@@ -2,9 +2,10 @@
 Phalcon Framework
 
 [![PDS Skeleton](https://img.shields.io/badge/pds-skeleton-blue.svg?style=flat-square)](https://github.com/php-pds/skeleton)
-[![Codacy Badge]()
-[![Scrutinizer Code Quality]()
-[![Code Coverage]()
+[![Codacy Badge](https://api.codacy.com/project/badge/Grade/196dff09b06b46958ff9dd205e74c537)](#)
+[![Scrutinizer Code Quality](https://scrutinizer-ci.com/g/niden/cardoe/badges/quality-score.png?b=master)](#)
+[![Code Coverage](https://scrutinizer-ci.com/g/niden/cardoe/badges/coverage.png?b=master)](#)
+
 
 ## Implemented
 
@@ -16,6 +17,8 @@ Phalcon Framework
 
 ## To do
 
+| Standard                                                                 | Description            |
+|--------------------------------------------------------------------------|------------------------|
 | ![PSR-3](https://img.shields.io/badge/PSR-3-red.svg?style=flat-square)   | `Phalcon\Logger`       |
 | ![PSR-6](https://img.shields.io/badge/PSR-6-red.svg?style=flat-square)   | Caching Interface      |
 | ![PSR-7](https://img.shields.io/badge/PSR-7-red.svg?style=flat-square)   | `Phalcon\Http\Message` |
