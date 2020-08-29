@@ -3,8 +3,8 @@ Phalcon Framework
 
 [![PDS Skeleton](https://img.shields.io/badge/pds-skeleton-blue.svg?style=flat-square)](https://github.com/php-pds/skeleton)
 [![Codacy Badge](https://api.codacy.com/project/badge/Grade/196dff09b06b46958ff9dd205e74c537)](#)
-[![Scrutinizer Code Quality](https://scrutinizer-ci.com/g/niden/cardoe/badges/quality-score.png?b=master)](#)
-[![Code Coverage](https://scrutinizer-ci.com/g/niden/cardoe/badges/coverage.png?b=master)](#)
+[![Scrutinizer Code Quality](https://scrutinizer-ci.com/g/phalcon/phalcon/badges/quality-score.png?b=master)](https://scrutinizer-ci.com/g/phalcon/phalcon/?branch=master)
+[![Code Coverage](https://scrutinizer-ci.com/g/phalcon/phalcon/badges/coverage.png?b=master)](https://scrutinizer-ci.com/g/phalcon/phalcon/?branch=master)
 
 
 ## Implemented
