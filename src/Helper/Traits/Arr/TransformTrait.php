@@ -17,17 +17,11 @@ use function array_chunk;
 use function array_diff_key;
 use function array_filter;
 use function array_flip;
-use function array_intersect_key;
-use function array_key_exists;
-use function array_key_first;
-use function array_key_last;
 use function array_keys;
 use function array_merge;
 use function array_slice;
-use function array_unique;
 use function array_values;
 use function call_user_func;
-use function end;
 use function function_exists;
 use function is_array;
 use function is_callable;
@@ -36,8 +30,6 @@ use function is_object;
 use function is_string;
 use function krsort;
 use function ksort;
-use function reset;
-use function settype;
 
 /**
  * This trait contains array transformation methods

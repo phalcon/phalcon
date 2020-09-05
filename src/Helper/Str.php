@@ -13,6 +13,7 @@ declare(strict_types=1);
 
 namespace Phalcon\Helper;
 
+use Phalcon\Helper\Traits\Str\AssertTrait;
 use function array_merge;
 use function count_chars;
 use function explode;
@@ -45,6 +46,8 @@ use const PATHINFO_FILENAME;
  */
 class Str
 {
+    use AssertTrait;
+
     // Only alpha numeric characters [a-zA-Z0-9]
     public const RANDOM_ALNUM = 0;
     // Only alphabetical characters [azAZ]
@@ -368,62 +371,6 @@ class Str
         }
 
         return $parts[0] . $separator . $number;
-    }
-
-    /**
-     * Compare two strings and returns true if both strings are anagram,
-     * false otherwise.
-     *
-     * @param string $first
-     * @param string $second
-     *
-     * @return bool
-     */
-    final public static function isAnagram(string $first, string $second): bool
-    {
-        return count_chars($first, 1) === count_chars($second, 1);
-    }
-
-    /**
-     * Returns true if the given string is lower case, false otherwise.
-     *
-     * @param string $text
-     * @param string $encoding
-     *
-     * @return bool
-     */
-    final public static function isLower(
-        string $text,
-        string $encoding = "UTF-8"
-    ): bool {
-        return $text === self::lower($text, $encoding);
-    }
-
-    /**
-     * Returns true if the given string is a palindrome, false otherwise.
-     *
-     * @param string $text
-     *
-     * @return bool
-     */
-    final public static function isPalindrome(string $text): bool
-    {
-        return strrev($text) === $text;
-    }
-
-    /**
-     * Returns true if the given string is upper case, false otherwise.
-     *
-     * @param string $text
-     * @param string $encoding
-     *
-     * @return bool
-     */
-    final public static function isUpper(
-        string $text,
-        string $encoding = "UTF-8"
-    ): bool {
-        return $text === self::upper($text, $encoding);
     }
 
     /**
