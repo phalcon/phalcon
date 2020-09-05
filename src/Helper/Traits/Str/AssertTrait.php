@@ -26,7 +26,6 @@ use const MB_CASE_UPPER;
  */
 trait AssertTrait
 {
-
     /**
      * Check if a string ends with a given string
      *

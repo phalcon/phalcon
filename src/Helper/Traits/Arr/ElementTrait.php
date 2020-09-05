@@ -62,19 +62,6 @@ trait ElementTrait
     }
 
     /**
-     * Checks a flat list for duplicate values. Returns true if duplicate
-     * values exist and false if values are all unique.
-     *
-     * @param array $collection
-     *
-     * @return bool
-     */
-    final public static function isUnique(array $collection): bool
-    {
-        return count($collection) === count(array_unique($collection));
-    }
-
-    /**
      * Helper method to set an array element
      *
      * @param array $collection
