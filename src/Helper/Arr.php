@@ -91,8 +91,8 @@ class Arr
      * Returns the first element of the collection. If a callable is passed, the
      * element returned is the first that validates true
      *
-     * @param array     $collection
-     * @param ?callable $method
+     * @param array         $collection
+     * @param callable|null $method
      *
      * @return mixed
      */
@@ -108,8 +108,8 @@ class Arr
     /**
      * Helper method to filter the collection
      *
-     * @param array     $collection
-     * @param ?callable $method
+     * @param array         $collection
+     * @param callable|null $method
      *
      * @return array
      */
@@ -128,8 +128,8 @@ class Arr
      * Returns the key of the first element of the collection. If a callable
      * is passed, the element returned is the first that validates true
      *
-     * @param array     $collection
-     * @param ?callable $method
+     * @param array         $collection
+     * @param callable|null $method
      *
      * @return mixed
      */
@@ -279,8 +279,8 @@ class Arr
      * Returns the key of the last element of the collection. If a callable is
      * passed, the element returned is the first that validates true
      *
-     * @param array     $collection
-     * @param ?callable $method
+     * @param array         $collection
+     * @param callable|null $method
      *
      * @return mixed
      */

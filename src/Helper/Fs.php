@@ -32,8 +32,8 @@ class Fs
      *
      * @see https://bugs.php.net/bug.php?id=37738
      *
-     * @param string  $uri
-     * @param ?string $suffix
+     * @param string      $uri
+     * @param string|null $suffix
      *
      * @return string
      */
@@ -48,7 +48,7 @@ class Fs
             $matches
         ) ? $matches[0] : "";
 
-        if ($suffix) {
+        if (true !== empty($suffix)) {
             $filename = preg_replace(
                 "@" . preg_quote($suffix, "@") . "$@",
                 "",

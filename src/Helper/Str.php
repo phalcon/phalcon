@@ -309,7 +309,7 @@ class Str
         );
 
         if ($lowercase) {
-            $friendly = strtolower($friendly);
+            $friendly = self::lower($friendly);
         }
 
         $friendly = preg_replace("/[\\/_|+ -]+/", $separator, $friendly);
@@ -557,6 +557,20 @@ class Str
     }
 
     /**
+     * Makes a phrase underscored instead of spaced
+     *
+     * @param string $text
+     *
+     * @return string
+     */
+    final public static function underscore(string $text): string
+    {
+        $result = preg_replace('#\s+#', '_', trim($text));
+
+        return (null === $result) ? "" : $result;
+    }
+
+    /**
      * Uppercases a string, this function makes use of the mbstring extension if
      * available
      *
@@ -570,19 +584,5 @@ class Str
         string $encoding = "UTF-8"
     ): string {
         return mb_convert_case($text, MB_CASE_UPPER, $encoding);
-    }
-
-    /**
-     * Makes a phrase underscored instead of spaced
-     *
-     * @param string $text
-     *
-     * @return string
-     */
-    final public static function underscore(string $text): string
-    {
-        $result = preg_replace('#\s+#', '_', trim($text));
-
-        return (null === $result) ? "" : $result;
     }
 }
