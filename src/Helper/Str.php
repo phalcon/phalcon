@@ -14,8 +14,8 @@ declare(strict_types=1);
 namespace Phalcon\Helper;
 
 use Phalcon\Helper\Traits\Str\AssertTrait;
+
 use function array_merge;
-use function count_chars;
 use function explode;
 use function func_get_args;
 use function implode;
@@ -30,13 +30,12 @@ use function rtrim;
 use function str_replace;
 use function str_split;
 use function strlen;
-use function strrev;
-use function strtolower;
 use function substr;
 use function substr_compare;
 use function trim;
 
 use const DIRECTORY_SEPARATOR;
+use const MB_CASE_LOWER;
 use const MB_CASE_TITLE;
 use const MB_CASE_UPPER;
 use const PATHINFO_FILENAME;
@@ -221,33 +220,6 @@ class Str
     final public static function dirSeparator(string $directory): string
     {
         return rtrim($directory, DIRECTORY_SEPARATOR) . DIRECTORY_SEPARATOR;
-    }
-
-    /**
-     * Check if a string ends with a given string
-     *
-     * @param string $haystack
-     * @param string $needle
-     * @param bool   $ignoreCase
-     *
-     * @return bool
-     */
-    final public static function endsWith(
-        string $haystack,
-        string $needle,
-        bool $ignoreCase = true
-    ): bool {
-        if ('' === $haystack) {
-            return false;
-        }
-
-        return 0 === substr_compare(
-            $haystack,
-            $needle,
-            -mb_strlen($needle),
-            mb_strlen($needle),
-            $ignoreCase
-        );
     }
 
     /**
@@ -459,33 +431,6 @@ class Str
         $result = preg_replace('#(?<!:)//+#', '/', $text);
 
         return (null === $result) ? '' : $result;
-    }
-
-    /**
-     * Check if a string starts with a given string
-     *
-     * @param string $haystack
-     * @param string $needle
-     * @param bool   $ignoreCase
-     *
-     * @return bool
-     */
-    final public static function startsWith(
-        string $haystack,
-        string $needle,
-        bool $ignoreCase = true
-    ): bool {
-        if ("" === $haystack) {
-            return false;
-        }
-
-        return 0 === substr_compare(
-            $haystack,
-            $needle,
-            0,
-            strlen($needle),
-            $ignoreCase
-        );
     }
 
     /**

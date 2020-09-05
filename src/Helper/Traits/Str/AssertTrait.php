@@ -14,7 +14,9 @@ declare(strict_types=1);
 namespace Phalcon\Helper\Traits\Str;
 
 use function count_chars;
+use function mb_strlen;
 use function strrev;
+use function substr_compare;
 
 use const MB_CASE_LOWER;
 use const MB_CASE_UPPER;
@@ -24,6 +26,34 @@ use const MB_CASE_UPPER;
  */
 trait AssertTrait
 {
+
+    /**
+     * Check if a string ends with a given string
+     *
+     * @param string $haystack
+     * @param string $needle
+     * @param bool   $ignoreCase
+     *
+     * @return bool
+     */
+    final public static function endsWith(
+        string $haystack,
+        string $needle,
+        bool $ignoreCase = true
+    ): bool {
+        if ('' === $haystack) {
+            return false;
+        }
+
+        return 0 === substr_compare(
+            $haystack,
+            $needle,
+            -mb_strlen($needle),
+            mb_strlen($needle),
+            $ignoreCase
+        );
+    }
+
     /**
      * Compare two strings and returns true if both strings are anagram,
      * false otherwise.
@@ -78,5 +108,32 @@ trait AssertTrait
         string $encoding = "UTF-8"
     ): bool {
         return $text === mb_convert_case($text, MB_CASE_UPPER, $encoding);
+    }
+
+    /**
+     * Check if a string starts with a given string
+     *
+     * @param string $haystack
+     * @param string $needle
+     * @param bool   $ignoreCase
+     *
+     * @return bool
+     */
+    final public static function startsWith(
+        string $haystack,
+        string $needle,
+        bool $ignoreCase = true
+    ): bool {
+        if ("" === $haystack) {
+            return false;
+        }
+
+        return 0 === substr_compare(
+            $haystack,
+            $needle,
+            0,
+            mb_strlen($needle),
+            $ignoreCase
+        );
     }
 }
