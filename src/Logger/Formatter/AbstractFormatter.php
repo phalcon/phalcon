@@ -13,6 +13,7 @@ declare(strict_types=1);
 
 namespace Phalcon\Logger\Formatter;
 
+use DateTime;
 use DateTimeImmutable;
 use DateTimeZone;
 use Exception;
@@ -23,8 +24,7 @@ use function date_default_timezone_get;
 /**
  * Class AbstractFormatter
  *
- * @property string       $dateFormat
- * @property DateTimeZone $timezone
+ * @property string $dateFormat
  */
 abstract class AbstractFormatter implements FormatterInterface
 {
@@ -34,22 +34,6 @@ abstract class AbstractFormatter implements FormatterInterface
      * @var string
      */
     protected string $dateFormat = 'c';
-
-    /**
-     * Default timezone
-     *
-     * @var DateTimeZone
-     */
-    protected DateTimeZone $timezone;
-
-    /**
-     * AbstractFormatter constructor.
-     */
-    public function __construct()
-    {
-        $timezone       = date_default_timezone_get();
-        $this->timezone = new DateTimeZone($timezone);
-    }
 
     /**
      * @return string
@@ -94,16 +78,17 @@ abstract class AbstractFormatter implements FormatterInterface
     /**
      * Returns the date formatted for the logger.
      *
-     * @param Item $item
-     *
      * @return string
+     * @throws Exception
+     * @todo Not using the set time from the Item since we have interface
+     *       misalignment which will break semver This will change in the future
+     *
      */
-    protected function getFormattedDate(Item $item): string
+    protected function getFormattedDate(): string
     {
-        return (new DateTimeImmutable())
-            ->setTimestamp($item->getTime())
-            ->setTimezone($this->timezone)
-            ->format($this->getDateFormat())
-        ;
+        $timezone = date_default_timezone_get();
+        $date     = new DateTimeImmutable("now", new DateTimeZone($timezone));
+
+        return $date->format($this->dateFormat);
     }
 }

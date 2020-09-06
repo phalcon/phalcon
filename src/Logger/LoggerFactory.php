@@ -13,8 +13,6 @@ declare(strict_types=1);
 
 namespace Phalcon\Logger;
 
-use Phalcon\Logger;
-
 /**
  * PhalconNG\Logger\LoggerFactory
  */

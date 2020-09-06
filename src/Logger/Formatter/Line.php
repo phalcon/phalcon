@@ -18,7 +18,6 @@ use Phalcon\Helper\Str;
 use Phalcon\Logger\Item;
 
 use function str_replace;
-use function var_dump;
 
 /**
  * Class Line
@@ -44,8 +43,6 @@ class Line extends AbstractFormatter
         string $format = "[{date}][{type}] {message}",
         string $dateFormat = "c"
     ) {
-        parent::__construct();
-
         $this->format     = $format;
         $this->dateFormat = $dateFormat;
     }
@@ -68,12 +65,6 @@ class Line extends AbstractFormatter
                 '{message}' => $item->getMessage(),
             ]
         );
-
-        var_dump($item);
-        var_dump($this->format);
-        var_dump($this->dateFormat);
-        var_dump($this->getDateFormat());
-        var_dump($format);
 
         return $this->interpolate(
             $format,
