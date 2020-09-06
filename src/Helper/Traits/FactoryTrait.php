@@ -30,12 +30,13 @@ trait FactoryTrait
     private array $mapper = [];
 
     /**
-     * Returns a service based on the name; throws exception if it does not exist
+     * Returns a service based on the name; throws exception if it does not
+     * exist
      *
      * @param string $name
      *
-     * @throws Exception
      * @return mixed
+     * @throws Exception
      */
     protected function getService(string $name)
     {

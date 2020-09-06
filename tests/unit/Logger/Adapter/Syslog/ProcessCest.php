@@ -14,11 +14,15 @@ declare(strict_types=1);
 namespace Phalcon\Tests\Unit\Logger\Adapter\Syslog;
 
 use Codeception\Stub;
+use DateTimeImmutable;
+use DateTimeZone;
 use LogicException;
 use Phalcon\Logger\Adapter\Syslog;
 use Phalcon\Logger\Item;
 use Phalcon\Logger\Logger;
 use UnitTester;
+
+use function date_default_timezone_get;
 
 class ProcessCest
 {
@@ -33,13 +37,15 @@ class ProcessCest
         $I->wantToTest('Logger\Adapter\Syslog - process()');
 
         $streamName = $I->getNewFileName('log', 'log');
-
-        $adapter = new Syslog($streamName);
+        $timezone   = date_default_timezone_get();
+        $datetime   = new DateTimeImmutable('now', new DateTimeZone($timezone));
+        $adapter    = new Syslog($streamName);
 
         $item = new Item(
             'Message 1',
             'debug',
-            Logger::DEBUG
+            Logger::DEBUG,
+            $datetime
         );
 
         $adapter->process($item);
@@ -76,7 +82,14 @@ class ProcessCest
                     ]
                 );
 
-                $item = new Item('Message 1', 'debug', Logger::DEBUG);
+                $timezone = date_default_timezone_get();
+                $datetime = new DateTimeImmutable('now', new DateTimeZone($timezone));
+                $item     = new Item(
+                    'Message 1',
+                    'debug',
+                    Logger::DEBUG,
+                    $datetime
+                );
                 $adapter->process($item);
             }
         );

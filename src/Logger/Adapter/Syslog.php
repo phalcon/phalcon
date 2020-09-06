@@ -14,8 +14,8 @@ declare(strict_types=1);
 namespace Phalcon\Logger\Adapter;
 
 use LogicException;
-use Phalcon\Logger\Logger;
 use Phalcon\Logger\Item;
+use Phalcon\Logger\Logger;
 
 use function closelog;
 use function openlog;

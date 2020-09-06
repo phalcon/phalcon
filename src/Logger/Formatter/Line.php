@@ -14,10 +14,7 @@ declare(strict_types=1);
 namespace Phalcon\Logger\Formatter;
 
 use Exception;
-use Phalcon\Helper\Str;
 use Phalcon\Logger\Item;
-
-use function str_replace;
 
 /**
  * Class Line

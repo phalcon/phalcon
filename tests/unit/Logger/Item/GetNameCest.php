@@ -13,9 +13,13 @@ declare(strict_types=1);
 
 namespace Phalcon\Tests\Unit\Logger\Item;
 
+use DateTimeImmutable;
+use DateTimeZone;
 use Phalcon\Logger\Item;
 use Phalcon\Logger\Logger;
 use UnitTester;
+
+use function date_default_timezone_get;
 
 class GetNameCest
 {
@@ -32,13 +36,13 @@ class GetNameCest
     {
         $I->wantToTest('Logger\Item - getName()');
 
-        $time = time();
-
-        $item = new Item(
+        $timezone = date_default_timezone_get();
+        $datetime = new DateTimeImmutable('now', new DateTimeZone($timezone));
+        $item     = new Item(
             'log message',
             'debug',
             Logger::DEBUG,
-            $time
+            $datetime
         );
 
         $I->assertEquals(

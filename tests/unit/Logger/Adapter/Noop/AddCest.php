@@ -13,10 +13,14 @@ declare(strict_types=1);
 
 namespace Phalcon\Tests\Unit\Logger\Adapter\Noop;
 
+use DateTimeImmutable;
+use DateTimeZone;
 use Phalcon\Logger\Adapter\Noop;
 use Phalcon\Logger\Item;
 use Phalcon\Logger\Logger;
 use UnitTester;
+
+use function date_default_timezone_get;
 
 class AddCest
 {
@@ -30,26 +34,31 @@ class AddCest
     {
         $I->wantToTest('Logger\Adapter\Noop - add()');
 
-        $adapter = new Noop();
+        $timezone = date_default_timezone_get();
+        $datetime = new DateTimeImmutable('now', new DateTimeZone($timezone));
+        $adapter  = new Noop();
 
         $adapter->begin();
 
         $item1 = new Item(
             'Message 1',
             'debug',
-            Logger::DEBUG
+            Logger::DEBUG,
+            $datetime
         );
 
         $item2 = new Item(
             'Message 2',
             'debug',
-            Logger::DEBUG
+            Logger::DEBUG,
+            $datetime
         );
 
         $item3 = new Item(
             'Message 3',
             'debug',
-            Logger::DEBUG
+            Logger::DEBUG,
+            $datetime
         );
 
         $adapter

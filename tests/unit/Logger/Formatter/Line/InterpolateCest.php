@@ -13,10 +13,14 @@ declare(strict_types=1);
 
 namespace Phalcon\Tests\Unit\Logger\Formatter\Line;
 
+use DateTimeImmutable;
+use DateTimeZone;
 use Phalcon\Logger\Formatter\Line;
 use Phalcon\Logger\Item;
 use Phalcon\Logger\Logger;
 use UnitTester;
+
+use function date_default_timezone_get;
 
 class InterpolateCest
 {
@@ -54,26 +58,24 @@ class InterpolateCest
         $I->wantToTest('Logger\Formatter\Line - interpolate() - format()');
 
         $formatter = new Line();
-
-        $message = 'The sky is {color}';
-
-        $context = [
+        $message   = 'The sky is {color}';
+        $context   = [
             'color' => 'blue',
         ];
 
-        $time = time();
-
-        $item = new Item(
+        $timezone = date_default_timezone_get();
+        $datetime = new DateTimeImmutable('now', new DateTimeZone($timezone));
+        $item     = new Item(
             $message,
             'debug',
             Logger::DEBUG,
-            $time,
+            $datetime,
             $context
         );
 
         $expected = sprintf(
             '[%s][debug] The sky is blue',
-            date('c', $time)
+            $datetime->format('c')
         );
 
         $I->assertEquals(

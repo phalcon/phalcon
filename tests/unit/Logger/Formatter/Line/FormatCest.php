@@ -13,11 +13,15 @@ declare(strict_types=1);
 
 namespace Phalcon\Tests\Unit\Logger\Formatter\Line;
 
+use DateTimeImmutable;
+use DateTimeZone;
 use Exception;
 use Phalcon\Logger\Formatter\Line;
 use Phalcon\Logger\Item;
 use Phalcon\Logger\Logger;
 use UnitTester;
+
+use function date_default_timezone_get;
 
 class FormatCest
 {
@@ -35,20 +39,19 @@ class FormatCest
     {
         $I->wantToTest('Logger\Formatter\Line - format()');
 
+        $timezone  = date_default_timezone_get();
+        $datetime  = new DateTimeImmutable('now', new DateTimeZone($timezone));
         $formatter = new Line();
-
-        $time = time();
-
-        $item = new Item(
+        $item      = new Item(
             'log message',
             'debug',
             Logger::DEBUG,
-            $time
+            $datetime
         );
 
         $expected = sprintf(
             '[%s][debug] log message',
-            date('c', $time)
+            $datetime->format('c')
         );
 
         $I->assertEquals(
@@ -72,19 +75,18 @@ class FormatCest
         $I->wantToTest('Logger\Formatter\Line - format() - custom');
 
         $formatter = new Line('{message}-[{type}]-{date}');
-
-        $time = time();
-
-        $item = new Item(
+        $timezone  = date_default_timezone_get();
+        $datetime  = new DateTimeImmutable('now', new DateTimeZone($timezone));
+        $item      = new Item(
             'log message',
             'debug',
             Logger::DEBUG,
-            $time
+            $datetime
         );
 
         $expected = sprintf(
             'log message-[debug]-%s',
-            date('c', $time)
+            $datetime->format('c')
         );
 
         $I->assertEquals(
@@ -112,11 +114,13 @@ class FormatCest
             'U.u'
         );
 
-        $item = new Item(
+        $timezone = date_default_timezone_get();
+        $datetime = new DateTimeImmutable('now', new DateTimeZone($timezone));
+        $item     = new Item(
             'log message',
             'debug',
             Logger::DEBUG,
-            time()
+            $datetime
         );
 
         $result = $formatter->format($item);

@@ -41,6 +41,6 @@ if (!function_exists('outputDir')) {
 if (!function_exists('logsDir')) {
     function logsDir(string $fileName = ''): string
     {
-        return codecept_output_dir() . '/logs/' . $fileName;
+        return codecept_output_dir() . 'logs/' . $fileName;
     }
 }

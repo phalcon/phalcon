@@ -13,11 +13,15 @@ declare(strict_types=1);
 
 namespace Phalcon\Testss\Unit\Logger\Formatter\Json;
 
+use DateTimeImmutable;
+use DateTimeZone;
 use Exception;
 use Phalcon\Logger\Formatter\Json;
 use Phalcon\Logger\Item;
 use Phalcon\Logger\Logger;
 use UnitTester;
+
+use function date_default_timezone_get;
 
 class FormatCest
 {
@@ -37,18 +41,18 @@ class FormatCest
 
         $formatter = new Json();
 
-        $time = time();
-
-        $item = new Item(
+        $timezone = date_default_timezone_get();
+        $datetime = new DateTimeImmutable('now', new DateTimeZone($timezone));
+        $item     = new Item(
             'log message',
             'debug',
             Logger::DEBUG,
-            $time
+            $datetime
         );
 
         $expected = sprintf(
             '{"type":"debug","message":"log message","timestamp":"%s"}',
-            date('c', $time)
+            $datetime->format('c')
         );
 
         $I->assertEquals(
@@ -73,18 +77,18 @@ class FormatCest
 
         $formatter = new Json('YmdHis');
 
-        $time = time();
-
-        $item = new Item(
+        $timezone = date_default_timezone_get();
+        $datetime = new DateTimeImmutable('now', new DateTimeZone($timezone));
+        $item     = new Item(
             'log message',
             'debug',
             Logger::DEBUG,
-            $time
+            $datetime
         );
 
         $expected = sprintf(
             '{"type":"debug","message":"log message","timestamp":"%s"}',
-            date('YmdHis', $time)
+            $datetime->format('YmdHis')
         );
 
         $I->assertEquals(

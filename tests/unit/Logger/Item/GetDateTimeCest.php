@@ -13,11 +13,15 @@ declare(strict_types=1);
 
 namespace Phalcon\Tests\Unit\Logger\Item;
 
+use DateTimeImmutable;
+use DateTimeZone;
 use Phalcon\Logger\Item;
 use Phalcon\Logger\Logger;
 use UnitTester;
 
-class GetTimeCest
+use function date_default_timezone_get;
+
+class GetDateTimeCest
 {
     /**
      * Tests Phalcon\Logger\Item :: getTime()
@@ -31,10 +35,19 @@ class GetTimeCest
     public function loggerItemGetTime(UnitTester $I)
     {
         $I->wantToTest('Logger\Item - getTime()');
-        $time = time();
-        $item = new Item('log message', 'debug', Logger::DEBUG, $time);
 
-        $expected = $time;
+        $timezone = date_default_timezone_get();
+        $datetime = new DateTimeImmutable('now', new DateTimeZone($timezone));
+        $item     = new Item(
+            'log message',
+            'debug',
+            Logger::DEBUG,
+            $datetime
+        );
+
+        $expected = $datetime;
+        $actual   = $item->getDateTime();
+        $I->assertEquals($expected, $actual);
         $actual   = $item->getTime();
         $I->assertEquals($expected, $actual);
     }

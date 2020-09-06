@@ -13,11 +13,15 @@ declare(strict_types=1);
 
 namespace Phalcon\Logger;
 
+use DateTimeImmutable;
+use DateTimeZone;
+use Exception;
 use Phalcon\Logger\Adapter\AdapterInterface;
 use Phalcon\Logger\Exception as LoggerException;
 use Psr\Log\LoggerInterface;
 
 use function array_flip;
+use function date_default_timezone_get;
 use function is_numeric;
 use function is_string;
 
@@ -25,9 +29,10 @@ use function is_string;
  * Class Logger
  *
  * @property AdapterInterface[] $adapters
+ * @property array              $excluded
  * @property int                $logLevel
  * @property string             $name
- * @property array              $excluded
+ * @property string             $timezone
  */
 class Logger implements LoggerInterface
 {
@@ -49,6 +54,13 @@ class Logger implements LoggerInterface
     protected array $adapters = [];
 
     /**
+     * The excluded adapters for this log process
+     *
+     * @var array
+     */
+    protected array $excluded = [];
+
+    /**
      * Minimum log level for the logger
      *
      * @var int
@@ -61,11 +73,9 @@ class Logger implements LoggerInterface
     protected string $name = '';
 
     /**
-     * The excluded adapters for this log process
-     *
-     * @var array
+     * @var string
      */
-    protected array $excluded = [];
+    protected string $timezone = 'UTC';
 
     /**
      * Constructor.
@@ -76,7 +86,8 @@ class Logger implements LoggerInterface
      */
     public function __construct(string $name, array $adapters = [])
     {
-        $this->name = $name;
+        $this->name     = $name;
+        $this->timezone = date_default_timezone_get();
 
         $this->setAdapters($adapters);
     }
@@ -356,10 +367,14 @@ class Logger implements LoggerInterface
      * @param array  $context
      *
      * @return bool
+     * @throws Exception
      * @throws LoggerException
      */
-    protected function addMessage(int $level, string $message, array $context = []): bool
-    {
+    protected function addMessage(
+        int $level,
+        string $message,
+        array $context = []
+    ): bool {
         if ($this->logLevel >= $level) {
             if (count($this->adapters) === 0) {
                 throw new LoggerException('No adapters specified');
@@ -368,7 +383,13 @@ class Logger implements LoggerInterface
             $levels    = $this->getLevels();
             $levelName = $levels[$level] ?? self::CUSTOM;
 
-            $item = new Item($message, $levelName, $level, time(), $context);
+            $item = new Item(
+                $message,
+                $levelName,
+                $level,
+                new DateTimeImmutable('now', new DateTimeZone($this->timezone)),
+                $context
+            );
 
             /**
              * Log only if the key does not exist in the excluded ones

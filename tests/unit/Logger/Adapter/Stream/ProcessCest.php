@@ -14,6 +14,8 @@ declare(strict_types=1);
 namespace Phalcon\Tests\Unit\Logger\Adapter\Stream;
 
 use Codeception\Stub;
+use DateTimeImmutable;
+use DateTimeZone;
 use LogicException;
 use Phalcon\Logger\Adapter\Stream;
 use Phalcon\Logger\Exception;
@@ -21,12 +23,15 @@ use Phalcon\Logger\Item;
 use Phalcon\Logger\Logger;
 use UnitTester;
 
+use function date_default_timezone_get;
 use function logsDir;
 
 class ProcessCest
 {
     /**
      * Tests Phalcon\Logger\Adapter\Stream :: process()
+     *
+     * @param UnitTester $I
      *
      * @throws Exception
      */
@@ -35,9 +40,16 @@ class ProcessCest
         $I->wantToTest('Logger\Adapter\Stream - process()');
         $fileName   = $I->getNewFileName('log', 'log');
         $outputPath = logsDir();
+        $timezone   = date_default_timezone_get();
+        $datetime   = new DateTimeImmutable('now', new DateTimeZone($timezone));
         $adapter    = new Stream($outputPath . $fileName);
 
-        $item = new Item('Message 1', 'debug', Logger::DEBUG);
+        $item = new Item(
+            'Message 1',
+            'debug',
+            Logger::DEBUG,
+            $datetime
+        );
         $adapter->process($item);
 
         $I->amInPath($outputPath);
@@ -52,7 +64,7 @@ class ProcessCest
     /**
      * Tests Phalcon\Logger\Adapter\Stream :: process() - exception
      *
-     * @throws Exception
+     * @param UnitTester $I
      */
     public function loggerAdapterStreamProcessException(UnitTester $I)
     {
@@ -77,7 +89,14 @@ class ProcessCest
                     ]
                 );
 
-                $item = new Item('Message 1', 'debug', Logger::DEBUG);
+                $timezone = date_default_timezone_get();
+                $datetime = new DateTimeImmutable('now', new DateTimeZone($timezone));
+                $item     = new Item(
+                    'Message 1',
+                    'debug',
+                    Logger::DEBUG,
+                    $datetime
+                );
                 $adapter->process($item);
             }
         );

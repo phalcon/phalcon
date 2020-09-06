@@ -13,16 +13,18 @@ declare(strict_types=1);
 
 namespace Phalcon\Logger;
 
+use DateTimeImmutable;
+
 /**
  * Phalcon\Logger\Item
  *
  * Represents each item in a logging transaction
  *
- * @property array  $context
- * @property string $message
- * @property string $name
- * @property int    $time
- * @property int    $type
+ * @property array             $context
+ * @property string            $message
+ * @property string            $name
+ * @property DateTimeImmutable $datetime
+ * @property int               $type
  */
 class Item
 {
@@ -42,9 +44,9 @@ class Item
     protected string $name;
 
     /**
-     * @var int
+     * @var DateTimeImmutable
      */
-    protected int $time;
+    protected DateTimeImmutable $datetime;
 
     /**
      * @var int
@@ -54,24 +56,24 @@ class Item
     /**
      * Item constructor.
      *
-     * @param string $message
-     * @param string $name
-     * @param int    $type
-     * @param int    $time
-     * @param array  $context
+     * @param string            $message
+     * @param string            $name
+     * @param int               $type
+     * @param DateTimeImmutable $datetime
+     * @param array             $context
      */
     public function __construct(
         string $message,
         string $name,
         int $type,
-        int $time = 0,
+        DateTimeImmutable $datetime,
         array $context = []
     ) {
-        $this->message = $message;
-        $this->name    = $name;
-        $this->type    = $type;
-        $this->time    = $time;
-        $this->context = $context;
+        $this->message  = $message;
+        $this->name     = $name;
+        $this->type     = $type;
+        $this->datetime = $datetime;
+        $this->context  = $context;
     }
 
     /**
@@ -80,6 +82,14 @@ class Item
     public function getContext(): ?array
     {
         return $this->context;
+    }
+
+    /**
+     * @return DateTimeImmutable
+     */
+    public function getDateTime(): DateTimeImmutable
+    {
+        return $this->datetime;
     }
 
     /**
@@ -99,11 +109,12 @@ class Item
     }
 
     /**
-     * @return int
+     * @return DateTimeImmutable
+     * @todo To be removed for v6 -- alias of getDateTime
      */
-    public function getTime(): int
+    public function getTime(): DateTimeImmutable
     {
-        return $this->time;
+        return $this->getDateTime();
     }
 
     /**

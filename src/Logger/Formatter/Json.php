@@ -53,7 +53,7 @@ class Json extends AbstractFormatter
             [
                 "type"      => $item->getName(),
                 "message"   => $message,
-                "timestamp" => $this->getFormattedDate(),
+                "timestamp" => $this->getFormattedDate($item),
             ]
         );
     }
