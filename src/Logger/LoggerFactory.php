@@ -14,7 +14,9 @@ declare(strict_types=1);
 namespace Phalcon\Logger;
 
 /**
- * PhalconNG\Logger\LoggerFactory
+ * Class LoggerFactory
+ *
+ * @package Phalcon\Logger
  */
 class LoggerFactory
 {

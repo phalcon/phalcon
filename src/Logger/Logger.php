@@ -28,6 +28,8 @@ use function is_string;
 /**
  * Class Logger
  *
+ * @package Phalcon\Logger
+ *
  * @property AdapterInterface[] $adapters
  * @property array              $excluded
  * @property int                $logLevel
@@ -73,21 +75,30 @@ class Logger implements LoggerInterface
     protected string $name = '';
 
     /**
-     * @var string
+     * @var DateTimeZone
      */
-    protected string $timezone = 'UTC';
+    protected DateTimeZone $timezone;
 
     /**
      * Constructor.
      *
-     * @param string $name     The name of the logger
-     * @param array  $adapters The collection of adapters to be used for
-     *                         logging (default [])
+     * @param string $name                The name of the logger
+     * @param array  $adapters            The collection of adapters to be used for
+     *                                    logging (default [])
+     * @param DateTimeZone|null $timezone Timezone. If omitted,
+     *                                    date_Default_timezone_get() is used
      */
-    public function __construct(string $name, array $adapters = [])
-    {
+    public function __construct(
+        string $name,
+        array $adapters = [],
+        ?DateTimeZone $timezone = null
+    ) {
+        if (null == $timezone) {
+            $timezone = new DateTimeZone(date_default_timezone_get() ?: 'UTC');
+        }
+
         $this->name     = $name;
-        $this->timezone = date_default_timezone_get();
+        $this->timezone = $timezone;
 
         $this->setAdapters($adapters);
     }
@@ -387,7 +398,7 @@ class Logger implements LoggerInterface
                 $message,
                 $levelName,
                 $level,
-                new DateTimeImmutable('now', new DateTimeZone($this->timezone)),
+                new DateTimeImmutable('now', $this->timezone),
                 $context
             );
 
