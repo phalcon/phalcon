@@ -126,19 +126,23 @@ trait TransformTrait
     final public static function group(array $collection, $method): array
     {
         $filtered = [];
-        foreach ($collection as $element) {
-            if (
-                is_callable($method) ||
-                (is_string($method) && function_exists($method))
-            ) {
+        if (
+            is_callable($method) ||
+            (is_string($method) && function_exists($method))
+        ) {
+            foreach ($collection as $element) {
                 $key              = call_user_func($method, $element);
                 $filtered[$key][] = $element;
-            } elseif (is_object($element)) {
-                $key              = $element->{$method};
-                $filtered[$key][] = $element;
-            } elseif (isset($element[$method])) {
-                $key              = $element[$method];
-                $filtered[$key][] = $element;
+            }
+        } else {
+            foreach ($collection as $element) {
+                if (is_object($element)) {
+                    $key              = $element->{$method};
+                    $filtered[$key][] = $element;
+                } elseif (isset($element[$method])) {
+                    $key              = $element[$method];
+                    $filtered[$key][] = $element;
+                }
             }
         }
 
