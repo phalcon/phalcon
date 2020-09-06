@@ -22,10 +22,11 @@ class GetMessageCest
     /**
      * Tests Phalcon\Logger\Item :: getMessage()
      *
-     * @author Phalcon Team <team@phalcon.io>
+     * @param UnitTester $I
+     *
      * @since  2020-09-06
      *
-     * @param UnitTester $I
+     * @author Phalcon Team <team@phalcon.io>
      */
     public function loggerItemGetMessage(UnitTester $I)
     {

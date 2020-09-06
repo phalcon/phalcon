@@ -13,6 +13,7 @@ declare(strict_types=1);
 
 namespace Phalcon\Tests\Unit\Logger\AdapterFactory;
 
+use Phalcon\Helper\Exception;
 use Phalcon\Logger\Adapter\AdapterInterface;
 use Phalcon\Logger\AdapterFactory;
 use UnitTester;
@@ -24,8 +25,9 @@ class NewInstanceCest
     /**
      * Tests Phalcon\Logger\AdapterFactory :: newInstance()
      *
-     * @author Phalcon Team <team@phalcon.io>
-     * @since  2019-05-20
+     * @param UnitTester $I
+     *
+     * @throws Exception
      */
     public function loggerAdapterFactoryNewInstance(UnitTester $I)
     {
@@ -42,8 +44,10 @@ class NewInstanceCest
     /**
      * Tests Phalcon\Logger\AdapterFactory :: newInstance() - exception
      *
+     * @param UnitTester $I
+     *
      * @author Phalcon Team <team@phalcon.io>
-     * @since  2019-05-20
+     * @since  2020-09-06
      */
     public function loggerAdapterFactoryNewInstanceException(UnitTester $I)
     {

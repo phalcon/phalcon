@@ -22,10 +22,11 @@ class GetNameCest
     /**
      * Tests Phalcon\Logger\Item :: getName()
      *
-     * @author Phalcon Team <team@phalcon.io>
+     * @param UnitTester $I
+     *
      * @since  2020-09-06
      *
-     * @param UnitTester $I
+     * @author Phalcon Team <team@phalcon.io>
      */
     public function loggerItemGetName(UnitTester $I)
     {

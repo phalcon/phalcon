@@ -21,10 +21,11 @@ class SetDateFormatCest
     /**
      * Tests Phalcon\Logger\Formatter\Json :: setDateFormat()
      *
-     * @author Phalcon Team <team@phalcon.io>
+     * @param UnitTester $I
+     *
      * @since  2020-09-06
      *
-     * @param UnitTester $I
+     * @author Phalcon Team <team@phalcon.io>
      */
     public function loggerFormatterJsonSetDateFormat(UnitTester $I)
     {

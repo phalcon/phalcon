@@ -14,9 +14,9 @@ declare(strict_types=1);
 namespace Phalcon\Testss\Unit\Logger\Formatter\Json;
 
 use Exception;
-use Phalcon\Logger\Logger;
 use Phalcon\Logger\Formatter\Json;
 use Phalcon\Logger\Item;
+use Phalcon\Logger\Logger;
 use UnitTester;
 
 class FormatCest
@@ -24,12 +24,12 @@ class FormatCest
     /**
      * Tests Phalcon\Logger\Formatter\Json :: format()
      *
-     * @author Phalcon Team <team@phalcon.io>
-     * @since  2020-09-06
-     *
      * @param UnitTester $I
      *
      * @throws Exception
+     * @author Phalcon Team <team@phalcon.io>
+     * @since  2020-09-06
+     *
      */
     public function loggerFormatterJsonFormat(UnitTester $I)
     {
@@ -60,12 +60,12 @@ class FormatCest
     /**
      * Tests Phalcon\Logger\Formatter\Json :: format() -custom
      *
-     * @author Phalcon Team <team@phalcon.io>
-     * @since  2020-09-06
-     *
      * @param UnitTester $I
      *
      * @throws Exception
+     * @author Phalcon Team <team@phalcon.io>
+     * @since  2020-09-06
+     *
      */
     public function loggerFormatterJsonFormatCustom(UnitTester $I)
     {

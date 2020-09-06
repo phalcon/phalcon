@@ -14,23 +14,22 @@ declare(strict_types=1);
 namespace Phalcon\Tests\Unit\Logger\Formatter\Line;
 
 use Exception;
-use Phalcon\Logger\Logger;
 use Phalcon\Logger\Formatter\Line;
 use Phalcon\Logger\Item;
+use Phalcon\Logger\Logger;
 use UnitTester;
-use function var_dump;
 
 class FormatCest
 {
     /**
      * Tests Phalcon\Logger\Formatter\Line :: format()
      *
-     * @author Phalcon Team <team@phalcon.io>
-     * @since  2020-09-06
-     *
      * @param UnitTester $I
      *
      * @throws Exception
+     * @author Phalcon Team <team@phalcon.io>
+     * @since  2020-09-06
+     *
      */
     public function loggerFormatterLineFormat(UnitTester $I)
     {
@@ -61,12 +60,12 @@ class FormatCest
     /**
      * Tests Phalcon\Logger\Formatter\Line :: format() -custom
      *
-     * @author Phalcon Team <team@phalcon.io>
-     * @since  2020-09-06
-     *
      * @param UnitTester $I
      *
      * @throws Exception
+     * @author Phalcon Team <team@phalcon.io>
+     * @since  2020-09-06
+     *
      */
     public function loggerFormatterLineFormatCustom(UnitTester $I)
     {
@@ -97,12 +96,12 @@ class FormatCest
     /**
      * Tests Phalcon\Logger\Formatter\Line :: format() -custom with milliseconds
      *
-     * @author Phalcon Team <team@phalcon.io>
-     * @since  2020-09-06
-     *
      * @param UnitTester $I
      *
      * @throws Exception
+     * @author Phalcon Team <team@phalcon.io>
+     * @since  2020-09-06
+     *
      */
     public function loggerFormatterLineFormatCustomWithMilliseconds(UnitTester $I)
     {
@@ -121,10 +120,8 @@ class FormatCest
         );
 
         $result = $formatter->format($item);
-        $I->assertEquals('', $result);
-        die();
-        $parts  = explode('-', $result);
-        $parts  = explode('.', $parts[2]);
+        $parts = explode('-', $result);
+        $parts = explode('.', $parts[2]);
         $I->assertCount(2, $parts);
         $I->assertGreaterThan(0, (int) $parts[0]);
         $I->assertGreaterThan(0, (int) $parts[1]);

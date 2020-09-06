@@ -13,17 +13,13 @@ declare(strict_types=1);
 
 namespace Phalcon\Tests\Unit\Logger\LoggerFactory;
 
-use Phalcon\Factory\Exception;
-use Phalcon\Logger;
-use Phalcon\Logger\Adapter\AdapterInterface;
 use Phalcon\Logger\Adapter\Stream;
-use Phalcon\Logger\AdapterFactory;
+use Phalcon\Logger\Logger;
 use Phalcon\Logger\LoggerFactory;
 use Psr\Log\LoggerInterface;
 use UnitTester;
 
 use function logsDir;
-use function outputDir;
 
 class NewInstanceCest
 {

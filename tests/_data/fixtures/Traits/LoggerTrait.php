@@ -12,6 +12,7 @@ declare(strict_types=1);
 namespace Phalcon\Tests\Fixtures\Traits;
 
 use DateTime;
+use Phalcon\Logger\Logger;
 use Phalcon\Logger\Adapter\Stream;
 use Phalcon\Logger\Exception;
 use UnitTester;

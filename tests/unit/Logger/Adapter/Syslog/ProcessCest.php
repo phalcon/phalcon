@@ -15,9 +15,9 @@ namespace Phalcon\Tests\Unit\Logger\Adapter\Syslog;
 
 use Codeception\Stub;
 use LogicException;
-use Phalcon\Logger;
 use Phalcon\Logger\Adapter\Syslog;
 use Phalcon\Logger\Item;
+use Phalcon\Logger\Logger;
 use UnitTester;
 
 class ProcessCest
@@ -69,7 +69,7 @@ class ProcessCest
                 $adapter = Stub::construct(
                     Syslog::class,
                     [
-                        $fileName
+                        $fileName,
                     ],
                     [
                         'openlog' => false,

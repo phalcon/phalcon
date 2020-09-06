@@ -15,10 +15,10 @@ namespace Phalcon\Tests\Unit\Logger\Adapter\Stream;
 
 use Codeception\Stub;
 use LogicException;
-use Phalcon\Logger;
 use Phalcon\Logger\Adapter\Stream;
 use Phalcon\Logger\Exception;
 use Phalcon\Logger\Item;
+use Phalcon\Logger\Logger;
 use UnitTester;
 
 use function logsDir;
@@ -58,8 +58,8 @@ class ProcessCest
     {
         $I->wantToTest('Logger\Adapter\Stream - process() - exception');
 
-        $fileName    = $I->getNewFileName('log', 'log');
-        $outputPath  = logsDir();
+        $fileName   = $I->getNewFileName('log', 'log');
+        $outputPath = logsDir();
 
         $I->expectThrowable(
             new LogicException(
@@ -70,7 +70,7 @@ class ProcessCest
                 $adapter = Stub::construct(
                     Stream::class,
                     [
-                        $outputPath . $fileName
+                        $outputPath . $fileName,
                     ],
                     [
                         'fopen' => false,
