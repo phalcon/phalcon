@@ -88,9 +88,9 @@ jobs:
 
       - name: Code Coverage - Codacy
         uses: codacy/codacy-coverage-reporter-action@master
-          with:
-            project-token: ${{ secrets.CODACY_PROJECT_TOKEN }}
-            coverage-reports: ./tests/_output/coverage.xml
+        with:
+          project-token: ${{ secrets.CODACY_PROJECT_TOKEN }}
+          coverage-reports: ./tests/_output/coverage.xml
 
 #      - name: Run integration tests
 #        env:
