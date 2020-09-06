@@ -11,12 +11,12 @@
 
 declare(strict_types=1);
 
-namespace Phalcon\Test\Unit\Autoload\Loader;
+namespace Phalcon\Tests\Unit\Autoload\Loader;
 
 use Example\Namespaces\Adapter\Another;
 use Example\Namespaces\Adapter\Mongo;
 use Phalcon\Autoload\Loader;
-use Phalcon\Test\Fixtures\Traits\LoaderTrait;
+use Phalcon\Tests\Fixtures\Traits\LoaderTrait;
 use UnitTester;
 
 use function dataDir;
