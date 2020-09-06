@@ -39,8 +39,8 @@
     "autoload": {
         "psr-4": {
             "Phalcon\\": "src/",
-            "Phalcon\\Test\\Unit\\": "tests/unit/",
-            "Phalcon\\Test\\Fixtures\\": "tests/_data/fixtures/"
+            "Phalcon\\Tests\\Unit\\": "tests/unit/",
+            "Phalcon\\Tests\\Fixtures\\": "tests/_data/fixtures/"
         }
     },
     "config": {
