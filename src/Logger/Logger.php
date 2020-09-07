@@ -295,7 +295,7 @@ class Logger implements LoggerInterface
              * Log only if the key does not exist in the excluded ones
              */
             $adapters = array_diff_key($this->adapters, $this->excluded);
-            foreach ($adapters as $name => $adapter) {
+            foreach ($adapters as $adapter) {
                 if ($adapter->inTransaction()) {
                     $adapter->add($item);
                 } else {
