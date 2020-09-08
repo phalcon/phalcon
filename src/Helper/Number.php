@@ -25,13 +25,13 @@ class Number
      */
     /**
      * @param int $value
-     * @param int $from
-     * @param int $to
+     * @param int $start
+     * @param int $end
      *
      * @return bool
      */
-    final public static function between(int $value, int $from, int $to): bool
+    final public static function between(int $value, int $start, int $end): bool
     {
-        return $value >= $from && $value <= $to;
+        return $value >= $start && $value <= $end;
     }
 }

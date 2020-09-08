@@ -6,14 +6,12 @@ Phalcon Framework
 [![Scrutinizer Code Quality](https://scrutinizer-ci.com/g/phalcon/phalcon/badges/quality-score.png?b=master)](https://scrutinizer-ci.com/g/phalcon/phalcon/?branch=master)
 [![Code Coverage](https://scrutinizer-ci.com/g/phalcon/phalcon/badges/coverage.png?b=master)](https://scrutinizer-ci.com/g/phalcon/phalcon/?branch=master)
 
-
 ## Implemented
 
 | Standard                                                                  | Description            |
 |---------------------------------------------------------------------------|------------------------|
 | ![PSR-4](https://img.shields.io/badge/PSR-4-blue.svg?style=flat-square)   | `Phalcon\Autoloader`   |
 | ![PSR-12](https://img.shields.io/badge/PSR-12-blue.svg?style=flat-square) | Coding Standard        |
-
 
 ## To do
 
