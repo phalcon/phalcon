@@ -106,10 +106,8 @@ class Loader
      */
     public function addExtension(string $extension): Loader
     {
-        $extensions   = $this->extensions;
-        $extensions[] = $extension;
-
-        $this->extensions = array_unique($extensions);
+        $this->extensions[] = $extension;
+        $this->extensions   = array_unique($this->extensions);
 
         return $this;
     }

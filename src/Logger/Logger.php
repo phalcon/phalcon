@@ -163,7 +163,9 @@ class Logger implements LoggerInterface
     public function getAdapter(string $name): AdapterInterface
     {
         if (true !== isset($this->adapters[$name])) {
-            throw new LoggerException('Adapter does not exist for this logger');
+            throw new LoggerException(
+                'Adapter does not exist for this logger'
+            );
         }
 
         return $this->adapters[$name];
@@ -198,9 +200,9 @@ class Logger implements LoggerInterface
     /**
      * Logs with an arbitrary level.
      *
-     * @param mixed  $level
-     * @param string $message
-     * @param array  $context
+     * @param mixed $level
+     * @param mixed $message
+     * @param array $context
      *
      * @throws LoggerException
      */
@@ -222,7 +224,9 @@ class Logger implements LoggerInterface
     public function removeAdapter(string $name): Logger
     {
         if (!isset($this->adapters[$name])) {
-            throw new LoggerException('Adapter does not exist for this logger');
+            throw new LoggerException(
+                'Adapter does not exist for this logger'
+            );
         }
 
         unset($this->adapters[$name]);
@@ -294,8 +298,8 @@ class Logger implements LoggerInterface
             /**
              * Log only if the key does not exist in the excluded ones
              */
-            $adapters = array_diff_key($this->adapters, $this->excluded);
-            foreach ($adapters as $adapter) {
+            $collection = array_diff_key($this->adapters, $this->excluded);
+            foreach ($collection as $adapter) {
                 $method = 'process';
                 if (true === $adapter->inTransaction()) {
                     $method = 'add';

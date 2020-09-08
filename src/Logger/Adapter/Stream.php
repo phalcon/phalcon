@@ -22,7 +22,6 @@ use function fopen;
 use function fwrite;
 use function is_resource;
 use function mb_strpos;
-use function sprintf;
 
 use const PHP_EOL;
 
@@ -127,9 +126,9 @@ class Stream extends AbstractAdapter
     public function process(Item $item): void
     {
         if (!is_resource($this->handler)) {
-            $handler = $this->fopen($this->name, $this->mode);
+            $fileHandler = $this->fopen($this->name, $this->mode);
 
-            if (!is_resource($handler)) {
+            if (!is_resource($fileHandler)) {
                 $this->handler = null;
 
                 throw new LogicException(
@@ -141,7 +140,7 @@ class Stream extends AbstractAdapter
                 );
             }
 
-            $this->handler = $handler;
+            $this->handler = $fileHandler;
         }
 
         $formatter        = $this->getFormatter();

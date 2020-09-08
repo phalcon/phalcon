@@ -54,7 +54,7 @@ class Line extends AbstractFormatter
      */
     public function format(Item $item): string
     {
-        $format = strtr(
+        $message = strtr(
             $this->format,
             [
                 '{date}'    => $this->getFormattedDate($item),
@@ -63,10 +63,7 @@ class Line extends AbstractFormatter
             ]
         );
 
-        return $this->interpolate(
-            $format,
-            $item->getContext()
-        );
+        return $this->interpolate($message, $item->getContext());
     }
 
     /**
