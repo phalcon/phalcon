@@ -127,10 +127,13 @@ trait TransformTrait
             $friendly = self::lower($friendly);
         }
 
-        return preg_replace(
-            '/[\\/_|+ -]+/',
-            $separator,
-            trim($friendly, $separator)
+        return trim(
+            preg_replace(
+                '/[\\/_|+ -]+/',
+                $separator,
+                $friendly
+            ),
+            $separator
         );
     }
 
