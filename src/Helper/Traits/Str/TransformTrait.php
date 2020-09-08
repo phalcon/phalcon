@@ -97,13 +97,12 @@ trait TransformTrait
      * @return string
      * @throws Exception
      */
-    public function friendly(
+    final public static function friendly(
         string $text,
         string $separator = '-',
         bool $lowercase = true,
         $replace = null
     ): string {
-
         if (null !== $replace) {
             if (!is_array($replace) && !is_string($replace)) {
                 throw new Exception(
@@ -128,10 +127,11 @@ trait TransformTrait
             $friendly = self::lower($friendly);
         }
 
-        $friendly = preg_replace('/[\\/_|+ -]+/', $separator, $friendly);
-        $friendly = trim($friendly, $separator);
-
-        return $friendly;
+        return preg_replace(
+            '/[\\/_|+ -]+/',
+            $separator,
+            trim($friendly, $separator)
+        );
     }
 
     /**
