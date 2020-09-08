@@ -75,8 +75,10 @@ class ProcessCest
 
         $I->expectThrowable(
             new LogicException(
-                "The file '" . $outputPath . $fileName
-                . "' cannot be opened with mode 'ab'"
+                'The file "' .
+                $outputPath .
+                $fileName .
+                '" cannot be opened with mode "ab"'
             ),
             function () use ($outputPath, $fileName) {
                 $adapter = Stub::construct(
