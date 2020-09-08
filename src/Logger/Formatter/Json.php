@@ -13,9 +13,17 @@ declare(strict_types=1);
 
 namespace Phalcon\Logger\Formatter;
 
-use Exception;
-use Phalcon\Helper\Json as JsonHelper;
+use JsonException;
 use Phalcon\Logger\Item;
+
+use function json_encode;
+
+use const JSON_HEX_AMP;
+use const JSON_HEX_APOS;
+use const JSON_HEX_QUOT;
+use const JSON_HEX_TAG;
+use const JSON_THROW_ON_ERROR;
+use const JSON_UNESCAPED_SLASHES;
 
 /**
  * Phalcon\Logger\Formatter\Json
@@ -29,7 +37,7 @@ class Json extends AbstractFormatter
      *
      * @param string $dateFormat
      */
-    public function __construct(string $dateFormat = "c")
+    public function __construct(string $dateFormat = 'c')
     {
         $this->dateFormat = $dateFormat;
     }
@@ -40,21 +48,25 @@ class Json extends AbstractFormatter
      * @param Item $item
      *
      * @return string
-     * @throws Exception
+     * @throws JsonException
      */
     public function format(Item $item): string
     {
+        $options = JSON_HEX_TAG + JSON_HEX_APOS + JSON_HEX_AMP
+                 + JSON_HEX_QUOT + JSON_UNESCAPED_SLASHES
+                 + JSON_THROW_ON_ERROR;
         $message = $this->interpolate(
             $item->getMessage(),
             $item->getContext()
         );
 
-        return JsonHelper::encode(
+        return json_encode(
             [
-                "type"      => $item->getName(),
-                "message"   => $message,
-                "timestamp" => $this->getFormattedDate($item),
-            ]
+                'type'      => $item->getName(),
+                'message'   => $message,
+                'timestamp' => $this->getFormattedDate($item),
+            ],
+            $options
         );
     }
 }

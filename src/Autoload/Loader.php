@@ -452,7 +452,7 @@ class Loader
                     return $file;
                 }
 
-                $this->debug[] = "Load: 404 : " . $namespace . " - " . $file;
+                $this->debug[] = 'Load: 404 : ' . $namespace . ' - ' . $file;
             }
         }
 
@@ -481,7 +481,7 @@ class Loader
 
             $file = $this->loadFile($namespace, $remainder);
             if (false !== $file) {
-                $this->debug[] = "Namespace: " . $namespace . " - " . $file;
+                $this->debug[] = 'Namespace: ' . $namespace . ' - ' . $file;
 
                 return $file;
             }
@@ -490,7 +490,7 @@ class Loader
         }
 
         // 404
-        $this->debug[] = "Namespace: 404 : " . $name;
+        $this->debug[] = 'Namespace: 404 : ' . $name;
 
         return false;
     }

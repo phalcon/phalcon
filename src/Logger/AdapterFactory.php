@@ -65,9 +65,9 @@ class AdapterFactory
     protected function getAdapters(): array
     {
         return [
-            "noop"   => Noop::class,
-            "stream" => Stream::class,
-            "syslog" => Syslog::class,
+            'noop'   => Noop::class,
+            'stream' => Stream::class,
+            'syslog' => Syslog::class,
         ];
     }
 }

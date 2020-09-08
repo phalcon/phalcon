@@ -37,8 +37,8 @@ class Line extends AbstractFormatter
      * @param string $dateFormat
      */
     public function __construct(
-        string $format = "[{date}][{type}] {message}",
-        string $dateFormat = "c"
+        string $format = '[{date}][{type}] {message}',
+        string $dateFormat = 'c'
     ) {
         $this->format     = $format;
         $this->dateFormat = $dateFormat;

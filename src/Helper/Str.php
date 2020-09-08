@@ -60,11 +60,11 @@ class Str
      *
      * ```php
      * $str = Phalcon\Helper\Str::concat(
-     *     "/",
-     *     "/tmp/",
-     *     "/folder_1/",
-     *     "/folder_2",
-     *     "folder_3/"
+     *     '/',
+     *     '/tmp/',
+     *     '/folder_1/',
+     *     '/folder_2',
+     *     'folder_3/'
      * );
      *
      * echo $str;   // /tmp/folder_1/folder_2/folder_3/
@@ -84,7 +84,7 @@ class Str
 
         if (count($arguments) < 3) {
             throw new Exception(
-                "concat needs at least three parameters"
+                'concat needs at least three parameters'
             );
         }
 
@@ -92,8 +92,8 @@ class Str
         $arguments = Arr::sliceRight($arguments);
         $first     = Arr::first($arguments);
         $last      = Arr::last($arguments);
-        $prefix    = "";
-        $suffix    = "";
+        $prefix    = '';
+        $suffix    = '';
         $data      = [];
 
         if (self::startsWith($first, $delimiter)) {
@@ -121,7 +121,7 @@ class Str
      */
     final public static function countVowels(string $text): int
     {
-        preg_match_all("/[aeiou]/i", $text, $matches);
+        preg_match_all('/[aeiou]/i', $text, $matches);
 
         return count($matches[0]);
     }
@@ -207,7 +207,7 @@ class Str
      */
     final public static function len(
         string $text,
-        string $encoding = "UTF-8"
+        string $encoding = 'UTF-8'
     ): int {
         return mb_strlen($text, $encoding);
     }
@@ -225,7 +225,7 @@ class Str
         int $type = self::RANDOM_ALNUM,
         int $length = 8
     ): string {
-        $text  = "";
+        $text  = '';
         $type  = ($type < 0 || $type > 5) ? self::RANDOM_ALNUM : $type;
         $pools = [
             self::RANDOM_ALPHA    => array_merge(

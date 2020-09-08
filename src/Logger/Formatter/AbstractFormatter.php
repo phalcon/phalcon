@@ -55,7 +55,7 @@ abstract class AbstractFormatter implements FormatterInterface
 
         $replace = [];
         foreach ($context as $key => $value) {
-            $replace["{" . $key . "}"] = $value;
+            $replace['{' . $key . '}'] = $value;
         }
 
         return strtr($message, $replace);

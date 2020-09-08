@@ -41,7 +41,7 @@ trait FactoryTrait
     protected function getService(string $name)
     {
         if (!isset($this->mapper[$name])) {
-            throw new Exception("Service " . $name . " is not registered");
+            throw new Exception('Service ' . $name . ' is not registered');
         }
 
         return $this->mapper[$name];

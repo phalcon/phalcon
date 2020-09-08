@@ -51,7 +51,7 @@ class Syslog extends AbstractAdapter
     /**
      * @var string
      */
-    protected string $name = "";
+    protected string $name = '';
 
     /**
      * @var bool

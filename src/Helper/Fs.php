@@ -43,15 +43,15 @@ class Fs
     ): string {
         $uri      = rtrim($uri, DIRECTORY_SEPARATOR);
         $filename = preg_match(
-            "@[^" . preg_quote(DIRECTORY_SEPARATOR, "@") . "]+$@",
+            '@[^' . preg_quote(DIRECTORY_SEPARATOR, '@') . ']+$@',
             $uri,
             $matches
-        ) ? $matches[0] : "";
+        ) ? $matches[0] : '';
 
         if (true !== empty($suffix)) {
             $filename = preg_replace(
-                "@" . preg_quote($suffix, "@") . "$@",
-                "",
+                '@' . preg_quote($suffix, '@') . '$@',
+                '',
                 $filename
             );
         }

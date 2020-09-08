@@ -63,7 +63,7 @@ class Json
 
         if (JSON_ERROR_NONE !== json_last_error()) {
             throw new InvalidArgumentException(
-                "json_decode error: " . json_last_error_msg()
+                'json_decode error: ' . json_last_error_msg()
             );
         }
 
@@ -104,7 +104,7 @@ class Json
 
         if (JSON_ERROR_NONE !== json_last_error()) {
             throw new InvalidArgumentException(
-                "json_encode error: " . json_last_error_msg()
+                'json_encode error: ' . json_last_error_msg()
             );
         }
 

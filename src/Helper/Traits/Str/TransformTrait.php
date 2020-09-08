@@ -44,7 +44,7 @@ trait TransformTrait
     final public static function decapitalize(
         string $text,
         bool $upperRest = false,
-        string $encoding = "UTF-8"
+        string $encoding = 'UTF-8'
     ): string {
         $substr = mb_substr($text, 1);
         $suffix = ($upperRest) ? self::upper($substr, $encoding) : $substr;
@@ -59,8 +59,8 @@ trait TransformTrait
      * ```php
      * use Phalcon\Helper\Str;
      *
-     * echo Str::decrement("a_1");    // "a"
-     * echo Str::decrement("a_2");  // "a_1"
+     * echo Str::decrement('a_1');  // 'a'
+     * echo Str::decrement('a_2');  // 'a_1'
      * ```
      *
      * @param string $text
@@ -70,7 +70,7 @@ trait TransformTrait
      */
     final public static function decrement(
         string $text,
-        string $separator = "_"
+        string $separator = '_'
     ): string {
         $number = 0;
         $parts  = explode($separator, $text);
@@ -99,7 +99,7 @@ trait TransformTrait
      */
     public function friendly(
         string $text,
-        string $separator = "-",
+        string $separator = '-',
         bool $lowercase = true,
         $replace = null
     ): string {
@@ -107,7 +107,7 @@ trait TransformTrait
         if (null !== $replace) {
             if (!is_array($replace) && !is_string($replace)) {
                 throw new Exception(
-                    "Parameter replace must be an array or a string"
+                    'Parameter replace must be an array or a string'
                 );
             }
 
@@ -115,12 +115,12 @@ trait TransformTrait
                 $replace = [$replace];
             }
 
-            $text = str_replace($replace, " ", $text);
+            $text = str_replace($replace, ' ', $text);
         }
 
         $friendly = preg_replace(
-            "/[^a-zA-Z0-9\\/_|+ -]/",
-            "",
+            '/[^a-zA-Z0-9\\/_|+ -]/',
+            '',
             $text
         );
 
@@ -128,7 +128,7 @@ trait TransformTrait
             $friendly = self::lower($friendly);
         }
 
-        $friendly = preg_replace("/[\\/_|+ -]+/", $separator, $friendly);
+        $friendly = preg_replace('/[\\/_|+ -]+/', $separator, $friendly);
         $friendly = trim($friendly, $separator);
 
         return $friendly;
@@ -159,7 +159,7 @@ trait TransformTrait
      */
     final public static function increment(
         string $text,
-        string $separator = "_"
+        string $separator = '_'
     ): string {
         $parts  = explode($separator, $text);
         $number = 1;
@@ -181,7 +181,7 @@ trait TransformTrait
      */
     final public static function lower(
         string $text,
-        string $encoding = "UTF-8"
+        string $encoding = 'UTF-8'
     ): string {
         return mb_convert_case($text, MB_CASE_LOWER, $encoding);
     }
@@ -210,7 +210,7 @@ trait TransformTrait
      */
     final public static function ucwords(
         string $text,
-        string $encoding = "UTF-8"
+        string $encoding = 'UTF-8'
     ): string {
         return mb_convert_case($text, MB_CASE_TITLE, $encoding);
     }
@@ -226,7 +226,7 @@ trait TransformTrait
     {
         $result = preg_replace('#\s+#', '_', trim($text));
 
-        return (null === $result) ? "" : $result;
+        return (null === $result) ? '' : $result;
     }
 
     /**
@@ -240,7 +240,7 @@ trait TransformTrait
      */
     final public static function upper(
         string $text,
-        string $encoding = "UTF-8"
+        string $encoding = 'UTF-8'
     ): string {
         return mb_convert_case($text, MB_CASE_UPPER, $encoding);
     }

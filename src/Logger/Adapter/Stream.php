@@ -32,11 +32,11 @@ use const PHP_EOL;
  * Adapter to store logs in plain text files
  *
  *```php
- * $logger = new \Phalcon\Logger\Adapter\Stream("app/logs/test.log");
+ * $logger = new \Phalcon\Logger\Adapter\Stream('app/logs/test.log');
  *
- * $logger->log("This is a message");
- * $logger->log(\Phalcon\Logger::ERROR, "This is an error");
- * $logger->error("This is another error");
+ * $logger->log('This is a message');
+ * $logger->log(\Phalcon\Logger::ERROR, 'This is an error');
+ * $logger->error('This is another error');
  *
  * $logger->close();
  *```
@@ -56,11 +56,11 @@ class Stream extends AbstractAdapter
     protected $handler = null;
 
     /**
-     * The file open mode. Defaults to "ab"
+     * The file open mode. Defaults to 'ab'
      *
      * @var string
      */
-    protected string $mode = "ab";
+    protected string $mode = 'ab';
 
     /**
      * Stream name
@@ -133,11 +133,11 @@ class Stream extends AbstractAdapter
                 $this->handler = null;
 
                 throw new LogicException(
-                    sprintf(
-                        "The file '%s' cannot be opened with mode '%s'",
-                        $this->name,
-                        $this->mode
-                    )
+                    'The file "' .
+                    $this->name .
+                    '" cannot be opened with mode "' .
+                    $this->mode .
+                    '"',
                 );
             }
 

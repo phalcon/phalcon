@@ -296,11 +296,12 @@ class Logger implements LoggerInterface
              */
             $adapters = array_diff_key($this->adapters, $this->excluded);
             foreach ($adapters as $adapter) {
-                if ($adapter->inTransaction()) {
-                    $adapter->add($item);
-                } else {
-                    $adapter->process($item);
+                $method = 'process';
+                if (true === $adapter->inTransaction()) {
+                    $method = 'add';
                 }
+
+                $adapter->$method($item);
             }
 
             /**
@@ -318,15 +319,15 @@ class Logger implements LoggerInterface
     protected function getLevels(): array
     {
         return [
-            self::ALERT     => "alert",
-            self::CRITICAL  => "critical",
-            self::DEBUG     => "debug",
-            self::EMERGENCY => "emergency",
-            self::ERROR     => "error",
-            self::INFO      => "info",
-            self::NOTICE    => "notice",
-            self::WARNING   => "warning",
-            self::CUSTOM    => "custom",
+            self::ALERT     => 'alert',
+            self::CRITICAL  => 'critical',
+            self::DEBUG     => 'debug',
+            self::EMERGENCY => 'emergency',
+            self::ERROR     => 'error',
+            self::INFO      => 'info',
+            self::NOTICE    => 'notice',
+            self::WARNING   => 'warning',
+            self::CUSTOM    => 'custom',
         ];
     }
 
