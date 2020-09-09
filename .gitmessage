@@ -1,0 +1,28 @@
+<type>(<scope>): <summary>
+
+<Description of the change (why). Wrap all lines at 80 characters.>
+
+Refs #<issue number>
+
+# -------------------------------- 100 chars ----------------------------------┤
+
+
+# Example Commit Messages
+# =======================
+
+
+# --- Examples ----------------------------------------------------------------┤
+# refactor(core): rename abc to def
+# docs: clarify the service limitation in providers.md guide
+# fix(logger): changed interface definition
+# feat(psr-18): implement PSR-18
+#
+# --- Comments ----------------------------------------------------------------┤
+# This commit fixes a and b but ignores c intentionally .....
+#
+# BREAKING CHANGE: watch out for these BC changes
+# @phalcon/core
+#
+# Fixes #1234
+# Refs #1234
+# -----------------------------------------------------------------------------┤
