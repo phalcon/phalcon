@@ -29,7 +29,7 @@ class CountVowelsCest
         $I->wantToTest('Helper\Str - countVowels()');
 
         $source   = 'Luke, I am your father!';
-        $expected = 8;
+        $expected = 9;
         $actual   = Str::countVowels($source);
         $I->assertEquals($expected, $actual);
 

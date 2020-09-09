@@ -74,6 +74,7 @@ trait TransformTrait
     ): string {
         $number = 0;
         $parts  = explode($separator, $text);
+        $parts  = !is_array($parts) ? [] : $parts;
 
         if (isset($parts[1])) {
             $number = $parts[1];
@@ -124,11 +125,11 @@ trait TransformTrait
         );
 
         if ($lowercase) {
-            $friendly = self::lower($friendly);
+            $friendly = self::lower((string) $friendly);
         }
 
         return trim(
-            preg_replace(
+            (string) preg_replace(
                 '/[\\/_|+ -]+/',
                 $separator,
                 $friendly

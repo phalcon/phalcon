@@ -31,7 +31,7 @@ class Item
     /**
      * @var array
      */
-    protected array $context;
+    protected array $context = [];
 
     /**
      * @var string
@@ -77,9 +77,9 @@ class Item
     }
 
     /**
-     * @return array|null
+     * @return array
      */
-    public function getContext(): ?array
+    public function getContext(): array
     {
         return $this->context;
     }

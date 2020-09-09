@@ -29,6 +29,7 @@ use function strlen;
 use function substr;
 use function trim;
 
+use function var_dump;
 use const DIRECTORY_SEPARATOR;
 use const PATHINFO_FILENAME;
 
@@ -70,42 +71,28 @@ class Str
      * echo $str;   // /tmp/folder_1/folder_2/folder_3/
      * ```
      *
-     * @param string separator
-     * @param string a
-     * @param string b
-     * @param string ...N
+     * @param string $delimiter
+     * @param string $first
+     * @param string $second
+     * @param string ...$arguments
      *
      * @return string
-     * @throws Exception
      */
-    final public static function concat(): string
-    {
-        $arguments = func_get_args();
+    final public static function concat(
+        string $delimiter,
+        string $first,
+        string $second,
+        string ...$arguments
+    ): string {
+        $data       = [];
+        $parameters = array_merge([$first, $second], $arguments);
+        $last       = Arr::last($parameters);
 
-        if (count($arguments) < 3) {
-            throw new Exception(
-                'concat needs at least three parameters'
-            );
-        }
+        $prefix = self::startsWith($first, $delimiter) ? $delimiter : '';
+        $suffix = self::endsWith($last, $delimiter) ? $delimiter : '';
 
-        $delimiter = Arr::first($arguments);
-        $arguments = Arr::sliceRight($arguments);
-        $first     = Arr::first($arguments);
-        $last      = Arr::last($arguments);
-        $prefix    = '';
-        $suffix    = '';
-        $data      = [];
-
-        if (self::startsWith($first, $delimiter)) {
-            $prefix = $delimiter;
-        }
-
-        if (self::endsWith($last, $delimiter)) {
-            $suffix = $delimiter;
-        }
-
-        foreach ($arguments as $argument) {
-            $data[] = trim($argument, $delimiter);
+        foreach ($parameters as $parameter) {
+            $data[] = trim($parameter, $delimiter);
         }
 
         return $prefix . implode($delimiter, $data) . $suffix;
@@ -121,7 +108,7 @@ class Str
      */
     final public static function countVowels(string $text): int
     {
-        preg_match_all('/[aeiou]/i', $text, $matches);
+        preg_match_all('/[aeiouy]/i', $text, $matches);
 
         return count($matches[0]);
     }
