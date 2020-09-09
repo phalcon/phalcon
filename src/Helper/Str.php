@@ -17,6 +17,7 @@ use Phalcon\Helper\Traits\Str\AssertTrait;
 use Phalcon\Helper\Traits\Str\TransformTrait;
 
 use function array_merge;
+use function end;
 use function implode;
 use function mt_rand;
 use function pathinfo;
@@ -84,7 +85,7 @@ class Str
     ): string {
         $data       = [];
         $parameters = array_merge([$first, $second], $arguments);
-        $last       = Arr::last($parameters);
+        $last       = end($parameters);
 
         $prefix = self::startsWith($first, $delimiter) ? $delimiter : '';
         $suffix = self::endsWith($last, $delimiter) ? $delimiter : '';
