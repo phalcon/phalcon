@@ -85,7 +85,7 @@ class Str
     ): string {
         $data       = [];
         $parameters = array_merge([$first, $second], $arguments);
-        $last       = end($parameters);
+        $last       = end($parameters) ?? $second;
 
         $prefix = self::startsWith($first, $delimiter) ? $delimiter : '';
         $suffix = self::endsWith($last, $delimiter) ? $delimiter : '';
