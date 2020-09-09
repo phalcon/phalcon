@@ -17,7 +17,6 @@ use Phalcon\Helper\Traits\Str\AssertTrait;
 use Phalcon\Helper\Traits\Str\TransformTrait;
 
 use function array_merge;
-use function func_get_args;
 use function implode;
 use function mt_rand;
 use function pathinfo;
@@ -29,7 +28,6 @@ use function strlen;
 use function substr;
 use function trim;
 
-use function var_dump;
 use const DIRECTORY_SEPARATOR;
 use const PATHINFO_FILENAME;
 
