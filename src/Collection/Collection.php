@@ -98,7 +98,7 @@ class Collection implements
     }
 
     /**
-     * Count elements of an object.
+     * Count elements of an object
      *
      * @return int
      */
@@ -152,7 +152,7 @@ class Collection implements
     /**
      * Returns the keys (insensitive or not) of the collection
      *
-     * @param bool $insensitive
+     * @param bool $insensitive Case insensitive keys (default: true)
      *
      * @return array
      */
