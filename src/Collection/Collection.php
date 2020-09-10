@@ -178,7 +178,7 @@ class Collection implements
     /**
      * Get the element from the collection
      *
-     * @param string $element
+     * @param string $element Name of the element
      *
      * @return bool
      */
@@ -194,7 +194,7 @@ class Collection implements
     /**
      * Initialize internal array
      *
-     * @param array $data
+     * @param array $data Array to initialize the collection with
      */
     public function init(array $data = []): void
     {
