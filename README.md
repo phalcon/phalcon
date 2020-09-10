@@ -2,10 +2,9 @@
 Phalcon Framework
 
 [![PDS Skeleton](https://img.shields.io/badge/pds-skeleton-blue.svg?style=flat-square)](https://github.com/php-pds/skeleton)
-[![Codacy Badge](https://api.codacy.com/project/badge/Grade/196dff09b06b46958ff9dd205e74c537)](#)
+[![Codacy Badge](https://app.codacy.com/project/badge/Grade/cb48fc4f2f03440bad6c305ea27449a2)](https://www.codacy.com/gh/phalcon/phalcon?utm_source=github.com&amp;utm_medium=referral&amp;utm_content=phalcon/phalcon&amp;utm_campaign=Badge_Grade)
 [![Scrutinizer Code Quality](https://scrutinizer-ci.com/g/phalcon/phalcon/badges/quality-score.png?b=master)](https://scrutinizer-ci.com/g/phalcon/phalcon/?branch=master)
 [![Code Coverage](https://scrutinizer-ci.com/g/phalcon/phalcon/badges/coverage.png?b=master)](https://scrutinizer-ci.com/g/phalcon/phalcon/?branch=master)
-
 
 ## Implemented
 
@@ -13,7 +12,6 @@ Phalcon Framework
 |---------------------------------------------------------------------------|------------------------|
 | ![PSR-4](https://img.shields.io/badge/PSR-4-blue.svg?style=flat-square)   | `Phalcon\Autoloader`   |
 | ![PSR-12](https://img.shields.io/badge/PSR-12-blue.svg?style=flat-square) | Coding Standard        |
-
 
 ## To do
 

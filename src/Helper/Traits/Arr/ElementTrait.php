@@ -14,7 +14,6 @@ declare(strict_types=1);
 namespace Phalcon\Helper\Traits\Arr;
 
 use function array_key_exists;
-use function array_unique;
 use function is_string;
 use function settype;
 

@@ -17,7 +17,7 @@ use Phalcon\Helper\Traits\Str\AssertTrait;
 use Phalcon\Helper\Traits\Str\TransformTrait;
 
 use function array_merge;
-use function func_get_args;
+use function end;
 use function implode;
 use function mt_rand;
 use function pathinfo;
@@ -60,52 +60,38 @@ class Str
      *
      * ```php
      * $str = Phalcon\Helper\Str::concat(
-     *     "/",
-     *     "/tmp/",
-     *     "/folder_1/",
-     *     "/folder_2",
-     *     "folder_3/"
+     *     '/',
+     *     '/tmp/',
+     *     '/folder_1/',
+     *     '/folder_2',
+     *     'folder_3/'
      * );
      *
      * echo $str;   // /tmp/folder_1/folder_2/folder_3/
      * ```
      *
-     * @param string separator
-     * @param string a
-     * @param string b
-     * @param string ...N
+     * @param string $delimiter
+     * @param string $first
+     * @param string $second
+     * @param string ...$arguments
      *
      * @return string
-     * @throws Exception
      */
-    final public static function concat(): string
-    {
-        $arguments = func_get_args();
+    final public static function concat(
+        string $delimiter,
+        string $first,
+        string $second,
+        string ...$arguments
+    ): string {
+        $data       = [];
+        $parameters = array_merge([$first, $second], $arguments);
+        $last       = end($parameters) ?? $second;
 
-        if (count($arguments) < 3) {
-            throw new Exception(
-                "concat needs at least three parameters"
-            );
-        }
+        $prefix = self::startsWith($first, $delimiter) ? $delimiter : '';
+        $suffix = self::endsWith($last, $delimiter) ? $delimiter : '';
 
-        $delimiter = Arr::first($arguments);
-        $arguments = Arr::sliceRight($arguments);
-        $first     = Arr::first($arguments);
-        $last      = Arr::last($arguments);
-        $prefix    = "";
-        $suffix    = "";
-        $data      = [];
-
-        if (self::startsWith($first, $delimiter)) {
-            $prefix = $delimiter;
-        }
-
-        if (self::endsWith($last, $delimiter)) {
-            $suffix = $delimiter;
-        }
-
-        foreach ($arguments as $argument) {
-            $data[] = trim($argument, $delimiter);
+        foreach ($parameters as $parameter) {
+            $data[] = trim($parameter, $delimiter);
         }
 
         return $prefix . implode($delimiter, $data) . $suffix;
@@ -121,7 +107,7 @@ class Str
      */
     final public static function countVowels(string $text): int
     {
-        preg_match_all("/[aeiou]/i", $text, $matches);
+        preg_match_all('/[aeiouy]/i', $text, $matches);
 
         return count($matches[0]);
     }
@@ -207,7 +193,7 @@ class Str
      */
     final public static function len(
         string $text,
-        string $encoding = "UTF-8"
+        string $encoding = 'UTF-8'
     ): int {
         return mb_strlen($text, $encoding);
     }
@@ -225,7 +211,7 @@ class Str
         int $type = self::RANDOM_ALNUM,
         int $length = 8
     ): string {
-        $text  = "";
+        $text  = '';
         $type  = ($type < 0 || $type > 5) ? self::RANDOM_ALNUM : $type;
         $pools = [
             self::RANDOM_ALPHA    => array_merge(

@@ -77,7 +77,7 @@ trait AssertTrait
      */
     final public static function isLower(
         string $text,
-        string $encoding = "UTF-8"
+        string $encoding = 'UTF-8'
     ): bool {
         return $text === mb_convert_case($text, MB_CASE_LOWER, $encoding);
     }
@@ -104,7 +104,7 @@ trait AssertTrait
      */
     final public static function isUpper(
         string $text,
-        string $encoding = "UTF-8"
+        string $encoding = 'UTF-8'
     ): bool {
         return $text === mb_convert_case($text, MB_CASE_UPPER, $encoding);
     }
@@ -123,7 +123,7 @@ trait AssertTrait
         string $needle,
         bool $ignoreCase = true
     ): bool {
-        if ("" === $haystack) {
+        if ('' === $haystack) {
             return false;
         }
 

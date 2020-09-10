@@ -11,7 +11,7 @@
 
 declare(strict_types=1);
 
-namespace Phalcon\Test\Unit\Helper\Str;
+namespace Phalcon\Tests\Unit\Helper\Str;
 
 use Phalcon\Helper\Exception;
 use Phalcon\Helper\Str;
@@ -49,19 +49,5 @@ class ConcatCest
         );
         $expected = '@test.test2.test.34';
         $I->assertEquals($expected, $actual);
-    }
-
-    /**
-     * Tests Phalcon\Helper\Str :: concat() - exception
-     */
-    public function helperStrConcatException(UnitTester $I)
-    {
-        $I->wantToTest('Helper\Str - concat() - exception');
-        $I->expectThrowable(
-            new Exception('concat needs at least three parameters'),
-            function () {
-                Str::concat('/', '/tmp/');
-            }
-        );
     }
 }

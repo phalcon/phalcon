@@ -34,3 +34,13 @@ if (!function_exists('outputDir')) {
     }
 }
 
+
+/**
+ * Returns the output logs folder
+ */
+if (!function_exists('logsDir')) {
+    function logsDir(string $fileName = ''): string
+    {
+        return codecept_output_dir() . 'logs/' . $fileName;
+    }
+}

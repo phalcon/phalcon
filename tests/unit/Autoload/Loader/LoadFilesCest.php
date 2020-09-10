@@ -11,10 +11,10 @@
 
 declare(strict_types=1);
 
-namespace Phalcon\Test\Unit\Autoload\Loader;
+namespace Phalcon\Tests\Unit\Autoload\Loader;
 
 use Phalcon\Autoload\Loader;
-use Phalcon\Test\Fixtures\Traits\LoaderTrait;
+use Phalcon\Tests\Fixtures\Traits\LoaderTrait;
 use UnitTester;
 
 use function dataDir;
