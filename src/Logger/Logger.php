@@ -18,6 +18,7 @@ use DateTimeZone;
 use Exception;
 use Phalcon\Logger\Adapter\AdapterInterface;
 use Phalcon\Logger\Exception as LoggerException;
+use Psr\Log\InvalidArgumentException;
 use Psr\Log\LoggerInterface;
 use Psr\Log\LoggerTrait;
 
@@ -342,6 +343,12 @@ class Logger implements LoggerInterface
      *
      * @return int
      */
+    /**
+     * @param $level
+     *
+     * @return int
+     * @throws InvalidArgumentException
+     */
     private function getLevelNumber($level): int
     {
         if (is_string($level)) {
@@ -359,6 +366,6 @@ class Logger implements LoggerInterface
             }
         }
 
-        return self::CUSTOM;
+        throw new InvalidArgumentException('Unknown log level');
     }
 }

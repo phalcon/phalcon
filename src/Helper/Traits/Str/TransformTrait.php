@@ -23,6 +23,7 @@ use function str_replace;
 use function trim;
 
 use const MB_CASE_LOWER;
+use const MB_CASE_TITLE;
 use const MB_CASE_UPPER;
 
 /**

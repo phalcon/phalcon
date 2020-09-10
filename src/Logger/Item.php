@@ -109,8 +109,10 @@ class Item
     }
 
     /**
+     * Alias of getDateTime
+     * 
      * @return DateTimeImmutable
-     * @todo To be removed for v6 -- alias of getDateTime
+     * @deprecated To be removed in v6
      */
     public function getTime(): DateTimeImmutable
     {
