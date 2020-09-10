@@ -87,9 +87,9 @@ class Logger implements LoggerInterface
     /**
      * Constructor.
      *
-     * @param string $name                The name of the logger
-     * @param array  $adapters            The collection of adapters to be used for
-     *                                    logging (default [])
+     * @param string            $name     The name of the logger
+     * @param array             $adapters The collection of adapters to be used
+     *                                    for logging (default [])
      * @param DateTimeZone|null $timezone Timezone. If omitted,
      *                                    date_Default_timezone_get() is used
      */

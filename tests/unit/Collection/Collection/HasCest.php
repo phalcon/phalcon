@@ -21,10 +21,11 @@ class HasCest
     /**
      * Tests Phalcon\Collection :: has()
      *
-     * @author Phalcon Team <team@phalcon.io>
+     * @param UnitTester $I
+     *
      * @since  2020-09-09
      *
-     * @param UnitTester $I
+     * @author Phalcon Team <team@phalcon.io>
      */
     public function collectionHas(UnitTester $I)
     {

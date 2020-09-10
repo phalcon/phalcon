@@ -124,8 +124,8 @@ class FormatCest
         );
 
         $result = $formatter->format($item);
-        $parts = explode('-', $result);
-        $parts = explode('.', $parts[2]);
+        $parts  = explode('-', $result);
+        $parts  = explode('.', $parts[2]);
         $I->assertCount(2, $parts);
         $I->assertGreaterThan(0, (int) $parts[0]);
         $I->assertGreaterThan(0, (int) $parts[1]);

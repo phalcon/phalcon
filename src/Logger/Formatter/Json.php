@@ -53,8 +53,8 @@ class Json extends AbstractFormatter
     public function format(Item $item): string
     {
         $options = JSON_HEX_TAG + JSON_HEX_APOS + JSON_HEX_AMP
-                 + JSON_HEX_QUOT + JSON_UNESCAPED_SLASHES
-                 + JSON_THROW_ON_ERROR;
+            + JSON_HEX_QUOT + JSON_UNESCAPED_SLASHES
+            + JSON_THROW_ON_ERROR;
         $message = $this->interpolate(
             $item->getMessage(),
             $item->getContext()
