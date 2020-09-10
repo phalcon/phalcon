@@ -23,6 +23,9 @@ class SerializeCest
      *
      * @author Phalcon Team <team@phalcon.io>
      * @since  2020-09-09
+     *
+     * @param UnitTester $I
+
      */
     public function collectionSerialize(UnitTester $I)
     {
