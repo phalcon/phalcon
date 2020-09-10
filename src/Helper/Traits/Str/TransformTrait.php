@@ -18,6 +18,8 @@ use Phalcon\Helper\Exception;
 use function explode;
 use function is_array;
 use function is_string;
+use function mb_convert_case;
+use function mb_substr;
 use function preg_replace;
 use function str_replace;
 use function trim;

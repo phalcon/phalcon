@@ -19,6 +19,7 @@ use Generator;
 use IteratorAggregate;
 use JsonSerializable;
 use Phalcon\Collection\Traits\ArrayAccessTrait;
+use Phalcon\Collection\Traits\GetSetHasTrait;
 use Phalcon\Collection\Traits\SerializableTrait;
 use Serializable;
 
@@ -30,7 +31,6 @@ use function json_encode;
 use function mb_strtolower;
 use function method_exists;
 use function settype;
-use function strtolower;
 
 /**
  * `Phalcon\Collection` is a supercharged object oriented array. It implements:
@@ -58,6 +58,7 @@ class Collection implements
     Serializable
 {
     use ArrayAccessTrait;
+    use GetSetHasTrait;
     use SerializableTrait;
 
     /**
@@ -85,51 +86,6 @@ class Collection implements
     {
         $this->insensitive = $insensitive;
         $this->init($data);
-    }
-
-    /**
-     * Magic getter to get an element from the collection
-     *
-     * @param string $element
-     *
-     * @return mixed|null
-     */
-    public function __get(string $element)
-    {
-        return $this->get($element);
-    }
-
-    /**
-     * Magic isset to check whether an element exists or not
-     *
-     * @param string $element
-     *
-     * @return bool
-     */
-    public function __isset(string $element): bool
-    {
-        return $this->has($element);
-    }
-
-    /**
-     * Magic setter to assign values to an element
-     *
-     * @param string $element
-     * @param mixed  $value
-     */
-    public function __set(string $element, $value): void
-    {
-        $this->set($element, $value);
-    }
-
-    /**
-     * Magic unset to remove an element from the collection
-     *
-     * @param string $element
-     */
-    public function __unset(string $element): void
-    {
-        $this->remove($element);
     }
 
     /**
@@ -165,7 +121,7 @@ class Collection implements
         $defaultValue = null,
         string $cast = null
     ) {
-        $element = ($this->insensitive) ? strtolower($element) : $element;
+        $element = ($this->insensitive) ? mb_strtolower($element) : $element;
 
         if (!array_key_exists($element, $this->lowerKeys)) {
             return $defaultValue;
@@ -204,9 +160,9 @@ class Collection implements
     {
         if ($insensitive) {
             return array_keys($this->lowerKeys);
-        } else {
-            return array_keys($this->data);
         }
+
+        return array_keys($this->data);
     }
 
     /**
@@ -229,7 +185,7 @@ class Collection implements
     public function has(string $element): bool
     {
         if ($this->insensitive) {
-            $element = strtolower($element);
+            $element = mb_strtolower($element);
         }
 
         return isset($this->lowerKeys[$element]);
@@ -276,7 +232,7 @@ class Collection implements
     {
         if ($this->has($element)) {
             if ($this->insensitive) {
-                $element = strtolower($element);
+                $element = mb_strtolower($element);
             }
 
             $value = $this->lowerKeys[$element];
