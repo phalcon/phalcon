@@ -4,8 +4,35 @@
         "Read more about it at https://getcomposer.org/doc/01-basic-usage.md#installing-dependencies",
         "This file is @generated automatically"
     ],
-    "content-hash": "f51dd41abb495f0b5a27bf334974755c",
+    "content-hash": "32141ef7f0cbfa598d2f9b001312d45d",
     "packages": [
+        {
+            "name": "payload-interop/payload-interop",
+            "version": "1.0.0",
+            "source": {
+                "type": "git",
+                "url": "https://github.com/payload-interop/payload-interop.git",
+                "reference": "c13921e6f81365e808c86c00484c3e03c8b2c0f5"
+            },
+            "dist": {
+                "type": "zip",
+                "url": "https://api.github.com/repos/payload-interop/payload-interop/zipball/c13921e6f81365e808c86c00484c3e03c8b2c0f5",
+                "reference": "c13921e6f81365e808c86c00484c3e03c8b2c0f5",
+                "shasum": ""
+            },
+            "type": "library",
+            "autoload": {
+                "psr-4": {
+                    "PayloadInterop\\": "src/"
+                }
+            },
+            "notification-url": "https://packagist.org/downloads/",
+            "license": [
+                "MIT"
+            ],
+            "description": "An interoperable Domain Payload Object specification.",
+            "time": "2020-02-10T13:41:16+00:00"
+        },
         {
             "name": "psr/container",
             "version": "1.0.0",
