@@ -13,7 +13,6 @@ declare(strict_types=1);
 
 namespace Phalcon\Tests\Unit\Helper\Str;
 
-use Phalcon\Helper\Exception;
 use Phalcon\Helper\Str;
 use UnitTester;
 

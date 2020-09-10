@@ -271,7 +271,7 @@ class Collection implements
      *
      * @see https://www.ietf.org/rfc/rfc4627.txt
      *
-     * @param int $options`
+     * @param int $options `
      *
      * @return string
      */

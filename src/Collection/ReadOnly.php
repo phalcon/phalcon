@@ -13,8 +13,6 @@ declare(strict_types=1);
 
 namespace Phalcon\Collection;
 
-use Phalcon\Collection\Collection;
-
 /**
  * Phalcon\Collection\ReadOnly is a read only Collection object
  */

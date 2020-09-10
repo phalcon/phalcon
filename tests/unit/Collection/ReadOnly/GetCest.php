@@ -21,11 +21,11 @@ class GetCest
     /**
      * Tests Phalcon\Collection\ReadOnly :: get()
      *
-     * @author Phalcon Team <team@phalcon.io>
+     * @param UnitTester $I
+     *
      * @since  2020-09-09
      *
-     * @param UnitTester $I
-
+     * @author Phalcon Team <team@phalcon.io>
      */
     public function collectionGet(UnitTester $I)
     {
