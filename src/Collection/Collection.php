@@ -226,7 +226,7 @@ class Collection implements
     /**
      * Delete the element from the collection
      *
-     * @param string $element
+     * @param string $element Name of the element
      */
     public function remove(string $element): void
     {
@@ -245,8 +245,8 @@ class Collection implements
     /**
      * Set an element in the collection
      *
-     * @param string $element
-     * @param mixed  $value
+     * @param string $element Name of the element
+     * @param mixed  $value   Value to store for the element
      */
     public function set(string $element, $value): void
     {
