@@ -110,7 +110,7 @@ class Item
 
     /**
      * Alias of getDateTime
-     * 
+     *
      * @return DateTimeImmutable
      * @deprecated To be removed in v6
      */
