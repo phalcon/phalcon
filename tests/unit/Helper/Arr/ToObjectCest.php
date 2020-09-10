@@ -23,7 +23,7 @@ class ToObjectCest
      * Unit Tests Phalcon\Helper\Arr :: toObject()
      *
      * @author Phalcon Team <team@phalcon.io>
-     * @since  2019-05-25
+     * @since  2020-09-09
      */
     public function helperArrArrayToObject(UnitTester $I)
     {

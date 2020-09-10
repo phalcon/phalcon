@@ -23,7 +23,7 @@ class DecrementCest
      * Tests Phalcon\Helper\Str :: decrement() - string
      *
      * @author       Ruud Boon <https://github.com/ruudboon>
-     * @since        2019-12-08
+     * @since        2020-09-09
      * @dataProvider strProvider
      */
     public function helperStrDecrement(UnitTester $I, Example $example)

@@ -23,7 +23,7 @@ class EncodeCest
      * Tests Phalcon\Helper\Json :: encode()
      *
      * @author Phalcon Team <team@phalcon.io>
-     * @since  2019-12-01
+     * @since  2020-09-09
      */
     public function helperJsonEncode(UnitTester $I)
     {
@@ -42,7 +42,7 @@ class EncodeCest
      * Tests Phalcon\Helper\Json :: encode() - exception
      *
      * @author Phalcon Team <team@phalcon.io>
-     * @since  2019-12-01
+     * @since  2020-09-09
      */
     public function helperJsonEncodeException(UnitTester $I)
     {

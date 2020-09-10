@@ -22,7 +22,7 @@ class FlattenCest
      * Tests Phalcon\Helper\Arr :: flatten()
      *
      * @author Phalcon Team <team@phalcon.io>
-     * @since  2019-04-06
+     * @since  2020-09-09
      */
     public function helperArrFlatten(UnitTester $I)
     {
@@ -40,7 +40,7 @@ class FlattenCest
      * Tests Phalcon\Helper\Arr :: flatten() - deep
      *
      * @author Phalcon Team <team@phalcon.io>
-     * @since  2019-04-06
+     * @since  2020-09-09
      */
     public function helperArrFlattenDeep(UnitTester $I)
     {

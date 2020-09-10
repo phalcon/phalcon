@@ -22,7 +22,7 @@ class ToArrayCest
      * Tests Phalcon\Collection\ReadOnly :: toArray()
      *
      * @author Phalcon Team <team@phalcon.io>
-     * @since  2018-11-13
+     * @since  2020-09-09
      */
     public function collectionToArray(UnitTester $I)
     {

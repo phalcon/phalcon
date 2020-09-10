@@ -23,7 +23,7 @@ class UpperCest
      * Tests Phalcon\Helper\Str :: upper()
      *
      * @author       Phalcon Team <team@phalcon.io>
-     * @since        2019-04-06
+     * @since        2020-09-09
      *
      * @dataProvider basicProvider
      */

@@ -22,7 +22,7 @@ class GetKeysCest
      * Tests Phalcon\Collection :: get()
      *
      * @author Phalcon Team <team@phalcon.io>
-     * @since  2019-12-12
+     * @since  2020-09-09
      */
     public function collectionCollectionGetKeys(UnitTester $I)
     {

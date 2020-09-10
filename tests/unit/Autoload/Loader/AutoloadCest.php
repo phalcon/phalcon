@@ -28,7 +28,7 @@ class AutoloadCest
     /**
      * Tests Phalcon\Autoloader\Loader :: autoload() = classes
      *
-     * @since  2018-11-13
+     * @since  2020-09-09
      */
     public function autoloaderLoaderAutoloadClasses(UnitTester $I)
     {
@@ -82,7 +82,7 @@ class AutoloadCest
     /**
      * Tests Phalcon\Autoloader\Loader :: autoload() = namespaces
      *
-     * @since  2018-11-13
+     * @since  2020-09-09
      */
     public function autoloaderLoaderAutoloadNamespaces(UnitTester $I)
     {
@@ -123,7 +123,7 @@ class AutoloadCest
      * Tests Phalcon\Autoloader\Loader :: autoload() = namespaces multiple
      * folders
      *
-     * @since  2018-11-13
+     * @since  2020-09-09
      */
     public function autoloaderLoaderAutoloadNamespacesMultipleFolders(UnitTester $I)
     {
@@ -173,7 +173,7 @@ class AutoloadCest
     /**
      * Tests Phalcon\Autoloader\Loader :: autoload() = namespaces no folders
      *
-     * @since  2018-11-13
+     * @since  2020-09-09
      */
     public function autoloaderLoaderAutoloadNamespacesNoFolders(UnitTester $I)
     {
@@ -199,7 +199,7 @@ class AutoloadCest
     /**
      * Tests Phalcon\Autoloader\Loader :: autoload() = namespaces 404
      *
-     * @since  2018-11-13
+     * @since  2020-09-09
      */
     public function autoloaderLoaderAutoloadNamespaces404(UnitTester $I)
     {
@@ -232,7 +232,7 @@ class AutoloadCest
     /**
      * Tests Phalcon\Autoloader\Loader :: autoload() = extension
      *
-     * @since  2018-11-13
+     * @since  2020-09-09
      */
     public function autoloaderLoaderAutoloadExtension(UnitTester $I)
     {

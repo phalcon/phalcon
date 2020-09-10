@@ -22,7 +22,7 @@ class LastKeyCest
      * Tests Phalcon\Helper\Arr :: last()
      *
      * @author Phalcon Team <team@phalcon.io>
-     * @since  2019-04-06
+     * @since  2020-09-09
      */
     public function helperArrLast(UnitTester $I)
     {
@@ -43,7 +43,7 @@ class LastKeyCest
      * Tests Phalcon\Helper\Arr :: last() - function
      *
      * @author Phalcon Team <team@phalcon.io>
-     * @since  2019-04-06
+     * @since  2020-09-09
      */
     public function helperArrLastFunction(UnitTester $I)
     {

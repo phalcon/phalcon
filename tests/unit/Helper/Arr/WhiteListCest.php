@@ -23,7 +23,7 @@ class WhiteListCest
      * Unit Tests Phalcon\Helper\Arr :: whiteList()
      *
      * @author Phalcon Team <team@phalcon.io>
-     * @since  2019-06-14
+     * @since  2020-09-09
      */
     public function helperArrWhiteList(UnitTester $I)
     {

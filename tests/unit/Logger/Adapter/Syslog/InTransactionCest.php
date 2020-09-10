@@ -22,7 +22,7 @@ class InTransactionCest
      * Tests Phalcon\Logger\Adapter\Syslog :: inTransaction()
      *
      * @author Phalcon Team <team@phalcon.io>
-     * @since  2018-11-13
+     * @since  2020-09-09
      */
     public function loggerAdapterSyslogInTransaction(UnitTester $I)
     {

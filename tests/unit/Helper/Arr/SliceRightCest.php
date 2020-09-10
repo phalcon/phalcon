@@ -22,7 +22,7 @@ class SliceRightCest
      * Tests Phalcon\Helper\Arr :: sliceRight()
      *
      * @author Phalcon Team <team@phalcon.io>
-     * @since  2019-04-06
+     * @since  2020-09-09
      */
     public function helperArrSliceRight(UnitTester $I)
     {

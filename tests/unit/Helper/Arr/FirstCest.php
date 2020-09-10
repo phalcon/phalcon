@@ -22,7 +22,7 @@ class FirstCest
      * Tests Phalcon\Helper\Arr :: first()
      *
      * @author Phalcon Team <team@phalcon.io>
-     * @since  2019-04-06
+     * @since  2020-09-09
      */
     public function helperArrFirst(UnitTester $I)
     {
@@ -43,7 +43,7 @@ class FirstCest
      * Tests Phalcon\Helper\Arr :: first() - function
      *
      * @author Phalcon Team <team@phalcon.io>
-     * @since  2019-04-06
+     * @since  2020-09-09
      */
     public function helperArrFirstFunction(UnitTester $I)
     {

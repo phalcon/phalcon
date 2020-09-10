@@ -22,7 +22,7 @@ class ValidateAllCest
      * Tests Phalcon\Helper\Arr :: validateAll()
      *
      * @author Phalcon Team <team@phalcon.io>
-     * @since  2019-04-07
+     * @since  2020-09-09
      */
     public function helperArrValidateAll(UnitTester $I)
     {

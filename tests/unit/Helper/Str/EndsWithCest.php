@@ -22,7 +22,7 @@ class EndsWithCest
      * Tests Phalcon\Helper\Str :: endsWith()
      *
      * @author Phalcon Team <team@phalcon.io>
-     * @since  2019-04-06
+     * @since  2020-09-09
      */
     public function helperStrEndsWith(UnitTester $I)
     {
@@ -41,7 +41,7 @@ class EndsWithCest
      * Tests Phalcon\Helper\Str :: endsWith() - empty strings
      *
      * @author Phalcon Team <team@phalcon.io>
-     * @since  2019-04-06
+     * @since  2020-09-09
      */
     public function helperStrEndsWithEmpty(UnitTester $I)
     {
@@ -54,7 +54,7 @@ class EndsWithCest
      * Tests Phalcon\Helper\Str :: endsWith() - finding an empty string
      *
      * @author Phalcon Team <team@phalcon.io>
-     * @since  2019-04-06
+     * @since  2020-09-09
      */
     public function helperStrEndsWithEmptySearchString(UnitTester $I)
     {
@@ -68,7 +68,7 @@ class EndsWithCest
      * Tests Phalcon\Helper\Str :: endsWith() - case insensitive flag
      *
      * @author Phalcon Team <team@phalcon.io>
-     * @since  2019-04-06
+     * @since  2020-09-09
      */
     public function helperStrEndsWithCaseInsensitive(UnitTester $I)
     {
@@ -87,7 +87,7 @@ class EndsWithCest
      * Tests Phalcon\Helper\Str :: endsWith() - case sensitive flag
      *
      * @author Phalcon Team <team@phalcon.io>
-     * @since  2019-04-06
+     * @since  2020-09-09
      */
     public function helperStrEndsWithCaseSensitive(UnitTester $I)
     {

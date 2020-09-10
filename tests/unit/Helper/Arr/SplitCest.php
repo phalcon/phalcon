@@ -22,7 +22,7 @@ class SplitCest
      * Tests Phalcon\Helper\Arr :: split()
      *
      * @author Phalcon Team <team@phalcon.io>
-     * @since  2019-04-07
+     * @since  2020-09-09
      */
     public function helperArrSplit(UnitTester $I)
     {

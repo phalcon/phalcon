@@ -24,7 +24,7 @@ class GetFormatterCest
      * Tests Phalcon\Logger\Adapter\Noop :: getFormatter()
      *
      * @author Phalcon Team <team@phalcon.io>
-     * @since  2018-11-13
+     * @since  2020-09-09
      */
     public function loggerAdapterNoopGetFormatter(UnitTester $I)
     {

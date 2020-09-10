@@ -22,7 +22,7 @@ class IsUpperCest
      * Tests Phalcon\Helper\Str :: isUpper()
      *
      * @author Phalcon Team <team@phalcon.io>
-     * @since  2019-04-06
+     * @since  2020-09-09
      */
     public function helperStrIsUpper(UnitTester $I)
     {
