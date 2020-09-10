@@ -283,8 +283,8 @@ class Collection implements
     /**
      * Internal method to set data
      *
-     * @param mixed $element
-     * @param mixed $value
+     * @param mixed $element Name of the element
+     * @param mixed $value   Value to store for the element
      */
     protected function setData($element, $value): void
     {
