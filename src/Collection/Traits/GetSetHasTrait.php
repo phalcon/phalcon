@@ -99,4 +99,3 @@ trait GetSetHasTrait
      */
     abstract public function set(string $element, $value): void;
 }
-
