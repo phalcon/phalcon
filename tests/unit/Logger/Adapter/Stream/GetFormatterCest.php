@@ -32,10 +32,6 @@ class GetFormatterCest
 
         $adapter = new Stream($fileName);
 
-        $adapter->getFormatter(
-            new Line()
-        );
-
         $I->assertInstanceOf(
             FormatterInterface::class,
             $adapter->getFormatter()
