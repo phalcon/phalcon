@@ -23,7 +23,7 @@ class GroupCest
      * Tests Phalcon\Helper\Arr :: group()
      *
      * @author Phalcon Team <team@phalcon.io>
-     * @since  2019-04-07
+     * @since  2020-09-09
      */
     public function helperArrGroup(UnitTester $I)
     {
@@ -74,7 +74,7 @@ class GroupCest
      * Tests Phalcon\Helper\Arr :: group() - object
      *
      * @author Phalcon Team <team@phalcon.io>
-     * @since  2019-04-07
+     * @since  2020-09-09
      */
     public function helperArrGroupObject(UnitTester $I)
     {
@@ -109,7 +109,7 @@ class GroupCest
      * Tests Phalcon\Helper\Arr :: group() - function
      *
      * @author Phalcon Team <team@phalcon.io>
-     * @since  2019-04-07
+     * @since  2020-09-09
      */
     public function helperArrGroupFunction(UnitTester $I)
     {

@@ -22,7 +22,7 @@ class FirstBetweenCest
      * Tests Phalcon\Helper\Str :: firstBetween()
      *
      * @author Phalcon Team <team@phalcon.io>
-     * @since  2019-04-06
+     * @since  2020-09-09
      */
     public function helperStrFirstBetween(UnitTester $I)
     {

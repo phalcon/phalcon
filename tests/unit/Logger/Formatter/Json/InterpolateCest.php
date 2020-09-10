@@ -28,7 +28,7 @@ class InterpolateCest
      * Tests Phalcon\Logger\Formatter\Json :: interpolate()
      *
      * @author Phalcon Team <team@phalcon.io>
-     * @since  2018-11-13
+     * @since  2020-09-09
      */
     public function loggerFormatterJsonInterpolate(UnitTester $I)
     {
@@ -51,7 +51,7 @@ class InterpolateCest
      * Tests Phalcon\Logger\Formatter\Json :: interpolate() - format
      *
      * @author Phalcon Team <team@phalcon.io>
-     * @since  2018-11-13
+     * @since  2020-09-09
      */
     public function loggerFormatterJsonInterpolateFormat(UnitTester $I)
     {

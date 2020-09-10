@@ -22,7 +22,7 @@ class StartsWithCest
      * Tests Phalcon\Helper\Str :: startsWith()
      *
      * @author Phalcon Team <team@phalcon.io>
-     * @since  2019-04-06
+     * @since  2020-09-09
      */
     public function helperStrStartsWith(UnitTester $I)
     {
@@ -41,7 +41,7 @@ class StartsWithCest
      * Tests Phalcon\Helper\Str :: startsWith() - empty strings
      *
      * @author Phalcon Team <team@phalcon.io>
-     * @since  2019-04-06
+     * @since  2020-09-09
      */
     public function helperStrStartsWithEmpty(UnitTester $I)
     {
@@ -54,7 +54,7 @@ class StartsWithCest
      * Tests Phalcon\Helper\Str :: startsWith() - finding an empty string
      *
      * @author Phalcon Team <team@phalcon.io>
-     * @since  2019-04-06
+     * @since  2020-09-09
      */
     public function helperStrStartsWithEmptySearchString(UnitTester $I)
     {
@@ -68,7 +68,7 @@ class StartsWithCest
      * Tests Phalcon\Helper\Str :: startsWith() - case insensitive flag
      *
      * @author Phalcon Team <team@phalcon.io>
-     * @since  2019-04-06
+     * @since  2020-09-09
      */
     public function helperStrStartsWithCaseInsensitive(UnitTester $I)
     {
@@ -87,7 +87,7 @@ class StartsWithCest
      * Tests Phalcon\Helper\Str :: startsWith() - case sensitive flag
      *
      * @author Phalcon Team <team@phalcon.io>
-     * @since  2019-04-06
+     * @since  2020-09-09
      */
     public function helperStrStartsWithCaseSensitive(UnitTester $I)
     {

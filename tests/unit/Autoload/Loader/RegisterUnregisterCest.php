@@ -27,7 +27,7 @@ class RegisterUnregisterCest
     /**
      * Tests Phalcon\Autoload\Loader :: register()/unregister()
      *
-     * @since  2018-11-13
+     * @since  2020-09-09
      */
 
     public function autoloaderLoaderRegisterUnregister(UnitTester $I)

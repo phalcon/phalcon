@@ -24,7 +24,7 @@ class GetCest
      * Tests Phalcon\Helper\Arr :: get() - numeric
      *
      * @author Phalcon Team <team@phalcon.io>
-     * @since  2019-02-17
+     * @since  2020-09-09
      */
     public function helperArrGetNumeric(UnitTester $I)
     {
@@ -45,7 +45,7 @@ class GetCest
      * Tests Phalcon\Helper\Arr :: get() - string
      *
      * @author Phalcon Team <team@phalcon.io>
-     * @since  2019-02-17
+     * @since  2020-09-09
      */
     public function helperArrGetString(UnitTester $I)
     {
@@ -66,7 +66,7 @@ class GetCest
      * Tests Phalcon\Helper\Arr :: get() - default
      *
      * @author Phalcon Team <team@phalcon.io>
-     * @since  2019-02-17
+     * @since  2020-09-09
      */
     public function helperArrGetDefault(UnitTester $I)
     {
@@ -88,7 +88,7 @@ class GetCest
      *
      * @dataProvider getExamples
      *
-     * @since        2019-10-12
+     * @since        2020-09-09
      */
     public function helperArrGetCast(UnitTester $I, Example $example)
     {

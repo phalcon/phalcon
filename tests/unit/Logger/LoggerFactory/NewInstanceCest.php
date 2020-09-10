@@ -27,7 +27,7 @@ class NewInstanceCest
      * Tests Phalcon\Logger\LoggerFactory :: newInstance()
      *
      * @author Phalcon Team <team@phalcon.io>
-     * @since  2019-05-20
+     * @since  2020-09-09
      */
     public function loggerLoggerFactoryNewInstance(UnitTester $I)
     {

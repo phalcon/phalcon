@@ -22,7 +22,7 @@ class FirstKeyCest
      * Tests Phalcon\Helper\Arr :: firstKey()
      *
      * @author Phalcon Team <team@phalcon.io>
-     * @since  2019-04-07
+     * @since  2020-09-09
      */
     public function helperArrFirstKey(UnitTester $I)
     {
@@ -41,7 +41,7 @@ class FirstKeyCest
      * Tests Phalcon\Helper\Arr :: firstKey() - function
      *
      * @author Phalcon Team <team@phalcon.io>
-     * @since  2019-04-07
+     * @since  2020-09-09
      */
     public function helperArrFirstKeyFunction(UnitTester $I)
     {

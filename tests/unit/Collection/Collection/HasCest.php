@@ -22,7 +22,7 @@ class HasCest
      * Tests Phalcon\Collection :: has()
      *
      * @author Phalcon Team <team@phalcon.io>
-     * @since  2018-11-13
+     * @since  2020-09-09
      */
     public function collectionHas(UnitTester $I)
     {
@@ -73,7 +73,7 @@ class HasCest
      * Tests Phalcon\Collection :: has() - sensitive
      *
      * @author Phalcon Team <team@phalcon.io>
-     * @since  2018-11-13
+     * @since  2020-09-09
      */
     public function collectionHasSensitive(UnitTester $I)
     {

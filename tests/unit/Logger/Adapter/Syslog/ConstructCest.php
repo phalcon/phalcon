@@ -24,7 +24,7 @@ class ConstructCest
      *
      * @dataProvider getExamples
      *
-     * @since        2019-10-14
+     * @since        2020-09-09
      */
     public function loggerAdapterSyslogConstructOptionsCast(UnitTester $I, Example $example)
     {

@@ -22,7 +22,7 @@ class ChunkCest
      * Tests Phalcon\Helper\Arr :: chunk()
      *
      * @author Phalcon Team <team@phalcon.io>
-     * @since  2019-04-06
+     * @since  2020-09-09
      */
     public function helperArrChunk(UnitTester $I)
     {
@@ -53,7 +53,7 @@ class ChunkCest
      * Tests Phalcon\Helper\Arr :: chunk() - preserve
      *
      * @author Phalcon Team <team@phalcon.io>
-     * @since  2019-04-06
+     * @since  2020-09-09
      */
     public function helperArrChunkPreserve(UnitTester $I)
     {

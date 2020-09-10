@@ -22,7 +22,7 @@ class BetweenCest
      * Tests Phalcon\Helper\Number :: between()
      *
      * @author Phalcon Team <team@phalcon.io>
-     * @since  2019-02-17
+     * @since  2020-09-09
      */
     public function helperNumberBetween(UnitTester $I)
     {

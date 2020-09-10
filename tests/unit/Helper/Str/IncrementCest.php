@@ -23,7 +23,7 @@ class IncrementCest
      * Tests Phalcon\Helper\Str :: increment()
      *
      * @author       Phalcon Team <team@phalcon.io>
-     * @since        2019-04-06
+     * @since        2020-09-09
      * @dataProvider strProvider
      */
     public function helperStrIncrementSimpleString(UnitTester $I, Example $example)

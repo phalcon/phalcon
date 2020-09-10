@@ -22,7 +22,7 @@ class RollbackCest
      * Tests Phalcon\Logger\Adapter\Noop :: rollback()
      *
      * @author Phalcon Team <team@phalcon.io>
-     * @since  2018-11-13
+     * @since  2020-09-09
      */
     public function loggerAdapterNoopRollback(UnitTester $I)
     {

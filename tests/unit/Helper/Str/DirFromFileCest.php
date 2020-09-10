@@ -22,7 +22,7 @@ class DirFromFileCest
      * Tests Phalcon\Helper\Str :: dirFromFile()
      *
      * @author Phalcon Team <team@phalcon.io>
-     * @since  2019-04-16
+     * @since  2020-09-09
      */
     public function helperStrFolderFromFile(UnitTester $I)
     {

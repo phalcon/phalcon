@@ -22,7 +22,7 @@ class PluckCest
      * Tests Phalcon\Helper\Arr :: pluck()
      *
      * @author Phalcon Team <team@phalcon.io>
-     * @since  2019-04-07
+     * @since  2020-09-09
      */
     public function helperArrPluck(UnitTester $I)
     {
@@ -41,7 +41,7 @@ class PluckCest
      * Tests Phalcon\Helper\Arr :: pluck() - object
      *
      * @author Phalcon Team <team@phalcon.io>
-     * @since  2019-04-07
+     * @since  2020-09-09
      */
     public function helperArrPluckObject(UnitTester $I)
     {

@@ -22,7 +22,7 @@ class SetCest
      * Tests Phalcon\Helper\Arr :: set() - numeric
      *
      * @author Phalcon Team <team@phalcon.io>
-     * @since  2018-11-13
+     * @since  2020-09-09
      */
     public function helperArrSetNumeric(UnitTester $I)
     {
@@ -44,7 +44,7 @@ class SetCest
      * Tests Phalcon\Helper\Arr :: set() - string
      *
      * @author Phalcon Team <team@phalcon.io>
-     * @since  2018-11-13
+     * @since  2020-09-09
      */
     public function helperArrSetString(UnitTester $I)
     {
@@ -66,7 +66,7 @@ class SetCest
      * Tests Phalcon\Helper\Arr :: set() - no index
      *
      * @author Phalcon Team <team@phalcon.io>
-     * @since  2018-11-13
+     * @since  2020-09-09
      */
     public function helperArrSetNoIndex(UnitTester $I)
     {
@@ -88,7 +88,7 @@ class SetCest
      * Tests Phalcon\Helper\Arr :: set() - overwrite
      *
      * @author Phalcon Team <team@phalcon.io>
-     * @since  2018-11-13
+     * @since  2020-09-09
      */
     public function helperArrSetOverwride(UnitTester $I)
     {

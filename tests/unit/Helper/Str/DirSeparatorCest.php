@@ -22,7 +22,7 @@ class DirSeparatorCest
      * Tests Phalcon\Helper\Str :: dirSeparator()
      *
      * @author Phalcon Team <team@phalcon.io>
-     * @since  2019-04-16
+     * @since  2020-09-09
      */
     public function helperStrFolderSeparator(UnitTester $I)
     {
