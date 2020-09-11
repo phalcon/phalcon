@@ -31,10 +31,13 @@ class NewInstanceCest
      *
      * @dataProvider getExamples
      *
-     * @throws Exception
-     * @since        2019-05-04
+     * @param UnitTester $I
+     * @param Example    $example
      *
-     * @author       Phalcon Team <team@phalcon.io>
+     * @throws Exception
+     *
+     * @author Phalcon Team <team@phalcon.io>
+     * @since  2020-09-09
      */
     public function storageSerializerFactoryNewInstance(UnitTester $I, Example $example)
     {
@@ -52,10 +55,10 @@ class NewInstanceCest
     /**
      * Tests Phalcon\Storage\SerializerFactory :: newInstance() - exception
      *
-     * @throws Exception
-     * @since  2019-05-04
+     * @param UnitTester $I
      *
      * @author Phalcon Team <team@phalcon.io>
+     * @since  2020-09-09
      */
     public function storageSerializerFactoryNewInstanceException(UnitTester $I)
     {
