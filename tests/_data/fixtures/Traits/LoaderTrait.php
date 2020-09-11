@@ -15,7 +15,14 @@ use UnitTester;
 
 trait LoaderTrait
 {
+    /**
+     * @var array
+     */
     protected array $loaders = [];
+
+    /**
+     * @var string
+     */
     protected string $includePath = '';
 
     /**

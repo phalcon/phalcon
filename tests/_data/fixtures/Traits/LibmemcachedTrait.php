@@ -24,6 +24,7 @@ trait LibmemcachedTrait
     public function _before(UnitTester $I)
     {
         $I->checkExtensionIsLoaded('memcached');
+
         $this->options = getOptionsLibmemcached();
     }
 }
