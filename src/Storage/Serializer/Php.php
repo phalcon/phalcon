@@ -51,9 +51,7 @@ class Php extends AbstractSerializer
      */
     public function unserialize($data): void
     {
-        if (false === $this->isSerializable($data)) {
-            $this->data = $data;
-        } else {
+        if (false !== $this->isSerializable($data)) {
             if (!is_string($data)) {
                 throw new InvalidArgumentException(
                     'Data for the unserializer must of type string'
@@ -68,13 +66,15 @@ class Php extends AbstractSerializer
                 E_NOTICE
             );
 
-            $this->data = unserialize($data);
+            $data = unserialize($data);
 
             restore_error_handler();
 
             if ($warning) {
-                $this->data = null;
+                $data = null;
             }
         }
+
+        $this->data = $data;
     }
 }
