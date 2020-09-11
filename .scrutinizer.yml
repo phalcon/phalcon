@@ -3,7 +3,7 @@ filter:
     - 'src/*'
 tools:
   external_code_coverage:
-    runs: 1
+    runs: 2
   php_code_coverage: true
   php_code_sniffer:
     config:
