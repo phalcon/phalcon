@@ -11,7 +11,7 @@
 
 declare(strict_types=1);
 
-namespace Phalcon\Tests\Integration\Storage\Unserializer\Php;
+namespace Phalcon\Tests\Integration\Storage\Serializer\Php;
 
 use Codeception\Example;
 use InvalidArgumentException;
@@ -26,8 +26,11 @@ class UnserializeCest
      *
      * @dataProvider getExamples
      *
-     * @author       Phalcon Team <team@phalcon.io>
-     * @since        2019-03-30
+     * @param UnitTester $I
+     * @param Example    $example
+     *
+     * @author Phalcon Team <team@phalcon.io>
+     * @since  2020-09-09
      */
     public function storageSerializerPhpUnserialize(UnitTester $I, Example $example)
     {

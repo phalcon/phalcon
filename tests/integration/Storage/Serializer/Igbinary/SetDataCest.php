@@ -21,8 +21,10 @@ class SetDataCest
     /**
      * Tests Phalcon\Storage\Serializer\Igbinary :: getData()
      *
+     * @param UnitTester $I
+     *
      * @author Phalcon Team <team@phalcon.io>
-     * @since  2019-03-30
+     * @since  2020-09-09
      */
     public function storageSerializerIgbinarySetData(UnitTester $I)
     {

@@ -21,8 +21,10 @@ class GetDataCest
     /**
      * Tests Phalcon\Storage\Serializer\Php :: getData()
      *
+     * @param UnitTester $I
+     *
      * @author Phalcon Team <team@phalcon.io>
-     * @since  2019-04-12
+     * @since  2020-09-09
      */
     public function storageSerializerPhpGetData(UnitTester $I)
     {

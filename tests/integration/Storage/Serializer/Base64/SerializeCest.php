@@ -22,8 +22,10 @@ class SerializeCest
     /**
      * Tests Phalcon\Storage\Serializer\Base64 :: serialize()
      *
+     * @param UnitTester $I
+     *
      * @author Phalcon Team <team@phalcon.io>
-     * @since  2019-03-30
+     * @since  2020-09-09
      */
     public function storageSerializerBase64Serialize(UnitTester $I)
     {
@@ -41,8 +43,10 @@ class SerializeCest
     /**
      * Tests Phalcon\Storage\Serializer\Base64 :: serialize() - exception
      *
+     * @param UnitTester $I
+     *
      * @author Phalcon Team <team@phalcon.io>
-     * @since  2019-03-30
+     * @since  2020-09-09
      */
     public function storageSerializerBase64SerializeException(UnitTester $I)
     {

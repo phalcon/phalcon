@@ -25,8 +25,11 @@ class UnserializeCest
      *
      * @dataProvider getExamples
      *
-     * @author       Phalcon Team <team@phalcon.io>
-     * @since        2019-03-30
+     * @param UnitTester $I
+     * @param Example    $example
+     *
+     * @author Phalcon Team <team@phalcon.io>
+     * @since  2020-09-09
      */
     public function storageSerializerMsgpackUnserialize(UnitTester $I, Example $example)
     {
@@ -43,8 +46,10 @@ class UnserializeCest
     /**
      * Tests Phalcon\Storage\Serializer\Msgpack :: unserialize() - error
      *
-     * @author       Phalcon Team <team@phalcon.io>
-     * @since        2019-09-28
+     * @param UnitTester $I
+     *
+     * @author Phalcon Team <team@phalcon.io>
+     * @since  2020-09-09
      */
     public function storageSerializerMsgpackUnserializeError(UnitTester $I)
     {
