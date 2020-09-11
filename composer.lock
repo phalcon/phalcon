@@ -3366,16 +3366,16 @@
         },
         {
             "name": "phpunit/phpunit",
-            "version": "9.3.8",
+            "version": "9.3.9",
             "source": {
                 "type": "git",
                 "url": "https://github.com/sebastianbergmann/phpunit.git",
-                "reference": "93d78d8e2a06393a0d0c1ead6fe9984f1af1f88c"
+                "reference": "60c90ba713075e83bd039db4760226df7ad9a5cb"
             },
             "dist": {
                 "type": "zip",
-                "url": "https://api.github.com/repos/sebastianbergmann/phpunit/zipball/93d78d8e2a06393a0d0c1ead6fe9984f1af1f88c",
-                "reference": "93d78d8e2a06393a0d0c1ead6fe9984f1af1f88c",
+                "url": "https://api.github.com/repos/sebastianbergmann/phpunit/zipball/60c90ba713075e83bd039db4760226df7ad9a5cb",
+                "reference": "60c90ba713075e83bd039db4760226df7ad9a5cb",
                 "shasum": ""
             },
             "require": {
@@ -3389,7 +3389,7 @@
                 "myclabs/deep-copy": "^1.10.1",
                 "phar-io/manifest": "^2.0.1",
                 "phar-io/version": "^3.0.2",
-                "php": "^7.3 || ^8.0",
+                "php": ">=7.3",
                 "phpspec/prophecy": "^1.11.1",
                 "phpunit/php-code-coverage": "^9.1.5",
                 "phpunit/php-file-iterator": "^3.0.4",
@@ -3461,20 +3461,20 @@
                     "type": "github"
                 }
             ],
-            "time": "2020-08-27T06:30:58+00:00"
+            "time": "2020-09-11T12:42:34+00:00"
         },
         {
             "name": "predis/predis",
-            "version": "v1.1.4",
+            "version": "v1.1.5",
             "source": {
                 "type": "git",
                 "url": "https://github.com/predis/predis.git",
-                "reference": "8be2418f0116572f1937083daf5cceb1bddc9f0d"
+                "reference": "8ca99f91e45d49f214abc234ce69149591406bbd"
             },
             "dist": {
                 "type": "zip",
-                "url": "https://api.github.com/repos/predis/predis/zipball/8be2418f0116572f1937083daf5cceb1bddc9f0d",
-                "reference": "8be2418f0116572f1937083daf5cceb1bddc9f0d",
+                "url": "https://api.github.com/repos/predis/predis/zipball/8ca99f91e45d49f214abc234ce69149591406bbd",
+                "reference": "8ca99f91e45d49f214abc234ce69149591406bbd",
                 "shasum": ""
             },
             "require": {
@@ -3536,7 +3536,7 @@
                     "type": "github"
                 }
             ],
-            "time": "2020-08-29T22:15:08+00:00"
+            "time": "2020-09-10T13:35:23+00:00"
         },
         {
             "name": "ralouphie/getallheaders",
