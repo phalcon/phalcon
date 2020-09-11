@@ -13,8 +13,8 @@ declare(strict_types=1);
 
 namespace Phalcon\Storage;
 
-use Phalcon\Factory\Exception;
-use Phalcon\Factory\FactoryTrait;
+use Phalcon\Helper\Exception as ExceptionAlias;
+use Phalcon\Helper\Traits\FactoryTrait;
 use Phalcon\Storage\Serializer\Base64;
 use Phalcon\Storage\Serializer\Igbinary;
 use Phalcon\Storage\Serializer\Json;
@@ -46,7 +46,7 @@ class SerializerFactory
      * @param string $name
      *
      * @return SerializerInterface
-     * @throws Exception
+     * @throws ExceptionAlias
      */
     public function newInstance(string $name): SerializerInterface
     {
