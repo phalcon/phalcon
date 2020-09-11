@@ -87,19 +87,20 @@ jobs:
         run: php ./bin/ocular.phar code-coverage:upload --format=php-clover ./tests/_output/coverage.xml
 
 #      - name: Code Coverage - Codacy
-#        run: |
-#          export CODACY_PROJECT_TOKEN=${{ secrets.CODACY_TOKEN }}
-#          bash <(curl -Ls https://coverage.codacy.com/get.sh) report -l PHP -r ./tests/_output/coverage.xml
+#        uses: codacy/codacy-coverage-reporter-action@master
+#        with:
+#          project-token: ${{ secrets.CODACY_PROJECT_TOKEN }}
+#          coverage-reports: ./tests/_output/coverage.xml
+#
+      - name: Run integration tests
+        env:
+          DATA_REDIS_PORT: ${{ job.services.redis.ports['6379'] }}
+          DATA_MEMCACHED_PORT: ${{ job.services.memcached.ports['11211'] }}
+        run: vendor/bin/codecept run --ext DotReporter integration --coverage --coverage-xml
 
-#      - name: Run integration tests
-#        env:
-#          DATA_REDIS_PORT: ${{ job.services.redis.ports['6379'] }}
-#          DATA_MEMCACHED_PORT: ${{ job.services.memcached.ports['11211'] }}
-#        run: vendor/bin/codecept run --ext DotReporter integration --coverage --coverage-xml
-#
-#      - name: Code Coverage integration tests
-#        run: php ./bin/ocular.phar code-coverage:upload --format=php-clover ./tests/_output/coverage.xml
-#
+      - name: Code Coverage integration tests
+        run: php ./bin/ocular.phar code-coverage:upload --format=php-clover ./tests/_output/coverage.xml
+
 #      - name: Run database tests MySQL
 #        env:
 #          DATA_MYSQL_PORT: ${{ job.services.mysql.ports['3306'] }}
