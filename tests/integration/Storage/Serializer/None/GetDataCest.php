@@ -21,8 +21,10 @@ class GetDataCest
     /**
      * Tests Phalcon\Storage\Serializer\None :: getData()
      *
+     * @param UnitTester $I
+     *
      * @author Phalcon Team <team@phalcon.io>
-     * @since  2019-03-30
+     * @since  2020-09-09
      */
     public function storageSerializerNoneGetData(UnitTester $I)
     {

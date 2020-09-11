@@ -15,6 +15,7 @@ namespace Phalcon\Storage\Serializer;
 
 use function restore_error_handler;
 use function set_error_handler;
+
 use const E_WARNING;
 
 /**
