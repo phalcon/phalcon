@@ -13,8 +13,9 @@ declare(strict_types=1);
 
 namespace Phalcon\Tests\Integration\Storage\Adapter\Stream;
 
+use Phalcon\Helper\Exception as HelperException;
 use Phalcon\Storage\Adapter\Stream;
-use Phalcon\Storage\Exception;
+use Phalcon\Storage\Exception as StorageException;
 use Phalcon\Storage\SerializerFactory;
 use UnitTester;
 
@@ -25,40 +26,51 @@ class DecrementCest
     /**
      * Tests Phalcon\Storage\Adapter\Stream :: decrement()
      *
-     * @throws Exception
-     * @since  2019-04-24
+     * @param UnitTester $I
+     *
+     * @throws HelperException
+     * @throws StorageException
      *
      * @author Phalcon Team <team@phalcon.io>
+     * @since  2020-09-09
      */
     public function storageAdapterStreamDecrement(UnitTester $I)
     {
         $I->wantToTest('Storage\Adapter\Stream - decrement()');
 
         $serializer = new SerializerFactory();
-
-        $adapter = new Stream(
+        $adapter    = new Stream(
             $serializer,
             [
                 'storageDir' => outputDir(),
             ]
         );
 
-        $key = 'cache-data';
-        $I->assertTrue($adapter->set($key, 100));
+        $key    = 'cache-data';
+        $actual = $adapter->set($key, 100);
+        $I->assertTrue($actual);
 
         $expected = 99;
-        $I->assertEquals($expected, $adapter->decrement($key));
-        $I->assertEquals($expected, $adapter->get($key));
+        $actual   = $adapter->decrement($key);
+        $I->assertEquals($expected, $actual);
+
+        $actual = $adapter->get($key);
+        $I->assertEquals($expected, $actual);
 
         $expected = 90;
-        $I->assertEquals($expected, $adapter->decrement($key, 9));
-        $I->assertEquals($expected, $adapter->get($key));
+        $actual   = $adapter->decrement($key, 9);
+        $I->assertEquals($expected, $actual);
+
+        $actual = $adapter->get($key);
+        $I->assertEquals($expected, $actual);
 
         /**
          * unknown key
          */
-        $key = 'unknown';
-        $I->assertFalse($adapter->decrement($key));
+        $key    = 'unknown';
+        $actual = $adapter->decrement($key);
+        $I->assertFalse($actual);
+
         $I->safeDeleteDirectory(outputDir('ph-strm'));
     }
 }

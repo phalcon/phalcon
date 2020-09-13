@@ -13,7 +13,9 @@ declare(strict_types=1);
 
 namespace Phalcon\Tests\Integration\Storage\Adapter\Stream;
 
+use Phalcon\Helper\Exception as HelperException;
 use Phalcon\Storage\Adapter\Stream;
+use Phalcon\Storage\Exception as StorageException;
 use Phalcon\Storage\SerializerFactory;
 use UnitTester;
 
@@ -25,25 +27,33 @@ class GetSetDefaultSerializerCest
      * Tests Phalcon\Storage\Adapter\Stream ::
      * getDefaultSerializer()/setDefaultSerializer()
      *
+     * @param UnitTester $I
+     *
+     * @throws HelperException
+     * @throws StorageException
+     *
      * @author Phalcon Team <team@phalcon.io>
-     * @since  2019-04-13
+     * @since  2020-09-09
      */
     public function storageAdapterStreamGetKeys(UnitTester $I)
     {
         $I->wantToTest('Storage\Adapter\Stream - getDefaultSerializer()/setDefaultSerializer()');
 
         $serializer = new SerializerFactory();
-
-        $adapter = new Stream(
+        $adapter    = new Stream(
             $serializer,
             [
                 'storageDir' => outputDir(),
             ]
         );
 
-        $I->assertEquals('php', $adapter->getDefaultSerializer());
+        $expected = 'php';
+        $actual   = $adapter->getDefaultSerializer();
+        $I->assertEquals($expected, $actual);
 
         $adapter->setDefaultSerializer('Base64');
-        $I->assertEquals('base64', $adapter->getDefaultSerializer());
+        $expected = 'base64';
+        $actual   = $adapter->getDefaultSerializer();
+        $I->assertEquals($expected, $actual);
     }
 }

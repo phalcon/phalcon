@@ -13,7 +13,9 @@ declare(strict_types=1);
 
 namespace Phalcon\Tests\Integration\Storage\Adapter\Stream;
 
+use Phalcon\Helper\Exception as HelperException;
 use Phalcon\Storage\Adapter\Stream;
+use Phalcon\Storage\Exception as StorageException;
 use Phalcon\Storage\SerializerFactory;
 use UnitTester;
 
@@ -22,22 +24,27 @@ class GetAdapterCest
     /**
      * Tests Phalcon\Storage\Adapter\Stream :: getAdapter()
      *
+     * @param UnitTester $I
+     *
+     * @throws HelperException
+     * @throws StorageException
+     *
      * @author Phalcon Team <team@phalcon.io>
-     * @since  2019-04-24
+     * @since  2020-09-09
      */
     public function storageAdapterStreamGetAdapter(UnitTester $I)
     {
         $I->wantToTest('Storage\Adapter\Stream - getAdapter()');
 
         $serializer = new SerializerFactory();
-
-        $adapter = new Stream(
+        $adapter    = new Stream(
             $serializer,
             [
                 'storageDir' => '/tmp',
             ]
         );
 
-        $I->assertNull($adapter->getAdapter());
+        $actual = $adapter->getAdapter();
+        $I->assertNull($actual);
     }
 }

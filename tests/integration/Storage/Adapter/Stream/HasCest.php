@@ -13,7 +13,9 @@ declare(strict_types=1);
 
 namespace Phalcon\Tests\Integration\Storage\Adapter\Stream;
 
+use Phalcon\Helper\Exception as HelperException;
 use Phalcon\Storage\Adapter\Stream;
+use Phalcon\Storage\Exception as StorageException;
 use Phalcon\Storage\SerializerFactory;
 use UnitTester;
 
@@ -25,16 +27,20 @@ class HasCest
     /**
      * Tests Phalcon\Storage\Adapter\Stream :: has()
      *
+     * @param UnitTester $I
+     *
+     * @throws HelperException
+     * @throws StorageException
+     *
      * @author Phalcon Team <team@phalcon.io>
-     * @since  2019-04-24
+     * @since  2020-09-09
      */
     public function storageAdapterStreamHas(UnitTester $I)
     {
         $I->wantToTest('Storage\Adapter\Stream - has()');
 
         $serializer = new SerializerFactory();
-
-        $adapter = new Stream(
+        $adapter    = new Stream(
             $serializer,
             [
                 'storageDir' => outputDir(),
@@ -42,9 +48,11 @@ class HasCest
         );
 
         $key = uniqid();
-        $I->assertFalse($adapter->has($key));
+        $actual = $adapter->has($key);
+        $I->assertFalse($actual);
 
         $adapter->set($key, 'test');
-        $I->assertTrue($adapter->has($key));
+        $actual = $adapter->has($key);
+        $I->assertTrue($actual);
     }
 }

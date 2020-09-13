@@ -14,11 +14,12 @@ declare(strict_types=1);
 namespace Phalcon\Storage\Adapter;
 
 use DateInterval;
+use Exception as BaseException;
 use FilesystemIterator;
 use Iterator;
-use Phalcon\Helper\Exception as ExceptionAlias;
+use Phalcon\Helper\Exception as HelperException;
 use Phalcon\Helper\Str;
-use Phalcon\Storage\Exception;
+use Phalcon\Storage\Exception as StorageException;
 use Phalcon\Storage\SerializerFactory;
 use RecursiveDirectoryIterator;
 use RecursiveIteratorIterator;
@@ -68,19 +69,19 @@ class Stream extends AbstractAdapter
      * @param SerializerFactory $factory
      * @param array             $options = [
      *                                   'storageDir'        => '',
-     *                                   'defaultSerializer' => 'Php',
+     *                                   'defaultSerializer' => 'php',
      *                                   'lifetime'          => 3600,
      *                                   'prefix'            => ''
      *                                   ]
      *
-     * @throws Exception
-     * @throws ExceptionAlias
+     * @throws StorageException
+     * @throws HelperException
      */
     public function __construct(SerializerFactory $factory, array $options = [])
     {
         $storageDir = $options['storageDir'] ?? '';
         if (empty($storageDir)) {
-            throw new Exception(
+            throw new StorageException(
                 'The "storageDir" must be specified in the options'
             );
         }
@@ -119,7 +120,7 @@ class Stream extends AbstractAdapter
      * @param int    $value
      *
      * @return bool|int
-     * @throws \Exception
+     * @throws BaseException
      */
     public function decrement(string $key, int $value = 1)
     {
@@ -169,11 +170,7 @@ class Stream extends AbstractAdapter
 
         $payload = $this->getPayload($filepath);
 
-        if (empty($payload)) {
-            return $defaultValue;
-        }
-
-        if ($this->isExpired($payload)) {
+        if (empty($payload) || $this->isExpired($payload)) {
             return $defaultValue;
         }
 
@@ -250,7 +247,7 @@ class Stream extends AbstractAdapter
      * @param int    $value
      *
      * @return bool|int
-     * @throws \Exception
+     * @throws BaseException
      */
     public function increment(string $key, int $value = 1)
     {
@@ -272,7 +269,7 @@ class Stream extends AbstractAdapter
      * @param DateInterval|int|null $ttl
      *
      * @return bool
-     * @throws \Exception
+     * @throws BaseException
      */
     public function set(string $key, $value, $ttl = null): bool
     {
@@ -399,7 +396,7 @@ class Stream extends AbstractAdapter
      */
     private function isExpired(array $payload): bool
     {
-        $created = $payload['created'] ?? time();
+        $created = $payload['created'] ?? 0;
         $ttl     = $payload['ttl'] ?? 3600;
 
         return ($created + $ttl) < time();

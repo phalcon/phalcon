@@ -13,7 +13,9 @@ declare(strict_types=1);
 
 namespace Phalcon\Tests\Integration\Storage\Adapter\Stream;
 
+use Phalcon\Helper\Exception as HelperException;
 use Phalcon\Storage\Adapter\Stream;
+use Phalcon\Storage\Exception as StorageException;
 use Phalcon\Storage\SerializerFactory;
 use UnitTester;
 
@@ -24,16 +26,20 @@ class GetPrefixCest
     /**
      * Tests Phalcon\Storage\Adapter\Stream :: getPrefix()
      *
+     * @param UnitTester $I
+     *
+     * @throws HelperException
+     * @throws StorageException
+     *
      * @author Phalcon Team <team@phalcon.io>
-     * @since  2019-04-24
+     * @since  2020-09-09
      */
     public function storageAdapterStreamGetSetPrefix(UnitTester $I)
     {
         $I->wantToTest('Storage\Adapter\Stream - getPrefix()');
 
         $serializer = new SerializerFactory();
-
-        $adapter = new Stream(
+        $adapter    = new Stream(
             $serializer,
             [
                 'storageDir' => outputDir(),
@@ -41,28 +47,36 @@ class GetPrefixCest
             ]
         );
 
-        $I->assertEquals('my-prefix', $adapter->getPrefix());
+        $expected = 'my-prefix';
+        $actual   = $adapter->getPrefix();
+        $I->assertEquals($expected, $actual);
     }
 
     /**
      * Tests Phalcon\Storage\Adapter\Stream :: getPrefix() - default
      *
+     * @param UnitTester $I
+     *
+     * @throws HelperException
+     * @throws StorageException
+     *
      * @author Phalcon Team <team@phalcon.io>
-     * @since  2019-04-24
+     * @since  2020-09-09
      */
     public function storageAdapterStreamGetSetPrefixDefault(UnitTester $I)
     {
         $I->wantToTest('Storage\Adapter\Stream - getPrefix() - default');
 
         $serializer = new SerializerFactory();
-
-        $adapter = new Stream(
+        $adapter    = new Stream(
             $serializer,
             [
                 'storageDir' => outputDir(),
             ]
         );
 
-        $I->assertEquals('ph-strm', $adapter->getPrefix());
+        $expected = 'ph-strm';
+        $actual   = $adapter->getPrefix();
+        $I->assertEquals($expected, $actual);
     }
 }
