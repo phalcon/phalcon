@@ -14,15 +14,15 @@ declare(strict_types=1);
 namespace Phalcon\Storage\Adapter;
 
 use DateInterval;
-use Phalcon\Collection\Collection;
 use Phalcon\Helper\Exception;
 use Phalcon\Storage\SerializerFactory;
+use function array_keys;
 
 /**
  * Memory adapter
  *
- * @property Collection $data
- * @property array      $options
+ * @property array $data
+ * @property array $options
  */
 class Memory extends AbstractAdapter
 {
@@ -122,10 +122,7 @@ class Memory extends AbstractAdapter
      */
     public function getKeys(string $prefix = ''): array
     {
-        return $this->getFilteredKeys(
-            $this->data->getKeys(),
-            $prefix
-        );
+        return $this->getFilteredKeys(array_keys($this->data), $prefix);
     }
 
     /**
