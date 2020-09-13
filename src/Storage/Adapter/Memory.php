@@ -14,8 +14,10 @@ declare(strict_types=1);
 namespace Phalcon\Storage\Adapter;
 
 use DateInterval;
-use Phalcon\Helper\Exception;
+use Exception as BaseException;
+use Phalcon\Helper\Exception as HelperException;
 use Phalcon\Storage\SerializerFactory;
+
 use function array_keys;
 
 /**
@@ -37,7 +39,7 @@ class Memory extends AbstractAdapter
      * @param SerializerFactory $factory
      * @param array             $options
      *
-     * @throws Exception
+     * @throws HelperException
      */
     public function __construct(SerializerFactory $factory, array $options = [])
     {
@@ -171,7 +173,7 @@ class Memory extends AbstractAdapter
      * @param DateInterval|int|null $ttl
      *
      * @return bool
-     * @throws \Exception
+     * @throws BaseException
      */
     public function set(string $key, $value, $ttl = null): bool
     {

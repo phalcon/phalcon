@@ -13,6 +13,7 @@ declare(strict_types=1);
 
 namespace Phalcon\Tests\Integration\Storage\Adapter\Memory;
 
+use Phalcon\Helper\Exception as HelperException;
 use Phalcon\Storage\Adapter\Memory;
 use Phalcon\Storage\SerializerFactory;
 use UnitTester;
@@ -23,8 +24,12 @@ class GetSetDefaultSerializerCest
      * Tests Phalcon\Storage\Adapter\Memory ::
      * getDefaultSerializer()/setDefaultSerializer()
      *
+     * @param UnitTester $I
+     *
+     * @throws HelperException
+     *
      * @author Phalcon Team <team@phalcon.io>
-     * @since  2019-04-13
+     * @since  2020-09-09
      */
     public function storageAdapterMemoryGetKeys(UnitTester $I)
     {
@@ -33,9 +38,13 @@ class GetSetDefaultSerializerCest
         $serializer = new SerializerFactory();
         $adapter    = new Memory($serializer);
 
-        $I->assertEquals('php', $adapter->getDefaultSerializer());
+        $expected = 'php';
+        $actual   = $adapter->getDefaultSerializer();
+        $I->assertEquals($expected, $actual);
 
         $adapter->setDefaultSerializer('Base64');
-        $I->assertEquals('base64', $adapter->getDefaultSerializer());
+        $expected = 'base64';
+        $actual   = $adapter->getDefaultSerializer();
+        $I->assertEquals($expected, $actual);
     }
 }

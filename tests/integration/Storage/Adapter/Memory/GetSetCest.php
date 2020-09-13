@@ -14,6 +14,7 @@ declare(strict_types=1);
 namespace Phalcon\Tests\Integration\Storage\Adapter\Memory;
 
 use Codeception\Example;
+use Phalcon\Helper\Exception as HelperException;
 use Phalcon\Storage\Adapter\Memory;
 use Phalcon\Storage\SerializerFactory;
 use stdClass;
@@ -26,8 +27,13 @@ class GetSetCest
      *
      * @dataProvider getExamples
      *
-     * @author       Phalcon Team <team@phalcon.io>
-     * @since        2019-03-31
+     * @param UnitTester $I
+     * @param Example    $example
+     *
+     * @throws HelperException
+     *
+     * @author Phalcon Team <team@phalcon.io>
+     * @since  2020-09-09
      */
     public function storageAdapterMemoryGetSet(UnitTester $I, Example $example)
     {
