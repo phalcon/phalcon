@@ -13,9 +13,10 @@ declare(strict_types=1);
 
 namespace Phalcon\Tests\Integration\Storage\Adapter\Stream;
 
+use Phalcon\Helper\Exception as HelperException;
 use Phalcon\Storage\Adapter\AdapterInterface;
 use Phalcon\Storage\Adapter\Stream;
-use Phalcon\Storage\Exception;
+use Phalcon\Storage\Exception as StorageException;
 use Phalcon\Storage\SerializerFactory;
 use UnitTester;
 
@@ -25,39 +26,45 @@ class ConstructCest
 {
     /**
      * Tests Phalcon\Storage\Adapter\Stream :: __construct()
+     */
+    /**
+     * @param UnitTester $I
      *
-     * @author Phalcon Team <team@phalcon.io>
-     * @since  2019-04-24
+     * @throws HelperException
+     * @throws StorageException
      */
     public function storageAdapterStreamConstruct(UnitTester $I)
     {
         $I->wantToTest('Storage\Adapter\Stream - __construct()');
 
         $serializer = new SerializerFactory();
-
-        $adapter = new Stream(
+        $adapter    = new Stream(
             $serializer,
             [
                 'storageDir' => outputDir(),
             ]
         );
 
-        $I->assertInstanceOf(Stream::class, $adapter);
-        $I->assertInstanceOf(AdapterInterface::class, $adapter);
+        $expected = Stream::class;
+        $I->assertInstanceOf($expected, $adapter);
+        $expected = AdapterInterface::class;
+        $I->assertInstanceOf($expected, $adapter);
     }
 
     /**
      * Tests Phalcon\Storage\Adapter\Stream :: __construct() - exception
      *
+     * @param UnitTester $I
+     *
      * @author Phalcon Team <team@phalcon.io>
-     * @since  2019-04-24
+     * @since  2020-09-09
      */
     public function storageAdapterStreamConstructException(UnitTester $I)
     {
         $I->wantToTest('Storage\Adapter\Stream - __construct() - exception');
 
         $I->expectThrowable(
-            new Exception('The "storageDir" must be specified in the options'),
+            new StorageException('The "storageDir" must be specified in the options'),
             function () {
                 $serializer = new SerializerFactory();
                 $adapter    = new Stream($serializer);

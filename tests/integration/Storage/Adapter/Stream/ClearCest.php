@@ -13,7 +13,9 @@ declare(strict_types=1);
 
 namespace Phalcon\Tests\Integration\Storage\Adapter\Stream;
 
+use Phalcon\Helper\Exception as HelperException;
 use Phalcon\Storage\Adapter\Stream;
+use Phalcon\Storage\Exception as StorageException;
 use Phalcon\Storage\SerializerFactory;
 use UnitTester;
 
@@ -25,16 +27,20 @@ class ClearCest
     /**
      * Tests Phalcon\Storage\Adapter\Stream :: clear()
      *
+     * @param UnitTester $I
+     *
+     * @throws HelperException
+     * @throws StorageException
+     *
      * @author Phalcon Team <team@phalcon.io>
-     * @since  2019-03-31
+     * @since  2020-09-09
      */
     public function storageAdapterStreamClear(UnitTester $I)
     {
         $I->wantToTest('Storage\Adapter\Stream - clear()');
 
         $serializer = new SerializerFactory();
-
-        $adapter = new Stream(
+        $adapter    = new Stream(
             $serializer,
             [
                 'storageDir' => outputDir(),
@@ -49,10 +55,14 @@ class ClearCest
 
         $adapter->set($key2, 'test');
 
-        $I->assertTrue($adapter->has($key2));
-        $I->assertTrue($adapter->clear());
-        $I->assertFalse($adapter->has($key1));
-        $I->assertFalse($adapter->has($key2));
+        $actual = $adapter->has($key2);
+        $I->assertTrue($actual);
+        $actual = $adapter->clear();
+        $I->assertTrue($actual);
+        $actual = $adapter->has($key1);
+        $I->assertFalse($actual);
+        $actual = $adapter->has($key2);
+        $I->assertFalse($actual);
 
         $I->safeDeleteDirectory(outputDir('ph-strm'));
     }
@@ -60,16 +70,20 @@ class ClearCest
     /**
      * Tests Phalcon\Storage\Adapter\Stream :: clear() - twice
      *
+     * @param UnitTester $I
+     *
+     * @throws HelperException
+     * @throws StorageException
+     *
      * @author Phalcon Team <team@phalcon.io>
-     * @since  2019-03-31
+     * @since  2020-09-09
      */
     public function storageAdapterStreamClearTwice(UnitTester $I)
     {
         $I->wantToTest('Storage\Adapter\Stream - clear() - twice');
 
         $serializer = new SerializerFactory();
-
-        $adapter = new Stream(
+        $adapter    = new Stream(
             $serializer,
             [
                 'storageDir' => outputDir(),
