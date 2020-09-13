@@ -44,44 +44,20 @@ class IncrementCest
         );
 
         $key = 'cache-data';
-
-        $I->assertTrue(
-            $adapter->set($key, 1)
-        );
-
+        $I->assertTrue($adapter->set($key, 1));
 
         $expected = 2;
-
-        $I->assertEquals(
-            $expected,
-            $adapter->increment($key)
-        );
-
-        $I->assertEquals(
-            $expected,
-            $adapter->get($key)
-        );
-
+        $I->assertEquals($expected, $adapter->increment($key));
+        $I->assertEquals($expected, $adapter->get($key));
 
         $expected = 10;
-
-        $I->assertEquals(
-            $expected,
-            $adapter->increment($key, 8)
-        );
-
-        $I->assertEquals(
-            $expected,
-            $adapter->get($key)
-        );
+        $I->assertEquals($expected, $adapter->increment($key, 8));
+        $I->assertEquals($expected, $adapter->get($key));
 
         /**
          * unknown key
          */
         $key = 'unknown';
-
-        $I->assertFalse(
-            $adapter->increment($key)
-        );
+        $I->assertFalse($adapter->increment($key));
     }
 }

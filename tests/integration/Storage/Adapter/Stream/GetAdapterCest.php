@@ -38,8 +38,6 @@ class GetAdapterCest
             ]
         );
 
-        $I->assertNull(
-            $adapter->getAdapter()
-        );
+        $I->assertNull($adapter->getAdapter());
     }
 }

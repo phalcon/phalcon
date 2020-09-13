@@ -42,15 +42,8 @@ class ConstructCest
             ]
         );
 
-        $I->assertInstanceOf(
-            Stream::class,
-            $adapter
-        );
-
-        $I->assertInstanceOf(
-            AdapterInterface::class,
-            $adapter
-        );
+        $I->assertInstanceOf(Stream::class, $adapter);
+        $I->assertInstanceOf(AdapterInterface::class, $adapter);
     }
 
     /**

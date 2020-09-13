@@ -41,10 +41,7 @@ class GetPrefixCest
             ]
         );
 
-        $I->assertEquals(
-            'my-prefix',
-            $adapter->getPrefix()
-        );
+        $I->assertEquals('my-prefix', $adapter->getPrefix());
     }
 
     /**
@@ -66,9 +63,6 @@ class GetPrefixCest
             ]
         );
 
-        $I->assertEquals(
-            'ph-strm',
-            $adapter->getPrefix()
-        );
+        $I->assertEquals('ph-strm', $adapter->getPrefix());
     }
 }

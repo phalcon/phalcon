@@ -48,21 +48,11 @@ class ClearCest
         $I->assertTrue($actual);
 
         $adapter->set($key2, 'test');
-        $I->assertTrue(
-            $adapter->has($key2)
-        );
 
-        $I->assertTrue(
-            $adapter->clear()
-        );
-
-        $I->assertFalse(
-            $adapter->has($key1)
-        );
-
-        $I->assertFalse(
-            $adapter->has($key2)
-        );
+        $I->assertTrue($adapter->has($key2));
+        $I->assertTrue($adapter->clear());
+        $I->assertFalse($adapter->has($key1));
+        $I->assertFalse($adapter->has($key2));
 
         $I->safeDeleteDirectory(outputDir('ph-strm'));
     }
