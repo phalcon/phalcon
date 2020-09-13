@@ -44,43 +44,21 @@ class DecrementCest
         );
 
         $key = 'cache-data';
-
-        $I->assertTrue(
-            $adapter->set($key, 100)
-        );
+        $I->assertTrue($adapter->set($key, 100));
 
         $expected = 99;
-
-        $I->assertEquals(
-            $expected,
-            $adapter->decrement($key)
-        );
-
-        $I->assertEquals(
-            $expected,
-            $adapter->get($key)
-        );
+        $I->assertEquals($expected, $adapter->decrement($key));
+        $I->assertEquals($expected, $adapter->get($key));
 
         $expected = 90;
-        $I->assertEquals(
-            $expected,
-            $adapter->decrement($key, 9)
-        );
-
-        $I->assertEquals(
-            $expected,
-            $adapter->get($key)
-        );
+        $I->assertEquals($expected, $adapter->decrement($key, 9));
+        $I->assertEquals($expected, $adapter->get($key));
 
         /**
          * unknown key
          */
         $key = 'unknown';
-
-        $I->assertFalse(
-            $adapter->decrement($key)
-        );
-
+        $I->assertFalse($adapter->decrement($key));
         $I->safeDeleteDirectory(outputDir('ph-strm'));
     }
 }

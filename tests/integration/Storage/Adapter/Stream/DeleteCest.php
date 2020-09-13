@@ -44,17 +44,9 @@ class DeleteCest
 
         $adapter->set($key, 'test');
 
-        $I->assertTrue(
-            $adapter->has($key)
-        );
-
-        $I->assertTrue(
-            $adapter->delete($key)
-        );
-
-        $I->assertFalse(
-            $adapter->has($key)
-        );
+        $I->assertTrue($adapter->has($key));
+        $I->assertTrue($adapter->delete($key));
+        $I->assertFalse($adapter->has($key));
     }
 
     /**
@@ -80,17 +72,9 @@ class DeleteCest
 
         $adapter->set($key, 'test');
 
-        $I->assertTrue(
-            $adapter->has($key)
-        );
-
-        $I->assertTrue(
-            $adapter->delete($key)
-        );
-
-        $I->assertFalse(
-            $adapter->delete($key)
-        );
+        $I->assertTrue($adapter->has($key));
+        $I->assertTrue($adapter->delete($key));
+        $I->assertFalse($adapter->delete($key));
     }
 
     /**
@@ -113,9 +97,6 @@ class DeleteCest
         );
 
         $key = 'cache-data';
-
-        $I->assertFalse(
-            $adapter->delete($key)
-        );
+        $I->assertFalse($adapter->delete($key));
     }
 }

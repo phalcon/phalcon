@@ -42,15 +42,9 @@ class HasCest
         );
 
         $key = uniqid();
-
-        $I->assertFalse(
-            $adapter->has($key)
-        );
+        $I->assertFalse($adapter->has($key));
 
         $adapter->set($key, 'test');
-
-        $I->assertTrue(
-            $adapter->has($key)
-        );
+        $I->assertTrue($adapter->has($key));
     }
 }
