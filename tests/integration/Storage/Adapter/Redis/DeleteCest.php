@@ -13,7 +13,9 @@ declare(strict_types=1);
 
 namespace Phalcon\Tests\Integration\Storage\Adapter\Redis;
 
+use Phalcon\Helper\Exception as HelperException;
 use Phalcon\Storage\Adapter\Redis;
+use Phalcon\Storage\Exception as StorageException;
 use Phalcon\Storage\SerializerFactory;
 use Phalcon\Tests\Fixtures\Traits\RedisTrait;
 use UnitTester;
@@ -27,8 +29,13 @@ class DeleteCest
     /**
      * Tests Phalcon\Storage\Adapter\Redis :: delete()
      *
+     * @param UnitTester $I
+     *
+     * @throws HelperException
+     * @throws StorageException
+     *
      * @author Phalcon Team <team@phalcon.io>
-     * @since  2019-03-31
+     * @since  2020-09-09
      */
     public function storageAdapterRedisDelete(UnitTester $I)
     {
@@ -52,8 +59,13 @@ class DeleteCest
     /**
      * Tests Phalcon\Storage\Adapter\Redis :: delete() - twice
      *
+     * @param UnitTester $I
+     *
+     * @throws HelperException
+     * @throws StorageException
+     *
      * @author Phalcon Team <team@phalcon.io>
-     * @since  2019-03-31
+     * @since  2020-09-09
      */
     public function storageAdapterRedisDeleteTwice(UnitTester $I)
     {
@@ -77,8 +89,13 @@ class DeleteCest
     /**
      * Tests Phalcon\Storage\Adapter\Redis :: delete() - unknown
      *
+     * @param UnitTester $I
+     *
+     * @throws HelperException
+     * @throws StorageException
+     *
      * @author Phalcon Team <team@phalcon.io>
-     * @since  2019-03-31
+     * @since  2020-09-09
      */
     public function storageAdapterRedisDeleteUnknown(UnitTester $I)
     {

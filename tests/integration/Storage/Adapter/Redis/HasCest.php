@@ -13,7 +13,9 @@ declare(strict_types=1);
 
 namespace Phalcon\Tests\Integration\Storage\Adapter\Redis;
 
+use Phalcon\Helper\Exception as HelperException;
 use Phalcon\Storage\Adapter\Redis;
+use Phalcon\Storage\Exception as StorageException;
 use Phalcon\Storage\SerializerFactory;
 use Phalcon\Tests\Fixtures\Traits\RedisTrait;
 use UnitTester;
@@ -27,30 +29,27 @@ class HasCest
     /**
      * Tests Phalcon\Storage\Adapter\Redis :: get()
      *
+     * @param UnitTester $I
+     *
+     * @throws HelperException
+     * @throws StorageException
+     *
      * @author Phalcon Team <team@phalcon.io>
-     * @since  2019-03-31
+     * @since  2020-09-09
      */
     public function storageAdapterRedisGetSetHas(UnitTester $I)
     {
         $I->wantToTest('Storage\Adapter\Redis - has()');
 
         $serializer = new SerializerFactory();
-
-        $adapter = new Redis(
-            $serializer,
-            getOptionsRedis()
-        );
+        $adapter    = new Redis($serializer, getOptionsRedis());
 
         $key = uniqid();
-
-        $I->assertFalse(
-            $adapter->has($key)
-        );
+        $actual = $adapter->has($key);
+        $I->assertFalse($actual);
 
         $adapter->set($key, 'test');
-
-        $I->assertTrue(
-            $adapter->has($key)
-        );
+        $actual = $adapter->has($key);
+        $I->assertTrue($actual);
     }
 }

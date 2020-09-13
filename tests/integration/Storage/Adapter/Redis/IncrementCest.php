@@ -13,7 +13,9 @@ declare(strict_types=1);
 
 namespace Phalcon\Tests\Integration\Storage\Adapter\Redis;
 
+use Phalcon\Helper\Exception as HelperException;
 use Phalcon\Storage\Adapter\Redis;
+use Phalcon\Storage\Exception as StorageException;
 use Phalcon\Storage\SerializerFactory;
 use Phalcon\Tests\Fixtures\Traits\RedisTrait;
 use UnitTester;
@@ -27,62 +29,47 @@ class IncrementCest
     /**
      * Tests Phalcon\Storage\Adapter\Redis :: increment()
      *
+     * @param UnitTester $I
+     *
+     * @throws HelperException
+     * @throws StorageException
+     *
      * @author Phalcon Team <team@phalcon.io>
-     * @since  2019-03-31
+     * @since  2020-09-09
      */
     public function storageAdapterRedisIncrement(UnitTester $I)
     {
         $I->wantToTest('Storage\Adapter\Redis - increment()');
 
-        $I->skipTest('Check this');
+//        $I->skipTest('Check this');
 
         $serializer = new SerializerFactory();
-
-        $adapter = new Redis(
-            $serializer,
-            getOptionsRedis()
-        );
+        $adapter    = new Redis($serializer, getOptionsRedis());
 
         $key = 'cache-data';
-
-        $I->assertTrue(
-            $adapter->set($key, 1)
-        );
-
+        $actual = $adapter->set($key, 1);
+        $I->assertTrue($actual);
 
         $expected = 2;
+        $actual   = $adapter->increment($key);
+        $I->assertEquals($expected, $actual);
 
-        $I->assertEquals(
-            $expected,
-            $adapter->increment($key)
-        );
-
-        $I->assertEquals(
-            $expected,
-            $adapter->get($key)
-        );
-
+        $actual = $adapter->get($key);
+        $I->assertEquals($expected, $actual);
 
         $expected = 10;
+        $actual   = $adapter->increment($key, 8);
+        $I->assertEquals($expected, $actual);
 
-        $I->assertEquals(
-            $expected,
-            $adapter->increment($key, 8)
-        );
-
-        $I->assertEquals(
-            $expected,
-            $adapter->get($key)
-        );
+        $actual = $adapter->get($key);
+        $I->assertEquals($expected, $actual);
 
 
         /**
          * unknown key
          */
-        $key = 'unknown';
-
-        $I->assertFalse(
-            $adapter->increment($key)
-        );
+        $key    = 'unknown';
+        $actual = $adapter->increment($key);
+        $I->assertFalse($actual);
     }
 }

@@ -28,7 +28,7 @@ class ClearCest
      * Tests Phalcon\Storage\Adapter\Redis :: clear()
      *
      * @author Phalcon Team <team@phalcon.io>
-     * @since  2019-03-31
+     * @since  2020-09-09
      */
     public function storageAdapterRedisClear(UnitTester $I)
     {
@@ -73,7 +73,7 @@ class ClearCest
      * Tests Phalcon\Storage\Adapter\Redis :: clear() - twice
      *
      * @author Phalcon Team <team@phalcon.io>
-     * @since  2019-03-31
+     * @since  2020-09-09
      */
     public function storageAdapterRedisClearTwice(UnitTester $I)
     {
