@@ -13,8 +13,9 @@ declare(strict_types=1);
 
 namespace Phalcon\Tests\Integration\Storage\Adapter\Redis;
 
+use Phalcon\Helper\Exception as HelperException;
 use Phalcon\Storage\Adapter\Redis;
-use Phalcon\Storage\Exception;
+use Phalcon\Storage\Exception as StorageException;
 use Phalcon\Storage\SerializerFactory;
 use Phalcon\Tests\Fixtures\Traits\RedisTrait;
 use UnitTester;
@@ -28,64 +29,44 @@ class DecrementCest
     /**
      * Tests Phalcon\Storage\Adapter\Redis :: decrement()
      *
-     * @throws Exception
-     * @since  2019-03-31
+     * @param UnitTester $I
+     *
+     * @throws StorageException
+     * @throws HelperException
      *
      * @author Phalcon Team <team@phalcon.io>
+     * @since  2020-09-09
      */
     public function storageAdapterRedisDecrement(UnitTester $I)
     {
         $I->wantToTest('Storage\Adapter\Redis - decrement()');
 
-        $I->skipTest('Check this');
-
         $serializer = new SerializerFactory();
+        $adapter    = new Redis($serializer, getOptionsRedis());
 
-        $adapter = new Redis(
-            $serializer,
-            getOptionsRedis()
-        );
-
-        $key = uniqid();
-
-        $I->assertTrue(
-            $adapter->set($key, 100)
-        );
-
+        $key    = uniqid();
+        $actual = $adapter->set($key, 100);
+        $I->assertTrue($actual);
 
         $expected = 99;
+        $actual   = $adapter->decrement($key);
+        $I->assertEquals($expected, $actual);
 
-        $I->assertEquals(
-            $expected,
-            $adapter->decrement($key)
-        );
-
-        $I->assertEquals(
-            $expected,
-            $adapter->get($key)
-        );
-
+        $actual   = $adapter->get($key);
+        $I->assertEquals($expected, $actual);
 
         $expected = 90;
+        $actual   = $adapter->decrement($key, 9);
+        $I->assertEquals($expected, $actual);
 
-        $I->assertEquals(
-            $expected,
-            $adapter->decrement($key, 9)
-        );
-
-        $I->assertEquals(
-            $expected,
-            $adapter->get($key)
-        );
-
+        $actual   = $adapter->get($key);
+        $I->assertEquals($expected, $actual);
 
         /**
          * unknown key
          */
         $key = 'unknown';
-
-        $I->assertFalse(
-            $adapter->decrement($key)
-        );
+        $actual   = $adapter->decrement($key, 9);
+        $I->assertFalse($actual);
     }
 }

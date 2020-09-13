@@ -28,28 +28,22 @@ class ConstructCest
     /**
      * Tests Phalcon\Storage\Adapter\Redis :: __construct()
      *
+     * @param UnitTester $I
+     *
      * @author Phalcon Team <team@phalcon.io>
-     * @since  2019-04-09
+     * @since  2020-09-09
      */
     public function storageAdapterRedisConstruct(UnitTester $I)
     {
         $I->wantToTest('Storage\Adapter\Redis - __construct()');
 
         $serializer = new SerializerFactory();
+        $adapter    = new Redis($serializer, getOptionsRedis());
 
-        $adapter = new Redis(
-            $serializer,
-            getOptionsRedis()
-        );
+        $expected = Redis::class;
+        $I->assertInstanceOf($expected, $adapter);
 
-        $I->assertInstanceOf(
-            Redis::class,
-            $adapter
-        );
-
-        $I->assertInstanceOf(
-            AdapterInterface::class,
-            $adapter
-        );
+        $expected = AdapterInterface::class;
+        $I->assertInstanceOf($expected, $adapter);
     }
 }

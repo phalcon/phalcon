@@ -13,7 +13,9 @@ declare(strict_types=1);
 
 namespace Phalcon\Tests\Integration\Storage\Adapter\Redis;
 
+use Phalcon\Helper\Exception as HelperException;
 use Phalcon\Storage\Adapter\Redis;
+use Phalcon\Storage\Exception as StorageException;
 use Phalcon\Storage\SerializerFactory;
 use Phalcon\Tests\Fixtures\Traits\RedisTrait;
 use UnitTester;
@@ -27,8 +29,13 @@ class GetAdapterCest
     /**
      * Tests Phalcon\Storage\Adapter\Redis :: getAdapter()
      *
+     * @param UnitTester $I
+     *
+     * @throws HelperException
+     * @throws StorageException
+     *
      * @author Phalcon Team <team@phalcon.io>
-     * @since  2019-04-14
+     * @since  2020-09-09
      */
     public function storageAdapterRedisGetAdapter(UnitTester $I)
     {
