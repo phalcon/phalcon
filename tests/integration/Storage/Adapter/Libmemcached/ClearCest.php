@@ -13,7 +13,9 @@ declare(strict_types=1);
 
 namespace Phalcon\Tests\Integration\Storage\Adapter\Libmemcached;
 
+use Phalcon\Helper\Exception as HelperException;
 use Phalcon\Storage\Adapter\Libmemcached;
+use Phalcon\Storage\Exception as StorageException;
 use Phalcon\Storage\SerializerFactory;
 use Phalcon\Tests\Fixtures\Traits\LibmemcachedTrait;
 use UnitTester;
@@ -27,64 +29,60 @@ class ClearCest
     /**
      * Tests Phalcon\Storage\Adapter\Libmemcached :: clear()
      *
+     * @param UnitTester $I
+     *
+     * @throws HelperException
+     * @throws StorageException
+     *
      * @author Phalcon Team <team@phalcon.io>
-     * @since  2019-03-31
+     * @since  2020-09-09
      */
     public function storageAdapterLibmemcachedClear(UnitTester $I)
     {
         $I->wantToTest('Storage\Adapter\Libmemcached - clear()');
 
         $serializer = new SerializerFactory();
-
-        $adapter = new Libmemcached(
-            $serializer,
-            getOptionsLibmemcached()
-        );
+        $adapter    = new Libmemcached($serializer, getOptionsLibmemcached());
 
         $key1 = uniqid();
         $key2 = uniqid();
 
         $adapter->set($key1, 'test');
 
-        $I->assertTrue(
-            $adapter->has($key1)
-        );
+        $actual = $adapter->has($key1);
+        $I->assertTrue($actual);
 
         $adapter->set($key1, 'test');
+        $actual = $adapter->has($key1);
+        $I->assertTrue($actual);
 
-        $I->assertTrue(
-            $adapter->has($key1)
-        );
+        $actual = $adapter->clear();
+        $I->assertTrue($actual);
 
-        $I->assertTrue(
-            $adapter->clear()
-        );
+        $actual = $adapter->has($key1);
+        $I->assertFalse($actual);
 
-        $I->assertFalse(
-            $adapter->has($key1)
-        );
-
-        $I->assertFalse(
-            $adapter->has($key2)
-        );
+        $actual = $adapter->has($key2);
+        $I->assertFalse($actual);
     }
 
     /**
      * Tests Phalcon\Storage\Adapter\Libmemcached :: clear() - twice
      *
+     * @param UnitTester $I
+     *
+     * @throws HelperException
+     * @throws StorageException
+     *
      * @author Phalcon Team <team@phalcon.io>
-     * @since  2019-03-31
+     * @since  2020-09-09
      */
     public function storageAdapterLibmemcachedClearTwice(UnitTester $I)
     {
         $I->wantToTest('Storage\Adapter\Libmemcached - clear() - twice');
 
         $serializer = new SerializerFactory();
-
-        $adapter = new Libmemcached(
-            $serializer,
-            getOptionsLibmemcached()
-        );
+        $adapter    = new Libmemcached($serializer, getOptionsLibmemcached());
 
         $key = 'key-1';
         $adapter->set($key, 'test');

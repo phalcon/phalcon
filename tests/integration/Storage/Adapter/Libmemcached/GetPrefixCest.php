@@ -27,8 +27,10 @@ class GetPrefixCest
     /**
      * Tests Phalcon\Storage\Adapter\Libmemcached :: getPrefix()
      *
+     * @param UnitTester $I
+     *
      * @author Phalcon Team <team@phalcon.io>
-     * @since  2019-03-31
+     * @since  2020-09-09
      */
     public function storageAdapterLibmemcachedGetSetPrefix(UnitTester $I)
     {
@@ -46,32 +48,28 @@ class GetPrefixCest
             )
         );
 
-        $I->assertEquals(
-            'my-prefix',
-            $adapter->getPrefix()
-        );
+        $expected = 'my-prefix';
+        $actual   = $adapter->getPrefix();
+        $I->assertEquals($expected, $actual);
     }
 
     /**
      * Tests Phalcon\Storage\Adapter\Libmemcached :: getPrefix() - default
      *
+     * @param UnitTester $I
+     *
      * @author Phalcon Team <team@phalcon.io>
-     * @since  2019-03-31
+     * @since  2020-09-09
      */
     public function storageAdapterLibmemcachedGetSetPrefixDefault(UnitTester $I)
     {
         $I->wantToTest('Storage\Adapter\Libmemcached - getPrefix() - default');
 
         $serializer = new SerializerFactory();
+        $adapter    = new Libmemcached($serializer, getOptionsLibmemcached());
 
-        $adapter = new Libmemcached(
-            $serializer,
-            getOptionsLibmemcached()
-        );
-
-        $I->assertEquals(
-            'ph-memc-',
-            $adapter->getPrefix()
-        );
+        $expected = 'ph-memc-';
+        $actual   = $adapter->getPrefix();
+        $I->assertEquals($expected, $actual);
     }
 }

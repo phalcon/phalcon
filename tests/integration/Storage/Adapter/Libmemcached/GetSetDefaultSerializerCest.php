@@ -28,19 +28,27 @@ class GetSetDefaultSerializerCest
      * Tests Phalcon\Storage\Adapter\Libmemcached ::
      * getDefaultSerializer()/setDefaultSerializer()
      *
+     * @param UnitTester $I
+     *
      * @author Phalcon Team <team@phalcon.io>
-     * @since  2019-04-13
+     * @since  2020-09-09
      */
     public function storageAdapterLibmemcachedGetKeys(UnitTester $I)
     {
-        $I->wantToTest('Storage\Adapter\Libmemcached - getDefaultSerializer()/setDefaultSerializer()');
+        $I->wantToTest(
+            'Storage\Adapter\Libmemcached - getDefaultSerializer()/setDefaultSerializer()'
+        );
 
         $serializer = new SerializerFactory();
         $adapter    = new Libmemcached($serializer, getOptionsLibmemcached());
 
-        $I->assertEquals('php', $adapter->getDefaultSerializer());
+        $expected = 'php';
+        $actual   = $adapter->getDefaultSerializer();
+        $I->assertEquals($expected, $actual);
 
         $adapter->setDefaultSerializer('Base64');
-        $I->assertEquals('base64', $adapter->getDefaultSerializer());
+        $expected = 'base64';
+        $actual   = $adapter->getDefaultSerializer();
+        $I->assertEquals($expected, $actual);
     }
 }

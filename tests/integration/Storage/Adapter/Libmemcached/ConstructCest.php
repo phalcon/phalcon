@@ -30,8 +30,10 @@ class ConstructCest
     /**
      * Tests Phalcon\Storage\Adapter\Libmemcached :: __construct()
      *
+     * @param UnitTester $I
+     *
      * @author Phalcon Team <team@phalcon.io>
-     * @since  2019-04-09
+     * @since  2020-09-09
      */
     public function storageAdapterLibmemcachedConstruct(UnitTester $I)
     {
@@ -39,28 +41,25 @@ class ConstructCest
 
         $serializer = new SerializerFactory();
 
-        $adapter = new Libmemcached(
-            $serializer,
-            getOptionsLibmemcached()
-        );
+        $adapter = new Libmemcached($serializer, getOptionsLibmemcached());
 
-        $I->assertInstanceOf(
-            Libmemcached::class,
-            $adapter
-        );
+        $expected = Libmemcached::class;
+        $actual   = $adapter;
+        $I->assertInstanceOf($expected, $actual);
 
-        $I->assertInstanceOf(
-            AdapterInterface::class,
-            $adapter
-        );
+        $expected = AdapterInterface::class;
+        $actual   = $adapter;
+        $I->assertInstanceOf($expected, $actual);
     }
 
     /**
      * Tests Phalcon\Storage\Adapter\Libmemcached :: __construct() - empty
      * options
      *
+     * @param UnitTester $I
+     *
      * @author Phalcon Team <team@phalcon.io>
-     * @since  2019-04-09
+     * @since  2020-09-09
      */
     public function storageAdapterLibmemcachedConstructEmptyOptions(UnitTester $I)
     {
@@ -78,21 +77,20 @@ class ConstructCest
                 ],
             ],
         ];
-
-        $I->assertEquals(
-            $expected,
-            $adapter->getOptions()
-        );
+        $actual = $adapter->getOptions();
+        $I->assertEquals($expected, $actual);
     }
 
     /**
      * Tests Phalcon\Storage\Adapter\Libmemcached :: __construct() - getTtl
      * options
      *
+     * @param UnitTester $I
+     *
      * @throws Exception
-     * @since  2019-04-09
      *
      * @author Phalcon Team <team@phalcon.io>
+     * @since  2020-09-09
      */
     public function storageAdapterLibmemcachedConstructGetTtl(UnitTester $I)
     {
@@ -101,21 +99,17 @@ class ConstructCest
         $serializer = new SerializerFactory();
         $adapter    = new Libmemcached($serializer);
 
-        $I->assertEquals(
-            3600,
-            $adapter->getTtl(null)
-        );
+        $expected = 3600;
+        $actual   = $adapter->getTtl(null);
+        $I->assertEquals($expected, $actual);
 
-        $I->assertEquals(
-            20,
-            $adapter->getTtl(20)
-        );
+        $expected = 20;
+        $actual   = $adapter->getTtl(20);
+        $I->assertEquals($expected, $actual);
 
-        $time = new DateInterval('PT5S');
-
-        $I->assertEquals(
-            5,
-            $adapter->getTtl($time)
-        );
+        $time     = new DateInterval('PT5S');
+        $expected = 5;
+        $actual   = $adapter->getTtl($time);
+        $I->assertEquals($expected, $actual);
     }
 }
