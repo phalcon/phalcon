@@ -13,7 +13,9 @@ declare(strict_types=1);
 
 namespace Phalcon\Tests\Integration\Storage\Adapter\Redis;
 
+use Phalcon\Helper\Exception as HelperException;
 use Phalcon\Storage\Adapter\Redis;
+use Phalcon\Storage\Exception as StorageException;
 use Phalcon\Storage\SerializerFactory;
 use Phalcon\Tests\Fixtures\Traits\RedisTrait;
 use UnitTester;
@@ -27,6 +29,11 @@ class ClearCest
     /**
      * Tests Phalcon\Storage\Adapter\Redis :: clear()
      *
+     * @param UnitTester $I
+     *
+     * @throws HelperException
+     * @throws StorageException
+     *
      * @author Phalcon Team <team@phalcon.io>
      * @since  2020-09-09
      */
@@ -35,42 +42,38 @@ class ClearCest
         $I->wantToTest('Storage\Adapter\Redis - clear()');
 
         $serializer = new SerializerFactory();
-
-        $adapter = new Redis(
-            $serializer,
-            getOptionsRedis()
-        );
+        $adapter    = new Redis($serializer, getOptionsRedis());
 
         $key1 = uniqid();
         $key2 = uniqid();
 
         $adapter->set($key1, 'test');
 
-        $I->assertTrue(
-            $adapter->has($key1)
-        );
+        $actual = $adapter->has($key1);
+        $I->assertTrue($actual);
 
         $adapter->set($key2, 'test');
 
-        $I->assertTrue(
-            $adapter->has($key2)
-        );
+        $actual = $adapter->has($key2);
+        $I->assertTrue($actual);
 
-        $I->assertTrue(
-            $adapter->clear()
-        );
+        $actual = $adapter->clear();
+        $I->assertTrue($actual);
 
-        $I->assertFalse(
-            $adapter->has($key1)
-        );
+        $actual = $adapter->has($key1);
+        $I->assertFalse($actual);
 
-        $I->assertFalse(
-            $adapter->has($key2)
-        );
+        $actual = $adapter->has($key2);
+        $I->assertFalse($actual);
     }
 
     /**
      * Tests Phalcon\Storage\Adapter\Redis :: clear() - twice
+     *
+     * @param UnitTester $I
+     *
+     * @throws HelperException
+     * @throws StorageException
      *
      * @author Phalcon Team <team@phalcon.io>
      * @since  2020-09-09
@@ -80,33 +83,25 @@ class ClearCest
         $I->wantToTest('Storage\Adapter\Redis - clear() - twice');
 
         $serializer = new SerializerFactory();
-
-        $adapter = new Redis(
-            $serializer,
-            getOptionsRedis()
-        );
+        $adapter    = new Redis($serializer, getOptionsRedis());
 
         $key1 = uniqid();
         $key2 = uniqid();
 
         $adapter->set($key1, 'test');
 
-        $I->assertTrue(
-            $adapter->has($key1)
-        );
+        $actual = $adapter->has($key1);
+        $I->assertTrue($actual);
 
         $adapter->set($key2, 'test');
 
-        $I->assertTrue(
-            $adapter->has($key2)
-        );
+        $actual = $adapter->has($key2);
+        $I->assertTrue($actual);
 
-        $I->assertTrue(
-            $adapter->clear()
-        );
+        $actual = $adapter->clear();
+        $I->assertTrue($actual);
 
-        $I->assertTrue(
-            $adapter->clear()
-        );
+        $actual = $adapter->clear();
+        $I->assertTrue($actual);
     }
 }
