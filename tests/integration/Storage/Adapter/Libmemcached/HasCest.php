@@ -13,7 +13,9 @@ declare(strict_types=1);
 
 namespace Phalcon\Tests\Integration\Storage\Adapter\Libmemcached;
 
+use Phalcon\Helper\Exception as HelperExceptions;
 use Phalcon\Storage\Adapter\Libmemcached;
+use Phalcon\Storage\Exception as StorageException;
 use Phalcon\Storage\SerializerFactory;
 use Phalcon\Tests\Fixtures\Traits\LibmemcachedTrait;
 use UnitTester;
@@ -27,30 +29,29 @@ class HasCest
     /**
      * Tests Phalcon\Storage\Adapter\Libmemcached :: get()
      *
+     * @param UnitTester $I
+     *
+     * @throws HelperExceptions
+     * @throws StorageException
+     *
      * @author Phalcon Team <team@phalcon.io>
-     * @since  2019-03-31
+     * @since  2020-09-09
      */
     public function storageAdapterLibmemcachedGetSetHas(UnitTester $I)
     {
         $I->wantToTest('Storage\Adapter\Libmemcached - has()');
 
         $serializer = new SerializerFactory();
-
-        $adapter = new Libmemcached(
-            $serializer,
-            getOptionsLibmemcached()
-        );
+        $adapter    = new Libmemcached($serializer, getOptionsLibmemcached());
 
         $key = uniqid();
 
-        $I->assertFalse(
-            $adapter->has($key)
-        );
+        $actual = $adapter->has($key);
+        $I->assertFalse($actual);
 
         $adapter->set($key, 'test');
 
-        $I->assertTrue(
-            $adapter->has($key)
-        );
+        $actual = $adapter->has($key);
+        $I->assertTrue($actual);
     }
 }

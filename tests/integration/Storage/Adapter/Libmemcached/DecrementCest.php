@@ -13,6 +13,7 @@ declare(strict_types=1);
 
 namespace Phalcon\Tests\Integration\Storage\Adapter\Libmemcached;
 
+use Phalcon\Helper\Exception as HelperException;
 use Phalcon\Storage\Adapter\Libmemcached;
 use Phalcon\Storage\Exception;
 use Phalcon\Storage\SerializerFactory;
@@ -27,64 +28,47 @@ class DecrementCest
 
     /**
      * Tests Phalcon\Storage\Adapter\Libmemcached :: decrement()
+     */
+    /**
+     * @param UnitTester $I
      *
      * @throws Exception
-     * @since  2019-03-31
+     * @throws HelperException
      *
      * @author Phalcon Team <team@phalcon.io>
+     * @since  2020-09-09
      */
     public function storageAdapterLibmemcachedDecrement(UnitTester $I)
     {
         $I->wantToTest('Storage\Adapter\Libmemcached - decrement()');
 
         $serializer = new SerializerFactory();
-
-        $adapter = new Libmemcached(
-            $serializer,
-            getOptionsLibmemcached()
-        );
+        $adapter    = new Libmemcached($serializer, getOptionsLibmemcached());
 
 
         $key = 'cache-data';
-
-        $I->assertTrue(
-            $adapter->set($key, 100)
-        );
-
+        $actual = $adapter->set($key, 100);
+        $I->assertTrue($actual);
 
         $expected = 99;
+        $actual   = $adapter->decrement($key);
 
-        $I->assertEquals(
-            $expected,
-            $adapter->decrement($key)
-        );
-
-        $I->assertEquals(
-            $expected,
-            $adapter->get($key)
-        );
-
+        $actual   = $adapter->get($key);
+        $I->assertEquals($expected, $actual);
 
         $expected = 90;
+        $actual   = $adapter->decrement($key, 9);
+        $I->assertEquals($expected, $actual);
 
-        $I->assertEquals(
-            $expected,
-            $adapter->decrement($key, 9)
-        );
-
-        $I->assertEquals(
-            $expected,
-            $adapter->get($key)
-        );
-
+        $actual = $adapter->get($key);
+        $I->assertEquals($expected, $actual);
 
         /**
          * unknown key
          */
         $key = 'unknown';
+        $actual = $adapter->decrement($key);
+        $I->assertFalse($actual);
 
-        $I->assertFalse(
-            $adapter->decrement($key)
-        );
     }
 }

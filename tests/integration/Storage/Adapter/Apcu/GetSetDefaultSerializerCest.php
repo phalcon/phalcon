@@ -42,9 +42,14 @@ class GetSetDefaultSerializerCest
         $serializer = new SerializerFactory();
         $adapter    = new Apcu($serializer);
 
-        $I->assertEquals('php', $adapter->getDefaultSerializer());
+        $expected = 'php';
+        $actual   = $adapter->getDefaultSerializer();
+        $I->assertEquals($expected, $actual);
 
         $adapter->setDefaultSerializer('Base64');
-        $I->assertEquals('base64', $adapter->getDefaultSerializer());
+
+        $expected = 'base64';
+        $actual   = $adapter->getDefaultSerializer();
+        $I->assertEquals($expected, $actual);
     }
 }

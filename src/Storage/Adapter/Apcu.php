@@ -16,7 +16,7 @@ namespace Phalcon\Storage\Adapter;
 use APCuIterator;
 use DateInterval;
 use Exception;
-use Phalcon\Helper\Exception as ExceptionAlias;
+use Phalcon\Helper\Exception as HelperException;
 use Phalcon\Storage\SerializerFactory;
 
 use function apcu_dec;
@@ -45,7 +45,7 @@ class Apcu extends AbstractAdapter
      * @param SerializerFactory $factory
      * @param array             $options
      *
-     * @throws ExceptionAlias
+     * @throws HelperException
      */
     public function __construct(SerializerFactory $factory, array $options = [])
     {
