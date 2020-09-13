@@ -13,6 +13,7 @@ declare(strict_types=1);
 
 namespace Phalcon\Tests\Integration\Storage\Adapter\Memory;
 
+use Phalcon\Helper\Exception as HelperException;
 use Phalcon\Storage\Adapter\Memory;
 use Phalcon\Storage\SerializerFactory;
 use UnitTester;
@@ -22,8 +23,12 @@ class GetAdapterCest
     /**
      * Tests Phalcon\Storage\Adapter\Memory :: getAdapter()
      *
+     * @param UnitTester $I
+     *
+     * @throws HelperException
+     *
      * @author Phalcon Team <team@phalcon.io>
-     * @since  2019-04-14
+     * @since  2020-09-09
      */
     public function storageAdapterMemoryGetAdapter(UnitTester $I)
     {
