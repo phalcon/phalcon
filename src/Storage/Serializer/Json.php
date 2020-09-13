@@ -40,8 +40,8 @@ class Json extends AbstractSerializer
     {
         if (is_object($this->data) && !($this->data instanceof JsonSerializable)) {
             throw new InvalidArgumentException(
-                'Data for the JSON serializer cannot be of type 'object' ' .
-                'without implementing 'JsonSerializable''
+                'Data for the JSON serializer cannot be of type "object" ' .
+                'without implementing "JsonSerializable"'
             );
         }
 

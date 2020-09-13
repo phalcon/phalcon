@@ -1,3 +1,4 @@
 .env
+boxfile.yml
 tests/_output/
 vendor/
