@@ -56,8 +56,13 @@ class Message implements MessageInterface, JsonSerializable
      * @param int    $code
      * @param array  $metaData
      */
-    public function __construct(string $message, string $field = "", string $type = "", int $code = 0, array $metaData = [])
-    {
+    public function __construct(
+        string $message,
+        string $field = "",
+        string $type = "",
+        int $code = 0,
+        array $metaData = []
+    ) {
         $this->message  = $message;
         $this->field    = $field;
         $this->type     = $type;

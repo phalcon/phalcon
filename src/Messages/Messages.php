@@ -134,8 +134,10 @@ class Messages implements ArrayAccess, Countable, Iterator, JsonSerializable
              * the current list
              */
             foreach ($this->messages as $message) {
-                if (method_exists($message, 'getField')
-                    && $fieldName === $message->getField()) {
+                if (
+                    method_exists($message, 'getField')
+                    && $fieldName === $message->getField()
+                ) {
                     $filtered[] = $message;
                 }
             }
