@@ -17,8 +17,8 @@ use Phalcon\Helper\Exception as HelperException;
 use Phalcon\Storage\Adapter\Stream;
 use Phalcon\Storage\Exception as StorageException;
 use Phalcon\Storage\SerializerFactory;
+use stdClass;
 use UnitTester;
-
 use function file_put_contents;
 use function is_dir;
 use function mkdir;
@@ -96,7 +96,7 @@ class GetSetCest
         $I->assertNotNull($actual);
         $I->assertEquals($expected, $actual);
 
-        $expected        = new \stdClass();
+        $expected        = new stdClass();
         $expected->one   = 'two';
         $expected->three = 'four';
 

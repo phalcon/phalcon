@@ -18,7 +18,6 @@ use Phalcon\Storage\Adapter\Stream;
 use Phalcon\Storage\Exception as StorageException;
 use Phalcon\Storage\SerializerFactory;
 use UnitTester;
-
 use function outputDir;
 
 class IncrementCest
@@ -53,7 +52,7 @@ class IncrementCest
         $expected = 2;
         $actual   = $adapter->increment($key);
         $I->assertEquals($expected, $actual);
-        $actual   = $adapter->get($key);
+        $actual = $adapter->get($key);
         $I->assertEquals($expected, $actual);
 
         $expected = 10;
@@ -65,7 +64,7 @@ class IncrementCest
         /**
          * unknown key
          */
-        $key = 'unknown';
+        $key    = 'unknown';
         $actual = $adapter->increment($key);
         $I->assertFalse($actual);
     }

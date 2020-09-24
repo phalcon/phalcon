@@ -19,7 +19,6 @@ use Phalcon\Storage\Adapter\Stream;
 use Phalcon\Storage\Exception as StorageException;
 use Phalcon\Storage\SerializerFactory;
 use UnitTester;
-
 use function outputDir;
 
 class ConstructCest

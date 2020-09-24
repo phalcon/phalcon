@@ -21,7 +21,6 @@ use Phalcon\Storage\SerializerFactory;
 use Phalcon\Tests\Fixtures\Traits\LibmemcachedTrait;
 use stdClass;
 use UnitTester;
-
 use function getOptionsLibmemcached;
 
 class GetSetCest
@@ -39,8 +38,8 @@ class GetSetCest
      * @throws StorageException
      * @throws HelperException
      *
-     * @author Phalcon Team <team@phalcon.io>
-     * @since  2020-09-09
+     * @author       Phalcon Team <team@phalcon.io>
+     * @since        2020-09-09
      */
     public function storageAdapterLibmemcachedGetSet(UnitTester $I, Example $example)
     {

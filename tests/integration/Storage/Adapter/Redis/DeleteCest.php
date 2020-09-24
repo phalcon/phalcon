@@ -19,7 +19,6 @@ use Phalcon\Storage\Exception as StorageException;
 use Phalcon\Storage\SerializerFactory;
 use Phalcon\Tests\Fixtures\Traits\RedisTrait;
 use UnitTester;
-
 use function getOptionsRedis;
 
 class DeleteCest
@@ -82,8 +81,14 @@ class DeleteCest
         $actual = $adapter->delete($key);
         $I->assertTrue($actual);
 
-        $actual = $adapter->delete($key);
+        $actual = $adapter->has($key);
         $I->assertFalse($actual);
+
+        $actual = $adapter->delete($key);
+        $I->assertTrue($actual);
+
+        $actual = $adapter->has($key);
+        $I->assertTrue($actual);
     }
 
     /**

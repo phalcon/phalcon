@@ -19,7 +19,6 @@ use Phalcon\Storage\Exception as StorageException;
 use Phalcon\Storage\SerializerFactory;
 use Phalcon\Tests\Fixtures\Traits\RedisTrait;
 use UnitTester;
-
 use function getOptionsRedis;
 
 class HasCest
@@ -44,7 +43,7 @@ class HasCest
         $serializer = new SerializerFactory();
         $adapter    = new Redis($serializer, getOptionsRedis());
 
-        $key = uniqid();
+        $key    = uniqid();
         $actual = $adapter->has($key);
         $I->assertFalse($actual);
 

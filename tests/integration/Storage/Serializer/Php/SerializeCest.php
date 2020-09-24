@@ -17,6 +17,7 @@ use Codeception\Example;
 use Phalcon\Storage\Serializer\Php;
 use stdClass;
 use UnitTester;
+
 use function serialize;
 
 class SerializeCest
@@ -29,8 +30,8 @@ class SerializeCest
      * @param UnitTester $I
      * @param Example    $example
      *
-     * @author Phalcon Team <team@phalcon.io>
-     * @since  2020-09-09
+     * @author       Phalcon Team <team@phalcon.io>
+     * @since        2020-09-09
      */
     public function storageSerializerPhpSerialize(UnitTester $I, Example $example)
     {

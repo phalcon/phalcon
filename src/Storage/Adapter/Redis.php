@@ -96,7 +96,7 @@ class Redis extends AbstractAdapter
      */
     public function delete(string $key): bool
     {
-        return (bool) $this->getAdapter()->del($key);
+        return (bool) $this->getAdapter()->unlink($key);
     }
 
     /**
@@ -220,9 +220,15 @@ class Redis extends AbstractAdapter
      */
     private function checkAuth(RedisService $connection): Redis
     {
-        $auth = $this->options['auth'];
+        $auth  = $this->options['auth'];
 
-        if (!empty($auth) && !$connection->auth($auth)) {
+        try {
+            $error = (!empty($auth) && !$connection->auth($auth));
+        } catch (BaseException $ex) {
+            $error = true;
+        }
+
+        if (true === $error) {
             throw new StorageException(
                 'Failed to authenticate with the Redis server'
             );

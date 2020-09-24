@@ -18,7 +18,6 @@ use Phalcon\Storage\Adapter\Stream;
 use Phalcon\Storage\Exception as StorageException;
 use Phalcon\Storage\SerializerFactory;
 use UnitTester;
-
 use function outputDir;
 use function uniqid;
 
@@ -47,7 +46,7 @@ class HasCest
             ]
         );
 
-        $key = uniqid();
+        $key    = uniqid();
         $actual = $adapter->has($key);
         $I->assertFalse($actual);
 

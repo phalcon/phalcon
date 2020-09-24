@@ -17,7 +17,6 @@ use Phalcon\Storage\Adapter\Libmemcached;
 use Phalcon\Storage\SerializerFactory;
 use Phalcon\Tests\Fixtures\Traits\LibmemcachedTrait;
 use UnitTester;
-
 use function getOptionsLibmemcached;
 
 class GetPrefixCest
