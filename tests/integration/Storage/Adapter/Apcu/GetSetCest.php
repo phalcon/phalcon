@@ -35,8 +35,8 @@ class GetSetCest
      *
      * @throws Exception
      *
-     * @author       Phalcon Team <team@phalcon.io>
-     * @since        2020-09-09
+     * @author Phalcon Team <team@phalcon.io>
+     * @since  2020-09-09
      */
     public function storageAdapterApcuGetSet(UnitTester $I, Example $example)
     {

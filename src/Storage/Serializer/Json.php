@@ -45,11 +45,7 @@ class Json extends AbstractSerializer
             );
         }
 
-        if (true !== $this->isSerializable($this->data)) {
-            return $this->data;
-        }
-
-        return json_encode($this->data, 79 + JSON_THROW_ON_ERROR);
+        return parent::serialize();
     }
 
     /**
@@ -61,7 +57,29 @@ class Json extends AbstractSerializer
      */
     public function unserialize($data): void
     {
-        $this->data = json_decode(
+        $this->data = $this->internalUnserlialize($data);
+    }
+
+    /**
+     * @param mixed $data
+     *
+     * @return false|string
+     * @throws JsonException
+     */
+    protected function internalSerialize($data)
+    {
+        return json_encode($this->data, 79 + JSON_THROW_ON_ERROR);
+    }
+
+    /**
+     * @param mixed $data
+     *
+     * @return mixed
+     * @throws JsonException
+     */
+    protected function internalUnserlialize($data)
+    {
+        return json_decode(
             $data,
             false,
             512,
