@@ -290,9 +290,9 @@ class Libmemcached extends AbstractAdapter
         if (isset($map[$serializer])) {
             $this->defaultSerializer = '';
             $connection->setOption(Memcached::OPT_SERIALIZER, $map[$serializer]);
-        } else {
-            $this->initSerializer();
         }
+
+        $this->initSerializer();
     }
 
     /**

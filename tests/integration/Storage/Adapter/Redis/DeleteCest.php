@@ -85,10 +85,7 @@ class DeleteCest
         $I->assertFalse($actual);
 
         $actual = $adapter->delete($key);
-        $I->assertTrue($actual);
-
-        $actual = $adapter->has($key);
-        $I->assertTrue($actual);
+        $I->assertFalse($actual);
     }
 
     /**

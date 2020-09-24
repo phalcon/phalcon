@@ -320,11 +320,11 @@ class Redis extends AbstractAdapter
 
         $serializer = mb_strtolower($this->defaultSerializer);
 
-        if (isset($map[$serializer])) {
+        if (true === isset($map[$serializer])) {
             $this->defaultSerializer = '';
             $connection->setOption(RedisService::OPT_SERIALIZER, $map[$serializer]);
-        } else {
-            $this->initSerializer();
         }
+
+        $this->initSerializer();
     }
 }
