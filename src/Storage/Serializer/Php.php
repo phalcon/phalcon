@@ -16,9 +16,7 @@ namespace Phalcon\Storage\Serializer;
 use InvalidArgumentException;
 
 use function is_string;
-use function restore_error_handler;
 use function serialize;
-use function set_error_handler;
 use function unserialize;
 
 use const E_NOTICE;
@@ -30,19 +28,7 @@ use const E_NOTICE;
  */
 class Php extends AbstractSerializer
 {
-    /**
-     * Serializes data
-     *
-     * @return string
-     */
-    public function serialize()
-    {
-        if (true !== $this->isSerializable($this->data)) {
-            return $this->data;
-        }
-
-        return serialize($this->data);
-    }
+    protected int $errorType = E_NOTICE;
 
     /**
      * Unserializes data
@@ -51,30 +37,30 @@ class Php extends AbstractSerializer
      */
     public function unserialize($data): void
     {
-        if (false !== $this->isSerializable($data)) {
-            if (!is_string($data)) {
-                throw new InvalidArgumentException(
-                    'Data for the unserializer must of type string'
-                );
-            }
-
-            $warning = false;
-            set_error_handler(
-                function () use (&$warning) {
-                    $warning = true;
-                },
-                E_NOTICE
+        if (true !== is_string($data)) {
+            throw new InvalidArgumentException(
+                'Data for the unserializer must of type string'
             );
-
-            $data = unserialize($data);
-
-            restore_error_handler();
-
-            if ($warning) {
-                $data = null;
-            }
         }
 
-        $this->data = $data;
+        parent::unserialize($data);
+    }
+
+    /**
+     * @param mixed $data
+     *
+     * @return string
+     */
+    protected function internalSerialize($data)
+    {
+        return serialize($data);
+    }
+
+    /**
+     * @param mixed $data
+     */
+    protected function internalUnserlialize($data)
+    {
+        return unserialize($data);
     }
 }

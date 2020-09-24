@@ -15,11 +15,16 @@ namespace Phalcon\Storage\Serializer;
 
 use function is_bool;
 use function is_numeric;
+use function restore_error_handler;
+use function set_error_handler;
+
+use const E_WARNING;
 
 /**
  * Class AbstractSerializer
  *
  * @property mixed|null $data
+ * @property int        $errorType
  */
 abstract class AbstractSerializer implements SerializerInterface
 {
@@ -27,6 +32,11 @@ abstract class AbstractSerializer implements SerializerInterface
      * @var mixed
      */
     protected $data = null;
+
+    /**
+     * @var int
+     */
+    protected int $errorType = E_WARNING;
 
     /**
      * AbstractSerializer constructor.
@@ -49,6 +59,25 @@ abstract class AbstractSerializer implements SerializerInterface
     }
 
     /**
+     * Serializes data
+     *
+     * @return string|null
+     */
+    public function serialize()
+    {
+        if (true !== $this->isSerializable($this->data)) {
+            return $this->data;
+        }
+
+        $serialized = $this->internalSerialize($this->data);
+        if (false === $serialized) {
+            $serialized = '';
+        }
+
+        return $serialized;
+    }
+
+    /**
      * Sets the data
      *
      * @param mixed $data
@@ -57,6 +86,33 @@ abstract class AbstractSerializer implements SerializerInterface
     {
         $this->data = $data;
     }
+
+    /**
+     * Unserializes data
+     *
+     * @param string $data
+     */
+    public function unserialize($data): void
+    {
+        $warning = false;
+        set_error_handler(
+            function () use (&$warning) {
+                $warning = true;
+            },
+            $this->errorType
+        );
+
+        $this->data = $this->internalUnserlialize($data);
+
+        restore_error_handler();
+
+        if ($warning) {
+            $this->data = null;
+        }
+    }
+
+    abstract protected function internalSerialize($data);
+    abstract protected function internalUnserlialize($data);
 
     /**
      * If this returns true, then the data returns back as is

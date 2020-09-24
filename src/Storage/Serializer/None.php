@@ -27,7 +27,7 @@ class None extends AbstractSerializer
      */
     public function serialize()
     {
-        return $this->data;
+        return $this->internalSerialize($this->data);
     }
 
     /**
@@ -37,6 +37,26 @@ class None extends AbstractSerializer
      */
     public function unserialize($data): void
     {
-        $this->data = $data;
+        $this->data = $this->internalUnserlialize($data);
+    }
+
+    /**
+     * @param mixed $data
+     *
+     * @return mixed
+     */
+    protected function internalSerialize($data)
+    {
+        return $data;
+    }
+
+    /**
+     * @param mixed $data
+     *
+     * @return mixed
+     */
+    protected function internalUnserlialize($data)
+    {
+        return $data;
     }
 }

@@ -18,6 +18,7 @@ use InvalidArgumentException;
 use function base64_decode;
 use function base64_encode;
 use function is_string;
+use function parent;
 
 /**
  * Class Base64
@@ -39,7 +40,7 @@ class Base64 extends AbstractSerializer
             );
         }
 
-        return base64_encode($this->data);
+        return parent::serialize();
     }
 
     /**
@@ -55,6 +56,26 @@ class Base64 extends AbstractSerializer
             );
         }
 
-        $this->data = base64_decode($data);
+        parent::unserialize($data);
+    }
+
+    /**
+     * @param mixed $data
+     *
+     * @return false|string
+     */
+    protected function internalSerialize($data)
+    {
+        return base64_encode($data);
+    }
+
+    /**
+     * @param mixed $data
+     *
+     * @return string
+     */
+    protected function internalUnserlialize($data)
+    {
+        return base64_decode($data);
     }
 }

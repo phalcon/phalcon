@@ -14,6 +14,7 @@ declare(strict_types=1);
 namespace Phalcon\Tests\Integration\Storage\Serializer\Php;
 
 use Codeception\Example;
+use Codeception\Stub;
 use Phalcon\Storage\Serializer\Php;
 use stdClass;
 use UnitTester;
@@ -30,8 +31,8 @@ class SerializeCest
      * @param UnitTester $I
      * @param Example    $example
      *
-     * @author       Phalcon Team <team@phalcon.io>
-     * @since        2020-09-09
+     * @author Phalcon Team <team@phalcon.io>
+     * @since  2020-09-09
      */
     public function storageSerializerPhpSerialize(UnitTester $I, Example $example)
     {
@@ -40,11 +41,35 @@ class SerializeCest
         $serializer = new Php($example[1]);
 
         $expected = $example[2];
+        $actual   = $serializer->serialize();
 
-        $I->assertEquals(
-            $expected,
-            $serializer->serialize()
+        $I->assertEquals($expected, $actual);
+    }
+
+    /**
+     * Tests Phalcon\Storage\Serializer\Php :: serialize() return empty string
+     *
+     * @param UnitTester $I
+     *
+     * @author Phalcon Team <team@phalcon.io>
+     * @since  2020-09-09
+     */
+    public function storageSerializerPhpSerializeReturnEmptyString(UnitTester $I)
+    {
+        $I->wantToTest('Storage\Serializer\Php - serialize() - return empty string');
+
+        $serializer = Stub::make(
+            Php::class,
+            [
+                'internalSerialize' => false,
+            ]
         );
+
+        $serializer->setData('abcdef');
+        $expected = '';
+        $actual   = $serializer->serialize();
+
+        $I->assertEquals($expected, $actual);
     }
 
     private function getExamples(): array

@@ -38,8 +38,8 @@ class GetSetCest
      * @throws StorageException
      * @throws HelperException
      *
-     * @author       Phalcon Team <team@phalcon.io>
-     * @since        2020-09-09
+     * @author Phalcon Team <team@phalcon.io>
+     * @since  2020-09-09
      */
     public function storageAdapterLibmemcachedGetSet(UnitTester $I, Example $example)
     {

@@ -48,8 +48,8 @@ class UnserializeCest
     /**
      * Tests Phalcon\Storage\Serializer\Igbinary :: unserialize() - error
      *
-     * @author       Phalcon Team <team@phalcon.io>
-     * @since        2019-11-21
+     * @author Phalcon Team <team@phalcon.io>
+     * @since  2020-09-09
      */
     public function storageSerializerIgbinaryUnserializeError(UnitTester $I)
     {
@@ -57,7 +57,8 @@ class UnserializeCest
         $serializer = new Igbinary();
         $serializer->unserialize('[DATA]');
 
-        $I->assertNull($serializer->getData());
+        $actual = $serializer->getData();
+        $I->assertNull($actual);
     }
 
     private function getExamples(): array
