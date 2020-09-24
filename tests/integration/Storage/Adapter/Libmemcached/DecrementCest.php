@@ -46,14 +46,14 @@ class DecrementCest
         $adapter    = new Libmemcached($serializer, getOptionsLibmemcached());
 
 
-        $key = 'cache-data';
+        $key    = 'cache-data';
         $actual = $adapter->set($key, 100);
         $I->assertTrue($actual);
 
         $expected = 99;
         $actual   = $adapter->decrement($key);
 
-        $actual   = $adapter->get($key);
+        $actual = $adapter->get($key);
         $I->assertEquals($expected, $actual);
 
         $expected = 90;
@@ -66,9 +66,8 @@ class DecrementCest
         /**
          * unknown key
          */
-        $key = 'unknown';
+        $key    = 'unknown';
         $actual = $adapter->decrement($key);
         $I->assertFalse($actual);
-
     }
 }

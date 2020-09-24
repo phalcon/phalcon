@@ -19,7 +19,6 @@ use Phalcon\Storage\Exception as StorageException;
 use Phalcon\Storage\SerializerFactory;
 use Phalcon\Tests\Fixtures\Traits\RedisTrait;
 use UnitTester;
-
 use function getOptionsRedis;
 
 class GetAdapterCest

@@ -15,7 +15,6 @@ namespace Phalcon\Tests\Integration\Storage\Adapter\Apcu;
 
 use Phalcon\Helper\Exception;
 use Phalcon\Storage\Adapter\Apcu;
-use Phalcon\Storage\Serializer\Php;
 use Phalcon\Storage\SerializerFactory;
 use Phalcon\Tests\Fixtures\Traits\ApcuTrait;
 use UnitTester;

@@ -21,7 +21,6 @@ use Phalcon\Storage\SerializerFactory;
 use Phalcon\Tests\Fixtures\Traits\RedisTrait;
 use stdClass;
 use UnitTester;
-
 use function array_merge;
 use function getOptionsRedis;
 use function uniqid;
@@ -41,8 +40,8 @@ class GetSetCest
      * @throws HelperException
      * @throws StorageException
      *
-     * @author Phalcon Team <team@phalcon.io>
-     * @since  2020-09-09
+     * @author       Phalcon Team <team@phalcon.io>
+     * @since        2020-09-09
      */
     public function storageAdapterRedisGetSet(UnitTester $I, Example $example)
     {
@@ -76,8 +75,7 @@ class GetSetCest
         $I->wantToTest('Storage\Adapter\Redis - get()/set() - persistent');
 
         $serializer = new SerializerFactory();
-
-        $adapter = new Redis(
+        $adapter    = new Redis(
             $serializer,
             array_merge(
                 getOptionsRedis(),
@@ -87,7 +85,7 @@ class GetSetCest
             )
         );
 
-        $key = uniqid();
+        $key    = uniqid();
         $actual = $adapter->set($key, 'test');
         $I->assertTrue($actual);
 
@@ -112,8 +110,7 @@ class GetSetCest
             new StorageException('Redis server selected database failed'),
             function () {
                 $serializer = new SerializerFactory();
-
-                $adapter = new Redis(
+                $adapter    = new Redis(
                     $serializer,
                     array_merge(
                         getOptionsRedis(),
@@ -144,8 +141,7 @@ class GetSetCest
             new StorageException('Failed to authenticate with the Redis server'),
             function () {
                 $serializer = new SerializerFactory();
-
-                $adapter = new Redis(
+                $adapter    = new Redis(
                     $serializer,
                     array_merge(
                         getOptionsRedis(),

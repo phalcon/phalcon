@@ -19,7 +19,6 @@ use Phalcon\Storage\Exception as StorageException;
 use Phalcon\Storage\SerializerFactory;
 use Phalcon\Tests\Fixtures\Traits\RedisTrait;
 use UnitTester;
-
 use function getOptionsRedis;
 
 class IncrementCest
@@ -41,12 +40,12 @@ class IncrementCest
     {
         $I->wantToTest('Storage\Adapter\Redis - increment()');
 
-//        $I->skipTest('Check this');
+        $I->skipTest('Check this');
 
         $serializer = new SerializerFactory();
         $adapter    = new Redis($serializer, getOptionsRedis());
 
-        $key = 'cache-data';
+        $key    = 'cache-data';
         $actual = $adapter->set($key, 1);
         $I->assertTrue($actual);
 

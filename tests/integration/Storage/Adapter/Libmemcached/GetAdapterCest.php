@@ -20,7 +20,6 @@ use Phalcon\Storage\Exception as StorageException;
 use Phalcon\Storage\SerializerFactory;
 use Phalcon\Tests\Fixtures\Traits\LibmemcachedTrait;
 use UnitTester;
-
 use function getOptionsLibmemcached;
 
 class GetAdapterCest
