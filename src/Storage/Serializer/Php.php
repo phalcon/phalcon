@@ -37,13 +37,15 @@ class Php extends AbstractSerializer
      */
     public function unserialize($data): void
     {
-        if (true !== is_string($data)) {
-            throw new InvalidArgumentException(
-                'Data for the unserializer must of type string'
-            );
-        }
+        if (false !== $this->isSerializable($data)) {
+            if (true !== is_string($data)) {
+                throw new InvalidArgumentException(
+                    'Data for the unserializer must of type string'
+                );
+            }
 
-        parent::unserialize($data);
+            parent::unserialize($data);
+        }
     }
 
     /**
