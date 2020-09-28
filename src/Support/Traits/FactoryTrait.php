@@ -29,6 +29,17 @@ trait FactoryTrait
      */
     private array $mapper = [];
 
+
+    /**
+     * FactoryTrait constructor.
+     *
+     * @param array $services
+     */
+    public function __construct(array $services = [])
+    {
+        $this->init($services);
+    }
+
     /**
      * AdapterFactory constructor.
      *
