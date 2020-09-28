@@ -102,16 +102,29 @@ abstract class AbstractSerializer implements SerializerInterface
             $this->errorType
         );
 
-        $this->data = $this->internalUnserlialize($data);
+        $data = $this->internalUnserlialize($data);
 
         restore_error_handler();
 
         if ($warning) {
-            $this->data = null;
+            $data = null;
         }
+
+        $this->data = $data;
     }
 
+    /**
+     * @param mixed $data
+     *
+     * @return mixed
+     */
     abstract protected function internalSerialize($data);
+
+    /**
+     * @param mixed $data
+     *
+     * @return mixed
+     */
     abstract protected function internalUnserlialize($data);
 
     /**
