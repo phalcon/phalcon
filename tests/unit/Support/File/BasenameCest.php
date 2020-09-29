@@ -11,64 +11,123 @@
 
 declare(strict_types=1);
 
-namespace Phalcon\Tests\Unit\Helper\Fs;
+namespace Phalcon\Tests\Unit\Support\File;
 
-use Phalcon\Helper\Fs;
+use Codeception\Example;
+use Phalcon\Support\File\Basename;
 use UnitTester;
+use function basename;
 
-class FsBasenameCest
+class BasenameCest
 {
     /**
-     * Tests Phalcon\Helper\Fs :: basename()
-     * with ASCII $uri it should be same as PHP's basename
+     * Tests Phalcon\Support\File :: basename() with ASCII $uri
+     * it should be same as PHP's basename
+     *
+     * @dataProvider getAsciiExamples
+     *
+     * @param UnitTester $I
+     * @param Example    $example
      *
      * @author Ian Hu <hu2008yinxiang@163.com>
      * @since  2020-09-09
      */
-    public function helperFsBasenamePureASCII(UnitTester $I)
+    public function supportFileBasenamePureASCII(UnitTester $I, Example $example)
     {
-        $I->wantToTest('Helper\Fs - basename() with pure ASCII uri');
-        $filePathAndSuffixes = [
-            ["/etc/sudoers.d", ".d"],
-            ["/etc/sudoers.d", ''],
-            ['/etc/passwd', ''],
-            ['/etc/', ''],
-            ['.', ''],
-            ['/', ''],
-        ];
+        $I->wantToTest('Support\File - basename() with pure ASCII uri');
 
-        foreach ($filePathAndSuffixes as $filePathAndSuffix) {
-            [$filePath, $suffix] = $filePathAndSuffix;
-            $I->assertEquals(
-                basename($filePath, $suffix),
-                Fs::basename($filePath, $suffix)
-            );
-        }
+        $object = new Basename();
+        $path   = $example[0];
+        $suffix = $example[1];
+
+        $expected = basename($path, $suffix);
+        $actual   = $object($path, $suffix);
+        $I->assertEquals($expected, $actual);
     }
 
     /**
-     * Tests Phalcon\Helper\Fs :: basename()
-     * with non-ASCII $uri support
+     * Tests Phalcon\Support\File :: basename() with non-ASCII $uri support
+     *
+     * @dataProvider getNonAsciiExamples
+     *
+     * @param UnitTester $I
+     * @param Example    $example
      *
      * @author Ian Hu <hu2008yinxiang@163.com>
      * @since  2020-09-09
      */
-    public function helperFsBasenameNonASCII(UnitTester $I)
+    public function supportFileBasenameNonASCII(UnitTester $I, Example $example)
     {
-        $I->wantToTest('Helper\Fs - basename() with non-ASCII uri');
-        $filePathAndExpects = [
-            '/file/热爱中文.txt'          => '热爱中文.txt',
-            '/中文目录/热爱中文.txt'          => '热爱中文.txt',
-            '/myfolder/日本語のファイル名.txt' => '日本語のファイル名.txt',
-            '/のファ/日本語のファイル名.txt'      => '日本語のファイル名.txt',
-            '/root/ελληνικά.txt'      => 'ελληνικά.txt',
-            '/νικά/ελληνικά.txt'      => 'ελληνικά.txt',
+        $I->wantToTest('Support\Fs - basename() with non-ASCII uri');
+
+        $object   = new Basename();
+        $path     = $example[0];
+        $expected = $example[1];
+        $actual   = $object($path);
+        $I->assertEquals($expected, $actual);
+    }
+
+    /**
+     * @return \string[][]
+     */
+    private function getAsciiExamples(): array
+    {
+        return [
+            [
+                '/etc/sudoers.d',
+                '.d',
+            ],
+            [
+                '/etc/sudoers.d',
+                '',
+            ],
+            [
+                '/etc/passwd',
+                '',
+            ],
+            [
+                '/etc/',
+                '',
+            ],
+            [
+                '.',
+                '',
+            ],
+            [
+                '/',
+                '',
+            ],
         ];
-        foreach ($filePathAndExpects as $filePath => $expect) {
-            $I->assertEquals(
-                $expect,
-                Fs::basename($filePath)
-            );
-        }
+    }
+
+    private function getNonAsciiExamples(): array
+    {
+        return [
+            [
+                '/file/热爱中文.txt',
+                '热爱中文.txt',
+            ],
+            [
+                '/中文目录/热爱中文.txt',
+                '热爱中文.txt',
+            ],
+            [
+                '/myfolder/日本語のファイル名.txt',
+                '日本語のファイル名.txt',
+            ],
+            [
+                '/のファ/日本語のファイル名.txt',
+                '日本語のファイル名.txt',
+            ],
+            [
+                '/root/ελληνικά.txt',
+                'ελληνικά.txt',
+            ],
+            [
+                '/νικά/ελληνικά.txt',
+                'ελληνικά.txt',
+            ],
+        ];
+
     }
 }
