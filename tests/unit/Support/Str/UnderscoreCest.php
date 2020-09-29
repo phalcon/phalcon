@@ -11,36 +11,62 @@
 
 declare(strict_types=1);
 
-namespace Phalcon\Tests\Unit\Helper\Str;
+namespace Phalcon\Tests\Unit\Support\Str;
 
-use Phalcon\Helper\Str;
+use Codeception\Example;
+use Phalcon\Support\Str\Underscore;
 use UnitTester;
 
 class UnderscoreCest
 {
     /**
-     * Tests Phalcon\Helper\Str :: underscore()
+     * Tests Phalcon\Support\Str :: underscore()
+     *
+     * @dataProvider getExamples
+     *
+     * @param UnitTester $I
+     * @param Example    $example
      *
      * @author Phalcon Team <team@phalcon.io>
      * @since  2020-09-09
      */
-    public function helperStrUnderscore(UnitTester $I)
+    public function supportStrUnderscore(UnitTester $I, Example $example)
     {
-        $I->wantToTest('Helper\Str - underscore()');
-        $expected = 'start_a_horse';
-        $actual   = Str::underscore('start a horse');
-        $I->assertEquals($expected, $actual);
+        $I->wantToTest('Support\Str - underscore() - ' . $example[0]);
 
-        $expected = 'five_cats';
-        $actual   = Str::underscore("five\tcats");
-        $I->assertEquals($expected, $actual);
+        $object = new Underscore();
 
-        $expected = 'look_behind';
-        $actual   = Str::underscore(' look behind ');
+        $expected = $example[2];
+        $actual   = $object($example[1]);
         $I->assertEquals($expected, $actual);
+    }
 
-        $expected = 'Awesome_Phalcon';
-        $actual   = Str::underscore(" \t Awesome \t  \t Phalcon ");
-        $I->assertEquals($expected, $actual);
+    /**
+     * @return \string[][]
+     */
+    private function getExamples(): array
+    {
+        return [
+            [
+                'spaces',
+                'start a horse',
+                'start_a_horse',
+            ],
+            [
+                'tabs',
+                "five\tcats",
+                'five_cats',
+            ],
+            [
+                'more spaces',
+                ' look behind ',
+                'look_behind',
+            ],
+            [
+                'more tabs',
+                " \t Awesome \t  \t Phalcon ",
+                'Awesome_Phalcon',
+            ],
+        ];
     }
 }

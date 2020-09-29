@@ -11,24 +11,27 @@
 
 declare(strict_types=1);
 
-namespace Phalcon\Tests\Unit\Helper\Str;
+namespace Phalcon\Tests\Unit\Support\Str;
 
-use Phalcon\Helper\Str;
+use Phalcon\Support\Str\IsPalindrome;
 use UnitTester;
 
 class IsPalindromeCest
 {
     /**
-     * Tests Phalcon\Helper\Str :: isPalindrome()
+     * Tests Phalcon\Support\Str :: isPalindrome()
+     *
+     * @param UnitTester $I
      *
      * @author Phalcon Team <team@phalcon.io>
      * @since  2020-09-09
      */
-    public function helperStrIsPalindrome(UnitTester $I)
+    public function supportStrIsPalindrome(UnitTester $I)
     {
-        $I->wantToTest('Helper\Str - isPalindrome()');
+        $I->wantToTest('Support\Str - isPalindrome()');
 
-        $actual = Str::isPalindrome('racecar');
+        $object = new IsPalindrome();
+        $actual = $object('racecar');
         $I->assertTrue($actual);
     }
 }

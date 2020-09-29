@@ -11,34 +11,39 @@
 
 declare(strict_types=1);
 
-namespace Phalcon\Tests\Unit\Helper\Str;
+namespace Phalcon\Tests\Unit\Support\Str;
 
 use Codeception\Example;
-use Phalcon\Helper\Str;
+use Phalcon\Support\Str\Ucwords;
 use UnitTester;
 
 class UcwordsCest
 {
     /**
-     * Tests Phalcon\Helper\Str :: ucwords()
-     *
-     * @author       Phalcon Team <team@phalcon.io>
-     * @since        2020-09-09
+     * Tests Phalcon\Support\Str :: ucwords()
      *
      * @dataProvider getData
+     *
+     * @param UnitTester $I
+     * @param Example    $example
+     *
+     * @author Phalcon Team <team@phalcon.io>
+     * @since  2020-09-09
      */
-    public function helperStrUcwords(UnitTester $I, Example $example)
+    public function supportStrUcwords(UnitTester $I, Example $example)
     {
-        $I->wantToTest('Helper\Str - ucwords()');
+        $I->wantToTest('Support\Str - ucwords()');
 
-        $I->assertEquals(
-            $example['expected'],
-            Str::ucwords(
-                $example['text']
-            )
-        );
+        $object   = new Ucwords();
+        $expected = $example['expected'];
+        $actual   = $object($example['text']);
+
+        $I->assertEquals($expected, $actual);
     }
 
+    /**
+     * @return \string[][]
+     */
     private function getData(): array
     {
         return [

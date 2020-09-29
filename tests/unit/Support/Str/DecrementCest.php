@@ -11,32 +11,39 @@
 
 declare(strict_types=1);
 
-namespace Phalcon\Tests\Unit\Helper\Str;
+namespace Phalcon\Tests\Unit\Support\Str;
 
 use Codeception\Example;
-use Phalcon\Helper\Str;
+use Phalcon\Support\Str\Decrement;
 use UnitTester;
 
 class DecrementCest
 {
     /**
-     * Tests Phalcon\Helper\Str :: decrement() - string
+     * Tests Phalcon\Support\Str :: decrement() - string
      *
-     * @author       Ruud Boon <https://github.com/ruudboon>
-     * @since        2020-09-09
-     * @dataProvider strProvider
+     * @dataProvider getExamples
+     *
+     * @param UnitTester $I
+     * @param Example    $example
+     *
+     * @author Phalcon Team <team@phalcon.io>
+     * @since  2020-09-09
      */
-    public function helperStrDecrement(UnitTester $I, Example $example)
+    public function supportStrDecrement(UnitTester $I, Example $example)
     {
-        $I->wantToTest('Helper\Str - decrement()');
-        $actual = Str::decrement($example['source'], $example['separator']);
-        $I->assertEquals($example['expected'], $actual);
+        $I->wantToTest('Support\Str - decrement()');
+
+        $object   = new Decrement();
+        $expected = $example['expected'];
+        $actual   = $object($example['source'], $example['separator']);
+        $I->assertEquals($expected, $actual);
     }
 
     /**
      * @return array
      */
-    protected function strProvider()
+    protected function getExamples()
     {
         return [
             ['source' => "file_2", 'expected' => "file_1", "separator" => "_"],

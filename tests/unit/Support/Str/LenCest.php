@@ -11,43 +11,50 @@
 
 declare(strict_types=1);
 
-namespace Phalcon\Tests\Unit\Helper\Str;
+namespace Phalcon\Tests\Unit\Support\Str;
 
-use Phalcon\Helper\Str;
+use Phalcon\Support\Str\Len;
 use UnitTester;
 
 class LenCest
 {
     /**
-     * Tests Phalcon\Helper\Str :: len()
+     * Tests Phalcon\Support\Str :: len()
+     *
+     * @param UnitTester $I
      *
      * @author Phalcon Team <team@phalcon.io>
-     * @since  2020-02-23
+     * @since  2020-09-09
      */
-    public function helperStrLen(UnitTester $I)
+    public function supportStrLen(UnitTester $I)
     {
-        $I->wantToTest('Helper\Str - len()');
+        $I->wantToTest('Support\Str - len()');
 
-        $actual = Str::len('hello');
+        $object = new Len();
+        $actual = $object('hello');
         $I->assertEquals(5, $actual);
 
-        $actual = Str::len('1234');
+        $actual = $object('1234');
         $I->assertEquals(4, $actual);
     }
 
     /**
-     * Tests Phalcon\Helper\Str :: len() - multi-bytes encoding
+     * Tests Phalcon\Support\Str :: len() - multi-bytes encoding
+     *
+     * @param UnitTester $I
      *
      * @author Phalcon Team <team@phalcon.io>
-     * @since  2020-02-23
+     * @since  2020-09-09
      */
-    public function helperStrLenMultiBytesEncoding(UnitTester $I)
+    public function supportStrLenMultiBytesEncoding(UnitTester $I)
     {
-        $I->wantToTest('Helper\Str - len() - multi byte encoding');
-        $actual = Str::len('привет мир!');
+        $I->wantToTest('Support\Str - len() - multi byte encoding');
+
+        $object = new Len();
+        $actual = $object('привет мир!');
         $I->assertEquals(11, $actual);
 
-        $actual = Str::len('männer');
+        $actual = $object('männer');
         $I->assertEquals(6, $actual);
     }
 }

@@ -11,54 +11,59 @@
 
 declare(strict_types=1);
 
-namespace Phalcon\Tests\Unit\Helper\Str;
+namespace Phalcon\Tests\Unit\Support\Str;
 
 use Codeception\Example;
-use Phalcon\Helper\Str;
+use Phalcon\Support\Str\Upper;
 use UnitTester;
 
 class UpperCest
 {
     /**
-     * Tests Phalcon\Helper\Str :: upper()
-     *
-     * @author       Phalcon Team <team@phalcon.io>
-     * @since        2020-09-09
+     * Tests Phalcon\Support\Str :: upper()
      *
      * @dataProvider basicProvider
+     *
+     * @param UnitTester $I
+     * @param Example    $example
+     *
+     * @author Phalcon Team <team@phalcon.io>
+     * @since  2020-09-09
      */
-    public function helperStrUpper(UnitTester $I, Example $example)
+    public function supportStrUpper(UnitTester $I, Example $example)
     {
-        $I->wantToTest('Helper\Str - upper()');
+        $I->wantToTest('Support\Str - upper()');
 
-        $I->assertEquals(
-            $example['expected'],
-            Str::upper(
-                $example['text']
-            )
-        );
+        $object   = new Upper();
+        $expected = $example['expected'];
+        $actual   = $object($example['text']);
+        $I->assertEquals($expected, $actual);
     }
 
     /**
-     * Tests Phalcon\Helper\Str :: upper() - multi-bytes encoding
-     *
-     * @author       Stanislav Kiryukhin <korsar.zn@gmail.com>
-     * @since        2015-05-06
+     * Tests Phalcon\Support\Str :: upper() - multi-bytes encoding
      *
      * @dataProvider multiBytesEncodingProvider
+     *
+     * @param UnitTester $I
+     * @param Example    $example
+     *
+     * @author Stanislav Kiryukhin <korsar.zn@gmail.com>
+     * @since  2015-05-06
      */
-    public function helperStrUpperMultiBytesEncoding(UnitTester $I, Example $example)
+    public function supportStrUpperMultiBytesEncoding(UnitTester $I, Example $example)
     {
-        $I->wantToTest('Helper\Str - upper() - multi byte encoding');
+        $I->wantToTest('Support\Str - upper() - multi byte encoding');
 
-        $I->assertEquals(
-            $example['expected'],
-            Str::upper(
-                $example['text']
-            )
-        );
+        $object   = new Upper();
+        $expected = $example['expected'];
+        $actual   = $object($example['text']);
+        $I->assertEquals($expected, $actual);
     }
 
+    /**
+     * @return \string[][]
+     */
     private function basicProvider(): array
     {
         return [
@@ -79,6 +84,9 @@ class UpperCest
         ];
     }
 
+    /**
+     * @return \string[][]
+     */
     private function multiBytesEncodingProvider(): array
     {
         return [

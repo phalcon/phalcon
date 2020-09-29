@@ -11,39 +11,48 @@
 
 declare(strict_types=1);
 
-namespace Phalcon\Tests\Unit\Helper\Str;
+namespace Phalcon\Tests\Unit\Support\Str;
 
-use Phalcon\Helper\Str;
+use Phalcon\Support\Str\DirFromFile;
 use UnitTester;
 
 class DirFromFileCest
 {
     /**
-     * Tests Phalcon\Helper\Str :: dirFromFile()
+     * Tests Phalcon\Support\Str :: dirFromFile()
+     *
+     * @param UnitTester $I
      *
      * @author Phalcon Team <team@phalcon.io>
      * @since  2020-09-09
      */
-    public function helperStrFolderFromFile(UnitTester $I)
+    public function supportStrFolderFromFile(UnitTester $I)
     {
-        $I->wantToTest('Helper\Str - dirFromFile()');
+        $I->wantToTest('Support\Str - dirFromFile()');
         $fileName = 'abcdef12345.jpg';
+        $object   = new DirFromFile();
 
         $expected = 'ab/cd/ef/12/3/';
-        $actual   = Str::dirFromFile($fileName);
+        $actual   = $object($fileName);
         $I->assertEquals($expected, $actual);
     }
 
     /**
-     * Tests Phalcon\Helper\Str :: dirFromFile() - empty string
+     * Tests Phalcon\Support\Str :: dirFromFile() - empty string
+     *
+     * @param UnitTester $I
+     *
+     * @author Phalcon Team <team@phalcon.io>
+     * @since  2020-09-09
      */
-    public function helperStrFolderFromFileEmptyString(UnitTester $I)
+    public function supportStrFolderFromFileEmptyString(UnitTester $I)
     {
-        $I->wantToTest('Helper\Str - dirFromFile() - empty string');
+        $I->wantToTest('Support\Str - dirFromFile() - empty string');
         $fileName = '';
+        $object   = new DirFromFile();
 
         $expected = '/';
-        $actual   = Str::dirFromFile($fileName);
+        $actual   = $object($fileName);
         $I->assertEquals($expected, $actual);
     }
 }

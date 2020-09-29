@@ -11,31 +11,34 @@
 
 declare(strict_types=1);
 
-namespace Phalcon\Tests\Unit\Helper\Str;
+namespace Phalcon\Tests\Unit\Support\Str;
 
-use Phalcon\Helper\Str;
+use Phalcon\Support\Str\Decapitalize;
 use UnitTester;
 
 class DecapitalizeCest
 {
     /**
-     * Tests Phalcon\Helper\Str :: decapitalize()
+     * Tests Phalcon\Support\Str :: decapitalize()
+     *
+     * @param UnitTester $I
      *
      * @author Phalcon Team <team@phalcon.io>
      * @since  2020-09-09
      */
-    public function helperStrDecapitalize(UnitTester $I)
+    public function supportStrDecapitalize(UnitTester $I)
     {
-        $I->wantToTest('Helper\Str - decapitalize()');
+        $I->wantToTest('Support\Str - decapitalize()');
 
+        $object   = new Decapitalize();
         $source   = 'BeetleJuice';
         $expected = 'beetleJuice';
-        $actual   = Str::decapitalize($source);
+        $actual   = $object($source);
         $I->assertEquals($expected, $actual);
 
         $source   = 'BeetleJuice';
         $expected = 'bEETLEJUICE';
-        $actual   = Str::decapitalize($source, true);
+        $actual   = $object($source, true);
         $I->assertEquals($expected, $actual);
     }
 }

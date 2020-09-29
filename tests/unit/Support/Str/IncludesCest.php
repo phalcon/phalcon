@@ -11,31 +11,34 @@
 
 declare(strict_types=1);
 
-namespace Phalcon\Tests\Unit\Helper\Str;
+namespace Phalcon\Tests\Unit\Support\Str;
 
-use Phalcon\Helper\Str;
+use Phalcon\Support\Str\Includes;
 use UnitTester;
 
 class IncludesCest
 {
     /**
-     * Tests Phalcon\Helper\Str :: includes()
+     * Tests Phalcon\Support\Str :: includes()
+     *
+     * @param UnitTester $I
      *
      * @author Phalcon Team <team@phalcon.io>
      * @since  2020-09-09
      */
-    public function helperStrIncludes(UnitTester $I)
+    public function supportStrIncludes(UnitTester $I)
     {
-        $I->wantToTest('Helper\Str - includes()');
+        $I->wantToTest('Support\Str - includes()');
 
+        $object = new Includes();
         $source = 'Mary had a little lamb';
-        $actual = Str::includes($source, 'lamb');
+        $actual = $object($source, 'lamb');
         $I->assertTrue($actual);
 
-        $actual = Str::includes($source, 'unknown');
+        $actual = $object($source, 'unknown');
         $I->assertFalse($actual);
 
-        $actual = Str::includes($source, 'Mary');
+        $actual = $object($source, 'Mary');
         $I->assertTrue($actual);
     }
 }

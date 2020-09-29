@@ -11,235 +11,205 @@
 
 declare(strict_types=1);
 
-namespace Phalcon\Tests\Unit\Helper\Str;
+namespace Phalcon\Tests\Unit\Support\Str;
 
 use Codeception\Example;
-use Phalcon\Helper\Str;
+use Phalcon\Support\Str\Random;
 use UnitTester;
+use function strlen;
 
 class RandomCest
 {
     /**
-     * Tests Phalcon\Helper\Str :: random() - constants
+     * Tests Phalcon\Support\Str :: random() - constants
+     *
+     * @param UnitTester $I
      *
      * @author Phalcon Team <team@phalcon.io>
      * @since  2020-09-09
      */
-    public function helperStrRandomConstants(UnitTester $I)
+    public function supportStrRandomConstants(UnitTester $I)
     {
-        $I->wantToTest('Helper\Str - random() - constants');
+        $I->wantToTest('Support\Str - random() - constants');
 
-        $I->assertEquals(0, Str::RANDOM_ALNUM);
-        $I->assertEquals(1, Str::RANDOM_ALPHA);
-        $I->assertEquals(2, Str::RANDOM_HEXDEC);
-        $I->assertEquals(3, Str::RANDOM_NUMERIC);
-        $I->assertEquals(4, Str::RANDOM_NOZERO);
-        $I->assertEquals(5, Str::RANDOM_DISTINCT);
+        $I->assertEquals(0, Random::RANDOM_ALNUM);
+        $I->assertEquals(1, Random::RANDOM_ALPHA);
+        $I->assertEquals(2, Random::RANDOM_HEXDEC);
+        $I->assertEquals(3, Random::RANDOM_NUMERIC);
+        $I->assertEquals(4, Random::RANDOM_NOZERO);
+        $I->assertEquals(5, Random::RANDOM_DISTINCT);
     }
 
     /**
-     * Tests Phalcon\Helper\Str :: random() - alnum
-     *
-     * @author       Phalcon Team <team@phalcon.io>
-     * @since        2020-09-09
+     * Tests Phalcon\Support\Str :: random() - alnum
      *
      * @dataProvider oneToTenProvider
+     *
+     * @param UnitTester $I
+     * @param Example    $example
+     *
+     * @author Phalcon Team <team@phalcon.io>
+     * @since  2020-09-09
      */
-    public function helperStrRandomAlnum(UnitTester $I, Example $example)
+    public function supportStrRandomAlnum(UnitTester $I, Example $example)
     {
-        $I->wantToTest('Helper\Str - random() - alnum');
+        $I->wantToTest('Support\Str - random() - alnum');
 
-        $i = $example[0];
-
-        $source = Str::random(
-            Str::RANDOM_ALNUM,
-            $i
-        );
+        $object = new Random();
+        $i      = $example[0];
+        $source = $object(Random::RANDOM_ALNUM, $i);
 
         $I->assertEquals(
             1,
             preg_match('/[a-zA-Z0-9]+/', $source, $matches)
         );
 
-        $I->assertEquals(
-            $source,
-            $matches[0]
-        );
-
-        $I->assertEquals(
-            $i,
-            strlen($source)
-        );
+        $I->assertEquals($source, $matches[0]);
+        $I->assertEquals($i, strlen($source));
     }
 
     /**
-     * Tests Phalcon\Helper\Str :: random() - alpha
-     *
-     * @author       Phalcon Team <team@phalcon.io>
-     * @since        2020-09-09
+     * Tests Phalcon\Support\Str :: random() - alpha
      *
      * @dataProvider oneToTenProvider
+     *
+     * @param UnitTester $I
+     * @param Example    $example
+     *
+     * @author Phalcon Team <team@phalcon.io>
+     * @since  2020-09-09
      */
-    public function helperStrRandomAlpha(UnitTester $I, Example $example)
+    public function supportStrRandomAlpha(UnitTester $I, Example $example)
     {
-        $I->wantToTest('Helper\Str - random() - alpha');
+        $I->wantToTest('Support\Str - random() - alpha');
 
-        $i = $example[0];
-
-        $source = Str::random(
-            Str::RANDOM_ALPHA,
-            $i
-        );
+        $object = new Random();
+        $i      = $example[0];
+        $source = $object(Random::RANDOM_ALPHA, $i);
 
         $I->assertEquals(
             1,
             preg_match('/[a-zA-Z]+/', $source, $matches)
         );
 
-        $I->assertEquals(
-            $source,
-            $matches[0]
-        );
-
-        $I->assertEquals(
-            $i,
-            strlen($source)
-        );
+        $I->assertEquals($source, $matches[0]);
+        $I->assertEquals($i,strlen($source));
     }
 
     /**
-     * Tests Phalcon\Helper\Str :: random() - hexdec
-     *
-     * @author       Phalcon Team <team@phalcon.io>
-     * @since        2020-09-09
+     * Tests Phalcon\Support\Str :: random() - hexdec
      *
      * @dataProvider oneToTenProvider
+     *
+     * @param UnitTester $I
+     * @param Example    $example
+     *
+     * @author Phalcon Team <team@phalcon.io>
+     * @since  2020-09-09
      */
-    public function helperStrRandomHexDec(UnitTester $I, Example $example)
+    public function supportStrRandomHexDec(UnitTester $I, Example $example)
     {
-        $I->wantToTest('Helper\Str - random() - hexdex');
+        $I->wantToTest('Support\Str - random() - hexdex');
 
-        $i = $example[0];
-
-        $source = Str::random(
-            Str::RANDOM_HEXDEC,
-            $i
-        );
+        $object = new Random();
+        $i      = $example[0];
+        $source = $object(Random::RANDOM_HEXDEC, $i);
 
         $I->assertEquals(
             1,
             preg_match('/[a-f0-9]+/', $source, $matches)
         );
 
-        $I->assertEquals(
-            $source,
-            $matches[0]
-        );
-
-        $I->assertEquals(
-            $i,
-            strlen($source)
-        );
+        $I->assertEquals($source, $matches[0]);
+        $I->assertEquals($i,strlen($source));
     }
 
     /**
-     * Tests Phalcon\Helper\Str :: random() - numeric
-     *
-     * @author       Phalcon Team <team@phalcon.io>
-     * @since        2020-09-09
+     * Tests Phalcon\Support\Str :: random() - numeric
      *
      * @dataProvider oneToTenProvider
+     *
+     * @param UnitTester $I
+     * @param Example    $example
+     *
+     * @author Phalcon Team <team@phalcon.io>
+     * @since  2020-09-09
      */
-    public function helperStrRandomNumeric(UnitTester $I, Example $example)
+    public function supportStrRandomNumeric(UnitTester $I, Example $example)
     {
-        $I->wantToTest('Helper\Str - random() - numeric');
+        $I->wantToTest('Support\Str - random() - numeric');
 
-        $i = $example[0];
-
-        $source = Str::random(
-            Str::RANDOM_NUMERIC,
-            $i
-        );
+        $object = new Random();
+        $i      = $example[0];
+        $source = $object(Random::RANDOM_NUMERIC, $i);
 
         $I->assertEquals(
             1,
             preg_match('/[0-9]+/', $source, $matches)
         );
 
-        $I->assertEquals(
-            $source,
-            $matches[0]
-        );
-
-        $I->assertEquals(
-            $i,
-            strlen($source)
-        );
+        $I->assertEquals($source, $matches[0]);
+        $I->assertEquals($i,strlen($source));
     }
 
     /**
-     * Tests Phalcon\Helper\Str :: random() - non zero
-     *
-     * @author       Phalcon Team <team@phalcon.io>
-     * @since        2020-09-09
+     * Tests Phalcon\Support\Str :: random() - non zero
      *
      * @dataProvider oneToTenProvider
+     *
+     * @param UnitTester $I
+     * @param Example    $example
+     *
+     * @author Phalcon Team <team@phalcon.io>
+     * @since  2020-09-09
      */
-    public function helperStrRandomNonZero(UnitTester $I, Example $example)
+    public function supportStrRandomNonZero(UnitTester $I, Example $example)
     {
-        $I->wantToTest('Helper\Str - random() - non zero');
+        $I->wantToTest('Support\Str - random() - non zero');
 
-        $i = $example[0];
-
-        $source = Str::random(
-            Str::RANDOM_NOZERO,
-            $i
-        );
+        $object = new Random();
+        $i      = $example[0];
+        $source = $object(Random::RANDOM_NOZERO, $i);
 
         $I->assertEquals(
             1,
             preg_match('/[1-9]+/', $source, $matches)
         );
 
-        $I->assertEquals(
-            $source,
-            $matches[0]
-        );
-
-        $I->assertEquals(
-            $i,
-            strlen($source)
-        );
+        $I->assertEquals($source, $matches[0]);
+        $I->assertEquals($i,strlen($source));
     }
 
     /**
-     * Tests Phalcon\Helper\Str :: random() - distinct type
+     * Tests Phalcon\Support\Str :: random() - distinct type
      *
-     * @author       Phalcon Team <team@phalcon.io>
-     * @since        2020-09-09
+     * @dataProvider supportStrRandomDistinctProvider
      *
-     * @dataProvider helperStrRandomDistinctProvider
+     * @param UnitTester $I
+     * @param Example    $example
+     *
+     * @author Phalcon Team <team@phalcon.io>
+     * @since  2020-09-09
      */
-    public function helperStrRandomDistinct(UnitTester $I, Example $example)
+    public function supportStrRandomDistinct(UnitTester $I, Example $example)
     {
-        $I->wantToTest('Helper\Str - random() - distinct');
+        $I->wantToTest('Support\Str - random() - distinct');
 
-        $source = Str::random(
-            Str::RANDOM_DISTINCT,
-            $example[0]
-        );
+        $object = new Random();
+        $i      = $example[0];
+        $source = $object(Random::RANDOM_DISTINCT, $i);
 
         $I->assertRegExp(
             '#^[2345679ACDEFHJKLMNPRSTUVWXYZ]+$#',
             $source
         );
 
-        $I->assertEquals(
-            $example[0],
-            strlen($source)
-        );
+        $I->assertEquals($i,strlen($source));
     }
 
+    /**
+     * @return \int[][]
+     */
     private function oneToTenProvider(): array
     {
         return [
@@ -256,7 +226,10 @@ class RandomCest
         ];
     }
 
-    private function helperStrRandomDistinctProvider(): array
+    /**
+     * @return \int[][]
+     */
+    private function supportStrRandomDistinctProvider(): array
     {
         return [
             [1],

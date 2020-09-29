@@ -11,24 +11,27 @@
 
 declare(strict_types=1);
 
-namespace Phalcon\Tests\Unit\Helper\Str;
+namespace Phalcon\Tests\Unit\Support\Str;
 
-use Phalcon\Helper\Str;
+use Phalcon\Support\Str\IsAnagram;
 use UnitTester;
 
 class IsAnagramCest
 {
     /**
-     * Tests Phalcon\Helper\Str :: isAnagram()
+     * Tests Phalcon\Support\Str :: isAnagram()
+     *
+     * @param UnitTester $I
      *
      * @author Phalcon Team <team@phalcon.io>
      * @since  2020-09-09
      */
-    public function helperStrIsAnagram(UnitTester $I)
+    public function supportStrIsAnagram(UnitTester $I)
     {
-        $I->wantToTest('Helper\Str - isAnagram()');
+        $I->wantToTest('Support\Str - isAnagram()');
 
-        $actual = Str::isAnagram('rail safety', 'fairy tales');
+        $object = new IsAnagram();
+        $actual = $object('rail safety', 'fairy tales');
         $I->assertTrue($actual);
     }
 }

@@ -11,31 +11,35 @@
 
 declare(strict_types=1);
 
-namespace Phalcon\Tests\Unit\Helper\Str;
+namespace Phalcon\Tests\Unit\Support\Str;
 
-use Phalcon\Helper\Str;
+use Phalcon\Support\Str\CountVowels;
 use UnitTester;
 
 class CountVowelsCest
 {
     /**
-     * Tests Phalcon\Helper\Str :: countVowels()
+     * Tests Phalcon\Support\Str :: countVowels()
+     *
+     * @param UnitTester $I
      *
      * @author Phalcon Team <team@phalcon.io>
      * @since  2020-09-09
      */
-    public function helperStrCountVowels(UnitTester $I)
+    public function supportStrCountVowels(UnitTester $I)
     {
-        $I->wantToTest('Helper\Str - countVowels()');
+        $I->wantToTest('Support\Str - countVowels()');
+
+        $object = new CountVowels();
 
         $source   = 'Luke, I am your father!';
         $expected = 9;
-        $actual   = Str::countVowels($source);
+        $actual   = $object($source);
         $I->assertEquals($expected, $actual);
 
         $source   = '';
         $expected = 0;
-        $actual   = Str::countVowels($source);
+        $actual   = $object($source);
         $I->assertEquals($expected, $actual);
     }
 }
