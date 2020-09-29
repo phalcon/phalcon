@@ -11,37 +11,36 @@
 
 declare(strict_types=1);
 
-namespace Phalcon\Tests\Unit\Helper\Number;
+namespace Phalcon\Tests\Unit\Support\Number;
 
-use Phalcon\Helper\Number;
+use Phalcon\Support\Number\Between;
 use UnitTester;
 
 class BetweenCest
 {
     /**
-     * Tests Phalcon\Helper\Number :: between()
+     * Tests Phalcon\Support\Number :: between()
+     *
+     * @param UnitTester $I
      *
      * @author Phalcon Team <team@phalcon.io>
      * @since  2020-09-09
      */
-    public function helperNumberBetween(UnitTester $I)
+    public function supportNumberBetween(UnitTester $I)
     {
-        $I->wantToTest('Helper\Number - between()');
+        $I->wantToTest('Support\Number - between()');
 
-        $I->assertTrue(
-            Number::between(5, 1, 10)
-        );
+        $object = new Between();
+        $actual = $object(5, 1, 10);
+        $I->assertTrue($actual);
 
-        $I->assertTrue(
-            Number::between(1, 1, 10)
-        );
+        $actual = $object(1, 1, 10);
+        $I->assertTrue($actual);
 
-        $I->assertTrue(
-            Number::between(10, 1, 10)
-        );
+        $actual = $object(10, 1, 10);
+        $I->assertTrue($actual);
 
-        $I->assertFalse(
-            Number::between(1, 5, 10)
-        );
+        $actual = $object(1, 5, 10);
+        $I->assertFalse($actual);
     }
 }
