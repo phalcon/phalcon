@@ -83,7 +83,7 @@ class CallCest
         $factory = new HelperFactory();
 
         $source   = 'Phalcon';
-        $expected = 10;
+        $expected = 7;
         $actual   = $factory->len($source);
         $I->assertEquals($expected, $actual);
     }
