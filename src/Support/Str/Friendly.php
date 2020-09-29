@@ -49,8 +49,7 @@ class Friendly
         $replace = null
     ): string {
         if (null !== $replace) {
-            $replace = $this->checkParameters($replace);
-            $text    = str_replace($replace, ' ', $text);
+            $text = $this->checkReplace($replace, $text);
         }
 
         $friendly = preg_replace(
@@ -74,12 +73,13 @@ class Friendly
     }
 
     /**
-     * @param $replace
+     * @param array|string $replace
+     * @param string       $text
      *
      * @return array|string[]
      * @throws Exception
      */
-    private function checkParameters($replace): array
+    private function checkReplace($replace, string $text): array
     {
         if (true !== is_array($replace) && true !== is_string($replace)) {
             throw new Exception(
@@ -91,6 +91,6 @@ class Friendly
             $replace = [$replace];
         }
 
-        return $replace;
+        return str_replace($replace, ' ', $text);
     }
 }
