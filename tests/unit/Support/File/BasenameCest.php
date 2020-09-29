@@ -16,6 +16,7 @@ namespace Phalcon\Tests\Unit\Support\File;
 use Codeception\Example;
 use Phalcon\Support\File\Basename;
 use UnitTester;
+
 use function basename;
 
 class BasenameCest
@@ -128,6 +129,5 @@ class BasenameCest
                 'ελληνικά.txt',
             ],
         ];
-
     }
 }
