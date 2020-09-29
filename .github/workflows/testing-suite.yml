@@ -86,11 +86,8 @@ jobs:
       - name: Code Coverage unit tests
         run: php ./bin/ocular.phar code-coverage:upload --format=php-clover ./tests/_output/coverage.xml
 
-#      - name: Code Coverage - Codacy
-#        uses: codacy/codacy-coverage-reporter-action@master
-#        with:
-#          project-token: ${{ secrets.CODACY_PROJECT_TOKEN }}
-#          coverage-reports: ./tests/_output/coverage.xml
+      - name: Code Coverage - Codacy
+        run: bash <(curl -Ls https://coverage.codacy.com/get.sh) report -l PHP -r ./tests/_output/coverage.xml
 
 #      - name: Run integration tests
 #        env:
