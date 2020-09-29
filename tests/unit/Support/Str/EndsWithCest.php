@@ -11,94 +11,114 @@
 
 declare(strict_types=1);
 
-namespace Phalcon\Tests\Unit\Helper\Str;
+namespace Phalcon\Tests\Unit\Support\Str;
 
-use Phalcon\Helper\Str;
+use Phalcon\Support\Str\EndsWith;
 use UnitTester;
 
 class EndsWithCest
 {
     /**
-     * Tests Phalcon\Helper\Str :: endsWith()
+     * Tests Phalcon\Support\Str :: endsWith()
+     *
+     * @param UnitTester $I
      *
      * @author Phalcon Team <team@phalcon.io>
      * @since  2020-09-09
      */
-    public function helperStrEndsWith(UnitTester $I)
+    public function supportStrEndsWith(UnitTester $I)
     {
-        $I->wantToTest('Helper\Str - endsWith()');
-        $actual = Str::endsWith('Hello', 'o');
+        $I->wantToTest('Support\Str - endsWith()');
+
+        $object = new EndsWith();
+        $actual = $object('Hello', 'o');
         $I->assertTrue($actual);
 
-        $actual = Str::endsWith('Hello', 'lo');
+        $actual = $object('Hello', 'lo');
         $I->assertTrue($actual);
 
-        $actual = Str::endsWith('Hello', 'Hello');
+        $actual = $object('Hello', 'Hello');
         $I->assertTrue($actual);
     }
 
     /**
-     * Tests Phalcon\Helper\Str :: endsWith() - empty strings
+     * Tests Phalcon\Support\Str :: endsWith() - empty strings
+     *
+     * @param UnitTester $I
      *
      * @author Phalcon Team <team@phalcon.io>
      * @since  2020-09-09
      */
-    public function helperStrEndsWithEmpty(UnitTester $I)
+    public function supportStrEndsWithEmpty(UnitTester $I)
     {
-        $I->wantToTest('Helper\Str - endsWith() - empty strings');
-        $actual = Str::endsWith('', '');
+        $I->wantToTest('Support\Str - endsWith() - empty strings');
+
+        $object = new EndsWith();
+        $actual = $object('', '');
         $I->assertFalse($actual);
     }
 
     /**
-     * Tests Phalcon\Helper\Str :: endsWith() - finding an empty string
+     * Tests Phalcon\Support\Str :: endsWith() - finding an empty string
+     *
+     * @param UnitTester $I
      *
      * @author Phalcon Team <team@phalcon.io>
      * @since  2020-09-09
      */
-    public function helperStrEndsWithEmptySearchString(UnitTester $I)
+    public function supportStrEndsWithEmptySearchString(UnitTester $I)
     {
-        $I->wantToTest('Helper\Str - endsWith() - search empty string');
-        $actual = Str::endsWith('', 'hello');
+        $I->wantToTest('Support\Str - endsWith() - search empty string');
+
+        $object = new EndsWith();
+        $actual = $object('', 'hello');
         $I->assertFalse($actual);
     }
 
 
     /**
-     * Tests Phalcon\Helper\Str :: endsWith() - case insensitive flag
+     * Tests Phalcon\Support\Str :: endsWith() - case insensitive flag
+     *
+     * @param UnitTester $I
      *
      * @author Phalcon Team <team@phalcon.io>
      * @since  2020-09-09
      */
-    public function helperStrEndsWithCaseInsensitive(UnitTester $I)
+    public function supportStrEndsWithCaseInsensitive(UnitTester $I)
     {
-        $I->wantToTest('Helper\Str - endsWith() - case insensitive flag');
-        $actual = Str::endsWith('Hello', 'O');
+        $I->wantToTest('Support\Str - endsWith() - case insensitive flag');
+
+        $object = new EndsWith();
+        $actual = $object('Hello', 'O');
         $I->assertTrue($actual);
 
-        $actual = Str::endsWith('Hello', 'LO');
+        $actual = $object('Hello', 'LO');
         $I->assertTrue($actual);
 
-        $actual = Str::endsWith('Hello', 'hello');
+        $actual = $object('Hello', 'hello');
         $I->assertTrue($actual);
     }
 
     /**
-     * Tests Phalcon\Helper\Str :: endsWith() - case sensitive flag
+     * Tests Phalcon\Support\Str :: endsWith() - case sensitive flag
+     *
+     * @param UnitTester $I
      *
      * @author Phalcon Team <team@phalcon.io>
      * @since  2020-09-09
      */
-    public function helperStrEndsWithCaseSensitive(UnitTester $I)
+    public function supportStrEndsWithCaseSensitive(UnitTester $I)
     {
-        $I->wantToTest('Helper\Str - endsWith() - case sensitive flag');
-        $actual = Str::endsWith('Hello', 'hello', true);
+        $I->wantToTest('Support\Str - endsWith() - case sensitive flag');
+
+        $object = new EndsWith();
+        $actual = $object('Hello', 'hello', true);
         $I->assertTrue($actual);
 
-        $actual = Str::endsWith('Hello', 'hello', false);
+        $actual = $object('Hello', 'hello', false);
         $I->assertFalse($actual);
 
-        $actual = Str::endsWith('Hello', 'O', false);
+        $actual = $object('Hello', 'O', false);
         $I->assertFalse($actual);
     }
 }

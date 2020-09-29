@@ -11,42 +11,53 @@
 
 declare(strict_types=1);
 
-namespace Phalcon\Tests\Unit\Helper\Str;
+namespace Phalcon\Tests\Unit\Support\Str;
 
-use Phalcon\Helper\Str;
+use Phalcon\Support\Str\DirFromFile;
+use Phalcon\Support\Str\DirSeparator;
 use UnitTester;
 
 class DirSeparatorCest
 {
     /**
-     * Tests Phalcon\Helper\Str :: dirSeparator()
+     * Tests Phalcon\Support\Str :: dirSeparator()
+     *
+     * @param UnitTester $I
      *
      * @author Phalcon Team <team@phalcon.io>
      * @since  2020-09-09
      */
-    public function helperStrFolderSeparator(UnitTester $I)
+    public function supportStrFolderSeparator(UnitTester $I)
     {
-        $I->wantToTest('Helper\Str - dirSeparator()');
+        $I->wantToTest('Support\Str - dirSeparator()');
+
+        $object   = new DirSeparator();
 
         $expected = '/home/phalcon/';
-        $actual   = Str::dirSeparator('/home/phalcon');
+        $actual   = $object('/home/phalcon');
         $I->assertEquals($expected, $actual);
 
         $expected = '/home/phalcon/';
-        $actual   = Str::dirSeparator('/home/phalcon//');
+        $actual   = $object('/home/phalcon//');
         $I->assertEquals($expected, $actual);
     }
 
     /**
-     * Tests Phalcon\Helper\Str :: dirSeparator() - empty string
+     * Tests Phalcon\Support\Str :: dirSeparator() - empty string
+     *
+     * @param UnitTester $I
+     *
+     * @author Phalcon Team <team@phalcon.io>
+     * @since  2020-09-09
      */
-    public function helperStrFolderSeparatorEmptyString(UnitTester $I)
+    public function supportStrFolderSeparatorEmptyString(UnitTester $I)
     {
-        $I->wantToTest('Helper\Str - dirSeparator() - empty string');
+        $I->wantToTest('Support\Str - dirSeparator() - empty string');
         $fileName = '';
+        $object   = new DirSeparator();
 
         $expected = '/';
-        $actual   = Str::dirSeparator($fileName);
+        $actual   = $object($fileName);
         $I->assertEquals($expected, $actual);
     }
 }

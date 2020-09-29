@@ -11,26 +11,29 @@
 
 declare(strict_types=1);
 
-namespace Phalcon\Tests\Unit\Helper\Str;
+namespace Phalcon\Tests\Unit\Support\Str;
 
-use Phalcon\Helper\Str;
+use Phalcon\Support\Str\FirstBetween;
 use UnitTester;
 
 class FirstBetweenCest
 {
     /**
-     * Tests Phalcon\Helper\Str :: firstBetween()
+     * Tests Phalcon\Support\Str :: firstBetween()
+     *
+     * @param UnitTester $I
      *
      * @author Phalcon Team <team@phalcon.io>
      * @since  2020-09-09
      */
-    public function helperStrFirstBetween(UnitTester $I)
+    public function supportStrFirstBetween(UnitTester $I)
     {
-        $I->wantToTest('Helper\Str - firstBetween()');
+        $I->wantToTest('Support\Str - firstBetween()');
 
+        $object   = new FirstBetween();
         $source   = 'This is a [custom] string';
         $expected = 'custom';
-        $actual   = Str::firstBetween($source, '[', ']');
+        $actual   = $object($source, '[', ']');
         $I->assertEquals($expected, $actual);
     }
 }

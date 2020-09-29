@@ -11,11 +11,11 @@
 
 declare(strict_types=1);
 
-namespace Phalcon\Tests\Unit\Helper\Str;
+namespace Phalcon\Tests\Unit\Support\Str;
 
 use Codeception\Example;
-use Phalcon\Helper\Exception;
-use Phalcon\Helper\Str;
+use Phalcon\Support\Exception;
+use Phalcon\Support\Str\Friendly;
 use UnitTester;
 
 /**
@@ -24,47 +24,46 @@ use UnitTester;
 class FriendlyCest
 {
     /**
-     * Tests Phalcon\Helper\Str :: friendly()
+     * Tests Phalcon\Support\Str :: friendly()
+     *
+     * @dataProvider getExamples
      *
      * @param UnitTester $I
      * @param Example    $example
      *
-     * @throws Exception
-     *
-     * @dataProvider getExamples
-     * @since        2020-01-07
-     *
-     * @author       Phalcon Team <team@phalcon.io>
+     * @author Phalcon Team <team@phalcon.io>
+     * @since  2020-09-09
      */
-    public function helperStrFriendly(UnitTester $I, Example $example)
+    public function supportStrFriendly(UnitTester $I, Example $example)
     {
-        $I->wantToTest('Helper\Str - friendly() ' . $example['message']);
+        $I->wantToTest('Support\Str - friendly() ' . $example['message']);
 
-        $actual = Str::friendly(
+        $object   = new Friendly();
+        $expected = $example['result'];
+        $actual   = $object(
             $example['text'],
             $example['separator'],
             $example['lowercase'],
             $example['replace']
         );
 
-        $I->assertEquals($example['result'], $actual);
+        $I->assertEquals($expected, $actual);
     }
 
     /**
-     * Tests Phalcon\Helper\Str :: friendly() - exception
+     * Tests Phalcon\Support\Str :: friendly() - exception
      *
      * @param UnitTester $I
      *
-     * @since  2020-09-09
-     *
      * @author Phalcon Team <team@phalcon.io>
+     * @since  2020-09-09
      */
-    public function helperStrFriendlyException(UnitTester $I)
+    public function supportStrFriendlyException(UnitTester $I)
     {
         $I->expectThrowable(
             new Exception('Parameter replace must be an array or a string'),
             function () {
-                Str::friendly('test', '-', true, true);
+                (new Friendly())('test', '-', true, true);
             }
         );
     }

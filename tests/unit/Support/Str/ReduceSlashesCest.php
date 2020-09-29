@@ -11,36 +11,41 @@
 
 declare(strict_types=1);
 
-namespace Phalcon\Tests\Unit\Helper\Str;
+namespace Phalcon\Tests\Unit\Support\Str;
 
-use Phalcon\Helper\Str;
+use Phalcon\Support\Str\ReduceSlashes;
 use UnitTester;
 
 class ReduceSlashesCest
 {
     /**
-     * Tests Phalcon\Helper\Str :: reduceSlashes()
+     * Tests Phalcon\Support\Str :: reduceSlashes()
+     *
+     * @param UnitTester $I
      *
      * @author Phalcon Team <team@phalcon.io>
      * @since  2020-09-09
      */
-    public function helperStrReduceSlashes(UnitTester $I)
+    public function supportStrReduceSlashes(UnitTester $I)
     {
-        $I->wantToTest('Helper\Str - reduceSlashes()');
+        $I->wantToTest('Support\Str - reduceSlashes()');
+
+        $object = new ReduceSlashes();
+
         $expected = 'app/controllers/IndexController';
-        $actual   = Str::reduceSlashes('app/controllers//IndexController');
+        $actual   = $object('app/controllers//IndexController');
         $I->assertEquals($expected, $actual);
 
         $expected = 'http://foo/bar/baz/buz';
-        $actual   = Str::reduceSlashes('http://foo//bar/baz/buz');
+        $actual   = $object('http://foo//bar/baz/buz');
         $I->assertEquals($expected, $actual);
 
         $expected = 'php://memory';
-        $actual   = Str::reduceSlashes('php://memory');
+        $actual   = $object('php://memory');
         $I->assertEquals($expected, $actual);
 
         $expected = 'http/https';
-        $actual   = Str::reduceSlashes('http//https');
+        $actual   = $object('http//https');
         $I->assertEquals($expected, $actual);
     }
 }

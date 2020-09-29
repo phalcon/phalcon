@@ -11,26 +11,33 @@
 
 declare(strict_types=1);
 
-namespace Phalcon\Tests\Unit\Helper\Str;
+namespace Phalcon\Tests\Unit\Support\Str;
 
 use Codeception\Example;
-use Phalcon\Helper\Str;
+use Phalcon\Support\Str\Increment;
 use UnitTester;
 
 class IncrementCest
 {
     /**
-     * Tests Phalcon\Helper\Str :: increment()
+     * Tests Phalcon\Support\Str :: increment()
      *
-     * @author       Phalcon Team <team@phalcon.io>
-     * @since        2020-09-09
      * @dataProvider strProvider
+     *
+     * @param UnitTester $I
+     * @param Example    $example
+     *
+     * @author Phalcon Team <team@phalcon.io>
+     * @since  2020-09-09
      */
-    public function helperStrIncrementSimpleString(UnitTester $I, Example $example)
+    public function supportStrIncrementSimpleString(UnitTester $I, Example $example)
     {
-        $I->wantToTest('Helper\Str - increment()');
-        $actual = Str::increment($example['source'], $example['separator']);
-        $I->assertEquals($example['expected'], $actual);
+        $I->wantToTest('Support\Str - increment()');
+
+        $object   = new Increment();
+        $expected = $example['expected'];
+        $actual   = $object($example['source'], $example['separator']);
+        $I->assertEquals($expected, $actual);
     }
 
     /**

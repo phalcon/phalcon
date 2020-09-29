@@ -11,27 +11,30 @@
 
 declare(strict_types=1);
 
-namespace Phalcon\Tests\Unit\Helper\Str;
+namespace Phalcon\Tests\Unit\Support\Str;
 
-use Phalcon\Helper\Str;
+use Phalcon\Support\Str\IsLower;
 use UnitTester;
 
 class IsLowerCest
 {
     /**
-     * Tests Phalcon\Helper\Str :: isLower()
+     * Tests Phalcon\Support\Str :: isLower()
+     *
+     * @param UnitTester $I
      *
      * @author Phalcon Team <team@phalcon.io>
      * @since  2020-09-09
      */
-    public function helperStrIsLower(UnitTester $I)
+    public function supportStrIsLower(UnitTester $I)
     {
-        $I->wantToTest('Helper\Str - isLower()');
+        $I->wantToTest('Support\Str - isLower()');
 
-        $actual = Str::isLower('phalcon framework');
+        $object = new IsLower();
+        $actual = $object('phalcon framework');
         $I->assertTrue($actual);
 
-        $actual = Str::isLower('Phalcon Framework');
+        $actual = $object('Phalcon Framework');
         $I->assertFalse($actual);
     }
 }

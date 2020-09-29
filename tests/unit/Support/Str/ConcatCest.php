@@ -13,7 +13,7 @@ declare(strict_types=1);
 
 namespace Phalcon\Tests\Unit\Support\Str;
 
-use Phalcon\Support\Str;
+use Phalcon\Support\Str\Concat;
 use UnitTester;
 
 class ConcatCest
@@ -21,14 +21,19 @@ class ConcatCest
     /**
      * Tests Phalcon\Support\Str :: concat()
      *
+     * @param UnitTester $I
+     *
      * @author Phalcon Team <team@phalcon.io>
      * @since  2020-09-09
      */
     public function supportStrConcat(UnitTester $I)
     {
         $I->wantToTest('Support\Str - concat()');
+
+        $object   = new Concat();
+
         // Test 1
-        $actual   = Str::concat(
+        $actual   = $object(
             '/',
             '/tmp/',
             '/folder_1/',
@@ -39,7 +44,7 @@ class ConcatCest
         $I->assertEquals($expected, $actual);
 
         // Test 2
-        $actual   = Str::concat(
+        $actual   = $object(
             '.',
             '@test.',
             '.test2.',

@@ -11,94 +11,119 @@
 
 declare(strict_types=1);
 
-namespace Phalcon\Tests\Unit\Helper\Str;
+namespace Phalcon\Tests\Unit\Support\Str;
 
-use Phalcon\Helper\Str;
+use Phalcon\Support\Str\StartsWith;
 use UnitTester;
 
 class StartsWithCest
 {
     /**
-     * Tests Phalcon\Helper\Str :: startsWith()
+     * Tests Phalcon\Support\Str :: startsWith()
+     *
+     * @param UnitTester $I
      *
      * @author Phalcon Team <team@phalcon.io>
      * @since  2020-09-09
      */
-    public function helperStrStartsWith(UnitTester $I)
+    public function supportStrStartsWith(UnitTester $I)
     {
-        $I->wantToTest('Helper\Str - startsWith()');
-        $actual = Str::startsWith('Hello', 'H');
+        $I->wantToTest('Support\Str - startsWith()');
+
+        $object = new StartsWith();
+
+        $actual = $object('Hello', 'H');
         $I->assertTrue($actual);
 
-        $actual = Str::startsWith('Hello', 'He');
+        $actual = $object('Hello', 'He');
         $I->assertTrue($actual);
 
-        $actual = Str::startsWith('Hello', 'Hello');
+        $actual = $object('Hello', 'Hello');
         $I->assertTrue($actual);
     }
 
     /**
-     * Tests Phalcon\Helper\Str :: startsWith() - empty strings
+     * Tests Phalcon\Support\Str :: startsWith() - empty strings
+     *
+     * @param UnitTester $I
      *
      * @author Phalcon Team <team@phalcon.io>
      * @since  2020-09-09
      */
-    public function helperStrStartsWithEmpty(UnitTester $I)
+    public function supportStrStartsWithEmpty(UnitTester $I)
     {
-        $I->wantToTest('Helper\Str - startsWith() - empty strings');
-        $actual = Str::startsWith('', '');
+        $I->wantToTest('Support\Str - startsWith() - empty strings');
+
+        $object = new StartsWith();
+
+        $actual = $object('', '');
         $I->assertFalse($actual);
     }
 
     /**
-     * Tests Phalcon\Helper\Str :: startsWith() - finding an empty string
+     * Tests Phalcon\Support\Str :: startsWith() - finding an empty string
+     *
+     * @param UnitTester $I
      *
      * @author Phalcon Team <team@phalcon.io>
      * @since  2020-09-09
      */
-    public function helperStrStartsWithEmptySearchString(UnitTester $I)
+    public function supportStrStartsWithEmptySearchString(UnitTester $I)
     {
-        $I->wantToTest('Helper\Str - startsWith() - search empty string');
-        $actual = Str::startsWith('', 'hello');
+        $I->wantToTest('Support\Str - startsWith() - search empty string');
+
+        $object = new StartsWith();
+
+        $actual = $object('', 'hello');
         $I->assertFalse($actual);
     }
 
 
     /**
-     * Tests Phalcon\Helper\Str :: startsWith() - case insensitive flag
+     * Tests Phalcon\Support\Str :: startsWith() - case insensitive flag
+     *
+     * @param UnitTester $I
      *
      * @author Phalcon Team <team@phalcon.io>
      * @since  2020-09-09
      */
-    public function helperStrStartsWithCaseInsensitive(UnitTester $I)
+    public function supportStrStartsWithCaseInsensitive(UnitTester $I)
     {
-        $I->wantToTest('Helper\Str - startsWith() - case insensitive flag');
-        $actual = Str::startsWith('Hello', 'h');
+        $I->wantToTest('Support\Str - startsWith() - case insensitive flag');
+
+        $object = new StartsWith();
+
+        $actual = $object('Hello', 'h');
         $I->assertTrue($actual);
 
-        $actual = Str::startsWith('Hello', 'he');
+        $actual = $object('Hello', 'he');
         $I->assertTrue($actual);
 
-        $actual = Str::startsWith('Hello', 'hello');
+        $actual = $object('Hello', 'hello');
         $I->assertTrue($actual);
     }
 
     /**
-     * Tests Phalcon\Helper\Str :: startsWith() - case sensitive flag
+     * Tests Phalcon\Support\Str :: startsWith() - case sensitive flag
+     *
+     * @param UnitTester $I
      *
      * @author Phalcon Team <team@phalcon.io>
      * @since  2020-09-09
      */
-    public function helperStrStartsWithCaseSensitive(UnitTester $I)
+    public function supportStrStartsWithCaseSensitive(UnitTester $I)
     {
-        $I->wantToTest('Helper\Str - startsWith() - case sensitive flag');
-        $actual = Str::startsWith('Hello', 'hello', true);
+        $I->wantToTest('Support\Str - startsWith() - case sensitive flag');
+
+        $object = new StartsWith();
+
+        $actual = $object('Hello', 'hello', true);
         $I->assertTrue($actual);
 
-        $actual = Str::startsWith('Hello', 'hello', false);
+        $actual = $object('Hello', 'hello', false);
         $I->assertFalse($actual);
 
-        $actual = Str::startsWith('Hello', 'h', false);
+        $actual = $object('Hello', 'h', false);
         $I->assertFalse($actual);
     }
 }

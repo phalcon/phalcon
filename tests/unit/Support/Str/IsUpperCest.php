@@ -11,27 +11,30 @@
 
 declare(strict_types=1);
 
-namespace Phalcon\Tests\Unit\Helper\Str;
+namespace Phalcon\Tests\Unit\Support\Str;
 
-use Phalcon\Helper\Str;
+use Phalcon\Support\Str\IsUpper;
 use UnitTester;
 
 class IsUpperCest
 {
     /**
-     * Tests Phalcon\Helper\Str :: isUpper()
+     * Tests Phalcon\Support\Str :: isUpper()
+     *
+     * @param UnitTester $I
      *
      * @author Phalcon Team <team@phalcon.io>
      * @since  2020-09-09
      */
-    public function helperStrIsUpper(UnitTester $I)
+    public function supportStrIsUpper(UnitTester $I)
     {
-        $I->wantToTest('Helper\Str - isUpper()');
+        $I->wantToTest('Support\Str - isUpper()');
 
-        $actual = Str::isUpper('PHALCON FRAMEWORK');
+        $object = new IsUpper();
+        $actual = $object('PHALCON FRAMEWORK');
         $I->assertTrue($actual);
 
-        $actual = Str::isUpper('Phalcon Framework');
+        $actual = $object('Phalcon Framework');
         $I->assertFalse($actual);
     }
 }
