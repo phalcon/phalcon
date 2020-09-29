@@ -14,6 +14,7 @@ declare(strict_types=1);
 namespace Phalcon\Support\Str;
 
 use Phalcon\Support\Str\Traits\LowerTrait;
+
 use function mb_convert_case;
 
 use const MB_CASE_LOWER;
