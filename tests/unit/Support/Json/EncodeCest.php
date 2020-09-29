@@ -11,51 +11,56 @@
 
 declare(strict_types=1);
 
-namespace Phalcon\Tests\Unit\Helper\Json;
+namespace Phalcon\Tests\Unit\Support\Json;
 
 use InvalidArgumentException;
-use Phalcon\Helper\Json;
+use Phalcon\Support\Json\Encode;
 use UnitTester;
 
-class DecodeCest
+class EncodeCest
 {
     /**
-     * Tests Phalcon\Helper\Json :: decode()
+     * Tests Phalcon\Support\Json :: encode()
+     *
+     * @param UnitTester $I
      *
      * @author Phalcon Team <team@phalcon.io>
      * @since  2020-09-09
      */
-    public function helperJsonDecode(UnitTester $I)
+    public function supportJsonEncode(UnitTester $I)
     {
-        $I->wantToTest('Helper\Json - decode()');
+        $I->wantToTest('Support\Json - encode()');
 
-        $data     = '{"one":"two","0":"three"}';
-        $expected = [
+        $object   = new Encode();
+        $data     = [
             'one' => 'two',
             'three',
         ];
-        $actual   = Json::decode($data, true);
+        $expected = '{"one":"two","0":"three"}';
+        $actual   = $object($data);
         $I->assertEquals($expected, $actual);
     }
 
     /**
-     * Tests Phalcon\Helper\Json :: decode() - exception
+     * Tests Phalcon\Support\Json :: encode() - exception
+     *
+     * @param UnitTester $I
      *
      * @author Phalcon Team <team@phalcon.io>
      * @since  2020-09-09
      */
-    public function helperJsonDecodeException(UnitTester $I)
+    public function supportJsonEncodeException(UnitTester $I)
     {
-        $I->wantToTest('Helper\Json - decode() - exception');
+        $I->wantToTest('Support\Json - encode() - exception');
 
         $I->expectThrowable(
             new InvalidArgumentException(
-                "json_decode error: Control character error, " .
+                "json_encode error: Malformed UTF-8 characters, " .
                 "possibly incorrectly encoded"
             ),
             function () {
-                $data   = '{"one';
-                $actual = Json::decode($data);
+                $data   = pack("H*", 'c32e');
+                (new Encode())($data);
             }
         );
     }

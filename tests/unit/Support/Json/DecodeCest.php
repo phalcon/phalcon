@@ -11,51 +11,56 @@
 
 declare(strict_types=1);
 
-namespace Phalcon\Tests\Unit\Helper\Json;
+namespace Phalcon\Tests\Unit\Support\Json;
 
 use InvalidArgumentException;
-use Phalcon\Helper\Json;
+use Phalcon\Support\Json\Decode;
 use UnitTester;
 
-class EncodeCest
+class DecodeCest
 {
     /**
-     * Tests Phalcon\Helper\Json :: encode()
+     * Tests Phalcon\Support\Json :: decode()
+     *
+     * @param UnitTester $I
      *
      * @author Phalcon Team <team@phalcon.io>
      * @since  2020-09-09
      */
-    public function helperJsonEncode(UnitTester $I)
+    public function supportJsonDecode(UnitTester $I)
     {
-        $I->wantToTest('Helper\Json - encode()');
+        $I->wantToTest('Support\Json - decode()');
 
-        $data     = [
+        $object   = new Decode();
+        $data     = '{"one":"two","0":"three"}';
+        $expected = [
             'one' => 'two',
             'three',
         ];
-        $expected = '{"one":"two","0":"three"}';
-        $actual   = Json::encode($data);
+        $actual   = $object($data, true);
         $I->assertEquals($expected, $actual);
     }
 
     /**
-     * Tests Phalcon\Helper\Json :: encode() - exception
+     * Tests Phalcon\Support\Json :: decode() - exception
+     *
+     * @param UnitTester $I
      *
      * @author Phalcon Team <team@phalcon.io>
      * @since  2020-09-09
      */
-    public function helperJsonEncodeException(UnitTester $I)
+    public function supportJsonDecodeException(UnitTester $I)
     {
-        $I->wantToTest('Helper\Json - encode() - exception');
+        $I->wantToTest('Support\Json - decode() - exception');
 
         $I->expectThrowable(
             new InvalidArgumentException(
-                "json_encode error: Malformed UTF-8 characters, " .
+                "json_decode error: Control character error, " .
                 "possibly incorrectly encoded"
             ),
             function () {
-                $data   = pack("H*", 'c32e');
-                $actual = Json::encode($data);
+                $data   = '{"one';
+                (new Decode())($data);
             }
         );
     }
