@@ -15,6 +15,7 @@ namespace Phalcon\Tests\Unit\Support\Arr;
 
 use Phalcon\Support\Arr\First;
 use UnitTester;
+
 use function strlen;
 
 /**
