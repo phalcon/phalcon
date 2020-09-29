@@ -82,7 +82,7 @@ class OrderCest
                 'name' => 'John',
             ],
         ];
-        $actual   = $object($collection, 'id', 'desc');
+        $actual   = $object($collection, 'id', $object::ORDER_DESC);
         $I->assertEquals($expected, $actual);
 
         $collection = [

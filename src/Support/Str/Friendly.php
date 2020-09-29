@@ -60,7 +60,7 @@ class Friendly
         );
 
         if ($lowercase) {
-            $friendly = $this->toLower((string) $friendly);
+            $friendly = $this->toLower($friendly);
         }
 
         return trim(

@@ -15,8 +15,8 @@ namespace Phalcon\Support\Arr;
 
 use function array_values;
 use function is_object;
-use function krsort;
-use function ksort;
+
+use const SORT_REGULAR;
 
 /**
  * Class Order
@@ -25,23 +25,28 @@ use function ksort;
  */
 class Order
 {
+    public const ORDER_ASC  = 1;
+    public const ORDER_DESC = 2;
+
     /**
      * Sorts a collection of arrays or objects by key
      *
-     * @param array  $collection
-     * @param mixed  $attribute
-     * @param string $order
+     * @param array $collection
+     * @param mixed $attribute
+     * @param int   $order
+     * @param int   $flags
      *
      * @return array
      */
     public function __invoke(
         array $collection,
         $attribute,
-        string $order = 'asc'
+        int $order = self::ORDER_ASC,
+        int $flags = SORT_REGULAR
     ): array {
         $sorted = [];
         foreach ($collection as $item) {
-            if (is_object($item)) {
+            if (true === is_object($item)) {
                 $key = $item->{$attribute};
             } else {
                 $key = $item[$attribute];
@@ -50,11 +55,8 @@ class Order
             $sorted[$key] = $item;
         }
 
-        if ('asc' === $order) {
-            ksort($sorted);
-        } else {
-            krsort($sorted);
-        }
+        $method = (self::ORDER_ASC === $order) ? 'ksort' : 'krsort';
+        $method($sorted, $flags);
 
         return array_values($sorted);
     }
