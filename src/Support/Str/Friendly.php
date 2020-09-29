@@ -14,8 +14,8 @@ declare(strict_types=1);
 namespace Phalcon\Support\Str;
 
 use Phalcon\Support\Exception;
-
 use Phalcon\Support\Str\Traits\LowerTrait;
+
 use function is_array;
 use function is_string;
 use function preg_replace;

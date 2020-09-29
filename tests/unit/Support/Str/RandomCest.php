@@ -16,6 +16,7 @@ namespace Phalcon\Tests\Unit\Support\Str;
 use Codeception\Example;
 use Phalcon\Support\Str\Random;
 use UnitTester;
+
 use function strlen;
 
 class RandomCest
@@ -93,7 +94,7 @@ class RandomCest
         );
 
         $I->assertEquals($source, $matches[0]);
-        $I->assertEquals($i,strlen($source));
+        $I->assertEquals($i, strlen($source));
     }
 
     /**
@@ -121,7 +122,7 @@ class RandomCest
         );
 
         $I->assertEquals($source, $matches[0]);
-        $I->assertEquals($i,strlen($source));
+        $I->assertEquals($i, strlen($source));
     }
 
     /**
@@ -149,7 +150,7 @@ class RandomCest
         );
 
         $I->assertEquals($source, $matches[0]);
-        $I->assertEquals($i,strlen($source));
+        $I->assertEquals($i, strlen($source));
     }
 
     /**
@@ -177,7 +178,7 @@ class RandomCest
         );
 
         $I->assertEquals($source, $matches[0]);
-        $I->assertEquals($i,strlen($source));
+        $I->assertEquals($i, strlen($source));
     }
 
     /**
@@ -204,7 +205,7 @@ class RandomCest
             $source
         );
 
-        $I->assertEquals($i,strlen($source));
+        $I->assertEquals($i, strlen($source));
     }
 
     /**

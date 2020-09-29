@@ -17,6 +17,7 @@ use function implode;
 use function mb_str_split;
 use function mb_substr;
 use function pathinfo;
+
 use const PATHINFO_FILENAME;
 
 /**
