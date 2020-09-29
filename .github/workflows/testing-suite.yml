@@ -87,9 +87,9 @@ jobs:
         run: php ./bin/ocular.phar code-coverage:upload --format=php-clover ./tests/_output/coverage.xml
 
       - name: Code Coverage - Codacy
-        env:
-          CODACY_PROJECT_TOKEN: ${{ secrets.CODACY_TOKEN }}
-        run: bash <(curl -Ls https://coverage.codacy.com/get.sh) report -l PHP -r ./tests/_output/coverage.xml
+        run: |
+          export CODACY_PROJECT_TOKEN=${{ secrets.CODACY_TOKEN }}
+          bash <(curl -Ls https://coverage.codacy.com/get.sh) report -l PHP -r ./tests/_output/coverage.xml
 
 #      - name: Run integration tests
 #        env:
