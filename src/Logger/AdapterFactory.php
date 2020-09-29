@@ -13,12 +13,12 @@ declare(strict_types=1);
 
 namespace Phalcon\Logger;
 
-use Phalcon\Helper\Exception as ExceptionAlias;
-use Phalcon\Helper\Traits\FactoryTrait;
 use Phalcon\Logger\Adapter\AdapterInterface;
 use Phalcon\Logger\Adapter\Noop;
 use Phalcon\Logger\Adapter\Stream;
 use Phalcon\Logger\Adapter\Syslog;
+use Phalcon\Support\Exception as SupportException;
+use Phalcon\Support\Traits\FactoryTrait;
 
 /**
  * Class AdapterFactory
@@ -37,7 +37,7 @@ class AdapterFactory
      * @param array  $options
      *
      * @return AdapterInterface
-     * @throws ExceptionAlias
+     * @throws SupportException
      */
     public function newInstance(
         string $name,
@@ -52,7 +52,7 @@ class AdapterFactory
     /**
      * @return array
      */
-    protected function getAdapters(): array
+    protected function getServices(): array
     {
         return [
             'noop'   => Noop::class,
