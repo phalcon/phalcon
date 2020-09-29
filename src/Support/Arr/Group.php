@@ -37,24 +37,64 @@ class Group
     public function __invoke(array $collection, $method): array
     {
         $filtered = [];
+        foreach ($collection as $element) {
+            $filtered = $this->processCallable($filtered, $method, $element);
+            $filtered = $this->processObject($filtered, $method, $element);
+            $filtered = $this->processOther($filtered, $method, $element);
+        }
+
+        return $filtered;
+    }
+
+    /**
+     * @param array           $filtered
+     * @param callable|string $method
+     * @param mixed           $element
+     *
+     * @return array
+     */
+    private function processCallable(array $filtered, $method, $element): array
+    {
         if (
             is_callable($method) ||
             (is_string($method) && function_exists($method))
         ) {
-            foreach ($collection as $element) {
-                $key              = call_user_func($method, $element);
-                $filtered[$key][] = $element;
-            }
-        } else {
-            foreach ($collection as $element) {
-                if (is_object($element)) {
-                    $key              = $element->{$method};
-                    $filtered[$key][] = $element;
-                } elseif (isset($element[$method])) {
-                    $key              = $element[$method];
-                    $filtered[$key][] = $element;
-                }
-            }
+            $key              = call_user_func($method, $element);
+            $filtered[$key][] = $element;
+        }
+
+        return $filtered;
+    }
+
+    /**
+     * @param array           $filtered
+     * @param callable|string $method
+     * @param mixed           $element
+     *
+     * @return array
+     */
+    private function processObject(array $filtered, $method, $element): array
+    {
+        if (is_object($element)) {
+            $key              = $element->{$method};
+            $filtered[$key][] = $element;
+        }
+
+        return $filtered;
+    }
+
+    /**
+     * @param array           $filtered
+     * @param callable|string $method
+     * @param mixed           $element
+     *
+     * @return array
+     */
+    private function processOther(array $filtered, $method, $element): array
+    {
+        if (isset($element[$method])) {
+            $key              = $element[$method];
+            $filtered[$key][] = $element;
         }
 
         return $filtered;
