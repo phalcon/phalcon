@@ -16,7 +16,7 @@ namespace Phalcon\Support\Number;
 /**
  * Class IsBetween
  *
- * @package Phalcon\Support\Str
+ * @package Phalcon\Support\Number
  */
 class IsBetween
 {

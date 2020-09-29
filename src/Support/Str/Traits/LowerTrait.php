@@ -18,7 +18,9 @@ use function mb_convert_case;
 use const MB_CASE_LOWER;
 
 /**
- * Lower method
+ * Trait LowerTrait
+ *
+ * @package Phalcon\Support\Str\Traits
  */
 trait LowerTrait
 {
