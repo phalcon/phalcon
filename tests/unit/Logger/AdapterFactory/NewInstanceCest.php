@@ -13,7 +13,7 @@ declare(strict_types=1);
 
 namespace Phalcon\Tests\Unit\Logger\AdapterFactory;
 
-use Phalcon\Helper\Exception;
+use Phalcon\Support\Exception;
 use Phalcon\Logger\Adapter\AdapterInterface;
 use Phalcon\Logger\AdapterFactory;
 use UnitTester;

@@ -58,9 +58,9 @@ trait FactoryTrait
     }
 
     /**
-     * Returns the adapters for the factory
+     * Returns the services for the factory
      */
-    abstract protected function getAdapters(): array;
+    abstract protected function getServices(): array;
 
     /**
      * AdapterFactory constructor.
@@ -69,6 +69,6 @@ trait FactoryTrait
      */
     protected function init(array $services = []): void
     {
-        $this->mapper = array_merge($this->getAdapters(), $services);
+        $this->mapper = array_merge($this->getServices(), $services);
     }
 }

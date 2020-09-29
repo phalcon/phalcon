@@ -13,13 +13,18 @@ declare(strict_types=1);
 
 namespace Phalcon\Tests\Unit\Support\Number;
 
-use Phalcon\Support\Number\Between;
+use Phalcon\Support\Number\IsBetween;
 use UnitTester;
 
-class BetweenCest
+/**
+ * Class IsBetweenCest
+ *
+ * @package Phalcon\Tests\Unit\Support\Number
+ */
+class IsBetweenCest
 {
     /**
-     * Tests Phalcon\Support\Number :: between()
+     * Tests Phalcon\Support\Number :: isBetween()
      *
      * @param UnitTester $I
      *
@@ -28,9 +33,9 @@ class BetweenCest
      */
     public function supportNumberBetween(UnitTester $I)
     {
-        $I->wantToTest('Support\Number - between()');
+        $I->wantToTest('Support\Number - isBetween()');
 
-        $object = new Between();
+        $object = new IsBetween();
         $actual = $object(5, 1, 10);
         $I->assertTrue($actual);
 
