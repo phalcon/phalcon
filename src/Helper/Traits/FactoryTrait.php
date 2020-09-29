@@ -30,6 +30,16 @@ trait FactoryTrait
     private array $mapper = [];
 
     /**
+     * AdapterFactory constructor.
+     *
+     * @param array $services
+     */
+    public function __construct(array $services = [])
+    {
+        $this->init($services);
+    }
+
+    /**
      * Returns a service based on the name; throws exception if it does not
      * exist
      *
@@ -40,7 +50,7 @@ trait FactoryTrait
      */
     protected function getService(string $name)
     {
-        if (!isset($this->mapper[$name])) {
+        if (true !== isset($this->mapper[$name])) {
             throw new Exception('Service ' . $name . ' is not registered');
         }
 

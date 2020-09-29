@@ -11,22 +11,22 @@
 
 declare(strict_types=1);
 
-namespace Phalcon\Tests\Unit\Helper\Str;
+namespace Phalcon\Tests\Unit\Support\Str;
 
-use Phalcon\Helper\Str;
+use Phalcon\Support\Str;
 use UnitTester;
 
 class ConcatCest
 {
     /**
-     * Tests Phalcon\Helper\Str :: concat()
+     * Tests Phalcon\Support\Str :: concat()
      *
      * @author Phalcon Team <team@phalcon.io>
      * @since  2020-09-09
      */
-    public function helperStrConcat(UnitTester $I)
+    public function supportStrConcat(UnitTester $I)
     {
-        $I->wantToTest('Helper\Str - concat()');
+        $I->wantToTest('Support\Str - concat()');
         // Test 1
         $actual   = Str::concat(
             '/',
