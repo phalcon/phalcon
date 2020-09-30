@@ -68,6 +68,10 @@ class Encode
         int $options = 4194383,
         int $depth = 512
     ): string {
+        /**
+         * Need to clear the json_last_error() before the code below
+         */
+        $encoded = json_encode('');
         $encoded = json_encode($data, $options, $depth);
 
         /**
@@ -76,9 +80,7 @@ class Encode
          * an error occurs
          */
         if (JSON_ERROR_NONE !== json_last_error()) {
-            throw new JsonException(
-                'json_encode error: ' . json_last_error_msg()
-            );
+            throw new JsonException(json_last_error_msg(), 5);
         }
 
         return (string) $encoded;

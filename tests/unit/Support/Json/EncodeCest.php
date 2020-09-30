@@ -14,8 +14,10 @@ declare(strict_types=1);
 namespace Phalcon\Tests\Unit\Support\Json;
 
 use InvalidArgumentException;
+use JsonException;
 use Phalcon\Support\Json\Encode;
 use UnitTester;
+use const JSON_HEX_TAG;
 
 class EncodeCest
 {
@@ -42,25 +44,49 @@ class EncodeCest
     }
 
     /**
-     * Tests Phalcon\Support\Json :: encode() - exception
+     * Tests Phalcon\Support\Json :: encode() - exception default options
      *
      * @param UnitTester $I
      *
      * @author Phalcon Team <team@phalcon.io>
      * @since  2020-09-09
      */
-    public function supportJsonEncodeException(UnitTester $I)
+    public function supportJsonEncodeExceptionDefaultOptions(UnitTester $I)
     {
-        $I->wantToTest('Support\Json - encode() - exception');
+        $I->wantToTest('Support\Json - encode() - exception default options');
 
         $I->expectThrowable(
-            new InvalidArgumentException(
-                "json_encode error: Malformed UTF-8 characters, " .
-                "possibly incorrectly encoded"
+            new JsonException(
+                'Malformed UTF-8 characters, possibly incorrectly encoded',
+                5
             ),
             function () {
                 $data   = pack("H*", 'c32e');
                 (new Encode())($data);
+            }
+        );
+    }
+
+    /**
+     * Tests Phalcon\Support\Json :: encode() - exception no options
+     *
+     * @param UnitTester $I
+     *
+     * @author Phalcon Team <team@phalcon.io>
+     * @since  2020-09-09
+     */
+    public function supportJsonEncodeExceptionNoOptions(UnitTester $I)
+    {
+        $I->wantToTest('Support\Json - encode() - exception no options');
+
+        $I->expectThrowable(
+            new JsonException(
+                'Malformed UTF-8 characters, possibly incorrectly encoded',
+                5
+            ),
+            function () {
+                $data   = pack("H*", 'c32e');
+                (new Encode())($data, JSON_HEX_TAG);
             }
         );
     }

@@ -47,6 +47,40 @@ class Group
     }
 
     /**
+     * @param mixed $method
+     *
+     * @return bool
+     */
+    private function isCallable($method): bool
+    {
+        return (
+            is_callable($method) ||
+            (is_string($method) && function_exists($method))
+        );
+    }
+
+    /**
+     * @param mixed $method
+     *
+     * @return bool
+     */
+    private function isObject($element): bool
+    {
+        return is_object($element);
+    }
+
+    /**
+     * @param mixed $method
+     * @param mixed $element
+     *
+     * @return bool
+     */
+    private function isSet($method, $element): bool
+    {
+        return isset($element[$method]);
+    }
+
+    /**
      * @param array           $filtered
      * @param callable|string $method
      * @param mixed           $element
@@ -55,10 +89,8 @@ class Group
      */
     private function processCallable(array $filtered, $method, $element): array
     {
-        if (
-            is_callable($method) ||
-            (is_string($method) && function_exists($method))
-        ) {
+        if (true === $this->isCallable($method))
+        {
             $key              = call_user_func($method, $element);
             $filtered[$key][] = $element;
         }
@@ -75,7 +107,10 @@ class Group
      */
     private function processObject(array $filtered, $method, $element): array
     {
-        if (is_object($element)) {
+        if (
+            true !== $this->isCallable($method) &&
+            true === $this->isObject($element)
+        ) {
             $key              = $element->{$method};
             $filtered[$key][] = $element;
         }
@@ -92,7 +127,11 @@ class Group
      */
     private function processOther(array $filtered, $method, $element): array
     {
-        if (isset($element[$method])) {
+        if (
+            true !== $this->isCallable($method) &&
+            true !== $this->isObject($element) &&
+            true === $this->isSet($method, $element)
+        ) {
             $key              = $element[$method];
             $filtered[$key][] = $element;
         }
