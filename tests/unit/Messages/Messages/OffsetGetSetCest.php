@@ -102,7 +102,6 @@ class OffsetGetSetCest
                 $messages = new Messages();
 
                 $messages->offsetSet(2, 'message');
-
             }
         );
     }

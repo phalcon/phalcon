@@ -17,6 +17,7 @@ use InvalidArgumentException;
 use JsonException;
 use Phalcon\Support\Json\Encode;
 use UnitTester;
+
 use const JSON_HEX_TAG;
 
 class EncodeCest
