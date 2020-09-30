@@ -22,8 +22,9 @@ class ToStringCest
      * Tests Phalcon\Messages\Message :: __toString()
      *
      * @param UnitTester $I
-     * @since  2018-11-13
+     *
      * @author Phalcon Team <team@phalcon.io>
+     * @since  2020-09-09
      */
     public function messagesMessageToString(UnitTester $I): void
     {
@@ -36,18 +37,18 @@ class ToStringCest
             111
         );
 
-        $I->assertEquals(
-            'This is a message #1',
-            $message->__toString()
-        );
+        $expected = 'This is a message #1';
+        $actual   = $message->__toString();
+        $I->assertEquals($expected, $actual);
     }
 
     /**
      * Tests Phalcon\Messages\Message :: __toString() - cast
      *
      * @param UnitTester $I
-     * @since  2018-11-13
+     *
      * @author Phalcon Team <team@phalcon.io>
+     * @since  2020-09-09
      */
     public function messagesMessageToStringCast(UnitTester $I): void
     {
@@ -60,9 +61,8 @@ class ToStringCest
             111
         );
 
-        $I->assertEquals(
-            'This is a message #1',
-            (string) $message
-        );
+        $expected = 'This is a message #1';
+        $actual   = (string) $message;
+        $I->assertEquals($expected, $actual);
     }
 }

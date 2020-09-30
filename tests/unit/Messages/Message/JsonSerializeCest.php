@@ -23,8 +23,9 @@ class JsonSerializeCest
      * Tests Phalcon\Messages\Message :: jsonSerialize()
      *
      * @param UnitTester $I
-     * @since  2018-11-13
+     *
      * @author Phalcon Team <team@phalcon.io>
+     * @since  2020-09-09
      */
     public function messagesMessageJsonSerialize(UnitTester $I): void
     {
@@ -41,11 +42,7 @@ class JsonSerializeCest
         );
 
 
-        $I->assertInstanceOf(
-            JsonSerializable::class,
-            $message
-        );
-
+        $I->assertInstanceOf(JsonSerializable::class, $message);
 
         $expected = [
             'field'    => 'MyField',
@@ -56,10 +53,7 @@ class JsonSerializeCest
                 'My1' => 'Metadata1',
             ],
         ];
-
-        $I->assertEquals(
-            $expected,
-            $message->jsonSerialize()
-        );
+        $actual   = $message->jsonSerialize();
+        $I->assertEquals($expected, $actual);
     }
 }

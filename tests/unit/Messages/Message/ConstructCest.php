@@ -25,8 +25,9 @@ class ConstructCest
      * Tests Phalcon\Messages\Message :: __construct()
      *
      * @param UnitTester $I
-     * @since  2018-11-13
+     *
      * @author Phalcon Team <team@phalcon.io>
+     * @since  2020-09-09
      */
     public function messagesMessageConstruct(UnitTester $I): void
     {
@@ -64,8 +65,9 @@ class ConstructCest
      * Tests Phalcon\Messages\Message :: __construct() - chain
      *
      * @param UnitTester $I
-     * @since  2018-11-13
+     *
      * @author Phalcon Team <team@phalcon.io>
+     * @since  2020-09-09
      */
     public function messagesMessageConstructChain(UnitTester $I): void
     {
@@ -104,8 +106,9 @@ class ConstructCest
      * Tests Phalcon\Messages\Message :: __construct() - exception
      *
      * @param UnitTester $I
-     * @since  2018-11-13
+     *
      * @author Phalcon Team <team@phalcon.io>
+     * @since  2020-09-09
      */
     public function messagesMessageConstructException(UnitTester $I): void
     {

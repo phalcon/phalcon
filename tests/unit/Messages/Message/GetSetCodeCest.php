@@ -22,8 +22,9 @@ class GetSetCodeCest
      * Tests Phalcon\Messages\Message :: getCode()/setCode()
      *
      * @param UnitTester $I
-     * @since  2018-11-13
+     *
      * @author Phalcon Team <team@phalcon.io>
+     * @since  2020-09-09
      */
     public function messagesMessageGetSetCode(UnitTester $I): void
     {
@@ -36,9 +37,8 @@ class GetSetCodeCest
             111
         );
 
-        $I->assertEquals(
-            111,
-            $message->getCode()
-        );
+        $expected = 111;
+        $actual   = $message->getCode();
+        $I->assertEquals($expected, $actual);
     }
 }
