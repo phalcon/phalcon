@@ -41,7 +41,7 @@ class Get
     ) {
         $value = $collection[$index] ?? $defaultValue;
 
-        if (is_string($cast)) {
+        if (null !== $cast) {
             settype($value, $cast);
         }
 
