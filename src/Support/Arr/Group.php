@@ -60,7 +60,7 @@ class Group
     }
 
     /**
-     * @param mixed $method
+     * @param mixed $element
      *
      * @return bool
      */
@@ -89,8 +89,7 @@ class Group
      */
     private function processCallable(array $filtered, $method, $element): array
     {
-        if (true === $this->isCallable($method))
-        {
+        if (true === $this->isCallable($method)) {
             $key              = call_user_func($method, $element);
             $filtered[$key][] = $element;
         }
