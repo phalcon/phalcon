@@ -17,6 +17,7 @@ use Phalcon\Messages\Message;
 use Phalcon\Messages\Messages;
 use TypeError;
 use UnitTester;
+
 use function substr;
 
 class AppendMessageCest
