@@ -13,6 +13,7 @@ declare(strict_types=1);
 
 namespace Phalcon\Tests\Unit\Messages\Messages;
 
+use Phalcon\Messages\Exception;
 use Phalcon\Messages\Message;
 use Phalcon\Messages\Messages;
 use TypeError;
@@ -70,36 +71,51 @@ class AppendMessagesCest
         $messages->appendMessages($newMessages);
 
         $I->assertCount(3, $messages);
+
+        /**
+         * Array of messages
+         */
+        $arrayMessages = [
+            new Message(
+                'This is a message #10',
+                'MyField10',
+                'MyType10',
+                1010
+            ),
+            new Message(
+                'This is a message #11',
+                'MyField11',
+                'MyType11',
+                1111
+            ),
+            new Message(
+                'This is a message #12',
+                'MyField12',
+                'MyType12',
+                1212
+            ),
+        ];
+
+        $messages->appendMessages($arrayMessages);
+        $I->assertCount(6, $messages);
     }
 
     /**
-     * Tests Phalcon\Messages\Messages :: __construct() - exception
+     * Tests Phalcon\Messages\Messages :: appendMessages() - exception
      *
      * @param UnitTester $I
      * @since  2018-11-13
      * @author Phalcon Team <team@phalcon.io>
      */
-    public function messagesMessagesConstructException(UnitTester $I): void
+    public function messagesMessagesAppendMessagesException(UnitTester $I): void
     {
-        $I->wantToTest('Messages\Messages - appendMessages() - exception');
+        $I->wantToTest('Messages\Messages - appendMessage() - exception');
 
-        /**
-         * Sometimes Travis reports 'boolean' vs 'bool' and the test fails. This
-         * is why `expectThrowable` is not used here
-         */
-        $actual = '';
-
-        try {
-            /** @noinspection PhpParamsInspection */
-            (new Messages())->appendMessage(true);
-        } catch (TypeError $ex) {
-            $actual = $ex->getMessage();
-        }
-
-        $I->assertEquals(
-            'Argument 1 passed to Phalcon\Messages\Messages::appendMessage()' .
-            ' must implement interface Phalcon\Messages\MessageInterface, bool',
-            substr($actual, 0, 128)
+        $I->expectThrowable(
+            new Exception('The messages must be iterable'),
+            function () {
+                (new Messages())->appendMessages(true);
+            }
         );
     }
 }

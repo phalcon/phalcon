@@ -24,9 +24,11 @@ class OffsetGetSetCest
      * Tests Phalcon\Messages\Messages :: offsetGet()/offsetSet()
      *
      * @param UnitTester $I
+     *
      * @throws Exception
+     *
      * @author Phalcon Team <team@phalcon.io>
-     * @since  2018-11-13
+     * @since  2020-09-09
      */
     public function messagesMessagesOffsetGetSet(UnitTester $I): void
     {
@@ -67,15 +69,10 @@ class OffsetGetSetCest
                 ]
             )
         );
-
         $I->assertCount(3, $messages);
 
         $message = $messages->offsetGet(2);
-
-        $I->assertInstanceOf(
-            Message::class,
-            $message
-        );
+        $I->assertInstanceOf(Message::class, $message);
 
 
         $I->assertEquals('This is a message #3', $message->getMessage());
@@ -83,5 +80,30 @@ class OffsetGetSetCest
         $I->assertEquals('MyType3', $message->getType());
         $I->assertEquals(777, $message->getCode());
         $I->assertEquals(['My3' => 'Metadata3'], $message->getMetaData());
+    }
+
+    /**
+     * Tests Phalcon\Messages\Messages :: offsetSet() - exception
+     *
+     * @param UnitTester $I
+     *
+     * @throws Exception
+     *
+     * @author Phalcon Team <team@phalcon.io>
+     * @since  2020-09-09
+     */
+    public function messagesMessagesOffsetSetException(UnitTester $I): void
+    {
+        $I->wantToTest('Messages\Messages - offsetSet() - exception');
+
+        $I->expectThrowable(
+            new Exception('The message must be an object'),
+            function () {
+                $messages = new Messages();
+
+                $messages->offsetSet(2, 'message');
+
+            }
+        );
     }
 }
