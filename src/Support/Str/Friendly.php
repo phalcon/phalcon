@@ -76,10 +76,10 @@ class Friendly
      * @param array|string $replace
      * @param string       $text
      *
-     * @return array|string[]
+     * @return string
      * @throws Exception
      */
-    private function checkReplace($replace, string $text): array
+    private function checkReplace($replace, string $text): string
     {
         if (true !== is_array($replace) && true !== is_string($replace)) {
             throw new Exception(
