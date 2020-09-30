@@ -34,9 +34,37 @@ class Set
         $value,
         $index = null
     ): array {
+        $collection = $this->checkNull($collection, $value, $index);
+
+        return $this->checkNotNull($collection, $value, $index);
+    }
+
+    /**
+     * @param array $collection
+     * @param mixed $value
+     * @param mixed $index
+     *
+     * @return array
+     */
+    private function checkNull(array $collection, $value, $index): array
+    {
         if (null === $index) {
             $collection[] = $value;
-        } else {
+        }
+
+        return $collection;
+    }
+
+    /**
+     * @param array $collection
+     * @param mixed $value
+     * @param mixed $index
+     *
+     * @return array
+     */
+    private function checkNotNull(array $collection, $value, $index): array
+    {
+        if (null !== $index) {
             $collection[$index] = $value;
         }
 

@@ -264,7 +264,7 @@ class Collection implements
     /**
      * Returns the object in a JSON format
      *
-     * The default string uses the following options for json_encode
+     * The following options are used if none specified for json_encode
      *
      * JSON_HEX_TAG, JSON_HEX_APOS, JSON_HEX_AMP, JSON_HEX_QUOT,
      * JSON_UNESCAPED_SLASHES, JSON_THROW_ON_ERROR
