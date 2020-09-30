@@ -46,18 +46,47 @@ class Order
     ): array {
         $sorted = [];
         foreach ($collection as $item) {
-            if (true === is_object($item)) {
-                $key = $item->{$attribute};
-            } else {
-                $key = $item[$attribute];
-            }
-
-            $sorted[$key] = $item;
+            $sorted = $this->checkObject($sorted, $attribute, $item);
+            $sorted = $this->checkNonObject($sorted, $attribute, $item);
         }
 
         $method = (self::ORDER_ASC === $order) ? 'ksort' : 'krsort';
         $method($sorted, $flags);
 
         return array_values($sorted);
+    }
+
+    /**
+     * @param array $sorted
+     * @param mixed $attribute
+     * @param mixed $item
+     *
+     * @return array
+     */
+    private function checkObject(array $sorted, $attribute, $item): array
+    {
+        if (true === is_object($item)) {
+            $key = $item->{$attribute};
+            $sorted[$key] = $item;
+        }
+
+        return $sorted;
+    }
+
+    /**
+     * @param array $sorted
+     * @param mixed $attribute
+     * @param mixed $item
+     *
+     * @return array
+     */
+    private function checkNonObject(array $sorted, $attribute, $item): array
+    {
+        if (true !== is_object($item)) {
+            $key = $item[$attribute];
+            $sorted[$key] = $item;
+        }
+
+        return $sorted;
     }
 }
