@@ -13,23 +13,30 @@ declare(strict_types=1);
 
 namespace Phalcon\Storage;
 
-use Phalcon\Helper\Exception as ExceptionAlias;
-use Phalcon\Helper\Traits\FactoryTrait;
 use Phalcon\Storage\Adapter\AdapterInterface;
 use Phalcon\Storage\Adapter\Apcu;
 use Phalcon\Storage\Adapter\Libmemcached;
 use Phalcon\Storage\Adapter\Memory;
 use Phalcon\Storage\Adapter\Redis;
 use Phalcon\Storage\Adapter\Stream;
+use Phalcon\Support\Exception as SupportException;
+use Phalcon\Support\HelperFactory;
+use Phalcon\Support\Traits\FactoryTrait;
 
 /**
  * Class AdapterFactory
  *
+ * @property HelperFactory     $helperFactory;
  * @property SerializerFactory $serializerFactory
  */
 class AdapterFactory
 {
     use FactoryTrait;
+
+    /**
+     * @var HelperFactory
+     */
+    private HelperFactory $helperFactory;
 
     /**
      * @var SerializerFactory
@@ -39,11 +46,16 @@ class AdapterFactory
     /**
      * AdapterFactory constructor.
      *
+     * @param HelperFactory     $helperFactory
      * @param SerializerFactory $factory
      * @param array             $services
      */
-    public function __construct(SerializerFactory $factory, array $services = [])
-    {
+    public function __construct(
+        HelperFactory $helperFactory,
+        SerializerFactory $factory,
+        array $services = []
+    ) {
+        $this->helperFactory     = $helperFactory;
         $this->serializerFactory = $factory;
 
         $this->init($services);
@@ -56,19 +68,23 @@ class AdapterFactory
      * @param array  $options
      *
      * @return AdapterInterface
-     * @throws ExceptionAlias
+     * @throws SupportException
      */
     public function newInstance(string $name, array $options = []): AdapterInterface
     {
         $definition = $this->getService($name);
 
-        return new $definition($this->serializerFactory, $options);
+        return new $definition(
+            $this->helperFactory,
+            $this->serializerFactory,
+            $options
+        );
     }
 
     /**
      * @return array
      */
-    protected function getAdapters(): array
+    protected function getServices(): array
     {
         return [
             'apcu'         => Apcu::class,
