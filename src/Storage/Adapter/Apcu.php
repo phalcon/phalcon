@@ -19,14 +19,7 @@ use Exception;
 use Phalcon\Storage\SerializerFactory;
 use Phalcon\Support\Exception as SupportException;
 use Phalcon\Support\HelperFactory;
-
-use function phpApcu_dec;
-use function phpApcu_delete;
-use function phpApcu_exists;
-use function phpApcu_fetch;
-use function phpApcu_inc;
-use function phpApcu_store;
-use function is_object;
+use Phalcon\Support\Traits\PhpApcuTrait;
 
 /**
  * Apcu adapter
@@ -35,6 +28,8 @@ use function is_object;
  */
 class Apcu extends AbstractAdapter
 {
+    use PhpApcuTrait;
+
     /**
      * @var string
      */
@@ -187,86 +182,5 @@ class Apcu extends AbstractAdapter
             $this->getSerializedData($value),
             $this->getTtl($ttl)
         );
-    }
-
-    /**
-     * @param string    $key
-     * @param int       $step
-     * @param bool|null $success
-     * @param int       $ttl
-     *
-     * @return int|false
-     *
-     * @link https://php.net/manual/en/function.apcu-dec.php
-     */
-    protected function phpApcuDec($key, $step = 1, &$success = null, $ttl = 0)
-    {
-        return apcu_dec($key, $step, $success, $ttl);
-    }
-
-    /**
-     * @param string|array $key
-     *
-     * @return bool|array
-     *
-     * @link https://php.net/manual/en/function.apcu-delete.php
-     */
-    protected function phpApcuDelete($key)
-    {
-        return apcu_delete($key);
-    }
-
-    /**
-     * @param string|array $key
-     *
-     * @return bool|array
-     *
-     * @link https://php.net/manual/en/function.apcu-exists.php
-     */
-    protected function phpApcuExists($key)
-    {
-        return apcu_exists($key);
-    }
-
-    /**
-     * @param string|array $key
-     * @param bool|null    $success
-     *
-     * @return mixed|false
-     *
-     * @link https://php.net/manual/en/function.apcu-fetch.php
-     */
-    protected function phpApcuFetch($key, &$success = null)
-    {
-        return apcu_fetch($key, $success);
-    }
-
-    /**
-     * @param string    $key
-     * @param int       $step
-     * @param bool|null $success
-     * @param int       $ttl
-     *
-     * @return false|int
-     *
-     * @link https://php.net/manual/en/function.apcu-inc.php
-     */
-    protected function phpApcuInc($key, $step = 1, &$success = null, $ttl = 0)
-    {
-        return apcu_inc($key, $step, $success, $ttl);
-    }
-
-    /**
-     * @param string|array $key
-     * @param mixed        $var
-     * @param int          $ttl
-     *
-     * @return bool|array
-     *
-     * @link https://php.net/manual/en/function.apcu-store.php
-     */
-    protected function phpApcuStore($key, $var, $ttl = 0)
-    {
-        return apcu_store($key, $var, $ttl);
     }
 }
