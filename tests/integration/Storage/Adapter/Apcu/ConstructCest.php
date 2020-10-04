@@ -16,6 +16,8 @@ namespace Phalcon\Tests\Integration\Storage\Adapter\Apcu;
 use Phalcon\Storage\Adapter\AdapterInterface;
 use Phalcon\Storage\Adapter\Apcu;
 use Phalcon\Storage\SerializerFactory;
+use Phalcon\Support\Exception;
+use Phalcon\Support\HelperFactory;
 use Phalcon\Tests\Fixtures\Traits\ApcuTrait;
 use UnitTester;
 
@@ -28,6 +30,8 @@ class ConstructCest
      *
      * @param UnitTester $I
      *
+     * @throws Exception
+     *
      * @author Phalcon Team <team@phalcon.io>
      * @since  2020-09-09
      */
@@ -35,8 +39,9 @@ class ConstructCest
     {
         $I->wantToTest('Storage\Adapter\Apcu - __construct()');
 
+        $helper     = new HelperFactory();
         $serializer = new SerializerFactory();
-        $adapter    = new Apcu($serializer);
+        $adapter    = new Apcu($helper, $serializer);
 
         $class = Apcu::class;
         $I->assertInstanceOf($class, $adapter);

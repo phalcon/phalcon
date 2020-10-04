@@ -13,10 +13,11 @@ declare(strict_types=1);
 
 namespace Phalcon\Tests\Integration\Storage\Adapter\Redis;
 
-use Phalcon\Helper\Exception as HelperException;
+use Phalcon\Support\Exception as HelperException;
 use Phalcon\Storage\Adapter\Redis;
 use Phalcon\Storage\Exception as StorageException;
 use Phalcon\Storage\SerializerFactory;
+use Phalcon\Support\HelperFactory;
 use Phalcon\Tests\Fixtures\Traits\RedisTrait;
 use UnitTester;
 use function getOptionsRedis;
@@ -42,8 +43,9 @@ class IncrementCest
 
         $I->skipTest('Check this');
 
+        $helper     = new HelperFactory();
         $serializer = new SerializerFactory();
-        $adapter    = new Redis($serializer, getOptionsRedis());
+        $adapter    = new Redis($helper, $serializer, getOptionsRedis());
 
         $key    = 'cache-data';
         $actual = $adapter->set($key, 1);
@@ -62,7 +64,6 @@ class IncrementCest
 
         $actual = $adapter->get($key);
         $I->assertEquals($expected, $actual);
-
 
         /**
          * unknown key

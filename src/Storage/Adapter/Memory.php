@@ -15,8 +15,9 @@ namespace Phalcon\Storage\Adapter;
 
 use DateInterval;
 use Exception as BaseException;
-use Phalcon\Helper\Exception as HelperException;
 use Phalcon\Storage\SerializerFactory;
+use Phalcon\Support\Exception as SupportException;
+use Phalcon\Support\HelperFactory;
 
 use function array_keys;
 
@@ -36,14 +37,18 @@ class Memory extends AbstractAdapter
     /**
      * Memory constructor.
      *
+     * @param HelperFactory     $helperFactory
      * @param SerializerFactory $factory
      * @param array             $options
      *
-     * @throws HelperException
+     * @throws SupportException
      */
-    public function __construct(SerializerFactory $factory, array $options = [])
-    {
-        parent::__construct($factory, $options);
+    public function __construct(
+        HelperFactory $helperFactory,
+        SerializerFactory $factory,
+        array $options = []
+    ) {
+        parent::__construct($helperFactory, $factory, $options);
 
         $this->initSerializer();
     }

@@ -15,9 +15,10 @@ namespace Phalcon\Storage\Adapter;
 
 use DateInterval;
 use Exception as BaseException;
-use Phalcon\Helper\Exception as HelperException;
 use Phalcon\Storage\Exception as StorageException;
 use Phalcon\Storage\SerializerFactory;
+use Phalcon\Support\Exception as SupportException;
+use Phalcon\Support\HelperFactory;
 use Redis as RedisService;
 
 use function call_user_func_array;
@@ -40,29 +41,34 @@ class Redis extends AbstractAdapter
     /**
      * Redis constructor.
      *
+     * @param HelperFactory     $helperFactory
      * @param SerializerFactory $factory
      * @param array             $options
+     *
+     * @throws SupportException
      */
-    public function __construct(SerializerFactory $factory, array $options = [])
-    {
+    public function __construct(
+        HelperFactory $helperFactory,
+        SerializerFactory $factory,
+        array $options = []
+    ) {
         /**
          * Lets set some defaults and options here
          */
-        $options['host']       = $options['host'] ?? '127.0.0.1';
-        $options['port']       = (int) $options['port'] ?? 6379;
-        $options['index']      = $options['index'] ?? 0;
-        $options['persistent'] = $options['persistent'] ?? false;
-        $options['auth']       = $options['auth'] ?? '';
-        $options['socket']     = $options['socket'] ?? '';
+        $options['host']       = $helperFactory->get($options, 'host', '127.0.0.1');
+        $options['port']       = $helperFactory->get($options, 'port', 6379, 'int');
+        $options['index']      = $helperFactory->get($options, 'index', 0);
+        $options['persistent'] = $helperFactory->get($options, 'persistent', false);
+        $options['auth']       = $helperFactory->get($options, 'auth', '');
+        $options['socket']     = $helperFactory->get($options, 'socket', '');
 
-        parent::__construct($factory, $options);
+        parent::__construct($helperFactory, $factory, $options);
     }
 
     /**
      * Flushes/clears the cache
      *
      * @return bool
-     * @throws HelperException
      * @throws StorageException
      */
     public function clear(): bool
@@ -77,7 +83,6 @@ class Redis extends AbstractAdapter
      * @param int    $value
      *
      * @return bool|int
-     * @throws HelperException
      * @throws StorageException
      */
     public function decrement(string $key, int $value = 1)
@@ -91,7 +96,6 @@ class Redis extends AbstractAdapter
      * @param string $key
      *
      * @return bool
-     * @throws HelperException
      * @throws StorageException
      */
     public function delete(string $key): bool
@@ -106,7 +110,6 @@ class Redis extends AbstractAdapter
      * @param null   $defaultValue
      *
      * @return mixed|null
-     * @throws HelperException
      * @throws StorageException
      */
     public function get(string $key, $defaultValue = null)
@@ -122,7 +125,6 @@ class Redis extends AbstractAdapter
      * server(s)
      *
      * @return mixed|RedisService
-     * @throws HelperException
      * @throws StorageException
      */
     public function getAdapter()
@@ -151,7 +153,6 @@ class Redis extends AbstractAdapter
      * @param string $prefix
      *
      * @return array
-     * @throws HelperException
      * @throws StorageException
      */
     public function getKeys(string $prefix = ''): array
@@ -168,7 +169,6 @@ class Redis extends AbstractAdapter
      * @param string $key
      *
      * @return bool
-     * @throws HelperException
      * @throws StorageException
      */
     public function has(string $key): bool
@@ -183,7 +183,6 @@ class Redis extends AbstractAdapter
      * @param int    $value
      *
      * @return bool|false|int
-     * @throws HelperException
      * @throws StorageException
      */
     public function increment(string $key, int $value = 1)
@@ -200,7 +199,6 @@ class Redis extends AbstractAdapter
      *
      * @return bool
      * @throws BaseException
-     * @throws HelperException
      */
     public function set(string $key, $value, $ttl = null): bool
     {
@@ -223,7 +221,7 @@ class Redis extends AbstractAdapter
         $auth  = $this->options['auth'];
 
         try {
-            $error = (!empty($auth) && !$connection->auth($auth));
+            $error = (true !== empty($auth) && true !== $connection->auth($auth));
         } catch (BaseException $ex) {
             $error = true;
         }
@@ -259,7 +257,7 @@ class Redis extends AbstractAdapter
 
         $result = call_user_func_array([$connection, $method], $options);
 
-        if (!$result) {
+        if (true !== $result) {
             throw new StorageException(
                 'Could not connect to the Redisd server [' .
                 $this->options['host'] .
@@ -282,7 +280,7 @@ class Redis extends AbstractAdapter
     {
         $index = $this->options['index'];
 
-        if ($index > 0 && !$connection->select($index)) {
+        if ($index > 0 && true !== $connection->select($index)) {
             throw new StorageException(
                 'Redis server selected database failed'
             );
@@ -296,8 +294,6 @@ class Redis extends AbstractAdapter
      * the custom one is set.
      *
      * @param RedisService $connection
-     *
-     * @throws HelperException
      */
     private function setSerializer(RedisService $connection)
     {

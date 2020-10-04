@@ -14,10 +14,11 @@ declare(strict_types=1);
 namespace Phalcon\Tests\Integration\Storage\Adapter\Redis;
 
 use Codeception\Example;
-use Phalcon\Helper\Exception as HelperException;
+use Phalcon\Support\Exception as HelperException;
 use Phalcon\Storage\Adapter\Redis;
 use Phalcon\Storage\Exception as StorageException;
 use Phalcon\Storage\SerializerFactory;
+use Phalcon\Support\HelperFactory;
 use Phalcon\Tests\Fixtures\Traits\RedisTrait;
 use stdClass;
 use UnitTester;
@@ -47,8 +48,9 @@ class GetSetCest
     {
         $I->wantToTest('Storage\Adapter\Redis - get()/set() - ' . $example[0]);
 
+        $helper     = new HelperFactory();
         $serializer = new SerializerFactory();
-        $adapter    = new Redis($serializer, getOptionsRedis());
+        $adapter    = new Redis($helper, $serializer, getOptionsRedis());
 
         $key    = 'cache-data';
         $actual = $adapter->set($key, $example[1]);
@@ -74,8 +76,10 @@ class GetSetCest
     {
         $I->wantToTest('Storage\Adapter\Redis - get()/set() - persistent');
 
+        $helper     = new HelperFactory();
         $serializer = new SerializerFactory();
         $adapter    = new Redis(
+            $helper,
             $serializer,
             array_merge(
                 getOptionsRedis(),
@@ -109,8 +113,10 @@ class GetSetCest
         $I->expectThrowable(
             new StorageException('Redis server selected database failed'),
             function () {
+                $helper     = new HelperFactory();
                 $serializer = new SerializerFactory();
                 $adapter    = new Redis(
+                    $helper,
                     $serializer,
                     array_merge(
                         getOptionsRedis(),
@@ -140,8 +146,10 @@ class GetSetCest
         $I->expectThrowable(
             new StorageException('Failed to authenticate with the Redis server'),
             function () {
+                $helper     = new HelperFactory();
                 $serializer = new SerializerFactory();
                 $adapter    = new Redis(
+                    $helper,
                     $serializer,
                     array_merge(
                         getOptionsRedis(),
@@ -171,9 +179,10 @@ class GetSetCest
     {
         $I->wantToTest('Storage\Adapter\Redis - get()/set() - custom serializer');
 
+        $helper     = new HelperFactory();
         $serializer = new SerializerFactory();
-
-        $adapter = new Redis(
+        $adapter    = new Redis(
+            $helper,
             $serializer,
             array_merge(
                 getOptionsRedis(),

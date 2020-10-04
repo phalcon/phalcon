@@ -13,10 +13,11 @@ declare(strict_types=1);
 
 namespace Phalcon\Tests\Integration\Storage\Adapter\Redis;
 
-use Phalcon\Helper\Exception as HelperException;
+use Phalcon\Support\Exception as HelperException;
 use Phalcon\Storage\Adapter\Redis;
 use Phalcon\Storage\Exception as StorageException;
 use Phalcon\Storage\SerializerFactory;
+use Phalcon\Support\HelperFactory;
 use Phalcon\Tests\Fixtures\Traits\RedisTrait;
 use UnitTester;
 use function getOptionsRedis;
@@ -40,8 +41,9 @@ class GetAdapterCest
     {
         $I->wantToTest('Storage\Adapter\Redis - getAdapter()');
 
+        $helper     = new HelperFactory();
         $serializer = new SerializerFactory();
-        $adapter    = new Redis($serializer, getOptionsRedis());
+        $adapter    = new Redis($helper, $serializer, getOptionsRedis());
 
         $class  = \Redis::class;
         $actual = $adapter->getAdapter();
