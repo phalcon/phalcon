@@ -19,8 +19,8 @@ use function is_string;
 use function restore_error_handler;
 use function serialize;
 use function set_error_handler;
-
 use function unserialize;
+
 use const E_NOTICE;
 
 class Php extends AbstractSerializer
@@ -46,11 +46,16 @@ class Php extends AbstractSerializer
      */
     public function unserialize($data)
     {
+        $this->processSerializable($data);
+        $this->processNotSerializable($data);
+    }
 
-        if (true !== $this->isSerializable($data)) {
-            $this->data = $data;
-        } else {
-
+    /**
+     * @param mixed $data
+     */
+    private function processSerializable($data): void
+    {
+        if (true === $this->isSerializable($data)) {
             if (true !== is_string($data)) {
                 throw new InvalidArgumentException(
                     'Data for the unserializer must of type string'
@@ -73,6 +78,16 @@ class Php extends AbstractSerializer
                 $data = null;
             }
 
+            $this->data = $data;
+        }
+    }
+
+    /**
+     * @param mixed $data
+     */
+    private function processNotSerializable($data): void
+    {
+        if (true !== $this->isSerializable($data)) {
             $this->data = $data;
         }
     }
