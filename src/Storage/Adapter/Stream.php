@@ -21,15 +21,14 @@ use Phalcon\Storage\Exception as StorageException;
 use Phalcon\Storage\SerializerFactory;
 use Phalcon\Support\Exception as SupportException;
 use Phalcon\Support\HelperFactory;
+use Phalcon\Support\Traits\PhpFileTrait;
 use RecursiveDirectoryIterator;
 use RecursiveIteratorIterator;
 
 use function fclose;
 use function file_exists;
-use function file_get_contents;
 use function file_put_contents;
 use function flock;
-use function fopen;
 use function is_array;
 use function is_dir;
 use function mkdir;
@@ -53,6 +52,8 @@ use const LOCK_SH;
  */
 class Stream extends AbstractAdapter
 {
+    use PhpFileTrait;
+
     /**
      * @var string
      */
@@ -292,50 +293,6 @@ class Stream extends AbstractAdapter
         }
 
         return false !== file_put_contents($directory . $key, $payload, LOCK_EX);
-    }
-
-    /**
-     * @param string   $filename
-     * @param string   $mode
-     * @param bool     $use_include_path
-     * @param resource $context
-     *
-     * @return resource|false
-     *
-     * @link https://php.net/manual/en/function.fopen.php
-     */
-    protected function phpFopen($filename, $mode)
-    {
-        return fopen($filename, $mode);
-    }
-
-    /**
-     * @param string   $filename
-     * @param bool     $use_include_path
-     * @param resource $context
-     * @param int      $offset
-     * @param int      $maxlen
-     *
-     * @return string|false
-     *
-     * @link https://php.net/manual/en/function.file-get-contents.php
-     */
-    protected function phpFileGetContents($filename)
-    {
-        return file_get_contents($filename);
-    }
-
-    /**
-     * @param string   $filename
-     * @param resource $context
-     *
-     * @return bool
-     *
-     * @link https://php.net/manual/en/function.unlink.php
-     */
-    protected function phpUnlink($filename)
-    {
-        return unlink($filename);
     }
 
     /**
