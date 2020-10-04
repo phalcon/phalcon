@@ -15,6 +15,7 @@ namespace Phalcon\Tests\Integration\Storage\Adapter\Libmemcached;
 
 use Phalcon\Storage\Adapter\Libmemcached;
 use Phalcon\Storage\SerializerFactory;
+use Phalcon\Support\HelperFactory;
 use Phalcon\Tests\Fixtures\Traits\LibmemcachedTrait;
 use UnitTester;
 use function getOptionsLibmemcached;
@@ -38,8 +39,13 @@ class GetSetDefaultSerializerCest
             'Storage\Adapter\Libmemcached - getDefaultSerializer()/setDefaultSerializer()'
         );
 
+        $helper     = new HelperFactory();
         $serializer = new SerializerFactory();
-        $adapter    = new Libmemcached($serializer, getOptionsLibmemcached());
+        $adapter    = new Libmemcached(
+            $helper,
+            $serializer,
+            getOptionsLibmemcached()
+        );
 
         $expected = 'php';
         $actual   = $adapter->getDefaultSerializer();

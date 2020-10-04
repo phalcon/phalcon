@@ -13,9 +13,10 @@ declare(strict_types=1);
 
 namespace Phalcon\Tests\Integration\Storage\Adapter\Apcu;
 
-use Phalcon\Helper\Exception;
+use Phalcon\Support\Exception;
 use Phalcon\Storage\Adapter\Apcu;
 use Phalcon\Storage\SerializerFactory;
+use Phalcon\Support\HelperFactory;
 use Phalcon\Tests\Fixtures\Traits\ApcuTrait;
 use UnitTester;
 
@@ -38,8 +39,9 @@ class GetSetDefaultSerializerCest
     {
         $I->wantToTest('Storage\Adapter\Apcu - getDefaultSerializer()/setDefaultSerializer()');
 
+        $helper     = new HelperFactory();
         $serializer = new SerializerFactory();
-        $adapter    = new Apcu($serializer);
+        $adapter    = new Apcu($helper, $serializer);
 
         $expected = 'php';
         $actual   = $adapter->getDefaultSerializer();

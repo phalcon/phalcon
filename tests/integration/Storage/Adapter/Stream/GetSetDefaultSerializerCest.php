@@ -13,10 +13,11 @@ declare(strict_types=1);
 
 namespace Phalcon\Tests\Integration\Storage\Adapter\Stream;
 
-use Phalcon\Helper\Exception as HelperException;
+use Phalcon\Support\Exception as HelperException;
 use Phalcon\Storage\Adapter\Stream;
 use Phalcon\Storage\Exception as StorageException;
 use Phalcon\Storage\SerializerFactory;
+use Phalcon\Support\HelperFactory;
 use UnitTester;
 use function outputDir;
 
@@ -38,8 +39,10 @@ class GetSetDefaultSerializerCest
     {
         $I->wantToTest('Storage\Adapter\Stream - getDefaultSerializer()/setDefaultSerializer()');
 
+        $helper     = new HelperFactory();
         $serializer = new SerializerFactory();
         $adapter    = new Stream(
+            $helper,
             $serializer,
             [
                 'storageDir' => outputDir(),

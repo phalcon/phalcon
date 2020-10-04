@@ -13,10 +13,11 @@ declare(strict_types=1);
 
 namespace Phalcon\Tests\Integration\Storage\Adapter\Libmemcached;
 
-use Phalcon\Helper\Exception as HelperExceptions;
+use Phalcon\Support\Exception as HelperExceptions;
 use Phalcon\Storage\Adapter\Libmemcached;
 use Phalcon\Storage\Exception as StorageException;
 use Phalcon\Storage\SerializerFactory;
+use Phalcon\Support\HelperFactory;
 use Phalcon\Tests\Fixtures\Traits\LibmemcachedTrait;
 use UnitTester;
 use function getOptionsLibmemcached;
@@ -40,8 +41,13 @@ class HasCest
     {
         $I->wantToTest('Storage\Adapter\Libmemcached - has()');
 
+        $helper     = new HelperFactory();
         $serializer = new SerializerFactory();
-        $adapter    = new Libmemcached($serializer, getOptionsLibmemcached());
+        $adapter    = new Libmemcached(
+            $helper,
+            $serializer,
+            getOptionsLibmemcached()
+        );
 
         $key = uniqid();
 

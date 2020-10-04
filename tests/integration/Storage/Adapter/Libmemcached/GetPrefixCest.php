@@ -15,6 +15,7 @@ namespace Phalcon\Tests\Integration\Storage\Adapter\Libmemcached;
 
 use Phalcon\Storage\Adapter\Libmemcached;
 use Phalcon\Storage\SerializerFactory;
+use Phalcon\Support\HelperFactory;
 use Phalcon\Tests\Fixtures\Traits\LibmemcachedTrait;
 use UnitTester;
 use function getOptionsLibmemcached;
@@ -35,9 +36,10 @@ class GetPrefixCest
     {
         $I->wantToTest('Storage\Adapter\Libmemcached - getPrefix()');
 
+        $helper     = new HelperFactory();
         $serializer = new SerializerFactory();
-
-        $adapter = new Libmemcached(
+        $adapter    = new Libmemcached(
+            $helper,
             $serializer,
             array_merge(
                 getOptionsLibmemcached(),
@@ -64,8 +66,13 @@ class GetPrefixCest
     {
         $I->wantToTest('Storage\Adapter\Libmemcached - getPrefix() - default');
 
+        $helper     = new HelperFactory();
         $serializer = new SerializerFactory();
-        $adapter    = new Libmemcached($serializer, getOptionsLibmemcached());
+        $adapter    = new Libmemcached(
+            $helper,
+            $serializer,
+            getOptionsLibmemcached()
+        );
 
         $expected = 'ph-memc-';
         $actual   = $adapter->getPrefix();

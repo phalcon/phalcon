@@ -16,15 +16,16 @@ namespace Phalcon\Storage\Adapter;
 use APCuIterator;
 use DateInterval;
 use Exception;
-use Phalcon\Helper\Exception as HelperException;
 use Phalcon\Storage\SerializerFactory;
+use Phalcon\Support\Exception as SupportException;
+use Phalcon\Support\HelperFactory;
 
-use function apcu_dec;
-use function apcu_delete;
-use function apcu_exists;
-use function apcu_fetch;
-use function apcu_inc;
-use function apcu_store;
+use function phpApcu_dec;
+use function phpApcu_delete;
+use function phpApcu_exists;
+use function phpApcu_fetch;
+use function phpApcu_inc;
+use function phpApcu_store;
 use function is_object;
 
 /**
@@ -42,14 +43,18 @@ class Apcu extends AbstractAdapter
     /**
      * Apcu constructor.
      *
+     * @param HelperFactory     $helperFactory
      * @param SerializerFactory $factory
      * @param array             $options
      *
-     * @throws HelperException
+     * @throws SupportException
      */
-    public function __construct(SerializerFactory $factory, array $options = [])
-    {
-        parent::__construct($factory, $options);
+    public function __construct(
+        HelperFactory $helperFactory,
+        SerializerFactory $factory,
+        array $options = []
+    ) {
+        parent::__construct($helperFactory, $factory, $options);
 
         $this->initSerializer();
     }
@@ -63,12 +68,12 @@ class Apcu extends AbstractAdapter
         $apc     = new APCuIterator($pattern);
         $result  = true;
 
-        if (!is_object($apc)) {
+        if (true !== is_object($apc)) {
             return false;
         }
 
         foreach ($apc as $item) {
-            if (!apcu_delete($item['key'])) {
+            if (true !== $this->phpApcuDelete($item['key'])) {
                 $result = false;
             }
         }
@@ -86,7 +91,7 @@ class Apcu extends AbstractAdapter
      */
     public function decrement(string $key, int $value = 1)
     {
-        return apcu_dec($this->getPrefixedKey($key), $value);
+        return $this->phpApcuDec($this->getPrefixedKey($key), $value);
     }
 
     /**
@@ -98,7 +103,7 @@ class Apcu extends AbstractAdapter
      */
     public function delete(string $key): bool
     {
-        return (bool) apcu_delete($this->getPrefixedKey($key));
+        return (bool) $this->phpApcuDelete($this->getPrefixedKey($key));
     }
 
     /**
@@ -111,7 +116,7 @@ class Apcu extends AbstractAdapter
      */
     public function get(string $key, $defaultValue = null)
     {
-        $content = apcu_fetch($this->getPrefixedKey($key));
+        $content = $this->phpApcuFetch($this->getPrefixedKey($key));
 
         return $this->getUnserializedData($content, $defaultValue);
     }
@@ -129,7 +134,7 @@ class Apcu extends AbstractAdapter
         $apc     = new APCuIterator($pattern);
         $results = [];
 
-        if (!is_object($apc)) {
+        if (true !== is_object($apc)) {
             return $results;
         }
 
@@ -149,7 +154,7 @@ class Apcu extends AbstractAdapter
      */
     public function has(string $key): bool
     {
-        return apcu_exists($this->getPrefixedKey($key));
+        return $this->phpApcuExists($this->getPrefixedKey($key));
     }
 
     /**
@@ -162,7 +167,7 @@ class Apcu extends AbstractAdapter
      */
     public function increment(string $key, int $value = 1)
     {
-        return apcu_inc($this->getPrefixedKey($key), $value);
+        return $this->phpApcuInc($this->getPrefixedKey($key), $value);
     }
 
     /**
@@ -177,10 +182,91 @@ class Apcu extends AbstractAdapter
      */
     public function set(string $key, $value, $ttl = null): bool
     {
-        return apcu_store(
+        return $this->phpApcuStore(
             $this->getPrefixedKey($key),
             $this->getSerializedData($value),
             $this->getTtl($ttl)
         );
+    }
+
+    /**
+     * @param string    $key
+     * @param int       $step
+     * @param bool|null $success
+     * @param int       $ttl
+     *
+     * @return int|false
+     *
+     * @link https://php.net/manual/en/function.apcu-dec.php
+     */
+    protected function phpApcuDec($key, $step = 1, &$success = null, $ttl = 0)
+    {
+        return apcu_dec($key, $step, $success, $ttl);
+    }
+
+    /**
+     * @param string|array $key
+     *
+     * @return bool|array
+     *
+     * @link https://php.net/manual/en/function.apcu-delete.php
+     */
+    protected function phpApcuDelete($key)
+    {
+        return apcu_delete($key);
+    }
+
+    /**
+     * @param string|array $key
+     *
+     * @return bool|array
+     *
+     * @link https://php.net/manual/en/function.apcu-exists.php
+     */
+    protected function phpApcuExists($key)
+    {
+        return apcu_exists($key);
+    }
+
+    /**
+     * @param string|array $key
+     * @param bool|null    $success
+     *
+     * @return mixed|false
+     *
+     * @link https://php.net/manual/en/function.apcu-fetch.php
+     */
+    protected function phpApcuFetch($key, &$success = null)
+    {
+        return apcu_fetch($key, $success);
+    }
+
+    /**
+     * @param string    $key
+     * @param int       $step
+     * @param bool|null $success
+     * @param int       $ttl
+     *
+     * @return false|int
+     *
+     * @link https://php.net/manual/en/function.apcu-inc.php
+     */
+    protected function phpApcuInc($key, $step = 1, &$success = null, $ttl = 0)
+    {
+        return apcu_inc($key, $step, $success, $ttl);
+    }
+
+    /**
+     * @param string|array $key
+     * @param mixed        $var
+     * @param int          $ttl
+     *
+     * @return bool|array
+     *
+     * @link https://php.net/manual/en/function.apcu-store.php
+     */
+    protected function phpApcuStore($key, $var, $ttl = 0)
+    {
+        return apcu_store($key, $var, $ttl);
     }
 }

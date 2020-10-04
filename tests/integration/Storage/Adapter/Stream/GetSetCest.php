@@ -13,10 +13,11 @@ declare(strict_types=1);
 
 namespace Phalcon\Tests\Integration\Storage\Adapter\Stream;
 
-use Phalcon\Helper\Exception as HelperException;
+use Phalcon\Support\Exception as HelperException;
 use Phalcon\Storage\Adapter\Stream;
 use Phalcon\Storage\Exception as StorageException;
 use Phalcon\Storage\SerializerFactory;
+use Phalcon\Support\HelperFactory;
 use stdClass;
 use UnitTester;
 use function file_put_contents;
@@ -42,8 +43,10 @@ class GetSetCest
     {
         $I->wantToTest('Storage\Adapter\Stream - set()');
 
+        $helper     = new HelperFactory();
         $serializer = new SerializerFactory();
         $adapter    = new Stream(
+            $helper,
             $serializer,
             [
                 'storageDir' => outputDir(),
@@ -78,8 +81,10 @@ class GetSetCest
     {
         $I->wantToTest('Storage\Adapter\Stream - get()');
 
+        $helper     = new HelperFactory();
         $serializer = new SerializerFactory();
         $adapter    = new Stream(
+            $helper,
             $serializer,
             [
                 'storageDir' => outputDir(),
@@ -124,8 +129,10 @@ class GetSetCest
     {
         $I->wantToTest('Storage\Adapter\Stream - get() - errors');
 
+        $helper     = new HelperFactory();
         $serializer = new SerializerFactory();
         $adapter    = new Stream(
+            $helper,
             $serializer,
             [
                 'storageDir' => outputDir(),

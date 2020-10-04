@@ -17,10 +17,10 @@ use DateInterval;
 use Exception as BaseException;
 use FilesystemIterator;
 use Iterator;
-use Phalcon\Helper\Exception as HelperException;
-use Phalcon\Helper\Str;
 use Phalcon\Storage\Exception as StorageException;
 use Phalcon\Storage\SerializerFactory;
+use Phalcon\Support\Exception as SupportException;
+use Phalcon\Support\HelperFactory;
 use RecursiveDirectoryIterator;
 use RecursiveIteratorIterator;
 
@@ -66,6 +66,7 @@ class Stream extends AbstractAdapter
     /**
      * Stream constructor.
      *
+     * @param HelperFactory     $helperFactory
      * @param SerializerFactory $factory
      * @param array             $options = [
      *                                   'storageDir'        => '',
@@ -75,11 +76,14 @@ class Stream extends AbstractAdapter
      *                                   ]
      *
      * @throws StorageException
-     * @throws HelperException
+     * @throws SupportException
      */
-    public function __construct(SerializerFactory $factory, array $options = [])
-    {
-        $storageDir = $options['storageDir'] ?? '';
+    public function __construct(
+        HelperFactory $helperFactory,
+        SerializerFactory $factory,
+        array $options = []
+    ) {
+        $storageDir = $helperFactory->get($options, 'storageDir', '');
         if (empty($storageDir)) {
             throw new StorageException(
                 'The "storageDir" must be specified in the options'
@@ -89,9 +93,9 @@ class Stream extends AbstractAdapter
         /**
          * Lets set some defaults and options here
          */
-        $this->storageDir = Str::dirSeparator($storageDir);
+        $this->storageDir = $helperFactory->dirSeparator($storageDir);
 
-        parent::__construct($factory, $options);
+        parent::__construct($helperFactory, $factory, $options);
 
         $this->initSerializer();
     }
@@ -105,7 +109,10 @@ class Stream extends AbstractAdapter
         $iterator  = $this->getIterator($this->storageDir);
 
         foreach ($iterator as $file) {
-            if ($file->isFile() && !unlink($file->getPathName())) {
+            if (
+                true === $file->isFile() &&
+                true !== $this->phpUnlink($file->getPathName())
+            ) {
                 $result = false;
             }
         }
@@ -124,7 +131,7 @@ class Stream extends AbstractAdapter
      */
     public function decrement(string $key, int $value = 1)
     {
-        if (!$this->has($key)) {
+        if (true !== $this->has($key)) {
             return false;
         }
 
@@ -143,7 +150,7 @@ class Stream extends AbstractAdapter
      */
     public function delete(string $key): bool
     {
-        if (!$this->has($key)) {
+        if (true !== $this->has($key)) {
             return false;
         }
 
@@ -164,7 +171,7 @@ class Stream extends AbstractAdapter
     {
         $filepath = $this->getFilepath($key);
 
-        if (!file_exists($filepath)) {
+        if (true !== file_exists($filepath)) {
             return $defaultValue;
         }
 
@@ -201,14 +208,14 @@ class Stream extends AbstractAdapter
         $files     = [];
         $directory = $this->getDir();
 
-        if (!file_exists($directory)) {
+        if (true !== file_exists($directory)) {
             return [];
         }
 
         $iterator = $this->getIterator($directory);
 
         foreach ($iterator as $file) {
-            if ($file->isFile()) {
+            if (true === $file->isFile()) {
                 $files[] = $this->prefix . $file->getFilename();
             }
         }
@@ -227,13 +234,12 @@ class Stream extends AbstractAdapter
     {
         $filepath = $this->getFilepath($key);
 
-        if (!file_exists($filepath)) {
+        if (true !== file_exists($filepath)) {
             return false;
         }
 
         $payload = $this->getPayload($filepath);
-
-        if (empty($payload)) {
+        if (true === empty($payload)) {
             return false;
         }
 
@@ -251,7 +257,7 @@ class Stream extends AbstractAdapter
      */
     public function increment(string $key, int $value = 1)
     {
-        if (!$this->has($key)) {
+        if (true !== $this->has($key)) {
             return false;
         }
 
@@ -281,11 +287,55 @@ class Stream extends AbstractAdapter
         $payload   = serialize($payload);
         $directory = $this->getDir($key);
 
-        if (!is_dir($directory)) {
+        if (true !== is_dir($directory)) {
             mkdir($directory, 0777, true);
         }
 
         return false !== file_put_contents($directory . $key, $payload, LOCK_EX);
+    }
+
+    /**
+     * @param string   $filename
+     * @param string   $mode
+     * @param bool     $use_include_path
+     * @param resource $context
+     *
+     * @return resource|false
+     *
+     * @link https://php.net/manual/en/function.fopen.php
+     */
+    protected function phpFopen($filename, $mode)
+    {
+        return fopen($filename, $mode);
+    }
+
+    /**
+     * @param string   $filename
+     * @param bool     $use_include_path
+     * @param resource $context
+     * @param int      $offset
+     * @param int      $maxlen
+     *
+     * @return string|false
+     *
+     * @link https://php.net/manual/en/function.file-get-contents.php
+     */
+    protected function phpFileGetContents($filename)
+    {
+        return file_get_contents($filename);
+    }
+
+    /**
+     * @param string   $filename
+     * @param resource $context
+     *
+     * @return bool
+     *
+     * @link https://php.net/manual/en/function.unlink.php
+     */
+    protected function phpUnlink($filename)
+    {
+        return unlink($filename);
     }
 
     /**
@@ -297,12 +347,14 @@ class Stream extends AbstractAdapter
      */
     private function getDir(string $key = ''): string
     {
-        $dirPrefix   = Str::dirSeparator($this->storageDir . $this->prefix);
-        $dirFromFile = Str::dirFromFile(
+        $dirPrefix    = $this->helperFactory->dirSeparator(
+            $this->storageDir . $this->prefix
+        );
+        $dirFromFile  = $this->helperFactory->dirFromFile(
             str_replace($this->prefix, '', $key)
         );
 
-        return Str::dirSeparator($dirPrefix . $dirFromFile);
+        return $this->helperFactory->dirSeparator($dirPrefix . $dirFromFile);
     }
 
     /**
@@ -347,7 +399,7 @@ class Stream extends AbstractAdapter
     {
         $warning = false;
         $payload = false;
-        $pointer = fopen($filepath, 'r');
+        $pointer = $this->phpFopen($filepath, 'r');
 
         /**
          * Cannot open file
@@ -357,7 +409,7 @@ class Stream extends AbstractAdapter
         }
 
         if (flock($pointer, LOCK_SH)) {
-            $payload = file_get_contents($filepath);
+            $payload = $this->phpFileGetContents($filepath);
         }
 
         fclose($pointer);
@@ -380,7 +432,7 @@ class Stream extends AbstractAdapter
 
         restore_error_handler();
 
-        if ($warning || !is_array($payload)) {
+        if (true === $warning || true !== is_array($payload)) {
             $payload = [];
         }
 

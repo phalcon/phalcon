@@ -16,15 +16,13 @@ namespace Phalcon\Storage\Adapter;
 use DateInterval;
 use DateTime;
 use Exception;
-use Phalcon\Helper\Exception as ExceptionAlias;
-use Phalcon\Storage\Serializer\Php;
 use Phalcon\Storage\Serializer\SerializerInterface;
 use Phalcon\Storage\SerializerFactory;
+use Phalcon\Support\Exception as SupportException;
+use Phalcon\Support\HelperFactory;
 
 use function is_object;
 use function mb_strtolower;
-use function strtolower;
-use function substr_compare;
 
 /**
  * Class AbstractAdapter
@@ -33,6 +31,7 @@ use function substr_compare;
  *
  * @property mixed               $adapter
  * @property string              $defaultSerializer
+ * @property HelperFactory       $helperFactory
  * @property int                 $lifetime
  * @property array               $options
  * @property string              $prefix
@@ -54,6 +53,13 @@ abstract class AbstractAdapter implements AdapterInterface
     protected string $defaultSerializer = 'php';
 
     /**
+     * Serializer Factory
+     *
+     * @var SerializerFactory
+     */
+    protected SerializerFactory $serializerFactory;
+
+    /**
      * Name of the default TTL (time to live)
      *
      * @var int
@@ -65,11 +71,11 @@ abstract class AbstractAdapter implements AdapterInterface
      */
     protected array $options = [];
 
+
     /**
      * @var string
      */
     protected string $prefix = 'ph-memo-';
-
 
     /**
      * Serializer
@@ -79,25 +85,26 @@ abstract class AbstractAdapter implements AdapterInterface
     protected ?SerializerInterface $serializer;
 
     /**
-     * Serializer Factory
-     *
-     * @var SerializerFactory
+     * Helper Factory
+     * @var HelperFactory
      */
-    protected SerializerFactory $serializerFactory;
+    protected HelperFactory $helperFactory;
 
     /**
-     * Sets parameters based on options
-     *
      * AbstractAdapter constructor.
      *
      * @param SerializerFactory $factory
      * @param array             $options
      */
-    protected function __construct(SerializerFactory $factory, array $options = [])
-    {
+    protected function __construct(
+        HelperFactory $helperFactory,
+        SerializerFactory $factory,
+        array $options = []
+    ) {
         /**
          * Lets set some defaults and options here
          */
+        $this->helperFactory     = $helperFactory;
         $this->serializerFactory = $factory;
         $this->defaultSerializer = mb_strtolower(($options['defaultSerializer']) ?? 'php');
         $this->lifetime          = $options['lifetime'] ?? 3600;
@@ -240,11 +247,11 @@ abstract class AbstractAdapter implements AdapterInterface
     protected function getFilteredKeys($keys, string $prefix): array
     {
         $results = [];
-        $pattern = $this->prefix . $prefix;
+        $needle  = $this->prefix . $prefix;
         $keys    = !$keys ? [] : $keys;
 
         foreach ($keys as $key) {
-            if (0 === substr_compare($key, $pattern, 0, mb_strlen($pattern))) {
+            if (true === $this->helperFactory->startsWith($key, $needle)) {
                 $results[] = $key;
             }
         }
@@ -261,9 +268,7 @@ abstract class AbstractAdapter implements AdapterInterface
      */
     protected function getPrefixedKey($key): string
     {
-        $key = (string) $key;
-
-        return $this->prefix . $key;
+        return $this->prefix . ((string) $key);
     }
 
     /**
@@ -330,7 +335,7 @@ abstract class AbstractAdapter implements AdapterInterface
     /**
      * Initializes the serializer
      *
-     * @throws ExceptionAlias
+     * @throws SupportException
      */
     protected function initSerializer(): void
     {

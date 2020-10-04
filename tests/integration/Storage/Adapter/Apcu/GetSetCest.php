@@ -14,9 +14,10 @@ declare(strict_types=1);
 namespace Phalcon\Tests\Integration\Storage\Adapter\Apcu;
 
 use Codeception\Example;
-use Phalcon\Helper\Exception;
+use Phalcon\Support\Exception;
 use Phalcon\Storage\Adapter\Apcu;
 use Phalcon\Storage\SerializerFactory;
+use Phalcon\Support\HelperFactory;
 use Phalcon\Tests\Fixtures\Traits\ApcuTrait;
 use stdClass;
 use UnitTester;
@@ -42,8 +43,9 @@ class GetSetCest
     {
         $I->wantToTest('Storage\Adapter\Apcu - get()/set() - ' . $example[0]);
 
+        $helper     = new HelperFactory();
         $serializer = new SerializerFactory();
-        $adapter    = new Apcu($serializer);
+        $adapter    = new Apcu($helper, $serializer);
 
         $key = uniqid();
 

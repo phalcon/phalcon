@@ -13,10 +13,11 @@ declare(strict_types=1);
 
 namespace Phalcon\Tests\Integration\Storage\Adapter\Stream;
 
-use Phalcon\Helper\Exception as HelperException;
+use Phalcon\Support\Exception as HelperException;
 use Phalcon\Storage\Adapter\Stream;
 use Phalcon\Storage\Exception as StorageException;
 use Phalcon\Storage\SerializerFactory;
+use Phalcon\Support\HelperFactory;
 use UnitTester;
 use function outputDir;
 use function sort;
@@ -39,8 +40,10 @@ class GetKeysCest
     {
         $I->wantToTest('Storage\Adapter\Stream - getKeys()');
 
+        $helper     = new HelperFactory();
         $serializer = new SerializerFactory();
         $adapter    = new Stream(
+            $helper,
             $serializer,
             [
                 'storageDir' => outputDir(),
@@ -105,8 +108,10 @@ class GetKeysCest
     {
         $I->wantToTest('Storage\Adapter\Stream - getKeys() - issue 14190');
 
+        $helper     = new HelperFactory();
         $serializer = new SerializerFactory();
         $adapter    = new Stream(
+            $helper,
             $serializer,
             [
                 'storageDir' => outputDir(),
@@ -155,8 +160,10 @@ class GetKeysCest
     {
         $I->wantToTest('Storage\Adapter\Stream - getKeys() - prefix');
 
+        $helper     = new HelperFactory();
         $serializer = new SerializerFactory();
         $adapter    = new Stream(
+            $helper,
             $serializer,
             [
                 'storageDir' => outputDir(),

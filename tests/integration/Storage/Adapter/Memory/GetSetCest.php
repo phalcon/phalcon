@@ -14,9 +14,10 @@ declare(strict_types=1);
 namespace Phalcon\Tests\Integration\Storage\Adapter\Memory;
 
 use Codeception\Example;
-use Phalcon\Helper\Exception as HelperException;
+use Phalcon\Support\Exception as HelperException;
 use Phalcon\Storage\Adapter\Memory;
 use Phalcon\Storage\SerializerFactory;
+use Phalcon\Support\HelperFactory;
 use stdClass;
 use UnitTester;
 
@@ -39,8 +40,9 @@ class GetSetCest
     {
         $I->wantToTest('Storage\Adapter\Memory - get()/set() - ' . $example[0]);
 
+        $helper     = new HelperFactory();
         $serializer = new SerializerFactory();
-        $adapter    = new Memory($serializer);
+        $adapter    = new Memory($helper, $serializer);
 
         $key = uniqid();
 

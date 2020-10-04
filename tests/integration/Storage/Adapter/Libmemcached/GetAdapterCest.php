@@ -14,10 +14,11 @@ declare(strict_types=1);
 namespace Phalcon\Tests\Integration\Storage\Adapter\Libmemcached;
 
 use Memcached;
-use Phalcon\Helper\Exception as HelperException;
+use Phalcon\Support\Exception as HelperException;
 use Phalcon\Storage\Adapter\Libmemcached;
 use Phalcon\Storage\Exception as StorageException;
 use Phalcon\Storage\SerializerFactory;
+use Phalcon\Support\HelperFactory;
 use Phalcon\Tests\Fixtures\Traits\LibmemcachedTrait;
 use UnitTester;
 use function getOptionsLibmemcached;
@@ -41,8 +42,13 @@ class GetAdapterCest
     {
         $I->wantToTest('Storage\Adapter\Libmemcached - getAdapter()');
 
+        $helper     = new HelperFactory();
         $serializer = new SerializerFactory();
-        $adapter    = new Libmemcached($serializer, getOptionsLibmemcached());
+        $adapter    = new Libmemcached(
+            $helper,
+            $serializer,
+            getOptionsLibmemcached()
+        );
 
         $expected = Memcached::class;
         $actual   = $adapter->getAdapter();
