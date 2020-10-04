@@ -124,6 +124,16 @@ class HelperFactory
     use FactoryTrait;
 
     /**
+     * FactoryTrait constructor.
+     *
+     * @param array $services
+     */
+    public function __construct(array $services = [])
+    {
+        $this->init($services);
+    }
+
+    /**
      * @param string $name
      * @param array  $arguments
      *
