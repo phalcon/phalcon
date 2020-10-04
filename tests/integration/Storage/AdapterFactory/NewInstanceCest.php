@@ -14,7 +14,6 @@ declare(strict_types=1);
 namespace Phalcon\Tests\Integration\Storage\AdapterFactory;
 
 use Codeception\Example;
-use Phalcon\Helper\Exception;
 use Phalcon\Storage\Adapter\Apcu;
 use Phalcon\Storage\Adapter\Libmemcached;
 use Phalcon\Storage\Adapter\Memory;
@@ -22,6 +21,8 @@ use Phalcon\Storage\Adapter\Redis;
 use Phalcon\Storage\Adapter\Stream;
 use Phalcon\Storage\AdapterFactory;
 use Phalcon\Storage\SerializerFactory;
+use Phalcon\Support\Exception;
+use Phalcon\Support\HelperFactory;
 use UnitTester;
 
 use function getOptionsLibmemcached;
@@ -47,8 +48,9 @@ class NewInstanceCest
     {
         $I->wantToTest('Storage\AdapterFactory - newInstance() - ' . $example[0]);
 
+        $helper     = new HelperFactory();
         $serializer = new SerializerFactory();
-        $adapter    = new AdapterFactory($serializer);
+        $adapter    = new AdapterFactory($helper, $serializer);
 
         $service = $adapter->newInstance($example[0], $example[2]);
 
@@ -72,8 +74,9 @@ class NewInstanceCest
         $I->expectThrowable(
             new Exception('Service unknown is not registered'),
             function () {
+                $helper     = new HelperFactory();
                 $serializer = new SerializerFactory();
-                $adapter    = new AdapterFactory($serializer);
+                $adapter    = new AdapterFactory($helper, $serializer);
 
                 $service = $adapter->newInstance('unknown');
             }
