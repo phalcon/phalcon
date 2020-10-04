@@ -18,7 +18,6 @@ use InvalidArgumentException;
 use function base64_decode;
 use function base64_encode;
 use function is_string;
-use function parent;
 
 /**
  * Class Base64
@@ -32,50 +31,32 @@ class Base64 extends AbstractSerializer
      *
      * @return string
      */
-    public function serialize(): string
+    public function serialize()
     {
-        if (!is_string($this->data)) {
+        if (true !== is_string($this->data)) {
             throw new InvalidArgumentException(
                 'Data for the serializer must of type string'
             );
         }
 
-        return parent::serialize();
+        return base64_encode($this->data);
     }
 
     /**
      * Unserializes data
      *
      * @param string $data
+     *
+     * @retrun void
      */
-    public function unserialize($data): void
+    public function unserialize($data)
     {
-        if (!is_string($data)) {
+        if (true !== is_string($this->data)) {
             throw new InvalidArgumentException(
                 'Data for the unserializer must of type string'
             );
         }
 
-        parent::unserialize($data);
-    }
-
-    /**
-     * @param mixed $data
-     *
-     * @return false|string
-     */
-    protected function internalSerialize($data)
-    {
-        return base64_encode($data);
-    }
-
-    /**
-     * @param mixed $data
-     *
-     * @return string
-     */
-    protected function internalUnserlialize($data)
-    {
-        return base64_decode($data);
+        $this->data = base64_decode($data);
     }
 }

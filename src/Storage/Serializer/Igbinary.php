@@ -28,22 +28,44 @@ use const E_WARNING;
 class Igbinary extends AbstractSerializer
 {
     /**
-     * @param mixed $data
+     * Serializes data
      *
-     * @return mixed
+     * @return string
      */
-    protected function internalSerialize($data)
+    public function serialize()
     {
-        return igbinary_serialize($data);
+        if (true !== $this->isSerializable($this->data)) {
+            return $this->data;
+        }
+
+        return igbinary_serialize($this->data);
     }
 
     /**
-     * @param mixed $data
+     * Unserializes data
      *
-     * @return mixed
+     * @param string $data
+     *
+     * @return void
      */
-    protected function internalUnserlialize($data)
+    public function unserialize($data)
     {
-        return igbinary_unserialize($data);
+        $warning = false;
+        set_error_handler(
+            function () use (&$warning) {
+                $warning = true;
+            },
+            E_WARNING
+        );
+
+        $data = igbinary_unserialize($data);
+
+        restore_error_handler();
+
+        if (true === $warning) {
+            $data = null;
+        }
+
+        $this->data = $data;
     }
 }

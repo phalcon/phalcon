@@ -16,53 +16,64 @@ namespace Phalcon\Storage\Serializer;
 use InvalidArgumentException;
 
 use function is_string;
+use function restore_error_handler;
 use function serialize;
-use function unserialize;
+use function set_error_handler;
 
+use function unserialize;
 use const E_NOTICE;
 
-/**
- * Class Php
- *
- * @package Phalcon\Storage\Serializer
- */
 class Php extends AbstractSerializer
 {
-    protected int $errorType = E_NOTICE;
+    /**
+     * Serializes data
+     *
+     * @return string|null
+     */
+    public function serialize()
+    {
+        if (true !== $this->isSerializable($this->data)) {
+            return $this->data;
+        }
+
+        return serialize($this->data);
+    }
 
     /**
      * Unserializes data
      *
-     * @param mixed $data
+     * @param string $data
      */
-    public function unserialize($data): void
+    public function unserialize($data)
     {
-        if (false !== $this->isSerializable($data)) {
+
+        if (true !== $this->isSerializable($data)) {
+            $this->data = $data;
+        } else {
+
             if (true !== is_string($data)) {
                 throw new InvalidArgumentException(
                     'Data for the unserializer must of type string'
                 );
             }
 
-            parent::unserialize($data);
+            $warning = false;
+            set_error_handler(
+                function () use (&$warning) {
+                    $warning = true;
+                },
+                E_NOTICE
+            );
+
+            $data = unserialize($data);
+
+            restore_error_handler();
+
+            if (true === $warning) {
+                $data = null;
+            }
+
+            $this->data = $data;
         }
-    }
-
-    /**
-     * @param mixed $data
-     *
-     * @return string
-     */
-    protected function internalSerialize($data)
-    {
-        return serialize($data);
-    }
-
-    /**
-     * @param mixed $data
-     */
-    protected function internalUnserlialize($data)
-    {
-        return unserialize($data);
     }
 }
