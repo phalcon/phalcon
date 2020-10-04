@@ -46,32 +46,6 @@ class SerializeCest
         $I->assertEquals($expected, $actual);
     }
 
-    /**
-     * Tests Phalcon\Storage\Serializer\Php :: serialize() return empty string
-     *
-     * @param UnitTester $I
-     *
-     * @author Phalcon Team <team@phalcon.io>
-     * @since  2020-09-09
-     */
-    public function storageSerializerPhpSerializeReturnEmptyString(UnitTester $I)
-    {
-        $I->wantToTest('Storage\Serializer\Php - serialize() - return empty string');
-
-        $serializer = Stub::make(
-            Php::class,
-            [
-                'internalSerialize' => false,
-            ]
-        );
-
-        $serializer->setData('abcdef');
-        $expected = '';
-        $actual   = $serializer->serialize();
-
-        $I->assertEquals($expected, $actual);
-    }
-
     private function getExamples(): array
     {
         return [
