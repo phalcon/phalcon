@@ -20,6 +20,7 @@ use Phalcon\Support\Exception;
 use Phalcon\Support\HelperFactory;
 use Phalcon\Tests\Fixtures\Traits\ApcuTrait;
 use UnitTester;
+
 use function uniqid;
 
 class ClearCest
@@ -100,7 +101,7 @@ class ClearCest
     }
 
     /**
-     * Tests Phalcon\Storage\Adapter\Apcu :: clear()
+     * Tests Phalcon\Storage\Adapter\Apcu :: clear() - iterator error
      *
      * @param UnitTester $I
      *
@@ -109,9 +110,50 @@ class ClearCest
      * @author Phalcon Team <team@phalcon.io>
      * @since  2020-09-09
      */
-    public function storageAdapterApcuClearFailDelete(UnitTester $I)
+    public function storageAdapterApcuClearIteratorError(UnitTester $I)
     {
-        $I->wantToTest('Storage\Adapter\Apcu - clear() - fail delete');
+        $I->wantToTest('Storage\Adapter\Apcu - clear() - iterator error');
+
+        $helper     = new HelperFactory();
+        $serializer = new SerializerFactory();
+        $adapter    = Stub::construct(
+            Apcu::class,
+            [
+                $helper,
+                $serializer
+            ],
+            [
+                'phpApcuIterator' => false,
+            ]
+        );
+
+        $key1 = uniqid();
+        $key2 = uniqid();
+        $adapter->set($key1, 'test');
+        $actual = $adapter->has($key1);
+        $I->assertTrue($actual);
+
+        $adapter->set($key2, 'test');
+        $actual = $adapter->has($key2);
+        $I->assertTrue($actual);
+
+        $actual = $adapter->clear();
+        $I->assertFalse($actual);
+    }
+
+    /**
+     * Tests Phalcon\Storage\Adapter\Apcu :: clear() - delete error
+     *
+     * @param UnitTester $I
+     *
+     * @throws Exception
+     *
+     * @author Phalcon Team <team@phalcon.io>
+     * @since  2020-09-09
+     */
+    public function storageAdapterApcuClearDeleteError(UnitTester $I)
+    {
+        $I->wantToTest('Storage\Adapter\Apcu - clear() - delete error');
 
         $helper     = new HelperFactory();
         $serializer = new SerializerFactory();

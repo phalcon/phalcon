@@ -13,6 +13,7 @@ declare(strict_types=1);
 
 namespace Phalcon\Tests\Integration\Storage\Adapter\Apcu;
 
+use Codeception\Stub;
 use Phalcon\Support\Exception;
 use Phalcon\Storage\Adapter\Apcu;
 use Phalcon\Storage\SerializerFactory;
@@ -71,5 +72,47 @@ class GetKeysCest
         $actual   = $adapter->getKeys("one");
         sort($actual);
         $I->assertEquals($expected, $actual);
+    }
+
+    /**
+     * Tests Phalcon\Storage\Adapter\Apcu :: getKeys() - iterator error
+     *
+     * @param UnitTester $I
+     *
+     * @throws Exception
+     *
+     * @author Phalcon Team <team@phalcon.io>
+     * @since  2020-09-09
+     */
+    public function storageAdapterApcuGetKeysIteratorError(UnitTester $I)
+    {
+        $I->wantToTest('Storage\Adapter\Apcu - getKeys() - iterator error');
+
+        $helper     = new HelperFactory();
+        $serializer = new SerializerFactory();
+        $adapter    = Stub::construct(
+            Apcu::class,
+            [
+                $helper,
+                $serializer,
+            ],
+            [
+                'phpApcuIterator' => false,
+            ]
+        );
+
+        $adapter->set('key-1', 'test');
+        $adapter->set('key-2', 'test');
+        $adapter->set('one-1', 'test');
+        $adapter->set('one-2', 'test');
+
+        $I->assertTrue($adapter->has('key-1'));
+        $I->assertTrue($adapter->has('key-2'));
+        $I->assertTrue($adapter->has('one-1'));
+        $I->assertTrue($adapter->has('one-2'));
+
+        $actual   = $adapter->getKeys();
+        $I->assertIsArray($actual);
+        $I->assertEmpty($actual);
     }
 }

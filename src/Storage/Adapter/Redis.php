@@ -206,8 +206,7 @@ class Redis extends AbstractAdapter
             $key,
             $this->getSerializedData($value),
             $this->getTtl($ttl)
-        )
-            ;
+        );
     }
 
     /**
