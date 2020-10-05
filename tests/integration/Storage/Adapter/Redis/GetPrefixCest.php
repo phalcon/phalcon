@@ -18,6 +18,7 @@ use Phalcon\Storage\SerializerFactory;
 use Phalcon\Support\HelperFactory;
 use Phalcon\Tests\Fixtures\Traits\RedisTrait;
 use UnitTester;
+
 use function getOptionsRedis;
 
 class GetPrefixCest

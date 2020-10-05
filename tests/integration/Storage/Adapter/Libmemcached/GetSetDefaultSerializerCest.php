@@ -18,6 +18,7 @@ use Phalcon\Storage\SerializerFactory;
 use Phalcon\Support\HelperFactory;
 use Phalcon\Tests\Fixtures\Traits\LibmemcachedTrait;
 use UnitTester;
+
 use function getOptionsLibmemcached;
 
 class GetSetDefaultSerializerCest

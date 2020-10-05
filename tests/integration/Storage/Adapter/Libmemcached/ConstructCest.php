@@ -21,6 +21,7 @@ use Phalcon\Support\HelperFactory;
 use Phalcon\Tests\Fixtures\Storage\Adapter\Libmemcached;
 use Phalcon\Tests\Fixtures\Traits\LibmemcachedTrait;
 use UnitTester;
+
 use function getOptionsLibmemcached;
 
 class ConstructCest

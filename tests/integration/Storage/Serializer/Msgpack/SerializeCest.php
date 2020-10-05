@@ -16,6 +16,7 @@ namespace Phalcon\Tests\Integration\Storage\Serializer\Msgpack;
 use Phalcon\Storage\Serializer\Msgpack;
 use stdClass;
 use UnitTester;
+
 use function msgpack_pack;
 
 class SerializeCest
