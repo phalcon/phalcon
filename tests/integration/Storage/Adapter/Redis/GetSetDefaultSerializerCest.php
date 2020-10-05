@@ -17,6 +17,7 @@ use Phalcon\Storage\Adapter\Redis;
 use Phalcon\Storage\SerializerFactory;
 use Phalcon\Support\HelperFactory;
 use UnitTester;
+
 use function getOptionsRedis;
 
 class GetSetDefaultSerializerCest

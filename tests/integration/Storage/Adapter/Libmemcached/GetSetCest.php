@@ -22,6 +22,7 @@ use Phalcon\Support\HelperFactory;
 use Phalcon\Tests\Fixtures\Traits\LibmemcachedTrait;
 use stdClass;
 use UnitTester;
+
 use function getOptionsLibmemcached;
 
 class GetSetCest

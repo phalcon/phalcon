@@ -22,6 +22,7 @@ use Phalcon\Support\HelperFactory;
 use Phalcon\Tests\Fixtures\Traits\RedisTrait;
 use stdClass;
 use UnitTester;
+
 use function array_merge;
 use function getOptionsRedis;
 use function uniqid;
