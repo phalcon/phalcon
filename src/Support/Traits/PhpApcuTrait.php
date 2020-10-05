@@ -13,6 +13,8 @@ declare(strict_types=1);
 
 namespace Phalcon\Support\Traits;
 
+use APCuIterator;
+
 use function apcu_dec;
 use function apcu_delete;
 use function apcu_exists;
@@ -92,6 +94,16 @@ trait PhpApcuTrait
     protected function phpApcuInc($key, $step = 1, &$success = null, $ttl = 0)
     {
         return apcu_inc($key, $step, $success, $ttl);
+    }
+
+    /**
+     * @param string $pattern
+     *
+     * @return APCuIterator|false
+     */
+    protected function phpApcuIterator(string $pattern)
+    {
+        return new APCuIterator($pattern);
     }
 
     /**
