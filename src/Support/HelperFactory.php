@@ -56,9 +56,11 @@ use Phalcon\Support\Str\IsPalindrome;
 use Phalcon\Support\Str\IsUpper;
 use Phalcon\Support\Str\Len;
 use Phalcon\Support\Str\Lower;
+use Phalcon\Support\Str\Prefix;
 use Phalcon\Support\Str\Random;
 use Phalcon\Support\Str\ReduceSlashes;
 use Phalcon\Support\Str\StartsWith;
+use Phalcon\Support\Str\Suffix;
 use Phalcon\Support\Str\Ucwords;
 use Phalcon\Support\Str\Underscore;
 use Phalcon\Support\Str\Upper;
@@ -112,9 +114,11 @@ use function call_user_func_array;
  * @method isUpper(string $text, string $encoding = 'UTF-8'): bool
  * @method len(string $text, string $encoding = 'UTF-8'): int
  * @method lower(string $text, string $encoding = 'UTF-8'): string
+ * @method prefix($text, string $prefix): string
  * @method random(int $type = 0, int $length = 8): string
  * @method reduceSlashes(string $text): string
  * @method startsWith(string $haystack, string $needle, bool $ignoreCase = true): bool
+ * @method suffix($text, string $suffix): string
  * @method ucwords(string $text, string $encoding = 'UTF-8'): string
  * @method underscore(string $text): string
  * @method upper(string $text, string $encoding = 'UTF-8'): string
@@ -209,9 +213,11 @@ class HelperFactory
             'isUpper'       => IsUpper::class,
             'len'           => Len::class,
             'lower'         => Lower::class,
+            'prefix'        => Prefix::class,
             'random'        => Random::class,
             'reduceSlashes' => ReduceSlashes::class,
             'startsWith'    => StartsWith::class,
+            'suffix'        => Suffix::class,
             'ucwords'       => Ucwords::class,
             'underscore'    => Underscore::class,
             'upper'         => Upper::class,

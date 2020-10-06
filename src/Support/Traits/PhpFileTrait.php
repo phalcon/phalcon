@@ -13,7 +13,9 @@ declare(strict_types=1);
 
 namespace Phalcon\Support\Traits;
 
+use function file_exists;
 use function file_get_contents;
+use function file_put_contents;
 use function fopen;
 use function unlink;
 
@@ -40,6 +42,18 @@ trait PhpFileTrait
     }
 
     /**
+     * @param string $filename
+     *
+     * @return bool
+     *
+     * @link https://php.net/manual/en/function.file-exists.php
+     */
+    protected function phpFileExists($filename)
+    {
+        return file_exists($filename);
+    }
+
+    /**
      * @param string   $filename
      * @param bool     $use_include_path
      * @param resource $context
@@ -53,6 +67,25 @@ trait PhpFileTrait
     protected function phpFileGetContents($filename)
     {
         return file_get_contents($filename);
+    }
+
+    /**
+     * @param string   $filename
+     * @param mixed    $data
+     * @param int      $flags
+     * @param resource $context
+     *
+     * @return int|false
+     *
+     * @link https://php.net/manual/en/function.file-put-contents.php
+     */
+    protected function phpFilePutContents(
+        $filename,
+        $data,
+        $flags = 0,
+        $context = null
+    ) {
+        return file_put_contents($filename, $data, $flags, $context);
     }
 
     /**
