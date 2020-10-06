@@ -34,51 +34,6 @@ use SessionHandlerInterface;
 class Noop implements SessionHandlerInterface
 {
     /**
-     * The connection of some adapters
-     */
-    protected connection;
-
-    /**
-     * Session options
-     *
-     * @var array
-     */
-    protected options = [];
-
-    /**
-     * Session prefix
-     *
-     * @var string
-     */
-    protected prefix = "";
-
-    /**
-     * Time To Live
-     *
-     * @var int
-     */
-    protected ttl = 8600;
-
-    /**
-     * Constructor
-     *
-     * @param array options = [
-     *     'prefix' => ''
-     * ]
-     */
-    public function __construct(array! options = [])
-    {
-        var prefix;
-
-        if !fetch prefix, options["prefix"] {
-            let prefix = "";
-        }
-
-        let this->prefix  = prefix,
-            this->options = options;
-    }
-
-    /**
      * Close
      */
     public function close(): bool
@@ -88,51 +43,63 @@ class Noop implements SessionHandlerInterface
 
     /**
      * Destroy
+     *
+     * @param string $sessionId
+     *
+     * @return bool
      */
-    public function destroy(var id): bool
+    public function destroy($sessionId): bool
     {
         return true;
     }
 
     /**
      * Garbage Collector
+     *
+     * @param int $maxlifetime
+     *
+     * @return bool
      */
-    public function gc(var maxlifetime): bool
+    public function gc($maxlifetime): bool
     {
         return true;
     }
 
     /**
      * Read
+     *
+     * @param string $sessionId
+     *
+     * @return string
      */
-    public function read(var id): string
+    public function read($sessionId): string
     {
-        return "";
+        return '';
     }
 
     /**
      * Open
+     *
+     * @param string $savePath
+     * @param string $sessionName
+     *
+     * @return bool
      */
-    public function open(var savePath, var sessionName): bool
+    public function open($savePath, $sessionName): bool
     {
         return true;
     }
 
     /**
      * Write
+     *
+     * @param string $sessionId
+     * @param string $data
+     *
+     * @return bool
      */
-    public function write(var id, var data): bool
+    public function write($sessionId, $data): bool
     {
         return true;
-    }
-
-    /**
-     * Helper method to get the name prefixed
-     */
-    protected function getPrefixedName(var name): string
-    {
-        let name = (string) name;
-
-        return this->prefix . name;
     }
 }
