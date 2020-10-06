@@ -27,8 +27,6 @@ use RecursiveDirectoryIterator;
 use RecursiveIteratorIterator;
 
 use function fclose;
-use function file_exists;
-use function file_put_contents;
 use function flock;
 use function is_dir;
 use function mkdir;
@@ -170,7 +168,7 @@ class Stream extends AbstractAdapter
     {
         $filepath = $this->getFilepath($key);
 
-        if (true !== file_exists($filepath)) {
+        if (true !== $this->phpFileExists($filepath)) {
             return $defaultValue;
         }
 
@@ -207,7 +205,7 @@ class Stream extends AbstractAdapter
         $files     = [];
         $directory = $this->getDir();
 
-        if (true !== file_exists($directory)) {
+        if (true !== $this->phpFileExists($directory)) {
             return [];
         }
 
@@ -233,7 +231,7 @@ class Stream extends AbstractAdapter
     {
         $filepath = $this->getFilepath($key);
 
-        if (true !== file_exists($filepath)) {
+        if (true !== $this->phpFileExists($filepath)) {
             return false;
         }
 
@@ -290,7 +288,9 @@ class Stream extends AbstractAdapter
             mkdir($directory, 0777, true);
         }
 
-        return false !== file_put_contents($directory . $key, $payload, LOCK_EX);
+        return (
+            false !== $this->phpFilePutContents($directory . $key, $payload, LOCK_EX)
+        );
     }
 
     /**
