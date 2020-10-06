@@ -13,39 +13,50 @@ declare(strict_types=1);
 
 namespace Phalcon\Session;
 
-use InvalidArgumentException;
-use RuntimeException;
 use SessionHandlerInterface;
 use Phalcon\Di\AbstractInjectionAware;
 use Phalcon\Di\DiInterface;
-use Phalcon\Helper\Arr;
+
+use function headers_sent;
+use function preg_match;
+use function session_destroy;
+use function session_id;
+use function session_name;
+use function session_regenerate_id;
+use function session_start;
+use function session_status;
 
 /**
  * Phalcon\Session\Manager
  *
  * Session manager class
+ *
+ * @property SessionHandlerInterface|null $adapter
+ * @property string                       $name
+ * @property array                        $options
+ * @property string                       $uniqueId
  */
-class Manager extends AbstractInjectionAware implements ManagerInterface
+class Manager implements ManagerInterface
 {
     /**
      * @var SessionHandlerInterface|null
      */
-    private adapter = null;
+    private ?SessionHandlerInterface $adapter = null;
 
     /**
      * @var string
      */
-    private name = "";
+    private string $name = '';
 
     /**
      * @var array
      */
-    private options = [];
+    private array $options = [];
 
     /**
      * @var string
      */
-    private uniqueId = "";
+    private string $uniqueId = '';
 
     /**
      * Manager constructor.
@@ -54,41 +65,54 @@ class Manager extends AbstractInjectionAware implements ManagerInterface
      *     'uniqueId' => null
      * ]
      */
-    public function __construct(array options = [])
+    public function __construct(array $options = [])
     {
-        this->setOptions(options);
+        $this->setOptions($options);
     }
 
     /**
      * Alias: Gets a session variable from an application context
+     *
+     * @param string $key
+     *
+     * @return mixed
      */
-    public function __get(string key): var
+    public function __get($key)
     {
-        return this->get(key);
+        return $this->get($key);
     }
 
     /**
      * Alias: Check whether a session variable is set in an application context
+     *
+     * @param string $key
+     *
+     * @return bool
      */
-    public function __isset(string key): bool
+    public function __isset(string $key): bool
     {
-        return this->has(key);
+        return $this->has($key);
     }
 
     /**
      * Alias: Sets a session variable in an application context
+     *
+     * @param string $key
+     * @param mixed  $value
      */
-    public function __set(string key, value): void
+    public function __set(string $key, $value): void
     {
-        this->set(key, value);
+        $this->set($key, $value);
     }
 
     /**
      * Alias: Removes a session variable from an application context
+     *
+     * @param string $key
      */
-    public function __unset(string key): void
+    public function __unset(string $key): void
     {
-        this->remove(key);
+        $this->remove($key);
     }
 
     /**
@@ -96,15 +120,17 @@ class Manager extends AbstractInjectionAware implements ManagerInterface
      */
     public function destroy(): void
     {
-        if true === this->exists() {
+        if (true === $this->exists()) {
             session_destroy();
 
-            let _SESSION = [];
+            $_SESSION = [];
         }
     }
 
     /**
      * Check whether the session has been started
+     *
+     * @return bool
      */
     public function exists(): bool
     {
@@ -113,36 +139,46 @@ class Manager extends AbstractInjectionAware implements ManagerInterface
 
     /**
      * Gets a session variable from an application context
+     *
+     * @param string     $key
+     * @param mixed|null $defaultValue
+     * @param bool       $remove
+     *
+     * @return mixed|null
      */
-    public function get(string key, var defaultValue = null, bool remove = false): var
+    public function get(string $key, $defaultValue = null, bool $remove = false)
     {
-        var uniqueKey, value = null;
+        $value = null;
 
-        if false === this->exists() {
+        if (false === $this->exists()) {
             // To use $_SESSION variable we need to start session first
-            return value;
+            return $value;
         }
 
-        let uniqueKey = this->getUniqueKey(key),
-            value     = Arr::get(_SESSION, uniqueKey, defaultValue);
+        $uniqueKey = $this->getUniqueKey($key);
+        $value     = $_SESSION[$uniqueKey] ?? $defaultValue;
 
-        if remove {
-            unset(_SESSION[uniqueKey]);
+        if (true === $remove) {
+            unset($_SESSION[$uniqueKey]);
         }
 
-        return value;
+        return $value;
     }
 
     /**
      * Returns the stored session adapter
+     *
+     * @return SessionHandlerInterface
      */
-    public function getAdapter(): <SessionHandlerInterface>
+    public function getAdapter(): SessionHandlerInterface
     {
-        return this->adapter;
+        return $this->adapter;
     }
 
     /**
      * Returns the session id
+     *
+     * @return string
      */
     public function getId(): string
     {
@@ -151,115 +187,128 @@ class Manager extends AbstractInjectionAware implements ManagerInterface
 
     /**
      * Returns the name of the session
+     *
+     * @return string
      */
     public function getName(): string
     {
-        if "" !== this->name {
-            let this->name = session_name();
+        if ('' !== $this->name) {
+            $this->name = session_name();
         }
 
-        return this->name;
+        return $this->name;
     }
 
     /**
      * Check whether a session variable is set in an application context
+     *
+     * @param string $key
+     *
+     * @return bool
      */
-    public function has(string key): bool
+    public function has(string $key): bool
     {
-        var uniqueKey;
-
-        if false === this->exists() {
+        if (false === $this->exists()) {
             // To use $_SESSION variable we need to start session first
             return false;
         }
 
-        let uniqueKey = this->getUniqueKey(key);
+        $uniqueKey = $this->getUniqueKey($key);
 
-        return isset(_SESSION[uniqueKey]);
+        return isset($_SESSION[$uniqueKey]);
     }
 
     /**
      * Get internal options
+     *
+     * @return array
      */
     public function getOptions(): array
     {
-        return this->options;
+        return $this->options;
     }
 
     /**
      * Regenerates the session id using the adapter.
+     *
+     * @param bool $deleteOldSession
+     *
+     * @return ManagerInterface
      */
-    public function regenerateId(deleteOldSession = true): <ManagerInterface>
+    public function regenerateId($deleteOldSession = true): ManagerInterface
     {
-        var delete;
-
-        let delete = (bool) deleteOldSession;
-
-        if true === this->exists() {
-            session_regenerate_id(delete);
+        if (true === $this->exists()) {
+            session_regenerate_id($deleteOldSession);
         }
 
-        return this;
+        return $this;
     }
 
     /**
      * Removes a session variable from an application context
+     *
+     * @param string $key
      */
-    public function remove(string key): void
+    public function remove(string $key): void
     {
-        if false === this->exists() {
-            // To use $_SESSION variable we need to start session first
-            return;
+        // To use $_SESSION variable we need to start session first
+        if (true === $this->exists()) {
+            $uniqueKey = $this->getUniqueKey($key);
+
+            unset($_SESSION[$uniqueKey]);
         }
-
-        var uniqueKey;
-
-        let uniqueKey = this->getUniqueKey(key);
-
-        unset(_SESSION[uniqueKey]);
     }
 
     /**
      * Sets a session variable in an application context
+     *
+     * @param string $key
+     * @param mixed  $value
      */
-    public function set(string key, value): void
+    public function set(string $key, $value): void
     {
-        var uniqueKey;
+        // To use $_SESSION variable we need to start session first
+        if (true === $this->exists()) {
+            $uniqueKey = $this->getUniqueKey($key);
 
-        if false === this->exists() {
-            // To use $_SESSION variable we need to start session first
-            return;
+            $_SESSION[$uniqueKey] = $value;
         }
-
-         let uniqueKey          = this->getUniqueKey(key),
-            _SESSION[uniqueKey] = value;
     }
 
     /**
      * Set the adapter for the session
+     *
+     * @param SessionHandlerInterface $adapter
+     *
+     * @return ManagerInterface
      */
-    public function setAdapter(<SessionHandlerInterface> adapter): <ManagerInterface>
+    public function setAdapter(SessionHandlerInterface $adapter): ManagerInterface
     {
-        let this->adapter = adapter;
+        $this->adapter = $adapter;
 
-        return this;
+        return $this;
     }
 
     /**
      * Set session Id
+     *
+     * @param string $sessionId
+     *
+     * @return ManagerInterface
+     * @throws Exception
      */
-    public function setId(string id): <ManagerInterface>
+    public function setId(string $sessionId): ManagerInterface
     {
-        if unlikely (true === this->exists()) {
-            throw new RuntimeException(
-                "The session has already been started. " .
-                "To change the id, use regenerateId()"
+        if (true === $this->exists()) {
+            throw new Exception(
+                'The session has already been started. ' .
+                'To change the id, use regenerateId()'
             );
         }
 
-        session_id(id);
+        session_id($sessionId);
 
-        return this;
+        return $this;
     }
 
     /**
@@ -268,68 +317,73 @@ class Manager extends AbstractInjectionAware implements ManagerInterface
      *
      * @param  string name
      *
-     * @throws InvalidArgumentException
+     * @throws Exception
      *
      * @return Manager
      */
-    public function setName(string name): <ManagerInterface>
+    public function setName(string $name): ManagerInterface
     {
-        if unlikely this->exists() {
-            throw new InvalidArgumentException(
-                "Cannot set session name after a session has started"
+        if (true === $this->exists()) {
+            throw new Exception(
+                'Cannot set session name after a session has started'
             );
         }
 
-        if unlikely !preg_match("/^[\p{L}\p{N}_-]+$/u", name) {
-            throw new InvalidArgumentException(
-                "The name contains non alphanum characters"
+        if (!preg_match('/^[\p{L}\p{N}_-]+$/u', $name)) {
+            throw new Exception(
+                'The name contains non alphanum characters'
             );
         }
 
-        let this->name = name;
+        $this->name = $name;
 
-        session_name(name);
+        session_name($name);
 
-        return this;
+        return $this;
     }
 
     /**
      * Sets session's options
+     *
+     * @param array $options
      */
-    public function setOptions(array options): void
+    public function setOptions(array $options): void
     {
-        let this->uniqueId = Arr::get(options, "uniqueId", ""),
-            this->options  = options;
+        $this->uniqueId = $options['uniqueId'] ?? '';
+        $this->options  = $options;
     }
 
     /**
      * Starts the session (if headers are already sent the session will not be
      * started)
+     *
+     * @return bool
+     * @throws Exception
      */
     public function start(): bool
     {
         /**
          * Check if the session exists
          */
-        if true === this->exists() {
+        if (true === $this->exists()) {
             return true;
         }
 
         /**
          * Cannot start this - headers already sent
          */
-        if true === headers_sent() {
+        if (true === headers_sent()) {
             return false;
         }
 
-        if unlikely !(this->adapter instanceof SessionHandlerInterface) {
-            throw new Exception("The session adapter is not valid");
+        if (true !== ($this->adapter instanceof SessionHandlerInterface)) {
+            throw new Exception('The session adapter is not valid');
         }
 
         /**
          * Register the adapter
          */
-        session_set_save_handler(this->adapter);
+        session_set_save_handler($this->adapter);
 
         /**
          * Start the session
@@ -339,37 +393,25 @@ class Manager extends AbstractInjectionAware implements ManagerInterface
 
     /**
      * Returns the status of the current session.
+     *
+     * @return int
      */
     public function status(): int
     {
-        var status;
-
-        let status = session_status();
-
-        switch status {
-            case PHP_SESSION_DISABLED:
-                return self::SESSION_DISABLED;
-
-            case PHP_SESSION_ACTIVE:
-                return self::SESSION_ACTIVE;
-        }
-
-        return self::SESSION_NONE;
+        return session_status();
     }
 
     /**
      * Returns the key prefixed
+     *
+     * @param string $key
+     *
+     * @return string
      */
-    private function getUniqueKey(string key): string
+    private function getUniqueKey(string $key): string
     {
-        var uniqueId;
+        $prefix = (true !== empty($this->uniqueId)) ? $this->uniqueId . '#' : '';
 
-        let uniqueId = this->uniqueId;
-
-		if !empty uniqueId {
-			return this->uniqueId . "#" . key;
-		} else {
-			return key;
-		}
+        return $prefix . $key;
     }
 }
