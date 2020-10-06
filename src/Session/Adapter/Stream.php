@@ -13,8 +13,12 @@ declare(strict_types=1);
 
 namespace Phalcon\Session\Adapter;
 
-use Phalcon\Helper\Str;
 use Phalcon\Session\Exception;
+use Phalcon\Support\Traits\PhpFileTrait;
+
+use function rtrim;
+
+use const DIRECTORY_SEPARATOR;
 
 /**
  * Phalcon\Session\Adapter\Stream
@@ -35,70 +39,103 @@ use Phalcon\Session\Exception;
  * );
  * $session->setAdapter($files);
  * ```
+ *
+ * @property array  $options
+ * @property string $prefix
+ * @property string $path
  */
 class Stream extends Noop
 {
+    use PhpFileTrait;
+
     /**
+     * Session options
+     *
+     * @var array
+     */
+    protected array $options = [];
+
+    /**
+     * Session prefix
+     *
      * @var string
      */
-    private path = "";
+    protected string $prefix = '';
 
     /**
-     * Constructor
+     * The path of the session files
      *
-     * @param array options = [
-     *     'prefix' => '',
+     * @var string
+     */
+    private string $path = '';
+
+    /**
+     * Stream constructor.
+     *
+     * @param array $options = [
+     *     'prefix'   => '',
      *     'savePath' => ''
      * ]
+     *
+     * @throws Exception
      */
-    public function __construct(array! options = [])
+    public function __construct(array $options = [])
     {
-        var path, options;
-
-        parent::__construct(options);
-
-        let options = this->options;
+        $this->prefix  = $options['prefix'] ?? '';
+        $this->options = $options;
 
         /**
          * Get the save_path from the passed options. If not defined
          * get it from php.ini
          */
-        if !fetch path, options["savePath"] {
-            let path = ini_get("session.save_path");
+        $path = $options['savePath'] ?? ini_get("session.save_path");
+
+        if (true === empty($path)) {
+            throw new Exception('The session save path cannot be empty');
         }
 
-        if unlikely !is_writable(path) {
-            throw new Exception("The session save path [" . path . "] is not writable");
+        if (true !== is_writable($path)) {
+            throw new Exception(
+                'The session save path [' . $path . '] is not writable'
+            );
         }
 
-        let this->path = Str::dirSeparator(path);
+        $this->path = rtrim($path, DIRECTORY_SEPARATOR) . DIRECTORY_SEPARATOR;
     }
 
-    public function destroy(var id): bool
+    /**
+     * @param string $sessionId
+     *
+     * @return bool
+     */
+    public function destroy($sessionId): bool
     {
-        var file;
+        $file = $this->path . $this->getPrefixedName($sessionId);
 
-        let file = this->path . this->getPrefixedName(id);
-
-        if file_exists(file) && is_file(file) {
-            unlink(file);
+        if (true === $this->phpFileExists($file) && true === is_file($file)) {
+            unlink($file);
         }
 
         return true;
     }
 
-    public function gc(var maxlifetime): bool
+    /**
+     * @param int $maxlifetime
+     *
+     * @return bool
+     */
+    public function gc($maxlifetime): bool
     {
-        var file, pattern, time;
+        $pattern = $this->path . $this->prefix . "*";
+        $time    = time() - $maxlifetime;
 
-        let pattern = this->path . this->prefix . "*",
-            time    = time() - maxlifetime;
-
-        for file in glob(pattern) {
-            if file_exists(file) &&
-               is_file(file)     &&
-               (filemtime(file) < time) {
-                unlink(file);
+        foreach (glob($pattern) as $file) {
+            if (
+                true === $this->phpFileExists($file) &&
+                true === is_file($file)     &&
+                filemtime($file) < $time
+            ) {
+                unlink($file);
             }
         }
 
@@ -108,43 +145,69 @@ class Stream extends Noop
     /**
     * Ignore the savePath and use local defined path
     *
-    * @return bool
-    */
-    public function open(var savePath, var sessionName): bool
+     * @param string $savePath
+     * @param string $sessionName
+     *
+     * @return bool
+     */
+    public function open($savePath, $sessionName): bool
     {
         return true;
     }
 
-    public function read(var id): string
+    /**
+     * @param string $sessionId
+     *
+     * @return string
+     */
+    public function read($sessionId): string
     {
-        var data, name, pointer;
+        $name = $this->path . $this->getPrefixedName($sessionId);
+        $data = "";
 
-        let name = this->path . this->getPrefixedName(id),
-            data = "";
+        if (true === $this->phpFileExists($name)) {
+            $pointer = $this->phpFopen($name, 'r');
 
-        if file_exists(name) {
-            let pointer = fopen(name, 'r');
-
-            if (flock(pointer, LOCK_SH)) {
-                let data = file_get_contents(name);
+            if (true === flock($pointer, LOCK_SH)) {
+                $data = file_get_contents($name);
             }
 
-            fclose(pointer);
+            fclose($pointer);
 
-            if false === data {
+            if (false === $data) {
                 return "";
             }
         }
 
-        return data;
+        return $data;
     }
 
-    public function write(var id, var data): bool
+    /**
+     * @param string $sessionId
+     * @param string $data
+     *
+     * @return bool
+     */
+    public function write($sessionId, $data): bool
     {
-        var name;
+        $name = $this->path . $this->getPrefixedName($sessionId);
 
-        let name = this->path . this->getPrefixedName(id);
+        return (
+            false !== $this->phpFilePutContents($name, $data, LOCK_EX)
+        );
+    }
 
-        return false !== file_put_contents(name, data, LOCK_EX);
+    /**
+     * Helper method to get the name prefixed
+     *
+     * @param mixed $name
+     *
+     * @return string
+     */
+    protected function getPrefixedName($name): string
+    {
+        $name = (string) $name;
+
+        return $this->prefix . $name;
     }
 }

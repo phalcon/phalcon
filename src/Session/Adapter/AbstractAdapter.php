@@ -16,12 +16,19 @@ namespace Phalcon\Session\Adapter;
 use Phalcon\Storage\Adapter\AdapterInterface;
 use SessionHandlerInterface;
 
+/**
+ * Class AbstractAdapter
+ *
+ * @package Phalcon\Session\Adapter
+ *
+ * @property AdapterInterface $adapter
+ */
 abstract class AbstractAdapter implements SessionHandlerInterface
 {
     /**
      * @var AdapterInterface
      */
-    protected $adapter;
+    protected AdapterInterface $adapter;
 
     /**
      * Close
