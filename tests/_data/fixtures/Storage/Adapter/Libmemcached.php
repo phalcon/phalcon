@@ -18,7 +18,7 @@ use Exception;
 use Phalcon\Storage\Adapter\Libmemcached as StorageLibmemcached;
 
 /**
- * Phalcon\Test\Fixtures\Storage\Adapter
+ * Phalcon\Tests\Fixtures\Storage\Adapter
  *
  * Libmemcached adapter fixture
  */
