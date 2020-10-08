@@ -15,6 +15,7 @@ namespace Phalcon\Events;
 
 use Closure;
 use SplPriorityQueue;
+
 use function is_object;
 use function is_string;
 
@@ -203,7 +204,7 @@ class Manager implements ManagerInterface
         }
 
         // All valid events must have a colon separator
-        if (false !== strpos($eventType, ':')) {
+        if (false === strpos($eventType, ':')) {
             throw new Exception('Invalid event type ' . $eventType);
         }
 
