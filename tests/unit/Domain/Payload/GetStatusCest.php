@@ -25,10 +25,10 @@ class GetStatusCest
     /**
      * Unit Tests Phalcon\Domain\Payload :: getStatus()
      *
+     * @param UnitTester $I
+     *
      * @author Phalcon Team <team@phalcon.io>
      * @since  2020-09-09
-     *
-     * @param UnitTester $I
      */
     public function httpPayloadPayloadGetStatus(UnitTester $I)
     {

@@ -26,8 +26,9 @@ class AppendMessageCest
      * Tests Phalcon\Messages\Messages :: appendMessage()
      *
      * @param UnitTester $I
-     * @since  2018-11-13
+     *
      * @author Phalcon Team <team@phalcon.io>
+     * @since  2020-09-09
      */
     public function messagesMessagesAppendMessage(UnitTester $I): void
     {
@@ -48,8 +49,9 @@ class AppendMessageCest
      * Tests Phalcon\Messages\Messages :: appendMessage() - exception
      *
      * @param UnitTester $I
-     * @since  2018-11-13
+     *
      * @author Phalcon Team <team@phalcon.io>
+     * @since  2020-09-09
      */
     public function messagesMessagesAppendMessageException(UnitTester $I): void
     {

@@ -27,6 +27,8 @@ class InterpolateCest
     /**
      * Tests Phalcon\Logger\Formatter\Json :: interpolate()
      *
+     * @param UnitTester $I
+     *
      * @author Phalcon Team <team@phalcon.io>
      * @since  2020-09-09
      */
@@ -49,6 +51,8 @@ class InterpolateCest
 
     /**
      * Tests Phalcon\Logger\Formatter\Json :: interpolate() - format
+     *
+     * @param UnitTester $I
      *
      * @author Phalcon Team <team@phalcon.io>
      * @since  2020-09-09

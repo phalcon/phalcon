@@ -24,6 +24,12 @@ class LoadFilesCest
 {
     use LoaderTrait;
 
+    /**
+     * @param UnitTester $I
+     *
+     * @author Phalcon Team <team@phalcon.io>
+     * @since  2020-09-09
+     */
     public function autoloaderLoaderLoadFiles(UnitTester $I)
     {
         $I->wantToTest('Autoload\Loader - loadFiles()');

@@ -30,10 +30,9 @@ class FormatCest
      *
      * @param UnitTester $I
      *
-     * @throws Exception
      * @author Phalcon Team <team@phalcon.io>
-     * @since  2020-09-06
-     *
+     * @since  2020-09-09
+     * @throws Exception
      */
     public function loggerFormatterJsonFormat(UnitTester $I)
     {
@@ -66,10 +65,9 @@ class FormatCest
      *
      * @param UnitTester $I
      *
-     * @throws Exception
      * @author Phalcon Team <team@phalcon.io>
-     * @since  2020-09-06
-     *
+     * @since  2020-09-09
+     * @throws Exception
      */
     public function loggerFormatterJsonFormatCustom(UnitTester $I)
     {

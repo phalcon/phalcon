@@ -28,6 +28,9 @@ class AutoloadCest
     /**
      * Tests Phalcon\Autoloader\Loader :: autoload() = classes
      *
+     * @param UnitTester $I
+     *
+     * @author Phalcon Team <team@phalcon.io>
      * @since  2020-09-09
      */
     public function autoloaderLoaderAutoloadClasses(UnitTester $I)
@@ -82,6 +85,9 @@ class AutoloadCest
     /**
      * Tests Phalcon\Autoloader\Loader :: autoload() = namespaces
      *
+     * @param UnitTester $I
+     *
+     * @author Phalcon Team <team@phalcon.io>
      * @since  2020-09-09
      */
     public function autoloaderLoaderAutoloadNamespaces(UnitTester $I)
@@ -173,6 +179,9 @@ class AutoloadCest
     /**
      * Tests Phalcon\Autoloader\Loader :: autoload() = namespaces no folders
      *
+     * @param UnitTester $I
+     *
+     * @author Phalcon Team <team@phalcon.io>
      * @since  2020-09-09
      */
     public function autoloaderLoaderAutoloadNamespacesNoFolders(UnitTester $I)
@@ -199,6 +208,9 @@ class AutoloadCest
     /**
      * Tests Phalcon\Autoloader\Loader :: autoload() = namespaces 404
      *
+     * @param UnitTester $I
+     *
+     * @author Phalcon Team <team@phalcon.io>
      * @since  2020-09-09
      */
     public function autoloaderLoaderAutoloadNamespaces404(UnitTester $I)
@@ -232,6 +244,9 @@ class AutoloadCest
     /**
      * Tests Phalcon\Autoloader\Loader :: autoload() = extension
      *
+     * @param UnitTester $I
+     *
+     * @author Phalcon Team <team@phalcon.io>
      * @since  2020-09-09
      */
     public function autoloaderLoaderAutoloadExtension(UnitTester $I)

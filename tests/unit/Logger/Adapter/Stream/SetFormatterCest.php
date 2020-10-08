@@ -22,6 +22,11 @@ class SetFormatterCest
 {
     /**
      * Tests Phalcon\Logger\Adapter\Stream :: setFormatter()
+     *
+     * @param UnitTester $I
+     *
+     * @author Phalcon Team <team@phalcon.io>
+     * @since  2020-09-09
      */
     public function loggerAdapterStreamSetFormatter(UnitTester $I)
     {

@@ -20,6 +20,11 @@ class GetSetLogLevelCest
 {
     /**
      * Tests Phalcon\Logger :: getLogLevel()/setLogLevel()
+     *
+     * @param UnitTester $I
+     *
+     * @author Phalcon Team <team@phalcon.io>
+     * @since  2020-09-09
      */
     public function loggerGetSetLogLevel(UnitTester $I)
     {

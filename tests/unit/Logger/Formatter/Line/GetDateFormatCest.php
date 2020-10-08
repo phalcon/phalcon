@@ -20,6 +20,11 @@ class GetDateFormatCest
 {
     /**
      * Tests Phalcon\Logger\Formatter\Line :: getDateFormat()
+     *
+     * @param UnitTester $I
+     *
+     * @author Phalcon Team <team@phalcon.io>
+     * @since  2020-09-09
      */
     public function loggerFormatterLineGetDateFormat(UnitTester $I)
     {
@@ -33,6 +38,11 @@ class GetDateFormatCest
 
     /**
      * Tests Phalcon\Logger\Formatter\Line :: getDateFormat() - custom
+     *
+     * @param UnitTester $I
+     *
+     * @author Phalcon Team <team@phalcon.io>
+     * @since  2020-09-09
      */
     public function loggerFormatterLineGetDateFormatCustom(UnitTester $I)
     {

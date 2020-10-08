@@ -23,8 +23,9 @@ class NextCest
      * Tests Phalcon\Messages\Messages :: next()
      *
      * @param UnitTester $I
-     * @since  2018-11-13
+     *
      * @author Phalcon Team <team@phalcon.io>
+     * @since  2020-09-09
      */
     public function messagesMessagesNext(UnitTester $I): void
     {

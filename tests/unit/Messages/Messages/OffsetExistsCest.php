@@ -23,8 +23,9 @@ class OffsetExistsCest
      * Tests Phalcon\Messages\Messages :: offsetExists()
      *
      * @param UnitTester $I
-     * @since  2018-11-13
+     *
      * @author Phalcon Team <team@phalcon.io>
+     * @since  2020-09-09
      */
     public function messagesMessagesOffsetExists(UnitTester $I): void
     {

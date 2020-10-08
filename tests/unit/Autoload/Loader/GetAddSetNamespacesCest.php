@@ -26,8 +26,11 @@ class GetAddSetNamespacesCest
      * Tests Phalcon\Autoload\Loader ::
      * getNamespaces()/addNamespace()/setNamespace()
      *
-     * @throws Exception
+     * @param UnitTester $I
+     *
+     * @author Phalcon Team <team@phalcon.io>
      * @since  2020-09-09
+     * @throws Exception
      */
     public function autoloaderLoaderGetAddSetNamespaces(UnitTester $I)
     {
@@ -145,6 +148,9 @@ class GetAddSetNamespacesCest
      * Tests Phalcon\Autoload\Loader ::
      * getNamespaces()/addNamespace()/setNamespace() - exception
      *
+     * @param UnitTester $I
+     *
+     * @author Phalcon Team <team@phalcon.io>
      * @since  2020-09-09
      */
     public function autoloaderLoaderGetAddSetNamespacesException(UnitTester $I)

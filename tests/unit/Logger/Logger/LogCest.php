@@ -26,6 +26,11 @@ class LogCest
 {
     /**
      * Tests Phalcon\Logger :: log()
+     *
+     * @param UnitTester $I
+     *
+     * @author Phalcon Team <team@phalcon.io>
+     * @since  2020-09-09
      */
     public function loggerLog(UnitTester $I)
     {
@@ -86,6 +91,11 @@ class LogCest
 
     /**
      * Tests Phalcon\Logger :: log() - logLevel
+     *
+     * @param UnitTester $I
+     *
+     * @author Phalcon Team <team@phalcon.io>
+     * @since  2020-09-09
      */
     public function loggerLogLogLevel(UnitTester $I)
     {
@@ -163,6 +173,11 @@ class LogCest
 
     /**
      * Tests Phalcon\Logger :: log() - logLevel - exception
+     *
+     * @param UnitTester $I
+     *
+     * @author Phalcon Team <team@phalcon.io>
+     * @since  2020-09-09
      */
     public function loggerLogLogLevelException(UnitTester $I)
     {
@@ -194,6 +209,11 @@ class LogCest
 
     /**
      * Tests Phalcon\Logger :: log()
+     *
+     * @param UnitTester $I
+     *
+     * @author Phalcon Team <team@phalcon.io>
+     * @since  2020-09-09
      */
     public function loggerLogSyslog(UnitTester $I)
     {

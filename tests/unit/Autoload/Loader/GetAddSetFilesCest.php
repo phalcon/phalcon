@@ -24,6 +24,9 @@ class GetAddSetFilesCest
     /**
      * Tests Phalcon\Autoload\Loader :: getFiles()/addFile()/setFile()
      *
+     * @param UnitTester $I
+     *
+     * @author Phalcon Team <team@phalcon.io>
      * @since  2020-09-09
      */
     public function autoloaderLoaderGetAddSetFiles(UnitTester $I)

@@ -23,8 +23,9 @@ class ConstructCest
      * Tests Phalcon\Messages\Messages :: __construct()
      *
      * @param UnitTester $I
-     * @since  2018-11-13
+     *
      * @author Phalcon Team <team@phalcon.io>
+     * @since  2020-09-09
      */
     public function messagesMessagesConstruct(UnitTester $I): void
     {

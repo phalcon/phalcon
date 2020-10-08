@@ -24,6 +24,11 @@ class GetAdapterCest
 {
     /**
      * Tests Phalcon\Logger :: getAdapter()
+     *
+     * @param UnitTester $I
+     *
+     * @author Phalcon Team <team@phalcon.io>
+     * @since  2020-09-09
      */
     public function loggerGetAdapter(UnitTester $I)
     {
@@ -50,6 +55,11 @@ class GetAdapterCest
 
     /**
      * Tests Phalcon\Logger :: getAdapter() - unknown
+     *
+     * @param UnitTester $I
+     *
+     * @author Phalcon Team <team@phalcon.io>
+     * @since  2020-09-09
      */
     public function loggerGetAdapterUnknown(UnitTester $I)
     {
@@ -66,6 +76,11 @@ class GetAdapterCest
 
     /**
      * Tests Phalcon\Logger :: getAdapter() - for transaction
+     *
+     * @param UnitTester $I
+     *
+     * @author Phalcon Team <team@phalcon.io>
+     * @since  2020-09-09
      */
     public function loggerGetAdapterForTransaction(UnitTester $I)
     {

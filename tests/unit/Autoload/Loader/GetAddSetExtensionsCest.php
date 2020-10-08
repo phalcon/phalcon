@@ -25,6 +25,9 @@ class GetAddSetExtensionsCest
      * Tests Phalcon\Autoload\Loader ::
      * getExtensions()/addExtension()/setExtension()
      *
+     * @param UnitTester $I
+     *
+     * @author Phalcon Team <team@phalcon.io>
      * @since  2020-09-09
      */
     public function autoloaderLoaderGetAddSetExtensions(UnitTester $I)
