@@ -16,6 +16,11 @@ namespace Phalcon\Tests\Unit\Events\Event;
 use Phalcon\Events\Event;
 use UnitTester;
 
+/**
+ * Class GetSetDataCest
+ *
+ * @package Phalcon\Tests\Unit\Events\Event
+ */
 class GetSetDataCest
 {
     /**

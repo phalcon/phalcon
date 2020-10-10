@@ -17,6 +17,11 @@ use Phalcon\Events\Event;
 use Phalcon\Events\EventInterface;
 use UnitTester;
 
+/**
+ * Class ConstructCest
+ *
+ * @package Phalcon\Tests\Unit\Events\Event
+ */
 class ConstructCest
 {
     /**

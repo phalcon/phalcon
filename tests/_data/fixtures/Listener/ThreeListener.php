@@ -11,16 +11,12 @@
 
 declare(strict_types=1);
 
-namespace Phalcon\Tests\Fixtures\Events;
+namespace Phalcon\Tests\Fixtures\Listener;
 
-use Phalcon\Events\Traits\EventsAwareTrait;
-
-class ComponentOne
+class ThreeListener
 {
-    use EventsAwareTrait;
-
-    public function doAction()
+    public function beforeAction($event, $component, $data)
     {
-        $this->eventsManager->fire('ab:beforeAction', $this, 'aa');
+        return 'three';
     }
 }

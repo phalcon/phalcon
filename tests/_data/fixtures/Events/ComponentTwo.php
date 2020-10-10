@@ -1,7 +1,5 @@
 <?php
 
-declare(strict_types=1);
-
 /**
  * This file is part of the Phalcon Framework.
  *
@@ -11,28 +9,17 @@ declare(strict_types=1);
  * file that was distributed with this source code.
  */
 
+declare(strict_types=1);
+
 namespace Phalcon\Tests\Fixtures\Events;
 
-use Phalcon\Events\Manager;
+use Phalcon\Events\Traits\EventsAwareTrait;
 
-class ComponentY
+class ComponentTwo
 {
-    /**
-     * @var Manager
-     */
-    protected $eventsManager;
+    use EventsAwareTrait;
 
-    public function setEventsManager(Manager $eventsManager)
-    {
-        $this->eventsManager = $eventsManager;
-    }
-
-    public function getEventsManager(): Manager
-    {
-        return $this->eventsManager;
-    }
-
-    public function leAction()
+    public function doAction()
     {
         $this->eventsManager->fire('another:beforeAction', $this);
         $this->eventsManager->fire('another:afterAction', $this);

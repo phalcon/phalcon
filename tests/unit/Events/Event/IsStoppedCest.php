@@ -16,6 +16,11 @@ namespace Phalcon\Tests\Unit\Events\Event;
 use Phalcon\Events\Event;
 use UnitTester;
 
+/**
+ * Class IsStoppedCest
+ *
+ * @package Phalcon\Tests\Unit\Events\Event
+ */
 class IsStoppedCest
 {
     /**
