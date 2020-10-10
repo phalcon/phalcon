@@ -17,7 +17,6 @@ use Closure;
 use SplPriorityQueue;
 
 use function is_object;
-use function is_string;
 
 /**
  * Phalcon\Events\Manager
@@ -51,17 +50,15 @@ class Manager implements ManagerInterface
     /**
      * Attach a listener to the events manager
      *
-     * @param string          $eventType
-     * @param object|callable $handler
+     * @param string $eventType
+     * @param mixed  $handler
      */
     public function attach(
         string $eventType,
         $handler,
         int $priority = self::DEFAULT_PRIORITY
     ): void {
-        if (false === $this->isValidHandler($handler)) {
-            throw new Exception('Event handler must be an Object or Callable');
-        }
+        $this->checkHandler($handler);
 
         $priorityQueue = $this->events[$eventType] ?? null;
         if (null === $priorityQueue) {
@@ -114,15 +111,13 @@ class Manager implements ManagerInterface
      */
     public function detach(string $eventType, $handler): void
     {
-        if (false === $this->isValidHandler($handler)) {
-            throw new Exception('Event handler must be an Object or Callable');
-        }
+        $this->checkHandler($handler);
 
         $priorityQueue = $this->events[$eventType] ?? null;
         if (null !== $priorityQueue) {
             /**
              * SplPriorityQueue doesn't have a method for element deletion so we
-             * need to rebuild queue
+             * need to rebuild the queue
              */
             $newPriorityQueue = new SplPriorityQueue();
 
@@ -256,10 +251,6 @@ class Manager implements ManagerInterface
         // Get the event type
         $eventName = $event->getType();
 
-        if (true !== is_string($eventName)) {
-            throw new Exception('The event type not valid');
-        }
-
         // Get the object who triggered the event
         $source = $event->getSource();
 
@@ -267,7 +258,7 @@ class Manager implements ManagerInterface
         $data = $event->getData();
 
         // Tell if the event is cancelable
-        $cancelable = (bool) $event->isCancelable();
+        $cancelable = $event->isCancelable();
 
         // Responses need to be traced?
         $collected = (bool) $this->collect;
@@ -393,5 +384,17 @@ class Manager implements ManagerInterface
         }
 
         return true;
+    }
+
+    /**
+     * @param mixed $handler
+     *
+     * @throws Exception
+     */
+    private function checkHandler($handler): void
+    {
+        if (false === $this->isValidHandler($handler)) {
+            throw new Exception('Event handler must be an Object or Callable');
+        }
     }
 }
