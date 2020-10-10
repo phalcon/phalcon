@@ -168,7 +168,6 @@ class FireCest
 
                 $manager->fire('unknown', new stdClass());
             }
-
         );
     }
 }
