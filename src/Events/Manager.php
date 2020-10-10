@@ -145,13 +145,8 @@ class Manager implements ManagerInterface
      */
     public function detachAll(string $type = null): void
     {
-        if (null === $type) {
-            $this->events = null;
-        } else {
-            if (isset($this->events[$type])) {
-                unset($this->events[$type]);
-            }
-        }
+        $this->processDetachAllNullType($type);
+        $this->processDetachAllNotNullType($type);
     }
 
     /**
@@ -240,7 +235,6 @@ class Manager implements ManagerInterface
      * @param EventInterface   $event
      *
      * @return false|mixed|null
-     * @throws Exception
      */
     final public function fireQueue(
         SplPriorityQueue $queue,
@@ -395,6 +389,26 @@ class Manager implements ManagerInterface
     {
         if (false === $this->isValidHandler($handler)) {
             throw new Exception('Event handler must be an Object or Callable');
+        }
+    }
+
+    /**
+     * @param string $type
+     */
+    private function processDetachAllNullType(string $type): void
+    {
+        if (null === $type) {
+            $this->events = null;
+        }
+    }
+
+    /**
+     * @param string $type
+     */
+    private function processDetachAllNotNullType(string $type): void
+    {
+        if (null !== $type && true === isset($this->events[$type])) {
+            unset($this->events[$type]);
         }
     }
 }
