@@ -393,9 +393,9 @@ class Manager implements ManagerInterface
     }
 
     /**
-     * @param string $type
+     * @param string|null $type
      */
-    private function processDetachAllNullType(string $type): void
+    private function processDetachAllNullType(?string $type): void
     {
         if (null === $type) {
             $this->events = null;
@@ -403,9 +403,9 @@ class Manager implements ManagerInterface
     }
 
     /**
-     * @param string $type
+     * @param string|null $type
      */
-    private function processDetachAllNotNullType(string $type): void
+    private function processDetachAllNotNullType(?string $type): void
     {
         if (null !== $type && true === isset($this->events[$type])) {
             unset($this->events[$type]);
