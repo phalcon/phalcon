@@ -52,6 +52,9 @@ class Manager implements ManagerInterface
      *
      * @param string $eventType
      * @param mixed  $handler
+     * @param int    $priority
+     *
+     * @throws Exception
      */
     public function attach(
         string $eventType,
