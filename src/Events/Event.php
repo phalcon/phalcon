@@ -123,6 +123,8 @@ class Event implements EventInterface
      *     $event->stop();
      * }
      * ```
+     *
+     * @return bool
      */
     public function isCancelable(): bool
     {
@@ -131,6 +133,8 @@ class Event implements EventInterface
 
     /**
      * Check whether the event is currently stopped.
+     *
+     * @return bool
      */
     public function isStopped(): bool
     {
