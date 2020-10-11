@@ -59,40 +59,6 @@ class FireCest
     }
 
     /**
-     * Tests Phalcon\Events\Manager :: fire() - with type
-     *
-     * @param UnitTester $I
-     *
-     * @author Phalcon Team <team@phalcon.io>
-     * @since  2020-09-09
-     */
-    public function eventsManagerFireWithType(UnitTester $I)
-    {
-        $I->wantToTest('Events\Manager - fire() - with type');
-
-        $manager = new Manager();
-        $one     = new OneListener();
-        $two     = new TwoListener();
-        $three   = new ThreeListener();
-
-        $manager->enablePriorities(false);
-        $manager->collectResponses(true);
-
-        $manager->attach('beforeAction', $three, 10);
-        $manager->attach('ab:', $two, 20);
-        $manager->attach('ab', $one, 30);
-
-        $component = new ComponentOne();
-        $component->setEventsManager($manager);
-
-        $component->doAction();
-
-        $expected = ['one'];
-        $actual   = $component->getEventsManager()->getResponses();
-        $I->assertEquals($expected, $actual);
-    }
-
-    /**
      * Tests Phalcon\Events\Manager :: fire() - with priorities
      *
      * @param UnitTester $I

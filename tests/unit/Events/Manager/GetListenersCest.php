@@ -13,6 +13,10 @@ declare(strict_types=1);
 
 namespace Phalcon\Tests\Unit\Events\Manager;
 
+use Phalcon\Events\Manager;
+use Phalcon\Tests\Fixtures\Events\ComponentOne;
+use Phalcon\Tests\Fixtures\Listener\OneListener;
+use Phalcon\Tests\Fixtures\Listener\TwoListener;
 use UnitTester;
 
 class GetListenersCest
@@ -29,6 +33,24 @@ class GetListenersCest
     {
         $I->wantToTest('Events\Manager - getListeners()');
 
-        $I->skipTest('Need implementation');
+        $first         = new OneListener();
+        $second        = new TwoListener();
+        $component     = new ComponentOne();
+        $eventsManager = new Manager();
+
+        $component->setEventsManager($eventsManager);
+
+        $eventsManager->attach('log', $first);
+        $eventsManager->attach('log', $second);
+        $logListeners = $component->getEventsManager()->getListeners('log');
+        $I->assertCount(2, $logListeners);
+
+        $expected = OneListener::class;
+        $actual   = $logListeners[0];
+        $I->assertInstanceOf($expected, $actual);
+
+        $expected = TwoListener::class;
+        $actual   = $logListeners[1];
+        $I->assertInstanceOf($expected, $actual);
     }
 }

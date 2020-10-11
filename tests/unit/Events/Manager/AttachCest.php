@@ -23,21 +23,6 @@ use UnitTester;
 class AttachCest
 {
     /**
-     * Tests Phalcon\Events\Manager :: attach()
-     *
-     * @param UnitTester $I
-     *
-     * @author Phalcon Team <team@phalcon.io>
-     * @since  2020-09-09
-     */
-    public function eventsManagerAttach(UnitTester $I)
-    {
-        $I->wantToTest('Events\Manager - attach()');
-
-        $I->skipTest('Need implementation');
-    }
-
-    /**
      * Tests Phalcon\Events\Manager :: attach() - exception
      *
      * @param UnitTester $I
