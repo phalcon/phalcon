@@ -232,15 +232,6 @@ class Manager implements ManagerInterface
     ) {
         $status = null;
 
-        // Get the event type
-        $eventName = $event->getType();
-
-        // Get the object who triggered the event
-        $source = $event->getSource();
-
-        // Get extra data passed to the event
-        $data = $event->getData();
-
         // Tell if the event is cancelable
         $cancelable = $event->isCancelable();
 
