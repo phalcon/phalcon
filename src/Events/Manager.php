@@ -17,7 +17,10 @@ use Closure;
 use Phalcon\Events\Traits\ManagerHelperTrait;
 use SplPriorityQueue;
 
+use function call_user_func_array;
+use function is_callable;
 use function is_object;
+use function method_exists;
 
 /**
  * Phalcon\Events\Manager
@@ -257,38 +260,19 @@ class Manager implements ManagerInterface
             $iterator->next();
 
             // Only handler objects are valid
-            if (false === $this->isValidHandler($handler)) {
-                continue;
-            }
+            if (true === $this->isValidHandler($handler)) {
+                $status = $this->checkFireHandlerClosure($status, $handler, $event);
+                $status = $this->checkFireHandlerMethod($status, $handler, $event);
 
-            // Check if the event is a closure
-            if ($handler instanceof Closure || true === is_callable($handler)) {
-                // Call the function in the PHP userland
-                $status = call_user_func_array(
-                    $handler,
-                    [
-                        $event,
-                        $source,
-                        $data
-                    ]
-                );
-            } else {
-                // Check if the listener has implemented an event with the same name
-                if (true !== method_exists($handler, $eventName)) {
-                    continue;
+                // Trace the response
+                if (true === $collected) {
+                    $this->responses[] = $status;
                 }
 
-                $status = $handler->{$eventName}($event, $source, $data);
-            }
-
-            // Trace the response
-            if (true === $collected) {
-                $this->responses[] = $status;
-            }
-
-            // Check if the event was stopped by the user
-            if (true === $cancelable && true === $event->isStopped()) {
-                break;
+                // Check if the event was stopped by the user
+                if (true === $cancelable && true === $event->isStopped()) {
+                    break;
+                }
             }
         }
 
@@ -351,5 +335,62 @@ class Manager implements ManagerInterface
     public function isCollecting(): bool
     {
         return $this->collect;
+    }
+
+    /**
+     * @param mixed          $status
+     * @param mixed          $handler
+     * @param EventInterface $event
+     *
+     * @return false|mixed
+     */
+    private function checkFireHandlerClosure(
+        $status,
+        $handler,
+        EventInterface $event
+    ) {
+        // Check if the event is a closure
+        if ($handler instanceof Closure || true === is_callable($handler)) {
+            // Call the function in the PHP userland
+            $status = call_user_func_array(
+                $handler,
+                [
+                    $event,
+                    $event->getSource(),
+                    $event->getData(),
+                ]
+            );
+        }
+
+        return $status;
+    }
+
+    /**
+     * @param mixed          $status
+     * @param mixed          $handler
+     * @param EventInterface $event
+     *
+     * @return mixed
+     */
+    private function checkFireHandlerMethod(
+        $status,
+        $handler,
+        EventInterface $event
+    ) {
+        $eventName = $event->getType();
+
+        // Check if the listener has implemented an event with the same name
+        if (
+            true !== ($handler instanceof Closure || true === is_callable($handler)) &&
+            true === method_exists($handler, $eventName)
+        ) {
+            $status = $handler->{$eventName}(
+                $event,
+                $event->getSource(),
+                $event->getData()
+            );
+        }
+
+        return $status;
     }
 }

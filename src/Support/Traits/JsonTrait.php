@@ -29,7 +29,10 @@ trait JsonTrait
      */
     private function checkSerializable($value)
     {
-        if (is_object($value) && method_exists($value, 'jsonSerialize')) {
+        if (
+            true === is_object($value) &&
+            true === method_exists($value, 'jsonSerialize')
+        ) {
             return $value->jsonSerialize();
         }
 
