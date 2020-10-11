@@ -13,17 +13,13 @@ declare(strict_types=1);
 
 namespace Phalcon\Di;
 
-use Phalcon\Di\Service;
-use Phalcon\Di\DiInterface;
-use Phalcon\Di\Exception;
 use Phalcon\Di\Exception\ServiceResolutionException;
 use Phalcon\Config\Adapter\Php;
 use Phalcon\Config\Adapter\Yaml;
 use Phalcon\Config\ConfigInterface;
-use Phalcon\Di\ServiceInterface;
 use Phalcon\Events\ManagerInterface;
-use Phalcon\Di\InjectionAwareInterface;
-use Phalcon\Di\ServiceProviderInterface;
+use Phalcon\Events\Traits\EventsAwareTrait;
+use function is_object;
 
 /**
  * Phalcon\Di is a component that implements Dependency Injection/Service
@@ -62,9 +58,16 @@ use Phalcon\Di\ServiceProviderInterface;
  *
  * $request = $di->getRequest();
  *```
- */
+ *
+ * @property array            $services
+ * @property array            $sharedInstances
+ * @property DiInterface|null $_default
+
+*/
 class Di implements DiInterface
 {
+    use EventsAwareTrait;
+
     /**
      * List of registered services
      *
@@ -80,72 +83,70 @@ class Di implements DiInterface
     protected array $sharedInstances = [];
 
     /**
-     * Events Manager
-     *
-     * @var ManagerInterface | null
-     */
-    protected eventsManager;
-
-    /**
      * Latest DI build
      *
-     * @var DiInterface | null
+     * @var DiInterface|null
      */
-    protected static _default;
+    protected static $_default;
 
     /**
-     * Phalcon\Di constructor
+     * Di constructor.
      */
     public function __construct()
     {
-        if !self::_default {
-            let self::_default = this;
+        if (!self::$_default) {
+            self::$_default = $this;
         }
     }
 
     /**
      * Magic method to get or set services using setters/getters
      */
-    public function __call(string! method, array arguments = []): var | null
+    /**
+     * @param string $method
+     * @param array  $arguments
+     *
+     * @return mixed|null
+     * @throws Exception
+     */
+    public function __call(string $method, array $arguments = [])
     {
-        var instance, possibleService, definition;
-
-        /**
-         * If the magic method starts with "get" we try to get a service with
-         * that name
-         */
-        if starts_with(method, "get") {
-            let possibleService = lcfirst(substr(method, 3));
-
-            if isset this->services[possibleService] {
-                let instance = this->get(possibleService, arguments);
-
-                return instance;
-            }
-        }
-
-        /**
-         * If the magic method starts with "set" we try to set a service using
-         * that name
-         */
-        if starts_with(method, "set") {
-            if fetch definition, arguments[0] {
-                this->set(
-                    lcfirst(
-                        substr(method, 3)
-                    ),
-                    definition
-                );
-
-                return null;
-            }
-        }
+//        /**
+//         * If the magic method starts with "get" we try to get a service with
+//         * that name
+//         */
+//        if starts_with(method, "get") {
+//            let possibleService = lcfirst(substr(method, 3));
+//
+//            if isset this->services[possibleService] {
+//                let instance = this->get(possibleService, arguments);
+//
+//                return instance;
+//            }
+//        }
+//
+//        /**
+//         * If the magic method starts with "set" we try to set a service using
+//         * that name
+//         */
+//        if starts_with(method, "set") {
+//            if fetch definition, arguments[0] {
+//                this->set(
+//                    lcfirst(
+//                        substr(method, 3)
+//                    ),
+//                    definition
+//                );
+//
+//                return null;
+//            }
+//        }
 
         /**
          * The method doesn't start with set/get throw an exception
          */
         throw new Exception(
-            "Call to undefined method or service '" . method . "'"
+            "Call to undefined method or service '" . $method . "'"
         );
     }
 
@@ -154,83 +155,99 @@ class Di implements DiInterface
      * Only is successful if a service hasn't been registered previously
      * with the same name
      */
-    public function attempt(string! name, definition, bool shared = false): <ServiceInterface> | bool
+    /**
+     * @param string $name
+     * @param mixed  $definition
+     * @param bool   $shared
+     *
+     * @return bool|mixed|Service|ServiceInterface
+     */
+    public function attempt(string $name, $definition, bool $shared = false)
     {
-        if isset this->services[name] {
+        if (true === isset($this->services[$name])) {
             return false;
         }
 
-        let this->services[name] = new Service(definition, shared);
+        $this->services[$name] = new Service($definition, $shared);
 
-        return this->services[name];
+        return $this->services[$name];
     }
 
     /**
      * Resolves the service based on its configuration
+     *
+     * @param string     $name
+     * @param array|null $parameters
+     *
+     * @return mixed
+     * @throws Exception
      */
-    public function get(string! name, parameters = null): var
+    public function get(string $name, array $parameters = null)
     {
-        var service, eventsManager, isShared, instance = null;
+        $instance = null;
+        $isShared = false;
 
         /**
          * If the service is shared and it already has a cached instance then
          * immediately return it without triggering events.
          */
-        if fetch service, this->services[name] {
-            let isShared = service->isShared();
+        if (true === isset($this->services[$name])) {
+            $service  = $this->services[$name];
+            $isShared = $service->isShared();
 
-            if isShared && isset this->sharedInstances[name] {
-                return this->sharedInstances[name];
+            if (
+                true === $isShared &&
+                true === isset($this->sharedInstances[$name])
+            ) {
+                return $this->sharedInstances[$name];
             }
         }
-
-        let eventsManager = <ManagerInterface> this->eventsManager;
 
         /**
          * Allows for custom creation of instances through the
          * "di:beforeServiceResolve" event.
          */
-        if typeof eventsManager == "object" {
-            let instance = eventsManager->fire(
+        if (true === is_object($this->eventsManager)) {
+            $instance = $this->eventsManager->fire(
                 "di:beforeServiceResolve",
-                this,
+                $this,
                 [
-                    "name":       name,
-                    "parameters": parameters
+                    'name'       => $name,
+                    'parameters' => $parameters,
                 ]
             );
         }
 
-        if typeof instance != "object" {
-            if service !== null {
+        if (true !== is_object($instance)) {
+            if (null !== $service) {
                 // The service is registered in the DI.
                 try {
-                    let instance = service->resolve(parameters, this);
-                } catch ServiceResolutionException {
+                    $instance = $service->resolve($parameters, $this);
+                } catch (ServiceResolutionException $ex) {
                     throw new Exception(
-                        "Service '" . name . "' cannot be resolved"
+                        "Service '" . $name . "' cannot be resolved"
                     );
                 }
 
                 // If the service is shared then we'll cache the instance.
-                if isShared {
-                    let this->sharedInstances[name] = instance;
+                if (true === $isShared) {
+                    $this->sharedInstances[$name] = $instance;
                 }
             } else {
                 /**
                  * The DI also acts as builder for any class even if it isn't
                  * defined in the DI
                  */
-                if unlikely !class_exists(name) {
+                if (true !== class_exists($name)) {
                     throw new Exception(
-                        "Service '" . name . "' wasn't found in the dependency injection container"
+                        "Service '" . $name . "' wasn't found in the dependency injection container"
                     );
                 }
 
-                if typeof parameters == "array" && count(parameters) {
-                    let instance = create_instance_params(name, parameters);
+                if (true === is_array($parameters) && true !== empty($parameters)) {
+                    $instance = new $name(...$parameters);
                 } else {
-                    let instance = create_instance(name);
+                    $instance = new $name();
                 }
             }
         }
@@ -239,214 +256,227 @@ class Di implements DiInterface
          * Pass the DI to the instance if it implements
          * \Phalcon\Di\InjectionAwareInterface
          */
-        if typeof instance == "object" {
-            if instance instanceof InjectionAwareInterface {
-                instance->setDI(this);
-            }
+        if (
+            true === is_object($instance) &&
+            $instance instanceof InjectionAwareInterface
+        ) {
+            $instance->setDI($this);
         }
 
         /**
          * Allows for post creation instance configuration through the
          * "di:afterServiceResolve" event.
          */
-        if typeof eventsManager == "object" {
-            eventsManager->fire(
+        if (true === is_object($this->eventsManager)) {
+            $instance = $this->eventsManager->fire(
                 "di:afterServiceResolve",
-                this,
+                $this,
                 [
-                    "name":       name,
-                    "parameters": parameters,
-                    "instance":   instance
+                    'name'       => $name,
+                    'parameters' => $parameters,
+                    'instance'   => $instance,
                 ]
             );
         }
 
-        return instance;
+        return $instance;
     }
 
     /**
      * Return the latest DI created
+     *
+     * @return DiInterface|null
      */
-    public static function getDefault(): <DiInterface> | null
+    public static function getDefault(): ?DiInterface
     {
-        return self::_default;
+        return self::$_default;
     }
 
     /**
      * Returns the internal event manager
+     *
+     * @return ManagerInterface|null
      */
-    public function getInternalEventsManager(): <ManagerInterface> | null
+    public function getInternalEventsManager(): ?ManagerInterface
     {
-        return this->eventsManager;
+        return $this->eventsManager;
     }
 
     /**
      * Returns a service definition without resolving
+     *
+     * @param string $name
+     *
+     * @return mixed
+     * @throws Exception
      */
-    public function getRaw(string! name): var
+    public function getRaw(string $name)
     {
-        var service;
+        $this->checkService($name);
 
-        if unlikely !fetch service, this->services[name] {
-            throw new Exception(
-                "Service '" . name . "' wasn't found in the dependency injection container"
-            );
-        }
+        $service = $this->services[$name];
 
-        return service->getDefinition();
+        return $service->getDefinition();
     }
 
     /**
      * Returns a Phalcon\Di\Service instance
+     *
+     * @param string $name
+     *
+     * @return ServiceInterface
+     * @throws Exception
      */
-    public function getService(string! name): <ServiceInterface>
+    public function getService(string $name): ServiceInterface
     {
-        var service;
+        $this->checkService($name);
 
-        if unlikely !fetch service, this->services[name] {
-            throw new Exception(
-                "Service '" . name . "' wasn't found in the dependency injection container"
-            );
-        }
-
-        return service;
+        return $this->services[$name];
     }
 
     /**
      * Return the services registered in the DI
+     *
+     * @return array
      */
-    public function getServices(): <ServiceInterface[]>
+    public function getServices(): array
     {
-        return this->services;
+        return $this->services;
     }
 
     /**
      * Resolves a service, the resolved service is stored in the DI, subsequent
      * requests for this service will return the same instance
+     *
+     * @param string     $name
+     * @param array|null $parameters
+     *
+     * @return mixed|InjectionAwareInterface|null
+     * @throws Exception
      */
-    public function getShared(string! name, parameters = null): var
+    public function getShared(string $name, array $parameters = null)
     {
-        var instance;
+        $instance = $this->sharedInstances[$name] ?? null;
+        if (null === $instance) {
+            $instance = $this->get($name, $parameters);
 
-        // Attempt to use the instance from the shared instances cache.
-        if !fetch instance, this->sharedInstances[name] {
-            // Resolve the instance normally
-            let instance = this->get(name, parameters);
-
-            // Store the instance in the shared instances cache.
-            let this->sharedInstances[name] = instance;
+            $this->sharedInstances[$name] = $instance;
         }
 
-        return instance;
+        return $instance;
     }
 
-    /**
-     * Loads services from a Config object.
-     */
-    protected function loadFromConfig(<ConfigInterface> config): void
-    {
-        var services, name, service;
-
-        let services = config->toArray();
-
-        for name, service in services {
-            this->set(
-                name,
-                service,
-                isset service["shared"] && service["shared"]
-            );
-        }
-    }
-
-    /**
-     * Loads services from a php config file.
-     *
-     * ```php
-     * $di->loadFromPhp("path/services.php");
-     * ```
-     *
-     * And the services can be specified in the file as:
-     *
-     * ```php
-     * return [
-     *      'myComponent' => [
-     *          'className' => '\Acme\Components\MyComponent',
-     *          'shared' => true,
-     *      ],
-     *      'group' => [
-     *          'className' => '\Acme\Group',
-     *          'arguments' => [
-     *              [
-     *                  'type' => 'service',
-     *                  'service' => 'myComponent',
-     *              ],
-     *          ],
-     *      ],
-     *      'user' => [
-     *          'className' => '\Acme\User',
-     *      ],
-     * ];
-     * ```
-     *
-     * @link https://docs.phalcon.io/en/latest/reference/di.html
-     */
-    public function loadFromPhp(string! filePath): void
-    {
-        var services;
-
-        let services = new Php(filePath);
-
-        this->loadFromConfig(services);
-    }
-
-    /**
-     * Loads services from a yaml file.
-     *
-     * ```php
-     * $di->loadFromYaml(
-     *     "path/services.yaml",
-     *     [
-     *         "!approot" => function ($value) {
-     *             return dirname(__DIR__) . $value;
-     *         }
-     *     ]
-     * );
-     * ```
-     *
-     * And the services can be specified in the file as:
-     *
-     * ```php
-     * myComponent:
-     *     className: \Acme\Components\MyComponent
-     *     shared: true
-     *
-     * group:
-     *     className: \Acme\Group
-     *     arguments:
-     *         - type: service
-     *           name: myComponent
-     *
-     * user:
-     *    className: \Acme\User
-     * ```
-     *
-     * @link https://docs.phalcon.io/en/latest/reference/di.html
-     */
-    public function loadFromYaml(string! filePath, array! callbacks = null): void
-    {
-        var services;
-
-        let services = new Yaml(filePath, callbacks);
-
-        this->loadFromConfig(services);
-    }
+//    /**
+//     * Loads services from a Config object.
+//     */
+//    protected function loadFromConfig(<ConfigInterface> config): void
+//    {
+//        var services, name, service;
+//
+//        let services = config->toArray();
+//
+//        for name, service in services {
+//            this->set(
+//                name,
+//                service,
+//                isset service["shared"] && service["shared"]
+//            );
+//        }
+//    }
+//
+//    /**
+//     * Loads services from a php config file.
+//     *
+//     * ```php
+//     * $di->loadFromPhp("path/services.php");
+//     * ```
+//     *
+//     * And the services can be specified in the file as:
+//     *
+//     * ```php
+//     * return [
+//     *      'myComponent' => [
+//     *          'className' => '\Acme\Components\MyComponent',
+//     *          'shared' => true,
+//     *      ],
+//     *      'group' => [
+//     *          'className' => '\Acme\Group',
+//     *          'arguments' => [
+//     *              [
+//     *                  'type' => 'service',
+//     *                  'service' => 'myComponent',
+//     *              ],
+//     *          ],
+//     *      ],
+//     *      'user' => [
+//     *          'className' => '\Acme\User',
+//     *      ],
+//     * ];
+//     * ```
+//     *
+//     * @link https://docs.phalcon.io/en/latest/reference/di.html
+//     */
+//    public function loadFromPhp(string! filePath): void
+//    {
+//        var services;
+//
+//        let services = new Php(filePath);
+//
+//        this->loadFromConfig(services);
+//    }
+//
+//    /**
+//     * Loads services from a yaml file.
+//     *
+//     * ```php
+//     * $di->loadFromYaml(
+//     *     "path/services.yaml",
+//     *     [
+//     *         "!approot" => function ($value) {
+//     *             return dirname(__DIR__) . $value;
+//     *         }
+//     *     ]
+//     * );
+//     * ```
+//     *
+//     * And the services can be specified in the file as:
+//     *
+//     * ```php
+//     * myComponent:
+//     *     className: \Acme\Components\MyComponent
+//     *     shared: true
+//     *
+//     * group:
+//     *     className: \Acme\Group
+//     *     arguments:
+//     *         - type: service
+//     *           name: myComponent
+//     *
+//     * user:
+//     *    className: \Acme\User
+//     * ```
+//     *
+//     * @link https://docs.phalcon.io/en/latest/reference/di.html
+//     */
+//    public function loadFromYaml(string! filePath, array! callbacks = null): void
+//    {
+//        var services;
+//
+//        let services = new Yaml(filePath, callbacks);
+//
+//        this->loadFromConfig(services);
+//    }
 
     /**
      * Check whether the DI contains a service by a name
+     *
+     * @param string $name
+     *
+     * @return bool
      */
-    public function has(string! name): bool
+    public function has(string $name): bool
     {
-        return isset this->services[name];
+        return isset($this->services[$name]);
     }
 
     /**
@@ -455,18 +485,27 @@ class Di implements DiInterface
      *```php
      * var_dump($di["request"]);
      *```
+     *
+     * @param mixed $name
+     *
+     * @return mixed|InjectionAwareInterface|null
+     * @throws Exception
      */
-    public function offsetGet(var name): var
+    public function offsetGet($name)
     {
-        return this->getShared(name);
+        return $this->getShared($name);
     }
 
     /**
      * Check if a service is registered using the array syntax
+     *
+     * @param mixed $name
+     *
+     * @return bool
      */
-    public function offsetExists(var name): bool
+    public function offsetExists($name): bool
     {
-        return this->has(name);
+        return $this->has($name);
     }
 
     /**
@@ -475,18 +514,23 @@ class Di implements DiInterface
      *```php
      * $di["request"] = new \Phalcon\Http\Request();
      *```
+     *
+     * @param mixed $name
+     * @param mixed $definition
      */
-    public function offsetSet(var name, var definition): void
+    public function offsetSet($name, $definition): void
     {
-        this->setShared(name, definition);
+        $this->setShared($name, $definition);
     }
 
     /**
      * Removes a service from the services container using the array syntax
+     *
+     * @param mixed $name
      */
-    public function offsetUnset(var name): void
+    public function offsetUnset($name): void
     {
-        this->remove(name);
+        $this->remove($name);
     }
 
     /**
@@ -509,27 +553,24 @@ class Di implements DiInterface
      *     }
      * }
      * ```
+     *
+     * @param ServiceProviderInterface $provider
      */
-    public function register(<ServiceProviderInterface> provider): void
+    public function register(ServiceProviderInterface $provider): void
     {
-        provider->register(this);
+        $provider->register($this);
     }
 
     /**
      * Removes a service in the services container
      * It also removes any shared instance created for the service
+     *
+     * @param string $name
      */
-    public function remove(string! name): void
+    public function remove(string $name): void
     {
-        var services;
-        let services = this->services;
-        unset services[name];
-        let this->services = services;
-
-        var sharedInstances;
-        let sharedInstances = this->sharedInstances;
-        unset sharedInstances[name];
-        let this->sharedInstances = sharedInstances;
+        unset($this->services[$name]);
+        unset($this->sharedInstances[$name]);
     }
 
     /**
@@ -537,51 +578,85 @@ class Di implements DiInterface
      */
     public static function reset(): void
     {
-        let self::_default = null;
+        self::$_default = null;
     }
 
     /**
      * Registers a service in the services container
+     *
+     * @param string $name
+     * @param mixed  $definition
+     * @param bool   $shared
+     *
+     * @return ServiceInterface
      */
-    public function set(string! name, var definition, bool shared = false): <ServiceInterface>
+    public function set(string $name, $definition, bool $shared = false): ServiceInterface
     {
-        let this->services[name] = new Service(definition, shared);
+        $this->services[$name] = new Service($definition, $shared);
 
-        return this->services[name];
+        return $this->services[$name];
     }
 
     /**
      * Set a default dependency injection container to be obtained into static
      * methods
+     *
+     * @param DiInterface $container
      */
-    public static function setDefault(<DiInterface> container): void
+    public static function setDefault(DiInterface $container): void
     {
-        let self::_default = container;
+        self::$_default = $container;
     }
 
     /**
      * Sets the internal event manager
+     *
+     * @param ManagerInterface $eventsManager
      */
-    public function setInternalEventsManager(<ManagerInterface> eventsManager)
+    public function setInternalEventsManager(ManagerInterface $eventsManager)
     {
-        let this->eventsManager = eventsManager;
+        $this->eventsManager = $eventsManager;
     }
 
     /**
      * Sets a service using a raw Phalcon\Di\Service definition
+     *
+     * @param string           $name
+     * @param ServiceInterface $rawDefinition
+     *
+     * @return ServiceInterface
      */
-    public function setService(string! name, <ServiceInterface> rawDefinition): <ServiceInterface>
+    public function setService(string $name, ServiceInterface $rawDefinition): ServiceInterface
     {
-        let this->services[name] = rawDefinition;
+        $this->services[$name] = $rawDefinition;
 
-        return rawDefinition;
+        return $rawDefinition;
     }
 
     /**
      * Registers an "always shared" service in the services container
+     *
+     * @param string $name
+     * @param mixed  $definition
+     *
+     * @return ServiceInterface
      */
-    public function setShared(string! name, var definition): <ServiceInterface>
+    public function setShared(string $name, $definition): ServiceInterface
     {
-        return this->set(name, definition, true);
+        return $this->set($name, $definition, true);
+    }
+
+    /**
+     * @param string $name
+     *
+     * @throws Exception
+     */
+    private function checkService(string $name): void
+    {
+        if (true !== $this->has($name)) {
+            throw new Exception(
+                "Service '" . $name . "' was not found in the dependency injection container"
+            );
+        }
     }
 }

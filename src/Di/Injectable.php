@@ -13,37 +13,42 @@ declare(strict_types=1);
 
 namespace Phalcon\Di;
 
-use Phalcon\Di;
-use Phalcon\Session\BagInterface;
+//use Phalcon\Di;
+//use Phalcon\Session\BagInterface;
+use Phalcon\Events\Manager as EventsManager;
+use Phalcon\Events\ManagerInterface as EventsManagerInterface;
+use function is_object;
 
 /**
  * This class allows to access services in the services container by just only
  * accessing a public property with the same name of a registered service
  *
- * @property \Phalcon\Mvc\Dispatcher|\Phalcon\Mvc\DispatcherInterface $dispatcher
- * @property \Phalcon\Mvc\Router|\Phalcon\Mvc\RouterInterface $router
- * @property \Phalcon\Url|\Phalcon\Url\UrlInterface $url
- * @property \Phalcon\Http\Request|\Phalcon\Http\RequestInterface $request
- * @property \Phalcon\Http\Response|\Phalcon\Http\ResponseInterface $response
- * @property \Phalcon\Http\Response\Cookies|\Phalcon\Http\Response\CookiesInterface $cookies
- * @property \Phalcon\Filter $filter
- * @property \Phalcon\Flash\Direct $flash
- * @property \Phalcon\Flash\Session $flashSession
- * @property \Phalcon\Session\ManagerInterface $session
- * @property \Phalcon\Events\Manager|\Phalcon\Events\ManagerInterface $eventsManager
- * @property \Phalcon\Db\Adapter\AdapterInterface $db
- * @property \Phalcon\Security $security
- * @property \Phalcon\Crypt|\Phalcon\CryptInterface $crypt
- * @property \Phalcon\Tag $tag
- * @property \Phalcon\Escaper|\Phalcon\Escaper\EscaperInterface $escaper
- * @property \Phalcon\Annotations\Adapter\Memory|\Phalcon\Annotations\Adapter $annotations
- * @property \Phalcon\Mvc\Model\Manager|\Phalcon\Mvc\Model\ManagerInterface $modelsManager
- * @property \Phalcon\Mvc\Model\MetaData\Memory|\Phalcon\Mvc\Model\MetadataInterface $modelsMetadata
- * @property \Phalcon\Mvc\Model\Transaction\Manager|\Phalcon\Mvc\Model\Transaction\ManagerInterface $transactionManager
- * @property \Phalcon\Assets\Manager $assets
- * @property \Phalcon\Di|\Phalcon\Di\DiInterface $di
- * @property \Phalcon\Session\Bag|\Phalcon\Session\BagInterface $persistent
- * @property \Phalcon\Mvc\View|\Phalcon\Mvc\ViewInterface $view
+ * @property DiInterface|null                     $container
+ * @property DiInterface|null                     $di
+ * @property EventsManager|EventsManagerInterface $eventsManager
+// * @property \Phalcon\Mvc\Dispatcher|\Phalcon\Mvc\DispatcherInterface $dispatcher
+// * @property \Phalcon\Mvc\Router|\Phalcon\Mvc\RouterInterface $router
+// * @property \Phalcon\Url|\Phalcon\Url\UrlInterface $url
+// * @property \Phalcon\Http\Request|\Phalcon\Http\RequestInterface $request
+// * @property \Phalcon\Http\Response|\Phalcon\Http\ResponseInterface $response
+// * @property \Phalcon\Http\Response\Cookies|\Phalcon\Http\Response\CookiesInterface $cookies
+// * @property \Phalcon\Filter $filter
+// * @property \Phalcon\Flash\Direct $flash
+// * @property \Phalcon\Flash\Session $flashSession
+// * @property \Phalcon\Session\ManagerInterface $session
+// * @property \Phalcon\Db\Adapter\AdapterInterface $db
+// * @property \Phalcon\Security $security
+// * @property \Phalcon\Crypt|\Phalcon\CryptInterface $crypt
+// * @property \Phalcon\Tag $tag
+// * @property \Phalcon\Escaper|\Phalcon\Escaper\EscaperInterface $escaper
+// * @property \Phalcon\Annotations\Adapter\Memory|\Phalcon\Annotations\Adapter $annotations
+// * @property \Phalcon\Mvc\Model\Manager|\Phalcon\Mvc\Model\ManagerInterface $modelsManager
+// * @property \Phalcon\Mvc\Model\MetaData\Memory|\Phalcon\Mvc\Model\MetadataInterface $modelsMetadata
+// * @property \Phalcon\Mvc\Model\Transaction\Manager|\Phalcon\Mvc\Model\Transaction\ManagerInterface $transactionManager
+// * @property \Phalcon\Assets\Manager $assets
+// * @property \Phalcon\Di|\Phalcon\Di\DiInterface $di
+// * @property \Phalcon\Session\Bag|\Phalcon\Session\BagInterface $persistent
+// * @property \Phalcon\Mvc\View|\Phalcon\Mvc\ViewInterface $view
  */
 abstract class Injectable implements InjectionAwareInterface
 {
@@ -52,51 +57,49 @@ abstract class Injectable implements InjectionAwareInterface
      *
      * @var DiInterface
      */
-    protected container;
+    protected DiInterface $container;
 
     /**
      * Magic method __get
      */
-    public function __get(string! propertyName): var | null
+    public function __get(string $propertyName)
     {
-        var container, service;
+        $container = $this->getDI();
 
-        let container = <DiInterface> this->getDI();
+        if ('di' === $propertyName) {
+            $this->di = $container;
 
-        if propertyName == "di" {
-            let this->{"di"} = container;
-
-            return container;
+            return $container;
         }
 
-        /**
-         * Accessing the persistent property will create a session bag on any class
-         */
-        if propertyName == "persistent" {
-            let this->{"persistent"} = <BagInterface> container->get(
-                "sessionBag",
-                [
-                    get_class(this)
-                ]
-            );
-
-            return this->{"persistent"};
-        }
+//        /**
+//         * Accessing the persistent property will create a session bag on any class
+//         */
+//        if propertyName == "persistent" {
+//            let this->{"persistent"} = <BagInterface> container->get(
+//                "sessionBag",
+//                [
+//                    get_class(this)
+//                ]
+//            );
+//
+//            return this->{"persistent"};
+//        }
 
         /**
          * Fallback to the PHP userland if the cache is not available
          */
-        if container->has(propertyName) {
-            let service = container->getShared(propertyName);
-            let this->{propertyName} = service;
+        if (true === $container->has($propertyName)) {
+            $service = $container->getShared($propertyName);
+            $this->$propertyName = $service;
 
-            return service;
+            return $service;
         }
 
         /**
          * A notice is shown if the property is not defined and isn't a valid service
          */
-        trigger_error("Access to undefined property " . propertyName);
+        trigger_error("Access to undefined property " . $propertyName);
 
         return null;
     }
@@ -104,38 +107,34 @@ abstract class Injectable implements InjectionAwareInterface
     /**
      * Magic method __isset
      */
-    public function __isset(string! name): bool
+    public function __isset(string $name): bool
     {
-        return this->getDI()->has(name);
+        return $this->getDI()->has($name);
     }
 
     /**
      * Returns the internal dependency injector
      */
-    public function getDI(): <DiInterface>
+    public function getDI(): DiInterface
     {
-        var container;
+        if (true !== is_object($this->container)) {
+            $this->container = Di::getDefault();
 
-        let container = <DiInterface> this->container;
-
-        if typeof container != "object" {
-            let container = Di::getDefault();
-
-            if unlikely typeof container != "object" {
-                throw new Exception(
-                    Exception::containerServiceNotFound("internal services")
-                );
-            }
+//            if unlikely typeof container != "object" {
+//                throw new Exception(
+//                    Exception::containerServiceNotFound("internal services")
+//                );
+//            }
         }
 
-        return container;
+        return $this->container;
     }
 
     /**
      * Sets the dependency injector
      */
-    public function setDI(<DiInterface> container): void
+    public function setDI(DiInterface $container): void
     {
-        let this->container = container;
+        $this->container = $container;
     }
 }

@@ -13,10 +13,7 @@ declare(strict_types=1);
 
 namespace Phalcon\Di;
 
-use Closure;
 use Phalcon\Di\Exception\ServiceResolutionException;
-use Phalcon\Di\Service\Builder;
-use function is_array;
 
 /**
  * Represents individually a service in the services container
@@ -60,10 +57,10 @@ class Service implements ServiceInterface
     /**
      * Service constructor.
      *
-     * @param array $definition
+     * @param mixed $definition
      * @param bool  $shared
      */
-    final public function __construct(array $definition, bool $shared = false)
+    final public function __construct($definition, bool $shared = false)
     {
         $this->definition = $definition;
         $this->shared     = $shared;
