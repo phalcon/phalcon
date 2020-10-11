@@ -18,6 +18,7 @@ use Countable;
 use Iterator;
 use JsonSerializable;
 use Phalcon\Support\Traits\JsonTrait;
+
 use function is_array;
 
 /**
@@ -297,6 +298,5 @@ class Messages implements ArrayAccess, Countable, Iterator, JsonSerializable
                 $messages->next();
             }
         }
-
     }
 }
