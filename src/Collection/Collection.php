@@ -21,6 +21,7 @@ use JsonSerializable;
 use Phalcon\Collection\Traits\ArrayAccessTrait;
 use Phalcon\Collection\Traits\GetSetHasTrait;
 use Phalcon\Collection\Traits\SerializableTrait;
+use Phalcon\Support\Traits\JsonTrait;
 use Serializable;
 
 use function array_key_exists;
@@ -59,6 +60,7 @@ class Collection implements
 {
     use ArrayAccessTrait;
     use GetSetHasTrait;
+    use JsonTrait;
     use SerializableTrait;
 
     /**
@@ -213,11 +215,7 @@ class Collection implements
         $records = [];
 
         foreach ($this->data as $key => $value) {
-            if (is_object($value) && method_exists($value, 'jsonSerialize')) {
-                $records[$key] = $value->jsonSerialize();
-            } else {
-                $records[$key] = $value;
-            }
+            $records[$key] = $this->checkSerializable($value);
         }
 
         return $records;

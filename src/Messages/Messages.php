@@ -17,23 +17,30 @@ use ArrayAccess;
 use Countable;
 use Iterator;
 use JsonSerializable;
+use Phalcon\Support\Traits\JsonTrait;
+use function is_array;
 
 /**
  * Class Messages
  *
  * Represents a collection of messages
+ *
+ * @property array $messages
+ * @property int   $position
  */
 class Messages implements ArrayAccess, Countable, Iterator, JsonSerializable
 {
-    /**
-     * @var int
-     */
-    protected int $position = 0;
+    use JsonTrait;
 
     /**
      * @var array
      */
     protected array $messages = [];
+
+    /**
+     * @var int
+     */
+    protected int $position = 0;
 
     /**
      * Phalcon\Messages\Messages constructor
@@ -72,30 +79,12 @@ class Messages implements ArrayAccess, Countable, Iterator, JsonSerializable
      */
     public function appendMessages($messages): void
     {
-        if (!is_iterable($messages)) {
+        if (true !== is_iterable($messages)) {
             throw new Exception("The messages must be iterable");
         }
 
-        if (is_array($messages)) {
-            /**
-             * An array of messages is simply merged into the current one
-             */
-
-            $this->messages = [...$this->messages, ...$messages];
-        } else {
-            /**
-             * A collection of messages is iterated and appended one-by-one to
-             * the current list
-             */
-
-            $messages->rewind();
-
-            while ($messages->valid()) {
-                $message = $messages->current();
-                $this->appendMessage($message);
-                $messages->next();
-            }
-        }
+        $this->checkAppendMessagesArray($messages);
+        $this->checkAppendMessages($messages);
     }
 
     /**
@@ -147,11 +136,26 @@ class Messages implements ArrayAccess, Countable, Iterator, JsonSerializable
     }
 
     /**
-     * Moves the internal iteration pointer to the next position
+     * Returns serialised message objects as array for json_encode. Calls
+     * jsonSerialize on each object if present
+     *
+     *```php
+     * $data = $messages->jsonSerialize();
+     * echo json_encode($data);
+     *```
+     *
+     * @return array
+     * @link https://php.net/manual/en/jsonserializable.jsonserialize.php
      */
-    public function next(): void
+    public function jsonSerialize(): array
     {
-        $this->position++;
+        $records = [];
+
+        foreach ($this->messages as $message) {
+            $records[] = $this->checkSerializable($message);
+        }
+
+        return $records;
     }
 
     /**
@@ -165,21 +169,11 @@ class Messages implements ArrayAccess, Countable, Iterator, JsonSerializable
     }
 
     /**
-     * Check if the current message in the iterator is valid
-     *
-     * @return bool
+     * Moves the internal iteration pointer to the next position
      */
-    public function valid(): bool
+    public function next(): void
     {
-        return isset($this->messages[$this->position]);
-    }
-
-    /**
-     * Rewinds the internal iterator
-     */
-    public function rewind(): void
-    {
-        $this->position = 0;
+        $this->position++;
     }
 
     /**
@@ -229,8 +223,8 @@ class Messages implements ArrayAccess, Countable, Iterator, JsonSerializable
      */
     public function offsetSet($offset, $message): void
     {
-        if (!is_object($message)) {
-            throw new Exception("The message must be an object");
+        if (true !== is_object($message)) {
+            throw new Exception('The message must be an object');
         }
 
         $this->messages[$offset] = $message;
@@ -253,29 +247,56 @@ class Messages implements ArrayAccess, Countable, Iterator, JsonSerializable
     }
 
     /**
-     * Returns serialised message objects as array for json_encode. Calls
-     * jsonSerialize on each object if present
-     *
-     *```php
-     * $data = $messages->jsonSerialize();
-     * echo json_encode($data);
-     *```
-     *
-     * @return array
-     * @link https://php.net/manual/en/jsonserializable.jsonserialize.php
+     * Rewinds the internal iterator
      */
-    public function jsonSerialize(): array
+    public function rewind(): void
     {
-        $records = [];
+        $this->position = 0;
+    }
 
-        foreach ($this->messages as $message) {
-            if (is_object($message) && method_exists($message, 'jsonSerialize')) {
-                $records[] = $message->jsonSerialize();
-            } else {
-                $records[] = $message;
+    /**
+     * Check if the current message in the iterator is valid
+     *
+     * @return bool
+     */
+    public function valid(): bool
+    {
+        return isset($this->messages[$this->position]);
+    }
+
+    /**
+     * @param mixed $messages
+     */
+    private function checkAppendMessages($messages): void
+    {
+        if (true === is_array($messages)) {
+            /**
+             * An array of messages is simply merged into the current one
+             */
+
+            $this->messages = [...$this->messages, ...$messages];
+        }
+    }
+
+    /**
+     * @param mixed $append
+     */
+    private function checkAppendMessagesArray($messages): void
+    {
+        if (true !== is_array($messages)) {
+            /**
+             * A collection of messages is iterated and appended one-by-one to
+             * the current list
+             */
+
+            $messages->rewind();
+
+            while ($messages->valid()) {
+                $message = $messages->current();
+                $this->appendMessage($message);
+                $messages->next();
             }
         }
 
-        return $records;
     }
 }

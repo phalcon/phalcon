@@ -14,6 +14,7 @@ declare(strict_types=1);
 namespace Phalcon\Events;
 
 use Closure;
+use Phalcon\Events\Traits\ManagerHelperTrait;
 use SplPriorityQueue;
 
 use function is_object;
@@ -25,27 +26,10 @@ use function is_object;
  * needed, the normal flow of operation. With the EventsManager the developer
  * can create hooks or plugins that will offer monitoring of data, manipulation,
  * conditional execution and much more.
- *
- * @property bool  $collect
- * @property bool  $enablePriorities
- * @property mixed $events
- * @property mixed $responses
  */
 class Manager implements ManagerInterface
 {
-    /**
-     * @var bool
-     */
-    protected bool $collect = false;
-
-    /**
-     * @var bool
-     */
-    protected bool $enablePriorities = false;
-
-    protected $events = null;
-
-    protected $responses;
+    use ManagerHelperTrait;
 
     /**
      * Attach a listener to the events manager
@@ -367,51 +351,5 @@ class Manager implements ManagerInterface
     public function isCollecting(): bool
     {
         return $this->collect;
-    }
-
-    /**
-     * @param mixed $handler
-     *
-     * @return bool
-     */
-    public function isValidHandler($handler): bool
-    {
-        if (true !== is_object($handler) && true !== is_callable($handler)) {
-            return false;
-        }
-
-        return true;
-    }
-
-    /**
-     * @param mixed $handler
-     *
-     * @throws Exception
-     */
-    private function checkHandler($handler): void
-    {
-        if (false === $this->isValidHandler($handler)) {
-            throw new Exception('Event handler must be an Object or Callable');
-        }
-    }
-
-    /**
-     * @param string|null $type
-     */
-    private function processDetachAllNullType(?string $type): void
-    {
-        if (null === $type) {
-            $this->events = null;
-        }
-    }
-
-    /**
-     * @param string|null $type
-     */
-    private function processDetachAllNotNullType(?string $type): void
-    {
-        if (null !== $type && true === isset($this->events[$type])) {
-            unset($this->events[$type]);
-        }
     }
 }
