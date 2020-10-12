@@ -22,6 +22,11 @@ class ErrorCest
 
     /**
      * Tests Phalcon\Logger :: error()
+     *
+     * @param UnitTester $I
+     *
+     * @author Phalcon Team <team@phalcon.io>
+     * @since  2020-09-09
      */
     public function loggerError(UnitTester $I)
     {

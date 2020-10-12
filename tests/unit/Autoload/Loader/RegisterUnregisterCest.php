@@ -27,9 +27,11 @@ class RegisterUnregisterCest
     /**
      * Tests Phalcon\Autoload\Loader :: register()/unregister()
      *
+     * @param UnitTester $I
+     *
+     * @author Phalcon Team <team@phalcon.io>
      * @since  2020-09-09
      */
-
     public function autoloaderLoaderRegisterUnregister(UnitTester $I)
     {
         $I->wantToTest('Autoload\Loader - register()/unregister()');

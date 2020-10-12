@@ -20,6 +20,11 @@ class SetDateFormatCest
 {
     /**
      * Tests Phalcon\Logger\Formatter\Line :: setDateFormat()
+     *
+     * @param UnitTester $I
+     *
+     * @author Phalcon Team <team@phalcon.io>
+     * @since  2020-09-09
      */
     public function loggerFormatterLineSetDateFormat(UnitTester $I)
     {

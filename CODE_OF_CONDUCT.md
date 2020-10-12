@@ -20,6 +20,6 @@ disagree.
 
 If ever conflict arises, please bring it to the attention of the maintainers
 privately. You can always find us on our [Discord](https://phalcon.io/discord)
-server or you can send us an email at team@phalcon.io
+server or you can send us an email at [team@phalcon.io](mailto:team@phalcon.io)
 
 The core team maintains the final decision on any conflict that may arise.

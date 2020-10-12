@@ -18,7 +18,9 @@ use Phalcon\Support\Exception;
 use function array_merge;
 
 /**
- * Class AbstractFactory
+ * Trait FactoryTrait
+ *
+ * @package Phalcon\Support\Traits
  *
  * @property array $mapper
  */

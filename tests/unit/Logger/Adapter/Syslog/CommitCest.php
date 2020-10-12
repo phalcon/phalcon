@@ -22,6 +22,8 @@ class CommitCest
     /**
      * Tests Phalcon\Logger\Adapter\Syslog :: commit()
      *
+     * @param UnitTester $I
+     *
      * @author Phalcon Team <team@phalcon.io>
      * @since  2020-09-09
      */
@@ -48,6 +50,8 @@ class CommitCest
 
     /**
      * Tests Phalcon\Logger\Adapter\Syslog :: commit() - no transaction
+     *
+     * @param UnitTester $I
      *
      * @author Phalcon Team <team@phalcon.io>
      * @since  2020-09-09

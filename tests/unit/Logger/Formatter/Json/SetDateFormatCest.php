@@ -23,9 +23,8 @@ class SetDateFormatCest
      *
      * @param UnitTester $I
      *
-     * @since  2020-09-06
-     *
      * @author Phalcon Team <team@phalcon.io>
+     * @since  2020-09-09
      */
     public function loggerFormatterJsonSetDateFormat(UnitTester $I)
     {

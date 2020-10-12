@@ -23,8 +23,9 @@ class KeyCest
      * Tests Phalcon\Messages\Messages :: key()
      *
      * @param UnitTester $I
-     * @since  2018-11-13
+     *
      * @author Phalcon Team <team@phalcon.io>
+     * @since  2020-09-09
      */
     public function messagesMessagesKey(UnitTester $I): void
     {

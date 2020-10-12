@@ -27,21 +27,24 @@ class ConstructCest
 
     /**
      * Tests Phalcon\Logger :: __construct() - implement PSR
+     *
+     * @param UnitTester $I
+     *
+     * @author Phalcon Team <team@phalcon.io>
+     * @since  2020-09-09
      */
     public function loggerConstructImplementPsr(UnitTester $I)
     {
         $I->wantToTest('Logger - __construct() - implement PSR');
 
         $logger = new Logger('my-logger');
-
-        $I->assertInstanceOf(
-            LoggerInterface::class,
-            $logger
-        );
+        $I->assertInstanceOf(LoggerInterface::class, $logger);
     }
 
     /**
      * Tests Phalcon\Logger :: __construct() - constants
+     *
+     * @param UnitTester $I
      *
      * @author Phalcon Team <team@phalcon.io>
      * @since  2020-09-09
@@ -63,22 +66,21 @@ class ConstructCest
 
     /**
      * Tests Phalcon\Logger :: __construct() - file with json formatter
+     *
+     * @param UnitTester $I
+     *
+     * @author Phalcon Team <team@phalcon.io>
+     * @since  2020-09-09
      */
     public function loggerConstructStreamWithJsonConstants(UnitTester $I)
     {
         $I->wantToTest('Logger - __construct() - file with json formatter');
 
-        $fileName = $I->getNewFileName('log', 'log');
-
+        $fileName   = $I->getNewFileName('log', 'log');
         $outputPath = logsDir();
+        $adapter    = new Stream($outputPath . $fileName);
 
-        $adapter = new Stream(
-            $outputPath . $fileName
-        );
-
-        $adapter->setFormatter(
-            new Json()
-        );
+        $adapter->setFormatter(new Json());
 
         $logger = new Logger(
             'my-logger',
@@ -90,12 +92,7 @@ class ConstructCest
         $time = time();
 
         $logger->debug('This is a message');
-
-        $logger->log(
-            Logger::ERROR,
-            'This is an error'
-        );
-
+        $logger->log(Logger::ERROR, 'This is an error');
         $logger->error('This is another error');
 
         $I->amInPath($outputPath);
@@ -113,14 +110,16 @@ class ConstructCest
         $I->seeInThisFile($expected);
 
         $adapter->close();
-
-        $I->safeDeleteFile(
-            $outputPath . $fileName
-        );
+        $I->safeDeleteFile($outputPath . $fileName);
     }
 
     /**
      * Tests Phalcon\Logger :: __construct() - read only mode exception
+     *
+     * @param UnitTester $I
+     *
+     * @author Phalcon Team <team@phalcon.io>
+     * @since  2020-09-09
      */
     public function loggerConstructStreamReadOnlyModeException(UnitTester $I)
     {
@@ -147,6 +146,11 @@ class ConstructCest
 
     /**
      * Tests Phalcon\Logger :: __construct() - no adapter exception
+     *
+     * @param UnitTester $I
+     *
+     * @author Phalcon Team <team@phalcon.io>
+     * @since  2020-09-09
      */
     public function loggerConstructNoAdapterException(UnitTester $I)
     {

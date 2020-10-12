@@ -21,6 +21,8 @@ class RollbackCest
     /**
      * Tests Phalcon\Logger\Adapter\Noop :: rollback()
      *
+     * @param UnitTester $I
+     *
      * @author Phalcon Team <team@phalcon.io>
      * @since  2020-09-09
      */

@@ -20,6 +20,11 @@ class BeginCest
 {
     /**
      * Tests Phalcon\Logger\Adapter\Stream :: begin()
+     *
+     * @param UnitTester $I
+     *
+     * @author Phalcon Team <team@phalcon.io>
+     * @since  2020-09-09
      */
     public function loggerAdapterStreamBegin(UnitTester $I)
     {

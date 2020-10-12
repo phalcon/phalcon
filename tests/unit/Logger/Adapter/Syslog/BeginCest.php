@@ -21,6 +21,8 @@ class BeginCest
     /**
      * Tests Phalcon\Logger\Adapter\Syslog :: begin()
      *
+     * @param UnitTester $I
+     *
      * @author Phalcon Team <team@phalcon.io>
      * @since  2020-09-09
      */

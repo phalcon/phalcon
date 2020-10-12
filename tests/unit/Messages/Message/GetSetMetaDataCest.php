@@ -22,8 +22,9 @@ class GetSetMetaDataCest
      * Tests Phalcon\Messages\Message :: getMetaData()/setMetaData()
      *
      * @param UnitTester $I
-     * @since  2019-02-10
+     *
      * @author Phalcon Team <team@phalcon.io>
+     * @since  2020-09-09
      */
     public function messagesMessageGetSetMetaData(UnitTester $I): void
     {

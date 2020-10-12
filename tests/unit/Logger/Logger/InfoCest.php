@@ -22,6 +22,11 @@ class InfoCest
 
     /**
      * Tests Phalcon\Logger :: info()
+     *
+     * @param UnitTester $I
+     *
+     * @author Phalcon Team <team@phalcon.io>
+     * @since  2020-09-09
      */
     public function loggerInfo(UnitTester $I)
     {

@@ -22,6 +22,11 @@ class CriticalCest
 
     /**
      * Tests Phalcon\Logger :: critical()
+     *
+     * @param UnitTester $I
+     *
+     * @author Phalcon Team <team@phalcon.io>
+     * @since  2020-09-09
      */
     public function loggerCritical(UnitTester $I)
     {
