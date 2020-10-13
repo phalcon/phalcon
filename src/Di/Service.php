@@ -13,7 +13,12 @@ declare(strict_types=1);
 
 namespace Phalcon\Di;
 
+use Closure;
 use Phalcon\Di\Exception\ServiceResolutionException;
+use function is_a;
+use function is_array;
+use function is_object;
+use function is_string;
 
 /**
  * Represents individually a service in the services container
@@ -35,9 +40,9 @@ use Phalcon\Di\Exception\ServiceResolutionException;
 class Service implements ServiceInterface
 {
     /**
-     * @var array
+     * @var mixed
      */
-    protected array $definition;
+    protected $definition;
 
     /**
      * @var bool
@@ -128,89 +133,86 @@ class Service implements ServiceInterface
             return $this->sharedInstance;
         }
 
-//        let found = true,
-//            instance = null;
-//
-//        let definition = this->definition;
-//        if typeof definition == "string" {
-//            /**
-//             * String definitions can be class names without implicit parameters
-//             */
-//            if container !== null {
-//                let instance = container->get(definition, parameters);
-//            } elseif class_exists(definition) {
-//                if typeof parameters == "array" && count(parameters) {
-//                    let instance = create_instance_params(
-//                        definition,
-//                        parameters
-//                    );
-//                } else {
-//                    let instance = create_instance(definition);
-//                }
-//            } else {
-//                let found = false;
-//            }
-//        } else {
-//
-//            /**
-//             * Object definitions can be a Closure or an already resolved
-//             * instance
-//             */
-//            if typeof definition == "object" {
-//                if definition instanceof Closure {
-//
-//                    /**
-//                     * Bounds the closure to the current DI
-//                     */
-//                    if typeof container == "object" {
-//                        let definition = Closure::bind(definition, container);
-//                    }
-//
-//                    if typeof parameters == "array" {
-//                        let instance = call_user_func_array(
-//                            definition,
-//                            parameters
-//                        );
-//                    } else {
-//                        let instance = call_user_func(definition);
-//                    }
-//                } else {
-//                    let instance = definition;
-//                }
-//            } else {
-//                /**
-//                 * Array definitions require a 'className' parameter
-//                 */
-//                if typeof definition == "array" {
-//                    let builder = new Builder(),
-//                        instance = builder->build(
-//                            container,
-//                            definition,
-//                            parameters
-//                        );
-//                } else {
-//                    let found = false;
-//                }
-//            }
-//        }
-//
-//        /**
-//         * If the service can't be built, we must throw an exception
-//         */
-//        if unlikely found === false {
-//            throw new ServiceResolutionException();
-//        }
-//
-//        /**
-//         * Update the shared instance if the service is shared
-//         */
-//        if shared {
-//            let this->sharedInstance = instance;
-//        }
-//
-//        let this->resolved = true;
-//
-//        return instance;
+        $found              = true;
+        $instance           = null;
+        $instanceDefinition = $this->definition;
+
+        if (true === is_string($instanceDefinition)) {
+            /**
+             * String definitions can be class names without implicit parameters
+             */
+            if (null !== $container) {
+                $instance = $container->get($instanceDefinition, $parameters);
+            } elseif (true === class_exists($instanceDefinition)) {
+                if (true === is_array($parameters) && true !== empty($parameters)) {
+                    $instance = new $instanceDefinition(... $parameters);
+                } else {
+                    $instance = new $instanceDefinition();
+                }
+            } else {
+                $found = false;
+            }
+        } else {
+
+            /**
+             * Object definitions can be a Closure or an already resolved
+             * instance
+             */
+            if (true === is_object($instanceDefinition)) {
+                if ($instanceDefinition instanceof Closure) {
+
+                    /**
+                     * Bounds the closure to the current DI
+                     */
+                    if (true === is_object($container)) {
+                        $instanceDefinition = Closure::bind($instanceDefinition, $container);
+                    }
+
+                    if (true === is_array($parameters)) {
+                        $instance = call_user_func_array(
+                            $instanceDefinition,
+                            $parameters
+                        );
+                    } else {
+                        $instance = call_user_func($instanceDefinition);
+                    }
+                } else {
+                    $instance = $instanceDefinition;
+                }
+            } else {
+                /**
+                 * Array definitions require a 'className' parameter
+                 */
+                if (true === is_array($instanceDefinition)) {
+                    $builder  = new Builder();
+                    $instance = $builder->build(
+                        $container,
+                        $instanceDefinition,
+                        $parameters
+                    );
+                } else {
+                    $found = false;
+                }
+            }
+        }
+
+        /**
+         * If the service can't be built, we must throw an exception
+         */
+        if (true !== $found) {
+            throw new ServiceResolutionException();
+        }
+
+        /**
+         * Update the shared instance if the service is shared
+         */
+        if (true === $this->shared) {
+            $this->sharedInstance = $instance;
+        }
+
+        $this->resolved = true;
+
+        return $instance;
     }
 
     /**
@@ -234,26 +236,26 @@ class Service implements ServiceInterface
      */
     public function setParameter(int $position, array $parameter): ServiceInterface
     {
-        $definition = $this->definition;
-
-//        /**
-//         * Update the parameter
-//         */
-//        if fetch arguments, definition["arguments"] {
-//            let arguments[position] = parameter;
-//        } else {
-//            let arguments = [position: parameter];
-//        }
-//
-//        /**
-//         * Re-update the arguments
-//         */
-//        let definition["arguments"] = arguments;
+        if (true !== is_array($this->definition)) {
+            throw new Exception(
+                'Definition must be an array to update its parameters'
+            );
+        }
 
         /**
-         * Re-update the definition
+         * Update the parameter
          */
-        $this->definition = $definition;
+        if (true === isset($this->definition['arguments'])) {
+            $arguments            = $this->definition['arguments'];
+            $arguments[$position] = $parameter;
+        } else {
+            $arguments = [$position => $parameter];
+        }
+
+        /**
+         * Re-update the arguments
+         */
+        $this->definition['arguments'] = $arguments;
 
         return $this;
     }

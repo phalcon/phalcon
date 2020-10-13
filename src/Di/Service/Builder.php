@@ -16,6 +16,9 @@ namespace Phalcon\Di\Service;
 use Phalcon\Di\DiInterface;
 use Phalcon\Di\Exception;
 
+use function is_array;
+use function is_object;
+
 /**
  * Phalcon\Di\Service\Builder
  *
@@ -26,114 +29,118 @@ class Builder
     /**
      * Builds a service using a complex service definition
      *
-     * @param array parameters
+     * @param DiInterface $container
+     * @param array       $definition
+     * @param array|null  $parameters
+     *
      * @return mixed
+     * @throws Exception
      */
-    public function build(<DiInterface> container, array! definition, parameters = null)
-    {
-        var className, arguments, paramCalls, methodPosition, method,
-            methodName, methodCall, instance, propertyPosition, property,
-            propertyName, propertyValue;
-
+    public function build(
+        DiInterface $container,
+        array $definition,
+        $parameters = null
+    ) {
         /**
          * The class name is required
          */
-        if unlikely !fetch className, definition["className"] {
+        if (true !== isset($definition['className'])) {
             throw new Exception(
-                "Invalid service definition. Missing 'className' parameter"
+                'Invalid service definition. Missing "className" parameter'
             );
         }
 
-        if typeof parameters == "array" {
-
+        $className = $definition['className'];
+        if (true === is_array($parameters)) {
             /**
              * Build the instance overriding the definition constructor
              * parameters
              */
-            if count(parameters) {
-                let instance = create_instance_params(className, parameters);
+            if (count($parameters) > 0) {
+                $instance = new $className(...$parameters);
             } else {
-                let instance = create_instance(className);
+                $instance = new $className();
             }
-
         } else {
-
             /**
              * Check if the argument has constructor arguments
              */
-            if fetch arguments, definition["arguments"] {
-
+            if (true === isset($definition['arguments'])) {
                 /**
                  * Create the instance based on the parameters
                  */
-                let instance = create_instance_params(
-                    className,
-                    this->buildParameters(container, arguments)
+                $params   = $this->buildParameters(
+                    $container,
+                    $definition['arguments']
                 );
-
+                $instance = new $className(...$params);
             } else {
-                let instance = create_instance(className);
+                $instance = new $className();
             }
         }
 
         /**
          * The definition has calls?
          */
-        if fetch paramCalls, definition["calls"] {
-            if unlikely typeof instance != "object" {
+        if (true === isset($definition['calls'])) {
+            if (true !== is_object($instance)) {
                 throw new Exception(
-                    "The definition has setter injection parameters but the constructor didn't return an instance"
+                    "The definition has setter injection " .
+                    "parameters but the constructor didn't return an instance"
                 );
             }
 
-            if unlikely typeof paramCalls != "array" {
+            $paramCalls = $definition['calls'];
+            if (true !== is_array($paramCalls)) {
                 throw new Exception(
-                    "Setter injection parameters must be an array"
+                    'Setter injection parameters must be an array'
                 );
             }
 
             /**
              * The method call has parameters
              */
-            for methodPosition, method in paramCalls {
-
+            foreach ($paramCalls as $methodPosition => $method) {
                 /**
                  * The call parameter must be an array of arrays
                  */
-                if unlikely typeof method != "array" {
+                if (true !== is_array($method)) {
                     throw new Exception(
-                        "Method call must be an array on position " . methodPosition
+                        'Method call must be an array on position ' .
+                        $methodPosition
                     );
                 }
 
                 /**
                  * A param 'method' is required
                  */
-                if unlikely !fetch methodName, method["method"] {
+                if (true !== isset($method['method'])) {
                     throw new Exception(
-                        "The method name is required on position " . methodPosition
+                        "The method name is required on position " .
+                        $methodPosition
                     );
                 }
 
                 /**
                  * Create the method call
                  */
-                let methodCall = [instance, methodName];
-
-                if fetch arguments, method["arguments"] {
-                    if unlikely typeof arguments != "array" {
+                $methodCall = [$instance, $method["method"]];
+                if (true === isset($method['arguments'])) {
+                    $arguments = $method['arguments'];
+                    if (true !== is_array($arguments)) {
                         throw new Exception(
-                            "Call arguments must be an array " . methodPosition
+                            "Call arguments must be an array " .
+                            $methodPosition
                         );
                     }
 
-                    if count(arguments) {
+                    if (count($arguments) > 0) {
                         /**
                          * Call the method on the instance
                          */
                         call_user_func_array(
-                            methodCall,
-                            this->buildParameters(container, arguments)
+                            $methodCall,
+                            $this->buildParameters($container, $arguments)
                         );
 
                         /**
@@ -146,182 +153,221 @@ class Builder
                 /**
                  * Call the method on the instance without arguments
                  */
-                call_user_func(methodCall);
+                call_user_func($methodCall);
             }
         }
 
         /**
          * The definition has properties?
          */
-        if fetch paramCalls, definition["properties"] {
-
-            if unlikely typeof instance != "object" {
+        if (true === isset($definition['properties'])) {
+            if (true !== is_object($instance)) {
                 throw new Exception(
-                    "The definition has properties injection parameters but the constructor didn't return an instance"
+                    "The definition has properties injection " .
+                    "parameters but the constructor didn't return an instance"
                 );
             }
 
-            if unlikely typeof paramCalls != "array" {
+            $paramCalls = $definition['properties'];
+            if (true !== is_array($paramCalls)) {
                 throw new Exception(
-                    "Setter injection parameters must be an array"
+                    'Setter injection parameters must be an array'
                 );
             }
 
             /**
              * The method call has parameters
              */
-            for propertyPosition, property in paramCalls {
-
+            foreach ($paramCalls as $propertyPosition => $property) {
                 /**
                  * The call parameter must be an array of arrays
                  */
-                if unlikely typeof property != "array" {
+                if (true !== is_array($property)) {
                     throw new Exception(
-                        "Property must be an array on position " . propertyPosition
+                        "Property must be an array on position " .
+                        $propertyPosition
                     );
                 }
 
                 /**
                  * A param 'name' is required
                  */
-                if unlikely !fetch propertyName, property["name"] {
+                if (true !== isset($property['name'])) {
                     throw new Exception(
-                        "The property name is required on position " . propertyPosition
+                        'The property name is required on position ' .
+                        $propertyPosition
                     );
                 }
 
                 /**
                  * A param 'value' is required
                  */
-                if unlikely !fetch propertyValue, property["value"] {
+                if (true !== isset($property['value'])) {
                     throw new Exception(
-                        "The property value is required on position " . propertyPosition
+                        'The property value is required on position ' .
+                        $propertyPosition
                     );
                 }
 
                 /**
                  * Update the public property
                  */
-                let instance->{propertyName} = this->buildParameter(
-                    container,
-                    propertyPosition,
-                    propertyValue
+                $propertyName  = $property['name'];
+                $propertyValue = $property['value'];
+
+                $instance->$propertyName = $this->buildParameter(
+                    $container,
+                    $propertyPosition,
+                    $propertyValue
                 );
             }
         }
 
-        return instance;
+        return $instance;
     }
 
     /**
      * Resolves a constructor/call parameter
      *
+     * @param DiInterface $container
+     * @param int         $position
+     * @param array       $argument
+     *
      * @return mixed
+     * @throws Exception
      */
-    private function buildParameter(<DiInterface> container, int position, array! argument)
-    {
-        var type, name, value, instanceArguments;
-
+    private function buildParameter(
+        DiInterface $container,
+        int $position,
+        array $argument
+    ) {
         /**
          * All the arguments must have a type
          */
-        if unlikely !fetch type, argument["type"] {
+        if (true !== isset($argument['type'])) {
             throw new Exception(
-                "Argument at position " . position . " must have a type"
+                'Argument at position ' . $position . ' must have a type'
             );
         }
 
-        switch type {
-
+        $type = $argument['type'];
+        switch ($type) {
             /**
              * If the argument type is 'service', we obtain the service from the
              * DI
              */
-            case "service":
-                if unlikely !fetch name, argument["name"] {
-                    throw new Exception(
-                        "Service 'name' is required in parameter on position " . position
-                    );
-                }
+            case 'service':
+                $this->checkParameters($argument, 'name', $position);
+                $this->checkContainer($container);
 
-                if unlikely typeof container != "object" {
-                    throw new Exception(
-                        "The dependency injector container is not valid"
-                    );
-                }
+                $name = $argument['name'];
 
-                return container->get(name);
+                return $container->get($name);
 
             /**
              * If the argument type is 'parameter', we assign the value as it is
              */
-            case "parameter":
-                if unlikely !fetch value, argument["value"] {
+            case 'parameter':
+                $this->checkParameters($argument, 'value', $position);
+                if (true !== isset($argument['value'])) {
                     throw new Exception(
-                        "Service 'value' is required in parameter on position " . position
+                        "Service 'value' is required in parameter " .
+                        "on position " . $position
                     );
                 }
 
-                return value;
+                return $argument['value'];
 
             /**
              * If the argument type is 'instance', we assign the value as it is
              */
-            case "instance":
+            case 'instance':
+                $this->checkParameters($argument, 'className', $position);
+                $this->checkContainer($container);
 
-                if unlikely !fetch name, argument["className"] {
-                    throw new Exception(
-                        "Service 'className' is required in parameter on position " . position
-                    );
-                }
-
-                if unlikely typeof container != "object" {
-                    throw new Exception(
-                        "The dependency injector container is not valid"
-                    );
-                }
-
-                if fetch instanceArguments, argument["arguments"] {
+                $name = $argument['className'];
+                if (true === isset($argument['arguments'])) {
+                    $instanceArguments = $argument['arguments'];
                     /**
                      * Build the instance with arguments
                      */
-                    return container->get(name, instanceArguments);
+                    return $container->get($name, $instanceArguments);
                 }
 
                 /**
                  * The instance parameter does not have arguments for its
                  * constructor
                  */
-                return container->get(name);
+                return $container->get($name);
 
             default:
                 /**
                  * Unknown parameter type
                  */
                 throw new Exception(
-                    "Unknown service type in parameter on position " . position
+                    'Unknown service type in parameter on ' .
+                    'position ' . $position
                 );
         }
     }
 
     /**
      * Resolves an array of parameters
+     *
+     * @param DiInterface $container
+     * @param array       $arguments
+     *
+     * @return array
+     * @throws Exception
      */
-    private function buildParameters(<DiInterface> container, array! arguments): array
-    {
-        var position, argument;
-        array buildArguments;
+    private function buildParameters(
+        DiInterface $container,
+        array $arguments
+    ): array {
+        $buildArguments = [];
 
-        let buildArguments = [];
-
-        for position, argument in arguments {
-            let buildArguments[] = this->buildParameter(
-                container,
-                position,
-                argument
+        foreach ($arguments as $position => $argument) {
+            $buildArguments[] = $this->buildParameter(
+                $container,
+                $position,
+                $argument
             );
         }
 
-        return buildArguments;
+        return $buildArguments;
+    }
+
+    /**
+     * @param mixed $container
+     *
+     * @throws Exception
+     */
+    private function checkContainer($container): void
+    {
+        if (true !== is_object($container)) {
+            throw new Exception(
+                'The dependency injector container is not valid'
+            );
+        }
+    }
+
+    /**
+     * @param array  $argument
+     * @param string $name
+     * @param int    $position
+     *
+     * @throws Exception
+     */
+    private function checkParameters(
+        array $argument,
+        string $name,
+        int $position
+    ): void {
+        if (true !== isset($argument[$name])) {
+            throw new Exception(
+                'Service "' . $name . '" is required in parameter ' .
+                'on position ' . (string) $position
+            );
+        }
     }
 }

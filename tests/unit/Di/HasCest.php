@@ -11,10 +11,10 @@
 
 declare(strict_types=1);
 
-namespace Phalcon\Test\Unit\Di;
+namespace Phalcon\Tests\Unit\Di;
 
-use Phalcon\Di;
-use Phalcon\Escaper;
+use Phalcon\Di\Di;
+use Phalcon\Escaper\Escaper;
 use UnitTester;
 
 class HasCest
@@ -22,23 +22,21 @@ class HasCest
     /**
      * Tests Phalcon\Di :: has()
      *
-     * @author Sid Roberts <https://github.com/SidRoberts>
-     * @since  2019-06-02
+     * @author Phalcon Team <team@phalcon.io>
+     * @since  2020-09-09
      */
     public function diHas(UnitTester $I)
     {
         $I->wantToTest('Di - has()');
 
-        $di = new Di();
+        $container = new Di();
 
-        $I->assertFalse(
-            $di->has('escaper')
-        );
+        $actual = $container->has('escaper');
+        $I->assertFalse($actual);
 
-        $di->set('escaper', Escaper::class);
+        $container->set('escaper', Escaper::class);
 
-        $I->assertTrue(
-            $di->has('escaper')
-        );
+        $actual = $container->has('escaper');
+        $I->assertTrue($actual);
     }
 }

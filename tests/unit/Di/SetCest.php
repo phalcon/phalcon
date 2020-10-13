@@ -11,11 +11,11 @@
 
 declare(strict_types=1);
 
-namespace Phalcon\Test\Unit\Di;
+namespace Phalcon\Tests\Unit\Di;
 
-use Phalcon\Crypt;
-use Phalcon\Di;
-use Phalcon\Escaper;
+use Phalcon\Collection\Collection;
+use Phalcon\Di\Di;
+use Phalcon\Escaper\Escaper;
 use UnitTester;
 
 class SetCest
@@ -24,37 +24,46 @@ class SetCest
      * Unit Tests Phalcon\Di :: set()
      *
      * @author Phalcon Team <team@phalcon.io>
-     * @since  2019-06-13
+     * @since  2019-09-09
      */
     public function diSet(UnitTester $I)
     {
         $I->wantToTest('Di - set()');
 
-        $di = new Di();
+        $container = new Di();
 
         // set non shared service
-        $di->set('escaper', Escaper::class);
+        $container->set('escaper', Escaper::class);
 
-        $actual = $di->get('escaper');
-        $I->assertInstanceOf(Escaper::class, $actual);
+        $class  = Escaper::class;
+        $actual = $container->get('escaper');
+        $I->assertInstanceOf($class, $actual);
 
-        $actual = $di->getService('escaper');
-        $I->assertFalse($actual->isShared());
+        $escaper = $container->getService('escaper');
+        $actual  = $escaper->isShared();
+        $I->assertFalse($actual);
 
         // set shared service
-        $di->set('crypt', Crypt::class, true);
+        $container->set('collection', Collection::class, true);
 
-        $actual = $di->get('crypt');
-        $I->assertInstanceOf(Crypt::class, $actual);
+        $class  = Collection::class;
+        $actual = $container->get('collection');
+        $I->assertInstanceOf($class, $actual);
 
-        $actual = $di->getService('crypt');
-        $I->assertTrue($actual->isShared());
+        $collection = $container->getService('collection');
+        $actual     = $collection->isShared();
+        $I->assertTrue($actual);
 
         // testing closure
         $returnValue = "Closure Test!";
-        $di->set('closure', function () use ($returnValue) {
-            return $returnValue;
-        });
-        $I->assertEquals($returnValue, $di->get('closure'));
+        $container->set(
+            'closure',
+            function () use ($returnValue) {
+                return $returnValue;
+            }
+        );
+
+        $actual = $container->get('closure');
+        $I->assertEquals($returnValue, $actual);
     }
 }

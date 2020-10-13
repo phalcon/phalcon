@@ -11,7 +11,7 @@
 
 declare(strict_types=1);
 
-namespace Phalcon\Test\Unit\Di\Service;
+namespace Phalcon\Tests\Unit\Di\Service;
 
 use UnitTester;
 
@@ -21,7 +21,7 @@ class SetSharedInstanceCest
      * Unit Tests Phalcon\Di\Service :: setSharedInstance()
      *
      * @author Phalcon Team <team@phalcon.io>
-     * @since  2019-06-13
+     * @since  2019-09-09
      */
     public function diServiceSetSharedInstance(UnitTester $I)
     {

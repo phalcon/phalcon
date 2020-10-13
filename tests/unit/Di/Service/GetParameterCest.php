@@ -11,7 +11,7 @@
 
 declare(strict_types=1);
 
-namespace Phalcon\Test\Unit\Di\Service;
+namespace Phalcon\Tests\Unit\Di\Service;
 
 use UnitTester;
 
@@ -21,7 +21,7 @@ class GetParameterCest
      * Unit Tests Phalcon\Di\Service :: getParameter()
      *
      * @author Phalcon Team <team@phalcon.io>
-     * @since  2019-06-13
+     * @since  2019-09-09
      */
     public function diServiceGetParameter(UnitTester $I)
     {

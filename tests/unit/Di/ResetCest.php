@@ -11,10 +11,11 @@
 
 declare(strict_types=1);
 
-namespace Phalcon\Test\Unit\Di;
+namespace Phalcon\Tests\Unit\Di;
 
-use Phalcon\Di;
+use Phalcon\Di\Di;
 use UnitTester;
+use function spl_object_hash;
 
 class ResetCest
 {
@@ -22,25 +23,34 @@ class ResetCest
      * Unit Tests Phalcon\Di :: reset()
      *
      * @author Phalcon Team <team@phalcon.io>
-     * @since  2019-06-13
+     * @since  2019-09-09
      */
     public function diReset(UnitTester $I)
     {
         $I->wantToTest('Di - reset()');
 
-        // there is a DI container
-        $I->assertInstanceOf(Di::class, Di::getDefault());
+        $class  = Di::class;
+        $actual = Di::getDefault();
+        $I->assertInstanceOf($class, $actual);
 
-        $di = Di::getDefault();
+        $container = Di::getDefault();
+
+        $expected = spl_object_hash($actual);
+        $actual   = spl_object_hash($container);
+        $I->assertEquals($expected, $actual);
 
         // delete it
         Di::reset();
 
-        $I->assertNull(Di::getDefault());
+        $class  = Di::class;
+        $actual = Di::getDefault();
+        $I->assertInstanceOf($class, $actual);
 
         // set it again
-        Di::setDefault($di);
+        Di::setDefault($container);
 
-        $I->assertInstanceOf(Di::class, Di::getDefault());
+        $class  = Di::class;
+        $actual = Di::getDefault();
+        $I->assertInstanceOf($class, $actual);
     }
 }

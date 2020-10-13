@@ -11,11 +11,11 @@
 
 declare(strict_types=1);
 
-namespace Phalcon\Test\Unit\Di;
+namespace Phalcon\Tests\Unit\Di;
 
-use Phalcon\Di;
+use Phalcon\Di\Di;
 use Phalcon\Di\Exception;
-use Phalcon\Escaper;
+use Phalcon\Escaper\Escaper;
 use UnitTester;
 
 class UnderscoreCallCest
@@ -24,20 +24,18 @@ class UnderscoreCallCest
      * Tests Phalcon\Di :: __call()
      *
      * @author Phalcon Team <team@phalcon.io>
-     * @since  2018-11-13
+     * @since  2020-09-09
      */
     public function testUnderscoreCall(UnitTester $I)
     {
         $I->wantToTest('Phalcon\Di :: __call() - set and get service');
 
-        $di = new Di();
+        $container = new Di();
 
-        $actual = $di->setEscaper(Escaper::class);
-
+        $actual = $container->setEscaper(Escaper::class);
         $I->assertNull($actual);
 
-        $actual = $di->getEscaper();
-
+        $actual = $container->getEscaper();
         $I->assertInstanceOf(Escaper::class, $actual);
     }
 
@@ -51,14 +49,14 @@ class UnderscoreCallCest
     {
         $I->wantToTest('Phalcon\Di :: __call() - unknown method');
 
-        $di = new Di();
+        $container = new Di();
 
         $I->expectThrowable(
             new Exception(
                 "Call to undefined method or service 'notARealMethod'"
             ),
-            function () use ($di) {
-                $di->notARealMethod();
+            function () use ($container) {
+                $container->notARealMethod();
             }
         );
     }

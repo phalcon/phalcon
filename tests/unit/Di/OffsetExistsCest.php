@@ -11,10 +11,10 @@
 
 declare(strict_types=1);
 
-namespace Phalcon\Test\Unit\Di;
+namespace Phalcon\Tests\Unit\Di;
 
-use Phalcon\Di;
-use Phalcon\Escaper;
+use Phalcon\Di\Di;
+use Phalcon\Escaper\Escaper;
 use UnitTester;
 
 class OffsetExistsCest
@@ -22,23 +22,21 @@ class OffsetExistsCest
     /**
      * Tests Phalcon\Di :: offsetExists()
      *
-     * @author Sid Roberts <https://github.com/SidRoberts>
-     * @since  2019-06-02
+     * @author Phalcon Team <team@phalcon.io>
+     * @since  2020-09-09
      */
     public function diOffsetExists(UnitTester $I)
     {
         $I->wantToTest('Di - offsetExists()');
 
-        $di = new Di();
+        $container = new Di();
 
-        $I->assertFalse(
-            isset($di['escaper'])
-        );
+        $actual = isset($container['escaper']);
+        $I->assertFalse($actual);
 
-        $di->set('escaper', Escaper::class);
+        $container->set('escaper', Escaper::class);
 
-        $I->assertTrue(
-            isset($di['escaper'])
-        );
+        $actual = isset($container['escaper']);
+        $I->assertTrue($actual);
     }
 }

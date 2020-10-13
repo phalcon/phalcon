@@ -11,11 +11,11 @@
 
 declare(strict_types=1);
 
-namespace Phalcon\Test\Unit\Di;
+namespace Phalcon\Tests\Unit\Di;
 
-use Phalcon\Crypt;
-use Phalcon\Di;
-use Phalcon\Escaper;
+use Phalcon\Collection\Collection;
+use Phalcon\Di\Di;
+use Phalcon\Escaper\Escaper;
 use UnitTester;
 
 class OffsetSetCest
@@ -24,24 +24,24 @@ class OffsetSetCest
      * Unit Tests Phalcon\Di :: offsetSet()
      *
      * @author Phalcon Team <team@phalcon.io>
-     * @since  2019-06-13
+     * @since  2019-09-09
      */
     public function diOffsetSet(UnitTester $I)
     {
         $I->wantToTest('Di - offsetSet()');
 
-        $di = new Di();
+        $container = new Di();
 
-        $di->offsetSet('escaper', Escaper::class);
+        $class = Escaper::class;
+        $container->offsetSet('escaper', $class);
 
-        $actual = $di->offsetGet('escaper');
+        $actual = $container->offsetGet('escaper');
+        $I->assertInstanceOf($class, $actual);
 
-        $I->assertInstanceOf(Escaper::class, $actual);
+        $container['collection'] = new Collection();
 
-        $di['crypt'] = new Crypt();
-
-        $actual = $di->offsetGet('crypt');
-
-        $I->assertInstanceOf(Crypt::class, $actual);
+        $class  = Collection::class;
+        $actual = $container->offsetGet('collection');
+        $I->assertInstanceOf($class, $actual);
     }
 }

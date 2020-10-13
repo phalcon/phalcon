@@ -9,10 +9,11 @@
  * file that was distributed with this source code.
  */
 
-namespace Phalcon\Test\Unit\Di;
+namespace Phalcon\Tests\Unit\Di;
 
-use Phalcon\Di;
-use Phalcon\Escaper;
+use Phalcon\Di\Di;
+use Phalcon\Di\Exception;
+use Phalcon\Escaper\Escaper;
 use UnitTester;
 
 class ServiceCest
@@ -21,63 +22,56 @@ class ServiceCest
      * Tests resolving service
      *
      * @author Phalcon Team <team@phalcon.io>
-     * @since  2016-01-29
+     * @since  2020-09-09
      */
     public function testResolvingService(UnitTester $I)
     {
-        $di = new Di();
+        $container = new Di();
 
-        $di->set(
+        $container->set(
             'resolved',
             function () {
                 return new Escaper();
             }
         );
 
-        $di->set(
+        $container->set(
             'notResolved',
             function () {
                 return new Escaper();
             }
         );
 
+        $actual = $container->getService('resolved')->isResolved();
+        $I->assertFalse($actual);
 
-        $I->assertFalse(
-            $di->getService('resolved')->isResolved()
-        );
-
-        $I->assertFalse(
-            $di->getService('notResolved')->isResolved()
-        );
+        $actual = $container->getService('notResolved')->isResolved();
+        $I->assertFalse($actual);
 
 
-        $di->get('resolved');
+        $container->get('resolved');
 
-        $I->assertTrue(
-            $di->getService('resolved')->isResolved()
-        );
+        $actual = $container->getService('resolved')->isResolved();
+        $I->assertTrue($actual);
 
-        $I->assertFalse(
-            $di->getService('notResolved')->isResolved()
-        );
+        $actual = $container->getService('notResolved')->isResolved();
+        $I->assertFalse($actual);
     }
 
+    /**
+     * @param UnitTester $I
+     *
+     * @throws Exception
+     */
     public function testAlias(UnitTester $I)
     {
         $escaper = new Escaper();
 
-        $di = new Di();
+        $container = new Di();
+        $container->set('resolved', Escaper::class);
+        $container->set(Escaper::class, $escaper);
 
-        $di->set(
-            'resolved',
-            Escaper::class
-        );
-
-        $di->set(Escaper::class, $escaper);
-
-        $I->assertSame(
-            $escaper,
-            $di->get('resolved')
-        );
+        $actual = $container->get('resolved');
+        $I->assertSame($escaper, $actual);
     }
 }

@@ -11,10 +11,11 @@
 
 declare(strict_types=1);
 
-namespace Phalcon\Test\Unit\Di;
+namespace Phalcon\Tests\Unit\Di;
 
-use Phalcon\Di;
+use Phalcon\Di\Di;
 use UnitTester;
+use function spl_object_hash;
 
 class SetDefaultCest
 {
@@ -22,25 +23,30 @@ class SetDefaultCest
      * Unit Tests Phalcon\Di :: setDefault()
      *
      * @author Phalcon Team <team@phalcon.io>
-     * @since  2019-06-13
+     * @since  2019-09-09
      */
     public function diSetDefault(UnitTester $I)
     {
         $I->wantToTest('Di - setDefault()');
 
-        // there is a DI container
-        $I->assertInstanceOf(Di::class, Di::getDefault());
-
-        $di = Di::getDefault();
-
-        // delete it
         Di::reset();
 
-        $I->assertNull(Di::getDefault());
+        $class  = Di::class;
+        $actual = Di::getDefault();
+        $I->assertInstanceOf($class, $actual);
 
-        // set it again
-        Di::setDefault($di);
+        $container = Di::getDefault();
 
-        $I->assertInstanceOf(Di::class, Di::getDefault());
+        $expected = spl_object_hash($actual);
+        $actual   = spl_object_hash($container);
+        $I->assertEquals($expected, $actual);
+
+        $new = new Di();
+
+        Di::setDefault($new);
+
+        $expected = spl_object_hash($new);
+        $actual   = spl_object_hash(Di::getDefault());
+        $I->assertEquals($expected, $actual);
     }
 }

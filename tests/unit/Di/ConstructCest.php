@@ -11,10 +11,11 @@
 
 declare(strict_types=1);
 
-namespace Phalcon\Test\Unit\Di;
+namespace Phalcon\Tests\Unit\Di;
 
-use Phalcon\Di;
+use Phalcon\Di\Di;
 use UnitTester;
+use function spl_object_hash;
 
 class ConstructCest
 {
@@ -22,16 +23,17 @@ class ConstructCest
      * Tests Phalcon\Di :: __construct()
      *
      * @author Phalcon Team <team@phalcon.io>
-     * @since  2018-11-13
+     * @since  2020-09-09
      */
     public function diConstruct(UnitTester $I)
     {
         $I->wantToTest('Di - __construct()');
 
-        $di = new Di();
+        $class = Di::class;
+        $actual = Di::getDefault();
+        $I->assertInstanceOf($class, $actual);
 
-        $I->assertInstanceOf(Di::class, $di);
-
-        $I->assertInstanceOf(Di::class, Di::getDefault());
+        $actual = Di::getDefault();
+        $I->assertInstanceOf($class, $actual);
     }
 }

@@ -11,12 +11,12 @@
 
 declare(strict_types=1);
 
-namespace Phalcon\Test\Unit\Di;
+namespace Phalcon\Tests\Unit\Di;
 
-use Phalcon\Di;
+use Phalcon\Di\Di;
 use Phalcon\Di\Exception;
 use Phalcon\Di\Service;
-use Phalcon\Escaper;
+use Phalcon\Escaper\Escaper;
 use UnitTester;
 
 class GetCest
@@ -25,33 +25,50 @@ class GetCest
      * Unit Tests Phalcon\Di :: get()
      *
      * @author Phalcon Team <team@phalcon.io>
-     * @since  2019-06-13
+     * @since  2019-09-09
      */
     public function diGet(UnitTester $I)
     {
         $I->wantToTest('Di - get()');
 
         // setup
-        $di = new Di();
+        $container = new Di();
 
         // set a service and get it to check
-        $actual = $di->set('escaper', Escaper::class);
+        $actual = $container->set('escaper', Escaper::class);
 
         $I->assertInstanceOf(Service::class, $actual);
         $I->assertFalse($actual->isShared());
 
         // get escaper service
-        $actual   = $di->get('escaper');
+        $actual   = $container->get('escaper');
         $expected = new Escaper();
 
         $I->assertInstanceOf(Escaper::class, $actual);
         $I->assertEquals($expected, $actual);
+    }
+
+    /**
+     * Unit Tests Phalcon\Di :: get() - exception
+     *
+     * @author Phalcon Team <team@phalcon.io>
+     * @since  2019-09-09
+     */
+    public function diGetException(UnitTester $I)
+    {
+        $I->wantToTest('Di - get() - exception');
+
+        // setup
+        $container = new Di();
 
         // non exists service
         $I->expectThrowable(
-            new Exception("Service 'non-exists' wasn't found in the dependency injection container"),
-            function () use ($di) {
-                $di->get('non-exists');
+            new Exception(
+                'Service "non-exists" was not found in the ' .
+                'dependency injection container'
+            ),
+            function () use ($container) {
+                $container->get('non-exists');
             }
         );
     }
