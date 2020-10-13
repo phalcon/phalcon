@@ -13,22 +13,26 @@ declare(strict_types=1);
 
 namespace Phalcon\Tests\Unit\Di\Injectable;
 
+use Error;
+use Exception;
 use Phalcon\Di\Di;
 use Phalcon\Tests\Fixtures\Di\InjectableComponent;
 use stdClass;
 use UnitTester;
 
+use function spl_object_hash;
+
 class UnderscoreGetCest
 {
     /**
-     * Unit Tests Phalcon\Di\Injectable :: __get()
+     * Unit Tests Phalcon\Di\Injectable :: __get()/__isset()
      *
      * @author Phalcon Team <team@phalcon.io>
      * @since  2019-09-09
      */
-    public function diInjectableUnderscoreGet(UnitTester $I)
+    public function diInjectableUnderscoreGetIsset(UnitTester $I)
     {
-        $I->wantToTest('Di\Injectable - __get()');
+        $I->wantToTest('Di\Injectable - __get()/__isset()');
 
         Di::reset();
         $container = new Di();
@@ -47,5 +51,43 @@ class UnderscoreGetCest
         $class  = stdClass::class;
         $actual = $component->std;
         $I->assertInstanceOf($class, $actual);
+
+        $expected = spl_object_hash($container);
+        $actual   = spl_object_hash($component->di);
+        $I->assertEquals($expected, $actual);
+
+        $actual = isset($component->di);
+        $I->assertTrue($actual);
+
+        $actual = isset($component->component);
+        $I->assertTrue($actual);
+
+        $actual = isset($component->std);
+        $I->assertTrue($actual);
+    }
+
+    /**
+     * Unit Tests Phalcon\Di\Injectable :: __get() - exception
+     *
+     * @author Phalcon Team <team@phalcon.io>
+     * @since  2019-09-09
+     */
+    public function diInjectableUnderscoreGetException(UnitTester $I)
+    {
+        $I->wantToTest('Di\Injectable - __get() - exception');
+
+        Di::reset();
+        $container = new Di();
+
+        $container->set('component', InjectableComponent::class);
+
+        $component = $container->get('component');
+
+        $I->expectThrowable(
+            new Exception('Access to undefined property unknown', 1024),
+            function () use ($component) {
+                $result = $component->unknown;
+            }
+        );
     }
 }

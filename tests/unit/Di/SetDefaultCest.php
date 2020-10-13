@@ -15,6 +15,7 @@ namespace Phalcon\Tests\Unit\Di;
 
 use Phalcon\Di\Di;
 use UnitTester;
+
 use function spl_object_hash;
 
 class SetDefaultCest

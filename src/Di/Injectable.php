@@ -17,6 +17,7 @@ namespace Phalcon\Di;
 //use Phalcon\Session\BagInterface;
 use Phalcon\Events\Manager as EventsManager;
 use Phalcon\Events\ManagerInterface as EventsManagerInterface;
+
 use function is_object;
 
 /**

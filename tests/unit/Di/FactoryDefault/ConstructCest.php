@@ -90,14 +90,14 @@ class ConstructCest
 //                'service' => 'dispatcher',
 //                'class'   => Dispatcher::class,
 //            ],
-[
-    'service' => 'escaper',
-    'class'   => Escaper::class,
-],
-[
-    'service' => 'eventsManager',
-    'class'   => EventsManager::class,
-],
+        [
+        'service' => 'escaper',
+        'class'   => Escaper::class,
+        ],
+        [
+        'service' => 'eventsManager',
+        'class'   => EventsManager::class,
+        ],
 //            [
 //                'service' => 'flash',
 //                'class'   => Direct::class,
