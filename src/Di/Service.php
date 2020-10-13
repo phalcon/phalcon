@@ -15,6 +15,7 @@ namespace Phalcon\Di;
 
 use Closure;
 use Phalcon\Di\Exception\ServiceResolutionException;
+
 use function is_a;
 use function is_array;
 use function is_object;

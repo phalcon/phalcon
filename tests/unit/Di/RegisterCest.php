@@ -38,7 +38,7 @@ class RegisterCest
         $I->assertEquals($expected, $actual);
 
         $expected = SomeComponent::class;
-        $actual   =$container->get('fooAction');
+        $actual   = $container->get('fooAction');
         $I->assertInstanceOf($expected, $actual);
     }
 }
