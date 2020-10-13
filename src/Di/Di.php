@@ -17,11 +17,10 @@ use Phalcon\Di\Exception\ServiceResolutionException;
 use Phalcon\Di\Traits\DiArrayAccessTrait;
 use Phalcon\Di\Traits\DiEventsTrait;
 use Phalcon\Di\Traits\DiExceptionsTrait;
+use Phalcon\Di\Traits\DiInstanceTrait;
 use Phalcon\Events\ManagerInterface;
 use Phalcon\Events\Traits\EventsAwareTrait;
 
-use function class_exists;
-use function is_array;
 use function is_object;
 use function lcfirst;
 use function substr;
@@ -78,6 +77,7 @@ class Di implements DiInterface
     use DiArrayAccessTrait;
     use DiEventsTrait;
     use DiExceptionsTrait;
+    use DiInstanceTrait;
     use EventsAwareTrait;
 
     /**
@@ -555,19 +555,6 @@ class Di implements DiInterface
     }
 
     /**
-     * Registers an "always shared" service in the services container
-     *
-     * @param string $name
-     * @param mixed  $definition
-     *
-     * @return ServiceInterface
-     */
-    public function setShared(string $name, $definition): ServiceInterface
-    {
-        return $this->set($name, $definition, true);
-    }
-
-    /**
      * @param string                $name
      * @param array|null            $parameters
      * @param ServiceInterface|null $service
@@ -578,7 +565,7 @@ class Di implements DiInterface
      */
     private function processObjectNotNullService(
         string $name,
-        array $parameters =  null,
+        array $parameters = null,
         ServiceInterface $service = null,
         $instance = null
     ) {
@@ -610,7 +597,7 @@ class Di implements DiInterface
      */
     private function processObjectNullService(
         string $name,
-        array $parameters =  null,
+        array $parameters = null,
         ServiceInterface $service = null,
         $instance = null
     ) {
@@ -621,14 +608,7 @@ class Di implements DiInterface
              */
             $this->checkClassExists($name);
 
-            if (
-                true === is_array($parameters) &&
-                true !== empty($parameters)
-            ) {
-                return new $name(...$parameters);
-            }
-
-            return new $name();
+            $instance = $this->createInstance($name, $parameters);
         }
 
         return $instance;

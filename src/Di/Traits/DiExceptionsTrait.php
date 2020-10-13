@@ -14,8 +14,14 @@ declare(strict_types=1);
 namespace Phalcon\Di\Traits;
 
 use Phalcon\Di\Exception;
+
 use function class_exists;
 
+/**
+ * Trait DiExceptionsTrait
+ *
+ * @package Phalcon\Di\Traits
+ */
 trait DiExceptionsTrait
 {
     /**
