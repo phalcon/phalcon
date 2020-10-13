@@ -11,10 +11,10 @@
 
 declare(strict_types=1);
 
-namespace Phalcon\Test\Unit\Di;
+namespace Phalcon\Tests\Unit\Di;
 
-use Phalcon\Di;
-use Phalcon\Escaper;
+use Phalcon\Di\Di;
+use Phalcon\Escaper\Escaper;
 use UnitTester;
 
 class RemoveCest
@@ -29,18 +29,16 @@ class RemoveCest
     {
         $I->wantToTest('Di - remove()');
 
-        $di = new Di();
+        $container = new Di();
 
-        $di->set('escaper', Escaper::class);
+        $container->set('escaper', Escaper::class);
 
-        $I->assertTrue(
-            $di->has('escaper')
-        );
+        $actual = $container->has('escaper');
+        $I->assertTrue($actual);
 
-        $di->remove('escaper');
+        $container->remove('escaper');
 
-        $I->assertFalse(
-            $di->has('escaper')
-        );
+        $actual = $container->has('escaper');
+        $I->assertFalse($actual);
     }
 }

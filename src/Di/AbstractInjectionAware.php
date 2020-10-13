@@ -13,37 +13,16 @@ declare(strict_types=1);
 
 namespace Phalcon\Di;
 
+use Phalcon\Di\Traits\InjectionAwareTrait;
+
 /**
  * This abstract class offers common access to the DI in a class
  *
  * Class AbstractInjectionAware
  *
  * @package Phalcon\Di
- *
- * @property DiInterface $container
  */
 abstract class AbstractInjectionAware implements InjectionAwareInterface
 {
-    /**
-     * Dependency Injector
-     *
-     * @var DiInterface
-     */
-    protected DiInterface $container;
-
-    /**
-     * Returns the internal dependency injector
-     */
-    public function getDI(): DiInterface
-    {
-        return $this->container;
-    }
-
-    /**
-     * Sets the dependency injector
-     */
-    public function setDI(DiInterface $container): void
-    {
-        $this->container = $container;
-    }
+    use InjectionAwareTrait;
 }

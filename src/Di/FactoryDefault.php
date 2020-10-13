@@ -14,6 +14,7 @@ declare(strict_types=1);
 namespace Phalcon\Di;
 
 //use Phalcon\Filter\FilterFactory;
+use Phalcon\Escaper\Escaper;
 use Phalcon\Events\Manager as EventsManager;
 
 /**
@@ -32,6 +33,7 @@ class FactoryDefault extends Di
         parent::__construct();
 
         $this->services = [
+            "escaper"       => new Service(Escaper::class, true),
             "eventsManager" => new Service(EventsManager::class, true),
         ];
 //        let filter = new FilterFactory();
@@ -42,8 +44,6 @@ class FactoryDefault extends Di
 //            "crypt":              new Service("Phalcon\\Crypt", true),
 //            "cookies":            new Service("Phalcon\\Http\\Response\\Cookies", true),
 //            "dispatcher":         new Service("Phalcon\\Mvc\\Dispatcher", true),
-//            "escaper":            new Service("Phalcon\\Escaper", true),
-//            "eventsManager":      new Service("Phalcon\\Events\\Manager", true),
 //            "flash":              new Service("Phalcon\\Flash\\Direct", true),
 //            "flashSession":       new Service("Phalcon\\Flash\\Session", true),
 //            "filter":             new Service(filter->newInstance(), true),

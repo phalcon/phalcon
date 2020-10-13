@@ -24,7 +24,7 @@ use Phalcon\Events\ManagerInterface;
  */
 trait EventsAwareTrait
 {
-    protected ?ManagerInterface $eventsManager;
+    protected ?ManagerInterface $eventsManager = null;
 
     /**
      * Returns the internal event manager

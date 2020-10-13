@@ -64,12 +64,12 @@ abstract class Injectable implements InjectionAwareInterface
      */
     public function __get(string $propertyName)
     {
-        $container = $this->getDI();
+        $bucket = $this->getDI();
 
         if ('di' === $propertyName) {
-            $this->di = $container;
+            $this->di = $bucket;
 
-            return $container;
+            return $bucket;
         }
 
 //        /**
@@ -89,8 +89,8 @@ abstract class Injectable implements InjectionAwareInterface
         /**
          * Fallback to the PHP userland if the cache is not available
          */
-        if (true === $container->has($propertyName)) {
-            $service = $container->getShared($propertyName);
+        if (true === $bucket->has($propertyName)) {
+            $service = $bucket->getShared($propertyName);
             $this->$propertyName = $service;
 
             return $service;
@@ -119,12 +119,6 @@ abstract class Injectable implements InjectionAwareInterface
     {
         if (true !== is_object($this->container)) {
             $this->container = Di::getDefault();
-
-//            if unlikely typeof container != "object" {
-//                throw new Exception(
-//                    Exception::containerServiceNotFound("internal services")
-//                );
-//            }
         }
 
         return $this->container;

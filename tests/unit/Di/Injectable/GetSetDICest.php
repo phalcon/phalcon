@@ -37,17 +37,28 @@ class GetSetDICest
 
         Di::reset();
         $container = new Di();
-        // Injection of parameters in the constructor
-        $container->set('std', function () {
-            return new stdClass();
-        });
+        $component = new InjectableComponent();
+        $component->setDI($container);
+
+        $actual    = $component->getDI();
+        $I->assertEquals($container, $actual);
+    }
+
+    /**
+     * Unit Tests Phalcon\Di\Injectable :: getDI()/setDI() - constructor
+     *
+     * @author Phalcon Team <team@phalcon.io>
+     * @since  2019-09-09
+     */
+    public function diInjectableGetDIConstructor(UnitTester $I)
+    {
+        $I->wantToTest('Di\Injectable - getDI()/setDI()');
+
+        Di::reset();
+        $container = new Di();
         $container->set('component', InjectableComponent::class);
         $component = $container->get('component');
         $actual    = $component->getDI();
         $I->assertEquals($container, $actual);
-
-        $expected = $component;
-        $actual   = $container->std;
-        $I->assertEquals($expected, $actual);
     }
 }

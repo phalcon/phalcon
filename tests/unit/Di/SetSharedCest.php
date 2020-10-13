@@ -11,10 +11,10 @@
 
 declare(strict_types=1);
 
-namespace Phalcon\Test\Unit\Di;
+namespace Phalcon\Tests\Unit\Di;
 
-use Phalcon\Di;
-use Phalcon\Escaper;
+use Phalcon\Di\Di;
+use Phalcon\Escaper\Escaper;
 use UnitTester;
 
 class SetSharedCest
@@ -23,21 +23,20 @@ class SetSharedCest
      * Unit Tests Phalcon\Di :: setShared()
      *
      * @author Phalcon Team <team@phalcon.io>
-     * @since  2019-06-13
+     * @since  2019-09-09
      */
     public function diSetShared(UnitTester $I)
     {
         $I->wantToTest('Di - setShared()');
 
-        $di = new Di();
-
-        $di->setShared('escaper', Escaper::class);
+        $container = new Di();
+        $container->setShared('escaper', Escaper::class);
 
         // check shared service
-        $actual = $di->getService('escaper');
+        $actual = $container->getService('escaper');
         $I->assertTrue($actual->isShared());
 
-        $actual = $di->getShared('escaper');
+        $actual = $container->getShared('escaper');
         $I->assertInstanceOf(Escaper::class, $actual);
     }
 }

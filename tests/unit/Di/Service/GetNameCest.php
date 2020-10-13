@@ -9,7 +9,7 @@
  * file that was distributed with this source code.
  */
 
-namespace Phalcon\Test\Unit\Di\Service;
+namespace Phalcon\Tests\Unit\Di\Service;
 
 use UnitTester;
 
@@ -19,7 +19,7 @@ class GetNameCest
      * Tests Phalcon\Di\Service :: getName()
      *
      * @author Phalcon Team <team@phalcon.io>
-     * @since  2018-11-13
+     * @since  2020-09-09
      */
     public function testGetName(UnitTester $I)
     {

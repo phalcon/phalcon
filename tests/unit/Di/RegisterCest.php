@@ -11,11 +11,11 @@
 
 declare(strict_types=1);
 
-namespace Phalcon\Test\Unit\Di;
+namespace Phalcon\Tests\Unit\Di;
 
-use Phalcon\Di;
-use SomeComponent;
-use SomeServiceProvider;
+use Phalcon\Di\Di;
+use Phalcon\Tests\Fixtures\Di\SomeComponent;
+use Phalcon\Tests\Fixtures\Di\SomeServiceProvider;
 use UnitTester;
 
 class RegisterCest
@@ -24,20 +24,21 @@ class RegisterCest
      * Unit Tests Phalcon\Di :: register()
      *
      * @author Phalcon Team <team@phalcon.io>
-     * @since  2019-06-13
+     * @since  2019-09-09
      */
     public function diRegister(UnitTester $I)
     {
         $I->wantToTest('Di - register()');
 
-        require_once dataDir('fixtures/Di/SomeComponent.php');
-        require_once dataDir('fixtures/Di/SomeServiceProvider.php');
+        $container = new Di();
+        $container->register(new SomeServiceProvider());
 
-        $di = new Di();
+        $expected = 'bar';
+        $actual   = $container->get('foo');
+        $I->assertEquals($expected, $actual);
 
-        $di->register(new SomeServiceProvider());
-
-        $I->assertEquals('bar', $di->get('foo'));
-        $I->assertInstanceOf(SomeComponent::class, $di->get('fooAction'));
+        $expected = SomeComponent::class;
+        $actual   =$container->get('fooAction');
+        $I->assertInstanceOf($expected, $actual);
     }
 }

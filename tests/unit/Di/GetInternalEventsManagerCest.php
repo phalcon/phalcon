@@ -11,9 +11,9 @@
 
 declare(strict_types=1);
 
-namespace Phalcon\Test\Unit\Di;
+namespace Phalcon\Tests\Unit\Di;
 
-use Phalcon\Di;
+use Phalcon\Di\Di;
 use Phalcon\Events\Manager;
 use Phalcon\Events\ManagerInterface;
 use UnitTester;
@@ -26,23 +26,22 @@ class GetInternalEventsManagerCest
      * @param  UnitTester $I
      *
      * @author Phalcon Team <team@phalcon.io>
-     * @since  2019-06-13
+     * @since  2019-09-09
      */
     public function diGetInternalEventsManager(UnitTester $I)
     {
         $I->wantToTest('Di - getInternalEventsManager()');
 
-        $di = new Di();
+        $container = new Di();
 
-        $I->assertNull(
-            $di->getInternalEventsManager()
-        );
+        $actual = $container->getInternalEventsManager();
+        $I->assertNull($actual);
 
-        $di->setInternalEventsManager(new Manager());
+        $container->setInternalEventsManager(new Manager());
 
-        $I->assertInstanceOf(
-            ManagerInterface::class,
-            $di->getInternalEventsManager()
-        );
+
+        $class  = ManagerInterface::class;
+        $actual = $container->getInternalEventsManager();
+        $I->assertInstanceOf($class, $actual);
     }
 }

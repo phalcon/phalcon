@@ -11,31 +11,34 @@
 
 declare(strict_types=1);
 
-namespace Phalcon\Test\Unit\Di\FactoryDefault;
+namespace Phalcon\Tests\Unit\Di\FactoryDefault;
 
 use Phalcon\Di\FactoryDefault;
 use Phalcon\Di\Service;
-use Phalcon\Escaper;
+use Phalcon\Escaper\Escaper;
 use UnitTester;
 
+/**
+ * Class SetServiceCest
+ *
+ * @package Phalcon\Tests\Unit\Di\FactoryDefault
+ */
 class SetServiceCest
 {
     /**
      * Unit Tests Phalcon\Di\FactoryDefault :: setService()
      *
      * @author Phalcon Team <team@phalcon.io>
-     * @since  2019-06-13
+     * @since  2019-09-09
      */
     public function diFactoryDefaultSetRaw(UnitTester $I)
     {
         $I->wantToTest('Di\FactoryDefault - setService()');
 
-        $di = new FactoryDefault();
+        $container = new FactoryDefault();
 
         $expected = new Service(Escaper::class);
-
-        $actual = $di->setService('escaper', $expected);
-
+        $actual   = $container->setService('escaper', $expected);
         $I->assertSame($expected, $actual);
     }
 }

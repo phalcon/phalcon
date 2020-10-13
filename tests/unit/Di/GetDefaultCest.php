@@ -11,9 +11,9 @@
 
 declare(strict_types=1);
 
-namespace Phalcon\Test\Unit\Di;
+namespace Phalcon\Tests\Unit\Di;
 
-use Phalcon\Di;
+use Phalcon\Di\Di;
 use UnitTester;
 
 class GetDefaultCest
@@ -22,25 +22,31 @@ class GetDefaultCest
      * Unit Tests Phalcon\Di :: getDefault()
      *
      * @author Phalcon Team <team@phalcon.io>
-     * @since  2019-06-13
+     * @since  2019-09-09
      */
     public function diGetDefault(UnitTester $I)
     {
         $I->wantToTest('Di - getDefault()');
 
-        // there is a DI container
-        $I->assertInstanceOf(Di::class, Di::getDefault());
+        $class  = Di::class;
+        $actual = Di::getDefault();
+        $I->assertInstanceOf($class, $actual);
 
-        $di = Di::getDefault();
+        $container = Di::getDefault();
+        $class = Di::class;
+        $I->assertInstanceOf($class, $container);
 
         // delete it
         Di::reset();
 
-        $I->assertNull(Di::getDefault());
+        $class  = Di::class;
+        $actual = Di::getDefault();
+        $I->assertInstanceOf($class, $actual);
 
         // set it again
-        Di::setDefault($di);
+        Di::setDefault($container);
 
-        $I->assertInstanceOf(Di::class, Di::getDefault());
+        $actual = Di::getDefault();
+        $I->assertInstanceOf($class, $actual);
     }
 }

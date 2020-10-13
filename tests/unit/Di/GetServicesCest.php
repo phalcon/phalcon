@@ -11,9 +11,10 @@
 
 declare(strict_types=1);
 
-namespace Phalcon\Test\Unit\Di;
+namespace Phalcon\Tests\Unit\Di;
 
-use Phalcon\Di;
+use Phalcon\Di\Di;
+use stdClass;
 use UnitTester;
 
 class GetServicesCest
@@ -24,20 +25,28 @@ class GetServicesCest
      * @param  UnitTester $I
      *
      * @author Phalcon Team <team@phalcon.io>
-     * @since  2019-06-13
+     * @since  2019-09-09
      */
     public function diGetServices(UnitTester $I)
     {
         $I->wantToTest('Di - getServices()');
 
-        $di = new Di();
-        $I->assertEquals([], $di->getServices());
+        $container = new Di();
 
-        $di->set('service', \stdClass::class);
-        $I->assertCount(1, $di->getServices());
+        $expected = [];
+        $actual   = $container->getServices();
+        $I->assertEquals($expected, $actual);
 
-        $di->remove('service');
-        $I->assertFalse($di->has('service'));
-        $I->assertEquals([], $di->getServices());
+        $container->set('service', stdClass::class);
+
+        $count  = 1;
+        $actual = $container->getServices();
+        $I->assertCount($count, $actual);
+
+        $container->remove('service');
+
+        $expected = [];
+        $actual   = $container->getServices();
+        $I->assertEquals($expected, $actual);
     }
 }

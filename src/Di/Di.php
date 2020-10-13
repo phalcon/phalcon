@@ -14,12 +14,19 @@ declare(strict_types=1);
 namespace Phalcon\Di;
 
 use Phalcon\Di\Exception\ServiceResolutionException;
-use Phalcon\Config\Adapter\Php;
-use Phalcon\Config\Adapter\Yaml;
-use Phalcon\Config\ConfigInterface;
+use Phalcon\Di\Traits\DiArrayAccessTrait;
 use Phalcon\Events\ManagerInterface;
 use Phalcon\Events\Traits\EventsAwareTrait;
+
+use function class_exists;
+use function is_array;
 use function is_object;
+use function lcfirst;
+use function substr;
+
+//use Phalcon\Config\Adapter\Php;
+//use Phalcon\Config\Adapter\Yaml;
+//use Phalcon\Config\ConfigInterface;
 
 /**
  * Phalcon\Di is a component that implements Dependency Injection/Service
@@ -66,6 +73,7 @@ use function is_object;
 */
 class Di implements DiInterface
 {
+    use DiArrayAccessTrait;
     use EventsAwareTrait;
 
     /**
@@ -87,22 +95,26 @@ class Di implements DiInterface
      *
      * @var DiInterface|null
      */
-    protected static $_default;
+    protected static $_default = null;
+
+    /**
+     * @var bool
+     */
+    protected static $initialized = false;
 
     /**
      * Di constructor.
      */
     public function __construct()
     {
-        if (!self::$_default) {
+        if (null === self::$_default) {
             self::$_default = $this;
         }
     }
 
     /**
      * Magic method to get or set services using setters/getters
-     */
-    /**
+     *
      * @param string $method
      * @param array  $arguments
      *
@@ -111,36 +123,30 @@ class Di implements DiInterface
      */
     public function __call(string $method, array $arguments = [])
     {
-//        /**
-//         * If the magic method starts with "get" we try to get a service with
-//         * that name
-//         */
-//        if starts_with(method, "get") {
-//            let possibleService = lcfirst(substr(method, 3));
-//
-//            if isset this->services[possibleService] {
-//                let instance = this->get(possibleService, arguments);
-//
-//                return instance;
-//            }
-//        }
-//
-//        /**
-//         * If the magic method starts with "set" we try to set a service using
-//         * that name
-//         */
-//        if starts_with(method, "set") {
-//            if fetch definition, arguments[0] {
-//                this->set(
-//                    lcfirst(
-//                        substr(method, 3)
-//                    ),
-//                    definition
-//                );
-//
-//                return null;
-//            }
-//        }
+        /**
+         * If the magic method starts with "get" we try to get a service with
+         * that name
+         */
+        if ('get' === substr($method, 0, 3)) {
+            $possibleService = lcfirst(substr($method, 3));
+
+            if (true === isset($this->services[$possibleService])) {
+                return $this->get($possibleService, $arguments);
+            }
+        }
+
+        /**
+         * If the magic method starts with "set" we try to set a service using
+         * that name
+         */
+        if ('set' === substr($method, 0, 3)) {
+            $definition = $arguments[0] ?? null;
+            if (null !== $definition) {
+                $this->set(lcfirst(substr($method, 3)), $definition);
+
+                return null;
+            }
+        }
 
         /**
          * The method doesn't start with set/get throw an exception
@@ -154,8 +160,7 @@ class Di implements DiInterface
      * Attempts to register a service in the services container
      * Only is successful if a service hasn't been registered previously
      * with the same name
-     */
-    /**
+     *
      * @param string $name
      * @param mixed  $definition
      * @param bool   $shared
@@ -186,6 +191,7 @@ class Di implements DiInterface
     {
         $instance = null;
         $isShared = false;
+        $service  = null;
 
         /**
          * If the service is shared and it already has a cached instance then
@@ -240,11 +246,15 @@ class Di implements DiInterface
                  */
                 if (true !== class_exists($name)) {
                     throw new Exception(
-                        "Service '" . $name . "' wasn't found in the dependency injection container"
+                        'Service "' . $name .
+                        '" was not found in the dependency injection container'
                     );
                 }
 
-                if (true === is_array($parameters) && true !== empty($parameters)) {
+                if (
+                    true === is_array($parameters) &&
+                    true !== empty($parameters)
+                ) {
                     $instance = new $name(...$parameters);
                 } else {
                     $instance = new $name();
@@ -289,6 +299,10 @@ class Di implements DiInterface
      */
     public static function getDefault(): ?DiInterface
     {
+        if (null === self::$_default) {
+            self::$_default = new Di();
+        }
+
         return self::$_default;
     }
 
@@ -312,11 +326,7 @@ class Di implements DiInterface
      */
     public function getRaw(string $name)
     {
-        $this->checkService($name);
-
-        $service = $this->services[$name];
-
-        return $service->getDefinition();
+        return $this->getService($name)->getDefinition();
     }
 
     /**
@@ -329,7 +339,12 @@ class Di implements DiInterface
      */
     public function getService(string $name): ServiceInterface
     {
-        $this->checkService($name);
+        if (true !== $this->has($name)) {
+            throw new Exception(
+                "Service '" . $name .
+                "' was not found in the dependency injection container"
+            );
+        }
 
         return $this->services[$name];
     }
@@ -480,60 +495,6 @@ class Di implements DiInterface
     }
 
     /**
-     * Allows to obtain a shared service using the array syntax
-     *
-     *```php
-     * var_dump($di["request"]);
-     *```
-     *
-     * @param mixed $name
-     *
-     * @return mixed|InjectionAwareInterface|null
-     * @throws Exception
-     */
-    public function offsetGet($name)
-    {
-        return $this->getShared($name);
-    }
-
-    /**
-     * Check if a service is registered using the array syntax
-     *
-     * @param mixed $name
-     *
-     * @return bool
-     */
-    public function offsetExists($name): bool
-    {
-        return $this->has($name);
-    }
-
-    /**
-     * Allows to register a shared service using the array syntax
-     *
-     *```php
-     * $di["request"] = new \Phalcon\Http\Request();
-     *```
-     *
-     * @param mixed $name
-     * @param mixed $definition
-     */
-    public function offsetSet($name, $definition): void
-    {
-        $this->setShared($name, $definition);
-    }
-
-    /**
-     * Removes a service from the services container using the array syntax
-     *
-     * @param mixed $name
-     */
-    public function offsetUnset($name): void
-    {
-        $this->remove($name);
-    }
-
-    /**
      * Registers a service provider.
      *
      * ```php
@@ -644,19 +605,5 @@ class Di implements DiInterface
     public function setShared(string $name, $definition): ServiceInterface
     {
         return $this->set($name, $definition, true);
-    }
-
-    /**
-     * @param string $name
-     *
-     * @throws Exception
-     */
-    private function checkService(string $name): void
-    {
-        if (true !== $this->has($name)) {
-            throw new Exception(
-                "Service '" . $name . "' was not found in the dependency injection container"
-            );
-        }
     }
 }
