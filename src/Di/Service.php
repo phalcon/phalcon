@@ -15,8 +15,9 @@ namespace Phalcon\Di;
 
 use Closure;
 use Phalcon\Di\Exception\ServiceResolutionException;
+use Phalcon\Di\Service\Builder;
+use Phalcon\Di\Traits\DiInstanceTrait;
 
-use function is_a;
 use function is_array;
 use function is_object;
 use function is_string;
@@ -40,6 +41,8 @@ use function is_string;
  */
 class Service implements ServiceInterface
 {
+    use DiInstanceTrait;
+
     /**
      * @var mixed
      */
@@ -145,11 +148,7 @@ class Service implements ServiceInterface
             if (null !== $container) {
                 $instance = $container->get($instanceDefinition, $parameters);
             } elseif (true === class_exists($instanceDefinition)) {
-                if (true === is_array($parameters) && true !== empty($parameters)) {
-                    $instance = new $instanceDefinition(... $parameters);
-                } else {
-                    $instance = new $instanceDefinition();
-                }
+                $instance = $this->createInstance($instanceDefinition, $parameters);
             } else {
                 $found = false;
             }
@@ -169,14 +168,10 @@ class Service implements ServiceInterface
                         $instanceDefinition = Closure::bind($instanceDefinition, $container);
                     }
 
-                    if (true === is_array($parameters)) {
-                        $instance = call_user_func_array(
-                            $instanceDefinition,
-                            $parameters
-                        );
-                    } else {
-                        $instance = call_user_func($instanceDefinition);
-                    }
+                    $instance = $this->createClosureInstance(
+                        $instanceDefinition,
+                        $parameters
+                    );
                 } else {
                     $instance = $instanceDefinition;
                 }

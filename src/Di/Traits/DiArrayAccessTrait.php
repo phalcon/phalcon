@@ -103,6 +103,21 @@ trait DiArrayAccessTrait
     abstract public function remove(string $name): void;
 
     /**
+     * Registers a service in the services container
+     *
+     * @param string $name
+     * @param mixed  $definition
+     * @param bool   $shared
+     *
+     * @return ServiceInterface
+     */
+    abstract public function set(
+        string $name,
+        $definition,
+        bool $shared = false
+    ): ServiceInterface;
+
+    /**
      * Registers an "always shared" service in the services container
      *
      * @param string $name
@@ -110,5 +125,8 @@ trait DiArrayAccessTrait
      *
      * @return ServiceInterface
      */
-    abstract public function setShared(string $name, $definition): ServiceInterface;
+    public function setShared(string $name, $definition): ServiceInterface
+    {
+        return $this->set($name, $definition, true);
+    }
 }

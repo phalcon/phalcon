@@ -19,6 +19,7 @@ use Iterator;
 use JsonSerializable;
 use Phalcon\Messages\Traits\MessagesHelperTrait;
 use Phalcon\Support\Traits\JsonTrait;
+
 use function is_array;
 
 /**

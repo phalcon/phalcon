@@ -15,6 +15,11 @@ namespace Phalcon\Di\Traits;
 
 use Phalcon\Events\ManagerInterface;
 
+/**
+ * Trait DiEventsTrait
+ *
+ * @package Phalcon\Di\Traits
+ */
 trait DiEventsTrait
 {
     /**
@@ -63,7 +68,6 @@ trait DiEventsTrait
         string $name,
         array $parameters = null,
         $instance = null
-
     ) {
         /**
          * Allows for custom creation of instances through the
