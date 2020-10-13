@@ -101,8 +101,6 @@ abstract class Injectable implements InjectionAwareInterface
          * A notice is shown if the property is not defined and isn't a valid service
          */
         trigger_error("Access to undefined property " . $propertyName);
-
-        return null;
     }
 
     /**

@@ -15,6 +15,8 @@ namespace Phalcon\Di;
 
 use Phalcon\Di\Exception\ServiceResolutionException;
 use Phalcon\Di\Traits\DiArrayAccessTrait;
+use Phalcon\Di\Traits\DiEventsTrait;
+use Phalcon\Di\Traits\DiExceptionsTrait;
 use Phalcon\Events\ManagerInterface;
 use Phalcon\Events\Traits\EventsAwareTrait;
 
@@ -74,6 +76,8 @@ use function substr;
 class Di implements DiInterface
 {
     use DiArrayAccessTrait;
+    use DiEventsTrait;
+    use DiExceptionsTrait;
     use EventsAwareTrait;
 
     /**
@@ -118,7 +122,7 @@ class Di implements DiInterface
      * @param string $method
      * @param array  $arguments
      *
-     * @return mixed|null
+     * @return mixed|void
      * @throws Exception
      */
     public function __call(string $method, array $arguments = [])
@@ -148,12 +152,7 @@ class Di implements DiInterface
             }
         }
 
-        /**
-         * The method doesn't start with set/get throw an exception
-         */
-        throw new Exception(
-            "Call to undefined method or service '" . $method . "'"
-        );
+        $this->throwUndefinedMethod($method);
     }
 
     /**
@@ -190,7 +189,6 @@ class Di implements DiInterface
     public function get(string $name, array $parameters = null)
     {
         $instance = null;
-        $isShared = false;
         $service  = null;
 
         /**
@@ -199,10 +197,9 @@ class Di implements DiInterface
          */
         if (true === isset($this->services[$name])) {
             $service  = $this->services[$name];
-            $isShared = $service->isShared();
 
             if (
-                true === $isShared &&
+                true === $service->isShared() &&
                 true === isset($this->sharedInstances[$name])
             ) {
                 return $this->sharedInstances[$name];
@@ -213,53 +210,26 @@ class Di implements DiInterface
          * Allows for custom creation of instances through the
          * "di:beforeServiceResolve" event.
          */
-        if (true === is_object($this->eventsManager)) {
-            $instance = $this->eventsManager->fire(
-                "di:beforeServiceResolve",
-                $this,
-                [
-                    'name'       => $name,
-                    'parameters' => $parameters,
-                ]
-            );
-        }
+        $instance = $this->fireBeforeServiceResolve(
+            $this->eventsManager,
+            $name,
+            $parameters,
+            $instance
+        );
 
         if (true !== is_object($instance)) {
-            if (null !== $service) {
-                // The service is registered in the DI.
-                try {
-                    $instance = $service->resolve($parameters, $this);
-                } catch (ServiceResolutionException $ex) {
-                    throw new Exception(
-                        "Service '" . $name . "' cannot be resolved"
-                    );
-                }
-
-                // If the service is shared then we'll cache the instance.
-                if (true === $isShared) {
-                    $this->sharedInstances[$name] = $instance;
-                }
-            } else {
-                /**
-                 * The DI also acts as builder for any class even if it isn't
-                 * defined in the DI
-                 */
-                if (true !== class_exists($name)) {
-                    throw new Exception(
-                        'Service "' . $name .
-                        '" was not found in the dependency injection container'
-                    );
-                }
-
-                if (
-                    true === is_array($parameters) &&
-                    true !== empty($parameters)
-                ) {
-                    $instance = new $name(...$parameters);
-                } else {
-                    $instance = new $name();
-                }
-            }
+            $instance = $this->processObjectNotNullService(
+                $name,
+                $parameters,
+                $service,
+                $instance
+            );
+            $instance = $this->processObjectNullService(
+                $name,
+                $parameters,
+                $service,
+                $instance
+            );
         }
 
         /**
@@ -277,19 +247,12 @@ class Di implements DiInterface
          * Allows for post creation instance configuration through the
          * "di:afterServiceResolve" event.
          */
-        if (true === is_object($this->eventsManager)) {
-            $instance = $this->eventsManager->fire(
-                "di:afterServiceResolve",
-                $this,
-                [
-                    'name'       => $name,
-                    'parameters' => $parameters,
-                    'instance'   => $instance,
-                ]
-            );
-        }
-
-        return $instance;
+        return $this->fireAfterServiceResolve(
+            $this->eventsManager,
+            $name,
+            $parameters,
+            $instance
+        );
     }
 
     /**
@@ -340,10 +303,7 @@ class Di implements DiInterface
     public function getService(string $name): ServiceInterface
     {
         if (true !== $this->has($name)) {
-            throw new Exception(
-                "Service '" . $name .
-                "' was not found in the dependency injection container"
-            );
+            $this->throwServiceNotFound($name);
         }
 
         return $this->services[$name];
@@ -605,5 +565,72 @@ class Di implements DiInterface
     public function setShared(string $name, $definition): ServiceInterface
     {
         return $this->set($name, $definition, true);
+    }
+
+    /**
+     * @param string                $name
+     * @param array|null            $parameters
+     * @param ServiceInterface|null $service
+     * @param mixed                 $instance
+     *
+     * @return mixed|null
+     * @throws Exception
+     */
+    private function processObjectNotNullService(
+        string $name,
+        array $parameters =  null,
+        ServiceInterface $service = null,
+        $instance = null
+    ) {
+        if (null !== $service) {
+            // The service is registered in the DI.
+            try {
+                $instance = $service->resolve($parameters, $this);
+            } catch (ServiceResolutionException $ex) {
+                $this->throwCannotResolveService($name);
+            }
+
+            // If the service is shared then we'll cache the instance.
+            if (true === $service->isShared()) {
+                $this->sharedInstances[$name] = $instance;
+            }
+        }
+
+        return $instance;
+    }
+
+    /**
+     * @param string                $name
+     * @param array|null            $parameters
+     * @param ServiceInterface|null $service
+     * @param mixed                 $instance
+     *
+     * @return mixed|null
+     * @throws Exception
+     */
+    private function processObjectNullService(
+        string $name,
+        array $parameters =  null,
+        ServiceInterface $service = null,
+        $instance = null
+    ) {
+        if (null === $service) {
+            /**
+             * The DI also acts as builder for any class even if it isn't
+             * defined in the DI
+             */
+            $this->checkClassExists($name);
+
+            if (
+                true === is_array($parameters) &&
+                true !== empty($parameters)
+            ) {
+                return new $name(...$parameters);
+            }
+
+            return new $name();
+        }
+
+        return $instance;
     }
 }
