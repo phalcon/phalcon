@@ -13,10 +13,9 @@ declare(strict_types=1);
 
 namespace Phalcon\Storage\Serializer;
 
+use Phalcon\Storage\Traits\StorageErrorHandlerTrait;
+
 use function msgpack_pack;
-use function msgpack_unpack;
-use function restore_error_handler;
-use function set_error_handler;
 
 use const E_WARNING;
 
@@ -27,6 +26,8 @@ use const E_WARNING;
  */
 class Msgpack extends AbstractSerializer
 {
+    use StorageErrorHandlerTrait;
+
     /**
      * Serializes data
      *
@@ -50,22 +51,10 @@ class Msgpack extends AbstractSerializer
      */
     public function unserialize($data)
     {
-        $warning = false;
-        set_error_handler(
-            function () use (&$warning) {
-                $warning = true;
-            },
-            E_WARNING
+        $this->data = $this->callMethodWithError(
+            'msgpack_unpack',
+            E_WARNING,
+            $data
         );
-
-        $data = msgpack_unpack($data);
-
-        restore_error_handler();
-
-        if (true === $warning) {
-            $data = null;
-        }
-
-        $this->data = $data;
     }
 }
