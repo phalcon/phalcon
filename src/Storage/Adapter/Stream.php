@@ -19,6 +19,7 @@ use FilesystemIterator;
 use Iterator;
 use Phalcon\Storage\Exception as StorageException;
 use Phalcon\Storage\SerializerFactory;
+use Phalcon\Storage\Traits\StorageErrorHandlerTrait;
 use Phalcon\Support\Exception as SupportException;
 use Phalcon\Support\HelperFactory;
 use Phalcon\Support\Traits\PhpFileTrait;
@@ -29,16 +30,12 @@ use function fclose;
 use function file_exists;
 use function file_put_contents;
 use function flock;
-use function is_array;
 use function is_dir;
 use function mkdir;
-use function restore_error_handler;
 use function serialize;
-use function set_error_handler;
 use function str_replace;
 use function time;
 use function unlink;
-use function unserialize;
 
 use const E_NOTICE;
 use const LOCK_EX;
@@ -53,6 +50,7 @@ use const LOCK_SH;
 class Stream extends AbstractAdapter
 {
     use PhpFileTrait;
+    use StorageErrorHandlerTrait;
 
     /**
      * @var string
@@ -354,7 +352,6 @@ class Stream extends AbstractAdapter
      */
     private function getPayload(string $filepath): array
     {
-        $warning = false;
         $payload = false;
         $pointer = $this->phpFopen($filepath, 'r');
 
@@ -365,7 +362,7 @@ class Stream extends AbstractAdapter
             return [];
         }
 
-        if (flock($pointer, LOCK_SH)) {
+        if (true === flock($pointer, LOCK_SH)) {
             $payload = $this->phpFileGetContents($filepath);
         }
 
@@ -378,22 +375,12 @@ class Stream extends AbstractAdapter
             return [];
         }
 
-        set_error_handler(
-            function () use (&$warning) {
-                $warning = true;
-            },
-            E_NOTICE
+        return $this->callMethodWithError(
+            'unserialize',
+            E_NOTICE,
+            $payload,
+            []
         );
-
-        $payload = unserialize($payload);
-
-        restore_error_handler();
-
-        if (true === $warning || true !== is_array($payload)) {
-            $payload = [];
-        }
-
-        return $payload;
     }
 
     /**

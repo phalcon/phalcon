@@ -14,17 +14,17 @@ declare(strict_types=1);
 namespace Phalcon\Storage\Serializer;
 
 use InvalidArgumentException;
+use Phalcon\Storage\Traits\StorageErrorHandlerTrait;
 
 use function is_string;
-use function restore_error_handler;
 use function serialize;
-use function set_error_handler;
-use function unserialize;
 
 use const E_NOTICE;
 
 class Php extends AbstractSerializer
 {
+    use StorageErrorHandlerTrait;
+
     /**
      * Serializes data
      *
@@ -62,23 +62,11 @@ class Php extends AbstractSerializer
                 );
             }
 
-            $warning = false;
-            set_error_handler(
-                function () use (&$warning) {
-                    $warning = true;
-                },
-                E_NOTICE
+            $this->data = $this->callMethodWithError(
+                'unserialize',
+                E_NOTICE,
+                $data
             );
-
-            $data = unserialize($data);
-
-            restore_error_handler();
-
-            if (true === $warning) {
-                $data = null;
-            }
-
-            $this->data = $data;
         }
     }
 
