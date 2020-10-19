@@ -14,6 +14,7 @@ declare(strict_types=1);
 namespace Phalcon\Di\Traits;
 
 use Phalcon\Di\Exception;
+
 use function class_exists;
 use function is_array;
 use function is_object;
@@ -266,7 +267,6 @@ trait DiExceptionsTrait
                 'Setter injection parameters must be an array'
             );
         }
-
     }
 
     /**
