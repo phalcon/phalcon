@@ -18,7 +18,8 @@ use Phalcon\Di\Exception;
 use Phalcon\Di\Traits\DiExceptionsTrait;
 use Phalcon\Di\Traits\DiInstanceTrait;
 
-use function is_array;
+use function call_user_func;
+use function call_user_func_array;
 
 /**
  * Phalcon\Di\Service\Builder
@@ -48,20 +49,12 @@ class Builder
         $this->checkClassNameExists($definition);
 
         $className = $definition['className'];
-        if (true === is_array($parameters)) {
-            /**
-             * Build the instance overriding the definition constructor
-             * parameters
-             */
-            $instance = $this->createInstance($className, $parameters);
-        } else {
-            /**
-             * Check if the argument has constructor arguments
-             */
-            $args     = $definition['arguments'] ?? [];
-            $params   = $this->buildParameters($container, $args);
-            $instance = $this->createInstance($className, $params);
-        }
+        $params    = $this->checkPassedParameters(
+            $container,
+            $definition,
+            $parameters
+        );
+        $instance  = $this->createInstance($className, $params);
 
         /**
          * The definition has calls?
@@ -192,7 +185,6 @@ class Builder
             $args = $argument['arguments'] ?? null;
 
             return $container->get($name, $args);
-
         }
 
         /**
@@ -225,5 +217,30 @@ class Builder
         }
 
         return $buildArguments;
+    }
+
+    /**
+     * @param DiInterface $container
+     * @param array       $definition
+     * @param mixed       $parameters
+     *
+     * @return array|null
+     * @throws Exception
+     */
+    private function checkPassedParameters(
+        DiInterface $container,
+        array $definition,
+        array $parameters = null
+    ): ?array {
+        if (null !== $parameters) {
+            return $parameters;
+        }
+
+        /**
+         * Check if the argument has constructor arguments
+         */
+        $args = $definition['arguments'] ?? [];
+
+        return $this->buildParameters($container, $args);
     }
 }
