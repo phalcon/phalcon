@@ -18,6 +18,7 @@ use Phalcon\Di\Exception\ServiceResolutionException;
 use Phalcon\Di\Service\Builder;
 use Phalcon\Di\Traits\DiInstanceTrait;
 
+use function class_exists;
 use function is_array;
 use function is_object;
 use function is_string;
@@ -88,7 +89,9 @@ class Service implements ServiceInterface
     /**
      * Returns a parameter in a specific position
      *
-     * @return mixed
+     * @param int $position
+     *
+     * @return mixed|null
      */
     public function getParameter(int $position)
     {
@@ -123,7 +126,8 @@ class Service implements ServiceInterface
      * @param array|null       $parameters
      * @param DiInterface|null $container
      *
-     * @return mixed
+     * @return mixed|null
+     * @throws Exception
      * @throws ServiceResolutionException
      */
     public function resolve(
@@ -137,7 +141,6 @@ class Service implements ServiceInterface
             return $this->sharedInstance;
         }
 
-        $found              = true;
         $instance           = null;
         $instanceDefinition = $this->definition;
 
@@ -150,17 +153,15 @@ class Service implements ServiceInterface
             } elseif (true === class_exists($instanceDefinition)) {
                 $instance = $this->createInstance($instanceDefinition, $parameters);
             } else {
-                $found = false;
+                throw new ServiceResolutionException();
             }
         } else {
-
             /**
              * Object definitions can be a Closure or an already resolved
              * instance
              */
             if (true === is_object($instanceDefinition)) {
                 if ($instanceDefinition instanceof Closure) {
-
                     /**
                      * Bounds the closure to the current DI
                      */
@@ -187,16 +188,9 @@ class Service implements ServiceInterface
                         $parameters
                     );
                 } else {
-                    $found = false;
+                    throw new ServiceResolutionException();
                 }
             }
-        }
-
-        /**
-         * If the service can't be built, we must throw an exception
-         */
-        if (true !== $found) {
-            throw new ServiceResolutionException();
         }
 
         /**
