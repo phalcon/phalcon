@@ -15,9 +15,10 @@ namespace Phalcon\Di\Service;
 
 use Phalcon\Di\DiInterface;
 use Phalcon\Di\Exception;
+use Phalcon\Di\Traits\DiExceptionsTrait;
+use Phalcon\Di\Traits\DiInstanceTrait;
 
 use function is_array;
-use function is_object;
 
 /**
  * Phalcon\Di\Service\Builder
@@ -26,6 +27,9 @@ use function is_object;
  */
 class Builder
 {
+    use DiExceptionsTrait;
+    use DiInstanceTrait;
+
     /**
      * Builds a service using a complex service definition
      *
@@ -39,16 +43,9 @@ class Builder
     public function build(
         DiInterface $container,
         array $definition,
-        $parameters = null
+        array $parameters = null
     ) {
-        /**
-         * The class name is required
-         */
-        if (true !== isset($definition['className'])) {
-            throw new Exception(
-                'Invalid service definition. Missing "className" parameter'
-            );
-        }
+        $this->checkClassNameExists($definition);
 
         $className = $definition['className'];
         if (true === is_array($parameters)) {
@@ -56,70 +53,31 @@ class Builder
              * Build the instance overriding the definition constructor
              * parameters
              */
-            if (count($parameters) > 0) {
-                $instance = new $className(...$parameters);
-            } else {
-                $instance = new $className();
-            }
+            $instance = $this->createInstance($className, $parameters);
         } else {
             /**
              * Check if the argument has constructor arguments
              */
-            if (true === isset($definition['arguments'])) {
-                /**
-                 * Create the instance based on the parameters
-                 */
-                $params   = $this->buildParameters(
-                    $container,
-                    $definition['arguments']
-                );
-                $instance = new $className(...$params);
-            } else {
-                $instance = new $className();
-            }
+            $args     = $definition['arguments'] ?? [];
+            $params   = $this->buildParameters($container, $args);
+            $instance = $this->createInstance($className, $params);
         }
 
         /**
          * The definition has calls?
          */
         if (true === isset($definition['calls'])) {
-            if (true !== is_object($instance)) {
-                throw new Exception(
-                    "The definition has setter injection " .
-                    "parameters but the constructor didn't return an instance"
-                );
-            }
-
+            $this->checkSetterInjectionConstructor($instance);
             $paramCalls = $definition['calls'];
-            if (true !== is_array($paramCalls)) {
-                throw new Exception(
-                    'Setter injection parameters must be an array'
-                );
-            }
+            $this->checkSetterInjectionParameters($paramCalls);
 
             /**
-             * The method call has parameters
+             * The method call has parameters - element already checked if
+             * it is an array
              */
             foreach ($paramCalls as $methodPosition => $method) {
-                /**
-                 * The call parameter must be an array of arrays
-                 */
-                if (true !== is_array($method)) {
-                    throw new Exception(
-                        'Method call must be an array on position ' .
-                        $methodPosition
-                    );
-                }
-
-                /**
-                 * A param 'method' is required
-                 */
-                if (true !== isset($method['method'])) {
-                    throw new Exception(
-                        "The method name is required on position " .
-                        $methodPosition
-                    );
-                }
+                $this->checkMethodCallPosition($method, $methodPosition);
+                $this->checkMethodMethodExists($method, $methodPosition);
 
                 /**
                  * Create the method call
@@ -127,12 +85,10 @@ class Builder
                 $methodCall = [$instance, $method["method"]];
                 if (true === isset($method['arguments'])) {
                     $arguments = $method['arguments'];
-                    if (true !== is_array($arguments)) {
-                        throw new Exception(
-                            "Call arguments must be an array " .
-                            $methodPosition
-                        );
-                    }
+                    $this->checkMethodArgumentsIsArray(
+                        $arguments,
+                        $methodPosition
+                    );
 
                     if (count($arguments) > 0) {
                         /**
@@ -161,53 +117,18 @@ class Builder
          * The definition has properties?
          */
         if (true === isset($definition['properties'])) {
-            if (true !== is_object($instance)) {
-                throw new Exception(
-                    "The definition has properties injection " .
-                    "parameters but the constructor didn't return an instance"
-                );
-            }
+            $this->checkPropertiesInjectionConstruct($instance);
 
             $paramCalls = $definition['properties'];
-            if (true !== is_array($paramCalls)) {
-                throw new Exception(
-                    'Setter injection parameters must be an array'
-                );
-            }
+            $this->checkSetterInjectionParameters($paramCalls);
 
             /**
              * The method call has parameters
              */
             foreach ($paramCalls as $propertyPosition => $property) {
-                /**
-                 * The call parameter must be an array of arrays
-                 */
-                if (true !== is_array($property)) {
-                    throw new Exception(
-                        "Property must be an array on position " .
-                        $propertyPosition
-                    );
-                }
-
-                /**
-                 * A param 'name' is required
-                 */
-                if (true !== isset($property['name'])) {
-                    throw new Exception(
-                        'The property name is required on position ' .
-                        $propertyPosition
-                    );
-                }
-
-                /**
-                 * A param 'value' is required
-                 */
-                if (true !== isset($property['value'])) {
-                    throw new Exception(
-                        'The property value is required on position ' .
-                        $propertyPosition
-                    );
-                }
+                $this->checkPropertyIsArray($property, $propertyPosition);
+                $this->checkPropertyNameExists($property, $propertyPosition);
+                $this->checkPropertyValueExists($property, $propertyPosition);
 
                 /**
                  * Update the public property
@@ -241,14 +162,7 @@ class Builder
         int $position,
         array $argument
     ) {
-        /**
-         * All the arguments must have a type
-         */
-        if (true !== isset($argument['type'])) {
-            throw new Exception(
-                'Argument at position ' . $position . ' must have a type'
-            );
-        }
+        $this->checkArgumentTypeExists($position, $argument);
 
         $type = $argument['type'];
         switch ($type) {
@@ -257,8 +171,8 @@ class Builder
              * DI
              */
             case 'service':
-                $this->checkParameters($argument, 'name', $position);
-                $this->checkContainer($container);
+                $this->checkServiceParameters($argument, 'name', $position);
+                $this->checkContainerIsValid($container);
 
                 $name = $argument['name'];
 
@@ -268,7 +182,7 @@ class Builder
              * If the argument type is 'parameter', we assign the value as it is
              */
             case 'parameter':
-                $this->checkParameters($argument, 'value', $position);
+                $this->checkServiceParameters($argument, 'value', $position);
                 if (true !== isset($argument['value'])) {
                     throw new Exception(
                         "Service 'value' is required in parameter " .
@@ -282,23 +196,13 @@ class Builder
              * If the argument type is 'instance', we assign the value as it is
              */
             case 'instance':
-                $this->checkParameters($argument, 'className', $position);
-                $this->checkContainer($container);
+                $this->checkServiceParameters($argument, 'className', $position);
+                $this->checkContainerIsValid($container);
 
                 $name = $argument['className'];
-                if (true === isset($argument['arguments'])) {
-                    $instanceArguments = $argument['arguments'];
-                    /**
-                     * Build the instance with arguments
-                     */
-                    return $container->get($name, $instanceArguments);
-                }
+                $args = $argument['arguments'] ?? null;
 
-                /**
-                 * The instance parameter does not have arguments for its
-                 * constructor
-                 */
-                return $container->get($name);
+                return $container->get($name, $args);
 
             default:
                 /**
@@ -335,39 +239,5 @@ class Builder
         }
 
         return $buildArguments;
-    }
-
-    /**
-     * @param mixed $container
-     *
-     * @throws Exception
-     */
-    private function checkContainer($container): void
-    {
-        if (true !== is_object($container)) {
-            throw new Exception(
-                'The dependency injector container is not valid'
-            );
-        }
-    }
-
-    /**
-     * @param array  $argument
-     * @param string $name
-     * @param int    $position
-     *
-     * @throws Exception
-     */
-    private function checkParameters(
-        array $argument,
-        string $name,
-        int $position
-    ): void {
-        if (true !== isset($argument[$name])) {
-            throw new Exception(
-                'Service "' . $name . '" is required in parameter ' .
-                'on position ' . (string) $position
-            );
-        }
     }
 }
