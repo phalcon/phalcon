@@ -165,42 +165,40 @@ class Builder
         $this->checkArgumentTypeExists($position, $argument);
 
         $type = $argument['type'];
-        switch ($type) {
-            /**
-             * If the argument type is 'service', we obtain the service from the
-             * DI
-             */
-            case 'service':
-                $this->checkServiceParameters($argument, 'name', $position);
-                $this->checkContainerIsValid($container);
+        /**
+         * If the argument type is 'parameter', we assign the value as it is
+         */
+        if ('parameter' === $type) {
+            $this->checkServiceParameters($argument, 'value', $position);
 
-                $name = $argument['name'];
-
-                return $container->get($name);
-
-            /**
-             * If the argument type is 'parameter', we assign the value as it is
-             */
-            case 'parameter':
-                $this->checkServiceParameters($argument, 'value', $position);
-
-                return $argument['value'];
-
-            /**
-             * If the argument type is 'instance', we assign the value as it is
-             */
-            case 'instance':
-                $this->checkServiceParameters($argument, 'className', $position);
-                $this->checkContainerIsValid($container);
-
-                $name = $argument['className'];
-                $args = $argument['arguments'] ?? null;
-
-                return $container->get($name, $args);
-
-            default:
-                $this->throwUnknownServiceInParameter($position);
+            return $argument['value'];
         }
+
+        /**
+         * Get 'service' and 'instance' from the container
+         */
+        $field = ('service' === $type) ? 'name' : '';
+        $field = ('instance' === $type) ? 'className' : $field;
+
+        if ('service' === $type || 'instance' === $type) {
+            $this->checkServiceParameters($argument, $field, $position);
+            $this->checkContainerIsValid($container);
+
+            $name = $argument[$field];
+
+            /**
+             * For 'service' this will have nothing so it will default to `null`
+             */
+            $args = $argument['arguments'] ?? null;
+
+            return $container->get($name, $args);
+
+        }
+
+        /**
+         * If we are here, then we have not found anything
+         */
+        $this->throwUnknownServiceInParameter($position);
     }
 
     /**
