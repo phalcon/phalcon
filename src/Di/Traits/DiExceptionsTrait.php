@@ -308,4 +308,20 @@ trait DiExceptionsTrait
             "Call to undefined method or service '" . $method . "'"
         );
     }
+
+    /**
+     * @param int $position
+     *
+     * @throws Exception
+     */
+    private function throwUnknownServiceInParameter(int $position): void
+    {
+        /**
+         * Unknown parameter type
+         */
+        throw new Exception(
+            'Unknown service type in parameter on ' .
+            'position ' . $position
+        );
+    }
 }

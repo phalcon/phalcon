@@ -154,7 +154,7 @@ class Builder
      * @param int         $position
      * @param array       $argument
      *
-     * @return mixed
+     * @return mixed|void
      * @throws Exception
      */
     private function buildParameter(
@@ -183,12 +183,6 @@ class Builder
              */
             case 'parameter':
                 $this->checkServiceParameters($argument, 'value', $position);
-                if (true !== isset($argument['value'])) {
-                    throw new Exception(
-                        "Service 'value' is required in parameter " .
-                        "on position " . $position
-                    );
-                }
 
                 return $argument['value'];
 
@@ -205,13 +199,7 @@ class Builder
                 return $container->get($name, $args);
 
             default:
-                /**
-                 * Unknown parameter type
-                 */
-                throw new Exception(
-                    'Unknown service type in parameter on ' .
-                    'position ' . $position
-                );
+                $this->throwUnknownServiceInParameter($position);
         }
     }
 
