@@ -20,6 +20,7 @@ use Phalcon\Di\Traits\DiInstanceTrait;
 
 use function call_user_func;
 use function call_user_func_array;
+use function var_dump;
 
 /**
  * Phalcon\Di\Service\Builder
@@ -175,7 +176,6 @@ class Builder
 
         if ('service' === $type || 'instance' === $type) {
             $this->checkServiceParameters($argument, $field, $position);
-            $this->checkContainerIsValid($container);
 
             $name = $argument[$field];
 
