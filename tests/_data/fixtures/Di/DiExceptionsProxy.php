@@ -11,37 +11,29 @@
 
 declare(strict_types=1);
 
-namespace Phalcon\Di\Traits;
+namespace Phalcon\Tests\Fixtures\Di;
 
 use Phalcon\Di\Exception;
-
-use function class_exists;
-use function is_array;
-use function is_object;
+use Phalcon\Di\Traits\DiExceptionsTrait;
 
 /**
  * Trait DiExceptionsTrait
  *
  * @package Phalcon\Di\Traits
  */
-trait DiExceptionsTrait
+class DiExceptionsProxy
 {
+    use DiExceptionsTrait;
+
     /**
      * @param int   $position
      * @param array $argument
      *
      * @throws Exception
      */
-    private function checkArgumentTypeExists(int $position, array $argument): void
+    private function proxyCheckArgumentTypeExists(int $position, array $argument): void
     {
-        /**
-         * All the arguments must have a type
-         */
-        if (true !== isset($argument['type'])) {
-            throw new Exception(
-                'Argument at position ' . $position . ' must have a type'
-            );
-        }
+        $this->checkArgumentTypeExists($position, $argument);
     }
 
     /**
@@ -51,16 +43,7 @@ trait DiExceptionsTrait
      */
     private function checkClassExists(string $name): void
     {
-        /**
-         * The DI also acts as builder for any class even if it isn't
-         * defined in the DI
-         */
-        if (true !== class_exists($name)) {
-            throw new Exception(
-                'Service "' . $name .
-                '" was not found in the dependency injection container'
-            );
-        }
+        $this->checkClassExists($name);
     }
 
     /**
@@ -235,8 +218,8 @@ trait DiExceptionsTrait
     {
         if (true !== is_object($instance)) {
             throw new Exception(
-                'The definition has setter injection ' .
-                'parameters but the constructor did not return an instance'
+                "The definition has setter injection " .
+                "parameters but the constructor didn't return an instance"
             );
         }
     }
