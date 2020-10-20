@@ -15,10 +15,17 @@ namespace Phalcon\Tests\Unit\Di\Service;
 
 use UnitTester;
 
+/**
+ * Class IsResolvedCest
+ *
+ * @package Phalcon\Tests\Unit\Di\Service
+ */
 class IsResolvedCest
 {
     /**
      * Unit Tests Phalcon\Di\Service :: isResolved()
+     *
+     * @param UnitTester $I
      *
      * @author Phalcon Team <team@phalcon.io>
      * @since  2019-09-09

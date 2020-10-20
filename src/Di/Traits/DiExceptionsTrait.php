@@ -104,7 +104,7 @@ trait DiExceptionsTrait
     {
         if (true !== is_array($arguments)) {
             throw new Exception(
-                'Call arguments must be an array ' .
+                'Call arguments must be an array on position ' .
                 (string) $position
             );
         }

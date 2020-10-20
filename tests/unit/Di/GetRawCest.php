@@ -18,13 +18,20 @@ use Phalcon\Di\Di;
 use Phalcon\Escaper\Escaper;
 use UnitTester;
 
+/**
+ * Class GetRawCest
+ *
+ * @package Phalcon\Tests\Unit\Di
+ */
 class GetRawCest
 {
     /**
      * Tests Phalcon\Di :: getRaw()
      *
+     * @param  UnitTester $I
+     *
      * @author Phalcon Team <team@phalcon.io>
-     * @since  2020-09-09
+     * @since  2019-09-09
      */
     public function diGetRaw(UnitTester $I)
     {
@@ -44,8 +51,10 @@ class GetRawCest
     /**
      * Tests Phalcon\Di :: getRaw() - exception
      *
+     * @param  UnitTester $I
+     *
      * @author Phalcon Team <team@phalcon.io>
-     * @since  2020-09-09
+     * @since  2019-09-09
      */
     public function diGetRawException(UnitTester $I)
     {

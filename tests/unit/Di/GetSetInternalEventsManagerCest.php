@@ -18,19 +18,24 @@ use Phalcon\Events\Manager;
 use Phalcon\Events\ManagerInterface;
 use UnitTester;
 
-class GetInternalEventsManagerCest
+/**
+ * Class GetSetInternalEventsManagerCest
+ *
+ * @package Phalcon\Tests\Unit\Di
+ */
+class GetSetInternalEventsManagerCest
 {
     /**
-     * Unit Tests Phalcon\Di :: getInternalEventsManager()
+     * Unit Tests Phalcon\Di :: getInternalEventsManager()/setInternalEventsManager()
      *
      * @param  UnitTester $I
      *
      * @author Phalcon Team <team@phalcon.io>
      * @since  2019-09-09
      */
-    public function diGetInternalEventsManager(UnitTester $I)
+    public function diGetSetInternalEventsManager(UnitTester $I)
     {
-        $I->wantToTest('Di - getInternalEventsManager()');
+        $I->wantToTest('Di - getInternalEventsManager()/setInternalEventsManager()');
 
         $container = new Di();
 
@@ -38,7 +43,6 @@ class GetInternalEventsManagerCest
         $I->assertNull($actual);
 
         $container->setInternalEventsManager(new Manager());
-
 
         $class  = ManagerInterface::class;
         $actual = $container->getInternalEventsManager();

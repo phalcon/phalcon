@@ -18,10 +18,17 @@ use Phalcon\Di\Exception;
 use Phalcon\Escaper\Escaper;
 use UnitTester;
 
+/**
+ * Class UnderscoreCallCest
+ *
+ * @package Phalcon\Tests\Unit\Di
+ */
 class UnderscoreCallCest
 {
     /**
      * Tests Phalcon\Di :: __call()
+     *
+     * @param UnitTester $I
      *
      * @author Phalcon Team <team@phalcon.io>
      * @since  2020-09-09
@@ -42,8 +49,10 @@ class UnderscoreCallCest
     /**
      * Tests Phalcon\Di :: __call() - unknown method
      *
-     * @author Sid Roberts <https://github.com/SidRoberts>
-     * @since  2019-05-28
+     * @param UnitTester $I
+     *
+     * @author Phalcon Team <team@phalcon.io>
+     * @since  2020-09-09
      */
     public function testUnderscoreCallUnknownMethod(UnitTester $I)
     {

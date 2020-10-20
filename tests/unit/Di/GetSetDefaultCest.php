@@ -20,10 +20,17 @@ use UnitTester;
 
 use function spl_object_hash;
 
+/**
+ * Class GetSetDefaultCest
+ *
+ * @package Phalcon\Tests\Unit\Di
+ */
 class GetSetDefaultCest
 {
     /**
      * Tests Phalcon\Di :: getDefault() / setDefault()
+     *
+     * @param  UnitTester $I
      *
      * @author Phalcon Team <team@phalcon.io>
      * @since  2019-09-09

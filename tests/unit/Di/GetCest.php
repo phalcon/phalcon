@@ -16,13 +16,23 @@ namespace Phalcon\Tests\Unit\Di;
 use Phalcon\Di\Di;
 use Phalcon\Di\Exception;
 use Phalcon\Di\Service;
+use Phalcon\Di\ServiceInterface;
 use Phalcon\Escaper\Escaper;
 use UnitTester;
 
+use function spl_object_hash;
+
+/**
+ * Class GetCest
+ *
+ * @package Phalcon\Tests\Unit\Di
+ */
 class GetCest
 {
     /**
      * Unit Tests Phalcon\Di :: get()
+     *
+     * @param  UnitTester $I
      *
      * @author Phalcon Team <team@phalcon.io>
      * @since  2019-09-09
@@ -35,21 +45,62 @@ class GetCest
         $container = new Di();
 
         // set a service and get it to check
-        $actual = $container->set('escaper', Escaper::class);
+        $service = $container->set('escaper', Escaper::class);
 
-        $I->assertInstanceOf(Service::class, $actual);
-        $I->assertFalse($actual->isShared());
+        $class = ServiceInterface::class;
+        $I->assertInstanceOf($class, $service);
+
+        $class = Service::class;
+        $I->assertInstanceOf($class, $service);
+
+        $actual = $service->isShared();
+        $I->assertFalse($actual);
 
         // get escaper service
         $actual   = $container->get('escaper');
-        $expected = new Escaper();
 
-        $I->assertInstanceOf(Escaper::class, $actual);
+        $class = Escaper::class;
+        $I->assertInstanceOf($class, $actual);
+
+        $expected = spl_object_hash(new Escaper());
+        $actual   = spl_object_hash($actual);
+        $I->assertNotEquals($expected, $actual);
+    }
+
+    /**
+     * Unit Tests Phalcon\Di :: get() - shared
+     *
+     * @param  UnitTester $I
+     *
+     * @author Phalcon Team <team@phalcon.io>
+     * @since  2019-09-09
+     */
+    public function diGetShared(UnitTester $I)
+    {
+        $I->wantToTest('Di - get() - shared ');
+
+        // setup
+        $container = new Di();
+
+        $escaper = new Escaper();
+        $service = $container->set('escaper', $escaper, true);
+
+        $actual = $service->isShared();
+        $I->assertTrue($actual);
+
+        // get escaper service - twice to cache it
+        $actual   = $container->get('escaper');
+        $actual   = $container->get('escaper');
+
+        $expected = spl_object_hash($escaper);
+        $actual   = spl_object_hash($actual);
         $I->assertEquals($expected, $actual);
     }
 
     /**
      * Unit Tests Phalcon\Di :: get() - exception
+     *
+     * @param  UnitTester $I
      *
      * @author Phalcon Team <team@phalcon.io>
      * @since  2019-09-09

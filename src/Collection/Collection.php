@@ -53,6 +53,7 @@ use function settype;
  */
 class Collection implements
     ArrayAccess,
+    CollectionInterface,
     Countable,
     IteratorAggregate,
     JsonSerializable,

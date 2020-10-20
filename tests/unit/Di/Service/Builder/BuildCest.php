@@ -15,10 +15,17 @@ namespace Phalcon\Tests\Unit\Di\Service\Builder;
 
 use UnitTester;
 
+/**
+ * Class BuildCest
+ *
+ * @package Phalcon\Tests\Unit\Di\Service\Builder
+ */
 class BuildCest
 {
     /**
      * Unit Tests Phalcon\Di\Service\Builder :: build()
+     *
+     * @param  UnitTester $I
      *
      * @author Phalcon Team <team@phalcon.io>
      * @since  2019-09-09

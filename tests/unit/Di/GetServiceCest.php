@@ -19,10 +19,17 @@ use Phalcon\Di\Service;
 use Phalcon\Escaper\Escaper;
 use UnitTester;
 
+/**
+ * Class GetServiceCest
+ *
+ * @package Phalcon\Tests\Unit\Di
+ */
 class GetServiceCest
 {
     /**
      * Unit Tests Phalcon\Di :: getService()
+     *
+     * @param  UnitTester $I
      *
      * @author Phalcon Team <team@phalcon.io>
      * @since  2019-09-09
@@ -49,6 +56,8 @@ class GetServiceCest
 
     /**
      * Unit Tests Phalcon\Di :: getService() - exception
+     *
+     * @param  UnitTester $I
      *
      * @author Phalcon Team <team@phalcon.io>
      * @since  2019-09-09

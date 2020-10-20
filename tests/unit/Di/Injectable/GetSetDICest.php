@@ -28,6 +28,8 @@ class GetSetDICest
     /**
      * Unit Tests Phalcon\Di\Injectable :: getDI()/setDI()
      *
+     * @param  UnitTester $I
+     *
      * @author Phalcon Team <team@phalcon.io>
      * @since  2019-09-09
      */
@@ -46,6 +48,8 @@ class GetSetDICest
 
     /**
      * Unit Tests Phalcon\Di\Injectable :: getDI()/setDI() - constructor
+     *
+     * @param  UnitTester $I
      *
      * @author Phalcon Team <team@phalcon.io>
      * @since  2019-09-09
