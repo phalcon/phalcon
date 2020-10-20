@@ -40,7 +40,7 @@ class WriteCest
         /**
          * Serialize the value because the adapter does not have a serializer
          */
-        $I->seeInLibmemcached('sess-memc-test1', $value);
-        $I->removeFromLibmemcached('sess-memc-test1');
+        $I->seeInMemcached('sess-memc-test1', $value);
+        $I->clearMemcache();
     }
 }

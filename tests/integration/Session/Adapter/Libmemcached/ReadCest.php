@@ -35,19 +35,17 @@ class ReadCest
 
         $adapter = $this->newService('sessionLibmemcached');
 
+        $key   = 'sess-memc-test1';
         $value = uniqid();
 
-        $I->haveInLibmemcached('sess-memc-test1', $value);
+        $I->haveInMemcached($key, $value);
 
-        $I->assertEquals(
-            $value,
-            $adapter->read('test1')
-        );
+        $actual = $adapter->read('test1');
+        $I->assertEquals($value, $actual);
 
-        $I->removeFromLibmemcached('sess-memc-test1');
+        $I->clearMemcache();
 
-        $I->assertNotNull(
-            $adapter->read('test1')
-        );
+        $actual = $adapter->read('test1');
+        $I->assertNotNull($actual);
     }
 }

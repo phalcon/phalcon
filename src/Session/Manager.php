@@ -13,9 +13,8 @@ declare(strict_types=1);
 
 namespace Phalcon\Session;
 
+use Phalcon\Session\Traits\ManagerMagicTraits;
 use SessionHandlerInterface;
-use Phalcon\Di\AbstractInjectionAware;
-use Phalcon\Di\DiInterface;
 
 use function headers_sent;
 use function preg_match;
@@ -38,6 +37,8 @@ use function session_status;
  */
 class Manager implements ManagerInterface
 {
+    use ManagerMagicTraits;
+
     /**
      * @var SessionHandlerInterface|null
      */
@@ -68,51 +69,6 @@ class Manager implements ManagerInterface
     public function __construct(array $options = [])
     {
         $this->setOptions($options);
-    }
-
-    /**
-     * Alias: Gets a session variable from an application context
-     *
-     * @param string $key
-     *
-     * @return mixed
-     */
-    public function __get($key)
-    {
-        return $this->get($key);
-    }
-
-    /**
-     * Alias: Check whether a session variable is set in an application context
-     *
-     * @param string $key
-     *
-     * @return bool
-     */
-    public function __isset(string $key): bool
-    {
-        return $this->has($key);
-    }
-
-    /**
-     * Alias: Sets a session variable in an application context
-     *
-     * @param string $key
-     * @param mixed  $value
-     */
-    public function __set(string $key, $value): void
-    {
-        $this->set($key, $value);
-    }
-
-    /**
-     * Alias: Removes a session variable from an application context
-     *
-     * @param string $key
-     */
-    public function __unset(string $key): void
-    {
-        $this->remove($key);
     }
 
     /**

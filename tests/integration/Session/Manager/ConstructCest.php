@@ -17,6 +17,11 @@ use IntegrationTester;
 use Phalcon\Session\Manager;
 use Phalcon\Session\ManagerInterface;
 
+/**
+ * Class ConstructCest
+ *
+ * @package Phalcon\Tests\Integration\Session\Manager
+ */
 class ConstructCest
 {
     /**
