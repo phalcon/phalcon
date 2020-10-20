@@ -7,6 +7,10 @@ $root = dirname(realpath(__DIR__) . DIRECTORY_SEPARATOR) . DIRECTORY_SEPARATOR;
 
 require_once $root . 'tests/_ci/functions.php';
 
+if (!file_exists(cacheDir())) {
+    mkdir(cacheDir());
+}
+
 if (!file_exists(logsDir())) {
     mkdir(logsDir());
 }

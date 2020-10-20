@@ -15,9 +15,9 @@ namespace Phalcon\Tests\Integration\Session\Manager;
 
 use IntegrationTester;
 use InvalidArgumentException;
+use Phalcon\Session\Exception;
 use Phalcon\Session\Manager;
 use Phalcon\Tests\Fixtures\Traits\DiTrait;
-use Phalcon\Tests\Fixtures\Traits\SessionTrait;
 
 /**
  * Class GetSetNameCest
@@ -59,7 +59,7 @@ class GetSetNameCest
     {
         $I->wantToTest('Session\Manager - getName()/setName() - not valid name');
         $I->expectThrowable(
-            new InvalidArgumentException('The name contains non alphanum characters'),
+            new Exception('The name contains non alphanum characters'),
             function () {
                 $manager = new Manager();
                 $files   = $this->newService('sessionStream');

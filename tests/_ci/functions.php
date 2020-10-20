@@ -15,6 +15,16 @@ declare(strict_types=1);
  * Directories
  *******************************************************************************/
 /**
+ * Returns the output logs folder
+ */
+if (!function_exists('cacheDir')) {
+    function cacheDir(string $fileName = ''): string
+    {
+        return codecept_output_dir() . 'cache/' . $fileName;
+    }
+}
+
+/**
  * Returns the data folder
  */
 if (!function_exists('dataDir')) {
@@ -130,6 +140,22 @@ if (!function_exists('getOptionsSqlite')) {
     {
         return [
             'dbname' => codecept_root_dir(env('DATA_SQLITE_NAME')),
+        ];
+    }
+}
+
+if (!function_exists('getOptionsSessionStream')) {
+    /**
+     * Get Session Stream options
+     */
+    function getOptionsSessionStream(): array
+    {
+        if (!is_dir(cacheDir('sessions'))) {
+            mkdir(cacheDir('sessions'));
+        }
+
+        return [
+            'savePath' => cacheDir('sessions'),
         ];
     }
 }

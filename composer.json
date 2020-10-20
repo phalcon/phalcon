@@ -57,6 +57,7 @@
         "codeception/module-asserts": "^1.0.0",
         "codeception/module-db": "^1.0",
         "codeception/module-filesystem": "^1.0.0",
+        "codeception/module-memcache": "^1.0",
         "codeception/module-redis": "^1.0",
         "pds/skeleton": "^1.0",
         "phpbench/phpbench": "^0.17.1",

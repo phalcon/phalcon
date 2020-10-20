@@ -4,7 +4,7 @@
         "Read more about it at https://getcomposer.org/doc/01-basic-usage.md#installing-dependencies",
         "This file is @generated automatically"
     ],
-    "content-hash": "32141ef7f0cbfa598d2f9b001312d45d",
+    "content-hash": "70ea2b760e0f7caa82327c40b3f1a4a3",
     "packages": [
         {
             "name": "payload-interop/payload-interop",
@@ -654,16 +654,16 @@
         },
         {
             "name": "codeception/codeception",
-            "version": "4.1.7",
+            "version": "4.1.8",
             "source": {
                 "type": "git",
                 "url": "https://github.com/Codeception/Codeception.git",
-                "reference": "220ad18d3c192137d9dc2d0dd8d69a0d82083a26"
+                "reference": "41036e8af66e727c4587012f0366b7f0576a99da"
             },
             "dist": {
                 "type": "zip",
-                "url": "https://api.github.com/repos/Codeception/Codeception/zipball/220ad18d3c192137d9dc2d0dd8d69a0d82083a26",
-                "reference": "220ad18d3c192137d9dc2d0dd8d69a0d82083a26",
+                "url": "https://api.github.com/repos/Codeception/Codeception/zipball/41036e8af66e727c4587012f0366b7f0576a99da",
+                "reference": "41036e8af66e727c4587012f0366b7f0576a99da",
                 "shasum": ""
             },
             "require": {
@@ -741,7 +741,7 @@
                     "type": "open_collective"
                 }
             ],
-            "time": "2020-08-28T06:37:06+00:00"
+            "time": "2020-10-11T17:54:58+00:00"
         },
         {
             "name": "codeception/lib-asserts",
@@ -999,6 +999,50 @@
             "time": "2019-12-04T17:13:39+00:00"
         },
         {
+            "name": "codeception/module-memcache",
+            "version": "1.0.0",
+            "source": {
+                "type": "git",
+                "url": "https://github.com/Codeception/module-memcache.git",
+                "reference": "e30756a05621e026cc8dc390636f6e25db224763"
+            },
+            "dist": {
+                "type": "zip",
+                "url": "https://api.github.com/repos/Codeception/module-memcache/zipball/e30756a05621e026cc8dc390636f6e25db224763",
+                "reference": "e30756a05621e026cc8dc390636f6e25db224763",
+                "shasum": ""
+            },
+            "require": {
+                "codeception/codeception": "4.0.x-dev | ^4.0",
+                "php": ">=5.6.0 <8.0"
+            },
+            "require-dev": {
+                "codeception/util-robohelpers": "dev-master"
+            },
+            "type": "library",
+            "autoload": {
+                "classmap": [
+                    "src/"
+                ]
+            },
+            "notification-url": "https://packagist.org/downloads/",
+            "license": [
+                "MIT"
+            ],
+            "authors": [
+                {
+                    "name": "Michael Bodnarchuk"
+                }
+            ],
+            "description": "Memcache module for Codeception",
+            "homepage": "http://codeception.com/",
+            "keywords": [
+                "codeception",
+                "memcache"
+            ],
+            "time": "2019-10-10T09:20:45+00:00"
+        },
+        {
             "name": "codeception/module-redis",
             "version": "1.0.0",
             "source": {
@@ -1048,16 +1092,16 @@
         },
         {
             "name": "codeception/phpunit-wrapper",
-            "version": "9.0.4",
+            "version": "9.0.5",
             "source": {
                 "type": "git",
                 "url": "https://github.com/Codeception/phpunit-wrapper.git",
-                "reference": "bb0925f1fe7a30105208352e619a11d6096e7047"
+                "reference": "72bac7770866799e23a7dda1ac6bec2f8baccf45"
             },
             "dist": {
                 "type": "zip",
-                "url": "https://api.github.com/repos/Codeception/phpunit-wrapper/zipball/bb0925f1fe7a30105208352e619a11d6096e7047",
-                "reference": "bb0925f1fe7a30105208352e619a11d6096e7047",
+                "url": "https://api.github.com/repos/Codeception/phpunit-wrapper/zipball/72bac7770866799e23a7dda1ac6bec2f8baccf45",
+                "reference": "72bac7770866799e23a7dda1ac6bec2f8baccf45",
                 "shasum": ""
             },
             "require": {
@@ -1088,7 +1132,7 @@
                 }
             ],
             "description": "PHPUnit classes used by Codeception",
-            "time": "2020-08-26T18:15:09+00:00"
+            "time": "2020-10-11T18:14:42+00:00"
         },
         {
             "name": "codeception/stub",
@@ -1587,16 +1631,16 @@
         },
         {
             "name": "lstrojny/functional-php",
-            "version": "1.14.0",
+            "version": "1.14.1",
             "source": {
                 "type": "git",
                 "url": "https://github.com/lstrojny/functional-php.git",
-                "reference": "4924870cecd16c8fe6536ff25f4deb1f18e53f39"
+                "reference": "9e8363e3cb9db924327f51b5804f4dfba03605aa"
             },
             "dist": {
                 "type": "zip",
-                "url": "https://api.github.com/repos/lstrojny/functional-php/zipball/4924870cecd16c8fe6536ff25f4deb1f18e53f39",
-                "reference": "4924870cecd16c8fe6536ff25f4deb1f18e53f39",
+                "url": "https://api.github.com/repos/lstrojny/functional-php/zipball/9e8363e3cb9db924327f51b5804f4dfba03605aa",
+                "reference": "9e8363e3cb9db924327f51b5804f4dfba03605aa",
                 "shasum": ""
             },
             "require": {
@@ -1727,7 +1771,7 @@
             "keywords": [
                 "functional"
             ],
-            "time": "2020-08-24T14:15:56+00:00"
+            "time": "2020-10-12T09:48:50+00:00"
         },
         {
             "name": "myclabs/deep-copy",
@@ -2993,16 +3037,16 @@
         },
         {
             "name": "phpstan/phpstan",
-            "version": "0.11.19",
+            "version": "0.11.20",
             "source": {
                 "type": "git",
                 "url": "https://github.com/phpstan/phpstan.git",
-                "reference": "63cc502f6957b7f74efbac444b4cf219dcadffd7"
+                "reference": "938dcc03a005280e1a9587ec7684345bff06ebfc"
             },
             "dist": {
                 "type": "zip",
-                "url": "https://api.github.com/repos/phpstan/phpstan/zipball/63cc502f6957b7f74efbac444b4cf219dcadffd7",
-                "reference": "63cc502f6957b7f74efbac444b4cf219dcadffd7",
+                "url": "https://api.github.com/repos/phpstan/phpstan/zipball/938dcc03a005280e1a9587ec7684345bff06ebfc",
+                "reference": "938dcc03a005280e1a9587ec7684345bff06ebfc",
                 "shasum": ""
             },
             "require": {
@@ -3064,7 +3108,21 @@
                 "MIT"
             ],
             "description": "PHPStan - PHP Static Analysis Tool",
-            "time": "2019-10-22T20:20:22+00:00"
+            "funding": [
+                {
+                    "url": "https://github.com/ondrejmirtes",
+                    "type": "github"
+                },
+                {
+                    "url": "https://www.patreon.com/phpstan",
+                    "type": "patreon"
+                },
+                {
+                    "url": "https://tidelift.com/funding/github/packagist/phpstan/phpstan",
+                    "type": "tidelift"
+                }
+            ],
+            "time": "2020-10-12T14:33:05+00:00"
         },
         {
             "name": "phpunit/php-code-coverage",

@@ -16,8 +16,12 @@ namespace Phalcon\Tests\Integration\Session\Manager;
 use IntegrationTester;
 use Phalcon\Session\Manager;
 use Phalcon\Tests\Fixtures\Traits\DiTrait;
-use Phalcon\Tests\Fixtures\Traits\SessionTrait;
 
+/**
+ * Class ExistsDestroyCest
+ *
+ * @package Phalcon\Tests\Integration\Session\Manager
+ */
 class ExistsDestroyCest
 {
     use DiTrait;
@@ -79,7 +83,7 @@ class ExistsDestroyCest
 
         $manager->set('test1', __METHOD__);
         $I->assertArrayHasKey('test1', $_SESSION);
-        $I->assertContains(__METHOD__, $_SESSION['test1']);
+        $I->assertEquals(__METHOD__, $_SESSION['test1']);
 
         $manager->destroy();
         $I->assertArrayNotHasKey('test1', $_SESSION);

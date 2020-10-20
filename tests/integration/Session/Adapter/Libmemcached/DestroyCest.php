@@ -17,6 +17,7 @@ use IntegrationTester;
 use Phalcon\Tests\Fixtures\Traits\DiTrait;
 use Phalcon\Tests\Fixtures\Traits\SessionTrait;
 
+use function serialize;
 use function uniqid;
 
 class DestroyCest
@@ -35,17 +36,20 @@ class DestroyCest
 
         $adapter = $this->newService('sessionLibmemcached');
 
-        $value = uniqid();
+        $value  = uniqid();
+        $key    = 'sess-memc-test1';
+        $actual = serialize($value);
 
-        $I->haveInLibmemcached(
+        $I->haveInMemcached($key, $actual);
+
+        $I->seeInMemcached(
             'sess-memc-test1',
             serialize($value)
         );
 
-        $I->assertTrue(
-            $adapter->destroy('test1')
-        );
+        $actual = $adapter->destroy('test1');
+        $I->assertTrue($actual);
 
-        $I->dontSeeInLibmemcached('sess-memc-test1');
+        $I->dontSeeInMemcached($key);
     }
 }

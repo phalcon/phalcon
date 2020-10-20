@@ -20,7 +20,7 @@ use Phalcon\Tests\Fixtures\Traits\FactoryTrait;
 
 class LoadCest
 {
-    use FactoryTrait;
+//    use FactoryTrait;
 
     public function _before(IntegrationTester $I)
     {
