@@ -17,10 +17,17 @@ use Phalcon\Di\Di;
 use Phalcon\Escaper\Escaper;
 use UnitTester;
 
+/**
+ * Class OffsetUnsetCest
+ *
+ * @package Phalcon\Tests\Unit\Di
+ */
 class OffsetUnsetCest
 {
     /**
      * Tests Phalcon\Di :: offsetUnset()
+     *
+     * @param  UnitTester $I
      *
      * @author Phalcon Team <team@phalcon.io>
      * @since  2019-09-09

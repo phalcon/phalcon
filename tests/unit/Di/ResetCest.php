@@ -18,13 +18,20 @@ use UnitTester;
 
 use function spl_object_hash;
 
+/**
+ * Class ResetCest
+ *
+ * @package Phalcon\Tests\Unit\Di
+ */
 class ResetCest
 {
     /**
      * Unit Tests Phalcon\Di :: reset()
      *
+     * @param UnitTester $I
+     *
      * @author Phalcon Team <team@phalcon.io>
-     * @since  2019-09-09
+     * @since  2020-09-09
      */
     public function diReset(UnitTester $I)
     {

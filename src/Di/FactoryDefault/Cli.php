@@ -15,6 +15,7 @@ namespace Phalcon\Di\FactoryDefault;
 
 use Phalcon\Di\FactoryDefault;
 use Phalcon\Di\Service;
+use Phalcon\Escaper\Escaper;
 use Phalcon\Events\Manager as EventsManager;
 
 //use Phalcon\Filter\FilterFactory;
@@ -39,12 +40,12 @@ class Cli extends FactoryDefault
 //        let filter = new FilterFactory();
 //
         $this->services = [
-            "eventsManager" => new Service(EventsManager::class, true),
+            'escaper'       => new Service(Escaper::class, true),
+            'eventsManager' => new Service(EventsManager::class, true),
         ];
 //        let this->services = [
 //            "annotations":        new Service("Phalcon\\Annotations\\Adapter\\Memory", true),
 //            "dispatcher":         new Service("Phalcon\\Cli\\Dispatcher", true),
-//            "escaper":            new Service("Phalcon\\Escaper", true),
 //            "eventsManager":      new Service("Phalcon\\Events\\Manager", true),
 //            "filter":             new Service(filter->newInstance(), true),
 //            "modelsManager":      new Service("Phalcon\\Mvc\\Model\\Manager", true),

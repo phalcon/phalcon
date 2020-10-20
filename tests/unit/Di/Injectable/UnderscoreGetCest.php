@@ -13,7 +13,6 @@ declare(strict_types=1);
 
 namespace Phalcon\Tests\Unit\Di\Injectable;
 
-use Error;
 use Exception;
 use Phalcon\Di\Di;
 use Phalcon\Tests\Fixtures\Di\InjectableComponent;
@@ -26,6 +25,8 @@ class UnderscoreGetCest
 {
     /**
      * Unit Tests Phalcon\Di\Injectable :: __get()/__isset()
+     *
+     * @param  UnitTester $I
      *
      * @author Phalcon Team <team@phalcon.io>
      * @since  2019-09-09
@@ -68,6 +69,10 @@ class UnderscoreGetCest
 
     /**
      * Unit Tests Phalcon\Di\Injectable :: __get() - exception
+     *
+     * @param  UnitTester $I
+     *
+     * @throws Exception
      *
      * @author Phalcon Team <team@phalcon.io>
      * @since  2019-09-09

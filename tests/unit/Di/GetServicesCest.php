@@ -17,6 +17,11 @@ use Phalcon\Di\Di;
 use stdClass;
 use UnitTester;
 
+/**
+ * Class GetServicesCest
+ *
+ * @package Phalcon\Tests\Unit\Di
+ */
 class GetServicesCest
 {
     /**

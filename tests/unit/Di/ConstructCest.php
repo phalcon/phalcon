@@ -18,13 +18,20 @@ use UnitTester;
 
 use function spl_object_hash;
 
+/**
+ * Class ConstructCest
+ *
+ * @package Phalcon\Tests\Unit\Di
+ */
 class ConstructCest
 {
     /**
      * Tests Phalcon\Di :: __construct()
      *
+     * @param  UnitTester $I
+     *
      * @author Phalcon Team <team@phalcon.io>
-     * @since  2020-09-09
+     * @since  2019-09-09
      */
     public function diConstruct(UnitTester $I)
     {

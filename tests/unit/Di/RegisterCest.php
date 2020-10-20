@@ -18,10 +18,17 @@ use Phalcon\Tests\Fixtures\Di\SomeComponent;
 use Phalcon\Tests\Fixtures\Di\SomeServiceProvider;
 use UnitTester;
 
+/**
+ * Class RegisterCest
+ *
+ * @package Phalcon\Tests\Unit\Di
+ */
 class RegisterCest
 {
     /**
      * Unit Tests Phalcon\Di :: register()
+     *
+     * @param  UnitTester $I
      *
      * @author Phalcon Team <team@phalcon.io>
      * @since  2019-09-09

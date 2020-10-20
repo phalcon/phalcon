@@ -17,13 +17,20 @@ use Phalcon\Di\Di;
 use Phalcon\Escaper\Escaper;
 use UnitTester;
 
+/**
+ * Class RemoveCest
+ *
+ * @package Phalcon\Tests\Unit\Di
+ */
 class RemoveCest
 {
     /**
      * Tests Phalcon\Di :: remove()
      *
-     * @author Sid Roberts <https://github.com/SidRoberts>
-     * @since  2019-06-02
+     * @param  UnitTester $I
+     *
+     * @author Phalcon Team <team@phalcon.io>
+     * @since  2019-09-09
      */
     public function diRemove(UnitTester $I)
     {

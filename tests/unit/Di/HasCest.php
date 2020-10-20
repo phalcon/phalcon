@@ -17,13 +17,20 @@ use Phalcon\Di\Di;
 use Phalcon\Escaper\Escaper;
 use UnitTester;
 
+/**
+ * Class HasCest
+ *
+ * @package Phalcon\Tests\Unit\Di
+ */
 class HasCest
 {
     /**
      * Tests Phalcon\Di :: has()
      *
+     * @param  UnitTester $I
+     *
      * @author Phalcon Team <team@phalcon.io>
-     * @since  2020-09-09
+     * @since  2019-09-09
      */
     public function diHas(UnitTester $I)
     {

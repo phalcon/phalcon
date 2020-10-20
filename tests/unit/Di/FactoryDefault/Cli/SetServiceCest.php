@@ -11,7 +11,7 @@
 
 declare(strict_types=1);
 
-namespace Phalcon\Tests\Unit\Di\FactoryDefault;
+namespace Phalcon\Tests\Unit\Di\FactoryDefault\Cli;
 
 use Phalcon\Di\FactoryDefault;
 use Phalcon\Di\Service;
@@ -21,23 +21,23 @@ use UnitTester;
 /**
  * Class SetServiceCest
  *
- * @package Phalcon\Tests\Unit\Di\FactoryDefault
+ * @package Phalcon\Tests\Unit\Di\FactoryDefault\Cli
  */
 class SetServiceCest
 {
     /**
-     * Unit Tests Phalcon\Di\FactoryDefault :: setService()
+     * Unit Tests Phalcon\Di\FactoryDefault\Cli :: setService()
      *
      * @param  UnitTester $I
      *
      * @author Phalcon Team <team@phalcon.io>
      * @since  2019-09-09
      */
-    public function diFactoryDefaultSetRaw(UnitTester $I)
+    public function diFactoryDefaultCliSetRaw(UnitTester $I)
     {
-        $I->wantToTest('Di\FactoryDefault - setService()');
+        $I->wantToTest('Di\FactoryDefault\Cli - setService()');
 
-        $container = new FactoryDefault();
+        $container = new FactoryDefault\Cli();
 
         $expected = new Service(Escaper::class);
         $actual   = $container->setService('escaper', $expected);

@@ -17,13 +17,20 @@ use Phalcon\Di\Di;
 use Phalcon\Escaper\Escaper;
 use UnitTester;
 
+/**
+ * Class SetSharedCest
+ *
+ * @package Phalcon\Tests\Unit\Di
+ */
 class SetSharedCest
 {
     /**
      * Unit Tests Phalcon\Di :: setShared()
      *
+     * @param UnitTester $I
+     *
      * @author Phalcon Team <team@phalcon.io>
-     * @since  2019-09-09
+     * @since  2020-09-09
      */
     public function diSetShared(UnitTester $I)
     {

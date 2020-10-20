@@ -33,8 +33,8 @@ class FactoryDefault extends Di
         parent::__construct();
 
         $this->services = [
-            "escaper"       => new Service(Escaper::class, true),
-            "eventsManager" => new Service(EventsManager::class, true),
+            'escaper'       => new Service(Escaper::class, true),
+            'eventsManager' => new Service(EventsManager::class, true),
         ];
 //        let filter = new FilterFactory();
 //

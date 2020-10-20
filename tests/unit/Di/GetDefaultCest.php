@@ -16,10 +16,17 @@ namespace Phalcon\Tests\Unit\Di;
 use Phalcon\Di\Di;
 use UnitTester;
 
+/**
+ * Class GetDefaultCest
+ *
+ * @package Phalcon\Tests\Unit\Di
+ */
 class GetDefaultCest
 {
     /**
      * Unit Tests Phalcon\Di :: getDefault()
+     *
+     * @param  UnitTester $I
      *
      * @author Phalcon Team <team@phalcon.io>
      * @since  2019-09-09

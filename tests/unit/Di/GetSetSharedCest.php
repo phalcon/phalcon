@@ -19,13 +19,20 @@ use UnitTester;
 
 use function spl_object_hash;
 
+/**
+ * Class GetSetSharedCest
+ *
+ * @package Phalcon\Tests\Unit\Di
+ */
 class GetSetSharedCest
 {
     /**
      * Tests Phalcon\Di :: getShared()/setShared()
      *
+     * @param  UnitTester $I
+     *
      * @author Phalcon Team <team@phalcon.io>
-     * @since  2020-09-09
+     * @since  2019-09-09
      */
     public function diGetShared(UnitTester $I)
     {
@@ -50,8 +57,10 @@ class GetSetSharedCest
     /**
      * Tests Phalcon\Di :: getShared() - set
      *
+     * @param  UnitTester $I
+     *
      * @author Phalcon Team <team@phalcon.io>
-     * @since  2020-09-09
+     * @since  2019-09-09
      */
     public function diGetSetSharedSet(UnitTester $I)
     {

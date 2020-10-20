@@ -18,13 +18,20 @@ use Phalcon\Di\Service;
 use Phalcon\Escaper\Escaper;
 use UnitTester;
 
+/**
+ * Class AttemptCest
+ *
+ * @package Phalcon\Tests\Unit\Di
+ */
 class AttemptCest
 {
     /**
      * Tests Phalcon\Di :: attempt()
      *
+     * @param  UnitTester $I
+     *
      * @author Phalcon Team <team@phalcon.io>
-     * @since  2020-09-09
+     * @since  2019-09-09
      */
     public function diAttempt(UnitTester $I)
     {

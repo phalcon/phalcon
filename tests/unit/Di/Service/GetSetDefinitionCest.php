@@ -13,32 +13,40 @@ declare(strict_types=1);
 
 namespace Phalcon\Tests\Unit\Di\Service;
 
+use Phalcon\Collection\Collection;
 use Phalcon\Di\Service;
-use Phalcon\Di\ServiceInterface;
 use Phalcon\Escaper\Escaper;
 use UnitTester;
 
 /**
- * Class ConstructCest
+ * Class GetSetDefinitionCest
  *
  * @package Phalcon\Tests\Unit\Di\Service
  */
-class ConstructCest
+class GetSetDefinitionCest
 {
     /**
-     * Unit Tests Phalcon\Di\Service :: __construct()
+     * Tests Phalcon\Di\Service :: setDefinition()
      *
      * @param UnitTester $I
      *
      * @author Phalcon Team <team@phalcon.io>
      * @since  2019-09-09
      */
-    public function diServiceConstruct(UnitTester $I)
+    public function diServiceGetSetDefinition(UnitTester $I)
     {
-        $I->wantToTest('Di\Service - __construct()');
+        $I->wantToTest('Di\Service - getDefinition()/setDefinition()');
 
         $service = new Service(Escaper::class, false);
-        $class = ServiceInterface::class;
-        $I->assertInstanceOf($class, $service);
+
+        $expected = Escaper::class;
+        $actual   = $service->getDefinition();
+        $I->assertEquals($expected, $actual);
+
+        $service->setDefinition(Collection::class);
+
+        $expected = Collection::class;
+        $actual   = $service->getDefinition();
+        $I->assertEquals($expected, $actual);
     }
 }

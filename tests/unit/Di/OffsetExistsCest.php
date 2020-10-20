@@ -17,13 +17,20 @@ use Phalcon\Di\Di;
 use Phalcon\Escaper\Escaper;
 use UnitTester;
 
+/**
+ * Class OffsetExistsCest
+ *
+ * @package Phalcon\Tests\Unit\Di
+ */
 class OffsetExistsCest
 {
     /**
      * Tests Phalcon\Di :: offsetExists()
      *
+     * @param  UnitTester $I
+     *
      * @author Phalcon Team <team@phalcon.io>
-     * @since  2020-09-09
+     * @since  2019-09-09
      */
     public function diOffsetExists(UnitTester $I)
     {
