@@ -58,16 +58,13 @@ class Bag extends Collection implements InjectionAwareInterface
     {
         $this->name = $name;
 
+        /**
+         * These need to be injected
+         */
         $container = Di::getDefault();
-        if (true !== is_object($container)) {
-            throw new Exception(
-                'A dependency injection container is required to ' .
-                    'access the "session" service'
-            );
-        }
 
         /** @var ManagerInterface $session */
-        $session         = $container->getService('session');
+        $session         = $container->getShared('session');
         $this->container = $container;
         $this->session   = $session;
 
