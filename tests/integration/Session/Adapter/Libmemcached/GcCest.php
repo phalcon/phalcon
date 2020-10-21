@@ -15,11 +15,15 @@ namespace Phalcon\Tests\Integration\Session\Adapter\Libmemcached;
 
 use IntegrationTester;
 use Phalcon\Tests\Fixtures\Traits\DiTrait;
-use Phalcon\Tests\Fixtures\Traits\SessionTrait;
 
 use function sleep;
 use function uniqid;
 
+/**
+ * Class GcCest
+ *
+ * @package Phalcon\Tests\Integration\Session\Adapter\Libmemcached
+ */
 class GcCest
 {
     use DiTrait;
@@ -27,8 +31,10 @@ class GcCest
     /**
      * Tests Phalcon\Session\Adapter\Libmemcached :: gc()
      *
+     * @param IntegrationTester $I
+     *
      * @author Phalcon Team <team@phalcon.io>
-     * @since  2018-11-13
+     * @since  2020-09-09
      */
     public function sessionAdapterLibmemcachedGc(IntegrationTester $I)
     {

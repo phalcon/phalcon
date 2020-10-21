@@ -16,8 +16,12 @@ namespace Phalcon\Tests\Integration\Session\Adapter\Stream;
 use IntegrationTester;
 use Phalcon\Session\Manager;
 use Phalcon\Tests\Fixtures\Traits\DiTrait;
-use Phalcon\Tests\Fixtures\Traits\SessionTrait;
 
+/**
+ * Class OpenCest
+ *
+ * @package Phalcon\Tests\Integration\Session\Adapter\Stream
+ */
 class OpenCest
 {
     use DiTrait;
@@ -25,8 +29,10 @@ class OpenCest
     /**
      * Tests Phalcon\Session\Adapter\Stream :: open()
      *
+     * @param IntegrationTester $I
+     *
      * @author Phalcon Team <team@phalcon.io>
-     * @since  2018-11-13
+     * @since  2020-09-09
      */
     public function sessionAdapterStreamOpen(IntegrationTester $I)
     {
@@ -34,19 +40,17 @@ class OpenCest
 
         $adapter = $this->newService('sessionStream');
 
-        $I->assertTrue(
-            $adapter->open(
-                cacheDir('sessions'),
-                'test1'
-            )
-        );
+        $actual = $adapter->open(cacheDir('sessions'), 'test1');
+        $I->assertTrue($actual);
     }
 
     /**
      * Tests Phalcon\Session\Adapter\Stream :: open()
      *
+     * @param IntegrationTester $I
+     *
      * @author Phalcon Team <team@phalcon.io>
-     * @since  2019-08-06
+     * @since  2020-09-09
      */
     public function issue14265(IntegrationTester $I)
     {
@@ -54,9 +58,10 @@ class OpenCest
         $session = new Manager();
         $stream  = $this->newService('sessionStream');
         $session->setAdapter($stream);
-        $I->assertTrue(
-            $session->start()
-        );
+
+        $actual = $session->start();
+        $I->assertTrue($actual);
+
         $value = uniqid();
         $stream->write('test1', $value);
         $I->amInPath(cacheDir('sessions'));

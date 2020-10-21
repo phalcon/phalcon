@@ -16,8 +16,12 @@ namespace Phalcon\Tests\Integration\Session\Manager;
 use IntegrationTester;
 use Phalcon\Session\Manager;
 use Phalcon\Tests\Fixtures\Traits\DiTrait;
-use Phalcon\Tests\Fixtures\Traits\SessionTrait;
 
+/**
+ * Class UnderscoreGetSetCest
+ *
+ * @package Phalcon\Tests\Integration\Session\Manager
+ */
 class UnderscoreGetSetCest
 {
     use DiTrait;
@@ -25,8 +29,10 @@ class UnderscoreGetSetCest
     /**
      * Tests Phalcon\Session\Manager :: __get()/__set()
      *
+     * @param IntegrationTester $I
+     *
      * @author Phalcon Team <team@phalcon.io>
-     * @since  2018-11-13
+     * @since  2020-09-09
      */
     public function sessionManagerUnderscoreGetSet(IntegrationTester $I)
     {
@@ -38,22 +44,17 @@ class UnderscoreGetSetCest
 
         $manager->setAdapter($files);
 
-        $I->assertTrue(
-            $manager->start()
-        );
+        $actual = $manager->start();
+        $I->assertTrue($actual);
 
         $expected      = 'myval';
         $manager->test = $expected;
 
-        $I->assertEquals(
-            $expected,
-            $manager->test
-        );
+        $I->assertEquals($expected, $manager->test);
 
         $manager->destroy();
 
-        $I->assertFalse(
-            $manager->exists()
-        );
+        $actual = $manager->exists();
+        $I->assertFalse($actual);
     }
 }

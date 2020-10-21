@@ -15,8 +15,12 @@ namespace Phalcon\Tests\Integration\Session\Adapter\Redis;
 
 use IntegrationTester;
 use Phalcon\Tests\Fixtures\Traits\DiTrait;
-use Phalcon\Tests\Fixtures\Traits\SessionTrait;
 
+/**
+ * Class OpenCest
+ *
+ * @package Phalcon\Tests\Integration\Session\Adapter\Redis
+ */
 class OpenCest
 {
     use DiTrait;
@@ -24,8 +28,10 @@ class OpenCest
     /**
      * Tests Phalcon\Session\Adapter\Redis :: open()
      *
+     * @param IntegrationTester $I
+     *
      * @author Phalcon Team <team@phalcon.io>
-     * @since  2018-11-13
+     * @since  2020-09-09
      */
     public function sessionAdapterRedisOpen(IntegrationTester $I)
     {
@@ -33,8 +39,7 @@ class OpenCest
 
         $adapter = $this->newService('sessionRedis');
 
-        $I->assertTrue(
-            $adapter->open('test', 'test1')
-        );
+        $actual = $adapter->open('test', 'test1');
+        $I->assertTrue($actual);
     }
 }

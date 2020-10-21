@@ -15,8 +15,12 @@ namespace Phalcon\Tests\Integration\Session\Adapter\Stream;
 
 use IntegrationTester;
 use Phalcon\Tests\Fixtures\Traits\DiTrait;
-use Phalcon\Tests\Fixtures\Traits\SessionTrait;
 
+/**
+ * Class CloseCest
+ *
+ * @package Phalcon\Tests\Integration\Session\Adapter\Stream
+ */
 class CloseCest
 {
     use DiTrait;
@@ -24,8 +28,10 @@ class CloseCest
     /**
      * Tests Phalcon\Session\Adapter\Stream :: close()
      *
+     * @param IntegrationTester $I
+     *
      * @author Phalcon Team <team@phalcon.io>
-     * @since  2018-11-13
+     * @since  2020-09-09
      */
     public function sessionAdapterStreamClose(IntegrationTester $I)
     {

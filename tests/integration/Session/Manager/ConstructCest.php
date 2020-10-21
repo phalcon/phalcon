@@ -27,8 +27,10 @@ class ConstructCest
     /**
      * Tests Phalcon\Session\Manager :: __construct()
      *
+     * @param IntegrationTester $I
+     *
      * @author Phalcon Team <team@phalcon.io>
-     * @since  2018-11-13
+     * @since  2020-09-09
      */
     public function sessionManagerConstruct(IntegrationTester $I)
     {
@@ -36,9 +38,7 @@ class ConstructCest
 
         $manager = new Manager();
 
-        $I->assertInstanceOf(
-            ManagerInterface::class,
-            $manager
-        );
+        $class = ManagerInterface::class;
+        $I->assertInstanceOf($class, $manager);
     }
 }

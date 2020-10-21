@@ -15,9 +15,13 @@ namespace Phalcon\Tests\Integration\Session\Adapter\Libmemcached;
 
 use IntegrationTester;
 use Phalcon\Tests\Fixtures\Traits\DiTrait;
-use Phalcon\Tests\Fixtures\Traits\SessionTrait;
 use SessionHandlerInterface;
 
+/**
+ * Class ConstructCest
+ *
+ * @package Phalcon\Tests\Integration\Session\Adapter\Libmemcached
+ */
 class ConstructCest
 {
     use DiTrait;
@@ -25,8 +29,10 @@ class ConstructCest
     /**
      * Tests Phalcon\Session\Adapter\Libmemcached :: __construct()
      *
+     * @param IntegrationTester $I
+     *
      * @author Phalcon Team <team@phalcon.io>
-     * @since  2018-11-13
+     * @since  2020-09-09
      */
     public function sessionAdapterLibmemcachedConstruct(IntegrationTester $I)
     {
@@ -34,9 +40,7 @@ class ConstructCest
 
         $adapter = $this->newService('sessionLibmemcached');
 
-        $I->assertInstanceOf(
-            SessionHandlerInterface::class,
-            $adapter
-        );
+        $class = SessionHandlerInterface::class;
+        $I->assertInstanceOf($class, $adapter);
     }
 }

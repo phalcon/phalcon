@@ -15,8 +15,12 @@ namespace Phalcon\Tests\Integration\Session\Adapter\Noop;
 
 use IntegrationTester;
 use Phalcon\Tests\Fixtures\Traits\DiTrait;
-use Phalcon\Tests\Fixtures\Traits\SessionTrait;
 
+/**
+ * Class DestroyCest
+ *
+ * @package Phalcon\Tests\Integration\Session\Adapter\Noop
+ */
 class DestroyCest
 {
     use DiTrait;
@@ -24,8 +28,10 @@ class DestroyCest
     /**
      * Tests Phalcon\Session\Adapter\Noop :: destroy()
      *
+     * @param IntegrationTester $I
+     *
      * @author Phalcon Team <team@phalcon.io>
-     * @since  2018-11-13
+     * @since  2020-09-09
      */
     public function sessionAdapterNoopDestroy(IntegrationTester $I)
     {
@@ -33,8 +39,7 @@ class DestroyCest
 
         $adapter = $this->newService('sessionNoop');
 
-        $I->assertTrue(
-            $adapter->destroy('test1')
-        );
+        $actual = $adapter->destroy('test1');
+        $I->assertTrue($actual);
     }
 }
