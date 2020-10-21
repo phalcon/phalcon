@@ -19,6 +19,11 @@ use UnitTester;
 
 use function is_string;
 
+/**
+ * Class GetCest
+ *
+ * @package Phalcon\Tests\Unit\Version
+ */
 class GetCest
 {
     use VersionTrait;
@@ -26,21 +31,26 @@ class GetCest
     /**
      * Tests Phalcon\Version :: get()
      *
+     * @param UnitTester $I
+     *
      * @author Phalcon Team <team@phalcon.io>
-     * @since  2018-11-13
+     * @since  2020-09-09
      */
     public function versionGet(UnitTester $I)
     {
         $I->wantToTest('Version - get()');
 
-        $I->assertTrue(is_string(Version::get()));
+        $actual = is_string(Version::get());
+        $I->assertTrue($actual);
     }
 
     /**
      * Tests the getId() translation to get()
      *
+     * @param UnitTester $I
+     *
      * @author Phalcon Team <team@phalcon.io>
-     * @since  2018-11-13
+     * @since  2020-09-09
      */
     public function versionGetIdToGet(UnitTester $I)
     {
@@ -61,9 +71,8 @@ class GetCest
             }
         }
 
-        $I->assertEquals(
-            trim($expected),
-            Version::get()
-        );
+        $expected = trim($expected);
+        $actual   = Version::get();
+        $I->assertEquals($expected, $actual);
     }
 }

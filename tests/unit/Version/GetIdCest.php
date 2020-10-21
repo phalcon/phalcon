@@ -19,6 +19,11 @@ use UnitTester;
 
 use function is_string;
 
+/**
+ * Class GetIdCest
+ *
+ * @package Phalcon\Tests\Unit\Version
+ */
 class GetIdCest
 {
     use VersionTrait;
@@ -26,8 +31,10 @@ class GetIdCest
     /**
      * Tests Phalcon\Version :: getId()
      *
+     * @param UnitTester $I
+     *
      * @author Phalcon Team <team@phalcon.io>
-     * @since  2018-11-13
+     * @since  2020-09-09
      */
     public function versionGetId(UnitTester $I)
     {
@@ -39,8 +46,10 @@ class GetIdCest
     /**
      * Tests the get() translation to getId()
      *
+     * @param UnitTester $I
+     *
      * @author Phalcon Team <team@phalcon.io>
-     * @since  2018-11-13
+     * @since  2020-09-09
      */
     public function versionGetToGetId(UnitTester $I)
     {
@@ -83,9 +92,8 @@ class GetIdCest
         $med       = substr('00' . intval($verChunks[1]), -2);
         $min       = substr('00' . intval($verChunks[2]), -2);
 
-        $I->assertEquals(
-            "{$major}{$med}{$min}{$special}{$specialNo}",
-            Version::getId()
-        );
+        $expected = "{$major}{$med}{$min}{$special}{$specialNo}";
+        $actual   = Version::getId();
+        $I->assertEquals($expected, $actual);
     }
 }

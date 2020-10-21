@@ -22,8 +22,8 @@ class Version
      * The constant referencing the major version. Returns 0
      *
      * ```php
-     * echo Phalcon\Version::getPart(
-     *     Phalcon\Version::VERSION_MAJOR
+     * echo Phalcon\Version\Version::getPart(
+     *     Phalcon\Version\Version::VERSION_MAJOR
      * );
      * ```
      */
@@ -33,8 +33,8 @@ class Version
      * The constant referencing the major version. Returns 1
      *
      * ```php
-     * echo Phalcon\Version::getPart(
-     *     Phalcon\Version::VERSION_MEDIUM
+     * echo Phalcon\Version\Version::getPart(
+     *     Phalcon\Version\Version::VERSION_MEDIUM
      * );
      * ```
      */
@@ -44,8 +44,8 @@ class Version
      * The constant referencing the major version. Returns 2
      *
      * ```php
-     * echo Phalcon\Version::getPart(
-     *     Phalcon\Version::VERSION_MINOR
+     * echo Phalcon\Version\Version::getPart(
+     *     Phalcon\Version\Version::VERSION_MINOR
      * );
      * ```
      */
@@ -55,8 +55,8 @@ class Version
      * The constant referencing the major version. Returns 3
      *
      * ```php
-     * echo Phalcon\Version::getPart(
-     *     Phalcon\Version::VERSION_SPECIAL
+     * echo Phalcon\Version\Version::getPart(
+     *     Phalcon\Version\Version::VERSION_SPECIAL
      * );
      * ```
      */
@@ -66,8 +66,8 @@ class Version
      * The constant referencing the major version. Returns 4
      *
      * ```php
-     * echo Phalcon\Version::getPart(
-     *     Phalcon\Version::VERSION_SPECIAL_NUMBER
+     * echo Phalcon\Version\Version::getPart(
+     *     Phalcon\Version\Version::VERSION_SPECIAL_NUMBER
      * );
      * ```
      */
@@ -77,21 +77,23 @@ class Version
      * Returns the active version (string)
      *
      * ```php
-     * echo Phalcon\Version::get();
+     * echo Phalcon\Version\Version::get();
      * ```
+     *
+     * @return string
      */
     public static function get(): string
     {
-        $version = static::getVersion();
 
-        $major         = (string) $version[self::VERSION_MAJOR];
-        $medium        = (string) $version[self::VERSION_MEDIUM];
-        $minor         = (string) $version[self::VERSION_MINOR];
-        $special       = $version[self::VERSION_SPECIAL];
-        $specialNumber = $version[self::VERSION_SPECIAL_NUMBER];
+        $version = self::getVersion();
 
-        $result  = $major . '.' . $medium . '.' . $minor;
-        $suffix  = static::getSpecial($special);
+        $result  = $version[self::VERSION_MAJOR]
+            . '.'
+            . $version[self::VERSION_MEDIUM]
+            . '.'
+            . $version[self::VERSION_MINOR]
+        ;
+        $suffix  = self::getSpecial($version[self::VERSION_SPECIAL]);
 
         if ('' !== $suffix) {
             /**
@@ -101,8 +103,8 @@ class Version
              */
             $result .= '-' . $suffix;
 
-            if (0 !== $specialNumber) {
-                $result .= '.' . (string) $specialNumber;
+            if (0 !== $version[self::VERSION_SPECIAL_NUMBER]) {
+                $result .= '.' . $version[self::VERSION_SPECIAL_NUMBER];
             }
         }
 
@@ -113,24 +115,21 @@ class Version
      * Returns the numeric active version
      *
      * ```php
-     * echo Phalcon\Version::getId();
+     * echo Phalcon\Version\Version::getId();
      * ```
+     *
+     * @return string
      */
     public static function getId(): string
     {
-        $version = static::getVersion();
+        $version = self::getVersion();
 
-        $major         = $version[self::VERSION_MAJOR];
-        $medium        = $version[self::VERSION_MEDIUM];
-        $minor         = $version[self::VERSION_MINOR];
-        $special       = $version[self::VERSION_SPECIAL];
-        $specialNumber = $version[self::VERSION_SPECIAL_NUMBER];
-
-        return $major
-            . sprintf('%02s', $medium)
-            . sprintf('%02s', $minor)
-            . $special
-            . $specialNumber;
+        return $version[self::VERSION_MAJOR]
+            . sprintf("%02s", $version[self::VERSION_MEDIUM])
+            . sprintf("%02s", $version[self::VERSION_MINOR])
+            . $version[self::VERSION_SPECIAL]
+            . $version[self::VERSION_SPECIAL_NUMBER]
+        ;
     }
 
     /**
@@ -138,26 +137,34 @@ class Version
      * it will return the full version
      *
      * ```php
-     * echo Phalcon\Version::getPart(
-     *     Phalcon\Version::VERSION_MAJOR
+     * echo Phalcon\Version\Version::getPart(
+     *     Phalcon\Version\Version::VERSION_MAJOR
      * );
      * ```
+     *
+     * @param int $part
+     *
+     * @return string
      */
     public static function getPart(int $part): string
     {
-        $version = static::getVersion();
+        $version = self::getVersion();
 
-        $version[self::VERSION_SPECIAL_NUMBER] = static::getSpecial(
+        $version[self::VERSION_SPECIAL] = self::getSpecial(
             $version[self::VERSION_SPECIAL]
         );
 
-        return $version[$part] ?? static::get();
+        return (string) ($version[$part] ?? self::get());
     }
 
     /**
      * Translates a number to a special release.
+     *
+     * @param int $special
+     *
+     * @return string
      */
-    protected final static function getSpecial(int $special): string
+    final protected static function getSpecial(int $special): string
     {
         $map = [
             1 => 'alpha',
@@ -177,9 +184,11 @@ class Version
      * C - Min version (two digits)
      * D - Special release: 1 = alpha, 2 = beta, 3 = RC, 4 = stable
      * E - Special release version i.e. RC1, Beta2 etc.
+     *
+     * @return int[]
      */
     protected static function getVersion(): array
     {
-        return [4, 1, 0, 4, 0];
+        return [5, 0, 0, 1, 0];
     }
 }
