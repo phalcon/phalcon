@@ -85,7 +85,7 @@ class Version
     public static function get(): string
     {
 
-        $version = self::getVersion();
+        $version = static::getVersion();
 
         $result  = $version[self::VERSION_MAJOR]
             . '.'
@@ -93,7 +93,7 @@ class Version
             . '.'
             . $version[self::VERSION_MINOR]
         ;
-        $suffix  = self::getSpecial($version[self::VERSION_SPECIAL]);
+        $suffix  = static::getSpecial($version[self::VERSION_SPECIAL]);
 
         if ('' !== $suffix) {
             /**
@@ -122,7 +122,7 @@ class Version
      */
     public static function getId(): string
     {
-        $version = self::getVersion();
+        $version = static::getVersion();
 
         return $version[self::VERSION_MAJOR]
             . sprintf("%02s", $version[self::VERSION_MEDIUM])
@@ -148,13 +148,13 @@ class Version
      */
     public static function getPart(int $part): string
     {
-        $version = self::getVersion();
+        $version = static::getVersion();
 
-        $version[self::VERSION_SPECIAL] = self::getSpecial(
+        $version[self::VERSION_SPECIAL] = static::getSpecial(
             $version[self::VERSION_SPECIAL]
         );
 
-        return (string) ($version[$part] ?? self::get());
+        return (string) ($version[$part] ?? static::get());
     }
 
     /**

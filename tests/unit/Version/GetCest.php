@@ -13,7 +13,9 @@ declare(strict_types=1);
 
 namespace Phalcon\Tests\Unit\Version;
 
+use Codeception\Stub;
 use Phalcon\Tests\Fixtures\Traits\VersionTrait;
+use Phalcon\Tests\Fixtures\VersionFixture;
 use Phalcon\Version\Version;
 use UnitTester;
 
@@ -73,6 +75,23 @@ class GetCest
 
         $expected = trim($expected);
         $actual   = Version::get();
+        $I->assertEquals($expected, $actual);
+    }
+
+    /**
+     * Tests the get with a special version
+     *
+     * @param UnitTester $I
+     *
+     * @author Phalcon Team <team@phalcon.io>
+     * @since  2020-09-09
+     */
+    public function versionGetWithSpecialVersion(UnitTester $I)
+    {
+        $I->wantToTest('Version - get() with special version');
+
+        $expected = '5.0.0-alpha.1';
+        $actual   = VersionFixture::get();
         $I->assertEquals($expected, $actual);
     }
 }
