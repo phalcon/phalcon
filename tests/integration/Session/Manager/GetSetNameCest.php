@@ -29,8 +29,10 @@ class GetSetNameCest
     /**
      * Tests Phalcon\Session\Manager :: getName()/setName()
      *
+     * @param IntegrationTester $I
+     *
      * @author Phalcon Team <team@phalcon.io>
-     * @since  2018-11-13
+     * @since  2020-09-09
      */
     public function sessionManagerGetSetName(IntegrationTester $I)
     {
@@ -52,8 +54,10 @@ class GetSetNameCest
     /**
      * Tests Phalcon\Session\Manager :: getName()/setName() - not valid name
      *
+     * @param IntegrationTester $I
+     *
      * @author Phalcon Team <team@phalcon.io>
-     * @since  2018-11-13
+     * @since  2020-09-09
      */
     public function sessionManagerGetNameNotValidName(IntegrationTester $I)
     {
@@ -73,8 +77,10 @@ class GetSetNameCest
     /**
      * Tests Phalcon\Session\Manager :: getName()/setName() - session started
      *
+     * @param IntegrationTester $I
+     *
      * @author Phalcon Team <team@phalcon.io>
-     * @since  2018-11-13
+     * @since  2020-09-09
      */
     public function sessionManagerGetNameSessionStarted(IntegrationTester $I)
     {
@@ -87,7 +93,7 @@ class GetSetNameCest
         try {
             $manager->start();
             $manager->setName('%-gga34');
-        } catch (InvalidArgumentException $ex) {
+        } catch (Exception $ex) {
             $manager->destroy();
             $valid    = true;
             $expected = 'Cannot set session name after a session has started';

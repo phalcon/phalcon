@@ -13,57 +13,45 @@ declare(strict_types=1);
 
 namespace Phalcon\Tests\Integration\Session\Manager;
 
+use Codeception\Stub;
 use IntegrationTester;
 use Phalcon\Session\Manager;
 use Phalcon\Tests\Fixtures\Traits\DiTrait;
 
 /**
- * Class RemoveCest
+ * Class StartCest
  *
  * @package Phalcon\Tests\Integration\Session\Manager
  */
-class RemoveCest
+class StartCest
 {
     use DiTrait;
 
     /**
-     * Tests Phalcon\Session\Manager :: remove()
+     * Tests Phalcon\Session\Manager :: start() - headers sent
      *
      * @param IntegrationTester $I
      *
      * @author Phalcon Team <team@phalcon.io>
      * @since  2020-09-09
      */
-    public function sessionManagerRemove(IntegrationTester $I)
+    public function sessionManagerStartHeadersSent(IntegrationTester $I)
     {
-        $I->wantToTest('Session\Manager - remove()');
-
-        $store    = $_SESSION ?? [];
-        $_SESSION = [];
-
+        $I->wantToTest('Session\Manager - start() - headers sent');
         $manager = new Manager();
         $files   = $this->newService('sessionStream');
         $manager->setAdapter($files);
 
-        $actual = $manager->start();
-        $I->assertTrue($actual);
+        $mock = Stub::make(
+            $manager,
+            [
+                'phpHeadersSent' => true,
+            ]
+        );
 
-        $actual = $manager->has('test');
-        $I->assertFalse($actual);
-
-        $manager->set('test', 'myval');
-        $actual = $manager->has('test');
-        $I->assertTrue($actual);
-
-        $manager->remove('test');
-        $actual = $manager->has('test');
+        $actual = $mock->start();
         $I->assertFalse($actual);
 
         $manager->destroy();
-
-        $actual = $manager->exists();
-        $I->assertFalse($actual);
-
-        $_SESSION = $store;
     }
 }

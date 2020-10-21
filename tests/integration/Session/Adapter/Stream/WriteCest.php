@@ -15,11 +15,15 @@ namespace Phalcon\Tests\Integration\Session\Adapter\Stream;
 
 use IntegrationTester;
 use Phalcon\Tests\Fixtures\Traits\DiTrait;
-use Phalcon\Tests\Fixtures\Traits\SessionTrait;
 
 use function cacheDir;
 use function uniqid;
 
+/**
+ * Class WriteCest
+ *
+ * @package Phalcon\Tests\Integration\Session\Adapter\Stream
+ */
 class WriteCest
 {
     use DiTrait;
@@ -27,8 +31,10 @@ class WriteCest
     /**
      * Tests Phalcon\Session\Adapter\Stream :: write()
      *
+     * @param IntegrationTester $I
+     *
      * @author Phalcon Team <team@phalcon.io>
-     * @since  2018-11-13
+     * @since  2020-09-09
      */
     public function sessionAdapterStreamWrite(IntegrationTester $I)
     {

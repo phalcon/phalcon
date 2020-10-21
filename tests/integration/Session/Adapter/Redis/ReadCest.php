@@ -15,10 +15,14 @@ namespace Phalcon\Tests\Integration\Session\Adapter\Redis;
 
 use IntegrationTester;
 use Phalcon\Tests\Fixtures\Traits\DiTrait;
-use Phalcon\Tests\Fixtures\Traits\SessionTrait;
 
 use function uniqid;
 
+/**
+ * Class ReadCest
+ *
+ * @package Phalcon\Tests\Integration\Session\Adapter\Redis
+ */
 class ReadCest
 {
     use DiTrait;
@@ -26,8 +30,10 @@ class ReadCest
     /**
      * Tests Phalcon\Session\Adapter\Redis :: read()
      *
+     * @param IntegrationTester $I
+     *
      * @author Phalcon Team <team@phalcon.io>
-     * @since  2018-11-13
+     * @since  2020-09-09
      */
     public function sessionAdapterRedisRead(IntegrationTester $I)
     {
@@ -43,8 +49,7 @@ class ReadCest
         $I->assertEquals($expected, $actual);
         $I->sendCommandToRedis('del', 'sess-reds-test1');
 
-        $I->assertNotNull(
-            $adapter->read('test1')
-        );
+        $actual = $adapter->read('test1');
+        $I->assertNotNull($actual);
     }
 }

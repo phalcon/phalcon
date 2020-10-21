@@ -15,8 +15,12 @@ namespace Phalcon\Tests\Integration\Session\Adapter\Redis;
 
 use IntegrationTester;
 use Phalcon\Tests\Fixtures\Traits\DiTrait;
-use Phalcon\Tests\Fixtures\Traits\SessionTrait;
 
+/**
+ * Class GcCest
+ *
+ * @package Phalcon\Tests\Integration\Session\Adapter\Redis
+ */
 class GcCest
 {
     use DiTrait;
@@ -24,8 +28,10 @@ class GcCest
     /**
      * Tests Phalcon\Session\Adapter\Redis :: gc()
      *
+     * @param IntegrationTester $I
+     *
      * @author Phalcon Team <team@phalcon.io>
-     * @since  2018-11-13
+     * @since  2020-09-09
      */
     public function sessionAdapterRedisGc(IntegrationTester $I)
     {
@@ -33,8 +39,7 @@ class GcCest
 
         $adapter = $this->newService('sessionRedis');
 
-        $I->assertTrue(
-            $adapter->gc(1)
-        );
+        $actual = $adapter->gc(1);
+        $I->assertTrue($actual);
     }
 }

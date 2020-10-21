@@ -29,8 +29,10 @@ class ExistsDestroyCest
     /**
      * Tests Phalcon\Session\Manager :: exists()/destroy()
      *
+     * @param IntegrationTester $I
+     *
      * @author Phalcon Team <team@phalcon.io>
-     * @since  2018-11-13
+     * @since  2020-09-09
      */
     public function sessionManagerExistsDestroy(IntegrationTester $I)
     {
@@ -62,8 +64,10 @@ class ExistsDestroyCest
      * @issue  https://github.com/phalcon/cphalcon/issues/12326
      * @issue  https://github.com/phalcon/cphalcon/issues/12835
      *
+     * @param IntegrationTester $I
+     *
      * @author Phalcon Team <team@phalcon.io>
-     * @since  2018-11-13
+     * @since  2020-09-09
      */
     public function sessionManagerDestroySuperGlobal(IntegrationTester $I)
     {
@@ -97,8 +101,10 @@ class ExistsDestroyCest
     /**
      * Tests Phalcon\Session\Manager :: destroy() - clean $_SESSION with uniquid
      *
+     * @param IntegrationTester $I
+     *
      * @author Phalcon Team <team@phalcon.io>
-     * @since  2020-01-06
+     * @since  2020-09-09
      */
     public function sessionManagerDestroySuperGlobalUniquid(IntegrationTester $I)
     {
@@ -125,7 +131,7 @@ class ExistsDestroyCest
         $manager->set('test1', __METHOD__);
 
         $I->assertArrayHasKey('aaa#test1', $_SESSION);
-        $I->assertContains(__METHOD__, $_SESSION['aaa#test1']);
+        $I->assertEquals(__METHOD__, $_SESSION['aaa#test1']);
 
         $manager->destroy();
         $I->assertArrayNotHasKey('aaa#test1', $_SESSION);
