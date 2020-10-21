@@ -16,6 +16,7 @@ namespace Phalcon\Session\Adapter;
 use Phalcon\Session\Exception;
 use Phalcon\Support\Traits\PhpFileTrait;
 
+use function file_exists;
 use function rtrim;
 
 use const DIRECTORY_SEPARATOR;
@@ -88,13 +89,13 @@ class Stream extends Noop
          * Get the save_path from the passed options. If not defined
          * get it from php.ini
          */
-        $path = $options['savePath'] ?? ini_get("session.save_path");
+        $path = $options['savePath'] ?? $this->phpIniGet('session.save_path');
 
         if (true === empty($path)) {
             throw new Exception('The session save path cannot be empty');
         }
 
-        if (true !== is_writable($path)) {
+        if (true !== $this->phpIsWriteable($path)) {
             throw new Exception(
                 'The session save path [' . $path . '] is not writable'
             );
@@ -112,7 +113,7 @@ class Stream extends Noop
     {
         $file = $this->path . $this->getPrefixedName($sessionId);
 
-        if (true === $this->phpFileExists($file) && true === is_file($file)) {
+        if (true === file_exists($file) && true === is_file($file)) {
             unlink($file);
         }
 
@@ -131,7 +132,7 @@ class Stream extends Noop
 
         foreach (glob($pattern) as $file) {
             if (
-                true === $this->phpFileExists($file) &&
+                true === file_exists($file) &&
                 true === is_file($file)     &&
                 filemtime($file) < $time
             ) {
@@ -169,7 +170,7 @@ class Stream extends Noop
             $pointer = $this->phpFopen($name, 'r');
 
             if (true === flock($pointer, LOCK_SH)) {
-                $data = file_get_contents($name);
+                $data = $this->phpFileGetContents($name);
             }
 
             fclose($pointer);

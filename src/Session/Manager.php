@@ -13,6 +13,7 @@ declare(strict_types=1);
 
 namespace Phalcon\Session;
 
+use Phalcon\Di\Traits\InjectionAwareTrait;
 use Phalcon\Session\Traits\ManagerMagicTraits;
 use SessionHandlerInterface;
 
@@ -37,6 +38,7 @@ use function session_status;
  */
 class Manager implements ManagerInterface
 {
+    use InjectionAwareTrait;
     use ManagerMagicTraits;
 
     /**
@@ -328,12 +330,8 @@ class Manager implements ManagerInterface
         /**
          * Cannot start this - headers already sent
          */
-        if (true === headers_sent()) {
+        if (true === $this->phpHeadersSent()) {
             return false;
-        }
-
-        if (true !== ($this->adapter instanceof SessionHandlerInterface)) {
-            throw new Exception('The session adapter is not valid');
         }
 
         /**
@@ -355,6 +353,18 @@ class Manager implements ManagerInterface
     public function status(): int
     {
         return session_status();
+    }
+
+    /**
+     * Checks if or where headers have been sent
+     *
+     * @return bool
+     *
+     * @link https://php.net/manual/en/function.headers-sent.php
+     */
+    protected function phpHeadersSent(): bool
+    {
+        return headers_sent();
     }
 
     /**
