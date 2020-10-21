@@ -17,6 +17,7 @@ use function file_exists;
 use function file_get_contents;
 use function file_put_contents;
 use function fopen;
+use function is_writable;
 use function unlink;
 
 /**
@@ -86,6 +87,35 @@ trait PhpFileTrait
         $context = null
     ) {
         return file_put_contents($filename, $data, $flags, $context);
+    }
+
+    /**
+     * Gets the value of a configuration option
+     *
+     * @param string $varname
+     *
+     * @return string
+     *
+     * @link https://php.net/manual/en/function.ini-get.php
+     * @link https://php.net/manual/en/ini.list.php
+     */
+    protected function phpIniGet($varname): string
+    {
+        return ini_get($varname);
+    }
+
+    /**
+     * Tells whether the filename is writable
+     *
+     * @param string $filename
+     *
+     * @return bool
+     *
+     * @link https://php.net/manual/en/function.is-writable.php
+     */
+    protected function phpIsWriteable($filename): bool
+    {
+        return is_writable($filename);
     }
 
     /**
