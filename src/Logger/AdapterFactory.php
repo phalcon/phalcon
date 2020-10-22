@@ -30,7 +30,7 @@ class AdapterFactory
     use FactoryTrait;
 
     /**
-     * FactoryTrait constructor.
+     * AdapterFactory constructor.
      *
      * @param array $services
      */
