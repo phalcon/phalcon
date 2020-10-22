@@ -13,6 +13,7 @@ declare(strict_types=1);
 
 namespace Phalcon\Tests\Integration\Cache\Cache;
 
+use Codeception\Stub;
 use Phalcon\Cache\Cache;
 use Phalcon\Cache\AdapterFactory;
 use Phalcon\Cache\Exception\InvalidArgumentException;
@@ -60,6 +61,42 @@ class SetMultipleCest
         ];
         $actual   = $adapter->getMultiple([$key1, $key2, 'unknown'], 'default-unknown');
         $I->assertEquals($expected, $actual);
+    }
+
+    /**
+     * Tests Phalcon\Cache :: setMultiple() - false
+     *
+     * @author Phalcon Team <team@phalcon.io>
+     * @since  2020-09-09
+     */
+    public function cacheCacheSetMultipleFalse(IntegrationTester $I)
+    {
+        $I->wantToTest('Cache\Cache - setMultiple() - false');
+
+        $helper     = new HelperFactory();
+        $serializer = new SerializerFactory();
+        $factory    = new AdapterFactory($helper, $serializer);
+        $instance   = $factory->newInstance('apcu');
+
+        $adapter = new Cache($instance);
+
+        $mock = Stub::make(
+            $adapter,
+            [
+                'set' => false,
+            ]
+        );
+
+        $key1   = uniqid();
+        $key2   = uniqid();
+        $actual = $mock->setMultiple(
+            [
+                $key1 => 'test1',
+                $key2 => 'test2',
+            ]
+        );
+
+        $I->assertFalse($actual);
     }
 
     /**
