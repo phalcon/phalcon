@@ -18,7 +18,7 @@ use Phalcon\Storage\Adapter\Apcu;
 use Phalcon\Storage\SerializerFactory;
 use Phalcon\Support\HelperFactory;
 use Phalcon\Tests\Fixtures\Traits\ApcuTrait;
-use UnitTester;
+use IntegrationTester;
 
 class GetAdapterCest
 {
@@ -27,14 +27,14 @@ class GetAdapterCest
     /**
      * Tests Phalcon\Storage\Adapter\Apcu :: getAdapter()
      *
-     * @param UnitTester $I
+     * @param IntegrationTester $I
      *
      * @throws Exception
      *
      * @author Phalcon Team <team@phalcon.io>
      * @since  2020-09-09
      */
-    public function storageAdapterApcuGetAdapter(UnitTester $I)
+    public function storageAdapterApcuGetAdapter(IntegrationTester $I)
     {
         $I->wantToTest('Storage\Adapter\Apcu - getAdapter()');
 

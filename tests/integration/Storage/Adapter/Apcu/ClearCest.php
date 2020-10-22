@@ -19,7 +19,7 @@ use Phalcon\Storage\SerializerFactory;
 use Phalcon\Support\Exception;
 use Phalcon\Support\HelperFactory;
 use Phalcon\Tests\Fixtures\Traits\ApcuTrait;
-use UnitTester;
+use IntegrationTester;
 
 use function uniqid;
 
@@ -30,14 +30,14 @@ class ClearCest
     /**
      * Tests Phalcon\Storage\Adapter\Apcu :: clear()
      *
-     * @param UnitTester $I
+     * @param IntegrationTester $I
      *
      * @throws Exception
      *
      * @author Phalcon Team <team@phalcon.io>
      * @since  2020-09-09
      */
-    public function storageAdapterApcuClear(UnitTester $I)
+    public function storageAdapterApcuClear(IntegrationTester $I)
     {
         $I->wantToTest('Storage\Adapter\Apcu - clear()');
 
@@ -68,14 +68,14 @@ class ClearCest
     /**
      * Tests Phalcon\Storage\Adapter\Apcu :: clear() - twice
      *
-     * @param UnitTester $I
+     * @param IntegrationTester $I
      *
      * @throws Exception
      *
      * @author Phalcon Team <team@phalcon.io>
      * @since  2020-09-09
      */
-    public function storageAdapterApcuClearTwice(UnitTester $I)
+    public function storageAdapterApcuClearTwice(IntegrationTester $I)
     {
         $I->wantToTest('Storage\Adapter\Apcu - clear() - twice');
 
@@ -103,14 +103,14 @@ class ClearCest
     /**
      * Tests Phalcon\Storage\Adapter\Apcu :: clear() - iterator error
      *
-     * @param UnitTester $I
+     * @param IntegrationTester $I
      *
      * @throws Exception
      *
      * @author Phalcon Team <team@phalcon.io>
      * @since  2020-09-09
      */
-    public function storageAdapterApcuClearIteratorError(UnitTester $I)
+    public function storageAdapterApcuClearIteratorError(IntegrationTester $I)
     {
         $I->wantToTest('Storage\Adapter\Apcu - clear() - iterator error');
 
@@ -144,14 +144,14 @@ class ClearCest
     /**
      * Tests Phalcon\Storage\Adapter\Apcu :: clear() - delete error
      *
-     * @param UnitTester $I
+     * @param IntegrationTester $I
      *
      * @throws Exception
      *
      * @author Phalcon Team <team@phalcon.io>
      * @since  2020-09-09
      */
-    public function storageAdapterApcuClearDeleteError(UnitTester $I)
+    public function storageAdapterApcuClearDeleteError(IntegrationTester $I)
     {
         $I->wantToTest('Storage\Adapter\Apcu - clear() - delete error');
 

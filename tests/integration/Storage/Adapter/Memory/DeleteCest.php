@@ -17,21 +17,21 @@ use Phalcon\Support\Exception as HelperException;
 use Phalcon\Storage\Adapter\Memory;
 use Phalcon\Storage\SerializerFactory;
 use Phalcon\Support\HelperFactory;
-use UnitTester;
+use IntegrationTester;
 
 class DeleteCest
 {
     /**
      * Tests Phalcon\Storage\Adapter\Memory :: delete()
      *
-     * @param UnitTester $I
+     * @param IntegrationTester $I
      *
      * @throws HelperException
      *
      * @author Phalcon Team <team@phalcon.io>
      * @since  2020-09-09
      */
-    public function storageAdapterMemoryDelete(UnitTester $I)
+    public function storageAdapterMemoryDelete(IntegrationTester $I)
     {
         $I->wantToTest('Storage\Adapter\Memory - delete()');
 
@@ -54,14 +54,14 @@ class DeleteCest
     /**
      * Tests Phalcon\Storage\Adapter\Memory :: delete() - twice
      *
-     * @param UnitTester $I
+     * @param IntegrationTester $I
      *
      * @throws HelperException
      *
      * @author Phalcon Team <team@phalcon.io>
      * @since  2020-09-09
      */
-    public function storageAdapterMemoryDeleteTwice(UnitTester $I)
+    public function storageAdapterMemoryDeleteTwice(IntegrationTester $I)
     {
         $I->wantToTest('Storage\Adapter\Memory - delete() - twice');
 
@@ -84,14 +84,14 @@ class DeleteCest
     /**
      * Tests Phalcon\Storage\Adapter\Memory :: delete() - unknown
      *
-     * @param UnitTester $I
+     * @param IntegrationTester $I
      *
      * @throws HelperException
      *
      * @author Phalcon Team <team@phalcon.io>
      * @since  2020-09-09
      */
-    public function storageAdapterMemoryDeleteUnknown(UnitTester $I)
+    public function storageAdapterMemoryDeleteUnknown(IntegrationTester $I)
     {
         $I->wantToTest('Storage\Adapter\Memory - delete() - unknown');
 

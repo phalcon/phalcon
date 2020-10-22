@@ -17,21 +17,21 @@ use Phalcon\Support\Exception as HelperException;
 use Phalcon\Storage\Adapter\Memory;
 use Phalcon\Storage\SerializerFactory;
 use Phalcon\Support\HelperFactory;
-use UnitTester;
+use IntegrationTester;
 
 class ClearCest
 {
     /**
      * Tests Phalcon\Storage\Adapter\Memory :: clear()
      *
-     * @param UnitTester $I
+     * @param IntegrationTester $I
      *
      * @throws HelperException
      *
      * @author Phalcon Team <team@phalcon.io>
      * @since  2020-09-09
      */
-    public function storageAdapterMemoryClear(UnitTester $I)
+    public function storageAdapterMemoryClear(IntegrationTester $I)
     {
         $I->wantToTest('Storage\Adapter\Memory - clear()');
 
@@ -62,14 +62,14 @@ class ClearCest
     /**
      * Tests Phalcon\Storage\Adapter\Memory :: clear() - twice
      *
-     * @param UnitTester $I
+     * @param IntegrationTester $I
      *
      * @throws HelperException
      *
      * @author Phalcon Team <team@phalcon.io>
      * @since  2020-09-09
      */
-    public function storageAdapterMemoryClearTwice(UnitTester $I)
+    public function storageAdapterMemoryClearTwice(IntegrationTester $I)
     {
         $I->wantToTest('Storage\Adapter\Memory - clear() - twice');
 

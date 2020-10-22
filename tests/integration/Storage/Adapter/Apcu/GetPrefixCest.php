@@ -18,7 +18,7 @@ use Phalcon\Storage\Adapter\Apcu;
 use Phalcon\Storage\SerializerFactory;
 use Phalcon\Support\HelperFactory;
 use Phalcon\Tests\Fixtures\Traits\ApcuTrait;
-use UnitTester;
+use IntegrationTester;
 
 class GetPrefixCest
 {
@@ -27,14 +27,14 @@ class GetPrefixCest
     /**
      * Tests Phalcon\Storage\Adapter\Apcu :: getPrefix()
      *
-     * @param UnitTester $I
+     * @param IntegrationTester $I
      *
      * @throws Exception
      *
      * @author Phalcon Team <team@phalcon.io>
      * @since  2020-09-09
      */
-    public function storageAdapterApcuGetSetPrefix(UnitTester $I)
+    public function storageAdapterApcuGetSetPrefix(IntegrationTester $I)
     {
         $I->wantToTest('Storage\Adapter\Apcu - getPrefix()');
 
@@ -58,14 +58,14 @@ class GetPrefixCest
     /**
      * Tests Phalcon\Storage\Adapter\Apcu :: getPrefix() - default
      *
-     * @param UnitTester $I
+     * @param IntegrationTester $I
      *
      * @throws Exception
      *
      * @author Phalcon Team <team@phalcon.io>
      * @since  2020-09-09
      */
-    public function storageAdapterApcuGetSetPrefixDefault(UnitTester $I)
+    public function storageAdapterApcuGetSetPrefixDefault(IntegrationTester $I)
     {
         $I->wantToTest('Storage\Adapter\Apcu - getPrefix() - default');
 

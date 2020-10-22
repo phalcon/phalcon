@@ -18,7 +18,7 @@ use Phalcon\Storage\Adapter\Stream;
 use Phalcon\Storage\Exception as StorageException;
 use Phalcon\Storage\SerializerFactory;
 use Phalcon\Support\HelperFactory;
-use UnitTester;
+use IntegrationTester;
 
 use function outputDir;
 
@@ -28,7 +28,7 @@ class GetSetDefaultSerializerCest
      * Tests Phalcon\Storage\Adapter\Stream ::
      * getDefaultSerializer()/setDefaultSerializer()
      *
-     * @param UnitTester $I
+     * @param IntegrationTester $I
      *
      * @throws HelperException
      * @throws StorageException
@@ -36,7 +36,7 @@ class GetSetDefaultSerializerCest
      * @author Phalcon Team <team@phalcon.io>
      * @since  2020-09-09
      */
-    public function storageAdapterStreamGetKeys(UnitTester $I)
+    public function storageAdapterStreamGetKeys(IntegrationTester $I)
     {
         $I->wantToTest('Storage\Adapter\Stream - getDefaultSerializer()/setDefaultSerializer()');
 

@@ -17,7 +17,7 @@ use Codeception\Example;
 use InvalidArgumentException;
 use Phalcon\Storage\Serializer\Php;
 use stdClass;
-use UnitTester;
+use IntegrationTester;
 
 use function serialize;
 
@@ -28,13 +28,13 @@ class UnserializeCest
      *
      * @dataProvider getExamples
      *
-     * @param UnitTester $I
+     * @param IntegrationTester $I
      * @param Example    $example
      *
      * @author Phalcon Team <team@phalcon.io>
      * @since  2020-09-09
      */
-    public function storageSerializerPhpUnserialize(UnitTester $I, Example $example)
+    public function storageSerializerPhpUnserialize(IntegrationTester $I, Example $example)
     {
         $I->wantToTest('Storage\Unserializer\Php - unserialize() - ' . $example[0]);
 
@@ -55,7 +55,7 @@ class UnserializeCest
      * @author Phalcon Team <team@phalcon.io>
      * @since  2020-09-09
      */
-    public function storageSerializerPhpUnserializeErrorNotString(UnitTester $I)
+    public function storageSerializerPhpUnserializeErrorNotString(IntegrationTester $I)
     {
         $I->wantToTest('Storage\Serializer\Php - unserialize() - error not string');
         $I->expectThrowable(
@@ -77,7 +77,7 @@ class UnserializeCest
      * @author Phalcon Team <team@phalcon.io>
      * @since  2020-09-09
      */
-    public function storageSerializerPhpUnserializeError(UnitTester $I)
+    public function storageSerializerPhpUnserializeError(IntegrationTester $I)
     {
         $I->wantToTest('Storage\Serializer\Php - unserialize() - error');
         $serializer = new Php();

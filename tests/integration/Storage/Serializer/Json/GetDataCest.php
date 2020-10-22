@@ -14,19 +14,19 @@ declare(strict_types=1);
 namespace Phalcon\Tests\Integration\Storage\Serializer\Json;
 
 use Phalcon\Storage\Serializer\Json;
-use UnitTester;
+use IntegrationTester;
 
 class GetDataCest
 {
     /**
      * Tests Phalcon\Storage\Serializer\Json :: getData()
      *
-     * @param UnitTester $I
+     * @param IntegrationTester $I
      *
      * @author Phalcon Team <team@phalcon.io>
      * @since  2020-09-09
      */
-    public function storageSerializerJsonGetData(UnitTester $I)
+    public function storageSerializerJsonGetData(IntegrationTester $I)
     {
         $I->wantToTest('Storage\Serializer\Json - getData()');
         $data       = ['Phalcon Framework'];

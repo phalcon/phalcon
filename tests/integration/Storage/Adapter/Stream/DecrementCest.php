@@ -18,7 +18,7 @@ use Phalcon\Storage\Adapter\Stream;
 use Phalcon\Storage\Exception as StorageException;
 use Phalcon\Storage\SerializerFactory;
 use Phalcon\Support\HelperFactory;
-use UnitTester;
+use IntegrationTester;
 
 use function outputDir;
 
@@ -27,7 +27,7 @@ class DecrementCest
     /**
      * Tests Phalcon\Storage\Adapter\Stream :: decrement()
      *
-     * @param UnitTester $I
+     * @param IntegrationTester $I
      *
      * @throws HelperException
      * @throws StorageException
@@ -35,7 +35,7 @@ class DecrementCest
      * @author Phalcon Team <team@phalcon.io>
      * @since  2020-09-09
      */
-    public function storageAdapterStreamDecrement(UnitTester $I)
+    public function storageAdapterStreamDecrement(IntegrationTester $I)
     {
         $I->wantToTest('Storage\Adapter\Stream - decrement()');
 

@@ -19,7 +19,7 @@ use Phalcon\Storage\Adapter\Memory;
 use Phalcon\Storage\SerializerFactory;
 use Phalcon\Support\HelperFactory;
 use stdClass;
-use UnitTester;
+use IntegrationTester;
 
 class GetSetCest
 {
@@ -28,7 +28,7 @@ class GetSetCest
      *
      * @dataProvider getExamples
      *
-     * @param UnitTester $I
+     * @param IntegrationTester $I
      * @param Example    $example
      *
      * @throws HelperException
@@ -36,7 +36,7 @@ class GetSetCest
      * @author Phalcon Team <team@phalcon.io>
      * @since  2020-09-09
      */
-    public function storageAdapterMemoryGetSet(UnitTester $I, Example $example)
+    public function storageAdapterMemoryGetSet(IntegrationTester $I, Example $example)
     {
         $I->wantToTest('Storage\Adapter\Memory - get()/set() - ' . $example[0]);
 

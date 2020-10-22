@@ -19,7 +19,7 @@ use Phalcon\Storage\Adapter\Stream;
 use Phalcon\Storage\Exception as StorageException;
 use Phalcon\Storage\SerializerFactory;
 use Phalcon\Support\HelperFactory;
-use UnitTester;
+use IntegrationTester;
 
 use function outputDir;
 use function uniqid;
@@ -29,7 +29,7 @@ class HasCest
     /**
      * Tests Phalcon\Storage\Adapter\Stream :: has()
      *
-     * @param UnitTester $I
+     * @param IntegrationTester $I
      *
      * @throws HelperException
      * @throws StorageException
@@ -37,7 +37,7 @@ class HasCest
      * @author Phalcon Team <team@phalcon.io>
      * @since  2020-09-09
      */
-    public function storageAdapterStreamHas(UnitTester $I)
+    public function storageAdapterStreamHas(IntegrationTester $I)
     {
         $I->wantToTest('Storage\Adapter\Stream - has()');
 
@@ -63,7 +63,7 @@ class HasCest
     /**
      * Tests Phalcon\Storage\Adapter\Stream :: has() - cannot open file
      *
-     * @param UnitTester $I
+     * @param IntegrationTester $I
      *
      * @throws HelperException
      * @throws StorageException
@@ -71,7 +71,7 @@ class HasCest
      * @author Phalcon Team <team@phalcon.io>
      * @since  2020-09-09
      */
-    public function storageAdapterStreamHasCannotOpenFile(UnitTester $I)
+    public function storageAdapterStreamHasCannotOpenFile(IntegrationTester $I)
     {
         $I->wantToTest('Storage\Adapter\Stream - has() - cannot open file');
 
@@ -102,7 +102,7 @@ class HasCest
     /**
      * Tests Phalcon\Storage\Adapter\Stream :: has() - empty payload
      *
-     * @param UnitTester $I
+     * @param IntegrationTester $I
      *
      * @throws HelperException
      * @throws StorageException
@@ -110,7 +110,7 @@ class HasCest
      * @author Phalcon Team <team@phalcon.io>
      * @since  2020-09-09
      */
-    public function storageAdapterStreamHasEmptyPayload(UnitTester $I)
+    public function storageAdapterStreamHasEmptyPayload(IntegrationTester $I)
     {
         $I->wantToTest('Storage\Adapter\Stream - has() - empty payload');
 

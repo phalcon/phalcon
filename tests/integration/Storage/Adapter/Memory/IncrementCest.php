@@ -17,21 +17,21 @@ use Phalcon\Support\Exception as HelperException;
 use Phalcon\Storage\Adapter\Memory;
 use Phalcon\Storage\SerializerFactory;
 use Phalcon\Support\HelperFactory;
-use UnitTester;
+use IntegrationTester;
 
 class IncrementCest
 {
     /**
      * Tests Phalcon\Storage\Adapter\Memory :: increment()
      *
-     * @param UnitTester $I
+     * @param IntegrationTester $I
      *
      * @throws HelperException
      *
      * @author Phalcon Team <team@phalcon.io>
      * @since  2020-09-09
      */
-    public function storageAdapterMemoryIncrement(UnitTester $I)
+    public function storageAdapterMemoryIncrement(IntegrationTester $I)
     {
         $I->wantToTest('Storage\Adapter\Memory - increment()');
 

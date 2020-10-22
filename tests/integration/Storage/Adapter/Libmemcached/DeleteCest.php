@@ -19,7 +19,7 @@ use Phalcon\Storage\Exception as StorageException;
 use Phalcon\Storage\SerializerFactory;
 use Phalcon\Support\HelperFactory;
 use Phalcon\Tests\Fixtures\Traits\LibmemcachedTrait;
-use UnitTester;
+use IntegrationTester;
 
 use function getOptionsLibmemcached;
 
@@ -30,7 +30,7 @@ class DeleteCest
     /**
      * Tests Phalcon\Storage\Adapter\Libmemcached :: delete()
      *
-     * @param UnitTester $I
+     * @param IntegrationTester $I
      *
      * @throws HelperException
      * @throws StorageException
@@ -38,7 +38,7 @@ class DeleteCest
      * @author Phalcon Team <team@phalcon.io>
      * @since  2020-09-09
      */
-    public function storageAdapterLibmemcachedDelete(UnitTester $I)
+    public function storageAdapterLibmemcachedDelete(IntegrationTester $I)
     {
         $I->wantToTest('Storage\Adapter\Libmemcached - delete()');
 
@@ -65,7 +65,7 @@ class DeleteCest
     /**
      * Tests Phalcon\Storage\Adapter\Libmemcached :: delete() - twice
      *
-     * @param UnitTester $I
+     * @param IntegrationTester $I
      *
      * @throws HelperException
      * @throws StorageException
@@ -73,7 +73,7 @@ class DeleteCest
      * @author Phalcon Team <team@phalcon.io>
      * @since  2020-09-09
      */
-    public function storageAdapterLibmemcachedDeleteTwice(UnitTester $I)
+    public function storageAdapterLibmemcachedDeleteTwice(IntegrationTester $I)
     {
         $I->wantToTest('Storage\Adapter\Libmemcached - delete() - twice');
 
@@ -100,7 +100,7 @@ class DeleteCest
     /**
      * Tests Phalcon\Storage\Adapter\Libmemcached :: delete() - unknown
      *
-     * @param UnitTester $I
+     * @param IntegrationTester $I
      *
      * @throws HelperException
      * @throws StorageException
@@ -108,7 +108,7 @@ class DeleteCest
      * @author Phalcon Team <team@phalcon.io>
      * @since  2020-09-09
      */
-    public function storageAdapterLibmemcachedDeleteUnknown(UnitTester $I)
+    public function storageAdapterLibmemcachedDeleteUnknown(IntegrationTester $I)
     {
         $I->wantToTest('Storage\Adapter\Libmemcached - delete() - unknown');
 

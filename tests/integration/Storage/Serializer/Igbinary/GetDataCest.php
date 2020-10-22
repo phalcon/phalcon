@@ -14,19 +14,19 @@ declare(strict_types=1);
 namespace Phalcon\Tests\Integration\Storage\Serializer\Igbinary;
 
 use Phalcon\Storage\Serializer\Igbinary;
-use UnitTester;
+use IntegrationTester;
 
 class GetDataCest
 {
     /**
      * Tests Phalcon\Storage\Serializer\Igbinary :: getData()
      *
-     * @param UnitTester $I
+     * @param IntegrationTester $I
      *
      * @author Phalcon Team <team@phalcon.io>
      * @since  2020-09-09
      */
-    public function storageSerializerIgbinaryGetData(UnitTester $I)
+    public function storageSerializerIgbinaryGetData(IntegrationTester $I)
     {
         $I->wantToTest('Storage\Serializer\Igbinary - getData()');
         $data       = ['Phalcon Framework'];

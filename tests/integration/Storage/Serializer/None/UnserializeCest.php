@@ -16,7 +16,7 @@ namespace Phalcon\Tests\Integration\Storage\Serializer\None;
 use Codeception\Example;
 use Phalcon\Storage\Serializer\None;
 use stdClass;
-use UnitTester;
+use IntegrationTester;
 
 class UnserializeCest
 {
@@ -25,13 +25,13 @@ class UnserializeCest
      *
      * @dataProvider getExamples
      *
-     * @param UnitTester $I
+     * @param IntegrationTester $I
      * @param Example    $example
      *
      * @author Phalcon Team <team@phalcon.io>
      * @since  2020-09-09
      */
-    public function storageSerializerNoneUnserialize(UnitTester $I, Example $example)
+    public function storageSerializerNoneUnserialize(IntegrationTester $I, Example $example)
     {
         $I->wantToTest('Storage\Serializer\None - unserialize() - ' . $example[0]);
         $serializer = new None();

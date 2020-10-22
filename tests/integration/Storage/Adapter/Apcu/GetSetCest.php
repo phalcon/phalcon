@@ -20,7 +20,7 @@ use Phalcon\Storage\SerializerFactory;
 use Phalcon\Support\HelperFactory;
 use Phalcon\Tests\Fixtures\Traits\ApcuTrait;
 use stdClass;
-use UnitTester;
+use IntegrationTester;
 
 class GetSetCest
 {
@@ -31,7 +31,7 @@ class GetSetCest
      *
      * @dataProvider getExamples
      *
-     * @param UnitTester $I
+     * @param IntegrationTester $I
      * @param Example    $example
      *
      * @throws Exception
@@ -39,7 +39,7 @@ class GetSetCest
      * @author Phalcon Team <team@phalcon.io>
      * @since  2020-09-09
      */
-    public function storageAdapterApcuGetSet(UnitTester $I, Example $example)
+    public function storageAdapterApcuGetSet(IntegrationTester $I, Example $example)
     {
         $I->wantToTest('Storage\Adapter\Apcu - get()/set() - ' . $example[0]);
 
