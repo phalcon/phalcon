@@ -28,6 +28,13 @@ interface EventInterface
     public function getData();
 
     /**
+     * Gets event source
+     *
+     * @return object
+     */
+    public function getSource(): object;
+
+    /**
      * Gets event type
      *
      * @return mixed

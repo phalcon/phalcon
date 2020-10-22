@@ -222,16 +222,16 @@ class Builder
     /**
      * @param DiInterface $container
      * @param array       $definition
-     * @param mixed       $parameters
+     * @param array|null  $parameters
      *
-     * @return array|null
+     * @return array
      * @throws Exception
      */
     private function checkPassedParameters(
         DiInterface $container,
         array $definition,
         array $parameters = null
-    ): ?array {
+    ): array {
         if (null !== $parameters) {
             return $parameters;
         }

@@ -38,14 +38,14 @@ trait ManagerHelperTrait
     protected bool $enablePriorities = false;
 
     /**
-     * @var array|null
+     * @var array
      */
-    protected ?array $events = null;
+    protected ?array $events = [];
 
     /**
-     * @var array|null
+     * @var array
      */
-    protected ?array $responses = null;
+    protected ?array $responses = [];
 
     /**
      * @param mixed $handler
@@ -79,7 +79,7 @@ trait ManagerHelperTrait
     private function processDetachAllNullType(?string $type): void
     {
         if (null === $type) {
-            $this->events = null;
+            $this->events = [];
         }
     }
 

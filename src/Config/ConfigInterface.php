@@ -28,7 +28,7 @@ interface ConfigInterface extends CollectionInterface
     public function getPathDelimiter(): string;
 
     /**
-     * @param $toMerge
+     * @param mixed $toMerge
      *
      * @return ConfigInterface
      */
