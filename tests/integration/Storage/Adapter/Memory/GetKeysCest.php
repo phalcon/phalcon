@@ -17,21 +17,21 @@ use Phalcon\Support\Exception as HelperException;
 use Phalcon\Storage\Adapter\Memory;
 use Phalcon\Storage\SerializerFactory;
 use Phalcon\Support\HelperFactory;
-use UnitTester;
+use IntegrationTester;
 
 class GetKeysCest
 {
     /**
      * Tests Phalcon\Storage\Adapter\Memory :: getKeys()
      *
-     * @param UnitTester $I
+     * @param IntegrationTester $I
      *
      * @throws HelperException
      *
      * @author Phalcon Team <team@phalcon.io>
      * @since  2020-09-09
      */
-    public function storageAdapterMemoryGetKeys(UnitTester $I)
+    public function storageAdapterMemoryGetKeys(IntegrationTester $I)
     {
         $I->wantToTest('Storage\Adapter\Memory - getKeys()');
 

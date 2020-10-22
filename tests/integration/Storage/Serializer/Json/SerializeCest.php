@@ -19,7 +19,7 @@ use JsonException;
 use Phalcon\Collection\Collection;
 use Phalcon\Storage\Serializer\Json;
 use stdClass;
-use UnitTester;
+use IntegrationTester;
 
 use function json_encode;
 
@@ -30,7 +30,7 @@ class SerializeCest
      *
      * @dataProvider getExamples
      *
-     * @param UnitTester $I
+     * @param IntegrationTester $I
      * @param Example    $example
      *
      * @throws JsonException
@@ -38,7 +38,7 @@ class SerializeCest
      * @author Phalcon Team <team@phalcon.io>
      * @since  2020-09-09
      */
-    public function storageSerializerJsonSerialize(UnitTester $I, Example $example)
+    public function storageSerializerJsonSerialize(IntegrationTester $I, Example $example)
     {
         $I->wantToTest('Storage\Serializer\Json - serialize() - ' . $example[0]);
         $serializer = new Json($example[1]);
@@ -51,12 +51,12 @@ class SerializeCest
     /**
      * Tests Phalcon\Storage\Serializer\Json :: serialize() - object
      *
-     * @param UnitTester $I
+     * @param IntegrationTester $I
      *
      * @author Phalcon Team <team@phalcon.io>
      * @since  2020-09-09
      */
-    public function storageSerializerJsonSerializeObject(UnitTester $I)
+    public function storageSerializerJsonSerializeObject(IntegrationTester $I)
     {
         $I->wantToTest('Storage\Serializer\Json - serialize() - object');
 
@@ -82,12 +82,12 @@ class SerializeCest
     /**
      * Tests Phalcon\Storage\Serializer\Json :: serialize() - error
      *
-     * @param UnitTester $I
+     * @param IntegrationTester $I
      *
      * @author Phalcon Team <team@phalcon.io>
      * @since  2020-09-09
      */
-    public function storageSerializerJsonSerializeError(UnitTester $I)
+    public function storageSerializerJsonSerializeError(IntegrationTester $I)
     {
         $I->wantToTest('Storage\Serializer\Json - serialize() - error');
 

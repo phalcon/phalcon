@@ -18,7 +18,7 @@ use Phalcon\Storage\Adapter\Apcu;
 use Phalcon\Storage\SerializerFactory;
 use Phalcon\Support\HelperFactory;
 use Phalcon\Tests\Fixtures\Traits\ApcuTrait;
-use UnitTester;
+use IntegrationTester;
 
 class DecrementCest
 {
@@ -27,14 +27,14 @@ class DecrementCest
     /**
      * Tests Phalcon\Storage\Adapter\Apcu :: decrement()
      *
-     * @param UnitTester $I
+     * @param IntegrationTester $I
      *
      * @throws ExceptionAlias
      *
      * @author Phalcon Team <team@phalcon.io>
      * @since  2020-09-09
      */
-    public function storageAdapterApcuDecrement(UnitTester $I)
+    public function storageAdapterApcuDecrement(IntegrationTester $I)
     {
         $I->wantToTest('Storage\Adapter\Apcu - decrement()');
 

@@ -14,19 +14,19 @@ declare(strict_types=1);
 namespace Phalcon\Tests\Integration\Storage\Serializer\Php;
 
 use Phalcon\Storage\Serializer\Php;
-use UnitTester;
+use IntegrationTester;
 
 class SetDataCest
 {
     /**
      * Tests Phalcon\Storage\Serializer\Php :: setData()
      *
-     * @param UnitTester $I
+     * @param IntegrationTester $I
      *
      * @author Phalcon Team <team@phalcon.io>
      * @since  2020-09-09
      */
-    public function storageSerializerPhpSetData(UnitTester $I)
+    public function storageSerializerPhpSetData(IntegrationTester $I)
     {
         $I->wantToTest('Storage\Serializer\Php - setData()');
         $data       = ['Phalcon Framework'];

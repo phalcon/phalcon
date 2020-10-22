@@ -21,7 +21,7 @@ use Phalcon\Storage\Exception as StorageException;
 use Phalcon\Storage\SerializerFactory;
 use Phalcon\Support\HelperFactory;
 use Phalcon\Tests\Fixtures\Traits\LibmemcachedTrait;
-use UnitTester;
+use IntegrationTester;
 
 use function getOptionsLibmemcached;
 
@@ -32,7 +32,7 @@ class GetAdapterCest
     /**
      * Tests Phalcon\Storage\Adapter\Libmemcached :: getAdapter()
      *
-     * @param UnitTester $I
+     * @param IntegrationTester $I
      *
      * @throws HelperException
      * @throws StorageException
@@ -40,7 +40,7 @@ class GetAdapterCest
      * @author Phalcon Team <team@phalcon.io>
      * @since  2020-09-09
      */
-    public function storageAdapterLibmemcachedGetAdapter(UnitTester $I)
+    public function storageAdapterLibmemcachedGetAdapter(IntegrationTester $I)
     {
         $I->wantToTest('Storage\Adapter\Libmemcached - getAdapter()');
 

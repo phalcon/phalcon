@@ -18,7 +18,7 @@ use Phalcon\Storage\Adapter\Stream;
 use Phalcon\Storage\Exception as StorageException;
 use Phalcon\Storage\SerializerFactory;
 use Phalcon\Support\HelperFactory;
-use UnitTester;
+use IntegrationTester;
 
 use function outputDir;
 use function sort;
@@ -29,7 +29,7 @@ class GetKeysCest
     /**
      * Tests Phalcon\Storage\Adapter\Stream :: getKeys()
      *
-     * @param UnitTester $I
+     * @param IntegrationTester $I
      *
      * @throws HelperException
      * @throws StorageException
@@ -37,7 +37,7 @@ class GetKeysCest
      * @author Phalcon Team <team@phalcon.io>
      * @since  2020-09-09
      */
-    public function storageAdapterStreamGetKeys(UnitTester $I)
+    public function storageAdapterStreamGetKeys(IntegrationTester $I)
     {
         $I->wantToTest('Storage\Adapter\Stream - getKeys()');
 
@@ -96,7 +96,7 @@ class GetKeysCest
     /**
      * Tests Phalcon\Storage\Adapter\Stream :: getKeys()
      *
-     * @param UnitTester $I
+     * @param IntegrationTester $I
      *
      * @throws HelperException
      * @throws StorageException
@@ -105,7 +105,7 @@ class GetKeysCest
      * @since  2020-09-09
      * @issue  cphalcon/#14190
      */
-    public function storageAdapterStreamGetKeysIssue14190(UnitTester $I)
+    public function storageAdapterStreamGetKeysIssue14190(IntegrationTester $I)
     {
         $I->wantToTest('Storage\Adapter\Stream - getKeys() - issue 14190');
 
@@ -148,7 +148,7 @@ class GetKeysCest
     /**
      * Tests Phalcon\Storage\Adapter\Stream :: getKeys()
      *
-     * @param UnitTester $I
+     * @param IntegrationTester $I
      *
      * @throws HelperException
      * @throws StorageException
@@ -157,7 +157,7 @@ class GetKeysCest
      * @since  2020-09-09
      * @issue  cphalcon/#14190
      */
-    public function storageAdapterStreamGetKeysPrefix(UnitTester $I)
+    public function storageAdapterStreamGetKeysPrefix(IntegrationTester $I)
     {
         $I->wantToTest('Storage\Adapter\Stream - getKeys() - prefix');
 

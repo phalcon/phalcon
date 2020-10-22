@@ -17,7 +17,7 @@ use Codeception\Example;
 use JsonException;
 use Phalcon\Storage\Serializer\Json;
 use stdClass;
-use UnitTester;
+use IntegrationTester;
 
 class UnserializeCest
 {
@@ -26,7 +26,7 @@ class UnserializeCest
      *
      * @dataProvider getExamples
      *
-     * @param UnitTester $I
+     * @param IntegrationTester $I
      * @param Example    $example
      *
      * @throws JsonException
@@ -34,7 +34,7 @@ class UnserializeCest
      * @author Phalcon Team <team@phalcon.io>
      * @since  2020-09-09
      */
-    public function storageSerializerJsonUnserialize(UnitTester $I, Example $example)
+    public function storageSerializerJsonUnserialize(IntegrationTester $I, Example $example)
     {
         $I->wantToTest('Storage\Serializer\Json - unserialize() - ' . $example[0]);
         $serializer = new Json();

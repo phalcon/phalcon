@@ -19,7 +19,7 @@ use Phalcon\Storage\Adapter\Stream;
 use Phalcon\Storage\Exception as StorageException;
 use Phalcon\Storage\SerializerFactory;
 use Phalcon\Support\HelperFactory;
-use UnitTester;
+use IntegrationTester;
 
 use function outputDir;
 
@@ -29,12 +29,12 @@ class ConstructCest
      * Tests Phalcon\Storage\Adapter\Stream :: __construct()
      */
     /**
-     * @param UnitTester $I
+     * @param IntegrationTester $I
      *
      * @throws HelperException
      * @throws StorageException
      */
-    public function storageAdapterStreamConstruct(UnitTester $I)
+    public function storageAdapterStreamConstruct(IntegrationTester $I)
     {
         $I->wantToTest('Storage\Adapter\Stream - __construct()');
 
@@ -57,12 +57,12 @@ class ConstructCest
     /**
      * Tests Phalcon\Storage\Adapter\Stream :: __construct() - exception
      *
-     * @param UnitTester $I
+     * @param IntegrationTester $I
      *
      * @author Phalcon Team <team@phalcon.io>
      * @since  2020-09-09
      */
-    public function storageAdapterStreamConstructException(UnitTester $I)
+    public function storageAdapterStreamConstructException(IntegrationTester $I)
     {
         $I->wantToTest('Storage\Adapter\Stream - __construct() - exception');
 

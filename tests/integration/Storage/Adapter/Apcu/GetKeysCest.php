@@ -19,7 +19,7 @@ use Phalcon\Storage\Adapter\Apcu;
 use Phalcon\Storage\SerializerFactory;
 use Phalcon\Support\HelperFactory;
 use Phalcon\Tests\Fixtures\Traits\ApcuTrait;
-use UnitTester;
+use IntegrationTester;
 
 class GetKeysCest
 {
@@ -28,14 +28,14 @@ class GetKeysCest
     /**
      * Tests Phalcon\Storage\Adapter\Apcu :: getKeys()
      *
-     * @param UnitTester $I
+     * @param IntegrationTester $I
      *
      * @throws Exception
      *
      * @author Phalcon Team <team@phalcon.io>
      * @since  2020-09-09
      */
-    public function storageAdapterApcuGetKeys(UnitTester $I)
+    public function storageAdapterApcuGetKeys(IntegrationTester $I)
     {
         $I->wantToTest('Storage\Adapter\Apcu - getKeys()');
 
@@ -77,14 +77,14 @@ class GetKeysCest
     /**
      * Tests Phalcon\Storage\Adapter\Apcu :: getKeys() - iterator error
      *
-     * @param UnitTester $I
+     * @param IntegrationTester $I
      *
      * @throws Exception
      *
      * @author Phalcon Team <team@phalcon.io>
      * @since  2020-09-09
      */
-    public function storageAdapterApcuGetKeysIteratorError(UnitTester $I)
+    public function storageAdapterApcuGetKeysIteratorError(IntegrationTester $I)
     {
         $I->wantToTest('Storage\Adapter\Apcu - getKeys() - iterator error');
 

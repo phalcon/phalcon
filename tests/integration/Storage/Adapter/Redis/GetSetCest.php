@@ -21,7 +21,7 @@ use Phalcon\Storage\SerializerFactory;
 use Phalcon\Support\HelperFactory;
 use Phalcon\Tests\Fixtures\Traits\RedisTrait;
 use stdClass;
-use UnitTester;
+use IntegrationTester;
 
 use function array_merge;
 use function getOptionsRedis;
@@ -36,7 +36,7 @@ class GetSetCest
      *
      * @dataProvider getExamples
      *
-     * @param UnitTester $I
+     * @param IntegrationTester $I
      * @param Example    $example
      *
      * @throws HelperException
@@ -45,7 +45,7 @@ class GetSetCest
      * @author Phalcon Team <team@phalcon.io>
      * @since  2020-09-09
      */
-    public function storageAdapterRedisGetSet(UnitTester $I, Example $example)
+    public function storageAdapterRedisGetSet(IntegrationTester $I, Example $example)
     {
         $I->wantToTest('Storage\Adapter\Redis - get()/set() - ' . $example[0]);
 
@@ -65,7 +65,7 @@ class GetSetCest
     /**
      * Tests Phalcon\Storage\Adapter\Redis :: get() - persistent
      *
-     * @param UnitTester $I
+     * @param IntegrationTester $I
      *
      * @throws HelperException
      * @throws StorageException
@@ -73,7 +73,7 @@ class GetSetCest
      * @author Phalcon Team <team@phalcon.io>
      * @since  2020-09-09
      */
-    public function storageAdapterRedisGetSetPersistent(UnitTester $I)
+    public function storageAdapterRedisGetSetPersistent(IntegrationTester $I)
     {
         $I->wantToTest('Storage\Adapter\Redis - get()/set() - persistent');
 
@@ -102,12 +102,12 @@ class GetSetCest
     /**
      * Tests Phalcon\Storage\Adapter\Redis :: get() - wrong index
      *
-     * @param UnitTester $I
+     * @param IntegrationTester $I
      *
      * @author Phalcon Team <team@phalcon.io>
      * @since  2020-09-09
      */
-    public function storageAdapterRedisGetSetWrongIndex(UnitTester $I)
+    public function storageAdapterRedisGetSetWrongIndex(IntegrationTester $I)
     {
         $I->wantToTest('Storage\Adapter\Redis - get()/set() - wrong index');
 
@@ -135,12 +135,12 @@ class GetSetCest
     /**
      * Tests Phalcon\Storage\Adapter\Redis :: get() - failed auth
      *
-     * @param UnitTester $I
+     * @param IntegrationTester $I
      *
      * @author Phalcon Team <team@phalcon.io>
      * @since  2020-09-09
      */
-    public function storageAdapterRedisGetSetFailedAuth(UnitTester $I)
+    public function storageAdapterRedisGetSetFailedAuth(IntegrationTester $I)
     {
         $I->wantToTest('Storage\Adapter\Redis - get()/set() - failed auth');
 
@@ -168,7 +168,7 @@ class GetSetCest
     /**
      * Tests Phalcon\Storage\Adapter\Redis :: get()/set() - custom serializer
      *
-     * @param UnitTester $I
+     * @param IntegrationTester $I
      *
      * @throws HelperException
      * @throws StorageException
@@ -176,7 +176,7 @@ class GetSetCest
      * @author Phalcon Team <team@phalcon.io>
      * @since  2020-09-09
      */
-    public function storageAdapterRedisGetSetCustomSerializer(UnitTester $I)
+    public function storageAdapterRedisGetSetCustomSerializer(IntegrationTester $I)
     {
         $I->wantToTest('Storage\Adapter\Redis - get()/set() - custom serializer');
 

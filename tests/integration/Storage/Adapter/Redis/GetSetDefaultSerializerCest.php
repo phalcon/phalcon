@@ -16,7 +16,7 @@ namespace Phalcon\Tests\Integration\Storage\Adapter\Redis;
 use Phalcon\Storage\Adapter\Redis;
 use Phalcon\Storage\SerializerFactory;
 use Phalcon\Support\HelperFactory;
-use UnitTester;
+use IntegrationTester;
 
 use function getOptionsRedis;
 
@@ -26,12 +26,12 @@ class GetSetDefaultSerializerCest
      * Tests Phalcon\Storage\Adapter\Redis ::
      * getDefaultSerializer()/setDefaultSerializer()
      *
-     * @param UnitTester $I
+     * @param IntegrationTester $I
      *
      * @author Phalcon Team <team@phalcon.io>
      * @since  2020-09-09
      */
-    public function storageAdapterRedisGetKeys(UnitTester $I)
+    public function storageAdapterRedisGetKeys(IntegrationTester $I)
     {
         $I->wantToTest('Storage\Adapter\Redis - getDefaultSerializer()/setDefaultSerializer()');
 

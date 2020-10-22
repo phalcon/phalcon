@@ -19,7 +19,7 @@ use Phalcon\Storage\Exception as StorageException;
 use Phalcon\Storage\SerializerFactory;
 use Phalcon\Support\HelperFactory;
 use Phalcon\Tests\Fixtures\Traits\LibmemcachedTrait;
-use UnitTester;
+use IntegrationTester;
 
 use function getOptionsLibmemcached;
 
@@ -30,7 +30,7 @@ class ClearCest
     /**
      * Tests Phalcon\Storage\Adapter\Libmemcached :: clear()
      *
-     * @param UnitTester $I
+     * @param IntegrationTester $I
      *
      * @throws HelperException
      * @throws StorageException
@@ -38,7 +38,7 @@ class ClearCest
      * @author Phalcon Team <team@phalcon.io>
      * @since  2020-09-09
      */
-    public function storageAdapterLibmemcachedClear(UnitTester $I)
+    public function storageAdapterLibmemcachedClear(IntegrationTester $I)
     {
         $I->wantToTest('Storage\Adapter\Libmemcached - clear()');
 
@@ -75,7 +75,7 @@ class ClearCest
     /**
      * Tests Phalcon\Storage\Adapter\Libmemcached :: clear() - twice
      *
-     * @param UnitTester $I
+     * @param IntegrationTester $I
      *
      * @throws HelperException
      * @throws StorageException
@@ -83,7 +83,7 @@ class ClearCest
      * @author Phalcon Team <team@phalcon.io>
      * @since  2020-09-09
      */
-    public function storageAdapterLibmemcachedClearTwice(UnitTester $I)
+    public function storageAdapterLibmemcachedClearTwice(IntegrationTester $I)
     {
         $I->wantToTest('Storage\Adapter\Libmemcached - clear() - twice');
 

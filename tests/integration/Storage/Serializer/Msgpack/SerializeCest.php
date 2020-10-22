@@ -15,7 +15,7 @@ namespace Phalcon\Tests\Integration\Storage\Serializer\Msgpack;
 
 use Phalcon\Storage\Serializer\Msgpack;
 use stdClass;
-use UnitTester;
+use IntegrationTester;
 
 use function msgpack_pack;
 
@@ -24,12 +24,12 @@ class SerializeCest
     /**
      * Tests Phalcon\Storage\Serializer\Msgpack :: serialize()
      *
-     * @param UnitTester $I
+     * @param IntegrationTester $I
      *
      * @author Phalcon Team <team@phalcon.io>
      * @since  2020-09-09
      */
-    public function storageSerializerMsgpackSerialize(UnitTester $I)
+    public function storageSerializerMsgpackSerialize(IntegrationTester $I)
     {
         $I->wantToTest('Storage\Serializer\Msgpack - serialize()');
 

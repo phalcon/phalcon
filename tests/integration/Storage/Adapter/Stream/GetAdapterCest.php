@@ -18,14 +18,14 @@ use Phalcon\Storage\Adapter\Stream;
 use Phalcon\Storage\Exception as StorageException;
 use Phalcon\Storage\SerializerFactory;
 use Phalcon\Support\HelperFactory;
-use UnitTester;
+use IntegrationTester;
 
 class GetAdapterCest
 {
     /**
      * Tests Phalcon\Storage\Adapter\Stream :: getAdapter()
      *
-     * @param UnitTester $I
+     * @param IntegrationTester $I
      *
      * @throws HelperException
      * @throws StorageException
@@ -33,7 +33,7 @@ class GetAdapterCest
      * @author Phalcon Team <team@phalcon.io>
      * @since  2020-09-09
      */
-    public function storageAdapterStreamGetAdapter(UnitTester $I)
+    public function storageAdapterStreamGetAdapter(IntegrationTester $I)
     {
         $I->wantToTest('Storage\Adapter\Stream - getAdapter()');
 

@@ -19,7 +19,7 @@ use Phalcon\Storage\Adapter\Stream;
 use Phalcon\Storage\Exception as StorageException;
 use Phalcon\Storage\SerializerFactory;
 use Phalcon\Support\HelperFactory;
-use UnitTester;
+use IntegrationTester;
 
 use function outputDir;
 use function uniqid;
@@ -29,7 +29,7 @@ class ClearCest
     /**
      * Tests Phalcon\Storage\Adapter\Stream :: clear()
      *
-     * @param UnitTester $I
+     * @param IntegrationTester $I
      *
      * @throws HelperException
      * @throws StorageException
@@ -37,7 +37,7 @@ class ClearCest
      * @author Phalcon Team <team@phalcon.io>
      * @since  2020-09-09
      */
-    public function storageAdapterStreamClear(UnitTester $I)
+    public function storageAdapterStreamClear(IntegrationTester $I)
     {
         $I->wantToTest('Storage\Adapter\Stream - clear()');
 
@@ -74,7 +74,7 @@ class ClearCest
     /**
      * Tests Phalcon\Storage\Adapter\Stream :: clear() - twice
      *
-     * @param UnitTester $I
+     * @param IntegrationTester $I
      *
      * @throws HelperException
      * @throws StorageException
@@ -82,7 +82,7 @@ class ClearCest
      * @author Phalcon Team <team@phalcon.io>
      * @since  2020-09-09
      */
-    public function storageAdapterStreamClearTwice(UnitTester $I)
+    public function storageAdapterStreamClearTwice(IntegrationTester $I)
     {
         $I->wantToTest('Storage\Adapter\Stream - clear() - twice');
 
@@ -118,7 +118,7 @@ class ClearCest
     /**
      * Tests Phalcon\Storage\Adapter\Stream :: clear() - cannot delete file
      *
-     * @param UnitTester $I
+     * @param IntegrationTester $I
      *
      * @throws HelperException
      * @throws StorageException
@@ -126,7 +126,7 @@ class ClearCest
      * @author Phalcon Team <team@phalcon.io>
      * @since  2020-09-09
      */
-    public function storageAdapterStreamClearCannotDeleteFile(UnitTester $I)
+    public function storageAdapterStreamClearCannotDeleteFile(IntegrationTester $I)
     {
         $I->wantToTest('Storage\Adapter\Stream - clear() - cannot delete file');
 
