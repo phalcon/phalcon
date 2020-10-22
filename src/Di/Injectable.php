@@ -13,8 +13,7 @@ declare(strict_types=1);
 
 namespace Phalcon\Di;
 
-//use Phalcon\Di;
-//use Phalcon\Session\BagInterface;
+use Phalcon\Di\Traits\InjectionAwareTrait;
 use Phalcon\Events\Manager as EventsManager;
 use Phalcon\Events\ManagerInterface as EventsManagerInterface;
 
@@ -45,7 +44,7 @@ use function is_object;
 // * @property \Phalcon\Annotations\Adapter\Memory|\Phalcon\Annotations\Adapter $annotations
 // * @property \Phalcon\Mvc\Model\Manager|\Phalcon\Mvc\Model\ManagerInterface $modelsManager
 // * @property \Phalcon\Mvc\Model\MetaData\Memory|\Phalcon\Mvc\Model\MetadataInterface $modelsMetadata
-// * @property \Phalcon\Mvc\Model\Transaction\Manager|\Phalcon\Mvc\Model\Transaction\ManagerInterface $transactionManager
+// * @property \Phalcon\Mvc\Model\Transaction\ManagerInterface $transactionManager
 // * @property \Phalcon\Assets\Manager $assets
 // * @property \Phalcon\Di|\Phalcon\Di\DiInterface $di
 // * @property \Phalcon\Session\Bag|\Phalcon\Session\BagInterface $persistent
@@ -53,12 +52,7 @@ use function is_object;
  */
 abstract class Injectable implements InjectionAwareInterface
 {
-    /**
-     * Dependency Injector
-     *
-     * @var DiInterface
-     */
-    protected DiInterface $container;
+    use InjectionAwareTrait;
 
     /**
      * Magic method __get
@@ -77,19 +71,19 @@ abstract class Injectable implements InjectionAwareInterface
             return $bucket;
         }
 
-//        /**
-//         * Accessing the persistent property will create a session bag on any class
-//         */
-//        if propertyName == "persistent" {
-//            let this->{"persistent"} = <BagInterface> container->get(
-//                "sessionBag",
-//                [
-//                    get_class(this)
-//                ]
-//            );
-//
-//            return this->{"persistent"};
-//        }
+        /**
+         * Accessing the persistent property will create a session bag on any class
+         */
+        if ('persistent' === $propertyName) {
+            $this->persistent = $bucket->get(
+                'sessionBag',
+                [
+                    get_class($this)
+                ]
+            );
+
+            return $this->persistent;
+        }
 
         /**
          * Fallback to the PHP userland if the cache is not available
@@ -120,18 +114,10 @@ abstract class Injectable implements InjectionAwareInterface
      */
     public function getDI(): DiInterface
     {
-        if (true !== is_object($this->container)) {
+        if (null === $this->container) {
             $this->container = Di::getDefault();
         }
 
         return $this->container;
-    }
-
-    /**
-     * Sets the dependency injector
-     */
-    public function setDI(DiInterface $container): void
-    {
-        $this->container = $container;
     }
 }

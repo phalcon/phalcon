@@ -29,9 +29,9 @@ trait InjectionAwareTrait
     /**
      * Dependency Injector
      *
-     * @var DiInterface
+     * @var DiInterface|null
      */
-    protected DiInterface $container;
+    protected ?DiInterface $container = null;
 
     /**
      * Returns the internal dependency injector

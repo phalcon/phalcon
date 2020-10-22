@@ -263,7 +263,7 @@ class Service implements ServiceInterface
     /**
      * Sets/Resets the shared instance related to the service
      *
-     * @param $sharedInstance
+     * @param mixed $sharedInstance
      */
     public function setSharedInstance($sharedInstance): void
     {

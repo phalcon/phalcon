@@ -73,8 +73,8 @@ class Friendly
     }
 
     /**
-     * @param array|string $replace
-     * @param string       $text
+     * @param mixed  $replace
+     * @param string $text
      *
      * @return string
      * @throws Exception

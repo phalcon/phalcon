@@ -342,11 +342,6 @@ class Logger implements LoggerInterface
      * @param mixed $level
      *
      * @return int
-     */
-    /**
-     * @param $level
-     *
-     * @return int
      * @throws InvalidArgumentException
      */
     private function getLevelNumber($level): int

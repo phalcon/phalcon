@@ -30,8 +30,6 @@ trait PhpFileTrait
     /**
      * @param string   $filename
      * @param string   $mode
-     * @param bool     $use_include_path
-     * @param resource $context
      *
      * @return resource|false
      *
@@ -56,10 +54,6 @@ trait PhpFileTrait
 
     /**
      * @param string   $filename
-     * @param bool     $use_include_path
-     * @param resource $context
-     * @param int      $offset
-     * @param int      $maxlen
      *
      * @return string|false
      *
@@ -120,7 +114,6 @@ trait PhpFileTrait
 
     /**
      * @param string   $filename
-     * @param resource $context
      *
      * @return bool
      *

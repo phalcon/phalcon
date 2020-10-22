@@ -179,7 +179,7 @@ class Manager implements ManagerInterface
         $data = null,
         bool $cancelable = true
     ) {
-        if (true !== is_array($this->events)) {
+        if (true === empty($this->events)) {
             return null;
         }
 
@@ -195,7 +195,7 @@ class Manager implements ManagerInterface
 
         // Responses must be traced?
         if (true === $this->collect) {
-            $this->responses = null;
+            $this->responses = [];
         }
 
         // Create the event context

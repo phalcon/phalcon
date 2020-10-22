@@ -395,6 +395,6 @@ class Stream extends AbstractAdapter
         $created = $payload['created'] ?? 0;
         $ttl     = $payload['ttl'] ?? 3600;
 
-        return ($created + $ttl) < time();
+        return ((int) $created + (int) $ttl) < time();
     }
 }

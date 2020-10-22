@@ -64,7 +64,7 @@ class Manager implements ManagerInterface
     /**
      * Manager constructor.
      *
-     * @param array options = [
+     * @param array $options = [
      *     'uniqueId' => null
      * ]
      */
@@ -193,7 +193,7 @@ class Manager implements ManagerInterface
      *
      * @return ManagerInterface
      */
-    public function regenerateId($deleteOldSession = true): ManagerInterface
+    public function regenerateId(bool $deleteOldSession = true): ManagerInterface
     {
         if (true === $this->exists()) {
             session_regenerate_id($deleteOldSession);
@@ -273,11 +273,10 @@ class Manager implements ManagerInterface
      * Set the session name. Throw exception if the session has started
      * and do not allow poop names
      *
-     * @param  string name
+     * @param string $name
      *
+     * @return ManagerInterface
      * @throws Exception
-     *
-     * @return Manager
      */
     public function setName(string $name): ManagerInterface
     {
