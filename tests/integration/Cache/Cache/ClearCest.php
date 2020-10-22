@@ -18,6 +18,7 @@ use Phalcon\Cache\AdapterFactory;
 use Phalcon\Cache\Cache;
 use Phalcon\Storage\SerializerFactory;
 use Phalcon\Support\HelperFactory;
+
 use function uniqid;
 
 class ClearCest

@@ -18,8 +18,8 @@ use Phalcon\Cache\AdapterFactory;
 use Phalcon\Cache\Exception\InvalidArgumentException;
 use Phalcon\Storage\SerializerFactory;
 use IntegrationTester;
-
 use Phalcon\Support\HelperFactory;
+
 use function uniqid;
 
 class SetMultipleCest
