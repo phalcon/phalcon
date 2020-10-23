@@ -16,6 +16,11 @@ namespace Phalcon\Tests\Unit\Translate\Adapter\NativeArray;
 use Phalcon\Tests\Fixtures\Traits\TranslateNativeArrayHelperTrait;
 use Phalcon\Tests\Fixtures\Traits\TranslateNativeArrayTrait;
 
+/**
+ * Class UnderscoreCest
+ *
+ * @package Phalcon\Tests\Unit\Translate\Adapter\NativeArray
+ */
 class UnderscoreCest
 {
     use TranslateNativeArrayTrait;

@@ -25,8 +25,10 @@ class ArrayAccessCest
     /**
      * Tests Phalcon\Translate\Adapter\NativeArray :: array access
      *
-     * @author Nikos Dimopoulos <nikos@phalcon.io>
-     * @since  2014-09-12
+     * @param UnitTester $I
+     *
+     * @author Phalcon Team <team@phalcon.io>
+     * @since  2020-09-09
      */
     public function translateAdapterNativeArrayWithArrayAccess(UnitTester $I)
     {

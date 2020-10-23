@@ -28,8 +28,10 @@ class ConstructCest
     /**
      * Tests Phalcon\Translate\Adapter\NativeArray :: __construct()
      *
+     * @param UnitTester $I
+     *
      * @author Phalcon Team <team@phalcon.io>
-     * @since  2018-11-13
+     * @since  2020-09-09
      */
     public function translateAdapterNativeArrayConstruct(UnitTester $I)
     {
@@ -58,8 +60,10 @@ class ConstructCest
     /**
      * Tests Phalcon\Translate\Adapter\NativeArray :: __construct() - Exception
      *
+     * @param UnitTester $I
+     *
      * @author Phalcon Team <team@phalcon.io>
-     * @since  2018-11-13
+     * @since  2020-09-09
      */
     public function translateAdapterNativeArrayContentParamExist(UnitTester $I)
     {
@@ -68,10 +72,7 @@ class ConstructCest
         $I->expectThrowable(
             new Exception('Translation content was not provided'),
             function () {
-                new NativeArray(
-                    new InterpolatorFactory(),
-                    []
-                );
+                new NativeArray(new InterpolatorFactory(), []);
             }
         );
     }
