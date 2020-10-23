@@ -38,7 +38,7 @@ class Redis extends AbstractAdapter
      */
     public function __construct(AdapterFactory $factory, array $options = [])
     {
-        $options["prefix"] = 'sess-reds-';
+        $options['prefix'] = $options['prefix'] ?? 'sess-reds-';
         $this->adapter     = $factory->newInstance('redis', $options);
     }
 }

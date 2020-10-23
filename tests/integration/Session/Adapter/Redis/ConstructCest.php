@@ -14,8 +14,14 @@ declare(strict_types=1);
 namespace Phalcon\Tests\Integration\Session\Adapter\Redis;
 
 use IntegrationTester;
+use Phalcon\Session\Adapter\Libmemcached;
+use Phalcon\Session\Adapter\Redis;
+use Phalcon\Storage\AdapterFactory;
+use Phalcon\Storage\SerializerFactory;
+use Phalcon\Support\HelperFactory;
 use Phalcon\Tests\Fixtures\Traits\DiTrait;
 use SessionHandlerInterface;
+use function getOptionsLibmemcached;
 
 /**
  * Class ConstructCest
@@ -42,5 +48,42 @@ class ConstructCest
 
         $class = SessionHandlerInterface::class;
         $I->assertInstanceOf($class, $adapter);
+    }
+
+    /**
+     * Tests Phalcon\Session\Adapter\Redis :: __construct() - with custom prefix
+     *
+     * @author Phalcon Team <team@phalcon.io>
+     * @since  2020-10-23
+     */
+    public function sessionAdapterRedisConstructWithPrefix(IntegrationTester $I)
+    {
+        $I->wantToTest('Session\Adapter\Redis - __construct() - with custom prefix');
+
+        $options           = getOptionsRedis();
+        $options['prefix'] = 'my-custom-prefix-';
+
+        $helperFactory     = new HelperFactory();
+        $serializerFactory = new SerializerFactory();
+        $factory           = new AdapterFactory($helperFactory, $serializerFactory);
+
+        $redisSession = new Redis($factory, $options);
+
+        $actual = $redisSession->write(
+            'my-session-prefixed-key',
+            'test-data'
+        );
+
+        $I->assertTrue($actual);
+
+        $redisStorage = $factory->newInstance('redis', $options);
+
+        $expected = 'my-custom-prefix-';
+        $actual   = $redisStorage->getPrefix();
+        $I->assertEquals($expected, $actual);
+
+        $expected = 'test-data';
+        $actual   = $redisStorage->get('my-session-prefixed-key');
+        $I->assertEquals($expected, $actual);
     }
 }
