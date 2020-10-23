@@ -17,6 +17,7 @@ use Codeception\Example;
 use Phalcon\Di\FactoryDefault\Cli;
 use Phalcon\Escaper\Escaper;
 use Phalcon\Events\Manager as EventsManager;
+use Phalcon\Filter\Filter;
 use UnitTester;
 
 /**
@@ -80,6 +81,10 @@ class ConstructCest
             [
                 'service' => 'eventsManager',
                 'class'   => EventsManager::class,
+            ],
+            [
+                'service' => 'filter',
+                'class'   => Filter::class,
             ],
         ];
     }

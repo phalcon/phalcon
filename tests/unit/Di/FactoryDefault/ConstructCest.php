@@ -17,6 +17,7 @@ use Codeception\Example;
 use Phalcon\Di\FactoryDefault;
 use Phalcon\Escaper\Escaper;
 use Phalcon\Events\Manager as EventsManager;
+use Phalcon\Filter\Filter;
 use UnitTester;
 
 //use Phalcon\Annotations\Adapter\Memory as MemoryAnnotations;
@@ -139,10 +140,10 @@ class ConstructCest
 //                'class'   => Session::class,
 //            ],
 //
-//            [
-//                'service' => 'filter',
-//                'class'   => Filter::class,
-//            ],
+            [
+                'service' => 'filter',
+                'class'   => Filter::class,
+            ],
 //
 //            [
 //                'service' => 'modelsManager',
