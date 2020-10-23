@@ -83,6 +83,30 @@ trait PhpFileTrait
         return file_put_contents($filename, $data, $flags, $context);
     }
 
+
+    /**
+     * Gets line from file pointer and parse for CSV fields
+     *
+     * @param resource $stream
+     * @param int      $length
+     * @param string   $separator
+     * @param string   $enclosure
+     * @param string   $escape
+     *
+     * @return array|null|false
+
+     * @link https://php.net/manual/en/function.fgetcsv.php
+     */
+    protected function phpFgetCsv(
+        $stream,
+        $length = 0,
+        $separator = ',',
+        $enclosure = '"',
+        $escape = '\\'
+    ) {
+        return fgetcsv($stream, $length, $separator, $enclosure, $escape);
+    }
+
     /**
      * Gets the value of a configuration option
      *
