@@ -14,6 +14,10 @@ declare(strict_types=1);
 namespace Phalcon\Tests\Integration\Session\Adapter\Libmemcached;
 
 use IntegrationTester;
+use Phalcon\Session\Adapter\Libmemcached;
+use Phalcon\Storage\AdapterFactory;
+use Phalcon\Storage\SerializerFactory;
+use Phalcon\Support\HelperFactory;
 use Phalcon\Tests\Fixtures\Traits\DiTrait;
 use SessionHandlerInterface;
 
@@ -42,5 +46,43 @@ class ConstructCest
 
         $class = SessionHandlerInterface::class;
         $I->assertInstanceOf($class, $adapter);
+    }
+
+
+    /**
+     * Tests Phalcon\Session\Adapter\Libmemcached :: __construct() - with custom prefix
+     *
+     * @author Phalcon Team <team@phalcon.io>
+     * @since  2020-10-23
+     */
+    public function sessionAdapterLibmemcachedConstructWithPrefix(IntegrationTester $I)
+    {
+        $I->wantToTest('Session\Adapter\Libmemcached - __construct() - with custom prefix');
+
+        $options           = getOptionsLibmemcached();
+        $options['prefix'] = 'my-custom-prefix-';
+
+        $helperFactory     = new HelperFactory();
+        $serializerFactory = new SerializerFactory();
+        $factory           = new AdapterFactory($helperFactory, $serializerFactory);
+
+        $memcachedSession = new Libmemcached($factory, $options);
+
+        $actual = $memcachedSession->write(
+            'my-session-prefixed-key',
+            'test-data'
+        );
+
+        $I->assertTrue($actual);
+
+        $memcachedStorage = $factory->newInstance('libmemcached', $options);
+
+        $expected = 'my-custom-prefix-';
+        $actual   = $memcachedStorage->getPrefix();
+        $I->assertEquals($expected, $actual);
+
+        $expected = 'test-data';
+        $actual   = $memcachedStorage->get('my-session-prefixed-key');
+        $I->assertEquals($expected, $actual);
     }
 }

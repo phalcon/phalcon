@@ -46,7 +46,7 @@ class Libmemcached extends AbstractAdapter
      */
     public function __construct(AdapterFactory $factory, array $options = [])
     {
-        $options["prefix"] = "sess-memc-";
+        $options['prefix'] = $options['prefix'] ?? 'sess-memc-';
         $this->adapter     = $factory->newInstance('libmemcached', $options);
     }
 }
