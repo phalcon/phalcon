@@ -76,4 +76,30 @@ class ConstructCest
             }
         );
     }
+
+    /**
+     * Tests Phalcon\Translate\Adapter\NativeArray :: __construct() - Exception
+     * content not array
+     *
+     * @param UnitTester $I
+     *
+     * @author Phalcon Team <team@phalcon.io>
+     * @since  2020-09-09
+     */
+    public function translateAdapterNativeArrayContentNotArray(UnitTester $I)
+    {
+        $I->wantToTest('Translate\Adapter\NativeArray - constructor with content not array throws exception');
+
+        $I->expectThrowable(
+            new Exception('Translation data must be an array'),
+            function () {
+                new NativeArray(
+                    new InterpolatorFactory(),
+                    [
+                        'content' => 1234,
+                    ]
+                );
+            }
+        );
+    }
 }

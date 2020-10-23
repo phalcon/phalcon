@@ -14,12 +14,14 @@ declare(strict_types=1);
 namespace Phalcon\Tests\Unit\Translate\Adapter\Csv;
 
 use ArrayAccess;
+use Codeception\Stub;
 use Phalcon\Tests\Fixtures\Traits\TranslateCsvTrait;
 use Phalcon\Translate\Adapter\AdapterInterface;
 use Phalcon\Translate\Adapter\Csv;
 use Phalcon\Translate\Exception;
 use Phalcon\Translate\InterpolatorFactory;
 use UnitTester;
+use function dataDir;
 
 class ConstructCest
 {
@@ -60,6 +62,38 @@ class ConstructCest
             new Exception('Parameter "content" is required'),
             function () {
                 new Csv(new InterpolatorFactory(), []);
+            }
+        );
+    }
+
+    /**
+     * Tests Phalcon\Translate\Adapter\Csv :: __construct() - Exception error loading file
+     *
+     * @param UnitTester $I
+     *
+     * @author Phalcon Team <team@phalcon.io>
+     * @since  2020-09-09
+     */
+    public function translateAdapterCsvErrorLoadingFile(UnitTester $I)
+    {
+        $I->wantToTest('Translate\Adapter\Csv - constructor error loading file throws exception');
+
+        $message = 'Error opening translation file "'
+            . dataDir('assets/translation/csv/en.csv"');
+        $I->expectThrowable(
+            new Exception($message),
+            function () {
+                $language = $this->getCsvConfig()['en'];
+                $translator = Stub::construct(
+                    Csv::class,
+                    [
+                        new InterpolatorFactory(),
+                        $language,
+                    ],
+                    [
+                        'phpFopen' => false,
+                    ]
+                );
             }
         );
     }
