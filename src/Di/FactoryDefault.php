@@ -13,9 +13,9 @@ declare(strict_types=1);
 
 namespace Phalcon\Di;
 
-//use Phalcon\Filter\FilterFactory;
 use Phalcon\Escaper\Escaper;
 use Phalcon\Events\Manager as EventsManager;
+use Phalcon\Filter\FilterFactory;
 
 /**
  * This is a variant of the standard Phalcon\Di. By default it automatically
@@ -32,9 +32,12 @@ class FactoryDefault extends Di
     {
         parent::__construct();
 
+        $filter = new FilterFactory();
+
         $this->services = [
             'escaper'       => new Service(Escaper::class, true),
             'eventsManager' => new Service(EventsManager::class, true),
+            'filter'        => new Service($filter->newInstance(), true),
         ];
 //        let filter = new FilterFactory();
 //
@@ -46,7 +49,6 @@ class FactoryDefault extends Di
 //            "dispatcher":         new Service("Phalcon\\Mvc\\Dispatcher", true),
 //            "flash":              new Service("Phalcon\\Flash\\Direct", true),
 //            "flashSession":       new Service("Phalcon\\Flash\\Session", true),
-//            "filter":             new Service(filter->newInstance(), true),
 //            "modelsManager":      new Service("Phalcon\\Mvc\\Model\\Manager", true),
 //            "modelsMetadata":     new Service("Phalcon\\Mvc\\Model\\MetaData\\Memory", true),
 //            "request":            new Service("Phalcon\\Http\\Request", true),
