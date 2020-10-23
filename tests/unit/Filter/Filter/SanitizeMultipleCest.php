@@ -26,8 +26,10 @@ class SanitizeMultipleCest
     /**
      * Tests sanitizing null value
      *
+     * @param UnitTester $I
+     *
      * @author Phalcon Team <team@phalcon.io>
-     * @since  2014-09-30
+     * @since  2020-09-09
      */
     public function filterFilterSanitizeNullValue(UnitTester $I)
     {
@@ -43,8 +45,10 @@ class SanitizeMultipleCest
     /**
      * Tests sanitizing string with filters
      *
+     * @param UnitTester $I
+     *
      * @author Phalcon Team <team@phalcon.io>
-     * @since  2014-09-30
+     * @since  2020-09-09
      */
     public function filterFilterSanitizeStringWithMultipleFilters(UnitTester $I)
     {
@@ -60,8 +64,10 @@ class SanitizeMultipleCest
     /**
      * Tests sanitizing array with filters
      *
+     * @param UnitTester $I
+     *
      * @author Phalcon Team <team@phalcon.io>
-     * @since  2014-09-30
+     * @since  2020-09-09
      */
     public function filterFilterSanitizeArray(UnitTester $I)
     {
@@ -77,8 +83,10 @@ class SanitizeMultipleCest
     /**
      * Tests sanitizing array with multiple filters
      *
+     * @param UnitTester $I
+     *
      * @author Phalcon Team <team@phalcon.io>
-     * @since  2014-09-30
+     * @since  2020-09-09
      */
     public function filterFilterSanitizeArrayWithMultipleFilters(UnitTester $I)
     {
@@ -94,8 +102,10 @@ class SanitizeMultipleCest
     /**
      * Tests sanitizing array with multiple filters and more parameters
      *
+     * @param UnitTester $I
+     *
      * @author Phalcon Team <team@phalcon.io>
-     * @since  2014-09-30
+     * @since  2020-09-09
      */
     public function filterFilterSanitizeWithMultipleFiltersMoreParameters(UnitTester $I)
     {
@@ -116,8 +126,10 @@ class SanitizeMultipleCest
     /**
      * Tests sanitizing array with multiple filters and one not existing
      *
+     * @param UnitTester $I
+     *
      * @author Phalcon Team <team@phalcon.io>
-     * @since  2020-02-22
+     * @since  2020-09-09
      */
     public function filterFilterSanitizeWithMultipleFiltersNotExisting(UnitTester $I)
     {
@@ -129,7 +141,6 @@ class SanitizeMultipleCest
             'trim',
             'something',
         ];
-        $expected = 'had a little lamb';
 
         $error = [];
         set_error_handler(

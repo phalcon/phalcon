@@ -45,10 +45,10 @@ class NewInstanceCest
     /**
      * Tests Phalcon\Filter\FilterFactory :: newInstance()
      *
-     * @param  UnitTester $I
+     * @param UnitTester $I
      *
      * @author Phalcon Team <team@phalcon.io>
-     * @since  2018-11-13
+     * @since  2020-09-09
      */
     public function filterFilterFactoryNewInstance(UnitTester $I)
     {
@@ -65,8 +65,8 @@ class NewInstanceCest
      * @param        Example $example
      * @dataProvider getData
      *
-     * @author       Phalcon Team <team@phalcon.io>
-     * @since        2018-11-13
+     * @author Phalcon Team <team@phalcon.io>
+     * @since  2020-09-09
      */
     public function filterFilterFactoryNewInstanceServices(UnitTester $I, Example $example)
     {

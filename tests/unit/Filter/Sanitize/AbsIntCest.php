@@ -23,9 +23,11 @@ class AbsIntCest
      * Tests Phalcon\Filter\Sanitize\AbsInt :: __invoke()
      *
      * @dataProvider getData
+     * @param UnitTester $I
+     * @param Example    $example
      *
-     * @author       Phalcon Team <team@phalcon.io>
-     * @since        2018-11-13
+     * @author Phalcon Team <team@phalcon.io>
+     * @since  2020-09-09
      */
     public function filterSanitizeAbsIntInvoke(UnitTester $I, Example $example)
     {
@@ -37,6 +39,9 @@ class AbsIntCest
         $I->assertEquals($example[1], $actual);
     }
 
+    /**
+     * @return array
+     */
     private function getData(): array
     {
         return [
