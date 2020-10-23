@@ -23,9 +23,11 @@ class EmailCest
      * Tests Phalcon\Filter\Sanitize\Email :: __invoke()
      *
      * @dataProvider getData
+     * @param UnitTester $I
+     * @param Example    $example
      *
-     * @author       Phalcon Team <team@phalcon.io>
-     * @since        2018-11-13
+     * @author Phalcon Team <team@phalcon.io>
+     * @since  2020-09-09
      */
     public function filterSanitizeEmailInvoke(UnitTester $I, Example $example)
     {
@@ -37,6 +39,9 @@ class EmailCest
         $I->assertEquals($example[1], $actual);
     }
 
+    /**
+     * @return \string[][]
+     */
     private function getData(): array
     {
         return [

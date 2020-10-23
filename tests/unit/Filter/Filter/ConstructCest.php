@@ -11,7 +11,7 @@
 
 declare(strict_types=1);
 
-namespace Phalcon\Tests\Unit\Filter\Locator;
+namespace Phalcon\Tests\Unit\Filter\Filter;
 
 use Phalcon\Filter\Filter;
 use Phalcon\Filter\Exception;
@@ -22,8 +22,10 @@ class ConstructCest
     /**
      * Tests Phalcon\Filter\Locator :: __construct() - empty
      *
+     * @param UnitTester $I
+     *
      * @author Phalcon Team <team@phalcon.io>
-     * @since  2019-01-19
+     * @since  2020-09-09
      */
     public function filterFilterConstruct(UnitTester $I)
     {

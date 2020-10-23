@@ -25,9 +25,11 @@ class FloatValCest
      * Tests Phalcon\Filter\Sanitize\FloatVal :: __invoke()
      *
      * @dataProvider getData
+     * @param UnitTester $I
+     * @param Example    $example
      *
-     * @author       Phalcon Team <team@phalcon.io>
-     * @since        2018-11-13
+     * @author Phalcon Team <team@phalcon.io>
+     * @since  2020-09-09
      */
     public function filterSanitizeFloatValInvoke(UnitTester $I, Example $example)
     {
@@ -43,8 +45,10 @@ class FloatValCest
      * Tests Phalcon\Filter\Sanitize\Email :: __invoke()
      * This is on its own to align the float values (fraction)
      *
-     * @author       Phalcon Team <team@phalcon.io>
-     * @since        2018-11-13
+     * @param UnitTester $I
+     *
+     * @author Phalcon Team <team@phalcon.io>
+     * @since  2020-09-09
      */
     public function filterSanitizeFloatValInvokeFloat(UnitTester $I)
     {
@@ -57,6 +61,9 @@ class FloatValCest
         $I->assertEquals($expected, $actual);
     }
 
+    /**
+     * @return array
+     */
     private function getData(): array
     {
         return [

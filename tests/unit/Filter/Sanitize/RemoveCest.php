@@ -23,9 +23,11 @@ class RemoveCest
      * Tests Phalcon\Filter\Sanitize\Remove :: __invoke()
      *
      * @dataProvider getData
+     * @param UnitTester $I
+     * @param Example    $example
      *
-     * @author       Phalcon Team <team@phalcon.io>
-     * @since        2018-11-13
+     * @author Phalcon Team <team@phalcon.io>
+     * @since  2020-09-09
      */
     public function filterSanitizeRemoveInvoke(UnitTester $I, Example $example)
     {
@@ -37,6 +39,9 @@ class RemoveCest
         $I->assertEquals($example[2], $actual);
     }
 
+    /**
+     * @return \string[][]
+     */
     private function getData(): array
     {
         return [

@@ -23,9 +23,11 @@ class StriptagsCest
      * Tests Phalcon\Filter\Sanitize\Striptags :: __invoke()
      *
      * @dataProvider getData
+     * @param UnitTester $I
+     * @param Example    $example
      *
-     * @author       Phalcon Team <team@phalcon.io>
-     * @since        2018-11-13
+     * @author Phalcon Team <team@phalcon.io>
+     * @since  2020-09-09
      */
     public function filterSanitizeStriptagsInvoke(UnitTester $I, Example $example)
     {
@@ -39,6 +41,9 @@ class StriptagsCest
         );
     }
 
+    /**
+     * @return \string[][]
+     */
     private function getData(): array
     {
         return [
