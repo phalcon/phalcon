@@ -16,7 +16,6 @@ namespace Phalcon\Translate\Adapter;
 use ArrayAccess;
 use Phalcon\Translate\Exception;
 use Phalcon\Translate\InterpolatorFactory;
-
 use function array_merge;
 use function bindtextdomain;
 use function call_user_func_array;
@@ -30,6 +29,7 @@ use function putenv;
 use function setlocale;
 use function textdomain;
 
+use function var_dump;
 use const LC_ALL;
 
 /**
@@ -52,8 +52,8 @@ use const LC_ALL;
  *
  * @property int          $category
  * @property string       $defaultDomain
- * @property string|array $directory;
- * @property string       $locale;
+ * @property string|array $directory
+ * @property string|false $locale
  */
 class Gettext extends AbstractAdapter implements ArrayAccess
 {
@@ -73,20 +73,20 @@ class Gettext extends AbstractAdapter implements ArrayAccess
     protected $directory;
 
     /**
-     * @var string
+     * @var string|false
      */
-    protected string $locale;
+    protected $locale;
 
     /**
      * Gettext constructor.
      *
      * @param InterpolatorFactory $interpolator
      * @param array               $options = [
-     *     'locale'        => '',
-     *     'defaultDomain' => '',
-     *     'directory'     => '',
-     *     'category'      => ''
-     * ]
+     *                                     'locale'        => '',
+     *                                     'defaultDomain' => '',
+     *                                     'directory'     => '',
+     *                                     'category'      => ''
+     *                                     ]
      *
      * @throws Exception
      */
@@ -144,9 +144,9 @@ class Gettext extends AbstractAdapter implements ArrayAccess
     }
 
     /**
-     * @return string
+     * @return string|false
      */
-    public function getLocale(): string
+    public function getLocale()
     {
         return $this->locale;
     }
@@ -172,7 +172,7 @@ class Gettext extends AbstractAdapter implements ArrayAccess
         string $domain = null
     ): string {
 
-        if (null !== $domain) {
+        if (null === $domain) {
             $translation = ngettext($msgid1, $msgid2, $count);
         } else {
             $translation = dngettext($domain, $msgid1, $msgid2, $count);
@@ -187,6 +187,7 @@ class Gettext extends AbstractAdapter implements ArrayAccess
      * ```php
      * $translator->query("你好 %name%！", ["name" => "Phalcon"]);
      * ```
+     *
      * @param string $index
      * @param array  $placeholders
      *
@@ -281,17 +282,17 @@ class Gettext extends AbstractAdapter implements ArrayAccess
      *
      * @param int    $category
      * @param string $locale
+     * @param mixed  ...$additional
      *
-     * @return false|mixed|string
+     * @return false|string
      */
     public function setLocale(int $category, string $locale)
     {
-        $this->locale = call_user_func_array(
+        $this->category = $category;
+        $this->locale   = call_user_func_array(
             'setlocale',
             func_get_args()
         );
-
-        $this->category = $category;
 
         putenv("LC_ALL=" . $this->locale);
         putenv("LANG=" . $this->locale);
