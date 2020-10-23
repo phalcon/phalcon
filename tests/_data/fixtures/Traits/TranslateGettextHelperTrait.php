@@ -14,22 +14,16 @@ declare(strict_types=1);
 namespace Phalcon\Tests\Fixtures\Traits;
 
 use Codeception\Example;
-use Phalcon\Translate\Adapter\Csv;
+use Phalcon\Translate\Adapter\Gettext;
+use Phalcon\Translate\Adapter\NativeArray;
 use Phalcon\Translate\Exception;
 use Phalcon\Translate\InterpolatorFactory;
 use UnitTester;
 
 use function sprintf;
 
-/**
- * Trait TranslateCsvHelperTrait
- *
- * @package Phalcon\Tests\Fixtures\Traits
- */
-trait TranslateCsvHelperTrait
+trait TranslateGettextHelperTrait
 {
-    protected string $function = '_';
-
     /**
      * @return string
      */
@@ -38,10 +32,10 @@ trait TranslateCsvHelperTrait
     /**
      * @return array
      */
-    abstract protected function getCsvConfig(): array;
+    abstract protected function getGettextConfig(): array;
 
     /**
-     * Tests Phalcon\Translate\Adapter\Csv :: query()
+     * Tests Phalcon\Translate\Adapter\Gettext :: query()
      *
      * @dataProvider getQueryProvider
      *
@@ -53,28 +47,27 @@ trait TranslateCsvHelperTrait
      * @author Phalcon Team <team@phalcon.io>
      * @since  2020-09-09
      */
-    public function translateAdapterCsvQuery(UnitTester $I, Example $data)
+    public function translateAdapterGettextQuery(UnitTester $I, Example $data)
     {
         $I->wantToTest(
             sprintf(
-                'Translate\Adapter\Csv - %s - %s',
-                $this->function,
+                'Translate\Adapter\Gettext - %s - %s',
+                $this->func(),
                 $data['language']
             )
         );
 
-        $language   = $this->getCsvConfig()[$data['code']];
-        $translator = new Csv(new InterpolatorFactory(), $language);
+        $language   = $this->getGettextConfig();
+        $translator = new Gettext(new InterpolatorFactory(), $language);
 
         foreach ($data['tests'] as $key => $expected) {
-            $actual = $translator->{$this->function}($key);
-
+            $actual = $translator->{$this->func()}($key);
             $I->assertEquals($expected, $actual);
         }
     }
 
     /**
-     * Tests Phalcon\Translate\Adapter\Csv :: query() -
+     * Tests Phalcon\Translate\Adapter\Gettext :: query() -
      * variable substitution in string with no variables
      *
      * @dataProvider getQueryProvider
@@ -87,34 +80,33 @@ trait TranslateCsvHelperTrait
      * @author Phalcon Team <team@phalcon.io>
      * @since  2020-09-09
      */
-    public function translateAdapterCsvVariableSubstitutionNoVariables(
+    public function translateAdapterGettextVariableSubstitutionNoVariables(
         UnitTester $I,
         Example $data
     ) {
         $I->wantToTest(
             sprintf(
-                'Translate\Adapter\Csv - variable substitution no variables - %s',
+                'Translate\Adapter\Gettext - variable substitution no variables - %s',
                 $data['language']
             )
         );
 
-        $language   = $this->getCsvConfig()[$data['code']];
-        $translator = new Csv(new InterpolatorFactory(), $language);
+        $language   = $this->getGettextConfig();
+        $translator = new Gettext(new InterpolatorFactory(), $language);
 
         foreach ($data['tests'] as $key => $expected) {
-            $actual = $translator->{$this->function}(
+            $actual = $translator->{$this->func()}(
                 $key,
                 [
                     'name' => 'my friend',
                 ]
             );
-
             $I->assertEquals($expected, $actual);
         }
     }
 
     /**
-     * Tests Phalcon\Translate\Adapter\Csv :: query() -
+     * Tests Phalcon\Translate\Adapter\Gettext :: query() -
      * variable substitution in string (one variable)
      *
      * @dataProvider getQueryOneVariable
@@ -127,28 +119,28 @@ trait TranslateCsvHelperTrait
      * @author Phalcon Team <team@phalcon.io>
      * @since  2020-09-09
      */
-    public function translateAdapterCsvVariableSubstitutionOneVariable(
+    public function translateAdapterGettextVariableSubstitutionOneVariable(
         UnitTester $I,
         Example $data
     ) {
         $I->wantToTest(
             sprintf(
-                'Translate\Adapter\Csv - variable substitution one variable - %s',
+                'Translate\Adapter\Gettext - variable substitution one variable - %s',
                 $data['language']
             )
         );
 
-        $language   = $this->getCsvConfig()[$data['code']];
-        $translator = new Csv(new InterpolatorFactory(), $language);
+        $language   = $this->getGettextConfig();
+        $translator = new Gettext(new InterpolatorFactory(), $language);
 
         foreach ($data['tests'] as $key => $expected) {
-            $actual = $translator->{$this->function}($key, ['name' => 'my friend']);
+            $actual = $translator->{$this->func()}($key, ['name' => 'my friend']);
             $I->assertEquals($expected, $actual);
         }
     }
 
     /**
-     * Tests Phalcon\Translate\Adapter\Csv :: query() -
+     * Tests Phalcon\Translate\Adapter\Gettext :: query() -
      * variable substitution in string (two variables)
      *
      * @dataProvider getQueryTwoVariables
@@ -161,34 +153,34 @@ trait TranslateCsvHelperTrait
      * @author Phalcon Team <team@phalcon.io>
      * @since  2020-09-09
      */
-    public function translateAdapterCsvVariableSubstitutionTwoVariable(
+    public function translateAdapterGettextVariableSubstitutionTwoVariable(
         UnitTester $I,
         Example $data
     ) {
         $I->wantToTest(
             sprintf(
-                'Translate\Adapter\Csv - variable substitution two variables - %s',
+                'Translate\Adapter\Gettext - variable substitution two variables - %s',
                 $data['language']
             )
         );
 
-        $language   = $this->getCsvConfig()[$data['code']];
-        $translator = new Csv(new InterpolatorFactory(), $language);
-        $vars       = [
+        $language   = $this->getGettextConfig();
+        $translator = new Gettext(new InterpolatorFactory(), $language);
+
+        $vars = [
             'song'   => 'Dust in the wind',
             'artist' => 'Kansas',
         ];
 
         foreach ($data['tests'] as $key => $expected) {
-            $actual = $translator->{$this->function}($key, $vars);
-
+            $actual = $translator->{$this->func()}($key, $vars);
             $I->assertEquals($expected, $actual);
         }
     }
 
     /**
-     * Tests Phalcon\Translate\Adapter\Csv :: query() - array access and UTF8
-     * strings
+     * Tests Phalcon\Translate\Adapter\Gettext :: query() - array access and
+     * UTF8 strings
      *
      * @param UnitTester $I
      *
@@ -199,16 +191,18 @@ trait TranslateCsvHelperTrait
      */
     public function testWithArrayAccessAndUTF8Strings(UnitTester $I)
     {
-        $language   = $this->getCsvConfig()['ru'];
-        $translator = new Csv(new InterpolatorFactory(), $language);
+        $language = $this->getGettextConfig();
+
+        $translator = new Gettext(new InterpolatorFactory(), $language);
 
         $vars = [
             'fname' => 'John',
             'lname' => 'Doe',
             'mname' => 'D.',
         ];
+
         $expected = 'Привет, John D. Doe!';
-        $actual   = $translator->{$this->function}('Hello %fname% %mname% %lname%!', $vars);
+        $actual   = $translator->{$this->func()}('Привет, %fname% %mname% %lname%!', $vars);
         $I->assertEquals($expected, $actual);
     }
 
@@ -225,23 +219,7 @@ trait TranslateCsvHelperTrait
                 'code'     => 'en',
                 'tests'    => [
                     'hi'  => 'Hello',
-                    'bye' => 'Good Bye',
-                ],
-            ],
-            [
-                'language' => 'Spanish',
-                'code'     => 'es',
-                'tests'    => [
-                    'hi'  => 'Hola',
-                    'bye' => 'Adiós',
-                ],
-            ],
-            [
-                'language' => 'French',
-                'code'     => 'fr',
-                'tests'    => [
-                    'hi'  => 'Bonjour',
-                    'bye' => 'Au revoir',
+                    'bye' => 'Bye',
                 ],
             ],
         ];
@@ -262,20 +240,6 @@ trait TranslateCsvHelperTrait
                     'hello-key' => 'Hello my friend',
                 ],
             ],
-            [
-                'language' => 'Spanish',
-                'code'     => 'es',
-                'tests'    => [
-                    'hello-key' => 'Hola my friend',
-                ],
-            ],
-            [
-                'language' => 'French',
-                'code'     => 'fr',
-                'tests'    => [
-                    'hello-key' => 'Bonjour my friend',
-                ],
-            ],
         ];
     }
 
@@ -291,21 +255,7 @@ trait TranslateCsvHelperTrait
                 'language' => 'English',
                 'code'     => 'en',
                 'tests'    => [
-                    'song-key' => 'This song is Dust in the wind (Kansas)',
-                ],
-            ],
-            [
-                'language' => 'Spanish',
-                'code'     => 'es',
-                'tests'    => [
-                    'song-key' => 'La canción es Dust in the wind (Kansas)',
-                ],
-            ],
-            [
-                'language' => 'French',
-                'code'     => 'fr',
-                'tests'    => [
-                    'song-key' => 'La chanson est Dust in the wind (Kansas)',
+                    'song-key' => 'The song is Dust in the wind (Kansas)',
                 ],
             ],
         ];
