@@ -16,6 +16,11 @@ namespace Phalcon\Tests\Unit\Translate\Adapter\NativeArray;
 use Phalcon\Tests\Fixtures\Traits\TranslateNativeArrayHelperTrait;
 use Phalcon\Tests\Fixtures\Traits\TranslateNativeArrayTrait;
 
+/**
+ * Class QueryCest
+ *
+ * @package Phalcon\Tests\Unit\Translate\Adapter\NativeArray
+ */
 class QueryCest
 {
     use TranslateNativeArrayTrait;
