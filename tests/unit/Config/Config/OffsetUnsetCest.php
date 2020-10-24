@@ -21,7 +21,7 @@ class OffsetUnsetCest
     use ConfigTrait;
 
     /**
-     * Tests Phalcon\Config :: offsetUnset()
+     * Tests Phalcon\Config\Config :: offsetUnset()
      *
      * @author Phalcon Team <team@phalcon.io>
      * @since  2019-06-19

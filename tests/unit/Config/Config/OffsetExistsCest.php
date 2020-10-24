@@ -21,7 +21,7 @@ class OffsetExistsCest
     use ConfigTrait;
 
     /**
-     * Tests Phalcon\Config :: offsetExists()
+     * Tests Phalcon\Config\Config :: offsetExists()
      *
      * @author Phalcon Team <team@phalcon.io>
      * @since  2019-06-19

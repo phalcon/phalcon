@@ -22,7 +22,7 @@ class OffsetGetCest
     use ConfigTrait;
 
     /**
-     * Tests Phalcon\Config :: offsetGet()
+     * Tests Phalcon\Config\Config :: offsetGet()
      *
      * @author Phalcon Team <team@phalcon.io>
      * @since  2019-06-19

@@ -22,6 +22,7 @@ use UnitTester;
 
 use function dataDir;
 use function hash;
+use function var_dump;
 
 class LoadCest
 {
@@ -147,7 +148,7 @@ class LoadCest
 
         $I->expectThrowable(
             new Exception(
-                'Config must be array or Phalcon\Config object'
+                'Config must be array or Phalcon\Config\Config object'
             ),
             function () {
                 $ini = (new ConfigFactory())->load(false);

@@ -14,3 +14,5 @@ if (!file_exists(cacheDir())) {
 if (!file_exists(logsDir())) {
     mkdir(logsDir());
 }
+
+loadDefined();

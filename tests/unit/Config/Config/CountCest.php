@@ -21,7 +21,7 @@ class CountCest
     use ConfigTrait;
 
     /**
-     * Tests Phalcon\Config :: count()
+     * Tests Phalcon\Config\Config :: count()
      *
      * @author Phalcon Team <team@phalcon.io>
      * @since  2019-06-19
