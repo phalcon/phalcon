@@ -21,6 +21,7 @@ use Phalcon\Storage\SerializerFactory;
 use Phalcon\Support\HelperFactory;
 use Phalcon\Tests\Fixtures\Traits\DiTrait;
 use SessionHandlerInterface;
+
 use function getOptionsLibmemcached;
 
 /**
