@@ -21,7 +21,7 @@ class GetCest
     use ConfigTrait;
 
     /**
-     * Tests Phalcon\Config :: __get()
+     * Tests Phalcon\Config\Config :: __get()
      *
      * @author Cameron Hall <me@chall.id.au>
      * @since  2019-06-17
@@ -37,7 +37,7 @@ class GetCest
     }
 
     /**
-     * Tests Phalcon\Config :: __get()
+     * Tests Phalcon\Config\Config :: __get()
      *
      * @author Cameron Hall <me@chall.id.au>
      * @since  2019-06-17

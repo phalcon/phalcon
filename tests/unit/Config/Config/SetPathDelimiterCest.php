@@ -21,7 +21,7 @@ class SetPathDelimiterCest
     use ConfigTrait;
 
     /**
-     * Tests Phalcon\Config :: setPathDelimiter()
+     * Tests Phalcon\Config\Config :: setPathDelimiter()
      *
      * @author Phalcon Team <team@phalcon.io>
      * @since  2019-06-19

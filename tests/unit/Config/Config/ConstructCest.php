@@ -21,7 +21,7 @@ class ConstructCest
     use ConfigTrait;
 
     /**
-     * Tests Phalcon\Config :: __construct()
+     * Tests Phalcon\Config\Config :: __construct()
      *
      * @author Phalcon Team <team@phalcon.io>
      * @since  2019-06-19

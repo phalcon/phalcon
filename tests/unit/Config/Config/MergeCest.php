@@ -22,7 +22,7 @@ class MergeCest
     use ConfigTrait;
 
     /**
-     * Tests Phalcon\Config :: merge()
+     * Tests Phalcon\Config\Config :: merge()
      *
      * @author Phalcon Team <team@phalcon.io>
      * @since  2019-02-15
@@ -40,7 +40,7 @@ class MergeCest
     }
 
     /**
-     * Tests Phalcon\Config :: merge()
+     * Tests Phalcon\Config\Config :: merge()
      *
      * @author Phalcon Team <team@phalcon.io>
      * @since  2019-02-15
@@ -419,7 +419,7 @@ class MergeCest
     }
 
     /**
-     * Tests Phalcon\Config :: merge()
+     * Tests Phalcon\Config\Config :: merge()
      *
      * @author Cameron Hall <me@chall.id.au>
      * @link   https://github.com/phalcon/cphalcon/issues/13201
@@ -494,7 +494,7 @@ class MergeCest
     }
 
     /**
-     * Tests Phalcon\Config :: merge()
+     * Tests Phalcon\Config\Config :: merge()
      *
      * @author Cameron Hall <me@chall.id.au>
      * @link   https://github.com/phalcon/cphalcon/issues/13768
