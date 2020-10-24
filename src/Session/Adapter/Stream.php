@@ -15,6 +15,7 @@ namespace Phalcon\Session\Adapter;
 
 use Phalcon\Session\Exception;
 use Phalcon\Support\Traits\PhpFileTrait;
+use Phalcon\Support\Traits\PhpFunctionTrait;
 
 use function file_exists;
 use function rtrim;
@@ -48,6 +49,7 @@ use const DIRECTORY_SEPARATOR;
 class Stream extends Noop
 {
     use PhpFileTrait;
+    use PhpFunctionTrait;
 
     /**
      * Session options
