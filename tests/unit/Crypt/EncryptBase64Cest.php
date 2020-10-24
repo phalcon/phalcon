@@ -15,6 +15,7 @@ namespace Phalcon\Tests\Unit\Crypt;
 
 use Phalcon\Crypt\Crypt;
 use UnitTester;
+
 use function md5;
 use function substr;
 use function uniqid;
@@ -102,7 +103,7 @@ class EncryptBase64Cest
         $crypt = new Crypt();
 
         $encrypted = $crypt->encryptBase64($source, $key, true);
-        $decrypted = $crypt->decryptBase64($encrypted, $key,true);
+        $decrypted = $crypt->decryptBase64($encrypted, $key, true);
         $I->assertEquals($source, $decrypted);
 
 //                $actual = rtrim(
