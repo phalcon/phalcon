@@ -13,6 +13,18 @@ declare(strict_types=1);
 
 namespace Phalcon\Crypt;
 
+use Phalcon\Crypt\Padding\PadAnsi;
+use Phalcon\Crypt\Padding\PadIso10126;
+use Phalcon\Crypt\Padding\PadIsoIek;
+use Phalcon\Crypt\Padding\PadPkcs7;
+use Phalcon\Crypt\Padding\PadSpace;
+use Phalcon\Crypt\Padding\PadZero;
+use Phalcon\Crypt\Padding\UnpadAnsi;
+use Phalcon\Crypt\Padding\UnpadIso10126;
+use Phalcon\Crypt\Padding\UnpadIsoIek;
+use Phalcon\Crypt\Padding\UnpadPkcs7;
+use Phalcon\Crypt\Padding\UnpadSpace;
+use Phalcon\Crypt\Padding\UnpadZero;
 use Phalcon\Crypt\Traits\CryptGettersTrait;
 use Phalcon\Support\Str\Traits\EndsWithTrait;
 use Phalcon\Support\Str\Traits\StartsWithTrait;
@@ -21,17 +33,12 @@ use Phalcon\Support\Traits\PhpFunctionTrait;
 
 use function base64_decode;
 use function base64_encode;
-use function chr;
 use function hash;
 use function hash_hmac;
 use function openssl_get_cipher_methods;
 use function openssl_random_pseudo_bytes;
-use function ord;
-use function rand;
-use function range;
 use function rtrim;
 use function sprintf;
-use function str_repeat;
 use function strlen;
 use function substr;
 
@@ -488,50 +495,27 @@ class Crypt implements CryptInterface
                 throw new Exception('Block size is bigger than 256');
             }
 
-            switch ($paddingType) {
-                case self::PADDING_ANSI_X_923:
-                    $padding = str_repeat(chr(0), $paddingSize - 1) . chr($paddingSize);
-                    break;
+            $map = [
+                self::PADDING_ANSI_X_923     => PadAnsi::class,
+                self::PADDING_PKCS7          => PadPkcs7::class,
+                self::PADDING_ISO_10126      => PadIso10126::class,
+                self::PADDING_ISO_IEC_7816_4 => PadIsoIek::class,
+                self::PADDING_ZERO           => PadZero::class,
+                self::PADDING_SPACE          => PadSpace::class,
+            ];
 
-                case self::PADDING_PKCS7:
-                    $padding = str_repeat(chr($paddingSize), $paddingSize);
-                    break;
-
-                case self::PADDING_ISO_10126:
-                    $padding = '';
-                    $range   = range(0, $paddingSize - 2);
-                    foreach ($range as $item) {
-                        $padding .= chr(rand());
-                    }
-
-                    $padding .= chr($paddingSize);
-
-                    break;
-
-                case self::PADDING_ISO_IEC_7816_4:
-                    $padding = chr(0x80) . str_repeat(chr(0), $paddingSize - 1);
-                    break;
-
-                case self::PADDING_ZERO:
-                    $padding = str_repeat(chr(0), $paddingSize);
-                    break;
-
-                case self::PADDING_SPACE:
-                    $padding = str_repeat(' ', $paddingSize);
-                    break;
-
-                default:
-                    $paddingSize = 0;
-                    break;
+            if (true === isset($map[$paddingType])) {
+                $definition = $map[$paddingType];
+                $padding    = (new $definition())($paddingSize);
             }
         }
 
-        if (!$paddingSize) {
+        if (0 === $paddingSize) {
             return $input;
         }
 
         if ($paddingSize > $blockSize) {
-            throw new Exception("Invalid padding size");
+            throw new Exception('Invalid padding size');
         }
 
         return $input . substr($padding, 0, $paddingSize);
@@ -563,89 +547,34 @@ class Crypt implements CryptInterface
             ($length % $blockSize == 0) &&
             ('cbc' === $mode || 'ecb' === $mode)
         ) {
-            switch ($paddingType) {
-                case self::PADDING_ANSI_X_923:
-                    $last = substr($input, $length - 1, 1);
-                    $ord  = (int) ord($last);
+            $map = [
+                self::PADDING_ANSI_X_923     => UnpadAnsi::class,
+                self::PADDING_PKCS7          => UnpadPkcs7::class,
+                self::PADDING_ISO_10126      => UnpadIso10126::class,
+                self::PADDING_ISO_IEC_7816_4 => UnpadIsoIek::class,
+                self::PADDING_ZERO           => UnpadZero::class,
+                self::PADDING_SPACE          => UnpadSpace::class,
+            ];
 
-                    if ($ord <= $blockSize) {
-                        $paddingSize = $ord;
-                        $padding     = str_repeat(chr(0), $paddingSize - 1) . $last;
-
-                        if (substr($input, $length - $paddingSize) != $padding) {
-                            $paddingSize = 0;
-                        }
-                    }
-                    break;
-
-                case self::PADDING_PKCS7:
-                    $last = substr($input, $length - 1, 1);
-                    $ord  = (int) ord($last);
-
-                    if ($ord <= $blockSize) {
-                        $paddingSize = $ord;
-                        $padding     = str_repeat(chr($paddingSize), $paddingSize);
-
-                        if (substr($input, $length - $paddingSize) != $padding) {
-                            $paddingSize = 0;
-                        }
-                    }
-                    break;
-
-                case self::PADDING_ISO_10126:
-                    $last        = substr($input, $length - 1, 1);
-                    $paddingSize = (int) ord($last);
-                    break;
-
-                case self::PADDING_ISO_IEC_7816_4:
-                    $counter = $length - 1;
-
-                    while ($counter > 0 && $input[$counter] == 0x00 && $paddingSize < $blockSize) {
-                        $paddingSize++;
-                        $counter--;
-                    }
-
-                    if ($input[$counter] == 0x80) {
-                        $paddingSize++;
-                    } else {
-                        $paddingSize = 0;
-                    }
-                    break;
-
-                case self::PADDING_ZERO:
-                    $counter = $length - 1;
-
-                    while ($counter >= 0 && $input[$counter] == 0x00 && $paddingSize <= $blockSize) {
-                        $paddingSize++;
-                        $counter--;
-                    }
-                    break;
-
-                case self::PADDING_SPACE:
-                    $counter = $length - 1;
-
-                    while ($counter >= 0 && $input[$counter] == 0x20 && $paddingSize <= $blockSize) {
-                        $paddingSize++;
-                        $counter--;
-                    }
-                    break;
-
-                default:
-                    break;
+            if (true === isset($map[$paddingType])) {
+                $definition  = $map[$paddingType];
+                $paddingSize = (new $definition())($input, $blockSize);
             }
 
-            if ($paddingSize && $paddingSize <= $blockSize) {
-                if ($paddingSize < $length) {
-                    return substr($input, 0, $length - $paddingSize);
+            if ($paddingSize > 0) {
+                if ($paddingSize <= $blockSize) {
+                    if ($paddingSize < $length) {
+                        return substr($input, 0, $length - $paddingSize);
+                    }
+
+                    return '';
                 }
 
-                return '';
-            } else {
                 $paddingSize = 0;
             }
         }
 
-        if (!$paddingSize) {
+        if (0 === $paddingSize) {
             return $input;
         }
     }
