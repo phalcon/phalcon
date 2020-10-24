@@ -13,6 +13,7 @@ declare(strict_types=1);
 
 namespace Phalcon\Crypt;
 
+use Phalcon\Crypt\Traits\CryptGettersTrait;
 use Phalcon\Support\Str\Traits\EndsWithTrait;
 use Phalcon\Support\Str\Traits\StartsWithTrait;
 use Phalcon\Support\Str\Traits\UpperTrait;
@@ -21,14 +22,8 @@ use Phalcon\Support\Traits\PhpFunctionTrait;
 use function base64_decode;
 use function base64_encode;
 use function chr;
-use function function_exists;
 use function hash;
-use function hash_algos;
 use function hash_hmac;
-use function hash_hmac_algos;
-use function openssl_cipher_iv_length;
-use function openssl_decrypt;
-use function openssl_encrypt;
 use function openssl_get_cipher_methods;
 use function openssl_random_pseudo_bytes;
 use function ord;
@@ -36,14 +31,9 @@ use function rand;
 use function range;
 use function rtrim;
 use function sprintf;
-use function str_ireplace;
 use function str_repeat;
 use function strlen;
-use function strrpos;
-use function strtolower;
 use function substr;
-
-use const OPENSSL_RAW_DATA;
 
 /**
  * Provides encryption capabilities to Phalcon applications.
@@ -57,9 +47,9 @@ use const OPENSSL_RAW_DATA;
  *
  * $key  =
  * "T4\xb1\x8d\xa9\x98\x05\\\x8c\xbe\x1d\x07&[\x99\x18\xa4~Lc1\xbeW\xb3";
- * $text = "The message to be encrypted";
+ * $input = "The message to be encrypted";
  *
- * $encrypted = $crypt->encrypt($text, $key);
+ * $encrypted = $crypt->encrypt($input, $key);
  *
  * echo $crypt->decrypt($encrypted, $key);
  * ```
@@ -77,10 +67,11 @@ use const OPENSSL_RAW_DATA;
  */
 class Crypt implements CryptInterface
 {
-    use PhpFunctionTrait;
+    use CryptGettersTrait;
     use EndsWithTrait;
-    use UpperTrait;
+    use PhpFunctionTrait;
     use StartsWithTrait;
+    use UpperTrait;
 
     public const PADDING_ANSI_X_923     = 1;
     public const PADDING_DEFAULT        = 0;
@@ -89,64 +80,6 @@ class Crypt implements CryptInterface
     public const PADDING_PKCS7          = 2;
     public const PADDING_SPACE          = 6;
     public const PADDING_ZERO           = 5;
-
-    /**
-     * @var string
-     */
-    protected string $authTag = '';
-
-    /**
-     * @var string
-     */
-    protected string $authData = '';
-
-    /**
-     * @var int
-     */
-    protected int $authTagLength = 16;
-
-    /**
-     * @var string
-     */
-    protected string $key = '';
-
-    /**
-     * @var int
-     */
-    protected int $padding = 0;
-
-    /**
-     * @var string
-     */
-    protected string $cipher = 'aes-256-cfb';
-
-    /**
-     * Available cipher methods.
-     *
-     * @var array
-     */
-    protected array $availableCiphers = [];
-
-    /**
-     * The cipher iv length.
-     *
-     * @var int
-     */
-    protected int $ivLength = 16;
-
-    /**
-     * The name of hashing algorithm.
-     *
-     * @var string
-     */
-    protected string $hashAlgo = 'sha256';
-
-    /**
-     * Whether calculating message digest enabled or not.
-     *
-     * @var bool
-     */
-    protected bool $useSigning = true;
 
     /**
      * Crypt constructor.
@@ -176,14 +109,14 @@ class Crypt implements CryptInterface
      * );
      * ```
      *
-     * @param string      $text
+     * @param string      $input
      * @param string|null $key
      *
      * @return string
      * @throws Exception
      * @throws Mismatch
      */
-    public function decrypt(string $text, string $key = null): string
+    public function decrypt(string $input, string $key = null): string
     {
         $decryptKey = (true === empty($key)) ? $this->key : $key;
 
@@ -191,117 +124,59 @@ class Crypt implements CryptInterface
             throw new Exception('Decryption key cannot be empty');
         }
 
-        $mode = strtolower(
-            substr(
-                $this->cipher,
-                strrpos($this->cipher, "-") - strlen($this->cipher)
-            )
-        );
-
         $this->checkCipherIsAvailable($this->cipher, 'cipher');
-
-        if ($this->ivLength > 0) {
-            $blockSize = $this->ivLength;
-        } else {
-            $blockSize = $this->getIvLength(
-                str_ireplace('-' . $mode, '', $this->cipher)
-            );
-        }
-
-        $iv = mb_substr($text, 0, $this->ivLength, '8bit');
+        $mode      = $this->getMode();
+        $blockSize = $this->getBlockSize($mode);
+        $iv        = mb_substr($input, 0, $this->ivLength, '8bit');
 
         if (true === $this->useSigning) {
-            $hashAlgo   = $this->getHashAlgo();
-            $hashLength = strlen(hash($hashAlgo, '', true));
-            $hash       = mb_substr($text, $this->ivLength, $hashLength, '8bit');
-            $ciphertext = mb_substr($text, $this->ivLength + $hashLength, null, '8bit');
+            $hashAlgorithm = $this->getHashAlgo();
+            $hashLength    = strlen(hash($hashAlgorithm, '', true));
+            $hash          = mb_substr($input, $this->ivLength, $hashLength, '8bit');
+            $ciphertext    = mb_substr($input, $this->ivLength + $hashLength, null, '8bit');
 
-            if (
-                ('-gcm' === $mode || '-ccm' === $mode) &&
-                true !== empty($this->authData)
-            ) {
-                $decrypted = openssl_decrypt(
-                    $ciphertext,
-                    $this->cipher,
-                    $decryptKey,
-                    OPENSSL_RAW_DATA,
-                    $iv,
-                    $this->authTag,
-                    $this->authData
-                );
-            } else {
-                $decrypted = openssl_decrypt(
-                    $ciphertext,
-                    $this->cipher,
-                    $decryptKey,
-                    OPENSSL_RAW_DATA,
-                    $iv
-                );
-            }
+            $decrypted = $this->decryptGcmCcmAuth(
+                $mode,
+                $ciphertext,
+                $decryptKey,
+                $iv
+            );
 
-            if ('-cbc-' === $mode || '-ecb' === $mode) {
-                $decrypted = $this->cryptUnpadText(
-                    $decrypted,
-                    $mode,
-                    $blockSize,
-                    $this->padding
-                );
-            }
+            $decrypted = $this->decryptCbcEcb(
+                $mode,
+                $blockSize,
+                $decrypted
+            );
 
             /**
              * Checks on the decrypted's message digest using the HMAC method.
              */
-            if ($hash !== hash_hmac($hashAlgo, $decrypted, $decryptKey, true)) {
+            if ($hash !== hash_hmac($hashAlgorithm, $decrypted, $decryptKey, true)) {
                 throw new Mismatch('Hash does not match.');
             }
 
             return $decrypted;
         }
 
-        $ciphertext = mb_substr($text, $this->ivLength, null, '8bit');
+        $ciphertext = mb_substr($input, $this->ivLength, null, '8bit');
+        $decrypted  = $this->decryptGcmCcmAuth(
+            $mode,
+            $ciphertext,
+            $decryptKey,
+            $iv
+        );
 
-        if (
-            ('-gcm' === $mode || '-ccm' === $mode) &&
-            true !== empty($this->authData)
-        ) {
-            $decrypted = openssl_decrypt(
-                $ciphertext,
-                $this->cipher,
-                $decryptKey,
-                OPENSSL_RAW_DATA,
-                $iv,
-                $this->authTag,
-                $this->authData
-            );
-        } else {
-            $decrypted = openssl_decrypt(
-                $ciphertext,
-                $this->cipher,
-                $decryptKey,
-                OPENSSL_RAW_DATA,
-                $iv
-            );
-        }
-
-        if ('-cbc' === $mode || '-ecb' === $mode) {
-            $decrypted = $this->cryptUnpadText(
-                $decrypted,
-                $mode,
-                $blockSize,
-                $this->padding
-            );
-        }
-
-        return $decrypted;
+        return $this->decryptCbcEcb(
+            $mode,
+            $blockSize,
+            $decrypted
+        );
     }
 
     /**
      * Decrypt a text that is coded as a base64 string.
      *
-     * @throws \Phalcon\Crypt\Mismatch
-     */
-    /**
-     * @param string     $text
+     * @param string     $input
      * @param mixed|null $key
      * @param bool       $safe
      *
@@ -310,17 +185,17 @@ class Crypt implements CryptInterface
      * @throws Mismatch
      */
     public function decryptBase64(
-        string $text,
+        string $input,
         $key = null,
         bool $safe = false
     ): string {
         if (true === $safe) {
-            $text = strtr($text, '-_', '+/')
-                . substr('===', (strlen($text) + 3) % 4);
+            $input = strtr($input, '-_', '+/')
+                . substr('===', (strlen($input) + 3) % 4);
         }
 
         return $this->decrypt(
-            base64_decode($text),
+            base64_decode($input),
             $key
         );
     }
@@ -335,13 +210,13 @@ class Crypt implements CryptInterface
      * );
      * ```
      *
-     * @param string      $text
+     * @param string      $input
      * @param string|null $key
      *
      * @return string
      * @throws Exception
      */
-    public function encrypt(string $text, string $key = null): string
+    public function encrypt(string $input, string $key = null): string
     {
         $encryptKey = (true === empty($key)) ? $this->key : $key;
 
@@ -349,60 +224,17 @@ class Crypt implements CryptInterface
             throw new Exception('Encryption key cannot be empty');
         }
 
-        $mode = strtolower(
-            substr(
-                $this->cipher,
-                strrpos($this->cipher, '-') - strlen($this->cipher)
-            )
-        );
-
         $this->checkCipherIsAvailable($this->cipher, 'cipher');
-        ;
-
-        if ($this->ivLength > 0) {
-            $blockSize = $this->ivLength;
-        } else {
-            $blockSize = $this->getIvLength(
-                str_ireplace('-' . $mode, '', $this->cipher)
-            );
-        }
-
-        $iv          = openssl_random_pseudo_bytes($this->ivLength);
-        $paddingType = $this->padding;
-
-        if (0 !== $paddingType && ('-cbc' === $mode || '-ecb' === $mode)) {
-            $padded = $this->cryptPadText($text, $mode, $blockSize, $paddingType);
-        } else {
-            $padded = $text;
-        }
+        $mode      = $this->getMode();
+        $blockSize = $this->getBlockSize($mode);
+        $iv        = openssl_random_pseudo_bytes($this->ivLength);
+        $padded    = $this->encryptGetPadded($mode, $input, $blockSize);
 
         /**
          * If the mode is "gcm" or "ccm" and auth data has been passed call it
          * with that data
          */
-        if (
-            ('-gcm' === $mode || '-ccm' === $mode) &&
-            true !== empty($this->authData)
-        ) {
-            $encrypted = openssl_encrypt(
-                $padded,
-                $this->cipher,
-                $encryptKey,
-                OPENSSL_RAW_DATA,
-                $iv,
-                $this->authTag,
-                $this->authData,
-                $this->authTagLength
-            );
-        } else {
-            $encrypted = openssl_encrypt(
-                $padded,
-                $this->cipher,
-                $encryptKey,
-                OPENSSL_RAW_DATA,
-                $iv
-            );
-        }
+        $encrypted = $this->encryptGcmCcm($mode, $padded, $encryptKey, $iv);
 
         if (true === $this->useSigning) {
             $digest = hash_hmac(
@@ -421,7 +253,7 @@ class Crypt implements CryptInterface
     /**
      * Encrypts a text returning the result as a base64 string.
      *
-     * @param string     $text
+     * @param string     $input
      * @param mixed|null $key
      * @param bool       $safe
      *
@@ -429,7 +261,7 @@ class Crypt implements CryptInterface
      * @throws Exception
      */
     public function encryptBase64(
-        string $text,
+        string $input,
         $key = null,
         bool $safe = false
     ): string {
@@ -437,7 +269,7 @@ class Crypt implements CryptInterface
             return rtrim(
                 strtr(
                     base64_encode(
-                        $this->encrypt($text, $key)
+                        $this->encrypt($input, $key)
                     ),
                     '+/',
                     '-_'
@@ -446,41 +278,7 @@ class Crypt implements CryptInterface
             );
         }
 
-        return base64_encode($this->encrypt($text, $key));
-    }
-
-    /**
-     * Returns a list of available ciphers.
-     *
-     * @return array
-     */
-    public function getAvailableCiphers(): array
-    {
-        return $this->availableCiphers;
-    }
-
-    /**
-     * @return string
-     */
-    public function getAuthTag(): string
-    {
-        return $this->authTag;
-    }
-
-    /**
-     * @return string
-     */
-    public function getAuthData(): string
-    {
-        return $this->authData;
-    }
-
-    /**
-     * @return int
-     */
-    public function getAuthTagLength(): int
-    {
-        return $this->authTagLength;
+        return base64_encode($this->encrypt($input, $key));
     }
 
     /**
@@ -504,36 +302,6 @@ class Crypt implements CryptInterface
         }
 
         return $available;
-    }
-
-    /**
-     * Returns the current cipher
-     *
-     * @return string
-     */
-    public function getCipher(): string
-    {
-        return $this->cipher;
-    }
-
-    /**
-     * Get the name of hashing algorithm.
-     *
-     * @return string
-     */
-    public function getHashAlgo(): string
-    {
-        return $this->hashAlgo;
-    }
-
-    /**
-     * Returns the encryption key
-     *
-     * @return string
-     */
-    public function getKey(): string
-    {
-        return $this->key;
     }
 
     /**
@@ -669,18 +437,6 @@ class Crypt implements CryptInterface
 
     /**
      * Initialize available cipher algorithms.
-     *
-     * @param string $cipher
-     *
-     * @return int
-     */
-    protected function getIvLength(string $cipher): int
-    {
-        return openssl_cipher_iv_length($cipher);
-    }
-
-    /**
-     * Initialize available cipher algorithms.
      */
     protected function initializeAvailableCiphers(): void
     {
@@ -710,7 +466,7 @@ class Crypt implements CryptInterface
      * Pads texts before encryption. See
      * [cryptopad](http://www.di-mgt.com.au/cryptopad.html)
      *
-     * @param string $text
+     * @param string $input
      * @param string $mode
      * @param int    $blockSize
      * @param int    $paddingType
@@ -718,7 +474,7 @@ class Crypt implements CryptInterface
      * @return string
      */
     protected function cryptPadText(
-        string $text,
+        string $input,
         string $mode,
         int $blockSize,
         int $paddingType
@@ -726,7 +482,7 @@ class Crypt implements CryptInterface
         $padding     = null;
         $paddingSize = 0;
         if ('cbc' === $mode || 'ecb' === $mode) {
-            $paddingSize = $blockSize - (strlen($text) % $blockSize);
+            $paddingSize = $blockSize - (strlen($input) % $blockSize);
 
             if ($paddingSize >= 256) {
                 throw new Exception('Block size is bigger than 256');
@@ -771,14 +527,14 @@ class Crypt implements CryptInterface
         }
 
         if (!$paddingSize) {
-            return $text;
+            return $input;
         }
 
         if ($paddingSize > $blockSize) {
             throw new Exception("Invalid padding size");
         }
 
-        return $text . substr($padding, 0, $paddingSize);
+        return $input . substr($padding, 0, $paddingSize);
     }
 
     /**
@@ -787,12 +543,7 @@ class Crypt implements CryptInterface
      * If the function detects that the text was not padded, it will return it
      * unmodified.
      *
-     * @param string $text
-     * @param string $mode
-     * @param int    $blockSize
-     * @param int    $paddingType
-     *
-     * @param string $text
+     * @param string $input
      * @param string $mode
      * @param int    $blockSize
      * @param int    $paddingType
@@ -800,13 +551,13 @@ class Crypt implements CryptInterface
      * @return false|string
      */
     protected function cryptUnpadText(
-        string $text,
+        string $input,
         string $mode,
         int $blockSize,
         int $paddingType
     ) {
         $paddingSize = 0;
-        $length      = strlen($text);
+        $length      = strlen($input);
         if (
             $length > 0 &&
             ($length % $blockSize == 0) &&
@@ -814,47 +565,47 @@ class Crypt implements CryptInterface
         ) {
             switch ($paddingType) {
                 case self::PADDING_ANSI_X_923:
-                    $last = substr($text, $length - 1, 1);
+                    $last = substr($input, $length - 1, 1);
                     $ord  = (int) ord($last);
 
                     if ($ord <= $blockSize) {
                         $paddingSize = $ord;
                         $padding     = str_repeat(chr(0), $paddingSize - 1) . $last;
 
-                        if (substr($text, $length - $paddingSize) != $padding) {
+                        if (substr($input, $length - $paddingSize) != $padding) {
                             $paddingSize = 0;
                         }
                     }
                     break;
 
                 case self::PADDING_PKCS7:
-                    $last = substr($text, $length - 1, 1);
+                    $last = substr($input, $length - 1, 1);
                     $ord  = (int) ord($last);
 
                     if ($ord <= $blockSize) {
                         $paddingSize = $ord;
                         $padding     = str_repeat(chr($paddingSize), $paddingSize);
 
-                        if (substr($text, $length - $paddingSize) != $padding) {
+                        if (substr($input, $length - $paddingSize) != $padding) {
                             $paddingSize = 0;
                         }
                     }
                     break;
 
                 case self::PADDING_ISO_10126:
-                    $last        = substr($text, $length - 1, 1);
+                    $last        = substr($input, $length - 1, 1);
                     $paddingSize = (int) ord($last);
                     break;
 
                 case self::PADDING_ISO_IEC_7816_4:
                     $counter = $length - 1;
 
-                    while ($counter > 0 && $text[$counter] == 0x00 && $paddingSize < $blockSize) {
+                    while ($counter > 0 && $input[$counter] == 0x00 && $paddingSize < $blockSize) {
                         $paddingSize++;
                         $counter--;
                     }
 
-                    if ($text[$counter] == 0x80) {
+                    if ($input[$counter] == 0x80) {
                         $paddingSize++;
                     } else {
                         $paddingSize = 0;
@@ -864,7 +615,7 @@ class Crypt implements CryptInterface
                 case self::PADDING_ZERO:
                     $counter = $length - 1;
 
-                    while ($counter >= 0 && $text[$counter] == 0x00 && $paddingSize <= $blockSize) {
+                    while ($counter >= 0 && $input[$counter] == 0x00 && $paddingSize <= $blockSize) {
                         $paddingSize++;
                         $counter--;
                     }
@@ -873,7 +624,7 @@ class Crypt implements CryptInterface
                 case self::PADDING_SPACE:
                     $counter = $length - 1;
 
-                    while ($counter >= 0 && $text[$counter] == 0x20 && $paddingSize <= $blockSize) {
+                    while ($counter >= 0 && $input[$counter] == 0x20 && $paddingSize <= $blockSize) {
                         $paddingSize++;
                         $counter--;
                     }
@@ -885,7 +636,7 @@ class Crypt implements CryptInterface
 
             if ($paddingSize && $paddingSize <= $blockSize) {
                 if ($paddingSize < $length) {
-                    return substr($text, 0, $length - $paddingSize);
+                    return substr($input, 0, $length - $paddingSize);
                 }
 
                 return '';
@@ -895,7 +646,7 @@ class Crypt implements CryptInterface
         }
 
         if (!$paddingSize) {
-            return $text;
+            return $input;
         }
     }
 
