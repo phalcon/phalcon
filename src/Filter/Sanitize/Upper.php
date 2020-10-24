@@ -25,7 +25,9 @@ use const MB_CASE_UPPER;
 class Upper
 {
     /**
-     * @var string $input The text to sanitize
+     * @param string $input The text to sanitize
+     *
+     * @return false|string|string[]
      */
     public function __invoke(string $input)
     {
