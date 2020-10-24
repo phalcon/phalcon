@@ -22,11 +22,11 @@ use function count;
 use function is_array;
 use function is_numeric;
 use function is_string;
-use function mb_strpos;
-use function mb_strtolower;
-use function mb_substr;
 use function parse_ini_file;
 use function preg_match;
+use function strpos;
+use function strtolower;
+use function substr;
 
 /**
  * Reads ini files and converts them to Phalcon\Config objects.
@@ -142,7 +142,7 @@ class Ini extends Config
 
         // Decode true
         $ini      = (string)$ini;
-        $lowerIni = mb_strtolower($ini);
+        $lowerIni = strtolower($ini);
 
         switch ($lowerIni) {
             case 'true':
@@ -180,7 +180,7 @@ class Ini extends Config
     protected function parseIniString(string $path, $value): array
     {
         $value    = $this->cast($value);
-        $position = mb_strpos($path, '.');
+        $position = strpos($path, '.');
 
         if (false === $position) {
             return [
@@ -188,8 +188,8 @@ class Ini extends Config
             ];
         }
 
-        $key  = mb_substr($path, 0, $position);
-        $path = mb_substr($path, $position + 1);
+        $key  = substr($path, 0, $position);
+        $path = substr($path, $position + 1);
 
         return [
             $key => $this->parseIniString($path, $value)

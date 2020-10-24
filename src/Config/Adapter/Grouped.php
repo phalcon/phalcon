@@ -18,7 +18,6 @@ use Phalcon\Config\ConfigFactory;
 use Phalcon\Config\ConfigInterface;
 use Phalcon\Config\Exception;
 
-use function is_array;
 use function is_string;
 use function is_object;
 
@@ -111,7 +110,7 @@ class Grouped extends Config
                 $configInstance['adapter'] = $defaultAdapter;
             }
 
-            if (is_array($configInstance['adapter'])) {
+            if ('array' === $configInstance['adapter']) {
                 if (false === isset($configInstance['config'])) {
                     throw new Exception(
                         "To use 'array' adapter you have to specify " .

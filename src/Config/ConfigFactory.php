@@ -18,7 +18,6 @@ use Phalcon\Config\Adapter\Ini;
 use Phalcon\Config\Adapter\Json;
 use Phalcon\Config\Adapter\Php;
 use Phalcon\Config\Adapter\Yaml;
-use Phalcon\Support\Arr\Get;
 use Phalcon\Support\Exception as SupportException;
 use Phalcon\Support\Traits\FactoryTrait;
 
@@ -74,7 +73,7 @@ class ConfigFactory
      */
     public function load($config): ConfigInterface
     {
-        if (is_string($config)) {
+        if (true === is_string($config)) {
             $oldConfig = $config;
             $extension = pathinfo($config, PATHINFO_EXTENSION);
 
@@ -120,12 +119,10 @@ class ConfigFactory
             $first .= '.' . lcfirst($adapter);
         }
 
-        $getHelper = new Get();
-
         if ('ini' === $adapter) {
-            $second = $getHelper($config, 'mode', 1);
+            $second = $config['mode'] ?? 1;
         } elseif ('yaml' === $adapter) {
-            $second = $getHelper($config, 'callbacks', []);
+            $second = $config['callbacks'] ?? [];
         }
 
         return $this->newInstance($adapter, $first, $second);
