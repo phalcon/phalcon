@@ -13,7 +13,9 @@ declare(strict_types=1);
 
 namespace Phalcon\Tests\Unit\Crypt;
 
+use Codeception\Stub;
 use Phalcon\Crypt\Crypt;
+use Phalcon\Crypt\Exception;
 use UnitTester;
 
 /**
@@ -35,21 +37,13 @@ class ConstructCest
     {
         $I->wantToTest('Crypt - __construct()');
 
-
         $crypt = new Crypt();
 
-        $I->assertInstanceOf(
-            Crypt::class,
-            $crypt
-        );
-
+        $I->assertInstanceOf(Crypt::class, $crypt);
 
         $crypt = new Crypt('aes-256-cfb', true);
 
-        $I->assertInstanceOf(
-            Crypt::class,
-            $crypt
-        );
+        $I->assertInstanceOf(Crypt::class, $crypt);
     }
 
     /**
@@ -69,5 +63,31 @@ class ConstructCest
         $I->assertEquals(4, Crypt::PADDING_ISO_IEC_7816_4);
         $I->assertEquals(5, Crypt::PADDING_ZERO);
         $I->assertEquals(6, Crypt::PADDING_SPACE);
+    }
+
+    /**
+     * Tests Phalcon\Crypt\Crypt :: __construct() - no openssl exception
+     *
+     * @param UnitTester $I
+     *
+     * @author Phalcon Team <team@phalcon.io>
+     * @since  2020-09-09
+     */
+    public function cryptConstructNoOpensslException(UnitTester $I)
+    {
+        $I->wantToTest('Crypt - __construct() - no openssl exception');
+
+        $I->expectThrowable(
+            new Exception('openssl extension is required'),
+            function () {
+                $crypt = Stub::construct(
+                    Crypt::class,
+                    [],
+                    [
+                        'phpFunctionExists' => false,
+                    ]
+                );
+            }
+        );
     }
 }

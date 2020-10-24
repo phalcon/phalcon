@@ -456,10 +456,6 @@ class Crypt implements CryptInterface
      */
     public function getAvailableCiphers(): array
     {
-        if (true === empty($this->availableCiphers)) {
-            $this->initializeAvailableCiphers();
-        }
-
         return $this->availableCiphers;
     }
 
@@ -677,14 +673,9 @@ class Crypt implements CryptInterface
      * @param string $cipher
      *
      * @return int
-     * @throws Exception
      */
     protected function getIvLength(string $cipher): int
     {
-        if (true !== $this->phpFunctionExists('openssl_cipher_iv_length')) {
-            throw new Exception('openssl extension is required');
-        }
-
         return openssl_cipher_iv_length($cipher);
     }
 

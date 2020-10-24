@@ -91,6 +91,29 @@ class EncryptCest
     }
 
     /**
+     * Tests Phalcon\Crypt\Crypt :: encrypt() - empty key
+     *
+     * @param UnitTester $I
+     *
+     * @author Phalcon Team <team@phalcon.io>
+     * @since  2020-09-09
+     */
+    public function cryptEncryptExceptionEmptyKey(UnitTester $I)
+    {
+        $I->wantToTest('Crypt - encrypt() - exception empty key');
+
+        $I->expectThrowable(
+            new Exception(
+                'Encryption key cannot be empty'
+            ),
+            function () {
+                $crypt = new Crypt();
+                $crypt->encrypt('sample text', '');
+            }
+        );
+    }
+
+    /**
      * Tests Phalcon\Crypt\Crypt :: encrypt() - unsupported algo
      *
      * @param UnitTester $I

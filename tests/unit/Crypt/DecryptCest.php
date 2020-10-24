@@ -14,6 +14,7 @@ declare(strict_types=1);
 namespace Phalcon\Tests\Unit\Crypt;
 
 use Phalcon\Crypt\Crypt;
+use Phalcon\Crypt\Exception;
 use Phalcon\Crypt\Mismatch;
 use UnitTester;
 
@@ -25,7 +26,7 @@ use UnitTester;
 class DecryptCest
 {
     /**
-     * Tests decrypt without using HMAC
+     * Tests Phalcon\Crypt\Crypt :: decrypt() - no exception on key mismatch
      *
      * @param UnitTester $I
      *
@@ -33,7 +34,7 @@ class DecryptCest
      * @since  2020-09-09
      * @issue  https://github.com/phalcon/cphalcon/issues/13379
      */
-    public function shouldNotThrowExceptionIfKeyMismatch(UnitTester $I)
+    public function cryptDecryptNoExceptionOnKeyMismatch(UnitTester $I)
     {
         $I->wantToTest(
             'Crypt - decrypt() not throwing Exception on key mismatch'
@@ -50,7 +51,7 @@ class DecryptCest
     }
 
     /**
-     * Tests decrypt using HMAC
+     * Tests Phalcon\Crypt\Crypt :: decrypt() - exception hash mismatch
      *
      * @param UnitTester $I
      *
@@ -58,8 +59,10 @@ class DecryptCest
      * @since  2020-09-09
      * @issue  https://github.com/phalcon/cphalcon/issues/13379
      */
-    public function shouldThrowExceptionIfHashMismatch(UnitTester $I)
+    public function cryptDecryptExceptionHashMismatch(UnitTester $I)
     {
+        $I->wantToTest('Crypt - decrypt() - exception hash mismatch');
+
         $I->expectThrowable(
             new Mismatch('Hash does not match.'),
             function () {
@@ -76,6 +79,7 @@ class DecryptCest
     }
 
     /**
+     * Tests Phalcon\Crypt\Crypt :: decrypt() - signed key
      * Tests decrypt using HMAC
      *
      * @param UnitTester $I
@@ -84,12 +88,12 @@ class DecryptCest
      * @since  2020-09-09
      * @issue  https://github.com/phalcon/cphalcon/issues/13379
      */
-    public function shouldDecryptSignedString(UnitTester $I)
+    public function cryptDecryptSignedString(UnitTester $I)
     {
+        $I->wantToTest('Crypt - decrypt() - signed key');
         $crypt = new Crypt();
 
         $crypt->useSigning(true);
-
         $crypt->setKey('secret');
 
         $expected  = 'le text';
@@ -98,4 +102,28 @@ class DecryptCest
 
         $I->assertEquals($expected, $actual);
     }
+
+    /**
+     * Tests Phalcon\Crypt\Crypt :: decrypt() - empty key
+     *
+     * @param UnitTester $I
+     *
+     * @author Phalcon Team <team@phalcon.io>
+     * @since  2020-09-09
+     */
+    public function cryptEncryptExceptionEmptyKey(UnitTester $I)
+    {
+        $I->wantToTest('Crypt - decrypt() - exception empty key');
+
+        $I->expectThrowable(
+            new Exception(
+                'Decryption key cannot be empty'
+            ),
+            function () {
+                $crypt = new Crypt();
+                $crypt->decrypt('sample text', '');
+            }
+        );
+    }
+
 }
