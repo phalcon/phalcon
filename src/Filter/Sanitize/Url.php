@@ -26,6 +26,8 @@ class Url
 {
     /**
      * @param mixed $input The text to sanitize
+     *
+     * @return string
      */
     public function __invoke($input)
     {
