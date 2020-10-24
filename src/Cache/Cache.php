@@ -36,7 +36,7 @@ class Cache implements CacheInterface
     /**
      * Constructor.
      *
-     * @param AdapterInterface  adapter The cache adapter
+     * @param AdapterInterface $adapter The cache adapter
      */
     public function __construct(AdapterInterface $adapter)
     {

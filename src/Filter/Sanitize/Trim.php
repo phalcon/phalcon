@@ -23,7 +23,7 @@ use function trim;
 class Trim
 {
     /**
-     * @param mixed $input The text to sanitize
+     * @param string $input The text to sanitize
      *
      * @return string
      */
