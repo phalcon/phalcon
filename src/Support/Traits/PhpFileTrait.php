@@ -84,21 +84,6 @@ trait PhpFileTrait
     }
 
     /**
-     * Gets the value of a configuration option
-     *
-     * @param string $varname
-     *
-     * @return string
-     *
-     * @link https://php.net/manual/en/function.ini-get.php
-     * @link https://php.net/manual/en/ini.list.php
-     */
-    protected function phpIniGet($varname): string
-    {
-        return ini_get($varname);
-    }
-
-    /**
      * Tells whether the filename is writable
      *
      * @param string $filename
