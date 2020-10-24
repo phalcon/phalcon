@@ -69,6 +69,8 @@ class Yaml extends Config
      */
     public function __construct(string $filePath, ?array $callbacks = null)
     {
+        $ndocs = 0;
+
         if (false === extension_loaded('yaml')) {
             throw new Exception(
                 'Yaml extension is not loaded'
@@ -83,7 +85,7 @@ class Yaml extends Config
             $yamlConfig = yaml_parse_file(
                 $filePath,
                 0,
-                $ndocs = 0,
+                $ndocs,
                 $callbacks
             );
         }
