@@ -52,7 +52,7 @@ use function method_exists;
  */
 class Config extends Collection implements ConfigInterface
 {
-    const DEFAULT_PATH_DELIMITER = ".";
+    public const DEFAULT_PATH_DELIMITER = ".";
 
     /**
      * @var string|null
