@@ -28,6 +28,8 @@ use function strpos;
 use function strtolower;
 use function substr;
 
+use const INI_SCANNER_RAW;
+
 /**
  * Reads ini files and converts them to Phalcon\Config objects.
  *
