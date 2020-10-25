@@ -71,24 +71,18 @@ class Yaml extends Config
     {
         $ndocs = 0;
 
-        if (false === extension_loaded('yaml')) {
+        if (true !== extension_loaded('yaml')) {
             throw new Exception(
                 'Yaml extension is not loaded'
             );
         }
 
-        if (true === empty($callbacks)) {
-            $yamlConfig = yaml_parse_file(
-                $filePath
-            );
-        } else {
-            $yamlConfig = yaml_parse_file(
-                $filePath,
-                0,
-                $ndocs,
-                $callbacks
-            );
-        }
+        $yamlConfig = yaml_parse_file(
+            $filePath,
+            0,
+            $ndocs,
+            $callbacks ?? []
+        );
 
         if (false === $yamlConfig) {
             throw new Exception(
