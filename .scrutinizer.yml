@@ -4,6 +4,12 @@ build:
       tests:
         override:
           - php-scrutinizer-run
+    phalcon:
+      dependencies:
+        before:
+          - sudo apt-get install -y libyaml libyaml-dev
+          - pecl install redis
+          - pecl install yaml
 
 filter:
   paths:
