@@ -228,11 +228,17 @@ class Config extends Collection implements ConfigInterface
         foreach ($target as $key => $value) {
             if (is_array($value) && isset($source[$key]) && is_array($source[$key])) {
                 $source[$key] = $this->internalMerge($source[$key], $value);
-            } elseif (is_int($key)) {
-                $source[] = $value;
-            } else {
-                $source[$key] = $value;
+
+                continue;
             }
+
+            if (is_int($key)) {
+                $source[] = $value;
+
+                continue;
+            }
+
+            $source[$key] = $value;
         }
 
         return $source;
