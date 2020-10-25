@@ -6,7 +6,7 @@ build:
           - php-scrutinizer-run
       dependencies:
         before:
-          - sudo apt-get install -y libyaml libyaml-dev
+          - sudo apt-get install -y libyaml-dev
           - pecl install redis
           - pecl install yaml
 
