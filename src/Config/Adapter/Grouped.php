@@ -92,8 +92,11 @@ class Grouped extends Config
             // Set to default adapter if passed as string
             if (is_object($configName) && $configName instanceof ConfigInterface) {
                 $this->merge($configInstance);
+
                 continue;
-            } elseif (is_string($configName)) {
+            }
+
+            if (false !== is_string($configName)) {
                 if ('' === $defaultAdapter) {
                     $this->merge(
                         (new ConfigFactory())->load($configName)
@@ -106,12 +109,12 @@ class Grouped extends Config
                     'filePath' => $configName,
                     'adapter'  => $defaultAdapter
                 ];
-            } elseif (false === isset($configInstance['adapter'])) {
+            } elseif (true !== isset($configInstance['adapter'])) {
                 $configInstance['adapter'] = $defaultAdapter;
             }
 
             if ('array' === $configInstance['adapter']) {
-                if (false === isset($configInstance['config'])) {
+                if (true !== isset($configInstance['config'])) {
                     throw new Exception(
                         "To use 'array' adapter you have to specify " .
                         "the 'config' as an array."
@@ -120,9 +123,13 @@ class Grouped extends Config
 
                 $configArray    = $configInstance['config'];
                 $configInstance = new Config($configArray);
-            } else {
-                $configInstance = (new ConfigFactory())->load($configInstance);
+
+                $this->merge($configInstance);
+
+                continue;
             }
+
+            $configInstance = (new ConfigFactory())->load($configInstance);
 
             $this->merge($configInstance);
         }

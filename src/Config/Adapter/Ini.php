@@ -17,7 +17,6 @@ use Phalcon\Config\Config;
 use Phalcon\Config\Exception;
 
 use function basename;
-use function call_user_func_array;
 use function count;
 use function is_array;
 use function is_numeric;
@@ -100,7 +99,7 @@ class Ini extends Config
         $config = [];
 
         foreach ($iniConfig as $section => $directives) {
-            if (true === is_array($directives)) {
+            if (false !== is_array($directives)) {
                 $sections = [];
 
                 foreach ($directives as $path => $lastValue) {
@@ -111,14 +110,13 @@ class Ini extends Config
                 }
 
                 if (count($sections)) {
-                    $config[$section] = call_user_func_array(
-                        'array_replace_recursive',
-                        $sections
-                    );
+                    $config[$section] = array_replace_recursive(...$sections);
                 }
-            } else {
-                $config[$section] = $this->cast($directives);
+
+                continue;
             }
+
+            $config[$section] = $this->cast($directives);
         }
 
         parent::__construct($config);
@@ -134,15 +132,11 @@ class Ini extends Config
      */
     protected function cast($ini)
     {
-        if (true === is_array($ini)) {
-            foreach ($ini as $key => $value) {
-                $ini[$key] = $this->cast($value);
-            }
-
-            return $ini;
+        if (false !== is_array($ini)) {
+            return $this->castArray($ini);
         }
 
-        // Decode true
+        // Decode boolean and null
         $ini      = (string)$ini;
         $lowerIni = strtolower($ini);
 
@@ -163,9 +157,22 @@ class Ini extends Config
         if (is_string($ini) && is_numeric($ini)) {
             if (preg_match('/[.]+/', $ini)) {
                 return (double)$ini;
-            } else {
-                return (int)$ini;
             }
+
+            return (int)$ini;
+        }
+
+        return $ini;
+    }
+
+    /**
+     * @param array $ini
+     *
+     * @return array
+     */
+    protected function castArray(array $ini): array {
+        foreach ($ini as $key => $value) {
+            $ini[$key] = $this->cast($value);
         }
 
         return $ini;

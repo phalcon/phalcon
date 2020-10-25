@@ -95,7 +95,7 @@ class Config extends Collection implements ConfigInterface
      */
     public function merge($toMerge): ConfigInterface
     {
-        if (true === is_array($toMerge)) {
+        if (false !== is_array($toMerge)) {
             $config = new Config($toMerge);
         } elseif (is_object($toMerge) && $toMerge instanceof ConfigInterface) {
             $config = $toMerge;
@@ -236,7 +236,7 @@ class Config extends Collection implements ConfigInterface
 
         $this->lowerKeys[$key] = $element;
 
-        if (true === is_array($value)) {
+        if (false !== is_array($value)) {
             $data = new Config($value);
         } else {
             $data = $value;

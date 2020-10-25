@@ -28,6 +28,8 @@ use function lcfirst;
 use function pathinfo;
 use function strtolower;
 
+use const PATHINFO_EXTENSION;
+
 /**
  * Loads Config Adapter class using 'adapter' option, if no extension is
  * provided it will be added to filePath
@@ -73,11 +75,50 @@ class ConfigFactory
      */
     public function load($config): ConfigInterface
     {
-        if (true === is_string($config)) {
+        $configArray = $this->parseConfig($config);
+
+        $adapter  = strtolower($configArray['adapter']);
+        $filePath = $configArray['filePath'];
+
+        if (false !== empty(pathinfo($filePath, PATHINFO_EXTENSION))) {
+            $filePath .= '.' . lcfirst($adapter);
+        }
+
+        switch ($adapter) {
+            case 'ini':
+                return $this->newInstance(
+                    $adapter,
+                    $filePath,
+                    $configArray['mode'] ?? null
+                );
+
+            case 'yaml':
+                return $this->newInstance(
+                    $adapter,
+                    $filePath,
+                    $configArray['callbacks'] ?? null
+                );
+        }
+
+        return $this->newInstance(
+            $adapter,
+            $filePath
+        );
+    }
+
+    /**
+     * @param mixed $config
+     *
+     * @return array
+     * @throws Exception
+     */
+    protected function parseConfig($config): array
+    {
+        if (false !== is_string($config)) {
             $oldConfig = $config;
             $extension = pathinfo($config, PATHINFO_EXTENSION);
 
-            if (empty($extension)) {
+            if (false !== empty($extension)) {
                 throw new Exception(
                     'You need to provide the extension in the file path'
                 );
@@ -93,39 +134,35 @@ class ConfigFactory
             $config = $config->toArray();
         }
 
-        if (false === is_array($config)) {
+        if (true !== is_array($config)) {
             throw new Exception(
                 'Config must be array or Phalcon\\Config\\Config object'
             );
         }
 
-        if (false === isset($config['filePath'])) {
+        $this->checkConfigArray($config);
+
+        return $config;
+    }
+
+    /**
+     * @param array $config
+     *
+     * @throws Exception
+     */
+    private function checkConfigArray(array $config): void
+    {
+        if (true !== isset($config['filePath'])) {
             throw new Exception(
                 'You must provide \'filePath\' option in factory config parameter.'
             );
         }
 
-        if (false === isset($config['adapter'])) {
+        if (true !== isset($config['adapter'])) {
             throw new Exception(
                 'You must provide \'adapter\' option in factory config parameter.'
             );
         }
-
-        $adapter = strtolower($config['adapter']);
-        $first   = $config['filePath'];
-        $second  = null;
-
-        if (empty(pathinfo($first, PATHINFO_EXTENSION))) {
-            $first .= '.' . lcfirst($adapter);
-        }
-
-        if ('ini' === $adapter) {
-            $second = $config['mode'] ?? 1;
-        } elseif ('yaml' === $adapter) {
-            $second = $config['callbacks'] ?? [];
-        }
-
-        return $this->newInstance($adapter, $first, $second);
     }
 
     /**
@@ -138,8 +175,11 @@ class ConfigFactory
      * @return ConfigInterface
      * @throws SupportException
      */
-    public function newInstance(string $name, string $fileName, $params = null): ConfigInterface
-    {
+    public function newInstance(
+        string $name,
+        string $fileName,
+        $params = null
+    ): ConfigInterface {
         $definition = $this->getService($name);
 
         switch ($definition) {
