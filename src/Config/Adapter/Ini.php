@@ -136,21 +136,26 @@ class Ini extends Config
             return $this->castArray($ini);
         }
 
-        // Decode boolean and null
         $ini      = (string)$ini;
         $lowerIni = strtolower($ini);
 
-        switch ($lowerIni) {
-            case 'true':
-            case 'yes':
-            case 'on':
-                return true;
-            case 'false':
-            case 'no':
-            case 'off':
-                return false;
-            case 'null':
-                return null;
+        // Decode null
+        if ('null' === $lowerIni) {
+            return null;
+        }
+
+        // Decode boolean
+        $castMap = [
+            'true'  => true,
+            'false' => false,
+            'yes'   => true,
+            'no'    => false,
+            'on'    => true,
+            'off'   => false
+        ];
+
+        if (false !== isset($castMap[$lowerIni])) {
+            return $castMap[$lowerIni];
         }
 
         // Decode float/int
@@ -170,7 +175,8 @@ class Ini extends Config
      *
      * @return array
      */
-    protected function castArray(array $ini): array {
+    protected function castArray(array $ini): array
+    {
         foreach ($ini as $key => $value) {
             $ini[$key] = $this->cast($value);
         }

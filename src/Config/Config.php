@@ -95,22 +95,36 @@ class Config extends Collection implements ConfigInterface
      */
     public function merge($toMerge): ConfigInterface
     {
-        if (false !== is_array($toMerge)) {
-            $config = new Config($toMerge);
-        } elseif (is_object($toMerge) && $toMerge instanceof ConfigInterface) {
-            $config = $toMerge;
-        } else {
-            throw new Exception('Invalid data type for merge.');
-        }
-
         $source = $this->toArray();
-        $target = $config->toArray();
-        $result = $this->internalMerge($source, $target);
 
         $this->clear();
-        $this->init($result);
 
-        return $this;
+        if (false !== is_array($toMerge)) {
+            $result = $this->internalMerge(
+                $source,
+                $toMerge
+            );
+
+            $this->init($result);
+
+            return $this;
+        }
+
+        if (is_object($toMerge) && $toMerge instanceof ConfigInterface) {
+            /**
+             * @var ConfigInterface $toMerge
+             */
+            $result = $this->internalMerge(
+                $source,
+                $toMerge->toArray()
+            );
+
+            $this->init($result);
+
+            return $this;
+        }
+
+        throw new Exception('Invalid data type for merge.');
     }
 
     /**
@@ -128,30 +142,31 @@ class Config extends Collection implements ConfigInterface
      */
     public function path(string $path, $defaultValue = null, $delimiter = null)
     {
-        if ($this->has($path)) {
+        if (false !== $this->has($path)) {
             return $this->get($path);
         }
 
-        if (empty($delimiter)) {
+        if (false !== empty($delimiter)) {
             $delimiter = $this->getPathDelimiter();
         }
 
         $config = clone $this;
         $keys   = explode($delimiter, $path);
 
-        while (!empty($keys)) {
+        while (true !== empty($keys)) {
             $key = array_shift($keys);
 
-            if (!$config->has($key)) {
+            if (true !== $config->has($key)) {
                 break;
             }
 
-            if (empty($keys)) {
+            if (false !== empty($keys)) {
                 return $config->get($key);
             }
 
             $config = $config->get($key);
-            if (empty($config)) {
+
+            if (false !== empty($config)) {
                 break;
             }
         }
