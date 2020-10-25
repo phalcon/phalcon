@@ -151,7 +151,7 @@ class Ini extends Config
             'yes'   => true,
             'no'    => false,
             'on'    => true,
-            'off'   => false
+            'off'   => false,
         ];
 
         if (false !== isset($castMap[$lowerIni])) {
@@ -199,7 +199,7 @@ class Ini extends Config
 
         if (false === $position) {
             return [
-                $path => $value
+                $path => $value,
             ];
         }
 

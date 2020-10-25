@@ -202,7 +202,7 @@ class Config extends Collection implements ConfigInterface
     public function toArray(): array
     {
         $results = [];
-        $data    = parent::toArray();
+        $data = parent::toArray();
 
         foreach ($data as $key => $value) {
             if (is_object($value) && method_exists($value, 'toArray')) {

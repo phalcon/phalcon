@@ -107,7 +107,7 @@ class Grouped extends Config
 
                 $configInstance = [
                     'filePath' => $configName,
-                    'adapter'  => $defaultAdapter
+                    'adapter'  => $defaultAdapter,
                 ];
             } elseif (true !== isset($configInstance['adapter'])) {
                 $configInstance['adapter'] = $defaultAdapter;
