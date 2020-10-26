@@ -64,7 +64,6 @@ class LoadCest
 
         $I->assertInstanceOf(Cache::class, $adapter);
         $I->assertInstanceOf(CacheInterface::class, $adapter);
-
     }
 
     /**

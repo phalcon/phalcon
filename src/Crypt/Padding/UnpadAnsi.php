@@ -34,9 +34,10 @@ class UnpadAnsi
      */
     public function __invoke(string $input, int $blockSize): int
     {
+        $paddingSize = 0;
         $length      = strlen($input);
-        $last = substr($input, $length - 1, 1);
-        $ord  = (int) ord($last);
+        $last        = substr($input, $length - 1, 1);
+        $ord         = (int) ord($last);
 
         if ($ord <= $blockSize) {
             $paddingSize = $ord;

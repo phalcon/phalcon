@@ -35,9 +35,10 @@ class UnpadIsoIek
      */
     public function __invoke(string $input, int $blockSize): int
     {
-        $length     = strlen($input);
-        $inputArray = str_split($input);
-        $counter    = $length - 1;
+        $paddingSize = 0;
+        $length      = strlen($input);
+        $inputArray  = str_split($input);
+        $counter     = $length - 1;
 
         while ($counter > 0 && $inputArray[$counter] == 0x00 && $paddingSize < $blockSize) {
             $paddingSize++;
