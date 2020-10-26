@@ -20,6 +20,11 @@ use UnitTester;
 
 use function dataDir;
 
+/**
+ * Class GetSetDirectoryCest
+ *
+ * @package Phalcon\Tests\Unit\Translate\Adapter\Gettext
+ */
 class GetSetDirectoryCest
 {
     use TranslateGettextTrait;

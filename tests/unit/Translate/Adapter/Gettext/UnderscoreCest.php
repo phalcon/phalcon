@@ -16,6 +16,11 @@ namespace Phalcon\Tests\Unit\Translate\Adapter\Gettext;
 use Phalcon\Tests\Fixtures\Traits\TranslateGettextHelperTrait;
 use Phalcon\Tests\Fixtures\Traits\TranslateGettextTrait;
 
+/**
+ * Class UnderscoreCest
+ *
+ * @package Phalcon\Tests\Unit\Translate\Adapter\Gettext
+ */
 class UnderscoreCest
 {
     use TranslateGettextTrait;
@@ -28,30 +33,4 @@ class UnderscoreCest
     {
         return '_';
     }
-
-
-//    /**
-//     * Tests Phalcon\Translate\Adapter\Gettext :: _()
-//     *
-//     * @author Jeremy PASTOURET <https://github.com/jenovateurs>
-//     * @since  2020-01-06
-//     */
-//    public function translateAdapterGettextUnderscore(UnitTester $I)
-//    {
-//        $I->wantToTest("Translate\Adapter\Gettext - _()");
-//
-//        $params     = $this->getGettextConfig();
-//        $translator = new Gettext(
-//            new InterpolatorFactory(),
-//            $params
-//        );
-//
-//        $I->assertEquals('Hello', $translator->_('hi'));
-//
-//        $I->assertEquals('Hello Jeremy', $translator->_('hello-key', ['name' => 'Jeremy']));
-//
-//        $sResultTranslate = $translator->_('song-key', ['song' => 'Phalcon rocks', 'artist' => 'Phalcon team']);
-//
-//        $I->assertEquals('The song is Phalcon rocks (Phalcon team)', $sResultTranslate);
-//    }
 }

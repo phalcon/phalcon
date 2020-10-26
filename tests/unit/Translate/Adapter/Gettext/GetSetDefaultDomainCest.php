@@ -18,6 +18,11 @@ use Phalcon\Translate\Adapter\Gettext;
 use Phalcon\Translate\InterpolatorFactory;
 use UnitTester;
 
+/**
+ * Class GetSetDefaultDomainCest
+ *
+ * @package Phalcon\Tests\Unit\Translate\Adapter\Gettext
+ */
 class GetSetDefaultDomainCest
 {
     use TranslateGettextTrait;

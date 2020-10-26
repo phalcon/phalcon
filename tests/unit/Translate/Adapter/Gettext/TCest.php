@@ -16,6 +16,11 @@ namespace Phalcon\Tests\Unit\Translate\Adapter\Gettext;
 use Phalcon\Tests\Fixtures\Traits\TranslateGettextHelperTrait;
 use Phalcon\Tests\Fixtures\Traits\TranslateGettextTrait;
 
+/**
+ * Class TCest
+ *
+ * @package Phalcon\Tests\Unit\Translate\Adapter\Gettext
+ */
 class TCest
 {
     use TranslateGettextTrait;

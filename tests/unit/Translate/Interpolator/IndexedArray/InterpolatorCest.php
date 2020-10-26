@@ -17,13 +17,20 @@ use Phalcon\Translate\Adapter\NativeArray;
 use Phalcon\Translate\InterpolatorFactory;
 use UnitTester;
 
+/**
+ * Class InterpolatorCest
+ *
+ * @package Phalcon\Tests\Unit\Translate\Interpolator\IndexedArray
+ */
 class InterpolatorCest
 {
     /**
      * Tests Phalcon\Translate\Interpolator\IndexedArray :: objects
      *
+     * @param UnitTester $I
+     *
      * @author Phalcon Team <team@phalcon.io>
-     * @since  2018-11-13
+     * @since  2020-09-09
      */
     public function translateInterpolatorIndexedArrayInterpolator(UnitTester $I)
     {

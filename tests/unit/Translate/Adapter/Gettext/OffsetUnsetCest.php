@@ -19,6 +19,11 @@ use Phalcon\Translate\Exception;
 use Phalcon\Translate\InterpolatorFactory;
 use UnitTester;
 
+/**
+ * Class OffsetUnsetCest
+ *
+ * @package Phalcon\Tests\Unit\Translate\Adapter\Gettext
+ */
 class OffsetUnsetCest
 {
     use TranslateGettextTrait;
