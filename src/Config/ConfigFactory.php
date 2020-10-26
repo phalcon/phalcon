@@ -63,11 +63,11 @@ class ConfigFactory
      * Load a config to create a new instance
      *
      * @param string|array|Config $config  = [
-     *                                     'adapter' => 'ini',
-     *                                     'filePath' => 'config.ini',
-     *                                     'mode' => null,
-     *                                     'callbacks' => null
-     *                                     ]
+     *     'adapter'   => 'ini',
+     *     'filePath'  => 'config.ini',
+     *     'mode'      => null,
+     *     'callbacks' => null
+     * ]
      *
      * @return ConfigInterface
      * @throws Exception

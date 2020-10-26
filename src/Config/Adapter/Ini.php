@@ -128,9 +128,9 @@ class Ini extends Config
      * We have to cast values manually because parse_ini_file() has a poor
      * implementation.
      *
-     * @param mixed
+     * @param mixed $ini
      *
-     * @return mixed
+     * @return array|float|int|mixed|string|null
      */
     protected function cast($ini)
     {
