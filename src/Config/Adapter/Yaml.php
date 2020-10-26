@@ -15,10 +15,10 @@ namespace Phalcon\Config\Adapter;
 
 use Phalcon\Config\Config;
 use Phalcon\Config\Exception;
+use Phalcon\Support\Traits\PhpFunctionTrait;
+use Phalcon\Support\Traits\PhpYamlTrait;
 
 use function basename;
-use function extension_loaded;
-use function yaml_parse_file;
 
 /**
  * Reads YAML files and converts them to Phalcon\Config objects.
@@ -59,6 +59,9 @@ use function yaml_parse_file;
  */
 class Yaml extends Config
 {
+    use PhpFunctionTrait;
+    use PhpYamlTrait;
+
     /**
      * Yaml constructor.
      *
@@ -71,13 +74,13 @@ class Yaml extends Config
     {
         $ndocs = 0;
 
-        if (true !== extension_loaded('yaml')) {
+        if (true !== $this->phpExtensionLoaded('yaml')) {
             throw new Exception(
                 'Yaml extension is not loaded'
             );
         }
 
-        $yamlConfig = yaml_parse_file(
+        $yamlConfig = $this->phpYamlParseFile(
             $filePath,
             0,
             $ndocs,

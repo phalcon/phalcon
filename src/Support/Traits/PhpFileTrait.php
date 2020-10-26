@@ -94,7 +94,7 @@ trait PhpFileTrait
      * @param string   $escape
      *
      * @return array|null|false
-
+     *
      * @link https://php.net/manual/en/function.fgetcsv.php
      */
     protected function phpFgetCsv(
@@ -119,6 +119,25 @@ trait PhpFileTrait
     protected function phpIsWriteable($filename): bool
     {
         return is_writable($filename);
+    }
+
+    /**
+     * Parse a configuration file
+     *
+     * @param string $filename
+     * @param bool   $process_sections
+     * @param int    $scanner_mode
+     *
+     * @return array|false
+     *
+     * @link https://php.net/manual/en/function.parse-ini-file.php
+     */
+    protected function phpParseIniFile(
+        $filename,
+        $process_sections = false,
+        $scanner_mode = INI_SCANNER_NORMAL
+    ) {
+        return parse_ini_file($filename, $process_sections, $scanner_mode);
     }
 
     /**

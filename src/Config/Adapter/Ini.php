@@ -15,13 +15,13 @@ namespace Phalcon\Config\Adapter;
 
 use Phalcon\Config\Config;
 use Phalcon\Config\Exception;
+use Phalcon\Support\Traits\PhpFileTrait;
 
 use function basename;
 use function count;
 use function is_array;
 use function is_numeric;
 use function is_string;
-use function parse_ini_file;
 use function preg_match;
 use function strpos;
 use function strtolower;
@@ -73,6 +73,8 @@ use const INI_SCANNER_RAW;
  */
 class Ini extends Config
 {
+    use PhpFileTrait;
+
     /**
      * Ini constructor.
      *
@@ -88,7 +90,7 @@ class Ini extends Config
             $mode = INI_SCANNER_RAW;
         }
 
-        $iniConfig = parse_ini_file($filePath, true, $mode);
+        $iniConfig = $this->phpParseIniFile($filePath, true, $mode);
 
         if (false === $iniConfig) {
             throw new Exception(

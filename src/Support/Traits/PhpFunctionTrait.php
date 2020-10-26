@@ -13,7 +13,9 @@ declare(strict_types=1);
 
 namespace Phalcon\Support\Traits;
 
+use function extension_loaded;
 use function function_exists;
+use function ini_get;
 
 /**
  * Trait PhpFunctionTrait
@@ -22,6 +24,20 @@ use function function_exists;
  */
 trait PhpFunctionTrait
 {
+    /**
+     * Find out whether an extension is loaded
+     *
+     * @param string $name
+     *
+     * @return bool
+     *
+     * @link https://php.net/manual/en/function.extension-loaded.php
+     */
+    protected function phpExtensionLoaded($name)
+    {
+        return extension_loaded($name);
+    }
+
     /**
      * Return true if the given function has been defined
      *
