@@ -247,15 +247,15 @@ trait DiTrait
         switch ($service) {
 //            case 'annotations':
 //            case 'console':
-//            case 'escaper':
+            case 'escaper':
 //            case 'eventsManager':
 //            case 'filter':
 //            case 'modelsManager':
 //            case 'modelsMetadata':
 //            case 'request':
 //            case 'response':
-//                $this->container->set($service, $class);
-//                break;
+                $this->container->set($service, $class);
+                break;
 //            case 'crypt':
 //                $this->container->set(
 //                    'crypt',

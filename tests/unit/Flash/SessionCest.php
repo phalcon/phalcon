@@ -12,6 +12,7 @@
 namespace Phalcon\Tests\Unit\Flash;
 
 use Codeception\Example;
+use Phalcon\Escaper\Escaper;
 use Phalcon\Flash\Session;
 use Phalcon\Storage\Exception;
 use Phalcon\Tests\Fixtures\Traits\DiTrait;
@@ -163,7 +164,7 @@ class SessionCest
     protected function getFlash()
     {
         $container = $this->getDi();
-
+        $container->setShared('escaper', new Escaper());
         $flash = new Session();
         $flash->setDI($container);
         $flash->setCssClasses($this->classes);
