@@ -18,6 +18,11 @@ use Phalcon\Translate\Adapter\NativeArray;
 use Phalcon\Translate\InterpolatorFactory;
 use UnitTester;
 
+/**
+ * Class ArrayAccessCest
+ *
+ * @package Phalcon\Tests\Unit\Translate\Adapter\NativeArray
+ */
 class ArrayAccessCest
 {
     use TranslateNativeArrayTrait;

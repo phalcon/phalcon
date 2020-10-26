@@ -21,6 +21,11 @@ use Phalcon\Translate\Exception;
 use Phalcon\Translate\InterpolatorFactory;
 use UnitTester;
 
+/**
+ * Class ConstructCest
+ *
+ * @package Phalcon\Tests\Unit\Translate\Adapter\NativeArray
+ */
 class ConstructCest
 {
     use TranslateNativeArrayTrait;

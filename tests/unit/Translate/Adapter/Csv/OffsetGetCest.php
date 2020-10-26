@@ -18,6 +18,11 @@ use Phalcon\Translate\Adapter\Csv;
 use Phalcon\Translate\InterpolatorFactory;
 use UnitTester;
 
+/**
+ * Class OffsetGetCest
+ *
+ * @package Phalcon\Tests\Unit\Translate\Adapter\Csv
+ */
 class OffsetGetCest
 {
     use TranslateCsvTrait;

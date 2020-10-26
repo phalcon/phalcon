@@ -18,6 +18,11 @@ use Phalcon\Translate\Adapter\NativeArray;
 use Phalcon\Translate\InterpolatorFactory;
 use UnitTester;
 
+/**
+ * Class OffsetGetCest
+ *
+ * @package Phalcon\Tests\Unit\Translate\Adapter\NativeArray
+ */
 class OffsetGetCest
 {
     use TranslateNativeArrayTrait;
@@ -43,9 +48,8 @@ class OffsetGetCest
             ]
         );
 
-        $I->assertEquals(
-            'Hello',
-            $translator->offsetGet('hi')
-        );
+        $expected = 'Hello';
+        $actual   = $translator->offsetGet('hi');
+        $I->assertEquals($expected, $actual);
     }
 }

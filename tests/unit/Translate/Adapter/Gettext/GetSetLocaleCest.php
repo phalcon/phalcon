@@ -20,6 +20,11 @@ use UnitTester;
 
 use const LC_ALL;
 
+/**
+ * Class GetSetLocaleCest
+ *
+ * @package Phalcon\Tests\Unit\Translate\Adapter\Gettext
+ */
 class GetSetLocaleCest
 {
     use TranslateGettextTrait;

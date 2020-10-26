@@ -20,6 +20,11 @@ use UnitTester;
 
 use const LC_MESSAGES;
 
+/**
+ * Class GetCategoryCest
+ *
+ * @package Phalcon\Tests\Unit\Translate\Adapter\Gettext
+ */
 class GetCategoryCest
 {
     use TranslateGettextTrait;

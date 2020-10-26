@@ -18,6 +18,11 @@ use Phalcon\Translate\Adapter\NativeArray;
 use Phalcon\Translate\InterpolatorFactory;
 use UnitTester;
 
+/**
+ * Class OffsetExistsCest
+ *
+ * @package Phalcon\Tests\Unit\Translate\Adapter\NativeArray
+ */
 class OffsetExistsCest
 {
     use TranslateNativeArrayTrait;
@@ -43,8 +48,6 @@ class OffsetExistsCest
             ]
         );
 
-        $I->assertTrue(
-            $translator->offsetExists('hi')
-        );
+        $I->assertTrue($translator->offsetExists('hi'));
     }
 }

@@ -20,6 +20,11 @@ use Phalcon\Translate\Interpolator\IndexedArray;
 use Phalcon\Translate\InterpolatorFactory;
 use UnitTester;
 
+/**
+ * Class NewInstanceCest
+ *
+ * @package Phalcon\Tests\Unit\Translate\InterpolatorFactory
+ */
 class NewInstanceCest
 {
     /**
@@ -29,8 +34,8 @@ class NewInstanceCest
      * @param        Example $example
      * @dataProvider getExamples
      *
-     * @author       Phalcon Team <team@phalcon.io>
-     * @since        2019-05-18
+     * @author Phalcon Team <team@phalcon.io>
+     * @since  2020-09-09
      */
     public function translateInterpolatorFactoryNewInstance(UnitTester $I, Example $example)
     {
@@ -49,8 +54,8 @@ class NewInstanceCest
      * @param        UnitTester $I
      * @dataProvider getExamples
      *
-     * @author       Phalcon Team <team@phalcon.io>
-     * @since        2019-05-18
+     * @author Phalcon Team <team@phalcon.io>
+     * @since  2020-09-09
      */
     public function translateInterpolatorFactoryNewInstanceException(UnitTester $I)
     {

@@ -24,6 +24,11 @@ use UnitTester;
 
 use function dataDir;
 
+/**
+ * Class ConstructCest
+ *
+ * @package Phalcon\Tests\Unit\Translate\Adapter\Csv
+ */
 class ConstructCest
 {
     use TranslateCsvTrait;
