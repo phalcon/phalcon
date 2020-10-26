@@ -13,6 +13,8 @@ declare(strict_types=1);
 
 namespace Phalcon\Cache;
 
+use Phalcon\Cache\Exception\Exception;
+use Phalcon\Config\ConfigInterface;
 use Psr\SimpleCache\CacheInterface;
 
 /**
@@ -36,55 +38,53 @@ class CacheFactory
     /**
      * Factory to create an instance from a Config object
      *
-     * @param array|\Phalcon\Config config = [
+     * @param array|ConfigInterface $config = [
      *     'adapter' => 'apcu',
      *     'options' => [
-     *         'servers' => [
+     *         'servers'           => [
      *             [
-     *                 'host' => 'localhost',
-     *                 'port' => 11211,
+     *                 'host'   => 'localhost',
+     *                 'port'   => 11211,
      *                 'weight' => 1,
      *
      *             ]
      *         ],
-     *         'host' => '127.0.0.1',
-     *         'port' => 6379,
-     *         'index' => 0,
-     *         'persistent' => false,
-     *         'auth' => '',
-     *         'socket' => '',
+     *         'host'              => '127.0.0.1',
+     *         'port'              => 6379,
+     *         'index'             => 0,
+     *         'persistent'        => false,
+     *         'auth'              => '',
+     *         'socket'            => '',
      *         'defaultSerializer' => 'Php',
-     *         'lifetime' => 3600,
-     *         'serializer' => null,
-     *         'prefix' => 'phalcon',
-     *         'storageDir' => ''
-     *     ]
+     *         'lifetime'          => 3600,
+     *         'serializer'        => null,
+     *         'prefix'            => 'phalcon',
+     *         'storageDir'        => '',
+     *     ],
      * ]
      */
     public function load($config)
     {
-//        var name, options;
-//
-//        if typeof config == "object" && config instanceof ConfigInterface {
-//            let config = config->toArray();
-//        }
-//
-//        if unlikely typeof config !== "array" {
-//            throw new Exception(
-//                "Config must be array or Phalcon\\Config object"
-//            );
-//        }
-//
-//        if unlikely !isset config["adapter"] {
-//            throw new Exception(
-//                "You must provide 'adapter' option in factory config parameter."
-//            );
-//        }
-//
-//        let name    = config["adapter"],
-//            options = Arr::get(config, "options", []);
-//
-//        return this->newInstance(name, options);
+        if (true === is_object($config) && $config instanceof ConfigInterface) {
+            $config = $config->toArray();
+        }
+
+        if (true !== is_array($config)) {
+            throw new Exception(
+                'Config must be array or Phalcon\Config\Config object'
+            );
+        }
+
+        if (true !== isset($config['adapter'])) {
+            throw new Exception(
+                'You must provide "adapter" option in factory config parameter.'
+            );
+        }
+
+        $name    = $config['adapter'];
+        $options = $config['options'] ?? [];
+
+        return $this->newInstance($name, $options);
     }
 
     /**
