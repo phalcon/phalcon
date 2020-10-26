@@ -66,7 +66,7 @@ use function substr;
  *
  * @property array            $services
  * @property array            $sharedInstances
- * @property DiInterface|null $_default
+ * @property DiInterface|null $defaultContainer
 
 */
 class Di implements DiInterface
@@ -97,7 +97,7 @@ class Di implements DiInterface
      *
      * @var DiInterface|null
      */
-    protected static $_default = null;
+    protected static $defaultContainer = null;
 
     /**
      * @var bool
@@ -109,8 +109,8 @@ class Di implements DiInterface
      */
     public function __construct()
     {
-        if (null === self::$_default) {
-            self::$_default = $this;
+        if (null === self::$defaultContainer) {
+            self::$defaultContainer = $this;
         }
     }
 
@@ -260,11 +260,11 @@ class Di implements DiInterface
      */
     public static function getDefault(): ?DiInterface
     {
-        if (null === self::$_default) {
-            self::$_default = new Di();
+        if (null === self::$defaultContainer) {
+            self::$defaultContainer = new Di();
         }
 
-        return self::$_default;
+        return self::$defaultContainer;
     }
 
     /**
@@ -396,7 +396,7 @@ class Di implements DiInterface
      */
     public static function reset(): void
     {
-        self::$_default = null;
+        self::$defaultContainer = null;
     }
 
     /**
@@ -423,7 +423,7 @@ class Di implements DiInterface
      */
     public static function setDefault(DiInterface $container): void
     {
-        self::$_default = $container;
+        self::$defaultContainer = $container;
     }
 
     /**

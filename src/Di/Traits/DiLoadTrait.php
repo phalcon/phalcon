@@ -13,6 +13,8 @@ declare(strict_types=1);
 
 namespace Phalcon\Di\Traits;
 
+use Phalcon\Config\Adapter\Php;
+use Phalcon\Config\Adapter\Yaml;
 use Phalcon\Config\ConfigInterface;
 
 /**
@@ -72,9 +74,9 @@ trait DiLoadTrait
      */
     public function loadFromPhp(string $filePath): void
     {
-        // $services = new Php(filePath);
-        // $this->loadFromConfig($services);
-        echo $filePath;
+        $services = new Php($filePath);
+
+        $this->loadFromConfig($services);
     }
 
     /**
@@ -112,9 +114,8 @@ trait DiLoadTrait
      */
     public function loadFromYaml(string $filePath, array $callbacks = null): void
     {
-        // $services = new Yaml($filePath, $callbacks);
-        // $this->loadFromConfig($services);
-        echo $filePath;
-        echo serialize($callbacks);
+        $services = new Yaml($filePath, $callbacks);
+
+        $this->loadFromConfig($services);
     }
 }
