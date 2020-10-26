@@ -13,17 +13,28 @@ declare(strict_types=1);
 
 namespace Phalcon\Tests\Integration\Cache\CacheFactory;
 
-use Phalcon\Cache\Cache;
+use IntegrationTester;
 use Phalcon\Cache\AdapterFactory;
+use Phalcon\Cache\Cache;
 use Phalcon\Cache\CacheFactory;
+use Phalcon\Cache\Exception\Exception as CacheException;
+use Phalcon\Storage\SerializerFactory;
+use Phalcon\Support\HelperFactory;
 use Phalcon\Tests\Fixtures\Traits\FactoryTrait;
 use Psr\SimpleCache\CacheInterface;
-use IntegrationTester;
 
+/**
+ * Class LoadCest
+ *
+ * @package Phalcon\Tests\Integration\Cache\CacheFactory
+ */
 class LoadCest
 {
     use FactoryTrait;
 
+    /**
+     * @param IntegrationTester $I
+     */
     public function _before(IntegrationTester $I)
     {
         $this->init();
@@ -32,47 +43,96 @@ class LoadCest
     /**
      * Tests Phalcon\Cache\CacheFactory :: load()
      *
+     * @param IntegrationTester $I
+     *
      * @author Phalcon Team <team@phalcon.io>
-     * @since  2019-05-18
+     * @since  2020-09-09
      */
     public function cacheCacheFactoryLoad(IntegrationTester $I)
     {
         $I->wantToTest('Cache\CacheFactory - load()');
 
         $options = $this->config->cache;
-        $this->runTests($I, $options);
+        $factory = new CacheFactory(
+            new AdapterFactory(
+                new HelperFactory(),
+                new SerializerFactory()
+            )
+        );
+
+        $adapter = $factory->load($options);
+
+        $I->assertInstanceOf(Cache::class, $adapter);
+        $I->assertInstanceOf(CacheInterface::class, $adapter);
+
     }
 
     /**
      * Tests Phalcon\Cache\CacheFactory :: load()
      *
+     * @param IntegrationTester $I
+     *
      * @author Phalcon Team <team@phalcon.io>
-     * @since  2019-05-18
+     * @since  2020-09-09
      */
     public function cacheCacheFactoryLoadArray(IntegrationTester $I)
     {
         $I->wantToTest('Cache\CacheFactory - load() - array');
 
         $options = $this->arrayConfig['cache'];
-        $this->runTests($I, $options);
+        $factory = new CacheFactory(
+            new AdapterFactory(
+                new HelperFactory(),
+                new SerializerFactory()
+            )
+        );
+
+        $adapter = $factory->load($options);
+
+        $I->assertInstanceOf(Cache::class, $adapter);
+        $I->assertInstanceOf(CacheInterface::class, $adapter);
     }
 
-    private function runTests(IntegrationTester $I, $options)
+    /**
+     * Tests Phalcon\Cache\CacheFactory :: load() - exceptions
+     *
+     * @param IntegrationTester $I
+     *
+     * @author Phalcon Team <team@phalcon.io>
+     * @since  2020-09-09
+     */
+    public function cacheCacheFactoryLoadExceptions(IntegrationTester $I)
     {
-        $cacheFactory = new CacheFactory(
-            new AdapterFactory()
+        $I->wantToTest('Cache\CacheFactory - load() - exceptions');
+
+
+        $options = $this->arrayConfig['cache'];
+        $factory = new CacheFactory(
+            new AdapterFactory(
+                new HelperFactory(),
+                new SerializerFactory()
+            )
         );
 
-        $adapter = $cacheFactory->load($options);
-
-        $I->assertInstanceOf(
-            Cache::class,
-            $adapter
+        $I->expectThrowable(
+            new CacheException(
+                'Config must be array or Phalcon\Config\Config object'
+            ),
+            function () use ($factory) {
+                $factory->load(1234);
+            }
         );
 
-        $I->assertInstanceOf(
-            CacheInterface::class,
-            $adapter
+        $I->expectThrowable(
+            new CacheException(
+                'You must provide "adapter" option in factory config parameter.'
+            ),
+            function () use ($factory, $options) {
+                $newOptions = $options;
+                unset($newOptions['adapter']);
+
+                $factory->load($newOptions);
+            }
         );
     }
 }

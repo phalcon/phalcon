@@ -13,6 +13,8 @@ declare(strict_types=1);
 
 namespace Phalcon\Translate;
 
+use Phalcon\Config\ConfigInterface;
+use Phalcon\Support\Exception as SupportException;
 use Phalcon\Support\Traits\FactoryTrait;
 use Phalcon\Translate\Adapter\AdapterInterface;
 use Phalcon\Translate\Adapter\Csv;
@@ -36,7 +38,10 @@ class TranslateFactory
     private InterpolatorFactory $interpolator;
 
     /**
-     * AdapterFactory constructor.
+     * TranslateFactory constructor.
+     *
+     * @param InterpolatorFactory $interpolator
+     * @param array               $services
      */
     public function __construct(InterpolatorFactory $interpolator, array $services = [])
     {
@@ -48,7 +53,7 @@ class TranslateFactory
     /**
      * Factory to create an instance from a Config object
      *
-     * @param array|\Phalcon\Config = [
+     * @param array|ConfigInterface $config = [
      *     'adapter' => 'ini,
      *     'options' => [
      *         'content'       => '',
@@ -61,18 +66,29 @@ class TranslateFactory
      *         'triggerError'  => false
      *     ]
      * ]
+     *
+     * @return AdapterInterface
+     * @throws Exception
+     * @throws SupportException
      */
-    public function load($config)
+    public function load($config): AdapterInterface
     {
-//        let config  = this->checkConfig(config),
-//            name    = config["adapter"],
-//            options = Arr::get(config, "options", []);
-//
-//        return this->newInstance(name, options);
+        $config  = $this->checkConfig($config);
+        $name    = $config['adapter'];
+        $options = $config['options'] ?? [];
+
+        return $this->newInstance($name, $options);
     }
 
     /**
      * Create a new instance of the adapter
+     */
+    /**
+     * @param string $name
+     * @param array  $options
+     *
+     * @return AdapterInterface
+     * @throws SupportException
      */
     public function newInstance(string $name, array $options = []): AdapterInterface
     {
@@ -89,7 +105,36 @@ class TranslateFactory
         return [
             'csv'     => Csv::class,
             'gettext' => Gettext::class,
-            'array'   => NativeArray::class
+            'array'   => NativeArray::class,
         ];
+    }
+
+    /**
+     * Checks the config if it is a valid object
+     *
+     * @param mixed $config
+     *
+     * @return array
+     * @throws Exception
+     */
+    private function checkConfig($config): array
+    {
+        if (true === is_object($config) && $config instanceof ConfigInterface) {
+            $config = $config->toArray();
+        }
+
+        if (true !== is_array($config)) {
+            throw new Exception(
+                'Config must be array or Phalcon\Config\Config object'
+            );
+        }
+
+        if (true !== isset($config['adapter'])) {
+            throw new Exception(
+                'You must provide "adapter" option in factory config parameter.'
+            );
+        }
+
+        return $config;
     }
 }
