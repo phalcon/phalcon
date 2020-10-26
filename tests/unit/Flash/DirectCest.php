@@ -12,6 +12,7 @@
 namespace Phalcon\Tests\Unit\Flash;
 
 use Codeception\Example;
+use Phalcon\Escaper\Escaper;
 use Phalcon\Flash\Direct;
 use Phalcon\Storage\Exception;
 use Phalcon\Tests\Fixtures\Traits\DiTrait;
@@ -118,6 +119,7 @@ class DirectCest
     protected function getFlash()
     {
         $container = $this->getDi();
+        $container->setShared('escaper', new Escaper());
 
         $flash = new Direct();
         $flash->setDI($container);
