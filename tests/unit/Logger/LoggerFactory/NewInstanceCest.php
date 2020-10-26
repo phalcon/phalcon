@@ -14,6 +14,7 @@ declare(strict_types=1);
 namespace Phalcon\Tests\Unit\Logger\LoggerFactory;
 
 use Phalcon\Logger\Adapter\Stream;
+use Phalcon\Logger\AdapterFactory;
 use Phalcon\Logger\Logger;
 use Phalcon\Logger\LoggerFactory;
 use Psr\Log\LoggerInterface;
@@ -21,6 +22,11 @@ use UnitTester;
 
 use function logsDir;
 
+/**
+ * Class NewInstanceCest
+ *
+ * @package Phalcon\Tests\Unit\Logger\LoggerFactory
+ */
 class NewInstanceCest
 {
     /**
@@ -38,7 +44,7 @@ class NewInstanceCest
         $logPath  = logsDir();
         $fileName = $I->getNewFileName('log', 'log');
         $adapter  = new Stream($logPath . $fileName);
-        $factory  = new LoggerFactory();
+        $factory  = new LoggerFactory(new AdapterFactory());
         $logger   = $factory->newInstance(
             'my-logger',
             [
