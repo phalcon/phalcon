@@ -18,6 +18,7 @@ use Phalcon\Config\Adapter\Yaml;
 use Phalcon\Config\Exception;
 use Phalcon\Tests\Fixtures\Traits\ConfigTrait;
 use UnitTester;
+
 use function dataDir;
 
 class ConstructCest

@@ -17,6 +17,7 @@ use Phalcon\Tests\Fixtures\Traits\TranslateGettextTrait;
 use Phalcon\Translate\Adapter\Gettext;
 use Phalcon\Translate\InterpolatorFactory;
 use UnitTester;
+
 use const LC_ALL;
 
 class GetSetLocaleCest
