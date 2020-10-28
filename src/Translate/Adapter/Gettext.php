@@ -16,6 +16,7 @@ namespace Phalcon\Translate\Adapter;
 use ArrayAccess;
 use Phalcon\Translate\Exception;
 use Phalcon\Translate\InterpolatorFactory;
+
 use function array_merge;
 use function bindtextdomain;
 use function call_user_func_array;
@@ -29,7 +30,6 @@ use function putenv;
 use function setlocale;
 use function textdomain;
 
-use function var_dump;
 use const LC_ALL;
 
 /**

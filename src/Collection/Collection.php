@@ -27,10 +27,8 @@ use Serializable;
 use function array_key_exists;
 use function array_keys;
 use function array_values;
-use function is_object;
 use function json_encode;
 use function mb_strtolower;
-use function method_exists;
 use function settype;
 
 /**
