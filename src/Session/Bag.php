@@ -19,7 +19,6 @@ use Phalcon\Di\InjectionAwareInterface;
 use Phalcon\Di\Traits\InjectionAwareTrait;
 
 use function is_array;
-use function is_object;
 
 /**
  * Phalcon\Session\Bag
