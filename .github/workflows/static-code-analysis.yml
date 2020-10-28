@@ -2,6 +2,9 @@ name: Static Code Analysis
 
 on:
   pull_request:
+    branches:
+      - master
+      - v5.0.x
   push:
     paths-ignore:
       - '**.md'
