@@ -1,6 +1,7 @@
 name: Static Code Analysis
 
 on:
+  pull_request:
   push:
     paths-ignore:
       - '**.md'
