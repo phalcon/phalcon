@@ -21,6 +21,7 @@ use Phalcon\Translate\Adapter\Csv;
 use Phalcon\Translate\Exception;
 use Phalcon\Translate\InterpolatorFactory;
 use UnitTester;
+
 use function dataDir;
 
 class ConstructCest
