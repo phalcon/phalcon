@@ -13,8 +13,15 @@ namespace Phalcon\Html\Helper\Input;
 
 /**
  * Class DateTimeLocal
+ *
+ * @package Phalcon\Html\Helper\Input
+ *
+ * @property string $type
  */
 class DateTimeLocal extends AbstractInput
 {
-    protected $type = "datetime-local";
+    /**
+     * @var string
+     */
+    protected string $type = 'datetime-local';
 }

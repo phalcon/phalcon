@@ -25,7 +25,7 @@ use function str_replace;
  * The resulting HTML when calling `render()` will have each breadcrumb enclosed
  * in `<dt>` tags, while the whole string is enclosed in `<dl>` tags.
  *
- * @property array  $elements
+ * @property array  $data
  * @property string $separator
  * @property string $template
  */
@@ -36,7 +36,7 @@ class Breadcrumbs
      *
      * @var array
      */
-    private $elements = [];
+    private $data = [];
 
     /**
      * Crumb separator
@@ -50,7 +50,7 @@ class Breadcrumbs
      *
      * @var string
      */
-    private $template = "<dt><a href=\"{link}\">{label}</a></dt>";
+    private $template = '<dt><a href="{link}">{label}</a></dt>';
 
     /**
      * Adds a new crumb.
@@ -68,9 +68,9 @@ class Breadcrumbs
      *
      * @return Breadcrumbs
      */
-    public function add(string $label, string $link = ""): Breadcrumbs
+    public function add(string $label, string $link = ''): Breadcrumbs
     {
-        $this->elements[$link] = $label;
+        $this->data[$link] = $label;
 
         return $this;
     }
@@ -84,7 +84,7 @@ class Breadcrumbs
      */
     public function clear(): void
     {
-        $this->elements = [];
+        $this->data = [];
     }
 
     /**
@@ -111,11 +111,7 @@ class Breadcrumbs
      */
     public function remove(string $link): void
     {
-        $elements = $this->elements;
-
-        unset($elements[$link]);
-
-        $this->elements = $elements;
+        unset($this->data[$link]);
     }
 
     /**
@@ -124,33 +120,35 @@ class Breadcrumbs
      * ```php
      * echo $breadcrumbs->render();
      * ```
+     *
+     * @return string
      */
     public function render(): string
     {
         $output    = [];
-        $elements  = $this->elements;
-        $urls      = array_keys($elements);
+        $urls      = array_keys($this->data);
         $lastUrl   = end($urls);
-        $lastLabel = $elements[$lastUrl];
+        $lastLabel = $this->data[$lastUrl];
 
-        unset($elements[$lastUrl]);
+        unset($this->data[$lastUrl]);
 
-        foreach ($elements as $url => $element) {
+        foreach ($this->data as $url => $element) {
             $output[] = $this->getLink($element, $url);
         }
 
         /**
          * Check if this is the "Home" element i.e. count() = 0
          */
-        if (0 !== count($elements)) {
-            $output[] = "<dt>" . $lastLabel . "</dt>";
-        } else {
-            $output[] = $this->getLink($lastLabel, $lastUrl);
+        $line = '<dt>' . $lastLabel . '</dt>';
+        if (true === empty($this->data)) {
+            $line = $this->getLink($lastLabel, $lastUrl);
         }
 
-        return "<dl>"
-            . implode("<dt>" . $this->separator . "</dt>", $output)
-            . "</dl>";
+        $output[] = $line;
+
+        return '<dl>'
+            . implode('<dt>' . $this->separator . '</dt>', $output)
+            . '</dl>';
     }
 
     /**
@@ -169,10 +167,12 @@ class Breadcrumbs
 
     /**
      * Returns the internal breadcrumbs array
+     *
+     * @return array
      */
     public function toArray(): array
     {
-        return $this->elements;
+        return $this->data;
     }
 
     /**
@@ -185,8 +185,8 @@ class Breadcrumbs
     {
         return str_replace(
             [
-                "{label}",
-                "{link}",
+                '{label}',
+                '{link}',
             ],
             [
                 $label,

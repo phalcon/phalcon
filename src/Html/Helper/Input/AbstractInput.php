@@ -18,6 +18,8 @@ use function array_merge;
 /**
  * Class AbstractInput
  *
+ * @package Phalcon\Html\Helper\Input
+ *
  * @property array  $attributes
  * @property string $type
  * @property string $value
@@ -27,12 +29,12 @@ abstract class AbstractInput extends AbstractHelper
     /**
      * @var string
      */
-    protected $type = "text";
+    protected string $type = 'text';
 
     /**
      * @var array
      */
-    protected $attributes = [];
+    protected array $attributes = [];
 
     /**
      * @param string      $name
@@ -47,12 +49,12 @@ abstract class AbstractInput extends AbstractHelper
         array $attributes = []
     ): AbstractInput {
         $this->attributes = [
-            "type" => $this->type,
-            "name" => $name,
+            'type' => $this->type,
+            'name' => $name,
         ];
 
-        if (!isset($attributes["id"])) {
-            $this->attributes["id"] = $name;
+        if (!isset($attributes['id'])) {
+            $this->attributes['id'] = $name;
         }
 
         $this->setValue($value);
@@ -69,14 +71,15 @@ abstract class AbstractInput extends AbstractHelper
      */
     public function __toString()
     {
-        $attributes       = $this->attributes;
+        $output = $this->renderTag(
+            'input',
+            $this->attributes,
+            '/'
+        );
+
         $this->attributes = [];
 
-        return $this->renderTag(
-            "input",
-            $attributes,
-            "/"
-        );
+        return $output;
     }
 
     /**
@@ -89,7 +92,7 @@ abstract class AbstractInput extends AbstractHelper
     public function setValue(string $value = null): AbstractInput
     {
         if (null !== $value) {
-            $this->attributes["value"] = $value;
+            $this->attributes['value'] = $value;
         }
 
         return $this;

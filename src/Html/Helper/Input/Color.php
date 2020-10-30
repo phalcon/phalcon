@@ -13,8 +13,15 @@ namespace Phalcon\Html\Helper\Input;
 
 /**
  * Class Color
+ *
+ * @package Phalcon\Html\Helper\Input
+ *
+ * @property string $type
  */
 class Color extends AbstractInput
 {
-    protected $type = "color";
+    /**
+     * @var string
+     */
+    protected string $type = 'color';
 }
