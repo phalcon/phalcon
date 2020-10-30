@@ -23,5 +23,5 @@ class Numeric extends AbstractInput
     /**
      * @var string
      */
-    protected $type = 'numeric';
+    protected string $type = 'numeric';
 }

@@ -17,6 +17,7 @@ use Phalcon\Html\Exception;
 use Phalcon\Html\Helper\Script;
 use Phalcon\Html\TagFactory;
 use UnitTester;
+use const PHP_EOL;
 
 /**
  * Class UnderscoreInvokeCest
@@ -74,8 +75,8 @@ class UnderscoreInvokeCest
         return [
             [
                 'message'   => 'base',
-                'indent'    => null,
-                'delimiter' => null,
+                'indent'    => '    ',
+                'delimiter' => PHP_EOL,
                 'add'       => [
                     [
                         "/js/custom.js",

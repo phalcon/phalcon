@@ -23,5 +23,5 @@ class Password extends AbstractInput
     /**
      * @var string
      */
-    protected $type = 'password';
+    protected string $type = 'password';
 }

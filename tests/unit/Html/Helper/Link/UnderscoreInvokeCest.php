@@ -16,6 +16,7 @@ use Phalcon\Html\Escaper;
 use Phalcon\Html\Helper\Link;
 use Phalcon\Html\TagFactory;
 use UnitTester;
+use const PHP_EOL;
 
 class UnderscoreInvokeCest
 {
@@ -70,8 +71,8 @@ class UnderscoreInvokeCest
                     'prev' => 'https://phalcon.io/page/1',
                     'next' => 'https://phalcon.io/page/2',
                 ],
-                'indent'    => null,
-                'delimiter' => null,
+                'indent'    => '    ',
+                'delimiter' => PHP_EOL,
                 'result'    => "    <link rel=\"prev\" href=\"https://phalcon.io/page/1\" />" . PHP_EOL
                     . "    <link rel=\"next\" href=\"https://phalcon.io/page/2\" />" . PHP_EOL,
             ],

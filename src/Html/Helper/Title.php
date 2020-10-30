@@ -15,6 +15,7 @@ use Phalcon\Html\Exception;
 
 use function array_merge;
 use function implode;
+use const PHP_EOL;
 
 /**
  * Class Title
@@ -61,8 +62,8 @@ class Title extends AbstractHelper
      */
     public function __invoke(
         string $separator = '',
-        string $indent = null,
-        string $delimiter = null
+        string $indent = '',
+        string $delimiter = PHP_EOL
     ): Title {
         $this->delimiter = $delimiter;
         $this->indent    = $indent;
