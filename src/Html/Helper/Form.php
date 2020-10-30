@@ -15,6 +15,8 @@ use Phalcon\Html\Exception;
 
 /**
  * Class Form
+ *
+ * @package Phalcon\Html\Helper
  */
 class Form extends AbstractHelper
 {
@@ -29,12 +31,12 @@ class Form extends AbstractHelper
     public function __invoke(array $attributes = [])
     {
         $overrides = [
-            "method"  => "post",
-            "enctype" => "multipart/form-data",
+            'method'  => 'post',
+            'enctype' => 'multipart/form-data',
         ];
 
         $overrides = $this->orderAttributes($overrides, $attributes);
 
-        return $this->renderElement("form", $overrides);
+        return $this->renderElement('form', $overrides);
     }
 }

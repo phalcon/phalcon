@@ -14,6 +14,8 @@ namespace Phalcon\Html\Helper;
 /**
  * Class AbstractSeries
  *
+ * @package Phalcon\Html\Helper
+ *
  * @property array $attributes
  * @property array $store
  */
@@ -22,12 +24,12 @@ abstract class AbstractSeries extends AbstractHelper
     /**
      * @var array
      */
-    protected $attributes = [];
+    protected array $attributes = [];
 
     /**
      * @var array
      */
-    protected $store = [];
+    protected array $store = [];
 
     /**
      * @param string $indent

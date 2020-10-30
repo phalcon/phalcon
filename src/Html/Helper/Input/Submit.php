@@ -13,8 +13,15 @@ namespace Phalcon\Html\Helper\Input;
 
 /**
  * Class Submit
+ *
+ * @package Phalcon\Html\Helper\Input
+ *
+ * @property string $type
  */
 class Submit extends AbstractInput
 {
-    protected $type = "submit";
+    /**
+     * @var string
+     */
+    protected string $type = 'submit';
 }

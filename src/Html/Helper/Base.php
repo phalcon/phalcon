@@ -17,6 +17,8 @@ use function array_merge;
 
 /**
  * Class Base
+ *
+ * @package Phalcon\Html\Helper
  */
 class Base extends AbstractHelper
 {
@@ -31,19 +33,18 @@ class Base extends AbstractHelper
      */
     public function __invoke(string $href, array $attributes = [])
     {
-        if (!empty($href)) {
-            $overrides = ["href" => $href];
-        } else {
-            $overrides = [];
+        $overrides = [];
+        if (true !== empty($href)) {
+            $overrides = ['href' => $href];
         }
 
         /**
-         * Avoid duplicate "href" and ignore it if it is passed in the attributes
+         * Avoid duplicate 'href' and ignore it if it is passed in the attributes
          */
-        unset($attributes["href"]);
+        unset($attributes['href']);
 
         $overrides = array_merge($overrides, $attributes);
 
-        return $this->renderElement("base", $overrides);
+        return $this->renderElement('base', $overrides);
     }
 }

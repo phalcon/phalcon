@@ -17,6 +17,8 @@ use function array_merge;
 
 /**
  * Class Img
+ *
+ * @package Phalcon\Html\Helper
  */
 class Img extends AbstractHelper
 {
@@ -31,15 +33,15 @@ class Img extends AbstractHelper
      */
     public function __invoke(string $src, array $attributes = [])
     {
-        $overrides = ["src" => $src];
+        $overrides = ['src' => $src];
 
         /**
-         * Avoid duplicate "src" and ignore it if it is passed in the attributes
+         * Avoid duplicate 'src' and ignore it if it is passed in the attributes
          */
-        unset($attributes["src"]);
+        unset($attributes['src']);
 
         $overrides = array_merge($overrides, $attributes);
 
-        return $this->selfClose("img", $overrides);
+        return $this->selfClose('img', $overrides);
     }
 }

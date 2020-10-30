@@ -17,12 +17,20 @@ use Phalcon\Html\Link\EvolvableLink;
 use Phalcon\Html\Link\Serializer\Header;
 use UnitTester;
 
+/**
+ * Class SerializeCest
+ *
+ * @package Phalcon\Tests\Unit\Html\Link\Serializer\Header
+ */
 class SerializeCest
 {
     /**
      * Tests Phalcon\Html\Link\Serializer\Header :: serialize()
      *
-     * @since  2019-11-02
+     * @param UnitTester $I
+     *
+     * @author Phalcon Team <team@phalcon.io>
+     * @since  2020-09-09
      */
     public function linkLinkSerializerHeaderSerialize(UnitTester $I)
     {

@@ -15,6 +15,8 @@ use Phalcon\Html\Exception;
 
 /**
  * Class Button
+ *
+ * @package Phalcon\Html\Helper
  */
 class Button extends AbstractHelper
 {
@@ -33,6 +35,6 @@ class Button extends AbstractHelper
         array $attributes = [],
         bool $raw = false
     ): string {
-        return $this->renderFullElement("button", $text, $attributes, $raw);
+        return $this->renderFullElement('button', $text, $attributes, $raw);
     }
 }

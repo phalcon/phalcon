@@ -13,10 +13,11 @@ namespace Phalcon\Html\Helper;
 
 /**
  * Class Ol
+ *
+ * @package Phalcon\Html\Helper
  */
 class Ol extends AbstractList
 {
-
     /**
      * Add an element to the list
      *
@@ -29,7 +30,7 @@ class Ol extends AbstractList
     public function add(string $text, array $attributes = [], bool $raw = false)
     {
         $this->store[] = [
-            "renderFullElement",
+            'renderFullElement',
             [
                 $this->elementTag,
                 $text,

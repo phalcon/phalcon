@@ -13,6 +13,8 @@ namespace Phalcon\Html\Helper;
 
 /**
  * Class Link
+ *
+ * @package Phalcon\Html\Helper
  */
 class Link extends AbstractSeries
 {
@@ -32,11 +34,11 @@ class Link extends AbstractSeries
         ];
 
         $this->store[] = [
-            "renderTag",
+            'renderTag',
             [
                 $this->getTag(),
                 $attributes,
-                "/",
+                '/',
             ],
             $this->indent(),
         ];

@@ -25,17 +25,17 @@ class Select extends AbstractList
     /**
      * @var string
      */
-    protected $elementTag = 'option';
+    protected string $elementTag = 'option';
 
     /**
      * @var bool
      */
-    protected $inOptGroup = false;
+    protected bool $inOptGroup = false;
 
     /**
      * @var string
      */
-    protected $selected = '';
+    protected string $selected = '';
 
     /**
      * Add an element to the list
@@ -111,8 +111,10 @@ class Select extends AbstractList
      *
      * @return Select
      */
-    public function optGroup(string $label = null, array $attributes = []): Select
-    {
+    public function optGroup(
+        string $label = null,
+        array $attributes = []
+    ): Select {
         if (!$this->inOptGroup) {
             $this->store[]     = [
                 'optGroupStart',

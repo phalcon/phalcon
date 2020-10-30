@@ -15,6 +15,8 @@ use Phalcon\Html\Exception;
 
 /**
  * Class Body
+ *
+ * @package Phalcon\Html\Helper
  */
 class Body extends AbstractHelper
 {
@@ -28,6 +30,6 @@ class Body extends AbstractHelper
      */
     public function __invoke(array $attributes = [])
     {
-        return $this->renderElement("body", $attributes);
+        return $this->renderElement('body', $attributes);
     }
 }

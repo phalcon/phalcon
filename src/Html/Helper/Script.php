@@ -15,6 +15,8 @@ use function array_merge;
 
 /**
  * Class Script
+ *
+ * @package Phalcon\Html\Helper
  */
 class Script extends Style
 {
@@ -41,7 +43,7 @@ class Script extends Style
             'type' => 'text/javascript',
         ];
 
-        unset($attributes["src"]);
+        unset($attributes['src']);
 
         return array_merge($required, $attributes);
     }

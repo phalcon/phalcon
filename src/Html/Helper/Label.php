@@ -15,6 +15,8 @@ use Phalcon\Html\Exception;
 
 /**
  * Class Label
+ *
+ * @package Phalcon\Html\Helper
  */
 class Label extends AbstractHelper
 {
@@ -28,6 +30,6 @@ class Label extends AbstractHelper
      */
     public function __invoke(array $attributes = [])
     {
-        return $this->renderElement("label", $attributes);
+        return $this->renderElement('label', $attributes);
     }
 }
