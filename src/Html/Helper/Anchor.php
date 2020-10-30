@@ -17,6 +17,8 @@ use function array_merge;
 
 /**
  * Class Anchor
+ *
+ * @package Phalcon\Html\Helper
  */
 class Anchor extends AbstractHelper
 {
@@ -39,7 +41,7 @@ class Anchor extends AbstractHelper
     ): string {
         $overrides = $this->processAttributes($href, $attributes);
 
-        return $this->renderFullElement("a", $text, $overrides, $raw);
+        return $this->renderFullElement('a', $text, $overrides, $raw);
     }
 
     /**
@@ -50,12 +52,12 @@ class Anchor extends AbstractHelper
      */
     protected function processAttributes(string $href, array $attributes): array
     {
-        $overrides = ["href" => $href];
+        $overrides = ['href' => $href];
 
         /**
-         * Avoid duplicate "href" and ignore it if it is passed in the attributes
+         * Avoid duplicate 'href' and ignore it if it is passed in the attributes
          */
-        unset($attributes["href"]);
+        unset($attributes['href']);
 
         return array_merge($overrides, $attributes);
     }

@@ -12,24 +12,31 @@ declare(strict_types=1);
 namespace Phalcon\Tests\Unit\Html\Helper\Meta;
 
 use Codeception\Example;
-use Phalcon\Factory\Exception;
 use Phalcon\Html\Escaper;
+use Phalcon\Html\Exception;
 use Phalcon\Html\Helper\Meta;
 use Phalcon\Html\TagFactory;
 use UnitTester;
 
+/**
+ * Class UnderscoreInvokeCest
+ *
+ * @package Phalcon\Tests\Unit\Html\Helper\Meta
+ */
 class UnderscoreInvokeCest
 {
     /**
      * Tests Phalcon\Html\Helper\Meta :: __invoke()
+     *
+     * @dataProvider getExamples
      *
      * @param UnitTester $I
      * @param Example    $example
      *
      * @throws Exception
      *
-     * @dataProvider getExamples
-     * @since        2020-01-06
+     * @author Phalcon Team <team@phalcon.io>
+     * @since  2020-09-09
      */
     public function htmlHelperMetaUnderscoreInvoke(UnitTester $I, Example $example)
     {

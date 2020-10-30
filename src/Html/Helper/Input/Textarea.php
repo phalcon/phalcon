@@ -15,13 +15,17 @@ use Phalcon\Html\Exception;
 
 /**
  * Class Textarea
+ *
+ * @package Phalcon\Html\Helper\Input
+ *
+ * @property string $type
  */
 class Textarea extends AbstractInput
 {
     /**
      * @var string
      */
-    protected $type = 'textarea';
+    protected string $type = 'textarea';
 
     /**
      * Returns the HTML for the input.

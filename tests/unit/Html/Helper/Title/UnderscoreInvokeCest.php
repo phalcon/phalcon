@@ -13,20 +13,30 @@ namespace Phalcon\Tests\Unit\Html\Helper\Title;
 
 use Codeception\Example;
 use Phalcon\Html\Escaper;
+use Phalcon\Html\Exception;
 use Phalcon\Html\Helper\Title;
 use Phalcon\Html\TagFactory;
 use UnitTester;
 
+/**
+ * Class UnderscoreInvokeCest
+ *
+ * @package Phalcon\Tests\Unit\Html\Helper\Title
+ */
 class UnderscoreInvokeCest
 {
     /**
      * Tests Phalcon\Html\Helper\Title :: __invoke()
      *
+     * @dataProvider getExamples
+     *
      * @param UnitTester $I
      * @param Example    $example
      *
-     * @dataProvider getExamples
-     * @since        2020-01-07
+     * @throws Exception
+     *
+     * @author Phalcon Team <team@phalcon.io>
+     * @since  2020-09-09
      */
     public function htmlHelperTitleUnderscoreInvoke(UnitTester $I, Example $example)
     {

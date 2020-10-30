@@ -11,7 +11,7 @@ declare(strict_types=1);
 
 namespace Phalcon\Html\Helper;
 
-use Phalcon\Html\Escaper;
+use Phalcon\Html\EscaperInterface;
 use Phalcon\Html\Exception;
 
 use function array_intersect_key;
@@ -27,39 +27,41 @@ use const PHP_EOL;
 /**
  * Class AbstractHelper
  *
- * @property string  $delimiter
- * @property Escaper $escaper
- * @property string  $indent
- * @property int     $indentLevel
+ * @package Phalcon\Html\Helper
+ *
+ * @property string           $delimiter
+ * @property EscaperInterface $escaper
+ * @property string           $indent
+ * @property int              $indentLevel
  */
 abstract class AbstractHelper
 {
     /**
      * @var string
      */
-    protected $delimiter = PHP_EOL;
+    protected string $delimiter = PHP_EOL;
 
     /**
-     * @var Escaper
+     * @var EscaperInterface
      */
-    protected $escaper;
+    protected EscaperInterface $escaper;
 
     /**
      * @var string
      */
-    protected $indent = "    ";
+    protected string $indent = '    ';
 
     /**
      * @var int
      */
-    protected $indentLevel = 1;
+    protected int $indentLevel = 1;
 
     /**
      * AbstractHelper constructor.
      *
-     * @param Escaper $escaper
+     * @param EscaperInterface $escaper
      */
-    public function __construct(Escaper $escaper)
+    public function __construct(EscaperInterface $escaper)
     {
         $this->escaper = $escaper;
     }
@@ -76,7 +78,7 @@ abstract class AbstractHelper
     {
         $tag = $raw ? $tag : $this->escaper->html($tag);
 
-        return "</" . $tag . ">";
+        return '</' . $tag . '>';
     }
 
     /**
@@ -97,19 +99,21 @@ abstract class AbstractHelper
      *
      * @return array
      */
-    protected function orderAttributes(array $overrides, array $attributes): array
-    {
+    protected function orderAttributes(
+        array $overrides,
+        array $attributes
+    ): array {
         $order = [
-            "rel"    => null,
-            "type"   => null,
-            "for"    => null,
-            "src"    => null,
-            "href"   => null,
-            "action" => null,
-            "id"     => null,
-            "name"   => null,
-            "value"  => null,
-            "class"  => null,
+            'rel'    => null,
+            'type'   => null,
+            'for'    => null,
+            'src'    => null,
+            'href'   => null,
+            'action' => null,
+            'id'     => null,
+            'name'   => null,
+            'value'  => null,
+            'class'  => null,
         ];
 
         $intersect = array_intersect_key($order, $attributes);
@@ -117,9 +121,9 @@ abstract class AbstractHelper
         $results   = array_merge($overrides, $results);
 
         /**
-         * Just in case remove the "escape" attribute
+         * Just in case remove the 'escape' attribute
          */
-        unset($results["escape"]);
+        unset($results['escape']);
 
         return $results;
     }
@@ -137,7 +141,7 @@ abstract class AbstractHelper
         array $elements,
         string $delimiter
     ): string {
-        $result = "";
+        $result = '';
         foreach ($elements as $item) {
             $result .= $item[2]
                 . call_user_func_array([$this, $item[0]], $item[1])
@@ -156,10 +160,14 @@ abstract class AbstractHelper
      */
     protected function renderAttributes(array $attributes): string
     {
-        $result = "";
+        $result = '';
         foreach ($attributes as $key => $value) {
             if (is_string($key) && null !== $value) {
-                $result .= $key . "=\"" . $this->escaper->attributes($value) . "\" ";
+                $result .= $key
+                    . '="'
+                    . $this->escaper->attributes($value)
+                    . '" '
+                ;
             }
         }
 
@@ -175,8 +183,10 @@ abstract class AbstractHelper
      * @return string
      * @throws Exception
      */
-    protected function renderElement(string $tag, array $attributes = []): string
-    {
+    protected function renderElement(
+        string $tag,
+        array $attributes = []
+    ): string {
         return $this->renderTag($tag, $attributes);
     }
 
@@ -199,7 +209,9 @@ abstract class AbstractHelper
     ): string {
         $content = $raw ? $text : $this->escaper->html($text);
 
-        return $this->renderElement($tag, $attributes) . $content . $this->close($tag, $raw);
+        return $this->renderElement($tag, $attributes) .
+            $content .
+            $this->close($tag, $raw);
     }
 
     /**
@@ -211,17 +223,20 @@ abstract class AbstractHelper
      *
      * @return string
      */
-    protected function renderTag(string $tag, array $attributes = [], string $close = ""): string
-    {
-        $escapedAttrs = "";
-        if (count($attributes) > 0) {
+    protected function renderTag(
+        string $tag,
+        array $attributes = [],
+        string $close = ''
+    ): string {
+        $escapedAttrs = '';
+        if (true !== empty($attributes)) {
             $attrs        = $this->orderAttributes([], $attributes);
-            $escapedAttrs = " " . rtrim($this->renderAttributes($attrs));
+            $escapedAttrs = ' ' . rtrim($this->renderAttributes($attrs));
         }
 
-        $close = empty(trim($close)) ? '' : " " . trim($close);
+        $close = empty(trim($close)) ? '' : ' ' . trim($close);
 
-        return "<" . $tag . $escapedAttrs . $close . ">";
+        return '<' . $tag . $escapedAttrs . $close . '>';
     }
 
     /**
@@ -234,6 +249,6 @@ abstract class AbstractHelper
      */
     protected function selfClose(string $tag, array $attributes = []): string
     {
-        return $this->renderTag($tag, $attributes, "/");
+        return $this->renderTag($tag, $attributes, '/');
     }
 }

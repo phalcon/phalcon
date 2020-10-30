@@ -16,6 +16,8 @@ use Phalcon\Html\Exception;
 /**
  * Class AbstractList
  *
+ * @package Phalcon\Html\Helper
+ *
  * @property array  $attributes
  * @property string $elementTag
  * @property array  $store
@@ -25,17 +27,17 @@ abstract class AbstractList extends AbstractHelper
     /**
      * @var array
      */
-    protected $attributes = [];
+    protected array $attributes = [];
 
     /**
      * @var string
      */
-    protected $elementTag = "li";
+    protected string $elementTag = 'li';
 
     /**
      * @var array
      */
-    protected $store = [];
+    protected array $store = [];
 
     /**
      * @param string $indent
@@ -72,7 +74,7 @@ abstract class AbstractList extends AbstractHelper
     public function __toString()
     {
         if (empty($this->store)) {
-            return "";
+            return '';
         }
 
         $contents = $this->delimiter .

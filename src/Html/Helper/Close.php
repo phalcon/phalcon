@@ -13,6 +13,8 @@ namespace Phalcon\Html\Helper;
 
 /**
  * Class Close
+ *
+ * @package Phalcon\Html\Helper
  */
 class Close extends AbstractHelper
 {

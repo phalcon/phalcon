@@ -15,6 +15,8 @@ use Phalcon\Html\Exception;
 
 /**
  * Class Element
+ *
+ * @package Phalcon\Html\Helper
  */
 class Element extends AbstractHelper
 {

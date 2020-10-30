@@ -54,14 +54,26 @@ use Phalcon\Html\Helper\Style;
 use Phalcon\Html\Helper\Title;
 use Phalcon\Html\Helper\Ul;
 use Phalcon\Html\TagFactory;
+use Phalcon\Support\Exception as SupportException;
 use UnitTester;
 
+/**
+ * Class NewInstanceCest
+ *
+ * @package Phalcon\Tests\Unit\Html\TagFactory
+ */
 class NewInstanceCest
 {
     /**
      * Tests Phalcon\Tag\TagFactory :: newInstance() - services
      *
      * @dataProvider getData
+     *
+     * @param UnitTester $I
+     * @param Example    $example
+     *
+     * @author Phalcon Team <team@phalcon.io>
+     * @since  2020-09-09
      */
     public function filterTagFactoryNewInstanceServices(UnitTester $I, Example $example)
     {
@@ -77,17 +89,17 @@ class NewInstanceCest
     /**
      * Tests Phalcon\Storage\SerializerFactory :: newInstance() - exception
      *
-     * @throws Exception
-     * @since  2019-05-04
+     * @param UnitTester $I
      *
      * @author Phalcon Team <team@phalcon.io>
+     * @since  2020-09-09
      */
     public function filterTagFactoryNewInstanceException(UnitTester $I)
     {
         $I->wantToTest('Tag\TagFactory - newInstance() - exception');
 
         $I->expectThrowable(
-            new Exception('Service unknown is not registered'),
+            new SupportException('Service unknown is not registered'),
             function () {
                 $escaper = new Escaper();
                 $factory = new TagFactory($escaper);

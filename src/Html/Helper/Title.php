@@ -19,6 +19,8 @@ use function implode;
 /**
  * Class Title
  *
+ * @package Phalcon\Html\Helper
+ *
  * @property array  $append
  * @property string $delimiter
  * @property string $indent
@@ -31,22 +33,22 @@ class Title extends AbstractHelper
     /**
      * @var array
      */
-    protected $append = [];
+    protected array $append = [];
 
     /**
      * @var array
      */
-    protected $prepend = [];
+    protected array $prepend = [];
 
     /**
      * @var string
      */
-    protected $title = '';
+    protected string $title = '';
 
     /**
      * @var string
      */
-    protected $separator = '';
+    protected string $separator = '';
 
     /**
      * Sets the separator and returns the object back
@@ -160,15 +162,4 @@ class Title extends AbstractHelper
 
         return $this;
     }
-
-//    public static function checkField(var parameters) -> string
-//    public static function endForm() -> string
-//    public static function fileField(var parameters) -> string
-//    public static function linkTo(parameters, text = null, local = true) -> string
-//    public static function radioField(var parameters) -> string
-//    public static function select(var parameters, data = null) -> string
-//    public static function selectStatic(parameters, data = null) -> string
-//    public static function tagHtml( string tagName, var parameters = null,
-//          bool selfClose = false, bool onlyStart = false, bool useEol = false) -> string
-//    public static function tagHtmlClose(string tagName, bool useEol = false) -> string
 }

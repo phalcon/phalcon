@@ -12,25 +12,32 @@ declare(strict_types=1);
 namespace Phalcon\Tests\Unit\Html\Helper\Input;
 
 use Codeception\Example;
-use Phalcon\Factory\Exception as ExceptionAlias;
 use Phalcon\Html\Escaper;
+use Phalcon\Html\Exception;
 use Phalcon\Html\Helper\Input\Input;
 use Phalcon\Html\Helper\Input\Textarea;
 use Phalcon\Html\TagFactory;
 use UnitTester;
 
+/**
+ * Class UnderscoreInvokeCest
+ *
+ * @package Phalcon\Tests\Unit\Html\Helper\Input
+ */
 class UnderscoreInvokeCest
 {
     /**
      * Tests Phalcon\Html\Helper\Input :: __invoke()
      *
+     * @dataProvider getExamples
+     *
      * @param UnitTester $I
      * @param Example    $example
      *
-     * @throws ExceptionAlias
+     * @throws Exception
      *
-     * @dataProvider getExamples
-     * @since        2020-01-07
+     * @author Phalcon Team <team@phalcon.io>
+     * @since  2020-09-09
      */
     public function htmlHelperInputUnderscoreInvoke(UnitTester $I, Example $example)
     {
@@ -69,7 +76,8 @@ class UnderscoreInvokeCest
      *
      * @param UnitTester $I
      *
-     * @since  2020-01-07
+     * @author Phalcon Team <team@phalcon.io>
+     * @since  2020-09-09
      */
     public function htmlHelperInputUnderscoreInvokeInput(UnitTester $I)
     {
@@ -92,8 +100,8 @@ class UnderscoreInvokeCest
      *
      * @param UnitTester $I
      *
-     * @throws ExceptionAlias
-     * @since  2020-01-07
+     * @author Phalcon Team <team@phalcon.io>
+     * @since  2020-09-09
      */
     public function htmlHelperInputUnderscoreInvokeTextarea(UnitTester $I)
     {

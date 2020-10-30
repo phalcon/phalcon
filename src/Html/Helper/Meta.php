@@ -15,6 +15,8 @@ use Phalcon\Html\Exception;
 
 /**
  * Class Meta
+ *
+ * @package Phalcon\Html\Helper
  */
 class Meta extends AbstractSeries
 {
@@ -28,7 +30,7 @@ class Meta extends AbstractSeries
     public function add(array $attributes = []): Meta
     {
         $this->store[] = [
-            "renderTag",
+            'renderTag',
             [
                 $this->getTag(),
                 $attributes,

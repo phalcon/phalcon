@@ -17,10 +17,11 @@ use function array_merge;
 
 /**
  * Class Style
+ *
+ * @package Phalcon\Html\Helper
  */
 class Style extends AbstractSeries
 {
-
     /**
      * Add an element to the list
      *
@@ -33,7 +34,7 @@ class Style extends AbstractSeries
     public function add(string $href, array $attributes = [])
     {
         $this->store[] = [
-            "renderFullElement",
+            'renderFullElement',
             [
                 $this->getTag(),
                 '',
@@ -70,7 +71,7 @@ class Style extends AbstractSeries
             'media' => 'screen',
         ];
 
-        unset($attributes["href"]);
+        unset($attributes['href']);
 
         return array_merge($required, $attributes);
     }
