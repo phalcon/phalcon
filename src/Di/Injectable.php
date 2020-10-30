@@ -40,7 +40,7 @@ use function is_object;
 // * @property \Phalcon\Security $security
 // * @property \Phalcon\Crypt|\Phalcon\CryptInterface $crypt
 // * @property \Phalcon\Tag $tag
-// * @property \Phalcon\Escaper|\Phalcon\Escaper\EscaperInterface $escaper
+// * @property \Phalcon\Escaper|\Phalcon\Html\EscaperInterface $escaper
 // * @property \Phalcon\Annotations\Adapter\Memory|\Phalcon\Annotations\Adapter $annotations
 // * @property \Phalcon\Mvc\Model\Manager|\Phalcon\Mvc\Model\ManagerInterface $modelsManager
 // * @property \Phalcon\Mvc\Model\MetaData\Memory|\Phalcon\Mvc\Model\MetadataInterface $modelsMetadata

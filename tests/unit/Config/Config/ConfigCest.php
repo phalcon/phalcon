@@ -9,7 +9,7 @@
  * file that was distributed with this source code.
  */
 
-namespace Phalcon\Test\Unit\Config\Config;
+namespace Phalcon\Tests\Unit\Config\Config;
 
 use Phalcon\Config\Config;
 use Phalcon\Tests\Fixtures\Traits\ConfigTrait;

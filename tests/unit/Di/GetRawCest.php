@@ -15,7 +15,7 @@ namespace Phalcon\Tests\Unit\Di;
 
 use Exception;
 use Phalcon\Di\Di;
-use Phalcon\Escaper\Escaper;
+use Phalcon\Html\Escaper;
 use UnitTester;
 
 /**

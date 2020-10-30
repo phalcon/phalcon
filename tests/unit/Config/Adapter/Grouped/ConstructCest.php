@@ -13,7 +13,7 @@
 
 declare(strict_types=1);
 
-namespace Phalcon\Test\Unit\Config\Adapter\Grouped;
+namespace Phalcon\Tests\Unit\Config\Adapter\Grouped;
 
 use Phalcon\Config\Config;
 use Phalcon\Config\Adapter\Grouped;

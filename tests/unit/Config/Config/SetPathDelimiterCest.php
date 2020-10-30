@@ -11,7 +11,7 @@
 
 declare(strict_types=1);
 
-namespace Phalcon\Test\Unit\Config\Config;
+namespace Phalcon\Tests\Unit\Config\Config;
 
 use Phalcon\Tests\Fixtures\Traits\ConfigTrait;
 use UnitTester;

@@ -13,7 +13,7 @@ declare(strict_types=1);
 
 namespace Phalcon\Di;
 
-use Phalcon\Escaper\Escaper;
+use Phalcon\Html\Escaper;
 use Phalcon\Events\Manager as EventsManager;
 use Phalcon\Filter\FilterFactory;
 

@@ -11,9 +11,9 @@
 
 declare(strict_types=1);
 
-namespace Phalcon\Escaper;
+namespace Phalcon\Html;
 
-use Phalcon\Escaper\Traits\EscaperHelperTrait;
+use Phalcon\Html\Traits\EscaperHelperTrait;
 
 use function htmlspecialchars;
 use function is_string;
@@ -74,6 +74,10 @@ class Escaper implements EscaperInterface
      */
     public function attributes(string $attribute = null): string
     {
+        if (null === $attribute) {
+            return '';
+        }
+
         return htmlspecialchars(
             $attribute,
             ENT_QUOTES,
@@ -116,7 +120,8 @@ class Escaper implements EscaperInterface
          * Check if charset is ASCII or ISO-8859-1
          */
         $charset = $this->isBasicCharset($input);
-
+        var_dump('here');
+        var_dump($charset);
         if (true === is_string($input)) {
             return $charset;
         }
@@ -172,6 +177,9 @@ class Escaper implements EscaperInterface
      */
     public function html(string $input = null): string
     {
+        if (null === $input) {
+            return '';
+        }
         return htmlspecialchars(
             $input,
             $this->flags,
@@ -214,7 +222,7 @@ class Escaper implements EscaperInterface
          */
         return mb_convert_encoding(
             $input,
-            "UTF-32",
+            'UTF-32',
             $this->detectEncoding($input)
         );
     }
@@ -301,7 +309,7 @@ class Escaper implements EscaperInterface
         $isIso      = false;
         $inputArray = str_split($input);
         foreach ($inputArray as $character) {
-            if ($character !== '\0') {
+            if ($character !== "\0") {
                 $ord = ord($character);
                 if ($ord === 172 || ($ord >= 128 && $ord <= 159)) {
                     continue;

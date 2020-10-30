@@ -16,7 +16,7 @@ namespace Phalcon\Tests\Unit\Di\Service\Builder;
 use Phalcon\Di\Di;
 use Phalcon\Di\Exception;
 use Phalcon\Di\Service\Builder;
-use Phalcon\Escaper\Escaper;
+use Phalcon\Html\Escaper;
 use Phalcon\Tests\Fixtures\Di\PropertiesComponent;
 use Phalcon\Tests\Fixtures\Di\ServiceComponent;
 use UnitTester;

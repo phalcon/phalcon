@@ -14,7 +14,7 @@ declare(strict_types=1);
 namespace Phalcon\Tests\Unit\Di;
 
 use Phalcon\Di\Di;
-use Phalcon\Escaper\Escaper;
+use Phalcon\Html\Escaper;
 use UnitTester;
 
 use function spl_object_hash;
