@@ -13,6 +13,8 @@ declare(strict_types=1);
 
 namespace Phalcon\Html\Traits;
 
+use function mb_strlen;
+
 trait EscaperHelperTrait
 {
     /**
