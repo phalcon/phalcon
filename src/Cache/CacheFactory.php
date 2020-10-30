@@ -13,8 +13,8 @@ declare(strict_types=1);
 
 namespace Phalcon\Cache;
 
-use Phalcon\Cache\Exception\Exception;
 use Phalcon\Config\ConfigInterface;
+use Phalcon\Support\Traits\ConfigTrait;
 use Psr\SimpleCache\CacheInterface;
 
 /**
@@ -22,6 +22,8 @@ use Psr\SimpleCache\CacheInterface;
  */
 class CacheFactory
 {
+    use ConfigTrait;
+
     /**
      * @var AdapterFactory
      */
@@ -41,47 +43,32 @@ class CacheFactory
      * @param array|ConfigInterface $config = [
      *     'adapter' => 'apcu',
      *     'options' => [
-     *         'servers'           => [
+     *         'servers' => [
      *             [
-     *                 'host'   => 'localhost',
-     *                 'port'   => 11211,
+     *                 'host' => 'localhost',
+     *                 'port' => 11211,
      *                 'weight' => 1,
      *
      *             ]
      *         ],
-     *         'host'              => '127.0.0.1',
-     *         'port'              => 6379,
-     *         'index'             => 0,
-     *         'persistent'        => false,
-     *         'auth'              => '',
-     *         'socket'            => '',
+     *         'host' => '127.0.0.1',
+     *         'port' => 6379,
+     *         'index' => 0,
+     *         'persistent' => false,
+     *         'auth' => '',
+     *         'socket' => '',
      *         'defaultSerializer' => 'Php',
-     *         'lifetime'          => 3600,
-     *         'serializer'        => null,
-     *         'prefix'            => 'phalcon',
-     *         'storageDir'        => '',
-     *     ],
+     *         'lifetime' => 3600,
+     *         'serializer' => null,
+     *         'prefix' => 'phalcon',
+     *         'storageDir' => ''
+     *     ]
      * ]
      */
     public function load($config)
     {
-        if (true === is_object($config) && $config instanceof ConfigInterface) {
-            $config = $config->toArray();
-        }
-
-        if (true !== is_array($config)) {
-            throw new Exception(
-                'Config must be array or Phalcon\Config\Config object'
-            );
-        }
-
-        if (true !== isset($config['adapter'])) {
-            throw new Exception(
-                'You must provide "adapter" option in factory config parameter.'
-            );
-        }
-
-        $name    = $config['adapter'];
+        $config = $this->checkConfig($config);
+        $name   = $config['adapter'];
         $options = $config['options'] ?? [];
 
         return $this->newInstance($name, $options);

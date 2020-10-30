@@ -61,7 +61,10 @@ class SerializeCest
     /**
      * Tests Phalcon\Html\Link\Serializer\Header :: serialize() - empty
      *
-     * @since  2019-11-02
+     * @param UnitTester $I
+     *
+     * @author Phalcon Team <team@phalcon.io>
+     * @since  2020-09-09
      */
     public function linkLinkSerializerHeaderSerializeEmpty(UnitTester $I)
     {

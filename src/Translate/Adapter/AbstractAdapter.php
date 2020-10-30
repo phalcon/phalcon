@@ -42,8 +42,10 @@ abstract class AbstractAdapter implements AdapterInterface
      * @param InterpolatorFactory $interpolator
      * @param array               $options
      */
-    public function __construct(InterpolatorFactory $interpolator, array $options = [])
-    {
+    public function __construct(
+        InterpolatorFactory $interpolator,
+        array $options = []
+    ) {
         $this->defaultInterpolator = $options['defaultInterpolator'] ?? 'associativeArray';
         $this->interpolatorFactory = $interpolator;
     }

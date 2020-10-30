@@ -16,7 +16,6 @@ namespace Phalcon\Config\Adapter;
 use Phalcon\Config\Config;
 use Phalcon\Config\Exception;
 use Phalcon\Support\Traits\PhpFileTrait;
-
 use function basename;
 use function count;
 use function is_array;
@@ -26,7 +25,6 @@ use function preg_match;
 use function strpos;
 use function strtolower;
 use function substr;
-
 use const INI_SCANNER_RAW;
 
 /**
@@ -106,7 +104,7 @@ class Ini extends Config
 
                 foreach ($directives as $path => $lastValue) {
                     $sections[] = $this->parseIniString(
-                        (string)$path,
+                        (string) $path,
                         $lastValue
                     );
                 }
@@ -138,10 +136,10 @@ class Ini extends Config
             return $this->castArray($ini);
         }
 
-        $ini      = (string)$ini;
+        $ini      = (string) $ini;
         $lowerIni = strtolower($ini);
 
-        // Decode null
+        // Decode null/boolean
         if ('null' === $lowerIni) {
             return null;
         }
@@ -163,10 +161,10 @@ class Ini extends Config
         // Decode float/int
         if (is_string($ini) && is_numeric($ini)) {
             if (preg_match('/[.]+/', $ini)) {
-                return (double)$ini;
+                return (double) $ini;
             }
 
-            return (int)$ini;
+            return (int) $ini;
         }
 
         return $ini;
@@ -209,7 +207,7 @@ class Ini extends Config
         $path = substr($path, $position + 1);
 
         return [
-            $key => $this->parseIniString($path, $value)
+            $key => $this->parseIniString($path, $value),
         ];
     }
 }

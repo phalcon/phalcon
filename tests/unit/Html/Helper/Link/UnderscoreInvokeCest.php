@@ -16,6 +16,7 @@ use Phalcon\Html\Escaper;
 use Phalcon\Html\Helper\Link;
 use Phalcon\Html\TagFactory;
 use UnitTester;
+
 use const PHP_EOL;
 
 class UnderscoreInvokeCest

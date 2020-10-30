@@ -32,7 +32,7 @@ class LinkProvider implements LinkProviderInterface
     /**
      * @var LinkInterface[]
      */
-    protected $links = [];
+    protected array $links = [];
 
     /**
      * LinkProvider constructor.
@@ -73,15 +73,15 @@ class LinkProvider implements LinkProviderInterface
      */
     public function getLinksByRel($rel)
     {
-        $links = [];
+        $filtered = [];
         foreach ($this->links as $link) {
             $rels = $link->getRels();
             if (in_array($rel, $rels)) {
-                $links[] = $link;
+                $filtered[] = $link;
             }
         }
 
-        return $links;
+        return $filtered;
     }
 
     /**

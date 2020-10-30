@@ -17,6 +17,7 @@ use Phalcon\Html\Exception;
 use Phalcon\Html\Helper\Script;
 use Phalcon\Html\TagFactory;
 use UnitTester;
+
 use const PHP_EOL;
 
 /**

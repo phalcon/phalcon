@@ -34,22 +34,22 @@ class Link implements LinkInterface
     /**
      * @var array
      */
-    protected $attributes = [];
+    protected array $attributes = [];
 
     /**
      * @var string
      */
-    protected $href = '';
+    protected string $href = '';
 
     /**
      * @var array
      */
-    protected $rels = [];
+    protected array $rels = [];
 
     /**
      * @var bool
      */
-    protected $templated = false;
+    protected bool $templated = false;
 
     /**
      * Link constructor.

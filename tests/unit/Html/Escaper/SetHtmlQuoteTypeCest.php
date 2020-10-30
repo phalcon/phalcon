@@ -16,13 +16,20 @@ namespace Phalcon\Tests\Unit\Html\Escaper;
 use Phalcon\Html\Escaper;
 use UnitTester;
 
+/**
+ * Class SetHtmlQuoteTypeCest
+ *
+ * @package Phalcon\Tests\Unit\Html\Escaper
+ */
 class SetHtmlQuoteTypeCest
 {
     /**
      * Tests Phalcon\Escaper :: setHtmlQuoteType()
      *
+     * @param UnitTester $I
+     *
      * @author Phalcon Team <team@phalcon.io>
-     * @since  2018-11-13
+     * @since  2020-09-09
      */
     public function escaperSetHtmlQuoteType(UnitTester $I)
     {

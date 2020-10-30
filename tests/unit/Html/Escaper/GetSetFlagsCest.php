@@ -17,38 +17,27 @@ use Phalcon\Html\Escaper;
 use UnitTester;
 
 /**
- * Class SetDoubleEncodeCest
+ * Class GetSetFlagsCest
  *
  * @package Phalcon\Tests\Unit\Html\Escaper
  */
-class SetDoubleEncodeCest
+class GetSetFlagsCest
 {
     /**
-     * Tests Phalcon\Escaper :: setDoubleEncode()
+     * Tests Phalcon\Escaper :: getFlags() / setFlags()
      *
      * @param UnitTester $I
      *
      * @author Phalcon Team <team@phalcon.io>
      * @since  2020-09-09
      */
-    public function escaperSetDoubleEncode(UnitTester $I)
+    public function escaperGetSetEncoding(UnitTester $I)
     {
-        $I->wantToTest('Escaper - setDoubleEncode()');
+        $I->wantToTest('Escaper - getFlags() / setFlags()');
 
         $escaper = new Escaper();
 
-        $source = '<h1>&amp;</h1>';
-
-        $I->assertEquals(
-            '&lt;h1&gt;&amp;amp;&lt;/h1&gt;',
-            $escaper->escapeHtml($source)
-        );
-
-        $escaper->setDoubleEncode(false);
-
-        $I->assertEquals(
-            '&lt;h1&gt;&amp;&lt;/h1&gt;',
-            $escaper->escapeHtml($source)
-        );
+        $escaper->setFlags(1234);
+        $I->assertEquals(1234, $escaper->getEncoding());
     }
 }

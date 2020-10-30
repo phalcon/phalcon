@@ -19,6 +19,15 @@ namespace Phalcon\Html;
 interface EscaperInterface
 {
     /**
+     * Escapes a HTML attribute string
+     *
+     * @param string $input
+     *
+     * @return string
+     */
+    public function attributes(string $input): string;
+
+    /**
      * Escape CSS strings by replacing non-alphanumeric chars by their
      * hexadecimal representation
      *
@@ -26,7 +35,14 @@ interface EscaperInterface
      *
      * @return string
      */
-    public function escapeCss(string $input): string;
+    public function css(string $input): string;
+
+    /**
+     * Returns the internal encoding used by the escaper
+     *
+     * @return string
+     */
+    public function getEncoding(): string;
 
     /**
      * Escapes a HTML string
@@ -35,16 +51,7 @@ interface EscaperInterface
      *
      * @return string
      */
-    public function escapeHtml(string $input): string;
-
-    /**
-     * Escapes a HTML attribute string
-     *
-     * @param string $input
-     *
-     * @return string
-     */
-    public function escapeHtmlAttr(string $input): string;
+    public function html(string $input): string;
 
     /**
      * Escape Javascript strings by replacing non-alphanumeric chars by their
@@ -54,23 +61,7 @@ interface EscaperInterface
      *
      * @return string
      */
-    public function escapeJs(string $input): string;
-
-    /**
-     * Escapes a URL. Internally uses rawurlencode
-     *
-     * @param string $input
-     *
-     * @return string
-     */
-    public function escapeUrl(string $input): string;
-
-    /**
-     * Returns the internal encoding used by the escaper
-     *
-     * @return string
-     */
-    public function getEncoding(): string;
+    public function js(string $input): string;
 
     /**
      * Sets the encoding to be used by the escaper
@@ -85,4 +76,13 @@ interface EscaperInterface
      * @param int $flags
      */
     public function setHtmlQuoteType(int $flags): void;
+
+    /**
+     * Escapes a URL. Internally uses rawurlencode
+     *
+     * @param string $input
+     *
+     * @return string
+     */
+    public function url(string $input): string;
 }

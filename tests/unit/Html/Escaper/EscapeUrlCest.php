@@ -16,13 +16,20 @@ namespace Phalcon\Tests\Unit\Html\Escaper;
 use Phalcon\Html\Escaper;
 use UnitTester;
 
+/**
+ * Class EscapeUrlCest
+ *
+ * @package Phalcon\Tests\Unit\Html\Escaper
+ */
 class EscapeUrlCest
 {
     /**
      * Tests Phalcon\Escaper :: escapeUrl()
      *
+     * @param UnitTester $I
+     *
      * @author Phalcon Team <team@phalcon.io>
-     * @since  2014-09-16
+     * @since  2020-09-09
      */
     public function escaperEscapeUrl(UnitTester $I)
     {
