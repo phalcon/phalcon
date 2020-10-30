@@ -15,7 +15,7 @@ namespace Phalcon\Tests\Unit\Di\FactoryDefault;
 
 use Codeception\Example;
 use Phalcon\Di\FactoryDefault;
-use Phalcon\Escaper\Escaper;
+use Phalcon\Html\Escaper;
 use Phalcon\Events\Manager as EventsManager;
 use Phalcon\Filter\Filter;
 use UnitTester;

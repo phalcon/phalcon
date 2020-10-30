@@ -11,7 +11,7 @@
 
 declare(strict_types=1);
 
-namespace Phalcon\Test\Unit\Session\Adapter;
+namespace Phalcon\Tests\Unit\Session\Adapter;
 
 use Phalcon\Session\Adapter\Noop;
 use Phalcon\Session\Manager;

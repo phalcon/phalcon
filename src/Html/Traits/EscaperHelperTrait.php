@@ -11,7 +11,7 @@
 
 declare(strict_types=1);
 
-namespace Phalcon\Escaper\Traits;
+namespace Phalcon\Html\Traits;
 
 trait EscaperHelperTrait
 {

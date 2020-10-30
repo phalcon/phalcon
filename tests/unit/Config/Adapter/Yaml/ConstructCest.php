@@ -11,7 +11,7 @@
 
 declare(strict_types=1);
 
-namespace Phalcon\Test\Unit\Config\Adapter\Yaml;
+namespace Phalcon\Tests\Unit\Config\Adapter\Yaml;
 
 use Codeception\Stub;
 use Phalcon\Config\Adapter\Yaml;

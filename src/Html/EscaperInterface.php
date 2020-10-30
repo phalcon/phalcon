@@ -11,7 +11,7 @@
 
 declare(strict_types=1);
 
-namespace Phalcon\Escaper;
+namespace Phalcon\Html;
 
 /**
  * Interface for Phalcon\Escaper

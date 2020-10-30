@@ -15,7 +15,7 @@ namespace Phalcon\Tests\Unit\Di\Service;
 
 use Codeception\Example;
 use Phalcon\Di\Service;
-use Phalcon\Escaper\Escaper;
+use Phalcon\Html\Escaper;
 use UnitTester;
 
 class SetSharedCest

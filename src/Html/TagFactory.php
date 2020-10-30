@@ -54,15 +54,15 @@ use Phalcon\Support\Traits\FactoryTrait;
 /**
  * ServiceLocator implementation for Tag helpers
  *
- * @property Escaper $escaper
- * @property array   $services
+ * @property EscaperInterface $escaper
+ * @property array            $services
  */
 class TagFactory
 {
     use FactoryTrait;
 
     /**
-     * @var Escaper
+     * @var EscaperInterface
      */
     private $escaper;
 
@@ -80,7 +80,7 @@ class TagFactory
      * @param Escaper $escaper
      * @param array   $services
      */
-    public function __construct(Escaper $escaper, array $services = [])
+    public function __construct(EscaperInterface $escaper, array $services = [])
     {
         $this->escaper = $escaper;
 
@@ -110,44 +110,44 @@ class TagFactory
     protected function getServices(): array
     {
         return [
-            "a"                  => Anchor::class,
-            "base"               => Base::class,
-            "body"               => Body::class,
-            "button"             => Button::class,
-            "close"              => Close::class,
-            "element"            => Element::class,
-            "form"               => Form::class,
-            "img"                => Img::class,
-            "inputColor"         => Color::class,
-            "inputDate"          => Date::class,
-            "inputDateTime"      => DateTime::class,
-            "inputDateTimeLocal" => DateTimeLocal::class,
-            "inputEmail"         => Email::class,
-            "inputFile"          => File::class,
-            "inputHidden"        => Hidden::class,
-            "inputImage"         => Image::class,
-            "inputInput"         => Input::class,
-            "inputMonth"         => Month::class,
-            "inputNumeric"       => Numeric::class,
-            "inputPassword"      => Password::class,
-            "inputRange"         => Range::class,
-            "inputSelect"        => Select::class,
-            "inputSearch"        => Search::class,
-            "inputSubmit"        => Submit::class,
-            "inputTel"           => Tel::class,
-            "inputText"          => Text::class,
-            "inputTextarea"      => Textarea::class,
-            "inputTime"          => Time::class,
-            "inputUrl"           => Url::class,
-            "inputWeek"          => Week::class,
-            "label"              => Label::class,
-            "link"               => Link::class,
-            "meta"               => Meta::class,
-            "ol"                 => Ol::class,
-            "script"             => Script::class,
-            "style"              => Style::class,
-            "title"              => Title::class,
-            "ul"                 => Ul::class,
+            'a'                  => Anchor::class,
+            'base'               => Base::class,
+            'body'               => Body::class,
+            'button'             => Button::class,
+            'close'              => Close::class,
+            'element'            => Element::class,
+            'form'               => Form::class,
+            'img'                => Img::class,
+            'inputColor'         => Color::class,
+            'inputDate'          => Date::class,
+            'inputDateTime'      => DateTime::class,
+            'inputDateTimeLocal' => DateTimeLocal::class,
+            'inputEmail'         => Email::class,
+            'inputFile'          => File::class,
+            'inputHidden'        => Hidden::class,
+            'inputImage'         => Image::class,
+            'inputInput'         => Input::class,
+            'inputMonth'         => Month::class,
+            'inputNumeric'       => Numeric::class,
+            'inputPassword'      => Password::class,
+            'inputRange'         => Range::class,
+            'inputSelect'        => Select::class,
+            'inputSearch'        => Search::class,
+            'inputSubmit'        => Submit::class,
+            'inputTel'           => Tel::class,
+            'inputText'          => Text::class,
+            'inputTextarea'      => Textarea::class,
+            'inputTime'          => Time::class,
+            'inputUrl'           => Url::class,
+            'inputWeek'          => Week::class,
+            'label'              => Label::class,
+            'link'               => Link::class,
+            'meta'               => Meta::class,
+            'ol'                 => Ol::class,
+            'script'             => Script::class,
+            'style'              => Style::class,
+            'title'              => Title::class,
+            'ul'                 => Ul::class,
         ];
     }
 }

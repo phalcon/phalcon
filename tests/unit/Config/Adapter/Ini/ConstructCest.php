@@ -11,7 +11,7 @@
 
 declare(strict_types=1);
 
-namespace Phalcon\Test\Unit\Config\Adapter\Ini;
+namespace Phalcon\Tests\Unit\Config\Adapter\Ini;
 
 use Codeception\Stub;
 use Phalcon\Config\Adapter\Ini;

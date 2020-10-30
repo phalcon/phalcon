@@ -47,8 +47,8 @@ class Header implements SerializerInterface
             $attributes = $link->getAttributes();
             $rels       = $link->getRels();
             $parts      = [
-                "",
-                "rel=\"" . implode(" ", $rels) . "\"",
+                '',
+                'rel="' . implode(' ', $rels) . '"',
             ];
 
             foreach ($attributes as $key => $value) {
@@ -58,23 +58,22 @@ class Header implements SerializerInterface
                 }
 
                 if (!is_bool($value)) {
-                    $parts[] = $key . "=\"" . $value . "\"";
+                    $parts[] = $key . '="' . $value . '"';
                     continue;
                 }
 
                 if (true === $value) {
                     $parts[] = $key;
-                    continue;
                 }
             }
 
-            $elements[] = "<"
+            $elements[] = '<'
                 . $link->getHref()
-                . ">"
-                . implode("; ", $parts);
+                . '>'
+                . implode('; ', $parts);
         }
 
-        if (count($elements) > 0) {
+        if (true !== empty($elements)) {
             $result = implode(",", $elements);
         }
 
@@ -93,7 +92,7 @@ class Header implements SerializerInterface
     private function processArray(array $parts, array $value, string $key): array
     {
         foreach ($value as $subValue) {
-            $parts[] = $key . "=\"" . $subValue . "\"";
+            $parts[] = $key . '="' . $subValue . '"';
         }
 
         return $parts;

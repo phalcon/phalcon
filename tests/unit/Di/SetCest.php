@@ -17,7 +17,7 @@ use Codeception\Example;
 use Phalcon\Collection\Collection;
 use Phalcon\Di\Di;
 use Phalcon\Di\Exception;
-use Phalcon\Escaper\Escaper;
+use Phalcon\Html\Escaper;
 use UnitTester;
 
 /**

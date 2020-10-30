@@ -15,7 +15,7 @@ namespace Phalcon\Tests\Unit\Di\Service;
 
 use Phalcon\Di\Service;
 use Phalcon\Di\ServiceInterface;
-use Phalcon\Escaper\Escaper;
+use Phalcon\Html\Escaper;
 use UnitTester;
 
 /**
