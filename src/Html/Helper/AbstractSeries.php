@@ -38,18 +38,12 @@ abstract class AbstractSeries extends AbstractHelper
      * @return AbstractSeries
      */
     public function __invoke(
-        string $indent = null,
-        string $delimiter = null
+        string $indent = '    ',
+        string $delimiter = PHP_EOL
     ): AbstractSeries {
-        if (null !== $delimiter) {
-            $this->delimiter = $delimiter;
-        }
-
-        if (null !== $indent) {
-            $this->indent = $indent;
-        }
-
-        $this->store = [];
+        $this->delimiter = $delimiter;
+        $this->indent    = $indent;
+        $this->store     = [];
 
         return $this;
     }

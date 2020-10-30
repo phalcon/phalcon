@@ -17,6 +17,7 @@ use Phalcon\Html\Exception;
 use Phalcon\Html\Helper\Input\Select;
 use Phalcon\Html\TagFactory;
 use UnitTester;
+use const PHP_EOL;
 
 /**
  * Class SelectUnderscoreInvokeCest
@@ -118,8 +119,8 @@ class SelectUnderscoreInvokeCest
         return [
             [
                 'message'     => 'base',
-                'indent'      => null,
-                'delimiter'   => null,
+                'indent'      => '    ',
+                'delimiter'   => PHP_EOL,
                 'selected'    => null,
                 'attributes'  => ['id' => 'carsList'],
                 'add'         => [
@@ -159,8 +160,8 @@ class SelectUnderscoreInvokeCest
             ],
             [
                 'message'     => 'raw',
-                'indent'      => null,
-                'delimiter'   => null,
+                'indent'      => '    ',
+                'delimiter'   => PHP_EOL,
                 'selected'    => null,
                 'attributes'  => ['id' => 'carsList'],
                 'add'         => [
@@ -200,8 +201,8 @@ class SelectUnderscoreInvokeCest
             ],
             [
                 'message'     => 'base placeholder',
-                'indent'      => null,
-                'delimiter'   => null,
+                'indent'      => '    ',
+                'delimiter'   => PHP_EOL,
                 'selected'    => null,
                 'attributes'  => ['id' => 'carsList'],
                 'add'         => [
@@ -247,8 +248,8 @@ class SelectUnderscoreInvokeCest
             ],
             [
                 'message'     => 'raw placeholder',
-                'indent'      => null,
-                'delimiter'   => null,
+                'indent'      => '    ',
+                'delimiter'   => PHP_EOL,
                 'selected'    => null,
                 'attributes'  => ['id' => 'carsList'],
                 'add'         => [
@@ -341,8 +342,8 @@ class SelectUnderscoreInvokeCest
             ],
             [
                 'message'     => 'base',
-                'indent'      => null,
-                'delimiter'   => null,
+                'indent'      => '    ',
+                'delimiter'   => PHP_EOL,
                 'selected'    => null,
                 'attributes'  => ['id' => 'carsList'],
                 'add'         => [
@@ -382,8 +383,8 @@ class SelectUnderscoreInvokeCest
             ],
             [
                 'message'     => 'raw',
-                'indent'      => null,
-                'delimiter'   => null,
+                'indent'      => '    ',
+                'delimiter'   => PHP_EOL,
                 'selected'    => null,
                 'attributes'  => ['id' => 'carsList'],
                 'add'         => [
@@ -470,8 +471,8 @@ class SelectUnderscoreInvokeCest
             ],
             [
                 'message'     => 'optgroup',
-                'indent'      => null,
-                'delimiter'   => null,
+                'indent'      => '    ',
+                'delimiter'   => PHP_EOL,
                 'selected'    => null,
                 'attributes'  => ['id' => 'carsList'],
                 'add'         => [
@@ -524,8 +525,8 @@ class SelectUnderscoreInvokeCest
             ],
             [
                 'message'     => 'selected',
-                'indent'      => null,
-                'delimiter'   => null,
+                'indent'      => '    ',
+                'delimiter'   => PHP_EOL,
                 'selected'    => '3',
                 'attributes'  => ['id' => 'carsList'],
                 'add'         => [

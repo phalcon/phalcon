@@ -17,6 +17,7 @@ use Phalcon\Html\Exception;
 use Phalcon\Html\Helper\Title;
 use Phalcon\Html\TagFactory;
 use UnitTester;
+use const PHP_EOL;
 
 /**
  * Class UnderscoreInvokeCest
@@ -96,8 +97,8 @@ class UnderscoreInvokeCest
             [
                 'message'   => 'only title',
                 'separator' => '',
-                'indent'    => null,
-                'delimiter' => null,
+                'indent'    => '',
+                'delimiter' => '',
                 'prepend'   => [],
                 'title'     => 'Accounting',
                 'titleRaw'  => false,
@@ -108,8 +109,8 @@ class UnderscoreInvokeCest
             [
                 'message'   => 'only title escaped',
                 'separator' => '',
-                'indent'    => null,
-                'delimiter' => null,
+                'indent'    => '',
+                'delimiter' => '',
                 'prepend'   => [],
                 'title'     => '<Accounting>',
                 'titleRaw'  => false,
@@ -120,8 +121,8 @@ class UnderscoreInvokeCest
             [
                 'message'   => 'only title raw',
                 'separator' => '',
-                'indent'    => null,
-                'delimiter' => null,
+                'indent'    => '',
+                'delimiter' => '',
                 'prepend'   => [],
                 'title'     => '<Accounting>',
                 'titleRaw'  => true,
@@ -133,7 +134,7 @@ class UnderscoreInvokeCest
                 'message'   => 'only title indent',
                 'separator' => '',
                 'indent'    => '--',
-                'delimiter' => null,
+                'delimiter' => '',
                 'prepend'   => [],
                 'title'     => 'Accounting',
                 'titleRaw'  => true,
@@ -144,7 +145,7 @@ class UnderscoreInvokeCest
             [
                 'message'   => 'only title delimiter',
                 'separator' => '',
-                'indent'    => null,
+                'indent'    => '',
                 'delimiter' => '+',
                 'prepend'   => [],
                 'title'     => 'Accounting',
@@ -156,8 +157,8 @@ class UnderscoreInvokeCest
             [
                 'message'   => 'only title prepend',
                 'separator' => ' | ',
-                'indent'    => null,
-                'delimiter' => null,
+                'indent'    => '',
+                'delimiter' => '',
                 'prepend'   => [
                     'Home >'  => false,
                     'Admin >' => false,
@@ -171,8 +172,8 @@ class UnderscoreInvokeCest
             [
                 'message'   => 'only title append',
                 'separator' => ' | ',
-                'indent'    => null,
-                'delimiter' => null,
+                'indent'    => '',
+                'delimiter' => '',
                 'prepend'   => [],
                 'title'     => 'Accounting',
                 'titleRaw'  => false,
@@ -186,8 +187,8 @@ class UnderscoreInvokeCest
             [
                 'message'   => 'only title prepend raw',
                 'separator' => ' | ',
-                'indent'    => null,
-                'delimiter' => null,
+                'indent'    => '',
+                'delimiter' => '',
                 'prepend'   => [
                     'Home >'  => true,
                     'Admin >' => true,
@@ -201,8 +202,8 @@ class UnderscoreInvokeCest
             [
                 'message'   => 'only title append',
                 'separator' => ' | ',
-                'indent'    => null,
-                'delimiter' => null,
+                'indent'    => '',
+                'delimiter' => '',
                 'prepend'   => [],
                 'title'     => 'Accounting',
                 'titleRaw'  => false,

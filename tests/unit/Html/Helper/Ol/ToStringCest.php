@@ -14,6 +14,7 @@ namespace Phalcon\Tests\Unit\Html\Helper\Ol;
 use Phalcon\Html\Escaper;
 use Phalcon\Html\Helper\Ol;
 use UnitTester;
+use const PHP_EOL;
 
 /**
  * Class ToStringCest
@@ -37,7 +38,7 @@ class ToStringCest
         $escaper = new Escaper();
         $helper  = new Ol($escaper);
 
-        $result = $helper(null, null, ['id' => 'carsList']);
+        $result = $helper('', PHP_EOL, ['id' => 'carsList']);
 
         $actual = (string) $result;
         $I->assertEmpty($actual);

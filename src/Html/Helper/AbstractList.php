@@ -12,6 +12,7 @@ declare(strict_types=1);
 namespace Phalcon\Html\Helper;
 
 use Phalcon\Html\Exception;
+use const PHP_EOL;
 
 /**
  * Class AbstractList
@@ -47,20 +48,14 @@ abstract class AbstractList extends AbstractHelper
      * @return AbstractList
      */
     public function __invoke(
-        string $indent = null,
-        string $delimiter = null,
+        string $indent = '    ',
+        string $delimiter = PHP_EOL,
         array $attributes = []
     ): AbstractList {
         $this->attributes = $attributes;
-        if (null !== $delimiter) {
-            $this->delimiter = $delimiter;
-        }
-
-        if (null !== $indent) {
-            $this->indent = $indent;
-        }
-
-        $this->store = [];
+        $this->delimiter  = $delimiter;
+        $this->indent     = $indent;
+        $this->store      = [];
 
         return $this;
     }

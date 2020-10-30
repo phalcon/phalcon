@@ -17,6 +17,7 @@ use Phalcon\Html\Exception;
 use Phalcon\Html\Helper\Ul;
 use Phalcon\Html\TagFactory;
 use UnitTester;
+use const PHP_EOL;
 
 /**
  * Class UnderscoreInvokeCest
@@ -74,8 +75,8 @@ class UnderscoreInvokeCest
         return [
             [
                 'message'    => 'base',
-                'indent'     => null,
-                'delimiter'  => null,
+                'indent'     => '    ',
+                'delimiter'  => PHP_EOL,
                 'attributes' => ['id' => 'carsList'],
                 'add'        => [
                     [
@@ -108,8 +109,8 @@ class UnderscoreInvokeCest
             ],
             [
                 'message'    => 'raw',
-                'indent'     => null,
-                'delimiter'  => null,
+                'indent'     => '    ',
+                'delimiter'  => PHP_EOL,
                 'attributes' => ['id' => 'carsList'],
                 'add'        => [
                     [
@@ -172,8 +173,8 @@ class UnderscoreInvokeCest
             ],
             [
                 'message'    => 'base',
-                'indent'     => null,
-                'delimiter'  => null,
+                'indent'     => '    ',
+                'delimiter'  => PHP_EOL,
                 'attributes' => ['id' => 'carsList'],
                 'add'        => [
                     [
@@ -206,8 +207,8 @@ class UnderscoreInvokeCest
             ],
             [
                 'message'    => 'raw',
-                'indent'     => null,
-                'delimiter'  => null,
+                'indent'     => '    ',
+                'delimiter'  => PHP_EOL,
                 'attributes' => ['id' => 'carsList'],
                 'add'        => [
                     [
