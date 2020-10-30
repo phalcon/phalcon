@@ -46,11 +46,10 @@ trait ConfigTrait
 
         if (true !== isset($config['adapter'])) {
             throw new Exception(
-        'You must provide "adapter" option in factory config parameter.'
+                'You must provide "adapter" option in factory config parameter.'
             );
         }
 
         return $config;
     }
-
 }

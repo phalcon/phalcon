@@ -16,6 +16,7 @@ namespace Phalcon\Config\Adapter;
 use Phalcon\Config\Config;
 use Phalcon\Config\Exception;
 use Phalcon\Support\Traits\PhpFileTrait;
+
 use function basename;
 use function count;
 use function is_array;
@@ -25,6 +26,7 @@ use function preg_match;
 use function strpos;
 use function strtolower;
 use function substr;
+
 use const INI_SCANNER_RAW;
 
 /**

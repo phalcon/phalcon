@@ -38,6 +38,6 @@ class GetSetFlagsCest
         $escaper = new Escaper();
 
         $escaper->setFlags(1234);
-        $I->assertEquals(1234, $escaper->getEncoding());
+        $I->assertEquals(1234, $escaper->getFlags());
     }
 }
