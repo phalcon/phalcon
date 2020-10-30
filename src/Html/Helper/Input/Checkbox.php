@@ -18,19 +18,22 @@ use function array_merge;
 /**
  * Class Checkbox
  *
- * @property array $label
+ * @package Phalcon\Html\Helper\Input
+ *
+ * @property array  $label
+ * @property string $type
  */
 class Checkbox extends AbstractInput
 {
     /**
      * @var array
      */
-    protected $label = [];
+    protected array $label = [];
 
     /**
      * @var string
      */
-    protected $type = "checkbox";
+    protected string $type = 'checkbox';
 
     /**
      * AbstractHelper constructor.
@@ -42,9 +45,9 @@ class Checkbox extends AbstractInput
         parent::__construct($escaper);
 
         $this->label = [
-            "start" => "",
-            "text"  => "",
-            "end"   => "",
+            'start' => '',
+            'text'  => '',
+            'end'   => '',
         ];
     }
 
@@ -56,20 +59,21 @@ class Checkbox extends AbstractInput
     public function __toString()
     {
         $this->processChecked();
-        $unchecked   = $this->processUnchecked();
-        $element     = parent::__toString();
-        $label       = $this->label;
+
+        $output = $this->processUnchecked()
+            . $this->label['start']
+            . parent::__toString()
+            . $this->label['text']
+            . $this->label['end']
+        ;
+
         $this->label = [
-            "start" => "",
-            "text"  => "",
-            "end"   => "",
+            'start' => '',
+            'text'  => '',
+            'end'   => '',
         ];
 
-        return $unchecked
-            . $label["start"]
-            . $element
-            . $label["text"]
-            . $label["end"];
+        return $output;
     }
 
     /**
@@ -81,20 +85,20 @@ class Checkbox extends AbstractInput
      */
     public function label(array $attributes = []): Checkbox
     {
-        $text = $attributes["text"] ?? "";
-        unset($attributes["text"]);
+        $text = $attributes['text'] ?? '';
+        unset($attributes['text']);
 
         $attributes = array_merge(
             [
-                'for' => $this->attributes["id"],
+                'for' => $this->attributes['id'],
             ],
             $attributes
         );
 
         $this->label = [
-            "start" => $this->renderTag('label', $attributes),
-            "text"  => $text,
-            "end"   => "</label>",
+            'start' => $this->renderTag('label', $attributes),
+            'text'  => $text,
+            'end'   => '</label>',
         ];
 
         return $this;
@@ -105,13 +109,13 @@ class Checkbox extends AbstractInput
      */
     private function processChecked(): void
     {
-        $checked = $this->attributes["checked"] ?? "";
-        unset($this->attributes["checked"]);
+        $checked = $this->attributes['checked'] ?? '';
+        unset($this->attributes['checked']);
 
         if (!empty($checked)) {
-            $value = $this->attributes["value"] ?? "";
+            $value = $this->attributes['value'] ?? '';
             if ($checked === $value) {
-                $this->attributes["checked"] = "checked";
+                $this->attributes['checked'] = 'checked';
             }
         }
     }
@@ -123,15 +127,15 @@ class Checkbox extends AbstractInput
      */
     private function processUnchecked(): string
     {
-        $unchecked = $this->attributes["unchecked"] ?? "";
-        unset($this->attributes["unchecked"]);
+        $unchecked = $this->attributes['unchecked'] ?? '';
+        unset($this->attributes['unchecked']);
 
         if (!empty($unchecked)) {
             $unchecked = $this->renderTag(
-                "hidden",
+                'hidden',
                 [
-                    "name"  => $this->attributes["name"],
-                    "value" => $unchecked,
+                    'name'  => $this->attributes['name'],
+                    'value' => $unchecked,
                 ]
             );
         }
