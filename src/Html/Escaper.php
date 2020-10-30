@@ -16,12 +16,9 @@ namespace Phalcon\Html;
 use Phalcon\Html\Traits\EscaperHelperTrait;
 
 use function htmlspecialchars;
-use function is_string;
 use function mb_convert_encoding;
 use function mb_detect_encoding;
-use function ord;
 use function rawurlencode;
-use function str_split;
 
 use const ENT_QUOTES;
 
@@ -97,12 +94,9 @@ class Escaper implements EscaperInterface
     public function css(string $input): string
     {
         /**
-         * Normalize encoding to UTF-32
-         * Escape the string
+         * Normalize encoding to UTF-32 and escape the string
          */
-        return $this->doEscapeCss(
-            $this->normalizeEncoding($input)
-        );
+        return $this->doEscapeCss($this->normalizeEncoding($input));
     }
 
     /**
@@ -117,16 +111,6 @@ class Escaper implements EscaperInterface
     final public function detectEncoding(string $input): ?string
     {
         /**
-         * Check if charset is ASCII or ISO-8859-1
-         */
-        $charset = $this->isBasicCharset($input);
-        var_dump('here');
-        var_dump($charset);
-        if (true === is_string($input)) {
-            return $charset;
-        }
-
-        /**
          * Strict encoding detection with fallback to non-strict detection.
          * Check encoding
          */
@@ -137,7 +121,7 @@ class Escaper implements EscaperInterface
             'ASCII',
         ];
         foreach ($charsets as $charset) {
-            if (true === mb_detect_encoding($input, $charset, true)) {
+            if (false !== mb_detect_encoding($input, $charset, true)) {
                 return $charset;
             }
         }
@@ -297,38 +281,6 @@ class Escaper implements EscaperInterface
     public function url(string $input): string
     {
         return rawurlencode($input);
-    }
-
-    /**
-     * @param string $input
-     *
-     * @return false|string
-     */
-    private function isBasicCharset(string $input)
-    {
-        $isIso      = false;
-        $inputArray = str_split($input);
-        foreach ($inputArray as $character) {
-            if ($character !== "\0") {
-                $ord = ord($character);
-                if ($ord === 172 || ($ord >= 128 && $ord <= 159)) {
-                    continue;
-                }
-
-                if ($ord >= 160 && $ord <= 255) {
-                    $isIso = true;
-                    continue;
-                }
-            }
-
-            return false;
-        }
-
-        if (true === $isIso) {
-            return 'ASCII';
-        }
-
-        return 'ISO-8859-1';
     }
 
     /**
