@@ -13,8 +13,15 @@ namespace Phalcon\Html\Helper\Input;
 
 /**
  * Class Time
+ *
+ * @package Phalcon\Html\Helper\Input
+ *
+ * @property string $type
  */
 class Time extends AbstractInput
 {
-    protected $type = "time";
+    /**
+     * @var string
+     */
+    protected string $type = 'time';
 }

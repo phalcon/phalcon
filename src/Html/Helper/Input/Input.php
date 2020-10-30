@@ -13,6 +13,8 @@ namespace Phalcon\Html\Helper\Input;
 
 /**
  * Class Input
+ *
+ * @package Phalcon\Html\Helper\Input
  */
 class Input extends AbstractInput
 {

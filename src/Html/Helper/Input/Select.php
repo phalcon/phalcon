@@ -25,7 +25,7 @@ class Select extends AbstractList
     /**
      * @var string
      */
-    protected $elementTag = "option";
+    protected $elementTag = 'option';
 
     /**
      * @var bool
@@ -35,7 +35,7 @@ class Select extends AbstractList
     /**
      * @var string
      */
-    protected $selected = "";
+    protected $selected = '';
 
     /**
      * Add an element to the list
@@ -56,7 +56,7 @@ class Select extends AbstractList
         $attributes = $this->processValue($attributes, $value);
 
         $this->store[] = [
-            "renderFullElement",
+            'renderFullElement',
             [
                 $this->elementTag,
                 $text,
@@ -86,11 +86,11 @@ class Select extends AbstractList
         bool $raw = false
     ): Select {
         if (null !== $value) {
-            $attributes["value"] = $value;
+            $attributes['value'] = $value;
         }
 
         $this->store[] = [
-            "renderFullElement",
+            'renderFullElement',
             [
                 $this->elementTag,
                 $text,
@@ -115,7 +115,7 @@ class Select extends AbstractList
     {
         if (!$this->inOptGroup) {
             $this->store[]     = [
-                "optGroupStart",
+                'optGroupStart',
                 [
                     $label,
                     $attributes,
@@ -126,7 +126,7 @@ class Select extends AbstractList
         } else {
             $this->indentLevel -= 1;
             $this->store[]     = [
-                "optGroupEnd",
+                'optGroupEnd',
                 [],
                 $this->indent(),
             ];
@@ -154,12 +154,12 @@ class Select extends AbstractList
      */
     protected function getTag(): string
     {
-        return "select";
+        return 'select';
     }
 
     protected function optGroupEnd(): string
     {
-        return "</optgroup>";
+        return '</optgroup>';
     }
 
     /**
@@ -170,9 +170,9 @@ class Select extends AbstractList
      */
     protected function optGroupStart(string $label, array $attributes): string
     {
-        $attributes["label"] = $label;
+        $attributes['label'] = $label;
 
-        return $this->renderTag("optgroup", $attributes);
+        return $this->renderTag('optgroup', $attributes);
     }
 
     /**
@@ -187,9 +187,9 @@ class Select extends AbstractList
     private function processValue(array $attributes, string $value = null): array
     {
         if (null !== $value) {
-            $attributes["value"] = $value;
+            $attributes['value'] = $value;
             if (!empty($this->selected) && $value === $this->selected) {
-                $attributes["selected"] = "selected";
+                $attributes['selected'] = 'selected';
             }
         }
 

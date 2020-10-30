@@ -13,8 +13,15 @@ namespace Phalcon\Html\Helper\Input;
 
 /**
  * Class Numeric
+ *
+ * @package Phalcon\Html\Helper\Input
+ *
+ * @property string $type
  */
 class Numeric extends AbstractInput
 {
-    protected $type = "numeric";
+    /**
+     * @var string
+     */
+    protected $type = 'numeric';
 }
