@@ -14,6 +14,7 @@ namespace Phalcon\Tests\Unit\Html\Helper\Ol;
 use Phalcon\Html\Escaper;
 use Phalcon\Html\Helper\Ol;
 use UnitTester;
+
 use const PHP_EOL;
 
 /**

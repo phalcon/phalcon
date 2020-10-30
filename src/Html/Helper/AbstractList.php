@@ -12,6 +12,7 @@ declare(strict_types=1);
 namespace Phalcon\Html\Helper;
 
 use Phalcon\Html\Exception;
+
 use const PHP_EOL;
 
 /**

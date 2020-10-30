@@ -16,13 +16,20 @@ namespace Phalcon\Tests\Unit\Html\Escaper;
 use Phalcon\Html\Escaper;
 use UnitTester;
 
+/**
+ * Class EscapeHtmlCest
+ *
+ * @package Phalcon\Tests\Unit\Html\Escaper
+ */
 class EscapeHtmlCest
 {
     /**
      * Tests Phalcon\Escaper :: escapeHtml()
      *
+     * @param UnitTester $I
+     *
      * @author Phalcon Team <team@phalcon.io>
-     * @since  2014-09-12
+     * @since  2020-09-09
      */
     public function escaperEscapeHtml(UnitTester $I)
     {
@@ -39,8 +46,10 @@ class EscapeHtmlCest
     /**
      * Tests Phalcon\Escaper :: escapeHtml() - null
      *
+     * @param UnitTester $I
+     *
      * @author Phalcon Team <team@phalcon.io>
-     * @since  2019-11-22
+     * @since  2020-09-09
      */
     public function escaperEscapeHtmlNull(UnitTester $I)
     {

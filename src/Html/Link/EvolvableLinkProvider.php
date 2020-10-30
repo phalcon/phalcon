@@ -20,8 +20,6 @@ use Psr\Link\LinkInterface;
  * Class LinkProvider
  *
  * @package Phalcon\Link
- *
- * @property LinkInterface[] $links
  */
 class EvolvableLinkProvider extends LinkProvider implements EvolvableLinkProviderInterface
 {

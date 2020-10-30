@@ -19,11 +19,6 @@ use Psr\Link\EvolvableLinkInterface;
  * Class Link
  *
  * @package Phalcon\Link
- *
- * @property array  $attributes
- * @property string $href
- * @property array  $rels
- * @property bool   $templated
  */
 class EvolvableLink extends Link implements EvolvableLinkInterface
 {

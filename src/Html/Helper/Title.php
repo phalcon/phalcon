@@ -15,6 +15,7 @@ use Phalcon\Html\Exception;
 
 use function array_merge;
 use function implode;
+
 use const PHP_EOL;
 
 /**
@@ -54,9 +55,9 @@ class Title extends AbstractHelper
     /**
      * Sets the separator and returns the object back
      *
-     * @param string      $separator
-     * @param string|null $indent
-     * @param string|null $delimiter
+     * @param string $separator
+     * @param string $indent
+     * @param string $delimiter
      *
      * @return Title
      */

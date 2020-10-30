@@ -64,12 +64,12 @@ class TagFactory
     /**
      * @var EscaperInterface
      */
-    private $escaper;
+    private EscaperInterface $escaper;
 
     /**
      * @var array
      */
-    protected $services = [];
+    protected array $services = [];
 
     /**
      * TagFactory constructor.
@@ -105,7 +105,7 @@ class TagFactory
     }
 
     /**
-     * @return array|void
+     * @return array
      */
     protected function getServices(): array
     {

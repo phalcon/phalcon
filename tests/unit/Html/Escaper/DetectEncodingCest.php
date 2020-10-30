@@ -17,6 +17,11 @@ use Codeception\Example;
 use Phalcon\Html\Escaper;
 use UnitTester;
 
+/**
+ * Class DetectEncodingCest
+ *
+ * @package Phalcon\Tests\Unit\Html\Escaper
+ */
 class DetectEncodingCest
 {
     /**

@@ -18,6 +18,11 @@ use Phalcon\Html\EscaperFactory;
 use Phalcon\Html\EscaperInterface;
 use UnitTester;
 
+/**
+ * Class NewInstanceCest
+ *
+ * @package Phalcon\Tests\Unit\Html\EscaperFactory
+ */
 class NewInstanceCest
 {
     /**

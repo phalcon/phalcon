@@ -22,15 +22,23 @@ use const ENT_HTML5;
 use const ENT_XHTML;
 use const ENT_XML1;
 
+/**
+ * Class EscapeHtmlAttrCest
+ *
+ * @package Phalcon\Tests\Unit\Html\Escaper
+ */
 class EscapeHtmlAttrCest
 {
     /**
      * Tests Phalcon\Escaper :: escapeHtmlAttr()
      *
-     * @author       Phalcon Team <team@phalcon.io>
-     * @since        2014-09-16
-     *
      * @dataProvider escaperEscapeHtmlAttrProvider
+     *
+     * @param UnitTester $I
+     * @param Example    $example
+     *
+     * @author Phalcon Team <team@phalcon.io>
+     * @since  2020-09-09
      */
     public function escaperEscapeHtmlAttr(UnitTester $I, Example $example)
     {
