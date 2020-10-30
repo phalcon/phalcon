@@ -13,8 +13,15 @@ namespace Phalcon\Html\Helper\Input;
 
 /**
  * Class Url
+ *
+ * @package Phalcon\Html\Helper\Input
+ *
+ * @property string $type
  */
 class Url extends AbstractInput
 {
-    protected $type = "url";
+    /**
+     * @var string
+     */
+    protected string $type = 'url';
 }

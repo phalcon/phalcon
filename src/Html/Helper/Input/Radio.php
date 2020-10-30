@@ -13,11 +13,15 @@ namespace Phalcon\Html\Helper\Input;
 
 /**
  * Class Radio
+ *
+ * @package Phalcon\Html\Helper\Input
+ *
+ * @property string $type
  */
 class Radio extends Checkbox
 {
     /**
      * @var string
      */
-    protected $type = "radio";
+    protected string $type = 'radio';
 }

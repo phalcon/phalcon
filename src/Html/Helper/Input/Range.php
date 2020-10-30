@@ -13,8 +13,15 @@ namespace Phalcon\Html\Helper\Input;
 
 /**
  * Class Range
+ *
+ * @package Phalcon\Html\Helper\Input
+ *
+ * @property string $type
  */
 class Range extends AbstractInput
 {
-    protected $type = "range";
+    /**
+     * @var string
+     */
+    protected string $type = 'range';
 }

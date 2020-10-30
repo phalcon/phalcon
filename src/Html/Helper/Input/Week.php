@@ -13,8 +13,15 @@ namespace Phalcon\Html\Helper\Input;
 
 /**
  * Class Week
+ *
+ * @package Phalcon\Html\Helper\Input
+ *
+ * @property string $type
  */
 class Week extends AbstractInput
 {
-    protected $type = "week";
+    /**
+     * @var string
+     */
+    protected string $type = 'week';
 }
