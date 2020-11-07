@@ -1,10 +1,10 @@
 {
     "_readme": [
         "This file locks the dependencies of your project to a known state",
-        "Read more about it at https://getcomposer.org/doc/01-basic-usage.md#composer-lock-the-lock-file",
+        "Read more about it at https://getcomposer.org/doc/01-basic-usage.md#installing-dependencies",
         "This file is @generated automatically"
     ],
-    "content-hash": "6af1b0822d05f413d9d6fa9237a2d692",
+    "content-hash": "ba976e7d4074d263f8903e4c269979c4",
     "packages": [
         {
             "name": "payload-interop/payload-interop",
@@ -2635,6 +2635,10 @@
                 }
             ],
             "description": "PHP Benchmarking Framework",
+            "support": {
+                "issues": "https://github.com/phpbench/phpbench/issues",
+                "source": "https://github.com/phpbench/phpbench/tree/master"
+            },
             "time": "2020-06-13T11:59:17+00:00"
         },
         {
@@ -5564,6 +5568,8 @@
         "ext-xml": "^7.2"
     },
     "platform-dev": {
+        "ext-gettext": "*",
         "ext-yaml": "*"
-    }
+    },
+    "plugin-api-version": "2.0.0"
 }
