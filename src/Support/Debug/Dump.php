@@ -404,7 +404,7 @@ class Dump
             }
 
             $attr    = get_class_methods($variable);
-            $message = "{class} <b style=\"{style}\"'>methods</b>: "
+            $message = "{class} <b style=\"{style}\">methods</b>: "
                 . "(<span style=\"{style}\">{count}</span>) (\n";
             $context = [
                 'style' => $this->getStyle('obj'),
