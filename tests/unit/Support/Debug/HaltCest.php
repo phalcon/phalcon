@@ -13,27 +13,35 @@ declare(strict_types=1);
 
 namespace Phalcon\Tests\Unit\Support\Debug;
 
+use Phalcon\Support\Debug\Debug;
+use Phalcon\Support\Debug\Exception;
 use UnitTester;
 
 /**
- * Class ListenExceptionsCest
+ * Class HaltCest
  *
  * @package Phalcon\Tests\Unit\Support\Debug
  */
-class ListenExceptionsCest
+class HaltCest
 {
     /**
-     * Tests Phalcon\Debug :: listenExceptions()
+     * Tests Phalcon\Debug :: halt()
      *
      * @param UnitTester $I
      *
      * @author Phalcon Team <team@phalcon.io>
      * @since  2020-09-09
      */
-    public function debugListenExceptions(UnitTester $I)
+    public function debugHalt(UnitTester $I)
     {
-        $I->wantToTest('Debug - listenExceptions()');
+        $I->wantToTest('Debug - halt()');
 
-        $I->skipTest('Need implementation');
+        $I->expectThrowable(
+            new Exception('Halted request'),
+            function () {
+                $debug = new Debug();
+                $debug->halt();
+            }
+        );
     }
 }

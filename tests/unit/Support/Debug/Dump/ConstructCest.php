@@ -14,10 +14,14 @@ declare(strict_types=1);
 namespace Phalcon\Tests\Unit\Support\Debug\Dump;
 
 use Phalcon\Support\Debug\Dump;
-use Phalcon\Tests\Fixtures\Dump\ClassProperties;
-use ReflectionException;
+use Phalcon\Tests\Fixtures\Support\Dump\ClassProperties;
 use UnitTester;
 
+/**
+ * Class ConstructCest
+ *
+ * @package Phalcon\Tests\Unit\Support\Debug\Dump
+ */
 class ConstructCest
 {
     /**
@@ -25,10 +29,10 @@ class ConstructCest
      *
      * @issue  https://github.com/phalcon/cphalcon/issues/13315
      *
-     * @throws ReflectionException
-     * @since  2014-10-23
+     * @param UnitTester $I
      *
      * @author Phalcon Team <team@phalcon.io>
+     * @since  2020-09-09
      */
     public function debugDumpConstructDump(UnitTester $I)
     {
