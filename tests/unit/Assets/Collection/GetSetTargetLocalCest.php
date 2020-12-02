@@ -16,24 +16,29 @@ namespace Phalcon\Tests\Unit\Assets\Collection;
 use Phalcon\Assets\Collection;
 use UnitTester;
 
-class GetSetTarisLocalCest
+/**
+ * Class GetSetTargetLocalCest
+ *
+ * @package Phalcon\Tests\Unit\Assets\Collection
+ */
+class GetSetTargetLocalCest
 {
     /**
-     * Tests Phalcon\Assets\Collection :: getTarisLocal() / setTarisLocal()
+     * Tests Phalcon\Assets\Collection :: getTargetLocal()/setTargetLocal()
      *
-     * @author Jeremy PASTOURET <https://github.com/jenovateurs>
-     * @since  2020-02-15
+     * @param UnitTester $I
+     *
+     * @author Phalcon Team <team@phalcon.io>
+     * @since  2020-09-09
      */
     public function assetsCollectionGetSetTarisLocal(UnitTester $I)
     {
-        $I->wantToTest('Assets\Collection - getTarisLocal() / setTarisLocal()');
+        $I->wantToTest('Assets\Collection - getTargetLocal()/setTargetLocal()');
 
         $collection = new Collection();
+        $I->assertEquals(true, $collection->getTargetLocal());
 
-        $I->assertEquals(true, $collection->getTarisLocal());
-
-        $collection->setTarisLocal(false);
-
-        $I->assertEquals(false, $collection->getTarisLocal());
+        $collection->setTargetLocal(false);
+        $I->assertEquals(false, $collection->getTargetLocal());
     }
 }

@@ -16,13 +16,20 @@ namespace Phalcon\Tests\Unit\Assets\Collection;
 use Phalcon\Assets\Collection;
 use UnitTester;
 
+/**
+ * Class ValidCest
+ *
+ * @package Phalcon\Tests\Unit\Assets\Collection
+ */
 class ValidCest
 {
     /**
      * Tests Phalcon\Assets\Collection :: valid()
      *
-     * @author Jeremy PASTOURET <https://github.com/jenovateurs>
-     * @since  2020-02-15
+     * @param UnitTester $I
+     *
+     * @author Phalcon Team <team@phalcon.io>
+     * @since  2020-09-09
      */
     public function assetsCollectionValid(UnitTester $I)
     {
@@ -31,12 +38,10 @@ class ValidCest
         $collection = new Collection();
 
         $I->assertFalse($collection->valid());
-
-        $collection->addCss(
-            'css/docs.css'
-        );
+        $collection->addCss('css/docs.css');
 
         //Position need to set to 0 by default ?
+        $collection->rewind();
         $I->assertTrue($collection->valid());
     }
 }

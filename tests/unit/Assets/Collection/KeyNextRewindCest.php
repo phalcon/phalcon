@@ -16,28 +16,32 @@ namespace Phalcon\Tests\Unit\Assets\Collection;
 use Phalcon\Assets\Collection;
 use UnitTester;
 
+/**
+ * Class KeyNextRewindCest
+ *
+ * @package Phalcon\Tests\Unit\Assets\Collection
+ */
 class KeyNextRewindCest
 {
     /**
      * Tests Phalcon\Assets\Collection :: key() / next() / rewind()
      *
-     * @author Jeremy PASTOURET <https://github.com/jenovateurs>
-     * @since  2020-02-15
+     * @param UnitTester $I
+     *
+     * @author Phalcon Team <team@phalcon.io>
+     * @since  2020-09-09
      */
     public function assetsCollectionKeyNextRewind(UnitTester $I)
     {
         $I->wantToTest('Assets\Collection - key() / next() / rewind()');
 
         $collection = new Collection();
-
         $I->assertEquals(0, $collection->key());
 
         $collection->next();
-
         $I->assertEquals(1, $collection->key());
 
         $collection->rewind();
-
         $I->assertEquals(0, $collection->key());
     }
 }
