@@ -11,23 +11,30 @@
 
 declare(strict_types=1);
 
-namespace Phalcon\Tests\Unit\Assets\Filters\Jsmin;
+namespace Phalcon\Tests\Unit\Assets\Filters\JsMin;
 
 use Phalcon\Assets\FilterInterface;
-use Phalcon\Assets\Filters\Jsmin;
+use Phalcon\Assets\Filters\JsMin;
 use UnitTester;
 
+/**
+ * Class ConstructCest
+ *
+ * @package Phalcon\Tests\Unit\Assets\Filters\JsMin
+ */
 class ConstructCest
 {
     /**
-     * Tests Phalcon\Assets\Filters\Jsmin :: __construct() - no string exception
+     * Tests Phalcon\Assets\Filters\JsMin :: __construct() - no string exception
+     *
+     * @param UnitTester $I
      *
      * @author Phalcon Team <team@phalcon.io>
-     * @since  2016-01-24
+     * @since  2020-09-09
      */
     public function assetsFiltersJsminConstruct(UnitTester $I)
     {
-        $I->wantToTest('Assets\Filters\Jsmin - filter() - no string exception');
+        $I->wantToTest('Assets\Filters\JsMin - filter() - no string exception');
 
         $jsMin = new Jsmin();
         $I->assertInstanceOf(Jsmin::class, $jsMin);

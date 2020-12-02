@@ -11,24 +11,26 @@
 
 declare(strict_types=1);
 
-namespace Phalcon\Tests\Unit\Assets\Filters\Jsmin;
+namespace Phalcon\Tests\Unit\Assets\Filters\JsMin;
 
-use Phalcon\Assets\Filters\Jsmin;
+use Phalcon\Assets\Filters\JsMin;
 use UnitTester;
 
 class FilterCest
 {
     /**
-     * Tests Phalcon\Assets\Filters\Jsmin :: filter()
+     * Tests Phalcon\Assets\Filters\JsMin :: filter()
+     *
+     * @param UnitTester $I
      *
      * @author Phalcon Team <team@phalcon.io>
-     * @since  2016-01-24
+     * @since  2020-09-09
      */
-    public function assetsFiltersJsminFilter(UnitTester $I)
+    public function assetsFiltersJsMinFilter(UnitTester $I)
     {
-        $I->wantToTest('Assets\Filters\Jsmin - filter()');
+        $I->wantToTest('Assets\Filters\JsMin - filter()');
 
-        $jsmin = new Jsmin();
+        $jsmin = new JsMin();
 
         $expected = '{}}';
         $actual   = $jsmin->filter('{}}');
