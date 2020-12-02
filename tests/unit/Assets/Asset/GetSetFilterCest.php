@@ -18,48 +18,50 @@ use Phalcon\Assets\Asset;
 use UnitTester;
 
 /**
- * Class GetContentCest
+ * Class GetSetFilterCest
  *
  * @package Phalcon\Tests\Unit\Assets\Asset
  */
-class GetContentCest
+class GetSetFilterCest
 {
     /**
-     * Tests Phalcon\Assets\Asset :: getContent()
+     * Tests Phalcon\Assets\Asset :: getFilter()/setFilter()
      *
      * @dataProvider provider
      *
      * @param UnitTester $I
      * @param Example    $example
      *
-     * @author Phalcon Team <team@phalcon.io>
-     * @since  2020-09-09
+     * @author       Phalcon Team <team@phalcon.io>
+     * @since        2020-09-09
      */
-    public function assetsAssetGetContent(UnitTester $I, Example $example)
+    public function assetsAssetGetSetFilter(UnitTester $I, Example $example)
     {
-        $I->wantToTest('Assets\Asset - getContent()');
+        $I->wantToTest('Assets\Asset - getFilter()/setFilter()');
 
-        $asset = new Asset($example['type'], $example['path']);
+        $asset  = new Asset($example['type'], $example['path']);
+        $actual = $asset->getFilter();
+        $I->assertTrue($actual);
 
-        $I->openFile(dataDir($example['path']));
+        $asset->setFilter(false);
 
-        $actual = $asset->getContent(dataDir());
-        $I->seeFileContentsEqual($actual);
+        $actual = $asset->getFilter();
+        $I->assertFalse($actual);
     }
 
     /**
-     * @return \string[][]
+     * @return array[]
      */
     protected function provider(): array
     {
         return [
             [
                 'type' => 'css',
-                'path' => 'assets/assets/1198.css',
+                'path' => 'css/docs.css',
             ],
             [
                 'type' => 'js',
-                'path' => 'assets/assets/signup.js',
+                'path' => 'js/jquery.js',
             ],
         ];
     }

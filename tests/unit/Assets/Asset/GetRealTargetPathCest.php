@@ -17,79 +17,60 @@ use Codeception\Example;
 use Phalcon\Assets\Asset;
 use UnitTester;
 
+/**
+ * Class GetRealTargetPathCest
+ *
+ * @package Phalcon\Tests\Unit\Assets\Asset
+ */
 class GetRealTargetPathCest
 {
     /**
      * Tests Phalcon\Assets\Asset :: getRealTargetPath() - css local
      *
-     * @author       Phalcon Team <team@phalcon.io>
-     * @since        2018-11-13
+     * @dataProvider provider
      *
-     * @dataProvider localProvider
+     * @param UnitTester $I
+     * @param Example    $example
+     *
+     * @author       Phalcon Team <team@phalcon.io>
+     * @since        2020-09-09
      */
-    public function assetsAssetGetAssetKeyLocal(UnitTester $I, Example $example)
+    public function assetsAssetGetRealTargetPath(UnitTester $I, Example $example)
     {
-        $I->wantToTest('Assets\Asset - getRealTargetPath() - css local');
+        $I->wantToTest('Assets\Asset - getRealTargetPath()');
 
-        $asset = new Asset(
-            $example['type'],
-            $example['path']
-        );
+        $asset = new Asset($example['type'], $example['path'], $example['local']);
 
-        $I->assertEquals(
-            $example['path'],
-            $asset->getRealTargetPath()
-        );
+        $expected = $example['path'];
+        $actual   = $asset->getRealTargetPath();
+        $I->assertEquals($expected, $actual);
     }
 
     /**
-     * Tests Phalcon\Assets\Asset :: getRealTargetPath() - css remote
-     *
-     * @author       Phalcon Team <team@phalcon.io>
-     * @since        2018-11-13
-     *
-     * @dataProvider remoteProvider
+     * @return \string[][]
      */
-    public function assetsAssetGetAssetKeyRemote(UnitTester $I, Example $example)
-    {
-        $I->wantToTest('Assets\Asset - getRealTargetPath() - css remote');
-
-        $asset = new Asset(
-            $example['type'],
-            $example['path'],
-            false
-        );
-
-        $I->assertEquals(
-            $example['path'],
-            $asset->getRealTargetPath()
-        );
-    }
-
-    protected function localProvider(): array
+    protected function provider(): array
     {
         return [
             [
-                'type' => 'css',
-                'path' => 'css/docs.css',
+                'type'  => 'css',
+                'path'  => 'css/docs.css',
+                'local' => true,
             ],
             [
-                'type' => 'js',
-                'path' => 'js/jquery.js',
-            ],
-        ];
-    }
-
-    protected function remoteProvider(): array
-    {
-        return [
-            [
-                'type' => 'css',
-                'path' => 'https://phalcon.ld/css/docs.css',
+                'type'  => 'js',
+                'path'  => 'js/jquery.js',
+                'local' => true,
             ],
             [
-                'type' => 'js',
-                'path' => 'https://phalcon.ld/js/jquery.js',
+                'type'  => 'css',
+                'path'  => 'https://phalcon.ld/css/docs.css',
+                'local' => false,
+            ],
+            [
+                'type'  => 'js',
+                'path'  => 'https://phalcon.ld/js/jquery.js',
+                'local' => false,
             ],
         ];
     }

@@ -11,38 +11,38 @@
 
 declare(strict_types=1);
 
-namespace Phalcon\Tests\Unit\Assets\Asset\Css;
+namespace Phalcon\Tests\Unit\Assets\Asset\Js;
 
 use Codeception\Example;
-use Phalcon\Assets\Asset\Css;
+use Phalcon\Assets\Asset\Js;
 use UnitTester;
 
 /**
- * Class GetRealTargetPathCest
+ * Class GetSetTypeCest
  *
- * @package Phalcon\Tests\Unit\Assets\Asset\Css
+ * @package Phalcon\Tests\Unit\Assets\Asset\Js
  */
-class GetRealTargetPathCest
+class GetSetTypeCest
 {
     /**
-     * Tests Phalcon\Assets\Asset\Css :: getRealTargetPath()
+     * Tests Phalcon\Assets\Asset\Js :: getType()/setType()
      *
      * @dataProvider provider
      *
      * @param UnitTester $I
      * @param Example    $example
      *
-     * @author       Phalcon Team <team@phalcon.io>
-     * @since        2020-09-09
+     * @author Phalcon Team <team@phalcon.io>
+     * @since  2020-09-09
      */
-    public function assetsAssetCssGetAssetKeyLocal(UnitTester $I, Example $example)
+    public function assetsAssetJsGetSetType(UnitTester $I, Example $example)
     {
-        $I->wantToTest('Assets\Asset\Css - getRealTargetPath()');
+        $I->wantToTest('Assets\Asset - getType()/setType()');
 
-        $asset = new Css($example['path']);
+        $asset = new Js($example['path'], $example['local']);
 
-        $expected = $example['path'];
-        $actual   = $asset->getRealTargetPath();
+        $expected = 'js';
+        $actual   = $asset->getType();
         $I->assertEquals($expected, $actual);
     }
 

@@ -18,31 +18,32 @@ use Phalcon\Assets\Asset\Css;
 use UnitTester;
 
 /**
- * Class GetRealTargetPathCest
+ * Class IsSetLocalCest
  *
  * @package Phalcon\Tests\Unit\Assets\Asset\Css
  */
-class GetRealTargetPathCest
+class IsSetLocalCest
 {
     /**
-     * Tests Phalcon\Assets\Asset\Css :: getRealTargetPath()
+     * Tests Phalcon\Assets\Asset\Css :: isLocal()/setLocal()
      *
      * @dataProvider provider
      *
      * @param UnitTester $I
      * @param Example    $example
      *
-     * @author       Phalcon Team <team@phalcon.io>
-     * @since        2020-09-09
+     * @author Phalcon Team <team@phalcon.io>
+     * @since  2020-09-09
      */
-    public function assetsAssetCssGetAssetKeyLocal(UnitTester $I, Example $example)
+    public function assetsAssetCssSetLocal(UnitTester $I, Example $example)
     {
-        $I->wantToTest('Assets\Asset\Css - getRealTargetPath()');
+        $I->wantToTest('Assets\Asset\Css - isLocal()/setLocal()');
 
-        $asset = new Css($example['path']);
+        $asset = new Css($example['path'], $example['local']);
 
-        $expected = $example['path'];
-        $actual   = $asset->getRealTargetPath();
+        $asset->setLocal($example['newLocal']);
+        $expected = $example['newLocal'];
+        $actual   = $asset->isLocal();
         $I->assertEquals($expected, $actual);
     }
 
@@ -53,12 +54,14 @@ class GetRealTargetPathCest
     {
         return [
             [
-                'path'  => 'js/jquery.js',
-                'local' => true,
+                'path'     => 'css/docs.css',
+                'local'    => true,
+                'newLocal' => false,
             ],
             [
-                'path'  => 'https://phalcon.ld/js/jquery.js',
-                'local' => false,
+                'path'     => 'https://phalcon.ld/css/docs.css',
+                'local'    => false,
+                'newLocal' => true,
             ],
         ];
     }

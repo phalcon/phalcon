@@ -11,38 +11,39 @@
 
 declare(strict_types=1);
 
-namespace Phalcon\Tests\Unit\Assets\Asset\Css;
+namespace Phalcon\Tests\Unit\Assets\Asset\Js;
 
 use Codeception\Example;
-use Phalcon\Assets\Asset\Css;
+use Phalcon\Assets\Asset\Js;
 use UnitTester;
 
 /**
- * Class GetRealTargetPathCest
+ * Class GetSetTargetUriCest
  *
- * @package Phalcon\Tests\Unit\Assets\Asset\Css
+ * @package Phalcon\Tests\Unit\Assets\Asset\Js
  */
-class GetRealTargetPathCest
+class GetSetTargetUriCest
 {
     /**
-     * Tests Phalcon\Assets\Asset\Css :: getRealTargetPath()
+     * Tests Phalcon\Assets\Asset\Js :: getTargetUri()/setTargetUri()
      *
      * @dataProvider provider
      *
      * @param UnitTester $I
      * @param Example    $example
      *
-     * @author       Phalcon Team <team@phalcon.io>
-     * @since        2020-09-09
+     * @author Phalcon Team <team@phalcon.io>
+     * @since  2020-09-09
      */
-    public function assetsAssetCssGetAssetKeyLocal(UnitTester $I, Example $example)
+    public function assetsAssetJsGetSetTargetUri(UnitTester $I, Example $example)
     {
-        $I->wantToTest('Assets\Asset\Css - getRealTargetPath()');
+        $I->wantToTest('Assets\Asset\Js - getTargetUri()/setTargetUri()');
 
-        $asset = new Css($example['path']);
+        $asset    = new Js($example['path'], $example['local']);
+        $expected = '/phalcon/path';
+        $asset->setTargetUri($expected);
 
-        $expected = $example['path'];
-        $actual   = $asset->getRealTargetPath();
+        $actual = $asset->getTargetUri();
         $I->assertEquals($expected, $actual);
     }
 

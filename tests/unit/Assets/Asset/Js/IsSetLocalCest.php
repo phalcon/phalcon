@@ -18,31 +18,32 @@ use Phalcon\Assets\Asset\Js;
 use UnitTester;
 
 /**
- * Class GetRealTargetUriCest
+ * Class IsSetLocalCest
  *
  * @package Phalcon\Tests\Unit\Assets\Asset\Js
  */
-class GetRealTargetUriCest
+class IsSetLocalCest
 {
     /**
-     * Tests Phalcon\Assets\Asset\Js :: getRealTargetUri()
+     * Tests Phalcon\Assets\Asset\Js :: isLocal()/setLocal()
      *
      * @dataProvider provider
      *
      * @param UnitTester $I
      * @param Example    $example
      *
-     * @author       Phalcon Team <team@phalcon.io>
-     * @since        2020-09-09
+     * @author Phalcon Team <team@phalcon.io>
+     * @since  2020-09-09
      */
-    public function assetsAssetJsGetAssetKey(UnitTester $I, Example $example)
+    public function assetsAssetJsSetLocal(UnitTester $I, Example $example)
     {
-        $I->wantToTest('Assets\Asset\Js - getRealTargetUri()');
+        $I->wantToTest('Assets\Asset\Js - isLocal()/setLocal()');
 
         $asset = new Js($example['path'], $example['local']);
 
-        $expected = $example['path'];
-        $actual   = $asset->getRealTargetUri();
+        $asset->setLocal($example['newLocal']);
+        $expected = $example['newLocal'];
+        $actual   = $asset->isLocal();
         $I->assertEquals($expected, $actual);
     }
 
@@ -53,12 +54,14 @@ class GetRealTargetUriCest
     {
         return [
             [
-                'path'  => 'js/jquery.js',
-                'local' => true,
+                'path'     => 'js/jquery.js',
+                'local'    => true,
+                'newLocal' => false,
             ],
             [
-                'path'  => 'https://phalcon.ld/js/jquery.js',
-                'local' => false,
+                'path'     => 'https://phalcon.ld/js/jquery.js',
+                'local'    => false,
+                'newLocal' => true,
             ],
         ];
     }

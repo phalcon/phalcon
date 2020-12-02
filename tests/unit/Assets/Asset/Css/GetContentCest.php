@@ -15,16 +15,22 @@ namespace Phalcon\Tests\Unit\Assets\Asset\Css;
 
 use Phalcon\Assets\Asset\Css;
 use UnitTester;
-
 use function dataDir;
 
+/**
+ * Class GetContentCest
+ *
+ * @package Phalcon\Tests\Unit\Assets\Asset\Css
+ */
 class GetContentCest
 {
     /**
      * Tests Phalcon\Assets\Asset\Css :: getContent()
      *
+     * @param UnitTester $I
+     *
      * @author Phalcon Team <team@phalcon.io>
-     * @since  2018-11-13
+     * @since  2020-09-09
      */
     public function assetsAssetCssGetContent(UnitTester $I)
     {
@@ -32,14 +38,9 @@ class GetContentCest
 
         $asset = new Css('assets/assets/1198.css');
 
-        $I->openFile(
-            dataDir('assets/assets/1198.css')
-        );
+        $I->openFile(dataDir('assets/assets/1198.css'));
 
-        $I->seeFileContentsEqual(
-            $asset->getContent(
-                dataDir()
-            )
-        );
+        $actual = $asset->getContent(dataDir());
+        $I->seeFileContentsEqual($actual);
     }
 }
