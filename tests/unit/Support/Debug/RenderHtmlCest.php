@@ -67,7 +67,7 @@ class RenderHtmlCest
             . '<h1>Phalcon\Support\Exception: exception message</h1>'
             . '<span class="error-file">'
             . __FILE__
-            . ' (41)</span>'
+            . ' (40)</span>'
             . '</div>'
             . '<script type="text/javascript" '
             . 'src="https://assets.phalcon.io/debug/4.0.x/bower_components/'
