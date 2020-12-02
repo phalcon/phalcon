@@ -17,35 +17,39 @@ use Codeception\Example;
 use Phalcon\Assets\Inline;
 use UnitTester;
 
-class SetTypeCest
+/**
+ * Class GetSetTypeCest
+ *
+ * @package Phalcon\Tests\Unit\Assets\Inline
+ */
+class GetSetTypeCest
 {
     /**
-     * Tests Phalcon\Assets\Inline :: setType()
-     *
-     * @author       Phalcon Team <team@phalcon.io>
-     * @since        2018-11-13
+     * Tests Phalcon\Assets\Inline :: getType()/setType()
      *
      * @dataProvider provider
+     *
+     * @param UnitTester $I
+     * @param Example    $example
+     *
+     * @author       Phalcon Team <team@phalcon.io>
+     * @since        2020-09-09
      */
-    public function assetsInlineSetType(UnitTester $I, Example $example)
+    public function assetsInlineGetSetType(UnitTester $I, Example $example)
     {
-        $I->wantToTest('Assets\Inline - setType()');
+        $I->wantToTest('Assets\Inline - getType()/setType()');
 
-        $asset = new Inline(
-            $example['type'],
-            $example['content']
-        );
+        $asset = new Inline($example['type'], $example['content']);
+        $asset->setType($example['newType']);
 
-        $asset->setType(
-            $example['newType']
-        );
-
-        $I->assertEquals(
-            $example['newType'],
-            $asset->getType()
-        );
+        $expected = $example['newType'];
+        $actual   = $asset->getType();
+        $I->assertEquals($expected, $actual);
     }
 
+    /**
+     * @return \string[][]
+     */
     protected function provider(): array
     {
         return [

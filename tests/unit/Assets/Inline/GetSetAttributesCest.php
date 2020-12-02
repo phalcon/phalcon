@@ -17,37 +17,42 @@ use Codeception\Example;
 use Phalcon\Assets\Inline;
 use UnitTester;
 
-class SetAttributesCest
+/**
+ * Class GetSetAttributesCest
+ *
+ * @package Phalcon\Tests\Unit\Assets\Inline
+ */
+class GetSetAttributesCest
 {
     /**
-     * Tests Phalcon\Assets\Inline :: setAttributes()
-     *
-     * @author       Phalcon Team <team@phalcon.io>
-     * @since        2018-11-13
+     * Tests Phalcon\Assets\Inline :: getAttributes()/setAttributes()
      *
      * @dataProvider provider
+     *
+     * @param UnitTester $I
+     * @param Example    $example
+     *
+     * @author       Phalcon Team <team@phalcon.io>
+     * @since        2020-09-09
      */
-    public function assetsInlineSetAttributes(UnitTester $I, Example $example)
+    public function assetsInlineGetSetAttributes(UnitTester $I, Example $example)
     {
-        $I->wantToTest('Assets\Inline - setAttributes()');
+        $I->wantToTest('Assets\Inline - getAttributes()/setAttributes()');
 
-        $asset = new Inline(
-            $example['type'],
-            $example['content']
-        );
-
+        $asset = new Inline($example['type'], $example['content']);
         $expected = [
             'data-key' => 'phalcon',
         ];
 
         $asset->setAttributes($expected);
+        $actual = $asset->getAttributes();
 
-        $I->assertEquals(
-            $expected,
-            $asset->getAttributes()
-        );
+        $I->assertEquals($expected, $actual);
     }
 
+    /**
+     * @return \string[][]
+     */
     protected function provider(): array
     {
         return [

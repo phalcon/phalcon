@@ -19,21 +19,21 @@ use UnitTester;
 class GetSetLocalCest
 {
     /**
-     * Tests Phalcon\Assets\Collection :: getLocal() / setLocal()
+     * Tests Phalcon\Assets\Collection :: isLocal() / setLocal()
      *
      * @author Jeremy PASTOURET <https://github.com/jenovateurs>
      * @since  2020-02-15
      */
     public function assetsCollectionGetSetLocal(UnitTester $I)
     {
-        $I->wantToTest('Assets\Collection - getLocal() / setLocal()');
+        $I->wantToTest('Assets\Collection - isLocal() / setLocal()');
 
         $collection = new Collection();
 
-        $I->assertTrue($collection->getLocal());
+        $I->assertTrue($collection->isLocal());
 
         $collection->setLocal(false);
 
-        $I->assertFalse($collection->getLocal());
+        $I->assertFalse($collection->isLocal());
     }
 }

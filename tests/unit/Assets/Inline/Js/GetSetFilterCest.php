@@ -17,28 +17,31 @@ use Phalcon\Assets\Inline\Js;
 use UnitTester;
 
 /**
- * Class GetContentCest
+ * Class GetSetFilterCest
  *
  * @package Phalcon\Tests\Unit\Assets\Inline\Js
  */
-class GetContentCest
+class GetSetFilterCest
 {
     /**
-     * Tests Phalcon\Assets\Inline\Js :: getContent()
+     * Tests Phalcon\Assets\Inline\Js :: getFilter()/setFilter()
      *
      * @param UnitTester $I
      *
      * @author Phalcon Team <team@phalcon.io>
      * @since  2020-09-09
      */
-    public function assetsInlineJsGetContent(UnitTester $I)
+    public function assetsInlineJsGetSetFilter(UnitTester $I)
     {
-        $I->wantToTest('Assets\Inline\Js - getContent()');
+        $I->wantToTest('Assets\Inline\Js - getFilter()/setFilter()');
 
-        $content = '<script>alert("Hello");</script>';
-        $asset = new Js($content);
+        $asset  = new Js('<script>alert("Hello");</script>');
+        $actual = $asset->getFilter();
+        $I->assertTrue($actual);
 
-        $actual = $asset->getContent();
-        $I->assertEquals($content, $actual);
+        $asset->setFilter(false);
+
+        $actual = $asset->getFilter();
+        $I->assertFalse($actual);
     }
 }

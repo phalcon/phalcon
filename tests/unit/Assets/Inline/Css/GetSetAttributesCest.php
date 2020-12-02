@@ -16,22 +16,26 @@ namespace Phalcon\Tests\Unit\Assets\Inline\Css;
 use Phalcon\Assets\Inline\Css;
 use UnitTester;
 
-class SetAttributesCest
+/**
+ * Class GetSetAttributesCest
+ *
+ * @package Phalcon\Tests\Unit\Assets\Inline\Css
+ */
+class GetSetAttributesCest
 {
     /**
-     * Tests Phalcon\Assets\Inline\Css :: setAttributes()
+     * Tests Phalcon\Assets\Inline\Css :: getAttributes()/setAttributes()
+     *
+     * @param UnitTester $I
      *
      * @author Phalcon Team <team@phalcon.io>
-     * @since  2018-11-13
+     * @since  2020-09-09
      */
-    public function assetsInlineCssSetAttributes(UnitTester $I)
+    public function assetsInlineCssGetSetAttributes(UnitTester $I)
     {
-        $I->wantToTest('Assets\Inline\Css - setAttributes()');
+        $I->wantToTest('Assets\Inline\Css - getAttributes()/setAttributes()');
 
-        $asset = new Css(
-            'p {color: #000099}'
-        );
-
+        $asset    = new Css('p {color: #000099}');
         $expected = [
             'data-key' => 'phalcon',
         ];

@@ -16,29 +16,31 @@ namespace Phalcon\Tests\Unit\Assets\Inline\Css;
 use Phalcon\Assets\Inline\Css;
 use UnitTester;
 
-class SetTypeCest
+/**
+ * Class SetTypeCest
+ *
+ * @package Phalcon\Tests\Unit\Assets\Inline\Css
+ */
+class GetSetTypeCest
 {
     /**
-     * Tests Phalcon\Assets\Inline\Css :: setType()
+     * Tests Phalcon\Assets\Inline\Css :: getType()/setType()
+     *
+     * @param UnitTester $I
      *
      * @author Phalcon Team <team@phalcon.io>
-     * @since  2018-11-13
+     * @since  2020-09-09
      */
-    public function assetsInlineCssSetType(UnitTester $I)
+    public function assetsInlineCssGetSetType(UnitTester $I)
     {
-        $I->wantToTest('Assets\Inline\Css - setType()');
+        $I->wantToTest('Assets\Inline\Css - getType()/setType()');
 
-        $asset = new Css(
-            'p {color: #000099}'
-        );
-
+        $asset   = new Css('p {color: #000099}');
         $newType = 'js';
 
         $asset->setType($newType);
+        $actual = $asset->getType();
 
-        $I->assertEquals(
-            $newType,
-            $asset->getType()
-        );
+        $I->assertEquals($newType, $actual);
     }
 }

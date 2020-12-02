@@ -11,7 +11,7 @@
 
 declare(strict_types=1);
 
-namespace Phalcon\Tests\Unit\Assets\Filters\Cssmin;
+namespace Phalcon\Tests\Unit\Assets\Filters\CssMin;
 
 use Phalcon\Assets\Filters\Cssmin;
 use UnitTester;

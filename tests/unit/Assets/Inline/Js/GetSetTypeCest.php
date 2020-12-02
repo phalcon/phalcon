@@ -17,28 +17,30 @@ use Phalcon\Assets\Inline\Js;
 use UnitTester;
 
 /**
- * Class GetContentCest
+ * Class SetTypeCest
  *
  * @package Phalcon\Tests\Unit\Assets\Inline\Js
  */
-class GetContentCest
+class GetSetTypeCest
 {
     /**
-     * Tests Phalcon\Assets\Inline\Js :: getContent()
+     * Tests Phalcon\Assets\Inline\Js :: getType()/setType()
      *
      * @param UnitTester $I
      *
      * @author Phalcon Team <team@phalcon.io>
      * @since  2020-09-09
      */
-    public function assetsInlineJsGetContent(UnitTester $I)
+    public function assetsInlineJsGetSetType(UnitTester $I)
     {
-        $I->wantToTest('Assets\Inline\Js - getContent()');
+        $I->wantToTest('Assets\Inline\Js - getType()/setType()');
 
-        $content = '<script>alert("Hello");</script>';
-        $asset = new Js($content);
+        $asset   = new Js('<script>alert("Hello");</script>');
+        $newType = 'js';
 
-        $actual = $asset->getContent();
-        $I->assertEquals($content, $actual);
+        $asset->setType($newType);
+        $actual = $asset->getType();
+
+        $I->assertEquals($newType, $actual);
     }
 }
