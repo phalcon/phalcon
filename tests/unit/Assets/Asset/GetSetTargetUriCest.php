@@ -18,14 +18,14 @@ use Phalcon\Assets\Asset;
 use UnitTester;
 
 /**
- * Class GetRealTargetUriCest
+ * Class GetSetTargetUriCest
  *
- * @package Phalcon\Tests\Unit\Assets\Asset
+ * @package Phalcon\Tests\Unit\Assets\Asset\Js
  */
-class GetRealTargetUriCest
+class GetSetTargetUriCest
 {
     /**
-     * Tests Phalcon\Assets\Asset :: getRealTargetUri() - local
+     * Tests Phalcon\Assets\Asset :: setTargetUri() - local
      *
      * @dataProvider provider
      *
@@ -35,42 +35,42 @@ class GetRealTargetUriCest
      * @author       Phalcon Team <team@phalcon.io>
      * @since        2020-09-09
      */
-    public function assetsAssetGetRealTargetUri(UnitTester $I, Example $example)
+    public function assetsAssetSetTargetUriJsLocal(UnitTester $I, Example $example)
     {
-        $I->wantToTest('Assets\Asset - getRealTargetUri()');
+        $I->wantToTest('Assets\Asset - setTargetUri()');
 
-        $asset = new Asset($example['type'], $example['path'], $example['local']);
+        $asset     = new Asset($example['type'], $example['path'], $example['local']);
+        $targetUri = '/new/path';
 
-
-        $expected = $example['path'];
-        $actual   = $asset->getRealTargetUri();
-        $I->assertEquals($expected, $actual);
+        $asset->setTargetUri($targetUri);
+        $actual = $asset->getTargetUri();
+        $I->assertEquals($targetUri, $actual);
     }
 
     /**
-     * @return \string[][]
+     * @return array[]
      */
     protected function provider(): array
     {
         return [
             [
-                'type' => 'css',
-                'path' => 'css/docs.css',
+                'type'  => 'css',
+                'path'  => 'css/docs.css',
                 'local' => true,
             ],
             [
-                'type' => 'js',
-                'path' => 'js/jquery.js',
+                'type'  => 'js',
+                'path'  => 'js/jquery.js',
                 'local' => true,
             ],
             [
-                'type' => 'css',
-                'path' => 'https://phalcon.ld/css/docs.css',
+                'type'  => 'css',
+                'path'  => 'https://phalcon.ld/css/docs.css',
                 'local' => false,
             ],
             [
-                'type' => 'js',
-                'path' => 'https://phalcon.ld/js/jquery.js',
+                'type'  => 'js',
+                'path'  => 'https://phalcon.ld/js/jquery.js',
                 'local' => false,
             ],
         ];

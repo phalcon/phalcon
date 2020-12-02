@@ -15,36 +15,37 @@ namespace Phalcon\Tests\Unit\Assets\Asset;
 
 use Codeception\Example;
 use Phalcon\Assets\Asset;
+use Phalcon\Assets\Asset\Js;
 use UnitTester;
 
 /**
- * Class GetContentCest
+ * Class GetSetTypeCest
  *
  * @package Phalcon\Tests\Unit\Assets\Asset
  */
-class GetContentCest
+class GetSetTypeCest
 {
     /**
-     * Tests Phalcon\Assets\Asset :: getContent()
+     * Tests Phalcon\Assets\Asset :: getType()/setType()
      *
      * @dataProvider provider
      *
      * @param UnitTester $I
      * @param Example    $example
      *
-     * @author Phalcon Team <team@phalcon.io>
-     * @since  2020-09-09
+     * @author       Phalcon Team <team@phalcon.io>
+     * @since        2020-09-09
      */
-    public function assetsAssetGetContent(UnitTester $I, Example $example)
+    public function assetsAssetSetType(UnitTester $I, Example $example)
     {
-        $I->wantToTest('Assets\Asset - getContent()');
+        $I->wantToTest('Assets\Asset - getType()/setType()');
 
         $asset = new Asset($example['type'], $example['path']);
 
-        $I->openFile(dataDir($example['path']));
-
-        $actual = $asset->getContent(dataDir());
-        $I->seeFileContentsEqual($actual);
+        $asset->setType($example['newType']);
+        $expected = $example['newType'];
+        $actual   = $asset->getType();
+        $I->assertEquals($expected, $actual);
     }
 
     /**
@@ -54,12 +55,14 @@ class GetContentCest
     {
         return [
             [
-                'type' => 'css',
-                'path' => 'assets/assets/1198.css',
+                'type'    => 'css',
+                'path'    => 'css/docs.css',
+                'newType' => 'js',
             ],
             [
-                'type' => 'js',
-                'path' => 'assets/assets/signup.js',
+                'type'    => 'css',
+                'path'    => 'js/jquery.js',
+                'newType' => 'js',
             ],
         ];
     }

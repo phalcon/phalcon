@@ -18,14 +18,14 @@ use Phalcon\Assets\Asset;
 use UnitTester;
 
 /**
- * Class GetContentCest
+ * Class GetSetPathCest
  *
  * @package Phalcon\Tests\Unit\Assets\Asset
  */
-class GetContentCest
+class GetSetPathCest
 {
     /**
-     * Tests Phalcon\Assets\Asset :: getContent()
+     * Tests Phalcon\Assets\Asset :: getPath()/setPath()
      *
      * @dataProvider provider
      *
@@ -35,31 +35,38 @@ class GetContentCest
      * @author Phalcon Team <team@phalcon.io>
      * @since  2020-09-09
      */
-    public function assetsAssetGetContent(UnitTester $I, Example $example)
+    public function assetsAssetGetSetPath(UnitTester $I, Example $example)
     {
-        $I->wantToTest('Assets\Asset - getContent()');
+        $I->wantToTest('Assets\Asset - getPath()/setPath()');
 
         $asset = new Asset($example['type'], $example['path']);
 
-        $I->openFile(dataDir($example['path']));
-
-        $actual = $asset->getContent(dataDir());
-        $I->seeFileContentsEqual($actual);
+        $expected = $example['path'];
+        $actual   = $asset->getPath();
+        $I->assertEquals($expected, $actual);
     }
 
     /**
-     * @return \string[][]
+     * @return array[]
      */
     protected function provider(): array
     {
         return [
             [
                 'type' => 'css',
-                'path' => 'assets/assets/1198.css',
+                'path' => 'css/docs.css',
+            ],
+            [
+                'type' => 'css',
+                'path' => 'https://phalcon.ld/css/docs.css',
             ],
             [
                 'type' => 'js',
-                'path' => 'assets/assets/signup.js',
+                'path' => 'js/jquery.js',
+            ],
+            [
+                'type' => 'js',
+                'path' => 'https://phalcon.ld/js/jquery.js',
             ],
         ];
     }

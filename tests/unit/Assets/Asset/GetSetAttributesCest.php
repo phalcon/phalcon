@@ -18,48 +18,50 @@ use Phalcon\Assets\Asset;
 use UnitTester;
 
 /**
- * Class GetContentCest
+ * Class SetAttributesCest
  *
  * @package Phalcon\Tests\Unit\Assets\Asset
  */
-class GetContentCest
+class GetSetAttributesCest
 {
     /**
-     * Tests Phalcon\Assets\Asset :: getContent()
+     * Tests Phalcon\Assets\Asset :: getAttributes()/setAttributes()
      *
      * @dataProvider provider
      *
      * @param UnitTester $I
      * @param Example    $example
      *
-     * @author Phalcon Team <team@phalcon.io>
-     * @since  2020-09-09
+     * @author       Phalcon Team <team@phalcon.io>
+     * @since        2020-09-09
      */
-    public function assetsAssetGetContent(UnitTester $I, Example $example)
+    public function assetsAssetGetSetAttributes(UnitTester $I, Example $example)
     {
-        $I->wantToTest('Assets\Asset - getContent()');
+        $I->wantToTest('Assets\Asset - getAttributes()/setAttributes()');
 
-        $asset = new Asset($example['type'], $example['path']);
+        $asset      = new Asset($example['type'], $example['path']);
+        $attributes = [
+            'data-key' => 'phalcon',
+        ];
 
-        $I->openFile(dataDir($example['path']));
-
-        $actual = $asset->getContent(dataDir());
-        $I->seeFileContentsEqual($actual);
+        $asset->setAttributes($attributes);
+        $actual = $asset->getAttributes();
+        $I->assertEquals($attributes, $actual);
     }
 
     /**
-     * @return \string[][]
+     * @return array[]
      */
     protected function provider(): array
     {
         return [
             [
                 'type' => 'css',
-                'path' => 'assets/assets/1198.css',
+                'path' => 'css/docs.css',
             ],
             [
                 'type' => 'js',
-                'path' => 'assets/assets/signup.js',
+                'path' => 'js/jquery.js',
             ],
         ];
     }

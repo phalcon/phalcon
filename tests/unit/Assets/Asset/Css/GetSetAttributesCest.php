@@ -18,14 +18,14 @@ use Phalcon\Assets\Asset\Css;
 use UnitTester;
 
 /**
- * Class GetRealTargetPathCest
+ * Class SetAttributesCest
  *
  * @package Phalcon\Tests\Unit\Assets\Asset\Css
  */
-class GetRealTargetPathCest
+class SetAttributesCest
 {
     /**
-     * Tests Phalcon\Assets\Asset\Css :: getRealTargetPath()
+     * Tests Phalcon\Assets\Asset\Css :: setAttributes()
      *
      * @dataProvider provider
      *
@@ -35,15 +35,18 @@ class GetRealTargetPathCest
      * @author       Phalcon Team <team@phalcon.io>
      * @since        2020-09-09
      */
-    public function assetsAssetCssGetAssetKeyLocal(UnitTester $I, Example $example)
+    public function assetsAssetCssSetAttributes(UnitTester $I, Example $example)
     {
-        $I->wantToTest('Assets\Asset\Css - getRealTargetPath()');
+        $I->wantToTest('Assets\Asset\Css - setAttributes()');
 
-        $asset = new Css($example['path']);
+        $asset      = new Css($example['path'], $example['local']);
+        $attributes = [
+            'data-key' => 'phalcon',
+        ];
 
-        $expected = $example['path'];
-        $actual   = $asset->getRealTargetPath();
-        $I->assertEquals($expected, $actual);
+        $asset->setAttributes($attributes);
+        $actual = $asset->getAttributes();
+        $I->assertEquals($attributes, $actual);
     }
 
     /**
@@ -53,11 +56,11 @@ class GetRealTargetPathCest
     {
         return [
             [
-                'path'  => 'js/jquery.js',
+                'path'  => 'css/docs.css',
                 'local' => true,
             ],
             [
-                'path'  => 'https://phalcon.ld/js/jquery.js',
+                'path'  => 'https://phalcon.ld/css/docs.css',
                 'local' => false,
             ],
         ];

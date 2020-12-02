@@ -18,37 +18,40 @@ use Phalcon\Assets\Asset;
 use UnitTester;
 
 /**
- * Class GetRealTargetUriCest
+ * Class SetLocalCest
  *
  * @package Phalcon\Tests\Unit\Assets\Asset
  */
-class GetRealTargetUriCest
+class IsSetLocalCest
 {
     /**
-     * Tests Phalcon\Assets\Asset :: getRealTargetUri() - local
+     * Tests Phalcon\Assets\Asset :: isLocal()/setLocal()
      *
      * @dataProvider provider
      *
      * @param UnitTester $I
      * @param Example    $example
      *
-     * @author       Phalcon Team <team@phalcon.io>
-     * @since        2020-09-09
+     * @author Phalcon Team <team@phalcon.io>
+     * @since  2020-09-09
      */
-    public function assetsAssetGetRealTargetUri(UnitTester $I, Example $example)
+    public function assetsAssetSetLocalCssLocal(UnitTester $I, Example $example)
     {
-        $I->wantToTest('Assets\Asset - getRealTargetUri()');
+        $I->wantToTest('Assets\Asset - isLocal()/setLocal()');
 
-        $asset = new Asset($example['type'], $example['path'], $example['local']);
+        $asset = new Asset($example['type'], $example['path']);
 
+        $actual = $asset->isLocal();
+        $I->assertTrue($actual);
 
-        $expected = $example['path'];
-        $actual   = $asset->getRealTargetUri();
-        $I->assertEquals($expected, $actual);
+        $asset->setLocal($example['local']);
+
+        $actual = $asset->isLocal();
+        $I->assertEquals($example['local'], $actual);
     }
 
     /**
-     * @return \string[][]
+     * @return array[]
      */
     protected function provider(): array
     {
