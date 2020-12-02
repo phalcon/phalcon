@@ -17,29 +17,31 @@ use Phalcon\Assets\Inline\Css;
 use UnitTester;
 
 /**
- * Class GetAssetKeyCest
+ * Class GetSetFilterCest
  *
  * @package Phalcon\Tests\Unit\Assets\Inline\Css
  */
-class GetAssetKeyCest
+class GetSetFilterCest
 {
     /**
-     * Tests Phalcon\Assets\Inline\Css :: getAssetKey()
+     * Tests Phalcon\Assets\Inline\Css :: getFilter()/setFilter()
      *
      * @param UnitTester $I
      *
      * @author Phalcon Team <team@phalcon.io>
      * @since  2020-09-09
      */
-    public function assetsInlineCssGetAssetKey(UnitTester $I)
+    public function assetsInlineCssGetSetFilter(UnitTester $I)
     {
-        $I->wantToTest('Assets\Inline\Css - getAssetKey()');
+        $I->wantToTest('Assets\Inline\Css - getFilter()/setFilter()');
 
-        $content = 'p {color: #000099}';
-        $asset   = new Css($content);
+        $asset  = new Css('p {color: #000099}');
+        $actual = $asset->getFilter();
+        $I->assertTrue($actual);
 
-        $expected = sha1('css:' . $content);
-        $actual   = $asset->getAssetKey();
-        $I->assertEquals($expected, $actual);
+        $asset->setFilter(false);
+
+        $actual = $asset->getFilter();
+        $I->assertFalse($actual);
     }
 }

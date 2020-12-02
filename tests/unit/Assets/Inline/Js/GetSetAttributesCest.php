@@ -16,22 +16,26 @@ namespace Phalcon\Tests\Unit\Assets\Inline\Js;
 use Phalcon\Assets\Inline\Js;
 use UnitTester;
 
-class SetAttributesCest
+/**
+ * Class GetSetAttributesCest
+ *
+ * @package Phalcon\Tests\Unit\Assets\Inline\Js
+ */
+class GetSetAttributesCest
 {
     /**
-     * Tests Phalcon\Assets\Inline\Js :: setAttributes()
+     * Tests Phalcon\Assets\Inline\Js :: getAttributes()/setAttributes()
+     *
+     * @param UnitTester $I
      *
      * @author Phalcon Team <team@phalcon.io>
-     * @since  2018-11-13
+     * @since  2020-09-09
      */
-    public function assetsInlineJsSetAttributes(UnitTester $I)
+    public function assetsInlineJsGetSetAttributes(UnitTester $I)
     {
-        $I->wantToTest('Assets\Inline\Js - setAttributes()');
+        $I->wantToTest('Assets\Inline\Js - getAttributes()/setAttributes()');
 
-        $asset = new Js(
-            '<script>alert("Hello");</script>'
-        );
-
+        $asset    = new Js('<script>alert("Hello");</script>');
         $expected = [
             'data-key' => 'phalcon',
         ];

@@ -17,31 +17,41 @@ use Codeception\Example;
 use Phalcon\Assets\Inline;
 use UnitTester;
 
-class GetTypeCest
+/**
+ * Class GetSetFilterCest
+ *
+ * @package Phalcon\Tests\Unit\Assets\Inline
+ */
+class GetSetFilterCest
 {
     /**
-     * Tests Phalcon\Assets\Inline :: getType()
-     *
-     * @author       Phalcon Team <team@phalcon.io>
-     * @since        2018-11-13
+     * Tests Phalcon\Assets\Inline :: getFilter()/setFilter()
      *
      * @dataProvider provider
+     *
+     * @param UnitTester $I
+     * @param Example    $example
+     *
+     * @author       Phalcon Team <team@phalcon.io>
+     * @since        2020-09-09
      */
-    public function assetsInlineGetType(UnitTester $I, Example $example)
+    public function assetsInlineGetSetFilter(UnitTester $I, Example $example)
     {
-        $I->wantToTest('Assets\Inline - getType()');
+        $I->wantToTest('Assets\Inline - getFilter()/setFilter()');
 
-        $asset = new Inline(
-            $example['type'],
-            $example['content']
-        );
+        $asset  = new Inline($example['type'], $example['content']);
+        $actual = $asset->getFilter();
+        $I->assertTrue($actual);
 
-        $I->assertEquals(
-            $example['type'],
-            $asset->getType()
-        );
+        $asset->setFilter(false);
+
+        $actual = $asset->getFilter();
+        $I->assertFalse($actual);
     }
 
+    /**
+     * @return \string[][]
+     */
     protected function provider(): array
     {
         return [

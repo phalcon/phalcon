@@ -344,7 +344,7 @@ class OutputJsCest
      * @author Dreamszhu <dreamsxin@qq.com>
      * @since  2013-10-25
      */
-    public function assetsManagerOutputJsTargetLocal(UnitTester $I)
+    public function assetsManagerOutputJsTarisLocal(UnitTester $I)
     {
         $I->wantToTest('Asset/Manager - outputJs() - target local');
 
@@ -361,7 +361,7 @@ class OutputJsCest
                ->join(true)
                ->addFilter(new Jsmin())
                ->setTargetPath(outputDir("tests/assets/{$file}"))
-               ->setTargetLocal(false)
+               ->setTarisLocal(false)
                ->setPrefix('//phalcon.io/')
                ->setTargetUri('js/jquery.js')
         ;

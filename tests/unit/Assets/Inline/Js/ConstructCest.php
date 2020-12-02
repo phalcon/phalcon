@@ -16,13 +16,20 @@ namespace Phalcon\Tests\Unit\Assets\Inline\Js;
 use Phalcon\Assets\Inline\Js;
 use UnitTester;
 
+/**
+ * Class ConstructCest
+ *
+ * @package Phalcon\Tests\Unit\Assets\Inline\Js
+ */
 class ConstructCest
 {
     /**
      * Tests Phalcon\Assets\Inline\Js :: __construct()
      *
+     * @param UnitTester $I
+     *
      * @author Phalcon Team <team@phalcon.io>
-     * @since  2018-11-13
+     * @since  2020-09-09
      */
     public function assetsInlineJsConstruct(UnitTester $I)
     {
@@ -30,54 +37,52 @@ class ConstructCest
 
         $asset = new Js('<script>alert("Hello");</script>');
 
-        $I->assertEquals(
-            'js',
-            $asset->getType()
-        );
+        $expected = 'js';
+        $actual   = $asset->getType();
+        $I->assertEquals($expected, $actual);
     }
 
     /**
      * Tests Phalcon\Assets\Inline\Js :: __construct() - filter
      *
+     * @param UnitTester $I
+     *
      * @author Phalcon Team <team@phalcon.io>
-     * @since  2018-11-13
+     * @since  2020-09-09
      */
     public function assetsInlineJsConstructFilter(UnitTester $I)
     {
         $I->wantToTest('Assets\Inline\Js - __construct() - filter');
 
-        $asset = new Js('<script>alert("Hello");</script>');
-
-        $I->assertTrue(
-            $asset->getFilter()
-        );
+        $asset  = new Js('<script>alert("Hello");</script>');
+        $actual = $asset->getFilter();
+        $I->assertTrue($actual);
     }
 
     /**
      * Tests Phalcon\Assets\Inline\Js :: __construct() - filter set
      *
+     * @param UnitTester $I
+     *
      * @author Phalcon Team <team@phalcon.io>
-     * @since  2018-11-13
+     * @since  2020-09-09
      */
     public function assetsInlineJsConstructFilterSet(UnitTester $I)
     {
         $I->wantToTest('Assets\Inline\Js - __construct() - filter set');
 
-        $asset = new Js(
-            '<script>alert("Hello");</script>',
-            false
-        );
-
-        $I->assertFalse(
-            $asset->getFilter()
-        );
+        $asset  = new Js('<script>alert("Hello");</script>', false);
+        $actual = $asset->getFilter();
+        $I->assertFalse($actual);
     }
 
     /**
      * Tests Phalcon\Assets\Inline\Js :: __construct() - attributes
      *
+     * @param UnitTester $I
+     *
      * @author Phalcon Team <team@phalcon.io>
-     * @since  2018-11-13
+     * @since  2020-09-09
      */
     public function assetsInlineJsConstructAttributes(UnitTester $I)
     {
@@ -88,18 +93,17 @@ class ConstructCest
         $expected = [
             'type' => 'text/javascript',
         ];
-
-        $I->assertEquals(
-            $expected,
-            $asset->getAttributes()
-        );
+        $actual   = $asset->getAttributes();
+        $I->assertEquals($expected, $actual);
     }
 
     /**
      * Tests Phalcon\Assets\Inline\Js :: __construct() - attributes set
      *
+     * @param UnitTester $I
+     *
      * @author Phalcon Team <team@phalcon.io>
-     * @since  2018-11-13
+     * @since  2020-09-09
      */
     public function assetsInlineJsConstructAttributesSet(UnitTester $I)
     {
@@ -109,15 +113,12 @@ class ConstructCest
             'data' => 'phalcon',
         ];
 
-        $asset = new Js(
+        $asset  = new Js(
             '<script>alert("Hello");</script>',
             true,
             $attributes
         );
-
-        $I->assertEquals(
-            $attributes,
-            $asset->getAttributes()
-        );
+        $actual = $asset->getAttributes();
+        $I->assertEquals($attributes, $actual);
     }
 }
