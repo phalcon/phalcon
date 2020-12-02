@@ -17,7 +17,6 @@ use Phalcon\Support\Debug\Debug;
 use Phalcon\Support\Exception;
 use Phalcon\Version\Version;
 use UnitTester;
-use function var_dump;
 
 /**
  * Class RenderHtmlCest
