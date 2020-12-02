@@ -11,24 +11,31 @@
 
 declare(strict_types=1);
 
-namespace Phalcon\Tests\Unit\Assets\Filters\Cssmin;
+namespace Phalcon\Tests\Unit\Assets\Filters\CssMin;
 
 use Phalcon\Assets\FilterInterface;
-use Phalcon\Assets\Filters\Cssmin;
+use Phalcon\Assets\Filters\CssMin;
 use UnitTester;
 
+/**
+ * Class ConstructCest
+ *
+ * @package Phalcon\Tests\Unit\Assets\Filters\CssMin
+ */
 class ConstructCest
 {
     /**
-     * Tests Phalcon\Assets\Filters\Cssmin :: __construct() - no string
+     * Tests Phalcon\Assets\Filters\CssMin :: __construct() - no string
      * exception
      *
+     * @param UnitTester $I
+     *
      * @author Phalcon Team <team@phalcon.io>
-     * @since  2016-01-24
+     * @since  2020-09-09
      */
-    public function assetsFiltersCssminConstructNonString(UnitTester $I)
+    public function assetsFiltersCssMinConstructNonString(UnitTester $I)
     {
-        $I->wantToTest('Assets\Filters\Cssmin - filter() - no string exception');
+        $I->wantToTest('Assets\Filters\CssMin - filter() - no string exception');
 
         $cssMin = new Cssmin();
         $I->assertInstanceOf(Cssmin::class, $cssMin);

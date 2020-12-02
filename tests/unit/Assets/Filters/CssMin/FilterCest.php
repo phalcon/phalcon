@@ -13,20 +13,27 @@ declare(strict_types=1);
 
 namespace Phalcon\Tests\Unit\Assets\Filters\CssMin;
 
-use Phalcon\Assets\Filters\Cssmin;
+use Phalcon\Assets\Filters\CssMin;
 use UnitTester;
 
+/**
+ * Class FilterCest
+ *
+ * @package Phalcon\Tests\Unit\Assets\Filters\CssMin
+ */
 class FilterCest
 {
     /**
-     * Tests Phalcon\Assets\Filters\Cssmin :: filter()
+     * Tests Phalcon\Assets\Filters\CssMin :: filter()
+     *
+     * @param UnitTester $I
      *
      * @author Phalcon Team <team@phalcon.io>
-     * @since  2014-10-10
+     * @since  2020-09-09
      */
-    public function assetsFiltersCssminFilter(UnitTester $I)
+    public function assetsFiltersCssMinFilter(UnitTester $I)
     {
-        $I->wantToTest('Assets\Filters\Cssmin - filter()');
+        $I->wantToTest('Assets\Filters\CssMin - filter()');
 
         $cssmin = new Cssmin();
 
