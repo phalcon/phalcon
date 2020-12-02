@@ -28,7 +28,7 @@ use Phalcon\Assets\AssetInterface;
  * @property array  $codes
  * @property array  $filters
  * @property bool   $join
- * @property bool   $local
+ * @property bool   $isLocal
  * @property string $prefix
  * @property int    $position
  * @property string $sourcePath
@@ -74,7 +74,7 @@ trait CollectionAddTrait
     /**
      * @var bool
      */
-    protected bool $local = true;
+    protected bool $isLocal = true;
 
     /**
      * @var string
@@ -124,6 +124,56 @@ trait CollectionAddTrait
     }
 
     /**
+     * Returns the current element
+     *
+     * @return Asset
+     */
+    public function current(): Asset
+    {
+        return $this->assets[$this->position];
+    }
+
+    /**
+     * Return the stored assets
+     *
+     * @return array
+     */
+    public function getAssets(): array
+    {
+        return $this->assets;
+    }
+
+    /**
+     * Return the stored attributes
+     *
+     * @return array
+     */
+    public function getAttributes(): array
+    {
+        return $this->attributes;
+    }
+
+    /**
+     * Return the stored codes
+     *
+     * @return array
+     */
+    public function getCodes(): array
+    {
+        return $this->codes;
+    }
+
+    /**
+     * Return the stored filters
+     *
+     * @return array
+     */
+    public function getFilters(): array
+    {
+        return $this->filters;
+    }
+
+    /**
      * Returns the generator of the class
      *
      * @return Generator
@@ -137,9 +187,82 @@ trait CollectionAddTrait
         }
     }
 
+    /**
+     * @return bool
+     */
+    public function getJoin(): bool
+    {
+        return $this->join;
+    }
+
+    /**
+     * Returns the array position of the iterator
+     *
+     * @return int
+     */
+    public function getPosition(): int
+    {
+        return $this->position;
+    }
+
+    /**
+     * Returns the prefix
+     *
+     * @return string
+     */
     public function getPrefix(): string
     {
         return $this->prefix;
+    }
+
+    /**
+     * Returns the source path
+     *
+     * @return string
+     */
+    public function getSourcePath(): string
+    {
+        return $this->sourcePath;
+    }
+
+    /**
+     * Returns whether the target is local or not
+     *
+     * @return bool
+     */
+    public function getTargetLocal(): bool
+    {
+        return $this->targetLocal;
+    }
+
+    /**
+     * Returns the target path
+     *
+     * @return string
+     */
+    public function getTargetPath(): string
+    {
+        return $this->targetPath;
+    }
+
+    /**
+     * Returns the target Uri
+     *
+     * @return string
+     */
+    public function getTargetUri(): string
+    {
+        return $this->targetUri;
+    }
+
+    /**
+     * Returns the version
+     *
+     * @return string
+     */
+    public function getVersion(): string
+    {
+        return $this->version;
     }
 
     /**
@@ -163,7 +286,14 @@ trait CollectionAddTrait
      */
     public function has(AssetInterface $asset): bool
     {
-        return isset($this->assets[$asset->getAssetKey()]);
+        $key = $asset->getAssetKey();
+        foreach ($this->assets as $storedAsset) {
+            if ($key === $storedAsset->getAssetKey()) {
+                return true;
+            }
+        }
+
+        return false;
     }
 
     /**
@@ -177,6 +307,50 @@ trait CollectionAddTrait
     }
 
     /**
+     * @return bool
+     */
+    public function isLocal(): bool
+    {
+        return $this->isLocal;
+    }
+
+    /**
+     * The current position of the iterator
+     *
+     * @return int
+     */
+    public function key(): int
+    {
+        return $this->position;
+    }
+
+    /**
+     * Moves the internal iteration pointer to the next position
+     */
+    public function next(): void
+    {
+        $this->position++;
+    }
+
+    /**
+     * Rewinds the internal iterator
+     */
+    public function rewind(): void
+    {
+        $this->position = 0;
+    }
+
+    /**
+     * Check if the current element in the iterator is valid
+     *
+     * @return bool
+     */
+    public function valid(): bool
+    {
+        return isset($this->assets[$this->position]);
+    }
+
+    /**
      * Adds a asset or inline-code to the collection
      *
      * @param AssetInterface $asset
@@ -185,17 +359,17 @@ trait CollectionAddTrait
      */
     final protected function addAsset(AssetInterface $asset): bool
     {
-        if (true !== $this->has($asset)) {
+        if (true === $this->has($asset)) {
             return false;
         }
 
-        $assetKey   = $asset->getAssetKey();
-        $collection = $this->assets;
         if ($asset instanceof Asset) {
-            $collection = $this->codes;
+            $this->assets[] = $asset;
+
+            return true;
         }
 
-        $collection[$assetKey] = $asset;
+        $this->codes[] = $asset;
 
         return true;
     }

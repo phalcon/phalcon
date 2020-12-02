@@ -16,24 +16,29 @@ namespace Phalcon\Tests\Unit\Assets\Collection;
 use Phalcon\Assets\Collection;
 use UnitTester;
 
+/**
+ * Class GetSetLocalCest
+ *
+ * @package Phalcon\Tests\Unit\Assets\Collection
+ */
 class GetSetLocalCest
 {
     /**
      * Tests Phalcon\Assets\Collection :: isLocal() / setLocal()
      *
-     * @author Jeremy PASTOURET <https://github.com/jenovateurs>
-     * @since  2020-02-15
+     * @param UnitTester $I
+     *
+     * @author Phalcon Team <team@phalcon.io>
+     * @since  2020-09-09
      */
     public function assetsCollectionGetSetLocal(UnitTester $I)
     {
         $I->wantToTest('Assets\Collection - isLocal() / setLocal()');
 
         $collection = new Collection();
-
         $I->assertTrue($collection->isLocal());
 
         $collection->setLocal(false);
-
         $I->assertFalse($collection->isLocal());
     }
 }

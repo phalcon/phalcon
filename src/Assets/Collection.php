@@ -52,7 +52,7 @@ class Collection implements Countable, IteratorAggregate
      * Adds a CSS asset to the collection
      *
      * @param string      $path
-     * @param bool|null   $local
+     * @param bool|null   $isLocal
      * @param bool        $filter
      * @param array       $attributes
      * @param string|null $version
@@ -62,13 +62,13 @@ class Collection implements Countable, IteratorAggregate
      */
     public function addCss(
         string $path,
-        bool $local = null,
+        bool $isLocal = null,
         bool $filter = true,
         array $attributes = [],
         string $version = null,
         bool $autoVersion = false
     ): Collection {
-        $isLocal = (null !== $local) ? $local : $this->local;
+        $isLocal = (null !== $isLocal) ? $isLocal : $this->isLocal;
         $attrs   = $this->processAttributes($attributes);
 
         $this->add(
@@ -162,7 +162,7 @@ class Collection implements Countable, IteratorAggregate
      * Adds a JavaScript asset to the collection
      *
      * @param string      $path
-     * @param bool|null   $local
+     * @param bool|null   $isLocal
      * @param bool        $filter
      * @param array       $attributes
      * @param string|null $version
@@ -172,13 +172,13 @@ class Collection implements Countable, IteratorAggregate
      */
     public function addJs(
         string $path,
-        bool $local = null,
+        bool $isLocal = null,
         bool $filter = true,
         array $attributes = [],
         string $version = null,
         bool $autoVersion = false
     ): Collection {
-        $isLocal = (null !== $local) ? $local : $this->local;
+        $isLocal = (null !== $isLocal) ? $isLocal : $this->isLocal;
         $attrs   = $this->processAttributes($attributes);
 
         $this->add(
@@ -218,13 +218,13 @@ class Collection implements Countable, IteratorAggregate
      * Sets if all filtered assets in the collection must be joined in a single
      * result file
      *
-     * @param bool $join
+     * @param bool $flag
      *
      * @return Collection
      */
-    public function join(bool $join): Collection
+    public function join(bool $flag): Collection
     {
-        $this->join = $join;
+        $this->join = $flag;
 
         return $this;
     }
@@ -272,13 +272,13 @@ class Collection implements Countable, IteratorAggregate
     /**
      * Sets if the collection uses local assets by default
      *
-     * @param bool $local
+     * @param bool $flag
      *
      * @return $this
      */
-    public function setLocal(bool $local): Collection
+    public function setLocal(bool $flag): Collection
     {
-        $this->local = $local;
+        $this->isLocal = $flag;
 
         return $this;
     }
@@ -349,6 +349,20 @@ class Collection implements Countable, IteratorAggregate
     public function setSourcePath(string $sourcePath): Collection
     {
         $this->sourcePath = $sourcePath;
+
+        return $this;
+    }
+
+    /**
+     * Sets the version
+     *
+     * @param string $version
+     *
+     * @return Collection
+     */
+    public function setVersion(string $version): Collection
+    {
+        $this->version = $version;
 
         return $this;
     }

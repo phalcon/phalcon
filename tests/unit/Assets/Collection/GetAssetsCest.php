@@ -17,42 +17,34 @@ use Phalcon\Assets\Asset;
 use Phalcon\Assets\Collection;
 use UnitTester;
 
+/**
+ * Class GetAssetsCest
+ *
+ * @package Phalcon\Tests\Unit\Assets\Collection
+ */
 class GetAssetsCest
 {
     /**
      * Tests Phalcon\Assets\Collection :: getAssets()
      *
-     * @author Jeremy PASTOURET <https://github.com/jenovateurs>
-     * @since  2020-02-06
+     * @param UnitTester $I
+     *
+     * @author Phalcon Team <team@phalcon.io>
+     * @since  2020-09-09
      */
     public function assetsCollectionGetAssets(UnitTester $I)
     {
         $I->wantToTest('Assets\Collection - getAssets()');
 
         $collection = new Collection();
-
         $asset = new Asset('js', 'js/jquery.js');
-
-        $collection->add(
-            $asset
-        );
-
+        $collection->add($asset);
         $asset1 = new Asset('js', 'js/jquery-ui.js');
+        $collection->add($asset1);
 
-        $collection->add(
-            $asset1
-        );
+        $assets = $collection->getAssets();
 
-        $asserts = $collection->getAssets();
-
-        $I->assertEquals(
-            2,
-            count($asserts)
-        );
-
-        $I->assertEquals(
-            [$asset, $asset1],
-            $asserts
-        );
+        $I->assertCount(2, $assets);
+        $I->assertEquals([$asset, $asset1], $assets);
     }
 }
