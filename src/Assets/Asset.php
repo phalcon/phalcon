@@ -25,9 +25,9 @@ use function sha1;
  *```
  *
  * @property array       $attributes
- * @property bool        $autoVersion
+ * @property bool        $isAutoVersion
  * @property bool        $filter
- * @property bool        $local
+ * @property bool        $isLocal
  * @property string      $path
  * @property string      $sourcePath
  * @property string      $targetPath
@@ -48,7 +48,7 @@ class Asset implements AssetInterface
     /**
      * @var bool
      */
-    protected bool $autoVersion = false;
+    protected bool $isAutoVersion = false;
 
     /**
      * @var bool
@@ -58,7 +58,7 @@ class Asset implements AssetInterface
     /**
      * @var bool
      */
-    protected bool $local;
+    protected bool $isLocal;
 
     /**
      * @var string
@@ -97,28 +97,28 @@ class Asset implements AssetInterface
      *
      * @param string      $type
      * @param string      $path
-     * @param bool        $local
+     * @param bool        $isLocal
      * @param bool        $filter
      * @param array       $attributes
      * @param string|null $version
-     * @param bool        $autoVersion
+     * @param bool        $isAutoVersion
      */
     public function __construct(
         string $type,
         string $path,
-        bool $local = true,
+        bool $isLocal = true,
         bool $filter = true,
         array $attributes = [],
         string $version = null,
-        bool $autoVersion = false
+        bool $isAutoVersion = false
     ) {
-        $this->type        = $type;
-        $this->path        = $path;
-        $this->local       = $local;
-        $this->filter      = $filter;
-        $this->attributes  = $attributes;
-        $this->version     = $version;
-        $this->autoVersion = $autoVersion;
+        $this->type          = $type;
+        $this->path          = $path;
+        $this->isLocal       = $isLocal;
+        $this->filter        = $filter;
+        $this->attributes    = $attributes;
+        $this->version       = $version;
+        $this->isAutoVersion = $isAutoVersion;
     }
 
     /**
@@ -134,9 +134,9 @@ class Asset implements AssetInterface
     /**
      * Gets extra HTML attributes.
      *
-     * @return array|null
+     * @return array
      */
-    public function getAttributes(): ?array
+    public function getAttributes(): array
     {
         return $this->attributes;
     }
@@ -161,7 +161,7 @@ class Asset implements AssetInterface
          * Local assets are loaded from the local disk
          */
         if (
-            true === $this->local &&
+            true === $this->isLocal &&
             true !== $this->phpFileExists($completePath)
         ) {
             $this->throwException($completePath);
@@ -210,11 +210,12 @@ class Asset implements AssetInterface
     public function getRealSourcePath(string $basePath = null): string
     {
         $source = $this->checkPath('sourcePath');
-        if (true === $this->local) {
+        if (true === $this->isLocal) {
             /**
-             * Get the real template path
+             * Get the real template path. If `realpath` fails it will return
+             * `false`. Casting it to a string will return an empty string
              */
-            return realpath($basePath . $source);
+            $source = (string) realpath($basePath . $source);
         }
 
         return $source;
@@ -230,7 +231,7 @@ class Asset implements AssetInterface
     public function getRealTargetPath(string $basePath = null): string
     {
         $target = $this->checkPath('targetPath');
-        if (true === $this->local) {
+        if (true === $this->isLocal) {
             /**
              * A base path for assets can be set in the assets manager
              */
@@ -259,7 +260,7 @@ class Asset implements AssetInterface
     {
         $target = $this->checkPath('targetUri');
         $ver    = $this->version;
-        if (true === $this->autoVersion && true === $this->local) {
+        if (true === $this->isAutoVersion && true === $this->isLocal) {
             $modTime = filemtime($this->getRealSourcePath());
             $ver     = $ver ? $ver . '.' . $modTime : $modTime;
         }
@@ -269,6 +270,36 @@ class Asset implements AssetInterface
         }
 
         return $target;
+    }
+
+    /**
+     * Gets the asset's source Path.
+     *
+     * @return string
+     */
+    public function getSourcePath(): string
+    {
+        return $this->sourcePath;
+    }
+
+    /**
+     * Gets the asset's target Path.
+     *
+     * @return string
+     */
+    public function getTargetPath(): string
+    {
+        return $this->targetPath;
+    }
+
+    /**
+     * Gets the asset's target URI.
+     *
+     * @return string
+     */
+    public function getTargetUri(): string
+    {
+        return $this->targetUri;
     }
 
     /**
@@ -282,13 +313,33 @@ class Asset implements AssetInterface
     }
 
     /**
-     * Checks if resource is using auto version
+     * Gets the asset's version.
+     *
+     * @return string
+     */
+    public function getVersion(): string
+    {
+        return $this->version;
+    }
+
+    /**
+     * Checks if the asset is using auto version
      *
      * @return bool
      */
     public function isAutoVersion(): bool
     {
-        return $this->autoVersion;
+        return $this->isAutoVersion;
+    }
+
+    /**
+     * Checks if the asset is local or not
+     *
+     * @return bool
+     */
+    public function isLocal(): bool
+    {
+        return $this->isLocal;
     }
 
     /**
@@ -312,7 +363,7 @@ class Asset implements AssetInterface
      */
     public function setAutoVersion(bool $flag): AssetInterface
     {
-        $this->autoVersion = $flag;
+        $this->isAutoVersion = $flag;
 
         return $this;
     }
@@ -334,13 +385,13 @@ class Asset implements AssetInterface
     /**
      * Sets if the asset is local or external
      *
-     * @param bool $local
+     * @param bool $flag
      *
      * @return AssetInterface
      */
-    public function setLocal(bool $local): AssetInterface
+    public function setLocal(bool $flag): AssetInterface
     {
-        $this->local = $local;
+        $this->isLocal = $flag;
 
         return $this;
     }
@@ -411,6 +462,20 @@ class Asset implements AssetInterface
     public function setPath(string $path): AssetInterface
     {
         $this->path = $path;
+
+        return $this;
+    }
+
+    /**
+     * Sets the asset's version
+     *
+     * @param string $version
+     *
+     * @return AssetInterface
+     */
+    public function setVersion(string $version): AssetInterface
+    {
+        $this->version = $version;
 
         return $this;
     }
