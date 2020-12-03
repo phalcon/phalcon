@@ -389,21 +389,17 @@ class Debug
     /**
      * Escapes a string with htmlentities
      *
-     * @param mixed $value
+     * @param string $value
      *
      * @return string
      */
-    protected function escapeString($value): string
+    protected function escapeString(string $value): string
     {
-        if (true === is_string($value)) {
-            return htmlentities(
-                str_replace("\n", "\\n", $value),
-                ENT_COMPAT,
-                'utf-8'
-            );
-        }
-
-        return $value;
+        return htmlentities(
+            str_replace("\n", "\\n", $value),
+            ENT_COMPAT,
+            'utf-8'
+        );
     }
 
     /**
@@ -429,7 +425,7 @@ class Debug
             if ('' === $argument) {
                 $varDump = '(empty string)';
             } elseif (true === is_scalar($argument)) {
-                $varDump = $this->escapeString($argument);
+                $varDump = $this->escapeString((string) $argument);
             } elseif (true === is_array($argument)) {
                 $varDump = 'Array(' . $this->getArrayDump($argument, $number + 1) . ')';
             } elseif (true === is_object($argument)) {
