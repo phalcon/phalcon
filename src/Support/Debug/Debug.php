@@ -183,7 +183,7 @@ class Debug
     }
 
     /**
-     * Listen for uncaught exceptions and unsilent notices or warnings
+     * Listen for uncaught exceptions and non silent notices or warnings
      *
      * @param bool $exceptions
      * @param bool $lowSeverity
@@ -218,7 +218,7 @@ class Debug
     }
 
     /**
-     * Listen for unsilent notices or warnings
+     * Listen for non silent notices or warnings
      *
      * @return Debug
      */
