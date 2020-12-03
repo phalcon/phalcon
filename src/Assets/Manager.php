@@ -13,23 +13,27 @@ declare(strict_types=1);
 
 namespace Phalcon\Assets;
 
-use Phalcon\Di\Traits\InjectionAwareTrait;
-use Phalcon\Tag;
-use Phalcon\Assets\Asset\Js as AssetJs;
 use Phalcon\Assets\Asset\Css as AssetCss;
+use Phalcon\Assets\Asset\Js as AssetJs;
 use Phalcon\Assets\Inline\Css as InlineCss;
 use Phalcon\Assets\Inline\Js as InlineJs;
-use Phalcon\Di\DiInterface;
-use Phalcon\Di\AbstractInjectionAware;
+use Phalcon\Di\Traits\InjectionAwareTrait;
+use Phalcon\Html\Helper\Close;
+use Phalcon\Html\Helper\Element;
+use Phalcon\Html\TagFactory;
+use function call_user_func_array;
+use function filemtime;
+use function is_object;
 
 /**
  * Phalcon\Assets\Manager
  *
  * Manages collections of CSS/JavaScript assets
  *
- * @property array $collections
- * @property array $options
- * @property bool  $implicitOutput
+ * @property array      $collections
+ * @property bool       $implicitOutput
+ * @property array      $options
+ * @property TagFactory $tagFactory
  */
 class Manager
 {
@@ -41,33 +45,34 @@ class Manager
     protected array $collections = [];
 
     /**
-     * @var array
-     */
-    protected array $options = [];
-
-    /**
      * @var bool
      */
     protected bool $implicitOutput = true;
 
     /**
+     * @var array
+     */
+    protected array $options = [];
+
+    /**
+     * @var TagFactory
+     */
+    protected TagFactory $tagFactory;
+
+    /**
      * Manager constructor.
      *
-     * @param array $options
+     * @param TagFactory $tagFactory
+     * @param array      $options
      */
-    public function __construct(array $options = [])
+    public function __construct(TagFactory $tagFactory, array $options = [])
     {
-        $this->options = $options;
+        $this->tagFactory = $tagFactory;
+        $this->options    = $options;
     }
 
     /**
      * Adds a raw asset to the manager
-     *
-     *```php
-     * $assets->addAsset(
-     *     new Phalcon\Assets\Asset("css", "css/style.css")
-     * );
-     *```
      *
      * @param Asset $asset
      *
@@ -86,13 +91,6 @@ class Manager
     /**
      * Adds a asset by its type
      *
-     *```php
-     * $assets->addAssetByType(
-     *     "css",
-     *     new \Phalcon\Assets\Asset\Css("css/style.css")
-     * );
-     *```
-     *
      * @param string $type
      * @param Asset  $asset
      *
@@ -107,13 +105,8 @@ class Manager
     }
 
     /**
-    * Adds a CSS asset to the 'css' collection
-    *
-    *```php
-    * $assets->addCss("css/bootstrap.css");
-    * $assets->addCss("http://bootstrap.my-cdn.com/style.css", false);
-    *```
-    *
+     * Adds a CSS asset to the 'css' collection
+     *
      * @param string      $path
      * @param bool        $local
      * @param bool        $filter
@@ -273,8 +266,10 @@ class Manager
     {
         $filtered = [];
         foreach ($assets as $asset) {
-            if ($asset instanceof AssetInterface &&
-                $type === $asset->getType()) {
+            if (
+                $asset instanceof AssetInterface &&
+                $type === $asset->getType()
+            ) {
                 $filtered[] = $asset;
             }
         }
@@ -363,438 +358,330 @@ class Manager
     /**
      * Traverses a collection calling the callback to generate its HTML
      *
-     * @param callback callback
-     * @param string type
+     * @param Collection $collection
+     * @param callable   $callback
+     * @param string     $type
+     *
+     * @return string|null
+     * @throws Exception
      */
     public function output(
         Collection $collection,
         callable $callback,
         string $type
     ): ?string {
-//        string output;
-//        var asset, assets, attributes, autoVersion, collectionSourcePath,
-//            collectionTargetPath, completeSourcePath, completeTargetPath,
-//            content, filter, filters, filteredContent, filteredJoinedContent,
-//            filterNeeded, html, join, local, modificationTime, mustFilter,
-//            options, parameters, path, prefixedPath, sourceBasePath = null,
-//            sourcePath,  targetBasePath = null, targetPath, targetUri, typeCss,
-//            useImplicitOutput, version;
-//
-//        let useImplicitOutput = this->implicitOutput,
-//            output            = "";
-//
-//        /**
-//         * Get the assets as an array
-//         */
-//        let assets = this->collectionAssetsByType(
-//            collection->getAssets(),
-//            type
-//        );
-//
-//        /**
-//         * Get filters in the collection
-//         */
-//        let filters = collection->getFilters(),
-//            typeCss = "css";
-//
-//        /**
-//         * Prepare options if the collection must be filtered
-//         */
-//        if count(filters) {
-//            let options = this->options;
-//
-//            /**
-//             * Check for global options in the assets manager
-//             */
-//            if typeof options == "array" {
-//                /**
-//                 * The source base path is a global location where all assets
-//                 * are located
-//                 */
-//                fetch sourceBasePath, options["sourceBasePath"];
-//
-//                /**
-//                 * The target base path is a global location where all assets
-//                 * are written
-//                 */
-//                fetch targetBasePath, options["targetBasePath"];
-//            }
-//
-//            /**
-//             * Check if the collection have its own source base path
-//             */
-//            let collectionSourcePath = collection->getSourcePath();
-//
-//            /**
-//             * Concatenate the global base source path with the collection one
-//             */
-//            if collectionSourcePath {
-//                let completeSourcePath = sourceBasePath . collectionSourcePath;
-//            } else {
-//                let completeSourcePath = sourceBasePath;
-//            }
-//
-//            /**
-//             * Check if the collection have its own target base path
-//             */
-//            let collectionTargetPath = collection->getTargetPath();
-//
-//            /**
-//             * Concatenate the global base source path with the collection one
-//             */
-//            if collectionTargetPath {
-//                let completeTargetPath = targetBasePath . collectionTargetPath;
-//            } else {
-//                let completeTargetPath = targetBasePath;
-//            }
-//
-//            /**
-//             * Global filtered content
-//             */
-//            let filteredJoinedContent = "";
-//
-//            /**
-//             * Check if the collection have its own target base path
-//             */
-//            let join = collection->getJoin();
-//
-//            /**
-//             * Check for valid target paths if the collection must be joined
-//             */
-//            if join {
-//                /**
-//                * We need a valid final target path
-//                */
-//                if unlikely !completeTargetPath {
-//                    throw new Exception(
-//                        "Path '" . completeTargetPath . "' is not a valid target path (1)"
-//                    );
-//                }
-//
-//                if unlikely is_dir(completeTargetPath) {
-//                    throw new Exception(
-//                        "Path '" . completeTargetPath . "' is not a valid target path (2), is dir."
-//                    );
-//                }
-//            }
-//        }
-//
-//        /**
-//         * walk in assets
-//         */
-//        for asset in assets {
-//            let filterNeeded = false,
-//                type         = asset->getType();
-//
-//            /**
-//             * Is the asset local?
-//             */
-//            let local = asset->getLocal();
-//
-//            /**
-//             * If the collection must not be joined we must print a HTML for
-//             * each one
-//             */
-//            if count(filters) {
-//                if local {
-//                    /**
-//                     * Get the complete path
-//                     */
-//                    let sourcePath = asset->getRealSourcePath(
-//                        completeSourcePath
-//                    );
-//
-//                    /**
-//                     * We need a valid source path
-//                     */
-//                    if unlikely !sourcePath {
-//                        let sourcePath = asset->getPath();
-//
-//                        throw new Exception(
-//                            "Asset '" . sourcePath . "' does not have a valid source path"
-//                        );
-//                    }
-//                } else {
-//                    /**
-//                     * Get the complete source path
-//                     */
-//                    let sourcePath = asset->getPath();
-//
-//                    /**
-//                     * assets paths are always filtered
-//                     */
-//                    let filterNeeded = true;
-//                }
-//
-//                /**
-//                 * Get the target path, we need to write the filtered content to
-//                 * a file
-//                 */
-//                let targetPath = asset->getRealTargetPath(completeTargetPath);
-//
-//                /**
-//                 * We need a valid final target path
-//                 */
-//                if unlikely !targetPath {
-//                    throw new Exception(
-//                        "Asset '" . sourcePath . "' does not have a valid target path"
-//                    );
-//                }
-//
-//                if local {
-//                    /**
-//                     * Make sure the target path is not the same source path
-//                     */
-//                    if unlikely targetPath == sourcePath {
-//                        throw new Exception(
-//                            "Asset '" . targetPath . "' have the same source and target paths"
-//                        );
-//                    }
-//
-//                    if file_exists(targetPath) {
-//                        if compare_mtime(targetPath, sourcePath) {
-//                            let filterNeeded = true;
-//                        }
-//                    } else {
-//                        let filterNeeded = true;
-//                    }
-//                }
-//            } else {
-//                /**
-//                 * If there are not filters, just print/buffer the HTML
-//                 */
-//                let path         = asset->getRealTargetUri(),
-//                    prefixedPath = this->getPrefixedPath(collection, path);
-//
-//                if null === asset->getVersion() && asset->isAutoVersion() {
-//					let version     = collection->getVersion(),
-//					    autoVersion = collection->isAutoVersion();
-//
-//				    if autoVersion && local {
-//				        let modificationTime = filemtime(asset->getRealSourcePath()),
-//				            version          = version ? version . "." . modificationTime : modificationTime;
-//				    }
-//
-//					if version {
-//						let prefixedPath = prefixedPath . "?ver=" . version;
-//					}
-//				}
-//
-//                /**
-//                 * Gets extra HTML attributes in the asset
-//                 */
-//                let attributes = asset->getAttributes();
-//
-//                /**
-//                 * Prepare the parameters for the callback
-//                 */
-//                if typeof attributes == "array" {
-//                    let attributes[0] = prefixedPath;
-//                    let parameters = [attributes];
-//                } else {
-//                    let parameters = [prefixedPath];
-//                }
-//                let parameters[] = local;
-//
-//                /**
-//                 * Call the callback to generate the HTML
-//                 */
-//                let html = call_user_func_array(callback, parameters);
-//
-//                /**
-//                 * Implicit output prints the content directly
-//                 */
-//                if useImplicitOutput == true {
-//                    echo html;
-//                } else {
-//                    let output .= html;
-//                }
-//
-//                continue;
-//            }
-//
-//            if filterNeeded == true {
-//                /**
-//                 * Gets the asset's content
-//                 */
-//                let content = asset->getContent(completeSourcePath);
-//
-//                /**
-//                 * Check if the asset must be filtered
-//                 */
-//                let mustFilter = asset->getFilter();
-//
-//                /**
-//                 * Only filter the asset if it's marked as 'filterable'
-//                 */
-//                if mustFilter == true {
-//                    for filter in filters {
-//                        /**
-//                         * Filters must be valid objects
-//                         */
-//                        if unlikely typeof filter != "object" {
-//                            throw new Exception("Filter is invalid");
-//                        }
-//
-//                        /**
-//                         * Calls the method 'filter' which must return a
-//                         * filtered version of the content
-//                         */
-//                        let filteredContent = filter->filter(content),
-//                            content         = filteredContent;
-//                    }
-//
-//                    /**
-//                     * Update the joined filtered content
-//                     */
-//                    if join == true {
-//                        if type == typeCss {
-//                            let filteredJoinedContent .= filteredContent;
-//                        } else {
-//                            let filteredJoinedContent .= filteredContent . ";";
-//                        }
-//                    }
-//                } else {
-//                    /**
-//                     * Update the joined filtered content
-//                     */
-//                    if join == true {
-//                        let filteredJoinedContent .= content;
-//                    } else {
-//                        let filteredContent = content;
-//                    }
-//                }
-//
-//                if !join {
-//                    /**
-//                     * Write the file using file-put-contents. This respects the
-//                     * openbase-dir also writes to streams
-//                     */
-//                    file_put_contents(targetPath, filteredContent);
-//                }
-//            }
-//
-//            if !join {
-//                /**
-//                 * Generate the HTML using the original path in the asset
-//                 */
-//                let path         = asset->getRealTargetUri(),
-//                    prefixedPath = this->getPrefixedPath(collection, path);
-//
-//                if null === asset->getVersion() && asset->isAutoVersion() {
-//					let version     = collection->getVersion(),
-//					    autoVersion = collection->isAutoVersion();
-//
-//				    if autoVersion && local {
-//				        let modificationTime = filemtime(asset->getRealSourcePath()),
-//				            version          = version ? version . "." . modificationTime : modificationTime;
-//				    }
-//
-//					if version {
-//						let prefixedPath = prefixedPath . "?ver=" . version;
-//					}
-//				}
-//
-//                /**
-//                 * Gets extra HTML attributes in the asset
-//                 */
-//                let attributes = asset->getAttributes();
-//
-//                /**
-//                 * Filtered assets are always local
-//                 */
-//                let local = true;
-//
-//                /**
-//                 * Prepare the parameters for the callback
-//                 */
-//                if typeof attributes == "array" {
-//                    let attributes[0] = prefixedPath;
-//                    let parameters = [attributes];
-//                } else {
-//                    let parameters = [prefixedPath];
-//                }
-//                let parameters[] = local;
-//
-//                /**
-//                * Call the callback to generate the HTML
-//                */
-//                let html = call_user_func_array(callback, parameters);
-//
-//                /**
-//                * Implicit output prints the content directly
-//                */
-//                if useImplicitOutput == true {
-//                    echo html;
-//                } else {
-//                    let output .= html;
-//                }
-//            }
-//        }
-//
-//        if count(filters) {
-//            if join == true {
-//                /**
-//                 * Write the file using file_put_contents. This respects the
-//                 * openbase-dir also writes to streams
-//                 */
-//                file_put_contents(completeTargetPath, filteredJoinedContent);
-//
-//                /**
-//                 * Generate the HTML using the original path in the asset
-//                 */
-//                let targetUri    = collection->getTargetUri(),
-//                    prefixedPath = this->getPrefixedPath(collection, targetUri),
-//                    version      = collection->getVersion(),
-//                    autoVersion  = collection->isAutoVersion();
-//
-//                if autoVersion && local {
-//                    let modificationTime = filemtime(completeTargetPath),
-//                        version          = version ? version . "." . modificationTime : modificationTime;
-//                }
-//
-//                if version {
-//                    let prefixedPath = prefixedPath . "?ver=" . version;
-//                }
-//
-//                /**
-//                 * Gets extra HTML attributes in the collection
-//                 */
-//                let attributes = collection->getAttributes();
-//
-//                /**
-//                 *  Gets local
-//                 */
-//                let local = collection->getTargetLocal();
-//
-//                /**
-//                 * Prepare the parameters for the callback
-//                 */
-//                if typeof attributes == "array" {
-//                    let attributes[0] = prefixedPath,
-//                        parameters = [attributes];
-//                } else {
-//                    let parameters = [prefixedPath];
-//                }
-//                let parameters[] = local;
-//
-//                /**
-//                 * Call the callback to generate the HTML
-//                 */
-//                let html = call_user_func_array(callback, parameters);
-//
-//                /**
-//                 * Implicit output prints the content directly
-//                 */
-//                if useImplicitOutput == true {
-//                    echo html;
-//                } else {
-//                    let output .= html;
-//                }
-//            }
-//        }
-//
-//        return output;
+
+        $completeSourcePath    = '';
+        $completeTargetPath    = '';
+        $filteredContent       = '';
+        $filteredJoinedContent = '';
+        $join                  = false;
+        $output                = '';
+        $sourceBasePath        = null;
+        $targetBasePath        = null;
+
+        /**
+         * Get the assets as an array
+         */
+        $assets = $this->collectionAssetsByType($collection->getAssets(), $type);
+
+        /**
+         * Get filters in the collection
+         */
+        $filters = $collection->getFilters();
+        $typeCss = 'css';
+
+        /**
+         * Prepare options if the collection must be filtered
+         */
+        if (true !== empty($filters)) {
+            /**
+             * Check for global options in the assets manager. The source and
+             * target base path are global locations where all assets are read
+             * and written respectively
+             */
+            $sourceBasePath = $this->options['sourceBasePath'] ?? '';
+            $targetBasePath = $this->options['targetBasePath'] ?? '';
+            /**
+             * Check if the collection have its own source base path
+             */
+            $collectionSourcePath = $collection->getSourcePath();
+            $completeSourcePath   = $sourceBasePath;
+
+            /**
+             * Concatenate the global base source path with the collection one
+             */
+            if (true !== empty($collectionSourcePath)) {
+                $completeSourcePath .= $collectionSourcePath;
+            }
+
+            /**
+             * Check if the collection have its own target base path
+             */
+            $collectionTargetPath = $collection->getTargetPath();
+            $completeTargetPath   = $targetBasePath;
+
+            /**
+             * Concatenate the global base source path with the collection one
+             */
+            if (true !== empty($collectionTargetPath)) {
+                $completeTargetPath .= $collectionTargetPath;
+            }
+
+            /**
+             * Global filtered content
+             */
+            $filteredJoinedContent = '';
+
+            /**
+             * Check if the collection have its own target base path
+             */
+            $join = $collection->getJoin();
+
+            /**
+             * Check for valid target paths if the collection must be joined
+             */
+            if (true !== $join) {
+                /**
+                 * We need a valid final target path
+                 */
+                if (true === empty($completeTargetPath)) {
+                    throw new Exception(
+                        "Path '" . $completeTargetPath . "' is not a valid target path (1)"
+                    );
+                }
+
+                if (true === is_dir($completeTargetPath)) {
+                    throw new Exception(
+                        "Path '" . $completeTargetPath . "' is not a valid target path (2), it is a directory."
+                    );
+                }
+            }
+        }
+
+        /** @var Asset $asset */
+        foreach ($assets as $asset) {
+            $filterNeeded = false;
+            $type         = $asset->getType();
+
+            /**
+             * If the collection must not be joined we must print a HTML for
+             * each one
+             */
+            if (true !== empty($filters)) {
+                $sourcePath = $asset->getPath();
+                if (true === $asset->isLocal()) {
+                    $filterNeeded = true;
+                    /**
+                     * Get the complete path
+                     */
+                    $sourcePath = $asset->getRealSourcePath($completeSourcePath);
+
+                    /**
+                     * We need a valid source path
+                     */
+                    if (true === empty($sourcePath)) {
+                        $sourcePath = $asset->getPath();
+
+                        throw new Exception(
+                            "Asset '" . $sourcePath . "' does not have a valid source path"
+                        );
+                    }
+                }
+
+                /**
+                 * Get the target path, we need to write the filtered content to
+                 * a file
+                 */
+                $targetPath = $asset->getRealTargetPath($completeTargetPath);
+
+                /**
+                 * We need a valid final target path
+                 */
+                if (true === empty($targetPath)) {
+                    throw new Exception(
+                        "Asset '" . $sourcePath . "' does not have a valid target path"
+                    );
+                }
+
+                if (true === $asset->isLocal()) {
+                    /**
+                     * Make sure the target path is not the same source path
+                     */
+                    if ($targetPath === $sourcePath) {
+                        throw new Exception(
+                            "Asset '" . $targetPath . "' have the same source and target paths"
+                        );
+                    }
+
+                    if (true === file_exists($targetPath)) {
+                        if (filemtime($targetPath) !== filemtime($sourcePath)) {
+                            $filterNeeded = true;
+                        }
+                    } else {
+                        $filterNeeded = true;
+                    }
+                }
+            } else {
+                /**
+                 * If there are not filters, just print/buffer the HTML
+                 */
+                $prefixedPath = $this->calculatePrefixedPath(
+                    $collection,
+                    $asset->getRealTargetUri(),
+                    $asset->getRealSourcePath()
+                );
+
+                /**
+                 * Generate the HTML
+                 */
+                $html = $this->doCallback(
+                    $callback,
+                    $asset->getAttributes(),
+                    $prefixedPath,
+                    $asset->isLocal()
+                );
+
+                /**
+                 * Implicit output prints the content directly
+                 */
+                if (true === $this->implicitOutput) {
+                    echo $html;
+                } else {
+                    $output .= $html;
+                }
+
+                continue;
+            }
+
+            if (true === $filterNeeded) {
+                /**
+                 * Gets the asset's content
+                 */
+                $content = $asset->getContent($completeSourcePath);
+
+                /**
+                 * Check if the asset must be filtered
+                 */
+                $mustFilter = $asset->getFilter();
+
+                /**
+                 * Only filter the asset if it's marked as 'filterable'
+                 */
+                if (true === $mustFilter) {
+                    foreach ($filters as $filter) {
+                        /**
+                         * Filters must be valid objects
+                         */
+                        if (true !== is_object($filter)) {
+                            throw new Exception('Filter is invalid');
+                        }
+
+                        /**
+                         * Calls the method 'filter' which must return a
+                         * filtered version of the content
+                         */
+                        $filteredContent = $filter->filter($content);
+                        $content         = $filteredContent;
+                    }
+
+                    /**
+                     * Update the joined filtered content
+                     */
+                    if (true === $join) {
+                        $filteredJoinedContent .= $filteredContent;
+                        if ($type !== $typeCss) {
+                            $filteredJoinedContent .= ';';
+                        }
+                    }
+                } else {
+                    /**
+                     * Update the joined filtered content
+                     */
+                    if (true === $join) {
+                        $filteredJoinedContent .= $content;
+                    } else {
+                        $filteredContent = $content;
+                    }
+                }
+
+                if (true !== $join) {
+                    /**
+                     * Write the file using file-put-contents. This respects the
+                     * openbase-dir also writes to streams
+                     */
+                    file_put_contents($targetPath, $filteredContent);
+                }
+            }
+
+            if (true !== $join) {
+                /**
+                 * Generate the HTML using the original path in the asset
+                 */
+                $prefixedPath = $this->calculatePrefixedPath(
+                    $collection,
+                    $asset->getRealTargetUri(),
+                    $asset->getRealSourcePath()
+                );
+
+                /**
+                 * Generate the HTML
+                 */
+                $html = $this->doCallback(
+                    $callback,
+                    $collection->getAttributes(),
+                    $prefixedPath,
+                    true
+                );
+
+                /**
+                 * Implicit output prints the content directly
+                 */
+                if (true === $this->implicitOutput) {
+                    echo $html;
+                } else {
+                    $output .= $html;
+                }
+            }
+        }
+
+        if (
+            true !== empty($filters) &&
+            true === $join
+        ) {
+            /**
+             * Write the file using file_put_contents. This respects the
+             * openbase-dir also writes to streams
+             */
+            file_put_contents($completeTargetPath, $filteredJoinedContent);
+
+            $prefixedPath = $this->calculatePrefixedPath(
+                $collection,
+                $collection->getTargetUri(),
+                $completeTargetPath
+            );
+
+            /**
+             * Generate the HTML
+             */
+            $html = $this->doCallback(
+                $callback,
+                $collection->getAttributes(),
+                $prefixedPath,
+                $collection->getTargetLocal()
+            );
+
+            /**
+             * Implicit output prints the content directly
+             */
+            if (true === $this->implicitOutput) {
+                echo $html;
+            } else {
+                $output .= $html;
+            }
+        }
+
+        return $output;
     }
 
     /**
@@ -806,14 +693,11 @@ class Manager
      */
     public function outputCss(string $name = null): string
     {
-//        array callback;
-//        var collection, container, tag;
-//
-//        if !collectionName {
-//            let collection = this->getCss();
-//        } else {
-//            let collection = this->get(collectionName);
-//        }
+        $collection = $this->getCss();
+        if (null !== $name) {
+            $collection = $this->get($name);
+        }
+
 //
 //        let callback  = ["Phalcon\\Tag", "stylesheetLink"],
 //            container = this->container;
@@ -833,58 +717,64 @@ class Manager
      * @param string     $type
      *
      * @return string
+     * @throws Exception
      */
     public function outputInline(Collection $collection, string $type): string
     {
-        let output        = "",
-            html          = "",
-            joinedContent = "",
-            codes         = collection->getCodes(),
-            filters       = collection->getFilters(),
-            join          = collection->getJoin() ;
+        $output        = "";
+        $html          = "";
+        $joinedContent = "";
+        $codes         = $collection->getCodes();
+        $filters       = $collection->getFilters();
+        $join          = $collection->getJoin();
 
-        if count(codes) {
-            for code in codes {
-                let attributes = code->getAttributes(),
-                    content = code->getContent();
+        if (true !== empty($codes)) {
+            /** @var Element $tagElement */
+            $tagElement = $this->tagFactory->newInstance('element');
+            /** @var Close $tagClose */
+            $tagClose = $this->tagFactory->newInstance('close');
 
-                for filter in filters {
+            foreach ($codes as $code) {
+                $attributes = $code->getAttributes();
+                $content    = $code->getContent();
+
+                foreach ($filters as $filter) {
                     /**
                      * Filters must be valid objects
                      */
-                    if unlikely typeof filter != "object" {
-                        throw new Exception("Filter is invalid");
+                    if (true !== is_object($filter)) {
+                        throw new Exception('Filter is invalid');
                     }
 
                     /**
                      * Calls the method 'filter' which must return a filtered
                      * version of the content
                      */
-                    let content = filter->filter(content);
+                    $content = $filter->filter($content);
                 }
 
-                if join {
-                    let joinedContent .= content;
+                if (true === $join) {
+                    $joinedContent .= $content;
                 } else {
-                    let html .= Tag::tagHtml(type, attributes, false, true)
-                              . content
-                              . Tag::tagHtmlClose(type, true);
+                    $html .= $tagElement($type, '', $attributes)
+                        . $content
+                        . $tagClose($type);
                 }
             }
 
-            if join {
-                let html .= Tag::tagHtml(type, attributes, false, true)
-                          . joinedContent
-                          . Tag::tagHtmlClose(type, true);
+            if (true === $join) {
+                $html .= $tagElement($type, '', $attributes)
+                    . $joinedContent
+                    . $tagClose($type);
             }
 
             /**
              * Implicit output prints the content directly
              */
-            if this->implicitOutput == true {
-                echo html;
+            if (true === $this->implicitOutput) {
+                echo $html;
             } else {
-                let output .= html;
+                $output .= $html;
             }
         }
 
@@ -939,6 +829,7 @@ class Manager
             $collection = $this->get($name);
         }
 
+        $callback = '';
 //        $callback = ["Phalcon\\Tag", "javascriptInclude"];
 //
 //        let container = this->container;
@@ -947,7 +838,7 @@ class Manager
 //                callback = [tag, "javascriptInclude"];
 //        }
 
-        return $this->output(collection, callback, "js");
+        return $this->output($collection, $callback, 'js');
     }
 
     /**
@@ -998,18 +889,42 @@ class Manager
     }
 
     /**
-     * Returns the prefixed path
+     * Calculates the prefixed path including the version
      *
      * @param Collection $collection
      * @param string     $path
+     * @param string     $filePath
      *
      * @return string
      */
-    private function getPrefixedPath(Collection $collection, string $path): string
-    {
-        return $collection->getPrefix() . $path;
+    private function calculatePrefixedPath(
+        Collection $collection,
+        string $path,
+        string $filePath
+    ): string {
+        $prefixedPath = $collection->getPrefix() . $path;
+        $version      = $collection->getVersion();
+
+        if (
+            true === $collection->isAutoVersion() &&
+            true === $collection->isLocal()
+        ) {
+            $modificationTime = filemtime($filePath);
+            $version          = $version ? $version . '.' . $modificationTime : $modificationTime;
+        }
+
+        if ($version) {
+            $prefixedPath = $prefixedPath . '?ver=' . $version;
+        }
+
+        return $prefixedPath;
     }
 
+    /**
+     * @param string $type
+     *
+     * @return Collection
+     */
     private function checkAndCreateCollection(string $type): Collection
     {
         if (true !== isset($this->collections[$type])) {
@@ -1017,5 +932,36 @@ class Manager
         }
 
         return $this->collections[$type];
+    }
+
+    /**
+     * @param callable $callback
+     * @param array    $attributes
+     * @param string   $prefixedPath
+     * @param bool     $local
+     *
+     * @return string
+     */
+    private function doCallback(
+        callable $callback,
+        array $attributes,
+        string $prefixedPath,
+        bool $local
+    ): string {
+        /**
+         * Prepare the parameters for the callback
+         */
+        if (true !== empty($attributes)) {
+            $attributes[0] = $prefixedPath;
+            $parameters    = [$attributes];
+        } else {
+            $parameters = [$prefixedPath];
+        }
+        $parameters[] = $local;
+
+        /**
+         * Call the callback to generate the HTML
+         */
+        return call_user_func_array($callback, $parameters);
     }
 }

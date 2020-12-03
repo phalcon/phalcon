@@ -19,6 +19,7 @@ use Phalcon\Html\Helper\Close;
 use Phalcon\Html\Helper\Element;
 use Phalcon\Html\Helper\Form;
 use Phalcon\Html\Helper\Img;
+use Phalcon\Html\Helper\Input\Checkbox;
 use Phalcon\Html\Helper\Input\Color;
 use Phalcon\Html\Helper\Input\Date;
 use Phalcon\Html\Helper\Input\DateTime;
@@ -31,6 +32,7 @@ use Phalcon\Html\Helper\Input\Input;
 use Phalcon\Html\Helper\Input\Month;
 use Phalcon\Html\Helper\Input\Numeric;
 use Phalcon\Html\Helper\Input\Password;
+use Phalcon\Html\Helper\Input\Radio;
 use Phalcon\Html\Helper\Input\Range;
 use Phalcon\Html\Helper\Input\Search;
 use Phalcon\Html\Helper\Input\Select;
@@ -50,6 +52,7 @@ use Phalcon\Html\Helper\Style;
 use Phalcon\Html\Helper\Title;
 use Phalcon\Html\Helper\Ul;
 use Phalcon\Support\Traits\FactoryTrait;
+use function call_user_func_array;
 
 /**
  * ServiceLocator implementation for Tag helpers
@@ -118,6 +121,7 @@ class TagFactory
             'element'            => Element::class,
             'form'               => Form::class,
             'img'                => Img::class,
+            'inputCheckbox'      => Checkbox::class,
             'inputColor'         => Color::class,
             'inputDate'          => Date::class,
             'inputDateTime'      => DateTime::class,
@@ -130,9 +134,10 @@ class TagFactory
             'inputMonth'         => Month::class,
             'inputNumeric'       => Numeric::class,
             'inputPassword'      => Password::class,
+            'inputRadio'         => Radio::class,
             'inputRange'         => Range::class,
-            'inputSelect'        => Select::class,
             'inputSearch'        => Search::class,
+            'inputSelect'        => Select::class,
             'inputSubmit'        => Submit::class,
             'inputTel'           => Tel::class,
             'inputText'          => Text::class,
