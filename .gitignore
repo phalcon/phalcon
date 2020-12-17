@@ -1,4 +1,5 @@
 .env
+.php_cs.cache
 boxfile.yml
 tests/_output/
 tests/_support/_generated/
