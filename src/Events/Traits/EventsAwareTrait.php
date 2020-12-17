@@ -46,10 +46,24 @@ trait EventsAwareTrait
         $this->eventsManager = $eventsManager;
     }
 
-    private function fireEvent(string $eventName): bool
-    {
+    /**
+     * Helper method to fire an event
+     *
+     * @param string     $eventName
+     * @param mixed|null $data
+     * @param bool       $cancellable
+     *
+     * @return mixed|bool
+     */
+    private function fireEvent(
+        string $eventName,
+        $data = null,
+        bool $cancellable = true
+    ) {
         if (null !== $this->eventsManager) {
-            return $this->eventsManager->fire($eventName, $this);
+            return $this
+                ->eventsManager
+                ->fire($eventName, $this, $data, $cancellable);
         }
 
         return true;

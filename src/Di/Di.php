@@ -15,7 +15,6 @@ namespace Phalcon\Di;
 
 use Phalcon\Di\Exception\ServiceResolutionException;
 use Phalcon\Di\Traits\DiArrayAccessTrait;
-use Phalcon\Di\Traits\DiEventsTrait;
 use Phalcon\Di\Traits\DiExceptionsTrait;
 use Phalcon\Di\Traits\DiInstanceTrait;
 use Phalcon\Di\Traits\DiLoadTrait;
@@ -72,7 +71,6 @@ use function substr;
 class Di implements DiInterface
 {
     use DiArrayAccessTrait;
-    use DiEventsTrait;
     use DiExceptionsTrait;
     use DiInstanceTrait;
     use DiLoadTrait;
@@ -208,11 +206,12 @@ class Di implements DiInterface
          * Allows for custom creation of instances through the
          * "di:beforeServiceResolve" event.
          */
-        $instance = $this->fireBeforeServiceResolve(
-            $this->eventsManager,
-            $name,
-            $parameters,
-            $instance
+        $instance = $this->fireEvent(
+            'di:beforeServiceResolve',
+            [
+                'name'       => $name,
+                'parameters' => $parameters,
+            ]
         );
 
         if (true !== is_object($instance)) {
@@ -245,11 +244,13 @@ class Di implements DiInterface
          * Allows for post creation instance configuration through the
          * "di:afterServiceResolve" event.
          */
-        return $this->fireAfterServiceResolve(
-            $this->eventsManager,
-            $name,
-            $parameters,
-            $instance
+        return $this->fireEvent(
+            'di:afterServiceResolve',
+            [
+                'name'       => $name,
+                'parameters' => $parameters,
+                'instance'   => $instance,
+            ]
         );
     }
 
