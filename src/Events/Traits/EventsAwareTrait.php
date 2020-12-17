@@ -45,4 +45,13 @@ trait EventsAwareTrait
     {
         $this->eventsManager = $eventsManager;
     }
+
+    private function fireEvent(string $eventName): bool
+    {
+        if (null !== $this->eventsManager) {
+            return $this->eventsManager->fire($eventName, $this);
+        }
+
+        return true;
+    }
 }
