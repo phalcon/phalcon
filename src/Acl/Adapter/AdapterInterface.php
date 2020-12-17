@@ -19,27 +19,6 @@ namespace Phalcon\Acl\Adapter;
 interface AdapterInterface
 {
     /**
-     * Do a role inherit from another existing role
-     *
-     * @param string $roleName
-     * @param mixed  $roleToInherit
-     *
-     * @return bool
-     */
-    public function addInherit(string $roleName, $roleToInherit): bool;
-
-    /**
-     * Adds a role to the ACL list. Second parameter lets to inherit access data
-     * from other existing role
-     *
-     * @param mixed      $role
-     * @param mixed|null $accessInherits
-     *
-     * @return bool
-     */
-    public function addRole($role, $accessInherits = null): bool;
-
-    /**
      * Adds a component to the ACL list
      *
      * Access names can be a particular action, by example
@@ -61,6 +40,27 @@ interface AdapterInterface
      * @return bool
      */
     public function addComponentAccess(string $componentName, $accessList): bool;
+
+    /**
+     * Do a role inherit from another existing role
+     *
+     * @param string $roleName
+     * @param mixed  $roleToInherit
+     *
+     * @return bool
+     */
+    public function addInherit(string $roleName, $roleToInherit): bool;
+
+    /**
+     * Adds a role to the ACL list. Second parameter lets to inherit access data
+     * from other existing role
+     *
+     * @param mixed      $roleObject
+     * @param mixed|null $accessInherits
+     *
+     * @return bool
+     */
+    public function addRole($roleObject, $accessInherits = null): bool;
 
     /**
      * Allow access to a role on a component
