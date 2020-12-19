@@ -24,6 +24,11 @@ use function file_get_contents;
 use function serialize;
 use function unserialize;
 
+/**
+ * Class ConstructCest
+ *
+ * @package Phalcon\Tests\Unit\Acl\Adapter\Memory
+ */
 class ConstructCest
 {
     /**
@@ -62,8 +67,10 @@ class ConstructCest
     /**
      * Tests serializing the ACL
      *
+     * @param UnitTester $I
+     *
      * @author Phalcon Team <team@phalcon.io>
-     * @since  2014-10-04
+     * @since  2020-09-09
      */
     public function testAclSerialize(UnitTester $I)
     {
@@ -102,10 +109,12 @@ class ConstructCest
     /**
      * Tests negation of inherited Roles
      *
-     * @issue   https://github.com/phalcon/cphalcon/issues/65
+     * @issue   65
      *
-     * @author  Phalcon Team <team@phalcon.io>
-     * @since   2014-10-04
+     * @param UnitTester $I
+     *
+     * @author Phalcon Team <team@phalcon.io>
+     * @since  2020-09-09
      */
     public function testAclNegationOfInheritedRoles(UnitTester $I)
     {
@@ -137,10 +146,12 @@ class ConstructCest
     /**
      * Tests function in Acl Allow Method
      *
-     * @issue   https://github.com/phalcon/cphalcon/issues/12004
+     * @issue   12004
      *
-     * @author  Wojciech Slawski <jurigag@gmail.com>
-     * @since   2016-07-22
+     * @param UnitTester $I
+     *
+     * @author Phalcon Team <team@phalcon.io>
+     * @since  2020-09-09
      */
     public function testIssue12004(UnitTester $I)
     {
@@ -186,10 +197,12 @@ class ConstructCest
     /**
      * Tests acl with adding new rule for Role after adding wildcard rule
      *
-     * @issue   https://github.com/phalcon/cphalcon/issues/2648
+     * @issue   2648
      *
-     * @author  Wojciech Slawski <jurigag@gmail.com>
-     * @since   2016-10-01
+     * @param UnitTester $I
+     *
+     * @author Phalcon Team <team@phalcon.io>
+     * @since  2020-09-09
      */
     public function testWildCardLastRole(UnitTester $I)
     {
@@ -228,10 +241,12 @@ class ConstructCest
     /**
      * Tests adding wildcard rule second time
      *
-     * @issue   https://github.com/phalcon/cphalcon/issues/2648
+     * @issue   2648
      *
-     * @author  Wojciech Slawski <jurigag@gmail.com>
-     * @since   2016-10-01
+     * @param UnitTester $I
+     *
+     * @author Phalcon Team <team@phalcon.io>
+     * @since  2020-09-09
      */
     public function testWildCardSecondTime(UnitTester $I)
     {
@@ -270,8 +285,10 @@ class ConstructCest
     /**
      * Tests negation of multiple inherited Roles
      *
-     * @author  cq-z <64899484@qq.com>
-     * @since   2018-10-10
+     * @param UnitTester $I
+     *
+     * @author Phalcon Team <team@phalcon.io>
+     * @since  2020-09-09
      */
     public function testAclNegationOfMultipleInheritedRoles(UnitTester $I)
     {
@@ -320,8 +337,10 @@ class ConstructCest
     /**
      * Tests negation of multilayer inherited Roles
      *
-     * @author  cq-z <64899484@qq.com>
-     * @since   2018-10-10
+     * @param UnitTester $I
+     *
+     * @author Phalcon Team <team@phalcon.io>
+     * @since  2020-09-09
      */
     public function testAclNegationOfMultilayerInheritedRoles(UnitTester $I)
     {

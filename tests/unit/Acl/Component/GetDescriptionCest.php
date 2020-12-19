@@ -16,6 +16,11 @@ namespace Phalcon\Tests\Unit\Acl\Component;
 use Phalcon\Acl\Component;
 use UnitTester;
 
+/**
+ * Class GetDescriptionCest
+ *
+ * @package Phalcon\Tests\Unit\Acl\Component
+ */
 class GetDescriptionCest
 {
     /**

@@ -17,24 +17,27 @@ use Phalcon\Acl\Adapter\Memory;
 use Phalcon\Acl\Enum;
 use UnitTester;
 
+/**
+ * Class DropComponentAccessCest
+ *
+ * @package Phalcon\Tests\Unit\Acl\Adapter\Memory
+ */
 class DropComponentAccessCest
 {
     /**
      * Tests Phalcon\Acl\Adapter\Memory :: dropComponentAccess()
      *
+     * @param UnitTester $I
+     *
      * @author Phalcon Team <team@phalcon.io>
-     * @since  2018-11-13
+     * @since  2020-09-09
      */
     public function aclAdapterMemoryDropComponentAccess(UnitTester $I)
     {
         $I->wantToTest('Acl\Adapter\Memory - dropComponentAccess()');
 
         $acl = new Memory();
-
-        $acl->setDefaultAction(
-            Enum::DENY
-        );
-
+        $acl->setDefaultAction(Enum::DENY);
         $acl->addRole('Guests');
         $acl->addComponent(
             'Post',

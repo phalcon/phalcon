@@ -16,6 +16,11 @@ namespace Phalcon\Tests\Unit\Acl\Component;
 use Phalcon\Acl\Component;
 use UnitTester;
 
+/**
+ * Class ToStringCest
+ *
+ * @package Phalcon\Tests\Unit\Acl\Component
+ */
 class ToStringCest
 {
     /**

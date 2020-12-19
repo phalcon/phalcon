@@ -23,13 +23,20 @@ use Phalcon\Tests\Fixtures\Acl\TestComponentAware;
 use Phalcon\Tests\Fixtures\Acl\TestRoleAware;
 use UnitTester;
 
+/**
+ * Class AllowCest
+ *
+ * @package Phalcon\Tests\Unit\Acl\Adapter\Memory
+ */
 class AllowCest
 {
     /**
      * Tests Phalcon\Acl\Adapter\Memory :: allow()
      *
+     * @param UnitTester $I
+     *
      * @author Phalcon Team <team@phalcon.io>
-     * @since  2018-11-13
+     * @since  2020-09-09
      */
     public function aclAdapterMemoryAllow(UnitTester $I)
     {
@@ -67,8 +74,10 @@ class AllowCest
     /**
      * Tests Phalcon\Acl\Adapter\Memory :: allow() - wildcard
      *
+     * @param UnitTester $I
+     *
      * @author Phalcon Team <team@phalcon.io>
-     * @since  2019-06-16
+     * @since  2020-09-09
      */
     public function aclAdapterMemoryAllowWildcard(UnitTester $I)
     {
@@ -144,8 +153,10 @@ class AllowCest
     /**
      * Tests Phalcon\Acl\Adapter\Memory :: allow() - exception
      *
+     * @param UnitTester $I
+     *
      * @author Phalcon Team <team@phalcon.io>
-     * @since  2019-06-16
+     * @since  2020-09-09
      */
     public function aclAdapterMemoryAllowException(UnitTester $I)
     {
@@ -207,10 +218,12 @@ class AllowCest
     /**
      * Tests Phalcon\Acl\Adapter\Memory :: allow() - function
      *
-     * @issue   https://github.com/phalcon/cphalcon/issues/11235
+     * @issue   11235
      *
-     * @author  Wojciech Slawski <jurigag@gmail.com>
-     * @since   2015-12-16
+     * @param UnitTester $I
+     *
+     * @author Phalcon Team <team@phalcon.io>
+     * @since  2020-09-09
      */
     public function aclAdapterMemoryAllowFunction(UnitTester $I)
     {
@@ -269,10 +282,12 @@ class AllowCest
     /**
      * Tests Phalcon\Acl\Adapter\Memory :: allow() - function exception
      *
-     * @issue   https://github.com/phalcon/cphalcon/issues/11235
+     * @issue   11235
      *
-     * @author  Wojciech Slawski <jurigag@gmail.com>
-     * @since   2016-06-05
+     * @param UnitTester $I
+     *
+     * @author Phalcon Team <team@phalcon.io>
+     * @since  2020-09-09
      */
     public function aclAdapterMemoryAllowFunctionException(UnitTester $I)
     {
