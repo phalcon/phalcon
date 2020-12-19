@@ -155,10 +155,10 @@ interface AdapterInterface
     /**
      * Check whether a role is allowed to access an action from a component
      *
-     * @param mixed      $roleName
-     * @param mixed      $componentName
-     * @param string     $access
-     * @param array|null $parameters
+     * @param mixed  $roleName
+     * @param mixed  $componentName
+     * @param string $access
+     * @param array  $parameters
      *
      * @return bool
      */
@@ -166,7 +166,7 @@ interface AdapterInterface
         $roleName,
         $componentName,
         string $access,
-        array $parameters = null
+        array $parameters = []
     ): bool;
 
     /**
