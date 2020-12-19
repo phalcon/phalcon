@@ -22,18 +22,18 @@ jobs:
       - name: Checkout Code
         uses: actions/checkout@v2
         with:
-          # fetch-depth: 1
-          # Full git history is needed to get a proper list of
-          # changed files within `super-linter`
-          fetch-depth: 0
-#      - name: Run PHP_CodeSniffer
-#        run: docker run --rm -v $(pwd):/data cytopia/phpcs --standard=./phpcs.xml
-      # Run Linter against code base
-      - name: Lint Code Base
-        uses: github/super-linter@v3
-        env:
-          VALIDATE_PHP_PHPCS: true
-          VALIDATE_PHP_PHPSTAN: true
-          VALIDATE_PHP_PSALM: true
-          DEFAULT_BRANCH: v5.0.x
-          GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}
+          fetch-depth: 1
+#          # Full git history is needed to get a proper list of
+#          # changed files within `super-linter`
+#          fetch-depth: 0
+      - name: Run PHP_CodeSniffer
+        run: docker run --rm -v $(pwd):/data cytopia/phpcs --standard=./phpcs.xml
+#      # Run Linter against code base
+#      - name: Lint Code Base
+#        uses: github/super-linter@v3
+#        env:
+#          VALIDATE_PHP_PHPCS: true
+#          VALIDATE_PHP_PHPSTAN: true
+#          VALIDATE_PHP_PSALM: true
+#          DEFAULT_BRANCH: v5.0.x
+#          GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}
