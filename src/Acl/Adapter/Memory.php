@@ -260,18 +260,15 @@ class Memory extends AbstractAdapter
      * );
      * ```
      *
-     * @param mixed $componentObject
-     * @param mixed $accessList
+     * @param ComponentInterface|string $componentObject
+     * @param mixed                     $accessList
      *
      * @return bool
      * @throws Exception
      */
     public function addComponent($componentObject, $accessList): bool
     {
-        if (
-            true === is_object($componentObject) &&
-            $componentObject instanceof ComponentInterface
-        ) {
+        if ($componentObject instanceof ComponentInterface) {
             $component = $componentObject;
         } else {
             $component = new Component($componentObject);
@@ -352,13 +349,9 @@ class Memory extends AbstractAdapter
          * inherits
          */
         foreach ($roleToInheritList as $inheritRole) {
-            if (
-                true === is_object($inheritRole) &&
-                $inheritRole instanceof RoleInterface
-            ) {
+            $roleInheritName = $inheritRole;
+            if ($inheritRole instanceof RoleInterface) {
                 $roleInheritName = $inheritRole->getName();
-            } else {
-                $roleInheritName = $inheritRole;
             }
 
             /**
@@ -440,15 +433,15 @@ class Memory extends AbstractAdapter
      * $acl->addRole("administrator", ["consultant", "consultant2"]);
      * ```
      *
-     * @param mixed      $roleObject
-     * @param mixed|null $accessInherits
+     * @param RoleInterface|string $roleObject
+     * @param mixed|null           $accessInherits
      *
      * @return bool
      * @throws Exception
      */
     public function addRole($roleObject, $accessInherits = null): bool
     {
-        if (true === is_object($roleObject) && $roleObject instanceof RoleInterface) {
+        if ($roleObject instanceof RoleInterface) {
             $role = $roleObject;
         } elseif (true === is_string($roleObject)) {
             $role = new Role($roleObject);
@@ -736,7 +729,7 @@ class Memory extends AbstractAdapter
         $this->accessGranted = $haveAccess;
         $this->fireEvent('acl:afterCheckAccess');
 
-        $this->activeKey      = (false === $accessKey) ? null : $accessKey;
+        $this->activeKey      = $accessKey ?: null;
         $this->activeFunction = $funcAccess;
 
         if (null === $haveAccess) {
