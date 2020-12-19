@@ -346,10 +346,7 @@ class ConstructCest
     {
         $acl = new Memory();
 
-        $acl->setDefaultAction(
-            Enum::DENY
-        );
-
+        $acl->setDefaultAction(Enum::DENY);
         $acl->addRole('Guests1');
         $acl->addRole('Guests12', 'Guests1');
         $acl->addRole('Guests2');

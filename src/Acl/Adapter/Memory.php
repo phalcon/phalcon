@@ -24,11 +24,12 @@ use Phalcon\Acl\RoleInterface;
 use Phalcon\Events\Traits\EventsAwareTrait;
 use ReflectionException;
 use ReflectionFunction;
-
+use function array_intersect_key;
 use function array_keys;
 use function is_array;
 use function is_object;
 use function is_string;
+use function key;
 
 /**
  * Manages ACL lists in memory
@@ -725,7 +726,7 @@ class Memory extends AbstractAdapter
         $this->accessGranted = $haveAccess;
         $this->fireEvent('acl:afterCheckAccess');
 
-        $this->activeKey      = $accessKey;
+        $this->activeKey      = (false === $accessKey) ? null : $accessKey;
         $this->activeFunction = $funcAccess;
 
         if (null === $haveAccess) {
@@ -982,25 +983,14 @@ class Memory extends AbstractAdapter
         /**
          * Check if there is a direct combination for role-component-access
          */
-        $accessKey = $roleName . '!' . $componentName . '!' . $access;
-        if (true === isset($this->access[$accessKey])) {
-            return $accessKey;
-        }
-
-        /**
-         * Check if there is a direct combination for role-*-*
-         */
-        $accessKey = $roleName . '!' . $componentName . '!*';
-        if (true === isset($this->access[$accessKey])) {
-            return $accessKey;
-        }
-
-        /**
-         * Check if there is a direct combination for role-*-*
-         */
-        $accessKey = $roleName . '!*!*';
-        if (true === isset($this->access[$accessKey])) {
-            return $accessKey;
+        $keys   = [
+            $roleName . '!' . $componentName . '!' . $access => true,
+            $roleName . '!' . $componentName . '!*'          => true,
+            $roleName . '!*!*'                               => true,
+        ];
+        $result = array_intersect_key($keys, $this->access);
+        if (true !== empty($result)) {
+            return key($result);
         }
 
         /**
@@ -1028,25 +1018,14 @@ class Memory extends AbstractAdapter
                  * Check if there is a direct combination in one of the
                  * inherited roles
                  */
-                $accessKey = $checkRoleToInherit . '!' . $componentName . '!' . $access;
-                if (true === isset($this->access[$accessKey])) {
-                    return $accessKey;
-                }
-
-                /**
-                 * Check if there is a direct combination for role-*-*
-                 */
-                $accessKey = $checkRoleToInherit . '!' . $componentName . '!*';
-                if (true === isset($this->access[$accessKey])) {
-                    return $accessKey;
-                }
-
-                /**
-                 * Check if there is a direct combination for role-*-*
-                 */
-                $accessKey = $checkRoleToInherit . '!*!*';
-                if (true === isset($this->access[$accessKey])) {
-                    return $accessKey;
+                $keys   = [
+                    $checkRoleToInherit . '!' . $componentName . '!' . $access => true,
+                    $checkRoleToInherit . '!' . $componentName . '!*'          => true,
+                    $checkRoleToInherit . '!*!*'                               => true,
+                ];
+                $result = array_intersect_key($keys, $this->access);
+                if (true !== empty($result)) {
+                    return key($result);
                 }
 
                 /**
