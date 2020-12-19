@@ -13,12 +13,12 @@ declare(strict_types=1);
 
 namespace Phalcon\Tests\Fixtures\Acl;
 
-use Phalcon\Acl\ComponentAware;
+use Phalcon\Acl\ComponentAwareInterface;
 
 /**
  * Class TestComponentAware
  */
-class TestComponentAware implements ComponentAware
+class TestComponentAware implements ComponentAwareInterface
 {
     /**
      * @var int

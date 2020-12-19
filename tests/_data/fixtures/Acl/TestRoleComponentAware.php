@@ -13,13 +13,13 @@ declare(strict_types=1);
 
 namespace Phalcon\Tests\Fixtures\Acl;
 
-use Phalcon\Acl\ComponentAware;
-use Phalcon\Acl\RoleAware;
+use Phalcon\Acl\ComponentAwareInterface;
+use Phalcon\Acl\RoleAwareInterface;
 
 /**
  * Class TestRoleComponentAware
  */
-class TestRoleComponentAware implements RoleAware, ComponentAware
+class TestRoleComponentAware implements RoleAwareInterface, ComponentAwareInterface
 {
     /**
      * @var int
