@@ -13,7 +13,6 @@ declare(strict_types=1);
 
 namespace Phalcon\Tests\Unit\Acl\Role;
 
-use BadMethodCallException;
 use Phalcon\Acl\Exception;
 use Phalcon\Acl\Role;
 use UnitTester;
