@@ -89,7 +89,7 @@ class ConstructCest
 
         $I->writeToFile(cacheDir($filename), serialize($acl));
 
-        $acl = null;
+        $acl      = null;
         $contents = file_get_contents(cacheDir($filename));
         $I->safeDeleteFile(cacheDir($filename));
 
@@ -113,8 +113,8 @@ class ConstructCest
      *
      * @param UnitTester $I
      *
-     * @author Phalcon Team <team@phalcon.io>
-     * @since  2020-09-09
+     * @author  Phalcon Team <team@phalcon.io>
+     * @since   2020-09-09
      */
     public function testAclNegationOfInheritedRoles(UnitTester $I)
     {
@@ -150,8 +150,8 @@ class ConstructCest
      *
      * @param UnitTester $I
      *
-     * @author Phalcon Team <team@phalcon.io>
-     * @since  2020-09-09
+     * @author  Phalcon Team <team@phalcon.io>
+     * @since   2020-09-09
      */
     public function testIssue12004(UnitTester $I)
     {
@@ -201,8 +201,8 @@ class ConstructCest
      *
      * @param UnitTester $I
      *
-     * @author Phalcon Team <team@phalcon.io>
-     * @since  2020-09-09
+     * @author  Phalcon Team <team@phalcon.io>
+     * @since   2020-09-09
      */
     public function testWildCardLastRole(UnitTester $I)
     {
@@ -245,8 +245,8 @@ class ConstructCest
      *
      * @param UnitTester $I
      *
-     * @author Phalcon Team <team@phalcon.io>
-     * @since  2020-09-09
+     * @author  Phalcon Team <team@phalcon.io>
+     * @since   2020-09-09
      */
     public function testWildCardSecondTime(UnitTester $I)
     {

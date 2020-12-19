@@ -222,8 +222,8 @@ class AllowCest
      *
      * @param UnitTester $I
      *
-     * @author Phalcon Team <team@phalcon.io>
-     * @since  2020-09-09
+     * @author  Phalcon Team <team@phalcon.io>
+     * @since   2020-09-09
      */
     public function aclAdapterMemoryAllowFunction(UnitTester $I)
     {
@@ -286,8 +286,8 @@ class AllowCest
      *
      * @param UnitTester $I
      *
-     * @author Phalcon Team <team@phalcon.io>
-     * @since  2020-09-09
+     * @author  Phalcon Team <team@phalcon.io>
+     * @since   2020-09-09
      */
     public function aclAdapterMemoryAllowFunctionException(UnitTester $I)
     {
