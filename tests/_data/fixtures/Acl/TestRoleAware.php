@@ -13,12 +13,12 @@ declare(strict_types=1);
 
 namespace Phalcon\Tests\Fixtures\Acl;
 
-use Phalcon\Acl\RoleAware;
+use Phalcon\Acl\RoleAwareInterface;
 
 /**
  * Class TestRoleAware
  */
-class TestRoleAware implements RoleAware
+class TestRoleAware implements RoleAwareInterface
 {
     /**
      * @var int
