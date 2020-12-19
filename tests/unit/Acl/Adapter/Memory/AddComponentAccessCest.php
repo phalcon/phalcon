@@ -18,13 +18,20 @@ use Phalcon\Acl\Component;
 use Phalcon\Acl\Exception;
 use UnitTester;
 
+/**
+ * Class AddComponentAccessCest
+ *
+ * @package Phalcon\Tests\Unit\Acl\Adapter\Memory
+ */
 class AddComponentAccessCest
 {
     /**
      * Tests Phalcon\Acl\Adapter\Memory :: addComponentAccess()
      *
+     * @param UnitTester $I
+     *
      * @author Phalcon Team <team@phalcon.io>
-     * @since  2018-11-13
+     * @since  2020-09-09
      */
     public function aclAdapterMemoryAddComponentAccess(UnitTester $I)
     {
@@ -49,8 +56,10 @@ class AddComponentAccessCest
     /**
      * Tests Phalcon\Acl\Adapter\Memory :: addComponentAccess() - unknown
      *
+     * @param UnitTester $I
+     *
      * @author Phalcon Team <team@phalcon.io>
-     * @since  2018-11-13
+     * @since  2020-09-09
      */
     public function aclAdapterMemoryAddComponentAccessUnknown(UnitTester $I)
     {
@@ -60,11 +69,7 @@ class AddComponentAccessCest
             new Exception('Component "Post" does not exist in the ACL'),
             function () {
                 $acl = new Memory();
-
-                $acl->addComponentAccess(
-                    'Post',
-                    ['update']
-                );
+                $acl->addComponentAccess('Post', ['update']);
             }
         );
     }
@@ -73,8 +78,10 @@ class AddComponentAccessCest
      * Tests Phalcon\Acl\Adapter\Memory :: addComponentAccess() - wrong access
      * list
      *
+     * @param UnitTester $I
+     *
      * @author Phalcon Team <team@phalcon.io>
-     * @since  2018-11-13
+     * @since  2020-09-09
      */
     public function aclAdapterMemoryAddComponentAccessWrongAccessList(UnitTester $I)
     {
@@ -86,11 +93,7 @@ class AddComponentAccessCest
                 $acl  = new Memory();
                 $post = new Component('Post');
 
-                $acl->addComponent(
-                    $post,
-                    ['update']
-                );
-
+                $acl->addComponent($post, ['update']);
                 $acl->addComponentAccess('Post', 123);
             }
         );

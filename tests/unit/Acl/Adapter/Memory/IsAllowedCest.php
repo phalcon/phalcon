@@ -25,15 +25,22 @@ use Phalcon\Tests\Fixtures\Acl\TestRoleComponentAware;
 use stdClass;
 use UnitTester;
 
+/**
+ * Class IsAllowedCest
+ *
+ * @package Phalcon\Tests\Unit\Acl\Adapter\Memory
+ */
 class IsAllowedCest
 {
     /**
      * Tests Phalcon\Acl\Adapter\Memory :: isAllowed() - default
      *
-     * @issue   https://github.com/phalcon/cphalcon/issues/12573
+     * @issue  12573
      *
-     * @author  Wojciech Slawski <jurigag@gmail.com>
-     * @since   2017-01-25
+     * @param UnitTester $I
+     *
+     * @author Phalcon Team <team@phalcon.io>
+     * @since  2020-09-09
      */
     public function aclAdapterMemoryIsAllowedDefault(UnitTester $I)
     {
@@ -69,8 +76,10 @@ class IsAllowedCest
     /**
      * Tests Phalcon\Acl\Adapter\Memory :: isAllowed() - objects
      *
-     * @author  Wojciech Slawski <jurigag@gmail.com>
-     * @since   2017-02-15
+     * @param UnitTester $I
+     *
+     * @author Phalcon Team <team@phalcon.io>
+     * @since  2020-09-09
      */
     public function aclAdapterMemoryIsAllowedObjects(UnitTester $I)
     {
@@ -111,8 +120,10 @@ class IsAllowedCest
     /**
      * Tests Phalcon\Acl\Adapter\Memory :: isAllowed() - same class
      *
-     * @author  Wojciech Slawski <jurigag@gmail.com>
-     * @since   2017-02-15
+     * @param UnitTester $I
+     *
+     * @author Phalcon Team <team@phalcon.io>
+     * @since  2020-09-09
      */
     public function aclAdapterMemoryIsAllowedSameClass(UnitTester $I)
     {
@@ -159,8 +170,10 @@ class IsAllowedCest
     /**
      * Tests Phalcon\Acl\Adapter\Memory :: isAllowed() - function no parameters
      *
-     * @author  Phalcon Team <team@phalcon.io>
-     * @since   2019-06-16
+     * @param UnitTester $I
+     *
+     * @author Phalcon Team <team@phalcon.io>
+     * @since  2020-09-09
      */
     public function aclAdapterMemoryIsAllowedFunctionNoParameters(UnitTester $I)
     {
@@ -192,8 +205,10 @@ class IsAllowedCest
      * Tests Phalcon\Acl\Adapter\Memory :: isAllowed() - function more
      * parameters
      *
-     * @author  Phalcon Team <team@phalcon.io>
-     * @since   2019-06-16
+     * @param UnitTester $I
+     *
+     * @author Phalcon Team <team@phalcon.io>
+     * @since  2020-09-09
      */
     public function aclAdapterMemoryIsAllowedFunctionMoreParameters(UnitTester $I)
     {
@@ -244,8 +259,10 @@ class IsAllowedCest
      * Tests Phalcon\Acl\Adapter\Memory :: isAllowed() - function not enough
      * parameters
      *
-     * @author  Phalcon Team <team@phalcon.io>
-     * @since   2019-06-16
+     * @param UnitTester $I
+     *
+     * @author Phalcon Team <team@phalcon.io>
+     * @since  2020-09-09
      */
     public function aclAdapterMemoryIsAllowedFunctionNotEnoughParameters(UnitTester $I)
     {
@@ -293,8 +310,10 @@ class IsAllowedCest
     /**
      * Tests Phalcon\Acl\Adapter\Memory :: isAllowed() - exception
      *
-     * @author  Phalcon Team <team@phalcon.io>
-     * @since   2019-06-16
+     * @param UnitTester $I
+     *
+     * @author Phalcon Team <team@phalcon.io>
+     * @since  2020-09-09
      */
     public function aclAdapterMemoryIsAllowedException(UnitTester $I)
     {

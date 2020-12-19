@@ -18,6 +18,11 @@ use Phalcon\Acl\Exception;
 use Phalcon\Acl\Role;
 use UnitTester;
 
+/**
+ * Class ConstructCest
+ *
+ * @package Phalcon\Tests\Unit\Acl\Role
+ */
 class ConstructCest
 {
     /**
@@ -40,8 +45,10 @@ class ConstructCest
     /**
      * Tests Phalcon\Acl\Role :: __construct() - wildcard
      *
+     * @param UnitTester $I
+     *
      * @author Phalcon Team <team@phalcon.io>
-     * @since  2018-11-13
+     * @since  2020-09-09
      */
     public function aclRoleConstructWithWildcardThrowsException(UnitTester $I)
     {

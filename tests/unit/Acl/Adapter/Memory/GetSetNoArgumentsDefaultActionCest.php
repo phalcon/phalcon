@@ -17,14 +17,21 @@ use Phalcon\Acl\Adapter\Memory;
 use Phalcon\Acl\Enum;
 use UnitTester;
 
+/**
+ * Class GetSetNoArgumentsDefaultActionCest
+ *
+ * @package Phalcon\Tests\Unit\Acl\Adapter\Memory
+ */
 class GetSetNoArgumentsDefaultActionCest
 {
     /**
      * Tests Phalcon\Acl\Adapter\Memory ::
      * getNoArgumentsDefaultAction()/setNoArgumentsDefaultAction()
      *
+     * @param UnitTester $I
+     *
      * @author Phalcon Team <team@phalcon.io>
-     * @since  2018-11-13
+     * @since  2020-09-09
      */
     public function aclAdapterMemoryGetSetNoArgumentsDefaultAction(UnitTester $I)
     {
@@ -48,8 +55,10 @@ class GetSetNoArgumentsDefaultActionCest
      * Tests Phalcon\Acl\Adapter\Memory ::
      * getNoArgumentsDefaultAction()/setNoArgumentsDefaultAction() - default
      *
+     * @param UnitTester $I
+     *
      * @author Phalcon Team <team@phalcon.io>
-     * @since  2018-11-13
+     * @since  2020-09-09
      */
     public function aclAdapterMemoryGetSetNoArgumentsDefaultActionDefault(UnitTester $I)
     {

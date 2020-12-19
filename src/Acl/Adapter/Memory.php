@@ -29,8 +29,6 @@ use function array_keys;
 use function is_array;
 use function is_object;
 use function is_string;
-use function var_dump;
-use const PHP_EOL;
 
 /**
  * Manages ACL lists in memory
@@ -289,11 +287,7 @@ class Memory extends AbstractAdapter
      */
     public function addComponentAccess(string $componentName, $accessList): bool
     {
-        if (true !== isset($this->componentsNames[$componentName])) {
-            throw new Exception(
-                'Component "' . $componentName . '" does not exist in the ACL'
-            );
-        }
+        $this->checkExists($this->componentsNames, $componentName, 'Component');
 
         if (true !== is_array($accessList) && true !== is_string($accessList)) {
             throw new Exception('Invalid value for the accessList');
@@ -329,11 +323,7 @@ class Memory extends AbstractAdapter
      */
     public function addInherit(string $roleName, $roleToInherit): bool
     {
-        if (true !== isset($this->roles[$roleName])) {
-            throw new Exception(
-                'Role "' . $roleName . '" does not exist in the role list'
-            );
-        }
+        $this->checkExists($this->roles, $roleName, 'Role', 'role list');
 
         if (true !== isset($this->roleInherits[$roleName])) {
             $this->roleInherits[$roleName] = [];
@@ -933,16 +923,8 @@ class Memory extends AbstractAdapter
         $action,
         $function = null
     ): void {
-        if (true !== isset($this->roles[$roleName])) {
-            throw new Exception(
-                'Role "' . $roleName . '" does not exist in the ACL'
-            );
-        }
-        if (true !== isset($this->componentsNames[$componentName])) {
-            throw new Exception(
-                'Component "' . $componentName . '" does not exist in the ACL'
-            );
-        }
+        $this->checkExists($this->roles, $roleName, 'Role');
+        $this->checkExists($this->componentsNames, $componentName, 'Component');
 
         if (true === is_array($access)) {
             foreach ($access as $accessName) {
@@ -1079,5 +1061,26 @@ class Memory extends AbstractAdapter
         }
 
         return false;
+    }
+
+    /**
+     * @param array  $collection
+     * @param string $element
+     * @param string $elementName
+     *
+     * @throws Exception
+     */
+    private function checkExists(
+        array $collection,
+        string $element,
+        string $elementName,
+        string $suffix = 'ACL'
+    ): void {
+        if (true !== isset($collection[$element])) {
+            throw new Exception(
+                $elementName . ' "' . $element .
+                '" does not exist in the ' . $suffix
+            );
+        }
     }
 }

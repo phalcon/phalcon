@@ -18,33 +18,42 @@ use Phalcon\Acl\Component;
 use Phalcon\Acl\Role;
 use UnitTester;
 
+/**
+ * Class AddInheritCest
+ *
+ * @package Phalcon\Tests\Unit\Acl\Adapter\Memory
+ */
 class AddInheritCest
 {
-//    /**
-//     * Tests Phalcon\Acl\Adapter\Memory :: addInherit()
-//     *
-//     * @author Phalcon Team <team@phalcon.io>
-//     * @since  2018-11-13
-//     */
-//    public function aclAdapterMemoryAddInherit(UnitTester $I)
-//    {
-//        $I->wantToTest('Acl\Adapter\Memory - addInherit()');
-//
-//        $acl = new Memory();
-//
-//        $acl->addRole(new Role('administrator'));
-//        $acl->addRole(new Role('apprentice'));
-//
-//        $addedInherit = $acl->addInherit('administrator', 'apprentice');
-//
-//        $I->assertTrue($addedInherit);
-//    }
-//
     /**
      * Tests Phalcon\Acl\Adapter\Memory :: addInherit()
      *
-     * @author <jenovateurs>
-     * @since  2019-12-05
+     * @param UnitTester $I
+     *
+     * @author Phalcon Team <team@phalcon.io>
+     * @since  2020-09-09
+     */
+    public function aclAdapterMemoryAddInherit(UnitTester $I)
+    {
+        $I->wantToTest('Acl\Adapter\Memory - addInherit()');
+
+        $acl = new Memory();
+
+        $acl->addRole(new Role('administrator'));
+        $acl->addRole(new Role('apprentice'));
+
+        $addedInherit = $acl->addInherit('administrator', 'apprentice');
+
+        $I->assertTrue($addedInherit);
+    }
+
+    /**
+     * Tests Phalcon\Acl\Adapter\Memory :: addInherit()
+     *
+     * @param UnitTester $I
+     *
+     * @author Phalcon Team <team@phalcon.io>
+     * @since  2020-09-09
      */
     public function aclAdapterMemoryAddInheritIsAllow(UnitTester $I)
     {

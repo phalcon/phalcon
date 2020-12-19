@@ -16,6 +16,11 @@ namespace Phalcon\Tests\Unit\Acl\Role;
 use Phalcon\Acl\Role;
 use UnitTester;
 
+/**
+ * Class GetDescriptionCest
+ *
+ * @package Phalcon\Tests\Unit\Acl\Role
+ */
 class GetDescriptionCest
 {
     /**
@@ -32,10 +37,7 @@ class GetDescriptionCest
 
         $role = new Role('Administrators', 'The admin unit');
 
-        $I->assertEquals(
-            'The admin unit',
-            $role->getDescription()
-        );
+        $I->assertEquals('The admin unit', $role->getDescription());
     }
 
     /**

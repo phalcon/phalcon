@@ -17,13 +17,20 @@ use Phalcon\Acl\Adapter\Memory;
 use Phalcon\Acl\Component;
 use UnitTester;
 
+/**
+ * Class GetComponentsCest
+ *
+ * @package Phalcon\Tests\Unit\Acl\Adapter\Memory
+ */
 class GetComponentsCest
 {
     /**
      * Tests Phalcon\Acl\Adapter\Memory :: getComponents()
      *
+     * @param UnitTester $I
+     *
      * @author Phalcon Team <team@phalcon.io>
-     * @since  2018-11-13
+     * @since  2020-09-09
      */
     public function aclAdapterMemoryGetComponents(UnitTester $I)
     {

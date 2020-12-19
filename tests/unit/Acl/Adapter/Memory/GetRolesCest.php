@@ -17,13 +17,20 @@ use Phalcon\Acl\Adapter\Memory;
 use Phalcon\Acl\Role;
 use UnitTester;
 
+/**
+ * Class GetRolesCest
+ *
+ * @package Phalcon\Tests\Unit\Acl\Adapter\Memory
+ */
 class GetRolesCest
 {
     /**
      * Tests Phalcon\Acl\Adapter\Memory :: getRoles()
      *
+     * @param UnitTester $I
+     *
      * @author Phalcon Team <team@phalcon.io>
-     * @since  2018-11-13
+     * @since  2020-09-09
      */
     public function aclAdapterMemoryGetRoles(UnitTester $I)
     {
