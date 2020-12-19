@@ -13,8 +13,6 @@ declare(strict_types=1);
 
 namespace Phalcon\Acl\Traits;
 
-use Phalcon\Acl\Exception;
-
 /**
  * This class defines role entity and its description
  *

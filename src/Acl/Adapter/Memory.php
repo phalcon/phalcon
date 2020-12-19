@@ -25,12 +25,12 @@ use Phalcon\Events\Traits\EventsAwareTrait;
 use ReflectionException;
 use ReflectionFunction;
 
-use function array_intersect_key;
 use function array_keys;
 use function is_array;
 use function is_object;
 use function is_string;
-use function key;
+use function var_dump;
+use const PHP_EOL;
 
 /**
  * Manages ACL lists in memory
@@ -53,11 +53,28 @@ use function key;
  *
  * // Private area components
  * $privateComponents = [
- *     "companies" => ["index", "search", "new", "edit", "save", "create",
- *     "delete"],
- *     "products"  => ["index", "search", "new", "edit", "save", "create",
- *     "delete"],
- *     "invoices"  => ["index", "profile"],
+ *     "companies" => [
+ *          "index",
+ *          "search",
+ *          "new",
+ *          "edit",
+ *          "save",
+ *          "create",
+ *          "delete",
+ *      ],
+ *     "products"  => [
+ *          "index",
+ *          "search",
+ *          "new",
+ *          "edit",
+ *          "save",
+ *          "create",
+ *          "delete",
+ *      ],
+ *     "invoices"  => [
+ *          "index",
+ *          "profile",
+ *      ],
  * ];
  *
  * foreach ($privateComponents as $componentName => $actions) {
@@ -98,17 +115,16 @@ use function key;
  *```
  *
  * @property mixed       $access
- * @property mixed       $accessList
+ * @property array       $accessList
  * @property mixed       $activeFunction
  * @property int         $activeFunctionCustomArgumentsCount
  * @property string|null $activeKey
- * @property mixed       $components
- * @property mixed       $componentsNames
- * @property mixed       $function
+ * @property array       $components
+ * @property array       $componentsNames
+ * @property array       $functions
  * @property int         $noArgumentsDefaultAction
- * @property mixed       $roles
- * @property mixed       $roleInherits
- * @property mixed       $rolesNames
+ * @property array       $roleInherits
+ * @property array       $roles
  */
 class Memory extends AbstractAdapter
 {
@@ -158,6 +174,13 @@ class Memory extends AbstractAdapter
     protected array $components = [];
 
     /**
+     * Components
+     *
+     * @var array
+     */
+    protected array $componentsNames = [];
+
+    /**
      * Function List
      *
      * @var array
@@ -172,18 +195,18 @@ class Memory extends AbstractAdapter
     protected int $noArgumentsDefaultAction = Enum::DENY;
 
     /**
-     * Roles
-     *
-     * @var array
-     */
-    protected array $roles = [];
-
-    /**
      * Role Inherits
      *
      * @var array
      */
     protected array $roleInherits = [];
+
+    /**
+     * Roles
+     *
+     * @var array
+     */
+    protected array $roles = [];
 
     /**
      * Memory constructor.
@@ -236,18 +259,23 @@ class Memory extends AbstractAdapter
      */
     public function addComponent($componentObject, $accessList): bool
     {
-        $component = $this->createObject(
-            $componentObject,
-            ComponentInterface::class,
-            Component::class,
-            'component'
-        );
-        $name      = $component->getName();
-        if (true === isset($this->components[$name])) {
-            $this->components[$name] = $component;
+        if (
+            true === is_object($componentObject) &&
+            $componentObject instanceof ComponentInterface
+        ) {
+            $component = $componentObject;
+        } else {
+            $component = new Component($componentObject);
         }
 
-        return $this->addComponentAccess($name, $accessList);
+        $componentName = $component->getName();
+
+        if (true !== isset($this->componentsNames[$componentName])) {
+            $this->components[$componentName]      = $component;
+            $this->componentsNames[$componentName] = true;
+        }
+
+        return $this->addComponentAccess($componentName, $accessList);
     }
 
     /**
@@ -261,15 +289,22 @@ class Memory extends AbstractAdapter
      */
     public function addComponentAccess(string $componentName, $accessList): bool
     {
-        if (true !== isset($this->components[$componentName])) {
+        if (true !== isset($this->componentsNames[$componentName])) {
             throw new Exception(
-                'Component "' . $componentName . '" does not exist in ACL'
+                'Component "' . $componentName . '" does not exist in the ACL'
             );
         }
 
-        $accessList = $this->processAccessList($accessList);
-        foreach ($accessList as $item) {
-            $accessKey = $componentName . '!' . $item;
+        if (true !== is_array($accessList) && true !== is_string($accessList)) {
+            throw new Exception('Invalid value for the accessList');
+        }
+
+        if (true === is_string($accessList)) {
+            $accessList = [$accessList];
+        }
+
+        foreach ($accessList as $accessName) {
+            $accessKey = $componentName . '!' . $accessName;
             if (true !== isset($this->accessList[$accessKey])) {
                 $this->accessList[$accessKey] = true;
             }
@@ -294,7 +329,11 @@ class Memory extends AbstractAdapter
      */
     public function addInherit(string $roleName, $roleToInherit): bool
     {
-        $this->checkObjectExists($this->roles, $roleName, 'Role');
+        if (true !== isset($this->roles[$roleName])) {
+            throw new Exception(
+                'Role "' . $roleName . '" does not exist in the role list'
+            );
+        }
 
         if (true !== isset($this->roleInherits[$roleName])) {
             $this->roleInherits[$roleName] = [];
@@ -303,15 +342,22 @@ class Memory extends AbstractAdapter
         /**
          * Type conversion
          */
-        $roleToInheritList = $this->processAccessList($roleToInherit);
+        $roleToInheritList = $roleToInherit;
+        if (true !== is_array($roleToInherit)) {
+            $roleToInheritList = [$roleToInherit];
+        }
 
         /**
          * inherits
          */
-        foreach ($roleToInheritList as $inheritedRole) {
-            $roleInheritName = $roleToInherit;
-            if ($inheritedRole instanceof RoleInterface) {
-                $roleInheritName = $inheritedRole->getName();
+        foreach ($roleToInheritList as $inheritRole) {
+            if (
+                true === is_object($inheritRole) &&
+                $inheritRole instanceof RoleInterface
+            ) {
+                $roleInheritName = $inheritRole->getName();
+            } else {
+                $roleInheritName = $inheritRole;
             }
 
             /**
@@ -355,7 +401,6 @@ class Memory extends AbstractAdapter
                     }
 
                     $usedRoleToInherits[$checkRoleToInherit] = true;
-
                     if ($roleName === $checkRoleToInherit) {
                         throw new Exception(
                             'Role "' . $roleInheritName .
@@ -402,19 +447,25 @@ class Memory extends AbstractAdapter
      */
     public function addRole($roleObject, $accessInherits = null): bool
     {
-        $role = $this->createObject(
-            $roleObject,
-            RoleInterface::class,
-            Role::class,
-            'role'
-        );
-        $name = $role->getName();
-        if (true === isset($this->roles[$name])) {
-            $this->roles[$name] = $role;
+        if (true === is_object($roleObject) && $roleObject instanceof RoleInterface) {
+            $role = $roleObject;
+        } elseif (true === is_string($roleObject)) {
+            $role = new Role($roleObject);
+        } else {
+            throw new Exception(
+                'Role must be either a string or implement RoleInterface'
+            );
         }
 
+        $roleName = $role->getName();
+        if (true === isset($this->roles[$roleName])) {
+            return false;
+        }
+
+        $this->roles[$roleName] = $role;
+
         if (null !== $accessInherits) {
-            return $this->addInherit($name, $accessInherits);
+            return $this->addInherit($roleName, $accessInherits);
         }
 
         return true;
@@ -516,24 +567,22 @@ class Memory extends AbstractAdapter
      *
      * @param string $componentName
      * @param mixed  $accessList
-     *
-     * @throws Exception
      */
     public function dropComponentAccess(string $componentName, $accessList): void
     {
-        $localAccess = $this->processAccessList($accessList);
-        foreach ($localAccess as $accessName) {
-            $accessKey = $componentName . '!' . $accessName;
-            unset($this->accessList[$accessKey]);
+        $localAccess = $accessList;
+        if (true === is_string($accessList)) {
+            $localAccess = [$accessList];
         }
-    }
 
-    /**
-     * @return string|null
-     */
-    public function getActiveKey(): ?string
-    {
-        return $this->activeKey;
+        if (true === is_array($accessList)) {
+            foreach ($localAccess as $accessName) {
+                $accessKey = $componentName . '!' . $accessName;
+                if (true === isset($this->accessList[$accessKey])) {
+                    unset($this->accessList[$accessKey]);
+                }
+            }
+        }
     }
 
     /**
@@ -550,6 +599,14 @@ class Memory extends AbstractAdapter
     public function getActiveFunctionCustomArgumentsCount(): int
     {
         return $this->activeFunctionCustomArgumentsCount;
+    }
+
+    /**
+     * @return string|null
+     */
+    public function getActiveKey(): ?string
+    {
+        return $this->activeKey;
     }
 
     /**
@@ -607,34 +664,46 @@ class Memory extends AbstractAdapter
         $roleName,
         $componentName,
         string $access,
-        array $parameters = null
+        array $parameters = []
     ): bool {
         $componentObject = null;
-        $haveAccess      = null;
+        $haveAccess      = false;
         $funcAccess      = null;
         $roleObject      = null;
         $hasComponent    = false;
         $hasRole         = false;
 
-        $roleName = $this->checkObjectName(
-            $roleName,
-            RoleInterface::class,
-            RoleAwareInterface::class,
-            'roleName'
-        );
+        if (true === is_object($roleName)) {
+            if ($roleName instanceof RoleAwareInterface) {
+                $roleObject = $roleName;
+                $roleName   = $roleObject->getRoleName();
+            } elseif ($roleName instanceof RoleInterface) {
+                $roleName = $roleName->getName();
+            } else {
+                throw new Exception(
+                    'Object passed as roleName must implement ' .
+                    'Phalcon\Acl\RoleAwareInterface or Phalcon\Acl\RoleInterface'
+                );
+            }
+        }
 
-        $componentName = $this->checkObjectName(
-            $componentName,
-            ComponentInterface::class,
-            ComponentAwareInterface::class,
-            'componentName'
-        );
-
+        if (true === is_object($componentName)) {
+            if ($componentName instanceof ComponentAwareInterface) {
+                $componentObject = $componentName;
+                $componentName   = $componentObject->getComponentName();
+            } elseif ($componentName instanceof ComponentInterface) {
+                $componentName = $componentName->getName();
+            } else {
+                throw new Exception(
+                    'Object passed as componentName must implement ' .
+                    'Phalcon\Acl\ComponentAwareInterface or Phalcon\Acl\ComponentInterface'
+                );
+            }
+        }
 
         $this->activeRole      = $roleName;
         $this->activeComponent = $componentName;
         $this->activeAccess    = $access;
-        $this->activeKey       = null;
         $this->activeKey       = null;
         $this->activeFunction  = null;
 
@@ -655,8 +724,8 @@ class Memory extends AbstractAdapter
          * Check if there is a direct combination for role-component-access
          */
         $accessKey = $this->canAccess($roleName, $componentName, $access);
-        if (false !== $accessKey && true === isset($this->accessList[$accessKey])) {
-            $haveAccess = $this->accessList[$accessKey];
+        if (false !== $accessKey && true === isset($this->access[$accessKey])) {
+            $haveAccess = $this->access[$accessKey];
             $funcAccess = $this->functions[$accessKey] ?? null;
         }
 
@@ -698,7 +767,6 @@ class Memory extends AbstractAdapter
             $parametersForFunction      = [];
             $numberOfRequiredParameters = $reflectionFunction->getNumberOfRequiredParameters();
             $userParametersSizeShouldBe = $parameterNumber;
-
             foreach ($reflectionParameters as $reflectionParameter) {
                 $reflectionClass  = $reflectionParameter->getClass();
                 $parameterToCheck = $reflectionParameter->getName();
@@ -707,7 +775,7 @@ class Memory extends AbstractAdapter
                     // roleObject is this class
                     if (
                         null !== $roleObject &&
-                        $reflectionClass->isInstance($roleObject) &&
+                        true === $reflectionClass->isInstance($roleObject) &&
                         true !== $hasRole
                     ) {
                         $hasRole                 = true;
@@ -720,7 +788,7 @@ class Memory extends AbstractAdapter
                     // componentObject is this class
                     if (
                         null !== $componentObject &&
-                        $reflectionClass->isInstance($componentObject) &&
+                        true === $reflectionClass->isInstance($componentObject) &&
                         true !== $hasComponent
                     ) {
                         $hasComponent            = true;
@@ -736,7 +804,7 @@ class Memory extends AbstractAdapter
                      */
                     if (
                         true === isset($parameters[$parameterToCheck]) &&
-                        is_object($parameters[$parameterToCheck]) &&
+                        true === is_object($parameters[$parameterToCheck]) &&
                         true !== $reflectionClass->isInstance($parameters[$parameterToCheck])
                     ) {
                         throw new Exception(
@@ -776,8 +844,9 @@ class Memory extends AbstractAdapter
             if (true === empty($parametersForFunction)) {
                 if ($numberOfRequiredParameters > 0) {
                     trigger_error(
-                        'You did not provide any parameters when "' . $roleName .
-                        '" can "' . $access . '" "'  . $componentName .
+                        'You did not provide any parameters when "' .
+                        $roleName . '" can "' . $access .
+                        '" "' . $componentName .
                         '". We will use default action when no arguments.'
                     );
 
@@ -864,28 +933,50 @@ class Memory extends AbstractAdapter
         $action,
         $function = null
     ): void {
-        $this->checkObjectExists($this->roles, $roleName, 'Role');
-        $this->checkObjectExists($this->components, $componentName, 'Component');
-
-        if (true !== is_array($access) && '*' !== $access) {
-            $access = [$access];
+        if (true !== isset($this->roles[$roleName])) {
+            throw new Exception(
+                'Role "' . $roleName . '" does not exist in the ACL'
+            );
+        }
+        if (true !== isset($this->componentsNames[$componentName])) {
+            throw new Exception(
+                'Component "' . $componentName . '" does not exist in the ACL'
+            );
         }
 
-        foreach ($access as $accessName) {
-            $accessKey = $componentName . '!' . $accessName;
-
-            if (true !== isset($this->accessList[$accessKey])) {
-                throw new Exception(
-                    'Access "' . $accessName .
-                    '" does not exist in component "' . $componentName . '"'
-                );
+        if (true === is_array($access)) {
+            foreach ($access as $accessName) {
+                $accessKey = $componentName . '!' . $accessName;
+                if (true !== isset($this->accessList[$accessKey])) {
+                    throw new Exception(
+                        'Access "' . $accessName .
+                        '" does not exist in component "' .
+                        $componentName . '"'
+                    );
+                }
             }
-        }
 
-        foreach ($access as $accessName) {
-            $accessKey = $roleName . '!' . $componentName . '!' . $accessName;
-            $this->access[$accessKey] = $action;
+            foreach ($access as $accessName) {
+                $accessKey                = $roleName . '!' . $componentName . '!' . $accessName;
+                $this->access[$accessKey] = ($action === Enum::ALLOW);
+                if (null !== $function) {
+                    $this->functions[$accessKey] = $function;
+                }
+            }
+        } else {
+            if ('*' !== $access) {
+                $accessKey = $componentName . '!' . $access;
+                if (true !== isset($this->accessList[$accessKey])) {
+                    throw new Exception(
+                        'Access "' . $access .
+                        '" does not exist in component "' .
+                        $componentName . '"'
+                    );
+                }
+            }
 
+            $accessKey                = $roleName . '!' . $componentName . '!' . $access;
+            $this->access[$accessKey] = ($action === Enum::ALLOW);
             if (null !== $function) {
                 $this->functions[$accessKey] = $function;
             }
@@ -899,24 +990,35 @@ class Memory extends AbstractAdapter
      * @param string $componentName
      * @param string $access
      *
-     * @return false|int|string|null
+     * @return string|bool
      */
     private function canAccess(
         string $roleName,
         string $componentName,
         string $access
     ) {
-        $keys    = [
-            $roleName . '!' . $componentName . '!' . $access => true,
-            $roleName . '!' . $componentName . '!*'          => true,
-            $roleName . '!*!*'                               => true,
-        ];
-        $results = array_intersect_key($this->accessList, $keys);
-        if (true !== empty($results)) {
-            /**
-             * Return the first result
-             */
-            return key($results[0]);
+        /**
+         * Check if there is a direct combination for role-component-access
+         */
+        $accessKey = $roleName . '!' . $componentName . '!' . $access;
+        if (true === isset($this->access[$accessKey])) {
+            return $accessKey;
+        }
+
+        /**
+         * Check if there is a direct combination for role-*-*
+         */
+        $accessKey = $roleName . '!' . $componentName . '!*';
+        if (true === isset($this->access[$accessKey])) {
+            return $accessKey;
+        }
+
+        /**
+         * Check if there is a direct combination for role-*-*
+         */
+        $accessKey = $roleName . '!*!*';
+        if (true === isset($this->access[$accessKey])) {
+            return $accessKey;
         }
 
         /**
@@ -924,11 +1026,13 @@ class Memory extends AbstractAdapter
          */
         if (true === isset($this->roleInherits[$roleName])) {
             $checkRoleToInherits = [];
+
             foreach ($this->roleInherits[$roleName] as $usedRoleToInherit) {
                 $checkRoleToInherits[] = $usedRoleToInherit;
             }
 
             $usedRoleToInherits = [];
+
             while (true !== empty($checkRoleToInherits)) {
                 $checkRoleToInherit = array_shift($checkRoleToInherits);
 
@@ -938,17 +1042,29 @@ class Memory extends AbstractAdapter
 
                 $usedRoleToInherits[$checkRoleToInherit] = true;
 
-                $keys    = [
-                    $checkRoleToInherit . '!' . $componentName . '!' . $access = true,
-                    $checkRoleToInherit . '!' . $componentName . '!*' => true,
-                    $checkRoleToInherit . '!*!*'                      => true,
-                ];
-                $results = array_intersect_key($this->accessList, $keys);
-                if (true !== empty($results)) {
-                    /**
-                     * Return the first result
-                     */
-                    return key($results[0]);
+                /**
+                 * Check if there is a direct combination in one of the
+                 * inherited roles
+                 */
+                $accessKey = $checkRoleToInherit . '!' . $componentName . '!' . $access;
+                if (true === isset($this->access[$accessKey])) {
+                    return $accessKey;
+                }
+
+                /**
+                 * Check if there is a direct combination for role-*-*
+                 */
+                $accessKey = $checkRoleToInherit . '!' . $componentName . '!*';
+                if (true === isset($this->access[$accessKey])) {
+                    return $accessKey;
+                }
+
+                /**
+                 * Check if there is a direct combination for role-*-*
+                 */
+                $accessKey = $checkRoleToInherit . '!*!*';
+                if (true === isset($this->access[$accessKey])) {
+                    return $accessKey;
                 }
 
                 /**
@@ -963,110 +1079,5 @@ class Memory extends AbstractAdapter
         }
 
         return false;
-    }
-
-    /**
-     * Returns an object (component or role
-     *
-     * @param mixed  $object
-     * @param string $objectInterface
-     * @param string $class
-     * @param string $objectName
-     *
-     * @return ComponentInterface|RoleInterface
-     * @throws Exception
-     */
-    protected function createObject(
-        $object,
-        string $objectInterface,
-        string $class,
-        string $objectName
-    ) {
-        if ($object instanceof $objectInterface) {
-            return $object;
-        }
-
-        if (is_string($object)) {
-            return new $class($object);
-        }
-
-        throw new Exception(
-            'The ' . $objectName . ' must be either a string or ' .
-            'an object implementing ' . $objectInterface
-        );
-    }
-
-    /**
-     * @param mixed  $object
-     * @param string $classInterface
-     * @param string $awareInterface
-     * @param string $messageName
-     *
-     * @return string
-     * @throws Exception
-     */
-    protected function checkObjectName(
-        $object,
-        string $classInterface,
-        string $awareInterface,
-        string $messageName
-    ): string {
-        if (is_object($object)) {
-            if ($object instanceof $classInterface) {
-                return $object->getName();
-            }
-
-            if ($object instanceof $awareInterface) {
-                return $object->getRoleName();
-            }
-
-            throw new Exception(
-                'Object passed as ' . $messageName . ' must implement ' .
-                $classInterface . ' or ' . $awareInterface
-            );
-        }
-
-        return '';
-    }
-
-    /**
-     * Checks the access list if it is a string or an array and throws an
-     * exception if not. If it is a string it returns it back as an array
-     *
-     * @param mixed $accessList
-     *
-     * @return array|string[]
-     * @throws Exception
-     */
-    protected function processAccessList($accessList): array
-    {
-        if (true !== is_array($accessList) && true !== is_string($accessList)) {
-            throw new Exception('The accessList must be either a string or an array');
-        }
-
-        if (true === is_string($accessList)) {
-            $accessList = [$accessList];
-        }
-
-        return $accessList;
-    }
-
-    /**
-     * @param array  $collection
-     * @param string $name
-     * @param string $collectionName
-     *
-     * @throws Exception
-     */
-    private function checkObjectExists(
-        array $collection,
-        string $name,
-        string $collectionName
-    ): void {
-        if (true !== isset($collection[$name])) {
-            throw new Exception(
-                $collectionName . ' "' . $name . '" does not exist in the ACL'
-            );
-        }
     }
 }
