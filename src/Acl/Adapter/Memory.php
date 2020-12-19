@@ -24,12 +24,22 @@ use Phalcon\Acl\RoleInterface;
 use Phalcon\Events\Traits\EventsAwareTrait;
 use ReflectionException;
 use ReflectionFunction;
+
 use function array_intersect_key;
 use function array_keys;
+use function array_shift;
+use function call_user_func;
+use function call_user_func_array;
+use function get_class;
+use function in_array;
 use function is_array;
+use function is_callable;
 use function is_object;
 use function is_string;
 use function key;
+use function trigger_error;
+
+use const E_USER_WARNING;
 
 /**
  * Manages ACL lists in memory
