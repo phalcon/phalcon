@@ -9,7 +9,7 @@
 
 declare(strict_types=1);
 
-namespace Phalcon\Tests\Unit\Html\Helper\Ol;
+namespace Phalcon\Tests\Unit\Html\Tag\Ol;
 
 use Phalcon\Html\Escaper;
 use Phalcon\Html\Tag\Ol;
@@ -20,7 +20,7 @@ use const PHP_EOL;
 /**
  * Class ToStringCest
  *
- * @package Phalcon\Tests\Unit\Html\Helper\Ol
+ * @package Phalcon\Tests\Unit\Html\Tag\Ol
  */
 class ToStringCest
 {
@@ -34,7 +34,7 @@ class ToStringCest
      */
     public function htmlHelperOlToStringEmpty(UnitTester $I)
     {
-        $I->wantToTest('Html\Helper\Ol - __toString() - empty');
+        $I->wantToTest('Html\Tag\Ol - __toString() - empty');
 
         $escaper = new Escaper();
         $helper  = new Ol($escaper);

@@ -9,7 +9,7 @@
 
 declare(strict_types=1);
 
-namespace Phalcon\Tests\Unit\Html\Helper\Input;
+namespace Phalcon\Tests\Unit\Html\Tag\Input;
 
 use Codeception\Example;
 use Phalcon\Html\Escaper;
@@ -23,7 +23,7 @@ use const PHP_EOL;
 /**
  * Class SelectUnderscoreInvokeCest
  *
- * @package Phalcon\Tests\Unit\Html\Helper\Input
+ * @package Phalcon\Tests\Unit\Html\Tag\Input
  */
 class SelectUnderscoreInvokeCest
 {
@@ -42,7 +42,7 @@ class SelectUnderscoreInvokeCest
      */
     public function htmlHelperInputUnderscoreInvoke(UnitTester $I, Example $example)
     {
-        $I->wantToTest('Html\Helper\Input\Select - __invoke() - ' . $example['message']);
+        $I->wantToTest('Html\Tag\Input\Select - __invoke() - ' . $example['message']);
 
         $escaper = new Escaper();
         $helper  = new Select($escaper);

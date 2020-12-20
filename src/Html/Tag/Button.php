@@ -9,14 +9,14 @@
 
 declare(strict_types=1);
 
-namespace Phalcon\Html\Helper;
+namespace Phalcon\Html\Tag;
 
 use Phalcon\Html\Exception;
 
 /**
  * Class Button
  *
- * @package Phalcon\Html\Helper
+ * @package Phalcon\Html\Tag
  */
 class Button extends AbstractHelper
 {

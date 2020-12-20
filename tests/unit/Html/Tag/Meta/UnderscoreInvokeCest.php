@@ -9,7 +9,7 @@
 
 declare(strict_types=1);
 
-namespace Phalcon\Tests\Unit\Html\Helper\Meta;
+namespace Phalcon\Tests\Unit\Html\Tag\Meta;
 
 use Codeception\Example;
 use Phalcon\Html\Escaper;
@@ -23,7 +23,7 @@ use const PHP_EOL;
 /**
  * Class UnderscoreInvokeCest
  *
- * @package Phalcon\Tests\Unit\Html\Helper\Meta
+ * @package Phalcon\Tests\Unit\Html\Tag\Meta
  */
 class UnderscoreInvokeCest
 {
@@ -42,7 +42,7 @@ class UnderscoreInvokeCest
      */
     public function htmlHelperMetaUnderscoreInvoke(UnitTester $I, Example $example)
     {
-        $I->wantToTest('Html\Helper\Meta - __invoke() ' . $example['message']);
+        $I->wantToTest('Html\Tag\Meta - __invoke() ' . $example['message']);
 
         $escaper = new Escaper();
         $helper  = new Meta($escaper);

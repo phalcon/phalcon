@@ -9,12 +9,12 @@
 
 declare(strict_types=1);
 
-namespace Phalcon\Html\Helper;
+namespace Phalcon\Html\Tag;
 
 /**
  * Class AbstractSeries
  *
- * @package Phalcon\Html\Helper
+ * @package Phalcon\Html\Tag
  *
  * @property array $attributes
  * @property array $store

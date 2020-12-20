@@ -9,14 +9,14 @@
 
 declare(strict_types=1);
 
-namespace Phalcon\Html\Helper;
+namespace Phalcon\Html\Tag;
 
 use Phalcon\Html\Exception;
 
 /**
  * Class Form
  *
- * @package Phalcon\Html\Helper
+ * @package Phalcon\Html\Tag
  */
 class Form extends AbstractHelper
 {

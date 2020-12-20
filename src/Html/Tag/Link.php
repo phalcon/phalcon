@@ -9,14 +9,14 @@
 
 declare(strict_types=1);
 
-namespace Phalcon\Html\Helper;
+namespace Phalcon\Html\Tag;
 
 use function array_merge;
 
 /**
  * Class Link
  *
- * @package Phalcon\Html\Helper
+ * @package Phalcon\Html\Tag
  */
 class Link extends Style
 {
@@ -49,5 +49,24 @@ class Link extends Style
     protected function getTag(): string
     {
         return 'link';
+    }
+
+    /**
+     * Returns the necessary attributes
+     *
+     * @param string $href
+     * @param array  $attributes
+     *
+     * @return array
+     */
+    protected function getAttributes(string $href, array $attributes): array
+    {
+        $required = [
+            'href'  => $href,
+        ];
+
+        unset($attributes['href']);
+
+        return array_merge($required, $attributes);
     }
 }

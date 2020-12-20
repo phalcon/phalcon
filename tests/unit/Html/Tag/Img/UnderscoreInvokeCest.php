@@ -9,7 +9,7 @@
 
 declare(strict_types=1);
 
-namespace Phalcon\Tests\Unit\Html\Helper\Img;
+namespace Phalcon\Tests\Unit\Html\Tag\Img;
 
 use Codeception\Example;
 use Phalcon\Html\Escaper;
@@ -21,7 +21,7 @@ use UnitTester;
 /**
  * Class UnderscoreInvokeCest
  *
- * @package Phalcon\Tests\Unit\Html\Helper\Img
+ * @package Phalcon\Tests\Unit\Html\Tag\Img
  */
 class UnderscoreInvokeCest
 {
@@ -40,7 +40,7 @@ class UnderscoreInvokeCest
      */
     public function htmlHelperImgUnderscoreInvoke(UnitTester $I, Example $example)
     {
-        $I->wantToTest('Html\Helper\Img - __invoke()');
+        $I->wantToTest('Html\Tag\Img - __invoke()');
         $escaper = new Escaper();
         $helper  = new Img($escaper);
 

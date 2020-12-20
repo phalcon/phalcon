@@ -9,7 +9,7 @@
 
 declare(strict_types=1);
 
-namespace Phalcon\Tests\Unit\Html\Helper\Close;
+namespace Phalcon\Tests\Unit\Html\Tag\Close;
 
 use Phalcon\Html\Escaper;
 use Phalcon\Html\Tag\Close;
@@ -19,7 +19,7 @@ use UnitTester;
 /**
  * Class UnderscoreInvokeCest
  *
- * @package Phalcon\Tests\Unit\Html\Helper\Close
+ * @package Phalcon\Tests\Unit\Html\Tag\Close
  */
 class UnderscoreInvokeCest
 {
@@ -33,7 +33,7 @@ class UnderscoreInvokeCest
      */
     public function htmlHelperCloseUnderscoreInvoke(UnitTester $I)
     {
-        $I->wantToTest('Html\Helper\Close - __invoke()');
+        $I->wantToTest('Html\Tag\Close - __invoke()');
         $escaper = new Escaper();
         $helper  = new Close($escaper);
 

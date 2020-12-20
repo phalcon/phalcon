@@ -9,16 +9,16 @@
 
 declare(strict_types=1);
 
-namespace Phalcon\Html\Helper\Input;
+namespace Phalcon\Html\Tag\Input;
 
-use Phalcon\Html\Helper\AbstractHelper;
+use Phalcon\Html\Tag\AbstractHelper;
 
 use function array_merge;
 
 /**
  * Class AbstractInput
  *
- * @package Phalcon\Html\Helper\Input
+ * @package Phalcon\Html\Tag\Input
  *
  * @property array  $attributes
  * @property string $type

@@ -9,7 +9,7 @@
 
 declare(strict_types=1);
 
-namespace Phalcon\Tests\Unit\Html\Helper\Form;
+namespace Phalcon\Tests\Unit\Html\Tag\Form;
 
 use Codeception\Example;
 use Phalcon\Html\Escaper;
@@ -21,7 +21,7 @@ use UnitTester;
 /**
  * Class UnderscoreInvokeCest
  *
- * @package Phalcon\Tests\Unit\Html\Helper\Form
+ * @package Phalcon\Tests\Unit\Html\Tag\Form
  */
 class UnderscoreInvokeCest
 {
@@ -40,7 +40,7 @@ class UnderscoreInvokeCest
      */
     public function htmlHelperFormUnderscoreInvoke(UnitTester $I, Example $example)
     {
-        $I->wantToTest('Html\Helper\Form - __invoke()');
+        $I->wantToTest('Html\Tag\Form - __invoke()');
         $escaper = new Escaper();
         $helper  = new Form($escaper);
 

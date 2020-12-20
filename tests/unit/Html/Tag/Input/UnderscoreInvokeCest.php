@@ -9,7 +9,7 @@
 
 declare(strict_types=1);
 
-namespace Phalcon\Tests\Unit\Html\Helper\Input;
+namespace Phalcon\Tests\Unit\Html\Tag\Input;
 
 use Codeception\Example;
 use Phalcon\Html\Escaper;
@@ -41,7 +41,7 @@ use UnitTester;
 /**
  * Class UnderscoreInvokeCest
  *
- * @package Phalcon\Tests\Unit\Html\Helper\Input
+ * @package Phalcon\Tests\Unit\Html\Tag\Input
  */
 class UnderscoreInvokeCest
 {
@@ -60,7 +60,7 @@ class UnderscoreInvokeCest
      */
     public function htmlHelperInputUnderscoreInvoke(UnitTester $I, Example $example)
     {
-        $I->wantToTest('Html\Helper\Input - __invoke() - ' . $example['message']);
+        $I->wantToTest('Html\Tag\Input - __invoke() - ' . $example['message']);
         $classes = $this->getClasses();
 
         foreach ($classes as $name => $class) {
@@ -100,7 +100,7 @@ class UnderscoreInvokeCest
      */
     public function htmlHelperInputUnderscoreInvokeInput(UnitTester $I)
     {
-        $I->wantToTest('Html\Helper\Input - __invoke() - input week');
+        $I->wantToTest('Html\Tag\Input - __invoke() - input week');
 
         $escaper = new Escaper();
         $helper  = new Input($escaper);
@@ -124,7 +124,7 @@ class UnderscoreInvokeCest
      */
     public function htmlHelperInputUnderscoreInvokeTextarea(UnitTester $I)
     {
-        $I->wantToTest('Html\Helper\Input - __invoke() - textarea');
+        $I->wantToTest('Html\Tag\Input - __invoke() - textarea');
 
         $escaper = new Escaper();
         $helper  = new Textarea($escaper);

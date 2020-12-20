@@ -9,7 +9,7 @@
 
 declare(strict_types=1);
 
-namespace Phalcon\Tests\Unit\Html\Helper\Anchor;
+namespace Phalcon\Tests\Unit\Html\Tag\Anchor;
 
 use Codeception\Example;
 use Phalcon\Html\Escaper;
@@ -21,7 +21,7 @@ use UnitTester;
 /**
  * Class UnderscoreInvokeCest
  *
- * @package Phalcon\Tests\Unit\Html\Helper\Anchor
+ * @package Phalcon\Tests\Unit\Html\Tag\Anchor
  */
 class UnderscoreInvokeCest
 {
@@ -40,7 +40,7 @@ class UnderscoreInvokeCest
      */
     public function htmlHelperAnchorUnderscoreInvoke(UnitTester $I, Example $example)
     {
-        $I->wantToTest('Html\Helper\Anchor - __invoke()');
+        $I->wantToTest('Html\Tag\Anchor - __invoke()');
 
         $escaper = new Escaper();
         $anchor  = new Anchor($escaper);

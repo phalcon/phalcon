@@ -9,7 +9,7 @@
 
 declare(strict_types=1);
 
-namespace Phalcon\Tests\Unit\Html\Helper\Style;
+namespace Phalcon\Tests\Unit\Html\Tag\Style;
 
 use Codeception\Example;
 use Phalcon\Html\Escaper;
@@ -23,7 +23,7 @@ use const PHP_EOL;
 /**
  * Class UnderscoreInvokeCest
  *
- * @package Phalcon\Tests\Unit\Html\Helper\Style
+ * @package Phalcon\Tests\Unit\Html\Tag\Style
  */
 class UnderscoreInvokeCest
 {
@@ -42,7 +42,7 @@ class UnderscoreInvokeCest
      */
     public function htmlHelperStyleUnderscoreInvoke(UnitTester $I, Example $example)
     {
-        $I->wantToTest('Html\Helper\Style - __invoke() ' . $example['message']);
+        $I->wantToTest('Html\Tag\Style - __invoke() ' . $example['message']);
 
         $escaper = new Escaper();
         $helper  = new Style($escaper);

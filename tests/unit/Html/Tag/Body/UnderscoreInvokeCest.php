@@ -9,7 +9,7 @@
 
 declare(strict_types=1);
 
-namespace Phalcon\Tests\Unit\Html\Helper\Body;
+namespace Phalcon\Tests\Unit\Html\Tag\Body;
 
 use Codeception\Example;
 use Phalcon\Html\Escaper;
@@ -21,7 +21,7 @@ use UnitTester;
 /**
  * Class UnderscoreInvokeCest
  *
- * @package Phalcon\Tests\Unit\Html\Helper\Body
+ * @package Phalcon\Tests\Unit\Html\Tag\Body
  */
 class UnderscoreInvokeCest
 {
@@ -40,7 +40,7 @@ class UnderscoreInvokeCest
      */
     public function htmlHelperBodyUnderscoreInvoke(UnitTester $I, Example $example)
     {
-        $I->wantToTest('Html\Helper\Body - __invoke()');
+        $I->wantToTest('Html\Tag\Body - __invoke()');
         $escaper = new Escaper();
         $helper  = new Body($escaper);
 
