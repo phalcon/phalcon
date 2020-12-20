@@ -14,6 +14,8 @@ declare(strict_types=1);
 namespace Phalcon\Tests\Unit\Assets\Manager;
 
 use Phalcon\Assets\Manager;
+use Phalcon\Html\Escaper;
+use Phalcon\Html\TagFactory;
 use Phalcon\Tests\Fixtures\Traits\DiTrait;
 use UnitTester;
 
@@ -44,12 +46,12 @@ class AddJsCest
     {
         $I->wantToTest('Assets\Manager - addJs()');
 
-        $assets = new Manager();
+        $manager = new Manager(new TagFactory(new Escaper()));
 
-        $assets->addJs('/js/jquery.js');
-        $assets->addJs('/js/jquery-ui.js');
+        $manager->addJs('/js/jquery.js');
+        $manager->addJs('/js/jquery-ui.js');
 
-        $collection = $assets->get('js');
+        $collection = $manager->get('js');
 
         foreach ($collection as $resource) {
             $I->assertEquals(
@@ -73,11 +75,11 @@ class AddJsCest
 
         $container = $this->getDI();
 
-        $assets = new Manager();
+        $manager = new Manager(new TagFactory(new Escaper()));
+        $manager->setDI($container);
+        $manager->useImplicitOutput(false);
 
-        $assets->setDI($container);
-
-        $assets->addJs(
+        $manager->addJs(
             dataDir('assets/assets/assets-version-1.js'),
             true,
             false,
@@ -85,7 +87,7 @@ class AddJsCest
             '1.0.0'
         );
 
-        $assets->addJs(
+        $manager->addJs(
             dataDir('assets/assets/assets-version-2.js'),
             true,
             false,
@@ -93,7 +95,7 @@ class AddJsCest
             '2.0.0'
         );
 
-        $assets->addJs(
+        $manager->addJs(
             dataDir('assets/assets/assets-version-3.js'),
             true,
             false,
@@ -101,19 +103,13 @@ class AddJsCest
         );
 
         $pathData = dataDir('assets/');
-
         $expected = sprintf(
             "%s" . PHP_EOL . "%s" . PHP_EOL . "%s" . PHP_EOL,
-            "<script src=\"{$pathData}assets/assets-version-1.js?ver=1.0.0\"></script>",
-            "<script src=\"{$pathData}assets/assets-version-2.js?ver=2.0.0\"></script>",
-            "<script src=\"{$pathData}assets/assets-version-3.js\"></script>"
+            "<script type=\"text/javascript\" src=\"{$pathData}assets/assets-version-1.js?ver=1.0.0\"></script>",
+            "<script type=\"text/javascript\" src=\"{$pathData}assets/assets-version-2.js?ver=2.0.0\"></script>",
+            "<script type=\"text/javascript\" src=\"{$pathData}assets/assets-version-3.js\"></script>"
         );
 
-        $assets->useImplicitOutput(false);
-
-        $I->assertEquals(
-            $expected,
-            $assets->outputJs()
-        );
+        $I->assertEquals($expected, $manager->outputJs());
     }
 }

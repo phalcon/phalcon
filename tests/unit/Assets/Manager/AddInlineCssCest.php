@@ -14,6 +14,8 @@ declare(strict_types=1);
 namespace Phalcon\Tests\Unit\Assets\Manager;
 
 use Phalcon\Assets\Manager;
+use Phalcon\Html\Escaper;
+use Phalcon\Html\TagFactory;
 use Phalcon\Tests\Fixtures\Traits\DiTrait;
 use UnitTester;
 
@@ -55,13 +57,10 @@ class AddInlineCssCest
     {
         $I->wantToTest('Assets\Manager - addInlineCss()');
 
-        $manager = new Manager();
-
         $css = ".h2:after, .h2:after { content: ''; display: none }";
-
+        $manager = new Manager(new TagFactory(new Escaper()));
         $manager->addInlineCss($css);
-
-        $expected = "<style type=\"text/css\">{$css}</style>" . PHP_EOL;
+        $expected = "<style type=\"text/css\">{$css}</style>";
 
         ob_start();
         $manager->outputInlineCss();

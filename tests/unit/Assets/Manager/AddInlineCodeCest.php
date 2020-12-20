@@ -15,6 +15,8 @@ namespace Phalcon\Tests\Unit\Assets\Manager;
 
 use Phalcon\Assets\Inline;
 use Phalcon\Assets\Manager;
+use Phalcon\Html\Escaper;
+use Phalcon\Html\TagFactory;
 use Phalcon\Tests\Fixtures\Traits\DiTrait;
 use UnitTester;
 
@@ -56,12 +58,12 @@ class AddInlineCodeCest
     {
         $I->wantToTest('Assets\Manager - addInlineCode()');
 
-        $manager = new Manager();
+        $manager = new Manager(new TagFactory(new Escaper()));
 
         $asset = new Inline('css', 'p {color: #000099}');
         $manager->addInlineCode($asset);
 
-        $expected = "<style>p {color: #000099}</style>" . PHP_EOL;
+        $expected = "<style>p {color: #000099}</style>";
 
         ob_start();
         $manager->outputInlineCss();

@@ -7,12 +7,16 @@ $root = dirname(realpath(__DIR__) . DIRECTORY_SEPARATOR) . DIRECTORY_SEPARATOR;
 
 require_once $root . 'tests/_ci/functions.php';
 
-if (!file_exists(cacheDir())) {
-    mkdir(cacheDir());
-}
+$folders = [
+    cacheDir(),
+    logsDir(),
+    outputDir('assets')
+];
 
-if (!file_exists(logsDir())) {
-    mkdir(logsDir());
+foreach ($folders as $folder) {
+    if (true !== file_exists($folder)) {
+        mkdir($folder);
+    }
 }
 
 loadDefined();
