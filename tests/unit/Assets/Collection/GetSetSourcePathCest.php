@@ -15,6 +15,7 @@ namespace Phalcon\Tests\Unit\Assets\Collection;
 
 use Phalcon\Assets\Collection;
 use UnitTester;
+
 use function dataDir;
 
 /**

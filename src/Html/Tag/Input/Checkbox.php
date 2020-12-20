@@ -64,8 +64,7 @@ class Checkbox extends AbstractInput
             . $this->label['start']
             . parent::__toString()
             . $this->label['text']
-            . $this->label['end']
-        ;
+            . $this->label['end'];
 
         $this->label = [
             'start' => '',

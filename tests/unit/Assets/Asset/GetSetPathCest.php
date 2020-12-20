@@ -16,6 +16,7 @@ namespace Phalcon\Tests\Unit\Assets\Asset;
 use Codeception\Example;
 use Phalcon\Assets\Asset;
 use UnitTester;
+
 use function uniqid;
 
 /**

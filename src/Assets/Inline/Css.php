@@ -36,7 +36,7 @@ class Css extends InlineBase
     ) {
         if (true === empty($attributes)) {
             $attributes = [
-                'type' => 'text/css'
+                'type' => 'text/css',
             ];
         }
 
