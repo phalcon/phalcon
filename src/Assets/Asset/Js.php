@@ -41,8 +41,7 @@ class Js extends AssetBase
         array $attributes = [],
         string $version = null,
         bool $autoVersion = false
-    )
-    {
+    ) {
         parent::__construct('js', $path, $local, $filter, $attributes, $version, $autoVersion);
     }
 }

@@ -25,6 +25,7 @@ use Phalcon\Html\Tag\Element;
 use Phalcon\Html\Tag\Script;
 use Phalcon\Html\Tag\Style;
 use Phalcon\Html\TagFactory;
+
 use function call_user_func_array;
 use function filemtime;
 use function htmlspecialchars;
@@ -32,6 +33,7 @@ use function is_array;
 use function is_object;
 use function is_resource;
 use function var_dump;
+
 use const ENT_QUOTES;
 use const PHP_EOL;
 
@@ -40,10 +42,10 @@ use const PHP_EOL;
  *
  * Manages collections of CSS/JavaScript assets
  *
- * @property array            $collections
- * @property bool             $implicitOutput
- * @property array            $options
- * @property TagFactory       $tagFactory
+ * @property array      $collections
+ * @property bool       $implicitOutput
+ * @property array      $options
+ * @property TagFactory $tagFactory
  */
 class Manager implements InjectionAwareInterface
 {
@@ -387,7 +389,7 @@ class Manager implements InjectionAwareInterface
         $targetBasePath        = null;
 
         $callbackMethod = ('css' === $type) ? 'cssLink' : 'jsLink';
-        $callback = [$this, $callbackMethod];
+        $callback       = [$this, $callbackMethod];
 
         /**
          * Get the assets as an array
@@ -942,7 +944,7 @@ class Manager implements InjectionAwareInterface
             if (true === isset($params['local'])) {
                 $local = (bool) $params['local'];
 
-                unset ($params['local']);
+                unset($params['local']);
             }
         }
 
@@ -959,6 +961,7 @@ class Manager implements InjectionAwareInterface
 
         /**
          * URLs are generated through the "url" service
+         *
          * @todo Check URL service
          */
         if (true === $local) {
@@ -1023,7 +1026,7 @@ class Manager implements InjectionAwareInterface
             if (true === isset($params['local'])) {
                 $local = (bool) $params['local'];
 
-                unset ($params['local']);
+                unset($params['local']);
             }
         }
 
@@ -1040,6 +1043,7 @@ class Manager implements InjectionAwareInterface
 
         /**
          * URLs are generated through the "url" service
+         *
          * @todo Check URL service
          */
         if (true === $local) {
