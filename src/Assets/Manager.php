@@ -20,15 +20,19 @@ use Phalcon\Assets\Inline\Js as InlineJs;
 use Phalcon\Di\InjectionAwareInterface;
 use Phalcon\Di\Traits\InjectionAwareTrait;
 use Phalcon\Html\EscaperInterface;
-use Phalcon\Html\Helper\Close;
-use Phalcon\Html\Helper\Element;
-use Phalcon\Html\Helper\Script;
-use Phalcon\Html\Helper\Style;
+use Phalcon\Html\Tag\Close;
+use Phalcon\Html\Tag\Element;
+use Phalcon\Html\Tag\Script;
+use Phalcon\Html\Tag\Style;
 use Phalcon\Html\TagFactory;
 use function call_user_func_array;
 use function filemtime;
+use function htmlspecialchars;
+use function is_array;
 use function is_object;
+use function is_resource;
 use function var_dump;
+use const ENT_QUOTES;
 use const PHP_EOL;
 
 /**
@@ -372,6 +376,7 @@ class Manager implements InjectionAwareInterface
      */
     public function output(Collection $collection, string $type): ?string
     {
+
         $completeSourcePath    = '';
         $completeTargetPath    = '';
         $filteredContent       = '';
@@ -381,8 +386,8 @@ class Manager implements InjectionAwareInterface
         $sourceBasePath        = null;
         $targetBasePath        = null;
 
-        $helper    = ('css' === $type) ? 'link' : 'script';
-        $formatter = $this->tagFactory->newInstance($helper);
+        $callbackMethod = ('css' === $type) ? 'cssLink' : 'jsLink';
+        $callback = [$this, $callbackMethod];
 
         /**
          * Get the assets as an array
@@ -465,7 +470,6 @@ class Manager implements InjectionAwareInterface
 
         /** @var Asset $asset */
         foreach ($assets as $asset) {
-            $formatter    = $formatter('', PHP_EOL);
             $filterNeeded = false;
             $type         = $asset->getType();
 
@@ -540,9 +544,12 @@ class Manager implements InjectionAwareInterface
                 /**
                  * Generate the HTML
                  */
-                $formatter->add($prefixedPath, $collection->getAttributes());
-
-                $html = (string) $formatter;
+                $html = $this->doCallback(
+                    $callback,
+                    $asset->getAttributes(),
+                    $prefixedPath,
+                    $asset->isLocal()
+                );
 
                 /**
                  * Implicit output prints the content directly
@@ -629,9 +636,12 @@ class Manager implements InjectionAwareInterface
                 /**
                  * Generate the HTML
                  */
-                $formatter->add($prefixedPath, $collection->getAttributes());
-
-                $html = (string) $formatter;
+                $html = $this->doCallback(
+                    $callback,
+                    $collection->getAttributes(),
+                    $prefixedPath,
+                    true
+                );
 
                 /**
                  * Implicit output prints the content directly
@@ -663,16 +673,12 @@ class Manager implements InjectionAwareInterface
             /**
              * Generate the HTML
              */
-            $formatter->add($prefixedPath, $collection->getAttributes());
-
-            $html = (string) $formatter;
-
-//            $html = $this->doCallback(
-//                $callback,
-//                $collection->getAttributes(),
-//                $prefixedPath,
-//                $collection->getTargetLocal()
-//            );
+            $html = $this->doCallback(
+                $callback,
+                $collection->getAttributes(),
+                $prefixedPath,
+                $collection->getTargetLocal()
+            );
 
             /**
              * Implicit output prints the content directly
@@ -911,5 +917,198 @@ class Manager implements InjectionAwareInterface
         }
 
         return $this->collections[$type];
+    }
+
+    /**
+     * Builds a LINK[rel="stylesheet"] tag
+     */
+    /**
+     * @param mixed $parameters
+     * @param bool  $local
+     *
+     * @return string
+     * @throws Exception
+     */
+    private function cssLink($parameters = [], bool $local = true): string
+    {
+        $params = $parameters;
+        if (true !== is_array($parameters)) {
+            $params = [$parameters, $local];
+        }
+
+        if (true === isset($params[1])) {
+            $local = (bool) $params[1];
+        } else {
+            if (true === isset($params['local'])) {
+                $local = (bool) $params['local'];
+
+                unset ($params['local']);
+            }
+        }
+
+        if (true !== isset($params['type'])) {
+            $params['type'] = 'text/css';
+        }
+
+        if (true !== isset($params['href'])) {
+            $params['href'] = '';
+            if (true === isset($params[0])) {
+                $params['href'] = $params[0];
+            }
+        }
+
+        /**
+         * URLs are generated through the "url" service
+         * @todo Check URL service
+         */
+        if (true === $local) {
+//            $params['href'] = self::getUrlService()->getStatic(params["href"]);
+        }
+
+        if (true !== isset($params['rel'])) {
+            $params['rel'] = 'stylesheet';
+        }
+
+        return $this->renderAttributes('<link', $params) . ' />' . PHP_EOL;
+    }
+
+    /**
+     * @param mixed  $callback
+     * @param array  $attributes
+     * @param string $prefixedPath
+     * @param bool   $local
+     *
+     * @return string
+     */
+    private function doCallback(
+        $callback,
+        array $attributes,
+        string $prefixedPath,
+        bool $local
+    ): string {
+        /**
+         * Prepare the parameters for the callback
+         */
+        if (true !== empty($attributes)) {
+            $attributes[0] = $prefixedPath;
+            $parameters    = [$attributes];
+        } else {
+            $parameters = [$prefixedPath];
+        }
+        $parameters[] = $local;
+
+        /**
+         * Call the callback to generate the HTML
+         */
+        return call_user_func_array($callback, $parameters);
+    }
+
+    /**
+     * @param mixed $parameters
+     * @param bool  $local
+     *
+     * @return string
+     * @throws Exception
+     */
+    private function jsLink($parameters = [], bool $local = true): string
+    {
+        $params = $parameters;
+        if (true !== is_array($parameters)) {
+            $params = [$parameters, $local];
+        }
+
+        if (true === isset($params[1])) {
+            $local = (bool) $params[1];
+        } else {
+            if (true === isset($params['local'])) {
+                $local = (bool) $params['local'];
+
+                unset ($params['local']);
+            }
+        }
+
+        if (true !== isset($params['type'])) {
+            $params['type'] = 'text/javascript';
+        }
+
+        if (true !== isset($params['src'])) {
+            $params['src'] = '';
+            if (true === isset($params[0])) {
+                $params['src'] = $params[0];
+            }
+        }
+
+        /**
+         * URLs are generated through the "url" service
+         * @todo Check URL service
+         */
+        if (true === $local) {
+//            $params['src'] = self::getUrlService()->getStatic(params["src"]);
+        }
+
+        return $this->renderAttributes('<script', $params) . '></script>' . PHP_EOL;
+    }
+
+    /**
+     * @param string $code
+     * @param array  $attributes
+     *
+     * @return string
+     * @throws Exception
+     */
+    private function renderAttributes(string $code, array $attributes): string
+    {
+        $order = [
+            'rel'    => null,
+            'type'   => null,
+            'for'    => null,
+            'src'    => null,
+            'href'   => null,
+            'action' => null,
+            'id'     => null,
+            'name'   => null,
+            'value'  => null,
+            'class'  => null,
+        ];
+
+        $attrs = [];
+        foreach ($order as $key => $value) {
+            if (true === isset($attributes[$key])) {
+                $attrs[$key] = $attributes[$key];
+            }
+        }
+
+        foreach ($attributes as $key => $value) {
+            if (true !== isset($attrs[$key])) {
+                $attrs[$key] = $value;
+            }
+        }
+
+        unset($attrs['escape']);
+
+        $newCode = $code;
+        foreach ($attrs as $key => $value) {
+            if (true === is_string($key) && null !== $value) {
+                if (true === is_array($value) || true === is_resource($value)) {
+                    throw new Exception(
+                        'Value at index: "' . $key . '" type: "' .
+                        gettype($value) . '" cannot be rendered'
+                    );
+                }
+
+                $newCode .= ' '
+                    . $key
+                    . '="'
+                    . htmlspecialchars(
+                        $value,
+                        ENT_QUOTES,
+                        'utf-8',
+                        true
+                    )
+                    . '"';
+            }
+        }
+
+        return $newCode;
     }
 }
