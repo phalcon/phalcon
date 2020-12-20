@@ -261,9 +261,9 @@ class OutputJsCest
         $expectedCSS = sprintf(
             "%s" . PHP_EOL . "%s" . PHP_EOL,
             '<link rel="stylesheet" type="text/css" ' .
-            'href="http:://cdn.example.com/css/styles1.css" media="screen" />',
+            'href="http:://cdn.example.com/css/styles1.css" />',
             '<link rel="stylesheet" type="text/css" ' .
-            'href="http:://cdn.example.com/css/styles2.css" media="screen" />'
+            'href="http:://cdn.example.com/css/styles2.css" />'
         );
 
         $I->assertEquals(

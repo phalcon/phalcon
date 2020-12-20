@@ -14,8 +14,11 @@ declare(strict_types=1);
 namespace Phalcon\Tests\Unit\Assets\Asset;
 
 use Codeception\Example;
+use Codeception\Stub;
 use Phalcon\Assets\Asset;
+use Phalcon\Assets\Exception;
 use UnitTester;
+use function dataDir;
 
 /**
  * Class GetRealTargetPathCest
@@ -43,6 +46,37 @@ class GetRealTargetPathCest
 
         $expected = $example['path'];
         $actual   = $asset->getRealTargetPath();
+        $I->assertEquals($expected, $actual);
+    }
+
+    /**
+     * Tests Phalcon\Assets\Asset :: getRealTargetPath() - css local 404
+     *
+     * @param UnitTester $I
+     *
+     * @author       Phalcon Team <team@phalcon.io>
+     * @since        2020-09-09
+     */
+    public function assetsAssetGetRealTargetPath404(UnitTester $I)
+    {
+        $I->wantToTest('Assets\Asset - getRealTargetPath() - css local 404');
+
+
+        $file = 'assets/assets/1198.css';
+        /** @var Asset $asset */
+        $asset = Stub::construct(
+            Asset::class,
+            [
+                'css',
+                $file,
+            ],
+            [
+                'phpFileExists' => true,
+            ]
+        );
+
+        $expected = dataDir($file);
+        $actual   = $asset->getRealTargetPath(dataDir());
         $I->assertEquals($expected, $actual);
     }
 

@@ -43,8 +43,8 @@ class UseImplicitOutputCest
 
         $expected = sprintf(
             "%s" . PHP_EOL . "%s" . PHP_EOL,
-            '<link rel="stylesheet" type="text/css" href="/css/style1.css" media="screen" />',
-            '<link rel="stylesheet" type="text/css" href="/css/style2.css" media="screen" />'
+            '<link rel="stylesheet" type="text/css" href="/css/style1.css" />',
+            '<link rel="stylesheet" type="text/css" href="/css/style2.css" />'
         );
 
         $manager->useImplicitOutput(false);

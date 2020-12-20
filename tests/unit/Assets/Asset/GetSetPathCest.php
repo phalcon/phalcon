@@ -16,6 +16,7 @@ namespace Phalcon\Tests\Unit\Assets\Asset;
 use Codeception\Example;
 use Phalcon\Assets\Asset;
 use UnitTester;
+use function uniqid;
 
 /**
  * Class GetSetPathCest
@@ -39,9 +40,15 @@ class GetSetPathCest
     {
         $I->wantToTest('Assets\Asset - getPath()/setPath()');
 
-        $asset = new Asset($example['type'], $example['path']);
+        $path = uniqid('/');
+        $asset = new Asset($example['type'], $path);
+
+        $expected = $path;
+        $actual   = $asset->getPath();
+        $I->assertEquals($expected, $actual);
 
         $expected = $example['path'];
+        $asset->setPath($example['path']);
         $actual   = $asset->getPath();
         $I->assertEquals($expected, $actual);
     }
