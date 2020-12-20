@@ -17,25 +17,31 @@ use Phalcon\Assets\Asset\Css as AssetCss;
 use Phalcon\Assets\Asset\Js as AssetJs;
 use Phalcon\Assets\Inline\Css as InlineCss;
 use Phalcon\Assets\Inline\Js as InlineJs;
+use Phalcon\Di\InjectionAwareInterface;
 use Phalcon\Di\Traits\InjectionAwareTrait;
+use Phalcon\Html\EscaperInterface;
 use Phalcon\Html\Helper\Close;
 use Phalcon\Html\Helper\Element;
+use Phalcon\Html\Helper\Script;
+use Phalcon\Html\Helper\Style;
 use Phalcon\Html\TagFactory;
 use function call_user_func_array;
 use function filemtime;
 use function is_object;
+use function var_dump;
+use const PHP_EOL;
 
 /**
  * Phalcon\Assets\Manager
  *
  * Manages collections of CSS/JavaScript assets
  *
- * @property array      $collections
- * @property bool       $implicitOutput
- * @property array      $options
- * @property TagFactory $tagFactory
+ * @property array            $collections
+ * @property bool             $implicitOutput
+ * @property array            $options
+ * @property TagFactory       $tagFactory
  */
-class Manager
+class Manager implements InjectionAwareInterface
 {
     use InjectionAwareTrait;
 
@@ -110,7 +116,7 @@ class Manager
      * @param string      $path
      * @param bool        $local
      * @param bool        $filter
-     * @param array|null  $attributes
+     * @param array       $attributes
      * @param string|null $version
      * @param bool        $autoVersion
      *
@@ -120,7 +126,7 @@ class Manager
         string $path,
         bool $local = true,
         bool $filter = true,
-        array $attributes = null,
+        array $attributes = [],
         string $version = null,
         bool $autoVersion = false
     ): Manager {
@@ -359,18 +365,13 @@ class Manager
      * Traverses a collection calling the callback to generate its HTML
      *
      * @param Collection $collection
-     * @param callable   $callback
      * @param string     $type
      *
      * @return string|null
      * @throws Exception
      */
-    public function output(
-        Collection $collection,
-        callable $callback,
-        string $type
-    ): ?string {
-
+    public function output(Collection $collection, string $type): ?string
+    {
         $completeSourcePath    = '';
         $completeTargetPath    = '';
         $filteredContent       = '';
@@ -379,6 +380,9 @@ class Manager
         $output                = '';
         $sourceBasePath        = null;
         $targetBasePath        = null;
+
+        $helper    = ('css' === $type) ? 'link' : 'script';
+        $formatter = $this->tagFactory->newInstance($helper);
 
         /**
          * Get the assets as an array
@@ -461,6 +465,7 @@ class Manager
 
         /** @var Asset $asset */
         foreach ($assets as $asset) {
+            $formatter    = $formatter('', PHP_EOL);
             $filterNeeded = false;
             $type         = $asset->getType();
 
@@ -535,12 +540,9 @@ class Manager
                 /**
                  * Generate the HTML
                  */
-                $html = $this->doCallback(
-                    $callback,
-                    $asset->getAttributes(),
-                    $prefixedPath,
-                    $asset->isLocal()
-                );
+                $formatter->add($prefixedPath, $collection->getAttributes());
+
+                $html = (string) $formatter;
 
                 /**
                  * Implicit output prints the content directly
@@ -627,12 +629,9 @@ class Manager
                 /**
                  * Generate the HTML
                  */
-                $html = $this->doCallback(
-                    $callback,
-                    $collection->getAttributes(),
-                    $prefixedPath,
-                    true
-                );
+                $formatter->add($prefixedPath, $collection->getAttributes());
+
+                $html = (string) $formatter;
 
                 /**
                  * Implicit output prints the content directly
@@ -664,12 +663,16 @@ class Manager
             /**
              * Generate the HTML
              */
-            $html = $this->doCallback(
-                $callback,
-                $collection->getAttributes(),
-                $prefixedPath,
-                $collection->getTargetLocal()
-            );
+            $formatter->add($prefixedPath, $collection->getAttributes());
+
+            $html = (string) $formatter;
+
+//            $html = $this->doCallback(
+//                $callback,
+//                $collection->getAttributes(),
+//                $prefixedPath,
+//                $collection->getTargetLocal()
+//            );
 
             /**
              * Implicit output prints the content directly
@@ -698,16 +701,7 @@ class Manager
             $collection = $this->get($name);
         }
 
-//
-//        let callback  = ["Phalcon\\Tag", "stylesheetLink"],
-//            container = this->container;
-//
-//        if typeof container == "object" && container->has("tag") {
-//            let tag      = container->getShared("tag"),
-//                callback = [tag, "stylesheetLink"];
-//        }
-//
-//        return $this->output(collection, callback, "css");
+        return $this->output($collection, 'css');
     }
 
     /**
@@ -731,13 +725,11 @@ class Manager
         if (true !== empty($codes)) {
             /** @var Element $tagElement */
             $tagElement = $this->tagFactory->newInstance('element');
-            /** @var Close $tagClose */
-            $tagClose = $this->tagFactory->newInstance('close');
 
             foreach ($codes as $code) {
                 $attributes = $code->getAttributes();
                 $content    = $code->getContent();
-
+                /** @var FilterInterface $filter */
                 foreach ($filters as $filter) {
                     /**
                      * Filters must be valid objects
@@ -756,16 +748,12 @@ class Manager
                 if (true === $join) {
                     $joinedContent .= $content;
                 } else {
-                    $html .= $tagElement($type, '', $attributes)
-                        . $content
-                        . $tagClose($type);
+                    $html .= $tagElement($type, $content, $attributes, true);
                 }
             }
 
             if (true === $join) {
-                $html .= $tagElement($type, '', $attributes)
-                    . $joinedContent
-                    . $tagClose($type);
+                $html .= $tagElement($type, $joinedContent, $attributes, true);
             }
 
             /**
@@ -829,16 +817,7 @@ class Manager
             $collection = $this->get($name);
         }
 
-        $callback = '';
-//        $callback = ["Phalcon\\Tag", "javascriptInclude"];
-//
-//        let container = this->container;
-//        if typeof container == "object" && container->has("tag") {
-//            let tag      = container->getShared("tag"),
-//                callback = [tag, "javascriptInclude"];
-//        }
-
-        return $this->output($collection, $callback, 'js');
+        return $this->output($collection, 'js');
     }
 
     /**
@@ -932,36 +911,5 @@ class Manager
         }
 
         return $this->collections[$type];
-    }
-
-    /**
-     * @param callable $callback
-     * @param array    $attributes
-     * @param string   $prefixedPath
-     * @param bool     $local
-     *
-     * @return string
-     */
-    private function doCallback(
-        callable $callback,
-        array $attributes,
-        string $prefixedPath,
-        bool $local
-    ): string {
-        /**
-         * Prepare the parameters for the callback
-         */
-        if (true !== empty($attributes)) {
-            $attributes[0] = $prefixedPath;
-            $parameters    = [$attributes];
-        } else {
-            $parameters = [$prefixedPath];
-        }
-        $parameters[] = $local;
-
-        /**
-         * Call the callback to generate the HTML
-         */
-        return call_user_func_array($callback, $parameters);
     }
 }
