@@ -378,7 +378,6 @@ class Manager implements InjectionAwareInterface
      */
     public function output(Collection $collection, string $type): ?string
     {
-
         $completeSourcePath    = '';
         $completeTargetPath    = '';
         $filteredContent       = '';

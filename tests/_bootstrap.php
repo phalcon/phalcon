@@ -10,7 +10,7 @@ require_once $root . 'tests/_ci/functions.php';
 $folders = [
     cacheDir(),
     logsDir(),
-    outputDir('assets')
+    outputDir('assets'),
 ];
 
 foreach ($folders as $folder) {
