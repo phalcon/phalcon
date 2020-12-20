@@ -41,13 +41,13 @@ class AddAssetByTypeCest
     {
         $I->wantToTest('Assets\Manager - addAssetByType()');
 
-        $assets = new Manager(new TagFactory(new Escaper()));
+        $manager = new Manager(new TagFactory(new Escaper()));
 
-        $assets->addAssetByType('css', new Css('/css/style1.css'));
-        $assets->addAssetByType('css', new Css('/css/style2.css'));
+        $manager->addAssetByType('css', new Css('/css/style1.css'));
+        $manager->addAssetByType('css', new Css('/css/style2.css'));
 
 
-        $collection = $assets->get('css');
+        $collection = $manager->get('css');
         $expected   = 'css';
         foreach ($collection as $resource) {
             $actual = $resource->getType();

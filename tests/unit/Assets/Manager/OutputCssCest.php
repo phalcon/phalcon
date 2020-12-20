@@ -15,6 +15,8 @@ namespace Phalcon\Tests\Unit\Assets\Manager;
 
 use Phalcon\Assets\Asset\Css;
 use Phalcon\Assets\Manager;
+use Phalcon\Html\Escaper;
+use Phalcon\Html\TagFactory;
 use Phalcon\Tests\Fixtures\Assets\CustomTag;
 use Phalcon\Tests\Fixtures\Assets\TrimFilter;
 use Phalcon\Tests\Fixtures\Assets\UppercaseFilter;
@@ -47,24 +49,23 @@ class OutputCssCest
     {
         $I->wantToTest('Assets\Manager - outputCss() - implicit');
 
-        $assets = new Manager();
+        $manager = new Manager(new TagFactory(new Escaper()));
 
-        $assets->addCss('css/style1.css');
-        $assets->addCss('css/style2.css');
-
-        $assets->addAsset(
+        $manager->addCss('css/style1.css');
+        $manager->addCss('css/style2.css');
+        $manager->addAsset(
             new Css('/css/style.css', false)
         );
 
-        $expected = '<link rel="stylesheet" type="text/css" href="/css/style1.css" />' . PHP_EOL
-            . '<link rel="stylesheet" type="text/css" href="/css/style2.css" />' . PHP_EOL
-            . '<link rel="stylesheet" type="text/css" href="/css/style.css" />' . PHP_EOL;
+        $expected = '<link rel="stylesheet" type="text/css" href="css/style1.css" media="screen" />' . PHP_EOL
+            . '<link rel="stylesheet" type="text/css" href="css/style2.css" media="screen" />' . PHP_EOL
+            . '<link rel="stylesheet" type="text/css" href="/css/style.css" media="screen" />' . PHP_EOL;
 
-        $assets->useImplicitOutput(false);
+        $manager->useImplicitOutput(false);
 
         $I->assertEquals(
             $expected,
-            $assets->outputCss()
+            $manager->outputCss()
         );
     }
 
@@ -78,21 +79,21 @@ class OutputCssCest
     {
         $I->wantToTest('Assets\Manager - outputCss() - not implicit');
 
-        $assets = new Manager();
+        $manager = new Manager(new TagFactory(new Escaper()));
 
-        $assets->addCss('css/style1.css');
-        $assets->addCss('css/style2.css');
+        $manager->addCss('/css/style1.css');
+        $manager->addCss('/css/style2.css');
 
-        $assets->addAsset(
+        $manager->addAsset(
             new Css('/css/style.css', false)
         );
 
-        $expected = '<link rel="stylesheet" type="text/css" href="/css/style1.css" />' . PHP_EOL
-            . '<link rel="stylesheet" type="text/css" href="/css/style2.css" />' . PHP_EOL
-            . '<link rel="stylesheet" type="text/css" href="/css/style.css" />' . PHP_EOL;
+        $expected = '<link rel="stylesheet" type="text/css" href="/css/style1.css" media="screen" />' . PHP_EOL
+            . '<link rel="stylesheet" type="text/css" href="/css/style2.css" media="screen" />' . PHP_EOL
+            . '<link rel="stylesheet" type="text/css" href="/css/style.css" media="screen" />' . PHP_EOL;
 
         ob_start();
-        $assets->outputCss();
+        $manager->outputCss();
         $actual = ob_get_clean();
 
         $I->assertEquals($expected, $actual);
@@ -115,30 +116,20 @@ class OutputCssCest
 
         $fileName = $I->getNewFileName('assets_', 'css');
 
-        $assets = new Manager();
+        $manager = new Manager(new TagFactory(new Escaper()));
+        $manager->useImplicitOutput(false);
 
-        $assets->useImplicitOutput(false);
-
-        $css     = $assets->collection('css');
+        $css     = $manager->collection('css');
         $cssFile = dataDir('assets/assets/1198.css');
 
-        $css->setTargetPath(
-            cacheDir($fileName)
-        );
+        $css->setTargetPath(cacheDir($fileName));
 
         $css->addCss($cssFile);
-
-        $css->addFilter(
-            new UppercaseFilter()
-        );
-
-        $css->addFilter(
-            new TrimFilter()
-        );
-
+        $css->addFilter(new UppercaseFilter());
+        $css->addFilter(new TrimFilter());
         $css->join(true);
 
-        $assets->outputCss('css');
+        $manager->outputCss('css');
 
         $I->openFile(
             cacheDir($fileName)
@@ -150,40 +141,6 @@ class OutputCssCest
 
         $I->safeDeleteFile(
             cacheDir($fileName)
-        );
-    }
-
-    /**
-     * Tests Phalcon\Assets\Manager :: outputCss() - custom tag component
-     */
-    public function assetsManagerOutputCssCustomTag(UnitTester $I)
-    {
-        $I->wantToTest('Assets\Manager - outputCss() - custom tag component');
-
-        $di = $this->getDi();
-
-        $di->setShared('tag', CustomTag::class);
-
-        $assets = new Manager();
-
-        $assets->setDI($di);
-
-        $assets->addCss('css/style1.css');
-        $assets->addCss('/css/style2.css');
-
-        $assets->addAsset(
-            new Css('/css/style.css')
-        );
-
-        $expected = '<link href="css/style1.css">' . PHP_EOL
-            . '<link href="/css/style2.css">' . PHP_EOL
-            . '<link href="/css/style.css">' . PHP_EOL;
-
-        $assets->useImplicitOutput(false);
-
-        $I->assertEquals(
-            $expected,
-            $assets->outputCss()
         );
     }
 }

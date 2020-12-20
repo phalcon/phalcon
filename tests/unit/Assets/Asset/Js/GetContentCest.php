@@ -15,6 +15,7 @@ namespace Phalcon\Tests\Unit\Assets\Asset\Js;
 
 use Phalcon\Assets\Asset\Js;
 use UnitTester;
+
 use function dataDir;
 
 /**
