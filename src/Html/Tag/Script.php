@@ -9,14 +9,14 @@
 
 declare(strict_types=1);
 
-namespace Phalcon\Html\Helper;
+namespace Phalcon\Html\Tag;
 
 use function array_merge;
 
 /**
  * Class Script
  *
- * @package Phalcon\Html\Helper
+ * @package Phalcon\Html\Tag
  */
 class Script extends Style
 {

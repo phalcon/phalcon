@@ -9,7 +9,7 @@
 
 declare(strict_types=1);
 
-namespace Phalcon\Html\Helper\Input;
+namespace Phalcon\Html\Tag\Input;
 
 use Phalcon\Html\Escaper;
 
@@ -18,7 +18,7 @@ use function array_merge;
 /**
  * Class Checkbox
  *
- * @package Phalcon\Html\Helper\Input
+ * @package Phalcon\Html\Tag\Input
  *
  * @property array  $label
  * @property string $type

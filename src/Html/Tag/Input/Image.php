@@ -9,12 +9,12 @@
 
 declare(strict_types=1);
 
-namespace Phalcon\Html\Helper\Input;
+namespace Phalcon\Html\Tag\Input;
 
 /**
  * Class Image
  *
- * @package Phalcon\Html\Helper\Input
+ * @package Phalcon\Html\Tag\Input
  *
  * @property string $type
  */

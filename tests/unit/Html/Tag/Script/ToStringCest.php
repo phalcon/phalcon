@@ -9,7 +9,7 @@
 
 declare(strict_types=1);
 
-namespace Phalcon\Tests\Unit\Html\Helper\Script;
+namespace Phalcon\Tests\Unit\Html\Tag\Script;
 
 use Phalcon\Html\Escaper;
 use Phalcon\Html\Tag\Script;
@@ -18,7 +18,7 @@ use UnitTester;
 /**
  * Class ToStringCest
  *
- * @package Phalcon\Tests\Unit\Html\Helper\Script
+ * @package Phalcon\Tests\Unit\Html\Tag\Script
  */
 class ToStringCest
 {
@@ -32,7 +32,7 @@ class ToStringCest
      */
     public function htmlHelperScriptToStringEmpty(UnitTester $I)
     {
-        $I->wantToTest('Html\Helper\Script - __toString() - empty');
+        $I->wantToTest('Html\Tag\Script - __toString() - empty');
 
         $escaper = new Escaper();
         $helper  = new Script($escaper);

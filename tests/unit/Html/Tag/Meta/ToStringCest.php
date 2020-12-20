@@ -9,7 +9,7 @@
 
 declare(strict_types=1);
 
-namespace Phalcon\Tests\Unit\Html\Helper\Meta;
+namespace Phalcon\Tests\Unit\Html\Tag\Meta;
 
 use Phalcon\Html\Escaper;
 use Phalcon\Html\Tag\Meta;
@@ -18,7 +18,7 @@ use UnitTester;
 /**
  * Class ToStringCest
  *
- * @package Phalcon\Tests\Unit\Html\Helper\Meta
+ * @package Phalcon\Tests\Unit\Html\Tag\Meta
  */
 class ToStringCest
 {
@@ -32,7 +32,7 @@ class ToStringCest
      */
     public function htmlHelperMetaToStringEmpty(UnitTester $I)
     {
-        $I->wantToTest('Html\Helper\Meta - __toString() - empty');
+        $I->wantToTest('Html\Tag\Meta - __toString() - empty');
 
         $escaper = new Escaper();
         $helper  = new Meta($escaper);

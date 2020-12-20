@@ -9,7 +9,7 @@
 
 declare(strict_types=1);
 
-namespace Phalcon\Html\Helper;
+namespace Phalcon\Html\Tag;
 
 use Phalcon\Html\Exception;
 
@@ -18,7 +18,7 @@ use const PHP_EOL;
 /**
  * Class AbstractList
  *
- * @package Phalcon\Html\Helper
+ * @package Phalcon\Html\Tag
  *
  * @property array  $attributes
  * @property string $elementTag

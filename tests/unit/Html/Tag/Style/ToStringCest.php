@@ -9,7 +9,7 @@
 
 declare(strict_types=1);
 
-namespace Phalcon\Tests\Unit\Html\Helper\Style;
+namespace Phalcon\Tests\Unit\Html\Tag\Style;
 
 use Phalcon\Html\Escaper;
 use Phalcon\Html\Tag\Style;
@@ -18,7 +18,7 @@ use UnitTester;
 /**
  * Class ToStringCest
  *
- * @package Phalcon\Tests\Unit\Html\Helper\Style
+ * @package Phalcon\Tests\Unit\Html\Tag\Style
  */
 class ToStringCest
 {
@@ -32,7 +32,7 @@ class ToStringCest
      */
     public function htmlHelperStyleToStringEmpty(UnitTester $I)
     {
-        $I->wantToTest('Html\Helper\Style - __toString() - empty');
+        $I->wantToTest('Html\Tag\Style - __toString() - empty');
 
         $escaper = new Escaper();
         $helper  = new Style($escaper);

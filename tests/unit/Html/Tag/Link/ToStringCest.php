@@ -9,7 +9,7 @@
 
 declare(strict_types=1);
 
-namespace Phalcon\Tests\Unit\Html\Helper\Link;
+namespace Phalcon\Tests\Unit\Html\Tag\Link;
 
 use Phalcon\Html\Escaper;
 use Phalcon\Html\Tag\Link;
@@ -18,7 +18,7 @@ use UnitTester;
 /**
  * Class ToStringCest
  *
- * @package Phalcon\Tests\Unit\Html\Helper\Link
+ * @package Phalcon\Tests\Unit\Html\Tag\Link
  */
 class ToStringCest
 {
@@ -32,7 +32,7 @@ class ToStringCest
      */
     public function htmlHelperLinkToStringEmpty(UnitTester $I)
     {
-        $I->wantToTest('Html\Helper\Link - __toString() - empty');
+        $I->wantToTest('Html\Tag\Link - __toString() - empty');
 
         $escaper = new Escaper();
         $helper  = new Link($escaper);

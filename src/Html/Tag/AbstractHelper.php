@@ -9,7 +9,7 @@
 
 declare(strict_types=1);
 
-namespace Phalcon\Html\Helper;
+namespace Phalcon\Html\Tag;
 
 use Phalcon\Html\EscaperInterface;
 use Phalcon\Html\Exception;
@@ -27,7 +27,7 @@ use const PHP_EOL;
 /**
  * Class AbstractHelper
  *
- * @package Phalcon\Html\Helper
+ * @package Phalcon\Html\Tag
  *
  * @property string           $delimiter
  * @property EscaperInterface $escaper

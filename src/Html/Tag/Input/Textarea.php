@@ -9,14 +9,14 @@
 
 declare(strict_types=1);
 
-namespace Phalcon\Html\Helper\Input;
+namespace Phalcon\Html\Tag\Input;
 
 use Phalcon\Html\Exception;
 
 /**
  * Class Textarea
  *
- * @package Phalcon\Html\Helper\Input
+ * @package Phalcon\Html\Tag\Input
  *
  * @property string $type
  */

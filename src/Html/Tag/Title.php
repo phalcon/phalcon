@@ -9,7 +9,7 @@
 
 declare(strict_types=1);
 
-namespace Phalcon\Html\Helper;
+namespace Phalcon\Html\Tag;
 
 use Phalcon\Html\Exception;
 
@@ -21,7 +21,7 @@ use const PHP_EOL;
 /**
  * Class Title
  *
- * @package Phalcon\Html\Helper
+ * @package Phalcon\Html\Tag
  *
  * @property array  $append
  * @property string $delimiter

@@ -9,7 +9,7 @@
 
 declare(strict_types=1);
 
-namespace Phalcon\Tests\Unit\Html\Helper\Input;
+namespace Phalcon\Tests\Unit\Html\Tag\Input;
 
 use Codeception\Example;
 use Phalcon\Html\Escaper;
@@ -20,7 +20,7 @@ use UnitTester;
 /**
  * Class CheckboxUnderscoreInvokeCest
  *
- * @package Phalcon\Tests\Unit\Html\Helper\Input
+ * @package Phalcon\Tests\Unit\Html\Tag\Input
  */
 class CheckboxUnderscoreInvokeCest
 {
@@ -36,7 +36,7 @@ class CheckboxUnderscoreInvokeCest
      */
     public function htmlHelperInputCheckboxUnderscoreInvoke(UnitTester $I, Example $example)
     {
-        $I->wantToTest('Html\Helper\Input\Checkbox - __invoke() - ' . $example['message']);
+        $I->wantToTest('Html\Tag\Input\Checkbox - __invoke() - ' . $example['message']);
 
         $escaper = new Escaper();
         $helper  = new Checkbox($escaper);
@@ -66,7 +66,7 @@ class CheckboxUnderscoreInvokeCest
      */
     public function htmlHelperInputRadioUnderscoreInvoke(UnitTester $I, Example $example)
     {
-        $I->wantToTest('Html\Helper\Input\Radio - __invoke() - ' . $example['message']);
+        $I->wantToTest('Html\Tag\Input\Radio - __invoke() - ' . $example['message']);
 
         $escaper = new Escaper();
         $helper  = new Radio($escaper);
