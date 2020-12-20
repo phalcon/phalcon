@@ -11,33 +11,30 @@ declare(strict_types=1);
 
 namespace Phalcon\Html\Helper;
 
+use function array_merge;
+
 /**
  * Class Link
  *
  * @package Phalcon\Html\Helper
  */
-class Link extends AbstractSeries
+class Link extends Style
 {
     /**
      * Add an element to the list
      *
-     * @param string $rel
      * @param string $href
+     * @param array  $attributes
      *
      * @return Link
      */
-    public function add(string $rel, string $href): Link
+    public function add(string $href, array $attributes = []): Link
     {
-        $attributes = [
-            'rel'  => $rel,
-            'href' => $href,
-        ];
-
         $this->store[] = [
             'renderTag',
             [
                 $this->getTag(),
-                $attributes,
+                $this->getAttributes($href, $attributes),
                 '/',
             ],
             $this->indent(),
