@@ -57,9 +57,9 @@ class OutputCssCest
             new Css('/css/style.css', false)
         );
 
-        $expected = '<link rel="stylesheet" type="text/css" href="css/style1.css" media="screen" />' . PHP_EOL
-            . '<link rel="stylesheet" type="text/css" href="css/style2.css" media="screen" />' . PHP_EOL
-            . '<link rel="stylesheet" type="text/css" href="/css/style.css" media="screen" />' . PHP_EOL;
+        $expected = '<link rel="stylesheet" type="text/css" href="css/style1.css" />' . PHP_EOL
+            . '<link rel="stylesheet" type="text/css" href="css/style2.css" />' . PHP_EOL
+            . '<link rel="stylesheet" type="text/css" href="/css/style.css" />' . PHP_EOL;
 
         $manager->useImplicitOutput(false);
 
@@ -88,9 +88,9 @@ class OutputCssCest
             new Css('/css/style.css', false)
         );
 
-        $expected = '<link rel="stylesheet" type="text/css" href="/css/style1.css" media="screen" />' . PHP_EOL
-            . '<link rel="stylesheet" type="text/css" href="/css/style2.css" media="screen" />' . PHP_EOL
-            . '<link rel="stylesheet" type="text/css" href="/css/style.css" media="screen" />' . PHP_EOL;
+        $expected = '<link rel="stylesheet" type="text/css" href="/css/style1.css" />' . PHP_EOL
+            . '<link rel="stylesheet" type="text/css" href="/css/style2.css" />' . PHP_EOL
+            . '<link rel="stylesheet" type="text/css" href="/css/style.css" />' . PHP_EOL;
 
         ob_start();
         $manager->outputCss();

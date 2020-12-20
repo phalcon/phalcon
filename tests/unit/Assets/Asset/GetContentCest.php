@@ -14,8 +14,11 @@ declare(strict_types=1);
 namespace Phalcon\Tests\Unit\Assets\Asset;
 
 use Codeception\Example;
+use Codeception\Stub;
+use Phalcon\Assets\Exception;
 use Phalcon\Assets\Asset;
 use UnitTester;
+use function dataDir;
 
 /**
  * Class GetContentCest
@@ -45,6 +48,74 @@ class GetContentCest
 
         $actual = $asset->getContent(dataDir());
         $I->seeFileContentsEqual($actual);
+    }
+
+    /**
+     * Tests Phalcon\Assets\Asset :: getContent() - exception 404
+     *
+     * @param UnitTester $I
+     *
+     * @author Phalcon Team <team@phalcon.io>
+     * @since  2020-09-09
+     */
+    public function assetsAssetGetContentException404(UnitTester $I)
+    {
+        $I->wantToTest('Assets\Asset - getContent() - exception 404');
+
+        $file = 'assets/assets/1198.css';
+        $message = 'Asset\'s content for "' . dataDir($file) . '" cannot be read';
+        $I->expectThrowable(
+            new Exception($message),
+            function () use ($file) {
+                /** @var Asset $asset */
+                $asset = Stub::construct(
+                    Asset::class,
+                    [
+                        'css',
+                        $file,
+                    ],
+                    [
+                        'phpFileExists' => false,
+                    ]
+                );
+
+                $data = $asset->getContent(dataDir());
+            }
+        );
+    }
+
+    /**
+     * Tests Phalcon\Assets\Asset :: getContent() - exception cannot read file
+     *
+     * @param UnitTester $I
+     *
+     * @author Phalcon Team <team@phalcon.io>
+     * @since  2020-09-09
+     */
+    public function assetsAssetGetContentExceptionCannotReadFile(UnitTester $I)
+    {
+        $I->wantToTest('Assets\Asset - getContent() - exception cannot read file');
+
+        $file = 'assets/assets/1198.css';
+        $message = 'Asset\'s content for "' . dataDir($file) . '" cannot be read';
+        $I->expectThrowable(
+            new Exception($message),
+            function () use ($file) {
+                /** @var Asset $asset */
+                $asset = Stub::construct(
+                    Asset::class,
+                    [
+                        'css',
+                        $file,
+                    ],
+                    [
+                        'phpFileGetContents' => false,
+                    ]
+                );
+
+                $data = $asset->getContent(dataDir());
+            }
+        );
     }
 
     /**
