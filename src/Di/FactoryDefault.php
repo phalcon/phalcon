@@ -13,9 +13,13 @@ declare(strict_types=1);
 
 namespace Phalcon\Di;
 
-use Phalcon\Html\Escaper;
+use Phalcon\Assets\Manager as AssetsManager;
+use Phalcon\Crypt\Crypt;
 use Phalcon\Events\Manager as EventsManager;
 use Phalcon\Filter\FilterFactory;
+use Phalcon\Html\Escaper;
+use Phalcon\Html\TagFactory;
+use Phalcon\Security\Security;
 
 /**
  * This is a variant of the standard Phalcon\Di. By default it automatically
@@ -32,19 +36,24 @@ class FactoryDefault extends Di
     {
         parent::__construct();
 
-        $filter = new FilterFactory();
+        $filter     = new FilterFactory();
+        $escaper    = new Escaper();
+        $tagFactory = new TagFactory($escaper);
+        $assets     = new AssetsManager($tagFactory);
 
         $this->services = [
+            'assets'        => new Service($assets, true),
+            'crypt'         => new Service(Crypt::class, true),
             'escaper'       => new Service(Escaper::class, true),
             'eventsManager' => new Service(EventsManager::class, true),
             'filter'        => new Service($filter->newInstance(), true),
+            'security'      => new Service(Security::class, true),
+            'tagFactory'    => new Service($tagFactory, true),
         ];
 //        let filter = new FilterFactory();
 //
 //        let this->services = [
 //            "annotations":        new Service("Phalcon\\Annotations\\Adapter\\Memory", true),
-//            "assets":             new Service("Phalcon\\Assets\\Manager", true),
-//            "crypt":              new Service("Phalcon\\Crypt", true),
 //            "cookies":            new Service("Phalcon\\Http\\Response\\Cookies", true),
 //            "dispatcher":         new Service("Phalcon\\Mvc\\Dispatcher", true),
 //            "flash":              new Service("Phalcon\\Flash\\Direct", true),
@@ -54,8 +63,6 @@ class FactoryDefault extends Di
 //            "request":            new Service("Phalcon\\Http\\Request", true),
 //            "response":           new Service("Phalcon\\Http\\Response", true),
 //            "router":             new Service("Phalcon\\Mvc\\Router", true),
-//            "security":           new Service("Phalcon\\Security", true),
-//            "tag":                new Service("Phalcon\\Tag", true),
 //            "transactionManager": new Service("Phalcon\\Mvc\\Model\\Transaction\\Manager", true),
 //            "url":                new Service("Phalcon\\Url", true)
 //        ];
