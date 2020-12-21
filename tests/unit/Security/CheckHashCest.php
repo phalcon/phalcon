@@ -17,6 +17,11 @@ use Codeception\Example;
 use Phalcon\Security\Security;
 use UnitTester;
 
+/**
+ * Class CheckHashCest
+ *
+ * @package Phalcon\Tests\Unit\Security
+ */
 class CheckHashCest
 {
     /**
@@ -50,8 +55,6 @@ class CheckHashCest
     {
         return [
             ['CRYPT_DEFAULT', Security::CRYPT_DEFAULT],
-            ['CRYPT_STD_DES', Security::CRYPT_STD_DES],
-            ['CRYPT_EXT_DES', Security::CRYPT_EXT_DES],
             ['CRYPT_BLOWFISH', Security::CRYPT_BLOWFISH],
             ['CRYPT_BLOWFISH_A', Security::CRYPT_BLOWFISH_A],
             ['CRYPT_BLOWFISH_X', Security::CRYPT_BLOWFISH_X],
