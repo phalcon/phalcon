@@ -13,13 +13,16 @@ declare(strict_types=1);
 
 namespace Phalcon\Security;
 
-use Phalcon\Di\DiInterface;
-use Phalcon\Di\AbstractInjectionAware;
+use Phalcon\Di\InjectionAwareInterface;
 use Phalcon\Di\Traits\InjectionAwareTrait;
 use Phalcon\Http\RequestInterface;
-use Phalcon\Security\Random;
-use Phalcon\Security\Exception;
 use Phalcon\Session\ManagerInterface as SessionInterface;
+use Phalcon\Support\Str\Traits\StartsWithTrait;
+
+use function crypt;
+use function mb_strlen;
+use function sprintf;
+use function str_split;
 
 /**
  * This component provides a set of functions to improve the security in Phalcon
@@ -37,262 +40,305 @@ use Phalcon\Session\ManagerInterface as SessionInterface;
  *     }
  * }
  *```
+ *
+ * @property int                   $defaultHash
+ * @property int                   $numberBytes
+ * @property Random                $random
+ * @property string|null           $requestToken
+ * @property string|null           $token
+ * @property string|null           $tokenKey
+ * @property string                $tokenKeySessionId
+ * @property string                $tokenValueSessionId
+ * @property int                   $workFactor
+ * @property RequestInterface|null $localRequest
+ * @property SessionInterface|null $localSession
  */
-class Security
+class Security implements InjectionAwareInterface
 {
     use InjectionAwareTrait;
+    use StartsWithTrait;
 
-    const CRYPT_DEFAULT    = 0;
-    const CRYPT_BLOWFISH   = 4;
-    const CRYPT_BLOWFISH_A = 5;
-    const CRYPT_BLOWFISH_X = 6;
-    const CRYPT_BLOWFISH_Y = 7;
-    const CRYPT_EXT_DES    = 2;
-    const CRYPT_MD5        = 3;
-    const CRYPT_SHA256     = 8;
-    const CRYPT_SHA512     = 9;
-    const CRYPT_STD_DES    = 1;
-
-    /**
-     * @var int|null
-     */
-    protected defaultHash;
+    public const CRYPT_DEFAULT    = 0;
+    public const CRYPT_BLOWFISH   = 4;
+    public const CRYPT_BLOWFISH_A = 5;
+    public const CRYPT_BLOWFISH_X = 6;
+    public const CRYPT_BLOWFISH_Y = 7;
+    public const CRYPT_EXT_DES    = 2;
+    public const CRYPT_MD5        = 3;
+    public const CRYPT_SHA256     = 8;
+    public const CRYPT_SHA512     = 9;
+    public const CRYPT_STD_DES    = 1;
 
     /**
      * @var int
      */
-    protected numberBytes = 16;
+    protected int $defaultHash = self::CRYPT_DEFAULT;
+
+    /**
+     * @var int
+     */
+    protected int $numberBytes = 16;
 
     /**
      * @var Random
      */
-    protected random;
-
-    /**
-     * @var string}null
-     */
-    protected requestToken;
+    protected Random $random;
 
     /**
      * @var string|null
      */
-    protected token;
+    protected ?string $requestToken = null;
 
     /**
      * @var string|null
      */
-    protected tokenKey;
+    protected ?string $token = null;
+
+    /**
+     * @var string|null
+     */
+    protected ?string $tokenKey = null;
 
     /**
      * @var string
      */
-    protected tokenKeySessionId = "$PHALCON/CSRF/KEY$";
+    protected string $tokenKeySessionId = '$PHALCON/CSRF/KEY$';
 
     /**
      * @var string
      */
-    protected tokenValueSessionId = "$PHALCON/CSRF$";
+    protected string $tokenValueSessionId = '$PHALCON/CSRF$';
 
     /**
      * @var int
      */
-    protected workFactor = 10 { get };
-
-    /**
-     * @var SessionInterface|null
-     */
-    private localSession = null;
+    protected int $workFactor = 10;
 
     /**
      * @var RequestInterface|null
      */
-    private localRequest = null;
+    private ?RequestInterface $localRequest = null;
 
     /**
-     * Phalcon\Security constructor
+     * @var SessionInterface|null
      */
-    public function __construct(<SessionInterface> session = null, <RequestInterface> request = null)
-    {
-        let this->random       = new Random(),
-            this->localRequest = request,
-            this->localSession = session;
+    private ?SessionInterface $localSession = null;
+
+    /**
+     * Security constructor.
+     *
+     * @param SessionInterface|null $session
+     * @param RequestInterface|null $request
+     */
+    public function __construct(
+        SessionInterface $session = null,
+        RequestInterface $request = null
+    ) {
+        $this->random       = new Random();
+        $this->localRequest = $request;
+        $this->localSession = $session;
     }
 
     /**
      * Checks a plain text password and its hash version to check if the
      * password matches
+     *
+     * @param string $password
+     * @param string $passwordHash
+     * @param int    $maxPassLength
+     *
+     * @return bool
      */
-    public function checkHash(string password, string passwordHash, int maxPassLength = 0) -> bool
-    {
-        char ch;
-        string cryptedHash;
-        int i, sum, cryptedLength, passwordLength;
-
-        if maxPassLength > 0 && strlen(password) > maxPassLength {
+    public function checkHash(
+        string $password,
+        string $passwordHash,
+        int $maxPassLength = 0
+    ): bool {
+        if ($maxPassLength > 0 && mb_strlen($password) > $maxPassLength) {
             return false;
         }
 
-        let cryptedHash = (string) crypt(password, passwordHash);
+        $cryptedHash    = crypt($password, $passwordHash);
+        $cryptedLength  = mb_strlen($cryptedHash);
+        $passwordLength = mb_strlen($passwordHash);
 
-        let cryptedLength = strlen(cryptedHash),
-            passwordLength = strlen(passwordHash);
+        $cryptedHash .= $passwordHash;
+        $sum         = $cryptedLength - $passwordLength;
+        $passArray   = str_split($passwordHash);
+        $cryptArray  = str_split($cryptedHash);
 
-        let cryptedHash .= passwordHash;
-
-        let sum = cryptedLength - passwordLength;
-
-        for i, ch in passwordHash {
-            let sum = sum | (cryptedHash[i] ^ ch);
+        foreach ($passArray as $index => $character) {
+            $sum = $sum | ($cryptArray[$index] ^ $character);
         }
 
-        return 0 === sum;
+        return 0 === $sum;
     }
 
     /**
      * Check if the CSRF token sent in the request is the same that the current
      * in session
+     *
+     * @param string|null $tokenKey
+     * @param mixed|null  $tokenValue
+     * @param bool        $destroyIfValid
+     *
+     * @return bool
+     * @throws Exception
      */
-    public function checkToken(var tokenKey = null, var tokenValue = null, bool destroyIfValid = true) -> bool
-    {
-        var session, request, equals, userToken, knownToken;
-
-        let session = this->getLocalSession();
-
-        if likely session && !tokenKey {
-            let tokenKey = session->get(
-                this->tokenKeySessionId
-            );
+    public function checkToken(
+        string $tokenKey = null,
+        $tokenValue = null,
+        bool $destroyIfValid = true
+    ): bool {
+        /** @var SessionInterface|null $session */
+        $session = $this->getLocalService('session', 'localSession');
+        if (null !== $session && true === empty($tokenKey)) {
+            $tokenKey = $session->get($this->tokenKeySessionId);
         }
 
         /**
          * If tokenKey does not exist in session return false
          */
-        if !tokenKey {
+        if (true === empty($tokenKey)) {
             return false;
         }
 
-        if !tokenValue {
-            let request = this->getLocalRequest();
+        $userToken = $tokenValue;
+        if (null !== $tokenValue) {
+            /** @var RequestInterface|null $request */
+            $request = $this->getLocalService('request', 'localRequest');
 
             /**
              * We always check if the value is correct in post
              */
-            let userToken = request->getPost(tokenKey, "string");
-        } else {
-            let userToken = tokenValue;
+            if (null !== $request) {
+                /** @var string|null $userToken */
+                $userToken = $request->getPost($tokenKey, 'string');
+            }
         }
 
         /**
          * The value is the same?
          */
-        let knownToken = this->getRequestToken();
-
-        if null === knownToken {
+        $knownToken = $this->getRequestToken();
+        if (null === $knownToken || null === $userToken) {
             return false;
         }
 
-        let equals = hash_equals(knownToken, userToken);
+        $equals = hash_equals($knownToken, $userToken);
 
         /**
          * Remove the key and value of the CSRF token in session
          */
-        if equals && destroyIfValid {
-            this->destroyToken();
+        if (true === $equals && true === $destroyIfValid) {
+            $this->destroyToken();
         }
 
-        return equals;
+        return $equals;
     }
 
     /**
      * Computes a HMAC
+     *
+     * @param string $data
+     * @param string $key
+     * @param string $algo
+     * @param bool   $raw
+     *
+     * @return string
+     * @throws Exception
      */
-    public function computeHmac(string data, string key, string algo, bool raw = false) -> string
-    {
-        var hmac;
-
-        let hmac = hash_hmac(algo, data, key, raw);
-
-        if unlikely !hmac {
-            throw new Exception(
-                sprintf(
-                    "Unknown hashing algorithm: %s",
-                    algo
-                )
-            );
+    public function computeHmac(
+        string $data,
+        string $key,
+        string $algo,
+        bool $raw = false
+    ): string {
+        $hmac = hash_hmac($algo, $data, $key, $raw);
+        if (false === $hmac) {
+            throw new Exception('Unknown hashing algorithm: ' . $algo);
         }
 
-        return hmac;
+        return $hmac;
     }
 
     /**
      * Removes the value of the CSRF token and key from session
+     *
+     * @return $this
      */
-    public function destroyToken() -> <Security>
+    public function destroyToken(): Security
     {
-        var session;
-
-        let session = this->getLocalSession();
-
-        if likely session {
-            session->remove(this->tokenKeySessionId);
-            session->remove(this->tokenValueSessionId);
+        /** @var SessionInterface|null $session */
+        $session = $this->getLocalService('session', 'localSession');
+        if (null !== $session) {
+            $session->remove($this->tokenKeySessionId);
+            $session->remove($this->tokenValueSessionId);
         }
 
-        let this->token        = null,
-            this->tokenKey     = null,
-            this->requestToken = null;
+        $this->token        = null;
+        $this->tokenKey     = null;
+        $this->requestToken = null;
 
-        return this;
+        return $this;
     }
 
     /**
-      * Returns the default hash
-      */
-    public function getDefaultHash() -> int | null
+     * Returns the default hash
+     *
+     * @return int
+     */
+    public function getDefaultHash(): int
     {
-        return this->defaultHash;
+        return $this->defaultHash;
     }
 
     /**
      * Returns a secure random number generator instance
+     *
+     * @return Random
      */
-    public function getRandom() -> <Random>
+    public function getRandom(): Random
     {
-        return this->random;
+        return $this->random;
     }
 
     /**
      * Returns a number of bytes to be generated by the openssl pseudo random
      * generator
+     *
+     * @return int
      */
-    public function getRandomBytes() -> int
+    public function getRandomBytes(): int
     {
-        return this->numberBytes;
+        return $this->numberBytes;
     }
 
     /**
      * Returns the value of the CSRF token for the current request.
+     *
+     * @return string|null
      */
-    public function getRequestToken() -> string | null
+    public function getRequestToken(): ?string
     {
-        if empty this->requestToken {
-            return this->getSessionToken();
+        if (true === empty($this->requestToken)) {
+            return $this->getSessionToken();
         }
 
-        return this->requestToken;
+        return $this->requestToken;
     }
 
     /**
      * Returns the value of the CSRF token in session
+     *
+     * @return string|null
      */
-    public function getSessionToken() -> string | null
+    public function getSessionToken(): ?string
     {
-        var session;
-
-        let session = this->getLocalSession();
-
-        if likely session {
-            return session->get(this->tokenValueSessionId);
+        /** @var SessionInterface|null $session */
+        $session = $this->getLocalService('session', 'localSession');
+        if (null !== $session) {
+            return $session->get($this->tokenValueSessionId);
         }
 
         return null;
@@ -301,172 +347,131 @@ class Security
     /**
      * Generate a >22-length pseudo random string to be used as salt for
      * passwords
+     *
+     * @param int $numberBytes
+     *
+     * @return string
+     * @throws Exception
      */
-    public function getSaltBytes(int numberBytes = 0) -> string
+    public function getSaltBytes(int $numberBytes = 0): string
     {
-        var safeBytes;
-
-        if !numberBytes {
-            let numberBytes = (int) this->numberBytes;
-        }
-
-        loop {
-            let safeBytes = this->random->base64Safe(numberBytes);
-
-            if safeBytes && strlen(safeBytes) >= numberBytes {
+        while (true) {
+            $safeBytes = $this->random->base64Safe($numberBytes);
+            if ($safeBytes && mb_strlen($safeBytes) >= $numberBytes) {
                 break;
             }
         }
 
-        return safeBytes;
+        return $safeBytes;
     }
 
     /**
      * Generates a pseudo random token value to be used as input's value in a
      * CSRF check
+     *
+     * @return string
+     * @throws Exception
      */
-    public function getToken() -> string
+    public function getToken(): string
     {
-        var session;
+        if (null === $this->token) {
+            $this->requestToken = $this->getSessionToken();
+            $this->token        = $this->random->base64Safe($this->numberBytes);
 
-        if null === this->token {
-            let this->requestToken = this->getSessionToken(),
-                this->token        = this->random->base64Safe(this->numberBytes);
-
-
-            let session = this->getLocalSession();
-
-            if likely session {
-                session->set(
-                    this->tokenValueSessionId,
-                    this->token
+            /** @var SessionInterface|null $session */
+            $session = $this->getLocalService('session', 'localSession');
+            if (null !== $session) {
+                $session->set(
+                    $this->tokenValueSessionId,
+                    $this->token
                 );
             }
         }
 
-        return this->token;
+        return $this->token;
     }
 
     /**
      * Generates a pseudo random token key to be used as input's name in a CSRF
      * check
+     *
+     * @return string|null
+     * @throws Exception
      */
-    public function getTokenKey() -> string
+    public function getTokenKey(): ?string
     {
-        var session;
-
-        if null === this->tokenKey {
-            let session = this->getLocalSession();
-
-            if likely session {
-                let this->tokenKey = this->random->base64Safe(this->numberBytes);
-                session->set(
-                    this->tokenKeySessionId,
-                    this->tokenKey
+        if (null === $this->tokenKey) {
+            /** @var SessionInterface|null $session */
+            $session = $this->getLocalService('session', 'localSession');
+            if (null !== $session) {
+                $this->tokenKey = $this->random->base64Safe($this->numberBytes);
+                $session->set(
+                    $this->tokenKeySessionId,
+                    $this->tokenKey
                 );
             }
         }
 
-        return this->tokenKey;
+        return $this->tokenKey;
+    }
+
+    /**
+     * @return int
+     */
+    public function getWorkFactor(): int
+    {
+        return $this->workFactor;
     }
 
     /**
      * Creates a password hash using bcrypt with a pseudo random salt
+     *
+     * @param string $password
+     * @param int    $workFactor
+     *
+     * @return string
      */
-    public function hash(string password, int workFactor = 0) -> string
+    public function hash(string $password, int $workFactor = 10): string
     {
-        int hash;
-        string variant;
-        var saltBytes;
-
-        if !workFactor {
-            let workFactor = (int) this->workFactor;
-        }
-
-        let hash = (int) this->defaultHash;
-
-        switch hash {
-
-            case self::CRYPT_BLOWFISH_A:
-                let variant = "a";
-                break;
-
-            case self::CRYPT_BLOWFISH_X:
-                let variant = "x";
-                break;
-
-            case self::CRYPT_BLOWFISH_Y:
-                let variant = "y";
-                break;
-
-            case self::CRYPT_MD5:
-                let variant = "1";
-                break;
-
-            case self::CRYPT_SHA256:
-                let variant = "5";
-                break;
-
-            case self::CRYPT_SHA512:
-                let variant = "6";
-                break;
-
-            case self::CRYPT_DEFAULT:
-            default:
-                let variant = "y";
-                break;
-        }
-
-        switch hash {
-
-            case self::CRYPT_STD_DES:
-            case self::CRYPT_EXT_DES:
-
+        try {
+            $workFactor = ($workFactor >= 4) ? $workFactor : 4;
+            $workFactor = ($workFactor <= 31) ? $workFactor : 31;
+            $formatted  = sprintf('%02s', $workFactor);
+            $map        = [
                 /*
                  * Standard DES-based hash with a two character salt from the
                  * alphabet "./0-9A-Za-z".
                  */
-
-                if hash == self::CRYPT_EXT_DES {
-                    let saltBytes = "_" . this->getSaltBytes(8);
-                } else {
-                    let saltBytes = this->getSaltBytes(2);
-                }
-
-                if unlikely typeof saltBytes != "string" {
-                    throw new Exception(
-                        "Unable to get random bytes for the salt"
-                    );
-                }
-
-                return crypt(password, saltBytes);
-
-            case self::CRYPT_MD5:
-            case self::CRYPT_SHA256:
-            case self::CRYPT_SHA512:
+                self::CRYPT_STD_DES    => [
+                    'prefix' => '_',
+                    'bytes'  => 2,
+                    'suffix' => '',
+                ],
+                self::CRYPT_EXT_DES    => [
+                    'prefix' => '',
+                    'bytes'  => 8,
+                    'suffix' => '',
+                ],
 
                 /*
                  * MD5 hashing with a twelve character salt
                  * SHA-256/SHA-512 hash with a sixteen character salt.
                  */
-
-                let saltBytes = this->getSaltBytes(hash == self::CRYPT_MD5 ? 12 : 16);
-
-                if unlikely typeof saltBytes != "string" {
-                    throw new Exception(
-                        "Unable to get random bytes for the salt"
-                    );
-                }
-
-                return crypt(
-                    password, "$" . variant . "$"  . saltBytes . "$"
-                );
-
-            case self::CRYPT_DEFAULT:
-            case self::CRYPT_BLOWFISH:
-            case self::CRYPT_BLOWFISH_X:
-            case self::CRYPT_BLOWFISH_Y:
-            default:
+                self::CRYPT_MD5        => [
+                    'prefix' => '$1$',
+                    'bytes'  => 12,
+                    'suffix' => '$',
+                ],
+                self::CRYPT_SHA256     => [
+                    'prefix' => '$5$',
+                    'bytes'  => 16,
+                    'suffix' => '$',
+                ],
+                self::CRYPT_SHA512     => [
+                    'prefix' => '$6$',
+                    'bytes'  => 16,
+                    'suffix' => '$',
+                ],
 
                 /*
                  * Blowfish hashing with a salt as follows: "$2a$", "$2x$" or
@@ -478,110 +483,111 @@ class Security
                  * Blowfish-based hashing algorithm and must be in range 04-31,
                  * values outside this range will cause crypt() to fail.
                  */
+                self::CRYPT_BLOWFISH_A => [
+                    'prefix' => '$2a$' . $formatted . '$',
+                    'bytes'  => 22,
+                    'suffix' => '$',
+                ],
+                self::CRYPT_BLOWFISH_X => [
+                    'prefix' => '$2x$' . $formatted . '$',
+                    'bytes'  => 22,
+                    'suffix' => '$',
+                ],
+                self::CRYPT_BLOWFISH_Y => [
+                    'prefix' => '$2y$' . $formatted . '$',
+                    'bytes'  => 22,
+                    'suffix' => '$',
+                ],
+                self::CRYPT_DEFAULT    => [
+                    'prefix' => '$2y$' . $formatted . '$',
+                    'bytes'  => 22,
+                    'suffix' => '$',
+                ],
+            ];
 
-                let saltBytes = this->getSaltBytes(22);
 
-                if unlikely typeof saltBytes != "string" {
-                    throw new Exception(
-                        "Unable to get random bytes for the salt"
-                    );
-                }
+            $option    = $map[$this->defaultHash] ?? $map[self::CRYPT_DEFAULT];
+            $numBytes  = $option['bytes'];
+            $saltBytes = $this->getSaltBytes($numBytes);
+            $salt      = $option['prefix'] . $saltBytes . $option['suffix'];
 
-                if workFactor < 4 {
-                    let workFactor = 4;
-                } elseif workFactor > 31 {
-                    let workFactor = 31;
-                }
-
-                return crypt(
-                    password,
-                    "$2" . variant . "$" . sprintf("%02s", workFactor) . "$" . saltBytes . "$"
-                );
+            return crypt($password, $salt);
+        } catch (\Exception $ex) {
+            return '';
         }
-
-        return "";
     }
 
     /**
      * Checks if a password hash is a valid bcrypt's hash
+     *
+     * @param string $passwordHash
+     *
+     * @return bool
      */
-    public function isLegacyHash(string passwordHash) -> bool
+    public function isLegacyHash(string $passwordHash): bool
     {
-        return starts_with(passwordHash, "$2a$");
+        return $this->toStartsWith($passwordHash, '$2a$');
     }
 
     /**
-      * Sets the default hash
-      */
-    public function setDefaultHash(int defaultHash) -> <Security>
+     * Sets the default hash
+     *
+     * @param int $defaultHash
+     *
+     * @return Security
+     */
+    public function setDefaultHash(int $defaultHash): Security
     {
-        let this->defaultHash = defaultHash;
+        $this->defaultHash = $defaultHash;
 
-        return this;
+        return $this;
     }
 
     /**
      * Sets a number of bytes to be generated by the openssl pseudo random
      * generator
+     *
+     * @param int $randomBytes
+     *
+     * @return Security
      */
-    public function setRandomBytes(int! randomBytes) -> <Security>
+    public function setRandomBytes(int $randomBytes): Security
     {
-        let this->numberBytes = randomBytes;
+        $this->numberBytes = $randomBytes;
 
-        return this;
+        return $this;
     }
 
     /**
      * Sets the work factor
+     *
+     * @param int $workFactor
+     *
+     * @return $this
      */
-    public function setWorkFactor(int workFactor) -> <Security>
+    public function setWorkFactor(int $workFactor): Security
     {
-        let this->workFactor = workFactor;
+        $this->workFactor = $workFactor;
 
-        return this;
+        return $this;
     }
 
-    private function getLocalRequest() -> <RequestInterface> | null
+    /**
+     * @param string $name
+     * @param string $property
+     *
+     * @return RequestInterface|SessionInterface|null
+     */
+    private function getLocalService(string $name, string $property)
     {
-        var container;
-
-        if this->localRequest {
-            return this->localRequest;
+        if (
+            null === $this->$property &&
+            null !== $this->container &&
+            true === $this->container->has($name)
+        ) {
+            $this->$property = $this->container->getShared($name);
         }
 
-        let container = <DiInterface> this->container;
-        if unlikely typeof container != "object" {
-            throw new Exception(
-                Exception::containerServiceNotFound("the 'request' service")
-            );
-        }
-
-        if likely container->has("request") {
-            return <RequestInterface> container->getShared("request");
-        }
-
-        return null;
-    }
-
-    private function getLocalSession() -> <SessionInterface> | null
-    {
-        var container;
-
-        if this->localSession {
-            return this->localSession;
-        }
-
-        let container = <DiInterface> this->container;
-        if unlikely typeof container != "object" {
-            throw new Exception(
-                Exception::containerServiceNotFound("the 'session' service")
-            );
-        }
-
-        if likely container->has("session") {
-            return <SessionInterface> container->getShared("session");
-        }
-
-        return null;
+        return $this->$property;
     }
 }
