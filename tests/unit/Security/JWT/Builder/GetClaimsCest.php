@@ -15,12 +15,20 @@ use Phalcon\Security\JWT\Builder;
 use Phalcon\Security\JWT\Signer\Hmac;
 use UnitTester;
 
+/**
+ * Class GetClaimsCest
+ *
+ * @package Phalcon\Tests\Unit\Security\JWT\Builder
+ */
 class GetClaimsCest
 {
     /**
      * Unit Tests Phalcon\Security\JWT\Builder :: getClaims()
      *
-     * @since  2019-12-22
+     * @param UnitTester $I
+     *
+     * @author Phalcon Team <team@phalcon.io>
+     * @since  2020-09-09
      */
     public function httpJWTBuilderGetClaims(UnitTester $I)
     {

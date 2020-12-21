@@ -19,6 +19,11 @@ use Phalcon\Security\JWT\Token\Signature;
 use Phalcon\Tests\Fixtures\Traits\JWTTrait;
 use UnitTester;
 
+/**
+ * Class ParseCest
+ *
+ * @package Phalcon\Tests\Unit\Security\JWT\Token\Parser
+ */
 class ParseCest
 {
     use JWTTrait;
@@ -26,7 +31,10 @@ class ParseCest
     /**
      * Unit Tests Phalcon\Security\JWT\Token\Parser :: parse()
      *
-     * @since  2019-12-22
+     * @param UnitTester $I
+     *
+     * @author Phalcon Team <team@phalcon.io>
+     * @since  2020-09-09
      */
     public function httpJWTTokenParserParse(UnitTester $I)
     {
@@ -69,7 +77,10 @@ class ParseCest
     /**
      * Unit Tests Phalcon\Security\JWT\Token\Parser :: parse() - no signature
      *
-     * @since  2019-12-22
+     * @param UnitTester $I
+     *
+     * @author Phalcon Team <team@phalcon.io>
+     * @since  2020-09-09
      */
     public function httpJWTTokenParserParseNoSignature(UnitTester $I)
     {
@@ -112,9 +123,13 @@ class ParseCest
     }
 
     /**
-     * Unit Tests Phalcon\Security\JWT\Token\Parser :: parse() - aud not an array
+     * Unit Tests Phalcon\Security\JWT\Token\Parser :: parse() - aud not an
+     * array
      *
-     * @since  2019-12-22
+     * @param UnitTester $I
+     *
+     * @author Phalcon Team <team@phalcon.io>
+     * @since  2020-09-09
      */
     public function httpJWTTokenParserParseAudNotAnArray(UnitTester $I)
     {
@@ -162,10 +177,13 @@ class ParseCest
     }
 
     /**
-     * Unit Tests Phalcon\Security\JWT\Token\Parser :: parse() - exception claims
-     * not array
+     * Unit Tests Phalcon\Security\JWT\Token\Parser :: parse() - exception
+     * claims not array
      *
-     * @since  2019-12-22
+     * @param UnitTester $I
+     *
+     * @author Phalcon Team <team@phalcon.io>
+     * @since  2020-09-09
      */
     public function httpJWTTokenParserParseExceptionClaimsNotArray(UnitTester $I)
     {
@@ -188,10 +206,13 @@ class ParseCest
     }
 
     /**
-     * Unit Tests Phalcon\Security\JWT\Token\Parser :: parse() - exception headers
-     * not array
+     * Unit Tests Phalcon\Security\JWT\Token\Parser :: parse() - exception
+     * headers not array
      *
-     * @since  2019-12-22
+     * @param UnitTester $I
+     *
+     * @author Phalcon Team <team@phalcon.io>
+     * @since  2020-09-09
      */
     public function httpJWTTokenParserParseExceptionHeadersNotArray(UnitTester $I)
     {
@@ -217,9 +238,13 @@ class ParseCest
     }
 
     /**
-     * Unit Tests Phalcon\Security\JWT\Token\Parser :: parse() - exception no typ
+     * Unit Tests Phalcon\Security\JWT\Token\Parser :: parse() - exception no
+     * typ
      *
-     * @since  2019-12-22
+     * @param UnitTester $I
+     *
+     * @author Phalcon Team <team@phalcon.io>
+     * @since  2020-09-09
      */
     public function httpJWTTokenParserParseExceptionNoTyp(UnitTester $I)
     {
@@ -246,9 +271,13 @@ class ParseCest
     }
 
     /**
-     * Unit Tests Phalcon\Security\JWT\Token\Parser :: parse() - exception wrong JWT
+     * Unit Tests Phalcon\Security\JWT\Token\Parser :: parse() - exception
+     * wrong JWT
      *
-     * @since  2019-12-22
+     * @param UnitTester $I
+     *
+     * @author Phalcon Team <team@phalcon.io>
+     * @since  2020-09-09
      */
     public function httpJWTTokenParserParseExceptionWrongJwt(UnitTester $I)
     {

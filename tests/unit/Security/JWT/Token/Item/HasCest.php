@@ -14,12 +14,20 @@ namespace Phalcon\Tests\Unit\Security\JWT\Token\Item;
 use Phalcon\Security\JWT\Token\Item;
 use UnitTester;
 
+/**
+ * Class HasCest
+ *
+ * @package Phalcon\Tests\Unit\Security\JWT\Token\Item
+ */
 class HasCest
 {
     /**
      * Unit Tests Phalcon\Security\JWT\Token\Item :: has()
      *
-     * @since  2019-12-22
+     * @param UnitTester $I
+     *
+     * @author Phalcon Team <team@phalcon.io>
+     * @since  2020-09-09
      */
     public function httpJWTTokenItemHas(UnitTester $I)
     {

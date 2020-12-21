@@ -18,6 +18,11 @@ use Phalcon\Security\JWT\Token\Token;
 use Phalcon\Tests\Fixtures\Traits\JWTTrait;
 use UnitTester;
 
+/**
+ * Class GetTokenCest
+ *
+ * @package Phalcon\Tests\Unit\Security\JWT\Builder
+ */
 class GetTokenCest
 {
     use JWTTrait;
@@ -25,7 +30,10 @@ class GetTokenCest
     /**
      * Unit Tests Phalcon\Security\JWT\Builder :: getToken()
      *
-     * @since  2019-12-19
+     * @param UnitTester $I
+     *
+     * @author Phalcon Team <team@phalcon.io>
+     * @since  2020-09-09
      */
     public function httpJWTBuilderGetToken(UnitTester $I)
     {
@@ -42,7 +50,10 @@ class GetTokenCest
     /**
      * Unit Tests Phalcon\Security\JWT\Builder :: getToken() - exception
      *
-     * @since  2019-12-19
+     * @param UnitTester $I
+     *
+     * @author Phalcon Team <team@phalcon.io>
+     * @since  2020-09-09
      */
     public function httpJWTBuilderGetTokenException(UnitTester $I)
     {

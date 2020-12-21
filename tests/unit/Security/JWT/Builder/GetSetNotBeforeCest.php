@@ -16,12 +16,20 @@ use Phalcon\Security\JWT\Exceptions\ValidatorException;
 use Phalcon\Security\JWT\Signer\Hmac;
 use UnitTester;
 
+/**
+ * Class GetSetNotBeforeCest
+ *
+ * @package Phalcon\Tests\Unit\Security\JWT\Builder
+ */
 class GetSetNotBeforeCest
 {
     /**
      * Unit Tests Phalcon\Security\JWT\Builder :: getNotBefore()/setNotBefore()
      *
-     * @since  2019-12-15
+     * @param UnitTester $I
+     *
+     * @author Phalcon Team <team@phalcon.io>
+     * @since  2020-09-09
      */
     public function httpJWTBuilderGetSetNotBefore(UnitTester $I)
     {
@@ -41,7 +49,10 @@ class GetSetNotBeforeCest
     /**
      * Unit Tests Phalcon\Security\JWT\Builder :: setNotBefore() - exception
      *
-     * @since  2019-12-15
+     * @param UnitTester $I
+     *
+     * @author Phalcon Team <team@phalcon.io>
+     * @since  2020-09-09
      */
     public function httpJWTBuilderSetNotBefore(UnitTester $I)
     {

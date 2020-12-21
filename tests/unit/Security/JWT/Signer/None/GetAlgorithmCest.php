@@ -14,12 +14,20 @@ namespace Phalcon\Tests\Unit\Security\JWT\Signer\None;
 use Phalcon\Security\JWT\Signer\None;
 use UnitTester;
 
+/**
+ * Class GetAlgorithmCest
+ *
+ * @package Phalcon\Tests\Unit\Security\JWT\Signer\None
+ */
 class GetAlgorithmCest
 {
     /**
      * Unit Tests Phalcon\Security\JWT\Signer\None :: getAlgorithm()
      *
-     * @since  2019-12-22
+     * @param UnitTester $I
+     *
+     * @author Phalcon Team <team@phalcon.io>
+     * @since  2020-09-09
      */
     public function httpJWTSignerNoneGetAlgorithm(UnitTester $I)
     {

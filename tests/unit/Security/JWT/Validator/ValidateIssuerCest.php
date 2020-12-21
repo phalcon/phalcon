@@ -16,6 +16,11 @@ use Phalcon\Security\JWT\Validator;
 use Phalcon\Tests\Fixtures\Traits\JWTTrait;
 use UnitTester;
 
+/**
+ * Class ValidateIssuerCest
+ *
+ * @package Phalcon\Tests\Unit\Security\JWT\Validator
+ */
 class ValidateIssuerCest
 {
     use JWTTrait;
@@ -23,7 +28,10 @@ class ValidateIssuerCest
     /**
      * Unit Tests Phalcon\Security\JWT\Validator :: validateIssuer()
      *
-     * @since  2019-12-22
+     * @param UnitTester $I
+     *
+     * @author Phalcon Team <team@phalcon.io>
+     * @since  2020-09-09
      */
     public function httpJWTValidatorValidateIssuer(UnitTester $I)
     {

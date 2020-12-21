@@ -14,12 +14,20 @@ namespace Phalcon\Tests\Unit\Security\JWT\Token\Item;
 use Phalcon\Security\JWT\Token\Item;
 use UnitTester;
 
+/**
+ * Class ConstructCest
+ *
+ * @package Phalcon\Tests\Unit\Security\JWT\Token\Item
+ */
 class ConstructCest
 {
     /**
      * Unit Tests Phalcon\Security\JWT\Token\Item :: __construct()
      *
-     * @since  2019-12-22
+     * @param UnitTester $I
+     *
+     * @author Phalcon Team <team@phalcon.io>
+     * @since  2020-09-09
      */
     public function httpJWTTokenItemConstruct(UnitTester $I)
     {

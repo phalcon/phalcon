@@ -14,12 +14,20 @@ namespace Phalcon\Tests\Unit\Security\JWT\Signer\None;
 use Phalcon\Security\JWT\Signer\None;
 use UnitTester;
 
+/**
+ * Class ConstructCest
+ *
+ * @package Phalcon\Tests\Unit\Security\JWT\Signer\None
+ */
 class ConstructCest
 {
     /**
      * Unit Tests Phalcon\Security\JWT\Signer\None :: __construct()
      *
-     * @since  2019-12-15
+     * @param UnitTester $I
+     *
+     * @author Phalcon Team <team@phalcon.io>
+     * @since  2020-09-09
      */
     public function httpJWTSignerNoneConstruct(UnitTester $I)
     {

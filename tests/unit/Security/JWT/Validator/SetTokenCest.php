@@ -17,6 +17,11 @@ use Phalcon\Security\JWT\Validator;
 use Phalcon\Tests\Fixtures\Traits\JWTTrait;
 use UnitTester;
 
+/**
+ * Class SetTokenCest
+ *
+ * @package Phalcon\Tests\Unit\Security\JWT\Validator
+ */
 class SetTokenCest
 {
     use JWTTrait;
@@ -24,7 +29,10 @@ class SetTokenCest
     /**
      * Unit Tests Phalcon\Security\JWT\Validator :: setToken()
      *
-     * @since  2019-12-22
+     * @param UnitTester $I
+     *
+     * @author Phalcon Team <team@phalcon.io>
+     * @since  2020-09-09
      */
     public function httpJWTValidatorSetToken(UnitTester $I)
     {

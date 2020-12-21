@@ -16,13 +16,21 @@ use Phalcon\Security\JWT\Exceptions\ValidatorException;
 use Phalcon\Security\JWT\Signer\Hmac;
 use UnitTester;
 
+/**
+ * Class GetSetExpirationTimeCest
+ *
+ * @package Phalcon\Tests\Unit\Security\JWT\Builder
+ */
 class GetSetExpirationTimeCest
 {
     /**
      * Unit Tests Phalcon\Security\JWT\Builder ::
      * getExpirationTime()/setExpirationTime()
      *
-     * @since  2019-12-15
+     * @param UnitTester $I
+     *
+     * @author Phalcon Team <team@phalcon.io>
+     * @since  2020-09-09
      */
     public function httpJWTBuilderGetSetExpirationTime(UnitTester $I)
     {
@@ -44,7 +52,10 @@ class GetSetExpirationTimeCest
      * Unit Tests Phalcon\Security\JWT\Builder ::
      * getExpirationTime()/setExpirationTime() - exception
      *
-     * @since  2019-12-15
+     * @param UnitTester $I
+     *
+     * @author Phalcon Team <team@phalcon.io>
+     * @since  2020-09-09
      */
     public function httpJWTBuilderGetSetExpirationTimeException(UnitTester $I)
     {
