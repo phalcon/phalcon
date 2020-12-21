@@ -21,8 +21,8 @@ use Phalcon\Support\Str\Traits\StartsWithTrait;
 
 use function crypt;
 use function mb_strlen;
+use function password_verify;
 use function sprintf;
-use function str_split;
 
 /**
  * This component provides a set of functions to improve the security in Phalcon
@@ -63,11 +63,9 @@ class Security implements InjectionAwareInterface
     public const CRYPT_BLOWFISH_A = 5;
     public const CRYPT_BLOWFISH_X = 6;
     public const CRYPT_BLOWFISH_Y = 7;
-    public const CRYPT_EXT_DES    = 2;
     public const CRYPT_MD5        = 3;
     public const CRYPT_SHA256     = 8;
     public const CRYPT_SHA512     = 9;
-    public const CRYPT_STD_DES    = 1;
 
     /**
      * @var int
@@ -157,21 +155,25 @@ class Security implements InjectionAwareInterface
         if ($maxPassLength > 0 && mb_strlen($password) > $maxPassLength) {
             return false;
         }
-
-        $cryptedHash    = crypt($password, $passwordHash);
-        $cryptedLength  = mb_strlen($cryptedHash);
-        $passwordLength = mb_strlen($passwordHash);
-
-        $cryptedHash .= $passwordHash;
-        $sum         = $cryptedLength - $passwordLength;
-        $passArray   = str_split($passwordHash);
-        $cryptArray  = str_split($cryptedHash);
-
-        foreach ($passArray as $index => $character) {
-            $sum = $sum | ($cryptArray[$index] ^ $character);
-        }
-
-        return 0 === $sum;
+        return password_verify($password, $passwordHash);
+//        $cryptedLength  = mb_strlen($cryptedHash);
+//        $passwordLength = mb_strlen($passwordHash);
+//
+//        $cryptedHash .= $passwordHash;
+//        $sum         = $cryptedLength - $passwordLength;
+//        $passArray   = str_split($passwordHash);
+//        $cryptArray  = str_split($cryptedHash);
+//        var_dump('-------------------------------------');
+//        foreach ($passArray as $index => $character) {
+//            var_dump($index);
+//            var_dump($character);
+//            var_dump($sum);
+//            var_dump($cryptArray[$index]);
+//            $sum = $sum | ($cryptArray[$index] ^ $character);
+//        }
+//        var_dump('-------------------------------------');
+//
+//        return 0 === $sum;
     }
 
     /**
@@ -204,7 +206,7 @@ class Security implements InjectionAwareInterface
         }
 
         $userToken = $tokenValue;
-        if (null !== $tokenValue) {
+        if (null === $tokenValue) {
             /** @var RequestInterface|null $request */
             $request = $this->getLocalService('request', 'localRequest');
 
@@ -224,7 +226,6 @@ class Security implements InjectionAwareInterface
         if (null === $knownToken || null === $userToken) {
             return false;
         }
-
         $equals = hash_equals($knownToken, $userToken);
 
         /**
@@ -438,21 +439,6 @@ class Security implements InjectionAwareInterface
             $workFactor = ($workFactor <= 31) ? $workFactor : 31;
             $formatted  = sprintf('%02s', $workFactor);
             $map        = [
-                /*
-                 * Standard DES-based hash with a two character salt from the
-                 * alphabet "./0-9A-Za-z".
-                 */
-                self::CRYPT_STD_DES    => [
-                    'prefix' => '_',
-                    'bytes'  => 2,
-                    'suffix' => '',
-                ],
-                self::CRYPT_EXT_DES    => [
-                    'prefix' => '',
-                    'bytes'  => 8,
-                    'suffix' => '',
-                ],
-
                 /*
                  * MD5 hashing with a twelve character salt
                  * SHA-256/SHA-512 hash with a sixteen character salt.
