@@ -17,13 +17,20 @@ use Codeception\Example;
 use Phalcon\Security\Random;
 use UnitTester;
 
+/**
+ * Class Base64SafeCest
+ *
+ * @package Phalcon\Tests\Unit\Security\Random
+ */
 class Base64SafeCest
 {
     /**
      * Tests Phalcon\Security\Random :: base64Safe()
      *
-     * @author       Phalcon Team <team@phalcon.io>
-     * @since        2018-11-13
+     * @param UnitTester $I
+     *
+     * @author Phalcon Team <team@phalcon.io>
+     * @since  2020-09-09
      *
      * @dataProvider securityRandomBase64SafeProvider
      */
@@ -43,6 +50,9 @@ class Base64SafeCest
         );
     }
 
+    /**
+     * @return array[]
+     */
     private function securityRandomBase64SafeProvider(): array
     {
         return [
