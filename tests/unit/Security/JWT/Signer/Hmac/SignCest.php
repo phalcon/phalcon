@@ -16,12 +16,20 @@ use UnitTester;
 
 use function hash_hmac;
 
+/**
+ * Class SignCest
+ *
+ * @package Phalcon\Tests\Unit\Security\JWT\Signer\Hmac
+ */
 class SignCest
 {
     /**
      * Unit Tests Phalcon\Security\JWT\Signer\Hmac :: sign()
      *
-     * @since  2019-12-15
+     * @param UnitTester $I
+     *
+     * @author Phalcon Team <team@phalcon.io>
+     * @since  2020-09-09
      */
     public function httpJWTSignerHmacSign(UnitTester $I)
     {

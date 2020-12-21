@@ -17,6 +17,11 @@ use Phalcon\Security\JWT\Exceptions\ValidatorException;
 use Phalcon\Security\JWT\Signer\Hmac;
 use UnitTester;
 
+/**
+ * Class GetSetPassphraseCest
+ *
+ * @package Phalcon\Tests\Unit\Security\JWT\Builder
+ */
 class GetSetPassphraseCest
 {
     /**
@@ -24,7 +29,11 @@ class GetSetPassphraseCest
      *
      * @throws ValidatorException
      * @throws UnsupportedAlgorithmException
-     * @since  2019-12-19
+     *
+     * @param UnitTester $I
+     *
+     * @author Phalcon Team <team@phalcon.io>
+     * @since  2020-09-09
      */
     public function httpJWTBuilderGetSetPassphrase(UnitTester $I)
     {
@@ -42,7 +51,10 @@ class GetSetPassphraseCest
     /**
      * Unit Tests Phalcon\Security\JWT\Builder :: setPassphrase() - exception
      *
-     * @since  2019-12-15
+     * @param UnitTester $I
+     *
+     * @author Phalcon Team <team@phalcon.io>
+     * @since  2020-09-09
      */
     public function httpJWTBuilderSetPassphraseException(UnitTester $I)
     {

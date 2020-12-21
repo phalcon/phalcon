@@ -14,12 +14,20 @@ namespace Phalcon\Tests\Unit\Security\JWT\Signer\Hmac;
 use Phalcon\Security\JWT\Signer\Hmac;
 use UnitTester;
 
+/**
+ * Class GetAlgHeaderCest
+ *
+ * @package Phalcon\Tests\Unit\Security\JWT\Signer\Hmac
+ */
 class GetAlgHeaderCest
 {
     /**
      * Unit Tests Phalcon\Security\JWT\Signer\Hmac :: getAlgHeader()
      *
-     * @since  2019-12-19
+     * @param UnitTester $I
+     *
+     * @author Phalcon Team <team@phalcon.io>
+     * @since  2020-09-09
      */
     public function httpJWTSignerHmacGetAlgHeader(UnitTester $I)
     {

@@ -15,12 +15,20 @@ use Phalcon\Security\JWT\Builder;
 use Phalcon\Security\JWT\Signer\Hmac;
 use UnitTester;
 
+/**
+ * Class GetHeadersCest
+ *
+ * @package Phalcon\Tests\Unit\Security\JWT\Builder
+ */
 class GetHeadersCest
 {
     /**
      * Unit Tests Phalcon\Security\JWT\Builder :: getHeaders()
      *
-     * @since  2019-12-19
+     * @param UnitTester $I
+     *
+     * @author Phalcon Team <team@phalcon.io>
+     * @since  2020-09-09
      */
     public function httpJWTBuilderGetHeaders(UnitTester $I)
     {

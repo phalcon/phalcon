@@ -14,12 +14,20 @@ namespace Phalcon\Tests\Unit\Security\JWT\Token\Signature;
 use Phalcon\Security\JWT\Token\Signature;
 use UnitTester;
 
+/**
+ * Class UnderscoreCallCest
+ *
+ * @package Phalcon\Tests\Unit\Security\JWT\Token\Signature
+ */
 class UnderscoreCallCest
 {
     /**
      * Unit Tests Phalcon\Security\JWT\Token\Signature :: __call()
      *
-     * @since  2019-12-22
+     * @param UnitTester $I
+     *
+     * @author Phalcon Team <team@phalcon.io>
+     * @since  2020-09-09
      */
     public function httpJWTTokenSignatureUnderscoreCall(UnitTester $I)
     {

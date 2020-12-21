@@ -15,6 +15,11 @@ use Phalcon\Security\JWT\Validator;
 use Phalcon\Tests\Fixtures\Traits\JWTTrait;
 use UnitTester;
 
+/**
+ * Class ConstructCest
+ *
+ * @package Phalcon\Tests\Unit\Security\JWT\Validator
+ */
 class ConstructCest
 {
     use JWTTrait;
@@ -22,7 +27,10 @@ class ConstructCest
     /**
      * Unit Tests Phalcon\Security\JWT\Validator :: __construct()
      *
-     * @since  2019-12-22
+     * @param UnitTester $I
+     *
+     * @author Phalcon Team <team@phalcon.io>
+     * @since  2020-09-09
      */
     public function httpJWTValidatorConstruct(UnitTester $I)
     {
