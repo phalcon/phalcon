@@ -17,13 +17,20 @@ use Exception;
 use Phalcon\Security\Random;
 use UnitTester;
 
+/**
+ * Class NumberCest
+ *
+ * @package Phalcon\Tests\Unit\Security\Random
+ */
 class NumberCest
 {
     /**
      * Tests Phalcon\Security\Random :: number()
      *
+     * @param UnitTester $I
+     *
      * @author Phalcon Team <team@phalcon.io>
-     * @since  2018-11-13
+     * @since  2020-09-09
      */
     public function securityRandomNumber(UnitTester $I)
     {
@@ -51,7 +58,6 @@ class NumberCest
         $randNumber = $random->number($maxRand);
 
         $I->assertGreaterOrEquals(0, $randNumber);
-
         $I->assertLessOrEquals($maxRand, $randNumber);
 
 
@@ -59,7 +65,6 @@ class NumberCest
         $randNumber = $random->number($maxRand);
 
         $I->assertGreaterOrEquals(0, $randNumber);
-
         $I->assertLessOrEquals($maxRand, $randNumber);
 
 

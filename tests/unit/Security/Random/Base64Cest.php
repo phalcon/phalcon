@@ -19,13 +19,20 @@ use UnitTester;
 
 use function is_string;
 
+/**
+ * Class Base64Cest
+ *
+ * @package Phalcon\Tests\Unit\Security\Random
+ */
 class Base64Cest
 {
     /**
      * Tests Phalcon\Security\Random :: base64()
      *
-     * @author       Phalcon Team <team@phalcon.io>
-     * @since        2018-11-13
+     * @param UnitTester $I
+     *
+     * @author Phalcon Team <team@phalcon.io>
+     * @since  2020-09-09
      *
      * @dataProvider securityRandomBase64Provider
      */
@@ -68,6 +75,9 @@ class Base64Cest
         return strlen($string) == $len;
     }
 
+    /**
+     * @return \int[][]
+     */
     private function securityRandomBase64Provider(): array
     {
         return [

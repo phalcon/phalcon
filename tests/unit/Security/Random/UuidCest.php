@@ -16,13 +16,20 @@ namespace Phalcon\Tests\Unit\Security\Random;
 use Phalcon\Security\Random;
 use UnitTester;
 
+/**
+ * Class UuidCest
+ *
+ * @package Phalcon\Tests\Unit\Security\Random
+ */
 class UuidCest
 {
     /**
      * Tests Phalcon\Security\Random :: uuid()
      *
+     * @param UnitTester $I
+     *
      * @author Phalcon Team <team@phalcon.io>
-     * @since  2018-11-13
+     * @since  2020-09-09
      */
     public function securityRandomUuid(UnitTester $I)
     {
@@ -43,8 +50,10 @@ class UuidCest
     /**
      * Tests Phalcon\Security\Random :: uuid() produces different results
      *
+     * @param UnitTester $I
+     *
      * @author Phalcon Team <team@phalcon.io>
-     * @since  2018-11-13
+     * @since  2020-09-09
      */
     public function securityRandomUuidDifferentResults(UnitTester $I)
     {

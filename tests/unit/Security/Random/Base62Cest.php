@@ -16,13 +16,20 @@ namespace Phalcon\Tests\Unit\Security\Random;
 use Phalcon\Security\Random;
 use UnitTester;
 
+/**
+ * Class Base62Cest
+ *
+ * @package Phalcon\Tests\Unit\Security\Random
+ */
 class Base62Cest
 {
     /**
      * Tests Phalcon\Security\Random :: base62()
      *
+     * @param UnitTester $I
+     *
      * @author Phalcon Team <team@phalcon.io>
-     * @since  2018-11-13
+     * @since  2020-09-09
      */
     public function securityRandomBase62(UnitTester $I)
     {

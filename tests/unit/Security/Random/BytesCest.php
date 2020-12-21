@@ -18,13 +18,20 @@ use UnitTester;
 
 use function strlen;
 
+/**
+ * Class BytesCest
+ *
+ * @package Phalcon\Tests\Unit\Security\Random
+ */
 class BytesCest
 {
     /**
      * Tests Phalcon\Security\Random :: bytes()
      *
+     * @param UnitTester $I
+     *
      * @author Phalcon Team <team@phalcon.io>
-     * @since  2018-11-13
+     * @since  2020-09-09
      */
     public function securityRandomBytes(UnitTester $I)
     {
