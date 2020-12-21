@@ -14,15 +14,17 @@ declare(strict_types=1);
 namespace Phalcon\Tests\Unit\Di\FactoryDefault;
 
 use Codeception\Example;
+use Phalcon\Assets\Manager as ManagerAssets;
+use Phalcon\Crypt\Crypt;
 use Phalcon\Di\FactoryDefault;
-use Phalcon\Html\Escaper;
 use Phalcon\Events\Manager as EventsManager;
 use Phalcon\Filter\Filter;
+use Phalcon\Html\Escaper;
+use Phalcon\Html\TagFactory;
+use Phalcon\Security\Security;
 use UnitTester;
 
 //use Phalcon\Annotations\Adapter\Memory as MemoryAnnotations;
-//use Phalcon\Assets\Manager as ManagerAssets;
-//use Phalcon\Crypt;
 //use Phalcon\Filter;
 //use Phalcon\Flash\Direct;
 //use Phalcon\Flash\Session;
@@ -34,7 +36,6 @@ use UnitTester;
 //use Phalcon\Mvc\Model\MetaData\Memory;
 //use Phalcon\Mvc\Model\Transaction\Manager;
 //use Phalcon\Mvc\Router;
-//use Phalcon\Security;
 //use Phalcon\Tag;
 //use Phalcon\Url;
 
@@ -48,7 +49,7 @@ class ConstructCest
     /**
      * Tests Phalcon\Di\FactoryDefault :: __construct()
      *
-     * @param  UnitTester $I
+     * @param UnitTester $I
      *
      * @author Phalcon Team <team@phalcon.io>
      * @since  2019-09-09
@@ -70,10 +71,10 @@ class ConstructCest
      *
      * @dataProvider getServices
      *
-     * @param  UnitTester $I
+     * @param UnitTester $I
      *
-     * @author Phalcon Team <team@phalcon.io>
-     * @since  2019-09-09
+     * @author       Phalcon Team <team@phalcon.io>
+     * @since        2019-09-09
      */
     public function diFactoryDefaultConstructServices(UnitTester $I, Example $example)
     {
@@ -98,21 +99,41 @@ class ConstructCest
     private function getServices(): array
     {
         return [
+            [
+                'service' => 'assets',
+                'class'   => ManagerAssets::class,
+            ],
+            [
+                'service' => 'crypt',
+                'class'   => Crypt::class,
+            ],
+            [
+                'service' => 'escaper',
+                'class'   => Escaper::class,
+            ],
+            [
+                'service' => 'eventsManager',
+                'class'   => EventsManager::class,
+            ],
+            [
+                'service' => 'filter',
+                'class'   => Filter::class,
+            ],
+            [
+                'service' => 'security',
+                'class'   => Security::class,
+            ],
+            [
+                'service' => 'tagFactory',
+                'class'   => TagFactory::class,
+            ],
+        ];
+    }
+
 //            [
 //                'service' => 'annotations',
 //                'class'   => MemoryAnnotations::class,
 //            ],
-//
-//            [
-//                'service' => 'assets',
-//                'class'   => ManagerAssets::class,
-//            ],
-//
-//            [
-//                'service' => 'crypt',
-//                'class'   => Crypt::class,
-//            ],
-//
 //            [
 //                'service' => 'cookies',
 //                'class'   => Cookies::class,
@@ -122,14 +143,6 @@ class ConstructCest
 //                'service' => 'dispatcher',
 //                'class'   => Dispatcher::class,
 //            ],
-        [
-        'service' => 'escaper',
-        'class'   => Escaper::class,
-        ],
-        [
-        'service' => 'eventsManager',
-        'class'   => EventsManager::class,
-        ],
 //            [
 //                'service' => 'flash',
 //                'class'   => Direct::class,
@@ -140,10 +153,6 @@ class ConstructCest
 //                'class'   => Session::class,
 //            ],
 //
-            [
-                'service' => 'filter',
-                'class'   => Filter::class,
-            ],
 //
 //            [
 //                'service' => 'modelsManager',
@@ -171,16 +180,6 @@ class ConstructCest
 //            ],
 //
 //            [
-//                'service' => 'security',
-//                'class'   => Security::class,
-//            ],
-//
-//            [
-//                'service' => 'tag',
-//                'class'   => Tag::class,
-//            ],
-//
-//            [
 //                'service' => 'transactionManager',
 //                'class'   => Manager::class,
 //            ],
@@ -189,6 +188,5 @@ class ConstructCest
 //                'service' => 'url',
 //                'class'   => Url::class,
 //            ],
-        ];
-    }
+
 }

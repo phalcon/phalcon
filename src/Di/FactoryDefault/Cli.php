@@ -18,6 +18,7 @@ use Phalcon\Di\Service;
 use Phalcon\Html\Escaper;
 use Phalcon\Events\Manager as EventsManager;
 use Phalcon\Filter\FilterFactory;
+use Phalcon\Security\Security;
 
 /**
  * Phalcon\Di\FactoryDefault\Cli
@@ -42,6 +43,7 @@ class Cli extends FactoryDefault
             'escaper'       => new Service(Escaper::class, true),
             'eventsManager' => new Service(EventsManager::class, true),
             'filter'        => new Service($filter->newInstance(), true),
+            'security'      => new Service(Security::class, true),
         ];
 //        let this->services = [
 //            "annotations":        new Service("Phalcon\\Annotations\\Adapter\\Memory", true),
@@ -50,7 +52,6 @@ class Cli extends FactoryDefault
 //            "modelsManager":      new Service("Phalcon\\Mvc\\Model\\Manager", true),
 //            "modelsMetadata":     new Service("Phalcon\\Mvc\\Model\\MetaData\\Memory", true),
 //            "router":             new Service("Phalcon\\Cli\\Router", true),
-//            "security":           new Service("Phalcon\\Security", true),
 //            "transactionManager": new Service("Phalcon\\Mvc\\Model\\Transaction\\Manager", true)
 //        ];
     }

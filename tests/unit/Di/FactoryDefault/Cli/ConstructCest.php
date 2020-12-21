@@ -18,6 +18,7 @@ use Phalcon\Di\FactoryDefault\Cli;
 use Phalcon\Html\Escaper;
 use Phalcon\Events\Manager as EventsManager;
 use Phalcon\Filter\Filter;
+use Phalcon\Security\Security;
 use UnitTester;
 
 /**
@@ -85,6 +86,10 @@ class ConstructCest
             [
                 'service' => 'filter',
                 'class'   => Filter::class,
+            ],
+            [
+                'service' => 'security',
+                'class'   => Security::class,
             ],
         ];
     }
