@@ -369,10 +369,10 @@ class Builder
     public function setPassphrase(string $passphrase): Builder
     {
         if (
-        !preg_match(
-            "/(?=^.{16,}$)((?=.*\d)|(?=.*\W+))(?![.\n])(?=.*[A-Z])(?=.*[a-z]).*$/",
-            $passphrase
-        )
+            !preg_match(
+                "/(?=^.{16,}$)((?=.*\d)|(?=.*\W+))(?![.\n])(?=.*[A-Z])(?=.*[a-z]).*$/",
+                $passphrase
+            )
         ) {
             throw new ValidatorException('Invalid passphrase (too weak)');
         }

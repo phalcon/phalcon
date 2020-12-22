@@ -188,5 +188,4 @@ class ConstructCest
 //                'service' => 'url',
 //                'class'   => Url::class,
 //            ],
-
 }
