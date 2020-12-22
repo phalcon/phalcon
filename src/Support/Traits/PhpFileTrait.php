@@ -13,10 +13,12 @@ declare(strict_types=1);
 
 namespace Phalcon\Support\Traits;
 
+use function fclose;
 use function file_exists;
 use function file_get_contents;
 use function file_put_contents;
 use function fopen;
+use function fwrite;
 use function is_writable;
 use function unlink;
 
@@ -27,19 +29,6 @@ use function unlink;
  */
 trait PhpFileTrait
 {
-    /**
-     * @param string   $filename
-     * @param string   $mode
-     *
-     * @return resource|false
-     *
-     * @link https://php.net/manual/en/function.fopen.php
-     */
-    protected function phpFopen($filename, $mode)
-    {
-        return fopen($filename, $mode);
-    }
-
     /**
      * @param string $filename
      *
@@ -83,6 +72,19 @@ trait PhpFileTrait
         return file_put_contents($filename, $data, $flags, $context);
     }
 
+    /**
+     * Closes an open file pointer
+     *
+     * @link https://php.net/manual/en/function.fclose.php
+     *
+     * @param resource $handle
+     *
+     * @return bool
+     */
+    public function phpFclose($handle)
+    {
+        return fclose($handle);
+    }
 
     /**
      * Gets line from file pointer and parse for CSV fields
@@ -105,6 +107,35 @@ trait PhpFileTrait
         $escape = '\\'
     ) {
         return fgetcsv($stream, $length, $separator, $enclosure, $escape);
+    }
+
+
+    /**
+     * @param string   $filename
+     * @param string   $mode
+     *
+     * @return resource|false
+     *
+     * @link https://php.net/manual/en/function.fopen.php
+     */
+    protected function phpFopen($filename, $mode)
+    {
+        return fopen($filename, $mode);
+    }
+
+    /**
+     * Binary-safe file write
+     *
+     * @link https://php.net/manual/en/function.fwrite.php
+     *
+     * @param resource $handle
+     * @param string   $data
+     *
+     * @return int|false
+     */
+    protected function phpFwrite($handle, string $data)
+    {
+        return fwrite($handle, $data);
     }
 
     /**
