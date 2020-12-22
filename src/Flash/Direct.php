@@ -35,8 +35,6 @@ class Direct extends AbstractFlash
 
     /**
      * Prints the messages accumulated in the flasher
-     *
-     * @param bool $remove
      */
     public function output(bool $remove = true): void
     {

@@ -13,14 +13,8 @@ declare(strict_types=1);
 
 namespace Phalcon\Flash\Traits;
 
-use Phalcon\Di\Traits\InjectionAwareTrait;
-use Phalcon\Escaper\EscaperInterface;
+use Phalcon\Html\EscaperInterface;
 use Phalcon\Session\ManagerInterface as SessionInterface;
-use function is_array;
-use function is_object;
-use function is_string;
-use function join;
-
 
 /**
  * Class AbstractFlash

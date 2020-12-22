@@ -14,7 +14,7 @@ declare(strict_types=1);
 namespace Phalcon\Flash;
 
 /**
- * Exceptions thrown in Phalcon\Flash calsses will use this class
+ * Exceptions thrown in Phalcon\Flash classes will use this class
  */
 class Exception extends \Exception
 {
