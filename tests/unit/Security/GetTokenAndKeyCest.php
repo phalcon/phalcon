@@ -75,6 +75,6 @@ class GetTokenAndKeyCest
 
         $security->destroyToken();
 
-        $session->destroy();;
+        $session->destroy();
     }
 }

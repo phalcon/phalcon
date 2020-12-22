@@ -45,8 +45,6 @@ class ConstructCest
     public function testSecurityConstants(UnitTester $I)
     {
         $I->assertEquals(0, Security::CRYPT_DEFAULT);
-        $I->assertEquals(1, Security::CRYPT_STD_DES);
-        $I->assertEquals(2, Security::CRYPT_EXT_DES);
         $I->assertEquals(3, Security::CRYPT_MD5);
         $I->assertEquals(4, Security::CRYPT_BLOWFISH);
         $I->assertEquals(5, Security::CRYPT_BLOWFISH_A);
