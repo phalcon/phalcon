@@ -14,6 +14,7 @@ declare(strict_types=1);
 namespace Phalcon\Security\JWT\Signer;
 
 use Phalcon\Security\JWT\Exceptions\UnsupportedAlgorithmException;
+
 use function hash_equals;
 use function hash_hmac;
 use function str_replace;
