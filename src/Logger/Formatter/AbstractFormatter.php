@@ -14,6 +14,7 @@ declare(strict_types=1);
 namespace Phalcon\Logger\Formatter;
 
 use Phalcon\Logger\Item;
+use Phalcon\Support\Str\Traits\InterpolateTrait;
 
 /**
  * Class AbstractFormatter
@@ -22,6 +23,8 @@ use Phalcon\Logger\Item;
  */
 abstract class AbstractFormatter implements FormatterInterface
 {
+    use InterpolateTrait;
+
     /**
      * Default date format
      *
@@ -49,16 +52,7 @@ abstract class AbstractFormatter implements FormatterInterface
      */
     public function interpolate(string $message, array $context = [])
     {
-        if (empty($context)) {
-            return $message;
-        }
-
-        $replace = [];
-        foreach ($context as $key => $value) {
-            $replace['{' . $key . '}'] = $value;
-        }
-
-        return strtr($message, $replace);
+        return $this->toInterpolate($message, $context);
     }
 
     /**
