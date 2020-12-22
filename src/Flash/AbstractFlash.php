@@ -13,20 +13,14 @@ declare(strict_types=1);
 
 namespace Phalcon\Flash;
 
+use Phalcon\Di\InjectionAwareInterface;
 use Phalcon\Di\Traits\InjectionAwareTrait;
-use Phalcon\Escaper\EscaperInterface;
 use Phalcon\Flash\Traits\FlashGettersTrait;
+use Phalcon\Html\EscaperInterface;
 use Phalcon\Session\ManagerInterface as SessionInterface;
-
-use function is_array;
-use function is_string;
-use function join;
+use Phalcon\Support\Str\Traits\InterpolateTrait;
 
 /**
- * Class AbstractFlash
- *
- * @package Phalcon\Flash
- *
  * Shows HTML notifications related to different circumstances. Classes can be
  * stylized using CSS
  *
@@ -35,10 +29,11 @@ use function join;
  * $flash->error("Cannot open the file");
  *```
  */
-abstract class AbstractFlash implements FlashInterface
+abstract class AbstractFlash implements FlashInterface, InjectionAwareInterface
 {
-    use InjectionAwareTrait;
     use FlashGettersTrait;
+    use InjectionAwareTrait;
+    use InterpolateTrait;
 
     /**
      * AbstractFlash constructor.
@@ -89,15 +84,19 @@ abstract class AbstractFlash implements FlashInterface
             return $this->escaperService;
         }
 
-        if (null === $this->container) {
-            $this->throwContainerException('the "escaper" service');
+        if (
+            null !== $this->container &&
+            true === $this->container->has('escaper')
+        ) {
+            $this->escaperService = $this->container->getShared('escaper');
+
+            return $this->escaperService;
         }
 
-        if (true !== $this->container->has('escaper')) {
-            $this->throwContainerException('the "escaper" service');
-        }
-
-        return $this->container->getShared('escaper');
+        throw new Exception(
+            'A dependency injection container is required to access ' .
+            'the "escaper" service'
+        );
     }
 
     /**
@@ -121,9 +120,9 @@ abstract class AbstractFlash implements FlashInterface
      *
      * @param bool $autoescape
      *
-     * @return FlashInterface
+     * @return $this
      */
-    public function setAutoescape(bool $autoescape): FlashInterface
+    public function setAutoescape(bool $autoescape): AbstractFlash
     {
         $this->autoescape = $autoescape;
 
@@ -135,9 +134,9 @@ abstract class AbstractFlash implements FlashInterface
      *
      * @param bool $automaticHtml
      *
-     * @return FlashInterface
+     * @return $this
      */
-    public function setAutomaticHtml(bool $automaticHtml): FlashInterface
+    public function setAutomaticHtml(bool $automaticHtml): AbstractFlash
     {
         $this->automaticHtml = $automaticHtml;
 
@@ -149,9 +148,9 @@ abstract class AbstractFlash implements FlashInterface
      *
      * @param array $cssClasses
      *
-     * @return FlashInterface
+     * @return $this
      */
-    public function setCssClasses(array $cssClasses): FlashInterface
+    public function setCssClasses(array $cssClasses): AbstractFlash
     {
         $this->cssClasses = $cssClasses;
 
@@ -163,9 +162,9 @@ abstract class AbstractFlash implements FlashInterface
      *
      * @param string $customTemplate
      *
-     * @return FlashInterface
+     * @return $this
      */
-    public function setCustomTemplate(string $customTemplate): FlashInterface
+    public function setCustomTemplate(string $customTemplate): AbstractFlash
     {
         $this->customTemplate = $customTemplate;
 
@@ -177,9 +176,9 @@ abstract class AbstractFlash implements FlashInterface
      *
      * @param EscaperInterface $escaperService
      *
-     * @return FlashInterface
+     * @return $this
      */
-    public function setEscaperService(EscaperInterface $escaperService): FlashInterface
+    public function setEscaperService(EscaperInterface $escaperService): AbstractFlash
     {
         $this->escaperService = $escaperService;
 
@@ -192,9 +191,9 @@ abstract class AbstractFlash implements FlashInterface
      *
      * @param bool $implicitFlush
      *
-     * @return FlashInterface
+     * @return $this
      */
-    public function setImplicitFlush(bool $implicitFlush): FlashInterface
+    public function setImplicitFlush(bool $implicitFlush): AbstractFlash
     {
         $this->implicitFlush = $implicitFlush;
 
@@ -230,7 +229,7 @@ abstract class AbstractFlash implements FlashInterface
      * @return string|null
      * @throws Exception
      */
-    public function outputMessage(string $type, $message)
+    public function outputMessage(string $type, $message): ?string
     {
         $content = '';
 
@@ -297,10 +296,10 @@ abstract class AbstractFlash implements FlashInterface
     {
         if ('' === $this->customTemplate) {
             if ('' === $cssClassses) {
-                return '<div>%message%</div>' . PHP_EOL;
+                return '<div>{message}</div>' . PHP_EOL;
             }
 
-            return '<div class="%cssClass%">%message%</div>' . PHP_EOL;
+            return '<div class="{cssClass}">{message}</div>' . PHP_EOL;
         }
 
         return $this->customTemplate;
@@ -323,7 +322,7 @@ abstract class AbstractFlash implements FlashInterface
 
         $escaper = $this->getEscaperService();
 
-        return $escaper->escapeHtml($message);
+        return $escaper->html($message);
     }
 
     /**
@@ -350,28 +349,12 @@ abstract class AbstractFlash implements FlashInterface
             $replaceCss = join(' ', $replaceCss);
         }
 
-        return str_replace(
+        return $this->toInterpolate(
+            $this->getTemplate($replaceCss),
             [
-                "%cssClass%",
-                "%message%",
-            ],
-            [
-                $replaceCss,
-                $message,
-            ],
-            $this->getTemplate($replaceCss)
-        );
-    }
-
-    /**
-     * @param string $message
-     *
-     * @throws Exception
-     */
-    protected function throwContainerException(string $message): void
-    {
-        throw new Exception(
-            'A dependency injection container is required to access ' . $message
+                'cssClass' => $replaceCss,
+                'message'  => $message,
+            ]
         );
     }
 }

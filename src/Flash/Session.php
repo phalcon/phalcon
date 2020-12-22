@@ -15,9 +15,6 @@ namespace Phalcon\Flash;
 
 use Phalcon\Session\ManagerInterface;
 
-use function is_array;
-use function is_string;
-
 /**
  * This is an implementation of the Phalcon\Flash\FlashInterface that
  * temporarily stores the messages in session, then messages can be printed in
@@ -180,14 +177,18 @@ class Session extends AbstractFlash
             return $this->sessionService;
         }
 
-        if (null === $this->container) {
-            $this->throwContainerException('the "session" service');
+        if (
+            null !== $this->container &&
+            true === $this->container->has('session')
+        ) {
+            $this->sessionService = $this->container->getShared('escaper');
+
+            return $this->sessionService;
         }
 
-        if (true !== $this->container->has('session')) {
-            $this->throwContainerException('the "session" service');
-        }
-
-        return $this->container->getShared('session');
+        throw new Exception(
+            'A dependency injection container is required to access ' .
+            'the "session" service'
+        );
     }
 }
