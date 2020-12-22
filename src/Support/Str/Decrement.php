@@ -44,8 +44,8 @@ class Decrement
         $parts  = explode($separator, $text);
         $parts  = !is_array($parts) ? [] : $parts;
 
-        if (isset($parts[1])) {
-            $number = $parts[1];
+        if (true === isset($parts[1])) {
+            $number = (int) $parts[1];
             $number--;
             if ($number <= 0) {
                 return $parts[0];

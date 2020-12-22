@@ -645,10 +645,10 @@ class Memory extends AbstractAdapter
      * $acl->isAllowed("guests", "*", "edit");
      * ```
      *
-     * @param mixed      $roleName
-     * @param mixed      $componentName
-     * @param string     $access
-     * @param array|null $parameters
+     * @param mixed  $roleName
+     * @param mixed  $componentName
+     * @param string $access
+     * @param array  $parameters
      *
      * @return bool
      * @throws Exception

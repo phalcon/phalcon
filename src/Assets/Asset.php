@@ -315,9 +315,9 @@ class Asset implements AssetInterface
     /**
      * Gets the asset's version.
      *
-     * @return string
+     * @return string|null
      */
-    public function getVersion(): string
+    public function getVersion(): ?string
     {
         return $this->version;
     }

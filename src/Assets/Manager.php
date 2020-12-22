@@ -699,9 +699,10 @@ class Manager implements InjectionAwareInterface
      *
      * @param string|null $name
      *
-     * @return string
+     * @return string|null
+     * @throws Exception
      */
-    public function outputCss(string $name = null): string
+    public function outputCss(string $name = null): ?string
     {
         $collection = $this->getCss();
         if (null !== $name) {
@@ -815,9 +816,10 @@ class Manager implements InjectionAwareInterface
      *
      * @param string|null $name
      *
-     * @return string
+     * @return string|null
+     * @throws Exception
      */
-    public function outputJs(string $name = null): string
+    public function outputJs(string $name = null): ?string
     {
         $collection = $this->getJs();
         if (true !== empty($name)) {
