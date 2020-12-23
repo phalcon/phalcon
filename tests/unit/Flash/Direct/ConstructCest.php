@@ -36,7 +36,7 @@ class ConstructCest
     {
         $I->wantToTest('Flash\Direct - __construct()');
 
-        $direct = new Direct();
-        $I->assertInstanceOf(FlashInterface::class, $direct);
+        $flash = new Direct();
+        $I->assertInstanceOf(FlashInterface::class, $flash);
     }
 }
