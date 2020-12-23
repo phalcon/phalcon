@@ -13,7 +13,7 @@ declare(strict_types=1);
 
 namespace Phalcon\Tests\Unit\Flash\Direct\Helper;
 
-use Phalcon\Escaper\Escaper;
+use Phalcon\Html\Escaper;
 use Phalcon\Flash\AbstractFlash;
 use Phalcon\Flash\Direct;
 use UnitTester;
