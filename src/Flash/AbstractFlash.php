@@ -28,6 +28,10 @@ use Phalcon\Support\Str\Traits\InterpolateTrait;
  * $flash->success("The record was successfully deleted");
  * $flash->error("Cannot open the file");
  *```
+ *
+ * Class AbstractFlash
+ *
+ * @package Phalcon\Flash
  */
 abstract class AbstractFlash implements FlashInterface, InjectionAwareInterface
 {

@@ -13,8 +13,10 @@ declare(strict_types=1);
 
 namespace Phalcon\Tests\Unit\Flash\Session;
 
+use Phalcon\Flash\Exception;
 use Phalcon\Flash\FlashInterface;
 use Phalcon\Flash\Session;
+use Phalcon\Tests\Fixtures\Traits\DiTrait;
 use UnitTester;
 
 /**
@@ -24,6 +26,8 @@ use UnitTester;
  */
 class ConstructCest
 {
+    use DiTrait;
+
     /**
      * Tests Phalcon\Flash\Session :: __construct()
      *
@@ -39,5 +43,32 @@ class ConstructCest
 
         $flash = new Session();
         $I->assertInstanceOf(FlashInterface::class, $flash);
+    }
+
+    /**
+     * Tests Phalcon\Flash\Session :: __construct() - no session service
+     *
+     * @param UnitTester $I
+     *
+     * @author Phalcon Team <team@phalcon.io>
+     * @since  2020-09-09
+     */
+    public function flashSessionConstructNoSessionService(UnitTester $I)
+    {
+        $I->wantToTest('Flash\Session - __construct() - no session service');
+
+        $this->setNewFactoryDefault();
+        $this->setDiService('sessionStream');
+
+        $I->expectThrowable(
+            new Exception(
+                'A dependency injection container is required to ' .
+                'access the "session" service'
+            ),
+            function () {
+                $flash = new Session();
+                $flash->getMessages();
+            }
+        );
     }
 }

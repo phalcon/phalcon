@@ -16,6 +16,7 @@ namespace Phalcon\Tests\Unit\Flash\Session;
 use Phalcon\Flash\Session;
 use Phalcon\Tests\Fixtures\Traits\DiTrait;
 use UnitTester;
+
 use function uniqid;
 
 /**

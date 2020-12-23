@@ -16,6 +16,7 @@ namespace Phalcon\Tests\Unit\Flash\Session;
 use Phalcon\Flash\Session;
 use Phalcon\Tests\Fixtures\Traits\DiTrait;
 use UnitTester;
+
 use function uniqid;
 
 /**
@@ -65,8 +66,10 @@ class GetMessagesCest
 
         $message1 = uniqid('m-');
         $message2 = uniqid('m-');
+        $message3 = uniqid('m-');
         $flash->success($message1);
         $flash->error($message2);
+        $flash->warning($message3);
 
         $expected = [$message1];
         $actual = $flash->getMessages('success', false);
@@ -74,6 +77,10 @@ class GetMessagesCest
 
         $expected = [$message2];
         $actual = $flash->getMessages('error', false);
+        $I->assertEquals($expected, $actual);
+
+        $expected = [$message3];
+        $actual = $flash->getMessages('warning', true);
         $I->assertEquals($expected, $actual);
 
         $expected = [

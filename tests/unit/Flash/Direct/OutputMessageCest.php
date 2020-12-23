@@ -18,8 +18,14 @@ use Phalcon\Flash\Direct;
 use Phalcon\Flash\Exception;
 use Phalcon\Html\Escaper;
 use UnitTester;
+
 use const PHP_EOL;
 
+/**
+ * Class OutputMessageCest
+ *
+ * @package Phalcon\Tests\Unit\Flash\Direct
+ */
 class OutputMessageCest
 {
     /**
