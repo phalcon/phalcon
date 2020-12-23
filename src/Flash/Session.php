@@ -19,6 +19,10 @@ use Phalcon\Session\ManagerInterface;
  * This is an implementation of the Phalcon\Flash\FlashInterface that
  * temporarily stores the messages in session, then messages can be printed in
  * the next request.
+ *
+ * Class Session
+ *
+ * @package Phalcon\Flash
  */
 class Session extends AbstractFlash
 {
@@ -52,18 +56,18 @@ class Session extends AbstractFlash
     /**
      * Checks whether there are messages
      *
-     * @param mixed|null $type
+     * @param string|null $type
      *
      * @return bool
      * @throws Exception
      */
-    public function has($type = null): bool
+    public function has(string $type = null): bool
     {
-        $messages = $this->getSessionMessages(false);
-
-        if (true !== is_string($type)) {
+        if (null === $type) {
             return true;
         }
+
+        $messages = $this->getSessionMessages(false);
 
         return isset($messages[$type]);
     }

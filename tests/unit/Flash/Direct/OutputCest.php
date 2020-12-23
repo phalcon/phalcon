@@ -25,6 +25,11 @@ use function ob_start;
 
 use const PHP_EOL;
 
+/**
+ * Class OutputCest
+ *
+ * @package Phalcon\Tests\Unit\Flash\Direct
+ */
 class OutputCest
 {
     /**

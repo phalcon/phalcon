@@ -14,8 +14,9 @@ declare(strict_types=1);
 namespace Phalcon\Flash;
 
 /**
- * This is an implementation of the Phalcon\Flash\FlashInterface that
- * immediately outputs any message passed to it.
+ * Class Direct
+ *
+ * @package Phalcon\Flash
  */
 class Direct extends AbstractFlash
 {

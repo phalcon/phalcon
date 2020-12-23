@@ -17,6 +17,11 @@ use Phalcon\Flash\Session;
 use Phalcon\Tests\Fixtures\Traits\DiTrait;
 use UnitTester;
 
+/**
+ * Class GetSetCustomTemplateCest
+ *
+ * @package Phalcon\Tests\Unit\Flash\Session
+ */
 class GetSetCustomTemplateCest
 {
     use DiTrait;
