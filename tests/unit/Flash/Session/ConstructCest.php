@@ -13,20 +13,31 @@ declare(strict_types=1);
 
 namespace Phalcon\Tests\Unit\Flash\Session;
 
+use Phalcon\Flash\FlashInterface;
+use Phalcon\Flash\Session;
 use UnitTester;
 
+/**
+ * Class ConstructCest
+ *
+ * @package Phalcon\Tests\Unit\Flash\Session
+ */
 class ConstructCest
 {
     /**
      * Tests Phalcon\Flash\Session :: __construct()
      *
+     * @param UnitTester $I
+     *
      * @author Phalcon Team <team@phalcon.io>
-     * @since  2018-11-13
+     * @since  2020-09-09
      */
     public function flashSessionConstruct(UnitTester $I)
     {
         $I->wantToTest('Flash\Session - __construct()');
 
-        $I->skipTest('Need implementation');
+
+        $flash = new Session();
+        $I->assertInstanceOf(FlashInterface::class, $flash);
     }
 }

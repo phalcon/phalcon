@@ -35,8 +35,8 @@ class OutputCest
      * @param UnitTester $I
      * @param Example    $example
      *
-     * @author Phalcon Team <team@phalcon.io>
-     * @since  2020-09-09
+     * @author       Phalcon Team <team@phalcon.io>
+     * @since        2020-09-09
      */
     public function flashDirectOutputCombinations(UnitTester $I, Example $example)
     {
@@ -64,7 +64,6 @@ class OutputCest
 
         $expected = $example['expected'];
         $I->assertEquals($expected, $actual);
-
     }
 
     /**
@@ -116,9 +115,9 @@ class OutputCest
      */
     private function getExamples(): array
     {
-        $message = 'sample <phalcon> message';
+        $message  = 'sample <phalcon> message';
         $template = '<span class="{cssClass}">{message}</span>';
-        $classes = [
+        $classes  = [
             'error'   => 'alert alert-error',
             'success' => 'alert alert-success',
             'notice'  => 'alert alert-notice',
@@ -155,7 +154,7 @@ class OutputCest
                 'autoHtml'   => true,
                 'autoescape' => true,
                 'implicit'   => false,
-                'template'   => $template
+                'template'   => $template,
             ],
             [
                 'label'      => 'xxxoo',
@@ -175,7 +174,7 @@ class OutputCest
                 'autoHtml'   => true,
                 'autoescape' => false,
                 'implicit'   => true,
-                'template'   => $template
+                'template'   => $template,
             ],
             [
                 'label'      => 'xxoxo',
@@ -195,7 +194,7 @@ class OutputCest
                 'autoHtml'   => true,
                 'autoescape' => false,
                 'implicit'   => false,
-                'template'   => $template
+                'template'   => $template,
             ],
             [
                 'label'      => 'xxooo',
@@ -215,7 +214,7 @@ class OutputCest
                 'autoHtml'   => false,
                 'autoescape' => true,
                 'implicit'   => true,
-                'template'   => '<span class="{cssClass}">{message}</span>'
+                'template'   => '<span class="{cssClass}">{message}</span>',
             ],
             [
                 'label'      => 'xoxxo',
