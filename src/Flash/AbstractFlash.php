@@ -264,7 +264,7 @@ abstract class AbstractFlash implements FlashInterface, InjectionAwareInterface
          * We return the message as a string if the implicitFlush is turned
          * off
          */
-        if (true === $this->implicitFlush) {
+        if (true !== $this->implicitFlush) {
             return $content;
         }
 

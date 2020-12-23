@@ -181,7 +181,7 @@ class Session extends AbstractFlash
             null !== $this->container &&
             true === $this->container->has('session')
         ) {
-            $this->sessionService = $this->container->getShared('escaper');
+            $this->sessionService = $this->container->getShared('session');
 
             return $this->sessionService;
         }
