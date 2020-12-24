@@ -16,6 +16,11 @@ namespace Phalcon\Tests\Unit\Support\Str;
 use Phalcon\Support\Str\ReduceSlashes;
 use UnitTester;
 
+/**
+ * Class ReduceSlashesCest
+ *
+ * @package Phalcon\Tests\Unit\Support\Str
+ */
 class ReduceSlashesCest
 {
     /**

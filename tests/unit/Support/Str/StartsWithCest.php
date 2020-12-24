@@ -16,6 +16,11 @@ namespace Phalcon\Tests\Unit\Support\Str;
 use Phalcon\Support\Str\StartsWith;
 use UnitTester;
 
+/**
+ * Class StartsWithCest
+ *
+ * @package Phalcon\Tests\Unit\Support\Str
+ */
 class StartsWithCest
 {
     /**

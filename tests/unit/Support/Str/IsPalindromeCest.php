@@ -16,6 +16,11 @@ namespace Phalcon\Tests\Unit\Support\Str;
 use Phalcon\Support\Str\IsPalindrome;
 use UnitTester;
 
+/**
+ * Class IsPalindromeCest
+ *
+ * @package Phalcon\Tests\Unit\Support\Str
+ */
 class IsPalindromeCest
 {
     /**

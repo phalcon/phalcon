@@ -16,6 +16,11 @@ namespace Phalcon\Tests\Unit\Support\Str;
 use Phalcon\Support\Str\Concat;
 use UnitTester;
 
+/**
+ * Class ConcatCest
+ *
+ * @package Phalcon\Tests\Unit\Support\Str
+ */
 class ConcatCest
 {
     /**

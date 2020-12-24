@@ -16,6 +16,11 @@ namespace Phalcon\Tests\Unit\Support\Str;
 use Phalcon\Support\Str\Includes;
 use UnitTester;
 
+/**
+ * Class IncludesCest
+ *
+ * @package Phalcon\Tests\Unit\Support\Str
+ */
 class IncludesCest
 {
     /**

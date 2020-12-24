@@ -17,6 +17,11 @@ use Codeception\Example;
 use Phalcon\Support\Str\Decrement;
 use UnitTester;
 
+/**
+ * Class DecrementCest
+ *
+ * @package Phalcon\Tests\Unit\Support\Str
+ */
 class DecrementCest
 {
     /**

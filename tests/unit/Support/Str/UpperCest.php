@@ -17,6 +17,11 @@ use Codeception\Example;
 use Phalcon\Support\Str\Upper;
 use UnitTester;
 
+/**
+ * Class UpperCest
+ *
+ * @package Phalcon\Tests\Unit\Support\Str
+ */
 class UpperCest
 {
     /**

@@ -20,6 +20,8 @@ use UnitTester;
 
 /**
  * Class FriendlyCest
+ *
+ * @package Phalcon\Tests\Unit\Support\Str
  */
 class FriendlyCest
 {
