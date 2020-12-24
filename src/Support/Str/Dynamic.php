@@ -15,8 +15,8 @@ namespace Phalcon\Support\Str;
 
 use Phalcon\Support\Str\Traits\EndsWithTrait;
 use Phalcon\Support\Str\Traits\StartsWithTrait;
-
 use RuntimeException;
+
 use function array_map;
 use function array_merge;
 use function end;
