@@ -35,9 +35,9 @@ abstract class AbstractApplication implements InjectionAwareInterface, EventsAwa
     use InjectionAwareTrait;
 
     /**
-     * @var string
+     * @var string|null
      */
-    protected string $defaultModule;
+    protected ?string $defaultModule = null;
 
     /**
      * @var array
@@ -57,9 +57,9 @@ abstract class AbstractApplication implements InjectionAwareInterface, EventsAwa
     /**
      * Returns the default module name
      *
-     * @return string
+     * @return string|null
      */
-    public function getDefaultModule(): string
+    public function getDefaultModule(): ?string
     {
         return $this->defaultModule;
     }
