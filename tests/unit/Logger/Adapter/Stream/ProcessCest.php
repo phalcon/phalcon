@@ -88,7 +88,7 @@ class ProcessCest
                         $outputPath . $fileName,
                     ],
                     [
-                        'fopen' => false,
+                        'phpFopen' => false,
                     ]
                 );
 
