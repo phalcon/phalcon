@@ -15,7 +15,6 @@ namespace Phalcon\Tests\Unit\Di\Injectable;
 
 use Phalcon\Di\Di;
 use Phalcon\Tests\Fixtures\Di\InjectableComponent;
-use stdClass;
 use UnitTester;
 
 /**
@@ -28,7 +27,7 @@ class GetSetDICest
     /**
      * Unit Tests Phalcon\Di\Injectable :: getDI()/setDI()
      *
-     * @param  UnitTester $I
+     * @param UnitTester $I
      *
      * @author Phalcon Team <team@phalcon.io>
      * @since  2019-09-09
@@ -42,14 +41,14 @@ class GetSetDICest
         $component = new InjectableComponent();
         $component->setDI($container);
 
-        $actual    = $component->getDI();
+        $actual = $component->getDI();
         $I->assertEquals($container, $actual);
     }
 
     /**
      * Unit Tests Phalcon\Di\Injectable :: getDI()/setDI() - constructor
      *
-     * @param  UnitTester $I
+     * @param UnitTester $I
      *
      * @author Phalcon Team <team@phalcon.io>
      * @since  2019-09-09

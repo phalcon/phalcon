@@ -18,6 +18,7 @@ use function implode;
 use function mb_strtolower;
 use function preg_split;
 use function ucfirst;
+
 use const PREG_SPLIT_DELIM_CAPTURE;
 use const PREG_SPLIT_NO_EMPTY;
 
@@ -53,7 +54,7 @@ class Camelize
             '/[' . $delimiters . ']+/',
             $text,
             -1,
-            PREG_SPLIT_DELIM_CAPTURE|PREG_SPLIT_NO_EMPTY
+            PREG_SPLIT_DELIM_CAPTURE | PREG_SPLIT_NO_EMPTY
         );
         $output     = array_map(
             function ($element) {

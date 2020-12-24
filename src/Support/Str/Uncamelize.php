@@ -24,6 +24,7 @@ use function mb_strtolower;
 use function preg_split;
 use function trim;
 use function ucfirst;
+
 use const PREG_SPLIT_DELIM_CAPTURE;
 use const PREG_SPLIT_NO_EMPTY;
 

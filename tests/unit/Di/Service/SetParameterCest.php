@@ -29,7 +29,7 @@ class SetParameterCest
     /**
      * Unit Tests Phalcon\Di\Service :: setParameter()
      *
-     * @param  UnitTester $I
+     * @param UnitTester $I
      *
      * @author Phalcon Team <team@phalcon.io>
      * @since  2019-09-09
@@ -53,10 +53,10 @@ class SetParameterCest
 
         $actual = $service->setParameter(1, ['one']);
 
-        $class  = ServiceInterface::class;
+        $class = ServiceInterface::class;
         $I->assertInstanceOf($class, $actual);
 
-        $class  = Service::class;
+        $class = Service::class;
         $I->assertInstanceOf($class, $actual);
 
         $expected = [
@@ -70,7 +70,7 @@ class SetParameterCest
     /**
      * Unit Tests Phalcon\Di\Service :: setParameter() - with arguments
      *
-     * @param  UnitTester $I
+     * @param UnitTester $I
      *
      * @author Phalcon Team <team@phalcon.io>
      * @since  2019-09-09
@@ -84,7 +84,7 @@ class SetParameterCest
                 'className' => Escaper::class,
                 'arguments' => [
                     0 => ['one'],
-                ]
+                ],
             ],
             true
         );
@@ -93,7 +93,7 @@ class SetParameterCest
             'className' => Escaper::class,
             'arguments' => [
                 0 => ['one'],
-            ]
+            ],
         ];
         $actual   = $service->getDefinition();
         $I->assertEquals($expected, $actual);
@@ -111,7 +111,7 @@ class SetParameterCest
     /**
      * Unit Tests Phalcon\Di\Service :: setParameter() - exception
      *
-     * @param  UnitTester $I
+     * @param UnitTester $I
      *
      * @author Phalcon Team <team@phalcon.io>
      * @since  2019-09-09
