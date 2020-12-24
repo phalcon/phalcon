@@ -32,7 +32,6 @@ use function htmlspecialchars;
 use function is_array;
 use function is_object;
 use function is_resource;
-use function var_dump;
 
 use const ENT_QUOTES;
 use const PHP_EOL;
