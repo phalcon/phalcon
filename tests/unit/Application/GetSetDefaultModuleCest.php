@@ -20,6 +20,7 @@ use Phalcon\Events\EventsAwareInterface;
 use Phalcon\Events\Manager;
 use Phalcon\Tests\Fixtures\Application\ApplicationFixture;
 use UnitTester;
+
 use function spl_object_hash;
 
 /**
