@@ -13,20 +13,26 @@ declare(strict_types=1);
 
 namespace Phalcon\Support\Str;
 
+use Phalcon\Support\Str\Traits\EndsWithTrait;
+use Phalcon\Support\Str\Traits\StartsWithTrait;
+
 use function array_map;
+use function array_merge;
+use function end;
 use function implode;
 use function mb_strtolower;
 use function preg_split;
+use function trim;
 use function ucfirst;
 use const PREG_SPLIT_DELIM_CAPTURE;
 use const PREG_SPLIT_NO_EMPTY;
 
 /**
- * Class Camelize
+ * Class Uncamelize
  *
  * @package Phalcon\Support\Str
  */
-class Camelize
+class Uncamelize
 {
     /**
      * Converts strings to camelize style
@@ -39,29 +45,21 @@ class Camelize
      * echo Str::camelize("co_co-bon_go", "_-");    // CoCoBonGo
      * ```
      *
-     * @param string      $text
-     * @param string|null $delimiters
+     * @param string $text
+     * @param string $delimiters
      *
      * @return string
      */
     public function __invoke(
         string $text,
-        string $delimiters = null
+        string $delimiter = '_'
     ): string {
-        $delimiters = $delimiters ?: '_-';
-        $exploded   = preg_split(
-            '/[' . $delimiters . ']+/',
-            $text,
-            -1,
-            PREG_SPLIT_DELIM_CAPTURE|PREG_SPLIT_NO_EMPTY
+        return mb_strtolower(
+            preg_replace(
+                '/[A-Z]/',
+                $delimiter . '\\0',
+                lcfirst($text)
+            )
         );
-        $output     = array_map(
-            function ($element) {
-                return ucfirst(mb_strtolower($element));
-            },
-            $exploded
-        );
-
-        return implode('', $output);
     }
 }
