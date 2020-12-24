@@ -16,6 +16,11 @@ namespace Phalcon\Tests\Unit\Support\Str;
 use Phalcon\Support\Str\IsAnagram;
 use UnitTester;
 
+/**
+ * Class IsAnagramCest
+ *
+ * @package Phalcon\Tests\Unit\Support\Str
+ */
 class IsAnagramCest
 {
     /**

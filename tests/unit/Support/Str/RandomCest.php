@@ -19,6 +19,11 @@ use UnitTester;
 
 use function strlen;
 
+/**
+ * Class RandomCest
+ *
+ * @package Phalcon\Tests\Unit\Support\Str
+ */
 class RandomCest
 {
     /**

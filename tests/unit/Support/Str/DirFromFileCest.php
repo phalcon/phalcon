@@ -16,6 +16,11 @@ namespace Phalcon\Tests\Unit\Support\Str;
 use Phalcon\Support\Str\DirFromFile;
 use UnitTester;
 
+/**
+ * Class DirFromFileCest
+ *
+ * @package Phalcon\Tests\Unit\Support\Str
+ */
 class DirFromFileCest
 {
     /**

@@ -17,6 +17,11 @@ use Phalcon\Support\Str\DirFromFile;
 use Phalcon\Support\Str\DirSeparator;
 use UnitTester;
 
+/**
+ * Class DirSeparatorCest
+ *
+ * @package Phalcon\Tests\Unit\Support\Str
+ */
 class DirSeparatorCest
 {
     /**

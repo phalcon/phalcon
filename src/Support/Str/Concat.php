@@ -36,7 +36,7 @@ class Concat
      * places concatenation
      *
      * ```php
-     * $str = Phalcon\Helper\Str::concat(
+     * $str = Phalcon\Support\Str::concat(
      *     '/',
      *     '/tmp/',
      *     '/folder_1/',

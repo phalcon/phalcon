@@ -25,7 +25,7 @@ class Decrement
      * defined
      *
      * ```php
-     * use Phalcon\Helper\Str;
+     * use Phalcon\Support\Str;
      *
      * echo Str::decrement('a_1');  // 'a'
      * echo Str::decrement('a_2');  // 'a_1'

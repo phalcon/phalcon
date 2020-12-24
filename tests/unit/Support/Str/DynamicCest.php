@@ -16,6 +16,11 @@ namespace Phalcon\Tests\Unit\Support\Str;
 use Phalcon\Support\Str\Dynamic;
 use UnitTester;
 
+/**
+ * Class DynamicCest
+ *
+ * @package Phalcon\Tests\Unit\Support\Str
+ */
 class DynamicCest
 {
     /**

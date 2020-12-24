@@ -16,6 +16,11 @@ namespace Phalcon\Tests\Unit\Support\Str;
 use Phalcon\Support\Str\IsUpper;
 use UnitTester;
 
+/**
+ * Class IsUpperCest
+ *
+ * @package Phalcon\Tests\Unit\Support\Str
+ */
 class IsUpperCest
 {
     /**
