@@ -23,7 +23,6 @@ use function crypt;
 use function mb_strlen;
 use function password_verify;
 use function sprintf;
-use function var_dump;
 
 /**
  * This component provides a set of functions to improve the security in Phalcon
@@ -177,25 +176,19 @@ class Security implements InjectionAwareInterface
     ): bool {
         /** @var SessionInterface|null $session */
         $session = $this->getLocalService('session', 'localSession');
-        var_dump('1');
         if (null !== $session && true === empty($tokenKey)) {
-            var_dump('11');
             $tokenKey = $session->get($this->tokenKeySessionId);
         }
 
         /**
          * If tokenKey does not exist in session return false
          */
-        var_dump('2');
         if (true === empty($tokenKey)) {
-            var_dump('21');
             return false;
         }
 
         $userToken = $tokenValue;
-        var_dump('3');
         if (null === $tokenValue) {
-            var_dump('31');
             /** @var RequestInterface|null $request */
             $request = $this->getLocalService('request', 'localRequest');
 
@@ -203,11 +196,8 @@ class Security implements InjectionAwareInterface
              * We always check if the value is correct in post
              */
             if (null !== $request) {
-                var_dump('32');
                 /** @var string|null $userToken */
                 $userToken = $request->getPost($tokenKey, 'string');
-                var_dump('321');
-                var_dump($userToken);
             }
         }
 
@@ -215,11 +205,7 @@ class Security implements InjectionAwareInterface
          * The value is the same?
          */
         $knownToken = $this->getRequestToken();
-        var_dump('4');
-        var_dump($knownToken);
-        var_dump($userToken);
         if (null === $knownToken || null === $userToken) {
-            var_dump('41');
             return false;
         }
         $equals = hash_equals($knownToken, $userToken);
@@ -227,10 +213,7 @@ class Security implements InjectionAwareInterface
         /**
          * Remove the key and value of the CSRF token in session
          */
-        var_dump('5');
-        var_dump($equals);
         if (true === $equals && true === $destroyIfValid) {
-            var_dump('51');
             $this->destroyToken();
         }
 
