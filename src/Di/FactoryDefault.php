@@ -16,7 +16,10 @@ namespace Phalcon\Di;
 use Phalcon\Html\Escaper;
 use Phalcon\Events\Manager as EventsManager;
 use Phalcon\Filter\FilterFactory;
-
+use Phalcon\Http\Request;
+use Phalcon\Http\Response;
+use Phalcon\Mvc\Router;
+use Phalcon\Mvc\Dispatcher;
 /**
  * This is a variant of the standard Phalcon\Di. By default it automatically
  * registers all the services provided by the framework. Thanks to this, the
@@ -38,6 +41,10 @@ class FactoryDefault extends Di
             'escaper'       => new Service(Escaper::class, true),
             'eventsManager' => new Service(EventsManager::class, true),
             'filter'        => new Service($filter->newInstance(), true),
+            'request' => new Service(Request::class, true),
+            'response' =>  new Service(Response::class, true),
+            'router' =>   new Service(Router::class, true),
+             'dispatcher' =>  new Service(Dispatcher::class, true),
         ];
 //        let filter = new FilterFactory();
 //
