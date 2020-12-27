@@ -19,7 +19,6 @@ use Phalcon\Helper\Json;
 use Phalcon\Http\Request\File;
 use Phalcon\Http\Request\FileInterface;
 use Phalcon\Http\Request\Exception;
-use Phalcon\Helper\Str;
 
 use UnexpectedValueException;
 use stdClass;
@@ -334,7 +333,7 @@ class Request extends AbstractInjectionAware implements RequestInterface
 
         foreach($server as $name => $value) {
             // Note: The starts_with uses case insensitive search here
-            if (Str::startsWith($name, "HTTP_")) {
+            if (str_starts_with($name, "HTTP_")) {
                 $name = ucwords(
                     strtolower(
                         str_replace( "_", " ",  substr($name, 5))

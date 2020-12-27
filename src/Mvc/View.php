@@ -16,7 +16,6 @@ use Phalcon\Di\DiInterface;
 use Phalcon\Di\Injectable;
 use Phalcon\Events\ManagerInterface;
 use Phalcon\Helper\Arr;
-use Phalcon\Helper\Str;
 use Phalcon\Mvc\View\Exception;
 use Phalcon\Events\EventsAwareInterface;
 use Phalcon\Mvc\View\Engine\Php as PhpEngine;
@@ -813,7 +812,10 @@ class View extends Injectable implements ViewInterface, EventsAwareInterface {
         }
 
         if (is_string($viewsDir)) {
-            $this->viewsDirs = Str::dirSeparator($viewsDir);
+            if (!str_ends_with($viewsDir,DIRECTORY_SEPARATOR)) {
+                $viewsDir .= DIRECTORY_SEPARATOR;
+            }
+            $this->viewsDirs = $viewsDir;   
         } else {
             $newViewsDir = [];
 

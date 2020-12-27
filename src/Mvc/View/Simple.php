@@ -17,7 +17,7 @@ use Phalcon\Di\Injectable;
 use Phalcon\Events\EventsAwareInterface;
 use Phalcon\Events\ManagerInterface;
 use Phalcon\Helper\Arr;
-use Phalcon\Helper\Str;
+
 use Phalcon\Mvc\ViewBaseInterface;
 use Phalcon\Mvc\View\Engine\EngineInterface;
 use Phalcon\Mvc\View\Engine\Php as PhpEngine;
@@ -343,7 +343,10 @@ class Simple extends Injectable implements ViewBaseInterface, EventsAwareInterfa
      */
     public function setViewsDir(string $viewsDir)
     {
-        $this->viewsDir = Str::dirSeparator(viewsDir);
+        if (!str_ends_with($viewsDir,DIRECTORY_SEPARATOR)) {
+            $viewsDir .= DIRECTORY_SEPARATOR;
+        }
+        $this->viewsDir = $viewsDir;
     }
 
     /**

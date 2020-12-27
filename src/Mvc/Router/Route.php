@@ -10,8 +10,6 @@
  */
 
 namespace Phalcon\Mvc\Router;
-
-use Phalcon\Helper\Str;
 use IntlChar;
 /**
  * Phalcon\Mvc\Router\Route
@@ -499,7 +497,7 @@ class Route implements RouteInterface
         /**
          * If the route starts with '#' we assume that it is a regular expression
          */
-        if (!Str::startsWith($pattern, "#")) {
+        if (!str_starts_with($pattern, "#")) {
             if (strpos($pattern, "{")!==false) {
                 /**
                  * The route has named parameters so we need to extract them
