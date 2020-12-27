@@ -28,7 +28,7 @@ use function is_object;
  * @property EventsManager|EventsManagerInterface $eventsManager
 // * @property \Phalcon\Mvc\Dispatcher|\Phalcon\Mvc\DispatcherInterface $dispatcher
 // * @property \Phalcon\Mvc\Router|\Phalcon\Mvc\RouterInterface $router
-// * @property \Phalcon\Url|\Phalcon\Url\UrlInterface $url
+// * @property \Phalcon\Url\Url|\Phalcon\Url\UrlInterface $url
 // * @property \Phalcon\Http\Request|\Phalcon\Http\RequestInterface $request
 // * @property \Phalcon\Http\Response|\Phalcon\Http\ResponseInterface $response
 // * @property \Phalcon\Http\Response\Cookies|\Phalcon\Http\Response\CookiesInterface $cookies
