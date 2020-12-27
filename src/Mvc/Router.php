@@ -96,9 +96,12 @@ class Router extends AbstractInjectionAware implements RouterInterface, EventsAw
      */
     public function __construct(bool $defaultRoutes = true) {
         $routes = [];
+        
         $this->generator = self::genId(); // return generator object
-
-        $this->generator->rewind();
+        
+        $gen = $this->generator;
+        
+        $gen->rewind();
         
         if ($defaultRoutes) {
             /**
@@ -124,7 +127,7 @@ class Router extends AbstractInjectionAware implements RouterInterface, EventsAw
                 "params" => 3
                     ]
             );
-            $this->generator->next();
+            $gen->next();
         }
 
         $this->routes = $routes;
