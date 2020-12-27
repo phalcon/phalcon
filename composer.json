@@ -17,14 +17,14 @@
     ],
     "license": "MIT",
     "require": {
-        "php": ">=7.4 <8.0",
+        "php": ">=8.0",
         "ext-apcu": "*",
         "ext-igbinary": "*",
         "ext-json": "*",
-        "ext-mbstring": "7.*",
+        "ext-mbstring": "*",
         "ext-pdo": "*",
         "ext-redis": "*",
-        "ext-xml": "^7.2",
+        "ext-xml": "*",
         "payload-interop/payload-interop": "^1.0",
         "psr/container": "^1.0",
         "psr/event-dispatcher": "^1.0",
@@ -53,7 +53,10 @@
     "config": {
         "optimize-autoloader": true,
         "preferred-install": "dist",
-        "sort-packages": true
+        "sort-packages": true,
+        "platform": {
+            "php": "8.0"
+        }
     },
     "require-dev": {
         "ext-gettext": "*",
@@ -64,11 +67,13 @@
         "codeception/module-db": "^1.0",
         "codeception/module-filesystem": "^1.0.0",
         "codeception/module-memcache": "^1.0",
+        "codeception/module-phalcon5": "^1.0",
         "codeception/module-redis": "^1.0",
         "friendsofphp/php-cs-fixer": "^2.17",
         "pds/skeleton": "^1.0",
-        "phpbench/phpbench": "^0.17.1",
+        "phpbench/phpbench": "1.0.0-alpha2",
         "phpstan/phpstan": "^0.12",
+        "phpunit/phpunit": "^9.5",
         "squizlabs/php_codesniffer": "^3.4",
         "vimeo/psalm": "^4.3",
         "vlucas/phpdotenv": "^4.0"
