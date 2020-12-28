@@ -17,8 +17,6 @@ use Phalcon\Di\Traits\InjectionAwareTrait;
 use Phalcon\Events\Manager as EventsManager;
 use Phalcon\Events\ManagerInterface as EventsManagerInterface;
 
-use function is_object;
-
 /**
  * This class allows to access services in the services container by just only
  * accessing a public property with the same name of a registered service
@@ -50,9 +48,11 @@ use function is_object;
 // * @property \Phalcon\Session\Bag|\Phalcon\Session\BagInterface $persistent
 // * @property \Phalcon\Mvc\View|\Phalcon\Mvc\ViewInterface $view
  */
+
 abstract class Injectable implements InjectionAwareInterface
 {
-    use InjectionAwareTrait;
+    // member $container in trait
+    use InjectionAwareTrait; 
 
     /**
      * Magic method __get

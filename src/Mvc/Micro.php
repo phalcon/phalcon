@@ -60,8 +60,6 @@ class Micro extends Injectable implements  ArrayAccess, EventsAwareInterface
 
     protected array $beforeHandlers = [];
 
-    protected ?Phalcon\Di\DiInterface $container;
-
     protected $errorHandler;
 
     protected ?ManagerInterface $eventsManager;
