@@ -1832,7 +1832,8 @@ class Manager implements ManagerInterface, InjectionAwareInterface, EventsAwareI
      */
     public function __destruct()
     {
-        phalcon_orm_destroy_cache();
+        //TODO: What is stored and When is this needed?
+        //phalcon_orm_destroy_cache();
 
         Query::clean();
     }

@@ -64,9 +64,9 @@ interface RelationInterface
     /**
      * Returns parameters that must be always used when the related records are obtained
      *
-     * @return array
+     * @return array|bool
      */
-    public function getParams() : array;
+    public function getParams() : array|bool;
 
     /**
      * Returns the referenced fields
@@ -106,6 +106,6 @@ interface RelationInterface
      * @param string|array intermediateFields
      * @param string|array intermediateReferencedFields
      */
-    public function setIntermediateRelation($intermediateFields, 
-        string $intermediateModel, $intermediateReferencedFields) : void;
+    public function setIntermediateRelation(string|array $intermediateFields, 
+        string $intermediateModel, string|array $intermediateReferencedFields) : void;
 }
