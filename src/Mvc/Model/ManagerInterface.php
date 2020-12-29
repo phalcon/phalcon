@@ -193,7 +193,8 @@ interface ManagerInterface
      * @param ModelInterface    $record
      * @param string|null       $method
      */
-    public function getHasOneRecords(string $modelName, string $modelRelation, ModelInterface $record, parameters = null, string method = null) : ModelInterface | bool;
+    public function getHasOneRecords(string $modelName, string $modelRelation, 
+        ModelInterface $record, $parameters = null, string $method = null) : ModelInterface | bool;
 
     /**
      * Get last initialized model
@@ -261,7 +262,7 @@ interface ManagerInterface
     /**
      * Loads a model throwing an exception if it doesn't exist
      */
-    public function load(string modelName) : ModelInterface;
+    public function load(string $modelName) : ModelInterface;
 
     /**
      * Initializes a model in the model manager
