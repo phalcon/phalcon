@@ -43,7 +43,8 @@ interface ManagerInterface
      * @param    mixed  referencedFields
      * @param    array  options
      */
-    public function addHasMany(ModelInterface $model, fields, string $referencedModel, $referencedFields, $options = null) : RelationInterface;
+    public function addHasMany(ModelInterface $model, $fields, string $referencedModel, 
+        $referencedFields, $options = null) : RelationInterface;
 
     /**
      * Setup a 1-1 relation between two models
@@ -52,7 +53,7 @@ interface ManagerInterface
      * @param    mixed  referencedFields
      * @param    array  options
      */
-    public function addHasOne(ModelInterface $model, fields, string $referencedModel, 
+    public function addHasOne(ModelInterface $model, $fields, string $referencedModel, 
         $referencedFields, $options = null) : RelationInterface;
 
     /**
