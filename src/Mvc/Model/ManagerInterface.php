@@ -66,7 +66,7 @@ interface ManagerInterface
      * @param   array options
      */
     public function addHasOneThrough(ModelInterface $model, $fields, string $intermediateModel,
-        var intermediateFields, $intermediateReferencedFields, 
+        $intermediateFields, $intermediateReferencedFields, 
         string $referencedModel, $referencedFields, $options = null) : RelationInterface;
 
     /**
@@ -79,7 +79,7 @@ interface ManagerInterface
      * @param   array options
      */
     public function addHasManyToMany(ModelInterface $model, $fields, string $intermediateModel,
-        var intermediateFields, $intermediateReferencedFields, 
+        $intermediateFields, $intermediateReferencedFields, 
         string $referencedModel, $referencedFields, $options = null) : RelationInterface;
 
     /**
