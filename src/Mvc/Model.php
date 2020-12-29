@@ -394,7 +394,7 @@ abstract class Model extends AbstractInjectionAware implements EntityInterface, 
             $lowerProperty = strtolower($property);
                 $modelName = get_class($this);
                 $manager   = $this->getModelsManager();
-                $relation  =  ($manager->getRelationByAlias(
+                $relation  =  $manager->getRelationByAlias(
                     $modelName,
                     $lowerProperty
                 );
