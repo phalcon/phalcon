@@ -41,7 +41,6 @@ use Phalcon\Mvc\Model\Relation;
 use Phalcon\Mvc\Model\RelationInterface;
 use Phalcon\Mvc\Model\TransactionInterface;
 use Phalcon\Mvc\Model\ValidationFailed;
-use Phalcon\Mvc\ModelInterface;
 use Phalcon\Validation\ValidationInterface;
 use Serializable;
 

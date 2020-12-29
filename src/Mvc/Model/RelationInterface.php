@@ -29,7 +29,7 @@ interface RelationInterface
      *
      * @return string|array
      */
-    public function getForeignKey() : string | array;
+    public function getForeignKey() : string | array | bool;
 
     /**
      * Gets the intermediate fields for has-*-through relations
