@@ -10,8 +10,6 @@
 
 namespace Phalcon\Mvc\Model;
 
-use Phalcon\Di\DiInterface;
-
 /**
  * Phalcon\Mvc\Model\CriteriaInterface
  *
@@ -105,7 +103,7 @@ interface CriteriaInterface
      * - An array with 'number' and 'offset' keys if an offset was set with the limit
      * - NULL if limit has not been set
      */
-    public function getLimit() -> int | array | null;
+    public function getLimit() : int | array | null;
 
     /**
      * Returns an internal model name on which the criteria will be applied
@@ -120,7 +118,7 @@ interface CriteriaInterface
     /**
      * Returns all the parameters defined in the criteria
      */
-    public function getParams() -> array;
+    public function getParams() : array;
 
     /**
      * Returns the conditions parameter in the criteria

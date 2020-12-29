@@ -1,4 +1,5 @@
 <?php
+
 /**
  * This file is part of the Phalcon Framework.
  *
@@ -12,52 +13,60 @@ namespace Phalcon\Mvc\Model;
 
 use Phalcon\Db\Adapter\AdapterInterface;
 use Phalcon\Mvc\ModelInterface;
-use Phalcon\Mvc\Model\Query\BuilderInterface;
-use Phalcon\Mvc\Model\Query\StatusInterface;
+use Phalcon\Mvc\Model\Query\{
+    BuilderInterface,
+    StatusInterface
+};
+use Phalcon\Mvc\Model\{
+    BehaviourInterface,
+    QueryInterface,
+    RelationInterface,
+    ResultsetInterface
+};
 
 /**
  * Phalcon\Mvc\Model\ManagerInterface
  *
  * Interface for Phalcon\Mvc\Model\Manager
  */
-interface ManagerInterface
-{
+interface ManagerInterface {
+
     /**
      * Binds a behavior to a model
      */
-    public function addBehavior(ModelInterface $model, BehaviorInterface $behavior) : void;
+    public function addBehavior(ModelInterface $model, BehaviorInterface $behavior): void;
 
     /**
-     * Setup a relation reverse 1-1  between two models
+     * Setup a $relation reverse 1-1  between two models
      *
      * @param    mixed  fields
      * @param    mixed  referencedFields
      * @param    array  options
      */
-    public function addBelongsTo(ModelInterface $model, $fields, string $referencedModel, $referencedFields, $options = null) : RelationInterface;
+    public function addBelongsTo(ModelInterface $model, $fields, string $referencedModel, $referencedFields, $options = null): RelationInterface;
 
     /**
-     * Setup a relation 1-n between two models
+     * Setup a $relation 1-n between two models
      *
      * @param    mixed  fields
      * @param    mixed  referencedFields
      * @param    array  options
      */
-    public function addHasMany(ModelInterface $model, $fields, string $referencedModel, 
-        $referencedFields, $options = null) : RelationInterface;
+    public function addHasMany(ModelInterface $model, $fields, string $referencedModel,
+            $referencedFields, $options = null): RelationInterface;
 
     /**
-     * Setup a 1-1 relation between two models
+     * Setup a 1-1 $relation between two models
      *
      * @param    mixed  fields
      * @param    mixed  referencedFields
      * @param    array  options
      */
-    public function addHasOne(ModelInterface $model, $fields, string $referencedModel, 
-        $referencedFields, $options = null) : RelationInterface;
+    public function addHasOne(ModelInterface $model, $fields, string $referencedModel,
+            $referencedFields, $options = null): RelationInterface;
 
     /**
-     * Setups a 1-1 relation between two models using an intermediate table
+     * Setups a 1-1 $relation between two models using an intermediate table
      *
      * @param    string fields
      * @param    string intermediateFields
@@ -66,11 +75,11 @@ interface ManagerInterface
      * @param   array options
      */
     public function addHasOneThrough(ModelInterface $model, $fields, string $intermediateModel,
-        $intermediateFields, $intermediateReferencedFields, 
-        string $referencedModel, $referencedFields, $options = null) : RelationInterface;
+            $intermediateFields, $intermediateReferencedFields,
+            string $referencedModel, $referencedFields, $options = null): RelationInterface;
 
     /**
-     * Setups a relation n-m between two models
+     * Setups a $relation n-m between two models
      *
      * @param    string fields
      * @param    string intermediateFields
@@ -79,20 +88,20 @@ interface ManagerInterface
      * @param   array options
      */
     public function addHasManyToMany(ModelInterface $model, $fields, string $intermediateModel,
-        $intermediateFields, $intermediateReferencedFields, 
-        string $referencedModel, $referencedFields, $options = null) : RelationInterface;
+            $intermediateFields, $intermediateReferencedFields,
+            string $referencedModel, $referencedFields, $options = null): RelationInterface;
 
     /**
      * Creates a Phalcon\Mvc\Model\Query\Builder
      *
      * @param string $params
      */
-    public function createBuilder($params = null) : BuilderInterface;
+    public function createBuilder($params = null): BuilderInterface;
 
     /**
      * Creates a Phalcon\Mvc\Model\Query without execute it
      */
-    public function createQuery(string $phql) : QueryInterface;
+    public function createQuery(string $phql): QueryInterface;
 
     /**
      * Creates a Phalcon\Mvc\Model\Query and execute it
@@ -101,37 +110,37 @@ interface ManagerInterface
      * @param array|null $types
      * @return ResultsetInterface|StatusInterface
      */
-    public function executeQuery(string $phql, $placeholders = null, $types = null) : mixed;
+    public function executeQuery(string $phql, $placeholders = null, $types = null): mixed;
 
     /**
-     * Checks whether a model has a belongsTo relation with another model
+     * Checks whether a model has a belongsTo $relation with another model
      */
-    public function existsBelongsTo(string $modelName, string $modelRelation) : bool;
+    public function existsBelongsTo(string $modelName, string $modelRelation): bool;
 
     /**
-     * Checks whether a model has a hasMany relation with another model
+     * Checks whether a model has a hasMany $relation with another model
      */
-    public function existsHasMany(string $modelName, string $modelRelation) : bool;
+    public function existsHasMany(string $modelName, string $modelRelation): bool;
 
     /**
-     * Checks whether a model has a hasOne relation with another model
+     * Checks whether a model has a hasOne $relation with another model
      */
-    public function existsHasOne(string $modelName, string $modelRelation) : bool;
+    public function existsHasOne(string $modelName, string $modelRelation): bool;
 
     /**
-     * Checks whether a model has a hasOneThrough relation with another model
+     * Checks whether a model has a hasOneThrough $relation with another model
      */
-    public function existsHasOneThrough(string $modelName, string $modelRelation) : bool;
+    public function existsHasOneThrough(string $modelName, string $modelRelation): bool;
 
     /**
-     * Checks whether a model has a hasManyToMany relation with another model
+     * Checks whether a model has a hasManyToMany $relation with another model
      */
-    public function existsHasManyToMany(string $modelName, string $modelRelation) : bool;
+    public function existsHasManyToMany(string $modelName, string $modelRelation): bool;
 
     /**
-     * Gets belongsTo relations defined on a model
+     * Gets belongsTo $relations defined on a model
      */
-    public function getBelongsTo(ModelInterface $model) : array;
+    public function getBelongsTo(ModelInterface $model): array;
 
     /**
      * Gets belongsTo related records from a model
@@ -142,14 +151,14 @@ interface ManagerInterface
      * @param ModelInterface    $record
      * @param string|null       $method
      */
-    public function getBelongsToRecords(string $modelName, string $modelRelation, 
-        ModelInterface $record, $parameters = null, 
-        string $method = null) : ResultsetInterface | bool;
+    public function getBelongsToRecords(string $modelName, string $modelRelation,
+            ModelInterface $record, $parameters = null,
+            string $method = null): ResultsetInterface|bool;
 
     /**
-     * Gets hasMany relations defined on a model
+     * Gets hasMany $relations defined on a model
      */
-    public function getHasMany(ModelInterface $model) : array;
+    public function getHasMany(ModelInterface $model): array;
 
     /**
      * Gets hasMany related records from a model
@@ -160,29 +169,29 @@ interface ManagerInterface
      * @param ModelInterface    $record
      * @param string|null       $method
      */
-    public function getHasManyRecords(string $modelName, string $modelRelation, 
-        ModelInterface $record, 
-        $parameters = null, string $method = null) : ResultsetInterface | bool;
+    public function getHasManyRecords(string $modelName, string $modelRelation,
+            ModelInterface $record,
+            $parameters = null, string $method = null): ResultsetInterface|bool;
 
     /**
-     * Gets hasManyToMany relations defined on a model
+     * Gets hasManyToMany $relations defined on a model
      */
-    public function getHasManyToMany(ModelInterface $model) : array;
+    public function getHasManyToMany(ModelInterface $model): array;
 
     /**
-     * Gets hasOne relations defined on a model
+     * Gets hasOne $relations defined on a model
      */
-    public function getHasOne(ModelInterface $model) : array;
+    public function getHasOne(ModelInterface $model): array;
 
     /**
-     * Gets hasOneThrough relations defined on a model
+     * Gets hasOneThrough $relations defined on a model
      */
-    public function getHasOneThrough(ModelInterface $model) : array;
+    public function getHasOneThrough(ModelInterface $model): array;
 
     /**
-     * Gets hasOne relations defined on a model
+     * Gets hasOne $relations defined on a model
      */
-    public function getHasOneAndHasMany(ModelInterface $model) : array;
+    public function getHasOneAndHasMany(ModelInterface $model): array;
 
     /**
      * Gets hasOne related records from a model
@@ -193,76 +202,76 @@ interface ManagerInterface
      * @param ModelInterface    $record
      * @param string|null       $method
      */
-    public function getHasOneRecords(string $modelName, string $modelRelation, 
-        ModelInterface $record, $parameters = null, string $method = null) : ModelInterface | bool;
+    public function getHasOneRecords(string $modelName, string $modelRelation,
+            ModelInterface $record, $parameters = null, string $method = null): ModelInterface|bool;
 
     /**
      * Get last initialized model
      */
-    public function getLastInitialized() : ModelInterface;
+    public function getLastInitialized(): ModelInterface;
 
     /**
      * Returns the last query created or executed in the models manager
      */
-    public function getLastQuery() : QueryInterface;
+    public function getLastQuery(): QueryInterface;
 
     /**
      * Returns the mapped schema for a model
      */
-    public function getModelSchema(ModelInterface $model) : string;
+    public function getModelSchema(ModelInterface $model): string;
 
     /**
      * Returns the mapped source for a model
      */
-    public function getModelSource(ModelInterface $model) : string;
+    public function getModelSource(ModelInterface $model): string;
 
     /**
      * Returns the connection to read data related to a model
      */
-    public function getReadConnection(ModelInterface $model) : AdapterInterface;
+    public function getReadConnection(ModelInterface $model): AdapterInterface;
 
     /**
      * Returns the connection service name used to read data related to a model
      */
-    public function getReadConnectionService(ModelInterface $model) : string;
+    public function getReadConnectionService(ModelInterface $model): string;
 
     /**
-     * Returns a relation by its alias
+     * Returns a $relation by its alias
      */
-    public function getRelationByAlias(string $modelName, string $alias) : Relation | bool;
+    public function getRelationByAlias(string $modelName, string $alias): Relation|bool;
 
     /**
-     * Helper method to query records based on a relation definition
+     * Helper method to query records based on a $relation definition
      *
      * @return \Phalcon\Mvc\Model\Resultset\Simple|Phalcon\Mvc\Model\Resultset\Simple|int|false
      */
-    public function getRelationRecords(RelationInterface relation, ModelInterface $record, 
-        $parameters = null, string $method = null);
+    public function getRelationRecords(RelationInterface $relation, ModelInterface $record,
+            $parameters = null, string $method = null);
 
     /**
-     * Query all the relationships defined on a model
+     * Query all the $relationships defined on a model
      */
-    public function getRelations(string $modelName) : array;
+    public function getRelations(string $modelName): array;
 
     /**
-     * Query the relations between two models
+     * Query the $relations between two models
      */
-    public function getRelationsBetween(string $first, string $second) : array | bool;
+    public function getRelationsBetween(string $first, string $second): array|bool;
 
     /**
      * Returns the connection to write data related to a model
      */
-    public function getWriteConnection(ModelInterface $model) : AdapterInterface;
+    public function getWriteConnection(ModelInterface $model): AdapterInterface;
 
     /**
      * Returns the connection service name used to write data related to a model
      */
-    public function getWriteConnectionService(ModelInterface $model) : string;
+    public function getWriteConnectionService(ModelInterface $model): string;
 
     /**
      * Loads a model throwing an exception if it doesn't exist
      */
-    public function load(string $modelName) : ModelInterface;
+    public function load(string $modelName): ModelInterface;
 
     /**
      * Initializes a model in the model manager
@@ -272,17 +281,17 @@ interface ManagerInterface
     /**
      * Check of a model is already initialized
      */
-    public function isInitialized(string $className) : bool;
+    public function isInitialized(string $className): bool;
 
     /**
      * Checks if a model is keeping snapshots for the queried records
      */
-    public function isKeepingSnapshots(ModelInterface $model) : bool;
+    public function isKeepingSnapshots(ModelInterface $model): bool;
 
     /**
      * Checks if a model is using dynamic update instead of all-field update
      */
-    public function isUsingDynamicUpdate(ModelInterface $model) : bool;
+    public function isUsingDynamicUpdate(ModelInterface $model): bool;
 
     /**
      * Check whether a model property is declared as public.
@@ -294,12 +303,14 @@ interface ManagerInterface
      * );
      * ```
      */
-    public function isVisibleModelProperty(ModelInterface $model, string property) : bool;
+    public function isVisibleModelProperty(
+            ModelInterface $model, string $property): bool;
 
     /**
      * Sets if a model must keep snapshots
      */
-    public function keepSnapshots(ModelInterface $model, bool $keepSnapshots) : void;
+    public function keepSnapshots(
+            ModelInterface $model, bool $keepSnapshots): void;
 
     /**
      * Dispatch an event to the listeners and behaviors
@@ -309,7 +320,7 @@ interface ManagerInterface
      * @param array data
      * @return bool
      */
-    public function missingMethod(ModelInterface $model, string $eventName, $data) : bool;
+    public function missingMethod(ModelInterface $model, string $eventName, $data): bool;
 
     /**
      * Receives events generated in the models and dispatches them to an events-manager if available
@@ -320,22 +331,22 @@ interface ManagerInterface
     /**
      * Sets both write and read connection service for a model
      */
-    public function setConnectionService(ModelInterface $model, string $connectionService) : void;
+    public function setConnectionService(ModelInterface $model, string $connectionService): void;
 
     /**
      * Sets read connection service for a model
      */
-    public function setReadConnectionService(ModelInterface $model, string $connectionService) : void;
+    public function setReadConnectionService(ModelInterface $model, string $connectionService): void;
 
     /**
      * Sets the mapped schema for a model
      */
-    public function setModelSchema(ModelInterface $model, string $schema) : void;
+    public function setModelSchema(ModelInterface $model, string $schema): void;
 
     /**
      * Sets the mapped source for a model
      */
-    public function setModelSource(ModelInterface $model, string $source) : void;
+    public function setModelSource(ModelInterface $model, string $source): void;
 
     /**
      * Sets write connection service for a model
@@ -345,5 +356,5 @@ interface ManagerInterface
     /**
      * Sets if a model must use dynamic update instead of the all-field update
      */
-    public function useDynamicUpdate(ModelInterface $model, bool $dynamicUpdate) : void;
+    public function useDynamicUpdate(ModelInterface $model, bool $dynamicUpdate): void;
 }
