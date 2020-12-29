@@ -156,13 +156,13 @@ abstract class Model extends AbstractInjectionAware implements EntityInterface, 
             );
         }
 
-        $this->container = container;
+        $this->container = $container;
 
         /**
          * Inject the manager service from the DI
          */
         if (!is_object($modelsManager)) {
-            $modelsManager = (ManagerInterface) ($container->getShared("modelsManager"));
+            $modelsManager =  $container->getShared("modelsManager");
 
             if (!is_object($modelsManager)) {
                 throw new Exception(
@@ -174,7 +174,7 @@ abstract class Model extends AbstractInjectionAware implements EntityInterface, 
         /**
          * Update the models-manager
          */
-        $this->modelsManager = modelsManager;
+        $this->modelsManager = $modelsManager;
 
         /**
          * The manager always initializes the object
@@ -229,7 +229,7 @@ abstract class Model extends AbstractInjectionAware implements EntityInterface, 
          * Try to find a replacement for the missing method in a
          * behavior/listener
          */
-        $status = (ManagerInterface) ($this->modelsManager->missingMethod($this, $method, $arguments));
+        $status =  $this->modelsManager->missingMethod($this, $method, $arguments);
 
         if ($status !== null) {
             return $status;
@@ -285,10 +285,10 @@ abstract class Model extends AbstractInjectionAware implements EntityInterface, 
         /**
          * Check if the property is a relationship
          */
-        $relation = (RelationInterface) ($manager->getRelationByAlias(
+        $relation =  $manager->getRelationByAlias(
             $modelName,
             $lowerProperty
-        ));
+        );
 
         if (is_object($relation)) {
             /**
@@ -330,15 +330,15 @@ abstract class Model extends AbstractInjectionAware implements EntityInterface, 
     public function __isset(string $property) : bool
     {
         $modelName = get_class($this);
-        $manager   = (ManagerInterface) ($this->getModelsManager());
+        $manager   = $this->getModelsManager();
 
         /**
          * Check if the property is a relationship
          */
-        $relation = (RelationInterface) ($manager->getRelationByAlias(
+        $relation = $manager->getRelationByAlias(
             $modelName,
             $property
-        ));
+        );
 
         if (is_object($relation)) {
             $result = true;
@@ -366,10 +366,10 @@ abstract class Model extends AbstractInjectionAware implements EntityInterface, 
             $lowerProperty = strtolower($property);
                 $modelName     = get_class($this);
                 $manager       = $this->getModelsManager();
-                $relation      = (RelationInterface) ($manager->getRelationByAlias(
+                $relation      = $manager->getRelationByAlias(
                     $modelName,
                     $lowerProperty
-                ));
+                );
 
             if (is_object($relation)) {
                 $dirtyState = $this->dirtyState;
@@ -394,10 +394,10 @@ abstract class Model extends AbstractInjectionAware implements EntityInterface, 
             $lowerProperty = strtolower($property);
                 $modelName = get_class($this);
                 $manager   = $this->getModelsManager();
-                $relation  = (RelationInterface) ($manager->getRelationByAlias(
+                $relation  =  ($manager->getRelationByAlias(
                     $modelName,
                     $lowerProperty
-                ));
+                );
 
             if (is_object($relation)) {
                 switch ($relation->getType()) {
@@ -605,7 +605,7 @@ abstract class Model extends AbstractInjectionAware implements EntityInterface, 
                 }
             }
         } else {
-            $dataMapped = data;
+            $dataMapped = $data;
         }
 
         if (count($dataMapped) == 0) {
@@ -635,14 +635,14 @@ abstract class Model extends AbstractInjectionAware implements EntityInterface, 
 		if ($attributeField === null) {
                     if (!globals_get("orm.ignore_unknown_columns")) {
                         throw new Exception(
-                            "Column '" . attribute. "' doesn't make part of the column map"
+                            "Column '" . $attribute. "' doesn't make part of the column map"
                         );
                     }
 
                     continue;
                 }
             } else {
-                $attributeField = attribute;
+                $attributeField = $attribute;
             }
 
             // The value in the array $passed
@@ -700,7 +700,7 @@ abstract class Model extends AbstractInjectionAware implements EntityInterface, 
      */
     public static function average($parameters = null): float | ResultsetInterface
     {
-        return self::groupResult("AVG", "average", parameters);
+        return self::groupResult("AVG", "average", $parameters);
     }
 
     /**
@@ -1568,10 +1568,10 @@ abstract class Model extends AbstractInjectionAware implements EntityInterface, 
     {
         
 
-        if (null === parameters) {
+        if (null === $parameters) {
             $params = [];
         } elseif (is_array($parameters)) {
-            $params = parameters;
+            $params = $parameters;
         } elseif (is_string($parameters) || is_numeric($parameters)) {
             $params = [$parameters];
         } else {
@@ -2093,8 +2093,8 @@ abstract class Model extends AbstractInjectionAware implements EntityInterface, 
         if (is_array($fieldName)) {
             $intersect = array_intersect($fieldName, $changedFields);
 
-            if (allFields) {
-                return $intersect == fieldName;
+            if ($allFields) {
+                return ($intersect === $fieldName);
             }
 
             return count($intersect) > 0;
@@ -2132,8 +2132,8 @@ abstract class Model extends AbstractInjectionAware implements EntityInterface, 
 
         if ((is_array($fieldName))) {
             $intersect = array_intersect($fieldName, $updatedFields);
-            if (allFields) {
-                return $intersect == fieldName;
+            if ($allFields) {
+                return ($intersect === $fieldName);
             }
 
             return count($intersect) > 0;
@@ -2670,7 +2670,7 @@ abstract class Model extends AbstractInjectionAware implements EntityInterface, 
      */
     public function setEventsManager(EventsManagerInterface $eventsManager)
     {
-        $this->modelsManager->setCustomEventsManager($this, eventsManager);
+        $this->modelsManager->setCustomEventsManager($this, $eventsManager);
     }
 
     /**
@@ -3015,7 +3015,7 @@ abstract class Model extends AbstractInjectionAware implements EntityInterface, 
      */
     public static function sum($parameters = null): float | ResultsetInterface
     {
-        return self::groupResult("SUM", "sumatory", parameters);
+        return self::groupResult("SUM", "sumatory", $parameters);
     }
 
     /**
@@ -3510,7 +3510,7 @@ abstract class Model extends AbstractInjectionAware implements EntityInterface, 
                      */
                     if (property_exists($this, $attributeField)) {
                         $value = $this->{$attributeField} ?? null;
-                        if (value === null && isset($defaultValues[$field])) {
+                        if ($value === null && isset($defaultValues[$field])) {
                             $defaultval = $defaultValues[$field];
                             $snapshot[$attributeField]           = $defaultval;
                             $unsetDefaultValues[$attributeField] = $defaultval;
@@ -3886,7 +3886,7 @@ abstract class Model extends AbstractInjectionAware implements EntityInterface, 
          */
         if (!count($fields)) {
             if ($useDynamicUpdate) {
-                $this->oldSnapshot = snapshot;
+                $this->oldSnapshot = $snapshot;
             }
 
             return true;
@@ -4134,7 +4134,7 @@ abstract class Model extends AbstractInjectionAware implements EntityInterface, 
             $uniqueTypes
         );
 
-        if (num["rowcount"]) {
+        if ($num["rowcount"]) {
             $this->dirtyState = self::DIRTY_STATE_PERSISTENT;
 
             return true;
@@ -4254,19 +4254,19 @@ abstract class Model extends AbstractInjectionAware implements EntityInterface, 
     protected static function groupResult(string $functionName, string $alias, $parameters): ResultsetInterface
     {
         $container = Di::getDefault();
-        $manager = (ManagerInterface) ($container->getShared("modelsManager"));
+        $manager = $container->getShared("modelsManager");
 
         if (!is_array($parameters)) {
             $params = [];
 
             if ($parameters !== null) {
-                $params[] = parameters;
+                $params[] = $parameters;
             }
         } else {
             $params = $parameters;
         }
 
-        $groupColumn = params["column"] ?? '*';
+        $groupColumn = $params["column"] ?? '*';
 
         /**
          * Builds the columns to query according to the received parameters
