@@ -320,7 +320,7 @@ interface ManagerInterface {
      * @param array data
      * @return bool
      */
-    public function missingMethod(ModelInterface $model, string $eventName, $data): bool;
+    public function missingMethod(ModelInterface $model, string $eventName, array $data = []): bool;
 
     /**
      * Receives events generated in the models and dispatches them to an events-manager if available

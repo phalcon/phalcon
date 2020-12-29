@@ -22,7 +22,7 @@ interface BehaviorInterface
     /**
      * Calls a method when it's missing in the model
      */
-    public function missingMethod(ModelInterface $model, string $method, array $arguments = []);
+    public function missingMethod(ModelInterface $model, string $method, array $arguments = []) : bool;
 
     /**
      * This method receives the notifications from the EventsManager

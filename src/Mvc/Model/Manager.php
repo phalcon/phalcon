@@ -572,13 +572,13 @@ class Manager implements ManagerInterface, InjectionAwareInterface, EventsAwareI
      * This method expects that the endpoint listeners/behaviors returns true
      * meaning that a least one was implemented
      */
-    public function missingMethod(ModelInterface $model, string $eventName, $data)
+    public function missingMethod(ModelInterface $model, string $eventName, array $data = []) : bool
     {
         /**
          * Dispatch events to the global events manager
          */
         $modelsBehaviors = $this->behaviors[get_class_lower($model)] ?? null;
-		if ($modelsBehaviors !== null) {
+        if ($modelsBehaviors !== null) {
             /**
              * Notify all the events on the behavior
              */
@@ -590,6 +590,7 @@ class Manager implements ManagerInterface, InjectionAwareInterface, EventsAwareI
                     return $result;
                 }
             }
+            return false;
         }
 
         /**
