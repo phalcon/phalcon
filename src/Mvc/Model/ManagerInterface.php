@@ -101,7 +101,7 @@ interface ManagerInterface
      * @param array|null $types
      * @return ResultsetInterface|StatusInterface
      */
-    public function executeQuery(string $phql, $placeholders = null, $types = null) : var;
+    public function executeQuery(string $phql, $placeholders = null, $types = null) : mixed;
 
     /**
      * Checks whether a model has a belongsTo relation with another model
