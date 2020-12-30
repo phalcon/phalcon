@@ -20,9 +20,7 @@ use Phalcon\Mvc\Model\Query\Builder;
 use Phalcon\Mvc\Model\Query\BuilderInterface;
 use Phalcon\Mvc\Model\Query\StatusInterface;
 
-function get_class_lower(object $instance) : string {
-    return strtolower(get_class($instance));
-}
+
 /**
  * Phalcon\Mvc\Model\Manager
  *
@@ -191,7 +189,7 @@ class Manager implements ManagerInterface, InjectionAwareInterface, EventsAwareI
     public function setCustomEventsManager(ModelInterface $model, 
         EventsManagerInterface $eventsManager) : void
     { 
-        $this->customEventsManager[get_class_lower($model)] = $eventsManager;
+        $this->customEventsManager[\get_class_lower($model)] = $eventsManager;
     }
 
     /**
@@ -199,7 +197,7 @@ class Manager implements ManagerInterface, InjectionAwareInterface, EventsAwareI
      */
     public function getCustomEventsManager(ModelInterface $model): ?EventsManagerInterface
     {
-        return $this->customEventsManager[get_class_lower($model)] ?? null;
+        return $this->customEventsManager[\get_class_lower($model)] ?? null;
     }
 
     /**
@@ -207,7 +205,7 @@ class Manager implements ManagerInterface, InjectionAwareInterface, EventsAwareI
      */
     public function initialize(ModelInterface $model) : bool
     {
-        $className = get_class_lower($model);
+        $className = \get_class_lower($model);
 
         /**
          * Models are just initialized once per request
@@ -328,7 +326,7 @@ class Manager implements ManagerInterface, InjectionAwareInterface, EventsAwareI
      */
     public function setModelSource(ModelInterface $model, string $source) : void
     { 
-        $this->sources[get_class_lower($model)] = $source;
+        $this->sources[\get_class_lower($model)] = $source;
     }
 
     /**
@@ -356,7 +354,7 @@ class Manager implements ManagerInterface, InjectionAwareInterface, EventsAwareI
      */
     public function getModelSource(ModelInterface $model) : string
     {
-        $entityName = get_class_lower($model);
+        $entityName = \get_class_lower($model);
 
         if (!isset($this->sources[$entityName])) {
             $this->setModelSource(
@@ -374,7 +372,7 @@ class Manager implements ManagerInterface, InjectionAwareInterface, EventsAwareI
      * Sets the mapped schema for a model
      */
     public function setModelSchema(ModelInterface $model, string $schema) : void
-    { $this->schemas[get_class_lower($model)] = $schema;
+    { $this->schemas[\get_class_lower($model)] = $schema;
     }
 
     /**
@@ -382,7 +380,7 @@ class Manager implements ManagerInterface, InjectionAwareInterface, EventsAwareI
      */
     public function getModelSchema(ModelInterface $model) : string
     {
-        return $this->schemas[get_class_lower($model)] ?? "";
+        return $this->schemas[\get_class_lower($model)] ?? "";
     }
 
     /**
@@ -398,14 +396,14 @@ class Manager implements ManagerInterface, InjectionAwareInterface, EventsAwareI
      * Sets write connection service for a model
      */
     public function setWriteConnectionService(ModelInterface $model, string $connectionService) : void
-    { $this->writeConnectionServices[get_class_lower($model)] = $connectionService;
+    { $this->writeConnectionServices[\get_class_lower($model)] = $connectionService;
     }
 
     /**
      * Sets read connection service for a model
      */
     public function setReadConnectionService(ModelInterface $model, string $connectionService) : void
-    { $this->readConnectionServices[get_class_lower($model)] = $connectionService;
+    { $this->readConnectionServices[\get_class_lower($model)] = $connectionService;
     }
 
     /**
@@ -511,7 +509,7 @@ class Manager implements ManagerInterface, InjectionAwareInterface, EventsAwareI
      */
     public function getConnectionService(ModelInterface $model, $connectionServices) : string
     {
-        return $connectionServices[get_class_lower($model)] ?? "db";
+        return $connectionServices[\get_class_lower($model)] ?? "db";
     }
 
     /**
@@ -526,7 +524,7 @@ class Manager implements ManagerInterface, InjectionAwareInterface, EventsAwareI
         /**
          * Dispatch events to the global events manager
          */
-        $modelsBehaviors = $this->behaviors[get_class_lower($model)] ?? null;
+        $modelsBehaviors = $this->behaviors[\get_class_lower($model)] ?? null;
 		if ($modelsBehaviors !== null) {
             /**
              * Notify all the events on the behavior
@@ -557,7 +555,7 @@ class Manager implements ManagerInterface, InjectionAwareInterface, EventsAwareI
         /**
          * A model can has a specific events manager for it
          */
-        $customEventsManager = $this->customEventsManager[get_class_lower($model)] ?? null;
+        $customEventsManager = $this->customEventsManager[\get_class_lower($model)] ?? null;
 		if ($customEventsManager !== null) { $status =$customEventsManager->fire(
                 "model:" . eventName,
                 model
@@ -581,7 +579,7 @@ class Manager implements ManagerInterface, InjectionAwareInterface, EventsAwareI
         /**
          * Dispatch events to the global events manager
          */
-        $modelsBehaviors = $this->behaviors[get_class_lower($model)] ?? null;
+        $modelsBehaviors = $this->behaviors[\get_class_lower($model)] ?? null;
         if ($modelsBehaviors !== null) {
             /**
              * Notify all the events on the behavior
@@ -614,7 +612,7 @@ class Manager implements ManagerInterface, InjectionAwareInterface, EventsAwareI
      */
     public function addBehavior(ModelInterface $model, BehaviorInterface $behavior) : void
     {
-        $entityName = get_class_lower($model);
+        $entityName = \get_class_lower($model);
 
         if (!isset($this->behaviors[$entityName])) { 
             $this->behaviors[$entityName] = [];
@@ -631,7 +629,7 @@ class Manager implements ManagerInterface, InjectionAwareInterface, EventsAwareI
      */
     public function keepSnapshots(ModelInterface $model, bool $keepSnapshots) : void
     { 
-        $this->keepSnapshots[get_class_lower($model)] = $keepSnapshots;
+        $this->keepSnapshots[\get_class_lower($model)] = $keepSnapshots;
     }
 
     /**
@@ -639,7 +637,7 @@ class Manager implements ManagerInterface, InjectionAwareInterface, EventsAwareI
      */
     public function isKeepingSnapshots(ModelInterface $model) : bool
     {
-        return $this->keepSnapshots[get_class_lower($model)] ?? false; 
+        return $this->keepSnapshots[\get_class_lower($model)] ?? false; 
     }
 
     /**
@@ -657,7 +655,7 @@ class Manager implements ManagerInterface, InjectionAwareInterface, EventsAwareI
      */
     public function isUsingDynamicUpdate(ModelInterface $model) : bool
     {
-        return $this->dynamicUpdate[get_class_lower($model)] ?? null;
+        return $this->dynamicUpdate[\get_class_lower($model)] ?? null;
     }
 
     /**
@@ -669,7 +667,7 @@ class Manager implements ManagerInterface, InjectionAwareInterface, EventsAwareI
         $referencedFields, $options = null) : RelationInterface
     {
         
-        $entityName = get_class_lower($model);
+        $entityName = \get_class_lower($model);
         $referencedEntity = strtolower($referencedModel); 
         $keyRelation = $entityName . "$" . $referencedEntity;
         $relations = $this->hasOne[$keyRelation] ?? [];
@@ -748,7 +746,7 @@ class Manager implements ManagerInterface, InjectionAwareInterface, EventsAwareI
         $intermediateFields, $intermediateReferencedFields, 
         string $referencedModel, $referencedFields, $options = null) : RelationInterface
     {
-        $entityName = get_class_lower($model);
+        $entityName = \get_class_lower($model);
         $intermediateEntity = strtolower($intermediateModel);
         $referencedEntity = strtolower($referencedModel);
         $keyRelation = $entityName . "$" . $referencedEntity; 
@@ -849,7 +847,7 @@ class Manager implements ManagerInterface, InjectionAwareInterface, EventsAwareI
         $referencedFields, $options = null) : RelationInterface
     {
 
-        $entityName = get_class_lower($model);
+        $entityName = \get_class_lower($model);
         $referencedEntity = strtolower($referencedModel); 
         $keyRelation = $entityName . "$" . $referencedEntity;
         $relations = $this->belongsTo[$keyRelation] ?? [];
@@ -924,7 +922,7 @@ class Manager implements ManagerInterface, InjectionAwareInterface, EventsAwareI
     public function addHasMany(ModelInterface $model, $fields, string $referencedModel,
         $referencedFields, $options = null) : RelationInterface
     {
-        $entityName = get_class_lower($model);
+        $entityName = \get_class_lower($model);
         $referencedEntity = strtolower($referencedModel);
         $keyRelation = $entityName . "$" . $referencedEntity;
         $hasMany = $this->hasMany;
@@ -1003,7 +1001,7 @@ class Manager implements ManagerInterface, InjectionAwareInterface, EventsAwareI
     public function addHasManyToMany(ModelInterface $model, $fields, string $intermediateModel,
         $intermediateFields, $intermediateReferencedFields, string $referencedModel, $referencedFields, $options = null) : RelationInterface
     {
-        $entityName = get_class_lower($model);
+        $entityName = \get_class_lower($model);
         $intermediateEntity = strtolower($intermediateModel);
         $referencedEntity = strtolower($referencedModel);
         $keyRelation = $entityName . "$" . $referencedEntity; 
@@ -1573,7 +1571,7 @@ class Manager implements ManagerInterface, InjectionAwareInterface, EventsAwareI
      */
     public function getBelongsTo(ModelInterface $model) :  array
     {
-        return $this->belongsToSingle[get_class_lower($model)] ?? [];
+        return $this->belongsToSingle[\get_class_lower($model)] ?? [];
     }
 
     /**
@@ -1581,7 +1579,7 @@ class Manager implements ManagerInterface, InjectionAwareInterface, EventsAwareI
      */
     public function getHasMany(ModelInterface $model) :  array
     {
-        return $this->hasManySingle[get_class_lower($model)] ?? [];
+        return $this->hasManySingle[\get_class_lower($model)] ?? [];
     }
 
     /**
@@ -1589,7 +1587,7 @@ class Manager implements ManagerInterface, InjectionAwareInterface, EventsAwareI
      */
     public function getHasOne(ModelInterface $model) : array
     {
-        return $this->hasOneSingle[get_class_lower($model)] ?? [];
+        return $this->hasOneSingle[\get_class_lower($model)] ?? [];
     }
 
     /**
@@ -1597,7 +1595,7 @@ class Manager implements ManagerInterface, InjectionAwareInterface, EventsAwareI
      */
     public function getHasOneThrough(ModelInterface $model) :  array
     {
-        return $this->hasOneThroughSingle[get_class_lower($model)] ?? [];
+        return $this->hasOneThroughSingle[\get_class_lower($model)] ?? [];
     }
 
     /**
@@ -1605,7 +1603,7 @@ class Manager implements ManagerInterface, InjectionAwareInterface, EventsAwareI
      */
     public function getHasManyToMany(ModelInterface $model) :  array
     {
-        return $this->hasManyToManySingle[get_class_lower($model)] ?? [];
+        return $this->hasManyToManySingle[\get_class_lower($model)] ?? [];
     }
 
     /**

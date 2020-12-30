@@ -1802,7 +1802,7 @@ abstract class Model extends AbstractInjectionAware implements EntityInterface, 
             /**
              * Obtain the models-metadata service from the DI
              */
-            $metaData = (MetaDataInterface) ($container->getShared("modelsMetadata"));
+            $metaData = $container->getShared("modelsMetadata");
 
             if (!is_object($metaData)) {
                 throw new Exception(
