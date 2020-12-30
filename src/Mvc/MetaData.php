@@ -777,13 +777,13 @@ abstract class MetaData implements InjectionAwareInterface, MetaDataInterface
          * Check for a column map, store in columnMap in order and reversed order
          */
         if (!\globals_get("orm.column_renaming")) {
-            return null;
+            return;
         }
 
         $keyName = strtolower($className);
 
         if (isset($this->columnMap[$keyName])) {
-            return null;
+            return;
         }
 
         /**
@@ -794,9 +794,8 @@ abstract class MetaData implements InjectionAwareInterface, MetaDataInterface
             $data = $this->{"read"}($prefixKey);
 
         if ($data !== null) {
-                $this->columnMap[$keyName] = $data;
-
-            return null;
+            $this->columnMap[$keyName] = $data;
+            return;
         }
 
         /**
