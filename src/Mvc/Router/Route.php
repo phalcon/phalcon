@@ -24,7 +24,7 @@ class Route implements RouteInterface
     protected $group;
     protected $hostname;
     protected int $id; 
-    protected $methods;
+    protected $httpMethods;
     protected $match;
     protected $name;
     protected $paths;
@@ -41,7 +41,7 @@ class Route implements RouteInterface
         $this->id = $id;
         $this->pattern = $pattern;
         $this->paths = $paths;
-        $this->methods = $httpMethods;
+        $this->httpMethods = $httpMethods;
         
         // Configure the route (extract parameters, paths, etc)
         $this->reConfigure($this->pattern, $this->paths);
@@ -329,7 +329,7 @@ class Route implements RouteInterface
      */
     public function getHttpMethods()
     {
-        return $this->methods;
+        return $this->httpMethods;
     }
 
     /**
@@ -628,7 +628,7 @@ class Route implements RouteInterface
      */
     public function via($httpMethods): RouteInterface
     {
-        $this->methods = $httpMethods;
+        $this->httpMethods = $httpMethods;
 
         return $this;
     }
