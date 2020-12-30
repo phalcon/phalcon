@@ -20,6 +20,9 @@ use Phalcon\Mvc\Model\Query\Builder;
 use Phalcon\Mvc\Model\Query\BuilderInterface;
 use Phalcon\Mvc\Model\Query\StatusInterface;
 
+function get_class_lower(string $cname) {
+    return get_class(strtolower($cname));
+}
 /**
  * Phalcon\Mvc\Model\Manager
  *
@@ -45,6 +48,7 @@ use Phalcon\Mvc\Model\Query\StatusInterface;
  * $robot = new Robots($di);
  * ```
  */
+
 class Manager implements ManagerInterface, InjectionAwareInterface, EventsAwareInterface
 {
     protected array $aliases = [];
