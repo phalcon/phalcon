@@ -73,7 +73,7 @@ interface MetaDataInterface
     /**
      * Returns an array $of fields which are not part of the primary key
      */
-    public function getNonPrimaryKeyAttributes(ModelInterface $model) : array;
+    public function getNonPrimaryKeyAttributes(ModelInterface $model) : array | null;
 
     /**
      * Returns an array $of not null attributes

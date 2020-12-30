@@ -1,4 +1,5 @@
 <?php
+
 /**
  * This file is part of the Phalcon Framework.
  *
@@ -37,8 +38,8 @@ use Phalcon\Mvc\ModelInterface;
  * print_r($attributes);
  * ```
  */
-abstract class MetaData implements InjectionAwareInterface, MetaDataInterface
-{
+abstract class MetaData implements InjectionAwareInterface, MetaDataInterface {
+
     const MODELS_ATTRIBUTES = 0;
     const MODELS_AUTOMATIC_DEFAULT_INSERT = 10;
     const MODELS_AUTOMATIC_DEFAULT_UPDATE = 11;
@@ -60,57 +61,59 @@ abstract class MetaData implements InjectionAwareInterface, MetaDataInterface
      * @var CacheAdapterInterface
      */
     protected $adapter;
-
     protected $columnMap = [];
-
     protected $container;
-
     protected $metaData = [];
-
     protected $strategy;
 
     /**
      * Returns table attributes names (fields)
      *
-     *```php
+     * ```php
      * print_r(
      *     $metaData->getAttributes(
      *         new Robots()
      *     )
      * );
-     *```
+     * ```
      */
-    public function getAttributes(ModelInterface $model) : array
-    {
+    protected function throwBadData(): void {
+        throw new Exception("The meta-data is invalid or is corrupt");
+    }
+
+    public function getAttributes(ModelInterface $model): array {
         $data = $this->readMetaDataIndex($model, self::MODELS_ATTRIBUTES);
 
-        if (!is_array($data)) {
-            throw new Exception("The meta-data is invalid or is corrupt");
+        if ($data === null) {
+            return [];
         }
-
+        if (!is_array($data)) {
+            $this->throwBadData();
+        }
         return $data;
     }
 
     /**
      * Returns attributes that must be ignored from the INSERT SQL generation
      *
-     *```php
+     * ```php
      * print_r(
      *     $metaData->getAutomaticCreateAttributes(
      *         new Robots()
      *     )
      * );
-     *```
+     * ```
      */
-    public function getAutomaticCreateAttributes(ModelInterface $model) : array
-    {
-            $data = $this->readMetaDataIndex(
-            $model,
-            self::MODELS_AUTOMATIC_DEFAULT_INSERT
+    public function getAutomaticCreateAttributes(ModelInterface $model): array {
+        $data = $this->readMetaDataIndex(
+                $model, self::MODELS_AUTOMATIC_DEFAULT_INSERT
         );
 
+        if ($data === null) {
+            return [];
+        }
         if (!is_array($data)) {
-            throw new Exception("The meta-data is invalid or is corrupt");
+            $this->throwBadData();
         }
 
         return $data;
@@ -119,23 +122,25 @@ abstract class MetaData implements InjectionAwareInterface, MetaDataInterface
     /**
      * Returns attributes that must be ignored from the UPDATE SQL generation
      *
-     *```php
+     * ```php
      * print_r(
      *     $metaData->getAutomaticUpdateAttributes(
      *         new Robots()
      *     )
      * );
-     *```
+     * ```
      */
-    public function getAutomaticUpdateAttributes(ModelInterface $model) :  array
-    {
-            $data = $this->readMetaDataIndex(
-            $model,
-            self::MODELS_AUTOMATIC_DEFAULT_UPDATE
+    public function getAutomaticUpdateAttributes(ModelInterface $model): array {
+        $data = $this->readMetaDataIndex(
+                $model,
+                self::MODELS_AUTOMATIC_DEFAULT_UPDATE
         );
 
+        if ($data === null) {
+            return [];
+        }
         if (!is_array($data)) {
-            throw new Exception("The meta-data is invalid or is corrupt");
+            $this->throwBadData();
         }
 
         return $data;
@@ -144,23 +149,24 @@ abstract class MetaData implements InjectionAwareInterface, MetaDataInterface
     /**
      * Returns attributes and their bind data types
      *
-     *```php
+     * ```php
      * print_r(
      *     $metaData->getBindTypes(
      *         new Robots()
      *     )
      * );
-     *```
+     * ```
      */
-    public function getBindTypes(ModelInterface $model) :  array
-    {
-            $data = $this->readMetaDataIndex(
-            $model,
-            self::MODELS_DATA_TYPES_BIND
+    public function getBindTypes(ModelInterface $model): array {
+        $data = $this->readMetaDataIndex(
+                $model, self::MODELS_DATA_TYPES_BIND
         );
 
+        if ($data === null) {
+            return [];
+        }
         if (!is_array($data)) {
-            throw new Exception("The meta-data is invalid or is corrupt");
+            $this->throwBadData();
         }
 
         return $data;
@@ -169,20 +175,22 @@ abstract class MetaData implements InjectionAwareInterface, MetaDataInterface
     /**
      * Returns the column map if any
      *
-     *```php
+     * ```php
      * print_r(
      *     $metaData->getColumnMap(
      *         new Robots()
      *     )
      * );
-     *```
+     * ```
      */
-    public function getColumnMap(ModelInterface $model) :  array | null
-    {
-            $data = $this->readColumnMapIndex($model, self::MODELS_COLUMN_MAP);
+    public function getColumnMap(ModelInterface $model): array|null {
+        $data = $this->readColumnMapIndex($model, self::MODELS_COLUMN_MAP);
 
-        if ($data !== null && !is_array($data)) {
-            throw new Exception("The meta-data is invalid or is corrupt");
+        if ($data === null) {
+            return null;
+        }
+        if (!is_array($data)) {
+            $this->throwBadData();
         }
 
         return $data;
@@ -191,20 +199,22 @@ abstract class MetaData implements InjectionAwareInterface, MetaDataInterface
     /**
      * Returns attributes (which have default values) and their default values
      *
-     *```php
+     * ```php
      * print_r(
      *     $metaData->getDefaultValues(
      *         new Robots()
      *     )
      * );
-     *```
+     * ```
      */
-    public function getDefaultValues(ModelInterface $model) :  array
-    {
-            $data = $this->readMetaDataIndex($model, self::MODELS_DEFAULT_VALUES);
+    public function getDefaultValues(ModelInterface $model): array {
+        $data = $this->readMetaDataIndex($model, self::MODELS_DEFAULT_VALUES);
 
+        if ($data === null) {
+            return [];
+        }
         if (!is_array($data)) {
-            throw new Exception("The meta-data is invalid or is corrupt");
+            $this->throwBadData();
         }
 
         return $data;
@@ -213,20 +223,22 @@ abstract class MetaData implements InjectionAwareInterface, MetaDataInterface
     /**
      * Returns attributes and their data types
      *
-     *```php
+     * ```php
      * print_r(
      *     $metaData->getDataTypes(
      *         new Robots()
      *     )
      * );
-     *```
+     * ```
      */
-    public function getDataTypes(ModelInterface $model) :  array
-    {
-            $data = $this->readMetaDataIndex($model, self::MODELS_DATA_TYPES);
+    public function getDataTypes(ModelInterface $model): array {
+        $data = $this->readMetaDataIndex($model, self::MODELS_DATA_TYPES);
 
+        if ($data === null) {
+            return [];
+        }
         if (!is_array($data)) {
-            throw new Exception("The meta-data is invalid or is corrupt");
+            $this->throwBadData();
         }
 
         return $data;
@@ -235,23 +247,25 @@ abstract class MetaData implements InjectionAwareInterface, MetaDataInterface
     /**
      * Returns attributes which types are numerical
      *
-     *```php
+     * ```php
      * print_r(
      *     $metaData->getDataTypesNumeric(
      *         new Robots()
      *     )
      * );
-     *```
+     * ```
      */
-    public function getDataTypesNumeric(ModelInterface $model) :  array
-    {
-            $data = $this->readMetaDataIndex(
-            $model,
-            self::MODELS_DATA_TYPES_NUMERIC
+    public function getDataTypesNumeric(ModelInterface $model): array {
+        $data = $this->readMetaDataIndex(
+                $model,
+                self::MODELS_DATA_TYPES_NUMERIC
         );
 
+        if ($data === null) {
+            return [];
+        }
         if (!is_array($data)) {
-            throw new Exception("The meta-data is invalid or is corrupt");
+            $this->throwBadData();
         }
 
         return $data;
@@ -260,13 +274,12 @@ abstract class MetaData implements InjectionAwareInterface, MetaDataInterface
     /**
      * Returns the DependencyInjector container
      */
-    public function getDI() :  DiInterface
-    {
-            $container = $this->container;
+    public function getDI(): DiInterface {
+        $container = $this->container;
 
         if (!is_object($container)) {
             throw new Exception(
-                Exception::containerServiceNotFound("internal services")
+                            Exception::containerServiceNotFound("internal services")
             );
         }
 
@@ -276,23 +289,25 @@ abstract class MetaData implements InjectionAwareInterface, MetaDataInterface
     /**
      * Returns attributes allow empty strings
      *
-     *```php
+     * ```php
      * print_r(
      *     $metaData->getEmptyStringAttributes(
      *         new Robots()
      *     )
      * );
-     *```
+     * ```
      */
-    public function getEmptyStringAttributes(ModelInterface $model) :  array
-    {
-            $data = $this->readMetaDataIndex(
-            $model,
-            self::MODELS_EMPTY_STRING_VALUES
+    public function getEmptyStringAttributes(ModelInterface $model): array {
+        $data = $this->readMetaDataIndex(
+                $model,
+                self::MODELS_EMPTY_STRING_VALUES
         );
 
+        if ($data === null) {
+            return [];
+        }
         if (!is_array($data)) {
-            throw new Exception("The meta-data is invalid or is corrupt");
+            $this->throwBadData();
         }
 
         return $data;
@@ -301,36 +316,37 @@ abstract class MetaData implements InjectionAwareInterface, MetaDataInterface
     /**
      * Returns the name of identity field (if one is present)
      *
-     *```php
+     * ```php
      * print_r(
      *     $metaData->getIdentityField(
      *         new Robots()
      *     )
      * );
-     *```
+     * ```
      */
-    public function getIdentityField(ModelInterface $model) :  string | null
-    {
+    public function getIdentityField(ModelInterface $model): string|null {
         return $this->readMetaDataIndex($model, self::MODELS_IDENTITY_COLUMN);
     }
 
     /**
      * Returns an array of fields which are not part of the primary key
      *
-     *```php
+     * ```php
      * print_r(
      *     $metaData->getNonPrimaryKeyAttributes(
      *         new Robots()
      *     )
      * );
-     *```
+     * ```
      */
-    public function getNonPrimaryKeyAttributes(ModelInterface $model) :  array | null
-    {
-            $data = $this->readMetaDataIndex($model, self::MODELS_NON_PRIMARY_KEY);
+    public function getNonPrimaryKeyAttributes(ModelInterface $model): array {
+        $data = $this->readMetaDataIndex($model, self::MODELS_NON_PRIMARY_KEY);
 
+        if ($data === null) {
+            return [];
+        }
         if (!is_array($data)) {
-            throw new Exception("The meta-data is invalid or is corrupt");
+            $this->throwBadData();
         }
 
         return $data;
@@ -339,20 +355,19 @@ abstract class MetaData implements InjectionAwareInterface, MetaDataInterface
     /**
      * Returns an array of not null attributes
      *
-     *```php
+     * ```php
      * print_r(
      *     $metaData->getNotNullAttributes(
      *         new Robots()
      *     )
      * );
-     *```
+     * ```
      */
-    public function getNotNullAttributes(ModelInterface $model) :  array
-    {
-            $data = $this->readMetaDataIndex($model, self::MODELS_NOT_NULL);
+    public function getNotNullAttributes(ModelInterface $model): array {
+        $data = $this->readMetaDataIndex($model, self::MODELS_NOT_NULL);
 
         if (!is_array($data)) {
-            throw new Exception("The meta-data is invalid or is corrupt");
+            $this->throwBadData();
         }
 
         return $data;
@@ -361,20 +376,22 @@ abstract class MetaData implements InjectionAwareInterface, MetaDataInterface
     /**
      * Returns an array of fields which are part of the primary key
      *
-     *```php
+     * ```php
      * print_r(
      *     $metaData->getPrimaryKeyAttributes(
      *         new Robots()
      *     )
      * );
-     *```
+     * ```
      */
-    public function getPrimaryKeyAttributes(ModelInterface $model) :  array
-    {
-            $data = $this->readMetaDataIndex($model, self::MODELS_PRIMARY_KEY);
+    public function getPrimaryKeyAttributes(ModelInterface $model): array {
+        $data = $this->readMetaDataIndex($model, self::MODELS_PRIMARY_KEY);
 
+        if ($data === null) {
+            return [];
+        }
         if (!is_array($data)) {
-            throw new Exception("The meta-data is invalid or is corrupt");
+            $this->throwBadData();
         }
 
         return $data;
@@ -383,23 +400,22 @@ abstract class MetaData implements InjectionAwareInterface, MetaDataInterface
     /**
      * Returns the reverse column map if any
      *
-     *```php
+     * ```php
      * print_r(
      *     $metaData->getReverseColumnMap(
      *         new Robots()
      *     )
      * );
-     *```
+     * ```
      */
-    public function getReverseColumnMap(ModelInterface $model) :  array | null
-    {
-            $data = $this->readColumnMapIndex(
-            $model,
-            self::MODELS_REVERSE_COLUMN_MAP
+    public function getReverseColumnMap(ModelInterface $model): array|null {
+        $data = $this->readColumnMapIndex(
+                $model,
+                self::MODELS_REVERSE_COLUMN_MAP
         );
 
         if ($data !== null && !is_array($data)) {
-            throw new Exception("The meta-data is invalid or is corrupt");
+            $this->throwBadData();
         }
 
         return $data;
@@ -408,10 +424,9 @@ abstract class MetaData implements InjectionAwareInterface, MetaDataInterface
     /**
      * Return the strategy to obtain the meta-data
      */
-    public function getStrategy() : StrategyInterface
-    {
+    public function getStrategy(): StrategyInterface {
         if ($this->strategy === null) {
-                $this->strategy = new Introspection();
+            $this->strategy = new Introspection();
         }
 
         return $this->strategy;
@@ -420,61 +435,57 @@ abstract class MetaData implements InjectionAwareInterface, MetaDataInterface
     /**
      * Check if a model has certain attribute
      *
-     *```php
+     * ```php
      * var_dump(
      *     $metaData->hasAttribute(
      *         new Robots(),
      *         "name"
      *     )
      * );
-     *```
+     * ```
      */
-    public function hasAttribute(ModelInterface $model, string $attribute) :  bool
-    {
-            $columnMap = $this->getReverseColumnMap($model);
+    public function hasAttribute(ModelInterface $model, string $attribute): bool {
+        $columnMap = $this->getReverseColumnMap($model);
 
         if (is_array($columnMap)) {
-            return isset ($columnMap[$attribute]);
+            return isset($columnMap[$attribute]);
         }
 
-        return isset ($this->readMetaData($model)[self::MODELS_DATA_TYPES][$attribute]);
+        return isset($this->readMetaData($model)[self::MODELS_DATA_TYPES][$attribute]);
     }
 
     /**
      * Checks if the internal meta-data container is empty
      *
-     *```php
+     * ```php
      * var_dump(
      *     $metaData->isEmpty()
      * );
-     *```
+     * ```
      */
-    public function isEmpty() :bool
-    {
+    public function isEmpty(): bool {
         return count($this->metaData) == 0;
     }
 
     /**
      * Reads metadata from the adapter
      */
-    public function read(string $key) : array | null
-    {
+    public function read(string $key): array|null {
         return $this->adapter->get($key);
     }
 
     /**
      * Reads the ordered/reversed column map for certain model
      *
-     *```php
+     * ```php
      * print_r(
      *     $metaData->readColumnMap(
      *         new Robots()
      *     )
      * );
-     *```
+     * ```
      */
-    final public function readColumnMap(ModelInterface $model) :  array | null
-    {
+    final public function readColumnMap(ModelInterface $model): array {
         if (!\globals_get("orm.column_renaming")) {
             return null;
         }
@@ -483,23 +494,22 @@ abstract class MetaData implements InjectionAwareInterface, MetaDataInterface
         if (!isset($this->columnMap[$keyName])) {
             $this->initialize($model, null, null, null);
         }
-        return  $this->columnMap[$keyName] ?? null;
+        return $this->columnMap[$keyName] ?? null;
     }
 
     /**
      * Reads column-map information for certain model using a MODEL_* constant
      *
-     *```php
+     * ```php
      * print_r(
      *     $metaData->readColumnMapIndex(
      *         new Robots(),
      *         MetaData::MODELS_REVERSE_COLUMN_MAP
      *     )
      * );
-     *```
+     * ```
      */
-    final public function readColumnMapIndex(ModelInterface $model, int $index) : mixed
-    {
+    final public function readColumnMapIndex(ModelInterface $model, int $index): mixed {
         if (!\globals_get("orm.column_renaming")) {
             return null;
         }
@@ -517,18 +527,17 @@ abstract class MetaData implements InjectionAwareInterface, MetaDataInterface
     /**
      * Reads the complete meta-data for certain model
      *
-     *```php
+     * ```php
      * print_r(
      *     $metaData->readMetaData(
      *         new Robots()
      *     )
      * );
-     *```
+     * ```
      */
-    final public function readMetaData(ModelInterface $model) : array | null
-    {
-            $source = $model->getSource();
-            $schema = $model->getSchema();
+    final public function readMetaData(ModelInterface $model): array|null {
+        $source = $model->getSource();
+        $schema = $model->getSchema();
 
         /*
          * Unique key for meta-data is created using class-name-schema-source
@@ -545,17 +554,16 @@ abstract class MetaData implements InjectionAwareInterface, MetaDataInterface
     /**
      * Reads meta-data for certain model
      *
-     *```php
+     * ```php
      * print_r(
      *     $metaData->readMetaDataIndex(
      *         new Robots(),
      *         0
      *     )
      * );
-     *```
+     * ```
      */
-    final public function readMetaDataIndex(ModelInterface $model, int $index) : mixed
-    {
+    final public function readMetaDataIndex(ModelInterface $model, int $index): mixed {
         $source = $model->getSource();
         $schema = $model->getSchema();
 
@@ -564,110 +572,103 @@ abstract class MetaData implements InjectionAwareInterface, MetaDataInterface
          */
         $key = \get_class_lower($model) . "-" . $schema . $source;
 
-        if (!isset ($this->metaData[$key][$index])) {
+        if (!isset($this->metaData[$key][$index])) {
             $this->initialize($model, $key, $source, $schema);
         }
 
-        return $this->metaData[$key][$index] ?? null;
+        return $this->metaData[$key][$index] ?? [];
     }
 
     /**
      * Resets internal meta-data in order to regenerate it
      *
-     *```php
+     * ```php
      * $metaData->reset();
-     *```
+     * ```
      */
-    public function reset() : void
-    {
-            $this->metaData = [];
-            $this->columnMap = [];
+    public function reset(): void {
+        $this->metaData = [];
+        $this->columnMap = [];
     }
 
     /**
      * Set the $attributes that must be ignored from the INSERT SQL generation
      *
-     *```php
+     * ```php
      * $metaData->setAutomaticCreateAttributes(
      *     new Robots(),
      *     [
      *         "created_at" => true,
      *     ]
      * );
-     *```
+     * ```
      */
-    public function setAutomaticCreateAttributes(ModelInterface $model, array $attributes) : void
-    {
+    public function setAutomaticCreateAttributes(ModelInterface $model, array $attributes): void {
         $this->writeMetaDataIndex(
-            $model,
-            self::MODELS_AUTOMATIC_DEFAULT_INSERT,
-            $attributes
+                $model,
+                self::MODELS_AUTOMATIC_DEFAULT_INSERT,
+                $attributes
         );
     }
 
     /**
      * Set the attributes that must be ignored from the UPDATE SQL generation
      *
-     *```php
+     * ```php
      * $metaData->setAutomaticUpdateAttributes(
      *     new Robots(),
      *     [
      *         "modified_at" => true,
      *     ]
      * );
-     *```
+     * ```
      */
-    public function setAutomaticUpdateAttributes(ModelInterface $model, array $attributes) : void
-    {
+    public function setAutomaticUpdateAttributes(ModelInterface $model, array $attributes): void {
         $this->writeMetaDataIndex(
-            $model,
-            self::MODELS_AUTOMATIC_DEFAULT_UPDATE,
-            $attributes
+                $model,
+                self::MODELS_AUTOMATIC_DEFAULT_UPDATE,
+                $attributes
         );
     }
 
     /**
      * Set the attributes that allow empty string values
      *
-     *```php
+     * ```php
      * $metaData->setEmptyStringAttributes(
      *     new Robots(),
      *     [
      *         "name" => true,
      *     ]
      * );
-     *```
+     * ```
      */
-    public function setEmptyStringAttributes(ModelInterface $model, array $attributes) : void
-    {
+    public function setEmptyStringAttributes(ModelInterface $model, array $attributes): void {
         $this->writeMetaDataIndex(
-            $model,
-            self::MODELS_EMPTY_STRING_VALUES,
-            $attributes
+                $model,
+                self::MODELS_EMPTY_STRING_VALUES,
+                $attributes
         );
     }
 
     /**
      * Sets the DependencyInjector container
      */
-    public function setDI(DiInterface $container) : void
-    {
-            $this->container = $container;
+    public function setDI(DiInterface $container): void {
+        $this->container = $container;
     }
 
     /**
      * Set the meta-data extraction strategy
      */
-    public function setStrategy(StrategyInterface $strategy) : void
-    {
-            $this->strategy = $strategy;
+    public function setStrategy(StrategyInterface $strategy): void {
+        $this->strategy = $strategy;
     }
 
     /**
      * Writes the metadata to adapter
      */
-    public function write(string $key, array $data) : void
-    {
+    public function write(string $key, array $data): void {
         try {
             $option = globals_get("orm.exception_on_failed_metadata_save");
             $result = $this->adapter->set($key, $data);
@@ -683,7 +684,7 @@ abstract class MetaData implements InjectionAwareInterface, MetaDataInterface
     /**
      * Writes meta-data for certain $model using a MODEL_* constant
      *
-     *```php
+     * ```php
      * print_r(
      *     $metaData->writeColumnMapIndex(
      *         new Robots(),
@@ -693,77 +694,75 @@ abstract class MetaData implements InjectionAwareInterface, MetaDataInterface
      *         ]
      *     )
      * );
-     *```
+     * ```
      */
-    final public function writeMetaDataIndex(ModelInterface $model, int $index, $data) : void
-    {
+    final public function writeMetaDataIndex(ModelInterface $model, int $index, $data): void {
         if (!is_array($data) && !is_string($data) && !is_bool($data)) {
             throw new Exception("Invalid data for index");
         }
 
-            $source = $model->getSource();
-            $schema = $model->getSchema();
+        $source = $model->getSource();
+        $schema = $model->getSchema();
 
         /*
          * Unique key for meta-data is created using class-name-schema-table
          */
-            $key = \get_class_lower($model) . "-" . $schema . $source;
+        $key = \get_class_lower($model) . "-" . $schema . $source;
 
         if (!isset($this->metaData[$key])) {
             $this->initialize($model, $key, $source, $schema);
         }
 
-            $this->metaData[$key][$index] = $data;
+        $this->metaData[$key][$index] = $data;
     }
 
     /**
      * Initialize the metadata for certain table
      */
-    final protected function initialize(ModelInterface $model, $key, $table, $schema) : void
-    {
-            $strategy = null;
-            $className = get_class($model);
+    final protected function initialize(ModelInterface $model, $key, $table, $schema): void {
+        $strategy = null;
+        $className = get_class($model);
 
         if ($key !== null) {
-                $metaData = $this->metaData;
+            $metaData = $this->metaData;
 
-            if (!isset($metaData[$key])){
+            if (!isset($metaData[$key])) {
                 /**
                  * The meta-data is read from the adapter always if not available in metaData property
                  */
-                    $prefixKey = "meta-" . $key;
-                    $data = $this->{"read"}($prefixKey);
+                $prefixKey = "meta-" . $key;
+                $data = $this->{"read"}($prefixKey);
 
                 if ($data !== null) {
-                        $this->metaData[$key] = $data;
+                    $this->metaData[$key] = $data;
                 } else {
                     /**
                      * Check if there is a method 'metaData' in the model to retrieve meta-data from it
                      */
                     if (method_exists($model, "metaData")) {
-                            $modelMetadata = $model->{"metaData"}();
+                        $modelMetadata = $model->{"metaData"}();
 
                         if (!is_array($modelMetadata)) {
                             throw new Exception(
-                                "Invalid meta-data for model " . $className
+                                            "Invalid meta-data for model " . $className
                             );
                         }
                     } else {
                         /**
                          * Get the meta-data extraction strategy
                          */
-                            $container = $this->getDI();
-                            $strategy = $this->getStrategy();
-                            $modelMetadata = $strategy->getMetaData(
+                        $container = $this->getDI();
+                        $strategy = $this->getStrategy();
+                        $modelMetadata = $strategy->getMetaData(
                                 $model,
                                 $container
-                            );
+                        );
                     }
 
                     /**
                      * Store the meta-data locally
                      */
-                        $this->metaData[$key] = $modelMetadata;
+                    $this->metaData[$key] = $modelMetadata;
 
                     /**
                      * Store the meta-data in the adapter
@@ -790,8 +789,8 @@ abstract class MetaData implements InjectionAwareInterface, MetaDataInterface
          * Create the map key name
          * Check if the meta-data is already in the adapter
          */
-            $prefixKey = "map-" . $keyName;
-            $data = $this->{"read"}($prefixKey);
+        $prefixKey = "map-" . $keyName;
+        $data = $this->{"read"}($prefixKey);
 
         if ($data !== null) {
             $this->columnMap[$keyName] = $data;
@@ -802,8 +801,8 @@ abstract class MetaData implements InjectionAwareInterface, MetaDataInterface
          * Get the meta-data extraction strategy
          */
         if (!is_object($strategy)) {
-                $container = $this->getDI();
-                $strategy = $this->getStrategy();
+            $container = $this->getDI();
+            $strategy = $this->getStrategy();
         }
 
         /**
@@ -822,8 +821,7 @@ abstract class MetaData implements InjectionAwareInterface, MetaDataInterface
     /**
      * Throws an exception when the metadata cannot be written
      */
-    private function throwWriteException($option) : void
-    {
+    private function throwWriteException($option): void {
         $message = "Failed to store metaData to the cache adapter";
 
         if ($option) {
@@ -832,4 +830,5 @@ abstract class MetaData implements InjectionAwareInterface, MetaDataInterface
             trigger_error($message);
         }
     }
+
 }
