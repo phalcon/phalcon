@@ -56,7 +56,7 @@ abstract class AbstractDb
     {
         $escapeIdentifiers = $options["escapeSqlIdentifiers"] ?? null;
         if (!empty($escapeIdentifiers)) {
-            globals_set("db.escape_identifiers", $escapeIdentifiers);
+            \globals_set("db.escape_identifiers", $escapeIdentifiers);
         }
         
 
@@ -65,7 +65,7 @@ abstract class AbstractDb
          */
         $forceCasting = $options["forceCasting"] ?? null;
         if (!empty($forceCasting)) {
-            globals_set("db.force_casting", $forceCasting);
+            \globals_set("db.force_casting", $forceCasting);
         }
     }
 

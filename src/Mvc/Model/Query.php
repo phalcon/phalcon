@@ -134,7 +134,7 @@ class Query implements QueryInterface, InjectionAwareInterface
             $this->enableImplicitJoins = $enableImplicitJoins;
         }
         else {
-            $this->enableImplicitJoins = globals_get("orm.enable_implicit_joins");
+            $this->enableImplicitJoins = \globals_get("orm.enable_implicit_joins");
         }
     }
 
@@ -244,7 +244,7 @@ class Query implements QueryInterface, InjectionAwareInterface
             /**
              * Change the selected column by its real name on its mapped table
              */
-            if (globals_get("orm.column_renaming")) {
+            if (\globals_get("orm.column_renaming")) {
                 /**
                  * Retrieve the corresponding model by its alias
                  */
@@ -341,7 +341,7 @@ class Query implements QueryInterface, InjectionAwareInterface
             /**
              * Rename the column
              */
-            if (globals_get("orm.column_renaming")) {
+            if (\globals_get("orm.column_renaming")) {
                     $columnMap = $metaData->getReverseColumnMap($hasModel);
             } else {
                     $columnMap = null;
@@ -2955,7 +2955,7 @@ class Query implements QueryInterface, InjectionAwareInterface
                      * If the resultset is complex we open every model into
                      * their columns
                      */
-                    if (globals_get("orm.$column_renaming")) {
+                    if (\globals_get("orm.$column_renaming")) {
                             $columnMap = $metaData->getColumnMap($instance);
                     } else {
                             $columnMap = null;
@@ -3126,7 +3126,7 @@ class Query implements QueryInterface, InjectionAwareInterface
                 /**
                  * Get the column map
                  */
-                if (!globals_get("orm.cast_on_hydrate")) {
+                if (!\globals_get("orm.cast_on_hydrate")) {
                         $simpleColumnMap = $metaData->getColumnMap($resultObject);
                 } else {
                         $columnMap      = $metaData->getColumnMap($resultObject);
@@ -3249,7 +3249,7 @@ class Query implements QueryInterface, InjectionAwareInterface
                 $automaticFields = true;
                 $fields = $attributes;
 
-            if (globals_get("orm.column_renaming")) {
+            if (\globals_get("orm.column_renaming")) {
                     $columnMap = $metaData->getColumnMap($model);
             } else {
                     $columnMap = null;

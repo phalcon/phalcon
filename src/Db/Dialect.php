@@ -36,7 +36,7 @@ abstract class Dialect implements DialectInterface
     {
         //var parts, key, part, newParts;
 
-        if (!globals_get("db.escape_identifiers")) {
+        if (!\globals_get("db.escape_identifiers")) {
             return $str;
         }
 
@@ -72,7 +72,7 @@ abstract class Dialect implements DialectInterface
      */
     final public function escapeSchema(string $str, ?string $escapeChar = null): string
     {
-        if (!globals_get("db.escape_identifiers")) {
+        if (!\globals_get("db.escape_identifiers")) {
             return $str;
         }
 

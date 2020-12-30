@@ -489,7 +489,7 @@ abstract class AbstractPdo extends AbstractAdapter {
                     $castValue = (string) $value;
                     $type = Column::BIND_SKIP;
                 } else {
-                    if (globals_get("db.force_casting")) {
+                    if (\globals_get("db.force_casting")) {
                         if (!is_array($value)) {
                             switch ($type) {
                                 case Column::BIND_PARAM_INT:
