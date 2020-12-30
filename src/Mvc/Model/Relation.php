@@ -44,10 +44,10 @@ class Relation implements RelationInterface
     public function __construct(int $type, string $referencedModel, string|array $fields, 
     	string|array $referencedFields, array $options = [])
     {
-            $this->type = $type,
-            $this->referencedModel = $referencedModel,
-            $this->fields = $fields,
-            $this->referencedFields = $referencedFields,
+            $this->type = $type;
+            $this->referencedModel = $referencedModel;
+            $this->fields = $fields;
+            $this->referencedFields = $referencedFields;
             $this->options = $options;
     }
 
@@ -195,8 +195,8 @@ class Relation implements RelationInterface
     public function setIntermediateRelation(string|array $intermediateFields, 
     		string $intermediateModel, string|array $intermediateReferencedFields) : void
     {
-            $this->intermediateFields = $intermediateFields,
-            $this->intermediateModel = $intermediateModel,
+            $this->intermediateFields = $intermediateFields;
+            $this->intermediateModel = $intermediateModel;
             $this->intermediateReferencedFields = $intermediateReferencedFields;
     }
 }

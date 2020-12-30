@@ -19,26 +19,30 @@ use IntlChar;
 class Route implements RouteInterface
 {
     protected $beforeMatch;
-    protected $compiledPattern;
+    protected string $compiledPattern;
     protected $converters;
     protected $group;
     protected $hostname;
-    //protected $id; //TODO: { get };
-    //protected $methods;
+    protected int $id; 
+    protected $methods;
     protected $match;
     protected $name;
-    //protected $paths;
-    //protected $pattern;
+    protected $paths;
+    protected string $pattern;
 
     // $id is passed to constructor, the caller must manage and use a generator object, or some other method.
 
     /**
      * Phalcon\Mvc\Router\Route constructor
      */
-    public function __construct( protected int $id, protected string $pattern, protected $paths = null, protected $httpMethods = null)
+    public function __construct(int $id, string $pattern, 
+             $paths = null,  $httpMethods = null)
     {
-        //var routeId, uniqueId;
-
+        $this->id = $id;
+        $this->pattern = $pattern;
+        $this->paths = $paths;
+        $this->methods = $httpMethods;
+        
         // Configure the route (extract parameters, paths, etc)
         $this->reConfigure($this->pattern, $this->paths);
 
@@ -78,6 +82,11 @@ class Route implements RouteInterface
         $this->beforeMatch = $callback;
 
         return $this;
+    }
+    
+    public function getId() : int
+    {
+        return $this->id;
     }
 
     /**
