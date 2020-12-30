@@ -20,8 +20,8 @@ use Phalcon\Mvc\Model\Query\Builder;
 use Phalcon\Mvc\Model\Query\BuilderInterface;
 use Phalcon\Mvc\Model\Query\StatusInterface;
 
-function get_class_lower(string $cname) {
-    return get_class(strtolower($cname));
+function get_class_lower(object $instance) : string {
+    return strtolower(get_class($instance));
 }
 /**
  * Phalcon\Mvc\Model\Manager
