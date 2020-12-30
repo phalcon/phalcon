@@ -8,7 +8,7 @@
  * file that was distributed with $this source code.
  */
 
-namespace Phalcon\Mvc;
+namespace Phalcon\Mvc\Model;
 
 use Phalcon\Cache\Adapter\AdapterInterface as CacheAdapterInterface;
 use Phalcon\Di\DiInterface;
@@ -18,7 +18,7 @@ use Phalcon\Mvc\Model\MetaData\Strategy\StrategyInterface;
 use Phalcon\Mvc\ModelInterface;
 
 /**
- * Phalcon\Mvc\MetaData
+ * Phalcon\Mvc\Model\MetaData
  *
  * Because Phalcon\Mvc\Model requires meta-data like field names, data types,
  * primary keys, etc. This component collect them and store for further
