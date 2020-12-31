@@ -125,7 +125,7 @@ class Mysql extends AbstractPdo
     /** lookup
      *   [columntype, bind type]
      */
-    protected function getNumericTypes() : array
+    protected function getNumberTypes() : array
     {
         return [
             "bigint" => [Column::TYPE_BIGINTEGER, Column::BIND_PARAM_INT],
@@ -200,19 +200,22 @@ class Mysql extends AbstractPdo
             
             $dtype_array = explode(" ", $columnType);
             $fundament = $dtype_array[0];
-            
+            $bracket = strpos($fundament,"(");
+            if ($bracket !== false) {
+                $fundament = substr($fundament,0,$bracket);
+            }
             $dtypes = $this->getNumberTypes()[$fundament] ?? null;
             
             if ($dtypes !== null) {
-                $definition["type"] = dtypes[0];
+                $definition["type"] = $dtypes[0];
                 $definition["isNumberic"] = true;
-                $defintion["bindType"] = dtypes[1];
+                $defintion["bindType"] = $dtypes[1];
             }
             else {
                 $ctype = $this->getStringTypes()[$fundament] ?? null;
                 if ($ctype !== null) {
-                    $defintion["type"] = $ctype;
-                    $defintion["bindType"] =  Column::BIND_PARAM_STR;
+                    $definition["type"] = $ctype;
+                    $definition["bindType"] =  Column::BIND_PARAM_STR;
                 }
             }
             
@@ -252,14 +255,15 @@ class Mysql extends AbstractPdo
             /**
              * Check if the column has default value
              */
-            if ($field[5] !== null) {
-                if (memstr($field[6], "on update")) {
+            $hasOnUpdate = (strpos($field[6], "on update") !== false);
+            if ($field[5] !== null) {    
+                if ($hasOnUpdate) {
                     $definition["default"] = $field[5] . " " . $field[6];
                 } else {
                     $definition["default"] = $field[5];
                 }
             } else {
-                if (memstr($field[6], "on update")) {
+                if ($hasOnUpdate) {
                     $definition["default"] = "NULL " . $field[6];
                 }
             }

@@ -21,8 +21,9 @@ use Phalcon\Events\ManagerInterface;
  */
 abstract class AbstractApplication extends Injectable implements EventsAwareInterface
 {
-    public function __construct(protected ?DiInterface $container = null)
+    public function __construct( ?DiInterface $container = null)
     {
+        $this->container = $container;
     }
     
     /**

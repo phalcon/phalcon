@@ -163,7 +163,7 @@ abstract class AbstractPdo extends AbstractAdapter {
              * Notify the events manager about the committed transaction
              */
             if ($this->eventsManager) {
-                $this->eventsManager->fire("db:commitTransaction", this);
+                $this->eventsManager->fire("db:commitTransaction", $this);
             }
 
             /**
@@ -484,7 +484,7 @@ abstract class AbstractPdo extends AbstractAdapter {
             }
 
             if (is_array($dataTypes)) {
-                $type = dataTypes[$wildcard] ?? null;
+                $type = $dataTypes[$wildcard] ?? null;
                 if ($type === Column::BIND_PARAM_DECIMAL) {
                     $castValue = (string) $value;
                     $type = Column::BIND_SKIP;
@@ -675,9 +675,9 @@ abstract class AbstractPdo extends AbstractAdapter {
         if ($em !== null) {
             $this->sqlStatement = $sqlStatement;
             $this->sqlVariables = $bindParams;
-            $this->sqlBindTypes = bindTypes;
+            $this->sqlBindTypes = $bindTypes;
 
-            if ($em->fire("db:beforeQuery", this) === false) {
+            if ($em->fire("db:beforeQuery", $this) === false) {
                 return false;
             }
         }

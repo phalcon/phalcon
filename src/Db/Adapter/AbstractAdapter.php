@@ -161,9 +161,9 @@ abstract class AbstractAdapter implements AdapterInterface, EventsAwareInterface
     {
         return $this->{"execute"}(
             $this->dialect->addColumn(
-                tableName,
-                schemaName,
-                column
+                $tableName,
+                $schemaName,
+                $column
             )
         );
     }
@@ -366,8 +366,8 @@ abstract class AbstractAdapter implements AdapterInterface, EventsAwareInterface
                 $referencedColumns = $constraint["referencedColumns"];
             }
 
-            $columns[] = reference[1];
-            $referencedColumns[] = reference[5];
+            $columns[] = $reference[1];
+            $referencedColumns[] = $reference[5];
 
             $references[$constraintName] = [
                 "referencedSchema"  =>  $referencedSchema,
@@ -379,7 +379,7 @@ abstract class AbstractAdapter implements AdapterInterface, EventsAwareInterface
 
         $referenceObjects = [];
 
-        foreach (references as $name => $arrayReference) {
+        foreach ($references as $name => $arrayReference) {
             $referenceObjects[$name] = new Reference(
                 $name,
                 [
@@ -566,7 +566,7 @@ abstract class AbstractAdapter implements AdapterInterface, EventsAwareInterface
     {
         $row = $this->fetchOne($sqlQuery, Enum::FETCH_BOTH, $placeholders);
         $columnValue = $row[$column] ?? false;
-        return columnValue;
+        return $columnValue;
     }
 
     /**
@@ -804,7 +804,7 @@ abstract class AbstractAdapter implements AdapterInterface, EventsAwareInterface
             }
         }
 
-        if (strpos(table, ".") > 0) {
+        if (strpos($table, ".") > 0) {
             $tableName = explode(".", $table);
         } else {
             $tableName = $table;
@@ -1088,7 +1088,7 @@ abstract class AbstractAdapter implements AdapterInterface, EventsAwareInterface
             return [];
         }
 
-        return $this->fetchAll(sql, Enum::FETCH_ASSOC)[0];
+        return $this->fetchAll($sql, Enum::FETCH_ASSOC)[0];
     }
 
     /**
@@ -1140,7 +1140,7 @@ abstract class AbstractAdapter implements AdapterInterface, EventsAwareInterface
          * string 'null', everything else is passed as '?'
          */
         foreach($values as $position => $value){
-            $field = $fields[position] ?? null;
+            $field = $fields[$position] ?? null;
             if (empty($field)) {
                 throw new Exception(
                     "The number of values in the update is not the same as fields"
@@ -1180,7 +1180,7 @@ abstract class AbstractAdapter implements AdapterInterface, EventsAwareInterface
         /**
          * Check if we got table and schema and escape it accordingly
          */
-        if (strpos(table, ".") > 0) {
+        if (strpos($table, ".") > 0) {
             $tableName = explode(".", $table);
         } else {
             $tableName = $table;
@@ -1241,7 +1241,7 @@ abstract class AbstractAdapter implements AdapterInterface, EventsAwareInterface
          * Perform the update via PDO::execute
          */
         if (empty($bindDataTypes)) {
-            return $this->{"execute"}(updateSql, updateValues);
+            return $this->{"execute"}($updateSql, $updateValues);
         }
 
         return $this->{"execute"}($updateSql, $updateValues, $bindDataTypes);

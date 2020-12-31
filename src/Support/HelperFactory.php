@@ -61,6 +61,7 @@ use Phalcon\Support\Str\Random;
 use Phalcon\Support\Str\ReduceSlashes;
 use Phalcon\Support\Str\StartsWith;
 use Phalcon\Support\Str\Suffix;
+use Phalcon\Support\Str\Uncamelize;
 use Phalcon\Support\Str\Ucwords;
 use Phalcon\Support\Str\Underscore;
 use Phalcon\Support\Str\Upper;
@@ -119,6 +120,7 @@ use function call_user_func_array;
  * @method string reduceSlashes(string $text)
  * @method bool   startsWith(string $haystack, string $needle, bool $ignoreCase = true)
  * @method string suffix($text, string $suffix)
+ * @method string uncamelize($text)
  * @method string ucwords(string $text, string $encoding = 'UTF-8')
  * @method string underscore(string $text)
  * @method string upper(string $text, string $encoding = 'UTF-8')
@@ -218,6 +220,7 @@ class HelperFactory
             'reduceSlashes' => ReduceSlashes::class,
             'startsWith'    => StartsWith::class,
             'suffix'        => Suffix::class,
+            'uncamelize'    => Uncamelize::class,
             'ucwords'       => Ucwords::class,
             'underscore'    => Underscore::class,
             'upper'         => Upper::class,

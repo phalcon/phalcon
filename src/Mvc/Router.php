@@ -453,7 +453,7 @@ class Router extends AbstractInjectionAware implements RouterInterface, EventsAw
         if ($key !== null) {
             return $this->routes[$key];
         }
-        foreach ($routes as $key => $route) {
+        foreach ($this->routes as $key => $route) {
             $routeName = $route->getName();
 
             if (!empty($routeName)) {

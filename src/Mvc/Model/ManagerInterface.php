@@ -326,7 +326,7 @@ interface ManagerInterface {
      * Receives events generated in the models and dispatches them to an events-manager if available
      * Notify the behaviors that are listening in the model
      */
-    public function notifyEvent(string $eventName, ModelInterface $model);
+    public function notifyEvent(string $eventName, ModelInterface $model): bool;
 
     /**
      * Sets both write and read connection service for a model

@@ -10,6 +10,8 @@
  */
 
 namespace Phalcon\Mvc\Router;
+use Phalcon\Support\Str\Uncamelize;
+
 use IntlChar;
 /**
  * Phalcon\Mvc\Router\Route
@@ -353,7 +355,13 @@ class Route implements RouteInterface
      */
     public function getName(): string
     {
-        return $this->name;
+        $name = $this->name;
+        if ($name === null)
+        {
+            $name = (string) $this->id;
+            $this->name = $name;
+        }
+        return $name;
     }
 
     /**
@@ -455,7 +463,7 @@ class Route implements RouteInterface
                 }
 
                 // Always pass the controller to lowercase
-                $routePaths["controller"] = uncamelize(realClassName);
+                $routePaths["controller"] = Uncamelize::fn(realClassName);
             }
 
             // Process action name

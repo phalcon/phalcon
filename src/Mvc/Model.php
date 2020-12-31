@@ -43,7 +43,7 @@ use Phalcon\Mvc\Model\TransactionInterface;
 use Phalcon\Mvc\Model\ValidationFailed;
 use Phalcon\Validation\ValidationInterface;
 use Serializable;
-
+use Phalcon\Support\Str\Uncamelize;
 /**
  * Phalcon\Mvc\Model
  *
@@ -124,7 +124,7 @@ abstract class Model extends AbstractInjectionAware implements EntityInterface, 
 
     protected $snapshot;
 
-    protected ?TransactionInterface $transaction;
+    protected ?TransactionInterface $transaction = null;
 
     protected $uniqueKey;
 
@@ -1841,8 +1841,6 @@ abstract class Model extends AbstractInjectionAware implements EntityInterface, 
      */
     final public function getReadConnection(): AdapterInterface
     {
-        
-
         $transaction = $this->transaction;
 
         if (is_object($transaction)) {
@@ -4420,7 +4418,7 @@ abstract class Model extends AbstractInjectionAware implements EntityInterface, 
                 /**
                  * Get the possible real method name
                  */
-                $field = uncamelize($extraMethod);
+                $field = Uncamelize::fn($extraMethod);
 
                 if (!isset($attributes[$field])) {
                     throw new Exception(
@@ -4481,7 +4479,7 @@ abstract class Model extends AbstractInjectionAware implements EntityInterface, 
         ];
 
 
-        $possibleSetter = "set" . camelize($property);
+        $possibleSetter = "set" . Uncamelize::fn($property);
 
         if (!method_exists($this, $possibleSetter)) {
             return false;
@@ -5272,7 +5270,7 @@ abstract class Model extends AbstractInjectionAware implements EntityInterface, 
             }
         }
 
-        $transaction = $params[$self::TRANSACTION_INDEX] ?? null;
+        $transaction = $params[self::TRANSACTION_INDEX] ?? null;
 		if ($transaction !== null) {
             if ($transaction instanceof TransactionInterface) {
                 $query->setTransaction($transaction);

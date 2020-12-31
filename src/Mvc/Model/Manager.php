@@ -19,7 +19,8 @@ use Phalcon\Mvc\ModelInterface;
 use Phalcon\Mvc\Model\Query\Builder;
 use Phalcon\Mvc\Model\Query\BuilderInterface;
 use Phalcon\Mvc\Model\Query\StatusInterface;
-
+use Phalcon\Mvc\Model\ManagerInterface;
+use Phalcon\Support\Str\Uncamelize;
 
 /**
  * Phalcon\Mvc\Model\Manager
@@ -359,8 +360,8 @@ class Manager implements ManagerInterface, InjectionAwareInterface, EventsAwareI
         if (!isset($this->sources[$entityName])) {
             $this->setModelSource(
                 $model,
-                uncamelize(
-                    get_class_ns($model)
+                Uncamelize::fn(
+                    \get_class_ns($model)
                 )
             );
         }
@@ -517,9 +518,9 @@ class Manager implements ManagerInterface, InjectionAwareInterface, EventsAwareI
      * events-manager if available. Notify the behaviors that are listening in
      * the model
      */
-    public function notifyEvent(string $eventName, ModelInterface $model)
+    public function notifyEvent(string $eventName, ModelInterface $model) : bool
     {
-        $status = null;
+        $status = true;
 
         /**
          * Dispatch events to the global events manager
@@ -542,13 +543,13 @@ class Manager implements ManagerInterface, InjectionAwareInterface, EventsAwareI
          * Dispatch events to the global events manager
          */ $eventsManager = $this->eventsManager;
 
-        if (is_object($eventsManager)) { $status =$eventsManager->fire(
-                "model:" . eventName,
-                model
+        if (is_object($eventsManager)) { $status = $eventsManager->fire(
+                "model:" . $eventName,
+                $model
             );
 
             if ($status === false) {
-                return status;
+                return false;
             }
         }
 
@@ -557,8 +558,8 @@ class Manager implements ManagerInterface, InjectionAwareInterface, EventsAwareI
          */
         $customEventsManager = $this->customEventsManager[\get_class_lower($model)] ?? null;
 		if ($customEventsManager !== null) { $status =$customEventsManager->fire(
-                "model:" . eventName,
-                model
+                "model:" . $eventName,
+                $model
             );
 
             if ($status === false) {
@@ -566,7 +567,7 @@ class Manager implements ManagerInterface, InjectionAwareInterface, EventsAwareI
             }
         }
 
-        return status;
+        return $status;
     }
 
     /**

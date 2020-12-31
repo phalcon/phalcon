@@ -166,7 +166,7 @@ class Url extends AbstractInjectionAware implements UrlInterface
             /**
              * Replace the patterns by its variables
              */
-            $uri = phalcon_replace_paths(
+            $uri = \phalcon_replace_paths(
                 $route->getPattern(),
                 $route->getReversedPaths(),
                 $uri
