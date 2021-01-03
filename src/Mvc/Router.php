@@ -11,7 +11,6 @@
 
 namespace Phalcon\Mvc;
 
-use Phalcon\Di\DiInterface;
 use Phalcon\Di\AbstractInjectionAware;
 use Phalcon\Events\EventsAwareInterface;
 use Phalcon\Events\ManagerInterface;
@@ -65,7 +64,7 @@ class Router extends AbstractInjectionAware implements RouterInterface, EventsAw
     protected $eventsManager;
     protected $keyRouteNames = []; // { get, set };
     protected $keyRouteIds = []; // { get, set };
-    protected $matchedRoute;
+    protected ?RouteInterface $matchedRoute = null;
     protected $matches;
     protected $module = null;
     protected $namespaceName = null;
@@ -388,7 +387,7 @@ class Router extends AbstractInjectionAware implements RouterInterface, EventsAw
     /**
      * Returns the route that matches the handled URI
      */
-    public function getMatchedRoute(): RouteInterface {
+    public function getMatchedRoute(): ?RouteInterface {
         return $this->matchedRoute;
     }
 
