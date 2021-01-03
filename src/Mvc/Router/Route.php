@@ -163,7 +163,7 @@ class Route implements RouteInterface
      */
     public function extractNamedParams(string $pattern)
     {   
-        return route_extract_params($pattern);
+        return \route_extract_params($pattern);
     }
 
     /**
