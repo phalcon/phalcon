@@ -22,7 +22,7 @@ use UnitTester;
  *
  * @package Phalcon\Tests\Unit\Assets\Asset\Css
  */
-class SetAttributesCest
+class GetSetAttributesCest
 {
     /**
      * Tests Phalcon\Assets\Asset\Css :: setAttributes()
