@@ -233,7 +233,7 @@ class Response implements ResponseInterface, InjectionAwareInterface, EventsAwar
         }
 
         if ($externalRedirect) {
-            $header = location;
+            $header = $location;
         } else {
             if (is_string($location) && strstr($location, "://")) {
                 $matched = preg_match("/^[^:\\/?#]++:/", $location);
@@ -599,7 +599,7 @@ class Response implements ResponseInterface, InjectionAwareInterface, EventsAwar
 
         $headers = $this->getHeaders();
 
-        $headers->set(name, value);
+        $headers->set($name, $value);
 
         return $this;
     }

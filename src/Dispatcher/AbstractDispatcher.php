@@ -363,7 +363,7 @@ abstract class AbstractDispatcher extends AbstractInjectionAware implements Disp
             if (method_exists($handler, "beforeExecuteRoute")) {
                 try {
                     // Calling "beforeExecuteRoute" as direct method
-                    if ($handler->beforeExecuteRoute(this) === false || $this->finished === false) {
+                    if ($handler->beforeExecuteRoute($this) === false || $this->finished === false) {
                         $container->remove($handlerClass);
 
                         continue;

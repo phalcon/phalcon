@@ -38,6 +38,7 @@ use Phalcon\Support\File\Basename;
 use Phalcon\Support\Json\Decode;
 use Phalcon\Support\Json\Encode;
 use Phalcon\Support\Number\IsBetween;
+use Phalcon\Support\Str\Camelize;
 use Phalcon\Support\Str\Concat;
 use Phalcon\Support\Str\CountVowels;
 use Phalcon\Support\Str\Decapitalize;
@@ -173,6 +174,7 @@ class HelperFactory
     {
         return [
             'blacklist'     => Blacklist::class,
+            'camelize'      => Camelize::class,
             'chunk'         => Chunk::class,
             'first'         => First::class,
             'firstKey'      => FirstKey::class,

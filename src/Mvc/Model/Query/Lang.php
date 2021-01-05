@@ -38,6 +38,8 @@ abstract class Lang
      */
     public static function parsePHQL(string $phql) : array
     {
-        return phql_parse_phql(phql);
+        
+        //return phql_parse_phql(phql);
+        return [];
     }
 }

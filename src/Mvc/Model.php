@@ -30,20 +30,19 @@ use Phalcon\Mvc\Model\CriteriaInterface;
 use Phalcon\Mvc\Model\Exception;
 use Phalcon\Mvc\Model\ManagerInterface;
 use Phalcon\Mvc\Model\MetaDataInterface;
-use Phalcon\Mvc\Model\Query;
-use Phalcon\Mvc\Model\Query\Builder;
-use Phalcon\Mvc\Model\Query\BuilderInterface;
-use Phalcon\Mvc\Model\QueryInterface;
+
 use Phalcon\Mvc\Model\ResultInterface;
 use Phalcon\Mvc\Model\Resultset;
 use Phalcon\Mvc\Model\ResultsetInterface;
 use Phalcon\Mvc\Model\Relation;
-use Phalcon\Mvc\Model\RelationInterface;
+
 use Phalcon\Mvc\Model\TransactionInterface;
 use Phalcon\Mvc\Model\ValidationFailed;
 use Phalcon\Validation\ValidationInterface;
 use Serializable;
-use Phalcon\Support\Str\Uncamelize;
+
+use Phalcon\Support\Str\Camelize;
+
 /**
  * Phalcon\Mvc\Model
  *
@@ -306,7 +305,7 @@ abstract class Model extends AbstractInjectionAware implements EntityInterface, 
         /**
          * Check if the property has getters
          */
-        $method = "get" . camelize($property);
+        $method = "get" . Camelize::fn($property);
 
         if (method_exists($this, $method)) {
             return $this->{$method}();
@@ -343,7 +342,7 @@ abstract class Model extends AbstractInjectionAware implements EntityInterface, 
             $result = true;
         } else {
             // If this is a property
-            $method = "get" . camelize($property);
+            $method = "get" . Camelize::fn($property);
 
             $result = method_exists($this, $method);
         }
@@ -3560,7 +3559,7 @@ abstract class Model extends AbstractInjectionAware implements EntityInterface, 
         /**
          * If there is an identity field we add it using "null" or "default"
          */
-        if ($identityField !== false) {
+        if (!empty($identityField)) {
             $defaultValue = $connection->getDefaultIdValue();
 
             /**
@@ -3639,7 +3638,7 @@ abstract class Model extends AbstractInjectionAware implements EntityInterface, 
          */
         $success = $connection->insert($table, $values, $fields, $bindTypes);
 
-        if ($success && $identityField !== false) {
+        if ($success && !empty($identityField)) {
             /**
              * We check if the model have sequences
              */
@@ -4347,117 +4346,9 @@ abstract class Model extends AbstractInjectionAware implements EntityInterface, 
      */
     protected final static function _invokeFinder(string $method, array $arguments)
     {
-
-        $extraMethod = null;
-
-        /**
-         * Check if the method starts with "findFirst"
-         */
-        if (str_starts_with($method, "findFirstBy")) {
-            $type = "findFirst";
-            $extraMethod = substr($method, 11);
-        }
-
-        /**
-         * Check if the method starts with "find"
-         */
-        elseif (starts_with($method, "findBy")) {
-            $type = "find";
-            $extraMethod = substr($method, 6);
-        }
-
-        /**
-         * Check if the $method starts with "count"
-         */
-        elseif (str_starts_with($method, "countBy")) {
-            $type = "count";
-            $extraMethod = substr($method, 7);
-        }
-
-        /**
-         * The called class is the model
-         */
-        $modelName = get_called_class();
-
-        if (!$extraMethod) {
-            return false;
-        }
-
-        if (!isset($arguments[0])) {
-            throw new Exception(
-                "The static method '" . $method . "' requires one argument"
-            );
-        }
-
-        $model    = create_instance($modelName);
-        $metaData = $model->getModelsMetaData();
-
-        /**
-         * Get the attributes
-         */
-        $attributes = $metaData->getReverseColumnMap($model);
-
-        if (!is_array($attributes)) {
-            $attributes = $metaData->getDataTypes($model);
-        }
-
-        /**
-         * Check if the extra-method is an attribute
-         */
-        if (isset($attributes[$extraMethod])) {
-            $field = $extraMethod;
-        } else {
-            /**
-             * Lowercase the first letter of the extra-method
-             */
-            $extraMethodFirst = lcfirst($extraMethod);
-
-            if (isset($attributes[$extraMethodFirst])) {
-                $field = $extraMethodFirst;
-            } else {
-                /**
-                 * Get the possible real method name
-                 */
-                $field = Uncamelize::fn($extraMethod);
-
-                if (!isset($attributes[$field])) {
-                    throw new Exception(
-                        "Cannot resolve attribute '" . $extraMethod . "' in the model"
-                    );
-                }
-            }
-        }
-
-        /**
-         * Check if we have "conditions" and "bind" defined
-         */
-        $value = $arguments[0] ?? null;
-
-        if ($value !== null) {
-            $params = [
-                 "conditions" => "[" . $field . "] = ?0",
-                 "bind" => [$value]
-            ];
-
-        } else {
-            $params = [
-                 "conditions" => "[" . $field . "] IS NULL"
-            ];
-        }
-
-        /**
-         * Just in case remove 'conditions' and 'bind'
-         */
-        unset($arguments[0] );
-        unset($arguments["conditions"] );
-        unset($arguments["bind"] );
-
-        $params = array_merge($params, $arguments);
-
-        /**
-         * Execute the query
-         */
-        return $modelName::$type($params);
+        $di = Di::getDefault();
+        $finder = $di->get('models-finder');
+        return $finder->find(get_called_class(), $method, $arguments);
     }
 
     /**
@@ -4479,7 +4370,7 @@ abstract class Model extends AbstractInjectionAware implements EntityInterface, 
         ];
 
 
-        $possibleSetter = "set" . Uncamelize::fn($property);
+        $possibleSetter = "set" . Camelize::fn($property);
 
         if (!method_exists($this, $possibleSetter)) {
             return false;
@@ -5230,63 +5121,6 @@ abstract class Model extends AbstractInjectionAware implements EntityInterface, 
         );
     }
 
-    /**
-     * shared prepare query logic for find and findFirst method
-     */
-    private static function getPreparedQuery($params, $limit = null): Query
-    {
-        $container = Di::getDefault();
-        $manager = $container->getShared("modelsManager");
-
-        /**
-         * Builds a query with the passed parameters
-         */
-        $builder = $manager->createBuilder($params);
-
-        $builder->from(
-            get_called_class()
-        );
-
-        if ($limit != null) {
-            $builder->limit($limit);
-        }
-
-        $query = $builder->getQuery();
-
-        /**
-         * Check for bind parameters
-         */
-        $bindParams = $params["bind"] ?? null;
-		if ($bindParams !== null) {
-            if (is_array($bindParams)) {
-                $query->setBindParams($bindParams, true);
-            }
-
-            $bindTypes = $params["bindTypes"] ?? null;
-		if ($bindTypes !== null) {
-                if (is_array($bindTypes)) {
-                    $query->setBindTypes($bindTypes, true);
-                }
-            }
-        }
-
-        $transaction = $params[self::TRANSACTION_INDEX] ?? null;
-		if ($transaction !== null) {
-            if ($transaction instanceof TransactionInterface) {
-                $query->setTransaction($transaction);
-            }
-        }
-
-        /**
-         * Pass the cache options to the query
-         */
-        $cache = $params["cache"] ?? null;
-		if ($cache !== null) {
-            $query->cache($cache);
-        }
-
-        return $query;
-    }
 
     /**
      * Setup a 1-n relation between two models

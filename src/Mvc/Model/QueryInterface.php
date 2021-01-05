@@ -55,7 +55,7 @@ interface QueryInterface
     /**
      * Executes the query returning the first result
      */
-    public function getSingleResult(array $bindParams = [], array $bindTypes = []) : ModelInterface;
+    public function getSingleResult(array $bindParams = [], array $bindTypes = []) : ?ModelInterface;
 
     /**
      * Check if the query is programmed to get only the first row in the resultset

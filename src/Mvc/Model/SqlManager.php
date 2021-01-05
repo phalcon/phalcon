@@ -1,4 +1,6 @@
 <?php
+namespace Phalcon\Mvc\Model;
+
 /**
  * This file is part of the Phalcon Framework.
  *
@@ -8,7 +10,6 @@
  * LICENSE.txt file that was distributed with this source code.
  */
 
-namespace Phalcon\Mvc\Model;
 
 use Phalcon\Db\Adapter\AdapterInterface;
 use Phalcon\Di\DiInterface;
@@ -49,7 +50,7 @@ use Pnalcon\Reflect\Create;
  * ```
  */
 
-class Manager implements ManagerInterface, InjectionAwareInterface, EventsAwareInterface
+class SqlManager implements ManagerInterface, InjectionAwareInterface, EventsAwareInterface
 {
     protected array $aliases = [];
 
@@ -1340,7 +1341,7 @@ class Manager implements ManagerInterface, InjectionAwareInterface, EventsAwareI
             );
 
             if ($method === "count") {
-               $builder->columns("COUNT(*) AS rowcount"); $rows =$builder->getQuery()->execute(); $firstRow =$rows->getFirst();
+               $builder->columns("COUNT(*) AS rowcount"); $rows = $builder->getQuery()->execute(); $firstRow =$rows->getFirst();
 
                 return (int)$firstRow->readAttribute("rowcount");
             }
@@ -1748,7 +1749,7 @@ class Manager implements ManagerInterface, InjectionAwareInterface, EventsAwareI
         /**
          * Create a query
          */ 
-        $query = $container->get( "Phalcon\\Mvc\\Model\\Query",[$phql, $container] ); 
+        $query = $container->get( "Phalcon\\Mvc\\Model\\SqlQuery",[$phql, $container] ); 
         $this->lastQuery = $query;
 
         return $query;
@@ -1818,7 +1819,7 @@ class Manager implements ManagerInterface, InjectionAwareInterface, EventsAwareI
          * Gets Builder instance from DI container
          */
         return $container->get(
-            "Phalcon\\Mvc\\Model\\Query\\Builder",
+            "Phalcon\\Mvc\\Model\\Query\\SqlBuilder",
             [ $params, $container ]
         );
     }

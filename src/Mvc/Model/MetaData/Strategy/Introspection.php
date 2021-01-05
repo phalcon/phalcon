@@ -45,7 +45,7 @@ class Introspection implements StrategyInterface
            $reversedColumnMap = [];
            $orderedColumnMap = $userColumnMap;
 
-            foreach(userColumnMap as $name  => $userName) {
+            foreach($userColumnMap as $name  => $userName) {
                $reversedColumnMap[$userName] = $name;
             }
         }

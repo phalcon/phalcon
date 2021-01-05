@@ -22,7 +22,7 @@ class Route implements RouteInterface
 {
     protected $beforeMatch;
     protected string $compiledPattern;
-    protected $converters;
+    protected ?array $converters = null;
     protected $group;
     protected $hostname;
     protected int $id; 
@@ -148,9 +148,9 @@ class Route implements RouteInterface
      */
     public function convert(string $name, $converter): RouteInterface
     {
-        $this->converters[name] = converter;
+        $this->converters[$name] = $converter;
 
-        return this;
+        return $this;
     }
 
     /**
@@ -185,7 +185,7 @@ class Route implements RouteInterface
     /**
      * Returns the router converter
      */
-    public function getConverters() : array
+    public function getConverters() : ?array
     {
         return $this->converters;
     }
