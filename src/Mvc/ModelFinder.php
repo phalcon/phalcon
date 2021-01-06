@@ -26,17 +26,8 @@ use Phalcon\Db\Column;
  */
 class ModelFinder implements ModelFinderInterface, InjectionAwareInterface {
 
-    protected string $method;
     protected array $arguments;
     protected ?string $modelName;
-    protected ?ModelInterface $model = null;
-    protected ?ModelManager $manager = null;
-    protected ?string $type;
-    /** storage field name to object property name */
-    protected ?array $propMap = null;
-    protected ?array $propTypes = null;
-    
-    protected ?MetaDataInterface $metaData = null;
     protected ?DiInterface $container = null;
 
     public function __construct(?DiInterface $container = null) {
@@ -62,32 +53,81 @@ class ModelFinder implements ModelFinderInterface, InjectionAwareInterface {
         return $result;
     }
 
-    public function find(string $modelName, string $method, array $arguments): ?ModelInterface {
-        $this->method = $method;
+    /**
+     * Called directly from static Model::findFirst
+     * One argument of a variety of parameter types. 
+     * Return one model instance or null
+     */
+    public function findFirst (string $modelName, mixed $arguments = null) : ModelInterface | null
+    {
+        // generate "conditions", "bind" and "bindTypes" parameters for query call
+        $this->modelName = $modelName;
+        
+        $params = null;
+        if (is_string($arguments)) {
+            // If string, to be direct SQL injection, pre-bound
+            $params["conditions"] = $arguments; 
+        }
+        else if (is_array($arguments)){
+            // pre-cooked configuration
+            $params = $arguments; 
+        }
+        else if ($arguments === null) {
+            $params = [];
+        }
+        else{
+            throw new Exception(
+                "arguments passed must be of type array, string, numeric or null"
+            );
+        }
+
+        $query = $this->getPreparedQuery($params, 1);
+
+        /**
+         * Return only the first row
+         */
+        $query->setUniqueRow(true);
+
+        /**
+         * Execute the query passing the bind-params and casting-types
+         */
+        $qresult = $query->execute();
+        
+        if (!empty($qresult)) {
+            // expect array of values
+            $result = Create::instance($modelName);
+            $propMap = $result->columnMap();
+            $result->assign($qresult, null, $propMap);
+            return $result;
+        }
+        return null;
+    }
+        
+    public function dispatch(string $modelName, string $method, array $arguments): null | array | ModelInterface
+    {
         $this->arguments = $arguments;
         $this->modelName = $modelName;
 
         $attrName = null;
-        $method = $this->method;
         /**
          * Check if the method starts with "findFirst"
          */
         if (str_starts_with($method, "findFirstBy")) {
-            $type = "findFirst";
             $attrName = substr($method, 11);
+            return $this->findFirstBy($attrName);
         }
 
         /**
          * Check if the method starts with "find"
-         */ elseif (starts_with($method, "findBy")) {
-            $type = "find";
+         */ elseif (str_starts_with($method, "findBy")) {
+            $type = "findBy";
             $attrName = substr($method, 6);
         }
 
         /**
          * Check if the $method starts with "count"
          */ elseif (str_starts_with($method, "countBy")) {
-            $type = "count";
+            $type = "countBy";
             $attrName = substr($method, 7);
         }
         // $attrName must resolve to a field
@@ -95,16 +135,25 @@ class ModelFinder implements ModelFinderInterface, InjectionAwareInterface {
             return false;
         }
 
-        $model = Create::instance($modelName);
-        // TODO: also set a model manager instance?
-        $this->model = $model; // save for later
+        /**
+         * Execute the query
+         */
+        return $this->$type($params);
+    }
+
+
+    /** Return just one or null, after resolving to one set of parameters
+     */
+    private function findFirstBy(string $attrName): ?ModelInterface {
+
+        $model = Create::instance($this->modelName);
 
 
         $metaData = $model->getModelsMetaData();
-        $this->metaData = $metaData;
+        //$this->metaData = $metaData;
 
         $propMap = $model->columnMap();
-        $this->propMap = $propMap;
+        //$this->propMap = $propMap;
         
         $propTypes = $metaData->getDataTypes($model);
         
@@ -123,10 +172,12 @@ class ModelFinder implements ModelFinderInterface, InjectionAwareInterface {
                 );
             }
         }
-
+        $arguments = $this->arguments;
         $value = $arguments[0] ?? null;
-        $colType = $propTypes[$field];
-
+        $colBindTypes = $metaData->getBindTypes($model);
+        
+        $colType = $colBindTypes[$field];
+        
         if ($value !== null) {
             $params = [
                 "conditions" => "$field  = :FP0",
@@ -148,29 +199,7 @@ class ModelFinder implements ModelFinderInterface, InjectionAwareInterface {
 
         $params = array_merge($params, $arguments);
 
-        /**
-         * Execute the query
-         */
-        return $this->$type($params);
-    }
-
-    /** Return just one or null
-     */
-    protected function findFirst(array $parameters): ?ModelInterface {
-
-        if (null === $parameters) {
-            $params = [];
-        } elseif (is_array($parameters)) {
-            $params = $parameters;
-        } elseif (is_string($parameters) || is_numeric($parameters)) {
-            $params = [$parameters];
-        } else {
-            throw new Exception(
-                            "Parameters passed must be of type array, string, numeric or null"
-            );
-        }
-
-        $query = static::getPreparedQuery($params, 1);
+        $query = $this->getPreparedQuery($params, 1);
 
         /**
          * Return only the first row
@@ -183,13 +212,43 @@ class ModelFinder implements ModelFinderInterface, InjectionAwareInterface {
         $qresult = $query->execute(); //mixed result
         if (!empty($qresult)) {
             // expect array of values
-            $result = $this->model;
-            $result->assign($qresult, null, $this->propMap);
+            $result = $model;
+            $result->assign($qresult, null, $propMap);
             return $result;
         }
         return null;
     }
+    
+    public function find(string $modelName, mixed $parameters = null) : ?ResultsetInterface
+    {
+        if (!is_array($parameters)) {
+            $params = [];
+            if ($parameters !== null) {
+                $params[] = $parameters;
+            }
+        } else {
+            $params = $parameters;
+        }
 
+        $query = $this->getPreparedQuery($params);
+
+        /**
+         * Execute the query passing the bind-params and casting-types
+         */
+        $resultset = $query->execute();
+
+        /**
+         * Define an hydration mode
+         */
+        if (is_object($resultset)) {
+            $hydration = $params["hydration"] ?? null;
+		if ($hydration !== null) {
+                $resultset->setHydrateMode($hydration);
+            }
+        }
+
+        return $resultset;
+    }
     /**
      * Previously static method of Phalcon\Mvc\Model
      * shared prepare query logic for find and findFirst method

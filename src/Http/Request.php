@@ -22,6 +22,7 @@ use Phalcon\Http\Request\Exception;
 
 use UnexpectedValueException;
 use stdClass;
+use const PREG_SPLIT_NO_EMPTY;
 
 /**
  * Encapsulates request information for easy and secure access from application
@@ -620,12 +621,12 @@ class Request extends AbstractInjectionAware implements RequestInterface
         }
 
         return $this->getHelper(
-            put,
-            name,
-            filters,
-            defaultValue,
-            notAllowEmpty,
-            noRecursive
+            $put,
+            $name,
+            $filters,
+            $defaultValue,
+            $notAllowEmpty,
+            $noRecursive
         );
     }
 
@@ -647,12 +648,12 @@ class Request extends AbstractInjectionAware implements RequestInterface
     public function getQuery(string $name = null, $filters = null, $defaultValue = null, bool $notAllowEmpty = false, bool $noRecursive = false) // TODO: mixed
     {
         return $this->getHelper(
-            _GET,
-            name,
-            filters,
-            defaultValue,
-            notAllowEmpty,
-            noRecursive
+            $_GET,
+            $name,
+            $filters,
+            $defaultValue,
+            $notAllowEmpty,
+            $noRecursive
         );
     }
 
@@ -747,10 +748,10 @@ class Request extends AbstractInjectionAware implements RequestInterface
         //var superFiles, prefix, input, smoothInput, file, dataFile;
        $files = [];
 
-        $superFiles = _FILES;
+        $superFiles = $_FILES;
 
         if (count($superFiles) > 0) {
-            foreach(superFiles as $prefix =>  $input) {
+            foreach($superFiles as $prefix =>  $input) {
                 if (is_array($input["name"])) {
                     $smoothInput = $this->smoothFiles(
                         $input["name"],
@@ -841,7 +842,7 @@ class Request extends AbstractInjectionAware implements RequestInterface
      */
     public function has(string $name): bool
     {
-        return isset( _REQUEST[$name]);
+        return isset( $_REQUEST[$name]);
     }
 
     /**

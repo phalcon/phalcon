@@ -3,5 +3,7 @@
 namespace Phalcon\Mvc;
 
 interface ModelFinderInterface {
-	public function find(string $modelName, string $method, array $arguments)  : ?ModelInterface;
+	function dispatch(string $modelName, string $method, array $arguments)  :  null | array | ModelInterface;
+        function findFirst(string $modelName, array $params): ?ModelInterface;
+        function find(string $modelName, mixed $parameters = null) : ?ResultsetInterface;       
 }

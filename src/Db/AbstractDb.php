@@ -47,6 +47,8 @@ use \PDO as Pdo;
  * }
  * 
  */
+
+
 abstract class AbstractDb
 {
     /**
@@ -70,3 +72,8 @@ abstract class AbstractDb
     }
 
 }
+
+
+
+
+

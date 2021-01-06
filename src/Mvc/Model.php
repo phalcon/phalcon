@@ -130,6 +130,9 @@ abstract class Model extends AbstractInjectionAware implements EntityInterface, 
     protected $uniqueParams;
 
     protected $uniqueTypes;
+    
+    // true means exists returned false. False means have not checked.
+    protected bool $existsFailed = false;
 
     /**
      * Phalcon\Mvc\Model constructor
@@ -1078,6 +1081,10 @@ abstract class Model extends AbstractInjectionAware implements EntityInterface, 
 
             return false;
         }
+        else {
+            // Let's not check this again, please
+            $this->nonExistent = true; 
+        }
 
         /**
          * Using save() anyways
@@ -1446,36 +1453,10 @@ abstract class Model extends AbstractInjectionAware implements EntityInterface, 
      */
     public static function find($parameters = null): ResultsetInterface
     {
-        
-
-        if (!is_array($parameters)) {
-            $params = [];
-
-            if ($parameters !== null) {
-                $params[] = $parameters;
-            }
-        } else {
-            $params = $parameters;
-        }
-
-        $query = static::getPreparedQuery($params);
-
-        /**
-         * Execute the query passing the bind-params and casting-types
-         */
-        $resultset = $query->execute();
-
-        /**
-         * Define an hydration mode
-         */
-        if (is_object($resultset)) {
-            $hydration = $params["hydration"] ?? null;
-		if ($hydration !== null) {
-                $resultset->setHydrateMode($hydration);
-            }
-        }
-
-        return $resultset;
+        $di = Di::getDefault();
+        $finder = $di->get('models-finder');
+        // direct dispatch
+        return $finder->find(get_called_class(),$parameters);
     }
 
     /**
@@ -1559,36 +1540,15 @@ abstract class Model extends AbstractInjectionAware implements EntityInterface, 
      *         'lifetime' => 3600,
      *         'key' => 'my-find-key'
      *     ],
-     *     'hydration' => null
+     *     'hydration' => null;
      * ]
      */
     public static function findFirst($parameters = null): ModelInterface | null
     {
-        
-
-        if (null === $parameters) {
-            $params = [];
-        } elseif (is_array($parameters)) {
-            $params = $parameters;
-        } elseif (is_string($parameters) || is_numeric($parameters)) {
-            $params = [$parameters];
-        } else {
-            throw new Exception(
-                "Parameters passed must be of type array, string, numeric or null"
-            );
-        }
-
-        $query = static::getPreparedQuery($params, 1);
-
-        /**
-         * Return only the first row
-         */
-        $query->setUniqueRow(true);
-
-        /**
-         * Execute the query passing the bind-params and casting-types
-         */
-        return $query->execute();
+        $di = Di::getDefault();
+        $finder = $di->get('models-finder');
+        // direct dispatch
+        return $finder->findFirst(get_called_class(),$parameters);
     }
 
     /**
@@ -2423,16 +2383,24 @@ abstract class Model extends AbstractInjectionAware implements EntityInterface, 
             $table = $source;
         }
 
-        /**
-         * Create/Get the current database connection
-         */
-        $readConnection = $this->getReadConnection();
+        
+        
 
         /**
-         * We need to check if the record exists
+         * We need may need to check if the record exists
          */
-        $exists = $this->exists($metaData, $readConnection);
-
+        if (!$this->existsFailed) {
+            // no recent exists check
+            /**
+             * Create/Get the current database connection
+             */
+            $readConnection = $this->getReadConnection();
+            $exists = $this->exists($metaData, $readConnection);
+        }
+        else {
+            $exists = false;
+        }
+        
         if ($exists) {
             $this->operationMade = self::OP_UPDATE;
         } else {
@@ -3986,14 +3954,14 @@ abstract class Model extends AbstractInjectionAware implements EntityInterface, 
 
     /**
      * Checks whether the current record already exists
-     *
+     * property existsFailed for exclusive write by this function.
      * @return bool
      */
     protected function exists(MetaDataInterface $metaData, AdapterInterface $connection) : bool
     {
         $uniqueParams = null;
         $uniqueTypes  = null;
-
+        $this->existsFailed = true; 
         /**
          * Builds a unique primary key condition
          */
@@ -4044,17 +4012,19 @@ abstract class Model extends AbstractInjectionAware implements EntityInterface, 
                 $value = null;
                 if (property_exists($this, $attributeField)) {
                     $value = $this->{$attributeField};
-                    if ($value !== null) {
+                   
                     /**
                      * We count how many fields are empty, if all fields are
                      * empty we don't perform an 'exist' check
                      */
                     if ($value === null || $value === "") {
                         $numberEmpty++;
+                        
                     }
-
+                    
+                    
+                    
                     $uniqueParams[] = $value;
-                    }
                 } else {
                     $uniqueParams[] = null;
                     $numberEmpty++;
@@ -4132,7 +4102,8 @@ abstract class Model extends AbstractInjectionAware implements EntityInterface, 
 
         if ($num["rowcount"]) {
             $this->dirtyState = self::DIRTY_STATE_PERSISTENT;
-
+            // false means really exists or have not checked
+            $this->existsFailed = false; 
             return true;
         } else {
             $this->dirtyState = self::DIRTY_STATE_TRANSIENT;
@@ -4348,7 +4319,7 @@ abstract class Model extends AbstractInjectionAware implements EntityInterface, 
     {
         $di = Di::getDefault();
         $finder = $di->get('models-finder');
-        return $finder->find(get_called_class(), $method, $arguments);
+        return $finder->dispatch(get_called_class(), $method, $arguments);
     }
 
     /**
