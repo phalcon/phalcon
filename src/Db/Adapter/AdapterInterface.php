@@ -182,7 +182,7 @@ interface AdapterInterface
     /**
      * Returns the first row in a SQL query result
      */
-    public function fetchOne(string $sqlQuery, int $fetchMode = 2, ?array $placeholders = null) : array;
+    public function fetchOne(string $sqlQuery, int $fetchMode = 2, ?array $placeholders = null) : array | bool;
 
     /**
      * Returns a SQL modified with a FOR UPDATE clause

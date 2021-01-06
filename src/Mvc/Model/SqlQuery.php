@@ -150,9 +150,12 @@ class SqlQuery implements QueryInterface, InjectionAwareInterface {
     public function execute(array $bindParams = [], array $bindTypes = []) {
         $uniqueRow = $this->uniqueRow;
         $cacheOptions = $this->cacheOptions;
-        if ($uniqueRow) {
-            $db = $this->container->get('db');     
+        $db = $this->container->get('db'); 
+        if ($uniqueRow) { 
             return $db->fetchOne($this->sql, Enum::FETCH_ASSOC, $this->bindParams, $this->bindTypes);
+        }
+        else {
+            return $db->fetchAll($this->sql, Enum::FETCH_ASSOC, $this->bindParams, $this->bindTypes);
         }
         return null;
     }

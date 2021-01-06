@@ -9,7 +9,8 @@ use Phalcon\Di\{
 };
 use Phalcon\Mvc\Model\{
     MetaDataInterface,
-    QueryInterface
+    QueryInterface,
+    Exception
 };
 use Phalcon\Support\Str\Uncamelize;
 use Phalcon\Reflect\Create;
@@ -26,8 +27,12 @@ use Phalcon\Db\Column;
  */
 class ModelFinder implements ModelFinderInterface, InjectionAwareInterface {
 
-    protected array $arguments;
+    
     protected ?string $modelName;
+    protected ?ModelInterface $model = null;
+    protected ?MetaDataInterface $metaData = null;
+   
+    
     protected ?DiInterface $container = null;
 
     public function __construct(?DiInterface $container = null) {
@@ -53,6 +58,22 @@ class ModelFinder implements ModelFinderInterface, InjectionAwareInterface {
         return $result;
     }
 
+    private function getBindTypes() : array {
+        return $this->metaData->getBindType($this->model);
+    }
+    
+    private function getPropTypes() : array {
+        return  $this->metaData->getDataTypes($this->model);
+    }
+    
+    private function init(string $modelName)
+    {
+        $this->modelName = $modelName;
+        $model = Create::instance($this->modelName);
+        $this->model = $model;
+        $metaData = $model->getModelsMetaData();
+        $this->metaData = $metaData;
+    }
     /**
      * Called directly from static Model::findFirst
      * One argument of a variety of parameter types. 
@@ -60,9 +81,10 @@ class ModelFinder implements ModelFinderInterface, InjectionAwareInterface {
      */
     public function findFirst (string $modelName, mixed $arguments = null) : ModelInterface | null
     {
-        // generate "conditions", "bind" and "bindTypes" parameters for query call
-        $this->modelName = $modelName;
         
+        $this->init($modelName);
+        
+        //$this->propMap = $propMap;
         $params = null;
         if (is_string($arguments)) {
             // If string, to be direct SQL injection, pre-bound
@@ -80,7 +102,7 @@ class ModelFinder implements ModelFinderInterface, InjectionAwareInterface {
                 "arguments passed must be of type array, string, numeric or null"
             );
         }
-
+        
         $query = $this->getPreparedQuery($params, 1);
 
         /**
@@ -96,8 +118,8 @@ class ModelFinder implements ModelFinderInterface, InjectionAwareInterface {
         if (!empty($qresult)) {
             // expect array of values
             $result = Create::instance($modelName);
-            $propMap = $result->columnMap();
-            $result->assign($qresult, null, $propMap);
+            //$propMap = $result->columnMap();
+            $result->assign($qresult, null);
             return $result;
         }
         return null;
@@ -132,7 +154,7 @@ class ModelFinder implements ModelFinderInterface, InjectionAwareInterface {
         }
         // $attrName must resolve to a field
         if (!$attrName) {
-            return false;
+            throw new Exception("ModelFinder dispatch does not support $method()");
         }
 
         /**
@@ -145,22 +167,8 @@ class ModelFinder implements ModelFinderInterface, InjectionAwareInterface {
     /** Return just one or null, after resolving to one set of parameters
      */
     private function findFirstBy(string $attrName): ?ModelInterface {
-
-        $model = Create::instance($this->modelName);
-
-
-        $metaData = $model->getModelsMetaData();
-        //$this->metaData = $metaData;
-
-        $propMap = $model->columnMap();
-        //$this->propMap = $propMap;
         
-        $propTypes = $metaData->getDataTypes($model);
-        
-        if (empty($propMap)) {
-            // getReverseColumnMap doesn't seem to work, returns null
-            $propMap = $metaData->getReverseColumnMap($model);
-        }
+        $propMap = $this->propMap;
         if (isset($propMap[$attrName])) {
             $field = $attrName;
         } else {
@@ -174,7 +182,7 @@ class ModelFinder implements ModelFinderInterface, InjectionAwareInterface {
         }
         $arguments = $this->arguments;
         $value = $arguments[0] ?? null;
-        $colBindTypes = $metaData->getBindTypes($model);
+        $colBindTypes = $this->getBindTypes();
         
         $colType = $colBindTypes[$field];
         
@@ -212,7 +220,7 @@ class ModelFinder implements ModelFinderInterface, InjectionAwareInterface {
         $qresult = $query->execute(); //mixed result
         if (!empty($qresult)) {
             // expect array of values
-            $result = $model;
+            $result = $$this->model;
             $result->assign($qresult, null, $propMap);
             return $result;
         }
@@ -221,6 +229,8 @@ class ModelFinder implements ModelFinderInterface, InjectionAwareInterface {
     
     public function find(string $modelName, mixed $parameters = null) : ?ResultsetInterface
     {
+        $this->init($modelName);
+        
         if (!is_array($parameters)) {
             $params = [];
             if ($parameters !== null) {
@@ -235,12 +245,18 @@ class ModelFinder implements ModelFinderInterface, InjectionAwareInterface {
         /**
          * Execute the query passing the bind-params and casting-types
          */
-        $resultset = $query->execute();
+        
+        // need a Result Set
+        
+        $rows = $query->execute();
 
         /**
          * Define an hydration mode
          */
-        if (is_object($resultset)) {
+        if (!empty($rows)) {
+            foreach($rows as $row) {
+                
+            }
             $hydration = $params["hydration"] ?? null;
 		if ($hydration !== null) {
                 $resultset->setHydrateMode($hydration);
@@ -275,18 +291,26 @@ class ModelFinder implements ModelFinderInterface, InjectionAwareInterface {
         /**
          * Check for bind parameters
          */
-        $bindParams = $params["bind"] ?? null;
-        if ($bindParams !== null) {
-            if (is_array($bindParams)) {
-                $query->setBindParams($bindParams, true);
+        $bindParams = $params["bind"] ?? [];
+        $bindTypes = $params["bindTypes"] ?? [];
+        
+        if (is_array($bindParams)) {
+            $bp = [];
+            $bt = $bindTypes;
+            foreach($bindParams as $key => $value) {
+                    $nkey = $key;
+                    if (!str_starts_with($nkey,':')) {
+                        $nkey = ':' . $key;
+                    }
+                    $bp[$nkey] = $value;
+                    
+                    if (!isset($bt[$nkey])) {
+                        $bt[$nkey] = is_int($value) ? COLUMN::BIND_PARAM_INT : COLUMN::BIND_PARAM_STR;
+                    }    
             }
-
-            $bindTypes = $params["bindTypes"] ?? null;
-            if ($bindTypes !== null) {
-                if (is_array($bindTypes)) {
-                    $query->setBindTypes($bindTypes, true);
-                }
-            }
+                
+            $query->setBindParams($bp, true);
+            $query->setBindTypes($bt, true);
         }
 
         $transaction = $params['transaction'] ?? null;
@@ -295,7 +319,6 @@ class ModelFinder implements ModelFinderInterface, InjectionAwareInterface {
                 $query->setTransaction($transaction);
             }
         }
-
         /**
          * Pass the cache options to the query
          */
