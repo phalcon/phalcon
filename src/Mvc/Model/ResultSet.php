@@ -441,7 +441,7 @@ abstract class Resultset
     /**
      * Gets row in a specific position of the resultset
      */
-    public function offsetGet(int $index) : ModelInterface | bool
+    public function offsetGet(mixed $index) : ModelInterface | bool
     {
         if ($index >= $this->count) {
             throw new Exception("The index does not exist in the cursor");
@@ -520,7 +520,7 @@ abstract class Resultset
                  * `Model\Query::executeSelect()`
                  * The first row is available with fetch
                  */
-               $this->row = $result->$fetch();
+               $this->row = $result->fetch();
             }
 
             if($this->pointer > $position) {
@@ -531,7 +531,7 @@ abstract class Resultset
                  */
                 $result->dataSeek($position);
 
-               $this->row = $result->$fetch();
+               $this->row = $result->fetch();
                $this->pointer = $position;
             }
 
@@ -541,7 +541,7 @@ abstract class Resultset
                  * forward until the requested position is reached. We do not
                  * need to re-execute the query!
                  */
-               $this->row = $result->$fetch();
+               $this->row = $result->fetch();
                $this->pointer++;
             }
 

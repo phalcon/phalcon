@@ -169,7 +169,7 @@ class Route implements RouteInterface
     /**
      * Returns the 'before match' callback if any
      */
-    public function getBeforeMatch() : callable
+    public function getBeforeMatch() : ?callable
     {
         return $this->beforeMatch;
     }

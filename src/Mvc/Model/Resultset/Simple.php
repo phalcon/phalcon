@@ -12,11 +12,11 @@
 namespace Phalcon\Mvc\Model\Resultset;
 
 use Phalcon\Cache\Adapter\AdapterInterface;
-use Phalcon\Di;
+use Phalcon\Di\Di;
 use Phalcon\Di\DiInterface;
 use Phalcon\Mvc\Model;
 use Phalcon\Mvc\Model\Exception;
-use Phalcon\Mvc\Model\Resultset;
+use Phalcon\Mvc\Model\ResultSet;
 use Phalcon\Mvc\Model\Row;
 use Phalcon\Mvc\ModelInterface;
 use Phalcon\Storage\Serializer\SerializerInterface;
@@ -27,7 +27,7 @@ use Phalcon\Storage\Serializer\SerializerInterface;
  * Simple resultsets only contains a complete objects
  * This class builds every complete object as it is required
  */
-class Simple extends Resultset
+class Simple extends ResultSet
 {
     protected $columnMap;
     protected $model;

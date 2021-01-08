@@ -846,14 +846,32 @@ class SqlBuilder implements BuilderInterface, InjectionAwareInterface {
 
         // Set default bind params
         $bindParams = $this->bindParams;
-        if (is_array($bindParams)) {
-            $query->setBindParams($bindParams);
-        }
-
-        // Set default bind types
+                // Set default bind types
         $bindTypes = $this->bindTypes;
-        if (is_array($bindTypes)) {
-            $query->setBindTypes($bindTypes);
+        
+        
+        if (is_array($bindParams)) {
+            // want each bindParam to be prefixed by :
+            // and be matched by appropriate bind type!
+            // This is a query builder class.
+            // Unfortunately metadata can't be allowed to help,
+            // since bind key names are arbitrary
+            $bp = [];
+            $bt = [];
+            foreach($bindParams as $key => $value) {
+                    $nkey = $key;
+                    if (!str_starts_with($nkey,':')) {
+                        $nkey = ':' . $key;
+                    }
+                    $bp[$nkey] = $value;
+                    if (!isset($bt[$nkey])) {
+                        $bt[$nkey] = is_int($value) ? COLUMN::BIND_PARAM_INT : COLUMN::BIND_PARAM_STR;
+                    }    
+            }
+            $this->bindParams = $bp;
+            $this->bindTypes = $bt;
+            $query->setBindParams($bp);
+            $query->setBindTypes($bt);
         }
 
         if (is_bool($this->sharedLock)) {

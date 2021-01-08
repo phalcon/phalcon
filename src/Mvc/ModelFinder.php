@@ -12,6 +12,8 @@ use Phalcon\Mvc\Model\{
     QueryInterface,
     Exception
 };
+use Phalcon\Mvc\Model\ResultsetInterface;
+use Phalcon\Mvc\Model\Resultset\Simple;
 use Phalcon\Support\Str\Uncamelize;
 use Phalcon\Reflect\Create;
 use Phalcon\Db\Column;
@@ -73,6 +75,18 @@ class ModelFinder implements ModelFinderInterface, InjectionAwareInterface {
         $this->model = $model;
         $metaData = $model->getModelsMetaData();
         $this->metaData = $metaData;
+        if (method_exists($model,'columnMap')) {
+            $this->propMap = $model->columnMap();
+        }
+        else {
+             // assume best case
+             $attr = $metaData->getAttributes($model);
+             $map = [];
+             foreach($attr as $name) {
+                 $map[$name] = $name;
+             }
+             $this->propMap = $map; 
+        }
     }
     /**
      * Called directly from static Model::findFirst
@@ -113,14 +127,18 @@ class ModelFinder implements ModelFinderInterface, InjectionAwareInterface {
         /**
          * Execute the query passing the bind-params and casting-types
          */
-        $qresult = $query->execute();
+        $ok = $query->execute();
         
-        if (!empty($qresult)) {
+        
+        if ($ok) {
             // expect array of values
             $result = Create::instance($modelName);
             //$propMap = $result->columnMap();
-            $result->assign($qresult, null);
-            return $result;
+            $row = $query->fetchOne();
+            if ($row) {
+                $result->assign($row, null);        
+                return $result;
+            }
         }
         return null;
     }
@@ -166,8 +184,8 @@ class ModelFinder implements ModelFinderInterface, InjectionAwareInterface {
 
     /** Return just one or null, after resolving to one set of parameters
      */
-    private function findFirstBy(string $attrName): ?ModelInterface {
-        
+    private function findFirstBy(string $attrName): ?ModelInterface 
+    {  
         $propMap = $this->propMap;
         if (isset($propMap[$attrName])) {
             $field = $attrName;
@@ -217,17 +235,21 @@ class ModelFinder implements ModelFinderInterface, InjectionAwareInterface {
         /**
          * Execute the query passing the bind-params and casting-types
          */
-        $qresult = $query->execute(); //mixed result
-        if (!empty($qresult)) {
-            // expect array of values
-            $result = $$this->model;
-            $result->assign($qresult, null, $propMap);
+      
+        $ok = $query->execute(); //mixed result
+        if ($ok) {
+            // expect 
+            $qrow = $query->fetchOne();
+            $result = $this->model;
+            $result->assign($qrow, null, $propMap);
             return $result;
         }
         return null;
     }
     
-    public function find(string $modelName, mixed $parameters = null) : ?ResultsetInterface
+    /** interface expectations of this and actual method horrible */
+    
+    public function find(string $modelName, mixed $parameters = null) : ?ResultSetInterface
     {
         $this->init($modelName);
         
@@ -241,29 +263,34 @@ class ModelFinder implements ModelFinderInterface, InjectionAwareInterface {
         }
 
         $query = $this->getPreparedQuery($params);
+        $ok = $query->execute();
 
+        $propMap = $this->propMap;
+        //$columnMap,$model,$result,AdapterInterface $cache = null,bool $keepSnapshots = null
+        if ($ok) {
+            $simple = new Simple($propMap, $this->model, $query->resultInterface());
+            return $simple;
+        }
+        else {
+            return null;
+        }
         /**
-         * Execute the query passing the bind-params and casting-types
-         */
-        
-        // need a Result Set
-        
-        $rows = $query->execute();
-
-        /**
-         * Define an hydration mode
-         */
-        if (!empty($rows)) {
+        if ($ok) {
+            // just batch it 
+            $modelSet = [];
+            $rows = $query->fetchAll();
+            
             foreach($rows as $row) {
-                
+                $m = Create::instance($modelName);
+                $m->assign($row, null, $propMap);
+                $modelSet[] = $m;
             }
-            $hydration = $params["hydration"] ?? null;
-		if ($hydration !== null) {
-                $resultset->setHydrateMode($hydration);
-            }
+            return $modelSet;
         }
 
-        return $resultset;
+        return [];
+         * 
+         */
     }
     /**
      * Previously static method of Phalcon\Mvc\Model
@@ -287,31 +314,6 @@ class ModelFinder implements ModelFinderInterface, InjectionAwareInterface {
         }
 
         $query = $builder->getQuery();
-
-        /**
-         * Check for bind parameters
-         */
-        $bindParams = $params["bind"] ?? [];
-        $bindTypes = $params["bindTypes"] ?? [];
-        
-        if (is_array($bindParams)) {
-            $bp = [];
-            $bt = $bindTypes;
-            foreach($bindParams as $key => $value) {
-                    $nkey = $key;
-                    if (!str_starts_with($nkey,':')) {
-                        $nkey = ':' . $key;
-                    }
-                    $bp[$nkey] = $value;
-                    
-                    if (!isset($bt[$nkey])) {
-                        $bt[$nkey] = is_int($value) ? COLUMN::BIND_PARAM_INT : COLUMN::BIND_PARAM_STR;
-                    }    
-            }
-                
-            $query->setBindParams($bp, true);
-            $query->setBindTypes($bt, true);
-        }
 
         $transaction = $params['transaction'] ?? null;
         if ($transaction !== null) {

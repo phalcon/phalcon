@@ -4,9 +4,13 @@ namespace Phalcon\Mvc\Model;
 
 use Phalcon\Di\DiInterface;
 use Phalcon\Di\InjectionAwareInterface;
-use Phalcon\Mvc\ModelInterface;
-use Phalcon\Db\Enum;
+use Phalcon\Db\{ResultInterface, Enum, Column};
+
+use Phalcon\Db\Result\Pdo as PdoResult;
 use Phalcon\Mvc\Model\QueryInterface;
+use Phalcon\Mvc\ModelInterface;
+
+use Phalcon\Mvc\Model\Resultset\Simple;
 /**
  * Not sure where this fits.
  * 
@@ -30,9 +34,9 @@ class SqlQuery implements QueryInterface, InjectionAwareInterface {
     protected ?MetaDataInterface $metaData = null;
     
     protected $_transaction = null;     
-    
+    protected $db = null; // may be set to Database object
     protected ?ModelInterface $instance = null;
-
+    protected ?pdoStatement $statement = null;
 
     //put your code here
     public function __construct(?string $sql = null, ?DiInterface $container = null, array $options = [])
@@ -45,6 +49,18 @@ class SqlQuery implements QueryInterface, InjectionAwareInterface {
         }
     }
     
+    /** make a Db ResultInterface appropriate to this */
+    
+    public function resultInterface() : ?ResultInterface
+    {
+        return new PdoResult($this->db, $this->pdoStatement,
+                $this->sql, $this->bindParams, $this->bindTypes);
+    }
+    
+    public function getStatement() : ?PDOStatement
+    {
+        return $this->pdoStatement;
+    }
     public function setDI(DiInterface $container) : void
     {
 
@@ -142,22 +158,43 @@ class SqlQuery implements QueryInterface, InjectionAwareInterface {
         return $this->uniqueRow;
     }
     
+    public function fetchAll(int $mode = \PDO::FETCH_ASSOC) : array {
+        return $this->pdoStatement->fetchAll($mode);
+    }
+    public function fetchOne(int $mode = \PDO::FETCH_ASSOC) : mixed {
+        return $this->pdoStatement->fetch($mode);
+    }
        /**
-     * Executes a parsed PHQL statement
-     *
-     * @return mixed
+     * Executes a parsed SQL statement
+     * This overrides internally set bindParams and bindTypes.
+     * @returns the PDO statement after execute call
      */
-    public function execute(array $bindParams = [], array $bindTypes = []) {
-        $uniqueRow = $this->uniqueRow;
-        $cacheOptions = $this->cacheOptions;
+    public function execute(array $bindParams = [], array $bindTypes = []) : bool
+    {
         $db = $this->container->get('db'); 
-        if ($uniqueRow) { 
-            return $db->fetchOne($this->sql, Enum::FETCH_ASSOC, $this->bindParams, $this->bindTypes);
+        $this->db = $db;
+        $pdo = $db->getInternalHandler();
+        $statement = $pdo->prepare($this->sql);
+        if (empty($bindParams)) {
+            $bindParams = $this->bindParams;
+            $bindTypes = $this->bindTypes;
         }
-        else {
-            return $db->fetchAll($this->sql, Enum::FETCH_ASSOC, $this->bindParams, $this->bindTypes);
+        if (is_object($statement)) {
+            foreach($bindParams as $bkey => $bvalue) {
+                $btype = $bindTypes[$bkey];
+                $statement->bindValue($bkey, $bvalue, $btype);
+            }
+            // now an execution, but no fetch yet.
+            /// AdapterInterface $connection, \PDOStatement $result,
+    /// ?string $sqlStatement = null, ?array $bindParams = null, ?array $bindTypes = null)
+            $pok = $statement->execute();
+            $this->pdoStatement = $statement;
+            if ($pok) { 
+                return true;
+            }
+            // TODO: get errorCode, errorInfo?
         }
-        return null;
+        return false;  
     }
     
     /** return {get} of Query transaction */
@@ -188,84 +225,7 @@ class SqlQuery implements QueryInterface, InjectionAwareInterface {
     }
     
     public function parse(): array {
-
-        $intermediate = $this->intermediate;
-
-        if (is_array($intermediate)) {
-            return $intermediate;
-        }
-
-        /**
-         * This function parses the PHQL statement
-         */
-        $phql = $this->phql;
-        $ast = Lang::parsePHQL($phql);
-
-        $irPhql = null;
-        $uniqueId = null;
-
-        if (is_array($ast)) {
-            /**
-             * Check if the prepared PHQL is already cached
-             * Parsed ASTs have a unique id
-             */
-            $uniqueId = $ast["id"] ?? null;
-            if ($uniqueId !== null) {
-                $irPhq = self::$_irPhqlCache[$uniqueId] ?? null;
-                if (is_array($irPhql)) {
-                    // Assign the type to the query
-                    $this->type = $ast["type"];
-                    return $irPhql;
-                }
-            }
-
-            /**
-             * A valid AST must have a type
-             */
-            $type = $ast["type"] ?? null;
-            if ($type !== null) {
-                $this->ast = $ast;
-                $this->type = $type;
-
-                switch ($type) {
-                    case PHQL_T_SELECT:
-                        $irPhql = $this->_prepareSelect();
-                        break;
-
-                    case PHQL_T_INSERT:
-                        $irPhql = $this->_prepareInsert();
-                        break;
-
-                    case PHQL_T_UPDATE:
-                        $irPhql = $this->_prepareUpdate();
-                        break;
-
-                    case PHQL_T_DELETE:
-                        $irPhql = $this->_prepareDelete();
-                        break;
-
-                    default:
-                        throw new Exception(
-                                        "Unknown statement " . $type . ", when preparing: " . $phql
-                        );
-                }
-            }
-        }
-
-        if (!is_array($irPhql)) {
-            throw new Exception("Corrupted AST");
-        }
-
-        /**
-         * Store the prepared AST in the cache
-         */
-        if (is_int($uniqueId)) {
-            self::$_irPhqlCache[$uniqueId] = $irPhql;
-        }
-
-        $this->intermediate = $irPhql;
-
-        return $irPhql;
+        return [];
     }
     public function getCacheOptions() : array
     {

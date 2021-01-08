@@ -50,8 +50,8 @@ class Dispatcher extends BaseDispatcher implements DispatcherInterface
      * ```php
      * use Phalcon\Events\Event;
      * use Phalcon\Mvc\Dispatcher;
-     * use App\Backend\Bootstrap as Backend;
-     * use App\Frontend\Bootstrap as Frontend;
+     * use WC\Backend\Bootstrap as Backend;
+     * use WC\Frontend\Bootstrap as Frontend;
      *
      * // Registering modules
      * $modules = [
@@ -59,14 +59,14 @@ class Dispatcher extends BaseDispatcher implements DispatcherInterface
      *         "className" => Frontend::class,
      *         "path"      => __DIR__ . "/app/Modules/Frontend/Bootstrap.php",
      *         "metadata"  => [
-     *             "controllersNamespace" => "App\Frontend\Controllers",
+     *             "controllersNamespace" => "WC\Frontend\Controllers",
      *         ],
      *     ],
      *     "backend" => [
      *         "className" => Backend::class,
      *         "path"      => __DIR__ . "/app/Modules/Backend/Bootstrap.php",
      *         "metadata"  => [
-     *             "controllersNamespace" => "App\Backend\Controllers",
+     *             "controllersNamespace" => "WC\Backend\Controllers",
      *         ],
      *     ],
      * ];
