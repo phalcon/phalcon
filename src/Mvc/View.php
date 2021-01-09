@@ -943,7 +943,8 @@ class View extends Injectable implements ViewInterface, EventsAwareInterface {
 
         if ($silence) {
             throw new Exception(
-                    "View '" . $viewPath . "' was not found in any of the views directory"
+                    "View '" . $viewPath . "' was not found in any of the views directory paths: " .
+                    PHP_EOL . print_r($viewEnginePaths, true)
             );
         }
     }

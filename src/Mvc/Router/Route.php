@@ -11,6 +11,7 @@
 
 namespace Phalcon\Mvc\Router;
 use Phalcon\Support\Str\Uncamelize;
+use function route_extract_params;
 
 use IntlChar;
 /**
@@ -161,9 +162,9 @@ class Route implements RouteInterface
      * it needs to be coded in C or C++, unless using zephir compiled phalcon.
      * Not quite happy
      */
-    public function extractNamedParams(string $pattern)
+    public function extractNamedParams(string $pattern) : bool | array
     {   
-        return \route_extract_params($pattern);
+        return route_extract_params($pattern);
     }
 
     /**

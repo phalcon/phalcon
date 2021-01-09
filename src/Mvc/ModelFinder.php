@@ -19,21 +19,21 @@ use Phalcon\Reflect\Create;
 use Phalcon\Db\Column;
 
 /**
-  A "models-finder" service.
-
-  functor Helper to expedite process of static "FindBy" calls of a model
-  This is a long involved bureacratic object framework process and deserves,
-  and needs a bureacratic helper from start to finish.
-
-
+ * A "models-finder" service.
+ *
+ * This is an injectable Helper class to expedite process of static "FindBy" calls 
+ * from a model class. 
+ * This is a long involved bureacratic object framework process and deserves,
+ * and needs a bureacratic helper from start to finish.
+ * 
  */
 class ModelFinder implements ModelFinderInterface, InjectionAwareInterface {
 
-    
+    protected mixed $arguments; // passed to dispatch
     protected ?string $modelName;
     protected ?ModelInterface $model = null;
     protected ?MetaDataInterface $metaData = null;
-   
+    protected $bindTypes = null;
     
     protected ?DiInterface $container = null;
 
@@ -61,7 +61,7 @@ class ModelFinder implements ModelFinderInterface, InjectionAwareInterface {
     }
 
     private function getBindTypes() : array {
-        return $this->metaData->getBindType($this->model);
+        return $this->bindTypes;
     }
     
     private function getPropTypes() : array {
@@ -74,7 +74,11 @@ class ModelFinder implements ModelFinderInterface, InjectionAwareInterface {
         $model = Create::instance($this->modelName);
         $this->model = $model;
         $metaData = $model->getModelsMetaData();
+        //debugLine("MetaData " . gettype($metaData) . " " . get_class($metaData));
         $this->metaData = $metaData;
+        $this->bindTypes = $metaData->getBindTypes($model);
+        
+        debugLine("Table = " . $model->getSource());
         if (method_exists($model,'columnMap')) {
             $this->propMap = $model->columnMap();
         }
@@ -153,15 +157,15 @@ class ModelFinder implements ModelFinderInterface, InjectionAwareInterface {
          * Check if the method starts with "findFirst"
          */
         if (str_starts_with($method, "findFirstBy")) {
-            $attrName = substr($method, 11);
-            return $this->findFirstBy($attrName);
+            $this->init($modelName);
+            return $this->findFirstBy(substr($method, 11));
         }
 
         /**
          * Check if the method starts with "find"
          */ elseif (str_starts_with($method, "findBy")) {
-            $type = "findBy";
-            $attrName = substr($method, 6);
+             $this->init($modelName);
+            return $this->findBy(substr($method, 6));
         }
 
         /**
@@ -181,12 +185,9 @@ class ModelFinder implements ModelFinderInterface, InjectionAwareInterface {
         return $this->$type($params);
     }
 
-
-    /** Return just one or null, after resolving to one set of parameters
-     */
-    private function findFirstBy(string $attrName): ?ModelInterface 
-    {  
-        $propMap = $this->propMap;
+    private function findBy(string $attrName) : ?ResultsetInterface 
+    {
+         $propMap = $this->propMap;
         if (isset($propMap[$attrName])) {
             $field = $attrName;
         } else {
@@ -195,12 +196,16 @@ class ModelFinder implements ModelFinderInterface, InjectionAwareInterface {
             if (!isset($propMap[$field])) {
                 throw new Exception(
                                 "Cannot resolve attribute '" . $attrName . "' in the model"
+                                    . PHP_EOL . print_r($propMap, true)
                 );
             }
         }
+        
         $arguments = $this->arguments;
         $value = $arguments[0] ?? null;
         $colBindTypes = $this->getBindTypes();
+        
+        debugLine("bindTypes are : " . typeof($colBindTypes));
         
         $colType = $colBindTypes[$field];
         
@@ -227,6 +232,70 @@ class ModelFinder implements ModelFinderInterface, InjectionAwareInterface {
 
         $query = $this->getPreparedQuery($params, 1);
 
+        $ok = $query->execute(); //mixed result
+        $propMap = $this->propMap;
+        //$columnMap,$model,$result,AdapterInterface $cache = null,bool $keepSnapshots = null
+        if ($ok) {
+            $simple = new Simple($propMap, $this->model, $query->resultInterface());
+            return $simple;
+        }
+        else {
+            return null;
+        }
+    }
+    /** Return just one or null, after resolving to one set of parameters
+     */
+    private function findFirstBy(string $attrName): ?ModelInterface 
+    {  
+        $propMap = $this->propMap;
+        $arguments = $this->arguments;
+        debugLine("FindFirstBy $attrName " . print_r($arguments, true) . PHP_EOL . print_r($propMap,true));
+        if (isset($propMap[$attrName])) {
+            $field = $attrName;
+        } else {
+            $lcfield = lcfirst($attrName);
+            $field = Uncamelize::fn($attrName);
+            if (!isset($propMap[$field])) {
+                throw new Exception(
+                                "Cannot resolve attribute '" . $attrName . "' in the model"
+                                    . PHP_EOL . print_r($propMap, true)
+                );
+            }
+        }
+        debugLine("Resolved to $field");
+        
+        $value = $arguments[0] ?? null;
+        
+        $colBindTypes = $this->getBindTypes();
+        debugLine("Bind types: " . print_f($colBindTypes,true));
+        debugLine("Field: $field " . "Value: $value");
+        $colType = $colBindTypes[$field];
+        
+        if ($value !== null) {
+            $params = [
+                "conditions" => "$field  = :FP0",
+                "bind" => [":FP0" => $value],
+                "bindTypes" => [":FP0" => $colType]
+            ];
+        } else {
+            $params = [
+                "conditions" => $field . " IS NULL"
+            ];
+        }
+        debugLine("Params " . print_r($params,true));
+        /**
+         * Just in case remove 'conditions' and 'bind'
+         */
+        unset($arguments[0]);
+        unset($arguments["conditions"]);
+        unset($arguments["bind"]);
+
+        $params = array_merge($params, $arguments);
+        
+        debugLine("Params: " . print_r($params, true));
+        
+        $query = $this->getPreparedQuery($params, 1);
+
         /**
          * Return only the first row
          */
@@ -237,6 +306,8 @@ class ModelFinder implements ModelFinderInterface, InjectionAwareInterface {
          */
       
         $ok = $query->execute(); //mixed result
+        
+        debugLine("Query ok: " . $ok);
         if ($ok) {
             // expect 
             $qrow = $query->fetchOne();
@@ -274,23 +345,6 @@ class ModelFinder implements ModelFinderInterface, InjectionAwareInterface {
         else {
             return null;
         }
-        /**
-        if ($ok) {
-            // just batch it 
-            $modelSet = [];
-            $rows = $query->fetchAll();
-            
-            foreach($rows as $row) {
-                $m = Create::instance($modelName);
-                $m->assign($row, null, $propMap);
-                $modelSet[] = $m;
-            }
-            return $modelSet;
-        }
-
-        return [];
-         * 
-         */
     }
     /**
      * Previously static method of Phalcon\Mvc\Model
@@ -299,7 +353,7 @@ class ModelFinder implements ModelFinderInterface, InjectionAwareInterface {
     private function getPreparedQuery($params, $limit = null): QueryInterface {
         $container = $this->getDI();
         $manager = $container->getShared("modelsManager");
-
+        debugLine("getPreparedQuery");
         /**
          * Builds a query with the passed parameters
          */

@@ -1,6 +1,9 @@
 # phalcon
 Phalcon Framework
 
+To be able to run this requires php extension for PSR interfaces.
+[PSR interface extension Implementation - ](https://github.com/jbboehr/php-psr)
+
 [![PDS Skeleton](https://img.shields.io/badge/pds-skeleton-blue.svg?style=flat-square)](https://github.com/php-pds/skeleton)
 [![Codacy Badge](https://app.codacy.com/project/badge/Grade/cb48fc4f2f03440bad6c305ea27449a2)](https://www.codacy.com/gh/phalcon/phalcon?utm_source=github.com&amp;utm_medium=referral&amp;utm_content=phalcon/phalcon&amp;utm_campaign=Badge_Grade)
 [![Scrutinizer Code Quality](https://scrutinizer-ci.com/g/phalcon/phalcon/badges/quality-score.png?b=v5.0.x)](https://scrutinizer-ci.com/g/phalcon/phalcon/?branch=v5.0.x)
