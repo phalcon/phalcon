@@ -300,7 +300,7 @@ class Application extends AbstractApplication {
                 /**
                  * Calling afterHandleRequest
                  */
-                if ($eventManager !== null) {
+                if ($eventsManager !== null) {
                     $eventsManager->fire("application:afterHandleRequest", $this, $controller);
                 }
 

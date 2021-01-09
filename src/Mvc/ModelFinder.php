@@ -18,6 +18,7 @@ use Phalcon\Support\Str\Uncamelize;
 use Phalcon\Reflect\Create;
 use Phalcon\Db\Column;
 
+use function debugLine;
 /**
  * A "models-finder" service.
  *
