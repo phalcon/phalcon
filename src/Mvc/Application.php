@@ -310,7 +310,7 @@ class Application extends AbstractApplication {
                  */
                 if (($returnedResponse === false) && ($implicitView === true)) {
                     $renderStatus = is_object($controller);
-                    if ($eventManager !== null) {
+                    if ($eventsManager !== null) {
                         $renderStatus = $eventsManager->fire("application:viewRender", $this, $view);
                     }
                     if ($renderStatus !== false) {
