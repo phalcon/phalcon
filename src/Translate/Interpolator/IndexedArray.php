@@ -11,12 +11,12 @@
 
 declare(strict_types=1);
 
-namespace Phalcon\Translate\Interpolator;
+namespace Phiz\Translate\Interpolator;
 
 /**
  * Class IndexedArray
  *
- * @package Phalcon\Translate\Interpolator
+ * @package Phiz\Translate\Interpolator
  */
 class IndexedArray implements InterpolatorInterface
 {

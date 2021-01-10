@@ -11,13 +11,13 @@
 
 declare(strict_types=1);
 
-namespace Phalcon\Session\Adapter;
+namespace Phiz\Session\Adapter;
 
-use Phalcon\Storage\AdapterFactory;
-use Phalcon\Support\Exception;
+use Phiz\Storage\AdapterFactory;
+use Phiz\Support\Exception;
 
 /**
- * Phalcon\Session\Adapter\Redis
+ * Phiz\Session\Adapter\Redis
  */
 class Redis extends AbstractAdapter
 {

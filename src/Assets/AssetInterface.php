@@ -11,10 +11,10 @@
 
 declare(strict_types=1);
 
-namespace Phalcon\Assets;
+namespace Phiz\Assets;
 
 /**
- * Interface for custom Phalcon\Assets resources
+ * Interface for custom Phiz\Assets resources
  */
 interface AssetInterface
 {

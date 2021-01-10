@@ -8,14 +8,14 @@
  * file that was distributed with this source code.
  */
 
-namespace Phalcon\Mvc\Model\Query;
+namespace Phiz\Mvc\Model\Query;
 
-use Phalcon\Mvc\Model\QueryInterface;
+use Phiz\Mvc\Model\QueryInterface;
 
 /**
- * Phalcon\Mvc\Model\Query\BuilderInterface
+ * Phiz\Mvc\Model\Query\BuilderInterface
  *
- * Interface for Phalcon\Mvc\Model\Query\Builder
+ * Interface for Phiz\Mvc\Model\Query\Builder
  */
 interface BuilderInterface
 {
@@ -45,7 +45,7 @@ interface BuilderInterface
      *
      * @param string|array columns
      */
-    public function columns(string|array $columns) : BuilderInterface;
+    public function columns( $columns) : BuilderInterface;
 
     /**
      * Sets SELECT DISTINCT / SELECT ALL flag
@@ -200,7 +200,7 @@ interface BuilderInterface
     /**
      * Returns the models involved in the query
      */
-    public function getModels() : string | array | null;
+    public function getModels();
 
     /**
      * Appends a NOT BETWEEN condition to the current conditions

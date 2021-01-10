@@ -9,27 +9,27 @@
  * LICENSE.txt file that was distributed with this source code.
  */
 
-namespace Phalcon\Mvc\Model;
+namespace Phiz\Mvc\Model;
 
 use ArrayAccess;
 use Closure;
 use Countable;
 use Iterator;
 use JsonSerializable;
-use Phalcon\Db\Enum;
-use Phalcon\Messages\MessageInterface;
-use Phalcon\Db\ResultInterface;
-use Phalcon\Mvc\Model;
-use Phalcon\Mvc\ModelInterface;
-use Phalcon\Cache\Adapter\AdapterInterface;
-use Phalcon\Storage\Serializer\SerializerInterface;
+use Phiz\Db\Enum;
+use Phiz\Messages\MessageInterface;
+use Phiz\Db\ResultInterface;
+use Phiz\Mvc\Model;
+use Phiz\Mvc\ModelInterface;
+use Phiz\Cache\Adapter\AdapterInterface;
+use Phiz\Storage\Serializer\SerializerInterface;
 use SeekableIterator;
 use Serializable;
 
 /**
- * Phalcon\Mvc\Model\Resultset
+ * Phiz\Mvc\Model\Resultset
  *
- * This component allows to Phalcon\Mvc\Model returns large resultsets with the minimum memory consumption
+ * This component allows to Phiz\Mvc\Model returns large resultsets with the minimum memory consumption
  * Resultsets can be traversed using a standard foreach or a while statement. If a resultset is serialized
  * it will dump all the rows into a big array. Then unserialize will retrieve the rows as they were before
  * serializing.
@@ -95,14 +95,14 @@ abstract class Resultset
     protected $rows = null;
 
     /**
-     * Phalcon\Db\ResultInterface or false for empty resultset
+     * Phiz\Db\ResultInterface or false for empty resultset
      */
     protected $result;
 
     /**
-     * Phalcon\Mvc\Model\Resultset constructor
+     * Phiz\Mvc\Model\Resultset constructor
      *
-     * @param \Phalcon\Db\ResultInterface|false result
+     * @param \Phiz\Db\ResultInterface|false result
      */
     public function __construct(ResultInterface|bool $result, AdapterInterface $cache = null)
     {        /**
@@ -116,7 +116,7 @@ abstract class Resultset
         }
 
         /**
-         * Valid resultsets are Phalcon\Db\ResultInterface instances
+         * Valid resultsets are Phiz\Db\ResultInterface instances
          */
        $this->result = $result;
 
@@ -312,7 +312,7 @@ abstract class Resultset
      *         ->execute()
      *         ->getFirst();
      *
-     * // \Phalcon\Mvc\Model\Row
+     * // \Phiz\Mvc\Model\Row
      * $manager->createQuery('SELECT r.id FROM Robots AS r')
      *         ->execute()
      *         ->getFirst();
@@ -467,7 +467,7 @@ abstract class Resultset
      * Resultsets cannot be changed. It has only been implemented to meet the definition of the ArrayAccess interface
      *
      * @param int index
-     * @param \Phalcon\Mvc\ModelInterface value
+     * @param \Phiz\Mvc\ModelInterface value
      */
     public function offsetSet($index, $value) : void
     {

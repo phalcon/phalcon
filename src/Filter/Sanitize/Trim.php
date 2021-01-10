@@ -11,12 +11,12 @@
 
 declare(strict_types=1);
 
-namespace Phalcon\Filter\Sanitize;
+namespace Phiz\Filter\Sanitize;
 
 use function trim;
 
 /**
- * Phalcon\Filter\Sanitize\Trim
+ * Phiz\Filter\Sanitize\Trim
  *
  * Sanitizes a value removing leading and trailing spaces
  */

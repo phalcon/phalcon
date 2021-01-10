@@ -11,16 +11,16 @@
 
 declare(strict_types=1);
 
-namespace Phalcon\Messages\Traits;
+namespace Phiz\Messages\Traits;
 
-use Phalcon\Messages\Exception;
-use Phalcon\Messages\Message;
-use Phalcon\Messages\MessageInterface;
+use Phiz\Messages\Exception;
+use Phiz\Messages\Message;
+use Phiz\Messages\MessageInterface;
 
 /**
  * Trait MessagesHelperTrait
  *
- * @package Phalcon\Messages\Traits
+ * @package Phiz\Messages\Traits
  *
  * @property array $messages
  * @property int   $position
@@ -38,7 +38,7 @@ trait MessagesHelperTrait
     protected int $position = 0;
 
     /**
-     * Phalcon\Messages\Messages constructor
+     * Phiz\Messages\Messages constructor
      *
      * @param array $messages
      */
@@ -125,7 +125,7 @@ trait MessagesHelperTrait
      * Sets an attribute using the array-syntax
      *
      *```php
-     * $messages[0] = new \Phalcon\Messages\Message("This is a message");
+     * $messages[0] = new \Phiz\Messages\Message("This is a message");
      *```
      *
      * @param mixed   $offset

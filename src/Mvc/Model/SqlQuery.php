@@ -1,16 +1,16 @@
 <?php
 
-namespace Phalcon\Mvc\Model;
+namespace Phiz\Mvc\Model;
 
-use Phalcon\Di\DiInterface;
-use Phalcon\Di\InjectionAwareInterface;
-use Phalcon\Db\{ResultInterface, Enum, Column};
+use Phiz\Di\DiInterface;
+use Phiz\Di\InjectionAwareInterface;
+use Phiz\Db\{ResultInterface, Enum, Column};
 
-use Phalcon\Db\Result\Pdo as PdoResult;
-use Phalcon\Mvc\Model\QueryInterface;
-use Phalcon\Mvc\ModelInterface;
+use Phiz\Db\Result\Pdo as PdoResult;
+use Phiz\Mvc\Model\QueryInterface;
+use Phiz\Mvc\ModelInterface;
 
-use Phalcon\Mvc\Model\Resultset\Simple;
+use Phiz\Mvc\Model\Resultset\Simple;
 /**
  * Not sure where this fits.
  * 
@@ -158,10 +158,10 @@ class SqlQuery implements QueryInterface, InjectionAwareInterface {
         return $this->uniqueRow;
     }
     
-    public function fetchAll(int $mode = \PDO::FETCH_ASSOC) : array {
+    public function fetchAll(int $mode = \PDO::FETCH_ASSOC)  {
         return $this->pdoStatement->fetchAll($mode);
     }
-    public function fetchOne(int $mode = \PDO::FETCH_ASSOC) : mixed {
+    public function fetchOne(int $mode = \PDO::FETCH_ASSOC)  {
         return $this->pdoStatement->fetch($mode);
     }
        /**

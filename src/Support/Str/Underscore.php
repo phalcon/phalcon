@@ -11,7 +11,7 @@
 
 declare(strict_types=1);
 
-namespace Phalcon\Support\Str;
+namespace Phiz\Support\Str;
 
 use function preg_replace;
 use function trim;
@@ -19,7 +19,7 @@ use function trim;
 /**
  * Class Underscore
  *
- * @package Phalcon\Support\Str
+ * @package Phiz\Support\Str
  */
 class Underscore
 {

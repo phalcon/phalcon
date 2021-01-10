@@ -9,13 +9,13 @@
  * file that was distributed with this source code.
  */
 
-namespace Phalcon\Mvc\View\Engine;
+namespace Phiz\Mvc\View\Engine;
 
-use Phalcon\Di\DiInterface;
-use Phalcon\Events\EventsAwareInterface;
-use Phalcon\Events\ManagerInterface;
-use Phalcon\Mvc\View\Engine\Volt\Compiler;
-use Phalcon\Mvc\View\Exception;
+use Phiz\Di\DiInterface;
+use Phiz\Events\EventsAwareInterface;
+use Phiz\Events\ManagerInterface;
+use Phiz\Mvc\View\Engine\Volt\Compiler;
+use Phiz\Mvc\View\Exception;
 
 /**
  * Designer friendly and fast template engine for PHP written in Zephir/C
@@ -170,7 +170,7 @@ class Volt extends AbstractEngine implements EventsAwareInterface
         }
 
         /**
-         * The compilation process is done by Phalcon\Mvc\View\Engine\Volt\Compiler
+         * The compilation process is done by Phiz\Mvc\View\Engine\Volt\Compiler
          */
         $compiler = $this->getCompiler();
         $eventsManager = $this->eventsManager;

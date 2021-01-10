@@ -8,10 +8,10 @@
  * file that was distributed with this source code.
  */
 
-namespace Phalcon\Mvc\Model;
+namespace Phiz\Mvc\Model;
 
 /**
- * Phalcon\Mvc\Model\Relation
+ * Phiz\Mvc\Model\Relation
  *
  * This class represents a relationship between two models
  */
@@ -26,23 +26,23 @@ class Relation implements RelationInterface
     const HAS_ONE_THROUGH  = 3;
     const NO_ACTION        = 0;
 
-    protected string|array $fields;
-    protected string|array $intermediateFields;
+    protected $fields;
+    protected $intermediateFields;
     protected string $intermediateModel;
-    protected string|array $intermediateReferencedFields;
+    protected $intermediateReferencedFields;
     protected array $options;
-    protected string|array $referencedFields;
+    protected $referencedFields;
     protected string $referencedModel;
     protected int $type;
 
     /**
-     * Phalcon\Mvc\Model\Relation constructor
+     * Phiz\Mvc\Model\Relation constructor
      *
      * @param string|array fields
      * @param string|array referencedFields
      */
-    public function __construct(int $type, string $referencedModel, string|array $fields, 
-    	string|array $referencedFields, array $options = [])
+    public function __construct(int $type, string $referencedModel, $fields, 
+    	$referencedFields, array $options = [])
     {
             $this->type = $type;
             $this->referencedModel = $referencedModel;
@@ -56,7 +56,7 @@ class Relation implements RelationInterface
      *
      * @return string|array
      */
-    public function getFields() : string|array
+    public function getFields() 
     {
         return $this->fields;
     }
@@ -66,7 +66,7 @@ class Relation implements RelationInterface
      *
      * @return string|array|bool
      */
-    public function getForeignKey() : string|array|bool
+    public function getForeignKey()
     {
         return $this->option["foreignKey"] ?? false;
     }
@@ -76,7 +76,7 @@ class Relation implements RelationInterface
      *
      * @return string|array
      */
-    public function getIntermediateFields(): string|array
+    public function getIntermediateFields()
     {
         return $this->intermediateFields;
     }
@@ -94,7 +94,7 @@ class Relation implements RelationInterface
      *
      * @return string|array
      */
-    public function getIntermediateReferencedFields() : string|array
+    public function getIntermediateReferencedFields()
     {
         return $this->intermediateReferencedFields;
     }
@@ -103,7 +103,7 @@ class Relation implements RelationInterface
      * Returns an option by the specified name
      * If the option doesn't exist null is returned
      */
-    public function getOption(string $name) : mixed
+    public function getOption(string $name)
     {
     	return $this->options[$name] ?? null;
     }
@@ -121,7 +121,7 @@ class Relation implements RelationInterface
      *
      * @return array|bool
      */
-    public function getParams() : array|bool
+    public function getParams()
     {
 
     	$params = $this->options["params"] ?? null;
@@ -147,7 +147,7 @@ class Relation implements RelationInterface
      *
      * @return string|array
      */
-    public function getReferencedFields() : string|array
+    public function getReferencedFields()
     {
         return $this->referencedFields;
     }
@@ -192,8 +192,8 @@ class Relation implements RelationInterface
      * @param string 			 intermediateModel
      * @param string|array       intermediateReferencedFields
      */
-    public function setIntermediateRelation(string|array $intermediateFields, 
-    		string $intermediateModel, string|array $intermediateReferencedFields) : void
+    public function setIntermediateRelation($intermediateFields, 
+    		string $intermediateModel, $intermediateReferencedFields) : void
     {
             $this->intermediateFields = $intermediateFields;
             $this->intermediateModel = $intermediateModel;

@@ -11,12 +11,12 @@
 
 declare(strict_types=1);
 
-namespace Phalcon\Storage;
+namespace Phiz\Storage;
 
 /**
- * Phalcon\Storage\Exception
+ * Phiz\Storage\Exception
  *
- * Exceptions thrown in Phalcon\Storage will use this class
+ * Exceptions thrown in Phiz\Storage will use this class
  *
  */
 class Exception extends \Exception

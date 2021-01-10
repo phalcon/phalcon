@@ -11,11 +11,11 @@
 
 declare(strict_types=1);
 
-namespace Phalcon\Di;
+namespace Phiz\Di;
 
-use Phalcon\Di\Traits\InjectionAwareTrait;
-use Phalcon\Events\Manager as EventsManager;
-use Phalcon\Events\ManagerInterface as EventsManagerInterface;
+use Phiz\Di\Traits\InjectionAwareTrait;
+use Phiz\Events\Manager as EventsManager;
+use Phiz\Events\ManagerInterface as EventsManagerInterface;
 
 /**
  * This class allows to access services in the services container by just only
@@ -24,29 +24,29 @@ use Phalcon\Events\ManagerInterface as EventsManagerInterface;
  * @property DiInterface|null                     $container
  * @property DiInterface|null                     $di
  * @property EventsManager|EventsManagerInterface $eventsManager
-// * @property \Phalcon\Mvc\Dispatcher|\Phalcon\Mvc\DispatcherInterface $dispatcher
-// * @property \Phalcon\Mvc\Router|\Phalcon\Mvc\RouterInterface $router
-// * @property \Phalcon\Url\Url|\Phalcon\Url\UrlInterface $url
-// * @property \Phalcon\Http\Request|\Phalcon\Http\RequestInterface $request
-// * @property \Phalcon\Http\Response|\Phalcon\Http\ResponseInterface $response
-// * @property \Phalcon\Http\Response\Cookies|\Phalcon\Http\Response\CookiesInterface $cookies
-// * @property \Phalcon\Filter $filter
-// * @property \Phalcon\Flash\Direct $flash
-// * @property \Phalcon\Flash\Session $flashSession
-// * @property \Phalcon\Session\ManagerInterface $session
-// * @property \Phalcon\Db\Adapter\AdapterInterface $db
-// * @property \Phalcon\Security $security
-// * @property \Phalcon\Crypt|\Phalcon\CryptInterface $crypt
-// * @property \Phalcon\Tag $tag
-// * @property \Phalcon\Escaper|\Phalcon\Html\EscaperInterface $escaper
-// * @property \Phalcon\Annotations\Adapter\Memory|\Phalcon\Annotations\Adapter $annotations
-// * @property \Phalcon\Mvc\Model\Manager|\Phalcon\Mvc\Model\ManagerInterface $modelsManager
-// * @property \Phalcon\Mvc\Model\MetaData\Memory|\Phalcon\Mvc\Model\MetadataInterface $modelsMetadata
-// * @property \Phalcon\Mvc\Model\Transaction\ManagerInterface $transactionManager
-// * @property \Phalcon\Assets\Manager $assets
-// * @property \Phalcon\Di|\Phalcon\Di\DiInterface $di
-// * @property \Phalcon\Session\Bag|\Phalcon\Session\BagInterface $persistent
-// * @property \Phalcon\Mvc\View|\Phalcon\Mvc\ViewInterface $view
+// * @property \Phiz\Mvc\Dispatcher|\Phiz\Mvc\DispatcherInterface $dispatcher
+// * @property \Phiz\Mvc\Router|\Phiz\Mvc\RouterInterface $router
+// * @property \Phiz\Url\Url|\Phiz\Url\UrlInterface $url
+// * @property \Phiz\Http\Request|\Phiz\Http\RequestInterface $request
+// * @property \Phiz\Http\Response|\Phiz\Http\ResponseInterface $response
+// * @property \Phiz\Http\Response\Cookies|\Phiz\Http\Response\CookiesInterface $cookies
+// * @property \Phiz\Filter $filter
+// * @property \Phiz\Flash\Direct $flash
+// * @property \Phiz\Flash\Session $flashSession
+// * @property \Phiz\Session\ManagerInterface $session
+// * @property \Phiz\Db\Adapter\AdapterInterface $db
+// * @property \Phiz\Security $security
+// * @property \Phiz\Crypt|\Phiz\CryptInterface $crypt
+// * @property \Phiz\Tag $tag
+// * @property \Phiz\Escaper|\Phiz\Html\EscaperInterface $escaper
+// * @property \Phiz\Annotations\Adapter\Memory|\Phiz\Annotations\Adapter $annotations
+// * @property \Phiz\Mvc\Model\Manager|\Phiz\Mvc\Model\ManagerInterface $modelsManager
+// * @property \Phiz\Mvc\Model\MetaData\Memory|\Phiz\Mvc\Model\MetadataInterface $modelsMetadata
+// * @property \Phiz\Mvc\Model\Transaction\ManagerInterface $transactionManager
+// * @property \Phiz\Assets\Manager $assets
+// * @property \Phiz\Di|\Phiz\Di\DiInterface $di
+// * @property \Phiz\Session\Bag|\Phiz\Session\BagInterface $persistent
+// * @property \Phiz\Mvc\View|\Phiz\Mvc\ViewInterface $view
  */
 
 abstract class Injectable implements InjectionAwareInterface

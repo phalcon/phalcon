@@ -11,9 +11,9 @@
 
 declare(strict_types=1);
 
-namespace Phalcon\Support\Arr;
+namespace Phiz\Support\Arr;
 
-use Phalcon\Support\Arr\Traits\FilterTrait;
+use Phiz\Support\Arr\Traits\FilterTrait;
 
 use function array_diff_key;
 use function array_flip;
@@ -23,7 +23,7 @@ use function is_string;
 /**
  * Class Blacklist
  *
- * @package Phalcon\Support\Arr
+ * @package Phiz\Support\Arr
  */
 class Blacklist
 {

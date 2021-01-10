@@ -9,7 +9,7 @@
  * file that was distributed with this source code.
  */
 
-namespace Phalcon\Mvc\View\Engine;
+namespace Phiz\Mvc\View\Engine;
 
 /**
  * Adapter to use PHP itself as templating engine

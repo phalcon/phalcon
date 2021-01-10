@@ -9,12 +9,12 @@
  * file that was distributed with this source code.
  */
 
-namespace Phalcon\Dispatcher;
+namespace Phiz\Dispatcher;
 
 /**
- * Exceptions thrown in Phalcon\Dispatcher/* will use this class
+ * Exceptions thrown in Phiz\Dispatcher/* will use this class
  */
-class Exception extends \Phalcon\Exception
+class Exception extends \Phiz\Exception
 {
     const EXCEPTION_ACTION_NOT_FOUND  = 5;
     const EXCEPTION_CYCLIC_ROUTING    = 1;

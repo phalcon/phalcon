@@ -9,14 +9,14 @@
  * file that was distributed with this source code.
  */
 
-namespace Phalcon\Mvc\Application;
+namespace Phiz\Mvc\Application;
 
 /**
- * Phalcon\Mvc\Application\Exception
+ * Phiz\Mvc\Application\Exception
  *
- * Exceptions thrown in Phalcon\Mvc\Application class will use this class
+ * Exceptions thrown in Phiz\Mvc\Application class will use this class
  */
-class Exception extends \Phalcon\Application\Exception
+class Exception extends \Phiz\Application\Exception
 {
 
 }

@@ -11,7 +11,7 @@
 
 declare(strict_types=1);
 
-namespace Phalcon\Support\Arr;
+namespace Phiz\Support\Arr;
 
 use function array_unique;
 use function count;
@@ -19,7 +19,7 @@ use function count;
 /**
  * Class IsUnique
  *
- * @package Phalcon\Support\Arr
+ * @package Phiz\Support\Arr
  */
 class IsUnique
 {

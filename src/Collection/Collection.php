@@ -11,17 +11,17 @@
 
 declare(strict_types=1);
 
-namespace Phalcon\Collection;
+namespace Phiz\Collection;
 
 use ArrayAccess;
 use Countable;
 use Generator;
 use IteratorAggregate;
 use JsonSerializable;
-use Phalcon\Collection\Traits\ArrayAccessTrait;
-use Phalcon\Collection\Traits\GetSetHasTrait;
-use Phalcon\Collection\Traits\SerializableTrait;
-use Phalcon\Support\Traits\JsonTrait;
+use Phiz\Collection\Traits\ArrayAccessTrait;
+use Phiz\Collection\Traits\GetSetHasTrait;
+use Phiz\Collection\Traits\SerializableTrait;
+use Phiz\Support\Traits\JsonTrait;
 use Serializable;
 
 use function array_key_exists;
@@ -32,7 +32,7 @@ use function mb_strtolower;
 use function settype;
 
 /**
- * `Phalcon\Collection` is a supercharged object oriented array. It implements:
+ * `Phiz\Collection` is a supercharged object oriented array. It implements:
  * - [ArrayAccess](https://www.php.net/manual/en/class.arrayaccess.php)
  * - [Countable](https://www.php.net/manual/en/class.countable.php)
  * -

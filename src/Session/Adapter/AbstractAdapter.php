@@ -11,15 +11,15 @@
 
 declare(strict_types=1);
 
-namespace Phalcon\Session\Adapter;
+namespace Phiz\Session\Adapter;
 
-use Phalcon\Storage\Adapter\AdapterInterface;
+use Phiz\Storage\Adapter\AdapterInterface;
 use SessionHandlerInterface;
 
 /**
  * Class AbstractAdapter
  *
- * @package Phalcon\Session\Adapter
+ * @package Phiz\Session\Adapter
  *
  * @property AdapterInterface $adapter
  */

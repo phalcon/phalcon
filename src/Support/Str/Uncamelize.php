@@ -1,6 +1,6 @@
 <?php
 
-namespace Phalcon\Support\Str;
+namespace Phiz\Support\Str;
 
 use function preg_replace;
 use function strtolower;
@@ -8,14 +8,14 @@ use function strtolower;
  * 
  * Class Uncamelize
  *
- * @package Phalcon\Support\Str
+ * @package Phiz\Support\Str
  *
  * Previously done by builtin C encoded function with zephir.
  *  Called from Route, Model, Manager, Router/Annotations.
  *  This is a stop - gap filler for Phalcon 5.0.
  * No second argument for spacer character.
- * Phalcon\Text::uncamelize("CocoBongo"); // coco_bongo
- * Phalcon\Text::uncamelize("CocoBongo", "-"); // coco-bongo
+ * Phiz\Text::uncamelize("CocoBongo"); // coco_bongo
+ * 
 */
 
 
@@ -30,7 +30,7 @@ class Uncamelize {
                                     $str));
     }
 	public function __invoke(
-        string $text,
+        string $text
     ): string {
         return self::fn($text);
     }

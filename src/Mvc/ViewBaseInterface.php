@@ -9,14 +9,14 @@
  * file that was distributed with this source code.
  */
 
-namespace Phalcon\Mvc;
+namespace Phiz\Mvc;
 
-use Phalcon\Cache\Adapter\AdapterInterface;
+use Phiz\Cache\Adapter\AdapterInterface;
 
 /**
- * Phalcon\Mvc\ViewInterface
+ * Phiz\Mvc\ViewInterface
  *
- * Interface for Phalcon\Mvc\View and Phalcon\Mvc\View\Simple
+ * Interface for Phiz\Mvc\View and Phiz\Mvc\View\Simple
  */
 interface ViewBaseInterface
 {

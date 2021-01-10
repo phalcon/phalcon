@@ -11,14 +11,14 @@
 
 declare(strict_types=1);
 
-namespace Phalcon\Filter\Sanitize;
+namespace Phiz\Filter\Sanitize;
 
 use function filter_var;
 
 use const FILTER_SANITIZE_NUMBER_INT;
 
 /**
- * Phalcon\Filter\Sanitize\IntVal
+ * Phiz\Filter\Sanitize\IntVal
  *
  * Sanitizes a value to integer
  */

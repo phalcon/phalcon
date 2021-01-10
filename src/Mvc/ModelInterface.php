@@ -9,20 +9,20 @@
  * LICENSE.txt file that was distributed with this source code.
  */
 
-namespace Phalcon\Mvc;
+namespace Phiz\Mvc;
 
-use Phalcon\Db\Adapter\AdapterInterface;
-use Phalcon\Di\DiInterface;
-use Phalcon\Messages\MessageInterface;
-use Phalcon\Mvc\Model\CriteriaInterface;
-use Phalcon\Mvc\Model\MetaDataInterface;
-use Phalcon\Mvc\Model\ResultsetInterface;
-use Phalcon\Mvc\Model\TransactionInterface;
+use Phiz\Db\Adapter\AdapterInterface;
+use Phiz\Di\DiInterface;
+use Phiz\Messages\MessageInterface;
+use Phiz\Mvc\Model\CriteriaInterface;
+use Phiz\Mvc\Model\MetaDataInterface;
+use Phiz\Mvc\Model\ResultsetInterface;
+use Phiz\Mvc\Model\TransactionInterface;
 
 /**
- * Phalcon\Mvc\ModelInterface
+ * Phiz\Mvc\ModelInterface
  *
- * Interface for Phalcon\Mvc\Model
+ * Interface for Phiz\Mvc\Model
  */
 interface ModelInterface
 {
@@ -45,7 +45,7 @@ interface ModelInterface
      * @param array parameters
      * @return double | ResultsetInterface
      */
-    public static function average($parameters = null) : float | ResultsetInterface;
+    public static function average(?array $parameters = null);
 
     /**
      * Assigns values to a model from an array returning a new model
@@ -55,9 +55,9 @@ interface ModelInterface
     /**
      * Assigns values to a model from an array returning a new model
      *
-     * @param \Phalcon\Mvc\Model base
+     * @param \Phiz\Mvc\Model base
      * @param array columnMap
-     * @return \Phalcon\Mvc\Model result
+     * @return \Phiz\Mvc\Model result
      */
     public static function cloneResultMap($base, array $data, $columnMap, int $dirtyState = 0, bool $keepSnapshots = null) : ModelInterface;
 
@@ -77,7 +77,7 @@ interface ModelInterface
      *
      * @param array parameters
      */
-    public static function count($parameters  = null) : int | ResultsetInterface;
+    public static function count(?array $parameters  = null);
 
     /**
      * Inserts a model instance. If the instance already exists in the
@@ -101,7 +101,7 @@ interface ModelInterface
      *
      * @param array parameters
      */
-    public static function findFirst($parameters = null) : ModelInterface | null;
+    public static function findFirst($parameters = null) : ?ModelInterface;
 
     /**
      * Fires an event, implicitly calls behaviors and listeners in the events
@@ -152,7 +152,7 @@ interface ModelInterface
      * Returns related records based on defined relations
      *
      * @param array arguments
-     * @return \Phalcon\Mvc\Model\Resultset\Simple|Phalcon\Mvc\Model\Resultset\Simple|false
+     * @return \Phiz\Mvc\Model\Resultset\Simple|Phiz\Mvc\Model\Resultset\Simple|false
      */
     public function getRelated(string $alias, $arguments = null);
 
@@ -219,7 +219,7 @@ interface ModelInterface
      * Sets the dirty state of the object using one of the DIRTY_STATE_*
      * constants
      */
-    public function setDirtyState(int $dirtyState) : ModelInterface | bool;
+    public function setDirtyState(int $dirtyState) : ModelInterface;
 
     /**
      * Sets the DependencyInjection connection service used to read data
@@ -255,7 +255,7 @@ interface ModelInterface
      * @param array parameters
      * @return double | ResultsetInterface
      */
-    public static function sum($parameters = null) : float | ResultsetInterface;
+    public static function sum(?array $parameters = null);
 
     /**
      * Check whether validation process has generated any messages

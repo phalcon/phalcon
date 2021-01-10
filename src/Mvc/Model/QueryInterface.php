@@ -9,13 +9,13 @@
  * file that was distributed with this source code.
  */
 
-namespace Phalcon\Mvc\Model;
+namespace Phiz\Mvc\Model;
 
-use Phalcon\Mvc\ModelInterface;
+use Phiz\Mvc\ModelInterface;
 /**
- * Phalcon\Mvc\Model\QueryInterface
+ * Phiz\Mvc\Model\QueryInterface
  *
- * Interface for Phalcon\Mvc\Model\Query
+ * Interface for Phiz\Mvc\Model\Query
  */
 interface QueryInterface
 {
@@ -62,8 +62,8 @@ interface QueryInterface
     public function getUniqueRow() : bool;
 
     /**
-     * Parses the intermediate code produced by Phalcon\Mvc\Model\Query\Lang generating another
-     * intermediate representation that could be executed by Phalcon\Mvc\Model\Query
+     * Parses the intermediate code produced by Phiz\Mvc\Model\Query\Lang generating another
+     * intermediate representation that could be executed by Phiz\Mvc\Model\Query
      */
     public function parse() : array;
 

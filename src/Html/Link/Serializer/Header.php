@@ -11,14 +11,14 @@
 
 declare(strict_types=1);
 
-namespace Phalcon\Html\Link\Serializer;
+namespace Phiz\Html\Link\Serializer;
 
 use function implode;
 use function is_array;
 use function is_bool;
 
 /**
- * Class Phalcon\Http\Link\Serializer\Header
+ * Class Phiz\Http\Link\Serializer\Header
  */
 class Header implements SerializerInterface
 {

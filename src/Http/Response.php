@@ -9,31 +9,31 @@
  * file that was distributed with this source code.
  */
 
-namespace Phalcon\Http;
+namespace Phiz\Http;
 
 use DateTime;
 use DateTimeZone;
-use Phalcon\Di;
-use Phalcon\Di\DiInterface;
-use Phalcon\Helper\Fs;
-use Phalcon\Helper\Json;
-use Phalcon\Http\Response\Exception;
-use Phalcon\Http\Response\HeadersInterface;
-use Phalcon\Http\Response\CookiesInterface;
-use Phalcon\Url\UrlInterface;
-use Phalcon\Mvc\ViewInterface;
-use Phalcon\Http\Response\Headers;
-use Phalcon\Di\InjectionAwareInterface;
-use Phalcon\Events\EventsAwareInterface;
-use Phalcon\Events\ManagerInterface;
+use Phiz\Di;
+use Phiz\Di\DiInterface;
+use Phiz\Helper\Fs;
+use Phiz\Helper\Json;
+use Phiz\Http\Response\Exception;
+use Phiz\Http\Response\HeadersInterface;
+use Phiz\Http\Response\CookiesInterface;
+use Phiz\Url\UrlInterface;
+use Phiz\Mvc\ViewInterface;
+use Phiz\Http\Response\Headers;
+use Phiz\Di\InjectionAwareInterface;
+use Phiz\Events\EventsAwareInterface;
+use Phiz\Events\ManagerInterface;
 
 /**
  * Part of the HTTP cycle is return responses to the clients.
- * Phalcon\HTTP\Response is the Ews component responsible to achieve this task.
+ * Phiz\HTTP\Response is the Ews component responsible to achieve this task.
  * HTTP responses are usually composed by headers and body.
  *
  *```php
- * $response = new \Phalcon\Http\Response();
+ * $response = new \Phiz\Http\Response();
  *
  * $response->setStatusCode(200, "OK");
  * $response->setContent("<html><body>Hello</body></html>");
@@ -63,13 +63,13 @@ class Response implements ResponseInterface, InjectionAwareInterface, EventsAwar
     protected $statusCodes;
 
     /**
-     * Phalcon\Http\Response constructor
+     * Phiz\Http\Response constructor
      */
     public function __construct(?string $content = null,  $code = null, $status = null)
     {
         // Note: Don't remove exclamation mark above otherwise NULL will be coerced.
 
-        // A Phalcon\Http\Response\Headers bag is temporary used to manage
+        // A Phiz\Http\Response\Headers bag is temporary used to manage
         // the headers before sent them to the client
         $this->headers = new Headers();
 

@@ -11,9 +11,9 @@
 
 declare(strict_types=1);
 
-namespace Phalcon\Assets\Inline;
+namespace Phiz\Assets\Inline;
 
-use Phalcon\Assets\Inline as InlineBase;
+use Phiz\Assets\Inline as InlineBase;
 
 /**
  * Represents an inlined CSS
@@ -21,7 +21,7 @@ use Phalcon\Assets\Inline as InlineBase;
 class Css extends InlineBase
 {
     /**
-     * Phalcon\Assets\Inline\Css constructor
+     * Phiz\Assets\Inline\Css constructor
      *
      * Css constructor.
      *

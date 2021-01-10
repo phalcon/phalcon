@@ -9,15 +9,15 @@
  * LICENSE.txt file that was distributed with this source code.
  */
 
-namespace Phalcon\Mvc\Model;
+namespace Phiz\Mvc\Model;
 
-use Phalcon\Db\Adapter\AdapterInterface;
-use Phalcon\Mvc\ModelInterface;
-use Phalcon\Mvc\Model\Query\{
+use Phiz\Db\Adapter\AdapterInterface;
+use Phiz\Mvc\ModelInterface;
+use Phiz\Mvc\Model\Query\{
     BuilderInterface,
     StatusInterface
 };
-use Phalcon\Mvc\Model\{
+use Phiz\Mvc\Model\{
     BehaviourInterface,
     QueryInterface,
     RelationInterface,
@@ -25,9 +25,9 @@ use Phalcon\Mvc\Model\{
 };
 
 /**
- * Phalcon\Mvc\Model\ManagerInterface
+ * Phiz\Mvc\Model\ManagerInterface
  *
- * Interface for Phalcon\Mvc\Model\Manager
+ * Interface for Phiz\Mvc\Model\Manager
  */
 interface ManagerInterface {
 
@@ -92,19 +92,19 @@ interface ManagerInterface {
             string $referencedModel, $referencedFields, $options = null): RelationInterface;
 
     /**
-     * Creates a Phalcon\Mvc\Model\Query\Builder
+     * Creates a Phiz\Mvc\Model\Query\Builder
      *
      * @param string $params
      */
     public function createBuilder($params = null): BuilderInterface;
 
     /**
-     * Creates a Phalcon\Mvc\Model\Query without execute it
+     * Creates a Phiz\Mvc\Model\Query without execute it
      */
     public function createQuery(string $phql): QueryInterface;
 
     /**
-     * Creates a Phalcon\Mvc\Model\Query and execute it
+     * Creates a Phiz\Mvc\Model\Query and execute it
      *
      * @param array|null $placeholders
      * @param array|null $types
@@ -153,7 +153,7 @@ interface ManagerInterface {
      */
     public function getBelongsToRecords(string $modelName, string $modelRelation,
             ModelInterface $record, $parameters = null,
-            string $method = null): ResultsetInterface|bool;
+            string $method = null): ?ResultsetInterface;
 
     /**
      * Gets hasMany $relations defined on a model
@@ -171,7 +171,7 @@ interface ManagerInterface {
      */
     public function getHasManyRecords(string $modelName, string $modelRelation,
             ModelInterface $record,
-            $parameters = null, string $method = null): ResultsetInterface|bool;
+            $parameters = null, string $method = null): ?ResultsetInterface;
 
     /**
      * Gets hasManyToMany $relations defined on a model
@@ -203,7 +203,8 @@ interface ManagerInterface {
      * @param string|null       $method
      */
     public function getHasOneRecords(string $modelName, string $modelRelation,
-            ModelInterface $record, $parameters = null, string $method = null): ModelInterface|bool;
+            ModelInterface $record, 
+            $parameters = null, string $method = null): ?ModelInterface;
 
     /**
      * Get last initialized model
@@ -238,12 +239,12 @@ interface ManagerInterface {
     /**
      * Returns a $relation by its alias
      */
-    public function getRelationByAlias(string $modelName, string $alias): RelationInterface|bool;
+    public function getRelationByAlias(string $modelName, string $alias): ?RelationInterface;
 
     /**
      * Helper method to query records based on a $relation definition
      *
-     * @return \Phalcon\Mvc\Model\Resultset\Simple|Phalcon\Mvc\Model\Resultset\Simple|int|false
+     * @return \Phiz\Mvc\Model\Resultset\Simple|Phiz\Mvc\Model\Resultset\Simple|int|false
      */
     public function getRelationRecords(RelationInterface $relation, ModelInterface $record,
             $parameters = null, string $method = null);
@@ -256,7 +257,7 @@ interface ManagerInterface {
     /**
      * Query the $relations between two models
      */
-    public function getRelationsBetween(string $first, string $second): array|bool;
+    public function getRelationsBetween(string $first, string $second);
 
     /**
      * Returns the connection to write data related to a model

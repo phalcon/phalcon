@@ -1,5 +1,5 @@
 <?php
-namespace Phalcon\Mvc\Model;
+namespace Phiz\Mvc\Model;
 
 /**
  * This file is part of the Phalcon Framework.
@@ -11,31 +11,31 @@ namespace Phalcon\Mvc\Model;
  */
 
 
-use Phalcon\Db\Adapter\AdapterInterface;
-use Phalcon\Di\DiInterface;
-use Phalcon\Di\InjectionAwareInterface;
-use Phalcon\Events\EventsAwareInterface;
-use Phalcon\Events\ManagerInterface as EventsManagerInterface;
-use Phalcon\Mvc\ModelInterface;
-use Phalcon\Mvc\Model\Query\Builder;
-use Phalcon\Mvc\Model\Query\BuilderInterface;
-use Phalcon\Mvc\Model\Query\StatusInterface;
-use Phalcon\Mvc\Model\ManagerInterface;
-use Phalcon\Support\Str\Uncamelize;
+use Phiz\Db\Adapter\AdapterInterface;
+use Phiz\Di\DiInterface;
+use Phiz\Di\InjectionAwareInterface;
+use Phiz\Events\EventsAwareInterface;
+use Phiz\Events\ManagerInterface as EventsManagerInterface;
+use Phiz\Mvc\ModelInterface;
+use Phiz\Mvc\Model\Query\Builder;
+use Phiz\Mvc\Model\Query\BuilderInterface;
+use Phiz\Mvc\Model\Query\StatusInterface;
+use Phiz\Mvc\Model\ManagerInterface;
+use Phiz\Support\Str\Uncamelize;
 use Pnalcon\Reflect\Create;
 
 /**
- * Phalcon\Mvc\Model\Manager
+ * Phiz\Mvc\Model\Manager
  *
  * This components controls the initialization of models, keeping record of
  * relations between the different models of the application.
  *
  * A ModelsManager is injected to a model via a Dependency Injector/Services
- * Container such as Phalcon\Di.
+ * Container such as Phiz\Di.
  *
  * ```php
- * use Phalcon\Di;
- * use Phalcon\Mvc\Model\Manager as ModelsManager;
+ * use Phiz\Di;
+ * use Phiz\Mvc\Model\Manager as ModelsManager;
  *
  * $di = new Di();
  *
@@ -294,7 +294,7 @@ class SqlManager implements ManagerInterface, InjectionAwareInterface, EventsAwa
      * Sets the prefix for all $model sources.
      *
      * ```php
-     * use Phalcon\Mvc\Model\Manager;
+     * use Phiz\Mvc\Model\Manager;
      *
      * $di->set(
      *     "modelsManager",
@@ -1205,9 +1205,9 @@ class SqlManager implements ManagerInterface, InjectionAwareInterface, EventsAwa
     /**
      * Returns a relation by its alias
      */
-    public function getRelationByAlias(string $modelName, string $alias) : RelationInterface | bool
+    public function getRelationByAlias(string $modelName, string $alias) : ?RelationInterface
     {
-        return  $this->aliases[strtolower($modelName . "$" . $alias)] ?? false;
+        return  $this->aliases[strtolower($modelName . "$" . $alias)] ?? null;
     }
 
     /**
@@ -1274,7 +1274,7 @@ class SqlManager implements ManagerInterface, InjectionAwareInterface, EventsAwa
     /**
      * Helper method to query records based on a relation definition
      *
-     * @return \Phalcon\Mvc\Model\Resultset\Simple|Phalcon\Mvc\Model\Resultset\Simple|int|false
+     * @return \Phiz\Mvc\Model\Resultset\Simple|Phiz\Mvc\Model\Resultset\Simple|int|false
      */
     public function getRelationRecords(RelationInterface $relation, ModelInterface $record, 
         $parameters = null, string $method = null)
@@ -1483,16 +1483,16 @@ class SqlManager implements ManagerInterface, InjectionAwareInterface, EventsAwa
      */
     public function getBelongsToRecords(string $modelName, string $modelRelation, 
         ModelInterface $record, $parameters = null, string $method = null)
-        : ResultsetInterface | bool
+        : ?ResultsetInterface
     {
         /**
          * Check if there is a relation between them
          */ 
         $keyRelation = strtolower($modelName) . "$" . strtolower($modelRelation);
-        $relations = $this->hasMany[$keyRelation] ?? false;
+        $relations = $this->hasMany[$keyRelation] ?? null;
 
         if (empty($relations)) {
-            return false;
+            return null;
         }
 
         /**
@@ -1512,7 +1512,7 @@ class SqlManager implements ManagerInterface, InjectionAwareInterface, EventsAwa
      */
     public function getHasManyRecords(string $modelName, string $modelRelation, 
         ModelInterface $record, $parameters = null, string $method = null)
-        : ResultsetInterface | bool
+        : ?ResultsetInterface
     {
         /**
          * Check if there is a relation between them
@@ -1520,7 +1520,7 @@ class SqlManager implements ManagerInterface, InjectionAwareInterface, EventsAwa
         $keyRelation = strtolower($modelName) . "$" . strtolower($modelRelation);
         $relations =  $this->hasMany[$keyRelation] ?? false;
         if (empty($relations)) {
-            return false;
+            return null;
         }
 
         /**
@@ -1540,7 +1540,7 @@ class SqlManager implements ManagerInterface, InjectionAwareInterface, EventsAwa
      */
     public function getHasOneRecords(string $modelName, string $modelRelation, 
         ModelInterface $record, $parameters = null, 
-        string $method = null): ModelInterface | bool
+        string $method = null): ?ModelInterface
     {
         /**
          * Check if there is a relation between them
@@ -1548,7 +1548,7 @@ class SqlManager implements ManagerInterface, InjectionAwareInterface, EventsAwa
         $keyRelation = strtolower($modelName) . "$" . strtolower($modelRelation);
         $relations = $this->hasOne[$keyRelation] ?? false;
         if (empty($relations))  {
-            return false;
+            return null;
         }
 
         /**
@@ -1684,7 +1684,7 @@ class SqlManager implements ManagerInterface, InjectionAwareInterface, EventsAwa
     /**
      * Query the first relationship defined between two models
      */
-    public function getRelationsBetween(string $first, string $second) :  bool
+    public function getRelationsBetween(string $first, string $second) : ?array
     {
         $keyRelation = strtolower($first) . "$" . strtolower($second);
 
@@ -1732,7 +1732,7 @@ class SqlManager implements ManagerInterface, InjectionAwareInterface, EventsAwa
     }
 
     /**
-     * Creates a Phalcon\Mvc\Model\Query without execute it
+     * Creates a Phiz\Mvc\Model\Query without execute it
      */
     public function createQuery(string $phql) : QueryInterface
     {
@@ -1749,32 +1749,32 @@ class SqlManager implements ManagerInterface, InjectionAwareInterface, EventsAwa
         /**
          * Create a query
          */ 
-        $query = $container->get( "Phalcon\\Mvc\\Model\\SqlQuery",[$phql, $container] ); 
+        $query = $container->get( "Phiz\\Mvc\\Model\\SqlQuery",[$phql, $container] ); 
         $this->lastQuery = $query;
 
         return $query;
     }
 
     /**
-     * Creates a Phalcon\Mvc\Model\Query and execute it
+     * Creates a Phiz\Mvc\Model\Query and execute it
      *
      * ```php
      * $model = new Robots();
      * $manager = $model->getModelsManager();
      *
-     * // \Phalcon\Mvc\Model\Resultset\Simple
+     * // \Phiz\Mvc\Model\Resultset\Simple
      * $manager->executeQuery('SELECT * FROM Robots');
      *
-     * // \Phalcon\Mvc\Model\Resultset\Complex
+     * // \Phiz\Mvc\Model\Resultset\Complex
      * $manager->executeQuery('SELECT COUNT($type) FROM Robots GROUP BY type');
      *
-     * // \Phalcon\Mvc\Model\Query\StatusInterface
+     * // \Phiz\Mvc\Model\Query\StatusInterface
      * $manager->executeQuery('INSERT INTO Robots (id) VALUES (1)');
      *
-     * // \Phalcon\Mvc\Model\Query\StatusInterface
+     * // \Phiz\Mvc\Model\Query\StatusInterface
      * $manager->executeQuery('UPDATE Robots SET id = 0 WHERE id = :id:', ['id' => 1]);
      *
-     * // \Phalcon\Mvc\Model\Query\StatusInterface
+     * // \Phiz\Mvc\Model\Query\StatusInterface
      * $manager->executeQuery('DELETE FROM Robots WHERE id = :id:', ['id' => 1]);
      * ```
      *
@@ -1801,7 +1801,7 @@ class SqlManager implements ManagerInterface, InjectionAwareInterface, EventsAwa
     }
 
     /**
-     * Creates a Phalcon\Mvc\Model\Query\Builder
+     * Creates a Phiz\Mvc\Model\Query\Builder
      */
     public function createBuilder($params = null) : BuilderInterface
     {
@@ -1819,7 +1819,7 @@ class SqlManager implements ManagerInterface, InjectionAwareInterface, EventsAwa
          * Gets Builder instance from DI container
          */
         return $container->get(
-            "Phalcon\\Mvc\\Model\\Query\\SqlBuilder",
+            "Phiz\\Mvc\\Model\\Query\\SqlBuilder",
             [ $params, $container ]
         );
     }

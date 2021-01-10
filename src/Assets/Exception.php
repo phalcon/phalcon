@@ -11,12 +11,12 @@
 
 declare(strict_types=1);
 
-namespace Phalcon\Assets;
+namespace Phiz\Assets;
 
 /**
- * Exceptions thrown in Phalcon\Assets will use this class
+ * Exceptions thrown in Phiz\Assets will use this class
  *
- * @package Phalcon\Assets
+ * @package Phiz\Assets
  */
 class Exception extends \Exception
 {

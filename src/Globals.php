@@ -1,6 +1,6 @@
 <?php
 
-namespace Phalcon {
+namespace Phiz {
     /*
      * Declare global variable and functions
      * which can be accessible at top script level.
@@ -59,7 +59,7 @@ namespace Phalcon {
 
     }
 
-} // end namespace Phalcon
+} // end namespace Phiz
 
 namespace {
     // A script dynamic global
@@ -86,7 +86,7 @@ namespace {
  * @param string $key
  * @return mixed
  */
-    function globals_get(string $key): mixed {
+    function globals_get(string $key) {
         global $ormGlobals;
 
         return $ormGlobals[$key];
@@ -115,7 +115,7 @@ namespace {
     }
     
     
-function route_extract_params(string $pattern): bool | array {
+function route_extract_params(string $pattern) : ?array {
     $prevChp = 0;
     $bracketCount = 0;
     $parenthesesCount = 0;
@@ -124,7 +124,7 @@ function route_extract_params(string $pattern): bool | array {
     $numberMatches = 0;
 
     if (strlen($pattern) === 0) {
-        return false;
+        return null;
     }
 
     $cp_underscore = IntlChar::ord('_');

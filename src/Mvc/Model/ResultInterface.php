@@ -8,12 +8,12 @@
  * file that was distributed with this source code.
  */
 
-namespace Phalcon\Mvc\Model;
+namespace Phiz\Mvc\Model;
 
-use Phalcon\Mvc\ModelInterface;
+use Phiz\Mvc\ModelInterface;
 
 /**
- * Phalcon\Mvc\Model\ResultInterface
+ * Phiz\Mvc\Model\ResultInterface
  *
  * All single objects passed as base objects to Resultsets must implement this interface
  */
@@ -22,5 +22,5 @@ interface ResultInterface
     /**
      * Sets the object's state
      */
-    public function setDirtyState(int $dirtyState) : ModelInterface | bool;
+    public function setDirtyState(int $dirtyState) : ModelInterface;
 }

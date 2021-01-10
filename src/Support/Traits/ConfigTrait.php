@@ -11,10 +11,10 @@
 
 declare(strict_types=1);
 
-namespace Phalcon\Support\Traits;
+namespace Phiz\Support\Traits;
 
-use Phalcon\Config\ConfigInterface;
-use Phalcon\Support\Exception;
+use Phiz\Config\ConfigInterface;
+use Phiz\Support\Exception;
 
 use function is_array;
 use function is_object;
@@ -22,7 +22,7 @@ use function is_object;
 /**
  * Trait ConfigTrait
  *
- * @package Phalcon\Support\Traits
+ * @package Phiz\Support\Traits
  */
 trait ConfigTrait
 {
@@ -40,7 +40,7 @@ trait ConfigTrait
 
         if (true !== is_array($config)) {
             throw new Exception(
-                'Config must be array or Phalcon\Config object'
+                'Config must be array or Phiz\Config object'
             );
         }
 

@@ -11,34 +11,34 @@
 
 declare(strict_types=1);
 
-namespace Phalcon\Filter;
+namespace Phiz\Filter;
 
-use Phalcon\Filter\Sanitize\AbsInt;
-use Phalcon\Filter\Sanitize\Alnum;
-use Phalcon\Filter\Sanitize\Alpha;
-use Phalcon\Filter\Sanitize\BoolVal;
-use Phalcon\Filter\Sanitize\Email;
-use Phalcon\Filter\Sanitize\FloatVal;
-use Phalcon\Filter\Sanitize\IntVal;
-use Phalcon\Filter\Sanitize\Lower;
-use Phalcon\Filter\Sanitize\LowerFirst;
-use Phalcon\Filter\Sanitize\Regex;
-use Phalcon\Filter\Sanitize\Remove;
-use Phalcon\Filter\Sanitize\Replace;
-use Phalcon\Filter\Sanitize\Special;
-use Phalcon\Filter\Sanitize\SpecialFull;
-use Phalcon\Filter\Sanitize\StringVal;
-use Phalcon\Filter\Sanitize\Striptags;
-use Phalcon\Filter\Sanitize\Trim;
-use Phalcon\Filter\Sanitize\Upper;
-use Phalcon\Filter\Sanitize\UpperFirst;
-use Phalcon\Filter\Sanitize\UpperWords;
-use Phalcon\Filter\Sanitize\Url;
+use Phiz\Filter\Sanitize\AbsInt;
+use Phiz\Filter\Sanitize\Alnum;
+use Phiz\Filter\Sanitize\Alpha;
+use Phiz\Filter\Sanitize\BoolVal;
+use Phiz\Filter\Sanitize\Email;
+use Phiz\Filter\Sanitize\FloatVal;
+use Phiz\Filter\Sanitize\IntVal;
+use Phiz\Filter\Sanitize\Lower;
+use Phiz\Filter\Sanitize\LowerFirst;
+use Phiz\Filter\Sanitize\Regex;
+use Phiz\Filter\Sanitize\Remove;
+use Phiz\Filter\Sanitize\Replace;
+use Phiz\Filter\Sanitize\Special;
+use Phiz\Filter\Sanitize\SpecialFull;
+use Phiz\Filter\Sanitize\StringVal;
+use Phiz\Filter\Sanitize\Striptags;
+use Phiz\Filter\Sanitize\Trim;
+use Phiz\Filter\Sanitize\Upper;
+use Phiz\Filter\Sanitize\UpperFirst;
+use Phiz\Filter\Sanitize\UpperWords;
+use Phiz\Filter\Sanitize\Url;
 
 /**
  * Class FilterFactory
  *
- * @package Phalcon\Filter
+ * @package Phiz\Filter
  */
 class FilterFactory
 {

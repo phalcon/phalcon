@@ -9,22 +9,22 @@
  * file that was distributed with this source code.
  */
 
-namespace Phalcon\Db\Adapter\Pdo;
+namespace Phiz\Db\Adapter\Pdo;
 
-use Phalcon\Db\Adapter\AbstractAdapter;
-use Phalcon\Db\Column;
-use Phalcon\Db\Exception;
-use Phalcon\Db\Result\Pdo as ResultPdo;
-use Phalcon\Db\ResultInterface;
+use Phiz\Db\Adapter\AbstractAdapter;
+use Phiz\Db\Column;
+use Phiz\Db\Exception;
+use Phiz\Db\Result\Pdo as ResultPdo;
+use Phiz\Db\ResultInterface;
 
-//use Phalcon\Events\ManagerInterface;
+//use Phiz\Events\ManagerInterface;
 
 /**
- * Phalcon\Db\Adapter\Pdo is the Phalcon\Db that internally uses PDO to connect
+ * Phiz\Db\Adapter\Pdo is the Phiz\Db that internally uses PDO to connect
  * to a database
  *
  * ```php
- * use Phalcon\Db\Adapter\Pdo\Mysql;
+ * use Phiz\Db\Adapter\Pdo\Mysql;
  *
  * $config = [
  *     "host"     => "localhost",
@@ -52,9 +52,9 @@ abstract class AbstractPdo extends AbstractAdapter {
     protected $pdo;
 
     /**
-     * Constructor for Phalcon\Db\Adapter\Pdo
+     * Constructor for Phiz\Db\Adapter\Pdo
      *
-     * @param array|\Phalcon\Config descriptor = [
+     * @param array|\Phiz\Config descriptor = [
      *     'host' => 'localhost',
      *     'port' => '3306',
      *     'dbname' => 'blog',
@@ -216,13 +216,13 @@ abstract class AbstractPdo extends AbstractAdapter {
     }
 
     /**
-     * This method is automatically called in \Phalcon\Db\Adapter\Pdo
+     * This method is automatically called in \Phiz\Db\Adapter\Pdo
      * constructor.
      *
      * Call it when you need to restore a database connection.
      *
      * ```php
-     * use Phalcon\Db\Adapter\Pdo\Mysql;
+     * use Phiz\Db\Adapter\Pdo\Mysql;
      *
      * // Make a connection
      * $connection = new Mysql(
@@ -454,7 +454,7 @@ abstract class AbstractPdo extends AbstractAdapter {
      * starting from zero
      *
      * ```php
-     * use Phalcon\Db\Column;
+     * use Phiz\Db\Column;
      *
      * $statement = $db->prepare(
      *     "SELECT * FROM robots WHERE name = :name"
@@ -610,7 +610,7 @@ abstract class AbstractPdo extends AbstractAdapter {
      * $id = $connection->lastInsertId();
      * ```
      */
-    public function lastInsertId($sequenceName = null): int|bool {
+    public function lastInsertId($sequenceName = null): ?int  {
         $pdo = $this->pdo;
 
         if (!is_object($pdo)) {
@@ -624,7 +624,7 @@ abstract class AbstractPdo extends AbstractAdapter {
      * Returns a PDO prepared statement to be executed with 'executePrepared'
      *
      * ```php
-     * use Phalcon\Db\Column;
+     * use Phiz\Db\Column;
      *
      * $statement = $db->prepare(
      *     "SELECT * FROM robots WHERE name = :name"
@@ -664,7 +664,7 @@ abstract class AbstractPdo extends AbstractAdapter {
      * );
      * ```
      */
-    public function query(string $sqlStatement, ?array $bindParams = null, ?array $bindTypes = null): ResultInterface|bool {
+    public function query(string $sqlStatement, ?array $bindParams = null, ?array $bindTypes = null): ?ResultInterface {
         //var eventsManager, pdo, statement, params, types;
 
         $em = $this->eventsManager;

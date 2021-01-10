@@ -11,11 +11,11 @@
 
 declare(strict_types=1);
 
-namespace Phalcon\Di;
+namespace Phiz\Di;
 
 /**
  * This interface must be implemented in those classes that uses internally the
- * Phalcon\Di that creates them
+ * Phiz\Di that creates them
  */
 interface InjectionAwareInterface
 {
@@ -24,7 +24,7 @@ interface InjectionAwareInterface
      *
      * @param DiInterface $container
      */
-    public function setDI(DiInterface $container): void;
+    public function setDI(DiInterface $container);
 
     /**
      * Returns the internal dependency injector

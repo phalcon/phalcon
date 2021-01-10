@@ -9,12 +9,12 @@
  * file that was distributed with this source code.
  */
 
-namespace Phalcon\Db;
+namespace Phiz\Db;
 
 /**
- * Exceptions thrown in Phalcon\Db will use this class
+ * Exceptions thrown in Phiz\Db will use this class
  */
-class Exception extends \Phalcon\Exception
+class Exception extends \Phiz\Exception
 {
 
 }

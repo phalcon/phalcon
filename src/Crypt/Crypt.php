@@ -11,25 +11,25 @@
 
 declare(strict_types=1);
 
-namespace Phalcon\Crypt;
+namespace Phiz\Crypt;
 
-use Phalcon\Crypt\Padding\PadAnsi;
-use Phalcon\Crypt\Padding\PadIso10126;
-use Phalcon\Crypt\Padding\PadIsoIek;
-use Phalcon\Crypt\Padding\PadPkcs7;
-use Phalcon\Crypt\Padding\PadSpace;
-use Phalcon\Crypt\Padding\PadZero;
-use Phalcon\Crypt\Padding\UnpadAnsi;
-use Phalcon\Crypt\Padding\UnpadIso10126;
-use Phalcon\Crypt\Padding\UnpadIsoIek;
-use Phalcon\Crypt\Padding\UnpadPkcs7;
-use Phalcon\Crypt\Padding\UnpadSpace;
-use Phalcon\Crypt\Padding\UnpadZero;
-use Phalcon\Crypt\Traits\CryptGettersTrait;
-use Phalcon\Support\Str\Traits\EndsWithTrait;
-use Phalcon\Support\Str\Traits\StartsWithTrait;
-use Phalcon\Support\Str\Traits\UpperTrait;
-use Phalcon\Support\Traits\PhpFunctionTrait;
+use Phiz\Crypt\Padding\PadAnsi;
+use Phiz\Crypt\Padding\PadIso10126;
+use Phiz\Crypt\Padding\PadIsoIek;
+use Phiz\Crypt\Padding\PadPkcs7;
+use Phiz\Crypt\Padding\PadSpace;
+use Phiz\Crypt\Padding\PadZero;
+use Phiz\Crypt\Padding\UnpadAnsi;
+use Phiz\Crypt\Padding\UnpadIso10126;
+use Phiz\Crypt\Padding\UnpadIsoIek;
+use Phiz\Crypt\Padding\UnpadPkcs7;
+use Phiz\Crypt\Padding\UnpadSpace;
+use Phiz\Crypt\Padding\UnpadZero;
+use Phiz\Crypt\Traits\CryptGettersTrait;
+use Phiz\Support\Str\Traits\EndsWithTrait;
+use Phiz\Support\Str\Traits\StartsWithTrait;
+use Phiz\Support\Str\Traits\UpperTrait;
+use Phiz\Support\Traits\PhpFunctionTrait;
 
 use function base64_decode;
 use function base64_encode;
@@ -46,7 +46,7 @@ use function substr;
  * Provides encryption capabilities to Phalcon applications.
  *
  * ```php
- * use Phalcon\Crypt;
+ * use Phiz\Crypt;
  *
  * $crypt = new Crypt();
  *

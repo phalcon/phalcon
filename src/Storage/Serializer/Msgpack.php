@@ -11,9 +11,9 @@
 
 declare(strict_types=1);
 
-namespace Phalcon\Storage\Serializer;
+namespace Phiz\Storage\Serializer;
 
-use Phalcon\Storage\Traits\StorageErrorHandlerTrait;
+use Phiz\Storage\Traits\StorageErrorHandlerTrait;
 
 use function msgpack_pack;
 
@@ -22,7 +22,7 @@ use const E_WARNING;
 /**
  * Class Msgpack
  *
- * @package Phalcon\Storage\Serializer
+ * @package Phiz\Storage\Serializer
  */
 class Msgpack extends AbstractSerializer
 {

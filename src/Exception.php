@@ -8,10 +8,10 @@
  * file that was distributed with this source code.
  */
 
-namespace Phalcon;
+namespace Phiz;
 
 /**
- * Phalcon\Exception
+ * Phiz\Exception
  *
  * All framework exceptions should use or extend this exception
  */

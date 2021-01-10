@@ -9,15 +9,15 @@
  * file that was distributed with this source code.
  */
 
-namespace Phalcon\Application;
+namespace Phiz\Application;
 
-use Phalcon\Di\DiInterface;
-use Phalcon\Di\Injectable;
-use Phalcon\Events\EventsAwareInterface;
-use Phalcon\Events\ManagerInterface;
+use Phiz\Di\DiInterface;
+use Phiz\Di\Injectable;
+use Phiz\Events\EventsAwareInterface;
+use Phiz\Events\ManagerInterface;
 
 /**
- * Base class for Phalcon\Cli\Console and Phalcon\Mvc\Application.
+ * Base class for Phiz\Cli\Console and Phiz\Mvc\Application.
  */
 abstract class AbstractApplication extends Injectable implements EventsAwareInterface
 {
@@ -42,7 +42,7 @@ abstract class AbstractApplication extends Injectable implements EventsAwareInte
     protected $modules = [];
 
     /**
-     * Phalcon\AbstractApplication constructor
+     * Phiz\AbstractApplication constructor
      */
 
 

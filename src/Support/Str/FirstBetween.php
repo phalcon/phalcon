@@ -11,14 +11,14 @@
 
 declare(strict_types=1);
 
-namespace Phalcon\Support\Str;
+namespace Phiz\Support\Str;
 
 use function trim;
 
 /**
  * Class FirstBetween
  *
- * @package Phalcon\Support\Str
+ * @package Phiz\Support\Str
  */
 class FirstBetween
 {

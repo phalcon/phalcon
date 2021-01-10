@@ -11,12 +11,12 @@
 
 declare(strict_types=1);
 
-namespace Phalcon\Di\Exception;
+namespace Phiz\Di\Exception;
 
-use Phalcon\Di\Exception;
+use Phiz\Di\Exception;
 
 /**
- * Phalcon\Di\Exception\ServiceResolutionException
+ * Phiz\Di\Exception\ServiceResolutionException
  */
 class ServiceResolutionException extends Exception
 {

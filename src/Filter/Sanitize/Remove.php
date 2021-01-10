@@ -11,12 +11,12 @@
 
 declare(strict_types=1);
 
-namespace Phalcon\Filter\Sanitize;
+namespace Phiz\Filter\Sanitize;
 
 use function str_replace;
 
 /**
- * Phalcon\Filter\Sanitize\Remove
+ * Phiz\Filter\Sanitize\Remove
  *
  * Sanitizes a value removing parts of a string
  */

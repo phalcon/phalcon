@@ -11,7 +11,7 @@
 
 declare(strict_types=1);
 
-namespace Phalcon\Di;
+namespace Phiz\Di;
 
 /**
  * Represents a service in the services container

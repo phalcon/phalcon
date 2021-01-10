@@ -9,16 +9,16 @@
 
 declare(strict_types=1);
 
-namespace Phalcon\Html\Tag;
+namespace Phiz\Html\Tag;
 
-use Phalcon\Html\Exception;
+use Phiz\Html\Exception;
 
 use function array_merge;
 
 /**
  * Class Base
  *
- * @package Phalcon\Html\Tag
+ * @package Phiz\Html\Tag
  */
 class Base extends AbstractHelper
 {

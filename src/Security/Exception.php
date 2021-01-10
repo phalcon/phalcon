@@ -8,14 +8,14 @@
  * file that was distributed with this source code.
  */
 
-namespace Phalcon\Security;
+namespace Phiz\Security;
 
 /**
- * Phalcon\Security\Exception
+ * Phiz\Security\Exception
  *
- * Exceptions thrown in Phalcon\Security will use this class
+ * Exceptions thrown in Phiz\Security will use this class
  */
-class Exception extends \Phalcon\Exception
+class Exception extends \Phiz\Exception
 {
 
 }

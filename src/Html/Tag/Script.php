@@ -9,14 +9,14 @@
 
 declare(strict_types=1);
 
-namespace Phalcon\Html\Tag;
+namespace Phiz\Html\Tag;
 
 use function array_merge;
 
 /**
  * Class Script
  *
- * @package Phalcon\Html\Tag
+ * @package Phiz\Html\Tag
  */
 class Script extends Style
 {

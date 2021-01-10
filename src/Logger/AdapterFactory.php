@@ -11,19 +11,19 @@
 
 declare(strict_types=1);
 
-namespace Phalcon\Logger;
+namespace Phiz\Logger;
 
-use Phalcon\Logger\Adapter\AdapterInterface;
-use Phalcon\Logger\Adapter\Noop;
-use Phalcon\Logger\Adapter\Stream;
-use Phalcon\Logger\Adapter\Syslog;
-use Phalcon\Support\Exception as SupportException;
-use Phalcon\Support\Traits\FactoryTrait;
+use Phiz\Logger\Adapter\AdapterInterface;
+use Phiz\Logger\Adapter\Noop;
+use Phiz\Logger\Adapter\Stream;
+use Phiz\Logger\Adapter\Syslog;
+use Phiz\Support\Exception as SupportException;
+use Phiz\Support\Traits\FactoryTrait;
 
 /**
  * Class AdapterFactory
  *
- * @package Phalcon\Logger
+ * @package Phiz\Logger
  */
 class AdapterFactory
 {

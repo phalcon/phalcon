@@ -11,7 +11,7 @@
 
 declare(strict_types=1);
 
-namespace Phalcon\Support\Json;
+namespace Phiz\Support\Json;
 
 use InvalidArgumentException;
 
@@ -24,7 +24,7 @@ use const JSON_ERROR_NONE;
 /**
  * Class Decode
  *
- * @package Phalcon\Support\Json
+ * @package Phiz\Support\Json
  */
 class Decode
 {
@@ -33,7 +33,7 @@ class Decode
      * JSON data cannot be decoded
      *
      * ```php
-     * use Phalcon\Helper\Json;
+     * use Phiz\Helper\Json;
      *
      * $data = '{"one":"two","0":"three"}';
      *

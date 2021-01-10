@@ -9,10 +9,10 @@
 
 declare(strict_types=1);
 
-namespace Phalcon\Html\Tag;
+namespace Phiz\Html\Tag;
 
-use Phalcon\Html\EscaperInterface;
-use Phalcon\Html\Exception;
+use Phiz\Html\EscaperInterface;
+use Phiz\Html\Exception;
 
 use function array_intersect_key;
 use function array_merge;
@@ -27,7 +27,7 @@ use const PHP_EOL;
 /**
  * Class AbstractHelper
  *
- * @package Phalcon\Html\Tag
+ * @package Phiz\Html\Tag
  *
  * @property string           $delimiter
  * @property EscaperInterface $escaper

@@ -11,9 +11,9 @@
 
 declare(strict_types=1);
 
-namespace Phalcon\Assets;
+namespace Phiz\Assets;
 
-use Phalcon\Support\Traits\PhpFileTrait;
+use Phiz\Support\Traits\PhpFileTrait;
 
 use function sha1;
 
@@ -21,7 +21,7 @@ use function sha1;
  * Represents an asset asset
  *
  *```php
- * $asset = new \Phalcon\Assets\Asset("js", "javascripts/jquery.js");
+ * $asset = new \Phiz\Assets\Asset("js", "javascripts/jquery.js");
  *```
  *
  * @property array       $attributes

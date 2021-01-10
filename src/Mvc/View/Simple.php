@@ -9,26 +9,26 @@
  * file that was distributed with this source code.
  */
 
-namespace Phalcon\Mvc\View;
+namespace Phiz\Mvc\View;
 
 use Closure;
-use Phalcon\Di\DiInterface;
-use Phalcon\Di\Injectable;
-use Phalcon\Events\EventsAwareInterface;
-use Phalcon\Events\ManagerInterface;
-use Phalcon\Helper\Arr;
+use Phiz\Di\DiInterface;
+use Phiz\Di\Injectable;
+use Phiz\Events\EventsAwareInterface;
+use Phiz\Events\ManagerInterface;
+use Phiz\Helper\Arr;
 
-use Phalcon\Mvc\ViewBaseInterface;
-use Phalcon\Mvc\View\Engine\EngineInterface;
-use Phalcon\Mvc\View\Engine\Php as PhpEngine;
+use Phiz\Mvc\ViewBaseInterface;
+use Phiz\Mvc\View\Engine\EngineInterface;
+use Phiz\Mvc\View\Engine\Php as PhpEngine;
 
 /**
- * Phalcon\Mvc\View\Simple
+ * Phiz\Mvc\View\Simple
  *
  * This component allows to render views without hierarchical levels
  *
  *```php
- * use Phalcon\Mvc\View\Simple as View;
+ * use Phiz\Mvc\View\Simple as View;
  *
  * $view = new View();
  *
@@ -55,7 +55,7 @@ class Simple extends Injectable implements ViewBaseInterface, EventsAwareInterfa
     protected $content;
 
     /**
-     * @var \Phalcon\Mvc\View\EngineInterface[]|false
+     * @var \Phiz\Mvc\View\EngineInterface[]|false
      */
     protected $engines = false;
     protected $eventsManager;
@@ -73,7 +73,7 @@ class Simple extends Injectable implements ViewBaseInterface, EventsAwareInterfa
     protected $viewParams = [];
 
     /**
-     * Phalcon\Mvc\View\Simple constructor
+     * Phiz\Mvc\View\Simple constructor
      */
     public function __construct(array  $options = [])
     {
@@ -226,8 +226,8 @@ class Simple extends Injectable implements ViewBaseInterface, EventsAwareInterfa
      *```php
      * $this->view->registerEngines(
      *     [
-     *         ".phtml" => \Phalcon\Mvc\View\Engine\Php::class,
-     *         ".volt"  => \Phalcon\Mvc\View\Engine\Volt::class,
+     *         ".phtml" => \Phiz\Mvc\View\Engine\Php::class,
+     *         ".volt"  => \Phiz\Mvc\View\Engine\Volt::class,
      *         ".mhtml" => \MyCustomEngine::class,
      *     ]
      * );
@@ -351,7 +351,7 @@ class Simple extends Injectable implements ViewBaseInterface, EventsAwareInterfa
 
     /**
      * Loads registered template engines, if none are registered it will use
-     * Phalcon\Mvc\View\Engine\Php
+     * Phiz\Mvc\View\Engine\Php
      */
     protected function loadTemplateEngines():  array
     {
@@ -369,7 +369,7 @@ class Simple extends Injectable implements ViewBaseInterface, EventsAwareInterfa
 
             if (!is_array($registeredEngines)) {
                 /**
-                 * We use Phalcon\Mvc\View\Engine\Php as default
+                 * We use Phiz\Mvc\View\Engine\Php as default
                  * Use .phtml as extension for the PHP engine
                  */
                 $engines[".phtml"] = new PhpEngine($this, $di);

@@ -11,18 +11,18 @@
 
 declare(strict_types=1);
 
-namespace Phalcon\Flash;
+namespace Phiz\Flash;
 
-use Phalcon\Session\ManagerInterface;
+use Phiz\Session\ManagerInterface;
 
 /**
- * This is an implementation of the Phalcon\Flash\FlashInterface that
+ * This is an implementation of the Phiz\Flash\FlashInterface that
  * temporarily stores the messages in session, then messages can be printed in
  * the next request.
  *
  * Class Session
  *
- * @package Phalcon\Flash
+ * @package Phiz\Flash
  */
 class Session extends AbstractFlash
 {

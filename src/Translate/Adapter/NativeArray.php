@@ -11,16 +11,16 @@
 
 declare(strict_types=1);
 
-namespace Phalcon\Translate\Adapter;
+namespace Phiz\Translate\Adapter;
 
 use ArrayAccess;
-use Phalcon\Translate\Exception;
-use Phalcon\Translate\InterpolatorFactory;
+use Phiz\Translate\Exception;
+use Phiz\Translate\InterpolatorFactory;
 
 use function is_array;
 
 /**
- * Phalcon\Translate\Adapter\NativeArray
+ * Phiz\Translate\Adapter\NativeArray
  *
  * Allows to define translation lists using PHP arrays
  */
@@ -28,7 +28,7 @@ use function is_array;
 /**
  * Class NativeArray
  *
- * @package Phalcon\Translate\Adapter
+ * @package Phiz\Translate\Adapter
  *
  * @property array $translate
  * @property bool $triggerError

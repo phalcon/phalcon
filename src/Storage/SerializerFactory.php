@@ -11,22 +11,22 @@
 
 declare(strict_types=1);
 
-namespace Phalcon\Storage;
+namespace Phiz\Storage;
 
-use Phalcon\Storage\Serializer\Base64;
-use Phalcon\Storage\Serializer\Igbinary;
-use Phalcon\Storage\Serializer\Json;
-use Phalcon\Storage\Serializer\Msgpack;
-use Phalcon\Storage\Serializer\None;
-use Phalcon\Storage\Serializer\Php;
-use Phalcon\Storage\Serializer\SerializerInterface;
-use Phalcon\Support\Exception as SupportException;
-use Phalcon\Support\Traits\FactoryTrait;
+use Phiz\Storage\Serializer\Base64;
+use Phiz\Storage\Serializer\Igbinary;
+use Phiz\Storage\Serializer\Json;
+use Phiz\Storage\Serializer\Msgpack;
+use Phiz\Storage\Serializer\None;
+use Phiz\Storage\Serializer\Php;
+use Phiz\Storage\Serializer\SerializerInterface;
+use Phiz\Support\Exception as SupportException;
+use Phiz\Support\Traits\FactoryTrait;
 
 /**
  * Class SerializerFactory
  *
- * @package Phalcon\Storage
+ * @package Phiz\Storage
  */
 class SerializerFactory
 {

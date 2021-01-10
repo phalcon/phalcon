@@ -11,12 +11,12 @@
 
 declare(strict_types=1);
 
-namespace Phalcon\Acl;
+namespace Phiz\Acl;
 
 /**
- * Class for exceptions thrown by Phalcon\Acl
+ * Class for exceptions thrown by Phiz\Acl
  *
- * @package Phalcon\Acl
+ * @package Phiz\Acl
  */
 class Exception extends \Exception
 {

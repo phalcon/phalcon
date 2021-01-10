@@ -11,23 +11,23 @@
 
 declare(strict_types=1);
 
-namespace Phalcon\Assets;
+namespace Phiz\Assets;
 
 use Countable;
 use IteratorAggregate;
-use Phalcon\Assets\Asset\Css as AssetCss;
-use Phalcon\Assets\Asset\Js as AssetJs;
-use Phalcon\Assets\Inline\Css as InlineCss;
-use Phalcon\Assets\Inline\Js as InlineJs;
-use Phalcon\Assets\Traits\CollectionAddTrait;
-use Phalcon\Support\Traits\PhpFileTrait;
+use Phiz\Assets\Asset\Css as AssetCss;
+use Phiz\Assets\Asset\Js as AssetJs;
+use Phiz\Assets\Inline\Css as InlineCss;
+use Phiz\Assets\Inline\Js as InlineJs;
+use Phiz\Assets\Traits\CollectionAddTrait;
+use Phiz\Support\Traits\PhpFileTrait;
 
 use function realpath;
 
 /**
  * Class Collection
  *
- * @package Phalcon\Assets
+ * @package Phiz\Assets
  */
 class Collection implements Countable, IteratorAggregate
 {

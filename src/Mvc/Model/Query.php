@@ -9,27 +9,27 @@
  * file that was distributed with this source code.
  */
 
-namespace Phalcon\Mvc\Model;
+namespace Phiz\Mvc\Model;
 
-use Phalcon\Db\Column;
-use Phalcon\Db\RawValue;
-use Phalcon\Db\ResultInterface;
-use Phalcon\Db\Adapter\AdapterInterface;
-use Phalcon\Di\DiInterface;
-use Phalcon\Helper\Arr;
-use Phalcon\Mvc\ModelInterface;
-use Phalcon\Mvc\Model\Query\Status;
-use Phalcon\Mvc\Model\Resultset\Complex;
-use Phalcon\Mvc\Model\Query\StatusInterface;
-use Phalcon\Mvc\Model\ResultsetInterface;
-use Phalcon\Mvc\Model\Resultset\Simple;
-use Phalcon\Di\InjectionAwareInterface;
-use Phalcon\Db\DialectInterface;
-use Phalcon\Mvc\Model\Query\Lang;
-use Phalcon\Reflect\Create;
+use Phiz\Db\Column;
+use Phiz\Db\RawValue;
+use Phiz\Db\ResultInterface;
+use Phiz\Db\Adapter\AdapterInterface;
+use Phiz\Di\DiInterface;
+use Phiz\Helper\Arr;
+use Phiz\Mvc\ModelInterface;
+use Phiz\Mvc\Model\Query\Status;
+use Phiz\Mvc\Model\Resultset\Complex;
+use Phiz\Mvc\Model\Query\StatusInterface;
+use Phiz\Mvc\Model\ResultsetInterface;
+use Phiz\Mvc\Model\Resultset\Simple;
+use Phiz\Di\InjectionAwareInterface;
+use Phiz\Db\DialectInterface;
+use Phiz\Mvc\Model\Query\Lang;
+use Phiz\Reflect\Create;
 
 /**
- * Phalcon\Mvc\Model\Query
+ * Phiz\Mvc\Model\Query
  *
  * This class takes a PHQL intermediate representation and executes it.
  *
@@ -51,11 +51,11 @@ use Phalcon\Reflect\Create;
  * }
  *
  * // with transaction
- * use Phalcon\Mvc\Model\Query;
- * use Phalcon\Mvc\Model\Transaction;
+ * use Phiz\Mvc\Model\Query;
+ * use Phiz\Mvc\Model\Transaction;
  *
  * // $di needs to have the service "db" registered for this to work
- * $di = Phalcon\Di\FactoryDefault::getDefault();
+ * $di = Phiz\Di\FactoryDefault::getDefault();
  *
  * $phql = 'SELECT * FROM robot';
  *
@@ -119,7 +119,7 @@ class Query implements QueryInterface, InjectionAwareInterface {
     protected $_transaction;
 
     /**
-     * Phalcon\Mvc\Model\Query constructor
+     * Phiz\Mvc\Model\Query constructor
      */
     public function __construct(string $phql = null, DiInterface $container = null, array $options = []) {
 
@@ -2729,10 +2729,10 @@ class Query implements QueryInterface, InjectionAwareInterface {
 
     /**
      * Executes the SELECT intermediate representation producing a
-     * Phalcon\Mvc\Model\Resultset
+     * Phiz\Mvc\Model\Resultset
      */
     final protected function _executeSelect(array $intermediate,
-            array $bindParams, array $bindTypes, bool $simulate = false): ResultsetInterface|array {
+            array $bindParams, array $bindTypes, bool $simulate = false) {
         $manager = $this->manager;
 
         /**
@@ -2996,7 +2996,7 @@ class Query implements QueryInterface, InjectionAwareInterface {
             if ($isSimpleStd) {
                 /**
                  * If the result is a simple standard object use an
-                 * Phalcon\Mvc\Model\Row as base
+                 * Phiz\Mvc\Model\Row as base
                  */
                 $resultObject = new Row();
 
@@ -3057,9 +3057,9 @@ class Query implements QueryInterface, InjectionAwareInterface {
                         );
                     }
 
-                    if (!is_subclass_of($resultsetClassName, "Phalcon\\Mvc\\Model\\ResultsetInterface")) {
+                    if (!is_subclass_of($resultsetClassName, "Phiz\\Mvc\\Model\\ResultsetInterface")) {
                         throw new Exception(
-                                        "Resultset class \"" . $resultsetClassName . "\" must be an implementation of Phalcon\\Mvc\\Model\\ResultsetInterface"
+                                        "Resultset class \"" . $resultsetClassName . "\" must be an implementation of Phiz\\Mvc\\Model\\ResultsetInterface"
                         );
                     }
 
@@ -3100,7 +3100,7 @@ class Query implements QueryInterface, InjectionAwareInterface {
 
     /**
      * Executes the INSERT intermediate representation producing a
-     * Phalcon\Mvc\Model\Query\Status
+     * Phiz\Mvc\Model\Query\Status
      */
     final protected function _executeInsert(array $intermediate,
             array $bindParams, array $bindTypes): StatusInterface {
@@ -3243,7 +3243,7 @@ class Query implements QueryInterface, InjectionAwareInterface {
 
     /**
      * Executes the UPDATE intermediate representation producing a
-     * Phalcon\Mvc\Model\Query\Status
+     * Phiz\Mvc\Model\Query\Status
      */
     final protected function _executeUpdate(array $intermediate,
             array $bindParams, array $bindTypes): StatusInterface {
@@ -3410,7 +3410,7 @@ class Query implements QueryInterface, InjectionAwareInterface {
 
     /**
      * Executes the DELETE intermediate representation producing a
-     * Phalcon\Mvc\Model\Query\Status
+     * Phiz\Mvc\Model\Query\Status
      */
     final protected function _executeDelete(array $intermediate,
             array $bindParams, array $bindTypes): StatusInterface {
@@ -3549,7 +3549,7 @@ class Query implements QueryInterface, InjectionAwareInterface {
         }
 
         /**
-         * We create another Phalcon\Mvc\Model\Query to get the related records
+         * We create another Phiz\Mvc\Model\Query to get the related records
          */
         $query = new self();
 

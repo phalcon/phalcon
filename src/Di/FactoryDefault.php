@@ -11,17 +11,17 @@
 
 declare(strict_types=1);
 
-namespace Phalcon\Di;
+namespace Phiz\Di;
 
-use Phalcon\Html\Escaper;
-use Phalcon\Events\Manager as EventsManager;
-use Phalcon\Filter\FilterFactory;
-use Phalcon\Http\Request;
-use Phalcon\Http\Response;
-use Phalcon\Mvc\Router;
-use Phalcon\Mvc\Dispatcher;
+use Phiz\Html\Escaper;
+use Phiz\Events\Manager as EventsManager;
+use Phiz\Filter\FilterFactory;
+use Phiz\Http\Request;
+use Phiz\Http\Response;
+use Phiz\Mvc\Router;
+use Phiz\Mvc\Dispatcher;
 /**
- * This is a variant of the standard Phalcon\Di. By default it automatically
+ * This is a variant of the standard Phiz\Di. By default it automatically
  * registers all the services provided by the framework. Thanks to this, the
  * developer does not need to register each service individually providing a
  * full stack framework
@@ -29,7 +29,7 @@ use Phalcon\Mvc\Dispatcher;
 class FactoryDefault extends Di
 {
     /**
-     * Phalcon\Di\FactoryDefault constructor
+     * Phiz\Di\FactoryDefault constructor
      */
     public function __construct()
     {
@@ -49,22 +49,22 @@ class FactoryDefault extends Di
 //        let filter = new FilterFactory();
 //
 //        let this->services = [
-//            "annotations":        new Service("Phalcon\\Annotations\\Adapter\\Memory", true),
-//            "assets":             new Service("Phalcon\\Assets\\Manager", true),
-//            "crypt":              new Service("Phalcon\\Crypt", true),
-//            "cookies":            new Service("Phalcon\\Http\\Response\\Cookies", true),
-//            "dispatcher":         new Service("Phalcon\\Mvc\\Dispatcher", true),
-//            "flash":              new Service("Phalcon\\Flash\\Direct", true),
-//            "flashSession":       new Service("Phalcon\\Flash\\Session", true),
-//            "modelsManager":      new Service("Phalcon\\Mvc\\Model\\Manager", true),
-//            "modelsMetadata":     new Service("Phalcon\\Mvc\\Model\\MetaData\\Memory", true),
-//            "request":            new Service("Phalcon\\Http\\Request", true),
-//            "response":           new Service("Phalcon\\Http\\Response", true),
-//            "router":             new Service("Phalcon\\Mvc\\Router", true),
-//            "security":           new Service("Phalcon\\Security", true),
-//            "tag":                new Service("Phalcon\\Tag", true),
-//            "transactionManager": new Service("Phalcon\\Mvc\\Model\\Transaction\\Manager", true),
-//            "url":                new Service("Phalcon\\Url", true)
+//            "annotations":        new Service("Phiz\\Annotations\\Adapter\\Memory", true),
+//            "assets":             new Service("Phiz\\Assets\\Manager", true),
+//            "crypt":              new Service("Phiz\\Crypt", true),
+//            "cookies":            new Service("Phiz\\Http\\Response\\Cookies", true),
+//            "dispatcher":         new Service("Phiz\\Mvc\\Dispatcher", true),
+//            "flash":              new Service("Phiz\\Flash\\Direct", true),
+//            "flashSession":       new Service("Phiz\\Flash\\Session", true),
+//            "modelsManager":      new Service("Phiz\\Mvc\\Model\\Manager", true),
+//            "modelsMetadata":     new Service("Phiz\\Mvc\\Model\\MetaData\\Memory", true),
+//            "request":            new Service("Phiz\\Http\\Request", true),
+//            "response":           new Service("Phiz\\Http\\Response", true),
+//            "router":             new Service("Phiz\\Mvc\\Router", true),
+//            "security":           new Service("Phiz\\Security", true),
+//            "tag":                new Service("Phiz\\Tag", true),
+//            "transactionManager": new Service("Phiz\\Mvc\\Model\\Transaction\\Manager", true),
+//            "url":                new Service("Phiz\\Url", true)
 //        ];
     }
 }

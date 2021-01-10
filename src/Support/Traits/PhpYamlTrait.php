@@ -11,14 +11,14 @@
 
 declare(strict_types=1);
 
-namespace Phalcon\Support\Traits;
+namespace Phiz\Support\Traits;
 
 use function yaml_parse_file;
 
 /**
  * Trait PhpYamlTrait
  *
- * @package Phalcon\Storage\Adapter\Traits
+ * @package Phiz\Storage\Adapter\Traits
  */
 trait PhpYamlTrait
 {

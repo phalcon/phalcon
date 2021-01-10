@@ -9,19 +9,19 @@
  * file that was distributed with this source code.
  */
 
-namespace Phalcon\Mvc\Model\Query;
+namespace Phiz\Mvc\Model\Query;
 
-use Phalcon\Di;
-use Phalcon\Db\Column;
-use Phalcon\Di\DiInterface;
-use Phalcon\Helper\Arr;
-use Phalcon\Mvc\Model\Exception;
-use Phalcon\Di\InjectionAwareInterface;
-use Phalcon\Mvc\Model\QueryInterface;
-use Phalcon\Reflect\Create;
+use Phiz\Di;
+use Phiz\Db\Column;
+use Phiz\Di\DiInterface;
+use Phiz\Helper\Arr;
+use Phiz\Mvc\Model\Exception;
+use Phiz\Di\InjectionAwareInterface;
+use Phiz\Mvc\Model\QueryInterface;
+use Phiz\Reflect\Create;
 
 /**
- * Phalcon\Mvc\Model\Query\Builder
+ * Phiz\Mvc\Model\Query\Builder
  *
  * Helps to create PHQL queries using an OO interface
  *
@@ -53,7 +53,7 @@ use Phalcon\Reflect\Create;
  *     // or "limit" => [20, 20],
  * ];
  *
- * $queryBuilder = new \Phalcon\Mvc\Model\Query\Builder($params);
+ * $queryBuilder = new \Phiz\Mvc\Model\Query\Builder($params);
  * ```
  */
 class SqlBuilder implements BuilderInterface, InjectionAwareInterface {
@@ -85,7 +85,7 @@ class SqlBuilder implements BuilderInterface, InjectionAwareInterface {
     protected ?object $instance = null;
 
     /**
-     * Phalcon\Mvc\Model\Query\Builder constructor
+     * Phiz\Mvc\Model\Query\Builder constructor
      */
     public function __construct(?array $params = null, ?DiInterface $container = null) {
         if (is_array($params)) {
@@ -549,7 +549,7 @@ class SqlBuilder implements BuilderInterface, InjectionAwareInterface {
     /**
      * Returns the models involved in the query
      */
-    public function getModels(): string|array|null {
+    public function getModels() {
         $models = $this->models;
 
         if (is_array($models) && count($models) === 1) {
@@ -840,7 +840,7 @@ class SqlBuilder implements BuilderInterface, InjectionAwareInterface {
          * Gets Query instance from DI container
          */
         $query = $container->get(
-                "Phalcon\\Mvc\\Model\\SqlQuery",
+                "Phiz\\Mvc\\Model\\SqlQuery",
                 [$phql, $container]
         );
 
@@ -1077,7 +1077,7 @@ class SqlBuilder implements BuilderInterface, InjectionAwareInterface {
      * $builder->limit("100", "20");
      * ```
      */
-    public function limit(int $limit, null|int|string $offset = null): BuilderInterface {
+    public function limit(int $limit,  $offset = null): BuilderInterface {
         $limit = abs($limit);
 
         if ($limit === 0) {

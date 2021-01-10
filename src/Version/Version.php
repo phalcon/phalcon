@@ -11,7 +11,7 @@
 
 declare(strict_types=1);
 
-namespace Phalcon\Version;
+namespace Phiz\Version;
 
 /**
  * This class allows to get the installed version of the framework
@@ -22,8 +22,8 @@ class Version
      * The constant referencing the major version. Returns 0
      *
      * ```php
-     * echo Phalcon\Version\Version::getPart(
-     *     Phalcon\Version\Version::VERSION_MAJOR
+     * echo Phiz\Version\Version::getPart(
+     *     Phiz\Version\Version::VERSION_MAJOR
      * );
      * ```
      */
@@ -33,8 +33,8 @@ class Version
      * The constant referencing the major version. Returns 1
      *
      * ```php
-     * echo Phalcon\Version\Version::getPart(
-     *     Phalcon\Version\Version::VERSION_MEDIUM
+     * echo Phiz\Version\Version::getPart(
+     *     Phiz\Version\Version::VERSION_MEDIUM
      * );
      * ```
      */
@@ -44,8 +44,8 @@ class Version
      * The constant referencing the major version. Returns 2
      *
      * ```php
-     * echo Phalcon\Version\Version::getPart(
-     *     Phalcon\Version\Version::VERSION_MINOR
+     * echo Phiz\Version\Version::getPart(
+     *     Phiz\Version\Version::VERSION_MINOR
      * );
      * ```
      */
@@ -55,8 +55,8 @@ class Version
      * The constant referencing the major version. Returns 3
      *
      * ```php
-     * echo Phalcon\Version\Version::getPart(
-     *     Phalcon\Version\Version::VERSION_SPECIAL
+     * echo Phiz\Version\Version::getPart(
+     *     Phiz\Version\Version::VERSION_SPECIAL
      * );
      * ```
      */
@@ -66,8 +66,8 @@ class Version
      * The constant referencing the major version. Returns 4
      *
      * ```php
-     * echo Phalcon\Version\Version::getPart(
-     *     Phalcon\Version\Version::VERSION_SPECIAL_NUMBER
+     * echo Phiz\Version\Version::getPart(
+     *     Phiz\Version\Version::VERSION_SPECIAL_NUMBER
      * );
      * ```
      */
@@ -77,7 +77,7 @@ class Version
      * Returns the active version (string)
      *
      * ```php
-     * echo Phalcon\Version\Version::get();
+     * echo Phiz\Version\Version::get();
      * ```
      *
      * @return string
@@ -115,7 +115,7 @@ class Version
      * Returns the numeric active version
      *
      * ```php
-     * echo Phalcon\Version\Version::getId();
+     * echo Phiz\Version\Version::getId();
      * ```
      *
      * @return string
@@ -137,8 +137,8 @@ class Version
      * it will return the full version
      *
      * ```php
-     * echo Phalcon\Version\Version::getPart(
-     *     Phalcon\Version\Version::VERSION_MAJOR
+     * echo Phiz\Version\Version::getPart(
+     *     Phiz\Version\Version::VERSION_MAJOR
      * );
      * ```
      *

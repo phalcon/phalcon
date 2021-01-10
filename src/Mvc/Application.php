@@ -9,26 +9,26 @@
  * file that was distributed with this source code.
  */
 
-namespace Phalcon\Mvc;
+namespace Phiz\Mvc;
 
 use Closure;
-use Phalcon\Application\AbstractApplication;
-use Phalcon\Mvc\Application\Exception;
-use Phalcon\Di\DiInterface;
-use Phalcon\Http\ResponseInterface;
-use Phalcon\Events\ManagerInterface;
-use Phalcon\Mvc\Router\RouteInterface;
-use Phalcon\Mvc\ModuleDefinitionInterface;
+use Phiz\Application\AbstractApplication;
+use Phiz\Mvc\Application\Exception;
+use Phiz\Di\DiInterface;
+use Phiz\Http\ResponseInterface;
+use Phiz\Events\ManagerInterface;
+use Phiz\Mvc\Router\RouteInterface;
+use Phiz\Mvc\ModuleDefinitionInterface;
 
 /**
- * Phalcon\Mvc\Application
+ * Phiz\Mvc\Application
  *
  * This component encapsulates all the complex operations behind instantiating
  * every component needed and integrating it with the rest to allow the MVC
  * pattern to operate as desired.
  *
  * ```php
- * use Phalcon\Mvc\Application;
+ * use Phiz\Mvc\Application;
  *
  * class MyApp extends Application
  * {

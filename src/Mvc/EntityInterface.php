@@ -8,12 +8,12 @@
  * file that was distributed with this source code.
  */
 
-namespace Phalcon\Mvc;
+namespace Phiz\Mvc;
 
 /**
- * Phalcon\Mvc\EntityInterface
+ * Phiz\Mvc\EntityInterface
  *
- * Interface for Phalcon\Mvc\Collection and Phalcon\Mvc\Model
+ * Interface for Phiz\Mvc\Collection and Phiz\Mvc\Model
  */
 interface EntityInterface
 {

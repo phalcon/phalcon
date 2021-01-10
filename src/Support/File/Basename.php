@@ -11,7 +11,7 @@
 
 declare(strict_types=1);
 
-namespace Phalcon\Support\File;
+namespace Phiz\Support\File;
 
 use function preg_match;
 use function preg_quote;
@@ -23,7 +23,7 @@ use const DIRECTORY_SEPARATOR;
 /**
  * Class Basename
  *
- * @package Phalcon\Support\File
+ * @package Phiz\Support\File
  */
 class Basename
 {

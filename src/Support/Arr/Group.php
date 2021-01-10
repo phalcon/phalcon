@@ -11,7 +11,7 @@
 
 declare(strict_types=1);
 
-namespace Phalcon\Support\Arr;
+namespace Phiz\Support\Arr;
 
 use function call_user_func;
 use function function_exists;
@@ -22,7 +22,7 @@ use function is_string;
 /**
  * Class Group
  *
- * @package Phalcon\Support\Arr
+ * @package Phiz\Support\Arr
  */
 class Group
 {

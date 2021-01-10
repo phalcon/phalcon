@@ -11,11 +11,11 @@
 
 declare(strict_types=1);
 
-namespace Phalcon\Config\Adapter;
+namespace Phiz\Config\Adapter;
 
-use Phalcon\Config\Config;
-use Phalcon\Config\Exception;
-use Phalcon\Support\Traits\PhpFileTrait;
+use Phiz\Config\Config;
+use Phiz\Config\Exception;
+use Phiz\Support\Traits\PhpFileTrait;
 
 use function basename;
 use function count;
@@ -30,7 +30,7 @@ use function substr;
 use const INI_SCANNER_RAW;
 
 /**
- * Reads ini files and converts them to Phalcon\Config objects.
+ * Reads ini files and converts them to Phiz\Config objects.
  *
  * Given the next configuration file:
  *
@@ -51,7 +51,7 @@ use const INI_SCANNER_RAW;
  * You can read it as follows:
  *
  *```php
- * use Phalcon\Config\Adapter\Ini;
+ * use Phiz\Config\Adapter\Ini;
  *
  * $config = new Ini("path/config.ini");
  *
@@ -65,7 +65,7 @@ use const INI_SCANNER_RAW;
  * second parameter as `INI_SCANNER_NORMAL` when calling the constructor:
  *
  * ```php
- * $config = new \Phalcon\Config\Adapter\Ini(
+ * $config = new \Phiz\Config\Adapter\Ini(
  *     "path/config-with-constants.ini",
  *     INI_SCANNER_NORMAL
  * );

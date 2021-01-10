@@ -9,28 +9,28 @@
  * file that was distributed with this source code.
  */
 
-namespace Phalcon\Mvc;
+namespace Phiz\Mvc;
 
 use ArrayAccess;
 use Closure;
-use Phalcon\Di\DiInterface;
-use Phalcon\Di\Injectable;
-use Phalcon\Di\FactoryDefault;
-use Phalcon\Mvc\Micro\Exception;
-use Phalcon\Di\ServiceInterface;
+use Phiz\Di\DiInterface;
+use Phiz\Di\Injectable;
+use Phiz\Di\FactoryDefault;
+use Phiz\Mvc\Micro\Exception;
+use Phiz\Di\ServiceInterface;
 
-use Phalcon\Mvc\Micro\LazyLoader;
-use Phalcon\Http\ResponseInterface;
-use Phalcon\Mvc\Model\BinderInterface;
-use Phalcon\Mvc\Router\RouteInterface;
-use Phalcon\Events\EventsAwareInterface;
-use Phalcon\Events\ManagerInterface;
-use Phalcon\Mvc\Micro\MiddlewareInterface;
-use Phalcon\Mvc\Micro\CollectionInterface;
+use Phiz\Mvc\Micro\LazyLoader;
+use Phiz\Http\ResponseInterface;
+use Phiz\Mvc\Model\BinderInterface;
+use Phiz\Mvc\Router\RouteInterface;
+use Phiz\Events\EventsAwareInterface;
+use Phiz\Events\ManagerInterface;
+use Phiz\Mvc\Micro\MiddlewareInterface;
+use Phiz\Mvc\Micro\CollectionInterface;
 use Throwable;
 
 /**
- * Phalcon\Mvc\Micro
+ * Phiz\Mvc\Micro
  *
  * With Phalcon you can create "Micro-Framework like" applications. By doing
  * $this, you only need to write a minimal amount of code to create a PHP
@@ -38,7 +38,7 @@ use Throwable;
  * prototypes in a practical way.
  *
  *```php
- * $app = new \Phalcon\Mvc\Micro();
+ * $app = new \Phiz\Mvc\Micro();
  *
  * $app->get(
  *     "/say/welcome/{name}",
@@ -81,7 +81,7 @@ class Micro extends Injectable implements  ArrayAccess, EventsAwareInterface
     protected $stopped;
 
     /**
-     * Phalcon\Mvc\Micro constructor
+     * Phiz\Mvc\Micro constructor
      */
     public function __construct( ?DiInterface $container = null)
     {
@@ -967,7 +967,7 @@ class Micro extends Injectable implements  ArrayAccess, EventsAwareInterface
      * using the array syntax
      *
      *```php
-     *    $app["request"] = new \Phalcon\Http\Request();
+     *    $app["request"] = new \Phiz\Http\Request();
      *```
      */
     public function offsetSet($alias, $definition): void

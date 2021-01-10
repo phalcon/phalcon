@@ -11,10 +11,10 @@
 
 declare(strict_types=1);
 
-namespace Phalcon\Acl\Adapter;
+namespace Phiz\Acl\Adapter;
 
 /**
- * Interface for Phalcon\Acl adapters
+ * Interface for Phiz\Acl adapters
  */
 interface AdapterInterface
 {
@@ -189,15 +189,15 @@ interface AdapterInterface
 
     /**
      * Sets the default access level
-     * (Phalcon\Acl\Enum::ALLOW or Phalcon\Acl\Enum::DENY)
+     * (Phiz\Acl\Enum::ALLOW or Phiz\Acl\Enum::DENY)
      *
      * @param int $defaultAccess
      */
     public function setDefaultAction(int $defaultAccess): void;
 
     /**
-     * Sets the default access level (Phalcon\Acl\Enum::ALLOW or
-     * Phalcon\Acl\Enum::DENY) for no arguments provided in isAllowed action if
+     * Sets the default access level (Phiz\Acl\Enum::ALLOW or
+     * Phiz\Acl\Enum::DENY) for no arguments provided in isAllowed action if
      * there exists func for accessKey
      *
      * @param int $defaultAccess

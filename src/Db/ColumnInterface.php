@@ -8,17 +8,17 @@
  * LICENSE.txt file that was distributed with this source code.
  */
 
-namespace Phalcon\Db;
+namespace Phiz\Db;
 
 /**
- * Interface for Phalcon\Db\Column
+ * Interface for Phiz\Db\Column
  */
 interface ColumnInterface
 {
     /**
      * Check whether field absolute to position in table
      */
-    public function getAfterPosition() : string | null;
+    public function getAfterPosition() : ?string;
 
     /**
      * Returns the type of bind handling
@@ -28,7 +28,7 @@ interface ColumnInterface
     /**
      * Returns default value of column
      */
-    public function getDefault() : mixed;
+    public function getDefault();
 
     /**
      * Returns column name
@@ -48,7 +48,7 @@ interface ColumnInterface
     /**
      * Returns column size
      */
-    public function getSize() : int | string;
+    public function getSize();
 
     /**
      * Returns column type
@@ -63,7 +63,7 @@ interface ColumnInterface
     /**
      * Returns column type values
      */
-    public function getTypeValues() : array | string;
+    public function getTypeValues();
 
 
     /**

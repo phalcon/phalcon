@@ -11,16 +11,16 @@
 
 declare(strict_types=1);
 
-namespace Phalcon\Events;
+namespace Phiz\Events;
 
 /**
- * Phalcon\Events\Event
+ * Phiz\Events\Event
  *
  * This class offers contextual information of a fired event in the
  * EventsManager
  *
  *```php
- * Phalcon\Events\Event;
+ * Phiz\Events\Event;
  *
  * $event = new Event("db:afterQuery", $this, ["data" => "mydata"], true);
  * if ($event->isCancelable()) {

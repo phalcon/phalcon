@@ -8,12 +8,12 @@
  * file that was distributed with this source code.
  */
 
-namespace Phalcon\Application;
+namespace Phiz\Application;
 
 /**
- * Exceptions thrown in Phalcon\Application class will use this class
+ * Exceptions thrown in Phiz\Application class will use this class
  */
-class Exception extends \Phalcon\Exception
+class Exception extends \Phiz\Exception
 {
 
 }

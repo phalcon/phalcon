@@ -9,10 +9,10 @@
  * file that was distributed with this source code.
  */
 
-namespace Phalcon\Url;
+namespace Phiz\Url;
 
 /**
- * Interface for Phalcon\Url\UrlInterface
+ * Interface for Phiz\Url\UrlInterface
  */
 interface UrlInterface
 {

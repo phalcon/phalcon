@@ -11,15 +11,15 @@
 
 declare(strict_types=1);
 
-namespace Phalcon\Config;
+namespace Phiz\Config;
 
-use Phalcon\Config\Adapter\Grouped;
-use Phalcon\Config\Adapter\Ini;
-use Phalcon\Config\Adapter\Json;
-use Phalcon\Config\Adapter\Php;
-use Phalcon\Config\Adapter\Yaml;
-use Phalcon\Support\Exception as SupportException;
-use Phalcon\Support\Traits\FactoryTrait;
+use Phiz\Config\Adapter\Grouped;
+use Phiz\Config\Adapter\Ini;
+use Phiz\Config\Adapter\Json;
+use Phiz\Config\Adapter\Php;
+use Phiz\Config\Adapter\Yaml;
+use Phiz\Support\Exception as SupportException;
+use Phiz\Support\Traits\FactoryTrait;
 
 use function is_array;
 use function is_object;
@@ -35,7 +35,7 @@ use const PATHINFO_EXTENSION;
  * provided it will be added to filePath
  *
  *```php
- * use Phalcon\Config\ConfigFactory;
+ * use Phiz\Config\ConfigFactory;
  *
  * $options = [
  *     "filePath" => "path/config",
@@ -136,7 +136,7 @@ class ConfigFactory
 
         if (true !== is_array($config)) {
             throw new Exception(
-                'Config must be array or Phalcon\\Config\\Config object'
+                'Config must be array or Phiz\\Config\\Config object'
             );
         }
 

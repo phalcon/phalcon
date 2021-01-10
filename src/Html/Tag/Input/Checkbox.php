@@ -9,16 +9,16 @@
 
 declare(strict_types=1);
 
-namespace Phalcon\Html\Tag\Input;
+namespace Phiz\Html\Tag\Input;
 
-use Phalcon\Html\Escaper;
+use Phiz\Html\Escaper;
 
 use function array_merge;
 
 /**
  * Class Checkbox
  *
- * @package Phalcon\Html\Tag\Input
+ * @package Phiz\Html\Tag\Input
  *
  * @property array  $label
  * @property string $type

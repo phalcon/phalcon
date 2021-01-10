@@ -11,7 +11,7 @@
 
 declare(strict_types=1);
 
-namespace Phalcon\Html\Link;
+namespace Phiz\Html\Link;
 
 use Psr\Link\EvolvableLinkProviderInterface;
 use Psr\Link\LinkInterface;
@@ -19,7 +19,7 @@ use Psr\Link\LinkInterface;
 /**
  * Class LinkProvider
  *
- * @package Phalcon\Link
+ * @package Phiz\Link
  */
 class EvolvableLinkProvider extends LinkProvider implements EvolvableLinkProviderInterface
 {

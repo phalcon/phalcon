@@ -11,7 +11,7 @@
 
 declare(strict_types=1);
 
-namespace Phalcon\Html\Traits;
+namespace Phiz\Html\Traits;
 
 use function mb_strlen;
 

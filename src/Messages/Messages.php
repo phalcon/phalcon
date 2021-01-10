@@ -11,14 +11,14 @@
 
 declare(strict_types=1);
 
-namespace Phalcon\Messages;
+namespace Phiz\Messages;
 
 use ArrayAccess;
 use Countable;
 use Iterator;
 use JsonSerializable;
-use Phalcon\Messages\Traits\MessagesHelperTrait;
-use Phalcon\Support\Traits\JsonTrait;
+use Phiz\Messages\Traits\MessagesHelperTrait;
+use Phiz\Support\Traits\JsonTrait;
 
 use function is_array;
 
@@ -33,7 +33,7 @@ class Messages implements ArrayAccess, Countable, Iterator, JsonSerializable
     use MessagesHelperTrait;
 
     /**
-     * Phalcon\Messages\Messages constructor
+     * Phiz\Messages\Messages constructor
      *
      * @param array $messages
      */
@@ -47,7 +47,7 @@ class Messages implements ArrayAccess, Countable, Iterator, JsonSerializable
      *
      *```php
      * $messages->appendMessage(
-     *     new \Phalcon\Messages\Message("This is a message")
+     *     new \Phiz\Messages\Message("This is a message")
      * );
      *```
      *

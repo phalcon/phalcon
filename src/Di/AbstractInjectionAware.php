@@ -11,16 +11,16 @@
 
 declare(strict_types=1);
 
-namespace Phalcon\Di;
+namespace Phiz\Di;
 
-use Phalcon\Di\Traits\InjectionAwareTrait;
+use Phiz\Di\Traits\InjectionAwareTrait;
 
 /**
  * This abstract class offers common access to the DI in a class
  *
  * Class AbstractInjectionAware
  *
- * @package Phalcon\Di
+ * @package Phiz\Di
  */
 abstract class AbstractInjectionAware implements InjectionAwareInterface
 {

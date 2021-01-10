@@ -11,11 +11,11 @@
 
 declare(strict_types=1);
 
-namespace Phalcon\Support\Debug;
+namespace Phiz\Support\Debug;
 
 use JsonException;
-use Phalcon\Di\DiInterface;
-use Phalcon\Support\Str\Traits\InterpolateTrait;
+use Phiz\Di\DiInterface;
+use Phiz\Support\Str\Traits\InterpolateTrait;
 use Reflection;
 use ReflectionClass;
 use ReflectionException;
@@ -57,7 +57,7 @@ use const PHP_EOL;
  * ```php
  * $foo = 123;
  *
- * echo (new \Phalcon\Debug\Dump())->variable($foo, "foo");
+ * echo (new \Phiz\Debug\Dump())->variable($foo, "foo");
  * ```
  *
  * ```php
@@ -65,7 +65,7 @@ use const PHP_EOL;
  * $bar = ["key" => "value"];
  * $baz = new stdClass();
  *
- * echo (new \Phalcon\Debug\Dump())->variables($foo, $bar, $baz);
+ * echo (new \Phiz\Debug\Dump())->variables($foo, $bar, $baz);
  * ```
  *
  * @property bool  $detailed
@@ -188,12 +188,12 @@ class Dump
      *     "key" => "value",
      * ];
      *
-     * echo (new \Phalcon\Debug\Dump())->toJson($foo);
+     * echo (new \Phiz\Debug\Dump())->toJson($foo);
      *
      * $foo = new stdClass();
      * $foo->bar = "buz";
      *
-     * echo (new \Phalcon\Debug\Dump())->toJson($foo);
+     * echo (new \Phiz\Debug\Dump())->toJson($foo);
      * ```
      *
      * @param mixed $variable
@@ -213,7 +213,7 @@ class Dump
      * Returns an HTML string of information about a single variable.
      *
      * ```php
-     * echo (new \Phalcon\Debug\Dump())->variable($foo, "foo");
+     * echo (new \Phiz\Debug\Dump())->variable($foo, "foo");
      * ```
      *
      * @param mixed       $variable
@@ -242,7 +242,7 @@ class Dump
      * $bar = ["key" => "value"];
      * $baz = new stdClass();
      *
-     * echo (new \Phalcon\Debug\Dump())->variables($foo, $bar, $baz);
+     * echo (new \Phiz\Debug\Dump())->variables($foo, $bar, $baz);
      * ```
      *
      * @return string

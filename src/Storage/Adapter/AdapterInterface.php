@@ -11,12 +11,12 @@
 
 declare(strict_types=1);
 
-namespace Phalcon\Storage\Adapter;
+namespace Phiz\Storage\Adapter;
 
 use DateInterval;
 
 /**
- * Interface for Phalcon\Logger adapters
+ * Interface for Phiz\Logger adapters
  */
 interface AdapterInterface
 {

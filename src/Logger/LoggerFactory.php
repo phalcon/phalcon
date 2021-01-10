@@ -11,15 +11,15 @@
 
 declare(strict_types=1);
 
-namespace Phalcon\Logger;
+namespace Phiz\Logger;
 
 use DateTimeZone;
-use Phalcon\Config\ConfigInterface;
+use Phiz\Config\ConfigInterface;
 
 /**
  * Class LoggerFactory
  *
- * @package Phalcon\Logger
+ * @package Phiz\Logger
  */
 class LoggerFactory
 {
@@ -106,7 +106,7 @@ class LoggerFactory
 
         if (true !== is_array($config)) {
             throw new Exception(
-                'Config must be array or Phalcon\Config\Config object'
+                'Config must be array or Phiz\Config\Config object'
             );
         }
 

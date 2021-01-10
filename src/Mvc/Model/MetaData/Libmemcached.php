@@ -9,15 +9,15 @@
  * file that was distributed with this source code.
  */
 
-namespace Phalcon\Mvc\Model\MetaData;
+namespace Phiz\Mvc\Model\MetaData;
 
-use Phalcon\Helper\Arr;
-use Phalcon\Mvc\Model\Exception;
-use Phalcon\Mvc\Model\MetaData;
-use Phalcon\Cache\AdapterFactory;
+use Phiz\Helper\Arr;
+use Phiz\Mvc\Model\Exception;
+use Phiz\Mvc\Model\MetaData;
+use Phiz\Cache\AdapterFactory;
 
 /**
- * Phalcon\Mvc\Model\MetaData\Libmemcached
+ * Phiz\Mvc\Model\MetaData\Libmemcached
  *
  * Stores model meta-data in the Memcache.
  *
@@ -26,7 +26,7 @@ use Phalcon\Cache\AdapterFactory;
 class Libmemcached extends MetaData
 {
     /**
-     * Phalcon\Mvc\Model\MetaData\Libmemcached constructor
+     * Phiz\Mvc\Model\MetaData\Libmemcached constructor
      *
      * @param array options
      */

@@ -9,14 +9,14 @@
  * file that was distributed with this source code.
  */
 
-namespace Phalcon\Http\Response;
+namespace Phiz\Http\Response;
 
 /**
- * Phalcon\Http\Response\Exception
+ * Phiz\Http\Response\Exception
  *
- * Exceptions thrown in Phalcon\Http\Response will use this class.
+ * Exceptions thrown in Phiz\Http\Response will use this class.
  */
-class Exception extends \Phalcon\Exception
+class Exception extends \Phiz\Exception
 {
 }
 

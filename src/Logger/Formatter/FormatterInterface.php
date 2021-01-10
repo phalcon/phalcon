@@ -9,14 +9,14 @@
  * file that was distributed with this source code.
  */
 
-namespace Phalcon\Logger\Formatter;
+namespace Phiz\Logger\Formatter;
 
-use Phalcon\Logger\Item;
+use Phiz\Logger\Item;
 
 /**
- * Phalcon\Logger\FormatterInterface
+ * Phiz\Logger\FormatterInterface
  *
- * This interface must be implemented by formatters in Phalcon\Logger
+ * This interface must be implemented by formatters in Phiz\Logger
  */
 interface FormatterInterface
 {

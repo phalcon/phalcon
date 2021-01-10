@@ -11,14 +11,14 @@
 
 declare(strict_types=1);
 
-namespace Phalcon\Config\Adapter;
+namespace Phiz\Config\Adapter;
 
-use Phalcon\Config\Config;
+use Phiz\Config\Config;
 
 use function file_get_contents;
 
 /**
- * Reads JSON files and converts them to Phalcon\Config objects.
+ * Reads JSON files and converts them to Phiz\Config objects.
  *
  * Given the following configuration file:
  *
@@ -29,7 +29,7 @@ use function file_get_contents;
  * You can read it as follows:
  *
  *```php
- * use Phalcon\Config\Adapter\Json;
+ * use Phiz\Config\Adapter\Json;
  *
  * $config = new Json("path/config.json");
  *

@@ -11,12 +11,12 @@
 
 declare(strict_types=1);
 
-namespace Phalcon\Translate\Interpolator;
+namespace Phiz\Translate\Interpolator;
 
 /**
- * Phalcon\Translate\InterpolatorInterface
+ * Phiz\Translate\InterpolatorInterface
  *
- * Interface for Phalcon\Translate interpolators
+ * Interface for Phiz\Translate interpolators
  */
 interface InterpolatorInterface
 {

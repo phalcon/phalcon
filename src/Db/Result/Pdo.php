@@ -10,11 +10,11 @@
  * file that was distributed with this source code.
  */
 
-namespace Phalcon\Db\Result;
+namespace Phiz\Db\Result;
 
-use Phalcon\Db\Enum;
-use Phalcon\Db\ResultInterface;
-use Phalcon\Db\Adapter\AdapterInterface;
+use Phiz\Db\Enum;
+use Phiz\Db\ResultInterface;
+use Phiz\Db\Adapter\AdapterInterface;
 
 /**
  * Encapsulates the resultset internals
@@ -23,7 +23,7 @@ use Phalcon\Db\Adapter\AdapterInterface;
  * $result = $connection->query("SELECT * FROM robots ORDER BY name");
  *
  * $result->setFetchMode(
- *     \Phalcon\Db\Enum::FETCH_NUM
+ *     \Phiz\Db\Enum::FETCH_NUM
  * );
  *
  * while ($robot = $result->fetchArray()) {
@@ -58,7 +58,7 @@ class Pdo implements ResultInterface
     protected $sqlStatement;
 
     /**
-     * Phalcon\Db\Result\Pdo constructor
+     * Phiz\Db\Result\Pdo constructor
      */
     public function __construct( AdapterInterface $connection, \PDOStatement $result,
         ?string $sqlStatement = null, ?array $bindParams = null, ?array $bindTypes = null)
@@ -136,13 +136,13 @@ class Pdo implements ResultInterface
     /**
      * Fetches an array/object of strings that corresponds to the fetched row,
      * or FALSE if there are no more rows. This method is affected by the active
-     * fetch flag set using `Phalcon\Db\Result\Pdo::setFetchMode()`
+     * fetch flag set using `Phiz\Db\Result\Pdo::setFetchMode()`
      *
      *```php
      * $result = $connection->query("SELECT * FROM robots ORDER BY name");
      *
      * $result->setFetchMode(
-     *     \Phalcon\Enum::FETCH_OBJ
+     *     \Phiz\Enum::FETCH_OBJ
      * );
      *
      * while ($robot = $result->fetch()) {
@@ -150,7 +150,7 @@ class Pdo implements ResultInterface
      * }
      *```
      */
-    public function fetch(?int $fetchStyle = null,  ?int $cursorOrientation = null, ?int $cursorOffset = null) : mixed
+    public function fetch(?int $fetchStyle = null,  ?int $cursorOrientation = null, ?int $cursorOffset = null)
     {
         return $this->pdoStatement->fetch(
             $fetchStyle,
@@ -162,7 +162,7 @@ class Pdo implements ResultInterface
     /**
      * Returns an array of arrays containing all the records in the result
      * This method is affected by the active fetch flag set using
-     * `Phalcon\Db\Result\Pdo::setFetchMode()`
+     * `Phiz\Db\Result\Pdo::setFetchMode()`
      *
      *```php
      * $result = $connection->query(
@@ -198,13 +198,13 @@ class Pdo implements ResultInterface
     /**
      * Returns an array of strings that corresponds to the fetched row, or FALSE
      * if there are no more rows. This method is affected by the active fetch
-     * flag set using `Phalcon\Db\Result\Pdo::setFetchMode()`
+     * flag set using `Phiz\Db\Result\Pdo::setFetchMode()`
      *
      *```php
      * $result = $connection->query("SELECT * FROM robots ORDER BY name");
      *
      * $result->setFetchMode(
-     *     \Phalcon\Enum::FETCH_NUM
+     *     \Phiz\Enum::FETCH_NUM
      * );
      *
      * while ($robot = result->fetchArray()) {
@@ -295,27 +295,27 @@ class Pdo implements ResultInterface
     }
 
     /**
-     * Changes the fetching mode affecting Phalcon\Db\Result\Pdo::fetch()
+     * Changes the fetching mode affecting Phiz\Db\Result\Pdo::fetch()
      *
      *```php
      * // Return array with integer indexes
      * $result->setFetchMode(
-     *     \Phalcon\Enum::FETCH_NUM
+     *     \Phiz\Enum::FETCH_NUM
      * );
      *
      * // Return associative array without integer indexes
      * $result->setFetchMode(
-     *     \Phalcon\Enum::FETCH_ASSOC
+     *     \Phiz\Enum::FETCH_ASSOC
      * );
      *
      * // Return associative array together with integer indexes
      * $result->setFetchMode(
-     *     \Phalcon\Enum::FETCH_BOTH
+     *     \Phiz\Enum::FETCH_BOTH
      * );
      *
      * // Return an object
      * $result->setFetchMode(
-     *     \Phalcon\Enum::FETCH_OBJ
+     *     \Phiz\Enum::FETCH_OBJ
      * );
      *```
      */

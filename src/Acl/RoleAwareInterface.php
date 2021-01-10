@@ -11,12 +11,12 @@
 
 declare(strict_types=1);
 
-namespace Phalcon\Acl;
+namespace Phiz\Acl;
 
 /**
  * Interface for classes which could be used in allow method as ROLE
  *
- * @package Phalcon\Acl
+ * @package Phiz\Acl
  */
 interface RoleAwareInterface
 {

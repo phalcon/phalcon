@@ -11,7 +11,7 @@
 
 declare(strict_types=1);
 
-namespace Phalcon\Storage\Serializer;
+namespace Phiz\Storage\Serializer;
 
 use InvalidArgumentException;
 use JsonSerializable;
@@ -23,7 +23,7 @@ use function json_encode;
 /**
  * Class Json
  *
- * @package Phalcon\Storage\Serializer
+ * @package Phiz\Storage\Serializer
  */
 class Json extends AbstractSerializer
 {

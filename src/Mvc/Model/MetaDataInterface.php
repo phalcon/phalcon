@@ -8,15 +8,15 @@
  * file that was distributed with this source code.
  */
 
-namespace Phalcon\Mvc\Model;
+namespace Phiz\Mvc\Model;
 
-use Phalcon\Mvc\ModelInterface;
-use Phalcon\Mvc\Model\MetaData\Strategy\StrategyInterface;
+use Phiz\Mvc\ModelInterface;
+use Phiz\Mvc\Model\MetaData\Strategy\StrategyInterface;
 
 /**
- * Phalcon\Mvc\Model\MetaDataInterface
+ * Phiz\Mvc\Model\MetaDataInterface
  *
- * Interface for Phalcon\Mvc\Model\MetaData
+ * Interface for Phiz\Mvc\Model\MetaData
  */
 interface MetaDataInterface
 {
@@ -43,7 +43,7 @@ interface MetaDataInterface
     /**
      * Returns the column map if any
      */
-    public function getColumnMap(ModelInterface $model) : array | null;
+    public function getColumnMap(ModelInterface $model) : ?array;
 
     /**
      * Returns attributes (which have default values) and their default values
@@ -68,12 +68,12 @@ interface MetaDataInterface
     /**
      * Returns the name of identity field (if one is present)
      */
-    public function getIdentityField(ModelInterface $model) : string | null;
+    public function getIdentityField(ModelInterface $model) : ?string;
 
     /**
      * Returns an array $of fields which are not part of the primary key
      */
-    public function getNonPrimaryKeyAttributes(ModelInterface $model) : array | null;
+    public function getNonPrimaryKeyAttributes(ModelInterface $model) : ?array;
 
     /**
      * Returns an array $of not null attributes
@@ -88,7 +88,7 @@ interface MetaDataInterface
     /**
      * Returns the reverse column map if any
      */
-    public function getReverseColumnMap(ModelInterface $model) : array | null;
+    public function getReverseColumnMap(ModelInterface $model) : ?array;
 
     /**
      * Return the strategy to obtain the meta-data
@@ -108,60 +108,60 @@ interface MetaDataInterface
     /**
      * Reads meta-data from the adapter
      */
-    public function read(string $key) : array | null;
+    public function read(string $key) : ?array;
 
     /**
      * Reads the ordered/reversed column map for certain model
      */
-    public function readColumnMap(ModelInterface $model) : array | null;
+    public function readColumnMap(ModelInterface $model) : ?array;
 
     /**
      * Reads column-map information for certain model using a MODEL_* constant
      */
-    public function readColumnMapIndex(ModelInterface $model, int $index) : mixed;
+    public function readColumnMapIndex(ModelInterface $model, int $index) ;
 
     /**
      * Reads meta-data for certain model
      */
-    public function readMetaData(ModelInterface $model) : array | null;
+    public function readMetaData(ModelInterface $model) : ?array;
 
     /**
      * Reads meta-data for certain model using a MODEL_* constant
      */
-    public function readMetaDataIndex(ModelInterface $model, int $index) : mixed;
+    public function readMetaDataIndex(ModelInterface $model, int $index) ;
 
     /**
      * Resets internal meta-data in order to regenerate it
      */
-    public function reset() : void;
+    public function reset() ;
 
     /**
      * Set the attributes that must be ignored from the INSERT SQL generation
      */
-    public function setAutomaticCreateAttributes(ModelInterface $model, array $attributes): void;
+    public function setAutomaticCreateAttributes(ModelInterface $model, array $attributes);
 
     /**
      * Set the attributes that must be ignored from the UPDATE SQL generation
      */
-    public function setAutomaticUpdateAttributes(ModelInterface $model, array $attributes): void;
+    public function setAutomaticUpdateAttributes(ModelInterface $model, array $attributes);
 
     /**
      * Set the attributes that allow empty string values
      */
-    public function setEmptyStringAttributes(ModelInterface $model, array $attributes) : void;
+    public function setEmptyStringAttributes(ModelInterface $model, array $attributes) ;
 
     /**
      * Writes meta-data for certain model using a MODEL_* constant
      */
-    public function writeMetaDataIndex(ModelInterface $model, int $index, $data): void;
+    public function writeMetaDataIndex(ModelInterface $model, int $index, $data);
 
     /**
      * Set the meta-data extraction strategy
      */
-    public function setStrategy(StrategyInterface $strategy): void;
+    public function setStrategy(StrategyInterface $strategy);
 
     /**
      * Writes meta-data to the adapter
      */
-    public function write(string $key, array $data) : void;
+    public function write(string $key, array $data) ;
 }

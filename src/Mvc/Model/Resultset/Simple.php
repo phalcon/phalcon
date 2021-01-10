@@ -9,20 +9,20 @@
  * file that was distributed with this source code.
  */
 
-namespace Phalcon\Mvc\Model\Resultset;
+namespace Phiz\Mvc\Model\Resultset;
 
-use Phalcon\Cache\Adapter\AdapterInterface;
-use Phalcon\Di\Di;
-use Phalcon\Di\DiInterface;
-use Phalcon\Mvc\Model;
-use Phalcon\Mvc\Model\Exception;
-use Phalcon\Mvc\Model\ResultSet;
-use Phalcon\Mvc\Model\Row;
-use Phalcon\Mvc\ModelInterface;
-use Phalcon\Storage\Serializer\SerializerInterface;
+use Phiz\Cache\Adapter\AdapterInterface;
+use Phiz\Di\Di;
+use Phiz\Di\DiInterface;
+use Phiz\Mvc\Model;
+use Phiz\Mvc\Model\Exception;
+use Phiz\Mvc\Model\ResultSet;
+use Phiz\Mvc\Model\Row;
+use Phiz\Mvc\ModelInterface;
+use Phiz\Storage\Serializer\SerializerInterface;
 
 /**
- * Phalcon\Mvc\Model\Resultset\Simple
+ * Phiz\Mvc\Model\Resultset\Simple
  *
  * Simple resultsets only contains a complete objects
  * This class builds every complete object as it is required
@@ -37,10 +37,10 @@ class Simple extends ResultSet
     protected $keepSnapshots = false;
 
     /**
-     * Phalcon\Mvc\Model\Resultset\Simple constructor
+     * Phiz\Mvc\Model\Resultset\Simple constructor
      *
      * @param array                                             columnMap
-     * @param \Phalcon\Mvc\ModelInterface|Phalcon\Mvc\Model\Row model
+     * @param \Phiz\Mvc\ModelInterface|Phiz\Mvc\Model\Row model
      */
     public function __construct(
         $columnMap,
@@ -110,7 +110,7 @@ class Simple extends ResultSet
                     if($this->model instanceof Model) {
                         $modelName = get_class($this->model);
                     } else {
-                        $modelName = "Phalcon\\Mvc\\Model";
+                        $modelName = "Phiz\\Mvc\\Model";
                     }
 
                     $activeRow = $modelName::cloneResultMap(

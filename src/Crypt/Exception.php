@@ -11,10 +11,10 @@
 
 declare(strict_types=1);
 
-namespace Phalcon\Crypt;
+namespace Phiz\Crypt;
 
 /**
- * Exceptions thrown in Phalcon\Crypt use this class
+ * Exceptions thrown in Phiz\Crypt use this class
  */
 class Exception extends \Exception
 {

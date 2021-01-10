@@ -11,14 +11,14 @@
 
 declare(strict_types=1);
 
-namespace Phalcon\Support\Arr;
+namespace Phiz\Support\Arr;
 
 use function array_slice;
 
 /**
  * Class SliceRight
  *
- * @package Phalcon\Support\Arr
+ * @package Phiz\Support\Arr
  */
 class SliceRight
 {

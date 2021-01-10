@@ -11,12 +11,12 @@
 
 declare(strict_types=1);
 
-namespace Phalcon\Session;
+namespace Phiz\Session;
 
 /**
- * Phalcon\Session\Exception
+ * Phiz\Session\Exception
  *
- * Exceptions thrown in Phalcon\Session will use this class
+ * Exceptions thrown in Phiz\Session will use this class
  */
 class Exception extends \Exception
 {

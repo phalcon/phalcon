@@ -11,12 +11,12 @@
 
 declare(strict_types=1);
 
-namespace Phalcon\Logger;
+namespace Phiz\Logger;
 
 /**
- * Phalcon\Logger\Exception
+ * Phiz\Logger\Exception
  *
- * Exceptions thrown in Phalcon\Logger will use this class
+ * Exceptions thrown in Phiz\Logger will use this class
  */
 class Exception extends \Exception
 {

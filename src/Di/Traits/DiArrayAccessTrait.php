@@ -11,11 +11,11 @@
 
 declare(strict_types=1);
 
-namespace Phalcon\Di\Traits;
+namespace Phiz\Di\Traits;
 
-use Phalcon\Di\Exception;
-use Phalcon\Di\InjectionAwareInterface;
-use Phalcon\Di\ServiceInterface;
+use Phiz\Di\Exception;
+use Phiz\Di\InjectionAwareInterface;
+use Phiz\Di\ServiceInterface;
 
 trait DiArrayAccessTrait
 {
@@ -73,7 +73,7 @@ trait DiArrayAccessTrait
      * Allows to register a shared service using the array syntax
      *
      *```php
-     * $di["request"] = new \Phalcon\Http\Request();
+     * $di["request"] = new \Phiz\Http\Request();
      *```
      *
      * @param mixed $name

@@ -11,14 +11,14 @@
 
 declare(strict_types=1);
 
-namespace Phalcon\Flash;
+namespace Phiz\Flash;
 
-use Phalcon\Di\InjectionAwareInterface;
-use Phalcon\Di\Traits\InjectionAwareTrait;
-use Phalcon\Flash\Traits\FlashGettersTrait;
-use Phalcon\Html\EscaperInterface;
-use Phalcon\Session\ManagerInterface as SessionInterface;
-use Phalcon\Support\Str\Traits\InterpolateTrait;
+use Phiz\Di\InjectionAwareInterface;
+use Phiz\Di\Traits\InjectionAwareTrait;
+use Phiz\Flash\Traits\FlashGettersTrait;
+use Phiz\Html\EscaperInterface;
+use Phiz\Session\ManagerInterface as SessionInterface;
+use Phiz\Support\Str\Traits\InterpolateTrait;
 
 /**
  * Shows HTML notifications related to different circumstances. Classes can be
@@ -31,7 +31,7 @@ use Phalcon\Support\Str\Traits\InterpolateTrait;
  *
  * Class AbstractFlash
  *
- * @package Phalcon\Flash
+ * @package Phiz\Flash
  */
 abstract class AbstractFlash implements FlashInterface, InjectionAwareInterface
 {

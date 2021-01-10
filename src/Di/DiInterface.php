@@ -11,12 +11,12 @@
 
 declare(strict_types=1);
 
-namespace Phalcon\Di;
+namespace Phiz\Di;
 
 use ArrayAccess;
 
 /**
- * Interface for Phalcon\Di
+ * Interface for Phiz\Di
  */
 interface DiInterface extends ArrayAccess
 {
@@ -66,7 +66,7 @@ interface DiInterface extends ArrayAccess
     public function getRaw(string $name);
 
     /**
-     * Returns the corresponding Phalcon\Di\Service instance for a service
+     * Returns the corresponding Phiz\Di\Service instance for a service
      *
      * @param string $name
      *
@@ -136,7 +136,7 @@ interface DiInterface extends ArrayAccess
     public static function setDefault(DiInterface $container): void;
 
     /**
-     * Sets a service using a raw Phalcon\Di\Service definition
+     * Sets a service using a raw Phiz\Di\Service definition
      *
      * @param string           $name
      * @param ServiceInterface $rawDefinition

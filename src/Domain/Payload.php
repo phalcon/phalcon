@@ -11,14 +11,14 @@
 
 declare(strict_types=1);
 
-namespace Phalcon\Domain;
+namespace Phiz\Domain;
 
 use PayloadInterop\DomainPayload;
 
 /**
  * Class Payload
  *
- * @package Phalcon\Domain
+ * @package Phiz\Domain
  *
  * @property array  $result
  * @property string $status

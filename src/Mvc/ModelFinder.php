@@ -1,22 +1,22 @@
 <?php
 
-namespace Phalcon\Mvc;
+namespace Phiz\Mvc;
 
-use Phalcon\Di\{
+use Phiz\Di\{
     Di,
     DiInterface,
     InjectionAwareInterface
 };
-use Phalcon\Mvc\Model\{
+use Phiz\Mvc\Model\{
     MetaDataInterface,
     QueryInterface,
     Exception
 };
-use Phalcon\Mvc\Model\ResultsetInterface;
-use Phalcon\Mvc\Model\Resultset\Simple;
-use Phalcon\Support\Str\Uncamelize;
-use Phalcon\Reflect\Create;
-use Phalcon\Db\Column;
+use Phiz\Mvc\Model\ResultsetInterface;
+use Phiz\Mvc\Model\Resultset\Simple;
+use Phiz\Support\Str\Uncamelize;
+use Phiz\Reflect\Create;
+use Phiz\Db\Column;
 
 use function debugLine;
 /**
@@ -30,7 +30,7 @@ use function debugLine;
  */
 class ModelFinder implements ModelFinderInterface, InjectionAwareInterface {
 
-    protected mixed $arguments; // passed to dispatch
+    protected $arguments; // passed to dispatch
     protected ?string $modelName;
     protected ?ModelInterface $model = null;
     protected ?MetaDataInterface $metaData = null;
@@ -98,7 +98,7 @@ class ModelFinder implements ModelFinderInterface, InjectionAwareInterface {
      * One argument of a variety of parameter types. 
      * Return one model instance or null
      */
-    public function findFirst (string $modelName, mixed $arguments = null) : ModelInterface | null
+    public function findFirst (string $modelName, $arguments = null) : ?ModelInterface
     {
         
         $this->init($modelName);
@@ -148,7 +148,10 @@ class ModelFinder implements ModelFinderInterface, InjectionAwareInterface {
         return null;
     }
         
-    public function dispatch(string $modelName, string $method, array $arguments): null | array | ModelInterface
+    /**
+     * Return ModelInterface | ResultInterface | null 
+     */
+    public function dispatch(string $modelName, string $method, array $arguments)
     {
         $this->arguments = $arguments;
         $this->modelName = $modelName;
@@ -321,7 +324,7 @@ class ModelFinder implements ModelFinderInterface, InjectionAwareInterface {
     
     /** interface expectations of this and actual method horrible */
     
-    public function find(string $modelName, mixed $parameters = null) : ?ResultSetInterface
+    public function find(string $modelName, $parameters = null) : ?ResultSetInterface
     {
         $this->init($modelName);
         
@@ -348,7 +351,7 @@ class ModelFinder implements ModelFinderInterface, InjectionAwareInterface {
         }
     }
     /**
-     * Previously static method of Phalcon\Mvc\Model
+     * Previously static method of Phiz\Mvc\Model
      * shared prepare query logic for find and findFirst method
      */
     private function getPreparedQuery($params, $limit = null): QueryInterface {

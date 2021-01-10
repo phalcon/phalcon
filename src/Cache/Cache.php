@@ -11,16 +11,16 @@
 
 declare(strict_types=1);
 
-namespace Phalcon\Cache;
+namespace Phiz\Cache;
 
-use Phalcon\Cache\Adapter\AdapterInterface;
-use Phalcon\Cache\Exception\InvalidArgumentException;
+use Phiz\Cache\Adapter\AdapterInterface;
+use Phiz\Cache\Exception\InvalidArgumentException;
 use Psr\SimpleCache\CacheInterface;
 use Traversable;
 
 /**
  * This component offers caching capabilities for your application.
- * Phalcon\Cache implements PSR-16.
+ * Phiz\Cache implements PSR-16.
  *
  * @property AdapterInterface $adapter
  */

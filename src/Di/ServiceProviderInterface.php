@@ -11,7 +11,7 @@
 
 declare(strict_types=1);
 
-namespace Phalcon\Di;
+namespace Phiz\Di;
 
 /**
  * Should be implemented by service providers, or such components, which
@@ -20,8 +20,8 @@ namespace Phalcon\Di;
  * ```php
  * namespace Acme;
  *
- * use Phalcon\Di\DiInterface;
- * use Phalcon\Di\ServiceProviderInterface;
+ * use Phiz\Di\DiInterface;
+ * use Phiz\Di\ServiceProviderInterface;
  *
  * class SomeServiceProvider implements ServiceProviderInterface
  * {

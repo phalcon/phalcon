@@ -9,12 +9,12 @@
  * file that was distributed with this source code.
  */
 
-namespace Phalcon\Mvc\Router;
+namespace Phiz\Mvc\Router;
 
 /**
- * Phalcon\Mvc\Router\RouteInterface
+ * Phiz\Mvc\Router\RouteInterface
  *
- * Interface for Phalcon\Mvc\Router\Route
+ * Interface for Phiz\Mvc\Router\Route
  */
 interface RouteInterface
 {

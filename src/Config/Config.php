@@ -11,9 +11,9 @@
 
 declare(strict_types=1);
 
-namespace Phalcon\Config;
+namespace Phiz\Config;
 
-use Phalcon\Collection\Collection;
+use Phiz\Collection\Collection;
 
 use function array_shift;
 use function explode;
@@ -24,13 +24,13 @@ use function mb_strtolower;
 use function method_exists;
 
 /**
- * `Phalcon\Config` is designed to simplify the access to, and the use of,
+ * `Phiz\Config` is designed to simplify the access to, and the use of,
  * configuration data within applications. It provides a nested object property
  * based user interface for accessing this configuration data within application
  * code.
  *
  *```php
- * $config = new \Phalcon\Config(
+ * $config = new \Phiz\Config(
  *     [
  *         "database" => [
  *             "adapter"  => "Mysql",
@@ -77,7 +77,7 @@ class Config extends Collection implements ConfigInterface
      * Merges a configuration into the current one
      *
      *```php
-     * $appConfig = new \Phalcon\Config(
+     * $appConfig = new \Phiz\Config(
      *     [
      *         "database" => [
      *             "host" => "localhost",

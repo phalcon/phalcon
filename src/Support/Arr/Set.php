@@ -11,12 +11,12 @@
 
 declare(strict_types=1);
 
-namespace Phalcon\Support\Arr;
+namespace Phiz\Support\Arr;
 
 /**
  * Class Set
  *
- * @package Phalcon\Support\Arr
+ * @package Phiz\Support\Arr
  */
 class Set
 {

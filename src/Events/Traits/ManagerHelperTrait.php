@@ -11,14 +11,14 @@
 
 declare(strict_types=1);
 
-namespace Phalcon\Events\Traits;
+namespace Phiz\Events\Traits;
 
-use Phalcon\Events\Exception;
+use Phiz\Events\Exception;
 
 /**
  * Trait ManagerHelperTrait
  *
- * @package Phalcon\Events\Traits
+ * @package Phiz\Events\Traits
  *
  * @property bool  $collect
  * @property bool  $enablePriorities

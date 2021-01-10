@@ -11,9 +11,9 @@
 
 declare(strict_types=1);
 
-namespace Phalcon\Autoload\Traits;
+namespace Phiz\Autoload\Traits;
 
-use Phalcon\Autoload\Exception;
+use Phiz\Autoload\Exception;
 
 use function file_exists;
 use function is_array;
@@ -28,7 +28,7 @@ use const DIRECTORY_SEPARATOR;
 /**
  * Trait LoaderHelperTrait
  *
- * @package Phalcon\Autoload\Traits
+ * @package Phiz\Autoload\Traits
  *
  * @property array $classes
  * @property array $debug

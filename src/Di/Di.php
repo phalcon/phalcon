@@ -11,28 +11,28 @@
 
 declare(strict_types=1);
 
-namespace Phalcon\Di;
+namespace Phiz\Di;
 
-use Phalcon\Di\Exception\ServiceResolutionException;
-use Phalcon\Di\Traits\DiArrayAccessTrait;
-use Phalcon\Di\Traits\DiEventsTrait;
-use Phalcon\Di\Traits\DiExceptionsTrait;
-use Phalcon\Di\Traits\DiInstanceTrait;
-use Phalcon\Di\Traits\DiLoadTrait;
-use Phalcon\Events\ManagerInterface;
-use Phalcon\Events\Traits\EventsAwareTrait;
+use Phiz\Di\Exception\ServiceResolutionException;
+use Phiz\Di\Traits\DiArrayAccessTrait;
+use Phiz\Di\Traits\DiEventsTrait;
+use Phiz\Di\Traits\DiExceptionsTrait;
+use Phiz\Di\Traits\DiInstanceTrait;
+use Phiz\Di\Traits\DiLoadTrait;
+use Phiz\Events\ManagerInterface;
+use Phiz\Events\Traits\EventsAwareTrait;
 
 use function is_object;
 use function lcfirst;
 use function substr;
 
-use Phalcon\Globals;
+use Phiz\Globals;
 
 /**
- * Phalcon\Di is a component that implements Dependency Injection/Service
+ * Phiz\Di is a component that implements Dependency Injection/Service
  * Location of services and it's itself a container for them.
  *
- * Since Phalcon is highly decoupled, Phalcon\Di is essential to integrate the
+ * Since Phalcon is highly decoupled, Phiz\Di is essential to integrate the
  * different components of the framework. The developer can also use this
  * component to inject dependencies and manage global instances of the different
  * classes used in the application.
@@ -47,8 +47,8 @@ use Phalcon\Globals;
  * less prone to errors.
  *
  *```php
- * use Phalcon\Di;
- * use Phalcon\Http\Request;
+ * use Phiz\Di;
+ * use Phiz\Http\Request;
  *
  * $di = new Di();
  *
@@ -234,7 +234,7 @@ class Di implements DiInterface
 
         /**
          * Pass the DI to the instance if it implements
-         * \Phalcon\Di\InjectionAwareInterface
+         * \Phiz\Di\InjectionAwareInterface
          */
         if (
             true === is_object($instance) &&
@@ -293,7 +293,7 @@ class Di implements DiInterface
     }
 
     /**
-     * Returns a Phalcon\Di\Service instance
+     * Returns a Phiz\Di\Service instance
      *
      * @param string $name
      *
@@ -357,8 +357,8 @@ class Di implements DiInterface
      * Registers a service provider.
      *
      * ```php
-     * use Phalcon\Di\DiInterface;
-     * use Phalcon\Di\ServiceProviderInterface;
+     * use Phiz\Di\DiInterface;
+     * use Phiz\Di\ServiceProviderInterface;
      *
      * class SomeServiceProvider implements ServiceProviderInterface
      * {
@@ -439,7 +439,7 @@ class Di implements DiInterface
     }
 
     /**
-     * Sets a service using a raw Phalcon\Di\Service definition
+     * Sets a service using a raw Phiz\Di\Service definition
      *
      * @param string           $name
      * @param ServiceInterface $rawDefinition

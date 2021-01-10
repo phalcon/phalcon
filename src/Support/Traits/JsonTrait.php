@@ -11,7 +11,7 @@
 
 declare(strict_types=1);
 
-namespace Phalcon\Support\Traits;
+namespace Phiz\Support\Traits;
 
 use function is_object;
 use function method_exists;
@@ -19,7 +19,7 @@ use function method_exists;
 /**
  * Trait JsonTrait
  *
- * @package Phalcon\Support\Traits
+ * @package Phiz\Support\Traits
  */
 trait JsonTrait
 {

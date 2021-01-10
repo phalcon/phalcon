@@ -9,17 +9,17 @@
  * file that was distributed with this source code.
  */
 
-namespace Phalcon\Db\Adapter;
+namespace Phiz\Db\Adapter;
 
-use Phalcon\Db\DialectInterface;
-use Phalcon\Db\ResultInterface;
-use Phalcon\Db\ColumnInterface;
-use Phalcon\Db\IndexInterface;
-use Phalcon\Db\RawValue;
-use Phalcon\Db\ReferenceInterface;
+use Phiz\Db\DialectInterface;
+use Phiz\Db\ResultInterface;
+use Phiz\Db\ColumnInterface;
+use Phiz\Db\IndexInterface;
+use Phiz\Db\RawValue;
+use Phiz\Db\ReferenceInterface;
 
 /**
- * Interface for Phalcon\Db adapters
+ * Interface for Phiz\Db adapters
  */
 interface AdapterInterface
 {
@@ -56,7 +56,7 @@ interface AdapterInterface
 
     /**
      * Closes active connection returning success. Phalcon automatically closes
-     * and destroys active connections within Phalcon\Db\Pool
+     * and destroys active connections within Phiz\Db\Pool
      */
     public function close() : bool;
 
@@ -66,7 +66,7 @@ interface AdapterInterface
     public function commit(bool $nesting = true) : bool;
 
     /**
-     * This method is automatically called in \Phalcon\Db\Adapter\Pdo
+     * This method is automatically called in \Phiz\Db\Adapter\Pdo
      * constructor. Call it when you need to restore a database connection
      */
     public function connect(array $descriptor = null) : bool;
@@ -93,7 +93,7 @@ interface AdapterInterface
             ?array $placeholders = null, ?array $dataTypes = null) : bool;
 
     /**
-     * Returns an array of Phalcon\Db\Column objects describing a table
+     * Returns an array of Phiz\Db\Column objects describing a table
      */
     public function describeColumns(string $table, ?string  $schema = null) : array;
 
@@ -141,7 +141,7 @@ interface AdapterInterface
     /**
      * Escapes a column/table/schema name
      */
-    public function escapeIdentifier(string $identifier) : string;
+    public function escapeIdentifier(mixed $identifier) : string;
 
     /**
      * Escapes a value to avoid SQL injections
@@ -177,12 +177,13 @@ interface AdapterInterface
      * print_r($robot);
      *```
      */
-    public function fetchColumn(string $sqlQuery, ?array $placeholders = [], int $column = 0) : string | bool;
+    public function fetchColumn(string $sqlQuery, ?array $placeholders = [], int $column = 0) : ?string;
 
     /**
      * Returns the first row in a SQL query result
      */
-    public function fetchOne(string $sqlQuery, int $fetchMode = 2, ?array $placeholders = null) : array | bool;
+    public function fetchOne(string $sqlQuery, int $fetchMode = 2, 
+        ?array $placeholders = null) : ?array;
 
     /**
      * Returns a SQL modified with a FOR UPDATE clause
@@ -350,7 +351,7 @@ interface AdapterInterface
      * Use this method only when the SQL statement sent to the server returns
      * rows
      */
-    public function query(string $sqlStatement, ?array $placeholders = null, ?array $dataTypes = null) : ResultInterface | bool;
+    public function query(string $sqlStatement, ?array $placeholders = null, ?array $dataTypes = null) : ?ResultInterface;
 
     /**
      * Releases given savepoint

@@ -11,12 +11,12 @@
 
 declare(strict_types=1);
 
-namespace Phalcon\Filter\Sanitize;
+namespace Phiz\Filter\Sanitize;
 
 use function preg_replace;
 
 /**
- * Phalcon\Filter\Sanitize\Alnum
+ * Phiz\Filter\Sanitize\Alnum
  *
  * Sanitizes a value to an alphanumeric value
  */

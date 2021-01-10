@@ -11,11 +11,11 @@
 
 declare(strict_types=1);
 
-namespace Phalcon\Logger\Adapter;
+namespace Phiz\Logger\Adapter;
 
 use LogicException;
-use Phalcon\Logger\Item;
-use Phalcon\Logger\Logger;
+use Phiz\Logger\Item;
+use Phiz\Logger\Logger;
 
 use function closelog;
 use function openlog;

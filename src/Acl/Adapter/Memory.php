@@ -11,17 +11,17 @@
 
 declare(strict_types=1);
 
-namespace Phalcon\Acl\Adapter;
+namespace Phiz\Acl\Adapter;
 
-use Phalcon\Acl\Component;
-use Phalcon\Acl\ComponentAwareInterface;
-use Phalcon\Acl\ComponentInterface;
-use Phalcon\Acl\Enum;
-use Phalcon\Acl\Exception;
-use Phalcon\Acl\Role;
-use Phalcon\Acl\RoleAwareInterface;
-use Phalcon\Acl\RoleInterface;
-use Phalcon\Events\Traits\EventsAwareTrait;
+use Phiz\Acl\Component;
+use Phiz\Acl\ComponentAwareInterface;
+use Phiz\Acl\ComponentInterface;
+use Phiz\Acl\Enum;
+use Phiz\Acl\Exception;
+use Phiz\Acl\Role;
+use Phiz\Acl\RoleAwareInterface;
+use Phiz\Acl\RoleInterface;
+use Phiz\Events\Traits\EventsAwareTrait;
 use ReflectionException;
 use ReflectionFunction;
 
@@ -45,16 +45,16 @@ use const E_USER_WARNING;
  * Manages ACL lists in memory
  *
  *```php
- * $acl = new \Phalcon\Acl\Adapter\Memory();
+ * $acl = new \Phiz\Acl\Adapter\Memory();
  *
  * $acl->setDefaultAction(
- *     \Phalcon\Acl\Enum::DENY
+ *     \Phiz\Acl\Enum::DENY
  * );
  *
  * // Register roles
  * $roles = [
- *     "users"  => new \Phalcon\Acl\Role("Users"),
- *     "guests" => new \Phalcon\Acl\Role("Guests"),
+ *     "users"  => new \Phiz\Acl\Role("Users"),
+ *     "guests" => new \Phiz\Acl\Role("Guests"),
  * ];
  * foreach ($roles as $role) {
  *     $acl->addRole($role);
@@ -88,7 +88,7 @@ use const E_USER_WARNING;
  *
  * foreach ($privateComponents as $componentName => $actions) {
  *     $acl->addComponent(
- *         new \Phalcon\Acl\Component($componentName),
+ *         new \Phiz\Acl\Component($componentName),
  *         $actions
  *     );
  * }
@@ -103,7 +103,7 @@ use const E_USER_WARNING;
  *
  * foreach ($publicComponents as $componentName => $actions) {
  *     $acl->addComponent(
- *         new \Phalcon\Acl\Component($componentName),
+ *         new \Phiz\Acl\Component($componentName),
  *         $actions
  *     );
  * }
@@ -236,7 +236,7 @@ class Memory extends AbstractAdapter
      * ```php
      * // Add a component to the the list allowing access to an action
      * $acl->addComponent(
-     *     new Phalcon\Acl\Component("customers"),
+     *     new Phiz\Acl\Component("customers"),
      *     "search"
      * );
      *
@@ -244,7 +244,7 @@ class Memory extends AbstractAdapter
      *
      * // Add a component  with an access list
      * $acl->addComponent(
-     *     new Phalcon\Acl\Component("customers"),
+     *     new Phiz\Acl\Component("customers"),
      *     [
      *         "create",
      *         "search",
@@ -425,7 +425,7 @@ class Memory extends AbstractAdapter
      *
      * ```php
      * $acl->addRole(
-     *     new Phalcon\Acl\Role("administrator"),
+     *     new Phiz\Acl\Role("administrator"),
      *     "consultant"
      * );
      *
@@ -676,7 +676,7 @@ class Memory extends AbstractAdapter
             } else {
                 throw new Exception(
                     'Object passed as roleName must implement ' .
-                    'Phalcon\Acl\RoleAwareInterface or Phalcon\Acl\RoleInterface'
+                    'Phiz\Acl\RoleAwareInterface or Phiz\Acl\RoleInterface'
                 );
             }
         }
@@ -690,7 +690,7 @@ class Memory extends AbstractAdapter
             } else {
                 throw new Exception(
                     'Object passed as componentName must implement ' .
-                    'Phalcon\Acl\ComponentAwareInterface or Phalcon\Acl\ComponentInterface'
+                    'Phiz\Acl\ComponentAwareInterface or Phiz\Acl\ComponentInterface'
                 );
             }
         }
@@ -898,8 +898,8 @@ class Memory extends AbstractAdapter
     }
 
     /**
-     * Sets the default access level (`Phalcon\Enum::ALLOW` or
-     * `Phalcon\Enum::DENY`) for no arguments provided in isAllowed action if
+     * Sets the default access level (`Phiz\Enum::ALLOW` or
+     * `Phiz\Enum::DENY`) for no arguments provided in isAllowed action if
      * there exists func for accessKey
      *
      * @param int $defaultAccess

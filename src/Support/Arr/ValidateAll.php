@@ -11,16 +11,16 @@
 
 declare(strict_types=1);
 
-namespace Phalcon\Support\Arr;
+namespace Phiz\Support\Arr;
 
-use Phalcon\Support\Arr\Traits\FilterTrait;
+use Phiz\Support\Arr\Traits\FilterTrait;
 
 use function count;
 
 /**
  * Class ValidateAll
  *
- * @package Phalcon\Support\Arr
+ * @package Phiz\Support\Arr
  */
 class ValidateAll
 {

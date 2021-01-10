@@ -11,14 +11,14 @@
 
 declare(strict_types=1);
 
-namespace Phalcon\Domain;
+namespace Phiz\Domain;
 
 use PayloadInterop\DomainPayload;
 
 /**
  * Factory to create payload objects
  *
- * @package Phalcon\Domain
+ * @package Phiz\Domain
  */
 class PayloadFactory
 {

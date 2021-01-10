@@ -11,18 +11,18 @@
 
 declare(strict_types=1);
 
-namespace Phalcon\Di\FactoryDefault;
+namespace Phiz\Di\FactoryDefault;
 
-use Phalcon\Di\FactoryDefault;
-use Phalcon\Di\Service;
-use Phalcon\Html\Escaper;
-use Phalcon\Events\Manager as EventsManager;
-use Phalcon\Filter\FilterFactory;
+use Phiz\Di\FactoryDefault;
+use Phiz\Di\Service;
+use Phiz\Html\Escaper;
+use Phiz\Events\Manager as EventsManager;
+use Phiz\Filter\FilterFactory;
 
 /**
- * Phalcon\Di\FactoryDefault\Cli
+ * Phiz\Di\FactoryDefault\Cli
  *
- * This is a variant of the standard Phalcon\Di. By default it automatically
+ * This is a variant of the standard Phiz\Di. By default it automatically
  * registers all the services provided by the framework.
  * Thanks to this, the developer does not need to register each service individually.
  * This class is specially suitable for CLI applications
@@ -30,7 +30,7 @@ use Phalcon\Filter\FilterFactory;
 class Cli extends FactoryDefault
 {
     /**
-     * Phalcon\Di\FactoryDefault\Cli constructor
+     * Phiz\Di\FactoryDefault\Cli constructor
      */
     public function __construct()
     {
@@ -44,14 +44,14 @@ class Cli extends FactoryDefault
             'filter'        => new Service($filter->newInstance(), true),
         ];
 //        let this->services = [
-//            "annotations":        new Service("Phalcon\\Annotations\\Adapter\\Memory", true),
-//            "dispatcher":         new Service("Phalcon\\Cli\\Dispatcher", true),
-//            "eventsManager":      new Service("Phalcon\\Events\\Manager", true),
-//            "modelsManager":      new Service("Phalcon\\Mvc\\Model\\Manager", true),
-//            "modelsMetadata":     new Service("Phalcon\\Mvc\\Model\\MetaData\\Memory", true),
-//            "router":             new Service("Phalcon\\Cli\\Router", true),
-//            "security":           new Service("Phalcon\\Security", true),
-//            "transactionManager": new Service("Phalcon\\Mvc\\Model\\Transaction\\Manager", true)
+//            "annotations":        new Service("Phiz\\Annotations\\Adapter\\Memory", true),
+//            "dispatcher":         new Service("Phiz\\Cli\\Dispatcher", true),
+//            "eventsManager":      new Service("Phiz\\Events\\Manager", true),
+//            "modelsManager":      new Service("Phiz\\Mvc\\Model\\Manager", true),
+//            "modelsMetadata":     new Service("Phiz\\Mvc\\Model\\MetaData\\Memory", true),
+//            "router":             new Service("Phiz\\Cli\\Router", true),
+//            "security":           new Service("Phiz\\Security", true),
+//            "transactionManager": new Service("Phiz\\Mvc\\Model\\Transaction\\Manager", true)
 //        ];
     }
 }

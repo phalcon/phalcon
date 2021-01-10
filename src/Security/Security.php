@@ -8,12 +8,12 @@
  * file that was distributed with this source code.
  */
 
-namespace Phalcon\Security;
+namespace Phiz\Security;
 
-//use Phalcon\Di\DiInterface;
-use Phalcon\Di\AbstractInjectionAware;
-use Phalcon\Http\RequestInterface;
-use Phalcon\Session\ManagerInterface as SessionInterface;
+//use Phiz\Di\DiInterface;
+use Phiz\Di\AbstractInjectionAware;
+use Phiz\Http\RequestInterface;
+use Phiz\Session\ManagerInterface as SessionInterface;
 
 /**
  * This component provides a set of functions to improve the security in Phalcon
@@ -101,7 +101,7 @@ class Security extends AbstractInjectionAware
     private ?RequestInterface $localRequest = null;
 
     /**
-     * Phalcon\Security constructor
+     * Phiz\Security constructor
      */
     public function __construct(SessionInterface $session = null, RequestInterface $request = null)
     {
@@ -238,7 +238,7 @@ class Security extends AbstractInjectionAware
     /**
       * Returns the default hash
       */
-    public function getDefaultHash() : int | null
+    public function getDefaultHash() : ?int
     {
         return $this->defaultHash;
     }
@@ -263,7 +263,7 @@ class Security extends AbstractInjectionAware
     /**
      * Returns the value of the CSRF token for the current request.
      */
-    public function getRequestToken() : string | null
+    public function getRequestToken() : ?string
     {
         if (empty($this->requestToken)) {
             return $this->getSessionToken();
@@ -275,7 +275,7 @@ class Security extends AbstractInjectionAware
     /**
      * Returns the value of the CSRF token in session
      */
-    public function getSessionToken() : string | null
+    public function getSessionToken() : ?string
     {
 
          $session = $this->getLocalSession();
@@ -523,7 +523,7 @@ class Security extends AbstractInjectionAware
         return $this;
     }
 
-    private function getLocalRequest() : RequestInterface | null
+    private function getLocalRequest() : ?RequestInterface
     {
 
         if ($this->localRequest) {
@@ -544,7 +544,7 @@ class Security extends AbstractInjectionAware
         return null;
     }
 
-    private function getLocalSession() : SessionInterface | null
+    private function getLocalSession() : ?SessionInterface
     {
 
         if ($this->localSession) {

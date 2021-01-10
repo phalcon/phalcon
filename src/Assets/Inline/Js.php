@@ -11,9 +11,9 @@
 
 declare(strict_types=1);
 
-namespace Phalcon\Assets\Inline;
+namespace Phiz\Assets\Inline;
 
-use Phalcon\Assets\Inline as InlineBase;
+use Phiz\Assets\Inline as InlineBase;
 
 /**
  * Represents an inline JavaScript

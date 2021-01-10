@@ -11,7 +11,7 @@
 
 declare(strict_types=1);
 
-namespace Phalcon\Support\Str\Traits;
+namespace Phiz\Support\Str\Traits;
 
 use function mb_convert_case;
 
@@ -20,7 +20,7 @@ use const MB_CASE_UPPER;
 /**
  * Trait UpperTrait
  *
- * @package Phalcon\Support\Str\Traits
+ * @package Phiz\Support\Str\Traits
  */
 trait UpperTrait
 {

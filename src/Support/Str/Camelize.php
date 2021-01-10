@@ -1,6 +1,6 @@
 <?php
 
-namespace Phalcon\Support\Str;
+namespace Phiz\Support\Str;
 
 use function preg_replace;
 use function strtolower;
@@ -8,7 +8,7 @@ use function strtolower;
  * 
  * Class Uncamelize
  *
- * @package Phalcon\Support\Str
+ * @package Phiz\Support\Str
  *
  * Previously done by builtin C encoded function with zephir.
  * Code from first return googled on stackoverflow.

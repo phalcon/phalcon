@@ -8,16 +8,16 @@
  * LICENSE.txt file that was distributed with this source code.
  */
 
-namespace Phalcon\Mvc\Model;
+namespace Phiz\Mvc\Model;
 
 use Closure;
-use Phalcon\Mvc\ModelInterface;
-use Phalcon\Cache\Adapter\AdapterInterface;
+use Phiz\Mvc\ModelInterface;
+use Phiz\Cache\Adapter\AdapterInterface;
 
 /**
- * Phalcon\Mvc\Model\ResultsetInterface
+ * Phiz\Mvc\Model\ResultsetInterface
  *
- * Interface for Phalcon\Mvc\Model\Resultset
+ * Interface for Phiz\Mvc\Model\Resultset
  */
 interface ResultsetInterface
 {

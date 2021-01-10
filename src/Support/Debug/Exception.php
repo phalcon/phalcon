@@ -11,12 +11,12 @@
 
 declare(strict_types=1);
 
-namespace Phalcon\Support\Debug;
+namespace Phiz\Support\Debug;
 
-use Phalcon\Support\Exception as SupportException;
+use Phiz\Support\Exception as SupportException;
 
 /**
- * Exceptions thrown in Phalcon\Debug will use this class
+ * Exceptions thrown in Phiz\Debug will use this class
  */
 class Exception extends SupportException
 {

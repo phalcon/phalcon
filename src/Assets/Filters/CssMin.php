@@ -11,9 +11,9 @@
 
 declare(strict_types=1);
 
-namespace Phalcon\Assets\Filters;
+namespace Phiz\Assets\Filters;
 
-use Phalcon\Assets\FilterInterface;
+use Phiz\Assets\FilterInterface;
 
 /**
  * Minify the CSS - removes comments removes newlines and line feeds keeping
@@ -21,7 +21,7 @@ use Phalcon\Assets\FilterInterface;
  *
  * Class CssMin
  *
- * @package Phalcon\Assets\Filters
+ * @package Phiz\Assets\Filters
  */
 class CssMin implements FilterInterface
 {

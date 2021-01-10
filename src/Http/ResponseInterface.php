@@ -9,15 +9,15 @@
  * file that was distributed with this source code.
  */
 
-namespace Phalcon\Http;
+namespace Phiz\Http;
 
 use DateTime;
-use Phalcon\Http\Response\HeadersInterface;
+use Phiz\Http\Response\HeadersInterface;
 
 /**
- * Phalcon\Http\Response
+ * Phiz\Http\Response
  *
- * Interface for Phalcon\Http\Response
+ * Interface for Phiz\Http\Response
  */
 interface ResponseInterface
 {

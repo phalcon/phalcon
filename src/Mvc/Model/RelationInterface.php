@@ -8,12 +8,12 @@
  * file that was distributed with this source code.
  */
 
-namespace Phalcon\Mvc\Model;
+namespace Phiz\Mvc\Model;
 
 /**
- * Phalcon\Mvc\Model\RelationInterface
+ * Phiz\Mvc\Model\RelationInterface
  *
- * Interface for Phalcon\Mvc\Model\Relation
+ * Interface for Phiz\Mvc\Model\Relation
  */
 interface RelationInterface
 {
@@ -22,21 +22,21 @@ interface RelationInterface
      *
      * @return string|array
      */
-    public function getFields() : string | array;
+    public function getFields();
 
     /**
      * Returns the foreign key configuration
      *
      * @return string|array
      */
-    public function getForeignKey() : string | array | bool;
+    public function getForeignKey();
 
     /**
      * Gets the intermediate fields for has-*-through relations
      *
      * @return string|array
      */
-    public function getIntermediateFields() : string | array;
+    public function getIntermediateFields() ;
 
     /**
      * Gets the intermediate model for has-*-through relations
@@ -48,13 +48,13 @@ interface RelationInterface
      *
      * @return string|array
      */
-    public function getIntermediateReferencedFields() : string | array;
+    public function getIntermediateReferencedFields() ;
 
     /**
      * Returns an option by the specified name
      * If the option doesn't exist null is returned
      */
-    public function getOption(string $name) : mixed;
+    public function getOption(string $name) ;
 
     /**
      * Returns the options
@@ -66,14 +66,14 @@ interface RelationInterface
      *
      * @return array|bool
      */
-    public function getParams() : array|bool;
+    public function getParams() ;
 
     /**
      * Returns the referenced fields
      *
      * @return string|array
      */
-    public function getReferencedFields() : string | array;
+    public function getReferencedFields() ;
 
     /**
      * Returns the referenced model
@@ -106,6 +106,6 @@ interface RelationInterface
      * @param string|array intermediateFields
      * @param string|array intermediateReferencedFields
      */
-    public function setIntermediateRelation(string|array $intermediateFields, 
-        string $intermediateModel, string|array $intermediateReferencedFields) : void;
+    public function setIntermediateRelation($intermediateFields, 
+        string $intermediateModel, $intermediateReferencedFields);
 }

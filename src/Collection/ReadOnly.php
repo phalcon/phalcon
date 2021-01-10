@@ -11,10 +11,10 @@
 
 declare(strict_types=1);
 
-namespace Phalcon\Collection;
+namespace Phiz\Collection;
 
 /**
- * Phalcon\Collection\ReadOnly is a read only Collection object
+ * Phiz\Collection\ReadOnly is a read only Collection object
  */
 class ReadOnly extends Collection
 {

@@ -11,7 +11,7 @@
 
 declare(strict_types=1);
 
-namespace Phalcon\Filter\Sanitize;
+namespace Phiz\Filter\Sanitize;
 
 use function abs;
 use function filter_var;
@@ -20,7 +20,7 @@ use function intval;
 use const FILTER_SANITIZE_NUMBER_INT;
 
 /**
- * Phalcon\Filter\Sanitize\AbsInt
+ * Phiz\Filter\Sanitize\AbsInt
  *
  * Sanitizes a value to absolute integer
  */

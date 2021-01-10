@@ -11,17 +11,17 @@
 
 declare(strict_types=1);
 
-namespace Phalcon\Storage;
+namespace Phiz\Storage;
 
-use Phalcon\Storage\Adapter\AdapterInterface;
-use Phalcon\Storage\Adapter\Apcu;
-use Phalcon\Storage\Adapter\Libmemcached;
-use Phalcon\Storage\Adapter\Memory;
-use Phalcon\Storage\Adapter\Redis;
-use Phalcon\Storage\Adapter\Stream;
-use Phalcon\Support\Exception as SupportException;
-use Phalcon\Support\HelperFactory;
-use Phalcon\Support\Traits\FactoryTrait;
+use Phiz\Storage\Adapter\AdapterInterface;
+use Phiz\Storage\Adapter\Apcu;
+use Phiz\Storage\Adapter\Libmemcached;
+use Phiz\Storage\Adapter\Memory;
+use Phiz\Storage\Adapter\Redis;
+use Phiz\Storage\Adapter\Stream;
+use Phiz\Support\Exception as SupportException;
+use Phiz\Support\HelperFactory;
+use Phiz\Support\Traits\FactoryTrait;
 
 /**
  * Class AdapterFactory

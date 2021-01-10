@@ -11,10 +11,10 @@
 
 declare(strict_types=1);
 
-namespace Phalcon\Logger\Formatter;
+namespace Phiz\Logger\Formatter;
 
 use JsonException;
-use Phalcon\Logger\Item;
+use Phiz\Logger\Item;
 
 use function json_encode;
 
@@ -26,7 +26,7 @@ use const JSON_THROW_ON_ERROR;
 use const JSON_UNESCAPED_SLASHES;
 
 /**
- * Phalcon\Logger\Formatter\Json
+ * Phiz\Logger\Formatter\Json
  *
  * Formats messages using JSON encoding
  */

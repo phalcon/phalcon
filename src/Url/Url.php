@@ -9,14 +9,14 @@
  * file that was distributed with this source code.
  */
 
-namespace Phalcon\Url;
+namespace Phiz\Url;
 
-use Phalcon\Di\DiInterface;
-use Phalcon\Di\AbstractInjectionAware;
-use Phalcon\Mvc\RouterInterface;
-use Phalcon\Mvc\Router\RouteInterface;
-use Phalcon\Url\Exception;
-use Phalcon\Url\UrlInterface;
+use Phiz\Di\DiInterface;
+use Phiz\Di\AbstractInjectionAware;
+use Phiz\Mvc\RouterInterface;
+use Phiz\Mvc\Router\RouteInterface;
+use Phiz\Url\Exception;
+use Phiz\Url\UrlInterface;
 
 /**
  * This components helps in the generation of: URIs, URLs and Paths

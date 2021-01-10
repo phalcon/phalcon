@@ -9,12 +9,12 @@
 
 declare(strict_types=1);
 
-namespace Phalcon\Html\Tag\Input;
+namespace Phiz\Html\Tag\Input;
 
 /**
  * Class Input
  *
- * @package Phalcon\Html\Tag\Input
+ * @package Phiz\Html\Tag\Input
  */
 class Input extends AbstractInput
 {

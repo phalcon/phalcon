@@ -9,13 +9,13 @@
  * file that was distributed with this source code.
  */
 
-namespace Phalcon\Http;
+namespace Phiz\Http;
 
-//TODO :  use Phalcon\Http\Request\FileInterface;
+//TODO :  use Phiz\Http\Request\FileInterface;
 use stdClass;
 
 /**
- * Interface for Phalcon\Http\Request
+ * Interface for Phiz\Http\Request
  */
 interface RequestInterface
 {
@@ -125,7 +125,7 @@ interface RequestInterface
      * they use regular expressions.
      *
      * ```php
-     * use Phalcon\Http\Request;
+     * use Phiz\Http\Request;
      *
      * $request = new Request;
      *
@@ -267,7 +267,7 @@ interface RequestInterface
     public function getServerName() : string;
 
     /**
-     * Gets attached files as Phalcon\Http\Request\FileInterface compatible
+     * Gets attached files as Phiz\Http\Request\FileInterface compatible
      * instances
      */
     public function getUploadedFiles(bool $onlySuccessful = false, bool $namedKeys = false) : array;

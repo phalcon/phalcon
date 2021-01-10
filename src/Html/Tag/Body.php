@@ -9,14 +9,14 @@
 
 declare(strict_types=1);
 
-namespace Phalcon\Html\Tag;
+namespace Phiz\Html\Tag;
 
-use Phalcon\Html\Exception;
+use Phiz\Html\Exception;
 
 /**
  * Class Body
  *
- * @package Phalcon\Html\Tag
+ * @package Phiz\Html\Tag
  */
 class Body extends AbstractHelper
 {

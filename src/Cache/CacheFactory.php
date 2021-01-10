@@ -11,10 +11,10 @@
 
 declare(strict_types=1);
 
-namespace Phalcon\Cache;
+namespace Phiz\Cache;
 
-use Phalcon\Config\ConfigInterface;
-use Phalcon\Support\Traits\ConfigTrait;
+use Phiz\Config\ConfigInterface;
+use Phiz\Support\Traits\ConfigTrait;
 use Psr\SimpleCache\CacheInterface;
 
 /**

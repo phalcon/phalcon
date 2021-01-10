@@ -11,9 +11,9 @@
 
 declare(strict_types=1);
 
-namespace Phalcon\Di\Traits;
+namespace Phiz\Di\Traits;
 
-use Phalcon\Di\Exception;
+use Phiz\Di\Exception;
 
 use function class_exists;
 use function is_array;
@@ -22,7 +22,7 @@ use function is_object;
 /**
  * Trait DiExceptionsTrait
  *
- * @package Phalcon\Di\Traits
+ * @package Phiz\Di\Traits
  */
 trait DiExceptionsTrait
 {

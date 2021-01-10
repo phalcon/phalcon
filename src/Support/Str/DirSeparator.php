@@ -11,7 +11,7 @@
 
 declare(strict_types=1);
 
-namespace Phalcon\Support\Str;
+namespace Phiz\Support\Str;
 
 use function rtrim;
 
@@ -20,7 +20,7 @@ use const DIRECTORY_SEPARATOR;
 /**
  * Class DirSeparator
  *
- * @package Phalcon\Support\Str
+ * @package Phiz\Support\Str
  */
 class DirSeparator
 {

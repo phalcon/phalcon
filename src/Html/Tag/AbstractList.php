@@ -9,16 +9,16 @@
 
 declare(strict_types=1);
 
-namespace Phalcon\Html\Tag;
+namespace Phiz\Html\Tag;
 
-use Phalcon\Html\Exception;
+use Phiz\Html\Exception;
 
 use const PHP_EOL;
 
 /**
  * Class AbstractList
  *
- * @package Phalcon\Html\Tag
+ * @package Phiz\Html\Tag
  *
  * @property array  $attributes
  * @property string $elementTag

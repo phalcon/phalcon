@@ -9,27 +9,27 @@
  * file that was distributed with $this source code.
  */
 
-namespace Phalcon\Mvc\Model;
+namespace Phiz\Mvc\Model;
 
-use Phalcon\Cache\Adapter\AdapterInterface as CacheAdapterInterface;
-use Phalcon\Di\DiInterface;
-use Phalcon\Di\InjectionAwareInterface;
-use Phalcon\Mvc\Model\MetaData\Strategy\Introspection;
-use Phalcon\Mvc\Model\MetaData\Strategy\StrategyInterface;
-use Phalcon\Mvc\ModelInterface;
+use Phiz\Cache\Adapter\AdapterInterface as CacheAdapterInterface;
+use Phiz\Di\DiInterface;
+use Phiz\Di\InjectionAwareInterface;
+use Phiz\Mvc\Model\MetaData\Strategy\Introspection;
+use Phiz\Mvc\Model\MetaData\Strategy\StrategyInterface;
+use Phiz\Mvc\ModelInterface;
 
 /**
- * Phalcon\Mvc\Model\MetaData
+ * Phiz\Mvc\Model\MetaData
  *
- * Because Phalcon\Mvc\Model requires meta-data like field names, data types,
+ * Because Phiz\Mvc\Model requires meta-data like field names, data types,
  * primary keys, etc. This component collect them and store for further
- * querying by Phalcon\Mvc\Model. Phalcon\Mvc\Model\MetaData can also use
+ * querying by Phiz\Mvc\Model. Phiz\Mvc\Model\MetaData can also use
  * adapters to store temporarily or permanently the meta-data.
  *
- * A standard Phalcon\Mvc\Model\MetaData can be used to query model attributes:
+ * A standard Phiz\Mvc\Model\MetaData can be used to query model attributes:
  *
  * ```php
- * $metaData = new \Phalcon\Mvc\Model\MetaData\Memory();
+ * $metaData = new \Phiz\Mvc\Model\MetaData\Memory();
  *
  * $attributes = $metaData->getAttributes(
  *     new Robots()
@@ -77,7 +77,7 @@ abstract class MetaData implements InjectionAwareInterface, MetaDataInterface {
      * );
      * ```
      */
-    protected function throwBadData(): void {
+    protected function throwBadData() {
         throw new Exception("The meta-data is invalid or is corrupt");
     }
 
@@ -183,7 +183,8 @@ abstract class MetaData implements InjectionAwareInterface, MetaDataInterface {
      * );
      * ```
      */
-    public function getColumnMap(ModelInterface $model): array|null {
+    public function getColumnMap(ModelInterface $model): ?array
+     {
         $data = $this->readColumnMapIndex($model, self::MODELS_COLUMN_MAP);
 
         if ($data === null) {
@@ -207,7 +208,8 @@ abstract class MetaData implements InjectionAwareInterface, MetaDataInterface {
      * );
      * ```
      */
-    public function getDefaultValues(ModelInterface $model): array {
+    public function getDefaultValues(ModelInterface $model): array 
+    {
         $data = $this->readMetaDataIndex($model, self::MODELS_DEFAULT_VALUES);
 
         if ($data === null) {
@@ -324,7 +326,7 @@ abstract class MetaData implements InjectionAwareInterface, MetaDataInterface {
      * );
      * ```
      */
-    public function getIdentityField(ModelInterface $model): string|null {
+    public function getIdentityField(ModelInterface $model): ?string {
         return $this->readMetaDataIndex($model, self::MODELS_IDENTITY_COLUMN);
     }
 
@@ -408,7 +410,7 @@ abstract class MetaData implements InjectionAwareInterface, MetaDataInterface {
      * );
      * ```
      */
-    public function getReverseColumnMap(ModelInterface $model): array|null {
+    public function getReverseColumnMap(ModelInterface $model): ?array  {
         $data = $this->readColumnMapIndex(
                 $model,
                 self::MODELS_REVERSE_COLUMN_MAP
@@ -470,7 +472,7 @@ abstract class MetaData implements InjectionAwareInterface, MetaDataInterface {
     /**
      * Reads metadata from the adapter
      */
-    public function read(string $key): array|null {
+    public function read(string $key): ?array {
         return $this->adapter->get($key);
     }
 
@@ -509,7 +511,8 @@ abstract class MetaData implements InjectionAwareInterface, MetaDataInterface {
      * );
      * ```
      */
-    final public function readColumnMapIndex(ModelInterface $model, int $index): mixed {
+    final public function readColumnMapIndex(ModelInterface $model, int $index) 
+    {
         if (!\globals_get("orm.column_renaming")) {
             return null;
         }
@@ -535,7 +538,7 @@ abstract class MetaData implements InjectionAwareInterface, MetaDataInterface {
      * );
      * ```
      */
-    final public function readMetaData(ModelInterface $model): array|null {
+    final public function readMetaData(ModelInterface $model): ?array {
         $source = $model->getSource();
         $schema = $model->getSchema();
 
@@ -563,7 +566,7 @@ abstract class MetaData implements InjectionAwareInterface, MetaDataInterface {
      * );
      * ```
      */
-    final public function readMetaDataIndex(ModelInterface $model, int $index): mixed {
+    final public function readMetaDataIndex(ModelInterface $model, int $index) {
         $source = $model->getSource();
         $schema = $model->getSchema();
 
@@ -586,7 +589,8 @@ abstract class MetaData implements InjectionAwareInterface, MetaDataInterface {
      * $metaData->reset();
      * ```
      */
-    public function reset(): void {
+    public function reset()
+    {
         $this->metaData = [];
         $this->columnMap = [];
     }
@@ -603,7 +607,8 @@ abstract class MetaData implements InjectionAwareInterface, MetaDataInterface {
      * );
      * ```
      */
-    public function setAutomaticCreateAttributes(ModelInterface $model, array $attributes): void {
+    public function setAutomaticCreateAttributes(
+        ModelInterface $model, array $attributes) {
         $this->writeMetaDataIndex(
                 $model,
                 self::MODELS_AUTOMATIC_DEFAULT_INSERT,
@@ -623,7 +628,8 @@ abstract class MetaData implements InjectionAwareInterface, MetaDataInterface {
      * );
      * ```
      */
-    public function setAutomaticUpdateAttributes(ModelInterface $model, array $attributes): void {
+    public function setAutomaticUpdateAttributes(
+        ModelInterface $model, array $attributes) {
         $this->writeMetaDataIndex(
                 $model,
                 self::MODELS_AUTOMATIC_DEFAULT_UPDATE,
@@ -643,7 +649,8 @@ abstract class MetaData implements InjectionAwareInterface, MetaDataInterface {
      * );
      * ```
      */
-    public function setEmptyStringAttributes(ModelInterface $model, array $attributes): void {
+    public function setEmptyStringAttributes(ModelInterface $model, array $attributes)
+     {
         $this->writeMetaDataIndex(
                 $model,
                 self::MODELS_EMPTY_STRING_VALUES,
@@ -654,21 +661,22 @@ abstract class MetaData implements InjectionAwareInterface, MetaDataInterface {
     /**
      * Sets the DependencyInjector container
      */
-    public function setDI(DiInterface $container): void {
+    public function setDI(DiInterface $container) {
         $this->container = $container;
     }
 
     /**
      * Set the meta-data extraction strategy
      */
-    public function setStrategy(StrategyInterface $strategy): void {
+    public function setStrategy(StrategyInterface $strategy) {
         $this->strategy = $strategy;
     }
 
     /**
      * Writes the metadata to adapter
      */
-    public function write(string $key, array $data): void {
+    public function write(string $key, array $data) 
+    {
         try {
             $option = globals_get("orm.exception_on_failed_metadata_save");
             $result = $this->adapter->set($key, $data);
@@ -676,7 +684,8 @@ abstract class MetaData implements InjectionAwareInterface, MetaDataInterface {
             if (false === $result) {
                 $this->throwWriteException($option);
             }
-        } catch (\Exception) {
+        } 
+        catch (\Exception $e) {
             $this->throwWriteException($option);
         }
     }
@@ -696,7 +705,7 @@ abstract class MetaData implements InjectionAwareInterface, MetaDataInterface {
      * );
      * ```
      */
-    final public function writeMetaDataIndex(ModelInterface $model, int $index, $data): void {
+    final public function writeMetaDataIndex(ModelInterface $model, int $index, $data) {
         if (!is_array($data) && !is_string($data) && !is_bool($data)) {
             throw new Exception("Invalid data for index");
         }
@@ -719,7 +728,7 @@ abstract class MetaData implements InjectionAwareInterface, MetaDataInterface {
     /**
      * Initialize the metadata for certain table
      */
-    final protected function initialize(ModelInterface $model, $key, $table, $schema): void {
+    final protected function initialize(ModelInterface $model, $key, $table, $schema) {
         $strategy = null;
         $className = get_class($model);
 
@@ -821,7 +830,7 @@ abstract class MetaData implements InjectionAwareInterface, MetaDataInterface {
     /**
      * Throws an exception when the metadata cannot be written
      */
-    private function throwWriteException($option): void {
+    private function throwWriteException($option) {
         $message = "Failed to store metaData to the cache adapter";
 
         if ($option) {

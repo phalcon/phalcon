@@ -11,12 +11,12 @@
 
 declare(strict_types=1);
 
-namespace Phalcon\Flash;
+namespace Phiz\Flash;
 
 /**
  * Class Direct
  *
- * @package Phalcon\Flash
+ * @package Phiz\Flash
  */
 class Direct extends AbstractFlash
 {

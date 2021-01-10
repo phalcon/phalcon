@@ -11,16 +11,16 @@
 
 declare(strict_types=1);
 
-namespace Phalcon\Acl\Adapter;
+namespace Phiz\Acl\Adapter;
 
-use Phalcon\Acl\Enum;
-use Phalcon\Events\EventsAwareInterface;
-use Phalcon\Events\Traits\EventsAwareTrait;
+use Phiz\Acl\Enum;
+use Phiz\Events\EventsAwareInterface;
+use Phiz\Events\Traits\EventsAwareTrait;
 
 /**
  * Class AbstractAdapter
  *
- * @package Phalcon\Acl\Adapter
+ * @package Phiz\Acl\Adapter
  *
  * @property string|null $activeAccess
  * @property string|null $activeComponent
@@ -109,7 +109,7 @@ abstract class AbstractAdapter implements AdapterInterface, EventsAwareInterface
     }
 
     /**
-     * Sets the default access level (Phalcon\Acl::ALLOW or Phalcon\Acl::DENY)
+     * Sets the default access level (Phiz\Acl::ALLOW or Phiz\Acl::DENY)
      *
      * @param int $defaultAccess
      */

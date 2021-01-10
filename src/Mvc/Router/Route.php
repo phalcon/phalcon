@@ -9,13 +9,13 @@
  * file that was distributed with this source code.
  */
 
-namespace Phalcon\Mvc\Router;
-use Phalcon\Support\Str\Uncamelize;
+namespace Phiz\Mvc\Router;
+use Phiz\Support\Str\Uncamelize;
 use function route_extract_params;
 
 use IntlChar;
 /**
- * Phalcon\Mvc\Router\Route
+ * Phiz\Mvc\Router\Route
  *
  * This class represents every route added to the router
  */
@@ -36,7 +36,7 @@ class Route implements RouteInterface
     // $id is passed to constructor, the caller must manage and use a generator object, or some other method.
 
     /**
-     * Phalcon\Mvc\Router\Route constructor
+     * Phiz\Mvc\Router\Route constructor
      */
     public function __construct(int $id, string $pattern, 
              $paths = null,  $httpMethods = null)
@@ -162,7 +162,7 @@ class Route implements RouteInterface
      * it needs to be coded in C or C++, unless using zephir compiled phalcon.
      * Not quite happy
      */
-    public function extractNamedParams(string $pattern) : bool | array
+    public function extractNamedParams(string $pattern) :  ?array
     {   
         return route_extract_params($pattern);
     }

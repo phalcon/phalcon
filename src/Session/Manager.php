@@ -11,10 +11,10 @@
 
 declare(strict_types=1);
 
-namespace Phalcon\Session;
+namespace Phiz\Session;
 
-use Phalcon\Di\Traits\InjectionAwareTrait;
-use Phalcon\Session\Traits\ManagerMagicTraits;
+use Phiz\Di\Traits\InjectionAwareTrait;
+use Phiz\Session\Traits\ManagerMagicTraits;
 use SessionHandlerInterface;
 
 use function headers_sent;
@@ -27,7 +27,7 @@ use function session_start;
 use function session_status;
 
 /**
- * Phalcon\Session\Manager
+ * Phiz\Session\Manager
  *
  * Session manager class
  *

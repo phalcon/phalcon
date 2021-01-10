@@ -11,9 +11,9 @@
 
 declare(strict_types=1);
 
-namespace Phalcon\Support\Arr;
+namespace Phiz\Support\Arr;
 
-use Phalcon\Support\Arr\Traits\FilterTrait;
+use Phiz\Support\Arr\Traits\FilterTrait;
 
 use function array_key_last;
 use function reset;
@@ -21,7 +21,7 @@ use function reset;
 /**
  * Class LastKey
  *
- * @package Phalcon\Support\Arr
+ * @package Phiz\Support\Arr
  */
 class LastKey
 {

@@ -11,7 +11,7 @@
 
 declare(strict_types=1);
 
-namespace Phalcon\Di\Traits;
+namespace Phiz\Di\Traits;
 
 use function call_user_func;
 use function call_user_func_array;
@@ -19,7 +19,7 @@ use function call_user_func_array;
 /**
  * Trait DiInstanceTrait
  *
- * @package Phalcon\Di\Traits
+ * @package Phiz\Di\Traits
  */
 trait DiInstanceTrait
 {

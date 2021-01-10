@@ -11,14 +11,14 @@
 
 declare(strict_types=1);
 
-namespace Phalcon\Filter\Sanitize;
+namespace Phiz\Filter\Sanitize;
 
 use function filter_var;
 
 use const FILTER_SANITIZE_URL;
 
 /**
- * Phalcon\Filter\Sanitize\Url
+ * Phiz\Filter\Sanitize\Url
  *
  * Sanitizes a value url
  */

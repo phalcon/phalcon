@@ -11,12 +11,12 @@
 
 declare(strict_types=1);
 
-namespace Phalcon\Messages;
+namespace Phiz\Messages;
 
 /**
  * Interface MessageInterface
  *
- * Interface for Phalcon\Messages\MessageInterface
+ * Interface for Phiz\Messages\MessageInterface
  */
 interface MessageInterface
 {

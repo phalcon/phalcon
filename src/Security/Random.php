@@ -8,24 +8,24 @@
  * file that was distributed with this source code.
  */
 
-namespace Phalcon\Security;
+namespace Phiz\Security;
 
 /**
- * Phalcon\Security\Random
+ * Phiz\Security\Random
  *
  * Secure random number generator class.
  *
  * Provides secure random number generator which is suitable for generating
  * session key in HTTP cookies, etc.
  *
- * `Phalcon\Security\Random` could be mainly useful for:
+ * `Phiz\Security\Random` could be mainly useful for:
  *
  * - Key generation (e.g. generation of complicated keys)
  * - Generating random passwords for new user accounts
  * - Encryption systems
  *
  *```php
- * $random = new \Phalcon\Security\Random();
+ * $random = new \Phiz\Security\Random();
  *
  * // Random binary string
  * $bytes = $random->bytes();
@@ -83,17 +83,17 @@ class Random
      * If $len is not specified, 16 is assumed. It may be larger in future.
      * The result may contain alphanumeric characters except 0, O, I and l.
      *
-     * It is similar to `Phalcon\Security\Random::base64()` but has been
+     * It is similar to `Phiz\Security\Random::base64()` but has been
      * modified to avoid both non-alphanumeric characters and letters which
      * might look ambiguous when printed.
      *
      *```php
-     * $random = new \Phalcon\Security\Random();
+     * $random = new \Phiz\Security\Random();
      *
      * echo $random->base58(); // 4kUgL2pdQMSCQtjE
      *```
      *
-     * @see    \Phalcon\Security\Random:base64
+     * @see    \Phiz\Security\Random:base64
      * @link   https://en.wikipedia.org/wiki/Base58
      * @throws Exception If secure random number generator is not available or unexpected partial read
      */
@@ -111,18 +111,18 @@ class Random
      *
      * If $len is not specified, 16 is assumed. It may be larger in future.
      *
-     * It is similar to `Phalcon\Security\Random::base58()` but has been
+     * It is similar to `Phiz\Security\Random::base58()` but has been
      * modified to provide the largest value that can safely be used in URLs
      * without needing to take extra characters into consideration because it is
      * [A-Za-z0-9].
      *
      *```php
-     * $random = new \Phalcon\Security\Random();
+     * $random = new \Phiz\Security\Random();
      *
      * echo $random->base62(); // z0RkwHfh8ErDM1xw
      *```
      *
-     * @see    \Phalcon\Security\Random:base58
+     * @see    \Phiz\Security\Random:base58
      * @throws Exception If secure random number generator is not available or unexpected partial read
      */
     public function base62(int $len = null) : string
@@ -142,7 +142,7 @@ class Random
      * Size formula: 4 * ($len / 3) rounded up to a multiple of 4.
      *
      *```php
-     * $random = new \Phalcon\Security\Random();
+     * $random = new \Phiz\Security\Random();
      *
      * echo $random->base64(12); // 3rcq39QzGK9fUqh8
      *```
@@ -168,7 +168,7 @@ class Random
      * base64.
      *
      *```php
-     * $random = new \Phalcon\Security\Random();
+     * $random = new \Phiz\Security\Random();
      *
      * echo $random->base64Safe(); // GD8JojhzSTrqX7Q8J6uug
      *```
@@ -209,7 +209,7 @@ class Random
      * The result may contain any byte: "x00" - "xFF".
      *
      *```php
-     * $random = new \Phalcon\Security\Random();
+     * $random = new \Phiz\Security\Random();
      *
      * $bytes = $random->bytes();
      * var_dump(bin2hex($bytes));
@@ -234,7 +234,7 @@ class Random
      * The length of the result string is usually greater of $len.
      *
      *```php
-     * $random = new \Phalcon\Security\Random();
+     * $random = new \Phiz\Security\Random();
      *
      * echo $random->hex(10); // a29f470508d5ccb8e289
      *```
@@ -257,7 +257,7 @@ class Random
      * Returns an integer: 0 <= result <= $len.
      *
      *```php
-     * $random = new \Phalcon\Security\Random();
+     * $random = new \Phiz\Security\Random();
      *
      * echo $random->number(16); // 8
      *```
@@ -286,7 +286,7 @@ class Random
      * y is one of 8, 9, A, or B (e.g., f47ac10b-58cc-4372-a567-0e02b2c3d479).
      *
      *```php
-     * $random = new \Phalcon\Security\Random();
+     * $random = new \Phiz\Security\Random();
      *
      * echo $random->uuid(); // 1378c906-64bb-4f81-a8d6-4ae1bfcdec22
      *```

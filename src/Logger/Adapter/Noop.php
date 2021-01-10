@@ -11,14 +11,14 @@
 
 declare(strict_types=1);
 
-namespace Phalcon\Logger\Adapter;
+namespace Phiz\Logger\Adapter;
 
-use Phalcon\Logger\Item;
+use Phiz\Logger\Item;
 
 /**
  * Class Noop
  *
- * @package Phalcon\Logger\Adapter
+ * @package Phiz\Logger\Adapter
  */
 class Noop extends AbstractAdapter
 {

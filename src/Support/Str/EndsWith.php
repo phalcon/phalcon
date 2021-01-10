@@ -11,14 +11,14 @@
 
 declare(strict_types=1);
 
-namespace Phalcon\Support\Str;
+namespace Phiz\Support\Str;
 
-use Phalcon\Support\Str\Traits\EndsWithTrait;
+use Phiz\Support\Str\Traits\EndsWithTrait;
 
 /**
  * Class EndsWith
  *
- * @package Phalcon\Support\Str
+ * @package Phiz\Support\Str
  */
 class EndsWith
 {

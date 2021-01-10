@@ -8,13 +8,13 @@
  * LICENSE.txt file that was distributed with this source code.
  */
 
-namespace Phalcon\Db;
+namespace Phiz\Db;
 
 /**
  * Allows to define columns to be used on create or alter table operations
  *
  *```php
- * use Phalcon\Db\Column as Column;
+ * use Phiz\Db\Column as Column;
  *
  * // Column definition
  * $column = new Column(
@@ -282,7 +282,7 @@ class Column implements ColumnInterface
      *
      * @var int | string
      */
-    protected int | string $size = 0;
+    protected  $size = 0;
 
     /**
      * Column data type
@@ -303,7 +303,7 @@ class Column implements ColumnInterface
      *
      * @var array|string
      */
-    protected array | string $typeValues;
+    protected  $typeValues;
 
     /**
      * Integer column unsigned?
@@ -313,7 +313,7 @@ class Column implements ColumnInterface
     protected bool $unsigned = false;
 
     /**
-     * Phalcon\Db\Column constructor
+     * Phiz\Db\Column constructor
      */
     public function __construct(string $name, array $definition)
     {
@@ -467,7 +467,7 @@ class Column implements ColumnInterface
     /**
      * Check whether field absolute to position in table
      */
-    public function getAfterPosition() : string | null
+    public function getAfterPosition() : ?string 
     {
         return $this->after;
     }
@@ -492,7 +492,7 @@ class Column implements ColumnInterface
         return $this->_default !== null;
     }
 
-    public function getDefault() : mixed
+    public function getDefault()
     {
         return $this->_default;
     }
@@ -512,7 +512,7 @@ class Column implements ColumnInterface
         return $this->size;
     }
     
-    public function getSize() : int | string 
+    public function getSize() 
     {
         return $this->size;
     }
@@ -521,7 +521,7 @@ class Column implements ColumnInterface
     {
         return $this->type;
     }
-    public function getTypeValues() : array | string
+    public function getTypeValues() 
     {
         return $this->typeValues;
     }

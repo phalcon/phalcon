@@ -11,7 +11,7 @@
 
 declare(strict_types=1);
 
-namespace Phalcon\Support\Arr\Traits;
+namespace Phiz\Support\Arr\Traits;
 
 use function array_filter;
 use function is_callable;
@@ -19,7 +19,7 @@ use function is_callable;
 /**
  * Trait FilterTrait
  *
- * @package Phalcon\Support\Str\Traits
+ * @package Phiz\Support\Str\Traits
  */
 trait FilterTrait
 {

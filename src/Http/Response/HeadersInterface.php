@@ -9,12 +9,12 @@
  * file that was distributed with this source code.
  */
 
-namespace Phalcon\Http\Response;
+namespace Phiz\Http\Response;
 
 /**
- * Phalcon\Http\Response\HeadersInterface
+ * Phiz\Http\Response\HeadersInterface
  *
- * Interface for Phalcon\Http\Response\Headers compatible bags
+ * Interface for Phiz\Http\Response\Headers compatible bags
  */
 interface HeadersInterface
 {

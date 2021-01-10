@@ -9,21 +9,21 @@
  * LICENSE.txt file that was distributed with this source code.
  */
 
-namespace Phalcon\Dispatcher;
+namespace Phiz\Dispatcher;
 
 use Exception;
-use Phalcon\Di\DiInterface;
-use Phalcon\Di\AbstractInjectionAware;
-use Phalcon\Dispatcher\Exception as DisException;
-use Phalcon\Events\EventsAwareInterface;
-use Phalcon\Events\ManagerInterface;
-use Phalcon\Filter\FilterInterface;
-use Phalcon\Mvc\Model\Binder;
-use Phalcon\Mvc\Model\BinderInterface;
+use Phiz\Di\DiInterface;
+use Phiz\Di\AbstractInjectionAware;
+use Phiz\Dispatcher\Exception as DisException;
+use Phiz\Events\EventsAwareInterface;
+use Phiz\Events\ManagerInterface;
+use Phiz\Filter\FilterInterface;
+use Phiz\Mvc\Model\Binder;
+use Phiz\Mvc\Model\BinderInterface;
 
 
 /**
- * This is the base class for Phalcon\Mvc\Dispatcher and Phalcon\Cli\Dispatcher.
+ * This is the base class for Phiz\Mvc\Dispatcher and Phiz\Cli\Dispatcher.
  * This class can't be instantiated directly, you can use it to create your own
  * dispatchers.
  */
@@ -593,7 +593,7 @@ abstract class AbstractDispatcher extends AbstractInjectionAware implements Disp
      * );
      * ```
      *
-     * @throws \Phalcon\Exception
+     * @throws \Phiz\Exception
      */
     public function forward(array $forward) : void
     {

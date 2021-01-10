@@ -11,12 +11,12 @@
 
 declare(strict_types=1);
 
-namespace Phalcon\Translate;
+namespace Phiz\Translate;
 
-use Phalcon\Support\Traits\FactoryTrait;
-use Phalcon\Translate\Interpolator\AssociativeArray;
-use Phalcon\Translate\Interpolator\IndexedArray;
-use Phalcon\Translate\Interpolator\InterpolatorInterface;
+use Phiz\Support\Traits\FactoryTrait;
+use Phiz\Translate\Interpolator\AssociativeArray;
+use Phiz\Translate\Interpolator\IndexedArray;
+use Phiz\Translate\Interpolator\InterpolatorInterface;
 
 class InterpolatorFactory
 {

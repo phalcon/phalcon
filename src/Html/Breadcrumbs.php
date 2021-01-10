@@ -11,7 +11,7 @@
 
 declare(strict_types=1);
 
-namespace Phalcon\Html;
+namespace Phiz\Html;
 
 use function array_keys;
 use function end;
@@ -19,7 +19,7 @@ use function implode;
 use function str_replace;
 
 /**
- * Phalcon\Html\Breadcrumbs
+ * Phiz\Html\Breadcrumbs
  *
  * This component offers an easy way to create breadcrumbs for your application.
  * The resulting HTML when calling `render()` will have each breadcrumb enclosed

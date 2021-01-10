@@ -11,16 +11,16 @@
 
 declare(strict_types=1);
 
-namespace Phalcon\Assets\Filters;
+namespace Phiz\Assets\Filters;
 
-use Phalcon\Assets\FilterInterface;
+use Phiz\Assets\FilterInterface;
 
 /**
  * Returns the content without make any modification to the original source
  *
  * Class None
  *
- * @package Phalcon\Assets\Filters
+ * @package Phiz\Assets\Filters
  */
 class None implements FilterInterface
 {

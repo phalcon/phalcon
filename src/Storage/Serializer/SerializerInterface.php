@@ -11,14 +11,14 @@
 
 declare(strict_types=1);
 
-namespace Phalcon\Storage\Serializer;
+namespace Phiz\Storage\Serializer;
 
 use Serializable;
 
 /**
  * Interface SerializerInterface
  *
- * @package Phalcon\Storage\Serializer
+ * @package Phiz\Storage\Serializer
  */
 interface SerializerInterface extends Serializable
 {

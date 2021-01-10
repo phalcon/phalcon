@@ -11,12 +11,12 @@
 
 declare(strict_types=1);
 
-namespace Phalcon\Config\Adapter;
+namespace Phiz\Config\Adapter;
 
-use Phalcon\Config\Config;
+use Phiz\Config\Config;
 
 /**
- * Reads php files and converts them to Phalcon\Config objects.
+ * Reads php files and converts them to Phiz\Config objects.
  *
  * Given the next configuration file:
  *
@@ -42,7 +42,7 @@ use Phalcon\Config\Config;
  * You can read it as follows:
  *
  *```php
- * use Phalcon\Config\Adapter\Php;
+ * use Phiz\Config\Adapter\Php;
  *
  * $config = new Php("path/config.php");
  *

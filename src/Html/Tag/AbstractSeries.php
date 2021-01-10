@@ -9,12 +9,12 @@
 
 declare(strict_types=1);
 
-namespace Phalcon\Html\Tag;
+namespace Phiz\Html\Tag;
 
 /**
  * Class AbstractSeries
  *
- * @package Phalcon\Html\Tag
+ * @package Phiz\Html\Tag
  *
  * @property array $attributes
  * @property array $store

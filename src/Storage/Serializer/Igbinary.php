@@ -11,9 +11,9 @@
 
 declare(strict_types=1);
 
-namespace Phalcon\Storage\Serializer;
+namespace Phiz\Storage\Serializer;
 
-use Phalcon\Storage\Traits\StorageErrorHandlerTrait;
+use Phiz\Storage\Traits\StorageErrorHandlerTrait;
 
 use function igbinary_serialize;
 
@@ -22,7 +22,7 @@ use const E_WARNING;
 /**
  * Class Igbinary
  *
- * @package Phalcon\Storage\Serializer
+ * @package Phiz\Storage\Serializer
  */
 class Igbinary extends AbstractSerializer
 {

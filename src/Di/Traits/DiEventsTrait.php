@@ -11,14 +11,14 @@
 
 declare(strict_types=1);
 
-namespace Phalcon\Di\Traits;
+namespace Phiz\Di\Traits;
 
-use Phalcon\Events\ManagerInterface;
+use Phiz\Events\ManagerInterface;
 
 /**
  * Trait DiEventsTrait
  *
- * @package Phalcon\Di\Traits
+ * @package Phiz\Di\Traits
  */
 trait DiEventsTrait
 {

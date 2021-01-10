@@ -11,7 +11,7 @@
 
 declare(strict_types=1);
 
-namespace Phalcon\Support\Str;
+namespace Phiz\Support\Str;
 
 use function explode;
 use function is_array;
@@ -25,7 +25,7 @@ class Decrement
      * defined
      *
      * ```php
-     * use Phalcon\Support\Str;
+     * use Phiz\Support\Str;
      *
      * echo Str::decrement('a_1');  // 'a'
      * echo Str::decrement('a_2');  // 'a_1'

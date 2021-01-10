@@ -11,12 +11,12 @@
 
 declare(strict_types=1);
 
-namespace Phalcon\Filter\Sanitize;
+namespace Phiz\Filter\Sanitize;
 
 use function in_array;
 
 /**
- * Phalcon\Filter\Sanitize\BoolVal
+ * Phiz\Filter\Sanitize\BoolVal
  *
  * Sanitizes a value to boolean
  */

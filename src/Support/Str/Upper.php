@@ -11,14 +11,14 @@
 
 declare(strict_types=1);
 
-namespace Phalcon\Support\Str;
+namespace Phiz\Support\Str;
 
-use Phalcon\Support\Str\Traits\UpperTrait;
+use Phiz\Support\Str\Traits\UpperTrait;
 
 /**
  * Class Upper
  *
- * @package Phalcon\Support\Str
+ * @package Phiz\Support\Str
  */
 class Upper
 {

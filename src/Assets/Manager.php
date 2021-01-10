@@ -11,20 +11,20 @@
 
 declare(strict_types=1);
 
-namespace Phalcon\Assets;
+namespace Phiz\Assets;
 
-use Phalcon\Assets\Asset\Css as AssetCss;
-use Phalcon\Assets\Asset\Js as AssetJs;
-use Phalcon\Assets\Inline\Css as InlineCss;
-use Phalcon\Assets\Inline\Js as InlineJs;
-use Phalcon\Di\InjectionAwareInterface;
-use Phalcon\Di\Traits\InjectionAwareTrait;
-use Phalcon\Html\EscaperInterface;
-use Phalcon\Html\Tag\Close;
-use Phalcon\Html\Tag\Element;
-use Phalcon\Html\Tag\Script;
-use Phalcon\Html\Tag\Style;
-use Phalcon\Html\TagFactory;
+use Phiz\Assets\Asset\Css as AssetCss;
+use Phiz\Assets\Asset\Js as AssetJs;
+use Phiz\Assets\Inline\Css as InlineCss;
+use Phiz\Assets\Inline\Js as InlineJs;
+use Phiz\Di\InjectionAwareInterface;
+use Phiz\Di\Traits\InjectionAwareTrait;
+use Phiz\Html\EscaperInterface;
+use Phiz\Html\Tag\Close;
+use Phiz\Html\Tag\Element;
+use Phiz\Html\Tag\Script;
+use Phiz\Html\Tag\Style;
+use Phiz\Html\TagFactory;
 
 use function call_user_func_array;
 use function filemtime;
@@ -38,7 +38,7 @@ use const ENT_QUOTES;
 use const PHP_EOL;
 
 /**
- * Phalcon\Assets\Manager
+ * Phiz\Assets\Manager
  *
  * Manages collections of CSS/JavaScript assets
  *
@@ -294,7 +294,7 @@ class Manager implements InjectionAwareInterface
      *
      * ```php
      * if ($assets->exists("jsHeader")) {
-     *     // \Phalcon\Assets\Collection
+     *     // \Phiz\Assets\Collection
      *     $collection = $assets->get("jsHeader");
      * }
      * ```

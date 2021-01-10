@@ -8,10 +8,10 @@
  * LICENSE.txt file that was distributed with this source code.
  */
 
-namespace Phalcon\Mvc\Model\Query;
+namespace Phiz\Mvc\Model\Query;
 
 /**
- * Phalcon\Mvc\Model\Query\Lang
+ * Phiz\Mvc\Model\Query\Lang
  *
  * PHQL is implemented as a parser (written in C) that translates syntax in
  * that of the target RDBMS. It allows Phalcon to offer a unified SQL language to
@@ -24,7 +24,7 @@ namespace Phalcon\Mvc\Model\Query;
  * parser with a very low memory footprint that is also thread-safe.
  *
  * ```php
- * use Phalcon\Mvc\Model\Query\Lang;
+ * use Phiz\Mvc\Model\Query\Lang;
  *
  * $intermediate = Lang::parsePHQL(
  *     "SELECT r.* FROM Robots r LIMIT 10"

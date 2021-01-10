@@ -11,16 +11,16 @@
 
 declare(strict_types=1);
 
-namespace Phalcon\Support\Traits;
+namespace Phiz\Support\Traits;
 
-use Phalcon\Support\Exception;
+use Phiz\Support\Exception;
 
 use function array_merge;
 
 /**
  * Trait FactoryTrait
  *
- * @package Phalcon\Support\Traits
+ * @package Phiz\Support\Traits
  *
  * @property array $mapper
  */

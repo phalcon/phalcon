@@ -11,12 +11,12 @@
 
 declare(strict_types=1);
 
-namespace Phalcon\Session\Traits;
+namespace Phiz\Session\Traits;
 
 /**
  * Trait ManagerMagicTraits
  *
- * @package Phalcon\Session\Traits
+ * @package Phiz\Session\Traits
  */
 trait ManagerMagicTraits
 {

@@ -11,9 +11,9 @@
 
 declare(strict_types=1);
 
-namespace Phalcon\Acl;
+namespace Phiz\Acl;
 
-use Phalcon\Acl\Traits\ItemTrait;
+use Phiz\Acl\Traits\ItemTrait;
 
 /**
  * This class defines role entity and its description

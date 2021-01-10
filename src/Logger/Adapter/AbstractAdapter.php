@@ -11,12 +11,12 @@
 
 declare(strict_types=1);
 
-namespace Phalcon\Logger\Adapter;
+namespace Phiz\Logger\Adapter;
 
-use Phalcon\Logger\Exception;
-use Phalcon\Logger\Formatter\FormatterInterface;
-use Phalcon\Logger\Formatter\Line;
-use Phalcon\Logger\Item;
+use Phiz\Logger\Exception;
+use Phiz\Logger\Formatter\FormatterInterface;
+use Phiz\Logger\Formatter\Line;
+use Phiz\Logger\Item;
 
 /**
  * Class AbstractAdapter

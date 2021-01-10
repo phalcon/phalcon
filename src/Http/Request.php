@@ -9,16 +9,16 @@
  * file that was distributed with this source code.
  */
 
-namespace Phalcon\Http;
+namespace Phiz\Http;
 
-use Phalcon\Di\DiInterface;
-use Phalcon\Di\AbstractInjectionAware;
-use Phalcon\Events\ManagerInterface;
-use Phalcon\Filter\FilterInterface;
-use Phalcon\Helper\Json;
-use Phalcon\Http\Request\File;
-use Phalcon\Http\Request\FileInterface;
-use Phalcon\Http\Request\Exception;
+use Phiz\Di\DiInterface;
+use Phiz\Di\AbstractInjectionAware;
+use Phiz\Events\ManagerInterface;
+use Phiz\Filter\FilterInterface;
+use Phiz\Helper\Json;
+use Phiz\Http\Request\File;
+use Phiz\Http\Request\FileInterface;
+use Phiz\Http\Request\Exception;
 
 use UnexpectedValueException;
 use stdClass;
@@ -32,7 +32,7 @@ use const PREG_SPLIT_NO_EMPTY;
  * dispatcher and controller classes. It packages the HTTP request environment.
  *
  *```php
- * use Phalcon\Http\Request;
+ * use Phiz\Http\Request;
  *
  * $request = new Request();
  *
@@ -388,7 +388,7 @@ class Request extends AbstractInjectionAware implements RequestInterface
      * they use regular expressions.
      *
      * ```php
-     * use Phalcon\Http\Request;
+     * use Phiz\Http\Request;
      *
      * $request = new Request;
      *
@@ -741,7 +741,7 @@ class Request extends AbstractInjectionAware implements RequestInterface
     }
 
     /**
-     * Gets attached files as Phalcon\Http\Request\File instances
+     * Gets attached files as Phiz\Http\Request\File instances
      */
     public function getUploadedFiles(bool $onlySuccessful = false, bool $namedKeys = false) : array
     {

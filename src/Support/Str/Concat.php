@@ -11,10 +11,10 @@
 
 declare(strict_types=1);
 
-namespace Phalcon\Support\Str;
+namespace Phiz\Support\Str;
 
-use Phalcon\Support\Str\Traits\EndsWithTrait;
-use Phalcon\Support\Str\Traits\StartsWithTrait;
+use Phiz\Support\Str\Traits\EndsWithTrait;
+use Phiz\Support\Str\Traits\StartsWithTrait;
 
 use function array_merge;
 use function end;
@@ -24,7 +24,7 @@ use function trim;
 /**
  * Class Concat
  *
- * @package Phalcon\Support\Str
+ * @package Phiz\Support\Str
  */
 class Concat
 {
@@ -36,7 +36,7 @@ class Concat
      * places concatenation
      *
      * ```php
-     * $str = Phalcon\Support\Str::concat(
+     * $str = Phiz\Support\Str::concat(
      *     '/',
      *     '/tmp/',
      *     '/folder_1/',

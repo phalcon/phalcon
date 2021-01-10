@@ -11,14 +11,14 @@
 
 declare(strict_types=1);
 
-namespace Phalcon\Storage\Adapter;
+namespace Phiz\Storage\Adapter;
 
 use DateInterval;
 use Exception;
-use Phalcon\Storage\SerializerFactory;
-use Phalcon\Support\Exception as SupportException;
-use Phalcon\Support\HelperFactory;
-use Phalcon\Support\Traits\PhpApcuTrait;
+use Phiz\Storage\SerializerFactory;
+use Phiz\Support\Exception as SupportException;
+use Phiz\Support\HelperFactory;
+use Phiz\Support\Traits\PhpApcuTrait;
 
 /**
  * Apcu adapter

@@ -9,9 +9,9 @@
 
 declare(strict_types=1);
 
-namespace Phalcon\Html\Tag\Input;
+namespace Phiz\Html\Tag\Input;
 
-use Phalcon\Html\Tag\AbstractList;
+use Phiz\Html\Tag\AbstractList;
 
 /**
  * Class Select

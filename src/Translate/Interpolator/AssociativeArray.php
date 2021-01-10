@@ -11,14 +11,14 @@
 
 declare(strict_types=1);
 
-namespace Phalcon\Translate\Interpolator;
+namespace Phiz\Translate\Interpolator;
 
 use function str_replace;
 
 /**
  * Class AssociativeArray
  *
- * @package Phalcon\Translate\Interpolator
+ * @package Phiz\Translate\Interpolator
  */
 class AssociativeArray implements InterpolatorInterface
 {
