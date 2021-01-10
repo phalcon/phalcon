@@ -649,7 +649,7 @@ class View extends Injectable implements ViewInterface, EventsAwareInterface {
      * Sets the events manager
      */
     public function setEventsManager(ManagerInterface $eventsManager): void {
-        $this->eventsManager = eventsManager;
+        $this->eventsManager = $eventsManager;
     }
 
     /**

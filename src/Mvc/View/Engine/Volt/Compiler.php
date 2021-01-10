@@ -216,9 +216,9 @@ class Compiler implements InjectionAwareInterface
          * located
          */
         $compiledPath = $options["path"] ?? null;
-        if ($compiledPath === null){
+        if ($compiledPath === null) {
             $compiledPath = $options["compiledPath"] ?? null;
-            if ($compilePath !== null) {
+            if ($compiledPath !== null) {
                 trigger_error(
                     "The 'compiledPath' option is deprecated. Use 'path' instead.",
                     E_USER_DEPRECATED

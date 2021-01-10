@@ -136,7 +136,7 @@ class Dispatcher extends BaseDispatcher implements DispatcherInterface
      */
     public function getControllerName() : string
     {
-        return$this->handlerName;
+        return $this->handlerName;
     }
 
     /**
@@ -144,7 +144,7 @@ class Dispatcher extends BaseDispatcher implements DispatcherInterface
      */
     public function getLastController() : ControllerInterface
     {
-        return$this->lastHandler;
+        return $this->lastHandler;
     }
 
     /**
@@ -218,7 +218,7 @@ class Dispatcher extends BaseDispatcher implements DispatcherInterface
     {
         //var container, response, exception;
 
-        $container =$this->getContainer("the 'response' service");
+        $container = $this->getContainer("the 'response' service");
 
         $response =  $container->getShared("response");
 

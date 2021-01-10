@@ -250,6 +250,24 @@ function route_extract_params(string $pattern): bool | array {
     return [$route, $matches];
 }
     
+function prepare_virtual_path(string $path, string $separator) : string
+{
+    $chars = preg_split('//u', $path, null, PREG_SPLIT_NO_EMPTY);
+    $cp_bsl = IntlChar::ord('\\');
+    $cp_fsl = IntlChar::ord('/');
+    $cp_colon = IntlChar::ord(':');
+    $result = "";
+    foreach($chars as $ch) {
+        $ch_pt = IntlChar::ord($ch);
+        if ($ch_pt === $cp_fsl || $ch_pt === $cp_bsl || $ch_pt === $cp_colon) {
+            $result .= $separator;
+        }
+        else {
+            $result .= $ch;
+        }
+    }
+    return $result;
+}
 
 } // end global namespace features
 
