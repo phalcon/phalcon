@@ -268,7 +268,7 @@ class ModelFinder implements ModelFinderInterface, InjectionAwareInterface {
         $value = $arguments[0] ?? null;
         
         $colBindTypes = $this->getBindTypes();
-        debugLine("Bind types: " . print_f($colBindTypes,true));
+        debugLine("Bind types: " . print_r($colBindTypes,true));
         debugLine("Field: $field " . "Value: $value");
         $colType = $colBindTypes[$field];
         

@@ -129,12 +129,15 @@ class Security extends AbstractInjectionAware
          $cryptedHash .= $passwordHash;
 
          $sum = $cryptedLength - $passwordLength;
+         // the hash check works on numeric values, not strings
+         
+         $split = array_map('intval', str_split($passwordHash));
+         $hash = array_map('intval', str_split($cryptedHash));
+         for($i = 0; $i < count($split); $i++) {
+             $sum = $sum | ($hash[$i] ^ $split[$i]);
+         }
 
-        foreach ($passwordHash as $_ => $ch) {
-             $sum = $sum | ($cryptedHash[i] ^ $ch);
-        }
-
-        return 0 === $sum;
+         return 0 === $sum;
     }
 
     /**
