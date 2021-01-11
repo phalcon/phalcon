@@ -9,15 +9,15 @@
  * LICENSE.txt file that was distributed with this source code.
  */
 
-namespace Phiz\Mvc\Model;
+namespace Phalcon\Mvc\Model;
 
-use Phiz\Db\Adapter\AdapterInterface;
-use Phiz\Mvc\ModelInterface;
-use Phiz\Mvc\Model\Query\{
+use Phalcon\Db\Adapter\AdapterInterface;
+use Phalcon\Mvc\ModelInterface;
+use Phalcon\Mvc\Model\Query\{
     BuilderInterface,
     StatusInterface
 };
-use Phiz\Mvc\Model\{
+use Phalcon\Mvc\Model\{
     BehaviourInterface,
     QueryInterface,
     RelationInterface,
@@ -25,9 +25,9 @@ use Phiz\Mvc\Model\{
 };
 
 /**
- * Phiz\Mvc\Model\ManagerInterface
+ * Phalcon\Mvc\Model\ManagerInterface
  *
- * Interface for Phiz\Mvc\Model\Manager
+ * Interface for Phalcon\Mvc\Model\Manager
  */
 interface ManagerInterface {
 
@@ -92,19 +92,19 @@ interface ManagerInterface {
             string $referencedModel, $referencedFields, $options = null): RelationInterface;
 
     /**
-     * Creates a Phiz\Mvc\Model\Query\Builder
+     * Creates a Phalcon\Mvc\Model\Query\Builder
      *
      * @param string $params
      */
     public function createBuilder($params = null): BuilderInterface;
 
     /**
-     * Creates a Phiz\Mvc\Model\Query without execute it
+     * Creates a Phalcon\Mvc\Model\Query without execute it
      */
     public function createQuery(string $phql): QueryInterface;
 
     /**
-     * Creates a Phiz\Mvc\Model\Query and execute it
+     * Creates a Phalcon\Mvc\Model\Query and execute it
      *
      * @param array|null $placeholders
      * @param array|null $types
@@ -244,7 +244,7 @@ interface ManagerInterface {
     /**
      * Helper method to query records based on a $relation definition
      *
-     * @return \Phiz\Mvc\Model\Resultset\Simple|Phiz\Mvc\Model\Resultset\Simple|int|false
+     * @return \Phalcon\Mvc\Model\Resultset\Simple|Phalcon\Mvc\Model\Resultset\Simple|int|false
      */
     public function getRelationRecords(RelationInterface $relation, ModelInterface $record,
             $parameters = null, string $method = null);

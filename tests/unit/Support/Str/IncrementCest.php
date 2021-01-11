@@ -17,6 +17,11 @@ use Codeception\Example;
 use Phalcon\Support\Str\Increment;
 use UnitTester;
 
+/**
+ * Class IncrementCest
+ *
+ * @package Phalcon\Tests\Unit\Support\Str
+ */
 class IncrementCest
 {
     /**

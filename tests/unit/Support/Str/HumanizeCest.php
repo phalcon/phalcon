@@ -16,6 +16,11 @@ namespace Phalcon\Tests\Unit\Support\Str;
 use Phalcon\Support\Str\Humanize;
 use UnitTester;
 
+/**
+ * Class HumanizeCest
+ *
+ * @package Phalcon\Tests\Unit\Support\Str
+ */
 class HumanizeCest
 {
     /**

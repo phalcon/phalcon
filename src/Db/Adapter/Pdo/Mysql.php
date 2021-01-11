@@ -9,23 +9,23 @@
  * file that was distributed with this source code.
  */
 
-namespace Phiz\Db\Adapter\Pdo;
+namespace Phalcon\Db\Adapter\Pdo;
 
-use Phiz\Db\Adapter\Pdo\AbstractPdo;
-use Phiz\Db\Column;
-use Phiz\Db\ColumnInterface;
-use Phiz\Db\Enum;
-use Phiz\Db\Exception;
-use Phiz\Db\Index;
-use Phiz\Db\IndexInterface;
-use Phiz\Db\Reference;
-use Phiz\Db\ReferenceInterface;
+use Phalcon\Db\Adapter\Pdo\AbstractPdo;
+use Phalcon\Db\Column;
+use Phalcon\Db\ColumnInterface;
+use Phalcon\Db\Enum;
+use Phalcon\Db\Exception;
+use Phalcon\Db\Index;
+use Phalcon\Db\IndexInterface;
+use Phalcon\Db\Reference;
+use Phalcon\Db\ReferenceInterface;
 
 /**
  * Specific functions for the MySQL database system
  *
  *```php
- * use Phiz\Db\Adapter\Pdo\Mysql;
+ * use Phalcon\Db\Adapter\Pdo\Mysql;
  *
  * $config = [
  *     "host"     => "localhost",
@@ -142,7 +142,7 @@ class Mysql extends AbstractPdo
     
     /**
     }
-     * Returns an array of Phiz\Db\Column objects describing a table
+     * Returns an array of Phalcon\Db\Column objects describing a table
      *
      * ```php
      * print_r(
@@ -182,7 +182,7 @@ class Mysql extends AbstractPdo
 
             /**
              * By checking every column type we convert it to a
-             * Phiz\Db\Column
+             * Phalcon\Db\Column
              */
             $columnType = $field[1];
 
@@ -276,7 +276,7 @@ class Mysql extends AbstractPdo
              }
 
             /**
-             * Every route is stored as a Phiz\Db\Column
+             * Every route is stored as a Phalcon\Db\Column
              */
             $columnName = $field[0];
             $columns[] = new Column($columnName, $definition);

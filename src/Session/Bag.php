@@ -11,24 +11,24 @@
 
 declare(strict_types=1);
 
-namespace Phiz\Session;
+namespace Phalcon\Session;
 
-use Phiz\Collection\Collection;
-use Phiz\Di\Di;
-use Phiz\Di\InjectionAwareInterface;
-use Phiz\Di\Traits\InjectionAwareTrait;
+use Phalcon\Collection\Collection;
+use Phalcon\Di\Di;
+use Phalcon\Di\InjectionAwareInterface;
+use Phalcon\Di\Traits\InjectionAwareTrait;
 
 use function is_array;
 
 /**
- * Phiz\Session\Bag
+ * Phalcon\Session\Bag
  *
  * This component helps to separate session data into "namespaces". Working by
  * this way you can easily create groups of session variables into the
  * application
  *
  * ```php
- * $user = new \Phiz\Session\Bag("user");
+ * $user = new \Phalcon\Session\Bag("user");
  *
  * $user->name = "Kimbra Johnson";
  * $user->age  = 22;
@@ -51,7 +51,7 @@ class Bag extends Collection implements InjectionAwareInterface
     private ManagerInterface $session;
 
     /**
-     * Phiz\Session\Bag constructor
+     * Phalcon\Session\Bag constructor
      */
     public function __construct(string $name)
     {

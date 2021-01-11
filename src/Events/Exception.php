@@ -11,12 +11,12 @@
 
 declare(strict_types=1);
 
-namespace Phiz\Events;
+namespace Phalcon\Events;
 
 /**
- * Phiz\Events\Exception
+ * Phalcon\Events\Exception
  *
- * Exceptions thrown in Phiz\Events will use this class
+ * Exceptions thrown in Phalcon\Events will use this class
  */
 class Exception extends \Exception
 {

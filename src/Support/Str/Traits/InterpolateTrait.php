@@ -11,12 +11,12 @@
 
 declare(strict_types=1);
 
-namespace Phiz\Support\Str\Traits;
+namespace Phalcon\Support\Str\Traits;
 
 /**
  * Trait InterpolateTrait
  *
- * @package Phiz\Support\Str
+ * @package Phalcon\Support\Str
  */
 trait InterpolateTrait
 {

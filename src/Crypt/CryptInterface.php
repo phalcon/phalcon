@@ -11,10 +11,10 @@
 
 declare(strict_types=1);
 
-namespace Phiz\Crypt;
+namespace Phalcon\Crypt;
 
 /**
- * Interface for Phiz\Crypt
+ * Interface for Phalcon\Crypt
  */
 interface CryptInterface
 {

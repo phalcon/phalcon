@@ -11,12 +11,12 @@
 
 declare(strict_types=1);
 
-namespace Phiz\Filter\Sanitize;
+namespace Phalcon\Filter\Sanitize;
 
 use function strip_tags;
 
 /**
- * Phiz\Filter\Sanitize\Striptags
+ * Phalcon\Filter\Sanitize\Striptags
  *
  * Sanitizes a value striptags
  */

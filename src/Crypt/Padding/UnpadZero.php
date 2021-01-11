@@ -11,7 +11,7 @@
 
 declare(strict_types=1);
 
-namespace Phiz\Crypt\Padding;
+namespace Phalcon\Crypt\Padding;
 
 use function str_split;
 use function strlen;
@@ -19,7 +19,7 @@ use function strlen;
 /**
  * Class UnpadZero
  *
- * @package Phiz\Crypt\Padding
+ * @package Phalcon\Crypt\Padding
  */
 class UnpadZero
 {

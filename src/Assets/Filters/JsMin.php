@@ -11,9 +11,9 @@
 
 declare(strict_types=1);
 
-namespace Phiz\Assets\Filters;
+namespace Phalcon\Assets\Filters;
 
-use Phiz\Assets\FilterInterface;
+use Phalcon\Assets\FilterInterface;
 
 /**
  * Deletes the characters which are insignificant to JavaScript. Comments will
@@ -22,7 +22,7 @@ use Phiz\Assets\FilterInterface;
  *
  * Class JsMin
  *
- * @package Phiz\Assets\Filters
+ * @package Phalcon\Assets\Filters
  */
 class JsMin implements FilterInterface
 {

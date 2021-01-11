@@ -8,9 +8,9 @@
  * file that was distributed with this source code.
  */
 
-namespace Phiz\Factory;
+namespace Phalcon\Factory;
 
-class Exception extends \Phiz\Exception
+class Exception extends \Phalcon\Exception
 {
 
 }

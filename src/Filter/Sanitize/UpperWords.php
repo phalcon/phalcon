@@ -11,14 +11,14 @@
 
 declare(strict_types=1);
 
-namespace Phiz\Filter\Sanitize;
+namespace Phalcon\Filter\Sanitize;
 
 use function mb_convert_case;
 
 use const MB_CASE_TITLE;
 
 /**
- * Phiz\Filter\Sanitize\UpperWords
+ * Phalcon\Filter\Sanitize\UpperWords
  *
  * Sanitizes a value to uppercase the first character of each word
  */

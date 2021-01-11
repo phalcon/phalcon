@@ -59,17 +59,17 @@ class GetParameterCest
                 'className' => Escaper::class,
                 'arguments' => [
                     0 => 1,
-                    1 => 'two'
+                    1 => 'two',
                 ],
             ]
         );
 
         $expected = 1;
-        $actual = $service->getParameter(0);
+        $actual   = $service->getParameter(0);
         $I->assertEquals($expected, $actual);
 
         $expected = 'two';
-        $actual = $service->getParameter(1);
+        $actual   = $service->getParameter(1);
         $I->assertEquals($expected, $actual);
 
         $actual = $service->getParameter(2);

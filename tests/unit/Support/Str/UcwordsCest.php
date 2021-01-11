@@ -17,6 +17,11 @@ use Codeception\Example;
 use Phalcon\Support\Str\Ucwords;
 use UnitTester;
 
+/**
+ * Class UcwordsCest
+ *
+ * @package Phalcon\Tests\Unit\Support\Str
+ */
 class UcwordsCest
 {
     /**

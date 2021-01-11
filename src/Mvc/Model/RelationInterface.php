@@ -8,12 +8,12 @@
  * file that was distributed with this source code.
  */
 
-namespace Phiz\Mvc\Model;
+namespace Phalcon\Mvc\Model;
 
 /**
- * Phiz\Mvc\Model\RelationInterface
+ * Phalcon\Mvc\Model\RelationInterface
  *
- * Interface for Phiz\Mvc\Model\Relation
+ * Interface for Phalcon\Mvc\Model\Relation
  */
 interface RelationInterface
 {

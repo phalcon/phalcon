@@ -25,11 +25,11 @@ class SetSharedCest
      *
      * @dataProvider getExamples
      *
-     * @param  UnitTester $I
-     * @param  Example    $example
+     * @param UnitTester $I
+     * @param Example    $example
      *
-     * @author Phalcon Team <team@phalcon.io>
-     * @since  2019-09-09
+     * @author       Phalcon Team <team@phalcon.io>
+     * @since        2019-09-09
      */
     public function diServiceSetShared(UnitTester $I, Example $example)
     {
@@ -48,7 +48,7 @@ class SetSharedCest
     }
 
     /**
-     * @return \Phalcon\Di\Service[][]
+     * @return Service[][]
      */
     private function getExamples(): array
     {

@@ -11,12 +11,12 @@
 
 declare(strict_types=1);
 
-namespace Phiz\Filter;
+namespace Phalcon\Filter;
 
 /**
- * Phiz\Filter\Exception
+ * Phalcon\Filter\Exception
  *
- * Exceptions thrown in Phiz\Filter will use this class
+ * Exceptions thrown in Phalcon\Filter will use this class
  */
 class Exception extends \Exception
 {

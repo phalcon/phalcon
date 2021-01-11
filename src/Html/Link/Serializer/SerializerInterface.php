@@ -11,10 +11,10 @@
 
 declare(strict_types=1);
 
-namespace Phiz\Html\Link\Serializer;
+namespace Phalcon\Html\Link\Serializer;
 
 /**
- * Class Phiz\Http\Link\Serializer\SerializerInterface
+ * Class Phalcon\Http\Link\Serializer\SerializerInterface
  */
 interface SerializerInterface
 {

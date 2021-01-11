@@ -11,9 +11,9 @@
 
 declare(strict_types=1);
 
-namespace Phiz\Support\Str;
+namespace Phalcon\Support\Str;
 
-use Phiz\Support\Str\Traits\UpperTrait;
+use Phalcon\Support\Str\Traits\UpperTrait;
 
 class IsUpper
 {

@@ -11,16 +11,16 @@
 
 declare(strict_types=1);
 
-namespace Phiz\Session;
+namespace Phalcon\Session;
 
 use InvalidArgumentException;
 use RuntimeException;
 use SessionHandlerInterface;
 
 /**
- * Phiz\Session
+ * Phalcon\Session
  *
- * Interface for the Phiz\Session\Manager
+ * Interface for the Phalcon\Session\Manager
  */
 interface ManagerInterface
 {

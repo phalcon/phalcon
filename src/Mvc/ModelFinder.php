@@ -1,22 +1,22 @@
 <?php
 
-namespace Phiz\Mvc;
+namespace Phalcon\Mvc;
 
-use Phiz\Di\{
+use Phalcon\Di\{
     Di,
     DiInterface,
     InjectionAwareInterface
 };
-use Phiz\Mvc\Model\{
+use Phalcon\Mvc\Model\{
     MetaDataInterface,
     QueryInterface,
     Exception
 };
-use Phiz\Mvc\Model\ResultsetInterface;
-use Phiz\Mvc\Model\Resultset\Simple;
-use Phiz\Support\Str\Uncamelize;
-use Phiz\Reflect\Create;
-use Phiz\Db\Column;
+use Phalcon\Mvc\Model\ResultsetInterface;
+use Phalcon\Mvc\Model\Resultset\Simple;
+use Phalcon\Support\Str\Uncamelize;
+use Phalcon\Reflect\Create;
+use Phalcon\Db\Column;
 
 use function debugLine;
 /**
@@ -351,7 +351,7 @@ class ModelFinder implements ModelFinderInterface, InjectionAwareInterface {
         }
     }
     /**
-     * Previously static method of Phiz\Mvc\Model
+     * Previously static method of Phalcon\Mvc\Model
      * shared prepare query logic for find and findFirst method
      */
     private function getPreparedQuery($params, $limit = null): QueryInterface {

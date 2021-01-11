@@ -11,12 +11,12 @@
 
 declare(strict_types=1);
 
-namespace Phiz\Filter\Sanitize;
+namespace Phalcon\Filter\Sanitize;
 
 use function lcfirst;
 
 /**
- * Phiz\Filter\Sanitize\LowerFirst
+ * Phalcon\Filter\Sanitize\LowerFirst
  *
  * Sanitizes a value to lcfirst
  */

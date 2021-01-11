@@ -16,6 +16,11 @@ namespace Phalcon\Tests\Unit\Support\Str;
 use Phalcon\Support\Str\Lower;
 use UnitTester;
 
+/**
+ * Class LowerCest
+ *
+ * @package Phalcon\Tests\Unit\Support\Str
+ */
 class LowerCest
 {
     /**

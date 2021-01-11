@@ -11,16 +11,16 @@
 
 declare(strict_types=1);
 
-namespace Phiz\Assets\Asset;
+namespace Phalcon\Assets\Asset;
 
-use Phiz\Assets\Asset as AssetBase;
+use Phalcon\Assets\Asset as AssetBase;
 
 /**
  * Represents JavaScript assets
  *
  * Class Js
  *
- * @package Phiz\Assets\Asset
+ * @package Phalcon\Assets\Asset
  */
 class Js extends AssetBase
 {

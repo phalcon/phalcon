@@ -11,7 +11,7 @@
 
 declare(strict_types=1);
 
-namespace Phiz\Support\Arr;
+namespace Phalcon\Support\Arr;
 
 use function array_keys;
 use function array_values;
@@ -19,7 +19,7 @@ use function array_values;
 /**
  * Class Split
  *
- * @package Phiz\Support\Arr
+ * @package Phalcon\Support\Arr
  */
 class Split
 {

@@ -11,14 +11,14 @@
 
 declare(strict_types=1);
 
-namespace Phiz\Support\Str;
+namespace Phalcon\Support\Str;
 
 use function explode;
 
 /**
  * Class Increment
  *
- * @package Phiz\Support\Str
+ * @package Phalcon\Support\Str
  */
 class Increment
 {

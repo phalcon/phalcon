@@ -11,12 +11,12 @@
 
 declare(strict_types=1);
 
-namespace Phiz\Filter;
+namespace Phalcon\Filter;
 
 /**
  * Interface FilterInterface
  *
- * @package Phiz\Filter
+ * @package Phalcon\Filter
  */
 interface FilterInterface
 {

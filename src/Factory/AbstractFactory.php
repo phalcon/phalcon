@@ -9,9 +9,9 @@
  * file that was distributed with this source code.
  */
 
-namespace Phiz\Factory;
+namespace Phalcon\Factory;
 
-use Phiz\Config;
+use Phalcon\Config;
 
 abstract class AbstractFactory
 {
@@ -35,7 +35,7 @@ abstract class AbstractFactory
         }
         if (!is_array($config)) {
             throw new Exception(
-                "Config must be array or Phiz\\Config object"
+                "Config must be array or Phalcon\\Config object"
             );
         }
         

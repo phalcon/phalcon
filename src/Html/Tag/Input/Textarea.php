@@ -9,14 +9,14 @@
 
 declare(strict_types=1);
 
-namespace Phiz\Html\Tag\Input;
+namespace Phalcon\Html\Tag\Input;
 
-use Phiz\Html\Exception;
+use Phalcon\Html\Exception;
 
 /**
  * Class Textarea
  *
- * @package Phiz\Html\Tag\Input
+ * @package Phalcon\Html\Tag\Input
  *
  * @property string $type
  */

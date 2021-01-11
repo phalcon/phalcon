@@ -11,12 +11,12 @@
 
 declare(strict_types=1);
 
-namespace Phiz\Config\Adapter;
+namespace Phalcon\Config\Adapter;
 
-use Phiz\Config\Config;
-use Phiz\Config\ConfigFactory;
-use Phiz\Config\ConfigInterface;
-use Phiz\Config\Exception;
+use Phalcon\Config\Config;
+use Phalcon\Config\ConfigFactory;
+use Phalcon\Config\ConfigInterface;
+use Phalcon\Config\Exception;
 
 use function is_string;
 use function is_object;
@@ -24,10 +24,10 @@ use function is_object;
 /**
  * Reads multiple files (or arrays) and merges them all together.
  *
- * See `Phiz\Config\Factory::load` To load Config Adapter class using 'adapter' option.
+ * See `Phalcon\Config\Factory::load` To load Config Adapter class using 'adapter' option.
  *
  * ```php
- * use Phiz\Config\Adapter\Grouped;
+ * use Phalcon\Config\Adapter\Grouped;
  *
  * $config = new Grouped(
  *     [
@@ -38,7 +38,7 @@ use function is_object;
  * ```
  *
  * ```php
- * use Phiz\Config\Adapter\Grouped;
+ * use Phalcon\Config\Adapter\Grouped;
  *
  * $config = new Grouped(
  *     [
@@ -50,7 +50,7 @@ use function is_object;
  * ```
  *
  * ```php
- * use Phiz\Config\Adapter\Grouped;
+ * use Phalcon\Config\Adapter\Grouped;
  *
  * $config = new Grouped(
  *     [

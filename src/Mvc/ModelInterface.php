@@ -9,20 +9,20 @@
  * LICENSE.txt file that was distributed with this source code.
  */
 
-namespace Phiz\Mvc;
+namespace Phalcon\Mvc;
 
-use Phiz\Db\Adapter\AdapterInterface;
-use Phiz\Di\DiInterface;
-use Phiz\Messages\MessageInterface;
-use Phiz\Mvc\Model\CriteriaInterface;
-use Phiz\Mvc\Model\MetaDataInterface;
-use Phiz\Mvc\Model\ResultsetInterface;
-use Phiz\Mvc\Model\TransactionInterface;
+use Phalcon\Db\Adapter\AdapterInterface;
+use Phalcon\Di\DiInterface;
+use Phalcon\Messages\MessageInterface;
+use Phalcon\Mvc\Model\CriteriaInterface;
+use Phalcon\Mvc\Model\MetaDataInterface;
+use Phalcon\Mvc\Model\ResultsetInterface;
+use Phalcon\Mvc\Model\TransactionInterface;
 
 /**
- * Phiz\Mvc\ModelInterface
+ * Phalcon\Mvc\ModelInterface
  *
- * Interface for Phiz\Mvc\Model
+ * Interface for Phalcon\Mvc\Model
  */
 interface ModelInterface
 {
@@ -55,9 +55,9 @@ interface ModelInterface
     /**
      * Assigns values to a model from an array returning a new model
      *
-     * @param \Phiz\Mvc\Model base
+     * @param \Phalcon\Mvc\Model base
      * @param array columnMap
-     * @return \Phiz\Mvc\Model result
+     * @return \Phalcon\Mvc\Model result
      */
     public static function cloneResultMap($base, array $data, $columnMap, int $dirtyState = 0, bool $keepSnapshots = null) : ModelInterface;
 
@@ -152,7 +152,7 @@ interface ModelInterface
      * Returns related records based on defined relations
      *
      * @param array arguments
-     * @return \Phiz\Mvc\Model\Resultset\Simple|Phiz\Mvc\Model\Resultset\Simple|false
+     * @return \Phalcon\Mvc\Model\Resultset\Simple|Phalcon\Mvc\Model\Resultset\Simple|false
      */
     public function getRelated(string $alias, $arguments = null);
 

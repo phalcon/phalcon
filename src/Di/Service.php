@@ -11,12 +11,12 @@
 
 declare(strict_types=1);
 
-namespace Phiz\Di;
+namespace Phalcon\Di;
 
 use Closure;
-use Phiz\Di\Exception\ServiceResolutionException;
-use Phiz\Di\Service\Builder;
-use Phiz\Di\Traits\DiInstanceTrait;
+use Phalcon\Di\Exception\ServiceResolutionException;
+use Phalcon\Di\Service\Builder;
+use Phalcon\Di\Traits\DiInstanceTrait;
 
 use function class_exists;
 use function is_array;
@@ -27,9 +27,9 @@ use function is_string;
  * Represents individually a service in the services container
  *
  *```php
- * $service = new \Phiz\Di\Service(
+ * $service = new \Phalcon\Di\Service(
  *     "request",
- *     \Phiz\Http\Request::class
+ *     \Phalcon\Http\Request::class
  * );
  *
  * $request = service->resolve();

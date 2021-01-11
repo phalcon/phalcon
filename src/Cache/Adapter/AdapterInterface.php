@@ -11,12 +11,12 @@
 
 declare(strict_types=1);
 
-namespace Phiz\Cache\Adapter;
+namespace Phalcon\Cache\Adapter;
 
-use Phiz\Storage\Adapter\AdapterInterface as StorageAdapterInterface;
+use Phalcon\Storage\Adapter\AdapterInterface as StorageAdapterInterface;
 
 /**
- * Interface for Phiz\Cache adapters
+ * Interface for Phalcon\Cache adapters
  */
 interface AdapterInterface extends StorageAdapterInterface
 {

@@ -1,4 +1,5 @@
 <?php
+
 /**
  * This file is part of the Phalcon Framework.
  *
@@ -8,12 +9,13 @@
  * file that was distributed with this source code.
  */
 
-namespace Phiz\Application;
+declare(strict_types=1);
+
+namespace Phalcon\Application;
 
 /**
- * Exceptions thrown in Phiz\Application class will use this class
+ * Exceptions thrown in Phalcon\Crypt use this class
  */
-class Exception extends \Phiz\Exception
+class Exception extends \Exception
 {
-
 }

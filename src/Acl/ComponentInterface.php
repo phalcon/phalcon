@@ -11,10 +11,10 @@
 
 declare(strict_types=1);
 
-namespace Phiz\Acl;
+namespace Phalcon\Acl;
 
 /**
- * Interface for Phiz\Acl\Component
+ * Interface for Phalcon\Acl\Component
  */
 interface ComponentInterface extends RoleInterface
 {

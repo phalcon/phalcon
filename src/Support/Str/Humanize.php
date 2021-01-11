@@ -11,7 +11,7 @@
 
 declare(strict_types=1);
 
-namespace Phiz\Support\Str;
+namespace Phalcon\Support\Str;
 
 use function preg_replace;
 use function trim;
@@ -19,7 +19,7 @@ use function trim;
 /**
  * Class Humanize
  *
- * @package Phiz\Support\Str
+ * @package Phalcon\Support\Str
  */
 class Humanize
 {

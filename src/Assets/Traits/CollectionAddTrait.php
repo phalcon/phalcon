@@ -11,16 +11,16 @@
 
 declare(strict_types=1);
 
-namespace Phiz\Assets\Traits;
+namespace Phalcon\Assets\Traits;
 
 use Generator;
-use Phiz\Assets\Asset;
-use Phiz\Assets\AssetInterface;
+use Phalcon\Assets\Asset;
+use Phalcon\Assets\AssetInterface;
 
 /**
  * Class Collection
  *
- * @package Phiz\Assets
+ * @package Phalcon\Assets
  *
  * @property array  $assets
  * @property array  $attributes
@@ -269,8 +269,8 @@ trait CollectionAddTrait
      * Checks this the asset is added to the collection.
      *
      * ```php
-     * use Phiz\Assets\Asset;
-     * use Phiz\Assets\Collection;
+     * use Phalcon\Assets\Asset;
+     * use Phalcon\Assets\Collection;
      *
      * $collection = new Collection();
      *

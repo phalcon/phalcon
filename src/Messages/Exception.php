@@ -11,12 +11,12 @@
 
 declare(strict_types=1);
 
-namespace Phiz\Messages;
+namespace Phalcon\Messages;
 
 /**
- * Phiz\Validation\Exception
+ * Phalcon\Validation\Exception
  *
- * Exceptions thrown in Phiz\Messages\* classes will use this class
+ * Exceptions thrown in Phalcon\Messages\* classes will use this class
  */
 class Exception extends \Exception
 {

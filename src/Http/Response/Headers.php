@@ -9,10 +9,10 @@
  * file that was distributed with this source code.
  */
 
-namespace Phiz\Http\Response;
+namespace Phalcon\Http\Response;
 
 /**
- * Phiz\Http\Response\Headers
+ * Phalcon\Http\Response\Headers
  *
  * This class is a bag to manage the response headers
  *

@@ -8,12 +8,12 @@
  * LICENSE.txt file that was distributed with this source code.
  */
 
-namespace Phiz\Mvc\Model;
+namespace Phalcon\Mvc\Model;
 
 /**
- * Phiz\Mvc\Model\CriteriaInterface
+ * Phalcon\Mvc\Model\CriteriaInterface
  *
- * Interface for Phiz\Mvc\Model\Criteria
+ * Interface for Phalcon\Mvc\Model\Criteria
  */
 interface CriteriaInterface
 {

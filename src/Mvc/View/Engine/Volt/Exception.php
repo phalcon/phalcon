@@ -8,12 +8,12 @@
  * file that was distributed with this source code.
  */
 
-namespace Phiz\Mvc\View\Engine\Volt;
+namespace Phalcon\Mvc\View\Engine\Volt;
 
-use Phiz\Mvc\View\Exception as BaseException;
+use Phalcon\Mvc\View\Exception as BaseException;
 
 /**
- * Class for exceptions thrown by Phiz\Mvc\View
+ * Class for exceptions thrown by Phalcon\Mvc\View
  */
 class Exception extends BaseException
 {

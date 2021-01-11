@@ -8,12 +8,12 @@
  * file that was distributed with this source code.
  */
 
-namespace Phiz\Mvc\Model;
+namespace Phalcon\Mvc\Model;
 
-use Phiz\Mvc\ModelInterface;
+use Phalcon\Mvc\ModelInterface;
 
 /**
- * Phiz\Mvc\Model\ResultInterface
+ * Phalcon\Mvc\Model\ResultInterface
  *
  * All single objects passed as base objects to Resultsets must implement this interface
  */

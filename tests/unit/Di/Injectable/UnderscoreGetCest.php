@@ -26,7 +26,7 @@ class UnderscoreGetCest
     /**
      * Unit Tests Phalcon\Di\Injectable :: __get()/__isset()
      *
-     * @param  UnitTester $I
+     * @param UnitTester $I
      *
      * @author Phalcon Team <team@phalcon.io>
      * @since  2019-09-09
@@ -70,7 +70,7 @@ class UnderscoreGetCest
     /**
      * Unit Tests Phalcon\Di\Injectable :: __get() - exception
      *
-     * @param  UnitTester $I
+     * @param UnitTester $I
      *
      * @throws Exception
      *

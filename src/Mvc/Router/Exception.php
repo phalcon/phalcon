@@ -10,14 +10,14 @@
  * file that was distributed with this source code.
  */
 
-namespace Phiz\Mvc\Router;
+namespace Phalcon\Mvc\Router;
 
 /**
- * Phiz\Mvc\Router\Exception
+ * Phalcon\Mvc\Router\Exception
  *
- * Exceptions thrown in Phiz\Mvc\Router will use this class
+ * Exceptions thrown in Phalcon\Mvc\Router will use this class
  */
-class Exception extends \Phiz\Exception
+class Exception extends \Phalcon\Exception
 {
 
 }

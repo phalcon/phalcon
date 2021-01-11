@@ -8,10 +8,10 @@
  * LICENSE.txt file that was distributed with this source code.
  */
 
-namespace Phiz\Db;
+namespace Phalcon\Db;
 
 /**
- * Interface for Phiz\Db\Column
+ * Interface for Phalcon\Db\Column
  */
 interface ColumnInterface
 {

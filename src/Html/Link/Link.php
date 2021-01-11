@@ -11,7 +11,7 @@
 
 declare(strict_types=1);
 
-namespace Phiz\Html\Link;
+namespace Phalcon\Html\Link;
 
 use Psr\Link\LinkInterface;
 
@@ -22,7 +22,7 @@ use function strrpos;
 /**
  * Class Link
  *
- * @package Phiz\Link
+ * @package Phalcon\Link
  *
  * @property array  $attributes
  * @property string $href

@@ -11,12 +11,12 @@
 
 declare(strict_types=1);
 
-namespace Phiz\Events;
+namespace Phalcon\Events;
 
 /**
- * Phiz\Events\EventInterface
+ * Phalcon\Events\EventInterface
  *
- * Interface for Phiz\Events\Event class
+ * Interface for Phalcon\Events\Event class
  */
 interface EventInterface
 {

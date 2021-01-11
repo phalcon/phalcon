@@ -11,14 +11,14 @@
 
 declare(strict_types=1);
 
-namespace Phiz\Support\Str;
+namespace Phalcon\Support\Str;
 
-use Phiz\Support\Str\Traits\StartsWithTrait;
+use Phalcon\Support\Str\Traits\StartsWithTrait;
 
 /**
  * Class StartsWith
  *
- * @package Phiz\Support\Str
+ * @package Phalcon\Support\Str
  */
 class StartsWith
 {

@@ -11,10 +11,10 @@
 
 declare(strict_types=1);
 
-namespace Phiz\Events;
+namespace Phalcon\Events;
 
 use Closure;
-use Phiz\Events\Traits\ManagerHelperTrait;
+use Phalcon\Events\Traits\ManagerHelperTrait;
 use SplPriorityQueue;
 
 use function call_user_func_array;
@@ -23,7 +23,7 @@ use function is_object;
 use function method_exists;
 
 /**
- * Phiz\Events\Manager
+ * Phalcon\Events\Manager
  *
  * Phalcon Events Manager, offers an easy way to intercept and manipulate, if
  * needed, the normal flow of operation. With the EventsManager the developer

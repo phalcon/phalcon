@@ -11,7 +11,7 @@
 
 declare(strict_types=1);
 
-namespace Phiz\Support\Arr;
+namespace Phalcon\Support\Arr;
 
 use function array_merge;
 use function array_values;
@@ -20,7 +20,7 @@ use function is_array;
 /**
  * Class Flatten
  *
- * @package Phiz\Support\Arr
+ * @package Phalcon\Support\Arr
  */
 class Flatten
 {

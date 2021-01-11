@@ -11,7 +11,7 @@
 
 declare(strict_types=1);
 
-namespace Phiz\Storage\Serializer;
+namespace Phalcon\Storage\Serializer;
 
 use function is_bool;
 use function is_numeric;
@@ -19,7 +19,7 @@ use function is_numeric;
 /**
  * Class AbstractSerializer
  *
- * @package Phiz\Storage\Serializer
+ * @package Phalcon\Storage\Serializer
  *
  * @property mixed $data
  */

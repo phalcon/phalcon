@@ -11,18 +11,18 @@
 
 declare(strict_types=1);
 
-namespace Phiz\Storage\Adapter;
+namespace Phalcon\Storage\Adapter;
 
 use DateInterval;
 use Exception as BaseException;
 use FilesystemIterator;
 use Iterator;
-use Phiz\Storage\Exception as StorageException;
-use Phiz\Storage\SerializerFactory;
-use Phiz\Storage\Traits\StorageErrorHandlerTrait;
-use Phiz\Support\Exception as SupportException;
-use Phiz\Support\HelperFactory;
-use Phiz\Support\Traits\PhpFileTrait;
+use Phalcon\Storage\Exception as StorageException;
+use Phalcon\Storage\SerializerFactory;
+use Phalcon\Storage\Traits\StorageErrorHandlerTrait;
+use Phalcon\Support\Exception as SupportException;
+use Phalcon\Support\HelperFactory;
+use Phalcon\Support\Traits\PhpFileTrait;
 use RecursiveDirectoryIterator;
 use RecursiveIteratorIterator;
 

@@ -11,12 +11,12 @@
 
 declare(strict_types=1);
 
-namespace Phiz\Flash;
+namespace Phalcon\Flash;
 
 /**
  * Interface FlashInterface
  *
- * @package Phiz\Flash
+ * @package Phalcon\Flash
  */
 interface FlashInterface
 {

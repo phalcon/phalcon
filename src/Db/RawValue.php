@@ -9,7 +9,7 @@
  * file that was distributed with this source code.
  */
 
-namespace Phiz\Db;
+namespace Phalcon\Db;
 
 /**
  * This class allows to insert/update raw data without quoting or formatting.
@@ -20,7 +20,7 @@ namespace Phiz\Db;
  * $subscriber = new Subscribers();
  *
  * $subscriber->email     = "andres@phalcon.io";
- * $subscriber->createdAt = new \Phiz\Db\RawValue("now()");
+ * $subscriber->createdAt = new \Phalcon\Db\RawValue("now()");
  *
  * $subscriber->save();
  *```
@@ -35,7 +35,7 @@ class RawValue
     protected string $value;
 
     /**
-     * Phiz\Db\RawValue constructor
+     * Phalcon\Db\RawValue constructor
      */
     public function __construct($value)
     {

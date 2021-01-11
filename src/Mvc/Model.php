@@ -9,44 +9,44 @@
  * LICENSE.txt file that was distributed with this source code.
  */
 
-namespace Phiz\Mvc;
+namespace Phalcon\Mvc;
 
 use JsonSerializable;
-use Phiz\Db\Adapter\AdapterInterface;
-use Phiz\Db\Column;
-use Phiz\Db\DialectInterface;
-use Phiz\Db\Enum;
-use Phiz\Db\RawValue;
-use Phiz\Di\AbstractInjectionAware;
-use Phiz\Di\Di;
-use Phiz\Di\DiInterface;
-use Phiz\Events\ManagerInterface as EventsManagerInterface;
-use Phiz\Helper\Arr;
-use Phiz\Messages\Message;
-use Phiz\Messages\MessageInterface;
-use Phiz\Mvc\Model\BehaviorInterface;
-use Phiz\Mvc\Model\Criteria;
-use Phiz\Mvc\Model\CriteriaInterface;
-use Phiz\Mvc\Model\Exception;
-use Phiz\Mvc\Model\ManagerInterface;
-use Phiz\Mvc\Model\MetaDataInterface;
+use Phalcon\Db\Adapter\AdapterInterface;
+use Phalcon\Db\Column;
+use Phalcon\Db\DialectInterface;
+use Phalcon\Db\Enum;
+use Phalcon\Db\RawValue;
+use Phalcon\Di\AbstractInjectionAware;
+use Phalcon\Di\Di;
+use Phalcon\Di\DiInterface;
+use Phalcon\Events\ManagerInterface as EventsManagerInterface;
+use Phalcon\Helper\Arr;
+use Phalcon\Messages\Message;
+use Phalcon\Messages\MessageInterface;
+use Phalcon\Mvc\Model\BehaviorInterface;
+use Phalcon\Mvc\Model\Criteria;
+use Phalcon\Mvc\Model\CriteriaInterface;
+use Phalcon\Mvc\Model\Exception;
+use Phalcon\Mvc\Model\ManagerInterface;
+use Phalcon\Mvc\Model\MetaDataInterface;
 
-use Phiz\Mvc\Model\ResultInterface;
-use Phiz\Mvc\Model\Resultset;
-use Phiz\Mvc\Model\ResultsetInterface;
-use Phiz\Mvc\Model\Relation;
+use Phalcon\Mvc\Model\ResultInterface;
+use Phalcon\Mvc\Model\Resultset;
+use Phalcon\Mvc\Model\ResultsetInterface;
+use Phalcon\Mvc\Model\Relation;
 
-use Phiz\Mvc\Model\TransactionInterface;
-use Phiz\Mvc\Model\ValidationFailed;
-use Phiz\Validation\ValidationInterface;
+use Phalcon\Mvc\Model\TransactionInterface;
+use Phalcon\Mvc\Model\ValidationFailed;
+use Phalcon\Validation\ValidationInterface;
 use Serializable;
 
-use Phiz\Support\Str\Camelize;
+use Phalcon\Support\Str\Camelize;
 
 /**
- * Phiz\Mvc\Model
+ * Phalcon\Mvc\Model
  *
- * Phiz\Mvc\Model connects business objects and database tables to create a
+ * Phalcon\Mvc\Model connects business objects and database tables to create a
  * persistable domain model where logic and data are presented in one wrapping.
  * It‘s an implementation of the object-relational mapping (ORM).
  *
@@ -56,7 +56,7 @@ use Phiz\Support\Str\Camelize;
  * your database will correspond to one model in your application. The bulk of
  * your application's business logic will be concentrated in the models.
  *
- * Phiz\Mvc\Model is the first ORM written in Zephir/C languages for PHP,
+ * Phalcon\Mvc\Model is the first ORM written in Zephir/C languages for PHP,
  * giving to developers high performance when interacting with databases while
  * is also easy to use.
  *
@@ -135,7 +135,7 @@ abstract class Model extends AbstractInjectionAware implements EntityInterface, 
     protected bool $existsFailed = false;
 
     /**
-     * Phiz\Mvc\Model constructor
+     * Phalcon\Mvc\Model constructor
      */
     final public function __construct(
         $data = null,
@@ -203,7 +203,7 @@ abstract class Model extends AbstractInjectionAware implements EntityInterface, 
      * Handles method calls when a method is not implemented
      *
      * @return mixed
-     * @throws \Phiz\Mvc\Model\Exception If the method doesn't exist
+     * @throws \Phalcon\Mvc\Model\Exception If the method doesn't exist
      */
     public function __call(string $method, array $arguments)
     {
@@ -248,7 +248,7 @@ abstract class Model extends AbstractInjectionAware implements EntityInterface, 
      * Handles method calls when a static method is not implemented
      *
      * @return mixed
-     * @throws \Phiz\Mvc\Model\Exception If the method doesn't exist
+     * @throws \Phalcon\Mvc\Model\Exception If the method doesn't exist
      */
     public static function __callStatic(string $method, array $arguments)
     {
@@ -478,8 +478,8 @@ abstract class Model extends AbstractInjectionAware implements EntityInterface, 
      * Setups a behavior in a model
      *
      *```php
-     * use Phiz\Mvc\Model;
-     * use Phiz\Mvc\Model\Behavior\Timestampable;
+     * use Phalcon\Mvc\Model;
+     * use Phalcon\Mvc\Model\Behavior\Timestampable;
      *
      * class Robots extends Model
      * {
@@ -519,8 +519,8 @@ abstract class Model extends AbstractInjectionAware implements EntityInterface, 
      * Appends a customized message on the validation process
      *
      * ```php
-     * use Phiz\Mvc\Model;
-     * use Phiz\Messages\Message as Message;
+     * use Phalcon\Mvc\Model;
+     * use Phalcon\Messages\Message as Message;
      *
      * class Robots extends Model
      * {
@@ -708,7 +708,7 @@ abstract class Model extends AbstractInjectionAware implements EntityInterface, 
      * Assigns values to a model from an array $returning a new model
      *
      *```php
-     * $robot = Phiz\Mvc\Model::cloneResult(
+     * $robot = Phalcon\Mvc\Model::cloneResult(
      *     new Robots(),
      *     [
      *         "type" => "mechanical",
@@ -755,7 +755,7 @@ abstract class Model extends AbstractInjectionAware implements EntityInterface, 
      * Assigns values to a model from an array, returning a new model.
      *
      *```php
-     * $robot = \Phiz\Mvc\Model::cloneResultMap(
+     * $robot = \Phalcon\Mvc\Model::cloneResultMap(
      *     new Robots(),
      *     [
      *         "type" => "mechanical",
@@ -765,7 +765,7 @@ abstract class Model extends AbstractInjectionAware implements EntityInterface, 
      * );
      *```
      *
-     * @param \Phiz\Mvc\ModelInterface|\Phiz\Mvc\Model\Row base
+     * @param \Phalcon\Mvc\ModelInterface|\Phalcon\Mvc\Model\Row base
      * @param array $columnMap
      */
     public static function cloneResultMap($base, array $data, $columnMap, int $dirtyState = 0, bool $keepSnapshots = null): ModelInterface
@@ -1318,7 +1318,7 @@ abstract class Model extends AbstractInjectionAware implements EntityInterface, 
      * // encapsulate find it into an running transaction esp. useful for application unit-tests
      * // or complex business logic where we wanna control which transactions are used.
      *
-     * $myTransaction = new Transaction(\Phiz\Di::getDefault());
+     * $myTransaction = new Transaction(\Phalcon\Di::getDefault());
      * $myTransaction->begin();
      *
      * $newRobot = new Robot();
@@ -1355,9 +1355,9 @@ abstract class Model extends AbstractInjectionAware implements EntityInterface, 
      * $myTransaction->rollback();
      *
      * // creating two different transactions
-     * $myTransaction1 = new Transaction(\Phiz\Di::getDefault());
+     * $myTransaction1 = new Transaction(\Phalcon\Di::getDefault());
      * $myTransaction1->begin();
-     * $myTransaction2 = new Transaction(\Phiz\Di::getDefault());
+     * $myTransaction2 = new Transaction(\Phalcon\Di::getDefault());
      * $myTransaction2->begin();
      *
      *  // add a new robots
@@ -1486,7 +1486,7 @@ abstract class Model extends AbstractInjectionAware implements EntityInterface, 
      * echo "The first virtual robot name is ", $robot->name;
      *
      * // behaviour with transaction
-     * $myTransaction = new Transaction(\Phiz\Di::getDefault());
+     * $myTransaction = new Transaction(\Phalcon\Di::getDefault());
      * $myTransaction->begin();
      *
      * $newRobot = new Robot();
@@ -1822,7 +1822,7 @@ abstract class Model extends AbstractInjectionAware implements EntityInterface, 
      * Returns related records based on defined relations
      *
      * @param array $arguments
-     * @return \Phiz\Mvc\Model\Resultset\Simple|Phiz\Mvc\Model\Resultset\Simple|false
+     * @return \Phalcon\Mvc\Model\Resultset\Simple|Phalcon\Mvc\Model\Resultset\Simple|false
      */
     public function getRelated(string $alias, $arguments = null)
     {
@@ -2194,7 +2194,7 @@ abstract class Model extends AbstractInjectionAware implements EntityInterface, 
          */
         if ($container instanceof DiInterface) {
             $criteria = (CriteriaInterface) ($container->get(
-                "Phiz\\Mvc\\Model\\Criteria"
+                "Phalcon\\Mvc\\Model\\Criteria"
             ));
         } else {
             $criteria = new Criteria();
@@ -2433,7 +2433,7 @@ abstract class Model extends AbstractInjectionAware implements EntityInterface, 
              */
             if (\globals_get("orm.exception_on_failed_save")) {
                 /**
-                 * Launch a Phiz\Mvc\Model\ValidationFailed to notify that
+                 * Launch a Phalcon\Mvc\Model\ValidationFailed to notify that
                  * the save failed
                  */
                 throw new ValidationFailed(
@@ -2774,8 +2774,8 @@ abstract class Model extends AbstractInjectionAware implements EntityInterface, 
      * Sets a transaction related to the Model instance
      *
      *```php
-     * use Phiz\Mvc\Model\Transaction\Manager as TxManager;
-     * use Phiz\Mvc\Model\Transaction\Failed as TxFailed;
+     * use Phalcon\Mvc\Model\Transaction\Manager as TxManager;
+     * use Phalcon\Mvc\Model\Transaction\Failed as TxFailed;
      *
      * try {
      *     $txManager = new TxManager();
@@ -4313,7 +4313,7 @@ abstract class Model extends AbstractInjectionAware implements EntityInterface, 
     /**
      * Try to check if the query must invoke a finder
      *
-     * @return \Phiz\Mvc\ModelInterface[]|\Phiz\Mvc\ModelInterface|bool
+     * @return \Phalcon\Mvc\ModelInterface[]|\Phalcon\Mvc\ModelInterface|bool
      */
     protected final static function _invokeFinder(string $method, array $arguments)
     {
@@ -4613,7 +4613,7 @@ abstract class Model extends AbstractInjectionAware implements EntityInterface, 
      * @todo Remove in v5.0
      * @deprecated Use preSaveRelatedRecords()
      *
-     * @param \Phiz\Mvc\ModelInterface[] related
+     * @param \Phalcon\Mvc\ModelInterface[] related
      */
     protected function _preSaveRelatedRecords(AdapterInterface $connection, $related) : bool
     {
@@ -4623,7 +4623,7 @@ abstract class Model extends AbstractInjectionAware implements EntityInterface, 
     /**
      * Saves related records that must be stored prior to save the master record
      *
-     * @param \Phiz\Mvc\ModelInterface[] related
+     * @param \Phalcon\Mvc\ModelInterface[] related
      * @return bool
      */
     protected function preSaveRelatedRecords(AdapterInterface $connection, $related) : bool
@@ -4758,7 +4758,7 @@ abstract class Model extends AbstractInjectionAware implements EntityInterface, 
      * @todo Remove in v5.0
      * @deprecated Use postSaveRelatedRecords()
      *
-     * @param Phiz\Mvc\ModelInterface[] related
+     * @param Phalcon\Mvc\ModelInterface[] related
      * @return bool
      */
     protected function _postSaveRelatedRecords(AdapterInterface $connection, $related) : bool
@@ -4769,7 +4769,7 @@ abstract class Model extends AbstractInjectionAware implements EntityInterface, 
     /**
      * Save the related records assigned in the has-one/has-many relations
      *
-     * @param Phiz\Mvc\ModelInterface[] related
+     * @param Phalcon\Mvc\ModelInterface[] related
      * @return bool
      */
     protected function postSaveRelatedRecords(AdapterInterface $connection, $related) : bool
@@ -4988,7 +4988,7 @@ abstract class Model extends AbstractInjectionAware implements EntityInterface, 
      * generated UPDATE statement
      *
      *```php
-     * class Robots extends \Phiz\Mvc\Model
+     * class Robots extends \Phalcon\Mvc\Model
      * {
      *     public function initialize()
      *     {
@@ -5041,7 +5041,7 @@ abstract class Model extends AbstractInjectionAware implements EntityInterface, 
      * Setup a reverse 1-1 or n-1 relation between two models
      *
      *```php
-     * class RobotsParts extends \Phiz\Mvc\Model
+     * class RobotsParts extends \Phalcon\Mvc\Model
      * {
      *     public function initialize()
      *     {
@@ -5097,7 +5097,7 @@ abstract class Model extends AbstractInjectionAware implements EntityInterface, 
      * Setup a 1-n relation between two models
      *
      *```php
-     * class Robots extends \Phiz\Mvc\Model
+     * class Robots extends \Phalcon\Mvc\Model
      * {
      *     public function initialize()
      *     {
@@ -5153,7 +5153,7 @@ abstract class Model extends AbstractInjectionAware implements EntityInterface, 
      * relation
      *
      *```php
-     * class Robots extends \Phiz\Mvc\Model
+     * class Robots extends \Phalcon\Mvc\Model
      * {
      *     public function initialize()
      *     {
@@ -5223,7 +5223,7 @@ abstract class Model extends AbstractInjectionAware implements EntityInterface, 
      * Setup a 1-1 relation between two models
      *
      *```php
-     * class Robots extends \Phiz\Mvc\Model
+     * class Robots extends \Phalcon\Mvc\Model
      * {
      *     public function initialize()
      *     {
@@ -5279,7 +5279,7 @@ abstract class Model extends AbstractInjectionAware implements EntityInterface, 
      * relation
      *
      *```php
-     * class Robots extends \Phiz\Mvc\Model
+     * class Robots extends \Phalcon\Mvc\Model
      * {
      *     public function initialize()
      *     {
@@ -5322,7 +5322,7 @@ abstract class Model extends AbstractInjectionAware implements EntityInterface, 
      * Sets if the model must keep the original record snapshot in memory
      *
      *```php
-     * use Phiz\Mvc\Model;
+     * use Phalcon\Mvc\Model;
      *
      * class Robots extends Model
      * {
@@ -5363,7 +5363,7 @@ abstract class Model extends AbstractInjectionAware implements EntityInterface, 
      * generated INSERT/UPDATE statement
      *
      *```php
-     * class Robots extends \Phiz\Mvc\Model
+     * class Robots extends \Phalcon\Mvc\Model
      * {
      *     public function initialize()
      *     {
@@ -5387,7 +5387,7 @@ abstract class Model extends AbstractInjectionAware implements EntityInterface, 
      * generated INSERT statement
      *
      *```php
-     * class Robots extends \Phiz\Mvc\Model
+     * class Robots extends \Phalcon\Mvc\Model
      * {
      *     public function initialize()
      *     {
@@ -5417,7 +5417,7 @@ abstract class Model extends AbstractInjectionAware implements EntityInterface, 
      * generated UPDATE statement
      *
      *```php
-     * class Robots extends \Phiz\Mvc\Model
+     * class Robots extends \Phalcon\Mvc\Model
      * {
      *     public function initialize()
      *     {
@@ -5446,7 +5446,7 @@ abstract class Model extends AbstractInjectionAware implements EntityInterface, 
      * Sets if a model must use dynamic update instead of the all-field update
      *
      *```php
-     * use Phiz\Mvc\Model;
+     * use Phalcon\Mvc\Model;
      *
      * class Robots extends Model
      * {
@@ -5466,9 +5466,9 @@ abstract class Model extends AbstractInjectionAware implements EntityInterface, 
      * Executes validators on every validation call
      *
      *```php
-     * use Phiz\Mvc\Model;
-     * use Phiz\Validation;
-     * use Phiz\Validation\Validator\ExclusionIn;
+     * use Phalcon\Mvc\Model;
+     * use Phalcon\Validation;
+     * use Phalcon\Validation\Validator\ExclusionIn;
      *
      * class Subscriptors extends Model
      * {
@@ -5524,9 +5524,9 @@ abstract class Model extends AbstractInjectionAware implements EntityInterface, 
      * Check whether validation process has generated any messages
      *
      *```php
-     * use Phiz\Mvc\Model;
-     * use Phiz\Validation;
-     * use Phiz\Validation\Validator\ExclusionIn;
+     * use Phalcon\Mvc\Model;
+     * use Phalcon\Validation;
+     * use Phalcon\Validation\Validator\ExclusionIn;
      *
      * class Subscriptors extends Model
      * {

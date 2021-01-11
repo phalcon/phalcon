@@ -11,14 +11,14 @@
 
 declare(strict_types=1);
 
-namespace Phiz\Support\Str;
+namespace Phalcon\Support\Str;
 
 use function mb_strlen;
 
 /**
  * Class Len
  *
- * @package Phiz\Support\Str
+ * @package Phalcon\Support\Str
  */
 class Len
 {

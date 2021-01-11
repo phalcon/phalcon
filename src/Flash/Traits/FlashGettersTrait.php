@@ -11,15 +11,15 @@
 
 declare(strict_types=1);
 
-namespace Phiz\Flash\Traits;
+namespace Phalcon\Flash\Traits;
 
-use Phiz\Html\EscaperInterface;
-use Phiz\Session\ManagerInterface as SessionInterface;
+use Phalcon\Html\EscaperInterface;
+use Phalcon\Session\ManagerInterface as SessionInterface;
 
 /**
  * Class AbstractFlash
  *
- * @package Phiz\Flash
+ * @package Phalcon\Flash
  *
  * Shows HTML notifications related to different circumstances. Classes can be
  * stylized using CSS

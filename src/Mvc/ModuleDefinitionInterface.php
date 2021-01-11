@@ -9,12 +9,12 @@
  * file that was distributed with this source code.
  */
 
-namespace Phiz\Mvc;
+namespace Phalcon\Mvc;
 
-use Phiz\Di\DiInterface;
+use Phalcon\Di\DiInterface;
 
 /**
- * Phiz\Mvc\ModuleDefinitionInterface
+ * Phalcon\Mvc\ModuleDefinitionInterface
  *
  * This interface must be implemented by class module definitions
  */

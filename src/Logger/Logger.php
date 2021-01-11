@@ -11,13 +11,13 @@
 
 declare(strict_types=1);
 
-namespace Phiz\Logger;
+namespace Phalcon\Logger;
 
 use DateTimeImmutable;
 use DateTimeZone;
 use Exception;
-use Phiz\Logger\Adapter\AdapterInterface;
-use Phiz\Logger\Exception as LoggerException;
+use Phalcon\Logger\Adapter\AdapterInterface;
+use Phalcon\Logger\Exception as LoggerException;
 use Psr\Log\InvalidArgumentException;
 use Psr\Log\LoggerInterface;
 use Psr\Log\LoggerTrait;
@@ -31,7 +31,7 @@ use function is_string;
 /**
  * Class Logger
  *
- * @package Phiz\Logger
+ * @package Phalcon\Logger
  *
  * @property AdapterInterface[] $adapters
  * @property array              $excluded

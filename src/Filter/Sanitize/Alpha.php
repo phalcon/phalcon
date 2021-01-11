@@ -11,12 +11,12 @@
 
 declare(strict_types=1);
 
-namespace Phiz\Filter\Sanitize;
+namespace Phalcon\Filter\Sanitize;
 
 use function preg_replace;
 
 /**
- * Phiz\Filter\Sanitize\Alpha
+ * Phalcon\Filter\Sanitize\Alpha
  *
  * Sanitizes a value to an alpha value
  */

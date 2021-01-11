@@ -11,14 +11,14 @@
 
 declare(strict_types=1);
 
-namespace Phiz\Filter\Sanitize;
+namespace Phalcon\Filter\Sanitize;
 
 use function filter_var;
 
 use const FILTER_SANITIZE_STRING;
 
 /**
- * Phiz\Filter\Sanitize\String
+ * Phalcon\Filter\Sanitize\String
  *
  * Sanitizes a value to string
  */

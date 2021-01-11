@@ -11,7 +11,7 @@
 namespace Phiz;
 
 /**
- * Phiz\Exception
+ * Phalcon\Exception
  *
  * All framework exceptions should use or extend this exception
  */

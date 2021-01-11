@@ -8,14 +8,14 @@
  * file that was distributed with this source code.
  */
 
-namespace Phiz\Mvc\Model;
+namespace Phalcon\Mvc\Model;
 
-use Phiz\Mvc\ModelInterface;
+use Phalcon\Mvc\ModelInterface;
 
 /**
- * Phiz\Mvc\Model\BehaviorInterface
+ * Phalcon\Mvc\Model\BehaviorInterface
  *
- * Interface for Phiz\Mvc\Model\Behavior
+ * Interface for Phalcon\Mvc\Model\Behavior
  */
 interface BehaviorInterface
 {

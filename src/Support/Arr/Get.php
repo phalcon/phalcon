@@ -11,7 +11,7 @@
 
 declare(strict_types=1);
 
-namespace Phiz\Support\Arr;
+namespace Phalcon\Support\Arr;
 
 use function is_string;
 use function settype;
@@ -19,7 +19,7 @@ use function settype;
 /**
  * Class Get
  *
- * @package Phiz\Support\Arr
+ * @package Phalcon\Support\Arr
  */
 class Get
 {

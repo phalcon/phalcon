@@ -11,9 +11,9 @@
 
 declare(strict_types=1);
 
-namespace Phiz\Html;
+namespace Phalcon\Html;
 
-use Phiz\Html\Traits\EscaperHelperTrait;
+use Phalcon\Html\Traits\EscaperHelperTrait;
 
 use function htmlspecialchars;
 use function mb_convert_encoding;
@@ -23,7 +23,7 @@ use function rawurlencode;
 use const ENT_QUOTES;
 
 /**
- * Phiz\Escaper
+ * Phalcon\Escaper
  *
  * Escapes different kinds of text securing them. By using this component you
  * may prevent XSS attacks.
@@ -32,7 +32,7 @@ use const ENT_QUOTES;
  * with UTF-8 support.
  *
  *```php
- * $escaper = new \Phiz\Escaper();
+ * $escaper = new \Phalcon\Escaper();
  *
  * $escaped = $escaper->escapeCss("font-family: <Verdana>");
  *

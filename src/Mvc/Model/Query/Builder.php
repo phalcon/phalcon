@@ -8,18 +8,18 @@
  * file that was distributed with this source code.
  */
 
-namespace Phiz\Mvc\Model\Query;
+namespace Phalcon\Mvc\Model\Query;
 
-use Phiz\Di;
-use Phiz\Db\Column;
-use Phiz\Di\DiInterface;
-use Phiz\Helper\Arr;
-use Phiz\Mvc\Model\Exception;
-use Phiz\Di\InjectionAwareInterface;
-use Phiz\Mvc\Model\QueryInterface;
-use Phiz\Reflect\Create;
+use Phalcon\Di;
+use Phalcon\Db\Column;
+use Phalcon\Di\DiInterface;
+use Phalcon\Helper\Arr;
+use Phalcon\Mvc\Model\Exception;
+use Phalcon\Di\InjectionAwareInterface;
+use Phalcon\Mvc\Model\QueryInterface;
+use Phalcon\Reflect\Create;
 /**
- * Phiz\Mvc\Model\Query\Builder
+ * Phalcon\Mvc\Model\Query\Builder
  *
  * Helps to create PHQL queries using an OO interface
  *
@@ -51,7 +51,7 @@ use Phiz\Reflect\Create;
  *     // or "limit" => [20, 20],
  * ];
  *
- * $queryBuilder = new \Phiz\Mvc\Model\Query\Builder($params);
+ * $queryBuilder = new \Phalcon\Mvc\Model\Query\Builder($params);
  *```
  */
 class Builder implements BuilderInterface, InjectionAwareInterface
@@ -84,7 +84,7 @@ class Builder implements BuilderInterface, InjectionAwareInterface
     protected $sharedLock;
 
     /**
-     * Phiz\Mvc\Model\Query\Builder constructor
+     * Phalcon\Mvc\Model\Query\Builder constructor
      */
     public function __construct(?array $params = null, ?DiInterface $container = null)
     {
@@ -964,7 +964,7 @@ class Builder implements BuilderInterface, InjectionAwareInterface
          * Gets Query instance from DI container
          */
         $query = $container->get(
-            "Phiz\\Mvc\\Model\\Query",
+            "Phalcon\\Mvc\\Model\\Query",
             [$phql, $container]
         );
 

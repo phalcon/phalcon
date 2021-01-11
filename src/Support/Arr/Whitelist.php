@@ -11,9 +11,9 @@
 
 declare(strict_types=1);
 
-namespace Phiz\Support\Arr;
+namespace Phalcon\Support\Arr;
 
-use Phiz\Support\Arr\Traits\FilterTrait;
+use Phalcon\Support\Arr\Traits\FilterTrait;
 
 use function array_flip;
 use function array_intersect_key;
@@ -23,7 +23,7 @@ use function is_string;
 /**
  * Class Whitelist
  *
- * @package Phiz\Support\Arr
+ * @package Phalcon\Support\Arr
  */
 class Whitelist
 {

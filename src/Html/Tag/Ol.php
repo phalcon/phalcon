@@ -9,12 +9,12 @@
 
 declare(strict_types=1);
 
-namespace Phiz\Html\Tag;
+namespace Phalcon\Html\Tag;
 
 /**
  * Class Ol
  *
- * @package Phiz\Html\Tag
+ * @package Phalcon\Html\Tag
  */
 class Ol extends AbstractList
 {

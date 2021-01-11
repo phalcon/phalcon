@@ -11,7 +11,7 @@
 
 declare(strict_types=1);
 
-namespace Phiz\Support\Str;
+namespace Phalcon\Support\Str;
 
 use function mb_convert_case;
 
@@ -20,7 +20,7 @@ use const MB_CASE_TITLE;
 /**
  * Class Ucwords
  *
- * @package Phiz\Support\Str
+ * @package Phalcon\Support\Str
  */
 class Ucwords
 {

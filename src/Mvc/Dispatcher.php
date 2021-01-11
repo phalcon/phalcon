@@ -9,12 +9,12 @@
  * file that was distributed with this source code.
  */
 
-namespace Phiz\Mvc;
+namespace Phalcon\Mvc;
 
-use Phiz\Mvc\Dispatcher\Exception;
-//use Phiz\Events\ManagerInterface;
-//use Phiz\Http\ResponseInterface;
-use Phiz\Dispatcher\AbstractDispatcher as BaseDispatcher;
+use Phalcon\Mvc\Dispatcher\Exception;
+//use Phalcon\Events\ManagerInterface;
+//use Phalcon\Http\ResponseInterface;
+use Phalcon\Dispatcher\AbstractDispatcher as BaseDispatcher;
 
 /**
  * Dispatching is the process of taking the request object, extracting the
@@ -23,9 +23,9 @@ use Phiz\Dispatcher\AbstractDispatcher as BaseDispatcher;
  * controller.
  *
  *```php
- * $di = new \Phiz\Di();
+ * $di = new \Phalcon\Di();
  *
- * $dispatcher = new \Phiz\Mvc\Dispatcher();
+ * $dispatcher = new \Phalcon\Mvc\Dispatcher();
  *
  * $dispatcher->setDI($di);
  *
@@ -48,8 +48,8 @@ class Dispatcher extends BaseDispatcher implements DispatcherInterface
      * Forwards the execution flow to another controller/action.
      *
      * ```php
-     * use Phiz\Events\Event;
-     * use Phiz\Mvc\Dispatcher;
+     * use Phalcon\Events\Event;
+     * use Phalcon\Mvc\Dispatcher;
      * use WC\Backend\Bootstrap as Backend;
      * use WC\Frontend\Bootstrap as Frontend;
      *

@@ -11,14 +11,14 @@
 
 declare(strict_types=1);
 
-namespace Phiz\Config;
+namespace Phalcon\Config;
 
-use Phiz\Collection\CollectionInterface;
+use Phalcon\Collection\CollectionInterface;
 
 /**
- * Phiz\Config\ConfigInterface
+ * Phalcon\Config\ConfigInterface
  *
- * Interface for Phiz\Config class
+ * Interface for Phalcon\Config class
  */
 interface ConfigInterface extends CollectionInterface
 {

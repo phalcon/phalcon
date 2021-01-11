@@ -11,12 +11,12 @@
 
 declare(strict_types=1);
 
-namespace Phiz\Storage\Serializer;
+namespace Phalcon\Storage\Serializer;
 
 /**
  * Class None
  *
- * @package Phiz\Storage\Serializer
+ * @package Phalcon\Storage\Serializer
  */
 class None extends AbstractSerializer
 {

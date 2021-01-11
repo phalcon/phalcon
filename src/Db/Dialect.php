@@ -9,7 +9,7 @@
  * file that was distributed with this source code.
  */
 
-namespace Phiz\Db;
+namespace Phalcon\Db;
 
 /**
  * This is the base class to each database dialect. This implements

@@ -8,18 +8,18 @@
  * file that was distributed with this source code.
  */
 
-namespace Phiz\Mvc\Model\MetaData;
+namespace Phalcon\Mvc\Model\MetaData;
 
-use Phiz\Mvc\Model\MetaData;
-use Phiz\Mvc\Model\Exception;
+use Phalcon\Mvc\Model\MetaData;
+use Phalcon\Mvc\Model\Exception;
 
 /**
- * Phiz\Mvc\Model\MetaData\Stream
+ * Phalcon\Mvc\Model\MetaData\Stream
  *
  * Stores model meta-data in PHP files.
  *
  *```php
- * $metaData = new \Phiz\Mvc\Model\MetaData\Files(
+ * $metaData = new \Phalcon\Mvc\Model\MetaData\Files(
  *     [
  *         "metaDataDir" => "app/cache/metadata/",
  *     ]
@@ -31,7 +31,7 @@ class Stream extends MetaData
     protected $metaDataDir = "./";
 
     /**
-     * Phiz\Mvc\Model\MetaData\Files constructor
+     * Phalcon\Mvc\Model\MetaData\Files constructor
      *
      * @param array options
      */

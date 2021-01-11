@@ -11,10 +11,10 @@
 
 declare(strict_types=1);
 
-namespace Phiz\Support\Str;
+namespace Phalcon\Support\Str;
 
-use Phiz\Support\Exception;
-use Phiz\Support\Str\Traits\LowerTrait;
+use Phalcon\Support\Exception;
+use Phalcon\Support\Str\Traits\LowerTrait;
 
 use function is_array;
 use function is_string;
@@ -25,7 +25,7 @@ use function trim;
 /**
  * Class Friendly
  *
- * @package Phiz\Support\Str
+ * @package Phalcon\Support\Str
  */
 class Friendly
 {

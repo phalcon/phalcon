@@ -11,7 +11,7 @@
 
 declare(strict_types=1);
 
-namespace Phiz\Collection;
+namespace Phalcon\Collection;
 
 /**
  * Exceptions for the Collection object

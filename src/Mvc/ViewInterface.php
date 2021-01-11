@@ -9,12 +9,12 @@
  * file that was distributed with this source code.
  */
 
-namespace Phiz\Mvc;
+namespace Phalcon\Mvc;
 
 /**
- * Phiz\Mvc\ViewInterface
+ * Phalcon\Mvc\ViewInterface
  *
- * Interface for Phiz\Mvc\View
+ * Interface for Phalcon\Mvc\View
  */
 interface ViewInterface extends ViewBaseInterface
 {

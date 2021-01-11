@@ -11,10 +11,10 @@
 
 declare(strict_types=1);
 
-namespace Phiz\Flash;
+namespace Phalcon\Flash;
 
 /**
- * Exceptions thrown in Phiz\Flash classes will use this class
+ * Exceptions thrown in Phalcon\Flash classes will use this class
  */
 class Exception extends \Exception
 {

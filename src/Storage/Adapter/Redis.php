@@ -11,14 +11,14 @@
 
 declare(strict_types=1);
 
-namespace Phiz\Storage\Adapter;
+namespace Phalcon\Storage\Adapter;
 
 use DateInterval;
 use Exception as BaseException;
-use Phiz\Storage\Exception as StorageException;
-use Phiz\Storage\SerializerFactory;
-use Phiz\Support\Exception as SupportException;
-use Phiz\Support\HelperFactory;
+use Phalcon\Storage\Exception as StorageException;
+use Phalcon\Storage\SerializerFactory;
+use Phalcon\Support\Exception as SupportException;
+use Phalcon\Support\HelperFactory;
 use Redis as RedisService;
 
 use function call_user_func_array;

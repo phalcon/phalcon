@@ -11,17 +11,17 @@
 
 declare(strict_types=1);
 
-namespace Phiz\Config\Adapter;
+namespace Phalcon\Config\Adapter;
 
-use Phiz\Config\Config;
-use Phiz\Config\Exception;
-use Phiz\Support\Traits\PhpFunctionTrait;
-use Phiz\Support\Traits\PhpYamlTrait;
+use Phalcon\Config\Config;
+use Phalcon\Config\Exception;
+use Phalcon\Support\Traits\PhpFunctionTrait;
+use Phalcon\Support\Traits\PhpYamlTrait;
 
 use function basename;
 
 /**
- * Reads YAML files and converts them to Phiz\Config objects.
+ * Reads YAML files and converts them to Phalcon\Config objects.
  *
  * Given the following configuration file:
  *
@@ -41,7 +41,7 @@ use function basename;
  *     dirname(__DIR__)
  * );
  *
- * use Phiz\Config\Adapter\Yaml;
+ * use Phalcon\Config\Adapter\Yaml;
  *
  * $config = new Yaml(
  *     "path/config.yaml",

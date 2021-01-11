@@ -11,7 +11,7 @@
 
 declare(strict_types=1);
 
-namespace Phiz\Support\Str;
+namespace Phalcon\Support\Str;
 
 use function array_merge;
 use function mt_rand;
@@ -22,7 +22,7 @@ use function strlen;
 /**
  * Class Random
  *
- * @package Phiz\Support\Str
+ * @package Phalcon\Support\Str
  */
 class Random
 {

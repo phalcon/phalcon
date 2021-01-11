@@ -11,12 +11,12 @@
 
 declare(strict_types=1);
 
-namespace Phiz\Support\Number;
+namespace Phalcon\Support\Number;
 
 /**
  * Class IsBetween
  *
- * @package Phiz\Support\Number
+ * @package Phalcon\Support\Number
  */
 class IsBetween
 {

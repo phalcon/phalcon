@@ -9,22 +9,22 @@
  * the LICENSE file that was distributed with this source code.
  */
 
-namespace Phiz\Db\Adapter;
+namespace Phalcon\Db\Adapter;
 
-use Phiz\Db\DialectInterface;
-use Phiz\Db\ColumnInterface;
-use Phiz\Db\Enum;
-use Phiz\Db\Exception;
-use Phiz\Db\Index;
-use Phiz\Db\IndexInterface;
-use Phiz\Db\Reference;
-use Phiz\Db\ReferenceInterface;
-use Phiz\Db\RawValue;
-use Phiz\Events\EventsAwareInterface;
-use Phiz\Events\ManagerInterface;
-use Phiz\Reflect\Create;
+use Phalcon\Db\DialectInterface;
+use Phalcon\Db\ColumnInterface;
+use Phalcon\Db\Enum;
+use Phalcon\Db\Exception;
+use Phalcon\Db\Index;
+use Phalcon\Db\IndexInterface;
+use Phalcon\Db\Reference;
+use Phalcon\Db\ReferenceInterface;
+use Phalcon\Db\RawValue;
+use Phalcon\Events\EventsAwareInterface;
+use Phalcon\Events\ManagerInterface;
+use Phalcon\Reflect\Create;
 /**
- * Base class for Phiz\Db\Adapter adapters
+ * Base class for Phalcon\Db\Adapter adapters
  */
 abstract class AbstractAdapter implements AdapterInterface, EventsAwareInterface
 {
@@ -117,7 +117,7 @@ abstract class AbstractAdapter implements AdapterInterface, EventsAwareInterface
     protected string $type; // { get };
 
     /**
-     * Phiz\Db\Adapter constructor
+     * Phalcon\Db\Adapter constructor
      *
      * @param array descriptor = [
      *     'host' => 'localhost',
@@ -143,7 +143,7 @@ abstract class AbstractAdapter implements AdapterInterface, EventsAwareInterface
          * Dialect class can override the default dialect
          */
         $dclass = ucfirst($this->dialectType);
-        $dialectClass = $descriptor["dialectClass"] ?? "Phiz\\Db\\Dialect\\" .  $dclass;
+        $dialectClass = $descriptor["dialectClass"] ?? "Phalcon\\Db\\Dialect\\" .  $dclass;
         if (is_string($dialectClass)) {
             $this->dialect = Create::instance($dialectClass);
         }
@@ -325,7 +325,7 @@ abstract class AbstractAdapter implements AdapterInterface, EventsAwareInterface
 
         foreach($indexes as $name => $indexColumns) {
             /**
-             * Every index is abstracted using a Phiz\Db\Index instance
+             * Every index is abstracted using a Phalcon\Db\Index instance
              */
             $indexObjects[$name] = new Index($name, $indexColumns);
         }
@@ -509,7 +509,7 @@ abstract class AbstractAdapter implements AdapterInterface, EventsAwareInterface
      * // Getting all robots with associative indexes only
      * $robots = $connection->fetchAll(
      *     "SELECT * FROM robots",
-     *     \Phiz\Db\Enum::FETCH_ASSOC
+     *     \Phalcon\Db\Enum::FETCH_ASSOC
      * );
      *
      * foreach ($robots as $robot) {
@@ -519,7 +519,7 @@ abstract class AbstractAdapter implements AdapterInterface, EventsAwareInterface
      *  // Getting all robots that contains word "robot" withing the name
      * $robots = $connection->fetchAll(
      *     "SELECT * FROM robots WHERE name LIKE :name",
-     *     \Phiz\Db\Enum::FETCH_ASSOC,
+     *     \Phalcon\Db\Enum::FETCH_ASSOC,
      *     [
      *         "name" => "%robot%",
      *     ]
@@ -580,7 +580,7 @@ abstract class AbstractAdapter implements AdapterInterface, EventsAwareInterface
      * // Getting first robot with associative indexes only
      * $robot = $connection->fetchOne(
      *     "SELECT * FROM robots",
-     *     \Phiz\Db\Enum::FETCH_ASSOC
+     *     \Phalcon\Db\Enum::FETCH_ASSOC
      * );
      * print_r($robot);
      *```

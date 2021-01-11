@@ -9,14 +9,14 @@
  * file that was distributed with this source code.
  */
 
-namespace Phiz\Mvc;
+namespace Phalcon\Mvc;
 
-use Phiz\Dispatcher\DispatcherInterface as DispatcherInterfaceBase;
+use Phalcon\Dispatcher\DispatcherInterface as DispatcherInterfaceBase;
 
 /**
- * Phiz\Mvc\DispatcherInterface
+ * Phalcon\Mvc\DispatcherInterface
  *
- * Interface for Phiz\Mvc\Dispatcher
+ * Interface for Phalcon\Mvc\Dispatcher
  */
 interface DispatcherInterface extends DispatcherInterfaceBase
 {

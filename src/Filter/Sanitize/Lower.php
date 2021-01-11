@@ -11,12 +11,12 @@
 
 declare(strict_types=1);
 
-namespace Phiz\Filter\Sanitize;
+namespace Phalcon\Filter\Sanitize;
 
 use function mb_convert_case;
 
 /**
- * Phiz\Filter\Sanitize\Lower
+ * Phalcon\Filter\Sanitize\Lower
  *
  * Sanitizes a value to lowercase
  */

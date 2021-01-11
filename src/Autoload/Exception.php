@@ -11,14 +11,14 @@
 
 declare(strict_types=1);
 
-namespace Phiz\Autoload;
+namespace Phalcon\Autoload;
 
 use Throwable;
 
 /**
- * Phiz\Autoload\Exception
+ * Phalcon\Autoload\Exception
  *
- * Exceptions thrown in Phiz\Autoload will use this class
+ * Exceptions thrown in Phalcon\Autoload will use this class
  */
 class Exception extends \Exception implements Throwable
 {

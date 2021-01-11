@@ -9,10 +9,10 @@
  * file that was distributed with this source code.
  */
 
-namespace Phiz\Mvc;
+namespace Phalcon\Mvc;
 
 /**
- * Phiz\Mvc\ControllerInterface
+ * Phalcon\Mvc\ControllerInterface
  *
  * Interface for controller handlers
  */

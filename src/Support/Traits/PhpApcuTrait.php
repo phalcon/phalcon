@@ -11,7 +11,7 @@
 
 declare(strict_types=1);
 
-namespace Phiz\Support\Traits;
+namespace Phalcon\Support\Traits;
 
 use APCuIterator;
 
@@ -25,7 +25,7 @@ use function apcu_store;
 /**
  * Trait PhpApcuTrait
  *
- * @package Phiz\Storage\Adapter\Traits
+ * @package Phalcon\Storage\Adapter\Traits
  */
 trait PhpApcuTrait
 {

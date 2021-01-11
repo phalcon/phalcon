@@ -8,17 +8,17 @@
  * file that was distributed with this source code.
  */
 
-namespace Phiz\Mvc\Model\MetaData\Strategy;
+namespace Phalcon\Mvc\Model\MetaData\Strategy;
 
-use Phiz\Di\DiInterface;
-use Phiz\Db\Adapter\AdapterInterface;
-use Phiz\Db\Column;
-use Phiz\Mvc\ModelInterface;
-use Phiz\Mvc\Model\Exception;
-use Phiz\Mvc\Model\MetaData;
+use Phalcon\Di\DiInterface;
+use Phalcon\Db\Adapter\AdapterInterface;
+use Phalcon\Db\Column;
+use Phalcon\Mvc\ModelInterface;
+use Phalcon\Mvc\Model\Exception;
+use Phalcon\Mvc\Model\MetaData;
 
 /**
- * Phiz\Mvc\Model\MetaData\Strategy\Introspection
+ * Phalcon\Mvc\Model\MetaData\Strategy\Introspection
  *
  * Queries the table meta-data in order to introspect the model's metadata
  */

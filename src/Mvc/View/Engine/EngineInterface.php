@@ -9,10 +9,10 @@
  * file that was distributed with this source code.
  */
 
-namespace Phiz\Mvc\View\Engine;
+namespace Phalcon\Mvc\View\Engine;
 
 /**
- * Interface for Phiz\Mvc\View engine adapters
+ * Interface for Phalcon\Mvc\View engine adapters
  */
 interface EngineInterface
 {

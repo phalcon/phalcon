@@ -11,7 +11,7 @@
 
 declare(strict_types=1);
 
-namespace Phiz\Filter\Sanitize;
+namespace Phalcon\Filter\Sanitize;
 
 use function filter_var;
 
@@ -19,7 +19,7 @@ use const FILTER_FLAG_EMAIL_UNICODE;
 use const FILTER_SANITIZE_EMAIL;
 
 /**
- * Phiz\Filter\Sanitize\Email
+ * Phalcon\Filter\Sanitize\Email
  *
  * Sanitizes an email string
  */

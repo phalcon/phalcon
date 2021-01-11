@@ -9,17 +9,17 @@
  * file that was distributed with this source code.
  */
 
-namespace Phiz\Db\Adapter;
+namespace Phalcon\Db\Adapter;
 
-use Phiz\Db\DialectInterface;
-use Phiz\Db\ResultInterface;
-use Phiz\Db\ColumnInterface;
-use Phiz\Db\IndexInterface;
-use Phiz\Db\RawValue;
-use Phiz\Db\ReferenceInterface;
+use Phalcon\Db\DialectInterface;
+use Phalcon\Db\ResultInterface;
+use Phalcon\Db\ColumnInterface;
+use Phalcon\Db\IndexInterface;
+use Phalcon\Db\RawValue;
+use Phalcon\Db\ReferenceInterface;
 
 /**
- * Interface for Phiz\Db adapters
+ * Interface for Phalcon\Db adapters
  */
 interface AdapterInterface
 {
@@ -56,7 +56,7 @@ interface AdapterInterface
 
     /**
      * Closes active connection returning success. Phalcon automatically closes
-     * and destroys active connections within Phiz\Db\Pool
+     * and destroys active connections within Phalcon\Db\Pool
      */
     public function close() : bool;
 
@@ -66,7 +66,7 @@ interface AdapterInterface
     public function commit(bool $nesting = true) : bool;
 
     /**
-     * This method is automatically called in \Phiz\Db\Adapter\Pdo
+     * This method is automatically called in \Phalcon\Db\Adapter\Pdo
      * constructor. Call it when you need to restore a database connection
      */
     public function connect(array $descriptor = null) : bool;
@@ -93,7 +93,7 @@ interface AdapterInterface
             ?array $placeholders = null, ?array $dataTypes = null) : bool;
 
     /**
-     * Returns an array of Phiz\Db\Column objects describing a table
+     * Returns an array of Phalcon\Db\Column objects describing a table
      */
     public function describeColumns(string $table, ?string  $schema = null) : array;
 

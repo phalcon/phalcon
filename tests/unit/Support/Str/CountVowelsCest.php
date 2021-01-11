@@ -16,6 +16,11 @@ namespace Phalcon\Tests\Unit\Support\Str;
 use Phalcon\Support\Str\CountVowels;
 use UnitTester;
 
+/**
+ * Class CountVowelsCest
+ *
+ * @package Phalcon\Tests\Unit\Support\Str
+ */
 class CountVowelsCest
 {
     /**

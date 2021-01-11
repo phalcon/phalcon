@@ -9,10 +9,10 @@
  * LICENSE.txt file that was distributed with this source code.
  */
 
-namespace Phiz\Dispatcher;
+namespace Phalcon\Dispatcher;
 
 /**
- * Interface for Phiz\Dispatcher\AbstractDispatcher
+ * Interface for Phalcon\Dispatcher\AbstractDispatcher
  */
 interface DispatcherInterface
 {

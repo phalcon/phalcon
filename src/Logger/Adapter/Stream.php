@@ -11,12 +11,12 @@
 
 declare(strict_types=1);
 
-namespace Phiz\Logger\Adapter;
+namespace Phalcon\Logger\Adapter;
 
 use LogicException;
-use Phiz\Logger\Exception;
-use Phiz\Logger\Item;
-use Phiz\Support\Traits\PhpFileTrait;
+use Phalcon\Logger\Exception;
+use Phalcon\Logger\Item;
+use Phalcon\Support\Traits\PhpFileTrait;
 
 use function is_resource;
 use function mb_strpos;
@@ -24,15 +24,15 @@ use function mb_strpos;
 use const PHP_EOL;
 
 /**
- * Phiz\Logger\Adapter\Stream
+ * Phalcon\Logger\Adapter\Stream
  *
  * Adapter to store logs in plain text files
  *
  *```php
- * $logger = new \Phiz\Logger\Adapter\Stream('app/logs/test.log');
+ * $logger = new \Phalcon\Logger\Adapter\Stream('app/logs/test.log');
  *
  * $logger->log('This is a message');
- * $logger->log(\Phiz\Logger::ERROR, 'This is an error');
+ * $logger->log(\Phalcon\Logger::ERROR, 'This is an error');
  * $logger->error('This is another error');
  *
  * $logger->close();

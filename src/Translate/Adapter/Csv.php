@@ -11,19 +11,19 @@
 
 declare(strict_types=1);
 
-namespace Phiz\Translate\Adapter;
+namespace Phalcon\Translate\Adapter;
 
 use ArrayAccess;
-use Phiz\Support\Traits\PhpFileTrait;
-use Phiz\Translate\Exception;
-use Phiz\Translate\InterpolatorFactory;
+use Phalcon\Support\Traits\PhpFileTrait;
+use Phalcon\Translate\Exception;
+use Phalcon\Translate\InterpolatorFactory;
 
 use function is_resource;
 
 /**
  * Class Csv
  *
- * @package Phiz\Translate\Adapter
+ * @package Phalcon\Translate\Adapter
  *
  * @property array $translate
  */

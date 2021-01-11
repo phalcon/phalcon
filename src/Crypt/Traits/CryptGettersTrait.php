@@ -11,13 +11,13 @@
 
 declare(strict_types=1);
 
-namespace Phiz\Crypt\Traits;
+namespace Phalcon\Crypt\Traits;
 
-use Phiz\Crypt\Exception;
-use Phiz\Support\Str\Traits\EndsWithTrait;
-use Phiz\Support\Str\Traits\StartsWithTrait;
-use Phiz\Support\Str\Traits\UpperTrait;
-use Phiz\Support\Traits\PhpFunctionTrait;
+use Phalcon\Crypt\Exception;
+use Phalcon\Support\Str\Traits\EndsWithTrait;
+use Phalcon\Support\Str\Traits\StartsWithTrait;
+use Phalcon\Support\Str\Traits\UpperTrait;
+use Phalcon\Support\Traits\PhpFunctionTrait;
 
 use function base64_decode;
 use function base64_encode;
@@ -50,7 +50,7 @@ use const OPENSSL_RAW_DATA;
  * Provides encryption capabilities to Phalcon applications.
  *
  * ```php
- * use Phiz\Crypt;
+ * use Phalcon\Crypt;
  *
  * $crypt = new Crypt();
  *

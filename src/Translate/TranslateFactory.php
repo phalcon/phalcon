@@ -11,20 +11,20 @@
 
 declare(strict_types=1);
 
-namespace Phiz\Translate;
+namespace Phalcon\Translate;
 
-use Phiz\Config\ConfigInterface;
-use Phiz\Support\Traits\ConfigTrait;
-use Phiz\Support\Traits\FactoryTrait;
-use Phiz\Translate\Adapter\AdapterInterface;
-use Phiz\Translate\Adapter\Csv;
-use Phiz\Translate\Adapter\Gettext;
-use Phiz\Translate\Adapter\NativeArray;
+use Phalcon\Config\ConfigInterface;
+use Phalcon\Support\Traits\ConfigTrait;
+use Phalcon\Support\Traits\FactoryTrait;
+use Phalcon\Translate\Adapter\AdapterInterface;
+use Phalcon\Translate\Adapter\Csv;
+use Phalcon\Translate\Adapter\Gettext;
+use Phalcon\Translate\Adapter\NativeArray;
 
 /**
  * Class TranslateFactory
  *
- * @package Phiz\Translate
+ * @package Phalcon\Translate
  *
  * @property InterpolatorFactory $interpolator
  */

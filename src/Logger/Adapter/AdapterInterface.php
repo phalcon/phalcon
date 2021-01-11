@@ -11,15 +11,15 @@
 
 declare(strict_types=1);
 
-namespace Phiz\Logger\Adapter;
+namespace Phalcon\Logger\Adapter;
 
-use Phiz\Logger\Formatter\FormatterInterface;
-use Phiz\Logger\Item;
+use Phalcon\Logger\Formatter\FormatterInterface;
+use Phalcon\Logger\Item;
 
 /**
- * Phiz\Logger\AdapterInterface
+ * Phalcon\Logger\AdapterInterface
  *
- * Interface for Phiz\Logger adapters
+ * Interface for Phalcon\Logger adapters
  */
 interface AdapterInterface
 {

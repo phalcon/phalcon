@@ -9,27 +9,27 @@
  * file that was distributed with this source code.
  */
 
-namespace Phiz\Mvc;
+namespace Phalcon\Mvc;
 
 use Closure;
-use Phiz\Di\DiInterface;
-use Phiz\Di\Injectable;
-use Phiz\Events\ManagerInterface;
-use Phiz\Helper\Arr;
-use Phiz\Mvc\View\Exception;
-use Phiz\Events\EventsAwareInterface;
-use Phiz\Mvc\View\Engine\Php as PhpEngine;
+use Phalcon\Di\DiInterface;
+use Phalcon\Di\Injectable;
+use Phalcon\Events\ManagerInterface;
+use Phalcon\Helper\Arr;
+use Phalcon\Mvc\View\Exception;
+use Phalcon\Events\EventsAwareInterface;
+use Phalcon\Mvc\View\Engine\Php as PhpEngine;
 
 /**
- * Phiz\Mvc\View
+ * Phalcon\Mvc\View
  *
- * Phiz\Mvc\View is a class for working with the "view" portion of the
+ * Phalcon\Mvc\View is a class for working with the "view" portion of the
  * model-view-controller pattern. That is, it exists to help keep the view
  * script separate from the model and controller scripts. It provides a system
  * of helpers, output filters, and variable escaping.
  *
  * ```php
- * use Phiz\Mvc\View;
+ * use Phalcon\Mvc\View;
  *
  * $view = new View();
  *
@@ -103,7 +103,7 @@ class View extends Injectable implements ViewInterface, EventsAwareInterface {
     protected $viewParams = [];
 
     /**
-     * Phiz\Mvc\View constructor
+     * Phalcon\Mvc\View constructor
      */
     public function __construct(array $options = []) {
         $this->options = $options;
@@ -209,7 +209,7 @@ class View extends Injectable implements ViewInterface, EventsAwareInterface {
 
         if (empty($engines)) {
             $engines = [
-                ".phtml" => "Phiz\\Mvc\\View\\Engine\\Php"
+                ".phtml" => "Phalcon\\Mvc\\View\\Engine\\Php"
             ];
 
             $this->registerEngines(engines);
@@ -522,7 +522,7 @@ class View extends Injectable implements ViewInterface, EventsAwareInterface {
      * Choose a different view to render instead of last-controller/last-action
      *
      * ```php
-     * use Phiz\Mvc\Controller;
+     * use Phalcon\Mvc\Controller;
      *
      * class ProductsController extends Controller
      * {
@@ -567,8 +567,8 @@ class View extends Injectable implements ViewInterface, EventsAwareInterface {
      * ```php
      * $this->view->registerEngines(
      *     [
-     *         ".phtml" => \Phiz\Mvc\View\Engine\Php::class,
-     *         ".volt"  => \Phiz\Mvc\View\Engine\Volt::class,
+     *         ".phtml" => \Phalcon\Mvc\View\Engine\Php::class,
+     *         ".volt"  => \Phalcon\Mvc\View\Engine\Volt::class,
      *         ".mhtml" => \MyCustomEngine::class,
      *     ]
      * );
@@ -963,7 +963,7 @@ class View extends Injectable implements ViewInterface, EventsAwareInterface {
 
     /**
      * Loads registered template engines, if none is registered it will use
-     * Phiz\Mvc\View\Engine\Php
+     * Phalcon\Mvc\View\Engine\Php
      */
     protected function loadTemplateEngines(): array {
         //var engines, di, registeredEngines, engineService, extension;
@@ -981,7 +981,7 @@ class View extends Injectable implements ViewInterface, EventsAwareInterface {
 
             if (empty($registeredEngines)) {
                 /**
-                 * We use Phiz\Mvc\View\Engine\Php as default
+                 * We use Phalcon\Mvc\View\Engine\Php as default
                  */
                 $engines[".phtml"] = new PhpEngine($this, $di);
             } else {

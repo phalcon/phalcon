@@ -11,14 +11,14 @@
 
 declare(strict_types=1);
 
-namespace Phiz\Support\Str;
+namespace Phalcon\Support\Str;
 
 use function preg_match_all;
 
 /**
  * Class CountVowels
  *
- * @package Phiz\Support\Str
+ * @package Phalcon\Support\Str
  */
 class CountVowels
 {

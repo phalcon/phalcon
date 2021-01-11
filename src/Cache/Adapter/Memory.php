@@ -11,10 +11,10 @@
 
 declare(strict_types=1);
 
-namespace Phiz\Cache\Adapter;
+namespace Phalcon\Cache\Adapter;
 
-use Phiz\Cache\Adapter\AdapterInterface as CacheAdapterInterface;
-use Phiz\Storage\Adapter\Memory as StorageMemory;
+use Phalcon\Cache\Adapter\AdapterInterface as CacheAdapterInterface;
+use Phalcon\Storage\Adapter\Memory as StorageMemory;
 
 /**
  * Memory adapter

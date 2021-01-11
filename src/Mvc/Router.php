@@ -9,28 +9,28 @@
  * file that was distributed with this source code.
  */
 
-namespace Phiz\Mvc;
+namespace Phalcon\Mvc;
 
-use Phiz\Di\AbstractInjectionAware;
-use Phiz\Events\EventsAwareInterface;
-use Phiz\Events\ManagerInterface;
-use Phiz\Http\RequestInterface;
-use Phiz\Mvc\Router\Exception;
-use Phiz\Mvc\Router\GroupInterface;
-use Phiz\Mvc\Router\Route;
-use Phiz\Mvc\Router\RouteInterface;
-//use Phiz\Helper\Sequence;
+use Phalcon\Di\AbstractInjectionAware;
+use Phalcon\Events\EventsAwareInterface;
+use Phalcon\Events\ManagerInterface;
+use Phalcon\Http\RequestInterface;
+use Phalcon\Mvc\Router\Exception;
+use Phalcon\Mvc\Router\GroupInterface;
+use Phalcon\Mvc\Router\Route;
+use Phalcon\Mvc\Router\RouteInterface;
+//use Phalcon\Helper\Sequence;
 
 /**
- * Phiz\Mvc\Router
+ * Phalcon\Mvc\Router
  *
- * Phiz\Mvc\Router is the standard framework router. Routing is the
+ * Phalcon\Mvc\Router is the standard framework router. Routing is the
  * process of taking a URI endpoint (that part of the URI which comes after the
  * base URL) and decomposing it into parameters to determine which module,
  * controller, and action of that controller should receive the request
  *
  * ```php
- * use Phiz\Mvc\Router;
+ * use Phalcon\Mvc\Router;
  *
  * $router = new Router();
  *
@@ -91,7 +91,7 @@ class Router extends AbstractInjectionAware implements RouterInterface, EventsAw
                 }
     }
     /**
-     * Phiz\Mvc\Router constructor
+     * Phalcon\Mvc\Router constructor
      */
     public function __construct(bool $defaultRoutes = true) {
         $routes = [];
@@ -136,7 +136,7 @@ class Router extends AbstractInjectionAware implements RouterInterface, EventsAw
      * Adds a route to the router without any HTTP constraint
      *
      * ```php
-     * use Phiz\Mvc\Router;
+     * use Phalcon\Mvc\Router;
      *
      * $router->add("/about", "About::index");
      *
@@ -165,7 +165,7 @@ class Router extends AbstractInjectionAware implements RouterInterface, EventsAw
         // var route;
 
         /**
-         * Every route is internally stored as a Phiz\Mvc\Router\Route
+         * Every route is internally stored as a Phalcon\Mvc\Router\Route
          */
         $route = new Route($this->generator->current(), $pattern, $paths, $httpMethods);
         $this->generator->next();
@@ -325,8 +325,8 @@ class Router extends AbstractInjectionAware implements RouterInterface, EventsAw
      * Attach Route object to the routes stack.
      *
      * ```php
-     * use Phiz\Mvc\Router;
-     * use Phiz\Mvc\Router\Route;
+     * use Phalcon\Mvc\Router;
+     * use Phalcon\Mvc\Router\Route;
      *
      * class CustomRoute extends Route {
      *      // ...

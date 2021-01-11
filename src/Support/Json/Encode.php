@@ -11,7 +11,7 @@
 
 declare(strict_types=1);
 
-namespace Phiz\Support\Json;
+namespace Phalcon\Support\Json;
 
 use JsonException;
 
@@ -24,7 +24,7 @@ use const JSON_ERROR_NONE;
 /**
  * Class Encode
  *
- * @package Phiz\Support\Json
+ * @package Phalcon\Support\Json
  */
 class Encode
 {
@@ -40,7 +40,7 @@ class Encode
      * @see https://www.ietf.org/rfc/rfc4627.txt
      *
      * ```php
-     * use Phiz\Support\Json\Encode;
+     * use Phalcon\Support\Json\Encode;
      *
      * $data = [
      *     'one' => 'two',

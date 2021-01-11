@@ -1,9 +1,9 @@
 <?php
 
-namespace Phiz\Mvc;
+namespace Phalcon\Mvc;
 
-use Phiz\Mvc\ModelInterface;
-use Phiz\Mvc\Model\ResultsetInterface;
+use Phalcon\Mvc\ModelInterface;
+use Phalcon\Mvc\Model\ResultsetInterface;
 
 interface ModelFinderInterface {
 	function dispatch(string $modelName, string $method, array $arguments);

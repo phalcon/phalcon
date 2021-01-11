@@ -11,16 +11,16 @@
 
 declare(strict_types=1);
 
-namespace Phiz\Di\Traits;
+namespace Phalcon\Di\Traits;
 
-use Phiz\Config\Adapter\Php;
-use Phiz\Config\Adapter\Yaml;
-use Phiz\Config\ConfigInterface;
+use Phalcon\Config\Adapter\Php;
+use Phalcon\Config\Adapter\Yaml;
+use Phalcon\Config\ConfigInterface;
 
 /**
  * Trait DiLoadTrait
  *
- * @package Phiz\Di\Traits
+ * @package Phalcon\Di\Traits
  */
 trait DiLoadTrait
 {

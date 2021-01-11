@@ -9,15 +9,15 @@
  * file that was distributed with this source code.
  */
 
-namespace Phiz\Db\Dialect;
+namespace Phalcon\Db\Dialect;
 
-use Phiz\Db\Dialect;
-use Phiz\Db\Column;
-use Phiz\Db\Exception;
-use Phiz\Db\IndexInterface;
-use Phiz\Db\ColumnInterface;
-use Phiz\Db\ReferenceInterface;
-//use Phiz\Db\DialectInterface;
+use Phalcon\Db\Dialect;
+use Phalcon\Db\Column;
+use Phalcon\Db\Exception;
+use Phalcon\Db\IndexInterface;
+use Phalcon\Db\ColumnInterface;
+use Phalcon\Db\ReferenceInterface;
+//use Phalcon\Db\DialectInterface;
 
 /**
  * Generates database specific SQL for the MySQL RDBMS

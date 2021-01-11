@@ -16,6 +16,11 @@ namespace Phalcon\Tests\Unit\Support\Str;
 use Phalcon\Support\Str\EndsWith;
 use UnitTester;
 
+/**
+ * Class EndsWithCest
+ *
+ * @package Phalcon\Tests\Unit\Support\Str
+ */
 class EndsWithCest
 {
     /**

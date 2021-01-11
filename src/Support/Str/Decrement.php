@@ -11,7 +11,7 @@
 
 declare(strict_types=1);
 
-namespace Phiz\Support\Str;
+namespace Phalcon\Support\Str;
 
 use function explode;
 use function is_array;
@@ -25,7 +25,7 @@ class Decrement
      * defined
      *
      * ```php
-     * use Phiz\Support\Str;
+     * use Phalcon\Support\Str;
      *
      * echo Str::decrement('a_1');  // 'a'
      * echo Str::decrement('a_2');  // 'a_1'
@@ -44,8 +44,8 @@ class Decrement
         $parts  = explode($separator, $text);
         $parts  = !is_array($parts) ? [] : $parts;
 
-        if (isset($parts[1])) {
-            $number = $parts[1];
+        if (true === isset($parts[1])) {
+            $number = (int) $parts[1];
             $number--;
             if ($number <= 0) {
                 return $parts[0];

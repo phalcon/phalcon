@@ -9,12 +9,12 @@
 
 declare(strict_types=1);
 
-namespace Phiz\Html\Tag;
+namespace Phalcon\Html\Tag;
 
 /**
  * Class Ul
  *
- * @package Phiz\Html\Tag
+ * @package Phalcon\Html\Tag
  */
 class Ul extends Ol
 {

@@ -16,6 +16,11 @@ namespace Phalcon\Tests\Unit\Support\Str;
 use Phalcon\Support\Str\FirstBetween;
 use UnitTester;
 
+/**
+ * Class FirstBetweenCest
+ *
+ * @package Phalcon\Tests\Unit\Support\Str
+ */
 class FirstBetweenCest
 {
     /**

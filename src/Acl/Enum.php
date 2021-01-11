@@ -11,10 +11,10 @@
 
 declare(strict_types=1);
 
-namespace Phiz\Acl;
+namespace Phalcon\Acl;
 
 /**
- * Constants for Phiz\Acl\Adapter adapters
+ * Constants for Phalcon\Acl\Adapter adapters
  */
 class Enum
 {

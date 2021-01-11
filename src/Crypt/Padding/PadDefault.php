@@ -11,7 +11,7 @@
 
 declare(strict_types=1);
 
-namespace Phiz\Crypt\Padding;
+namespace Phalcon\Crypt\Padding;
 
 use function chr;
 use function str_repeat;
@@ -19,7 +19,7 @@ use function str_repeat;
 /**
  * Class Ansi
  *
- * @package Phiz\Crypt\Padding
+ * @package Phalcon\Crypt\Padding
  */
 class PadDefault
 {

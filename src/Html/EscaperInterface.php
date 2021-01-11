@@ -11,10 +11,10 @@
 
 declare(strict_types=1);
 
-namespace Phiz\Html;
+namespace Phalcon\Html;
 
 /**
- * Interface for Phiz\Escaper
+ * Interface for Phalcon\Escaper
  */
 interface EscaperInterface
 {

@@ -11,7 +11,7 @@
 
 declare(strict_types=1);
 
-namespace Phiz\Assets;
+namespace Phalcon\Assets;
 
 use function sha1;
 
@@ -19,7 +19,7 @@ use function sha1;
  * Represents an inline asset
  *
  *```php
- * $inline = new \Phiz\Assets\Inline("js", "alert('hello world');");
+ * $inline = new \Phalcon\Assets\Inline("js", "alert('hello world');");
  *```
  *
  * @property array  $attributes

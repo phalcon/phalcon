@@ -11,7 +11,7 @@
 
 declare(strict_types=1);
 
-namespace Phiz\Filter\Sanitize;
+namespace Phalcon\Filter\Sanitize;
 
 use function filter_var;
 
@@ -19,7 +19,7 @@ use const FILTER_FLAG_ALLOW_FRACTION;
 use const FILTER_SANITIZE_NUMBER_FLOAT;
 
 /**
- * Phiz\Filter\Sanitize\FloatVal
+ * Phalcon\Filter\Sanitize\FloatVal
  *
  * Sanitizes a value to float
  */

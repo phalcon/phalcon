@@ -11,14 +11,14 @@
 
 declare(strict_types=1);
 
-namespace Phiz\Filter\Sanitize;
+namespace Phalcon\Filter\Sanitize;
 
 use function mb_convert_case;
 
 use const MB_CASE_UPPER;
 
 /**
- * Phiz\Filter\Sanitize\Upper
+ * Phalcon\Filter\Sanitize\Upper
  *
  * Sanitizes a value to uppercase
  */

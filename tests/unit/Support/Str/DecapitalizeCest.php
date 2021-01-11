@@ -16,6 +16,11 @@ namespace Phalcon\Tests\Unit\Support\Str;
 use Phalcon\Support\Str\Decapitalize;
 use UnitTester;
 
+/**
+ * Class DecapitalizeCest
+ *
+ * @package Phalcon\Tests\Unit\Support\Str
+ */
 class DecapitalizeCest
 {
     /**

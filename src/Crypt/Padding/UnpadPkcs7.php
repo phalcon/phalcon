@@ -11,7 +11,7 @@
 
 declare(strict_types=1);
 
-namespace Phiz\Crypt\Padding;
+namespace Phalcon\Crypt\Padding;
 
 use function chr;
 use function ord;
@@ -22,7 +22,7 @@ use function substr;
 /**
  * Class UnpadPkcs7
  *
- * @package Phiz\Crypt\Padding
+ * @package Phalcon\Crypt\Padding
  */
 class UnpadPkcs7
 {

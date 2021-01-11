@@ -11,14 +11,14 @@
 
 declare(strict_types=1);
 
-namespace Phiz\Crypt\Padding;
+namespace Phalcon\Crypt\Padding;
 
 use function str_repeat;
 
 /**
  * Class PadSpace
  *
- * @package Phiz\Crypt\Padding
+ * @package Phalcon\Crypt\Padding
  */
 class PadSpace
 {

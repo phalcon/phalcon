@@ -9,12 +9,12 @@
 
 declare(strict_types=1);
 
-namespace Phiz\Html\Tag;
+namespace Phalcon\Html\Tag;
 
 /**
  * Class Close
  *
- * @package Phiz\Html\Tag
+ * @package Phalcon\Html\Tag
  */
 class Close extends AbstractHelper
 {

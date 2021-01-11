@@ -11,7 +11,7 @@
 
 declare(strict_types=1);
 
-namespace Phiz\Crypt\Padding;
+namespace Phalcon\Crypt\Padding;
 
 use function chr;
 use function rand;
@@ -21,7 +21,7 @@ use function str_repeat;
 /**
  * Class PadIso10126
  *
- * @package Phiz\Crypt\Padding
+ * @package Phalcon\Crypt\Padding
  */
 class PadIso10126
 {

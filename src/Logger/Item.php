@@ -11,12 +11,12 @@
 
 declare(strict_types=1);
 
-namespace Phiz\Logger;
+namespace Phalcon\Logger;
 
 use DateTimeImmutable;
 
 /**
- * Phiz\Logger\Item
+ * Phalcon\Logger\Item
  *
  * Represents each item in a logging transaction
  *

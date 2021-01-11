@@ -11,15 +11,15 @@
 
 declare(strict_types=1);
 
-namespace Phiz\Session\Adapter;
+namespace Phalcon\Session\Adapter;
 
-use Phiz\Storage\AdapterFactory;
-use Phiz\Support\Exception as SupportException;
+use Phalcon\Storage\AdapterFactory;
+use Phalcon\Support\Exception as SupportException;
 
 /**
  * Class Libmemcached
  *
- * @package Phiz\Session\Adapter
+ * @package Phalcon\Session\Adapter
  */
 class Libmemcached extends AbstractAdapter
 {

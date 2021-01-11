@@ -11,10 +11,10 @@
 
 declare(strict_types=1);
 
-namespace Phiz\Config;
+namespace Phalcon\Config;
 
 /**
- * Exceptions thrown in Phiz\Config will use this class
+ * Exceptions thrown in Phalcon\Config will use this class
  */
 class Exception extends \Exception
 {

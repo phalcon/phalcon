@@ -11,14 +11,14 @@
 
 declare(strict_types=1);
 
-namespace Phiz\Support\Arr;
+namespace Phalcon\Support\Arr;
 
 use function array_key_exists;
 
 /**
  * Class Has
  *
- * @package Phiz\Support\Arr
+ * @package Phalcon\Support\Arr
  */
 class Has
 {

@@ -11,7 +11,7 @@
 
 declare(strict_types=1);
 
-namespace Phiz\Storage\Traits;
+namespace Phalcon\Storage\Traits;
 
 trait StorageErrorHandlerTrait
 {

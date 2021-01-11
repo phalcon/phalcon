@@ -11,7 +11,7 @@
 
 declare(strict_types=1);
 
-namespace Phiz\Storage\Serializer;
+namespace Phalcon\Storage\Serializer;
 
 use InvalidArgumentException;
 
@@ -22,7 +22,7 @@ use function is_string;
 /**
  * Class Base64
  *
- * @package Phiz\Storage\Serializer
+ * @package Phalcon\Storage\Serializer
  */
 class Base64 extends AbstractSerializer
 {

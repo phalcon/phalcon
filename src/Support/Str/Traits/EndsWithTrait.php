@@ -11,7 +11,7 @@
 
 declare(strict_types=1);
 
-namespace Phiz\Support\Str\Traits;
+namespace Phalcon\Support\Str\Traits;
 
 use function mb_strlen;
 use function substr_compare;
@@ -19,7 +19,7 @@ use function substr_compare;
 /**
  * Trait EndsWithTrait
  *
- * @package Phiz\Support\Str\Traits
+ * @package Phalcon\Support\Str\Traits
  */
 trait EndsWithTrait
 {

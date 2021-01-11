@@ -1,16 +1,16 @@
 <?php
 
-namespace Phiz\Mvc\Model;
+namespace Phalcon\Mvc\Model;
 
-use Phiz\Di\DiInterface;
-use Phiz\Di\InjectionAwareInterface;
-use Phiz\Db\{ResultInterface, Enum, Column};
+use Phalcon\Di\DiInterface;
+use Phalcon\Di\InjectionAwareInterface;
+use Phalcon\Db\{ResultInterface, Enum, Column};
 
-use Phiz\Db\Result\Pdo as PdoResult;
-use Phiz\Mvc\Model\QueryInterface;
-use Phiz\Mvc\ModelInterface;
+use Phalcon\Db\Result\Pdo as PdoResult;
+use Phalcon\Mvc\Model\QueryInterface;
+use Phalcon\Mvc\ModelInterface;
 
-use Phiz\Mvc\Model\Resultset\Simple;
+use Phalcon\Mvc\Model\Resultset\Simple;
 /**
  * Not sure where this fits.
  * 

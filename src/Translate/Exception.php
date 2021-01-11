@@ -11,12 +11,12 @@
 
 declare(strict_types=1);
 
-namespace Phiz\Translate;
+namespace Phalcon\Translate;
 
 /**
- * Phiz\Translate\Exception
+ * Phalcon\Translate\Exception
  *
- * Class for exceptions thrown by Phiz\Translate
+ * Class for exceptions thrown by Phalcon\Translate
  */
 class Exception extends \Exception
 {

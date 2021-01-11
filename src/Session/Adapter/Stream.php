@@ -11,11 +11,11 @@
 
 declare(strict_types=1);
 
-namespace Phiz\Session\Adapter;
+namespace Phalcon\Session\Adapter;
 
-use Phiz\Session\Exception;
-use Phiz\Support\Traits\PhpFileTrait;
-use Phiz\Support\Traits\PhpFunctionTrait;
+use Phalcon\Session\Exception;
+use Phalcon\Support\Traits\PhpFileTrait;
+use Phalcon\Support\Traits\PhpFunctionTrait;
 
 use function file_exists;
 use function rtrim;
@@ -23,15 +23,15 @@ use function rtrim;
 use const DIRECTORY_SEPARATOR;
 
 /**
- * Phiz\Session\Adapter\Stream
+ * Phalcon\Session\Adapter\Stream
  *
  * This is the file based adapter. It stores sessions in a file based system
  *
  * ```php
  * <?php
  *
- * use Phiz\Session\Manager;
- * use Phiz\Session\Adapter\Stream;
+ * use Phalcon\Session\Manager;
+ * use Phalcon\Session\Adapter\Stream;
  *
  * $session = new Manager();
  * $files = new Stream(

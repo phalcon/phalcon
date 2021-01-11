@@ -9,27 +9,27 @@
  * file that was distributed with $this source code.
  */
 
-namespace Phiz\Mvc\Model;
+namespace Phalcon\Mvc\Model;
 
-use Phiz\Cache\Adapter\AdapterInterface as CacheAdapterInterface;
-use Phiz\Di\DiInterface;
-use Phiz\Di\InjectionAwareInterface;
-use Phiz\Mvc\Model\MetaData\Strategy\Introspection;
-use Phiz\Mvc\Model\MetaData\Strategy\StrategyInterface;
-use Phiz\Mvc\ModelInterface;
+use Phalcon\Cache\Adapter\AdapterInterface as CacheAdapterInterface;
+use Phalcon\Di\DiInterface;
+use Phalcon\Di\InjectionAwareInterface;
+use Phalcon\Mvc\Model\MetaData\Strategy\Introspection;
+use Phalcon\Mvc\Model\MetaData\Strategy\StrategyInterface;
+use Phalcon\Mvc\ModelInterface;
 
 /**
- * Phiz\Mvc\Model\MetaData
+ * Phalcon\Mvc\Model\MetaData
  *
- * Because Phiz\Mvc\Model requires meta-data like field names, data types,
+ * Because Phalcon\Mvc\Model requires meta-data like field names, data types,
  * primary keys, etc. This component collect them and store for further
- * querying by Phiz\Mvc\Model. Phiz\Mvc\Model\MetaData can also use
+ * querying by Phalcon\Mvc\Model. Phalcon\Mvc\Model\MetaData can also use
  * adapters to store temporarily or permanently the meta-data.
  *
- * A standard Phiz\Mvc\Model\MetaData can be used to query model attributes:
+ * A standard Phalcon\Mvc\Model\MetaData can be used to query model attributes:
  *
  * ```php
- * $metaData = new \Phiz\Mvc\Model\MetaData\Memory();
+ * $metaData = new \Phalcon\Mvc\Model\MetaData\Memory();
  *
  * $attributes = $metaData->getAttributes(
  *     new Robots()

@@ -143,7 +143,5 @@ I hope that with some further work, the PHQL and Volt extensions compiled with
 Zephir, might be offered as independent C-extension enhanced functionality.
 
 
-
 [PSR interface extension Implementation - ](https://github.com/jbboehr/php-psr)
-
 

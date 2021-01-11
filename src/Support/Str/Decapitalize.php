@@ -11,17 +11,17 @@
 
 declare(strict_types=1);
 
-namespace Phiz\Support\Str;
+namespace Phalcon\Support\Str;
 
-use Phiz\Support\Str\Traits\LowerTrait;
-use Phiz\Support\Str\Traits\UpperTrait;
+use Phalcon\Support\Str\Traits\LowerTrait;
+use Phalcon\Support\Str\Traits\UpperTrait;
 
 use function mb_substr;
 
 /**
  * Class Decapitalize
  *
- * @package Phiz\Support\Str
+ * @package Phalcon\Support\Str
  */
 class Decapitalize
 {

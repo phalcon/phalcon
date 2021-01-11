@@ -11,11 +11,11 @@
 
 declare(strict_types=1);
 
-namespace Phiz\Translate\Adapter;
+namespace Phalcon\Translate\Adapter;
 
 use ArrayAccess;
-use Phiz\Translate\Exception;
-use Phiz\Translate\InterpolatorFactory;
+use Phalcon\Translate\Exception;
+use Phalcon\Translate\InterpolatorFactory;
 
 use function array_merge;
 use function bindtextdomain;
@@ -33,10 +33,10 @@ use function textdomain;
 use const LC_ALL;
 
 /**
- * Phiz\Translate\Adapter\Gettext
+ * Phalcon\Translate\Adapter\Gettext
  *
  * ```php
- * use Phiz\Translate\Adapter\Gettext;
+ * use Phalcon\Translate\Adapter\Gettext;
  *
  * $adapter = new Gettext(
  *     [

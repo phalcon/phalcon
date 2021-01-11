@@ -11,7 +11,7 @@
 
 declare(strict_types=1);
 
-namespace Phiz\Collection\Traits;
+namespace Phalcon\Collection\Traits;
 
 use function serialize;
 use function unserialize;

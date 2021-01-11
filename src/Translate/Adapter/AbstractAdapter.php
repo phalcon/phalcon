@@ -11,15 +11,15 @@
 
 declare(strict_types=1);
 
-namespace Phiz\Translate\Adapter;
+namespace Phalcon\Translate\Adapter;
 
-use Phiz\Translate\Exception;
-use Phiz\Translate\InterpolatorFactory;
+use Phalcon\Translate\Exception;
+use Phalcon\Translate\InterpolatorFactory;
 
 /**
  * Class AbstractAdapter
  *
- * @package Phiz\Translate\Adapter
+ * @package Phalcon\Translate\Adapter
  *
  * @property string              $defaultInterpolator
  * @property InterpolatorFactory $interpolatorFactory

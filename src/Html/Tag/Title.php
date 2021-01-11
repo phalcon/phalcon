@@ -9,9 +9,9 @@
 
 declare(strict_types=1);
 
-namespace Phiz\Html\Tag;
+namespace Phalcon\Html\Tag;
 
-use Phiz\Html\Exception;
+use Phalcon\Html\Exception;
 
 use function array_merge;
 use function implode;
@@ -21,7 +21,7 @@ use const PHP_EOL;
 /**
  * Class Title
  *
- * @package Phiz\Html\Tag
+ * @package Phalcon\Html\Tag
  *
  * @property array  $append
  * @property string $delimiter

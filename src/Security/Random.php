@@ -1,4 +1,5 @@
 <?php
+
 /**
  * This file is part of the Phalcon Framework.
  *
@@ -8,24 +9,29 @@
  * file that was distributed with this source code.
  */
 
-namespace Phiz\Security;
+declare(strict_types=1);
+
+namespace Phalcon\Security;
+
+use Base;
+use Phalcon\Support\Traits\Base64Trait;
 
 /**
- * Phiz\Security\Random
+ * Phalcon\Security\Random
  *
  * Secure random number generator class.
  *
  * Provides secure random number generator which is suitable for generating
  * session key in HTTP cookies, etc.
  *
- * `Phiz\Security\Random` could be mainly useful for:
+ * `Phalcon\Security\Random` could be mainly useful for:
  *
  * - Key generation (e.g. generation of complicated keys)
  * - Generating random passwords for new user accounts
  * - Encryption systems
  *
  *```php
- * $random = new \Phiz\Security\Random();
+ * $random = new \Phalcon\Security\Random();
  *
  * // Random binary string
  * $bytes = $random->bytes();
@@ -50,7 +56,7 @@ namespace Phiz\Security;
  * echo $random->base64Safe();           // PcV6jGbJ6vfVw7hfKIFDGA
  * echo $random->base64Safe();           // GD8JojhzSTrqX7Q8J6uug
  * echo $random->base64Safe(8);          // mGyy0evy3ok
- * echo $random->base64Safe(null, true); // DRrAgOFkS4rvRiVHFefcQ==
+ * echo $random->base64Safe(16, true); // DRrAgOFkS4rvRiVHFefcQ==
  *
  * // Random UUID
  * echo $random->uuid(); // db082997-2572-4e2c-a046-5eefe97b1235
@@ -77,30 +83,35 @@ namespace Phiz\Security;
  */
 class Random
 {
+    use Base64Trait;
+
     /**
      * Generates a random base58 string
      *
      * If $len is not specified, 16 is assumed. It may be larger in future.
      * The result may contain alphanumeric characters except 0, O, I and l.
      *
-     * It is similar to `Phiz\Security\Random::base64()` but has been
+     * It is similar to `Phalcon\Security\Random::base64()` but has been
      * modified to avoid both non-alphanumeric characters and letters which
      * might look ambiguous when printed.
      *
      *```php
-     * $random = new \Phiz\Security\Random();
+     * $random = new \Phalcon\Security\Random();
      *
      * echo $random->base58(); // 4kUgL2pdQMSCQtjE
      *```
      *
-     * @see    \Phiz\Security\Random:base64
-     * @link   https://en.wikipedia.org/wiki/Base58
+     * @param int $len
+     *
+     * @return string
      * @throws Exception If secure random number generator is not available or unexpected partial read
+     *
+     * @link   https://en.wikipedia.org/wiki/Base58
      */
-    public function base58(int $len = null) : string
+    public function base58(int $len = 16): string
     {
         return $this->base(
-            "123456789ABCDEFGHJKLMNPQRSTUVWXYZabcdefghijkmnopqrstuvwxyz",
+            '123456789ABCDEFGHJKLMNPQRSTUVWXYZabcdefghijkmnopqrstuvwxyz',
             58,
             $len
         );
@@ -111,24 +122,26 @@ class Random
      *
      * If $len is not specified, 16 is assumed. It may be larger in future.
      *
-     * It is similar to `Phiz\Security\Random::base58()` but has been
+     * It is similar to `Phalcon\Security\Random::base58()` but has been
      * modified to provide the largest value that can safely be used in URLs
      * without needing to take extra characters into consideration because it is
      * [A-Za-z0-9].
      *
      *```php
-     * $random = new \Phiz\Security\Random();
+     * $random = new \Phalcon\Security\Random();
      *
      * echo $random->base62(); // z0RkwHfh8ErDM1xw
      *```
      *
-     * @see    \Phiz\Security\Random:base58
+     * @param int $len
+     *
+     * @return string
      * @throws Exception If secure random number generator is not available or unexpected partial read
      */
-    public function base62(int $len = null) : string
+    public function base62(int $len = 16): string
     {
         return $this->base(
-            "0123456789ABCDEFGHIJKLMNOPQRSTUVWXYZabcdefghijklmnopqrstuvwxyz",
+            '0123456789ABCDEFGHIJKLMNOPQRSTUVWXYZabcdefghijklmnopqrstuvwxyz',
             62,
             $len
         );
@@ -142,25 +155,26 @@ class Random
      * Size formula: 4 * ($len / 3) rounded up to a multiple of 4.
      *
      *```php
-     * $random = new \Phiz\Security\Random();
+     * $random = new \Phalcon\Security\Random();
      *
      * echo $random->base64(12); // 3rcq39QzGK9fUqh8
      *```
      *
-     * @throws Exception If secure random number generator is not available or unexpected partial read
+     * @param int $len
+     *
+     * @return string
+     * @throws \Exception If secure random number generator is not available or unexpected partial read
      */
-    public function base64(int $len = null) : string
+    public function base64(int $len = 16): string
     {
-        return base64_encode(
-            $this->bytes($len)
-        );
+        return base64_encode($this->bytes($len));
     }
 
     /**
      * Generates a random URL-safe base64 string
      *
      * If $len is not specified, 16 is assumed. It may be larger in future.
-     * The $length of the result string is usually greater of $len.
+     * The length of the result string is usually greater of $len.
      *
      * By default, padding is not generated because "=" may be used as a URL
      * delimiter. The result may contain A-Z, a-z, 0-9, "-" and "_". "=" is also
@@ -168,57 +182,53 @@ class Random
      * base64.
      *
      *```php
-     * $random = new \Phiz\Security\Random();
+     * $random = new \Phalcon\Security\Random();
      *
      * echo $random->base64Safe(); // GD8JojhzSTrqX7Q8J6uug
      *```
      *
-     * @link https://www.ietf.org/rfc/rfc3548.txt
+     * @param int|null $len
+     * @param bool     $padding
+     *
+     * @return string
      * @throws Exception If secure random number generator is not available or unexpected partial read
+     *
+     * @link https://www.ietf.org/rfc/rfc3548.txt
      */
-    public function base64Safe(int $len = null, bool $padding = false) : string
+    public function base64Safe(int $len = 16, bool $padding = false): string
     {
-        $s = strtr(
-            base64_encode(
-                $this->base64($len)
-            ),
-            "+/",
-            "-_"
-        );
-
-        $s = preg_replace(
-            "#[^a-z0-9_=-]+#i",
-            "",
-            $s
-        );
+        $output = $this->doEncodeUrl($this->base64($len));
 
         if (!$padding) {
-            return rtrim($s, "=");
+            return rtrim($output, '=');
         }
 
-        return $s;
+        return $output;
     }
 
     /**
      * Generates a random binary string
      *
      * The `Random::bytes` method returns a string and accepts as input an int
-     * representing the $length in bytes to be returned.
+     * representing the length in bytes to be returned.
      *
      * If $len is not specified, 16 is assumed. It may be larger in future.
      * The result may contain any byte: "x00" - "xFF".
      *
      *```php
-     * $random = new \Phiz\Security\Random();
+     * $random = new \Phalcon\Security\Random();
      *
      * $bytes = $random->bytes();
      * var_dump(bin2hex($bytes));
      * // Possible output: string(32) "00f6c04b144b41fad6a59111c126e1ee"
      *```
      *
-     * @throws Exception If secure random number generator is not available or unexpected partial read
+     * @param int $len
+     *
+     * @return string
+     * @throws \Exception If secure random number generator is not available or unexpected partial read
      */
-    public function bytes(int $len = 16) : string
+    public function bytes(int $len = 16): string
     {
         if ($len <= 0) {
             $len = 16;
@@ -234,21 +244,21 @@ class Random
      * The length of the result string is usually greater of $len.
      *
      *```php
-     * $random = new \Phiz\Security\Random();
+     * $random = new \Phalcon\Security\Random();
      *
      * echo $random->hex(10); // a29f470508d5ccb8e289
      *```
      *
+     * @param int $len
+     *
+     * @return string
      * @throws Exception If secure random number generator is not available or unexpected partial read
      */
-    public function hex(int $len = null) : string
+    public function hex(int $len = 16): string
     {
-        return array_shift(
-            unpack(
-                "H*",
-                $this->bytes($len)
-            )
-        );
+        $unpacked = unpack('H*', $this->bytes($len));
+
+        return array_shift($unpacked);
     }
 
     /**
@@ -257,16 +267,19 @@ class Random
      * Returns an integer: 0 <= result <= $len.
      *
      *```php
-     * $random = new \Phiz\Security\Random();
+     * $random = new \Phalcon\Security\Random();
      *
      * echo $random->number(16); // 8
      *```
+     * @param int $len
+     *
+     * @return int
      * @throws Exception If secure random number generator is not available, unexpected partial read or $len <= 0
      */
-    public function number(int $len) : int
+    public function number(int $len): int
     {
         if ($len <= 0) {
-            throw new Exception("Require a positive integer > 0");
+            throw new Exception('Input number must be a positive integer');
         }
 
         return random_int(0, $len);
@@ -286,32 +299,31 @@ class Random
      * y is one of 8, 9, A, or B (e.g., f47ac10b-58cc-4372-a567-0e02b2c3d479).
      *
      *```php
-     * $random = new \Phiz\Security\Random();
+     * $random = new \Phalcon\Security\Random();
      *
      * echo $random->uuid(); // 1378c906-64bb-4f81-a8d6-4ae1bfcdec22
      *```
      *
-     * @link https://www.ietf.org/rfc/rfc4122.txt
+     * @return string
      * @throws Exception If secure random number generator is not available or unexpected partial read
+     *
+     * @link https://www.ietf.org/rfc/rfc4122.txt
      */
-    public function uuid() : string
+    public function uuid(): string
     {
-        $ary = array_values(
+        $values = array_values(
             unpack(
-                "N1a/n1b/n1c/n1d/n1e/N1f",
+                'N1a/n1b/n1c/n1d/n1e/N1f',
                 $this->bytes(16)
             )
         );
 
-        $ary[2] = ($ary[2] & 0x0fff) | 0x4000;
-        $ary[3] = ($ary[3] & 0x3fff) | 0x8000;
+        $values[2] = ($values[2] & 0x0fff) | 0x4000;
+        $values[3] = ($values[3] & 0x3fff) | 0x8000;
 
-        array_unshift(
-            $ary,
-            "%08x-%04x-%04x-%04x-%04x%08x"
-        );
+        array_unshift($values, '%08x-%04x-%04x-%04x-%04x%08x');
 
-        return call_user_func_array("sprintf", $ary);
+        return call_user_func_array('sprintf', $values);
     }
 
 
@@ -319,28 +331,25 @@ class Random
      * Generates a random string based on the number ($base) of characters
      * ($alphabet).
      *
-     * If $n is not specified, 16 is assumed. It may be larger in future.
+     * @param string $alphabet
+     * @param int    $base
+     * @param int    $number
      *
+     * @return string
      * @throws Exception If secure random number generator is not available or unexpected partial read
      */
-    protected function base(string $alphabet, int $base, $n = null) : string
+    protected function base(string $alphabet, int $base, int $number = 16): string
     {
+        $byteString = '';
+        $bytes = unpack('C*', $this->bytes($number));
+        foreach ($bytes as $index) {
+            $index = $index % 64;
 
-        $byteString = "";
-
-        $bytes = unpack(
-            "C*",
-            $this->bytes(n)
-        );
-
-        foreach($bytes as $idx) {
-            $idx = $idx % 64;
-
-            if ($idx >= $base) {
-                $idx = $this->number($base - 1);
+            if ($index >= $base) {
+                $index = $this->number($base - 1);
             }
 
-            $byteString .= $alphabet[(int) $idx];
+            $byteString .= $alphabet[(int) $index];
         }
 
         return $byteString;

@@ -9,10 +9,10 @@
  * file that was distributed with this source code.
  */
 
-namespace Phiz\Db;
+namespace Phalcon\Db;
 
 /**
- * Interface for Phiz\Db dialects
+ * Interface for Phalcon\Db dialects
  */
 interface DialectInterface
 {

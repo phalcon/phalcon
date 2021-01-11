@@ -22,7 +22,6 @@ use UnitTester;
 
 use function dataDir;
 use function hash;
-use function var_dump;
 
 class LoadCest
 {

@@ -8,15 +8,15 @@
  * file that was distributed with this source code.
  */
 
-namespace Phiz\Mvc\Model;
+namespace Phalcon\Mvc\Model;
 
-use Phiz\Mvc\ModelInterface;
-use Phiz\Mvc\Model\MetaData\Strategy\StrategyInterface;
+use Phalcon\Mvc\ModelInterface;
+use Phalcon\Mvc\Model\MetaData\Strategy\StrategyInterface;
 
 /**
- * Phiz\Mvc\Model\MetaDataInterface
+ * Phalcon\Mvc\Model\MetaDataInterface
  *
- * Interface for Phiz\Mvc\Model\MetaData
+ * Interface for Phalcon\Mvc\Model\MetaData
  */
 interface MetaDataInterface
 {

@@ -11,9 +11,9 @@
 
 declare(strict_types=1);
 
-namespace Phiz\Autoload;
+namespace Phalcon\Autoload;
 
-use Phiz\Autoload\Traits\LoaderHelperTrait;
+use Phalcon\Autoload\Traits\LoaderHelperTrait;
 
 use function array_merge;
 use function array_unique;
@@ -28,7 +28,7 @@ use const DIRECTORY_SEPARATOR;
 /**
  * Class Logger
  *
- * @package Phiz\Autoload
+ * @package Phalcon\Autoload
  */
 class Loader
 {

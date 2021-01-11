@@ -11,7 +11,7 @@
 
 declare(strict_types=1);
 
-namespace Phiz\Support\Arr;
+namespace Phalcon\Support\Arr;
 
 use function array_values;
 use function is_object;
@@ -21,7 +21,7 @@ use const SORT_REGULAR;
 /**
  * Class Order
  *
- * @package Phiz\Support\Arr
+ * @package Phalcon\Support\Arr
  */
 class Order
 {

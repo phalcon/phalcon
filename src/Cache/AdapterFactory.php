@@ -11,18 +11,18 @@
 
 declare(strict_types=1);
 
-namespace Phiz\Cache;
+namespace Phalcon\Cache;
 
-use Phiz\Cache\Adapter\AdapterInterface;
-use Phiz\Cache\Adapter\Apcu;
-use Phiz\Cache\Adapter\Libmemcached;
-use Phiz\Cache\Adapter\Memory;
-use Phiz\Cache\Adapter\Redis;
-use Phiz\Cache\Adapter\Stream;
-use Phiz\Storage\SerializerFactory;
-use Phiz\Support\Exception as SupportException;
-use Phiz\Support\HelperFactory;
-use Phiz\Support\Traits\FactoryTrait;
+use Phalcon\Cache\Adapter\AdapterInterface;
+use Phalcon\Cache\Adapter\Apcu;
+use Phalcon\Cache\Adapter\Libmemcached;
+use Phalcon\Cache\Adapter\Memory;
+use Phalcon\Cache\Adapter\Redis;
+use Phalcon\Cache\Adapter\Stream;
+use Phalcon\Storage\SerializerFactory;
+use Phalcon\Support\Exception as SupportException;
+use Phalcon\Support\HelperFactory;
+use Phalcon\Support\Traits\FactoryTrait;
 
 /**
  * Factory to create Cache adapters

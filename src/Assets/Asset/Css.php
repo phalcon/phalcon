@@ -11,16 +11,16 @@
 
 declare(strict_types=1);
 
-namespace Phiz\Assets\Asset;
+namespace Phalcon\Assets\Asset;
 
-use Phiz\Assets\Asset as AssetBase;
+use Phalcon\Assets\Asset as AssetBase;
 
 /**
  * Represents CSS assets
  *
  * Class Css
  *
- * @package Phiz\Assets\Asset
+ * @package Phalcon\Assets\Asset
  */
 class Css extends AssetBase
 {

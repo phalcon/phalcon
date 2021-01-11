@@ -11,7 +11,7 @@
 
 declare(strict_types=1);
 
-namespace Phiz\Support\Arr;
+namespace Phalcon\Support\Arr;
 
 use function is_array;
 use function is_object;
@@ -19,7 +19,7 @@ use function is_object;
 /**
  * Class Pluck
  *
- * @package Phiz\Support\Arr
+ * @package Phalcon\Support\Arr
  */
 class Pluck
 {

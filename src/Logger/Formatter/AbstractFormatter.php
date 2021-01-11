@@ -11,10 +11,10 @@
 
 declare(strict_types=1);
 
-namespace Phiz\Logger\Formatter;
+namespace Phalcon\Logger\Formatter;
 
-use Phiz\Logger\Item;
-use Phiz\Support\Str\Traits\InterpolateTrait;
+use Phalcon\Logger\Item;
+use Phalcon\Support\Str\Traits\InterpolateTrait;
 
 /**
  * Class AbstractFormatter

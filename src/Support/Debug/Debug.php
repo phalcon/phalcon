@@ -11,10 +11,10 @@
 
 declare(strict_types=1);
 
-namespace Phiz\Support\Debug;
+namespace Phalcon\Support\Debug;
 
 use ErrorException;
-use Phiz\Version\Version;
+use Phalcon\Version\Version;
 use ReflectionClass;
 use ReflectionException;
 use ReflectionFunction;
@@ -31,7 +31,7 @@ use function memory_get_usage;
 /**
  * Class Debug
  *
- * @package Phiz\Debug
+ * @package Phalcon\Debug
  *
  * @property array  $blacklist
  * @property mixed  $data

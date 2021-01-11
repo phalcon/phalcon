@@ -11,10 +11,10 @@
 
 declare(strict_types=1);
 
-namespace Phiz\Events;
+namespace Phalcon\Events;
 
 /**
- * Phiz\Events\EventsAwareInterface
+ * Phalcon\Events\EventsAwareInterface
  *
  * This interface must for those classes that accept an EventsManager and
  * dispatch events

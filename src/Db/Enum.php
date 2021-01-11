@@ -8,10 +8,10 @@
  * file that was distributed with this source code.
  */
 
-namespace Phiz\Db;
+namespace Phalcon\Db;
 
 /**
- * Constants for Phiz\Db
+ * Constants for Phalcon\Db
  */
 class Enum
 {

@@ -11,7 +11,7 @@
 
 declare(strict_types=1);
 
-namespace Phiz\Html\Link;
+namespace Phalcon\Html\Link;
 
 use Psr\Link\LinkInterface;
 use Psr\Link\LinkProviderInterface;
@@ -23,7 +23,7 @@ use function spl_object_hash;
 /**
  * Class LinkProvider
  *
- * @package Phiz\Link
+ * @package Phalcon\Link
  *
  * @property LinkInterface[] $links
  */

@@ -11,9 +11,9 @@
 
 declare(strict_types=1);
 
-namespace Phiz\Support\Str;
+namespace Phalcon\Support\Str;
 
-use Phiz\Support\Str\Traits\LowerTrait;
+use Phalcon\Support\Str\Traits\LowerTrait;
 
 use function mb_convert_case;
 
@@ -22,7 +22,7 @@ use const MB_CASE_LOWER;
 /**
  * Class IsLower
  *
- * @package Phiz\Support\Str
+ * @package Phalcon\Support\Str
  */
 class IsLower
 {

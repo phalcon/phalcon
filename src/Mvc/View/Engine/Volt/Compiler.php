@@ -9,18 +9,18 @@
  * file that was distributed with this source code.
  */
 
-namespace Phiz\Mvc\View\Engine\Volt;
+namespace Phalcon\Mvc\View\Engine\Volt;
 
 use Closure;
-use Phiz\Di\DiInterface;
-use Phiz\Mvc\ViewBaseInterface;
-use Phiz\Di\InjectionAwareInterface;
+use Phalcon\Di\DiInterface;
+use Phalcon\Mvc\ViewBaseInterface;
+use Phalcon\Di\InjectionAwareInterface;
 
 /**
  * This class reads and compiles Volt templates into PHP plain code
  *
  *```php
- * $compiler = new \Phiz\Mvc\View\Engine\Volt\Compiler();
+ * $compiler = new \Phalcon\Mvc\View\Engine\Volt\Compiler();
  *
  * $compiler->compile("views/partials/header.volt");
  *
@@ -52,7 +52,7 @@ class Compiler implements InjectionAwareInterface
     protected $view;
 
     /**
-     * Phiz\Mvc\View\Engine\Volt\Compiler
+     * Phalcon\Mvc\View\Engine\Volt\Compiler
      */
     public function __construct(ViewBaseInterface $view = null)
     {
@@ -983,7 +983,7 @@ class Compiler implements InjectionAwareInterface
                 if ($defaultValue !== null) {
                     $code .= "\$" . $variableName . " = " . $this->expression($defaultValue) . ";";
                 } else {
-                    $code .= " throw new \\Phiz\\Mvc\\View\\Exception(\"Macro '" . $name . "' was called without parameter: " . $variableName . "\"); ";
+                    $code .= " throw new \\Phalcon\\Mvc\\View\\Exception(\"Macro '" . $name . "' was called without parameter: " . $variableName . "\"); ";
                 }
 
                 $code .= " } } ";
@@ -1713,9 +1713,9 @@ class Compiler implements InjectionAwareInterface
             ];
 
             /**
-             * Check if it's a method in Phiz\Tag
+             * Check if it's a method in Phalcon\Tag
              */
-            if (method_exists("Phiz\\Tag", $method)) {
+            if (method_exists("Phalcon\\Tag", $method)) {
                 if (isset($arrayHelpers[$name])){
                     return "\$this->tag->" . $method . "([" . $arguments . "])";
                 }
@@ -1768,7 +1768,7 @@ class Compiler implements InjectionAwareInterface
                 "text_area"             : true.
             ];
 
-            if (method_exists("Phiz\\Html\\Tag", method)) {
+            if (method_exists("Phalcon\\Html\\Tag", method)) {
                 if isset(arrayHelpers[name]){
                     return "$this->tag->" . method . "([" . arguments . "])";
                 }
@@ -1804,11 +1804,11 @@ class Compiler implements InjectionAwareInterface
             }
 
             if ($name === "version") {
-                return "Phiz\\Version::get()";
+                return "Phalcon\\Version::get()";
             }
 
             if ($name === "version_id") {
-                return "Phiz\\Version::getId()";
+                return "Phalcon\\Version::getId()";
             }
 
             if ($name === "preload") {
@@ -2446,7 +2446,7 @@ class Compiler implements InjectionAwareInterface
          * "mb_strtolower" if the mbstring extension is loaded
          */
         if (($name === "lower") || ($name === "lowercase")) {
-            return "Phiz\\Text::lower(" . $arguments . ")";
+            return "Phalcon\\Text::lower(" . $arguments . ")";
         }
 
         /**
@@ -2454,7 +2454,7 @@ class Compiler implements InjectionAwareInterface
          * "mb_strtoupper" if the mbstring extension is loaded
          */
         if (($name === "upper") || ($name === "uppercase")) {
-            return "Phiz\\Text::upper(" . $arguments . ")";
+            return "Phalcon\\Text::upper(" . $arguments . ")";
         }
 
         /**

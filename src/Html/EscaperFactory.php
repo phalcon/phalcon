@@ -9,7 +9,7 @@
 
 declare(strict_types=1);
 
-namespace Phiz\Html;
+namespace Phalcon\Html;
 
 /**
  * Class EscaperFactory

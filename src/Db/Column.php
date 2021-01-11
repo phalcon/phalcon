@@ -8,13 +8,13 @@
  * LICENSE.txt file that was distributed with this source code.
  */
 
-namespace Phiz\Db;
+namespace Phalcon\Db;
 
 /**
  * Allows to define columns to be used on create or alter table operations
  *
  *```php
- * use Phiz\Db\Column as Column;
+ * use Phalcon\Db\Column as Column;
  *
  * // Column definition
  * $column = new Column(
@@ -313,7 +313,7 @@ class Column implements ColumnInterface
     protected bool $unsigned = false;
 
     /**
-     * Phiz\Db\Column constructor
+     * Phalcon\Db\Column constructor
      */
     public function __construct(string $name, array $definition)
     {

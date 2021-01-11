@@ -8,10 +8,10 @@
  * file that was distributed with this source code.
  */
 
-namespace Phiz\Mvc\Model;
+namespace Phalcon\Mvc\Model;
 
 /**
- * Phiz\Mvc\Model\Relation
+ * Phalcon\Mvc\Model\Relation
  *
  * This class represents a relationship between two models
  */
@@ -36,7 +36,7 @@ class Relation implements RelationInterface
     protected int $type;
 
     /**
-     * Phiz\Mvc\Model\Relation constructor
+     * Phalcon\Mvc\Model\Relation constructor
      *
      * @param string|array fields
      * @param string|array referencedFields

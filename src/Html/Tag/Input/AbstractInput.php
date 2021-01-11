@@ -9,16 +9,16 @@
 
 declare(strict_types=1);
 
-namespace Phiz\Html\Tag\Input;
+namespace Phalcon\Html\Tag\Input;
 
-use Phiz\Html\Tag\AbstractHelper;
+use Phalcon\Html\Tag\AbstractHelper;
 
 use function array_merge;
 
 /**
  * Class AbstractInput
  *
- * @package Phiz\Html\Tag\Input
+ * @package Phalcon\Html\Tag\Input
  *
  * @property array  $attributes
  * @property string $type

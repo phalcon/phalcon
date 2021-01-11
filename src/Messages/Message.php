@@ -11,7 +11,7 @@
 
 declare(strict_types=1);
 
-namespace Phiz\Messages;
+namespace Phalcon\Messages;
 
 use JsonSerializable;
 
@@ -48,7 +48,7 @@ class Message implements MessageInterface, JsonSerializable
     protected array $metaData = [];
 
     /**
-     * Phiz\Messages\Message constructor
+     * Phalcon\Messages\Message constructor
      *
      * @param string $message
      * @param string $field

@@ -9,22 +9,22 @@
  * file that was distributed with this source code.
  */
 
-namespace Phiz\Mvc\View\Engine;
+namespace Phalcon\Mvc\View\Engine;
 
-use Phiz\Di\DiInterface;
-use Phiz\Di\Injectable;
-use Phiz\Mvc\ViewBaseInterface;
+use Phalcon\Di\DiInterface;
+use Phalcon\Di\Injectable;
+use Phalcon\Mvc\ViewBaseInterface;
 
 /**
  * All the template engine adapters must inherit this class. This provides
- * basic interfacing between the engine and the Phiz\Mvc\View component.
+ * basic interfacing between the engine and the Phalcon\Mvc\View component.
  */
 abstract class AbstractEngine extends Injectable implements EngineInterface
 {
     protected $view;
 
     /**
-     * Phiz\Mvc\View\Engine constructor
+     * Phalcon\Mvc\View\Engine constructor
      */
     public function __construct(ViewBaseInterface $view,  DiInterface $container = null)
     {

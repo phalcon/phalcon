@@ -11,10 +11,10 @@
 
 declare(strict_types=1);
 
-namespace Phiz\Assets;
+namespace Phalcon\Assets;
 
 /**
- * Interface for custom Phiz\Assets filters
+ * Interface for custom Phalcon\Assets filters
  */
 interface FilterInterface
 {

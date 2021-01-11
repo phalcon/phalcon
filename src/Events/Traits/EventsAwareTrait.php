@@ -11,14 +11,14 @@
 
 declare(strict_types=1);
 
-namespace Phiz\Events\Traits;
+namespace Phalcon\Events\Traits;
 
-use Phiz\Events\ManagerInterface;
+use Phalcon\Events\ManagerInterface;
 
 /**
  * Trait EventsAwareTrait
  *
- * @package Phiz\Events\Traits
+ * @package Phalcon\Events\Traits
  *
  * @property ?ManagerInterface $eventsManager
  */

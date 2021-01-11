@@ -8,14 +8,14 @@
  * file that was distributed with this source code.
  */
 
-namespace Phiz\Mvc\Model\MetaData;
+namespace Phalcon\Mvc\Model\MetaData;
 
-use Phiz\Mvc\Model\MetaData;
-use Phiz\Mvc\Model\Exception;
-use Phiz\Cache\AdapterFactory;
+use Phalcon\Mvc\Model\MetaData;
+use Phalcon\Mvc\Model\Exception;
+use Phalcon\Cache\AdapterFactory;
 
 /**
- * Phiz\Mvc\Model\MetaData\Apcu
+ * Phalcon\Mvc\Model\MetaData\Apcu
  *
  * Stores model meta-data in the APCu cache. Data will erased if the web server is restarted
  *
@@ -24,7 +24,7 @@ use Phiz\Cache\AdapterFactory;
  * You can query the meta-data by printing apcu_fetch('$PMM$') or apcu_fetch('$PMM$my-app-id')
  *
  *```php
- * $metaData = new \Phiz\Mvc\Model\MetaData\Apcu(
+ * $metaData = new \Phalcon\Mvc\Model\MetaData\Apcu(
  *     [
  *         "prefix"   => "my-app-id",
  *         "lifetime" => 86400,
@@ -35,7 +35,7 @@ use Phiz\Cache\AdapterFactory;
 class Apcu extends MetaData
 {
     /**
-     * Phiz\Mvc\Model\MetaData\Apcu constructor
+     * Phalcon\Mvc\Model\MetaData\Apcu constructor
      *
      * @param array options
      */

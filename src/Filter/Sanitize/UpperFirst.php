@@ -11,12 +11,12 @@
 
 declare(strict_types=1);
 
-namespace Phiz\Filter\Sanitize;
+namespace Phalcon\Filter\Sanitize;
 
 use function ucfirst;
 
 /**
- * Phiz\Filter\Sanitize\UpperFirst
+ * Phalcon\Filter\Sanitize\UpperFirst
  *
  * Sanitizes a value to ucfirst
  */

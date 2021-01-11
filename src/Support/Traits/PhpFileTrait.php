@@ -11,7 +11,7 @@
 
 declare(strict_types=1);
 
-namespace Phiz\Support\Traits;
+namespace Phalcon\Support\Traits;
 
 use function fclose;
 use function file_exists;
@@ -25,7 +25,7 @@ use function unlink;
 /**
  * Trait PhpFileTrait
  *
- * @package Phiz\Support\Traits
+ * @package Phalcon\Support\Traits
  */
 trait PhpFileTrait
 {

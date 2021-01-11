@@ -8,14 +8,14 @@
  * file that was distributed with this source code.
  */
 
-namespace Phiz\Url;
+namespace Phalcon\Url;
 
 /**
- * Phiz\Url\Exception
+ * Phalcon\Url\Exception
  *
- * Exceptions thrown in Phiz\Url will use this class
+ * Exceptions thrown in Phalcon\Url will use this class
  */
-class Exception extends \Phiz\Exception
+class Exception extends \Phalcon\Exception
 {
 
 }

@@ -11,10 +11,10 @@
 
 declare(strict_types=1);
 
-namespace Phiz\Support;
+namespace Phalcon\Support;
 
 /**
- * Exceptions thrown in Phiz\Helper will use this class
+ * Exceptions thrown in Phalcon\Helper will use this class
  */
 class Exception extends \Exception
 {

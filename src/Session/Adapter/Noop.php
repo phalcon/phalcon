@@ -11,12 +11,12 @@
 
 declare(strict_types=1);
 
-namespace Phiz\Session\Adapter;
+namespace Phalcon\Session\Adapter;
 
 use SessionHandlerInterface;
 
 /**
- * Phiz\Session\Adapter\Noop
+ * Phalcon\Session\Adapter\Noop
  *
  * This is an "empty" or null adapter. It can be used for testing or any
  * other purpose that no session needs to be invoked
@@ -24,8 +24,8 @@ use SessionHandlerInterface;
  * ```php
  * <?php
  *
- * use Phiz\Session\Manager;
- * use Phiz\Session\Adapter\Noop;
+ * use Phalcon\Session\Manager;
+ * use Phalcon\Session\Adapter\Noop;
  *
  * $session = new Manager();
  * $session->setAdapter(new Noop());

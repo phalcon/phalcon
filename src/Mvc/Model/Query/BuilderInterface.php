@@ -8,14 +8,14 @@
  * file that was distributed with this source code.
  */
 
-namespace Phiz\Mvc\Model\Query;
+namespace Phalcon\Mvc\Model\Query;
 
-use Phiz\Mvc\Model\QueryInterface;
+use Phalcon\Mvc\Model\QueryInterface;
 
 /**
- * Phiz\Mvc\Model\Query\BuilderInterface
+ * Phalcon\Mvc\Model\Query\BuilderInterface
  *
- * Interface for Phiz\Mvc\Model\Query\Builder
+ * Interface for Phalcon\Mvc\Model\Query\Builder
  */
 interface BuilderInterface
 {

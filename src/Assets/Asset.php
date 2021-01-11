@@ -11,9 +11,9 @@
 
 declare(strict_types=1);
 
-namespace Phiz\Assets;
+namespace Phalcon\Assets;
 
-use Phiz\Support\Traits\PhpFileTrait;
+use Phalcon\Support\Traits\PhpFileTrait;
 
 use function sha1;
 
@@ -21,7 +21,7 @@ use function sha1;
  * Represents an asset asset
  *
  *```php
- * $asset = new \Phiz\Assets\Asset("js", "javascripts/jquery.js");
+ * $asset = new \Phalcon\Assets\Asset("js", "javascripts/jquery.js");
  *```
  *
  * @property array       $attributes
@@ -315,9 +315,9 @@ class Asset implements AssetInterface
     /**
      * Gets the asset's version.
      *
-     * @return string
+     * @return string|null
      */
-    public function getVersion(): string
+    public function getVersion(): ?string
     {
         return $this->version;
     }

@@ -11,12 +11,12 @@
 
 declare(strict_types=1);
 
-namespace Phiz\Translate\Adapter;
+namespace Phalcon\Translate\Adapter;
 
 /**
- * Phiz\Translate\Adapter\AdapterInterface
+ * Phalcon\Translate\Adapter\AdapterInterface
  *
- * Interface for Phiz\Translate adapters
+ * Interface for Phalcon\Translate adapters
  */
 interface AdapterInterface
 {

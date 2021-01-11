@@ -6,7 +6,7 @@
  * and open the template in the editor.
  */
 
-namespace Phiz\Reflect;
+namespace Phalcon\Reflect;
 
 /**
  * Description of Reflect

@@ -11,7 +11,7 @@
 
 declare(strict_types=1);
 
-namespace Phiz\Support\Str;
+namespace Phalcon\Support\Str;
 
 use function implode;
 use function mb_str_split;
@@ -23,7 +23,7 @@ use const PATHINFO_FILENAME;
 /**
  * Class DirFromFile
  *
- * @package Phiz\Support\Str
+ * @package Phalcon\Support\Str
  */
 class DirFromFile
 {

@@ -11,7 +11,7 @@
 
 declare(strict_types=1);
 
-namespace Phiz\Filter;
+namespace Phalcon\Filter;
 
 use function is_array;
 use function is_string;

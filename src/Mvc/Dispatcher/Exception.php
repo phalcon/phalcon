@@ -9,14 +9,14 @@
  * file that was distributed with this source code.
  */
 
-namespace Phiz\Mvc\Dispatcher;
+namespace Phalcon\Mvc\Dispatcher;
 
 /**
- * Phiz\Mvc\Dispatcher\Exception
+ * Phalcon\Mvc\Dispatcher\Exception
  *
- * Exceptions thrown in Phiz\Mvc\Dispatcher will use this class
+ * Exceptions thrown in Phalcon\Mvc\Dispatcher will use this class
  */
-class Exception extends \Phiz\Dispatcher\Exception
+class Exception extends \Phalcon\Dispatcher\Exception
 {
 
 }

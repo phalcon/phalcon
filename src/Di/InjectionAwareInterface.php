@@ -11,11 +11,11 @@
 
 declare(strict_types=1);
 
-namespace Phiz\Di;
+namespace Phalcon\Di;
 
 /**
  * This interface must be implemented in those classes that uses internally the
- * Phiz\Di that creates them
+ * Phalcon\Di that creates them
  */
 interface InjectionAwareInterface
 {

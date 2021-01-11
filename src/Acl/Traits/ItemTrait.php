@@ -11,12 +11,12 @@
 
 declare(strict_types=1);
 
-namespace Phiz\Acl\Traits;
+namespace Phalcon\Acl\Traits;
 
 /**
  * This class defines role entity and its description
  *
- * @package Phiz\Acl\Traits
+ * @package Phalcon\Acl\Traits
  *
  * @property string      $name
  * @property string|null $description

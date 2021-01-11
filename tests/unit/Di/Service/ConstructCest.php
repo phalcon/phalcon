@@ -38,7 +38,7 @@ class ConstructCest
         $I->wantToTest('Di\Service - __construct()');
 
         $service = new Service(Escaper::class, false);
-        $class = ServiceInterface::class;
+        $class   = ServiceInterface::class;
         $I->assertInstanceOf($class, $service);
     }
 }

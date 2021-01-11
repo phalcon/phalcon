@@ -9,13 +9,13 @@
  * file that was distributed with this source code.
  */
 
-namespace Phiz\Mvc\Router;
+namespace Phalcon\Mvc\Router;
 
 /**
- * Phiz\Mvc\Router\GroupInterface
+ * Phalcon\Mvc\Router\GroupInterface
  *
  *```php
- * $router = new \Phiz\Mvc\Router();
+ * $router = new \Phalcon\Mvc\Router();
  *
  * // Create a group with a common module and controller
  * $blog = new Group(

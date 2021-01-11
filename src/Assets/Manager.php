@@ -11,20 +11,20 @@
 
 declare(strict_types=1);
 
-namespace Phiz\Assets;
+namespace Phalcon\Assets;
 
-use Phiz\Assets\Asset\Css as AssetCss;
-use Phiz\Assets\Asset\Js as AssetJs;
-use Phiz\Assets\Inline\Css as InlineCss;
-use Phiz\Assets\Inline\Js as InlineJs;
-use Phiz\Di\InjectionAwareInterface;
-use Phiz\Di\Traits\InjectionAwareTrait;
-use Phiz\Html\EscaperInterface;
-use Phiz\Html\Tag\Close;
-use Phiz\Html\Tag\Element;
-use Phiz\Html\Tag\Script;
-use Phiz\Html\Tag\Style;
-use Phiz\Html\TagFactory;
+use Phalcon\Assets\Asset\Css as AssetCss;
+use Phalcon\Assets\Asset\Js as AssetJs;
+use Phalcon\Assets\Inline\Css as InlineCss;
+use Phalcon\Assets\Inline\Js as InlineJs;
+use Phalcon\Di\InjectionAwareInterface;
+use Phalcon\Di\Traits\InjectionAwareTrait;
+use Phalcon\Html\EscaperInterface;
+use Phalcon\Html\Tag\Close;
+use Phalcon\Html\Tag\Element;
+use Phalcon\Html\Tag\Script;
+use Phalcon\Html\Tag\Style;
+use Phalcon\Html\TagFactory;
 
 use function call_user_func_array;
 use function filemtime;
@@ -32,13 +32,12 @@ use function htmlspecialchars;
 use function is_array;
 use function is_object;
 use function is_resource;
-use function var_dump;
 
 use const ENT_QUOTES;
 use const PHP_EOL;
 
 /**
- * Phiz\Assets\Manager
+ * Phalcon\Assets\Manager
  *
  * Manages collections of CSS/JavaScript assets
  *
@@ -294,7 +293,7 @@ class Manager implements InjectionAwareInterface
      *
      * ```php
      * if ($assets->exists("jsHeader")) {
-     *     // \Phiz\Assets\Collection
+     *     // \Phalcon\Assets\Collection
      *     $collection = $assets->get("jsHeader");
      * }
      * ```
@@ -699,9 +698,10 @@ class Manager implements InjectionAwareInterface
      *
      * @param string|null $name
      *
-     * @return string
+     * @return string|null
+     * @throws Exception
      */
-    public function outputCss(string $name = null): string
+    public function outputCss(string $name = null): ?string
     {
         $collection = $this->getCss();
         if (null !== $name) {
@@ -815,9 +815,10 @@ class Manager implements InjectionAwareInterface
      *
      * @param string|null $name
      *
-     * @return string
+     * @return string|null
+     * @throws Exception
      */
-    public function outputJs(string $name = null): string
+    public function outputJs(string $name = null): ?string
     {
         $collection = $this->getJs();
         if (true !== empty($name)) {

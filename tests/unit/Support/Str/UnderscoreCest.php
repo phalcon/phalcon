@@ -17,6 +17,11 @@ use Codeception\Example;
 use Phalcon\Support\Str\Underscore;
 use UnitTester;
 
+/**
+ * Class UnderscoreCest
+ *
+ * @package Phalcon\Tests\Unit\Support\Str
+ */
 class UnderscoreCest
 {
     /**

@@ -11,14 +11,14 @@
 
 declare(strict_types=1);
 
-namespace Phiz\Filter\Sanitize;
+namespace Phalcon\Filter\Sanitize;
 
 use function filter_var;
 
 use const FILTER_SANITIZE_FULL_SPECIAL_CHARS;
 
 /**
- * Phiz\Filter\Sanitize\SpecialFull
+ * Phalcon\Filter\Sanitize\SpecialFull
  *
  * Sanitizes a value special characters (htmlspecialchars() and ENT_QUOTES)
  */

@@ -11,12 +11,12 @@
 
 declare(strict_types=1);
 
-namespace Phiz\Collection;
+namespace Phalcon\Collection;
 
 /**
- * Phiz\Collection\CollectionInterface
+ * Phalcon\Collection\CollectionInterface
  *
- * Interface for Phiz\Collection class
+ * Interface for Phalcon\Collection class
  */
 interface CollectionInterface
 {

@@ -11,15 +11,15 @@
 
 declare(strict_types=1);
 
-namespace Phiz\Storage\Adapter;
+namespace Phalcon\Storage\Adapter;
 
 use DateInterval;
 use DateTime;
 use Exception;
-use Phiz\Storage\Serializer\SerializerInterface;
-use Phiz\Storage\SerializerFactory;
-use Phiz\Support\Exception as SupportException;
-use Phiz\Support\HelperFactory;
+use Phalcon\Storage\Serializer\SerializerInterface;
+use Phalcon\Storage\SerializerFactory;
+use Phalcon\Support\Exception as SupportException;
+use Phalcon\Support\HelperFactory;
 
 use function is_object;
 use function mb_strtolower;
@@ -27,7 +27,7 @@ use function mb_strtolower;
 /**
  * Class AbstractAdapter
  *
- * @package Phiz\Storage\Adapter
+ * @package Phalcon\Storage\Adapter
  *
  * @property mixed               $adapter
  * @property string              $defaultSerializer

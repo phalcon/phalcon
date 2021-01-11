@@ -11,12 +11,12 @@
 
 declare(strict_types=1);
 
-namespace Phiz\Events;
+namespace Phalcon\Events;
 
 /**
- * Phiz\Events\ManagerInterface
+ * Phalcon\Events\ManagerInterface
  *
- * Interface for Phiz\Events managers.
+ * Interface for Phalcon\Events managers.
  */
 interface ManagerInterface
 {

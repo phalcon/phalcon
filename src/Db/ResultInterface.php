@@ -9,10 +9,10 @@
  * file that was distributed with this source code.
  */
 
-namespace Phiz\Db;
+namespace Phalcon\Db;
 
 /**
- * Interface for Phiz\Db\Result objects
+ * Interface for Phalcon\Db\Result objects
  */
 interface ResultInterface
 {
@@ -32,21 +32,21 @@ interface ResultInterface
     /**
      * Fetches an array/object of strings that corresponds to the fetched row,
      * or FALSE if there are no more rows. This method is affected by the active
-     * fetch flag set using `Phiz\Db\Result\Pdo::setFetchMode()`
+     * fetch flag set using `Phalcon\Db\Result\Pdo::setFetchMode()`
      */
     public function fetch(?int $fetchStyle, ?int $cursoOrinetation, ?int $cursorOffset);
 
     /**
      * Returns an array of arrays containing all the records in the result. This
      * method is affected by the active fetch flag set using
-     * `Phiz\Db\Result\Pdo::setFetchMode()`
+     * `Phalcon\Db\Result\Pdo::setFetchMode()`
      */
     public function fetchAll(): array;
 
     /**
      * Returns an array of strings that corresponds to the fetched row, or FALSE
      * if there are no more rows. This method is affected by the active fetch
-     * flag set using `Phiz\Db\Result\Pdo::setFetchMode()`
+     * flag set using `Phalcon\Db\Result\Pdo::setFetchMode()`
      */
     public function fetchArray();
 
@@ -61,7 +61,7 @@ interface ResultInterface
     public function numRows(): int;
 
     /**
-     * Changes the fetching mode affecting Phiz\Db\Result\Pdo::fetch()
+     * Changes the fetching mode affecting Phalcon\Db\Result\Pdo::fetch()
      */
     public function setFetchMode(int $fetchMode): bool;
 }

@@ -11,7 +11,7 @@
 
 declare(strict_types=1);
 
-namespace Phiz\Support\Str\Traits;
+namespace Phalcon\Support\Str\Traits;
 
 use function mb_convert_case;
 
@@ -20,7 +20,7 @@ use const MB_CASE_LOWER;
 /**
  * Trait LowerTrait
  *
- * @package Phiz\Support\Str\Traits
+ * @package Phalcon\Support\Str\Traits
  */
 trait LowerTrait
 {

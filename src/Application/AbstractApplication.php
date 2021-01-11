@@ -9,81 +9,87 @@
  * file that was distributed with this source code.
  */
 
-namespace Phiz\Application;
+declare(strict_types=1);
 
-use Phiz\Di\DiInterface;
-use Phiz\Di\Injectable;
-use Phiz\Events\EventsAwareInterface;
-use Phiz\Events\ManagerInterface;
+namespace Phalcon\Application;
+
+use Phalcon\Di\DiInterface;
+use Phalcon\Di\InjectionAwareInterface;
+use Phalcon\Di\Traits\InjectionAwareTrait;
+use Phalcon\Events\EventsAwareInterface;
+use Phalcon\Events\Traits\EventsAwareTrait;
 
 /**
- * Base class for Phiz\Cli\Console and Phiz\Mvc\Application.
+ * Base class for Phalcon\Cli\Console and Phalcon\Mvc\Application.
+ *
+ * Class AbstractApplication
+ *
+ * @package Phalcon\Application
+ *
+ * @property string $defaultModule
+ * @property array  $modules
  */
-abstract class AbstractApplication extends Injectable implements EventsAwareInterface
+abstract class AbstractApplication implements InjectionAwareInterface, EventsAwareInterface
 {
-    public function __construct( ?DiInterface $container = null)
-    {
-        $this->container = $container;
-    }
-    
-    /**
-     * @var string
-     */
-    protected $defaultModule;
+    use EventsAwareTrait;
+    use InjectionAwareTrait;
 
     /**
-     * @var null | ManagerInterface
+     * @var string|null
      */
-    protected $eventsManager;
+    protected ?string $defaultModule = null;
 
     /**
      * @var array
      */
-    protected $modules = [];
+    protected array $modules = [];
 
     /**
-     * Phiz\AbstractApplication constructor
+     * AbstractApplication constructor.
+     *
+     * @param DiInterface|null $container
      */
-
+    public function __construct(DiInterface $container = null)
+    {
+        $this->container = $container;
+    }
 
     /**
      * Returns the default module name
+     *
+     * @return string|null
      */
-    public function getDefaultModule() : string
+    public function getDefaultModule(): ?string
     {
         return $this->defaultModule;
     }
 
     /**
-     * Returns the internal event manager
-     */
-    public function getEventsManager()  : ManagerInterface
-    {
-        return $this->eventsManager;
-    }
-
-    /**
      * Gets the module definition registered in the application via module name
-     * TODO: return array | object
+     *
+     * @param string $name
+     *
+     * @return array|object
+     * @throws Exception
      */
-    public function getModule(string $name) 
+    public function getModule(string $name)
     {
-        //var module;
-        $module = $this->modules[$name] ?? null;
-        
-        if (is_null($module)) {
+        if (true !== isset($this->modules[$name])) {
             throw new Exception(
-                "Module '" . $name . "' isn't registered in the application container"
+                'Module "' . $name
+                . '" is not registered in the application container'
             );
         }
 
-        return $module;
+        return $this->modules[$name];
     }
 
     /**
      * Return the modules registered in the application
+     *
+     * @return array
      */
-    public function getModules() : array
+    public function getModules(): array
     {
         return $this->modules;
     }
@@ -105,11 +111,18 @@ abstract class AbstractApplication extends Injectable implements EventsAwareInte
      *     ]
      * );
      * ```
+     *
+     * @param array $modules
+     * @param bool  $merge
+     *
+     * @return $this
      */
-    public function registerModules(array $modules, bool $merge = false)  : AbstractApplication
-    {
-        if ($merge) {
-             $this->modules = array_merge($this->modules, $modules);
+    public function registerModules(
+        array $modules,
+        bool $merge = false
+    ): AbstractApplication {
+        if (true === $merge) {
+            $this->modules = array_merge($this->modules, $modules);
         } else {
             $this->modules = $modules;
         }
@@ -118,21 +131,17 @@ abstract class AbstractApplication extends Injectable implements EventsAwareInte
     }
 
     /**
-     * Sets the module name to be used if the router doesn't return a valid module
+     * Sets the module name to be used if the router doesn't return a valid
+     * module
+     *
+     * @param string $defaultModule
+     *
+     * @return $this
      */
-    public function setDefaultModule(string $defaultModule) : AbstractApplication
+    public function setDefaultModule(string $defaultModule): AbstractApplication
     {
-         $this->defaultModule = $defaultModule;
+        $this->defaultModule = $defaultModule;
 
         return $this;
     }
-
-    /**
-     * Sets the events manager
-     */
-    public function setEventsManager( ManagerInterface $eventsManager) : void
-    {
-        $this->eventsManager = $eventsManager;
-    }
 }
-

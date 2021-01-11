@@ -11,10 +11,10 @@
 
 declare(strict_types=1);
 
-namespace Phiz\Storage\Serializer;
+namespace Phalcon\Storage\Serializer;
 
 use InvalidArgumentException;
-use Phiz\Storage\Traits\StorageErrorHandlerTrait;
+use Phalcon\Storage\Traits\StorageErrorHandlerTrait;
 
 use function is_string;
 use function serialize;

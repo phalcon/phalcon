@@ -11,19 +11,18 @@
 
 declare(strict_types=1);
 
-namespace Phiz\Di\Service;
+namespace Phalcon\Di\Service;
 
-use Phiz\Di\DiInterface;
-use Phiz\Di\Exception;
-use Phiz\Di\Traits\DiExceptionsTrait;
-use Phiz\Di\Traits\DiInstanceTrait;
+use Phalcon\Di\DiInterface;
+use Phalcon\Di\Exception;
+use Phalcon\Di\Traits\DiExceptionsTrait;
+use Phalcon\Di\Traits\DiInstanceTrait;
 
 use function call_user_func;
 use function call_user_func_array;
-use function var_dump;
 
 /**
- * Phiz\Di\Service\Builder
+ * Phalcon\Di\Service\Builder
  *
  * This class builds instances based on complex definitions
  */

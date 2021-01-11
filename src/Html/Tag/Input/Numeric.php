@@ -9,12 +9,12 @@
 
 declare(strict_types=1);
 
-namespace Phiz\Html\Tag\Input;
+namespace Phalcon\Html\Tag\Input;
 
 /**
  * Class Numeric
  *
- * @package Phiz\Html\Tag\Input
+ * @package Phalcon\Html\Tag\Input
  *
  * @property string $type
  */

@@ -11,7 +11,7 @@
 
 declare(strict_types=1);
 
-namespace Phiz\Support\Traits;
+namespace Phalcon\Support\Traits;
 
 use function extension_loaded;
 use function function_exists;
@@ -20,7 +20,7 @@ use function ini_get;
 /**
  * Trait PhpFunctionTrait
  *
- * @package Phiz\Support\Traits
+ * @package Phalcon\Support\Traits
  */
 trait PhpFunctionTrait
 {

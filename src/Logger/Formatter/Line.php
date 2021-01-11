@@ -11,10 +11,10 @@
 
 declare(strict_types=1);
 
-namespace Phiz\Logger\Formatter;
+namespace Phalcon\Logger\Formatter;
 
 use Exception;
-use Phiz\Logger\Item;
+use Phalcon\Logger\Item;
 
 /**
  * Class Line

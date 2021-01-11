@@ -9,10 +9,10 @@
  * file that was distributed with this source code.
  */
 
-namespace Phiz\Db\Adapter;
-use Phiz\Reflect\Create;
-use Phiz\Factory\AbstractFactory;
-//use Phiz\Helper\Arr; // needless obfuscation
+namespace Phalcon\Db\Adapter;
+use Phalcon\Reflect\Create;
+use Phalcon\Factory\AbstractFactory;
+//use Phalcon\Helper\Arr; // needless obfuscation
 
 class PdoFactory extends AbstractFactory
 {
@@ -27,7 +27,7 @@ class PdoFactory extends AbstractFactory
     /**
      * Factory to create an instance from a Config object
      *
-     * @param array|\Phiz\Config config = [
+     * @param array|\Phalcon\Config config = [
      *     'adapter' => 'mysql',
      *     'options' => [
      *         'host' => 'localhost',
@@ -70,9 +70,9 @@ class PdoFactory extends AbstractFactory
     protected function getAdapters() : array
     {
         return [
-            "mysql"      => "Phiz\\Db\\Adapter\\Pdo\\Mysql",
-            "postgresql" =>  "Phiz\\Db\\Adapter\\Pdo\\Postgresql",
-            "sqlite"     =>  "Phiz\\Db\\Adapter\\Pdo\\Sqlite"
+            "mysql"      => "Phalcon\\Db\\Adapter\\Pdo\\Mysql",
+            "postgresql" =>  "Phalcon\\Db\\Adapter\\Pdo\\Postgresql",
+            "sqlite"     =>  "Phalcon\\Db\\Adapter\\Pdo\\Sqlite"
         ];
     }
 }
