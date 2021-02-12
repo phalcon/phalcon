@@ -90,11 +90,11 @@ abstract class AbstractElement implements ElementInterface
     /**
      * Adds a validator to the element
      */
-    public function addValidator(<ValidatorInterface> validator) -> <ElementInterface>
+    public function addValidator($validator):ElementInterface
     {
-        let this->validators[] = validator;
+        $this->validators[] = $validator;
 
-        return this;
+        return $this;
     }
 
     /**
@@ -103,82 +103,77 @@ abstract class AbstractElement implements ElementInterface
      * @param \Phalcon\Validation\ValidatorInterface[] validators
      * @param bool                                     merge
      */
-    public function addValidators(array! validators, bool merge = true) -> <ElementInterface>
+    public function addValidators(?array $validators, bool $merge = true):ElementInterface
     {
-        if merge {
-            let validators = array_merge(
-                this->validators,
-                validators
+
+        if ($merge) {
+            $validators = array_merge(
+                $this->validators,
+                $validators
             );
         }
 
-        let this->validators = validators;
+        $this->validators = $validators;
 
-        return this;
+        return $this;
     }
 
     /**
      * Appends a message to the internal message list
      */
-    public function appendMessage(<MessageInterface> message) -> <ElementInterface>
+    public function appendMessage(MessageInterface $message):ElementInterface
     {
-        this->messages->appendMessage(message);
+        $this->messages->appendMessage($message);
 
-        return this;
+        return $this;
     }
 
     /**
      * Clears element to its default value
      */
-    public function clear() -> <ElementInterface>
+    public function clear():ElementInterface
     {
-        var form  = this->form,
-            name  = this->name,
-            value = this->value;
+        $form = $this->form;
+        $name = $this->name;
+        $value = $this->value;
 
-        if typeof form == "object" {
-            form->clear(name);
+        if (gettype($form) == "object") {
+            $form->clear($name);
         } else {
-            Tag::setDefault(name, value);
+            Tag::setDefault($name, $value);
         }
 
-        return this;
+        return $this;
     }
 
     /**
      * Returns the value of an attribute if present
      */
-    public function getAttribute(string attribute, var defaultValue = null) -> var
+    public function getAttribute(string $attribute, $defaultValue = null)
     {
-        var attributes, value;
+        $attributes = $this->attributes;
 
-        let attributes = this->attributes;
-
-        if !fetch value, attributes[attribute] {
-            return defaultValue;
+        if(!array_key_exists($attribute, $attributes)){
+            return $defaultValue;
         }
 
-        return value;
+        return $attributes[attribute];
     }
 
     /**
      * Returns the default attributes for the element
      */
-    public function getAttributes() -> array
+    public function getAttributes():array
     {
-        var attributes;
-
-        let attributes = this->attributes;
-
-        return attributes;
+        return $this->attributes;
     }
 
     /**
      * Returns the default value assigned to the element
      */
-    public function getDefault() -> var
+    public function getDefault()
     {
-        return this->value;
+        return $this->value;
     }
 
     /**
@@ -188,46 +183,46 @@ abstract class AbstractElement implements ElementInterface
      */
     public function getFilters()
     {
-        return this->filters;
+        return $this->filters;
     }
 
     /**
      * Returns the parent form to the element
      */
-    public function getForm() -> <Form>
+    public function getForm():Form
     {
-        return this->form;
+        return $this->form;
     }
 
     /**
      * Returns the element label
      */
-    public function getLabel() -> string
+    public function getLabel():string
     {
-        return this->label;
+        return $this->label;
     }
 
     /**
      * Returns the messages that belongs to the element
      * The element needs to be attached to a form
      */
-    public function getMessages() -> <Messages>
+    public function getMessages():Messages
     {
-        return this->messages;
+        return $this->messages;
     }
 
     /**
      * Returns the element name
      */
-    public function getName() -> string
+    public function getName():string
     {
-        return this->name;
+        return $this->name;
     }
 
     /**
      * Returns the value of an option if present
      */
-    public function getUserOption(string option, var defaultValue = null) -> var
+    public function getUserOption(string $option, $defaultValue = null)
     {
         var value;
 
