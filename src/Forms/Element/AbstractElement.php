@@ -224,8 +224,6 @@ abstract class AbstractElement implements ElementInterface
      */
     public function getUserOption(string $option, $defaultValue = null)
     {
-        var value;
-
         if(!array_key_exists($option, $this->options)){
             return $defaultValue;
         }
@@ -244,7 +242,7 @@ abstract class AbstractElement implements ElementInterface
     /**
      * Returns the validators registered for the element
      */
-    public function getValidators():ValidatorInterface[]
+    public function getValidators():array
     {
         return $this->validators;
     }
