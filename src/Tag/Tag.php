@@ -40,48 +40,48 @@ class Tag
     const XHTML20 = 10;
     const XHTML5 = 11;
 
-    protected static autoEscape = true;
+    protected static $autoEscape = true;
 
     /**
      * DI Container
      */
-    protected static container;
+    protected static $container;
 
     /**
      * Pre-assigned values for components
      */
-    protected static displayValues;
+    protected static $displayValues;
 
-    protected static documentAppendTitle = null;
+    protected static $documentAppendTitle = null;
 
-    protected static documentPrependTitle = null;
+    protected static $documentPrependTitle = null;
 
     /**
      * HTML document title
      */
-    protected static documentTitle = null;
+    protected static $documentTitle = null;
 
-    protected static documentTitleSeparator = null;
+    protected static $documentTitleSeparator = null;
 
-    protected static documentType = 11;
+    protected static $documentType = 11;
 
-    protected static escaperService = null;
+    protected static $escaperService = null;
 
-    protected static urlService = null;
+    protected static $urlService = null;
 
     /**
      * Appends a text to current document title
      */
-    public static function appendTitle(var title) -> void
+    public static function appendTitle($title):void
     {
-        if self::documentAppendTitle === null {
-            let self::documentAppendTitle = [];
+        if (self::$documentAppendTitle === null) {
+            self::$documentAppendTitle = [];
         }
 
-        if typeof title == "array" {
-            let self::documentAppendTitle = title ;
+        if (gettype($title) == "array") {
+            self::$documentAppendTitle = title ;
         } else {
-            let self::documentAppendTitle[] = title ;
+            self::$documentAppendTitle[] = title ;
         }
     }
 
@@ -95,9 +95,9 @@ class Tag
      *     'value' => ''
      * ]
      */
-    public static function checkField(var parameters) -> string
+    public static function checkField($parameters):string
     {
-        return self::inputFieldChecked("checkbox", parameters);
+        return self::inputFieldChecked("checkbox", $parameters);
     }
 
     /**
@@ -110,9 +110,9 @@ class Tag
      *     'value' => ''
      * ]
      */
-    public static function colorField(var parameters) -> string
+    public static function colorField($parameters):string
     {
-        return self::inputField("color", parameters);
+        return self::inputField("color", $parameters);
     }
 
     /**
@@ -125,9 +125,9 @@ class Tag
      *     'value' => ''
      * ]
      */
-    public static function dateField(var parameters) -> string
+    public static function dateField($parameters):string
     {
-        return self::inputField("date", parameters);
+        return self::inputField("date", $parameters);
     }
 
     /**
@@ -140,9 +140,9 @@ class Tag
      *     'value' => ''
      * ]
     */
-    public static function dateTimeField(var parameters) -> string
+    public static function dateTimeField($parameters):string
     {
-        return self::inputField("datetime", parameters);
+        return self::inputField("datetime", $parameters);
     }
 
     /**
@@ -155,17 +155,17 @@ class Tag
      *     'value' => ''
      * ]
     */
-    public static function dateTimeLocalField(var parameters) -> string
+    public static function dateTimeLocalField($parameters):string
     {
-        return self::inputField("datetime-local", parameters);
+        return self::inputField("datetime-local", $parameters);
     }
 
     /**
      * Alias of Phalcon\Tag::setDefault()
      */
-    public static function displayTo(string! id, value) -> void
+    public static function displayTo(?string $id, $value):void
     {
-        self::setDefault(id, value);
+        self::setDefault($id, $value);
     }
 
     /**
@@ -178,15 +178,15 @@ class Tag
      *     'value' => ''
      * ]
      */
-    public static function emailField(var parameters) -> string
+    public static function emailField($parameters):string
     {
-        return self::inputField("email", parameters);
+        return self::inputField("email", $parameters);
     }
 
     /**
      * Builds a HTML close FORM tag
      */
-    public static function endForm() -> string
+    public static function endForm():string
     {
         return "</form>";
     }
@@ -201,9 +201,9 @@ class Tag
      *     'value' => ''
      * ]
      */
-    public static function fileField(var parameters) -> string
+    public static function fileField($parameters):string
     {
-        return self::inputField("file", parameters);
+        return self::inputField("file", $parameters);
     }
 
     /**
@@ -218,75 +218,79 @@ class Tag
      *     'id' => ''
      * ]
      */
-    public static function form(var parameters) -> string
+    public static function form($parameters):string
     {
-        var params, paramsAction, action, code;
+        $params = null;
 
-        if typeof parameters != "array" {
-            let params = [parameters];
+        if (gettype($parameters) != "array") {
+            $params = [$parameters];
         } else {
-            let params = parameters;
+            $params = $parameters;
         }
 
-        if !fetch paramsAction, params[0] {
-            fetch paramsAction, params["action"];
+        $paramsAction = null;
+        if(count($params) > 0){
+            $paramsAction = $params[0];
+        }
+        else{
+            $paramsAction = $params['action'];
         }
 
         /**
          * By default the method is POST
          */
-        if !isset params["method"] {
-            let params["method"] = "post";
+        if (!isset($params["method"])) {
+            $params["method"] = "post";
         }
 
-        let action = null;
+        $action = null;
 
-        if !empty paramsAction {
-            let action = self::getUrlService()->get(paramsAction);
+        if (!empty($paramsAction)) {
+            $action = self::getUrlService()->get($paramsAction);
         }
 
         /**
          * Check for extra parameters
          */
-        if fetch parameters, params["parameters"] {
-            let action .= "?" . parameters;
+        if(array_key_exists('parameters', $params)){
+            $action .= "?" . $params['parameters'];
         }
 
-        if !empty action {
-            let params["action"] = action;
+        if (!empty($action)) {
+            $params["action"] = $action;
         }
 
-        let code = self::renderAttributes("<form", params),
-            code .= ">";
+        $code = self::renderAttributes("<form", $params);
+        $code .= ">";
 
-        return code;
+        return $code;
     }
 
     /**
      * Converts texts into URL-friendly titles
      */
     public static function friendlyTitle(
-        string text,
-        string separator = "-",
-        bool lowercase = true,
-        var replace = null
-    ) -> string
+        string $text,
+        string $separator = "-",
+        bool $lowercase = true,
+        $replace = null
+    ):string
     {
-        var ex;
+        $ex;
 
         try {
-            return Str::friendly(text, separator, lowercase, replace);
-        } catch HelperException, ex {
-            throw new Exception(ex->getMessage());
+            return Str::friendly($text, $separator, $lowercase, $replace);
+        } catch (HelperException $ex) {
+            throw new Exception($ex->getMessage());
         }
     }
 
     /**
      * Get the document type declaration of content
      */
-    public static function getDocType() -> string
+    public static function getDocType():string
     {
-        switch self::documentType
+        switch (self::documentType)
         {
             case 1:  return "<!DOCTYPE html PUBLIC \"-//W3C//DTD HTML 3.2 Final//EN\">" . PHP_EOL;
             /* no break */
@@ -320,21 +324,21 @@ class Tag
             /* no break */
         }
 
-        return "";
+        return '';
     }
 
     /**
      * Obtains the 'escaper' service if required
      */
-    public static function getEscaper(array! params) -> <EscaperInterface> | null
+    public static function getEscaper(?array $params):EscaperInterface
     {
-        var autoescape;
+        $autoescape = null;
 
-        if !fetch autoescape, params["escape"] {
-            let autoescape = self::autoEscape;
+        if(array_key_exists('escape', $params)){
+            $autoescape = self::autoEscape;
         }
 
-        if !autoescape {
+        if (!$autoescape) {
             return null;
         }
 
@@ -344,110 +348,104 @@ class Tag
     /**
      * Internally gets the request dispatcher
      */
-    public static function getDI() -> <DiInterface>
+    public static function getDI():DiInterface
     {
-        var di;
+        $di = self::container;
 
-        let di = self::container;
-
-        if typeof di != "object" {
-            let di = Di::getDefault();
+        if (gettype($di) != "object") {
+            $di = Di::getDefault();
         }
 
-        return di;
+        return $di;
     }
 
     /**
      * Returns an Escaper service from the default DI
      */
-    public static function getEscaperService() -> <EscaperInterface>
+    public static function getEscaperService():EscaperInterface
     {
-        var escaper, container;
+        $escaper = self::escaperService;
 
-        let escaper = self::escaperService;
+        if (gettype($escaper) != "object") {
+            $container = self::getDI();
 
-        if typeof escaper != "object" {
-            let container = self::getDI();
 
-            if unlikely typeof container != "object" {
+            if(gettype($container) != 'object'){
                 throw new Exception(
                     Exception::containerServiceNotFound("the 'escaper' service")
                 );
             }
 
-            let escaper = <EscaperInterface> container->getShared("escaper"),
-                self::escaperService = escaper;
+            $escaper = $container->getShared("escaper");
+            self::$escaperService = $escaper;
         }
 
-        return escaper;
+        return $escaper;
     }
 
     /**
      * Gets the current document title. The title will be automatically escaped.
      */
-    public static function getTitle(bool prepend = true, bool append = true) -> string
+    public static function getTitle(bool $prepend = true, bool $append = true):string
     {
-        var items, output, title, documentTitle, documentAppendTitle,
-            documentPrependTitle, documentTitleSeparator, escaper;
+        $escaper = self::getEscaper(["escape" => true]);
+        $items = [];
+        $output = '';
+        $documentTitle = $escaper->escapeHtml(self::documentTitle);
 
-        let escaper = <EscaperInterface> self::getEscaper(["escape": true]);
-        let items = [];
-        let output = "";
-        let documentTitle = escaper->escapeHtml(self::documentTitle);
-
-        let documentTitleSeparator = escaper->escapeHtml(
+        $documentTitleSeparator = $escaper->escapeHtml(
             self::documentTitleSeparator
         );
 
-        if prepend {
-            if self::documentPrependTitle === null {
-                let self::documentPrependTitle = [];
+        if ($prepend) {
+            if (self::documentPrependTitle === null) {
+                self::$documentPrependTitle = [];
             }
 
-            let documentPrependTitle = self::documentPrependTitle;
+            $documentPrependTitle = self::documentPrependTitle;
 
-            if !empty documentPrependTitle {
-                var tmp = array_reverse(documentPrependTitle);
+            if (!empty($documentPrependTitle)) {
+                $tmp = array_reverse($documentPrependTitle);
 
-                for title in tmp {
-                    let items[] = escaper->escapeHtml(title);
+                foreach ($tmp as $title) {
+                    $items[] = $escaper->escapeHtml($title);
                 }
             }
         }
 
-        if !empty documentTitle {
-            let items[] = documentTitle;
+        if (!empty($documentTitle)) {
+            $items[] = $documentTitle;
         }
 
-        if append {
-            if self::documentAppendTitle === null {
-                let self::documentAppendTitle = [];
+        if ($append) {
+            if (self::documentAppendTitle === null) {
+                self::$documentAppendTitle = [];
             }
 
-            let documentAppendTitle = self::documentAppendTitle;
+            $documentAppendTitle = self::documentAppendTitle;
 
-            if !empty documentAppendTitle {
-                for title in documentAppendTitle {
-                    let items[] = escaper->escapeHtml(title);
+            if (!empty($documentAppendTitle)) {
+                foreach($documentAppendTitle as $title) {
+                    $items[] = $escaper->escapeHtml($title);
                 }
             }
         }
 
-        if empty documentTitleSeparator {
-            let documentTitleSeparator = "";
+        if (empty($documentTitleSeparator)) {
+            $documentTitleSeparator = "";
         }
 
-        if !empty items {
-            let output = implode(documentTitleSeparator, items);
+        if (!empty($items)) {
+            $output = implode($documentTitleSeparator, $items);
         }
 
-        return output;
+        return $output;
     }
 
     /**
      * Gets the current document title separator
      */
-    public static function getTitleSeparator() -> string
+    public static function getTitleSeparator():string
     {
         return self::documentTitleSeparator;
     }
@@ -455,63 +453,60 @@ class Tag
     /**
      * Returns a URL service from the default DI
      */
-    public static function getUrlService() -> <UrlInterface>
+    public static function getUrlService():UrlInterface
     {
-        var url, container;
+        $url = self::urlService;
 
-        let url = self::urlService;
+        if (gettype($url) != "object") {
+            $container = self::getDI();
 
-        if typeof url != "object" {
-            let container = self::getDI();
-
-            if unlikely typeof container != "object" {
+            if (gettype($container) != "object") {
                 throw new Exception(
                     Exception::containerServiceNotFound("the 'url' service")
                 );
             }
 
-            let url = <UrlInterface> container->getShared("url"),
-                self::urlService = url;
+            $url = $container->getShared("url");
+            self::$urlService = url;
         }
 
-        return url;
+        return $url;
     }
 
     /**
      * Every helper calls this function to check whether a component has a
      * predefined value using Phalcon\Tag::setDefault() or value from $_POST
      */
-    public static function getValue(var name, array params = [])
+    public static function getValue($name, array $params = [])
     {
-        var value;
-
-        if !fetch value, params["value"] {
-            /**
-             * Check if there is a predefined value for it
-             */
-            if !fetch value, self::displayValues[name] {
-                /**
-                 * Check if there is a post value for the item
-                 */
-                if !fetch value, _POST[name] {
+        if(!array_key_exists('value', $params)){
+            if(!array_key_exists($name, self::displayValues)){
+                if(!array_key_exists($name, $_POST)){
                     return null;
                 }
+                else{
+                    return $_POST[$name];
+                }
+            }
+            else{
+                return self::displayValues[$name];
             }
         }
-
-        return value;
+        else{
+            return $params['value'];
+        }
     }
 
     /**
      * Check if a helper has a default value set using Phalcon\Tag::setDefault()
      * or value from $_POST
      */
-    public static function hasValue(var name) -> bool
+    public static function hasValue($name):bool
     {
         /**
          * Check if there is a predefined or a POST value for it
          */
-        return isset self::displayValues[name] || isset _POST[name];
+        return (isset(self::displayValues[$name]) || isset ($_POST[$name]));
     }
 
     /**
@@ -525,9 +520,9 @@ class Tag
      *     'value' => ''
      * ]
      */
-    public static function hiddenField(var parameters) -> string
+    public static function hiddenField($parameters):string
     {
-        return self::inputField("hidden", parameters);
+        return self::inputField("hidden", $parameters);
     }
 
     /**
@@ -540,11 +535,11 @@ class Tag
      *     'name' => ''
      * ]
      */
-    public static function image(var parameters = null, bool local = true) -> string
+    public static function image($parameters = null, bool $local = true):string
     {
         var params, code, src;
 
-        if typeof parameters != "array" {
+        if (gettype($parameters) != "array") {
             let params = [parameters];
         } else {
             let params = parameters;

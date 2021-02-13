@@ -38,9 +38,6 @@ abstract class Select
      */
     public static function selectField($parameters, $data = null):string
     {
-        var params, name, id, value, useEmpty, code, emptyValue, emptyText,
-            options, using;
-
         $params = null;
         if (gettype($parameters) != "array") {
             $params = [$parameters, $data];
@@ -52,7 +49,7 @@ abstract class Select
             return $this->forms[$name];
         }
         else{
-            throw new Exception("There is no form with name='" . name . "'");
+            throw new Exception("There is no form with name='" . $name . "'");
         }
 
         $id = null;
@@ -112,7 +109,7 @@ abstract class Select
                 unset($params["emptyText"]);
             }
 
-            unset $params["useEmpty"];
+            unset($params["useEmpty"]);
         }
 
         $options = null;
@@ -163,60 +160,58 @@ abstract class Select
                 "</option>" . PHP_EOL
             );
         } else {
-            if typeof options == "array" {
+            if (gettype($options) == "array") {
                 /**
                  * Create the SELECT's option from an array
                  */
-                let code .= self::optionsFromArray(
-                    options,
-                    value,
+                $code .= self::optionsFromArray(
+                    $options,
+                    $value,
                     "</option>" . PHP_EOL
                 );
             }
         }
 
-        let code .= "</select>";
+        $code .= "</select>";
 
-        return code;
+        return $code;
     }
 
     /**
      * Generate the OPTION tags based on an array
      */
-    private static function optionsFromArray(array data, var value, string closeOption) -> string
+    private static function optionsFromArray(array $data, $value, string $closeOption):string
     {
-        var strValue, strOptionValue, code, optionValue, optionText, escaped;
+        $code = '';
 
-        let code = "";
+        foreach($data as $optionValue => $optionText) {
+            $escaped = htmlspecialchars($optionValue);
 
-        for optionValue, optionText in data {
-            let escaped = htmlspecialchars(optionValue);
-
-            if typeof optionText == "array" {
-                let code .= "\t<optgroup label=\"" . escaped . "\">" . PHP_EOL . self::optionsFromArray(optionText, value, closeOption) . "\t</optgroup>" . PHP_EOL;
+            if (gettype($optionText) == "array") {
+                $code .= "\t<optgroup label=\"" . $escaped . "\">" . PHP_EOL . self::optionsFromArray($optionText, $value, $closeOption) . "\t</optgroup>" . PHP_EOL;
 
                 continue;
             }
 
-            if typeof value == "array" {
-                if in_array(optionValue, value) {
-                    let code .= "\t<option selected=\"selected\" value=\"" . escaped . "\">" . optionText . closeOption;
+            if (gettype($value == "array")) {
+                if (in_array($optionValue, $value)) {
+                    $code .= "\t<option selected=\"selected\" value=\"" . $escaped . "\">" . $optionText . $closeOption;
                 } else {
-                    let code .= "\t<option value=\"" . escaped . "\">" . optionText . closeOption;
+                    $code .= "\t<option value=\"" . $escaped . "\">" . $optionText . $closeOption;
                 }
             } else {
-                let strOptionValue = (string) optionValue,
-                    strValue = (string) value;
+                $strOptionValue = (string) $optionValue;
+                $strValue = (string) $value;
 
-                if strOptionValue === strValue {
-                    let code .= "\t<option selected=\"selected\" value=\"" . escaped . "\">" . optionText . closeOption;
+                if ($strOptionValue === $strValue) {
+                    $code .= "\t<option selected=\"selected\" value=\"" . $escaped . "\">" . $optionText . $closeOption;
                 } else {
-                    let code .= "\t<option value=\"" . escaped . "\">" . optionText . closeOption;
+                    $code .= "\t<option value=\"" . $escaped . "\">" . $optionText . $closeOption;
                 }
             }
         }
 
-        return code;
+        return $code;
     }
 
     /**
@@ -225,71 +220,68 @@ abstract class Select
      * @param array using
      */
     private static function optionsFromResultset(
-        <ResultsetInterface> resultset,
-        var using,
-        var value,
-        string closeOption
-    ) -> string
+        ResultsetInterface $resultset,
+        $using,
+        $value,
+        string $closeOption
+    ):string
     {
-        var code, params, option, usingZero, usingOne, escaper, optionValue,
-            optionText, strValue, strOptionValue;
+        $code = "";
+        $params = null;
 
-        let code = "";
-        let params = null;
-
-        if typeof using == "array" {
-            if unlikely count(using) != 2 {
+        if (gettype($using) == "array") {
+            if (count($using) < 2) {
                 throw new Exception("Parameter 'using' requires two values");
             }
 
-            let usingZero = using[0],
-                usingOne = using[1];
+            $usingZero = $using[0];
+            $usingOne = $using[1];
         }
 
-        let escaper = <EscaperInterface> BaseTag::getEscaperService();
+        $escaper = BaseTag::getEscaperService();
 
-        for option in iterator(resultset) {
-            if typeof using == "array" {
-                if typeof option == "object" {
-                    if method_exists(option, "readAttribute") {
-                        let optionValue = option->readAttribute(usingZero);
-                        let optionText = option->readAttribute(usingOne);
+        foreach($resultset as $option) {
+            if (gettype($using) == "array") {
+                if (gettype($option == "object")) {
+                    if (method_exists($option, "readAttribute")) {
+                        $optionValue = $option->readAttribute($usingZero);
+                        $optionText = $option->readAttribute($usingOne);
                     } else {
-                        let optionValue = option->usingZero;
-                        let optionText = option->usingOne;
+                        $optionValue = $option->usingZero;
+                        $optionText = $option->usingOne;
                     }
                 } else {
-                    if unlikely typeof option != "array" {
+                    if (gettype($option) != "array") {
                         throw new Exception(
                             "Resultset returned an invalid value"
                         );
                     }
 
-                    let optionValue = option[usingZero];
-                    let optionText = option[usingOne];
+                    $optionValue = $option[$usingZero];
+                    $optionText = $option[$usingOne];
                 }
 
-                let optionValue = escaper->escapeHtmlAttr(optionValue);
-                let optionText = escaper->escapeHtml(optionText);
+                $optionValue = $escaper->escapeHtmlAttr($optionValue);
+                $optionText = $escaper->escapeHtml($optionText);
 
                 /**
                  * If the value is equal to the option's value we mark it as
                  * selected
                  */
-                if typeof value == "array" {
-                    if in_array(optionValue, value) {
-                        let code .= "\t<option selected=\"selected\" value=\"" . optionValue . "\">" . optionText . closeOption;
+                if (gettype($value) == "array") {
+                    if (in_array($optionValue, $value)) {
+                        $code .= "\t<option selected=\"selected\" value=\"" . $optionValue . "\">" . $optionText . $closeOption;
                     } else {
-                        let code .= "\t<option value=\"" . optionValue . "\">" . optionText . closeOption;
+                        $code .= "\t<option value=\"" . $optionValue . "\">" . $optionText . $closeOption;
                     }
                 } else {
-                    let strOptionValue = (string) optionValue,
-                        strValue = (string) value;
+                    $strOptionValue = (string) $optionValue;
+                    $strValue = (string) value;
 
-                    if strOptionValue === strValue {
-                        let code .= "\t<option selected=\"selected\" value=\"" . strOptionValue . "\">" . optionText . closeOption;
+                    if ($strOptionValue === $strValue) {
+                        $code .= "\t<option selected=\"selected\" value=\"" . $strOptionValue . "\">" . $optionText . $closeOption;
                     } else {
-                        let code .= "\t<option value=\"" . strOptionValue . "\">" . optionText . closeOption;
+                        $code .= "\t<option value=\"" . $strOptionValue . "\">" . $optionText . $closeOption;
                     }
                 }
             } else {
@@ -297,17 +289,17 @@ abstract class Select
                 /**
                  * Check if using is a closure
                  */
-                if typeof using == "object" {
-                    if params === null {
-                        let params = [];
+                if (gettype($using == "object")) {
+                    if ($params === null) {
+                        $params = [];
                     }
 
-                    let params[0] = option;
-                    let code .= call_user_func_array(using, params);
+                    $params[0] = $option;
+                    $code .= call_user_func_array($using, $params);
                 }
             }
         }
 
-        return code;
+        return $code;
     }
 }
