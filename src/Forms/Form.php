@@ -580,7 +580,7 @@ class Form extends Injectable implements Countable, Iterator, AttributesInterfac
 
         $validation = $this->getValidation();
 
-        if (gettype($validation) != "object" || !($validation instanceof ValidationInterface) {
+        if ((gettype($validation) != "object") || !($validation instanceof ValidationInterface)) {
             // Create an implicit validation
             $validation = new Validation();
         }
