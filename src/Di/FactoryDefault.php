@@ -20,6 +20,10 @@ use Phalcon\Filter\FilterFactory;
 use Phalcon\Html\Escaper;
 use Phalcon\Html\TagFactory;
 use Phalcon\Security\Security;
+use Phalcon\Mvc\Router;
+use Phalcon\Http\Request;
+use Phalcon\Http\Response;
+use Phalcon\Mvc\Dispatcher;
 
 /**
  * This is a variant of the standard Phalcon\Di. By default it automatically
@@ -42,6 +46,7 @@ class FactoryDefault extends Di
         $assets     = new AssetsManager($tagFactory);
 
         $this->services = [
+            'dispatcher'    => new Service(Dispatcher::class, true),
             'assets'        => new Service($assets, true),
             'crypt'         => new Service(Crypt::class, true),
             'escaper'       => new Service(Escaper::class, true),
@@ -49,6 +54,9 @@ class FactoryDefault extends Di
             'filter'        => new Service($filter->newInstance(), true),
             'security'      => new Service(Security::class, true),
             'tagFactory'    => new Service($tagFactory, true),
+            'request'       => new Service(Request::class, true),
+            'response'      => new Service(Response::class, true), 
+            'router'        => new Service(Router::class, true)
         ];
 //        let filter = new FilterFactory();
 //

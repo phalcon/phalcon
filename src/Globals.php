@@ -1,6 +1,6 @@
 <?php
 
-namespace Phiz {
+namespace Phalcon {
     /*
      * Declare global variable and functions
      * which can be accessible at top script level.

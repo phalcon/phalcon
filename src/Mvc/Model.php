@@ -41,7 +41,7 @@ use Phalcon\Mvc\Model\ValidationFailed;
 use Phalcon\Validation\ValidationInterface;
 use Serializable;
 
-use Phalcon\Support\Str\Camelize;
+use Phalcon\Support\HelperFactory;
 
 /**
  * Phalcon\Mvc\Model
@@ -134,6 +134,7 @@ abstract class Model extends AbstractInjectionAware implements EntityInterface, 
     // true means exists returned false. False means have not checked.
     protected bool $existsFailed = false;
 
+    protected $camelizer;
     /**
      * Phalcon\Mvc\Model constructor
      */
@@ -156,7 +157,7 @@ abstract class Model extends AbstractInjectionAware implements EntityInterface, 
                 )
             );
         }
-
+        $this->camelizer = (new HelperFactory())->newInstance('camelize');
         $this->container = $container;
 
         /**
@@ -308,7 +309,9 @@ abstract class Model extends AbstractInjectionAware implements EntityInterface, 
         /**
          * Check if the property has getters
          */
-        $method = "get" . Camelize::fn($property);
+        $camelize = $this->getCamelizer();
+        
+        $method = "get" . $camelize($property);
 
         if (method_exists($this, $method)) {
             return $this->{$method}();
@@ -345,7 +348,8 @@ abstract class Model extends AbstractInjectionAware implements EntityInterface, 
             $result = true;
         } else {
             // If this is a property
-            $method = "get" . Camelize::fn($property);
+            $camelize = $this->getCamelizer();
+            $method = "get" . $camelize($property);
 
             $result = method_exists($this, $method);
         }
@@ -4340,8 +4344,8 @@ abstract class Model extends AbstractInjectionAware implements EntityInterface, 
             "setWriteConnectionService" => 1
         ];
 
-
-        $possibleSetter = "set" . Camelize::fn($property);
+        $camelize = $this->getCamelizer();
+        $possibleSetter = "set" . $camelize($property);
 
         if (!method_exists($this, $possibleSetter)) {
             return false;
@@ -5442,6 +5446,10 @@ abstract class Model extends AbstractInjectionAware implements EntityInterface, 
         $this->getModelsMetaData()->setAutomaticUpdateAttributes($this, $keysAttributes);
     }
 
+    protected function getCamelizer() : object
+    {
+        return $this->camelizer;
+    }
     /**
      * Sets if a model must use dynamic update instead of the all-field update
      *

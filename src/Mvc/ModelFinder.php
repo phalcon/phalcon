@@ -14,7 +14,7 @@ use Phalcon\Mvc\Model\{
 };
 use Phalcon\Mvc\Model\ResultsetInterface;
 use Phalcon\Mvc\Model\Resultset\Simple;
-use Phalcon\Support\Str\Uncamelize;
+use Phalcon\Support\HelperFactory;
 use Phalcon\Reflect\Create;
 use Phalcon\Db\Column;
 
@@ -35,13 +35,14 @@ class ModelFinder implements ModelFinderInterface, InjectionAwareInterface {
     protected ?ModelInterface $model = null;
     protected ?MetaDataInterface $metaData = null;
     protected $bindTypes = null;
-    
+    protected ?object $uncamelize = null;
     protected ?DiInterface $container = null;
 
     public function __construct(?DiInterface $container = null) {
         if (is_object($container)) {
             $this->setDI($container);
         }
+        $this->uncamelize = (new HelperFactory())->newInstance("uncamelize");
     }
 
     public function setDI(DiInterface $container): void {
@@ -196,7 +197,8 @@ class ModelFinder implements ModelFinderInterface, InjectionAwareInterface {
             $field = $attrName;
         } else {
             $lcfield = lcfirst($attrName);
-            $field = Uncamelize::fn($attrName);
+            $fn = $this->uncamelize;
+            $field = $fn($attrName);
             if (!isset($propMap[$field])) {
                 throw new Exception(
                                 "Cannot resolve attribute '" . $attrName . "' in the model"
@@ -258,7 +260,8 @@ class ModelFinder implements ModelFinderInterface, InjectionAwareInterface {
             $field = $attrName;
         } else {
             $lcfield = lcfirst($attrName);
-            $field = Uncamelize::fn($attrName);
+            $fn  = $this->uncamelize;
+            $field = $fn($attrName);
             if (!isset($propMap[$field])) {
                 throw new Exception(
                                 "Cannot resolve attribute '" . $attrName . "' in the model"
