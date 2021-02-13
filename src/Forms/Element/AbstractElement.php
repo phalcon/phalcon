@@ -292,7 +292,7 @@ abstract class AbstractElement implements ElementInterface
     /**
      * Generate the HTML to label the element
      */
-    public function label(array attributes = []):string
+    public function label(array $attributes = []):string
     {
         $name = null;
 
