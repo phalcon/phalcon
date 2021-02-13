@@ -363,7 +363,7 @@ abstract class AbstractElement implements ElementInterface
                  */
 
                 if(array_key_exists('value', $mergedAttributes)){
-                    if $mergedAttributes["value"] == $value {
+                    if ($mergedAttributes["value"] == $value) {
                         $mergedAttributes["checked"] = "checked";
                     }
                 }
