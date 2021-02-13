@@ -15,7 +15,7 @@ namespace Phalcon\Test\Integration\Forms\Element\Check;
 
 use IntegrationTester;
 use Phalcon\Forms\Element\Check;
-use Phalcon\Tag;
+use Phalcon\Html\TagFactory;
 use Phalcon\Tests\Fixtures\Traits\DiTrait;
 
 class RenderCest
