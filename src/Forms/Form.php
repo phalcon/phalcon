@@ -431,12 +431,9 @@ class Form extends Injectable implements Countable, Iterator, AttributesInterfac
      */
     public function getValue(?string $name)
     {
-        var entity, value, data, internalEntity, element;
-        array forbidden;
-        string method;
-
         $entity = $this->entity;
-        $data = $this->data;
+        $data   = $this->data;
+        $method = null;
 
         /**
          * Check if form has a getter
@@ -472,18 +469,18 @@ class Form extends Injectable implements Countable, Iterator, AttributesInterfac
         }
 
         $forbidden = [
-            "attributes" =>    true,
-            "validation" =>    true,
-            "action" =>        true,
-            "useroption" =>    true,
-            "useroptions" =>   true,
-            "entity" =>        true,
-            "elements" =>      true,
-            "messages" =>      true,
-            "messagesfor" =>   true,
-            "label" =>         true,
-            "value" =>         true,
-            "di"=>            true,
+            "attributes"    => true,
+            "validation"    => true,
+            "action"        => true,
+            "useroption"    => true,
+            "useroptions"   => true,
+            "entity"        => true,
+            "elements"      => true,
+            "messages"      => true,
+            "messagesfor"   => true,
+            "label"         => true,
+            "value"         => true,
+            "di"            => true,
             "eventsmanager" => true
         ];
 
