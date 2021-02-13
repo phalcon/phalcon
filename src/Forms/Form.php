@@ -248,13 +248,6 @@ class Form extends Injectable implements Countable, Iterator, AttributesInterfac
                     unset($data[$field]);
                 }
 
-                if fetch element, elements[field] {
-                    Tag::setDefault(
-                        element->getName(),
-                        element->getDefault()
-                    );
-                }
-
                 if(array_key_exists($field, $elements)){
                     $element = $elements[$field];
 
