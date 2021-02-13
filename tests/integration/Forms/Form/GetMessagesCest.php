@@ -19,7 +19,7 @@ use Phalcon\Forms\Form;
 use Phalcon\Messages\Message;
 use Phalcon\Messages\Messages;
 use Phalcon\Tag;
-use Phalcon\Test\Fixtures\Traits\DiTrait;
+use Phalcon\Tests\Fixtures\Traits\DiTrait;
 use Phalcon\Validation;
 use Phalcon\Validation\Validator\PresenceOf;
 use Phalcon\Validation\Validator\Regex;

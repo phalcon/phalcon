@@ -17,7 +17,7 @@ use IntegrationTester;
 use Phalcon\Forms\Element\Text;
 use Phalcon\Forms\Form;
 use Phalcon\Tag;
-use Phalcon\Test\Fixtures\Traits\DiTrait;
+use Phalcon\Tests\Fixtures\Traits\DiTrait;
 use stdClass;
 
 class RenderCest

@@ -16,7 +16,7 @@ namespace Phalcon\Test\Integration\Forms\Element\Date;
 use IntegrationTester;
 use Phalcon\Forms\Element\Date;
 use Phalcon\Tag;
-use Phalcon\Test\Fixtures\Traits\DiTrait;
+use Phalcon\Tests\Fixtures\Traits\DiTrait;
 
 class ToStringCest
 {

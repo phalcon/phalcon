@@ -15,7 +15,7 @@ namespace Phalcon\Test\Integration\Forms\Element\Select;
 
 use IntegrationTester;
 use Phalcon\Forms\Element\Select;
-use Phalcon\Test\Fixtures\Traits\DiTrait;
+use Phalcon\Tests\Fixtures\Traits\DiTrait;
 
 class GetSetNameCest
 {

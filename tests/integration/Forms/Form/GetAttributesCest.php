@@ -17,7 +17,7 @@ use IntegrationTester;
 use Phalcon\Forms\Form;
 use Phalcon\Html\Attributes\AttributesInterface;
 use Phalcon\Tag;
-use Phalcon\Test\Fixtures\Traits\DiTrait;
+use Phalcon\Tests\Fixtures\Traits\DiTrait;
 
 class GetAttributesCest
 {

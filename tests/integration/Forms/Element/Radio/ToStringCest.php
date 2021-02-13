@@ -16,7 +16,7 @@ namespace Phalcon\Test\Integration\Forms\Element\Radio;
 use IntegrationTester;
 use Phalcon\Forms\Element\Radio;
 use Phalcon\Tag;
-use Phalcon\Test\Fixtures\Traits\DiTrait;
+use Phalcon\Tests\Fixtures\Traits\DiTrait;
 
 class ToStringCest
 {
