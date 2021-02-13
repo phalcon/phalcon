@@ -275,7 +275,7 @@ class Form extends Injectable implements Countable, Iterator, AttributesInterfac
     /**
      * Returns the current element in the iterator
      */
-    public function current():ElementInterface | bool
+    public function current()
     {
         $element = null;
 
@@ -380,7 +380,7 @@ class Form extends Injectable implements Countable, Iterator, AttributesInterfac
      * }
      * ```
      */
-    public function getMessages():Messages|array
+    public function getMessages()
     {
         $messages = $this->messages;
 
@@ -559,10 +559,10 @@ class Form extends Injectable implements Countable, Iterator, AttributesInterfac
         /**
          * If the user doesn't pass an entity we use the one in this_ptr->entity
          */
-        if (gettype(entity) == "object") {
+        if (gettype($entity) == "object") {
             $this->bind($data, $entity);
         } else {
-            if (gettype(this->entity) == "object") {
+            if (gettype($this->entity) == "object") {
                 $this->bind($data, $this->entity);
             }
         }
@@ -688,8 +688,6 @@ class Form extends Injectable implements Countable, Iterator, AttributesInterfac
      */
     public function render(?string $name, array $attributes = []):string
     {
-        var element;
-
         if(array_key_exists($name, $this->elements)){
             return $this->elements[$name]->render($attributes);
         }
