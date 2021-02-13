@@ -103,7 +103,7 @@ interface ElementInterface
     /**
      * Returns the validators registered for the element
      */
-    public function getValidators():ValidatorInterface[];
+    public function getValidators():array;
 
     /**
      * Returns the element's value
