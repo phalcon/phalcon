@@ -226,195 +226,196 @@ abstract class AbstractElement implements ElementInterface
     {
         var value;
 
-        if !fetch value, this->options[option] {
-            return defaultValue;
+        if(!array_key_exists($option, $this->options)){
+            return $defaultValue;
         }
 
-        return value;
+        return $this->options[$option];
     }
 
     /**
      * Returns the options for the element
      */
-    public function getUserOptions() -> array
+    public function getUserOptions():array
     {
-        return this->options;
+        return $this->options;
     }
 
     /**
      * Returns the validators registered for the element
      */
-    public function getValidators() -> <ValidatorInterface[]>
+    public function getValidators():ValidatorInterface[]
     {
-        return this->validators;
+        return $this->validators;
     }
 
     /**
      * Returns the element's value
      */
-    public function getValue() -> var
+    public function getValue()
     {
-        var name  = this->name,
-            form  = this->form,
-            value = null;
+        $name  = $this->name;
+        $form  = $this->form;
+        $value = null;
 
         /**
          * If element belongs to the form, get value from the form
          */
-        if typeof form == "object" {
-            return form->getValue(name);
+        if (gettyp($form) == "object") {
+            return $form->getValue($name);
         }
 
         /**
          * Otherwise check Phalcon\Tag
          */
-        if Tag::hasValue(name) {
-            let value = Tag::getValue(name);
+        if (Tag::hasValue($name)) {
+            $value = Tag::getValue($name);
         }
 
         /**
          * Assign the default value if there is no form available or
          * Phalcon\Tag returns null
          */
-        if value === null {
-            let value = this->value;
+        if (null === $value) {
+            $value = $this->value;
         }
 
-        return value;
+        return $value;
     }
 
     /**
      * Checks whether there are messages attached to the element
      */
-    public function hasMessages() -> bool
+    public function hasMessages():bool
     {
-        return count(this->messages) > 0;
+        return (count($this->messages) > 0);
     }
 
     /**
      * Generate the HTML to label the element
      */
-    public function label(array attributes = []) -> string
+    public function label(array attributes = []):string
     {
-        var internalAttributes, label, name, code;
+        $name = null;
+
 
         /**
          * Check if there is an "id" attribute defined
          */
-        let internalAttributes = this->getAttributes();
+        $internalAttributes = $this->getAttributes();
 
-        if !fetch name, internalAttributes["id"] {
-            let name = this->name;
+        if(!array_key_exists('id', $internalAttributes)){
+            $name = $this->name;
         }
 
-        if !isset attributes["for"] {
-            let attributes["for"] = name;
+        if (!isset($attributes["for"])) {
+            $attributes["for"] = $name;
         }
 
-        let code = Tag::renderAttributes("<label", attributes);
+        $code = Tag::renderAttributes("<label", $attributes);
 
         /**
          * Use the default label or leave the same name as label
          */
-        let label = this->label;
+        $label = $this->label;
 
-        if label || is_numeric(label) {
-            let code .= ">" . label . "</label>";
+        if ($label || is_numeric($label)) {
+            $code .= ">" . $label . "</label>";
         } else {
-            let code .= ">" . name . "</label>";
+            $code .= ">" . $name . "</label>";
         }
 
-        return code;
+        return $code;
     }
 
     /**
      * Returns an array of prepared attributes for Phalcon\Tag helpers
      * according to the element parameters
      */
-    public function prepareAttributes(array attributes = [], bool useChecked = false) -> array
+    public function prepareAttributes(array $attributes = [], bool $useChecked = false):array
     {
-        var value, name, mergedAttributes, defaultAttributes, currentValue;
+        $name = $messagesthis->name;
 
-        let name = this->name;
-
-        let attributes[0] = name;
+        $attributes[0] = $name;
 
         /**
          * Merge passed parameters with default ones
          */
-        let defaultAttributes = this->attributes;
+        $defaultAttributes = $this->attributes;
 
-        let mergedAttributes = array_merge(
-            defaultAttributes,
-            attributes
+        $mergedAttributes = array_merge(
+            $defaultAttributes,
+            $attributes
         );
 
         /**
          * Get the current element value
          */
-        let value = this->getValue();
+        $value = $this->getValue();
 
         /**
          * If the widget has a value set it as default value
          */
-        if value !== null {
-            if useChecked {
+        if ($value !== null) {
+            if ($useChecked) {
                 /**
                  * Check if the element already has a default value, compare it
                  * with the one in the attributes, if they are the same mark the
                  * element as checked
                  */
-                if fetch currentValue, mergedAttributes["value"] {
-                    if currentValue == value {
-                        let mergedAttributes["checked"] = "checked";
+
+                if(array_key_exists('value', $mergedAttributes)){
+                    if $mergedAttributes["value"] == $value {
+                        $mergedAttributes["checked"] = "checked";
                     }
-                } else {
+                }
+                else {
                     /**
                      * Evaluate the current value and mark the check as checked
                      */
-                    if value {
-                        let mergedAttributes["checked"] = "checked";
+                    if ($value) {
+                        $mergedAttributes["checked"] = "checked";
                     }
 
-                    let mergedAttributes["value"] = value;
+                    $mergedAttributes["value"] = $value;
                 }
             } else {
-                let mergedAttributes["value"] = value;
+                $mergedAttributes["value"] = $value;
             }
         }
 
-        return mergedAttributes;
+        return $mergedAttributes;
     }
 
     /**
      * Sets a default attribute for the element
      */
-    public function setAttribute(string attribute, var value) -> <ElementInterface>
+    public function setAttribute(string $attribute, $value):ElementInterface
     {
-        let this->attributes[attribute] = value;
+        $this->attributes[$attribute] = $value;
 
-        return this;
+        return $this;
     }
 
     /**
      * Sets default attributes for the element
      */
-    public function setAttributes(array! attributes) -> <ElementInterface>
+    public function setAttributes(?array $attributes):ElementInterface
     {
-        let this->attributes = attributes;
+        $this->attributes = $attributes;
 
-        return this;
+        return $this;
     }
 
     /**
      * Sets a default value in case the form does not use an entity
      * or there is no value available for the element in _POST
      */
-    public function setDefault(var value) -> <ElementInterface>
+    public function setDefault($value):ElementInterface
     {
-        let this->value = value;
+        $this->value = $value;
 
-        return this;
+        return $this;
     }
 
     /**
@@ -422,74 +423,74 @@ abstract class AbstractElement implements ElementInterface
      *
      * @param array|string filters
      */
-    public function setFilters(var filters) -> <ElementInterface>
+    public function setFilters($filters):ElementInterface
     {
-        if unlikely (typeof filters != "string" && typeof filters != "array") {
+        if (gettype($filters) == "string" || gettype($filters) == "array") {
             throw new Exception("Wrong filter type added");
         }
 
-        let this->filters = filters;
+        $this->filters = $filters;
 
-        return this;
+        return $this;
     }
 
     /**
      * Sets the parent form to the element
      */
-    public function setForm(<Form> form) -> <ElementInterface>
+    public function setForm(Form $form):ElementInterface
     {
-        let this->form = form;
+        $this->form = $form;
 
-        return this;
+        return $this;
     }
 
     /**
      * Sets the element label
      */
-    public function setLabel(string label) -> <ElementInterface>
+    public function setLabel(string $label):ElementInterface
     {
-        let this->label = label;
+        $this->label = $label;
 
-        return this;
+        return $this;
     }
 
     /**
      * Sets the validation messages related to the element
      */
-    public function setMessages(<Messages> messages) -> <ElementInterface>
+    public function setMessages(Messages $messages):ElementInterface
     {
-        let this->messages = messages;
+        $this->messages = $messages;
 
-        return this;
+        return $this;
     }
 
     /**
      * Sets the element name
      */
-    public function setName(string! name) -> <ElementInterface>
+    public function setName(?string $name):ElementInterface
     {
-        let this->name = name;
+        $this->name = $name;
 
-        return this;
+        return $this;
     }
 
     /**
      * Sets an option for the element
      */
-    public function setUserOption(string option, var value) -> <ElementInterface>
+    public function setUserOption(string $option, $value):ElementInterface
     {
-        let this->options[option] = value;
+        $this->options[$option] = $value;
 
-        return this;
+        return $this;
     }
 
     /**
      * Sets options for the element
      */
-    public function setUserOptions(array options) -> <ElementInterface>
+    public function setUserOptions(array $options):ElementInterface
     {
-        let this->options = options;
+        $this->options = $options;
 
-        return this;
+        return $this;
     }
 }
