@@ -85,7 +85,7 @@ class Form extends Injectable implements Countable, Iterator, AttributesInterfac
         /**
          * Check for an 'initialize' method and call it
          */
-        if (method_exists(this, "initialize")) {
+        if (method_exists($this, "initialize")) {
             $this->{"initialize"}($entity, $userOptions);
         }
     }

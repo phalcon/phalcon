@@ -11,7 +11,7 @@
 
 namespace Phalcon\Html;
 
-use Phalcon\Collection;
+use Phalcon\Collection\Collection;
 use Phalcon\Html\Attributes\RenderInterface;
 use Phalcon\Tag;
 
