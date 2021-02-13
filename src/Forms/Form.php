@@ -503,7 +503,7 @@ class Form extends Injectable implements Countable, Iterator, AttributesInterfac
         /**
          * Check if the tag has a default value
          */
-        if Tag::hasValue($name) {
+        if (Tag::hasValue($name)) {
             return Tag::getValue($name);
         }
 
