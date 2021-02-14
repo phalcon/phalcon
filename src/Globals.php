@@ -269,6 +269,21 @@ function prepare_virtual_path(string $path, string $separator) : string
     return $result;
 }
 
+    /**
+     * @return A generator object
+     *   $id = $generator->current();
+     *   $generator->next();
+     * 
+     */
+
+    function newIdGenerator() : \Generator {
+                $i = 0;
+                while(true) {
+                    yield $i;
+                    $i++;
+                }
+    }
+    
 } // end global namespace features
 
 

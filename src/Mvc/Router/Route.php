@@ -9,7 +9,7 @@
  * file that was distributed with this source code.
  */
 
-namespace Phalcon\Mvc\Router;
+namespace Phalcon\Mvc\Router {
 use Phalcon\Support\Str\Uncamelize;
 use function route_extract_params;
 
@@ -33,15 +33,22 @@ class Route implements RouteInterface
     protected $paths;
     protected string $pattern;
 
+    public static function nextId() {
+        global $RouteIdGen;
+        
+        $result = $RouteIdGen->current();
+        $RouteIdGen->next();
+        return $result;
+    }
     // $id is passed to constructor, the caller must manage and use a generator object, or some other method.
 
     /**
      * Phalcon\Mvc\Router\Route constructor
      */
-    public function __construct(int $id, string $pattern, 
+    public function __construct( string $pattern, 
              $paths = null,  $httpMethods = null)
     {
-        $this->id = $id;
+        $this->id = Route::nextId();
         $this->pattern = $pattern;
         $this->paths = $paths;
         $this->httpMethods = $httpMethods;
@@ -514,4 +521,13 @@ class Route implements RouteInterface
 
         return $this;
     }
+}
+
+} // end namespace 
+
+namespace {
+    // global namespace
+    global $RouteIdGen;
+    
+    $RouteIdGen = newIdGenerator();
 }

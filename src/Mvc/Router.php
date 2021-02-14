@@ -19,6 +19,7 @@ use Phalcon\Mvc\Router\Exception;
 use Phalcon\Mvc\Router\GroupInterface;
 use Phalcon\Mvc\Router\Route;
 use Phalcon\Mvc\Router\RouteInterface;
+
 //use Phalcon\Helper\Sequence;
 
 /**
@@ -74,33 +75,13 @@ class Router extends AbstractInjectionAware implements RouterInterface, EventsAw
     protected $routes;
     protected $uriSource;
     protected $wasMatched = false;
-    protected $generator = null;
 
-    /**
-     * @return A generator object
-     *   $id = $generator->current();
-     *   $generator->next();
-     * 
-     */
 
-    protected static function genId() : \Generator {
-                $i = 0;
-                while(true) {
-                    yield $i;
-                    $i++;
-                }
-    }
     /**
      * Phalcon\Mvc\Router constructor
      */
     public function __construct(bool $defaultRoutes = true) {
         $routes = [];
-        
-        $this->generator = self::genId(); // return generator object
-        
-        $gen = $this->generator;
-        
-        $gen->rewind();
         
         if ($defaultRoutes) {
             /**
@@ -109,16 +90,13 @@ class Router extends AbstractInjectionAware implements RouterInterface, EventsAw
              */
             
             $routes[] = new Route(
-                    $gen->current(),
                     "#^/([\\w0-9\\_\\-]+)[/]{0,1}$#u",
                     [
                 "controller" => 1
                     ]
             );
-            $this->generator->next();
 
             $routes[] = new Route(
-                    $gen->current(),
                     "#^/([\\w0-9\\_\\-]+)/([\\w0-9\\.\\_]+)(/.*)*$#u",
                     [
                 "controller" => 1,
@@ -126,7 +104,6 @@ class Router extends AbstractInjectionAware implements RouterInterface, EventsAw
                 "params" => 3
                     ]
             );
-            $gen->next();
         }
 
         $this->routes = $routes;
@@ -167,17 +144,12 @@ class Router extends AbstractInjectionAware implements RouterInterface, EventsAw
         /**
          * Every route is internally stored as a Phalcon\Mvc\Router\Route
          */
-        $route = new Route($this->generator->current(), $pattern, $paths, $httpMethods);
-        $this->generator->next();
+        $route = new Route($pattern, $paths, $httpMethods);
 
 
         $this->attach($route, $position);
 
         return $route;
-    }
-
-    public function getIdGenerator(): Generator {
-        return $this->generator;
     }
 
     /**

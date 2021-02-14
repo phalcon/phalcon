@@ -170,7 +170,5 @@ interface RouterInterface
      * Check if the router matches any of the defined routes
      */
     public function wasMatched() : bool;
-    
-    
-    public function getIdGenerator() : Generator;
+
 }
