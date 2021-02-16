@@ -1010,12 +1010,19 @@ abstract class AbstractDispatcher extends AbstractInjectionAware implements Disp
         }
     }
 
+    /** 
+     * Check and maintain a cache. Wonder how many hits.
+     * @global type $gCamelize
+     * @param string $input
+     * @return string
+     */
     protected function toCamelCase(string $input) :  string
     {
-        //var camelCaseInput;
         $camelCaseInput = $this->camelCaseMap[$input] ?? null;
         if ($camelCaseInput === null) {
-            $camelCaseInput = join( "", array_map( "ucfirst", preg_split("/[_-]+/", $input)));
+            global $gCamelize;
+            
+            $camelCaseInput =  $gCamelize($input);
             $this->camelCaseMap[$input] = $camelCaseInput;
         }
         return $camelCaseInput;

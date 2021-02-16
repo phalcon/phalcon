@@ -26,8 +26,6 @@ use function is_object;
 use function lcfirst;
 use function substr;
 
-use Phalcon\Globals;
-
 /**
  * Phalcon\Di is a component that implements Dependency Injection/Service
  * Location of services and it's itself a container for them.
@@ -513,13 +511,4 @@ class Di implements DiInterface
         return $instance;
     }
 }
-
-/* 
- * Di class file seems most likely place 
- * to force early globals inclusion.
- * Init can be called more than once.
- * Subsequent calls will do nothing additional.
- */
-
-Globals::Init();
 
