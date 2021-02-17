@@ -759,7 +759,7 @@ class Request extends AbstractInjectionAware implements RequestInterface
                         $input["tmp_name"],
                         $input["size"],
                         $input["error"],
-                        #prefix
+                        $prefix
                     );
                     foreach($smoothInput as $file) {
                         if ( ($onlySuccessful === false) || ($file["error"] === UPLOAD_ERR_OK)) {
@@ -1105,7 +1105,7 @@ class Request extends AbstractInjectionAware implements RequestInterface
         //var files, file, error;
         $numberFiles = 0;
 
-        $files = _FILES;
+        $files = $_FILES;
 
         if ( !is_array($files)){
             return 0;
@@ -1410,7 +1410,9 @@ class Request extends AbstractInjectionAware implements RequestInterface
     /**
      * Smooth out $_FILES to have plain array with all files uploaded
      */
-    final protected function smoothFiles(array $names, array $types, array $tmp_names,array $sizes, array $errors, string $prefix): array
+    final protected function smoothFiles(array $names, array $types, 
+            array $tmp_names,array $sizes, 
+            array $errors, string $prefix): array
     {
         //var idx, name, file, files, parentFiles, p;
 
