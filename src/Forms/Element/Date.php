@@ -1,4 +1,5 @@
 <?php
+
 /**
  * This file is part of the Phalcon Framework.
  *
@@ -7,6 +8,8 @@
  * For the full copyright and license information, please view the LICENSE.txt
  * file that was distributed with this source code.
  */
+
+declare(strict_types=1);
 
 namespace Phalcon\Forms\Element;
 
@@ -20,7 +23,7 @@ class Date extends AbstractElement
     /**
      * Renders the element widget returning html
      */
-    public function render(array $attributes = []):string
+    public function render(array $attributes = []): string
     {
         return Tag::dateField(
             $this->prepareAttributes($attributes)

@@ -9,6 +9,8 @@
  * file that was distributed with this source code.
  */
 
+declare(strict_types=1);
+
 namespace Phalcon\Forms\Element;
 
 use Phalcon\Tag;
@@ -21,7 +23,7 @@ class Submit extends AbstractElement
     /**
      * Renders the element widget
      */
-    public function render(array $attributes = []):string
+    public function render(array $attributes = []): string
     {
         /**
          * Merged passed attributes with previously defined ones

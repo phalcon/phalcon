@@ -9,6 +9,8 @@
  * file that was distributed with this source code.
  */
 
+declare(strict_types=1);
+
 namespace Phalcon\Forms\Element;
 
 use Phalcon\Tag\Select as SelectTag;
@@ -40,7 +42,7 @@ class Select extends AbstractElement
      *
      * @param array|string option
      */
-    public function addOption($option):ElementInterface
+    public function addOption($option): ElementInterface
     {
         if (gettype($option) == "array") {
             foreach($option as $key => $value) {
@@ -66,7 +68,7 @@ class Select extends AbstractElement
     /**
      * Renders the element widget returning HTML
      */
-    public function render(array $attributes = []):string
+    public function render(array $attributes = []): string
     {
         /**
          * Merged passed attributes with previously defined ones
@@ -82,7 +84,7 @@ class Select extends AbstractElement
      *
      * @param array|object options
      */
-    public function setOptions($options):ElementInterface
+    public function setOptions($options): ElementInterface
     {
         $this->optionsValues = $options;
 

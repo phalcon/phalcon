@@ -1,4 +1,5 @@
 <?php
+
 /**
  * This file is part of the Phalcon Framework.
  *
@@ -7,6 +8,8 @@
  * For the full copyright and license information, please view the LICENSE.txt
  * file that was distributed with this source code.
  */
+
+declare(strict_types=1);
 
 namespace Phalcon\Forms\Element;
 
@@ -62,7 +65,7 @@ abstract class AbstractElement implements ElementInterface
     /**
      * Magic method __toString renders the widget without attributes
      */
-    public function __toString():string
+    public function __toString(): string
     {
         return $this->{"render"}();
     }
@@ -70,7 +73,7 @@ abstract class AbstractElement implements ElementInterface
     /**
      * Adds a filter to current list of filters
      */
-    public function addFilter(string $filter):ElementInterface
+    public function addFilter(string $filter): ElementInterface
     {
         $filters = $this->filters;
 
@@ -90,7 +93,7 @@ abstract class AbstractElement implements ElementInterface
     /**
      * Adds a validator to the element
      */
-    public function addValidator($validator):ElementInterface
+    public function addValidator($validator): ElementInterface
     {
         $this->validators[] = $validator;
 
@@ -103,7 +106,7 @@ abstract class AbstractElement implements ElementInterface
      * @param \Phalcon\Validation\ValidatorInterface[] validators
      * @param bool                                     merge
      */
-    public function addValidators(?array $validators, bool $merge = true):ElementInterface
+    public function addValidators(?array $validators, bool $merge = true): ElementInterface
     {
 
         if ($merge) {
@@ -121,7 +124,7 @@ abstract class AbstractElement implements ElementInterface
     /**
      * Appends a message to the internal message list
      */
-    public function appendMessage(MessageInterface $message):ElementInterface
+    public function appendMessage(MessageInterface $message): ElementInterface
     {
         $this->messages->appendMessage($message);
 
@@ -131,13 +134,13 @@ abstract class AbstractElement implements ElementInterface
     /**
      * Clears element to its default value
      */
-    public function clear():ElementInterface
+    public function clear(): ElementInterface
     {
         $form = $this->form;
         $name = $this->name;
         $value = $this->value;
 
-        if (gettype($form) == "object") {
+        if (false === is_null($form)) {
             $form->clear($name);
         } else {
             Tag::setDefault($name, $value);
@@ -163,7 +166,7 @@ abstract class AbstractElement implements ElementInterface
     /**
      * Returns the default attributes for the element
      */
-    public function getAttributes():array
+    public function getAttributes(): array
     {
         return $this->attributes;
     }
@@ -189,7 +192,7 @@ abstract class AbstractElement implements ElementInterface
     /**
      * Returns the parent form to the element
      */
-    public function getForm():Form
+    public function getForm(): Form
     {
         return $this->form;
     }
@@ -197,7 +200,7 @@ abstract class AbstractElement implements ElementInterface
     /**
      * Returns the element label
      */
-    public function getLabel():string
+    public function getLabel(): string
     {
         return $this->label;
     }
@@ -206,7 +209,7 @@ abstract class AbstractElement implements ElementInterface
      * Returns the messages that belongs to the element
      * The element needs to be attached to a form
      */
-    public function getMessages():Messages
+    public function getMessages(): Messages
     {
         return $this->messages;
     }
@@ -214,7 +217,7 @@ abstract class AbstractElement implements ElementInterface
     /**
      * Returns the element name
      */
-    public function getName():string
+    public function getName(): string
     {
         return $this->name;
     }
@@ -234,7 +237,7 @@ abstract class AbstractElement implements ElementInterface
     /**
      * Returns the options for the element
      */
-    public function getUserOptions():array
+    public function getUserOptions(): array
     {
         return $this->options;
     }
@@ -242,7 +245,7 @@ abstract class AbstractElement implements ElementInterface
     /**
      * Returns the validators registered for the element
      */
-    public function getValidators():array
+    public function getValidators(): array
     {
         return $this->validators;
     }
@@ -284,7 +287,7 @@ abstract class AbstractElement implements ElementInterface
     /**
      * Checks whether there are messages attached to the element
      */
-    public function hasMessages():bool
+    public function hasMessages(): bool
     {
         return (count($this->messages) > 0);
     }
@@ -292,7 +295,7 @@ abstract class AbstractElement implements ElementInterface
     /**
      * Generate the HTML to label the element
      */
-    public function label(array $attributes = []):string
+    public function label(array $attributes = []): string
     {
         $name = null;
 
@@ -330,7 +333,7 @@ abstract class AbstractElement implements ElementInterface
      * Returns an array of prepared attributes for Phalcon\Tag helpers
      * according to the element parameters
      */
-    public function prepareAttributes(array $attributes = [], bool $useChecked = false):array
+    public function prepareAttributes(array $attributes = [], bool $useChecked = false): array
     {
         $name = $messagesthis->name;
 
@@ -388,7 +391,7 @@ abstract class AbstractElement implements ElementInterface
     /**
      * Sets a default attribute for the element
      */
-    public function setAttribute(string $attribute, $value):ElementInterface
+    public function setAttribute(string $attribute, $value): ElementInterface
     {
         $this->attributes[$attribute] = $value;
 
@@ -398,7 +401,7 @@ abstract class AbstractElement implements ElementInterface
     /**
      * Sets default attributes for the element
      */
-    public function setAttributes(?array $attributes):ElementInterface
+    public function setAttributes(?array $attributes): ElementInterface
     {
         $this->attributes = $attributes;
 
@@ -409,7 +412,7 @@ abstract class AbstractElement implements ElementInterface
      * Sets a default value in case the form does not use an entity
      * or there is no value available for the element in _POST
      */
-    public function setDefault($value):ElementInterface
+    public function setDefault($value): ElementInterface
     {
         $this->value = $value;
 
@@ -421,7 +424,7 @@ abstract class AbstractElement implements ElementInterface
      *
      * @param array|string filters
      */
-    public function setFilters($filters):ElementInterface
+    public function setFilters($filters): ElementInterface
     {
         if (gettype($filters) == "string" || gettype($filters) == "array") {
             throw new Exception("Wrong filter type added");
@@ -435,7 +438,7 @@ abstract class AbstractElement implements ElementInterface
     /**
      * Sets the parent form to the element
      */
-    public function setForm(Form $form):ElementInterface
+    public function setForm(Form $form): ElementInterface
     {
         $this->form = $form;
 
@@ -445,7 +448,7 @@ abstract class AbstractElement implements ElementInterface
     /**
      * Sets the element label
      */
-    public function setLabel(string $label):ElementInterface
+    public function setLabel(string $label): ElementInterface
     {
         $this->label = $label;
 
@@ -455,7 +458,7 @@ abstract class AbstractElement implements ElementInterface
     /**
      * Sets the validation messages related to the element
      */
-    public function setMessages(Messages $messages):ElementInterface
+    public function setMessages(Messages $messages): ElementInterface
     {
         $this->messages = $messages;
 
@@ -465,7 +468,7 @@ abstract class AbstractElement implements ElementInterface
     /**
      * Sets the element name
      */
-    public function setName(?string $name):ElementInterface
+    public function setName(?string $name): ElementInterface
     {
         $this->name = $name;
 
@@ -475,7 +478,7 @@ abstract class AbstractElement implements ElementInterface
     /**
      * Sets an option for the element
      */
-    public function setUserOption(string $option, $value):ElementInterface
+    public function setUserOption(string $option, $value): ElementInterface
     {
         $this->options[$option] = $value;
 
@@ -485,7 +488,7 @@ abstract class AbstractElement implements ElementInterface
     /**
      * Sets options for the element
      */
-    public function setUserOptions(array $options):ElementInterface
+    public function setUserOptions(array $options): ElementInterface
     {
         $this->options = $options;
 

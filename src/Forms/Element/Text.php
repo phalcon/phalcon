@@ -9,6 +9,8 @@
  * file that was distributed with this source code.
  */
 
+declare(strict_types=1);
+
 namespace Phalcon\Forms\Element;
 
 use Phalcon\Tag;
@@ -23,7 +25,7 @@ class Text extends AbstractElement
     /**
      * Renders the element widget
      */
-    public function render(array $attributes = []):string
+    public function render(array $attributes = []): string
     {
         return Tag::textField(
             $this->prepareAttributes($attributes)

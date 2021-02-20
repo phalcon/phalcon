@@ -15,7 +15,7 @@ namespace Phalcon\Test\Integration\Forms\Element\Check;
 
 use IntegrationTester;
 use Phalcon\Forms\Element\Check;
-//use Phalcon\Html\Tag\Doctype;
+use Phalcon\Html\Tag\Doctype;
 use Phalcon\Tests\Fixtures\Traits\DiTrait;
 
 class RenderCest
@@ -35,8 +35,8 @@ class RenderCest
     public function _after(IntegrationTester $I)
     {
         // Setting the doctype to XHTML5 for other tests to run smoothly
-        Tag::setDocType(
-            Tag::XHTML5
+        Doctype::set(
+            Doctype::XHTML5
         );
     }
 

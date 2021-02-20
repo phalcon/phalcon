@@ -1,4 +1,5 @@
 <?php
+
 /**
  * This file is part of the Phalcon Framework.
  *
@@ -7,6 +8,8 @@
  * For the full copyright and license information, please view the LICENSE.txt
  * file that was distributed with this source code.
  */
+
+declare(strict_types=1);
 
 namespace Phalcon\Forms\Element;
 
@@ -23,29 +26,29 @@ interface ElementInterface
     /**
      * Adds a filter to current list of filters
      */
-    public function addFilter(string $filter):ElementInterface;
+    public function addFilter(string $filter): ElementInterface;
 
     /**
      * Adds a validator to the element
      */
-    public function addValidator(ValidatorInterface $validator):ElementInterface;
+    public function addValidator(ValidatorInterface $validator): ElementInterface;
 
     /**
      * Adds a group of validators
      *
      * @param \Phalcon\Validation\ValidatorInterface[]
      */
-    public function addValidators(?array $validators, bool $merge = true):ElementInterface;
+    public function addValidators(?array $validators, bool $merge = true): ElementInterface;
 
     /**
      * Appends a message to the internal message list
      */
-    public function appendMessage ( MessageInterface $message):ElementInterface;
+    public function appendMessage ( MessageInterface $message): ElementInterface;
 
     /**
      * Clears every element in the form to its default value
      */
-    public function clear():ElementInterface;
+    public function clear(): ElementInterface;
 
     /**
      * Returns the value of an attribute if present
@@ -55,7 +58,7 @@ interface ElementInterface
     /**
      * Returns the default attributes for the element
      */
-    public function getAttributes():array;
+    public function getAttributes(): array;
 
     /**
      * Returns the default value assigned to the element
@@ -72,23 +75,23 @@ interface ElementInterface
     /**
      * Returns the parent form to the element
      */
-    public function getForm():Form;
+    public function getForm(): Form;
 
     /**
      * Returns the element's label
      */
-    public function getLabel():string;
+    public function getLabel(): string;
 
     /**
      * Returns the messages that belongs to the element
      * The element needs to be attached to a form
      */
-    public function getMessages():Messages;
+    public function getMessages(): Messages;
 
     /**
      * Returns the element's name
      */
-    public function getName():string;
+    public function getName(): string;
 
     /**
      * Returns the value of an option if present
@@ -98,12 +101,12 @@ interface ElementInterface
     /**
      * Returns the options for the element
      */
-    public function getUserOptions():array;
+    public function getUserOptions(): array;
 
     /**
      * Returns the validators registered for the element
      */
-    public function getValidators():array;
+    public function getValidators(): array;
 
     /**
      * Returns the element's value
@@ -113,74 +116,74 @@ interface ElementInterface
     /**
      * Checks whether there are messages attached to the element
      */
-    public function hasMessages():bool;
+    public function hasMessages(): bool;
 
     /**
      * Generate the HTML to label the element
      */
-    public function label():string;
+    public function label(): string;
 
     /**
      * Returns an array of prepared attributes for Phalcon\Tag helpers
      * according to the element's parameters
      */
-    public function prepareAttributes(array $attributes = [], bool $useChecked = false):array;
+    public function prepareAttributes(array $attributes = [], bool $useChecked = false): array;
 
     /**
      * Renders the element widget
      */
-    public function render(array $attributes = []):string;
+    public function render(array $attributes = []): string;
 
     /**
      * Sets a default attribute for the element
      */
-    public function setAttribute(string $attribute, $value):ElementInterface;
+    public function setAttribute(string $attribute, $value): ElementInterface;
 
     /**
      * Sets default attributes for the element
      */
-    public function setAttributes(?array $attributes):ElementInterface;
+    public function setAttributes(?array $attributes): ElementInterface;
 
     /**
      * Sets a default value in case the form does not use an entity
      * or there is no value available for the element in _POST
      */
-    public function setDefault($value):ElementInterface;
+    public function setDefault($value): ElementInterface;
 
     /**
      * Sets the element's filters
      *
      * @param array|string filters
      */
-    public function setFilters($filters):ElementInterface;
+    public function setFilters($filters): ElementInterface;
 
     /**
      * Sets the parent form to the element
      */
-    public function setForm (Form $form):ElementInterface;
+    public function setForm (Form $form): ElementInterface;
 
     /**
      * Sets the element label
      */
-    public function setLabel(string $label):ElementInterface;
+    public function setLabel(string $label): ElementInterface;
 
     /**
      * Sets the validation messages related to the element
      */
-    public function setMessages (Messages $messages):ElementInterface;
+    public function setMessages (Messages $messages): ElementInterface;
 
     /**
      * Sets the element's name
      */
-    public function setName(?string $name):ElementInterface;
+    public function setName(?string $name): ElementInterface;
 
     /**
      * Sets an option for the element
      */
-    public function setUserOption(string $option, $value):ElementInterface;
+    public function setUserOption(string $option, $value): ElementInterface;
 
     /**
      * Sets options for the element
      */
-    public function setUserOptions(array $options):ElementInterface;
+    public function setUserOptions(array $options): ElementInterface;
 }

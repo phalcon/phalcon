@@ -1,3 +1,4 @@
+
 <?php
 
 /**
@@ -36,7 +37,7 @@ class Doctype extends AbstractHelper
     /**
      * @var int
      */
-    protected int $documentType = 11;
+    protected static $documentType = 11;
 
     /**
      * Returns the doctype
@@ -46,7 +47,7 @@ class Doctype extends AbstractHelper
      */
     public function __toString()
     {
-        switch ($this->documentType)
+        switch (self::documentType)
         {
             case 1:  return "<!DOCTYPE html PUBLIC \"-//W3C//DTD HTML 3.2 Final//EN\">" . PHP_EOL;
             /* no break */
@@ -90,7 +91,7 @@ class Doctype extends AbstractHelper
      */
     public function get(): string
     {
-        return $this->documentType;
+        return self::documentType;
     }
 
     /**
@@ -100,12 +101,12 @@ class Doctype extends AbstractHelper
      *      *
      * @return Doctype
      */
-    public function set(int $doctype): Doctype
+    public static function set(int $doctype): Doctype
     {
         if (($doctype < self::HTML32) || ($doctype > self::XHTML5)) {
-            $this->documentType = self::HTML5;
+            static::documentType = self::HTML5;
         } else {
-            $this->documentType = $doctype;
+            self::documentType = $doctype;
         }
 
         return $this;
