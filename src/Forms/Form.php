@@ -269,7 +269,7 @@ class Form extends Injectable implements Countable, Iterator, AttributesInterfac
     /**
      * Returns the number of elements in the form
      */
-    public function count():int
+    public function count(): int
     {
         return count($this->elements);
     }
@@ -292,7 +292,7 @@ class Form extends Injectable implements Countable, Iterator, AttributesInterfac
     /**
      * Returns an element added to the form by its name
      */
-    public function get(?string $name):ElementInterface
+    public function get(?string $name): ElementInterface
     {
         if(array_key_exists($name, $this->elements)){
             return $this->elements[$name];
@@ -307,7 +307,7 @@ class Form extends Injectable implements Countable, Iterator, AttributesInterfac
     /**
      * Returns the form's action
      */
-    public function getAction():string
+    public function getAction(): string
     {
         return (string) $this->getAttributes()->get("action");
     }
@@ -315,7 +315,7 @@ class Form extends Injectable implements Countable, Iterator, AttributesInterfac
     /**
     * Get Form attributes collection
     */
-    public function getAttributes():Attributes
+    public function getAttributes(): Attributes
     {
         if(null === $this->attributes){
             $this->attributes = new Attributes();
@@ -345,7 +345,7 @@ class Form extends Injectable implements Countable, Iterator, AttributesInterfac
     /**
      * Returns a label for an element
      */
-    public function getLabel(?string $name):string
+    public function getLabel(?string $name): string
     {
         $element = null;
         if(array_key_exists($name, $this->elements)){
@@ -423,7 +423,7 @@ class Form extends Injectable implements Countable, Iterator, AttributesInterfac
     /**
      * Returns the options for the element
      */
-    public function getUserOptions():array
+    public function getUserOptions(): array
     {
         return $this->options;
     }
@@ -522,7 +522,7 @@ class Form extends Injectable implements Countable, Iterator, AttributesInterfac
     /**
      * Check if the form contains an element
      */
-    public function has(?string $name):bool
+    public function has(?string $name): bool
     {
         /**
          * Checks if the element is in the form
@@ -533,7 +533,7 @@ class Form extends Injectable implements Countable, Iterator, AttributesInterfac
     /**
      * Check if messages were generated for a specific element
      */
-    public function hasMessagesFor(?string $name):bool
+    public function hasMessagesFor(?string $name): bool
     {
         return ($this->getMessagesFor($name)->count() > 0);
     }
@@ -544,7 +544,7 @@ class Form extends Injectable implements Countable, Iterator, AttributesInterfac
      * @param array data
      * @param object entity
      */
-    public function isValid($data = null, $entity = null):bool
+    public function isValid($data = null, $entity = null): bool
     {
         if (empty($this->elements)) {
             return true;
@@ -657,7 +657,7 @@ class Form extends Injectable implements Countable, Iterator, AttributesInterfac
     /**
      * Returns the current position/key in the iterator
      */
-    public function key():int
+    public function key(): int
     {
         return $this->position;
     }
@@ -665,7 +665,7 @@ class Form extends Injectable implements Countable, Iterator, AttributesInterfac
     /**
      * Generate the label of an element added to the form including HTML
      */
-    public function label(?string $name, array $attributes = null):string
+    public function label(?string $name, array $attributes = null): string
     {
         if(array_key_exists($name, $this->elements)){
             return $this->elements[$name]->label($attributes);
@@ -680,7 +680,7 @@ class Form extends Injectable implements Countable, Iterator, AttributesInterfac
     /**
      * Moves the internal iteration pointer to the next position
      */
-    public function next():void
+    public function next(): void
     {
         $this->position++;
     }
@@ -688,7 +688,7 @@ class Form extends Injectable implements Countable, Iterator, AttributesInterfac
     /**
      * Renders a specific item in the form
      */
-    public function render(?string $name, array $attributes = []):string
+    public function render(?string $name, array $attributes = []): string
     {
         if(array_key_exists($name, $this->elements)){
             return $this->elements[$name]->render($attributes);
@@ -703,7 +703,7 @@ class Form extends Injectable implements Countable, Iterator, AttributesInterfac
     /**
      * Removes an element from the form
      */
-    public function remove(?string $name):bool
+    public function remove(?string $name): bool
     {
         /**
          * Checks if the element is in the form
@@ -725,7 +725,7 @@ class Form extends Injectable implements Countable, Iterator, AttributesInterfac
     /**
      * Rewinds the internal iterator
      */
-    public function rewind():void
+    public function rewind(): void
     {
         $this->position = 0;
 
@@ -737,7 +737,7 @@ class Form extends Injectable implements Countable, Iterator, AttributesInterfac
      *
      * @return Form
      */
-    public function setAction(?string $action):Form
+    public function setAction(?string $action): Form
     {
         $this->getAttributes()->set("action", $action);
 
@@ -749,7 +749,7 @@ class Form extends Injectable implements Countable, Iterator, AttributesInterfac
      *
      * @param object entity
      */
-    public function setEntity($entity):Form
+    public function setEntity($entity): Form
     {
         $this->entity = $entity;
 
@@ -759,7 +759,7 @@ class Form extends Injectable implements Countable, Iterator, AttributesInterfac
     /**
     * Set form attributes collection
     */
-    public function setAttributes(Attributes $attributes):AttributesInterface
+    public function setAttributes(Attributes $attributes): AttributesInterface
     {
         $this->attributes = $attributes;
 
@@ -769,7 +769,7 @@ class Form extends Injectable implements Countable, Iterator, AttributesInterfac
     /**
      * Sets an option for the form
      */
-    public function setUserOption(string $option, $value):Form
+    public function setUserOption(string $option, $value): Form
     {
         $this->options[$option] = $value;
 
@@ -779,7 +779,7 @@ class Form extends Injectable implements Countable, Iterator, AttributesInterfac
     /**
      * Sets options for the element
      */
-    public function setUserOptions(?array $options):Form
+    public function setUserOptions(?array $options): Form
     {
         $this->options = $options;
 
@@ -789,7 +789,7 @@ class Form extends Injectable implements Countable, Iterator, AttributesInterfac
     /**
      * Check if the current element in the iterator is valid
      */
-    public function valid():bool
+    public function valid(): bool
     {
         return (isset($this->elementsIndexed[$this->position]));
     }
