@@ -81,7 +81,6 @@ namespace {
         }
     }
 
-    
 } // end global namespace features
 
 
