@@ -262,16 +262,17 @@ abstract class AbstractElement implements ElementInterface
         /**
          * If element belongs to the form, get value from the form
          */
-        if (gettyp($form) == "object") {
+        if (false === is_null($this->form)) {
             return $form->getValue($name);
         }
 
         /**
          * Otherwise check Phalcon\Tag
          */
-        if (Tag::hasValue($name)) {
+        // I have a doubt on it
+        /*if (Tag::hasValue($name)) {
             $value = Tag::getValue($name);
-        }
+        }*/
 
         /**
          * Assign the default value if there is no form available or
@@ -335,7 +336,7 @@ abstract class AbstractElement implements ElementInterface
      */
     public function prepareAttributes(array $attributes = [], bool $useChecked = false): array
     {
-        $name = $messagesthis->name;
+        $name = $this->name;
 
         $attributes[0] = $name;
 

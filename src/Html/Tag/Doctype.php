@@ -1,10 +1,11 @@
-
 <?php
 
 /**
  * This file is part of the Phalcon Framework.
  *
- * For the full copyright and license information, please view the LICENSE.md
+ * (c) Phalcon Team <team@phalcon.io>
+ *
+ * For the full copyright and license information, please view the LICENSE.txt
  * file that was distributed with this source code.
  */
 
@@ -37,7 +38,7 @@ class Doctype extends AbstractHelper
     /**
      * @var int
      */
-    protected static $documentType = 11;
+    protected static int $documentType = 11;
 
     /**
      * Returns the doctype
@@ -101,14 +102,12 @@ class Doctype extends AbstractHelper
      *      *
      * @return Doctype
      */
-    public static function set(int $doctype): Doctype
+    public static function set(int $doctype)
     {
         if (($doctype < self::HTML32) || ($doctype > self::XHTML5)) {
-            static::documentType = self::HTML5;
+            self::$documentType = self::XHTML5;
         } else {
-            self::documentType = $doctype;
+            self::$documentType = $doctype;
         }
-
-        return $this;
     }
 }

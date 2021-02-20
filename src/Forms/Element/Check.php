@@ -13,7 +13,8 @@ declare(strict_types=1);
 
 namespace Phalcon\Forms\Element;
 
-use Phalcon\Tag;
+use Phalcon\Html\Tag\Input\Checkbox;
+use Phalcon\Html\Escaper;
 
 /**
  * Phalcon\Forms\Element\Check
@@ -27,8 +28,12 @@ class Check extends AbstractElement
      */
     public function render(array $attributes = []): string
     {
-        return Tag::checkField(
-            $this->prepareAttributes($attributes, true)
-        );
+        $escaper = new Escaper();
+        $helper  = new Checkbox($escaper);
+
+        var_dump($attributes);
+        $attributes = $this->prepareAttributes($attributes, true);
+        var_dump($attributes);
+        return $helper($attributes['name'], $attributes['value'], $attributes['attributes']);
     }
 }
