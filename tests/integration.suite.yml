@@ -1,13 +1,13 @@
 actor: IntegrationTester
 modules:
   enabled:
-    - Memcache:
-        host: '%DATA_MEMCACHED_HOST%'
-        port: '%DATA_MEMCACHED_PORT%'
-    - Redis:
-        database: '%DATA_REDIS_NAME%'
-        host: '%DATA_REDIS_HOST%'
-        port: '%DATA_REDIS_PORT%'
+   # - Memcache:
+   #     host: '%DATA_MEMCACHED_HOST%'
+   #     port: '%DATA_MEMCACHED_PORT%'
+   # - Redis:
+   #     database: '%DATA_REDIS_NAME%'
+   #     host: '%DATA_REDIS_HOST%'
+   #     port: '%DATA_REDIS_PORT%'
     - Asserts
     - Filesystem
     - Helper\Integration
