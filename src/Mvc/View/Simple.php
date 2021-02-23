@@ -77,7 +77,7 @@ class Simple extends Injectable implements ViewBaseInterface, EventsAwareInterfa
      */
     public function __construct(array  $options = [])
     {
-        $this->options = options;
+        $this->options = $options;
     }
 
     /**
