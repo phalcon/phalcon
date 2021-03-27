@@ -20,12 +20,19 @@ namespace Phalcon\Support {
             $RouteIdGen->next();
             return $result;
         }
-
+        static function extractParams(string $pattern): ?array {
+            if (extension_loaded('phiz')) {
+                return route_extract_params($pattern);
+            }
+            else { 
+                return self::pf_extractParams($pattern);
+           }
+        }
         /**
          * Extract named parameters in route and regular expressions.
          * Used by Cli\Router\Route and Mvc\Router\Route
          */
-        static function extractParams(string $pattern): ?array {
+        static function pf_extractParams(string $pattern): ?array {
             $prevChp = 0;
             $bracketCount = 0;
             $parenthesesCount = 0;

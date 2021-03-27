@@ -577,12 +577,12 @@ class Request extends AbstractInjectionAware implements RequestInterface
     public function getPost(string $name = null, $filters = null, $defaultValue = null, bool $notAllowEmpty = false, bool $noRecursive = false) // TODO: mixed
     {
         return $this->getHelper(
-            _POST,
-            name,
-            filters,
-            defaultValue,
-            notAllowEmpty,
-            noRecursive
+            $_POST,
+            $name,
+            $filters,
+            $defaultValue,
+            $notAllowEmpty,
+            $noRecursive
         );
     }
 
