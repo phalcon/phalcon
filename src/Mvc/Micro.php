@@ -238,7 +238,7 @@ class Micro extends Injectable implements  ArrayAccess, EventsAwareInterface
     /**
      * Returns the internal event manager
      */
-    public function getEventsManager(): ManagerInterface | null
+    public function getEventsManager(): ?ManagerInterface
     {
         return $this->eventsManager;
     }
@@ -262,7 +262,7 @@ class Micro extends Injectable implements  ArrayAccess, EventsAwareInterface
     /**
      * Gets model binder
      */
-    public function getModelBinder(): BinderInterface|null
+    public function getModelBinder(): ?BinderInterface
     {
         return $this->modelBinder;
     }

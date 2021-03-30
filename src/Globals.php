@@ -1,14 +1,25 @@
 <?php
 
 namespace Phalcon {
-    /** This is typical PHP suspect code.
-     *  
-     *  Globals has just one static method.
+    /** 
+     *  A global in a PHP script, is a top level variable, that lives
+     * outside a function  or class method. An easy way to make
+     * a "global" is declare something
+     * in "index.php", outside a function or class method.
+     *  They can be accessed inside a function or class method by declaring
+     *  with keyword global. 
+     *  This Globals class has just one static method, to be called once.
+     *  It makes a few preconstructed object instances of functors,
+     *  used by routing, and metaprogramming with names of classes and methods.
      *  Classname argument is created as global $gGlobals.  
-     *  Purpose of having this globals file and class is to
-     *  ensure that these odd helper classes and functions are
-     *  created and available in global namespace.
-     *  Global namespace is access to first layer of PHP interpreter stack.
+     *  To reduce the use of actual global variables, a stdClass or other class
+     * name is created as all purpose globals storage.
+     *  
+     *  Global namespace is the top stack layer of PHP script, recreated every
+     *  php request handling. Int is not those persistent globals managed by
+     * PHP interpreter and configuration files,
+     * which are used as properties for extensions.
+     *  
      */
     class Globals  {
         static public function init(string $globals_class_name = null) : object {
