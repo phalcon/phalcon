@@ -291,12 +291,16 @@ class AllowCest
      */
     public function aclAdapterMemoryAllowFunctionException(UnitTester $I)
     {
+        $errorMessage = 'You did not provide any parameters when "Guests" can '
+            . '"update" "Post". We will use default action when no arguments. '
+            . 'at src/Acl/Adapter/Memory.php:844';
+
+        if (PHP_OS_FAMILY === 'Windows') {
+            $errorMessage = str_replace('/', '\\', $errorMessage);
+        }
+
         $I->expectThrowable(
-            new Exception(
-                'You did not provide any parameters when "Guests" can ' .
-                '"update" "Post". We will use default action when no arguments.',
-                1024
-            ),
+            new Exception($errorMessage, 1024),
             function () use ($I) {
                 $acl = new Memory();
 

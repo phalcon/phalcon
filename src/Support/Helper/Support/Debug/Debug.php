@@ -11,10 +11,10 @@
 
 declare(strict_types=1);
 
-namespace Phalcon\Support;
+namespace Phalcon\Support\Debug;
 
 use ErrorException;
-use Phalcon\Support\Version;
+use Phalcon\Version\Version;
 use ReflectionClass;
 use ReflectionException;
 use ReflectionFunction;
