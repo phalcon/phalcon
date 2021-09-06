@@ -89,7 +89,10 @@ class UnderscoreGetCest
         $component = $container->get('component');
 
         $I->expectThrowable(
-            new Exception('Access to undefined property unknown', 1024),
+            new Exception(
+	        'Access to undefined property unknown at src/Di/Injectable.php:101',
+		1024
+	    ),
             function () use ($component) {
                 $result = $component->unknown;
             }
