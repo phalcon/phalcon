@@ -14,9 +14,9 @@ declare(strict_types=1);
 namespace Phalcon\Crypt\Traits;
 
 use Phalcon\Crypt\Exception;
-use Phalcon\Support\Str\Traits\EndsWithTrait;
-use Phalcon\Support\Str\Traits\StartsWithTrait;
-use Phalcon\Support\Str\Traits\UpperTrait;
+use Phalcon\Support\Helper\Str\Traits\EndsWithTrait;
+use Phalcon\Support\Helper\Str\Traits\StartsWithTrait;
+use Phalcon\Support\Helper\Str\Traits\UpperTrait;
 use Phalcon\Support\Traits\PhpFunctionTrait;
 
 use function base64_decode;

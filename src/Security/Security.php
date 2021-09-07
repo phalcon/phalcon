@@ -18,7 +18,7 @@ use Phalcon\Di\Traits\InjectionAwareTrait;
 use Phalcon\Http\RequestInterface;
 use Phalcon\Security\Traits\SecurityGettersTrait;
 use Phalcon\Session\ManagerInterface as SessionInterface;
-use Phalcon\Support\Str\Traits\StartsWithTrait;
+use Phalcon\Support\Helper\Str\Traits\StartsWithTrait;
 
 use function crypt;
 use function mb_strlen;
