@@ -101,35 +101,4 @@ class ConstructCest
             $message->getCode()
         );
     }
-
-    /**
-     * Tests Phalcon\Messages\Message :: __construct() - exception
-     *
-     * @param UnitTester $I
-     *
-     * @author Phalcon Team <team@phalcon.io>
-     * @since  2020-09-09
-     */
-    public function messagesMessageConstructException(UnitTester $I): void
-    {
-        $I->wantToTest('Messages\Message - __construct() - exception');
-
-        /**
-         * Sometimes Travis reports 'boolean' vs 'bool' and the test fails. This
-         * is why `expectThrowable` is not used here
-         */
-        $actual = '';
-
-        try {
-            /** @noinspection PhpStrictTypeCheckingInspection */
-            (new Message(true));
-        } catch (TypeError $ex) {
-            $actual = $ex->getMessage();
-        }
-
-        $I->assertEquals(
-            'Argument 1 passed to Phalcon\Messages\Message::__construct() must be of the type string, bool',
-            substr($actual, 0, 93)
-        );
-    }
 }
