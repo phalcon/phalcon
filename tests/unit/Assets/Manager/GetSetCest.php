@@ -14,7 +14,6 @@ declare(strict_types=1);
 namespace Phalcon\Tests\Unit\Assets\Manager;
 
 use Countable;
-use Iterator;
 use IteratorAggregate;
 use Phalcon\Assets\Collection;
 use Phalcon\Assets\Exception;
@@ -35,7 +34,7 @@ class GetSetCest
     {
         $I->wantToTest('Assets\Manager - get()/set()');
 
-        $manager = new Manager(new TagFactory(new Escaper()));
+        $manager    = new Manager(new TagFactory(new Escaper()));
         $collection = new Collection();
 
         $manager->set('hangout', $collection);

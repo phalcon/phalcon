@@ -66,8 +66,7 @@ class GetAddSetClassesCest
         $loader
             ->addClass('one', 'classOne.php')
             ->addClass('two', 'classTwo.php')
-            ->addClass('one', 'classOne.php')
-        ;
+            ->addClass('one', 'classOne.php');
         $I->assertEquals(
             [
                 'one' => 'classOne.php',

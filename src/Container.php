@@ -13,8 +13,8 @@ declare(strict_types=1);
 
 namespace Phalcon;
 
-use Psr\Container\ContainerInterface;
 use Phalcon\Di\DiInterface;
+use Psr\Container\ContainerInterface;
 
 /**
  * PSR-11 Wrapper for `Phalcon\Di`
@@ -40,6 +40,7 @@ class Container implements ContainerInterface
      * Return the service
      *
      * @param string $id
+     *
      * @return mixed
      */
     public function get($id)
@@ -51,6 +52,7 @@ class Container implements ContainerInterface
      * Whether a service exists or not in the container
      *
      * @param string $id
+     *
      * @return bool
      */
     public function has($id): bool

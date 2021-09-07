@@ -65,8 +65,8 @@ class Manager implements ManagerInterface
      * Manager constructor.
      *
      * @param array $options = [
-     *     'uniqueId' => null
-     * ]
+     *                       'uniqueId' => null
+     *                       ]
      */
     public function __construct(array $options = [])
     {

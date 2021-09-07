@@ -23,9 +23,9 @@ use function str_replace;
 class Replace
 {
     /**
-     * @param  mixed $input
-     * @param  mixed $source
-     * @param  mixed $target
+     * @param mixed $input
+     * @param mixed $source
+     * @param mixed $target
      *
      * @return string|string[]
      */

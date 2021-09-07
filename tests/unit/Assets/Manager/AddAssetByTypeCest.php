@@ -32,10 +32,10 @@ class AddAssetByTypeCest
      *
      * @param UnitTester $I
      *
-     * @author Phalcon Team <team@phalcon.io>
+     * @throws Exception
      * @since  2020-09-09
      *
-     * @throws Exception
+     * @author Phalcon Team <team@phalcon.io>
      */
     public function assetsManagerAddAssetByType(UnitTester $I)
     {

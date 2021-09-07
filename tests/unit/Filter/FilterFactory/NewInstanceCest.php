@@ -53,7 +53,7 @@ class NewInstanceCest
     public function filterFilterFactoryNewInstance(UnitTester $I)
     {
         $I->wantToTest('Filter\FilterFactory - newInstance()');
-        $factory  = new FilterFactory();
+        $factory = new FilterFactory();
 
         $I->assertInstanceOf(FilterInterface::class, $factory->newInstance());
     }
@@ -61,12 +61,13 @@ class NewInstanceCest
     /**
      * Tests Phalcon\Filter\FilterFactory :: newInstance() - services
      *
-     * @param        UnitTester $I
-     * @param        Example $example
+     * @param UnitTester $I
+     * @param Example    $example
+     *
      * @dataProvider getData
      *
-     * @author Phalcon Team <team@phalcon.io>
-     * @since  2020-09-09
+     * @author       Phalcon Team <team@phalcon.io>
+     * @since        2020-09-09
      */
     public function filterFilterFactoryNewInstanceServices(UnitTester $I, Example $example)
     {

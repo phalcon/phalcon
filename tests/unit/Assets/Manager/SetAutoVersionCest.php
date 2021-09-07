@@ -74,7 +74,7 @@ class SetAutoVersionCest
             false
         );
 
-        $pathData = dataDir('assets/');
+        $pathData         = dataDir('assets/');
         $modificationTime = filemtime(
             dataDir('assets/assets/assets-version-3.js')
         );

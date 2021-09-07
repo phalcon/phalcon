@@ -39,7 +39,7 @@ class GetSetAttributesCest
     {
         $I->wantToTest('Assets\Inline - getAttributes()/setAttributes()');
 
-        $asset = new Inline($example['type'], $example['content']);
+        $asset    = new Inline($example['type'], $example['content']);
         $expected = [
             'data-key' => 'phalcon',
         ];
@@ -51,7 +51,7 @@ class GetSetAttributesCest
     }
 
     /**
-     * @return \string[][]
+     * @return string[][]
      */
     protected function provider(): array
     {

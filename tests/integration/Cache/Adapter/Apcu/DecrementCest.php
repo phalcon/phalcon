@@ -13,12 +13,12 @@ declare(strict_types=1);
 
 namespace Phalcon\Tests\Integration\Cache\Adapter\Apcu;
 
-use Phalcon\Support\Exception as ExceptionAlias;
+use IntegrationTester;
 use Phalcon\Cache\Adapter\Apcu;
 use Phalcon\Storage\SerializerFactory;
+use Phalcon\Support\Exception as ExceptionAlias;
 use Phalcon\Support\HelperFactory;
 use Phalcon\Tests\Fixtures\Traits\ApcuTrait;
-use IntegrationTester;
 
 class DecrementCest
 {

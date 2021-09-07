@@ -13,8 +13,8 @@ declare(strict_types=1);
 
 namespace Phalcon\Tests\Integration\Storage\Serializer\Json;
 
-use Phalcon\Storage\Serializer\Json;
 use IntegrationTester;
+use Phalcon\Storage\Serializer\Json;
 
 class GetDataCest
 {

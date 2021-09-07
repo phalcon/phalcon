@@ -69,7 +69,7 @@ class ReadCest
         $value = uniqid();
         $adapter->write('test1', $value);
 
-        $mock    = Stub::make(
+        $mock   = Stub::make(
             $adapter,
             [
                 'phpFileGetContents' => false,

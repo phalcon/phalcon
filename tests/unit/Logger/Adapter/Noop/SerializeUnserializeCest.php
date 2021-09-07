@@ -47,7 +47,7 @@ class SerializeUnserializeCest
             new \Exception("This object cannot be unserialized"),
             function () {
                 $serialized = file_get_contents(dataDir('assets/assets/logger.serialized'));
-                $object = unserialize($serialized);
+                $object     = unserialize($serialized);
             }
         );
     }

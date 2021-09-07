@@ -13,12 +13,12 @@ declare(strict_types=1);
 
 namespace Phalcon\Tests\Integration\Cache\Adapter\Stream;
 
-use Phalcon\Support\Exception as HelperException;
+use IntegrationTester;
 use Phalcon\Cache\Adapter\Stream;
 use Phalcon\Storage\Exception as CacheException;
 use Phalcon\Storage\SerializerFactory;
+use Phalcon\Support\Exception as HelperException;
 use Phalcon\Support\HelperFactory;
-use IntegrationTester;
 
 class GetAdapterCest
 {

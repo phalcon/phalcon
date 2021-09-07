@@ -32,8 +32,8 @@ class IsSetLocalCest
      * @param UnitTester $I
      * @param Example    $example
      *
-     * @author Phalcon Team <team@phalcon.io>
-     * @since  2020-09-09
+     * @author       Phalcon Team <team@phalcon.io>
+     * @since        2020-09-09
      */
     public function assetsAssetSetLocalCssLocal(UnitTester $I, Example $example)
     {
@@ -57,23 +57,23 @@ class IsSetLocalCest
     {
         return [
             [
-                'type' => 'css',
-                'path' => 'css/docs.css',
+                'type'  => 'css',
+                'path'  => 'css/docs.css',
                 'local' => true,
             ],
             [
-                'type' => 'js',
-                'path' => 'js/jquery.js',
+                'type'  => 'js',
+                'path'  => 'js/jquery.js',
                 'local' => true,
             ],
             [
-                'type' => 'css',
-                'path' => 'https://phalcon.ld/css/docs.css',
+                'type'  => 'css',
+                'path'  => 'https://phalcon.ld/css/docs.css',
                 'local' => false,
             ],
             [
-                'type' => 'js',
-                'path' => 'https://phalcon.ld/js/jquery.js',
+                'type'  => 'js',
+                'path'  => 'https://phalcon.ld/js/jquery.js',
                 'local' => false,
             ],
         ];

@@ -17,8 +17,6 @@ use Psr\Link\LinkInterface;
 
 use function array_keys;
 use function mb_strpos;
-use function strpos;
-use function strrpos;
 
 /**
  * Class Link

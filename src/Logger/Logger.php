@@ -94,8 +94,8 @@ class Logger implements LoggerInterface
      *                                    date_Default_timezone_get() is used
      */
     public function __construct(
-        string $name,
-        array $adapters = [],
+        string        $name,
+        array         $adapters = [],
         ?DateTimeZone $timezone = null
     ) {
         if (null == $timezone) {
@@ -276,9 +276,9 @@ class Logger implements LoggerInterface
      * @throws LoggerException
      */
     protected function addMessage(
-        int $level,
+        int    $level,
         string $message,
-        array $context = []
+        array  $context = []
     ): bool {
         if ($this->logLevel >= $level) {
             if (count($this->adapters) === 0) {

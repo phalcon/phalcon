@@ -32,7 +32,7 @@ class GetCest
     /**
      * Unit Tests Phalcon\Di :: get()
      *
-     * @param  UnitTester $I
+     * @param UnitTester $I
      *
      * @author Phalcon Team <team@phalcon.io>
      * @since  2019-09-09
@@ -57,7 +57,7 @@ class GetCest
         $I->assertFalse($actual);
 
         // get escaper service
-        $actual   = $container->get('escaper');
+        $actual = $container->get('escaper');
 
         $class = Escaper::class;
         $I->assertInstanceOf($class, $actual);
@@ -70,7 +70,7 @@ class GetCest
     /**
      * Unit Tests Phalcon\Di :: get() - shared
      *
-     * @param  UnitTester $I
+     * @param UnitTester $I
      *
      * @author Phalcon Team <team@phalcon.io>
      * @since  2019-09-09
@@ -89,8 +89,8 @@ class GetCest
         $I->assertTrue($actual);
 
         // get escaper service - twice to cache it
-        $actual   = $container->get('escaper');
-        $actual   = $container->get('escaper');
+        $actual = $container->get('escaper');
+        $actual = $container->get('escaper');
 
         $expected = spl_object_hash($escaper);
         $actual   = spl_object_hash($actual);
@@ -100,7 +100,7 @@ class GetCest
     /**
      * Unit Tests Phalcon\Di :: get() - exception
      *
-     * @param  UnitTester $I
+     * @param UnitTester $I
      *
      * @author Phalcon Team <team@phalcon.io>
      * @since  2019-09-09

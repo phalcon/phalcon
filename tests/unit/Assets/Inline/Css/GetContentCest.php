@@ -36,7 +36,7 @@ class GetContentCest
         $I->wantToTest('Assets\Inline\Css - getContent()');
 
         $content = 'p {color: #000099}';
-        $asset = new Css($content);
+        $asset   = new Css($content);
 
         $actual = $asset->getContent();
         $I->assertEquals($content, $actual);

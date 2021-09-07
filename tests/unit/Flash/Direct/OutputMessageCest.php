@@ -57,8 +57,8 @@ class OutputMessageCest
      * @param UnitTester $I
      * @param Example    $example
      *
-     * @author Phalcon Team <team@phalcon.io>
-     * @since  2020-09-09
+     * @author       Phalcon Team <team@phalcon.io>
+     * @since        2020-09-09
      */
     public function flashDirectOutputMessage(UnitTester $I, Example $example)
     {
@@ -74,10 +74,10 @@ class OutputMessageCest
         $actual   = $flash->outputMessage($type, $source);
         $I->assertEquals($expected, $actual);
 
-        $actual   = $flash->message($type, $source);
+        $actual = $flash->message($type, $source);
         $I->assertEquals($expected, $actual);
 
-        $actual   = $flash->$type($source);
+        $actual = $flash->$type($source);
         $I->assertEquals($expected, $actual);
     }
 

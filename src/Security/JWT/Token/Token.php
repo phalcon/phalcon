@@ -47,8 +47,8 @@ class Token
      * @param Signature $signature
      */
     public function __construct(
-        Item $headers,
-        Item $claims,
+        Item      $headers,
+        Item      $claims,
         Signature $signature
     ) {
         $this->headers   = $headers;

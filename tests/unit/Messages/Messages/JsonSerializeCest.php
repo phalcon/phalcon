@@ -76,7 +76,7 @@ class JsonSerializeCest
     {
         $I->wantToTest('Messages\Messages - jsonSerialize() - no jsonSerialize');
 
-        $fixture  = new MessageFixture(
+        $fixture = new MessageFixture(
             'This is a message #1',
             'MyField1',
             'MyType1',

@@ -76,9 +76,9 @@ class Stream extends AbstractAdapter
      * @throws SupportException
      */
     public function __construct(
-        HelperFactory $helperFactory,
+        HelperFactory     $helperFactory,
         SerializerFactory $factory,
-        array $options = []
+        array             $options = []
     ) {
         $storageDir = $helperFactory->get($options, 'storageDir', '');
         if (empty($storageDir)) {
@@ -102,8 +102,8 @@ class Stream extends AbstractAdapter
      */
     public function clear(): bool
     {
-        $result    = true;
-        $iterator  = $this->getIterator($this->storageDir);
+        $result   = true;
+        $iterator = $this->getIterator($this->storageDir);
 
         foreach ($iterator as $file) {
             if (
@@ -302,10 +302,10 @@ class Stream extends AbstractAdapter
      */
     private function getDir(string $key = ''): string
     {
-        $dirPrefix    = $this->helperFactory->dirSeparator(
+        $dirPrefix   = $this->helperFactory->dirSeparator(
             $this->storageDir . $this->prefix
         );
-        $dirFromFile  = $this->helperFactory->dirFromFile(
+        $dirFromFile = $this->helperFactory->dirFromFile(
             str_replace($this->prefix, '', $key)
         );
 

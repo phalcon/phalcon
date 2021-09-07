@@ -14,10 +14,9 @@ declare(strict_types=1);
 namespace Phalcon\Tests\Integration\Storage\Serializer\Php;
 
 use Codeception\Example;
-use Codeception\Stub;
+use IntegrationTester;
 use Phalcon\Storage\Serializer\Php;
 use stdClass;
-use IntegrationTester;
 
 use function serialize;
 
@@ -29,10 +28,10 @@ class SerializeCest
      * @dataProvider getExamples
      *
      * @param IntegrationTester $I
-     * @param Example    $example
+     * @param Example           $example
      *
-     * @author Phalcon Team <team@phalcon.io>
-     * @since  2020-09-09
+     * @author       Phalcon Team <team@phalcon.io>
+     * @since        2020-09-09
      */
     public function storageSerializerPhpSerialize(IntegrationTester $I, Example $example)
     {

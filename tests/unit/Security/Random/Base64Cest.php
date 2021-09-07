@@ -31,8 +31,8 @@ class Base64Cest
      *
      * @param UnitTester $I
      *
-     * @author Phalcon Team <team@phalcon.io>
-     * @since  2020-09-09
+     * @author       Phalcon Team <team@phalcon.io>
+     * @since        2020-09-09
      *
      * @dataProvider securityRandomBase64Provider
      */
@@ -76,7 +76,7 @@ class Base64Cest
     }
 
     /**
-     * @return \int[][]
+     * @return int[][]
      */
     private function securityRandomBase64Provider(): array
     {

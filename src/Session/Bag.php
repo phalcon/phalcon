@@ -33,6 +33,7 @@ use function is_array;
  * $user->name = "Kimbra Johnson";
  * $user->age  = 22;
  * ```
+ *
  * @property string           $name
  * @property ManagerInterface $session;
  */

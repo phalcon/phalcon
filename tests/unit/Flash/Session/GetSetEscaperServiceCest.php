@@ -13,9 +13,8 @@ declare(strict_types=1);
 
 namespace Phalcon\Tests\Unit\Flash\Session;
 
-use Phalcon\Di\Di;
-use Phalcon\Flash\Session;
 use Phalcon\Flash\Exception;
+use Phalcon\Flash\Session;
 use Phalcon\Html\Escaper;
 use Phalcon\Tests\Fixtures\Traits\DiTrait;
 use UnitTester;
@@ -59,7 +58,7 @@ class GetSetEscaperServiceCest
         $I->assertEquals(spl_object_hash($escaper), spl_object_hash($actual));
 
         $newEscaper = new Escaper();
-        $actual = $flash->setEscaperService($newEscaper);
+        $actual     = $flash->setEscaperService($newEscaper);
         $I->assertInstanceOf(Session::class, $actual);
 
         $actual = $flash->getEscaperService();
@@ -83,7 +82,7 @@ class GetSetEscaperServiceCest
         $escaper = new Escaper();
         $this->container->setShared('escaper', $escaper);
 
-        $flash   = new Session();
+        $flash = new Session();
         $flash->setDI($this->container);
 
         $actual = $flash->getEscaperService();
@@ -108,7 +107,7 @@ class GetSetEscaperServiceCest
                 'access the "escaper" service'
             ),
             function () {
-                $flash   = new Session();
+                $flash = new Session();
 
                 $actual = $flash->getEscaperService();
             }

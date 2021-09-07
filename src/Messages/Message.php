@@ -60,8 +60,8 @@ class Message implements MessageInterface, JsonSerializable
         string $message,
         string $field = "",
         string $type = "",
-        int $code = 0,
-        array $metaData = []
+        int    $code = 0,
+        array  $metaData = []
     ) {
         $this->message  = $message;
         $this->field    = $field;
@@ -122,6 +122,7 @@ class Message implements MessageInterface, JsonSerializable
      * Sets code for the message
      *
      * @param int $code
+     *
      * @return $this|MessageInterface
      */
     public function setCode(int $code): MessageInterface
@@ -135,6 +136,7 @@ class Message implements MessageInterface, JsonSerializable
      * Sets field name related to message
      *
      * @param string $field
+     *
      * @return $this|MessageInterface
      */
     public function setField(string $field): MessageInterface
@@ -148,6 +150,7 @@ class Message implements MessageInterface, JsonSerializable
      * Sets verbose message
      *
      * @param string $message
+     *
      * @return $this|MessageInterface
      */
     public function setMessage(string $message): MessageInterface
@@ -161,6 +164,7 @@ class Message implements MessageInterface, JsonSerializable
      * Sets message metadata
      *
      * @param array $metaData
+     *
      * @return $this|MessageInterface
      */
     public function setMetaData(array $metaData): MessageInterface
@@ -174,6 +178,7 @@ class Message implements MessageInterface, JsonSerializable
      * Sets message type
      *
      * @param string $type
+     *
      * @return $this|MessageInterface
      */
     public function setType(string $type): MessageInterface

@@ -29,7 +29,7 @@ class GetSetSharedCest
     /**
      * Tests Phalcon\Di :: getShared()/setShared()
      *
-     * @param  UnitTester $I
+     * @param UnitTester $I
      *
      * @author Phalcon Team <team@phalcon.io>
      * @since  2019-09-09
@@ -50,14 +50,14 @@ class GetSetSharedCest
         $I->assertEquals($expected, $actual);
 
         $objectTwo = $container->getShared('escaper');
-        $actual   = spl_object_hash($objectTwo);
+        $actual    = spl_object_hash($objectTwo);
         $I->assertEquals($expected, $actual);
     }
 
     /**
      * Tests Phalcon\Di :: getShared() - set
      *
-     * @param  UnitTester $I
+     * @param UnitTester $I
      *
      * @author Phalcon Team <team@phalcon.io>
      * @since  2019-09-09
@@ -78,7 +78,7 @@ class GetSetSharedCest
         $I->assertEquals($expected, $actual);
 
         $objectTwo = $container->getShared('escaper');
-        $actual   = spl_object_hash($objectTwo);
+        $actual    = spl_object_hash($objectTwo);
         $I->assertEquals($expected, $actual);
     }
 }

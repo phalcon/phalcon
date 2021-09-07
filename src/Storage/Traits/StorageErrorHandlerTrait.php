@@ -25,9 +25,9 @@ trait StorageErrorHandlerTrait
      */
     private function callMethodWithError(
         string $method,
-        int $errorType,
-        $data,
-        $defaultValue = null
+        int    $errorType,
+               $data,
+               $defaultValue = null
     ) {
         $warning = false;
         set_error_handler(

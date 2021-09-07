@@ -48,9 +48,9 @@ class Redis extends AbstractAdapter
      * @throws SupportException
      */
     public function __construct(
-        HelperFactory $helperFactory,
+        HelperFactory     $helperFactory,
         SerializerFactory $factory,
-        array $options = []
+        array             $options = []
     ) {
         /**
          * Lets set some defaults and options here
@@ -135,8 +135,7 @@ class Redis extends AbstractAdapter
             $this
                 ->checkConnect($connection)
                 ->checkAuth($connection)
-                ->checkIndex($connection)
-            ;
+                ->checkIndex($connection);
 
             $connection->setOption(RedisService::OPT_PREFIX, $this->prefix);
 
@@ -217,7 +216,7 @@ class Redis extends AbstractAdapter
      */
     private function checkAuth(RedisService $connection): Redis
     {
-        $auth  = $this->options['auth'];
+        $auth = $this->options['auth'];
 
         try {
             $error = (true !== empty($auth) && true !== $connection->auth($auth));
@@ -242,9 +241,9 @@ class Redis extends AbstractAdapter
      */
     private function checkConnect(RedisService $connection): Redis
     {
-        $persistent   = $this->options['persistent'];
-        $method       = $persistent ? 'connect' : 'pconnect';
-        $options      = [
+        $persistent = $this->options['persistent'];
+        $method     = $persistent ? 'connect' : 'pconnect';
+        $options    = [
             $this->options['host'],
             $this->options['port'],
             $this->lifetime

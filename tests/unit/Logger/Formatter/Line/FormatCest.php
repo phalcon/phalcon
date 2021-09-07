@@ -30,9 +30,9 @@ class FormatCest
      *
      * @param UnitTester $I
      *
-     * @author Phalcon Team <team@phalcon.io>
-     * @since  2020-09-09
      * @throws Exception
+     * @since  2020-09-09
+     * @author Phalcon Team <team@phalcon.io>
      */
     public function loggerFormatterLineFormat(UnitTester $I)
     {
@@ -64,9 +64,9 @@ class FormatCest
      *
      * @param UnitTester $I
      *
-     * @author Phalcon Team <team@phalcon.io>
-     * @since  2020-09-09
      * @throws Exception
+     * @since  2020-09-09
+     * @author Phalcon Team <team@phalcon.io>
      */
     public function loggerFormatterLineFormatCustom(UnitTester $I)
     {
@@ -98,9 +98,9 @@ class FormatCest
      *
      * @param UnitTester $I
      *
-     * @author Phalcon Team <team@phalcon.io>
-     * @since  2020-09-09
      * @throws Exception
+     * @since  2020-09-09
+     * @author Phalcon Team <team@phalcon.io>
      */
     public function loggerFormatterLineFormatCustomWithMilliseconds(UnitTester $I)
     {

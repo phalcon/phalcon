@@ -15,9 +15,9 @@ namespace Phalcon\Tests\Unit\Di\FactoryDefault\Cli;
 
 use Codeception\Example;
 use Phalcon\Di\FactoryDefault\Cli;
-use Phalcon\Html\Escaper;
 use Phalcon\Events\Manager as EventsManager;
 use Phalcon\Filter\Filter;
+use Phalcon\Html\Escaper;
 use Phalcon\Security\Security;
 use UnitTester;
 
@@ -31,7 +31,7 @@ class ConstructCest
     /**
      * Tests Phalcon\Di\FactoryDefault\Cli :: __construct()
      *
-     * @param  UnitTester $I
+     * @param UnitTester $I
      *
      * @author Phalcon Team <team@phalcon.io>
      * @since  2019-09-09
@@ -53,10 +53,10 @@ class ConstructCest
      *
      * @dataProvider getServices
      *
-     * @param  UnitTester $I
+     * @param UnitTester $I
      *
-     * @author Phalcon Team <team@phalcon.io>
-     * @since  2019-09-09
+     * @author       Phalcon Team <team@phalcon.io>
+     * @since        2019-09-09
      */
     public function diFactoryDefaultCliConstructServices(UnitTester $I, Example $example)
     {

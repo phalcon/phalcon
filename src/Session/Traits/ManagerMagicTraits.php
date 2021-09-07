@@ -76,8 +76,8 @@ trait ManagerMagicTraits
      */
     abstract public function get(
         string $key,
-        $defaultValue = null,
-        bool $remove = false
+               $defaultValue = null,
+        bool   $remove = false
     );
 
     /**

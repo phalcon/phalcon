@@ -23,11 +23,12 @@ class LowerFirstCest
      * Tests Phalcon\Filter\Sanitize\LowerFirst :: __invoke()
      *
      * @dataProvider getData
+     *
      * @param UnitTester $I
      * @param Example    $example
      *
-     * @author Phalcon Team <team@phalcon.io>
-     * @since  2020-09-09
+     * @author       Phalcon Team <team@phalcon.io>
+     * @since        2020-09-09
      */
     public function filterSanitizeLowerFirstInvoke(UnitTester $I, Example $example)
     {
@@ -42,7 +43,7 @@ class LowerFirstCest
     }
 
     /**
-     * @return \string[][]
+     * @return string[][]
      */
     private function getData(): array
     {

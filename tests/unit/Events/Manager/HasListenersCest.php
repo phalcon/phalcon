@@ -41,7 +41,7 @@ class HasListenersCest
             }
         );
 
-        $actual  = $manager->hasListeners('some:upload');
+        $actual = $manager->hasListeners('some:upload');
         $I->assertTrue($actual);
     }
 }

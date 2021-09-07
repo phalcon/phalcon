@@ -71,8 +71,7 @@ class UseImplicitOutputCest
             ->setPrefix('http:://cdn.example.com/')
             ->setLocal(false)
             ->addJs('js/script1.js')
-            ->addJs('js/script2.js')
-        ;
+            ->addJs('js/script2.js');
 
         $manager->useImplicitOutput(false);
 

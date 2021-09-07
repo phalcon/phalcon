@@ -13,14 +13,13 @@ declare(strict_types=1);
 
 namespace Phalcon\Tests\Integration\Cache\Adapter\Redis;
 
-use Phalcon\Cache\Adapter\Memory;
-use Phalcon\Support\Exception as HelperException;
+use IntegrationTester;
 use Phalcon\Cache\Adapter\Redis;
 use Phalcon\Storage\Exception as CacheException;
 use Phalcon\Storage\SerializerFactory;
+use Phalcon\Support\Exception as HelperException;
 use Phalcon\Support\HelperFactory;
 use Phalcon\Tests\Fixtures\Traits\RedisTrait;
-use IntegrationTester;
 
 use function getOptionsRedis;
 

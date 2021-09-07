@@ -55,8 +55,7 @@ class ValidateSignatureCest
             ->setNotBefore($notBefore)
             ->setSubject('Mary had a little lamb')
             ->setPassphrase($passphrase)
-            ->getToken()
-        ;
+            ->getToken();
 
         $validator = new Validator($token);
         $I->assertInstanceOf(Validator::class, $validator);

@@ -15,7 +15,6 @@ namespace Phalcon\Tests\Unit\Assets\Asset;
 
 use Codeception\Example;
 use Phalcon\Assets\Asset;
-use Phalcon\Assets\Asset\Js;
 use UnitTester;
 
 /**
@@ -49,7 +48,7 @@ class GetSetTypeCest
     }
 
     /**
-     * @return \string[][]
+     * @return string[][]
      */
     protected function provider(): array
     {

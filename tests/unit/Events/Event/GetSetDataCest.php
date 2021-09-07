@@ -53,7 +53,7 @@ class GetSetDataCest
     {
         $I->wantToTest('Events\Event - getData() when explicitly set');
 
-        $data    = [1, 2, 3];
+        $data     = [1, 2, 3];
         $event    = new Event('type-two:beforeSome', $this, $data);
         $expected = $data;
         $actual   = $event->getData();

@@ -27,11 +27,11 @@ class GetSetPassphraseCest
     /**
      * Unit Tests Phalcon\Security\JWT\Builder :: getPassphrase()/setPassphrase()
      *
-     * @throws ValidatorException
-     * @throws UnsupportedAlgorithmException
-     *
      * @param UnitTester $I
      *
+     * @throws UnsupportedAlgorithmException
+     *
+     * @throws ValidatorException
      * @author Phalcon Team <team@phalcon.io>
      * @since  2020-09-09
      */

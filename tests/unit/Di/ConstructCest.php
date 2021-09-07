@@ -16,8 +16,6 @@ namespace Phalcon\Tests\Unit\Di;
 use Phalcon\Di\Di;
 use UnitTester;
 
-use function spl_object_hash;
-
 /**
  * Class ConstructCest
  *
@@ -28,7 +26,7 @@ class ConstructCest
     /**
      * Tests Phalcon\Di :: __construct()
      *
-     * @param  UnitTester $I
+     * @param UnitTester $I
      *
      * @author Phalcon Team <team@phalcon.io>
      * @since  2019-09-09
@@ -37,7 +35,7 @@ class ConstructCest
     {
         $I->wantToTest('Di - __construct()');
 
-        $class = Di::class;
+        $class  = Di::class;
         $actual = Di::getDefault();
         $I->assertInstanceOf($class, $actual);
 

@@ -29,8 +29,8 @@ class Base64SafeCest
      *
      * @param UnitTester $I
      *
-     * @author Phalcon Team <team@phalcon.io>
-     * @since  2020-09-09
+     * @author       Phalcon Team <team@phalcon.io>
+     * @since        2020-09-09
      *
      * @dataProvider securityRandomBase64SafeProvider
      */

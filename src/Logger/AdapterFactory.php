@@ -52,7 +52,7 @@ class AdapterFactory
     public function newInstance(
         string $name,
         string $fileName,
-        array $options = []
+        array  $options = []
     ): AdapterInterface {
         $definition = $this->getService($name);
 

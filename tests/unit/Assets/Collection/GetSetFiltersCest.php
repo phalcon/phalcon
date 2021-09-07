@@ -37,7 +37,7 @@ class GetSetFiltersCest
         $I->wantToTest('Assets\Collection - getFilters()/setFilters()');
 
         $collection = new Collection();
-        $filters = [new None(), new None(),];
+        $filters    = [new None(), new None(),];
 
         $collection->setFilters($filters);
         $I->assertEquals($filters, $collection->getFilters());

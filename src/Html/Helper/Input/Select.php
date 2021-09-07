@@ -50,8 +50,8 @@ class Select extends AbstractList
     public function add(
         string $text,
         string $value = null,
-        array $attributes = [],
-        bool $raw = false
+        array  $attributes = [],
+        bool   $raw = false
     ): Select {
         $attributes = $this->processValue($attributes, $value);
 
@@ -82,8 +82,8 @@ class Select extends AbstractList
     public function addPlaceholder(
         string $text,
         string $value = null,
-        array $attributes = [],
-        bool $raw = false
+        array  $attributes = [],
+        bool   $raw = false
     ): Select {
         if (null !== $value) {
             $attributes['value'] = $value;
@@ -113,7 +113,7 @@ class Select extends AbstractList
      */
     public function optGroup(
         string $label = null,
-        array $attributes = []
+        array  $attributes = []
     ): Select {
         if (!$this->inOptGroup) {
             $this->store[]     = [

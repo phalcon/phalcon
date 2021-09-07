@@ -28,9 +28,9 @@ class GetAddSetNamespacesCest
      *
      * @param UnitTester $I
      *
-     * @author Phalcon Team <team@phalcon.io>
-     * @since  2020-09-09
      * @throws Exception
+     * @since  2020-09-09
+     * @author Phalcon Team <team@phalcon.io>
      */
     public function autoloaderLoaderGetAddSetNamespaces(UnitTester $I)
     {
@@ -89,8 +89,7 @@ class GetAddSetNamespacesCest
             ->addNamespace(
                 'Phalcon\Loader',
                 '/path/to/loader'
-            )
-        ;
+            );
         $I->assertEquals(
             [
                 'Phalcon\Loader\\'   => [
@@ -130,8 +129,7 @@ class GetAddSetNamespacesCest
             ->addNamespace(
                 'Phalcon\Loader',
                 '/path/to/provider/source'
-            )
-        ;
+            );
         $I->assertEquals(
             [
                 'Phalcon\Loader\\' => [

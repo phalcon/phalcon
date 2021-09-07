@@ -42,7 +42,7 @@ class GetSetIdCest
         $I->wantToTest('Session\Manager - getId()/setId()');
 
         $manager = new Manager();
-        $files = $this->newService('sessionStream');
+        $files   = $this->newService('sessionStream');
         $manager->setAdapter($files);
 
         $actual = $manager->getId();

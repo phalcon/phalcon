@@ -42,8 +42,7 @@ class WithoutRelCest
 
         $newInstance = $link
             ->withRel('citation')
-            ->withRel('canonical')
-        ;
+            ->withRel('canonical');
 
         $I->assertNotSame($link, $newInstance);
 

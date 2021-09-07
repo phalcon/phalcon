@@ -13,8 +13,8 @@ declare(strict_types=1);
 
 namespace Phalcon\Tests\Unit\Security;
 
-use Phalcon\Security\Security;
 use Phalcon\Security\Random;
+use Phalcon\Security\Security;
 use UnitTester;
 
 class GetRandomCest
@@ -32,7 +32,7 @@ class GetRandomCest
         $I->wantToTest('Security - getRandom()');
 
         $security = new Security();
-        $random = $security->getRandom();
+        $random   = $security->getRandom();
 
         $I->assertInstanceOf(Random::class, $random);
     }

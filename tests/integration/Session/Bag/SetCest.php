@@ -48,8 +48,8 @@ class SetCest
         $I->assertEquals($expected, $actual);
 
         $collection->three = 'Phalcon';
-        $expected = 'Phalcon';
-        $actual   = $collection->get('three');
+        $expected          = 'Phalcon';
+        $actual            = $collection->get('three');
         $I->assertEquals($expected, $actual);
 
         $collection->offsetSet('three', 123);
@@ -58,7 +58,7 @@ class SetCest
         $I->assertEquals($expected, $actual);
 
         $collection['three'] = true;
-        $actual = $collection->get('three');
+        $actual              = $collection->get('three');
         $I->assertTrue($actual);
     }
 }

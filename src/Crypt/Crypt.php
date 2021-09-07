@@ -98,7 +98,7 @@ class Crypt implements CryptInterface
      */
     public function __construct(
         string $cipher = 'aes-256-cfb',
-        bool $useSigning = false
+        bool   $useSigning = false
     ) {
         $this->initializeAvailableCiphers();
 
@@ -193,8 +193,8 @@ class Crypt implements CryptInterface
      */
     public function decryptBase64(
         string $input,
-        $key = null,
-        bool $safe = false
+               $key = null,
+        bool   $safe = false
     ): string {
         if (true === $safe) {
             $input = strtr($input, '-_', '+/')
@@ -269,8 +269,8 @@ class Crypt implements CryptInterface
      */
     public function encryptBase64(
         string $input,
-        $key = null,
-        bool $safe = false
+               $key = null,
+        bool   $safe = false
     ): string {
         if (true === $safe) {
             return rtrim(
@@ -483,8 +483,8 @@ class Crypt implements CryptInterface
     protected function cryptPadText(
         string $input,
         string $mode,
-        int $blockSize,
-        int $paddingType
+        int    $blockSize,
+        int    $paddingType
     ): string {
         $padding     = null;
         $paddingSize = 0;
@@ -537,8 +537,8 @@ class Crypt implements CryptInterface
     protected function cryptUnpadText(
         string $input,
         string $mode,
-        int $blockSize,
-        int $paddingType
+        int    $blockSize,
+        int    $paddingType
     ) {
         $paddingSize = 0;
         $length      = strlen($input);

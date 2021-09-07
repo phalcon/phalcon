@@ -15,9 +15,9 @@ namespace Phalcon\Di\FactoryDefault;
 
 use Phalcon\Di\FactoryDefault;
 use Phalcon\Di\Service;
-use Phalcon\Html\Escaper;
 use Phalcon\Events\Manager as EventsManager;
 use Phalcon\Filter\FilterFactory;
+use Phalcon\Html\Escaper;
 use Phalcon\Security\Security;
 
 /**

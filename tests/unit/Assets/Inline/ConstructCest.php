@@ -74,8 +74,8 @@ class ConstructCest
         $I->wantToTest('Assets\Asset - __construct() - css filter set');
 
         $content = 'p {color: #000099}';
-        $asset = new Inline('css', $content, false);
-        $actual = $asset->getFilter();
+        $asset   = new Inline('css', $content, false);
+        $actual  = $asset->getFilter();
         $I->assertFalse($actual);
     }
 
@@ -111,7 +111,7 @@ class ConstructCest
     {
         $I->wantToTest('Assets\Asset - __construct() - css attributes set');
 
-        $content = 'p {color: #000099}';
+        $content    = 'p {color: #000099}';
         $attributes = [
             'data' => 'phalcon',
         ];
@@ -215,11 +215,11 @@ class ConstructCest
     {
         $I->wantToTest('Assets\Asset - __construct() - js attributes set');
 
-        $content = '<script>alert("Hello");</script>';
+        $content    = '<script>alert("Hello");</script>';
         $attributes = [
             'data' => 'phalcon',
         ];
-        $asset = new Inline('js', $content, true, $attributes);
+        $asset      = new Inline('js', $content, true, $attributes);
 
         $actual = $asset->getAttributes();
         $I->assertEquals($attributes, $actual);

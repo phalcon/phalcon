@@ -14,7 +14,6 @@ declare(strict_types=1);
 namespace Phalcon\Tests\Unit\Assets\Manager;
 
 use Countable;
-use Iterator;
 use IteratorAggregate;
 use Phalcon\Assets\Collection;
 use Phalcon\Assets\Manager;

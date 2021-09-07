@@ -49,7 +49,7 @@ class GetSetTargetPathCest
     }
 
     /**
-     * @return \string[][]
+     * @return string[][]
      */
     protected function provider(): array
     {

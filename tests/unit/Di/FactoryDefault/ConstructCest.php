@@ -36,7 +36,7 @@ use UnitTester;
 //use Phalcon\Mvc\Model\MetaData\Memory;
 //use Phalcon\Mvc\Model\Transaction\Manager;
 //use Phalcon\Mvc\Router;
-//use Phalcon\Tag;
+//use Phalcon\Helper;
 //use Phalcon\Url;
 
 /**

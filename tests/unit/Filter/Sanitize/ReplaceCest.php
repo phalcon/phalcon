@@ -23,11 +23,12 @@ class ReplaceCest
      * Tests Phalcon\Filter\Sanitize\Replace :: __invoke()
      *
      * @dataProvider getData
+     *
      * @param UnitTester $I
      * @param Example    $example
      *
-     * @author Phalcon Team <team@phalcon.io>
-     * @since  2020-09-09
+     * @author       Phalcon Team <team@phalcon.io>
+     * @since        2020-09-09
      */
     public function filterSanitizeReplaceInvoke(UnitTester $I, Example $example)
     {
@@ -39,7 +40,7 @@ class ReplaceCest
     }
 
     /**
-     * @return \string[][]
+     * @return string[][]
      */
     private function getData(): array
     {

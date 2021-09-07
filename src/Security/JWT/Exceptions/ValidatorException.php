@@ -13,12 +13,14 @@ declare(strict_types=1);
 
 namespace Phalcon\Security\JWT\Exceptions;
 
+use Exception;
+
 /**
  * Class ValidatorException
  *
  * @package Phalcon\Security\JWT\Exceptions
  */
-class ValidatorException extends \Exception
+class ValidatorException extends Exception
 {
 
 }

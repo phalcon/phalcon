@@ -36,7 +36,7 @@ class GetContentCest
         $I->wantToTest('Assets\Inline\Js - getContent()');
 
         $content = '<script>alert("Hello");</script>';
-        $asset = new Js($content);
+        $asset   = new Js($content);
 
         $actual = $asset->getContent();
         $I->assertEquals($content, $actual);

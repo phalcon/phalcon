@@ -45,7 +45,7 @@ class ConstructCest
     {
         $I->wantToTest('Translate\Adapter\Csv - constructor');
 
-        $language = $this->getCsvConfig()['en'];
+        $language   = $this->getCsvConfig()['en'];
         $translator = new Csv(new InterpolatorFactory(), $language);
 
         $I->assertInstanceOf(ArrayAccess::class, $translator);
@@ -89,7 +89,7 @@ class ConstructCest
         $I->expectThrowable(
             new Exception($message),
             function () {
-                $language = $this->getCsvConfig()['en'];
+                $language   = $this->getCsvConfig()['en'];
                 $translator = Stub::construct(
                     Csv::class,
                     [

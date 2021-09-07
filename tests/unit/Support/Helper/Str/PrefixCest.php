@@ -13,7 +13,6 @@ declare(strict_types=1);
 
 namespace Phalcon\Tests\Unit\Support\Helper\Str;
 
-use Phalcon\Support\Helper\Str\Len;
 use Phalcon\Support\Helper\Str\Prefix;
 use UnitTester;
 
@@ -39,7 +38,7 @@ class PrefixCest
         $object = new Prefix();
 
         $expected = 'ClassConstants';
-        $actual = $object('Constants', 'Class');
+        $actual   = $object('Constants', 'Class');
         $I->assertEquals($expected, $actual);
     }
 }

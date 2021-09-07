@@ -26,10 +26,11 @@ class NewInstanceCest
     /**
      * Unit Tests Phalcon\Domain\PayloadFactory :: newInstance()
      *
-     * @author Phalcon Team <team@phalcon.io>
+     * @param UnitTester $I
+     *
      * @since  2019-09-09
      *
-     * @param UnitTester $I
+     * @author Phalcon Team <team@phalcon.io>
      */
     public function httpPayloadPayloadFactoryNewInstance(UnitTester $I)
     {

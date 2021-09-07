@@ -13,9 +13,9 @@ declare(strict_types=1);
 
 namespace Phalcon\Tests\Unit\Logger\AdapterFactory;
 
-use Phalcon\Support\Exception;
 use Phalcon\Logger\Adapter\AdapterInterface;
 use Phalcon\Logger\AdapterFactory;
+use Phalcon\Support\Exception;
 use UnitTester;
 
 use function outputDir;
@@ -27,9 +27,9 @@ class NewInstanceCest
      *
      * @param UnitTester $I
      *
-     * @author Phalcon Team <team@phalcon.io>
-     * @since  2020-09-09
      * @throws Exception
+     * @since  2020-09-09
+     * @author Phalcon Team <team@phalcon.io>
      */
     public function loggerAdapterFactoryNewInstance(UnitTester $I)
     {

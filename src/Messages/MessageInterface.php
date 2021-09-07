@@ -66,6 +66,7 @@ interface MessageInterface
      * Sets code for the message
      *
      * @param int $code
+     *
      * @return MessageInterface
      */
     public function setCode(int $code): MessageInterface;
@@ -74,6 +75,7 @@ interface MessageInterface
      * Sets field name related to message
      *
      * @param string $field
+     *
      * @return MessageInterface
      */
     public function setField(string $field): MessageInterface;
@@ -82,6 +84,7 @@ interface MessageInterface
      * Sets verbose message
      *
      * @param string $message
+     *
      * @return MessageInterface
      */
     public function setMessage(string $message): MessageInterface;
@@ -90,6 +93,7 @@ interface MessageInterface
      * Sets message metadata
      *
      * @param array $metaData
+     *
      * @return MessageInterface
      */
     public function setMetaData(array $metaData): MessageInterface;
@@ -98,6 +102,7 @@ interface MessageInterface
      * Sets message type
      *
      * @param string $type
+     *
      * @return MessageInterface
      */
     public function setType(string $type): MessageInterface;

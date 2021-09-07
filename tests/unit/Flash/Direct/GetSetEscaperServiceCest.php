@@ -47,7 +47,7 @@ class GetSetEscaperServiceCest
         $I->assertEquals(spl_object_hash($escaper), spl_object_hash($actual));
 
         $newEscaper = new Escaper();
-        $actual = $flash->setEscaperService($newEscaper);
+        $actual     = $flash->setEscaperService($newEscaper);
         $I->assertInstanceOf(Direct::class, $actual);
 
         $actual = $flash->getEscaperService();
@@ -69,7 +69,7 @@ class GetSetEscaperServiceCest
         $container = new Di();
         $escaper   = new Escaper();
         $container->setShared('escaper', $escaper);
-        $flash   = new Direct();
+        $flash = new Direct();
         $flash->setDI($container);
 
         $actual = $flash->getEscaperService();
@@ -94,7 +94,7 @@ class GetSetEscaperServiceCest
                 'access the "escaper" service'
             ),
             function () {
-                $flash   = new Direct();
+                $flash = new Direct();
 
                 $actual = $flash->getEscaperService();
             }

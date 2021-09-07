@@ -32,8 +32,8 @@ class CheckHashCest
      * @param UnitTester $I
      * @param Example    $example
      *
-     * @author Phalcon Team <team@phalcon.io>
-     * @since  2020-09-09
+     * @author       Phalcon Team <team@phalcon.io>
+     * @since        2020-09-09
      */
     public function securityCheckHash(UnitTester $I, Example $example)
     {

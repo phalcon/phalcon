@@ -23,11 +23,12 @@ class RemoveCest
      * Tests Phalcon\Filter\Sanitize\Remove :: __invoke()
      *
      * @dataProvider getData
+     *
      * @param UnitTester $I
      * @param Example    $example
      *
-     * @author Phalcon Team <team@phalcon.io>
-     * @since  2020-09-09
+     * @author       Phalcon Team <team@phalcon.io>
+     * @since        2020-09-09
      */
     public function filterSanitizeRemoveInvoke(UnitTester $I, Example $example)
     {
@@ -40,7 +41,7 @@ class RemoveCest
     }
 
     /**
-     * @return \string[][]
+     * @return string[][]
      */
     private function getData(): array
     {

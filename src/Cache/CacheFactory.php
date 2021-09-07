@@ -41,13 +41,13 @@ class CacheFactory
      * Factory to create an instance from a Config object
      *
      * @param array|ConfigInterface $config = [
-     *     'adapter' => 'apcu',
-     *     'options' => [
-     *         'servers' => [
-     *             [
-     *                 'host' => 'localhost',
-     *                 'port' => 11211,
-     *                 'weight' => 1,
+     *                                      'adapter' => 'apcu',
+     *                                      'options' => [
+     *                                      'servers' => [
+     *                                      [
+     *                                      'host' => 'localhost',
+     *                                      'port' => 11211,
+     *                                      'weight' => 1,
      *
      *             ]
      *         ],
@@ -67,8 +67,8 @@ class CacheFactory
      */
     public function load($config)
     {
-        $config = $this->checkConfig($config);
-        $name   = $config['adapter'];
+        $config  = $this->checkConfig($config);
+        $name    = $config['adapter'];
         $options = $config['options'] ?? [];
 
         return $this->newInstance($name, $options);
@@ -78,25 +78,25 @@ class CacheFactory
      * Constructs a new Cache instance.
      *
      * @param array $options = [
-     *     'servers'           => [
-     *         [
-     *             'host' => 'localhost',
-     *             'port' => 11211,
-     *             'weight' => 1,
-     *         ]
-     *     ],
-     *     'host'              => '127.0.0.1',
-     *     'port'              => 6379,
-     *     'index'             => 0,
-     *     'persistent'        => false,
-     *     'auth'              => '',
-     *     'socket'            => '',
-     *     'defaultSerializer' => 'Php',
-     *     'lifetime'          => 3600,
-     *     'serializer'        => null,
-     *     'prefix'            => 'phalcon',
-     *     'storageDir'        => '',
-     * ]
+     *                       'servers'           => [
+     *                       [
+     *                       'host' => 'localhost',
+     *                       'port' => 11211,
+     *                       'weight' => 1,
+     *                       ]
+     *                       ],
+     *                       'host'              => '127.0.0.1',
+     *                       'port'              => 6379,
+     *                       'index'             => 0,
+     *                       'persistent'        => false,
+     *                       'auth'              => '',
+     *                       'socket'            => '',
+     *                       'defaultSerializer' => 'Php',
+     *                       'lifetime'          => 3600,
+     *                       'serializer'        => null,
+     *                       'prefix'            => 'phalcon',
+     *                       'storageDir'        => '',
+     *                       ]
      */
     public function newInstance(string $name, array $options = []): CacheInterface
     {

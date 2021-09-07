@@ -29,9 +29,9 @@ class DetachCest
      * @param UnitTester $I
      * @param Example    $example
      *
-     * @author Phalcon Team <team@phalcon.io>
-     * @since  2020-09-09
-     * @issue  12882
+     * @author       Phalcon Team <team@phalcon.io>
+     * @since        2020-09-09
+     * @issue        12882
      */
     public function eventsManagerDetach(UnitTester $I, Example $example)
     {
@@ -75,8 +75,8 @@ class DetachCest
      *
      * @param UnitTester $I
      *
-     * @author Phalcon Team <team@phalcon.io>
-     * @since  2020-09-09
+     * @author       Phalcon Team <team@phalcon.io>
+     * @since        2020-09-09
      */
     public function eventsManagerDetachException(UnitTester $I)
     {

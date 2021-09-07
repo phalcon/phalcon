@@ -13,12 +13,8 @@ declare(strict_types=1);
 
 namespace Phalcon\Crypt\Padding;
 
-use function chr;
-use function ord;
-use function str_repeat;
 use function str_split;
 use function strlen;
-use function substr;
 
 /**
  * Class UnpadIsoIek

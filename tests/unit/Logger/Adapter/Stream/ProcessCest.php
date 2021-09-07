@@ -18,7 +18,6 @@ use DateTimeImmutable;
 use DateTimeZone;
 use LogicException;
 use Phalcon\Logger\Adapter\Stream;
-use Phalcon\Logger\Exception;
 use Phalcon\Logger\Item;
 use Phalcon\Logger\Logger;
 use UnitTester;

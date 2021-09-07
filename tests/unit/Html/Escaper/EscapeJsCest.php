@@ -55,7 +55,7 @@ class EscapeJsCest
             . 'var h \x3d document.createElement(\x27li\x27);'
             . 'l.appendChild(h);'
             . '}}';
-        $actual = $escaper->escapeJs($source);
+        $actual   = $escaper->escapeJs($source);
 
         $I->assertEquals($expected, $actual);
     }

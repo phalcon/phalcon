@@ -18,8 +18,6 @@ use Phalcon\Html\Helper\Title;
 use Phalcon\Html\TagFactory;
 use UnitTester;
 
-use const PHP_EOL;
-
 /**
  * Class UnderscoreInvokeCest
  *
@@ -37,8 +35,8 @@ class UnderscoreInvokeCest
      *
      * @throws Exception
      *
-     * @author Phalcon Team <team@phalcon.io>
-     * @since  2020-09-09
+     * @author       Phalcon Team <team@phalcon.io>
+     * @since        2020-09-09
      */
     public function htmlHelperTitleUnderscoreInvoke(UnitTester $I, Example $example)
     {

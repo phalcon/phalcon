@@ -51,7 +51,7 @@ abstract class AbstractList extends AbstractHelper
     public function __invoke(
         string $indent = '    ',
         string $delimiter = PHP_EOL,
-        array $attributes = []
+        array  $attributes = []
     ): AbstractList {
         $this->attributes = $attributes;
         $this->delimiter  = $delimiter;

@@ -14,7 +14,6 @@ declare(strict_types=1);
 namespace Phalcon\Session;
 
 use InvalidArgumentException;
-use RuntimeException;
 use SessionHandlerInterface;
 
 /**

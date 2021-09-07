@@ -39,11 +39,11 @@ class IsCancelableCest
         $actual = $event->isCancelable();
         $I->assertTrue($actual);
 
-        $event = new Event('type-two:beforeSome', $this, [], false);
+        $event  = new Event('type-two:beforeSome', $this, [], false);
         $actual = $event->isCancelable();
         $I->assertFalse($actual);
 
-        $event = new Event('type-three:beforeSome', $this, [], true);
+        $event  = new Event('type-three:beforeSome', $this, [], true);
         $actual = $event->isCancelable();
         $I->assertTrue($actual);
     }

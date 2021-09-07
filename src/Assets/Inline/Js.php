@@ -29,8 +29,8 @@ class Js extends InlineBase
      */
     public function __construct(
         string $content,
-        bool $filter = true,
-        array $attributes = []
+        bool   $filter = true,
+        array  $attributes = []
     ) {
         if (true === empty($attributes)) {
             $attributes = [

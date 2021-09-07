@@ -55,8 +55,7 @@ class OutputCest
             ->setAutomaticHtml($example['autoHtml'])
             ->setAutoescape($example['autoescape'])
             ->setCustomTemplate($example['template'])
-            ->setImplicitFlush($example['implicit'])
-        ;
+            ->setImplicitFlush($example['implicit']);
 
         if (true === $example['implicit']) {
             ob_start();

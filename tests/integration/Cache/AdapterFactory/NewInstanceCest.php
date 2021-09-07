@@ -14,6 +14,7 @@ declare(strict_types=1);
 namespace Phalcon\Tests\Integration\Cache\AdapterFactory;
 
 use Codeception\Example;
+use IntegrationTester;
 use Phalcon\Cache\Adapter\Apcu;
 use Phalcon\Cache\Adapter\Libmemcached;
 use Phalcon\Cache\Adapter\Memory;
@@ -23,7 +24,6 @@ use Phalcon\Cache\AdapterFactory;
 use Phalcon\Storage\SerializerFactory;
 use Phalcon\Support\Exception;
 use Phalcon\Support\HelperFactory;
-use IntegrationTester;
 
 use function getOptionsLibmemcached;
 use function getOptionsRedis;
@@ -41,8 +41,8 @@ class NewInstanceCest
      *
      * @throws Exception
      *
-     * @author Phalcon Team <team@phalcon.io>
-     * @since  2020-09-09
+     * @author       Phalcon Team <team@phalcon.io>
+     * @since        2020-09-09
      */
     public function cacheAdapterFactoryNewInstance(IntegrationTester $I, Example $example)
     {
