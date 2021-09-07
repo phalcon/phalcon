@@ -18,29 +18,24 @@ use Phalcon\Logger\Formatter\FormatterInterface;
 use Phalcon\Logger\Formatter\Line;
 use UnitTester;
 
-class GetFormatterCest
+class GetSetFormatterCest
 {
     /**
-     * Tests Phalcon\Logger\Adapter\Noop :: getFormatter()
+     * Tests Phalcon\Logger\Adapter\Noop :: getFormatter()/setFormatter()
      *
      * @param UnitTester $I
      *
      * @author Phalcon Team <team@phalcon.io>
      * @since  2020-09-09
      */
-    public function loggerAdapterNoopGetFormatter(UnitTester $I)
+    public function loggerAdapterNoopGetSetFormatter(UnitTester $I)
     {
-        $I->wantToTest('Logger\Adapter\Noop - getFormatter()');
+        $I->wantToTest('Logger\Adapter\Noop - getFormatter()/setFormatter()');
 
         $adapter = new Noop();
 
-        $adapter->getFormatter(
-            new Line()
-        );
+        $adapter->setFormatter(new Line());
 
-        $I->assertInstanceOf(
-            FormatterInterface::class,
-            $adapter->getFormatter()
-        );
+        $I->assertInstanceOf(FormatterInterface::class, $adapter->getFormatter());
     }
 }
