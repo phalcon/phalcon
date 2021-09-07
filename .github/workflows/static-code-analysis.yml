@@ -52,7 +52,7 @@ jobs:
       - name: Install Packages
         run: composer install --prefer-dist
 
-      - name: Validate Psalm
-        if: always()
-        run: |
-          vendor/bin/psalm src/
+#      - name: Validate Psalm
+#        if: always()
+#        run: |
+#          vendor/bin/psalm src/
