@@ -14,7 +14,7 @@ declare(strict_types=1);
 namespace Phalcon\Support;
 
 use ErrorException;
-use Phalcon\Support\Version;
+use Phalcon\Support\Debug\Exception;
 use ReflectionClass;
 use ReflectionException;
 use ReflectionFunction;
@@ -161,15 +161,16 @@ class Debug
      */
     public function getVersion(): string
     {
-        $link = "https://docs.phalcon.io/"
-            . Version::getPart(Version::VERSION_MAJOR)
+        $version = new Version();
+        $link    = "https://docs.phalcon.io/"
+            . $version->getPart(Version::VERSION_MAJOR)
             . "."
-            . Version::getPart(Version::VERSION_MEDIUM)
+            . $version->getPart(Version::VERSION_MEDIUM)
             . "/en/";
 
         return '<div class="version">Phalcon Framework '
             . '<a href="' . $link . '" target="_new">'
-            . Version::get() . "</a></div>";
+            . $version->get() . "</a></div>";
     }
 
     /**
@@ -287,11 +288,11 @@ class Debug
      * @throws ErrorException
      */
     public function onUncaughtLowSeverity(
-        int $severity,
+        int    $severity,
         string $message,
         string $file,
-        int $line,
-        array $context = []
+        int    $line,
+        array  $context = []
     ): void {
         if (error_reporting() & $severity) {
             throw new ErrorException($message, 0, $severity, $file, $line);
@@ -907,8 +908,7 @@ class Debug
                 $html .= '<tr><td class="key">'
                     . $key . '</td><td>'
                     . $this->getVarDump($value[0])
-                    . '</td></tr>'
-                ;
+                    . '</td></tr>';
             }
 
             $html .= '</table></div>';
@@ -948,8 +948,7 @@ class Debug
             . '<tr><th colspan="2">Memory</th></tr><tr><td>Usage</td><td>'
             . memory_get_usage(true)
             . '</td></tr>'
-            . '</table></div>'
-            ;
+            . '</table></div>';
     }
 
     /**

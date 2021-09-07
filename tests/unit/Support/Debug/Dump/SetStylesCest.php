@@ -27,9 +27,9 @@ class SetStylesCest
     /**
      * Tests Phalcon\Support\Debug\Dump :: setStyles()
      *
-     * @throws ReflectionException
-     *
      * @param UnitTester $I
+     *
+     * @throws ReflectionException
      *
      * @author Phalcon Team <team@phalcon.io>
      * @since  2020-09-09
@@ -61,9 +61,9 @@ class SetStylesCest
     /**
      * Tests Phalcon\Support\Debug\Dump :: getStyle()
      *
-     * @throws ReflectionException
-     *
      * @param UnitTester $I
+     *
+     * @throws ReflectionException
      *
      * @author Phalcon Team <team@phalcon.io>
      * @since  2020-09-09

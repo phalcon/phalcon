@@ -19,21 +19,21 @@ use UnitTester;
 /**
  * Class ChunkCest
  *
- * @package Phalcon\Tests\Unit\Support\Arr
+ * @package Phalcon\Tests\Unit\Support\Helper\Arr
  */
 class ChunkCest
 {
     /**
-     * Tests Phalcon\Support\Arr :: chunk()
+     * Tests Phalcon\Support\Helper\Arr :: chunk()
      *
      * @param UnitTester $I
      *
      * @author Phalcon Team <team@phalcon.io>
      * @since  2020-09-09
      */
-    public function supportArrChunk(UnitTester $I)
+    public function supportHelperArrChunk(UnitTester $I)
     {
-        $I->wantToTest('Support\Arr - chunk()');
+        $I->wantToTest('Support\Helper\Arr - chunk()');
 
         $source = [
             'k1' => 1,
@@ -50,21 +50,21 @@ class ChunkCest
             [3, 4],
             [5, 6],
         ];
-        $actual   = $object->__invoke($source, 2);
+        $actual   = $object($source, 2);
         $I->assertEquals($expected, $actual);
     }
 
     /**
-     * Tests Phalcon\Support\Arr :: chunk() - preserve
+     * Tests Phalcon\Support\Helper\Arr :: chunk() - preserve
      *
      * @param UnitTester $I
      *
      * @author Phalcon Team <team@phalcon.io>
      * @since  2020-09-09
      */
-    public function supportArrChunkPreserve(UnitTester $I)
+    public function supportHelperArrChunkPreserve(UnitTester $I)
     {
-        $I->wantToTest('Support\Arr - chunk() - preserve');
+        $I->wantToTest('Support\Helper\Arr - chunk() - preserve');
 
         $source = [
             'k1' => 1,
@@ -90,7 +90,7 @@ class ChunkCest
                 'k6' => 6,
             ],
         ];
-        $actual   = $object->__invoke($source, 2, true);
+        $actual   = $object($source, 2, true);
         $I->assertEquals($expected, $actual);
     }
 }

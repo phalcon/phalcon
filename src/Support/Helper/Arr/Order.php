@@ -11,7 +11,7 @@
 
 declare(strict_types=1);
 
-namespace Phalcon\Support\Arr;
+namespace Phalcon\Support\Helper\Arr;
 
 use function array_values;
 use function is_object;
@@ -40,9 +40,9 @@ class Order
      */
     public function __invoke(
         array $collection,
-        $attribute,
-        int $order = self::ORDER_ASC,
-        int $flags = SORT_REGULAR
+              $attribute,
+        int   $order = self::ORDER_ASC,
+        int   $flags = SORT_REGULAR
     ): array {
         $sorted = [];
         foreach ($collection as $item) {
@@ -66,7 +66,7 @@ class Order
     private function checkObject(array $sorted, $attribute, $item): array
     {
         if (true === is_object($item)) {
-            $key = $item->{$attribute};
+            $key          = $item->{$attribute};
             $sorted[$key] = $item;
         }
 
@@ -83,7 +83,7 @@ class Order
     private function checkNonObject(array $sorted, $attribute, $item): array
     {
         if (true !== is_object($item)) {
-            $key = $item[$attribute];
+            $key          = $item[$attribute];
             $sorted[$key] = $item;
         }
 

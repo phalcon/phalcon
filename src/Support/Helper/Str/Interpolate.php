@@ -13,8 +13,12 @@ declare(strict_types=1);
 
 namespace Phalcon\Support\Helper\Str;
 
+use Phalcon\Support\Helper\Str\Traits\InterpolateTrait;
+
 class Interpolate
 {
+    use InterpolateTrait;
+
     /**
      * Interpolates context values into the message placeholders
      *
@@ -25,20 +29,10 @@ class Interpolate
      */
     public function __invoke(
         string $message,
-        array $context = [],
+        array  $context = [],
         string $leftToken = "%",
         string $rightToken = "%"
     ): string {
-        if (true !== empty($context)) {
-            $replace = [];
-
-            foreach ($context as $key => $value) {
-                $replace[$leftToken . $key . $rightToken] = $value;
-            }
-
-            return strtr($message, $replace);
-        }
-
-        return $message;
+        return $this->toInterpolate($message, $context, $leftToken, $rightToken);
     }
 }

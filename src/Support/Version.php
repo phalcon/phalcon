@@ -117,8 +117,8 @@ class Version
         $special       = $version[self::VERSION_SPECIAL];
         $specialNumber = $version[self::VERSION_SPECIAL_NUMBER];
 
-        $result  = $major . "." . $medium . "." . $minor;
-        $suffix  = $this->getSpecial($special);
+        $result = $major . "." . $medium . "." . $minor;
+        $suffix = $this->getSpecial($special);
 
         if ('' !== $suffix) {
             /**

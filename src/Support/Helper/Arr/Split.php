@@ -11,7 +11,7 @@
 
 declare(strict_types=1);
 
-namespace Phalcon\Support\Arr;
+namespace Phalcon\Support\Helper\Arr;
 
 use function array_keys;
 use function array_values;

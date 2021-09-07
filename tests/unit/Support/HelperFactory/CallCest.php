@@ -13,7 +13,6 @@ declare(strict_types=1);
 
 namespace Phalcon\Tests\Unit\Support\HelperFactory;
 
-use Codeception\Example;
 use Phalcon\Support\Arr\Blacklist;
 use Phalcon\Support\Arr\Chunk;
 use Phalcon\Support\Arr\First;
