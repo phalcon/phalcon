@@ -15,7 +15,7 @@ namespace Phalcon\Support\Debug;
 
 use JsonException;
 use Phalcon\Di\DiInterface;
-use Phalcon\Support\Str\Traits\InterpolateTrait;
+use Phalcon\Support\Helper\Str\Traits\InterpolateTrait;
 use Reflection;
 use ReflectionClass;
 use ReflectionException;

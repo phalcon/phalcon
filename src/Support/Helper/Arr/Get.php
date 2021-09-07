@@ -11,9 +11,8 @@
 
 declare(strict_types=1);
 
-namespace Phalcon\Support\Arr;
+namespace Phalcon\Support\Helper\Arr;
 
-use function is_string;
 use function settype;
 
 /**
@@ -34,9 +33,9 @@ class Get
      * @return mixed|null
      */
     public function __invoke(
-        array $collection,
-        $index,
-        $defaultValue = null,
+        array  $collection,
+               $index,
+               $defaultValue = null,
         string $cast = null
     ) {
         $value = $collection[$index] ?? $defaultValue;

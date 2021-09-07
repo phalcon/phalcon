@@ -15,7 +15,6 @@ namespace Phalcon\Tests\Unit\Support\Version;
 
 use Codeception\Example;
 use Phalcon\Tests\Fixtures\Traits\VersionTrait;
-use Phalcon\Support\Version;
 use Phalcon\Tests\Fixtures\Version\VersionAlphaFixture;
 use Phalcon\Tests\Fixtures\Version\VersionBetaFixture;
 use Phalcon\Tests\Fixtures\Version\VersionRcFixture;
@@ -36,8 +35,8 @@ class GetIdCest
      * @param UnitTester $I
      * @param Example    $example
      *
-     * @author Phalcon Team <team@phalcon.io>
-     * @since  2020-09-09
+     * @author       Phalcon Team <team@phalcon.io>
+     * @since        2020-09-09
      */
     public function supportVersionGetId(UnitTester $I, Example $example)
     {
@@ -52,7 +51,7 @@ class GetIdCest
     }
 
     /**
-     * @return \string[][]
+     * @return string[][]
      */
     private function getExamples(): array
     {

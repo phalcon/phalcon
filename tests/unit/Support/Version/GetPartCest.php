@@ -13,8 +13,8 @@ declare(strict_types=1);
 
 namespace Phalcon\Tests\Unit\Support\Version;
 
-use Phalcon\Tests\Fixtures\Traits\VersionTrait;
 use Phalcon\Support\Version;
+use Phalcon\Tests\Fixtures\Traits\VersionTrait;
 use UnitTester;
 
 class GetPartCest
@@ -39,7 +39,7 @@ class GetPartCest
          */
 
         $version = new Version();
-        $id = $version->getId();
+        $id      = $version->getId();
 
         // The major version is the first digit
         $I->assertEquals(

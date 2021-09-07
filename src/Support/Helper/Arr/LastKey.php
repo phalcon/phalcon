@@ -11,12 +11,11 @@
 
 declare(strict_types=1);
 
-namespace Phalcon\Support\Arr;
+namespace Phalcon\Support\Helper\Arr;
 
-use Phalcon\Support\Arr\Traits\FilterTrait;
+use Phalcon\Support\Helper\Arr\Traits\FilterTrait;
 
 use function array_key_last;
-use function reset;
 
 /**
  * Class LastKey

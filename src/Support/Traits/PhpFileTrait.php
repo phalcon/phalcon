@@ -42,7 +42,7 @@ trait PhpFileTrait
     }
 
     /**
-     * @param string   $filename
+     * @param string $filename
      *
      * @return string|false
      *
@@ -111,8 +111,8 @@ trait PhpFileTrait
 
 
     /**
-     * @param string   $filename
-     * @param string   $mode
+     * @param string $filename
+     * @param string $mode
      *
      * @return resource|false
      *
@@ -172,7 +172,7 @@ trait PhpFileTrait
     }
 
     /**
-     * @param string   $filename
+     * @param string $filename
      *
      * @return bool
      *

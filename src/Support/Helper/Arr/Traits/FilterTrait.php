@@ -11,7 +11,7 @@
 
 declare(strict_types=1);
 
-namespace Phalcon\Support\Arr\Traits;
+namespace Phalcon\Support\Helper\Arr\Traits;
 
 use function array_filter;
 use function is_callable;
@@ -19,7 +19,7 @@ use function is_callable;
 /**
  * Trait FilterTrait
  *
- * @package Phalcon\Support\Str\Traits
+ * @package Phalcon\Support\Helper\Str\Traits
  */
 trait FilterTrait
 {
@@ -32,7 +32,7 @@ trait FilterTrait
      * @return array
      */
     private function toFilter(
-        array $collection,
+        array    $collection,
         callable $method = null
     ): array {
         if (null === $method || !is_callable($method)) {

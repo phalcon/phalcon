@@ -13,9 +13,9 @@ declare(strict_types=1);
 
 namespace Phalcon\Tests\Unit\Support\Debug;
 
-use Phalcon\Support\Debug\Debug;
+use Phalcon\Support\Debug;
 use Phalcon\Support\Exception;
-use Phalcon\Version\Version;
+use Phalcon\Support\Version;
 use UnitTester;
 
 /**
@@ -41,10 +41,11 @@ class RenderHtmlCest
         $debug     = new Debug();
         $debug->setShowBackTrace(false);
 
-        $version = Version::get();
-        $link    = Version::getPart(Version::VERSION_MAJOR)
+        $version       = new Version();
+        $versionString = $version->get();
+        $link          = $version->getPart(Version::VERSION_MAJOR)
             . "."
-            . Version::getPart(Version::VERSION_MEDIUM);
+            . $version->getPart(Version::VERSION_MEDIUM);
 
 
         $expected = '<html><head>'
@@ -60,7 +61,7 @@ class RenderHtmlCest
             . '</head><body>'
             . '<div class="version">Phalcon Framework '
             . '<a href="https://docs.phalcon.io/' . $link . '/en/" '
-            . 'target="_new">' . $version . '</a>'
+            . 'target="_new">' . $versionString . '</a>'
             . '</div>'
             . '<div align="center">'
             . '<div class="error-main">'
@@ -85,7 +86,7 @@ class RenderHtmlCest
             . '</div>'
             . '</body></html>';
 
-        $actual   = $debug->renderHtml($exception);
+        $actual = $debug->renderHtml($exception);
         $I->assertEquals($expected, $actual);
     }
 
@@ -105,7 +106,7 @@ class RenderHtmlCest
         $debug     = new Debug();
         $debug->setShowBackTrace(true);
 
-        $actual   = $debug->renderHtml($exception);
+        $actual = $debug->renderHtml($exception);
         $I->assertStringContainsString(
             '<div class="error-info">',
             $actual

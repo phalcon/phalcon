@@ -13,9 +13,9 @@ declare(strict_types=1);
 
 namespace Phalcon\Tests\Unit\Support\Debug;
 
-use Phalcon\Support\Debug\Debug;
+use Phalcon\Support\Debug;
+use Phalcon\Support\Version;
 use Phalcon\Tests\Fixtures\Traits\DiTrait;
-use Phalcon\Version\Version;
 use UnitTester;
 
 /**
@@ -47,16 +47,17 @@ class GetVersionCest
     {
         $I->wantToTest('Debug - getVersion()');
 
-        $debug = new Debug();
+        $debug   = new Debug();
+        $version = new Version();
 
-        $uri     = 'https://docs.phalcon.io/'
-            . Version::getPart(Version::VERSION_MAJOR) . '.'
-            . Version::getPart(Version::VERSION_MEDIUM) . '/en/';
-        $version = Version::get();
+        $uri           = 'https://docs.phalcon.io/'
+            . $version->getPart(Version::VERSION_MAJOR) . '.'
+            . $version->getPart(Version::VERSION_MEDIUM) . '/en/';
+        $versionString = $version->get();
 
 
         $expected = '<div class="version">Phalcon Framework '
-            . '<a href="' . $uri . '" target="_new">' . $version . '</a></div>';
+            . '<a href="' . $uri . '" target="_new">' . $versionString . '</a></div>';
         $actual   = $debug->getVersion();
 
         $I->assertEquals($expected, $actual);

@@ -11,7 +11,7 @@
 
 declare(strict_types=1);
 
-namespace Phalcon\Support\Arr;
+namespace Phalcon\Support\Helper\Arr;
 
 /**
  * Class Set
@@ -31,8 +31,8 @@ class Set
      */
     public function __invoke(
         array $collection,
-        $value,
-        $index = null
+              $value,
+              $index = null
     ): array {
         $collection = $this->checkNull($collection, $value, $index);
 

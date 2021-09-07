@@ -14,56 +14,56 @@ declare(strict_types=1);
 namespace Phalcon\Tests\Unit\Support\HelperFactory;
 
 use Codeception\Example;
-use Phalcon\Support\Arr\Blacklist;
-use Phalcon\Support\Arr\Chunk;
-use Phalcon\Support\Arr\First;
-use Phalcon\Support\Arr\FirstKey;
-use Phalcon\Support\Arr\Flatten;
-use Phalcon\Support\Arr\Get;
-use Phalcon\Support\Arr\Group;
-use Phalcon\Support\Arr\Has;
-use Phalcon\Support\Arr\IsUnique;
-use Phalcon\Support\Arr\Last;
-use Phalcon\Support\Arr\LastKey;
-use Phalcon\Support\Arr\Order;
-use Phalcon\Support\Arr\Pluck;
-use Phalcon\Support\Arr\Set;
-use Phalcon\Support\Arr\SliceLeft;
-use Phalcon\Support\Arr\SliceRight;
-use Phalcon\Support\Arr\Split;
-use Phalcon\Support\Arr\ToObject;
-use Phalcon\Support\Arr\ValidateAll;
-use Phalcon\Support\Arr\ValidateAny;
-use Phalcon\Support\Arr\Whitelist;
-use Phalcon\Support\File\Basename;
+use Phalcon\Support\Helper\Arr\Blacklist;
+use Phalcon\Support\Helper\Arr\Chunk;
+use Phalcon\Support\Helper\Arr\First;
+use Phalcon\Support\Helper\Arr\FirstKey;
+use Phalcon\Support\Helper\Arr\Flatten;
+use Phalcon\Support\Helper\Arr\Get;
+use Phalcon\Support\Helper\Arr\Group;
+use Phalcon\Support\Helper\Arr\Has;
+use Phalcon\Support\Helper\Arr\IsUnique;
+use Phalcon\Support\Helper\Arr\Last;
+use Phalcon\Support\Helper\Arr\LastKey;
+use Phalcon\Support\Helper\Arr\Order;
+use Phalcon\Support\Helper\Arr\Pluck;
+use Phalcon\Support\Helper\Arr\Set;
+use Phalcon\Support\Helper\Arr\SliceLeft;
+use Phalcon\Support\Helper\Arr\SliceRight;
+use Phalcon\Support\Helper\Arr\Split;
+use Phalcon\Support\Helper\Arr\ToObject;
+use Phalcon\Support\Helper\Arr\ValidateAll;
+use Phalcon\Support\Helper\Arr\ValidateAny;
+use Phalcon\Support\Helper\Arr\Whitelist;
+use Phalcon\Support\Helper\File\Basename;
+use Phalcon\Support\Helper\Json\Decode;
+use Phalcon\Support\Helper\Json\Encode;
+use Phalcon\Support\Helper\Number\IsBetween;
+use Phalcon\Support\Helper\Str\Concat;
+use Phalcon\Support\Helper\Str\CountVowels;
+use Phalcon\Support\Helper\Str\Decapitalize;
+use Phalcon\Support\Helper\Str\Decrement;
+use Phalcon\Support\Helper\Str\DirFromFile;
+use Phalcon\Support\Helper\Str\DirSeparator;
+use Phalcon\Support\Helper\Str\EndsWith;
+use Phalcon\Support\Helper\Str\FirstBetween;
+use Phalcon\Support\Helper\Str\Friendly;
+use Phalcon\Support\Helper\Str\Humanize;
+use Phalcon\Support\Helper\Str\Includes;
+use Phalcon\Support\Helper\Str\Increment;
+use Phalcon\Support\Helper\Str\IsAnagram;
+use Phalcon\Support\Helper\Str\IsLower;
+use Phalcon\Support\Helper\Str\IsPalindrome;
+use Phalcon\Support\Helper\Str\IsUpper;
+use Phalcon\Support\Helper\Str\Len;
+use Phalcon\Support\Helper\Str\Lower;
+use Phalcon\Support\Helper\Str\Random;
+use Phalcon\Support\Helper\Str\ReduceSlashes;
+use Phalcon\Support\Helper\Str\StartsWith;
+use Phalcon\Support\Helper\Str\Ucwords;
+use Phalcon\Support\Helper\Str\Underscore;
+use Phalcon\Support\Helper\Str\Upper;
 use Phalcon\Support\HelperFactory;
-use Phalcon\Support\Json\Decode;
-use Phalcon\Support\Json\Encode;
-use Phalcon\Support\Number\IsBetween;
-use Phalcon\Support\Str\Concat;
-use Phalcon\Support\Str\CountVowels;
-use Phalcon\Support\Str\Decapitalize;
-use Phalcon\Support\Str\Decrement;
-use Phalcon\Support\Str\DirFromFile;
-use Phalcon\Support\Str\DirSeparator;
-use Phalcon\Support\Str\EndsWith;
-use Phalcon\Support\Str\FirstBetween;
-use Phalcon\Support\Str\Friendly;
-use Phalcon\Support\Str\Humanize;
-use Phalcon\Support\Str\Includes;
-use Phalcon\Support\Str\Increment;
-use Phalcon\Support\Str\IsAnagram;
-use Phalcon\Support\Str\IsLower;
-use Phalcon\Support\Str\IsPalindrome;
-use Phalcon\Support\Str\IsUpper;
-use Phalcon\Support\Str\Len;
-use Phalcon\Support\Str\Lower;
-use Phalcon\Support\Str\Random;
-use Phalcon\Support\Str\ReduceSlashes;
-use Phalcon\Support\Str\StartsWith;
-use Phalcon\Support\Str\Ucwords;
-use Phalcon\Support\Str\Underscore;
-use Phalcon\Support\Str\Upper;
 use UnitTester;
 
 class NewInstanceCest
@@ -75,8 +75,8 @@ class NewInstanceCest
      *
      * @param UnitTester $I
      *
-     * @author Phalcon Team <team@phalcon.io>
-     * @since  2020-09-09
+     * @author       Phalcon Team <team@phalcon.io>
+     * @since        2020-09-09
      */
     public function supportHelperFactoryNewInstance(UnitTester $I, Example $example)
     {
@@ -90,7 +90,7 @@ class NewInstanceCest
     }
 
     /**
-     * @return \string[][]
+     * @return string[][]
      */
     private function getExamples(): array
     {
