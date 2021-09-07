@@ -17,7 +17,7 @@
     ],
     "license": "MIT",
     "require": {
-        "php": ">=7.4 <8.0",
+        "php": ">=7.4 <9.0",
         "ext-apcu": "*",
         "ext-igbinary": "*",
         "ext-json": "*",

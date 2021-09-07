@@ -4,7 +4,7 @@
         "Read more about it at https://getcomposer.org/doc/01-basic-usage.md#installing-dependencies",
         "This file is @generated automatically"
     ],
-    "content-hash": "066b61bd79df75bf4c46f0a86e873b22",
+    "content-hash": "8a3a0d748b767fdf488e0bcd040c08c8",
     "packages": [
         {
             "name": "payload-interop/payload-interop",
@@ -6510,7 +6510,7 @@
     "prefer-stable": false,
     "prefer-lowest": false,
     "platform": {
-        "php": ">=7.4 <8.0",
+        "php": ">=7.4 <9.0",
         "ext-apcu": "*",
         "ext-igbinary": "*",
         "ext-json": "*",
