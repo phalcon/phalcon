@@ -145,6 +145,12 @@ jobs:
         if: always()
         run: vendor/bin/codecept run --coverage-xml=coverage-${{ matrix.php-versions }}.xml --ext DotReporter unit
 
+      - name: Upload Code Coverage on 7.4
+        uses: codecov/codecov-action@v1
+        with:
+          token: ${{ secrets.CODECOV_TOKEN }}
+          file: ./tests/_output/coverage-*.xml
+
 #      - name: Run CLI Tests
 #        if: always()
 #        run: vendor/bin/codecept run --coverage-xml=coverage-${{ matrix.php-versions }}.xml --ext DotReporter cli
@@ -155,6 +161,12 @@ jobs:
           DATA_MEMCACHED_PORT: ${{ job.services.memcached.ports['11211'] }}
         if: always()
         run: vendor/bin/codecept run --coverage-xml=coverage-${{ matrix.php-versions }}.xml --ext DotReporter integration
+
+      - name: Upload Code Coverage on 7.4
+        uses: codecov/codecov-action@v1
+        with:
+          token: ${{ secrets.CODECOV_TOKEN }}
+          file: ./tests/_output/coverage-*.xml
 
 #      - name: Run Database Tests (Common)
 #        env:
