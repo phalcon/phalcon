@@ -119,7 +119,7 @@ abstract class AbstractApplication implements InjectionAwareInterface, EventsAwa
      */
     public function registerModules(
         array $modules,
-        bool  $merge = false
+        bool $merge = false
     ): AbstractApplication {
         if (true === $merge) {
             $this->modules = array_merge($this->modules, $modules);

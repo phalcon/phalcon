@@ -50,7 +50,7 @@ class Csv extends AbstractAdapter implements ArrayAccess
      */
     public function __construct(
         InterpolatorFactory $interpolator,
-        array               $options
+        array $options
     ) {
         parent::__construct($interpolator, $options);
 
@@ -103,7 +103,7 @@ class Csv extends AbstractAdapter implements ArrayAccess
      */
     private function load(
         string $file,
-        int    $length,
+        int $length,
         string $separator,
         string $enclosure
     ): void {

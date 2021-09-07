@@ -42,6 +42,7 @@ class GetClaimsCest
         $token = new Token($headers, $claims, $signature);
 
         $I->assertInstanceOf(Item::class, $token->getClaims());
-        $I->assertEquals("valid-subject", $token->getClaims()->get('sub'));
+        $I->assertEquals("valid-subject", $token->getClaims()
+                                                ->get('sub'));
     }
 }

@@ -106,11 +106,11 @@ class Asset implements AssetInterface
     public function __construct(
         string $type,
         string $path,
-        bool   $isLocal = true,
-        bool   $filter = true,
-        array  $attributes = [],
+        bool $isLocal = true,
+        bool $filter = true,
+        array $attributes = [],
         string $version = null,
-        bool   $isAutoVersion = false
+        bool $isAutoVersion = false
     ) {
         $this->type          = $type;
         $this->path          = $path;

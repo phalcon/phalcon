@@ -125,11 +125,11 @@ class Manager implements InjectionAwareInterface
      */
     public function addCss(
         string $path,
-        bool   $local = true,
-        bool   $filter = true,
-        array  $attributes = [],
+        bool $local = true,
+        bool $filter = true,
+        array $attributes = [],
         string $version = null,
-        bool   $autoVersion = false
+        bool $autoVersion = false
     ): Manager {
         $this->addAssetByType(
             'css',
@@ -183,8 +183,8 @@ class Manager implements InjectionAwareInterface
      */
     public function addInlineCss(
         string $content,
-        bool   $filter = true,
-        array  $attributes = []
+        bool $filter = true,
+        array $attributes = []
     ): Manager {
         $this->addInlineCodeByType(
             'css',
@@ -205,8 +205,8 @@ class Manager implements InjectionAwareInterface
      */
     public function addInlineJs(
         string $content,
-        bool   $filter = true,
-        array  $attributes = []
+        bool $filter = true,
+        array $attributes = []
     ): Manager {
         $this->addInlineCodeByType(
             'js',
@@ -235,11 +235,11 @@ class Manager implements InjectionAwareInterface
      */
     public function addJs(
         string $path,
-        bool   $local = true,
-        bool   $filter = true,
-        array  $attributes = [],
+        bool $local = true,
+        bool $filter = true,
+        array $attributes = [],
         string $version = null,
-        bool   $autoVersion = false
+        bool $autoVersion = false
     ): Manager {
         $this->addAssetByType(
             'js',
@@ -882,8 +882,8 @@ class Manager implements InjectionAwareInterface
      */
     private function calculatePrefixedPath(
         Collection $collection,
-        string     $path,
-        string     $filePath
+        string $path,
+        string $filePath
     ): string {
         $prefixedPath = $collection->getPrefix() . $path;
         $version      = $collection->getVersion();

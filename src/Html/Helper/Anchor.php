@@ -36,8 +36,8 @@ class Anchor extends AbstractHelper
     public function __invoke(
         string $href,
         string $text,
-        array  $attributes = [],
-        bool   $raw = false
+        array $attributes = [],
+        bool $raw = false
     ): string {
         $overrides = $this->processAttributes($href, $attributes);
 

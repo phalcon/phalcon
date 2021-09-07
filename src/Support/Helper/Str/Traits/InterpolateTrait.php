@@ -34,7 +34,7 @@ trait InterpolateTrait
      */
     private function toInterpolate(
         string $input,
-        array  $context = [],
+        array $context = [],
         string $left = '{',
         string $right = '}'
     ): string {

@@ -72,6 +72,8 @@ abstract class AbstractFormatter implements FormatterInterface
      */
     protected function getFormattedDate(Item $item): string
     {
-        return $item->getDateTime()->format($this->dateFormat);
+        return $item->getDateTime()
+                    ->format($this->dateFormat)
+        ;
     }
 }

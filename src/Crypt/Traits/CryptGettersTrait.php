@@ -196,8 +196,8 @@ trait CryptGettersTrait
     abstract protected function cryptUnpadText(
         string $input,
         string $mode,
-        int    $blockSize,
-        int    $paddingType
+        int $blockSize,
+        int $paddingType
     );
 
     /**
@@ -209,7 +209,7 @@ trait CryptGettersTrait
      */
     protected function decryptCbcEcb(
         string $mode,
-        int    $blockSize,
+        int $blockSize,
         string $decrypted
     ): string {
         if ('-cbc' === $mode || '-ecb' === $mode) {
@@ -273,7 +273,7 @@ trait CryptGettersTrait
     protected function encryptGetPadded(
         string $mode,
         string $input,
-        int    $blockSize
+        int $blockSize
     ): string {
         if (0 !== $this->padding && ('-cbc' === $mode || '-ecb' === $mode)) {
             return $this->cryptPadText($input, $mode, $blockSize, $this->padding);

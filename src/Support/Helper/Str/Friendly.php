@@ -45,8 +45,8 @@ class Friendly
     public function __invoke(
         string $text,
         string $separator = '-',
-        bool   $lowercase = true,
-               $replace = null
+        bool $lowercase = true,
+        $replace = null
     ): string {
         if (null !== $replace) {
             $text = $this->checkReplace($replace, $text);

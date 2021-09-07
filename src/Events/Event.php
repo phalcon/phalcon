@@ -82,8 +82,8 @@ class Event implements EventInterface
     public function __construct(
         string $type,
         object $source,
-               $data = null,
-        bool   $cancelable = true
+        $data = null,
+        bool $cancelable = true
     ) {
         $this->type       = $type;
         $this->source     = $source;

@@ -36,7 +36,7 @@ class StartsWith
     public function __invoke(
         string $haystack,
         string $needle,
-        bool   $ignoreCase = true
+        bool $ignoreCase = true
     ): bool {
         return $this->toStartsWith($haystack, $needle, $ignoreCase);
     }

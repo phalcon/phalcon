@@ -36,8 +36,8 @@ interface DiInterface extends ArrayAccess
      */
     public function attempt(
         string $name,
-               $definition,
-        bool   $shared = false
+        $definition,
+        bool $shared = false
     );
 
     /**
@@ -123,8 +123,8 @@ interface DiInterface extends ArrayAccess
      */
     public function set(
         string $name,
-               $definition,
-        bool   $shared = false
+        $definition,
+        bool $shared = false
     ): ServiceInterface;
 
     /**
@@ -144,7 +144,7 @@ interface DiInterface extends ArrayAccess
      * @return ServiceInterface
      */
     public function setService(
-        string           $name,
+        string $name,
         ServiceInterface $rawDefinition
     ): ServiceInterface;
 

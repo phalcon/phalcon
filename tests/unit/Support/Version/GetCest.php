@@ -39,7 +39,7 @@ class GetCest
     {
         $I->wantToTest('Version - get() - ' . $example[0]);
 
-        $version = new $example[1];
+        $version = new $example[1]();
 
         $expected = $example[2];
         $actual   = $version->get();

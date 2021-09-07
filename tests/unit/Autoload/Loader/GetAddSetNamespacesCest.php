@@ -89,7 +89,8 @@ class GetAddSetNamespacesCest
             ->addNamespace(
                 'Phalcon\Loader',
                 '/path/to/loader'
-            );
+            )
+        ;
         $I->assertEquals(
             [
                 'Phalcon\Loader\\'   => [
@@ -129,7 +130,8 @@ class GetAddSetNamespacesCest
             ->addNamespace(
                 'Phalcon\Loader',
                 '/path/to/provider/source'
-            );
+            )
+        ;
         $I->assertEquals(
             [
                 'Phalcon\Loader\\' => [
@@ -164,7 +166,8 @@ class GetAddSetNamespacesCest
             function () {
                 $loader = new Loader();
                 $loader
-                    ->addNamespace('Phalcon\Loader', 1234);
+                    ->addNamespace('Phalcon\Loader', 1234)
+                ;
             }
         );
     }

@@ -51,9 +51,9 @@ class AdapterFactory
      * @param array             $services
      */
     public function __construct(
-        HelperFactory     $helperFactory,
+        HelperFactory $helperFactory,
         SerializerFactory $factory,
-        array             $services = []
+        array $services = []
     ) {
         $this->helperFactory     = $helperFactory;
         $this->serializerFactory = $factory;

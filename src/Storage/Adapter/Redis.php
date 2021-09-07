@@ -48,9 +48,9 @@ class Redis extends AbstractAdapter
      * @throws SupportException
      */
     public function __construct(
-        HelperFactory     $helperFactory,
+        HelperFactory $helperFactory,
         SerializerFactory $factory,
-        array             $options = []
+        array $options = []
     ) {
         /**
          * Lets set some defaults and options here
@@ -73,7 +73,9 @@ class Redis extends AbstractAdapter
      */
     public function clear(): bool
     {
-        return $this->getAdapter()->flushDB();
+        return $this->getAdapter()
+                    ->flushDB()
+        ;
     }
 
     /**
@@ -87,7 +89,9 @@ class Redis extends AbstractAdapter
      */
     public function decrement(string $key, int $value = 1)
     {
-        return $this->getAdapter()->decrBy($key, $value);
+        return $this->getAdapter()
+                    ->decrBy($key, $value)
+        ;
     }
 
     /**
@@ -100,7 +104,8 @@ class Redis extends AbstractAdapter
      */
     public function delete(string $key): bool
     {
-        return (bool) $this->getAdapter()->unlink($key);
+        return (bool) $this->getAdapter()
+                           ->unlink($key);
     }
 
     /**
@@ -115,7 +120,8 @@ class Redis extends AbstractAdapter
     public function get(string $key, $defaultValue = null)
     {
         return $this->getUnserializedData(
-            $this->getAdapter()->get($key),
+            $this->getAdapter()
+                 ->get($key),
             $defaultValue
         );
     }
@@ -135,7 +141,8 @@ class Redis extends AbstractAdapter
             $this
                 ->checkConnect($connection)
                 ->checkAuth($connection)
-                ->checkIndex($connection);
+                ->checkIndex($connection)
+            ;
 
             $connection->setOption(RedisService::OPT_PREFIX, $this->prefix);
 
@@ -157,7 +164,8 @@ class Redis extends AbstractAdapter
     public function getKeys(string $prefix = ''): array
     {
         return $this->getFilteredKeys(
-            $this->getAdapter()->keys('*'),
+            $this->getAdapter()
+                 ->keys('*'),
             $prefix
         );
     }
@@ -172,7 +180,8 @@ class Redis extends AbstractAdapter
      */
     public function has(string $key): bool
     {
-        return (bool) $this->getAdapter()->exists($key);
+        return (bool) $this->getAdapter()
+                           ->exists($key);
     }
 
     /**
@@ -186,7 +195,9 @@ class Redis extends AbstractAdapter
      */
     public function increment(string $key, int $value = 1)
     {
-        return $this->getAdapter()->incrBy($key, $value);
+        return $this->getAdapter()
+                    ->incrBy($key, $value)
+        ;
     }
 
     /**
@@ -201,11 +212,13 @@ class Redis extends AbstractAdapter
      */
     public function set(string $key, $value, $ttl = null): bool
     {
-        return $this->getAdapter()->set(
-            $key,
-            $this->getSerializedData($value),
-            $this->getTtl($ttl)
-        );
+        return $this->getAdapter()
+                    ->set(
+                        $key,
+                        $this->getSerializedData($value),
+                        $this->getTtl($ttl)
+                    )
+        ;
     }
 
     /**

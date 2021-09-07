@@ -44,9 +44,9 @@ class Memory extends AbstractAdapter
      * @throws SupportException
      */
     public function __construct(
-        HelperFactory     $helperFactory,
+        HelperFactory $helperFactory,
         SerializerFactory $factory,
-        array             $options = []
+        array $options = []
     ) {
         parent::__construct($helperFactory, $factory, $options);
 

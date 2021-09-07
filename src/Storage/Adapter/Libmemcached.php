@@ -44,9 +44,9 @@ class Libmemcached extends AbstractAdapter
      * @throws SupportException
      */
     public function __construct(
-        HelperFactory     $helperFactory,
+        HelperFactory $helperFactory,
         SerializerFactory $factory,
-        array             $options = []
+        array $options = []
     ) {
         if (true !== isset($options['servers'])) {
             $options['servers'] = [
@@ -69,7 +69,9 @@ class Libmemcached extends AbstractAdapter
      */
     public function clear(): bool
     {
-        return $this->getAdapter()->flush();
+        return $this->getAdapter()
+                    ->flush()
+        ;
     }
 
     /**
@@ -83,7 +85,9 @@ class Libmemcached extends AbstractAdapter
      */
     public function decrement(string $key, int $value = 1)
     {
-        return $this->getAdapter()->decrement($key, $value);
+        return $this->getAdapter()
+                    ->decrement($key, $value)
+        ;
     }
 
     /**
@@ -96,7 +100,9 @@ class Libmemcached extends AbstractAdapter
      */
     public function delete(string $key): bool
     {
-        return $this->getAdapter()->delete($key, 0);
+        return $this->getAdapter()
+                    ->delete($key, 0)
+        ;
     }
 
     /**
@@ -111,7 +117,8 @@ class Libmemcached extends AbstractAdapter
     public function get(string $key, $defaultValue = null)
     {
         return $this->getUnserializedData(
-            $this->getAdapter()->get($key),
+            $this->getAdapter()
+                 ->get($key),
             $defaultValue
         );
     }
@@ -171,7 +178,8 @@ class Libmemcached extends AbstractAdapter
                 $this
                     ->setOptions($connection, $client)
                     ->setServers($connection, $servers)
-                    ->setSasl($connection, $saslUser, $saslPass);
+                    ->setSasl($connection, $saslUser, $saslPass)
+                ;
             }
 
             $this->setSerializer($connection);
@@ -193,7 +201,8 @@ class Libmemcached extends AbstractAdapter
     public function getKeys(string $prefix = ''): array
     {
         return $this->getFilteredKeys(
-            $this->getAdapter()->getAllKeys(),
+            $this->getAdapter()
+                 ->getAllKeys(),
             $prefix
         );
     }
@@ -225,7 +234,9 @@ class Libmemcached extends AbstractAdapter
      */
     public function increment(string $key, int $value = 1)
     {
-        return $this->getAdapter()->increment($key, $value);
+        return $this->getAdapter()
+                    ->increment($key, $value)
+        ;
     }
 
     /**
@@ -241,11 +252,13 @@ class Libmemcached extends AbstractAdapter
      */
     public function set(string $key, $value, $ttl = null): bool
     {
-        return $this->getAdapter()->set(
-            $key,
-            $this->getSerializedData($value),
-            $this->getTtl($ttl)
-        );
+        return $this->getAdapter()
+                    ->set(
+                        $key,
+                        $this->getSerializedData($value),
+                        $this->getTtl($ttl)
+                    )
+        ;
     }
 
     /**

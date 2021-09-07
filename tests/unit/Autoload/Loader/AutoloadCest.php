@@ -47,7 +47,8 @@ class AutoloadCest
             ->addClass(
                 'Two',
                 dataDir('fixtures/Loader/Example/Classes/Two.php')
-            );
+            )
+        ;
 
         $loader->autoload('One');
 
@@ -107,7 +108,8 @@ class AutoloadCest
             ->addNamespace(
                 'Example\Namespaces',
                 dataDir('fixtures/Loader/Example/Namespaces/')
-            );
+            )
+        ;
 
         $loader->autoload(Mongo::class);
 
@@ -147,7 +149,8 @@ class AutoloadCest
             ->addNamespace(
                 'Example\Namespaces',
                 dataDir('fixtures/Loader/Example/Namespaces/')
-            );
+            )
+        ;
         $loader
             ->setNamespaces(
                 [
@@ -156,7 +159,8 @@ class AutoloadCest
                         dataDir('fixtures/Loader/Example/Namespaces/Plugin/'),
                     ],
                 ]
-            );
+            )
+        ;
 
         $loader->autoload(Another::class);
 
@@ -220,7 +224,8 @@ class AutoloadCest
             ->addNamespace(
                 'Example\Namespaces\Adapter',
                 dataDir('fixtures/Loader/Example/Namespaces/Adapter/')
-            );
+            )
+        ;
 
         $loader->autoload('Example\Namespaces\Adapter\Unknown');
 
@@ -264,7 +269,8 @@ class AutoloadCest
                     'Example\Namespaces'      => dataDir('fixtures/Loader/Example/Namespaces/'),
                     'Example'                 => dataDir('fixtures/Loader/Example/Namespaces/'),
                 ]
-            );
+            )
+        ;
 
         $loader->autoload('Example\Namespaces\Engines\Alcohol');
 

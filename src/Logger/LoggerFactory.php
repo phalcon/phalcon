@@ -83,8 +83,8 @@ class LoggerFactory
      * @return Logger
      */
     public function newInstance(
-        string        $name,
-        array         $adapters = [],
+        string $name,
+        array $adapters = [],
         ?DateTimeZone $timezone = null
     ): Logger {
         return new Logger($name, $adapters, $timezone);

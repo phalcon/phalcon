@@ -40,9 +40,9 @@ class Order
      */
     public function __invoke(
         array $collection,
-              $attribute,
-        int   $order = self::ORDER_ASC,
-        int   $flags = SORT_REGULAR
+        $attribute,
+        int $order = self::ORDER_ASC,
+        int $flags = SORT_REGULAR
     ): array {
         $sorted = [];
         foreach ($collection as $item) {

@@ -76,9 +76,9 @@ class Stream extends AbstractAdapter
      * @throws SupportException
      */
     public function __construct(
-        HelperFactory     $helperFactory,
+        HelperFactory $helperFactory,
         SerializerFactory $factory,
-        array             $options = []
+        array $options = []
     ) {
         $storageDir = $helperFactory->get($options, 'storageDir', '');
         if (empty($storageDir)) {

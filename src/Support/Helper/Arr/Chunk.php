@@ -33,8 +33,8 @@ class Chunk
      */
     public function __invoke(
         array $collection,
-        int   $size,
-        bool  $preserveKeys = false
+        int $size,
+        bool $preserveKeys = false
     ): array {
         return array_chunk($collection, $size, $preserveKeys);
     }

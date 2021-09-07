@@ -120,9 +120,10 @@ class OutputJsCest
         $manager->useImplicitOutput(false);
 
         $manager->collection('js')
-            ->addJs(dataDir('assets/assets/jquery.js'), false, false)
-            ->setTargetPath(outputDir('assets/combined.js'))
-            ->setTargetUri('production/combined.js');
+                ->addJs(dataDir('assets/assets/jquery.js'), false, false)
+                ->setTargetPath(outputDir('assets/combined.js'))
+                ->setTargetUri('production/combined.js')
+        ;
 
         $expected = sprintf(
             '<script type="text/javascript" src="%s"></script>%s',
@@ -147,10 +148,11 @@ class OutputJsCest
         $manager->useImplicitOutput(false);
 
         $manager->collection('js')
-            ->addJs(dataDir('assets/assets/jquery.js'), false, false)
-            ->setTargetPath(outputDir('assets/combined.js'))
-            ->setTargetUri('production/combined.js')
-            ->join(true);
+                ->addJs(dataDir('assets/assets/jquery.js'), false, false)
+                ->setTargetPath(outputDir('assets/combined.js'))
+                ->setTargetUri('production/combined.js')
+                ->join(true)
+        ;
 
         $expected = sprintf(
             '<script type="text/javascript" src="%s"></script>%s',
@@ -175,10 +177,11 @@ class OutputJsCest
         $manager->useImplicitOutput(false);
 
         $manager->collection('js')
-            ->addJs(dataDir('assets/assets/jquery.js'), false, false)
-            ->setTargetPath(outputDir('assets/combined.js'))
-            ->setTargetUri('production/combined.js')
-            ->join(false);
+                ->addJs(dataDir('assets/assets/jquery.js'), false, false)
+                ->setTargetPath(outputDir('assets/combined.js'))
+                ->setTargetUri('production/combined.js')
+                ->join(false)
+        ;
 
         $expected = sprintf(
             '<script type="text/javascript" src="%s"></script>%s',
@@ -205,11 +208,12 @@ class OutputJsCest
         $manager->useImplicitOutput(false);
 
         $manager->collection('js')
-            ->addJs($jsFile, false, false)
-            ->setTargetPath(outputDir('assets/combined.js'))
-            ->setTargetUri('production/combined.js')
-            ->join(false)
-            ->addFilter(new None());
+                ->addJs($jsFile, false, false)
+                ->setTargetPath(outputDir('assets/combined.js'))
+                ->setTargetUri('production/combined.js')
+                ->join(false)
+                ->addFilter(new None())
+        ;
 
         $expected = sprintf(
             '<script type="text/javascript" src="%s"></script>%s',
@@ -239,7 +243,8 @@ class OutputJsCest
             ->addJs('js/script1.js')
             ->addJs('js/script2.js')
             ->addCss('css/styles1.css')
-            ->addCss('css/styles2.css');
+            ->addCss('css/styles2.css')
+        ;
 
         $expectedJS = sprintf(
             "%s" . PHP_EOL . "%s" . PHP_EOL,
@@ -286,13 +291,14 @@ class OutputJsCest
         $manager->useImplicitOutput(false);
 
         $manager->collection('js')
-            ->addJs($jsFile)
-            ->join(true)
-            ->addFilter(new JsMin())
-            ->setTargetPath(outputDir("assets/{$file}"))
-            ->setTargetLocal(false)
-            ->setPrefix('//phalcon.io/')
-            ->setTargetUri('js/jquery.js');
+                ->addJs($jsFile)
+                ->join(true)
+                ->addFilter(new JsMin())
+                ->setTargetPath(outputDir("assets/{$file}"))
+                ->setTargetLocal(false)
+                ->setPrefix('//phalcon.io/')
+                ->setTargetUri('js/jquery.js')
+        ;
 
         $I->assertEquals(
             '<script type="text/javascript" src="//phalcon.io/js/jquery.js"></script>' . PHP_EOL,

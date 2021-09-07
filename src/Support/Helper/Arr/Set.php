@@ -31,8 +31,8 @@ class Set
      */
     public function __invoke(
         array $collection,
-              $value,
-              $index = null
+        $value,
+        $index = null
     ): array {
         $collection = $this->checkNull($collection, $value, $index);
 

@@ -50,7 +50,8 @@ class LoadFilesCest
             )
             ->addFile(
                 '/path/to/unknown/file'
-            );
+            )
+        ;
 
         $loader->loadFiles();
 

@@ -94,8 +94,8 @@ class Logger implements LoggerInterface
      *                                    date_Default_timezone_get() is used
      */
     public function __construct(
-        string        $name,
-        array         $adapters = [],
+        string $name,
+        array $adapters = [],
         ?DateTimeZone $timezone = null
     ) {
         if (null == $timezone) {
@@ -276,9 +276,9 @@ class Logger implements LoggerInterface
      * @throws LoggerException
      */
     protected function addMessage(
-        int    $level,
+        int $level,
         string $message,
-        array  $context = []
+        array $context = []
     ): bool {
         if ($this->logLevel >= $level) {
             if (count($this->adapters) === 0) {
@@ -286,7 +286,7 @@ class Logger implements LoggerInterface
             }
 
             $levels    = $this->getLevels();
-            $levelName = $levels[$level] ?? self::CUSTOM;
+            $levelName = $levels[$level] ?? $levels[self::CUSTOM];
 
             $item = new Item(
                 $message,
@@ -320,6 +320,8 @@ class Logger implements LoggerInterface
 
     /**
      * Returns an array of log levels with integer to string conversion
+     *
+     * @return string[]
      */
     protected function getLevels(): array
     {
@@ -346,14 +348,14 @@ class Logger implements LoggerInterface
      */
     private function getLevelNumber($level): int
     {
-        if (is_string($level)) {
+        if (true === is_string($level)) {
             $levelName = mb_strtolower($level);
             $levels    = array_flip($this->getLevels());
 
             if (isset($levels[$levelName])) {
                 return $levels[$levelName];
             }
-        } elseif (is_numeric($level)) {
+        } elseif (true === is_numeric($level)) {
             $levels = $this->getLevels();
 
             if (isset($levels[$level])) {

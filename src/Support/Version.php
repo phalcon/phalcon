@@ -26,7 +26,7 @@ class Version
      *          ->getPart(Phalcon\Support\Version::VERSION_MAJOR);
      * ```
      */
-    const VERSION_MAJOR = 0;
+    public const VERSION_MAJOR = 0;
 
     /**
      * The constant referencing the major version. Returns 1
@@ -36,7 +36,7 @@ class Version
      *          ->getPart(Phalcon\Support\Version::VERSION_MEDIUM);
      * ```
      */
-    const VERSION_MEDIUM = 1;
+    public const VERSION_MEDIUM = 1;
 
     /**
      * The constant referencing the major version. Returns 2
@@ -46,7 +46,7 @@ class Version
      *          ->getPart(Phalcon\Support\Version::VERSION_MINOR);
      * ```
      */
-    const VERSION_MINOR = 2;
+    public const VERSION_MINOR = 2;
 
     /**
      * The constant referencing the major version. Returns 3
@@ -56,7 +56,7 @@ class Version
      *          ->getPart(Phalcon\Support\Version::VERSION_SPECIAL);
      * ```
      */
-    const VERSION_SPECIAL = 3;
+    public const VERSION_SPECIAL = 3;
 
     /**
      * The constant referencing the major version. Returns 4
@@ -66,39 +66,7 @@ class Version
      *          ->getPart(Phalcon\Support\Version::VERSION_SPECIAL_NUMBER);
      * ```
      */
-    const VERSION_SPECIAL_NUMBER = 4;
-
-    /**
-     * Area where the version number is set. The format is as follows:
-     * ABBCCDE
-     *
-     * A - Major version
-     * B - Med version (two digits)
-     * C - Min version (two digits)
-     * D - Special release: 1 = alpha, 2 = beta, 3 = RC, 4 = stable
-     * E - Special release version i.e. RC1, Beta2 etc.
-     */
-    protected function getVersion(): array
-    {
-        return [5, 0, 0, 1, 4];
-    }
-
-    /**
-     * Translates a number to a special release.
-     */
-    protected final function getSpecial(int $special): string
-    {
-        switch ($special) {
-            case 1:
-                return 'alpha';
-            case 2:
-                return 'beta';
-            case 3:
-                return 'RC';
-        }
-
-        return '';
-    }
+    public const VERSION_SPECIAL_NUMBER = 4;
 
     /**
      * Returns the active version (string)
@@ -184,5 +152,37 @@ class Version
         }
 
         return $this->get();
+    }
+
+    /**
+     * Area where the version number is set. The format is as follows:
+     * ABBCCDE
+     *
+     * A - Major version
+     * B - Med version (two digits)
+     * C - Min version (two digits)
+     * D - Special release: 1 = alpha, 2 = beta, 3 = RC, 4 = stable
+     * E - Special release version i.e. RC1, Beta2 etc.
+     */
+    protected function getVersion(): array
+    {
+        return [5, 0, 0, 1, 4];
+    }
+
+    /**
+     * Translates a number to a special release.
+     */
+    final protected function getSpecial(int $special): string
+    {
+        switch ($special) {
+            case 1:
+                return 'alpha';
+            case 2:
+                return 'beta';
+            case 3:
+                return 'RC';
+        }
+
+        return '';
     }
 }

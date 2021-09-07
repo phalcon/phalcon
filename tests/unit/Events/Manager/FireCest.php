@@ -54,7 +54,8 @@ class FireCest
         $component->doAction();
 
         $expected = ['three', 'two', 'one'];
-        $actual   = $component->getEventsManager()->getResponses();
+        $actual   = $component->getEventsManager()
+                              ->getResponses();
         $I->assertEquals($expected, $actual);
     }
 
@@ -88,7 +89,8 @@ class FireCest
         $component->doAction();
 
         $expected = ['one', 'two', 'three'];
-        $actual   = $component->getEventsManager()->getResponses();
+        $actual   = $component->getEventsManager()
+                              ->getResponses();
         $I->assertEquals($expected, $actual);
     }
 

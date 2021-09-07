@@ -42,7 +42,7 @@ class GetIdCest
     {
         $I->wantToTest('Version - getId() - ' . $example[0]);
 
-        $version = new $example[1];
+        $version = new $example[1]();
 
         $expected = $example[2];
         $actual   = $version->getId();

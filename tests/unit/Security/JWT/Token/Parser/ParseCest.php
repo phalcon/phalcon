@@ -66,11 +66,14 @@ class ParseCest
         $I->assertTrue($claims->has('sub'));
 
         $I->assertEquals(['my-audience'], $claims->get('aud'));
-        $I->assertEquals($token->getClaims()->get('exp'), $claims->get('exp'));
+        $I->assertEquals($token->getClaims()
+                               ->get('exp'), $claims->get('exp'));
         $I->assertEquals('PH-JWT', $claims->get('jti'));
-        $I->assertEquals($token->getClaims()->get('iat'), $claims->get('iat'));
+        $I->assertEquals($token->getClaims()
+                               ->get('iat'), $claims->get('iat'));
         $I->assertEquals('Phalcon JWT', $claims->get('iss'));
-        $I->assertEquals($token->getClaims()->get('nbf'), $claims->get('nbf'));
+        $I->assertEquals($token->getClaims()
+                               ->get('nbf'), $claims->get('nbf'));
         $I->assertEquals('Mary had a little lamb', $claims->get('sub'));
     }
 
@@ -112,11 +115,14 @@ class ParseCest
         $I->assertTrue($claims->has('sub'));
 
         $I->assertEquals(['my-audience'], $claims->get('aud'));
-        $I->assertEquals($token->getClaims()->get('exp'), $claims->get('exp'));
+        $I->assertEquals($token->getClaims()
+                               ->get('exp'), $claims->get('exp'));
         $I->assertEquals('PH-JWT', $claims->get('jti'));
-        $I->assertEquals($token->getClaims()->get('iat'), $claims->get('iat'));
+        $I->assertEquals($token->getClaims()
+                               ->get('iat'), $claims->get('iat'));
         $I->assertEquals('Phalcon JWT', $claims->get('iss'));
-        $I->assertEquals($token->getClaims()->get('nbf'), $claims->get('nbf'));
+        $I->assertEquals($token->getClaims()
+                               ->get('nbf'), $claims->get('nbf'));
         $I->assertEquals('Mary had a little lamb', $claims->get('sub'));
 
         $I->assertEmpty($signature->getEncoded());
@@ -168,11 +174,14 @@ class ParseCest
         $I->assertTrue($claims->has('sub'));
 
         $I->assertEquals(['my-audience'], $claims->get('aud'));
-        $I->assertEquals($token->getClaims()->get('exp'), $claims->get('exp'));
+        $I->assertEquals($token->getClaims()
+                               ->get('exp'), $claims->get('exp'));
         $I->assertEquals('PH-JWT', $claims->get('jti'));
-        $I->assertEquals($token->getClaims()->get('iat'), $claims->get('iat'));
+        $I->assertEquals($token->getClaims()
+                               ->get('iat'), $claims->get('iat'));
         $I->assertEquals('Phalcon JWT', $claims->get('iss'));
-        $I->assertEquals($token->getClaims()->get('nbf'), $claims->get('nbf'));
+        $I->assertEquals($token->getClaims()
+                               ->get('nbf'), $claims->get('nbf'));
         $I->assertEquals('Mary had a little lamb', $claims->get('sub'));
     }
 

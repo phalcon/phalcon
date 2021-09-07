@@ -43,8 +43,8 @@ class Builder
      */
     public function build(
         DiInterface $container,
-        array       $definition,
-        array       $parameters = null
+        array $definition,
+        array $parameters = null
     ) {
         $this->checkClassNameExists($definition);
 
@@ -152,8 +152,8 @@ class Builder
      */
     private function buildParameter(
         DiInterface $container,
-        int         $position,
-        array       $argument
+        int $position,
+        array $argument
     ) {
         $this->checkArgumentTypeExists($position, $argument);
 
@@ -203,7 +203,7 @@ class Builder
      */
     private function buildParameters(
         DiInterface $container,
-        array       $arguments
+        array $arguments
     ): array {
         $buildArguments = [];
 
@@ -228,8 +228,8 @@ class Builder
      */
     private function checkPassedParameters(
         DiInterface $container,
-        array       $definition,
-        array       $parameters = null
+        array $definition,
+        array $parameters = null
     ): array {
         if (null !== $parameters) {
             return $parameters;

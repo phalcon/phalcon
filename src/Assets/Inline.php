@@ -60,8 +60,8 @@ class Inline implements AssetInterface
     public function __construct(
         string $type,
         string $content,
-        bool   $filter = true,
-        array  $attributes = []
+        bool $filter = true,
+        array $attributes = []
     ) {
         $this->type       = $type;
         $this->content    = $content;

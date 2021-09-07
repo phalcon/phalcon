@@ -35,18 +35,18 @@ trait StartsWithTrait
     private function toStartsWith(
         string $haystack,
         string $needle,
-        bool   $ignoreCase = true
+        bool $ignoreCase = true
     ): bool {
         if ('' === $haystack) {
             return false;
         }
 
         return 0 === substr_compare(
-                $haystack,
-                $needle,
-                0,
-                mb_strlen($needle),
-                $ignoreCase
-            );
+            $haystack,
+            $needle,
+            0,
+            mb_strlen($needle),
+            $ignoreCase
+        );
     }
 }
