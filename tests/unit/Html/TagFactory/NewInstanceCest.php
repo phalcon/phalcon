@@ -15,44 +15,44 @@ namespace Phalcon\Tests\Unit\Html\TagFactory;
 
 use Codeception\Example;
 use Phalcon\Html\Escaper;
-use Phalcon\Html\Tag\Anchor;
-use Phalcon\Html\Tag\Base;
-use Phalcon\Html\Tag\Body;
-use Phalcon\Html\Tag\Button;
-use Phalcon\Html\Tag\Close;
-use Phalcon\Html\Tag\Element;
-use Phalcon\Html\Tag\Form;
-use Phalcon\Html\Tag\Img;
-use Phalcon\Html\Tag\Input\Color;
-use Phalcon\Html\Tag\Input\Date;
-use Phalcon\Html\Tag\Input\DateTime;
-use Phalcon\Html\Tag\Input\DateTimeLocal;
-use Phalcon\Html\Tag\Input\Email;
-use Phalcon\Html\Tag\Input\File;
-use Phalcon\Html\Tag\Input\Hidden;
-use Phalcon\Html\Tag\Input\Image;
-use Phalcon\Html\Tag\Input\Input;
-use Phalcon\Html\Tag\Input\Month;
-use Phalcon\Html\Tag\Input\Numeric;
-use Phalcon\Html\Tag\Input\Password;
-use Phalcon\Html\Tag\Input\Range;
-use Phalcon\Html\Tag\Input\Search;
-use Phalcon\Html\Tag\Input\Select;
-use Phalcon\Html\Tag\Input\Submit;
-use Phalcon\Html\Tag\Input\Tel;
-use Phalcon\Html\Tag\Input\Text;
-use Phalcon\Html\Tag\Input\Textarea;
-use Phalcon\Html\Tag\Input\Time;
-use Phalcon\Html\Tag\Input\Url;
-use Phalcon\Html\Tag\Input\Week;
-use Phalcon\Html\Tag\Label;
-use Phalcon\Html\Tag\Link;
-use Phalcon\Html\Tag\Meta;
-use Phalcon\Html\Tag\Ol;
-use Phalcon\Html\Tag\Script;
-use Phalcon\Html\Tag\Style;
-use Phalcon\Html\Tag\Title;
-use Phalcon\Html\Tag\Ul;
+use Phalcon\Html\Helper\Anchor;
+use Phalcon\Html\Helper\Base;
+use Phalcon\Html\Helper\Body;
+use Phalcon\Html\Helper\Button;
+use Phalcon\Html\Helper\Close;
+use Phalcon\Html\Helper\Element;
+use Phalcon\Html\Helper\Form;
+use Phalcon\Html\Helper\Img;
+use Phalcon\Html\Helper\Input\Color;
+use Phalcon\Html\Helper\Input\Date;
+use Phalcon\Html\Helper\Input\DateTime;
+use Phalcon\Html\Helper\Input\DateTimeLocal;
+use Phalcon\Html\Helper\Input\Email;
+use Phalcon\Html\Helper\Input\File;
+use Phalcon\Html\Helper\Input\Hidden;
+use Phalcon\Html\Helper\Input\Image;
+use Phalcon\Html\Helper\Input\Input;
+use Phalcon\Html\Helper\Input\Month;
+use Phalcon\Html\Helper\Input\Numeric;
+use Phalcon\Html\Helper\Input\Password;
+use Phalcon\Html\Helper\Input\Range;
+use Phalcon\Html\Helper\Input\Search;
+use Phalcon\Html\Helper\Input\Select;
+use Phalcon\Html\Helper\Input\Submit;
+use Phalcon\Html\Helper\Input\Tel;
+use Phalcon\Html\Helper\Input\Text;
+use Phalcon\Html\Helper\Input\Textarea;
+use Phalcon\Html\Helper\Input\Time;
+use Phalcon\Html\Helper\Input\Url;
+use Phalcon\Html\Helper\Input\Week;
+use Phalcon\Html\Helper\Label;
+use Phalcon\Html\Helper\Link;
+use Phalcon\Html\Helper\Meta;
+use Phalcon\Html\Helper\Ol;
+use Phalcon\Html\Helper\Script;
+use Phalcon\Html\Helper\Style;
+use Phalcon\Html\Helper\Title;
+use Phalcon\Html\Helper\Ul;
 use Phalcon\Html\TagFactory;
 use Phalcon\Support\Exception as SupportException;
 use UnitTester;
@@ -65,7 +65,7 @@ use UnitTester;
 class NewInstanceCest
 {
     /**
-     * Tests Phalcon\Tag\TagFactory :: newInstance() - services
+     * Tests Phalcon\Helper\TagFactory :: newInstance() - services
      *
      * @dataProvider getData
      *
@@ -77,7 +77,7 @@ class NewInstanceCest
      */
     public function filterTagFactoryNewInstanceServices(UnitTester $I, Example $example)
     {
-        $I->wantToTest('Tag\TagFactory - newInstance() - services ' . $example[0]);
+        $I->wantToTest('Helper\TagFactory - newInstance() - services ' . $example[0]);
         $escaper = new Escaper();
         $factory = new TagFactory($escaper);
         $service = $factory->newInstance($example[0]);
@@ -96,7 +96,7 @@ class NewInstanceCest
      */
     public function filterTagFactoryNewInstanceException(UnitTester $I)
     {
-        $I->wantToTest('Tag\TagFactory - newInstance() - exception');
+        $I->wantToTest('Helper\TagFactory - newInstance() - exception');
 
         $I->expectThrowable(
             new SupportException('Service unknown is not registered'),
