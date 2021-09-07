@@ -38,16 +38,6 @@ trait MessagesHelperTrait
     protected int $position = 0;
 
     /**
-     * Phalcon\Messages\Messages constructor
-     *
-     * @param array $messages
-     */
-    public function __construct(array $messages = [])
-    {
-        $this->messages = $messages;
-    }
-
-    /**
      * Returns the number of messages in the list
      *
      * @return int

@@ -14,6 +14,7 @@ declare(strict_types=1);
 namespace Phalcon\Tests\Unit\Security;
 
 use Codeception\Example;
+use Phalcon\Security\Exception;
 use Phalcon\Security\Security;
 use UnitTester;
 
@@ -23,6 +24,7 @@ class ComputeHmacCest
      * Tests the HMAC computation
      *
      * @param UnitTester $I
+     * @param Example    $example
      *
      * @author       Phalcon Team <team@phalcon.io>
      * @since        2020-09-09

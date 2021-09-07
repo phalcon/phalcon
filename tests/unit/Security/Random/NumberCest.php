@@ -13,7 +13,7 @@ declare(strict_types=1);
 
 namespace Phalcon\Tests\Unit\Security\Random;
 
-use Exception;
+use Phalcon\Security\Exception;
 use Phalcon\Security\Random;
 use UnitTester;
 
@@ -36,24 +36,24 @@ class NumberCest
     {
         $I->wantToTest("Security\Random - number()");
 
-        $random = new Random();
-
-
         $I->expectThrowable(
-            Exception::class,
+            new Exception('Input number must be a positive integer'),
             function () {
-                $randNumber = $random->number();
+                $random = new Random();
+                $randNumber = $random->number(0);
             }
         );
 
         $I->expectThrowable(
-            Exception::class,
+            new Exception('Input number must be a positive integer'),
             function () {
+                $random = new Random();
                 $randNumber = $random->number(-1);
             }
         );
 
 
+        $random     = new Random();
         $maxRand    = 1;
         $randNumber = $random->number($maxRand);
 
