@@ -34,8 +34,8 @@ class Element extends AbstractHelper
     public function __invoke(
         string $tag,
         string $text,
-        array $attributes = [],
-        bool $raw = false
+        array  $attributes = [],
+        bool   $raw = false
     ): string {
         return $this->renderFullElement($tag, $text, $attributes, $raw);
     }

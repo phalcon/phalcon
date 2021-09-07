@@ -44,9 +44,9 @@ class Libmemcached extends AbstractAdapter
      * @throws SupportException
      */
     public function __construct(
-        HelperFactory $helperFactory,
+        HelperFactory     $helperFactory,
         SerializerFactory $factory,
-        array $options = []
+        array             $options = []
     ) {
         if (true !== isset($options['servers'])) {
             $options['servers'] = [
@@ -144,13 +144,13 @@ class Libmemcached extends AbstractAdapter
 
             if (count($serverList) < 1) {
                 /** @var array $servers */
-                $servers  = $this->helperFactory->get(
+                $servers = $this->helperFactory->get(
                     $this->options,
                     'servers',
                     []
                 );
                 /** @var array $client */
-                $client   = $this->helperFactory->get(
+                $client = $this->helperFactory->get(
                     $this->options,
                     'client',
                     []
@@ -171,8 +171,7 @@ class Libmemcached extends AbstractAdapter
                 $this
                     ->setOptions($connection, $client)
                     ->setServers($connection, $servers)
-                    ->setSasl($connection, $saslUser, $saslPass)
-                ;
+                    ->setSasl($connection, $saslUser, $saslPass);
             }
 
             $this->setSerializer($connection);
@@ -246,8 +245,7 @@ class Libmemcached extends AbstractAdapter
             $key,
             $this->getSerializedData($value),
             $this->getTtl($ttl)
-        )
-            ;
+        );
     }
 
     /**

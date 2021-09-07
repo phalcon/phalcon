@@ -85,7 +85,7 @@ class Security implements InjectionAwareInterface
     public function checkHash(
         string $password,
         string $passwordHash,
-        int $maxPassLength = 0
+        int    $maxPassLength = 0
     ): bool {
         if ($maxPassLength > 0 && mb_strlen($password) > $maxPassLength) {
             return false;
@@ -106,8 +106,8 @@ class Security implements InjectionAwareInterface
      */
     public function checkToken(
         string $tokenKey = null,
-        $tokenValue = null,
-        bool $destroyIfValid = true
+               $tokenValue = null,
+        bool   $destroyIfValid = true
     ): bool {
         $tokenKey = $this->processTokenKey($tokenKey);
 
@@ -153,7 +153,7 @@ class Security implements InjectionAwareInterface
         string $data,
         string $key,
         string $algo,
-        bool $raw = false
+        bool   $raw = false
     ): string {
         $hmac = hash_hmac($algo, $data, $key, $raw);
         if (false === $hmac) {

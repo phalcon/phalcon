@@ -29,7 +29,7 @@ class GetServiceCest
     /**
      * Unit Tests Phalcon\Di :: getService()
      *
-     * @param  UnitTester $I
+     * @param UnitTester $I
      *
      * @author Phalcon Team <team@phalcon.io>
      * @since  2019-09-09
@@ -57,7 +57,7 @@ class GetServiceCest
     /**
      * Unit Tests Phalcon\Di :: getService() - exception
      *
-     * @param  UnitTester $I
+     * @param UnitTester $I
      *
      * @author Phalcon Team <team@phalcon.io>
      * @since  2019-09-09

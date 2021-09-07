@@ -26,7 +26,7 @@ class GetDefaultCest
     /**
      * Unit Tests Phalcon\Di :: getDefault()
      *
-     * @param  UnitTester $I
+     * @param UnitTester $I
      *
      * @author Phalcon Team <team@phalcon.io>
      * @since  2019-09-09
@@ -40,7 +40,7 @@ class GetDefaultCest
         $I->assertInstanceOf($class, $actual);
 
         $container = Di::getDefault();
-        $class = Di::class;
+        $class     = Di::class;
         $I->assertInstanceOf($class, $container);
 
         // delete it

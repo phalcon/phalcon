@@ -48,29 +48,29 @@ class GetRealTargetUriCest
     }
 
     /**
-     * @return \string[][]
+     * @return string[][]
      */
     protected function provider(): array
     {
         return [
             [
-                'type' => 'css',
-                'path' => 'css/docs.css',
+                'type'  => 'css',
+                'path'  => 'css/docs.css',
                 'local' => true,
             ],
             [
-                'type' => 'js',
-                'path' => 'js/jquery.js',
+                'type'  => 'js',
+                'path'  => 'js/jquery.js',
                 'local' => true,
             ],
             [
-                'type' => 'css',
-                'path' => 'https://phalcon.ld/css/docs.css',
+                'type'  => 'css',
+                'path'  => 'https://phalcon.ld/css/docs.css',
                 'local' => false,
             ],
             [
-                'type' => 'js',
-                'path' => 'https://phalcon.ld/js/jquery.js',
+                'type'  => 'js',
+                'path'  => 'https://phalcon.ld/js/jquery.js',
                 'local' => false,
             ],
         ];

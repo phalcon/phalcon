@@ -32,8 +32,8 @@ class DetectEncodingCest
      * @param UnitTester $I
      * @param Example    $example
      *
-     * @author Phalcon Team <team@phalcon.io>
-     * @since  2020-09-09
+     * @author       Phalcon Team <team@phalcon.io>
+     * @since        2020-09-09
      */
     public function escaperDetectEncoding(UnitTester $I, Example $example)
     {
@@ -48,7 +48,7 @@ class DetectEncodingCest
     }
 
     /**
-     * @return \string[][]
+     * @return string[][]
      */
     private function escaperDetectEncodingProvider(): array
     {
@@ -57,14 +57,14 @@ class DetectEncodingCest
                 'source'   => 'ḂḃĊċḊḋḞḟĠġṀṁ',
                 'expected' => 'UTF-8',
             ],
-//            [
-//                'source'   => chr(172) . chr(128) . chr(159) . 'ḂḃĊċḊḋḞḟĠġṀṁ',
-//                'expected' => 'ISO-8859-1',
-//            ],
-//            [
-//                'source'   => '\0\0\0H\0\0\0i',
-//                'expected' => 'UTF-8',
-//            ],
+            //            [
+            //                'source'   => chr(172) . chr(128) . chr(159) . 'ḂḃĊċḊḋḞḟĠġṀṁ',
+            //                'expected' => 'ISO-8859-1',
+            //            ],
+            //            [
+            //                'source'   => '\0\0\0H\0\0\0i',
+            //                'expected' => 'UTF-8',
+            //            ],
         ];
     }
 }

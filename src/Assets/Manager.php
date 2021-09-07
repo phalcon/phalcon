@@ -19,11 +19,7 @@ use Phalcon\Assets\Inline\Css as InlineCss;
 use Phalcon\Assets\Inline\Js as InlineJs;
 use Phalcon\Di\InjectionAwareInterface;
 use Phalcon\Di\Traits\InjectionAwareTrait;
-use Phalcon\Html\EscaperInterface;
-use Phalcon\Html\Tag\Close;
-use Phalcon\Html\Tag\Element;
-use Phalcon\Html\Tag\Script;
-use Phalcon\Html\Tag\Style;
+use Phalcon\Html\Helper\Element;
 use Phalcon\Html\TagFactory;
 
 use function call_user_func_array;
@@ -129,11 +125,11 @@ class Manager implements InjectionAwareInterface
      */
     public function addCss(
         string $path,
-        bool $local = true,
-        bool $filter = true,
-        array $attributes = [],
+        bool   $local = true,
+        bool   $filter = true,
+        array  $attributes = [],
         string $version = null,
-        bool $autoVersion = false
+        bool   $autoVersion = false
     ): Manager {
         $this->addAssetByType(
             'css',
@@ -187,8 +183,8 @@ class Manager implements InjectionAwareInterface
      */
     public function addInlineCss(
         string $content,
-        bool $filter = true,
-        array $attributes = []
+        bool   $filter = true,
+        array  $attributes = []
     ): Manager {
         $this->addInlineCodeByType(
             'css',
@@ -209,8 +205,8 @@ class Manager implements InjectionAwareInterface
      */
     public function addInlineJs(
         string $content,
-        bool $filter = true,
-        array $attributes = []
+        bool   $filter = true,
+        array  $attributes = []
     ): Manager {
         $this->addInlineCodeByType(
             'js',
@@ -239,11 +235,11 @@ class Manager implements InjectionAwareInterface
      */
     public function addJs(
         string $path,
-        bool $local = true,
-        bool $filter = true,
-        array $attributes = [],
+        bool   $local = true,
+        bool   $filter = true,
+        array  $attributes = [],
         string $version = null,
-        bool $autoVersion = false
+        bool   $autoVersion = false
     ): Manager {
         $this->addAssetByType(
             'js',
@@ -886,8 +882,8 @@ class Manager implements InjectionAwareInterface
      */
     private function calculatePrefixedPath(
         Collection $collection,
-        string $path,
-        string $filePath
+        string     $path,
+        string     $filePath
     ): string {
         $prefixedPath = $collection->getPrefix() . $path;
         $version      = $collection->getVersion();

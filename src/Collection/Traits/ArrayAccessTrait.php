@@ -26,7 +26,7 @@ trait ArrayAccessTrait
      */
     abstract public function get(
         string $element,
-        $defaultValue = null,
+               $defaultValue = null,
         string $cast = null
     );
 

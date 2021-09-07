@@ -13,13 +13,13 @@ declare(strict_types=1);
 
 namespace Phalcon\Tests\Integration\Cache\CacheFactory;
 
-use Phalcon\Cache\Cache;
+use IntegrationTester;
 use Phalcon\Cache\AdapterFactory;
+use Phalcon\Cache\Cache;
 use Phalcon\Cache\CacheFactory;
 use Phalcon\Storage\SerializerFactory;
 use Phalcon\Support\HelperFactory;
 use Psr\SimpleCache\CacheInterface;
-use IntegrationTester;
 
 class NewInstanceCest
 {

@@ -56,7 +56,7 @@ class GetSetCssClassesCest
         $flash->setCssClasses($newClasses);
 
         $expected = $newClasses;
-        $actual = $flash->getCssClasses();
+        $actual   = $flash->getCssClasses();
         $I->assertEquals($expected, $actual);
     }
 }

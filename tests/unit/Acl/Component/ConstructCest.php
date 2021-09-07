@@ -13,7 +13,6 @@ declare(strict_types=1);
 
 namespace Phalcon\Tests\Unit\Acl\Component;
 
-use BadMethodCallException;
 use Phalcon\Acl\Component;
 use Phalcon\Acl\Exception;
 use UnitTester;

@@ -63,8 +63,7 @@ class ExcludeAdaptersCest
          */
         $logger
             ->excludeAdapters(['two'])
-            ->debug('Goodbye')
-        ;
+            ->debug('Goodbye');
 
         $I->amInPath($outputPath);
         $I->openFile($fileName1);

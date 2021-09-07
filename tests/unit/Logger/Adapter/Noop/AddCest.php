@@ -66,8 +66,7 @@ class AddCest
         $adapter
             ->add($item1)
             ->add($item2)
-            ->add($item3)
-        ;
+            ->add($item3);
 
         $adapter->commit();
     }

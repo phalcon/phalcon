@@ -19,10 +19,6 @@ use Phalcon\Tests\Fixtures\Http\RequestFixture;
 use Phalcon\Tests\Fixtures\Traits\DiTrait;
 use UnitTester;
 
-use function session_destroy;
-use function session_start;
-use function session_status;
-
 class GetTokenAndKeyCest
 {
     use DiTrait;

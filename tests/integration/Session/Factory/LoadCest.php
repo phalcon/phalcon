@@ -16,7 +16,6 @@ namespace Phalcon\Tests\Integration\Session\Factory;
 use IntegrationTester;
 use Phalcon\Session\Adapter\Files;
 use Phalcon\Session\Factory;
-use Phalcon\Tests\Fixtures\Traits\FactoryTrait;
 
 class LoadCest
 {

@@ -14,10 +14,10 @@ declare(strict_types=1);
 namespace Phalcon\Tests\Integration\Storage\Serializer\Json;
 
 use Codeception\Example;
+use IntegrationTester;
 use JsonException;
 use Phalcon\Storage\Serializer\Json;
 use stdClass;
-use IntegrationTester;
 
 class UnserializeCest
 {
@@ -27,12 +27,12 @@ class UnserializeCest
      * @dataProvider getExamples
      *
      * @param IntegrationTester $I
-     * @param Example    $example
+     * @param Example           $example
      *
      * @throws JsonException
      *
-     * @author Phalcon Team <team@phalcon.io>
-     * @since  2020-09-09
+     * @author       Phalcon Team <team@phalcon.io>
+     * @since        2020-09-09
      */
     public function storageSerializerJsonUnserialize(IntegrationTester $I, Example $example)
     {

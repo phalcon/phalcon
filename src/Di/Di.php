@@ -67,7 +67,6 @@ use function substr;
  * @property array            $services
  * @property array            $sharedInstances
  * @property DiInterface|null $defaultContainer
-
  */
 class Di implements DiInterface
 {
@@ -194,7 +193,7 @@ class Di implements DiInterface
          * immediately return it without triggering events.
          */
         if (true === isset($this->services[$name])) {
-            $service  = $this->services[$name];
+            $service = $this->services[$name];
 
             if (
                 true === $service->isShared() &&
@@ -461,10 +460,10 @@ class Di implements DiInterface
      * @throws Exception
      */
     private function processObjectNotNullService(
-        string $name,
-        array $parameters = null,
+        string           $name,
+        array            $parameters = null,
         ServiceInterface $service = null,
-        $instance = null
+                         $instance = null
     ) {
         if (null !== $service) {
             // The service is registered in the DI.
@@ -493,10 +492,10 @@ class Di implements DiInterface
      * @throws Exception
      */
     private function processObjectNullService(
-        string $name,
-        array $parameters = null,
+        string           $name,
+        array            $parameters = null,
         ServiceInterface $service = null,
-        $instance = null
+                         $instance = null
     ) {
         if (null === $service) {
             /**

@@ -72,8 +72,7 @@ class GetAddSetExtensionsCest
         $loader
             ->addExtension('inc')
             ->addExtension('phpt')
-            ->addExtension('inc')
-        ;
+            ->addExtension('inc');
         $I->assertEquals(
             [
                 'php',

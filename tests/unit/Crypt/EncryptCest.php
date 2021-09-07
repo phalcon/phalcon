@@ -161,8 +161,7 @@ class EncryptCest
                 ->setCipher($cipher)
                 ->setAuthTag('1234')
                 ->setAuthData('abcd')
-                ->setKey('123456')
-            ;
+                ->setKey('123456');
 
             $encryption = $crypt->encrypt('phalcon');
             $actual     = $crypt->decrypt($encryption);

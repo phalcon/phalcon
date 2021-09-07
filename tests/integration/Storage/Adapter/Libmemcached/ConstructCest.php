@@ -15,12 +15,12 @@ namespace Phalcon\Tests\Integration\Storage\Adapter\Libmemcached;
 
 use DateInterval;
 use Exception;
+use IntegrationTester;
 use Phalcon\Storage\Adapter\AdapterInterface;
 use Phalcon\Storage\SerializerFactory;
 use Phalcon\Support\HelperFactory;
 use Phalcon\Tests\Fixtures\Storage\Adapter\Libmemcached;
 use Phalcon\Tests\Fixtures\Traits\LibmemcachedTrait;
-use IntegrationTester;
 
 use function getOptionsLibmemcached;
 

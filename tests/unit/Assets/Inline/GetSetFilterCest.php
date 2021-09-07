@@ -50,7 +50,7 @@ class GetSetFilterCest
     }
 
     /**
-     * @return \string[][]
+     * @return string[][]
      */
     protected function provider(): array
     {

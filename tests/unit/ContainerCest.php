@@ -16,6 +16,7 @@ namespace Phalcon\Tests\Unit;
 use Phalcon\Container;
 use Phalcon\Di\Di;
 use Phalcon\Di\Exception;
+use stdClass;
 use UnitTester;
 
 final class ContainerCest
@@ -34,7 +35,7 @@ final class ContainerCest
 
         $di = new Di();
         $di->setShared('service', function () {
-            return new \stdClass();
+            return new stdClass();
         });
 
         $container = new Container($di);
@@ -43,7 +44,7 @@ final class ContainerCest
             $container->get('empty');
         });
 
-        $I->assertInstanceOf(\stdClass::class, $container->get('service'));
+        $I->assertInstanceOf(stdClass::class, $container->get('service'));
     }
 
     /**

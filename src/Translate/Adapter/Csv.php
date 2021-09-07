@@ -41,16 +41,16 @@ class Csv extends AbstractAdapter implements ArrayAccess
      *
      * @param InterpolatorFactory $interpolator
      * @param array               $options = [
-     *     'content'   => '',
-     *     'delimiter' => ';',
-     *     'enclosure' => '"'
-     * ]
+     *                                     'content'   => '',
+     *                                     'delimiter' => ';',
+     *                                     'enclosure' => '"'
+     *                                     ]
      *
      * @throws Exception
      */
     public function __construct(
         InterpolatorFactory $interpolator,
-        array $options
+        array               $options
     ) {
         parent::__construct($interpolator, $options);
 
@@ -92,8 +92,8 @@ class Csv extends AbstractAdapter implements ArrayAccess
     }
 
     /**
-    * Load translates from file
-    *
+     * Load translates from file
+     *
      * @param string $file
      * @param int    $length
      * @param string $separator
@@ -103,7 +103,7 @@ class Csv extends AbstractAdapter implements ArrayAccess
      */
     private function load(
         string $file,
-        int $length,
+        int    $length,
         string $separator,
         string $enclosure
     ): void {
@@ -123,7 +123,7 @@ class Csv extends AbstractAdapter implements ArrayAccess
             }
 
             if (
-                '#' ===  substr($data[0], 0, 1) ||
+                '#' === substr($data[0], 0, 1) ||
                 true !== isset($data[1])
             ) {
                 continue;

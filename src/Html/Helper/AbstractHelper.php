@@ -138,7 +138,7 @@ abstract class AbstractHelper
      * @return string
      */
     protected function renderArrayElements(
-        array $elements,
+        array  $elements,
         string $delimiter
     ): string {
         $result = '';
@@ -166,8 +166,7 @@ abstract class AbstractHelper
                 $result .= $key
                     . '="'
                     . $this->escaper->attributes($value)
-                    . '" '
-                ;
+                    . '" ';
             }
         }
 
@@ -185,7 +184,7 @@ abstract class AbstractHelper
      */
     protected function renderElement(
         string $tag,
-        array $attributes = []
+        array  $attributes = []
     ): string {
         return $this->renderTag($tag, $attributes);
     }
@@ -204,8 +203,8 @@ abstract class AbstractHelper
     protected function renderFullElement(
         string $tag,
         string $text,
-        array $attributes = [],
-        bool $raw = false
+        array  $attributes = [],
+        bool   $raw = false
     ): string {
         $content = $raw ? $text : $this->escaper->html($text);
 
@@ -225,7 +224,7 @@ abstract class AbstractHelper
      */
     protected function renderTag(
         string $tag,
-        array $attributes = [],
+        array  $attributes = [],
         string $close = ''
     ): string {
         $escapedAttrs = '';

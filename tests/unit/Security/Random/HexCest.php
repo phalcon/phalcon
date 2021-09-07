@@ -36,7 +36,7 @@ class HexCest
         $I->wantToTest("Security\Random - hex()");
 
         $random = new Random();
-        $hex = $random->hex();
+        $hex    = $random->hex();
 
         // Test forbidden characters
         $I->assertRegExp('/^[0-9a-f]+$/', $hex);

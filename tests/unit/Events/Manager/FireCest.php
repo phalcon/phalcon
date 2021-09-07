@@ -105,7 +105,7 @@ class FireCest
         $I->wantToTest('Events\Manager - fire() - no events');
 
         $manager = new Manager();
-        $actual = $manager->fire('someEvent', new stdClass());
+        $actual  = $manager->fire('someEvent', new stdClass());
         $I->assertNull($actual);
     }
 

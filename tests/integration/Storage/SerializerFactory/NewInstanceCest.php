@@ -14,6 +14,7 @@ declare(strict_types=1);
 namespace Phalcon\Tests\Integration\Storage\SerializerFactory;
 
 use Codeception\Example;
+use IntegrationTester;
 use Phalcon\Storage\Serializer\Base64;
 use Phalcon\Storage\Serializer\Igbinary;
 use Phalcon\Storage\Serializer\Json;
@@ -22,7 +23,6 @@ use Phalcon\Storage\Serializer\None;
 use Phalcon\Storage\Serializer\Php;
 use Phalcon\Storage\SerializerFactory;
 use Phalcon\Support\Exception;
-use IntegrationTester;
 
 class NewInstanceCest
 {
@@ -32,12 +32,12 @@ class NewInstanceCest
      * @dataProvider getExamples
      *
      * @param IntegrationTester $I
-     * @param Example    $example
+     * @param Example           $example
      *
      * @throws Exception
      *
-     * @author Phalcon Team <team@phalcon.io>
-     * @since  2020-09-09
+     * @author       Phalcon Team <team@phalcon.io>
+     * @since        2020-09-09
      */
     public function storageSerializerFactoryNewInstance(IntegrationTester $I, Example $example)
     {

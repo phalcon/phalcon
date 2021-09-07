@@ -16,8 +16,6 @@ namespace Phalcon\Tests\Unit\Crypt;
 use Phalcon\Crypt\Crypt;
 use UnitTester;
 
-use function uniqid;
-
 class GetSetAuthTagLengthCest
 {
     /**

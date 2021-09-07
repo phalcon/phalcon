@@ -96,8 +96,8 @@ class Loader
      */
     public function addNamespace(
         string $namespace,
-        $directories,
-        bool $prepend = false
+               $directories,
+        bool   $prepend = false
     ): Loader {
         $nSeparator  = '\\';
         $dSeparator  = DIRECTORY_SEPARATOR;

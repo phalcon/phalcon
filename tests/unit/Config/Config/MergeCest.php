@@ -550,8 +550,8 @@ class MergeCest
         $I->wantToTest('Phalcon\Config :: merge() - exceptions');
 
         $config = new Config([
-            'my' => 'config'
-        ]);
+                                 'my' => 'config'
+                             ]);
 
         $I->expectThrowable(
             new Exception(

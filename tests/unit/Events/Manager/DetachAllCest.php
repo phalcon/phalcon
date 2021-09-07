@@ -31,7 +31,7 @@ class DetachAllCest
         $I->wantToTest('Events\Manager - detachAll()');
 
         $eventType = 'some:upload';
-        $manager = new Manager();
+        $manager   = new Manager();
         $manager->attach(
             $eventType,
             function () {
@@ -39,12 +39,12 @@ class DetachAllCest
             }
         );
 
-        $actual  = $manager->getListeners($eventType);
+        $actual = $manager->getListeners($eventType);
         $I->assertCount(1, $actual);
 
         $manager->detachAll();
 
-        $actual  = $manager->hasListeners($eventType);
+        $actual = $manager->hasListeners($eventType);
         $I->assertFalse($actual);
     }
 
@@ -77,16 +77,16 @@ class DetachAllCest
             }
         );
 
-        $actual  = $manager->hasListeners($uploadType);
+        $actual = $manager->hasListeners($uploadType);
         $I->assertTrue($actual);
-        $actual  = $manager->hasListeners($downloadType);
+        $actual = $manager->hasListeners($downloadType);
         $I->assertTrue($actual);
 
         $manager->detachAll($uploadType);
 
-        $actual  = $manager->hasListeners($uploadType);
+        $actual = $manager->hasListeners($uploadType);
         $I->assertFalse($actual);
-        $actual  = $manager->hasListeners($downloadType);
+        $actual = $manager->hasListeners($downloadType);
         $I->assertTrue($actual);
     }
 }

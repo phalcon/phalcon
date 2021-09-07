@@ -15,8 +15,8 @@ namespace Phalcon\Tests\Unit\Assets\Asset;
 
 use Codeception\Example;
 use Codeception\Stub;
-use Phalcon\Assets\Exception;
 use Phalcon\Assets\Asset;
+use Phalcon\Assets\Exception;
 use UnitTester;
 
 use function dataDir;
@@ -36,8 +36,8 @@ class GetContentCest
      * @param UnitTester $I
      * @param Example    $example
      *
-     * @author Phalcon Team <team@phalcon.io>
-     * @since  2020-09-09
+     * @author       Phalcon Team <team@phalcon.io>
+     * @since        2020-09-09
      */
     public function assetsAssetGetContent(UnitTester $I, Example $example)
     {
@@ -63,7 +63,7 @@ class GetContentCest
     {
         $I->wantToTest('Assets\Asset - getContent() - exception 404');
 
-        $file = 'assets/assets/1198.css';
+        $file    = 'assets/assets/1198.css';
         $message = 'Asset\'s content for "' . dataDir($file) . '" cannot be read';
         $I->expectThrowable(
             new Exception($message),
@@ -97,7 +97,7 @@ class GetContentCest
     {
         $I->wantToTest('Assets\Asset - getContent() - exception cannot read file');
 
-        $file = 'assets/assets/1198.css';
+        $file    = 'assets/assets/1198.css';
         $message = 'Asset\'s content for "' . dataDir($file) . '" cannot be read';
         $I->expectThrowable(
             new Exception($message),
@@ -120,7 +120,7 @@ class GetContentCest
     }
 
     /**
-     * @return \string[][]
+     * @return string[][]
      */
     protected function provider(): array
     {

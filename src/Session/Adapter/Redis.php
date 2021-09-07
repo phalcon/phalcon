@@ -25,14 +25,14 @@ class Redis extends AbstractAdapter
      * Redis constructor.
      *
      * @param AdapterFactory $factory
-     * @param array          $options= [
-     *     'prefix'     => 'sess-reds-',
-     *     'host'       => '127.0.0.1',
-     *     'port'       => 6379,
-     *     'index'      => 0,
-     *     'persistent' => false,
-     *     'auth'       => '',
-     *     'socket'     => '',
+     * @param array          $options = [
+     *                                'prefix'     => 'sess-reds-',
+     *                                'host'       => '127.0.0.1',
+     *                                'port'       => 6379,
+     *                                'index'      => 0,
+     *                                'persistent' => false,
+     *                                'auth'       => '',
+     *                                'socket'     => '',
      *
      * @throws Exception
      */

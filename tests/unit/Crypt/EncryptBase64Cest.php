@@ -61,7 +61,7 @@ class EncryptBase64Cest
                 $crypt->setKey(substr($key, 0, 16));
 
                 $encryption = $crypt->encryptBase64($test);
-                $actual = rtrim($crypt->decryptBase64($encryption), "\0");
+                $actual     = rtrim($crypt->decryptBase64($encryption), "\0");
                 $I->assertEquals($test, $actual);
             }
 

@@ -16,7 +16,6 @@ namespace Phalcon\Crypt\Padding;
 use function chr;
 use function rand;
 use function range;
-use function str_repeat;
 
 /**
  * Class PadIso10126

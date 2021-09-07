@@ -24,6 +24,7 @@ use Phalcon\Logger\Adapter\Syslog;
 use Phalcon\Logger\Item;
 use Phalcon\Logger\Logger;
 use UnitTester;
+
 use function date_default_timezone_get;
 
 class AddCest
@@ -71,8 +72,7 @@ class AddCest
         $adapter
             ->add($item1)
             ->add($item2)
-            ->add($item3)
-        ;
+            ->add($item3);
 
         $adapter->commit();
 

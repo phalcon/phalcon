@@ -14,31 +14,11 @@ declare(strict_types=1);
 namespace Phalcon\Crypt\Traits;
 
 use Phalcon\Crypt\Exception;
-use Phalcon\Support\Helper\Str\Traits\EndsWithTrait;
-use Phalcon\Support\Helper\Str\Traits\StartsWithTrait;
-use Phalcon\Support\Helper\Str\Traits\UpperTrait;
-use Phalcon\Support\Traits\PhpFunctionTrait;
 
-use function base64_decode;
-use function base64_encode;
-use function chr;
-use function function_exists;
-use function hash;
-use function hash_algos;
-use function hash_hmac;
-use function hash_hmac_algos;
 use function openssl_cipher_iv_length;
 use function openssl_decrypt;
 use function openssl_encrypt;
-use function openssl_get_cipher_methods;
-use function openssl_random_pseudo_bytes;
-use function ord;
-use function rand;
-use function range;
-use function rtrim;
-use function sprintf;
 use function str_ireplace;
-use function str_repeat;
 use function strlen;
 use function strrpos;
 use function strtolower;
@@ -216,8 +196,8 @@ trait CryptGettersTrait
     abstract protected function cryptUnpadText(
         string $input,
         string $mode,
-        int $blockSize,
-        int $paddingType
+        int    $blockSize,
+        int    $paddingType
     );
 
     /**
@@ -229,7 +209,7 @@ trait CryptGettersTrait
      */
     protected function decryptCbcEcb(
         string $mode,
-        int $blockSize,
+        int    $blockSize,
         string $decrypted
     ): string {
         if ('-cbc' === $mode || '-ecb' === $mode) {
@@ -293,7 +273,7 @@ trait CryptGettersTrait
     protected function encryptGetPadded(
         string $mode,
         string $input,
-        int $blockSize
+        int    $blockSize
     ): string {
         if (0 !== $this->padding && ('-cbc' === $mode || '-ecb' === $mode)) {
             return $this->cryptPadText($input, $mode, $blockSize, $this->padding);

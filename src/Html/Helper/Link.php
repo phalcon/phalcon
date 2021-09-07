@@ -62,7 +62,7 @@ class Link extends Style
     protected function getAttributes(string $href, array $attributes): array
     {
         $required = [
-            'href'  => $href,
+            'href' => $href,
         ];
 
         unset($attributes['href']);

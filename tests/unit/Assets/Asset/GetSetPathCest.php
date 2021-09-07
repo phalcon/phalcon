@@ -34,14 +34,14 @@ class GetSetPathCest
      * @param UnitTester $I
      * @param Example    $example
      *
-     * @author Phalcon Team <team@phalcon.io>
-     * @since  2020-09-09
+     * @author       Phalcon Team <team@phalcon.io>
+     * @since        2020-09-09
      */
     public function assetsAssetGetSetPath(UnitTester $I, Example $example)
     {
         $I->wantToTest('Assets\Asset - getPath()/setPath()');
 
-        $path = uniqid('/');
+        $path  = uniqid('/');
         $asset = new Asset($example['type'], $path);
 
         $expected = $path;
@@ -50,7 +50,7 @@ class GetSetPathCest
 
         $expected = $example['path'];
         $asset->setPath($example['path']);
-        $actual   = $asset->getPath();
+        $actual = $asset->getPath();
         $I->assertEquals($expected, $actual);
     }
 

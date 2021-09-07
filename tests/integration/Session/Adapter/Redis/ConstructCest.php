@@ -14,15 +14,12 @@ declare(strict_types=1);
 namespace Phalcon\Tests\Integration\Session\Adapter\Redis;
 
 use IntegrationTester;
-use Phalcon\Session\Adapter\Libmemcached;
 use Phalcon\Session\Adapter\Redis;
 use Phalcon\Storage\AdapterFactory;
 use Phalcon\Storage\SerializerFactory;
 use Phalcon\Support\HelperFactory;
 use Phalcon\Tests\Fixtures\Traits\DiTrait;
 use SessionHandlerInterface;
-
-use function getOptionsLibmemcached;
 
 /**
  * Class ConstructCest

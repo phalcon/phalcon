@@ -13,9 +13,6 @@ declare(strict_types=1);
 
 namespace Phalcon\Crypt\Padding;
 
-use function chr;
-use function str_repeat;
-
 /**
  * Class Ansi
  *

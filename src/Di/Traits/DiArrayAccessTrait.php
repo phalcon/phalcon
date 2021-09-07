@@ -113,8 +113,8 @@ trait DiArrayAccessTrait
      */
     abstract public function set(
         string $name,
-        $definition,
-        bool $shared = false
+               $definition,
+        bool   $shared = false
     ): ServiceInterface;
 
     /**

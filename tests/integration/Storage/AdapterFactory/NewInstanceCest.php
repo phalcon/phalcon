@@ -14,6 +14,7 @@ declare(strict_types=1);
 namespace Phalcon\Tests\Integration\Storage\AdapterFactory;
 
 use Codeception\Example;
+use IntegrationTester;
 use Phalcon\Storage\Adapter\Apcu;
 use Phalcon\Storage\Adapter\Libmemcached;
 use Phalcon\Storage\Adapter\Memory;
@@ -23,7 +24,6 @@ use Phalcon\Storage\AdapterFactory;
 use Phalcon\Storage\SerializerFactory;
 use Phalcon\Support\Exception;
 use Phalcon\Support\HelperFactory;
-use IntegrationTester;
 
 use function getOptionsLibmemcached;
 use function getOptionsRedis;
@@ -41,8 +41,8 @@ class NewInstanceCest
      *
      * @throws Exception
      *
-     * @author Phalcon Team <team@phalcon.io>
-     * @since  2020-09-09
+     * @author       Phalcon Team <team@phalcon.io>
+     * @since        2020-09-09
      */
     public function storageAdapterFactoryNewInstance(IntegrationTester $I, Example $example)
     {

@@ -35,7 +35,7 @@ class IsLegacyHashCest
     {
         $I->wantToTest('Security - isLegacyHash()');
 
-        $oldHash = '$2a$10$JnD9Za73U2dIIjd.Uvn1IuNVQhXNQpHIu13WzlL70q.WhfKT9Yuc2';
+        $oldHash  = '$2a$10$JnD9Za73U2dIIjd.Uvn1IuNVQhXNQpHIu13WzlL70q.WhfKT9Yuc2';
         $security = new Security();
 
         $I->assertTrue($security->isLegacyHash($oldHash));

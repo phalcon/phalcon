@@ -14,7 +14,6 @@ declare(strict_types=1);
 namespace Phalcon\Tests\Integration\Session\Manager;
 
 use IntegrationTester;
-use InvalidArgumentException;
 use Phalcon\Session\Exception;
 use Phalcon\Session\Manager;
 use Phalcon\Tests\Fixtures\Traits\DiTrait;

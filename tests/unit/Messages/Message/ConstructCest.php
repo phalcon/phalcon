@@ -78,8 +78,7 @@ class ConstructCest
         $message
             ->setField('MyField')
             ->setType('MyType')
-            ->setCode(111)
-        ;
+            ->setCode(111);
 
         $I->assertEquals(
             'This is a message #1',

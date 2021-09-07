@@ -47,7 +47,7 @@ class GetAssetKeyCest
     }
 
     /**
-     * @return \string[][]
+     * @return string[][]
      */
     protected function provider(): array
     {

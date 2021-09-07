@@ -13,12 +13,14 @@ declare(strict_types=1);
 
 namespace Phalcon\Security\JWT\Exceptions;
 
+use Exception;
+
 /**
  * Class UnsupportedAlgorithmException
  *
  * @package Phalcon\Security\JWT\Exceptions
  */
-class UnsupportedAlgorithmException extends \Exception
+class UnsupportedAlgorithmException extends Exception
 {
 
 }

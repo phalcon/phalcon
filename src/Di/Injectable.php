@@ -13,11 +13,40 @@ declare(strict_types=1);
 
 namespace Phalcon\Di;
 
+use Phalcon\Annotations\Adapter;
+use Phalcon\Assets\Manager;
+use Phalcon\Crypt;
+use Phalcon\CryptInterface;
+use Phalcon\Db\Adapter\AdapterInterface;
 use Phalcon\Di\Traits\InjectionAwareTrait;
+use Phalcon\Escaper;
 use Phalcon\Events\Manager as EventsManager;
 use Phalcon\Events\ManagerInterface as EventsManagerInterface;
-
-use function is_object;
+use Phalcon\Filter;
+use Phalcon\Flash\Direct;
+use Phalcon\Flash\Session;
+use Phalcon\Helper;
+use Phalcon\Html\EscaperInterface;
+use Phalcon\Http\Request;
+use Phalcon\Http\RequestInterface;
+use Phalcon\Http\Response;
+use Phalcon\Http\Response\Cookies;
+use Phalcon\Http\Response\CookiesInterface;
+use Phalcon\Http\ResponseInterface;
+use Phalcon\Mvc\Dispatcher;
+use Phalcon\Mvc\DispatcherInterface;
+use Phalcon\Mvc\Model\MetaData\Memory;
+use Phalcon\Mvc\Model\MetadataInterface;
+use Phalcon\Mvc\Model\Transaction\ManagerInterface;
+use Phalcon\Mvc\Router;
+use Phalcon\Mvc\RouterInterface;
+use Phalcon\Mvc\View;
+use Phalcon\Mvc\ViewInterface;
+use Phalcon\Security;
+use Phalcon\Session\Bag;
+use Phalcon\Session\BagInterface;
+use Phalcon\Url;
+use Phalcon\Url\UrlInterface;
 
 /**
  * This class allows to access services in the services container by just only
@@ -26,29 +55,29 @@ use function is_object;
  * @property DiInterface|null                     $container
  * @property DiInterface|null                     $di
  * @property EventsManager|EventsManagerInterface $eventsManager
-// * @property \Phalcon\Mvc\Dispatcher|\Phalcon\Mvc\DispatcherInterface $dispatcher
-// * @property \Phalcon\Mvc\Router|\Phalcon\Mvc\RouterInterface $router
-// * @property \Phalcon\Url|\Phalcon\Url\UrlInterface $url
-// * @property \Phalcon\Http\Request|\Phalcon\Http\RequestInterface $request
-// * @property \Phalcon\Http\Response|\Phalcon\Http\ResponseInterface $response
-// * @property \Phalcon\Http\Response\Cookies|\Phalcon\Http\Response\CookiesInterface $cookies
-// * @property \Phalcon\Filter $filter
-// * @property \Phalcon\Flash\Direct $flash
-// * @property \Phalcon\Flash\Session $flashSession
-// * @property \Phalcon\Session\ManagerInterface $session
-// * @property \Phalcon\Db\Adapter\AdapterInterface $db
-// * @property \Phalcon\Security $security
-// * @property \Phalcon\Crypt|\Phalcon\CryptInterface $crypt
-// * @property \Phalcon\Tag $tag
-// * @property \Phalcon\Escaper|\Phalcon\Html\EscaperInterface $escaper
-// * @property \Phalcon\Annotations\Adapter\Memory|\Phalcon\Annotations\Adapter $annotations
-// * @property \Phalcon\Mvc\Model\Manager|\Phalcon\Mvc\Model\ManagerInterface $modelsManager
-// * @property \Phalcon\Mvc\Model\MetaData\Memory|\Phalcon\Mvc\Model\MetadataInterface $modelsMetadata
-// * @property \Phalcon\Mvc\Model\Transaction\ManagerInterface $transactionManager
-// * @property \Phalcon\Assets\Manager $assets
-// * @property \Phalcon\Di|\Phalcon\Di\DiInterface $di
-// * @property \Phalcon\Session\Bag|\Phalcon\Session\BagInterface $persistent
-// * @property \Phalcon\Mvc\View|\Phalcon\Mvc\ViewInterface $view
+ * // * @property Dispatcher|DispatcherInterface $dispatcher
+ * // * @property Router|RouterInterface $router
+ * // * @property Url|UrlInterface $url
+ * // * @property Request|RequestInterface $request
+ * // * @property Response|ResponseInterface $response
+ * // * @property Cookies|CookiesInterface $cookies
+ * // * @property Filter $filter
+ * // * @property Direct $flash
+ * // * @property Session $flashSession
+ * // * @property \Phalcon\Session\ManagerInterface $session
+ * // * @property AdapterInterface $db
+ * // * @property Security $security
+ * // * @property Crypt|CryptInterface $crypt
+ * // * @property Helper $tag
+ * // * @property Escaper|EscaperInterface $escaper
+ * // * @property \Phalcon\Annotations\Adapter\Memory|Adapter $annotations
+ * // * @property \Phalcon\Mvc\Model\Manager|\Phalcon\Mvc\Model\ManagerInterface $modelsManager
+ * // * @property Memory|MetadataInterface $modelsMetadata
+ * // * @property ManagerInterface $transactionManager
+ * // * @property Manager $assets
+ * // * @property \Phalcon\Di|DiInterface $di
+ * // * @property Bag|BagInterface $persistent
+ * // * @property View|ViewInterface $view
  */
 abstract class Injectable implements InjectionAwareInterface
 {
@@ -89,7 +118,7 @@ abstract class Injectable implements InjectionAwareInterface
          * Fallback to the PHP userland if the cache is not available
          */
         if (true === $bucket->has($propertyName)) {
-            $service = $bucket->getShared($propertyName);
+            $service             = $bucket->getShared($propertyName);
             $this->$propertyName = $service;
 
             return $service;

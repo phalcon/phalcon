@@ -35,8 +35,8 @@ class UnderscoreInvokeCest
      *
      * @throws Exception
      *
-     * @author Phalcon Team <team@phalcon.io>
-     * @since  2020-09-09
+     * @author       Phalcon Team <team@phalcon.io>
+     * @since        2020-09-09
      */
     public function htmlHelperAnchorUnderscoreInvoke(UnitTester $I, Example $example)
     {

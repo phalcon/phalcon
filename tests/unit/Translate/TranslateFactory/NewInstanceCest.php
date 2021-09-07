@@ -36,7 +36,7 @@ class NewInstanceCest
      *
      * @author Phalcon Team <team@phalcon.io>
      * @since  2020-09-09
-`     */
+     * `     */
     public function translateTranslateFactoryNewInstance(UnitTester $I)
     {
         $I->wantToTest('Translate\TranslateFactory - newInstance()');

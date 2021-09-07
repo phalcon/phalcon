@@ -45,8 +45,8 @@ class Manager implements ManagerInterface
      */
     public function attach(
         string $eventType,
-        $handler,
-        int $priority = self::DEFAULT_PRIORITY
+               $handler,
+        int    $priority = self::DEFAULT_PRIORITY
     ): void {
         $this->checkHandler($handler);
 
@@ -176,8 +176,8 @@ class Manager implements ManagerInterface
     public function fire(
         string $eventType,
         object $source,
-        $data = null,
-        bool $cancelable = true
+               $data = null,
+        bool   $cancelable = true
     ) {
         if (true === empty($this->events)) {
             return null;
@@ -228,7 +228,7 @@ class Manager implements ManagerInterface
      */
     final public function fireQueue(
         SplPriorityQueue $queue,
-        EventInterface $event
+        EventInterface   $event
     ) {
         $status = null;
 

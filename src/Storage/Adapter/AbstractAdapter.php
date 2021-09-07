@@ -86,6 +86,7 @@ abstract class AbstractAdapter implements AdapterInterface
 
     /**
      * Helper Factory
+     *
      * @var HelperFactory
      */
     protected HelperFactory $helperFactory;
@@ -97,9 +98,9 @@ abstract class AbstractAdapter implements AdapterInterface
      * @param array             $options
      */
     protected function __construct(
-        HelperFactory $helperFactory,
+        HelperFactory     $helperFactory,
         SerializerFactory $factory,
-        array $options = []
+        array             $options = []
     ) {
         /**
          * Lets set some defaults and options here

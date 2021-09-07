@@ -47,7 +47,7 @@ class GetContentCest
     }
 
     /**
-     * @return \string[][]
+     * @return string[][]
      */
     protected function provider(): array
     {

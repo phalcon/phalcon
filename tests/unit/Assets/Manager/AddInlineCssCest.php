@@ -23,8 +23,6 @@ use function ob_end_clean;
 use function ob_get_contents;
 use function ob_start;
 
-use const PHP_EOL;
-
 class AddInlineCssCest
 {
     use DiTrait;
@@ -57,7 +55,7 @@ class AddInlineCssCest
     {
         $I->wantToTest('Assets\Manager - addInlineCss()');
 
-        $css = ".h2:after, .h2:after { content: ''; display: none }";
+        $css     = ".h2:after, .h2:after { content: ''; display: none }";
         $manager = new Manager(new TagFactory(new Escaper()));
         $manager->addInlineCss($css);
         $expected = "<style type=\"text/css\">{$css}</style>";

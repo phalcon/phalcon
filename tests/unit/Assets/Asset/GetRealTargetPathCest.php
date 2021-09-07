@@ -16,7 +16,6 @@ namespace Phalcon\Tests\Unit\Assets\Asset;
 use Codeception\Example;
 use Codeception\Stub;
 use Phalcon\Assets\Asset;
-use Phalcon\Assets\Exception;
 use UnitTester;
 
 use function dataDir;
@@ -82,7 +81,7 @@ class GetRealTargetPathCest
     }
 
     /**
-     * @return \string[][]
+     * @return string[][]
      */
     protected function provider(): array
     {

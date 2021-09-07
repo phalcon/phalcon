@@ -13,7 +13,6 @@ declare(strict_types=1);
 
 namespace Phalcon\Security;
 
-use Base;
 use Phalcon\Support\Traits\Base64Trait;
 
 /**
@@ -271,6 +270,7 @@ class Random
      *
      * echo $random->number(16); // 8
      *```
+     *
      * @param int $len
      *
      * @return int
@@ -341,7 +341,7 @@ class Random
     protected function base(string $alphabet, int $base, int $number = 16): string
     {
         $byteString = '';
-        $bytes = unpack('C*', $this->bytes($number));
+        $bytes      = unpack('C*', $this->bytes($number));
         foreach ($bytes as $index) {
             $index = $index % 64;
 

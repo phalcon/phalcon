@@ -32,7 +32,7 @@ class GetSetCipherCest
         $I->wantToTest('Crypt - getCipher() / setCipher()');
 
         $cipher = 'aes-256-cfb';
-        $crypt = new Crypt();
+        $crypt  = new Crypt();
         $crypt->setCipher($cipher);
 
         $I->assertEquals($cipher, $crypt->getCipher());

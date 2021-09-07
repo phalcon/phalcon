@@ -28,7 +28,7 @@ class GetRawCest
     /**
      * Tests Phalcon\Di :: getRaw()
      *
-     * @param  UnitTester $I
+     * @param UnitTester $I
      *
      * @author Phalcon Team <team@phalcon.io>
      * @since  2019-09-09
@@ -51,7 +51,7 @@ class GetRawCest
     /**
      * Tests Phalcon\Di :: getRaw() - exception
      *
-     * @param  UnitTester $I
+     * @param UnitTester $I
      *
      * @author Phalcon Team <team@phalcon.io>
      * @since  2019-09-09

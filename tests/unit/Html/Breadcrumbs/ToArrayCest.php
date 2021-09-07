@@ -40,8 +40,7 @@ class ToArrayCest
         $breadcrumbs
             ->add('Home', '/')
             ->add('Users', '/users')
-            ->add('Phalcon Team')
-        ;
+            ->add('Phalcon Team');
 
         $expected = [
             '/'      => 'Home',

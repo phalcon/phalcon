@@ -53,8 +53,6 @@ use Phalcon\Html\Helper\Title;
 use Phalcon\Html\Helper\Ul;
 use Phalcon\Support\Traits\FactoryTrait;
 
-use function call_user_func_array;
-
 /**
  * ServiceLocator implementation for Helper helpers
  *

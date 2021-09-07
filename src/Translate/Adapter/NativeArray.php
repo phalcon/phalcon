@@ -31,7 +31,7 @@ use function is_array;
  * @package Phalcon\Translate\Adapter
  *
  * @property array $translate
- * @property bool $triggerError
+ * @property bool  $triggerError
  */
 class NativeArray extends AbstractAdapter implements ArrayAccess
 {
@@ -50,15 +50,15 @@ class NativeArray extends AbstractAdapter implements ArrayAccess
      *
      * @param InterpolatorFactory $interpolator
      * @param array               $options = [
-     *     'content'      => '',
-     *     'triggerError' => false
-     * ]
+     *                                     'content'      => '',
+     *                                     'triggerError' => false
+     *                                     ]
      *
      * @throws Exception
      */
     public function __construct(
         InterpolatorFactory $interpolator,
-        array $options
+        array               $options
     ) {
         parent::__construct($interpolator, $options);
 

@@ -18,8 +18,8 @@ use Phalcon\Config\ConfigFactory;
 use Phalcon\Config\ConfigInterface;
 use Phalcon\Config\Exception;
 
-use function is_string;
 use function is_object;
+use function is_string;
 
 /**
  * Reads multiple files (or arrays) and merges them all together.

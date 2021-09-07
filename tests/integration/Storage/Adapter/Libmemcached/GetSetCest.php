@@ -14,14 +14,14 @@ declare(strict_types=1);
 namespace Phalcon\Tests\Integration\Storage\Adapter\Libmemcached;
 
 use Codeception\Example;
-use Phalcon\Support\Exception as HelperException;
+use IntegrationTester;
 use Phalcon\Storage\Adapter\Libmemcached;
 use Phalcon\Storage\Exception as StorageException;
 use Phalcon\Storage\SerializerFactory;
+use Phalcon\Support\Exception as HelperException;
 use Phalcon\Support\HelperFactory;
 use Phalcon\Tests\Fixtures\Traits\LibmemcachedTrait;
 use stdClass;
-use IntegrationTester;
 
 use function getOptionsLibmemcached;
 
@@ -35,13 +35,13 @@ class GetSetCest
      * @dataProvider getExamples
      *
      * @param IntegrationTester $I
-     * @param Example    $example
+     * @param Example           $example
      *
      * @throws StorageException
      * @throws HelperException
      *
-     * @author Phalcon Team <team@phalcon.io>
-     * @since  2020-09-09
+     * @author       Phalcon Team <team@phalcon.io>
+     * @since        2020-09-09
      */
     public function storageAdapterLibmemcachedGetSet(IntegrationTester $I, Example $example)
     {

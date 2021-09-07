@@ -73,8 +73,8 @@ interface AdapterInterface
     public function allow(
         string $roleName,
         string $componentName,
-        $access,
-        $function = null
+               $access,
+               $function = null
     ): void;
 
     /**
@@ -88,8 +88,8 @@ interface AdapterInterface
     public function deny(
         string $roleName,
         string $componentName,
-        $access,
-        $function = null
+               $access,
+               $function = null
     ): void;
 
     /**

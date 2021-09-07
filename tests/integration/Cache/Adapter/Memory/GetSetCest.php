@@ -14,12 +14,12 @@ declare(strict_types=1);
 namespace Phalcon\Tests\Integration\Cache\Adapter\Memory;
 
 use Codeception\Example;
-use Phalcon\Support\Exception as HelperException;
+use IntegrationTester;
 use Phalcon\Cache\Adapter\Memory;
 use Phalcon\Storage\SerializerFactory;
+use Phalcon\Support\Exception as HelperException;
 use Phalcon\Support\HelperFactory;
 use stdClass;
-use IntegrationTester;
 
 class GetSetCest
 {
@@ -29,12 +29,12 @@ class GetSetCest
      * @dataProvider getExamples
      *
      * @param IntegrationTester $I
-     * @param Example    $example
+     * @param Example           $example
      *
      * @throws HelperException
      *
-     * @author Phalcon Team <team@phalcon.io>
-     * @since  2020-09-09
+     * @author       Phalcon Team <team@phalcon.io>
+     * @since        2020-09-09
      */
     public function storageAdapterMemoryGetSet(IntegrationTester $I, Example $example)
     {

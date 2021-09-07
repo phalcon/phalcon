@@ -28,11 +28,11 @@ class Libmemcached extends AbstractAdapter
      *
      * @param AdapterFactory $factory
      * @param array          $options = [
-     *     'servers'          => [
-     *         [
-     *             'host'   => 'localhost',
-     *             'port'   => 11211,
-     *             'weight' => 1,
+     *                                'servers'          => [
+     *                                [
+     *                                'host'   => 'localhost',
+     *                                'port'   => 11211,
+     *                                'weight' => 1,
      *
      *         ]
      *     ],

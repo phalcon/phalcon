@@ -14,12 +14,12 @@ declare(strict_types=1);
 namespace Phalcon\Tests\Integration\Cache\Adapter\Apcu;
 
 use Codeception\Stub;
+use IntegrationTester;
 use Phalcon\Cache\Adapter\Apcu;
 use Phalcon\Storage\SerializerFactory;
 use Phalcon\Support\Exception;
 use Phalcon\Support\HelperFactory;
 use Phalcon\Tests\Fixtures\Traits\ApcuTrait;
-use IntegrationTester;
 
 use function uniqid;
 

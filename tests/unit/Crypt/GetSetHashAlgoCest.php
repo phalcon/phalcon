@@ -17,8 +17,6 @@ use Phalcon\Crypt\Crypt;
 use Phalcon\Crypt\Exception;
 use UnitTester;
 
-use function uniqid;
-
 /**
  * Class GetSetHashAlgoCest
  *
@@ -39,7 +37,7 @@ class GetSetHashAlgoCest
         $I->wantToTest('Crypt - getHashAlgo() / setHashAlgo()');
 
         $cipher = 'blowfish';
-        $crypt = new Crypt();
+        $crypt  = new Crypt();
         $crypt->setHashAlgo($cipher);
 
         $I->assertEquals($cipher, $crypt->getHashAlgo());

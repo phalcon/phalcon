@@ -13,8 +13,6 @@ declare(strict_types=1);
 
 namespace Phalcon\Tests\Unit\Support\Helper\Str;
 
-use Phalcon\Support\Helper\Str\Len;
-use Phalcon\Support\Helper\Str\Prefix;
 use Phalcon\Support\Helper\Str\Suffix;
 use UnitTester;
 
@@ -40,7 +38,7 @@ class SuffixCest
         $object = new Suffix();
 
         $expected = 'ClassConstants';
-        $actual = $object('Class', 'Constants');
+        $actual   = $object('Class', 'Constants');
         $I->assertEquals($expected, $actual);
     }
 }

@@ -13,15 +13,8 @@ declare(strict_types=1);
 
 namespace Phalcon\Tests\Unit\Application;
 
-use Phalcon\Application\AbstractApplication;
-use Phalcon\Di\FactoryDefault;
-use Phalcon\Di\InjectionAwareInterface;
-use Phalcon\Events\EventsAwareInterface;
-use Phalcon\Events\Manager;
 use Phalcon\Tests\Fixtures\Application\ApplicationFixture;
 use UnitTester;
-
-use function spl_object_hash;
 
 /**
  * Class GetSetDefaultModuleCest

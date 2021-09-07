@@ -29,7 +29,7 @@ class InjectionAwareCest
     /**
      * Tests Phalcon\Di :: injection aware trait
      *
-     * @param  UnitTester $I
+     * @param UnitTester $I
      *
      * @author Phalcon Team <team@phalcon.io>
      * @since  2019-09-09

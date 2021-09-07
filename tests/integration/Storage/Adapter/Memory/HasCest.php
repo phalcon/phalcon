@@ -13,11 +13,11 @@ declare(strict_types=1);
 
 namespace Phalcon\Tests\Integration\Storage\Adapter\Memory;
 
-use Phalcon\Support\Exception as HelperException;
+use IntegrationTester;
 use Phalcon\Storage\Adapter\Memory;
 use Phalcon\Storage\SerializerFactory;
+use Phalcon\Support\Exception as HelperException;
 use Phalcon\Support\HelperFactory;
-use IntegrationTester;
 
 class HasCest
 {

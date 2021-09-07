@@ -75,6 +75,7 @@ class LoadCest
         $I->assertInstanceOf(Logger::class, $object);
         $I->assertCount(2, $object->getAdapters());
     }
+
     /**
      * Tests Phalcon\Translate\Factory :: load() - exceptions
      *

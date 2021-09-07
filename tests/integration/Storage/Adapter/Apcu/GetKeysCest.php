@@ -14,12 +14,12 @@ declare(strict_types=1);
 namespace Phalcon\Tests\Integration\Storage\Adapter\Apcu;
 
 use Codeception\Stub;
-use Phalcon\Support\Exception;
+use IntegrationTester;
 use Phalcon\Storage\Adapter\Apcu;
 use Phalcon\Storage\SerializerFactory;
+use Phalcon\Support\Exception;
 use Phalcon\Support\HelperFactory;
 use Phalcon\Tests\Fixtures\Traits\ApcuTrait;
-use IntegrationTester;
 
 class GetKeysCest
 {
@@ -111,7 +111,7 @@ class GetKeysCest
         $I->assertTrue($adapter->has('one-1'));
         $I->assertTrue($adapter->has('one-2'));
 
-        $actual   = $adapter->getKeys();
+        $actual = $adapter->getKeys();
         $I->assertIsArray($actual);
         $I->assertEmpty($actual);
     }

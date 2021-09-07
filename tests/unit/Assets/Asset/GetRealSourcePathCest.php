@@ -32,14 +32,14 @@ class GetRealSourcePathCest
      * @param UnitTester $I
      * @param Example    $example
      *
-     * @author Phalcon Team <team@phalcon.io>
-     * @since  2020-09-09
+     * @author       Phalcon Team <team@phalcon.io>
+     * @since        2020-09-09
      */
     public function assetsAssetGetRealSourcePathLocal(UnitTester $I, Example $example)
     {
         $I->wantToTest("Assets\Asset - getRealSourcePath() - {$example['type']} local");
 
-        $asset = new Asset($example['type'], $example['path']);
+        $asset  = new Asset($example['type'], $example['path']);
         $actual = $asset->getRealSourcePath();
         $I->assertEmpty($actual);
     }
@@ -52,8 +52,8 @@ class GetRealSourcePathCest
      * @param UnitTester $I
      * @param Example    $example
      *
-     * @author Phalcon Team <team@phalcon.io>
-     * @since  2020-09-09
+     * @author       Phalcon Team <team@phalcon.io>
+     * @since        2020-09-09
      */
     public function assetsAssetGetRealSourcePathRemote(UnitTester $I, Example $example)
     {
@@ -67,7 +67,7 @@ class GetRealSourcePathCest
     }
 
     /**
-     * @return \string[][]
+     * @return string[][]
      */
     protected function localProvider(): array
     {
@@ -84,7 +84,7 @@ class GetRealSourcePathCest
     }
 
     /**
-     * @return \string[][]
+     * @return string[][]
      */
     protected function remoteProvider(): array
     {

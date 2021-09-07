@@ -13,8 +13,8 @@ declare(strict_types=1);
 
 namespace Phalcon\Tests\Unit\Filter\Filter;
 
-use Phalcon\Filter\Filter;
 use Phalcon\Filter\Exception;
+use Phalcon\Filter\Filter;
 use UnitTester;
 
 class ConstructCest

@@ -14,9 +14,9 @@ declare(strict_types=1);
 namespace Phalcon\Tests\Integration\Storage\Serializer\Msgpack;
 
 use Codeception\Example;
+use IntegrationTester;
 use Phalcon\Storage\Serializer\Msgpack;
 use stdClass;
-use IntegrationTester;
 
 class UnserializeCest
 {
@@ -26,10 +26,10 @@ class UnserializeCest
      * @dataProvider getExamples
      *
      * @param IntegrationTester $I
-     * @param Example    $example
+     * @param Example           $example
      *
-     * @author Phalcon Team <team@phalcon.io>
-     * @since  2020-09-09
+     * @author       Phalcon Team <team@phalcon.io>
+     * @since        2020-09-09
      */
     public function storageSerializerMsgpackUnserialize(IntegrationTester $I, Example $example)
     {

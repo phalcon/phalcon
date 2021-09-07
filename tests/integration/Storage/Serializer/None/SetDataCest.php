@@ -13,8 +13,8 @@ declare(strict_types=1);
 
 namespace Phalcon\Tests\Integration\Storage\Serializer\None;
 
-use Phalcon\Storage\Serializer\None;
 use IntegrationTester;
+use Phalcon\Storage\Serializer\None;
 
 class SetDataCest
 {

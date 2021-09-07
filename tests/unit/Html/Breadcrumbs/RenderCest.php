@@ -39,8 +39,7 @@ class RenderCest
 
         $breadcrumbs
             ->add('Home', '/')
-            ->add('Phalcon Team')
-        ;
+            ->add('Phalcon Team');
 
         $expected = '<dl>'
             . '<dt><a href="/">Home</a></dt>'
@@ -69,8 +68,7 @@ class RenderCest
         $breadcrumbs = new Breadcrumbs();
 
         $breadcrumbs
-            ->add('Home', '/')
-        ;
+            ->add('Home', '/');
 
         $expected = '<dl>'
             . '<dt><a href="/">Home</a></dt>'

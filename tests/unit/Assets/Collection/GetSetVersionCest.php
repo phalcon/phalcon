@@ -36,7 +36,7 @@ class GetSetVersionCest
         $I->wantToTest('Assets\Collection - getVersion() / setVersion()');
 
         $collection = new Collection();
-        $version = '1.0';
+        $version    = '1.0';
         $collection->setVersion($version);
 
         $I->assertEquals($version, $collection->getVersion());

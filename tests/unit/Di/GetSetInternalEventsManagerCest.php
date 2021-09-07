@@ -28,7 +28,7 @@ class GetSetInternalEventsManagerCest
     /**
      * Unit Tests Phalcon\Di :: getInternalEventsManager()/setInternalEventsManager()
      *
-     * @param  UnitTester $I
+     * @param UnitTester $I
      *
      * @author Phalcon Team <team@phalcon.io>
      * @since  2019-09-09

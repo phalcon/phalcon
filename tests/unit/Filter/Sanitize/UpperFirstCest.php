@@ -23,11 +23,12 @@ class UpperFirstCest
      * Tests Phalcon\Filter\Sanitize\UpperFirst :: __invoke()
      *
      * @dataProvider getData
+     *
      * @param UnitTester $I
      * @param Example    $example
      *
-     * @author Phalcon Team <team@phalcon.io>
-     * @since  2020-09-09
+     * @author       Phalcon Team <team@phalcon.io>
+     * @since        2020-09-09
      */
     public function filterSanitizeUpperFirstInvoke(UnitTester $I, Example $example)
     {
@@ -40,7 +41,7 @@ class UpperFirstCest
     }
 
     /**
-     * @return \string[][]
+     * @return string[][]
      */
     private function getData(): array
     {

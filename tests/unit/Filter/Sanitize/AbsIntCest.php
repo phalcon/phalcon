@@ -23,11 +23,12 @@ class AbsIntCest
      * Tests Phalcon\Filter\Sanitize\AbsInt :: __invoke()
      *
      * @dataProvider getData
+     *
      * @param UnitTester $I
      * @param Example    $example
      *
-     * @author Phalcon Team <team@phalcon.io>
-     * @since  2020-09-09
+     * @author       Phalcon Team <team@phalcon.io>
+     * @since        2020-09-09
      */
     public function filterSanitizeAbsIntInvoke(UnitTester $I, Example $example)
     {

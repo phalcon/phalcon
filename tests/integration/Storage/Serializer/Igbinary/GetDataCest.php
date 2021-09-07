@@ -13,8 +13,8 @@ declare(strict_types=1);
 
 namespace Phalcon\Tests\Integration\Storage\Serializer\Igbinary;
 
-use Phalcon\Storage\Serializer\Igbinary;
 use IntegrationTester;
+use Phalcon\Storage\Serializer\Igbinary;
 
 class GetDataCest
 {

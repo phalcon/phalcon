@@ -76,9 +76,9 @@ class Stream extends Noop
      * Stream constructor.
      *
      * @param array $options = [
-     *     'prefix'   => '',
-     *     'savePath' => ''
-     * ]
+     *                       'prefix'   => '',
+     *                       'savePath' => ''
+     *                       ]
      *
      * @throws Exception
      */
@@ -135,7 +135,7 @@ class Stream extends Noop
         foreach (glob($pattern) as $file) {
             if (
                 true === file_exists($file) &&
-                true === is_file($file)     &&
+                true === is_file($file) &&
                 filemtime($file) < $time
             ) {
                 unlink($file);
@@ -146,8 +146,8 @@ class Stream extends Noop
     }
 
     /**
-    * Ignore the savePath and use local defined path
-    *
+     * Ignore the savePath and use local defined path
+     *
      * @param string $savePath
      * @param string $sessionName
      *

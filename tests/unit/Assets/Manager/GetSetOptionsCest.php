@@ -35,7 +35,7 @@ class GetSetOptionsCest
      */
     public function assetsManagerGetSetOptions(
         UnitTester $I,
-        Example $example
+        Example    $example
     ) {
         $I->wantToTest(
             'Assets\Manager - getOptions()/setOptions() - ' . $example['label']

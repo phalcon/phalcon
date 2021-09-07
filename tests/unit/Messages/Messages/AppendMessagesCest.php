@@ -16,7 +16,6 @@ namespace Phalcon\Tests\Unit\Messages\Messages;
 use Phalcon\Messages\Exception;
 use Phalcon\Messages\Message;
 use Phalcon\Messages\Messages;
-use TypeError;
 use UnitTester;
 
 class AppendMessagesCest
@@ -25,7 +24,8 @@ class AppendMessagesCest
      * Tests Phalcon\Messages\Messages :: appendMessages() - array
      *
      * @param UnitTester $I
-     * @throws \Phalcon\Messages\Exception
+     *
+     * @throws Exception
      * @author Phalcon Team <team@phalcon.io>
      * @since  2020-09-09
      */

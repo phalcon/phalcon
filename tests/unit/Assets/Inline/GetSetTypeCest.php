@@ -48,7 +48,7 @@ class GetSetTypeCest
     }
 
     /**
-     * @return \string[][]
+     * @return string[][]
      */
     protected function provider(): array
     {

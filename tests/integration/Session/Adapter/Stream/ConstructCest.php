@@ -20,9 +20,6 @@ use Phalcon\Session\Exception;
 use Phalcon\Tests\Fixtures\Traits\DiTrait;
 use SessionHandlerInterface;
 
-use function cacheDir;
-use function getOptionsSessionStream;
-
 /**
  * Class ConstructCest
  *

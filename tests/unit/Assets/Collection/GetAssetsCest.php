@@ -37,7 +37,7 @@ class GetAssetsCest
         $I->wantToTest('Assets\Collection - getAssets()');
 
         $collection = new Collection();
-        $asset = new Asset('js', 'js/jquery.js');
+        $asset      = new Asset('js', 'js/jquery.js');
         $collection->add($asset);
         $asset1 = new Asset('js', 'js/jquery-ui.js');
         $collection->add($asset1);

@@ -66,8 +66,7 @@ class GetAddSetFilesCest
         $loader
             ->addFile('classOne.php')
             ->addFile('classTwo.php')
-            ->addFile('classOne.php')
-        ;
+            ->addFile('classOne.php');
         $I->assertEquals(
             [
                 'classOne.php',

@@ -54,7 +54,7 @@ class GetSetCustomTemplateCest
         $I->assertEmpty($actual);
 
         $template = '<span class="{cssClasses}">{message}</span>';
-        $actual = $flash->setCustomTemplate($template);
+        $actual   = $flash->setCustomTemplate($template);
         $I->assertInstanceOf(Session::class, $actual);
 
         $actual = $flash->getCustomTemplate();
