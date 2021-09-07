@@ -22,7 +22,8 @@ use function array_merge;
  *
  * @package Phalcon\Support\Traits
  *
- * @property array $mapper
+ * @property string $exceptionClass
+ * @property array  $mapper
  */
 trait FactoryTrait
 {
@@ -53,7 +54,8 @@ trait FactoryTrait
     protected function getService(string $name)
     {
         if (true !== isset($this->mapper[$name])) {
-            throw new Exception('Service ' . $name . ' is not registered');
+            $exceptionClass = $this->getExceptionClass();
+            throw new $exceptionClass('Service ' . $name . ' is not registered');
         }
 
         return $this->mapper[$name];
@@ -73,4 +75,9 @@ trait FactoryTrait
     {
         $this->mapper = array_merge($this->getServices(), $services);
     }
+
+    /**
+     * @return string
+     */
+    abstract protected function getExceptionClass(): string;
 }

@@ -19,7 +19,6 @@ use Phalcon\Storage\Adapter\Libmemcached;
 use Phalcon\Storage\Adapter\Memory;
 use Phalcon\Storage\Adapter\Redis;
 use Phalcon\Storage\Adapter\Stream;
-use Phalcon\Support\Exception as SupportException;
 use Phalcon\Support\HelperFactory;
 use Phalcon\Support\Traits\FactoryTrait;
 
@@ -68,7 +67,7 @@ class AdapterFactory
      * @param array  $options
      *
      * @return AdapterInterface
-     * @throws SupportException
+     * @throws Exception
      */
     public function newInstance(string $name, array $options = []): AdapterInterface
     {
@@ -79,6 +78,14 @@ class AdapterFactory
             $this->serializerFactory,
             $options
         );
+    }
+
+    /**
+     * @return string
+     */
+    protected function getExceptionClass(): string
+    {
+        return Exception::class;
     }
 
     /**

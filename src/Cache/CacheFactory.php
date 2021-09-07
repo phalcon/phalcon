@@ -13,6 +13,7 @@ declare(strict_types=1);
 
 namespace Phalcon\Cache;
 
+use Phalcon\Cache\Exception\Exception;
 use Phalcon\Config\ConfigInterface;
 use Phalcon\Support\Traits\ConfigTrait;
 use Psr\SimpleCache\CacheInterface;
@@ -79,31 +80,45 @@ class CacheFactory
     /**
      * Constructs a new Cache instance.
      *
-     * @param array $options = [
-     *                       'servers'           => [
-     *                       [
-     *                       'host' => 'localhost',
-     *                       'port' => 11211,
-     *                       'weight' => 1,
-     *                       ]
-     *                       ],
-     *                       'host'              => '127.0.0.1',
-     *                       'port'              => 6379,
-     *                       'index'             => 0,
-     *                       'persistent'        => false,
-     *                       'auth'              => '',
-     *                       'socket'            => '',
-     *                       'defaultSerializer' => 'Php',
-     *                       'lifetime'          => 3600,
-     *                       'serializer'        => null,
-     *                       'prefix'            => 'phalcon',
-     *                       'storageDir'        => '',
-     *                       ]
+     * @param string $name
+     * @param array  $options = [
+     *     'servers'           => [
+     *         [
+     *             'host' => 'localhost',
+     *             'port' => 11211,
+     *             'weight' => 1,
+     *         ]
+     *     ],
+     *     'host'              => '127.0.0.1',
+     *     'port'              => 6379,
+     *     'index'             => 0,
+     *     'persistent'        => false,
+     *     'auth'              => '',
+     *     'socket'            => '',
+     *     'defaultSerializer' => 'Php',
+     *     'lifetime'          => 3600,
+     *     'serializer'        => null,
+     *     'prefix'            => 'phalcon',
+     *     'storageDir'        => '',
+     * ]
+     */
+    /**
+     *
+     * @return CacheInterface
+     * @throws Exception
      */
     public function newInstance(string $name, array $options = []): CacheInterface
     {
         $adapter = $this->adapterFactory->newInstance($name, $options);
 
         return new Cache($adapter);
+    }
+
+    /**
+     * @return string
+     */
+    protected function getExceptionClass(): string
+    {
+        return Exception::class;
     }
 }

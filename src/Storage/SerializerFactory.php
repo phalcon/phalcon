@@ -20,7 +20,6 @@ use Phalcon\Storage\Serializer\Msgpack;
 use Phalcon\Storage\Serializer\None;
 use Phalcon\Storage\Serializer\Php;
 use Phalcon\Storage\Serializer\SerializerInterface;
-use Phalcon\Support\Exception as SupportException;
 use Phalcon\Support\Traits\FactoryTrait;
 
 /**
@@ -36,13 +35,21 @@ class SerializerFactory
      * @param string $name
      *
      * @return SerializerInterface
-     * @throws SupportException
+     * @throws Exception
      */
     public function newInstance(string $name): SerializerInterface
     {
         $definition = $this->getService($name);
 
         return new $definition();
+    }
+
+    /**
+     * @return string
+     */
+    protected function getExceptionClass(): string
+    {
+        return Exception::class;
     }
 
     /**

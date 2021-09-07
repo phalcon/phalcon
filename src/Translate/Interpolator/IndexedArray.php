@@ -22,6 +22,11 @@ class IndexedArray implements InterpolatorInterface
 {
     /**
      * Replaces placeholders by the values passed
+     *
+     * @param string             $translation
+     * @param array<int, mixed>  $placeholders
+     *
+     * @return string
      */
     public function replacePlaceholders(
         string $translation,
