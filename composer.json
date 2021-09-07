@@ -24,7 +24,7 @@
         "ext-mbstring": "*",
         "ext-pdo": "*",
         "ext-redis": "*",
-        "ext-xml": "^7.2",
+        "ext-xml": "*",
         "payload-interop/payload-interop": "^1.0",
         "psr/container": "^1.0",
         "psr/event-dispatcher": "^1.0",
