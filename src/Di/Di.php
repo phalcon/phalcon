@@ -286,7 +286,9 @@ class Di implements DiInterface
      */
     public function getRaw(string $name)
     {
-        return $this->getService($name)->getDefinition();
+        return $this->getService($name)
+                    ->getDefinition()
+        ;
     }
 
     /**
@@ -460,10 +462,10 @@ class Di implements DiInterface
      * @throws Exception
      */
     private function processObjectNotNullService(
-        string           $name,
-        array            $parameters = null,
+        string $name,
+        array $parameters = null,
         ServiceInterface $service = null,
-                         $instance = null
+        $instance = null
     ) {
         if (null !== $service) {
             // The service is registered in the DI.
@@ -492,10 +494,10 @@ class Di implements DiInterface
      * @throws Exception
      */
     private function processObjectNullService(
-        string           $name,
-        array            $parameters = null,
+        string $name,
+        array $parameters = null,
         ServiceInterface $service = null,
-                         $instance = null
+        $instance = null
     ) {
         if (null === $service) {
             /**

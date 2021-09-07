@@ -57,13 +57,14 @@ trait EventsAwareTrait
      */
     protected function fireEvent(
         string $eventName,
-               $data = null,
-        bool   $cancellable = true
+        $data = null,
+        bool $cancellable = true
     ) {
         if (null !== $this->eventsManager) {
             return $this
                 ->eventsManager
-                ->fire($eventName, $this, $data, $cancellable);
+                ->fire($eventName, $this, $data, $cancellable)
+            ;
         }
 
         return true;

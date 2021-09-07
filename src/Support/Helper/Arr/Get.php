@@ -33,9 +33,9 @@ class Get
      * @return mixed|null
      */
     public function __invoke(
-        array  $collection,
-               $index,
-               $defaultValue = null,
+        array $collection,
+        $index,
+        $defaultValue = null,
         string $cast = null
     ) {
         $value = $collection[$index] ?? $defaultValue;

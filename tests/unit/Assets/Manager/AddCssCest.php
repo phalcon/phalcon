@@ -64,7 +64,8 @@ class AddCssCest
         for ($i = 0; $i < 10; $i++) {
             $manager
                 ->addCss('css/style.css')
-                ->addJs('script.js');
+                ->addJs('script.js')
+            ;
         }
 
         $I->assertCount(
@@ -80,7 +81,8 @@ class AddCssCest
         for ($i = 0; $i < 2; $i++) {
             $manager
                 ->addCss('style_' . $i . '.css')
-                ->addJs('script_' . $i . '.js');
+                ->addJs('script_' . $i . '.js')
+            ;
         }
 
         $I->assertCount(

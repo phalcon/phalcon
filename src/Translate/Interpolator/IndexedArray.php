@@ -25,7 +25,7 @@ class IndexedArray implements InterpolatorInterface
      */
     public function replacePlaceholders(
         string $translation,
-        array  $placeholders = []
+        array $placeholders = []
     ): string {
         if (true !== empty($placeholders)) {
             array_unshift($placeholders, $translation);

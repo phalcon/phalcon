@@ -62,11 +62,11 @@ class Collection implements Countable, IteratorAggregate
      */
     public function addCss(
         string $path,
-        bool   $isLocal = null,
-        bool   $filter = true,
-        array  $attributes = [],
+        bool $isLocal = null,
+        bool $filter = true,
+        array $attributes = [],
         string $version = null,
-        bool   $autoVersion = false
+        bool $autoVersion = false
     ): Collection {
         $isLocal = (null !== $isLocal) ? $isLocal : $this->isLocal;
         $attrs   = $this->processAttributes($attributes);
@@ -117,8 +117,8 @@ class Collection implements Countable, IteratorAggregate
      */
     public function addInlineCss(
         string $content,
-        bool   $filter = true,
-        array  $attributes = []
+        bool $filter = true,
+        array $attributes = []
     ): Collection {
         $attrs = $this->processAttributes($attributes);
         $asset = new InlineCss(
@@ -143,8 +143,8 @@ class Collection implements Countable, IteratorAggregate
      */
     public function addInlineJs(
         string $content,
-        bool   $filter = true,
-        array  $attributes = []
+        bool $filter = true,
+        array $attributes = []
     ): Collection {
         $attrs = $this->processAttributes($attributes);
         $asset = new InlineJs(
@@ -172,11 +172,11 @@ class Collection implements Countable, IteratorAggregate
      */
     public function addJs(
         string $path,
-        bool   $isLocal = null,
-        bool   $filter = true,
-        array  $attributes = [],
+        bool $isLocal = null,
+        bool $filter = true,
+        array $attributes = [],
         string $version = null,
-        bool   $autoVersion = false
+        bool $autoVersion = false
     ): Collection {
         $isLocal = (null !== $isLocal) ? $isLocal : $this->isLocal;
         $attrs   = $this->processAttributes($attributes);

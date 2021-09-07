@@ -119,7 +119,7 @@ class Collection implements
      */
     public function get(
         string $element,
-               $defaultValue = null,
+        $defaultValue = null,
         string $cast = null
     ) {
         $element = ($this->insensitive) ? mb_strtolower($element) : $element;

@@ -15,19 +15,16 @@ namespace Phalcon\Di;
 
 use Phalcon\Annotations\Adapter;
 use Phalcon\Assets\Manager;
-use Phalcon\Crypt;
 use Phalcon\CryptInterface;
 use Phalcon\Db\Adapter\AdapterInterface;
 use Phalcon\Di\Traits\InjectionAwareTrait;
 use Phalcon\Escaper;
 use Phalcon\Events\Manager as EventsManager;
 use Phalcon\Events\ManagerInterface as EventsManagerInterface;
-use Phalcon\Filter;
 use Phalcon\Flash\Direct;
 use Phalcon\Flash\Session;
 use Phalcon\Helper;
 use Phalcon\Html\EscaperInterface;
-use Phalcon\Http\Request;
 use Phalcon\Http\RequestInterface;
 use Phalcon\Http\Response;
 use Phalcon\Http\Response\Cookies;
@@ -42,7 +39,6 @@ use Phalcon\Mvc\Router;
 use Phalcon\Mvc\RouterInterface;
 use Phalcon\Mvc\View;
 use Phalcon\Mvc\ViewInterface;
-use Phalcon\Security;
 use Phalcon\Session\Bag;
 use Phalcon\Session\BagInterface;
 use Phalcon\Url;
@@ -70,7 +66,7 @@ use Phalcon\Url\UrlInterface;
  * // * @property Crypt|CryptInterface $crypt
  * // * @property Helper $tag
  * // * @property Escaper|EscaperInterface $escaper
- * // * @property \Phalcon\Annotations\Adapter\Memory|Adapter $annotations
+ * // * @property Adapter\Memory|Adapter $annotations
  * // * @property \Phalcon\Mvc\Model\Manager|\Phalcon\Mvc\Model\ManagerInterface $modelsManager
  * // * @property Memory|MetadataInterface $modelsMetadata
  * // * @property ManagerInterface $transactionManager
@@ -135,7 +131,9 @@ abstract class Injectable implements InjectionAwareInterface
      */
     public function __isset(string $name): bool
     {
-        return $this->getDI()->has($name);
+        return $this->getDI()
+                    ->has($name)
+        ;
     }
 
     /**

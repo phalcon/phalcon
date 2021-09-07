@@ -42,7 +42,8 @@ class GetListenersCest
 
         $eventsManager->attach('log', $first);
         $eventsManager->attach('log', $second);
-        $logListeners = $component->getEventsManager()->getListeners('log');
+        $logListeners = $component->getEventsManager()
+                                  ->getListeners('log');
         $I->assertCount(2, $logListeners);
 
         $expected = OneListener::class;

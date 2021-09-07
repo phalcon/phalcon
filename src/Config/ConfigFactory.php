@@ -178,7 +178,7 @@ class ConfigFactory
     public function newInstance(
         string $name,
         string $fileName,
-               $params = null
+        $params = null
     ): ConfigInterface {
         $definition = $this->getService($name);
 

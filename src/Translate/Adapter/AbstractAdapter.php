@@ -44,7 +44,7 @@ abstract class AbstractAdapter implements AdapterInterface
      */
     public function __construct(
         InterpolatorFactory $interpolator,
-        array               $options = []
+        array $options = []
     ) {
         $this->defaultInterpolator = $options['defaultInterpolator'] ?? 'associativeArray';
         $this->interpolatorFactory = $interpolator;
@@ -135,7 +135,7 @@ abstract class AbstractAdapter implements AdapterInterface
      */
     protected function replacePlaceholders(
         string $translation,
-        array  $placeholders = []
+        array $placeholders = []
     ): string {
         $interpolator = $this->interpolatorFactory->newInstance($this->defaultInterpolator);
 

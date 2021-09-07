@@ -35,18 +35,18 @@ trait EndsWithTrait
     private function toEndsWith(
         string $haystack,
         string $needle,
-        bool   $ignoreCase = true
+        bool $ignoreCase = true
     ): bool {
         if ('' === $haystack) {
             return false;
         }
 
         return 0 === substr_compare(
-                $haystack,
-                $needle,
-                -mb_strlen($needle),
-                mb_strlen($needle),
-                $ignoreCase
-            );
+            $haystack,
+            $needle,
+            -mb_strlen($needle),
+            mb_strlen($needle),
+            $ignoreCase
+        );
     }
 }

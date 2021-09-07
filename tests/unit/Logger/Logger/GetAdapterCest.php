@@ -102,13 +102,17 @@ class GetAdapterCest
 
         $logger->info('Logging');
 
-        $logger->getAdapter('two')->begin();
+        $logger->getAdapter('two')
+               ->begin()
+        ;
 
         $I->assertFalse(
-            $logger->getAdapter('one')->inTransaction()
+            $logger->getAdapter('one')
+                   ->inTransaction()
         );
         $I->assertTrue(
-            $logger->getAdapter('two')->inTransaction()
+            $logger->getAdapter('two')
+                   ->inTransaction()
         );
 
         $logger->info('Thanks');
@@ -134,7 +138,9 @@ class GetAdapterCest
         $I->dontSeeInThisFile('with');
         $I->dontSeeInThisFile('Phalcon');
 
-        $logger->getAdapter('two')->commit();
+        $logger->getAdapter('two')
+               ->commit()
+        ;
 
         $I->amInPath($outputPath);
         $I->openFile($fileName2);

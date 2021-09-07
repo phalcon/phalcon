@@ -56,9 +56,9 @@ class Decode
      */
     public function __invoke(
         string $data,
-        bool   $associative = false,
-        int    $depth = 512,
-        int    $options = 0
+        bool $associative = false,
+        int $depth = 512,
+        int $options = 0
     ) {
         $decoded = json_decode($data, $associative, $depth, $options);
 

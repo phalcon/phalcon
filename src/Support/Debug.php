@@ -288,11 +288,11 @@ class Debug
      * @throws ErrorException
      */
     public function onUncaughtLowSeverity(
-        int    $severity,
+        int $severity,
         string $message,
         string $file,
-        int    $line,
-        array  $context = []
+        int $line,
+        array $context = []
     ): void {
         if (error_reporting() & $severity) {
             throw new ErrorException($message, 0, $severity, $file, $line);

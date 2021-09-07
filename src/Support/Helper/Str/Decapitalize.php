@@ -41,7 +41,7 @@ class Decapitalize
      */
     public function __invoke(
         string $text,
-        bool   $upperRest = false,
+        bool $upperRest = false,
         string $encoding = 'UTF-8'
     ): string {
         $substr = mb_substr($text, 1);

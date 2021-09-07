@@ -214,8 +214,8 @@ class Filter implements FilterInterface
      */
     private function processArraySanitizers(
         array $sanitizers,
-              $value,
-        bool  $noRecursive
+        $value,
+        bool $noRecursive
     ) {
         /**
          * Null value - return immediately
@@ -269,9 +269,9 @@ class Filter implements FilterInterface
      * @throws Exception
      */
     private function processArrayValues(
-        array  $values,
+        array $values,
         string $sanitizerName,
-        array  $sanitizerParams = []
+        array $sanitizerParams = []
     ): array {
         $arrayValue = [];
 

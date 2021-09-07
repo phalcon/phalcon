@@ -98,9 +98,9 @@ abstract class AbstractAdapter implements AdapterInterface
      * @param array             $options
      */
     protected function __construct(
-        HelperFactory     $helperFactory,
+        HelperFactory $helperFactory,
         SerializerFactory $factory,
-        array             $options = []
+        array $options = []
     ) {
         /**
          * Lets set some defaults and options here
@@ -305,7 +305,9 @@ abstract class AbstractAdapter implements AdapterInterface
 
         if (is_object($ttl) && $ttl instanceof DateInterval) {
             $dateTime = new DateTime('@0');
-            return $dateTime->add($ttl)->getTimestamp();
+            return $dateTime->add($ttl)
+                            ->getTimestamp()
+            ;
         }
 
         return (int) $ttl;

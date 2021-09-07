@@ -68,7 +68,8 @@ class Validator
      */
     public function validateAudience(string $audience): Validator
     {
-        $tokenAudience = $this->token->getClaims()->get(Enum::AUDIENCE, []);
+        $tokenAudience = $this->token->getClaims()
+                                     ->get(Enum::AUDIENCE, []);
         if (true !== in_array($audience, $tokenAudience)) {
             throw new ValidatorException(
                 "Validation: audience not allowed"
@@ -86,9 +87,11 @@ class Validator
      */
     public function validateExpiration(int $timestamp): Validator
     {
-        $tokenExpirationTime = (int) $this->token->getClaims()->get(Enum::EXPIRATION_TIME);
+        $tokenExpirationTime = (int) $this->token->getClaims()
+                                                 ->get(Enum::EXPIRATION_TIME);
         if (
-            $this->token->getClaims()->has(Enum::EXPIRATION_TIME) &&
+            $this->token->getClaims()
+                        ->has(Enum::EXPIRATION_TIME) &&
             $this->getTimestamp($timestamp) >= $tokenExpirationTime
         ) {
             throw new ValidatorException('Validation: the token has expired');
@@ -105,7 +108,8 @@ class Validator
      */
     public function validateId(string $jwtId): Validator
     {
-        $tokenId = (string) $this->token->getClaims()->get(Enum::ID);
+        $tokenId = (string) $this->token->getClaims()
+                                        ->get(Enum::ID);
         if ($jwtId !== $tokenId) {
             throw new ValidatorException('Validation: incorrect Id');
         }
@@ -121,7 +125,8 @@ class Validator
      */
     public function validateIssuedAt(int $timestamp): Validator
     {
-        $tokenIssuedAt = (int) $this->token->getClaims()->get(Enum::ISSUED_AT);
+        $tokenIssuedAt = (int) $this->token->getClaims()
+                                           ->get(Enum::ISSUED_AT);
         if ($this->getTimestamp($timestamp) <= $tokenIssuedAt) {
             throw new ValidatorException(
                 'Validation: the token cannot be used yet (future)'
@@ -139,7 +144,8 @@ class Validator
      */
     public function validateIssuer(string $issuer): Validator
     {
-        $tokenIssuer = (string) $this->token->getClaims()->get(Enum::ISSUER);
+        $tokenIssuer = (string) $this->token->getClaims()
+                                            ->get(Enum::ISSUER);
         if ($issuer !== $tokenIssuer) {
             throw new ValidatorException('Validation: incorrect issuer');
         }
@@ -155,7 +161,8 @@ class Validator
      */
     public function validateNotBefore(int $timestamp): Validator
     {
-        $tokenNotBefore = (int) $this->token->getClaims()->get(Enum::NOT_BEFORE);
+        $tokenNotBefore = (int) $this->token->getClaims()
+                                            ->get(Enum::NOT_BEFORE);
         if ($this->getTimestamp($timestamp) <= $tokenNotBefore) {
             throw new ValidatorException(
                 'Validation: the token cannot be used yet (not before)'
@@ -176,7 +183,8 @@ class Validator
     {
         if (
             true !== $signer->verify(
-                $this->token->getSignature()->getHash(),
+                $this->token->getSignature()
+                            ->getHash(),
                 $this->token->getPayload(),
                 $passphrase
             )

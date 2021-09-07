@@ -35,7 +35,9 @@ class UseImplicitOutputCest
         $I->wantToTest('Assets\Manager - useImplicitOutput()');
 
         $manager = new Manager(new TagFactory(new Escaper()));
-        $manager->collection('footer')->addCss('/css/style1.css');
+        $manager->collection('footer')
+                ->addCss('/css/style1.css')
+        ;
 
         $footer = $manager->collection('footer');
 
@@ -71,7 +73,8 @@ class UseImplicitOutputCest
             ->setPrefix('http:://cdn.example.com/')
             ->setLocal(false)
             ->addJs('js/script1.js')
-            ->addJs('js/script2.js');
+            ->addJs('js/script2.js')
+        ;
 
         $manager->useImplicitOutput(false);
 

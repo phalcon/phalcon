@@ -92,7 +92,7 @@ class Gettext extends AbstractAdapter implements ArrayAccess
      */
     public function __construct(
         InterpolatorFactory $interpolator,
-        array               $options
+        array $options
     ) {
         if (true !== function_exists('gettext')) {
             throw new Exception(
@@ -167,8 +167,8 @@ class Gettext extends AbstractAdapter implements ArrayAccess
     public function nquery(
         string $msgid1,
         string $msgid2,
-        int    $count,
-        array  $placeholders = [],
+        int $count,
+        array $placeholders = [],
         string $domain = null
     ): string {
 

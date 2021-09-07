@@ -53,10 +53,10 @@ interface RequestInterface
      */
     public function get(
         string $name = null,
-               $filters = null,
-               $default = null,
-        bool   $notAllowEmpty = false,
-        bool   $noRecursive = false
+        $filters = null,
+        $default = null,
+        bool $notAllowEmpty = false,
+        bool $noRecursive = false
     );
 
     /**
@@ -283,10 +283,10 @@ interface RequestInterface
      */
     public function getPost(
         string $name = null,
-               $filters = null,
-               $default = null,
-        bool   $notAllowEmpty = false,
-        bool   $noRecursive = false
+        $filters = null,
+        $default = null,
+        bool $notAllowEmpty = false,
+        bool $noRecursive = false
     );
 
     /**
@@ -310,10 +310,10 @@ interface RequestInterface
      */
     public function getPut(
         string $name = null,
-               $filters = null,
-               $default = null,
-        bool   $notAllowEmpty = false,
-        bool   $noRecursive = false
+        $filters = null,
+        $default = null,
+        bool $notAllowEmpty = false,
+        bool $noRecursive = false
     );
 
     /**
@@ -341,10 +341,10 @@ interface RequestInterface
      */
     public function getQuery(
         string $name = null,
-               $filters = null,
-               $default = null,
-        bool   $notAllowEmpty = false,
-        bool   $noRecursive = false
+        $filters = null,
+        $default = null,
+        bool $notAllowEmpty = false,
+        bool $noRecursive = false
     );
 
     /**

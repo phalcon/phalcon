@@ -36,11 +36,11 @@ class Js extends AssetBase
      */
     public function __construct(
         string $path,
-        bool   $local = true,
-        bool   $filter = true,
-        array  $attributes = [],
+        bool $local = true,
+        bool $filter = true,
+        array $attributes = [],
         string $version = null,
-        bool   $autoVersion = false
+        bool $autoVersion = false
     ) {
         parent::__construct('js', $path, $local, $filter, $attributes, $version, $autoVersion);
     }

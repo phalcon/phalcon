@@ -61,15 +61,19 @@ class AttachCest
         $component->setEventsManager($eventsManager);
 
         $eventsManager->attach('log', $first);
-        $logListeners = $component->getEventsManager()->getListeners('log');
+        $logListeners = $component->getEventsManager()
+                                  ->getListeners('log');
         $I->assertCount(1, $logListeners);
 
         $expected = OneListener::class;
         $actual   = $logListeners[0];
         $I->assertInstanceOf($expected, $actual);
 
-        $component->getEventsManager()->attach('log', $second);
-        $logListeners = $component->getEventsManager()->getListeners('log');
+        $component->getEventsManager()
+                  ->attach('log', $second)
+        ;
+        $logListeners = $component->getEventsManager()
+                                  ->getListeners('log');
         $I->assertCount(2, $logListeners);
 
         $expected = OneListener::class;
@@ -80,12 +84,18 @@ class AttachCest
         $actual   = $logListeners[1];
         $I->assertInstanceOf($expected, $actual);
 
-        $component->getEventsManager()->detachAll('log');
-        $logListeners = $component->getEventsManager()->getListeners('log');
+        $component->getEventsManager()
+                  ->detachAll('log')
+        ;
+        $logListeners = $component->getEventsManager()
+                                  ->getListeners('log');
         $I->assertEmpty($logListeners);
 
-        $component->getEventsManager()->attach('log', $second);
-        $logListeners = $component->getEventsManager()->getListeners('log');
+        $component->getEventsManager()
+                  ->attach('log', $second)
+        ;
+        $logListeners = $component->getEventsManager()
+                                  ->getListeners('log');
         $I->assertCount(1, $logListeners);
 
         $expected = TwoListener::class;

@@ -44,7 +44,7 @@ interface CollectionInterface
      */
     public function get(
         string $element,
-               $defaultValue = null,
+        $defaultValue = null,
         string $cast = null
     );
 

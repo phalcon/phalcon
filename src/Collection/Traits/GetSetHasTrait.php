@@ -71,7 +71,7 @@ trait GetSetHasTrait
      */
     abstract public function get(
         string $element,
-               $defaultValue = null,
+        $defaultValue = null,
         string $cast = null
     );
 

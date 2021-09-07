@@ -214,9 +214,9 @@ trait DiExceptionsTrait
      * @throws Exception
      */
     private function checkServiceParameters(
-        array  $argument,
+        array $argument,
         string $name,
-        int    $position
+        int $position
     ): void {
         if (true !== isset($argument[$name])) {
             throw new Exception(

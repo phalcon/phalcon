@@ -27,7 +27,7 @@ class AssociativeArray implements InterpolatorInterface
      */
     public function replacePlaceholders(
         string $translation,
-        array  $placeholders = []
+        array $placeholders = []
     ): string {
         foreach ($placeholders as $key => $placeholder) {
             $translation = str_replace(

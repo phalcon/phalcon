@@ -52,7 +52,8 @@ class GetResponsesCest
         $component->doAction();
 
         $expected = ['one'];
-        $actual   = $component->getEventsManager()->getResponses();
+        $actual   = $component->getEventsManager()
+                              ->getResponses();
         $I->assertEquals($expected, $actual);
     }
 }

@@ -46,7 +46,7 @@ abstract class AbstractInput extends AbstractHelper
     public function __invoke(
         string $name,
         string $value = null,
-        array  $attributes = []
+        array $attributes = []
     ): AbstractInput {
         $this->attributes = [
             'type' => $this->type,

@@ -491,8 +491,8 @@ class Memory extends AbstractAdapter
     public function allow(
         string $roleName,
         string $componentName,
-               $access,
-               $function = null
+        $access,
+        $function = null
     ): void {
         $rolesArray = [$roleName];
         if ('*' === $roleName) {
@@ -537,8 +537,8 @@ class Memory extends AbstractAdapter
     public function deny(
         string $roleName,
         string $componentName,
-               $access,
-               $function = null
+        $access,
+        $function = null
     ): void {
         $rolesArray = [$roleName];
         if ('*' === $roleName) {
@@ -923,9 +923,9 @@ class Memory extends AbstractAdapter
     private function allowOrDeny(
         string $roleName,
         string $componentName,
-               $access,
-               $action,
-               $function = null
+        $access,
+        $action,
+        $function = null
     ): void {
         $this->checkExists($this->roles, $roleName, 'Role');
         $this->checkExists($this->componentsNames, $componentName, 'Component');
@@ -1053,7 +1053,7 @@ class Memory extends AbstractAdapter
      * @throws Exception
      */
     private function checkExists(
-        array  $collection,
+        array $collection,
         string $element,
         string $elementName,
         string $suffix = 'ACL'

@@ -63,11 +63,11 @@ class Item
      * @param array             $context
      */
     public function __construct(
-        string            $message,
-        string            $name,
-        int               $type,
+        string $message,
+        string $name,
+        int $type,
         DateTimeImmutable $datetime,
-        array             $context = []
+        array $context = []
     ) {
         $this->message  = $message;
         $this->name     = $name;

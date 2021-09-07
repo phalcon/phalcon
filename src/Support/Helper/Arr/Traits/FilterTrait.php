@@ -32,7 +32,7 @@ trait FilterTrait
      * @return array
      */
     private function toFilter(
-        array    $collection,
+        array $collection,
         callable $method = null
     ): array {
         if (null === $method || !is_callable($method)) {

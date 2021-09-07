@@ -60,8 +60,8 @@ class Message implements MessageInterface, JsonSerializable
         string $message,
         string $field = "",
         string $type = "",
-        int    $code = 0,
-        array  $metaData = []
+        int $code = 0,
+        array $metaData = []
     ) {
         $this->message  = $message;
         $this->field    = $field;

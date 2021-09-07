@@ -70,7 +70,8 @@ class LoadCest
         );
 
         /** @var Ini $ini */
-        $ini = (new ConfigFactory())->load($ini->get('config')->toArray());
+        $ini = (new ConfigFactory())->load($ini->get('config')
+                                               ->toArray());
 
         $I->assertInstanceOf(
             Ini::class,

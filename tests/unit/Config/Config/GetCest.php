@@ -47,7 +47,8 @@ class GetCest
         $I->wantToTest('Config - get()');
         $config = $this->getConfig();
         $I->assertEquals(
-            $config->get('database')->get('adapter'),
+            $config->get('database')
+                   ->get('adapter'),
             $this->config['database']['adapter']
         );
     }

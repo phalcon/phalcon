@@ -42,6 +42,7 @@ class GetSignatureCest
         $token = new Token($headers, $claims, $signature);
 
         $I->assertInstanceOf(Signature::class, $token->getSignature());
-        $I->assertEquals("signature-encoded", $token->getSignature()->getEncoded());
+        $I->assertEquals("signature-encoded", $token->getSignature()
+                                                    ->getEncoded());
     }
 }
