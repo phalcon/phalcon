@@ -107,6 +107,14 @@ class TagFactory
     }
 
     /**
+     * @return string
+     */
+    protected function getExceptionClass(): string
+    {
+        return Exception::class;
+    }
+
+    /**
      * @return array
      */
     protected function getServices(): array

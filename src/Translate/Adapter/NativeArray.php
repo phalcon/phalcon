@@ -48,11 +48,11 @@ class NativeArray extends AbstractAdapter implements ArrayAccess
     /**
      * NativeArray constructor.
      *
-     * @param InterpolatorFactory $interpolator
-     * @param array               $options = [
-     *                                     'content'      => '',
-     *                                     'triggerError' => false
-     *                                     ]
+     * @param InterpolatorFactory                     $interpolator
+     * @param array{content: array, triggerError: bool} $options = [
+     *     'content'      => '',
+     *     'triggerError' => false
+     * ]
      *
      * @throws Exception
      */
@@ -62,11 +62,11 @@ class NativeArray extends AbstractAdapter implements ArrayAccess
     ) {
         parent::__construct($interpolator, $options);
 
-        if (true !== isset($options['content'])) {
+        if (!isset($options['content'])) {
             throw new Exception('Translation content was not provided');
         }
 
-        if (true !== is_array($options['content'])) {
+        if (!is_array($options['content'])) {
             throw new Exception('Translation data must be an array');
         }
 
@@ -106,8 +106,8 @@ class NativeArray extends AbstractAdapter implements ArrayAccess
     /**
      * Returns the translation related to the given key
      *
-     * @param string $index
-     * @param array  $placeholders
+     * @param string            $index
+     * @param array<int, mixed> $placeholders
      *
      * @return string
      * @throws Exception

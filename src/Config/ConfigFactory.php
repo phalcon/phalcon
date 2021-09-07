@@ -18,7 +18,6 @@ use Phalcon\Config\Adapter\Ini;
 use Phalcon\Config\Adapter\Json;
 use Phalcon\Config\Adapter\Php;
 use Phalcon\Config\Adapter\Yaml;
-use Phalcon\Support\Exception as SupportException;
 use Phalcon\Support\Traits\FactoryTrait;
 
 use function is_array;
@@ -71,7 +70,6 @@ class ConfigFactory
      *
      * @return ConfigInterface
      * @throws Exception
-     * @throws SupportException
      */
     public function load($config): ConfigInterface
     {
@@ -104,6 +102,54 @@ class ConfigFactory
             $adapter,
             $filePath
         );
+    }
+
+    /**
+     * Returns a new Config instance
+     *
+     * @param string     $name
+     * @param string     $fileName
+     * @param mixed|null $params
+     *
+     * @return ConfigInterface
+     * @throws SupportException
+     */
+    public function newInstance(
+        string $name,
+        string $fileName,
+        $params = null
+    ): ConfigInterface {
+        $definition = $this->getService($name);
+
+        switch ($definition) {
+            case Json::class:
+            case Php::class:
+                return new $definition($fileName);
+        }
+
+        return new $definition($fileName, $params);
+    }
+
+    /**
+     * @return string
+     */
+    protected function getExceptionClass(): string
+    {
+        return Exception::class;
+    }
+
+    /**
+     * @return array
+     */
+    protected function getServices(): array
+    {
+        return [
+            'grouped' => Grouped::class,
+            'ini'     => Ini::class,
+            'json'    => Json::class,
+            'php'     => Php::class,
+            'yaml'    => Yaml::class
+        ];
     }
 
     /**
@@ -163,45 +209,5 @@ class ConfigFactory
                 'You must provide \'adapter\' option in factory config parameter.'
             );
         }
-    }
-
-    /**
-     * Returns a new Config instance
-     *
-     * @param string     $name
-     * @param string     $fileName
-     * @param mixed|null $params
-     *
-     * @return ConfigInterface
-     * @throws SupportException
-     */
-    public function newInstance(
-        string $name,
-        string $fileName,
-        $params = null
-    ): ConfigInterface {
-        $definition = $this->getService($name);
-
-        switch ($definition) {
-            case Json::class:
-            case Php::class:
-                return new $definition($fileName);
-        }
-
-        return new $definition($fileName, $params);
-    }
-
-    /**
-     * @return array
-     */
-    protected function getServices(): array
-    {
-        return [
-            'grouped' => Grouped::class,
-            'ini'     => Ini::class,
-            'json'    => Json::class,
-            'php'     => Php::class,
-            'yaml'    => Yaml::class
-        ];
     }
 }

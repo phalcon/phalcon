@@ -28,6 +28,9 @@ class LoggerFactory
      */
     private AdapterFactory $adapterFactory;
 
+    /**
+     * @param AdapterFactory $factory
+     */
     public function __construct(AdapterFactory $factory)
     {
         $this->adapterFactory = $factory;

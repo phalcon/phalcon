@@ -74,6 +74,8 @@ class Version
      * ```php
      * echo (new Phalcon\Version())->get();
      * ```
+     *
+     * @return string
      */
     public function get(): string
     {
@@ -110,6 +112,8 @@ class Version
      * ```php
      * echo (new Phalcon\Version())->getId();
      * ```
+     *
+     * @return string
      */
     public function getId(): string
     {
@@ -135,6 +139,10 @@ class Version
      * ```php
      * echo (new Phalcon\Version())->getPart(Phalcon\Version::VERSION_MAJOR);
      * ```
+     *
+     * @param int $part
+     *
+     * @return string
      */
     public function getPart(int $part): string
     {
@@ -163,6 +171,8 @@ class Version
      * C - Min version (two digits)
      * D - Special release: 1 = alpha, 2 = beta, 3 = RC, 4 = stable
      * E - Special release version i.e. RC1, Beta2 etc.
+     *
+     * @return int[]
      */
     protected function getVersion(): array
     {
@@ -171,6 +181,10 @@ class Version
 
     /**
      * Translates a number to a special release.
+     *
+     * @param int $special
+     *
+     * @return string
      */
     final protected function getSpecial(int $special): string
     {

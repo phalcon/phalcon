@@ -25,7 +25,7 @@ class InterpolatorFactory
     /**
      * InterpolatorFactor constructor.
      *
-     * @param array $services
+     * @param array<string, string> $services
      */
     public function __construct(array $services = [])
     {
@@ -34,6 +34,11 @@ class InterpolatorFactory
 
     /**
      * Create a new instance of the adapter
+     *
+     * @param string $name
+     *
+     * @return InterpolatorInterface
+     * @throws Exception
      */
     public function newInstance(string $name): InterpolatorInterface
     {
@@ -42,6 +47,17 @@ class InterpolatorFactory
         return new $definition($definition);
     }
 
+    /**
+     * @return string
+     */
+    protected function getExceptionClass(): string
+    {
+        return Exception::class;
+    }
+
+    /**
+     * @return string[]
+     */
     protected function getServices(): array
     {
         return [

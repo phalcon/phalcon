@@ -40,6 +40,9 @@ class TranslateFactory
 
     /**
      * AdapterFactory constructor.
+     *
+     * @param InterpolatorFactory   $interpolator
+     * @param array<string, string> $services
      */
     public function __construct(InterpolatorFactory $interpolator, array $services = [])
     {
@@ -51,21 +54,24 @@ class TranslateFactory
     /**
      * Factory to create an instance from a Config object
      *
-     * @param array|ConfigInterface $config = [
-     *                                      'adapter' => 'ini,
-     *                                      'options' => [
-     *                                      'content'       => '',
-     *                                      'delimiter'     => ';',
-     *                                      'enclosure'     => '"',
-     *                                      'locale'        => '',
-     *                                      'defaultDomain' => '',
-     *                                      'directory'     => '',
-     *                                      'category'      => ''
-     *                                      'triggerError'  => false
-     *                                      ]
-     *                                      ]
+     * @param array<string, >|ConfigInterface $config = [
+     *     'adapter' => 'ini,
+     *     'options' => [
+     *         'content'       => '',
+     *         'delimiter'     => ';',
+     *         'enclosure'     => '"',
+     *         'locale'        => '',
+     *         'defaultDomain' => '',
+     *         'directory'     => '',
+     *         'category'      => ''
+     *         'triggerError'  => false
+     *     ]
+     * ]
+     *
+     * @return AdapterInterface
+     * @throws Exception
      */
-    public function load($config)
+    public function load($config): AdapterInterface
     {
         $config  = $this->checkConfig($config);
         $name    = $config['adapter'];
@@ -76,12 +82,26 @@ class TranslateFactory
 
     /**
      * Create a new instance of the adapter
+     *
+     * @param string $name
+     * @param array<string, string>  $options
+     *
+     * @return AdapterInterface
+     * @throws Exception
      */
     public function newInstance(string $name, array $options = []): AdapterInterface
     {
         $definition = $this->getService($name);
 
         return new $definition($this->interpolator, $options);
+    }
+
+    /**
+     * @return string
+     */
+    protected function getExceptionClass(): string
+    {
+        return Exception::class;
     }
 
     /**

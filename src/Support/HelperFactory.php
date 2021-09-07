@@ -165,6 +165,14 @@ class HelperFactory
     }
 
     /**
+     * @return string
+     */
+    protected function getExceptionClass(): string
+    {
+        return Exception::class;
+    }
+
+    /**
      * @return string[]
      */
     protected function getServices(): array

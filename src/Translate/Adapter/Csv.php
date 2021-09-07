@@ -39,12 +39,12 @@ class Csv extends AbstractAdapter implements ArrayAccess
     /**
      * Csv constructor.
      *
-     * @param InterpolatorFactory $interpolator
-     * @param array               $options = [
-     *                                     'content'   => '',
-     *                                     'delimiter' => ';',
-     *                                     'enclosure' => '"'
-     *                                     ]
+     * @param InterpolatorFactory   $interpolator
+     * @param array<string, string> $options = [
+     *     'content'   => '',
+     *     'delimiter' => ';',
+     *     'enclosure' => '"'
+     * ]
      *
      * @throws Exception
      */
