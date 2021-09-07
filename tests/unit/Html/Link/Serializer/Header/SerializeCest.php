@@ -50,6 +50,8 @@ class SerializeCest
             (new EvolvableLink('alternate', '/2'))
                 ->withRel('next')
                 ->withAttribute('hreflang', ['en', 'es']),
+            // This will be ignored because it has a template
+            (new EvolvableLink('alternate', '/3/login/{username}')),
         ];
 
         $expected = '</1>; rel="preload"; as="image"; nopush,'

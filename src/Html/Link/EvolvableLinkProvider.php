@@ -33,7 +33,7 @@ class EvolvableLinkProvider extends LinkProvider implements EvolvableLinkProvide
      * @param LinkInterface $link
      *   A link object that should be included in this collection.
      *
-     * @return static
+     * @return $this
      */
     public function withLink(LinkInterface $link)
     {
@@ -52,10 +52,9 @@ class EvolvableLinkProvider extends LinkProvider implements EvolvableLinkProvide
      * without errors. The link is present if $link is === identical to a link
      * object already in the collection.
      *
-     * @param LinkInterface $link
-     *   The link to remove.
+     * @param LinkInterface $link The link to remove.
      *
-     * @return static
+     * @return $this
      */
     public function withoutLink(LinkInterface $link)
     {
