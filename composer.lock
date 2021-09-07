@@ -4,7 +4,7 @@
         "Read more about it at https://getcomposer.org/doc/01-basic-usage.md#installing-dependencies",
         "This file is @generated automatically"
     ],
-    "content-hash": "4d014456d74840b969ab45c0a140695e",
+    "content-hash": "fe0cfb6c7e9a5c71f713d620717c3aea",
     "packages": [
         {
             "name": "payload-interop/payload-interop",
@@ -6409,7 +6409,7 @@
         "ext-mbstring": "*",
         "ext-pdo": "*",
         "ext-redis": "*",
-        "ext-xml": "^7.2"
+        "ext-xml": "*"
     },
     "platform-dev": {
         "ext-gettext": "*",
