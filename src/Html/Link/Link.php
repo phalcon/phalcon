@@ -16,6 +16,7 @@ namespace Phalcon\Html\Link;
 use Psr\Link\LinkInterface;
 
 use function array_keys;
+use function mb_strpos;
 use function strpos;
 use function strrpos;
 
@@ -136,8 +137,8 @@ class Link implements LinkInterface
     protected function hrefIsTemplated(string $href): bool
     {
         return (
-            false !== strpos($href, '{') &&
-            false !== strrpos($href, '}')
+            false !== mb_strpos($href, '{') &&
+            false !== mb_strpos($href, '}')
         );
     }
 }
