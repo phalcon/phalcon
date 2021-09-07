@@ -13,6 +13,8 @@ declare(strict_types=1);
 
 namespace Phalcon\Translate\Interpolator;
 
+use Phalcon\Support\Helper\Str\Traits\InterpolateTrait;
+
 use function str_replace;
 
 /**
@@ -22,6 +24,8 @@ use function str_replace;
  */
 class AssociativeArray implements InterpolatorInterface
 {
+    use InterpolateTrait;
+
     /**
      * Replaces placeholders by the values passed
      */
@@ -29,14 +33,6 @@ class AssociativeArray implements InterpolatorInterface
         string $translation,
         array $placeholders = []
     ): string {
-        foreach ($placeholders as $key => $placeholder) {
-            $translation = str_replace(
-                '%' . $key . '%',
-                $placeholder,
-                $translation
-            );
-        }
-
-        return $translation;
+        return $this->toInterpolate($translation, $placeholders);
     }
 }

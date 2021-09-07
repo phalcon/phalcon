@@ -1,0 +1,202 @@
+name: Phalcon CI
+
+on:
+  schedule:
+    - cron: '0 2 * * *' # Daily at 02:00 runs only on default branch
+  push:
+    paths-ignore:
+      - '**.md'
+      - '**.txt'
+  pull_request:
+
+env:
+  LANG: en_US.UTF-8
+  LANGUAGE: en_US.UTF-8
+  LC_ALL: en_US.UTF-8
+
+jobs:
+  generate:
+    # To prevent build a particular commit use
+    #     git commit -m "......... [ci skip]"
+    if: "!contains(github.event.head_commit.message, 'ci skip')"
+
+    runs-on: ubuntu-20.04
+    name: Build Phalcon Pecl Package
+    steps:
+
+      - name: Setup PHP
+        uses: shivammathur/setup-php@v2
+        with:
+          php-version: '8.0'
+          extensions: mbstring, intl, json, psr
+          tools: pecl
+        env:
+          COMPOSER_TOKEN: ${{ secrets.GITHUB_TOKEN }}
+
+      - name: Checkout Code
+        uses: actions/checkout@v2
+        with:
+          fetch-depth: 1
+
+      - name: Setup APT Repositories
+        run: |
+          # We don't need this at all, and our
+          # builds often fails because Microsoft
+          # servers are unstable or even offline.
+          sudo rm -f /etc/apt/sources.list.d/dotnetdev.list
+          sudo rm -f /etc/apt/sources.list.d/azure*.list
+
+      - name: Install System Dependencies
+        run: |
+          sudo apt-get update --quiet --yes 1>/dev/null
+          sudo apt-get install --no-install-recommends -q -y re2c
+
+  build-and-test-linux:
+    # To prevent build a particular commit use
+    #     git commit -m "......... [ci skip]"
+    if: "!contains(github.event.head_commit.message, 'ci skip')"
+
+    needs: generate
+    services:
+      mysql:
+        image: mysql:5.7
+        ports:
+          - 3306
+        env:
+          MYSQL_ROOT_PASSWORD: secret
+          MYSQL_USER: phalcon
+          MYSQL_DATABASE: phalcon
+          MYSQL_PASSWORD: secret
+      postgres:
+        image: postgres:12-alpine
+        ports:
+          - 5432
+        env:
+          POSTGRES_PASSWORD: secret
+          POSTGRES_DB: phalcon
+      redis:
+        image: redis:5-alpine
+        ports:
+          - 6379
+      memcached:
+        image: memcached:1.5-alpine
+        ports:
+          - 11211
+
+    runs-on: ${{ matrix.operating-system }}
+    strategy:
+      fail-fast: false
+      matrix:
+        operating-system: [ubuntu-20.04]
+        php-versions: ['7.4', '8.0']
+
+    name: PHP ${{ matrix.php-versions }} Test on ${{ matrix.operating-system }}
+    steps:
+      - name: Checkout Code
+        uses: actions/checkout@v2
+        with:
+          fetch-depth: 1
+
+      - name: Validate composer
+        run: composer validate --no-check-all --no-check-publish
+
+      - name: Get Composer Cache Directory
+        id: composer-cache
+        run: |
+          echo "::set-output name=dir::$(composer config cache-files-dir)"
+
+      - name: Setup Composer Cache
+        uses: actions/cache@v2
+        with:
+          path: ${{ steps.composer-cache.outputs.dir }}
+          key: ${{ runner.os }}-composer-${{ hashFiles('**/composer.json') }}
+          restore-keys: ${{ runner.os }}-composer-
+
+      - name: Setup PHP
+        uses: shivammathur/setup-php@v2
+        with:
+          php-version: ${{ matrix.php-versions }}
+          extensions: mbstring, intl, json, imagick, gd, gettext, igbinary, apcu, msgpack, memcached, yaml, redis
+          ini-values: apc.enable_cli=on, session.save_path=/tmp
+          tools: pecl
+        env:
+          COMPOSER_TOKEN: ${{ secrets.GITHUB_TOKEN }}
+
+      - name: Setup locales
+        run: |
+          sudo sudo apt-get install tzdata locales -y
+          sudo sed -i -e 's/# de_DE.UTF-8 UTF-8/de_DE.UTF-8 UTF-8/' /etc/locale.gen
+          sudo sed -i -e 's/# el_GR.UTF-8 UTF-8/el_GR.UTF-8 UTF-8/' /etc/locale.gen
+          sudo sed -i -e 's/# en_US.UTF-8 UTF-8/en_US.UTF-8 UTF-8/' /etc/locale.gen
+          sudo sed -i -e 's/# es_ES.UTF-8 UTF-8/es_ES.UTF-8 UTF-8/' /etc/locale.gen
+          sudo sed -i -e 's/# ru_RU.UTF-8 UTF-8/ru_RU.UTF-8 UTF-8/' /etc/locale.gen
+          sudo dpkg-reconfigure --frontend=noninteractive locales
+          sudo update-locale LANG=en_US.UTF-8
+
+      - name: Install Packages
+        run: composer install --prefer-dist
+
+      - name: Setup Tests
+        run: |
+          cp tests/_config/.env.default .env
+          vendor/bin/codecept build
+
+      - name: Run Unit Tests
+        if: always()
+        run: vendor/bin/codecept run --coverage-xml=coverage-${{ matrix.php-versions }}.xml --ext DotReporter unit
+
+#      - name: Run CLI Tests
+#        if: always()
+#        run: vendor/bin/codecept run --coverage-xml=coverage-${{ matrix.php-versions }}.xml --ext DotReporter cli
+
+      - name: Run Integration Tests
+        env:
+          DATA_REDIS_PORT: ${{ job.services.redis.ports['6379'] }}
+          DATA_MEMCACHED_PORT: ${{ job.services.memcached.ports['11211'] }}
+        if: always()
+        run: vendor/bin/codecept run --coverage-xml=coverage-${{ matrix.php-versions }}.xml --ext DotReporter integration
+
+#      - name: Run Database Tests (Common)
+#        env:
+#          DATA_REDIS_PORT: ${{ job.services.redis.ports['6379'] }}
+#          DATA_MEMCACHED_PORT: ${{ job.services.memcached.ports['11211'] }}
+#          DATA_MYSQL_USER: root
+#        if: always()
+#        run: vendor/bin/codecept run --coverage-xml=coverage-${{ matrix.php-versions }}.xml --ext DotReporter database -g common
+#
+#      - name: Run Database Tests (MySQL)
+#        env:
+#          DATA_MYSQL_PORT: ${{ job.services.mysql.ports['3306'] }}
+#          DATA_REDIS_PORT: ${{ job.services.redis.ports['6379'] }}
+#          DATA_MEMCACHED_PORT: ${{ job.services.memcached.ports['11211'] }}
+#          DATA_MYSQL_USER: root
+#        if: always()
+#        run: vendor/bin/codecept run --coverage-xml=coverage-${{ matrix.php-versions }}.xml --ext DotReporter database --env mysql -g mysql
+#
+#      - name: Run Database Tests (Sqlite)
+#        env:
+#          DATA_REDIS_PORT: ${{ job.services.redis.ports['6379'] }}
+#          DATA_MEMCACHED_PORT: ${{ job.services.memcached.ports['11211'] }}
+#        if: always()
+#        run: vendor/bin/codecept run --coverage-xml=coverage-${{ matrix.php-versions }}.xml --ext DotReporter database --env sqlite -g sqlite
+#
+#      - name: Run Database Tests (Postgres)
+#        env:
+#          DATA_POSTGRES_USER: postgres
+#          DATA_POSTGRES_PORT: ${{ job.services.postgres.ports['5432'] }}
+#          DATA_REDIS_PORT: ${{ job.services.redis.ports['6379'] }}
+#          DATA_MEMCACHED_PORT: ${{ job.services.memcached.ports['11211'] }}
+#        if: always()
+#        run: vendor/bin/codecept run --coverage-xml=coverage-${{ matrix.php-versions }}.xml --ext DotReporter database --env pgsql -g pgsql
+
+      # - name: Run Database Tests (SQL Server)
+      #   env:
+      #     DATA_REDIS_PORT: ${{ job.services.redis.ports['6379'] }}
+      #     DATA_MEMCACHED_PORT: ${{ job.services.memcached.ports['11211'] }}
+      #   run: vendor/bin/codecept run --ext DotReporter database --env sqlsrv
+
+      - name: Upload Code Coverage on 7.4
+        uses: codecov/codecov-action@v1
+        with:
+          token: ${{ secrets.CODECOV_TOKEN }}
+          file: ./tests/_output/coverage-*.xml
