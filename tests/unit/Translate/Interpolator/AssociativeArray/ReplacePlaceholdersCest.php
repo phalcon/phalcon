@@ -38,7 +38,7 @@ class ReplacePlaceholdersCest
 
         $interpolator = new AssociativeArray();
 
-        $stringFrom = 'Hello, %fname% %mname% %lname%!';
+        $stringFrom = 'Hello, {fname} {mname} {lname}!';
 
         $actual = $interpolator->replacePlaceholders(
             $stringFrom,

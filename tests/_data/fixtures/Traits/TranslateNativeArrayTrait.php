@@ -21,24 +21,24 @@ trait TranslateNativeArrayTrait
             'en' => [
                 'hi'        => 'Hello',
                 'bye'       => 'Good Bye',
-                'hello-key' => 'Hello %name%',
-                'song-key'  => 'This song is %song% (%artist%)',
+                'hello-key' => 'Hello {name}',
+                'song-key'  => 'This song is {song} ({artist})',
             ],
             'es' => [
                 'hi'        => 'Hola',
                 'bye'       => 'Adiós',
-                'hello-key' => 'Hola %name%',
-                'song-key'  => 'La canción es %song% (%artist%)',
+                'hello-key' => 'Hola {name}',
+                'song-key'  => 'La canción es {song} ({artist})',
             ],
             'fr' => [
                 'hi'        => 'Bonjour',
                 'bye'       => 'Au revoir',
-                'hello-key' => 'Bonjour %name%',
-                'song-key'  => 'La chanson est %song% (%artist%)',
+                'hello-key' => 'Bonjour {name}',
+                'song-key'  => 'La chanson est {song} ({artist})',
             ],
             'ru' => [
                 'Hello!'                         => 'Привет!',
-                'Hello %fname% %mname% %lname%!' => 'Привет, %fname% %mname% %lname%!',
+                'Hello {fname} {mname} {lname}!' => 'Привет, {fname} {mname} {lname}!',
             ],
         ];
     }
