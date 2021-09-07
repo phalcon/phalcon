@@ -21,8 +21,8 @@ use Phalcon\Storage\Adapter\Memory;
 use Phalcon\Storage\Adapter\Redis;
 use Phalcon\Storage\Adapter\Stream;
 use Phalcon\Storage\AdapterFactory;
+use Phalcon\Storage\Exception;
 use Phalcon\Storage\SerializerFactory;
-use Phalcon\Support\Exception;
 use Phalcon\Support\HelperFactory;
 
 use function getOptionsLibmemcached;
