@@ -18,7 +18,7 @@ use Phalcon\Di\Traits\InjectionAwareTrait;
 use Phalcon\Flash\Traits\FlashGettersTrait;
 use Phalcon\Html\EscaperInterface;
 use Phalcon\Session\ManagerInterface as SessionInterface;
-use Phalcon\Support\Str\Traits\InterpolateTrait;
+use Phalcon\Support\Helper\Str\Traits\InterpolateTrait;
 
 /**
  * Shows HTML notifications related to different circumstances. Classes can be
