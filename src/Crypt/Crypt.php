@@ -448,7 +448,7 @@ class Crypt implements CryptInterface
     protected function initializeAvailableCiphers(): void
     {
         if (true !== $this->phpFunctionExists('openssl_get_cipher_methods')) {
-            throw new Exception('openssl extension is required');
+            throw new Exception('This class requires the openssl extension for PHP');
         }
 
         $available = openssl_get_cipher_methods(true);

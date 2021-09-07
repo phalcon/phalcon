@@ -14,6 +14,7 @@ declare(strict_types=1);
 namespace Phalcon\Translate\Adapter;
 
 use ArrayAccess;
+use Phalcon\Support\Traits\PhpFunctionTrait;
 use Phalcon\Translate\Exception;
 use Phalcon\Translate\InterpolatorFactory;
 
@@ -57,6 +58,8 @@ use const LC_ALL;
  */
 class Gettext extends AbstractAdapter implements ArrayAccess
 {
+    use PhpFunctionTrait;
+
     /**
      * @var int
      */
@@ -94,7 +97,7 @@ class Gettext extends AbstractAdapter implements ArrayAccess
         InterpolatorFactory $interpolator,
         array $options
     ) {
-        if (true !== function_exists('gettext')) {
+        if (true !== $this->phpFunctionExists('gettext')) {
             throw new Exception(
                 'This class requires the gettext extension for PHP'
             );

@@ -78,7 +78,7 @@ class ConstructCest
         $I->wantToTest('Crypt - __construct() - no openssl exception');
 
         $I->expectThrowable(
-            new Exception('openssl extension is required'),
+            new Exception('This class requires the openssl extension for PHP'),
             function () {
                 $crypt = Stub::construct(
                     Crypt::class,

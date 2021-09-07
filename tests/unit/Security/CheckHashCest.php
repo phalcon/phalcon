@@ -49,6 +49,25 @@ class CheckHashCest
     }
 
     /**
+     * Tests Phalcon\Security :: checkHash() - false
+     *
+     * @param UnitTester $I
+     *
+     * @author Phalcon Team <team@phalcon.io>
+     * @since  2020-09-09
+     */
+    public function securityCheckHashFalse(UnitTester $I)
+    {
+        $I->wantToTest('Security - checkHash() - false');
+
+        $security = new Security();
+        $password = 'PhalconROCKS!';
+
+        $actual = $security->checkHash($password, $password, 2);
+        $I->assertFalse($actual);
+    }
+
+    /**
      * @return array[]
      */
     private function getExamples(): array

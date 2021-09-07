@@ -14,6 +14,7 @@ declare(strict_types=1);
 namespace Phalcon\Tests\Unit\Translate\Adapter\Gettext;
 
 use ArrayAccess;
+use Codeception\Stub;
 use Phalcon\Tests\Fixtures\Traits\TranslateGettextTrait;
 use Phalcon\Translate\Adapter\AdapterInterface;
 use Phalcon\Translate\Adapter\Gettext;
@@ -90,6 +91,38 @@ class ConstructCest
                     new InterpolatorFactory(),
                     [
                         'locale' => 'en_US.utf8',
+                    ]
+                );
+            }
+        );
+    }
+
+    /**
+     * Tests Phalcon\Translate\Adapter\Gettext :: __construct() - Exception
+     * no gettext extension loaded
+     *
+     * @param UnitTester $I
+     *
+     * @author Phalcon Team <team@phalcon.io>
+     * @since  2020-09-09
+     */
+    public function translateAdapterGettextConstructNoGettextException(UnitTester $I)
+    {
+        $I->wantToTest('Translate\Adapter\Gettext - __construct() - no gettext exception');
+
+        $I->expectThrowable(
+            new \Exception('This class requires the gettext extension for PHP'),
+            function () {
+                $gettext = Stub::construct(
+                    Gettext::class,
+                    [
+                        new InterpolatorFactory(),
+                        [
+                            'locale' => 'en_US.utf8',
+                        ],
+                    ],
+                    [
+                        'phpFunctionExists' => false,
                     ]
                 );
             }
