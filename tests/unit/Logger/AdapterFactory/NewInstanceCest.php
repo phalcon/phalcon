@@ -15,7 +15,7 @@ namespace Phalcon\Tests\Unit\Logger\AdapterFactory;
 
 use Phalcon\Logger\Adapter\AdapterInterface;
 use Phalcon\Logger\AdapterFactory;
-use Phalcon\Support\Exception;
+use Phalcon\Logger\Exception;
 use UnitTester;
 
 use function outputDir;

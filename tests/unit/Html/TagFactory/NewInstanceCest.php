@@ -54,7 +54,7 @@ use Phalcon\Html\Helper\Style;
 use Phalcon\Html\Helper\Title;
 use Phalcon\Html\Helper\Ul;
 use Phalcon\Html\TagFactory;
-use Phalcon\Support\Exception as SupportException;
+use Phalcon\Html\Exception;
 use UnitTester;
 
 /**
@@ -99,7 +99,7 @@ class NewInstanceCest
         $I->wantToTest('Helper\TagFactory - newInstance() - exception');
 
         $I->expectThrowable(
-            new SupportException('Service unknown is not registered'),
+            new Exception('Service unknown is not registered'),
             function () {
                 $escaper = new Escaper();
                 $factory = new TagFactory($escaper);
