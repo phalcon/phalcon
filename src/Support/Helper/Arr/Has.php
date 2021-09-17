@@ -25,8 +25,8 @@ class Has
     /**
      * Helper method to get an array element or a default
      *
-     * @param array $collection
-     * @param mixed $index
+     * @param array<int|string,mixed> $collection
+     * @param mixed                   $index
      *
      * @return bool
      */

@@ -27,7 +27,7 @@ class IsUnique
      * Checks a flat list for duplicate values. Returns true if duplicate
      * values exist and false if values are all unique.
      *
-     * @param array $collection
+     * @param array<int|string,mixed> $collection
      *
      * @return bool
      */

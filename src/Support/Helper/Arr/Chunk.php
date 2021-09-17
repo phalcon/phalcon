@@ -25,11 +25,11 @@ class Chunk
     /**
      * Chunks an array into smaller arrays of a specified size.
      *
-     * @param array $collection
-     * @param int   $size
-     * @param bool  $preserveKeys
+     * @param array<int|string,mixed> $collection
+     * @param int                     $size
+     * @param bool                    $preserveKeys
      *
-     * @return array
+     * @return array<int|string,mixed>
      */
     public function __invoke(
         array $collection,

@@ -27,9 +27,9 @@ class Split
      * Returns a new array with keys of the passed array as one element and
      * values as another
      *
-     * @param array $collection
+     * @param array<int|string,mixed> $collection
      *
-     * @return array
+     * @return array<int|string,mixed>
      */
     public function __invoke(array $collection): array
     {

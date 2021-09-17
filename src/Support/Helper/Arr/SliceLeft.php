@@ -25,10 +25,10 @@ class SliceLeft
     /**
      * Returns a new array with n elements removed from the left.
      *
-     * @param array $collection
-     * @param int   $elements
+     * @param array<int|string,mixed> $collection
+     * @param int                     $elements
      *
-     * @return array
+     * @return array<int|string,mixed>
      */
     public function __invoke(array $collection, int $elements = 1): array
     {

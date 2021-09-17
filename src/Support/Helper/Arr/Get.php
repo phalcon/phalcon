@@ -25,10 +25,10 @@ class Get
     /**
      * Helper method to get an array element or a default
      *
-     * @param array       $collection
-     * @param mixed       $index
-     * @param mixed|null  $defaultValue
-     * @param string|null $cast
+     * @param array<int|string,mixed> $collection
+     * @param mixed                   $index
+     * @param mixed|null              $defaultValue
+     * @param string|null             $cast
      *
      * @return mixed|null
      */

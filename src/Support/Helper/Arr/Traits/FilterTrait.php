@@ -26,10 +26,10 @@ trait FilterTrait
     /**
      * Helper method to filter the collection
      *
-     * @param array         $collection
-     * @param callable|null $method
+     * @param array<int|string,mixed> $collection
+     * @param callable|null           $method
      *
-     * @return array
+     * @return array<int|string,mixed>
      */
     private function toFilter(
         array $collection,

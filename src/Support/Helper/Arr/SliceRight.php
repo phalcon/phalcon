@@ -25,10 +25,10 @@ class SliceRight
     /**
      * Returns a new array with the X elements from the right
      *
-     * @param array $collection
-     * @param int   $elements
+     * @param array<int|string,mixed> $collection
+     * @param int                     $elements
      *
-     * @return array
+     * @return array<int|string,mixed>
      */
     public function __invoke(array $collection, int $elements = 1): array
     {

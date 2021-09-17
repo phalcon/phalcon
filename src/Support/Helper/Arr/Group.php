@@ -29,10 +29,10 @@ class Group
     /**
      * Groups the elements of an array based on the passed callable
      *
-     * @param array           $collection
-     * @param callable|string $method
+     * @param array<int|string,mixed> $collection
+     * @param callable|string         $method
      *
-     * @return array
+     * @return array<int|string,mixed>
      */
     public function __invoke(array $collection, $method): array
     {
@@ -81,11 +81,11 @@ class Group
     }
 
     /**
-     * @param array           $filtered
-     * @param callable|string $method
-     * @param mixed           $element
+     * @param array<int|string,mixed> $filtered
+     * @param callable|string         $method
+     * @param mixed                   $element
      *
-     * @return array
+     * @return array<int|string,mixed>
      */
     private function processCallable(array $filtered, $method, $element): array
     {
@@ -98,11 +98,11 @@ class Group
     }
 
     /**
-     * @param array           $filtered
-     * @param callable|string $method
-     * @param mixed           $element
+     * @param array<int|string,mixed> $filtered
+     * @param callable|string         $method
+     * @param mixed                   $element
      *
-     * @return array
+     * @return array<int|string,mixed>
      */
     private function processObject(array $filtered, $method, $element): array
     {
@@ -118,11 +118,11 @@ class Group
     }
 
     /**
-     * @param array           $filtered
-     * @param callable|string $method
-     * @param mixed           $element
+     * @param array<int|string,mixed> $filtered
+     * @param callable|string         $method
+     * @param mixed                   $element
      *
-     * @return array
+     * @return array<int|string,mixed>
      */
     private function processOther(array $filtered, $method, $element): array
     {
