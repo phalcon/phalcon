@@ -33,10 +33,10 @@ class Whitelist
      * White list filter by key: obtain elements of an array filtering
      * by the keys obtained from the elements of a whitelist
      *
-     * @param array $collection
-     * @param array $whiteList
+     * @param array<int|string,mixed> $collection
+     * @param array<int|string,mixed> $whiteList
      *
-     * @return array
+     * @return array<int|string,mixed>
      */
     public function __invoke(array $collection, array $whiteList): array
     {

@@ -28,10 +28,10 @@ class Flatten
      * Flattens an array up to the one level depth, unless `$deep` is set to
      * `true`
      *
-     * @param array $collection
-     * @param bool  $deep
+     * @param array<int|string,mixed> $collection
+     * @param bool                    $deep
      *
-     * @return array
+     * @return array<int|string,mixed>
      */
     public function __invoke(array $collection, bool $deep = false): array
     {
@@ -47,10 +47,10 @@ class Flatten
     }
 
     /**
-     * @param array $data
-     * @param mixed $item
+     * @param array<int|string,mixed> $data
+     * @param mixed                   $item
      *
-     * @return array
+     * @return array<int|string,mixed>
      */
     private function processNotArray(array $data, $item): array
     {
@@ -62,11 +62,11 @@ class Flatten
     }
 
     /**
-     * @param array $data
-     * @param mixed $item
-     * @param bool  $deep
+     * @param array<int|string,mixed> $data
+     * @param mixed                   $item
+     * @param bool                    $deep
      *
-     * @return array
+     * @return array<int|string,mixed>
      */
     private function processArray(array $data, $item, bool $deep): array
     {
@@ -78,11 +78,11 @@ class Flatten
     }
 
     /**
-     * @param array $data
-     * @param mixed $item
-     * @param bool  $deep
+     * @param array<int|string,mixed> $data
+     * @param mixed                   $item
+     * @param bool                    $deep
      *
-     * @return array
+     * @return array<int|string,mixed>
      */
     private function processArrayDeep(array $data, $item, bool $deep): array
     {

@@ -23,7 +23,7 @@ class ToObject
     /**
      * Returns the passed array as an object
      *
-     * @param array $collection
+     * @param array<int|string,mixed> $collection
      *
      * @return object
      */

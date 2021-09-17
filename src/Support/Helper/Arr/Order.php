@@ -31,12 +31,12 @@ class Order
     /**
      * Sorts a collection of arrays or objects by key
      *
-     * @param array $collection
-     * @param mixed $attribute
-     * @param int   $order
-     * @param int   $flags
+     * @param array<int|string,mixed> $collection
+     * @param mixed                   $attribute
+     * @param int                     $order
+     * @param int                     $flags
      *
-     * @return array
+     * @return array<int|string,mixed>
      */
     public function __invoke(
         array $collection,
@@ -57,11 +57,11 @@ class Order
     }
 
     /**
-     * @param array $sorted
-     * @param mixed $attribute
-     * @param mixed $item
+     * @param array<int|string,mixed> $sorted
+     * @param mixed                   $attribute
+     * @param mixed                   $item
      *
-     * @return array
+     * @return array<int|string,mixed>
      */
     private function checkObject(array $sorted, $attribute, $item): array
     {
@@ -74,11 +74,11 @@ class Order
     }
 
     /**
-     * @param array $sorted
-     * @param mixed $attribute
-     * @param mixed $item
+     * @param array<int|string,mixed> $sorted
+     * @param mixed                   $attribute
+     * @param mixed                   $item
      *
-     * @return array
+     * @return array<int|string,mixed>
      */
     private function checkNonObject(array $sorted, $attribute, $item): array
     {

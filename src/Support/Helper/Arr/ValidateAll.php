@@ -30,8 +30,8 @@ class ValidateAll
      * Returns true if the provided function returns true for all elements of
      * the collection, false otherwise.
      *
-     * @param array    $collection
-     * @param callable $method
+     * @param array<int|string,mixed> $collection
+     * @param callable                $method
      *
      * @return bool
      */

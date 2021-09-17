@@ -24,12 +24,12 @@ use function is_object;
 class Pluck
 {
     /**
-     * Retrieves all of the values for a given key:
+     * Retrieves all the values for a given key:
      *
-     * @param array  $collection
-     * @param string $element
+     * @param array<int|string,mixed> $collection
+     * @param string                  $element
      *
-     * @return array
+     * @return array<int|string,mixed>
      */
     public function __invoke(array $collection, string $element): array
     {
@@ -43,11 +43,11 @@ class Pluck
     }
 
     /**
-     * @param array  $filtered
-     * @param string $element
-     * @param mixed  $item
+     * @param array<int|string,mixed> $filtered
+     * @param string                  $element
+     * @param mixed                   $item
      *
-     * @return array
+     * @return array<int|string,mixed>
      */
     private function checkArray(array $filtered, string $element, $item): array
     {
@@ -59,11 +59,11 @@ class Pluck
     }
 
     /**
-     * @param array  $filtered
-     * @param string $element
-     * @param mixed  $item
+     * @param array<int|string,mixed> $filtered
+     * @param string                  $element
+     * @param mixed                   $item
      *
-     * @return array
+     * @return array<int|string,mixed>
      */
     private function checkObject(array $filtered, string $element, $item): array
     {

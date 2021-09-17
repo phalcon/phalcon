@@ -23,11 +23,11 @@ class Set
     /**
      * Helper method to set an array element
      *
-     * @param array $collection
-     * @param mixed $value
-     * @param mixed $index
+     * @param array<int|string,mixed> $collection
+     * @param mixed                   $value
+     * @param mixed                   $index
      *
-     * @return array
+     * @return array<int|string,mixed>
      */
     public function __invoke(
         array $collection,
@@ -40,11 +40,11 @@ class Set
     }
 
     /**
-     * @param array $collection
-     * @param mixed $value
-     * @param mixed $index
+     * @param array<int|string,mixed> $collection
+     * @param mixed                   $value
+     * @param mixed                   $index
      *
-     * @return array
+     * @return array<int|string,mixed>
      */
     private function checkNull(array $collection, $value, $index): array
     {
@@ -56,11 +56,11 @@ class Set
     }
 
     /**
-     * @param array $collection
-     * @param mixed $value
-     * @param mixed $index
+     * @param array<int|string,mixed> $collection
+     * @param mixed                   $value
+     * @param mixed                   $index
      *
-     * @return array
+     * @return array<int|string,mixed>
      */
     private function checkNotNull(array $collection, $value, $index): array
     {
