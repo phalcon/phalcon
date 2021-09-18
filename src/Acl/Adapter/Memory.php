@@ -13,6 +13,7 @@ declare(strict_types=1);
 
 namespace Phalcon\Acl\Adapter;
 
+use Closure;
 use Phalcon\Acl\Component;
 use Phalcon\Acl\ComponentAwareInterface;
 use Phalcon\Acl\ComponentInterface;
@@ -149,7 +150,7 @@ class Memory extends AbstractAdapter
     /**
      * Access List
      *
-     * @var array
+     * @var array<string, bool>
      */
     protected array $accessList = [];
 
@@ -169,7 +170,7 @@ class Memory extends AbstractAdapter
     protected int $activeFunctionCustomArgumentsCount = 0;
 
     /**
-     * Returns latest key used to acquire access
+     * Returns the last key used to acquire access
      *
      * @var string|null
      */
@@ -178,26 +179,26 @@ class Memory extends AbstractAdapter
     /**
      * Components
      *
-     * @var array
+     * @var array<string, ComponentInterface>
      */
     protected array $components = [];
 
     /**
      * Components
      *
-     * @var array
+     * @var array<string, bool>
      */
     protected array $componentsNames = [];
 
     /**
      * Function List
      *
-     * @var array
+     * @var array<string, Closure|string>
      */
     protected array $functions = [];
 
     /**
-     * Default action for no arguments is allow
+     * Default action for no arguments is `deny`
      *
      * @var int
      */
@@ -206,14 +207,14 @@ class Memory extends AbstractAdapter
     /**
      * Role Inherits
      *
-     * @var array
+     * @var array<string, array<int, string>>
      */
     protected array $roleInherits = [];
 
     /**
      * Roles
      *
-     * @var array
+     * @var array<string, RoleInterface>
      */
     protected array $roles = [];
 
@@ -229,12 +230,12 @@ class Memory extends AbstractAdapter
     /**
      * Adds a component to the ACL list
      *
-     * Access names can be a particular action, by example
-     * search, update, delete, etc or a list of them
+     * Access names can be a particular action, for instance `search`, `update`
+     * `delete` etc. or a list of them.
      *
      * Example:
      * ```php
-     * // Add a component to the the list allowing access to an action
+     * // Add a component to the list allowing access to an action
      * $acl->addComponent(
      *     new Phalcon\Acl\Component("customers"),
      *     "search"
@@ -316,7 +317,7 @@ class Memory extends AbstractAdapter
     }
 
     /**
-     * Do a role inherit from another existing role
+     * Add a role which inherits from an existing role
      *
      * ```php
      * $acl->addRole("administrator", "consultant");
@@ -420,8 +421,8 @@ class Memory extends AbstractAdapter
     }
 
     /**
-     * Adds a role to the ACL list. Second parameter allows inheriting access
-     * data from other existing role
+     * Adds a role to the ACL list. The second parameter lets to inherit access
+     * from an existing role
      *
      * ```php
      * $acl->addRole(
@@ -557,7 +558,7 @@ class Memory extends AbstractAdapter
     }
 
     /**
-     * Removes an access from a component
+     * Removes access from a component
      *
      * @param string $componentName
      * @param mixed  $accessList
@@ -606,7 +607,7 @@ class Memory extends AbstractAdapter
     /**
      * Return an array with every component registered in the list
      *
-     * @return array
+     * @return array<string, ComponentInterface>
      */
     public function getComponents(): array
     {
@@ -627,7 +628,7 @@ class Memory extends AbstractAdapter
     /**
      * Return an array with every role registered in the list
      *
-     * @return array
+     * @return array<string, RoleInterface>
      */
     public function getRoles(): array
     {
@@ -648,7 +649,7 @@ class Memory extends AbstractAdapter
      * @param mixed  $roleName
      * @param mixed  $componentName
      * @param string $access
-     * @param array  $parameters
+     * @param array<int|string, mixed>  $parameters
      *
      * @return bool
      * @throws Exception
@@ -1046,7 +1047,7 @@ class Memory extends AbstractAdapter
     }
 
     /**
-     * @param array  $collection
+     * @param array<string, mixed>  $collection
      * @param string $element
      * @param string $elementName
      *
