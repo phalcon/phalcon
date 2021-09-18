@@ -125,16 +125,6 @@ trait CollectionAddTrait
     }
 
     /**
-     * Returns the current element
-     *
-     * @return Asset
-     */
-    public function current(): Asset
-    {
-        return $this->assets[$this->position];
-    }
-
-    /**
      * Return the stored assets
      *
      * @return array<string, AssetInterface>
@@ -194,16 +184,6 @@ trait CollectionAddTrait
     public function getJoin(): bool
     {
         return $this->join;
-    }
-
-    /**
-     * Returns the array position of the iterator
-     *
-     * @return int
-     */
-    public function getPosition(): int
-    {
-        return $this->position;
     }
 
     /**
@@ -313,42 +293,6 @@ trait CollectionAddTrait
     public function isLocal(): bool
     {
         return $this->isLocal;
-    }
-
-    /**
-     * The current position of the iterator
-     *
-     * @return int
-     */
-    public function key(): int
-    {
-        return $this->position;
-    }
-
-    /**
-     * Moves the internal iteration pointer to the next position
-     */
-    public function next(): void
-    {
-        $this->position++;
-    }
-
-    /**
-     * Rewinds the internal iterator
-     */
-    public function rewind(): void
-    {
-        $this->position = 0;
-    }
-
-    /**
-     * Check if the current element in the iterator is valid
-     *
-     * @return bool
-     */
-    public function valid(): bool
-    {
-        return isset($this->assets[$this->position]);
     }
 
     /**

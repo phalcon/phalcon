@@ -37,14 +37,18 @@ class GetAssetsCest
         $I->wantToTest('Assets\Collection - getAssets()');
 
         $collection = new Collection();
-        $asset      = new Asset('js', 'js/jquery.js');
-        $collection->add($asset);
-        $asset1 = new Asset('js', 'js/jquery-ui.js');
+        $asset1     = new Asset('js', 'js/jquery.js');
+        $key1       = $asset1->getAssetKey();
         $collection->add($asset1);
+
+        $asset2 = new Asset('js', 'js/jquery-ui.js');
+        $key2   = $asset2->getAssetKey();
+        $collection->add($asset2);
 
         $assets = $collection->getAssets();
 
         $I->assertCount(2, $assets);
-        $I->assertEquals([$asset, $asset1], $assets);
+        $expected = [$key1 => $asset1, $key2 => $asset2];
+        $I->assertEquals($expected, $assets);
     }
 }
