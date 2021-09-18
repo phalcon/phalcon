@@ -29,5 +29,5 @@ interface InjectionAwareInterface
     /**
      * Returns the internal dependency injector
      */
-    public function getDI(): DiInterface;
+    public function getDI(): ?DiInterface;
 }

@@ -40,7 +40,7 @@ abstract class AbstractApplication implements InjectionAwareInterface, EventsAwa
     protected ?string $defaultModule = null;
 
     /**
-     * @var array
+     * @var array<string, mixed>
      */
     protected array $modules = [];
 
@@ -69,7 +69,7 @@ abstract class AbstractApplication implements InjectionAwareInterface, EventsAwa
      *
      * @param string $name
      *
-     * @return array|object
+     * @return array<string, mixed>
      * @throws Exception
      */
     public function getModule(string $name)
@@ -87,7 +87,7 @@ abstract class AbstractApplication implements InjectionAwareInterface, EventsAwa
     /**
      * Return the modules registered in the application
      *
-     * @return array
+     * @return array<string, mixed>
      */
     public function getModules(): array
     {
@@ -112,7 +112,7 @@ abstract class AbstractApplication implements InjectionAwareInterface, EventsAwa
      * );
      * ```
      *
-     * @param array $modules
+     * @param array<string, array<string, string>> $modules
      * @param bool  $merge
      *
      * @return $this
