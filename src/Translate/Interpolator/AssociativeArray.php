@@ -15,8 +15,6 @@ namespace Phalcon\Translate\Interpolator;
 
 use Phalcon\Support\Helper\Str\Traits\InterpolateTrait;
 
-use function str_replace;
-
 /**
  * Class AssociativeArray
  *
@@ -29,8 +27,8 @@ class AssociativeArray implements InterpolatorInterface
     /**
      * Replaces placeholders by the values passed
      *
-     * @param string                 $translation
-     * @param array<string, string>  $placeholders
+     * @param string                $translation
+     * @param array<string, string> $placeholders
      *
      * @return string
      */

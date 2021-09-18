@@ -23,7 +23,6 @@ use function bindtextdomain;
 use function call_user_func_array;
 use function dngettext;
 use function func_get_args;
-use function function_exists;
 use function gettext;
 use function is_array;
 use function ngettext;
@@ -85,11 +84,11 @@ class Gettext extends AbstractAdapter implements ArrayAccess
      *
      * @param InterpolatorFactory   $interpolator
      * @param array<string, string> $options = [
-     *     'locale'        => '',
-     *     'defaultDomain' => '',
-     *     'directory'     => '',
-     *     'category'      => ''
-     * ]
+     *                                       'locale'        => '',
+     *                                       'defaultDomain' => '',
+     *                                       'directory'     => '',
+     *                                       'category'      => ''
+     *                                       ]
      *
      * @throws Exception
      */

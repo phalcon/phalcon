@@ -20,13 +20,9 @@ use Phalcon\Translate\InterpolatorFactory;
 use function is_array;
 
 /**
- * Phalcon\Translate\Adapter\NativeArray
- *
- * Allows to define translation lists using PHP arrays
- */
-
-/**
  * Class NativeArray
+ *
+ * Defines translation lists using PHP arrays
  *
  * @package Phalcon\Translate\Adapter
  *
@@ -36,7 +32,7 @@ use function is_array;
 class NativeArray extends AbstractAdapter implements ArrayAccess
 {
     /**
-     * @var array
+     * @var array<string, string>
      */
     private array $translate;
 
@@ -48,11 +44,11 @@ class NativeArray extends AbstractAdapter implements ArrayAccess
     /**
      * NativeArray constructor.
      *
-     * @param InterpolatorFactory                     $interpolator
+     * @param InterpolatorFactory                       $interpolator
      * @param array{content: array, triggerError: bool} $options = [
-     *     'content'      => '',
-     *     'triggerError' => false
-     * ]
+     *                                                           'content'      => '',
+     *                                                           'triggerError' => false
+     *                                                           ]
      *
      * @throws Exception
      */
@@ -106,8 +102,8 @@ class NativeArray extends AbstractAdapter implements ArrayAccess
     /**
      * Returns the translation related to the given key
      *
-     * @param string            $index
-     * @param array<int, mixed> $placeholders
+     * @param string                    $index
+     * @param array<int|string, string> $placeholders
      *
      * @return string
      * @throws Exception
