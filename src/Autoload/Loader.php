@@ -154,7 +154,7 @@ class Loader
     /**
      * Returns the registered classes array
      *
-     * @return array
+     * @return array<int, string>
      */
     public function getClasses(): array
     {
@@ -164,7 +164,7 @@ class Loader
     /**
      * Returns an array with debugging information after the last autoload
      *
-     * @return array
+     * @return array<int, string>
      */
     public function getDebug()
     {
@@ -174,7 +174,7 @@ class Loader
     /**
      * Returns the registered extensions array
      *
-     * @return array
+     * @return array<int, string>
      */
     public function getExtensions(): array
     {
@@ -184,7 +184,7 @@ class Loader
     /**
      * Returns the registered files array
      *
-     * @return array
+     * @return array<int, string>
      */
     public function getFiles(): array
     {
@@ -194,7 +194,7 @@ class Loader
     /**
      * Returns the registered namespaces array
      *
-     * @return array
+     * @return array<string, string>
      */
     public function getNamespaces(): array
     {
@@ -217,7 +217,7 @@ class Loader
     /**
      * Sets the classes for the loader. Overwrites existing entries
      *
-     * @param array $classes
+     * @param array<string, string> $classes
      *
      * @return Loader
      */
@@ -234,7 +234,7 @@ class Loader
     /**
      * Sets the extensions for the loader. Overwrites existing entries
      *
-     * @param array $extensions
+     * @param array<int, string> $extensions
      *
      * @return Loader
      */
@@ -251,7 +251,7 @@ class Loader
     /**
      * Sets all the files that need to be loaded. Overwrites existing files
      *
-     * @param array $files
+     * @param array<int, string> $files
      *
      * @return Loader
      */
@@ -268,7 +268,7 @@ class Loader
     /**
      * Sets the namespaces for the loader. Overwrites existing entries
      *
-     * @param array $namespaces
+     * @param array<string, string> $namespaces
      *
      * @return Loader
      * @throws Exception
