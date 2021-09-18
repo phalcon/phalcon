@@ -13,19 +13,50 @@ declare(strict_types=1);
 
 namespace Phalcon\Collection;
 
+use ArrayAccess;
+use IteratorAggregate;
+
 /**
  * Phalcon\Collection\CollectionInterface
  *
  * Interface for Phalcon\Collection class
+ *
+ * @extends ArrayAccess<int|string, mixed>
+ * @extends IteratorAggregate<int, int>
  */
-interface CollectionInterface
+interface CollectionInterface extends ArrayAccess, IteratorAggregate
 {
+    /**
+     * Get the element from the collection
+     *
+     * @param string $element
+     *
+     * @return mixed
+     */
     public function __get(string $element);
 
+    /**
+     * Get the element from the collection
+     *
+     * @param string $element Name of the element
+     *
+     * @return bool
+     */
     public function __isset(string $element): bool;
 
+    /**
+     * Set an element in the collection
+     *
+     * @param string $element Name of the element
+     * @param mixed  $value   Value to store for the element
+     */
     public function __set(string $element, $value): void;
 
+    /**
+     * Delete the element from the collection
+     *
+     * @param string $element Name of the element
+     */
     public function __unset(string $element): void;
 
     /**
@@ -51,16 +82,16 @@ interface CollectionInterface
     /**
      * Returns the keys (insensitive or not) of the collection
      *
-     * @param bool $insensitive Case insensitive keys (default: true)
+     * @param bool $insensitive Case-insensitive keys (default: true)
      *
-     * @return array
+     * @return array<int|string, mixed>
      */
     public function getKeys(bool $insensitive = true): array;
 
     /**
      * Returns the values of the internal array
      *
-     * @return array
+     * @return array<int|string, mixed>
      */
     public function getValues(): array;
 
@@ -76,7 +107,7 @@ interface CollectionInterface
     /**
      * Initialize internal array
      *
-     * @param array $data Array to initialize the collection with
+     * @param array<int|string, mixed> $data Array to initialize the collection with
      */
     public function init(array $data = []): void;
 
@@ -97,6 +128,8 @@ interface CollectionInterface
 
     /**
      * Returns the object in an array format
+     *
+     * @return array<int|string, mixed>
      */
     public function toArray(): array;
 

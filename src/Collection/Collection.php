@@ -13,10 +13,8 @@ declare(strict_types=1);
 
 namespace Phalcon\Collection;
 
-use ArrayAccess;
 use Countable;
 use Generator;
-use IteratorAggregate;
 use JsonSerializable;
 use Phalcon\Collection\Traits\ArrayAccessTrait;
 use Phalcon\Collection\Traits\GetSetHasTrait;
@@ -32,7 +30,7 @@ use function mb_strtolower;
 use function settype;
 
 /**
- * `Phalcon\Collection` is a supercharged object oriented array. It implements:
+ * `Phalcon\Collection` is a supercharged object-oriented array. It implements:
  * - [ArrayAccess](https://www.php.net/manual/en/class.arrayaccess.php)
  * - [Countable](https://www.php.net/manual/en/class.countable.php)
  * -
@@ -50,10 +48,8 @@ use function settype;
  * @property array $lowerKeys
  */
 class Collection implements
-    ArrayAccess,
     CollectionInterface,
     Countable,
-    IteratorAggregate,
     JsonSerializable,
     Serializable
 {
@@ -63,7 +59,7 @@ class Collection implements
     use SerializableTrait;
 
     /**
-     * @var array
+     * @var array<int|string, mixed>
      */
     protected array $data = [];
 
@@ -73,15 +69,15 @@ class Collection implements
     protected bool $insensitive = true;
 
     /**
-     * @var array
+     * @var array<int|string, mixed>
      */
     protected array $lowerKeys = [];
 
     /**
      * Collection constructor.
      *
-     * @param array $data
-     * @param bool  $insensitive
+     * @param array<int|string, mixed> $data
+     * @param bool                     $insensitive
      */
     public function __construct(array $data = [], bool $insensitive = true)
     {
@@ -141,7 +137,7 @@ class Collection implements
     /**
      * Returns the generator of the class
      *
-     * @return Generator
+     * @return Generator<int|string, mixed>
      */
     public function getIterator(): Generator
     {
@@ -153,9 +149,9 @@ class Collection implements
     /**
      * Returns the keys (insensitive or not) of the collection
      *
-     * @param bool $insensitive Case insensitive keys (default: true)
+     * @param bool $insensitive Case-insensitive keys (default: true)
      *
-     * @return array
+     * @return array<int|string, mixed>
      */
     public function getKeys(bool $insensitive = true): array
     {
@@ -169,7 +165,7 @@ class Collection implements
     /**
      * Returns the values of the internal array
      *
-     * @return array
+     * @return array<int|string, mixed>
      */
     public function getValues(): array
     {
@@ -195,7 +191,7 @@ class Collection implements
     /**
      * Initialize internal array
      *
-     * @param array $data Array to initialize the collection with
+     * @param array<int|string, mixed> $data Array to initialize the collection with
      */
     public function init(array $data = []): void
     {
@@ -208,6 +204,8 @@ class Collection implements
      * Specify data which should be serialized to JSON
      *
      * @link https://php.net/manual/en/jsonserializable.jsonserialize.php
+     *
+     * @return array<int|string, mixed>
      */
     public function jsonSerialize(): array
     {
@@ -252,6 +250,8 @@ class Collection implements
 
     /**
      * Returns the object in an array format
+     *
+     * @return array<int|string, mixed>
      */
     public function toArray(): array
     {
@@ -274,7 +274,13 @@ class Collection implements
      */
     public function toJson(int $options = 4194383): string
     {
-        return json_encode($this->jsonSerialize(), $options);
+        $return = json_encode($this->jsonSerialize(), $options);
+
+        if (false === $return) {
+            $return = '';
+        }
+
+        return $return;
     }
 
     /**
