@@ -43,15 +43,14 @@ class CacheFactory
     /**
      * Factory to create an instance from a Config object
      *
-     * @param array|ConfigInterface $config = [
-     *                                      'adapter' => 'apcu',
-     *                                      'options' => [
-     *                                      'servers' => [
-     *                                      [
-     *                                      'host' => 'localhost',
-     *                                      'port' => 11211,
-     *                                      'weight' => 1,
-     *
+     * @param array<string, mixed>|ConfigInterface $config = [
+     *     'adapter' => 'apcu',
+     *     'options' => [
+     *         'servers' => [
+     *             [
+     *                 'host' => 'localhost',
+     *                 'port' => 11211,
+     *                 'weight' => 1,
      *             ]
      *         ],
      *         'host' => '127.0.0.1',
@@ -67,8 +66,11 @@ class CacheFactory
      *         'storageDir' => ''
      *     ]
      * ]
+     *
+     * @return CacheInterface
+     * @throws Exception
      */
-    public function load($config)
+    public function load($config): CacheInterface
     {
         $config  = $this->checkConfig($config);
         $name    = $config['adapter'];
@@ -80,8 +82,8 @@ class CacheFactory
     /**
      * Constructs a new Cache instance.
      *
-     * @param string $name
-     * @param array  $options = [
+     * @param string               $name
+     * @param array<string, mixed> $options = [
      *     'servers'           => [
      *         [
      *             'host' => 'localhost',
@@ -101,8 +103,6 @@ class CacheFactory
      *     'prefix'            => 'phalcon',
      *     'storageDir'        => '',
      * ]
-     */
-    /**
      *
      * @return CacheInterface
      * @throws Exception

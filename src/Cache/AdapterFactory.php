@@ -47,9 +47,9 @@ class AdapterFactory
     /**
      * AdapterFactory constructor.
      *
-     * @param HelperFactory     $helperFactory
-     * @param SerializerFactory $factory
-     * @param array             $services
+     * @param HelperFactory         $helperFactory
+     * @param SerializerFactory     $factory
+     * @param array<string, string> $services
      */
     public function __construct(
         HelperFactory $helperFactory,
@@ -65,8 +65,8 @@ class AdapterFactory
     /**
      * Create a new instance of the adapter
      *
-     * @param string $name
-     * @param array  $options = [
+     * @param string               $name
+     * @param array<string, mixed> $options = [
      *     'servers' => [
      *         [
      *             'host'   => 'localhost',
@@ -112,7 +112,7 @@ class AdapterFactory
     /**
      * Returns the available adapters
      *
-     * @return array
+     * @return array<string, string>
      */
     protected function getServices(): array
     {
