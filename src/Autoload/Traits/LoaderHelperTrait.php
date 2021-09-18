@@ -40,22 +40,22 @@ use const DIRECTORY_SEPARATOR;
 trait LoaderHelperTrait
 {
     /**
-     * @var array
+     * @var array<string, string>
      */
     protected array $classes = [];
 
     /**
-     * @var array
+     * @var array<int, string>
      */
     protected array $debug = [];
 
     /**
-     * @var array
+     * @var array<int, string>
      */
     protected array $extensions = [];
 
     /**
-     * @var array
+     * @var array<string, string>
      */
     protected array $files = [];
 
@@ -65,7 +65,7 @@ trait LoaderHelperTrait
     protected bool $isRegistered = false;
 
     /**
-     * @var array
+     * @var array<string, string>
      */
     protected array $namespaces = [];
 
@@ -90,7 +90,7 @@ trait LoaderHelperTrait
     /**
      * @param mixed $directories
      *
-     * @return array
+     * @return array<int, string>
      * @throws Exception
      */
     private function checkDirectories($directories): array
@@ -129,10 +129,10 @@ trait LoaderHelperTrait
     }
 
     /**
-     * @param array  $directories
+     * @param array<int, string>  $directories
      * @param string $dSeparator
      *
-     * @return array
+     * @return array<int, string>
      */
     private function processDirectories(array $directories, string $dSeparator): array
     {
