@@ -16,6 +16,7 @@ namespace Phalcon\Assets\Traits;
 use Generator;
 use Phalcon\Assets\Asset;
 use Phalcon\Assets\AssetInterface;
+use Phalcon\Assets\FilterInterface;
 
 /**
  * Class Collection
@@ -40,12 +41,12 @@ use Phalcon\Assets\AssetInterface;
 trait CollectionAddTrait
 {
     /**
-     * @var array
+     * @var array<string, AssetInterface>
      */
     protected array $assets = [];
 
     /**
-     * @var array
+     * @var array<string, string>
      */
     protected array $attributes = [];
 
@@ -57,12 +58,12 @@ trait CollectionAddTrait
     protected bool $autoVersion = false;
 
     /**
-     * @var array
+     * @var array<string, string>
      */
     protected array $codes = [];
 
     /**
-     * @var array
+     * @var array<int, FilterInterface>
      */
     protected array $filters = [];
 
@@ -136,7 +137,7 @@ trait CollectionAddTrait
     /**
      * Return the stored assets
      *
-     * @return array
+     * @return array<string, AssetInterface>
      */
     public function getAssets(): array
     {
@@ -146,7 +147,7 @@ trait CollectionAddTrait
     /**
      * Return the stored attributes
      *
-     * @return array
+     * @return array<string, string>
      */
     public function getAttributes(): array
     {
@@ -156,7 +157,7 @@ trait CollectionAddTrait
     /**
      * Return the stored codes
      *
-     * @return array
+     * @return array<string, string>
      */
     public function getCodes(): array
     {
@@ -166,7 +167,7 @@ trait CollectionAddTrait
     /**
      * Return the stored filters
      *
-     * @return array
+     * @return array<int, FilterInterface>
      */
     public function getFilters(): array
     {
@@ -176,7 +177,7 @@ trait CollectionAddTrait
     /**
      * Returns the generator of the class
      *
-     * @return Generator
+     * @return Generator<int, mixed>
      *
      * @link https://php.net/manual/en/iteratoraggregate.getiterator.php
      */
@@ -351,7 +352,7 @@ trait CollectionAddTrait
     }
 
     /**
-     * Adds a asset or inline-code to the collection
+     * Adds an asset or inline-code to the collection
      *
      * @param AssetInterface $asset
      *
@@ -364,7 +365,7 @@ trait CollectionAddTrait
         }
 
         if ($asset instanceof Asset) {
-            $this->assets[] = $asset;
+            $this->assets[$asset->getAssetKey()] = $asset;
 
             return true;
         }

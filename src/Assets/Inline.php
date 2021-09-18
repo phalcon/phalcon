@@ -30,7 +30,7 @@ use function sha1;
 class Inline implements AssetInterface
 {
     /**
-     * @var array
+     * @var array<string, string>
      */
     protected array $attributes;
 
@@ -52,10 +52,10 @@ class Inline implements AssetInterface
     /**
      * Inline constructor.
      *
-     * @param string $type
-     * @param string $content
-     * @param bool   $filter
-     * @param array  $attributes
+     * @param string                $type
+     * @param string                $content
+     * @param bool                  $filter
+     * @param array<string, string> $attributes
      */
     public function __construct(
         string $type,
@@ -84,9 +84,9 @@ class Inline implements AssetInterface
     /**
      * Gets extra HTML attributes.
      *
-     * @return array|null
+     * @return array<string, string>
      */
-    public function getAttributes(): ?array
+    public function getAttributes(): array
     {
         return $this->attributes;
     }
@@ -124,7 +124,7 @@ class Inline implements AssetInterface
     /**
      * Sets extra HTML attributes
      *
-     * @param array $attributes
+     * @param array<string, string> $attributes
      *
      * @return AssetInterface
      */

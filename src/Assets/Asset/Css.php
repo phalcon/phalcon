@@ -27,12 +27,12 @@ class Css extends AssetBase
     /**
      * Css constructor.
      *
-     * @param string      $path
-     * @param bool        $local
-     * @param bool        $filter
-     * @param array       $attributes
-     * @param string|null $version
-     * @param bool        $autoVersion
+     * @param string                $path
+     * @param bool                  $local
+     * @param bool                  $filter
+     * @param array<string, string> $attributes
+     * @param string|null           $version
+     * @param bool                  $autoVersion
      */
     public function __construct(
         string $path,
