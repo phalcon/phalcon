@@ -13,6 +13,11 @@ declare(strict_types=1);
 
 namespace Phalcon\Acl\Adapter;
 
+use Phalcon\Acl\Component;
+use Phalcon\Acl\ComponentInterface;
+use Phalcon\Acl\Role;
+use Phalcon\Acl\RoleInterface;
+
 /**
  * Interface for Phalcon\Acl adapters
  */
@@ -21,11 +26,11 @@ interface AdapterInterface
     /**
      * Adds a component to the ACL list
      *
-     * Access names can be a particular action, by example
-     * search, update, delete, etc or a list of them
+     * Access names can be a particular action, for instance `search`, `update`
+     * `delete` etc. or a list of them.
      *
-     * @param mixed $componentObject
-     * @param mixed $accessList
+     * @param ComponentInterface|string $componentObject
+     * @param mixed                     $accessList
      *
      * @return bool
      */
@@ -42,7 +47,7 @@ interface AdapterInterface
     public function addComponentAccess(string $componentName, $accessList): bool;
 
     /**
-     * Do a role inherit from another existing role
+     * Add a role which inherits from an existing role
      *
      * @param string $roleName
      * @param mixed  $roleToInherit
@@ -52,18 +57,18 @@ interface AdapterInterface
     public function addInherit(string $roleName, $roleToInherit): bool;
 
     /**
-     * Adds a role to the ACL list. Second parameter lets to inherit access data
-     * from other existing role
+     * Adds a role to the ACL list. The second parameter lets to inherit access
+     * from an existing role
      *
-     * @param mixed      $roleObject
-     * @param mixed|null $accessInherits
+     * @param RoleInterface|string $roleObject
+     * @param mixed|null           $accessInherits
      *
      * @return bool
      */
     public function addRole($roleObject, $accessInherits = null): bool;
 
     /**
-     * Allow access to a role on a component
+     * Allow access to a role on a component. You can use `*` as wildcard
      *
      * @param string     $roleName
      * @param string     $componentName
@@ -78,7 +83,7 @@ interface AdapterInterface
     ): void;
 
     /**
-     * Deny access to a role on a component
+     * Deny access to a role on a component. You can use `*` as wildcard
      *
      * @param string     $roleName
      * @param string     $componentName
@@ -93,7 +98,7 @@ interface AdapterInterface
     ): void;
 
     /**
-     * Removes an access from a component
+     * Removes access from a component
      *
      * @param string $componentName
      * @param mixed  $accessList
@@ -101,19 +106,11 @@ interface AdapterInterface
     public function dropComponentAccess(string $componentName, $accessList): void;
 
     /**
-     * Returns the access which the list is checking if some role can access it
+     * Returns the access which the list is checking if a role can access it
      *
      * @return string|null
      */
     public function getActiveAccess(): ?string;
-
-    /**
-     * Returns the role which the list is checking if it's allowed to certain
-     * component/access
-     *
-     * @return string|null
-     */
-    public function getActiveRole(): ?string;
 
     /**
      * Returns the component which the list is checking if some role can access
@@ -124,7 +121,22 @@ interface AdapterInterface
     public function getActiveComponent(): ?string;
 
     /**
-     * Returns the default ACL access level
+     * Returns the role which the list is checking if 's allowed to certain
+     * component/access
+     *
+     * @return string|null
+     */
+    public function getActiveRole(): ?string;
+
+    /**
+     * Return an array with every component registered in the list
+     *
+     * @return array<string, ComponentInterface>
+     */
+    public function getComponents(): array;
+
+    /**
+     * Returns the default action
      *
      * @return int
      */
@@ -132,7 +144,7 @@ interface AdapterInterface
 
     /**
      * Returns the default ACL access level for no arguments provided in
-     * isAllowed action if there exists func for accessKey
+     * `isAllowed` action if a `function` (callable) exists for `accessKey`
      *
      * @return int
      */
@@ -141,16 +153,9 @@ interface AdapterInterface
     /**
      * Return an array with every role registered in the list
      *
-     * @return array
+     * @return array<string, RoleInterface>
      */
     public function getRoles(): array;
-
-    /**
-     * Return an array with every component registered in the list
-     *
-     * @return array
-     */
-    public function getComponents(): array;
 
     /**
      * Check whether a role is allowed to access an action from a component
@@ -158,7 +163,7 @@ interface AdapterInterface
      * @param mixed  $roleName
      * @param mixed  $componentName
      * @param string $access
-     * @param array  $parameters
+     * @param array<int|string, mixed>  $parameters
      *
      * @return bool
      */
@@ -170,7 +175,7 @@ interface AdapterInterface
     ): bool;
 
     /**
-     * Check whether component exist in the components list
+     * Check whether a component exists in the components list
      *
      * @param string $componentName
      *

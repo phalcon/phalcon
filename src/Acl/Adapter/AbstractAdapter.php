@@ -69,7 +69,7 @@ abstract class AbstractAdapter implements AdapterInterface, EventsAwareInterface
     protected int $defaultAccess = Enum::DENY;
 
     /**
-     * Returns the active Access
+     * Returns the access which the list is checking if a role can access it
      *
      * @return string|null
      */
@@ -79,7 +79,8 @@ abstract class AbstractAdapter implements AdapterInterface, EventsAwareInterface
     }
 
     /**
-     * Returns the active Component
+     * Returns the component which the list is checking if some role can access
+     * it
      *
      * @return string|null
      */
@@ -89,7 +90,8 @@ abstract class AbstractAdapter implements AdapterInterface, EventsAwareInterface
     }
 
     /**
-     * Returns the active Role
+     * Returns the role which the list is checking if 's allowed to certain
+     * component/access
      *
      * @return string|null
      */
@@ -99,7 +101,7 @@ abstract class AbstractAdapter implements AdapterInterface, EventsAwareInterface
     }
 
     /**
-     * Returns the default ACL access level
+     * Returns the default action
      *
      * @return int
      */
@@ -109,7 +111,8 @@ abstract class AbstractAdapter implements AdapterInterface, EventsAwareInterface
     }
 
     /**
-     * Sets the default access level (Phalcon\Acl::ALLOW or Phalcon\Acl::DENY)
+     * Sets the default access level
+     * (Phalcon\Acl\Enum::ALLOW or Phalcon\Acl\Enum::DENY)
      *
      * @param int $defaultAccess
      */
