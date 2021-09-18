@@ -25,7 +25,7 @@ class Js extends InlineBase
      *
      * @param string $content
      * @param bool   $filter
-     * @param array  $attributes
+     * @param array<string, string>  $attributes
      */
     public function __construct(
         string $content,

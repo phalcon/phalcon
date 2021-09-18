@@ -35,7 +35,7 @@ class Collection implements Countable, IteratorAggregate
     use CollectionAddTrait;
 
     /**
-     * Adds a asset to the collection
+     * Adds an asset to the collection
      *
      * @param AssetInterface $asset
      *
@@ -51,12 +51,12 @@ class Collection implements Countable, IteratorAggregate
     /**
      * Adds a CSS asset to the collection
      *
-     * @param string      $path
-     * @param bool|null   $isLocal
-     * @param bool        $filter
-     * @param array       $attributes
-     * @param string|null $version
-     * @param bool        $autoVersion
+     * @param string                $path
+     * @param bool|null             $isLocal
+     * @param bool                  $filter
+     * @param array<string, string> $attributes
+     * @param string|null           $version
+     * @param bool                  $autoVersion
      *
      * @return $this
      */
@@ -68,7 +68,7 @@ class Collection implements Countable, IteratorAggregate
         string $version = null,
         bool $autoVersion = false
     ): Collection {
-        $isLocal = (null !== $isLocal) ? $isLocal : $this->isLocal;
+        $isLocal = $isLocal ?: $this->isLocal;
         $attrs   = $this->processAttributes($attributes);
 
         $this->add(

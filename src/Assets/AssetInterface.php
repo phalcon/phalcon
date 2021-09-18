@@ -28,9 +28,9 @@ interface AssetInterface
     /**
      * Gets extra HTML attributes.
      *
-     * @return array|null
+     * @return array<string, string>
      */
-    public function getAttributes(): ?array;
+    public function getAttributes(): array;
 
     /**
      * Gets if the asset must be filtered or not.
@@ -49,7 +49,7 @@ interface AssetInterface
     /**
      * Sets extra HTML attributes.
      *
-     * @param array $attributes
+     * @param array<string, string> $attributes
      *
      * @return AssetInterface
      */

@@ -18,10 +18,10 @@ use Phalcon\Support\Traits\PhpFileTrait;
 use function sha1;
 
 /**
- * Represents an asset asset
+ * Represents an asset
  *
  *```php
- * $asset = new \Phalcon\Assets\Asset("js", "javascripts/jquery.js");
+ * $asset = new \Phalcon\Assets\Asset("js", "js/jquery.js");
  *```
  *
  * @property array       $attributes
@@ -41,7 +41,7 @@ class Asset implements AssetInterface
     use PhpFileTrait;
 
     /**
-     * @var array
+     * @var array<string, string>
      */
     protected array $attributes;
 
@@ -95,13 +95,13 @@ class Asset implements AssetInterface
     /**
      * Asset constructor.
      *
-     * @param string      $type
-     * @param string      $path
-     * @param bool        $isLocal
-     * @param bool        $filter
-     * @param array       $attributes
-     * @param string|null $version
-     * @param bool        $isAutoVersion
+     * @param string                $type
+     * @param string                $path
+     * @param bool                  $isLocal
+     * @param bool                  $filter
+     * @param array<string, string> $attributes
+     * @param string|null           $version
+     * @param bool                  $isAutoVersion
      */
     public function __construct(
         string $type,
@@ -134,7 +134,7 @@ class Asset implements AssetInterface
     /**
      * Gets extra HTML attributes.
      *
-     * @return array
+     * @return array<string, string>
      */
     public function getAttributes(): array
     {
@@ -242,7 +242,11 @@ class Asset implements AssetInterface
              * exist
              */
             if (true === $this->phpFileExists($completePath)) {
-                return realpath($completePath);
+                $completePath = realpath($completePath);
+
+                if (false === $completePath) {
+                    $completePath = '';
+                }
             }
 
             return $completePath;
@@ -345,7 +349,7 @@ class Asset implements AssetInterface
     /**
      * Sets extra HTML attributes
      *
-     * @param array $attributes
+     * @param array<string, string> $attributes
      *
      * @return AssetInterface
      */
