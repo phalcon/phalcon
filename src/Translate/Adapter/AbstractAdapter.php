@@ -39,8 +39,8 @@ abstract class AbstractAdapter implements AdapterInterface
     /**
      * AbstractAdapter constructor.
      *
-     * @param InterpolatorFactory $interpolator
-     * @param array               $options
+     * @param InterpolatorFactory  $interpolator
+     * @param array<string, mixed> $options
      */
     public function __construct(
         InterpolatorFactory $interpolator,
@@ -53,8 +53,8 @@ abstract class AbstractAdapter implements AdapterInterface
     /**
      * Returns the translation string of the given key (alias of method 't')
      *
-     * @param string $translateKey
-     * @param array  $placeholders
+     * @param string                    $translateKey
+     * @param array<int|string, string> $placeholders
      *
      * @return string
      */
@@ -115,8 +115,8 @@ abstract class AbstractAdapter implements AdapterInterface
     /**
      * Returns the translation string of the given key
      *
-     * @param string $translateKey
-     * @param array  $placeholders
+     * @param string                    $translateKey
+     * @param array<int|string, string> $placeholders
      *
      * @return string
      */
@@ -128,8 +128,8 @@ abstract class AbstractAdapter implements AdapterInterface
     /**
      * Replaces placeholders by the values passed
      *
-     * @param string $translation
-     * @param array  $placeholders
+     * @param string                    $translation
+     * @param array<int|string, string> $placeholders
      *
      * @return string
      */

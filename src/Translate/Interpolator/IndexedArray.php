@@ -24,7 +24,7 @@ class IndexedArray implements InterpolatorInterface
      * Replaces placeholders by the values passed
      *
      * @param string             $translation
-     * @param array<int, mixed>  $placeholders
+     * @param array<int, string> $placeholders
      *
      * @return string
      */
