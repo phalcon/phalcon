@@ -32,7 +32,7 @@ class AllCest
      * @author Phalcon Team <team@phalcon.io>
      * @since  2020-09-09
      */
-    public function debugDumpAll(UnitTester $I)
+    public function supportDebugDumpAll(UnitTester $I)
     {
         $I->wantToTest('Debug\Dump - all()');
 

@@ -33,7 +33,7 @@ class RenderHtmlCest
      * @author Phalcon Team <team@phalcon.io>
      * @since  2020-09-09
      */
-    public function debugRenderHtml(UnitTester $I)
+    public function supportDebugRenderHtml(UnitTester $I)
     {
         $I->wantToTest('Debug - renderHtml()');
 
@@ -51,13 +51,13 @@ class RenderHtmlCest
         $expected = '<html><head>'
             . '<title>Phalcon\Support\Exception: exception message</title>'
             . '<link rel="stylesheet" type="text/css" '
-            . 'href="https://assets.phalcon.io/debug/4.0.x/bower_components/'
+            . 'href="https://assets.phalcon.io/debug/6.0.x/assets/'
             . 'jquery-ui/themes/ui-lightness/jquery-ui.min.css" />'
             . '<link rel="stylesheet" type="text/css" '
-            . 'href="https://assets.phalcon.io/debug/4.0.x/bower_components/'
+            . 'href="https://assets.phalcon.io/debug/6.0.x/assets/'
             . 'jquery-ui/themes/ui-lightness/theme.css" />'
             . '<link rel="stylesheet" type="text/css" '
-            . 'href="https://assets.phalcon.io/debug/4.0.x/themes/default/style.css" />'
+            . 'href="https://assets.phalcon.io/debug/6.0.x/themes/default/style.css" />'
             . '</head><body>'
             . '<div class="version">Phalcon Framework '
             . '<a href="https://docs.phalcon.io/' . $link . '/en/" '
@@ -71,18 +71,18 @@ class RenderHtmlCest
             . ' (40)</span>'
             . '</div>'
             . '<script type="text/javascript" '
-            . 'src="https://assets.phalcon.io/debug/4.0.x/bower_components/'
+            . 'src="https://assets.phalcon.io/debug/6.0.x/assets/'
             . 'jquery/dist/jquery.min.js"></script>'
             . '<script type="text/javascript" '
-            . 'src="https://assets.phalcon.io/debug/4.0.x/bower_components/'
+            . 'src="https://assets.phalcon.io/debug/6.0.x/assets/'
             . 'jquery-ui/jquery-ui.min.js"></script>'
             . '<script type="text/javascript" '
-            . 'src="https://assets.phalcon.io/debug/4.0.x/bower_components/'
+            . 'src="https://assets.phalcon.io/debug/6.0.x/assets/'
             . 'jquery.scrollTo/jquery.scrollTo.min.js"></script>'
             . '<script type="text/javascript" '
-            . 'src="https://assets.phalcon.io/debug/4.0.x/prettify/prettify.js"></script>'
+            . 'src="https://assets.phalcon.io/debug/6.0.x/prettify/prettify.js"></script>'
             . '<script type="text/javascript" '
-            . 'src="https://assets.phalcon.io/debug/4.0.x/pretty.js"></script>'
+            . 'src="https://assets.phalcon.io/debug/6.0.x/pretty.js"></script>'
             . '</div>'
             . '</body></html>';
 

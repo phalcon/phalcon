@@ -33,17 +33,17 @@ class GetCssSourcesCest
      * @author Phalcon Team <team@phalcon.io>
      * @since  2020-09-09
      */
-    public function debugGetCssSources(UnitTester $I)
+    public function supportDebugGetCssSources(UnitTester $I)
     {
         $I->wantToTest('Debug - getCssSources()');
         $debug = new Debug();
-        $uri   = 'https://assets.phalcon.io/debug/4.0.x/';
+        $uri   = 'https://assets.phalcon.io/debug/6.0.x/';
 
         $expected = sprintf(
             '<link rel="stylesheet" type="text/css" ' .
-            'href="%1$sbower_components/jquery-ui/themes/ui-lightness/jquery-ui.min.css" />' .
+            'href="%1$sassets/jquery-ui/themes/ui-lightness/jquery-ui.min.css" />' .
             '<link rel="stylesheet" type="text/css" ' .
-            'href="%1$sbower_components/jquery-ui/themes/ui-lightness/theme.css" />' .
+            'href="%1$sassets/jquery-ui/themes/ui-lightness/theme.css" />' .
             '<link rel="stylesheet" type="text/css" ' .
             'href="%1$sthemes/default/style.css" />',
             $uri

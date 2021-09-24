@@ -33,19 +33,19 @@ class GetJsSourcesCest
      * @author Phalcon Team <team@phalcon.io>
      * @since  2020-09-09
      */
-    public function debugGetJsSources(UnitTester $I)
+    public function supportDebugGetJsSources(UnitTester $I)
     {
         $I->wantToTest('Debug - getJsSources()');
         $debug = new Debug();
-        $uri   = 'https://assets.phalcon.io/debug/4.0.x/';
+        $uri   = 'https://assets.phalcon.io/debug/6.0.x/';
 
         $expected = sprintf(
             '<script type="text/javascript" ' .
-            'src="%1$sbower_components/jquery/dist/jquery.min.js"></script>' .
+            'src="%1$sassets/jquery/dist/jquery.min.js"></script>' .
             '<script type="text/javascript" ' .
-            'src="%1$sbower_components/jquery-ui/jquery-ui.min.js"></script>' .
+            'src="%1$sassets/jquery-ui/jquery-ui.min.js"></script>' .
             '<script type="text/javascript" ' .
-            'src="%1$sbower_components/jquery.scrollTo/jquery.scrollTo.min.js"></script>' .
+            'src="%1$sassets/jquery.scrollTo/jquery.scrollTo.min.js"></script>' .
             '<script type="text/javascript" src="%1$sprettify/prettify.js"></script>' .
             '<script type="text/javascript" src="%1$spretty.js"></script>',
             $uri

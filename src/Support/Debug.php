@@ -45,25 +45,21 @@ use function memory_get_usage;
 class Debug
 {
     /**
+     * @var bool
+     */
+    protected static bool $isActive;
+    /**
      * @var array
      */
     protected array $blacklist = ["request" => [], "server" => []];
-
     /**
      * @var mixed
      */
     protected $data;
-
     /**
      * @var bool
      */
     protected bool $hideDocumentRoot = false;
-
-    /**
-     * @var bool
-     */
-    protected static bool $isActive;
-
     /**
      * @var bool
      */
@@ -82,7 +78,7 @@ class Debug
     /**
      * @var string
      */
-    protected string $uri = "https://assets.phalcon.io/debug/4.0.x/";
+    protected string $uri = "https://assets.phalcon.io/debug/6.0.x/";
 
     /**
      * Clears are variables added previously
@@ -112,65 +108,6 @@ class Debug
         ];
 
         return $this;
-    }
-
-    /**
-     * Returns the CSS sources
-     *
-     * @return string
-     */
-    public function getCssSources(): string
-    {
-        return '<link rel="stylesheet" type="text/css" href="'
-            . $this->uri
-            . 'bower_components/jquery-ui/themes/ui-lightness/jquery-ui.min.css" />'
-            . '<link rel="stylesheet" type="text/css" href="'
-            . $this->uri
-            . 'bower_components/jquery-ui/themes/ui-lightness/theme.css" />'
-            . '<link rel="stylesheet" type="text/css" href="'
-            . $this->uri
-            . 'themes/default/style.css" />';
-    }
-
-    /**
-     * Returns the JavaScript sources
-     *
-     * @return string
-     */
-    public function getJsSources(): string
-    {
-        return '<script type="text/javascript" src="'
-            . $this->uri
-            . 'bower_components/jquery/dist/jquery.min.js"></script>'
-            . '<script type="text/javascript" src="'
-            . $this->uri
-            . 'bower_components/jquery-ui/jquery-ui.min.js"></script>'
-            . '<script type="text/javascript" src="'
-            . $this->uri
-            . 'bower_components/jquery.scrollTo/jquery.scrollTo.min.js"></script>'
-            . '<script type="text/javascript" src="'
-            . $this->uri
-            . 'prettify/prettify.js"></script>'
-            . '<script type="text/javascript" src="'
-            . $this->uri
-            . 'pretty.js"></script>';
-    }
-
-    /**
-     * Generates a link to the current version documentation
-     */
-    public function getVersion(): string
-    {
-        $version = new Version();
-        $link    = "https://docs.phalcon.io/"
-            . $version->getPart(Version::VERSION_MAJOR)
-            . "."
-            . $version->getPart(Version::VERSION_MEDIUM)
-            . "/en/";
-
-        return '<div class="version">Phalcon Framework '
-            . '<a href="' . $link . '" target="_new">'
-            . $version->get() . "</a></div>";
     }
 
     /**
@@ -276,115 +213,100 @@ class Debug
         return false;
     }
 
-    /**
-     * Throws an exception when a notice or warning is raised
-     *
-     * @param int    $severity
-     * @param string $message
-     * @param string $file
-     * @param int    $line
-     * @param array  $context
-     *
-     * @throws ErrorException
-     */
-    public function onUncaughtLowSeverity(
-        int $severity,
-        string $message,
-        string $file,
-        int $line,
-        array $context = []
-    ): void {
-        if (error_reporting() & $severity) {
-            throw new ErrorException($message, 0, $severity, $file, $line);
+    public function renderHtml(Throwable $exception): string
+    {
+        $className = get_class($exception);
+
+        /**
+         * Escape the exception's message avoiding possible XSS injections?
+         */
+        $escapedMessage = $this->escapeString($exception->getMessage());
+
+        /**
+         * CSS static sources to style the error presentation
+         * Use the exception info as document's title
+         */
+        $html = '<html><head>'
+            . '<title>'
+            . $className . ': '
+            . $escapedMessage . '</title>'
+            . $this->getCssSources()
+            . '</head><body>';
+
+        /**
+         * Get the version link
+         */
+        $html .= $this->getVersion();
+
+        /**
+         * Main exception info
+         */
+        $html .= '<div align="center">'
+            . '<div class="error-main">'
+            . '<h1>'
+            . $className . ': '
+            . $escapedMessage . '</h1>'
+            . '<span class="error-file">'
+            . $exception->getFile() . ' ('
+            . $exception->getLine() . ')</span>'
+            . '</div>';
+
+        /**
+         * Check if the developer wants to show the backtrace or not
+         */
+        if (true === $this->showBackTrace) {
+            /**
+             * Create the tabs in the page
+             */
+            $html .= '<div class="error-info"><div id="tabs"><ul>'
+                . '<li><a href="#error-tabs-1">Backtrace</a></li>'
+                . '<li><a href="#error-tabs-2">Request</a></li>'
+                . '<li><a href="#error-tabs-3">Server</a></li>'
+                . '<li><a href="#error-tabs-4">Included Files</a></li>'
+                . '<li><a href="#error-tabs-5">Memory</a></li>';
+
+            if (true === is_array($this->data)) {
+                $html .= '<li><a href="#error-tabs-6">Variables</a></li>';
+            }
+
+            $html .= '</ul>';
+
+            /**
+             * Print backtrace
+             */
+            $html .= $this->printBacktrace($exception);
+
+            /**
+             * Print _REQUEST superglobal
+             */
+            $html .= $this->printSuperglobal($_REQUEST);
+            /**
+             * Print _SERVER superglobal
+             */
+            $html .= $this->printSuperglobal($_SERVER);
+
+            /**
+             * Show included files
+             */
+            $html .= $this->printIncludedFiles();
+
+            /**
+             * Memory usage
+             */
+            $html .= $this->printMemoryUsage();
+
+            /**
+             * Print extra variables passed to the component
+             */
+            $html .= $this->printExtraVariables();
+
+            $html .= '</div>';
         }
-    }
 
-    /**
-     * Sets if files the exception's backtrace must be showed
-     *
-     * @param array $blacklist
-     *
-     * @return $this
-     */
-    public function setBlacklist(array $blacklist): Debug
-    {
-        $area     = $blacklist['request'] ?? [];
-        $subArray = [];
-        $result   = [];
-
-        foreach ($area as $value) {
-            $subArray[mb_strtolower($value)] = 1;
-        }
-
-        $result['request'] = $subArray;
-        $area              = $blacklist['server'] ?? [];
-        $subArray          = [];
-
-        foreach ($area as $value) {
-            $subArray[mb_strtolower($value)] = 1;
-        }
-
-        $result['server'] = $subArray;
-        $this->blacklist  = $result;
-
-        return $this;
-    }
-
-    /**
-     * Sets if files the exception's backtrace must be showed
-     *
-     * @param bool $showBackTrace
-     *
-     * @return $this
-     */
-    public function setShowBackTrace(bool $showBackTrace): Debug
-    {
-        $this->showBackTrace = $showBackTrace;
-
-        return $this;
-    }
-
-    /**
-     * Sets if files must be completely opened and showed in the output
-     * or just the fragment related to the exception
-     *
-     * @param bool $showFileFragment
-     *
-     * @return Debug
-     */
-    public function setShowFileFragment(bool $showFileFragment): Debug
-    {
-        $this->showFileFragment = $showFileFragment;
-
-        return $this;
-    }
-
-    /**
-     * Set if files part of the backtrace must be shown in the output
-     *
-     * @param bool $showFiles
-     *
-     * @return Debug
-     */
-    public function setShowFiles(bool $showFiles): Debug
-    {
-        $this->showFiles = $showFiles;
-
-        return $this;
-    }
-
-    /**
-     * Change the base URI for static resources
-     *
-     * @param string $uri
-     *
-     * @return $this
-     */
-    public function setUri(string $uri): Debug
-    {
-        $this->uri = $uri;
-
-        return $this;
+        /**
+         * Get JavaScript sources
+         */
+        return $html . $this->getJsSources() . '</div></body></html>';
     }
 
     /**
@@ -404,122 +326,62 @@ class Debug
     }
 
     /**
-     * Produces a recursive representation of an array
-     *
-     * @param array $arguments
-     * @param int   $number
-     *
-     * @return string|null
-     */
-    protected function getArrayDump(array $arguments, int $number = 0): ?string
-    {
-        if ($number >= 3 || true === empty($arguments)) {
-            return null;
-        }
-
-        if (count($arguments) >= 10) {
-            return (string) count($arguments);
-        }
-
-        $dump = [];
-        foreach ($arguments as $index => $argument) {
-            if ('' === $argument) {
-                $varDump = '(empty string)';
-            } elseif (true === is_scalar($argument)) {
-                $varDump = $this->escapeString((string) $argument);
-            } elseif (true === is_array($argument)) {
-                $varDump = 'Array(' . $this->getArrayDump($argument, $number + 1) . ')';
-            } elseif (true === is_object($argument)) {
-                $varDump = 'Object(' . get_class($argument) . ')';
-            } elseif (null === $argument) {
-                $varDump = 'null';
-            } else {
-                $varDump = $argument;
-            }
-
-            $dump[] = '[' . $index . '] =&gt; ' . $varDump;
-        }
-
-        return implode(', ', $dump);
-    }
-
-    /**
-     * Produces a string representation of a variable
-     *
-     * @param mixed $variable
+     * Returns the CSS sources
      *
      * @return string
      */
-    protected function getVarDump($variable): string
+    public function getCssSources(): string
     {
-        if (true === $variable) {
-            return 'true';
-        }
-
-        if (false === $variable) {
-            return 'false';
-        }
-
-        /**
-         * String variables are escaped to avoid XSS injections
-         */
-        if (true === is_string($variable)) {
-            return $this->escapeString($variable);
-        }
-
-        /**
-         * Scalar variables are just converted to strings
-         */
-        if (true === is_scalar($variable)) {
-            return (string) $variable;
-        }
-
-        /**
-         * If the variable is an object print its class name
-         */
-        if (true === is_object($variable)) {
-            $className = get_class($variable);
-
-            /**
-             * Try to check for a 'dump' method, this surely produces a better
-             * printable representation
-             */
-            if (true === method_exists($variable, 'dump')) {
-                $dumpedObject = $variable->dump();
-
-                /**
-                 * dump() must return an array, generate a recursive
-                 * representation using `getArrayDump()`
-                 */
-                return 'Object(' . $className . ': ' . $this->getArrayDump($dumpedObject) . ')';
-            }
-
-            /**
-             * If dump() is not available just print the class name
-             */
-            return 'Object(' . $className . ')';
-        }
-
-        /**
-         * Recursively process the array and enclose it in []
-         */
-        if (true === is_array($variable)) {
-            return 'Array(' . $this->getArrayDump($variable) . ')';
-        }
-
-        /**
-         * Null variables are represented as 'null'
-         */
-        if (null === $variable) {
-            return 'null';
-        }
-
-        /**
-         * Other types are represented by its type
-         */
-        return gettype($variable);
+        return '<link rel="stylesheet" type="text/css" href="'
+            . $this->uri
+            . 'assets/jquery-ui/themes/ui-lightness/jquery-ui.min.css" />'
+            . '<link rel="stylesheet" type="text/css" href="'
+            . $this->uri
+            . 'assets/jquery-ui/themes/ui-lightness/theme.css" />'
+            . '<link rel="stylesheet" type="text/css" href="'
+            . $this->uri
+            . 'themes/default/style.css" />';
     }
 
+    /**
+     * Generates a link to the current version documentation
+     */
+    public function getVersion(): string
+    {
+        $version = new Version();
+        $link    = "https://docs.phalcon.io/"
+            . $version->getPart(Version::VERSION_MAJOR)
+            . "."
+            . $version->getPart(Version::VERSION_MEDIUM)
+            . "/en/";
+
+        return '<div class="version">Phalcon Framework '
+            . '<a href="' . $link . '" target="_new">'
+            . $version->get() . "</a></div>";
+    }
+
+    /**
+     * @param Throwable $exception
+     *
+     * @return string
+     * @throws ReflectionException
+     */
+    private function printBacktrace(Throwable $exception): string
+    {
+        $html = '<div id="error-tabs-1">'
+            . '<table style="border-collapse: collapse; border-spacing: 0; '
+            . 'text-align=center; width:100%">';
+
+        $trace = $exception->getTrace();
+        foreach ($trace as $number => $item) {
+            /**
+             * Every line in the trace is rendered using 'showTraceItem'
+             */
+            $html .= $this->showTraceItem($number, $item);
+        }
+
+        return $html . '</table></div>';
+    }
 
     /**
      * Shows a backtrace item
@@ -553,7 +415,7 @@ class Debug
                 /**
                  * Generate a link to the official docs
                  */
-                $classNameWithLink = '<a target="_new" href="https://docs.phalcon.io/4.0/en/api/'
+                $classNameWithLink = '<a target="_new" href="https://docs.phalcon.io/6.0/en/api/'
                     . $prepareUriClass . '">'
                     . $className . '</a>';
             } else {
@@ -770,151 +632,148 @@ class Debug
         return $html . '</td></tr>';
     }
 
-    /*
-     * Render exception to html format.
+    /**
+     * Produces a string representation of a variable
+     *
+     * @param mixed $variable
+     *
+     * @return string
      */
-    public function renderHtml(Throwable $exception): string
+    protected function getVarDump($variable): string
     {
-        $className = get_class($exception);
+        if (true === $variable) {
+            return 'true';
+        }
 
-        /**
-         * Escape the exception's message avoiding possible XSS injections?
-         */
-        $escapedMessage = $this->escapeString($exception->getMessage());
-
-        /**
-         * CSS static sources to style the error presentation
-         * Use the exception info as document's title
-         */
-        $html = '<html><head>'
-            . '<title>'
-            . $className . ': '
-            . $escapedMessage . '</title>'
-            . $this->getCssSources()
-            . '</head><body>';
-
-        /**
-         * Get the version link
-         */
-        $html .= $this->getVersion();
-
-        /**
-         * Main exception info
-         */
-        $html .= '<div align="center">'
-            . '<div class="error-main">'
-            . '<h1>'
-            . $className . ': '
-            . $escapedMessage . '</h1>'
-            . '<span class="error-file">'
-            . $exception->getFile() . ' ('
-            . $exception->getLine() . ')</span>'
-            . '</div>';
-
-        /**
-         * Check if the developer wants to show the backtrace or not
-         */
-        if (true === $this->showBackTrace) {
-            /**
-             * Create the tabs in the page
-             */
-            $html .= '<div class="error-info"><div id="tabs"><ul>'
-                . '<li><a href="#error-tabs-1">Backtrace</a></li>'
-                . '<li><a href="#error-tabs-2">Request</a></li>'
-                . '<li><a href="#error-tabs-3">Server</a></li>'
-                . '<li><a href="#error-tabs-4">Included Files</a></li>'
-                . '<li><a href="#error-tabs-5">Memory</a></li>';
-
-            if (true === is_array($this->data)) {
-                $html .= '<li><a href="#error-tabs-6">Variables</a></li>';
-            }
-
-            $html .= '</ul>';
-
-            /**
-             * Print backtrace
-             */
-            $html .= $this->printBacktrace($exception);
-
-            /**
-             * Print _REQUEST superglobal
-             */
-            $html .= $this->printSuperglobal($_REQUEST);
-            /**
-             * Print _SERVER superglobal
-             */
-            $html .= $this->printSuperglobal($_SERVER);
-
-            /**
-             * Show included files
-             */
-            $html .= $this->printIncludedFiles();
-
-            /**
-             * Memory usage
-             */
-            $html .= $this->printMemoryUsage();
-
-            /**
-             * Print extra variables passed to the component
-             */
-            $html .= $this->printExtraVariables();
-
-            $html .= '</div>';
+        if (false === $variable) {
+            return 'false';
         }
 
         /**
-         * Get JavaScript sources
+         * String variables are escaped to avoid XSS injections
          */
-        return $html . $this->getJsSources() . '</div></body></html>';
+        if (true === is_string($variable)) {
+            return $this->escapeString($variable);
+        }
+
+        /**
+         * Scalar variables are just converted to strings
+         */
+        if (true === is_scalar($variable)) {
+            return (string) $variable;
+        }
+
+        /**
+         * If the variable is an object print its class name
+         */
+        if (true === is_object($variable)) {
+            $className = get_class($variable);
+
+            /**
+             * Try to check for a 'dump' method, this surely produces a better
+             * printable representation
+             */
+            if (true === method_exists($variable, 'dump')) {
+                $dumpedObject = $variable->dump();
+
+                /**
+                 * dump() must return an array, generate a recursive
+                 * representation using `getArrayDump()`
+                 */
+                return 'Object(' . $className . ': ' . $this->getArrayDump($dumpedObject) . ')';
+            }
+
+            /**
+             * If dump() is not available just print the class name
+             */
+            return 'Object(' . $className . ')';
+        }
+
+        /**
+         * Recursively process the array and enclose it in []
+         */
+        if (true === is_array($variable)) {
+            return 'Array(' . $this->getArrayDump($variable) . ')';
+        }
+
+        /**
+         * Null variables are represented as 'null'
+         */
+        if (null === $variable) {
+            return 'null';
+        }
+
+        /**
+         * Other types are represented by its type
+         */
+        return gettype($variable);
     }
 
     /**
-     * @param Throwable $exception
+     * Produces a recursive representation of an array
+     *
+     * @param array $arguments
+     * @param int   $number
+     *
+     * @return string|null
+     */
+    protected function getArrayDump(array $arguments, int $number = 0): ?string
+    {
+        if ($number >= 3 || true === empty($arguments)) {
+            return null;
+        }
+
+        if (count($arguments) >= 10) {
+            return (string) count($arguments);
+        }
+
+        $dump = [];
+        foreach ($arguments as $index => $argument) {
+            if ('' === $argument) {
+                $varDump = '(empty string)';
+            } elseif (true === is_scalar($argument)) {
+                $varDump = $this->escapeString((string) $argument);
+            } elseif (true === is_array($argument)) {
+                $varDump = 'Array(' . $this->getArrayDump($argument, $number + 1) . ')';
+            } elseif (true === is_object($argument)) {
+                $varDump = 'Object(' . get_class($argument) . ')';
+            } elseif (null === $argument) {
+                $varDump = 'null';
+            } else {
+                $varDump = $argument;
+            }
+
+            $dump[] = '[' . $index . '] =&gt; ' . $varDump;
+        }
+
+        return implode(', ', $dump);
+    }
+
+    /**
+     * @param array $source
      *
      * @return string
-     * @throws ReflectionException
      */
-    private function printBacktrace(Throwable $exception): string
+    private function printSuperglobal(array $source): string
     {
-        $html = '<div id="error-tabs-1">'
+        /**
+         * Print $_REQUEST or $_SERVER superglobal
+         */
+        $html   = '<div id="error-tabs-3">'
             . '<table style="border-collapse: collapse; border-spacing: 0; '
-            . 'text-align=center; width:100%">';
+            . 'text-align: center" class="superglobal-detail">'
+            . '<tr><th>Key</th><th>Value</th></tr>';
+        $filter = $this->blacklist['server'] ?? [];
 
-        $trace = $exception->getTrace();
-        foreach ($trace as $number => $item) {
-            /**
-             * Every line in the trace is rendered using 'showTraceItem'
-             */
-            $html .= $this->showTraceItem($number, $item);
+        foreach ($source as $key => $value) {
+            if (true !== isset($filter[mb_strtolower($key)])) {
+                $html .= '<tr><td class="key">'
+                    . $key . '</td><td>'
+                    . $this->getVarDump($value) . '</td></tr>';
+            }
         }
 
         return $html . '</table></div>';
-    }
-
-    /**
-     * @return string
-     */
-    private function printExtraVariables(): string
-    {
-        $html = '';
-        if (true === is_array($this->data)) {
-            $html .= '<div id="error-tabs-6">'
-                . '<table style="border-collapse: collapse; border-spacing: 0; '
-                . 'text-align: center" class="superglobal-detail">'
-                . '<tr><th>Key</th><th>Value</th></tr>';
-
-            foreach ($this->data as $key => $value) {
-                $html .= '<tr><td class="key">'
-                    . $key . '</td><td>'
-                    . $this->getVarDump($value[0])
-                    . '</td></tr>';
-            }
-
-            $html .= '</table></div>';
-        }
-
-        return $html;
     }
 
     /**
@@ -952,29 +811,166 @@ class Debug
     }
 
     /**
-     * @param array $source
+     * @return string
+     */
+    private function printExtraVariables(): string
+    {
+        $html = '';
+        if (true === is_array($this->data)) {
+            $html .= '<div id="error-tabs-6">'
+                . '<table style="border-collapse: collapse; border-spacing: 0; '
+                . 'text-align: center" class="superglobal-detail">'
+                . '<tr><th>Key</th><th>Value</th></tr>';
+
+            foreach ($this->data as $key => $value) {
+                $html .= '<tr><td class="key">'
+                    . $key . '</td><td>'
+                    . $this->getVarDump($value[0])
+                    . '</td></tr>';
+            }
+
+            $html .= '</table></div>';
+        }
+
+        return $html;
+    }
+
+    /**
+     * Returns the JavaScript sources
      *
      * @return string
      */
-    private function printSuperglobal(array $source): string
+    public function getJsSources(): string
     {
-        /**
-         * Print $_REQUEST or $_SERVER superglobal
-         */
-        $html   = '<div id="error-tabs-3">'
-            . '<table style="border-collapse: collapse; border-spacing: 0; '
-            . 'text-align: center" class="superglobal-detail">'
-            . '<tr><th>Key</th><th>Value</th></tr>';
-        $filter = $this->blacklist['server'] ?? [];
+        return '<script type="text/javascript" src="'
+            . $this->uri
+            . 'assets/jquery/dist/jquery.min.js"></script>'
+            . '<script type="text/javascript" src="'
+            . $this->uri
+            . 'assets/jquery-ui/jquery-ui.min.js"></script>'
+            . '<script type="text/javascript" src="'
+            . $this->uri
+            . 'assets/jquery.scrollTo/jquery.scrollTo.min.js"></script>'
+            . '<script type="text/javascript" src="'
+            . $this->uri
+            . 'prettify/prettify.js"></script>'
+            . '<script type="text/javascript" src="'
+            . $this->uri
+            . 'pretty.js"></script>';
+    }
 
-        foreach ($source as $key => $value) {
-            if (true !== isset($filter[mb_strtolower($key)])) {
-                $html .= '<tr><td class="key">'
-                    . $key . '</td><td>'
-                    . $this->getVarDump($value) . '</td></tr>';
-            }
+    /*
+     * Render exception to html format.
+     */
+
+    /**
+     * Throws an exception when a notice or warning is raised
+     *
+     * @param int    $severity
+     * @param string $message
+     * @param string $file
+     * @param int    $line
+     * @param array  $context
+     *
+     * @throws ErrorException
+     */
+    public function onUncaughtLowSeverity(
+        int $severity,
+        string $message,
+        string $file,
+        int $line,
+        array $context = []
+    ): void {
+        if (error_reporting() & $severity) {
+            throw new ErrorException($message, 0, $severity, $file, $line);
+        }
+    }
+
+    /**
+     * Sets if files the exception's backtrace must be showed
+     *
+     * @param array $blacklist
+     *
+     * @return $this
+     */
+    public function setBlacklist(array $blacklist): Debug
+    {
+        $area     = $blacklist['request'] ?? [];
+        $subArray = [];
+        $result   = [];
+
+        foreach ($area as $value) {
+            $subArray[mb_strtolower($value)] = 1;
         }
 
-        return $html . '</table></div>';
+        $result['request'] = $subArray;
+        $area              = $blacklist['server'] ?? [];
+        $subArray          = [];
+
+        foreach ($area as $value) {
+            $subArray[mb_strtolower($value)] = 1;
+        }
+
+        $result['server'] = $subArray;
+        $this->blacklist  = $result;
+
+        return $this;
+    }
+
+    /**
+     * Sets if files the exception's backtrace must be showed
+     *
+     * @param bool $showBackTrace
+     *
+     * @return $this
+     */
+    public function setShowBackTrace(bool $showBackTrace): Debug
+    {
+        $this->showBackTrace = $showBackTrace;
+
+        return $this;
+    }
+
+    /**
+     * Sets if files must be completely opened and showed in the output
+     * or just the fragment related to the exception
+     *
+     * @param bool $showFileFragment
+     *
+     * @return Debug
+     */
+    public function setShowFileFragment(bool $showFileFragment): Debug
+    {
+        $this->showFileFragment = $showFileFragment;
+
+        return $this;
+    }
+
+    /**
+     * Set if files part of the backtrace must be shown in the output
+     *
+     * @param bool $showFiles
+     *
+     * @return Debug
+     */
+    public function setShowFiles(bool $showFiles): Debug
+    {
+        $this->showFiles = $showFiles;
+
+        return $this;
+    }
+
+    /**
+     * Change the base URI for static resources
+     *
+     * @param string $uri
+     *
+     * @return $this
+     */
+    public function setUri(string $uri): Debug
+    {
+        $this->uri = $uri;
+
+        return $this;
     }
 }

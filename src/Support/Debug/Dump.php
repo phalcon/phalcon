@@ -224,7 +224,7 @@ class Dump
      */
     public function variable($variable, string $name = null): string
     {
-        $message = '<pre style="{style}">{output}</pre>';
+        $message = '<pre style="%style%">%output%</pre>';
         $context = [
             'style'  => $this->getStyle('pre'),
             'output' => $this->output($variable, $name),
@@ -310,7 +310,7 @@ class Dump
             foreach ($variable as $key => $value) {
                 $output .= str_repeat($space, $tab);
 
-                $message = "[<span style=\"{style}\">{key}</span>] => ";
+                $message = "[<span style=\"%style%\">%key%</span>] => ";
                 $context = [
                     'style' => $this->getStyle('arr'),
                     'key'   => $key,
@@ -333,7 +333,7 @@ class Dump
         }
 
         if (true === is_object($variable)) {
-            $message = $this->getOutputBold('Object') . ' {class}';
+            $message = $this->getOutputBold('Object') . ' %class%';
             $context = [
                 'style' => $this->getStyle('obj'),
                 'class' => get_class($variable),
@@ -358,8 +358,8 @@ class Dump
                 // Debug only public properties
                 $vars = get_object_vars($variable);
                 foreach ($vars as $key => $value) {
-                    $message = "-><span style=\"{style}\">{key}</span> "
-                        . "(<span style=\"{style}\">{type}</span>) = ";
+                    $message = "-><span style=\"%style%\">%key%</span> "
+                        . "(<span style=\"%style%\">%type%</span>) = ";
                     $context = [
                         'style' => $this->getStyle('obj'),
                         'key'   => $key,
@@ -388,8 +388,8 @@ class Dump
                         Reflection::getModifierNames($property->getModifiers())
                     );
 
-                    $message = "-><span style=\"{style}\">{key}</span> "
-                        . "(<span style=\"{style}\">{type}</span>) = ";
+                    $message = "-><span style=\"%style%\">%key%</span> "
+                        . "(<span style=\"%style%\">%type%</span>) = ";
                     $context = [
                         'style' => $this->getStyle('obj'),
                         'key'   => $key,
@@ -404,8 +404,8 @@ class Dump
             }
 
             $attr    = get_class_methods($variable);
-            $message = "{class} <b style=\"{style}\">methods</b>: "
-                . "(<span style=\"{style}\">{count}</span>) (\n";
+            $message = "%class% <b style=\"%style%\">methods</b>: "
+                . "(<span style=\"%style%\">%count%</span>) (\n";
             $context = [
                 'style' => $this->getStyle('obj'),
                 'class' => get_class($variable),
@@ -422,10 +422,10 @@ class Dump
                 foreach ($attr as $value) {
                     $this->methods[] = get_class($variable);
 
-                    $message = "-><span style=\"{style}\">:method</span>();\n";
+                    $message = "-><span style=\"%style%\">:method</span>();\n";
                     if ('__construct' === $value) {
-                        $message = "-><span style=\"{style}\">:method</span>(); "
-                            . "[<b style=\"{style}\">constructor</b>]\n";
+                        $message = "-><span style=\"%style%\">:method</span>(); "
+                            . "[<b style=\"%style%\">constructor</b>]\n";
                     }
                     $context = [
                         'style'  => $this->getStyle('obj'),
@@ -443,8 +443,8 @@ class Dump
         }
 
         if (true === is_int($variable)) {
-            $message = "<b style=\"{style}\">Integer</b> "
-                . "(<span style=\"{style}\">{var}</span>)";
+            $message = "<b style=\"%style%\">Integer</b> "
+                . "(<span style=\"%style%\">%var%</span>)";
             $context = [
                 'style' => $this->getStyle('int'),
                 'var'   => $variable,
@@ -454,8 +454,8 @@ class Dump
         }
 
         if (true === is_float($variable)) {
-            $message = "<b style=\"{style}\">Float</b> "
-                . "(<span style=\"{style}\">{var}</span>)";
+            $message = "<b style=\"%style%\">Float</b> "
+                . "(<span style=\"%style%\">%var%</span>)";
             $context = [
                 'style' => $this->getStyle('float'),
                 'var'   => $variable,
@@ -465,9 +465,9 @@ class Dump
         }
 
         if (true === is_numeric($variable)) {
-            $message = "<b style=\"{style}\">Numeric String</b> "
-                . "(<span style=\"{style}\">{length}</span>) "
-                . "\"<span style=\"{style}\">{var}</span>\"";
+            $message = "<b style=\"%style%\">Numeric String</b> "
+                . "(<span style=\"%style%\">%length%</span>) "
+                . "\"<span style=\"%style%\">%var%</span>\"";
             $context = [
                 'style'  => $this->getStyle('num'),
                 'length' => mb_strlen($variable),
@@ -478,9 +478,9 @@ class Dump
         }
 
         if (true === is_string($variable)) {
-            $message = "<b style=\"{style}\">String</b> "
-                . "(<span style=\"{style}\">{length}</span>) "
-                . "\"<span style=\"{style}\">{var}</span>\"";
+            $message = "<b style=\"%style%\">String</b> "
+                . "(<span style=\"%style%\">%length%</span>) "
+                . "\"<span style=\"%style%\">%var%</span>\"";
             $context = [
                 'style'  => $this->getStyle('str'),
                 'length' => mb_strlen($variable),
@@ -491,8 +491,8 @@ class Dump
         }
 
         if (true === is_bool($variable)) {
-            $message = "<b style=\"{style}\">Boolean</b> "
-                . "(<span style=\"{style}\">{var}</span>)";
+            $message = "<b style=\"%style%\">Boolean</b> "
+                . "(<span style=\"%style%\">%var%</span>)";
             $context = [
                 'style' => $this->getStyle('bool'),
                 'var'   => ($variable) ? 'TRUE' : 'FALSE',
@@ -502,7 +502,7 @@ class Dump
         }
 
         if (null === $variable) {
-            $message = "<b style=\"{style}\">NULL</b>";
+            $message = "<b style=\"%style%\">NULL</b>";
             $context = [
                 'style' => $this->getStyle('null'),
             ];
@@ -510,7 +510,7 @@ class Dump
             return $output . $this->toInterpolate($message, $context);
         }
 
-        $message = "<b style=\"{style}\">{var}</b>";
+        $message = "<b style=\"%style%\">%var%</b>";
         $context = [
             'style' => $this->getStyle('null'),
             'var'   => $variable,
@@ -526,7 +526,7 @@ class Dump
      */
     private function getOutputBold(string $text): string
     {
-        return "<b style=\"{style}\">" . $text . "</b>";
+        return "<b style=\"%style%\">" . $text . "</b>";
     }
 
     /**
@@ -534,6 +534,6 @@ class Dump
      */
     private function getOutputParenthesis(string $varName): string
     {
-        return "(<span style=\"{style}\">{" . $varName . "}</span>)";
+        return "(<span style=\"%style%\">%" . $varName . "%</span>)";
     }
 }

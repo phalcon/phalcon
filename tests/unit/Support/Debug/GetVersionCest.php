@@ -43,23 +43,22 @@ class GetVersionCest
      * @author Phalcon Team <team@phalcon.io>
      * @since  2020-09-09
      */
-    public function debugGetVersion(UnitTester $I)
+    public function supportDebugGetVersion(UnitTester $I)
     {
         $I->wantToTest('Debug - getVersion()');
 
         $debug   = new Debug();
         $version = new Version();
 
-        $uri           = 'https://docs.phalcon.io/'
+        $target  = '"_new"';
+        $uri     = '"https://docs.phalcon.io/'
             . $version->getPart(Version::VERSION_MAJOR) . '.'
-            . $version->getPart(Version::VERSION_MEDIUM) . '/en/';
-        $versionString = $version->get();
+            . $version->getPart(Version::VERSION_MEDIUM) . '/en/"';
+        $version = $version->get();
 
-
-        $expected = '<div class="version">Phalcon Framework '
-            . '<a href="' . $uri . '" target="_new">' . $versionString . '</a></div>';
-        $actual   = $debug->getVersion();
-
-        $I->assertEquals($expected, $actual);
+        $I->assertEquals(
+            "<div class=\"version\">Phalcon Framework <a href={$uri} target={$target}>{$version}</a></div>",
+            $debug->getVersion()
+        );
     }
 }

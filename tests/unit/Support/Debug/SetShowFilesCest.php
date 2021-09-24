@@ -15,24 +15,17 @@ namespace Phalcon\Tests\Unit\Support\Debug;
 
 use UnitTester;
 
-/**
- * Class ListenExceptionsCest
- *
- * @package Phalcon\Tests\Unit\Support\Debug
- */
-class ListenExceptionsCest
+class SetShowFilesCest
 {
     /**
-     * Tests Phalcon\Debug :: listenExceptions()
-     *
-     * @param UnitTester $I
+     * Tests Phalcon\Debug :: setShowFiles()
      *
      * @author Phalcon Team <team@phalcon.io>
      * @since  2020-09-09
      */
-    public function supportDebugListenExceptions(UnitTester $I)
+    public function supportDebugSetShowFiles(UnitTester $I)
     {
-        $I->wantToTest('Debug - listenExceptions()');
+        $I->wantToTest('Debug - setShowFiles()');
 
         $I->skipTest('Need implementation');
     }

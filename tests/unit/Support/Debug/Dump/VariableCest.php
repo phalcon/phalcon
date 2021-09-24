@@ -31,7 +31,7 @@ class VariableCest
      * @author Phalcon Team <team@phalcon.io>
      * @since  2020-09-09
      */
-    public function debugDumpVariable(UnitTester $I)
+    public function supportDebugDumpVariable(UnitTester $I)
     {
         $I->wantToTest('Debug\Dump - variable()');
 

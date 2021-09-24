@@ -30,7 +30,7 @@ class ListenLowSeverityCest
      * @author Phalcon Team <team@phalcon.io>
      * @since  2020-09-09
      */
-    public function debugListenLowSeverity(UnitTester $I)
+    public function supportDebugListenLowSeverity(UnitTester $I)
     {
         $I->wantToTest('Debug - listenLowSeverity()');
 
