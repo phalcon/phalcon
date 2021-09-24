@@ -21,19 +21,19 @@ use UnitTester;
 
 use function date_default_timezone_get;
 
-class GetNameCest
+class GetLevelCest
 {
     /**
-     * Tests Phalcon\Logger\Item :: getName()
+     * Tests Phalcon\Logger\Item :: getLevel()
      *
      * @param UnitTester $I
      *
      * @author Phalcon Team <team@phalcon.io>
      * @since  2020-09-09
      */
-    public function loggerItemGetName(UnitTester $I)
+    public function loggerItemGetLevel(UnitTester $I)
     {
-        $I->wantToTest('Logger\Item - getName()');
+        $I->wantToTest('Logger\Item - getLevel()');
 
         $timezone = date_default_timezone_get();
         $datetime = new DateTimeImmutable('now', new DateTimeZone($timezone));
@@ -44,9 +44,8 @@ class GetNameCest
             $datetime
         );
 
-        $I->assertEquals(
-            'debug',
-            $item->getName()
-        );
+        $expected = Logger::DEBUG;
+        $actual   = $item->getLevel();
+        $I->assertEquals($expected, $actual);
     }
 }

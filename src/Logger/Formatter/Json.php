@@ -62,7 +62,7 @@ class Json extends AbstractFormatter
 
         return json_encode(
             [
-                'type'      => $item->getName(),
+                'level'     => $item->getLevelName(),
                 'message'   => $message,
                 'timestamp' => $this->getFormattedDate($item),
             ],

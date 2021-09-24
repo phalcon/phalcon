@@ -37,7 +37,7 @@ class Line extends AbstractFormatter
      * @param string $dateFormat
      */
     public function __construct(
-        string $format = '[{date}][{type}] {message}',
+        string $format = '[%date%][%level%] %message%',
         string $dateFormat = 'c'
     ) {
         $this->format     = $format;
@@ -57,9 +57,9 @@ class Line extends AbstractFormatter
         $message = strtr(
             $this->format,
             [
-                '{date}'    => $this->getFormattedDate($item),
-                '{type}'    => $item->getName(),
-                '{message}' => $item->getMessage(),
+                '%date%'    => $this->getFormattedDate($item),
+                '%level%'   => $item->getLevelName(),
+                '%message%' => $item->getMessage(),
             ]
         );
 

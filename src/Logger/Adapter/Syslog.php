@@ -112,7 +112,7 @@ class Syslog extends AbstractAdapter
         }
 
         $this->opened = true;
-        $level        = $this->logLevelToSyslog($item->getType());
+        $level        = $this->logLevelToSyslog($item->getLevel());
 
         \syslog($level, $message);
     }

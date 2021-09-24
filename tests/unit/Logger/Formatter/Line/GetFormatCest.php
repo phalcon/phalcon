@@ -33,7 +33,7 @@ class GetFormatCest
         $formatter = new Line();
 
         $I->assertEquals(
-            '[{date}][{type}] {message}',
+            '[%date%][%level%] %message%',
             $formatter->getFormat()
         );
     }

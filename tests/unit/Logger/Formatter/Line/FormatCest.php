@@ -72,7 +72,7 @@ class FormatCest
     {
         $I->wantToTest('Logger\Formatter\Line - format() - custom');
 
-        $formatter = new Line('{message}-[{type}]-{date}');
+        $formatter = new Line('%message%-[%level%]-%date%');
         $timezone  = date_default_timezone_get();
         $datetime  = new DateTimeImmutable('now', new DateTimeZone($timezone));
         $item      = new Item(
@@ -107,7 +107,7 @@ class FormatCest
         $I->wantToTest('Logger\Formatter\Line - format() - custom - with milliseconds');
 
         $formatter = new Line(
-            '{message}-[{type}]-{date}',
+            '%message%-[%level%]-%date%',
             'U.u'
         );
 

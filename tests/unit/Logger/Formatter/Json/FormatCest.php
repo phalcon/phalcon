@@ -50,7 +50,7 @@ class FormatCest
         );
 
         $expected = sprintf(
-            '{"type":"debug","message":"log message","timestamp":"%s"}',
+            '{"level":"debug","message":"log message","timestamp":"%s"}',
             $datetime->format('c')
         );
 
@@ -85,7 +85,7 @@ class FormatCest
         );
 
         $expected = sprintf(
-            '{"type":"debug","message":"log message","timestamp":"%s"}',
+            '{"level":"debug","message":"log message","timestamp":"%s"}',
             $datetime->format('YmdHis')
         );
 

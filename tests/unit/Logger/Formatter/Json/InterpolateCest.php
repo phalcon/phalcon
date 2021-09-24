@@ -41,7 +41,7 @@ class InterpolateCest
         $I->assertEquals(
             'The sky is blue',
             $formatter->interpolate(
-                'The sky is {color}',
+                'The sky is %color%',
                 [
                     'color' => 'blue',
                 ]
@@ -62,7 +62,7 @@ class InterpolateCest
         $I->wantToTest('Logger\Formatter\Json - interpolate() - format()');
 
         $formatter = new Json();
-        $message   = 'The sky is {color}';
+        $message   = 'The sky is %color%';
         $context   = [
             'color' => 'blue',
         ];
@@ -78,7 +78,7 @@ class InterpolateCest
         );
 
         $expected = sprintf(
-            '{"type":"debug","message":"The sky is blue","timestamp":"%s"}',
+            '{"level":"debug","message":"The sky is blue","timestamp":"%s"}',
             $datetime->format('c')
         );
 

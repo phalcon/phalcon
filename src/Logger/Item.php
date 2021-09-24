@@ -22,9 +22,9 @@ use DateTimeImmutable;
  *
  * @property array             $context
  * @property string            $message
- * @property string            $name
+ * @property int               $level
+ * @property string            $levelName
  * @property DateTimeImmutable $datetime
- * @property int               $type
  */
 class Item
 {
@@ -39,9 +39,14 @@ class Item
     protected string $message;
 
     /**
+     * @var int
+     */
+    protected int $level;
+
+    /**
      * @var string
      */
-    protected string $name;
+    protected string $levelName;
 
     /**
      * @var DateTimeImmutable
@@ -49,31 +54,26 @@ class Item
     protected DateTimeImmutable $datetime;
 
     /**
-     * @var int
-     */
-    protected int $type;
-
-    /**
      * Item constructor.
      *
      * @param string            $message
-     * @param string            $name
-     * @param int               $type
+     * @param string            $levelName
+     * @param int               $level
      * @param DateTimeImmutable $datetime
      * @param array             $context
      */
     public function __construct(
         string $message,
-        string $name,
-        int $type,
+        string $levelName,
+        int $level,
         DateTimeImmutable $datetime,
         array $context = []
     ) {
-        $this->message  = $message;
-        $this->name     = $name;
-        $this->type     = $type;
-        $this->datetime = $datetime;
-        $this->context  = $context;
+        $this->message   = $message;
+        $this->levelName = $levelName;
+        $this->level     = $level;
+        $this->datetime  = $datetime;
+        $this->context   = $context;
     }
 
     /**
@@ -93,37 +93,26 @@ class Item
     }
 
     /**
+     * @return int
+     */
+    public function getLevel(): int
+    {
+        return $this->level;
+    }
+
+    /**
+     * @return string
+     */
+    public function getLevelName(): string
+    {
+        return $this->levelName;
+    }
+
+    /**
      * @return string
      */
     public function getMessage(): string
     {
         return $this->message;
-    }
-
-    /**
-     * @return string
-     */
-    public function getName(): string
-    {
-        return $this->name;
-    }
-
-    /**
-     * Alias of getDateTime
-     *
-     * @return DateTimeImmutable
-     * @deprecated To be removed in v6
-     */
-    public function getTime(): DateTimeImmutable
-    {
-        return $this->getDateTime();
-    }
-
-    /**
-     * @return int
-     */
-    public function getType(): int
-    {
-        return $this->type;
     }
 }
