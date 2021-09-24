@@ -34,7 +34,7 @@ class SetStylesCest
      * @author Phalcon Team <team@phalcon.io>
      * @since  2020-09-09
      */
-    public function debugDumpSetStyles(UnitTester $I)
+    public function supportDebugDumpSetStyles(UnitTester $I)
     {
         $I->wantToTest('Debug\Dump - setStyles()');
 
@@ -68,7 +68,7 @@ class SetStylesCest
      * @author Phalcon Team <team@phalcon.io>
      * @since  2020-09-09
      */
-    public function debugDumpGetStyle(UnitTester $I)
+    public function supportDebugDumpGetStyle(UnitTester $I)
     {
         $I->wantToTest('Debug\Dump - getStyle()');
 

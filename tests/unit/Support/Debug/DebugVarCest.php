@@ -15,24 +15,17 @@ namespace Phalcon\Tests\Unit\Support\Debug;
 
 use UnitTester;
 
-/**
- * Class ListenExceptionsCest
- *
- * @package Phalcon\Tests\Unit\Support\Debug
- */
-class ListenExceptionsCest
+class DebugVarCest
 {
     /**
-     * Tests Phalcon\Debug :: listenExceptions()
-     *
-     * @param UnitTester $I
+     * Tests Phalcon\Debug :: debugVar()
      *
      * @author Phalcon Team <team@phalcon.io>
-     * @since  2020-09-09
+     * @since  2020-02-04
      */
-    public function supportDebugListenExceptions(UnitTester $I)
+    public function supportDebugDebugVar(UnitTester $I)
     {
-        $I->wantToTest('Debug - listenExceptions()');
+        $I->wantToTest('Debug - debugVar()');
 
         $I->skipTest('Need implementation');
     }
