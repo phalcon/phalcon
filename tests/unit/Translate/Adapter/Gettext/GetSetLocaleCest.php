@@ -18,8 +18,6 @@ use Phalcon\Translate\Adapter\Gettext;
 use Phalcon\Translate\InterpolatorFactory;
 use UnitTester;
 
-use const LC_ALL;
-
 /**
  * Class GetSetLocaleCest
  *
@@ -44,12 +42,20 @@ class GetSetLocaleCest
         $params     = $this->getGettextConfig();
         $translator = new Gettext(new InterpolatorFactory(), $params);
 
-        $I->assertEquals('en_US.utf8', $translator->getLocale());
+        $expected = 'en_US.utf8';
+        $actual   = $translator->getLocale();
+        $I->assertEquals($expected, $actual);
 
-        $translator->setLocale(1, 'nl_NL');
-        $I->assertFalse($translator->getLocale());
+        $translator->setLocale(1, ['ru']);
 
-        $translator->setLocale(LC_ALL, 'de_DE@euro', 'de_DE', 'de', 'ge');
-        $I->assertFalse($translator->getLocale());
+        $expected = '';
+        $actual   = $translator->getLocale();
+        $I->assertEquals($expected, $actual);
+
+        $translator->setLocale(1, ['ru_RU.utf8']);
+
+        $expected = 'ru_RU.utf8';
+        $actual   = $translator->getLocale();
+        $I->assertEquals($expected, $actual);
     }
 }

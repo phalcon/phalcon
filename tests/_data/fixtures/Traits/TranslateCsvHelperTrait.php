@@ -208,7 +208,7 @@ trait TranslateCsvHelperTrait
             'mname' => 'D.',
         ];
         $expected = 'Привет, John D. Doe!';
-        $actual   = $translator->{$this->function}('Hello {fname} {mname} {lname}!', $vars);
+        $actual   = $translator->{$this->function}('Hello %fname% %mname% %lname%!', $vars);
         $I->assertEquals($expected, $actual);
     }
 

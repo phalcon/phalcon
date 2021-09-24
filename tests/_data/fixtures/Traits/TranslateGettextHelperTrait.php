@@ -202,7 +202,7 @@ trait TranslateGettextHelperTrait
         ];
 
         $expected = 'Привет, John D. Doe!';
-        $actual   = $translator->{$this->func()}('Привет, {fname} {mname} {lname}!', $vars);
+        $actual   = $translator->{$this->func()}('Привет, %fname% %mname% %lname%!', $vars);
         $I->assertEquals($expected, $actual);
     }
 
