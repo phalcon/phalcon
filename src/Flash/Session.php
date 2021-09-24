@@ -63,11 +63,11 @@ class Session extends AbstractFlash
      */
     public function has(string $type = null): bool
     {
-        if (null === $type) {
-            return true;
-        }
-
         $messages = $this->getSessionMessages(false);
+
+        if (null === $type) {
+            return count($messages) > 0;
+        }
 
         return isset($messages[$type]);
     }
@@ -195,4 +195,47 @@ class Session extends AbstractFlash
             'the "session" service'
         );
     }
+//
+//
+//    /**
+//     * Returns the messages stored in session
+//     *
+//     * @param bool        $remove
+//     * @param string|null $type
+//     *
+//     * @return array
+//     */
+//    protected function getSessionMessages(bool remove, var type = null) -> array
+//    {
+//        var session, messages, returnMessages;
+//
+//        let session  = this->getSessionService(),
+//            messages = session->get("_flashMessages");
+//
+//        /**
+//         * Session might be empty
+//         */
+//        if typeof messages != "array" {
+//        let messages = [];
+//        }
+//
+//        if typeof type == "string" {
+//        if fetch returnMessages, messages[type] {
+//            if remove {
+//                unset(messages[type]);
+//                session->set("_flashMessages", messages);
+//                }
+//
+//            return returnMessages;
+//        }
+//
+//            return [];
+//        }
+//
+//        if remove {
+//            session->remove("_flashMessages");
+//        }
+//
+//        return messages;
+//    }
 }

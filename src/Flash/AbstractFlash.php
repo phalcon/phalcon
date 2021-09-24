@@ -20,6 +20,12 @@ use Phalcon\Html\EscaperInterface;
 use Phalcon\Session\ManagerInterface as SessionInterface;
 use Phalcon\Support\Helper\Str\Traits\InterpolateTrait;
 
+use function is_array;
+use function is_string;
+use function join;
+
+use const PHP_EOL;
+
 /**
  * Shows HTML notifications related to different circumstances. Classes can be
  * stylized using CSS
@@ -104,7 +110,7 @@ abstract class AbstractFlash implements FlashInterface, InjectionAwareInterface
     }
 
     /**
-     * Shows a HTML notice/information message
+     * Shows an HTML notice/information message
      *
      *```php
      * $flash->notice("This is an information");
@@ -162,7 +168,21 @@ abstract class AbstractFlash implements FlashInterface, InjectionAwareInterface
     }
 
     /**
-     * Set an custom template for showing the messages
+     * Set an array with CSS classes to format the icon messages
+     *
+     * @param array $cssIconClasses
+     *
+     * @return $this
+     */
+    public function setCssIconClasses(array $cssIconClasses): AbstractFlash
+    {
+        $this->cssIconClasses = $cssIconClasses;
+
+        return $this;
+    }
+
+    /**
+     * Set a custom template for showing the messages
      *
      * @param string $customTemplate
      *
@@ -292,21 +312,38 @@ abstract class AbstractFlash implements FlashInterface, InjectionAwareInterface
     }
 
     /**
-     * @param string $cssClassses
+     * Returns the template for the CSS classes (with icon classes). It will
+     * either be the custom one (defined) or the default
+     *
+     * @param string $cssClasses
+     * @param string $cssIconClasses
      *
      * @return string
      */
-    private function getTemplate(string $cssClassses): string
+    private function getTemplate(string $cssClasses, string $cssIconClasses): string
     {
-        if ('' === $this->customTemplate) {
-            if ('' === $cssClassses) {
-                return '<div>{message}</div>' . PHP_EOL;
-            }
-
-            return '<div class="{cssClass}">{message}</div>' . PHP_EOL;
+        if (true !== empty($this->customTemplate)) {
+            return $this->customTemplate;
         }
 
-        return $this->customTemplate;
+        $template     = "<div%divString%>%iconString%%message%</div>" . PHP_EOL;
+        $divString    = "";
+        $iconString   = "";
+
+        if (true !== empty($cssClasses)) {
+            $divString = ' class="%cssClass%"';
+            if (true !== empty($cssIconClasses)) {
+                $iconString = '<i class="%cssIconClass%"></i> ';
+            }
+        }
+
+        return $this->toInterpolate(
+            $template,
+            [
+                'divString'  => $divString,
+                'iconString' => $iconString,
+            ]
+        );
     }
 
     /**
@@ -353,11 +390,21 @@ abstract class AbstractFlash implements FlashInterface, InjectionAwareInterface
             $replaceCss = join(' ', $replaceCss);
         }
 
+        $replaceIconCss = $this->cssIconClasses[$type] ?? '';
+        if (true !== empty($replaceIconCss)) {
+            if (true !== is_array($replaceIconCss)) {
+                $replaceIconCss = [$replaceIconCss];
+            }
+
+            $replaceIconCss = join(' ', $replaceIconCss);
+        }
+
         return $this->toInterpolate(
-            $this->getTemplate($replaceCss),
+            $this->getTemplate($replaceCss, $replaceIconCss),
             [
-                'cssClass' => $replaceCss,
-                'message'  => $message,
+                'cssClass'     => $replaceCss,
+                'cssIconClass' => $replaceIconCss,
+                'message'      => $message,
             ]
         );
     }
