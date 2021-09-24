@@ -232,7 +232,7 @@ trait TranslateNativeArrayHelperTrait
             'mname' => 'D.',
         ];
         $expected = 'Привет, John D. Doe!';
-        $actual   = $translator->{$this->func()}('Hello {fname} {mname} {lname}!', $vars);
+        $actual   = $translator->{$this->func()}('Hello %fname% %mname% %lname%!', $vars);
         $I->assertEquals($expected, $actual);
     }
 

@@ -283,17 +283,14 @@ class Gettext extends AbstractAdapter implements ArrayAccess
      * ```
      *
      * @param int    $category
-     * @param string $locale
+     * @param array $locale
      *
      * @return false|string
      */
-    public function setLocale(int $category, string $locale)
+    public function setLocale(int $category, array $localeArray = [])
     {
         $this->category = $category;
-        $this->locale   = call_user_func_array(
-            'setlocale',
-            func_get_args()
-        );
+        $this->locale   = setlocale($category, $localeArray);
 
         putenv("LC_ALL=" . $this->locale);
         putenv("LANG=" . $this->locale);
