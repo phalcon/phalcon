@@ -31,7 +31,7 @@ class SetFormatCest
         $I->wantToTest('Logger\Formatter\Line - setFormat()');
         $formatter = new Line();
 
-        $format = '{message}-[{date}]-[{type}]';
+        $format = '%message%-[%date%]-[%level%]';
         $formatter->setFormat($format);
 
         $expected = $format;

@@ -47,7 +47,7 @@ class GetDateTimeCest
         $expected = $datetime;
         $actual   = $item->getDateTime();
         $I->assertEquals($expected, $actual);
-        $actual = $item->getTime();
+        $actual = $item->getDateTime();
         $I->assertEquals($expected, $actual);
     }
 }
