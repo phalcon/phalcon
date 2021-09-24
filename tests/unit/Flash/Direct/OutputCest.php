@@ -139,7 +139,8 @@ class OutputCest
             [
                 'label'       => 'CLS-ICO-HTML-ESC-IMP-TPL',
                 'message'     => $message,
-                'expected'    => '<div class="successPhalcon"><i class="successIconPhalcon"></i> sample &lt;phalcon&gt; message</div>',
+                'expected'    => '<div class="successPhalcon"><i class="successIconPhalcon">'
+                    . '</i> sample &lt;phalcon&gt; message</div>',
                 'classes'     => $classes,
                 'iconClasses' => $iconClasses,
                 'autoHtml'    => true,
@@ -150,7 +151,9 @@ class OutputCest
             [
                 'label'       => 'CLS-ICO-HTML-ESC-IMP-XXX',
                 'message'     => $message,
-                'expected'    => '<div class="successPhalcon"><i class="successIconPhalcon"></i> sample &lt;phalcon&gt; message</div>' . PHP_EOL,
+                'expected'    => '<div class="successPhalcon">'
+                    . '<i class="successIconPhalcon"></i>'
+                    . ' sample &lt;phalcon&gt; message</div>' . PHP_EOL,
                 'classes'     => $classes,
                 'iconClasses' => $iconClasses,
                 'autoHtml'    => true,
@@ -161,7 +164,9 @@ class OutputCest
             [
                 'label'       => 'CLS-ICO-HTML-ESC-XXX-TPL',
                 'message'     => $message,
-                'expected'    => '<div class="successPhalcon"><i class="successIconPhalcon"></i> sample &lt;phalcon&gt; message</div>',
+                'expected'    => '<div class="successPhalcon">'
+                    . '<i class="successIconPhalcon"></i>'
+                    . ' sample &lt;phalcon&gt; message</div>',
                 'classes'     => $classes,
                 'iconClasses' => $iconClasses,
                 'autoHtml'    => true,
@@ -172,7 +177,9 @@ class OutputCest
             [
                 'label'       => 'CLS-ICO-HTML-ESC-XXX-XXX',
                 'message'     => $message,
-                'expected'    => '<div class="successPhalcon"><i class="successIconPhalcon"></i> sample &lt;phalcon&gt; message</div>' . PHP_EOL,
+                'expected'    => '<div class="successPhalcon">'
+                    . '<i class="successIconPhalcon"></i>'
+                    . ' sample &lt;phalcon&gt; message</div>' . PHP_EOL,
                 'classes'     => $classes,
                 'iconClasses' => $iconClasses,
                 'autoHtml'    => true,
@@ -183,7 +190,9 @@ class OutputCest
             [
                 'label'       => 'CLS-ICO-HTML-XXX-IMP-TPL',
                 'message'     => $message,
-                'expected'    => '<div class="successPhalcon"><i class="successIconPhalcon"></i> sample <phalcon> message</div>',
+                'expected'    => '<div class="successPhalcon">'
+                    . '<i class="successIconPhalcon"></i>'
+                    . ' sample <phalcon> message</div>',
                 'classes'     => $classes,
                 'iconClasses' => $iconClasses,
                 'autoHtml'    => true,
@@ -194,7 +203,9 @@ class OutputCest
             [
                 'label'       => 'CLS-ICO-HTML-XXX-IMP-XXX',
                 'message'     => $message,
-                'expected'    => '<div class="successPhalcon"><i class="successIconPhalcon"></i> sample <phalcon> message</div>' . PHP_EOL,
+                'expected'    => '<div class="successPhalcon">'
+                    . '<i class="successIconPhalcon"></i>'
+                    . ' sample <phalcon> message</div>' . PHP_EOL,
                 'classes'     => $classes,
                 'iconClasses' => $iconClasses,
                 'autoHtml'    => true,
@@ -205,7 +216,9 @@ class OutputCest
             [
                 'label'       => 'CLS-ICO-HTML-XXX-XXX-TPL',
                 'message'     => $message,
-                'expected'    => '<div class="successPhalcon"><i class="successIconPhalcon"></i> sample <phalcon> message</div>',
+                'expected'    => '<div class="successPhalcon">'
+                    . '<i class="successIconPhalcon"></i>'
+                    . ' sample <phalcon> message</div>',
                 'classes'     => $classes,
                 'iconClasses' => $iconClasses,
                 'autoHtml'    => true,
@@ -216,7 +229,9 @@ class OutputCest
             [
                 'label'       => 'CLS-ICO-HTML-XXX-XXX-XXX',
                 'message'     => $message,
-                'expected'    => '<div class="successPhalcon"><i class="successIconPhalcon"></i> sample <phalcon> message</div>' . PHP_EOL,
+                'expected'    => '<div class="successPhalcon">'
+                    . '<i class="successIconPhalcon"></i>'
+                    . ' sample <phalcon> message</div>' . PHP_EOL,
                 'classes'     => $classes,
                 'iconClasses' => $iconClasses,
                 'autoHtml'    => true,
@@ -315,7 +330,8 @@ class OutputCest
             [
                 'label'       => 'CLS-XXX-HTML-ESC-IMP-TPL',
                 'message'     => $message,
-                'expected'    => '<div class="successPhalcon"><i class=""></i> sample &lt;phalcon&gt; message</div>',
+                'expected'    => '<div class="successPhalcon">'
+                    . '<i class=""></i> sample &lt;phalcon&gt; message</div>',
                 'classes'     => $classes,
                 'iconClasses' => [],
                 'autoHtml'    => true,
@@ -326,7 +342,8 @@ class OutputCest
             [
                 'label'       => 'CLS-XXX-HTML-ESC-IMP-XXX',
                 'message'     => $message,
-                'expected'    => '<div class="successPhalcon">sample &lt;phalcon&gt; message</div>' . PHP_EOL,
+                'expected'    => '<div class="successPhalcon">'
+                    . 'sample &lt;phalcon&gt; message</div>' . PHP_EOL,
                 'classes'     => $classes,
                 'iconClasses' => [],
                 'autoHtml'    => true,
@@ -337,7 +354,8 @@ class OutputCest
             [
                 'label'       => 'CLS-XXX-HTML-ESC-XXX-TPL',
                 'message'     => $message,
-                'expected'    => '<div class="successPhalcon"><i class=""></i> sample &lt;phalcon&gt; message</div>',
+                'expected'    => '<div class="successPhalcon">'
+                    . '<i class=""></i> sample &lt;phalcon&gt; message</div>',
                 'classes'     => $classes,
                 'iconClasses' => [],
                 'autoHtml'    => true,
@@ -348,7 +366,8 @@ class OutputCest
             [
                 'label'       => 'CLS-XXX-HTML-ESC-XXX-XXX',
                 'message'     => $message,
-                'expected'    => '<div class="successPhalcon">sample &lt;phalcon&gt; message</div>' . PHP_EOL,
+                'expected'    => '<div class="successPhalcon">'
+                    . 'sample &lt;phalcon&gt; message</div>' . PHP_EOL,
                 'classes'     => $classes,
                 'iconClasses' => [],
                 'autoHtml'    => true,
@@ -359,7 +378,8 @@ class OutputCest
             [
                 'label'       => 'CLS-XXX-HTML-XXX-IMP-TPL',
                 'message'     => $message,
-                'expected'    => '<div class="successPhalcon"><i class=""></i> sample <phalcon> message</div>',
+                'expected'    => '<div class="successPhalcon">'
+                    . '<i class=""></i> sample <phalcon> message</div>',
                 'classes'     => $classes,
                 'iconClasses' => [],
                 'autoHtml'    => true,
@@ -370,7 +390,8 @@ class OutputCest
             [
                 'label'       => 'CLS-XXX-HTML-XXX-IMP-XXX',
                 'message'     => $message,
-                'expected'    => '<div class="successPhalcon">sample <phalcon> message</div>' . PHP_EOL,
+                'expected'    => '<div class="successPhalcon">'
+                    . 'sample <phalcon> message</div>' . PHP_EOL,
                 'classes'     => $classes,
                 'iconClasses' => [],
                 'autoHtml'    => true,
@@ -381,7 +402,8 @@ class OutputCest
             [
                 'label'       => 'CLS-XXX-HTML-XXX-XXX-TPL',
                 'message'     => $message,
-                'expected'    => '<div class="successPhalcon"><i class=""></i> sample <phalcon> message</div>',
+                'expected'    => '<div class="successPhalcon">'
+                    . '<i class=""></i> sample <phalcon> message</div>',
                 'classes'     => $classes,
                 'iconClasses' => [],
                 'autoHtml'    => true,
@@ -392,7 +414,8 @@ class OutputCest
             [
                 'label'       => 'CLS-XXX-HTML-XXX-XXX-XXX',
                 'message'     => $message,
-                'expected'    => '<div class="successPhalcon">sample <phalcon> message</div>' . PHP_EOL,
+                'expected'    => '<div class="successPhalcon">'
+                    . 'sample <phalcon> message</div>' . PHP_EOL,
                 'classes'     => $classes,
                 'iconClasses' => [],
                 'autoHtml'    => true,
@@ -491,7 +514,9 @@ class OutputCest
             [
                 'label'       => 'XXX-ICO-HTML-ESC-IMP-TPL',
                 'message'     => $message,
-                'expected'    => '<div class=""><i class="successIconPhalcon"></i> sample &lt;phalcon&gt; message</div>',
+                'expected'    => '<div class="">'
+                    . '<i class="successIconPhalcon"></i>'
+                    . ' sample &lt;phalcon&gt; message</div>',
                 'classes'     => [],
                 'iconClasses' => $iconClasses,
                 'autoHtml'    => true,
@@ -513,7 +538,9 @@ class OutputCest
             [
                 'label'       => 'XXX-ICO-HTML-ESC-XXX-TPL',
                 'message'     => $message,
-                'expected'    => '<div class=""><i class="successIconPhalcon"></i> sample &lt;phalcon&gt; message</div>',
+                'expected'    => '<div class="">'
+                    . '<i class="successIconPhalcon"></i>'
+                    . ' sample &lt;phalcon&gt; message</div>',
                 'classes'     => [],
                 'iconClasses' => $iconClasses,
                 'autoHtml'    => true,
@@ -535,7 +562,9 @@ class OutputCest
             [
                 'label'       => 'XXX-ICO-HTML-XXX-IMP-TPL',
                 'message'     => $message,
-                'expected'    => '<div class=""><i class="successIconPhalcon"></i> sample <phalcon> message</div>',
+                'expected'    => '<div class="">'
+                    . '<i class="successIconPhalcon"></i>'
+                    . ' sample <phalcon> message</div>',
                 'classes'     => [],
                 'iconClasses' => $iconClasses,
                 'autoHtml'    => true,
@@ -557,7 +586,9 @@ class OutputCest
             [
                 'label'       => 'XXX-ICO-HTML-XXX-XXX-TPL',
                 'message'     => $message,
-                'expected'    => '<div class=""><i class="successIconPhalcon"></i> sample <phalcon> message</div>',
+                'expected'    => '<div class="">'
+                    . '<i class="successIconPhalcon"></i>'
+                    . ' sample <phalcon> message</div>',
                 'classes'     => [],
                 'iconClasses' => $iconClasses,
                 'autoHtml'    => true,
@@ -667,7 +698,9 @@ class OutputCest
             [
                 'label'       => 'XXX-XXX-HTML-ESC-IMP-TPL',
                 'message'     => $message,
-                'expected'    => '<div class=""><i class=""></i> sample &lt;phalcon&gt; message</div>',
+                'expected'    => '<div class="">'
+                    . '<i class=""></i>'
+                    . ' sample &lt;phalcon&gt; message</div>',
                 'classes'     => [],
                 'iconClasses' => [],
                 'autoHtml'    => true,
@@ -689,7 +722,9 @@ class OutputCest
             [
                 'label'       => 'XXX-XXX-HTML-ESC-XXX-TPL',
                 'message'     => $message,
-                'expected'    => '<div class=""><i class=""></i> sample &lt;phalcon&gt; message</div>',
+                'expected'    => '<div class="">'
+                    . '<i class=""></i>'
+                    . ' sample &lt;phalcon&gt; message</div>',
                 'classes'     => [],
                 'iconClasses' => [],
                 'autoHtml'    => true,
@@ -711,7 +746,8 @@ class OutputCest
             [
                 'label'       => 'XXX-XXX-HTML-XXX-IMP-TPL',
                 'message'     => $message,
-                'expected'    => '<div class=""><i class=""></i> sample <phalcon> message</div>',
+                'expected'    => '<div class="">'
+                    . '<i class=""></i> sample <phalcon> message</div>',
                 'classes'     => [],
                 'iconClasses' => [],
                 'autoHtml'    => true,
@@ -733,7 +769,8 @@ class OutputCest
             [
                 'label'       => 'XXX-XXX-HTML-XXX-XXX-TPL',
                 'message'     => $message,
-                'expected'    => '<div class=""><i class=""></i> sample <phalcon> message</div>',
+                'expected'    => '<div class="">'
+                    . '<i class=""></i> sample <phalcon> message</div>',
                 'classes'     => [],
                 'iconClasses' => [],
                 'autoHtml'    => true,
