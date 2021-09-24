@@ -35,8 +35,8 @@ trait InterpolateTrait
     private function toInterpolate(
         string $input,
         array $context = [],
-        string $left = '{',
-        string $right = '}'
+        string $left = '%',
+        string $right = '%'
     ): string {
         if (empty($context)) {
             return $input;

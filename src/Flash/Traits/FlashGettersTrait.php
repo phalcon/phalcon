@@ -55,6 +55,11 @@ trait FlashGettersTrait
     protected array $cssClasses = [];
 
     /**
+     * @var array
+     */
+    protected array $cssIconClasses = [];
+
+    /**
      * @var string
      */
     protected string $customTemplate = '';
@@ -88,6 +93,8 @@ trait FlashGettersTrait
     }
 
     /**
+     * Returns the flag that defines whether to automatically escape content or not
+     *
      * @return bool
      */
     public function getAutoescape(): bool
@@ -96,6 +103,9 @@ trait FlashGettersTrait
     }
 
     /**
+     * Returns the array of the CSS classes for formatting messages. The key is
+     * the type of message and the value is the CSS class
+     *
      * @return array
      */
     public function getCssClasses(): array
@@ -104,6 +114,19 @@ trait FlashGettersTrait
     }
 
     /**
+     * Returns the array of the icon CSS classes for formatting messages. The
+     * key is the type of message and the value is the icon CSS class
+     *
+     * @return array
+     */
+    public function getCssIconClasses(): array
+    {
+        return $this->cssIconClasses;
+    }
+
+    /**
+     * Returns the custom template for formatting messages
+     *
      * @return string
      */
     public function getCustomTemplate(): string
