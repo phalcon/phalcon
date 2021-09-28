@@ -15,14 +15,44 @@ env:
   LC_ALL: en_US.UTF-8
 
 jobs:
+  phpcs:
+    name: Validate Tests code style
+    if: "!contains(github.event.head_commit.message, 'ci skip')"
+
+    runs-on: ubuntu-20.04
+    steps:
+      - uses: actions/checkout@v2
+
+      - name: Run PHP_CodeSniffer
+        run: docker run --rm -v $(pwd):/data cytopia/phpcs --standard=./phpcs.xml
+
+  stubs:
+    name: PHP ${{ matrix.php-versions }} Stubs validation
+    if: "!contains(github.event.head_commit.message, 'ci skip')"
+
+    runs-on: ubuntu-20.04
+
+    strategy:
+      fail-fast: false
+      matrix:
+        php-versions: ['7.4', '8.0']
+
+    steps:
+      - uses: actions/checkout@v2
+
+      - name: Validate stubs
+        if: always()
+        run: vendor/bin/psalm ide/
+
   generate:
+    name: Setup Environments
     # To prevent build a particular commit use
     #     git commit -m "......... [ci skip]"
     if: "!contains(github.event.head_commit.message, 'ci skip')"
 
     runs-on: ubuntu-20.04
-    name: Setup Environments
     steps:
+      - uses: actions/checkout@v2
 
       - name: Setup PHP
         uses: shivammathur/setup-php@v2
@@ -32,11 +62,6 @@ jobs:
           tools: pecl
         env:
           COMPOSER_TOKEN: ${{ secrets.GITHUB_TOKEN }}
-
-      - name: Checkout Code
-        uses: actions/checkout@v2
-        with:
-          fetch-depth: 1
 
       - name: Setup APT Repositories
         run: |
@@ -52,11 +77,13 @@ jobs:
           sudo apt-get install --no-install-recommends -q -y re2c
 
   build-and-test-linux:
+    name: PHP ${{ matrix.php-versions }} Test on ${{ matrix.operating-system }}
     # To prevent build a particular commit use
     #     git commit -m "......... [ci skip]"
-    if: "!contains(github.event.head_commit.message, 'ci skip')"
+    #     git commit -m "......... [linux skip] - to skip only linux builds"
+    if: "!contains(github.event.head_commit.message, '[linux skip]') || !contains(github.event.head_commit.message, 'ci skip')"
 
-    needs: generate
+    needs: [generate]
     services:
       mysql:
         image: mysql:5.7
@@ -90,7 +117,6 @@ jobs:
         operating-system: [ubuntu-20.04]
         php-versions: ['7.4', '8.0']
 
-    name: PHP ${{ matrix.php-versions }} Test on ${{ matrix.operating-system }}
     steps:
       - name: Checkout Code
         uses: actions/checkout@v2
@@ -102,8 +128,7 @@ jobs:
 
       - name: Get Composer Cache Directory
         id: composer-cache
-        run: |
-          echo "::set-output name=dir::$(composer config cache-files-dir)"
+        run: echo "::set-output name=dir::$(composer config cache-files-dir)"
 
       - name: Setup Composer Cache
         uses: actions/cache@v2
@@ -133,7 +158,7 @@ jobs:
           sudo dpkg-reconfigure --frontend=noninteractive locales
           sudo update-locale LANG=en_US.UTF-8
 
-      - name: Install Packages
+      - name: Install Composer Packages
         run: composer install --prefer-dist
 
       - name: Setup Tests
