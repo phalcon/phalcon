@@ -30,7 +30,7 @@ class DropComponentAccessCest
      * @param UnitTester $I
      *
      * @author Phalcon Team <team@phalcon.io>
-     * @since  2020-09-09
+     * @since  2018-11-13
      */
     public function aclAdapterMemoryDropComponentAccess(UnitTester $I)
     {
@@ -78,17 +78,15 @@ class DropComponentAccessCest
             ]
         );
 
-        $I->assertTrue(
-            $acl->isAllowed('Guests', 'Post', 'update')
-        );
-        $I->assertTrue(
-            $acl->isAllowed('Guests', 'News', 'index')
-        );
+        $actual = $acl->isAllowed('Guests', 'Post', 'update');
+        $I->assertTrue($actual);
+
+        $actual = $acl->isAllowed('Guests', 'News', 'index');
+        $I->assertTrue($actual);
 
         $acl->dropComponentAccess('Post', 'index');
-        $I->assertTrue(
-            $acl->isAllowed('Guests', 'Post', 'index')
-        );
+        $actual = $acl->isAllowed('Guests', 'Post', 'index');
+        $I->assertTrue($actual);
 
         $acl->dropComponentAccess(
             'News',
@@ -97,11 +95,10 @@ class DropComponentAccessCest
                 'create',
             ]
         );
-        $I->assertTrue(
-            $acl->isAllowed('Guests', 'News', 'index')
-        );
-        $I->assertTrue(
-            $acl->isAllowed('Guests', 'News', 'create')
-        );
+        $actual = $acl->isAllowed('Guests', 'News', 'index');
+        $I->assertTrue($actual);
+
+        $actual = $acl->isAllowed('Guests', 'News', 'create');
+        $I->assertTrue($actual);
     }
 }

@@ -30,7 +30,7 @@ class GetActiveComponentCest
      * @param UnitTester $I
      *
      * @author Phalcon Team <team@phalcon.io>
-     * @since  2020-09-09
+     * @since  2018-11-13
      */
     public function aclAdapterMemoryGetActiveComponentDefault(UnitTester $I)
     {
@@ -47,7 +47,7 @@ class GetActiveComponentCest
      * @param UnitTester $I
      *
      * @author Phalcon Team <team@phalcon.io>
-     * @since  2020-09-09
+     * @since  2018-11-13
      */
     public function aclAdapterMemoryGetActiveComponent(UnitTester $I)
     {
@@ -63,9 +63,11 @@ class GetActiveComponentCest
 
         $acl->allow('Guests', 'Login', '*');
 
-        $I->assertTrue(
-            $acl->isAllowed('Guests', 'Login', 'index')
-        );
-        $I->assertEquals('Login', $acl->getActiveComponent());
+        $actual = $acl->isAllowed('Guests', 'Login', 'index');
+        $I->assertTrue($actual);
+
+        $expected = 'Login';
+        $actual   = $acl->getActiveComponent();
+        $I->assertEquals($expected, $actual);
     }
 }

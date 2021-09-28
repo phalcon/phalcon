@@ -30,7 +30,7 @@ class GetSetDefaultActionCest
      * @param UnitTester $I
      *
      * @author Phalcon Team <team@phalcon.io>
-     * @since  2020-09-09
+     * @since  2018-11-13
      */
     public function aclAdapterMemoryGetSetDefaultAction(UnitTester $I)
     {
@@ -39,7 +39,9 @@ class GetSetDefaultActionCest
         $acl = new Memory();
         $acl->setDefaultAction(Enum::ALLOW);
 
-        $I->assertEquals(Enum::ALLOW, $acl->getDefaultAction());
+        $expected = Enum::ALLOW;
+        $actual   = $acl->getDefaultAction();
+        $I->assertEquals($expected, $actual);
     }
 
     /**
@@ -48,7 +50,7 @@ class GetSetDefaultActionCest
      * @param UnitTester $I
      *
      * @author Phalcon Team <team@phalcon.io>
-     * @since  2020-09-09
+     * @since  2018-11-13
      */
     public function aclAdapterMemoryGetSetDefaultActionDefault(UnitTester $I)
     {
@@ -56,6 +58,8 @@ class GetSetDefaultActionCest
 
         $acl = new Memory();
 
-        $I->assertEquals(Enum::DENY, $acl->getDefaultAction());
+        $expected = Enum::DENY;
+        $actual   = $acl->getDefaultAction();
+        $I->assertEquals($expected, $actual);
     }
 }

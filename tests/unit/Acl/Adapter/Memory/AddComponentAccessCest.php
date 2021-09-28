@@ -31,7 +31,7 @@ class AddComponentAccessCest
      * @param UnitTester $I
      *
      * @author Phalcon Team <team@phalcon.io>
-     * @since  2020-09-09
+     * @since  2018-11-13
      */
     public function aclAdapterMemoryAddComponentAccess(UnitTester $I)
     {
@@ -39,16 +39,10 @@ class AddComponentAccessCest
 
         $acl = new Memory();
 
-        $component = new Component('Customer', 'Customer component');
-        $added     = $acl->addComponent(
-            'Customer',
-            ['index']
-        );
-
-        $accessAdded = $acl->addComponentAccess(
-            'Customer',
-            ['new']
-        );
+        $component   = new Component('Customer', 'Customer component');
+        $added       = $acl->addComponent('Customer', ['index']);
+        $I->assertTrue($added);
+        $accessAdded = $acl->addComponentAccess('Customer', ['new']);
 
         $I->assertTrue($accessAdded);
     }
@@ -59,14 +53,14 @@ class AddComponentAccessCest
      * @param UnitTester $I
      *
      * @author Phalcon Team <team@phalcon.io>
-     * @since  2020-09-09
+     * @since  2018-11-13
      */
     public function aclAdapterMemoryAddComponentAccessUnknown(UnitTester $I)
     {
         $I->wantToTest('Acl\Adapter\Memory - addComponentAccess() - unknown');
 
         $I->expectThrowable(
-            new Exception('Component "Post" does not exist in the ACL'),
+            new Exception("Component 'Post' does not exist in the ACL"),
             function () {
                 $acl = new Memory();
                 $acl->addComponentAccess('Post', ['update']);
@@ -81,7 +75,7 @@ class AddComponentAccessCest
      * @param UnitTester $I
      *
      * @author Phalcon Team <team@phalcon.io>
-     * @since  2020-09-09
+     * @since  2018-11-13
      */
     public function aclAdapterMemoryAddComponentAccessWrongAccessList(UnitTester $I)
     {

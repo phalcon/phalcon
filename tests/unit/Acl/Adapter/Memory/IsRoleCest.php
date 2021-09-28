@@ -30,7 +30,7 @@ class IsRoleCest
      * @param UnitTester $I
      *
      * @author Phalcon Team <team@phalcon.io>
-     * @since  2020-09-09
+     * @since  2018-11-13
      */
     public function aclAdapterMemoryIsRole(UnitTester $I)
     {
@@ -41,7 +41,8 @@ class IsRoleCest
 
         $acl->addRole($aclRole);
 
-        $I->assertTrue($acl->isRole('Administrators'));
+        $actual = $acl->isRole('Administrators');
+        $I->assertTrue($actual);
     }
 
     /**
@@ -50,7 +51,7 @@ class IsRoleCest
      * @param UnitTester $I
      *
      * @author Phalcon Team <team@phalcon.io>
-     * @since  2020-09-09
+     * @since  2018-11-13
      */
     public function aclAdapterMemoryIsRoleUnknown(UnitTester $I)
     {
@@ -61,6 +62,7 @@ class IsRoleCest
 
         $acl->addRole($aclRole);
 
-        $I->assertFalse($acl->isRole('unknown'));
+        $actual = $acl->isRole('unknown');
+        $I->assertFalse($actual);
     }
 }

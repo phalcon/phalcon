@@ -16,7 +16,7 @@ namespace Phalcon\Acl;
 use Phalcon\Acl\Traits\ItemTrait;
 
 /**
- * This class defines role entity and its description
+ * This class defines component entity and its description
  */
 class Component implements ComponentInterface
 {

@@ -30,7 +30,7 @@ class DenyCest
      * @param UnitTester $I
      *
      * @author Phalcon Team <team@phalcon.io>
-     * @since  2020-09-09
+     * @since  2018-11-13
      */
     public function aclAdapterMemoryDeny(UnitTester $I)
     {
@@ -44,12 +44,10 @@ class DenyCest
 
         $acl->deny('Member', 'Post', 'update');
 
-        $I->assertTrue(
-            $acl->isAllowed('Guest', 'Post', 'update')
-        );
+        $actual = $acl->isAllowed('Guest', 'Post', 'update');
+        $I->assertTrue($actual);
 
-        $I->assertFalse(
-            $acl->isAllowed('Member', 'Post', 'update')
-        );
+        $actual = $acl->isAllowed('Member', 'Post', 'update');
+        $I->assertFalse($actual);
     }
 }

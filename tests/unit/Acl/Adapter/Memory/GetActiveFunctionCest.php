@@ -31,8 +31,8 @@ class GetActiveFunctionCest
      *
      * @param UnitTester $I
      *
-     * @author Phalcon Team <team@phalcon.io>
-     * @since  2020-09-09
+     * @author  Wojciech Slawski <jurigag@gmail.com>
+     * @since   2017-01-13
      */
     public function aclAdapterMemoryGetActiveFunction(UnitTester $I)
     {
@@ -50,21 +50,29 @@ class GetActiveFunctionCest
         );
 
         $acl->allow('Guests', 'Post', 'create', $function);
-        $I->assertTrue(
-            $acl->isAllowed(
-                'Guests',
-                'Post',
-                'create',
-                [
-                    'a' => 1,
-                ]
-            )
-        );
 
+        $actual = $acl->isAllowed(
+            'Guests',
+            'Post',
+            'create',
+            [
+                'a' => 1,
+            ]
+        );
+        $I->assertTrue($actual);
 
         $returnedFunction = $acl->getActiveFunction();
-        $I->assertInstanceOf(Closure::class, $returnedFunction);
-        $I->assertEquals(1, $function(1));
-        $I->assertEquals(1, $acl->getActiveFunctionCustomArgumentsCount());
+
+        $class  = Closure::class;
+        $actual = $returnedFunction;
+        $I->assertInstanceOf($class, $actual);
+
+        $expected = 1;
+        $actual   = $function(1);
+        $I->assertEquals($expected, $actual);
+
+        $expected = 1;
+        $actual   = $acl->getActiveFunctionCustomArgumentsCount();
+        $I->assertEquals($expected, $actual);
     }
 }

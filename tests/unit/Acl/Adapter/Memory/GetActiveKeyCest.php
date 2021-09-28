@@ -30,8 +30,8 @@ class GetActiveKeyCest
      *
      * @param UnitTester $I
      *
-     * @author Phalcon Team <team@phalcon.io>
-     * @since  2020-09-09
+     * @author  Wojciech Slawski <jurigag@gmail.com>
+     * @since   2017-01-13
      */
     public function aclAdapterMemoryGetActiveKey(UnitTester $I)
     {
@@ -46,10 +46,11 @@ class GetActiveKeyCest
 
         $acl->allow('Guests', 'Post', 'create');
 
-        $I->assertTrue(
-            $acl->isAllowed('Guests', 'Post', 'create')
-        );
+        $actual = $acl->isAllowed('Guests', 'Post', 'create');
+        $I->assertTrue($actual);
 
-        $I->assertEquals('Guests!Post!create', $acl->getActiveKey());
+        $expected = 'Guests!Post!create';
+        $actual   = $acl->getActiveKey();
+        $I->assertEquals($expected, $actual);
     }
 }

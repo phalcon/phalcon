@@ -30,14 +30,13 @@ class GetRolesCest
      * @param UnitTester $I
      *
      * @author Phalcon Team <team@phalcon.io>
-     * @since  2020-09-09
+     * @since  2018-11-13
      */
     public function aclAdapterMemoryGetRoles(UnitTester $I)
     {
         $I->wantToTest('Acl\Adapter\Memory - getRoles()');
 
-        $acl = new Memory();
-
+        $acl   = new Memory();
         $role1 = new Role('Admin');
         $role2 = new Role('Guest');
 

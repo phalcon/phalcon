@@ -367,8 +367,8 @@ class Memory extends AbstractAdapter
              */
             if (true !== isset($this->roles[$roleInheritName])) {
                 throw new Exception(
-                    'Role "' . $roleInheritName .
-                    '" (to inherit) does not exist in the role list'
+                    "Role '" . $roleInheritName .
+                    "' (to inherit) does not exist in the role list"
                 );
             }
 
@@ -398,8 +398,8 @@ class Memory extends AbstractAdapter
                     $usedRoleToInherits[$checkRoleToInherit] = true;
                     if ($roleName === $checkRoleToInherit) {
                         throw new Exception(
-                            'Role "' . $roleInheritName .
-                            '" (to inherit) produces an infinite loop'
+                            "Role '" . $roleInheritName .
+                            "' (to inherit) produces an infinite loop"
                         );
                     }
 
@@ -646,10 +646,10 @@ class Memory extends AbstractAdapter
      * $acl->isAllowed("guests", "*", "edit");
      * ```
      *
-     * @param mixed  $roleName
-     * @param mixed  $componentName
-     * @param string $access
-     * @param array<int|string, mixed>  $parameters
+     * @param mixed                    $roleName
+     * @param mixed                    $componentName
+     * @param string                   $access
+     * @param array<int|string, mixed> $parameters
      *
      * @return bool
      * @throws Exception
@@ -662,7 +662,7 @@ class Memory extends AbstractAdapter
         array $parameters = []
     ): bool {
         $componentObject = null;
-        $haveAccess      = false;
+        $haveAccess      = null;
         $funcAccess      = null;
         $roleObject      = null;
         $hasComponent    = false;
@@ -704,7 +704,7 @@ class Memory extends AbstractAdapter
 
         $this->activeFunctionCustomArgumentsCount = 0;
 
-        if (false === $this->fireEvent('acl:beforeCheckAccess')) {
+        if (false === $this->fireManagerEvent('acl:beforeCheckAccess')) {
             return false;
         }
 
@@ -719,7 +719,7 @@ class Memory extends AbstractAdapter
          * Check if there is a direct combination for role-component-access
          */
         $accessKey = $this->canAccess($roleName, $componentName, $access);
-        if (false !== $accessKey && true === isset($this->access[$accessKey])) {
+        if (null !== $accessKey && true === isset($this->access[$accessKey])) {
             $haveAccess = $this->access[$accessKey];
             $funcAccess = $this->functions[$accessKey] ?? null;
         }
@@ -727,8 +727,8 @@ class Memory extends AbstractAdapter
         /**
          * Check in the inherits roles
          */
-        $this->accessGranted = $haveAccess;
-        $this->fireEvent('acl:afterCheckAccess');
+        $this->accessGranted = (null === $haveAccess) ? false : $haveAccess;
+        $this->fireManagerEvent('acl:afterCheckAccess');
 
         $this->activeKey      = $accessKey ?: null;
         $this->activeFunction = $funcAccess;
@@ -740,7 +740,7 @@ class Memory extends AbstractAdapter
              */
             $this->activeKey = $roleName . '!' . $componentName . '!' . $access;
 
-            return $this->defaultAccess == Enum::ALLOW;
+            return $this->defaultAccess === Enum::ALLOW;
         }
 
         /**
@@ -827,10 +827,10 @@ class Memory extends AbstractAdapter
 
             if (count($parameters) > $userParametersSizeShouldBe) {
                 trigger_error(
-                    'Number of parameters in array is higher than ' .
-                    'the number of parameters in defined function when checking if "' .
-                    $roleName . '" can "' . $access . '" "' . $componentName .
-                    '". Extra parameters will be ignored.',
+                    "Number of parameters in array is higher than " .
+                    "the number of parameters in defined function when checking if '" .
+                    $roleName . "' can '" . $access . "' '" . $componentName .
+                    "'. Extra parameters will be ignored.",
                     E_USER_WARNING
                 );
             }
@@ -839,10 +839,10 @@ class Memory extends AbstractAdapter
             if (true === empty($parametersForFunction)) {
                 if ($numberOfRequiredParameters > 0) {
                     trigger_error(
-                        'You did not provide any parameters when "' .
-                        $roleName . '" can "' . $access .
-                        '" "' . $componentName .
-                        '". We will use default action when no arguments.'
+                        "You did not provide any parameters when '" .
+                        $roleName . "' can '" . $access .
+                        "' '" . $componentName .
+                        "'. We will use default action when no arguments."
                     );
 
                     return $haveAccess == Enum::ALLOW &&
@@ -865,9 +865,9 @@ class Memory extends AbstractAdapter
 
             // We don't have enough parameters
             throw new Exception(
-                'You did not provide all necessary parameters for the ' .
-                'defined function when checking if "' . $roleName . '" can "' .
-                $access . '" for "' . $componentName . '".'
+                "You did not provide all necessary parameters for the " .
+                "defined function when checking if '" . $roleName . "' can '" .
+                $access . "' for '" . $componentName . "'."
             );
         }
 
@@ -936,9 +936,9 @@ class Memory extends AbstractAdapter
                 $accessKey = $componentName . '!' . $accessName;
                 if (true !== isset($this->accessList[$accessKey])) {
                     throw new Exception(
-                        'Access "' . $accessName .
-                        '" does not exist in component "' .
-                        $componentName . '"'
+                        "Access '" . $accessName .
+                        "' does not exist in component '" .
+                        $componentName . "'"
                     );
                 }
             }
@@ -955,9 +955,9 @@ class Memory extends AbstractAdapter
                 $accessKey = $componentName . '!' . $access;
                 if (true !== isset($this->accessList[$accessKey])) {
                     throw new Exception(
-                        'Access "' . $access .
-                        '" does not exist in component "' .
-                        $componentName . '"'
+                        "Access '" . $access .
+                        "' does not exist in component '" .
+                        $componentName . "'"
                     );
                 }
             }
@@ -977,13 +977,13 @@ class Memory extends AbstractAdapter
      * @param string $componentName
      * @param string $access
      *
-     * @return string|bool
+     * @return string|null
      */
     private function canAccess(
         string $roleName,
         string $componentName,
         string $access
-    ) {
+    ): ?string {
         /**
          * Check if there is a direct combination for role-component-access
          */
@@ -1043,13 +1043,14 @@ class Memory extends AbstractAdapter
             }
         }
 
-        return false;
+        return null;
     }
 
     /**
-     * @param array<string, mixed>  $collection
-     * @param string $element
-     * @param string $elementName
+     * @param array<string, mixed> $collection
+     * @param string               $element
+     * @param string               $elementName
+     * @param string               $suffix
      *
      * @throws Exception
      */
@@ -1061,8 +1062,8 @@ class Memory extends AbstractAdapter
     ): void {
         if (true !== isset($collection[$element])) {
             throw new Exception(
-                $elementName . ' "' . $element .
-                '" does not exist in the ' . $suffix
+                $elementName . " '" . $element .
+                "' does not exist in the " . $suffix
             );
         }
     }

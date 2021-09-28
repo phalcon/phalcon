@@ -16,6 +16,26 @@ namespace Phalcon\Acl;
 /**
  * Interface for Phalcon\Acl\Component
  */
-interface ComponentInterface extends RoleInterface
+interface ComponentInterface
 {
+    /**
+     * Returns the component name
+     *
+     * @return string
+     */
+    public function getName(): string;
+
+    /**
+     * Returns component description
+     *
+     * @return string|null
+     */
+    public function getDescription(): ?string;
+
+    /**
+     * Magic method __toString
+     *
+     * @return string
+     */
+    public function __toString(): string;
 }

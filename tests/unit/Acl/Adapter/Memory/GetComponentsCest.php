@@ -30,20 +30,18 @@ class GetComponentsCest
      * @param UnitTester $I
      *
      * @author Phalcon Team <team@phalcon.io>
-     * @since  2020-09-09
+     * @since  2018-11-13
      */
     public function aclAdapterMemoryGetComponents(UnitTester $I)
     {
         $I->wantToTest('Acl\Adapter\Memory - getComponents()');
 
-        $acl = new Memory();
-
+        $acl        = new Memory();
         $component1 = new Component('Posts');
         $component2 = new Component('Tags');
 
         $acl->addComponent($component1, ['index']);
         $acl->addComponent($component2, ['index']);
-
 
         $expected = [
             'Posts' => $component1,
