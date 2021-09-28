@@ -55,7 +55,7 @@ trait EventsAwareTrait
      *
      * @return mixed|bool
      */
-    protected function fireEvent(
+    protected function fireManagerEvent(
         string $eventName,
         $data = null,
         bool $cancellable = true
