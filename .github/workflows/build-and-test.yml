@@ -26,24 +26,24 @@ jobs:
       - name: Run PHP_CodeSniffer
         run: docker run --rm -v $(pwd):/data cytopia/phpcs --standard=./phpcs.xml
 
-  stubs:
-    name: PHP ${{ matrix.php-versions }} Stubs validation
-    if: "!contains(github.event.head_commit.message, 'ci skip')"
-
-    runs-on: ubuntu-20.04
-
-    strategy:
-      fail-fast: false
-      matrix:
-        php-versions: ['7.4', '8.0']
-
-    steps:
-      - uses: actions/checkout@v2
-
-      - name: Validate stubs
-        if: always()
-        run: vendor/bin/psalm ide/
-
+#  stubs:
+#    name: PHP ${{ matrix.php-versions }} Stubs validation
+#    if: "!contains(github.event.head_commit.message, 'ci skip')"
+#
+#    runs-on: ubuntu-20.04
+#
+#    strategy:
+#      fail-fast: false
+#      matrix:
+#        php-versions: ['7.4', '8.0']
+#
+#    steps:
+#      - uses: actions/checkout@v2
+#
+#      - name: Validate stubs
+#        if: always()
+#        run: vendor/bin/psalm ide/
+#
   generate:
     name: Setup Environments
     # To prevent build a particular commit use
