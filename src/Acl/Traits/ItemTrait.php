@@ -33,7 +33,7 @@ trait ItemTrait
     /**
      * Role description
      *
-     * @var string
+     * @var string|null
      */
     private ?string $description = null;
 

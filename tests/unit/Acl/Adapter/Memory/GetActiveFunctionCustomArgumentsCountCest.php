@@ -32,7 +32,7 @@ class GetActiveFunctionCustomArgumentsCountCest
      * @param UnitTester $I
      *
      * @author Phalcon Team <team@phalcon.io>
-     * @since  2020-09-09
+     * @since  2018-11-13
      */
     public function aclAdapterMemoryGetActiveFunctionCustomArgumentsCount(UnitTester $I)
     {
@@ -67,9 +67,8 @@ class GetActiveFunctionCustomArgumentsCountCest
 
         $I->assertTrue($isAllowed);
 
-        $I->assertEquals(
-            2,
-            $acl->getActiveFunctionCustomArgumentsCount()
-        );
+        $expected = 2;
+        $actual   =$acl->getActiveFunctionCustomArgumentsCount();
+        $I->assertEquals($expected, $actual);
     }
 }

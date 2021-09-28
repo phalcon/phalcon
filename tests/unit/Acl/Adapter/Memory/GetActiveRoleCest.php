@@ -30,7 +30,7 @@ class GetActiveRoleCest
      * @param UnitTester $I
      *
      * @author Phalcon Team <team@phalcon.io>
-     * @since  2020-09-09
+     * @since  2018-11-13
      */
     public function aclAdapterMemoryGetActiveRoleDefault(UnitTester $I)
     {
@@ -38,9 +38,8 @@ class GetActiveRoleCest
 
         $acl = new Memory();
 
-        $I->assertNull(
-            $acl->getActiveRole()
-        );
+        $actual = $acl->getActiveRole();
+        $I->assertNull($actual);
     }
 
     /**
@@ -49,7 +48,7 @@ class GetActiveRoleCest
      * @param UnitTester $I
      *
      * @author Phalcon Team <team@phalcon.io>
-     * @since  2020-09-09
+     * @since  2018-11-13
      */
     public function aclAdapterMemoryGetActiveRole(UnitTester $I)
     {
@@ -62,10 +61,11 @@ class GetActiveRoleCest
         $acl->allow('Guests', 'Login', '*');
 
 
-        $I->assertTrue(
-            $acl->isAllowed('Guests', 'Login', 'index')
-        );
+        $actual = $acl->isAllowed('Guests', 'Login', 'index');
+        $I->assertTrue($actual);
 
-        $I->assertEquals('Guests', $acl->getActiveRole());
+        $expected = 'Guests';
+        $actual   = $acl->getActiveRole();
+        $I->assertEquals($expected, $actual);
     }
 }

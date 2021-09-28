@@ -29,7 +29,7 @@ class ToStringCest
      * @param UnitTester $I
      *
      * @author Phalcon Team <team@phalcon.io>
-     * @since  2020-09-09
+     * @since  2018-11-13
      */
     public function aclRoleToString(UnitTester $I)
     {

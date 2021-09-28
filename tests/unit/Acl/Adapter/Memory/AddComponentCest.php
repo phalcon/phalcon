@@ -30,14 +30,13 @@ class AddComponentCest
      * @param UnitTester $I
      *
      * @author Phalcon Team <team@phalcon.io>
-     * @since  2020-09-09
+     * @since  2018-11-13
      */
     public function aclAdapterMemoryAddComponentString(UnitTester $I)
     {
         $I->wantToTest('Acl\Adapter\Memory - addComponent() - string');
 
-        $acl       = new Memory();
-        $component = new Component('Customer', 'Customer component');
+        $acl = new Memory();
 
         $actual = $acl->addComponent('Customer', ['index']);
         $I->assertTrue($actual);
@@ -49,7 +48,7 @@ class AddComponentCest
      * @param UnitTester $I
      *
      * @author Phalcon Team <team@phalcon.io>
-     * @since  2020-09-09
+     * @since  2018-11-13
      */
     public function aclAdapterMemoryAddComponentObject(UnitTester $I)
     {
@@ -68,7 +67,7 @@ class AddComponentCest
      * @param UnitTester $I
      *
      * @author Phalcon Team <team@phalcon.io>
-     * @since  2020-09-09
+     * @since  2018-11-13
      */
     public function aclAdapterMemoryAddComponentNumericKey(UnitTester $I)
     {

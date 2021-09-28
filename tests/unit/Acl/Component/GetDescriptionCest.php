@@ -29,7 +29,7 @@ class GetDescriptionCest
      * @param UnitTester $I
      *
      * @author Phalcon Team <team@phalcon.io>
-     * @since  2020-09-09
+     * @since  2018-11-13
      */
     public function aclComponentGetDescription(UnitTester $I)
     {
@@ -49,7 +49,7 @@ class GetDescriptionCest
      * @param UnitTester $I
      *
      * @author Phalcon Team <team@phalcon.io>
-     * @since  2020-09-09
+     * @since  2018-11-13
      */
     public function aclComponentGetDescriptionEmpty(UnitTester $I)
     {
