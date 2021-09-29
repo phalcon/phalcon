@@ -11,9 +11,9 @@
 
 declare(strict_types=1);
 
-namespace Phalcon\Tests\Unit\Collection\Collection;
+namespace Phalcon\Tests\Unit\Support\Collection\Collection;
 
-use Phalcon\Collection\Collection;
+use Phalcon\Support\Collection;
 use UnitTester;
 
 class ToArrayCest
@@ -26,9 +26,9 @@ class ToArrayCest
      * @author Phalcon Team <team@phalcon.io>
      * @since  2020-09-09
      */
-    public function collectionToArray(UnitTester $I)
+    public function supportCollectionToArray(UnitTester $I)
     {
-        $I->wantToTest('Collection - toArray()');
+        $I->wantToTest('Support\Collection - toArray()');
 
         $data = [
             'one'   => 'two',

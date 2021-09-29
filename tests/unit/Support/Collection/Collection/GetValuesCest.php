@@ -11,9 +11,9 @@
 
 declare(strict_types=1);
 
-namespace Phalcon\Tests\Unit\Collection\Collection;
+namespace Phalcon\Tests\Unit\Support\Collection\Collection;
 
-use Phalcon\Collection\Collection;
+use Phalcon\Support\Collection;
 use UnitTester;
 
 class GetValuesCest
@@ -26,9 +26,9 @@ class GetValuesCest
      * @author Phalcon Team <team@phalcon.io>
      * @since  2020-09-09
      */
-    public function collectionGetValues(UnitTester $I)
+    public function supportCollectionGetValues(UnitTester $I)
     {
-        $I->wantToTest('Collection - getValues()');
+        $I->wantToTest('Support\Collection - getValues()');
 
         $data = [
             'one'   => 'two',

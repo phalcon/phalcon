@@ -11,9 +11,9 @@
 
 declare(strict_types=1);
 
-namespace Phalcon\Tests\Unit\Collection\Collection;
+namespace Phalcon\Tests\Unit\Support\Collection\Collection;
 
-use Phalcon\Collection\Collection;
+use Phalcon\Support\Collection;
 use UnitTester;
 
 class RemoveCest
@@ -26,9 +26,9 @@ class RemoveCest
      * @author Phalcon Team <team@phalcon.io>
      * @since  2020-09-09
      */
-    public function collectionRemove(UnitTester $I)
+    public function supportCollectionRemove(UnitTester $I)
     {
-        $I->wantToTest('Collection - remove()');
+        $I->wantToTest('Support\Collection - remove()');
         $data       = [
             'one'   => 'two',
             'three' => 'four',

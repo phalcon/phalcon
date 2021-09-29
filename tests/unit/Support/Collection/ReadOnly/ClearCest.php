@@ -11,24 +11,24 @@
 
 declare(strict_types=1);
 
-namespace Phalcon\Tests\Unit\Collection\ReadOnly;
+namespace Phalcon\Tests\Unit\Support\Collection\ReadOnly;
 
-use Phalcon\Collection\ReadOnly;
+use Phalcon\Support\Collection\ReadOnly;
 use UnitTester;
 
 class ClearCest
 {
     /**
-     * Tests Phalcon\Collection\ReadOnly :: clear()
+     * Tests Phalcon\Support\Collection\ReadOnly :: clear()
      *
      * @param UnitTester $I
      *
      * @author Phalcon Team <team@phalcon.io>
      * @since  2020-09-09
      */
-    public function collectionClear(UnitTester $I)
+    public function supportCollectionClear(UnitTester $I)
     {
-        $I->wantToTest('ReadOnly - clear()');
+        $I->wantToTest('Support\Collection\ReadOnly - clear()');
 
         $data = [
             'one'   => 'two',

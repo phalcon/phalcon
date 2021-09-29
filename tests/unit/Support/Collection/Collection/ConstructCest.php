@@ -11,9 +11,9 @@
 
 declare(strict_types=1);
 
-namespace Phalcon\Tests\Unit\Collection\Collection;
+namespace Phalcon\Tests\Unit\Support\Collection\Collection;
 
-use Phalcon\Collection\Collection;
+use Phalcon\Support\Collection;
 use UnitTester;
 
 class ConstructCest
@@ -26,9 +26,9 @@ class ConstructCest
      * @author Phalcon Team <team@phalcon.io>
      * @since  2020-09-09
      */
-    public function collectionConstruct(UnitTester $I)
+    public function supportCollectionConstruct(UnitTester $I)
     {
-        $I->wantToTest('Collection - __construct()');
+        $I->wantToTest('Support\Collection - __construct()');
 
         $collection = new Collection();
 

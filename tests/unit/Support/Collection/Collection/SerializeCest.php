@@ -11,9 +11,9 @@
 
 declare(strict_types=1);
 
-namespace Phalcon\Tests\Unit\Collection\Collection;
+namespace Phalcon\Tests\Unit\Support\Collection\Collection;
 
-use Phalcon\Collection\Collection;
+use Phalcon\Support\Collection;
 use UnitTester;
 
 class SerializeCest
@@ -26,9 +26,9 @@ class SerializeCest
      * @author Phalcon Team <team@phalcon.io>
      * @since  2020-09-09
      */
-    public function collectionSerialize(UnitTester $I)
+    public function supportCollectionSerialize(UnitTester $I)
     {
-        $I->wantToTest('Collection - serialize()');
+        $I->wantToTest('Support\Collection - serialize()');
 
         $data = [
             'one'   => 'two',

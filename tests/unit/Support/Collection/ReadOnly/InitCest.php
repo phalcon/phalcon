@@ -11,24 +11,24 @@
 
 declare(strict_types=1);
 
-namespace Phalcon\Tests\Unit\Collection\ReadOnly;
+namespace Phalcon\Tests\Unit\Support\Collection\ReadOnly;
 
-use Phalcon\Collection\ReadOnly;
+use Phalcon\Support\Collection\ReadOnly;
 use UnitTester;
 
 class InitCest
 {
     /**
-     * Tests Phalcon\Collection\ReadOnly :: init()
+     * Tests Phalcon\Support\Collection\ReadOnly :: init()
      *
      * @param UnitTester $I
      *
      * @author Phalcon Team <team@phalcon.io>
      * @since  2020-09-09
      */
-    public function collectionInit(UnitTester $I)
+    public function supportCollectionInit(UnitTester $I)
     {
-        $I->wantToTest('ReadOnly - init()');
+        $I->wantToTest('Support\Collection\ReadOnly - init()');
 
         $data = [
             'one'   => 'two',

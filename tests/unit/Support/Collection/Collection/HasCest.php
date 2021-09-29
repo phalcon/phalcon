@@ -11,9 +11,9 @@
 
 declare(strict_types=1);
 
-namespace Phalcon\Tests\Unit\Collection\Collection;
+namespace Phalcon\Tests\Unit\Support\Collection\Collection;
 
-use Phalcon\Collection\Collection;
+use Phalcon\Support\Collection;
 use UnitTester;
 
 class HasCest
@@ -26,9 +26,9 @@ class HasCest
      * @author Phalcon Team <team@phalcon.io>
      * @since  2020-09-09
      */
-    public function collectionHas(UnitTester $I)
+    public function supportCollectionHas(UnitTester $I)
     {
-        $I->wantToTest('Collection - has()');
+        $I->wantToTest('Support\Collection - has()');
 
         $data = [
             'one'   => 'two',
@@ -77,9 +77,9 @@ class HasCest
      * @author Phalcon Team <team@phalcon.io>
      * @since  2020-09-09
      */
-    public function collectionHasSensitive(UnitTester $I)
+    public function supportCollectionHasSensitive(UnitTester $I)
     {
-        $I->wantToTest('Collection - has()');
+        $I->wantToTest('Support\Collection - has()');
 
         $data = [
             'one'   => 'two',

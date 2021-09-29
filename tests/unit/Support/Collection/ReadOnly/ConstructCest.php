@@ -11,24 +11,24 @@
 
 declare(strict_types=1);
 
-namespace Phalcon\Tests\Unit\Collection\ReadOnly;
+namespace Phalcon\Tests\Unit\Support\Collection\ReadOnly;
 
-use Phalcon\Collection\ReadOnly;
+use Phalcon\Support\Collection\ReadOnly;
 use UnitTester;
 
 class ConstructCest
 {
     /**
-     * Tests Phalcon\Collection\ReadOnly :: __construct()
+     * Tests Phalcon\Support\Collection\ReadOnly :: __construct()
      *
      * @param UnitTester $I
      *
      * @author Phalcon Team <team@phalcon.io>
      * @since  2020-09-09
      */
-    public function collectionConstruct(UnitTester $I)
+    public function supportCollectionConstruct(UnitTester $I)
     {
-        $I->wantToTest('ReadOnly - __construct()');
+        $I->wantToTest('Support\Collection\ReadOnly - __construct()');
         $collection = new ReadOnly();
 
         $class = ReadOnly::class;

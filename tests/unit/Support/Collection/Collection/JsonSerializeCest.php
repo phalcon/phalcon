@@ -11,9 +11,9 @@
 
 declare(strict_types=1);
 
-namespace Phalcon\Tests\Unit\Collection\Collection;
+namespace Phalcon\Tests\Unit\Support\Collection\Collection;
 
-use Phalcon\Collection\Collection;
+use Phalcon\Support\Collection;
 use Phalcon\Tests\Fixtures\JsonFixture;
 use UnitTester;
 
@@ -27,9 +27,9 @@ class JsonSerializeCest
      * @author Phalcon Team <team@phalcon.io>
      * @since  2020-09-09
      */
-    public function collectionJsonSerialize(UnitTester $I)
+    public function supportCollectionJsonSerialize(UnitTester $I)
     {
-        $I->wantToTest('Collection - jsonSerialize()');
+        $I->wantToTest('Support\Collection - jsonSerialize()');
 
         $data = [
             'one'   => 'two',

@@ -11,9 +11,9 @@
 
 declare(strict_types=1);
 
-namespace Phalcon\Tests\Unit\Collection\Collection;
+namespace Phalcon\Tests\Unit\Support\Collection\Collection;
 
-use Phalcon\Collection\Collection;
+use Phalcon\Support\Collection;
 use UnitTester;
 
 class SetCest
@@ -26,9 +26,9 @@ class SetCest
      * @author Phalcon Team <team@phalcon.io>
      * @since  2020-09-09
      */
-    public function collectionSet(UnitTester $I)
+    public function supportCollectionSet(UnitTester $I)
     {
-        $I->wantToTest('Collection - set()');
+        $I->wantToTest('Support\Collection - set()');
 
         $collection = new Collection();
 

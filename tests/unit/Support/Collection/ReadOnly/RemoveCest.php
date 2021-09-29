@@ -11,25 +11,25 @@
 
 declare(strict_types=1);
 
-namespace Phalcon\Tests\Unit\Collection\ReadOnly;
+namespace Phalcon\Tests\Unit\Support\Collection\ReadOnly;
 
-use Phalcon\Collection\Exception;
-use Phalcon\Collection\ReadOnly;
+use Phalcon\Support\Collection\Exception;
+use Phalcon\Support\Collection\ReadOnly;
 use UnitTester;
 
 class RemoveCest
 {
     /**
-     * Tests Phalcon\Collection\ReadOnly :: remove()
+     * Tests Phalcon\Support\Collection\ReadOnly :: remove()
      *
      * @param UnitTester $I
      *
      * @author Phalcon Team <team@phalcon.io>
      * @since  2020-09-09
      */
-    public function collectionRemove(UnitTester $I)
+    public function supportCollectionRemove(UnitTester $I)
     {
-        $I->wantToTest('ReadOnly - remove()');
+        $I->wantToTest('Support\Collection\ReadOnly - remove()');
 
         $data       = [
             'one'   => 'two',

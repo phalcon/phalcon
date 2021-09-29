@@ -11,24 +11,24 @@
 
 declare(strict_types=1);
 
-namespace Phalcon\Tests\Unit\Collection\ReadOnly;
+namespace Phalcon\Tests\Unit\Support\Collection\ReadOnly;
 
-use Phalcon\Collection\ReadOnly;
+use Phalcon\Support\Collection\ReadOnly;
 use UnitTester;
 
 class ToArrayCest
 {
     /**
-     * Tests Phalcon\Collection\ReadOnly :: toArray()
+     * Tests Phalcon\Support\Collection\ReadOnly :: toArray()
      *
      * @param UnitTester $I
      *
      * @author Phalcon Team <team@phalcon.io>
      * @since  2020-09-09
      */
-    public function collectionToArray(UnitTester $I)
+    public function supportCollectionToArray(UnitTester $I)
     {
-        $I->wantToTest('ReadOnly - toArray()');
+        $I->wantToTest('Support\Collection\ReadOnly - toArray()');
 
         $data = [
             'one'   => 'two',

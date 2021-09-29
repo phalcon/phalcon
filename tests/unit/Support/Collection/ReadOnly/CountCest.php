@@ -11,24 +11,24 @@
 
 declare(strict_types=1);
 
-namespace Phalcon\Tests\Unit\Collection\ReadOnly;
+namespace Phalcon\Tests\Unit\Support\Collection\ReadOnly;
 
-use Phalcon\Collection\ReadOnly;
+use Phalcon\Support\Collection\ReadOnly;
 use UnitTester;
 
 class CountCest
 {
     /**
-     * Tests Phalcon\Collection\ReadOnly :: count()
+     * Tests Phalcon\Support\Collection\ReadOnly :: count()
      *
      * @param UnitTester $I
      *
      * @author Phalcon Team <team@phalcon.io>
      * @since  2020-09-09
      */
-    public function collectionCount(UnitTester $I)
+    public function supportCollectionCount(UnitTester $I)
     {
-        $I->wantToTest('ReadOnly - count()');
+        $I->wantToTest('Support\Collection\ReadOnly - count()');
 
         $data = [
             'one'   => 'two',
