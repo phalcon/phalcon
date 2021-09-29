@@ -13,7 +13,7 @@ declare(strict_types=1);
 
 namespace Phalcon\Tests\Unit\Di\Service;
 
-use Phalcon\Collection\Collection;
+use Phalcon\Support\Collection;
 use Phalcon\Di\Service;
 use Phalcon\Html\Escaper;
 use UnitTester;

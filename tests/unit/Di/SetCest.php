@@ -14,7 +14,7 @@ declare(strict_types=1);
 namespace Phalcon\Tests\Unit\Di;
 
 use Codeception\Example;
-use Phalcon\Collection\Collection;
+use Phalcon\Support\Collection;
 use Phalcon\Di\Di;
 use Phalcon\Di\Exception;
 use Phalcon\Html\Escaper;

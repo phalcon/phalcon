@@ -26,9 +26,9 @@ class GetKeysCest
      * @author Phalcon Team <team@phalcon.io>
      * @since  2020-09-09
      */
-    public function supportCollectionCollectionGetKeys(UnitTester $I)
+    public function supportCollectionGetKeys(UnitTester $I)
     {
-        $I->wantToTest('Support\Collection\Collection - getKeys()');
+        $I->wantToTest('Support\Collection - getKeys()');
 
         $keys = [
             'one',
