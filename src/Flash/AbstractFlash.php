@@ -268,10 +268,6 @@ abstract class AbstractFlash implements FlashInterface, InjectionAwareInterface
             $message = [$message];
         }
 
-        if (true !== $this->implicitFlush) {
-            $content = '';
-        }
-
         foreach ($message as $item) {
             $prepared = $this->prepareEscapedMessage($item);
             $html     = $this->prepareHtmlMessage($type, $prepared);
@@ -381,23 +377,8 @@ abstract class AbstractFlash implements FlashInterface, InjectionAwareInterface
             return $message;
         }
 
-        $replaceCss = $this->cssClasses[$type] ?? '';
-        if (true !== empty($replaceCss)) {
-            if (true !== is_array($replaceCss)) {
-                $replaceCss = [$replaceCss];
-            }
-
-            $replaceCss = join(' ', $replaceCss);
-        }
-
-        $replaceIconCss = $this->cssIconClasses[$type] ?? '';
-        if (true !== empty($replaceIconCss)) {
-            if (true !== is_array($replaceIconCss)) {
-                $replaceIconCss = [$replaceIconCss];
-            }
-
-            $replaceIconCss = join(' ', $replaceIconCss);
-        }
+        $replaceCss     = $this->checkClasses($this->cssClasses, $type);
+        $replaceIconCss = $this->checkClasses($this->cssIconClasses, $type);
 
         return $this->toInterpolate(
             $this->getTemplate($replaceCss, $replaceIconCss),
@@ -407,5 +388,29 @@ abstract class AbstractFlash implements FlashInterface, InjectionAwareInterface
                 'message'      => $message,
             ]
         );
+    }
+
+    /**
+     * Checks the collection and returns the content as a string
+     * (array is joined)
+     *
+     * @param array  $collection
+     * @param string $type
+     *
+     * @return string
+     */
+    private function checkClasses(array $collection, string $type): string
+    {
+        $content = $collection[$type] ?? '';
+
+        if (true !== empty($content)) {
+            if (true !== is_array($content)) {
+                $content = [$content];
+            }
+
+            $content = join(' ', $content);
+        }
+
+        return $content;
     }
 }
