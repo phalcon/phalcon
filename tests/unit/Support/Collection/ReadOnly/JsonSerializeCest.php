@@ -14,6 +14,7 @@ declare(strict_types=1);
 namespace Phalcon\Tests\Unit\Support\Collection\ReadOnly;
 
 use Phalcon\Support\Collection\ReadOnly;
+use Phalcon\Tests\Fixtures\JsonFixture;
 use UnitTester;
 
 class JsonSerializeCest
@@ -38,9 +39,29 @@ class JsonSerializeCest
 
         $collection = new ReadOnly($data);
 
-        $I->assertEquals(
-            $data,
-            $collection->jsonSerialize()
-        );
+        $expected = $data;
+        $actual   = $collection->jsonSerialize();
+        $I->assertEquals($expected, $actual);
+
+        $data = [
+            'one'    => 'two',
+            'three'  => 'four',
+            'five'   => 'six',
+            'object' => new JsonFixture(),
+        ];
+
+        $expected = [
+            'one'    => 'two',
+            'three'  => 'four',
+            'five'   => 'six',
+            'object' => [
+                'one' => 'two',
+            ],
+        ];
+
+        $collection = new ReadOnly($data);
+
+        $actual = $collection->jsonSerialize();
+        $I->assertEquals($expected, $actual);
     }
 }

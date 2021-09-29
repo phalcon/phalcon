@@ -13,7 +13,9 @@ declare(strict_types=1);
 
 namespace Phalcon\Tests\Unit\Support\Collection\ReadOnly;
 
+use Codeception\Example;
 use Phalcon\Support\Collection\ReadOnly;
+use stdClass;
 use UnitTester;
 
 class GetCest
@@ -37,37 +39,109 @@ class GetCest
         ];
 
         $collection = new ReadOnly($data);
+        $expected   = 'four';
 
-        $expected = 'four';
+        $actual = $collection->get('three');
+        $I->assertEquals($expected, $actual);
 
-        $I->assertEquals(
-            $expected,
-            $collection->get('three')
+        $actual = $collection->get('THREE');
+        $I->assertEquals($expected, $actual);
+
+        $actual = $collection->get('unknown', 'four');
+        $I->assertEquals($expected, $actual);
+
+        $actual = $collection['three'];
+        $I->assertEquals($expected, $actual);
+
+        $actual = $collection->three;
+        $I->assertEquals($expected, $actual);
+
+        $actual = $collection->offsetGet('three');
+        $I->assertEquals($expected, $actual);
+    }
+
+    /**
+     * Tests Phalcon\Support\Collection :: get() - cast
+     *
+     * @dataProvider getExamples
+     *
+     * @author       Phalcon Team <team@phalcon.io>
+     * @since        2020-09-09
+     */
+    public function helperArrGetCast(UnitTester $I, Example $example)
+    {
+        $I->wantToTest('Support\Collection\ReadOnly - get() - cast ' . $example[0]);
+
+        $collection = new ReadOnly(
+            [
+                'value' => $example[1],
+            ]
         );
 
-        $I->assertEquals(
-            $expected,
-            $collection->get('THREE')
-        );
+        $expected = $example[2];
+        $actual   = $collection->get('value', null, $example[0]);
+        $I->assertEquals($expected, $actual);
+    }
 
-        $I->assertEquals(
-            $expected,
-            $collection->get('unknown', 'four')
-        );
+    /**
+     * @return array
+     */
+    private function getExamples(): array
+    {
+        $sample      = new stdClass();
+        $sample->one = 'two';
 
-        $I->assertEquals(
-            $expected,
-            $collection['three']
-        );
-
-        $I->assertEquals(
-            $expected,
-            $collection->three
-        );
-
-        $I->assertEquals(
-            $expected,
-            $collection->offsetGet('three')
-        );
+        return [
+            [
+                'boolean',
+                1,
+                true,
+            ],
+            [
+                'bool',
+                1,
+                true,
+            ],
+            [
+                'integer',
+                "123",
+                123,
+            ],
+            [
+                'int',
+                "123",
+                123,
+            ],
+            [
+                'float',
+                "123.45",
+                123.45,
+            ],
+            [
+                'double',
+                "123.45",
+                123.45,
+            ],
+            [
+                'string',
+                123,
+                "123",
+            ],
+            [
+                'array',
+                $sample,
+                ['one' => 'two'],
+            ],
+            [
+                'object',
+                ['one' => 'two'],
+                $sample,
+            ],
+            [
+                'null',
+                1234,
+                null,
+            ],
+        ];
     }
 }

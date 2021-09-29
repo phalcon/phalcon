@@ -19,7 +19,7 @@ use UnitTester;
 class SetCest
 {
     /**
-     * Tests Phalcon\Collection :: set()
+     * Tests Phalcon\Support\Collection :: set()
      *
      * @param UnitTester $I
      *
@@ -34,30 +34,25 @@ class SetCest
 
         $collection->set('three', 'two');
 
-        $I->assertEquals(
-            'two',
-            $collection->get('three')
-        );
+        $expected = 'two';
+        $actual   = $collection->get('three');
+        $I->assertEquals($expected, $actual);
 
         $collection->three = 'Phalcon';
 
-        $I->assertEquals(
-            'Phalcon',
-            $collection->get('three')
-        );
+        $expected = 'Phalcon';
+        $actual   = $collection->get('three');
+        $I->assertEquals($expected, $actual);
 
         $collection->offsetSet('three', 123);
 
-        $I->assertEquals(
-            123,
-            $collection->get('three')
-        );
-
+        $expected = 123;
+        $actual   = $collection->get('three');
+        $I->assertEquals($expected, $actual);
 
         $collection['three'] = true;
 
-        $I->assertTrue(
-            $collection->get('three')
-        );
+        $actual = $collection->get('three');
+        $I->assertTrue($actual);
     }
 }

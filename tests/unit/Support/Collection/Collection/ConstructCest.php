@@ -19,7 +19,7 @@ use UnitTester;
 class ConstructCest
 {
     /**
-     * Tests Phalcon\Collection :: __construct()
+     * Tests Phalcon\Support\Collection :: __construct()
      *
      * @param UnitTester $I
      *
@@ -32,9 +32,7 @@ class ConstructCest
 
         $collection = new Collection();
 
-        $I->assertInstanceOf(
-            Collection::class,
-            $collection
-        );
+        $class = Collection::class;
+        $I->assertInstanceOf($class, $collection);
     }
 }

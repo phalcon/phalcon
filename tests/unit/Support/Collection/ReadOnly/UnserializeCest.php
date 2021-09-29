@@ -37,14 +37,12 @@ class UnserializeCest
         ];
 
         $serialized = serialize($data);
-
         $collection = new ReadOnly();
 
         $collection->unserialize($serialized);
 
-        $I->assertEquals(
-            $data,
-            $collection->toArray()
-        );
+        $expected = $data;
+        $actual   = $collection->toArray();
+        $I->assertEquals($expected, $actual);
     }
 }

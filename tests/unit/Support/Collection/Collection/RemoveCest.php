@@ -19,7 +19,7 @@ use UnitTester;
 class RemoveCest
 {
     /**
-     * Tests Phalcon\Collection :: remove()
+     * Tests Phalcon\Support\Collection :: remove()
      *
      * @param UnitTester $I
      *

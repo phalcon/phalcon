@@ -38,37 +38,29 @@ class HasCest
 
         $collection = new ReadOnly($data);
 
-        $I->assertTrue(
-            $collection->has('three')
-        );
+        $actual = $collection->has('three');
+        $I->assertTrue($actual);
 
-        $I->assertTrue(
-            $collection->has('THREE')
-        );
+        $actual = $collection->has('THREE');
+        $I->assertTrue($actual);
 
-        $I->assertFalse(
-            $collection->has('unknown')
-        );
+        $actual = $collection->has('unknown');
+        $I->assertFalse($actual);
 
-        $I->assertTrue(
-            $collection->__isset('three')
-        );
+        $actual = $collection->__isset('three');
+        $I->assertTrue($actual);
 
-        $I->assertTrue(
-            isset($collection['three'])
-        );
+        $actual = isset($collection['three']);
+        $I->assertTrue($actual);
 
-        $I->assertFalse(
-            isset($collection['unknown'])
-        );
+        $actual = isset($collection['unknown']);
+        $I->assertFalse($actual);
 
-        $I->assertTrue(
-            $collection->offsetExists('three')
-        );
+        $actual = $collection->offsetExists('three');
+        $I->assertTrue($actual);
 
-        $I->assertFalse(
-            $collection->offsetExists('unknown')
-        );
+        $actual = $collection->offsetExists('unknown');
+        $I->assertFalse($actual);
     }
 
     /**
@@ -89,36 +81,28 @@ class HasCest
 
         $collection = new ReadOnly($data, false);
 
-        $I->assertTrue(
-            $collection->has('three')
-        );
+        $actual = $collection->has('three');
+        $I->assertTrue($actual);
 
-        $I->assertFalse(
-            $collection->has('THREE')
-        );
+        $actual = $collection->has('THREE');
+        $I->assertFalse($actual);
 
-        $I->assertFalse(
-            $collection->has('unknown')
-        );
+        $actual = $collection->has('unknown');
+        $I->assertFalse($actual);
 
-        $I->assertTrue(
-            $collection->__isset('three')
-        );
+        $actual = $collection->__isset('three');
+        $I->assertTrue($actual);
 
-        $I->assertTrue(
-            isset($collection['three'])
-        );
+        $actual = isset($collection['three']);
+        $I->assertTrue($actual);
 
-        $I->assertFalse(
-            isset($collection['unknown'])
-        );
+        $actual = isset($collection['unknown']);
+        $I->assertFalse($actual);
 
-        $I->assertTrue(
-            $collection->offsetExists('three')
-        );
+        $actual = $collection->offsetExists('three');
+        $I->assertTrue($actual);
 
-        $I->assertFalse(
-            $collection->offsetExists('unknown')
-        );
+        $actual = $collection->offsetExists('unknown');
+        $I->assertFalse($actual);
     }
 }

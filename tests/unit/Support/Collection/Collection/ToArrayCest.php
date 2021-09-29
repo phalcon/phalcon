@@ -19,7 +19,7 @@ use UnitTester;
 class ToArrayCest
 {
     /**
-     * Tests Phalcon\Collection :: toArray()
+     * Tests Phalcon\Support\Collection :: toArray()
      *
      * @param UnitTester $I
      *
@@ -38,9 +38,8 @@ class ToArrayCest
 
         $collection = new Collection($data);
 
-        $I->assertEquals(
-            $data,
-            $collection->toArray()
-        );
+        $expected = $data;
+        $actual   = $collection->toArray();
+        $I->assertEquals($expected, $actual);
     }
 }

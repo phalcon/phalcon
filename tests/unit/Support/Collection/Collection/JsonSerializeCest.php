@@ -20,7 +20,7 @@ use UnitTester;
 class JsonSerializeCest
 {
     /**
-     * Tests Phalcon\Collection :: jsonSerialize()
+     * Tests Phalcon\Support\Collection :: jsonSerialize()
      *
      * @param UnitTester $I
      *
@@ -39,10 +39,9 @@ class JsonSerializeCest
 
         $collection = new Collection($data);
 
-        $I->assertEquals(
-            $data,
-            $collection->jsonSerialize()
-        );
+        $expected = $data;
+        $actual   = $collection->jsonSerialize();
+        $I->assertEquals($expected, $actual);
 
         $data = [
             'one'    => 'two',
@@ -62,9 +61,7 @@ class JsonSerializeCest
 
         $collection = new Collection($data);
 
-        $I->assertEquals(
-            $expected,
-            $collection->jsonSerialize()
-        );
+        $actual = $collection->jsonSerialize();
+        $I->assertEquals($expected, $actual);
     }
 }

@@ -19,7 +19,7 @@ use UnitTester;
 class InitCest
 {
     /**
-     * Tests Phalcon\Collection :: init()
+     * Tests Phalcon\Support\Collection :: init()
      *
      * @param UnitTester $I
      *
@@ -38,16 +38,14 @@ class InitCest
 
         $collection = new Collection();
 
-        $I->assertEquals(
-            0,
-            $collection->count()
-        );
+        $expected = 0;
+        $actual   = $collection->count();
+        $I->assertEquals($expected, $actual);
 
         $collection->init($data);
 
-        $I->assertEquals(
-            $data,
-            $collection->toArray()
-        );
+        $expected = $data;
+        $actual   = $collection->toArray();
+        $I->assertEquals($expected, $actual);
     }
 }

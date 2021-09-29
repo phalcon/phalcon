@@ -19,7 +19,7 @@ use UnitTester;
 class GetValuesCest
 {
     /**
-     * Tests Phalcon\Collection :: get()
+     * Tests Phalcon\Support\Collection :: get()
      *
      * @param UnitTester $I
      *
@@ -44,9 +44,7 @@ class GetValuesCest
             'six',
         ];
 
-        $I->assertEquals(
-            $expected,
-            $collection->getValues(false)
-        );
+        $actual = $collection->getValues();
+        $I->assertEquals($expected, $actual);
     }
 }

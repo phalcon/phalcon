@@ -19,7 +19,7 @@ use UnitTester;
 class ClearCest
 {
     /**
-     * Tests Phalcon\Collection :: clear()
+     * Tests Phalcon\Support\Collection :: clear()
      *
      * @param UnitTester $I
      *
@@ -38,16 +38,14 @@ class ClearCest
 
         $collection = new Collection($data);
 
-        $I->assertEquals(
-            $data,
-            $collection->toArray()
-        );
+        $expected = $data;
+        $actual   = $collection->toArray();
+        $I->assertEquals($expected, $actual);
 
         $collection->clear();
 
-        $I->assertEquals(
-            0,
-            $collection->count()
-        );
+        $expected = 0;
+        $actual   = $collection->count();
+        $I->assertEquals($expected, $actual);
     }
 }
