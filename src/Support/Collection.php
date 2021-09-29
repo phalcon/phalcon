@@ -11,14 +11,15 @@
 
 declare(strict_types=1);
 
-namespace Phalcon\Collection;
+namespace Phalcon\Support;
 
 use Countable;
 use Generator;
 use JsonSerializable;
-use Phalcon\Collection\Traits\ArrayAccessTrait;
-use Phalcon\Collection\Traits\GetSetHasTrait;
-use Phalcon\Collection\Traits\SerializableTrait;
+use Phalcon\Support\Collection\CollectionInterface;
+use Phalcon\Support\Collection\Traits\ArrayAccessTrait;
+use Phalcon\Support\Collection\Traits\GetSetHasTrait;
+use Phalcon\Support\Collection\Traits\SerializableTrait;
 use Phalcon\Support\Traits\JsonTrait;
 use Serializable;
 
