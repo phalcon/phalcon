@@ -11,7 +11,7 @@
 
 declare(strict_types=1);
 
-namespace Phalcon\Collection\Traits;
+namespace Phalcon\Support\Collection\Traits;
 
 trait GetSetHasTrait
 {

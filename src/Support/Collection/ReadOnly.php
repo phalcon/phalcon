@@ -11,7 +11,9 @@
 
 declare(strict_types=1);
 
-namespace Phalcon\Collection;
+namespace Phalcon\Support\Collection;
+
+use Phalcon\Support\Collection;
 
 /**
  * Phalcon\Collection\ReadOnly is a read only Collection object
