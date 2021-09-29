@@ -13,8 +13,8 @@ declare(strict_types=1);
 
 namespace Phalcon\Security\JWT;
 
-use Phalcon\Collection\Collection;
-use Phalcon\Collection\CollectionInterface;
+use Phalcon\Support\Collection;
+use Phalcon\Support\Collection\CollectionInterface;
 use Phalcon\Security\JWT\Exceptions\ValidatorException;
 use Phalcon\Security\JWT\Signer\SignerInterface;
 use Phalcon\Security\JWT\Token\Enum;

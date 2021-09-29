@@ -13,7 +13,7 @@ declare(strict_types=1);
 
 namespace Phalcon\Session;
 
-use Phalcon\Collection\Collection;
+use Phalcon\Support\Collection;
 use Phalcon\Di\Di;
 use Phalcon\Di\InjectionAwareInterface;
 use Phalcon\Di\Traits\InjectionAwareTrait;

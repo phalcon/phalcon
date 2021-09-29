@@ -13,7 +13,7 @@ declare(strict_types=1);
 
 namespace Phalcon\Config;
 
-use Phalcon\Collection\Collection;
+use Phalcon\Support\Collection;
 
 use function array_shift;
 use function explode;

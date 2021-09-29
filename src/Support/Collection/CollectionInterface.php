@@ -17,7 +17,7 @@ use ArrayAccess;
 use IteratorAggregate;
 
 /**
- * Phalcon\Collection\CollectionInterface
+ * Phalcon\Support\Collection\CollectionInterface
  *
  * Interface for Phalcon\Collection class
  *

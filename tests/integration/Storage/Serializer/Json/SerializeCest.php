@@ -17,7 +17,7 @@ use Codeception\Example;
 use IntegrationTester;
 use InvalidArgumentException;
 use JsonException;
-use Phalcon\Collection\Collection;
+use Phalcon\Support\Collection;
 use Phalcon\Storage\Serializer\Json;
 use stdClass;
 

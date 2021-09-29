@@ -13,7 +13,7 @@ declare(strict_types=1);
 
 namespace Phalcon\Config;
 
-use Phalcon\Collection\CollectionInterface;
+use Phalcon\Support\Collection\CollectionInterface;
 
 /**
  * Phalcon\Config\ConfigInterface
