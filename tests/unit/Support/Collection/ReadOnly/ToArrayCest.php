@@ -38,9 +38,8 @@ class ToArrayCest
 
         $collection = new ReadOnly($data);
 
-        $I->assertEquals(
-            $data,
-            $collection->toArray()
-        );
+        $expected = $data;
+        $actual   = $collection->toArray();
+        $I->assertEquals($expected, $actual);
     }
 }

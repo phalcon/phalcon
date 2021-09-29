@@ -39,10 +39,9 @@ class GetIteratorCest
         $collection = new ReadOnly($data);
 
         foreach ($collection as $key => $value) {
-            $I->assertEquals(
-                $data[$key],
-                $collection[$key]
-            );
+            $expected = $data[$key];
+            $actual   = $collection[$key];
+            $I->assertEquals($expected, $actual);
         }
     }
 }

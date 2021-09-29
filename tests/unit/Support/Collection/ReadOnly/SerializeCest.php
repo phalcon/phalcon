@@ -38,9 +38,8 @@ class SerializeCest
 
         $collection = new ReadOnly($data);
 
-        $I->assertEquals(
-            serialize($data),
-            $collection->serialize()
-        );
+        $expected = serialize($data);
+        $actual   = $collection->serialize();
+        $I->assertEquals($expected, $actual);
     }
 }

@@ -21,7 +21,7 @@ use UnitTester;
 class GetCest
 {
     /**
-     * Tests Phalcon\Collection :: get()
+     * Tests Phalcon\Support\Collection :: get()
      *
      * @param UnitTester $I
      *
@@ -39,45 +39,33 @@ class GetCest
         ];
 
         $collection = new Collection($data);
+        $expected   = 'four';
 
-        $expected = 'four';
+        $actual = $collection->get('three');
+        $I->assertEquals($expected, $actual);
 
-        $I->assertEquals(
-            $expected,
-            $collection->get('three')
-        );
+        $actual = $collection->get('THREE');
+        $I->assertEquals($expected, $actual);
 
-        $I->assertEquals(
-            $expected,
-            $collection->get('THREE')
-        );
+        $actual = $collection->get('unknown', 'four');
+        $I->assertEquals($expected, $actual);
 
-        $I->assertEquals(
-            $expected,
-            $collection->get('unknown', 'four')
-        );
+        $actual = $collection['three'];
+        $I->assertEquals($expected, $actual);
 
-        $I->assertEquals(
-            $expected,
-            $collection['three']
-        );
+        $actual = $collection->three;
+        $I->assertEquals($expected, $actual);
 
-        $I->assertEquals(
-            $expected,
-            $collection->three
-        );
-
-        $I->assertEquals(
-            $expected,
-            $collection->offsetGet('three')
-        );
+        $actual = $collection->offsetGet('three');
+        $I->assertEquals($expected, $actual);
     }
 
     /**
-     * Tests Phalcon\Collection :: get() - cast
+     * Tests Phalcon\Support\Collection :: get() - cast
      *
      * @dataProvider getExamples
      *
+     * @author       Phalcon Team <team@phalcon.io>
      * @since        2020-09-09
      */
     public function helperArrGetCast(UnitTester $I, Example $example)
@@ -90,10 +78,9 @@ class GetCest
             ]
         );
 
-        $I->assertEquals(
-            $example[2],
-            $collection->get('value', null, $example[0])
-        );
+        $expected = $example[2];
+        $actual   = $collection->get('value', null, $example[0]);
+        $I->assertEquals($expected, $actual);
     }
 
     /**

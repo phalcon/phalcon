@@ -19,7 +19,7 @@ use UnitTester;
 class ToJsonCest
 {
     /**
-     * Tests Phalcon\Collection :: toJson()
+     * Tests Phalcon\Support\Collection :: toJson()
      *
      * @param UnitTester $I
      *
@@ -38,14 +38,12 @@ class ToJsonCest
 
         $collection = new Collection($data);
 
-        $I->assertEquals(
-            json_encode($data),
-            $collection->toJson()
-        );
+        $expected = json_encode($data);
+        $actual   = $collection->toJson();
+        $I->assertEquals($expected, $actual);
 
-        $I->assertEquals(
-            json_encode($data, JSON_PRETTY_PRINT),
-            $collection->toJson(JSON_PRETTY_PRINT)
-        );
+        $expected = json_encode($data, JSON_PRETTY_PRINT);
+        $actual   = $collection->toJson(JSON_PRETTY_PRINT);
+        $I->assertEquals($expected, $actual);
     }
 }

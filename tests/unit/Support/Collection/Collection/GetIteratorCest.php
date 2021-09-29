@@ -19,7 +19,7 @@ use UnitTester;
 class GetIteratorCest
 {
     /**
-     * Tests Phalcon\Collection :: getIterator()
+     * Tests Phalcon\Support\Collection :: getIterator()
      *
      * @param UnitTester $I
      *
@@ -39,10 +39,9 @@ class GetIteratorCest
         $collection = new Collection($data);
 
         foreach ($collection as $key => $value) {
-            $I->assertEquals(
-                $data[$key],
-                $collection[$key]
-            );
+            $expected = $data[$key];
+            $actual   = $collection[$key];
+            $I->assertEquals($expected, $actual);
         }
     }
 }

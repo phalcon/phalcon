@@ -19,7 +19,7 @@ use UnitTester;
 class SerializeCest
 {
     /**
-     * Tests Phalcon\Collection :: serialize()
+     * Tests Phalcon\Support\Collection :: serialize()
      *
      * @param UnitTester $I
      *
@@ -38,9 +38,8 @@ class SerializeCest
 
         $collection = new Collection($data);
 
-        $I->assertEquals(
-            serialize($data),
-            $collection->serialize()
-        );
+        $expected = serialize($data);
+        $actual   = $collection->serialize();
+        $I->assertEquals($expected, $actual);
     }
 }

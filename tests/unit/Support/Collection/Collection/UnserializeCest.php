@@ -19,7 +19,7 @@ use UnitTester;
 class UnserializeCest
 {
     /**
-     * Tests Phalcon\Collection :: unserialize()
+     * Tests Phalcon\Support\Collection :: unserialize()
      *
      * @param UnitTester $I
      *
@@ -37,14 +37,12 @@ class UnserializeCest
         ];
 
         $serialized = serialize($data);
-
         $collection = new Collection();
 
         $collection->unserialize($serialized);
 
-        $I->assertEquals(
-            $data,
-            $collection->toArray()
-        );
+        $expected = $data;
+        $actual   = $collection->toArray();
+        $I->assertEquals($expected, $actual);
     }
 }

@@ -38,14 +38,12 @@ class CountCest
 
         $collection = new ReadOnly($data);
 
-        $I->assertCount(
-            3,
-            $collection->toArray()
-        );
+        $expected = 3;
+        $actual   = $collection->toArray();
+        $I->assertCount($expected, $actual);
 
-        $I->assertEquals(
-            3,
-            $collection->count()
-        );
+        $expected = 3;
+        $actual   = $collection->count();
+        $I->assertEquals($expected, $actual);
     }
 }
