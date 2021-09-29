@@ -11,9 +11,9 @@
 
 declare(strict_types=1);
 
-namespace Phalcon\Tests\Unit\Collection\Collection;
+namespace Phalcon\Tests\Unit\Support\Collection\Collection;
 
-use Phalcon\Collection\Collection;
+use Phalcon\Support\Collection;
 use UnitTester;
 
 class CountCest
@@ -26,9 +26,9 @@ class CountCest
      * @author Phalcon Team <team@phalcon.io>
      * @since  2020-09-09
      */
-    public function collectionCount(UnitTester $I)
+    public function supportCollectionCount(UnitTester $I)
     {
-        $I->wantToTest('Collection - count()');
+        $I->wantToTest('Support\Collection - count()');
 
         $data = [
             'one'   => 'two',

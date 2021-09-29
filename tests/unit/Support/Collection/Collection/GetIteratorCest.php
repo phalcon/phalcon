@@ -11,9 +11,9 @@
 
 declare(strict_types=1);
 
-namespace Phalcon\Tests\Unit\Collection\Collection;
+namespace Phalcon\Tests\Unit\Support\Collection\Collection;
 
-use Phalcon\Collection\Collection;
+use Phalcon\Support\Collection;
 use UnitTester;
 
 class GetIteratorCest
@@ -26,9 +26,9 @@ class GetIteratorCest
      * @author Phalcon Team <team@phalcon.io>
      * @since  2020-09-09
      */
-    public function collectionGetIterator(UnitTester $I)
+    public function supportCollectionGetIterator(UnitTester $I)
     {
-        $I->wantToTest('Collection - getIterator()');
+        $I->wantToTest('Support\Collection - getIterator()');
 
         $data = [
             'one'   => 'two',

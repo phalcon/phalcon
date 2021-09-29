@@ -11,25 +11,25 @@
 
 declare(strict_types=1);
 
-namespace Phalcon\Tests\Unit\Collection\ReadOnly;
+namespace Phalcon\Tests\Unit\Support\Collection\ReadOnly;
 
-use Phalcon\Collection\Exception;
-use Phalcon\Collection\ReadOnly;
+use Phalcon\Support\Collection\Exception;
+use Phalcon\Support\Collection\ReadOnly;
 use UnitTester;
 
 class SetCest
 {
     /**
-     * Tests Phalcon\Collection\ReadOnly :: set()
+     * Tests Phalcon\Support\Collection\ReadOnly :: set()
      *
      * @param UnitTester $I
      *
      * @author Phalcon Team <team@phalcon.io>
      * @since  2020-09-09
      */
-    public function collectionSet(UnitTester $I)
+    public function supportCollectionSet(UnitTester $I)
     {
-        $I->wantToTest('ReadOnly - set()');
+        $I->wantToTest('Support\Collection\ReadOnly - set()');
 
         $I->expectThrowable(
             new Exception('The object is read only'),

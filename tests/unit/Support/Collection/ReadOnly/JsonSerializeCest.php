@@ -11,24 +11,24 @@
 
 declare(strict_types=1);
 
-namespace Phalcon\Tests\Unit\Collection\ReadOnly;
+namespace Phalcon\Tests\Unit\Support\Collection\ReadOnly;
 
-use Phalcon\Collection\ReadOnly;
+use Phalcon\Support\Collection\ReadOnly;
 use UnitTester;
 
 class JsonSerializeCest
 {
     /**
-     * Tests Phalcon\Collection\ReadOnly :: jsonSerialize()
+     * Tests Phalcon\Support\Collection\ReadOnly :: jsonSerialize()
      *
      * @param UnitTester $I
      *
      * @author Phalcon Team <team@phalcon.io>
      * @since  2020-09-09
      */
-    public function collectionJsonSerialize(UnitTester $I)
+    public function supportCollectionJsonSerialize(UnitTester $I)
     {
-        $I->wantToTest('ReadOnly - jsonSerialize()');
+        $I->wantToTest('Support\Collection\ReadOnly - jsonSerialize()');
 
         $data = [
             'one'   => 'two',

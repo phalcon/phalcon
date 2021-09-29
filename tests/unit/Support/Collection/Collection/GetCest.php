@@ -11,10 +11,10 @@
 
 declare(strict_types=1);
 
-namespace Phalcon\Tests\Unit\Collection\Collection;
+namespace Phalcon\Tests\Unit\Support\Collection\Collection;
 
 use Codeception\Example;
-use Phalcon\Collection\Collection;
+use Phalcon\Support\Collection;
 use stdClass;
 use UnitTester;
 
@@ -28,9 +28,9 @@ class GetCest
      * @author Phalcon Team <team@phalcon.io>
      * @since  2020-09-09
      */
-    public function collectionGet(UnitTester $I)
+    public function supportCollectionGet(UnitTester $I)
     {
-        $I->wantToTest('Collection - get()');
+        $I->wantToTest('Support\Collection - get()');
 
         $data = [
             'one'   => 'two',
@@ -82,7 +82,7 @@ class GetCest
      */
     public function helperArrGetCast(UnitTester $I, Example $example)
     {
-        $I->wantToTest('Collection - get() - cast ' . $example[0]);
+        $I->wantToTest('Support\Collection - get() - cast ' . $example[0]);
 
         $collection = new Collection(
             [

@@ -11,9 +11,9 @@
 
 declare(strict_types=1);
 
-namespace Phalcon\Tests\Unit\Collection\Collection;
+namespace Phalcon\Tests\Unit\Support\Collection\Collection;
 
-use Phalcon\Collection\Collection;
+use Phalcon\Support\Collection;
 use UnitTester;
 
 class ClearCest
@@ -26,9 +26,9 @@ class ClearCest
      * @author Phalcon Team <team@phalcon.io>
      * @since  2020-09-09
      */
-    public function collectionClear(UnitTester $I)
+    public function supportCollectionClear(UnitTester $I)
     {
-        $I->wantToTest('Collection - clear()');
+        $I->wantToTest('Support\Collection - clear()');
 
         $data = [
             'one'   => 'two',

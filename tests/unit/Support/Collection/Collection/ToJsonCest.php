@@ -11,9 +11,9 @@
 
 declare(strict_types=1);
 
-namespace Phalcon\Tests\Unit\Collection\Collection;
+namespace Phalcon\Tests\Unit\Support\Collection\Collection;
 
-use Phalcon\Collection\Collection;
+use Phalcon\Support\Collection;
 use UnitTester;
 
 class ToJsonCest
@@ -26,9 +26,9 @@ class ToJsonCest
      * @author Phalcon Team <team@phalcon.io>
      * @since  2020-09-09
      */
-    public function collectionToJson(UnitTester $I)
+    public function supportCollectionToJson(UnitTester $I)
     {
-        $I->wantToTest('Collection - toJson()');
+        $I->wantToTest('Support\Collection - toJson()');
 
         $data = [
             'one'   => 'two',

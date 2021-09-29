@@ -11,24 +11,24 @@
 
 declare(strict_types=1);
 
-namespace Phalcon\Tests\Unit\Collection\ReadOnly;
+namespace Phalcon\Tests\Unit\Support\Collection\ReadOnly;
 
-use Phalcon\Collection\ReadOnly;
+use Phalcon\Support\Collection\ReadOnly;
 use UnitTester;
 
 class HasCest
 {
     /**
-     * Tests Phalcon\Collection\ReadOnly :: has()
+     * Tests Phalcon\Support\Collection\ReadOnly :: has()
      *
      * @param UnitTester $I
      *
      * @author Phalcon Team <team@phalcon.io>
      * @since  2020-09-09
      */
-    public function collectionHas(UnitTester $I)
+    public function supportCollectionHas(UnitTester $I)
     {
-        $I->wantToTest('Collection - has()');
+        $I->wantToTest('Support\Collection - has()');
 
         $data = [
             'one'   => 'two',
@@ -72,14 +72,14 @@ class HasCest
     }
 
     /**
-     * Tests Phalcon\Collection\ReadOnly :: has() - sensitive
+     * Tests Phalcon\Support\Collection\ReadOnly :: has() - sensitive
      *
      * @author Phalcon Team <team@phalcon.io>
      * @since  2020-09-09
      */
-    public function collectionHasSensitive(UnitTester $I)
+    public function supportCollectionHasSensitive(UnitTester $I)
     {
-        $I->wantToTest('Collection - has()');
+        $I->wantToTest('Support\Collection - has()');
 
         $data = [
             'one'   => 'two',

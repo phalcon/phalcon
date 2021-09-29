@@ -11,9 +11,9 @@
 
 declare(strict_types=1);
 
-namespace Phalcon\Tests\Unit\Collection\Collection;
+namespace Phalcon\Tests\Unit\Support\Collection\Collection;
 
-use Phalcon\Collection\Collection;
+use Phalcon\Support\Collection;
 use UnitTester;
 
 class GetKeysCest
@@ -26,9 +26,9 @@ class GetKeysCest
      * @author Phalcon Team <team@phalcon.io>
      * @since  2020-09-09
      */
-    public function collectionCollectionGetKeys(UnitTester $I)
+    public function supportCollectionCollectionGetKeys(UnitTester $I)
     {
-        $I->wantToTest('Collection\Collection - getKeys()');
+        $I->wantToTest('Support\Collection\Collection - getKeys()');
 
         $keys = [
             'one',
