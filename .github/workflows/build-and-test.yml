@@ -226,4 +226,3 @@ jobs:
         with:
           token: ${{ secrets.CODECOV_TOKEN }}
           directory: ./tests/_output/
-          files: ./tests/_output/coverage-unit-${{ matrix.php-versions }}.xml, ./tests/_output/coverage-int-${{ matrix.php-versions }}.xml
