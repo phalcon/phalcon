@@ -119,7 +119,6 @@ class ConfigFactory
         string $fileName,
         $params = null
     ): ConfigInterface {
-        /** @var ConfigInterface $definition */
         $definition = $this->getService($name);
 
         switch ($definition) {

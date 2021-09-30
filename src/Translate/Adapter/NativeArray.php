@@ -102,8 +102,8 @@ class NativeArray extends AbstractAdapter implements ArrayAccess
     /**
      * Returns the translation related to the given key
      *
-     * @param string                  $index
-     * @param array<array-key, mixed> $placeholders
+     * @param string                    $index
+     * @param array<int|string, string> $placeholders
      *
      * @return string
      * @throws Exception
