@@ -130,13 +130,13 @@ class Cache implements CacheInterface
     /**
      * Obtains multiple cache items by their unique keys.
      *
-     * @param iterable<string> $keys    A list of keys that can obtained in a single
-     *                          operation.
-     * @param mixed    $default Default value to return for keys that do not
-     *                          exist.
+     * @param iterable<mixed, mixed> $keys    A list of keys that can obtained
+     *                                        in a single operation.
+     * @param mixed                  $default Default value to return for keys
+     *                                        that do not exist.
      *
-     * @return iterable<string, mixed> A list of key => value pairs. Cache keys that do not
-     * exist or are stale will have $default as value.
+     * @return iterable<string, mixed> A list of key => value pairs. Cache keys
+     * that do not exist or are stale will have $default as value.
      *
      * @throws InvalidArgumentException MUST be thrown if $keys is neither an
      * array nor a Traversable, or if any of the $keys are not a legal value.
@@ -198,7 +198,7 @@ class Cache implements CacheInterface
     /**
      * Persists a set of key => value pairs in the cache, with an optional TTL.
      *
-     * @param iterable<string, mixed> $values  A list of key => value pairs for a
+     * @param iterable<mixed, mixed> $values A list of key => value pairs for a
      *                                       multiple-set operation.
      * @param null|int|DateInterval $ttl     Optional. The TTL value of this
      *                                       item. If no value is sent and the
