@@ -729,6 +729,7 @@ class Manager implements InjectionAwareInterface
             /** @var Element $tagElement */
             $tagElement = $this->tagFactory->newInstance('element');
 
+            /** @var Inline $code */
             foreach ($codes as $code) {
                 $attributes = $code->getAttributes();
                 $content    = $code->getContent();

@@ -20,6 +20,8 @@ use Phalcon\Support\Exception as SupportException;
 use Phalcon\Support\HelperFactory;
 use Phalcon\Support\Traits\PhpApcuTrait;
 
+use function is_bool;
+
 /**
  * Apcu adapter
  *
@@ -148,7 +150,9 @@ class Apcu extends AbstractAdapter
      */
     public function has(string $key): bool
     {
-        return $this->phpApcuExists($this->getPrefixedKey($key));
+        $result = $this->phpApcuExists($this->getPrefixedKey($key));
+
+        return is_bool($result) ? $result : false;
     }
 
     /**
@@ -176,10 +180,12 @@ class Apcu extends AbstractAdapter
      */
     public function set(string $key, $value, $ttl = null): bool
     {
-        return $this->phpApcuStore(
+        $result = $this->phpApcuStore(
             $this->getPrefixedKey($key),
             $this->getSerializedData($value),
             $this->getTtl($ttl)
         );
+
+        return is_bool($result) ? $result : false;
     }
 }

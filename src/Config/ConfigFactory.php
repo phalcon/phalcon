@@ -112,13 +112,14 @@ class ConfigFactory
      * @param mixed|null $params
      *
      * @return ConfigInterface
-     * @throws SupportException
+     * @throws Exception
      */
     public function newInstance(
         string $name,
         string $fileName,
         $params = null
     ): ConfigInterface {
+        /** @var ConfigInterface $definition */
         $definition = $this->getService($name);
 
         switch ($definition) {

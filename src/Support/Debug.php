@@ -518,14 +518,13 @@ class Debug
          */
         if (true === isset($trace['file'])) {
             $file = $trace['file'];
-            $line = (string) $trace['line'];
+            $line = $trace['line'];
 
             /**
              * Realpath to the file and its line using a special header
              */
             $html .= '<br/><div class="error-file">'
-                . $file . ' ('
-                . $line . ')</div>';
+                . "$file ($line)</div>";
 
             /**
              * The developer can change if the files must be opened or not
