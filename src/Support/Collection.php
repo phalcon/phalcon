@@ -21,6 +21,7 @@ use Phalcon\Support\Collection\Traits\ArrayAccessTrait;
 use Phalcon\Support\Collection\Traits\GetSetHasTrait;
 use Phalcon\Support\Collection\Traits\SerializableTrait;
 use Phalcon\Support\Traits\JsonTrait;
+use Phalcon\Support\Traits\PhpJsonTrait;
 use Serializable;
 
 use function array_key_exists;
@@ -57,6 +58,7 @@ class Collection implements
     use ArrayAccessTrait;
     use GetSetHasTrait;
     use JsonTrait;
+    use PhpJsonTrait;
     use SerializableTrait;
 
     /**
@@ -275,7 +277,7 @@ class Collection implements
      */
     public function toJson(int $options = 4194383): string
     {
-        $return = json_encode($this->jsonSerialize(), $options);
+        $return = $this->phpJsonEncode($this->jsonSerialize(), $options);
 
         if (false === $return) {
             $return = '';
