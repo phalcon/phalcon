@@ -151,6 +151,17 @@ interface AdapterInterface
     public function getNoArgumentsDefaultAction(): int;
 
     /**
+     * Returns the inherited roles for a passed role name. If no role name
+     * has been specified it will return the whole array. If the role has not
+     * been found it returns an empty array
+     *
+     * @param string $roleName
+     *
+     * @return array<int|string, string|array<int, string>>
+     */
+    public function getInheritedRoles(string $roleName = ""): array;
+
+    /**
      * Return an array with every role registered in the list
      *
      * @return array<string, RoleInterface>
