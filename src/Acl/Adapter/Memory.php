@@ -623,9 +623,9 @@ class Memory extends AbstractAdapter
      *
      * @return array<int|string, string|array<int, string>>
      */
-    public function getInheritedRoles(string $roleName = ""): array
+    public function getInheritedRoles(string $roleName = ''): array
     {
-        if (true === empty($roleName)) {
+        if ('' === $roleName) {
             return $this->roleInherits;
         }
 
