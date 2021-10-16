@@ -221,11 +221,11 @@ class Crypt implements CryptInterface
             $hashAlgorithm = $this->getHashAlgorithm();
             $hashLength    = strlen(hash($hashAlgorithm, "", true));
             $hash          = mb_substr($input, $this->ivLength, $hashLength, "8bit");
-            $ciphertext    = mb_substr($input, $this->ivLength + $hashLength, null, "8bit");
+            $cipherText    = mb_substr($input, $this->ivLength + $hashLength, null, "8bit");
 
             $decrypted = $this->decryptGcmCcmAuth(
                 $mode,
-                $ciphertext,
+                $cipherText,
                 $decryptKey,
                 $iv
             );
@@ -246,10 +246,10 @@ class Crypt implements CryptInterface
             return $decrypted;
         }
 
-        $ciphertext = mb_substr($input, $this->ivLength, null, "8bit");
+        $cipherText = mb_substr($input, $this->ivLength, null, "8bit");
         $decrypted  = $this->decryptGcmCcmAuth(
             $mode,
-            $ciphertext,
+            $cipherText,
             $decryptKey,
             $iv
         );
@@ -315,8 +315,13 @@ class Crypt implements CryptInterface
         $this->checkCipherHashIsAvailable($this->cipher, "cipher");
         $mode      = $this->getMode();
         $blockSize = $this->getBlockSize($mode);
-        $iv        = openssl_random_pseudo_bytes($this->ivLength);
-        $padded    = $this->encryptGetPadded($mode, $input, $blockSize);
+        $iv        = $this->phpOpensslRandomPseudoBytes($this->ivLength);
+
+        if (false === $iv) {
+            throw new Exception("Cannot calculate Random Pseudo Bytes");
+        }
+
+        $padded = $this->encryptGetPadded($mode, $input, $blockSize);
 
         /**
          * If the mode is "gcm" or "ccm" and auth data has been passed call it
@@ -380,6 +385,8 @@ class Crypt implements CryptInterface
     }
 
     /**
+     * Returns the auth data
+     *
      * @return string
      */
     public function getAuthData(): string
@@ -388,6 +395,8 @@ class Crypt implements CryptInterface
     }
 
     /**
+     * Returns the auth tag
+     *
      * @return string
      */
     public function getAuthTag(): string
@@ -396,6 +405,8 @@ class Crypt implements CryptInterface
     }
 
     /**
+     * Returns the auth tag length
+     *
      * @return int
      */
     public function getAuthTagLength(): int
@@ -713,7 +724,7 @@ class Crypt implements CryptInterface
 
     /**
      * @param string $mode
-     * @param string $ciphertext
+     * @param string $cipherText
      * @param string $decryptKey
      * @param string $iv
      *
@@ -721,32 +732,42 @@ class Crypt implements CryptInterface
      */
     protected function decryptGcmCcmAuth(
         string $mode,
-        string $ciphertext,
+        string $cipherText,
         string $decryptKey,
         string $iv
     ): string {
-        if (
-            true === $this->checkIsMode(["ccm", "gcm"], $mode) &&
-            true !== empty($this->authData)
-        ) {
-            return openssl_decrypt(
-                $ciphertext,
+        $cipher = $this->cipher;
+
+        if (true === $this->checkIsMode(["ccm", "gcm"], $mode)) {
+            $authData      = $this->authData;
+            $authTagLength = $this->authTagLength;
+            $encrypted     = substr($cipherText, 0, -$authTagLength);
+            $authTag       = substr($cipherText, -$authTagLength);
+
+            $decrypted = openssl_decrypt(
+                $encrypted,
                 $this->cipher,
                 $decryptKey,
                 OPENSSL_RAW_DATA,
                 $iv,
-                $this->authTag,
-                $this->authData
+                $authTag,
+                $authData
+            );
+        } else {
+            $decrypted = openssl_decrypt(
+                $cipherText,
+                $cipher,
+                $decryptKey,
+                OPENSSL_RAW_DATA,
+                $iv
             );
         }
 
-        return openssl_decrypt(
-            $ciphertext,
-            $this->cipher,
-            $decryptKey,
-            OPENSSL_RAW_DATA,
-            $iv
-        );
+        if (false === $decrypted) {
+            throw new Exception("Could not decrypt data");
+        }
+
+        return $decrypted;
     }
 
     /**
@@ -786,33 +807,55 @@ class Crypt implements CryptInterface
         string $encryptKey,
         string $iv
     ): string {
+        $cipher = $this->cipher;
+
         /**
          * If the mode is "gcm" or "ccm" and auth data has been passed call it
          * with that data
          */
-        if (
-            true === $this->checkIsMode(["ccm", "gcm"], $mode) &&
-            true !== empty($this->authData)
-        ) {
-            return openssl_encrypt(
+        if (true === $this->checkIsMode(["ccm", "gcm"], $mode)) {
+            $authData = $this->authData;
+
+            if (true === empty($authData)) {
+                throw new Exception(
+                    "Auth data must be provided when using AEAD mode"
+                );
+            }
+
+            $authTag       = $this->authTag;
+            $authTagLength = $this->authTagLength;
+
+            $encrypted = openssl_encrypt(
                 $padded,
-                $this->cipher,
+                $cipher,
                 $encryptKey,
                 OPENSSL_RAW_DATA,
                 $iv,
-                $this->authTag,
-                $this->authData,
-                $this->authTagLength
+                $authTag,
+                $authData,
+                $authTagLength
+            );
+
+            $this->authTag  = $authTag;
+            /**
+             * Store the tag with encrypted data
+             */
+            $encrypted     .= $authTag;
+        } else {
+            $encrypted = openssl_encrypt(
+                $padded,
+                $cipher,
+                $encryptKey,
+                OPENSSL_RAW_DATA,
+                $iv
             );
         }
 
-        return openssl_encrypt(
-            $padded,
-            $this->cipher,
-            $encryptKey,
-            OPENSSL_RAW_DATA,
-            $iv
-        );
+        if (false === $encrypted) {
+            throw new Exception("Could not encrypt data");
+        }
+
+        return $encrypted;
     }
 
     /**
