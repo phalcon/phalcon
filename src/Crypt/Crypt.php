@@ -177,64 +177,6 @@ class Crypt implements CryptInterface
     }
 
     /**
-     * Initialize available cipher algorithms.
-     *
-     * @return Crypt
-     * @throws Exception
-     */
-    protected function initializeAvailableCiphers(): Crypt
-    {
-        if (true !== $this->phpFunctionExists("openssl_get_cipher_methods")) {
-            throw new Exception("This class requires the openssl extension for PHP");
-        }
-
-        $available = openssl_get_cipher_methods(true);
-        $allowed   = [];
-
-        foreach ($available as $cipher) {
-            if (
-                true !== $this->toStartsWith($cipher, "des") &&
-                true !== $this->toStartsWith($cipher, "rc2") &&
-                true !== $this->toStartsWith($cipher, "rc4") &&
-                true !== $this->toEndsWith($cipher, "ecb")
-            ) {
-                $allowed[$cipher] = $cipher;
-            }
-        }
-
-        $this->availableCiphers = $allowed;
-
-        return $this;
-    }
-
-    /**
-     * Decrypt a text that is coded as a base64 string.
-     *
-     * @param string     $input
-     * @param mixed|null $key
-     * @param bool       $safe
-     *
-     * @return string
-     * @throws Exception
-     * @throws Mismatch
-     */
-    public function decryptBase64(
-        string $input,
-        $key = null,
-        bool $safe = false
-    ): string {
-        if (true === $safe) {
-            $input = strtr($input, "-_", "+/")
-                . substr("===", (strlen($input) + 3) % 4);
-        }
-
-        return $this->decrypt(
-            base64_decode($input),
-            $key
-        );
-    }
-
-    /**
      * Decrypts an encrypted text.
      *
      * ```php
@@ -309,237 +251,7 @@ class Crypt implements CryptInterface
     }
 
     /**
-     * Checks if a cipher or a hash algorithm is available
-     *
-     * @param string $cipher
-     * @param string $type
-     *
-     * @throws Exception
-     */
-    protected function checkCipherHashIsAvailable(string $cipher, string $type): void
-    {
-        $method    = "getAvailable";
-        $method    .= ("hash" === $cipher) ? "HashAlgorithms" : "Ciphers";
-        $available = $this->$method();
-        $upper     = $this->toLower($cipher);
-        if (true !== isset($available[$upper])) {
-            throw new Exception(
-                sprintf(
-                    "The %s algorithm '%s' is not supported on this system.",
-                    $type,
-                    $cipher
-                )
-            );
-        }
-    }
-
-    /**
-     * Returns the mode (last few characters of the cipher)
-     *
-     * @return string
-     */
-    private function getMode(): string
-    {
-        $position = strrpos($this->cipher, "-");
-        if (false === $position) {
-            throw new Exception("Cannot determine cipher mode");
-        }
-        return $this->toLower(
-            substr($this->cipher, $position - strlen($this->cipher) + 1)
-        );
-    }
-
-    /**
-     * Returns the block size
-     *
-     * @param string $mode
-     *
-     * @return int
-     */
-    private function getBlockSize(string $mode): int
-    {
-        if ($this->ivLength > 0) {
-            return $this->ivLength;
-        }
-
-        return $this->getIvLength(
-            str_ireplace("-" . $mode, "", $this->cipher)
-        );
-    }
-
-    /**
-     * Initialize available cipher algorithms.
-     *
-     * @param string $cipher
-     *
-     * @return int
-     */
-    private function getIvLength(string $cipher): int
-    {
-        $length = $this->phpOpensslCipherIvLength($cipher);
-        if (false === $length) {
-            throw new Exception(
-                "Cannot calculate the initialization vector (IV) length of the cipher"
-            );
-        }
-
-        return $length;
-    }
-
-    /**
-     * Get the name of hashing algorithm.
-     *
-     * @return string
-     */
-    public function getHashAlgorithm(): string
-    {
-        return $this->hashAlgorithm;
-    }
-
-    /**
-     * Set the name of hashing algorithm.
-     *
-     * @param string $hashAlgorithm
-     *
-     * @return CryptInterface
-     * @throws Exception
-     */
-    public function setHashAlgorithm(string $hashAlgorithm): CryptInterface
-    {
-        $this->checkCipherHashIsAvailable($hashAlgorithm, "hash");
-
-        $this->hashAlgorithm = $hashAlgorithm;
-
-        return $this;
-    }
-
-    /**
-     * @param string $mode
-     * @param string $ciphertext
-     * @param string $decryptKey
-     * @param string $iv
-     *
-     * @return string
-     */
-    protected function decryptGcmCcmAuth(
-        string $mode,
-        string $ciphertext,
-        string $decryptKey,
-        string $iv
-    ): string {
-        if (
-            true === $this->checkIsMode(["ccm", "gcm"], $mode) &&
-            true !== empty($this->authData)
-        ) {
-            return openssl_decrypt(
-                $ciphertext,
-                $this->cipher,
-                $decryptKey,
-                OPENSSL_RAW_DATA,
-                $iv,
-                $this->authTag,
-                $this->authData
-            );
-        }
-
-        return openssl_decrypt(
-            $ciphertext,
-            $this->cipher,
-            $decryptKey,
-            OPENSSL_RAW_DATA,
-            $iv
-        );
-    }
-
-    /**
-     * Checks if a mode (string) is in the values to compare (modes array)
-     *
-     * @param array  $modes
-     * @param string $mode
-     *
-     * @return bool
-     */
-    private function checkIsMode(array $modes, string $mode): bool
-    {
-        return in_array($mode, $modes);
-    }
-
-    /**
-     * @param string $mode
-     * @param int    $blockSize
-     * @param string $decrypted
-     *
-     * @return string
-     */
-    protected function decryptCbcEcb(
-        string $mode,
-        int $blockSize,
-        string $decrypted
-    ): string {
-        if (true === $this->checkIsMode(["cbc", "ecb"], $mode)) {
-            $decrypted = $this->cryptUnpadText(
-                $decrypted,
-                $mode,
-                $blockSize,
-                $this->padding
-            );
-        }
-
-        return $decrypted;
-    }
-
-    /**
-     * Removes a padding from a text.
-     *
-     * If the function detects that the text was not padded, it will return it
-     * unmodified.
-     *
-     * @param string $input
-     * @param string $mode
-     * @param int    $blockSize
-     * @param int    $paddingType
-     *
-     * @return string
-     */
-    protected function cryptUnpadText(
-        string $input,
-        string $mode,
-        int $blockSize,
-        int $paddingType
-    ): string {
-        $paddingSize = 0;
-        $length      = strlen($input);
-        if (
-            $length > 0 &&
-            ($length % $blockSize === 0) &&
-            true === $this->checkIsMode(["cbc", "ecb"], $mode)
-        ) {
-            $service     = $this->padFactory->padNumberToService($paddingType);
-            $paddingSize = $this->padFactory->newInstance($service)
-                                            ->unpad($input, $blockSize);
-
-            if ($paddingSize > 0) {
-                if ($paddingSize <= $blockSize) {
-                    if ($paddingSize < $length) {
-                        return substr($input, 0, $length - $paddingSize);
-                    }
-
-                    return "";
-                }
-
-                $paddingSize = 0;
-            }
-        }
-
-        if (0 === $paddingSize) {
-            return $input;
-        }
-
-        return "";
-    }
-
-    /**
-     * Encrypts a text returning the result as a base64 string.
+     * Decrypt a text that is coded as a base64 string.
      *
      * @param string     $input
      * @param mixed|null $key
@@ -547,26 +259,22 @@ class Crypt implements CryptInterface
      *
      * @return string
      * @throws Exception
+     * @throws Mismatch
      */
-    public function encryptBase64(
+    public function decryptBase64(
         string $input,
         $key = null,
         bool $safe = false
     ): string {
         if (true === $safe) {
-            return rtrim(
-                strtr(
-                    base64_encode(
-                        $this->encrypt($input, $key)
-                    ),
-                    "+/",
-                    "-_"
-                ),
-                "="
-            );
+            $input = strtr($input, "-_", "+/")
+                . substr("===", (strlen($input) + 3) % 4);
         }
 
-        return base64_encode($this->encrypt($input, $key));
+        return $this->decrypt(
+            base64_decode($input),
+            $key
+        );
     }
 
     /**
@@ -620,26 +328,262 @@ class Crypt implements CryptInterface
     }
 
     /**
-     * @param string $mode
-     * @param string $input
-     * @param int    $blockSize
+     * Encrypts a text returning the result as a base64 string.
+     *
+     * @param string     $input
+     * @param mixed|null $key
+     * @param bool       $safe
      *
      * @return string
      * @throws Exception
      */
-    protected function encryptGetPadded(
-        string $mode,
+    public function encryptBase64(
         string $input,
-        int $blockSize
+        $key = null,
+        bool $safe = false
     ): string {
-        if (
-            0 !== $this->padding &&
-            true === $this->checkIsMode(["cbc", "ecb"], $mode)
-        ) {
-            return $this->cryptPadText($input, $mode, $blockSize, $this->padding);
+        if (true === $safe) {
+            return rtrim(
+                strtr(
+                    base64_encode(
+                        $this->encrypt($input, $key)
+                    ),
+                    "+/",
+                    "-_"
+                ),
+                "="
+            );
         }
 
-        return $input;
+        return base64_encode($this->encrypt($input, $key));
+    }
+
+    /**
+     * Returns a list of available ciphers.
+     *
+     * @return array
+     */
+    public function getAvailableCiphers(): array
+    {
+        return $this->availableCiphers;
+    }
+
+    /**
+     * @return string
+     */
+    public function getAuthData(): string
+    {
+        return $this->authData;
+    }
+
+    /**
+     * @return string
+     */
+    public function getAuthTag(): string
+    {
+        return $this->authTag;
+    }
+
+    /**
+     * @return int
+     */
+    public function getAuthTagLength(): int
+    {
+        return $this->authTagLength;
+    }
+
+    /**
+     * Return a list of registered hashing algorithms suitable for hash_hmac.
+     *
+     * @return array
+     */
+    public function getAvailableHashAlgorithms(): array
+    {
+        if (true === $this->phpFunctionExists("hash_hmac_algos")) {
+            return hash_hmac_algos();
+        }
+
+        return hash_algos();
+    }
+
+    /**
+     * Get the name of hashing algorithm.
+     *
+     * @return string
+     */
+    public function getHashAlgorithm(): string
+    {
+        return $this->hashAlgorithm;
+    }
+
+    /**
+     * Returns the current cipher
+     *
+     * @return string
+     */
+    public function getCipher(): string
+    {
+        return $this->cipher;
+    }
+
+    /**
+     * Returns the encryption key
+     *
+     * @return string
+     */
+    public function getKey(): string
+    {
+        return $this->key;
+    }
+
+    /**
+     * @param string $data
+     *
+     * @return CryptInterface
+     */
+    public function setAuthData(string $data): CryptInterface
+    {
+        $this->authData = $data;
+
+        return $this;
+    }
+
+    /**
+     * @param string $tag
+     *
+     * @return CryptInterface
+     */
+    public function setAuthTag(string $tag): CryptInterface
+    {
+        $this->authTag = $tag;
+
+        return $this;
+    }
+
+    /**
+     * @param int $length
+     *
+     * @return CryptInterface
+     */
+    public function setAuthTagLength(int $length): CryptInterface
+    {
+        $this->authTagLength = $length;
+
+        return $this;
+    }
+
+    /**
+     * Sets the cipher algorithm for data encryption and decryption.
+     *
+     * @param string $cipher
+     *
+     * @return CryptInterface
+     * @throws Exception
+     */
+    public function setCipher(string $cipher): CryptInterface
+    {
+        $this->checkCipherHashIsAvailable($cipher, "cipher");
+
+        $this->ivLength = $this->getIvLength($cipher);
+        $this->cipher   = $cipher;
+
+        return $this;
+    }
+
+    /**
+     * Sets the encryption key.
+     *
+     * The `$key` should have been previously generated in a cryptographically
+     * safe way.
+     *
+     * Bad key:
+     * "le password"
+     *
+     * Better (but still unsafe):
+     * "#1dj8$=dp?.ak//j1V$~%*0X"
+     *
+     * Good key:
+     * "T4\xb1\x8d\xa9\x98\x05\\\x8c\xbe\x1d\x07&[\x99\x18\xa4~Lc1\xbeW\xb3"
+     *
+     * @param string $key
+     *
+     * @return CryptInterface
+     */
+    public function setKey(string $key): CryptInterface
+    {
+        $this->key = $key;
+
+        return $this;
+    }
+
+    /**
+     * Set the name of hashing algorithm.
+     *
+     * @param string $hashAlgorithm
+     *
+     * @return CryptInterface
+     * @throws Exception
+     */
+    public function setHashAlgorithm(string $hashAlgorithm): CryptInterface
+    {
+        $this->checkCipherHashIsAvailable($hashAlgorithm, "hash");
+
+        $this->hashAlgorithm = $hashAlgorithm;
+
+        return $this;
+    }
+
+    /**
+     * Changes the padding scheme used.
+     *
+     * @param int $scheme
+     *
+     * @return CryptInterface
+     */
+    public function setPadding(int $scheme): CryptInterface
+    {
+        $this->padding = $scheme;
+
+        return $this;
+    }
+
+    /**
+     * Sets if the calculating message digest must used.
+     *
+     * @param bool $useSigning
+     *
+     * @return CryptInterface
+     */
+    public function useSigning(bool $useSigning): CryptInterface
+    {
+        $this->useSigning = $useSigning;
+
+        return $this;
+    }
+
+    /**
+     * Checks if a cipher or a hash algorithm is available
+     *
+     * @param string $cipher
+     * @param string $type
+     *
+     * @throws Exception
+     */
+    protected function checkCipherHashIsAvailable(string $cipher, string $type): void
+    {
+        $method    = "getAvailable";
+        $method    .= ("hash" === $cipher) ? "HashAlgorithms" : "Ciphers";
+        $available = $this->$method();
+        $upper     = $this->toLower($cipher);
+        if (true !== isset($available[$upper])) {
+            throw new Exception(
+                sprintf(
+                    "The %s algorithm '%s' is not supported on this system.",
+                    $type,
+                    $cipher
+                )
+            );
+        }
     }
 
     /**
@@ -680,6 +624,141 @@ class Crypt implements CryptInterface
         }
 
         return $input . substr($padding, 0, $paddingSize);
+    }
+
+    /**
+     * Removes a padding from a text.
+     *
+     * If the function detects that the text was not padded, it will return it
+     * unmodified.
+     *
+     * @param string $input
+     * @param string $mode
+     * @param int    $blockSize
+     * @param int    $paddingType
+     *
+     * @return string
+     */
+    protected function cryptUnpadText(
+        string $input,
+        string $mode,
+        int $blockSize,
+        int $paddingType
+    ): string {
+        $paddingSize = 0;
+        $length      = strlen($input);
+        if (
+            $length > 0 &&
+            ($length % $blockSize === 0) &&
+            true === $this->checkIsMode(["cbc", "ecb"], $mode)
+        ) {
+            $service     = $this->padFactory->padNumberToService($paddingType);
+            $paddingSize = $this->padFactory->newInstance($service)
+                                            ->unpad($input, $blockSize);
+
+            if ($paddingSize > 0) {
+                if ($paddingSize <= $blockSize) {
+                    if ($paddingSize < $length) {
+                        return substr($input, 0, $length - $paddingSize);
+                    }
+
+                    return "";
+                }
+
+                $paddingSize = 0;
+            }
+        }
+
+        if (0 === $paddingSize) {
+            return $input;
+        }
+
+        return "";
+    }
+
+    /**
+     * @param string $mode
+     * @param int    $blockSize
+     * @param string $decrypted
+     *
+     * @return string
+     */
+    protected function decryptCbcEcb(
+        string $mode,
+        int $blockSize,
+        string $decrypted
+    ): string {
+        if (true === $this->checkIsMode(["cbc", "ecb"], $mode)) {
+            $decrypted = $this->cryptUnpadText(
+                $decrypted,
+                $mode,
+                $blockSize,
+                $this->padding
+            );
+        }
+
+        return $decrypted;
+    }
+
+    /**
+     * @param string $mode
+     * @param string $ciphertext
+     * @param string $decryptKey
+     * @param string $iv
+     *
+     * @return string
+     */
+    protected function decryptGcmCcmAuth(
+        string $mode,
+        string $ciphertext,
+        string $decryptKey,
+        string $iv
+    ): string {
+        if (
+            true === $this->checkIsMode(["ccm", "gcm"], $mode) &&
+            true !== empty($this->authData)
+        ) {
+            return openssl_decrypt(
+                $ciphertext,
+                $this->cipher,
+                $decryptKey,
+                OPENSSL_RAW_DATA,
+                $iv,
+                $this->authTag,
+                $this->authData
+            );
+        }
+
+        return openssl_decrypt(
+            $ciphertext,
+            $this->cipher,
+            $decryptKey,
+            OPENSSL_RAW_DATA,
+            $iv
+        );
+    }
+
+    /**
+     * @param string $mode
+     * @param string $input
+     * @param int    $blockSize
+     *
+     * @return string
+     * @throws Exception
+     */
+    protected function encryptGetPadded(
+        string $mode,
+        string $input,
+        int $blockSize
+    ): string {
+        if (
+            0 !== $this->padding &&
+            true === $this->checkIsMode(["cbc", "ecb"], $mode)
+        ) {
+            return $this->cryptPadText($input, $mode, $blockSize, $this->padding);
+        }
+
+        return $input;
     }
 
     /**
@@ -726,178 +805,97 @@ class Crypt implements CryptInterface
     }
 
     /**
-     * Returns a list of available ciphers.
+     * Initialize available cipher algorithms.
      *
-     * @return array
+     * @return Crypt
+     * @throws Exception
      */
-    public function getAvailableCiphers(): array
+    protected function initializeAvailableCiphers(): Crypt
     {
-        return $this->availableCiphers;
-    }
-
-    /**
-     * @return string
-     */
-    public function getAuthData(): string
-    {
-        return $this->authData;
-    }
-
-    /**
-     * @param string $data
-     *
-     * @return CryptInterface
-     */
-    public function setAuthData(string $data): CryptInterface
-    {
-        $this->authData = $data;
-
-        return $this;
-    }
-
-    /**
-     * @return string
-     */
-    public function getAuthTag(): string
-    {
-        return $this->authTag;
-    }
-
-    /**
-     * @param string $tag
-     *
-     * @return CryptInterface
-     */
-    public function setAuthTag(string $tag): CryptInterface
-    {
-        $this->authTag = $tag;
-
-        return $this;
-    }
-
-    /**
-     * @return int
-     */
-    public function getAuthTagLength(): int
-    {
-        return $this->authTagLength;
-    }
-
-    /**
-     * @param int $length
-     *
-     * @return CryptInterface
-     */
-    public function setAuthTagLength(int $length): CryptInterface
-    {
-        $this->authTagLength = $length;
-
-        return $this;
-    }
-
-    /**
-     * Return a list of registered hashing algorithms suitable for hash_hmac.
-     *
-     * @return array
-     */
-    public function getAvailableHashAlgorithms(): array
-    {
-        if (true === $this->phpFunctionExists("hash_hmac_algos")) {
-            return hash_hmac_algos();
+        if (true !== $this->phpFunctionExists("openssl_get_cipher_methods")) {
+            throw new Exception("This class requires the openssl extension for PHP");
         }
 
-        return hash_algos();
+        $available = openssl_get_cipher_methods(true);
+        $allowed   = [];
+
+        foreach ($available as $cipher) {
+            if (
+                true !== $this->toStartsWith($cipher, "des") &&
+                true !== $this->toStartsWith($cipher, "rc2") &&
+                true !== $this->toStartsWith($cipher, "rc4") &&
+                true !== $this->toEndsWith($cipher, "ecb")
+            ) {
+                $allowed[$cipher] = $cipher;
+            }
+        }
+
+        $this->availableCiphers = $allowed;
+
+        return $this;
     }
 
     /**
-     * Returns the current cipher
+     * Checks if a mode (string) is in the values to compare (modes array)
      *
-     * @return string
+     * @param array  $modes
+     * @param string $mode
+     *
+     * @return bool
      */
-    public function getCipher(): string
+    private function checkIsMode(array $modes, string $mode): bool
     {
-        return $this->cipher;
+        return in_array($mode, $modes);
     }
 
     /**
-     * Sets the cipher algorithm for data encryption and decryption.
+     * Returns the block size
+     *
+     * @param string $mode
+     *
+     * @return int
+     */
+    private function getBlockSize(string $mode): int
+    {
+        if ($this->ivLength > 0) {
+            return $this->ivLength;
+        }
+
+        return $this->getIvLength(
+            str_ireplace("-" . $mode, "", $this->cipher)
+        );
+    }
+
+    /**
+     * Initialize available cipher algorithms.
      *
      * @param string $cipher
      *
-     * @return CryptInterface
-     * @throws Exception
+     * @return int
      */
-    public function setCipher(string $cipher): CryptInterface
+    private function getIvLength(string $cipher): int
     {
-        $this->checkCipherHashIsAvailable($cipher, "cipher");
+        $length = $this->phpOpensslCipherIvLength($cipher);
+        if (false === $length) {
+            throw new Exception(
+                "Cannot calculate the initialization vector (IV) length of the cipher"
+            );
+        }
 
-        $this->ivLength = $this->getIvLength($cipher);
-        $this->cipher   = $cipher;
-
-        return $this;
+        return $length;
     }
 
     /**
-     * Returns the encryption key
+     * Returns the mode (last few characters of the cipher)
      *
      * @return string
      */
-    public function getKey(): string
+    private function getMode(): string
     {
-        return $this->key;
-    }
+        $position = intval(strrpos($this->cipher, "-"));
 
-    /**
-     * Sets the encryption key.
-     *
-     * The `$key` should have been previously generated in a cryptographically
-     * safe way.
-     *
-     * Bad key:
-     * "le password"
-     *
-     * Better (but still unsafe):
-     * "#1dj8$=dp?.ak//j1V$~%*0X"
-     *
-     * Good key:
-     * "T4\xb1\x8d\xa9\x98\x05\\\x8c\xbe\x1d\x07&[\x99\x18\xa4~Lc1\xbeW\xb3"
-     *
-     * @param string $key
-     *
-     * @return CryptInterface
-     */
-    public function setKey(string $key): CryptInterface
-    {
-        $this->key = $key;
-
-        return $this;
-    }
-
-    /**
-     * Changes the padding scheme used.
-     *
-     * @param int $scheme
-     *
-     * @return CryptInterface
-     */
-    public function setPadding(int $scheme): CryptInterface
-    {
-        $this->padding = $scheme;
-
-        return $this;
-    }
-
-    /**
-     * Sets if the calculating message digest must used.
-     *
-     * @param bool $useSigning
-     *
-     * @return CryptInterface
-     */
-    public function useSigning(bool $useSigning): CryptInterface
-    {
-        $this->useSigning = $useSigning;
-
-        return $this;
+        return $this->toLower(
+            substr($this->cipher, $position - strlen($this->cipher) + 1)
+        );
     }
 }
