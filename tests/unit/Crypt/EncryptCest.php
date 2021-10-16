@@ -140,35 +140,83 @@ class EncryptCest
     }
 
     /**
-     * Tests Phalcon\Crypt\Crypt :: encrypt() - gcm
+     * Tests Phalcon\Crypt\Crypt :: encrypt() - gcm/ccm with data
      *
      * @param UnitTester $I
      *
      * @author Phalcon Team <team@phalcon.io>
      * @since  2020-09-09
      */
-    public function cryptEncryptGcm(UnitTester $I)
+    public function cryptEncryptGcmCcmWithData(UnitTester $I)
     {
-        $I->wantToTest('Crypt - encrypt()');
+        $I->wantToTest('Crypt - encrypt() - gcm/ccm with data');
 
         $ciphers = [
             'aes-128-gcm',
             'aes-128-ccm',
+            'aes-256-gcm',
+            'aes-256-ccm',
         ];
 
-        $crypt = new Crypt();
 
         foreach ($ciphers as $cipher) {
+            $crypt = new Crypt();
             $crypt
                 ->setCipher($cipher)
+                ->setKey('123456')
                 ->setAuthTag('1234')
                 ->setAuthData('abcd')
-                ->setKey('123456')
             ;
 
             $encryption = $crypt->encrypt('phalcon');
+
+            $crypt = new Crypt();
+            $crypt
+                ->setCipher($cipher)
+                ->setKey('123456')
+                ->setAuthData('abcd')
+            ;
+
             $actual     = $crypt->decrypt($encryption);
             $I->assertEquals('phalcon', $actual);
+        }
+    }
+
+    /**
+     * Tests Phalcon\Crypt\Crypt :: encrypt() - gcm/ccm exception without data
+     *
+     * @param UnitTester $I
+     *
+     * @author Phalcon Team <team@phalcon.io>
+     * @since  2020-09-09
+     */
+    public function cryptEncryptGcmCcmExceptionWithoutData(UnitTester $I)
+    {
+        $I->wantToTest('Crypt - encrypt() - gcm/ccm exception without data');
+
+        $ciphers = [
+            'aes-128-gcm',
+            'aes-128-ccm',
+            'aes-256-gcm',
+            'aes-256-ccm',
+        ];
+
+        foreach ($ciphers as $cipher) {
+            $I->expectThrowable(
+                new Exception(
+                    "Auth data must be provided when using AEAD mode"
+                ),
+                function () use ($cipher) {
+                    $crypt = new Crypt();
+
+                    $crypt
+                        ->setCipher($cipher)
+                        ->setKey('123456')
+                    ;
+
+                    $encryption = $crypt->encrypt('phalcon');
+                }
+            );
         }
     }
 
