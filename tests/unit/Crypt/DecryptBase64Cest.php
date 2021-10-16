@@ -33,7 +33,7 @@ class DecryptBase64Cest
      * @since  2020-09-09
      * @issue  https://github.com/phalcon/cphalcon/issues/13379
      */
-    public function shouldNotThrowExceptionIfKeyMismatch(UnitTester $I)
+    public function cryptDecryptBase64NoExceptionOnKeyMismatch(UnitTester $I)
     {
         $I->wantToTest(
             'Crypt - decryptBase64() not throwing Exception on key mismatch'
@@ -58,7 +58,7 @@ class DecryptBase64Cest
      * @since  2020-09-09
      * @issue  https://github.com/phalcon/cphalcon/issues/13379
      */
-    public function shouldThrowExceptionIfHashMismatch(UnitTester $I)
+    public function cryptDecryptBase64NoExceptionIfHashMismatch(UnitTester $I)
     {
         $I->expectThrowable(
             new Mismatch('Hash does not match.'),
@@ -84,13 +84,13 @@ class DecryptBase64Cest
      * @since  2020-09-09
      * @issue  https://github.com/phalcon/cphalcon/issues/13379
      */
-    public function shouldDecryptSignedString(UnitTester $I)
+    public function cryptDecryptBase64DecryptSignedString(UnitTester $I)
     {
         $crypt = new Crypt();
-
-        $crypt->useSigning(true);
-
-        $crypt->setKey('secret');
+        $crypt
+            ->useSigning(true)
+            ->setKey('secret')
+        ;
 
         $expected  = 'le text';
         $encrypted = $crypt->encryptBase64($expected);

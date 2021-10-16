@@ -16,7 +16,10 @@ namespace Phalcon\Tests\Unit\Crypt;
 use Phalcon\Crypt\Crypt;
 use Phalcon\Crypt\Exception\Exception;
 use Phalcon\Crypt\Exception\Mismatch;
+use Phalcon\Tests\Fixtures\Crypt\CryptFixture;
 use UnitTester;
+
+use function str_repeat;
 
 /**
  * Class DecryptCest
@@ -111,7 +114,7 @@ class DecryptCest
      * @author Phalcon Team <team@phalcon.io>
      * @since  2020-09-09
      */
-    public function cryptEncryptExceptionEmptyKey(UnitTester $I)
+    public function cryptDecryptExceptionEmptyKey(UnitTester $I)
     {
         $I->wantToTest('Crypt - decrypt() - exception empty key');
 
@@ -125,4 +128,29 @@ class DecryptCest
             }
         );
     }
+
+
+    /**
+     * Tests Phalcon\Crypt\Crypt :: encrypt() - Zero padding returns input
+     *
+     * @param UnitTester $I
+     *
+     * @author Phalcon Team <team@phalcon.io>
+     * @since  2020-09-09
+     */
+    public function cryptDecryptCryptUnpadZeroPaddingReturnsInput(UnitTester $I)
+    {
+        $I->wantToTest('Crypt - decrypt() - cryptUnpadText() - zero padding returns input');
+
+        $crypt       = new CryptFixture();
+        $input       = str_repeat("A", 32);
+        $mode        = "ccb";
+        $blockSize   = 16;
+        $paddingType = Crypt::PADDING_PKCS7;
+
+        $expected = $input;
+        $actual   = $crypt->cryptUnpadText($input, $mode, $blockSize, $paddingType);
+        $I->assertEquals($expected, $actual);
+    }
+
 }

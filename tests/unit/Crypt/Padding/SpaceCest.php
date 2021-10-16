@@ -16,7 +16,6 @@ namespace Phalcon\Tests\Unit\Crypt\Padding;
 use Phalcon\Crypt\Padding\Space;
 use UnitTester;
 
-use function chr;
 use function str_repeat;
 
 /**

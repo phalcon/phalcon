@@ -15,8 +15,10 @@ namespace Phalcon\Tests\Unit\Crypt;
 
 use Phalcon\Crypt\Crypt;
 use Phalcon\Crypt\Exception\Exception;
+use Phalcon\Tests\Fixtures\Crypt\CryptFixture;
 use UnitTester;
 
+use function str_repeat;
 use function substr;
 
 /**
@@ -121,9 +123,9 @@ class EncryptCest
      * @author Phalcon Team <team@phalcon.io>
      * @since  2020-09-09
      */
-    public function cryptEncryptException(UnitTester $I)
+    public function cryptEncryptExceptionUnsupportedAlgo(UnitTester $I)
     {
-        $I->wantToTest('Crypt - encrypt() - exception');
+        $I->wantToTest('Crypt - encrypt() - exception unsupported algo');
 
         $I->expectThrowable(
             new Exception(
@@ -168,5 +170,67 @@ class EncryptCest
             $actual     = $crypt->decrypt($encryption);
             $I->assertEquals('phalcon', $actual);
         }
+    }
+
+    /**
+     * Tests Phalcon\Crypt\Crypt :: encrypt() - exception invalid padding size
+     *
+     * @param UnitTester $I
+     *
+     * @author Phalcon Team <team@phalcon.io>
+     * @since  2020-09-09
+     */
+    public function cryptEncryptCryptPadExceptionInvalidPaddingSize(UnitTester $I)
+    {
+        $I->wantToTest('Crypt - encrypt() - cryptPadText() - exception invalid padding size');
+
+        $I->expectThrowable(
+            new Exception("Padding size cannot be less than 0 or greater than 256"),
+            function () {
+                $crypt       = new CryptFixture();
+                $input       = str_repeat("A", 4096);
+                $mode        = "cbc";
+                $blockSize   = 1024;
+                $paddingType = Crypt::PADDING_PKCS7;
+
+                $result = $crypt->cryptPadText($input, $mode, $blockSize, $paddingType);
+            }
+        );
+
+        $I->expectThrowable(
+            new Exception("Padding size cannot be less than 0 or greater than 256"),
+            function () {
+                $crypt       = new CryptFixture();
+                $input       = str_repeat("A", 4096);
+                $mode        = "cbc";
+                $blockSize   = -1024;
+                $paddingType = Crypt::PADDING_PKCS7;
+
+                $result = $crypt->cryptPadText($input, $mode, $blockSize, $paddingType);
+            }
+        );
+    }
+
+    /**
+     * Tests Phalcon\Crypt\Crypt :: encrypt() - Zero padding returns input
+     *
+     * @param UnitTester $I
+     *
+     * @author Phalcon Team <team@phalcon.io>
+     * @since  2020-09-09
+     */
+    public function cryptEncryptCryptPadZeroPaddingReturnsInput(UnitTester $I)
+    {
+        $I->wantToTest('Crypt - encrypt() - cryptPadText() - zero padding returns input');
+
+        $crypt       = new CryptFixture();
+        $input       = str_repeat("A", 32);
+        $mode        = "ccb";
+        $blockSize   = 16;
+        $paddingType = Crypt::PADDING_PKCS7;
+
+        $expected = $input;
+        $actual   = $crypt->cryptPadText($input, $mode, $blockSize, $paddingType);
+        $I->assertEquals($expected, $actual);
     }
 }

@@ -16,9 +16,6 @@ namespace Phalcon\Tests\Unit\Crypt\Padding;
 use Phalcon\Crypt\Padding\Iso10126;
 use UnitTester;
 
-use function chr;
-use function str_repeat;
-
 /**
  * Class Iso10126Cest
  *
