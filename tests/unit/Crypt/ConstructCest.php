@@ -15,7 +15,7 @@ namespace Phalcon\Tests\Unit\Crypt;
 
 use Codeception\Stub;
 use Phalcon\Crypt\Crypt;
-use Phalcon\Crypt\Exception;
+use Phalcon\Crypt\Exception\Exception;
 use UnitTester;
 
 /**

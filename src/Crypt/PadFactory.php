@@ -13,6 +13,7 @@ declare(strict_types=1);
 
 namespace Phalcon\Crypt;
 
+use Phalcon\Crypt\Exception\Exception;
 use Phalcon\Crypt\Padding\Ansi;
 use Phalcon\Crypt\Padding\Iso10126;
 use Phalcon\Crypt\Padding\IsoIek;

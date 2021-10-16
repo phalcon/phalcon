@@ -13,34 +13,13 @@ declare(strict_types=1);
 
 namespace Phalcon\Crypt;
 
-use Phalcon\Crypt\Padding\PadAnsi;
-use Phalcon\Crypt\Padding\PadIso10126;
-use Phalcon\Crypt\Padding\PadIsoIek;
-use Phalcon\Crypt\Padding\PadPkcs7;
-use Phalcon\Crypt\Padding\PadSpace;
-use Phalcon\Crypt\Padding\PadZero;
-use Phalcon\Crypt\Padding\UnpadAnsi;
-use Phalcon\Crypt\Padding\UnpadIso10126;
-use Phalcon\Crypt\Padding\UnpadIsoIek;
-use Phalcon\Crypt\Padding\UnpadPkcs7;
-use Phalcon\Crypt\Padding\UnpadSpace;
-use Phalcon\Crypt\Padding\UnpadZero;
+use Phalcon\Crypt\Exception\Exception;
+use Phalcon\Crypt\Exception\Mismatch;
 use Phalcon\Crypt\Traits\CryptGettersTrait;
 use Phalcon\Support\Helper\Str\Traits\EndsWithTrait;
+use Phalcon\Support\Helper\Str\Traits\LowerTrait;
 use Phalcon\Support\Helper\Str\Traits\StartsWithTrait;
-use Phalcon\Support\Helper\Str\Traits\UpperTrait;
 use Phalcon\Support\Traits\PhpFunctionTrait;
-
-use function base64_decode;
-use function base64_encode;
-use function hash;
-use function hash_hmac;
-use function openssl_get_cipher_methods;
-use function openssl_random_pseudo_bytes;
-use function rtrim;
-use function sprintf;
-use function strlen;
-use function substr;
 
 /**
  * Provides encryption capabilities to Phalcon applications.
@@ -50,7 +29,7 @@ use function substr;
  *
  * $crypt = new Crypt();
  *
- * $crypt->setCipher('aes-256-ctr');
+ * $crypt->setCipher("aes-256-ctr");
  *
  * $key  =
  * "T4\xb1\x8d\xa9\x98\x05\\\x8c\xbe\x1d\x07&[\x99\x18\xa4~Lc1\xbeW\xb3";
@@ -69,16 +48,16 @@ use function substr;
  * @property string $cipher
  * @property array  $availableCiphers
  * @property int    $ivLength
- * @property string $hashAlgo
+ * @property string $hashAlgorithm
  * @property bool   $useSigning
  */
 class Crypt implements CryptInterface
 {
     use CryptGettersTrait;
     use EndsWithTrait;
+    use LowerTrait;
     use PhpFunctionTrait;
     use StartsWithTrait;
-    use UpperTrait;
 
     public const PADDING_ANSI_X_923     = 1;
     public const PADDING_DEFAULT        = 0;
@@ -97,7 +76,7 @@ class Crypt implements CryptInterface
      * @throws Exception
      */
     public function __construct(
-        string $cipher = 'aes-256-cfb',
+        string $cipher = "aes-256-cfb",
         bool $useSigning = false
     ) {
         $this->initializeAvailableCiphers();
@@ -128,19 +107,19 @@ class Crypt implements CryptInterface
         $decryptKey = (true === empty($key)) ? $this->key : $key;
 
         if (true === empty($decryptKey)) {
-            throw new Exception('Decryption key cannot be empty');
+            throw new Exception("Decryption key cannot be empty");
         }
 
-        $this->checkCipherIsAvailable($this->cipher, 'cipher');
+        $this->checkCipherHashIsAvailable($this->cipher, "cipher");
         $mode      = $this->getMode();
         $blockSize = $this->getBlockSize($mode);
-        $iv        = mb_substr($input, 0, $this->ivLength, '8bit');
+        $iv        = mb_substr($input, 0, $this->ivLength, "8bit");
 
         if (true === $this->useSigning) {
-            $hashAlgorithm = $this->getHashAlgo();
-            $hashLength    = strlen(hash($hashAlgorithm, '', true));
-            $hash          = mb_substr($input, $this->ivLength, $hashLength, '8bit');
-            $ciphertext    = mb_substr($input, $this->ivLength + $hashLength, null, '8bit');
+            $hashAlgorithm = $this->getHashAlgorithm();
+            $hashLength    = strlen(hash($hashAlgorithm, "", true));
+            $hash          = mb_substr($input, $this->ivLength, $hashLength, "8bit");
+            $ciphertext    = mb_substr($input, $this->ivLength + $hashLength, null, "8bit");
 
             $decrypted = $this->decryptGcmCcmAuth(
                 $mode,
@@ -156,16 +135,16 @@ class Crypt implements CryptInterface
             );
 
             /**
-             * Checks on the decrypted's message digest using the HMAC method.
+             * Checks on the decrypted message digest using the HMAC method.
              */
             if ($hash !== hash_hmac($hashAlgorithm, $decrypted, $decryptKey, true)) {
-                throw new Mismatch('Hash does not match.');
+                throw new Mismatch("Hash does not match.");
             }
 
             return $decrypted;
         }
 
-        $ciphertext = mb_substr($input, $this->ivLength, null, '8bit');
+        $ciphertext = mb_substr($input, $this->ivLength, null, "8bit");
         $decrypted  = $this->decryptGcmCcmAuth(
             $mode,
             $ciphertext,
@@ -197,8 +176,8 @@ class Crypt implements CryptInterface
         bool $safe = false
     ): string {
         if (true === $safe) {
-            $input = strtr($input, '-_', '+/')
-                . substr('===', (strlen($input) + 3) % 4);
+            $input = strtr($input, "-_", "+/")
+                . substr("===", (strlen($input) + 3) % 4);
         }
 
         return $this->decrypt(
@@ -228,10 +207,10 @@ class Crypt implements CryptInterface
         $encryptKey = (true === empty($key)) ? $this->key : $key;
 
         if (true === empty($encryptKey)) {
-            throw new Exception('Encryption key cannot be empty');
+            throw new Exception("Encryption key cannot be empty");
         }
 
-        $this->checkCipherIsAvailable($this->cipher, 'cipher');
+        $this->checkCipherHashIsAvailable($this->cipher, "cipher");
         $mode      = $this->getMode();
         $blockSize = $this->getBlockSize($mode);
         $iv        = openssl_random_pseudo_bytes($this->ivLength);
@@ -245,7 +224,7 @@ class Crypt implements CryptInterface
 
         if (true === $this->useSigning) {
             $digest = hash_hmac(
-                $this->getHashAlgo(),
+                $this->getHashAlgorithm(),
                 $padded,
                 $encryptKey,
                 true
@@ -278,10 +257,10 @@ class Crypt implements CryptInterface
                     base64_encode(
                         $this->encrypt($input, $key)
                     ),
-                    '+/',
-                    '-_'
+                    "+/",
+                    "-_"
                 ),
-                '='
+                "="
             );
         }
 
@@ -293,22 +272,13 @@ class Crypt implements CryptInterface
      *
      * @return array
      */
-    public function getAvailableHashAlgos(): array
+    public function getAvailableHashAlgorithms(): array
     {
-        $algos = hash_algos();
-
-        if (true === function_exists('hash_hmac_algos')) {
-            $algos = hash_hmac_algos();
+        if (true === $this->phpFunctionExists("hash_hmac_algos")) {
+            return hash_hmac_algos();
         }
 
-        $available = [];
-        foreach ($algos as $algo) {
-            $upper = $this->toUpper($algo);
-
-            $available[$upper] = $algo;
-        }
-
-        return $available;
+        return hash_algos();
     }
 
     /**
@@ -350,12 +320,6 @@ class Crypt implements CryptInterface
     /**
      * Sets the cipher algorithm for data encryption and decryption.
      *
-     * The `aes-256-gcm' is the preferable cipher, but it is not usable
-     * until the openssl library is upgraded, which is available in PHP 7.1.
-     *
-     * The `aes-256-ctr' is arguably the best choice for cipher
-     * algorithm for current openssl library version.
-     *
      * @param string $cipher
      *
      * @return CryptInterface
@@ -363,7 +327,7 @@ class Crypt implements CryptInterface
      */
     public function setCipher(string $cipher): CryptInterface
     {
-        $this->checkCipherIsAvailable($cipher, 'cipher');
+        $this->checkCipherHashIsAvailable($cipher, "cipher");
 
         $this->ivLength = $this->getIvLength($cipher);
         $this->cipher   = $cipher;
@@ -374,16 +338,16 @@ class Crypt implements CryptInterface
     /**
      * Set the name of hashing algorithm.
      *
-     * @param string $hashAlgo
+     * @param string $hashAlgorithm
      *
      * @return CryptInterface
      * @throws Exception
      */
-    public function setHashAlgo(string $hashAlgo): CryptInterface
+    public function setHashAlgorithm(string $hashAlgorithm): CryptInterface
     {
-        $this->checkCipherIsAvailable($hashAlgo, 'hash');
+        $this->checkCipherHashIsAvailable($hashAlgorithm, "hash");
 
-        $this->hashAlgo = $hashAlgo;
+        $this->hashAlgorithm = $hashAlgorithm;
 
         return $this;
     }
@@ -391,7 +355,7 @@ class Crypt implements CryptInterface
     /**
      * Sets the encryption key.
      *
-     * The `$key' should have been previously generated in a cryptographically
+     * The `$key` should have been previously generated in a cryptographically
      * safe way.
      *
      * Bad key:
@@ -443,12 +407,37 @@ class Crypt implements CryptInterface
     }
 
     /**
+     * Checks if a cipher or a hash algorithm is available
+     *
+     * @param string $cipher
+     * @param string $type
+     *
+     * @throws Exception
+     */
+    protected function checkCipherHashIsAvailable(string $cipher, string $type): void
+    {
+        $method    = "getAvailable";
+        $method    .= ("hash" === $cipher) ? "HashAlgorithms" : "Ciphers";
+        $available = $this->$method();
+        $upper     = $this->toLower($cipher);
+        if (true !== isset($available[$upper])) {
+            throw new Exception(
+                sprintf(
+                    "The %s algorithm '%s' is not supported on this system.",
+                    $type,
+                    $cipher
+                )
+            );
+        }
+    }
+
+    /**
      * Initialize available cipher algorithms.
      */
     protected function initializeAvailableCiphers(): void
     {
-        if (true !== $this->phpFunctionExists('openssl_get_cipher_methods')) {
-            throw new Exception('This class requires the openssl extension for PHP');
+        if (true !== $this->phpFunctionExists("openssl_get_cipher_methods")) {
+            throw new Exception("This class requires the openssl extension for PHP");
         }
 
         $available = openssl_get_cipher_methods(true);
@@ -456,17 +445,29 @@ class Crypt implements CryptInterface
 
         foreach ($available as $cipher) {
             if (
-                true !== $this->toStartsWith($cipher, 'des') &&
-                true !== $this->toStartsWith($cipher, 'rc2') &&
-                true !== $this->toStartsWith($cipher, 'rc4') &&
-                true !== $this->toEndsWith($cipher, 'ecb')
+                true !== $this->toStartsWith($cipher, "des") &&
+                true !== $this->toStartsWith($cipher, "rc2") &&
+                true !== $this->toStartsWith($cipher, "rc4") &&
+                true !== $this->toEndsWith($cipher, "ecb")
             ) {
-                $upper           = $this->toUpper($cipher);
-                $allowed[$upper] = $upper;
+                $allowed[$cipher] = $cipher;
             }
         }
 
         $this->availableCiphers = $allowed;
+    }
+
+    /**
+     * Checks if a mode (string) is in the values to compare (modes array)
+     *
+     * @param array  $modes
+     * @param string $mode
+     *
+     * @return bool
+     */
+    private function checkIsMode(array $modes, string $mode): bool
+    {
+        return in_array($mode, $modes);
     }
 
     /**
@@ -486,13 +487,13 @@ class Crypt implements CryptInterface
         int $blockSize,
         int $paddingType
     ): string {
-        $padding     = null;
+        $padding     = "";
         $paddingSize = 0;
-        if ('cbc' === $mode || 'ecb' === $mode) {
+        if ("cbc" === $mode || "ecb" === $mode) {
             $paddingSize = $blockSize - (strlen($input) % $blockSize);
 
             if ($paddingSize >= 256) {
-                throw new Exception('Block size is bigger than 256');
+                throw new Exception("Block size is bigger than 256");
             }
 
             $map = [
@@ -515,7 +516,7 @@ class Crypt implements CryptInterface
         }
 
         if ($paddingSize > $blockSize) {
-            throw new Exception('Invalid padding size');
+            throw new Exception("Invalid padding size");
         }
 
         return $input . substr($padding, 0, $paddingSize);
@@ -545,7 +546,7 @@ class Crypt implements CryptInterface
         if (
             $length > 0 &&
             ($length % $blockSize == 0) &&
-            ('cbc' === $mode || 'ecb' === $mode)
+            ("cbc" === $mode || "ecb" === $mode)
         ) {
             $map = [
                 self::PADDING_ANSI_X_923     => UnpadAnsi::class,
@@ -567,7 +568,7 @@ class Crypt implements CryptInterface
                         return substr($input, 0, $length - $paddingSize);
                     }
 
-                    return '';
+                    return "";
                 }
 
                 $paddingSize = 0;
@@ -576,28 +577,6 @@ class Crypt implements CryptInterface
 
         if (0 === $paddingSize) {
             return $input;
-        }
-    }
-
-    /**
-     * @param string $cipher
-     * @param string $type
-     *
-     * @throws Exception
-     */
-    protected function checkCipherIsAvailable(string $cipher, string $type): void
-    {
-        $method    = ('hash' === $cipher) ? 'getAvailableHashAlgos' : 'getAvailableCiphers';
-        $available = $this->$method();
-        $upper     = $this->toUpper($cipher);
-        if (true !== isset($available[$upper])) {
-            throw new Exception(
-                sprintf(
-                    'The %s algorithm "%s" is not supported on this system.',
-                    $type,
-                    $cipher
-                )
-            );
         }
     }
 }
