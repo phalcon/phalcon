@@ -14,24 +14,28 @@ declare(strict_types=1);
 namespace Phalcon\Crypt\Padding;
 
 use function chr;
+use function ord;
 use function rand;
 use function range;
+use function strlen;
+use function substr;
 
 /**
- * Class PadIso10126
+ * Class Iso10126
  *
  * @package Phalcon\Crypt\Padding
  */
-class PadIso10126
+class Iso10126 implements PadInterface
 {
     /**
-     * @param int $paddingSize
+     * @param string $input
+     * @param int    $blockSize
      *
-     * @return string
+     * @return int
      */
-    public function __invoke(int $paddingSize): string
+    public function pad(int $paddingSize): string
     {
-        $padding = '';
+        $padding = "";
         $range   = range(0, $paddingSize - 2);
         foreach ($range as $item) {
             $padding .= chr(rand());
@@ -40,5 +44,19 @@ class PadIso10126
         $padding .= chr($paddingSize);
 
         return $padding;
+    }
+
+    /**
+     * @param string $input
+     * @param int    $blockSize
+     *
+     * @return int
+     */
+    public function unpad(string $input, int $blockSize): int
+    {
+        $length = strlen($input);
+        $last   = substr($input, $length - 1, 1);
+
+        return ord($last);
     }
 }

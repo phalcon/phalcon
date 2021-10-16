@@ -13,35 +13,52 @@ declare(strict_types=1);
 
 namespace Phalcon\Crypt\Padding;
 
+use function chr;
+use function str_repeat;
 use function str_split;
 use function strlen;
 
 /**
- * Class UnpadIsoIek
+ * Class IsoIek
  *
  * @package Phalcon\Crypt\Padding
  */
-class UnpadIsoIek
+class IsoIek implements PadInterface
 {
+    /**
+     * @param int $paddingSize
+     *
+     * @return string
+     */
+    public function pad(int $paddingSize): string
+    {
+        return chr(0x80) . str_repeat(chr(0), $paddingSize - 1);
+    }
+
     /**
      * @param string $input
      * @param int    $blockSize
      *
      * @return int
      */
-    public function __invoke(string $input, int $blockSize): int
+    public function unpad(string $input, int $blockSize): int
     {
         $paddingSize = 0;
+        $zero        = chr(0);
         $length      = strlen($input);
         $inputArray  = str_split($input);
         $counter     = $length - 1;
 
-        while ($counter > 0 && $inputArray[$counter] == 0x00 && $paddingSize < $blockSize) {
+        while (
+            $counter > 0 &&
+            $inputArray[$counter] === $zero &&
+            $paddingSize < $blockSize
+        ) {
             $paddingSize++;
             $counter--;
         }
 
-        if ($inputArray[$counter] == 0x80) {
+        if ($inputArray[$counter] == chr(0x80)) {
             $paddingSize++;
         } else {
             $paddingSize = 0;
