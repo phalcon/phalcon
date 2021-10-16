@@ -31,7 +31,7 @@ class Iso10126 implements PadInterface
      * @param string $input
      * @param int    $blockSize
      *
-     * @return int
+     * @return string
      */
     public function pad(int $paddingSize): string
     {
