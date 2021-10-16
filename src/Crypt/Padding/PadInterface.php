@@ -13,23 +13,23 @@ declare(strict_types=1);
 
 namespace Phalcon\Crypt\Padding;
 
-use function chr;
-use function str_repeat;
-
 /**
- * Class PadPkcs7
- *
- * @package Phalcon\Crypt\Padding
+ * Interface for Phalcon\Crypt\Padding
  */
-class PadPkcs7
+interface PadInterface
 {
     /**
      * @param int $paddingSize
      *
      * @return string
      */
-    public function __invoke(int $paddingSize): string
-    {
-        return str_repeat(chr($paddingSize), $paddingSize);
-    }
+    public function pad(int $paddingSize): string;
+
+    /**
+     * @param string $input
+     * @param int    $blockSize
+     *
+     * @return int
+     */
+    public function unpad(string $input, int $blockSize): int;
 }

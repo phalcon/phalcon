@@ -19,31 +19,43 @@ use function str_repeat;
 use function strlen;
 use function substr;
 
+use const PHP_EOL;
+
 /**
- * Class UnpadPkcs7
+ * Class Pkcs7
  *
  * @package Phalcon\Crypt\Padding
  */
-class UnpadPkcs7
+class Pkcs7 implements PadInterface
 {
+    /**
+     * @param int $paddingSize
+     *
+     * @return string
+     */
+    public function pad(int $paddingSize): string
+    {
+        return str_repeat(chr($paddingSize), $paddingSize);
+    }
+
     /**
      * @param string $input
      * @param int    $blockSize
      *
      * @return int
      */
-    public function __invoke(string $input, int $blockSize): int
+    public function unpad(string $input, int $blockSize): int
     {
         $paddingSize = 0;
         $length      = strlen($input);
         $last        = substr($input, $length - 1, 1);
-        $ord         = (int) ord($last);
+        $ord         = ord($last);
 
         if ($ord <= $blockSize) {
             $paddingSize = $ord;
             $padding     = str_repeat(chr($paddingSize), $paddingSize);
 
-            if (substr($input, $length - $paddingSize) != $padding) {
+            if (substr($input, $length - $paddingSize) !== $padding) {
                 $paddingSize = 0;
             }
         }
