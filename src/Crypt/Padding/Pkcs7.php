@@ -19,8 +19,6 @@ use function str_repeat;
 use function strlen;
 use function substr;
 
-use const PHP_EOL;
-
 /**
  * Class Pkcs7
  *

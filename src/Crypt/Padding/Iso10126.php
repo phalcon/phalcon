@@ -16,7 +16,6 @@ namespace Phalcon\Crypt\Padding;
 use function chr;
 use function ord;
 use function rand;
-use function range;
 use function strlen;
 use function substr;
 
@@ -36,8 +35,8 @@ class Iso10126 implements PadInterface
     public function pad(int $paddingSize): string
     {
         $padding = "";
-        $range   = range(0, $paddingSize - 2);
-        foreach ($range as $item) {
+        $length  = $paddingSize - 2;
+        for ($counter = 0; $counter <= $length; $counter++) {
             $padding .= chr(rand());
         }
 

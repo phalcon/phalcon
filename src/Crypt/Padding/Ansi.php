@@ -51,12 +51,12 @@ class Ansi implements PadInterface
 
         if ($ord <= $blockSize) {
             $paddingSize = $ord;
-            $repeat = "";
+            $repeat      = "";
             if ($paddingSize > 1) {
                 $repeat = str_repeat(chr(0), $paddingSize - 1);
             }
 
-            $padding     = $repeat . $last;
+            $padding = $repeat . $last;
 
             if (substr($input, $length - $paddingSize) !== $padding) {
                 $paddingSize = 0;
