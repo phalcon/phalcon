@@ -14,7 +14,7 @@ declare(strict_types=1);
 namespace Phalcon\Tests\Unit\Crypt;
 
 use Phalcon\Crypt\Crypt;
-use Phalcon\Crypt\Exception;
+use Phalcon\Crypt\Exception\Exception;
 use UnitTester;
 
 class GetSetCipherCest
@@ -51,7 +51,7 @@ class GetSetCipherCest
         $I->wantToTest('Crypt - setCipher() - unknown');
         $I->expectThrowable(
             new Exception(
-                'The cipher algorithm "xxx-yyy-zzz" is not supported on this system.'
+                "The cipher algorithm 'xxx-yyy-zzz' is not supported on this system."
             ),
             function () {
                 $crypt = new Crypt();

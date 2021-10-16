@@ -13,7 +13,7 @@ declare(strict_types=1);
 
 namespace Phalcon\Crypt\Traits;
 
-use Phalcon\Crypt\Exception;
+use Phalcon\Crypt\Exception\Exception;
 
 use function openssl_cipher_iv_length;
 use function openssl_decrypt;
@@ -53,7 +53,7 @@ use const OPENSSL_RAW_DATA;
  * @property string $cipher
  * @property array  $availableCiphers
  * @property int    $ivLength
- * @property string $hashAlgo
+ * @property string $hashAlgorithm
  * @property bool   $useSigning
  */
 trait CryptGettersTrait
@@ -107,7 +107,7 @@ trait CryptGettersTrait
      *
      * @var string
      */
-    protected string $hashAlgo = 'sha256';
+    protected string $hashAlgorithm = 'sha256';
 
     /**
      * Whether calculating message digest enabled or not.
@@ -165,9 +165,9 @@ trait CryptGettersTrait
      *
      * @return string
      */
-    public function getHashAlgo(): string
+    public function getHashAlgorithm(): string
     {
-        return $this->hashAlgo;
+        return $this->hashAlgorithm;
     }
 
     /**

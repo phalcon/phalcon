@@ -14,8 +14,8 @@ declare(strict_types=1);
 namespace Phalcon\Tests\Unit\Crypt;
 
 use Phalcon\Crypt\Crypt;
-use Phalcon\Crypt\Exception;
-use Phalcon\Crypt\Mismatch;
+use Phalcon\Crypt\Exception\Exception;
+use Phalcon\Crypt\Exception\Mismatch;
 use UnitTester;
 
 /**

@@ -15,7 +15,7 @@ namespace Phalcon\Tests\Unit\Crypt\PadFactory;
 
 use Codeception\Example;
 use Phalcon\Crypt\Crypt;
-use Phalcon\Crypt\Exception;
+use Phalcon\Crypt\Exception\Exception;
 use Phalcon\Crypt\Padding\Ansi;
 use Phalcon\Crypt\Padding\Iso10126;
 use Phalcon\Crypt\Padding\IsoIek;
@@ -70,7 +70,7 @@ class NewInstanceCest
         $I->wantToTest('Crypt\PadFactory - newInstance() - exception');
 
         $I->expectThrowable(
-            new Exception("Service unknown is not registered"),
+            new \Exception("Service unknown is not registered"),
             function () {
                 $factory = new PadFactory();
                 $adapter = $factory->newInstance("unknown");

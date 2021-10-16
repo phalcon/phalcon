@@ -14,7 +14,7 @@ declare(strict_types=1);
 namespace Phalcon\Tests\Unit\Crypt;
 
 use Phalcon\Crypt\Crypt;
-use Phalcon\Crypt\Exception;
+use Phalcon\Crypt\Exception\Exception;
 use UnitTester;
 
 /**
@@ -22,10 +22,10 @@ use UnitTester;
  *
  * @package Phalcon\Tests\Unit\Crypt
  */
-class GetSetHashAlgoCest
+class GetSetHashAlgorithmCest
 {
     /**
-     * Tests Phalcon\Crypt\Crypt :: getHashAlgo() / setHashAlgo()
+     * Tests Phalcon\Crypt\Crypt :: getHashAlgorithm() / setHashAlgorithm()
      *
      * @param UnitTester $I
      *
@@ -34,13 +34,15 @@ class GetSetHashAlgoCest
      */
     public function cryptGetSetHashAlgo(UnitTester $I)
     {
-        $I->wantToTest('Crypt - getHashAlgo() / setHashAlgo()');
+        $I->wantToTest('Crypt - getHashAlgorithm() / setHashAlgorithm()');
 
         $cipher = 'blowfish';
         $crypt  = new Crypt();
-        $crypt->setHashAlgo($cipher);
+        $crypt->setHashAlgorithm($cipher);
 
-        $I->assertEquals($cipher, $crypt->getHashAlgo());
+        $expected = $cipher;
+        $actual   = $crypt->getHashAlgorithm();
+        $I->assertEquals($expected, $actual);
     }
 
     /**
@@ -53,15 +55,15 @@ class GetSetHashAlgoCest
      */
     public function cryptGetSetHashAlgoUnknown(UnitTester $I)
     {
-        $I->wantToTest('Crypt - setHashAlgo() - unknown');
+        $I->wantToTest('Crypt - setHashAlgorithm() - unknown');
         $I->expectThrowable(
             new Exception(
-                'The hash algorithm "xxx-yyy-zzz" is not supported on this system.'
+                "The hash algorithm 'xxx-yyy-zzz' is not supported on this system."
             ),
             function () {
                 $crypt = new Crypt();
 
-                $crypt->setHashAlgo('xxx-yyy-zzz');
+                $crypt->setHashAlgorithm('xxx-yyy-zzz');
             }
         );
     }

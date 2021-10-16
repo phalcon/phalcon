@@ -14,7 +14,7 @@ declare(strict_types=1);
 namespace Phalcon\Tests\Unit\Crypt;
 
 use Phalcon\Crypt\Crypt;
-use Phalcon\Crypt\Exception;
+use Phalcon\Crypt\Exception\Exception;
 use UnitTester;
 
 use function substr;
@@ -127,7 +127,7 @@ class EncryptCest
 
         $I->expectThrowable(
             new Exception(
-                'The cipher algorithm "AES-128-ECB" is not supported on this system.'
+                "The cipher algorithm 'AES-128-ECB' is not supported on this system."
             ),
             function () {
                 $crypt = new Crypt();

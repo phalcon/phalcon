@@ -11,7 +11,7 @@
 
 declare(strict_types=1);
 
-namespace Phalcon\Crypt;
+namespace Phalcon\Crypt\Exception;
 
 /**
  * Exceptions thrown in Phalcon\Crypt use this class
