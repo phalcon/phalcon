@@ -21,9 +21,20 @@ use Phalcon\Support\Helper\Str\Traits\StartsWithTrait;
 use Phalcon\Support\Traits\PhpFunctionTrait;
 use Phalcon\Support\Traits\PhpOpensslTrait;
 
+use function base64_decode;
+use function base64_encode;
+use function hash;
+use function hash_algos;
+use function hash_hmac;
+use function hash_hmac_algos;
 use function in_array;
+use function intval;
 use function openssl_decrypt;
 use function openssl_encrypt;
+use function openssl_get_cipher_methods;
+use function openssl_random_pseudo_bytes;
+use function rtrim;
+use function sprintf;
 use function str_ireplace;
 use function strlen;
 use function strrpos;
@@ -78,13 +89,13 @@ class Crypt implements CryptInterface
     /**
      * Padding
      */
-    const PADDING_ANSI_X_923     = 1;
-    const PADDING_DEFAULT        = 0;
-    const PADDING_ISO_10126      = 3;
-    const PADDING_ISO_IEC_7816_4 = 4;
-    const PADDING_PKCS7          = 2;
-    const PADDING_SPACE          = 6;
-    const PADDING_ZERO           = 5;
+    public const PADDING_ANSI_X_923     = 1;
+    public const PADDING_DEFAULT        = 0;
+    public const PADDING_ISO_10126      = 3;
+    public const PADDING_ISO_IEC_7816_4 = 4;
+    public const PADDING_PKCS7          = 2;
+    public const PADDING_SPACE          = 6;
+    public const PADDING_ZERO           = 5;
 
     /**
      * @var string

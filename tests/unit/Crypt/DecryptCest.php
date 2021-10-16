@@ -129,7 +129,6 @@ class DecryptCest
         );
     }
 
-
     /**
      * Tests Phalcon\Crypt\Crypt :: encrypt() - Zero padding returns input
      *
@@ -152,5 +151,4 @@ class DecryptCest
         $actual   = $crypt->cryptUnpadText($input, $mode, $blockSize, $paddingType);
         $I->assertEquals($expected, $actual);
     }
-
 }
