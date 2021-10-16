@@ -153,4 +153,13 @@ interface CryptInterface
      * @return CryptInterface
      */
     public function setPadding(int $scheme): CryptInterface;
+
+    /**
+     * Sets if the calculating message digest must be used.
+     *
+     * @param bool $useSigning
+     *
+     * @return CryptInterface
+     */
+    public function useSigning(bool $useSigning): CryptInterface;
 }
