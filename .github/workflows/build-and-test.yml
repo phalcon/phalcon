@@ -74,8 +74,6 @@ jobs:
       - name: Install System Dependencies
         run: |
           sudo apt-get update --quiet --yes 1>/dev/null
-          sudo apt-get install --no-install-recommends -q -y re2c
-
 
   build-and-test-linux:
     name: PHP ${{ matrix.php-versions }} Test on ${{ matrix.operating-system }}
