@@ -69,23 +69,16 @@ class PadFactory
      */
     public function padNumberToService(int $number): string
     {
-        switch ($number) {
-            case Crypt::PADDING_ANSI_X_923:
-                return "ansi";
-            case Crypt::PADDING_ISO_10126:
-                return "iso10126";
-            case Crypt::PADDING_ISO_IEC_7816_4:
-                return "isoiek";
-            case Crypt::PADDING_PKCS7:
-                return "pjcs7";
-            case Crypt::PADDING_SPACE:
-                return "space";
-            case Crypt::PADDING_ZERO:
-                return "zero";
-            case Crypt::PADDING_DEFAULT:
-            default:
-                return "noop";
-        }
+        $map = [
+            Crypt::PADDING_ANSI_X_923     => "ansi",
+            Crypt::PADDING_ISO_10126      => "iso10126",
+            Crypt::PADDING_ISO_IEC_7816_4 => "isoiek",
+            Crypt::PADDING_PKCS7          => "pjcs7",
+            Crypt::PADDING_SPACE          => "space",
+            Crypt::PADDING_ZERO           => "zero",
+        ];
+
+        return $map[$number] ?? "noop";
     }
 
     /**
