@@ -32,7 +32,6 @@ use function intval;
 use function openssl_decrypt;
 use function openssl_encrypt;
 use function openssl_get_cipher_methods;
-use function openssl_random_pseudo_bytes;
 use function rtrim;
 use function sprintf;
 use function str_ireplace;
@@ -807,7 +806,8 @@ class Crypt implements CryptInterface
         string $encryptKey,
         string $iv
     ): string {
-        $cipher = $this->cipher;
+        $cipher  = $this->cipher;
+        $authTag = "";
 
         /**
          * If the mode is "gcm" or "ccm" and auth data has been passed call it
@@ -836,11 +836,7 @@ class Crypt implements CryptInterface
                 $authTagLength
             );
 
-            $this->authTag  = $authTag;
-            /**
-             * Store the tag with encrypted data
-             */
-            $encrypted     .= $authTag;
+            $this->authTag = $authTag;
         } else {
             $encrypted = openssl_encrypt(
                 $padded,
@@ -855,7 +851,11 @@ class Crypt implements CryptInterface
             throw new Exception("Could not encrypt data");
         }
 
-        return $encrypted;
+        /**
+         * Store the tag with encrypted data and return it. In the non AEAD
+         * mode this is an empty string
+         */
+        return $encrypted . $authTag;
     }
 
     /**
