@@ -177,7 +177,7 @@ class EncryptCest
                 ->setAuthData('abcd')
             ;
 
-            $actual     = $crypt->decrypt($encryption);
+            $actual = $crypt->decrypt($encryption);
             $I->assertEquals('phalcon', $actual);
         }
     }
