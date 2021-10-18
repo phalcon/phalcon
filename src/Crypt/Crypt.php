@@ -35,6 +35,7 @@ use function openssl_get_cipher_methods;
 use function rtrim;
 use function sprintf;
 use function str_ireplace;
+use function str_replace;
 use function strlen;
 use function strrpos;
 use function substr;
@@ -217,14 +218,14 @@ class Crypt implements CryptInterface
         $iv        = mb_substr($input, 0, $this->ivLength, "8bit");
 
         /**
-         * Check if we have chosen signing and use the hash
+         * Check if we have chosen to sign and use the hash
          */
-        $hash = "";
+        $digest        = "";
+        $hashAlgorithm = $this->getHashAlgorithm();
         if (true === $this->useSigning) {
-            $hashAlgorithm = $this->getHashAlgorithm();
-            $hashLength    = strlen(hash($hashAlgorithm, "", true));
-            $hash          = mb_substr($input, $this->ivLength, $hashLength, "8bit");
-            $cipherText    = mb_substr($input, $this->ivLength + $hashLength, null, "8bit");
+            $hashLength = strlen(hash($hashAlgorithm, "", true));
+            $digest     = mb_substr($input, $this->ivLength, $hashLength, "8bit");
+            $cipherText = mb_substr($input, $this->ivLength + $hashLength, null, "8bit");
         } else {
             $cipherText = mb_substr($input, $this->ivLength, null, "8bit");
         }
@@ -236,7 +237,12 @@ class Crypt implements CryptInterface
             $iv
         );
 
-        $decrypted = $this->decryptCbcEcb(
+        /**
+         * The variable below keeps the string (not unpadded). It will be used
+         * to compare the hash if we use a digest (signed)
+         */
+        $padded    = $decrypted;
+        $decrypted = $this->unpadCbcEcb(
             $mode,
             $blockSize,
             $decrypted
@@ -246,7 +252,7 @@ class Crypt implements CryptInterface
             /**
              * Checks on the decrypted message digest using the HMAC method.
              */
-            if ($hash !== hash_hmac($hashAlgorithm, $decrypted, $decryptKey, true)) {
+            if ($digest !== hash_hmac($hashAlgorithm, $padded, $decryptKey, true)) {
                 throw new Mismatch("Hash does not match.");
             }
         }
@@ -563,7 +569,7 @@ class Crypt implements CryptInterface
     }
 
     /**
-     * Sets if the calculating message digest must used.
+     * Sets if the calculating message digest must be used.
      *
      * @param bool $useSigning
      *
@@ -611,6 +617,7 @@ class Crypt implements CryptInterface
      * @param int    $paddingType
      *
      * @return string
+     * @throws Exception
      */
     protected function cryptPadText(
         string $input,
@@ -653,6 +660,7 @@ class Crypt implements CryptInterface
      * @param int    $paddingType
      *
      * @return string
+     * @throws Exception
      */
     protected function cryptUnpadText(
         string $input,
@@ -694,25 +702,26 @@ class Crypt implements CryptInterface
     /**
      * @param string $mode
      * @param int    $blockSize
-     * @param string $decrypted
+     * @param string $cryptText
      *
      * @return string
+     * @throws Exception
      */
-    protected function decryptCbcEcb(
+    protected function unpadCbcEcb(
         string $mode,
         int $blockSize,
-        string $decrypted
+        string $cryptText
     ): string {
         if (true === $this->checkIsMode(["cbc", "ecb"], $mode)) {
-            $decrypted = $this->cryptUnpadText(
-                $decrypted,
+            $cryptText = $this->cryptUnpadText(
+                $cryptText,
                 $mode,
                 $blockSize,
                 $this->padding
             );
         }
 
-        return $decrypted;
+        return $cryptText;
     }
 
     /**
@@ -722,6 +731,7 @@ class Crypt implements CryptInterface
      * @param string $iv
      *
      * @return string
+     * @throws Exception
      */
     protected function decryptGcmCcmAuth(
         string $mode,
@@ -793,6 +803,7 @@ class Crypt implements CryptInterface
      * @param string $iv
      *
      * @return string
+     * @throws Exception
      */
     protected function encryptGcmCcm(
         string $mode,
@@ -902,6 +913,7 @@ class Crypt implements CryptInterface
      * @param string $mode
      *
      * @return int
+     * @throws Exception
      */
     private function getBlockSize(string $mode): int
     {
@@ -920,6 +932,7 @@ class Crypt implements CryptInterface
      * @param string $cipher
      *
      * @return int
+     * @throws Exception
      */
     private function getIvLength(string $cipher): int
     {
