@@ -249,7 +249,6 @@ class Crypt implements CryptInterface
             if ($hash !== hash_hmac($hashAlgorithm, $decrypted, $decryptKey, true)) {
                 throw new Mismatch("Hash does not match.");
             }
-
         }
 
         return $decrypted;
