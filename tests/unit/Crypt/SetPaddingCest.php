@@ -32,8 +32,8 @@ class SetPaddingCest
      * @throws Exception
      * @throws Mismatch
      *
-     * @author       Phalcon Team <team@phalcon.io>
-     * @since        2014-10-17
+     * @author Phalcon Team <team@phalcon.io>
+     * @since  2021-10-18
      */
     public function cryptSetPadding(UnitTester $I, Example $example)
     {
@@ -52,6 +52,7 @@ class SetPaddingCest
         $crypt = new Crypt();
         $crypt
             ->setKey($key)
+            ->useSigning(false)
             ->setPadding($example['padding'])
             ->setCipher($example['cipher'])
         ;

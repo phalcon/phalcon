@@ -170,7 +170,7 @@ class Crypt implements CryptInterface
      */
     public function __construct(
         string $cipher = self::DEFAULT_CIPHER,
-        bool $useSigning = false,
+        bool $useSigning = true,
         PadFactory $padFactory = null
     ) {
         if (null === $padFactory) {
@@ -216,25 +216,33 @@ class Crypt implements CryptInterface
         $blockSize = $this->getBlockSize($mode);
         $iv        = mb_substr($input, 0, $this->ivLength, "8bit");
 
+        /**
+         * Check if we have chosen signing and use the hash
+         */
+        $hash = "";
         if (true === $this->useSigning) {
             $hashAlgorithm = $this->getHashAlgorithm();
             $hashLength    = strlen(hash($hashAlgorithm, "", true));
             $hash          = mb_substr($input, $this->ivLength, $hashLength, "8bit");
             $cipherText    = mb_substr($input, $this->ivLength + $hashLength, null, "8bit");
+        } else {
+            $cipherText = mb_substr($input, $this->ivLength, null, "8bit");
+        }
 
-            $decrypted = $this->decryptGcmCcmAuth(
-                $mode,
-                $cipherText,
-                $decryptKey,
-                $iv
-            );
+        $decrypted = $this->decryptGcmCcmAuth(
+            $mode,
+            $cipherText,
+            $decryptKey,
+            $iv
+        );
 
-            $decrypted = $this->decryptCbcEcb(
-                $mode,
-                $blockSize,
-                $decrypted
-            );
+        $decrypted = $this->decryptCbcEcb(
+            $mode,
+            $blockSize,
+            $decrypted
+        );
 
+        if (true === $this->useSigning) {
             /**
              * Checks on the decrypted message digest using the HMAC method.
              */
@@ -242,22 +250,9 @@ class Crypt implements CryptInterface
                 throw new Mismatch("Hash does not match.");
             }
 
-            return $decrypted;
         }
 
-        $cipherText = mb_substr($input, $this->ivLength, null, "8bit");
-        $decrypted  = $this->decryptGcmCcmAuth(
-            $mode,
-            $cipherText,
-            $decryptKey,
-            $iv
-        );
-
-        return $this->decryptCbcEcb(
-            $mode,
-            $blockSize,
-            $decrypted
-        );
+        return $decrypted;
     }
 
     /**
@@ -740,8 +735,8 @@ class Crypt implements CryptInterface
         if (true === $this->checkIsMode(["ccm", "gcm"], $mode)) {
             $authData      = $this->authData;
             $authTagLength = $this->authTagLength;
-            $encrypted     = substr($cipherText, 0, -$authTagLength);
             $authTag       = substr($cipherText, -$authTagLength);
+            $encrypted     = str_replace($authTag, "", $cipherText);
 
             $decrypted = openssl_decrypt(
                 $encrypted,
