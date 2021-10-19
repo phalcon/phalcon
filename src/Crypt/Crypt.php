@@ -242,7 +242,7 @@ class Crypt implements CryptInterface
          * to compare the hash if we use a digest (signed)
          */
         $padded    = $decrypted;
-        $decrypted = $this->unpadCbcEcb(
+        $decrypted = $this->decryptUnpadCbcEcb(
             $mode,
             $blockSize,
             $decrypted
@@ -281,10 +281,7 @@ class Crypt implements CryptInterface
                 . substr("===", (strlen($input) + 3) % 4);
         }
 
-        return $this->decrypt(
-            base64_decode($input),
-            $key
-        );
+        return $this->decrypt(base64_decode($input), $key);
     }
 
     /**
@@ -701,31 +698,6 @@ class Crypt implements CryptInterface
 
     /**
      * @param string $mode
-     * @param int    $blockSize
-     * @param string $cryptText
-     *
-     * @return string
-     * @throws Exception
-     */
-    protected function unpadCbcEcb(
-        string $mode,
-        int $blockSize,
-        string $cryptText
-    ): string {
-        if (true === $this->checkIsMode(["cbc", "ecb"], $mode)) {
-            $cryptText = $this->cryptUnpadText(
-                $cryptText,
-                $mode,
-                $blockSize,
-                $this->padding
-            );
-        }
-
-        return $cryptText;
-    }
-
-    /**
-     * @param string $mode
      * @param string $cipherText
      * @param string $decryptKey
      * @param string $iv
@@ -771,6 +743,31 @@ class Crypt implements CryptInterface
         }
 
         return $decrypted;
+    }
+
+    /**
+     * @param string $mode
+     * @param int    $blockSize
+     * @param string $cryptText
+     *
+     * @return string
+     * @throws Exception
+     */
+    protected function decryptUnpadCbcEcb(
+        string $mode,
+        int $blockSize,
+        string $cryptText
+    ): string {
+        if (true === $this->checkIsMode(["cbc", "ecb"], $mode)) {
+            $cryptText = $this->cryptUnpadText(
+                $cryptText,
+                $mode,
+                $blockSize,
+                $this->padding
+            );
+        }
+
+        return $cryptText;
     }
 
     /**
