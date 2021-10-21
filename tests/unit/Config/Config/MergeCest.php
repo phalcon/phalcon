@@ -64,7 +64,19 @@ class MergeCest
         $source = new Config($example['source']);
         $target = new Config($example['target']);
 
+        /**
+         * As Config object
+         */
         $expected = $example['expected'];
+        $actual   = $source->merge($target)
+                           ->toArray();
+        $I->assertEquals($expected, $actual);
+
+        /**
+         * As array
+         */
+        $expected = $example['expected'];
+        $target   = $example['target'];
         $actual   = $source->merge($target)
                            ->toArray();
         $I->assertEquals($expected, $actual);

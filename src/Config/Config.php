@@ -18,9 +18,7 @@ use Phalcon\Support\Collection;
 use function array_shift;
 use function explode;
 use function is_array;
-use function is_int;
 use function is_object;
-use function mb_strtolower;
 use function method_exists;
 
 /**
@@ -220,7 +218,11 @@ class Config extends Collection implements ConfigInterface
     final protected function internalMerge(array $source, array $target): array
     {
         foreach ($target as $key => $value) {
-            if (is_array($value) && isset($source[$key]) && is_array($source[$key])) {
+            if (
+                true === is_array($value) &&
+                true === isset($source[$key]) &&
+                true === is_array($source[$key])
+            ) {
                 $source[$key] = $this->internalMerge($source[$key], $value);
 
                 continue;
