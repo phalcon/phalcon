@@ -48,9 +48,8 @@ class OffsetGetCest
             ]
         );
 
-        $I->assertEquals(
-            'abc',
-            $config->{0}
-        );
+        $expected = 'abc';
+        $actual   = $config->{0};
+        $I->assertEquals($expected, $actual);
     }
 }

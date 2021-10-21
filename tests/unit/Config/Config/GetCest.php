@@ -30,10 +30,10 @@ class GetCest
     {
         $I->wantToTest('Config - get()');
         $config = $this->getConfig();
-        $I->assertEquals(
-            $config->database->adapter,
-            $this->config['database']['adapter']
-        );
+
+        $expected = $config->database->adapter;
+        $actual   = $this->config['database']['adapter'];
+        $I->assertEquals($expected, $actual);
     }
 
     /**
@@ -46,10 +46,9 @@ class GetCest
     {
         $I->wantToTest('Config - get()');
         $config = $this->getConfig();
-        $I->assertEquals(
-            $config->get('database')
-                   ->get('adapter'),
-            $this->config['database']['adapter']
-        );
+
+        $expected = $this->config['database']['adapter'];
+        $actual   = $config->get('database')->get('adapter');
+        $I->assertEquals($expected, $actual);
     }
 }

@@ -33,20 +33,15 @@ class ConfigCest
             ]
         );
 
-        $I->assertInstanceOf(
-            Config::class,
-            $config->childNode
-        );
+        $expected = Config::class;
+        $actual   = $config->childNode;
+        $I->assertInstanceOf($expected, $actual);
 
-        $I->assertInstanceOf(
-            Config::class,
-            $config->get('childNode')
-        );
+        $actual = $config->get('childNode');
+        $I->assertInstanceOf($expected, $actual);
 
-        $I->assertInstanceOf(
-            Config::class,
-            $config->offsetGet('childNode')
-        );
+        $actual = $config->offsetGet('childNode');
+        $I->assertInstanceOf($expected, $actual);
     }
 
     /**

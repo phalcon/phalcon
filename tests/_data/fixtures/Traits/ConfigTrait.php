@@ -13,12 +13,12 @@ declare(strict_types=1);
 
 namespace Phalcon\Tests\Fixtures\Traits;
 
-use Phalcon\Config\Config;
 use Phalcon\Config\Adapter\Grouped;
 use Phalcon\Config\Adapter\Ini;
 use Phalcon\Config\Adapter\Json;
 use Phalcon\Config\Adapter\Php;
 use Phalcon\Config\Adapter\Yaml;
+use Phalcon\Config\Config;
 use Phalcon\Config\Exception;
 use UnitTester;
 
@@ -45,8 +45,9 @@ trait ConfigTrait
         ],
         'test'        => [
             'parent' => [
-                'property'  => 1,
-                'property2' => 'yeah',
+                'property'      => 1,
+                'property2'     => 'yeah',
+                'emptyProperty' => '',
             ],
         ],
         'issue-12725' => [
@@ -217,7 +218,8 @@ trait ConfigTrait
 
         $I->assertEquals(
             'memory',
-            $config->get('models')->get('metadata')
+            $config->get('models')
+                   ->get('metadata')
         );
     }
 
@@ -325,7 +327,8 @@ trait ConfigTrait
 
         $I->assertEquals(
             'memory',
-            $config->offsetGet('models')->offsetGet('metadata')
+            $config->offsetGet('models')
+                   ->offsetGet('metadata')
         );
     }
 

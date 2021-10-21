@@ -44,7 +44,8 @@ class ConstructCest
         $this->config['database']['num7'] = null;
         $this->config['database']['num8'] = 123;
         $this->config['database']['num9'] = (float) 123.45;
-        $config                           = $this->getConfig('Ini');
+
+        $config = $this->getConfig('Ini');
 
         $this->compareConfig($I, $this->config, $config);
     }
@@ -84,10 +85,8 @@ class ConstructCest
 
         ];
 
-        $I->assertEquals(
-            $expected,
-            $config->toArray()
-        );
+        $actual = $config->toArray();
+        $I->assertEquals($expected, $actual);
     }
 
     /**
@@ -114,9 +113,7 @@ class ConstructCest
                 'Configuration file ' . basename($filePath) . ' cannot be loaded'
             ),
             function () use ($mock, $filePath) {
-                $mock->__construct(
-                    $filePath
-                );
+                $mock->__construct($filePath);
             }
         );
     }

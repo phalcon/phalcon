@@ -51,32 +51,22 @@ class LoadCest
     {
         $I->wantToTest('Config\ConfigFactory - load() - Config');
 
+        $class   = Ini::class;
         $options = $this->config->get('config');
 
         /** @var Ini $ini */
         $ini = (new ConfigFactory())->load($options);
-
-        $I->assertInstanceOf(
-            Ini::class,
-            $ini
-        );
+        $I->assertInstanceOf($class, $ini);
 
         //Issue 14756
         $configFile = dataDir('fixtures/Config/config-with.in-file.name.ini');
         $ini        = new Ini($configFile, INI_SCANNER_NORMAL);
-        $I->assertInstanceOf(
-            Ini::class,
-            $ini
-        );
+        $I->assertInstanceOf($class, $ini);
 
         /** @var Ini $ini */
         $ini = (new ConfigFactory())->load($ini->get('config')
                                                ->toArray());
-
-        $I->assertInstanceOf(
-            Ini::class,
-            $ini
-        );
+        $I->assertInstanceOf($class, $ini);
     }
 
     /**
@@ -92,14 +82,11 @@ class LoadCest
         $I->wantToTest('Config\ConfigFactory - load() - array');
 
         $options = $this->arrayConfig['config'];
+        $class   = Ini::class;
 
         /** @var Ini $ini */
         $ini = (new ConfigFactory())->load($options);
-
-        $I->assertInstanceOf(
-            Ini::class,
-            $ini
-        );
+        $I->assertInstanceOf($class, $ini);
     }
 
     /**
@@ -115,14 +102,11 @@ class LoadCest
         $I->wantToTest('Config\ConfigFactory - load() - string');
 
         $filePath = $this->arrayConfig['config']['filePathExtension'];
+        $class   = Ini::class;
 
         /** @var Ini $ini */
         $ini = (new ConfigFactory())->load($filePath);
-
-        $I->assertInstanceOf(
-            Ini::class,
-            $ini
-        );
+        $I->assertInstanceOf($class, $ini);
     }
 
     /**
@@ -192,9 +176,9 @@ class LoadCest
     {
         $I->wantToTest('Config\ConfigFactory - load() - yaml callback');
 
+        $class   = Yaml::class;
         $factory = new ConfigFactory();
-
-        $config = [
+        $config  = [
             'adapter'   => 'yaml',
             'filePath'  => dataDir('fixtures/Config/callbacks.yml'),
             'callbacks' => [
@@ -208,7 +192,7 @@ class LoadCest
         ];
 
         $config = $factory->load($config);
-        $I->assertInstanceOf(Yaml::class, $config);
+        $I->assertInstanceOf($class, $config);
     }
 
     /**

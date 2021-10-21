@@ -78,7 +78,6 @@ class NewInstanceCest
         );
     }
 
-
     /**
      * Tests Phalcon\Crypt\PadFactory :: padNumberToService()
      *

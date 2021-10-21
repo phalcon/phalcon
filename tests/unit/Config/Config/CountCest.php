@@ -24,11 +24,12 @@ class CountCest
      * Tests Phalcon\Config\Config :: count()
      *
      * @author Phalcon Team <team@phalcon.io>
-     * @since  2019-06-19
+     * @since  2021-10-21
      */
     public function configCount(UnitTester $I)
     {
         $I->wantToTest('Config - count()');
+
         $this->checkCount($I);
     }
 }
