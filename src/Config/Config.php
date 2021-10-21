@@ -99,25 +99,19 @@ class Config extends Collection implements ConfigInterface
 
         $this->clear();
 
-        if (false !== is_array($toMerge)) {
-            $result = $this->internalMerge(
-                $source,
-                $toMerge
-            );
+        if (true === is_array($toMerge)) {
+            $result = $this->internalMerge($source, $toMerge);
 
             $this->init($result);
 
             return $this;
         }
 
-        if (is_object($toMerge) && $toMerge instanceof ConfigInterface) {
-            /**
-             * @var ConfigInterface $toMerge
-             */
-            $result = $this->internalMerge(
-                $source,
-                $toMerge->toArray()
-            );
+        if (
+            true === is_object($toMerge) &&
+            $toMerge instanceof ConfigInterface
+        ) {
+            $result = $this->internalMerge($source, $toMerge->toArray());
 
             $this->init($result);
 
@@ -166,7 +160,7 @@ class Config extends Collection implements ConfigInterface
 
             $config = $config->get($key);
 
-            if (false !== empty($config)) {
+            if (true === empty($config)) {
                 break;
             }
         }
@@ -228,12 +222,6 @@ class Config extends Collection implements ConfigInterface
         foreach ($target as $key => $value) {
             if (is_array($value) && isset($source[$key]) && is_array($source[$key])) {
                 $source[$key] = $this->internalMerge($source[$key], $value);
-
-                continue;
-            }
-
-            if (is_int($key)) {
-                $source[] = $value;
 
                 continue;
             }
