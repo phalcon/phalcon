@@ -225,6 +225,7 @@ class Crypt implements CryptInterface
             $hashAlgorithm,
             $input
         );
+
         $decrypted = $this->decryptGcmCcmAuth(
             $mode,
             $cipherText,
