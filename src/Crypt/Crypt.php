@@ -221,7 +221,10 @@ class Crypt implements CryptInterface
          * Check if we have chosen to sign and use the hash
          */
         $hashAlgorithm = $this->hashAlgorithm;
-        [$cipherText, $digest] = $this->calculateCipherTextAndDigest($hashAlgorithm);
+        [$cipherText, $digest] = $this->calculateCipherTextAndDigest(
+            $hashAlgorithm,
+            $input
+        );
         $decrypted = $this->decryptGcmCcmAuth(
             $mode,
             $cipherText,
