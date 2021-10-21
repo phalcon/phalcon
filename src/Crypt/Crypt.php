@@ -220,16 +220,8 @@ class Crypt implements CryptInterface
         /**
          * Check if we have chosen to sign and use the hash
          */
-        $digest        = "";
-        $hashAlgorithm = $this->getHashAlgorithm();
-        if (true === $this->useSigning) {
-            $hashLength = strlen(hash($hashAlgorithm, "", true));
-            $digest     = mb_substr($input, $this->ivLength, $hashLength, "8bit");
-            $cipherText = mb_substr($input, $this->ivLength + $hashLength, null, "8bit");
-        } else {
-            $cipherText = mb_substr($input, $this->ivLength, null, "8bit");
-        }
-
+        $hashAlgorithm = $this->hashAlgorithm;
+        [$cipherText, $digest] = $this->calculateCipherTextAndDigest($hashAlgorithm);
         $decrypted = $this->decryptGcmCcmAuth(
             $mode,
             $cipherText,
@@ -889,6 +881,31 @@ class Crypt implements CryptInterface
         $this->availableCiphers = $allowed;
 
         return $this;
+    }
+
+    /**
+     * Calculates the digest and the actual cipherText from the input
+     *
+     * @param string $hashAlgorithm
+     * @param string $input
+     *
+     * @return array
+     */
+    private function calculateCipherTextAndDigest(
+        string $hashAlgorithm,
+        string $input
+    ): array
+    {
+        $digest = "";
+        if (true === $this->useSigning) {
+            $hashLength = strlen(hash($hashAlgorithm, "", true));
+            $digest     = mb_substr($input, $this->ivLength, $hashLength, "8bit");
+            $cipherText = mb_substr($input, $this->ivLength + $hashLength, null, "8bit");
+        } else {
+            $cipherText = mb_substr($input, $this->ivLength, null, "8bit");
+        }
+
+        return [$cipherText, $digest];
     }
 
     /**
