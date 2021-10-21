@@ -102,7 +102,7 @@ class LoadCest
         $I->wantToTest('Config\ConfigFactory - load() - string');
 
         $filePath = $this->arrayConfig['config']['filePathExtension'];
-        $class   = Ini::class;
+        $class    = Ini::class;
 
         /** @var Ini $ini */
         $ini = (new ConfigFactory())->load($filePath);

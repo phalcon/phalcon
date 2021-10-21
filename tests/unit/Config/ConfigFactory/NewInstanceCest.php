@@ -34,13 +34,13 @@ class NewInstanceCest
      * @param UnitTester $I
      * @param Example    $example
      *
-     * @author Phalcon Team <team@phalcon.io>
-     * @since  2021-10-18
+     * @author       Phalcon Team <team@phalcon.io>
+     * @since        2021-10-18
      */
     public function configFactoryNewInstance(UnitTester $I, Example $example)
     {
         $I->wantToTest(
-            'Config\ConfigFactory - newInstance() ' .  $example['label']
+            'Config\ConfigFactory - newInstance() ' . $example['label']
         );
 
         $factory = new ConfigFactory();
@@ -70,8 +70,8 @@ class NewInstanceCest
             function () {
                 $factory = new ConfigFactory();
                 $adapter = $factory->newInstance(
-                "unknown",
-                "config.php"
+                    "unknown",
+                    "config.php"
                 );
             }
         );
@@ -84,27 +84,27 @@ class NewInstanceCest
     {
         return [
             [
-                'label' => 'ini',
-                'service' => 'ini',
-                'options' => dataDir('fixtures/Config/config.ini'),
+                'label'    => 'ini',
+                'service'  => 'ini',
+                'options'  => dataDir('fixtures/Config/config.ini'),
                 'expected' => Ini::class,
             ],
             [
-                'label' => 'json',
-                'service' => 'json',
-                'options' => dataDir('fixtures/Config/config.json'),
+                'label'    => 'json',
+                'service'  => 'json',
+                'options'  => dataDir('fixtures/Config/config.json'),
                 'expected' => Json::class,
             ],
             [
-                'label' => 'php',
-                'service' => 'php',
-                'options' => dataDir('fixtures/Config/config.php'),
+                'label'    => 'php',
+                'service'  => 'php',
+                'options'  => dataDir('fixtures/Config/config.php'),
                 'expected' => Php::class,
             ],
             [
-                'label' => 'yaml',
-                'service' => 'yaml',
-                'options' => dataDir('fixtures/Config/config.yml'),
+                'label'    => 'yaml',
+                'service'  => 'yaml',
+                'options'  => dataDir('fixtures/Config/config.yml'),
                 'expected' => Yaml::class,
             ],
         ];

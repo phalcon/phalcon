@@ -48,7 +48,8 @@ class GetCest
         $config = $this->getConfig();
 
         $expected = $this->config['database']['adapter'];
-        $actual   = $config->get('database')->get('adapter');
+        $actual   = $config->get('database')
+                           ->get('adapter');
         $I->assertEquals($expected, $actual);
     }
 }

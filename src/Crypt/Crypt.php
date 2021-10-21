@@ -897,8 +897,7 @@ class Crypt implements CryptInterface
     private function calculateCipherTextAndDigest(
         string $hashAlgorithm,
         string $input
-    ): array
-    {
+    ): array {
         $digest = "";
         if (true === $this->useSigning) {
             $hashLength = strlen(hash($hashAlgorithm, "", true));

@@ -48,14 +48,14 @@ class MergeCest
      * @param UnitTester $I
      * @param Example    $example
      *
-     * @link https://github.com/phalcon/cphalcon/issues/13351
-     * @link https://github.com/phalcon/cphalcon/issues/13201
-     * @link https://github.com/phalcon/cphalcon/issues/13768
-     * @link https://github.com/phalcon/cphalcon/issues/12779
-     * @link https://github.com/phalcon/phalcon/issues/196
+     * @link         https://github.com/phalcon/cphalcon/issues/13351
+     * @link         https://github.com/phalcon/cphalcon/issues/13201
+     * @link         https://github.com/phalcon/cphalcon/issues/13768
+     * @link         https://github.com/phalcon/cphalcon/issues/12779
+     * @link         https://github.com/phalcon/phalcon/issues/196
      *
-     * @author Phalcon Team <team@phalcon.io>
-     * @since  2121-10-21
+     * @author       Phalcon Team <team@phalcon.io>
+     * @since        2121-10-21
      */
     public function configMergeConfigCases(UnitTester $I, Example $example)
     {
@@ -65,7 +65,8 @@ class MergeCest
         $target = new Config($example['target']);
 
         $expected = $example['expected'];
-        $actual   = $source->merge($target)->toArray();
+        $actual   = $source->merge($target)
+                           ->toArray();
         $I->assertEquals($expected, $actual);
     }
 
@@ -343,8 +344,8 @@ class MergeCest
                         5 => 'test'
                     ]
                 ],
-                'target'   =>[
-                    'empty'    => [
+                'target'   => [
+                    'empty' => [
                         3 => 'toEmpty'
                     ],
                 ],
@@ -367,8 +368,8 @@ class MergeCest
                         5 => 'test'
                     ]
                 ],
-                'target'   =>[
-                    'nonEmpty'    => [
+                'target'   => [
+                    'nonEmpty' => [
                         3 => 'toNonEmpty'
                     ],
                 ],
@@ -394,20 +395,6 @@ class MergeCest
     {
         $config = new Config();
         $config->merge($this->getConfig());
-
-        return $config;
-    }
-
-    /**
-     * Merges the reference config array data into an empty config object.
-     *
-     * @return Config
-     * @throws Exception
-     */
-    private function getMergedByArray(): Config
-    {
-        $config = new Config();
-        $config->merge(require dataDir('fixtures/Config/config.php'));
 
         return $config;
     }
