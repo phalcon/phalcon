@@ -29,6 +29,7 @@ class OffsetUnsetCest
     public function configOffsetUnset(UnitTester $I)
     {
         $I->wantToTest('Config - offsetUnset()');
+
         $this->checkOffsetUnset($I);
     }
 }
