@@ -63,7 +63,7 @@ class ConstructCest
         define('TEST_CONST', 'foo');
 
         $config = new Ini(
-            dataDir('fixtures/Config/config-with-constants.ini'),
+            dataDir('assets/config/config-with-constants.ini'),
             INI_SCANNER_NORMAL
         );
 
@@ -106,7 +106,7 @@ class ConstructCest
             ]
         );
 
-        $filePath = dataDir('fixtures/Config/config-with-constants.ini');
+        $filePath = dataDir('assets/config/config-with-constants.ini');
 
         $I->expectThrowable(
             new Exception(

@@ -116,30 +116,30 @@ trait ConfigTrait
         switch ($adapter) {
             case 'Ini':
                 return new Ini(
-                    dataDir('fixtures/Config/config.ini')
+                    dataDir('assets/config/config.ini')
                 );
 
             case 'Json':
                 return new Json(
-                    dataDir('fixtures/Config/config.json')
+                    dataDir('assets/config/config.json')
                 );
 
             case 'Php':
                 return new Php(
-                    dataDir('fixtures/Config/config.php')
+                    dataDir('assets/config/config.php')
                 );
 
             case 'Yaml':
                 return new Yaml(
-                    dataDir('fixtures/Config/config.yml')
+                    dataDir('assets/config/config.yml')
                 );
 
             case 'Grouped':
                 $config = [
-                    dataDir('fixtures/Config/config.php'),
+                    dataDir('assets/config/config.php'),
                     [
                         'adapter'  => 'json',
-                        'filePath' => dataDir('fixtures/Config/config.json'),
+                        'filePath' => dataDir('assets/config/config.json'),
                     ],
                     [
                         'adapter' => 'array',
@@ -193,10 +193,9 @@ trait ConfigTrait
 
         $config = $this->getConfig($adapter);
 
-        $I->assertEquals(
-            5,
-            $config->count()
-        );
+        $expected = 5;
+        $actual   = $config->count();
+        $I->assertEquals($expected, $actual);
     }
 
     /**
@@ -216,11 +215,9 @@ trait ConfigTrait
 
         $config = $this->getConfig($adapter);
 
-        $I->assertEquals(
-            'memory',
-            $config->get('models')
-                   ->get('metadata')
-        );
+        $expected = 'memory';
+        $actual   = $config->get('models')->get('metadata');
+        $I->assertEquals($expected, $actual);
     }
 
     /**
@@ -238,24 +235,19 @@ trait ConfigTrait
             )
         );
 
-        $config = $this->getConfig($adapter);
-
+        $config   = $this->getConfig($adapter);
         $existing = $config->getPathDelimiter();
 
-
-        $I->assertEquals(
-            '.',
-            $config->getPathDelimiter()
-        );
+        $expected = '.';
+        $actual   = $config->getPathDelimiter();
+        $I->assertEquals($expected, $actual);
 
 
         $config->setPathDelimiter('/');
 
-        $I->assertEquals(
-            '/',
-            $config->getPathDelimiter()
-        );
-
+        $expected = '/';
+        $actual   = $config->getPathDelimiter();
+        $I->assertEquals($expected, $actual);
 
         $config->setPathDelimiter($existing);
     }
@@ -303,9 +295,8 @@ trait ConfigTrait
 
         $config = $this->getConfig($adapter);
 
-        $I->assertTrue(
-            $config->offsetExists('models')
-        );
+        $actual = $config->offsetExists('models');
+        $I->assertTrue($actual);
     }
 
     /**
@@ -325,11 +316,9 @@ trait ConfigTrait
 
         $config = $this->getConfig($adapter);
 
-        $I->assertEquals(
-            'memory',
-            $config->offsetGet('models')
-                   ->offsetGet('metadata')
-        );
+        $expected = 'memory';
+        $actual   = $config->offsetGet('models')->offsetGet('metadata');
+        $I->assertEquals($expected, $actual);
     }
 
     /**
@@ -348,13 +337,11 @@ trait ConfigTrait
         );
 
         $config = $this->getConfig($adapter);
-
         $config->offsetSet('models', 'something-else');
 
-        $I->assertEquals(
-            'something-else',
-            $config->offsetGet('models')
-        );
+        $expected = 'something-else';
+        $actual   = $config->offsetGet('models');
+        $I->assertEquals($expected, $actual);
     }
 
     /**
@@ -374,15 +361,13 @@ trait ConfigTrait
 
         $config = $this->getConfig($adapter);
 
-        $I->assertTrue(
-            $config->offsetExists('database')
-        );
+        $actual = $config->offsetExists('database');
+        $I->assertTrue($actual);
 
         $config->offsetUnset('database');
 
-        $I->assertFalse(
-            $config->offsetExists('database')
-        );
+        $actual = $config->offsetExists('database');
+        $I->assertFalse($actual);
     }
 
     /**
@@ -402,16 +387,13 @@ trait ConfigTrait
 
         $config = $this->getConfig($adapter);
 
-        $I->assertCount(
-            1,
-            $config->path('test')
-        );
+        $expected = 1;
+        $actual   = $config->path('test');
+        $I->assertCount($expected, $actual);
 
-
-        $I->assertEquals(
-            'yeah',
-            $config->path('test.parent.property2')
-        );
+        $expected = 'yeah';
+        $actual   = $config->path('test.parent.property2');
+        $I->assertEquals($expected, $actual);
     }
 
     /**
@@ -431,10 +413,9 @@ trait ConfigTrait
 
         $config = $this->getConfig($adapter);
 
-        $I->assertEquals(
-            'Unknown',
-            $config->path('test.parent.property3', 'Unknown')
-        );
+        $expected = 'Unknown';
+        $actual   = $config->path('test.parent.property3', 'Unknown');
+        $I->assertEquals($expected, $actual);
     }
 
     /**
@@ -452,26 +433,22 @@ trait ConfigTrait
             )
         );
 
-        $config = $this->getConfig($adapter);
-
+        $config   = $this->getConfig($adapter);
         $existing = $config->getPathDelimiter();
 
-        $I->assertEquals(
-            'yeah',
-            $config->path('test.parent.property2', 'Unknown')
-        );
+        $expected = 'yeah';
+        $actual   = $config->path('test.parent.property2', 'Unknown');
+        $I->assertEquals($expected, $actual);
 
         $config->setPathDelimiter('/');
 
-        $I->assertEquals(
-            'Unknown',
-            $config->path('test.parent.property2', 'Unknown')
-        );
+        $expected = 'Unknown';
+        $actual   = $config->path('test.parent.property2', 'Unknown');
+        $I->assertEquals($expected, $actual);
 
-        $I->assertEquals(
-            'yeah',
-            $config->path('test/parent/property2', 'Unknown')
-        );
+        $expected = 'yeah';
+        $actual   = $config->path('test/parent/property2', 'Unknown');
+        $I->assertEquals($expected, $actual);
 
         $config->setPathDelimiter($existing);
     }
@@ -493,9 +470,8 @@ trait ConfigTrait
 
         $config = $this->getConfig($adapter);
 
-        $I->assertEquals(
-            $this->config,
-            $config->toArray()
-        );
+        $expected = $this->config;
+        $actual   = $config->toArray();
+        $I->assertEquals($expected, $actual);
     }
 }

@@ -35,13 +35,13 @@ interface ConfigInterface extends CollectionInterface
     public function merge($toMerge): ConfigInterface;
 
     /**
-     * @param string     $path
-     * @param mixed|null $defaultValue
-     * @param mixed|null $delimiter
+     * @param string      $path
+     * @param mixed|null  $defaultValue
+     * @param string|null $delimiter
      *
      * @return mixed
      */
-    public function path(string $path, $defaultValue = null, $delimiter = null);
+    public function path(string $path, $defaultValue = null, string $delimiter = null);
 
     /**
      * @param string|null $delimiter

@@ -46,16 +46,16 @@ use function method_exists;
  * );
  *```
  *
- * @property string|null $pathDelimiter
+ * @property string $pathDelimiter
  */
 class Config extends Collection implements ConfigInterface
 {
     public const DEFAULT_PATH_DELIMITER = ".";
 
     /**
-     * @var string|null
+     * @var string
      */
-    protected ?string $pathDelimiter = null;
+    protected string $pathDelimiter = self::DEFAULT_PATH_DELIMITER;
 
     /**
      * Gets the default path delimiter
@@ -64,10 +64,6 @@ class Config extends Collection implements ConfigInterface
      */
     public function getPathDelimiter(): string
     {
-        if (!$this->pathDelimiter) {
-            $this->pathDelimiter = self::DEFAULT_PATH_DELIMITER;
-        }
-
         return $this->pathDelimiter;
     }
 
@@ -86,7 +82,7 @@ class Config extends Collection implements ConfigInterface
      * $globalConfig->merge($appConfig);
      *```
      *
-     * @param mixed $toMerge
+     * @param array|ConfigInterface $toMerge
      *
      * @return ConfigInterface
      * @throws Exception
@@ -126,20 +122,23 @@ class Config extends Collection implements ConfigInterface
      * echo $config->path("unknown.path", "default", ".");
      *```
      *
-     * @param string     $path
-     * @param mixed|null $defaultValue
-     * @param mixed|null $delimiter
+     * @param string      $path
+     * @param mixed|null  $defaultValue
+     * @param string|null $delimiter
      *
      * @return mixed
      */
-    public function path(string $path, $defaultValue = null, $delimiter = null)
-    {
+    public function path(
+        string $path,
+        $defaultValue = null,
+        string $delimiter = null
+    ) {
         if (false !== $this->has($path)) {
             return $this->get($path);
         }
 
         if (false !== empty($delimiter)) {
-            $delimiter = $this->getPathDelimiter();
+            $delimiter = $this->pathDelimiter;
         }
 
         $config = clone $this;

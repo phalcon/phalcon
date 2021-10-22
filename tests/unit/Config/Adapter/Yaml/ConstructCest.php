@@ -54,7 +54,7 @@ class ConstructCest
         $I->wantToTest('Config\Adapter\Yaml - construct - callbacks');
 
         $config = new Yaml(
-            dataDir('fixtures/Config/callbacks.yml'),
+            dataDir('assets/config/callbacks.yml'),
             [
                 '!decrypt' => function ($value) {
                     return hash('sha256', $value);
@@ -84,7 +84,7 @@ class ConstructCest
     {
         $I->wantToTest('Config\Adapter\Yaml - construct - exceptions');
 
-        $filePath = dataDir('fixtures/Config/callbacks.yml');
+        $filePath = dataDir('assets/config/callbacks.yml');
 
         $I->expectThrowable(
             new Exception(
