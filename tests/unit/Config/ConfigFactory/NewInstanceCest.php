@@ -86,25 +86,25 @@ class NewInstanceCest
             [
                 'label'    => 'ini',
                 'service'  => 'ini',
-                'options'  => dataDir('fixtures/Config/config.ini'),
+                'options'  => dataDir('assets/config/config.ini'),
                 'expected' => Ini::class,
             ],
             [
                 'label'    => 'json',
                 'service'  => 'json',
-                'options'  => dataDir('fixtures/Config/config.json'),
+                'options'  => dataDir('assets/config/config.json'),
                 'expected' => Json::class,
             ],
             [
                 'label'    => 'php',
                 'service'  => 'php',
-                'options'  => dataDir('fixtures/Config/config.php'),
+                'options'  => dataDir('assets/config/config.php'),
                 'expected' => Php::class,
             ],
             [
                 'label'    => 'yaml',
                 'service'  => 'yaml',
-                'options'  => dataDir('fixtures/Config/config.yml'),
+                'options'  => dataDir('assets/config/config.yml'),
                 'expected' => Yaml::class,
             ],
         ];

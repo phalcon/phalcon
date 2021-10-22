@@ -46,10 +46,10 @@ class ConstructCest
         $this->config['test']['property']  = 'blah';
 
         $config = [
-            dataDir('fixtures/Config/config.php'),
+            dataDir('assets/config/config.php'),
             [
                 'adapter'  => 'json',
-                'filePath' => dataDir('fixtures/Config/config.json'),
+                'filePath' => dataDir('assets/config/config.json'),
             ],
             [
                 'adapter' => 'array',
@@ -89,7 +89,7 @@ class ConstructCest
 
         $config = [
             [
-                'filePath' => dataDir('fixtures/Config/config.json'),
+                'filePath' => dataDir('assets/config/config.json'),
             ],
             [
                 'adapter' => 'array',

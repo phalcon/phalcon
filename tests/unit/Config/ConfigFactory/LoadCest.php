@@ -59,7 +59,7 @@ class LoadCest
         $I->assertInstanceOf($class, $ini);
 
         //Issue 14756
-        $configFile = dataDir('fixtures/Config/config-with.in-file.name.ini');
+        $configFile = dataDir('assets/config/config-with.in-file.name.ini');
         $ini        = new Ini($configFile, INI_SCANNER_NORMAL);
         $I->assertInstanceOf($class, $ini);
 
@@ -157,7 +157,7 @@ class LoadCest
             ),
             function () {
                 $config = [
-                    'filePath' => dataDir('fixtures/Config/config.ini'),
+                    'filePath' => dataDir('assets/config/config.ini'),
                 ];
                 $ini    = (new ConfigFactory())->load($config);
             }
@@ -180,7 +180,7 @@ class LoadCest
         $factory = new ConfigFactory();
         $config  = [
             'adapter'   => 'yaml',
-            'filePath'  => dataDir('fixtures/Config/callbacks.yml'),
+            'filePath'  => dataDir('assets/config/callbacks.yml'),
             'callbacks' => [
                 '!decrypt' => function ($value) {
                     return hash('sha256', $value);
@@ -210,12 +210,12 @@ class LoadCest
 
         $factory = new ConfigFactory();
 
-        $configFile1 = dataDir('fixtures/Config/config.php');
+        $configFile1 = dataDir('assets/config/config.php');
         $config      = $factory->load($configFile1);
 
         $I->assertEquals("/phalcon/", $config->get('phalcon')->baseUri);
 
-        $configFile2 = dataDir('fixtures/Config/config-2.php');
+        $configFile2 = dataDir('assets/config/config-2.php');
         $config2     = $factory->load($configFile2);
 
         $I->assertEquals("/phalcon4/", $config2->get('phalcon')->baseUri);

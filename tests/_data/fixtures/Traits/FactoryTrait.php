@@ -41,7 +41,7 @@ trait FactoryTrait
      */
     protected function init(): void
     {
-        $configFile = dataDir('fixtures/Config/factory.ini');
+        $configFile = dataDir('assets/config/factory.ini');
 
         $this->config = new Ini($configFile, INI_SCANNER_NORMAL);
 
