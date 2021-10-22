@@ -46,7 +46,7 @@ class SerializeUnserializeCest
         $I->expectThrowable(
             new \Exception("This object cannot be unserialized"),
             function () {
-                $serialized = file_get_contents(dataDir('assets/assets/logger.serialized'));
+                $serialized = file_get_contents(dataDir('assets/logger/logger.serialized'));
                 $object     = unserialize($serialized);
             }
         );
