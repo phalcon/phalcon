@@ -27,6 +27,7 @@ use function lcfirst;
 use function pathinfo;
 use function strtolower;
 
+use const INI_SCANNER_RAW;
 use const PATHINFO_EXTENSION;
 
 /**
@@ -78,7 +79,7 @@ class ConfigFactory
         $adapter  = strtolower($configArray['adapter']);
         $filePath = $configArray['filePath'];
 
-        if (false !== empty(pathinfo($filePath, PATHINFO_EXTENSION))) {
+        if (true === empty(pathinfo($filePath, PATHINFO_EXTENSION))) {
             $filePath .= '.' . lcfirst($adapter);
         }
 
@@ -87,7 +88,7 @@ class ConfigFactory
                 return $this->newInstance(
                     $adapter,
                     $filePath,
-                    $configArray['mode'] ?? null
+                    $configArray['mode'] ?? INI_SCANNER_RAW
                 );
 
             case 'yaml':
@@ -122,12 +123,17 @@ class ConfigFactory
         $definition = $this->getService($name);
 
         switch ($definition) {
-            case Json::class:
-            case Php::class:
-                return new $definition($fileName);
+            case Grouped::class:
+                $adapter = null === $params ? 'php' : $params;
+                return new $definition($fileName, $adapter);
+            case Ini::class:
+                $mode = null === $params ? INI_SCANNER_RAW : $params;
+                return new $definition($fileName, $mode);
+            case Yaml::class:
+                return new $definition($fileName, $params);
         }
 
-        return new $definition($fileName, $params);
+        return new $definition($fileName);
     }
 
     /**
@@ -200,13 +206,13 @@ class ConfigFactory
     {
         if (true !== isset($config['filePath'])) {
             throw new Exception(
-                'You must provide \'filePath\' option in factory config parameter.'
+                "You must provide 'filePath' option in factory config parameter."
             );
         }
 
         if (true !== isset($config['adapter'])) {
             throw new Exception(
-                'You must provide \'adapter\' option in factory config parameter.'
+                "You must provide 'adapter' option in factory config parameter."
             );
         }
     }

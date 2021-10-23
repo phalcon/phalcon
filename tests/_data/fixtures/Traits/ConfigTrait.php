@@ -90,93 +90,6 @@ trait ConfigTrait
     }
 
     /**
-     * Returns the message to print out for the test
-     */
-    private function getMessage(string $adapter = ''): string
-    {
-        $class = '';
-
-        if ('' !== $adapter) {
-            $class = sprintf('\Adapter\%s', $adapter);
-        }
-
-        return 'Config' . $class . ' - %s';
-    }
-
-    /**
-     * Returns a config object
-     *
-     * @return Config|Ini|Json|Php|Yaml
-     *
-     * @author Phalcon Team <team@phalcon.io>
-     * @since  2018-11-13
-     */
-    private function getConfig(string $adapter = '')
-    {
-        switch ($adapter) {
-            case 'Ini':
-                return new Ini(
-                    dataDir('assets/config/config.ini')
-                );
-
-            case 'Json':
-                return new Json(
-                    dataDir('assets/config/config.json')
-                );
-
-            case 'Php':
-                return new Php(
-                    dataDir('assets/config/config.php')
-                );
-
-            case 'Yaml':
-                return new Yaml(
-                    dataDir('assets/config/config.yml')
-                );
-
-            case 'Grouped':
-                $config = [
-                    dataDir('assets/config/config.php'),
-                    [
-                        'adapter'  => 'json',
-                        'filePath' => dataDir('assets/config/config.json'),
-                    ],
-                    [
-                        'adapter' => 'array',
-                        'config'  => [
-                            'test' => [
-                                'property2' => 'something-else',
-                            ],
-                        ],
-                    ],
-                ];
-
-                return new Grouped($config);
-
-            default:
-                return new Config($this->config);
-        }
-    }
-
-    private function compareConfig(UnitTester $I, array $actual, Config $expected)
-    {
-        $I->assertEquals(
-            $expected->toArray(),
-            $actual
-        );
-
-        foreach ($actual as $key => $value) {
-            $I->assertTrue(
-                isset($expected->$key)
-            );
-
-            if (is_array($value)) {
-                $this->compareConfig($I, $value, $expected->$key);
-            }
-        }
-    }
-
-    /**
      * Tests Phalcon\Config\Adapter\* :: count()
      *
      * @author Faruk Brbovic <fbrbovic@devstub.com>
@@ -473,5 +386,92 @@ trait ConfigTrait
         $expected = $this->config;
         $actual   = $config->toArray();
         $I->assertEquals($expected, $actual);
+    }
+
+    private function compareConfig(UnitTester $I, array $actual, Config $expected)
+    {
+        $I->assertEquals(
+            $expected->toArray(),
+            $actual
+        );
+
+        foreach ($actual as $key => $value) {
+            $I->assertTrue(
+                isset($expected->$key)
+            );
+
+            if (is_array($value)) {
+                $this->compareConfig($I, $value, $expected->$key);
+            }
+        }
+    }
+
+    /**
+     * Returns a config object
+     *
+     * @return Config|Ini|Json|Php|Yaml
+     *
+     * @author Phalcon Team <team@phalcon.io>
+     * @since  2018-11-13
+     */
+    private function getConfig(string $adapter = '')
+    {
+        switch ($adapter) {
+            case 'Ini':
+                return new Ini(
+                    dataDir('assets/config/config.ini')
+                );
+
+            case 'Json':
+                return new Json(
+                    dataDir('assets/config/config.json')
+                );
+
+            case 'Php':
+                return new Php(
+                    dataDir('assets/config/config.php')
+                );
+
+            case 'Yaml':
+                return new Yaml(
+                    dataDir('assets/config/config.yml')
+                );
+
+            case 'Grouped':
+                $config = [
+                    dataDir('assets/config/config.php'),
+                    [
+                        'adapter'  => 'json',
+                        'filePath' => dataDir('assets/config/config.json'),
+                    ],
+                    [
+                        'adapter' => 'array',
+                        'config'  => [
+                            'test' => [
+                                'property2' => 'something-else',
+                            ],
+                        ],
+                    ],
+                ];
+
+                return new Grouped($config);
+
+            default:
+                return new Config($this->config);
+        }
+    }
+
+    /**
+     * Returns the message to print out for the test
+     */
+    private function getMessage(string $adapter = ''): string
+    {
+        $class = '';
+
+        if ('' !== $adapter) {
+            $class = sprintf('\Adapter\%s', $adapter);
+        }
+
+        return 'Config' . $class . ' - %s';
     }
 }

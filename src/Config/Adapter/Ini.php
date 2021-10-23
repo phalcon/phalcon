@@ -78,18 +78,13 @@ class Ini extends Config
     /**
      * Ini constructor.
      *
-     * @param string   $filePath
-     * @param int|null $mode
+     * @param string $filePath
+     * @param int    $mode
      *
      * @throws Exception
      */
-    public function __construct(string $filePath, $mode = null)
+    public function __construct(string $filePath, int $mode = INI_SCANNER_RAW)
     {
-        // Default to INI_SCANNER_RAW if not specified
-        if (null === $mode) {
-            $mode = INI_SCANNER_RAW;
-        }
-
         $iniConfig = $this->phpParseIniFile($filePath, true, $mode);
 
         if (false === $iniConfig) {
