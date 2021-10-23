@@ -213,11 +213,15 @@ class LoadCest
         $configFile1 = dataDir('assets/config/config.php');
         $config      = $factory->load($configFile1);
 
-        $I->assertEquals("/phalcon/", $config->get('phalcon')->baseUri);
+        $expected = "/phalcon/";
+        $actual   = $config->get('phalcon')->baseUri;
+        $I->assertEquals($expected, $actual);
 
         $configFile2 = dataDir('assets/config/config-2.php');
         $config2     = $factory->load($configFile2);
 
-        $I->assertEquals("/phalcon4/", $config2->get('phalcon')->baseUri);
+        $expected = "/phalcon4/";
+        $actual   = $config2->get('phalcon')->baseUri;
+        $I->assertEquals($expected, $actual);
     }
 }

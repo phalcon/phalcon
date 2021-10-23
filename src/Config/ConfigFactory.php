@@ -99,10 +99,7 @@ class ConfigFactory
                 );
         }
 
-        return $this->newInstance(
-            $adapter,
-            $filePath
-        );
+        return $this->newInstance($adapter, $filePath);
     }
 
     /**
@@ -182,7 +179,7 @@ class ConfigFactory
             ];
         }
 
-        if (is_object($config) && $config instanceof ConfigInterface) {
+        if (true === is_object($config) && $config instanceof ConfigInterface) {
             $config = $config->toArray();
         }
 
