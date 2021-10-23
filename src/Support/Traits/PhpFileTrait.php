@@ -166,7 +166,7 @@ trait PhpFileTrait
     protected function phpParseIniFile(
         $filename,
         $process_sections = false,
-        $scanner_mode = INI_SCANNER_NORMAL
+        $scanner_mode = 1
     ) {
         return parse_ini_file($filename, $process_sections, $scanner_mode);
     }
