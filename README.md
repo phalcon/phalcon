@@ -27,3 +27,42 @@ Phalcon Framework
 | ![PSR-15](https://img.shields.io/badge/PSR-15-red.svg?style=flat-square) | HTTP Handlers          |
 | ![PSR-17](https://img.shields.io/badge/PSR-18-red.svg?style=flat-square) | `Phalcon\Http\Message` |
 | ![PSR-18](https://img.shields.io/badge/PSR-17-red.svg?style=flat-square) | HTTP Client            |
+
+
+## Alignment with `cphalcon` (v5)
+- ~Acl~
+- Annotations
+- Application
+- Assets
+- Cache
+- Cli
+- ~Config~
+- ~Crypt~
+- DataMapper
+- Db
+- Di
+- Dispatcher
+- Domain
+- Escaper
+- Events
+- Factory
+- Filter
+- Flash
+- Forms
+- Helper
+- Html
+- Http
+- Image
+- Loader
+- Logger
+- Messages
+- Mvc
+- Paginator
+- Security
+- Session
+- Storage
+- Support
+- Tag
+- Translate
+- Url
+- Validation
