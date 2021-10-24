@@ -41,8 +41,8 @@ class TranslateFactory
     /**
      * AdapterFactory constructor.
      *
-     * @param InterpolatorFactory   $interpolator
-     * @param array<string, string> $services
+     * @param InterpolatorFactory $interpolator
+     * @param array               $services
      */
     public function __construct(InterpolatorFactory $interpolator, array $services = [])
     {
@@ -54,7 +54,7 @@ class TranslateFactory
     /**
      * Factory to create an instance from a Config object
      *
-     * @param array<string, mixed>|ConfigInterface $config = [
+     * @param array|ConfigInterface $config = [
      *     'adapter' => 'ini,
      *     'options' => [
      *         'content'       => '',
@@ -83,8 +83,8 @@ class TranslateFactory
     /**
      * Create a new instance of the adapter
      *
-     * @param string                $name
-     * @param array<string, string> $options
+     * @param string $name
+     * @param array  $options
      *
      * @return AdapterInterface
      * @throws Exception

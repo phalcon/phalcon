@@ -19,6 +19,10 @@ use Phalcon\Translate\InterpolatorFactory;
 use Phalcon\Translate\TranslateFactory;
 use UnitTester;
 
+use function strtolower;
+
+use const PHP_OS;
+
 class LoadCest
 {
     use FactoryTrait;

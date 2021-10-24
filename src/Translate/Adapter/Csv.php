@@ -39,8 +39,8 @@ class Csv extends AbstractAdapter implements ArrayAccess
     /**
      * Csv constructor.
      *
-     * @param InterpolatorFactory   $interpolator
-     * @param array<string, string> $options = [
+     * @param InterpolatorFactory $interpolator
+     * @param array               $options = [
      *                                       'content'   => '',
      *                                       'delimiter' => ';',
      *                                       'enclosure' => '"'
@@ -55,7 +55,7 @@ class Csv extends AbstractAdapter implements ArrayAccess
         parent::__construct($interpolator, $options);
 
         if (true !== isset($options['content'])) {
-            throw new Exception('Parameter "content" is required');
+            throw new Exception("Parameter 'content' is required");
         }
 
         $delimiter = $options['delimiter'] ?? ';';
@@ -79,20 +79,20 @@ class Csv extends AbstractAdapter implements ArrayAccess
     /**
      * Returns the translation related to the given key
      *
-     * @param string $index
+     * @param string $translateKey
      * @param array  $placeholders
      *
      * @return string
      */
-    public function query(string $index, array $placeholders = []): string
+    public function query(string $translateKey, array $placeholders = []): string
     {
-        $translation = $this->translate[$index] ?? $index;
+        $translation = $this->translate[$translateKey] ?? $translateKey;
 
         return $this->replacePlaceholders($translation, $placeholders);
     }
 
     /**
-     * Load translates from file
+     * Load translations from file
      *
      * @param string $file
      * @param int    $length
@@ -111,7 +111,7 @@ class Csv extends AbstractAdapter implements ArrayAccess
 
         if (true !== is_resource($pointer)) {
             throw new Exception(
-                'Error opening translation file "' . $file . '"'
+                "Error opening translation file '" . $file . "'"
             );
         }
 

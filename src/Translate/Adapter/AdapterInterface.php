@@ -32,12 +32,12 @@ interface AdapterInterface
     /**
      * Returns the translation related to the given key
      *
-     * @param string $index
+     * @param string $translateKey
      * @param array  $placeholders
      *
      * @return string
      */
-    public function query(string $index, array $placeholders = []): string;
+    public function query(string $translateKey, array $placeholders = []): string;
 
     /**
      * Returns the translation string of the given key
