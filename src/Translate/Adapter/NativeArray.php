@@ -32,9 +32,9 @@ use function is_array;
 class NativeArray extends AbstractAdapter implements ArrayAccess
 {
     /**
-     * @var array<string, string>
+     * @var array
      */
-    private array $translate;
+    private array $translate = [];
 
     /**
      * @var bool
@@ -44,11 +44,11 @@ class NativeArray extends AbstractAdapter implements ArrayAccess
     /**
      * NativeArray constructor.
      *
-     * @param InterpolatorFactory                       $interpolator
-     * @param array{content: array, triggerError: bool} $options = [
-     *                                                           'content'      => '',
-     *                                                           'triggerError' => false
-     *                                                           ]
+     * @param InterpolatorFactory $interpolator
+     * @param array               $options = [
+     *                                'content'      => '',
+     *                                'triggerError' => false
+     *                            ]
      *
      * @throws Exception
      */
@@ -102,20 +102,20 @@ class NativeArray extends AbstractAdapter implements ArrayAccess
     /**
      * Returns the translation related to the given key
      *
-     * @param string                    $index
-     * @param array<int|string, string> $placeholders
+     * @param string $index
+     * @param array  $placeholders
      *
      * @return string
      * @throws Exception
      */
-    public function query(string $index, array $placeholders = []): string
+    public function query(string $translateKey, array $placeholders = []): string
     {
-        if (true !== isset($this->translate[$index])) {
-            return $this->notFound($index);
+        if (true !== isset($this->translate[$translateKey])) {
+            return $this->notFound($translateKey);
         }
 
         return $this->replacePlaceholders(
-            $this->translate[$index],
+            $this->translate[$translateKey],
             $placeholders
         );
     }

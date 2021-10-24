@@ -105,12 +105,12 @@ abstract class AbstractFlash implements FlashInterface, InjectionAwareInterface
 
         throw new Exception(
             'A dependency injection container is required to access ' .
-            'the "escaper" service'
+            "the 'escaper' service"
         );
     }
 
     /**
-     * Shows an HTML notice/information message
+     * Shows a HTML notice/information message
      *
      *```php
      * $flash->notice("This is an information");
@@ -318,18 +318,18 @@ abstract class AbstractFlash implements FlashInterface, InjectionAwareInterface
      */
     private function getTemplate(string $cssClasses, string $cssIconClasses): string
     {
+        $template   = "<div%divString%>%iconString%%message%</div>" . PHP_EOL;
+        $divString  = "";
+        $iconString = "";
+
         if (true !== empty($this->customTemplate)) {
             return $this->customTemplate;
         }
 
-        $template     = "<div%divString%>%iconString%%message%</div>" . PHP_EOL;
-        $divString    = "";
-        $iconString   = "";
-
         if (true !== empty($cssClasses)) {
-            $divString = ' class="%cssClass%"';
+            $divString = " class=\"%cssClass%\"";
             if (true !== empty($cssIconClasses)) {
-                $iconString = '<i class="%cssIconClass%"></i> ';
+                $iconString = "<i class=\"%cssIconClass%\"></i> ";
             }
         }
 

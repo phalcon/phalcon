@@ -46,7 +46,7 @@ class UrlCest
     private function getData(): array
     {
         return [
-            ['http://juhara��.co�m', 'http://juhara.com'],
+            ['https://pha�lc�on.i�o', 'https://phalcon.io'],
         ];
     }
 }

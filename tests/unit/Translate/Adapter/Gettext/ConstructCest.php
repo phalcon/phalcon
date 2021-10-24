@@ -64,7 +64,7 @@ class ConstructCest
         $I->wantToTest('Translate\Adapter\Gettext - constructor without "locale" throws exception');
 
         $I->expectThrowable(
-            new Exception('Parameter "locale" is required'),
+            new Exception("Parameter 'locale' is required"),
             function () {
                 new Gettext(new InterpolatorFactory(), []);
             }
@@ -85,7 +85,7 @@ class ConstructCest
         $I->wantToTest('Translate\Adapter\Gettext - constructor without "directory" throws exception');
 
         $I->expectThrowable(
-            new Exception('Parameter "directory" is required'),
+            new Exception("Parameter 'directory' is required"),
             function () {
                 new Gettext(
                     new InterpolatorFactory(),

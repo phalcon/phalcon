@@ -50,10 +50,10 @@ class FilterFactory
      */
     public function newInstance(): FilterInterface
     {
-        return new Filter($this->getAdapters());
+        return new Filter($this->getServices());
     }
 
-    protected function getAdapters(): array
+    protected function getServices(): array
     {
         return [
             Filter::FILTER_ABSINT      => AbsInt::class,

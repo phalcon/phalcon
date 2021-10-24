@@ -65,7 +65,7 @@ class ConstructCest
         $I->wantToTest('Translate\Adapter\Csv - constructor without content throws exception');
 
         $I->expectThrowable(
-            new Exception('Parameter "content" is required'),
+            new Exception("Parameter 'content' is required"),
             function () {
                 new Csv(new InterpolatorFactory(), []);
             }
@@ -84,8 +84,8 @@ class ConstructCest
     {
         $I->wantToTest('Translate\Adapter\Csv - constructor error loading file throws exception');
 
-        $message = 'Error opening translation file "'
-            . dataDir('assets/translation/csv/en.csv"');
+        $message = "Error opening translation file '"
+            . dataDir('assets/translation/csv/en.csv') . "'";
         $I->expectThrowable(
             new Exception($message),
             function () {

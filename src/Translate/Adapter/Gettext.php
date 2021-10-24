@@ -48,7 +48,7 @@ use const LC_ALL;
  * );
  * ```
  *
- * Allows translate using gettext
+ * Allows translations using gettext
  *
  * @property int          $category
  * @property string       $defaultDomain
@@ -82,8 +82,8 @@ class Gettext extends AbstractAdapter implements ArrayAccess
     /**
      * Gettext constructor.
      *
-     * @param InterpolatorFactory   $interpolator
-     * @param array<string, string> $options = [
+     * @param InterpolatorFactory $interpolator
+     * @param array               $options = [
      *                                       'locale'        => '',
      *                                       'defaultDomain' => '',
      *                                       'directory'     => '',
@@ -190,14 +190,14 @@ class Gettext extends AbstractAdapter implements ArrayAccess
      * $translator->query("你好 %name%！", ["name" => "Phalcon"]);
      * ```
      *
-     * @param string $index
+     * @param string $translateKey
      * @param array  $placeholders
      *
      * @return string
      */
-    public function query(string $index, array $placeholders = []): string
+    public function query(string $translateKey, array $placeholders = []): string
     {
-        $translation = gettext($index);
+        $translation = gettext($translateKey);
 
         return $this->replacePlaceholders($translation, $placeholders);
     }
@@ -260,13 +260,12 @@ class Gettext extends AbstractAdapter implements ArrayAccess
 
     /**
      * Changes the current domain (i.e. the translation file)
-     */
-    /**
-     * @param ?string $domain
+     *
+     * @param string|null $domain
      *
      * @return string
      */
-    public function setDomain(?string $domain): string
+    public function setDomain(?string $domain = null): string
     {
         return textdomain($domain);
     }
@@ -282,8 +281,8 @@ class Gettext extends AbstractAdapter implements ArrayAccess
      * $gettext->setLocale(LC_ALL, "de_DE@euro", "de_DE", "de", "ge");
      * ```
      *
-     * @param int    $category
-     * @param array $locale
+     * @param int   $category
+     * @param array $localeArray
      *
      * @return false|string
      */
@@ -323,11 +322,11 @@ class Gettext extends AbstractAdapter implements ArrayAccess
     protected function prepareOptions(array $options): void
     {
         if (true !== isset($options['locale'])) {
-            throw new Exception('Parameter "locale" is required');
+            throw new Exception("Parameter 'locale' is required");
         }
 
         if (true !== isset($options['directory'])) {
-            throw new Exception('Parameter "directory" is required');
+            throw new Exception("Parameter 'directory' is required");
         }
 
         $options = array_merge($this->getOptionsDefault(), $options);

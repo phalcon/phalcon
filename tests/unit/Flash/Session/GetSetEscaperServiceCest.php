@@ -103,8 +103,8 @@ class GetSetEscaperServiceCest
 
         $I->expectThrowable(
             new Exception(
-                'A dependency injection container is required to ' .
-                'access the "escaper" service'
+                "A dependency injection container is required to " .
+                "access the 'escaper' service"
             ),
             function () {
                 $flash = new Session();
