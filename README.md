@@ -29,14 +29,12 @@ Phalcon Framework
 | ![PSR-18](https://img.shields.io/badge/PSR-17-red.svg?style=flat-square) | HTTP Client            |
 
 
-## Alignment with `cphalcon` (v5)
-- ~Acl~
+## Remaining refactoring - alignment with `cphalcon` (v5) 
 - Annotations
 - Application
 - Assets
 - Cache
 - Cli
-- ~Config~
 - ~Crypt~
 - DataMapper
 - Db
@@ -46,8 +44,6 @@ Phalcon Framework
 - Escaper
 - Events
 - Factory
-- Filter
-- Flash
 - Forms
 - Helper
 - Html
@@ -63,6 +59,5 @@ Phalcon Framework
 - Storage
 - Support
 - Tag
-- Translate
 - Url
 - Validation
