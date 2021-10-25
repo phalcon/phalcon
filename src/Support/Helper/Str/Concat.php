@@ -22,9 +22,8 @@ use function implode;
 use function trim;
 
 /**
- * Class Concat
- *
- * @package Phalcon\Support\Str
+ * Concatenates strings using the separator only once without duplication in
+ * places concatenation
  */
 class Concat
 {
@@ -32,21 +31,6 @@ class Concat
     use StartsWithTrait;
 
     /**
-     * Concatenates strings using the separator only once without duplication in
-     * places concatenation
-     *
-     * ```php
-     * $str = Phalcon\Support\Str::concat(
-     *     '/',
-     *     '/tmp/',
-     *     '/folder_1/',
-     *     '/folder_2',
-     *     'folder_3/'
-     * );
-     *
-     * echo $str;   // /tmp/folder_1/folder_2/folder_3/
-     * ```
-     *
      * @param string $delimiter
      * @param string $first
      * @param string $second

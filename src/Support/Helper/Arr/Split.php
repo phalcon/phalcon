@@ -17,16 +17,12 @@ use function array_keys;
 use function array_values;
 
 /**
- * Class Split
- *
- * @package Phalcon\Support\Arr
+ * Returns a new array with keys of the collection as one element and values
+ * as another
  */
 class Split
 {
     /**
-     * Returns a new array with keys of the passed array as one element and
-     * values as another
-     *
      * @param array<int|string,mixed> $collection
      *
      * @return array<int|string,mixed>

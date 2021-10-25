@@ -16,17 +16,13 @@ namespace Phalcon\Support\Helper\Str;
 use Phalcon\Support\Helper\Str\Traits\LowerTrait;
 
 /**
- * Class IsLower
- *
- * @package Phalcon\Support\Str
+ * Returns `true` if the given string is in lower case, `false` otherwise.
  */
 class IsLower
 {
     use LowerTrait;
 
     /**
-     * Returns true if the given string is lower case, false otherwise.
-     *
      * @param string $text
      * @param string $encoding
      *

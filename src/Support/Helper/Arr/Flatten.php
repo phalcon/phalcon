@@ -18,16 +18,12 @@ use function array_values;
 use function is_array;
 
 /**
- * Class Flatten
- *
- * @package Phalcon\Support\Arr
+ * Flattens an array up to the one level depth, unless `$deep` is set to
+ * `true`
  */
 class Flatten
 {
     /**
-     * Flattens an array up to the one level depth, unless `$deep` is set to
-     * `true`
-     *
      * @param array<int|string,mixed> $collection
      * @param bool                    $deep
      *

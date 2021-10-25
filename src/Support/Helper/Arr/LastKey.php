@@ -18,18 +18,14 @@ use Phalcon\Support\Helper\Arr\Traits\FilterTrait;
 use function array_key_last;
 
 /**
- * Class LastKey
- *
- * @package Phalcon\Support\Arr
+ * Returns the key of the last element of the collection. If a callable is
+ * passed, the element returned is the first that validates true
  */
 class LastKey
 {
     use FilterTrait;
 
     /**
-     * Returns the key of the last element of the collection. If a callable is
-     * passed, the element returned is the first that validates true
-     *
      * @param array<int|string,mixed> $collection
      * @param callable|null           $method
      *

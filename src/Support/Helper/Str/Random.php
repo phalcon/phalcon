@@ -20,17 +20,16 @@ use function str_split;
 use function strlen;
 
 /**
- * Class Random
- *
- * @package Phalcon\Support\Str
+ * Generates a random string based on the given type. Type is one of the
+ * RANDOM_* constants
  */
 class Random
 {
-    // Only alpha numeric characters [a-zA-Z0-9]
+    // Only alphanumeric characters [a-zA-Z0-9]
     public const RANDOM_ALNUM = 0;
     // Only alphabetical characters [azAZ]
     public const RANDOM_ALPHA = 1;
-    // Only alpha numeric uppercase characters exclude similar
+    // Only alphanumeric uppercase characters exclude similar
     // characters [2345679ACDEFHJKLMNPRSTUVWXYZ]
     public const RANDOM_DISTINCT = 5;
     // Only hexadecimal characters [0-9a-f]
@@ -41,9 +40,6 @@ class Random
     public const RANDOM_NUMERIC = 3;
 
     /**
-     * Generates a random string based on the given type. Type is one of the
-     * RANDOM_* constants
-     *
      * @param int $type
      * @param int $length
      *

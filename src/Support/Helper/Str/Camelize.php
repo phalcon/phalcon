@@ -23,23 +23,11 @@ use const PREG_SPLIT_DELIM_CAPTURE;
 use const PREG_SPLIT_NO_EMPTY;
 
 /**
- * Class Camelize
- *
- * @package Phalcon\Support\Str
+ * Converts strings to camelize style
  */
 class Camelize
 {
     /**
-     * Converts strings to camelize style
-     *
-     * ```php
-     * use Phalcon\Support\Helper\Str;
-     *
-     * echo Str::camelize("coco_bongo");            // CocoBongo
-     * echo Str::camelize("co_co-bon_go", "-");     // Co_coBon_go
-     * echo Str::camelize("co_co-bon_go", "_-");    // CoCoBonGo
-     * ```
-     *
      * @param string      $text
      * @param string|null $delimiters
      *

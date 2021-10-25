@@ -15,15 +15,17 @@ namespace Phalcon\Support\Helper\Str;
 
 use Phalcon\Support\Helper\Str\Traits\InterpolateTrait;
 
+/**
+ * Interpolates context values into the message placeholders. By default, the
+ * right and left tokens are `%`
+ *
+ * @see http://www.php-fig.org/psr/psr-3/ Section 1.2 Message
+ */
 class Interpolate
 {
     use InterpolateTrait;
 
     /**
-     * Interpolates context values into the message placeholders
-     *
-     * @see http://www.php-fig.org/psr/psr-3/ Section 1.2 Message
-     *
      * @param string $message
      * @param array  $context
      */

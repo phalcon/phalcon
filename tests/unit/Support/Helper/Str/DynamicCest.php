@@ -131,7 +131,7 @@ class DynamicCest
         $I->wantToTest('Support\Helper\Str - dynamic() - exception');
 
         $I->expectThrowable(
-            new RuntimeException('Syntax error in string "{{Hi/Hello}"'),
+            new RuntimeException("Syntax error in string '{{Hi/Hello}'"),
             function () {
                 $object = new Dynamic();
                 $actual = $object->__invoke('{{Hi/Hello}');

@@ -16,17 +16,13 @@ namespace Phalcon\Support\Helper\Str;
 use Phalcon\Support\Helper\Str\Traits\LowerTrait;
 
 /**
- * Class Lower
- *
- * @package Phalcon\Support\Str
+ * Converts a string to lowercase using mbstring
  */
 class Lower
 {
     use LowerTrait;
 
     /**
-     * Lowercases a string using mbstring
-     *
      * @param string $text
      * @param string $encoding
      *

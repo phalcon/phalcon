@@ -42,7 +42,7 @@ class FriendlyCest
 
         $object   = new Friendly();
         $expected = $example['result'];
-        $actual   = $object(
+        $actual   = $object->__invoke(
             $example['text'],
             $example['separator'],
             $example['lowercase'],
@@ -131,7 +131,7 @@ class FriendlyCest
                 'separator' => '-',
                 'lowercase' => true,
                 'replace'   => "'",
-                'result'    => 'perch-l-erba-verde',
+                'result'    => 'perche-l-erba-e-verde',
             ],
             [
                 'message'   => 'accented characters replace array',

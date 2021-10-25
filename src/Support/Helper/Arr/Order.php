@@ -19,9 +19,9 @@ use function is_object;
 use const SORT_REGULAR;
 
 /**
- * Class Order
- *
- * @package Phalcon\Support\Arr
+ * Sorts a collection of arrays or objects by an attribute of the object. It
+ * supports ascending/descending sorts but also flags that are identical to
+ * the ones used by `ksort` and `krsort`
  */
 class Order
 {
@@ -29,8 +29,6 @@ class Order
     public const ORDER_DESC = 2;
 
     /**
-     * Sorts a collection of arrays or objects by key
-     *
      * @param array<int|string,mixed> $collection
      * @param mixed                   $attribute
      * @param int                     $order

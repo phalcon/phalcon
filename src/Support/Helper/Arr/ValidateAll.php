@@ -18,18 +18,14 @@ use Phalcon\Support\Helper\Arr\Traits\FilterTrait;
 use function count;
 
 /**
- * Class ValidateAll
- *
- * @package Phalcon\Support\Arr
+ * Returns `true` if the provided function returns `true` for all elements of
+ * the collection, `false` otherwise.
  */
 class ValidateAll
 {
     use FilterTrait;
 
     /**
-     * Returns true if the provided function returns true for all elements of
-     * the collection, false otherwise.
-     *
      * @param array<int|string,mixed> $collection
      * @param callable                $method
      *

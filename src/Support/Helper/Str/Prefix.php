@@ -14,15 +14,11 @@ declare(strict_types=1);
 namespace Phalcon\Support\Helper\Str;
 
 /**
- * Class Prefix
- *
- * @package Phalcon\Support\Str
+ * Prefixes the text with the supplied prefix
  */
 class Prefix
 {
     /**
-     * Prefixes the text with the supplied prefix
-     *
      * @param mixed  $text
      * @param string $prefix
      *

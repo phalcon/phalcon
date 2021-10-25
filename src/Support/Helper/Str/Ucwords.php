@@ -18,15 +18,11 @@ use function mb_convert_case;
 use const MB_CASE_TITLE;
 
 /**
- * Class Ucwords
- *
- * @package Phalcon\Support\Str
+ * Capitalizes the first letter of each word
  */
 class Ucwords
 {
     /**
-     * Capitalizes the first letter of each word
-     *
      * @param string $text
      * @param string $encoding
      *
