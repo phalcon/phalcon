@@ -21,18 +21,14 @@ use function is_int;
 use function is_string;
 
 /**
- * Class Blacklist
- *
- * @package Phalcon\Support\Arr
+ * Black list filter by key: exclude elements of an array
+ * by the keys obtained from the elements of a blacklist
  */
 class Blacklist
 {
     use FilterTrait;
 
     /**
-     * Black list filter by key: exclude elements of an array
-     * by the keys obtained from the elements of a blacklist
-     *
      * @param array<int|string,mixed> $collection
      * @param array<int|string,mixed> $blackList
      *

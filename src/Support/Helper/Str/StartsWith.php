@@ -16,17 +16,13 @@ namespace Phalcon\Support\Helper\Str;
 use Phalcon\Support\Helper\Str\Traits\StartsWithTrait;
 
 /**
- * Class StartsWith
- *
- * @package Phalcon\Support\Str
+ * Check if a string starts with a given string
  */
 class StartsWith
 {
     use StartsWithTrait;
 
     /**
-     * Check if a string starts with a given string
-     *
      * @param string $haystack
      * @param string $needle
      * @param bool   $ignoreCase

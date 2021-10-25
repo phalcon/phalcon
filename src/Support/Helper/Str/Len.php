@@ -16,15 +16,11 @@ namespace Phalcon\Support\Helper\Str;
 use function mb_strlen;
 
 /**
- * Class Len
- *
- * @package Phalcon\Support\Str
+ * Calculates the length of the string using `mb_strlen`
  */
 class Len
 {
     /**
-     * Calculates the length of the string using mbstring
-     *
      * @param string $text
      * @param string $encoding
      *

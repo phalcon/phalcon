@@ -16,15 +16,11 @@ namespace Phalcon\Support\Helper\Str;
 use function mb_strpos;
 
 /**
- * Class Includes
- *
- * @package Phalcon\Support\Str
+ * Determines whether a string includes another string or not.
  */
 class Includes
 {
     /**
-     * Lets you determine whether or not a string includes another string.
-     *
      * @param string $haystack
      * @param string $needle
      *

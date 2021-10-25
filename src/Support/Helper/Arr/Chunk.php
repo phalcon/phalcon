@@ -16,15 +16,11 @@ namespace Phalcon\Support\Helper\Arr;
 use function array_chunk;
 
 /**
- * Class Chunk
- *
- * @package Phalcon\Support\Arr
+ * Chunks an array into smaller arrays of a specified size.
  */
 class Chunk
 {
     /**
-     * Chunks an array into smaller arrays of a specified size.
-     *
      * @param array<int|string,mixed> $collection
      * @param int                     $size
      * @param bool                    $preserveKeys

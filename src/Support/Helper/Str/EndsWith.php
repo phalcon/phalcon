@@ -16,17 +16,13 @@ namespace Phalcon\Support\Helper\Str;
 use Phalcon\Support\Helper\Str\Traits\EndsWithTrait;
 
 /**
- * Class EndsWith
- *
- * @package Phalcon\Support\Str
+ * Check if a string ends with a given string
  */
 class EndsWith
 {
     use EndsWithTrait;
 
     /**
-     * Check if a string ends with a given string
-     *
      * @param string $haystack
      * @param string $needle
      * @param bool   $ignoreCase

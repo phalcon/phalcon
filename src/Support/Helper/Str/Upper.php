@@ -16,17 +16,13 @@ namespace Phalcon\Support\Helper\Str;
 use Phalcon\Support\Helper\Str\Traits\UpperTrait;
 
 /**
- * Class Upper
- *
- * @package Phalcon\Support\Str
+ * Converts a string to uppercase using mbstring
  */
 class Upper
 {
     use UpperTrait;
 
     /**
-     * Uppercases a string using mbstring
-     *
      * @param string $text
      * @param string $encoding
      *

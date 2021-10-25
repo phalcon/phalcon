@@ -18,18 +18,14 @@ use Phalcon\Support\Helper\Arr\Traits\FilterTrait;
 use function end;
 
 /**
- * Class Last
- *
- * @package Phalcon\Support\Arr
+ * Returns the last element of the collection. If a callable is passed, the
+ * element returned is the first that validates true
  */
 class Last
 {
     use FilterTrait;
 
     /**
-     * Returns the last element of the collection. If a callable is passed, the
-     * element returned is the first that validates true
-     *
      * @param array<int|string,mixed> $collection
      * @param callable|null           $method
      *

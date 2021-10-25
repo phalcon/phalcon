@@ -16,16 +16,12 @@ namespace Phalcon\Support\Helper\Str;
 use function count_chars;
 
 /**
- * Class IsAnagram
- *
- * @package Phalcon\Support\Str
+ * Compare two strings and returns `true` if both strings are anagram,
+ * `false` otherwise.
  */
 class IsAnagram
 {
     /**
-     * Compare two strings and returns true if both strings are anagram,
-     * false otherwise.
-     *
      * @param string $first
      * @param string $second
      *

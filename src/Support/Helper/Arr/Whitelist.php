@@ -21,18 +21,14 @@ use function is_int;
 use function is_string;
 
 /**
- * Class Whitelist
- *
- * @package Phalcon\Support\Arr
+ * White list filter by key: obtain elements of an array filtering by the keys
+ * obtained from the elements of a whitelist
  */
 class Whitelist
 {
     use FilterTrait;
 
     /**
-     * White list filter by key: obtain elements of an array filtering
-     * by the keys obtained from the elements of a whitelist
-     *
      * @param array<int|string,mixed> $collection
      * @param array<int|string,mixed> $whiteList
      *

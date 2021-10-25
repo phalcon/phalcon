@@ -16,15 +16,12 @@ namespace Phalcon\Support\Helper\Arr;
 use function array_key_exists;
 
 /**
- * Class Has
- *
- * @package Phalcon\Support\Arr
+ * Checks an array if it has an element with a specific key and returns
+ * `true`/`false` accordingly
  */
 class Has
 {
     /**
-     * Helper method to get an array element or a default
-     *
      * @param array<int|string,mixed> $collection
      * @param mixed                   $index
      *

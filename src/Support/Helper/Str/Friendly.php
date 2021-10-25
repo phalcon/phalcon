@@ -16,6 +16,8 @@ namespace Phalcon\Support\Helper\Str;
 use Phalcon\Support\Helper\Exception;
 use Phalcon\Support\Helper\Str\Traits\LowerTrait;
 
+use function array_keys;
+use function array_values;
 use function is_array;
 use function is_string;
 use function preg_replace;
@@ -23,17 +25,15 @@ use function str_replace;
 use function trim;
 
 /**
- * Class Friendly
- *
- * @package Phalcon\Support\Str
+ * Changes a text to a URL friendly one. Replaces commonly known accented
+ * characters with their Latin equivalents. If a `replace` string or array
+ * is passed, it will also be used to replace those characters with a space.
  */
 class Friendly
 {
     use LowerTrait;
 
     /**
-     * Changes a text to a URL friendly one
-     *
      * @param string     $text
      * @param string     $separator
      * @param bool       $lowercase
@@ -49,12 +49,17 @@ class Friendly
         $replace = null
     ): string {
         if (null !== $replace) {
-            $text = $this->checkReplace($replace, $text);
+            $replace = $this->checkReplace($replace);
+        } else {
+            $replace = [];
         }
 
+        $matrix = $this->getMatrix($replace);
+
+        $text     = str_replace(array_keys($matrix), array_values($matrix), $text);
         $friendly = preg_replace(
-            '/[^a-zA-Z0-9\\/_|+ -]/',
-            '',
+            "/[^a-zA-Z0-9\\/_|+ -]/",
+            "",
             $text
         );
 
@@ -62,28 +67,22 @@ class Friendly
             $friendly = $this->toLower($friendly);
         }
 
-        return trim(
-            (string) preg_replace(
-                '/[\\/_|+ -]+/',
-                $separator,
-                $friendly
-            ),
-            $separator
-        );
+        $friendly = preg_replace("/[\\/_|+ -]+/", $separator, $friendly);
+
+        return trim($friendly, $separator);
     }
 
     /**
-     * @param mixed  $replace
-     * @param string $text
+     * @param mixed $replace
      *
-     * @return string
+     * @return array
      * @throws Exception
      */
-    private function checkReplace($replace, string $text): string
+    private function checkReplace($replace): array
     {
         if (true !== is_array($replace) && true !== is_string($replace)) {
             throw new Exception(
-                'Parameter replace must be an array or a string'
+                "Parameter replace must be an array or a string"
             );
         }
 
@@ -91,6 +90,44 @@ class Friendly
             $replace = [$replace];
         }
 
-        return str_replace($replace, ' ', $text);
+        return $replace;
+    }
+
+    /**
+     * @param mixed $replace
+     *
+     * @return array
+     * @throws Exception
+     */
+    private function getMatrix(array $replace): array
+    {
+        $matrix = [
+            "Š"    => "S",     "š"    => "s", "Đ"    => "Dj", "Ð"    => "Dj",
+            "đ"    => "dj",    "Ž"    => "Z", "ž"    => "z",  "Č"    => "C",
+            "č"    => "c",     "Ć"    => "C", "ć"    => "c",  "À"    => "A",
+            "Á"    => "A",     "Â"    => "A", "Ã"    => "A",  "Ä"    => "A",
+            "Å"    => "A",     "Æ"    => "A", "Ç"    => "C",  "È"    => "E",
+            "É"    => "E",     "Ê"    => "E", "Ë"    => "E",  "Ì"    => "I",
+            "Í"    => "I",     "Î"    => "I", "Ï"    => "I",  "Ñ"    => "N",
+            "Ò"    => "O",     "Ó"    => "O", "Ô"    => "O",  "Õ"    => "O",
+            "Ö"    => "O",     "Ø"    => "O", "Ù"    => "U",  "Ú"    => "U",
+            "Û"    => "U",     "Ü"    => "U", "Ý"    => "Y",  "Þ"    => "B",
+            "ß"    => "Ss",    "à"    => "a", "á"    => "a",  "â"    => "a",
+            "ã"    => "a",     "ä"    => "a", "å"    => "a",  "æ"    => "a",
+            "ç"    => "c",     "è"    => "e", "é"    => "e",  "ê"    => "e",
+            "ë"    => "e",     "ì"    => "i", "í"    => "i",  "î"    => "i",
+            "ï"    => "i",     "ð"    => "o", "ñ"    => "n",  "ò"    => "o",
+            "ó"    => "o",     "ô"    => "o", "õ"    => "o",  "ö"    => "o",
+            "ø"    => "o",     "ù"    => "u", "ú"    => "u",  "û"    => "u",
+            "ý"    => "y",     "þ"    => "b",  "ÿ"   => "y",  "Ŕ"    => "R",
+            "ŕ"    => "r",     "ē"    => "e",  "'"   => "",   "&"    => " and ",
+            "\r\n" => " ",     "\n"   => " ",
+        ];
+
+        foreach ($replace as $item) {
+            $matrix[$item] = " ";
+        }
+
+        return $matrix;
     }
 }

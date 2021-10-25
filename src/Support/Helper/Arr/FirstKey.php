@@ -18,18 +18,14 @@ use Phalcon\Support\Helper\Arr\Traits\FilterTrait;
 use function array_key_first;
 
 /**
- * Class FirstKey
- *
- * @package Phalcon\Support\Arr
+ * Returns the key of the first element of the collection. If a callable
+ * is passed, the element returned is the first that validates true
  */
 class FirstKey
 {
     use FilterTrait;
 
     /**
-     * Returns the key of the first element of the collection. If a callable
-     * is passed, the element returned is the first that validates true
-     *
      * @param array<int|string,mixed> $collection
      * @param callable|null           $method
      *

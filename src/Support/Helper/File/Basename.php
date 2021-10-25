@@ -21,17 +21,13 @@ use function rtrim;
 use const DIRECTORY_SEPARATOR;
 
 /**
- * Class Basename
- *
- * @package Phalcon\Support\File
+ * Gets the filename from a given path, Same as PHP's `basename()` but has
+ * non-ASCII support. PHP's `basename()` does not properly support streams or
+ * filenames beginning with a non-US-ASCII character.
  */
 class Basename
 {
     /**
-     * Gets the filename from a given path, Same as PHP's basename() but has
-     * non-ASCII support. PHP's basename() does not properly support streams or
-     * filenames beginning with a non-US-ASCII character.
-     *
      * @see https://bugs.php.net/bug.php?id=37738
      *
      * @param string      $uri

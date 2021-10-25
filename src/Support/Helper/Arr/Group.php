@@ -20,15 +20,11 @@ use function is_object;
 use function is_string;
 
 /**
- * Class Group
- *
- * @package Phalcon\Support\Arr
+ * Groups the elements of an array based on the passed callable
  */
 class Group
 {
     /**
-     * Groups the elements of an array based on the passed callable
-     *
      * @param array<int|string,mixed> $collection
      * @param callable|string         $method
      *

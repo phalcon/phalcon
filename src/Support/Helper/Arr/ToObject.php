@@ -14,15 +14,11 @@ declare(strict_types=1);
 namespace Phalcon\Support\Helper\Arr;
 
 /**
- * Class ToObject
- *
- * @package Phalcon\Support\Arr
+ * Returns the passed array as an object.
  */
 class ToObject
 {
     /**
-     * Returns the passed array as an object
-     *
      * @param array<int|string,mixed> $collection
      *
      * @return object

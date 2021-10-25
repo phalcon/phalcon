@@ -16,15 +16,11 @@ namespace Phalcon\Support\Helper\Arr;
 use function array_slice;
 
 /**
- * Class SliceLeft
- *
- * @package Phalcon\Support\Arr
+ * Returns a new array with n elements removed from the left.
  */
 class SliceLeft
 {
     /**
-     * Returns a new array with n elements removed from the left.
-     *
      * @param array<int|string,mixed> $collection
      * @param int                     $elements
      *

@@ -17,15 +17,11 @@ use function is_array;
 use function is_object;
 
 /**
- * Class Pluck
- *
- * @package Phalcon\Support\Arr
+ * Returns a subset of the collection based on the values of the collection
  */
 class Pluck
 {
     /**
-     * Retrieves all the values for a given key:
-     *
      * @param array<int|string,mixed> $collection
      * @param string                  $element
      *

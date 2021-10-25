@@ -16,9 +16,7 @@ namespace Phalcon\Support\Helper\Arr;
 use function array_slice;
 
 /**
- * Class SliceRight
- *
- * @package Phalcon\Support\Arr
+ * Returns a new array with n elements removed from the right.
  */
 class SliceRight
 {
