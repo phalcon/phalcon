@@ -23,7 +23,7 @@ class Has
 {
     /**
      * @param array<int|string,mixed> $collection
-     * @param mixed                   $index
+     * @param string|int $index
      *
      * @return bool
      */

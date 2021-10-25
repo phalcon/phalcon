@@ -21,8 +21,6 @@ use function array_slice;
 class SliceRight
 {
     /**
-     * Returns a new array with the X elements from the right
-     *
      * @param array<int|string,mixed> $collection
      * @param int                     $elements
      *

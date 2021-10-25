@@ -21,7 +21,6 @@ use function trim;
  */
 class Underscore
 {
-
     /**
      * @param string $text
      *
