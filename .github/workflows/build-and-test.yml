@@ -167,26 +167,26 @@ jobs:
 
       - name: Run Unit Tests
         if: always()
-        run: vendor/bin/codecept run --coverage-xml=coverage-${{ matrix.php-versions }}.xml --ext DotReporter unit
+        run: vendor/bin/codecept run --coverage-xml=coverage-unit-${{ matrix.php-versions }}.xml --ext DotReporter unit
 
-      - name: Upload Code Coverage on ${{ matrix.php-versions }} for unit
-        uses: codecov/codecov-action@v2
-        with:
-          token: ${{ secrets.CODECOV_TOKEN }}
-          directory: ./tests/_output/
+#      - name: Upload Code Coverage on ${{ matrix.php-versions }} for unit
+#        uses: codecov/codecov-action@v2
+#        with:
+#          token: ${{ secrets.CODECOV_TOKEN }}
+#          directory: ./tests/_output/
 
       - name: Run Integration Tests
         env:
           DATA_REDIS_PORT: ${{ job.services.redis.ports['6379'] }}
           DATA_MEMCACHED_PORT: ${{ job.services.memcached.ports['11211'] }}
         if: always()
-        run: vendor/bin/codecept run --coverage-xml=coverage-${{ matrix.php-versions }}.xml --ext DotReporter integration
+        run: vendor/bin/codecept run --coverage-xml=coverage-int-${{ matrix.php-versions }}.xml --ext DotReporter integration
 
-      - name: Upload Code Coverage on ${{ matrix.php-versions }} for integration
-        uses: codecov/codecov-action@v2
-        with:
-          token: ${{ secrets.CODECOV_TOKEN }}
-          directory: ./tests/_output/
+#      - name: Upload Code Coverage on ${{ matrix.php-versions }} for integration
+#        uses: codecov/codecov-action@v2
+#        with:
+#          token: ${{ secrets.CODECOV_TOKEN }}
+#          directory: ./tests/_output/
 
 #      - name: Run Database Tests (Common)
 #        env:
@@ -232,3 +232,4 @@ jobs:
         with:
           token: ${{ secrets.CODECOV_TOKEN }}
           directory: ./tests/_output/
+          files: ./coverage-unit-${{ matrix.php-versions }}.xml, coverage-int-${{ matrix.php-versions }}.xml
