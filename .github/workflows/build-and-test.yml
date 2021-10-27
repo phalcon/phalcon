@@ -223,4 +223,4 @@ jobs:
         uses: codecov/codecov-action@v2
         with:
           token: ${{ secrets.CODECOV_TOKEN }}
-          files: ./tests/_output/coverage-*.xml
+          files: ./tests/_output/coverage-unit-${{ matrix.php-versions }}.xml, ./tests/_output/coverage-int-${{ matrix.php-versions }}.xml
