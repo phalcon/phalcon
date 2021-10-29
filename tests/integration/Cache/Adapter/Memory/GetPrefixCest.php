@@ -17,7 +17,6 @@ use IntegrationTester;
 use Phalcon\Cache\Adapter\Memory;
 use Phalcon\Storage\SerializerFactory;
 use Phalcon\Support\Exception as HelperException;
-use Phalcon\Support\HelperFactory;
 
 class GetPrefixCest
 {
@@ -35,10 +34,8 @@ class GetPrefixCest
     {
         $I->wantToTest('Cache\Adapter\Memory - getPrefix()');
 
-        $helper     = new HelperFactory();
         $serializer = new SerializerFactory();
         $adapter    = new Memory(
-            $helper,
             $serializer,
             [
                 'prefix' => 'my-prefix',
@@ -64,9 +61,8 @@ class GetPrefixCest
     {
         $I->wantToTest('Cache\Adapter\Memory - getPrefix() - default');
 
-        $helper     = new HelperFactory();
         $serializer = new SerializerFactory();
-        $adapter    = new Memory($helper, $serializer);
+        $adapter    = new Memory($serializer);
 
         $expected = 'ph-memo-';
         $actual   = $adapter->getPrefix();

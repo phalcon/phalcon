@@ -41,28 +41,26 @@ class Redis extends AbstractAdapter
     /**
      * Redis constructor.
      *
-     * @param HelperFactory     $helperFactory
      * @param SerializerFactory $factory
      * @param array             $options
      *
      * @throws SupportException
      */
     public function __construct(
-        HelperFactory $helperFactory,
         SerializerFactory $factory,
         array $options = []
     ) {
         /**
          * Lets set some defaults and options here
          */
-        $options['host']       = $helperFactory->get($options, 'host', '127.0.0.1');
-        $options['port']       = $helperFactory->get($options, 'port', 6379, 'int');
-        $options['index']      = $helperFactory->get($options, 'index', 0);
-        $options['persistent'] = $helperFactory->get($options, 'persistent', false);
-        $options['auth']       = $helperFactory->get($options, 'auth', '');
-        $options['socket']     = $helperFactory->get($options, 'socket', '');
+        $options['host']       = $options['host'] ?? '127.0.0.1';
+        $options['port']       = (int) ($options['port'] ?? 6379);
+        $options['index']      = $options['index'] ?? 0;
+        $options['persistent'] = $options['persistent'] ?? false;
+        $options['auth']       = $options['auth'] ?? '';
+        $options['socket']     = $options['socket'] ?? '';
 
-        parent::__construct($helperFactory, $factory, $options);
+        parent::__construct($factory, $options);
     }
 
     /**

@@ -17,7 +17,6 @@ use IntegrationTester;
 use Phalcon\Cache\AdapterFactory;
 use Phalcon\Cache\Cache;
 use Phalcon\Storage\SerializerFactory;
-use Phalcon\Support\HelperFactory;
 use Psr\SimpleCache\CacheInterface;
 
 class ConstructCest
@@ -32,9 +31,8 @@ class ConstructCest
     {
         $I->wantToTest('Cache\Cache - __construct()');
 
-        $helper     = new HelperFactory();
         $serializer = new SerializerFactory();
-        $factory    = new AdapterFactory($helper, $serializer);
+        $factory    = new AdapterFactory($serializer);
         $options    = [
             'defaultSerializer' => 'Json',
             'lifetime'          => 7200,

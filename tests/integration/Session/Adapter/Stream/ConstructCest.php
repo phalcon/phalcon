@@ -73,16 +73,16 @@ class ConstructCest
     }
 
     /**
-     * Tests Phalcon\Session\Adapter\Stream :: __construct() - not writeable path
+     * Tests Phalcon\Session\Adapter\Stream :: __construct() - not writable path
      *
      * @param IntegrationTester $I
      *
      * @author Phalcon Team <team@phalcon.io>
      * @since  2020-09-09
      */
-    public function sessionAdapterStreamConstructNotWriteablePath(IntegrationTester $I)
+    public function sessionAdapterStreamConstructNotWritablePath(IntegrationTester $I)
     {
-        $I->wantToTest('Session\Adapter\Stream - __construct() - not writeable path');
+        $I->wantToTest('Session\Adapter\Stream - __construct() - not writable path');
 
         $path = ini_get('session.save_path');
         $I->expectThrowable(
@@ -94,7 +94,7 @@ class ConstructCest
                     SessionStream::class,
                     [],
                     [
-                        'phpIsWriteable' => false,
+                        'phpIsWritable' => false,
                     ]
                 );
             }

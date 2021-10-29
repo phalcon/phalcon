@@ -18,10 +18,10 @@ use Phalcon\Cache\Adapter\Redis;
 use Phalcon\Storage\Exception as CacheException;
 use Phalcon\Storage\SerializerFactory;
 use Phalcon\Support\Exception as HelperException;
-use Phalcon\Support\HelperFactory;
 use Phalcon\Tests\Fixtures\Traits\RedisTrait;
 
 use function getOptionsRedis;
+use function uniqid;
 
 class DecrementCest
 {
@@ -42,15 +42,13 @@ class DecrementCest
     {
         $I->wantToTest('Cache\Adapter\Redis - decrement()');
 
-        $I->skipTest('Check this');
-
-        $helper     = new HelperFactory();
         $serializer = new SerializerFactory();
-        $adapter    = new Redis($helper, $serializer, getOptionsRedis());
+        $adapter    = new Redis($serializer, getOptionsRedis());
 
-        $key    = uniqid();
-        $actual = $adapter->set($key, 100);
-        $I->assertTrue($actual);
+        $key      = uniqid();
+        $expected = 100;
+        $actual   = $adapter->increment($key, 100);
+        $I->assertEquals($expected, $actual);
 
         $expected = 99;
         $actual   = $adapter->decrement($key);
@@ -69,8 +67,9 @@ class DecrementCest
         /**
          * unknown key
          */
-        $key    = 'unknown';
-        $actual = $adapter->decrement($key, 9);
-        $I->assertFalse($actual);
+        $key      = uniqid();
+        $expected = -9;
+        $actual   = $adapter->decrement($key, 9);
+        $I->assertEquals($expected, $actual);
     }
 }

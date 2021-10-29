@@ -16,7 +16,6 @@ namespace Phalcon\Tests\Integration\Cache\Adapter\Redis;
 use IntegrationTester;
 use Phalcon\Cache\Adapter\Redis;
 use Phalcon\Storage\SerializerFactory;
-use Phalcon\Support\HelperFactory;
 
 use function getOptionsRedis;
 
@@ -35,9 +34,8 @@ class GetSetDefaultSerializerCest
     {
         $I->wantToTest('Cache\Adapter\Redis - getDefaultSerializer()/setDefaultSerializer()');
 
-        $helper     = new HelperFactory();
         $serializer = new SerializerFactory();
-        $adapter    = new Redis($helper, $serializer, getOptionsRedis());
+        $adapter    = new Redis($serializer, getOptionsRedis());
 
         $expected = 'php';
         $actual   = $adapter->getDefaultSerializer();

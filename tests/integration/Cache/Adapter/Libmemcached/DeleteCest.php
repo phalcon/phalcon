@@ -18,7 +18,6 @@ use Phalcon\Cache\Adapter\Libmemcached;
 use Phalcon\Storage\Exception as CacheException;
 use Phalcon\Storage\SerializerFactory;
 use Phalcon\Support\Exception as HelperException;
-use Phalcon\Support\HelperFactory;
 use Phalcon\Tests\Fixtures\Traits\LibmemcachedTrait;
 
 use function getOptionsLibmemcached;
@@ -42,15 +41,13 @@ class DeleteCest
     {
         $I->wantToTest('Cache\Adapter\Libmemcached - delete()');
 
-        $helper     = new HelperFactory();
         $serializer = new SerializerFactory();
         $adapter    = new Libmemcached(
-            $helper,
             $serializer,
             getOptionsLibmemcached()
         );
 
-        $key = 'cache-data';
+        $key = uniqid();
         $adapter->set($key, 'test');
         $actual = $adapter->has($key);
         $I->assertTrue($actual);
@@ -77,15 +74,13 @@ class DeleteCest
     {
         $I->wantToTest('Cache\Adapter\Libmemcached - delete() - twice');
 
-        $helper     = new HelperFactory();
         $serializer = new SerializerFactory();
         $adapter    = new Libmemcached(
-            $helper,
             $serializer,
             getOptionsLibmemcached()
         );
 
-        $key = 'cache-data';
+        $key = uniqid();
         $adapter->set($key, 'test');
         $actual = $adapter->has($key);
         $I->assertTrue($actual);
@@ -112,15 +107,13 @@ class DeleteCest
     {
         $I->wantToTest('Cache\Adapter\Libmemcached - delete() - unknown');
 
-        $helper     = new HelperFactory();
         $serializer = new SerializerFactory();
         $adapter    = new Libmemcached(
-            $helper,
             $serializer,
             getOptionsLibmemcached()
         );
 
-        $key    = 'cache-data';
+        $key    = uniqid();
         $actual = $adapter->delete($key);
         $I->assertFalse($actual);
     }

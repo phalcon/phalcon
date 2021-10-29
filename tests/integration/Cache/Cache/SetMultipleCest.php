@@ -19,7 +19,6 @@ use Phalcon\Cache\AdapterFactory;
 use Phalcon\Cache\Cache;
 use Phalcon\Cache\Exception\InvalidArgumentException;
 use Phalcon\Storage\SerializerFactory;
-use Phalcon\Support\HelperFactory;
 
 use function uniqid;
 
@@ -35,9 +34,8 @@ class SetMultipleCest
     {
         $I->wantToTest('Cache\Cache - setMultiple()');
 
-        $helper     = new HelperFactory();
         $serializer = new SerializerFactory();
-        $factory    = new AdapterFactory($helper, $serializer);
+        $factory    = new AdapterFactory($serializer);
         $instance   = $factory->newInstance('apcu');
 
         $adapter = new Cache($instance);
@@ -73,9 +71,8 @@ class SetMultipleCest
     {
         $I->wantToTest('Cache\Cache - setMultiple() - false');
 
-        $helper     = new HelperFactory();
         $serializer = new SerializerFactory();
-        $factory    = new AdapterFactory($helper, $serializer);
+        $factory    = new AdapterFactory($serializer);
         $instance   = $factory->newInstance('apcu');
 
         $adapter = new Cache($instance);
@@ -112,9 +109,8 @@ class SetMultipleCest
         $I->expectThrowable(
             new InvalidArgumentException('The key contains invalid characters'),
             function () {
-                $helper     = new HelperFactory();
                 $serializer = new SerializerFactory();
-                $factory    = new AdapterFactory($helper, $serializer);
+                $factory    = new AdapterFactory($serializer);
                 $instance   = $factory->newInstance('apcu');
 
                 $adapter = new Cache($instance);
@@ -133,9 +129,8 @@ class SetMultipleCest
                 'The keys need to be an array or instance of Traversable'
             ),
             function () {
-                $helper     = new HelperFactory();
                 $serializer = new SerializerFactory();
-                $factory    = new AdapterFactory($helper, $serializer);
+                $factory    = new AdapterFactory($serializer);
                 $instance   = $factory->newInstance('apcu');
 
                 $adapter = new Cache($instance);

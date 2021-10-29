@@ -15,7 +15,7 @@ namespace Phalcon\Config\Adapter;
 
 use Phalcon\Config\Config;
 use Phalcon\Config\Exception;
-use Phalcon\Support\Traits\PhpFunctionTrait;
+use Phalcon\Traits\Php\InfoTrait;
 use Phalcon\Support\Traits\PhpYamlTrait;
 
 use function basename;
@@ -59,7 +59,7 @@ use function basename;
  */
 class Yaml extends Config
 {
-    use PhpFunctionTrait;
+    use InfoTrait;
     use PhpYamlTrait;
 
     /**

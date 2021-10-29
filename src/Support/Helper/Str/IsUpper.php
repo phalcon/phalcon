@@ -13,7 +13,7 @@ declare(strict_types=1);
 
 namespace Phalcon\Support\Helper\Str;
 
-use Phalcon\Support\Helper\Str\Traits\UpperTrait;
+use Phalcon\Traits\Helper\Str\UpperTrait;
 
 /**
  * Returns `true` if the given string is in upper case, `false` otherwise.

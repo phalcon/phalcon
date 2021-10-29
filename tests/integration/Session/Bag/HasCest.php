@@ -55,19 +55,19 @@ class HasCest
         $actual = $collection->has('THREE');
         $I->assertTrue($actual);
 
-        $actual = $collection->has('unknown');
+        $actual = $collection->has(uniqid());
         $I->assertFalse($actual);
 
         $actual = isset($collection['three']);
         $I->assertTrue($actual);
 
-        $actual = isset($collection['unknown']);
+        $actual = isset($collection[uniqid()]);
         $I->assertFalse($actual);
 
         $actual = $collection->offsetExists('three');
         $I->assertTrue($actual);
 
-        $actual = $collection->offsetExists('unknown');
+        $actual = $collection->offsetExists(uniqid());
         $I->assertFalse($actual);
     }
 }

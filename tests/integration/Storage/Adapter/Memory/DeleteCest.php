@@ -17,7 +17,6 @@ use IntegrationTester;
 use Phalcon\Storage\Adapter\Memory;
 use Phalcon\Storage\SerializerFactory;
 use Phalcon\Support\Exception as HelperException;
-use Phalcon\Support\HelperFactory;
 
 class DeleteCest
 {
@@ -35,11 +34,10 @@ class DeleteCest
     {
         $I->wantToTest('Storage\Adapter\Memory - delete()');
 
-        $helper     = new HelperFactory();
         $serializer = new SerializerFactory();
-        $adapter    = new Memory($helper, $serializer);
+        $adapter    = new Memory($serializer);
 
-        $key = 'cache-data';
+        $key = uniqid();
         $adapter->set($key, 'test');
         $actual = $adapter->has($key);
         $I->assertTrue($actual);
@@ -65,11 +63,10 @@ class DeleteCest
     {
         $I->wantToTest('Storage\Adapter\Memory - delete() - twice');
 
-        $helper     = new HelperFactory();
         $serializer = new SerializerFactory();
-        $adapter    = new Memory($helper, $serializer);
+        $adapter    = new Memory($serializer);
 
-        $key = 'cache-data';
+        $key = uniqid();
         $adapter->set($key, 'test');
         $actual = $adapter->has($key);
         $I->assertTrue($actual);
@@ -95,11 +92,10 @@ class DeleteCest
     {
         $I->wantToTest('Storage\Adapter\Memory - delete() - unknown');
 
-        $helper     = new HelperFactory();
         $serializer = new SerializerFactory();
-        $adapter    = new Memory($helper, $serializer);
+        $adapter    = new Memory($serializer);
 
-        $key    = 'cache-data';
+        $key    = uniqid();
         $actual = $adapter->delete($key);
         $I->assertFalse($actual);
     }

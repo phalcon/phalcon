@@ -18,7 +18,6 @@ use Phalcon\Storage\Adapter\AdapterInterface;
 use Phalcon\Storage\Adapter\Memory;
 use Phalcon\Storage\SerializerFactory;
 use Phalcon\Support\Exception as HelperException;
-use Phalcon\Support\HelperFactory;
 
 class ConstructCest
 {
@@ -36,9 +35,8 @@ class ConstructCest
     {
         $I->wantToTest('Storage\Adapter\Memory - __construct()');
 
-        $helper     = new HelperFactory();
         $serializer = new SerializerFactory();
-        $adapter    = new Memory($helper, $serializer);
+        $adapter    = new Memory($serializer);
 
         $class = Memory::class;
         $I->assertInstanceOf($class, $adapter);

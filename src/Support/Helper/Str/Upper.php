@@ -13,7 +13,7 @@ declare(strict_types=1);
 
 namespace Phalcon\Support\Helper\Str;
 
-use Phalcon\Support\Helper\Str\Traits\UpperTrait;
+use Phalcon\Traits\Helper\Str\UpperTrait;
 
 /**
  * Converts a string to uppercase using mbstring

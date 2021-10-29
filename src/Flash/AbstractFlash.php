@@ -18,7 +18,7 @@ use Phalcon\Di\Traits\InjectionAwareTrait;
 use Phalcon\Flash\Traits\FlashGettersTrait;
 use Phalcon\Html\EscaperInterface;
 use Phalcon\Session\ManagerInterface as SessionInterface;
-use Phalcon\Support\Helper\Str\Traits\InterpolateTrait;
+use Phalcon\Traits\Helper\Str\InterpolateTrait;
 
 use function is_array;
 use function is_string;

@@ -18,7 +18,6 @@ use Phalcon\Cache\Adapter\AdapterInterface;
 use Phalcon\Cache\AdapterFactory;
 use Phalcon\Cache\Cache;
 use Phalcon\Storage\SerializerFactory;
-use Phalcon\Support\HelperFactory;
 
 class GetAdapterCest
 {
@@ -32,9 +31,8 @@ class GetAdapterCest
     {
         $I->wantToTest('Cache\Cache - getAdapter()');
 
-        $helper     = new HelperFactory();
         $serializer = new SerializerFactory();
-        $factory    = new AdapterFactory($helper, $serializer);
+        $factory    = new AdapterFactory($serializer);
         $instance   = $factory->newInstance('apcu');
 
         $adapter = new Cache($instance);

@@ -19,7 +19,7 @@ use Exception;
 use Phalcon\Storage\Serializer\SerializerInterface;
 use Phalcon\Storage\SerializerFactory;
 use Phalcon\Support\Exception as SupportException;
-use Phalcon\Support\HelperFactory;
+use Phalcon\Traits\Helper\Str\StartsWithTrait;
 
 use function is_object;
 use function mb_strtolower;
@@ -31,7 +31,6 @@ use function mb_strtolower;
  *
  * @property mixed               $adapter
  * @property string              $defaultSerializer
- * @property HelperFactory       $helperFactory
  * @property int                 $lifetime
  * @property array               $options
  * @property string              $prefix
@@ -40,6 +39,8 @@ use function mb_strtolower;
  */
 abstract class AbstractAdapter implements AdapterInterface
 {
+    use StartsWithTrait;
+
     /**
      * @var mixed
      */
@@ -85,27 +86,18 @@ abstract class AbstractAdapter implements AdapterInterface
     protected ?SerializerInterface $serializer;
 
     /**
-     * Helper Factory
-     *
-     * @var HelperFactory
-     */
-    protected HelperFactory $helperFactory;
-
-    /**
      * AbstractAdapter constructor.
      *
      * @param SerializerFactory $factory
      * @param array             $options
      */
     protected function __construct(
-        HelperFactory $helperFactory,
         SerializerFactory $factory,
         array $options = []
     ) {
         /**
          * Lets set some defaults and options here
          */
-        $this->helperFactory     = $helperFactory;
         $this->serializerFactory = $factory;
         $this->defaultSerializer = mb_strtolower(($options['defaultSerializer']) ?? 'php');
         $this->lifetime          = $options['lifetime'] ?? 3600;
@@ -252,7 +244,7 @@ abstract class AbstractAdapter implements AdapterInterface
         $keys    = !$keys ? [] : $keys;
 
         foreach ($keys as $key) {
-            if (true === $this->helperFactory->startsWith($key, $needle)) {
+            if (true === $this->toStartsWith($key, $needle)) {
                 $results[] = $key;
             }
         }

@@ -64,7 +64,7 @@ use Phalcon\Support\Helper\Str\Suffix;
 use Phalcon\Support\Helper\Str\Ucwords;
 use Phalcon\Support\Helper\Str\Underscore;
 use Phalcon\Support\Helper\Str\Upper;
-use Phalcon\Support\Traits\FactoryTrait;
+use Phalcon\Traits\Factory\FactoryTrait;
 
 use function call_user_func_array;
 

@@ -18,7 +18,6 @@ use Phalcon\Storage\Adapter\Stream;
 use Phalcon\Storage\Exception as StorageException;
 use Phalcon\Storage\SerializerFactory;
 use Phalcon\Support\Exception as HelperException;
-use Phalcon\Support\HelperFactory;
 
 use function outputDir;
 
@@ -39,17 +38,15 @@ class DecrementCest
     {
         $I->wantToTest('Storage\Adapter\Stream - decrement()');
 
-        $helper     = new HelperFactory();
         $serializer = new SerializerFactory();
         $adapter    = new Stream(
-            $helper,
             $serializer,
             [
                 'storageDir' => outputDir(),
             ]
         );
 
-        $key    = 'cache-data';
+        $key    = uniqid();
         $actual = $adapter->set($key, 100);
         $I->assertTrue($actual);
 
@@ -70,7 +67,7 @@ class DecrementCest
         /**
          * unknown key
          */
-        $key    = 'unknown';
+        $key    = uniqid();
         $actual = $adapter->decrement($key);
         $I->assertFalse($actual);
 

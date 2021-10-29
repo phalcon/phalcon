@@ -18,7 +18,6 @@ use IntegrationTester;
 use Phalcon\Cache\Adapter\Apcu;
 use Phalcon\Storage\SerializerFactory;
 use Phalcon\Support\Exception;
-use Phalcon\Support\HelperFactory;
 use Phalcon\Tests\Fixtures\Traits\ApcuTrait;
 
 class GetKeysCest
@@ -39,9 +38,8 @@ class GetKeysCest
     {
         $I->wantToTest('Cache\Adapter\Apcu - getKeys()');
 
-        $helper     = new HelperFactory();
         $serializer = new SerializerFactory();
-        $adapter    = new Apcu($helper, $serializer);
+        $adapter    = new Apcu($serializer);
 
         $I->assertTrue($adapter->clear());
 
@@ -88,12 +86,10 @@ class GetKeysCest
     {
         $I->wantToTest('Cache\Adapter\Apcu - getKeys() - iterator error');
 
-        $helper     = new HelperFactory();
         $serializer = new SerializerFactory();
         $adapter    = Stub::construct(
             Apcu::class,
             [
-                $helper,
                 $serializer,
             ],
             [

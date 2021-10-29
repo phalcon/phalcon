@@ -15,13 +15,12 @@ namespace Phalcon\Config\Adapter;
 
 use Phalcon\Config\Config;
 use Phalcon\Config\Exception;
-use Phalcon\Support\Traits\PhpFileTrait;
+use Phalcon\Traits\Php\FileTrait;
 
 use function basename;
 use function count;
 use function is_array;
 use function is_numeric;
-use function is_string;
 use function preg_match;
 use function strpos;
 use function strtolower;
@@ -73,7 +72,7 @@ use const INI_SCANNER_RAW;
  */
 class Ini extends Config
 {
-    use PhpFileTrait;
+    use FileTrait;
 
     /**
      * Ini constructor.

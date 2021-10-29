@@ -18,7 +18,6 @@ use IntegrationTester;
 use Phalcon\Cache\Adapter\Memory;
 use Phalcon\Storage\SerializerFactory;
 use Phalcon\Support\Exception as HelperException;
-use Phalcon\Support\HelperFactory;
 use stdClass;
 
 class GetSetCest
@@ -40,9 +39,8 @@ class GetSetCest
     {
         $I->wantToTest('Cache\Adapter\Memory - get()/set() - ' . $example[0]);
 
-        $helper     = new HelperFactory();
         $serializer = new SerializerFactory();
-        $adapter    = new Memory($helper, $serializer);
+        $adapter    = new Memory($serializer);
 
         $key = uniqid();
 

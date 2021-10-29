@@ -17,7 +17,6 @@ use IntegrationTester;
 use Phalcon\Storage\Adapter\Memory;
 use Phalcon\Storage\SerializerFactory;
 use Phalcon\Support\Exception as HelperException;
-use Phalcon\Support\HelperFactory;
 
 class GetSetDefaultSerializerCest
 {
@@ -36,9 +35,8 @@ class GetSetDefaultSerializerCest
     {
         $I->wantToTest('Storage\Adapter\Memory - getDefaultSerializer()/setDefaultSerializer()');
 
-        $helper     = new HelperFactory();
         $serializer = new SerializerFactory();
-        $adapter    = new Memory($helper, $serializer);
+        $adapter    = new Memory($serializer);
 
         $expected = 'php';
         $actual   = $adapter->getDefaultSerializer();

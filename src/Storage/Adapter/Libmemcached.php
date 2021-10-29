@@ -37,14 +37,12 @@ class Libmemcached extends AbstractAdapter
     /**
      * Libmemcached constructor.
      *
-     * @param HelperFactory     $helperFactory
      * @param SerializerFactory $factory
      * @param array             $options
      *
      * @throws SupportException
      */
     public function __construct(
-        HelperFactory $helperFactory,
         SerializerFactory $factory,
         array $options = []
     ) {
@@ -58,7 +56,7 @@ class Libmemcached extends AbstractAdapter
             ];
         }
 
-        parent::__construct($helperFactory, $factory, $options);
+        parent::__construct($factory, $options);
     }
 
     /**
@@ -133,17 +131,9 @@ class Libmemcached extends AbstractAdapter
     public function getAdapter()
     {
         if (null === $this->adapter) {
-            $persistentId = $this->helperFactory->get(
-                $this->options,
-                'persistentId',
-                'ph-mcid-'
-            );
+            $persistentId = $this->options['persistentId'] ?? 'ph-mcid-';
             /** @var array $sasl */
-            $sasl       = $this->helperFactory->get(
-                $this->options,
-                'saslAuthData',
-                []
-            );
+            $sasl       = $this->options['saslAuthData'] ?? [];
             $connection = new Memcached($persistentId);
             $serverList = $connection->getServerList();
 
@@ -151,21 +141,13 @@ class Libmemcached extends AbstractAdapter
 
             if (count($serverList) < 1) {
                 /** @var array $servers */
-                $servers = $this->helperFactory->get(
-                    $this->options,
-                    'servers',
-                    []
-                );
+                $servers = $this->options['servers'] ?? [];
                 /** @var array $client */
-                $client = $this->helperFactory->get(
-                    $this->options,
-                    'client',
-                    []
-                );
+                $client = $this->options['client'] ?? [];
                 /** @var string $saslUser */
-                $saslUser = $this->helperFactory->get($sasl, 'user', '');
+                $saslUser = $sasl['user'] ?? '';
                 /** @var string $saslPass */
-                $saslPass = $this->helperFactory->get($sasl, 'pass', '');
+                $saslPass = $sasl['pass'] ?? '';
                 $failover = [
                     Memcached::OPT_CONNECT_TIMEOUT       => 10,
                     Memcached::OPT_DISTRIBUTION          => Memcached::DISTRIBUTION_CONSISTENT,

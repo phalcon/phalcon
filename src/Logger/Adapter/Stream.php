@@ -16,7 +16,7 @@ namespace Phalcon\Logger\Adapter;
 use LogicException;
 use Phalcon\Logger\Exception;
 use Phalcon\Logger\Item;
-use Phalcon\Support\Traits\PhpFileTrait;
+use Phalcon\Traits\Php\FileTrait;
 
 use function is_resource;
 use function mb_strpos;
@@ -45,7 +45,7 @@ use const PHP_EOL;
  */
 class Stream extends AbstractAdapter
 {
-    use PhpFileTrait;
+    use FileTrait;
 
     /**
      * Stream handler resource

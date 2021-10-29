@@ -13,8 +13,8 @@ declare(strict_types=1);
 
 namespace Phalcon\Support\Helper\Str;
 
-use Phalcon\Support\Helper\Str\Traits\EndsWithTrait;
-use Phalcon\Support\Helper\Str\Traits\StartsWithTrait;
+use Phalcon\Traits\Helper\Str\EndsWithTrait;
+use Phalcon\Traits\Helper\Str\StartsWithTrait;
 
 use function array_merge;
 use function end;

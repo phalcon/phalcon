@@ -17,7 +17,6 @@ use IntegrationTester;
 use Phalcon\Cache\Adapter\AdapterInterface;
 use Phalcon\Cache\Adapter\Redis;
 use Phalcon\Storage\SerializerFactory;
-use Phalcon\Support\HelperFactory;
 use Phalcon\Tests\Fixtures\Traits\RedisTrait;
 
 use function getOptionsRedis;
@@ -38,9 +37,8 @@ class ConstructCest
     {
         $I->wantToTest('Cache\Adapter\Redis - __construct()');
 
-        $helper     = new HelperFactory();
         $serializer = new SerializerFactory();
-        $adapter    = new Redis($helper, $serializer, getOptionsRedis());
+        $adapter    = new Redis($serializer, getOptionsRedis());
 
         $expected = Redis::class;
         $I->assertInstanceOf($expected, $adapter);

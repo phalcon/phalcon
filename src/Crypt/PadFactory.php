@@ -22,7 +22,7 @@ use Phalcon\Crypt\Padding\PadInterface;
 use Phalcon\Crypt\Padding\Pkcs7;
 use Phalcon\Crypt\Padding\Space;
 use Phalcon\Crypt\Padding\Zero;
-use Phalcon\Support\Traits\FactoryTrait;
+use Phalcon\Traits\Factory\FactoryTrait;
 
 /**
  * Class PadFactory

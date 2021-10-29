@@ -24,6 +24,8 @@ use Phalcon\Storage\Serializer\None;
 use Phalcon\Storage\Serializer\Php;
 use Phalcon\Storage\SerializerFactory;
 
+use function uniqid;
+
 class NewInstanceCest
 {
     /**
@@ -64,11 +66,12 @@ class NewInstanceCest
     {
         $I->wantToTest('Storage\SerializerFactory - newInstance() - exception');
 
+        $name = uniqid();
         $I->expectThrowable(
-            new Exception('Service unknown is not registered'),
-            function () {
+            new Exception('Service ' . $name . ' is not registered'),
+            function () use ($name) {
                 $factory = new SerializerFactory();
-                $service = $factory->newInstance('unknown');
+                $service = $factory->newInstance($name);
             }
         );
     }

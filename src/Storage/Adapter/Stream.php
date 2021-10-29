@@ -22,7 +22,9 @@ use Phalcon\Storage\SerializerFactory;
 use Phalcon\Storage\Traits\StorageErrorHandlerTrait;
 use Phalcon\Support\Exception as SupportException;
 use Phalcon\Support\HelperFactory;
-use Phalcon\Support\Traits\PhpFileTrait;
+use Phalcon\Traits\Helper\Str\DirFromFileTrait;
+use Phalcon\Traits\Helper\Str\DirSeparatorTrait;
+use Phalcon\Traits\Php\FileTrait;
 use RecursiveDirectoryIterator;
 use RecursiveIteratorIterator;
 
@@ -47,7 +49,9 @@ use const LOCK_SH;
  */
 class Stream extends AbstractAdapter
 {
-    use PhpFileTrait;
+    use DirFromFileTrait;
+    use DirSeparatorTrait;
+    use FileTrait;
     use StorageErrorHandlerTrait;
 
     /**
@@ -63,7 +67,6 @@ class Stream extends AbstractAdapter
     /**
      * Stream constructor.
      *
-     * @param HelperFactory     $helperFactory
      * @param SerializerFactory $factory
      * @param array             $options = [
      *                                   'storageDir'        => '',
@@ -76,11 +79,10 @@ class Stream extends AbstractAdapter
      * @throws SupportException
      */
     public function __construct(
-        HelperFactory $helperFactory,
         SerializerFactory $factory,
         array $options = []
     ) {
-        $storageDir = $helperFactory->get($options, 'storageDir', '');
+        $storageDir = $options['storageDir'] ?? '';
         if (empty($storageDir)) {
             throw new StorageException(
                 'The "storageDir" must be specified in the options'
@@ -90,9 +92,9 @@ class Stream extends AbstractAdapter
         /**
          * Lets set some defaults and options here
          */
-        $this->storageDir = $helperFactory->dirSeparator($storageDir);
+        $this->storageDir = $this->toDirSeparator($storageDir);
 
-        parent::__construct($helperFactory, $factory, $options);
+        parent::__construct($factory, $options);
 
         $this->initSerializer();
     }
@@ -302,14 +304,14 @@ class Stream extends AbstractAdapter
      */
     private function getDir(string $key = ''): string
     {
-        $dirPrefix   = $this->helperFactory->dirSeparator(
+        $dirPrefix   = $this->toDirSeparator(
             $this->storageDir . $this->prefix
         );
-        $dirFromFile = $this->helperFactory->dirFromFile(
+        $dirFromFile = $this->toDirFromFile(
             str_replace($this->prefix, '', $key)
         );
 
-        return $this->helperFactory->dirSeparator($dirPrefix . $dirFromFile);
+        return $this->toDirSeparator($dirPrefix . $dirFromFile);
     }
 
     /**

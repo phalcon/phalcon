@@ -18,7 +18,6 @@ use IntegrationTester;
 use Phalcon\Storage\Adapter\Apcu;
 use Phalcon\Storage\SerializerFactory;
 use Phalcon\Support\Exception;
-use Phalcon\Support\HelperFactory;
 use Phalcon\Tests\Fixtures\Traits\ApcuTrait;
 
 use function uniqid;
@@ -41,9 +40,8 @@ class ClearCest
     {
         $I->wantToTest('Storage\Adapter\Apcu - clear()');
 
-        $helper     = new HelperFactory();
         $serializer = new SerializerFactory();
-        $adapter    = new Apcu($helper, $serializer);
+        $adapter    = new Apcu($serializer);
 
         $key1 = uniqid();
         $key2 = uniqid();
@@ -79,9 +77,8 @@ class ClearCest
     {
         $I->wantToTest('Storage\Adapter\Apcu - clear() - twice');
 
-        $helper     = new HelperFactory();
         $serializer = new SerializerFactory();
-        $adapter    = new Apcu($helper, $serializer);
+        $adapter    = new Apcu($serializer);
 
         $key1 = uniqid();
         $key2 = uniqid();
@@ -114,12 +111,10 @@ class ClearCest
     {
         $I->wantToTest('Storage\Adapter\Apcu - clear() - iterator error');
 
-        $helper     = new HelperFactory();
         $serializer = new SerializerFactory();
         $adapter    = Stub::construct(
             Apcu::class,
             [
-                $helper,
                 $serializer
             ],
             [
@@ -155,12 +150,10 @@ class ClearCest
     {
         $I->wantToTest('Storage\Adapter\Apcu - clear() - delete error');
 
-        $helper     = new HelperFactory();
         $serializer = new SerializerFactory();
         $adapter    = Stub::construct(
             Apcu::class,
             [
-                $helper,
                 $serializer
             ],
             [

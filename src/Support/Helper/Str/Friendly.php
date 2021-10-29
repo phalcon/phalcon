@@ -14,7 +14,7 @@ declare(strict_types=1);
 namespace Phalcon\Support\Helper\Str;
 
 use Phalcon\Support\Helper\Exception;
-use Phalcon\Support\Helper\Str\Traits\LowerTrait;
+use Phalcon\Traits\Helper\Str\LowerTrait;
 
 use function array_keys;
 use function array_values;
@@ -57,7 +57,7 @@ class Friendly
         $matrix = $this->getMatrix($replace);
 
         $text     = str_replace(array_keys($matrix), array_values($matrix), $text);
-        $friendly = preg_replace(
+        $friendly = (string) preg_replace(
             "/[^a-zA-Z0-9\\/_|+ -]/",
             "",
             $text

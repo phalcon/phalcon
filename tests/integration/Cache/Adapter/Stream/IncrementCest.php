@@ -18,7 +18,6 @@ use Phalcon\Cache\Adapter\Stream;
 use Phalcon\Storage\Exception as CacheException;
 use Phalcon\Storage\SerializerFactory;
 use Phalcon\Support\Exception as HelperException;
-use Phalcon\Support\HelperFactory;
 
 use function outputDir;
 
@@ -39,17 +38,15 @@ class IncrementCest
     {
         $I->wantToTest('Cache\Adapter\Stream - increment()');
 
-        $helper     = new HelperFactory();
         $serializer = new SerializerFactory();
         $adapter    = new Stream(
-            $helper,
             $serializer,
             [
                 'storageDir' => outputDir(),
             ]
         );
 
-        $key    = 'cache-data';
+        $key    = uniqid();
         $actual = $adapter->set($key, 1);
         $I->assertTrue($actual);
 
@@ -68,7 +65,7 @@ class IncrementCest
         /**
          * unknown key
          */
-        $key    = 'unknown';
+        $key    = uniqid();
         $actual = $adapter->increment($key);
         $I->assertFalse($actual);
     }

@@ -17,7 +17,6 @@ use IntegrationTester;
 use Phalcon\Cache\Adapter\Apcu;
 use Phalcon\Storage\SerializerFactory;
 use Phalcon\Support\Exception;
-use Phalcon\Support\HelperFactory;
 use Phalcon\Tests\Fixtures\Traits\ApcuTrait;
 
 class GetSetDefaultSerializerCest
@@ -39,9 +38,8 @@ class GetSetDefaultSerializerCest
     {
         $I->wantToTest('Cache\Adapter\Apcu - getDefaultSerializer()/setDefaultSerializer()');
 
-        $helper     = new HelperFactory();
         $serializer = new SerializerFactory();
-        $adapter    = new Apcu($helper, $serializer);
+        $adapter    = new Apcu($serializer);
 
         $expected = 'php';
         $actual   = $adapter->getDefaultSerializer();

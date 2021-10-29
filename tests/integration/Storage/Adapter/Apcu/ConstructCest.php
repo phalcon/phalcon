@@ -18,7 +18,6 @@ use Phalcon\Storage\Adapter\AdapterInterface;
 use Phalcon\Storage\Adapter\Apcu;
 use Phalcon\Storage\SerializerFactory;
 use Phalcon\Support\Exception;
-use Phalcon\Support\HelperFactory;
 use Phalcon\Tests\Fixtures\Traits\ApcuTrait;
 
 class ConstructCest
@@ -39,9 +38,8 @@ class ConstructCest
     {
         $I->wantToTest('Storage\Adapter\Apcu - __construct()');
 
-        $helper     = new HelperFactory();
         $serializer = new SerializerFactory();
-        $adapter    = new Apcu($helper, $serializer);
+        $adapter    = new Apcu($serializer);
 
         $class = Apcu::class;
         $I->assertInstanceOf($class, $adapter);

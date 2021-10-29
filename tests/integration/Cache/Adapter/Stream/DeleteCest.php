@@ -18,7 +18,6 @@ use Phalcon\Cache\Adapter\Stream;
 use Phalcon\Storage\Exception as CacheException;
 use Phalcon\Storage\SerializerFactory;
 use Phalcon\Support\Exception as HelperException;
-use Phalcon\Support\HelperFactory;
 
 use function outputDir;
 
@@ -39,17 +38,15 @@ class DeleteCest
     {
         $I->wantToTest('Cache\Adapter\Stream - delete()');
 
-        $helper     = new HelperFactory();
         $serializer = new SerializerFactory();
         $adapter    = new Stream(
-            $helper,
             $serializer,
             [
                 'storageDir' => outputDir(),
             ]
         );
 
-        $key = 'cache-data';
+        $key = uniqid();
 
         $adapter->set($key, 'test');
 
@@ -78,17 +75,15 @@ class DeleteCest
     {
         $I->wantToTest('Cache\Adapter\Stream - delete() - twice');
 
-        $helper     = new HelperFactory();
         $serializer = new SerializerFactory();
         $adapter    = new Stream(
-            $helper,
             $serializer,
             [
                 'storageDir' => outputDir(),
             ]
         );
 
-        $key = 'cache-data';
+        $key = uniqid();
 
         $adapter->set($key, 'test');
 
@@ -120,17 +115,15 @@ class DeleteCest
     {
         $I->wantToTest('Cache\Adapter\Stream - delete() - unknown');
 
-        $helper     = new HelperFactory();
         $serializer = new SerializerFactory();
         $adapter    = new Stream(
-            $helper,
             $serializer,
             [
                 'storageDir' => outputDir(),
             ]
         );
 
-        $key    = 'cache-data';
+        $key    = uniqid();
         $actual = $adapter->delete($key);
         $I->assertFalse($actual);
     }

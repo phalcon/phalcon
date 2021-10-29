@@ -49,7 +49,7 @@ class DestroyCest
         $actual = $adapter->destroy('test1');
         $I->assertTrue($actual);
 
-        $actual = $adapter->destroy('unknown');
+        $actual = $adapter->destroy(uniqid());
         $I->assertTrue($actual);
 
         $I->dontSeeInMemcached($key);

@@ -13,7 +13,7 @@ declare(strict_types=1);
 
 namespace Phalcon\Support\Helper\Arr;
 
-use Phalcon\Support\Helper\Arr\Traits\FilterTrait;
+use Phalcon\Traits\Helper\Arr\FilterTrait;
 
 use function array_diff_key;
 use function array_flip;
