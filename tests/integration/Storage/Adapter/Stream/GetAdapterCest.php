@@ -18,7 +18,6 @@ use Phalcon\Storage\Adapter\Stream;
 use Phalcon\Storage\Exception as StorageException;
 use Phalcon\Storage\SerializerFactory;
 use Phalcon\Support\Exception as HelperException;
-use Phalcon\Support\HelperFactory;
 
 class GetAdapterCest
 {
@@ -37,10 +36,8 @@ class GetAdapterCest
     {
         $I->wantToTest('Storage\Adapter\Stream - getAdapter()');
 
-        $helper     = new HelperFactory();
         $serializer = new SerializerFactory();
         $adapter    = new Stream(
-            $helper,
             $serializer,
             [
                 'storageDir' => '/tmp',

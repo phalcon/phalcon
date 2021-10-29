@@ -18,7 +18,7 @@ use Phalcon\Config\Adapter\Ini;
 use Phalcon\Config\Adapter\Json;
 use Phalcon\Config\Adapter\Php;
 use Phalcon\Config\Adapter\Yaml;
-use Phalcon\Support\Traits\FactoryTrait;
+use Phalcon\Traits\Factory\FactoryTrait;
 
 use function is_array;
 use function is_object;

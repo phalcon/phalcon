@@ -18,7 +18,6 @@ use Exception;
 use IntegrationTester;
 use Phalcon\Storage\Adapter\AdapterInterface;
 use Phalcon\Storage\SerializerFactory;
-use Phalcon\Support\HelperFactory;
 use Phalcon\Tests\Fixtures\Storage\Adapter\Libmemcached;
 use Phalcon\Tests\Fixtures\Traits\LibmemcachedTrait;
 
@@ -40,10 +39,8 @@ class ConstructCest
     {
         $I->wantToTest('Storage\Adapter\Libmemcached - __construct()');
 
-        $helper     = new HelperFactory();
         $serializer = new SerializerFactory();
         $adapter    = new Libmemcached(
-            $helper,
             $serializer,
             getOptionsLibmemcached()
         );
@@ -70,9 +67,8 @@ class ConstructCest
     {
         $I->wantToTest('Storage\Adapter\Libmemcached - __construct() - empty options');
 
-        $helper     = new HelperFactory();
         $serializer = new SerializerFactory();
-        $adapter    = new Libmemcached($helper, $serializer);
+        $adapter    = new Libmemcached($serializer);
 
         $expected = [
             'servers' => [
@@ -102,10 +98,8 @@ class ConstructCest
     {
         $I->wantToTest('Storage\Adapter\Libmemcached - __construct() - getTtl');
 
-        $helper     = new HelperFactory();
         $serializer = new SerializerFactory();
         $adapter    = new Libmemcached(
-            $helper,
             $serializer,
             getOptionsLibmemcached()
         );

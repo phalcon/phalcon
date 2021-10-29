@@ -13,7 +13,7 @@ declare(strict_types=1);
 
 namespace Phalcon\Translate;
 
-use Phalcon\Support\Traits\FactoryTrait;
+use Phalcon\Traits\Factory\FactoryTrait;
 use Phalcon\Translate\Interpolator\AssociativeArray;
 use Phalcon\Translate\Interpolator\IndexedArray;
 use Phalcon\Translate\Interpolator\InterpolatorInterface;

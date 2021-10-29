@@ -18,7 +18,6 @@ use Phalcon\Storage\Adapter\Stream;
 use Phalcon\Storage\Exception as StorageException;
 use Phalcon\Storage\SerializerFactory;
 use Phalcon\Support\Exception as HelperException;
-use Phalcon\Support\HelperFactory;
 use stdClass;
 
 use function file_put_contents;
@@ -44,10 +43,8 @@ class GetSetCest
     {
         $I->wantToTest('Storage\Adapter\Stream - set()');
 
-        $helper     = new HelperFactory();
         $serializer = new SerializerFactory();
         $adapter    = new Stream(
-            $helper,
             $serializer,
             [
                 'storageDir' => outputDir(),
@@ -82,10 +79,8 @@ class GetSetCest
     {
         $I->wantToTest('Storage\Adapter\Stream - get()');
 
-        $helper     = new HelperFactory();
         $serializer = new SerializerFactory();
         $adapter    = new Stream(
-            $helper,
             $serializer,
             [
                 'storageDir' => outputDir(),
@@ -130,10 +125,8 @@ class GetSetCest
     {
         $I->wantToTest('Storage\Adapter\Stream - get() - errors');
 
-        $helper     = new HelperFactory();
         $serializer = new SerializerFactory();
         $adapter    = new Stream(
-            $helper,
             $serializer,
             [
                 'storageDir' => outputDir(),
@@ -147,7 +140,7 @@ class GetSetCest
 
         // Unknown key
         $expected = 'test';
-        $actual   = $adapter->get('unknown', 'test');
+        $actual   = $adapter->get(uniqid(), 'test');
         $I->assertEquals($expected, $actual);
 
         // Invalid stored object

@@ -19,7 +19,6 @@ use Phalcon\Storage\Adapter\Libmemcached;
 use Phalcon\Storage\Exception as StorageException;
 use Phalcon\Storage\SerializerFactory;
 use Phalcon\Support\Exception as HelperException;
-use Phalcon\Support\HelperFactory;
 use Phalcon\Tests\Fixtures\Traits\LibmemcachedTrait;
 use stdClass;
 
@@ -47,15 +46,13 @@ class GetSetCest
     {
         $I->wantToTest('Storage\Adapter\Libmemcached - get()/set() - ' . $example[0]);
 
-        $helper     = new HelperFactory();
         $serializer = new SerializerFactory();
         $adapter    = new Libmemcached(
-            $helper,
             $serializer,
             getOptionsLibmemcached()
         );
 
-        $key    = 'cache-data';
+        $key    = uniqid();
         $actual = $adapter->set($key, $example[1]);
         $I->assertTrue($actual);
 
@@ -80,10 +77,8 @@ class GetSetCest
     {
         $I->wantToTest('Storage\Adapter\Libmemcached - get()/set() - custom serializer');
 
-        $helper     = new HelperFactory();
         $serializer = new SerializerFactory();
         $adapter    = new Libmemcached(
-            $helper,
             $serializer,
             array_merge(
                 getOptionsLibmemcached(),
@@ -93,7 +88,7 @@ class GetSetCest
             )
         );
 
-        $key    = 'cache-data';
+        $key    = uniqid();
         $source = 'Phalcon Framework';
         $actual = $adapter->set($key, $source);
         $I->assertTrue($actual);

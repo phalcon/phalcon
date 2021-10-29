@@ -18,7 +18,6 @@ use Phalcon\Storage\Adapter\Libmemcached;
 use Phalcon\Storage\Exception;
 use Phalcon\Storage\SerializerFactory;
 use Phalcon\Support\Exception as HelperException;
-use Phalcon\Support\HelperFactory;
 use Phalcon\Tests\Fixtures\Traits\LibmemcachedTrait;
 
 use function getOptionsLibmemcached;
@@ -43,20 +42,19 @@ class DecrementCest
     {
         $I->wantToTest('Storage\Adapter\Libmemcached - decrement()');
 
-        $helper     = new HelperFactory();
         $serializer = new SerializerFactory();
         $adapter    = new Libmemcached(
-            $helper,
             $serializer,
             getOptionsLibmemcached()
         );
 
-        $key    = 'cache-data';
+        $key    = uniqid();
         $actual = $adapter->set($key, 100);
         $I->assertTrue($actual);
 
         $expected = 99;
         $actual   = $adapter->decrement($key);
+        $I->assertEquals($expected, $actual);
 
         $actual = $adapter->get($key);
         $I->assertEquals($expected, $actual);
@@ -71,7 +69,7 @@ class DecrementCest
         /**
          * unknown key
          */
-        $key    = 'unknown';
+        $key    = uniqid();
         $actual = $adapter->decrement($key);
         $I->assertFalse($actual);
     }

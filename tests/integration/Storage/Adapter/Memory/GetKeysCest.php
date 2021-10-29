@@ -17,7 +17,6 @@ use IntegrationTester;
 use Phalcon\Storage\Adapter\Memory;
 use Phalcon\Storage\SerializerFactory;
 use Phalcon\Support\Exception as HelperException;
-use Phalcon\Support\HelperFactory;
 
 class GetKeysCest
 {
@@ -35,9 +34,8 @@ class GetKeysCest
     {
         $I->wantToTest('Storage\Adapter\Memory - getKeys()');
 
-        $helper     = new HelperFactory();
         $serializer = new SerializerFactory();
-        $adapter    = new Memory($helper, $serializer);
+        $adapter    = new Memory($serializer);
 
         $I->assertTrue($adapter->clear());
 

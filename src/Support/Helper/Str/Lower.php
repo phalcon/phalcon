@@ -13,7 +13,7 @@ declare(strict_types=1);
 
 namespace Phalcon\Support\Helper\Str;
 
-use Phalcon\Support\Helper\Str\Traits\LowerTrait;
+use Phalcon\Traits\Helper\Str\LowerTrait;
 
 /**
  * Converts a string to lowercase using mbstring

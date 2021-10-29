@@ -18,7 +18,6 @@ use Phalcon\Storage\Adapter\Redis;
 use Phalcon\Storage\Exception as StorageException;
 use Phalcon\Storage\SerializerFactory;
 use Phalcon\Support\Exception as HelperException;
-use Phalcon\Support\HelperFactory;
 use Phalcon\Tests\Fixtures\Traits\RedisTrait;
 
 use function getOptionsRedis;
@@ -42,11 +41,10 @@ class DeleteCest
     {
         $I->wantToTest('Storage\Adapter\Redis - delete()');
 
-        $helper     = new HelperFactory();
         $serializer = new SerializerFactory();
-        $adapter    = new Redis($helper, $serializer, getOptionsRedis());
+        $adapter    = new Redis($serializer, getOptionsRedis());
 
-        $key = 'cache-data';
+        $key = uniqid();
         $adapter->set($key, 'test');
         $actual = $adapter->has($key);
         $I->assertTrue($actual);
@@ -73,11 +71,10 @@ class DeleteCest
     {
         $I->wantToTest('Storage\Adapter\Redis - delete() - twice');
 
-        $helper     = new HelperFactory();
         $serializer = new SerializerFactory();
-        $adapter    = new Redis($helper, $serializer, getOptionsRedis());
+        $adapter    = new Redis($serializer, getOptionsRedis());
 
-        $key = 'cache-data';
+        $key = uniqid();
         $adapter->set($key, 'test');
         $actual = $adapter->has($key);
         $I->assertTrue($actual);
@@ -107,11 +104,10 @@ class DeleteCest
     {
         $I->wantToTest('Storage\Adapter\Redis - delete() - unknown');
 
-        $helper     = new HelperFactory();
         $serializer = new SerializerFactory();
-        $adapter    = new Redis($helper, $serializer, getOptionsRedis());
+        $adapter    = new Redis($serializer, getOptionsRedis());
 
-        $key    = 'cache-data';
+        $key    = uniqid();
         $actual = $adapter->delete($key);
         $I->assertFalse($actual);
     }

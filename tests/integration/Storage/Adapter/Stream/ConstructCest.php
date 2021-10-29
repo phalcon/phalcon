@@ -19,7 +19,6 @@ use Phalcon\Storage\Adapter\Stream;
 use Phalcon\Storage\Exception as StorageException;
 use Phalcon\Storage\SerializerFactory;
 use Phalcon\Support\Exception as HelperException;
-use Phalcon\Support\HelperFactory;
 
 use function outputDir;
 
@@ -38,10 +37,8 @@ class ConstructCest
     {
         $I->wantToTest('Storage\Adapter\Stream - __construct()');
 
-        $helper     = new HelperFactory();
         $serializer = new SerializerFactory();
         $adapter    = new Stream(
-            $helper,
             $serializer,
             [
                 'storageDir' => outputDir(),
@@ -69,9 +66,8 @@ class ConstructCest
         $I->expectThrowable(
             new StorageException('The "storageDir" must be specified in the options'),
             function () {
-                $helper     = new HelperFactory();
                 $serializer = new SerializerFactory();
-                $adapter    = new Stream($helper, $serializer);
+                $adapter    = new Stream($serializer);
             }
         );
     }

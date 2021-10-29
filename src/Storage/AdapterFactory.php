@@ -19,23 +19,16 @@ use Phalcon\Storage\Adapter\Libmemcached;
 use Phalcon\Storage\Adapter\Memory;
 use Phalcon\Storage\Adapter\Redis;
 use Phalcon\Storage\Adapter\Stream;
-use Phalcon\Support\HelperFactory;
-use Phalcon\Support\Traits\FactoryTrait;
+use Phalcon\Traits\Factory\FactoryTrait;
 
 /**
  * Class AdapterFactory
  *
- * @property HelperFactory     $helperFactory;
  * @property SerializerFactory $serializerFactory
  */
 class AdapterFactory
 {
     use FactoryTrait;
-
-    /**
-     * @var HelperFactory
-     */
-    private HelperFactory $helperFactory;
 
     /**
      * @var SerializerFactory
@@ -45,16 +38,13 @@ class AdapterFactory
     /**
      * AdapterFactory constructor.
      *
-     * @param HelperFactory     $helperFactory
      * @param SerializerFactory $factory
      * @param array             $services
      */
     public function __construct(
-        HelperFactory $helperFactory,
         SerializerFactory $factory,
         array $services = []
     ) {
-        $this->helperFactory     = $helperFactory;
         $this->serializerFactory = $factory;
 
         $this->init($services);
@@ -73,11 +63,7 @@ class AdapterFactory
     {
         $definition = $this->getService($name);
 
-        return new $definition(
-            $this->helperFactory,
-            $this->serializerFactory,
-            $options
-        );
+        return new $definition($this->serializerFactory, $options);
     }
 
     /**

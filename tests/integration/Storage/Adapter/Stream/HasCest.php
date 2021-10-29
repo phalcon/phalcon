@@ -19,7 +19,6 @@ use Phalcon\Storage\Adapter\Stream;
 use Phalcon\Storage\Exception as StorageException;
 use Phalcon\Storage\SerializerFactory;
 use Phalcon\Support\Exception as HelperException;
-use Phalcon\Support\HelperFactory;
 
 use function outputDir;
 use function uniqid;
@@ -41,10 +40,8 @@ class HasCest
     {
         $I->wantToTest('Storage\Adapter\Stream - has()');
 
-        $helper     = new HelperFactory();
         $serializer = new SerializerFactory();
         $adapter    = new Stream(
-            $helper,
             $serializer,
             [
                 'storageDir' => outputDir(),
@@ -75,12 +72,10 @@ class HasCest
     {
         $I->wantToTest('Storage\Adapter\Stream - has() - cannot open file');
 
-        $helper     = new HelperFactory();
         $serializer = new SerializerFactory();
         $adapter    = Stub::construct(
             Stream::class,
             [
-                $helper,
                 $serializer,
                 [
                     'storageDir' => outputDir(),
@@ -114,12 +109,10 @@ class HasCest
     {
         $I->wantToTest('Storage\Adapter\Stream - has() - empty payload');
 
-        $helper     = new HelperFactory();
         $serializer = new SerializerFactory();
         $adapter    = Stub::construct(
             Stream::class,
             [
-                $helper,
                 $serializer,
                 [
                     'storageDir' => outputDir(),

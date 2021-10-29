@@ -19,7 +19,6 @@ use Phalcon\Cache\Adapter\Redis;
 use Phalcon\Storage\Exception as CacheException;
 use Phalcon\Storage\SerializerFactory;
 use Phalcon\Support\Exception as HelperException;
-use Phalcon\Support\HelperFactory;
 use Phalcon\Tests\Fixtures\Traits\RedisTrait;
 use stdClass;
 
@@ -49,11 +48,10 @@ class GetSetCest
     {
         $I->wantToTest('Cache\Adapter\Redis - get()/set() - ' . $example[0]);
 
-        $helper     = new HelperFactory();
         $serializer = new SerializerFactory();
-        $adapter    = new Redis($helper, $serializer, getOptionsRedis());
+        $adapter    = new Redis($serializer, getOptionsRedis());
 
-        $key    = 'cache-data';
+        $key    = uniqid();
         $actual = $adapter->set($key, $example[1]);
         $I->assertTrue($actual);
 
@@ -77,10 +75,8 @@ class GetSetCest
     {
         $I->wantToTest('Cache\Adapter\Redis - get()/set() - persistent');
 
-        $helper     = new HelperFactory();
         $serializer = new SerializerFactory();
         $adapter    = new Redis(
-            $helper,
             $serializer,
             array_merge(
                 getOptionsRedis(),
@@ -114,10 +110,8 @@ class GetSetCest
         $I->expectThrowable(
             new CacheException('Redis server selected database failed'),
             function () {
-                $helper     = new HelperFactory();
                 $serializer = new SerializerFactory();
                 $adapter    = new Redis(
-                    $helper,
                     $serializer,
                     array_merge(
                         getOptionsRedis(),
@@ -147,10 +141,8 @@ class GetSetCest
         $I->expectThrowable(
             new CacheException('Failed to authenticate with the Redis server'),
             function () {
-                $helper     = new HelperFactory();
                 $serializer = new SerializerFactory();
                 $adapter    = new Redis(
-                    $helper,
                     $serializer,
                     array_merge(
                         getOptionsRedis(),
@@ -180,10 +172,8 @@ class GetSetCest
     {
         $I->wantToTest('Cache\Adapter\Redis - get()/set() - custom serializer');
 
-        $helper     = new HelperFactory();
         $serializer = new SerializerFactory();
         $adapter    = new Redis(
-            $helper,
             $serializer,
             array_merge(
                 getOptionsRedis(),
@@ -193,7 +183,7 @@ class GetSetCest
             )
         );
 
-        $key    = 'cache-data';
+        $key    = uniqid();
         $source = 'Phalcon Framework';
 
         $actual = $adapter->set($key, $source);

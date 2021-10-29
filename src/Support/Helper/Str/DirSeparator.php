@@ -13,9 +13,7 @@ declare(strict_types=1);
 
 namespace Phalcon\Support\Helper\Str;
 
-use function rtrim;
-
-use const DIRECTORY_SEPARATOR;
+use Phalcon\Traits\Helper\Str\DirSeparatorTrait;
 
 /**
  * Accepts a directory name and ensures that it ends with
@@ -23,6 +21,8 @@ use const DIRECTORY_SEPARATOR;
  */
 class DirSeparator
 {
+    use DirSeparatorTrait;
+
     /**
      * @param string $directory
      *
@@ -30,6 +30,6 @@ class DirSeparator
      */
     public function __invoke(string $directory): string
     {
-        return rtrim($directory, DIRECTORY_SEPARATOR) . DIRECTORY_SEPARATOR;
+        return $this->toDirSeparator($directory);
     }
 }

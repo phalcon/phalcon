@@ -17,7 +17,6 @@ use IntegrationTester;
 use Phalcon\Cache\Adapter\Apcu;
 use Phalcon\Storage\SerializerFactory;
 use Phalcon\Support\Exception;
-use Phalcon\Support\HelperFactory;
 use Phalcon\Tests\Fixtures\Traits\ApcuTrait;
 
 class HasCest
@@ -38,9 +37,8 @@ class HasCest
     {
         $I->wantToTest('Cache\Adapter\Apcu - has()');
 
-        $helper     = new HelperFactory();
         $serializer = new SerializerFactory();
-        $adapter    = new Apcu($helper, $serializer);
+        $adapter    = new Apcu($serializer);
 
         $key = uniqid();
 

@@ -17,7 +17,6 @@ use IntegrationTester;
 use Phalcon\Session\Adapter\Libmemcached;
 use Phalcon\Storage\AdapterFactory;
 use Phalcon\Storage\SerializerFactory;
-use Phalcon\Support\HelperFactory;
 use Phalcon\Tests\Fixtures\Traits\DiTrait;
 use SessionHandlerInterface;
 
@@ -62,9 +61,8 @@ class ConstructCest
         $options           = getOptionsLibmemcached();
         $options['prefix'] = 'my-custom-prefix-';
 
-        $helperFactory     = new HelperFactory();
         $serializerFactory = new SerializerFactory();
-        $factory           = new AdapterFactory($helperFactory, $serializerFactory);
+        $factory           = new AdapterFactory($serializerFactory);
 
         $memcachedSession = new Libmemcached($factory, $options);
 

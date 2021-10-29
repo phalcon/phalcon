@@ -19,7 +19,6 @@ use Phalcon\Storage\Adapter\Stream;
 use Phalcon\Storage\Exception as StorageException;
 use Phalcon\Storage\SerializerFactory;
 use Phalcon\Support\Exception as HelperException;
-use Phalcon\Support\HelperFactory;
 
 use function outputDir;
 use function uniqid;
@@ -41,10 +40,8 @@ class ClearCest
     {
         $I->wantToTest('Storage\Adapter\Stream - clear()');
 
-        $helper     = new HelperFactory();
         $serializer = new SerializerFactory();
         $adapter    = new Stream(
-            $helper,
             $serializer,
             [
                 'storageDir' => outputDir(),
@@ -86,10 +83,8 @@ class ClearCest
     {
         $I->wantToTest('Storage\Adapter\Stream - clear() - twice');
 
-        $helper     = new HelperFactory();
         $serializer = new SerializerFactory();
         $adapter    = new Stream(
-            $helper,
             $serializer,
             [
                 'storageDir' => outputDir(),
@@ -130,12 +125,10 @@ class ClearCest
     {
         $I->wantToTest('Storage\Adapter\Stream - clear() - cannot delete file');
 
-        $helper     = new HelperFactory();
         $serializer = new SerializerFactory();
         $adapter    = Stub::construct(
             Stream::class,
             [
-                $helper,
                 $serializer,
                 [
                     'storageDir' => outputDir(),

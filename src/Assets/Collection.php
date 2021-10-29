@@ -20,7 +20,7 @@ use Phalcon\Assets\Asset\Js as AssetJs;
 use Phalcon\Assets\Inline\Css as InlineCss;
 use Phalcon\Assets\Inline\Js as InlineJs;
 use Phalcon\Assets\Traits\CollectionAddTrait;
-use Phalcon\Support\Traits\PhpFileTrait;
+use Phalcon\Traits\Php\FileTrait;
 
 use function realpath;
 
@@ -31,7 +31,7 @@ use function realpath;
  */
 class Collection implements Countable, IteratorAggregate
 {
-    use PhpFileTrait;
+    use FileTrait;
     use CollectionAddTrait;
 
     /**

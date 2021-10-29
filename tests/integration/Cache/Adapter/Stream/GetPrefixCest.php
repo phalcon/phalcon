@@ -18,7 +18,6 @@ use Phalcon\Cache\Adapter\Stream;
 use Phalcon\Storage\Exception as CacheException;
 use Phalcon\Storage\SerializerFactory;
 use Phalcon\Support\Exception as HelperException;
-use Phalcon\Support\HelperFactory;
 
 use function outputDir;
 
@@ -39,10 +38,8 @@ class GetPrefixCest
     {
         $I->wantToTest('Cache\Adapter\Stream - getPrefix()');
 
-        $helper     = new HelperFactory();
         $serializer = new SerializerFactory();
         $adapter    = new Stream(
-            $helper,
             $serializer,
             [
                 'storageDir' => outputDir(),
@@ -70,10 +67,8 @@ class GetPrefixCest
     {
         $I->wantToTest('Cache\Adapter\Stream - getPrefix() - default');
 
-        $helper     = new HelperFactory();
         $serializer = new SerializerFactory();
         $adapter    = new Stream(
-            $helper,
             $serializer,
             [
                 'storageDir' => outputDir(),

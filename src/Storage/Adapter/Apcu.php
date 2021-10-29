@@ -39,18 +39,16 @@ class Apcu extends AbstractAdapter
     /**
      * Apcu constructor.
      *
-     * @param HelperFactory     $helperFactory
      * @param SerializerFactory $factory
      * @param array             $options
      *
      * @throws SupportException
      */
     public function __construct(
-        HelperFactory $helperFactory,
         SerializerFactory $factory,
         array $options = []
     ) {
-        parent::__construct($helperFactory, $factory, $options);
+        parent::__construct($factory, $options);
 
         $this->initSerializer();
     }

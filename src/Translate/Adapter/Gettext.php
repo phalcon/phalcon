@@ -14,15 +14,13 @@ declare(strict_types=1);
 namespace Phalcon\Translate\Adapter;
 
 use ArrayAccess;
-use Phalcon\Support\Traits\PhpFunctionTrait;
+use Phalcon\Traits\Php\InfoTrait;
 use Phalcon\Translate\Exception;
 use Phalcon\Translate\InterpolatorFactory;
 
 use function array_merge;
 use function bindtextdomain;
-use function call_user_func_array;
 use function dngettext;
-use function func_get_args;
 use function gettext;
 use function is_array;
 use function ngettext;
@@ -57,7 +55,7 @@ use const LC_ALL;
  */
 class Gettext extends AbstractAdapter implements ArrayAccess
 {
-    use PhpFunctionTrait;
+    use InfoTrait;
 
     /**
      * @var int

@@ -13,7 +13,7 @@ declare(strict_types=1);
 
 namespace Phalcon\Support\Helper\Str;
 
-use Phalcon\Support\Helper\Str\Traits\LowerTrait;
+use Phalcon\Traits\Helper\Str\LowerTrait;
 
 /**
  * Returns `true` if the given string is in lower case, `false` otherwise.

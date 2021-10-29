@@ -17,7 +17,6 @@ use IntegrationTester;
 use Phalcon\Cache\Adapter\Memory;
 use Phalcon\Storage\SerializerFactory;
 use Phalcon\Support\Exception as HelperException;
-use Phalcon\Support\HelperFactory;
 
 class ClearCest
 {
@@ -35,9 +34,8 @@ class ClearCest
     {
         $I->wantToTest('Cache\Adapter\Memory - clear()');
 
-        $helper     = new HelperFactory();
         $serializer = new SerializerFactory();
-        $adapter    = new Memory($helper, $serializer);
+        $adapter    = new Memory($serializer);
 
         $key1 = uniqid();
         $key2 = uniqid();
@@ -73,9 +71,8 @@ class ClearCest
     {
         $I->wantToTest('Cache\Adapter\Memory - clear() - twice');
 
-        $helper     = new HelperFactory();
         $serializer = new SerializerFactory();
-        $adapter    = new Memory($helper, $serializer);
+        $adapter    = new Memory($serializer);
 
         $key1 = uniqid();
         $key2 = uniqid();

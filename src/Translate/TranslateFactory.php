@@ -15,7 +15,7 @@ namespace Phalcon\Translate;
 
 use Phalcon\Config\ConfigInterface;
 use Phalcon\Support\Traits\ConfigTrait;
-use Phalcon\Support\Traits\FactoryTrait;
+use Phalcon\Traits\Factory\FactoryTrait;
 use Phalcon\Translate\Adapter\AdapterInterface;
 use Phalcon\Translate\Adapter\Csv;
 use Phalcon\Translate\Adapter\Gettext;

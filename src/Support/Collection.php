@@ -20,14 +20,13 @@ use Phalcon\Support\Collection\CollectionInterface;
 use Phalcon\Support\Collection\Traits\ArrayAccessTrait;
 use Phalcon\Support\Collection\Traits\GetSetHasTrait;
 use Phalcon\Support\Collection\Traits\SerializableTrait;
-use Phalcon\Support\Traits\JsonTrait;
-use Phalcon\Support\Traits\PhpJsonTrait;
+use Phalcon\Support\Traits\JsonTrait as BaseJsonTrait;
+use Phalcon\Traits\Php\JsonTrait;
 use Serializable;
 
 use function array_key_exists;
 use function array_keys;
 use function array_values;
-use function json_encode;
 use function mb_strtolower;
 use function settype;
 
@@ -56,9 +55,9 @@ class Collection implements
     Serializable
 {
     use ArrayAccessTrait;
+    use BaseJsonTrait;
     use GetSetHasTrait;
     use JsonTrait;
-    use PhpJsonTrait;
     use SerializableTrait;
 
     /**

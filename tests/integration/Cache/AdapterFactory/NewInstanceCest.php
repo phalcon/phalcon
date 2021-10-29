@@ -23,11 +23,11 @@ use Phalcon\Cache\Adapter\Stream;
 use Phalcon\Cache\AdapterFactory;
 use Phalcon\Cache\Exception\Exception;
 use Phalcon\Storage\SerializerFactory;
-use Phalcon\Support\HelperFactory;
 
 use function getOptionsLibmemcached;
 use function getOptionsRedis;
 use function outputDir;
+use function uniqid;
 
 class NewInstanceCest
 {
@@ -48,9 +48,8 @@ class NewInstanceCest
     {
         $I->wantToTest('Cache\AdapterFactory - newInstance() - ' . $example[0]);
 
-        $helper     = new HelperFactory();
         $serializer = new SerializerFactory();
-        $adapter    = new AdapterFactory($helper, $serializer);
+        $adapter    = new AdapterFactory($serializer);
 
         $service = $adapter->newInstance($example[0], $example[2]);
 
@@ -71,14 +70,14 @@ class NewInstanceCest
     {
         $I->wantToTest('Storage\SerializerFactory - newInstance() - exception');
 
+        $name = uniqid();
         $I->expectThrowable(
-            new Exception('Service unknown is not registered'),
-            function () {
-                $helper     = new HelperFactory();
+            new Exception('Service ' . $name . ' is not registered'),
+            function () use ($name) {
                 $serializer = new SerializerFactory();
-                $adapter    = new AdapterFactory($helper, $serializer);
+                $adapter    = new AdapterFactory($serializer);
 
-                $service = $adapter->newInstance('unknown');
+                $service = $adapter->newInstance($name);
             }
         );
     }

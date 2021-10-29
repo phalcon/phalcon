@@ -18,7 +18,6 @@ use Phalcon\Storage\Adapter\Redis;
 use Phalcon\Storage\Exception as StorageException;
 use Phalcon\Storage\SerializerFactory;
 use Phalcon\Support\Exception as HelperException;
-use Phalcon\Support\HelperFactory;
 use Phalcon\Tests\Fixtures\Traits\RedisTrait;
 
 use function getOptionsRedis;
@@ -42,9 +41,8 @@ class GetKeysCest
     {
         $I->wantToTest('Storage\Adapter\Redis - getKeys()');
 
-        $helper     = new HelperFactory();
         $serializer = new SerializerFactory();
-        $adapter    = new Redis($helper, $serializer, getOptionsRedis());
+        $adapter    = new Redis($serializer, getOptionsRedis());
 
         $I->assertTrue($adapter->clear());
 

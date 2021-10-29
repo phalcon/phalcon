@@ -17,6 +17,8 @@ use IntegrationTester;
 use Phalcon\Session\Manager;
 use Phalcon\Tests\Fixtures\Traits\DiTrait;
 
+use function uniqid;
+
 /**
  * Class GetSetCest
  *
@@ -63,8 +65,9 @@ class GetSetCest
         $actual = $manager->has('test');
         $I->assertFalse($actual);
 
-        $expected = 'unknown';
-        $actual   = $manager->get('test', 'unknown');
+        $name     = uniqid();
+        $expected = $name;
+        $actual   = $manager->get('test', $name);
         $I->assertEquals($expected, $actual);
 
         $manager->destroy();

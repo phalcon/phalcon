@@ -18,7 +18,6 @@ use Phalcon\Storage\Adapter\Libmemcached;
 use Phalcon\Storage\Exception as StorageException;
 use Phalcon\Storage\SerializerFactory;
 use Phalcon\Support\Exception as HelperException;
-use Phalcon\Support\HelperFactory;
 use Phalcon\Tests\Fixtures\Traits\LibmemcachedTrait;
 
 use function getOptionsLibmemcached;
@@ -42,15 +41,13 @@ class IncrementCest
     {
         $I->wantToTest('Storage\Adapter\Libmemcached - increment()');
 
-        $helper     = new HelperFactory();
         $serializer = new SerializerFactory();
         $adapter    = new Libmemcached(
-            $helper,
             $serializer,
             getOptionsLibmemcached()
         );
 
-        $key    = 'cache-data';
+        $key    = uniqid();
         $result = $adapter->set($key, 1);
         $I->assertTrue($result);
 
@@ -71,7 +68,7 @@ class IncrementCest
         /**
          * unknown key
          */
-        $key    = 'unknown';
+        $key    = uniqid();
         $result = $adapter->increment($key);
         $I->assertFalse($result);
     }

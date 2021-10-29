@@ -17,7 +17,6 @@ use IntegrationTester;
 use Phalcon\Storage\Adapter\Apcu;
 use Phalcon\Storage\SerializerFactory;
 use Phalcon\Support\Exception;
-use Phalcon\Support\HelperFactory;
 use Phalcon\Tests\Fixtures\Traits\ApcuTrait;
 
 class DeleteCest
@@ -38,11 +37,10 @@ class DeleteCest
     {
         $I->wantToTest('Storage\Adapter\Apcu - delete()');
 
-        $helper     = new HelperFactory();
         $serializer = new SerializerFactory();
-        $adapter    = new Apcu($helper, $serializer);
+        $adapter    = new Apcu($serializer);
 
-        $key = 'cache-data';
+        $key = uniqid();
         $adapter->set($key, 'test');
         $actual = $adapter->has($key);
         $I->assertTrue($actual);
@@ -68,11 +66,10 @@ class DeleteCest
     {
         $I->wantToTest('Storage\Adapter\Apcu - delete() - twice');
 
-        $helper     = new HelperFactory();
         $serializer = new SerializerFactory();
-        $adapter    = new Apcu($helper, $serializer);
+        $adapter    = new Apcu($serializer);
 
-        $key = 'cache-data';
+        $key = uniqid();
         $adapter->set($key, 'test');
         $actual = $adapter->has($key);
         $I->assertTrue($actual);
@@ -98,11 +95,10 @@ class DeleteCest
     {
         $I->wantToTest('Storage\Adapter\Apcu - delete() - unknown');
 
-        $helper     = new HelperFactory();
         $serializer = new SerializerFactory();
-        $adapter    = new Apcu($helper, $serializer);
+        $adapter    = new Apcu($serializer);
 
-        $key    = 'cache-data';
+        $key    = uniqid();
         $actual = $adapter->delete($key);
         $I->assertFalse($actual);
     }

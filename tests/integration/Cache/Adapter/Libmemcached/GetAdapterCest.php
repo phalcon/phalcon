@@ -19,7 +19,6 @@ use Phalcon\Cache\Adapter\Libmemcached;
 use Phalcon\Storage\Exception as CacheException;
 use Phalcon\Storage\SerializerFactory;
 use Phalcon\Support\Exception as HelperException;
-use Phalcon\Support\HelperFactory;
 use Phalcon\Tests\Fixtures\Traits\LibmemcachedTrait;
 
 use function getOptionsLibmemcached;
@@ -43,10 +42,8 @@ class GetAdapterCest
     {
         $I->wantToTest('Cache\Adapter\Libmemcached - getAdapter()');
 
-        $helper     = new HelperFactory();
         $serializer = new SerializerFactory();
         $adapter    = new Libmemcached(
-            $helper,
             $serializer,
             getOptionsLibmemcached()
         );

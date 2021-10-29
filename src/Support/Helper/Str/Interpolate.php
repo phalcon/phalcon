@@ -13,7 +13,7 @@ declare(strict_types=1);
 
 namespace Phalcon\Support\Helper\Str;
 
-use Phalcon\Support\Helper\Str\Traits\InterpolateTrait;
+use Phalcon\Traits\Helper\Str\InterpolateTrait;
 
 /**
  * Interpolates context values into the message placeholders. By default, the

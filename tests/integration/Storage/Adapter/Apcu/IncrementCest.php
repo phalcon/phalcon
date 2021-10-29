@@ -17,7 +17,6 @@ use IntegrationTester;
 use Phalcon\Storage\Adapter\Apcu;
 use Phalcon\Storage\SerializerFactory;
 use Phalcon\Support\Exception;
-use Phalcon\Support\HelperFactory;
 use Phalcon\Tests\Fixtures\Traits\ApcuTrait;
 
 class IncrementCest
@@ -38,11 +37,10 @@ class IncrementCest
     {
         $I->wantToTest('Storage\Adapter\Apcu - increment()');
 
-        $helper     = new HelperFactory();
         $serializer = new SerializerFactory();
-        $adapter    = new Apcu($helper, $serializer);
+        $adapter    = new Apcu($serializer);
 
-        $key    = 'cache-data';
+        $key    = uniqid();
         $result = $adapter->set($key, 1);
         $I->assertTrue($result);
 

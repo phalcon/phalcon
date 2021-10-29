@@ -51,7 +51,7 @@ use Phalcon\Html\Helper\Script;
 use Phalcon\Html\Helper\Style;
 use Phalcon\Html\Helper\Title;
 use Phalcon\Html\Helper\Ul;
-use Phalcon\Support\Traits\FactoryTrait;
+use Phalcon\Traits\Factory\FactoryTrait;
 
 /**
  * ServiceLocator implementation for Helper helpers

@@ -15,10 +15,10 @@ namespace Phalcon\Crypt;
 
 use Phalcon\Crypt\Exception\Exception;
 use Phalcon\Crypt\Exception\Mismatch;
-use Phalcon\Support\Helper\Str\Traits\EndsWithTrait;
-use Phalcon\Support\Helper\Str\Traits\LowerTrait;
-use Phalcon\Support\Helper\Str\Traits\StartsWithTrait;
-use Phalcon\Support\Traits\PhpFunctionTrait;
+use Phalcon\Traits\Helper\Str\EndsWithTrait;
+use Phalcon\Traits\Helper\Str\LowerTrait;
+use Phalcon\Traits\Helper\Str\StartsWithTrait;
+use Phalcon\Traits\Php\InfoTrait;
 use Phalcon\Support\Traits\PhpOpensslTrait;
 
 use function base64_decode;
@@ -76,7 +76,7 @@ class Crypt implements CryptInterface
 {
     use EndsWithTrait;
     use LowerTrait;
-    use PhpFunctionTrait;
+    use InfoTrait;
     use PhpOpensslTrait;
     use StartsWithTrait;
 

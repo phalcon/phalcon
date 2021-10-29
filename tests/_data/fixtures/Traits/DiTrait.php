@@ -194,7 +194,6 @@ trait DiTrait
             case 'sessionLibmemcached':
                 return new SessionLibmemcached(
                     new StorageAdapterFactory(
-                        new HelperFactory(),
                         new SerializerFactory()
                     ),
                     getOptionsLibmemcached()
@@ -204,7 +203,6 @@ trait DiTrait
             case 'sessionRedis':
                 return new SessionRedis(
                     new StorageAdapterFactory(
-                        new HelperFactory(),
                         new SerializerFactory()
                     ),
                     getOptionsRedis()

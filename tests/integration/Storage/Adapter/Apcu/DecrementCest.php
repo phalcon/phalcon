@@ -17,7 +17,6 @@ use IntegrationTester;
 use Phalcon\Storage\Adapter\Apcu;
 use Phalcon\Storage\SerializerFactory;
 use Phalcon\Support\Exception as ExceptionAlias;
-use Phalcon\Support\HelperFactory;
 use Phalcon\Tests\Fixtures\Traits\ApcuTrait;
 
 class DecrementCest
@@ -38,9 +37,8 @@ class DecrementCest
     {
         $I->wantToTest('Storage\Adapter\Apcu - decrement()');
 
-        $helper     = new HelperFactory();
         $serializer = new SerializerFactory();
-        $adapter    = new Apcu($helper, $serializer);
+        $adapter    = new Apcu($serializer);
 
         $key    = uniqid();
         $result = $adapter->set($key, 100);

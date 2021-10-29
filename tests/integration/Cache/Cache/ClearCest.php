@@ -17,7 +17,6 @@ use IntegrationTester;
 use Phalcon\Cache\AdapterFactory;
 use Phalcon\Cache\Cache;
 use Phalcon\Storage\SerializerFactory;
-use Phalcon\Support\HelperFactory;
 
 use function uniqid;
 
@@ -33,9 +32,8 @@ class ClearCest
     {
         $I->wantToTest('Cache\Cache - clear()');
 
-        $helper     = new HelperFactory();
         $serializer = new SerializerFactory();
-        $factory    = new AdapterFactory($helper, $serializer);
+        $factory    = new AdapterFactory($serializer);
         $instance   = $factory->newInstance('apcu');
 
         $adapter = new Cache($instance);

@@ -13,7 +13,7 @@ declare(strict_types=1);
 
 namespace Phalcon\Assets;
 
-use Phalcon\Support\Traits\PhpFileTrait;
+use Phalcon\Traits\Php\FileTrait;
 
 use function sha1;
 
@@ -38,7 +38,7 @@ use function sha1;
  */
 class Asset implements AssetInterface
 {
-    use PhpFileTrait;
+    use FileTrait;
 
     /**
      * @var array<string, string>

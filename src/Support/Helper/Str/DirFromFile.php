@@ -13,12 +13,7 @@ declare(strict_types=1);
 
 namespace Phalcon\Support\Helper\Str;
 
-use function implode;
-use function mb_str_split;
-use function mb_substr;
-use function pathinfo;
-
-use const PATHINFO_FILENAME;
+use Phalcon\Traits\Helper\Str\DirFromFileTrait;
 
 /**
  * Accepts a file name (without extension) and returns a calculated
@@ -26,6 +21,8 @@ use const PATHINFO_FILENAME;
  */
 class DirFromFile
 {
+    use DirFromFileTrait;
+
     /**
      * @param string $file
      *
@@ -33,13 +30,6 @@ class DirFromFile
      */
     public function __invoke(string $file): string
     {
-        $name  = pathinfo($file, PATHINFO_FILENAME);
-        $start = mb_substr($name, 0, -2);
-
-        if (!$start) {
-            $start = mb_substr($name, 0, 1);
-        }
-
-        return implode('/', mb_str_split($start, 2)) . '/';
+        return $this->toDirFromFile($file);
     }
 }

@@ -14,7 +14,7 @@ declare(strict_types=1);
 namespace Phalcon\Translate\Adapter;
 
 use ArrayAccess;
-use Phalcon\Support\Traits\PhpFileTrait;
+use Phalcon\Traits\Php\FileTrait;
 use Phalcon\Translate\Exception;
 use Phalcon\Translate\InterpolatorFactory;
 
@@ -29,7 +29,7 @@ use function is_resource;
  */
 class Csv extends AbstractAdapter implements ArrayAccess
 {
-    use PhpFileTrait;
+    use FileTrait;
 
     /**
      * @var array

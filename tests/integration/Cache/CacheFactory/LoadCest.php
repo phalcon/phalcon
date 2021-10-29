@@ -18,7 +18,6 @@ use Phalcon\Cache\AdapterFactory;
 use Phalcon\Cache\Cache;
 use Phalcon\Cache\CacheFactory;
 use Phalcon\Storage\SerializerFactory;
-use Phalcon\Support\HelperFactory;
 use Phalcon\Tests\Fixtures\Traits\FactoryTrait;
 use Psr\SimpleCache\CacheInterface;
 
@@ -63,7 +62,6 @@ class LoadCest
     {
         $cacheFactory = new CacheFactory(
             new AdapterFactory(
-                new HelperFactory(),
                 new SerializerFactory()
             )
         );

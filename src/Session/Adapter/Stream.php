@@ -14,8 +14,8 @@ declare(strict_types=1);
 namespace Phalcon\Session\Adapter;
 
 use Phalcon\Session\Exception;
-use Phalcon\Support\Traits\PhpFileTrait;
-use Phalcon\Support\Traits\PhpFunctionTrait;
+use Phalcon\Traits\Php\FileTrait;
+use Phalcon\Traits\Php\InfoTrait;
 
 use function file_exists;
 use function rtrim;
@@ -48,8 +48,8 @@ use const DIRECTORY_SEPARATOR;
  */
 class Stream extends Noop
 {
-    use PhpFileTrait;
-    use PhpFunctionTrait;
+    use FileTrait;
+    use InfoTrait;
 
     /**
      * Session options
@@ -97,7 +97,7 @@ class Stream extends Noop
             throw new Exception('The session save path cannot be empty');
         }
 
-        if (true !== $this->phpIsWriteable($path)) {
+        if (true !== $this->phpIsWritable($path)) {
             throw new Exception(
                 'The session save path [' . $path . '] is not writable'
             );

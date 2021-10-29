@@ -18,7 +18,6 @@ use Phalcon\Cache\Adapter\Stream;
 use Phalcon\Storage\Exception as CacheException;
 use Phalcon\Storage\SerializerFactory;
 use Phalcon\Support\Exception as HelperException;
-use Phalcon\Support\HelperFactory;
 
 use function outputDir;
 
@@ -40,10 +39,8 @@ class GetSetDefaultSerializerCest
     {
         $I->wantToTest('Cache\Adapter\Stream - getDefaultSerializer()/setDefaultSerializer()');
 
-        $helper     = new HelperFactory();
         $serializer = new SerializerFactory();
         $adapter    = new Stream(
-            $helper,
             $serializer,
             [
                 'storageDir' => outputDir(),

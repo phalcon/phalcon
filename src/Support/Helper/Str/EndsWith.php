@@ -13,7 +13,7 @@ declare(strict_types=1);
 
 namespace Phalcon\Support\Helper\Str;
 
-use Phalcon\Support\Helper\Str\Traits\EndsWithTrait;
+use Phalcon\Traits\Helper\Str\EndsWithTrait;
 
 /**
  * Check if a string ends with a given string
