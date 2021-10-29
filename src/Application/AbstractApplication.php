@@ -113,7 +113,7 @@ abstract class AbstractApplication implements InjectionAwareInterface, EventsAwa
      * ```
      *
      * @param array<string, array<string, string>> $modules
-     * @param bool  $merge
+     * @param bool                                 $merge
      *
      * @return $this
      */

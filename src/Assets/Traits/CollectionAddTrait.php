@@ -115,11 +115,11 @@ trait CollectionAddTrait
     /**
      * Return the count of the assets
      *
-     * @return int|void
+     * @return int
      *
      * @link https://php.net/manual/en/countable.count.php
      */
-    public function count()
+    public function count(): int
     {
         return count($this->assets);
     }

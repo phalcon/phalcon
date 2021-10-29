@@ -39,7 +39,7 @@ class NumberCest
         $I->expectThrowable(
             new Exception('Input number must be a positive integer'),
             function () {
-                $random = new Random();
+                $random     = new Random();
                 $randNumber = $random->number(0);
             }
         );
@@ -47,7 +47,7 @@ class NumberCest
         $I->expectThrowable(
             new Exception('Input number must be a positive integer'),
             function () {
-                $random = new Random();
+                $random     = new Random();
                 $randNumber = $random->number(-1);
             }
         );

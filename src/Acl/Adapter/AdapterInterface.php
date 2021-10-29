@@ -13,9 +13,7 @@ declare(strict_types=1);
 
 namespace Phalcon\Acl\Adapter;
 
-use Phalcon\Acl\Component;
 use Phalcon\Acl\ComponentInterface;
-use Phalcon\Acl\Role;
 use Phalcon\Acl\RoleInterface;
 
 /**
@@ -171,10 +169,10 @@ interface AdapterInterface
     /**
      * Check whether a role is allowed to access an action from a component
      *
-     * @param mixed  $roleName
-     * @param mixed  $componentName
-     * @param string $access
-     * @param array<int|string, mixed>  $parameters
+     * @param mixed                    $roleName
+     * @param mixed                    $componentName
+     * @param string                   $access
+     * @param array<int|string, mixed> $parameters
      *
      * @return bool
      */

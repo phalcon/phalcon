@@ -46,9 +46,9 @@ class NativeArray extends AbstractAdapter implements ArrayAccess
      *
      * @param InterpolatorFactory $interpolator
      * @param array               $options = [
-     *                                'content'      => '',
-     *                                'triggerError' => false
-     *                            ]
+     *                                     'content'      => '',
+     *                                     'triggerError' => false
+     *                                     ]
      *
      * @throws Exception
      */

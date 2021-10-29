@@ -129,8 +129,8 @@ trait LoaderHelperTrait
     }
 
     /**
-     * @param array<int, string>  $directories
-     * @param string $dSeparator
+     * @param array<int, string> $directories
+     * @param string             $dSeparator
      *
      * @return array<int, string>
      */

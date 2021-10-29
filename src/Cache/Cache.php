@@ -85,7 +85,7 @@ class Cache implements CacheInterface
     /**
      * Deletes multiple cache items in a single operation.
      *
-     * @param iterable<string> $keys A list of string-based keys to be deleted.
+     * @param iterable<mixed, mixed> $keys A list of string-based keys to be deleted.
      *
      * @return bool True if the items were successfully removed. False if there
      *              was an error.
@@ -135,8 +135,8 @@ class Cache implements CacheInterface
      * @param mixed                  $default Default value to return for keys
      *                                        that do not exist.
      *
-     * @return iterable<string, mixed> A list of key => value pairs. Cache keys
-     * that do not exist or are stale will have $default as value.
+     * @return iterable<array-key, mixed> A list of key => value pairs. Cache
+     * keys that do not exist or are stale will have $default as value.
      *
      * @throws InvalidArgumentException MUST be thrown if $keys is neither an
      * array nor a Traversable, or if any of the $keys are not a legal value.
@@ -200,7 +200,7 @@ class Cache implements CacheInterface
      *
      * @param iterable<mixed, mixed> $values A list of key => value pairs for a
      *                                       multiple-set operation.
-     * @param null|int|DateInterval $ttl     Optional. The TTL value of this
+     * @param null|int|DateInterval  $ttl    Optional. The TTL value of this
      *                                       item. If no value is sent and the
      *                                       driver supports TTL then the
      *                                       library may set a default value for

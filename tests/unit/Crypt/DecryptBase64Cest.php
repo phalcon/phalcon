@@ -39,7 +39,7 @@ class DecryptBase64Cest
             'Crypt - decryptBase64() unsigned key mismatch no exception'
         );
 
-        $crypt  = new Crypt();
+        $crypt = new Crypt();
         $crypt->useSigning(false);
         $actual = $crypt->decryptBase64(
             $crypt->encryptBase64('le text', 'encrypt key'),

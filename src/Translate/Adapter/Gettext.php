@@ -81,7 +81,7 @@ class Gettext extends AbstractAdapter implements ArrayAccess
      * Gettext constructor.
      *
      * @param InterpolatorFactory $interpolator
-     * @param array               $options = [
+     * @param array               $options   = [
      *                                       'locale'        => '',
      *                                       'defaultDomain' => '',
      *                                       'directory'     => '',

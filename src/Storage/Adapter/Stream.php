@@ -21,7 +21,6 @@ use Phalcon\Storage\Exception as StorageException;
 use Phalcon\Storage\SerializerFactory;
 use Phalcon\Storage\Traits\StorageErrorHandlerTrait;
 use Phalcon\Support\Exception as SupportException;
-use Phalcon\Support\HelperFactory;
 use Phalcon\Traits\Helper\Str\DirFromFileTrait;
 use Phalcon\Traits\Helper\Str\DirSeparatorTrait;
 use Phalcon\Traits\Php\FileTrait;

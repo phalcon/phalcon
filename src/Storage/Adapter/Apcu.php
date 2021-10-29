@@ -17,7 +17,6 @@ use DateInterval;
 use Exception;
 use Phalcon\Storage\SerializerFactory;
 use Phalcon\Support\Exception as SupportException;
-use Phalcon\Support\HelperFactory;
 use Phalcon\Support\Traits\PhpApcuTrait;
 
 use function is_bool;

@@ -25,9 +25,9 @@ class Css extends InlineBase
      *
      * Css constructor.
      *
-     * @param string $content
-     * @param bool   $filter
-     * @param array<string, string>  $attributes
+     * @param string                $content
+     * @param bool                  $filter
+     * @param array<string, string> $attributes
      */
     public function __construct(
         string $content,
