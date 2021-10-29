@@ -13,14 +13,14 @@ declare(strict_types=1);
 
 namespace Phalcon\Security\JWT;
 
-use Phalcon\Support\Collection;
-use Phalcon\Support\Collection\CollectionInterface;
 use Phalcon\Security\JWT\Exceptions\ValidatorException;
 use Phalcon\Security\JWT\Signer\SignerInterface;
 use Phalcon\Security\JWT\Token\Enum;
 use Phalcon\Security\JWT\Token\Item;
 use Phalcon\Security\JWT\Token\Signature;
 use Phalcon\Security\JWT\Token\Token;
+use Phalcon\Support\Collection;
+use Phalcon\Support\Collection\CollectionInterface;
 use Phalcon\Support\Traits\Base64Trait;
 
 use function is_array;

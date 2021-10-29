@@ -40,17 +40,17 @@ class LoggerFactory
      * Factory to create an instance from a Config object
      *
      * @param array|ConfigInterface $config = [
-     *     'name'     => 'messages',
-     *     'adapters' => [
-     *         'adapter' => 'stream',
-     *         'name'    => 'file.log',
-     *         'options' => [
-     *             'mode'     => 'ab',
-     *             'option'   => null,
-     *             'facility' => null
-     *         ]
-     *     ]
-     * ]
+     *                                      'name'     => 'messages',
+     *                                      'adapters' => [
+     *                                      'adapter' => 'stream',
+     *                                      'name'    => 'file.log',
+     *                                      'options' => [
+     *                                      'mode'     => 'ab',
+     *                                      'option'   => null,
+     *                                      'facility' => null
+     *                                      ]
+     *                                      ]
+     *                                      ]
      */
     public function load($config): Logger
     {

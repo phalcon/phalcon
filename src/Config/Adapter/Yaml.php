@@ -15,8 +15,8 @@ namespace Phalcon\Config\Adapter;
 
 use Phalcon\Config\Config;
 use Phalcon\Config\Exception;
-use Phalcon\Traits\Php\InfoTrait;
 use Phalcon\Support\Traits\PhpYamlTrait;
+use Phalcon\Traits\Php\InfoTrait;
 
 use function basename;
 

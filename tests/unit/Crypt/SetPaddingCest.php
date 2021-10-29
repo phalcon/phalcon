@@ -32,8 +32,8 @@ class SetPaddingCest
      * @throws Exception
      * @throws Mismatch
      *
-     * @author Phalcon Team <team@phalcon.io>
-     * @since  2021-10-18
+     * @author       Phalcon Team <team@phalcon.io>
+     * @since        2021-10-18
      */
     public function cryptSetPadding(UnitTester $I, Example $example)
     {
@@ -70,7 +70,7 @@ class SetPaddingCest
      */
     private function getExamples(): array
     {
-        $ciphers = [
+        $ciphers  = [
             'AES-256-CBC',
             'AES-256-CFB',
         ];
@@ -82,7 +82,7 @@ class SetPaddingCest
             Crypt::PADDING_ZERO           => 'PADDING_ZERO',
             Crypt::PADDING_SPACE          => 'PADDING_SPACE',
         ];
-        $signed  = [
+        $signed   = [
             'unsigned' => false,
             'signed'   => true,
         ];

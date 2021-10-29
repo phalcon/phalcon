@@ -69,14 +69,14 @@ class Escaper implements EscaperInterface
      *
      * @return string
      */
-    public function attributes(string $attribute = null): string
+    public function attributes(string $input = null): string
     {
-        if (null === $attribute) {
+        if (null === $input) {
             return '';
         }
 
         return htmlspecialchars(
-            $attribute,
+            $input,
             ENT_QUOTES,
             $this->encoding,
             $this->doubleEncode

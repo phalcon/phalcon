@@ -19,7 +19,6 @@ use Memcached;
 use Phalcon\Storage\Exception as StorageException;
 use Phalcon\Storage\SerializerFactory;
 use Phalcon\Support\Exception as SupportException;
-use Phalcon\Support\HelperFactory;
 
 use function array_merge;
 use function strtolower;

@@ -18,7 +18,6 @@ use Exception as BaseException;
 use Phalcon\Storage\Exception as StorageException;
 use Phalcon\Storage\SerializerFactory;
 use Phalcon\Support\Exception as SupportException;
-use Phalcon\Support\HelperFactory;
 use Redis as RedisService;
 
 use function call_user_func_array;

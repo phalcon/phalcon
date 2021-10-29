@@ -17,8 +17,8 @@ use Codeception\Example;
 use IntegrationTester;
 use InvalidArgumentException;
 use JsonException;
-use Phalcon\Support\Collection;
 use Phalcon\Storage\Serializer\Json;
+use Phalcon\Support\Collection;
 use stdClass;
 
 use function json_encode;

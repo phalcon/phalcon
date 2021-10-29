@@ -14,7 +14,6 @@ declare(strict_types=1);
 namespace Phalcon\Tests\Unit\Security;
 
 use Codeception\Example;
-use Phalcon\Security\Exception;
 use Phalcon\Security\Security;
 use UnitTester;
 
