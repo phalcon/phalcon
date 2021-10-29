@@ -4,7 +4,7 @@
         "Read more about it at https://getcomposer.org/doc/01-basic-usage.md#installing-dependencies",
         "This file is @generated automatically"
     ],
-    "content-hash": "dab089bbce7b7efea79b925bbfe609f5",
+    "content-hash": "2a27ac9cab7ae19fabf66b19810ff187",
     "packages": [
         {
             "name": "payload-interop/payload-interop",
@@ -36,6 +36,74 @@
                 "source": "https://github.com/payload-interop/payload-interop/tree/1.0.0"
             },
             "time": "2020-02-10T13:41:16+00:00"
+        },
+        {
+            "name": "phalcon/traits",
+            "version": "1.0.0",
+            "source": {
+                "type": "git",
+                "url": "https://github.com/phalcon/traits.git",
+                "reference": "00cf986a800ca2f282779872176d093852d9bc0f"
+            },
+            "dist": {
+                "type": "zip",
+                "url": "https://api.github.com/repos/phalcon/traits/zipball/00cf986a800ca2f282779872176d093852d9bc0f",
+                "reference": "00cf986a800ca2f282779872176d093852d9bc0f",
+                "shasum": ""
+            },
+            "require": {
+                "ext-json": "*",
+                "ext-mbstring": "*",
+                "php": ">=7.4 <9.0"
+            },
+            "require-dev": {
+                "codeception/codeception": "^4.0",
+                "codeception/module-asserts": "^1.0.0",
+                "codeception/module-filesystem": "^1.0",
+                "codeception/module-phpbrowser": "^1.0.0",
+                "pds/skeleton": "^1.0",
+                "phpstan/phpstan": "^0.12",
+                "squizlabs/php_codesniffer": "^3.4",
+                "vimeo/psalm": "^4.10",
+                "vlucas/phpdotenv": "^5.3"
+            },
+            "suggest": {
+                "ext-gettext": "*",
+                "ext-yaml": "*"
+            },
+            "type": "library",
+            "autoload": {
+                "psr-4": {
+                    "Phalcon\\Traits\\": "src/",
+                    "Phalcon\\Tests\\Fixtures\\": "tests/_data/fixtures/",
+                    "Phalcon\\Tests\\Unit\\": "tests/unit/"
+                }
+            },
+            "notification-url": "https://packagist.org/downloads/",
+            "license": [
+                "MIT"
+            ],
+            "description": "Phalcon Framework Traits",
+            "keywords": [
+                "framework",
+                "php",
+                "traits"
+            ],
+            "support": {
+                "issues": "https://github.com/phalcon/traits/issues",
+                "source": "https://github.com/phalcon/traits/tree/1.0.0"
+            },
+            "funding": [
+                {
+                    "url": "https://github.com/phalcon",
+                    "type": "github"
+                },
+                {
+                    "url": "https://opencollective.com/phalcon",
+                    "type": "open_collective"
+                }
+            ],
+            "time": "2021-10-28T20:16:36+00:00"
         },
         {
             "name": "psr/container",
