@@ -15,17 +15,16 @@ namespace Phalcon\Tests\Unit\Di\FactoryDefault;
 
 use Codeception\Example;
 use Phalcon\Assets\Manager as ManagerAssets;
-use Phalcon\Crypt\Crypt;
+use Phalcon\Encryption\Crypt;
+use Phalcon\Encryption\Security;
 use Phalcon\Di\FactoryDefault;
 use Phalcon\Events\Manager as EventsManager;
 use Phalcon\Filter\Filter;
 use Phalcon\Html\Escaper;
 use Phalcon\Html\TagFactory;
-use Phalcon\Security\Security;
 use UnitTester;
 
 //use Phalcon\Annotations\Adapter\Memory as MemoryAnnotations;
-//use Phalcon\Filter;
 //use Phalcon\Flash\Direct;
 //use Phalcon\Flash\Session;
 //use Phalcon\Http\Request;

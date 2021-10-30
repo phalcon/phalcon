@@ -14,12 +14,12 @@ declare(strict_types=1);
 namespace Phalcon\Di;
 
 use Phalcon\Assets\Manager as AssetsManager;
-use Phalcon\Crypt\Crypt;
+use Phalcon\Encryption\Crypt;
+use Phalcon\Encryption\Security;
 use Phalcon\Events\Manager as EventsManager;
 use Phalcon\Filter\FilterFactory;
 use Phalcon\Html\Escaper;
 use Phalcon\Html\TagFactory;
-use Phalcon\Security\Security;
 
 /**
  * This is a variant of the standard Phalcon\Di. By default it automatically
