@@ -14,6 +14,7 @@ declare(strict_types=1);
 namespace Phalcon\Tests\Unit\Di\FactoryDefault\Cli;
 
 use Codeception\Example;
+use Phalcon\Di\Exception;
 use Phalcon\Di\FactoryDefault\Cli;
 use Phalcon\Events\Manager as EventsManager;
 use Phalcon\Filter\Filter;
@@ -54,6 +55,9 @@ class ConstructCest
      * @dataProvider getServices
      *
      * @param UnitTester $I
+     * @param Example    $example
+     *
+     * @throws Exception
      *
      * @author       Phalcon Team <team@phalcon.io>
      * @since        2019-09-09
