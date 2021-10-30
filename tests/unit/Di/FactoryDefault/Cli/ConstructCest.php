@@ -18,7 +18,7 @@ use Phalcon\Di\FactoryDefault\Cli;
 use Phalcon\Events\Manager as EventsManager;
 use Phalcon\Filter\Filter;
 use Phalcon\Html\Escaper;
-use Phalcon\Security\Security;
+use Phalcon\Encryption\Security;
 use UnitTester;
 
 /**

@@ -18,7 +18,7 @@ use Phalcon\Di\Service;
 use Phalcon\Events\Manager as EventsManager;
 use Phalcon\Filter\FilterFactory;
 use Phalcon\Html\Escaper;
-use Phalcon\Security\Security;
+use Phalcon\Encryption\Security;
 
 /**
  * Phalcon\Di\FactoryDefault\Cli
