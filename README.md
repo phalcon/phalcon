@@ -33,7 +33,7 @@ Phalcon Framework
 - Annotations
 - Application
 - Assets
-- Cache
+- ~Cache~
 - Cli
 - ~Crypt~
 - DataMapper
@@ -43,7 +43,7 @@ Phalcon Framework
 - Domain
 - Escaper
 - Events
-- Factory
+- ~Factory~
 - Forms
 - Helper
 - Html
@@ -54,10 +54,10 @@ Phalcon Framework
 - Messages
 - Mvc
 - Paginator
-- Security
+- ~Security~
 - Session
-- Storage
-- Support
+- ~Storage~
+- ~Support~
 - Tag
 - Url
 - Validation
