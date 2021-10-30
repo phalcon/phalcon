@@ -77,6 +77,8 @@ class Cache implements CacheInterface
      */
     public function delete($key): bool
     {
+        $key = (string) $key;
+
         $this->checkKey($key);
 
         return $this->adapter->delete($key);
@@ -122,6 +124,8 @@ class Cache implements CacheInterface
      */
     public function get($key, $default = null)
     {
+        $key = (string) $key;
+
         $this->checkKey($key);
 
         return $this->adapter->get($key, $default);
@@ -165,6 +169,8 @@ class Cache implements CacheInterface
      */
     public function has($key): bool
     {
+        $key = (string) $key;
+
         $this->checkKey($key);
 
         return $this->adapter->has($key);
@@ -190,6 +196,8 @@ class Cache implements CacheInterface
      */
     public function set($key, $value, $ttl = null): bool
     {
+        $key = (string) $key;
+
         $this->checkKey($key);
 
         return $this->adapter->set($key, $value, $ttl);
@@ -233,10 +241,8 @@ class Cache implements CacheInterface
      *
      * @throws InvalidArgumentException
      */
-    protected function checkKey($key): void
+    protected function checkKey(string $key): void
     {
-        $key = (string) $key;
-
         if (preg_match("/[^A-Za-z0-9-_.]/", $key)) {
             throw new InvalidArgumentException(
                 'The key contains invalid characters'

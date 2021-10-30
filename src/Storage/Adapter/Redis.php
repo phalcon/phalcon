@@ -52,12 +52,17 @@ class Redis extends AbstractAdapter
         /**
          * Lets set some defaults and options here
          */
-        $options['host']       = $options['host'] ?? '127.0.0.1';
-        $options['port']       = (int) ($options['port'] ?? 6379);
-        $options['index']      = $options['index'] ?? 0;
-        $options['persistent'] = $options['persistent'] ?? false;
-        $options['auth']       = $options['auth'] ?? '';
-        $options['socket']     = $options['socket'] ?? '';
+        $options["host"]           = $options["host"] ?? "127.0.0.1";
+        $options["port"]           = (int) ($options["port"] ?? 6379);
+        $options["index"]          = $options["index"] ?? 0;
+        $options["timeout"]        = $options["timeout"] ?? 0;
+        $options["persistent"]     = (bool) ($options["persistent"] ?? false);
+        $options["persistentId"]   = (string) ($options["persistentId"] ?? "");
+        $options["auth"]           = $options["auth"] ?? "";
+        $options["socket"]         = $options["socket"] ?? "";
+        $options["connectTimeout"] = $options["connectTimeout"] ?? 0;
+        $options["retryInterval"]  = $options["retryInterval"] ?? 0;
+        $options["readTimeout"]    = $options["readTimeout"] ?? 0;
 
         parent::__construct($factory, $options);
     }
@@ -251,27 +256,38 @@ class Redis extends AbstractAdapter
      */
     private function checkConnect(RedisService $connection): Redis
     {
-        $persistent = $this->options['persistent'];
-        $method     = $persistent ? 'connect' : 'pconnect';
-        $options    = [
-            $this->options['host'],
-            $this->options['port'],
-            $this->lifetime
-        ];
+        $options       = $this->options;
+        $host          = $options["host"];
+        $port          = $options["port"];
+        $timeout       = $options["timeout"];
+        $retryInterval = $options["retryInterval"];
+        $readTimeout   = $options["readTimeout"];
 
-        if (true === $persistent) {
-            $options[] = 'persistentid_' . $this->options['index'];
+        if (true === $options["persistent"]) {
+            $method    = "connect";
+            $parameter = null;
+        } else {
+            $method       = "pconnect";
+            $persistentId = $this->options["persistentId"];
+            $parameter    = !empty($persistentId) ?: "persistentId" . $options["index"];
         }
 
-        $result = call_user_func_array([$connection, $method], $options);
+        $result = $connection->$method(
+            $host,
+            $port,
+            $timeout,
+            $parameter,
+            $retryInterval,
+            $readTimeout
+        );
 
         if (true !== $result) {
             throw new StorageException(
-                'Could not connect to the Redisd server [' .
-                $this->options['host'] .
-                ':' .
-                $this->options['port'] .
-                ']'
+                sprintf(
+                    "Could not connect to the Redisd server [%s:%s]",
+                    $host,
+                    $port
+                )
             );
         }
 
