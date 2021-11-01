@@ -305,7 +305,7 @@ class Filter implements FilterInterface
         if (true !== $this->has($sanitizerName)) {
             if (true !== empty($sanitizerName)) {
                 trigger_error(
-                    'Sanitizer "' . $sanitizerName . '" is not registered',
+                    "Sanitizer '" . $sanitizerName . "' is not registered",
                     E_USER_NOTICE
                 );
             }
