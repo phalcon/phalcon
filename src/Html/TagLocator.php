@@ -53,8 +53,6 @@ use Phalcon\Html\Helper\Title;
 use Phalcon\Html\Helper\Ul;
 use Phalcon\Traits\Factory\FactoryTrait;
 
-use function call_user_func_array;
-
 use const PHP_EOL;
 
 /**
@@ -66,8 +64,8 @@ use const PHP_EOL;
  *
  * The class implements `__call()` to allow calling helper objects as methods.
  *
- * @property EscaperInterface $escaper
- * @property array            $services
+ * @property array $resolved
+ * @property array $services
  *
  * @method a(string $href, string $text, array $attributes = [], bool $raw = false): string
  * @method base(string $href, array $attributes = []): string
@@ -110,14 +108,12 @@ use const PHP_EOL;
  * @method title(string $separator = '', string $indent = '', string $delimiter = PHP_EOL): string
  * @method ul(string $text, array $attributes = [], bool $raw = false): string
  */
-class TagFactory
+class TagLocator
 {
-    use FactoryTrait;
-
     /**
-     * @var EscaperInterface
+     * @var array
      */
-    private EscaperInterface $escaper;
+    protected array $resolved = [];
 
     /**
      * @var array
@@ -125,19 +121,11 @@ class TagFactory
     protected array $services = [];
 
     /**
-     * TagFactory constructor.
+     * @param array $services
      */
-    /**
-     * TagFactory constructor.
-     *
-     * @param Escaper $escaper
-     * @param array   $services
-     */
-    public function __construct(EscaperInterface $escaper, array $services = [])
+    public function __construct(array $services = array())
     {
-        $this->escaper = $escaper;
-
-        $this->init($services);
+        $this->services = $services;
     }
 
     /**
@@ -151,7 +139,19 @@ class TagFactory
      */
     public function __call(string $name, array $args)
     {
-        return call_user_func_array($this->newInstance($name), $args);
+        return call_user_func_array($this->get($name), $args);
+    }
+
+    /**
+     * @param string   $name
+     * @param callable $callable
+     */
+    public function set(string $name, $callable): TagLocator
+    {
+        $this->services[$name] = $callable;
+        unset($this->resolved[$name]);
+
+        return $this;
     }
 
     /**
@@ -165,86 +165,24 @@ class TagFactory
     }
 
     /**
-     * Create a new instance of the object
-     *
      * @param string $name
      *
      * @return mixed
+     * @throws Exception
      */
-    public function newInstance(string $name)
+    public function get(string $name)
     {
-        if (true !== isset($this->services[$name])) {
-            $definition            = $this->getService($name);
-            $this->services[$name] = new $definition($this->escaper);
+        if (true !== $this->has($name)) {
+            throw new Exception(
+                "Service '" . $name . "' has not been found in the Tag locator"
+            );
         }
 
-        return $this->services[$name];
-    }
+        if (true !== isset($this->resolved[$name])) {
+            $definition = $this->services[$name];
+            $this->resolved[$definition] = $definition();
+        }
 
-    /**
-     * @param string   $name
-     * @param callable $callable
-     */
-    public function set(string $name, $callable): void
-    {
-        $this->services[$name] = $callable;
-        unset($this->mapper[$name]);
-    }
-
-    /**
-     * @return string
-     */
-    protected function getExceptionClass(): string
-    {
-        return Exception::class;
-    }
-
-    /**
-     * @return array
-     */
-    protected function getServices(): array
-    {
-        return [
-            'a'                  => Anchor::class,
-            'base'               => Base::class,
-            'body'               => Body::class,
-            'button'             => Button::class,
-            'close'              => Close::class,
-            'element'            => Element::class,
-            'form'               => Form::class,
-            'img'                => Img::class,
-            'inputCheckbox'      => Checkbox::class,
-            'inputColor'         => Color::class,
-            'inputDate'          => Date::class,
-            'inputDateTime'      => DateTime::class,
-            'inputDateTimeLocal' => DateTimeLocal::class,
-            'inputEmail'         => Email::class,
-            'inputFile'          => File::class,
-            'inputHidden'        => Hidden::class,
-            'inputImage'         => Image::class,
-            'inputInput'         => Input::class,
-            'inputMonth'         => Month::class,
-            'inputNumeric'       => Numeric::class,
-            'inputPassword'      => Password::class,
-            'inputRadio'         => Radio::class,
-            'inputRange'         => Range::class,
-            'inputSearch'        => Search::class,
-            'inputSelect'        => Select::class,
-            'inputSubmit'        => Submit::class,
-            'inputTel'           => Tel::class,
-            'inputText'          => Text::class,
-            'inputTextarea'      => Textarea::class,
-            'inputTime'          => Time::class,
-            'inputUrl'           => Url::class,
-            'inputWeek'          => Week::class,
-            'label'              => Label::class,
-            'link'               => Link::class,
-            'meta'               => Meta::class,
-            'ol'                 => Ol::class,
-            'script'             => Script::class,
-            'style'              => Style::class,
-            'title'              => Title::class,
-            'ul'                 => Ul::class,
-        ];
+        return $this->resolved[$name];
     }
 }

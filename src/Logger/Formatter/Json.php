@@ -55,7 +55,7 @@ class Json extends AbstractFormatter
         $options = JSON_HEX_TAG + JSON_HEX_APOS + JSON_HEX_AMP
             + JSON_HEX_QUOT + JSON_UNESCAPED_SLASHES
             + JSON_THROW_ON_ERROR;
-        $message = $this->interpolate(
+        $message = $this->toInterpolate(
             $item->getMessage(),
             $item->getContext()
         );

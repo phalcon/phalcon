@@ -63,7 +63,7 @@ class Line extends AbstractFormatter
             ]
         );
 
-        return $this->interpolate($message, $item->getContext());
+        return $this->toInterpolate($message, $item->getContext());
     }
 
     /**
