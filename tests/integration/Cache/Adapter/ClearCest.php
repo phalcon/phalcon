@@ -23,9 +23,7 @@ use Phalcon\Cache\Adapter\Redis;
 use Phalcon\Cache\Adapter\Stream;
 use Phalcon\Cache\Exception as CacheException;
 use Phalcon\Storage\SerializerFactory;
-
 use Phalcon\Support\Exception;
-
 use Phalcon\Support\Exception as HelperException;
 
 use function getOptionsLibmemcached;
