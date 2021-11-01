@@ -261,7 +261,7 @@ class ParseCest
 
         $I->expectThrowable(
             new InvalidArgumentException(
-                'Invalid Header (missing "typ" element)'
+                "Invalid Header (missing 'typ' element)"
             ),
             function () {
                 $tokenString = 'eyJhdWQiOlsibXktYXVkaWVuY2UiXSwiZXhwIjoxNT'

@@ -100,7 +100,7 @@ class Parser
 
         if (true !== isset($decoded[Enum::TYPE])) {
             throw new InvalidArgumentException(
-                'Invalid Header (missing "typ" element)'
+                "Invalid Header (missing 'typ' element)"
             );
         }
 
