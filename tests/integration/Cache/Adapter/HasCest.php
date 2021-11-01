@@ -21,9 +21,8 @@ use Phalcon\Cache\Adapter\Libmemcached;
 use Phalcon\Cache\Adapter\Memory;
 use Phalcon\Cache\Adapter\Redis;
 use Phalcon\Cache\Adapter\Stream;
-use Phalcon\Cache\Exception as CacheException;
+use Phalcon\Storage\Exception as StorageException;
 use Phalcon\Storage\SerializerFactory;
-
 use Phalcon\Support\Exception as HelperException;
 
 use function getOptionsLibmemcached;
@@ -40,7 +39,7 @@ class HasCest
      * @param IntegrationTester $I
      *
      * @throws HelperException
-     * @throws CacheException
+     * @throws StorageException
      *
      * @author Phalcon Team <team@phalcon.io>
      * @since  2020-09-09
@@ -77,7 +76,7 @@ class HasCest
      * @param IntegrationTester $I
      *
      * @throws HelperException
-     * @throws CacheException
+     * @throws StorageException
      *
      * @author Phalcon Team <team@phalcon.io>
      * @since  2020-09-09
