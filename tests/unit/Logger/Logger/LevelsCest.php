@@ -1,37 +1,52 @@
 <?php
 
-declare(strict_types=1);
-
 /**
  * This file is part of the Phalcon Framework.
+ *
+ * (c) Phalcon Team <team@phalcon.io>
  *
  * For the full copyright and license information, please view the LICENSE.txt
  * file that was distributed with this source code.
  */
 
-namespace Phalcon\Tests\Fixtures\Traits;
+declare(strict_types=1);
 
+namespace Phalcon\Tests\Unit\Logger\Logger;
+
+use Codeception\Example;
 use DateTime;
-use Phalcon\Logger\Logger;
 use Phalcon\Logger\Adapter\Stream;
-use Phalcon\Logger\Exception;
+use Phalcon\Logger\Logger;
 use UnitTester;
 
+use function date;
+use function end;
+use function file_get_contents;
 use function logsDir;
+use function preg_match;
 
-trait LoggerTrait
+class LevelsCest
 {
     /**
-     * @param UnitTester $I
-     * @param string     $level
+     * Tests Phalcon\Logger :: alert()
      *
-     * @throws Exception
+     * @dataProvider getExamples
+     *
+     * @param UnitTester $I
+     * @param Example    $example
+     *
+     * @author Phalcon Team <team@phalcon.io>
+     * @since  2020-09-09
      */
-    protected function runLoggerFile(UnitTester $I, string $level)
+    public function loggerAlert(UnitTester $I, Example $example)
     {
+        $I->wantToTest('Logger - ' . $example[0] . '()');
+
+        $level    = $example[0];
         $fileName = $I->getNewFileName('log', 'log');
         $fileName = logsDir($fileName);
-        $logger   = $this->getLogger($fileName);
+        $adapter = new Stream($fileName);
+        $logger  = new Logger('my-logger', ['one' => $adapter]);
 
         $logString = 'Hello';
         $logTime   = date('c');
@@ -71,20 +86,19 @@ trait LoggerTrait
     }
 
     /**
-     * @param string $fileName
-     *
-     * @return Logger
-     * @throws Exception
+     * @return string[][]
      */
-    protected function getLogger(string $fileName): Logger
+    private function getExamples(): array
     {
-        $adapter = new Stream($fileName);
-
-        return new Logger(
-            'my-logger',
-            [
-                'one' => $adapter,
-            ]
-        );
+        return [
+            ['alert'],
+            ['critical'],
+            ['debug'],
+            ['emergency'],
+            ['error'],
+            ['info'],
+            ['notice'],
+            ['warning'],
+        ];
     }
 }

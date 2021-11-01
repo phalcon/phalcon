@@ -57,7 +57,8 @@ class ProcessCest
         $I->openFile($fileName);
         $I->seeInThisFile('Message 1');
 
-        $adapter->close();
+        $actual = $adapter->close();
+        $I->assertTrue($actual);
         $I->safeDeleteFile($outputPath . $fileName);
     }
 
