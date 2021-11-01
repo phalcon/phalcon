@@ -29,7 +29,9 @@ use RecursiveIteratorIterator;
 
 use function fclose;
 use function flock;
+use function is_bool;
 use function is_dir;
+use function is_int;
 use function mkdir;
 use function serialize;
 use function str_replace;
@@ -84,7 +86,7 @@ class Stream extends AbstractAdapter
         $storageDir = $options['storageDir'] ?? '';
         if (empty($storageDir)) {
             throw new StorageException(
-                'The "storageDir" must be specified in the options'
+                "The 'storageDir' must be specified in the options"
             );
         }
 
@@ -266,7 +268,11 @@ class Stream extends AbstractAdapter
     }
 
     /**
-     * Stores data in the adapter
+     * Stores data in the adapter. If the TTL is `null` (default) or not defined
+     * then the default TTL will be used, as set in this adapter. If the TTL
+     * is `0` or a negative number, a `delete()` will be issued, since this
+     * item has expired. If you need to set this key forever, you should use
+     * the `setForever()` method.
      *
      * @param string                $key
      * @param mixed                 $value
@@ -277,21 +283,37 @@ class Stream extends AbstractAdapter
      */
     public function set(string $key, $value, $ttl = null): bool
     {
+        if (true === is_int($ttl) && $ttl < 1) {
+            return $this->delete($key);
+        }
+
         $payload   = [
             'created' => time(),
             'ttl'     => $this->getTtl($ttl),
             'content' => $this->getSerializedData($value),
         ];
-        $payload   = serialize($payload);
-        $directory = $this->getDir($key);
 
-        if (true !== is_dir($directory)) {
-            mkdir($directory, 0777, true);
-        }
+        return $this->storePayload($payload, $key);
+    }
 
-        return (
-            false !== $this->phpFilePutContents($directory . $key, $payload, LOCK_EX)
-        );
+    /**
+     * Stores data in the adapter forever. The key needs to manually deleted
+     * from the adapter.
+     *
+     * @param string $key
+     * @param mixed  $value
+     *
+     * @return bool
+     */
+    public function setForever(string $key, $value): bool
+    {
+        $payload   = [
+            'created' => time(),
+            'ttl'     => 'forever',
+            'content' => $this->getSerializedData($value),
+        ];
+
+        return $this->storePayload($payload, $key);
     }
 
     /**
@@ -396,6 +418,32 @@ class Stream extends AbstractAdapter
         $created = $payload['created'] ?? 0;
         $ttl     = $payload['ttl'] ?? 3600;
 
+        if ('forever' === $ttl) {
+            return false;
+        }
+
         return ((int) $created + (int) $ttl) < time();
+    }
+
+    /**
+     * Stores an array payload on the file system
+     *
+     * @param array  $payload
+     * @param string $key
+     *
+     * @return bool
+     */
+    private function storePayload(array $payload, string $key): bool
+    {
+        $payload   = serialize($payload);
+        $directory = $this->getDir($key);
+
+        if (true !== is_dir($directory)) {
+            mkdir($directory, 0777, true);
+        }
+
+        return (
+            false !== $this->phpFilePutContents($directory . $key, $payload, LOCK_EX)
+        );
     }
 }
