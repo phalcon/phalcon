@@ -48,5 +48,8 @@ class ProcessCest
         );
 
         $adapter->process($item);
+
+        $actual = $adapter->close();
+        $I->assertTrue($actual);
     }
 }
