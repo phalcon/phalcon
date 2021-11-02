@@ -80,6 +80,7 @@ class NewInstanceCest
         $I->wantToTest('Helper\TagFactory - newInstance() - services ' . $example[0]);
         $escaper = new Escaper();
         $factory = new TagFactory($escaper);
+
         $service = $factory->newInstance($example[0]);
 
         $class = $example[1];
