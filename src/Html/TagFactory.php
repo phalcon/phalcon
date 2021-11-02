@@ -161,7 +161,7 @@ class TagFactory
      */
     public function has(string $name): bool
     {
-        return isset($this->services[$name]);
+        return isset($this->mapper[$name]);
     }
 
     /**
@@ -187,8 +187,8 @@ class TagFactory
      */
     public function set(string $name, $callable): void
     {
-        $this->services[$name] = $callable;
-        unset($this->mapper[$name]);
+        $this->mapper[$name] = $callable;
+        unset($this->services[$name]);
     }
 
     /**
