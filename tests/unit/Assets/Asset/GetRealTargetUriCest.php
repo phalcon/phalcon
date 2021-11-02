@@ -39,11 +39,16 @@ class GetRealTargetUriCest
     {
         $I->wantToTest('Assets\Asset - getRealTargetUri()');
 
-        $asset = new Asset($example['type'], $example['path'], $example['local']);
+        $type      = $example['type'];
+        $path      = $example['path'];
+        $local     = $example['local'];
+        $expected  = $example['expected'];
+        $targetUri = $example['targetUri'];
 
+        $asset = new Asset($type, $path, $local);
+        $asset->setTargetUri($targetUri);
 
-        $expected = $example['path'];
-        $actual   = $asset->getRealTargetUri();
+        $actual = $asset->getRealTargetUri();
         $I->assertEquals($expected, $actual);
     }
 
@@ -54,24 +59,39 @@ class GetRealTargetUriCest
     {
         return [
             [
-                'type'  => 'css',
-                'path'  => 'css/docs.css',
-                'local' => true,
+                'type'      => 'css',
+                'path'      => 'css/docs.css',
+                'local'     => true,
+                'targetUri' => '',
+                'expected'  => 'css/docs.css',
             ],
             [
-                'type'  => 'js',
-                'path'  => 'js/jquery.js',
-                'local' => true,
+                'type'      => 'js',
+                'path'      => 'js/jquery.js',
+                'local'     => true,
+                'targetUri' => '',
+                'expected'  => 'js/jquery.js',
             ],
             [
-                'type'  => 'css',
-                'path'  => 'https://phalcon.ld/css/docs.css',
-                'local' => false,
+                'type'      => 'css',
+                'path'      => 'https://phalcon.ld/css/docs.css',
+                'local'     => false,
+                'targetUri' => '',
+                'expected'  => 'https://phalcon.ld/css/docs.css',
             ],
             [
-                'type'  => 'js',
-                'path'  => 'https://phalcon.ld/js/jquery.js',
-                'local' => false,
+                'type'      => 'js',
+                'path'      => 'https://phalcon.ld/js/jquery.js',
+                'local'     => false,
+                'targetUri' => '',
+                'expected'  => 'https://phalcon.ld/js/jquery.js',
+            ],
+            [
+                'type'      => 'css',
+                'path'      => 'css/assets.css',
+                'local'     => true,
+                'targetUri' => 'css/docs.css',
+                'expected'  => 'css/docs.css',
             ],
         ];
     }
