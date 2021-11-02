@@ -37,12 +37,10 @@ class AddInlineCssCest
         $I->wantToTest('Assets\Collection - addInlineCss()');
 
         $collection = new Collection();
-        $inline     = new Css(".awesome{color: #8fc6bc}");
-        $collection->addInline($inline);
+        $collection->addInlineCss(".awesome{color: #8fc6bc}");
 
         $codes = $collection->getCodes();
 
         $I->assertCount(1, $collection->getCodes());
-        $I->assertEquals(end($codes), $inline);
     }
 }

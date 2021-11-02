@@ -37,12 +37,10 @@ class AddInlineJsCest
         $I->wantToTest('Assets\Collection - addInlineJs()');
 
         $collection = new Collection();
-        $inline     = new Js("alert('an amazing test');");
-        $collection->addInline($inline);
+        $collection->addInlineJs("alert('an amazing test');");
 
         $codes = $collection->getCodes();
 
         $I->assertCount(1, $collection->getCodes());
-        $I->assertEquals(end($codes), $inline);
     }
 }
