@@ -11,15 +11,15 @@
 
 declare(strict_types=1);
 
-namespace Phalcon\Tests\Unit\Support\Collection\ReadOnly;
+namespace Phalcon\Tests\Unit\Support\Collection\ReadOnlyCollection;
 
-use Phalcon\Support\Collection\ReadOnly;
+use Phalcon\Support\Collection\ReadOnlyCollection;
 use UnitTester;
 
 class HasCest
 {
     /**
-     * Tests Phalcon\Support\Collection\ReadOnly :: has()
+     * Tests Phalcon\Support\Collection\ReadOnlyCollection :: has()
      *
      * @param UnitTester $I
      *
@@ -36,7 +36,7 @@ class HasCest
             'five'  => 'six',
         ];
 
-        $collection = new ReadOnly($data);
+        $collection = new ReadOnlyCollection($data);
 
         $actual = $collection->has('three');
         $I->assertTrue($actual);
@@ -64,7 +64,7 @@ class HasCest
     }
 
     /**
-     * Tests Phalcon\Support\Collection\ReadOnly :: has() - sensitive
+     * Tests Phalcon\Support\Collection\ReadOnlyCollection :: has() - sensitive
      *
      * @author Phalcon Team <team@phalcon.io>
      * @since  2020-09-09
@@ -79,7 +79,7 @@ class HasCest
             'five'  => 'six',
         ];
 
-        $collection = new ReadOnly($data, false);
+        $collection = new ReadOnlyCollection($data, false);
 
         $actual = $collection->has('three');
         $I->assertTrue($actual);
