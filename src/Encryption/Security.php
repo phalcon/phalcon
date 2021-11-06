@@ -37,7 +37,6 @@ use const PASSWORD_ARGON2I;
 use const PASSWORD_ARGON2ID;
 use const PASSWORD_BCRYPT;
 
-
 /**
  * This component provides a set of functions to improve the security in Phalcon
  * applications
