@@ -27,7 +27,7 @@ class UpperFirst
      *
      * @return string
      */
-    public function __invoke(string $input)
+    public function __invoke(string $input): string
     {
         return ucfirst($input);
     }

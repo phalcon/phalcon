@@ -23,13 +23,14 @@ use function str_replace;
 class Replace
 {
     /**
-     * @param mixed $input
-     * @param mixed $source
-     * @param mixed $target
+     * @param array|string $input
+     * @param array|string $source
+     * @param array|string $target
      *
      * @return string|string[]
      */
     public function __invoke($input, $source, $target)
+    //public function __invoke(array | string $input, array | string $source, array | string $target)
     {
         return str_replace($source, $target, $input);
     }

@@ -126,9 +126,6 @@ class TagFactory
 
     /**
      * TagFactory constructor.
-     */
-    /**
-     * TagFactory constructor.
      *
      * @param Escaper $escaper
      * @param array   $services
@@ -141,7 +138,6 @@ class TagFactory
     }
 
     /**
-     *
      * Magic call to make the helper objects available as methods.
      *
      * @param string $name
@@ -151,6 +147,12 @@ class TagFactory
      */
     public function __call(string $name, array $args)
     {
+        $services = $this->getServices();
+
+        if (true !== isset($services[$name])) {
+            throw new Exception('Service ' . $name . ' is not registered');
+        }
+
         return call_user_func_array($this->newInstance($name), $args);
     }
 

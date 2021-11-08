@@ -29,8 +29,8 @@ class StringVal
      *
      * @return string
      */
-    public function __invoke($input)
+    public function __invoke($input): string
     {
-        return filter_var($input, FILTER_SANITIZE_STRING);
+        return (string) filter_var($input, FILTER_SANITIZE_STRING);
     }
 }

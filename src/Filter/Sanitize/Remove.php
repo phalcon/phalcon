@@ -23,8 +23,8 @@ use function str_replace;
 class Remove
 {
     /**
-     * @param mixed $input
-     * @param mixed $replace
+     * @param array|string $input
+     * @param array|string $replace
      *
      * @return string|string[]
      */
