@@ -19,9 +19,7 @@ use UnitTester;
 
 use function call_user_func_array;
 use function implode;
-use function is_a;
 use function is_array;
-use function join;
 
 class SanitizeCest
 {
