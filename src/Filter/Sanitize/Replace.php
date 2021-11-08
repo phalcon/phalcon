@@ -30,7 +30,6 @@ class Replace
      * @return string|string[]
      */
     public function __invoke($input, $source, $target)
-    //public function __invoke(array | string $input, array | string $source, array | string $target)
     {
         return str_replace($source, $target, $input);
     }
