@@ -31,7 +31,7 @@ class AbsInt
      *
      * @return int
      */
-    public function __invoke($input)
+    public function __invoke($input): int
     {
         return abs(
             intval(

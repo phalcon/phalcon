@@ -25,9 +25,9 @@ class Lower
     /**
      * @param string $input The text to sanitize
      *
-     * @return false|string|string[]
+     * @return string
      */
-    public function __invoke(string $input)
+    public function __invoke(string $input): string
     {
         return mb_convert_case($input, MB_CASE_LOWER, "UTF-8");
     }

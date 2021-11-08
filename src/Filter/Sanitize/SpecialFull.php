@@ -27,10 +27,10 @@ class SpecialFull
     /**
      * @param mixed $input The text to sanitize
      *
-     * @return mixed
+     * @return string
      */
-    public function __invoke($input)
+    public function __invoke($input): string
     {
-        return filter_var($input, FILTER_SANITIZE_FULL_SPECIAL_CHARS);
+        return (string) filter_var($input, FILTER_SANITIZE_FULL_SPECIAL_CHARS);
     }
 }

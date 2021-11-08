@@ -27,7 +27,7 @@ class LowerFirst
      *
      * @return string
      */
-    public function __invoke(string $input)
+    public function __invoke(string $input): string
     {
         return lcfirst($input);
     }

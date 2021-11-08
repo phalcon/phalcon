@@ -29,7 +29,7 @@ class IntVal
      *
      * @return int
      */
-    public function __invoke($input)
+    public function __invoke($input): int
     {
         return (int) filter_var($input, FILTER_SANITIZE_NUMBER_INT);
     }

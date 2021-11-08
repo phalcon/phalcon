@@ -30,7 +30,7 @@ class FloatVal
      *
      * @return float
      */
-    public function __invoke($input)
+    public function __invoke($input): float
     {
         return (double) filter_var(
             $input,

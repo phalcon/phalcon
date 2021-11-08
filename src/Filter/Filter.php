@@ -13,11 +13,35 @@ declare(strict_types=1);
 
 namespace Phalcon\Filter;
 
+use function call_user_func_array;
 use function is_array;
 use function is_string;
 
 /**
  * Lazy loads, stores and exposes sanitizer objects
+ *
+ *
+ * @method absint(mixed $input): int
+ * @method alnum(mixed $input): string
+ * @method alpha(mixed $input): string
+ * @method boolval(mixed $input): bool
+ * @method email(string $input): string
+ * @method floatval(mixed $input): float
+ * @method intval(string $input): int
+ * @method lower(string $input): string
+ * @method lowerfirst(string $input): string
+ * @method regex(mixed $input, mixed $pattern, mixed $replace): mixed
+ * @method remove(mixed $input, mixed $replace): mixed
+ * @method replace(mixed $input, mixed $source, mixed $target): mixed
+ * @method special(string $input): string
+ * @method specialfull(string $input): string
+ * @method stringval(string $input): string
+ * @method striptags(string $input): string
+ * @method trim(string $input): string
+ * @method upper(string $input): string
+ * @method upperFirst(string $input): string
+ * @method upperWords(string $input): string|null
+ * @method url(string $input): string|null
  *
  * @property array $mapper
  * @property array $services
@@ -27,23 +51,23 @@ class Filter implements FilterInterface
     public const FILTER_ABSINT      = 'absint';
     public const FILTER_ALNUM       = 'alnum';
     public const FILTER_ALPHA       = 'alpha';
-    public const FILTER_BOOL        = 'bool';
+    public const FILTER_BOOL        = 'boolval';
     public const FILTER_EMAIL       = 'email';
-    public const FILTER_FLOAT       = 'float';
-    public const FILTER_INT         = 'int';
+    public const FILTER_FLOAT       = 'floatval';
+    public const FILTER_INT         = 'intval';
     public const FILTER_LOWER       = 'lower';
-    public const FILTER_LOWERFIRST  = 'lowerFirst';
+    public const FILTER_LOWERFIRST  = 'lowerfirst';
     public const FILTER_REGEX       = 'regex';
     public const FILTER_REMOVE      = 'remove';
     public const FILTER_REPLACE     = 'replace';
     public const FILTER_SPECIAL     = 'special';
-    public const FILTER_SPECIALFULL = 'specialFull';
+    public const FILTER_SPECIALFULL = 'specialfull';
     public const FILTER_STRING      = 'string';
     public const FILTER_STRIPTAGS   = 'striptags';
     public const FILTER_TRIM        = 'trim';
     public const FILTER_UPPER       = 'upper';
-    public const FILTER_UPPERFIRST  = 'upperFirst';
-    public const FILTER_UPPERWORDS  = 'upperWords';
+    public const FILTER_UPPERFIRST  = 'upperfirst';
+    public const FILTER_UPPERWORDS  = 'upperwords';
     public const FILTER_URL         = 'url';
 
     /**
@@ -67,6 +91,22 @@ class Filter implements FilterInterface
     }
 
     /**
+     * Magic call to make the helper objects available as methods.
+     *
+     * @param string $name
+     * @param array  $args
+     *
+     * @return mixed
+     * @throws Exception
+     */
+    public function __call(string $name, array $args)
+    {
+        $sanitizer = $this->get($name);
+
+        return call_user_func_array([$sanitizer, "__invoke"], $args);
+    }
+
+    /**
      * Get a service. If it is not in the mapper array, create a new object,
      * set it and then return it.
      *
@@ -79,7 +119,7 @@ class Filter implements FilterInterface
     {
         if (true !== isset($this->mapper[$name])) {
             throw new Exception(
-                'The service ' . $name . ' has not been found in the locator'
+                'Filter ' . $name . ' is not registered'
             );
         }
 

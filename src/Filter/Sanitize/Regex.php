@@ -23,9 +23,9 @@ use function preg_replace;
 class Regex
 {
     /**
-     * @param mixed $input
-     * @param mixed $pattern
-     * @param mixed $replace
+     * @param array|string $input
+     * @param array|string $pattern
+     * @param array|string $replace
      *
      * @return string|string[]|null
      */

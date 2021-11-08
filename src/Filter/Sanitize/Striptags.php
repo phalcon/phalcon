@@ -27,7 +27,7 @@ class Striptags
      *
      * @return string
      */
-    public function __invoke(string $input)
+    public function __invoke(string $input): string
     {
         return strip_tags($input);
     }
