@@ -186,9 +186,7 @@ class Escaper implements EscaperInterface
          * Normalize encoding to UTF-32
          * Escape the string
          */
-        return $this->doEscapeJs(
-            $this->normalizeEncoding($input)
-        );
+        return $this->doEscapeJs($this->normalizeEncoding($input));
     }
 
     /**

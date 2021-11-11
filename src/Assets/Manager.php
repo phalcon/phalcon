@@ -20,6 +20,8 @@ use Phalcon\Assets\Inline\Js as InlineJs;
 use Phalcon\Di\InjectionAwareInterface;
 use Phalcon\Di\Traits\InjectionAwareTrait;
 use Phalcon\Html\Helper\Element;
+use Phalcon\Html\Helper\Link;
+use Phalcon\Html\Helper\Script;
 use Phalcon\Html\TagFactory;
 
 use function call_user_func_array;
@@ -33,8 +35,6 @@ use const ENT_QUOTES;
 use const PHP_EOL;
 
 /**
- * Phalcon\Assets\Manager
- *
  * Manages collections of CSS/JavaScript assets
  *
  * @property array      $collections
@@ -920,8 +920,7 @@ class Manager implements InjectionAwareInterface
 
     /**
      * Builds a LINK[rel="stylesheet"] tag
-     */
-    /**
+     *
      * @param mixed $parameters
      * @param bool  $local
      *
@@ -955,6 +954,12 @@ class Manager implements InjectionAwareInterface
                 $params['href'] = $params[0];
             }
         }
+        $href = $params['href'];
+        unset($params['href']);
+
+        if (true !== isset($params['rel'])) {
+            $params['rel'] = 'stylesheet';
+        }
 
         /**
          * URLs are generated through the "url" service
@@ -965,11 +970,14 @@ class Manager implements InjectionAwareInterface
 //            $params['href'] = self::getUrlService()->getStatic(params["href"]);
         }
 
-        if (true !== isset($params['rel'])) {
-            $params['rel'] = 'stylesheet';
-        }
 
-        return $this->renderAttributes('<link', $params) . ' />' . PHP_EOL;
+        $params = $this->orderAttributes($params);
+        /** @var Link $helper */
+        $helper = $this->tagFactory->link('');
+        $helper->add($href, $params);
+
+        return (string) $helper;
+//        return $this->renderAttributes('<link', $params) . ' />' . PHP_EOL;
     }
 
     /**
@@ -1037,6 +1045,8 @@ class Manager implements InjectionAwareInterface
                 $params['src'] = $params[0];
             }
         }
+        $src = $params['src'];
+        unset($params['src']);
 
         /**
          * URLs are generated through the "url" service
@@ -1047,7 +1057,12 @@ class Manager implements InjectionAwareInterface
 //            $params['src'] = self::getUrlService()->getStatic(params["src"]);
         }
 
-        return $this->renderAttributes('<script', $params) . '></script>' . PHP_EOL;
+        $params = $this->orderAttributes($params);
+        /** @var Script $helper */
+        $helper = $this->tagFactory->script('');
+        $helper->add($src, $params);
+        return (string) $helper;
+//        return $this->renderAttributes('<script', $params) . '></script>' . PHP_EOL;
     }
 
     /**
@@ -1111,5 +1126,43 @@ class Manager implements InjectionAwareInterface
         }
 
         return $newCode;
+    }
+
+    /**
+     * @param string $code
+     * @param array  $attributes
+     *
+     * @return string
+     * @throws Exception
+     */
+    private function orderAttributes(array $attributes): array
+    {
+        $order = [
+            'rel'    => null,
+            'type'   => null,
+            'for'    => null,
+            'src'    => null,
+            'href'   => null,
+            'action' => null,
+            'id'     => null,
+            'name'   => null,
+            'value'  => null,
+            'class'  => null,
+        ];
+
+        $attrs = [];
+        foreach ($order as $key => $value) {
+            if (true === isset($attributes[$key])) {
+                $attrs[$key] = $attributes[$key];
+            }
+        }
+
+        foreach ($attributes as $key => $value) {
+            if (true !== isset($attrs[$key])) {
+                $attrs[$key] = $value;
+            }
+        }
+
+        return $attrs;
     }
 }

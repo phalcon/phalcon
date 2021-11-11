@@ -33,7 +33,7 @@ class AbsInt
      */
     public function __invoke($input): int
     {
-        return abs(
+        return (int) abs(
             intval(
                 filter_var($input, FILTER_SANITIZE_NUMBER_INT)
             )
