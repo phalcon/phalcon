@@ -16,12 +16,7 @@ namespace Phalcon\Tests\Unit\Html\Escaper;
 use Phalcon\Html\Escaper;
 use UnitTester;
 
-/**
- * Class EscapeJsCest
- *
- * @package Phalcon\Tests\Unit\Html\Escaper
- */
-class EscapeJsCest
+class JsCest
 {
     /**
      * Tests Phalcon\Escaper :: escapeJs()
@@ -31,11 +26,10 @@ class EscapeJsCest
      * @author Phalcon Team <team@phalcon.io>
      * @since  2020-09-09
      */
-    public function escaperEscapeJs(UnitTester $I)
+    public function escaperJs(UnitTester $I)
     {
-        $I->wantToTest('Escaper - escapeJs()');
-        $I->skipTest('TODO - Fix this when we add js escaping');
-
+        $I->wantToTest('Escaper - js()');
+        $I->skipTest("TODO: Enable this after escaping is converted from C to PHP");
         $escaper = new Escaper();
 
         $source = 'function createtoc () {'
@@ -55,8 +49,10 @@ class EscapeJsCest
             . 'var h \x3d document.createElement(\x27li\x27);'
             . 'l.appendChild(h);'
             . '}}';
-        $actual   = $escaper->escapeJs($source);
+        $actual   = $escaper->js($source);
+        $I->assertEquals($expected, $actual);
 
+        $actual   = $escaper->escapeJs($source);
         $I->assertEquals($expected, $actual);
     }
 }

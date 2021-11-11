@@ -31,13 +31,16 @@ class GetSetFlagsCest
      * @author Phalcon Team <team@phalcon.io>
      * @since  2020-09-09
      */
-    public function escaperGetSetEncoding(UnitTester $I)
+    public function escaperGetSetFlags(UnitTester $I)
     {
         $I->wantToTest('Escaper - getFlags() / setFlags()');
 
         $escaper = new Escaper();
 
-        $escaper->setFlags(1234);
-        $I->assertEquals(1234, $escaper->getFlags());
+        $escaper->setFlags(ENT_HTML401);
+
+        $expected = 'That&#039;s right';
+        $actual   = $escaper->attributes("That's right");
+        $I->assertEquals($expected, $actual);
     }
 }

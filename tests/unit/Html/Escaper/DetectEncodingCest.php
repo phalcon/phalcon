@@ -57,14 +57,16 @@ class DetectEncodingCest
                 'source'   => 'ḂḃĊċḊḋḞḟĠġṀṁ',
                 'expected' => 'UTF-8',
             ],
-            //            [
-            //                'source'   => chr(172) . chr(128) . chr(159) . 'ḂḃĊċḊḋḞḟĠġṀṁ',
-            //                'expected' => 'ISO-8859-1',
-            //            ],
-            //            [
-            //                'source'   => '\0\0\0H\0\0\0i',
-            //                'expected' => 'UTF-8',
-            //            ],
+
+            [
+                'source'   => chr(172) . chr(128) . chr(159) . 'ḂḃĊċḊḋḞḟĠġṀṁ',
+                'expected' => 'ISO-8859-1',
+            ],
+
+            [
+                'source'   => '\0\0\0H\0\0\0i',
+                'expected' => 'UTF-8',
+            ],
         ];
     }
 }
