@@ -368,6 +368,10 @@ class Redis extends AbstractAdapter
             $map['msgpack'] = constant('\\Redis::SERIALIZER_MSGPACK');
         }
 
+        if (defined('\\Redis::SERIALIZER_JSON')) {
+            $map['json'] = constant('\\Redis::SERIALIZER_JSON');
+        }
+
         $serializer = mb_strtolower($this->defaultSerializer);
 
         if (true === isset($map[$serializer])) {
