@@ -39,9 +39,8 @@ class GetSetEncodingCest
 
         $escaper->setEncoding('UTF-8');
 
-        $I->assertEquals(
-            'UTF-8',
-            $escaper->getEncoding()
-        );
+        $expected = 'UTF-8';
+        $actual   = $escaper->getEncoding();
+        $I->assertEquals($expected, $actual);
     }
 }

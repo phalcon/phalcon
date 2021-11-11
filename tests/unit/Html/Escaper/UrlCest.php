@@ -16,12 +16,7 @@ namespace Phalcon\Tests\Unit\Html\Escaper;
 use Phalcon\Html\Escaper;
 use UnitTester;
 
-/**
- * Class EscapeUrlCest
- *
- * @package Phalcon\Tests\Unit\Html\Escaper
- */
-class EscapeUrlCest
+class UrlCest
 {
     /**
      * Tests Phalcon\Escaper :: escapeUrl()
@@ -31,15 +26,17 @@ class EscapeUrlCest
      * @author Phalcon Team <team@phalcon.io>
      * @since  2020-09-09
      */
-    public function escaperEscapeUrl(UnitTester $I)
+    public function escaperUrl(UnitTester $I)
     {
-        $I->wantToTest('Escaper - escapeUrl()');
+        $I->wantToTest('Escaper - url()');
 
         $escaper = new Escaper();
 
-        $I->assertEquals(
-            'http%3A%2F%2Fphalcon.io%2Fa.php%3Fc%3Dd%26e%3Df',
-            $escaper->escapeUrl('http://phalcon.io/a.php?c=d&e=f')
-        );
+        $expected = 'http%3A%2F%2Fphalcon.io%2Fa.php%3Fc%3Dd%26e%3Df';
+        $actual   = $escaper->url('http://phalcon.io/a.php?c=d&e=f');
+        $I->assertEquals($expected, $actual);
+
+        $actual   = $escaper->escapeUrl('http://phalcon.io/a.php?c=d&e=f');
+        $I->assertEquals($expected, $actual);
     }
 }
