@@ -87,8 +87,8 @@ class Title extends AbstractHelper
             $this->append
         );
 
-        $indent    = $this->indent ? $this->indent : '';
-        $delimiter = $this->delimiter ? $this->delimiter : '';
+        $indent    = $this->indent ?: '';
+        $delimiter = $this->delimiter ?: '';
 
         $this->append  = [];
         $this->prepend = [];
