@@ -27,6 +27,7 @@ use function array_flip;
 use function date_default_timezone_get;
 use function is_numeric;
 use function is_string;
+use function strtoupper;
 
 /**
  * Class Logger
@@ -326,15 +327,15 @@ class Logger implements LoggerInterface
     protected function getLevels(): array
     {
         return [
-            self::ALERT     => 'alert',
-            self::CRITICAL  => 'critical',
-            self::DEBUG     => 'debug',
-            self::EMERGENCY => 'emergency',
-            self::ERROR     => 'error',
-            self::INFO      => 'info',
-            self::NOTICE    => 'notice',
-            self::WARNING   => 'warning',
-            self::CUSTOM    => 'custom',
+            self::ALERT     => "ALERT",
+            self::CRITICAL  => "CRITICAL",
+            self::DEBUG     => "DEBUG",
+            self::EMERGENCY => "EMERGENCY",
+            self::ERROR     => "ERROR",
+            self::INFO      => "INFO",
+            self::NOTICE    => "NOTICE",
+            self::WARNING   => "WARNING",
+            self::CUSTOM    => "CUSTOM",
         ];
     }
 
@@ -348,8 +349,11 @@ class Logger implements LoggerInterface
      */
     private function getLevelNumber($level): int
     {
+        /**
+         * If someone uses "critical" as the level (string)
+         */
         if (true === is_string($level)) {
-            $levelName = mb_strtolower($level);
+            $levelName = strtoupper($level);
             $levels    = array_flip($this->getLevels());
 
             if (isset($levels[$levelName])) {
@@ -363,6 +367,6 @@ class Logger implements LoggerInterface
             }
         }
 
-        throw new InvalidArgumentException('Unknown log level');
+        return self::CUSTOM;
     }
 }

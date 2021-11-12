@@ -15,16 +15,19 @@ namespace Phalcon\Di;
 
 use Phalcon\Annotations\Adapter;
 use Phalcon\Assets\Manager;
-use Phalcon\CryptInterface;
+use Phalcon\Encryption\Crypt;
+use Phalcon\Encryption\Crypt\CryptInterface;
 use Phalcon\Db\Adapter\AdapterInterface;
 use Phalcon\Di\Traits\InjectionAwareTrait;
-use Phalcon\Escaper;
+use Phalcon\Encryption\Security;
 use Phalcon\Events\Manager as EventsManager;
 use Phalcon\Events\ManagerInterface as EventsManagerInterface;
+use Phalcon\Filter\Filter;
+use Phalcon\Filter\FilterInterface;
 use Phalcon\Flash\Direct;
 use Phalcon\Flash\Session;
-use Phalcon\Helper;
-use Phalcon\Html\EscaperInterface;
+use Phalcon\Html\Escaper;
+use Phalcon\Html\Escaper\EscaperInterface;
 use Phalcon\Http\RequestInterface;
 use Phalcon\Http\Response;
 use Phalcon\Http\Response\Cookies;
@@ -43,6 +46,7 @@ use Phalcon\Session\Bag;
 use Phalcon\Session\BagInterface;
 use Phalcon\Url;
 use Phalcon\Url\UrlInterface;
+use Phalcon\Support\HelperFactory;
 
 /**
  * This class allows to access services in the services container by just only
@@ -50,28 +54,27 @@ use Phalcon\Url\UrlInterface;
  *
  * @property DiInterface|null                     $container
  * @property DiInterface|null                     $di
+ * @property Crypt|CryptInterface                 $crypt
  * @property EventsManager|EventsManagerInterface $eventsManager
+ * @property Escaper|EscaperInterface             $escaper
+ * @property Filter|FilterInterface               $filter
+ * @property HelperFactory                        $helper
+ * @property Security                             $security
  * // * @property Dispatcher|DispatcherInterface $dispatcher
  * // * @property Router|RouterInterface $router
  * // * @property Url|UrlInterface $url
  * // * @property Request|RequestInterface $request
  * // * @property Response|ResponseInterface $response
  * // * @property Cookies|CookiesInterface $cookies
- * // * @property Filter $filter
  * // * @property Direct $flash
  * // * @property Session $flashSession
  * // * @property \Phalcon\Session\ManagerInterface $session
  * // * @property AdapterInterface $db
- * // * @property Security $security
- * // * @property Crypt|CryptInterface $crypt
- * // * @property Helper $tag
- * // * @property Escaper|EscaperInterface $escaper
  * // * @property Adapter\Memory|Adapter $annotations
  * // * @property \Phalcon\Mvc\Model\Manager|\Phalcon\Mvc\Model\ManagerInterface $modelsManager
  * // * @property Memory|MetadataInterface $modelsMetadata
  * // * @property ManagerInterface $transactionManager
  * // * @property Manager $assets
- * // * @property \Phalcon\Di|DiInterface $di
  * // * @property Bag|BagInterface $persistent
  * // * @property View|ViewInterface $view
  */

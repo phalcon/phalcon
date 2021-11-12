@@ -24,10 +24,10 @@ use function is_string;
  * @method absint(mixed $input): int
  * @method alnum(mixed $input): string
  * @method alpha(mixed $input): string
- * @method boolval(mixed $input): bool
+ * @method bool(mixed $input): bool
  * @method email(string $input): string
- * @method floatval(mixed $input): float
- * @method intval(string $input): int
+ * @method float(mixed $input): float
+ * @method int(string $input): int
  * @method lower(string $input): string
  * @method lowerfirst(string $input): string
  * @method regex(mixed $input, mixed $pattern, mixed $replace): mixed
@@ -35,7 +35,7 @@ use function is_string;
  * @method replace(mixed $input, mixed $source, mixed $target): mixed
  * @method special(string $input): string
  * @method specialfull(string $input): string
- * @method stringval(string $input): string
+ * @method string(string $input): string
  * @method striptags(string $input): string
  * @method trim(string $input): string
  * @method upper(string $input): string
@@ -51,10 +51,10 @@ class Filter implements FilterInterface
     public const FILTER_ABSINT      = 'absint';
     public const FILTER_ALNUM       = 'alnum';
     public const FILTER_ALPHA       = 'alpha';
-    public const FILTER_BOOL        = 'boolval';
+    public const FILTER_BOOL        = 'bool';
     public const FILTER_EMAIL       = 'email';
-    public const FILTER_FLOAT       = 'floatval';
-    public const FILTER_INT         = 'intval';
+    public const FILTER_FLOAT       = 'float';
+    public const FILTER_INT         = 'int';
     public const FILTER_LOWER       = 'lower';
     public const FILTER_LOWERFIRST  = 'lowerfirst';
     public const FILTER_REGEX       = 'regex';

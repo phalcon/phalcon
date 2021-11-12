@@ -13,6 +13,7 @@ declare(strict_types=1);
 
 namespace Phalcon\Html;
 
+use Phalcon\Html\Escaper\EscaperInterface;
 use Phalcon\Html\Traits\EscaperHelperTrait;
 
 use function htmlspecialchars;

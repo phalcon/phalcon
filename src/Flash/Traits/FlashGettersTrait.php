@@ -13,7 +13,7 @@ declare(strict_types=1);
 
 namespace Phalcon\Flash\Traits;
 
-use Phalcon\Html\EscaperInterface;
+use Phalcon\Html\Escaper\EscaperInterface;
 use Phalcon\Session\ManagerInterface as SessionInterface;
 
 /**

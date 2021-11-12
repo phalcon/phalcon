@@ -115,7 +115,7 @@ class LoggerFactory
 
         if (true !== isset($config['name'])) {
             throw new Exception(
-                'You must provide "name" option in factory config parameter.'
+                "You must provide 'name' option in factory config parameter."
             );
         }
 

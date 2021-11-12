@@ -11,7 +11,7 @@ declare(strict_types=1);
 
 namespace Phalcon\Html\Helper;
 
-use Phalcon\Html\EscaperInterface;
+use Phalcon\Html\Escaper\EscaperInterface;
 use Phalcon\Html\Exception;
 
 use function array_intersect_key;
