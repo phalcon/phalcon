@@ -96,9 +96,9 @@ class ConstructCest
         $I->openFile($fileName);
 
         $expected = sprintf(
-            '{"level":"debug","message":"This is a message","timestamp":"%s"}' . PHP_EOL .
-            '{"level":"error","message":"This is an error","timestamp":"%s"}' . PHP_EOL .
-            '{"level":"error","message":"This is another error","timestamp":"%s"}',
+            '{"level":"DEBUG","message":"This is a message","timestamp":"%s"}' . PHP_EOL .
+            '{"level":"ERROR","message":"This is an error","timestamp":"%s"}' . PHP_EOL .
+            '{"level":"ERROR","message":"This is another error","timestamp":"%s"}',
             date('c', $time),
             date('c', $time),
             date('c', $time)

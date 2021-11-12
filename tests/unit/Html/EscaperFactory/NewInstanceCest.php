@@ -15,7 +15,7 @@ namespace Phalcon\Tests\Unit\Html\EscaperFactory;
 
 use Phalcon\Html\Escaper;
 use Phalcon\Html\EscaperFactory;
-use Phalcon\Html\EscaperInterface;
+use Phalcon\Html\Escaper\EscaperInterface;
 use UnitTester;
 
 /**
@@ -26,16 +26,16 @@ use UnitTester;
 class NewInstanceCest
 {
     /**
-     * Tests Phalcon\Logger\EscaperFactory :: newInstance()
+     * Tests Phalcon\Html\EscaperFactory :: newInstance()
      *
      * @param UnitTester $I
      *
      * @author Phalcon Team <team@phalcon.io>
      * @since  2020-09-09
      */
-    public function loggerEscaperFactoryNewInstance(UnitTester $I)
+    public function htmlEscaperFactoryNewInstance(UnitTester $I)
     {
-        $I->wantToTest('Logger\EscaperFactory - newInstance()');
+        $I->wantToTest('Html\EscaperFactory - newInstance()');
 
         $factory = new EscaperFactory();
         $escaper = $factory->newInstance();
