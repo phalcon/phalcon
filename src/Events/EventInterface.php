@@ -30,9 +30,9 @@ interface EventInterface
     /**
      * Gets event source
      *
-     * @return object
+     * @return object|null
      */
-    public function getSource(): object;
+    public function getSource(): ?object;
 
     /**
      * Gets event type

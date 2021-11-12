@@ -14,7 +14,6 @@ declare(strict_types=1);
 namespace Phalcon\Html;
 
 use Phalcon\Html\Escaper\EscaperInterface;
-use Phalcon\Html\Traits\EscaperHelperTrait;
 
 use function htmlspecialchars;
 use function mb_convert_encoding;
@@ -46,8 +45,6 @@ use const ENT_QUOTES;
  */
 class Escaper implements EscaperInterface
 {
-    use EscaperHelperTrait;
-
     /**
      * @var bool
      */
@@ -300,5 +297,72 @@ class Escaper implements EscaperInterface
     private function doEscapeJs(string $input): string
     {
         return $input;
+    }
+
+    /**
+     * Escape CSS strings by replacing non-alphanumeric chars by their
+     * hexadecimal escaped representation
+     *
+     * @param string $input
+     *
+     * @return string
+     * @deprecated
+     */
+    public function escapeCss(string $input): string
+    {
+        return $this->css($input);
+    }
+
+    /**
+     * Escape JavaScript strings by replacing non-alphanumeric chars by their
+     * hexadecimal escaped representation
+     *
+     * @param string $input
+     *
+     * @return string
+     * @deprecated
+     */
+    public function escapeJs(string $input): string
+    {
+        return $this->js($input);
+    }
+
+    /**
+     * Escapes a HTML string. Internally uses htmlspecialchars
+     *
+     * @param string|null $input
+     *
+     * @return string
+     * @deprecated
+     */
+    public function escapeHtml(string $input = null): string
+    {
+        return $this->html($input);
+    }
+
+    /**
+     * Escapes a HTML attribute string
+     *
+     * @param string|null $input
+     *
+     * @return string
+     * @deprecated
+     */
+    public function escapeHtmlAttr(string $input = null): string
+    {
+        return $this->attributes($input);
+    }
+
+    /**
+     * Escapes a URL. Internally uses rawurlencode
+     *
+     * @param string $input
+     *
+     * @return string
+     * @deprecated
+     */
+    public function escapeUrl(string $input): string
+    {
+        return $this->url($input);
     }
 }

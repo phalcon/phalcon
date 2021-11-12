@@ -53,9 +53,9 @@ class Event implements EventInterface
     /**
      * Event source
      *
-     * @var object
+     * @var object|null
      */
-    protected object $source;
+    protected ?object $source;
 
     /**
      * Is event propagation stopped?
@@ -74,14 +74,14 @@ class Event implements EventInterface
     /**
      * Event constructor.
      *
-     * @param string     $type
-     * @param object     $source
-     * @param mixed|null $data
-     * @param bool       $cancelable
+     * @param string      $type
+     * @param object|null $source
+     * @param mixed|null  $data
+     * @param bool        $cancelable
      */
     public function __construct(
         string $type,
-        object $source,
+        object $source = null,
         $data = null,
         bool $cancelable = true
     ) {
@@ -100,9 +100,9 @@ class Event implements EventInterface
     }
 
     /**
-     * @return object
+     * @return object|null
      */
-    public function getSource(): object
+    public function getSource(): ?object
     {
         return $this->source;
     }
