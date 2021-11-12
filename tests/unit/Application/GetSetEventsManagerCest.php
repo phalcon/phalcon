@@ -27,7 +27,7 @@ use function spl_object_hash;
 class GetSetEventsManagerCest
 {
     /**
-     * Tests Phalcon\Acl\Role :: getEventsManager()/setEventsManager()
+     * Tests Phalcon\Application\* :: getEventsManager()/setEventsManager()
      *
      * @param UnitTester $I
      *

@@ -25,7 +25,7 @@ use UnitTester;
 class GetRegisterModulesCest
 {
     /**
-     * Tests Phalcon\Acl\Role :: registerModules()
+     * Tests Phalcon\Application\* :: registerModules()
      *
      * @param UnitTester $I
      *

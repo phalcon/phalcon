@@ -16,29 +16,23 @@ namespace Phalcon\Tests\Unit\Events\Event;
 use Phalcon\Events\Event;
 use UnitTester;
 
-/**
- * Class IsStoppedCest
- *
- * @package Phalcon\Tests\Unit\Events\Event
- */
 class IsStoppedCest
 {
     /**
      * Tests Phalcon\Events\Event :: isStopped()
      *
-     * @param UnitTester $I
-     *
      * @author Sid Roberts <https://github.com/SidRoberts>
-     * @since  2020-09-09
+     * @since  2019-05-20
      */
     public function eventsEventIsStopped(UnitTester $I)
     {
         $I->wantToTest('Events\Event - isStopped()');
 
-        $event  = new Event('some-type:beforeSome', $this);
+        $type  = 'some-type:beforeSome';
+        $event = new Event($type, $this);
+
         $actual = $event->isStopped();
         $I->assertFalse($actual);
-
 
         $event->stop();
 

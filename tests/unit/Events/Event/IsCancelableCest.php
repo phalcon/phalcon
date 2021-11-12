@@ -16,35 +16,27 @@ namespace Phalcon\Tests\Unit\Events\Event;
 use Phalcon\Events\Event;
 use UnitTester;
 
-/**
- * Class IsCancelableCest
- *
- * @package Phalcon\Tests\Unit\Events\Event
- */
 class IsCancelableCest
 {
     /**
      * Tests Phalcon\Events\Event :: isCancelable()
      *
-     * @param UnitTester $I
-     *
      * @author Sid Roberts <https://github.com/SidRoberts>
-     * @since  2020-09-09
+     * @since  2019-05-20
      */
     public function eventsEventIsCancelable(UnitTester $I)
     {
         $I->wantToTest('Events\Event - isCancelable()');
 
-        $event  = new Event('type-one:beforeSome', $this, []);
+        $type  = 'some-type:beforeSome';
+        $event = new Event($type, $this);
+
         $actual = $event->isCancelable();
         $I->assertTrue($actual);
 
-        $event  = new Event('type-two:beforeSome', $this, [], false);
+        $event = new Event($type, $this, [], false);
+
         $actual = $event->isCancelable();
         $I->assertFalse($actual);
-
-        $event  = new Event('type-three:beforeSome', $this, [], true);
-        $actual = $event->isCancelable();
-        $I->assertTrue($actual);
     }
 }

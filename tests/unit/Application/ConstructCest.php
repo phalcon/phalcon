@@ -27,7 +27,7 @@ use UnitTester;
 class ConstructCest
 {
     /**
-     * Tests Phalcon\Acl\Role :: __construct()
+     * Tests Phalcon\Application\* :: __construct()
      *
      * @param UnitTester $I
      *
