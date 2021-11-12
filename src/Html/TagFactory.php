@@ -11,11 +11,13 @@ declare(strict_types=1);
 
 namespace Phalcon\Html;
 
+use Phalcon\Html\Escaper\EscaperInterface;
 use Phalcon\Html\Helper\Anchor;
 use Phalcon\Html\Helper\Base;
 use Phalcon\Html\Helper\Body;
 use Phalcon\Html\Helper\Button;
 use Phalcon\Html\Helper\Close;
+use Phalcon\Html\Helper\Doctype;
 use Phalcon\Html\Helper\Element;
 use Phalcon\Html\Helper\Form;
 use Phalcon\Html\Helper\Img;
@@ -74,6 +76,7 @@ use const PHP_EOL;
  * @method body(array $attributes = []): string
  * @method button(string $text, array $attributes = [], bool $raw = false): string
  * @method close(string $tag, bool $raw = false): string
+ * @method doctype(int $flag, string $delimiter): string
  * @method element(string $tag, string $text, array $attributes = [], bool $raw = false): string
  * @method form(array $attributes = []): string
  * @method img(string $src, array $attributes = []): string
@@ -202,7 +205,9 @@ class TagFactory
     }
 
     /**
-     * @return array
+     * Returns the available services
+     *
+     * @return string[]
      */
     protected function getServices(): array
     {
@@ -212,6 +217,7 @@ class TagFactory
             'body'               => Body::class,
             'button'             => Button::class,
             'close'              => Close::class,
+            'doctype'            => Doctype::class,
             'element'            => Element::class,
             'form'               => Form::class,
             'img'                => Img::class,

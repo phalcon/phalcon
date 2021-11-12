@@ -1165,4 +1165,133 @@ class Manager implements InjectionAwareInterface
 
         return $attrs;
     }
+//
+//
+//
+//    public function getStatic(var uri = null) -> string
+//    {
+//        return this->get(
+//            uri,
+//            null,
+//            null,
+//            this->getStaticBaseUri()
+//        );
+//    }
+//
+//    /**
+//     * Returns the prefix for all the generated urls. By default /
+//     */
+//    public function getBaseUri(): string
+//    {
+//        $phpSelf = $_SERVER["PHP_SELF"] ?? null;
+//        $uri     = null;
+//        if (null !== $phpSelf) {
+//            $uri = phalcon_get_uri($phpSelf);
+//        }
+//
+//        if (null !== $uri) {
+//            return "/" . $uri . "/";
+//        }
+//
+//        return "/";
+//    }
+//    public function get(var uri = null, var args = null, bool local = null, var baseUri = null) -> string
+//    {
+//        string strUri;
+//        var router, container, routeName, route, queryString;
+//
+//        if local == null {
+//            if typeof uri == "string" && (memstr(uri, "//") || memstr(uri, ":")) {
+//                if preg_match("#^((//)|([a-z0-9]+://)|([a-z0-9]+:))#i", uri) {
+//                   let local = false;
+//                } else {
+//                let local = true;
+//                }
+//            } else {
+//                let local = true;
+//            }
+//        }
+//
+//        if typeof baseUri != "string" {
+//        let baseUri = this->getBaseUri();
+//        }
+//
+//        if typeof uri == "array" {
+//        if unlikely !fetch routeName, uri["for"] {
+//            throw new Exception(
+//                "It's necessary to define the route name with the parameter 'for'"
+//            );
+//        }
+//
+//            let router = this->router;
+//
+//            /**
+//             * Check if the router has not previously set
+//             */
+//            if unlikely !router {
+//            let container = <DiInterface> this->container;
+//
+//                if unlikely typeof container != "object" {
+//                throw new Exception(
+//                    Exception::containerServiceNotFound(
+//                        "the 'router' service"
+//                    )
+//                );
+//            }
+//
+//                if unlikely !container->has("router") {
+//                                        throw new Exception(
+//                                            Exception::containerServiceNotFound(
+//                                                "the 'router' service"
+//                                            )
+//                                        );
+//                }
+//
+//                let router       = <RouterInterface> container->getShared("router"),
+//                    this->router = router;
+//            }
+//
+//            /**
+//             * Every route is uniquely differenced by a name
+//             */
+//            let route = <RouteInterface> router->getRouteByName(routeName);
+//
+//            if unlikely typeof route != "object" {
+//            throw new Exception(
+//                "Cannot obtain a route using the name '" . routeName . "'"
+//            );
+//        }
+//
+//            /**
+//             * Replace the patterns by its variables
+//             */
+//            let uri = phalcon_replace_paths(
+//            route->getPattern(),
+//                route->getReversedPaths(),
+//                uri
+//            );
+//        }
+//
+//        if local {
+//            let strUri = (string) uri;
+//            let uri = preg_replace("#(?<!:)//+#", "/", baseUri . strUri);
+//        }
+//
+//        if args {
+//            let queryString = http_build_query(args);
+//
+//            if typeof queryString == "string" && strlen(queryString) {
+//                if strpos(uri, "?") !== false {
+//                    let uri .= "&" . queryString;
+//                } else {
+//                    let uri .= "?" . queryString;
+//                }
+//            }
+//        }
+//
+//        return uri;
+//    }
+//
+
+
 }
