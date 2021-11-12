@@ -27,7 +27,7 @@ use function spl_object_hash;
 class GetSetDICest
 {
     /**
-     * Tests Phalcon\Acl\Role :: getDI()/setDI() - construct
+     * Tests Phalcon\Application\* :: getDI()/setDI() - construct
      *
      * @param UnitTester $I
      *

@@ -24,7 +24,7 @@ use UnitTester;
 class GetSetDefaultModuleCest
 {
     /**
-     * Tests Phalcon\Acl\Role :: getDefaultModule()/setDefaultModule()
+     * Tests Phalcon\Application\* :: getDefaultModule()/setDefaultModule()
      *
      * @param UnitTester $I
      *

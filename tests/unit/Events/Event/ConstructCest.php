@@ -17,27 +17,27 @@ use Phalcon\Events\Event;
 use Phalcon\Events\EventInterface;
 use UnitTester;
 
-/**
- * Class ConstructCest
- *
- * @package Phalcon\Tests\Unit\Events\Event
- */
 class ConstructCest
 {
     /**
      * Tests Phalcon\Events\Event :: __construct()
      *
-     * @param UnitTester $I
-     *
-     * @author Sid Roberts <https://github.com/SidRoberts>
-     * @since  2020-09-09
+     * @author Phalcon Team <team@phalcon.io>
+     * @since  2021-10-06
+     * @issue  https://github.com/phalcon/cphalcon/issues/15133
      */
     public function eventsEventConstruct(UnitTester $I)
     {
         $I->wantToTest('Events\Event - __construct()');
 
-        $actual = new Event('some-type:beforeSome', $this);
-        $class  = EventInterface::class;
-        $I->assertInstanceOf($class, $actual);
+        $event = new Event('test', $this);
+
+        $class = EventInterface::class;
+        $I->assertInstanceOf($class, $event);
+
+        $event = new Event('test');
+
+        $class = EventInterface::class;
+        $I->assertInstanceOf($class, $event);
     }
 }

@@ -23,7 +23,7 @@ class ArePrioritiesEnabledCest
      *
      * @param UnitTester $I
      *
-     * @author Sid Roberts <https://github.com/SidRoberts>
+     * @author Phalcon Team <team@phalcon.io>
      * @since  2020-09-09
      */
     public function eventsManagerArePrioritiesEnabled(UnitTester $I)
