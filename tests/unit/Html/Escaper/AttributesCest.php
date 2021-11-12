@@ -83,29 +83,6 @@ class AttributesCest
                 'expected'      => 'That&#039;s right',
                 'text'          => "That's right",
             ],
-            [
-                'htmlQuoteType' => ENT_HTML401,
-                'expected'      => '',
-                'text'          => null,
-            ],
-
-            [
-                'htmlQuoteType' => ENT_XML1,
-                'expected'      => '',
-                'text'          => null,
-            ],
-
-            [
-                'htmlQuoteType' => ENT_XHTML,
-                'expected'      => '',
-                'text'          => null,
-            ],
-
-            [
-                'htmlQuoteType' => ENT_HTML5,
-                'expected'      => '',
-                'text'          => null,
-            ],
         ];
     }
 }

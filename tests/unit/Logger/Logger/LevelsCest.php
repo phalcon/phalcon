@@ -24,6 +24,7 @@ use function end;
 use function file_get_contents;
 use function logsDir;
 use function preg_match;
+use function strtoupper;
 
 class LevelsCest
 {
@@ -62,22 +63,25 @@ class LevelsCest
         $I->seeInThisFile($logString);
 
         // Check if the level is in the log file
-        $I->seeInThisFile('[' . $level . ']');
+        $I->seeInThisFile('[' . strtoupper($level) . ']');
 
         // Check time content
-        $sContent = file_get_contents($fileName);
+        $content = file_get_contents($fileName);
 
         // Get time part
-        $aDate = [];
-        preg_match('/\[(.*)\]\[' . $level . '\]/', $sContent, $aDate);
-        $I->assertEquals(count($aDate), 2);
+        $matches = [];
+        preg_match(
+            '/\[(.*)\]\[' . strtoupper($level) . '\]/',
+            $content,
+            $matches
+        );
+        $I->assertEquals(count($matches), 2);
 
         // Get Extract time
-        $sDate             = end($aDate);
-        $sLogDateTime      = new DateTime($sDate);
-        $sDateTimeAfterLog = new DateTime($logTime);
-
-        $nInterval        = $sLogDateTime->diff($sDateTimeAfterLog)->format('%s');
+        $date             = end($matches);
+        $logDateTime      = new DateTime($date);
+        $dateTimeAfterLog = new DateTime($logTime);
+        $nInterval        = $logDateTime->diff($dateTimeAfterLog)->format('%s');
         $nSecondThreshold = 60;
 
         $I->assertLessThan($nSecondThreshold, $nInterval);

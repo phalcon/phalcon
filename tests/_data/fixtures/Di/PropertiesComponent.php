@@ -13,7 +13,7 @@ declare(strict_types=1);
 
 namespace Phalcon\Tests\Fixtures\Di;
 
-use Phalcon\Html\EscaperInterface;
+use Phalcon\Html\Escaper\EscaperInterface;
 
 /**
  * Class PropertiesComponent

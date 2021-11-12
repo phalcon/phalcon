@@ -16,11 +16,11 @@ namespace Phalcon\Tests\Unit\Logger\Logger;
 use Phalcon\Logger\Adapter\Stream;
 use Phalcon\Logger\Adapter\Syslog;
 use Phalcon\Logger\Logger;
-use Psr\Log\InvalidArgumentException;
 use UnitTester;
 
 use function logsDir;
 use function sprintf;
+use function strtoupper;
 
 class LogCest
 {
@@ -78,7 +78,7 @@ class LogCest
         foreach ($levels as $levelName) {
             $expected = sprintf(
                 '[%s] Message %s',
-                $levelName,
+                strtoupper($levelName),
                 $levelName
             );
 
@@ -152,7 +152,7 @@ class LogCest
         foreach ($levelsYes as $levelName) {
             $expected = sprintf(
                 '[%s] Message %s',
-                $levelName,
+                strtoupper($levelName),
                 $levelName
             );
             $I->seeInThisFile($expected);
@@ -161,7 +161,7 @@ class LogCest
         foreach ($levelsNo as $levelName) {
             $expected = sprintf(
                 '[%s] Message %s',
-                $levelName,
+                strtoupper($levelName),
                 $levelName
             );
             $I->dontSeeInThisFile($expected);
@@ -169,65 +169,5 @@ class LogCest
 
         $adapter->close();
         $I->safeDeleteFile($fileName);
-    }
-
-    /**
-     * Tests Phalcon\Logger :: log() - logLevel - exception
-     *
-     * @param UnitTester $I
-     *
-     * @author Phalcon Team <team@phalcon.io>
-     * @since  2020-09-09
-     */
-    public function loggerLogLogLevelException(UnitTester $I)
-    {
-        $I->wantToTest('Logger - log() - logLevel exception');
-
-        $logPath  = logsDir();
-        $fileName = $I->getNewFileName('log', 'log');
-        $adapter  = new Stream($logPath . $fileName);
-
-        $logger = new Logger(
-            'my-logger',
-            [
-                'one' => $adapter,
-            ]
-        );
-
-        $I->expectThrowable(
-            new InvalidArgumentException(
-                'Unknown log level'
-            ),
-            function () use ($logger) {
-                $logger->log('unknown', 'message');
-            }
-        );
-
-        $adapter->close();
-        $I->safeDeleteFile($fileName);
-    }
-
-    /**
-     * Tests Phalcon\Logger :: log()
-     *
-     * @param UnitTester $I
-     *
-     * @author Phalcon Team <team@phalcon.io>
-     * @since  2020-09-09
-     */
-    public function loggerLogSyslog(UnitTester $I)
-    {
-        $I->wantToTest('Logger - log() - syslog');
-
-        $adapter = new Syslog("php:://memory");
-
-        $logger = new Logger(
-            'my-logger',
-            [
-                'one' => $adapter,
-            ]
-        );
-
-        $logger->log(Logger::ERROR, 'Message Error');
     }
 }
