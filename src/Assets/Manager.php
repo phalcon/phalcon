@@ -1061,8 +1061,8 @@ class Manager implements InjectionAwareInterface
         /** @var Script $helper */
         $helper = $this->tagFactory->script('');
         $helper->add($src, $params);
+
         return (string) $helper;
-//        return $this->renderAttributes('<script', $params) . '></script>' . PHP_EOL;
     }
 
     /**
@@ -1292,6 +1292,4 @@ class Manager implements InjectionAwareInterface
 //        return uri;
 //    }
 //
-
-
 }
