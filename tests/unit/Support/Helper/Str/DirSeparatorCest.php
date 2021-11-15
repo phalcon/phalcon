@@ -18,6 +18,7 @@ use UnitTester;
 
 use const DIRECTORY_SEPARATOR;
 use const PHP_OS;
+use const PHP_OS_FAMILY;
 
 /**
  * Class DirSeparatorCest
@@ -42,9 +43,12 @@ class DirSeparatorCest
 
         $expected = $I->convertDirSeparator('/home/phalcon/');
         $actual   = $object('/home/phalcon');
+        var_dump(PHP_OS_FAMILY);
+        var_dump($expected);
         $I->assertEquals($expected, $actual);
 
         $expected = $I->convertDirSeparator('/home/phalcon/');
+        var_dump($expected);
         $actual   = $object('/home/phalcon//');
         $I->assertEquals($expected, $actual);
     }
