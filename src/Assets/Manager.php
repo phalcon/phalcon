@@ -19,7 +19,6 @@ use Phalcon\Assets\Inline\Css as InlineCss;
 use Phalcon\Assets\Inline\Js as InlineJs;
 use Phalcon\Di\InjectionAwareInterface;
 use Phalcon\Di\Traits\InjectionAwareTrait;
-use Phalcon\Html\Helper\Element;
 use Phalcon\Html\TagFactory;
 
 use function call_user_func_array;
@@ -29,16 +28,8 @@ use function filemtime;
 use function is_array;
 use function is_dir;
 use function is_object;
-use function is_string;
-use function parse_url;
-use function preg_match;
-use function preg_replace;
-use function rtrim;
-use function strpos;
 
 use const PHP_EOL;
-use const PHP_URL_PATH;
-
 
 /**
  * Manages collections of CSS/JavaScript assets
@@ -780,11 +771,11 @@ class Manager implements InjectionAwareInterface
 
             if (true === $join) {
                 $html .= $this->tagFactory->element(
-                    $type,
-                    $joinedContent,
-                    $attributes,
-                    true
-                ) . PHP_EOL;
+                        $type,
+                        $joinedContent,
+                        $attributes,
+                        true
+                    ) . PHP_EOL;
             }
 
             /**

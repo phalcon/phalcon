@@ -18,7 +18,6 @@ use Generator;
 use IteratorAggregate;
 use Phalcon\Traits\Php\FileTrait;
 
-use function is_bool;
 use function realpath;
 
 /**
