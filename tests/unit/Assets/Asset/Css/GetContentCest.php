@@ -17,6 +17,7 @@ use Phalcon\Assets\Asset\Css;
 use UnitTester;
 
 use function dataDir;
+use function file_get_contents;
 
 /**
  * Class GetContentCest
@@ -39,9 +40,10 @@ class GetContentCest
 
         $asset = new Css('assets/assets/1198.css');
 
-        $I->openFile(dataDir('assets/assets/1198.css'));
-
-        $actual = $asset->getContent(dataDir());
-        $I->seeFileContentsEqual($actual);
+        $expected = $I->convertDirSeparator(
+            file_get_contents(dataDir('assets/assets/1198.css'))
+        );
+        $actual   = $asset->getContent(dataDir());
+        $I->assertEquals($expected, $actual);
     }
 }

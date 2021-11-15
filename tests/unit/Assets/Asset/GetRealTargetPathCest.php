@@ -44,7 +44,7 @@ class GetRealTargetPathCest
 
         $asset = new Asset($example['type'], $example['path'], $example['local']);
 
-        $expected = $example['path'];
+        $expected = $I->convertDirSeparator($example['path']);
         $actual   = $asset->getRealTargetPath();
         $I->assertEquals($expected, $actual);
     }
