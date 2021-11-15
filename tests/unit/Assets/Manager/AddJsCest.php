@@ -102,9 +102,15 @@ class AddJsCest
         $pathData = dataDir('assets/');
         $expected = sprintf(
             "%s" . PHP_EOL . "%s" . PHP_EOL . "%s" . PHP_EOL,
-            "<script type=\"application/javascript\" src=\"{$pathData}assets/assets-version-1.js?ver=1.0.0\"></script>",
-            "<script type=\"application/javascript\" src=\"{$pathData}assets/assets-version-2.js?ver=2.0.0\"></script>",
-            "<script type=\"application/javascript\" src=\"{$pathData}assets/assets-version-3.js\"></script>"
+            "<script type=\"application/javascript\" src=\""
+                . $I->convertDirSeparator($pathData . "assets/assets-version-1.js?ver=1.0.0")
+                . "\"></script>",
+            "<script type=\"application/javascript\" src=\""
+                . $I->convertDirSeparator($pathData . "assets/assets-version-2.js?ver=2.0.0")
+                . "\"></script>",
+            "<script type=\"application/javascript\"  src=\""
+                . $I->convertDirSeparator($pathData . "assets/assets-version-3.js")
+                . "\"></script>"
         );
 
         $I->assertEquals($expected, $manager->outputJs());

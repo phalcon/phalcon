@@ -42,15 +42,15 @@ class AllCest
 
         $dump = new Dump();
 
-        $expected = trim(
-            file_get_contents(
-                dataDir('fixtures/Support/Dump/variables_output.txt')
+        $expected = $I->convertDirSeparator(
+            trim(
+                file_get_contents(
+                    dataDir('fixtures/Support/Dump/variables_output.txt')
+                )
             )
         );
 
-        $I->assertEquals(
-            $expected,
-            $dump->all($test1, $test2, $test3)
-        );
+        $actual = $dump->all($test1, $test2, $test3);
+        $I->assertEquals($expected, $actual);
     }
 }

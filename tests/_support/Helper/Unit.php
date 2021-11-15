@@ -19,87 +19,21 @@ use function is_file;
 use function is_object;
 use function rmdir;
 use function sprintf;
+use function strtolower;
 use function substr;
 use function uniqid;
 use function unlink;
 
+use const DIRECTORY_SEPARATOR;
 use const GLOB_MARK;
+use const PHP_EOL;
+use const PHP_OS;
 
 // here you can define custom actions
 // all public methods declared in helper class will be available in $I
 
 class Unit extends Module
 {
-    /**
-     * Checks if an extension is loaded and if not, skips the test
-     *
-     * @param string $extension The extension to check
-     */
-    public function checkExtensionIsLoaded(string $extension)
-    {
-        if (true !== extension_loaded($extension)) {
-            $this->skipTest(
-                sprintf("Extension '%s' is not loaded. Skipping test", $extension)
-            );
-        }
-    }
-
-    /**
-     * Throws the SkippedTestError exception to skip a test
-     *
-     * @param string $message The message to display
-     */
-    public function skipTest(string $message)
-    {
-        throw new SkippedTestError($message);
-    }
-
-    /**
-     * Returns a unique file name
-     *
-     * @param string $prefix A prefix for the file
-     * @param string $suffix A suffix for the file
-     *
-     * @return string
-     */
-    public function getNewFileName(string $prefix = '', string $suffix = 'log')
-    {
-        $prefix = ($prefix) ? $prefix . '_' : '';
-        $suffix = ($suffix) ? $suffix : 'log';
-
-        return uniqid($prefix, true) . '.' . $suffix;
-    }
-
-    /**
-     * @param string $directory
-     */
-    public function safeDeleteDirectory(string $directory)
-    {
-        $files = glob($directory . '*', GLOB_MARK);
-        foreach ($files as $file) {
-            if (substr($file, -1) == '/') {
-                $this->safeDeleteDirectory($file);
-            } else {
-                unlink($file);
-            }
-        }
-
-        if (is_dir($directory)) {
-            rmdir($directory);
-        }
-    }
-
-    /**
-     * @param string $filename
-     */
-    public function safeDeleteFile(string $filename)
-    {
-        if (file_exists($filename) && is_file($filename)) {
-            gc_collect_cycles();
-            unlink($filename);
-        }
-    }
-
     /**
      * Calls private or protected method.
      *
@@ -133,6 +67,67 @@ class Unit extends Module
     }
 
     /**
+     * Checks if an extension is loaded and if not, skips the test
+     *
+     * @param string $extension The extension to check
+     */
+    public function checkExtensionIsLoaded(string $extension)
+    {
+        if (true !== extension_loaded($extension)) {
+            $this->skipTest(
+                sprintf("Extension '%s' is not loaded. Skipping test", $extension)
+            );
+        }
+    }
+
+    /**
+     * Converts line endings and directory separators to the Windows ones
+     * if this is a windows build
+     *
+     * @param string $input
+     *
+     * @return string
+     */
+    public function convertDirSeparator(string $input): string
+    {
+        /**
+         * Tests have "\r\n" the typical PHP_EOL and "/" as the
+         * DIRECTORY_SEPARATOR. If this is a Windows platform we need to change
+         * those
+         */
+        if ('windows' === strtolower(PHP_OS)) {
+            $input = str_replace(
+                [
+                    "\r\n",
+                    "/",
+                ],
+                [
+                    PHP_EOL,
+                    DIRECTORY_SEPARATOR,
+                ],
+                $input
+            );
+        }
+
+        return $input;
+    }
+    /**
+     * Returns a unique file name
+     *
+     * @param string $prefix A prefix for the file
+     * @param string $suffix A suffix for the file
+     *
+     * @return string
+     */
+    public function getNewFileName(string $prefix = '', string $suffix = 'log')
+    {
+        $prefix = ($prefix) ? $prefix . '_' : '';
+        $suffix = ($suffix) ? $suffix : 'log';
+
+        return uniqid($prefix, true) . '.' . $suffix;
+    }
+
+    /**
      * @throws ReflectionException
      */
     public function getProtectedProperty($obj, $prop)
@@ -144,6 +139,36 @@ class Unit extends Module
         $property->setAccessible(true);
 
         return $property->getValue($obj);
+    }
+
+    /**
+     * @param string $directory
+     */
+    public function safeDeleteDirectory(string $directory)
+    {
+        $files = glob($directory . '*', GLOB_MARK);
+        foreach ($files as $file) {
+            if (substr($file, -1) == '/') {
+                $this->safeDeleteDirectory($file);
+            } else {
+                unlink($file);
+            }
+        }
+
+        if (is_dir($directory)) {
+            rmdir($directory);
+        }
+    }
+
+    /**
+     * @param string $filename
+     */
+    public function safeDeleteFile(string $filename)
+    {
+        if (file_exists($filename) && is_file($filename)) {
+            gc_collect_cycles();
+            unlink($filename);
+        }
     }
 
     /**
@@ -162,5 +187,15 @@ class Unit extends Module
             $value,
             $property->getValue($obj)
         );
+    }
+
+    /**
+     * Throws the SkippedTestError exception to skip a test
+     *
+     * @param string $message The message to display
+     */
+    public function skipTest(string $message)
+    {
+        throw new SkippedTestError($message);
     }
 }

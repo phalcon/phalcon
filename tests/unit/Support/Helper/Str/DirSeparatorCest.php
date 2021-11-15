@@ -39,11 +39,11 @@ class DirSeparatorCest
 
         $object = new DirSeparator();
 
-        $expected = '/home/phalcon/';
+        $expected = $I->convertDirSeparator('/home/phalcon/');
         $actual   = $object('/home/phalcon');
         $I->assertEquals($expected, $actual);
 
-        $expected = '/home/phalcon/';
+        $expected = $I->convertDirSeparator('/home/phalcon/');
         $actual   = $object('/home/phalcon//');
         $I->assertEquals($expected, $actual);
     }
@@ -62,7 +62,7 @@ class DirSeparatorCest
         $fileName = '';
         $object   = new DirSeparator();
 
-        $expected = DIRECTORY_SEPARATOR;
+        $expected = $I->convertDirSeparator("/");
         $actual   = $object($fileName);
         $I->assertEquals($expected, $actual);
     }

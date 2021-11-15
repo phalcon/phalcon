@@ -65,7 +65,7 @@ class BasenameCest
 
         $object   = new Basename();
         $path     = $example[0];
-        $expected = $example[1];
+        $expected = $I->convertDirSeparator($example[1]);
         $actual   = $object($path);
         $I->assertEquals($expected, $actual);
     }
@@ -77,19 +77,19 @@ class BasenameCest
     {
         return [
             [
-                DIRECTORY_SEPARATOR . 'etc' . DIRECTORY_SEPARATOR . 'sudoers.d',
+                '/etc/sudoers.d',
                 '.d',
             ],
             [
-                DIRECTORY_SEPARATOR . 'etc' . DIRECTORY_SEPARATOR . 'sudoers.d',
+                '/etc/sudoers.d',
                 '',
             ],
             [
-                DIRECTORY_SEPARATOR . 'etc' . DIRECTORY_SEPARATOR . 'passwd',
+                '/etc/passwd',
                 '',
             ],
             [
-                DIRECTORY_SEPARATOR . 'etc' . DIRECTORY_SEPARATOR . '',
+                '/etc/',
                 '',
             ],
             [
@@ -97,7 +97,7 @@ class BasenameCest
                 '',
             ],
             [
-                DIRECTORY_SEPARATOR . '',
+                '/',
                 '',
             ],
         ];
@@ -107,27 +107,27 @@ class BasenameCest
     {
         return [
             [
-                DIRECTORY_SEPARATOR . 'file' . DIRECTORY_SEPARATOR . '热爱中文.txt',
+                '/file/热爱中文.txt',
                 '热爱中文.txt',
             ],
             [
-                DIRECTORY_SEPARATOR . '中文目录' . DIRECTORY_SEPARATOR . '热爱中文.txt',
+                '/中文目录/热爱中文.txt',
                 '热爱中文.txt',
             ],
             [
-                DIRECTORY_SEPARATOR . 'myfolder' . DIRECTORY_SEPARATOR . '日本語のファイル名.txt',
+                '/myfolder/日本語のファイル名.txt',
                 '日本語のファイル名.txt',
             ],
             [
-                DIRECTORY_SEPARATOR . 'のファ' . DIRECTORY_SEPARATOR . '日本語のファイル名.txt',
+                '/のファ/日本語のファイル名.txt',
                 '日本語のファイル名.txt',
             ],
             [
-                DIRECTORY_SEPARATOR . 'root' . DIRECTORY_SEPARATOR . 'ελληνικά.txt',
+                '/root/ελληνικά.txt',
                 'ελληνικά.txt',
             ],
             [
-                DIRECTORY_SEPARATOR . 'νικά' . DIRECTORY_SEPARATOR . 'ελληνικά.txt',
+                '/νικά/ελληνικά.txt',
                 'ελληνικά.txt',
             ],
         ];
