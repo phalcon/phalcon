@@ -61,7 +61,7 @@ class GetRealSourcePathCest
 
         $asset = new Asset($example['type'], $example['path'], false);
 
-        $expected = $example['path'];
+        $expected = $I->convertDirSeparator($example['path']);
         $actual   = $asset->getRealSourcePath();
         $I->assertEquals($expected, $actual);
     }

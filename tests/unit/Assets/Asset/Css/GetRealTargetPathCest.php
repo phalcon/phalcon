@@ -41,7 +41,7 @@ class GetRealTargetPathCest
 
         $asset = new Css($example['path']);
 
-        $expected = $example['path'];
+        $expected = $I->convertDirSeparator($example['path']);
         $actual   = $asset->getRealTargetPath();
         $I->assertEquals($expected, $actual);
     }
