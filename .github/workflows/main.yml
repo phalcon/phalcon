@@ -137,8 +137,8 @@ jobs:
           fi
 
           cp tests/_config/.env.default .env
-#          php tests/_config/generate-db-schemas.php
           vendor/bin/codecept build
+#          php tests/_config/generate-db-schemas.php
 
       - name: Run Unit Tests
         if: always()
@@ -213,8 +213,8 @@ jobs:
       - name: Setup Tests
         run: |
           cp tests/_config/.env.default .env
-#          php tests/_config/generate-db-schemas.php
           vendor/bin/codecept build
+#          php tests/_config/generate-db-schemas.php
 
       - name: Run Unit Tests
         if: always()
