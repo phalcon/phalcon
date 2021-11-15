@@ -108,7 +108,7 @@ class AddJsCest
             "<script type=\"application/javascript\" src=\""
                 . $I->convertDirSeparator($pathData . "assets/assets-version-2.js?ver=2.0.0")
                 . "\"></script>",
-            "<script type=\"application/javascript\"  src=\""
+            "<script type=\"application/javascript\" src=\""
                 . $I->convertDirSeparator($pathData . "assets/assets-version-3.js")
                 . "\"></script>"
         );
