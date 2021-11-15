@@ -36,9 +36,6 @@ class GetSetDICest
         $manager = new Manager(new TagFactory(new Escaper()));
         $manager->setDI($container);
 
-        $I->assertSame(
-            $container,
-            $manager->getDI()
-        );
+        $I->assertSame($container, $manager->getDI());
     }
 }

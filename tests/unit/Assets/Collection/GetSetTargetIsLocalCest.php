@@ -17,28 +17,28 @@ use Phalcon\Assets\Collection;
 use UnitTester;
 
 /**
- * Class GetSetLocalCest
+ * Class GetSetTargetLocalCest
  *
  * @package Phalcon\Tests\Unit\Assets\Collection
  */
-class GetSetLocalCest
+class GetSetTargetIsLocalCest
 {
     /**
-     * Tests Phalcon\Assets\Collection :: isLocal() / setLocal()
+     * Tests Phalcon\Assets\Collection :: getTargetIsLocal()/setTargetIsLocal()
      *
      * @param UnitTester $I
      *
      * @author Phalcon Team <team@phalcon.io>
      * @since  2020-09-09
      */
-    public function assetsCollectionGetSetLocal(UnitTester $I)
+    public function assetsCollectionGetSetTargetIsLocal(UnitTester $I)
     {
-        $I->wantToTest('Assets\Collection - isLocal() / setLocal()');
+        $I->wantToTest('Assets\Collection - getTargetIsLocal()/setTargetIsLocal()');
 
         $collection = new Collection();
-        $I->assertTrue($collection->isLocal());
+        $I->assertEquals(true, $collection->getTargetIsLocal());
 
-        $collection->setLocal(false);
-        $I->assertFalse($collection->isLocal());
+        $collection->setTargetIsLocal(false);
+        $I->assertEquals(false, $collection->getTargetIsLocal());
     }
 }

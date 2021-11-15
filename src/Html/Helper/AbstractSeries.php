@@ -12,10 +12,6 @@ declare(strict_types=1);
 namespace Phalcon\Html\Helper;
 
 /**
- * Class AbstractSeries
- *
- * @package Phalcon\Html\Helper
- *
  * @property array $attributes
  * @property array $store
  */

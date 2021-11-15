@@ -40,14 +40,14 @@ class GetJsSourcesCest
         $uri   = 'https://assets.phalcon.io/debug/6.0.x/';
 
         $expected = sprintf(
-            '<script type="text/javascript" ' .
+            '<script type="application/javascript" ' .
             'src="%1$sassets/jquery/dist/jquery.min.js"></script>' .
-            '<script type="text/javascript" ' .
+            '<script type="application/javascript" ' .
             'src="%1$sassets/jquery-ui/jquery-ui.min.js"></script>' .
-            '<script type="text/javascript" ' .
+            '<script type="application/javascript" ' .
             'src="%1$sassets/jquery.scrollTo/jquery.scrollTo.min.js"></script>' .
-            '<script type="text/javascript" src="%1$sprettify/prettify.js"></script>' .
-            '<script type="text/javascript" src="%1$spretty.js"></script>',
+            '<script type="application/javascript" src="%1$sprettify/prettify.js"></script>' .
+            '<script type="application/javascript" src="%1$spretty.js"></script>',
             $uri
         );
 

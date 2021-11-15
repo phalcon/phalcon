@@ -16,12 +16,9 @@ namespace Phalcon\Assets;
 use Countable;
 use Generator;
 use IteratorAggregate;
-use Phalcon\Assets\Asset\Css as AssetCss;
-use Phalcon\Assets\Asset\Js as AssetJs;
-use Phalcon\Assets\Inline\Css as InlineCss;
-use Phalcon\Assets\Inline\Js as InlineJs;
 use Phalcon\Traits\Php\FileTrait;
 
+use function is_bool;
 use function realpath;
 
 /**
@@ -35,9 +32,8 @@ use function realpath;
  * @property bool   $join
  * @property bool   $isLocal
  * @property string $prefix
- * @property int    $position
  * @property string $sourcePath
- * @property bool   $targetLocal
+ * @property bool   $targetIsLocal
  * @property string $targetPath
  * @property string $targetUri
  * @property string $version
@@ -89,11 +85,6 @@ class Collection implements Countable, IteratorAggregate
     protected string $prefix = '';
 
     /**
-     * @var int
-     */
-    protected int $position = 0;
-
-    /**
      * @var string
      */
     protected string $sourcePath = '';
@@ -101,7 +92,7 @@ class Collection implements Countable, IteratorAggregate
     /**
      * @var bool
      */
-    protected bool $targetLocal = true;
+    protected bool $targetIsLocal = true;
 
     /**
      * @var string
@@ -152,14 +143,15 @@ class Collection implements Countable, IteratorAggregate
         string $version = null,
         bool $autoVersion = false
     ): Collection {
-        $isLocal = $isLocal ?: $this->isLocal;
-        $attrs   = $this->processAttributes($attributes);
-
-        $this->add(
-            new AssetCss($path, $isLocal, $filter, $attrs, $version, $autoVersion)
+        return $this->processAdd(
+            "Css",
+            $path,
+            $isLocal,
+            $filter,
+            $attributes,
+            $version,
+            $autoVersion
         );
-
-        return $this;
     }
 
     /**
@@ -204,16 +196,7 @@ class Collection implements Countable, IteratorAggregate
         bool $filter = true,
         array $attributes = []
     ): Collection {
-        $attrs = $this->processAttributes($attributes);
-        $asset = new InlineCss(
-            $content,
-            $filter,
-            $attrs
-        );
-
-        $this->codes[$asset->getAssetKey()] = $asset;
-
-        return $this;
+        return $this->processAddInline("Css", $content, $filter, $attributes);
     }
 
     /**
@@ -230,16 +213,7 @@ class Collection implements Countable, IteratorAggregate
         bool $filter = true,
         array $attributes = []
     ): Collection {
-        $attrs = $this->processAttributes($attributes);
-        $asset = new InlineJs(
-            $content,
-            $filter,
-            $attrs
-        );
-
-        $this->codes[$asset->getAssetKey()] = $asset;
-
-        return $this;
+        return $this->processAddInline("Js", $content, $filter, $attributes);
     }
 
     /**
@@ -262,14 +236,15 @@ class Collection implements Countable, IteratorAggregate
         string $version = null,
         bool $autoVersion = false
     ): Collection {
-        $isLocal = (null !== $isLocal) ? $isLocal : $this->isLocal;
-        $attrs   = $this->processAttributes($attributes);
-
-        $this->add(
-            new AssetJs($path, $isLocal, $filter, $attrs, $version, $autoVersion)
+        return $this->processAdd(
+            "Js",
+            $path,
+            $isLocal,
+            $filter,
+            $attributes,
+            $version,
+            $autoVersion
         );
-
-        return $this;
     }
 
     /**
@@ -397,9 +372,9 @@ class Collection implements Countable, IteratorAggregate
      *
      * @return bool
      */
-    public function getTargetLocal(): bool
+    public function getTargetIsLocal(): bool
     {
-        return $this->targetLocal;
+        return $this->targetIsLocal;
     }
 
     /**
@@ -543,7 +518,7 @@ class Collection implements Countable, IteratorAggregate
      *
      * @return $this
      */
-    public function setLocal(bool $flag): Collection
+    public function setIsLocal(bool $flag): Collection
     {
         $this->isLocal = $flag;
 
@@ -565,15 +540,15 @@ class Collection implements Countable, IteratorAggregate
     }
 
     /**
-     * Sets the target local
+     * Sets if the target local or not
      *
-     * @param bool $targetLocal
+     * @param bool $flag
      *
      * @return $this
      */
-    public function setTargetLocal(bool $targetLocal): Collection
+    public function setTargetIsLocal(bool $flag): Collection
     {
-        $this->targetLocal = $targetLocal;
+        $this->targetIsLocal = $flag;
 
         return $this;
     }
@@ -656,6 +631,59 @@ class Collection implements Countable, IteratorAggregate
         $this->codes[] = $asset;
 
         return true;
+    }
+
+    /**
+     * Adds an inline asset
+     *
+     * @param string      $className
+     * @param string      $path
+     * @param bool|null   $isLocal
+     * @param bool        $filter
+     * @param array       $attributes
+     * @param string|null $version
+     * @param bool        $autoVersion
+     *
+     * @return Collection
+     */
+    private function processAdd(
+        string $className,
+        string $path,
+        bool $isLocal = null,
+        bool $filter = true,
+        array $attributes = [],
+        string $version = null,
+        bool $autoVersion = false
+    ): Collection {
+        $name  = "Phalcon\\Assets\\Asset\\" . $className;
+        $flag  = (null !== $isLocal) ? $isLocal : $this->isLocal;
+        $attrs = $this->processAttributes($attributes);
+
+        $this->add(new $name($path, $flag, $filter, $attrs, $version, $autoVersion));
+
+        return $this;
+    }
+
+    /**
+     * Adds an inline asset
+     */
+    private function processAddInline(
+        string $className,
+        string $content,
+        bool $filter = true,
+        array $attributes = []
+    ): Collection {
+        $name  = "Phalcon\\Assets\\Inline\\" . $className;
+        $attrs = $this->processAttributes($attributes);
+        $asset = new $name(
+            $content,
+            $filter,
+            $attrs
+        );
+
+        $this->codes[$asset->getAssetKey()] = $asset;
+
+        return $this;
     }
 
     /**

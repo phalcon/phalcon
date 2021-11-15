@@ -64,7 +64,7 @@ class GetContentCest
         $I->wantToTest('Assets\Asset - getContent() - exception 404');
 
         $file    = 'assets/assets/1198.css';
-        $message = 'Asset\'s content for "' . dataDir($file) . '" cannot be read';
+        $message = "Asset's content for '" . dataDir($file) . "' cannot be read";
         $I->expectThrowable(
             new Exception($message),
             function () use ($file) {
@@ -98,7 +98,7 @@ class GetContentCest
         $I->wantToTest('Assets\Asset - getContent() - exception cannot read file');
 
         $file    = 'assets/assets/1198.css';
-        $message = 'Asset\'s content for "' . dataDir($file) . '" cannot be read';
+        $message = "Asset's content for '" . dataDir($file) . "' cannot be read";
         $I->expectThrowable(
             new Exception($message),
             function () use ($file) {

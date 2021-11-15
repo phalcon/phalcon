@@ -21,14 +21,6 @@ use function array_merge;
 class Script extends Style
 {
     /**
-     * @return string
-     */
-    protected function getTag(): string
-    {
-        return 'script';
-    }
-
-    /**
      * Returns the necessary attributes
      *
      * @param string $src
@@ -40,11 +32,19 @@ class Script extends Style
     {
         $required = [
             'src'  => $src,
-            'type' => 'text/javascript',
+            'type' => 'application/javascript',
         ];
 
         unset($attributes['src']);
 
         return array_merge($required, $attributes);
+    }
+
+    /**
+     * @return string
+     */
+    protected function getTag(): string
+    {
+        return "script";
     }
 }

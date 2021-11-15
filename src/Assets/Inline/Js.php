@@ -34,7 +34,7 @@ class Js extends InlineBase
     ) {
         if (true === empty($attributes)) {
             $attributes = [
-                'type' => 'text/javascript',
+                'type' => 'application/javascript',
             ];
         }
 

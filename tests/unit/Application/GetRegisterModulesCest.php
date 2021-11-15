@@ -125,7 +125,7 @@ class GetRegisterModulesCest
 
         $I->expectThrowable(
             new Exception(
-                'Module "no-module" is not registered in the application container'
+                "Module 'no-module' is not registered in the application container"
             ),
             function () {
                 $application = new ApplicationFixture();

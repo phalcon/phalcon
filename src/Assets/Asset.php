@@ -506,7 +506,7 @@ class Asset implements AssetInterface
     private function throwException(string $completePath): void
     {
         throw new Exception(
-            'Asset\'s content for "' . $completePath . '" cannot be read'
+            "Asset's content for '" . $completePath . "' cannot be read"
         );
     }
 }

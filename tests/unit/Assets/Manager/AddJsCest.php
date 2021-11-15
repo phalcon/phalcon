@@ -54,10 +54,7 @@ class AddJsCest
         $collection = $manager->get('js');
 
         foreach ($collection as $resource) {
-            $I->assertEquals(
-                'js',
-                $resource->getType()
-            );
+            $I->assertEquals('js', $resource->getType());
         }
 
         $I->assertCount(2, $collection);
@@ -105,9 +102,9 @@ class AddJsCest
         $pathData = dataDir('assets/');
         $expected = sprintf(
             "%s" . PHP_EOL . "%s" . PHP_EOL . "%s" . PHP_EOL,
-            "<script type=\"text/javascript\" src=\"{$pathData}assets/assets-version-1.js?ver=1.0.0\"></script>",
-            "<script type=\"text/javascript\" src=\"{$pathData}assets/assets-version-2.js?ver=2.0.0\"></script>",
-            "<script type=\"text/javascript\" src=\"{$pathData}assets/assets-version-3.js\"></script>"
+            "<script type=\"application/javascript\" src=\"{$pathData}assets/assets-version-1.js?ver=1.0.0\"></script>",
+            "<script type=\"application/javascript\" src=\"{$pathData}assets/assets-version-2.js?ver=2.0.0\"></script>",
+            "<script type=\"application/javascript\" src=\"{$pathData}assets/assets-version-3.js\"></script>"
         );
 
         $I->assertEquals($expected, $manager->outputJs());

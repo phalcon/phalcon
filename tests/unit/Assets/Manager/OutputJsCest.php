@@ -58,18 +58,16 @@ class OutputJsCest
         $I->wantToTest('Assets\Manager - outputJs() - implicit');
 
         $manager = new Manager(new TagFactory(new Escaper()));
-        $manager->addJs('/js/script1.js');
-        $manager->addJs('/js/script2.js');
 
-        $manager->addAsset(
-            new Js('/js/script3.js', false)
-        );
+        $manager->addJs('js/script1.js');
+        $manager->addJs('js/script2.js');
 
+        $manager->addAsset(new Js('/js/script3.js', false));
         $manager->useImplicitOutput(false);
 
-        $expected = '<script type="text/javascript" src="/js/script1.js"></script>' . PHP_EOL
-            . '<script type="text/javascript" src="/js/script2.js"></script>' . PHP_EOL
-            . '<script type="text/javascript" src="/js/script3.js"></script>' . PHP_EOL;
+        $expected = '<script type="application/javascript" src="/js/script1.js"></script>' . PHP_EOL
+            . '<script type="application/javascript" src="/js/script2.js"></script>' . PHP_EOL
+            . '<script type="application/javascript" src="/js/script3.js"></script>' . PHP_EOL;
 
         $I->assertEquals($expected, $manager->outputJs());
     }
@@ -85,8 +83,9 @@ class OutputJsCest
         $I->wantToTest('Assets\Manager - outputJs() - not implicit');
 
         $manager = new Manager(new TagFactory(new Escaper()));
-        $manager->addJs('/js/script1.js');
-        $manager->addJs('/js/script2.js');
+
+        $manager->addJs('js/script1.js');
+        $manager->addJs('js/script2.js');
 
         $manager->addAsset(
             new Js(
@@ -95,9 +94,9 @@ class OutputJsCest
             )
         );
 
-        $expected = '<script type="text/javascript" src="/js/script1.js"></script>' . PHP_EOL .
-            '<script type="text/javascript" src="/js/script2.js"></script>' . PHP_EOL .
-            '<script type="text/javascript" src="/js/script3.js"></script>' . PHP_EOL;
+        $expected = '<script type="application/javascript" src="/js/script1.js"></script>' . PHP_EOL .
+            '<script type="application/javascript" src="/js/script2.js"></script>' . PHP_EOL .
+            '<script type="application/javascript" src="/js/script3.js"></script>' . PHP_EOL;
 
         ob_start();
         $manager->outputJs();
@@ -117,16 +116,17 @@ class OutputJsCest
         $I->wantToTest('Asset/Manager - outputJs() - basic');
 
         $manager = new Manager(new TagFactory(new Escaper()));
+
         $manager->useImplicitOutput(false);
 
         $manager->collection('js')
-                ->addJs(dataDir('assets/assets/jquery.js'), false, false)
-                ->setTargetPath(outputDir('assets/combined.js'))
-                ->setTargetUri('production/combined.js')
+               ->addJs(dataDir('assets/assets/jquery.js'), false, false)
+               ->setTargetPath(outputDir('tests/assets/combined.js'))
+               ->setTargetUri('production/combined.js')
         ;
 
         $expected = sprintf(
-            '<script type="text/javascript" src="%s"></script>%s',
+            '<script type="application/javascript" src="%s"></script>%s',
             dataDir('assets/assets/jquery.js'),
             PHP_EOL
         );
@@ -145,17 +145,18 @@ class OutputJsCest
         $I->wantToTest('Asset/Manager - outputJs() - enabled join');
 
         $manager = new Manager(new TagFactory(new Escaper()));
+
         $manager->useImplicitOutput(false);
 
         $manager->collection('js')
-                ->addJs(dataDir('assets/assets/jquery.js'), false, false)
-                ->setTargetPath(outputDir('assets/combined.js'))
-                ->setTargetUri('production/combined.js')
-                ->join(true)
+               ->addJs(dataDir('assets/assets/jquery.js'), false, false)
+               ->setTargetPath(outputDir('tests/assets/combined.js'))
+               ->setTargetUri('production/combined.js')
+               ->join(true)
         ;
 
         $expected = sprintf(
-            '<script type="text/javascript" src="%s"></script>%s',
+            '<script type="application/javascript" src="%s"></script>%s',
             dataDir('assets/assets/jquery.js'),
             PHP_EOL
         );
@@ -178,13 +179,13 @@ class OutputJsCest
 
         $manager->collection('js')
                 ->addJs(dataDir('assets/assets/jquery.js'), false, false)
-                ->setTargetPath(outputDir('assets/combined.js'))
+                ->setTargetPath(outputDir('tests/assets/combined.js'))
                 ->setTargetUri('production/combined.js')
                 ->join(false)
         ;
 
         $expected = sprintf(
-            '<script type="text/javascript" src="%s"></script>%s',
+            '<script type="application/javascript" src="%s"></script>%s',
             dataDir('assets/assets/jquery.js'),
             PHP_EOL
         );
@@ -209,14 +210,14 @@ class OutputJsCest
 
         $manager->collection('js')
                 ->addJs($jsFile, false, false)
-                ->setTargetPath(outputDir('assets/combined.js'))
+                ->setTargetPath(outputDir('tests/assets/combined.js'))
                 ->setTargetUri('production/combined.js')
                 ->join(false)
                 ->addFilter(new None())
         ;
 
         $expected = sprintf(
-            '<script type="text/javascript" src="%s"></script>%s',
+            '<script type="application/javascript" src="%s"></script>%s',
             dataDir('assets/assets/jquery.js'),
             PHP_EOL
         );
@@ -239,7 +240,7 @@ class OutputJsCest
         $manager
             ->collection('header')
             ->setPrefix('http:://cdn.example.com/')
-            ->setLocal(false)
+            ->setIsLocal(false)
             ->addJs('js/script1.js')
             ->addJs('js/script2.js')
             ->addCss('css/styles1.css')
@@ -248,14 +249,11 @@ class OutputJsCest
 
         $expectedJS = sprintf(
             "%s" . PHP_EOL . "%s" . PHP_EOL,
-            '<script type="text/javascript" src="http:://cdn.example.com/js/script1.js"></script>',
-            '<script type="text/javascript" src="http:://cdn.example.com/js/script2.js"></script>'
+            '<script type="application/javascript" src="http:://cdn.example.com/js/script1.js"></script>',
+            '<script type="application/javascript" src="http:://cdn.example.com/js/script2.js"></script>'
         );
 
-        $I->assertEquals(
-            $expectedJS,
-            $manager->outputJs('header')
-        );
+        $I->assertEquals($expectedJS, $manager->outputJs('header'));
 
 
         $expectedCSS = sprintf(
@@ -266,10 +264,7 @@ class OutputJsCest
             'href="http:://cdn.example.com/css/styles2.css" />'
         );
 
-        $I->assertEquals(
-            $expectedCSS,
-            $manager->outputCss('header')
-        );
+        $I->assertEquals($expectedCSS, $manager->outputCss('header'));
     }
 
     /**
@@ -294,18 +289,18 @@ class OutputJsCest
                 ->addJs($jsFile)
                 ->join(true)
                 ->addFilter(new JsMin())
-                ->setTargetPath(outputDir("assets/{$file}"))
-                ->setTargetLocal(false)
+                ->setTargetPath(outputDir("tests/assets/{$file}"))
+                ->setTargetIsLocal(false)
                 ->setPrefix('//phalcon.io/')
                 ->setTargetUri('js/jquery.js')
         ;
 
         $I->assertEquals(
-            '<script type="text/javascript" src="//phalcon.io/js/jquery.js"></script>' . PHP_EOL,
+            '<script type="application/javascript" src="//phalcon.io/js/jquery.js"></script>' . PHP_EOL,
             $manager->outputJs('js')
         );
 
-        $I->seeFileFound(outputDir("assets/{$file}"));
-        $I->safeDeleteFile(outputDir("assets/{$file}"));
+        $I->seeFileFound(outputDir("tests/assets/{$file}"));
+        $I->safeDeleteFile(outputDir("tests/assets/{$file}"));
     }
 }
