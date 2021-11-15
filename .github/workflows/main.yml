@@ -133,7 +133,7 @@ jobs:
         shell: bash
         run: |
           if [ "${{ runner.os }}" = "Linux" ]; then
-            ./.ci/linux-setup-locales.sh
+            ./config/ci/linux-setup-locales.sh
           fi
 
           cp tests/_config/.env.default .env
@@ -194,7 +194,7 @@ jobs:
       - name: Prepare test Environment
         run: |
           echo "::group::Set up locales"
-          ./.ci/linux-setup-locales.sh
+          ./config/ci/linux-setup-locales.sh
           echo "::endgroup::"
 
       - name: Get Composer Cache Directory
