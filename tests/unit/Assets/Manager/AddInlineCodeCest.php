@@ -24,6 +24,8 @@ use function ob_end_clean;
 use function ob_get_contents;
 use function ob_start;
 
+use const PHP_EOL;
+
 class AddInlineCodeCest
 {
     use DiTrait;
@@ -61,7 +63,7 @@ class AddInlineCodeCest
         $asset = new Inline('css', 'p {color: #000099}');
         $manager->addInlineCode($asset);
 
-        $expected = "<style>p {color: #000099}</style>";
+        $expected = "<style>p {color: #000099}</style>" . PHP_EOL;
 
         ob_start();
         $manager->outputInlineCss();

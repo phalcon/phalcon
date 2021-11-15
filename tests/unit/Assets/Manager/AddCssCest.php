@@ -38,10 +38,7 @@ class AddCssCest
         $collection = $manager->get('css');
 
         foreach ($collection as $resource) {
-            $I->assertEquals(
-                'css',
-                $resource->getType()
-            );
+            $I->assertEquals('css', $resource->getType());
         }
 
         $I->assertCount(2, $collection);
@@ -68,15 +65,8 @@ class AddCssCest
             ;
         }
 
-        $I->assertCount(
-            1,
-            $manager->getCss()
-        );
-
-        $I->assertCount(
-            1,
-            $manager->getJs()
-        );
+        $I->assertCount(1, $manager->getCss());
+        $I->assertCount(1, $manager->getJs());
 
         for ($i = 0; $i < 2; $i++) {
             $manager
@@ -85,14 +75,7 @@ class AddCssCest
             ;
         }
 
-        $I->assertCount(
-            3,
-            $manager->getCss()
-        );
-
-        $I->assertCount(
-            3,
-            $manager->getJs()
-        );
+        $I->assertCount(3, $manager->getCss());
+        $I->assertCount(3, $manager->getJs());
     }
 }

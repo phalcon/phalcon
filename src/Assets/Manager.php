@@ -20,19 +20,25 @@ use Phalcon\Assets\Inline\Js as InlineJs;
 use Phalcon\Di\InjectionAwareInterface;
 use Phalcon\Di\Traits\InjectionAwareTrait;
 use Phalcon\Html\Helper\Element;
-use Phalcon\Html\Helper\Link;
-use Phalcon\Html\Helper\Script;
 use Phalcon\Html\TagFactory;
 
 use function call_user_func_array;
+use function file_exists;
+use function file_put_contents;
 use function filemtime;
-use function htmlspecialchars;
 use function is_array;
+use function is_dir;
 use function is_object;
-use function is_resource;
+use function is_string;
+use function parse_url;
+use function preg_match;
+use function preg_replace;
+use function rtrim;
+use function strpos;
 
-use const ENT_QUOTES;
 use const PHP_EOL;
+use const PHP_URL_PATH;
+
 
 /**
  * Manages collections of CSS/JavaScript assets
@@ -288,19 +294,20 @@ class Manager implements InjectionAwareInterface
      * Returns true or false if collection exists.
      *
      * ```php
-     * if ($assets->exists("jsHeader")) {
+     * if ($manager->exists("jsHeader")) {
      *     // \Phalcon\Assets\Collection
-     *     $collection = $assets->get("jsHeader");
+     *     $collection = $manager->get("jsHeader");
      * }
      * ```
      *
      * @param string $name
      *
      * @return bool
+     * @deprecated
      */
     public function exists(string $name): bool
     {
-        return isset($this->collections[$name]);
+        return $this->has($name);
     }
 
     /**
@@ -363,6 +370,25 @@ class Manager implements InjectionAwareInterface
     }
 
     /**
+     * Returns true or false if collection exists.
+     *
+     * ```php
+     * if ($manager->exists("jsHeader")) {
+     *     // \Phalcon\Assets\Collection
+     *     $collection = $manager->get("jsHeader");
+     * }
+     * ```
+     *
+     * @param string $name
+     *
+     * @return bool
+     */
+    public function has(string $name): bool
+    {
+        return isset($this->collections[$name]);
+    }
+
+    /**
      * Traverses a collection calling the callback to generate its HTML
      *
      * @param Collection $collection
@@ -379,8 +405,6 @@ class Manager implements InjectionAwareInterface
         $filteredJoinedContent = '';
         $join                  = false;
         $output                = '';
-        $sourceBasePath        = null;
-        $targetBasePath        = null;
 
         $callbackMethod = ('css' === $type) ? 'cssLink' : 'jsLink';
         $callback       = [$this, $callbackMethod];
@@ -401,7 +425,7 @@ class Manager implements InjectionAwareInterface
          */
         if (true !== empty($filters)) {
             /**
-             * Check for global options in the assets manager. The source and
+             * Check for global options in the asset manager. The source and
              * target base path are global locations where all assets are read
              * and written respectively
              */
@@ -467,10 +491,9 @@ class Manager implements InjectionAwareInterface
         /** @var Asset $asset */
         foreach ($assets as $asset) {
             $filterNeeded = false;
-            $type         = $asset->getType();
 
             /**
-             * If the collection must not be joined we must print a HTML for
+             * If the collection must not be joined we must print HTML for
              * each one
              */
             if (true !== empty($filters)) {
@@ -529,7 +552,7 @@ class Manager implements InjectionAwareInterface
                 }
             } else {
                 /**
-                 * If there are not filters, just print/buffer the HTML
+                 * If there are no filters, just print/buffer the HTML
                  */
                 $prefixedPath = $this->calculatePrefixedPath(
                     $collection,
@@ -595,7 +618,7 @@ class Manager implements InjectionAwareInterface
                      */
                     if (true === $join) {
                         $filteredJoinedContent .= $filteredContent;
-                        if ($type !== $typeCss) {
+                        if ($asset->getType() !== $typeCss) {
                             $filteredJoinedContent .= ';';
                         }
                     }
@@ -673,7 +696,7 @@ class Manager implements InjectionAwareInterface
                 $callback,
                 $collection->getAttributes(),
                 $prefixedPath,
-                $collection->getTargetLocal()
+                $collection->getTargetIsLocal()
             );
 
             /**
@@ -726,9 +749,6 @@ class Manager implements InjectionAwareInterface
         $join          = $collection->getJoin();
 
         if (true !== empty($codes)) {
-            /** @var Element $tagElement */
-            $tagElement = $this->tagFactory->newInstance('element');
-
             /** @var Inline $code */
             foreach ($codes as $code) {
                 $attributes = $code->getAttributes();
@@ -752,12 +772,19 @@ class Manager implements InjectionAwareInterface
                 if (true === $join) {
                     $joinedContent .= $content;
                 } else {
-                    $html .= $tagElement($type, $content, $attributes, true);
+                    $html .= $this
+                            ->tagFactory
+                            ->element($type, $content, $attributes, true) . PHP_EOL;
                 }
             }
 
             if (true === $join) {
-                $html .= $tagElement($type, $joinedContent, $attributes, true);
+                $html .= $this->tagFactory->element(
+                    $type,
+                    $joinedContent,
+                    $attributes,
+                    true
+                ) . PHP_EOL;
             }
 
             /**
@@ -929,55 +956,13 @@ class Manager implements InjectionAwareInterface
      */
     private function cssLink($parameters = [], bool $local = true): string
     {
-        $params = $parameters;
-        if (true !== is_array($parameters)) {
-            $params = [$parameters, $local];
-        }
-
-        if (true === isset($params[1])) {
-            $local = (bool) $params[1];
-        } else {
-            if (true === isset($params['local'])) {
-                $local = (bool) $params['local'];
-
-                unset($params['local']);
-            }
-        }
-
-        if (true !== isset($params['type'])) {
-            $params['type'] = 'text/css';
-        }
-
-        if (true !== isset($params['href'])) {
-            $params['href'] = '';
-            if (true === isset($params[0])) {
-                $params['href'] = $params[0];
-            }
-        }
-        $href = $params['href'];
-        unset($params['href']);
-
-        if (true !== isset($params['rel'])) {
-            $params['rel'] = 'stylesheet';
-        }
-
-        /**
-         * URLs are generated through the "url" service
-         *
-         * @todo Check URL service
-         */
-        if (true === $local) {
-//            $params['href'] = self::getUrlService()->getStatic(params["href"]);
-        }
-
-
-        $params = $this->orderAttributes($params);
-        /** @var Link $helper */
-        $helper = $this->tagFactory->link('');
-        $helper->add($href, $params);
-
-        return (string) $helper;
-//        return $this->renderAttributes('<link', $params) . ' />' . PHP_EOL;
+        return $this->processParameters(
+            $parameters,
+            $local,
+            "link",
+            "text/css",
+            "href"
+        );
     }
 
     /**
@@ -1020,276 +1005,76 @@ class Manager implements InjectionAwareInterface
      */
     private function jsLink($parameters = [], bool $local = true): string
     {
+        return $this->processParameters(
+            $parameters,
+            $local,
+            "script",
+            "application/javascript",
+            "src"
+        );
+    }
+
+    /**
+     * Processes common parameters for js/css link generation
+     */
+    private function processParameters(
+        $parameters,
+        bool $local,
+        string $helperClass,
+        string $type,
+        string $name
+    ): string {
         $params = $parameters;
-        if (true !== is_array($parameters)) {
+
+        if (true !== is_array($params)) {
             $params = [$parameters, $local];
         }
 
         if (true === isset($params[1])) {
             $local = (bool) $params[1];
+            unset($params[1]);
         } else {
-            if (true === isset($params['local'])) {
-                $local = (bool) $params['local'];
+            if (true === isset($params["local"])) {
+                $local = (bool) $params["local"];
 
-                unset($params['local']);
+                unset($params["local"]);
             }
         }
 
-        if (true !== isset($params['type'])) {
-            $params['type'] = 'text/javascript';
+        if (true !== isset($params["type"])) {
+            $params["type"] = $type;
         }
 
-        if (true !== isset($params['src'])) {
-            $params['src'] = '';
+        /**
+         * Only for css
+         */
+        if ("link" === $helperClass) {
+            $params["rel"] = "stylesheet";
+        }
+
+        if (true !== isset($params[$name])) {
+            $params[$name] = "";
             if (true === isset($params[0])) {
-                $params['src'] = $params[0];
+                $params[$name] = $params[0];
+                unset($params[0]);
             }
         }
-        $src = $params['src'];
-        unset($params['src']);
+
+        $tag = $params[$name];
+        unset($params[$name]);
 
         /**
          * URLs are generated through the "url" service
-         *
-         * @todo Check URL service
          */
         if (true === $local) {
-//            $params['src'] = self::getUrlService()->getStatic(params["src"]);
+            $tag = "/" . ltrim($tag, "/");
         }
 
-        $params = $this->orderAttributes($params);
-        /** @var Script $helper */
-        $helper = $this->tagFactory->script('');
-        $helper->add($src, $params);
+        $helper = $this->tagFactory->newInstance($helperClass);
+
+        $helper->__invoke(""); // no indentation
+        $helper->add($tag, $params);
 
         return (string) $helper;
     }
-
-    /**
-     * @param string $code
-     * @param array  $attributes
-     *
-     * @return string
-     * @throws Exception
-     */
-    private function renderAttributes(string $code, array $attributes): string
-    {
-        $order = [
-            'rel'    => null,
-            'type'   => null,
-            'for'    => null,
-            'src'    => null,
-            'href'   => null,
-            'action' => null,
-            'id'     => null,
-            'name'   => null,
-            'value'  => null,
-            'class'  => null,
-        ];
-
-        $attrs = [];
-        foreach ($order as $key => $value) {
-            if (true === isset($attributes[$key])) {
-                $attrs[$key] = $attributes[$key];
-            }
-        }
-
-        foreach ($attributes as $key => $value) {
-            if (true !== isset($attrs[$key])) {
-                $attrs[$key] = $value;
-            }
-        }
-
-        unset($attrs['escape']);
-
-        $newCode = $code;
-        foreach ($attrs as $key => $value) {
-            if (true === is_string($key) && null !== $value) {
-                if (true === is_array($value) || true === is_resource($value)) {
-                    throw new Exception(
-                        'Value at index: "' . $key . '" type: "' .
-                        gettype($value) . '" cannot be rendered'
-                    );
-                }
-
-                $newCode .= ' '
-                    . $key
-                    . '="'
-                    . htmlspecialchars(
-                        $value,
-                        ENT_QUOTES,
-                        'utf-8',
-                        true
-                    )
-                    . '"';
-            }
-        }
-
-        return $newCode;
-    }
-
-    /**
-     * @param string $code
-     * @param array  $attributes
-     *
-     * @return string
-     * @throws Exception
-     */
-    private function orderAttributes(array $attributes): array
-    {
-        $order = [
-            'rel'    => null,
-            'type'   => null,
-            'for'    => null,
-            'src'    => null,
-            'href'   => null,
-            'action' => null,
-            'id'     => null,
-            'name'   => null,
-            'value'  => null,
-            'class'  => null,
-        ];
-
-        $attrs = [];
-        foreach ($order as $key => $value) {
-            if (true === isset($attributes[$key])) {
-                $attrs[$key] = $attributes[$key];
-            }
-        }
-
-        foreach ($attributes as $key => $value) {
-            if (true !== isset($attrs[$key])) {
-                $attrs[$key] = $value;
-            }
-        }
-
-        return $attrs;
-    }
-//
-//
-//
-//    public function getStatic(var uri = null) -> string
-//    {
-//        return this->get(
-//            uri,
-//            null,
-//            null,
-//            this->getStaticBaseUri()
-//        );
-//    }
-//
-//    /**
-//     * Returns the prefix for all the generated urls. By default /
-//     */
-//    public function getBaseUri(): string
-//    {
-//        $phpSelf = $_SERVER["PHP_SELF"] ?? null;
-//        $uri     = null;
-//        if (null !== $phpSelf) {
-//            $uri = phalcon_get_uri($phpSelf);
-//        }
-//
-//        if (null !== $uri) {
-//            return "/" . $uri . "/";
-//        }
-//
-//        return "/";
-//    }
-//    public function get(var uri = null, var args = null, bool local = null, var baseUri = null) -> string
-//    {
-//        string strUri;
-//        var router, container, routeName, route, queryString;
-//
-//        if local == null {
-//            if typeof uri == "string" && (memstr(uri, "//") || memstr(uri, ":")) {
-//                if preg_match("#^((//)|([a-z0-9]+://)|([a-z0-9]+:))#i", uri) {
-//                   let local = false;
-//                } else {
-//                let local = true;
-//                }
-//            } else {
-//                let local = true;
-//            }
-//        }
-//
-//        if typeof baseUri != "string" {
-//        let baseUri = this->getBaseUri();
-//        }
-//
-//        if typeof uri == "array" {
-//        if unlikely !fetch routeName, uri["for"] {
-//            throw new Exception(
-//                "It's necessary to define the route name with the parameter 'for'"
-//            );
-//        }
-//
-//            let router = this->router;
-//
-//            /**
-//             * Check if the router has not previously set
-//             */
-//            if unlikely !router {
-//            let container = <DiInterface> this->container;
-//
-//                if unlikely typeof container != "object" {
-//                throw new Exception(
-//                    Exception::containerServiceNotFound(
-//                        "the 'router' service"
-//                    )
-//                );
-//            }
-//
-//                if unlikely !container->has("router") {
-//                                        throw new Exception(
-//                                            Exception::containerServiceNotFound(
-//                                                "the 'router' service"
-//                                            )
-//                                        );
-//                }
-//
-//                let router       = <RouterInterface> container->getShared("router"),
-//                    this->router = router;
-//            }
-//
-//            /**
-//             * Every route is uniquely differenced by a name
-//             */
-//            let route = <RouteInterface> router->getRouteByName(routeName);
-//
-//            if unlikely typeof route != "object" {
-//            throw new Exception(
-//                "Cannot obtain a route using the name '" . routeName . "'"
-//            );
-//        }
-//
-//            /**
-//             * Replace the patterns by its variables
-//             */
-//            let uri = phalcon_replace_paths(
-//            route->getPattern(),
-//                route->getReversedPaths(),
-//                uri
-//            );
-//        }
-//
-//        if local {
-//            let strUri = (string) uri;
-//            let uri = preg_replace("#(?<!:)//+#", "/", baseUri . strUri);
-//        }
-//
-//        if args {
-//            let queryString = http_build_query(args);
-//
-//            if typeof queryString == "string" && strlen(queryString) {
-//                if strpos(uri, "?") !== false {
-//                    let uri .= "&" . queryString;
-//                } else {
-//                    let uri .= "?" . queryString;
-//                }
-//            }
-//        }
-//
-//        return uri;
-//    }
-//
 }

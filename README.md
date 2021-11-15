@@ -31,24 +31,17 @@ Phalcon Framework
 
 ## Remaining refactoring - alignment with `cphalcon` (v5) 
 - Annotations
-- Application
 - Assets
 - Cli
 - DataMapper
 - Db
-- Di
 - Dispatcher
 - Domain
-- Escaper
-- Events
 - Forms
-- Helper
 - Html
 - Http
 - Image
 - Loader
-- Logger
-- Messages
 - Mvc
 - Paginator
 - Session

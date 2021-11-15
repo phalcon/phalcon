@@ -17,11 +17,13 @@ use Phalcon\Assets\Asset\Css;
 use Phalcon\Assets\Manager;
 use Phalcon\Html\Escaper;
 use Phalcon\Html\TagFactory;
-use Phalcon\Tests\Fixtures\Assets\CustomTag;
 use Phalcon\Tests\Fixtures\Assets\TrimFilter;
 use Phalcon\Tests\Fixtures\Assets\UppercaseFilter;
 use Phalcon\Tests\Fixtures\Traits\DiTrait;
 use UnitTester;
+
+use function cacheDir;
+use function outputDir;
 
 class OutputCssCest
 {
@@ -57,16 +59,13 @@ class OutputCssCest
             new Css('/css/style.css', false)
         );
 
-        $expected = '<link rel="stylesheet" type="text/css" href="css/style1.css" />' . PHP_EOL
-            . '<link rel="stylesheet" type="text/css" href="css/style2.css" />' . PHP_EOL
+        $expected = '<link rel="stylesheet" type="text/css" href="/css/style1.css" />' . PHP_EOL
+            . '<link rel="stylesheet" type="text/css" href="/css/style2.css" />' . PHP_EOL
             . '<link rel="stylesheet" type="text/css" href="/css/style.css" />' . PHP_EOL;
 
         $manager->useImplicitOutput(false);
 
-        $I->assertEquals(
-            $expected,
-            $manager->outputCss()
-        );
+        $I->assertEquals($expected, $manager->outputCss());
     }
 
     /**
@@ -81,12 +80,9 @@ class OutputCssCest
 
         $manager = new Manager(new TagFactory(new Escaper()));
 
-        $manager->addCss('/css/style1.css');
-        $manager->addCss('/css/style2.css');
-
-        $manager->addAsset(
-            new Css('/css/style.css', false)
-        );
+        $manager->addCss('css/style1.css');
+        $manager->addCss('css/style2.css');
+        $manager->addAsset(new Css('/css/style.css', false));
 
         $expected = '<link rel="stylesheet" type="text/css" href="/css/style1.css" />' . PHP_EOL
             . '<link rel="stylesheet" type="text/css" href="/css/style2.css" />' . PHP_EOL
@@ -115,32 +111,30 @@ class OutputCssCest
         );
 
         $fileName = $I->getNewFileName('assets_', 'css');
+        $fileName = outputDir('tests/assets/' . $fileName);
+        $cssFile  = dataDir('assets/assets/1198.css');
+        $manager  = new Manager(new TagFactory(new Escaper()));
 
-        $manager = new Manager(new TagFactory(new Escaper()));
         $manager->useImplicitOutput(false);
 
-        $css     = $manager->collection('css');
-        $cssFile = dataDir('assets/assets/1198.css');
+        $css = $manager->collection('css');
 
-        $css->setTargetPath(cacheDir($fileName));
-
-        $css->addCss($cssFile);
-        $css->addFilter(new UppercaseFilter());
-        $css->addFilter(new TrimFilter());
-        $css->join(true);
+        $css
+            ->setTargetPath($fileName)
+            ->addCss($cssFile)
+            ->addFilter(new UppercaseFilter())
+            ->addFilter(new TrimFilter())
+            ->join(true)
+        ;
 
         $manager->outputCss('css');
 
-        $I->openFile(
-            cacheDir($fileName)
-        );
+        $I->openFile($fileName);
 
         $I->seeFileContentsEqual(
             'A{TEXT-DECORATION:NONE;}B{FONT-WEIGHT:BOLD;}'
         );
 
-        $I->safeDeleteFile(
-            cacheDir($fileName)
-        );
+        $I->safeDeleteFile($fileName);
     }
 }

@@ -7,16 +7,6 @@ $root = dirname(realpath(__DIR__) . DIRECTORY_SEPARATOR) . DIRECTORY_SEPARATOR;
 
 require_once $root . 'tests/_config/functions.php';
 
-$folders = [
-    cacheDir(),
-    logsDir(),
-    outputDir('assets'),
-];
-
-foreach ($folders as $folder) {
-    if (true !== file_exists($folder)) {
-        mkdir($folder);
-    }
-}
-
+loadIni();
+loadFolders();
 loadDefined();

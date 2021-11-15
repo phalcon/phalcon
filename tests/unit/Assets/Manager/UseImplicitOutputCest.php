@@ -51,10 +51,7 @@ class UseImplicitOutputCest
 
         $manager->useImplicitOutput(false);
 
-        $I->assertEquals(
-            $expected,
-            $manager->outputCss('footer')
-        );
+        $I->assertEquals($expected, $manager->outputCss('footer'));
     }
 
     /**
@@ -71,7 +68,7 @@ class UseImplicitOutputCest
         $manager
             ->collection('header')
             ->setPrefix('http:://cdn.example.com/')
-            ->setLocal(false)
+            ->setIsLocal(false)
             ->addJs('js/script1.js')
             ->addJs('js/script2.js')
         ;
@@ -80,13 +77,10 @@ class UseImplicitOutputCest
 
         $expected = sprintf(
             "%s" . PHP_EOL . "%s" . PHP_EOL,
-            '<script type="text/javascript" src="http:://cdn.example.com/js/script1.js"></script>',
-            '<script type="text/javascript" src="http:://cdn.example.com/js/script2.js"></script>'
+            '<script type="application/javascript" src="http:://cdn.example.com/js/script1.js"></script>',
+            '<script type="application/javascript" src="http:://cdn.example.com/js/script2.js"></script>'
         );
 
-        $I->assertEquals(
-            $expected,
-            $manager->outputJs('header')
-        );
+        $I->assertEquals($expected, $manager->outputJs('header'));
     }
 }

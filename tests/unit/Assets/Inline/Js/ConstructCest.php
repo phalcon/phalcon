@@ -91,7 +91,7 @@ class ConstructCest
         $asset = new Js('<script>alert("Hello");</script>');
 
         $expected = [
-            'type' => 'text/javascript',
+            'type' => 'application/javascript',
         ];
         $actual   = $asset->getAttributes();
         $I->assertEquals($expected, $actual);

@@ -841,19 +841,19 @@ class Debug
      */
     public function getJsSources(): string
     {
-        return '<script type="text/javascript" src="'
+        return '<script type="application/javascript" src="'
             . $this->uri
             . 'assets/jquery/dist/jquery.min.js"></script>'
-            . '<script type="text/javascript" src="'
+            . '<script type="application/javascript" src="'
             . $this->uri
             . 'assets/jquery-ui/jquery-ui.min.js"></script>'
-            . '<script type="text/javascript" src="'
+            . '<script type="application/javascript" src="'
             . $this->uri
             . 'assets/jquery.scrollTo/jquery.scrollTo.min.js"></script>'
-            . '<script type="text/javascript" src="'
+            . '<script type="application/javascript" src="'
             . $this->uri
             . 'prettify/prettify.js"></script>'
-            . '<script type="text/javascript" src="'
+            . '<script type="application/javascript" src="'
             . $this->uri
             . 'pretty.js"></script>';
     }
