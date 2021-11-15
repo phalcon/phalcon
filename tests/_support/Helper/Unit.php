@@ -95,7 +95,7 @@ class Unit extends Module
          * DIRECTORY_SEPARATOR. If this is a Windows platform we need to change
          * those
          */
-        if (PHP_OS_FAMILY !== 'Windows') {
+        if (PHP_OS_FAMILY === 'Windows') {
             $input = str_replace(["\r\n", "/"], ["\n", "\\",], $input);
         }
 
