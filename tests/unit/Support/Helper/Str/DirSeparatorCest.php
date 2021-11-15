@@ -65,8 +65,6 @@ class DirSeparatorCest
 
         $expected = $I->convertDirSeparator("/");
         $actual   = $object($fileName);
-        var_dump("OSOSOSOSOS");
-        var_dump(PHP_OS);
         $I->assertEquals($expected, $actual);
     }
 }
