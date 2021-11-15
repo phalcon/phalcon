@@ -763,19 +763,22 @@ class Manager implements InjectionAwareInterface
                 if (true === $join) {
                     $joinedContent .= $content;
                 } else {
-                    $html .= $this
-                            ->tagFactory
-                            ->element($type, $content, $attributes, true) . PHP_EOL;
+                    $html .= $this->tagFactory->element(
+                        $type,
+                        $content,
+                        $attributes,
+                        true
+                    ) . PHP_EOL;
                 }
             }
 
             if (true === $join) {
                 $html .= $this->tagFactory->element(
-                        $type,
-                        $joinedContent,
-                        $attributes,
-                        true
-                    ) . PHP_EOL;
+                    $type,
+                    $joinedContent,
+                    $attributes,
+                    true
+                ) . PHP_EOL;
             }
 
             /**
@@ -814,6 +817,7 @@ class Manager implements InjectionAwareInterface
      * @param string|null $name
      *
      * @return string
+     * @throws Exception
      */
     public function outputInlineJs(string $name = null): string
     {
