@@ -112,7 +112,7 @@ class Unit extends Module
     public function getNewFileName(string $prefix = '', string $suffix = 'log')
     {
         $prefix = ($prefix) ? $prefix . '_' : '';
-        $suffix = ($suffix) ? $suffix : 'log';
+        $suffix = ($suffix) ?: 'log';
 
         return uniqid($prefix, true) . '.' . $suffix;
     }
