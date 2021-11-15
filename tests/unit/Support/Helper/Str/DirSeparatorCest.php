@@ -41,11 +41,17 @@ class DirSeparatorCest
 
         $object = new DirSeparator();
 
-        $expected = $I->convertDirSeparator('/home/phalcon/');
+        $expected = '/home/phalcon/';
+        if ('Windows' === PHP_OS_FAMILY) {
+            $expected = '\home\phalcon\\';
+        }
         $actual   = $object('/home/phalcon');
         $I->assertEquals($expected, $actual);
 
-        $expected = $I->convertDirSeparator('/home/phalcon/');
+        $expected = '/home/phalcon/';
+        if ('Windows' === PHP_OS_FAMILY) {
+            $expected = '\home\phalcon\\';
+        }
         $actual   = $object('/home/phalcon//');
         $I->assertEquals($expected, $actual);
     }
@@ -64,7 +70,10 @@ class DirSeparatorCest
         $fileName = '';
         $object   = new DirSeparator();
 
-        $expected = $I->convertDirSeparator("/");
+        $expected = "/";
+        if ('Windows' === PHP_OS_FAMILY) {
+            $expected = '\\';
+        }
         $actual   = $object($fileName);
         $I->assertEquals($expected, $actual);
     }
