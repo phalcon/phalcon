@@ -16,6 +16,8 @@ namespace Phalcon\Tests\Unit\Support\Helper\Str;
 use Phalcon\Support\Helper\Str\DirSeparator;
 use UnitTester;
 
+use const DIRECTORY_SEPARATOR;
+
 /**
  * Class DirSeparatorCest
  *
@@ -60,7 +62,7 @@ class DirSeparatorCest
         $fileName = '';
         $object   = new DirSeparator();
 
-        $expected = '/';
+        $expected = DIRECTORY_SEPARATOR;
         $actual   = $object($fileName);
         $I->assertEquals($expected, $actual);
     }
