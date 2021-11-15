@@ -76,8 +76,8 @@ abstract class AbstractApplication implements InjectionAwareInterface, EventsAwa
     {
         if (true !== isset($this->modules[$name])) {
             throw new Exception(
-                'Module "' . $name
-                . '" is not registered in the application container'
+                "Module '" . $name
+                . "' is not registered in the application container"
             );
         }
 
