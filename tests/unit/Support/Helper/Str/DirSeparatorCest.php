@@ -17,6 +17,7 @@ use Phalcon\Support\Helper\Str\DirSeparator;
 use UnitTester;
 
 use const DIRECTORY_SEPARATOR;
+use const PHP_OS;
 
 /**
  * Class DirSeparatorCest
@@ -64,6 +65,8 @@ class DirSeparatorCest
 
         $expected = $I->convertDirSeparator("/");
         $actual   = $object($fileName);
+        var_dump("OSOSOSOSOS");
+        var_dump(PHP_OS);
         $I->assertEquals($expected, $actual);
     }
 }
