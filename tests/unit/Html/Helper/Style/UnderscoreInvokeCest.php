@@ -48,6 +48,7 @@ class UnderscoreInvokeCest
         $helper  = new Style($escaper);
 
         $result = $helper($example['indent'], $example['delimiter']);
+        $result->setStyle($example['style']);
         foreach ($example['add'] as $add) {
             $result->add($add[0], $add[1]);
         }
@@ -56,10 +57,14 @@ class UnderscoreInvokeCest
         $actual   = (string) $result;
         $I->assertEquals($expected, $actual);
 
+        /**
+         * Try the TagFactory
+         */
         $factory = new TagFactory($escaper);
         $locator = $factory->newInstance('style');
 
         $result = $locator($example['indent'], $example['delimiter']);
+        $result->setStyle($example['style']);
         foreach ($example['add'] as $add) {
             $result->add($add[0], $add[1]);
         }
@@ -75,9 +80,10 @@ class UnderscoreInvokeCest
     {
         return [
             [
-                'message'   => 'base',
+                'message'   => 'link base',
                 'indent'    => '    ',
                 'delimiter' => PHP_EOL,
+                'style'     => false,
                 'add'       => [
                     [
                         "custom.css",
@@ -94,9 +100,10 @@ class UnderscoreInvokeCest
                     . "href=\"print.css\" media=\"print\" />" . PHP_EOL,
             ],
             [
-                'message'   => 'with indent and delimiter',
+                'message'   => 'link with indent and delimiter',
                 'indent'    => '--',
                 'delimiter' => '+',
+                'style'     => false,
                 'add'       => [
                     [
                         "custom.css",
@@ -110,6 +117,46 @@ class UnderscoreInvokeCest
                 'result'    => "--<link rel=\"stylesheet\" type=\"text/css\" "
                     . "href=\"custom.css\" media=\"screen\" />+"
                     . "--<link rel=\"stylesheet\" type=\"text/css\" "
+                    . "href=\"print.css\" media=\"print\" />+",
+            ],
+            [
+                'message'   => 'style base',
+                'indent'    => '    ',
+                'delimiter' => PHP_EOL,
+                'style'     => true,
+                'add'       => [
+                    [
+                        "custom.css",
+                        [],
+                    ],
+                    [
+                        "print.css",
+                        ["media" => "print"],
+                    ],
+                ],
+                'result'    => "    <style type=\"text/css\" "
+                    . "href=\"custom.css\" media=\"screen\" />" . PHP_EOL
+                    . "    <style type=\"text/css\" "
+                    . "href=\"print.css\" media=\"print\" />" . PHP_EOL,
+            ],
+            [
+                'message'   => 'style with indent and delimiter',
+                'indent'    => '--',
+                'delimiter' => '+',
+                'style'     => true,
+                'add'       => [
+                    [
+                        "custom.css",
+                        [],
+                    ],
+                    [
+                        "print.css",
+                        ["media" => "print"],
+                    ],
+                ],
+                'result'    => "--<style type=\"text/css\" "
+                    . "href=\"custom.css\" media=\"screen\" />+"
+                    . "--<style type=\"text/css\" "
                     . "href=\"print.css\" media=\"print\" />+",
             ],
         ];
