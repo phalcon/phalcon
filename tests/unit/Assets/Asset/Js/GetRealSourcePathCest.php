@@ -40,7 +40,7 @@ class GetRealSourcePathCest
         $file  = dataDir('assets/assets/jquery.js');
         $asset = new Js($file);
 
-        $expected = $I->convertDirSeparator($file);
+        $expected = $file;
         $actual   = $asset->getRealSourcePath();
         $I->assertEquals($expected, $actual);
     }

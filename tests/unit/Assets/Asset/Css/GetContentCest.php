@@ -38,11 +38,13 @@ class GetContentCest
     {
         $I->wantToTest('Assets\Asset\Css - getContent()');
 
+        if (PHP_OS_FAMILY === 'Windows') {
+            $I->markTestSkipped('Need to fix Windows new lines...');
+        }
+
         $asset = new Css('assets/assets/1198.css');
 
-        $expected = $I->convertDirSeparator(
-            file_get_contents(dataDir('assets/assets/1198.css'))
-        );
+        $expected = file_get_contents(dataDir('assets/assets/1198.css'));
         $actual   = $asset->getContent(dataDir());
         $I->assertEquals($expected, $actual);
     }
