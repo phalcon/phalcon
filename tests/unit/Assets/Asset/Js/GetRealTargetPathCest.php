@@ -41,7 +41,7 @@ class GetRealTargetPathCest
 
         $asset = new Js($example['path']);
 
-        $expected = $I->convertDirSeparator($example['path']);
+        $expected = $example['path'];
         $actual   = $asset->getRealTargetPath();
         $I->assertEquals($expected, $actual);
     }

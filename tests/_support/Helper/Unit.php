@@ -81,27 +81,6 @@ class Unit extends Module
     }
 
     /**
-     * Converts line endings and directory separators to the Windows ones
-     * if this is a windows build
-     *
-     * @param string $input
-     *
-     * @return string
-     */
-    public function convertDirSeparator(string $input): string
-    {
-        /**
-         * Tests have "\r\n" the typical PHP_EOL and "/" as the
-         * DIRECTORY_SEPARATOR. If this is a Windows platform we need to change
-         * those
-         */
-        if (PHP_OS_FAMILY === 'Windows') {
-            $input = str_replace(["\r\n", "/"], ["\n", "\\",], $input);
-        }
-
-        return $input;
-    }
-    /**
      * Returns a unique file name
      *
      * @param string $prefix A prefix for the file
