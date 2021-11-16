@@ -11,6 +11,8 @@ declare(strict_types=1);
 
 namespace Phalcon\Html\Helper;
 
+use Phalcon\Html\Exception;
+
 use function array_merge;
 
 /**
@@ -18,8 +20,32 @@ use function array_merge;
  *
  * @package Phalcon\Html\Helper
  */
-class Script extends Style
+class Script extends AbstractSeries
 {
+    /**
+     * Add an element to the list
+     *
+     * @param string $href
+     * @param array  $attributes
+     *
+     * @return $this
+     * @throws Exception
+     */
+    public function add(string $href, array $attributes = [])
+    {
+        $this->store[] = [
+            'renderFullElement',
+            [
+                $this->getTag(),
+                '',
+                $this->getAttributes($href, $attributes),
+            ],
+            $this->indent(),
+        ];
+
+        return $this;
+    }
+
     /**
      * Returns the necessary attributes
      *
