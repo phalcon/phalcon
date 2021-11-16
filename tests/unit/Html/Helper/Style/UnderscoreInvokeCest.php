@@ -88,10 +88,10 @@ class UnderscoreInvokeCest
                         ["media" => "print"],
                     ],
                 ],
-                'result'    => "    <style rel=\"stylesheet\" type=\"text/css\" "
-                    . "href=\"custom.css\" media=\"screen\"></style>" . PHP_EOL
-                    . "    <style rel=\"stylesheet\" type=\"text/css\" "
-                    . "href=\"print.css\" media=\"print\"></style>" . PHP_EOL,
+                'result'    => "    <link rel=\"stylesheet\" type=\"text/css\" "
+                    . "href=\"custom.css\" media=\"screen\" />" . PHP_EOL
+                    . "    <link rel=\"stylesheet\" type=\"text/css\" "
+                    . "href=\"print.css\" media=\"print\" />" . PHP_EOL,
             ],
             [
                 'message'   => 'with indent and delimiter',
@@ -107,10 +107,10 @@ class UnderscoreInvokeCest
                         ["media" => "print"],
                     ],
                 ],
-                'result'    => "--<style rel=\"stylesheet\" type=\"text/css\" "
-                    . "href=\"custom.css\" media=\"screen\"></style>+"
-                    . "--<style rel=\"stylesheet\" type=\"text/css\" "
-                    . "href=\"print.css\" media=\"print\"></style>+",
+                'result'    => "--<link rel=\"stylesheet\" type=\"text/css\" "
+                    . "href=\"custom.css\" media=\"screen\" />+"
+                    . "--<link rel=\"stylesheet\" type=\"text/css\" "
+                    . "href=\"print.css\" media=\"print\" />+",
             ],
         ];
     }

@@ -34,24 +34,16 @@ class Style extends AbstractSeries
     public function add(string $href, array $attributes = [])
     {
         $this->store[] = [
-            'renderFullElement',
+            'renderTag',
             [
                 $this->getTag(),
-                '',
                 $this->getAttributes($href, $attributes),
+                '/'
             ],
             $this->indent(),
         ];
 
         return $this;
-    }
-
-    /**
-     * @return string
-     */
-    protected function getTag(): string
-    {
-        return 'style';
     }
 
     /**
@@ -74,5 +66,13 @@ class Style extends AbstractSeries
         unset($attributes['href']);
 
         return array_merge($required, $attributes);
+    }
+
+    /**
+     * @return string
+     */
+    protected function getTag(): string
+    {
+        return 'link';
     }
 }
