@@ -78,7 +78,7 @@ class GetRealTargetPathCest
             ]
         );
 
-        $expected = $I->convertDirSeparator(dataDir($file));
+        $expected = dataDir($file);
         $actual   = $asset->getRealTargetPath(dataDir());
         $I->assertEquals($expected, $actual);
     }
