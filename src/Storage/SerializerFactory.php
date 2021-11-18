@@ -32,6 +32,14 @@ class SerializerFactory
     use FactoryTrait;
 
     /**
+     * @param array $services
+     */
+    public function __construct(array $services = [])
+    {
+        $this->init($services);
+    }
+
+    /**
      * @param string $name
      *
      * @return SerializerInterface

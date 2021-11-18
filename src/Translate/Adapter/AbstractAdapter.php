@@ -72,7 +72,7 @@ abstract class AbstractAdapter implements AdapterInterface
      */
     public function offsetExists($translateKey): bool
     {
-        return $this->exists($translateKey);
+        return $this->has($translateKey);
     }
 
     /**

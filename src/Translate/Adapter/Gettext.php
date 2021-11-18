@@ -106,20 +106,6 @@ class Gettext extends AbstractAdapter implements ArrayAccess
     }
 
     /**
-     * Check whether is defined a translation key in the internal array
-     *
-     * @param string $index
-     *
-     * @return bool
-     */
-    public function exists(string $index): bool
-    {
-        $result = $this->query($index);
-
-        return ($result !== $index);
-    }
-
-    /**
      * @return int
      */
     public function getCategory(): int
@@ -149,6 +135,20 @@ class Gettext extends AbstractAdapter implements ArrayAccess
     public function getLocale()
     {
         return $this->locale;
+    }
+
+    /**
+     * Check whether is defined a translation key in the internal array
+     *
+     * @param string $index
+     *
+     * @return bool
+     */
+    public function has(string $index): bool
+    {
+        $result = $this->query($index);
+
+        return ($result !== $index);
     }
 
     /**

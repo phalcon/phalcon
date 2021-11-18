@@ -132,11 +132,11 @@ class Stream extends AbstractAdapter
                 $this->handler = null;
 
                 throw new LogicException(
-                    'The file "' .
+                    "The file '" .
                     $this->name .
-                    '" cannot be opened with mode "' .
+                    "' cannot be opened with mode '" .
                     $this->mode .
-                    '"',
+                    "'",
                 );
             }
 
