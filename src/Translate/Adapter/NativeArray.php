@@ -77,7 +77,7 @@ class NativeArray extends AbstractAdapter implements ArrayAccess
      *
      * @return bool
      */
-    public function exists(string $index): bool
+    public function has(string $index): bool
     {
         return isset($this->translate[$index]);
     }
