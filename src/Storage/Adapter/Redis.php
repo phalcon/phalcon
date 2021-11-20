@@ -20,7 +20,6 @@ use Phalcon\Storage\SerializerFactory;
 use Phalcon\Support\Exception as SupportException;
 use Redis as RedisService;
 
-use function call_user_func_array;
 use function constant;
 use function defined;
 use function is_bool;
@@ -298,7 +297,7 @@ class Redis extends AbstractAdapter
             $parameter = null;
         } else {
             $method       = "pconnect";
-            $persistentId = $this->options["persistentId"];
+            $persistentId = $options["persistentId"];
             $parameter    = !empty($persistentId) ?: "persistentId" . $options["index"];
         }
 
@@ -314,7 +313,7 @@ class Redis extends AbstractAdapter
         if (true !== $result) {
             throw new StorageException(
                 sprintf(
-                    "Could not connect to the Redisd server [%s:%s]",
+                    "Could not connect to the Redis server [%s:%s]",
                     $host,
                     $port
                 )
