@@ -37,12 +37,10 @@ class LoadFilesCest
         $loader = new Loader();
 
         $actual = function_exists('noClassFoo');
-        $I->assertTrue($actual);
-//        $I->assertFalse($actual);
+        $I->assertFalse($actual);
 
         $actual = function_exists('noClassBar');
-        $I->assertTrue($actual);
-//        $I->assertFalse($actual);
+        $I->assertFalse($actual);
 
         $loader
             ->addFile(
