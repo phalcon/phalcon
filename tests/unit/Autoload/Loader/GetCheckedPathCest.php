@@ -39,10 +39,10 @@ class GetCheckedPathCest
     {
         $I->wantToTest('Autoload\Loader - getCheckedPath()');
 
-//        if (PHP_OS_FAMILY === 'Windows') {
-//            $I->markTestSkipped('Need to fix Windows new lines...');
-//        }
-//
+        if (PHP_OS_FAMILY === 'Windows') {
+            $I->markTestSkipped('Need to fix Windows new lines...');
+        }
+
         $loader    = new Loader(true);
         $directory = dataDir('fixtures/Loader/Example/Folders/Types/');
         $loader->addDirectory($directory);

@@ -39,10 +39,10 @@ class GetFoundPathCest
     {
         $I->wantToTest('Autoload\Loader - getFoundPath()');
 
-//        if (PHP_OS_FAMILY === 'Windows') {
-//            $I->markTestSkipped('Need to fix Windows new lines...');
-//        }
-//
+        if (PHP_OS_FAMILY === 'Windows') {
+            $I->markTestSkipped('Need to fix Windows new lines...');
+        }
+
         $loader = new Loader();
         $file   = dataDir('fixtures/Loader/Example/Functions/FunctionsNoClass.php');
         $loader->addFile($file);
