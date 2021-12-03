@@ -18,6 +18,8 @@ use Phalcon\Autoload\Loader;
 use Phalcon\Tests\Fixtures\Traits\LoaderTrait;
 use UnitTester;
 
+use function sha1;
+
 class GetAddSetNamespacesCest
 {
     use LoaderTrait;
@@ -42,10 +44,9 @@ class GetAddSetNamespacesCest
 
         $loader = new Loader();
 
-        $I->assertEquals(
-            [],
-            $loader->getNamespaces()
-        );
+        $expected = [];
+        $actual   = $loader->getNamespaces();
+        $I->assertEquals($expected, $actual);
 
         $loader->setNamespaces(
             [
@@ -56,27 +57,27 @@ class GetAddSetNamespacesCest
                 ],
             ]
         );
-        $I->assertEquals(
-            [
-                'Phalcon\Loader\\'   => [
-                    '/path/to/loader/',
-                ],
-                'Phalcon\Provider\\' => [
-                    '/path/to/provider/source/',
-                    '/path/to/provider/target/',
-                ],
+
+        $expected = [
+            'Phalcon\Loader\\'   => [
+                sha1('/path/to/loader/') => '/path/to/loader/',
             ],
-            $loader->getNamespaces()
-        );
+            'Phalcon\Provider\\' => [
+                sha1('/path/to/provider/source/') => '/path/to/provider/source/',
+                sha1('/path/to/provider/target/') => '/path/to/provider/target/',
+            ],
+        ];
+        $actual   = $loader->getNamespaces();
+        $I->assertEquals($expected, $actual);
 
         /**
          * Clear
          */
         $loader->setNamespaces([]);
-        $I->assertEquals(
-            [],
-            $loader->getNamespaces()
-        );
+
+        $expected = [];
+        $actual   = $loader->getNamespaces();
+        $I->assertEquals($expected, $actual);
 
         $loader
             ->addNamespace(
@@ -95,27 +96,27 @@ class GetAddSetNamespacesCest
                 '/path/to/loader'
             )
         ;
-        $I->assertEquals(
-            [
-                'Phalcon\Loader\\'   => [
-                    '/path/to/loader/',
-                ],
-                'Phalcon\Provider\\' => [
-                    '/path/to/provider/source/',
-                    '/path/to/provider/target/',
-                ],
+
+        $expected = [
+            'Phalcon\Loader\\'   => [
+                sha1('/path/to/loader/') => '/path/to/loader/',
             ],
-            $loader->getNamespaces()
-        );
+            'Phalcon\Provider\\' => [
+                sha1('/path/to/provider/source/') => '/path/to/provider/source/',
+                sha1('/path/to/provider/target/') => '/path/to/provider/target/',
+            ],
+        ];
+        $actual   = $loader->getNamespaces();
+        $I->assertEquals($expected, $actual);
 
         /**
          * Clear - prepend
          */
         $loader->setNamespaces([]);
-        $I->assertEquals(
-            [],
-            $loader->getNamespaces()
-        );
+
+        $expected = [];
+        $actual   = $loader->getNamespaces();
+        $I->assertEquals($expected, $actual);
 
         $loader
             ->addNamespace(
@@ -136,16 +137,16 @@ class GetAddSetNamespacesCest
                 '/path/to/provider/source'
             )
         ;
-        $I->assertEquals(
-            [
-                'Phalcon\Loader\\' => [
-                    '/path/to/provider/target/',
-                    '/path/to/loader/',
-                    '/path/to/provider/source/',
-                ],
+
+        $expected = [
+            'Phalcon\Loader\\' => [
+                sha1('/path/to/provider/target/') => '/path/to/provider/target/',
+                sha1('/path/to/loader/')          => '/path/to/loader/',
+                sha1('/path/to/provider/source/') => '/path/to/provider/source/',
             ],
-            $loader->getNamespaces()
-        );
+        ];
+        $actual   = $loader->getNamespaces();
+        $I->assertEquals($expected, $actual);
     }
 
     /**
