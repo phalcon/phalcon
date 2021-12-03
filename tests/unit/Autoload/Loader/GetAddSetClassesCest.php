@@ -35,45 +35,36 @@ class GetAddSetClassesCest
 
         $loader = new Loader();
 
-        $I->assertEquals(
-            [],
-            $loader->getClasses()
-        );
+        $expected = [];
+        $actual   = $loader->getClasses();
+        $I->assertEquals($expected, $actual);
 
-        $loader->setClasses(
-            [
-                'ome' => 'classOne.php',
-                'two' => 'classTwo.php',
-            ]
-        );
-        $I->assertEquals(
-            [
-                'ome' => 'classOne.php',
-                'two' => 'classTwo.php',
-            ],
-            $loader->getClasses()
-        );
+        $source = [
+            'one' => 'classOne.php',
+            'two' => 'classTwo.php',
+        ];
+        $loader->setClasses($source);
+
+        $expected = $source;
+        $actual   = $loader->getClasses();
+        $I->assertEquals($expected, $actual);
 
         /**
          * Clear
          */
         $loader->setClasses([]);
-        $I->assertEquals(
-            [],
-            $loader->getClasses()
-        );
+
+        $expected = [];
+        $actual   = $loader->getClasses();
+        $I->assertEquals($expected, $actual);
 
         $loader
             ->addClass('one', 'classOne.php')
             ->addClass('two', 'classTwo.php')
             ->addClass('one', 'classOne.php')
         ;
-        $I->assertEquals(
-            [
-                'one' => 'classOne.php',
-                'two' => 'classTwo.php',
-            ],
-            $loader->getClasses()
-        );
+        $expected = $source;
+        $actual   = $loader->getClasses();
+        $I->assertEquals($expected, $actual);
     }
 }

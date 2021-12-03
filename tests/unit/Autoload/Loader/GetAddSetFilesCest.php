@@ -35,10 +35,9 @@ class GetAddSetFilesCest
 
         $loader = new Loader();
 
-        $I->assertEquals(
-            [],
-            $loader->getFiles()
-        );
+        $expected = [];
+        $actual   = $loader->getFiles();
+        $I->assertEquals($expected, $actual);
 
         $loader->setFiles(
             [
@@ -47,33 +46,30 @@ class GetAddSetFilesCest
                 'classOne.php',
             ]
         );
-        $I->assertEquals(
-            [
-                'classOne.php',
-            ],
-            $loader->getFiles()
-        );
+        $expected = [sha1('classOne.php') => 'classOne.php'];
+        $actual   = $loader->getFiles();
+        $I->assertEquals($expected, $actual);
 
         /**
          * Clear
          */
         $loader->setFiles([]);
-        $I->assertEquals(
-            [],
-            $loader->getFiles()
-        );
+
+        $expected = [];
+        $actual   = $loader->getFiles();
+        $I->assertEquals($expected, $actual);
 
         $loader
             ->addFile('classOne.php')
             ->addFile('classTwo.php')
             ->addFile('classOne.php')
         ;
-        $I->assertEquals(
-            [
-                'classOne.php',
-                'classTwo.php',
-            ],
-            $loader->getFiles()
-        );
+
+        $expected = [
+            sha1('classOne.php') => 'classOne.php',
+            sha1('classTwo.php') => 'classTwo.php',
+        ];
+        $actual   = $loader->getFiles();
+        $I->assertEquals($expected, $actual);
     }
 }

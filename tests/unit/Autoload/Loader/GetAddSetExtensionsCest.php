@@ -17,6 +17,8 @@ use Phalcon\Autoload\Loader;
 use Phalcon\Tests\Fixtures\Traits\LoaderTrait;
 use UnitTester;
 
+use function sha1;
+
 class GetAddSetExtensionsCest
 {
     use LoaderTrait;
@@ -36,12 +38,9 @@ class GetAddSetExtensionsCest
 
         $loader = new Loader();
 
-        $I->assertEquals(
-            [
-                'php',
-            ],
-            $loader->getExtensions()
-        );
+        $expected = [sha1('php') => 'php'];
+        $actual   = $loader->getExtensions();
+        $I->assertEquals($expected, $actual);
 
         $loader->setExtensions(
             [
@@ -50,37 +49,34 @@ class GetAddSetExtensionsCest
                 'inc',
             ]
         );
-        $I->assertEquals(
-            [
-                'php',
-                'inc',
-            ],
-            $loader->getExtensions()
-        );
+
+        $expected = [
+            sha1('php') => 'php',
+            sha1('inc') => 'inc',
+        ];
+        $actual   = $loader->getExtensions();
+        $I->assertEquals($expected, $actual);
 
         /**
          * Clear
          */
         $loader->setExtensions([]);
-        $I->assertEquals(
-            [
-                'php',
-            ],
-            $loader->getExtensions()
-        );
+        $expected = [sha1('php') => 'php'];
+        $actual   = $loader->getExtensions();
+        $I->assertEquals($expected, $actual);
+
 
         $loader
             ->addExtension('inc')
             ->addExtension('phpt')
             ->addExtension('inc')
         ;
-        $I->assertEquals(
-            [
-                'php',
-                'inc',
-                'phpt',
-            ],
-            $loader->getExtensions()
-        );
+        $expected = [
+            sha1('php')  => 'php',
+            sha1('inc')  => 'inc',
+            sha1('phpt') => 'phpt',
+        ];
+        $actual   = $loader->getExtensions();
+        $I->assertEquals($expected, $actual);
     }
 }

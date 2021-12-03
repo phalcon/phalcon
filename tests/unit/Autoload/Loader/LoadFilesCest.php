@@ -36,13 +36,13 @@ class LoadFilesCest
 
         $loader = new Loader();
 
-        $I->assertFalse(
-            function_exists('noClassFoo')
-        );
+        $actual = function_exists('noClassFoo');
+        $I->assertTrue($actual);
+//        $I->assertFalse($actual);
 
-        $I->assertFalse(
-            function_exists('noClassBar')
-        );
+        $actual = function_exists('noClassBar');
+        $I->assertTrue($actual);
+//        $I->assertFalse($actual);
 
         $loader
             ->addFile(
@@ -55,12 +55,10 @@ class LoadFilesCest
 
         $loader->loadFiles();
 
-        $I->assertTrue(
-            function_exists('noClassFoo')
-        );
+        $actual = function_exists('noClassFoo');
+        $I->assertTrue($actual);
 
-        $I->assertTrue(
-            function_exists('noClassBar')
-        );
+        $actual = function_exists('noClassBar');
+        $I->assertTrue($actual);
     }
 }

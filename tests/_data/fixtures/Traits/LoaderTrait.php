@@ -60,8 +60,6 @@ trait LoaderTrait
             spl_autoload_register($loader);
         }
 
-        set_include_path(
-            $this->includePath
-        );
+        set_include_path($this->includePath);
     }
 }
