@@ -36,15 +36,15 @@ class LoadFilesCest
 
         $loader = new Loader();
 
-        $actual = function_exists('noClassFoo');
+        $actual = function_exists('noClass2Foo');
         $I->assertFalse($actual);
 
-        $actual = function_exists('noClassBar');
+        $actual = function_exists('noClass2Bar');
         $I->assertFalse($actual);
 
         $loader
             ->addFile(
-                dataDir('fixtures/Loader/Example/Functions/FunctionsNoClass.php')
+                dataDir('fixtures/Loader/Example/Functions/FunctionsNoClassTwo.php')
             )
             ->addFile(
                 '/path/to/unknown/file'
@@ -53,10 +53,10 @@ class LoadFilesCest
 
         $loader->loadFiles();
 
-        $actual = function_exists('noClassFoo');
+        $actual = function_exists('noClass2Foo');
         $I->assertTrue($actual);
 
-        $actual = function_exists('noClassBar');
+        $actual = function_exists('noClass2Bar');
         $I->assertTrue($actual);
     }
 }
