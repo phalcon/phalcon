@@ -94,9 +94,9 @@ class AutoloadCest
     {
         $I->wantToTest('Autoload\Loader - autoload() - namespaces');
 
-//        if (PHP_OS_FAMILY === 'Windows') {
-//            $I->markTestSkipped('Need to fix Windows new lines...');
-//        }
+        if (PHP_OS_FAMILY === 'Windows') {
+            $I->markTestSkipped('Need to fix Windows new lines...');
+        }
 
         $loader = new Loader(true);
         $loader
@@ -199,9 +199,9 @@ class AutoloadCest
     {
         $I->wantToTest('Autoload\Loader - autoload() - namespaces no folders');
 
-//        if (PHP_OS_FAMILY === 'Windows') {
-//            $I->markTestSkipped('Need to fix Windows new lines...');
-//        }
+        if (PHP_OS_FAMILY === 'Windows') {
+            $I->markTestSkipped('Need to fix Windows new lines...');
+        }
 
         $loader = new Loader(true);
         $loader->autoload(Mongo::class);
@@ -231,9 +231,9 @@ class AutoloadCest
     {
         $I->wantToTest('Autoload\Loader - autoload() - namespaces 404');
 
-//        if (PHP_OS_FAMILY === 'Windows') {
-//            $I->markTestSkipped('Need to fix Windows new lines...');
-//        }
+        if (PHP_OS_FAMILY === 'Windows') {
+            $I->markTestSkipped('Need to fix Windows new lines...');
+        }
 
         $loader = new Loader(true);
         $loader
@@ -269,9 +269,9 @@ class AutoloadCest
     {
         $I->wantToTest('Autoload\Loader - autoload() - extension');
 
-//        if (PHP_OS_FAMILY === 'Windows') {
-//            $I->markTestSkipped('Need to fix Windows new lines...');
-//        }
+        if (PHP_OS_FAMILY === 'Windows') {
+            $I->markTestSkipped('Need to fix Windows new lines...');
+        }
 
         $loader = new Loader(true);
         $loader
