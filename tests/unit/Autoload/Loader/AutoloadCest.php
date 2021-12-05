@@ -57,7 +57,7 @@ class AutoloadCest
             'Require: ' . dataDir('fixtures/Loader/Example/Classes/One.php'),
             'Class: load: ' . dataDir('fixtures/Loader/Example/Classes/One.php'),
         ];
-        $actual = $loader->getDebug();
+        $actual   = $loader->getDebug();
         $I->assertEquals($expected, $actual);
 
         $loader->autoload('Two');
@@ -67,7 +67,7 @@ class AutoloadCest
             'Require: ' . dataDir('fixtures/Loader/Example/Classes/Two.php'),
             'Class: load: ' . dataDir('fixtures/Loader/Example/Classes/Two.php'),
         ];
-        $actual = $loader->getDebug();
+        $actual   = $loader->getDebug();
         $I->assertEquals($expected, $actual);
 
         $loader->autoload('Three');
@@ -78,7 +78,7 @@ class AutoloadCest
             'Namespace: 404: Three',
             'Directories: 404: Three',
         ];
-        $actual = $loader->getDebug();
+        $actual   = $loader->getDebug();
         $I->assertEquals($expected, $actual);
     }
 
@@ -126,7 +126,7 @@ class AutoloadCest
             dataDir('fixtures/Loader/Example/Namespaces/Adapter/') .
             'Mongo.php',
         ];
-        $actual = $loader->getDebug();
+        $actual   = $loader->getDebug();
         $I->assertEquals($expected, $actual);
     }
 
@@ -183,7 +183,7 @@ class AutoloadCest
             'Namespace: Example\Namespaces\Adapter\ - ' .
             dataDir('fixtures/Loader/Example/Namespaces/Plugin/Another.php'),
         ];
-        $actual = $loader->getDebug();
+        $actual   = $loader->getDebug();
         $I->assertEquals($expected, $actual);
     }
 
@@ -209,13 +209,13 @@ class AutoloadCest
         $expected = [
             'Loading: Example\Namespaces\Adapter\Mongo',
             'Class: 404: Example\Namespaces\Adapter\Mongo',
-//            'Load: No folders registered: Example\Namespaces\Adapter\\',
-//            'Load: No folders registered: Example\Namespaces\\',
-//            'Load: No folders registered: Example\\',
+            //            'Load: No folders registered: Example\Namespaces\Adapter\\',
+            //            'Load: No folders registered: Example\Namespaces\\',
+            //            'Load: No folders registered: Example\\',
             'Namespace: 404: Example\Namespaces\Adapter\Mongo',
             'Directories: 404: Example\Namespaces\Adapter\Mongo',
         ];
-        $actual = $loader->getDebug();
+        $actual   = $loader->getDebug();
         $I->assertEquals($expected, $actual);
     }
 
@@ -253,7 +253,7 @@ class AutoloadCest
             'Namespace: 404: Example\Namespaces\Adapter\Unknown',
             'Directories: 404: Example\Namespaces\Adapter\Unknown',
         ];
-        $actual = $loader->getDebug();
+        $actual   = $loader->getDebug();
         $I->assertEquals($expected, $actual);
     }
 
@@ -301,7 +301,7 @@ class AutoloadCest
             'Namespace: Example\Namespaces\ - ' .
             dataDir('fixtures/Loader/Example/Namespaces/Engines/Alcohol.inc'),
         ];
-        $actual = $loader->getDebug();
+        $actual   = $loader->getDebug();
         $I->assertEquals($expected, $actual);
     }
 }

@@ -20,7 +20,9 @@ use function mb_convert_encoding;
 use function mb_detect_encoding;
 use function rawurlencode;
 
+use const ENT_HTML401;
 use const ENT_QUOTES;
+use const ENT_SUBSTITUTE;
 
 /**
  * Phalcon\Escaper
@@ -56,9 +58,11 @@ class Escaper implements EscaperInterface
     protected string $encoding = 'utf-8';
 
     /**
+     * ENT_QUOTES | ENT_SUBSTITUTE | ENT_HTML401
+     *
      * @var int
      */
-    protected int $flags = 3;
+    protected int $flags = 11;
 
     /**
      * Escapes a HTML attribute string

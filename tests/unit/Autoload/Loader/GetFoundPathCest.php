@@ -20,7 +20,6 @@ use UnitTester;
 
 use function dataDir;
 use function function_exists;
-use function sha1;
 
 class GetFoundPathCest
 {

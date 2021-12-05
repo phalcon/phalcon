@@ -37,19 +37,46 @@ class FactoryDefault extends Di
         parent::__construct();
 
         $filter     = new FilterFactory();
-        $escaper    = new Escaper();
-        $tagFactory = new TagFactory($escaper);
-        $assets     = new AssetsManager($tagFactory);
+//        $escaper    = new Escaper();
+//        $tagFactory = new TagFactory($escaper);
+//        $assets     = new AssetsManager($tagFactory);
 
         $this->services = [
-            'assets'        => new Service($assets, true),
+//            'assets'        => new Service($assets, true),
             'crypt'         => new Service(Crypt::class, true),
             'escaper'       => new Service(Escaper::class, true),
             'eventsManager' => new Service(EventsManager::class, true),
             'filter'        => new Service($filter->newInstance(), true),
             'security'      => new Service(Security::class, true),
-            'tagFactory'    => new Service($tagFactory, true),
         ];
+
+        $this->set(
+            'assets',
+            [
+                'className' => AssetsManager::class,
+                'arguments' => [
+                    [
+                        'type' => 'service',
+                        'name' => 'tag',
+                    ],
+                ],
+            ]
+        );
+
+        $this->set(
+            'tag',
+            [
+                'className' => TagFactory::class,
+                'arguments' => [
+                    [
+                        'type' => 'service',
+                        'name' => 'escaper',
+                    ],
+                ],
+            ]
+        );
+
+
 //        let filter = new FilterFactory();
 //
 //        let this->services = [

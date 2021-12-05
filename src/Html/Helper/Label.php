@@ -23,13 +23,18 @@ class Label extends AbstractHelper
     /**
      * Produce a `<label>` tag.
      *
-     * @param array $attributes
+     * @param string $label
+     * @param array  $attributes
+     * @param bool   $raw
      *
      * @return string
      * @throws Exception
      */
-    public function __invoke(array $attributes = [])
-    {
-        return $this->renderElement('label', $attributes);
+    public function __invoke(
+        string $label,
+        array $attributes = [],
+        bool $raw = false
+    ): string {
+        return $this->renderFullElement('label', $label, $attributes, $raw);
     }
 }

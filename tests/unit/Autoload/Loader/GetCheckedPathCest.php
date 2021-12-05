@@ -19,8 +19,6 @@ use Phalcon\Tests\Fixtures\Traits\LoaderTrait;
 use UnitTester;
 
 use function dataDir;
-use function function_exists;
-use function sha1;
 
 class GetCheckedPathCest
 {
@@ -56,7 +54,7 @@ class GetCheckedPathCest
             'Require: ' . $directory . 'Integer.php',
             'Directories: ' . $directory . 'Integer.php',
         ];
-        $actual = $loader->getDebug();
+        $actual   = $loader->getDebug();
         $I->assertEquals($expected, $actual);
 
         $expected = $directory . 'Integer.php';
