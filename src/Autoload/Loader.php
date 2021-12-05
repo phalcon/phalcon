@@ -660,7 +660,6 @@ class Loader
                 $this->fireManagerEvent("loader:beforeCheckPath", $filePath);
 
                 if (true === $this->requireFile($filePath)) {
-                    $this->fireManagerEvent("loader:pathFound", $filePath);
                     if (true === $isDirectory) {
                         $this->addDebug("Directories: " . $filePath);
                     }

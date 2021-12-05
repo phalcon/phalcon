@@ -78,8 +78,8 @@ class SetFileCheckingCallbackCest
      * @param UnitTester $I
      * @param Example    $example
      *
-     * @author Phalcon Team <team@phalcon.io>
-     * @since  2020-09-09
+     * @author       Phalcon Team <team@phalcon.io>
+     * @since        2020-09-09
      * @issue  https://github.com/phalcon/cphalcon/issues/13360
      * @issue  https://github.com/phalcon/cphalcon/issues/10472
      */
