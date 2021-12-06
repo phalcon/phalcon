@@ -22,6 +22,9 @@ use UnitTester;
 use function array_pop;
 use function dataDir;
 use function spl_autoload_functions;
+use function str_replace;
+
+use const DIRECTORY_SEPARATOR;
 
 class RegisterUnregisterCest
 {
@@ -104,16 +107,12 @@ class RegisterUnregisterCest
 
         $I->assertInstanceOf(LoaderEvent::class, new LoaderEvent());
 
+        $path = dataDir('fixtures/Loader/Example/Events/LoaderEvent.php');
+        $path = str_replace("/", DIRECTORY_SEPARATOR, $path);
         $expected = [
-            'beforeCheckClass' => [
-                0 => null,
-            ],
-            'beforeCheckPath'  => [
-                0 => dataDir('fixtures/Loader/Example/Events/LoaderEvent.php'),
-            ],
-            'pathFound'        => [
-                0 => dataDir('fixtures/Loader/Example/Events/LoaderEvent.php'),
-            ],
+            'beforeCheckClass' => [0 => null],
+            'beforeCheckPath'  => [0 => $path],
+            'pathFound'        => [0 => $path],
         ];
 
         $I->assertEquals($expected, $trace);
