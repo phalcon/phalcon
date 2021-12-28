@@ -19,11 +19,11 @@ use Phalcon\Traits\Helper\Str\StartsWithTrait;
 use function array_merge;
 use function array_unique;
 use function call_user_func;
+use function hash;
 use function is_array;
 use function is_callable;
 use function is_string;
 use function rtrim;
-use function sha1;
 use function spl_autoload_register;
 use function spl_autoload_unregister;
 use function str_replace;
@@ -115,7 +115,7 @@ class Loader
      */
     public function __construct(bool $isDebug = false)
     {
-        $this->extensions = [sha1('php') => 'php'];
+        $this->extensions = [hash("sha256", 'php') => 'php'];
         $this->isDebug    = $isDebug;
     }
 
@@ -143,7 +143,7 @@ class Loader
      */
     public function addDirectory(string $directory): Loader
     {
-        $this->directories[sha1($directory)] = $directory;
+        $this->directories[hash("sha256", $directory)] = $directory;
 
         return $this;
     }
@@ -157,7 +157,7 @@ class Loader
      */
     public function addExtension(string $extension): Loader
     {
-        $this->extensions[sha1($extension)] = $extension;
+        $this->extensions[hash("sha256", $extension)] = $extension;
 
         return $this;
     }
@@ -171,7 +171,7 @@ class Loader
      */
     public function addFile(string $file): Loader
     {
-        $this->files[sha1($file)] = $file;
+        $this->files[hash("sha256", $file)] = $file;
 
         return $this;
     }
@@ -420,7 +420,7 @@ class Loader
     public function setExtensions(array $extensions, bool $merge = false): Loader
     {
         if (true !== $merge) {
-            $this->extensions = [sha1('php') => 'php'];
+            $this->extensions = [hash("sha256", 'php') => 'php'];
         }
 
         foreach ($extensions as $extension) {
@@ -730,7 +730,7 @@ class Loader
         foreach ($directories as $directory) {
             $directory = rtrim($directory, $dirSeparator) . $dirSeparator;
 
-            $results[sha1($directory)] = $directory;
+            $results[hash("sha256", $directory)] = $directory;
         }
 
         return $results;

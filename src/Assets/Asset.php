@@ -15,7 +15,7 @@ namespace Phalcon\Assets;
 
 use Phalcon\Traits\Php\FileTrait;
 
-use function sha1;
+use function hash;
 
 /**
  * Represents an asset
@@ -128,7 +128,7 @@ class Asset implements AssetInterface
     {
         $key = $this->getType() . ':' . $this->getPath();
 
-        return sha1($key);
+        return hash("sha256", $key);
     }
 
     /**

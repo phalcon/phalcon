@@ -13,7 +13,7 @@ declare(strict_types=1);
 
 namespace Phalcon\Assets;
 
-use function sha1;
+use function hash;
 
 /**
  * Represents an inline asset
@@ -78,7 +78,7 @@ class Inline implements AssetInterface
     {
         $key = $this->getType() . ':' . $this->getContent();
 
-        return sha1($key);
+        return hash("sha256", $key);
     }
 
     /**
