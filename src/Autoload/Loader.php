@@ -493,6 +493,7 @@ class Loader
      * @param bool  $merge
      *
      * @return Loader
+     * @throws Exception
      */
     public function setNamespaces(array $namespaces, bool $merge = false): Loader
     {

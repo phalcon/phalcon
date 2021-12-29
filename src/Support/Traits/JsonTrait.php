@@ -23,7 +23,6 @@ use function method_exists;
  */
 trait JsonTrait
 {
-
     /**
      * @param mixed $value
      */
