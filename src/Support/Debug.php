@@ -925,12 +925,7 @@ class Debug
      */
     private function printMemoryUsage(): string
     {
-        return $this->printTableHeader(
-            'error-tabs-5',
-            'Memory',
-            'Usage',
-            "2"
-            )
+        return $this->printTableHeader('error-tabs-5', 'Memory', 'Usage', "2")
             . memory_get_usage(true)
             . '</td></tr>'
             . '</table></div>';
@@ -951,9 +946,11 @@ class Debug
 
         foreach ($source as $key => $value) {
             if (true !== isset($filter[mb_strtolower($key)])) {
-                $html .= '<tr><td class="key">'
-                    . $key . '</td><td>'
-                    . $this->getVarDump($value) . '</td></tr>';
+                $html .= sprintf(
+                    '<tr><td class="key">%s</td><td>%s</td></tr>',
+                    $key,
+                    $this->getVarDump($value)
+                );
             }
         }
 
