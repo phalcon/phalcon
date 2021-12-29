@@ -83,20 +83,18 @@ class ConfigFactory
             $filePath .= '.' . lcfirst($adapter);
         }
 
-        switch ($adapter) {
-            case 'ini':
-                return $this->newInstance(
-                    $adapter,
-                    $filePath,
-                    $configArray['mode'] ?? INI_SCANNER_RAW
-                );
-
-            case 'yaml':
-                return $this->newInstance(
-                    $adapter,
-                    $filePath,
-                    $configArray['callbacks'] ?? null
-                );
+        if ('ini' === $adapter) {
+            return $this->newInstance(
+                $adapter,
+                $filePath,
+                $configArray['mode'] ?? INI_SCANNER_RAW
+            );
+        } elseif ('yaml' === $adapter) {
+            return $this->newInstance(
+                $adapter,
+                $filePath,
+                $configArray['callbacks'] ?? null
+            );
         }
 
         return $this->newInstance($adapter, $filePath);
@@ -128,9 +126,9 @@ class ConfigFactory
                 return new $definition($fileName, $mode);
             case Yaml::class:
                 return new $definition($fileName, $params);
+            default:
+                return new $definition($fileName);
         }
-
-        return new $definition($fileName);
     }
 
     /**

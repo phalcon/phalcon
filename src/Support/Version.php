@@ -157,9 +157,9 @@ class Version
 
             case self::VERSION_SPECIAL:
                 return $this->getSpecial($version[self::VERSION_SPECIAL]);
+            default:
+                return $this->get();
         }
-
-        return $this->get();
     }
 
     /**
@@ -176,7 +176,7 @@ class Version
      */
     protected function getVersion(): array
     {
-        return [5, 0, 0, 1, 4];
+        return [6, 0, 0, 1, 1];
     }
 
     /**
@@ -188,15 +188,12 @@ class Version
      */
     final protected function getSpecial(int $special): string
     {
-        switch ($special) {
-            case 1:
-                return 'alpha';
-            case 2:
-                return 'beta';
-            case 3:
-                return 'RC';
-        }
+        $map = [
+            1 => "alpha",
+            2 => "beta",
+            3 => "RC",
+        ];
 
-        return '';
+        return $map[$special] ?? "";
     }
 }

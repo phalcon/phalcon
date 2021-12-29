@@ -288,8 +288,9 @@ class Dump
      */
     protected function output($variable, string $name = null, int $tab = 1): string
     {
-        $space  = '  ';
-        $output = '';
+        $space       = '  ';
+        $output      = '';
+        $varTemplate = "(<span style=\"%style%\">%var%</span>)";
 
         if (true !== empty($name)) {
             $output .= $name . ' ';
@@ -443,8 +444,7 @@ class Dump
         }
 
         if (true === is_int($variable)) {
-            $message = "<b style=\"%style%\">Integer</b> "
-                . "(<span style=\"%style%\">%var%</span>)";
+            $message = "<b style=\"%style%\">Integer</b> " . $varTemplate;
             $context = [
                 'style' => $this->getStyle('int'),
                 'var'   => $variable,
@@ -454,8 +454,7 @@ class Dump
         }
 
         if (true === is_float($variable)) {
-            $message = "<b style=\"%style%\">Float</b> "
-                . "(<span style=\"%style%\">%var%</span>)";
+            $message = "<b style=\"%style%\">Float</b> " . $varTemplate;
             $context = [
                 'style' => $this->getStyle('float'),
                 'var'   => $variable,
@@ -491,8 +490,7 @@ class Dump
         }
 
         if (true === is_bool($variable)) {
-            $message = "<b style=\"%style%\">Boolean</b> "
-                . "(<span style=\"%style%\">%var%</span>)";
+            $message = "<b style=\"%style%\">Boolean</b> " . $varTemplate;
             $context = [
                 'style' => $this->getStyle('bool'),
                 'var'   => ($variable) ? 'TRUE' : 'FALSE',

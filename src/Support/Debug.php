@@ -27,6 +27,7 @@ use function is_object;
 use function is_string;
 use function mb_strtolower;
 use function memory_get_usage;
+use function sprintf;
 
 /**
  * Class Debug
@@ -117,15 +118,12 @@ class Debug
      */
     public function getCssSources(): string
     {
-        return '<link rel="stylesheet" type="text/css" href="'
-            . $this->uri
-            . 'assets/jquery-ui/themes/ui-lightness/jquery-ui.min.css" />'
-            . '<link rel="stylesheet" type="text/css" href="'
-            . $this->uri
-            . 'assets/jquery-ui/themes/ui-lightness/theme.css" />'
-            . '<link rel="stylesheet" type="text/css" href="'
-            . $this->uri
-            . 'themes/default/style.css" />';
+        $template = '<link rel="stylesheet" type="text/css" href="'
+            . $this->uri . '%s" />';
+
+        return sprintf($template, 'assets/jquery-ui/themes/ui-lightness/jquery-ui.min.css')
+            . sprintf($template, 'assets/jquery-ui/themes/ui-lightness/theme.css')
+            . sprintf($template, 'themes/default/style.css');
     }
 
     /**
@@ -135,21 +133,15 @@ class Debug
      */
     public function getJsSources(): string
     {
-        return '<script type="application/javascript" src="'
+        $template = '<script type="application/javascript" src="'
             . $this->uri
-            . 'assets/jquery/dist/jquery.min.js"></script>'
-            . '<script type="application/javascript" src="'
-            . $this->uri
-            . 'assets/jquery-ui/jquery-ui.min.js"></script>'
-            . '<script type="application/javascript" src="'
-            . $this->uri
-            . 'assets/jquery.scrollTo/jquery.scrollTo.min.js"></script>'
-            . '<script type="application/javascript" src="'
-            . $this->uri
-            . 'prettify/prettify.js"></script>'
-            . '<script type="application/javascript" src="'
-            . $this->uri
-            . 'pretty.js"></script>';
+            . '%s"></script>';
+
+        return sprintf($template, 'assets/jquery/dist/jquery.min.js')
+            . sprintf($template, 'assets/jquery-ui/jquery-ui.min.js')
+            . sprintf($template, 'assets/jquery.scrollTo/jquery.scrollTo.min.js')
+            . sprintf($template, 'prettify/prettify.js')
+            . sprintf($template, 'pretty.js');
     }
 
     /**
@@ -898,10 +890,7 @@ class Debug
     {
         $html = '';
         if (true === is_array($this->data)) {
-            $html .= '<div id="error-tabs-6">'
-                . '<table style="border-collapse: collapse; border-spacing: 0; '
-                . 'text-align: center" class="superglobal-detail">'
-                . '<tr><th>Key</th><th>Value</th></tr>';
+            $html .= $this->printTableHeader('error-tabs-6', 'Key', 'Value');
 
             foreach ($this->data as $key => $value) {
                 $html .= '<tr><td class="key">'
@@ -921,16 +910,11 @@ class Debug
      */
     private function printIncludedFiles(): string
     {
-        $html = '<div id="error-tabs-4">'
-            . '<table style="border-collapse: collapse; border-spacing: 0; '
-            . 'text-align: center" class="superglobal-detail">'
-            . '<tr><th>#</th><th>Path</th></tr>';
+        $html = $this->printTableHeader('error-tabs-4', '#', 'Path');
 
         $files = get_included_files();
         foreach ($files as $key => $value) {
-            $html .= '<tr><td>'
-                . $key . '</th><td>'
-                . $value . '</td></tr>';
+            $html .= sprintf('<tr><td>%s</th><td>%s</td></tr>', $key, $value);
         }
 
         return $html . '</table></div>';
@@ -941,10 +925,12 @@ class Debug
      */
     private function printMemoryUsage(): string
     {
-        return '<div id="error-tabs-5">'
-            . '<table style="border-collapse: collapse; border-spacing: 0; '
-            . 'text-align: center" class="superglobal-detail">'
-            . '<tr><th colspan="2">Memory</th></tr><tr><td>Usage</td><td>'
+        return $this->printTableHeader(
+            'error-tabs-5',
+            'Memory',
+            'Usage',
+            "2"
+            )
             . memory_get_usage(true)
             . '</td></tr>'
             . '</table></div>';
@@ -960,10 +946,7 @@ class Debug
         /**
          * Print $_REQUEST or $_SERVER superglobal
          */
-        $html   = '<div id="error-tabs-3">'
-            . '<table style="border-collapse: collapse; border-spacing: 0; '
-            . 'text-align: center" class="superglobal-detail">'
-            . '<tr><th>Key</th><th>Value</th></tr>';
+        $html   = $this->printTableHeader('error-tabs-3', 'Key', 'Value');
         $filter = $this->blacklist['server'] ?? [];
 
         foreach ($source as $key => $value) {
@@ -975,5 +958,33 @@ class Debug
         }
 
         return $html . '</table></div>';
+    }
+
+    /**
+     * @param string $divId
+     * @param string $headerOne
+     * @param string $headerTwo
+     * @param string $colspan
+     *
+     * @return string
+     */
+    private function printTableHeader(
+        string $divId,
+        string $headerOne,
+        string $headerTwo,
+        string $colspan = ""
+    ): string {
+        $span = (true === empty($colspan)) ? "" : ' colspan="' . $colspan . '"';
+
+        return '<div id="' . $divId . '">'
+            . '<table style="border-collapse: collapse; border-spacing: 0; '
+            . 'text-align: center" class="superglobal-detail">'
+            . '<tr><th'
+            . $span . '>'
+            . $headerOne
+            . '</th></tr><tr><td>'
+            . $headerTwo
+            . '</td><td>'
+        ;
     }
 }
