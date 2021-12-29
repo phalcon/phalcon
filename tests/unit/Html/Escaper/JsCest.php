@@ -52,7 +52,7 @@ class JsCest
         $actual   = $escaper->js($source);
         $I->assertEquals($expected, $actual);
 
-        $actual   = $escaper->escapeJs($source);
+        $actual = $escaper->escapeJs($source);
         $I->assertEquals($expected, $actual);
     }
 }

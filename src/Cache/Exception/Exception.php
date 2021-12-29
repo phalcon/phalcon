@@ -20,5 +20,4 @@ use Psr\SimpleCache\CacheException;
  */
 class Exception extends \Exception implements CacheException
 {
-
 }

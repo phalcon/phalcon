@@ -18,5 +18,4 @@ namespace Phalcon\Cache\Exception;
  */
 class InvalidArgumentException extends \Exception implements \Psr\SimpleCache\InvalidArgumentException
 {
-
 }

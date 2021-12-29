@@ -16,10 +16,10 @@ namespace Phalcon\Tests\Unit\Di\FactoryDefault\Cli;
 use Codeception\Example;
 use Phalcon\Di\Exception;
 use Phalcon\Di\FactoryDefault\Cli;
+use Phalcon\Encryption\Security;
 use Phalcon\Events\Manager as EventsManager;
 use Phalcon\Filter\Filter;
 use Phalcon\Html\Escaper;
-use Phalcon\Encryption\Security;
 use UnitTester;
 
 /**

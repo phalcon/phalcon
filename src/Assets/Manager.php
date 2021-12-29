@@ -93,7 +93,7 @@ class Manager implements InjectionAwareInterface
     }
 
     /**
-     * Adds a asset by its type
+     * Adds an asset by its type
      *
      * @param string $type
      * @param Asset  $asset
@@ -449,34 +449,9 @@ class Manager implements InjectionAwareInterface
             }
 
             /**
-             * Global filtered content
-             */
-            $filteredJoinedContent = '';
-
-            /**
              * Check if the collection have its own target base path
              */
-            $join = $collection->getJoin();
-
-            /**
-             * Check for valid target paths if the collection must be joined
-             */
-            if (true !== $join) {
-                /**
-                 * We need a valid final target path
-                 */
-                if (true === empty($completeTargetPath)) {
-                    throw new Exception(
-                        "Path '" . $completeTargetPath . "' is not a valid target path (1)"
-                    );
-                }
-
-                if (true === is_dir($completeTargetPath)) {
-                    throw new Exception(
-                        "Path '" . $completeTargetPath . "' is not a valid target path (2), it is a directory."
-                    );
-                }
-            }
+            $join = $this->getJoin($collection, $completeTargetPath);
         }
 
         /** @var Asset $asset */
@@ -494,18 +469,7 @@ class Manager implements InjectionAwareInterface
                     /**
                      * Get the complete path
                      */
-                    $sourcePath = $asset->getRealSourcePath($completeSourcePath);
-
-                    /**
-                     * We need a valid source path
-                     */
-                    if (true === empty($sourcePath)) {
-                        $sourcePath = $asset->getPath();
-
-                        throw new Exception(
-                            "Asset '" . $sourcePath . "' does not have a valid source path"
-                        );
-                    }
+                    $sourcePath = $this->getSourcePath($asset, $completeSourcePath);
                 }
 
                 /**
@@ -523,24 +487,7 @@ class Manager implements InjectionAwareInterface
                     );
                 }
 
-                if (true === $asset->isLocal()) {
-                    /**
-                     * Make sure the target path is not the same source path
-                     */
-                    if ($targetPath === $sourcePath) {
-                        throw new Exception(
-                            "Asset '" . $targetPath . "' have the same source and target paths"
-                        );
-                    }
-
-                    if (true === file_exists($targetPath)) {
-                        if (filemtime($targetPath) !== filemtime($sourcePath)) {
-                            $filterNeeded = true;
-                        }
-                    } else {
-                        $filterNeeded = true;
-                    }
-                }
+                $filterNeeded = $this->isFilterNeeded($asset, $targetPath, $sourcePath, $filterNeeded);
             } else {
                 /**
                  * If there are no filters, just print/buffer the HTML
@@ -674,30 +621,7 @@ class Manager implements InjectionAwareInterface
              */
             file_put_contents($completeTargetPath, $filteredJoinedContent);
 
-            $prefixedPath = $this->calculatePrefixedPath(
-                $collection,
-                $collection->getTargetUri(),
-                $completeTargetPath
-            );
-
-            /**
-             * Generate the HTML
-             */
-            $html = $this->doCallback(
-                $callback,
-                $collection->getAttributes(),
-                $prefixedPath,
-                $collection->getTargetIsLocal()
-            );
-
-            /**
-             * Implicit output prints the content directly
-             */
-            if (true === $this->implicitOutput) {
-                echo $html;
-            } else {
-                $output .= $html;
-            }
+            $output = $this->getOutput($collection, $completeTargetPath, $callback, $output);
         }
 
         return $output;
@@ -735,6 +659,7 @@ class Manager implements InjectionAwareInterface
         $output        = "";
         $html          = "";
         $joinedContent = "";
+        $attributes    = [];
         $codes         = $collection->getCodes();
         $filters       = $collection->getFilters();
         $join          = $collection->getJoin();
@@ -800,6 +725,7 @@ class Manager implements InjectionAwareInterface
      * @param string|null $name
      *
      * @return string
+     * @throws Exception
      */
     public function outputInlineCss(string $name = null): string
     {
@@ -947,7 +873,6 @@ class Manager implements InjectionAwareInterface
      * @param bool  $local
      *
      * @return string
-     * @throws Exception
      */
     private function cssLink($parameters = [], bool $local = true): string
     {
@@ -996,7 +921,6 @@ class Manager implements InjectionAwareInterface
      * @param bool  $local
      *
      * @return string
-     * @throws Exception
      */
     private function jsLink($parameters = [], bool $local = true): string
     {
@@ -1007,6 +931,143 @@ class Manager implements InjectionAwareInterface
             "application/javascript",
             "src"
         );
+    }
+
+    /**
+     * @param Collection $collection
+     * @param string     $completeTargetPath
+     *
+     * @return bool
+     * @throws Exception
+     */
+    private function getJoin(Collection $collection, string $completeTargetPath): bool
+    {
+        $join = $collection->getJoin();
+
+        /**
+         * Check for valid target paths if the collection must be joined
+         */
+        if (true !== $join) {
+            /**
+             * We need a valid final target path
+             */
+            if (true === empty($completeTargetPath)) {
+                throw new Exception(
+                    "Path '" . $completeTargetPath . "' is not a valid target path (1)"
+                );
+            }
+
+            if (true === is_dir($completeTargetPath)) {
+                throw new Exception(
+                    "Path '" . $completeTargetPath . "' is not a valid target path (2), it is a directory."
+                );
+            }
+        }
+
+        return $join;
+    }
+
+    /**
+     * @param Collection $collection
+     * @param string     $completeTargetPath
+     * @param array      $callback
+     * @param string     $output
+     *
+     * @return string
+     */
+    private function getOutput(
+        Collection $collection,
+        string $completeTargetPath,
+        array $callback,
+        string $output
+    ): string {
+        $prefixedPath = $this->calculatePrefixedPath(
+            $collection,
+            $collection->getTargetUri(),
+            $completeTargetPath
+        );
+
+        /**
+         * Generate the HTML
+         */
+        $html = $this->doCallback(
+            $callback,
+            $collection->getAttributes(),
+            $prefixedPath,
+            $collection->getTargetIsLocal()
+        );
+
+        /**
+         * Implicit output prints the content directly
+         */
+        if (true === $this->implicitOutput) {
+            echo $html;
+        } else {
+            $output .= $html;
+        }
+
+        return $output;
+    }
+
+    /**
+     * @param Asset  $asset
+     * @param string $completeSourcePath
+     *
+     * @return string
+     * @throws Exception
+     */
+    private function getSourcePath(Asset $asset, string $completeSourcePath): string
+    {
+        $sourcePath = $asset->getRealSourcePath($completeSourcePath);
+
+        /**
+         * We need a valid source path
+         */
+        if (true === empty($sourcePath)) {
+            $sourcePath = $asset->getPath();
+
+            throw new Exception(
+                "Asset '" . $sourcePath . "' does not have a valid source path"
+            );
+        }
+        return $sourcePath;
+    }
+
+    /**
+     * @param Asset  $asset
+     * @param string $targetPath
+     * @param string $sourcePath
+     * @param bool   $filterNeeded
+     *
+     * @return bool
+     * @throws Exception
+     */
+    private function isFilterNeeded(
+        Asset $asset,
+        string $targetPath,
+        string $sourcePath,
+        bool $filterNeeded
+    ): bool {
+        if (true === $asset->isLocal()) {
+            /**
+             * Make sure the target path is not the same source path
+             */
+            if ($targetPath === $sourcePath) {
+                throw new Exception(
+                    "Asset '" . $targetPath . "' have the same source and target paths"
+                );
+            }
+
+            if (true === file_exists($targetPath)) {
+                if (filemtime($targetPath) !== filemtime($sourcePath)) {
+                    $filterNeeded = true;
+                }
+            } else {
+                $filterNeeded = true;
+            }
+        }
+
+        return $filterNeeded;
     }
 
     /**

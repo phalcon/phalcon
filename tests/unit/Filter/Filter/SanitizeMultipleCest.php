@@ -32,8 +32,8 @@ class SanitizeMultipleCest
      * @param UnitTester $I
      * @param Example    $example
      *
-     * @author Phalcon Team <team@phalcon.io>
-     * @since  2021-10-23
+     * @author       Phalcon Team <team@phalcon.io>
+     * @since        2021-10-23
      */
     public function filterFilterSanitize(UnitTester $I, Example $example)
     {
@@ -97,39 +97,39 @@ class SanitizeMultipleCest
     {
         return [
             [
-                'label' => 'null value',
-                'source' => null,
-                'filters' => [
+                'label'    => 'null value',
+                'source'   => null,
+                'filters'  => [
                     'string',
                     'trim',
                 ],
                 'expected' => null,
             ],
             [
-                'label' => 'string with filters',
-                'source' => '    lol<<<   ',
-                'filters' => [
+                'label'    => 'string with filters',
+                'source'   => '    lol<<<   ',
+                'filters'  => [
                     'string',
                     'trim',
                 ],
                 'expected' => 'lol',
             ],
             [
-                'label' => 'array with filters',
-                'source' => [' 1 ', '  2', '3  '],
-                'filters' => 'trim',
+                'label'    => 'array with filters',
+                'source'   => [' 1 ', '  2', '3  '],
+                'filters'  => 'trim',
                 'expected' => ['1', '2', '3'],
             ],
             [
-                'label' => 'array with multiple filters',
-                'source' => [' <a href="a">1</a> ', '  <h1>2</h1>', '<p>3</p>'],
-                'filters' => ['striptags', 'trim'],
+                'label'    => 'array with multiple filters',
+                'source'   => [' <a href="a">1</a> ', '  <h1>2</h1>', '<p>3</p>'],
+                'filters'  => ['striptags', 'trim'],
                 'expected' => ['1', '2', '3'],
             ],
             [
-                'label' => 'multiple filters and more parameters',
-                'source' => '  mary had a little lamb ',
-                'filters' => [
+                'label'    => 'multiple filters and more parameters',
+                'source'   => '  mary had a little lamb ',
+                'filters'  => [
                     'trim',
                     'replace' => [' ', '-'],
                     'remove'  => ['mary'],

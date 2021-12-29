@@ -20,5 +20,4 @@ namespace Phalcon\Assets;
  */
 class Exception extends \Exception
 {
-
 }

@@ -16,5 +16,4 @@ namespace Phalcon\Html\Escaper;
  */
 class Exception extends \Exception
 {
-
 }

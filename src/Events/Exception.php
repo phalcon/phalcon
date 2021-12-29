@@ -20,5 +20,4 @@ namespace Phalcon\Events;
  */
 class Exception extends \Exception
 {
-
 }
