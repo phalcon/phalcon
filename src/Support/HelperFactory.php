@@ -38,6 +38,7 @@ use Phalcon\Support\Helper\File\Basename;
 use Phalcon\Support\Helper\Json\Decode;
 use Phalcon\Support\Helper\Json\Encode;
 use Phalcon\Support\Helper\Number\IsBetween;
+use Phalcon\Support\Helper\Str\Camelize;
 use Phalcon\Support\Helper\Str\Concat;
 use Phalcon\Support\Helper\Str\CountVowels;
 use Phalcon\Support\Helper\Str\Decapitalize;
@@ -212,6 +213,7 @@ class HelperFactory
             'decode'        => Decode::class,
             'encode'        => Encode::class,
             'between'       => IsBetween::class,
+            'camelize'      => Camelize::class,
             'concat'        => Concat::class,
             'countVowels'   => CountVowels::class,
             'decapitalize'  => Decapitalize::class,
