@@ -56,10 +56,13 @@ use Phalcon\Support\Helper\Str\IsAnagram;
 use Phalcon\Support\Helper\Str\IsLower;
 use Phalcon\Support\Helper\Str\IsPalindrome;
 use Phalcon\Support\Helper\Str\IsUpper;
+use Phalcon\Support\Helper\Str\KebabCase;
 use Phalcon\Support\Helper\Str\Len;
 use Phalcon\Support\Helper\Str\Lower;
+use Phalcon\Support\Helper\Str\PascalCase;
 use Phalcon\Support\Helper\Str\Random;
 use Phalcon\Support\Helper\Str\ReduceSlashes;
+use Phalcon\Support\Helper\Str\SnakeCase;
 use Phalcon\Support\Helper\Str\StartsWith;
 use Phalcon\Support\Helper\Str\Ucwords;
 use Phalcon\Support\Helper\Str\Underscore;
@@ -283,6 +286,10 @@ class NewInstanceCest
                 IsUpper::class,
             ],
             [
+                'kebabCase',
+                KebabCase::class,
+            ],
+            [
                 'len',
                 Len::class,
             ],
@@ -291,12 +298,20 @@ class NewInstanceCest
                 Lower::class,
             ],
             [
+                'pascalCase',
+                PascalCase::class,
+            ],
+            [
                 'random',
                 Random::class,
             ],
             [
                 'reduceSlashes',
                 ReduceSlashes::class,
+            ],
+            [
+                'snakeCase',
+                SnakeCase::class,
             ],
             [
                 'startsWith',
