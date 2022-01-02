@@ -28,28 +28,23 @@ use const PREG_SPLIT_DELIM_CAPTURE;
 use const PREG_SPLIT_NO_EMPTY;
 
 /**
- * Converts strings to upperCamelCase or lowerCamelCase
+ * Converts strings to snake_case style
  */
-class Camelize extends PascalCase
+class SnakeCase extends PascalCase
 {
     /**
      * @param string      $text
      * @param string|null $delimiters
-     * @param bool        $lowerFirst
      *
      * @return string
      */
     public function __invoke(
         string $text,
-        string $delimiters = null,
-        bool $lowerFirst = false
-    ): string {
-        $result = parent::__invoke($text, $delimiters);
+        string $delimiters = null
+    ): string
+    {
+        $output = $this->processArray($text, $delimiters);
 
-        if (true === $lowerFirst) {
-            $result = lcfirst($result);
-        }
-
-        return $result;
+        return implode('-', $output);
     }
 }
