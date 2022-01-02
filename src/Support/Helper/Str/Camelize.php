@@ -13,19 +13,7 @@ declare(strict_types=1);
 
 namespace Phalcon\Support\Helper\Str;
 
-use function array_map;
-use function implode;
 use function lcfirst;
-use function mb_strtolower;
-use function preg_replace;
-use function preg_split;
-use function str_replace;
-use function ucfirst;
-
-use function ucwords;
-
-use const PREG_SPLIT_DELIM_CAPTURE;
-use const PREG_SPLIT_NO_EMPTY;
 
 /**
  * Converts strings to upperCamelCase or lowerCamelCase

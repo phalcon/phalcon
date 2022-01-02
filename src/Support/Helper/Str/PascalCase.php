@@ -15,14 +15,10 @@ namespace Phalcon\Support\Helper\Str;
 
 use function array_map;
 use function implode;
-use function lcfirst;
 use function mb_strtolower;
-use function preg_replace;
 use function preg_split;
 use function str_replace;
 use function ucfirst;
-
-use function ucwords;
 
 use const PREG_SPLIT_DELIM_CAPTURE;
 use const PREG_SPLIT_NO_EMPTY;
@@ -44,7 +40,7 @@ class PascalCase
     ): string {
         $exploded = $this->processArray($text, $delimiters);
 
-        $output     = array_map(
+        $output = array_map(
             function ($element) {
                 return ucfirst(mb_strtolower($element));
             },
