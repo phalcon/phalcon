@@ -20,11 +20,6 @@ use Phalcon\Logger\LoggerFactory;
 use Phalcon\Tests\Fixtures\Traits\FactoryTrait;
 use UnitTester;
 
-/**
- * Class LoadCest
- *
- * @package Phalcon\Tests\Unit\Logger\LoggerFactory
- */
 class LoadCest
 {
     use FactoryTrait;
@@ -49,10 +44,17 @@ class LoadCest
         $options = $this->config->logger;
         $factory = new LoggerFactory(new AdapterFactory());
 
-        $object = $factory->load($options);
+        $logger = $factory->load($options);
 
-        $I->assertInstanceOf(Logger::class, $object);
-        $I->assertCount(2, $object->getAdapters());
+        $class = Logger::class;
+        $I->assertInstanceOf($class, $logger);
+
+        $class = LoggerInterface::class;
+        $I->assertInstanceOf($class, $logger);
+
+        $expected = 2;
+        $actual   = $logger->getAdapters();
+        $I->assertCount($expected, $actual);
     }
 
     /**
@@ -70,10 +72,53 @@ class LoadCest
         $options = $this->arrayConfig['logger'];
         $factory = new LoggerFactory(new AdapterFactory());
 
-        $object = $factory->load($options);
+        $logger = $factory->load($options);
 
-        $I->assertInstanceOf(Logger::class, $object);
-        $I->assertCount(2, $object->getAdapters());
+        $class = Logger::class;
+        $I->assertInstanceOf($class, $logger);
+
+        $class = LoggerInterface::class;
+        $I->assertInstanceOf($class, $logger);
+
+        $expected = 2;
+        $actual   = $logger->getAdapters();
+        $I->assertCount($expected, $actual);
+    }
+
+    /**
+     * Tests Phalcon\Logger\LoggerFactory :: load() - array - check name
+     *
+     * @param UnitTester $I
+     *
+     * @author Phalcon Team <team@phalcon.io>
+     * @since  2020-09-09
+     */
+    public function loggerLoggerFactoryLoadArrayName(UnitTester $I)
+    {
+        $I->wantToTest('Logger\LoggerFactory - load() - array - check name');
+
+        $options = $this->arrayConfig['logger'];
+        $factory = new LoggerFactory(new AdapterFactory());
+
+        $logger = $factory->load($options);
+
+        $class = Logger::class;
+        $I->assertInstanceOf($class, $logger);
+
+        $class = LoggerInterface::class;
+        $I->assertInstanceOf($class, $logger);
+
+        $expected = 2;
+        $actual   = $logger->getAdapters();
+        $I->assertCount($expected, $actual);
+
+        $class  = Stream::class;
+        $actual = $logger->getAdapter('main');
+        $I->assertInstanceOf($class, $actual);
+
+        $class  = Stream::class;
+        $actual = $logger->getAdapter('admin');
+        $I->assertInstanceOf($class, $actual);
     }
 
     /**
