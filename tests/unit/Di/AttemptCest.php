@@ -26,7 +26,7 @@ use UnitTester;
 class AttemptCest
 {
     /**
-     * Tests Phalcon\Di :: attempt()
+     * Tests Phalcon\Di\Di :: attempt()
      *
      * @param UnitTester $I
      *

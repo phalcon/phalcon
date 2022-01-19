@@ -30,7 +30,7 @@ use function spl_object_hash;
 class GetCest
 {
     /**
-     * Unit Tests Phalcon\Di :: get()
+     * Unit Tests Phalcon\Di\Di :: get()
      *
      * @param UnitTester $I
      *
