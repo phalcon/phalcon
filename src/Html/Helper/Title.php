@@ -55,20 +55,17 @@ class Title extends AbstractHelper
     /**
      * Sets the separator and returns the object back
      *
-     * @param string $separator
      * @param string $indent
      * @param string $delimiter
      *
      * @return Title
      */
     public function __invoke(
-        string $separator = '',
         string $indent = '',
         string $delimiter = PHP_EOL
     ): Title {
         $this->delimiter = $delimiter;
         $this->indent    = $indent;
-        $this->separator = $separator;
 
         return $this;
     }
@@ -141,9 +138,22 @@ class Title extends AbstractHelper
      */
     public function set(string $text, bool $raw = false): Title
     {
-        $text = $raw ? $text : $this->escaper->html($text);
+        $this->title = $raw ? $text : $this->escaper->html($text);
 
-        $this->title = $text;
+        return $this;
+    }
+
+    /**
+     * Sets the separator
+     *
+     * @param string $separator
+     * @param bool   $raw
+     *
+     * @return Title
+     */
+    public function setSeparator(string $separator, bool $raw = false): Title
+    {
+        $this->separator = $raw ? $separator : $this->escaper->html($separator);
 
         return $this;
     }
