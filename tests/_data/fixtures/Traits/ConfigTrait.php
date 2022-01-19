@@ -29,7 +29,7 @@ trait ConfigTrait
     /**
      * @var array
      */
-    protected $config = [
+    protected array $config = [
         'phalcon'     => [
             'baseuri' => '/phalcon/',
         ],
@@ -390,15 +390,10 @@ trait ConfigTrait
 
     private function compareConfig(UnitTester $I, array $actual, Config $expected)
     {
-        $I->assertEquals(
-            $expected->toArray(),
-            $actual
-        );
+        $I->assertEquals($expected->toArray(), $actual);
 
         foreach ($actual as $key => $value) {
-            $I->assertTrue(
-                isset($expected->$key)
-            );
+            $I->assertTrue(isset($expected->$key));
 
             if (is_array($value)) {
                 $this->compareConfig($I, $value, $expected->$key);

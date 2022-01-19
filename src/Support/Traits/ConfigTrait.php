@@ -39,17 +39,46 @@ trait ConfigTrait
         }
 
         if (true !== is_array($config)) {
-            throw new Exception(
-                'Config must be array or Phalcon\Config object'
+            $exception = $this->getExceptionClass();
+            throw new $exception(
+                'Config must be array or Phalcon\Config\Config object'
             );
         }
+//
+//        if (true !== isset($config['adapter'])) {
+//            $exception = $this->getExceptionClass();
+//            throw new $exception(
+//                'You must provide "adapter" option in factory config parameter.'
+//            );
+//        }
 
-        if (true !== isset($config['adapter'])) {
-            throw new Exception(
-                'You must provide "adapter" option in factory config parameter.'
+        return $config;
+    }
+
+    /**
+     * Checks if the config has a specific element
+     *
+     * @param array  $config
+     * @param string $element
+     *
+     * @return array
+     */
+    protected function checkConfigElement(array $config, string $element): array
+    {
+        if (true !== isset($config[$element])) {
+            $exception = $this->getExceptionClass();
+            throw new $exception(
+                "You must provide '" . $element . "' option in factory config parameter."
             );
         }
 
         return $config;
     }
+
+    /**
+     * Returns the exception class for the factory
+     *
+     * @return string
+     */
+    abstract protected function getExceptionClass(): string;
 }

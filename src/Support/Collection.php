@@ -34,10 +34,8 @@ use function settype;
  * `Phalcon\Collection` is a supercharged object-oriented array. It implements:
  * - [ArrayAccess](https://www.php.net/manual/en/class.arrayaccess.php)
  * - [Countable](https://www.php.net/manual/en/class.countable.php)
- * -
- * [IteratorAggregate](https://www.php.net/manual/en/class.iteratoraggregate.php)
- * -
- * [JsonSerializable](https://www.php.net/manual/en/class.jsonserializable.php)
+ * - [IteratorAggregate](https://www.php.net/manual/en/class.iteratoraggregate.php)
+ * - [JsonSerializable](https://www.php.net/manual/en/class.jsonserializable.php)
  * - [Serializable](https://www.php.net/manual/en/class.serializable.php)
  *
  * It can be used in any part of the application that needs collection of data
@@ -120,14 +118,25 @@ class Collection implements
         $defaultValue = null,
         string $cast = null
     ) {
-        $element = ($this->insensitive) ? mb_strtolower($element) : $element;
+        $element = $this->processKey($element);
 
-        if (!array_key_exists($element, $this->lowerKeys)) {
+        /**
+         * If the key is not set, return the default value
+         */
+        if (true !== isset($this->lowerKeys[$element])) {
             return $defaultValue;
         }
 
         $key   = $this->lowerKeys[$element];
         $value = $this->data[$key];
+
+        /**
+         * If the key is set and is `null` then return the default
+         * value also. This aligns with 3.x behavior
+         */
+        if (null === $value) {
+            return $defaultValue;
+        }
 
         if (null !== $cast) {
             settype($value, $cast);
@@ -288,15 +297,26 @@ class Collection implements
     /**
      * Internal method to set data
      *
-     * @param mixed $element Name of the element
-     * @param mixed $value   Value to store for the element
+     * @param string $element Name of the element
+     * @param mixed  $value   Value to store for the element
      */
-    protected function setData($element, $value): void
+    protected function setData(string $element, $value): void
     {
-        $element = (string) $element;
-        $key     = ($this->insensitive) ? mb_strtolower($element) : $element;
-
+        $key                   = $this->processKey($element);
         $this->data[$element]  = $value;
         $this->lowerKeys[$key] = $element;
+    }
+
+    /**
+     * Checks if we need insensitive keys and if so, converts the element to
+     * lowercase
+     */
+    protected function processKey(string $element): string
+    {
+        if (true === $this->insensitive) {
+            return mb_strtolower($element);
+        }
+
+        return $element;
     }
 }

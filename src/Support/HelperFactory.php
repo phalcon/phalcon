@@ -15,6 +15,7 @@ namespace Phalcon\Support;
 
 use Phalcon\Support\Helper\Arr\Blacklist;
 use Phalcon\Support\Helper\Arr\Chunk;
+use Phalcon\Support\Helper\Arr\Filter;
 use Phalcon\Support\Helper\Arr\First;
 use Phalcon\Support\Helper\Arr\FirstKey;
 use Phalcon\Support\Helper\Arr\Flatten;
@@ -45,12 +46,14 @@ use Phalcon\Support\Helper\Str\Decapitalize;
 use Phalcon\Support\Helper\Str\Decrement;
 use Phalcon\Support\Helper\Str\DirFromFile;
 use Phalcon\Support\Helper\Str\DirSeparator;
+use Phalcon\Support\Helper\Str\Dynamic;
 use Phalcon\Support\Helper\Str\EndsWith;
 use Phalcon\Support\Helper\Str\FirstBetween;
 use Phalcon\Support\Helper\Str\Friendly;
 use Phalcon\Support\Helper\Str\Humanize;
 use Phalcon\Support\Helper\Str\Includes;
 use Phalcon\Support\Helper\Str\Increment;
+use Phalcon\Support\Helper\Str\Interpolate;
 use Phalcon\Support\Helper\Str\IsAnagram;
 use Phalcon\Support\Helper\Str\IsLower;
 use Phalcon\Support\Helper\Str\IsPalindrome;
@@ -182,67 +185,72 @@ class HelperFactory
     }
 
     /**
+     * Returns the available adapters
+     *
      * @return string[]
      */
     protected function getServices(): array
     {
         return [
-            'blacklist'     => Blacklist::class,
-            'chunk'         => Chunk::class,
-            'first'         => First::class,
-            'firstKey'      => FirstKey::class,
-            'flatten'       => Flatten::class,
-            'get'           => Get::class,
-            'group'         => Group::class,
-            'has'           => Has::class,
-            'isUnique'      => IsUnique::class,
-            'last'          => Last::class,
-            'lastKey'       => LastKey::class,
-            'order'         => Order::class,
-            'pluck'         => Pluck::class,
-            'set'           => Set::class,
-            'sliceLeft'     => SliceLeft::class,
-            'sliceRight'    => SliceRight::class,
-            'split'         => Split::class,
-            'toObject'      => ToObject::class,
-            'validateAll'   => ValidateAll::class,
-            'validateAny'   => ValidateAny::class,
-            'whitelist'     => Whitelist::class,
-            'basename'      => Basename::class,
-            'decode'        => Decode::class,
-            'encode'        => Encode::class,
-            'between'       => IsBetween::class,
-            'camelize'      => Camelize::class,
-            'concat'        => Concat::class,
-            'countVowels'   => CountVowels::class,
-            'decapitalize'  => Decapitalize::class,
-            'decrement'     => Decrement::class,
-            'dirFromFile'   => DirFromFile::class,
-            'dirSeparator'  => DirSeparator::class,
-            'endsWith'      => EndsWith::class,
-            'firstBetween'  => FirstBetween::class,
-            'friendly'      => Friendly::class,
-            'humanize'      => Humanize::class,
-            'includes'      => Includes::class,
-            'increment'     => Increment::class,
-            'isAnagram'     => IsAnagram::class,
-            'isLower'       => IsLower::class,
-            'isPalindrome'  => IsPalindrome::class,
-            'isUpper'       => IsUpper::class,
-            'kebabCase'     => KebabCase::class,
-            'len'           => Len::class,
-            'lower'         => Lower::class,
-            'pascalCase'    => PascalCase::class,
-            'prefix'        => Prefix::class,
-            'random'        => Random::class,
-            'reduceSlashes' => ReduceSlashes::class,
-            'snakeCase'     => SnakeCase::class,
-            'startsWith'    => StartsWith::class,
-            'suffix'        => Suffix::class,
-            'ucwords'       => Ucwords::class,
-            'uncamelize'    => Uncamelize::class,
-            'underscore'    => Underscore::class,
-            'upper'         => Upper::class,
+            "blacklist"     => Blacklist::class,
+            "chunk"         => Chunk::class,
+            "filter"        => Filter::class,
+            "first"         => First::class,
+            "firstKey"      => FirstKey::class,
+            "flatten"       => Flatten::class,
+            "get"           => Get::class,
+            "group"         => Group::class,
+            "has"           => Has::class,
+            "isUnique"      => IsUnique::class,
+            "last"          => Last::class,
+            "lastKey"       => LastKey::class,
+            "order"         => Order::class,
+            "pluck"         => Pluck::class,
+            "set"           => Set::class,
+            "sliceLeft"     => SliceLeft::class,
+            "sliceRight"    => SliceRight::class,
+            "split"         => Split::class,
+            "toObject"      => ToObject::class,
+            "validateAll"   => ValidateAll::class,
+            "validateAny"   => ValidateAny::class,
+            "whitelist"     => Whitelist::class,
+            "basename"      => Basename::class,
+            "decode"        => Decode::class,
+            "encode"        => Encode::class,
+            "isBetween"     => IsBetween::class,
+            "camelize"      => Camelize::class,
+            "concat"        => Concat::class,
+            "countVowels"   => CountVowels::class,
+            "decapitalize"  => Decapitalize::class,
+            "decrement"     => Decrement::class,
+            "dirFromFile"   => DirFromFile::class,
+            "dirSeparator"  => DirSeparator::class,
+            "dynamic"       => Dynamic::class,
+            "endsWith"      => EndsWith::class,
+            "firstBetween"  => FirstBetween::class,
+            "friendly"      => Friendly::class,
+            "humanize"      => Humanize::class,
+            "includes"      => Includes::class,
+            "increment"     => Increment::class,
+            "interpolate"   => Interpolate::class,
+            "isAnagram"     => IsAnagram::class,
+            "isLower"       => IsLower::class,
+            "isPalindrome"  => IsPalindrome::class,
+            "isUpper"       => IsUpper::class,
+            "kebabCase"     => KebabCase::class,
+            "len"           => Len::class,
+            "lower"         => Lower::class,
+            "pascalCase"    => PascalCase::class,
+            "prefix"        => Prefix::class,
+            "random"        => Random::class,
+            "reduceSlashes" => ReduceSlashes::class,
+            "snakeCase"     => SnakeCase::class,
+            "startsWith"    => StartsWith::class,
+            "suffix"        => Suffix::class,
+            "ucwords"       => Ucwords::class,
+            "uncamelize"    => Uncamelize::class,
+            "underscore"    => Underscore::class,
+            "upper"         => Upper::class,
         ];
     }
 }
