@@ -74,7 +74,7 @@ use Phalcon\Traits\Factory\FactoryTrait;
 use function call_user_func_array;
 
 /**
- * This class offers quick string functions throughout the framework
+ * ServiceLocator implementation for helpers
  *
  * @method array  blacklist(array $collection, array $blackList)
  * @method array  chunk(array $collection, int $size, bool $preserveKeys = false)
@@ -164,8 +164,7 @@ class HelperFactory
     /**
      * @param string $name
      *
-     * @return mixed
-     * @throws Exception
+     * @throws \Exception
      */
     public function newInstance(string $name)
     {
