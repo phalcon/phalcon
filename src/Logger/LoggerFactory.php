@@ -15,14 +15,15 @@ namespace Phalcon\Logger;
 
 use DateTimeZone;
 use Phalcon\Config\ConfigInterface;
+use Phalcon\Support\Traits\ConfigTrait;
 
 /**
- * Class LoggerFactory
- *
- * @package Phalcon\Logger
+ * Factory creating logger objects
  */
 class LoggerFactory
 {
+    use ConfigTrait;
+
     /**
      * @var AdapterFactory
      */
@@ -42,31 +43,34 @@ class LoggerFactory
      * @param array|ConfigInterface $config = [
      *     'name'     => 'messages',
      *     'adapters' => [
-     *         'adapter' => 'stream',
-     *         'name'    => 'file.log',
-     *         'options' => [
-     *             'mode'     => 'ab',
-     *             'option'   => null,
-     *             'facility' => null
-     *         ]
+     *         'adapter-name' => [
+     *              'adapter' => 'stream',
+     *              'name'    => 'file.log',
+     *              'options' => [
+     *                  'mode'     => 'ab',
+     *                  'option'   => null,
+     *                  'facility' => null
+     *              ],
+     *         ],
      *     ]
      * ]
      */
     public function load($config): Logger
     {
-        $config   = $this->checkConfig($config);
-        $name     = $config['name'];
-        $timezone = $config['timezone'] ?? null;
-        $options  = $config['options'] ?? [];
-        $adapters = $options['adapters'] ?? [];
         $data     = [];
+        $config   = $this->checkConfig($config);
+        $config   = $this->checkConfigElement($config, "name");
+        $name     = $config["name"];
+        $timezone = $config["timezone"] ?? null;
+        $options  = $config["options"] ?? [];
+        $adapters = $options["adapters"] ?? [];
 
-        foreach ($adapters as $adapter) {
-            $adapterClass    = $adapter['adapter'];
-            $adapterFileName = $adapter['name'];
-            $adapterOptions  = $adapter['options'] ?? [];
+        foreach ($adapters as $adapterName => $adapter) {
+            $adapterClass    = $adapter["adapter"];
+            $adapterFileName = $adapter["name"];
+            $adapterOptions  = $adapter["options"] ?? [];
 
-            $data[] = $this->adapterFactory->newInstance(
+            $data[$adapterName] = $this->adapterFactory->newInstance(
                 $adapterClass,
                 $adapterFileName,
                 $adapterOptions
@@ -88,37 +92,16 @@ class LoggerFactory
     public function newInstance(
         string $name,
         array $adapters = [],
-        ?DateTimeZone $timezone = null
+        DateTimeZone $timezone = null
     ): Logger {
         return new Logger($name, $adapters, $timezone);
     }
 
     /**
-     * Checks the config if it is a valid object
-     *
-     * @param mixed $config
-     *
-     * @return array
-     * @throws Exception
+     * @return string
      */
-    private function checkConfig($config): array
+    protected function getExceptionClass(): string
     {
-        if (true === is_object($config) && $config instanceof ConfigInterface) {
-            $config = $config->toArray();
-        }
-
-        if (true !== is_array($config)) {
-            throw new Exception(
-                'Config must be array or Phalcon\Config\Config object'
-            );
-        }
-
-        if (true !== isset($config['name'])) {
-            throw new Exception(
-                "You must provide 'name' option in factory config parameter."
-            );
-        }
-
-        return $config;
+        return Exception::class;
     }
 }

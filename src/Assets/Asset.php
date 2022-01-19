@@ -393,7 +393,7 @@ class Asset implements AssetInterface
      *
      * @return AssetInterface
      */
-    public function setLocal(bool $flag): AssetInterface
+    public function setIsLocal(bool $flag): AssetInterface
     {
         $this->isLocal = $flag;
 

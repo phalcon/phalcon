@@ -113,4 +113,14 @@ class CacheFactory
 
         return new Cache($adapter);
     }
+
+    /**
+     * Returns the exception class for the factory
+     *
+     * @return string
+     */
+    protected function getExceptionClass(): string
+    {
+        return Exception::class;
+    }
 }

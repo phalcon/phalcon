@@ -16,6 +16,10 @@ namespace Phalcon\Html;
 use Phalcon\Support\Collection;
 use Phalcon\Html\Attributes\RenderInterface;
 
+use function htmlspecialchars;
+
+use const ENT_QUOTES;
+
 /**
  * This class helps to work with HTML Attributes
  */
@@ -26,7 +30,7 @@ class Attributes extends Collection implements RenderInterface
      */
     public function render(): string
     {
-        return $this->renderAttributes("", $this->toArray());
+        return $this->renderAttributes($this->toArray());
     }
 
     /**
@@ -46,7 +50,7 @@ class Attributes extends Collection implements RenderInterface
      *
      * @todo Move this in a trait and start using the escaper
      */
-    private function renderAttributes(string $code, array $attributes): string
+    private function renderAttributes(array $attributes): string
     {
         $order = [
             'rel'    => null,
@@ -61,23 +65,16 @@ class Attributes extends Collection implements RenderInterface
             'class'  => null,
         ];
 
-        $attrs = [];
-        foreach ($order as $key => $value) {
-            if (true === isset($attributes[$key])) {
-                $attrs[$key] = $attributes[$key];
-            }
-        }
+        $intersect = array_intersect_key($order, $attributes);
+        $results   = array_merge($intersect, $attributes);
 
-        foreach ($attributes as $key => $value) {
-            if (true !== isset($attrs[$key])) {
-                $attrs[$key] = $value;
-            }
-        }
+        /**
+         * Just in case remove the "escape" attribute
+         */
+        unset($results['escape']);
 
-        unset($attrs['escape']);
-
-        $newCode = $code;
-        foreach ($attrs as $key => $value) {
+        $result = "";
+        foreach ($results as $key => $value) {
             if (true === is_string($key) && null !== $value) {
                 if (true === is_array($value) || true === is_resource($value)) {
                     throw new Exception(
@@ -86,19 +83,12 @@ class Attributes extends Collection implements RenderInterface
                     );
                 }
 
-                $newCode .= ' '
-                    . $key
-                    . '="'
-                    . htmlspecialchars(
-                        $value,
-                        ENT_QUOTES,
-                        'utf-8',
-                        true
-                    )
-                    . '"';
+                $result .= $key . "=\""
+                    . htmlspecialchars($value, ENT_QUOTES, "utf-8", true)
+                    . "\" ";
             }
         }
 
-        return $newCode;
+        return $result;
     }
 }
