@@ -35,7 +35,6 @@ use function intval;
 use function openssl_decrypt;
 use function openssl_encrypt;
 use function openssl_get_cipher_methods;
-use function rtrim;
 use function sprintf;
 use function str_ireplace;
 use function str_replace;
@@ -443,6 +442,25 @@ class Crypt implements CryptInterface
     public function getKey(): string
     {
         return $this->key;
+    }
+
+    /**
+     * Returns if the input length for decryption is valid or not
+     * (number of bytes required by the cipher).
+     *
+     * @param string $input
+     *
+     * @return bool
+     */
+    public function isValidDecryptLength(string $input): bool
+    {
+        $length = $this->phpOpensslCipherIvLength($this->cipher);
+
+        if ($length === false) {
+            return false;
+        }
+
+        return $length <= mb_strlen($input);
     }
 
     /**
