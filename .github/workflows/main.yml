@@ -106,7 +106,7 @@ jobs:
           php-version: ${{ matrix.php }}
           extensions: ${{ env.EXTENSIONS }}
           ini-values: apc.enable_cli=on, session.save_path=${{ env.SESSION_SAVE_PATH }}
-          tools: pecl, phpize, php-config
+          tools: pecl, phpize, php-config, composer:v2
           coverage: xdebug
         env:
           PHPTS: ${{ matrix.ts }}
