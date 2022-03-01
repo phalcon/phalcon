@@ -13,21 +13,10 @@ declare(strict_types=1);
 
 namespace Phalcon\Storage\Serializer;
 
-use Phalcon\Storage\Traits\StorageErrorHandlerTrait;
-
 use function msgpack_pack;
 
-use const E_WARNING;
-
-/**
- * Class Msgpack
- *
- * @package Phalcon\Storage\Serializer
- */
-class Msgpack extends AbstractSerializer
+class Msgpack extends Igbinary
 {
-    use StorageErrorHandlerTrait;
-
     /**
      * Serializes data
      *
@@ -43,18 +32,12 @@ class Msgpack extends AbstractSerializer
     }
 
     /**
-     * Unserializes data
+     * @param mixed $value
      *
-     * @param string $data
-     *
-     * @return void
+     * @return mixed
      */
-    public function unserialize($data)
+    protected function doUnserialize($value)
     {
-        $this->data = $this->callMethodWithError(
-            'msgpack_unpack',
-            E_WARNING,
-            $data
-        );
+        return msgpack_unpack($value);
     }
 }

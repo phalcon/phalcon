@@ -273,7 +273,7 @@ abstract class AbstractAdapter implements AdapterInterface
      */
     protected function getSerializedData($content)
     {
-        if ('' !== $this->defaultSerializer) {
+        if (null !== $this->serializer) {
             $this->serializer->setData($content);
             $content = $this->serializer->serialize();
         }
@@ -315,11 +315,11 @@ abstract class AbstractAdapter implements AdapterInterface
      */
     protected function getUnserializedData($content, $defaultValue = null)
     {
-        if (!$content) {
-            return $defaultValue;
-        }
+        if (null !== $this->serializer) {
+            if (true !== $this->serializer->isSuccess()) {
+                return $defaultValue;
+            }
 
-        if ('' !== $this->defaultSerializer) {
             $this->serializer->unserialize($content);
             $content = $this->serializer->getData();
         }

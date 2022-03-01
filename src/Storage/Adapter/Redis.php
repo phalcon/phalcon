@@ -108,7 +108,8 @@ class Redis extends AbstractAdapter
     public function delete(string $key): bool
     {
         return (bool) $this->getAdapter()
-                           ->unlink($key);
+                           ->unlink($key)
+        ;
     }
 
     /**
@@ -184,7 +185,8 @@ class Redis extends AbstractAdapter
     public function has(string $key): bool
     {
         return (bool) $this->getAdapter()
-                           ->exists($key);
+                           ->exists($key)
+        ;
     }
 
     /**
@@ -351,8 +353,8 @@ class Redis extends AbstractAdapter
     private function setSerializer(RedisService $connection)
     {
         $map = [
-            'none' => RedisService::SERIALIZER_NONE,
-            'php'  => RedisService::SERIALIZER_PHP,
+            'redis_none' => RedisService::SERIALIZER_NONE,
+            'redis_php'  => RedisService::SERIALIZER_PHP,
         ];
 
         /**
@@ -360,15 +362,15 @@ class Redis extends AbstractAdapter
          * of Redis
          */
         if (defined('\\Redis::SERIALIZER_IGBINARY')) {
-            $map['igbinary'] = constant('\\Redis::SERIALIZER_IGBINARY');
+            $map['redis_igbinary'] = constant('\\Redis::SERIALIZER_IGBINARY');
         }
 
         if (defined('\\Redis::SERIALIZER_MSGPACK')) {
-            $map['msgpack'] = constant('\\Redis::SERIALIZER_MSGPACK');
+            $map['redis_msgpack'] = constant('\\Redis::SERIALIZER_MSGPACK');
         }
 
         if (defined('\\Redis::SERIALIZER_JSON')) {
-            $map['json'] = constant('\\Redis::SERIALIZER_JSON');
+            $map['redis_json'] = constant('\\Redis::SERIALIZER_JSON');
         }
 
         $serializer = mb_strtolower($this->defaultSerializer);

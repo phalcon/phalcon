@@ -17,11 +17,8 @@ use function is_bool;
 use function is_numeric;
 
 /**
- * Class AbstractSerializer
- *
- * @package Phalcon\Storage\Serializer
- *
  * @property mixed $data
+ * @property bool  $isSuccess
  */
 abstract class AbstractSerializer implements SerializerInterface
 {
@@ -29,6 +26,11 @@ abstract class AbstractSerializer implements SerializerInterface
      * @var mixed
      */
     protected $data = null;
+
+    /**
+     * @var bool
+     */
+    protected bool $isSuccess = true;
 
     /**
      * AbstractSerializer constructor.
@@ -41,22 +43,6 @@ abstract class AbstractSerializer implements SerializerInterface
     }
 
     /**
-     * If this returns true, then the data returns back as is
-     *
-     * @param mixed $data
-     *
-     * @return bool
-     */
-    protected function isSerializable($data): bool
-    {
-        return !(
-            true === empty($data) ||
-            true === is_bool($data) ||
-            true === is_numeric($data)
-        );
-    }
-
-    /**
      * @return mixed
      */
     public function getData()
@@ -65,10 +51,37 @@ abstract class AbstractSerializer implements SerializerInterface
     }
 
     /**
+     * Returns `true` if the serialize/unserialize operation was successful;
+     * `false` otherwise
+     *
+     * @return bool
+     */
+    public function isSuccess(): bool
+    {
+        return $this->isSuccess;
+    }
+
+    /**
      * @param mixed $data
      */
     public function setData($data): void
     {
         $this->data = $data;
+    }
+
+    /**
+     * If this returns true, then the data is returned as is
+     *
+     * @param mixed $data
+     *
+     * @return bool
+     */
+    protected function isSerializable($data): bool
+    {
+        return !(
+            null === $data ||
+            true === is_bool($data) ||
+            true === is_numeric($data)
+        );
     }
 }

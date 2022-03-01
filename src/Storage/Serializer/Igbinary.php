@@ -13,21 +13,14 @@ declare(strict_types=1);
 
 namespace Phalcon\Storage\Serializer;
 
-use Phalcon\Storage\Traits\StorageErrorHandlerTrait;
-
 use function igbinary_serialize;
+use function restore_error_handler;
+use function set_error_handler;
 
 use const E_WARNING;
 
-/**
- * Class Igbinary
- *
- * @package Phalcon\Storage\Serializer
- */
 class Igbinary extends AbstractSerializer
 {
-    use StorageErrorHandlerTrait;
-
     /**
      * Serializes data
      *
@@ -39,7 +32,14 @@ class Igbinary extends AbstractSerializer
             return $this->data;
         }
 
-        return igbinary_serialize($this->data);
+        $result = $this->phpIgbinarySerialize($this->data);
+
+        if (null === $result) {
+            $this->isSuccess = false;
+            $result          = "";
+        }
+
+        return $result;
     }
 
     /**
@@ -51,10 +51,51 @@ class Igbinary extends AbstractSerializer
      */
     public function unserialize($data)
     {
-        $this->data = $this->callMethodWithError(
-            'igbinary_unserialize',
-            E_WARNING,
-            $data
-        );
+        if (true !== $this->isSerializable($data)) {
+            $this->data = $data;
+        } else {
+            $warning = false;
+            set_error_handler(
+                function () use (&$warning) {
+                    $warning = true;
+                },
+                E_WARNING
+            );
+
+            $result = $this->doUnserialize($data);
+
+            restore_error_handler();
+
+            if (true === $warning || false === $result) {
+                $this->isSuccess = false;
+                $result          = "";
+            }
+
+            $this->data = $result;
+        }
+    }
+
+    /**
+     * Wrapper for `igbinary_serialize`
+     *
+     * @param mixed $value
+     *
+     * @return string|null
+     */
+    protected function phpIgbinarySerialize($value): ?string
+    {
+        return igbinary_serialize($value);
+    }
+
+    /**
+     * Wrapper for `igbinary_unserialize`
+     *
+     * @param string $value
+     *
+     * @return mixed|false
+     */
+    protected function doUnserialize($value)
+    {
+        return igbinary_unserialize($value);
     }
 }

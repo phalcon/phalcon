@@ -14,17 +14,16 @@ declare(strict_types=1);
 namespace Phalcon\Storage\Serializer;
 
 use InvalidArgumentException;
-use Phalcon\Storage\Traits\StorageErrorHandlerTrait;
 
 use function is_string;
+use function restore_error_handler;
 use function serialize;
+use function set_error_handler;
 
 use const E_NOTICE;
 
 class Php extends AbstractSerializer
 {
-    use StorageErrorHandlerTrait;
-
     /**
      * Serializes data
      *
@@ -46,37 +45,44 @@ class Php extends AbstractSerializer
      */
     public function unserialize($data)
     {
-        $this->processSerializable($data);
-        $this->processNotSerializable($data);
-    }
-
-    /**
-     * @param mixed $data
-     */
-    private function processSerializable($data): void
-    {
-        if (true === $this->isSerializable($data)) {
+        if (true !== $this->isSerializable($data)) {
+            $this->data = $data;
+        } else {
             if (true !== is_string($data)) {
                 throw new InvalidArgumentException(
                     'Data for the unserializer must of type string'
                 );
             }
 
-            $this->data = $this->callMethodWithError(
-                'unserialize',
-                E_NOTICE,
-                $data
+            $warning = false;
+            set_error_handler(
+                function () use (&$warning) {
+                    $warning = true;
+                },
+                E_NOTICE
             );
+
+            $result = $this->phpUnserialize($data);
+
+            restore_error_handler();
+
+            if (true === $warning || false === $result) {
+                $this->isSuccess = false;
+                $result          = "";
+            }
+
+            $this->data = $result;
         }
     }
 
     /**
-     * @param mixed $data
+     * @param string $data
+     * @param array  $options
+     *
+     * @return mixed|false
      */
-    private function processNotSerializable($data): void
+    private function phpUnserialize(string $data, array $options = [])
     {
-        if (true !== $this->isSerializable($data)) {
-            $this->data = $data;
-        }
+        return unserialize($data, $options);
     }
 }

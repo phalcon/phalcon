@@ -19,7 +19,6 @@ use FilesystemIterator;
 use Iterator;
 use Phalcon\Storage\Exception as StorageException;
 use Phalcon\Storage\SerializerFactory;
-use Phalcon\Storage\Traits\StorageErrorHandlerTrait;
 use Phalcon\Support\Exception as SupportException;
 use Phalcon\Traits\Helper\Str\DirFromFileTrait;
 use Phalcon\Traits\Helper\Str\DirSeparatorTrait;
@@ -29,11 +28,12 @@ use RecursiveIteratorIterator;
 
 use function fclose;
 use function flock;
-use function is_bool;
 use function is_dir;
 use function is_int;
 use function mkdir;
+use function restore_error_handler;
 use function serialize;
+use function set_error_handler;
 use function str_replace;
 use function time;
 use function unlink;
@@ -53,7 +53,6 @@ class Stream extends AbstractAdapter
     use DirFromFileTrait;
     use DirSeparatorTrait;
     use FileTrait;
-    use StorageErrorHandlerTrait;
 
     /**
      * @var string
@@ -138,7 +137,12 @@ class Stream extends AbstractAdapter
         $data = $this->get($key);
         $data = (int) $data - $value;
 
-        return $this->set($key, $data);
+        $result = $this->set($key, $data);
+        if (false !== $result) {
+            $result = $data;
+        }
+
+        return $result;
     }
 
     /**
@@ -243,7 +247,7 @@ class Stream extends AbstractAdapter
             return false;
         }
 
-        return !$this->isExpired($payload);
+        return true !== $this->isExpired($payload);
     }
 
     /**
@@ -264,7 +268,12 @@ class Stream extends AbstractAdapter
         $data = $this->get($key);
         $data = (int) $data + $value;
 
-        return $this->set($key, $data);
+        $result = $this->set($key, $data);
+        if (false !== $result) {
+            $result = $data;
+        }
+
+        return $result;
     }
 
     /**
@@ -287,7 +296,7 @@ class Stream extends AbstractAdapter
             return $this->delete($key);
         }
 
-        $payload   = [
+        $payload = [
             'created' => time(),
             'ttl'     => $this->getTtl($ttl),
             'content' => $this->getSerializedData($value),
@@ -307,7 +316,7 @@ class Stream extends AbstractAdapter
      */
     public function setForever(string $key, $value): bool
     {
-        $payload   = [
+        $payload = [
             'created' => time(),
             'ttl'     => 'forever',
             'content' => $this->getSerializedData($value),
@@ -398,12 +407,23 @@ class Stream extends AbstractAdapter
             return [];
         }
 
-        return $this->callMethodWithError(
-            'unserialize',
-            E_NOTICE,
-            $payload,
-            []
+        $warning = false;
+        set_error_handler(
+            function () use (&$warning) {
+                $warning = true;
+            },
+            E_NOTICE
         );
+
+        $data = unserialize($payload);
+
+        restore_error_handler();
+
+        if (true === $warning) {
+            $data = [];
+        }
+
+        return $data;
     }
 
     /**

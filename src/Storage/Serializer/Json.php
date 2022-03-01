@@ -20,11 +20,6 @@ use function is_object;
 use function json_decode;
 use function json_encode;
 
-/**
- * Class Json
- *
- * @package Phalcon\Storage\Serializer
- */
 class Json extends AbstractSerializer
 {
     /**
@@ -57,6 +52,10 @@ class Json extends AbstractSerializer
      */
     public function unserialize($data)
     {
-        $this->data = json_decode($data);
+        if (true !== $this->isSerializable($data)) {
+            $this->data = $data;
+        } else {
+            $this->data = json_decode($data);
+        }
     }
 }
