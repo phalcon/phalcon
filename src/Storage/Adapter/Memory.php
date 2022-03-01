@@ -14,12 +14,11 @@ declare(strict_types=1);
 namespace Phalcon\Storage\Adapter;
 
 use DateInterval;
-use Exception as BaseException;
 use Phalcon\Storage\SerializerFactory;
 use Phalcon\Support\Exception as SupportException;
 
+use function array_key_exists;
 use function array_keys;
-use function is_bool;
 use function is_int;
 
 /**
@@ -73,9 +72,9 @@ class Memory extends AbstractAdapter
     public function decrement(string $key, int $value = 1)
     {
         $prefixedKey = $this->getPrefixedKey($key);
-        $result      = isset($this->data[$prefixedKey]);
+        $result      = array_key_exists($prefixedKey, $this->data);
 
-        if ($result) {
+        if (true === $result) {
             $current  = $this->data[$prefixedKey];
             $newValue = (int) $current - $value;
             $result   = $newValue;
@@ -96,7 +95,7 @@ class Memory extends AbstractAdapter
     public function delete(string $key): bool
     {
         $prefixedKey = $this->getPrefixedKey($key);
-        $exists      = isset($this->data[$prefixedKey]);
+        $exists      = array_key_exists($prefixedKey, $this->data);
 
         unset($this->data[$prefixedKey]);
 
@@ -142,7 +141,7 @@ class Memory extends AbstractAdapter
     {
         $prefixedKey = $this->getPrefixedKey($key);
 
-        return isset($this->data[$prefixedKey]);
+        return array_key_exists($prefixedKey, $this->data);
     }
 
     /**
@@ -156,7 +155,7 @@ class Memory extends AbstractAdapter
     public function increment(string $key, int $value = 1)
     {
         $prefixedKey = $this->getPrefixedKey($key);
-        $result      = isset($this->data[$prefixedKey]);
+        $result      = array_key_exists($prefixedKey, $this->data);
 
         if ($result) {
             $current  = $this->data[$prefixedKey];

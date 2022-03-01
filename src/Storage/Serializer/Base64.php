@@ -19,11 +19,6 @@ use function base64_decode;
 use function base64_encode;
 use function is_string;
 
-/**
- * Class Base64
- *
- * @package Phalcon\Storage\Serializer
- */
 class Base64 extends AbstractSerializer
 {
     /**
@@ -57,6 +52,26 @@ class Base64 extends AbstractSerializer
             );
         }
 
-        $this->data = base64_decode($data);
+        $result = $this->phpBase64Decode($data, true);
+
+        if (false === $result) {
+            $this->isSuccess = false;
+            $result          = "";
+        }
+
+        $this->data = $result;
+    }
+
+    /**
+     * Wrapper for base64_decode
+     *
+     * @param string $string
+     * @param bool   $strict
+     *
+     * @return string|false
+     */
+    protected function phpBase64Decode(string $string, bool $strict = false)
+    {
+        return base64_decode($string, $strict);
     }
 }

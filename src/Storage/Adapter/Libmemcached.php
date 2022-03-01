@@ -315,9 +315,9 @@ class Libmemcached extends AbstractAdapter
     private function setSerializer(Memcached $connection)
     {
         $map = [
-            'php'      => Memcached::SERIALIZER_PHP,
-            'json'     => Memcached::SERIALIZER_JSON,
-            'igbinary' => Memcached::SERIALIZER_IGBINARY,
+            'memcached_php'      => Memcached::SERIALIZER_PHP,
+            'memcached_json'     => Memcached::SERIALIZER_JSON,
+            'memcached_igbinary' => Memcached::SERIALIZER_IGBINARY,
         ];
 
         $serializer = strtolower($this->defaultSerializer);
