@@ -103,22 +103,6 @@ class Memory extends AbstractAdapter
     }
 
     /**
-     * Reads data from the adapter
-     *
-     * @param string     $key
-     * @param mixed|null $defaultValue
-     *
-     * @return mixed
-     */
-    public function get(string $key, $defaultValue = null)
-    {
-        $prefixedKey = $this->getPrefixedKey($key);
-        $content     = $this->data[$prefixedKey];
-
-        return $this->getUnserializedData($content, $defaultValue);
-    }
-
-    /**
      * Stores data in the adapter
      *
      * @param string $prefix
@@ -207,5 +191,15 @@ class Memory extends AbstractAdapter
     public function setForever(string $key, $value): bool
     {
         return $this->set($key, $value);
+    }
+
+    /**
+     * @param string $key
+     *
+     * @return mixed
+     */
+    protected function doGet(string $key)
+    {
+        return $this->data[$this->getPrefixedKey($key)];
     }
 }
