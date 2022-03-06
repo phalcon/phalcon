@@ -54,6 +54,8 @@ class GetKeysCest
         $serializer = new SerializerFactory();
         $adapter    = new Apcu($serializer);
 
+        $I->assertTrue($adapter->clear());
+
         $this->setupKeys($adapter, $I);
 
         $expected = [
@@ -157,6 +159,8 @@ class GetKeysCest
             }
         }
 
+        $I->assertTrue($adapter->clear());
+
         $this->setupKeys($adapter, $I);
 
 
@@ -195,6 +199,8 @@ class GetKeysCest
 
         $serializer = new SerializerFactory();
         $adapter    = new Memory($serializer);
+
+        $I->assertTrue($adapter->clear());
 
         $this->setupKeys($adapter, $I);
 
@@ -236,6 +242,8 @@ class GetKeysCest
 
         $serializer = new SerializerFactory();
         $adapter    = new Redis($serializer, getOptionsRedis());
+
+        $I->assertTrue($adapter->clear());
 
         $this->setupKeys($adapter, $I);
 
@@ -441,8 +449,6 @@ class GetKeysCest
         AdapterInterface $adapter,
         IntegrationTester $I
     ): void {
-        $I->assertTrue($adapter->clear());
-
         $actual = $adapter->set('key-1', 'test');
         $I->assertNotFalse($actual);
         $actual = $adapter->set('key-2', 'test');
