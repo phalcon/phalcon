@@ -56,7 +56,7 @@ class NewInstanceCest
 
         $name = uniqid();
         $I->expectThrowable(
-            new Exception('Service ' . $name . 'is not registered'),
+            new Exception('Service ' . $name . ' is not registered'),
             function () use ($name) {
                 $cacheFactory = new CacheFactory(
                     new AdapterFactory(
