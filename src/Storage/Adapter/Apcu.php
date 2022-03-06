@@ -101,21 +101,6 @@ class Apcu extends AbstractAdapter
     }
 
     /**
-     * Reads data from the adapter
-     *
-     * @param string     $key
-     * @param mixed|null $defaultValue
-     *
-     * @return mixed
-     */
-    public function get(string $key, $defaultValue = null)
-    {
-        $content = $this->phpApcuFetch($this->getPrefixedKey($key));
-
-        return $this->getUnserializedData($content, $defaultValue);
-    }
-
-    /**
      * Stores data in the adapter
      *
      * @param string $prefix
@@ -212,5 +197,15 @@ class Apcu extends AbstractAdapter
         );
 
         return is_bool($result) ? $result : false;
+    }
+
+    /**
+     * @param string $key
+     *
+     * @return mixed
+     */
+    protected function doGet(string $key)
+    {
+        return $this->phpApcuFetch($this->getPrefixedKey($key));
     }
 }

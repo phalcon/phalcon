@@ -190,15 +190,6 @@ class Stream extends AbstractAdapter
         return $this->getUnserializedData($content, $defaultValue);
     }
 
-    /**
-     * Always returns null
-     *
-     * @return null
-     */
-    public function getAdapter()
-    {
-        return $this->adapter;
-    }
 
     /**
      * Stores data in the adapter

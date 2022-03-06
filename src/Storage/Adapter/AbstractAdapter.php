@@ -149,9 +149,18 @@ abstract class AbstractAdapter implements AdapterInterface
      * @param string     $key
      * @param mixed|null $defaultValue
      *
-     * @return mixed
+     * @return mixed|null
      */
-    abstract public function get(string $key, $defaultValue = null);
+    public function get(string $key, $defaultValue = null)
+    {
+        if (true !== $this->has($key)) {
+            return $defaultValue;
+        }
+
+        $content  = $this->doGet($key);
+
+        return $this->getUnserializedData($content, $defaultValue);
+    }
 
     /**
      * Returns the adapter - connects to the storage if not connected
@@ -227,6 +236,16 @@ abstract class AbstractAdapter implements AdapterInterface
     public function setDefaultSerializer(string $serializer): void
     {
         $this->defaultSerializer = mb_strtolower($serializer);
+    }
+
+    /**
+     * @param string $key
+     *
+     * @return mixed
+     */
+    protected function doGet(string $key)
+    {
+        return $this->getAdapter()->get($key);
     }
 
     /**

@@ -18,12 +18,7 @@ use Phalcon\Tests\Fixtures\Traits\DiTrait;
 
 use function uniqid;
 
-/**
- * Class WriteCest
- *
- * @package Phalcon\Tests\Integration\Session\Adapter\Libmemcached
- */
-class WriteCest
+class ReadWriteCest
 {
     use DiTrait;
 
@@ -35,18 +30,22 @@ class WriteCest
      * @author Phalcon Team <team@phalcon.io>
      * @since  2020-09-09
      */
-    public function sessionAdapterLibmemcachedWrite(IntegrationTester $I)
+    public function sessionAdapterLibmemcachedRead(IntegrationTester $I)
     {
-        $I->wantToTest('Session\Adapter\Libmemcached - write()');
+        $I->wantToTest('Session\Adapter\Libmemcached - read()');
 
         $adapter = $this->newService('sessionLibmemcached');
-        $value   = uniqid();
+
+        $value = uniqid();
+
         $adapter->write('test1', $value);
 
-        /**
-         * Serialize the value because the adapter does not have a serializer
-         */
-        $I->seeInMemcached('sess-memc-test1', $value);
+        $actual = $adapter->read('test1');
+        $I->assertEquals($value, $actual);
+
         $I->clearMemcache();
+
+        $actual = $adapter->read('test1');
+        $I->assertNotNull($actual);
     }
 }
