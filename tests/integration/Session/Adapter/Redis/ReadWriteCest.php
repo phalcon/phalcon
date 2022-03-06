@@ -41,8 +41,6 @@ class ReadWriteCest
 
         $adapter->write('test1', $value);
 
-//        $I->haveInRedis('string', 'sess-reds-test1', $value);
-
         $expected = $value;
         $actual   = $adapter->read('test1');
         $I->assertEquals($expected, $actual);
