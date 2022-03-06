@@ -56,25 +56,7 @@ class GetKeysCest
 
         $I->assertTrue($adapter->clear());
 
-        $this->setupKeys($adapter, $I);
-
-        $expected = [
-            'ph-apcu-key-1',
-            'ph-apcu-key-2',
-            'ph-apcu-one-1',
-            'ph-apcu-one-2',
-        ];
-        $actual   = $adapter->getKeys();
-        sort($actual);
-        $I->assertSame($expected, $actual);
-
-        $expected = [
-            'ph-apcu-one-1',
-            'ph-apcu-one-2',
-        ];
-        $actual   = $adapter->getKeys("one");
-        sort($actual);
-        $I->assertSame($expected, $actual);
+        $this->runTest($adapter, $I, 'ph-apcu-');
     }
 
     /**
@@ -104,7 +86,7 @@ class GetKeysCest
             ]
         );
 
-        $this->setupKeys($adapter, $I);
+        $this->setupTest($adapter, $I);
 
         $actual = $adapter->getKeys();
         $I->assertIsArray($actual);
@@ -139,7 +121,7 @@ class GetKeysCest
         ;
         $memcachedExtensionVersion = phpversion('memcached');
 
-        foreach ($memcachedServerVersions as $server => $memcachedServerVersion) {
+        foreach ($memcachedServerVersions as $memcachedServerVersion) {
             // https://www.php.net/manual/en/memcached.getallkeys.php#123793
             // https://bugs.launchpad.net/libmemcached/+bug/1534062
             if (
@@ -161,26 +143,7 @@ class GetKeysCest
 
         $I->assertTrue($adapter->clear());
 
-        $this->setupKeys($adapter, $I);
-
-
-        $expected = [
-            'ph-memc-key-1',
-            'ph-memc-key-2',
-            'ph-memc-one-1',
-            'ph-memc-one-2',
-        ];
-        $actual   = $adapter->getKeys();
-        sort($actual);
-        $I->assertSame($expected, $actual);
-
-        $expected = [
-            'ph-memc-one-1',
-            'ph-memc-one-2',
-        ];
-        $actual   = $adapter->getKeys("one");
-        sort($actual);
-        $I->assertSame($expected, $actual);
+        $this->runTest($adapter, $I, 'ph-memc-');
     }
 
     /**
@@ -202,25 +165,7 @@ class GetKeysCest
 
         $I->assertTrue($adapter->clear());
 
-        $this->setupKeys($adapter, $I);
-
-        $expected = [
-            'ph-memo-key-1',
-            'ph-memo-key-2',
-            'ph-memo-one-1',
-            'ph-memo-one-2',
-        ];
-        $actual   = $adapter->getKeys();
-        sort($actual);
-        $I->assertSame($expected, $actual);
-
-        $expected = [
-            'ph-memo-one-1',
-            'ph-memo-one-2',
-        ];
-        $actual   = $adapter->getKeys("one");
-        sort($actual);
-        $I->assertSame($expected, $actual);
+        $this->runTest($adapter, $I, 'ph-memo-');
     }
 
     /**
@@ -245,25 +190,7 @@ class GetKeysCest
 
         $I->assertTrue($adapter->clear());
 
-        $this->setupKeys($adapter, $I);
-
-        $expected = [
-            'ph-reds-key-1',
-            'ph-reds-key-2',
-            'ph-reds-one-1',
-            'ph-reds-one-2',
-        ];
-        $actual   = $adapter->getKeys();
-        sort($actual);
-        $I->assertSame($expected, $actual);
-
-        $expected = [
-            'ph-reds-one-1',
-            'ph-reds-one-2',
-        ];
-        $actual   = $adapter->getKeys("one");
-        sort($actual);
-        $I->assertSame($expected, $actual);
+        $this->runTest($adapter, $I, 'ph-reds-');
     }
 
     /**
@@ -291,42 +218,12 @@ class GetKeysCest
 
         $I->assertTrue($adapter->clear());
 
+        $this->runTest($adapter, $I, 'ph-strm');
+
         $key1 = uniqid('key');
         $key2 = uniqid('key');
         $key3 = uniqid('one');
         $key4 = uniqid('one');
-
-        $result = $adapter->set($key1, 'test');
-        $I->assertNotFalse($result);
-        $result = $adapter->set($key2, 'test');
-        $I->assertNotFalse($result);
-        $result = $adapter->set($key3, 'test');
-        $I->assertNotFalse($result);
-        $result = $adapter->set($key4, 'test');
-        $I->assertNotFalse($result);
-
-        $I->assertTrue($adapter->has($key1));
-        $I->assertTrue($adapter->has($key2));
-        $I->assertTrue($adapter->has($key3));
-        $I->assertTrue($adapter->has($key4));
-
-        $expected = [
-            'ph-strm' . $key1,
-            'ph-strm' . $key2,
-            'ph-strm' . $key3,
-            'ph-strm' . $key4,
-        ];
-        $actual   = $adapter->getKeys();
-        sort($actual);
-        $I->assertSame($expected, $actual);
-
-        $expected = [
-            'ph-strm' . $key3,
-            'ph-strm' . $key4,
-        ];
-        $actual   = $adapter->getKeys("one");
-        sort($actual);
-        $I->assertSame($expected, $actual);
 
         $I->safeDeleteDirectory(outputDir('ph-strm'));
     }
@@ -445,26 +342,59 @@ class GetKeysCest
         $I->safeDeleteDirectory(outputDir('pref-'));
     }
 
-    private function setupKeys(
+    private function runTest(
+        AdapterInterface $adapter,
+        IntegrationTester $I,
+        string $prefix
+    ): void {
+        [$key1, $key2, $key3, $key4] = $this->setupTest($adapter, $I);
+
+        $expected = [
+            $prefix . $key1,
+            $prefix . $key2,
+            $prefix . $key3,
+            $prefix . $key4,
+        ];
+        $actual   = $adapter->getKeys();
+        sort($actual);
+        $I->assertSame($expected, $actual);
+
+        $expected = [
+            $prefix . $key3,
+            $prefix . $key4,
+        ];
+        $actual   = $adapter->getKeys("one");
+        sort($actual);
+        $I->assertSame($expected, $actual);
+    }
+
+    private function setupTest(
         AdapterInterface $adapter,
         IntegrationTester $I
-    ): void {
-        $actual = $adapter->set('key-1', 'test');
-        $I->assertNotFalse($actual);
-        $actual = $adapter->set('key-2', 'test');
-        $I->assertNotFalse($actual);
-        $actual = $adapter->set('one-1', 'test');
-        $I->assertNotFalse($actual);
-        $actual = $adapter->set('one-2', 'test');
-        $I->assertNotFalse($actual);
+    ): array {
+        $key1 = uniqid('key');
+        $key2 = uniqid('key');
+        $key3 = uniqid('one');
+        $key4 = uniqid('one');
 
-        $actual = $adapter->has('key-1');
+        $result = $adapter->set($key1, 'test');
+        $I->assertNotFalse($result);
+        $result = $adapter->set($key2, 'test');
+        $I->assertNotFalse($result);
+        $result = $adapter->set($key3, 'test');
+        $I->assertNotFalse($result);
+        $result = $adapter->set($key4, 'test');
+        $I->assertNotFalse($result);
+
+        $actual = $adapter->has($key1);
         $I->assertTrue($actual);
-        $actual = $adapter->has('key-2');
+        $actual = $adapter->has($key2);
         $I->assertTrue($actual);
-        $actual = $adapter->has('one-1');
+        $actual = $adapter->has($key3);
         $I->assertTrue($actual);
-        $actual = $adapter->has('one-2');
+        $actual = $adapter->has($key4);
         $I->assertTrue($actual);
+
+        return [$key1, $key2, $key3, $key4];
     }
 }
