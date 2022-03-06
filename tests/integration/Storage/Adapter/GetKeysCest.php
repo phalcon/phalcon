@@ -15,6 +15,7 @@ namespace Phalcon\Tests\Integration\Storage\Adapter;
 
 use Codeception\Stub;
 use IntegrationTester;
+use Phalcon\Storage\Adapter\AdapterInterface;
 use Phalcon\Storage\Adapter\Apcu;
 use Phalcon\Storage\Adapter\Libmemcached;
 use Phalcon\Storage\Adapter\Memory;
@@ -53,17 +54,7 @@ class GetKeysCest
         $serializer = new SerializerFactory();
         $adapter    = new Apcu($serializer);
 
-        $I->assertTrue($adapter->clear());
-
-        $adapter->set('key-1', 'test');
-        $adapter->set('key-2', 'test');
-        $adapter->set('one-1', 'test');
-        $adapter->set('one-2', 'test');
-
-        $I->assertTrue($adapter->has('key-1'));
-        $I->assertTrue($adapter->has('key-2'));
-        $I->assertTrue($adapter->has('one-1'));
-        $I->assertTrue($adapter->has('one-2'));
+        $this->setupKeys($adapter, $I);
 
         $expected = [
             'ph-apcu-key-1',
@@ -111,15 +102,7 @@ class GetKeysCest
             ]
         );
 
-        $adapter->set('key-1', 'test');
-        $adapter->set('key-2', 'test');
-        $adapter->set('one-1', 'test');
-        $adapter->set('one-2', 'test');
-
-        $I->assertTrue($adapter->has('key-1'));
-        $I->assertTrue($adapter->has('key-2'));
-        $I->assertTrue($adapter->has('one-1'));
-        $I->assertTrue($adapter->has('one-2'));
+        $this->setupKeys($adapter, $I);
 
         $actual = $adapter->getKeys();
         $I->assertIsArray($actual);
@@ -174,21 +157,8 @@ class GetKeysCest
             }
         }
 
-        $I->assertTrue($adapter->clear());
+        $this->setupKeys($adapter, $I);
 
-        $adapter->set('key-1', 'test');
-        $adapter->set('key-2', 'test');
-        $adapter->set('one-1', 'test');
-        $adapter->set('one-2', 'test');
-
-        $actual = $adapter->has('key-1');
-        $I->assertTrue($actual);
-        $actual = $adapter->has('key-2');
-        $I->assertTrue($actual);
-        $actual = $adapter->has('one-1');
-        $I->assertTrue($actual);
-        $actual = $adapter->has('one-2');
-        $I->assertTrue($actual);
 
         $expected = [
             'ph-memc-key-1',
@@ -226,21 +196,7 @@ class GetKeysCest
         $serializer = new SerializerFactory();
         $adapter    = new Memory($serializer);
 
-        $I->assertTrue($adapter->clear());
-
-        $adapter->set('key-1', 'test');
-        $adapter->set('key-2', 'test');
-        $adapter->set('one-1', 'test');
-        $adapter->set('one-2', 'test');
-
-        $actual = $adapter->has('key-1');
-        $I->assertTrue($actual);
-        $actual = $adapter->has('key-2');
-        $I->assertTrue($actual);
-        $actual = $adapter->has('one-1');
-        $I->assertTrue($actual);
-        $actual = $adapter->has('one-2');
-        $I->assertTrue($actual);
+        $this->setupKeys($adapter, $I);
 
         $expected = [
             'ph-memo-key-1',
@@ -281,21 +237,7 @@ class GetKeysCest
         $serializer = new SerializerFactory();
         $adapter    = new Redis($serializer, getOptionsRedis());
 
-        $I->assertTrue($adapter->clear());
-
-        $adapter->set('key-1', 'test');
-        $adapter->set('key-2', 'test');
-        $adapter->set('one-1', 'test');
-        $adapter->set('one-2', 'test');
-
-        $actual = $adapter->has('key-1');
-        $I->assertTrue($actual);
-        $actual = $adapter->has('key-2');
-        $I->assertTrue($actual);
-        $actual = $adapter->has('one-1');
-        $I->assertTrue($actual);
-        $actual = $adapter->has('one-2');
-        $I->assertTrue($actual);
+        $this->setupKeys($adapter, $I);
 
         $expected = [
             'ph-reds-key-1',
@@ -493,5 +435,30 @@ class GetKeysCest
         $I->assertTrue($actual);
 
         $I->safeDeleteDirectory(outputDir('pref-'));
+    }
+
+    private function setupKeys(
+        AdapterInterface $adapter,
+        IntegrationTester $I
+    ): void {
+        $I->assertTrue($adapter->clear());
+
+        $actual = $adapter->set('key-1', 'test');
+        $I->assertNotFalse($actual);
+        $actual = $adapter->set('key-2', 'test');
+        $I->assertNotFalse($actual);
+        $actual = $adapter->set('one-1', 'test');
+        $I->assertNotFalse($actual);
+        $actual = $adapter->set('one-2', 'test');
+        $I->assertNotFalse($actual);
+
+        $actual = $adapter->has('key-1');
+        $I->assertTrue($actual);
+        $actual = $adapter->has('key-2');
+        $I->assertTrue($actual);
+        $actual = $adapter->has('one-1');
+        $I->assertTrue($actual);
+        $actual = $adapter->has('one-2');
+        $I->assertTrue($actual);
     }
 }
