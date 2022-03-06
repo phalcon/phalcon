@@ -239,7 +239,7 @@ class ExceptionsCest
                 $example->one = 'two';
 
                 $serializer = new Json($example);
-                $actual     = $serializer->serialize();
+                $serializer->serialize();
             }
         );
     }

@@ -37,6 +37,8 @@ use function serialize;
 
 class SerializeUnserializeCest
 {
+    private const text = 'Phalcon Framework';
+
     /**
      * Tests Phalcon\Storage\Serializer\Igbinary :: serialize()
      *
@@ -93,8 +95,8 @@ class SerializeUnserializeCest
                 'Base64',
                 'string',
                 Base64::class,
-                'Phalcon Framework',
-                base64_encode('Phalcon Framework'),
+                self::text,
+                base64_encode(self::text),
             ],
             [
                 'Igbinary',
@@ -135,15 +137,15 @@ class SerializeUnserializeCest
                 'Igbinary',
                 'string',
                 Igbinary::class,
-                'Phalcon Framework',
-                igbinary_serialize('Phalcon Framework'),
+                self::text,
+                igbinary_serialize(self::text),
             ],
             [
                 'Igbinary',
                 'array',
                 Igbinary::class,
-                ['Phalcon Framework'],
-                igbinary_serialize(['Phalcon Framework']),
+                [self::text],
+                igbinary_serialize([self::text]),
             ],
             [
                 'Igbinary',
@@ -191,15 +193,15 @@ class SerializeUnserializeCest
                 'Json',
                 'string',
                 Json::class,
-                'Phalcon Framework',
-                json_encode('Phalcon Framework'),
+                self::text,
+                json_encode(self::text),
             ],
             [
                 'Json',
                 'array',
                 Json::class,
-                ['Phalcon Framework'],
-                json_encode(['Phalcon Framework']),
+                [self::text],
+                json_encode([self::text]),
             ],
             [
                 'MemcachedIgbinary',
@@ -261,15 +263,15 @@ class SerializeUnserializeCest
                 'Msgpack',
                 'string',
                 Msgpack::class,
-                'Phalcon Framework',
-                msgpack_pack('Phalcon Framework'),
+                self::text,
+                msgpack_pack(self::text),
             ],
             [
                 'Msgpack',
                 'array',
                 Msgpack::class,
-                ['Phalcon Framework'],
-                msgpack_pack(['Phalcon Framework']),
+                [self::text],
+                msgpack_pack([self::text]),
             ],
             [
                 'Msgpack',
@@ -317,15 +319,15 @@ class SerializeUnserializeCest
                 'None',
                 'string',
                 None::class,
-                'Phalcon Framework',
-                'Phalcon Framework',
+                self::text,
+                self::text,
             ],
             [
                 'None',
                 'array',
                 None::class,
-                ['Phalcon Framework'],
-                ['Phalcon Framework'],
+                [self::text],
+                [self::text],
             ],
             [
                 'None',
@@ -373,15 +375,15 @@ class SerializeUnserializeCest
                 'Php',
                 'string',
                 Php::class,
-                'Phalcon Framework',
-                serialize('Phalcon Framework'),
+                self::text,
+                serialize(self::text),
             ],
             [
                 'Php',
                 'array',
                 Php::class,
-                ['Phalcon Framework'],
-                serialize(['Phalcon Framework']),
+                [self::text],
+                serialize([self::text]),
             ],
             [
                 'Php',

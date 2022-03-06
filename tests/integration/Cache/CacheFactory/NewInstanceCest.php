@@ -64,7 +64,7 @@ class NewInstanceCest
                     )
                 );
 
-                $adapter = $cacheFactory->newInstance($name);
+                $cacheFactory->newInstance($name);
             }
         );
     }
