@@ -48,9 +48,12 @@ class InitCest
 
         $collection = new Bag($this->container->get("session"), 'BagTest');
 
-        $I->assertEquals(0, $collection->count());
+        $expected = 3;
+        $actual   = $collection->count();
+        $I->assertEquals($expected, $actual);
 
         $collection->init($data);
-        $I->assertEquals($data, $collection->toArray());
+        $actual = $collection->toArray();
+        $I->assertEquals($data, $actual);
     }
 }

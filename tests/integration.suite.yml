@@ -3,7 +3,7 @@ modules:
   enabled:
     - Memcache:
         host: '%DATA_MEMCACHED_HOST%'
-        port: '%DATA_MEMCACHED_PORT%'
+        port: %DATA_MEMCACHED_PORT%
     - Redis:
         database: '%DATA_REDIS_NAME%'
         host: '%DATA_REDIS_HOST%'
