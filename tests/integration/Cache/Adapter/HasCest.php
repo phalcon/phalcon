@@ -21,9 +21,7 @@ use Phalcon\Cache\Adapter\Libmemcached;
 use Phalcon\Cache\Adapter\Memory;
 use Phalcon\Cache\Adapter\Redis;
 use Phalcon\Cache\Adapter\Stream;
-use Phalcon\Storage\Exception as StorageException;
 use Phalcon\Storage\SerializerFactory;
-use Phalcon\Support\Exception as HelperException;
 
 use function getOptionsLibmemcached;
 use function getOptionsRedis;
@@ -37,9 +35,6 @@ class HasCest
      * Tests Phalcon\Cache\Adapter\Stream :: has() - cannot open file
      *
      * @param IntegrationTester $I
-     *
-     * @throws HelperException
-     * @throws StorageException
      *
      * @author Phalcon Team <team@phalcon.io>
      * @since  2020-09-09

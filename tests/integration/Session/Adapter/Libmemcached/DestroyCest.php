@@ -41,7 +41,7 @@ class DestroyCest
         $key    = 'sess-memc-test1';
         $actual = serialize($value);
 
-        $I->haveInMemcached($key, $actual);
+        $I->haveInMemcached($key, $actual, 0);
 
         $actual = serialize($value);
         $I->seeInMemcached($key, $actual);

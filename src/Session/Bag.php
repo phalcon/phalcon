@@ -66,7 +66,7 @@ class Bag extends Collection implements InjectionAwareInterface
             $data = [];
         }
 
-        parent::__construct($data);
+        $this->init($data);
     }
 
     /**
@@ -85,6 +85,8 @@ class Bag extends Collection implements InjectionAwareInterface
     public function init(array $data = []): void
     {
         parent::init($data);
+
+        $this->session->set($this->name, $data);
     }
 
     /**
