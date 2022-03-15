@@ -254,9 +254,6 @@ trait DiTrait
 //            case 'request':
 //            case 'response':
                 $this->container->set($service, $class);
-                if (true === property_exists($class, "setDI")) {
-                    $service->setDI($this->container);
-                }
                 break;
 //            case 'crypt':
 //                $this->container->set(
