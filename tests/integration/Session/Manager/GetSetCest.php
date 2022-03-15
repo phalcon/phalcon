@@ -19,11 +19,6 @@ use Phalcon\Tests\Fixtures\Traits\DiTrait;
 
 use function uniqid;
 
-/**
- * Class GetSetCest
- *
- * @package Phalcon\Tests\Integration\Session\Manager
- */
 class GetSetCest
 {
     use DiTrait;

@@ -16,11 +16,6 @@ namespace Phalcon\Tests\Integration\Session\Adapter\Stream;
 use IntegrationTester;
 use Phalcon\Tests\Fixtures\Traits\DiTrait;
 
-/**
- * Class CloseCest
- *
- * @package Phalcon\Tests\Integration\Session\Adapter\Stream
- */
 class CloseCest
 {
     use DiTrait;

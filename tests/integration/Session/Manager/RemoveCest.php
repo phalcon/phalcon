@@ -17,11 +17,6 @@ use IntegrationTester;
 use Phalcon\Session\Manager;
 use Phalcon\Tests\Fixtures\Traits\DiTrait;
 
-/**
- * Class RemoveCest
- *
- * @package Phalcon\Tests\Integration\Session\Manager
- */
 class RemoveCest
 {
     use DiTrait;

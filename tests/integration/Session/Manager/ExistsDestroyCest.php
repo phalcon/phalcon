@@ -13,15 +13,11 @@ declare(strict_types=1);
 
 namespace Phalcon\Tests\Integration\Session\Manager;
 
+use Codeception\Example;
 use IntegrationTester;
 use Phalcon\Session\Manager;
 use Phalcon\Tests\Fixtures\Traits\DiTrait;
 
-/**
- * Class ExistsDestroyCest
- *
- * @package Phalcon\Tests\Integration\Session\Manager
- */
 class ExistsDestroyCest
 {
     use DiTrait;
@@ -29,19 +25,22 @@ class ExistsDestroyCest
     /**
      * Tests Phalcon\Session\Manager :: exists()/destroy()
      *
+     * @dataProvider getAdapters
+     *
      * @param IntegrationTester $I
+     * @param Example           $example
      *
      * @author Phalcon Team <team@phalcon.io>
-     * @since  2020-09-09
+     * @since  2018-11-13
      */
-    public function sessionManagerExistsDestroy(IntegrationTester $I)
+    public function sessionManagerExistsDestroy(IntegrationTester $I, Example $example)
     {
-        $I->wantToTest('Session\Manager - exists()/destroy()');
+        $I->wantToTest('Session\Manager - exists()/destroy() - ' . $example[0]);
         $store    = $_SESSION ?? [];
         $_SESSION = [];
 
         $manager = new Manager();
-        $files   = $this->newService('sessionStream');
+        $files   = $this->newService($example[1]);
         $manager->setAdapter($files);
 
         $actual = $manager->start();
@@ -61,22 +60,27 @@ class ExistsDestroyCest
     /**
      * Tests Phalcon\Session\Manager :: destroy() - clean $_SESSION
      *
+     * @dataProvider getAdapters
+     *
+     * @param IntegrationTester $I
+     * @param Example           $example
+     *
+     * @throws \Phalcon\Storage\Exception
+     *
      * @issue  https://github.com/phalcon/cphalcon/issues/12326
      * @issue  https://github.com/phalcon/cphalcon/issues/12835
      *
-     * @param IntegrationTester $I
-     *
      * @author Phalcon Team <team@phalcon.io>
-     * @since  2020-09-09
+     * @since  2018-11-13
      */
-    public function sessionManagerDestroySuperGlobal(IntegrationTester $I)
+    public function sessionManagerDestroySuperGlobal(IntegrationTester $I, Example $example)
     {
-        $I->wantToTest('Session\Manager - destroy() - clean $_SESSION');
+        $I->wantToTest('Session\Manager - destroy() - clean $_SESSION - ' . $example[0]);
         $store    = $_SESSION ?? [];
         $_SESSION = [];
 
         $manager = new Manager();
-        $files   = $this->newService('sessionStream');
+        $files   = $this->newService($example[1]);
         $manager->setAdapter($files);
 
         $actual = $manager->start();
@@ -87,7 +91,7 @@ class ExistsDestroyCest
 
         $manager->set('test1', __METHOD__);
         $I->assertArrayHasKey('test1', $_SESSION);
-        $I->assertEquals(__METHOD__, $_SESSION['test1']);
+        $I->assertStringContainsString(__METHOD__, $_SESSION['test1']);
 
         $manager->destroy();
         $I->assertArrayNotHasKey('test1', $_SESSION);
@@ -101,20 +105,25 @@ class ExistsDestroyCest
     /**
      * Tests Phalcon\Session\Manager :: destroy() - clean $_SESSION with uniquid
      *
+     * @dataProvider getAdapters
+     *
      * @param IntegrationTester $I
+     * @param Example           $example
+     *
+     * @throws \Phalcon\Storage\Exception
      *
      * @author Phalcon Team <team@phalcon.io>
      * @since  2020-09-09
      */
-    public function sessionManagerDestroySuperGlobalUniquid(IntegrationTester $I)
+    public function sessionManagerDestroySuperGlobalUniquid(IntegrationTester $I, Example $example)
     {
-        $I->wantToTest('Session\Manager - destroy() - clean $_SESSION with uniquid');
+        $I->wantToTest('Session\Manager - destroy() - clean $_SESSION with uniquid - ' . $example[0]);
 
         $store    = $_SESSION ?? [];
         $_SESSION = [];
 
         $manager = new Manager();
-        $files   = $this->newService('sessionStream');
+        $files   = $this->newService($example[1]);
         $manager->setAdapter($files);
         $manager->setOptions(
             [
@@ -131,7 +140,7 @@ class ExistsDestroyCest
         $manager->set('test1', __METHOD__);
 
         $I->assertArrayHasKey('aaa#test1', $_SESSION);
-        $I->assertEquals(__METHOD__, $_SESSION['aaa#test1']);
+        $I->assertStringContainsString(__METHOD__, $_SESSION['aaa#test1']);
 
         $manager->destroy();
         $I->assertArrayNotHasKey('aaa#test1', $_SESSION);
@@ -140,5 +149,30 @@ class ExistsDestroyCest
         $I->assertFalse($actual);
 
         $_SESSION = $store;
+    }
+
+    /**
+     * @return array
+     */
+    private function getAdapters(): array
+    {
+        return [
+            [
+                'stream',
+                'sessionStream',
+            ],
+            [
+                'memcached',
+                'sessionLibmemcached',
+            ],
+            [
+                'noop',
+                'sessionNoop',
+            ],
+            [
+                'redis',
+                'sessionRedis',
+            ],
+        ];
     }
 }

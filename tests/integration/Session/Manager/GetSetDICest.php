@@ -17,11 +17,6 @@ use IntegrationTester;
 use Phalcon\Di\FactoryDefault;
 use Phalcon\Session\Manager;
 
-/**
- * Class GetSetDICest
- *
- * @package Phalcon\Tests\Integration\Session\Manager
- */
 class GetSetDICest
 {
     /**

@@ -231,8 +231,8 @@ class ExceptionsCest
 
         $I->expectThrowable(
             new InvalidArgumentException(
-                'Data for the JSON serializer cannot be of type "object" ' .
-                'without implementing "JsonSerializable"'
+                "Data for the JSON serializer cannot be of type 'object' " .
+                "without implementing 'JsonSerializable'"
             ),
             function () {
                 $example      = new stdClass();

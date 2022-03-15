@@ -18,11 +18,6 @@ use Phalcon\Tests\Fixtures\Traits\DiTrait;
 
 use function uniqid;
 
-/**
- * Class ReadCest
- *
- * @package Phalcon\Tests\Integration\Session\Adapter\Noop
- */
 class ReadCest
 {
     use DiTrait;

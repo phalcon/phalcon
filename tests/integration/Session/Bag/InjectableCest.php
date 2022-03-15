@@ -15,47 +15,61 @@ namespace Phalcon\Tests\Integration\Session\Bag;
 
 use IntegrationTester;
 use Phalcon\Session\Bag;
+use Phalcon\Tests\Fixtures\Session\InjectableBag;
 use Phalcon\Tests\Fixtures\Traits\DiTrait;
 
 /**
- * Class ClearCest
- *
- * @package Phalcon\Tests\Integration\Session\Bag
+ * This is part of the DI Injectable
  */
-class ClearCest
+class InjectableCest
 {
     use DiTrait;
 
     /**
      * Tests Phalcon\Session\Bag :: clear()
      *
-     * @param IntegrationTester $I
-     *
      * @author Phalcon Team <team@phalcon.io>
-     * @since  2020-09-09
+     * @since  2018-11-13
      */
     public function sessionBagClear(IntegrationTester $I)
     {
-        $I->wantToTest('Session\Bag - clear()');
+        $I->wantToTest('Session\Bag - injectable');
 
         $this->setNewFactoryDefault();
         $this->setDiService('sessionStream');
+
+        /**
+         * Set a session bag
+         */
         $data = [
             'one'   => 'two',
             'three' => 'four',
             'five'  => 'six',
         ];
-
         $collection = new Bag('BagTest', $this->container);
-
         $collection->init($data);
 
-        $actual = $collection->toArray();
-        $I->assertEquals($data, $actual);
+        /**
+         * Store it in the container
+         */
+        $this->container->set('sessionBag', $collection);
 
-        $collection->clear();
+        /**
+         * Create the injectable component - this can be a controller for
+         * instance, and set the container
+         */
+        $injectable = new InjectableBag();
+        $injectable->setDI($this->container);
 
-        $actual = $collection->count();
-        $I->assertEquals(0, $actual);
+        /**
+         * Get the `persistent` property
+         */
+        $class      = Bag::class;
+        $sessionBag = $injectable->persistent;
+        $I->assertInstanceOf($class, $sessionBag);
+
+        $expected = $data;
+        $actual   = $sessionBag->toArray();
+        $I->assertEquals($expected, $actual);
     }
 }

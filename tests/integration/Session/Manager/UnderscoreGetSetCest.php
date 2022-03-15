@@ -17,11 +17,6 @@ use IntegrationTester;
 use Phalcon\Session\Manager;
 use Phalcon\Tests\Fixtures\Traits\DiTrait;
 
-/**
- * Class UnderscoreGetSetCest
- *
- * @package Phalcon\Tests\Integration\Session\Manager
- */
 class UnderscoreGetSetCest
 {
     use DiTrait;

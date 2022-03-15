@@ -16,11 +16,6 @@ namespace Phalcon\Tests\Integration\Session\Adapter\Noop;
 use IntegrationTester;
 use Phalcon\Tests\Fixtures\Traits\DiTrait;
 
-/**
- * Class OpenCest
- *
- * @package Phalcon\Tests\Integration\Session\Adapter\Noop
- */
 class OpenCest
 {
     use DiTrait;

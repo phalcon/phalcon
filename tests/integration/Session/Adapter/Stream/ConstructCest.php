@@ -20,11 +20,6 @@ use Phalcon\Session\Exception;
 use Phalcon\Tests\Fixtures\Traits\DiTrait;
 use SessionHandlerInterface;
 
-/**
- * Class ConstructCest
- *
- * @package Phalcon\Tests\Integration\Session\Adapter\Stream
- */
 class ConstructCest
 {
     use DiTrait;

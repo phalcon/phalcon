@@ -18,11 +18,6 @@ use Phalcon\Tests\Fixtures\Traits\DiTrait;
 
 use function uniqid;
 
-/**
- * Class DestroyCest
- *
- * @package Phalcon\Tests\Integration\Session\Adapter\Redis
- */
 class DestroyCest
 {
     use DiTrait;
