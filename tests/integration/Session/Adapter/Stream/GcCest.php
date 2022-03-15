@@ -21,11 +21,6 @@ use function file_put_contents;
 use function sleep;
 use function uniqid;
 
-/**
- * Class GcCest
- *
- * @package Phalcon\Tests\Integration\Session\Adapter\Stream
- */
 class GcCest
 {
     use DiTrait;

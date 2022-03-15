@@ -17,11 +17,6 @@ use IntegrationTester;
 use Phalcon\Tests\Fixtures\Traits\DiTrait;
 use SessionHandlerInterface;
 
-/**
- * Class ConstructCest
- *
- * @package Phalcon\Tests\Integration\Session\Adapter\Noop
- */
 class ConstructCest
 {
     use DiTrait;

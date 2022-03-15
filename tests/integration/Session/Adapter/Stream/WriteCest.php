@@ -19,11 +19,6 @@ use Phalcon\Tests\Fixtures\Traits\DiTrait;
 use function cacheDir;
 use function uniqid;
 
-/**
- * Class WriteCest
- *
- * @package Phalcon\Tests\Integration\Session\Adapter\Stream
- */
 class WriteCest
 {
     use DiTrait;

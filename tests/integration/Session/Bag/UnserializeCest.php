@@ -17,11 +17,6 @@ use IntegrationTester;
 use Phalcon\Session\Bag;
 use Phalcon\Tests\Fixtures\Traits\DiTrait;
 
-/**
- * Class UnserializeCest
- *
- * @package Phalcon\Tests\Integration\Session\Bag
- */
 class UnserializeCest
 {
     use DiTrait;
@@ -47,7 +42,7 @@ class UnserializeCest
         ];
 
         $serialized = serialize($data);
-        $collection = new Bag('BagTest');
+        $collection = new Bag('BagTest', $this->container);
 
         $collection->unserialize($serialized);
         $I->assertEquals($data, $collection->toArray());

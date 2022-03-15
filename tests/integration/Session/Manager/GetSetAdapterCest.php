@@ -18,11 +18,6 @@ use Phalcon\Session\Manager;
 use Phalcon\Tests\Fixtures\Traits\DiTrait;
 use SessionHandlerInterface;
 
-/**
- * Class GetSetAdapterCest
- *
- * @package Phalcon\Tests\Integration\Session\Manager
- */
 class GetSetAdapterCest
 {
     use DiTrait;

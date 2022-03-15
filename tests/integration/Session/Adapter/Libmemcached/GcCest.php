@@ -19,11 +19,6 @@ use Phalcon\Tests\Fixtures\Traits\DiTrait;
 use function sleep;
 use function uniqid;
 
-/**
- * Class GcCest
- *
- * @package Phalcon\Tests\Integration\Session\Adapter\Libmemcached
- */
 class GcCest
 {
     use DiTrait;

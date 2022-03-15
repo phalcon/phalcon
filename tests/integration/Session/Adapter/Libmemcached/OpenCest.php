@@ -16,11 +16,6 @@ namespace Phalcon\Tests\Integration\Session\Adapter\Libmemcached;
 use IntegrationTester;
 use Phalcon\Tests\Fixtures\Traits\DiTrait;
 
-/**
- * Class OpenCest
- *
- * @package Phalcon\Tests\Integration\Session\Adapter\Libmemcached
- */
 class OpenCest
 {
     use DiTrait;

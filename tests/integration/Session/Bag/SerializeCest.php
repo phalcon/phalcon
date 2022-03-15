@@ -46,7 +46,7 @@ class SerializeCest
             'five'  => 'six',
         ];
 
-        $collection = new Bag('BagTest');
+        $collection = new Bag('BagTest', $this->container);
 
         $collection->init($data);
 

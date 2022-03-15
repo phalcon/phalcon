@@ -20,11 +20,6 @@ use Phalcon\Storage\SerializerFactory;
 use Phalcon\Tests\Fixtures\Traits\DiTrait;
 use SessionHandlerInterface;
 
-/**
- * Class ConstructCest
- *
- * @package Phalcon\Tests\Integration\Session\Adapter\Libmemcached
- */
 class ConstructCest
 {
     use DiTrait;
@@ -46,7 +41,6 @@ class ConstructCest
         $class = SessionHandlerInterface::class;
         $I->assertInstanceOf($class, $adapter);
     }
-
 
     /**
      * Tests Phalcon\Session\Adapter\Libmemcached :: __construct() - with custom prefix

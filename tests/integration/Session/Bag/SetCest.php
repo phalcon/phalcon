@@ -40,7 +40,7 @@ class SetCest
 
         $this->setNewFactoryDefault();
         $this->setDiService('sessionStream');
-        $collection = new Bag('BagTest');
+        $collection = new Bag('BagTest', $this->container);
 
         $collection->set('three', 'two');
         $expected = 'two';

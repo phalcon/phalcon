@@ -17,11 +17,6 @@ use IntegrationTester;
 use Phalcon\Session\Manager;
 use Phalcon\Tests\Fixtures\Traits\DiTrait;
 
-/**
- * Class OpenCest
- *
- * @package Phalcon\Tests\Integration\Session\Adapter\Stream
- */
 class OpenCest
 {
     use DiTrait;

@@ -20,11 +20,6 @@ use Phalcon\Storage\SerializerFactory;
 use Phalcon\Tests\Fixtures\Traits\DiTrait;
 use SessionHandlerInterface;
 
-/**
- * Class ConstructCest
- *
- * @package Phalcon\Tests\Integration\Session\Adapter\Redis
- */
 class ConstructCest
 {
     use DiTrait;

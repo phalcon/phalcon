@@ -14,23 +14,19 @@ declare(strict_types=1);
 namespace Phalcon\Tests\Integration\Session\Manager;
 
 use IntegrationTester;
+use Phalcon\Session\Adapter\Noop;
 use Phalcon\Session\Manager;
 use Phalcon\Session\ManagerInterface;
+use Phalcon\Tests\Fixtures\Session\ExtendedManager;
+use SessionHandlerInterface;
 
-/**
- * Class ConstructCest
- *
- * @package Phalcon\Tests\Integration\Session\Manager
- */
 class ConstructCest
 {
     /**
      * Tests Phalcon\Session\Manager :: __construct()
      *
-     * @param IntegrationTester $I
-     *
      * @author Phalcon Team <team@phalcon.io>
-     * @since  2020-09-09
+     * @since  2018-11-13
      */
     public function sessionManagerConstruct(IntegrationTester $I)
     {
@@ -38,7 +34,26 @@ class ConstructCest
 
         $manager = new Manager();
 
-        $class = ManagerInterface::class;
-        $I->assertInstanceOf($class, $manager);
+        $I->assertInstanceOf(ManagerInterface::class, $manager);
+    }
+
+    /**
+     * Tests Phalcon\Session\Manager :: __construct() - extended
+     *
+     * @author Phalcon Team <team@phalcon.io>
+     * @since  2021-04-05
+     * @issue  14933
+     */
+    public function sessionManagerConstructExtended(IntegrationTester $I)
+    {
+        $I->wantToTest('Session\Manager - __construct() - extended');
+
+        $manager = new ExtendedManager();
+
+        $I->assertInstanceOf(ManagerInterface::class, $manager);
+
+        $adapter = $manager->getAdapter();
+        $I->assertInstanceOf(Noop::class, $adapter);
+        $I->assertInstanceOf(SessionHandlerInterface::class, $adapter);
     }
 }

@@ -17,11 +17,6 @@ use IntegrationTester;
 use Phalcon\Session\Manager;
 use Phalcon\Tests\Fixtures\Traits\DiTrait;
 
-/**
- * Class GetSetOptionsCest
- *
- * @package Phalcon\Tests\Integration\Session\Manager
- */
 class GetSetOptionsCest
 {
     use DiTrait;
