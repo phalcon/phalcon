@@ -58,6 +58,7 @@ use Phalcon\Support\HelperFactory;
 use function getOptionsLibmemcached;
 use function getOptionsRedis;
 use function getOptionsSessionStream;
+use function property_exists;
 
 /**
  * Trait DiTrait
@@ -253,7 +254,9 @@ trait DiTrait
 //            case 'request':
 //            case 'response':
                 $this->container->set($service, $class);
-                $service->setDI($this->container);
+                if (true === property_exists($class, "setDI")) {
+                    $service->setDI($this->container);
+                }
                 break;
 //            case 'crypt':
 //                $this->container->set(
