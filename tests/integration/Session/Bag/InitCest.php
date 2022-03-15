@@ -46,7 +46,7 @@ class InitCest
             'five'  => 'six',
         ];
 
-        $collection = new Bag('BagTest', $this->container);
+        $collection = new Bag($this->container->get("session"), 'BagTest');
 
         $I->assertEquals(0, $collection->count());
 

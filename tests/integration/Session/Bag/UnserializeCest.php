@@ -42,7 +42,7 @@ class UnserializeCest
         ];
 
         $serialized = serialize($data);
-        $collection = new Bag('BagTest', $this->container);
+        $collection = new Bag($this->container->get("session"), 'BagTest');
 
         $collection->unserialize($serialized);
         $I->assertEquals($data, $collection->toArray());

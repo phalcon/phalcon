@@ -46,7 +46,7 @@ class ClearCest
             'five'  => 'six',
         ];
 
-        $collection = new Bag('BagTest', $this->container);
+        $collection = new Bag($this->container->get("session"), 'BagTest');
 
         $collection->init($data);
 
