@@ -41,12 +41,17 @@ class GetSetDICest
 
         $this->setNewFactoryDefault();
         $this->setDiService('sessionStream');
+        $session   = $this->container->get("session");
+        $container = $this->container;
 
-        $session   = new Bag('DiTest', $this->container);
+        $bag    = new Bag($session, 'DiTest');
+        $actual = $bag->getDI();
+        $I->assertSame($container, $actual);
+
         $container = new FactoryDefault();
+        $bag->setDI($container);
 
-        $session->setDI($container);
-
-        $I->assertEquals($container, $session->getDI());
+        $actual = $bag->getDI();
+        $I->assertSame($container, $actual);
     }
 }

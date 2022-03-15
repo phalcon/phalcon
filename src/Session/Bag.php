@@ -44,7 +44,7 @@ class Bag extends Collection implements InjectionAwareInterface
     /**
      * @var string
      */
-    private string $name = '';
+    private string $name;
 
     /**
      * @var ManagerInterface
@@ -52,21 +52,14 @@ class Bag extends Collection implements InjectionAwareInterface
     private ManagerInterface $session;
 
     /**
-     * Phalcon\Session\Bag constructor
+     * @param ManagerInterface $session
+     * @param string           $name
      */
-    public function __construct(string $name)
+    public function __construct(ManagerInterface $session, string $name)
     {
-        $this->name = $name;
-
-        /**
-         * These need to be injected
-         */
-        $container = Di::getDefault();
-
-        /** @var ManagerInterface $session */
-        $session         = $container->getShared('session');
-        $this->container = $container;
         $this->session   = $session;
+        $this->name      = $name;
+        $this->container = $session->getDI();
 
         $data = $session->get($name);
         if (true !== is_array($data)) {

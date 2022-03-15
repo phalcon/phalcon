@@ -253,6 +253,7 @@ trait DiTrait
 //            case 'request':
 //            case 'response':
                 $this->container->set($service, $class);
+                $service->setDI($this->container);
                 break;
 //            case 'crypt':
 //                $this->container->set(
@@ -278,10 +279,15 @@ trait DiTrait
             case 'sessionLibmemcached':
             case 'sessionNoop':
             case 'sessionRedis':
+                $container = $this->container;
                 $this->container->set(
                     'session',
-                    function () use ($class) {
-                        return (new Manager())->setAdapter($class);
+                    function () use ($class, $container) {
+                        $manager = new Manager();
+                        $manager->setDI($container);
+                        $manager->setAdapter($class);
+
+                        return $manager;
                     }
                 );
                 break;
