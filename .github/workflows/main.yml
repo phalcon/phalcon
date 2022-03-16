@@ -216,6 +216,10 @@ jobs:
           vendor/bin/codecept build
 #          php tests/_config/generate-db-schemas.php
 
+      - name: Check memcached
+        if: always()
+        run: php -r "var_dump(class_exists('\Memcached'))"
+
       - name: Run Unit Tests
         if: always()
         run: vendor/bin/codecept run --coverage-xml=coverage-${{ matrix.php }}.xml --ext DotReporter unit
