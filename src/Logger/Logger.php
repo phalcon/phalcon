@@ -13,196 +13,116 @@ declare(strict_types=1);
 
 namespace Phalcon\Logger;
 
-use DateTimeImmutable;
-use DateTimeZone;
 use Exception;
-use Phalcon\Logger\Adapter\AdapterInterface;
 use Phalcon\Logger\Exception as LoggerException;
-use Psr\Log\InvalidArgumentException;
-use Psr\Log\LoggerInterface;
-use Psr\Log\LoggerTrait;
-
-use function array_diff_key;
-use function array_flip;
-use function date_default_timezone_get;
-use function is_numeric;
-use function is_string;
-use function strtoupper;
 
 /**
  * Phalcon Logger.
  *
- * A PSR compatible logger, with various adapters and formatters. A formatter
+ * A logger, with various adapters and formatters. A formatter
  * interface is available as well as an adapter one. Adapters can be created
- * easily using the built in AdapterFactory. A LoggerFactory is also available
+ * easily using the built-in AdapterFactory. A LoggerFactory is also available
  * that allows developers to create new instances of the Logger or load them
  * from config files (see Phalcon\Config\Config object).
- *
- * @package Phalcon\Logger
- *
- * @property AdapterInterface[] $adapters
- * @property array              $excluded
- * @property int                $logLevel
- * @property string             $name
- * @property string             $timezone
  */
-class Logger implements LoggerInterface
+class Logger extends AbstractLogger implements LoggerInterface
 {
-    use LoggerTrait;
-
-    public const ALERT     = 2;
-    public const CRITICAL  = 1;
-    public const CUSTOM    = 8;
-    public const DEBUG     = 7;
-    public const EMERGENCY = 0;
-    public const ERROR     = 3;
-    public const INFO      = 6;
-    public const NOTICE    = 5;
-    public const WARNING   = 4;
-
     /**
-     * The adapter stack
+     * Action must be taken immediately.
      *
-     * @var AdapterInterface[]
-     */
-    protected array $adapters = [];
-
-    /**
-     * The excluded adapters for this log process
+     * Example: Entire website down, database unavailable, etc. This should
+     * trigger the SMS alerts and wake you up.
      *
-     * @var array
-     */
-    protected array $excluded = [];
-
-    /**
-     * Minimum log level for the logger
+     * @param string $message
+     * @param array  $context
      *
-     * @var int
-     */
-    protected int $logLevel = 8;
-
-    /**
-     * @var string
-     */
-    protected string $name = '';
-
-    /**
-     * @var DateTimeZone
-     */
-    protected DateTimeZone $timezone;
-
-    /**
-     * Constructor.
-     *
-     * @param string            $name     The name of the logger
-     * @param array             $adapters The collection of adapters to be used
-     *                                    for logging (default [])
-     * @param DateTimeZone|null $timezone Timezone. If omitted,
-     *                                    date_Default_timezone_get() is used
-     */
-    public function __construct(
-        string $name,
-        array $adapters = [],
-        ?DateTimeZone $timezone = null
-    ) {
-        if (null == $timezone) {
-            $timezone = new DateTimeZone(date_default_timezone_get() ?: 'UTC');
-        }
-
-        $this->name     = $name;
-        $this->timezone = $timezone;
-
-        $this->setAdapters($adapters);
-    }
-
-    /**
-     * Add an adapter to the stack. For processing we use FIFO
-     *
-     * @param string           $name    The name of the adapter
-     * @param AdapterInterface $adapter The adapter to add to the stack
-     *
-     * @return Logger
-     */
-    public function addAdapter(string $name, AdapterInterface $adapter): Logger
-    {
-        $this->adapters[$name] = $adapter;
-
-        return $this;
-    }
-
-    /**
-     * Exclude certain adapters.
-     *
-     * @param array $adapters
-     *
-     * @return Logger
-     */
-    public function excludeAdapters(array $adapters = []): Logger
-    {
-        /**
-         * Loop through what has been passed. Check these names with
-         * the registered adapters. If they match, add them to the
-         * this->excluded array
-         */
-        $registered = $this->adapters;
-
-        /**
-         * Loop through what has been passed. Check these names with
-         * the registered adapters. If they match, add them to the
-         * this->excluded array
-         */
-        foreach ($adapters as $adapter) {
-            if (isset($registered[$adapter])) {
-                $this->excluded[$adapter] = true;
-            }
-        }
-
-        return $this;
-    }
-
-    /**
-     * Returns an adapter from the stack
-     *
-     * @param string $name The name of the adapter
-     *
-     * @return AdapterInterface
+     * @return void
+     * @throws Exception
      * @throws LoggerException
      */
-    public function getAdapter(string $name): AdapterInterface
+    public function alert(string $message, array $context = array()): void
     {
-        if (true !== isset($this->adapters[$name])) {
-            throw new LoggerException(
-                'Adapter does not exist for this logger'
-            );
-        }
-
-        return $this->adapters[$name];
+        $this->log(self::ALERT, $message, $context);
     }
 
     /**
-     * Returns the adapter stack array
+     * Critical conditions.
      *
-     * @return AdapterInterface[]
+     * Example: Application component unavailable, unexpected exception.
+     *
+     * @param string $message
+     * @param array  $context
+     *
+     * @return void
+     * @throws Exception
+     * @throws LoggerException
      */
-    public function getAdapters(): array
+    public function critical(string $message, array $context = array()): void
     {
-        return $this->adapters;
+        $this->log(self::CRITICAL, $message, $context);
     }
 
     /**
-     * Returns the log level
+     * Detailed debug information.
+     *
+     * @param string $message
+     * @param array  $context
+     *
+     * @return void
+     * @throws Exception
+     * @throws LoggerException
      */
-    public function getLogLevel(): int
+    public function debug(string $message, array $context = array()): void
     {
-        return $this->logLevel;
+        $this->log(self::DEBUG, $message, $context);
     }
 
     /**
-     * Returns the name of the logger
+     * System is unusable.
+     *
+     * @param string $message
+     * @param array  $context
+     *
+     * @return void
+     * @throws Exception
+     * @throws LoggerException
      */
-    public function getName(): string
+    public function emergency(string $message, array $context = array()): void
     {
-        return $this->name;
+        $this->log(self::EMERGENCY, $message, $context);
+    }
+
+    /**
+     * Runtime errors that do not require immediate action but should typically
+     * be logged and monitored.
+     *
+     * @param string $message
+     * @param array  $context
+     *
+     * @return void
+     * @throws Exception
+     * @throws LoggerException
+     */
+    public function error(string $message, array $context = array()): void
+    {
+        $this->log(self::ERROR, $message, $context);
+    }
+
+    /**
+     * Interesting events.
+     *
+     * Example: User logs in, SQL logs.
+     *
+     * @param string $message
+     * @param array  $context
+     *
+     * @return void
+     * @throws Exception
+     * @throws LoggerException
+     */
+    public function info(string $message, array $context = array()): void
+    {
+        $this->log(self::INFO, $message, $context);
     }
 
     /**
@@ -212,6 +132,8 @@ class Logger implements LoggerInterface
      * @param mixed $message
      * @param array $context
      *
+     * @return void
+     * @throws Exception
      * @throws LoggerException
      */
     public function log($level, $message, array $context = []): void
@@ -222,157 +144,35 @@ class Logger implements LoggerInterface
     }
 
     /**
-     * Removes an adapter from the stack
+     * Normal but significant events.
      *
-     * @param string $name The name of the adapter
-     *
-     * @return Logger
-     * @throws LoggerException
-     */
-    public function removeAdapter(string $name): Logger
-    {
-        if (!isset($this->adapters[$name])) {
-            throw new LoggerException(
-                'Adapter does not exist for this logger'
-            );
-        }
-
-        unset($this->adapters[$name]);
-
-        return $this;
-    }
-
-    /**
-     * Sets the adapters stack overriding what is already there
-     *
-     * @param array $adapters An array of adapters
-     *
-     * @return Logger
-     */
-    public function setAdapters(array $adapters): Logger
-    {
-        $this->adapters = $adapters;
-
-        return $this;
-    }
-
-    /**
-     * Sets the adapters stack overriding what is already there
-     *
-     * @param int $level
-     *
-     * @return Logger
-     */
-    public function setLogLevel(int $level): Logger
-    {
-        $levels         = $this->getLevels();
-        $this->logLevel = isset($levels[$level]) ? $level : self::CUSTOM;
-
-        return $this;
-    }
-
-    /**
-     * Adds a message to each handler for processing
-     *
-     * @param int    $level
      * @param string $message
      * @param array  $context
      *
-     * @return bool
+     * @return void
      * @throws Exception
      * @throws LoggerException
      */
-    protected function addMessage(
-        int $level,
-        string $message,
-        array $context = []
-    ): bool {
-        if ($this->logLevel >= $level) {
-            if (count($this->adapters) === 0) {
-                throw new LoggerException('No adapters specified');
-            }
-
-            $levels    = $this->getLevels();
-            $levelName = $levels[$level] ?? $levels[self::CUSTOM];
-
-            $item = new Item(
-                $message,
-                $levelName,
-                $level,
-                new DateTimeImmutable('now', $this->timezone),
-                $context
-            );
-
-            /**
-             * Log only if the key does not exist in the excluded ones
-             */
-            $collection = array_diff_key($this->adapters, $this->excluded);
-            foreach ($collection as $adapter) {
-                $method = 'process';
-                if (true === $adapter->inTransaction()) {
-                    $method = 'add';
-                }
-
-                $adapter->$method($item);
-            }
-
-            /**
-             * Clear the excluded array since we made the call now
-             */
-            $this->excluded = [];
-        }
-
-        return true;
+    public function notice(string $message, array $context = array()): void
+    {
+        $this->log(self::NOTICE, $message, $context);
     }
 
     /**
-     * Returns an array of log levels with integer to string conversion
+     * Exceptional occurrences that are not errors.
      *
-     * @return string[]
+     * Example: Use of deprecated APIs, poor use of an API, undesirable things
+     * that are not necessarily wrong.
+     *
+     * @param string $message
+     * @param array  $context
+     *
+     * @return void
+     * @throws Exception
+     * @throws LoggerException
      */
-    protected function getLevels(): array
+    public function warning(string $message, array $context = array()): void
     {
-        return [
-            self::ALERT     => "ALERT",
-            self::CRITICAL  => "CRITICAL",
-            self::DEBUG     => "DEBUG",
-            self::EMERGENCY => "EMERGENCY",
-            self::ERROR     => "ERROR",
-            self::INFO      => "INFO",
-            self::NOTICE    => "NOTICE",
-            self::WARNING   => "WARNING",
-            self::CUSTOM    => "CUSTOM",
-        ];
-    }
-
-    /**
-     * Converts the level from string/word to an integer
-     *
-     * @param mixed $level
-     *
-     * @return int
-     * @throws InvalidArgumentException
-     */
-    private function getLevelNumber($level): int
-    {
-        /**
-         * If someone uses "critical" as the level (string)
-         */
-        if (true === is_string($level)) {
-            $levelName = strtoupper($level);
-            $levels    = array_flip($this->getLevels());
-
-            if (isset($levels[$levelName])) {
-                return $levels[$levelName];
-            }
-        } elseif (true === is_numeric($level)) {
-            $levels = $this->getLevels();
-
-            if (isset($levels[$level])) {
-                return (int) $level;
-            }
-        }
-
-        return self::CUSTOM;
+        $this->log(self::WARNING, $message, $context);
     }
 }
