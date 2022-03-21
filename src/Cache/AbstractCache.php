@@ -16,6 +16,7 @@ namespace Phalcon\Cache;
 use DateInterval;
 use Phalcon\Cache\Adapter\AdapterInterface;
 use Phalcon\Cache\Exception\InvalidArgumentException;
+use Traversable;
 
 /**
  * This component offers caching capabilities for your application.
@@ -23,16 +24,75 @@ use Phalcon\Cache\Exception\InvalidArgumentException;
  *
  * @property AdapterInterface $adapter
  */
-class Cache extends AbstractCache
+abstract class AbstractCache implements CacheInterface
 {
+    /**
+     * The adapter
+     *
+     * @var AdapterInterface
+     */
+    protected AdapterInterface $adapter;
+
+    /**
+     * Constructor.
+     *
+     * @param AdapterInterface $adapter The cache adapter
+     */
+    public function __construct(AdapterInterface $adapter)
+    {
+        $this->adapter = $adapter;
+    }
+
+    /**
+     * Returns the current adapter
+     *
+     * @return AdapterInterface
+     */
+    public function getAdapter(): AdapterInterface
+    {
+        return $this->adapter;
+    }
+
+    /**
+     * Checks the key. If it contains invalid characters an exception is thrown
+     *
+     * @param mixed $key
+     *
+     * @throws InvalidArgumentException
+     */
+    protected function checkKey(string $key): void
+    {
+        if (preg_match("/[^A-Za-z0-9-_.]/", $key)) {
+            throw new InvalidArgumentException(
+                'The key contains invalid characters'
+            );
+        }
+    }
+
+    /**
+     * Checks the key. If it contains invalid characters an exception is thrown
+     *
+     * @param mixed $keys
+     *
+     * @throws InvalidArgumentException
+     */
+    protected function checkKeys($keys): void
+    {
+        if (!(true === is_array($keys) || $keys instanceof Traversable)) {
+            throw new InvalidArgumentException(
+                'The keys need to be an array or instance of Traversable'
+            );
+        }
+    }
+
     /**
      * Wipes clean the entire cache's keys.
      *
      * @return bool True on success and false on failure.
      */
-    public function clear(): bool
+    protected function doClear(): bool
     {
-        return $this->doClear();
+        return $this->adapter->clear();
     }
 
     /**
@@ -46,9 +106,11 @@ class Cache extends AbstractCache
      * @throws InvalidArgumentException MUST be thrown if the $key string is
      *                                  not a legal value.
      */
-    public function delete(string $key): bool
+    protected function doDelete(string $key): bool
     {
-        return $this->doDelete($key);
+        $this->checkKey($key);
+
+        return $this->adapter->delete($key);
     }
 
     /**
@@ -63,9 +125,18 @@ class Cache extends AbstractCache
      *                                  array nor a Traversable, or if any of
      *                                  the $keys are not a legal value.
      */
-    public function deleteMultiple($keys): bool
+    protected function doDeleteMultiple($keys): bool
     {
-        return $this->doDeleteMultiple($keys);
+        $this->checkKeys($keys);
+
+        $result = true;
+        foreach ($keys as $key) {
+            if (true !== $this->adapter->delete($key)) {
+                $result = false;
+            }
+        }
+
+        return $result;
     }
 
     /**
@@ -80,9 +151,11 @@ class Cache extends AbstractCache
      * @throws InvalidArgumentException MUST be thrown if the $key string is
      * not a legal value.
      */
-    public function get(string $key, $default = null)
+    protected function doGet(string $key, $default = null)
     {
-        return $this->doGet($key, $default);
+        $this->checkKey($key);
+
+        return $this->adapter->get($key, $default);
     }
 
     /**
@@ -99,9 +172,16 @@ class Cache extends AbstractCache
      * @throws InvalidArgumentException MUST be thrown if $keys is neither an
      * array nor a Traversable, or if any of the $keys are not a legal value.
      */
-    public function getMultiple($keys, $default = null)
+    protected function doGetMultiple($keys, $default = null)
     {
-        return $this->doGetMultiple($keys, $default);
+        $this->checkKeys($keys);
+
+        $results = [];
+        foreach ($keys as $element) {
+            $results[$element] = $this->get($element, $default);
+        }
+
+        return $results;
     }
 
     /**
@@ -114,9 +194,11 @@ class Cache extends AbstractCache
      * @throws InvalidArgumentException MUST be thrown if the $key string is
      * not a legal value.
      */
-    public function has(string $key): bool
+    protected function doHas(string $key): bool
     {
-        return $this->doHas($key);
+        $this->checkKey($key);
+
+        return $this->adapter->has($key);
     }
 
     /**
@@ -137,9 +219,11 @@ class Cache extends AbstractCache
      * @throws InvalidArgumentException MUST be thrown if the $key string is not
      * a legal value.
      */
-    public function set(string $key, $value, $ttl = null): bool
+    protected function doSet(string $key, $value, $ttl = null): bool
     {
-        return $this->doSet($key, $value, $ttl);
+        $this->checkKey($key);
+
+        return $this->adapter->set($key, $value, $ttl);
     }
 
     /**
@@ -159,8 +243,17 @@ class Cache extends AbstractCache
      * @throws InvalidArgumentException MUST be thrown if $values is neither an
      * array nor a Traversable, or if any of the $values are not a legal value.
      */
-    public function setMultiple($values, $ttl = null): bool
+    protected function doSetMultiple($values, $ttl = null): bool
     {
-        return $this->doSetMultiple($values, $ttl);
+        $this->checkKeys($values);
+
+        $result = true;
+        foreach ($values as $key => $value) {
+            if (true !== $this->set($key, $value, $ttl)) {
+                $result = false;
+            }
+        }
+
+        return $result;
     }
 }

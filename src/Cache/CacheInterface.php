@@ -14,26 +14,19 @@ declare(strict_types=1);
 namespace Phalcon\Cache;
 
 use DateInterval;
-use Phalcon\Cache\Adapter\AdapterInterface;
 use Phalcon\Cache\Exception\InvalidArgumentException;
 
 /**
- * This component offers caching capabilities for your application.
- * Phalcon\Cache implements PSR-16.
- *
- * @property AdapterInterface $adapter
+ * Interface for Phalcon\Cache\Cache
  */
-class Cache extends AbstractCache
+interface CacheInterface
 {
     /**
      * Wipes clean the entire cache's keys.
      *
      * @return bool True on success and false on failure.
      */
-    public function clear(): bool
-    {
-        return $this->doClear();
-    }
+    public function clear(): bool;
 
     /**
      * Delete an item from the cache by its unique key.
@@ -46,10 +39,7 @@ class Cache extends AbstractCache
      * @throws InvalidArgumentException MUST be thrown if the $key string is
      *                                  not a legal value.
      */
-    public function delete(string $key): bool
-    {
-        return $this->doDelete($key);
-    }
+    public function delete(string $key): bool;
 
     /**
      * Deletes multiple cache items in a single operation.
@@ -63,10 +53,7 @@ class Cache extends AbstractCache
      *                                  array nor a Traversable, or if any of
      *                                  the $keys are not a legal value.
      */
-    public function deleteMultiple($keys): bool
-    {
-        return $this->doDeleteMultiple($keys);
-    }
+    public function deleteMultiple($keys): bool;
 
     /**
      * Fetches a value from the cache.
@@ -80,10 +67,7 @@ class Cache extends AbstractCache
      * @throws InvalidArgumentException MUST be thrown if the $key string is
      * not a legal value.
      */
-    public function get(string $key, $default = null)
-    {
-        return $this->doGet($key, $default);
-    }
+    public function get(string $key, $default = null);
 
     /**
      * Obtains multiple cache items by their unique keys.
@@ -99,10 +83,7 @@ class Cache extends AbstractCache
      * @throws InvalidArgumentException MUST be thrown if $keys is neither an
      * array nor a Traversable, or if any of the $keys are not a legal value.
      */
-    public function getMultiple($keys, $default = null)
-    {
-        return $this->doGetMultiple($keys, $default);
-    }
+    public function getMultiple($keys, $default = null);
 
     /**
      * Determines whether an item is present in the cache.
@@ -114,10 +95,7 @@ class Cache extends AbstractCache
      * @throws InvalidArgumentException MUST be thrown if the $key string is
      * not a legal value.
      */
-    public function has(string $key): bool
-    {
-        return $this->doHas($key);
-    }
+    public function has(string $key): bool;
 
     /**
      * Persists data in the cache, uniquely referenced by a key with an optional
@@ -137,10 +115,7 @@ class Cache extends AbstractCache
      * @throws InvalidArgumentException MUST be thrown if the $key string is not
      * a legal value.
      */
-    public function set(string $key, $value, $ttl = null): bool
-    {
-        return $this->doSet($key, $value, $ttl);
-    }
+    public function set(string $key, $value, $ttl = null): bool;
 
     /**
      * Persists a set of key => value pairs in the cache, with an optional TTL.
@@ -159,8 +134,5 @@ class Cache extends AbstractCache
      * @throws InvalidArgumentException MUST be thrown if $values is neither an
      * array nor a Traversable, or if any of the $values are not a legal value.
      */
-    public function setMultiple($values, $ttl = null): bool
-    {
-        return $this->doSetMultiple($values, $ttl);
-    }
+    public function setMultiple($values, $ttl = null): bool;
 }
