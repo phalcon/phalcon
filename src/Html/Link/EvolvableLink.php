@@ -13,13 +13,6 @@ declare(strict_types=1);
 
 namespace Phalcon\Html\Link;
 
-use Psr\Link\EvolvableLinkInterface;
-
-/**
- * Class Link
- *
- * @package Phalcon\Link
- */
 class EvolvableLink extends Link implements EvolvableLinkInterface
 {
     /**
@@ -33,13 +26,9 @@ class EvolvableLink extends Link implements EvolvableLinkInterface
      *
      * @return $this
      */
-    public function withAttribute($attribute, $value)
+    public function withAttribute(string $attribute, $value): EvolvableLink
     {
-        $newInstance = clone $this;
-
-        $newInstance->attributes[$attribute] = $value;
-
-        return $newInstance;
+        return $this->doWithAttribute("attributes", $attribute, $value);
     }
 
     /**
@@ -59,14 +48,9 @@ class EvolvableLink extends Link implements EvolvableLinkInterface
      *
      * @return $this
      */
-    public function withHref($href)
+    public function withHref(string $href): EvolvableLink
     {
-        $newInstance = clone $this;
-
-        $newInstance->href      = $href;
-        $newInstance->templated = $this->hrefIsTemplated($href);
-
-        return $newInstance;
+        return $this->doWithHref($href);
     }
 
     /**
@@ -75,18 +59,13 @@ class EvolvableLink extends Link implements EvolvableLinkInterface
      * If the specified rel is already present, this method MUST return
      * normally without errors, but without adding the rel a second time.
      *
-     * @param string $rel
-     *   The relationship value to add.
+     * @param string $rel The relationship value to add.
      *
      * @return $this
      */
-    public function withRel($rel)
+    public function withRel(string $rel): EvolvableLink
     {
-        $newInstance = clone $this;
-
-        $newInstance->rels[$rel] = true;
-
-        return $newInstance;
+        return $this->doWithAttribute("rels", $rel, true);
     }
 
     /**
@@ -95,18 +74,13 @@ class EvolvableLink extends Link implements EvolvableLinkInterface
      * If the specified attribute is not present, this method MUST return
      * normally without errors.
      *
-     * @param string $attribute
-     *   The attribute to remove.
+     * @param string $attribute The attribute to remove.
      *
      * @return $this
      */
-    public function withoutAttribute($attribute)
+    public function withoutAttribute(string $attribute): EvolvableLink
     {
-        $newInstance = clone $this;
-
-        unset($newInstance->attributes[$attribute]);
-
-        return $newInstance;
+        return $this->doWithoutAttribute("attributes", $attribute);
     }
 
     /**
@@ -115,17 +89,12 @@ class EvolvableLink extends Link implements EvolvableLinkInterface
      * If the specified rel is already not present, this method MUST return
      * normally without errors.
      *
-     * @param string $rel
-     *   The relationship value to exclude.
+     * @param string $rel The relationship value to exclude.
      *
      * @return $this
      */
-    public function withoutRel($rel)
+    public function withoutRel(string $rel): EvolvableLink
     {
-        $newInstance = clone $this;
-
-        unset($newInstance->rels[$rel]);
-
-        return $newInstance;
+        return $this->doWithoutAttribute("rels", $rel);
     }
 }

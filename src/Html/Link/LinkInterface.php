@@ -13,21 +13,11 @@ declare(strict_types=1);
 
 namespace Phalcon\Html\Link;
 
-class Link extends AbstractLink implements LinkInterface
+/**
+ * A readable link object.
+ */
+interface LinkInterface
 {
-    /**
-     * Returns a list of attributes that describe the target URI.
-     *
-     * @return array
-     *   A key-value list of attributes, where the key is a string and the value
-     *  is either a PHP primitive or an array of PHP strings. If no values are
-     *  found an empty array MUST be returned.
-     */
-    public function getAttributes(): array
-    {
-        return $this->doGetAttributes();
-    }
-
     /**
      * Returns the target of the link.
      *
@@ -41,10 +31,15 @@ class Link extends AbstractLink implements LinkInterface
      *
      * @return string
      */
-    public function getHref(): string
-    {
-        return $this->doGetHref();
-    }
+    public function getHref(): string;
+
+    /**
+     * Returns whether this is a templated link.
+     *
+     * @return bool
+     *   True if this link object is templated, False otherwise.
+     */
+    public function isTemplated(): bool;
 
     /**
      * Returns the relationship type(s) of the link.
@@ -54,19 +49,15 @@ class Link extends AbstractLink implements LinkInterface
      *
      * @return string[]
      */
-    public function getRels(): array
-    {
-        return $this->doGetRels();
-    }
+    public function getRels(): array;
 
     /**
-     * Returns whether this is a templated link.
+     * Returns a list of attributes that describe the target URI.
      *
-     * @return bool
-     *   True if this link object is templated, False otherwise.
+     * @return array
+     *   A key-value list of attributes, where the key is a string and the value
+     *  is either a PHP primitive or an array of PHP strings. If no values are
+     *  found an empty array MUST be returned.
      */
-    public function isTemplated(): bool
-    {
-        return $this->doIsTemplated();
-    }
+    public function getAttributes(): array;
 }

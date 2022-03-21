@@ -13,52 +13,22 @@ declare(strict_types=1);
 
 namespace Phalcon\Html\Link;
 
-use Psr\Link\LinkInterface;
-use Psr\Link\LinkProviderInterface;
-use Traversable;
-
-use function in_array;
-use function spl_object_hash;
-
 /**
- * Class LinkProvider
- *
- * @package Phalcon\Link
- *
  * @property LinkInterface[] $links
  */
-class LinkProvider implements LinkProviderInterface
+class LinkProvider extends AbstractLinkProvider implements LinkProviderInterface
 {
-    /**
-     * @var LinkInterface[]
-     */
-    protected array $links = [];
-
-    /**
-     * LinkProvider constructor.
-     *
-     * @param array $links
-     */
-    public function __construct(array $links = [])
-    {
-        foreach ($links as $link) {
-            if ($link instanceof LinkInterface) {
-                $this->links[$this->getKey($link)] = $link;
-            }
-        }
-    }
-
     /**
      * Returns an iterable of LinkInterface objects.
      *
      * The iterable may be an array or any PHP \Traversable object. If no links
      * are available, an empty array or \Traversable MUST be returned.
      *
-     * @return LinkInterface[]|Traversable
+     * @return LinkInterface[]
      */
-    public function getLinks()
+    public function getLinks(): array
     {
-        return $this->links;
+        return $this->doGetLinks();
     }
 
     /**
@@ -69,30 +39,10 @@ class LinkProvider implements LinkProviderInterface
      * with that relationship are available, an empty array or \Traversable
      * MUST be returned.
      *
-     * @return LinkInterface[]|Traversable
+     * @return LinkInterface[]
      */
-    public function getLinksByRel($rel)
+    public function getLinksByRel($rel): array
     {
-        $filtered = [];
-        foreach ($this->links as $link) {
-            $rels = $link->getRels();
-            if (in_array($rel, $rels)) {
-                $filtered[] = $link;
-            }
-        }
-
-        return $filtered;
-    }
-
-    /**
-     * Returns the object hash key
-     *
-     * @param LinkInterface $link
-     *
-     * @return string
-     */
-    protected function getKey(LinkInterface $link): string
-    {
-        return spl_object_hash($link);
+        return $this->doGetLinksByRel($rel);
     }
 }

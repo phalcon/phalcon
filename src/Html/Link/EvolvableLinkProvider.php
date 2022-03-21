@@ -13,14 +13,6 @@ declare(strict_types=1);
 
 namespace Phalcon\Html\Link;
 
-use Psr\Link\EvolvableLinkProviderInterface;
-use Psr\Link\LinkInterface;
-
-/**
- * Class LinkProvider
- *
- * @package Phalcon\Link
- */
 class EvolvableLinkProvider extends LinkProvider implements EvolvableLinkProviderInterface
 {
     /**
@@ -33,16 +25,11 @@ class EvolvableLinkProvider extends LinkProvider implements EvolvableLinkProvide
      * @param LinkInterface $link
      *   A link object that should be included in this collection.
      *
-     * @return $this
+     * @return EvolvableLinkProvider
      */
-    public function withLink(LinkInterface $link)
+    public function withLink(LinkInterface $link): EvolvableLinkProvider
     {
-        $key         = $this->getKey($link);
-        $newInstance = clone $this;
-
-        $newInstance->links[$key] = $link;
-
-        return $newInstance;
+        return $this->doWithLink($link);
     }
 
     /**
@@ -54,15 +41,10 @@ class EvolvableLinkProvider extends LinkProvider implements EvolvableLinkProvide
      *
      * @param LinkInterface $link The link to remove.
      *
-     * @return $this
+     * @return EvolvableLinkProvider
      */
-    public function withoutLink(LinkInterface $link)
+    public function withoutLink(LinkInterface $link): EvolvableLinkProvider
     {
-        $key         = $this->getKey($link);
-        $newInstance = clone $this;
-
-        unset($newInstance->links[$key]);
-
-        return $newInstance;
+        return $this->doWithoutLink($link);
     }
 }
