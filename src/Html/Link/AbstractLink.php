@@ -151,7 +151,6 @@ abstract class AbstractLink
         $newInstance->$collection[$key] = $value;
 
         return $newInstance;
-
     }
 
     /**
