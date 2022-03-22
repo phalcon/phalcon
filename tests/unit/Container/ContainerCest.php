@@ -11,15 +11,15 @@
 
 declare(strict_types=1);
 
-namespace Phalcon\Tests\Unit;
+namespace Phalcon\Tests\Unit\Container;
 
-use Phalcon\Container;
+use Phalcon\Container\Container;
 use Phalcon\Di\Di;
 use Phalcon\Di\Exception;
 use stdClass;
 use UnitTester;
 
-final class ContainerCest
+class ContainerCest
 {
     /**
      * Tests Phalcon\Container :: get
@@ -31,7 +31,7 @@ final class ContainerCest
      */
     public function get(UnitTester $I): void
     {
-        $I->wantToTest('PSR-11 Container - get');
+        $I->wantToTest('Container\Container - get');
 
         $di = new Di();
         $di->setShared('service', function () {
@@ -57,7 +57,7 @@ final class ContainerCest
      */
     public function has(UnitTester $I): void
     {
-        $I->wantToTest('PSR-11 Container - has');
+        $I->wantToTest('Container\Container - has');
 
         $di = new Di();
         $di->setShared('issetService', function () {
