@@ -11,13 +11,14 @@
 
 declare(strict_types=1);
 
-namespace Phalcon;
+namespace Phalcon\Container;
 
 use Phalcon\Di\DiInterface;
-use Psr\Container\ContainerInterface;
 
 /**
- * PSR-11 Wrapper for `Phalcon\Di`
+ * Wrapper for `Phalcon\Di\Di`
+ *
+ * A full lazy loading autoloader will be implemented
  */
 class Container implements ContainerInterface
 {
@@ -43,7 +44,7 @@ class Container implements ContainerInterface
      *
      * @return mixed
      */
-    public function get($id)
+    public function get(string $id)
     {
         return $this->container->getShared($id);
     }
@@ -55,7 +56,7 @@ class Container implements ContainerInterface
      *
      * @return bool
      */
-    public function has($id): bool
+    public function has(string $id): bool
     {
         return $this->container->has($id);
     }
