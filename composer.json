@@ -4,13 +4,9 @@
     "keywords": [
         "php",
         "framework",
-        "psr-4",
         "psr-7",
-        "psr-11",
-        "psr-14",
         "psr-15",
-        "psr-17",
-        "psr-18"
+        "psr-17"
     ],
     "license": "MIT",
     "require": {
@@ -24,9 +20,6 @@
         "ext-xml": "*",
         "payload-interop/payload-interop": "^1.0",
         "phalcon/traits": "^1.0",
-        "psr/container": "^1.0",
-        "psr/event-dispatcher": "^1.0",
-        "psr/http-client": "^1.0",
         "psr/http-factory": "^1.0",
         "psr/http-message": "^1.0",
         "psr/http-server-handler": "^1.0",
