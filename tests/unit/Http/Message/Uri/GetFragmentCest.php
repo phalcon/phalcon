@@ -32,7 +32,7 @@ class GetFragmentCest
 
         $expected = 'frag';
         $actual   = $uri->getFragment();
-        $I->assertEquals($expected, $actual);
+        $I->assertSame($expected, $actual);
     }
 
     /**

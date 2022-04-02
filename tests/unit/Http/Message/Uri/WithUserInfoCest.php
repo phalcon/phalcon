@@ -14,9 +14,9 @@ declare(strict_types=1);
 namespace Phalcon\Tests\Unit\Http\Message\Uri;
 
 use Codeception\Example;
-use InvalidArgumentException;
 use Phalcon\Http\Message\Uri;
 use UnitTester;
+use function sprintf;
 
 class WithUserInfoCest
 {
@@ -30,122 +30,86 @@ class WithUserInfoCest
      */
     public function httpMessageUriWithUserInfo(UnitTester $I, Example $example)
     {
-        $I->wantToTest('Http\Message\Uri - withUserInfo()');
+        $I->wantToTest(
+            'Http\Message\Uri - withUserInfo() - ' . $example['label']
+        );
 
         $query = 'https://%s@dev.phalcon.ld:8080/action?param=value#frag';
+        $uri   = new Uri(sprintf($query, 'zephir:module'));
 
-        $uri = new Uri(
-            sprintf($query, 'zephir:module')
-        );
+        $user = $example['user'];
+        $pass = $example['pass'];
 
-        $newInstance = $uri->withUserInfo($example[1], $example[2]);
+        $newInstance = $uri->withUserInfo($user, $pass);
+        $I->assertNotSame($uri, $newInstance);
 
-        $I->assertNotEquals($uri, $newInstance);
+        $expected = $example['expected'];
+        $actual   = $newInstance->getUserInfo();
+        $I->assertSame($expected, $actual);
 
-        $I->assertEquals(
-            $example[3],
-            $newInstance->getUserInfo()
-        );
-
-        $I->assertEquals(
-            sprintf($query, $example[3]),
-            (string) $newInstance
-        );
+        $expected = sprintf($query, $example['expected']);
+        $actual   = (string) $newInstance;
+        $I->assertSame($expected, $actual);
     }
 
     /**
-     * Tests Phalcon\Http\Message\Uri :: withUserInfo() - exception no string
-     *
-     * @dataProvider getExceptions
-     *
-     * @author       Phalcon Team <team@phalcon.io>
-     * @since        2019-02-07
+     * @return string[][]
      */
-    public function httpUriWithUserInfoException(UnitTester $I, Example $example)
-    {
-        $I->wantToTest('Http\Uri - withUserInfo() - exception - ' . $example[1]);
-
-        $I->expectThrowable(
-            new InvalidArgumentException(
-                'Method requires a string argument'
-            ),
-            function () use ($example) {
-                $query = 'https://phalcon:secret@dev.phalcon.ld:8080/action?param=value#frag';
-                $uri   = new Uri($query);
-
-                $instance = $uri->withUserInfo($example[2]);
-            }
-        );
-    }
-
     private function getExamples(): array
     {
         return [
             [
-                'valid',
-                'phalcon',
-                'secret',
-                'phalcon:secret',
+                'label'    => 'valid',
+                'user'     => 'phalcon',
+                'pass'     => 'secret',
+                'expected' => 'phalcon:secret',
             ],
             [
-                'user only',
-                'phalcon',
-                '',
-                'phalcon',
+                'label'    => 'user only',
+                'user'     => 'phalcon',
+                'pass'     => null,
+                'expected' => 'phalcon',
             ],
             [
-                'email',
-                'phalcon@secret',
-                'secret@phalcon',
-                'phalcon%40secret:secret%40phalcon',
+                'label'    => 'user only empty pass',
+                'user'     => 'phalcon',
+                'pass'     => '',
+                'expected' => 'phalcon:',
             ],
             [
-                'email',
-                'phalcon:secret',
-                'secret:phalcon',
-                'phalcon%3Asecret:secret%3Aphalcon',
+                'label'    => 'user with @',
+                'user'     => 'phalcon@secret',
+                'pass'     => 'secret@phalcon',
+                'expected' => 'phalcon%40secret:secret%40phalcon',
             ],
             [
-                'percent',
-                'phalcon%secret',
-                'secret%phalcon',
-                'phalcon%25secret:secret%25phalcon',
+                'label'    => 'user with :',
+                'user'     => 'phalcon:secret',
+                'pass'     => 'secret:phalcon',
+                'expected' => 'phalcon%3Asecret:secret%3Aphalcon',
             ],
-        ];
-    }
+            [
+                'label'    => 'user with %',
+                'user'     => 'phalcon%secret',
+                'pass'     => 'secret%phalcon',
+                'expected' => 'phalcon%25secret:secret%25phalcon',
+            ],
+            [
+                'label'    => 'user invalid UTF8',
+                'user'     => "\x21\x92",
+                'pass'     => '!?',
+                'expected' => '!%92:!%3F',
 
-    private function getExceptions(): array
-    {
-        return [
-            [
-                'NULL',
-                'null',
-                null,
+                -'!%92:!%3F'
+                + '%21�:!%3F',
+
+
             ],
             [
-                'boolean',
-                'true',
-                true,
-            ],
-            [
-                'boolean',
-                'false',
-                false,
-            ],
-            [
-                'integer',
-                'number',
-                1234,
-            ],
-            [
-                'array',
-                'array',
-                ['/action'],
-            ],
-            [
-                'stdClass',
-                'object',
-                (object) ['/action'],
+                'label'    => 'user invalid encoding',
+                'user'     => '%ZZ',
+                'pass'     => '%GG',
+                'expected' => '%25ZZ:%25GG',
             ],
         ];
     }

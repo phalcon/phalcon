@@ -35,7 +35,7 @@ class GetAuthorityCest
             $example[1]
         );
 
-        $I->assertEquals(
+        $I->assertSame(
             $example[2],
             $uri->getAuthority()
         );

@@ -32,7 +32,7 @@ class GetPathCest
 
         $expected = '/action';
         $actual   = $uri->getPath();
-        $I->assertEquals($expected, $actual);
+        $I->assertSame($expected, $actual);
     }
 
     /**

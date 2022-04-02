@@ -32,7 +32,7 @@ class GetPortCest
 
         $expected = 8080;
         $actual   = $uri->getPort();
-        $I->assertEquals($expected, $actual);
+        $I->assertSame($expected, $actual);
     }
 
     /**
