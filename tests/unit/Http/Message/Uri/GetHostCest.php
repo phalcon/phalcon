@@ -33,23 +33,6 @@ class GetHostCest
 
         $expected = 'dev.phalcon.ld';
         $actual   = $uri->getHost();
-        $I->assertEquals($expected, $actual);
-    }
-
-    /**
-     * Tests Phalcon\Http\Message\Uri :: getHost() - empty
-     *
-     * @author Phalcon Team <team@phalcon.io>
-     * @since  2019-02-07
-     */
-    public function httpUriGetHostEmpty(UnitTester $I)
-    {
-        $I->wantToTest('Http\Uri - getHost() - empty');
-
-        $query = 'https://';
-        $uri   = new Uri($query);
-
-        $actual = $uri->getHost();
-        $I->assertEmpty($actual);
+        $I->assertSame($expected, $actual);
     }
 }

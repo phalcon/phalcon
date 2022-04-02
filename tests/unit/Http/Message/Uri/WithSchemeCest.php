@@ -13,10 +13,10 @@ declare(strict_types=1);
 
 namespace Phalcon\Tests\Unit\Http\Message\Uri;
 
-use Codeception\Example;
 use InvalidArgumentException;
 use Phalcon\Http\Message\Uri;
 use UnitTester;
+use function sprintf;
 
 class WithSchemeCest
 {
@@ -37,18 +37,15 @@ class WithSchemeCest
         );
 
         $newInstance = $uri->withScheme('http');
+        $I->assertNotSame($uri, $newInstance);
 
-        $I->assertNotEquals($uri, $newInstance);
+        $example = "http";
+        $actual  = $newInstance->getScheme();
+        $I->assertSame($example, $actual);
 
-        $I->assertEquals(
-            'http',
-            $newInstance->getScheme()
-        );
-
-        $I->assertEquals(
-            sprintf($query, 'http'),
-            (string) $newInstance
-        );
+        $example = sprintf($query, 'http');
+        $actual  = (string) $newInstance;
+        $I->assertSame($example, $actual);
     }
 
     /**
@@ -73,68 +70,5 @@ class WithSchemeCest
                 $instance = $uri->withScheme('ftp');
             }
         );
-    }
-
-    /**
-     * Tests Phalcon\Http\Message\Uri :: withScheme() - exception no string
-     *
-     * @dataProvider getExamples
-     *
-     * @author       Phalcon Team <team@phalcon.io>
-     * @since        2019-02-07
-     */
-    public function httpUriWithSchemeException(UnitTester $I, Example $example)
-    {
-        $I->wantToTest('Http\Uri - withScheme() - exception - ' . $example[1]);
-
-        $I->expectThrowable(
-            new InvalidArgumentException(
-                'Method requires a string argument'
-            ),
-            function () use ($example) {
-                $uri = new Uri(
-                    'https://phalcon:secret@dev.phalcon.ld:8080/action?param=value#frag'
-                );
-
-                $instance = $uri->withScheme($example[2]);
-            }
-        );
-    }
-
-
-    private function getExamples(): array
-    {
-        return [
-            [
-                'NULL',
-                'null',
-                null,
-            ],
-            [
-                'boolean',
-                'true',
-                true,
-            ],
-            [
-                'boolean',
-                'false',
-                false,
-            ],
-            [
-                'integer',
-                'number',
-                1234,
-            ],
-            [
-                'array',
-                'array',
-                ['/action'],
-            ],
-            [
-                'stdClass',
-                'object',
-                (object) ['/action'],
-            ],
-        ];
     }
 }

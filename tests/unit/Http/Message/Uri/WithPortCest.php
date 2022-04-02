@@ -17,7 +17,6 @@ use Codeception\Example;
 use InvalidArgumentException;
 use Phalcon\Http\Message\Uri;
 use UnitTester;
-
 use function sprintf;
 
 class WithPortCest
@@ -32,30 +31,33 @@ class WithPortCest
      */
     public function httpMessageUriWithPort(UnitTester $I, Example $example)
     {
-        $I->wantToTest('Http\Message\Uri - withPort() - ' . $example[0]);
+        $I->wantToTest('Http\Message\Uri - withPort() - ' . $example['label']);
 
         $query = 'https://phalcon:secret@dev.phalcon.ld:%s/action?param=value#frag';
+        $uri   = new Uri(sprintf($query, ':4300'));
 
-        $uri = new Uri(
-            sprintf($query, ':4300')
-        );
+        $source   = $example['source'];
+        $expected = $example['expected'];
+        $toString = $example['toString'];
 
-        $newInstance = $uri->withPort($example[1]);
+        /**
+         * New Instance
+         */
+        $newInstance = $uri->withPort($source);
+        $I->assertNotSame($uri, $newInstance);
 
-        $I->assertNotEquals(
-            $uri,
-            $newInstance
-        );
+        /**
+         * Same instance
+         */
+        $sameInstance = $newInstance->withPort($source);
+        $I->assertSame($newInstance, $sameInstance);
 
-        $I->assertEquals(
-            $example[2],
-            $newInstance->getPort()
-        );
+        $actual = $newInstance->getPort();
+        $I->assertSame($expected, $actual);
 
-        $I->assertEquals(
-            sprintf($query, $example[3]),
-            (string) $newInstance
-        );
+        $expected = sprintf($query, $toString);
+        $actual   = (string) $newInstance;
+        $I->assertSame($expected, $actual);
     }
 
     /**
@@ -68,67 +70,68 @@ class WithPortCest
      */
     public function httpUriWithPortException(UnitTester $I, Example $example)
     {
-        $I->wantToTest('Http\Uri - withPort() - ' . $example[0]);
+        $I->wantToTest('Http\Uri - withPort() - ' . $example['label']);
 
         $I->expectThrowable(
             new InvalidArgumentException(
-                'Method expects ' . $example[2]
+                'Invalid port specified. (Valid range 1-65535)'
             ),
             function () use ($example) {
                 $query = 'https://phalcon:secret@dev.phalcon.ld%s/action?param=value#frag';
+                $uri   = new Uri(sprintf($query, ':4300'));
 
-                $uri = new Uri(
-                    sprintf($query, ':4300')
-                );
-
-                $newInstance = $uri->withPort($example[1]);
+                $newInstance = $uri->withPort($example['source']);
             }
         );
     }
 
-
+    /**
+     * @return array[]
+     */
     private function getExamples(): array
     {
         return [
             [
-                'null',
-                null,
-                null,
-                '',
+                'label'    => 'null',
+                'source'   => null,
+                'expected' => null,
+                'toString' => '',
             ],
             [
-                'int',
-                8080,
-                8080,
-                ':8080',
+                'label'    => 'int',
+                'source'   => 8080,
+                'expected' => 8080,
+                'toString' => ':8080',
             ],
             [
-                'string-int',
-                '8080',
-                8080,
-                ':8080',
+                'label'    => 'http',
+                'source'   => 80,
+                'expected' => null,
+                'toString' => '',
             ],
             [
-                'http',
-                80,
-                null,
-                '',
-            ],
-            [
-                'https',
-                443,
-                null,
-                '',
+                'label'    => 'https',
+                'source'   => 443,
+                'expected' => null,
+                'toString' => '',
             ],
         ];
     }
 
-
+    /**
+     * @return array[]
+     */
     private function getExceptions(): array
     {
         return [
-            ['port less than 1', -2, 'valid port (1-65535)'],
-            ['port more than max', 70000, 'valid port (1-65535)'],
+            [
+                'label'  => 'port less than 1',
+                'source' => -2,
+            ],
+            [
+                'label'  => 'port more than max',
+                'source' => 70000,
+            ],
         ];
     }
 }

@@ -32,7 +32,7 @@ class GetSchemeCest
 
         $expected = 'https';
         $actual   = $uri->getScheme();
-        $I->assertEquals($expected, $actual);
+        $I->assertSame($expected, $actual);
     }
 
     /**

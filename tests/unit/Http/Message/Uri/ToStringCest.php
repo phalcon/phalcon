@@ -30,7 +30,7 @@ class ToStringCest
         $query = 'https://phalcon:secret@dev.phalcon.ld:8080/action?param=value#frag';
         $uri   = new Uri($query);
 
-        $I->assertEquals($query, (string) $uri);
+        $I->assertSame($query, (string) $uri);
     }
 
     /**
@@ -47,7 +47,7 @@ class ToStringCest
         $newInstance = $uri->withPath('action/reaction');
         $expected    = 'https://dev.phalcon.ld/action/reaction';
         $actual      = $newInstance->__toString();
-        $I->assertEquals($expected, $actual);
+        $I->assertSame($expected, $actual);
     }
 
     /**
@@ -64,6 +64,6 @@ class ToStringCest
         $newInstance = $uri->withPath('///action/reaction');
         $expected    = 'https://dev.phalcon.ld/action/reaction';
         $actual      = $newInstance->__toString();
-        $I->assertEquals($expected, $actual);
+        $I->assertSame($expected, $actual);
     }
 }

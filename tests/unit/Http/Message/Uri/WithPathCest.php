@@ -42,41 +42,19 @@ class WithPathCest
             $example[1]
         );
 
-        $I->assertNotEquals(
+        $I->assertNotSame(
             $uri,
             $newInstance
         );
 
-        $I->assertEquals(
+        $I->assertSame(
             $example[2],
             $newInstance->getPath()
         );
 
-        $I->assertEquals(
+        $I->assertSame(
             sprintf($query, $example[3]),
             (string) $newInstance
-        );
-    }
-
-    /**
-     * Tests Phalcon\Http\Message\Uri :: withPath() - exception query string
-     *
-     * @author       Phalcon Team <team@phalcon.io>
-     * @since        2019-06-01
-     */
-    public function httpUriWithPathExceptionQueryString(UnitTester $I)
-    {
-        $I->wantToTest('Http\Uri - withPath() - exception - query string');
-
-        $I->expectThrowable(
-            new InvalidArgumentException(
-                'Path cannot contain a query string or fragment'
-            ),
-            function () {
-                $query    = 'https://phalcon:secret@dev.phalcon.ld:8080/action?param=value#frag';
-                $uri      = new Uri($query);
-                $instance = $uri->withPath('/login?param=value');
-            }
         );
     }
 
@@ -101,31 +79,6 @@ class WithPathCest
             }
         );
     }
-
-    /**
-     * Tests Phalcon\Http\Message\Uri :: withPath() - exception no string
-     *
-     * @dataProvider getExceptions
-     *
-     * @author       Phalcon Team <team@phalcon.io>
-     * @since        2019-02-07
-     */
-    public function httpUriWithPathException(UnitTester $I, Example $example)
-    {
-        $I->wantToTest('Http\Uri - withPath() - exception - ' . $example[1]);
-
-        $I->expectThrowable(
-            new InvalidArgumentException(
-                'Method requires a string argument'
-            ),
-            function () use ($example) {
-                $query    = 'https://phalcon:secret@dev.phalcon.ld:8080/action?param=value#frag';
-                $uri      = new Uri($query);
-                $instance = $uri->withPath($example[2]);
-            }
-        );
-    }
-
 
     private function getExamples(): array
     {

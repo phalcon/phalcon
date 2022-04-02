@@ -32,7 +32,7 @@ class GetUserInfoCest
 
         $expected = 'phalcon:secret';
         $actual   = $uri->getUserInfo();
-        $I->assertEquals($expected, $actual);
+        $I->assertSame($expected, $actual);
     }
 
     /**
@@ -49,7 +49,7 @@ class GetUserInfoCest
 
         $expected = 'phalcon';
         $actual   = $uri->getUserInfo();
-        $I->assertEquals($expected, $actual);
+        $I->assertSame($expected, $actual);
     }
 
     /**
@@ -66,7 +66,7 @@ class GetUserInfoCest
 
         $expected = ':secret';
         $actual   = $uri->getUserInfo();
-        $I->assertEquals($expected, $actual);
+        $I->assertSame($expected, $actual);
     }
 
     /**

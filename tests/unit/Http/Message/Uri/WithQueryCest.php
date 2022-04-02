@@ -30,50 +30,23 @@ class WithQueryCest
      */
     public function httpMessageUriWithQuery(UnitTester $I, Example $example)
     {
-        $I->wantToTest('Http\Message\Uri - withQuery()');
+        $I->wantToTest('Http\Message\Uri - withQuery() - ' . $example['label']);
 
         $query = 'https://phalcon:secret@dev.phalcon.ld:8080/action?%s#frag';
         $uri   = new Uri(sprintf($query, 'param=value'));
 
-        $newInstance = $uri->withQuery($example[1]);
+        $source      = $example['source'];
+        $expected    = $example['expected'];
+        $newInstance = $uri->withQuery($source);
 
-        $I->assertNotEquals($uri, $newInstance);
+        $I->assertNotSame($uri, $newInstance);
 
-        $I->assertEquals(
-            $example[2],
-            $newInstance->getQuery()
-        );
+        $actual = $newInstance->getQuery();
+        $I->assertSame($expected, $actual);
 
-        $I->assertEquals(
-            sprintf($query, $example[2]),
-            (string) $newInstance
-        );
-    }
-
-    /**
-     * Tests Phalcon\Http\Message\Uri :: withQuery() - exception no string
-     *
-     * @dataProvider getExceptions
-     *
-     * @author       Phalcon Team <team@phalcon.io>
-     * @since        2019-02-07
-     */
-    public function httpUriWithQueryException(UnitTester $I, Example $example)
-    {
-        $I->wantToTest('Http\Uri - withQuery() - exception - ' . $example[1]);
-
-        $I->expectThrowable(
-            new InvalidArgumentException(
-                'Method requires a string argument'
-            ),
-            function () use ($example) {
-                $uri = new Uri(
-                    'https://phalcon:secret@dev.phalcon.ld:8080/action?param=value#frag'
-                );
-
-                $instance = $uri->withQuery($example[2]);
-            }
-        );
+        $expected = sprintf($query, $expected);
+        $actual   = (string) $newInstance;
+        $I->assertSame($expected, $actual);
     }
 
     /**
@@ -88,7 +61,7 @@ class WithQueryCest
 
         $I->expectThrowable(
             new InvalidArgumentException(
-                'Query cannot contain a query fragment'
+                'Query cannot contain a URI fragment'
             ),
             function () {
                 $uri = new Uri(
@@ -104,70 +77,34 @@ class WithQueryCest
     {
         return [
             [
-                'key only',
-                'p^aram',
-                'p%5Earam',
+                'label'    => 'key only',
+                'source'   => 'p^aram',
+                'expected' => 'p%5Earam',
             ],
             [
-                'key and value',
-                'p^aram=valu`',
-                'p%5Earam=valu%60',
+                'label'    => 'key and value',
+                'source'   => 'p^aram=valu`',
+                'expected' => 'p%5Earam=valu%60',
             ],
             [
-                'key as array',
-                'param[]',
-                'param%5B%5D',
+                'label'    => 'key as array',
+                'source'   => 'param[]',
+                'expected' => 'param%5B%5D',
             ],
             [
-                'key as array and value',
-                'param[]=valu`',
-                'param%5B%5D=valu%60',
+                'label'    => 'key as array and value',
+                'source'   => 'param[]=valu`',
+                'expected' => 'param%5B%5D=valu%60',
             ],
             [
-                'key with questionmark',
-                '?param=valu',
-                'param=valu',
+                'label'    => 'key with questionmark',
+                'source'   => '?param=valu',
+                'expected' => 'param=valu',
             ],
             [
-                'complex',
-                'p^aram&all[]=va lu`&f<>=`bar',
-                'p%5Earam&all%5B%5D=va%20lu%60&f%3C%3E=%60bar',
-            ],
-        ];
-    }
-
-    private function getExceptions(): array
-    {
-        return [
-            [
-                'NULL',
-                'null',
-                null,
-            ],
-            [
-                'boolean',
-                'true',
-                true,
-            ],
-            [
-                'boolean',
-                'false',
-                false,
-            ],
-            [
-                'integer',
-                'number',
-                1234,
-            ],
-            [
-                'array',
-                'array',
-                ['/action'],
-            ],
-            [
-                'stdClass',
-                'object',
-                (object) ['/action'],
+                'label'    => 'complex',
+                'source'   => 'p^aram&all[]=va lu`&param<>=`test',
+                'expected' => 'p%5Earam&all%5B%5D=va%20lu`&param%3C%3E=%60test',
             ],
         ];
     }
