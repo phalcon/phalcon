@@ -549,8 +549,8 @@ trait MessageTrait
         } else {
             if (!($headers instanceof CollectionInterface)) {
                 throw new InvalidArgumentException(
-                    "Headers needs to be either an array or instance "
-                . "implementing of Phalcon\\Support\\CollectionIterface"
+                    "Headers needs to be either an array or an instance "
+                    . "implementing Phalcon\\Support\\CollectionInterface"
                 );
             }
 
