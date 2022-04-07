@@ -51,7 +51,10 @@ interface StreamFactoryInterface
      * @throws RuntimeException If the file cannot be opened.
      * @throws InvalidArgumentException If the mode is invalid.
      */
-    public function createStreamFromFile(string $filename, string $mode = "r"): StreamInterface;
+    public function createStreamFromFile(
+        string $filename,
+        string $mode = "r"
+    ): StreamInterface;
 
     /**
      * Create a new stream from an existing resource.
