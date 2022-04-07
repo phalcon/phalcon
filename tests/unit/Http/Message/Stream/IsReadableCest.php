@@ -15,8 +15,12 @@ namespace Phalcon\Tests\Unit\Http\Message\Stream;
 
 use Codeception\Example;
 use Phalcon\Http\Message\Stream;
+use Phalcon\Http\Message\Stream\Input;
+use Phalcon\Http\Message\Stream\Memory;
+use Phalcon\Http\Message\Stream\Temp;
 use UnitTester;
 
+use function dataDir;
 use function logsDir;
 
 class IsReadableCest
@@ -31,16 +35,13 @@ class IsReadableCest
      */
     public function httpMessageStreamIsReadable(UnitTester $I, Example $example)
     {
-        $I->wantToTest('Http\Message\Stream - isReadable() - ' . $example[0]);
+        $I->wantToTest('Http\Message\Stream - isReadable() - ' . $example['label']);
 
-        $fileName = dataDir('assets/stream/mit-empty.txt');
+        $stream = $example['resource'];
 
-        $stream = new Stream($fileName, $example[0]);
-
-        $I->assertEquals(
-            $example[1],
-            $stream->isReadable()
-        );
+        $expected = $example['readable'];
+        $actual   = $stream->isReadable();
+        $I->assertEquals($expected, $actual);
     }
 
     /**
@@ -66,6 +67,205 @@ class IsReadableCest
         );
     }
 
+    /**
+     * @return array[]
+     */
+    private function getExamples(): array
+    {
+        $fileName = dataDir('assets/stream/mit-empty.txt');
+
+        return [
+            [
+                'label'    => 'stream - a',
+                'resource' => new Stream($fileName, 'a'),
+                'readable' => false,
+            ],
+            [
+                'label'    => 'stream - ab',
+                'resource' => new Stream($fileName, 'ab'),
+                'readable' => false,
+            ],
+            [
+                'label'    => 'stream - a+',
+                'resource' => new Stream($fileName, 'a+'),
+                'readable' => true,
+            ],
+            [
+                'label'    => 'stream - a+b',
+                'resource' => new Stream($fileName, 'a+b'),
+                'readable' => true,
+            ],
+            [
+                'label'    => 'stream - c',
+                'resource' => new Stream($fileName, 'c'),
+                'readable' => false,
+            ],
+            [
+                'label'    => 'stream - cb',
+                'resource' => new Stream($fileName, 'cb'),
+                'readable' => false,
+            ],
+            [
+                'label'    => 'stream - c+',
+                'resource' => new Stream($fileName, 'c+'),
+                'readable' => true,
+            ],
+            [
+                'label'    => 'stream - c+b',
+                'resource' => new Stream($fileName, 'c+b'),
+                'readable' => true,
+            ],
+            [
+                'label'    => 'stream - r',
+                'resource' => new Stream($fileName, 'r'),
+                'readable' => true,
+            ],
+            [
+                'label'    => 'stream - rb',
+                'resource' => new Stream($fileName, 'rb'),
+                'readable' => true,
+            ],
+            [
+                'label'    => 'stream - r+',
+                'resource' => new Stream($fileName, 'r+'),
+                'readable' => true,
+            ],
+            [
+                'label'    => 'stream - r+b',
+                'resource' => new Stream($fileName, 'r+b'),
+                'readable' => true,
+            ],
+            [
+                'label'    => 'input',
+                'resource' => new Input(),
+                'readable' => true,
+            ],
+            [
+                'label'    => 'memory - a',
+                'resource' => new Memory('a'),
+                'readable' => true,
+            ],
+            [
+                'label'    => 'memory - ab',
+                'resource' => new Memory('ab'),
+                'readable' => true,
+            ],
+            [
+                'label'    => 'memory - a+',
+                'resource' => new Memory('a+'),
+                'readable' => true,
+            ],
+            [
+                'label'    => 'memory - a+b',
+                'resource' => new Memory('a+b'),
+                'readable' => true,
+            ],
+            [
+                'label'    => 'memory - c',
+                'resource' => new Memory('c'),
+                'readable' => true,
+            ],
+            [
+                'label'    => 'memory - cb',
+                'resource' => new Memory('cb'),
+                'readable' => true,
+            ],
+            [
+                'label'    => 'memory - c+',
+                'resource' => new Memory('c+'),
+                'readable' => true,
+            ],
+            [
+                'label'    => 'memory - c+b',
+                'resource' => new Memory('c+b'),
+                'readable' => true,
+            ],
+            [
+                'label'    => 'memory - r',
+                'resource' => new Memory('r'),
+                'readable' => true,
+            ],
+            [
+                'label'    => 'memory - rb',
+                'resource' => new Memory('rb'),
+                'readable' => true,
+            ],
+            [
+                'label'    => 'memory - r+',
+                'resource' => new Memory('r+'),
+                'readable' => true,
+            ],
+            [
+                'label'    => 'memory - r+b',
+                'resource' => new Memory('r+b'),
+                'readable' => true,
+            ],
+            [
+                'label'    => 'temp - a',
+                'resource' => new Temp('a'),
+                'readable' => true,
+            ],
+            [
+                'label'    => 'temp - ab',
+                'resource' => new Temp('ab'),
+                'readable' => true,
+            ],
+            [
+                'label'    => 'temp - a+',
+                'resource' => new Temp('a+'),
+                'readable' => true,
+            ],
+            [
+                'label'    => 'temp - a+b',
+                'resource' => new Temp('a+b'),
+                'readable' => true,
+            ],
+            [
+                'label'    => 'temp - c',
+                'resource' => new Temp('c'),
+                'readable' => true,
+            ],
+            [
+                'label'    => 'temp - cb',
+                'resource' => new Temp('cb'),
+                'readable' => true,
+            ],
+            [
+                'label'    => 'temp - c+',
+                'resource' => new Temp('c+'),
+                'readable' => true,
+            ],
+            [
+                'label'    => 'temp - c+b',
+                'resource' => new Temp('c+b'),
+                'readable' => true,
+            ],
+            [
+                'label'    => 'temp - r',
+                'resource' => new Temp('r'),
+                'readable' => true,
+            ],
+            [
+                'label'    => 'temp - rb',
+                'resource' => new Temp('rb'),
+                'readable' => true,
+            ],
+            [
+                'label'    => 'temp - r+',
+                'resource' => new Temp('r+'),
+                'readable' => true,
+            ],
+            [
+                'label'    => 'temp - r+b',
+                'resource' => new Temp('r+b'),
+                'readable' => true,
+            ],
+        ];
+    }
+
+    /**
+     * @return array[]
+     */
     private function getExamplesX(): array
     {
         return [
@@ -77,24 +277,6 @@ class IsReadableCest
             ['xb', false],
             ['x+', true],
             ['x+b', true],
-        ];
-    }
-
-    private function getExamples(): array
-    {
-        return [
-            ['a', false],
-            ['ab', false],
-            ['a+', true],
-            ['a+b', true],
-            ['c', false],
-            ['cb', false],
-            ['c+', true],
-            ['c+b', true],
-            ['r', true],
-            ['rb', true],
-            ['r+', true],
-            ['r+b', true],
         ];
     }
 }
