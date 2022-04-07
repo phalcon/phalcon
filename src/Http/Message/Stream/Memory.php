@@ -1,3 +1,4 @@
+<?php
 
 /**
  * This file is part of the Phalcon Framework.
@@ -7,8 +8,11 @@
  * For the full copyright and license information, please view the LICENSE.txt
  * file that was distributed with this source code.
  *
- * Implementation of this file has been influenced by Zend Diactoros
- * @link    https://github.com/zendframework/zend-diactoros
+ * Implementation of this file has been influenced by Nyholm/psr7 and Laminas
+ *
+ * @link    https://github.com/Nyholm/psr7
+ * @license https://github.com/Nyholm/psr7/blob/master/LICENSE
+ * @link    https://github.com/laminas/laminas-diactoros
  * @license https://github.com/zendframework/zend-diactoros/blob/master/LICENSE.md
  */
 
@@ -17,19 +21,19 @@ namespace Phalcon\Http\Message\Stream;
 use Phalcon\Http\Message\Stream;
 
 /**
- * Describes a data stream from "php://temp"
+ * Describes a data stream from "php://memory"
  *
  * Typically, an instance will wrap a PHP stream; this interface provides
  * a wrapper around the most common operations, including serialization of
  * the entire stream to a string.
  */
-class Temp extends Stream
+class Memory extends Stream
 {
     /**
      * Constructor
      */
-    public function __construct(var mode = "rb")
+    public function __construct(string $mode = "rb")
     {
-        parent::__construct("php://temp", mode);
+        parent::__construct("php://memory", $mode);
     }
 }

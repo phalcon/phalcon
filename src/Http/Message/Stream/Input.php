@@ -1,3 +1,4 @@
+<?php
 
 /**
  * This file is part of the Phalcon Framework.
@@ -7,13 +8,17 @@
  * For the full copyright and license information, please view the LICENSE.txt
  * file that was distributed with this source code.
  *
- * Implementation of this file has been influenced by Zend Diactoros
- * @link    https://github.com/zendframework/zend-diactoros
+ * Implementation of this file has been influenced by Nyholm/psr7 and Laminas
+ *
+ * @link    https://github.com/Nyholm/psr7
+ * @license https://github.com/Nyholm/psr7/blob/master/LICENSE
+ * @link    https://github.com/laminas/laminas-diactoros
  * @license https://github.com/zendframework/zend-diactoros/blob/master/LICENSE.md
  */
 
 namespace Phalcon\Http\Message\Stream;
 
+use Phalcon\Http\Message\Exception\RuntimeException;
 use Phalcon\Http\Message\Stream;
 
 /**
@@ -22,18 +27,21 @@ use Phalcon\Http\Message\Stream;
  * Typically, an instance will wrap a PHP stream; this interface provides
  * a wrapper around the most common operations, including serialization of
  * the entire stream to a string.
+ *
+ * @property string $data
+ * @property bool   $eof
  */
 class Input extends Stream
 {
     /**
      * @var string
      */
-    private data = "";
+    private string $data = "";
 
     /**
      * @var bool
      */
-    private eof = false;
+    private bool $eof = false;
 
     /**
      * Input constructor.
@@ -55,16 +63,18 @@ class Input extends Stream
      * string casting operations.
      *
      * @see http://php.net/manual/en/language.oop5.magic.php#object.tostring
+     *
+     * @return string
      */
-    public function __toString() -> string
+    public function __toString(): string
     {
-        if unlikely this->eof {
-            return this->data;
+        if (true === $this->eof) {
+            return $this->data;
         }
 
-        this->getContents();
+        $this->getContents();
 
-        return this->data;
+        return $this->data;
     }
 
     /**
@@ -72,31 +82,31 @@ class Input extends Stream
      *
      * @param int $length
      *
-     * @throws \RuntimeException If unable to read or if error occurs while reading.
+     * @throws RuntimeException If unable to read or if error occurs while reading.
      * @return string
      */
-    public function getContents(int length = -1) -> string
+    public function getContents(int $length = -1): string
     {
-        var data;
-
-        if unlikely this->eof {
-            return this->data;
+        if (true === $this->eof) {
+            return $this->data;
         }
 
-        let data       = stream_get_contents(this->handle, length),
-            this->data = data;
+        $data       = stream_get_contents($this->handle, $length);
+        $this->data = $data;
 
-        if unlikely (-1 === length || this->eof()) {
-            let this->eof = true;
+        if (-1 === $length || true === $this->eof()) {
+            $this->eof = true;
         }
 
-        return this->data;
+        return $this->data;
     }
 
     /**
-     * Returns whether or not the stream is writeable.
+     * Returns whether the stream is writeable.
+     *
+     * @return void
      */
-    public function isWritable() -> bool
+    public function isWritable(): bool
     {
         return false;
     }
@@ -108,20 +118,18 @@ class Input extends Stream
      *
      * @return string
      */
-    public function read(var length)-> string
+    public function read(int $length): string
     {
-        var data;
+        $data = parent::read($length);
 
-        let data = parent::read(length);
-
-        if unlikely true !== this->eof {
-            let this->data = data;
+        if (true !== $this->eof) {
+            $this->data = $data;
         }
 
-        if unlikely this->eof() {
-            let this->eof = true;
+        if (true === $this->eof()) {
+            $this->eof = true;
         }
 
-        return data;
+        return $data;
     }
 }

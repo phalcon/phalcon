@@ -15,8 +15,12 @@ namespace Phalcon\Tests\Unit\Http\Message\Stream;
 
 use Codeception\Example;
 use Phalcon\Http\Message\Stream;
+use Phalcon\Http\Message\Stream\Input;
+use Phalcon\Http\Message\Stream\Memory;
+use Phalcon\Http\Message\Stream\Temp;
 use UnitTester;
 
+use function dataDir;
 use function logsDir;
 
 class IsWritableCest
@@ -31,16 +35,13 @@ class IsWritableCest
      */
     public function httpMessageStreamIsWritable(UnitTester $I, Example $example)
     {
-        $I->wantToTest('Http\Message\Stream - isWritable() - ' . $example[0]);
+        $I->wantToTest('Http\Message\Stream - isWritable() - ' . $example['label']);
 
-        $fileName = dataDir('assets/stream/mit-empty.txt');
+        $stream = $example['resource'];
 
-        $stream = new Stream($fileName, $example[0]);
-
-        $I->assertEquals(
-            $example[1],
-            $stream->isWritable()
-        );
+        $expected = $example['writable'];
+        $actual   = $stream->isWritable();
+        $I->assertEquals($expected, $actual);
     }
 
     /**
@@ -62,12 +63,210 @@ class IsWritableCest
 
         $stream = new Stream($fileName, $example[0]);
 
-        $I->assertEquals(
-            $example[1],
-            $stream->isWritable()
-        );
+        $expected = $example[1];
+        $actual   = $stream->isWritable();
+        $I->assertEquals($expected, $actual);
     }
 
+    /**
+     * @return array[]
+     */
+    private function getExamples(): array
+    {
+        $fileName = dataDir('assets/stream/mit-empty.txt');
+
+        return [
+            [
+                'label'    => 'stream - a',
+                'resource' => new Stream($fileName, 'a'),
+                'writable' => true,
+            ],
+            [
+                'label'    => 'stream - ab',
+                'resource' => new Stream($fileName, 'ab'),
+                'writable' => true,
+            ],
+            [
+                'label'    => 'stream - a+',
+                'resource' => new Stream($fileName, 'a+'),
+                'writable' => true,
+            ],
+            [
+                'label'    => 'stream - a+b',
+                'resource' => new Stream($fileName, 'a+b'),
+                'writable' => true,
+            ],
+            [
+                'label'    => 'stream - c',
+                'resource' => new Stream($fileName, 'c'),
+                'writable' => true,
+            ],
+            [
+                'label'    => 'stream - cb',
+                'resource' => new Stream($fileName, 'cb'),
+                'writable' => true,
+            ],
+            [
+                'label'    => 'stream - c+',
+                'resource' => new Stream($fileName, 'c+'),
+                'writable' => true,
+            ],
+            [
+                'label'    => 'stream - c+b',
+                'resource' => new Stream($fileName, 'c+b'),
+                'writable' => true,
+            ],
+            [
+                'label'    => 'stream - r',
+                'resource' => new Stream($fileName, 'r'),
+                'writable' => false,
+            ],
+            [
+                'label'    => 'stream - rb',
+                'resource' => new Stream($fileName, 'rb'),
+                'writable' => false,
+            ],
+            [
+                'label'    => 'stream - r+',
+                'resource' => new Stream($fileName, 'r+'),
+                'writable' => true,
+            ],
+            [
+                'label'    => 'stream - r+b',
+                'resource' => new Stream($fileName, 'r+b'),
+                'writable' => true,
+            ],
+            [
+                'label'    => 'input',
+                'resource' => new Input(),
+                'writable' => false,
+            ],
+            [
+                'label'    => 'memory - a',
+                'resource' => new Memory('a'),
+                'writable' => true,
+            ],
+            [
+                'label'    => 'memory - ab',
+                'resource' => new Memory('ab'),
+                'writable' => true,
+            ],
+            [
+                'label'    => 'memory - a+',
+                'resource' => new Memory('a+'),
+                'writable' => true,
+            ],
+            [
+                'label'    => 'memory - a+b',
+                'resource' => new Memory('a+b'),
+                'writable' => true,
+            ],
+            [
+                'label'    => 'memory - c',
+                'resource' => new Memory('c'),
+                'writable' => false,
+            ],
+            [
+                'label'    => 'memory - cb',
+                'resource' => new Memory('cb'),
+                'writable' => false,
+            ],
+            [
+                'label'    => 'memory - c+',
+                'resource' => new Memory('c+'),
+                'writable' => true,
+            ],
+            [
+                'label'    => 'memory - c+b',
+                'resource' => new Memory('c+b'),
+                'writable' => true,
+            ],
+            [
+                'label'    => 'memory - r',
+                'resource' => new Memory('r'),
+                'writable' => false,
+            ],
+            [
+                'label'    => 'memory - rb',
+                'resource' => new Memory('rb'),
+                'writable' => false,
+            ],
+            [
+                'label'    => 'memory - r+',
+                'resource' => new Memory('r+'),
+                'writable' => true,
+            ],
+            [
+                'label'    => 'memory - r+b',
+                'resource' => new Memory('r+b'),
+                'writable' => true,
+            ],
+            [
+                'label'    => 'temp - a',
+                'resource' => new Temp('a'),
+                'writable' => true,
+            ],
+            [
+                'label'    => 'temp - ab',
+                'resource' => new Temp('ab'),
+                'writable' => true,
+            ],
+            [
+                'label'    => 'temp - a+',
+                'resource' => new Temp('a+'),
+                'writable' => true,
+            ],
+            [
+                'label'    => 'temp - a+b',
+                'resource' => new Temp('a+b'),
+                'writable' => true,
+            ],
+            [
+                'label'    => 'temp - c',
+                'resource' => new Temp('c'),
+                'writable' => false,
+            ],
+            [
+                'label'    => 'temp - cb',
+                'resource' => new Temp('cb'),
+                'writable' => false,
+            ],
+            [
+                'label'    => 'temp - c+',
+                'resource' => new Temp('c+'),
+                'writable' => true,
+            ],
+            [
+                'label'    => 'temp - c+b',
+                'resource' => new Temp('c+b'),
+                'writable' => true,
+            ],
+            [
+                'label'    => 'temp - r',
+                'resource' => new Temp('r'),
+                'writable' => false,
+            ],
+            [
+                'label'    => 'temp - rb',
+                'resource' => new Temp('rb'),
+                'writable' => false,
+            ],
+            [
+                'label'    => 'temp - r+',
+                'resource' => new Temp('r+'),
+                'writable' => true,
+            ],
+            [
+                'label'    => 'temp - r+b',
+                'resource' => new Temp('r+b'),
+                'writable' => true,
+            ],
+        ];
+    }
+
+    /**
+     * @return array[]
+     */
     private function getExamplesX(): array
     {
         return [
@@ -79,24 +278,6 @@ class IsWritableCest
             ['xb', true],
             ['x+', true],
             ['x+b', true],
-        ];
-    }
-
-    private function getExamples(): array
-    {
-        return [
-            ['a', true],
-            ['ab', true],
-            ['a+', true],
-            ['a+b', true],
-            ['c', true],
-            ['cb', true],
-            ['c+', true],
-            ['c+b', true],
-            ['r', false],
-            ['rb', false],
-            ['r+', true],
-            ['r+b', true],
         ];
     }
 }

@@ -14,8 +14,11 @@ declare(strict_types=1);
 namespace Phalcon\Tests\Unit\Http\Message\Stream;
 
 use Codeception\Example;
+use Phalcon\Http\Message\Interfaces\StreamInterface;
 use Phalcon\Http\Message\Stream;
-use Psr\Http\Message\StreamInterface;
+use Phalcon\Http\Message\Stream\Input;
+use Phalcon\Http\Message\Stream\Memory;
+use Phalcon\Http\Message\Stream\Temp;
 use RuntimeException;
 use stdClass;
 use UnitTester;
@@ -25,19 +28,23 @@ class ConstructCest
     /**
      * Tests Phalcon\Http\Message\Stream :: __construct()
      *
+     * @dataProvider getExamples
+     *
+     * @param UnitTester $I
+     * @param Example    $example
+     *
+     * @return void
+     *
      * @author Phalcon Team <team@phalcon.io>
      * @since  2019-02-08
      */
-    public function httpMessageStreamConstruct(UnitTester $I)
+    public function httpMessageStreamConstruct(UnitTester $I, Example $example)
     {
-        $I->wantToTest('Http\Message\Stream - __construct()');
+        $I->wantToTest('Http\Message\Stream - __construct() ' . $example['label']);
 
-        $request = new Stream('php://temp');
+        $request = $example['request'];
 
-        $I->assertInstanceOf(
-            StreamInterface::class,
-            $request
-        );
+        $I->assertInstanceOf(StreamInterface::class, $request);
     }
 
     /**
@@ -62,6 +69,34 @@ class ConstructCest
         );
     }
 
+    /**
+     * @return array[]
+     */
+    private function getExamples(): array
+    {
+        return [
+            [
+                'label' => 'stream',
+                'request' => new Stream('php://temp'),
+            ],
+            [
+                'label' => 'input',
+                'request' => new Input(),
+            ],
+            [
+                'label' => 'memory',
+                'request' => new Memory(),
+            ],
+            [
+                'label' => 'temp',
+                'request' => new Temp(),
+            ],
+
+        ];
+    }
+    /**
+     * @return array[]
+     */
     private function getExceptionExamples(): array
     {
         return [

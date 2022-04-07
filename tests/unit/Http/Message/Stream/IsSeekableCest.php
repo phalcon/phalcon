@@ -15,8 +15,12 @@ namespace Phalcon\Tests\Unit\Http\Message\Stream;
 
 use Codeception\Example;
 use Phalcon\Http\Message\Stream;
+use Phalcon\Http\Message\Stream\Input;
+use Phalcon\Http\Message\Stream\Memory;
+use Phalcon\Http\Message\Stream\Temp;
 use UnitTester;
 
+use function dataDir;
 use function logsDir;
 
 class IsSeekableCest
@@ -31,16 +35,13 @@ class IsSeekableCest
      */
     public function httpMessageStreamIsSeekable(UnitTester $I, Example $example)
     {
-        $I->wantToTest('Http\Message\Stream - isSeekable() - ' . $example[0]);
+        $I->wantToTest('Http\Message\Stream - isSeekable() - ' . $example['label']);
 
-        $fileName = dataDir('assets/stream/mit-empty.txt');
+        $stream = $example['resource'];
 
-        $stream = new Stream($fileName, $example[0]);
-
-        $I->assertEquals(
-            $example[1],
-            $stream->isSeekable()
-        );
+        $expected = $example['seekable'];
+        $actual   = $stream->isSeekable();
+        $I->assertEquals($expected, $actual);
     }
 
     /**
@@ -62,12 +63,210 @@ class IsSeekableCest
 
         $stream = new Stream($fileName, $example[0]);
 
-        $I->assertEquals(
-            $example[1],
-            $stream->isSeekable()
-        );
+        $expected = $example[1];
+        $actual   = $stream->isSeekable();
+        $I->assertEquals($expected, $actual);
     }
 
+    /**
+     * @return array[]
+     */
+    private function getExamples(): array
+    {
+        $fileName = dataDir('assets/stream/mit-empty.txt');
+
+        return [
+            [
+                'label'    => 'stream - a',
+                'resource' => new Stream($fileName, 'a'),
+                'seekable' => true,
+            ],
+            [
+                'label'    => 'stream - ab',
+                'resource' => new Stream($fileName, 'ab'),
+                'seekable' => true,
+            ],
+            [
+                'label'    => 'stream - a+',
+                'resource' => new Stream($fileName, 'a+'),
+                'seekable' => true,
+            ],
+            [
+                'label'    => 'stream - a+b',
+                'resource' => new Stream($fileName, 'a+b'),
+                'seekable' => true,
+            ],
+            [
+                'label'    => 'stream - c',
+                'resource' => new Stream($fileName, 'c'),
+                'seekable' => true,
+            ],
+            [
+                'label'    => 'stream - cb',
+                'resource' => new Stream($fileName, 'cb'),
+                'seekable' => true,
+            ],
+            [
+                'label'    => 'stream - c+',
+                'resource' => new Stream($fileName, 'c+'),
+                'seekable' => true,
+            ],
+            [
+                'label'    => 'stream - c+b',
+                'resource' => new Stream($fileName, 'c+b'),
+                'seekable' => true,
+            ],
+            [
+                'label'    => 'stream - r',
+                'resource' => new Stream($fileName, 'r'),
+                'seekable' => true,
+            ],
+            [
+                'label'    => 'stream - rb',
+                'resource' => new Stream($fileName, 'rb'),
+                'seekable' => true,
+            ],
+            [
+                'label'    => 'stream - r+',
+                'resource' => new Stream($fileName, 'r+'),
+                'seekable' => true,
+            ],
+            [
+                'label'    => 'stream - r+b',
+                'resource' => new Stream($fileName, 'r+b'),
+                'seekable' => true,
+            ],
+            [
+                'label'    => 'input',
+                'resource' => new Input(),
+                'seekable' => true,
+            ],
+            [
+                'label'    => 'memory - a',
+                'resource' => new Memory('a'),
+                'seekable' => true,
+            ],
+            [
+                'label'    => 'memory - ab',
+                'resource' => new Memory('ab'),
+                'seekable' => true,
+            ],
+            [
+                'label'    => 'memory - a+',
+                'resource' => new Memory('a+'),
+                'seekable' => true,
+            ],
+            [
+                'label'    => 'memory - a+b',
+                'resource' => new Memory('a+b'),
+                'seekable' => true,
+            ],
+            [
+                'label'    => 'memory - c',
+                'resource' => new Memory('c'),
+                'seekable' => true,
+            ],
+            [
+                'label'    => 'memory - cb',
+                'resource' => new Memory('cb'),
+                'seekable' => true,
+            ],
+            [
+                'label'    => 'memory - c+',
+                'resource' => new Memory('c+'),
+                'seekable' => true,
+            ],
+            [
+                'label'    => 'memory - c+b',
+                'resource' => new Memory('c+b'),
+                'seekable' => true,
+            ],
+            [
+                'label'    => 'memory - r',
+                'resource' => new Memory('r'),
+                'seekable' => true,
+            ],
+            [
+                'label'    => 'memory - rb',
+                'resource' => new Memory('rb'),
+                'seekable' => true,
+            ],
+            [
+                'label'    => 'memory - r+',
+                'resource' => new Memory('r+'),
+                'seekable' => true,
+            ],
+            [
+                'label'    => 'memory - r+b',
+                'resource' => new Memory('r+b'),
+                'seekable' => true,
+            ],
+            [
+                'label'    => 'temp - a',
+                'resource' => new Temp('a'),
+                'seekable' => true,
+            ],
+            [
+                'label'    => 'temp - ab',
+                'resource' => new Temp('ab'),
+                'seekable' => true,
+            ],
+            [
+                'label'    => 'temp - a+',
+                'resource' => new Temp('a+'),
+                'seekable' => true,
+            ],
+            [
+                'label'    => 'temp - a+b',
+                'resource' => new Temp('a+b'),
+                'seekable' => true,
+            ],
+            [
+                'label'    => 'temp - c',
+                'resource' => new Temp('c'),
+                'seekable' => true,
+            ],
+            [
+                'label'    => 'temp - cb',
+                'resource' => new Temp('cb'),
+                'seekable' => true,
+            ],
+            [
+                'label'    => 'temp - c+',
+                'resource' => new Temp('c+'),
+                'seekable' => true,
+            ],
+            [
+                'label'    => 'temp - c+b',
+                'resource' => new Temp('c+b'),
+                'seekable' => true,
+            ],
+            [
+                'label'    => 'temp - r',
+                'resource' => new Temp('r'),
+                'seekable' => true,
+            ],
+            [
+                'label'    => 'temp - rb',
+                'resource' => new Temp('rb'),
+                'seekable' => true,
+            ],
+            [
+                'label'    => 'temp - r+',
+                'resource' => new Temp('r+'),
+                'seekable' => true,
+            ],
+            [
+                'label'    => 'temp - r+b',
+                'resource' => new Temp('r+b'),
+                'seekable' => true,
+            ],
+        ];
+    }
+
+    /**
+     * @return array[]
+     */
     private function getExamplesX(): array
     {
         return [
@@ -78,25 +277,6 @@ class IsSeekableCest
             ['xb', true],
             ['x+', true],
             ['x+b', true],
-        ];
-    }
-
-    private function getExamples(): array
-    {
-        return [
-            ['a', true],
-            ['ab', true],
-            ['a+', true],
-            ['a+b', true],
-            ['c', true],
-            ['cb', true],
-            ['c+', true],
-            ['c+b', true],
-            ['r', true],
-            ['rb', true],
-            ['r+', true],
-            ['r+b', true],
-            ['w', true],
         ];
     }
 }
