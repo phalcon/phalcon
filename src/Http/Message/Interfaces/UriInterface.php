@@ -9,6 +9,7 @@
  * file that was distributed with this source code.
  *
  * Implementation of this file has been influenced by Nyholm/psr7 and Laminas
+ *
  * @link    https://github.com/Nyholm/psr7
  * @license https://github.com/Nyholm/psr7/blob/master/LICENSE
  * @link    https://github.com/laminas/laminas-diactoros
@@ -17,7 +18,9 @@
 
 declare(strict_types=1);
 
-namespace Phalcon\Http\Message;
+namespace Phalcon\Http\Message\Interfaces;
+
+use Phalcon\Http\Message\Exception\InvalidArgumentException;
 
 /**
  * Value object representing a URI.
@@ -203,8 +206,9 @@ interface UriInterface
      * An empty scheme is equivalent to removing the scheme.
      *
      * @param string $scheme The scheme to use with the new instance.
+     *
      * @return static A new instance with the specified scheme.
-     * @throws \InvalidArgumentException for invalid or unsupported schemes.
+     * @throws InvalidArgumentException for invalid or unsupported schemes.
      */
     public function withScheme(string $scheme): UriInterface;
 
@@ -218,8 +222,9 @@ interface UriInterface
      * user; an empty string for the user is equivalent to removing user
      * information.
      *
-     * @param string $user The user name to use for authority.
+     * @param string      $user     The user name to use for authority.
      * @param null|string $password The password associated with $user.
+     *
      * @return static A new instance with the specified user information.
      */
     public function withUserInfo(string $user, ?string $password = null): UriInterface;
@@ -233,8 +238,9 @@ interface UriInterface
      * An empty host value is equivalent to removing the host.
      *
      * @param string $host The hostname to use with the new instance.
+     *
      * @return static A new instance with the specified host.
-     * @throws \InvalidArgumentException for invalid hostnames.
+     * @throws InvalidArgumentException for invalid hostnames.
      */
     public function withHost(string $host): UriInterface;
 
@@ -251,9 +257,10 @@ interface UriInterface
      * information.
      *
      * @param null|int $port The port to use with the new instance; a null value
-     *     removes the port information.
+     *                       removes the port information.
+     *
      * @return static A new instance with the specified port.
-     * @throws \InvalidArgumentException for invalid ports.
+     * @throws InvalidArgumentException for invalid ports.
      */
     public function withPort(?int $port): UriInterface;
 
@@ -276,8 +283,9 @@ interface UriInterface
      * Implementations ensure the correct encoding as outlined in getPath().
      *
      * @param string $path The path to use with the new instance.
+     *
      * @return static A new instance with the specified path.
-     * @throws \InvalidArgumentException for invalid paths.
+     * @throws InvalidArgumentException for invalid paths.
      */
     public function withPath(string $path): UriInterface;
 
@@ -293,8 +301,9 @@ interface UriInterface
      * An empty query string value is equivalent to removing the query string.
      *
      * @param string $query The query string to use with the new instance.
+     *
      * @return static A new instance with the specified query string.
-     * @throws \InvalidArgumentException for invalid query strings.
+     * @throws InvalidArgumentException for invalid query strings.
      */
     public function withQuery(string $query): UriInterface;
 
@@ -310,6 +319,7 @@ interface UriInterface
      * An empty fragment value is equivalent to removing the fragment.
      *
      * @param string $fragment The fragment to use with the new instance.
+     *
      * @return static A new instance with the specified fragment.
      */
     public function withFragment(string $fragment): UriInterface;
