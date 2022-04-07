@@ -14,7 +14,7 @@ declare(strict_types=1);
 namespace Phalcon\Tests\Unit\Http\Message\Response;
 
 use Phalcon\Http\Message\Response;
-use Psr\Http\Message\ResponseInterface;
+use Phalcon\Http\Message\Interfaces\ResponseInterface;
 use UnitTester;
 
 class ConstructCest
@@ -31,9 +31,6 @@ class ConstructCest
 
         $response = new Response();
 
-        $I->assertInstanceOf(
-            ResponseInterface::class,
-            $response
-        );
+        $I->assertInstanceOf(ResponseInterface::class, $response);
     }
 }

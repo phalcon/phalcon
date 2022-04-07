@@ -1,41 +1,55 @@
+<?php
 
 /**
  * This file is part of the Phalcon Framework.
  *
  * (c) Phalcon Team <team@phalcon.io>
  *
- * For the full copyright and license information, please view the
- * LICENSE.txt file that was distributed with this source code.
+ * For the full copyright and license information, please view the LICENSE.txt
+ * file that was distributed with this source code.
  *
- * Implementation of this file has been influenced by Zend Diactoros
- * @link    https://github.com/zendframework/zend-diactoros
+ * Implementation of this file has been influenced by Nyholm/psr7 and Laminas
+ *
+ * @link    https://github.com/Nyholm/psr7
+ * @license https://github.com/Nyholm/psr7/blob/master/LICENSE
+ * @link    https://github.com/laminas/laminas-diactoros
  * @license https://github.com/zendframework/zend-diactoros/blob/master/LICENSE.md
  */
 
-namespace Phalcon\Http\Message;
+namespace Phalcon\Http\Message\Traits;
 
+use Phalcon\Http\Message\Exception\InvalidArgumentException;
+use Phalcon\Http\Message\Interfaces\MessageInterface;
+use Phalcon\Http\Message\Interfaces\StreamInterface;
+use Phalcon\Http\Message\Interfaces\UriInterface;
+use Phalcon\Http\Message\Stream;
 use Phalcon\Support\Collection;
 use Phalcon\Support\Collection\CollectionInterface;
-use Phalcon\Http\Message\Exception\InvalidArgumentException;
-use Psr\Http\Message\StreamInterface;
-use Psr\Http\Message\UriInterface;
+
+use function array_merge;
+use function implode;
+use function is_array;
+use function is_numeric;
+use function is_resource;
+use function is_string;
+use function preg_match;
 
 /**
- * Message methods
+ * Message methods in trait
  */
-abstract class AbstractMessage extends AbstractCommon
+trait MessageTrait
 {
     /**
      * Gets the body of the message.
      *
      * @var StreamInterface
      */
-    protected body { get };
+    protected StreamInterface $body;
 
     /**
-     * @var Collection|CollectionInterface
+     * @var Collection
      */
-    protected headers;
+    protected Collection $headers;
 
     /**
      * Retrieves the HTTP protocol version as a string.
@@ -43,11 +57,9 @@ abstract class AbstractMessage extends AbstractCommon
      * The string MUST contain only the HTTP version number (e.g., '1.1',
      * '1.0').
      *
-     * @return string HTTP protocol version.
-     *
      * @var string
      */
-    protected protocolVersion = "1.1" { get };
+    protected string $protocolVersion = "1.1";
 
     /**
      * Retrieves the URI instance.
@@ -58,7 +70,17 @@ abstract class AbstractMessage extends AbstractCommon
      *
      * @var UriInterface
      */
-    protected uri { get };
+    protected UriInterface $uri;
+
+    /**
+     * Return the body of the stream
+     *
+     * @return StreamInterface
+     */
+    public function getBody(): StreamInterface
+    {
+        return $this->body;
+    }
 
     /**
      * Retrieves a message header value by the given case-insensitive name.
@@ -73,11 +95,9 @@ abstract class AbstractMessage extends AbstractCommon
      *
      * @return array
      */
-    public function getHeader(var name) -> array
+    public function getHeader(string $name): array
     {
-        let name = (string) name;
-
-        return this->headers->get(name, []);
+        return $this->headers->get($name, []);
     }
 
     /**
@@ -98,13 +118,9 @@ abstract class AbstractMessage extends AbstractCommon
      *
      * @return string
      */
-    public function getHeaderLine(var name) -> string
+    public function getHeaderLine(string $name): string
     {
-        var header;
-
-        let header = this->getHeader(name);
-
-        return implode(',', header);
+        return implode(',', $this->getHeader($name));
     }
 
     /**
@@ -130,9 +146,29 @@ abstract class AbstractMessage extends AbstractCommon
      *
      * @return array
      */
-    public function getHeaders() -> array
+    public function getHeaders(): array
     {
-        return this->headers->toArray();
+        return $this->headers->toArray();
+    }
+
+    /**
+     * Returns the protocol version
+     *
+     * @return string
+     */
+    public function getProtocolVersion(): string
+    {
+        return $this->protocolVersion;
+    }
+
+    /**
+     * Returns the Uri
+     *
+     * @return UriInterface
+     */
+    public function getUri(): UriInterface
+    {
+        return $this->uri;
     }
 
     /**
@@ -142,9 +178,9 @@ abstract class AbstractMessage extends AbstractCommon
      *
      * @return bool
      */
-    public function hasHeader(name) -> bool
+    public function hasHeader(string $name): bool
     {
-        return this->headers->has(name);
+        return $this->headers->has($name);
     }
 
     /**
@@ -162,22 +198,20 @@ abstract class AbstractMessage extends AbstractCommon
      * @param string          $name
      * @param string|string[] $value
      *
-     * @return static
+     * @return MessageInterface
      */
-    public function withAddedHeader(var name, var value) -> var
+    public function withAddedHeader(string $name, $value): MessageInterface
     {
-        var existing, headers;
+        $this->checkHeaderName($name);
 
-        this->checkHeaderName(name);
+        $headers  = clone $this->headers;
+        $existing = $headers->get($name, []);
+        $value    = $this->getHeaderValue($value);
+        $value    = array_merge($existing, $value);
 
-        let headers  = clone this->headers,
-            existing = headers->get(name, []),
-            value    = this->getHeaderValue(value),
-            value    = array_merge(existing, value);
+        $headers->set($name, $value);
 
-        headers->set(name, value);
-
-        return this->cloneInstance(headers, "headers");
+        return $this->cloneInstance($headers, "headers");
     }
 
     /**
@@ -191,17 +225,16 @@ abstract class AbstractMessage extends AbstractCommon
      *
      * @param StreamInterface $body
      *
-     * @return static
+     * @return MessageInterface
      * @throws InvalidArgumentException When the body is not valid.
      *
      */
-    public function withBody(<StreamInterface> body) -> var
+    public function withBody(StreamInterface $body): MessageInterface
     {
-        var newBody;
-
-        let newBody = this->processBody(body, "w+b");
-
-        return this->cloneInstance(newBody, "body");
+        return $this->cloneInstance(
+            $this->processBody($body, "w+b"),
+            "body"
+        );
     }
 
     /**
@@ -218,22 +251,19 @@ abstract class AbstractMessage extends AbstractCommon
      * @param string          $name
      * @param string|string[] $value
      *
-     * @return static
+     * @return MessageInterface
      * @throws InvalidArgumentException for invalid header names or values.
-     *
      */
-    public function withHeader(var name, var value) -> var
+    public function withHeader(string $name, $value): MessageInterface
     {
-        var headers;
+        $this->checkHeaderName($name);
 
-        this->checkHeaderName(name);
+        $headers = clone $this->headers;
+        $value   = $this->getHeaderValue($value);
 
-        let headers = clone this->headers,
-            value   = this->getHeaderValue(value);
+        $headers->set($name, $value);
 
-        headers->set(name, value);
-
-        return this->cloneInstance(headers, "headers");
+        return $this->cloneInstance($headers, "headers");
     }
 
     /**
@@ -248,13 +278,14 @@ abstract class AbstractMessage extends AbstractCommon
      *
      * @param string $version
      *
-     * @return static
+     * @return MessageInterface
      */
-    public function withProtocolVersion(var version) -> var
+    public function withProtocolVersion(string $version): MessageInterface
     {
-        this->processProtocol(version);
-
-        return this->cloneInstance(version, "protocolVersion");
+        return $this->cloneInstance(
+            $this->processProtocol($version),
+            "protocolVersion"
+        );
     }
 
     /**
@@ -268,17 +299,15 @@ abstract class AbstractMessage extends AbstractCommon
      *
      * @param string $name
      *
-     * @return static
+     * @return MessageInterface
      */
-    public function withoutHeader(var name) -> var
+    public function withoutHeader(string $name): MessageInterface
     {
-        var headers;
+        $headers = clone $this->headers;
 
-        let headers = clone this->headers;
+        $headers->remove($name);
 
-        headers->remove(name);
-
-        return this->cloneInstance(headers, "headers");
+        return $this->cloneInstance($headers, "headers");
     }
 
     /**
@@ -290,46 +319,48 @@ abstract class AbstractMessage extends AbstractCommon
      *
      * @return CollectionInterface
      */
-    final protected function checkHeaderHost(<CollectionInterface> collection) -> <CollectionInterface>
-    {
-        var data, host, hostArray;
-        array header;
-
-        if unlikely (collection->has("host") &&
-            !empty(this->uri) &&
-            "" !== this->uri->getHost()) {
-
-            let host      = this->getUriHost(this->uri),
-                hostArray = host;
-            if unlikely typeof host !== "array" {
-                let hostArray = [host];
+    final protected function checkHeaderHost(
+        CollectionInterface $collection
+    ): CollectionInterface {
+        if (
+            true === $collection->has("host") &&
+            true !== empty($this->uri) &&
+            "" !== $this->uri->getHost()
+        ) {
+            $host      = $this->getUriHost($this->uri);
+            $hostArray = $host;
+            if (true !== is_array($host)) {
+                $hostArray = [$host];
             }
 
-            collection->remove("host");
+            $collection->remove("host");
 
-            let data           = collection->toArray(),
-                header         = [],
-                header["Host"] = hostArray,
-                header         = header + (array) data;
+            $data           = $collection->toArray();
+            $header         = [];
+            $header["Host"] = $hostArray;
+            $header         = $header + (array) $data;
 
-            collection->clear();
-            collection->init(header);
+            $collection->clear();
+            $collection->init($header);
         }
 
-        return collection;
+        return $collection;
     }
 
     /**
      * Check the name of the header. Throw exception if not valid
      *
      * @see http://tools.ietf.org/html/rfc7230#section-3.2
+     *
+     * @param string $name
+     *
+     * @return void
      */
-    final protected function checkHeaderName(var name) -> void
+    final protected function checkHeaderName(string $name): void
     {
-        if unlikely (typeof name !== "string"  ||
-            !preg_match("/^[a-zA-Z0-9'`#$%&*+.^_|~!-]+$/", name)) {
+        if (!preg_match("/^[a-zA-Z\d'`#$%&*+.^_|~!-]+$/", $name)) {
             throw new InvalidArgumentException(
-                "Invalid header name " . name
+                "Invalid header name " . $name
             );
         }
     }
@@ -378,48 +409,64 @@ abstract class AbstractMessage extends AbstractCommon
      * backslash octets occurring within that comment.
      *
      * @see https://tools.ietf.org/html/rfc7230#section-3.2.6
+     *
+     * @param mixed $value
+     *
+     * @return void
      */
-    final protected function checkHeaderValue(var value) -> void
+    final protected function checkHeaderValue($value): void
     {
-        if unlikely (typeof value !== "string" && true !== is_numeric(value)) {
+        if (true !== is_string($value) && true !== is_numeric($value)) {
             throw new InvalidArgumentException("Invalid header value");
         }
 
-        let value = (string) value;
+        $value = (string) $value;
 
-        if unlikely (preg_match("#(?:(?:(?<!\r)\n)|(?:\r(?!\n))|(?:\r\n(?![ \t])))#", value) ||
-            preg_match("/[^\x09\x0a\x0d\x20-\x7E\x80-\xFE]/", value)) {
+        if (
+            preg_match("#(?:(?:(?<!\r)\n)|(?:\r(?!\n))|(?:\r\n(?![ \t])))#", $value) ||
+            preg_match("/[^\x09\x0a\x0d\x20-\x7E\x80-\xFE]/", $value)
+        ) {
             throw new InvalidArgumentException("Invalid header value");
         }
     }
 
     /**
-     * Returns the header values checked for validity
+     * @param mixed  $element
+     * @param string $property
+     *
+     * @return mixed
      */
-    final protected function getHeaderValue(var values) -> array
-    {
-        var value, valueArray, valueData;
+    abstract protected function cloneInstance($element, string $property);
 
-        let valueArray = values;
-        if unlikely typeof values !== "array" {
-            let valueArray = [values];
+    /**
+     * Returns the header values checked for validity
+     *
+     * @param mixed $values
+     *
+     * @return array
+     */
+    final protected function getHeaderValue($values): array
+    {
+        $valueArray = $values;
+        if (true !== is_array($values)) {
+            $valueArray = [$values];
         }
 
-        if unlikely empty(valueArray) {
+        if (true === empty($valueArray)) {
             throw new InvalidArgumentException(
                 "Invalid header value: must be a string or " .
                 "array of strings; cannot be an empty array"
             );
         }
 
-        let valueData = [];
-        for value in valueArray {
-            this->checkHeaderValue(value);
+        $valueData = [];
+        foreach ($valueArray as $value) {
+            $this->checkHeaderValue($value);
 
-            let valueData[] = (string) value;
+            $valueData[] = (string) $value;
         }
 
-        return valueData;
+        return $valueData;
     }
 
     /**
@@ -429,17 +476,15 @@ abstract class AbstractMessage extends AbstractCommon
      *
      * @return string
      */
-    final protected function getUriHost(<UriInterface> uri) -> string
+    final protected function getUriHost(UriInterface $uri): string
     {
-        var host;
+        $host = $uri->getHost();
 
-        let host = uri->getHost();
-
-        if unlikely null !== uri->getPort() {
-            let host .= ":" . uri->getPort();
+        if (null !== $uri->getPort()) {
+            $host .= ":" . $uri->getPort();
         }
 
-        return host;
+        return $host;
     }
 
     /**
@@ -449,21 +494,19 @@ abstract class AbstractMessage extends AbstractCommon
      *
      * @return CollectionInterface
      */
-    final protected function populateHeaderCollection(array headers) -> <CollectionInterface>
+    final protected function populateHeaderCollection(array $headers): CollectionInterface
     {
-        var collection, name, value;
+        $collection = new Collection();
+        foreach ($headers as $name => $value) {
+            $this->checkHeaderName($name);
 
-        let collection = new Collection();
-        for name, value in headers {
-            this->checkHeaderName(name);
+            $name  = (string) $name;
+            $value = $this->getHeaderValue($value);
 
-            let name  = (string) name,
-                value = this->getHeaderValue(value);
-
-            collection->set(name, value);
+            $collection->set($name, $value);
         }
 
-        return collection;
+        return $collection;
     }
 
     /**
@@ -474,42 +517,47 @@ abstract class AbstractMessage extends AbstractCommon
      *
      * @return StreamInterface
      */
-    final protected function processBody(var body = "php://memory", string! mode = "r+b") -> <StreamInterface>
-    {
-        if unlikely (typeof body === "object" && body instanceof StreamInterface) {
-            return body;
+    final protected function processBody(
+        $body = "php://memory",
+        string $mode = "r+b"
+    ): StreamInterface {
+        if ($body instanceof StreamInterface) {
+            return $body;
         }
 
-        if unlikely (typeof body !== "string" && typeof body !== "resource") {
+        if (true !== is_string($body) && true !== is_resource($body)) {
             throw new InvalidArgumentException(
                 "Invalid stream passed as a parameter"
             );
         }
 
-        return new Stream(body, mode);
+        return new Stream($body, $mode);
     }
 
     /**
      * Sets the headers
+     *
+     * @param mixed $headers
+     *
+     * @return CollectionInterface
      */
-    final protected function processHeaders(var headers) -> <CollectionInterface>
+    final protected function processHeaders($headers): CollectionInterface
     {
-        var collection;
-
-        if likely typeof headers === "array" {
-            let collection = this->populateHeaderCollection(headers);
-            let collection = this->checkHeaderHost(collection);
+        if (true === is_array($headers)) {
+            $collection = $this->populateHeaderCollection($headers);
+            $collection = $this->checkHeaderHost($collection);
         } else {
-            if unlikely !(typeof headers === "object" && headers instanceof CollectionInterface) {
+            if (!($headers instanceof CollectionInterface)) {
                 throw new InvalidArgumentException(
-                    "Headers needs to be either an array or instance of Phalcon\\Support\\Collection"
+                    "Headers needs to be either an array or instance "
+                . "implementing of Phalcon\\Support\\CollectionIterface"
                 );
             }
 
-            let collection = headers;
+            $collection = $headers;
         }
 
-        return collection;
+        return $collection;
     }
 
     /**
@@ -519,27 +567,25 @@ abstract class AbstractMessage extends AbstractCommon
      *
      * @return string
      */
-    final protected function processProtocol(var protocol = "") -> string
+    final protected function processProtocol(string $protocol = ""): string
     {
-        var protocols;
-
-        let protocols = [
-            "1.0" : 1,
-            "1.1" : 1,
-            "2.0" : 1,
-            "3.0" : 1
+        $protocols = [
+            "1.0" => 1,
+            "1.1" => 1,
+            "2.0" => 1,
+            "3.0" => 1
         ];
 
-        if unlikely (empty(protocol) || typeof protocol !== "string") {
+        if (true === empty($protocol) || true !== is_string($protocol)) {
             throw new InvalidArgumentException("Invalid protocol value");
         }
 
-        if unlikely !isset protocols[protocol] {
+        if (true !== isset($protocols[$protocol])) {
             throw new InvalidArgumentException(
-                "Unsupported protocol " . protocol
+                "Unsupported protocol " . $protocol
             );
         }
 
-        return protocol;
+        return $protocol;
     }
 }
