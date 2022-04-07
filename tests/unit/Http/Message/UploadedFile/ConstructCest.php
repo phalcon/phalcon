@@ -15,8 +15,8 @@ namespace Phalcon\Tests\Unit\Http\Message\UploadedFile;
 
 use Codeception\Example;
 use Phalcon\Http\Message\Exception\InvalidArgumentException;
+use Phalcon\Http\Message\Interfaces\UploadedFileInterface;
 use Phalcon\Http\Message\UploadedFile;
-use Psr\Http\Message\UploadedFileInterface;
 use stdClass;
 use UnitTester;
 
@@ -34,16 +34,11 @@ class ConstructCest
     {
         $I->wantToTest('Http\Message\UploadedFile - __construct()');
 
-        $stream = logsDir(
-            uniqid('test')
-        );
+        $stream = logsDir(uniqid('test'));
 
         $file = new UploadedFile($stream, 100);
 
-        $I->assertInstanceOf(
-            UploadedFileInterface::class,
-            $file
-        );
+        $I->assertInstanceOf(UploadedFileInterface::class, $file);
     }
 
     /**
@@ -56,17 +51,12 @@ class ConstructCest
     {
         $I->wantToTest('Http\Message\UploadedFile - __construct()');
 
-        $stream = logsDir(
-            uniqid('test')
-        );
+        $stream = logsDir(uniqid('test'));
 
         $stream = fopen($stream, 'w+b');
         $file   = new UploadedFile($stream, 100);
 
-        $I->assertInstanceOf(
-            UploadedFileInterface::class,
-            $file
-        );
+        $I->assertInstanceOf(UploadedFileInterface::class, $file);
     }
 
     /**
@@ -78,8 +68,10 @@ class ConstructCest
      * @author       Phalcon Team <team@phalcon.io>
      * @since        2019-02-18
      */
-    public function httpMessageUploadedFileConstructStreamException(UnitTester $I, Example $example)
-    {
+    public function httpMessageUploadedFileConstructStreamException(
+        UnitTester $I,
+        Example $example
+    ) {
         $I->wantToTest(
             'Http\Message\UploadedFile - __construct() - stream ' . $example[0]
         );

@@ -14,6 +14,7 @@ declare(strict_types=1);
 namespace Phalcon\Tests\Unit\Http\Message\UploadedFile;
 
 use Phalcon\Http\Message\Exception\InvalidArgumentException;
+use Phalcon\Http\Message\Exception\RuntimeException;
 use Phalcon\Http\Message\Stream;
 use Phalcon\Http\Message\UploadedFile;
 use UnitTester;
@@ -38,17 +39,13 @@ class MoveToCest
 
         $file   = new UploadedFile($stream, 0);
         $target = $I->getNewFileName();
-        $target = outputDir(
-            'tests/stream/' . $target
-        );
+        $target = outputDir('tests/stream/' . $target);
 
         $file->moveTo($target);
         $I->seeFileFound($target);
         $I->openFile($target);
 
-        $I->seeFileContentsEqual(
-            (string) $stream
-        );
+        $I->seeFileContentsEqual((string) $stream);
     }
 
     /**
@@ -62,21 +59,15 @@ class MoveToCest
         $I->wantToTest('Http\Message\UploadedFile - moveTo() - upload error');
 
         $I->expectThrowable(
-            new InvalidArgumentException(
-                'Failed to write file to disk.'
-            ),
+            new RuntimeException('Failed to write file to disk.'),
             function () use ($I) {
                 $stream = new Stream('php://memory', 'w+b');
 
                 $stream->write('Phalcon Framework');
 
                 $target = $I->getNewFileName();
-
-                $target = outputDir(
-                    'tests/stream/' . $target
-                );
-
-                $file = new UploadedFile($stream, 0, UPLOAD_ERR_CANT_WRITE);
+                $target = outputDir('tests/stream/' . $target);
+                $file   = new UploadedFile($stream, 0, UPLOAD_ERR_CANT_WRITE);
 
                 $file->moveTo($target);
             }
@@ -99,12 +90,10 @@ class MoveToCest
             ),
             function () use ($I) {
                 $stream = new Stream('php://memory', 'w+b');
-
                 $stream->write('Phalcon Framework');
 
                 $file = new UploadedFile($stream, 0);
-
-                $file->moveTo(123);
+                $file->moveTo("");
             }
         );
     }
@@ -120,21 +109,15 @@ class MoveToCest
         $I->wantToTest('Http\Message\UploadedFile - moveTo() - already moved');
 
         $I->expectThrowable(
-            new InvalidArgumentException(
-                'File has already been moved'
-            ),
+            new RuntimeException('File has already been moved'),
             function () use ($I) {
                 $stream = new Stream('php://memory', 'w+b');
-
                 $stream->write('Phalcon Framework');
 
-                $file = new UploadedFile($stream, 0);
-
+                $file   = new UploadedFile($stream, 0);
                 $target = $I->getNewFileName();
 
-                $target = outputDir(
-                    'tests/stream/' . $target
-                );
+                $target = outputDir('tests/stream/' . $target);
 
                 $file->moveTo($target);
                 $file->moveTo($target);

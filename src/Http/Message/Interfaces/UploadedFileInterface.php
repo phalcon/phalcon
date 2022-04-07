@@ -138,10 +138,10 @@ interface UploadedFileInterface
      *
      * @param string $targetPath Path to which to move the uploaded file.
      *
-     * @return bool
+     * @return void
      * @throws InvalidArgumentException if the $targetPath specified is invalid.
      * @throws RuntimeException on any error during the move operation, or on
      *     the second or subsequent call to the method.
      */
-    public function moveTo(string $targetPath): bool;
+    public function moveTo(string $targetPath): void;
 }

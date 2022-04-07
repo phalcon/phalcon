@@ -23,6 +23,23 @@ use Phalcon\Http\Message\Exception\RuntimeException;
 use Phalcon\Http\Message\Interfaces\StreamInterface;
 use Phalcon\Traits\Php\FileTrait;
 
+use function fclose;
+use function feof;
+use function fread;
+use function fseek;
+use function fstat;
+use function ftell;
+use function get_resource_type;
+use function is_resource;
+use function is_string;
+use function restore_error_handler;
+use function set_error_handler;
+use function stream_get_contents;
+use function stream_get_meta_data;
+use function strpbrk;
+
+use const E_WARNING;
+
 /**
  * Stream/file OO class
  *
@@ -367,7 +384,7 @@ class Stream implements StreamInterface
         return $bytes;
     }
 
-   /**
+    /**
      * Checks if a handle is available and throws an exception otherwise
      *
      * @return void

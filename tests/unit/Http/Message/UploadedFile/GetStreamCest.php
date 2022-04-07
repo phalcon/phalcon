@@ -13,10 +13,10 @@ declare(strict_types=1);
 
 namespace Phalcon\Tests\Unit\Http\Message\UploadedFile;
 
-use Phalcon\Http\Message\Exception\InvalidArgumentException;
+use Phalcon\Http\Message\Exception\RuntimeException;
+use Phalcon\Http\Message\Interfaces\StreamInterface;
 use Phalcon\Http\Message\Stream;
 use Phalcon\Http\Message\UploadedFile;
-use Psr\Http\Message\StreamInterface;
 use UnitTester;
 
 use function outputDir;
@@ -78,9 +78,7 @@ class GetStreamCest
         $I->wantToTest('Http\Message\UploadedFile - getStream() - exception');
 
         $I->expectThrowable(
-            new InvalidArgumentException(
-                'Failed to write file to disk.'
-            ),
+            new RuntimeException('Failed to write file to disk.'),
             function () {
                 $stream = new Stream('php://memory');
                 $file   = new UploadedFile(
@@ -107,7 +105,7 @@ class GetStreamCest
         $I->wantToTest('Http\Message\UploadedFile - getStream() - exception already moved');
 
         $I->expectThrowable(
-            new InvalidArgumentException(
+            new RuntimeException(
                 'The file has already been moved to the target location'
             ),
             function () use ($I) {
