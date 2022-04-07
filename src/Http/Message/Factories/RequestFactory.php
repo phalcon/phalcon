@@ -1,3 +1,4 @@
+<?php
 
 /**
  * This file is part of the Phalcon Framework.
@@ -7,19 +8,23 @@
  * For the full copyright and license information, please view the LICENSE.txt
  * file that was distributed with this source code.
  *
- * Implementation of this file has been influenced by Zend Diactoros
- * @link    https://github.com/zendframework/zend-diactoros
+ * Implementation of this file has been influenced by Nyholm/psr7 and Laminas
+ *
+ * @link    https://github.com/Nyholm/psr7
+ * @license https://github.com/Nyholm/psr7/blob/master/LICENSE
+ * @link    https://github.com/laminas/laminas-diactoros
  * @license https://github.com/zendframework/zend-diactoros/blob/master/LICENSE.md
  */
 
-namespace Phalcon\Http\Message;
+namespace Phalcon\Http\Message\Factories;
 
-use Psr\Http\Message\RequestInterface;
-use Psr\Http\Message\RequestFactoryInterface;
-use Psr\Http\Message\UriInterface;
+use Phalcon\Http\Message\Request;
+use Phalcon\Http\Message\Interfaces\RequestFactoryInterface;
+use Phalcon\Http\Message\Interfaces\RequestInterface;
+use Phalcon\Http\Message\Interfaces\UriInterface;
 
 /**
- * PSR-17 RequestFactory
+ * Factory for Request objects
  */
 final class RequestFactory implements RequestFactoryInterface
 {
@@ -31,8 +36,8 @@ final class RequestFactory implements RequestFactoryInterface
      *
      * @return RequestInterface
      */
-    public function createRequest(string! method, var uri) -> <RequestInterface>
+    public function createRequest(string $method, $uri): RequestInterface
     {
-        return new Request(method, uri);
+        return new Request($method, $uri);
     }
 }

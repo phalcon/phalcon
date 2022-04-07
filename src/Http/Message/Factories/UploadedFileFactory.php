@@ -1,3 +1,4 @@
+<?php
 
 /**
  * This file is part of the Phalcon Framework.
@@ -7,19 +8,24 @@
  * For the full copyright and license information, please view the LICENSE.txt
  * file that was distributed with this source code.
  *
- * Implementation of this file has been influenced by Zend Diactoros
- * @link    https://github.com/zendframework/zend-diactoros
+ * Implementation of this file has been influenced by Nyholm/psr7 and Laminas
+ *
+ * @link    https://github.com/Nyholm/psr7
+ * @license https://github.com/Nyholm/psr7/blob/master/LICENSE
+ * @link    https://github.com/laminas/laminas-diactoros
  * @license https://github.com/zendframework/zend-diactoros/blob/master/LICENSE.md
  */
 
-namespace Phalcon\Http\Message;
+namespace Phalcon\Http\Message\Factories;
 
-use Psr\Http\Message\StreamInterface;
-use Psr\Http\Message\UploadedFileInterface;
-use Psr\Http\Message\UploadedFileFactoryInterface;
+use Phalcon\Http\Message\Exception\InvalidArgumentException;
+use Phalcon\Http\Message\Interfaces\StreamInterface;
+use Phalcon\Http\Message\Interfaces\UploadedFileFactoryInterface;
+use Phalcon\Http\Message\Interfaces\UploadedFileInterface;
+use Phalcon\Http\Message\UploadedFile;
 
 /**
- * PSR-17 UploadedFileFactory
+ * Factory for UploadedFile objects
  */
 final class UploadedFileFactory implements UploadedFileFactoryInterface
 {
@@ -39,22 +45,21 @@ final class UploadedFileFactory implements UploadedFileFactoryInterface
      * @param string          $clientFilename  The filename as provided by the client, if any.
      * @param string          $clientMediaType The media type as provided by the client, if any.
      *
-     * @throws \InvalidArgumentException If the file resource is not readable.
+     * @throws InvalidArgumentException If the file resource is not readable.
      */
     public function createUploadedFile(
-        <StreamInterface> stream,
-        int size = null,
-        int error = 0,
-        string clientFilename = null,
-        string clientMediaType = null
-    ) -> <UploadedFileInterface>
-    {
+        StreamInterface $stream,
+        int $size = null,
+        int $error = 0,
+        string $clientFilename = null,
+        string $clientMediaType = null
+    ): UploadedFileInterface {
         return new UploadedFile(
-            stream,
-            size,
-            error,
-            clientFilename,
-            clientMediaType
+            $stream,
+            $size,
+            $error,
+            $clientFilename,
+            $clientMediaType
         );
     }
 }

@@ -1,3 +1,4 @@
+<?php
 
 /**
  * This file is part of the Phalcon Framework.
@@ -7,18 +8,22 @@
  * For the full copyright and license information, please view the LICENSE.txt
  * file that was distributed with this source code.
  *
- * Implementation of this file has been influenced by Zend Diactoros
- * @link    https://github.com/zendframework/zend-diactoros
+ * Implementation of this file has been influenced by Nyholm/psr7 and Laminas
+ *
+ * @link    https://github.com/Nyholm/psr7
+ * @license https://github.com/Nyholm/psr7/blob/master/LICENSE
+ * @link    https://github.com/laminas/laminas-diactoros
  * @license https://github.com/zendframework/zend-diactoros/blob/master/LICENSE.md
  */
 
-namespace Phalcon\Http\Message;
+namespace Phalcon\Http\Message\Factories;
 
-use Psr\Http\Message\ResponseInterface;
-use Psr\Http\Message\ResponseFactoryInterface;
+use Phalcon\Http\Message\Interfaces\ResponseFactoryInterface;
+use Phalcon\Http\Message\Interfaces\ResponseInterface;
+use Phalcon\Http\Message\Response;
 
 /**
- * PSR-17 ResponseFactory
+ * Factory for Response objects
  */
 final class ResponseFactory implements ResponseFactoryInterface
 {
@@ -33,8 +38,8 @@ final class ResponseFactory implements ResponseFactoryInterface
      *
      * @return ResponseInterface
      */
-    public function createResponse(int code = 200, string reasonPhrase = "") -> <ResponseInterface>
+    public function createResponse(int $code = 200, string $reasonPhrase = ""): ResponseInterface
     {
-        return (new Response())->withStatus(code, reasonPhrase);
+        return (new Response())->withStatus($code, $reasonPhrase);
     }
 }

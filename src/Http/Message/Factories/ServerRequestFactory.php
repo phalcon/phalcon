@@ -1,29 +1,51 @@
+<?php
 
 /**
-* This file is part of the Phalcon Framework.
-*
-* (c) Phalcon Team <team@phalcon.io>
-*
-* For the full copyright and license information, please view the LICENSE.txt
-* file that was distributed with this source code.
-*
-* Implementation of this file has been influenced by Zend Diactoros
-* @link    https://github.com/zendframework/zend-diactoros
-* @license https://github.com/zendframework/zend-diactoros/blob/master/LICENSE.md
-*/
+ * This file is part of the Phalcon Framework.
+ *
+ * (c) Phalcon Team <team@phalcon.io>
+ *
+ * For the full copyright and license information, please view the LICENSE.txt
+ * file that was distributed with this source code.
+ *
+ * Implementation of this file has been influenced by Nyholm/psr7 and Laminas
+ *
+ * @link    https://github.com/Nyholm/psr7
+ * @license https://github.com/Nyholm/psr7/blob/master/LICENSE
+ * @link    https://github.com/laminas/laminas-diactoros
+ * @license https://github.com/zendframework/zend-diactoros/blob/master/LICENSE.md
+ */
 
-namespace Phalcon\Http\Message;
+namespace Phalcon\Http\Message\Factories;
 
+use Phalcon\Http\Message\Interfaces\RequestMethodInterface;
+use Phalcon\Http\Message\Interfaces\ServerRequestFactoryInterface;
+use Phalcon\Http\Message\Interfaces\ServerRequestInterface;
+use Phalcon\Http\Message\Interfaces\UploadedFileInterface;
+use Phalcon\Http\Message\Interfaces\UriInterface;
+use Phalcon\Http\Message\ServerRequest;
 use Phalcon\Support\Collection;
 use Phalcon\Support\Collection\CollectionInterface;
 use Phalcon\Http\Message\Exception\InvalidArgumentException;
-use Psr\Http\Message\ServerRequestFactoryInterface;
-use Psr\Http\Message\ServerRequestInterface;
-use Psr\Http\Message\UriInterface;
-use Psr\Http\Message\UploadedFileInterface;
+
+use function apache_request_headers;
+use function explode;
+use function function_exists;
+use function implode;
+use function is_array;
+use function is_object;
+use function ltrim;
+use function parse_str;
+use function preg_match;
+use function preg_replace;
+use function str_replace;
+use function strlen;
+use function strpos;
+use function strtolower;
+use function substr;
 
 /**
- * PSR-17 ServerRequestFactory
+ * Factory for ServerRequest objects
  */
 class ServerRequestFactory implements ServerRequestFactoryInterface, RequestMethodInterface
 {
@@ -49,12 +71,12 @@ class ServerRequestFactory implements ServerRequestFactoryInterface, RequestMeth
      * @return ServerRequestInterface
      */
     public function createServerRequest(
-        string method,
-        var uri,
-        array serverParams = []
-    ) -> <ServerRequestInterface> {
+        string $method,
+        $uri,
+        array $serverParams = []
+    ): ServerRequestInterface {
 
-        return new ServerRequest(method, uri, serverParams);
+        return new ServerRequest($method, $uri, $serverParams);
     }
 
     /**
@@ -63,77 +85,57 @@ class ServerRequestFactory implements ServerRequestFactoryInterface, RequestMeth
      * If any argument is not supplied, the corresponding superglobal value will
      * be used.
      *
-     * @param array $server  $_SERVER superglobal
-     * @param array $get     $_GET superglobal
-     * @param array $post    $_POST superglobal
-     * @param array $cookies $_COOKIE superglobal
-     * @param array $files   $_FILES superglobal
+     * @param array|null $server  $_SERVER superglobal
+     * @param array|null $get     $_GET superglobal
+     * @param array|null $post    $_POST superglobal
+     * @param array|null $cookies $_COOKIE superglobal
+     * @param array|null $files   $_FILES superglobal
      *
      * @return ServerRequest
-     * @see fromServer()
      */
     public function load(
-        array server = null,
-        array get = null,
-        array post = null,
-        array cookies = null,
-        array files = null
-    ) -> <ServerRequest> {
-        var cookiesCollection, filesCollection, headers, method, protocol,
-            serverCollection;
-        array globalCookies = [], globalFiles  = [], globalGet = [],
-              globalPost    = [], globalServer = [];
-
+        array $server = null,
+        array $get = null,
+        array $post = null,
+        array $cookies = null,
+        array $files = null
+    ): ServerRequest {
         /**
          * Ensure that superglobals are defined if not
          */
-        if !empty _COOKIE {
-            let globalCookies = _COOKIE;
-        }
+        $globalCookies = true !== empty($_COOKIE) ? $_COOKIE : [];
+        $globalFiles   = true !== empty($_FILES) ? $_FILES : [];
+        $globalGet     = true !== empty($_GET) ? $_GET : [];
+        $globalPost    = true !== empty($_POST) ? $_POST : [];
+        $globalServer  = true !== empty($_SERVER) ? $_SERVER : [];
 
-        if !empty _FILES  {
-            let globalFiles = _FILES;
-        }
+        $server            = $this->checkNullArray($server, $globalServer);
+        $files             = $this->checkNullArray($files, $globalFiles);
+        $cookies           = $this->checkNullArray($cookies, $globalCookies);
+        $get               = $this->checkNullArray($get, $globalGet);
+        $post              = $this->checkNullArray($post, $globalPost);
+        $serverCollection  = $this->parseServer($server);
+        $method            = $serverCollection->get("REQUEST_METHOD", self::METHOD_GET);
+        $protocol          = $this->parseProtocol($serverCollection);
+        $headers           = $this->parseHeaders($serverCollection);
+        $filesCollection   = $this->parseUploadedFiles($files);
+        $cookiesCollection = $cookies;
 
-        if !empty _GET  {
-            let globalGet = _GET;
-        }
-
-        if !empty _POST  {
-            let globalPost = _POST;
-        }
-
-        if !empty _SERVER  {
-            let globalServer = _SERVER;
-        }
-
-        let server            = this->checkNullArray(server, globalServer),
-            files             = this->checkNullArray(files, globalFiles),
-            cookies           = this->checkNullArray(cookies, globalCookies),
-            get               = this->checkNullArray(get, globalGet),
-            post              = this->checkNullArray(post, globalPost),
-            serverCollection  = this->parseServer(server),
-            method            = serverCollection->get("REQUEST_METHOD", self::METHOD_GET),
-            protocol          = this->parseProtocol(serverCollection),
-            headers           = this->parseHeaders(serverCollection),
-            filesCollection   = this->parseUploadedFiles(files),
-            cookiesCollection = cookies;
-
-        if unlikely (empty(cookies) && headers->has("cookie")) {
-            let cookiesCollection = this->parseCookieHeader(headers->get("cookie"));
+        if (true === empty($cookies) && true === $headers->has("cookie")) {
+            $cookiesCollection = $this->parseCookieHeader($headers->get("cookie"));
         }
 
         return new ServerRequest(
-            method,
-            this->parseUri(serverCollection, headers),
-            serverCollection->toArray(),
+            $method,
+            $this->parseUri($serverCollection, $headers),
+            $serverCollection->toArray(),
             "php://input",
-            headers->toArray(),
-            cookiesCollection,
-            get,
-            filesCollection->toArray(),
-            post,
-            protocol
+            $headers->toArray(),
+            $cookiesCollection,
+            $get,
+            $filesCollection->toArray(),
+            $post,
+            $protocol
         );
     }
 
@@ -144,7 +146,7 @@ class ServerRequestFactory implements ServerRequestFactoryInterface, RequestMeth
      */
     protected function getHeaders()
     {
-        if likely function_exists("apache_request_headers") {
+        if (true === function_exists("apache_request_headers")) {
             return apache_request_headers();
         }
 
@@ -159,26 +161,26 @@ class ServerRequestFactory implements ServerRequestFactoryInterface, RequestMeth
      *
      * @return array
      */
-    private function calculateUriHost(<CollectionInterface> server, <CollectionInterface> headers) -> array
-    {
-        var host, port;
-        array defaults;
+    private function calculateUriHost(
+        CollectionInterface $server,
+        CollectionInterface $headers
+    ): array {
+        $defaults = ["", null];
 
-        let defaults = ["", null];
+        if (true === $this->getHeader($headers, "host", false)) {
+            $host = $this->getHeader($headers, "host");
 
-        if unlikely this->getHeader(headers, "host", false) {
-            let host = this->getHeader(headers, "host");
-            return this->calculateUriHostFromHeader(host);
+            return $this->calculateUriHostFromHeader($host);
         }
 
-        if unlikely !server->has("SERVER_NAME") {
-            return defaults;
+        if (true !== $server->has("SERVER_NAME")) {
+            return $defaults;
         }
 
-        let host = server->get("SERVER_NAME"),
-            port = server->get("SERVER_PORT", null);
+        $host = $server->get("SERVER_NAME");
+        $port = $server->get("SERVER_PORT");
 
-        return [host, port];
+        return [$host, $port];
     }
 
     /**
@@ -188,19 +190,17 @@ class ServerRequestFactory implements ServerRequestFactoryInterface, RequestMeth
      *
      * @return array
      */
-    private function calculateUriHostFromHeader(string host) -> array
+    private function calculateUriHostFromHeader(string $host): array
     {
-        var matches, port;
-
-        let port = null;
+        $port = null;
 
         // works for regname, IPv4 & IPv6
-        if unlikely preg_match("|:(\d+)$|", host, matches) {
-            let host = substr(host, 0, -1 * (strlen(matches[1]) + 1)),
-                port = (int) matches[1];
+        if (preg_match("|:(\d+)$|", $host, $matches)) {
+            $host = substr($host, 0, -1 * (strlen($matches[1]) + 1));
+            $port = (int) $matches[1];
         }
 
-        return [host, port];
+        return [$host, $port];
     }
 
     /**
@@ -211,37 +211,36 @@ class ServerRequestFactory implements ServerRequestFactoryInterface, RequestMeth
      *
      * @return string
      */
-    private function calculateUriPath(<CollectionInterface> server) -> string
+    private function calculateUriPath(CollectionInterface $server): string
     {
-        var iisRewrite, origPathInfo, requestUri, unencodedUrl;
         /**
          * IIS7 with URL Rewrite - double slash
          */
-        let iisRewrite   = server->get("IIS_WasUrlRewritten", null),
-            unencodedUrl = server->get("UNENCODED_URL", "");
+        $iisRewrite   = $server->get("IIS_WasUrlRewritten");
+        $unencodedUrl = $server->get("UNENCODED_URL", "");
 
-        if unlikely ("1" === iisRewrite && !empty(unencodedUrl)) {
-            return unencodedUrl;
+        if ("1" === $iisRewrite && true !== empty($unencodedUrl)) {
+            return $unencodedUrl;
         }
 
         /**
          * REQUEST_URI
          */
-        let requestUri = server->get("REQUEST_URI", null);
+        $requestUri = $server->get("REQUEST_URI");
 
-        if unlikely null !== requestUri {
-            return preg_replace("#^[^/:]+://[^/]+#", "", requestUri);
+        if (null !== $requestUri) {
+            return preg_replace("#^[^/:]+://[^/]+#", "", $requestUri);
         }
 
         /**
          * ORIG_PATH_INFO
          */
-        let origPathInfo = server->get("ORIG_PATH_INFO", null);
-        if unlikely  empty(origPathInfo) {
+        $origPathInfo = $server->get("ORIG_PATH_INFO");
+        if (true === empty($origPathInfo)) {
             return "/";
         }
 
-        return origPathInfo;
+        return $origPathInfo;
     }
 
     /**
@@ -251,9 +250,9 @@ class ServerRequestFactory implements ServerRequestFactoryInterface, RequestMeth
      *
      * @return string
      */
-    private function calculateUriQuery(<CollectionInterface> server) -> string
+    private function calculateUriQuery(CollectionInterface $server): string
     {
-        return ltrim(server->get("QUERY_STRING", ""), "?");
+        return ltrim($server->get("QUERY_STRING", ""), "?");
     }
 
     /**
@@ -264,38 +263,42 @@ class ServerRequestFactory implements ServerRequestFactoryInterface, RequestMeth
      *
      * @return string
      */
-    private function calculateUriScheme(<CollectionInterface> server, <CollectionInterface> headers) -> string
-    {
-        var header, isHttps;
-        string scheme;
-
+    private function calculateUriScheme(
+        CollectionInterface $server,
+        CollectionInterface $headers
+    ): string {
         // URI scheme
-        let scheme  = "https",
-            isHttps = true;
-        if likely server->has("HTTPS") {
-            let isHttps = (string) server->get("HTTPS", "on"),
-                isHttps = "off" !== strtolower(isHttps);
+        $scheme  = "https";
+        $isHttps = true;
+        if (true === $server->has("HTTPS")) {
+            $isHttps = (string) $server->get("HTTPS", "on");
+            $isHttps = "off" !== strtolower($isHttps);
         }
 
-        let header = this->getHeader(headers, "x-forwarded-proto", "https");
-        if unlikely (!isHttps || "https" !== header) {
-            let scheme = "http";
+        $header = $this->getHeader($headers, "x-forwarded-proto", "https");
+        if (!$isHttps || "https" !== $header) {
+            $scheme = "http";
         }
 
-        return scheme;
+        return $scheme;
     }
 
     /**
-     * Checks the source if it null and returns the super, otherwise the source
-     * array
+     * Checks the source if it is null and returns the super, otherwise the
+     * source
+     *
+     * @param mixed $source
+     * @param array $super
+     *
+     * @return array
      */
-    private function checkNullArray(var source, array super) -> array
+    private function checkNullArray($source, array $super): array
     {
-        if unlikely empty source {
-            return super;
+        if (true === empty($source)) {
+            return $super;
         }
 
-        return source;
+        return $source;
     }
 
     /**
@@ -307,26 +310,28 @@ class ServerRequestFactory implements ServerRequestFactoryInterface, RequestMeth
      *
      * @throws InvalidArgumentException If one of the elements is missing
      */
-    private function createUploadedFile(array file) -> <UploadedFile>
+    private function createUploadedFile(array $file): UploadedFile
     {
-        var name, type;
-
-        if unlikely (!isset file["tmp_name"] || !isset file["size"] || !isset file["error"]) {
+        if (
+            true !== isset($file["tmp_name"]) ||
+            true !== isset($file["size"]) ||
+            true !== isset($file["error"])
+        ) {
             throw new InvalidArgumentException(
                 "The file array must contain tmp_name, size and error; " .
                 "one or more are missing"
             );
         }
 
-        let name = isset file["name"] ? file["name"] : null,
-            type = isset file["type"] ? file["type"] : null;
+        $name = true === isset($file["name"]) ? $file["name"] : null;
+        $type = true === isset($file["type"]) ? $file["type"] : null;
 
         return new UploadedFile(
-            file["tmp_name"],
-            file["size"],
-            file["error"],
-            name,
-            type
+            $file["tmp_name"],
+            $file["size"],
+            $file["error"],
+            $name,
+            $type
         );
     }
 
@@ -339,17 +344,18 @@ class ServerRequestFactory implements ServerRequestFactoryInterface, RequestMeth
      *
      * @return mixed|string
      */
-    private function getHeader(<CollectionInterface> headers, string name, var defaultValue = null) -> var
-    {
-        var value;
+    private function getHeader(
+        CollectionInterface $headers,
+        string $name,
+        $defaultValue = null
+    ) {
+        $value = $headers->get($name, $defaultValue);
 
-        let value = headers->get(name, defaultValue);
-
-        if typeof value === "array" {
-            let value = implode(",", value);
+        if (true === is_array($value)) {
+            $value = implode(",", $value);
         }
 
-        return value;
+        return $value;
     }
 
     /**
@@ -358,26 +364,23 @@ class ServerRequestFactory implements ServerRequestFactoryInterface, RequestMeth
      * @param string $cookieHeader A string cookie header value.
      *
      * @return array key/value cookie pairs.
-     *
      */
-    private function parseCookieHeader(string cookieHeader) -> array
+    private function parseCookieHeader(string $cookieHeader): array
     {
-        var cookies;
-
-        let cookies = [];
+        $cookies = [];
         parse_str(
             strtr(
-                cookieHeader,
+                $cookieHeader,
                 [
-                    "&" : "%26",
-                    "+" : "%2B",
-                    ";" : "&"
+                    "&" => "%26",
+                    "+" => "%2B",
+                    ";" => "&",
                 ]
             ),
-            cookies
+            $cookies
         );
 
-        return cookies;
+        return $cookies;
     }
 
     /**
@@ -387,54 +390,52 @@ class ServerRequestFactory implements ServerRequestFactoryInterface, RequestMeth
      *
      * @return CollectionInterface
      */
-    private function parseHeaders(<CollectionInterface> server) -> <CollectionInterface>
-    {
-        var headers, key, name, serverArray, value;
-
+    private function parseHeaders(
+        CollectionInterface $server
+    ): CollectionInterface {
         /**
          * @todo Figure out why server is not iterable
          */
-        let headers     = new Collection(),
-            serverArray = server->toArray();
+        $headers     = new Collection();
+        $serverArray = $server->toArray();
 
-        for key, value in serverArray {
-            if likely "" !== value {
+        foreach ($serverArray as $key => $value) {
+            if ("" !== $value) {
                 /**
                  * Apache prefixes environment variables with REDIRECT_
                  * if they are added by rewrite rules
                  */
-                if unlikely strpos(key, "REDIRECT_") === 0 {
-                    let key = substr(key, 9);
+                if (0 === strpos($key, "REDIRECT_")) {
+                    $key = substr($key, 9);
                     /**
                      * We will not overwrite existing variables with the
                      * prefixed versions, though
                      */
-                    if unlikely (true === server->has(key)) {
+                    if (true === $server->has($key)) {
                         continue;
                     }
                 }
 
-                if likely strpos(key, "HTTP_") === 0 {
-                    let name = str_replace(
+                if (0 === strpos($key, "HTTP_")) {
+                    $name = str_replace(
                         "_",
                         "-",
-                        strtolower(substr(key, 5))
+                        strtolower(substr($key, 5))
                     );
 
-                    headers->set(name, value);
+                    $headers->set($name, $value);
                     continue;
                 }
 
-                if unlikely strpos(key, "CONTENT_") === 0 {
-                    let name = "content-" . strtolower(substr(key, 8));
+                if (0 === strpos($key, "CONTENT_")) {
+                    $name = "content-" . strtolower(substr($key, 8));
 
-                    headers->set(name, value);
-                    continue;
+                    $headers->set($name, $value);
                 }
             }
         }
 
-        return headers;
+        return $headers;
     }
 
     /**
@@ -444,38 +445,39 @@ class ServerRequestFactory implements ServerRequestFactoryInterface, RequestMeth
      *
      * @return string
      */
-    private function parseProtocol(<CollectionInterface> server) -> string
+    private function parseProtocol(CollectionInterface $server): string
     {
-        var localProtocol, protocol, protocols;
-
-        if true !== server->has("SERVER_PROTOCOL") {
+        if (true !== $server->has("SERVER_PROTOCOL")) {
             return "1.1";
         }
 
-        let protocol      = (string) server->get("SERVER_PROTOCOL", "HTTP/1.1"),
-            localProtocol = strtolower(protocol),
-            protocols     = [
-            "1.0" : 1,
-            "1.1" : 1,
-            "2.0" : 1,
-            "3.0" : 1
+        $protocol      = (string) $server->get("SERVER_PROTOCOL", "HTTP/1.1");
+        $localProtocol = strtolower($protocol);
+        $protocols     = [
+            "1.0" => 1,
+            "1.1" => 1,
+            "2.0" => 1,
+            "3.0" => 1,
         ];
 
-        if substr(localProtocol, 0, 5) !== "http/" {
+        /**
+         * 5 characters to distinguish between http and https
+         */
+        if ("http/" === substr($localProtocol, 0, 5)) {
             throw new InvalidArgumentException(
-                "Incorrect protocol value " . protocol
+                "Incorrect protocol value " . $protocol
             );
         }
 
-        let localProtocol = str_replace("http/", "", localProtocol);
+        $localProtocol = str_replace("http/", "", $localProtocol);
 
-        if unlikely !isset protocols[localProtocol] {
+        if (true !== isset($protocols[$localProtocol])) {
             throw new InvalidArgumentException(
-                "Unsupported protocol " . protocol
+                "Unsupported protocol " . $protocol
             );
         }
 
-        return localProtocol;
+        return $localProtocol;
     }
 
     /**
@@ -487,25 +489,26 @@ class ServerRequestFactory implements ServerRequestFactoryInterface, RequestMeth
      *
      * @return CollectionInterface
      */
-    private function parseServer(array server) -> <CollectionInterface>
+    private function parseServer(array $server): CollectionInterface
     {
-        var collection, headers, headersCollection;
+        $collection = new Collection($server);
+        $headers    = $this->getHeaders();
 
-        let collection = new Collection(server),
-            headers    = this->getHeaders();
+        if (
+            true !== $collection->has("HTTP_AUTHORIZATION") &&
+            false !== $headers
+        ) {
+            $headersCollection = new Collection($headers);
 
-        if unlikely (!collection->has("HTTP_AUTHORIZATION") && false !== headers) {
-            let headersCollection = new Collection(headers);
-
-            if likely headersCollection->has("Authorization") {
-                collection->set(
+            if (true === $headersCollection->has("Authorization")) {
+                $collection->set(
                     "HTTP_AUTHORIZATION",
-                    headersCollection->get("Authorization")
+                    $headersCollection->get("Authorization")
                 );
             }
         }
 
-        return collection;
+        return $collection;
     }
 
     /**
@@ -516,46 +519,43 @@ class ServerRequestFactory implements ServerRequestFactoryInterface, RequestMeth
      *
      * @return CollectionInterface
      */
-    private function parseUploadedFiles(array files) -> <CollectionInterface>
+    private function parseUploadedFiles(array $files): CollectionInterface
     {
-        var collection, data, key, file;
-
-        let collection = new Collection();
+        $collection = new Collection();
 
         /**
          * Loop through the files and check them recursively
          */
-         for key, file in files {
-            let key = (string) key;
+        foreach ($files as $key => $file) {
+            $key = (string) $key;
 
             /**
              * UriInterface
              */
-            if unlikely (typeof file === "object" && file instanceof UploadedFileInterface) {
-                collection->set(key, file);
+            if ($file instanceof UploadedFileInterface) {
+                $collection->set($key, $file);
                 continue;
             }
 
             /**
              * file is array with 'tmp_name'
              */
-            if likely (typeof file === "array" && isset file["tmp_name"]) {
-                collection->set(key, this->createUploadedFile(file));
+            if (true === is_array($file) && true === isset($file["tmp_name"])) {
+                $collection->set($key, $this->createUploadedFile($file));
                 continue;
             }
 
             /**
              * file is array of elements - recursion
              */
-            if unlikely typeof file === "array" {
-                let data = this->parseUploadedFiles(file);
+            if (true === is_array($file)) {
+                $data = $this->parseUploadedFiles($file);
 
-                collection->set(key, data->toArray());
-                continue;
+                $collection->set($key, $data->toArray());
             }
         }
 
-        return collection;
+        return $collection;
     }
 
     /**
@@ -566,47 +566,46 @@ class ServerRequestFactory implements ServerRequestFactoryInterface, RequestMeth
      *
      * @return Uri
      */
-    private function parseUri(<CollectionInterface> server, <CollectionInterface> headers) -> <Uri>
-    {
-        var path, query, scheme, split, uri;
-
-        let uri = new Uri();
+    private function parseUri(
+        CollectionInterface $server,
+        CollectionInterface $headers
+    ): Uri {
+        $uri = new Uri();
 
         /**
          * Scheme
          */
-        let scheme = this->calculateUriScheme(server, headers),
-            uri    = uri->withScheme(scheme);
+        $scheme = $this->calculateUriScheme($server, $headers);
+        $uri    = $uri->withScheme($scheme);
 
         /**
          * Host/Port
          */
-        let split = this->calculateUriHost(server, headers);
-        if likely !empty(split[0]) {
-            let uri = uri->withHost(split[0]);
-            if unlikely !empty(split[1]) {
-                let uri = uri->withPort(split[1]);
+        $split = $this->calculateUriHost($server, $headers);
+        if (true !== empty($split[0])) {
+            $uri = $uri->withHost($split[0]);
+            if (true !== empty($split[1])) {
+                $uri = $uri->withPort($split[1]);
             }
         }
 
         /**
          * Path
          */
-        let path  = this->calculateUriPath(server),
-            split = explode("#", path),
-            path  = explode("?", split[0]),
-            uri   = uri->withPath(path[0]);
+        $path  = $this->calculateUriPath($server);
+        $split = explode("#", $path);
+        $path  = explode("?", $split[0]);
+        $uri   = $uri->withPath($path[0]);
 
-        if unlikely count(split) > 1 {
-            let uri = uri->withFragment(split[1]);
+        if (count($split) > 1) {
+            $uri = $uri->withFragment($split[1]);
         }
 
         /**
          * Query
          */
-        let query = this->calculateUriQuery(server),
-            uri   = uri->withQuery(query);
+        $query = $this->calculateUriQuery($server);
 
-        return uri;
+        return $uri->withQuery($query);
     }
 }
