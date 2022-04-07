@@ -22,21 +22,29 @@ use Phalcon\Http\Message\Exception\InvalidArgumentException;
 use Phalcon\Http\Message\Exception\RuntimeException;
 use Phalcon\Http\Message\Interfaces\StreamInterface;
 use Phalcon\Http\Message\Interfaces\UploadedFileInterface;
-
 use Phalcon\Traits\Php\FileTrait;
 
+use function constant;
+use function dirname;
+use function fclose;
+use function fopen;
+use function fwrite;
+use function is_dir;
 use function is_resource;
+use function is_string;
+use function is_writable;
+use function move_uploaded_file;
 use function substr;
 
 /**
  * UploadedFile class
  *
- * @property bool        $alreadyMoved
- * @property string|null $clientFilename
- * @property string|null $clientMediaType
- * @property int         $error
- * @property string      $fileName
- * @property int|null    $size
+ * @property bool                        $alreadyMoved
+ * @property string|null                 $clientFilename
+ * @property string|null                 $clientMediaType
+ * @property int                         $error
+ * @property string                      $fileName
+ * @property int|null                    $size
  * @property StreamInterface|string|null $stream
  */
 final class UploadedFile implements UploadedFileInterface
@@ -271,9 +279,9 @@ final class UploadedFile implements UploadedFileInterface
          */
         if (
             !(true === is_string($targetPath) &&
-            true !== empty($targetPath) &&
-            true === is_dir(dirname($targetPath)) &&
-            true === is_writable(dirname($targetPath)))
+                true !== empty($targetPath) &&
+                true === is_dir(dirname($targetPath)) &&
+                true === is_writable(dirname($targetPath)))
         ) {
             throw new InvalidArgumentException(
                 "Target folder is empty string, not a folder or not writable"
