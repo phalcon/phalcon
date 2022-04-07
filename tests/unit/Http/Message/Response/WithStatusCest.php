@@ -35,10 +35,9 @@ class WithStatusCest
 
         $I->assertNotEquals($response, $newInstance);
 
-        $I->assertEquals(
-            $code,
-            $newInstance->getStatusCode()
-        );
+        $expected = $code;
+        $actual   = $newInstance->getStatusCode();
+        $I->assertEquals($expected, $actual);
     }
 
     /**
@@ -58,58 +57,12 @@ class WithStatusCest
 
         $I->assertNotEquals($response, $newInstance);
 
-        $I->assertEquals(
-            $code,
-            $newInstance->getStatusCode()
-        );
+        $expected = $code;
+        $actual   = $newInstance->getStatusCode();
+        $I->assertEquals($expected, $actual);
 
-        $I->assertEquals(
-            $reason,
-            $newInstance->getReasonPhrase()
-        );
-    }
-
-    /**
-     * Tests Phalcon\Http\Message\Response :: withStatus() - exception invalid
-     * code
-     *
-     * @author Phalcon Team <team@phalcon.io>
-     * @since  2019-03-09
-     */
-    public function httpMessageResponseWithStatusExceptionInvalidCode(UnitTester $I)
-    {
-        $I->wantToTest('Http\Message\Response - withStatus() - exception invalid code');
-
-        $I->expectThrowable(
-            new InvalidArgumentException(
-                'Invalid status code; it must be an integer or string'
-            ),
-            function () {
-                $response    = new Response();
-                $newInstance = $response->withStatus(true, '');
-            }
-        );
-    }
-
-    /**
-     * Tests Phalcon\Http\Message\Response :: withStatus() - exception invalid
-     * phrase
-     *
-     * @author Phalcon Team <team@phalcon.io>
-     * @since  2019-03-09
-     */
-    public function httpMessageResponseWithStatusExceptionInvalidPhrase(UnitTester $I)
-    {
-        $I->wantToTest('Http\Message\Response - withStatus() - exception invalid phrase');
-
-        $I->expectThrowable(
-            new InvalidArgumentException(
-                'Invalid response reason'
-            ),
-            function () {
-                $response    = new Response();
-                $newInstance = $response->withStatus(200, true);
-            }
-        );
+        $expected = $reason;
+        $actual   = $newInstance->getReasonPhrase();
+        $I->assertEquals($expected, $actual);
     }
 }
