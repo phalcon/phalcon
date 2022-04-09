@@ -31,7 +31,7 @@ class GetStatusCodeCest
 
         $response = new Response();
 
-        $I->assertEquals(
+        $I->assertSame(
             200,
             $response->getStatusCode()
         );

@@ -16,13 +16,13 @@
  * @license https://github.com/zendframework/zend-diactoros/blob/master/LICENSE.md
  */
 
-namespace Phalcon\Http\Message\Traits;
+namespace Phalcon\Http\Message;
 
 use Phalcon\Http\Message\Exception\InvalidArgumentException;
 use Phalcon\Http\Message\Interfaces\MessageInterface;
+use Phalcon\Http\Message\Interfaces\ResponseStatusCodeInterface;
 use Phalcon\Http\Message\Interfaces\StreamInterface;
 use Phalcon\Http\Message\Interfaces\UriInterface;
-use Phalcon\Http\Message\Stream;
 use Phalcon\Support\Collection;
 use Phalcon\Support\Collection\CollectionInterface;
 
@@ -35,9 +35,9 @@ use function is_string;
 use function preg_match;
 
 /**
- * Message methods in trait
+ * Message methods
  */
-trait MessageTrait
+abstract class AbstractMessage extends AbstractCommon implements MessageInterface, ResponseStatusCodeInterface
 {
     /**
      * Gets the body of the message.
@@ -47,9 +47,9 @@ trait MessageTrait
     protected StreamInterface $body;
 
     /**
-     * @var Collection
+     * @var CollectionInterface
      */
-    protected Collection $headers;
+    protected CollectionInterface $headers;
 
     /**
      * Retrieves the HTTP protocol version as a string.
@@ -328,17 +328,11 @@ trait MessageTrait
             "" !== $this->uri->getHost()
         ) {
             $host      = $this->getUriHost($this->uri);
-            $hostArray = $host;
-            if (true !== is_array($host)) {
-                $hostArray = [$host];
-            }
 
             $collection->remove("host");
 
-            $data           = $collection->toArray();
-            $header         = [];
-            $header["Host"] = $hostArray;
-            $header         = $header + (array) $data;
+            $data   = $collection->toArray();
+            $header = ["Host" => [$host]] + (array) $data;
 
             $collection->clear();
             $collection->init($header);
@@ -429,14 +423,6 @@ trait MessageTrait
             throw new InvalidArgumentException("Invalid header value");
         }
     }
-
-    /**
-     * @param mixed  $element
-     * @param string $property
-     *
-     * @return mixed
-     */
-    abstract protected function cloneInstance($element, string $property);
 
     /**
      * Returns the header values checked for validity

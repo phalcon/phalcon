@@ -21,7 +21,7 @@ declare(strict_types=1);
 namespace Phalcon\Http\Message;
 
 use Phalcon\Http\Message\Exception\InvalidArgumentException;
-use Phalcon\Http\Message\Traits\CloneTrait;
+use Phalcon\Http\Message\Interfaces\UriInterface;
 use Phalcon\Traits\Helper\Str\StartsWithTrait;
 
 use function explode;
@@ -49,9 +49,8 @@ use function substr;
  * @property string   $scheme
  * @property string   $userInfo
  */
-final class Uri implements UriInterface
+final class Uri extends AbstractCommon implements UriInterface
 {
-    use CloneTrait;
     use StartsWithTrait;
 
     /**
@@ -239,7 +238,7 @@ final class Uri implements UriInterface
          * If the port component is not set or is the standard port for the
          * current scheme, it SHOULD NOT be included.
          */
-        if (true === $this->isNonStandardPort($this->scheme, $this->host, $this->port)) {
+        if (true === $this->isNonStandardPort($this->scheme, $this->port)) {
             $authority .= ":" . $this->port;
         }
 
@@ -300,7 +299,7 @@ final class Uri implements UriInterface
      */
     public function getPort(): ?int
     {
-        return true === $this->isNonStandardPort($this->scheme, $this->host, $this->port)
+        return true === $this->isNonStandardPort($this->scheme, $this->port)
             ? $this->port
             : null;
     }
@@ -458,7 +457,6 @@ final class Uri implements UriInterface
                 "Invalid port specified. (Valid range 1-65535)"
             );
         }
-
         return $this->cloneInstance($port, "port");
     }
 
@@ -802,23 +800,18 @@ final class Uri implements UriInterface
      * Checks if this is a non-standard port
      *
      * @param string   $scheme
-     * @param string   $host
      * @param int|null $port
      *
      * @return bool
      */
-    private function isNonStandardPort(string $scheme, string $host, ?int $port): bool
+    private function isNonStandardPort(string $scheme, ?int $port): bool
     {
         $schemes = [
             "http"  => 80,
             "https" => 443,
         ];
 
-        if ("" === $scheme) {
-            return "" === $host || null !== $port;
-        }
-
-        if ("" === $host || null === $port) {
+        if (null === $port) {
             return false;
         }
 

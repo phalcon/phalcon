@@ -53,6 +53,6 @@ class SetStreamCest
             . 'persons to whom the Software is furnished to do so, subject '
             . 'to the following conditions:';
         $actual   = $stream->read(432);
-        $I->assertEquals($expected, $actual);
+        $I->assertSame($expected, $actual);
     }
 }

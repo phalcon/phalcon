@@ -20,19 +20,13 @@ namespace Phalcon\Http\Message;
 
 use Phalcon\Http\Message\Exception\InvalidArgumentException;
 use Phalcon\Http\Message\Interfaces\ResponseInterface;
-use Phalcon\Http\Message\Interfaces\ResponseStatusCodeInterface;
 use Phalcon\Http\Message\Interfaces\StreamInterface;
-use Phalcon\Http\Message\Traits\CloneTrait;
-use Phalcon\Http\Message\Traits\MessageTrait;
 
 /**
  * Response object
  */
-final class Response implements ResponseInterface, ResponseStatusCodeInterface
+final class Response extends AbstractMessage implements ResponseInterface
 {
-    use CloneTrait;
-    use MessageTrait;
-
     /**
      * Gets the response reason phrase associated with the status code.
      *

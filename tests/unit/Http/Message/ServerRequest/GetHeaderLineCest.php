@@ -37,10 +37,10 @@ class GetHeaderLineCest
 
         $expected = 'text/html,text/json';
         $actual   = $request->getHeaderLine('accept');
-        $I->assertEquals($expected, $actual);
+        $I->assertSame($expected, $actual);
 
         $actual = $request->getHeaderLine('aCCepT');
-        $I->assertEquals($expected, $actual);
+        $I->assertSame($expected, $actual);
     }
 
     /**
@@ -56,6 +56,6 @@ class GetHeaderLineCest
 
         $expected = '';
         $actual   = $request->getHeaderLine('accept');
-        $I->assertEquals($expected, $actual);
+        $I->assertSame($expected, $actual);
     }
 }

@@ -32,14 +32,14 @@ class WithMethodCest
 
         $newInstance = $request->withMethod('POST');
 
-        $I->assertNotEquals($request, $newInstance);
+        $I->assertNotSame($request, $newInstance);
 
-        $I->assertEquals(
+        $I->assertSame(
             'GET',
             $request->getMethod()
         );
 
-        $I->assertEquals(
+        $I->assertSame(
             'POST',
             $newInstance->getMethod()
         );

@@ -9,20 +9,21 @@
  * file that was distributed with this source code.
  *
  * Implementation of this file has been influenced by Nyholm/psr7 and Laminas
+ *
  * @link    https://github.com/Nyholm/psr7
  * @license https://github.com/Nyholm/psr7/blob/master/LICENSE
  * @link    https://github.com/laminas/laminas-diactoros
  * @license https://github.com/zendframework/zend-diactoros/blob/master/LICENSE.md
  */
 
-declare(strict_types=1);
+namespace Phalcon\Http\Message;
 
-namespace Phalcon\Http\Message\Traits;
+use Phalcon\Http\Message\Exception\InvalidArgumentException;
 
 /**
- * Clone helper method for with*
+ * Common methods
  */
-trait CloneTrait
+abstract class AbstractCommon
 {
     /**
      * Returns a new instance having set the parameter
@@ -45,5 +46,19 @@ trait CloneTrait
         $newInstance->$property = $element;
 
         return $newInstance;
+    }
+
+    /**
+     * Checks the element passed if it is a string
+     *
+     * @param mixed $element
+     */
+    final protected function checkStringParameter($element): void
+    {
+        if (true !== is_string($element)) {
+            throw new InvalidArgumentException(
+                "Method requires a string argument"
+            );
+        }
     }
 }

@@ -15,7 +15,7 @@ namespace Phalcon\Tests\Unit\Http\Message\Uri;
 
 use Phalcon\Http\Message\Exception\InvalidArgumentException;
 use Phalcon\Http\Message\Uri;
-use Phalcon\Http\Message\UriInterface;
+use Phalcon\Http\Message\Interfaces\UriInterface;
 use UnitTester;
 
 class ConstructCest

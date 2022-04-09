@@ -43,13 +43,13 @@ class WithHeaderCest
             ]
         );
 
-        $I->assertNotEquals($request, $newInstance);
+        $I->assertNotSame($request, $newInstance);
 
         $expected = [
             'Accept' => ['text/html'],
         ];
 
-        $I->assertEquals(
+        $I->assertSame(
             $expected,
             $request->getHeaders()
         );
@@ -59,7 +59,7 @@ class WithHeaderCest
             'Cache-Control' => ['max-age=0'],
         ];
 
-        $I->assertEquals(
+        $I->assertSame(
             $expected,
             $newInstance->getHeaders()
         );

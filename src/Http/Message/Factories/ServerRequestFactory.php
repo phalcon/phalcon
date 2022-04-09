@@ -24,6 +24,8 @@ use Phalcon\Http\Message\Interfaces\ServerRequestInterface;
 use Phalcon\Http\Message\Interfaces\UploadedFileInterface;
 use Phalcon\Http\Message\Interfaces\UriInterface;
 use Phalcon\Http\Message\ServerRequest;
+use Phalcon\Http\Message\UploadedFile;
+use Phalcon\Http\Message\Uri;
 use Phalcon\Support\Collection;
 use Phalcon\Support\Collection\CollectionInterface;
 use Phalcon\Http\Message\Exception\InvalidArgumentException;
@@ -33,7 +35,6 @@ use function explode;
 use function function_exists;
 use function implode;
 use function is_array;
-use function is_object;
 use function ltrim;
 use function parse_str;
 use function preg_match;
@@ -463,7 +464,7 @@ class ServerRequestFactory implements ServerRequestFactoryInterface, RequestMeth
         /**
          * 5 characters to distinguish between http and https
          */
-        if ("http/" === substr($localProtocol, 0, 5)) {
+        if ("http/" === substr($localProtocol, 0, 4)) {
             throw new InvalidArgumentException(
                 "Incorrect protocol value " . $protocol
             );
@@ -582,6 +583,7 @@ class ServerRequestFactory implements ServerRequestFactoryInterface, RequestMeth
          * Host/Port
          */
         $split = $this->calculateUriHost($server, $headers);
+
         if (true !== empty($split[0])) {
             $uri = $uri->withHost($split[0]);
             if (true !== empty($split[1])) {

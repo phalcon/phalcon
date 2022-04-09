@@ -37,6 +37,6 @@ class GetClientMediaTypeCest
 
         $expected = 'some-media-type';
         $actual   = $file->getClientMediaType();
-        $I->assertEquals($expected, $actual);
+        $I->assertSame($expected, $actual);
     }
 }

@@ -34,7 +34,7 @@ class GetSizeCest
         $expected = filesize($fileName);
         $stream   = new Stream($fileName, 'rb');
         $actual   = $stream->getSize();
-        $I->assertEquals($expected, $actual);
+        $I->assertSame($expected, $actual);
     }
 
     /**
@@ -49,7 +49,7 @@ class GetSizeCest
         $stream   = new Stream('php://memory', 'rb');
         $expected = 0;
         $actual   = $stream->getSize();
-        $I->assertEquals($expected, $actual);
+        $I->assertSame($expected, $actual);
     }
 
     /**

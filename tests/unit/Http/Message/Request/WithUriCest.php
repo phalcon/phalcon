@@ -37,9 +37,9 @@ class WithUriCest
 
         $newInstance = $request->withUri($uri);
 
-        $I->assertNotEquals($request, $newInstance);
+        $I->assertNotSame($request, $newInstance);
 
-        $I->assertEquals(
+        $I->assertSame(
             $uri,
             $newInstance->getUri()
         );

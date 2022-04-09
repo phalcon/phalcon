@@ -33,11 +33,11 @@ class WithStatusCest
         $response    = new Response();
         $newInstance = $response->withStatus($code);
 
-        $I->assertNotEquals($response, $newInstance);
+        $I->assertNotSame($response, $newInstance);
 
         $expected = $code;
         $actual   = $newInstance->getStatusCode();
-        $I->assertEquals($expected, $actual);
+        $I->assertSame($expected, $actual);
     }
 
     /**
@@ -55,14 +55,14 @@ class WithStatusCest
         $response    = new Response();
         $newInstance = $response->withStatus($code, $reason);
 
-        $I->assertNotEquals($response, $newInstance);
+        $I->assertNotSame($response, $newInstance);
 
         $expected = $code;
         $actual   = $newInstance->getStatusCode();
-        $I->assertEquals($expected, $actual);
+        $I->assertSame($expected, $actual);
 
         $expected = $reason;
         $actual   = $newInstance->getReasonPhrase();
-        $I->assertEquals($expected, $actual);
+        $I->assertSame($expected, $actual);
     }
 }

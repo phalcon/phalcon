@@ -33,10 +33,9 @@ class GetAttributeCest
             ->withAttribute('three', 'four')
         ;
 
-        $I->assertEquals(
-            'two',
-            $request->getAttribute('one')
-        );
+        $expected = 'two';
+        $actual   = $request->getAttribute('one');
+        $I->assertSame($expected, $actual);
     }
 
     /**
@@ -54,9 +53,7 @@ class GetAttributeCest
             ->withAttribute('three', 'four')
         ;
 
-        $I->assertEquals(
-            '',
-            $request->getAttribute('unknown')
-        );
+        $actual   = $request->getAttribute('unknown');
+        $I->assertNull($actual);
     }
 }

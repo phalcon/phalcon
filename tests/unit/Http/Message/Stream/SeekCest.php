@@ -46,7 +46,7 @@ class SeekCest
             . 'persons to whom the Software is furnished to do so, subject '
             . 'to the following conditions:';
         $actual   = $stream->read(432);
-        $I->assertEquals($expected, $actual);
+        $I->assertSame($expected, $actual);
     }
 
     /**
@@ -64,7 +64,7 @@ class SeekCest
         $stream->seek(10240);
         $expected = '';
         $actual   = $stream->read(1);
-        $I->assertEquals($expected, $actual);
+        $I->assertSame($expected, $actual);
     }
 
     /**

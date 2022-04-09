@@ -32,7 +32,7 @@ class GetServerParamsCest
 
         $expected = $params;
         $actual   = $request->getServerParams();
-        $I->assertEquals($expected, $actual);
+        $I->assertSame($expected, $actual);
     }
 
     /**

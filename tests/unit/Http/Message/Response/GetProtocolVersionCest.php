@@ -30,7 +30,7 @@ class GetProtocolVersionCest
 
         $response = new Response();
 
-        $I->assertEquals(
+        $I->assertSame(
             '1.1',
             $response->getProtocolVersion()
         );

@@ -34,12 +34,12 @@ class RewindCest
         $stream->seek(10);
         $expected = 10;
         $actual   = $stream->tell();
-        $I->assertEquals($expected, $actual);
+        $I->assertSame($expected, $actual);
 
         $stream->rewind();
         $expected = 0;
         $actual   = $stream->tell();
-        $I->assertEquals($expected, $actual);
+        $I->assertSame($expected, $actual);
     }
 
     /**

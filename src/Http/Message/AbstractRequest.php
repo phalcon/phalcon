@@ -1,24 +1,38 @@
+<?php
 
 /**
  * This file is part of the Phalcon Framework.
  *
  * (c) Phalcon Team <team@phalcon.io>
  *
- * For the full copyright and license information, please view the
- * LICENSE.txt file that was distributed with this source code.
+ * For the full copyright and license information, please view the LICENSE.txt
+ * file that was distributed with this source code.
  *
- * Implementation of this file has been influenced by Zend Diactoros
- * @link    https://github.com/zendframework/zend-diactoros
+ * Implementation of this file has been influenced by Nyholm/psr7 and Laminas
+ *
+ * @link    https://github.com/Nyholm/psr7
+ * @license https://github.com/Nyholm/psr7/blob/master/LICENSE
+ * @link    https://github.com/laminas/laminas-diactoros
  * @license https://github.com/zendframework/zend-diactoros/blob/master/LICENSE.md
  */
 
 namespace Phalcon\Http\Message;
 
 use Phalcon\Http\Message\Exception\InvalidArgumentException;
-use Psr\Http\Message\UriInterface;
+use Phalcon\Http\Message\Interfaces\RequestInterface;
+use Phalcon\Http\Message\Interfaces\RequestMethodInterface;
+use Phalcon\Http\Message\Interfaces\UriInterface;
+
+use function is_string;
+use function preg_match;
+use function strtoupper;
 
 /**
  * Request methods
+ *
+ * @property string       $method
+ * @property null|string  $requestTarget
+ * @property UriInterface $uri
  */
 abstract class AbstractRequest extends AbstractMessage implements RequestMethodInterface
 {
@@ -27,14 +41,14 @@ abstract class AbstractRequest extends AbstractMessage implements RequestMethodI
      *
      * @var string
      */
-    protected method = self::METHOD_GET { get };
+    protected string $method = self::METHOD_GET;
 
     /**
      * The request-target, if it has been provided or calculated.
      *
      * @var null|string
      */
-    protected requestTarget;
+    protected ?string $requestTarget = null;
 
     /**
      * Retrieves the URI instance.
@@ -45,7 +59,15 @@ abstract class AbstractRequest extends AbstractMessage implements RequestMethodI
      *
      * @var UriInterface
      */
-    protected uri { get };
+    protected UriInterface $uri;
+
+    /**
+     * @return string
+     */
+    public function getMethod(): string
+    {
+        return $this->method;
+    }
 
     /**
      * Retrieves the message's request target.
@@ -60,25 +82,23 @@ abstract class AbstractRequest extends AbstractMessage implements RequestMethodI
      *
      * @return string
      */
-    public function getRequestTarget() -> string
+    public function getRequestTarget(): string
     {
-        var requestTarget;
+        $requestTarget = $this->requestTarget;
 
-        let requestTarget = this->requestTarget;
+        if (null === $requestTarget) {
+            $requestTarget = $this->uri->getPath();
 
-        if unlikely null === requestTarget {
-            let requestTarget = this->uri->getPath();
-
-            if unlikely !empty(this->uri->getQuery()) {
-                let requestTarget .= "?" . this->uri->getQuery();
+            if (true !== empty($this->uri->getQuery())) {
+                $requestTarget .= "?" . $this->uri->getQuery();
             }
 
-            if unlikely empty(requestTarget) {
-                let requestTarget = "/";
+            if (true === empty($requestTarget)) {
+                $requestTarget = "/";
             }
         }
 
-        return requestTarget;
+        return $requestTarget;
     }
 
     /**
@@ -94,14 +114,14 @@ abstract class AbstractRequest extends AbstractMessage implements RequestMethodI
      *
      * @param string $method
      *
-     * @return static
+     * @return RequestInterface
      * @throws InvalidArgumentException for invalid HTTP methods.
      */
-    public function withMethod(var method) -> var
+    public function withMethod(string $method): RequestInterface
     {
-        this->processMethod(method);
+        $this->processMethod($method);
 
-        return this->cloneInstance(method, "method");
+        return $this->cloneInstance($method, "method");
     }
 
     /**
@@ -119,19 +139,19 @@ abstract class AbstractRequest extends AbstractMessage implements RequestMethodI
      * @see http://tools.ietf.org/html/rfc7230#section-5.3 (for the various
      *     request-target forms allowed in request messages)
      *
-     * @param mixed $requestTarget
+     * @param string|null $requestTarget
      *
-     * @return static
+     * @return RequestInterface
      */
-    public function withRequestTarget(var requestTarget) -> var
+    public function withRequestTarget(?string $requestTarget): RequestInterface
     {
-        if unlikely preg_match("/\s/", requestTarget) {
+        if (preg_match("/\s/", $requestTarget)) {
             throw new InvalidArgumentException(
                 "Invalid request target: cannot contain whitespace"
             );
         }
 
-        return this->cloneInstance(requestTarget, "requestTarget");
+        return $this->cloneInstance($requestTarget, "requestTarget");
     }
 
     /**
@@ -167,21 +187,18 @@ abstract class AbstractRequest extends AbstractMessage implements RequestMethodI
      *
      * @return static
      */
-    public function withUri(<UriInterface> uri, var preserveHost = false) -> var
+    public function withUri(UriInterface $uri, bool $preserveHost = false): RequestInterface
     {
-        var headers, newInstance;
+        $headers     = clone $this->headers;
+        $newInstance = $this->cloneInstance($uri, "uri");
 
-        let preserveHost     = (bool) preserveHost,
-            headers          = clone this->headers,
-            newInstance      = this->cloneInstance(uri, "uri");
+        if (false === $preserveHost) {
+            $headers = $this->checkHeaderHost($headers);
 
-        if unlikely !preserveHost {
-            let headers = this->checkHeaderHost(headers);
-
-            let newInstance->headers = headers;
+            $newInstance->headers = $headers;
         }
 
-        return newInstance;
+        return $newInstance;
     }
 
     /**
@@ -191,32 +208,32 @@ abstract class AbstractRequest extends AbstractMessage implements RequestMethodI
      *
      * @return string
      */
-    final protected function processMethod(method = "") -> string
+    final protected function processMethod(string $method = ""): string
     {
-        var methods;
+        if ("" !== $method) {
+            $methods = [
+                "CONNECT" => 1,
+                "DELETE"  => 1,
+                "GET"     => 1,
+                "HEAD"    => 1,
+                "OPTIONS" => 1,
+                "PATCH"   => 1,
+                "POST"    => 1,
+                "PURGE"   => 1,
+                "PUT"     => 1,
+                "TRACE"   => 1,
+            ];
 
-        let methods = [
-            self::METHOD_CONNECT : 1,
-            self::METHOD_DELETE  : 1,
-            self::METHOD_GET     : 1,
-            self::METHOD_HEAD    : 1,
-            self::METHOD_OPTIONS : 1,
-            self::METHOD_PATCH   : 1,
-            self::METHOD_POST    : 1,
-            self::METHOD_PURGE   : 1,
-            self::METHOD_PUT     : 1,
-            self::METHOD_TRACE   : 1
-        ];
+            $method = strtoupper($method);
 
-        if unlikely !(!empty(method) &&
-            typeof method === "string"  &&
-            isset methods[method]) {
-            throw new InvalidArgumentException(
-                "Invalid or unsupported method " . method
-            );
+            if (true !== isset($methods[$method])) {
+                throw new InvalidArgumentException(
+                    "Invalid or unsupported method " . $method
+                );
+            }
         }
 
-        return method;
+        return $method;
     }
 
     /**
@@ -225,18 +242,19 @@ abstract class AbstractRequest extends AbstractMessage implements RequestMethodI
      * @param UriInterface|string|null $uri
      *
      * @return UriInterface
+     * @throws InvalidArgumentException
      */
-    final protected function processUri(var uri) -> <UriInterface>
+    final protected function processUri($uri): UriInterface
     {
-        if unlikely (typeof uri === "object" && uri instanceof UriInterface) {
-            return uri;
+        if ($uri instanceof UriInterface) {
+            return $uri;
         }
 
-        if likely typeof uri === "string" {
-            return new Uri(uri);
+        if (true === is_string($uri)) {
+            return new Uri($uri);
         }
 
-        if null === uri {
+        if (null === $uri) {
             return new Uri();
         }
 

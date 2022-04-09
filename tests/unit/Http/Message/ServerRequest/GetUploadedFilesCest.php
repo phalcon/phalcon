@@ -46,7 +46,7 @@ class GetUploadedFilesCest
 
         $expected = $files;
         $actual   = $request->getUploadedFiles();
-        $I->assertEquals($expected, $actual);
+        $I->assertSame($expected, $actual);
     }
 
     /**

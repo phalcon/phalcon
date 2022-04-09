@@ -39,14 +39,14 @@ class WriteCest
             . 'the right of the people to keep and bear Arms, shall not be infringed.';
         $expected = strlen($source);
         $actual   = $stream->write($source);
-        $I->assertEquals($expected, $actual);
+        $I->assertSame($expected, $actual);
 
         $stream->close();
 
         $stream   = new Stream($fileName, 'rb');
         $expected = $source;
         $actual   = $stream->getContents();
-        $I->assertEquals($expected, $actual);
+        $I->assertSame($expected, $actual);
     }
 
     /**

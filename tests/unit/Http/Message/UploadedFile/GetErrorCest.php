@@ -31,6 +31,6 @@ class GetErrorCest
 
         $expected = UPLOAD_ERR_OK;
         $actual   = $file->getError();
-        $I->assertEquals($expected, $actual);
+        $I->assertSame($expected, $actual);
     }
 }

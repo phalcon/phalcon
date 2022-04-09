@@ -35,7 +35,7 @@ class GetUriCest
 
         $request = new Request('GET', $uri);
 
-        $I->assertEquals(
+        $I->assertSame(
             $uri,
             $request->getUri()
         );

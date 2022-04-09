@@ -14,8 +14,8 @@ declare(strict_types=1);
 namespace Phalcon\Tests\Unit\Http\Message\UploadedFileFactory;
 
 use Phalcon\Http\Message\Stream;
-use Phalcon\Http\Message\UploadedFileFactory;
-use Psr\Http\Message\UploadedFileInterface;
+use Phalcon\Http\Message\Factories\UploadedFileFactory;
+use Phalcon\Http\Message\Interfaces\UploadedFileInterface;
 use UnitTester;
 
 class CreateUploadedFileCest

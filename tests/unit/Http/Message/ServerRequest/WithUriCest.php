@@ -33,10 +33,10 @@ class WithUriCest
 
         $request     = new ServerRequest();
         $newInstance = $request->withUri($uri);
-        $I->assertNotEquals($request, $newInstance);
+        $I->assertNotSame($request, $newInstance);
 
         $expected = $uri;
         $actual   = $newInstance->getUri();
-        $I->assertEquals($expected, $actual);
+        $I->assertSame($expected, $actual);
     }
 }

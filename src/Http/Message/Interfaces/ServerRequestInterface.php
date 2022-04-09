@@ -72,13 +72,13 @@ interface ServerRequestInterface extends RequestInterface
      * This method obviates the need for a hasAttribute() method, as it allows
      * specifying a default value to return if the attribute is not found.
      *
-     * @param string $name    The attribute name.
-     * @param mixed  $default Default value to return if the attribute does not exist.
+     * @param string $name         The attribute name.
+     * @param mixed  $defaultValue Default value to return if the attribute does not exist.
      *
      * @return mixed
      * @see getAttributes()
      */
-    public function getAttribute(string $name, $default = null);
+    public function getAttribute(string $name, $defaultValue = null);
 
     /**
      * Retrieve attributes derived from the request.
@@ -195,7 +195,7 @@ interface ServerRequestInterface extends RequestInterface
      *
      * @param array $cookies Array of key/value pairs representing cookies.
      *
-     * @return static
+     * @return ServerRequestInterface
      */
     public function withCookieParams(array $cookies): ServerRequestInterface;
 
@@ -224,7 +224,7 @@ interface ServerRequestInterface extends RequestInterface
      * @param null|array|object $data The deserialized body data. This will
      *                                typically be in an array or object.
      *
-     * @return static
+     * @return ServerRequestInterface
      * @throws InvalidArgumentException if an unsupported argument type is
      *     provided.
      */
@@ -251,7 +251,7 @@ interface ServerRequestInterface extends RequestInterface
      * @param array $query Array of query string arguments, typically from
      *                     $_GET.
      *
-     * @return static
+     * @return ServerRequestInterface
      */
     public function withQueryParams(array $query): ServerRequestInterface;
 
@@ -264,7 +264,7 @@ interface ServerRequestInterface extends RequestInterface
      *
      * @param array $uploadedFiles An array tree of UploadedFileInterface instances.
      *
-     * @return static
+     * @return ServerRequestInterface
      * @throws InvalidArgumentException if an invalid structure is provided.
      */
     public function withUploadedFiles(array $uploadedFiles): ServerRequestInterface;
@@ -281,7 +281,7 @@ interface ServerRequestInterface extends RequestInterface
      *
      * @param string $name The attribute name.
      *
-     * @return static
+     * @return ServerRequestInterface
      * @see getAttributes()
      */
     public function withoutAttribute(string $name): ServerRequestInterface;

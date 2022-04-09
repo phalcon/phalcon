@@ -30,7 +30,7 @@ class GetReasonPhraseCest
 
         $response = new Response();
 
-        $I->assertEquals(
+        $I->assertSame(
             'OK',
             $response->getReasonPhrase()
         );
@@ -48,7 +48,7 @@ class GetReasonPhraseCest
 
         $response = new Response('php://memory', 420);
 
-        $I->assertEquals(
+        $I->assertSame(
             'Method Failure',
             $response->getReasonPhrase()
         );

@@ -32,6 +32,6 @@ class DetachCest
         $stream   = new Stream($handle);
 
         $actual = $stream->detach();
-        $I->assertEquals($handle, $actual);
+        $I->assertSame($handle, $actual);
     }
 }
