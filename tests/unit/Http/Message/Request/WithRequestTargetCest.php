@@ -33,17 +33,15 @@ class WithRequestTargetCest
 
         $newInstance = $request->withRequestTarget('/test');
 
-        $I->assertNotEquals($request, $newInstance);
+        $I->assertNotSame($request, $newInstance);
 
-        $I->assertEquals(
-            '/',
-            $request->getRequestTarget()
-        );
+        $expected = "/";
+        $actual   = $request->getRequestTarget();
+        $I->assertSame($expected, $actual);
 
-        $I->assertEquals(
-            '/test',
-            $newInstance->getRequestTarget()
-        );
+        $expected = "/test";
+        $actual   = $newInstance->getRequestTarget();
+        $I->assertSame($expected, $actual);
     }
 
     /**

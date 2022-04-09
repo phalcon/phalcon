@@ -41,7 +41,7 @@ class IsSeekableCest
 
         $expected = $example['seekable'];
         $actual   = $stream->isSeekable();
-        $I->assertEquals($expected, $actual);
+        $I->assertSame($expected, $actual);
     }
 
     /**
@@ -65,7 +65,7 @@ class IsSeekableCest
 
         $expected = $example[1];
         $actual   = $stream->isSeekable();
-        $I->assertEquals($expected, $actual);
+        $I->assertSame($expected, $actual);
     }
 
     /**

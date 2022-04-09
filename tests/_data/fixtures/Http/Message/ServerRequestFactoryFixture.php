@@ -11,7 +11,7 @@ declare(strict_types=1);
 
 namespace Phalcon\Tests\Fixtures\Http\Message;
 
-use Phalcon\Http\Message\ServerRequestFactory;
+use Phalcon\Http\Message\Factories\ServerRequestFactory;
 
 class ServerRequestFactoryFixture extends ServerRequestFactory
 {

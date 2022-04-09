@@ -33,19 +33,19 @@ class WithHeaderCest
         $response    = new Response('php://memory', 200, $data);
         $newInstance = $response->withHeader('Cache-Control', ['max-age=0']);
 
-        $I->assertNotEquals($response, $newInstance);
+        $I->assertNotSame($response, $newInstance);
 
         $expected = [
             'Accept' => ['text/html'],
         ];
         $actual   = $response->getHeaders();
-        $I->assertEquals($expected, $actual);
+        $I->assertSame($expected, $actual);
 
         $expected = [
             'Accept'        => ['text/html'],
             'Cache-Control' => ['max-age=0'],
         ];
         $actual   = $newInstance->getHeaders();
-        $I->assertEquals($expected, $actual);
+        $I->assertSame($expected, $actual);
     }
 }

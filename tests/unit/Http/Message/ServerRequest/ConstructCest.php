@@ -15,7 +15,7 @@ namespace Phalcon\Tests\Unit\Http\Message\ServerRequest;
 
 use Phalcon\Http\Message\ServerRequest;
 use Phalcon\Http\Message\Uri;
-use Psr\Http\Message\ServerRequestInterface;
+use Phalcon\Http\Message\Interfaces\ServerRequestInterface;
 use UnitTester;
 
 class ConstructCest
@@ -60,7 +60,7 @@ class ConstructCest
 
         $expected = ['127.0.0.1'];
 
-        $I->assertEquals(
+        $I->assertSame(
             $expected,
             $request->getHeader('host')
         );

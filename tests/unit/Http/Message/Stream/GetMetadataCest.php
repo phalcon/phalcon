@@ -46,7 +46,7 @@ class GetMetadataCest
         ];
 
         $actual = $stream->getMetadata();
-        $I->assertEquals($expected, $actual);
+        $I->assertSame($expected, $actual);
     }
 
     /**
@@ -65,7 +65,7 @@ class GetMetadataCest
         $stream   = new Stream($handle);
 
         $actual = $stream->getMetadata($example[0]);
-        $I->assertEquals($example[1], $actual);
+        $I->assertSame($example[1], $actual);
     }
 
     /**

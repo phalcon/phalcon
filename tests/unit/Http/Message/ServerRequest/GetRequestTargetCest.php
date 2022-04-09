@@ -31,6 +31,6 @@ class GetRequestTargetCest
 
         $expected = '/';
         $actual   = $request->getRequestTarget();
-        $I->assertEquals($expected, $actual);
+        $I->assertSame($expected, $actual);
     }
 }

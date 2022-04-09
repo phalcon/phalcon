@@ -15,10 +15,10 @@ namespace Phalcon\Tests\Unit\Http\Message\ServerRequestFactory;
 
 use Codeception\Example;
 use Phalcon\Http\Message\Exception\InvalidArgumentException;
-use Phalcon\Http\Message\ServerRequestFactory;
+use Phalcon\Http\Message\Factories\ServerRequestFactory;
 use Phalcon\Http\Message\UploadedFile;
 use Phalcon\Tests\Fixtures\Http\Message\ServerRequestFactoryFixture;
-use Psr\Http\Message\ServerRequestInterface;
+use Phalcon\Http\Message\Interfaces\ServerRequestInterface;
 use UnitTester;
 
 /**
@@ -102,8 +102,7 @@ class LoadCest
     }
 
     /**
-     * Tests Phalcon\Http\Message\ServerRequestFactory :: load() - header host
-     * prefixed
+     * Tests Phalcon\Http\Message\ServerRequestFactory :: load() - header cookie
      *
      * @param UnitTester $I
      *
@@ -137,7 +136,7 @@ class LoadCest
         ];
 
         $actual  = $request->getCookieParams();
-        $I->assertEquals($expected, $actual);
+        $I->assertSame($expected, $actual);
     }
 
     /**
@@ -161,11 +160,11 @@ class LoadCest
         $request = $factory->load($server);
         $uri     = $request->getUri();
 
-        $I->assertEquals('dev.phalcon.ld', $uri->getHost());
-        $I->assertEquals(8080, $uri->getPort());
-        $I->assertEquals('/', $uri->getPath());
-        $I->assertEquals('', $uri->getQuery());
-        $I->assertEquals('', $uri->getFragment());
+        $I->assertSame('dev.phalcon.ld', $uri->getHost());
+        $I->assertSame(8080, $uri->getPort());
+        $I->assertSame('/', $uri->getPath());
+        $I->assertSame('', $uri->getQuery());
+        $I->assertSame('', $uri->getFragment());
     }
 
     /**
@@ -194,7 +193,7 @@ class LoadCest
 
         $expected = 'dev.phalcon.ld,test.phalcon.ld';
         $actual   = $uri->getHost();
-        $I->assertEquals($expected, $actual);
+        $I->assertSame($expected, $actual);
     }
 
     /**
@@ -221,7 +220,7 @@ class LoadCest
 
         $expected = '/action/reaction';
         $actual   = $uri->getPath();
-        $I->assertEquals($expected, $actual);
+        $I->assertSame($expected, $actual);
     }
 
     /**
@@ -247,7 +246,7 @@ class LoadCest
 
         $expected = '/action/reaction';
         $actual   = $uri->getPath();
-        $I->assertEquals($expected, $actual);
+        $I->assertSame($expected, $actual);
     }
 
     /**
@@ -275,7 +274,7 @@ class LoadCest
         ];
 
         $actual = $request->getHeaders();
-        $I->assertEquals($expected, $actual);
+        $I->assertSame($expected, $actual);
     }
 
     /**
@@ -305,11 +304,11 @@ class LoadCest
         $request = $factory->load($server);
         $uri     = $request->getUri();
 
-        $I->assertEquals($example[5], $uri->getHost());
-        $I->assertEquals($example[6], $uri->getPort());
-        $I->assertEquals($example[7], $uri->getPath());
-        $I->assertEquals($example[8], $uri->getQuery());
-        $I->assertEquals($example[9], $uri->getFragment());
+        $I->assertSame($example[5], $uri->getHost());
+        $I->assertSame($example[6], $uri->getPort());
+        $I->assertSame($example[7], $uri->getPath());
+        $I->assertSame($example[8], $uri->getQuery());
+        $I->assertSame($example[9], $uri->getFragment());
     }
 
     /**
@@ -343,7 +342,7 @@ class LoadCest
         $request = $factory->load($server);
 
         $actual = $request->getHeaders();
-        $I->assertEquals($expected, $actual);
+        $I->assertSame($expected, $actual);
     }
 
     /**
@@ -395,19 +394,19 @@ class LoadCest
         /** @var UploadedFile $element */
         $element = $actual[0];
         $I->assertInstanceOf(UploadedFile::class, $element);
-        $I->assertEquals('test1', $element->getClientFilename());
-        $I->assertEquals('text/plain', $element->getClientMediaType());
+        $I->assertSame('test1', $element->getClientFilename());
+        $I->assertSame('text/plain', $element->getClientMediaType());
 
         /** @var UploadedFile $element */
         $element = $actual[1];
         $I->assertInstanceOf(UploadedFile::class, $element);
-        $I->assertEquals($uploadObject, $element);
+        $I->assertSame($uploadObject, $element);
 
         /** @var UploadedFile $element */
         $element = $actual[2][0];
         $I->assertInstanceOf(UploadedFile::class, $element);
-        $I->assertEquals('test3', $element->getClientFilename());
-        $I->assertEquals('text/plain', $element->getClientMediaType());
+        $I->assertSame('test3', $element->getClientFilename());
+        $I->assertSame('text/plain', $element->getClientMediaType());
     }
 
     /**
@@ -464,7 +463,7 @@ class LoadCest
 
         $request = $factory->load($server);
         $uri     = $request->getUri();
-        $I->assertEquals('https', $uri->getScheme());
+        $I->assertSame('https', $uri->getScheme());
 
         $server = [
             'HTTPS' => 'off',
@@ -474,7 +473,7 @@ class LoadCest
         $uri      = $request->getUri();
         $expected = 'http';
         $actual   = $uri->getScheme();
-        $I->assertEquals($expected, $actual);
+        $I->assertSame($expected, $actual);
     }
 
     /**
@@ -533,11 +532,11 @@ class LoadCest
 
         $expected = 'PUT';
         $actual = $request->getMethod();
-        $I->assertEquals($expected, $actual);
+        $I->assertSame($expected, $actual);
 
         $expected = $params;
         $actual = $request->getServerParams();
-        $I->assertEquals($expected, $actual);
+        $I->assertSame($expected, $actual);
 
         $I->assertInstanceOf(ServerRequestInterface::class, $request);
     }
@@ -589,7 +588,7 @@ class LoadCest
 
         $expected = '1.1';
         $actual   = $request->getProtocolVersion();
-        $I->assertEquals($expected, $actual);
+        $I->assertSame($expected, $actual);
     }
 
     /**
@@ -614,7 +613,7 @@ class LoadCest
 
         $expected = '2.0';
         $actual   = $request->getProtocolVersion();
-        $I->assertEquals($expected, $actual);
+        $I->assertSame($expected, $actual);
     }
 
     /**

@@ -33,20 +33,20 @@ class WithAddedHeaderCest
         $request     = new ServerRequest('GET', null, [], 'php://input', $data);
         $newInstance = $request->withAddedHeader('Cache-Control', ['max-age=0']);
 
-        $I->assertNotEquals($request, $newInstance);
+        $I->assertNotSame($request, $newInstance);
 
         $expected = [
             'Accept' => ['text/html'],
         ];
         $actual   = $request->getHeaders();
-        $I->assertEquals($expected, $actual);
+        $I->assertSame($expected, $actual);
 
         $expected = [
             'Accept'        => ['text/html'],
             'Cache-Control' => ['max-age=0'],
         ];
         $actual   = $newInstance->getHeaders();
-        $I->assertEquals($expected, $actual);
+        $I->assertSame($expected, $actual);
     }
 
     /**
@@ -63,18 +63,18 @@ class WithAddedHeaderCest
         $request     = new ServerRequest('GET', null, [], 'php://input', $data);
         $newInstance = $request->withAddedHeader('Accept', ['text/json']);
 
-        $I->assertNotEquals($request, $newInstance);
+        $I->assertNotSame($request, $newInstance);
 
         $expected = [
             'Accept' => ['text/html'],
         ];
         $actual   = $request->getHeaders();
-        $I->assertEquals($expected, $actual);
+        $I->assertSame($expected, $actual);
 
         $expected = [
             'Accept' => ['text/html', 'text/json'],
         ];
         $actual   = $newInstance->getHeaders();
-        $I->assertEquals($expected, $actual);
+        $I->assertSame($expected, $actual);
     }
 }

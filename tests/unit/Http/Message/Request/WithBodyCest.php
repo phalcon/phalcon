@@ -41,7 +41,7 @@ class WithBodyCest
 
         $newInstance = $request->withBody($stream);
 
-        $I->assertNotEquals($request, $newInstance);
+        $I->assertNotSame($request, $newInstance);
 
         $I->openFile($fileName);
 

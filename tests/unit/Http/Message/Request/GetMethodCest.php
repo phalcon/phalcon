@@ -31,7 +31,7 @@ class GetMethodCest
 
         $request = new Request('POST');
 
-        $I->assertEquals(
+        $I->assertSame(
             'POST',
             $request->getMethod()
         );
@@ -49,7 +49,7 @@ class GetMethodCest
 
         $request = new Request();
 
-        $I->assertEquals(
+        $I->assertSame(
             'GET',
             $request->getMethod()
         );

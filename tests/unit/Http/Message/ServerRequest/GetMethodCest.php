@@ -32,7 +32,7 @@ class GetMethodCest
 
         $expected = 'POST';
         $actual   = $request->getMethod();
-        $I->assertEquals($expected, $actual);
+        $I->assertSame($expected, $actual);
     }
 
     /**
@@ -48,7 +48,7 @@ class GetMethodCest
 
         $expected = 'GET';
         $actual   = $request->getMethod();
-        $I->assertEquals($expected, $actual);
+        $I->assertSame($expected, $actual);
     }
 
     /**

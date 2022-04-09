@@ -15,7 +15,7 @@ namespace Phalcon\Tests\Unit\Http\Message\StreamFactory;
 
 use Phalcon\Http\Message\Exception\InvalidArgumentException;
 use Phalcon\Http\Message\Stream;
-use Phalcon\Http\Message\StreamFactory;
+use Phalcon\Http\Message\Factories\StreamFactory;
 use UnitTester;
 
 class CreateStreamFromResourceCest
@@ -41,7 +41,7 @@ class CreateStreamFromResourceCest
             $stream
         );
 
-        $I->assertEquals(
+        $I->assertSame(
             $expected,
             $stream->getContents()
         );

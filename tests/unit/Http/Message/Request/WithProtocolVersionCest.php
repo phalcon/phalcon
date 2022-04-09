@@ -33,14 +33,14 @@ class WithProtocolVersionCest
 
         $newInstance = $request->withProtocolVersion('2.0');
 
-        $I->assertNotEquals($request, $newInstance);
+        $I->assertNotSame($request, $newInstance);
 
-        $I->assertEquals(
+        $I->assertSame(
             '1.1',
             $request->getProtocolVersion()
         );
 
-        $I->assertEquals(
+        $I->assertSame(
             '2.0',
             $newInstance->getProtocolVersion()
         );

@@ -32,7 +32,7 @@ class GetQueryParamsCest
 
         $expected = $params;
         $actual   = $request->getQueryParams();
-        $I->assertEquals($expected, $actual);
+        $I->assertSame($expected, $actual);
     }
 
     /**

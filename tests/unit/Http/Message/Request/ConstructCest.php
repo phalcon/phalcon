@@ -15,7 +15,7 @@ namespace Phalcon\Tests\Unit\Http\Message\Request;
 
 use Phalcon\Http\Message\Exception\InvalidArgumentException;
 use Phalcon\Http\Message\Request;
-use Psr\Http\Message\RequestInterface;
+use Phalcon\Http\Message\Interfaces\RequestInterface;
 use UnitTester;
 
 class ConstructCest
@@ -32,10 +32,7 @@ class ConstructCest
 
         $request = new Request();
 
-        $I->assertInstanceOf(
-            RequestInterface::class,
-            $request
-        );
+        $I->assertInstanceOf(RequestInterface::class, $request);
     }
 
     /**
@@ -90,7 +87,8 @@ class ConstructCest
 
         $I->expectThrowable(
             new InvalidArgumentException(
-                'Headers needs to be either an array or instance of Phalcon\Support\Collection'
+                "Headers needs to be either an array or an instance "
+                . "implementing Phalcon\\Support\\CollectionInterface"
             ),
             function () {
                 $request = new Request(
@@ -130,6 +128,6 @@ class ConstructCest
             'Cache-Control' => ['max-age=0'],
         ];
         $actual   = $request->getHeaders();
-        $I->assertEquals($expected, $actual);
+        $I->assertSame($expected, $actual);
     }
 }

@@ -30,8 +30,8 @@ class GetHeadersCest
         $I->wantToTest('Http\Message\Request - getHeaders()');
 
         $data = [
-            'Cache-Control' => ['max-age=0'],
             'Accept'        => ['text/html'],
+            'Cache-Control' => ['max-age=0'],
         ];
 
         $request = new Request(
@@ -46,7 +46,7 @@ class GetHeadersCest
             'Cache-Control' => ['max-age=0'],
         ];
 
-        $I->assertEquals(
+        $I->assertSame(
             $expected,
             $request->getHeaders()
         );
@@ -63,8 +63,8 @@ class GetHeadersCest
         $I->wantToTest('Http\Message\Request - getHeaders()');
 
         $data = [
-            'Cache-Control' => ['max-age=0'],
             'Accept'        => ['text/html'],
+            'Cache-Control' => ['max-age=0'],
         ];
 
         $headers = new Collection($data);
@@ -81,7 +81,7 @@ class GetHeadersCest
             'Cache-Control' => ['max-age=0'],
         ];
 
-        $I->assertEquals(
+        $I->assertSame(
             $expected,
             $request->getHeaders()
         );
@@ -99,7 +99,7 @@ class GetHeadersCest
 
         $request = new Request();
 
-        $I->assertEquals(
+        $I->assertSame(
             [],
             $request->getHeaders()
         );

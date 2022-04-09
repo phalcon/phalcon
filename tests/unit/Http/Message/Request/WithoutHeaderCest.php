@@ -37,14 +37,14 @@ class WithoutHeaderCest
 
         $newInstance = $request->withoutHeader('Accept');
 
-        $I->assertNotEquals($request, $newInstance);
+        $I->assertNotSame($request, $newInstance);
 
         $expected = [
             'Accept'        => ['text/html'],
             'Cache-Control' => ['max-age=0'],
         ];
 
-        $I->assertEquals(
+        $I->assertSame(
             $expected,
             $request->getHeaders()
         );
@@ -53,7 +53,7 @@ class WithoutHeaderCest
             'Cache-Control' => ['max-age=0'],
         ];
 
-        $I->assertEquals(
+        $I->assertSame(
             $expected,
             $newInstance->getHeaders()
         );

@@ -14,7 +14,7 @@ declare(strict_types=1);
 namespace Phalcon\Tests\Unit\Http\Message\StreamFactory;
 
 use Phalcon\Http\Message\Stream;
-use Phalcon\Http\Message\StreamFactory;
+use Phalcon\Http\Message\Factories\StreamFactory;
 use UnitTester;
 
 class CreateStreamFromFileCest
@@ -39,7 +39,7 @@ class CreateStreamFromFileCest
             $stream
         );
 
-        $I->assertEquals(
+        $I->assertSame(
             $expected,
             $stream->getContents()
         );

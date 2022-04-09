@@ -34,6 +34,6 @@ class GetUriCest
 
         $expected = $uri;
         $actual   = $request->getUri();
-        $I->assertEquals($expected, $actual);
+        $I->assertSame($expected, $actual);
     }
 }

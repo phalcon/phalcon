@@ -30,14 +30,14 @@ class WithMethodCest
         $request     = new ServerRequest();
         $newInstance = $request->withMethod('POST');
 
-        $I->assertNotEquals($request, $newInstance);
+        $I->assertNotSame($request, $newInstance);
 
         $expected = 'GET';
         $actual   = $request->getMethod();
-        $I->assertEquals($expected, $actual);
+        $I->assertSame($expected, $actual);
 
         $expected = 'POST';
         $actual   = $newInstance->getMethod();
-        $I->assertEquals($expected, $actual);
+        $I->assertSame($expected, $actual);
     }
 }

@@ -36,9 +36,9 @@ class WithQueryParamsCest
             ]
         );
 
-        $I->assertNotEquals($request, $newInstance);
+        $I->assertNotSame($request, $newInstance);
 
-        $I->assertEquals(
+        $I->assertSame(
             [
                 'one' => 'two',
             ],

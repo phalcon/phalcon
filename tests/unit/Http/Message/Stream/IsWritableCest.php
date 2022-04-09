@@ -41,7 +41,7 @@ class IsWritableCest
 
         $expected = $example['writable'];
         $actual   = $stream->isWritable();
-        $I->assertEquals($expected, $actual);
+        $I->assertSame($expected, $actual);
     }
 
     /**
@@ -65,7 +65,7 @@ class IsWritableCest
 
         $expected = $example[1];
         $actual   = $stream->isWritable();
-        $I->assertEquals($expected, $actual);
+        $I->assertSame($expected, $actual);
     }
 
     /**

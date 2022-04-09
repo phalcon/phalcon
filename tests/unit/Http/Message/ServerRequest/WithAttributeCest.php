@@ -30,7 +30,7 @@ class WithAttributeCest
         $request     = new ServerRequest();
         $newInstance = $request->withAttribute('one', 'two');
 
-        $I->assertNotEquals($request, $newInstance);
-        $I->assertEquals('two', $newInstance->getAttribute('one'));
+        $I->assertNotSame($request, $newInstance);
+        $I->assertSame('two', $newInstance->getAttribute('one'));
     }
 }

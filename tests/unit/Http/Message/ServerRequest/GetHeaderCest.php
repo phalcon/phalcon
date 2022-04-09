@@ -35,10 +35,10 @@ class GetHeaderCest
 
         $expected = ['text/html'];
         $actual   = $request->getHeader('accept');
-        $I->assertEquals($expected, $actual);
+        $I->assertSame($expected, $actual);
 
         $actual = $request->getHeader('aCCepT');
-        $I->assertEquals($expected, $actual);
+        $I->assertSame($expected, $actual);
     }
 
     /**
@@ -54,6 +54,6 @@ class GetHeaderCest
 
         $expected = [];
         $actual   = $request->getHeader('empty');
-        $I->assertEquals($expected, $actual);
+        $I->assertSame($expected, $actual);
     }
 }

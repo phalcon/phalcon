@@ -112,11 +112,11 @@ interface RequestInterface extends MessageInterface
      * @link http://tools.ietf.org/html/rfc7230#section-5.3 (for the various
      *     request-target forms allowed in request messages)
      *
-     * @param mixed $requestTarget
+     * @param string|null $requestTarget
      *
-     * @return static
+     * @return RequestInterface
      */
-    public function withRequestTarget($requestTarget): RequestInterface;
+    public function withRequestTarget(?string $requestTarget): RequestInterface;
 
     /**
      * Returns an instance with the provided URI.

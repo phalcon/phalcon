@@ -36,6 +36,6 @@ class GetClientFilenameCest
 
         $expected = 'phalcon.txt';
         $actual   = $file->getClientFilename();
-        $I->assertEquals($expected, $actual);
+        $I->assertSame($expected, $actual);
     }
 }

@@ -38,7 +38,7 @@ class GetAttributesCest
             'three' => 'four',
         ];
 
-        $I->assertEquals(
+        $I->assertSame(
             $expected,
             $request->getAttributes()
         );

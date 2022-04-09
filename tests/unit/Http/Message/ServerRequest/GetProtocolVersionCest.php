@@ -42,7 +42,7 @@ class GetProtocolVersionCest
 //
 //        $expected = '2.0';
 //        $actual   = $request->getProtocolVersion();
-//        $I->assertEquals($expected, $actual);
+//        $I->assertSame($expected, $actual);
 //    }
 
     /**
@@ -58,7 +58,7 @@ class GetProtocolVersionCest
 
         $expected = '1.1';
         $actual   = $request->getProtocolVersion();
-        $I->assertEquals($expected, $actual);
+        $I->assertSame($expected, $actual);
     }
 //
 //    /**

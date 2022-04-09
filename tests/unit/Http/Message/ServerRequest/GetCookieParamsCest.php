@@ -32,7 +32,7 @@ class GetCookieParamsCest
 
         $expected = $cookies;
         $actual   = $request->getCookieParams();
-        $I->assertEquals($expected, $actual);
+        $I->assertSame($expected, $actual);
     }
 
     /**

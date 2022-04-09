@@ -37,11 +37,11 @@ class WithUploadedFilesCest
         ];
         $request     = new ServerRequest();
         $newInstance = $request->withUploadedFiles($files);
-        $I->assertNotEquals($request, $newInstance);
+        $I->assertNotSame($request, $newInstance);
 
         $expected = $files;
         $actual   = $newInstance->getUploadedFiles();
-        $I->assertEquals($expected, $actual);
+        $I->assertSame($expected, $actual);
     }
 
     /**

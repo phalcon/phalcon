@@ -41,7 +41,7 @@ class IsReadableCest
 
         $expected = $example['readable'];
         $actual   = $stream->isReadable();
-        $I->assertEquals($expected, $actual);
+        $I->assertSame($expected, $actual);
     }
 
     /**
@@ -61,7 +61,7 @@ class IsReadableCest
 
         $stream = new Stream($fileName, $example[0]);
 
-        $I->assertEquals(
+        $I->assertSame(
             $example[1],
             $stream->isReadable()
         );

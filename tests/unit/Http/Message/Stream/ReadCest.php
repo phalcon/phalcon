@@ -39,7 +39,7 @@ class ReadCest
 
         $expected = 'The MIT License (MIT)' . PHP_EOL . PHP_EOL . 'Copyright (c) 2015-present, Phalcon PHP';
         $actual   = $stream->read(62);
-        $I->assertEquals($expected, $actual);
+        $I->assertSame($expected, $actual);
     }
 
     /**

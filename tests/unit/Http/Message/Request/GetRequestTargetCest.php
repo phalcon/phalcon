@@ -32,7 +32,7 @@ class GetRequestTargetCest
         $uri     = new Uri('https://phalcon:secret@dev.phalcon.ld:8080/action?param=value#frag');
         $request = new Request('GET', $uri);
 
-        $I->assertEquals(
+        $I->assertSame(
             '/action?param=value',
             $request->getRequestTarget()
         );

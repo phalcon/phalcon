@@ -31,15 +31,15 @@ class WithProtocolVersionCest
         $response    = new Response();
         $newInstance = $response->withProtocolVersion('2.0');
 
-        $I->assertNotEquals($response, $newInstance);
+        $I->assertNotSame($response, $newInstance);
 
         $expected = '1.1';
         $actual   = $response->getProtocolVersion();
-        $I->assertEquals($expected, $actual);
+        $I->assertSame($expected, $actual);
 
         $expected = '2.0';
         $actual   = $newInstance->getProtocolVersion();
-        $I->assertEquals($expected, $actual);
+        $I->assertSame($expected, $actual);
     }
 
     /**

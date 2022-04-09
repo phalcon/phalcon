@@ -143,7 +143,7 @@ interface MessageInterface
      * @param string          $name  Case-insensitive header field name to add.
      * @param string|string[] $value Header value(s).
      *
-     * @return static
+     * @return MessageInterface
      * @throws InvalidArgumentException for invalid header names or values.
      */
     public function withAddedHeader(string $name, $value): MessageInterface;
@@ -159,7 +159,7 @@ interface MessageInterface
      *
      * @param StreamInterface $body Body.
      *
-     * @return static
+     * @return MessageInterface
      * @throws InvalidArgumentException When the body is not valid.
      */
     public function withBody(StreamInterface $body): MessageInterface;
@@ -177,7 +177,7 @@ interface MessageInterface
      * @param string          $name  Case-insensitive header field name.
      * @param string|string[] $value Header value(s).
      *
-     * @return static
+     * @return MessageInterface
      * @throws InvalidArgumentException for invalid header names or values.
      */
     public function withHeader(string $name, $value): MessageInterface;
@@ -194,7 +194,7 @@ interface MessageInterface
      *
      * @param string $version HTTP protocol version
      *
-     * @return static
+     * @return MessageInterface
      */
     public function withProtocolVersion(string $version): MessageInterface;
 

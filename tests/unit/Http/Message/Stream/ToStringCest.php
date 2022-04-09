@@ -32,12 +32,12 @@ class ToStringCest
         $expected = file_get_contents($fileName);
         $stream   = new Stream($fileName, 'rb');
 
-        $I->assertEquals(
+        $I->assertSame(
             $expected,
             (string) $stream
         );
 
-        $I->assertEquals(
+        $I->assertSame(
             $expected,
             $stream->__toString()
         );

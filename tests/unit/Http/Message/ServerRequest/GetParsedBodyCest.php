@@ -41,7 +41,7 @@ class GetParsedBodyCest
 
         $expected = 'something';
         $actual   = $request->getParsedBody();
-        $I->assertEquals($expected, $actual);
+        $I->assertSame($expected, $actual);
     }
 
     /**
@@ -55,8 +55,7 @@ class GetParsedBodyCest
         $I->wantToTest('Http\Message\ServerRequest - getParsedBody() - empty');
         $request = new ServerRequest();
 
-        $expected = '';
         $actual   = $request->getParsedBody();
-        $I->assertEquals($expected, $actual);
+        $I->assertNull($actual);
     }
 }

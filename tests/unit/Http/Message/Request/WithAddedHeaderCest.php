@@ -42,13 +42,13 @@ class WithAddedHeaderCest
             ]
         );
 
-        $I->assertNotEquals($request, $newInstance);
+        $I->assertNotSame($request, $newInstance);
 
         $expected = [
             'Accept' => ['text/html'],
         ];
 
-        $I->assertEquals(
+        $I->assertSame(
             $expected,
             $request->getHeaders()
         );
@@ -58,7 +58,7 @@ class WithAddedHeaderCest
             'Cache-Control' => ['max-age=0'],
         ];
 
-        $I->assertEquals(
+        $I->assertSame(
             $expected,
             $newInstance->getHeaders()
         );
@@ -85,14 +85,14 @@ class WithAddedHeaderCest
             'max-age=0'
         );
 
-        $I->assertNotEquals($request, $newInstance);
+        $I->assertNotSame($request, $newInstance);
 
         $expected = [
             'Accept'        => ['text/html'],
             'Cache-Control' => ['max-age=0'],
         ];
 
-        $I->assertEquals(
+        $I->assertSame(
             $expected,
             $newInstance->getHeaders()
         );
@@ -145,7 +145,7 @@ class WithAddedHeaderCest
             ]
         );
 
-        $I->assertNotEquals($request, $newInstance);
+        $I->assertNotSame($request, $newInstance);
 
         $expected = [
             'Accept' => [
@@ -153,7 +153,7 @@ class WithAddedHeaderCest
             ],
         ];
 
-        $I->assertEquals(
+        $I->assertSame(
             $expected,
             $request->getHeaders()
         );
@@ -165,7 +165,7 @@ class WithAddedHeaderCest
             ],
         ];
 
-        $I->assertEquals(
+        $I->assertSame(
             $expected,
             $newInstance->getHeaders()
         );

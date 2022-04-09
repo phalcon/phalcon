@@ -71,7 +71,7 @@ class GetContentsCest
             . 'SOFTWARE OR THE USE OR OTHER DEALINGS IN THE SOFTWARE.'
             . PHP_EOL;
         $actual = $stream->getContents();
-        $I->assertEquals($expected, $actual);
+        $I->assertSame($expected, $actual);
     }
 
     /**

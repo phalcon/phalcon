@@ -44,7 +44,7 @@ class GetStreamCest
 
         $expected = $stream;
         $actual   = $file->getStream();
-        $I->assertEquals($expected, $actual);
+        $I->assertSame($expected, $actual);
     }
 
     /**

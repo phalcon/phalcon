@@ -13,8 +13,8 @@ declare(strict_types=1);
 
 namespace Phalcon\Tests\Unit\Http\Message\StreamFactory;
 
-use Phalcon\Http\Message\StreamFactory;
-use Psr\Http\Message\StreamFactoryInterface;
+use Phalcon\Http\Message\Factories\StreamFactory;
+use Phalcon\Http\Message\Interfaces\StreamFactoryInterface;
 use UnitTester;
 
 class ConstructCest

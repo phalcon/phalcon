@@ -35,7 +35,7 @@ class TellCest
         $expected = 274;
         fseek($handle, $expected);
         $actual = $stream->tell();
-        $I->assertEquals($expected, $actual);
+        $I->assertSame($expected, $actual);
     }
 
     /**

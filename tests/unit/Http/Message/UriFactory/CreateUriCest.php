@@ -13,8 +13,8 @@ declare(strict_types=1);
 
 namespace Phalcon\Tests\Unit\Http\Message\UriFactory;
 
-use Phalcon\Http\Message\UriFactory;
-use Psr\Http\Message\UriInterface;
+use Phalcon\Http\Message\Factories\UriFactory;
+use Phalcon\Http\Message\Interfaces\UriInterface;
 use UnitTester;
 
 class CreateUriCest

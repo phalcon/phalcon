@@ -13,6 +13,7 @@ declare(strict_types=1);
 
 namespace Phalcon\Tests\Unit\Http\Message\ServerRequest;
 
+use Phalcon\Http\Message\Exception\InvalidArgumentException;
 use Phalcon\Http\Message\ServerRequest;
 use UnitTester;
 
@@ -28,16 +29,35 @@ class WithParsedBodyCest
     {
         $I->wantToTest('Http\Message\ServerRequest - withParsedBody()');
         $request     = new ServerRequest();
-        $newInstance = $request->withParsedBody('something');
+        $newInstance = $request->withParsedBody(['key' => 'value']);
 
-        $I->assertNotEquals($request, $newInstance);
+        $I->assertNotSame($request, $newInstance);
 
-        $expected = null;
         $actual   = $request->getParsedBody();
-        $I->assertEquals($expected, $actual);
+        $I->assertNull($actual);
 
-        $expected = 'something';
+        $expected = ['key' => 'value'];
         $actual   = $newInstance->getParsedBody();
-        $I->assertEquals($expected, $actual);
+        $I->assertSame($expected, $actual);
+    }
+
+    /**
+     * Tests Phalcon\Http\Message\ServerRequest :: withParsedBody() - exception
+     *
+     * @author Phalcon Team <team@phalcon.io>
+     * @since  2019-02-10
+     */
+    public function httpMessageServerRequestWithParsedBodyException(UnitTester $I)
+    {
+        $I->wantToTest('Http\Message\ServerRequest - withParsedBody() - exception');
+        $I->expectThrowable(
+            new InvalidArgumentException(
+                'The method expects null, an array or an object'
+            ),
+            function () {
+                $request     = new ServerRequest();
+                $newInstance = $request->withParsedBody('something');
+            }
+        );
     }
 }

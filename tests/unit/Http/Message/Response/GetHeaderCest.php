@@ -37,13 +37,13 @@ class GetHeaderCest
 
         $expected = ['text/html'];
 
-        $I->assertEquals(
+        $I->assertSame(
             $expected,
             $response->getHeader('accept')
         );
 
 
-        $I->assertEquals(
+        $I->assertSame(
             $expected,
             $response->getHeader('aCCepT')
         );
@@ -61,7 +61,7 @@ class GetHeaderCest
 
         $response = new Response();
 
-        $I->assertEquals(
+        $I->assertSame(
             [],
             $response->getHeader('empty')
         );

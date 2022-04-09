@@ -31,6 +31,6 @@ class GetSizeCest
 
         $expected = 100;
         $actual   = $file->getSize();
-        $I->assertEquals($expected, $actual);
+        $I->assertSame($expected, $actual);
     }
 }
