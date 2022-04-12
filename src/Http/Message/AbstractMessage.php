@@ -120,7 +120,7 @@ abstract class AbstractMessage extends AbstractCommon implements MessageInterfac
      */
     public function getHeaderLine(string $name): string
     {
-        return implode(',', $this->getHeader($name));
+        return implode(",", $this->getHeader($name));
     }
 
     /**

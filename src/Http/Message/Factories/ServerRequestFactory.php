@@ -200,7 +200,6 @@ class ServerRequestFactory implements ServerRequestFactoryInterface, RequestMeth
             $host = substr($host, 0, -1 * (strlen($matches[1]) + 1));
             $port = (int) $matches[1];
         }
-        var_dump("4");
 
         return [$host, $port];
     }

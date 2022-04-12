@@ -24,6 +24,7 @@ use Phalcon\Http\Message\Exception\InvalidArgumentException;
 use Phalcon\Http\Message\Interfaces\UriInterface;
 use Phalcon\Traits\Helper\Str\StartsWithTrait;
 
+use function array_keys;
 use function explode;
 use function implode;
 use function ltrim;
@@ -58,14 +59,14 @@ final class Uri extends AbstractCommon implements UriInterface
      *
      * @const string
      */
-    public const CHAR_SUB_DELIMS = "!\$&\'\(\)\*\+,;=";
+    private const CHAR_SUB_DELIMS = "!\$&\'\(\)\*\+,;=";
 
     /**
      * Unreserved characters used in user info, paths, query strings, and fragments.
      *
      * @const string
      */
-    public const CHAR_UNRESERVED = "a-zA-Z0-9_\-\.~\pL";
+    private const CHAR_UNRESERVED = "a-zA-Z0-9_\-\.~\pL";
 
     /**
      * Returns the fragment of the URL
@@ -200,7 +201,7 @@ final class Uri extends AbstractCommon implements UriInterface
             ) {
                 // If the path is rootless and an authority is present,
                 // the path MUST be prefixed by "/"
-                $path = '/' . $path;
+                $path = "/" . $path;
             } elseif (
                 "/" === substr($path, 1, 1) &&
                 "" === $authority
@@ -208,7 +209,7 @@ final class Uri extends AbstractCommon implements UriInterface
                 // If the path is starting with more than one "/" and no
                 // authority is present, the starting slashes MUST be reduced
                 // to one.
-                $path = '/' . ltrim($path, '/');
+                $path = "/" . ltrim($path, "/");
             }
         }
 
@@ -529,7 +530,7 @@ final class Uri extends AbstractCommon implements UriInterface
     ): UriInterface {
         $userInfo = $this->filterUserInfo($user);
         if (null !== $password) {
-            $userInfo .= ':' . $this->filterUserInfo($password);
+            $userInfo .= ":" . $this->filterUserInfo($password);
         }
 
         return $this->cloneInstance($userInfo, "userInfo");
@@ -576,8 +577,8 @@ final class Uri extends AbstractCommon implements UriInterface
      */
     private function filterFragment(string $fragment): string
     {
-        if ("" !== $fragment && 0 === strpos($fragment, '#')) {
-            $fragment = '%23' . substr($fragment, 1);
+        if ("" !== $fragment && 0 === strpos($fragment, "#")) {
+            $fragment = "%23" . substr($fragment, 1);
         }
 
         return $this->filterQueryOrFragment($fragment);
@@ -612,7 +613,9 @@ final class Uri extends AbstractCommon implements UriInterface
     private function filterPath(string $path): string
     {
         $path = $this->filterString(
-            '/(?:[^' . self::CHAR_UNRESERVED . ')(:@&=\+\$,\/;%]+|%(?![A-Fa-f0-9]{2}))/u',
+            "/(?:[^"
+            . self::CHAR_UNRESERVED
+            . ")(:@&=\+\$,\/;%]+|%(?![A-Fa-f0-9]{2}))/u",
             $path
         );
 
@@ -713,17 +716,20 @@ final class Uri extends AbstractCommon implements UriInterface
     private function filterScheme(string $scheme): string
     {
         $filtered = preg_replace("#:(//)?$#", "", mb_strtolower($scheme));
-        $schemes  = ["http", "https"];
+        $schemes  = [
+            "http" => 1,
+            "https" => 1
+        ];
 
         if ("" === $filtered) {
             return "";
         }
 
-        if (true !== in_array($filtered, $schemes)) {
+        if (true !== isset($schemes[$filtered])) {
             throw new InvalidArgumentException(
                 "Unsupported scheme [" . $filtered . "]. " .
                 "Scheme must be one of [" .
-                implode(", ", $schemes) . "]"
+                implode(", ", array_keys($schemes)) . "]"
             );
         }
 
@@ -755,7 +761,10 @@ final class Uri extends AbstractCommon implements UriInterface
     private function filterQueryOrFragment(string $value): string
     {
         return $this->filterString(
-            '/(?:[^' . self::CHAR_UNRESERVED . self::CHAR_SUB_DELIMS . '%:@\/\?]+|%(?![A-Fa-f0-9]{2}))/u',
+            "/(?:[^"
+            . self::CHAR_UNRESERVED
+            . self::CHAR_SUB_DELIMS
+            . "%:@\/\?]+|%(?![A-Fa-f0-9]{2}))/u",
             $this->filterUtf8($value)
         );
     }
@@ -772,6 +781,11 @@ final class Uri extends AbstractCommon implements UriInterface
     {
         $matches = [];
         $value   = $this->filterUtf8($value);
+        /**
+         * Because preg_match_callback does not work in Zephir (for now),
+         * replace the spaces with %20
+         */
+        $value   = str_replace(" ", "%20", $value);
         $result  = preg_match($pattern, $value, $matches);
 
         if (false === $result) {
@@ -797,7 +811,10 @@ final class Uri extends AbstractCommon implements UriInterface
         // Note the addition of `%` to initial charset; this allows `|` portion
         // to match and thus prevent double-encoding.
         return $this->filterString(
-            '/(?:[^%' . self::CHAR_UNRESERVED . self::CHAR_SUB_DELIMS . ']+|%(?![A-Fa-f0-9]{2}))/u',
+            "/(?:[^%"
+            . self::CHAR_UNRESERVED
+            . self::CHAR_SUB_DELIMS
+            . "]+|%(?![A-Fa-f0-9]{2}))/u",
             $value
         );
     }
@@ -812,7 +829,7 @@ final class Uri extends AbstractCommon implements UriInterface
     private function filterUtf8(string $value): string
     {
         // check if given string contains only valid UTF-8 characters
-        if (preg_match('//u', $value)) {
+        if (preg_match("//u", $value)) {
             return $value;
         }
 
@@ -823,7 +840,7 @@ final class Uri extends AbstractCommon implements UriInterface
             }
         }
 
-        return implode('', $characters);
+        return implode("", $characters);
     }
 
     /**

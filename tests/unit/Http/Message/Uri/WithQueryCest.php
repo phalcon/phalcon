@@ -104,7 +104,7 @@ class WithQueryCest
             [
                 'label'    => 'complex',
                 'source'   => 'p^aram&all[]=va lu`&param<>=`test',
-                'expected' => 'p%5Earam&all%5B%5D=va%20lu`&param%3C%3E=%60test',
+                'expected' => 'p%5Earam&all%5B%5D=va%20lu%60&param%3C%3E=%60test',
             ],
         ];
     }
