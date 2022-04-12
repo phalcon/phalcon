@@ -34,7 +34,7 @@ use function strtoupper;
  * @property null|string  $requestTarget
  * @property UriInterface $uri
  */
-abstract class AbstractRequest extends AbstractMessage implements RequestMethodInterface
+abstract class AbstractRequest extends AbstractMessage implements RequestInterface, RequestMethodInterface
 {
     /**
      * Retrieves the HTTP method of the request.
@@ -145,6 +145,10 @@ abstract class AbstractRequest extends AbstractMessage implements RequestMethodI
      */
     public function withRequestTarget(?string $requestTarget): RequestInterface
     {
+        if (null === $requestTarget) {
+            return $this;
+        }
+
         if (preg_match("/\s/", $requestTarget)) {
             throw new InvalidArgumentException(
                 "Invalid request target: cannot contain whitespace"
