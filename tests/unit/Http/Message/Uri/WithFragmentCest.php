@@ -16,6 +16,8 @@ namespace Phalcon\Tests\Unit\Http\Message\Uri;
 use Phalcon\Http\Message\Uri;
 use UnitTester;
 
+use function sprintf;
+
 class WithFragmentCest
 {
     /**
@@ -37,27 +39,23 @@ class WithFragmentCest
         $newInstance = $uri->withFragment('newspaper');
         $I->assertNotSame($uri, $newInstance);
 
-        $I->assertSame(
-            'newspaper',
-            $newInstance->getFragment()
-        );
+        $expected = 'newspaper';
+        $actual   = $newInstance->getFragment();
+        $I->assertSame($expected, $actual);
 
-        $I->assertSame(
-            sprintf($query, 'newspaper'),
-            (string) $newInstance
-        );
+        $expected = sprintf($query, 'newspaper');
+        $actual   = (string) $newInstance;
+        $I->assertSame($expected, $actual);
 
         $newInstance = $uri->withFragment('#newspaper');
         $I->assertNotSame($uri, $newInstance);
 
-        $I->assertSame(
-            '%23newspaper',
-            $newInstance->getFragment()
-        );
+        $expected = '%23newspaper';
+        $actual   = $newInstance->getFragment();
+        $I->assertSame($expected, $actual);
 
-        $I->assertSame(
-            sprintf($query, '%23newspaper'),
-            (string) $newInstance
-        );
+        $expected = sprintf($query, '%23newspaper');
+        $actual   = (string) $newInstance;
+        $I->assertSame($expected, $actual);
     }
 }

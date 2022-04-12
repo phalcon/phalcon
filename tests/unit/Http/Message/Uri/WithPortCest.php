@@ -17,6 +17,7 @@ use Codeception\Example;
 use InvalidArgumentException;
 use Phalcon\Http\Message\Uri;
 use UnitTester;
+
 use function sprintf;
 
 class WithPortCest
@@ -39,7 +40,7 @@ class WithPortCest
         $expected = $example['expected'];
         $toString = $example['toString'];
 
-        $uri   = new Uri($scheme . sprintf($query, ':4300'));
+        $uri = new Uri($scheme . sprintf($query, ':4300'));
 
 
         /**

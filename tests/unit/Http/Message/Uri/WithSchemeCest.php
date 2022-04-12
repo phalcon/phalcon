@@ -16,6 +16,7 @@ namespace Phalcon\Tests\Unit\Http\Message\Uri;
 use InvalidArgumentException;
 use Phalcon\Http\Message\Uri;
 use UnitTester;
+
 use function sprintf;
 
 class WithSchemeCest

@@ -13,8 +13,8 @@ declare(strict_types=1);
 
 namespace Phalcon\Tests\Unit\Http\Message\Request;
 
-use Phalcon\Support\Collection;
 use Phalcon\Http\Message\Request;
+use Phalcon\Support\Collection;
 use UnitTester;
 
 class GetHeadersCest

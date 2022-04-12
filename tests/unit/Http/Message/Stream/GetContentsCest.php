@@ -70,7 +70,7 @@ class GetContentsCest
             . 'OTHERWISE, ARISING FROM, OUT OF OR IN CONNECTION WITH THE '
             . 'SOFTWARE OR THE USE OR OTHER DEALINGS IN THE SOFTWARE.'
             . PHP_EOL;
-        $actual = $stream->getContents();
+        $actual   = $stream->getContents();
         $I->assertSame($expected, $actual);
     }
 

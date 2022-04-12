@@ -16,6 +16,7 @@ namespace Phalcon\Tests\Unit\Http\Message\Uri;
 use Codeception\Example;
 use Phalcon\Http\Message\Uri;
 use UnitTester;
+
 use function sprintf;
 
 class WithUserInfoCest
@@ -99,11 +100,6 @@ class WithUserInfoCest
                 'user'     => "\x21\x92",
                 'pass'     => '!?',
                 'expected' => '!%92:!%3F',
-
-                -'!%92:!%3F'
-                + '%21�:!%3F',
-
-
             ],
             [
                 'label'    => 'user invalid encoding',

@@ -13,8 +13,8 @@ declare(strict_types=1);
 
 namespace Phalcon\Tests\Unit\Http\Message\ResponseFactory;
 
-use Phalcon\Http\Message\Response;
 use Phalcon\Http\Message\Interfaces\ResponseInterface;
+use Phalcon\Http\Message\Response;
 use UnitTester;
 
 class ConstructCest

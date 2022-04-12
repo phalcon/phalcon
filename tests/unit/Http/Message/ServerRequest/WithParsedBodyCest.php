@@ -33,7 +33,7 @@ class WithParsedBodyCest
 
         $I->assertNotSame($request, $newInstance);
 
-        $actual   = $request->getParsedBody();
+        $actual = $request->getParsedBody();
         $I->assertNull($actual);
 
         $expected = ['key' => 'value'];
