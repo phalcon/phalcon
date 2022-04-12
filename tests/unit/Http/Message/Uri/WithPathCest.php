@@ -112,7 +112,7 @@ class WithPathCest
             [
                 'label'    => 'garbled',
                 'url'      => $url . '/action',
-                'path'     => '/l^ogin/si%20gn',
+                'path'     => '/l^ogin/si gn',
                 'expected' => '/l%5Eogin/si%20gn',
                 'toString' => $url . '/l%5Eogin/si%20gn',
             ],
