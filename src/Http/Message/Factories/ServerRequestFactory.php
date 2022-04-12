@@ -168,7 +168,7 @@ class ServerRequestFactory implements ServerRequestFactoryInterface, RequestMeth
     ): array {
         $defaults = ["", null];
 
-        if (true === $this->getHeader($headers, "host", false)) {
+        if (false !== $this->getHeader($headers, "host", false)) {
             $host = $this->getHeader($headers, "host");
 
             return $this->calculateUriHostFromHeader($host);
@@ -200,6 +200,7 @@ class ServerRequestFactory implements ServerRequestFactoryInterface, RequestMeth
             $host = substr($host, 0, -1 * (strlen($matches[1]) + 1));
             $port = (int) $matches[1];
         }
+        var_dump("4");
 
         return [$host, $port];
     }
@@ -464,7 +465,7 @@ class ServerRequestFactory implements ServerRequestFactoryInterface, RequestMeth
         /**
          * 5 characters to distinguish between http and https
          */
-        if ("http/" === substr($localProtocol, 0, 4)) {
+        if ("http/" !== substr($localProtocol, 0, 5)) {
             throw new InvalidArgumentException(
                 "Incorrect protocol value " . $protocol
             );
