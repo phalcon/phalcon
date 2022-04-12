@@ -18,6 +18,7 @@ use InvalidArgumentException;
 use Phalcon\Http\Message\Uri;
 use UnitTester;
 
+
 class WithPathCest
 {
     /**
@@ -30,32 +31,24 @@ class WithPathCest
      */
     public function httpMessageUriWithPath(UnitTester $I, Example $example)
     {
-        $I->wantToTest('Http\Message\Uri - withPath() - ' . $example[0]);
+        $I->wantToTest('Http\Message\Uri - withPath() - ' . $example['label']);
 
-        $query = 'https://dev.phalcon.ld%s';
+        $source      = $example['url'];
+        $path        = $example['path'];
+        $expected    = $example['expected'];
+        $toString    = $example['toString'];
+        $uri          = new Uri($source);
 
-        $uri = new Uri(
-            sprintf($query, '/action')
-        );
+        $newInstance = $uri->withPath($path);
 
-        $newInstance = $uri->withPath(
-            $example[1]
-        );
+        $I->assertNotSame($uri, $newInstance);
 
-        $I->assertNotSame(
-            $uri,
-            $newInstance
-        );
+        $actual = $newInstance->getPath();
+        $I->assertSame($expected, $actual);
 
-        $I->assertSame(
-            $example[2],
-            $newInstance->getPath()
-        );
-
-        $I->assertSame(
-            sprintf($query, $example[3]),
-            (string) $newInstance
-        );
+        $expected = $toString;
+        $actual   = (string) $newInstance;
+        $I->assertSame($expected, $actual);
     }
 
     /**
@@ -80,27 +73,70 @@ class WithPathCest
         );
     }
 
+    /**
+     * @return \string[][]
+     */
     private function getExamples(): array
     {
-        return [
-            ['empty', '', '', ''],
-            ['normal', '/login', '/login', '/login'],
-            ['double slash', '//login', '/login', '/login'],
-            ['no leading slash', 'login', 'login', '/login'],
-            ['garbled', '/l^ogin/si gh', '/l%5Eogin/si%20gh', '/l%5Eogin/si%20gh'],
-        ];
-    }
+        $url = 'https://dev.phalcon.ld';
 
-
-    private function getExceptions(): array
-    {
         return [
-            ['NULL', 'null', null],
-            ['boolean', 'true', true],
-            ['boolean', 'false', false],
-            ['integer', 'number', 1234],
-            ['array', 'array', ['/action']],
-            ['stdClass', 'object', (object) ['/action']],
+            [
+                'label'    => 'empty',
+                'url'      => $url . '/action',
+                'path'     => '',
+                'expected' => '',
+                'toString' => $url . '',
+            ],
+            [
+                'label'    => 'normal',
+                'url'      => $url . '/action',
+                'path'     => '/login',
+                'expected' => '/login',
+                'toString' => $url . '/login',
+            ],
+            [
+                'label'    => 'double slash',
+                'url'      => $url . '/action',
+                'path'     => '//login',
+                'expected' => '/login',
+                'toString' => $url . '/login',
+            ],
+            [
+                'label'    => 'no leading slash',
+                'url'      => $url . '/action',
+                'path'     => 'login',
+                'expected' => 'login',
+                'toString' => $url . '/login',
+            ],
+            [
+                'label'    => 'garbled',
+                'url'      => $url . '/action',
+                'path'     => '/l^ogin/si%20gn',
+                'expected' => '/l%5Eogin/si%20gn',
+                'toString' => $url . '/l%5Eogin/si%20gn',
+            ],
+            [
+                'label'    => 'with double colon',
+                'url'      => $url . '/action;parameter?query:fragment',
+                'path'     => 'action;parameter',
+                'expected' => 'action;parameter',
+                'toString' => $url . '/action;parameter?query:fragment',
+            ],
+            [
+                'label'    => 'utf8 russian',
+                'url'      => $url . '/action?параметр=ценность#фрагмент',
+                'path'     => 'действие',
+                'expected' => 'действие',
+                'toString' => $url . '/действие?параметр=ценность#фрагмент',
+            ],
+            [
+                'label'    => 'utf8 greek',
+                'url'      => $url . '/action?παράμετρος=ερώτηση#θραύσμα',
+                'path'     => 'ενέργεια',
+                'expected' => 'ενέργεια',
+                'toString' => $url . '/ενέργεια?παράμετρος=ερώτηση#θραύσμα',
+            ],
         ];
     }
 }

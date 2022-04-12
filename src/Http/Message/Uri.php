@@ -61,8 +61,7 @@ final class Uri extends AbstractCommon implements UriInterface
     public const CHAR_SUB_DELIMS = "!\$&\'\(\)\*\+,;=";
 
     /**
-     * Unreserved characters used in user info, paths, query strings, and
-     * fragments.
+     * Unreserved characters used in user info, paths, query strings, and fragments.
      *
      * @const string
      */
@@ -159,7 +158,7 @@ final class Uri extends AbstractCommon implements UriInterface
             $this->fragment = $this->filterFragment($urlParts["fragment"] ?? "");
             $this->host     = strtolower($urlParts["host"] ?? "");
             $this->path     = $this->filterPath($urlParts["path"] ?? "");
-            $this->port     = $urlParts["port"] ?? null;
+            $this->port     = $this->filterPort($urlParts["port"] ?? null);
             $this->query    = $this->filterQuery($urlParts["query"] ?? "");
             $this->scheme   = $this->filterScheme($urlParts["scheme"] ?? "");
             $this->userInfo = $this->filterUserInfo($urlParts["user"] ?? "");
@@ -194,12 +193,23 @@ final class Uri extends AbstractCommon implements UriInterface
          *   - If the path is starting with more than one "/" and no authority
          *     is present, the starting slashes MUST be reduced to one.
          */
-        if (
-            "" !== $path &&
-            "/" !== substr($path, 0, 1) &&
-            "" !== $authority
-        ) {
-            $path = "/" . $path;
+        if ("" !== $path) {
+            if (
+                "/" !== substr($path, 0, 1) &&
+                "" !== $authority
+            ) {
+                // If the path is rootless and an authority is present,
+                // the path MUST be prefixed by "/"
+                $path = '/' . $path;
+            } elseif (
+                "/" === substr($path, 1, 1) &&
+                "" === $authority
+            ) {
+                // If the path is starting with more than one "/" and no
+                // authority is present, the starting slashes MUST be reduced
+                // to one.
+                $path = '/' . ltrim($path, '/');
+            }
         }
 
         return $this->checkValue($this->scheme, "", ":")
@@ -238,7 +248,7 @@ final class Uri extends AbstractCommon implements UriInterface
          * If the port component is not set or is the standard port for the
          * current scheme, it SHOULD NOT be included.
          */
-        if (true === $this->isNonStandardPort($this->scheme, $this->port)) {
+        if (null !== $this->port) {
             $authority .= ":" . $this->port;
         }
 
@@ -299,9 +309,7 @@ final class Uri extends AbstractCommon implements UriInterface
      */
     public function getPort(): ?int
     {
-        return true === $this->isNonStandardPort($this->scheme, $this->port)
-            ? $this->port
-            : null;
+        return $this->port;
     }
 
     /**
@@ -452,12 +460,10 @@ final class Uri extends AbstractCommon implements UriInterface
      */
     public function withPort(?int $port): UriInterface
     {
-        if (null !== $port && ($port < 1 || $port > 65535)) {
-            throw new InvalidArgumentException(
-                "Invalid port specified. (Valid range 1-65535)"
-            );
-        }
-        return $this->cloneInstance($port, "port");
+        return $this->cloneInstance(
+            $this->filterPort($port),
+            "port"
+        );
     }
 
     /**
@@ -578,7 +584,6 @@ final class Uri extends AbstractCommon implements UriInterface
     }
 
     /**
-     *
      * The path can either be empty or absolute (starting with a slash) or
      * rootless (not starting with a slash). Implementations MUST support all
      * three syntaxes.
@@ -606,19 +611,50 @@ final class Uri extends AbstractCommon implements UriInterface
      */
     private function filterPath(string $path): string
     {
-
         $path = $this->filterString(
-            "/(?:[^"
-            . self::CHAR_UNRESERVED
-            . ")(:@&=\+\$,\/;%]+|%(?![A-Fa-f0-9]{2}))/u",
+            '/(?:[^' . self::CHAR_UNRESERVED . ')(:@&=\+\$,\/;%]+|%(?![A-Fa-f0-9]{2}))/u',
             $path
         );
 
-        if ("" === $path || "/" === substr($path, 0, 1)) {
+        if ("" === $path || "/" !== substr($path, 0, 1)) {
             return $path;
         }
 
         return "/" . ltrim($path, "/");
+    }
+
+    /**
+     * Filters the port
+     *
+     * @param ?int $port
+     *
+     * @return int|null
+     */
+    private function filterPort(?int $port): ?int
+    {
+        if (null === $port) {
+            return null;
+        }
+
+        if (null !== $port && ($port < 1 || $port > 65535)) {
+            throw new InvalidArgumentException(
+                "Invalid port specified. (Valid range 1-65535)"
+            );
+        }
+
+        $schemes = [
+            "http"  => 80,
+            "https" => 443,
+        ];
+
+        if (
+            true === isset($schemes[$this->scheme]) &&
+            $port === $schemes[$this->scheme]
+        ) {
+            return null;
+        }
+
+        return $port;
     }
 
     /**
@@ -718,11 +754,8 @@ final class Uri extends AbstractCommon implements UriInterface
      */
     private function filterQueryOrFragment(string $value): string
     {
-        return $this->filterstring(
-            "/(?:[^"
-            . self::CHAR_UNRESERVED
-            . self::CHAR_SUB_DELIMS
-            . "%:@\/?]+|%(?![A-Fa-f0-9]{2}))/u",
+        return $this->filterString(
+            '/(?:[^' . self::CHAR_UNRESERVED . self::CHAR_SUB_DELIMS . '%:@\/\?]+|%(?![A-Fa-f0-9]{2}))/u',
             $this->filterUtf8($value)
         );
     }
@@ -764,10 +797,7 @@ final class Uri extends AbstractCommon implements UriInterface
         // Note the addition of `%` to initial charset; this allows `|` portion
         // to match and thus prevent double-encoding.
         return $this->filterString(
-            "/(?:[^%"
-            . self::CHAR_UNRESERVED
-            . self::CHAR_SUB_DELIMS
-            . "]+|%(?![A-Fa-f0-9]{2}))/u",
+            '/(?:[^%' . self::CHAR_UNRESERVED . self::CHAR_SUB_DELIMS . ']+|%(?![A-Fa-f0-9]{2}))/u',
             $value
         );
     }
@@ -782,7 +812,7 @@ final class Uri extends AbstractCommon implements UriInterface
     private function filterUtf8(string $value): string
     {
         // check if given string contains only valid UTF-8 characters
-        if (preg_match("//u", $value)) {
+        if (preg_match('//u', $value)) {
             return $value;
         }
 
@@ -794,28 +824,6 @@ final class Uri extends AbstractCommon implements UriInterface
         }
 
         return implode('', $characters);
-    }
-
-    /**
-     * Checks if this is a non-standard port
-     *
-     * @param string   $scheme
-     * @param int|null $port
-     *
-     * @return bool
-     */
-    private function isNonStandardPort(string $scheme, ?int $port): bool
-    {
-        $schemes = [
-            "http"  => 80,
-            "https" => 443,
-        ];
-
-        if (null === $port) {
-            return false;
-        }
-
-        return true !== isset($schemes[$scheme]) || $port !== $schemes[$scheme];
     }
 
     /**

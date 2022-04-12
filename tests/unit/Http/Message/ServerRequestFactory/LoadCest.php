@@ -16,9 +16,9 @@ namespace Phalcon\Tests\Unit\Http\Message\ServerRequestFactory;
 use Codeception\Example;
 use Phalcon\Http\Message\Exception\InvalidArgumentException;
 use Phalcon\Http\Message\Factories\ServerRequestFactory;
+use Phalcon\Http\Message\Interfaces\ServerRequestInterface;
 use Phalcon\Http\Message\UploadedFile;
 use Phalcon\Tests\Fixtures\Http\Message\ServerRequestFactoryFixture;
-use Phalcon\Http\Message\Interfaces\ServerRequestInterface;
 use UnitTester;
 
 /**
@@ -135,7 +135,7 @@ class LoadCest
             'httponly' => '',
         ];
 
-        $actual  = $request->getCookieParams();
+        $actual = $request->getCookieParams();
         $I->assertSame($expected, $actual);
     }
 
@@ -286,29 +286,32 @@ class LoadCest
      * @param UnitTester $I
      * @param Example    $example
      *
-     * @author Phalcon Team <team@phalcon.io>
-     * @since  2019-02-09
+     * @author       Phalcon Team <team@phalcon.io>
+     * @since        2019-02-09
      */
     public function httpMessageServerRequestFactoryLoadServerNamePort(UnitTester $I, Example $example)
     {
-        $I->wantToTest('Http\Message\ServerRequestFactory - load() - server name/port ' . $example[0]);
+        $I->wantToTest(
+            'Http\Message\ServerRequestFactory - load() - server name/port '
+            . $example['label']
+        );
 
         $server = [
-            'REQUEST_URI'  => $example[1],
-            'QUERY_STRING' => $example[2],
-            'SERVER_NAME'  => $example[3],
-            'SERVER_PORT'  => $example[4],
+            'REQUEST_URI'  => $example['uri'],
+            'QUERY_STRING' => $example['query'],
+            'SERVER_NAME'  => $example['name'],
+            'SERVER_PORT'  => $example['port'],
         ];
 
         $factory = new ServerRequestFactory();
         $request = $factory->load($server);
         $uri     = $request->getUri();
 
-        $I->assertSame($example[5], $uri->getHost());
-        $I->assertSame($example[6], $uri->getPort());
-        $I->assertSame($example[7], $uri->getPath());
-        $I->assertSame($example[8], $uri->getQuery());
-        $I->assertSame($example[9], $uri->getFragment());
+        $I->assertSame($example['getHost'], $uri->getHost());
+        $I->assertSame($example['getPort'], $uri->getPort());
+        $I->assertSame($example['getPath'], $uri->getPath());
+        $I->assertSame($example['getQuery'], $uri->getQuery());
+        $I->assertSame($example['getFragment'], $uri->getFragment());
     }
 
     /**
@@ -484,20 +487,23 @@ class LoadCest
      * @param UnitTester $I
      * @param Example    $example
      *
-     * @author Phalcon Team <team@phalcon.io>
-     * @since  2019-02-09
+     * @author       Phalcon Team <team@phalcon.io>
+     * @since        2019-02-09
      */
     public function httpMessageServerRequestFactoryLoadConstructor(UnitTester $I, Example $example)
     {
-        $I->wantToTest('Http\Message\ServerRequestFactory - load() - constructor ' . $example[0]);
+        $I->wantToTest(
+            'Http\Message\ServerRequestFactory - load() - constructor ' .
+            $example['label']
+        );
 
         $factory = new ServerRequestFactory();
         $request = $factory->load(
-            $example[1],
-            $example[2],
-            $example[3],
-            $example[4],
-            $example[5]
+            $example['server'],
+            $example['get'],
+            $example['post'],
+            $example['cookies'],
+            $example['files']
         );
 
         $I->assertInstanceOf(ServerRequestInterface::class, $request);
@@ -519,7 +525,7 @@ class LoadCest
         );
 
         // Backup
-        $params  = [
+        $params = [
             'REQUEST_TIME_FLOAT' => $this->storeServer['REQUEST_TIME_FLOAT'],
             'REQUEST_METHOD'     => 'PUT',
             'one'                => 'two',
@@ -531,11 +537,11 @@ class LoadCest
         $request = $factory->load();
 
         $expected = 'PUT';
-        $actual = $request->getMethod();
+        $actual   = $request->getMethod();
         $I->assertSame($expected, $actual);
 
         $expected = $params;
-        $actual = $request->getServerParams();
+        $actual   = $request->getServerParams();
         $I->assertSame($expected, $actual);
 
         $I->assertInstanceOf(ServerRequestInterface::class, $request);
@@ -550,20 +556,23 @@ class LoadCest
      * @param UnitTester $I
      * @param Example    $example
      *
-     * @author Phalcon Team <team@phalcon.io>
-     * @since  2019-02-09
+     * @author       Phalcon Team <team@phalcon.io>
+     * @since        2019-02-09
      */
     public function httpMessageServerRequestFactoryLoadConstructorEmptySuperglobals(UnitTester $I, Example $example)
     {
-        $I->wantToTest('Http\Message\ServerRequestFactory - load() - constructor - empty superglobals ' . $example[0]);
+        $I->wantToTest(
+            'Http\Message\ServerRequestFactory - load() - constructor - empty superglobals '
+            . $example['label']
+        );
 
         $factory = new ServerRequestFactory();
         $request = $factory->load(
-            $example[1],
-            $example[2],
-            $example[3],
-            $example[4],
-            $example[5]
+            $example['server'],
+            $example['get'],
+            $example['post'],
+            $example['cookies'],
+            $example['files']
         );
         $I->assertInstanceOf(ServerRequestInterface::class, $request);
     }
@@ -681,52 +690,52 @@ class LoadCest
     {
         return [
             [
-                'empty',
-                null,
-                null,
-                null,
-                null,
-                null,
+                'label'   => 'empty',
+                'server'  => null,
+                'get'     => null,
+                'post'    => null,
+                'cookies' => null,
+                'files'   => null,
             ],
             [
-                'server',
-                ['one' => 'two'],
-                null,
-                null,
-                null,
-                null,
+                'label'   => 'server',
+                'server'  => ['one' => 'two'],
+                'get'     => null,
+                'post'    => null,
+                'cookies' => null,
+                'files'   => null,
             ],
             [
-                'get',
-                null,
-                ['one' => 'two'],
-                null,
-                null,
-                null,
+                'label'   => 'get',
+                'server'  => null,
+                'get'     => ['one' => 'two'],
+                'post'    => null,
+                'cookies' => null,
+                'files'   => null,
             ],
             [
-                'post',
-                null,
-                null,
-                ['one' => 'two'],
-                null,
-                null,
+                'label'   => 'post',
+                'server'  => null,
+                'get'     => null,
+                'post'    => ['one' => 'two'],
+                'cookies' => null,
+                'files'   => null,
             ],
             [
-                'cookie',
-                null,
-                null,
-                null,
-                ['one' => 'two'],
-                null,
+                'label'   => 'cookie',
+                'server'  => null,
+                'get'     => null,
+                'post'    => null,
+                'cookies' => ['one' => 'two'],
+                'files'   => null,
             ],
             [
-                'files',
-                null,
-                null,
-                null,
-                null,
-                ['one' => 'two'],
+                'label'   => 'files',
+                'server'  => null,
+                'get'     => null,
+                'post'    => null,
+                'cookies' => null,
+                'files'   => ['one' => 'two'],
             ],
         ];
     }
@@ -738,64 +747,64 @@ class LoadCest
     {
         return [
             [
-                'host',
-                'http://dev.phalcon.ld',
-                '',
-                'dev.phalcon.ld',
-                null,
-                'dev.phalcon.ld',
-                null,
-                '',
-                '',
-                '',
+                'label'       => 'host',
+                'uri'         => 'http://dev.phalcon.ld',
+                'query'       => '',
+                'name'        => 'dev.phalcon.ld',
+                'port'        => null,
+                'getHost'     => 'dev.phalcon.ld',
+                'getPort'     => null,
+                'getPath'     => '',
+                'getQuery'    => '',
+                'getFragment' => '',
             ],
             [
-                'host',
-                'http://dev.phalcon.ld',
-                '',
-                'dev.phalcon.ld',
-                8080,
-                'dev.phalcon.ld',
-                8080,
-                '',
-                '',
-                '',
+                'label'       => 'host port',
+                'uri'         => 'http://dev.phalcon.ld',
+                'query'       => '',
+                'name'        => 'dev.phalcon.ld',
+                'port'        => 8080,
+                'getHost'     => 'dev.phalcon.ld',
+                'getPort'     => 8080,
+                'getPath'     => '',
+                'getQuery'    => '',
+                'getFragment' => '',
             ],
             [
-                'host',
-                'http://dev.phalcon.ld/action/reaction',
-                '',
-                'dev.phalcon.ld',
-                8080,
-                'dev.phalcon.ld',
-                8080,
-                '/action/reaction',
-                '',
-                '',
+                'label'       => 'host port path',
+                'uri'         => 'http://dev.phalcon.ld/action/reaction',
+                'query'       => '',
+                'name'        => 'dev.phalcon.ld',
+                'port'        => 8080,
+                'getHost'     => 'dev.phalcon.ld',
+                'getPort'     => 8080,
+                'getPath'     => '/action/reaction',
+                'getQuery'    => '',
+                'getFragment' => '',
             ],
             [
-                'host',
-                'http://dev.phalcon.ld/action/reaction?one=two',
-                'one=two',
-                'dev.phalcon.ld',
-                8080,
-                'dev.phalcon.ld',
-                8080,
-                '/action/reaction',
-                'one=two',
-                '',
+                'label'       => 'host port path query',
+                'uri'         => 'http://dev.phalcon.ld/action/reaction?one=two',
+                'query'       => 'one=two',
+                'name'        => 'dev.phalcon.ld',
+                'port'        => 8080,
+                'getHost'     => 'dev.phalcon.ld',
+                'getPort'     => 8080,
+                'getPath'     => '/action/reaction',
+                'getQuery'    => 'one=two',
+                'getFragment' => '',
             ],
             [
-                'host',
-                'http://dev.phalcon.ld/action/reaction?one=two#fragment',
-                'one=two',
-                'dev.phalcon.ld',
-                8080,
-                'dev.phalcon.ld',
-                8080,
-                '/action/reaction',
-                'one=two',
-                'fragment',
+                'label'       => 'host port path query fragment',
+                'uri'         => 'http://dev.phalcon.ld/action/reaction?one=two#fragment',
+                'query'       => 'one=two',
+                'name'        => 'dev.phalcon.ld',
+                'port'        => 8080,
+                'getHost'     => 'dev.phalcon.ld',
+                'getPort'     => 8080,
+                'getPath'     => '/action/reaction',
+                'getQuery'    => 'one=two',
+                'getFragment' => 'fragment',
             ],
         ];
     }

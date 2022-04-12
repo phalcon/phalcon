@@ -33,12 +33,14 @@ class WithPortCest
     {
         $I->wantToTest('Http\Message\Uri - withPort() - ' . $example['label']);
 
-        $query = 'https://phalcon:secret@dev.phalcon.ld:%s/action?param=value#frag';
-        $uri   = new Uri(sprintf($query, ':4300'));
-
+        $query    = '://phalcon:secret@dev.phalcon.ld%s/action?param=value#frag';
+        $scheme   = $example['scheme'];
         $source   = $example['source'];
         $expected = $example['expected'];
         $toString = $example['toString'];
+
+        $uri   = new Uri($scheme . sprintf($query, ':4300'));
+
 
         /**
          * New Instance
@@ -55,7 +57,7 @@ class WithPortCest
         $actual = $newInstance->getPort();
         $I->assertSame($expected, $actual);
 
-        $expected = sprintf($query, $toString);
+        $expected = $scheme . sprintf($query, $toString);
         $actual   = (string) $newInstance;
         $I->assertSame($expected, $actual);
     }
@@ -93,24 +95,28 @@ class WithPortCest
         return [
             [
                 'label'    => 'null',
+                'scheme'   => 'https',
                 'source'   => null,
                 'expected' => null,
                 'toString' => '',
             ],
             [
                 'label'    => 'int',
+                'scheme'   => 'http',
                 'source'   => 8080,
                 'expected' => 8080,
                 'toString' => ':8080',
             ],
             [
                 'label'    => 'http',
+                'scheme'   => 'http',
                 'source'   => 80,
                 'expected' => null,
                 'toString' => '',
             ],
             [
                 'label'    => 'https',
+                'scheme'   => 'https',
                 'source'   => 443,
                 'expected' => null,
                 'toString' => '',
