@@ -18,7 +18,6 @@ use InvalidArgumentException;
 use Phalcon\Http\Message\Uri;
 use UnitTester;
 
-
 class WithPathCest
 {
     /**
@@ -33,11 +32,11 @@ class WithPathCest
     {
         $I->wantToTest('Http\Message\Uri - withPath() - ' . $example['label']);
 
-        $source      = $example['url'];
-        $path        = $example['path'];
-        $expected    = $example['expected'];
-        $toString    = $example['toString'];
-        $uri          = new Uri($source);
+        $source   = $example['url'];
+        $path     = $example['path'];
+        $expected = $example['expected'];
+        $toString = $example['toString'];
+        $uri      = new Uri($source);
 
         $newInstance = $uri->withPath($path);
 
@@ -74,7 +73,7 @@ class WithPathCest
     }
 
     /**
-     * @return \string[][]
+     * @return string[][]
      */
     private function getExamples(): array
     {

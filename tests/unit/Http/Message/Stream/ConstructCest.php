@@ -35,8 +35,8 @@ class ConstructCest
      *
      * @return void
      *
-     * @author Phalcon Team <team@phalcon.io>
-     * @since  2019-02-08
+     * @author       Phalcon Team <team@phalcon.io>
+     * @since        2019-02-08
      */
     public function httpMessageStreamConstruct(UnitTester $I, Example $example)
     {
@@ -76,24 +76,25 @@ class ConstructCest
     {
         return [
             [
-                'label' => 'stream',
+                'label'   => 'stream',
                 'request' => new Stream('php://temp'),
             ],
             [
-                'label' => 'input',
+                'label'   => 'input',
                 'request' => new Input(),
             ],
             [
-                'label' => 'memory',
+                'label'   => 'memory',
                 'request' => new Memory(),
             ],
             [
-                'label' => 'temp',
+                'label'   => 'temp',
                 'request' => new Temp(),
             ],
 
         ];
     }
+
     /**
      * @return array[]
      */

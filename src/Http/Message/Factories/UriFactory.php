@@ -35,5 +35,3 @@ final class UriFactory implements UriFactoryInterface
         return new Uri($uri);
     }
 }
-
-

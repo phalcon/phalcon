@@ -13,7 +13,6 @@ declare(strict_types=1);
 
 namespace Phalcon\Tests\Unit\Http\Message\Response;
 
-use Phalcon\Http\Message\Exception\InvalidArgumentException;
 use Phalcon\Http\Message\Response;
 use UnitTester;
 

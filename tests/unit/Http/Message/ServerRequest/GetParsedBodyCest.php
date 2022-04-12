@@ -55,7 +55,7 @@ class GetParsedBodyCest
         $I->wantToTest('Http\Message\ServerRequest - getParsedBody() - empty');
         $request = new ServerRequest();
 
-        $actual   = $request->getParsedBody();
+        $actual = $request->getParsedBody();
         $I->assertNull($actual);
     }
 }

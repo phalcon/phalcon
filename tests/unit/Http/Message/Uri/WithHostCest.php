@@ -16,6 +16,8 @@ namespace Phalcon\Tests\Unit\Http\Message\Uri;
 use Phalcon\Http\Message\Uri;
 use UnitTester;
 
+use function sprintf;
+
 class WithHostCest
 {
     /**
@@ -38,14 +40,12 @@ class WithHostCest
 
         $I->assertNotSame($uri, $newInstance);
 
-        $I->assertSame(
-            'prod.phalcon.ld',
-            $newInstance->getHost()
-        );
+        $expected = 'prod.phalcon.ld';
+        $actual   = $newInstance->getHost();
+        $I->assertSame($expected, $actual);
 
-        $I->assertSame(
-            sprintf($query, 'prod.phalcon.ld'),
-            (string) $newInstance
-        );
+        $expected = sprintf($query, 'prod.phalcon.ld');
+        $actual   = (string) $newInstance;
+        $I->assertSame($expected, $actual);
     }
 }

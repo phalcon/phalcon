@@ -525,7 +525,7 @@ final class Uri extends AbstractCommon implements UriInterface
      * @return Uri
      */
     public function withUserInfo(
-        string  $user,
+        string $user,
         ?string $password = null
     ): UriInterface {
         $userInfo = $this->filterUserInfo($user);
@@ -691,7 +691,6 @@ final class Uri extends AbstractCommon implements UriInterface
         $parts = explode("&", $query);
 
         foreach ($parts as $index => $part) {
-
             $split = $this->splitQueryValue($part);
             if (null === $split[1]) {
                 $parts[$index] = $this->filterQueryOrFragment($split[0]);

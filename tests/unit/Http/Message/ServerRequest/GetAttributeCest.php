@@ -53,7 +53,7 @@ class GetAttributeCest
             ->withAttribute('three', 'four')
         ;
 
-        $actual   = $request->getAttribute('unknown');
+        $actual = $request->getAttribute('unknown');
         $I->assertNull($actual);
     }
 }
