@@ -17,6 +17,7 @@ use Codeception\Example;
 use InvalidArgumentException;
 use Phalcon\Http\Message\Uri;
 use UnitTester;
+
 use const PHP_OS_FAMILY;
 
 class WithPathCest
@@ -36,7 +37,7 @@ class WithPathCest
         if (PHP_OS_FAMILY === 'macos') {
             $I->markTestSkipped('Need to check the UTF8 on Mac');
         }
-
+var_dump(PHP_OS_FAMILY);
         $source   = $example['url'];
         $path     = $example['path'];
         $expected = $example['expected'];
