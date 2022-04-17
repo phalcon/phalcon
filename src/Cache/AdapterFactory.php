@@ -106,11 +106,11 @@ class AdapterFactory
     protected function getServices(): array
     {
         return [
-            'apcu'         => Apcu::class,
-            'libmemcached' => Libmemcached::class,
-            'memory'       => Memory::class,
-            'redis'        => Redis::class,
-            'stream'       => Stream::class,
+            "apcu"         => Apcu::class,
+            "libmemcached" => Libmemcached::class,
+            "memory"       => Memory::class,
+            "redis"        => Redis::class,
+            "stream"       => Stream::class,
         ];
     }
 }
