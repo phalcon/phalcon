@@ -34,8 +34,8 @@ class WithPathCest
     {
         $I->wantToTest('Http\Message\Uri - withPath() - ' . $example['label']);
 
-        if (PHP_OS_FAMILY === 'Darwin') {
-            $I->markTestSkipped('Need to check the UTF8 on Mac');
+        if (PHP_OS_FAMILY !== 'Linux') {
+            $I->markTestSkipped('Need to check the UTF8 on Mac/Win');
         }
 
         $source   = $example['url'];
