@@ -63,8 +63,9 @@ abstract class AbstractCache implements CacheInterface
     protected function checkKey(string $key): void
     {
         if (preg_match("/[^A-Za-z0-9-_.]/", $key)) {
-            throw new InvalidArgumentException(
-                'The key contains invalid characters'
+            $exception = $this->getExceptionClass();
+            throw new $exception(
+                "The key contains invalid characters"
             );
         }
     }
@@ -79,8 +80,9 @@ abstract class AbstractCache implements CacheInterface
     protected function checkKeys($keys): void
     {
         if (!(true === is_array($keys) || $keys instanceof Traversable)) {
-            throw new InvalidArgumentException(
-                'The keys need to be an array or instance of Traversable'
+            $exception = $this->getExceptionClass();
+            throw new $exception(
+                "The keys need to be an array or instance of Traversable"
             );
         }
     }
@@ -256,4 +258,12 @@ abstract class AbstractCache implements CacheInterface
 
         return $result;
     }
+
+
+    /**
+     * Returns the exception class that will be used for exceptions thrown
+     *
+     * @return string
+     */
+    abstract protected function getExceptionClass(): string;
 }
