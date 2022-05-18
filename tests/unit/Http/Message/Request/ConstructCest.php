@@ -88,7 +88,7 @@ class ConstructCest
         $I->expectThrowable(
             new InvalidArgumentException(
                 "Headers needs to be either an array or an instance "
-                . "implementing Phalcon\\Support\\CollectionInterface"
+                . "of Phalcon\\Http\\Message\\Headers"
             ),
             function () {
                 $request = new Request(

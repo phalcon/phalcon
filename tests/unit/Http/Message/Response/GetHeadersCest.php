@@ -39,11 +39,8 @@ class GetHeadersCest
             'Accept'        => ['text/html'],
             'Cache-Control' => ['max-age=0'],
         ];
-
-        $I->assertSame(
-            $expected,
-            $response->getHeaders()
-        );
+        $actual   = $response->getHeaders();
+        $I->assertSame($expected, $actual);
     }
 
     /**
@@ -58,9 +55,8 @@ class GetHeadersCest
 
         $response = new Response();
 
-        $I->assertSame(
-            [],
-            $response->getHeaders()
-        );
+        $expected = [];
+        $actual   = $response->getHeaders();
+        $I->assertSame($expected, $actual);
     }
 }
