@@ -68,7 +68,8 @@ final class Response extends AbstractMessage implements ResponseInterface
     ) {
         $this->processCode($code);
 
-        $this->headers = $this->processHeaders($headers);
+        $collection    = new Headers();
+        $this->headers = $collection->processHeaders($headers);
         $this->body    = $this->processBody($body, "w+b");
     }
 

@@ -48,8 +48,9 @@ final class Request extends AbstractRequest implements RequestInterface, Request
             $body = new Input();
         }
 
+        $collection    = new Headers();
         $this->uri     = $this->processUri($uri);
-        $this->headers = $this->processHeaders($headers);
+        $this->headers = $collection->processHeaders($headers, $this->uri);
         $this->method  = $this->processMethod($method);
         $this->body    = $this->processBody($body, "w+b");
     }
