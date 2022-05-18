@@ -268,8 +268,11 @@ class LoadCest
         $factory = new ServerRequestFactoryFixture();
         $request = $factory->load($server);
 
+        /**
+         * "Host" instead of "host" because there is no URI
+         */
         $expected = [
-            'host'          => ['test.phalcon.ld'],
+            'Host'          => ['test.phalcon.ld'],
             'authorization' => ['Bearer'],
         ];
 

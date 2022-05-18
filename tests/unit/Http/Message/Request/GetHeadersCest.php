@@ -13,8 +13,8 @@ declare(strict_types=1);
 
 namespace Phalcon\Tests\Unit\Http\Message\Request;
 
+use Phalcon\Http\Message\Headers;
 use Phalcon\Http\Message\Request;
-use Phalcon\Support\Collection;
 use UnitTester;
 
 class GetHeadersCest
@@ -45,11 +45,8 @@ class GetHeadersCest
             'Accept'        => ['text/html'],
             'Cache-Control' => ['max-age=0'],
         ];
-
-        $I->assertSame(
-            $expected,
-            $request->getHeaders()
-        );
+        $actual   = $request->getHeaders();
+        $I->assertSame($expected, $actual);
     }
 
     /**
@@ -67,7 +64,7 @@ class GetHeadersCest
             'Cache-Control' => ['max-age=0'],
         ];
 
-        $headers = new Collection($data);
+        $headers = new Headers($data);
 
         $request = new Request(
             'GET',
@@ -80,11 +77,8 @@ class GetHeadersCest
             'Accept'        => ['text/html'],
             'Cache-Control' => ['max-age=0'],
         ];
-
-        $I->assertSame(
-            $expected,
-            $request->getHeaders()
-        );
+        $actual   = $request->getHeaders();
+        $I->assertSame($expected, $actual);
     }
 
     /**
@@ -99,9 +93,8 @@ class GetHeadersCest
 
         $request = new Request();
 
-        $I->assertSame(
-            [],
-            $request->getHeaders()
-        );
+        $expected = [];
+        $actual   = $request->getHeaders();
+        $I->assertSame($expected, $actual);
     }
 }

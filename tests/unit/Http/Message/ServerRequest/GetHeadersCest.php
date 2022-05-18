@@ -13,8 +13,8 @@ declare(strict_types=1);
 
 namespace Phalcon\Tests\Unit\Http\Message\ServerRequest;
 
+use Phalcon\Http\Message\Headers;
 use Phalcon\Http\Message\ServerRequest;
-use Phalcon\Support\Collection;
 use UnitTester;
 
 class GetHeadersCest
@@ -55,7 +55,7 @@ class GetHeadersCest
             'Accept'        => ['text/html'],
             'Cache-Control' => ['max-age=0'],
         ];
-        $headers = new Collection($data);
+        $headers = new Headers($data);
         $request = new ServerRequest('GET', null, [], 'php://input', $headers);
 
         $expected = [
