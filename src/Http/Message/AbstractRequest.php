@@ -102,6 +102,16 @@ abstract class AbstractRequest extends AbstractMessage implements RequestInterfa
     }
 
     /**
+     * Returns the Uri object
+     *
+     * @return UriInterface
+     */
+    public function getUri(): UriInterface
+    {
+        return $this->uri;
+    }
+
+    /**
      * Return an instance with the provided HTTP method.
      *
      * While HTTP method names are typically all uppercase characters, HTTP
@@ -197,7 +207,7 @@ abstract class AbstractRequest extends AbstractMessage implements RequestInterfa
         $newInstance = $this->cloneInstance($uri, "uri");
 
         if (false === $preserveHost) {
-            $headers = $this->checkHeaderHost($headers);
+            $headers = $headers->checkHeaderHost($headers);
 
             $newInstance->headers = $headers;
         }

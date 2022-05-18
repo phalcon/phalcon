@@ -138,10 +138,11 @@ final class ServerRequest extends AbstractRequest implements ServerRequestInterf
 
         $this->checkUploadedFiles($uploadFiles);
 
+        $collection            = new Headers();
         $this->protocolVersion = $this->processProtocol($protocol);
         $this->method          = $this->processMethod($method);
-        $this->headers         = $this->processHeaders($headers);
         $this->uri             = $this->processUri($uri);
+        $this->headers         = $collection->processHeaders($headers, $this->uri);
         $this->body            = $this->processBody($body, "w+b");
         $this->uploadedFiles   = $uploadFiles;
         $this->parsedBody      = $parsedBody;
