@@ -119,4 +119,14 @@ class NativeArray extends AbstractAdapter implements ArrayAccess
             $placeholders
         );
     }
+
+    /**
+     * Returns the internal array
+     *
+     * @return array
+     */
+    public function toArray(): array
+    {
+        return $this->translate;
+    }
 }

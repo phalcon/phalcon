@@ -134,4 +134,14 @@ class Csv extends AbstractAdapter implements ArrayAccess
 
         fclose($pointer);
     }
+
+    /**
+     * Returns the internal array
+     *
+     * @return array
+     */
+    public function toArray(): array
+    {
+        return $this->translate;
+    }
 }
