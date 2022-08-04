@@ -1,18 +1,17 @@
 FROM composer:latest as composer
 FROM php:8.0-fpm
 
-# Compilation parameters
-RUN CPU_CORES="$(getconf _NPROCESSORS_ONLN)";
-ENV MAKEFLAGS="-j${CPU_CORES}"
-
 ADD ./extra.ini /usr/local/etc/php/conf.d/
 
 # User/Group globals
 ENV MY_USER="phalcon" \
-	MY_GROUP="phalcon" \
-	MY_UID="1000" \
-	MY_GID="1000" \
-	PHP_VERSION="8.0"
+    MY_GROUP="phalcon" \
+    MY_UID="1000" \
+    MY_GID="1000" \
+    PHP_VERSION="8.0" \
+    LANG=en_US.UTF-8 \
+    LANGUAGE=en_US.UTF-8 \
+    LC_ALL=en_US.UTF-8
 
 # User and Group
 RUN set -eux && \
@@ -32,6 +31,8 @@ RUN apt update -y && \
         libpng-dev \
         libpq-dev \
         libyaml-dev \
+        libwebp-dev \
+        libxpm-dev \
         libzip-dev \
         locales \
         nano \
@@ -41,19 +42,14 @@ RUN apt update -y && \
 
 # PECL Packages
 RUN pecl install -o -f redis && \
-    pecl install igbinary && \
-    pecl install msgpack && \
-    pecl install apcu && \
-    pecl install yaml && \
-    pecl install memcached && \
-    pecl install xdebug
+    pecl install igbinary \
+      msgpack \
+      apcu \
+      yaml \
+      imagick \
+      memcached \
+      xdebug
 
-# Remove this RUN when imagick will be available via pecl
-RUN cd /opt && \
-    git clone https://github.com/Jeckerson/imagick.git && \
-    cd imagick && \
-    phpize && ./configure && \
-    make && make install
 
 # Locale
 RUN sed -i -e 's/# de_DE.UTF-8 UTF-8/de_DE.UTF-8 UTF-8/' /etc/locale.gen && \
@@ -70,7 +66,11 @@ ENV LANG=en_US.UTF-8 \
     LC_ALL=en_US.UTF-8
 
 # Install PHP extensions
-RUN docker-php-ext-configure gd --with-freetype --with-jpeg=/usr/include/ --enable-gd
+RUN docker-php-ext-configure gd --with-freetype  \
+    --with-jpeg=/usr/include/  \
+    --with-xpm \
+    --with-webp \
+    --enable-gd
 
 RUN docker-php-ext-install \
         gd \
