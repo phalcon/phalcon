@@ -70,3 +70,13 @@ alias mv='mv -i'
 alias untar='tar xvf'
 
 PATH=$PATH:./vendor/bin
+
+alias test-unit='php vendor/bin/codecept run --ext DotReporter unit'
+alias test-cli='php vendor/bin/codecept run --ext DotReporter cli'
+alias test-integration='php vendor/bin/codecept run --ext DotReporter integration'
+alias test-db-common='php vendor/bin/codecept run --ext DotReporter database -g common'
+alias test-db-mysql='php vendor/bin/codecept run --ext DotReporter database --env mysql -g mysql'
+alias test-db-pgsql='php vendor/bin/codecept run --ext DotReporter database --env pgsql -g pgsql'
+alias test-db-sqlite='php vendor/bin/codecept run --ext DotReporter database --env sqlite -g sqlite'
+alias test-db='test-db-common && test-db-mysql && test-db-pgsql && test-db-sqlite'
+alias test-all='test-unit && test-cli && test-integration && test-db'
