@@ -67,7 +67,7 @@ class Imagick extends AbstractAdapter
         int $height = null
     ) {
         $this->check();
-        
+
         $this->file  = $file;
         $this->image = new ImagickNative();
 
