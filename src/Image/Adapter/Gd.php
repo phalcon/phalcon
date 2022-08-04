@@ -159,7 +159,6 @@ class Gd extends AbstractAdapter
             }
 
             imagesavealpha($this->image, true);
-
         } else {
             if (null === $width || null === $height) {
                 throw new Exception(
@@ -646,7 +645,7 @@ class Gd extends AbstractAdapter
             $transparent
         );
 
-        imagesavealpha($image, TRUE);
+        imagesavealpha($image, true);
 
         $width  = imagesx($image);
         $height = imagesy($image);
@@ -933,5 +932,5 @@ class Gd extends AbstractAdapter
                 "version '2.0.1' or greater, you have " . $version
             );
         }
-   }
+    }
 }
