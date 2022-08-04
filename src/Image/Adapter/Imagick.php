@@ -62,8 +62,8 @@ class Imagick extends AbstractAdapter
      * @throws ImagickException
      */
     public function __construct(
-        string $file, 
-        int $width = null, 
+        string $file,
+        int $width = null,
         int $height = null
     ) {
         $this->check();
@@ -896,7 +896,7 @@ class Imagick extends AbstractAdapter
         }
 
         if (defined("Imagick::IMAGICK_EXTNUM")) {
-           $this->version = constant("Imagick::IMAGICK_EXTNUM");
+            $this->version = constant("Imagick::IMAGICK_EXTNUM");
         }
     }
 }
