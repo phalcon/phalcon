@@ -45,7 +45,9 @@ class WatermarkCest
         );
 
         // Add a watermark to the bottom right of the image
-        $image->watermark($mark, 10, 10)->save(outputDir('tests/image/imagick/watermark.jpg'));
+        $image->watermark($mark, 10, 10)
+              ->save(outputDir('tests/image/imagick/watermark.jpg'))
+        ;
 
         $I->amInPath(
             outputDir('tests/image/imagick/')

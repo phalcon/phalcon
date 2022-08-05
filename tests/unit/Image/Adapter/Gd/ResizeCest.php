@@ -21,7 +21,6 @@ use Phalcon\Tests\Fixtures\Traits\GdTrait;
 use UnitTester;
 
 use function dataDir;
-use function uniqid;
 
 class ResizeCest
 {
@@ -95,13 +94,13 @@ class ResizeCest
 
         $this->checkJpegSupport($I);
 
-        $master = $example['master'];
-        $width  = $example['width'];
-        $height = $example['height'];
+        $master  = $example['master'];
+        $width   = $example['width'];
+        $height  = $example['height'];
         $message = $example['message'];
 
-        $source    = dataDir('assets/images/example-jpg.jpg');
-        $image = new Gd($source);
+        $source = dataDir('assets/images/example-jpg.jpg');
+        $image  = new Gd($source);
 
         $I->expectThrowable(
             new Exception($message),

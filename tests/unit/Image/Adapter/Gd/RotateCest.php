@@ -59,7 +59,9 @@ class RotateCest
 
                 $image = new Gd($imagePath);
 
-                $image->rotate($degrees)->save($output);
+                $image->rotate($degrees)
+                      ->save($output)
+                ;
 
                 $I->amInPath(
                     outputDir($outputDir)

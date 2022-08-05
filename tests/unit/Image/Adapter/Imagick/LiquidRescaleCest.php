@@ -43,7 +43,9 @@ class LiquidRescaleCest
         $image->setResourceLimit(6, 1);
 
         // Resize to 200 pixels on the shortest side
-        $image->liquidRescale(200, 200)->save(outputDir('tests/image/imagick/liquidRescale.jpg'));
+        $image->liquidRescale(200, 200)
+              ->save(outputDir('tests/image/imagick/liquidRescale.jpg'))
+        ;
 
         $I->amInPath(
             outputDir('tests/image/imagick/')

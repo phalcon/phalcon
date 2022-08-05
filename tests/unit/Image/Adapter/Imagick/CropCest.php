@@ -41,7 +41,9 @@ class CropCest
         $image->setResourceLimit(6, 1);
 
         // Crop the image to 200x200 pixels, from the center
-        $image->crop(200, 200)->save(outputDir('tests/image/imagick/crop.jpg'));
+        $image->crop(200, 200)
+              ->save(outputDir('tests/image/imagick/crop.jpg'))
+        ;
 
         $I->amInPath(
             outputDir('tests/image/imagick/')

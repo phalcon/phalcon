@@ -41,7 +41,9 @@ class BackgroundCest
         $image->setResourceLimit(6, 1);
 
         // Add a watermark to the bottom right of the image
-        $image->background('#000')->save(outputDir('tests/image/imagick/background.jpg'));
+        $image->background('#000')
+              ->save(outputDir('tests/image/imagick/background.jpg'))
+        ;
 
         $I->amInPath(
             outputDir('tests/image/imagick/')

@@ -41,7 +41,9 @@ class ReflectionCest
         $image->setResourceLimit(6, 1);
 
         // Create a 50 pixel reflection that fades from 0-100% opacity
-        $image->reflection(50)->save(outputDir('tests/image/imagick/reflection.jpg'));
+        $image->reflection(50)
+              ->save(outputDir('tests/image/imagick/reflection.jpg'))
+        ;
 
         $I->amInPath(
             outputDir('tests/image/imagick/')

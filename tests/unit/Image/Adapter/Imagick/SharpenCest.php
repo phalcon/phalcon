@@ -41,7 +41,9 @@ class SharpenCest
         $image->setResourceLimit(6, 1);
 
         // Sharpen the image by 20%
-        $image->sharpen(20)->save(outputDir('tests/image/imagick/sharpen.jpg'));
+        $image->sharpen(20)
+              ->save(outputDir('tests/image/imagick/sharpen.jpg'))
+        ;
 
         $I->amInPath(
             outputDir('tests/image/imagick/')

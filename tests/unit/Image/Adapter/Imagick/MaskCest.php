@@ -45,7 +45,9 @@ class MaskCest
         );
 
         // Add a watermark to the bottom right of the image
-        $image->mask($mask)->save(outputDir('tests/image/imagick/mask.jpg'));
+        $image->mask($mask)
+              ->save(outputDir('tests/image/imagick/mask.jpg'))
+        ;
 
         $I->amInPath(
             outputDir('tests/image/imagick/')
