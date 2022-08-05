@@ -33,8 +33,8 @@ class TextCest
      * @param UnitTester $I
      * @param Example    $example
      *
-     * @author Phalcon Team <team@phalcon.io>
-     * @since  2018-11-13
+     * @author       Phalcon Team <team@phalcon.io>
+     * @since        2018-11-13
      */
     public function imageAdapterGdText(UnitTester $I, Example $example)
     {
@@ -58,7 +58,7 @@ class TextCest
                 $example['size'],
                 $example['font']
             )
-              ->save($output)
+            ->save($output)
         ;
 
         $I->amInPath(outputDir($outputDir));

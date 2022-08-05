@@ -53,16 +53,11 @@ class SharpenCest
                   ->save($output)
             ;
 
-            $I->amInPath(
-                outputDir($outputDir)
-            );
-
+            $I->amInPath(outputDir($outputDir));
             $I->seeFileFound($outputImage);
 
-            $I->assertTrue(
-                $this->checkImageHash($output, $hash)
-            );
-
+            $actual = $this->checkImageHash($output, $hash);
+            $I->assertTrue($actual);
             $I->safeDeleteFile($outputImage);
         }
     }
