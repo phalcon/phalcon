@@ -792,7 +792,7 @@ class Gd extends AbstractAdapter
 
         $opacity = (int) round(abs(($opacity * 127 / 100) - 127));
 
-        if (true !== empty($fontfile)) {
+        if (true !== empty($fontFile)) {
             $space = imagettfbbox($size, 0, $fontFile, $text);
 
             if (false === $space) {
