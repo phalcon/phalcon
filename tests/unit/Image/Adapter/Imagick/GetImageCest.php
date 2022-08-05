@@ -38,6 +38,7 @@ class GetImageCest
         );
 
         $class = \Imagick::class;
-        $I->assertInstanceOf($class, $image);
+        $actual = $image->getImage();
+        $I->assertInstanceOf($class, $actual);
     }
 }
