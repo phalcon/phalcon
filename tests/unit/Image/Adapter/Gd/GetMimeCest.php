@@ -59,6 +59,11 @@ class GetMimeCest
     {
         return [
             [
+                'label'    => 'GIF',
+                'source'   => dataDir('assets/images/example-gif.gif'),
+                'expected' => 'image/gif',
+            ],
+            [
                 'label'    => 'JPEG',
                 'source'   => dataDir('assets/images/example-jpg.jpg'),
                 'expected' => 'image/jpeg',
@@ -79,7 +84,7 @@ class GetMimeCest
                 'expected' => 'image/webp',
             ],
             [
-                'label'    => 'WEBP',
+                'label'    => 'XBM',
                 'source'   => dataDir('assets/images/example-xbm.xbm'),
                 'expected' => 'image/xbm',
             ],

@@ -53,7 +53,9 @@ class WatermarkCest
         $hash = 'fbf9f3e3c3c18183';
 
         // Resize to 200 pixels on the shortest side
-        $image->watermark($watermark, $offsetX, $offsetY, $opacity)->save($output);
+        $image->watermark($watermark, $offsetX, $offsetY, $opacity)
+              ->save($output)
+        ;
 
         $I->amInPath(
             outputDir($outputDir)
@@ -96,7 +98,9 @@ class WatermarkCest
 
         $hash = 'fbf9f3e3c3c18183';
 
-        $image->watermark($watermark, $offsetX, $offsetY)->save($output);
+        $image->watermark($watermark, $offsetX, $offsetY)
+              ->save($output)
+        ;
 
         $I->amInPath(
             outputDir($outputDir)
@@ -142,7 +146,9 @@ class WatermarkCest
         $hash = '107c7c7c7e1c1818';
 
         // Resize to 200 pixels on the shortest side
-        $image->watermark($watermark, $offsetX, $offsetY, $opacity)->save($output);
+        $image->watermark($watermark, $offsetX, $offsetY, $opacity)
+              ->save($output)
+        ;
 
         $I->amInPath(
             outputDir($outputDir)
@@ -185,7 +191,9 @@ class WatermarkCest
 
         $hash = '10787c3c3e181818';
 
-        $image->watermark($watermark, $offsetX, $offsetY, $opacity)->save($output);
+        $image->watermark($watermark, $offsetX, $offsetY, $opacity)
+              ->save($output)
+        ;
 
         $I->amInPath(
             outputDir($outputDir)
