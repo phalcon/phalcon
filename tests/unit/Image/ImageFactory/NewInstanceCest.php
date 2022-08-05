@@ -14,10 +14,12 @@ declare(strict_types=1);
 namespace Phalcon\Tests\Unit\Image\ImageFactory;
 
 use Phalcon\Image\Adapter\Imagick;
+use Phalcon\Image\Exception;
 use Phalcon\Image\ImageFactory;
 use UnitTester;
 
 use function dataDir;
+use function uniqid;
 
 class NewInstanceCest
 {
@@ -42,7 +44,29 @@ class NewInstanceCest
         $class = Imagick::class;
         $I->assertInstanceOf($class, $image);
 
-        $actual = $image->getRealpath();
-        $I->assertSame($file, $actual);
+        $expected = $file;
+        $actual   = $image->getRealPath();
+        $I->assertSame($expected, $actual);
+    }
+
+    /**
+     * Tests Phalcon\Image\ImageFactory :: newInstance() - exception
+     *
+     * @author Phalcon Team <team@phalcon.io>
+     * @since  2022-08-02
+     */
+    public function imageImageFactoryNewInstanceException(UnitTester $I)
+    {
+        $I->checkExtensionIsLoaded('imagick');
+        $I->wantToTest('Image\ImageFactory - newInstance() - exception');
+
+        $name = uniqid('service-');
+        $I->expectThrowable(
+            new Exception('Service ' . $name . ' is not registered'),
+            function () use ($name) {
+                $factory = new ImageFactory();
+                $factory->newInstance($name, uniqid('file-'));
+            }
+        );
     }
 }

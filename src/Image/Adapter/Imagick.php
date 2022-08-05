@@ -87,7 +87,10 @@ class Imagick extends AbstractAdapter
             }
             $this->type = $this->image->getImageType();
 
-            if ($this->type == IMAGETYPE_GIF) {
+            /**
+             * GIF
+             */
+            if ($this->image->getImageType() == IMAGETYPE_GIF) {
                 $image = $this->image->coalesceImages();
 
                 $this->image->clear();
@@ -182,17 +185,27 @@ class Imagick extends AbstractAdapter
     /**
      * Sets the limit for a particular resource in megabytes
      *
-     * @link http://php.net/manual/ru/imagick.constants.php#imagick.constants.resourcetypes
-     *
      * @param int $type
      * @param int $limit
      *
      * @return void
+     * @throws Exception
      * @throws ImagickException
+     *
+     * @link https://www.php.net/manual/en/imagick.constants.php#imagick.constants.resourcetypes
      */
     public function setResourceLimit(int $type, int $limit): void
     {
-        $this->image->setResourceLimit($type, $limit);
+        /**
+         * The constants are all integers and are 0-6
+         */
+        if ($type >= 0 && $type <= 6) {
+            $this->image->setResourceLimit($type, $limit);
+        } else {
+            throw new Exception(
+                "Cannot set the Resource Type for this image"
+            );
+        }
     }
 
     /**
@@ -225,7 +238,7 @@ class Imagick extends AbstractAdapter
         while (true) {
             $background->newImage($this->width, $this->height, $pixel1);
 
-            if (!$background->getImageAlphaChannel()) {
+            if (true !== $background->getImageAlphaChannel()) {
                 $background->setImageAlphaChannel(
                     constant("Imagick::ALPHACHANNEL_SET")
                 );
@@ -243,18 +256,18 @@ class Imagick extends AbstractAdapter
                 $this->image->getColorspace()
             );
 
-            $return = $background->compositeImage(
+            $result = $background->compositeImage(
                 $this->image,
                 constant("Imagick::COMPOSITE_DISSOLVE"),
                 0,
                 0
             );
 
-            if ($return !== true) {
+            if (true !== $result) {
                 throw new Exception("Imagick::compositeImage failed");
             }
 
-            if ($this->image->nextImage() === false) {
+            if (true !== $this->image->nextImage()) {
                 break;
             }
         }
@@ -280,7 +293,7 @@ class Imagick extends AbstractAdapter
         while (true) {
             $this->image->blurImage($radius, 100);
 
-            if ($this->image->nextImage() === false) {
+            if (true !== $this->image->nextImage()) {
                 break;
             }
         }
@@ -311,7 +324,7 @@ class Imagick extends AbstractAdapter
             $image->cropImage($width, $height, $offsetX, $offsetY);
             $image->setImagePage($width, $height, 0, 0);
 
-            if ($image->nextImage() === false) {
+            if (true !== $image->nextImage()) {
                 break;
             }
         }
@@ -337,7 +350,7 @@ class Imagick extends AbstractAdapter
         while (true) {
             $this->image->$method();
 
-            if ($this->image->nextImage() === false) {
+            if (true !== $this->image->nextImage()) {
                 break;
             }
         }
@@ -373,7 +386,7 @@ class Imagick extends AbstractAdapter
                 throw new Exception("Imagick::compositeImage failed");
             }
 
-            if ($this->image->nextImage() === false) {
+            if (true !== $this->image->nextImage()) {
                 break;
             }
         }
@@ -401,7 +414,7 @@ class Imagick extends AbstractAdapter
             $this->image->scaleImage($width, $height);
             $this->image->scaleImage($this->width, $this->height);
 
-            if ($this->image->nextImage() === false) {
+            if (true !== $this->image->nextImage()) {
                 break;
             }
         }
@@ -448,7 +461,7 @@ class Imagick extends AbstractAdapter
                 0
             );
 
-            if ($reflection->nextImage() === false) {
+            if (true !== $this->image->nextImage()) {
                 break;
             }
         }
@@ -483,7 +496,7 @@ class Imagick extends AbstractAdapter
                 constant("Imagick::CHANNEL_ALPHA")
             );
 
-            if ($this->image->nextImage() === false) {
+            if (true !== $this->image->nextImage()) {
                 break;
             }
         }
@@ -516,7 +529,7 @@ class Imagick extends AbstractAdapter
                 throw new Exception("Imagick::compositeImage failed");
             }
 
-            if ($this->image->nextImage() === false) {
+            if (true !== $this->image->nextImage()) {
                 break;
             }
         }
@@ -536,10 +549,7 @@ class Imagick extends AbstractAdapter
                 throw new Exception("Imagick::compositeImage failed");
             }
 
-            if (
-                $image->nextImage() === false ||
-                $reflection->nextImage() === false
-            ) {
+            if (true !== $image->nextImage() || true !== $reflection->nextImage()) {
                 break;
             }
         }
@@ -608,7 +618,7 @@ class Imagick extends AbstractAdapter
         while (true) {
             $image->scaleImage($width, $height);
 
-            if ($image->nextImage() === false) {
+            if (true !== $image->nextImage()) {
                 break;
             }
         }
@@ -641,7 +651,7 @@ class Imagick extends AbstractAdapter
                 0
             );
 
-            if ($this->image->nextImage() === false) {
+            if (true !== $this->image->nextImage()) {
                 break;
             }
         }
@@ -713,7 +723,7 @@ class Imagick extends AbstractAdapter
         while (true) {
             $this->image->sharpenImage(0, $amount);
 
-            if ($this->image->nextImage() === false) {
+            if (true !== $this->image->nextImage()) {
                 break;
             }
         }
@@ -816,7 +826,7 @@ class Imagick extends AbstractAdapter
         while (true) {
             $this->image->annotateImage($draw, $offsetX, $offsetY, 0, $text);
 
-            if ($this->image->nextImage() === false) {
+            if (true !== $this->image->nextImage()) {
                 break;
             }
         }
@@ -825,7 +835,7 @@ class Imagick extends AbstractAdapter
     }
 
     /**
-     * Execute a watermarking.
+     * Add Watermark
      *
      * @param AdapterInterface $image
      * @param int              $offsetX
@@ -866,7 +876,7 @@ class Imagick extends AbstractAdapter
                 throw new Exception("Imagick::compositeImage failed");
             }
 
-            if ($this->image->nextImage() === false) {
+            if (true !== $this->image->nextImage()) {
                 break;
             }
         }
