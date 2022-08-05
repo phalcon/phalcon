@@ -48,7 +48,8 @@ class TextCest
             '000099',
             12,
             dataDir('assets/fonts/Roboto-Thin.ttf')
-        )->save(outputDir('tests/image/imagick/text.jpg'))
+        )
+              ->save(outputDir('tests/image/imagick/text.jpg'))
         ;
 
         $I->amInPath(

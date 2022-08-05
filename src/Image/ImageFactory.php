@@ -13,6 +13,7 @@ declare(strict_types=1);
 
 namespace Phalcon\Image;
 
+use Phalcon\Config\Config;
 use Phalcon\Image\Adapter\AdapterInterface;
 use Phalcon\Image\Adapter\Gd;
 use Phalcon\Image\Adapter\Imagick;
@@ -38,12 +39,12 @@ class ImageFactory
     /**
      * Factory to create an instance from a Config object
      *
-     * @param array|\Phalcon\Config\Config $config = [
-     *     'adapter' => 'gd',
-     *     'file'    => 'image.jpg',
-     *     'height'  => null,
-     *     'width'   => null
-     * ]
+     * @param array|Config $config                 = [
+     *                                             'adapter' => 'gd',
+     *                                             'file'    => 'image.jpg',
+     *                                             'height'  => null,
+     *                                             'width'   => null
+     *                                             ]
      *
      * @return AdapterInterface
      */

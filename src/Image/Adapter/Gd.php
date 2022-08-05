@@ -13,6 +13,7 @@ declare(strict_types=1);
 
 namespace Phalcon\Image\Adapter;
 
+use GdImage;
 use Phalcon\Image\Enum;
 use Phalcon\Image\Exception;
 
@@ -208,7 +209,7 @@ class Gd extends AbstractAdapter
         if (defined("GD_VERSION")) {
             $version = GD_VERSION;
         } else {
-            $info = gd_info();
+            $info    = gd_info();
             $matches = null;
 
             if (
@@ -239,7 +240,7 @@ class Gd extends AbstractAdapter
         int $blue,
         int $opacity
     ): void {
-        $opacity = (int) round(abs(($opacity * 127 / 100) - 127));
+        $opacity    = (int) round(abs(($opacity * 127 / 100) - 127));
         $image      = $this->image;
         $background = $this->processCreate($this->width, $this->height);
 
@@ -289,7 +290,7 @@ class Gd extends AbstractAdapter
      * @param int $width
      * @param int $height
      *
-     * @return false|\GdImage|resource
+     * @return false|GdImage|resource
      */
     protected function processCreate(int $width, int $height)
     {
@@ -322,11 +323,11 @@ class Gd extends AbstractAdapter
             "height" => $height,
         ];
 
-        $image  = imagecrop($this->image, $rect);
+        $image = imagecrop($this->image, $rect);
 
         imagedestroy($this->image);
 
-        $this->image = $image;
+        $this->image  = $image;
         $this->width  = imagesx($image);
         $this->height = imagesy($image);
     }
@@ -740,9 +741,9 @@ class Gd extends AbstractAdapter
         $amount = (int) round(abs(-18 + ($amount * 0.08)), 2);
 
         $matrix = [
-            [-1, -1,      -1],
+            [-1, -1, -1],
             [-1, $amount, -1],
-            [-1, -1,      -1]
+            [-1, -1, -1]
         ];
 
         $result = imageconvolution(

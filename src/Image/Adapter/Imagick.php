@@ -75,9 +75,9 @@ class Imagick extends AbstractAdapter
             $this->realpath = realpath($this->file);
 
             if (true !== $this->image->readImage($this->realpath)) {
-                 throw new Exception(
-                     "Imagick::readImage " . $this->file . " failed"
-                 );
+                throw new Exception(
+                    "Imagick::readImage " . $this->file . " failed"
+                );
             }
 
             if (!$this->image->getImageAlphaChannel()) {
@@ -132,13 +132,51 @@ class Imagick extends AbstractAdapter
     }
 
     /**
-     * Get instance
+     * This method scales the images using liquid rescaling method. Only support
+     * Imagick
      *
-     * @return ImagickNative
+     * @param int $width    new width
+     * @param int $height   new height
+     * @param int $deltaX   How much the seam can traverse on x-axis. Passing
+     *                      0 causes the seams to be straight.
+     * @param int $rigidity Introduces a bias for non-straight seams. This
+     *                      parameter is typically 0.
+     *
+     * @return void
+     * @throws Exception
+     * @throws ImagickException
      */
-    public function getInternalImInstance(): ImagickNative
-    {
-        return $this->image;
+    public function liquidRescale(
+        int $width,
+        int $height,
+        int $deltaX = 0,
+        int $rigidity = 0
+    ): AbstractAdapter {
+        $image = $this->image;
+
+        $image->setIteratorIndex(0);
+
+        while (true) {
+            $return = $image->liquidRescaleImage(
+                $width,
+                $height,
+                $deltaX,
+                $rigidity
+            );
+
+            if ($return !== true) {
+                throw new Exception("Imagick::liquidRescale failed");
+            }
+
+            if ($image->nextImage() === false) {
+                break;
+            }
+        }
+
+        $this->width  = $image->getImageWidth();
+        $this->height = $image->getImageHeight();
+
+        return $this;
     }
 
     /**
@@ -306,50 +344,6 @@ class Imagick extends AbstractAdapter
     }
 
     /**
-     * This method scales the images using liquid rescaling method. Only support
-     * Imagick
-     *
-     * @param int $width   new width
-     * @param int $height  new height
-     * @param int $deltaX How much the seam can traverse on x-axis. Passing 0 causes the seams to be straight.
-     * @param int $rigidity Introduces a bias for non-straight seams. This parameter is typically 0.
-     *
-     * @return void
-     * @throws Exception
-     * @throws ImagickException
-     */
-    protected function processLiquidRescale(
-        int $width,
-        int $height,
-        int $deltaX,
-        int $rigidity
-    ): void {
-        $image = $this->image;
-
-        $image->setIteratorIndex(0);
-
-        while (true) {
-            $return = $image->liquidRescaleImage(
-                $width,
-                $height,
-                $deltaX,
-                $rigidity
-            );
-
-            if ($return !== true) {
-                throw new Exception("Imagick::liquidRescale failed");
-            }
-
-            if ($image->nextImage() === false) {
-                break;
-            }
-        }
-
-        $this->width  = $image->getImageWidth();
-        $this->height = $image->getImageHeight();
-    }
-
-    /**
      * Composite one image onto another
      *
      * @param AdapterInterface $image
@@ -460,7 +454,7 @@ class Imagick extends AbstractAdapter
         }
 
         $pseudo = $fadeIn ? "gradient:black-transparent" : "gradient:transparent-black";
-        $fade = new ImagickNative();
+        $fade   = new ImagickNative();
 
         $fade->newPseudoImage(
             $reflection->getImageWidth(),

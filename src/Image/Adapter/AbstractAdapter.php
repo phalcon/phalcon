@@ -236,28 +236,6 @@ abstract class AbstractAdapter implements AdapterInterface
     }
 
     /**
-     * This method scales the images using liquid rescaling method. Only support
-     * Imagick
-     *
-     * @param int $width
-     * @param int $height
-     * @param int $deltaX
-     * @param int $rigidity
-     *
-     * @return AbstractAdapter
-     */
-    public function liquidRescale(
-        int $width,
-        int $height,
-        int $deltaX = 0,
-        int $rigidity = 0
-    ): AbstractAdapter {
-        $this->processLiquidRescale($width, $height, $deltaX, $rigidity);
-
-        return $this;
-    }
-
-    /**
      * Composite one image onto another
      *
      * @param AdapterInterface $mask
@@ -548,10 +526,10 @@ abstract class AbstractAdapter implements AdapterInterface
         int $offsetY = 0,
         int $opacity = 100
     ): AdapterInterface {
-        $temp = $this->width - $watermark->getWidth();
+        $temp    = $this->width - $watermark->getWidth();
         $offsetX = $this->checkHighLow($offsetX, 0, $temp);
 
-        $temp = $this->height - $watermark->getHeight();
+        $temp    = $this->height - $watermark->getHeight();
         $offsetY = $this->checkHighLow($offsetX, 0, $temp);
 
         $opacity = $this->checkHighLow($opacity);
