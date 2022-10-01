@@ -18,10 +18,6 @@ use function hash;
 /**
  * Represents an inline asset
  *
- *```php
- * $inline = new \Phalcon\Assets\Inline("js", "alert('hello world');");
- *```
- *
  * @property array  $attributes
  * @property string $content
  * @property bool   $filter

@@ -27,7 +27,7 @@ class BoolVal
      *
      * @return bool
      */
-    public function __invoke($input): bool
+    public function __invoke(mixed $input): bool
     {
         $trueArray  = ['true', 'on', 'yes', 'y', '1'];
         $falseArray = ['false', 'off', 'no', 'n', '0'];

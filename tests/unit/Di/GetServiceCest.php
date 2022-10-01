@@ -27,7 +27,9 @@ use UnitTester;
 class GetServiceCest
 {
     /**
-     * Unit Tests Phalcon\Di :: getService()
+     * Unit Tests Phalcon\Di\Di :: getService()
+     *
+     * @param UnitTester $I
      *
      * @param UnitTester $I
      *

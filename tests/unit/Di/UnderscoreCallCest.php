@@ -26,7 +26,9 @@ use UnitTester;
 class UnderscoreCallCest
 {
     /**
-     * Tests Phalcon\Di :: __call()
+     * Tests Phalcon\Di\Di :: __call()
+     *
+     * @param UnitTester $I
      *
      * @param UnitTester $I
      *
@@ -47,7 +49,7 @@ class UnderscoreCallCest
     }
 
     /**
-     * Tests Phalcon\Di :: __call() - unknown method
+     * Tests Phalcon\Di\Di :: __call() - unknown method
      *
      * @param UnitTester $I
      *

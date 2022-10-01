@@ -28,7 +28,7 @@ class HasCest
     use TranslateGettextTrait;
 
     /**
-     * Tests Phalcon\Translate\Adapter\Gettext :: has()
+     * Tests Phalcon\Translate\Adapter\Gettext :: exists()
      *
      * @param UnitTester $I
      *

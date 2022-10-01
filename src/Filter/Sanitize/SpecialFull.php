@@ -29,7 +29,7 @@ class SpecialFull
      *
      * @return string
      */
-    public function __invoke($input): string
+    public function __invoke(mixed $input): string
     {
         return (string) filter_var($input, FILTER_SANITIZE_FULL_SPECIAL_CHARS);
     }

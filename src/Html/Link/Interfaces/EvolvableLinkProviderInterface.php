@@ -11,7 +11,7 @@
 
 declare(strict_types=1);
 
-namespace Phalcon\Html\Link;
+namespace Phalcon\Html\Link\Interfaces;
 
 /**
  * An evolvable link provider value object.
@@ -21,15 +21,15 @@ interface EvolvableLinkProviderInterface extends LinkProviderInterface
     /**
      * Returns an instance with the specified link included.
      *
-     * If the specified link is already present, this method MUST return normally
-     * without errors. The link is present if $link is === identical to a link
-     * object already in the collection.
+     * If the specified link is already present, this method MUST return
+     * normally without errors. The link is present if $link is === identical
+     * to a link object already in the collection.
      *
-     * @param LinkInterface $link
-     *   A link object that should be included in this collection.
-     * @return static
+     * @param LinkInterface $link A link object that should be included in this collection.
+     *
+     * @return EvolvableLinkProviderInterface
      */
-    public function withLink(LinkInterface $link);
+    public function withLink(LinkInterface $link): EvolvableLinkProviderInterface;
 
     /**
      * Returns an instance with the specifed link removed.
@@ -38,9 +38,9 @@ interface EvolvableLinkProviderInterface extends LinkProviderInterface
      * without errors. The link is present if $link is === identical to a link
      * object already in the collection.
      *
-     * @param LinkInterface $link
-     *   The link to remove.
-     * @return static
+     * @param LinkInterface $link The link to remove.
+     *
+     * @return EvolvableLinkProviderInterface
      */
-    public function withoutLink(LinkInterface $link);
+    public function withoutLink(LinkInterface $link): EvolvableLinkProviderInterface;
 }

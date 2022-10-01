@@ -27,7 +27,7 @@ use function spl_object_hash;
 class InjectionAwareCest
 {
     /**
-     * Tests Phalcon\Di :: injection aware trait
+     * Tests Phalcon\Di\Di :: injection aware trait
      *
      * @param UnitTester $I
      *
@@ -46,6 +46,6 @@ class InjectionAwareCest
 
         $expected = spl_object_hash($container);
         $actual   = spl_object_hash($actual);
-        $I->assertEquals($expected, $actual);
+        $I->assertSame($expected, $actual);
     }
 }

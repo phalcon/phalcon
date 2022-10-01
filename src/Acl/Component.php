@@ -16,7 +16,7 @@ namespace Phalcon\Acl;
 use Phalcon\Acl\Traits\ItemTrait;
 
 /**
- * This class defines component entity and its description
+ * Components of the ACL. Also known as "Resources"
  */
 class Component implements ComponentInterface
 {

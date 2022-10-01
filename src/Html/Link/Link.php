@@ -13,6 +13,8 @@ declare(strict_types=1);
 
 namespace Phalcon\Html\Link;
 
+use Phalcon\Html\Link\Interfaces\LinkInterface;
+
 class Link extends AbstractLink implements LinkInterface
 {
     /**

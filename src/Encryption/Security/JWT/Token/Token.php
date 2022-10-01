@@ -13,6 +13,9 @@ declare(strict_types=1);
 
 namespace Phalcon\Encryption\Security\JWT\Token;
 
+use Phalcon\Encryption\Security\JWT\Signer\SignerInterface;
+use Phalcon\Encryption\Security\JWT\Validator;
+
 /**
  * Token Class.
  *
@@ -60,6 +63,8 @@ class Token
     }
 
     /**
+     * Return the registered claims
+     *
      * @return Item
      */
     public function getClaims(): Item
@@ -68,6 +73,8 @@ class Token
     }
 
     /**
+     * Return the registered headers
+     *
      * @return Item
      */
     public function getHeaders(): Item
@@ -76,6 +83,8 @@ class Token
     }
 
     /**
+     * Return the payload
+     *
      * @return string
      */
     public function getPayload(): string
@@ -83,8 +92,9 @@ class Token
         return $this->headers->getEncoded() . '.' . $this->claims->getEncoded();
     }
 
-
     /**
+     * Return the signature
+     *
      * @return Signature
      */
     public function getSignature(): Signature
@@ -93,10 +103,56 @@ class Token
     }
 
     /**
+     * Return the token
+     *
      * @return string
      */
     public function getToken(): string
     {
         return $this->getPayload() . '.' . $this->signature->getEncoded();
+    }
+
+    /**
+     * @param Validator $validator
+     *
+     * @return array
+     */
+    public function validate(Validator $validator): array
+    {
+        $methods = [
+            "validateAudience"   => $validator->get(Enum::AUDIENCE),
+            "validateExpiration" => $validator->get(Enum::EXPIRATION_TIME),
+            "validateId"         => $validator->get(Enum::ID),
+            "validateIssuedAt"   => $validator->get(Enum::ISSUED_AT),
+            "validateIssuer"     => $validator->get(Enum::ISSUER),
+            "validateNotBefore"  => $validator->get(Enum::NOT_BEFORE),
+        ];
+
+        foreach ($methods as $method => $claimId) {
+            $validator->$method($claimId);
+        }
+
+        return $validator->getErrors();
+    }
+
+    /**
+     * Verify the signature
+     *
+     * @param SignerInterface $signer
+     * @param string          $key
+     *
+     * @return bool
+     */
+    public function verify(SignerInterface $signer, string $key): bool
+    {
+        if ($signer->getAlgHeader() !== $this->getHeaders()->get(Enum::ALGO)) {
+            return false;
+        }
+
+        return $signer->verify(
+            $this->signature->getHash(),
+            $this->getPayload(),
+            $key
+        );
     }
 }

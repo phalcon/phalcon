@@ -26,7 +26,9 @@ use UnitTester;
 class GetRawCest
 {
     /**
-     * Tests Phalcon\Di :: getRaw()
+     * Tests Phalcon\Di\Di :: getRaw()
+     *
+     * @param UnitTester $I
      *
      * @param UnitTester $I
      *

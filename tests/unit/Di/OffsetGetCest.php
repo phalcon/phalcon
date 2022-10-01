@@ -26,7 +26,9 @@ use UnitTester;
 class OffsetGetCest
 {
     /**
-     * Unit Tests Phalcon\Di :: offsetGet()
+     * Unit Tests Phalcon\Di\Di :: offsetGet()
+     *
+     * @param UnitTester $I
      *
      * @param UnitTester $I
      *
@@ -65,8 +67,8 @@ class OffsetGetCest
 
         $I->expectThrowable(
             new Exception(
-                'Service "non-exists" was not found ' .
-                'in the dependency injection container'
+                "Service 'non-exists' was not found " .
+                "in the dependency injection container"
             ),
             function () use ($container) {
                 $container['non-exists'];
@@ -75,8 +77,8 @@ class OffsetGetCest
 
         $I->expectThrowable(
             new Exception(
-                'Service "non-exists" was not found ' .
-                'in the dependency injection container'
+                "Service 'non-exists' was not found " .
+                "in the dependency injection container"
             ),
             function () use ($container) {
                 $container->offsetGet('non-exists');

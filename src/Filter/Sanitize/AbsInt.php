@@ -31,7 +31,7 @@ class AbsInt
      *
      * @return int
      */
-    public function __invoke($input): int
+    public function __invoke(mixed $input): int
     {
         return (int) abs(
             intval(

@@ -18,11 +18,7 @@ use Phalcon\Traits\Php\FileTrait;
 use function hash;
 
 /**
- * Represents an asset
- *
- *```php
- * $asset = new \Phalcon\Assets\Asset("js", "js/jquery.js");
- *```
+ * Object representation of an asset
  *
  * @property array       $attributes
  * @property bool        $isAutoVersion

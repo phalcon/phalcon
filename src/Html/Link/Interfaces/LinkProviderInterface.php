@@ -11,7 +11,7 @@
 
 declare(strict_types=1);
 
-namespace Phalcon\Html\Link;
+namespace Phalcon\Html\Link\Interfaces;
 
 /**
  * A link provider object.
@@ -21,14 +21,17 @@ interface LinkProviderInterface
     /**
      * Returns an array of LinkInterface objects.
      *
-     * @return LinkInterface[]
+     * @return array
      */
     public function getLinks(): array;
 
     /**
-     * Returns an array of LinkInterface objects that have a specific relationship.
+     * Returns an array of LinkInterface objects that have a specific
+     * relationship.
      *
-     * @return LinkInterface[]
+     * @param string $rel
+     *
+     * @return array
      */
     public function getLinksByRel(string $rel): array;
 }

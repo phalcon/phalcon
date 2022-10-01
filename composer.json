@@ -10,7 +10,7 @@
     ],
     "license": "MIT",
     "require": {
-        "php": ">=7.4 <9.0",
+        "php": ">=8.0 <9.0",
         "ext-apcu": "*",
         "ext-igbinary": "*",
         "ext-json": "*",
@@ -19,11 +19,7 @@
         "ext-redis": "*",
         "ext-xml": "*",
         "payload-interop/payload-interop": "^1.0",
-        "phalcon/traits": "^1.0",
-        "psr/http-factory": "^1.0",
-        "psr/http-message": "^1.0",
-        "psr/http-server-handler": "^1.0",
-        "psr/http-server-middleware": "^1.0"
+        "phalcon/traits": "^1.0"
     },
     "suggest": {
         "ext-yaml": "*",

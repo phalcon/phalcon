@@ -14,9 +14,7 @@ declare(strict_types=1);
 namespace Phalcon\Acl;
 
 /**
- * Interface for classes which could be used in allow method as RESOURCE
- *
- * @package Phalcon\Acl
+ * Interface for ACL Component aware objects
  */
 interface ComponentAwareInterface
 {

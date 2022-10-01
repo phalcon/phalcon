@@ -14,9 +14,7 @@ declare(strict_types=1);
 namespace Phalcon\Acl\Traits;
 
 /**
- * This class defines role entity and its description
- *
- * @package Phalcon\Acl\Traits
+ * This class defines role/component names and their descriptions
  *
  * @property string      $name
  * @property string|null $description

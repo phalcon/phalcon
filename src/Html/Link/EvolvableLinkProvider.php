@@ -13,6 +13,9 @@ declare(strict_types=1);
 
 namespace Phalcon\Html\Link;
 
+use Phalcon\Html\Link\Interfaces\EvolvableLinkProviderInterface;
+use Phalcon\Html\Link\Interfaces\LinkInterface;
+
 class EvolvableLinkProvider extends LinkProvider implements EvolvableLinkProviderInterface
 {
     /**

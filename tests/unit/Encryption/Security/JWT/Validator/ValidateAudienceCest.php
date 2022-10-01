@@ -33,20 +33,17 @@ class ValidateAudienceCest
      * @author Phalcon Team <team@phalcon.io>
      * @since  2020-09-09
      */
-    public function httpJWTValidatorValidateAudience(UnitTester $I)
+    public function encryptionSecurityJWTValidatorValidateAudience(UnitTester $I)
     {
-        $I->wantToTest('Http\JWT\Validator - validateAudience()');
+        $I->wantToTest('Encryption\Security\JWT\Validator - validateAudience()');
 
         $token = $this->newToken();
-        $I->expectThrowable(
-            new ValidatorException(
-                "Validation: audience not allowed"
-            ),
-            function () use ($token, $I) {
-                $validator = new Validator($token);
-                $I->assertInstanceOf(Validator::class, $validator);
-                $validator->validateAudience("unknown");
-            }
-        );
+        $validator = new Validator($token);
+
+        $validator->validateAudience('unknown');
+
+        $expected = ["Validation: audience not allowed"];
+        $actual   = $validator->getErrors();
+        $I->assertSame($expected, $actual);
     }
 }

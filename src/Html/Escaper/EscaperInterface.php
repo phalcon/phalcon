@@ -66,16 +66,19 @@ interface EscaperInterface
     /**
      * Sets the encoding to be used by the escaper
      *
-     * @param string $encoding
+     *
+     * @return EscaperInterface
      */
-    public function setEncoding(string $encoding): void;
+    public function setEncoding(string $encoding): EscaperInterface;
 
     /**
      * Sets the HTML quoting type for htmlspecialchars
      *
      * @param int $flags
+     *
+     * @return EscaperInterface
      */
-    public function setHtmlQuoteType(int $flags): void;
+    public function setHtmlQuoteType(int $flags): EscaperInterface;
 
     /**
      * Escapes a URL. Internally uses rawurlencode

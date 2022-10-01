@@ -14,7 +14,7 @@ declare(strict_types=1);
 namespace Phalcon\Application;
 
 /**
- * Exceptions thrown in Phalcon\Crypt use this class
+ * Exceptions thrown in Phalcon\Application use this class
  */
 class Exception extends \Exception
 {

@@ -18,11 +18,6 @@ use Phalcon\Di\Service;
 use Phalcon\Html\Escaper;
 use UnitTester;
 
-/**
- * Class SetServiceCest
- *
- * @package Phalcon\Tests\Unit\Di\FactoryDefault
- */
 class SetServiceCest
 {
     /**
@@ -31,7 +26,7 @@ class SetServiceCest
      * @param UnitTester $I
      *
      * @author Phalcon Team <team@phalcon.io>
-     * @since  2019-09-09
+     * @since  2019-06-13
      */
     public function diFactoryDefaultSetRaw(UnitTester $I)
     {

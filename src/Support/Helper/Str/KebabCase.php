@@ -32,6 +32,6 @@ class KebabCase extends PascalCase
     ): string {
         $output = $this->processArray($text, $delimiters);
 
-        return implode('_', $output);
+        return implode('-', $output);
     }
 }

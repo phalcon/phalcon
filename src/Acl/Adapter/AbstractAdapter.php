@@ -18,9 +18,7 @@ use Phalcon\Events\EventsAwareInterface;
 use Phalcon\Events\Traits\EventsAwareTrait;
 
 /**
- * Class AbstractAdapter
- *
- * @package Phalcon\Acl\Adapter
+ * Functionality common to all adapters
  *
  * @property string|null $activeAccess
  * @property string|null $activeComponent

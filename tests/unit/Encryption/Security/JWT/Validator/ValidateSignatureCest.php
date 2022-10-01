@@ -35,9 +35,9 @@ class ValidateSignatureCest
      * @author Phalcon Team <team@phalcon.io>
      * @since  2020-09-09
      */
-    public function httpJWTValidatorValidateNotBefore(UnitTester $I)
+    public function encryptionSecurityJWTValidatorValidateNotBefore(UnitTester $I)
     {
-        $I->wantToTest('Http\JWT\Validator - validateSignature()');
+        $I->wantToTest('Encryption\Security\JWT\Validator - validateSignature()');
 
         $signer     = new Hmac();
         $builder    = new Builder($signer);
@@ -74,26 +74,23 @@ class ValidateSignatureCest
      * @author Phalcon Team <team@phalcon.io>
      * @since  2020-09-09
      */
-    public function httpJWTValidatorValidateNotBeforeException(UnitTester $I)
+    public function encryptionSecurityJWTValidatorValidateNotBeforeException(UnitTester $I)
     {
-        $I->wantToTest('Http\JWT\Validator - validateSignature()');
+        $I->wantToTest('Encryption\Security\JWT\Validator - validateSignature()');
 
         $token = $this->newToken();
-        $I->expectThrowable(
-            new ValidatorException(
-                "Validation: the signature does not match"
-            ),
-            function () use ($token, $I) {
-                $signer     = new Hmac();
-                $passphrase = '123456';
-                $validator  = new Validator($token);
-                $I->assertInstanceOf(Validator::class, $validator);
+        $signer     = new Hmac();
+        $passphrase = '123456';
+        $validator  = new Validator($token);
+        $I->assertInstanceOf(Validator::class, $validator);
 
-                $I->assertInstanceOf(
-                    Validator::class,
-                    $validator->validateSignature($signer, $passphrase)
-                );
-            }
+        $I->assertInstanceOf(
+            Validator::class,
+            $validator->validateSignature($signer, $passphrase)
         );
+
+        $expected = ["Validation: the signature does not match"];
+        $actual   = $validator->getErrors();
+        $I->assertSame($expected, $actual);
     }
 }

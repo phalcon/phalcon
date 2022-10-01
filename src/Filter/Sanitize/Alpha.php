@@ -23,11 +23,11 @@ use function preg_replace;
 class Alpha
 {
     /**
-     * @param mixed $input The text to sanitize
+     * @param array|string $input The text to sanitize
      *
      * @return string|string[]|null
      */
-    public function __invoke($input)
+    public function __invoke(array|string $input)
     {
         return preg_replace("/[^A-Za-z]/", "", $input);
     }

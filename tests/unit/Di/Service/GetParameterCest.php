@@ -36,7 +36,13 @@ class GetParameterCest
     {
         $I->wantToTest('Di\Service - getParameter()');
 
-        $service = new Service(Escaper::class, false);
+        $service = new Service(
+            [
+                'className' => Escaper::class,
+                'arguments' => [],
+            ],
+            false
+        );
 
         $actual = $service->getParameter(1);
         $I->assertNull($actual);
@@ -66,11 +72,11 @@ class GetParameterCest
 
         $expected = 1;
         $actual   = $service->getParameter(0);
-        $I->assertEquals($expected, $actual);
+        $I->assertSame($expected, $actual);
 
         $expected = 'two';
         $actual   = $service->getParameter(1);
-        $I->assertEquals($expected, $actual);
+        $I->assertSame($expected, $actual);
 
         $actual = $service->getParameter(2);
         $I->assertNull($actual);

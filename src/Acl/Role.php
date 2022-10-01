@@ -16,7 +16,7 @@ namespace Phalcon\Acl;
 use Phalcon\Acl\Traits\ItemTrait;
 
 /**
- * This class defines role entity and its description
+ * Roles for the ACL
  */
 class Role implements RoleInterface
 {
