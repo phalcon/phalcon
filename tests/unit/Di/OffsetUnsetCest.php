@@ -25,7 +25,7 @@ use UnitTester;
 class OffsetUnsetCest
 {
     /**
-     * Tests Phalcon\Di :: offsetUnset()
+     * Tests Phalcon\Di\Di :: offsetUnset()
      *
      * @param UnitTester $I
      *

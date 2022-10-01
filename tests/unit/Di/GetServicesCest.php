@@ -17,11 +17,6 @@ use Phalcon\Di\Di;
 use stdClass;
 use UnitTester;
 
-/**
- * Class GetServicesCest
- *
- * @package Phalcon\Tests\Unit\Di
- */
 class GetServicesCest
 {
     /**
@@ -40,7 +35,7 @@ class GetServicesCest
 
         $expected = [];
         $actual   = $container->getServices();
-        $I->assertEquals($expected, $actual);
+        $I->assertSame($expected, $actual);
 
         $container->set('service', stdClass::class);
 
@@ -52,6 +47,6 @@ class GetServicesCest
 
         $expected = [];
         $actual   = $container->getServices();
-        $I->assertEquals($expected, $actual);
+        $I->assertSame($expected, $actual);
     }
 }

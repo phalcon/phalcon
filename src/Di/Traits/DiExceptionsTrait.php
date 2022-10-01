@@ -57,8 +57,8 @@ trait DiExceptionsTrait
          */
         if (true !== class_exists($name)) {
             throw new Exception(
-                'Service "' . $name .
-                '" was not found in the dependency injection container'
+                "Service '" . $name .
+                "' was not found in the dependency injection container"
             );
         }
     }
@@ -75,7 +75,7 @@ trait DiExceptionsTrait
          */
         if (true !== isset($definition['className'])) {
             throw new Exception(
-                'Invalid service definition. Missing "className" parameter'
+                "Invalid service definition. Missing 'className' parameter"
             );
         }
     }

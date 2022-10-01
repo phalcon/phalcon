@@ -15,8 +15,6 @@ namespace Phalcon\Assets;
 
 /**
  * Exceptions thrown in Phalcon\Assets will use this class
- *
- * @package Phalcon\Assets
  */
 class Exception extends \Exception
 {

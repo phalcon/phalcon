@@ -27,7 +27,7 @@ use function spl_object_hash;
 class GetSetSharedCest
 {
     /**
-     * Tests Phalcon\Di :: getShared()/setShared()
+     * Tests Phalcon\Di\Di :: getShared()/setShared()
      *
      * @param UnitTester $I
      *
@@ -47,15 +47,15 @@ class GetSetSharedCest
 
         $expected = spl_object_hash($class);
         $actual   = spl_object_hash($object);
-        $I->assertEquals($expected, $actual);
+        $I->assertSame($expected, $actual);
 
         $objectTwo = $container->getShared('escaper');
         $actual    = spl_object_hash($objectTwo);
-        $I->assertEquals($expected, $actual);
+        $I->assertSame($expected, $actual);
     }
 
     /**
-     * Tests Phalcon\Di :: getShared() - set
+     * Tests Phalcon\Di\Di :: getShared() - set
      *
      * @param UnitTester $I
      *
@@ -75,10 +75,10 @@ class GetSetSharedCest
 
         $expected = spl_object_hash($class);
         $actual   = spl_object_hash($object);
-        $I->assertEquals($expected, $actual);
+        $I->assertSame($expected, $actual);
 
         $objectTwo = $container->getShared('escaper');
         $actual    = spl_object_hash($objectTwo);
-        $I->assertEquals($expected, $actual);
+        $I->assertSame($expected, $actual);
     }
 }

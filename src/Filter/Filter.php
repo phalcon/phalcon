@@ -153,8 +153,11 @@ class Filter implements FilterInterface
      * @return array|false|mixed|null
      * @throws Exception
      */
-    public function sanitize($value, $sanitizers, bool $noRecursive = false)
-    {
+    public function sanitize(
+        mixed $value,
+        array|string $sanitizers,
+        bool $noRecursive = false
+    ): mixed {
         /**
          * First we need to figure out whether this is one sanitizer (string) or
          * an array with different sanitizers in it.
@@ -170,7 +173,7 @@ class Filter implements FilterInterface
          * $locator->sanitize( 'abcde', ['trim', 'upper'])
          *
          * If the sanitizer requires more than one parameter then we need to
-         * inject those parameters in the sanitize also:
+         * inject those parameters in method also:
          *
          * $locator->sanitize(
          *     '  mary had a little lamb ',

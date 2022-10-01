@@ -25,7 +25,7 @@ use UnitTester;
 class OffsetExistsCest
 {
     /**
-     * Tests Phalcon\Di :: offsetExists()
+     * Tests Phalcon\Di\Di :: offsetExists()
      *
      * @param UnitTester $I
      *

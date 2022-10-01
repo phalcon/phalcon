@@ -31,9 +31,9 @@ class GetClaimsCest
      * @author Phalcon Team <team@phalcon.io>
      * @since  2020-09-09
      */
-    public function httpJWTTokenTokenGetClaims(UnitTester $I)
+    public function encryptionSecurityJWTTokenTokenGetClaims(UnitTester $I)
     {
-        $I->wantToTest('Http\JWT\Token\Token - getClaims()');
+        $I->wantToTest('Encryption\Security\JWT\Token\Token - getClaims()');
 
         $headers   = new Item(["typ" => "JWT"], "header-encoded");
         $claims    = new Item(["sub" => "valid-subject"], "claim-encoded");
@@ -41,8 +41,12 @@ class GetClaimsCest
 
         $token = new Token($headers, $claims, $signature);
 
-        $I->assertInstanceOf(Item::class, $token->getClaims());
-        $I->assertEquals("valid-subject", $token->getClaims()
-                                                ->get('sub'));
+        $expected = Item::class;
+        $actual   = $token->getClaims();
+        $I->assertInstanceOf($expected, $actual);
+
+        $expected = "valid-subject";
+        $actual   = $token->getClaims()->get('sub');
+        $I->assertSame($expected, $actual);
     }
 }

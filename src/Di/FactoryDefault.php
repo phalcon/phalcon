@@ -18,8 +18,11 @@ use Phalcon\Encryption\Crypt;
 use Phalcon\Encryption\Security;
 use Phalcon\Events\Manager as EventsManager;
 use Phalcon\Filter\FilterFactory;
+use Phalcon\Flash\Direct;
+use Phalcon\Flash\Session;
 use Phalcon\Html\Escaper;
 use Phalcon\Html\TagFactory;
+use Phalcon\Support\HelperFactory;
 
 /**
  * This is a variant of the standard Phalcon\Di. By default, it automatically
@@ -36,62 +39,51 @@ class FactoryDefault extends Di
     {
         parent::__construct();
 
-        $filter     = new FilterFactory();
-//        $escaper    = new Escaper();
-//        $tagFactory = new TagFactory($escaper);
-//        $assets     = new AssetsManager($tagFactory);
+        $filterFactory = new FilterFactory();
 
         $this->services = [
-//            'assets'        => new Service($assets, true),
-            'crypt'         => new Service(Crypt::class, true),
-            'escaper'       => new Service(Escaper::class, true),
-            'eventsManager' => new Service(EventsManager::class, true),
-            'filter'        => new Service($filter->newInstance(), true),
-            'security'      => new Service(Security::class, true),
+//            "annotations"        : new Service("Phalcon\\Annotations\\Adapter\\Memory", true),
+            "assets"             => new Service(
+                [
+                    "className" => AssetsManager::class,
+                    "arguments" => [
+                        [
+                            "type" => "service",
+                            "name" => "tag"
+                        ]
+                    ]
+                ],
+                true
+            ),
+            "crypt"              => new Service(Crypt::class, true),
+//            "cookies"            => new Service("Phalcon\\Http\\Response\\Cookies", true),
+//            "dispatcher"         => new Service("Phalcon\\Mvc\\Dispatcher", true),
+            "escaper"            => new Service(Escaper::class, true),
+            "eventsManager"      => new Service(EventsManager::class, true),
+            "flash"              => new Service(Direct::class, true),
+            "flashSession"       => new Service(Session::class, true),
+            "filter"             => new Service($filterFactory->newInstance(), true),
+            "helper"             => new Service(HelperFactory::class, true),
+//            "modelsManager"      => new Service("Phalcon\\Mvc\\Model\\Manager", true),
+//            "modelsMetadata"     => new Service("Phalcon\\Mvc\\Model\\MetaData\\Memory", true),
+//            "request"            => new Service("Phalcon\\Http\\Request", true),
+//            "response"           => new Service("Phalcon\\Http\\Response", true),
+//            "router"             => new Service("Phalcon\\Mvc\\Router", true),
+            "security"           => new Service(Security::class, true),
+            "tag"                => new Service(
+                [
+                    "className" => TagFactory::class,
+                    "arguments" => [
+                        [
+                            "type" => "service",
+                            "name" => "escaper"
+                        ]
+                    ]
+                ],
+                true
+            ),
+//            "transactionManager" : new Service("Phalcon\\Mvc\\Model\\Transaction\\Manager", true),
+//            "url"                : new Service("Phalcon\\Mvc\\Url", true)
         ];
-
-        $this->set(
-            'assets',
-            [
-                'className' => AssetsManager::class,
-                'arguments' => [
-                    [
-                        'type' => 'service',
-                        'name' => 'tag',
-                    ],
-                ],
-            ]
-        );
-
-        $this->set(
-            'tag',
-            [
-                'className' => TagFactory::class,
-                'arguments' => [
-                    [
-                        'type' => 'service',
-                        'name' => 'escaper',
-                    ],
-                ],
-            ]
-        );
-
-
-//        let filter = new FilterFactory();
-//
-//        let this->services = [
-//            "annotations":        new Service("Phalcon\\Annotations\\Adapter\\Memory", true),
-//            "cookies":            new Service("Phalcon\\Http\\Response\\Cookies", true),
-//            "dispatcher":         new Service("Phalcon\\Mvc\\Dispatcher", true),
-//            "flash":              new Service("Phalcon\\Flash\\Direct", true),
-//            "flashSession":       new Service("Phalcon\\Flash\\Session", true),
-//            "modelsManager":      new Service("Phalcon\\Mvc\\Model\\Manager", true),
-//            "modelsMetadata":     new Service("Phalcon\\Mvc\\Model\\MetaData\\Memory", true),
-//            "request":            new Service("Phalcon\\Http\\Request", true),
-//            "response":           new Service("Phalcon\\Http\\Response", true),
-//            "router":             new Service("Phalcon\\Mvc\\Router", true),
-//            "transactionManager": new Service("Phalcon\\Mvc\\Model\\Transaction\\Manager", true),
-//            "url":                new Service("Phalcon\\Url", true)
-//        ];
     }
 }

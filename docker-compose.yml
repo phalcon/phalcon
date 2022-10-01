@@ -3,14 +3,6 @@
 version: '3'
 
 services:
-  cphalcon-7.4:
-    container_name: phalcon-7.4
-    hostname: phalcon-74
-    build: docker/7.4
-    working_dir: /srv
-    volumes:
-      - .:/srv
-
   cphalcon-8.0:
     container_name: phalcon-8.0
     hostname: phalcon-80

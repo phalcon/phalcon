@@ -11,13 +11,25 @@
 
 declare(strict_types=1);
 
-namespace Phalcon\Html\Link;
+namespace Phalcon\Html\Link\Interfaces;
 
 /**
  * A readable link object.
  */
 interface LinkInterface
 {
+    /**
+     * Returns a list of attributes that describe the target URI.
+     *
+     * @return array
+     *   A key-value list of attributes, where the key is a string and the value
+     *  is either a PHP primitive or an array of PHP strings. If no values are
+     *  found an empty array MUST be returned.
+     *
+     * @return array
+     */
+    public function getAttributes(): array;
+
     /**
      * Returns the target of the link.
      *
@@ -34,14 +46,6 @@ interface LinkInterface
     public function getHref(): string;
 
     /**
-     * Returns whether this is a templated link.
-     *
-     * @return bool
-     *   True if this link object is templated, False otherwise.
-     */
-    public function isTemplated(): bool;
-
-    /**
      * Returns the relationship type(s) of the link.
      *
      * This method returns 0 or more relationship types for a link, expressed
@@ -52,12 +56,10 @@ interface LinkInterface
     public function getRels(): array;
 
     /**
-     * Returns a list of attributes that describe the target URI.
+     * Returns whether this is a templated link.
      *
-     * @return array
-     *   A key-value list of attributes, where the key is a string and the value
-     *  is either a PHP primitive or an array of PHP strings. If no values are
-     *  found an empty array MUST be returned.
+     * @return bool
+     *   True if this link object is templated, False otherwise.
      */
-    public function getAttributes(): array;
+    public function isTemplated(): bool;
 }

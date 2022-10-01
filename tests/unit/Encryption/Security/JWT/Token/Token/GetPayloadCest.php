@@ -31,9 +31,9 @@ class GetPayloadCest
      * @author Phalcon Team <team@phalcon.io>
      * @since  2020-09-09
      */
-    public function httpJWTTokenTokenGetPayload(UnitTester $I)
+    public function encryptionSecurityJWTTokenTokenGetPayload(UnitTester $I)
     {
-        $I->wantToTest('Http\JWT\Token\Token - getPayload()');
+        $I->wantToTest('Encryption\Security\JWT\Token\Token - getPayload()');
 
         $headers   = new Item(["typ" => "JWT"], "header-encoded");
         $claims    = new Item(["aud" => ["valid-audience"]], "claim-encoded");
@@ -41,6 +41,8 @@ class GetPayloadCest
 
         $token = new Token($headers, $claims, $signature);
 
-        $I->assertEquals("header-encoded.claim-encoded", $token->getPayload());
+        $expected = "header-encoded.claim-encoded";
+        $actual   = $token->getPayload();
+        $I->assertSame($expected, $actual);
     }
 }

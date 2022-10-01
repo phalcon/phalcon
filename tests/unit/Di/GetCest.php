@@ -94,7 +94,7 @@ class GetCest
 
         $expected = spl_object_hash($escaper);
         $actual   = spl_object_hash($actual);
-        $I->assertEquals($expected, $actual);
+        $I->assertSame($expected, $actual);
     }
 
     /**
@@ -115,8 +115,8 @@ class GetCest
         // non exists service
         $I->expectThrowable(
             new Exception(
-                'Service "non-exists" was not found in the ' .
-                'dependency injection container'
+                "Service 'non-exists' was not found in the " .
+                "dependency injection container"
             ),
             function () use ($container) {
                 $container->get('non-exists');

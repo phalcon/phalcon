@@ -22,10 +22,6 @@ use Phalcon\Events\Traits\EventsAwareTrait;
 /**
  * Base class for Phalcon\Cli\Console and Phalcon\Mvc\Application.
  *
- * Class AbstractApplication
- *
- * @package Phalcon\Application
- *
  * @property string $defaultModule
  * @property array  $modules
  */
@@ -35,9 +31,9 @@ abstract class AbstractApplication implements InjectionAwareInterface, EventsAwa
     use InjectionAwareTrait;
 
     /**
-     * @var string|null
+     * @var string
      */
-    protected ?string $defaultModule = null;
+    protected string $defaultModule = '';
 
     /**
      * @var array<string, mixed>
@@ -57,9 +53,9 @@ abstract class AbstractApplication implements InjectionAwareInterface, EventsAwa
     /**
      * Returns the default module name
      *
-     * @return string|null
+     * @return string
      */
-    public function getDefaultModule(): ?string
+    public function getDefaultModule(): string
     {
         return $this->defaultModule;
     }

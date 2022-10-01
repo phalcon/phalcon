@@ -32,6 +32,6 @@ class SnakeCase extends PascalCase
     ): string {
         $output = $this->processArray($text, $delimiters);
 
-        return implode('-', $output);
+        return implode('_', $output);
     }
 }

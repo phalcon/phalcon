@@ -14,7 +14,7 @@ declare(strict_types=1);
 namespace Phalcon\Tests\Unit\Html\Link\EvolvableLink;
 
 use Phalcon\Html\Link\EvolvableLink;
-use Phalcon\Html\Link\EvolvableLinkInterface;
+use Phalcon\Html\Link\Interfaces\EvolvableLinkInterface;
 use UnitTester;
 
 /**

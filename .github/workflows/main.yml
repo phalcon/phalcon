@@ -51,7 +51,7 @@ jobs:
     strategy:
       fail-fast: false
       matrix:
-        php: [ '7.4', '8.0' ]
+        php: [ '8.0', '8.1' ]
         ts: [ 'nts', 'ts' ]
         arch: [ 'x64' ]
 
@@ -63,7 +63,7 @@ jobs:
         #     {php}-{ts}-{os.name}-{compiler}-{arch}
         include:
           # Linux
-          - { name: ubuntu-gcc, os: ubuntu-18.04, compiler: gcc }
+          - { name: ubuntu-gcc, os: ubuntu-latest, compiler: gcc }
           # macOS
           - { name: macos-clang, os: macos-10.15, compiler: clang }
           # Windows

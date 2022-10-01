@@ -25,7 +25,7 @@ use UnitTester;
 class HasCest
 {
     /**
-     * Tests Phalcon\Di :: has()
+     * Tests Phalcon\Di\Di :: has()
      *
      * @param UnitTester $I
      *

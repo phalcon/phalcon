@@ -11,11 +11,10 @@ beautification by scripts.  The fields are: name (N), email (E), web-address
 The sample of querying command to search PECL keyword:
   awk -v RS='' -v ORS='\n\n' '/\nD: .*PECL/' CODE_OWNERS.TXT
 
-N: Ruud Boon
-E: ruud@phalcon.io
-W: https://ruudboon.io
-P: 0xF2E9F914DFA1BCD7
-D: PECL and all parts of Phalcon not covered by someone else
+N: Anton Vasiliev
+E: anton@phalcon.io
+P:
+D: PECL, CI/CD Integration, Zephir support, Parsers and Scanners, Volt, Annotation, PHQL support
 
 N: Nikolaos Dimopoulos
 E: niden@phalcon.io

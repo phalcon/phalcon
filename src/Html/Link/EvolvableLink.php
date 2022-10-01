@@ -13,6 +13,8 @@ declare(strict_types=1);
 
 namespace Phalcon\Html\Link;
 
+use Phalcon\Html\Link\Interfaces\EvolvableLinkInterface;
+
 class EvolvableLink extends Link implements EvolvableLinkInterface
 {
     /**
@@ -26,9 +28,9 @@ class EvolvableLink extends Link implements EvolvableLinkInterface
      *
      * @return $this
      */
-    public function withAttribute(string $attribute, $value): EvolvableLink
+    public function withAttribute(string $attribute, mixed $value): EvolvableLink
     {
-        return $this->doWithAttribute("attributes", $attribute, $value);
+        return $this->doWithAttribute($attribute, $value);
     }
 
     /**
@@ -65,7 +67,7 @@ class EvolvableLink extends Link implements EvolvableLinkInterface
      */
     public function withRel(string $rel): EvolvableLink
     {
-        return $this->doWithAttribute("rels", $rel, true);
+        return $this->doWithRel($rel);
     }
 
     /**
@@ -80,7 +82,7 @@ class EvolvableLink extends Link implements EvolvableLinkInterface
      */
     public function withoutAttribute(string $attribute): EvolvableLink
     {
-        return $this->doWithoutAttribute("attributes", $attribute);
+        return $this->doWithoutAttribute($attribute);
     }
 
     /**
@@ -95,6 +97,6 @@ class EvolvableLink extends Link implements EvolvableLinkInterface
      */
     public function withoutRel(string $rel): EvolvableLink
     {
-        return $this->doWithoutAttribute("rels", $rel);
+        return $this->doWithoutRel($rel);
     }
 }

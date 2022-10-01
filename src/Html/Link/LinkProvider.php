@@ -13,6 +13,9 @@ declare(strict_types=1);
 
 namespace Phalcon\Html\Link;
 
+use Phalcon\Html\Link\Interfaces\LinkInterface;
+use Phalcon\Html\Link\Interfaces\LinkProviderInterface;
+
 /**
  * @property LinkInterface[] $links
  */

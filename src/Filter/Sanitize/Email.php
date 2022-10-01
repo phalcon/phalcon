@@ -30,7 +30,7 @@ class Email
      *
      * @return string
      */
-    public function __invoke($input): string
+    public function __invoke(mixed $input): string
     {
         return (string) filter_var(
             $input,

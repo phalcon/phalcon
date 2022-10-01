@@ -27,14 +27,14 @@ use Phalcon\Encryption\Security\JWT\Token\Token;
 class Validator
 {
     /**
-     * @var int
+     * @var array
      */
-    private int $timeShift = 0;
+    private array $claims;
 
     /**
-     * @var Token
+     * @var array
      */
-    private Token $token;
+    private array $errors = [];
 
     /**
      * Validator constructor.
@@ -42,13 +42,60 @@ class Validator
      * @param Token $token
      * @param int   $timeShift
      */
-    public function __construct(Token $token, int $timeShift = 0)
-    {
-        $this->token     = $token;
-        $this->timeShift = $timeShift;
+    public function __construct(
+        private Token $token,
+        private int $timeShift = 0
+    ) {
+        $now             = time();
+        $this->claims    = [
+            Enum::AUDIENCE        => null,
+            Enum::EXPIRATION_TIME => $now,
+            Enum::ID              => null,
+            Enum::ISSUED_AT       => $now,
+            Enum::ISSUER          => null,
+            Enum::NOT_BEFORE      => $now,
+            Enum::SUBJECT         => null
+        ];
     }
 
     /**
+     * Return an array with validation errors (if any)
+     * @return array
+     */
+    public function getErrors(): array
+    {
+        return $this->errors;
+    }
+
+    /**
+     * Return the value of a claim
+     *
+     * @param string $claim
+     *
+     * @return mixed
+     */
+    public function get(string $claim): mixed
+    {
+        return $this->claims[$claim] ?? null;
+    }
+
+    /**
+     * Set the value of a claim, for comparison with the token values
+     * @param string $claim
+     * @param mixed  $value
+     *
+     * @return Validator
+     */
+    public function set(string $claim, mixed $value): Validator
+    {
+        $this->claims[$claim] = $value;
+
+        return $this;
+    }
+
+    /**
+     * Set the token to be validated
+     * 
      * @param Token $token
      *
      * @return Validator
@@ -61,137 +108,142 @@ class Validator
     }
 
     /**
-     * @param string $audience
+     * Validate the audience
+     * 
+     * @param string|array $audience
      *
      * @return Validator
-     * @throws ValidatorException
      */
-    public function validateAudience(string $audience): Validator
+    public function validateAudience(array|string $audience): Validator
     {
-        $tokenAudience = $this->token->getClaims()
-                                     ->get(Enum::AUDIENCE, []);
-        if (true !== in_array($audience, $tokenAudience)) {
-            throw new ValidatorException(
-                "Validation: audience not allowed"
-            );
+        if (true === is_string($audience)) {
+            $audience = [$audience];
+        }
+
+        $tokenAudience = $this->token->getClaims()->get(Enum::AUDIENCE, []);
+
+        foreach ($audience as $item) {
+            if (true !== in_array($item, $tokenAudience)) {
+                $this->errors[] = "Validation: audience not allowed";
+            }
         }
 
         return $this;
     }
 
     /**
+     * Validate the expiration time of the token
+     *
      * @param int $timestamp
      *
      * @return Validator
-     * @throws ValidatorException
      */
     public function validateExpiration(int $timestamp): Validator
     {
-        $tokenExpirationTime = (int) $this->token->getClaims()
-                                                 ->get(Enum::EXPIRATION_TIME);
+        $tokenExpirationTime = (int) $this->token->getClaims()->get(Enum::EXPIRATION_TIME);
+
         if (
-            $this->token->getClaims()
-                        ->has(Enum::EXPIRATION_TIME) &&
-            $this->getTimestamp($timestamp) >= $tokenExpirationTime
+            $this->token->getClaims()->has(Enum::EXPIRATION_TIME) &&
+            $this->getTimestamp($timestamp) < $tokenExpirationTime
         ) {
-            throw new ValidatorException('Validation: the token has expired');
+            $this->errors[] = "Validation: the token has expired";
         }
 
         return $this;
     }
 
     /**
+     * Validate the id of the token
+     *
      * @param string $jwtId
      *
      * @return Validator
-     * @throws ValidatorException
      */
     public function validateId(string $jwtId): Validator
     {
-        $tokenId = (string) $this->token->getClaims()
-                                        ->get(Enum::ID);
+        $tokenId = (string) $this->token->getClaims()->get(Enum::ID);
+
         if ($jwtId !== $tokenId) {
-            throw new ValidatorException('Validation: incorrect Id');
+            $this->errors[] = "Validation: incorrect Id";
         }
 
         return $this;
     }
 
     /**
+     * Validate the issued at (iat) of the token
+     *
      * @param int $timestamp
      *
      * @return Validator
-     * @throws ValidatorException
      */
     public function validateIssuedAt(int $timestamp): Validator
     {
-        $tokenIssuedAt = (int) $this->token->getClaims()
-                                           ->get(Enum::ISSUED_AT);
+        $tokenIssuedAt = (int) $this->token->getClaims()->get(Enum::ISSUED_AT);
+
         if ($this->getTimestamp($timestamp) <= $tokenIssuedAt) {
-            throw new ValidatorException(
-                'Validation: the token cannot be used yet (future)'
-            );
+            $this->errors[] = "Validation: the token cannot be used yet (future)";
         }
 
         return $this;
     }
 
     /**
+     * Validate the issuer of the token
+     *
      * @param string $issuer
      *
      * @return Validator
-     * @throws ValidatorException
      */
     public function validateIssuer(string $issuer): Validator
     {
-        $tokenIssuer = (string) $this->token->getClaims()
-                                            ->get(Enum::ISSUER);
+        $tokenIssuer = (string) $this->token->getClaims()->get(Enum::ISSUER);
+
         if ($issuer !== $tokenIssuer) {
-            throw new ValidatorException('Validation: incorrect issuer');
+            $this->errors[] = "Validation: incorrect issuer";
         }
 
         return $this;
     }
 
     /**
+     * Validate the notbefore (nbf) of the token
+     *
      * @param int $timestamp
      *
      * @return Validator
-     * @throws ValidatorException
      */
     public function validateNotBefore(int $timestamp): Validator
     {
-        $tokenNotBefore = (int) $this->token->getClaims()
-                                            ->get(Enum::NOT_BEFORE);
+        $tokenNotBefore = (int) $this->token->getClaims()->get(Enum::NOT_BEFORE);
+
         if ($this->getTimestamp($timestamp) <= $tokenNotBefore) {
-            throw new ValidatorException(
-                'Validation: the token cannot be used yet (not before)'
-            );
+            $this->errors[] = "Validation: the token cannot be used yet (not before)";
         }
 
         return $this;
     }
 
     /**
+     * Validate the signature of the token
+     *
      * @param SignerInterface $signer
      * @param string          $passphrase
      *
      * @return Validator
-     * @throws ValidatorException
      */
-    public function validateSignature(SignerInterface $signer, string $passphrase): Validator
-    {
+    public function validateSignature(
+        SignerInterface $signer,
+        string $passphrase
+    ): Validator {
         if (
             true !== $signer->verify(
-                $this->token->getSignature()
-                            ->getHash(),
+                $this->token->getSignature()->getHash(),
                 $this->token->getPayload(),
                 $passphrase
             )
         ) {
-            throw new ValidatorException(
-                'Validation: the signature does not match'
-            );
+            $this->errors[] = "Validation: the signature does not match";
         }
 
         return $this;

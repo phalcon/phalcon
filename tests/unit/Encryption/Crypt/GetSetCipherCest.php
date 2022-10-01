@@ -13,7 +13,6 @@ declare(strict_types=1);
 
 namespace Phalcon\Tests\Unit\Encryption\Crypt;
 
-use Codeception\Stub;
 use Phalcon\Encryption\Crypt;
 use Phalcon\Encryption\Crypt\Exception\Exception;
 use UnitTester;
@@ -28,15 +27,15 @@ class GetSetCipherCest
      * @author Phalcon Team <team@phalcon.io>
      * @since  2021-10-18
      */
-    public function cryptGetSetCipher(UnitTester $I)
+    public function encryptionCryptGetSetCipher(UnitTester $I)
     {
-        $I->wantToTest('Crypt - getCipher() / setCipher()');
+        $I->wantToTest('Encryption\Crypt - getCipher() / setCipher()');
 
         $cipher = 'aes-256-cfb';
         $crypt  = new Crypt();
         $crypt->setCipher($cipher);
 
-        $I->assertEquals($cipher, $crypt->getCipher());
+        $I->assertSame($cipher, $crypt->getCipher());
     }
 
     /**
@@ -47,9 +46,9 @@ class GetSetCipherCest
      * @author Phalcon Team <team@phalcon.io>
      * @since  2021-10-18
      */
-    public function cryptGetSetCipherUnknown(UnitTester $I)
+    public function encryptionCryptGetSetCipherUnknown(UnitTester $I)
     {
-        $I->wantToTest('Crypt - setCipher() - unknown');
+        $I->wantToTest('Encryption\Crypt - setCipher() - unknown');
         $I->expectThrowable(
             new Exception(
                 "The cipher algorithm 'xxx-yyy-zzz' is not supported on this system."

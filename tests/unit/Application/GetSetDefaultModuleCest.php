@@ -38,11 +38,11 @@ class GetSetDefaultModuleCest
         $application = new ApplicationFixture();
 
         $actual = $application->getDefaultModule();
-        $I->assertNull($actual);
+        $I->assertSame('', $actual);
 
         $application->setDefaultModule('admin');
         $expected = 'admin';
         $actual   = $application->getDefaultModule();
-        $I->assertEquals($expected, $actual);
+        $I->assertSame($expected, $actual);
     }
 }

@@ -48,41 +48,61 @@ use const ENT_SUBSTITUTE;
 class Escaper implements EscaperInterface
 {
     /**
-     * @var bool
+     * @param string $encoding
+     * @param int    $flags
+     * @param bool   $doubleEncode
      */
-    protected bool $doubleEncode = true;
+    public function __construct(
+        private string $encoding = 'utf-8',
+        private int $flags = ENT_QUOTES | ENT_SUBSTITUTE | ENT_HTML401,
+        private bool $doubleEncode = true
+    ) {
+    }
 
     /**
-     * @var string
-     */
-    protected string $encoding = 'utf-8';
-
-    /**
-     * ENT_QUOTES | ENT_SUBSTITUTE | ENT_HTML401
+     * Escapes an HTML attribute string or array
      *
-     * @var int
-     */
-    protected int $flags = 11;
-
-    /**
-     * Escapes a HTML attribute string
+     * If the input is an array, the keys are the attribute names and the
+     * values are attribute values. If a value is boolean (true/false) then
+     * the attribute will have no value:
+     * `['disabled' => true]` -> `'disabled``
      *
-     * @param string|null $attribute
+     * The resulting string will have attribute pairs separated by a space.
+     *
+     * @param array|string $input
      *
      * @return string
      */
-    public function attributes(string $input = null): string
+    public function attributes(mixed $input = null): string
     {
-        if (null === $input) {
-            return '';
+        if (true !== is_array($input)) {
+            return $this->phpHtmlSpecialChars((string) $input);
         }
 
-        return htmlspecialchars(
-            $input,
-            ENT_QUOTES,
-            $this->encoding,
-            $this->doubleEncode
-        );
+        $result = "";
+        foreach ($input as $key => $value) {
+            if (null === $value || false === $value) {
+                continue;
+            }
+
+            $key = trim($key);
+
+            if (true === is_array($value)) {
+                $value = implode(" ", $value);
+            }
+
+            $result .= $this->phpHtmlSpecialChars($key);
+
+            if (true !== $value) {
+                $result .= "=\""
+                    . $this->phpHtmlSpecialChars((string) $value)
+                    . "\"";
+            }
+
+            $result .= " ";
+        }
+
+        return rtrim($result);
     }
 
     /**
@@ -155,7 +175,7 @@ class Escaper implements EscaperInterface
     }
 
     /**
-     * Escapes a HTML string. Internally uses htmlspecialchars
+     * Escapes an HTML string. Internally uses htmlspecialchars
      *
      * @param string|null $input
      *
@@ -166,12 +186,7 @@ class Escaper implements EscaperInterface
         if (null === $input) {
             return '';
         }
-        return htmlspecialchars(
-            $input,
-            $this->flags,
-            $this->encoding,
-            $this->doubleEncode
-        );
+        return $this->phpHtmlSpecialChars($input);
     }
 
     /**
@@ -219,10 +234,14 @@ class Escaper implements EscaperInterface
      *```
      *
      * @param bool $doubleEncode
+     *
+     * @return Escaper
      */
-    public function setDoubleEncode(bool $doubleEncode): void
+    public function setDoubleEncode(bool $doubleEncode): Escaper
     {
         $this->doubleEncode = $doubleEncode;
+
+        return $this;
     }
 
     /**
@@ -233,10 +252,14 @@ class Escaper implements EscaperInterface
      *```
      *
      * @param string $encoding
+     *
+     * @return EscaperInterface
      */
-    public function setEncoding(string $encoding): void
+    public function setEncoding(string $encoding): EscaperInterface
     {
         $this->encoding = $encoding;
+
+        return $this;
     }
 
     /**
@@ -265,10 +288,14 @@ class Escaper implements EscaperInterface
      *```
      *
      * @param int $flags
+     *
+     * @return EscaperInterface
      */
-    public function setHtmlQuoteType(int $flags): void
+    public function setHtmlQuoteType(int $flags): EscaperInterface
     {
         $this->flags = $flags;
+
+        return $this;
     }
 
     /**
@@ -304,69 +331,19 @@ class Escaper implements EscaperInterface
     }
 
     /**
-     * Escape CSS strings by replacing non-alphanumeric chars by their
-     * hexadecimal escaped representation
+     * Proxy method for testing
      *
      * @param string $input
      *
      * @return string
-     * @deprecated
      */
-    public function escapeCss(string $input): string
+    protected function phpHtmlSpecialChars(string $input): string
     {
-        return $this->css($input);
-    }
-
-    /**
-     * Escape JavaScript strings by replacing non-alphanumeric chars by their
-     * hexadecimal escaped representation
-     *
-     * @param string $input
-     *
-     * @return string
-     * @deprecated
-     */
-    public function escapeJs(string $input): string
-    {
-        return $this->js($input);
-    }
-
-    /**
-     * Escapes a HTML string. Internally uses htmlspecialchars
-     *
-     * @param string|null $input
-     *
-     * @return string
-     * @deprecated
-     */
-    public function escapeHtml(string $input = null): string
-    {
-        return $this->html($input);
-    }
-
-    /**
-     * Escapes a HTML attribute string
-     *
-     * @param string|null $input
-     *
-     * @return string
-     * @deprecated
-     */
-    public function escapeHtmlAttr(string $input = null): string
-    {
-        return $this->attributes($input);
-    }
-
-    /**
-     * Escapes a URL. Internally uses rawurlencode
-     *
-     * @param string $input
-     *
-     * @return string
-     * @deprecated
-     */
-    public function escapeUrl(string $input): string
-    {
-        return $this->url($input);
+        return htmlspecialchars(
+            $input,
+            $this->flags,
+            $this->encoding,
+            $this->doubleEncode
+        );
     }
 }

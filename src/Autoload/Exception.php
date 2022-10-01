@@ -13,13 +13,9 @@ declare(strict_types=1);
 
 namespace Phalcon\Autoload;
 
-use Throwable;
-
 /**
- * Phalcon\Autoload\Exception
- *
  * Exceptions thrown in Phalcon\Autoload will use this class
  */
-class Exception extends \Exception implements Throwable
+class Exception extends \Exception
 {
 }

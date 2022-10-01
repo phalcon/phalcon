@@ -34,9 +34,9 @@ class SetTokenCest
      * @author Phalcon Team <team@phalcon.io>
      * @since  2020-09-09
      */
-    public function httpJWTValidatorSetToken(UnitTester $I)
+    public function encryptionSecurityJWTValidatorSetToken(UnitTester $I)
     {
-        $I->wantToTest('Http\JWT\Validator - setToken()');
+        $I->wantToTest('Encryption\Security\JWT\Validator - setToken()');
 
         $token1    = $this->newToken();
         $token2    = $this->newToken(Hmac::class, 5);
@@ -49,16 +49,10 @@ class SetTokenCest
         );
 
         $validator->setToken($token2);
-        $I->expectThrowable(
-            new ValidatorException(
-                "Validation: the token cannot be used yet (future)"
-            ),
-            function () use ($validator, $now, $I) {
-                $I->assertInstanceOf(
-                    Validator::class,
-                    $validator->validateIssuedAt($now)
-                );
-            }
-        );
+        $validator->validateIssuedAt($now);
+
+        $expected = ["Validation: the token cannot be used yet (future)"];
+        $actual   = $validator->getErrors();
+        $I->assertSame($expected, $actual);
     }
 }

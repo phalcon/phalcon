@@ -28,7 +28,7 @@ class Remove
      *
      * @return string|string[]
      */
-    public function __invoke($input, $replace)
+    public function __invoke(array|string $input, array|string $replace)
     {
         return str_replace($replace, "", $input);
     }

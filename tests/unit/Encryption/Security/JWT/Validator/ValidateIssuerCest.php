@@ -33,20 +33,18 @@ class ValidateIssuerCest
      * @author Phalcon Team <team@phalcon.io>
      * @since  2020-09-09
      */
-    public function httpJWTValidatorValidateIssuer(UnitTester $I)
+    public function encryptionSecurityJWTValidatorValidateIssuer(UnitTester $I)
     {
-        $I->wantToTest('Http\JWT\Validator - validateIssuer()');
+        $I->wantToTest('Encryption\Security\JWT\Validator - validateIssuer()');
 
         $token = $this->newToken();
-        $I->expectThrowable(
-            new ValidatorException(
-                "Validation: incorrect issuer"
-            ),
-            function () use ($token, $I) {
-                $validator = new Validator($token);
-                $I->assertInstanceOf(Validator::class, $validator);
-                $validator->validateIssuer("unknown");
-            }
-        );
+        $validator = new Validator($token);
+        $I->assertInstanceOf(Validator::class, $validator);
+
+        $validator->validateIssuer("unknown");
+
+        $expected = ["Validation: incorrect issuer"];
+        $actual   = $validator->getErrors();
+        $I->assertSame($expected, $actual);
     }
 }

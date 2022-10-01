@@ -21,23 +21,23 @@ use UnitTester;
 use function spl_object_hash;
 
 /**
- * Class GetSetDefaultCest
+ * Class GetSetDefaultResetCest
  *
  * @package Phalcon\Tests\Unit\Di
  */
-class GetSetDefaultCest
+class GetSetDefaultResetCest
 {
     /**
-     * Tests Phalcon\Di :: getDefault() / setDefault()
+     * Tests Phalcon\Di :: getDefault() / setDefault() / reset()
      *
      * @param UnitTester $I
      *
      * @author Phalcon Team <team@phalcon.io>
      * @since  2019-09-09
      */
-    public function diGetDefault(UnitTester $I)
+    public function diGetSetDefaultReset(UnitTester $I)
     {
-        $I->wantToTest('Di - getDefault() / setDefault()');
+        $I->wantToTest('Di - getDefault() / setDefault() / reset()');
 
         $one = new Di();
         $one->set('collection', Collection::class);
@@ -49,12 +49,23 @@ class GetSetDefaultCest
 
         $expected = spl_object_hash($one);
         $actual   = spl_object_hash(Di::getDefault());
-        $I->assertEquals($expected, $actual);
+        $I->assertSame($expected, $actual);
 
         Di::setDefault($two);
 
         $expected = spl_object_hash($two);
         $actual   = spl_object_hash(Di::getDefault());
-        $I->assertEquals($expected, $actual);
+        $I->assertSame($expected, $actual);
+
+        Di::reset();
+        $three = Di::getDefault();
+
+        $expected = spl_object_hash($one);
+        $actual   = spl_object_hash($three);
+        $I->assertNotSame($expected, $actual);
+
+        $expected = spl_object_hash($two);
+        $actual   = spl_object_hash($three);
+        $I->assertNotSame($expected, $actual);
     }
 }

@@ -15,6 +15,8 @@ namespace Phalcon\Filter\Sanitize;
 
 use function filter_var;
 
+use function htmlspecialchars;
+
 use const FILTER_SANITIZE_STRING;
 
 /**
@@ -25,12 +27,12 @@ use const FILTER_SANITIZE_STRING;
 class StringVal
 {
     /**
-     * @param mixed $input The text to sanitize
+     * @param string $input The text to sanitize
      *
      * @return string
      */
-    public function __invoke($input): string
+    public function __invoke(string $input): string
     {
-        return (string) filter_var($input, FILTER_SANITIZE_STRING);
+        return htmlspecialchars($input);
     }
 }

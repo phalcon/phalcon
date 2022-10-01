@@ -13,16 +13,19 @@ declare(strict_types=1);
 
 namespace Phalcon\Html\Link;
 
+use Phalcon\Html\Link\Interfaces\LinkInterface;
+
 use function in_array;
+use function is_a;
 use function spl_object_hash;
 
 /**
- * @property LinkInterface[] $links
+ * @property array $links
  */
 abstract class AbstractLinkProvider
 {
     /**
-     * @var LinkInterface[]
+     * @var array
      */
     protected array $links = [];
 
@@ -34,7 +37,10 @@ abstract class AbstractLinkProvider
     public function __construct(array $links = [])
     {
         foreach ($links as $link) {
-            if ($link instanceof LinkInterface) {
+            if (
+                true === is_a($link, LinkInterface::class) ||
+                true === is_a($link, "Psr\\Link\\LinkInterface")
+            ) {
                 $this->links[$this->getKey($link)] = $link;
             }
         }
@@ -46,7 +52,7 @@ abstract class AbstractLinkProvider
      * The iterable may be an array or any PHP \Traversable object. If no links
      * are available, an empty array or \Traversable MUST be returned.
      *
-     * @return LinkInterface[]
+     * @return array
      */
     protected function doGetLinks(): array
     {
@@ -61,14 +67,14 @@ abstract class AbstractLinkProvider
      * with that relationship are available, an empty array or \Traversable
      * MUST be returned.
      *
-     * @return LinkInterface[]
+     * @return array
      */
     protected function doGetLinksByRel(string $rel): array
     {
         $filtered = [];
         foreach ($this->links as $link) {
             $rels = $link->getRels();
-            if (in_array($rel, $rels)) {
+            if (true === in_array($rel, $rels)) {
                 $filtered[] = $link;
             }
         }
@@ -83,12 +89,12 @@ abstract class AbstractLinkProvider
      * normally without errors. The link is present if $link is === identical
      * to a link object already in the collection.
      *
-     * @param LinkInterface $link
-     *   A link object that should be included in this collection.
+     * @param mixed $link A link object that should be included in this
+     *                    collection.
      *
      * @return $this
      */
-    protected function doWithLink(LinkInterface $link)
+    protected function doWithLink(mixed $link): AbstractLinkProvider
     {
         $key         = $this->getKey($link);
         $newInstance = clone $this;
@@ -105,11 +111,11 @@ abstract class AbstractLinkProvider
      * without errors. The link is present if $link is === identical to a link
      * object already in the collection.
      *
-     * @param LinkInterface $link The link to remove.
+     * @param mixed $link The link to remove.
      *
      * @return $this
      */
-    protected function doWithoutLink(LinkInterface $link)
+    protected function doWithoutLink(mixed $link): AbstractLinkProvider
     {
         $key         = $this->getKey($link);
         $newInstance = clone $this;
@@ -122,11 +128,11 @@ abstract class AbstractLinkProvider
     /**
      * Returns the object hash key
      *
-     * @param LinkInterface $link
+     * @param mixed link
      *
      * @return string
      */
-    protected function getKey(LinkInterface $link): string
+    protected function getKey(mixed $link): string
     {
         return spl_object_hash($link);
     }

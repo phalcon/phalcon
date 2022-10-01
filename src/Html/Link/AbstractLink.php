@@ -13,8 +13,7 @@ declare(strict_types=1);
 
 namespace Phalcon\Html\Link;
 
-use function array_keys;
-use function mb_strpos;
+use Phalcon\Support\Collection;
 
 /**
  * @property array  $attributes
@@ -25,9 +24,9 @@ use function mb_strpos;
 abstract class AbstractLink
 {
     /**
-     * @var array
+     * @var Collection
      */
-    protected array $attributes = [];
+    protected Collection $attributes;
 
     /**
      * @var string
@@ -35,9 +34,9 @@ abstract class AbstractLink
     protected string $href = "";
 
     /**
-     * @var array
+     * @var Collection
      */
-    protected array $rels = [];
+    protected Collection $rels;
 
     /**
      * @var bool
@@ -56,13 +55,14 @@ abstract class AbstractLink
         string $href = "",
         array $attributes = []
     ) {
-        if (true !== empty($rel)) {
-            $this->rels[$rel] = true;
-        }
-
-        $this->attributes = $attributes;
+        $this->attributes = new Collection($attributes);
+        $this->rels       = new Collection();
         $this->href       = $href;
         $this->templated  = $this->hrefIsTemplated($href);
+
+        if (true !== empty($rel)) {
+            $this->rels->set($rel, true);
+        }
     }
 
     /**
@@ -75,7 +75,7 @@ abstract class AbstractLink
      */
     protected function doGetAttributes(): array
     {
-        return $this->attributes;
+        return $this->attributes->toArray();
     }
 
     /**
@@ -106,7 +106,7 @@ abstract class AbstractLink
      */
     protected function doGetRels(): array
     {
-        return array_keys($this->rels);
+        return $this->rels->getKeys(false);
     }
 
     /**
@@ -136,34 +136,17 @@ abstract class AbstractLink
             false !== mb_strpos($href, "}")
         );
     }
-
     /**
-     * @param string $collection
      * @param string $key
      * @param mixed  $value
      *
-     * @return mixed
+     * @return $this
      */
-    protected function doWithAttribute(string $collection, string $key, $value)
+    protected function doWithAttribute(string $key, mixed $value): self
     {
         $newInstance = clone $this;
 
-        $newInstance->$collection[$key] = $value;
-
-        return $newInstance;
-    }
-
-    /**
-     * @param string $collection
-     * @param string $key
-     *
-     * @return mixed
-     */
-    protected function doWithoutAttribute(string $collection, string $key)
-    {
-        $newInstance = clone $this;
-
-        unset($newInstance->$collection[$key]);
+        $newInstance->attributes->set($key, $value);
 
         return $newInstance;
     }
@@ -171,14 +154,56 @@ abstract class AbstractLink
     /**
      * @param string $href
      *
-     * @return mixed
+     * @return $this
      */
-    protected function doWithHref(string $href)
+    protected function doWithHref(string $href): self
     {
         $newInstance = clone $this;
 
         $newInstance->href      = $href;
         $newInstance->templated = $this->hrefIsTemplated($href);
+
+        return $newInstance;
+    }
+
+    /**
+     * @param string $key
+     *
+     * @return $this
+     */
+    protected function doWithRel(string $key): self
+    {
+        $newInstance = clone $this;
+
+        $newInstance->rels->set($key, true);
+
+        return $newInstance;
+    }
+
+    /**
+     * @param string $key
+     *
+     * @return $this
+     */
+    protected function doWithoutAttribute(string $key): self
+    {
+        $newInstance = clone $this;
+
+        $newInstance->attributes->remove($key);
+
+        return $newInstance;
+    }
+
+    /**
+     * @param string $key
+     *
+     * @return $this
+     */
+    protected function doWithoutRel(string $key): self
+    {
+        $newInstance = clone $this;
+
+        $newInstance->rels->remove($key);
 
         return $newInstance;
     }

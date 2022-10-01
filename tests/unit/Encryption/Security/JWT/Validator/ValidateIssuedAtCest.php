@@ -33,21 +33,19 @@ class ValidateIssuedAtCest
      * @author Phalcon Team <team@phalcon.io>
      * @since  2020-09-09
      */
-    public function httpJWTValidatorValidateIssuedAt(UnitTester $I)
+    public function encryptionSecurityJWTValidatorValidateIssuedAt(UnitTester $I)
     {
-        $I->wantToTest('Http\JWT\Validator - validateIssuedAt()');
+        $I->wantToTest('Encryption\Security\JWT\Validator - validateIssuedAt()');
 
         $token = $this->newToken();
-        $I->expectThrowable(
-            new ValidatorException(
-                "Validation: the token cannot be used yet (future)"
-            ),
-            function () use ($token, $I) {
-                $timestamp = strtotime(("-1 day"));
-                $validator = new Validator($token);
-                $I->assertInstanceOf(Validator::class, $validator);
-                $validator->validateIssuedAt($timestamp);
-            }
-        );
+        $timestamp = strtotime(("-1 day"));
+        $validator = new Validator($token);
+        $I->assertInstanceOf(Validator::class, $validator);
+
+        $validator->validateIssuedAt($timestamp);
+
+        $expected = ["Validation: the token cannot be used yet (future)"];
+        $actual   = $validator->getErrors();
+        $I->assertSame($expected, $actual);
     }
 }

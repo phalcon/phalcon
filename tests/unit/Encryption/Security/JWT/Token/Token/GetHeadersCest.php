@@ -31,9 +31,9 @@ class GetHeadersCest
      * @author Phalcon Team <team@phalcon.io>
      * @since  2020-09-09
      */
-    public function httpJWTTokenTokenGetHeaders(UnitTester $I)
+    public function encryptionSecurityJWTTokenTokenGetHeaders(UnitTester $I)
     {
-        $I->wantToTest('Http\JWT\Token\Token - getHeaders()');
+        $I->wantToTest('Encryption\Security\JWT\Token\Token - getHeaders()');
 
         $headers   = new Item(["typ" => "JWT"], "header-encoded");
         $claims    = new Item(["aud" => ["valid-audience"]], "claim-encoded");
@@ -41,8 +41,12 @@ class GetHeadersCest
 
         $token = new Token($headers, $claims, $signature);
 
-        $I->assertInstanceOf(Item::class, $token->getHeaders());
-        $I->assertEquals("JWT", $token->getHeaders()
-                                      ->get('typ'));
+        $expected = Item::class;
+        $actual   = $token->getHeaders();
+        $I->assertInstanceOf($expected, $actual);
+
+        $expected = "JWT";
+        $actual   = $token->getHeaders()->get('typ');
+        $I->assertSame($expected, $actual);
     }
 }

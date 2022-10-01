@@ -120,7 +120,7 @@ class ResizeCest
                 'label'  => 'jpg',
                 'source' => dataDir('assets/images/example-jpg.jpg'),
                 'file'   => 'resize.jpg',
-                'height' => 76,
+                'height' => 75,
                 'width'  => 199,
                 'hash'   => 'fbf9f3e3c3c1c183',
             ],
