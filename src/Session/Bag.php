@@ -13,7 +13,6 @@ declare(strict_types=1);
 
 namespace Phalcon\Session;
 
-use Phalcon\Di\Di;
 use Phalcon\Di\InjectionAwareInterface;
 use Phalcon\Di\Traits\InjectionAwareTrait;
 use Phalcon\Support\Collection;
@@ -37,7 +36,7 @@ use function is_array;
  * @property string           $name
  * @property ManagerInterface $session;
  */
-class Bag extends Collection implements InjectionAwareInterface
+class Bag extends Collection implements BagInterface, InjectionAwareInterface
 {
     use InjectionAwareTrait;
 

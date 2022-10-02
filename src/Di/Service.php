@@ -47,7 +47,7 @@ class Service implements ServiceInterface
     /**
      * @var mixed
      */
-    protected $definition;
+    protected mixed $definition;
 
     /**
      * @var bool
@@ -70,7 +70,7 @@ class Service implements ServiceInterface
      * @param mixed $definition
      * @param bool  $shared
      */
-    final public function __construct($definition, bool $shared = false)
+    final public function __construct(mixed $definition, bool $shared = false)
     {
         $this->definition = $definition;
         $this->shared     = $shared;
@@ -81,7 +81,7 @@ class Service implements ServiceInterface
      *
      * @return mixed
      */
-    public function getDefinition()
+    public function getDefinition(): mixed
     {
         return $this->definition;
     }
@@ -91,9 +91,9 @@ class Service implements ServiceInterface
      *
      * @param int $position
      *
-     * @return mixed|null
+     * @return mixed
      */
-    public function getParameter(int $position)
+    public function getParameter(int $position): mixed
     {
         $arguments = $this->definition['arguments'] ?? [];
 
@@ -133,7 +133,7 @@ class Service implements ServiceInterface
     public function resolve(
         array $parameters = null,
         DiInterface $container = null
-    ) {
+    ): mixed {
         /**
          * Check if the service is shared
          */
@@ -141,7 +141,6 @@ class Service implements ServiceInterface
             return $this->sharedInstance;
         }
 
-        $instance           = null;
         $instanceDefinition = $this->definition;
 
         if (true === is_string($instanceDefinition)) {
@@ -210,7 +209,7 @@ class Service implements ServiceInterface
      *
      * @param mixed $definition
      */
-    public function setDefinition($definition): void
+    public function setDefinition(mixed $definition): void
     {
         $this->definition = $definition;
     }
@@ -265,7 +264,7 @@ class Service implements ServiceInterface
      *
      * @param mixed $sharedInstance
      */
-    public function setSharedInstance($sharedInstance): void
+    public function setSharedInstance(mixed $sharedInstance): void
     {
         $this->sharedInstance = $sharedInstance;
     }

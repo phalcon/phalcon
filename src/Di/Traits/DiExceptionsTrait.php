@@ -86,7 +86,7 @@ trait DiExceptionsTrait
      *
      * @throws Exception
      */
-    private function checkMethodArgumentsIsArray($arguments, $position): void
+    private function checkMethodArgumentsIsArray(mixed $arguments, int $position): void
     {
         if (true !== is_array($arguments)) {
             throw new Exception(
@@ -102,7 +102,7 @@ trait DiExceptionsTrait
      *
      * @throws Exception
      */
-    private function checkMethodCallPosition($method, $position): void
+    private function checkMethodCallPosition(mixed $method, int $position): void
     {
         /**
          * The call parameter must be an array of arrays
@@ -121,7 +121,7 @@ trait DiExceptionsTrait
      *
      * @throws Exception
      */
-    private function checkMethodMethodExists(array $method, $position): void
+    private function checkMethodMethodExists(array $method, int $position): void
     {
         /**
          * A param 'method' is required
@@ -139,7 +139,7 @@ trait DiExceptionsTrait
      *
      * @throws Exception
      */
-    private function checkPropertiesInjectionConstruct($instance): void
+    private function checkPropertiesInjectionConstruct(mixed $instance): void
     {
         if (true !== is_object($instance)) {
             throw new Exception(
@@ -155,7 +155,7 @@ trait DiExceptionsTrait
      *
      * @throws Exception
      */
-    private function checkPropertyIsArray($property, $position): void
+    private function checkPropertyIsArray(mixed $property, int $position): void
     {
         /**
          * The call parameter must be an array of arrays
@@ -174,7 +174,7 @@ trait DiExceptionsTrait
      *
      * @throws Exception
      */
-    private function checkPropertyNameExists(array $property, $position): void
+    private function checkPropertyNameExists(array $property, int $position): void
     {
         /**
          * A param 'name' is required
@@ -231,7 +231,7 @@ trait DiExceptionsTrait
      *
      * @throws Exception
      */
-    private function checkSetterInjectionConstructor($instance): void
+    private function checkSetterInjectionConstructor(mixed $instance): void
     {
         if (true !== is_object($instance)) {
             throw new Exception(
@@ -246,7 +246,7 @@ trait DiExceptionsTrait
      *
      * @throws Exception
      */
-    private function checkSetterInjectionParameters($parameters): void
+    private function checkSetterInjectionParameters(mixed $parameters): void
     {
         if (true !== is_array($parameters)) {
             throw new Exception(

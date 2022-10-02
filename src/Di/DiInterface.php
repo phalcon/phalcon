@@ -49,7 +49,7 @@ interface DiInterface extends ArrayAccess
      *
      * @return mixed
      */
-    public function get(string $name, array $parameters = null);
+    public function get(string $name, array $parameters = null): mixed;
 
     /**
      * Return the last DI created
@@ -63,7 +63,7 @@ interface DiInterface extends ArrayAccess
      *
      * @return mixed
      */
-    public function getRaw(string $name);
+    public function getRaw(string $name): mixed;
 
     /**
      * Returns the corresponding Phalcon\Di\Service instance for a service
@@ -89,7 +89,7 @@ interface DiInterface extends ArrayAccess
      *
      * @return mixed
      */
-    public function getShared(string $name, array $parameters = null);
+    public function getShared(string $name, array $parameters = null): mixed;
 
     /**
      * Check whether the DI contains a service by a name

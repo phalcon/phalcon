@@ -13,11 +13,9 @@ declare(strict_types=1);
 
 namespace Phalcon\Di;
 
-use Phalcon\Annotations\Adapter;
 use Phalcon\Assets\Manager;
 use Phalcon\Encryption\Crypt;
 use Phalcon\Encryption\Crypt\CryptInterface;
-use Phalcon\Db\Adapter\AdapterInterface;
 use Phalcon\Di\Traits\InjectionAwareTrait;
 use Phalcon\Encryption\Security;
 use Phalcon\Events\Manager as EventsManager;
@@ -29,24 +27,28 @@ use Phalcon\Flash\Session;
 use Phalcon\Html\Escaper;
 use Phalcon\Html\Escaper\EscaperInterface;
 use Phalcon\Http\RequestInterface;
-use Phalcon\Http\Response;
-use Phalcon\Http\Response\Cookies;
-use Phalcon\Http\Response\CookiesInterface;
-use Phalcon\Http\ResponseInterface;
-use Phalcon\Mvc\Dispatcher;
-use Phalcon\Mvc\DispatcherInterface;
-use Phalcon\Mvc\Model\MetaData\Memory;
-use Phalcon\Mvc\Model\MetadataInterface;
-use Phalcon\Mvc\Model\Transaction\ManagerInterface;
-use Phalcon\Mvc\Router;
-use Phalcon\Mvc\RouterInterface;
-use Phalcon\Mvc\View;
-use Phalcon\Mvc\ViewInterface;
 use Phalcon\Session\Bag;
 use Phalcon\Session\BagInterface;
-use Phalcon\Url;
-use Phalcon\Url\UrlInterface;
 use Phalcon\Support\HelperFactory;
+
+//use Phalcon\Annotations\Adapter;
+//use Phalcon\Db\Adapter\AdapterInterface;
+//use Phalcon\Http\RequestInterface;
+//use Phalcon\Http\Response;
+//use Phalcon\Http\Response\Cookies;
+//use Phalcon\Http\Response\CookiesInterface;
+//use Phalcon\Http\ResponseInterface;
+//use Phalcon\Mvc\Dispatcher;
+//use Phalcon\Mvc\DispatcherInterface;
+//use Phalcon\Mvc\Model\MetaData\Memory;
+//use Phalcon\Mvc\Model\MetadataInterface;
+//use Phalcon\Mvc\Model\Transaction\ManagerInterface;
+//use Phalcon\Mvc\Router;
+//use Phalcon\Mvc\RouterInterface;
+//use Phalcon\Mvc\View;
+//use Phalcon\Mvc\ViewInterface;
+//use Phalcon\Url;
+//use Phalcon\Url\UrlInterface;
 
 /**
  * This class allows to access services in the services container by just only
@@ -57,6 +59,8 @@ use Phalcon\Support\HelperFactory;
  * @property Crypt|CryptInterface                 $crypt
  * @property EventsManager|EventsManagerInterface $eventsManager
  * @property Escaper|EscaperInterface             $escaper
+ * @property Direct                               $flash
+ * @property Session                              $flashSession
  * @property Filter|FilterInterface               $filter
  * @property HelperFactory                        $helper
  * @property Security                             $security
@@ -66,8 +70,6 @@ use Phalcon\Support\HelperFactory;
  * // * @property Request|RequestInterface $request
  * // * @property Response|ResponseInterface $response
  * // * @property Cookies|CookiesInterface $cookies
- * // * @property Direct $flash
- * // * @property Session $flashSession
  * // * @property \Phalcon\Session\ManagerInterface $session
  * // * @property AdapterInterface $db
  * // * @property Adapter\Memory|Adapter $annotations

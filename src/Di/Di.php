@@ -5,14 +5,15 @@
  *
  * (c) Phalcon Team <team@phalcon.io>
  *
- * For the full copyright and license information, please view the LICENSE.txt
- * file that was distributed with this source code.
+ * For the full copyright and license information, please view the
+ * LICENSE.txt file that was distributed with this source code.
  */
 
 declare(strict_types=1);
 
 namespace Phalcon\Di;
 
+use Phalcon\Di\Exception as DiException;
 use Phalcon\Di\Exception\ServiceResolutionException;
 use Phalcon\Di\Traits\DiArrayAccessTrait;
 use Phalcon\Di\Traits\DiEventsTrait;
@@ -22,15 +23,11 @@ use Phalcon\Di\Traits\DiLoadTrait;
 use Phalcon\Events\ManagerInterface;
 use Phalcon\Events\Traits\EventsAwareTrait;
 
-use function is_object;
-use function lcfirst;
-use function substr;
-
 /**
- * Phalcon\Di is a component that implements Dependency Injection/Service
- * Location of services and it's itself a container for them.
+ * Phalcon\Di\Di is a component that implements Dependency Injection/Service
+ * Location of services, and it's itself a container for them.
  *
- * Since Phalcon is highly decoupled, Phalcon\Di is essential to integrate the
+ * Since Phalcon is highly decoupled, Phalcon\Di\Di is essential to integrate the
  * different components of the framework. The developer can also use this
  * component to inject dependencies and manage global instances of the different
  * classes used in the application.
@@ -45,7 +42,7 @@ use function substr;
  * less prone to errors.
  *
  *```php
- * use Phalcon\Di;
+ * use Phalcon\Di\Di;
  * use Phalcon\Http\Request;
  *
  * $di = new Di();
@@ -63,10 +60,6 @@ use function substr;
  *
  * $request = $di->getRequest();
  *```
- *
- * @property array            $services
- * @property array            $sharedInstances
- * @property DiInterface|null $defaultContainer
  */
 class Di implements DiInterface
 {
@@ -96,15 +89,10 @@ class Di implements DiInterface
      *
      * @var DiInterface|null
      */
-    protected static $defaultContainer = null;
+    protected static ?DiInterface $defaultContainer = null;
 
     /**
-     * @var bool
-     */
-    protected static $initialized = false;
-
-    /**
-     * Di constructor.
+     * Phalcon\Di\Di constructor
      */
     public function __construct()
     {
@@ -128,7 +116,7 @@ class Di implements DiInterface
          * If the magic method starts with "get" we try to get a service with
          * that name
          */
-        if ('get' === substr($method, 0, 3)) {
+        if (true === str_starts_with($method, 'get')) {
             $possibleService = lcfirst(substr($method, 3));
 
             if (true === isset($this->services[$possibleService])) {
@@ -140,7 +128,7 @@ class Di implements DiInterface
          * If the magic method starts with "set" we try to set a service using
          * that name
          */
-        if ('set' === substr($method, 0, 3)) {
+        if (true === str_starts_with($method, 'set')) {
             $definition = $arguments[0] ?? null;
             if (null !== $definition) {
                 $this->set(lcfirst(substr($method, 3)), $definition);
@@ -183,13 +171,13 @@ class Di implements DiInterface
      * @return mixed
      * @throws Exception
      */
-    public function get(string $name, array $parameters = null)
+    public function get(string $name, array $parameters = null): mixed
     {
         $instance = null;
         $service  = null;
 
         /**
-         * If the service is shared and it already has a cached instance then
+         * If the service is shared, and it already has a cached instance then
          * immediately return it without triggering events.
          */
         if (true === isset($this->services[$name])) {
@@ -233,11 +221,12 @@ class Di implements DiInterface
          * Pass the DI to the instance if it implements
          * \Phalcon\Di\InjectionAwareInterface
          */
-        if (
-            true === is_object($instance) &&
-            $instance instanceof InjectionAwareInterface
-        ) {
+        if ($instance instanceof InjectionAwareInterface) {
             $instance->setDI($this);
+        }
+
+        if ($instance instanceof InitializationAwareInterface) {
+            $instance->initialize();
         }
 
         /**
@@ -284,7 +273,7 @@ class Di implements DiInterface
      * @return mixed
      * @throws Exception
      */
-    public function getRaw(string $name)
+    public function getRaw(string $name): mixed
     {
         return $this->getService($name)
                     ->getDefinition()
@@ -325,19 +314,17 @@ class Di implements DiInterface
      * @param string     $name
      * @param array|null $parameters
      *
-     * @return mixed|InjectionAwareInterface|null
-     * @throws Exception
+     * @return mixed
+     * @throws DiException
      */
-    public function getShared(string $name, array $parameters = null)
+    public function getShared(string $name, array $parameters = null): mixed
     {
-        $instance = $this->sharedInstances[$name] ?? null;
-        if (null === $instance) {
-            $instance = $this->get($name, $parameters);
-
-            $this->sharedInstances[$name] = $instance;
+        if (true !== isset($this->sharedInstances[$name])) {
+            // Store the instance in the shared instances cache.
+            $this->sharedInstances[$name] = $this->get($name, $parameters);
         }
 
-        return $instance;
+        return $this->sharedInstances[$name];
     }
 
     /**
@@ -374,6 +361,8 @@ class Di implements DiInterface
      * ```
      *
      * @param ServiceProviderInterface $provider
+     *
+     * @return void
      */
     public function register(ServiceProviderInterface $provider): void
     {
@@ -385,6 +374,8 @@ class Di implements DiInterface
      * It also removes any shared instance created for the service
      *
      * @param string $name
+     *
+     * @return void
      */
     public function remove(string $name): void
     {
@@ -394,6 +385,8 @@ class Di implements DiInterface
 
     /**
      * Resets the internal default DI
+     *
+     * @return void
      */
     public static function reset(): void
     {
@@ -409,8 +402,11 @@ class Di implements DiInterface
      *
      * @return ServiceInterface
      */
-    public function set(string $name, $definition, bool $shared = false): ServiceInterface
-    {
+    public function set(
+        string $name,
+        mixed $definition,
+        bool $shared = false
+    ): ServiceInterface {
         $this->services[$name] = new Service($definition, $shared);
 
         return $this->services[$name];
@@ -421,6 +417,8 @@ class Di implements DiInterface
      * methods
      *
      * @param DiInterface $container
+     *
+     * @return void
      */
     public static function setDefault(DiInterface $container): void
     {
@@ -453,6 +451,17 @@ class Di implements DiInterface
     }
 
     /**
+     * @param string $name
+     * @param mixed  $definition
+     *
+     * @return ServiceInterface
+     */
+    public function setShared(string $name, mixed $definition): ServiceInterface
+    {
+        return $this->set($name, $definition, true);
+    }
+
+    /**
      * @param string                $name
      * @param array|null            $parameters
      * @param ServiceInterface|null $service
@@ -465,7 +474,7 @@ class Di implements DiInterface
         string $name,
         array $parameters = null,
         ServiceInterface $service = null,
-        $instance = null
+        mixed $instance = null
     ) {
         if (null !== $service) {
             // The service is registered in the DI.
@@ -497,8 +506,8 @@ class Di implements DiInterface
         string $name,
         array $parameters = null,
         ServiceInterface $service = null,
-        $instance = null
-    ) {
+        mixed $instance = null
+    ): mixed {
         if (null === $service) {
             /**
              * The DI also acts as builder for any class even if it isn't
