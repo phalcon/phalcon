@@ -154,7 +154,7 @@ class Imagick extends AbstractAdapter
         int $height,
         int $deltaX = 0,
         int $rigidity = 0
-    ): AbstractAdapter {
+    ): void {
         $image = $this->image;
 
         $image->setIteratorIndex(0);
@@ -178,8 +178,6 @@ class Imagick extends AbstractAdapter
 
         $this->width  = $image->getImageWidth();
         $this->height = $image->getImageHeight();
-
-        return $this;
     }
 
     /**
@@ -671,6 +669,7 @@ class Imagick extends AbstractAdapter
      */
     protected function processSave(string $file, int $quality): void
     {
+        /** @var string $extension */
         $extension = pathinfo($file, PATHINFO_EXTENSION);
 
         $this->image->setFormat($extension);
@@ -749,8 +748,8 @@ class Imagick extends AbstractAdapter
      */
     protected function processText(
         string $text,
-        $offsetX,
-        $offsetY,
+        mixed $offsetX,
+        mixed $offsetY,
         int $opacity,
         int $red,
         int $green,

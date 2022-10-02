@@ -165,7 +165,7 @@ class ConfigFactory
             $oldConfig = $config;
             $extension = pathinfo($config, PATHINFO_EXTENSION);
 
-            if (true == empty($extension)) {
+            if (true === empty($extension)) {
                 throw new Exception(
                     'You need to provide the extension in the file path'
                 );

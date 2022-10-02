@@ -675,11 +675,12 @@ class Gd extends AbstractAdapter
      * @param string $file
      * @param int    $quality
      *
-     * @return bool
+     * @return void
      * @throws Exception
      */
-    protected function processSave(string $file, int $quality): bool
+    protected function processSave(string $file, int $quality): void
     {
+        /** @var string $extension */
         $extension = pathinfo($file, PATHINFO_EXTENSION);
 
         // If no extension is given, revert to the original type.
@@ -727,8 +728,6 @@ class Gd extends AbstractAdapter
         }
 
         $this->mime = image_type_to_mime_type($this->type);
-
-        return true;
     }
 
     /**
@@ -774,8 +773,8 @@ class Gd extends AbstractAdapter
      */
     protected function processText(
         string $text,
-        $offsetX,
-        $offsetY,
+        mixed $offsetX,
+        mixed $offsetY,
         int $opacity,
         int $red,
         int $green,

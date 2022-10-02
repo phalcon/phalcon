@@ -132,7 +132,7 @@ class Service implements ServiceInterface
      */
     public function resolve(
         array $parameters = null,
-        DiInterface $container = null
+        ?DiInterface $container = null
     ): mixed {
         /**
          * Check if the service is shared

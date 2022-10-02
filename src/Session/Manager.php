@@ -169,9 +169,9 @@ class Manager implements ManagerInterface
     /**
      * Returns the stored session adapter
      *
-     * @return SessionHandlerInterface
+     * @return SessionHandlerInterface|null
      */
-    public function getAdapter(): SessionHandlerInterface
+    public function getAdapter(): ?SessionHandlerInterface
     {
         return $this->adapter;
     }
