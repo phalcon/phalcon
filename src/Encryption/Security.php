@@ -272,7 +272,9 @@ class Security implements InjectionAwareInterface
      */
     public function getHashInformation(string $hash): array
     {
-        return password_get_info($hash);
+        $info = password_get_info($hash);
+
+        return null === $info ? [] : $info;
     }
 
     /**
@@ -466,7 +468,7 @@ class Security implements InjectionAwareInterface
 
         if (true === $legacy) {
             $salt = $prefix . $this->getSaltBytes($bytes) . "$";
-            return crypt($password, $salt);
+            return (string) crypt($password, $salt);
         }
 
         /**
@@ -481,7 +483,7 @@ class Security implements InjectionAwareInterface
         $algorithm = $this->processAlgorithm();
         $arguments = $this->processArgonOptions($options);
 
-        return password_hash($password, $algorithm, $arguments);
+        return (string) password_hash($password, $algorithm, $arguments);
     }
 
     /**

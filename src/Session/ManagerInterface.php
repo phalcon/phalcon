@@ -94,9 +94,9 @@ interface ManagerInterface
     /**
      * Returns the stored session adapter
      *
-     * @return SessionHandlerInterface
+     * @return SessionHandlerInterface|null
      */
-    public function getAdapter(): SessionHandlerInterface;
+    public function getAdapter(): ?SessionHandlerInterface;
 
     /**
      * Returns the name of the session
