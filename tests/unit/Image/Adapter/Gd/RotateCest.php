@@ -77,31 +77,6 @@ class RotateCest
     {
         return [
             [
-                'label'   => 'gif',
-                'degrees' => 0,
-                'hash'    => 'ffffffffffffffff',
-            ],
-            [
-                'label'   => 'gif',
-                'degrees' => 45,
-                'hash'    => '387cfeff7f3f1e0c',
-            ],
-            [
-                'label'   => 'gif',
-                'degrees' => 90,
-                'hash'    => 'ffffffffffffffff',
-            ],
-            [
-                'label'   => 'gif',
-                'degrees' => 180,
-                'hash'    => 'ffffffffffffffff',
-            ],
-            [
-                'label'   => 'gif',
-                'degrees' => 270,
-                'hash'    => 'ffffffffffffffff',
-            ],
-            [
                 'label'   => 'jpg',
                 'degrees' => 0,
                 'hash'    => 'fbf9f3e3c3c18183',
@@ -150,56 +125,6 @@ class RotateCest
                 'label'   => 'png',
                 'degrees' => 270,
                 'hash'    => '0008387ffff06000',
-            ],
-            [
-                'label'   => 'wbmp',
-                'degrees' => 0,
-                'hash'    => '00c78ffe78030200',
-            ],
-            [
-                'label'   => 'wbmp',
-                'degrees' => 45,
-                'hash'    => 'fff71b198fc1e9f3',
-            ],
-            [
-                'label'   => 'wbmp',
-                'degrees' => 90,
-                'hash'    => '0e1a18181c0e6e26',
-            ],
-            [
-                'label'   => 'wbmp',
-                'degrees' => 180,
-                'hash'    => '0040c01e7ff1e302',
-            ],
-            [
-                'label'   => 'wbmp',
-                'degrees' => 270,
-                'hash'    => '647670381818d870',
-            ],
-            [
-                'label'   => 'webp',
-                'degrees' => 0,
-                'hash'    => '670640183c3c7cfc',
-            ],
-            [
-                'label'   => 'webp',
-                'degrees' => 45,
-                'hash'    => '1018c4fe7f3a1000',
-            ],
-            [
-                'label'   => 'webp',
-                'degrees' => 90,
-                'hash'    => '00c4f1f8f8f30301',
-            ],
-            [
-                'label'   => 'webp',
-                'degrees' => 180,
-                'hash'    => '3f3e3c3c180260e4',
-            ],
-            [
-                'label'   => 'webp',
-                'degrees' => 270,
-                'hash'    => '80c0cf1f1f8fa301',
             ],
         ];
     }
