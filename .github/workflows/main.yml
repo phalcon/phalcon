@@ -46,8 +46,20 @@ jobs:
     steps:
       - uses: actions/checkout@v3
 
-      - name: Run PHP_CodeSniffer
-        run: docker run --rm -v $(pwd):/data cytopia/phpcs --standard=./phpcs.xml
+      - name: Setup PHP
+        uses: shivammathur/setup-php@v2
+        with:
+          php-version: ${{ matrix.php }}
+          extensions: ${{ env.EXTENSIONS }}
+          ini-values: apc.enable_cli=on, session.save_path=/tmp
+          tools: pecl
+        env:
+          COMPOSER_TOKEN: ${{ secrets.GITHUB_TOKEN }}
+
+      - name: PHPCS
+        run: |
+          composer install --prefer-dist
+          vendor/bin/phpcs --standard=./phpcs.xml
 
   build-and-test:
     permissions:
@@ -172,7 +184,7 @@ jobs:
     strategy:
       fail-fast: false
       matrix:
-        php: [ '7.4', '8.0' ]
+        php: [ '8.0', '8.1' ]
 
     steps:
       - uses: actions/checkout@v3
