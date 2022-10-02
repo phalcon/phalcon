@@ -32,19 +32,27 @@ env:
   # PHP extensions required by Composer
   EXTENSIONS: apcu, gettext, gd, igbinary, imagick, intl, json, mbstring, msgpack, memcached, sqlite3, yaml, redis, :memcache
 
+permissions: {}
 jobs:
+  # PHP CodeSniffer inspection
   phpcs:
+    permissions:
+      contents: read
+
     name: Validate Tests code style
     if: "!contains(github.event.head_commit.message, 'ci skip')"
 
     runs-on: ubuntu-20.04
     steps:
-      - uses: actions/checkout@v2
+      - uses: actions/checkout@v3
 
       - name: Run PHP_CodeSniffer
         run: docker run --rm -v $(pwd):/data cytopia/phpcs --standard=./phpcs.xml
 
   build-and-test:
+    permissions:
+      contents: read # to fetch code (actions/checkout)
+
     name: tests / PHP-${{ matrix.php }}-${{ matrix.ts }}-${{ matrix.name }}-${{ matrix.arch }}
 
     runs-on: ${{ matrix.os }}
@@ -57,23 +65,25 @@ jobs:
 
         name:
           - ubuntu-gcc
-          - macos-clang
+#          - macos-clang
 
         # matrix names should be in next format:
         #     {php}-{ts}-{os.name}-{compiler}-{arch}
         include:
           # Linux
-          - { name: ubuntu-gcc, os: ubuntu-latest, compiler: gcc }
-          # macOS
-          - { name: macos-clang, os: macos-10.15, compiler: clang }
+          - { name: ubuntu-gcc, os: ubuntu-18.04, compiler: gcc }
+#          # macOS
+#          - { name: macos-clang, os: macos-11, compiler: clang }
           # Windows
           - { php: '7.4', ts: 'ts',  arch: 'x64', name: 'windows2019-vc15', os: 'windows-2019', compiler: 'vc15' }
           - { php: '7.4', ts: 'nts', arch: 'x64', name: 'windows2019-vc15', os: 'windows-2019', compiler: 'vc15' }
           - { php: '8.0', ts: 'ts',  arch: 'x64', name: 'windows2019-vs16', os: 'windows-2019', compiler: 'vs16' }
           - { php: '8.0', ts: 'nts', arch: 'x64', name: 'windows2019-vs16', os: 'windows-2019', compiler: 'vs16' }
+          - { php: '8.1', ts: 'ts',  arch: 'x64', name: 'windows2019-vs16', os: 'windows-2019', compiler: 'vs16' }
+          - { php: '8.1', ts: 'nts', arch: 'x64', name: 'windows2019-vs16', os: 'windows-2019', compiler: 'vs16' }
 
     steps:
-      - uses: actions/checkout@v2
+      - uses: actions/checkout@v3
 
       - name: Setup platform specific environment
         shell: pwsh
@@ -133,7 +143,7 @@ jobs:
       mysql:
         image: mysql:5.7
         ports:
-          - 3306
+          - "3306:3306"
         env:
           MYSQL_ROOT_PASSWORD: secret
           MYSQL_USER: phalcon
@@ -142,18 +152,24 @@ jobs:
       postgres:
         image: postgres:12-alpine
         ports:
-          - 5432
+          - "5432:5432"
         env:
+          POSTGRES_USER: phalcon
           POSTGRES_PASSWORD: secret
           POSTGRES_DB: phalcon
+        options: >-
+          --health-cmd pg_isready
+          --health-interval 10s
+          --health-timeout 5s
+          --health-retries 5
       redis:
         image: redis:5-alpine
         ports:
-          - 6379
+          - "6379:6379"
       memcached:
         image: memcached:1.5-alpine
         ports:
-          - 11211
+          - "11211:11211"
 
     strategy:
       fail-fast: false
@@ -161,7 +177,7 @@ jobs:
         php: [ '7.4', '8.0' ]
 
     steps:
-      - uses: actions/checkout@v2
+      - uses: actions/checkout@v3
 
       - name: Setup PHP
         uses: shivammathur/setup-php@v2
