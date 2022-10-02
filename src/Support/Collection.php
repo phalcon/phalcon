@@ -117,7 +117,7 @@ class Collection implements
         string $element,
         $defaultValue = null,
         string $cast = null
-    ) {
+    ): mixed {
         $element = $this->processKey($element);
 
         /**

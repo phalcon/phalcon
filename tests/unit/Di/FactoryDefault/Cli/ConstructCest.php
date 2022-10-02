@@ -20,6 +20,7 @@ use Phalcon\Encryption\Security;
 use Phalcon\Events\Manager as EventsManager;
 use Phalcon\Filter\Filter;
 use Phalcon\Html\Escaper;
+use Phalcon\Support\HelperFactory;
 use UnitTester;
 
 /**
@@ -90,6 +91,10 @@ class ConstructCest
             [
                 'service' => 'filter',
                 'class'   => Filter::class,
+            ],
+            [
+                'service' => 'helper',
+                'class'   => HelperFactory::class,
             ],
             [
                 'service' => 'security',

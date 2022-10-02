@@ -78,7 +78,7 @@ final class Registry extends Collection
     /**
      * Magic getter to get an element from the collection
      */
-    final public function __get(string $element)
+    final public function __get(string $element): mixed
     {
         return parent::get($element);
     }
@@ -132,7 +132,7 @@ final class Registry extends Collection
         string $element,
         $defaultValue = null,
         string $cast = null
-    ) {
+    ): mixed {
         return parent::get($element, $defaultValue, $cast);
     }
 

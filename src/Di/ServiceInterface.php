@@ -23,7 +23,7 @@ interface ServiceInterface
      *
      * @return mixed
      */
-    public function getDefinition();
+    public function getDefinition(): mixed;
 
     /**
      * Returns a parameter in a specific position
@@ -32,7 +32,7 @@ interface ServiceInterface
      *
      * @return mixed
      */
-    public function getParameter(int $position);
+    public function getParameter(int $position): mixed;
 
     /**
      * Returns true if the service was resolved
@@ -56,7 +56,7 @@ interface ServiceInterface
      *
      * @return mixed
      */
-    public function resolve(array $parameters = null, DiInterface $container = null);
+    public function resolve(array $parameters = null, DiInterface $container = null): mixed;
 
     /**
      * Set the service definition
@@ -65,7 +65,7 @@ interface ServiceInterface
      *
      * @return mixed
      */
-    public function setDefinition($definition);
+    public function setDefinition(mixed $definition);
 
     /**
      * Changes a parameter in the definition without resolve the service

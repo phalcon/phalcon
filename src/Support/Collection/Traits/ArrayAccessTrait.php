@@ -28,7 +28,7 @@ trait ArrayAccessTrait
         string $element,
         $defaultValue = null,
         string $cast = null
-    );
+    ): mixed;
 
     /**
      * Get the element from the collection

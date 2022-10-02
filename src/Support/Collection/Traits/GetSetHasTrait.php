@@ -22,7 +22,7 @@ trait GetSetHasTrait
      *
      * @return mixed|null
      */
-    public function __get(string $element)
+    public function __get(string $element): mixed
     {
         return $this->get($element);
     }
@@ -73,7 +73,7 @@ trait GetSetHasTrait
         string $element,
         $defaultValue = null,
         string $cast = null
-    );
+    ): mixed;
 
     /**
      * Get the element from the collection
