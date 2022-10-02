@@ -55,18 +55,18 @@ class TranslateFactory
      * Factory to create an instance from a Config object
      *
      * @param array|ConfigInterface $config = [
-     *     'adapter' => 'ini,
-     *     'options' => [
-     *         'content'       => '',
-     *         'delimiter'     => ';',
-     *         'enclosure'     => '"',
-     *         'locale'        => '',
-     *         'defaultDomain' => '',
-     *         'directory'     => '',
-     *         'category'      => ''
-     *         'triggerError'  => false
-     *     ]
-     * ]
+     *                                      'adapter' => 'ini,
+     *                                      'options' => [
+     *                                      'content'       => '',
+     *                                      'delimiter'     => ';',
+     *                                      'enclosure'     => '"',
+     *                                      'locale'        => '',
+     *                                      'defaultDomain' => '',
+     *                                      'directory'     => '',
+     *                                      'category'      => ''
+     *                                      'triggerError'  => false
+     *                                      ]
+     *                                      ]
      *
      * @return AdapterInterface
      * @throws Exception

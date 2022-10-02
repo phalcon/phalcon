@@ -18,10 +18,10 @@
 
 namespace Phalcon\Http\Message\Factories;
 
-use Phalcon\Http\Message\Request;
 use Phalcon\Http\Message\Interfaces\RequestFactoryInterface;
 use Phalcon\Http\Message\Interfaces\RequestInterface;
 use Phalcon\Http\Message\Interfaces\UriInterface;
+use Phalcon\Http\Message\Request;
 
 /**
  * Factory for Request objects

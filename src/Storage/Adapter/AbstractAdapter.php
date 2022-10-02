@@ -157,7 +157,7 @@ abstract class AbstractAdapter implements AdapterInterface
             return $defaultValue;
         }
 
-        $content  = $this->doGet($key);
+        $content = $this->doGet($key);
 
         return $this->getUnserializedData($content, $defaultValue);
     }
@@ -245,7 +245,9 @@ abstract class AbstractAdapter implements AdapterInterface
      */
     protected function doGet(string $key)
     {
-        return $this->getAdapter()->get($key);
+        return $this->getAdapter()
+                    ->get($key)
+        ;
     }
 
     /**

@@ -981,7 +981,6 @@ class Debug
             . $headerOne
             . '</th></tr><tr><td>'
             . $headerTwo
-            . '</td><td>'
-        ;
+            . '</td><td>';
     }
 }

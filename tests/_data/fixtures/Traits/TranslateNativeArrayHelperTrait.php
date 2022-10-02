@@ -48,8 +48,8 @@ trait TranslateNativeArrayHelperTrait
      *
      * @throws Exception
      *
-     * @author Phalcon Team <team@phalcon.io>
-     * @since  2020-09-09
+     * @author       Phalcon Team <team@phalcon.io>
+     * @since        2020-09-09
      */
     public function translateAdapterNativearrayQuery(
         UnitTester $I,
@@ -72,7 +72,8 @@ trait TranslateNativeArrayHelperTrait
         );
 
         foreach ($data['tests'] as $key => $expected) {
-            $actual = $translator->{$this->func()}($key);
+            $actual = $translator->{$this->func()}($key)
+            ;
 
             $I->assertEquals($expected, $actual);
         }
@@ -89,8 +90,8 @@ trait TranslateNativeArrayHelperTrait
      *
      * @throws Exception
      *
-     * @author Phalcon Team <team@phalcon.io>
-     * @since  2020-09-09
+     * @author       Phalcon Team <team@phalcon.io>
+     * @since        2020-09-09
      */
     public function translateAdapterNativearrayVariableSubstitutionNoVariables(
         UnitTester $I,
@@ -117,7 +118,8 @@ trait TranslateNativeArrayHelperTrait
                 [
                     'name' => 'my friend',
                 ]
-            );
+            )
+            ;
 
             $I->assertEquals($expected, $actual);
         }
@@ -154,7 +156,8 @@ trait TranslateNativeArrayHelperTrait
         );
 
         foreach ($data['tests'] as $key => $expected) {
-            $actual = $translator->{$this->func()}($key, ['name' => 'my friend']);
+            $actual = $translator->{$this->func()}($key, ['name' => 'my friend'])
+            ;
             $I->assertEquals($expected, $actual);
         }
     }
@@ -170,8 +173,8 @@ trait TranslateNativeArrayHelperTrait
      *
      * @throws Exception
      *
-     * @author Phalcon Team <team@phalcon.io>
-     * @since  2020-09-09
+     * @author       Phalcon Team <team@phalcon.io>
+     * @since        2020-09-09
      */
     public function translateAdapterNativearrayVariableSubstitutionTwoVariable(
         UnitTester $I,
@@ -198,7 +201,8 @@ trait TranslateNativeArrayHelperTrait
         ];
 
         foreach ($data['tests'] as $key => $expected) {
-            $actual = $translator->{$this->func()}($key, $vars);
+            $actual = $translator->{$this->func()}($key, $vars)
+            ;
 
             $I->assertEquals($expected, $actual);
         }
@@ -232,7 +236,8 @@ trait TranslateNativeArrayHelperTrait
             'mname' => 'D.',
         ];
         $expected = 'Привет, John D. Doe!';
-        $actual   = $translator->{$this->func()}('Hello %fname% %mname% %lname%!', $vars);
+        $actual   = $translator->{$this->func()}('Hello %fname% %mname% %lname%!', $vars)
+        ;
         $I->assertEquals($expected, $actual);
     }
 

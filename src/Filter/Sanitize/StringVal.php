@@ -13,11 +13,7 @@ declare(strict_types=1);
 
 namespace Phalcon\Filter\Sanitize;
 
-use function filter_var;
-
 use function htmlspecialchars;
-
-use const FILTER_SANITIZE_STRING;
 
 /**
  * Phalcon\Filter\Sanitize\String

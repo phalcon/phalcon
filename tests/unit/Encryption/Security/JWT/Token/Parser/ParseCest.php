@@ -67,13 +67,13 @@ class ParseCest
 
         $I->assertSame(['my-audience'], $claims->get('aud'));
         $I->assertSame($token->getClaims()
-                               ->get('exp'), $claims->get('exp'));
+                             ->get('exp'), $claims->get('exp'));
         $I->assertSame('PH-JWT', $claims->get('jti'));
         $I->assertSame($token->getClaims()
-                               ->get('iat'), $claims->get('iat'));
+                             ->get('iat'), $claims->get('iat'));
         $I->assertSame('Phalcon JWT', $claims->get('iss'));
         $I->assertSame($token->getClaims()
-                               ->get('nbf'), $claims->get('nbf'));
+                             ->get('nbf'), $claims->get('nbf'));
         $I->assertSame('Mary had a little lamb', $claims->get('sub'));
     }
 
@@ -116,13 +116,13 @@ class ParseCest
 
         $I->assertSame(['my-audience'], $claims->get('aud'));
         $I->assertSame($token->getClaims()
-                               ->get('exp'), $claims->get('exp'));
+                             ->get('exp'), $claims->get('exp'));
         $I->assertSame('PH-JWT', $claims->get('jti'));
         $I->assertSame($token->getClaims()
-                               ->get('iat'), $claims->get('iat'));
+                             ->get('iat'), $claims->get('iat'));
         $I->assertSame('Phalcon JWT', $claims->get('iss'));
         $I->assertSame($token->getClaims()
-                               ->get('nbf'), $claims->get('nbf'));
+                             ->get('nbf'), $claims->get('nbf'));
         $I->assertSame('Mary had a little lamb', $claims->get('sub'));
 
         $I->assertEmpty($signature->getEncoded());
@@ -175,13 +175,13 @@ class ParseCest
 
         $I->assertSame(['my-audience'], $claims->get('aud'));
         $I->assertSame($token->getClaims()
-                               ->get('exp'), $claims->get('exp'));
+                             ->get('exp'), $claims->get('exp'));
         $I->assertSame('PH-JWT', $claims->get('jti'));
         $I->assertSame($token->getClaims()
-                               ->get('iat'), $claims->get('iat'));
+                             ->get('iat'), $claims->get('iat'));
         $I->assertSame('Phalcon JWT', $claims->get('iss'));
         $I->assertSame($token->getClaims()
-                               ->get('nbf'), $claims->get('nbf'));
+                             ->get('nbf'), $claims->get('nbf'));
         $I->assertSame('Mary had a little lamb', $claims->get('sub'));
     }
 

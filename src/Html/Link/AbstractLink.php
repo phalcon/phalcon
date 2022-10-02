@@ -136,6 +136,7 @@ abstract class AbstractLink
             false !== mb_strpos($href, "}")
         );
     }
+
     /**
      * @param string $key
      * @param mixed  $value

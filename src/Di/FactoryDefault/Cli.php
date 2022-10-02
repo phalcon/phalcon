@@ -15,10 +15,10 @@ namespace Phalcon\Di\FactoryDefault;
 
 use Phalcon\Di\FactoryDefault;
 use Phalcon\Di\Service;
+use Phalcon\Encryption\Security;
 use Phalcon\Events\Manager as EventsManager;
 use Phalcon\Filter\FilterFactory;
 use Phalcon\Html\Escaper;
-use Phalcon\Encryption\Security;
 use Phalcon\Support\HelperFactory;
 
 /**
@@ -43,14 +43,14 @@ class Cli extends FactoryDefault
         $this->services = [
 //            "annotations"        => new Service("Phalcon\\Annotations\\Adapter\\Memory", true),
 //            "dispatcher"         => new Service("Phalcon\\Cli\\Dispatcher", true),
-            "escaper"            => new Service(Escaper::class, true),
-            "eventsManager"      => new Service(EventsManager::class, true),
-            "filter"             => new Service($filter->newInstance(), true),
-            "helper"             => new Service(HelperFactory::class, true),
+            "escaper"       => new Service(Escaper::class, true),
+            "eventsManager" => new Service(EventsManager::class, true),
+            "filter"        => new Service($filter->newInstance(), true),
+            "helper"        => new Service(HelperFactory::class, true),
 //            "modelsManager"      => new Service("Phalcon\\Mvc\\Model\\Manager", true),
 //            "modelsMetadata"     => new Service("Phalcon\\Mvc\\Model\\MetaData\\Memory", true),
 //            "router"             => new Service("Phalcon\\Cli\\Router", true),
-            "security"           => new Service(Security::class, true),
+            "security"      => new Service(Security::class, true),
 //            "transactionManager" => new Service("Phalcon\\Mvc\\Model\\Transaction\\Manager", true)
         ];
     }

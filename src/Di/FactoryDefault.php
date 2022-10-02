@@ -43,7 +43,7 @@ class FactoryDefault extends Di
 
         $this->services = [
 //            "annotations"        : new Service("Phalcon\\Annotations\\Adapter\\Memory", true),
-            "assets"             => new Service(
+            "assets"        => new Service(
                 [
                     "className" => AssetsManager::class,
                     "arguments" => [
@@ -55,22 +55,22 @@ class FactoryDefault extends Di
                 ],
                 true
             ),
-            "crypt"              => new Service(Crypt::class, true),
+            "crypt"         => new Service(Crypt::class, true),
 //            "cookies"            => new Service("Phalcon\\Http\\Response\\Cookies", true),
 //            "dispatcher"         => new Service("Phalcon\\Mvc\\Dispatcher", true),
-            "escaper"            => new Service(Escaper::class, true),
-            "eventsManager"      => new Service(EventsManager::class, true),
-            "flash"              => new Service(Direct::class, true),
-            "flashSession"       => new Service(Session::class, true),
-            "filter"             => new Service($filterFactory->newInstance(), true),
-            "helper"             => new Service(HelperFactory::class, true),
+            "escaper"       => new Service(Escaper::class, true),
+            "eventsManager" => new Service(EventsManager::class, true),
+            "flash"         => new Service(Direct::class, true),
+            "flashSession"  => new Service(Session::class, true),
+            "filter"        => new Service($filterFactory->newInstance(), true),
+            "helper"        => new Service(HelperFactory::class, true),
 //            "modelsManager"      => new Service("Phalcon\\Mvc\\Model\\Manager", true),
 //            "modelsMetadata"     => new Service("Phalcon\\Mvc\\Model\\MetaData\\Memory", true),
 //            "request"            => new Service("Phalcon\\Http\\Request", true),
 //            "response"           => new Service("Phalcon\\Http\\Response", true),
 //            "router"             => new Service("Phalcon\\Mvc\\Router", true),
-            "security"           => new Service(Security::class, true),
-            "tag"                => new Service(
+            "security"      => new Service(Security::class, true),
+            "tag"           => new Service(
                 [
                     "className" => TagFactory::class,
                     "arguments" => [

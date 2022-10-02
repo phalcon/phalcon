@@ -424,7 +424,7 @@ class Security implements InjectionAwareInterface
          * This distinguishes between `password_hash` and non `password_hash`
          * hashing.
          */
-        $legacy    = true;
+        $legacy = true;
 
         switch ($this->defaultHash) {
             case self::CRYPT_MD5:

@@ -53,12 +53,10 @@ use Phalcon\Session\Adapter\Stream as SessionStream;
 use Phalcon\Session\Manager;
 use Phalcon\Storage\AdapterFactory as StorageAdapterFactory;
 use Phalcon\Storage\SerializerFactory;
-use Phalcon\Support\HelperFactory;
 
 use function getOptionsLibmemcached;
 use function getOptionsRedis;
 use function getOptionsSessionStream;
-use function property_exists;
 
 /**
  * Trait DiTrait
