@@ -121,6 +121,7 @@ class Validator
             $audience = [$audience];
         }
 
+        /** @var array $tokenAudience */
         $tokenAudience = $this->token->getClaims()
                                      ->get(Enum::AUDIENCE, [])
         ;

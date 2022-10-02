@@ -38,17 +38,17 @@ use const DIRECTORY_SEPARATOR;
  * (namespaced or not) as well as files. It also features extension loading,
  * allowing the user to autoload files with different extensions than .php.
  *
- * @property string|null          $checkedPath
- * @property array                $classes
- * @property array                $debug
- * @property array                $directories
- * @property array                $extensions
- * @property string|callable|null $fileCheckingCallback
- * @property array                $files
- * @property string|null          $foundPath
- * @property bool                 $isDebug
- * @property bool                 $isRegistered
- * @property array                $namespaces
+ * @property string|null     $checkedPath
+ * @property array           $classes
+ * @property array           $debug
+ * @property array           $directories
+ * @property array           $extensions
+ * @property string|callable $fileCheckingCallback
+ * @property array           $files
+ * @property string|null     $foundPath
+ * @property bool            $isDebug
+ * @property bool            $isRegistered
+ * @property array           $namespaces
  */
 class Loader
 {
