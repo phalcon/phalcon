@@ -14,9 +14,9 @@ declare(strict_types=1);
 namespace Phalcon\Di;
 
 use Phalcon\Assets\Manager;
+use Phalcon\Di\Traits\InjectionAwareTrait;
 use Phalcon\Encryption\Crypt;
 use Phalcon\Encryption\Crypt\CryptInterface;
-use Phalcon\Di\Traits\InjectionAwareTrait;
 use Phalcon\Encryption\Security;
 use Phalcon\Events\Manager as EventsManager;
 use Phalcon\Events\ManagerInterface as EventsManagerInterface;
@@ -27,6 +27,7 @@ use Phalcon\Flash\Session;
 use Phalcon\Html\Escaper;
 use Phalcon\Html\Escaper\EscaperInterface;
 use Phalcon\Http\RequestInterface;
+use Phalcon\Mvc\Model\ManagerInterface;
 use Phalcon\Session\Bag;
 use Phalcon\Session\BagInterface;
 use Phalcon\Support\HelperFactory;
@@ -73,7 +74,7 @@ use Phalcon\Support\HelperFactory;
  * // * @property \Phalcon\Session\ManagerInterface $session
  * // * @property AdapterInterface $db
  * // * @property Adapter\Memory|Adapter $annotations
- * // * @property \Phalcon\Mvc\Model\Manager|\Phalcon\Mvc\Model\ManagerInterface $modelsManager
+ * // * @property \Phalcon\Mvc\Model\Manager|ManagerInterface $modelsManager
  * // * @property Memory|MetadataInterface $modelsMetadata
  * // * @property ManagerInterface $transactionManager
  * // * @property Manager $assets

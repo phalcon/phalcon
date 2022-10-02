@@ -615,7 +615,7 @@ class Loader
     private function autoloadCheckClasses(string $className): bool
     {
         if (true === isset($this->classes[$className])) {
-            $filePath      = $this->classes[$className];
+            $filePath = $this->classes[$className];
             $this->fireManagerEvent("loader:pathFound", $filePath);
 
             $this->requireFile($filePath);
@@ -656,7 +656,7 @@ class Loader
                 /**
                  * Create a possible path for the file
                  */
-                $filePath = $fixedDirectory . $className . "." . $extension;
+                $filePath          = $fixedDirectory . $className . "." . $extension;
                 $this->checkedPath = $filePath;
                 $this->fireManagerEvent("loader:beforeCheckPath", $filePath);
 

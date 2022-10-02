@@ -13,8 +13,8 @@ declare(strict_types=1);
 
 namespace Phalcon\Html;
 
-use Phalcon\Support\Collection;
 use Phalcon\Html\Attributes\RenderInterface;
+use Phalcon\Support\Collection;
 
 use function htmlspecialchars;
 

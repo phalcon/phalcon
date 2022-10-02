@@ -11,7 +11,6 @@ declare(strict_types=1);
 
 namespace Phalcon\Tests\Unit\Encryption\Security\JWT\Validator;
 
-use Phalcon\Encryption\Security\JWT\Exceptions\ValidatorException;
 use Phalcon\Encryption\Security\JWT\Validator;
 use Phalcon\Tests\Fixtures\Traits\JWTTrait;
 use UnitTester;
@@ -37,7 +36,7 @@ class ValidateAudienceCest
     {
         $I->wantToTest('Encryption\Security\JWT\Validator - validateAudience()');
 
-        $token = $this->newToken();
+        $token     = $this->newToken();
         $validator = new Validator($token);
 
         $validator->validateAudience('unknown');

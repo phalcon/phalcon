@@ -43,7 +43,7 @@ class GetHeadersCest
             'alg' => $signer->getAlgHeader(),
             'typ' => 'JWT',
         ];
-        $actual = $builder->getHeaders();
+        $actual   = $builder->getHeaders();
         ksort($actual);
         $I->assertSame($expected, $actual);
     }

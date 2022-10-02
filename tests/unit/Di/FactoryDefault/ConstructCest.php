@@ -14,27 +14,24 @@ declare(strict_types=1);
 namespace Phalcon\Tests\Unit\Di\FactoryDefault;
 
 use Codeception\Example;
-use Phalcon\Annotations\Adapter\Memory as MemoryAnnotations;
 use Phalcon\Assets\Manager as ManagerAssets;
+use Phalcon\Di\FactoryDefault;
 use Phalcon\Encryption\Crypt;
 use Phalcon\Encryption\Security;
-use Phalcon\Di\FactoryDefault;
-use Phalcon\Html\Escaper;
-use Phalcon\Html\TagFactory;
 use Phalcon\Events\Manager as ManagerEvents;
 use Phalcon\Filter\Filter;
 use Phalcon\Flash\Direct;
 use Phalcon\Flash\Session;
-use Phalcon\Http\Request;
+use Phalcon\Html\Escaper;
+use Phalcon\Html\TagFactory;
 use Phalcon\Http\Response;
 use Phalcon\Http\Response\Cookies;
 use Phalcon\Mvc\Dispatcher;
-use Phalcon\Mvc\Model\Manager as ManagerModel;
 use Phalcon\Mvc\Model\MetaData\Memory;
 use Phalcon\Mvc\Model\Transaction\Manager;
 use Phalcon\Mvc\Router;
-use Phalcon\Support\HelperFactory;
 use Phalcon\Mvc\Url;
+use Phalcon\Support\HelperFactory;
 use UnitTester;
 
 class ConstructCest

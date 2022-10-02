@@ -14,8 +14,8 @@ declare(strict_types=1);
 namespace Phalcon\Html\Attributes;
 
 /**
-* Rendering interface for HTML attributes
-*/
+ * Rendering interface for HTML attributes
+ */
 interface RenderInterface
 {
     /**

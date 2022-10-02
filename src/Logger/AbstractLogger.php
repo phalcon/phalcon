@@ -16,8 +16,8 @@ namespace Phalcon\Logger;
 use DateTimeImmutable;
 use DateTimeZone;
 use Exception;
-use Phalcon\Logger\Exception as LoggerException;
 use Phalcon\Logger\Adapter\AdapterInterface;
+use Phalcon\Logger\Exception as LoggerException;
 
 use function array_diff_key;
 use function array_flip;

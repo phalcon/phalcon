@@ -18,6 +18,7 @@
 
 namespace Phalcon\Http\Message\Factories;
 
+use Phalcon\Http\Message\Exception\InvalidArgumentException;
 use Phalcon\Http\Message\Interfaces\RequestMethodInterface;
 use Phalcon\Http\Message\Interfaces\ServerRequestFactoryInterface;
 use Phalcon\Http\Message\Interfaces\ServerRequestInterface;
@@ -28,7 +29,6 @@ use Phalcon\Http\Message\UploadedFile;
 use Phalcon\Http\Message\Uri;
 use Phalcon\Support\Collection;
 use Phalcon\Support\Collection\CollectionInterface;
-use Phalcon\Http\Message\Exception\InvalidArgumentException;
 
 use function apache_request_headers;
 use function explode;
@@ -340,8 +340,8 @@ class ServerRequestFactory implements ServerRequestFactoryInterface, RequestMeth
      * Returns a header
      *
      * @param CollectionInterface $headers
-     * @param string     $name
-     * @param mixed|null $defaultValue
+     * @param string              $name
+     * @param mixed|null          $defaultValue
      *
      * @return mixed|string
      */

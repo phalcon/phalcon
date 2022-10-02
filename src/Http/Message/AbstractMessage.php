@@ -22,7 +22,6 @@ use Phalcon\Http\Message\Exception\InvalidArgumentException;
 use Phalcon\Http\Message\Interfaces\MessageInterface;
 use Phalcon\Http\Message\Interfaces\ResponseStatusCodeInterface;
 use Phalcon\Http\Message\Interfaces\StreamInterface;
-use Phalcon\Support\Collection\CollectionInterface;
 
 use function array_merge;
 use function implode;

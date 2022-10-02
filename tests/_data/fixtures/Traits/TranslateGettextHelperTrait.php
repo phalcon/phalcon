@@ -15,7 +15,6 @@ namespace Phalcon\Tests\Fixtures\Traits;
 
 use Codeception\Example;
 use Phalcon\Translate\Adapter\Gettext;
-use Phalcon\Translate\Adapter\NativeArray;
 use Phalcon\Translate\Exception;
 use Phalcon\Translate\InterpolatorFactory;
 use UnitTester;
@@ -44,8 +43,8 @@ trait TranslateGettextHelperTrait
      *
      * @throws Exception
      *
-     * @author Phalcon Team <team@phalcon.io>
-     * @since  2020-09-09
+     * @author       Phalcon Team <team@phalcon.io>
+     * @since        2020-09-09
      */
     public function translateAdapterGettextQuery(UnitTester $I, Example $data)
     {
@@ -61,7 +60,8 @@ trait TranslateGettextHelperTrait
         $translator = new Gettext(new InterpolatorFactory(), $language);
 
         foreach ($data['tests'] as $key => $expected) {
-            $actual = $translator->{$this->func()}($key);
+            $actual = $translator->{$this->func()}($key)
+            ;
             $I->assertEquals($expected, $actual);
         }
     }
@@ -77,8 +77,8 @@ trait TranslateGettextHelperTrait
      *
      * @throws Exception
      *
-     * @author Phalcon Team <team@phalcon.io>
-     * @since  2020-09-09
+     * @author       Phalcon Team <team@phalcon.io>
+     * @since        2020-09-09
      */
     public function translateAdapterGettextVariableSubstitutionNoVariables(
         UnitTester $I,
@@ -100,7 +100,8 @@ trait TranslateGettextHelperTrait
                 [
                     'name' => 'my friend',
                 ]
-            );
+            )
+            ;
             $I->assertEquals($expected, $actual);
         }
     }
@@ -116,8 +117,8 @@ trait TranslateGettextHelperTrait
      *
      * @throws Exception
      *
-     * @author Phalcon Team <team@phalcon.io>
-     * @since  2020-09-09
+     * @author       Phalcon Team <team@phalcon.io>
+     * @since        2020-09-09
      */
     public function translateAdapterGettextVariableSubstitutionOneVariable(
         UnitTester $I,
@@ -134,7 +135,8 @@ trait TranslateGettextHelperTrait
         $translator = new Gettext(new InterpolatorFactory(), $language);
 
         foreach ($data['tests'] as $key => $expected) {
-            $actual = $translator->{$this->func()}($key, ['name' => 'my friend']);
+            $actual = $translator->{$this->func()}($key, ['name' => 'my friend'])
+            ;
             $I->assertEquals($expected, $actual);
         }
     }
@@ -150,8 +152,8 @@ trait TranslateGettextHelperTrait
      *
      * @throws Exception
      *
-     * @author Phalcon Team <team@phalcon.io>
-     * @since  2020-09-09
+     * @author       Phalcon Team <team@phalcon.io>
+     * @since        2020-09-09
      */
     public function translateAdapterGettextVariableSubstitutionTwoVariable(
         UnitTester $I,
@@ -173,7 +175,8 @@ trait TranslateGettextHelperTrait
         ];
 
         foreach ($data['tests'] as $key => $expected) {
-            $actual = $translator->{$this->func()}($key, $vars);
+            $actual = $translator->{$this->func()}($key, $vars)
+            ;
             $I->assertEquals($expected, $actual);
         }
     }
@@ -202,7 +205,8 @@ trait TranslateGettextHelperTrait
         ];
 
         $expected = 'Привет, John D. Doe!';
-        $actual   = $translator->{$this->func()}('Привет, %fname% %mname% %lname%!', $vars);
+        $actual   = $translator->{$this->func()}('Привет, %fname% %mname% %lname%!', $vars)
+        ;
         $I->assertEquals($expected, $actual);
     }
 

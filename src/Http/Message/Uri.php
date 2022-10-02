@@ -716,7 +716,7 @@ final class Uri extends AbstractCommon implements UriInterface
     {
         $filtered = preg_replace("#:(//)?$#", "", mb_strtolower($scheme));
         $schemes  = [
-            "http" => 1,
+            "http"  => 1,
             "https" => 1
         ];
 
@@ -784,8 +784,8 @@ final class Uri extends AbstractCommon implements UriInterface
          * Because preg_match_callback does not work in Zephir (for now),
          * replace the spaces with %20
          */
-        $value   = str_replace(" ", "%20", $value);
-        $result  = preg_match($pattern, $value, $matches);
+        $value  = str_replace(" ", "%20", $value);
+        $result = preg_match($pattern, $value, $matches);
 
         if (false === $result) {
             return $value;

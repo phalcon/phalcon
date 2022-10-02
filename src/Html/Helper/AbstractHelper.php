@@ -12,7 +12,6 @@ declare(strict_types=1);
 namespace Phalcon\Html\Helper;
 
 use Phalcon\Html\Escaper\EscaperInterface;
-use Phalcon\Html\Exception;
 
 use function array_intersect_key;
 use function array_merge;

@@ -12,7 +12,6 @@ declare(strict_types=1);
 namespace Phalcon\Tests\Unit\Encryption\Security\JWT\Validator;
 
 use Phalcon\Encryption\Security\JWT\Builder;
-use Phalcon\Encryption\Security\JWT\Exceptions\ValidatorException;
 use Phalcon\Encryption\Security\JWT\Signer\Hmac;
 use Phalcon\Encryption\Security\JWT\Validator;
 use Phalcon\Tests\Fixtures\Traits\JWTTrait;
@@ -55,7 +54,8 @@ class ValidateSignatureCest
             ->setNotBefore($notBefore)
             ->setSubject('Mary had a little lamb')
             ->setPassphrase($passphrase)
-            ->getToken();
+            ->getToken()
+        ;
 
         $validator = new Validator($token);
         $I->assertInstanceOf(Validator::class, $validator);
@@ -78,7 +78,7 @@ class ValidateSignatureCest
     {
         $I->wantToTest('Encryption\Security\JWT\Validator - validateSignature()');
 
-        $token = $this->newToken();
+        $token      = $this->newToken();
         $signer     = new Hmac();
         $passphrase = '123456';
         $validator  = new Validator($token);

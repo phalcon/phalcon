@@ -145,7 +145,9 @@ class Token
      */
     public function verify(SignerInterface $signer, string $key): bool
     {
-        if ($signer->getAlgHeader() !== $this->getHeaders()->get(Enum::ALGO)) {
+        if (
+            $signer->getAlgHeader() !== $this->getHeaders()->get(Enum::ALGO)
+        ) {
             return false;
         }
 

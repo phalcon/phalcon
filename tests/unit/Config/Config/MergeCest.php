@@ -69,7 +69,8 @@ class MergeCest
          */
         $expected = $example['expected'];
         $actual   = $source->merge($target)
-                           ->toArray();
+                           ->toArray()
+        ;
         $I->assertSame($expected, $actual);
 
         /**
@@ -78,7 +79,8 @@ class MergeCest
         $expected = $example['expected'];
         $target   = $example['target'];
         $actual   = $source->merge($target)
-                           ->toArray();
+                           ->toArray()
+        ;
         $I->assertSame($expected, $actual);
     }
 

@@ -644,7 +644,8 @@ class Crypt implements CryptInterface
 
             $service = $this->padFactory->padNumberToService($paddingType);
             $padding = $this->padFactory->newInstance($service)
-                                        ->pad($paddingSize);
+                                        ->pad($paddingSize)
+            ;
         }
 
         if (0 === $paddingSize) {
@@ -683,7 +684,8 @@ class Crypt implements CryptInterface
         ) {
             $service     = $this->padFactory->padNumberToService($paddingType);
             $paddingSize = $this->padFactory->newInstance($service)
-                                            ->unpad($input, $blockSize);
+                                            ->unpad($input, $blockSize)
+            ;
 
             if ($paddingSize > 0) {
                 if ($paddingSize <= $blockSize) {
