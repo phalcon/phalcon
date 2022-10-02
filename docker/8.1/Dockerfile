@@ -1,7 +1,7 @@
-FROM composer:latest as composer
+FROM composer:2.4.2 as composer
 FROM php:8.1-fpm
 
-ADD ./extra.ini /usr/local/etc/php/conf.d/
+COPY ./extra.ini /usr/local/etc/php/conf.d/
 
 # User/Group globals
 ENV MY_USER="phalcon" \
