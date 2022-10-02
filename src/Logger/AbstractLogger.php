@@ -41,7 +41,7 @@ use function strtoupper;
  * @property array              $excluded
  * @property int                $logLevel
  * @property string             $name
- * @property string             $timezone
+ * @property DateTimeZone       $timezone
  */
 abstract class AbstractLogger
 {
