@@ -1,7 +1,8 @@
 <?php
+declare(strict_types=1);
 namespace Phalcon\Base\Exception;
 
-class BaseRuntimeException extends \RuntimeException
+class RuntimeException extends \RuntimeException
 {
 
     /**

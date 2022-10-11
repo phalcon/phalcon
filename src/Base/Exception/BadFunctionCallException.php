@@ -1,9 +1,10 @@
 <?php
+declare(strict_types=1);
 namespace Phalcon\Base\Exception;
 
 use BadFunctionCallException as BadFunctionCallExceptionAlias;
 
-class BaseBadFunctionCallException extends BadFunctionCallExceptionAlias
+class BadFunctionCallException extends BadFunctionCallExceptionAlias
 {
 
     /**

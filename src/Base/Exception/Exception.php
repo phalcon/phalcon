@@ -1,7 +1,8 @@
 <?php
+declare(strict_types=1);
 namespace Phalcon\Base\Exception;
 
-class BaseException extends \Exception
+class Exception extends \Exception
 {
 
     /**

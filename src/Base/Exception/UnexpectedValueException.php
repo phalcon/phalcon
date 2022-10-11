@@ -1,7 +1,8 @@
 <?php
+declare(strict_types=1);
 namespace Phalcon\Base\Exception;
 
-class BaseUnexpectedValueException extends \UnexpectedValueException
+class UnexpectedValueException extends \UnexpectedValueException
 {
     /**
      * Exception thrown if a value does not match with a set of values. Typically, this happens

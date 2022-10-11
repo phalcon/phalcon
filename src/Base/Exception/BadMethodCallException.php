@@ -1,9 +1,10 @@
 <?php
+declare(strict_types=1);
 namespace Phalcon\Base\Exception;
 
 use BadMethodCallException as BadMethodCallExceptionAlias;
 
-class BaseBadMethodCallException extends BadMethodCallExceptionAlias
+class BadMethodCallException extends BadMethodCallExceptionAlias
 {
     /**
      * Exception throw if a callback refers to on undefined method or if some arguments are missing .

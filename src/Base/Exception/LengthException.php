@@ -1,7 +1,8 @@
 <?php
+declare(strict_types=1);
 namespace Phalcon\Base\Exception;
 
-class BaseLengthException extends \LengthException
+class LengthException extends \LengthException
 {
     /**
      * Exception thrown if a length is invalid.

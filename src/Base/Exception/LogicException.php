@@ -1,7 +1,8 @@
 <?php
+declare(strict_types=1);
 namespace Phalcon\Base\Exception;
 
-class BaseLogicException extends \LogicException
+class LogicException extends \LogicException
 {
     /**
      * Exception that represents in the params logic. This kind of exception should lead directly to a fix in your code .
