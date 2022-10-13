@@ -284,4 +284,4 @@ jobs:
         uses: codacy/codacy-coverage-reporter-action@v1
         with:
           project-token: ${{ secrets.CODACY_PROJECT_TOKEN }}
-          coverage-reports: unit-coverage-${{ matrix.php }}.xml,int-coverage-${{ matrix.php }}.xml
+          coverage-reports: tests/_output/unit-coverage-${{ matrix.php }}.xml,tests/_output/int-coverage-${{ matrix.php }}.xml
