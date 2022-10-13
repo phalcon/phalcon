@@ -279,9 +279,9 @@ jobs:
       #     DATA_REDIS_PORT: ${{ job.services.redis.ports['6379'] }}
       #     DATA_MEMCACHED_PORT: ${{ job.services.memcached.ports['11211'] }}
       #   run: vendor/bin/codecept run --ext DotReporter database --env sqlsrv
-      - name: Upload Code Coverage to Codacy
-        env:
-          CODACY_PROJECT_TOKEN: ${{ secrets.CODACY_PROJECT_TOKEN }}
-        run: |
-          bash <(curl -Ls https://coverage.codacy.com/get.sh) report -r tests/_output/unit-coverage-${{ matrix.php }}.xml
-          bash <(curl -Ls https://coverage.codacy.com/get.sh) report -r tests/_output/int-coverage-${{ matrix.php }}.xml
+
+      - name: Run codacy-coverage-reporter
+        uses: codacy/codacy-coverage-reporter-action@v1
+        with:
+          project-token: ${{ secrets.CODACY_PROJECT_TOKEN }}
+          coverage-reports: unit-coverage-${{ matrix.php }}.xml,int-coverage-${{ matrix.php }}.xml
