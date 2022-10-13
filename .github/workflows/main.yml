@@ -283,5 +283,5 @@ jobs:
         env:
           CODACY_PROJECT_TOKEN: ${{ secrets. CODACY_PROJECT_TOKEN }}
         run: |
-          bash <(curl -Ls https://coverage.codacy.com/get.sh) -t tests/_output/unit-coverage-${{ matrix.php }}.xml
-          bash <(curl -Ls https://coverage.codacy.com/get.sh) -t tests/_output/int-coverage-${{ matrix.php }}.xml
+          bash <(curl -Ls https://coverage.codacy.com/get.sh) -r tests/_output/unit-coverage-${{ matrix.php }}.xml
+          bash <(curl -Ls https://coverage.codacy.com/get.sh) -r tests/_output/int-coverage-${{ matrix.php }}.xml
