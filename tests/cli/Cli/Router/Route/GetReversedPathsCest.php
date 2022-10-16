@@ -54,7 +54,6 @@ class GetReversedPathsCest
                     'feed' => 'task',
                 ],
             ],
-
             [
                 'path'     => 'Feed::get',
                 'expected' => [
@@ -62,7 +61,6 @@ class GetReversedPathsCest
                     'get'  => 'action',
                 ],
             ],
-
             [
                 'path'     => 'News::Posts::show',
                 'expected' => [
@@ -71,9 +69,7 @@ class GetReversedPathsCest
                     'show'  => 'action',
                 ],
             ],
-
             [
-
                 'path'     => 'MyApp\\Tasks\\Posts::show',
                 'expected' => [
                     'MyApp\\Tasks' => 'namespace',
@@ -81,7 +77,6 @@ class GetReversedPathsCest
                     'show'         => 'action',
                 ],
             ],
-
             [
                 'path'     => 'News::MyApp\\Tasks\\Posts::show',
                 'expected' => [
@@ -91,7 +86,6 @@ class GetReversedPathsCest
                     'show'         => 'action',
                 ],
             ],
-
             [
                 'path'     => '\\Posts::show',
                 'expected' => [

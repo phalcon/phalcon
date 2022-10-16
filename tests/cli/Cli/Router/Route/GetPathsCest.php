@@ -57,7 +57,6 @@ class GetPathsCest
                     'task' => 'feed',
                 ],
             ],
-
             [
                 'path'     => 'Feed::get',
                 'expected' => [
@@ -65,7 +64,6 @@ class GetPathsCest
                     'action' => 'get',
                 ],
             ],
-
             [
                 'path'     => 'News::Posts::show',
                 'expected' => [
@@ -74,7 +72,6 @@ class GetPathsCest
                     'action' => 'show',
                 ],
             ],
-
             [
                 'path'     => 'MyApp\\Tasks\\Posts::show',
                 'expected' => [
@@ -83,7 +80,6 @@ class GetPathsCest
                     'action'    => 'show',
                 ],
             ],
-
             [
                 'path'     => 'News::MyApp\\Tasks\\Posts::show',
                 'expected' => [
@@ -93,7 +89,6 @@ class GetPathsCest
                     'action'    => 'show',
                 ],
             ],
-
             [
                 'path'     => '\\Posts::show',
                 'expected' => [
