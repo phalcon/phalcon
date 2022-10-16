@@ -49,6 +49,5 @@ class ResetCest
         $expected = '0';
         $actual   = $route->getRouteId();
         $I->assertSame($expected, $actual);
-
     }
 }
