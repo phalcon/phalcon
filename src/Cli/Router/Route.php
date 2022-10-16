@@ -16,6 +16,7 @@ namespace Phalcon\Cli\Router;
 use Phalcon\Traits\Helper\Str\UncamelizeTrait;
 
 use function array_keys;
+use function array_pop;
 use function explode;
 use function is_array;
 use function str_contains;
@@ -140,7 +141,7 @@ class Route implements RouteInterface
 
             // This is a pattern for valid identifiers
             $idPattern = $this->delimiter . "([a-zA-Z0-9\\_\\-]+)";
-            $map = [
+            $map       = [
                 ":delimiter"                    => $this->delimiter,
                 $this->delimiter . ":module"    => $idPattern,
                 $this->delimiter . ":task"      => $idPattern,
@@ -203,7 +204,7 @@ class Route implements RouteInterface
      *
      * @return array|bool
      */
-    public function extractNamedParams(string $pattern): array | bool
+    public function extractNamedParams(string $pattern): array|bool
     {
         if (0 === strlen($pattern)) {
             return false;
@@ -262,10 +263,10 @@ class Route implements RouteInterface
                                 if (
                                     ($itemChar >= 'a' && $itemChar <= 'z') ||
                                     ($itemChar >= 'A' && $itemChar <= 'Z') ||
-                                    ($itemChar >= '0' && $itemChar <='9') ||
+                                    ($itemChar >= '0' && $itemChar <= '9') ||
                                     $itemChar == '-' ||
                                     $itemChar == '_' ||
-                                    $itemChar ==  ':'
+                                    $itemChar == ':'
                                 ) {
                                     if (':' === $itemChar) {
                                         $variable = (string) substr($item, 0, $cursorVar);
@@ -285,7 +286,7 @@ class Route implements RouteInterface
 
                                 if ($variable && $regexp) {
                                     $foundPattern = 0;
-                                    $regexpArray = str_split($regexp);
+                                    $regexpArray  = str_split($regexp);
                                     foreach ($regexpArray as $regexChar) {
                                         if ('\0' === $regexChar) {
                                             break;
@@ -310,7 +311,7 @@ class Route implements RouteInterface
 
                                     $matches[$variable] = $tmp;
                                 } else {
-                                    $route         .= "([^" . $this->delimiter . "]*)";
+                                    $route          .= "([^" . $this->delimiter . "]*)";
                                     $matches[$item] = $tmp;
                                 }
                             } else {
@@ -458,11 +459,11 @@ class Route implements RouteInterface
     {
         if (is_string($paths)) {
             $moduleName = null;
-            $taskName = null;
+            $taskName   = null;
             $actionName = null;
 
             // Explode the short paths using the :: separator
-            $parts = explode("::", $paths);
+            $parts      = explode("::", $paths);
             $countParts = count($parts);
 
             // Create the array paths dynamically
@@ -496,13 +497,13 @@ class Route implements RouteInterface
                 if (str_contains($taskName, "\\")) {
                     $taskNameArray = explode("\\", $taskName);
 
-                    // Extract the namespace from the namespaced class
+                    // Extract the real class name from the namespaced class
                     $realClassName = array_pop($taskNameArray);
 
-                    // Extract the real class name from the namespaced class
+                    // Extract the namespace from the namespaced class
                     $namespaceName = implode("\\", $taskNameArray);
 
-                    if (null === $namespaceName || null === $realClassName) {
+                    if (true === empty($realClassName)) {
                         throw new Exception(
                             "The route contains invalid paths"
                         );

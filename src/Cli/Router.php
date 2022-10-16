@@ -13,11 +13,10 @@ declare(strict_types=1);
 
 namespace Phalcon\Cli;
 
-use Phalcon\Di\DiInterface;
-use Phalcon\Di\AbstractInjectionAware;
-use Phalcon\Cli\Router\Route;
 use Phalcon\Cli\Router\Exception;
+use Phalcon\Cli\Router\Route;
 use Phalcon\Cli\Router\RouteInterface;
+use Phalcon\Di\AbstractInjectionAware;
 
 use function array_reverse;
 use function is_array;
@@ -116,10 +115,10 @@ class Router extends AbstractInjectionAware implements RouterInterface
             // Two routes are added by default to match
             // /:task/:action and /:task/:action/:params
             $this->add(
-                    "#^(?::delimiter)?([a-zA-Z0-9\\_\\-]+)[:delimiter]{0,1}$#",
-                    [
-                        "task" => 1
-                    ]
+                "#^(?::delimiter)?([a-zA-Z0-9\\_\\-]+)[:delimiter]{0,1}$#",
+                [
+                    "task" => 1
+                ]
             );
 
             $this->add(
@@ -170,7 +169,7 @@ class Router extends AbstractInjectionAware implements RouterInterface
      *
      * @return RouteInterface|null
      */
-    public function getMatchedRoute(): RouteInterface | null
+    public function getMatchedRoute(): RouteInterface|null
     {
         return $this->matchedRoute;
     }
@@ -223,7 +222,7 @@ class Router extends AbstractInjectionAware implements RouterInterface
      *
      * @return RouteInterface|bool
      */
-    public function getRouteById(string $routeId): RouteInterface | bool
+    public function getRouteById(string $routeId): RouteInterface|bool
     {
         return $this->routes[$routeId] ?? false;
     }
@@ -235,7 +234,7 @@ class Router extends AbstractInjectionAware implements RouterInterface
      *
      * @return RouteInterface|bool
      */
-    public function getRouteByName(string $name): RouteInterface | bool
+    public function getRouteByName(string $name): RouteInterface|bool
     {
         /** @var RouteInterface $route */
         foreach ($this->routes as $route) {
@@ -433,13 +432,15 @@ class Router extends AbstractInjectionAware implements RouterInterface
         /**
          * Check for parameters
          */
-        $params = $parts["params"] ?? [];
         if (true === isset($parts["params"])) {
+            $params = $parts["params"];
             if (true !== is_array($params)) {
                 $strParams = substr((string) $params, 1);
 
                 if ($strParams) {
                     $params = explode(Route::getDelimiter(), $strParams);
+                } else {
+                    $params = [];
                 }
             }
 
