@@ -15,14 +15,20 @@ namespace Phalcon\Cli\Router;
 
 use Phalcon\Traits\Helper\Str\UncamelizeTrait;
 
+use function array_flip;
 use function array_keys;
+use function array_merge;
 use function array_pop;
+use function array_values;
 use function explode;
+use function implode;
 use function is_array;
-use function str_contains;
+use function is_string;
 use function str_replace;
 use function str_split;
-use function str_starts_with;
+use function strlen;
+use function substr;
+
 
 /**
  * This class represents every route added to the router
