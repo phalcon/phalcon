@@ -13,7 +13,7 @@ declare(strict_types=1);
 
 namespace Phalcon\Di;
 
-use Phalcon\Assets\Manager;
+use Phalcon\Assets\Manager as AssetsManager;
 use Phalcon\Di\Traits\InjectionAwareTrait;
 use Phalcon\Encryption\Crypt;
 use Phalcon\Encryption\Crypt\CryptInterface;
@@ -30,7 +30,10 @@ use Phalcon\Http\RequestInterface;
 use Phalcon\Mvc\Model\ManagerInterface;
 use Phalcon\Session\Bag;
 use Phalcon\Session\BagInterface;
+use Phalcon\Session\ManagerInterface as SessionManager;
 use Phalcon\Support\HelperFactory;
+
+use function spl_object_hash;
 
 //use Phalcon\Annotations\Adapter;
 //use Phalcon\Db\Adapter\AdapterInterface;
@@ -55,6 +58,7 @@ use Phalcon\Support\HelperFactory;
  * This class allows to access services in the services container by just only
  * accessing a public property with the same name of a registered service
  *
+ * @property AssetsManager                        $assets
  * @property DiInterface|null                     $container
  * @property DiInterface|null                     $di
  * @property Crypt|CryptInterface                 $crypt
@@ -65,19 +69,17 @@ use Phalcon\Support\HelperFactory;
  * @property Filter|FilterInterface               $filter
  * @property HelperFactory                        $helper
  * @property Security                             $security
- * // * @property Dispatcher|DispatcherInterface $dispatcher
+ * @property SessionManager                       $session
  * // * @property Router|RouterInterface $router
  * // * @property Url|UrlInterface $url
  * // * @property Request|RequestInterface $request
  * // * @property Response|ResponseInterface $response
  * // * @property Cookies|CookiesInterface $cookies
- * // * @property \Phalcon\Session\ManagerInterface $session
  * // * @property AdapterInterface $db
  * // * @property Adapter\Memory|Adapter $annotations
  * // * @property \Phalcon\Mvc\Model\Manager|ManagerInterface $modelsManager
  * // * @property Memory|MetadataInterface $modelsMetadata
  * // * @property ManagerInterface $transactionManager
- * // * @property Manager $assets
  * // * @property Bag|BagInterface $persistent
  * // * @property View|ViewInterface $view
  */

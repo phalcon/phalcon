@@ -17,6 +17,7 @@ use Phalcon\Assets\Manager as AssetsManager;
 use Phalcon\Encryption\Crypt;
 use Phalcon\Encryption\Security;
 use Phalcon\Events\Manager as EventsManager;
+use Phalcon\Filter\Filter;
 use Phalcon\Filter\FilterFactory;
 use Phalcon\Flash\Direct;
 use Phalcon\Flash\Session;
@@ -25,10 +26,31 @@ use Phalcon\Html\TagFactory;
 use Phalcon\Support\HelperFactory;
 
 /**
- * This is a variant of the standard Phalcon\Di. By default, it automatically
+ * This is a variant of the standard Phalcon\Di\Di. By default it automatically
  * registers all the services provided by the framework. Thanks to this, the
  * developer does not need to register each service individually providing a
  * full stack framework
+ *
+ * @property AnnotationsManager $annotations
+ * @property AssetsManager      $assets
+ * @property Crypt              $crypt
+ * @property Cookies            $cookies
+ * @property Dispatcher         $dispatcher
+ * @property Escaper            $escaper
+ * @property EventsManager      $eventsManager
+ * @property Direct             $flash
+ * @property Session            $flashSession
+ * @property Filter             $filter
+ * @property HelperFactory      $helper
+ * @property ModelsManager      $modelsManager
+ * @property MetadataManager    $modelsMetadata
+ * @property Request            $request
+ * @property Response           $response
+ * @property Router             $router
+ * @property Security           $security
+ * @property TagFactory         $tag
+ * @property TransactionManager $transactionManager
+ * @property Url                $url
  */
 class FactoryDefault extends Di
 {
