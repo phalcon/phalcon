@@ -13,7 +13,10 @@ declare(strict_types=1);
 
 namespace Phalcon\Events\Traits;
 
+use Phalcon\Events\Exception as EventsException;
 use Phalcon\Events\ManagerInterface;
+
+use function property_exists;
 
 /**
  * Trait EventsAwareTrait
@@ -43,17 +46,25 @@ trait EventsAwareTrait
      */
     public function setEventsManager(ManagerInterface $eventsManager): void
     {
+        if (
+            true === property_exists($this, 'container') &&
+            null !== $this->container
+        ) {
+            $this->container->set('eventsManager', $eventsManager);
+        }
+
         $this->eventsManager = $eventsManager;
     }
 
     /**
      * Helper method to fire an event
      *
-     * @param string     $eventName
-     * @param mixed|null $data
-     * @param bool       $cancellable
+     * @param string $eventName
+     * @param        $data
+     * @param bool   $cancellable
      *
-     * @return mixed|bool
+     * @return bool|mixed|null
+     * @throws EventsException
      */
     protected function fireManagerEvent(
         string $eventName,

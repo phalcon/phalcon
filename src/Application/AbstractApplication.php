@@ -14,6 +14,7 @@ declare(strict_types=1);
 namespace Phalcon\Application;
 
 use Phalcon\Di\DiInterface;
+use Phalcon\Di\Injectable;
 use Phalcon\Di\InjectionAwareInterface;
 use Phalcon\Di\Traits\InjectionAwareTrait;
 use Phalcon\Events\EventsAwareInterface;
@@ -25,10 +26,10 @@ use Phalcon\Events\Traits\EventsAwareTrait;
  * @property string $defaultModule
  * @property array  $modules
  */
-abstract class AbstractApplication implements InjectionAwareInterface, EventsAwareInterface
+abstract class AbstractApplication extends Injectable
+    implements EventsAwareInterface
 {
     use EventsAwareTrait;
-    use InjectionAwareTrait;
 
     /**
      * @var string
