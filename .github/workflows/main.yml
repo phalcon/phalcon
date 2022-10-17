@@ -77,15 +77,15 @@ jobs:
 
         name:
           - ubuntu-gcc
-#          - macos-clang
+          - macos-clang
 
         # matrix names should be in next format:
         #     {php}-{ts}-{os.name}-{compiler}-{arch}
         include:
           # Linux
           - { name: ubuntu-gcc, os: ubuntu-18.04, compiler: gcc }
-#          # macOS
-#          - { name: macos-clang, os: macos-11, compiler: clang }
+          # macOS
+          - { name: macos-clang, os: macos-11, compiler: clang }
           # Windows
           - { php: '8.0', ts: 'ts',  arch: 'x64', name: 'windows2019-vs16', os: 'windows-2019', compiler: 'vs16' }
           - { php: '8.0', ts: 'nts', arch: 'x64', name: 'windows2019-vs16', os: 'windows-2019', compiler: 'vs16' }
@@ -147,6 +147,8 @@ jobs:
         run: vendor/bin/codecept run --coverage-xml=coverage-${{ matrix.php }}.xml --ext DotReporter unit
 
   integration-test:
+    permissions:
+      contents: read # to fetch code (actions/checkout)
     runs-on: ubuntu-20.04
 
     services:
