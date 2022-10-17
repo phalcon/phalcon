@@ -13,14 +13,14 @@ declare(strict_types=1);
 
 namespace Phalcon\Support\Helper\Str;
 
-use Phalcon\Traits\Helper\Str\LowerTrait;
+use Phalcon\Traits\Helper\Str\UncamelizeTrait;
 
 /**
  * Converts strings to non camelized style
  */
 class Uncamelize
 {
-    use LowerTrait;
+    use UncamelizeTrait;
 
     /**
      * @param string $text
@@ -32,12 +32,6 @@ class Uncamelize
         string $text,
         string $delimiter = '_'
     ): string {
-        $text = (string) preg_replace(
-            '/[A-Z]/',
-            $delimiter . '\\0',
-            lcfirst($text)
-        );
-
-        return $this->toLower($text);
+        return $this->toUncamelize($text, $delimiter);
     }
 }
