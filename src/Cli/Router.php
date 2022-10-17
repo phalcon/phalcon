@@ -18,9 +18,14 @@ use Phalcon\Cli\Router\Route;
 use Phalcon\Cli\Router\RouteInterface;
 use Phalcon\Di\AbstractInjectionAware;
 
+use function array_merge;
 use function array_reverse;
+use function call_user_func_array;
+use function explode;
 use function is_array;
-use function str_contains;
+use function is_callable;
+use function preg_match;
+use function substr;
 
 /**
  * Phalcon\Cli\Router is the standard framework router. Routing is the process
