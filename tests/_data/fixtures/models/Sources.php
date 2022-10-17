@@ -1,7 +1,5 @@
 <?php
 
-declare(strict_types=1);
-
 /**
  * This file is part of the Phalcon Framework.
  *
@@ -11,6 +9,18 @@ declare(strict_types=1);
  * file that was distributed with this source code.
  */
 
-class One
+namespace Phalcon\Tests\Models;
+
+use Phalcon\Mvc\Model;
+
+class Sources extends Model
 {
+    public $id;
+    public $source;
+    public $username;
+
+    public function initialize()
+    {
+        $this->setSource('co_sources');
+    }
 }

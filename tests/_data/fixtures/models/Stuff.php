@@ -1,7 +1,5 @@
 <?php
 
-declare(strict_types=1);
-
 /**
  * This file is part of the Phalcon Framework.
  *
@@ -11,6 +9,18 @@ declare(strict_types=1);
  * file that was distributed with this source code.
  */
 
-class One
+declare(strict_types=1);
+
+namespace Phalcon\Tests\Models;
+
+use Phalcon\Mvc\Model;
+
+/**
+ * Class Stuff
+ */
+class Stuff extends Model
 {
+    public $stf_id;
+    public $stf_name;
+    public $stf_type;
 }

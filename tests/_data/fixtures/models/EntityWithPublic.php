@@ -1,7 +1,5 @@
 <?php
 
-declare(strict_types=1);
-
 /**
  * This file is part of the Phalcon Framework.
  *
@@ -11,6 +9,19 @@ declare(strict_types=1);
  * file that was distributed with this source code.
  */
 
-class One
+declare(strict_types=1);
+
+namespace Phalcon\Tests\Models;
+
+/**
+ * Class EntityWithPublic
+ */
+class EntityWithPublic
 {
+    public $name;
+
+    public function __construct(string $name)
+    {
+        $this->name = $name;
+    }
 }
