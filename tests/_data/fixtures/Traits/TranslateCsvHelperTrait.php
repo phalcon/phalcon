@@ -50,8 +50,8 @@ trait TranslateCsvHelperTrait
      *
      * @throws Exception
      *
-     * @author       Phalcon Team <team@phalcon.io>
-     * @since        2020-09-09
+     * @author Phalcon Team <team@phalcon.io>
+     * @since  2020-09-09
      */
     public function translateAdapterCsvQuery(UnitTester $I, Example $data)
     {
@@ -84,8 +84,8 @@ trait TranslateCsvHelperTrait
      *
      * @throws Exception
      *
-     * @author       Phalcon Team <team@phalcon.io>
-     * @since        2020-09-09
+     * @author Phalcon Team <team@phalcon.io>
+     * @since  2020-09-09
      */
     public function translateAdapterCsvVariableSubstitutionNoVariables(
         UnitTester $I,
@@ -124,8 +124,8 @@ trait TranslateCsvHelperTrait
      *
      * @throws Exception
      *
-     * @author       Phalcon Team <team@phalcon.io>
-     * @since        2020-09-09
+     * @author Phalcon Team <team@phalcon.io>
+     * @since  2020-09-09
      */
     public function translateAdapterCsvVariableSubstitutionOneVariable(
         UnitTester $I,
@@ -158,8 +158,8 @@ trait TranslateCsvHelperTrait
      *
      * @throws Exception
      *
-     * @author       Phalcon Team <team@phalcon.io>
-     * @since        2020-09-09
+     * @author Phalcon Team <team@phalcon.io>
+     * @since  2020-09-09
      */
     public function translateAdapterCsvVariableSubstitutionTwoVariable(
         UnitTester $I,
@@ -202,7 +202,7 @@ trait TranslateCsvHelperTrait
         $language   = $this->getCsvConfig()['ru'];
         $translator = new Csv(new InterpolatorFactory(), $language);
 
-        $vars     = [
+        $vars = [
             'fname' => 'John',
             'lname' => 'Doe',
             'mname' => 'D.',

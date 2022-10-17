@@ -42,10 +42,12 @@ namespace Phalcon\Tests\Fixtures\Traits;
 //use function getOptionsPostgresql;
 //use function getOptionsSessionStream;
 //use function getOptionsSqlite;
+use Phalcon\Cli\Console;
 use Phalcon\Di\Di;
 use Phalcon\Di\DiInterface;
 use Phalcon\Di\FactoryDefault;
 use Phalcon\Di\FactoryDefault\Cli as CliFactoryDefault;
+use Phalcon\Events\Manager as EventsManager;
 use Phalcon\Session\Adapter\Libmemcached as SessionLibmemcached;
 use Phalcon\Session\Adapter\Noop as SessionNoop;
 use Phalcon\Session\Adapter\Redis as SessionRedis;
@@ -156,12 +158,12 @@ trait DiTrait
 //                return new AnnotationsMemory();
             case 'cliFactoryDefault':
                 return new CliFactoryDefault();
-//            case 'console':
-//                return new Console($options);
+            case 'console':
+                return new Console($options);
 //            case 'crypt':
 //                return new Crypt();
-//            case 'eventsManager':
-//                return new EventsManager();
+            case 'eventsManager':
+                return new EventsManager();
 //            case 'escaper':
 //                return new Escaper();
             case 'factoryDefault':
