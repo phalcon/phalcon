@@ -41,7 +41,8 @@ class ConvertCest
         $router = new Router();
 
         $route1 = $router
-            ->add('{task:[a-z\-]+} {action:[a-z\-]+} this-is-a-country');
+            ->add('{task:[a-z\-]+} {action:[a-z\-]+} this-is-a-country')
+        ;
 
         $taskConverter   = function ($task) {
             return str_replace('-', '', $task);

@@ -33,8 +33,12 @@ class GetRouteByIdCest
 
         $router = new Router(false);
 
-        $usersFind = $router->add('api users find')->setName('usersFind');
-        $usersAdd  = $router->add('api users add')->setName('usersAdd');
+        $usersFind = $router->add('api users find')
+                            ->setName('usersFind')
+        ;
+        $usersAdd  = $router->add('api users add')
+                            ->setName('usersAdd')
+        ;
 
         $expected = $usersFind;
         $actual   = $router->getRouteById($usersFind->getRouteId());

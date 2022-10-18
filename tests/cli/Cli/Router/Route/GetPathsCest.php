@@ -17,10 +17,12 @@ use CliTester;
 use Codeception\Example;
 use Phalcon\Cli\Router;
 use Phalcon\Cli\Router\Route;
+use Phalcon\Tests\Fixtures\Traits\CliTrait;
 use Phalcon\Tests\Fixtures\Traits\DiTrait;
 
 class GetPathsCest
 {
+    use CliTrait;
     use DiTrait;
 
     public function _before(CliTester $I)
@@ -29,9 +31,14 @@ class GetPathsCest
     }
 
     /**
-     * @dataProvider shortPathsProvider
+     * @dataProvider getExamplesShortPaths
+     *
+     * @param CliTester $I
+     * @param Example   $example
+     *
+     * @return void
      */
-    public function testShortPaths(CliTester $I, Example $example)
+    public function cliRouterRouteGetPathsShortPaths(CliTester $I, Example $example)
     {
         Route::reset();
 
@@ -40,62 +47,8 @@ class GetPathsCest
         $path     = $example['path'];
         $expected = $example['expected'];
 
-        $route = $router->add('route', $path);
+        $route  = $router->add('route', $path);
         $actual = $route->getPaths();
         $I->assertSame($expected, $actual);
-    }
-
-    /**
-     * @return array[]
-     */
-    protected function shortPathsProvider(): array
-    {
-        return [
-            [
-                'path'     => 'Feed',
-                'expected' => [
-                    'task' => 'feed',
-                ],
-            ],
-            [
-                'path'     => 'Feed::get',
-                'expected' => [
-                    'task'   => 'feed',
-                    'action' => 'get',
-                ],
-            ],
-            [
-                'path'     => 'News::Posts::show',
-                'expected' => [
-                    'module' => 'News',
-                    'task'   => 'posts',
-                    'action' => 'show',
-                ],
-            ],
-            [
-                'path'     => 'MyApp\\Tasks\\Posts::show',
-                'expected' => [
-                    'namespace' => 'MyApp\\Tasks',
-                    'task'      => 'posts',
-                    'action'    => 'show',
-                ],
-            ],
-            [
-                'path'     => 'News::MyApp\\Tasks\\Posts::show',
-                'expected' => [
-                    'module'    => 'News',
-                    'namespace' => 'MyApp\\Tasks',
-                    'task'      => 'posts',
-                    'action'    => 'show',
-                ],
-            ],
-            [
-                'path'     => '\\Posts::show',
-                'expected' => [
-                    'task'   => 'posts',
-                    'action' => 'show',
-                ],
-            ],
-        ];
     }
 }

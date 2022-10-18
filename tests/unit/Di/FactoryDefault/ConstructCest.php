@@ -32,10 +32,13 @@ use Phalcon\Mvc\Model\Transaction\Manager;
 use Phalcon\Mvc\Router;
 use Phalcon\Mvc\Url;
 use Phalcon\Support\HelperFactory;
+use Phalcon\Tests\Fixtures\Traits\CliTrait;
 use UnitTester;
 
 class ConstructCest
 {
+    use CliTrait;
+
     /**
      * Tests Phalcon\Di\FactoryDefault :: __construct()
      *
@@ -78,94 +81,5 @@ class ConstructCest
         $class  = $example['class'];
         $actual = $container->get($example['service'], $params);
         $I->assertInstanceOf($class, $actual);
-    }
-
-    /**
-     * @return string[][]
-     */
-    private function getServices(): array
-    {
-        return [
-//            [
-//                'service' => 'annotations',
-//                'class'   => MemoryAnnotations::class,
-//            ],
-            [
-                'service' => 'assets',
-                'class'   => ManagerAssets::class,
-            ],
-            [
-                'service' => 'crypt',
-                'class'   => Crypt::class,
-            ],
-//            [
-//                'service' => 'cookies',
-//                'class'   => Cookies::class,
-//            ],
-//            [
-//                'service' => 'dispatcher',
-//                'class'   => Dispatcher::class,
-//            ],
-            [
-                'service' => 'escaper',
-                'class'   => Escaper::class,
-            ],
-            [
-                'service' => 'eventsManager',
-                'class'   => ManagerEvents::class,
-            ],
-            [
-                'service' => 'flash',
-                'class'   => Direct::class,
-            ],
-            [
-                'service' => 'flashSession',
-                'class'   => Session::class,
-            ],
-            [
-                'service' => 'filter',
-                'class'   => Filter::class,
-            ],
-            [
-                'service' => 'helper',
-                'class'   => HelperFactory::class,
-            ],
-//            [
-//                'service' => 'modelsManager',
-//                'class'   => ManagerModel::class,
-//            ],
-//            [
-//                'service' => 'modelsMetadata',
-//                'class'   => Memory::class,
-//            ],
-//            [
-//                'service' => 'request',
-//                'class'   => Request::class,
-//            ],
-//            [
-//                'service' => 'response',
-//                'class'   => Response::class,
-//            ],
-//            [
-//                'service' => 'router',
-//                'class'   => Router::class,
-//            ],
-            [
-                'service' => 'security',
-                'class'   => Security::class,
-            ],
-            [
-                'service' => 'tag',
-                'class'   => TagFactory::class,
-            ],
-//            [
-//                'service' => 'transactionManager',
-//                'class'   => Manager::class,
-//            ],
-//            [
-//                'service' => 'url',
-//                'class'   => Url::class,
-//            ],
-        ];
     }
 }

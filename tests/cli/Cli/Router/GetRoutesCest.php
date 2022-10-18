@@ -43,14 +43,18 @@ class GetRoutesCest
         $actual   = $router->getRoutes();
         $I->assertSame($expected, $actual);
 
-        $usersFind = $router->add('api users find')->setName('usersFind');
-        $usersAdd  = $router->add('api users add')->setName('usersAdd');
+        $usersFind = $router->add('api users find')
+                            ->setName('usersFind')
+        ;
+        $usersAdd  = $router->add('api users add')
+                            ->setName('usersAdd')
+        ;
 
         $expected = [
             0 => $usersFind,
             1 => $usersAdd,
         ];
-        $actual = $router->getRoutes();
+        $actual   = $router->getRoutes();
         $I->assertSame($expected, $actual);
     }
 }
