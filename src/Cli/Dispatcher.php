@@ -105,9 +105,9 @@ class Dispatcher extends CliDispatcher implements DispatcherInterface
     /**
      * Returns the latest dispatched controller
      *
-     * @return TaskInterface
+     * @return TaskInterface|null
      */
-    public function getLastTask(): TaskInterface
+    public function getLastTask(): ?TaskInterface
     {
         return $this->lastHandler;
     }
