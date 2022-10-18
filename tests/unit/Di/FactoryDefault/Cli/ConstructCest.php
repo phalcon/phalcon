@@ -14,6 +14,8 @@ declare(strict_types=1);
 namespace Phalcon\Tests\Unit\Di\FactoryDefault\Cli;
 
 use Codeception\Example;
+use Phalcon\Cli\Dispatcher;
+use Phalcon\Cli\Router;
 use Phalcon\Di\Exception;
 use Phalcon\Di\FactoryDefault\Cli;
 use Phalcon\Encryption\Security;
@@ -80,6 +82,14 @@ class ConstructCest
     private function getServices(): array
     {
         return [
+//            [
+//                'service' => 'annotations',
+//                'class'   => AnnotationsMemory::class,
+//            ],
+            [
+                'service' => 'dispatcher',
+                'class'   => Dispatcher::class,
+            ],
             [
                 'service' => 'escaper',
                 'class'   => Escaper::class,
@@ -96,10 +106,26 @@ class ConstructCest
                 'service' => 'helper',
                 'class'   => HelperFactory::class,
             ],
+//            [
+//                'service' => 'modelsManager',
+//                'class'   => ModelsManager::class,
+//            ],
+//            [
+//                'service' => 'modelsMetadata',
+//                'class'   => Memory::class,
+//            ],
+            [
+                'service' => 'router',
+                'class'   => Router::class,
+            ],
             [
                 'service' => 'security',
                 'class'   => Security::class,
             ],
+//            [
+//                'service' => 'transactionManager',
+//                'class'   => Manager::class,
+//            ],
         ];
     }
 }
