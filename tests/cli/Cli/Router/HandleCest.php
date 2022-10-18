@@ -32,39 +32,18 @@ class HandleCest
      * @return void
      * @throws Exception
      *
-     * @author Phalcon Team <team@phalcon.io>
-     * @since  2018-11-13
+     * @author       Phalcon Team <team@phalcon.io>
+     * @since        2018-11-13
      */
     public function cliRouterHandle(CliTester $I, Example $example)
     {
         $label      = $example['label'];
-        $arguments  = $example['arguments'];
-        $moduleName = $example['moduleName'];
-        $taskName   = $example['taskName'];
-        $actionName = $example['actionName'];
-        $params     = $example['params'];
 
         $I->wantToTest('Cli\Router - handle() - ' . $label);
 
         $router = new Router();
 
-        $router->handle($arguments);
-
-        $expected = $moduleName;
-        $actual   = $router->getModuleName();
-        $I->assertSame($expected, $actual);
-
-        $expected = $taskName;
-        $actual   = $router->getTaskName();
-        $I->assertSame($expected, $actual);
-
-        $expected = $actionName;
-        $actual   = $router->getActionName();
-        $I->assertSame($expected, $actual);
-
-        $expected = $params;
-        $actual   = $router->getParams();
-        $I->assertSame($expected, $actual);
+        $this->assertParameters($I, $router, $example);
     }
 
     /**
@@ -78,12 +57,7 @@ class HandleCest
      */
     public function cliRouterHandleRouter(CliTester $I, Example $example)
     {
-        $label  = $example['uri'];
-        $uri    = $example['uri'];
-        $module = $example['module'];
-        $task   = $example['task'];
-        $action = $example['action'];
-        $params = $example['params'];
+        $label = $example['uri'];
 
         $I->wantToTest('Cli\Router - handle() - router - ' . $label);
 
@@ -101,7 +75,7 @@ class HandleCest
         );
 
         $router->add(
-            'system :task a :action :params',
+            'system :task :action :params',
             [
                 'task'   => 1,
                 'action' => 2,
@@ -186,23 +160,7 @@ class HandleCest
             'Videos::show'
         );
 
-        $router->handle($uri);
-
-        $expected = $module;
-        $actual   = $router->getModuleName();
-        $I->assertSame($expected, $actual);
-
-        $expected = $task;
-        $actual   = $router->getTaskName();
-        $I->assertSame($expected, $actual);
-
-        $expected = $action;
-        $actual   = $router->getActionName();
-        $I->assertSame($expected, $actual);
-
-        $expected = $params;
-        $actual   = $router->getParams();
-        $I->assertSame($expected, $actual);
+        $this->assertParameters($I, $router, $example);
     }
 
     /**
@@ -216,23 +174,7 @@ class HandleCest
         $router->add('some {name} {id:[0-9]+}');
         $router->add('some {name} {id:[0-9]+} {date}');
 
-        $router->handle($example['uri']);
-
-        $expected = $example['module'];
-        $actual   = $router->getModuleName();
-        $I->assertSame($expected, $actual);
-
-        $expected = $example['task'];
-        $actual   = $router->getTaskName();
-        $I->assertSame($expected, $actual);
-
-        $expected = $example['action'];
-        $actual   = $router->getActionName();
-        $I->assertSame($expected, $actual);
-
-        $expected = $example['params'];
-        $actual   = $router->getParams();
-        $I->assertSame($expected, $actual);
+        $this->assertParameters($I, $router, $example);
     }
 
     /**
@@ -346,23 +288,7 @@ class HandleCest
             'Videos::show'
         );
 
-        $router->handle($example['uri']);
-
-        $expected = $example['module'];
-        $actual   = $router->getModuleName();
-        $I->assertSame($expected, $actual);
-
-        $expected = $example['task'];
-        $actual   = $router->getTaskName();
-        $I->assertSame($expected, $actual);
-
-        $expected = $example['action'];
-        $actual   = $router->getActionName();
-        $I->assertSame($expected, $actual);
-
-        $expected = $example['params'];
-        $actual   = $router->getParams();
-        $I->assertSame($expected, $actual);
+        $this->assertParameters($I, $router, $example);
     }
 
     /**
@@ -385,96 +311,124 @@ class HandleCest
     }
 
     /**
+     * @param CliTester $I
+     * @param Router    $router
+     * @param Example   $example
+     *
+     * @return void
+     */
+    private function assertParameters(CliTester $I, Router $router, Example $example): void
+    {
+        $router->handle($example['uri']);
+
+        $expected = $example['module'];
+        $actual   = $router->getModuleName();
+        $I->assertSame($expected, $actual);
+
+        $expected = $example['task'];
+        $actual   = $router->getTaskName();
+        $I->assertSame($expected, $actual);
+
+        $expected = $example['action'];
+        $actual   = $router->getActionName();
+        $I->assertSame($expected, $actual);
+
+        $expected = $example['params'];
+        $actual   = $router->getParams();
+        $I->assertSame($expected, $actual);
+    }
+
+    /**
      * @return array[]
      */
     private function getExamplesRouterHandle(): array
     {
         return [
             [
-                'label'      => 'empty',
-                'arguments'  => [],
-                'moduleName' => '',
-                'taskName'   => '',
-                'actionName' => '',
-                'params'     => [],
+                'label'  => 'empty',
+                'uri'    => [],
+                'module' => '',
+                'task'   => '',
+                'action' => '',
+                'params' => [],
             ],
             [
-                'label'      => 'task main',
-                'arguments'  => [
+                'label'  => 'task main',
+                'uri'    => [
                     'task' => 'main',
                 ],
-                'moduleName' => '',
-                'taskName'   => 'main',
-                'actionName' => '',
-                'params'     => [],
+                'module' => '',
+                'task'   => 'main',
+                'action' => '',
+                'params' => [],
             ],
             [
-                'label'      => 'task echo',
-                'arguments'  => [
+                'label'  => 'task echo',
+                'uri'    => [
                     'task' => 'echo',
                 ],
-                'moduleName' => '',
-                'taskName'   => 'echo',
-                'actionName' => '',
-                'params'     => [],
+                'module' => '',
+                'task'   => 'echo',
+                'action' => '',
+                'params' => [],
             ],
             [
-                'label'      => 'task action',
-                'arguments'  => [
+                'label'  => 'task action',
+                'uri'    => [
                     'task'   => 'main',
                     'action' => 'hello',
                 ],
-                'moduleName' => '',
-                'taskName'   => 'main',
-                'actionName' => 'hello',
-                'params'     => [],
+                'module' => '',
+                'task'   => 'main',
+                'action' => 'hello',
+                'params' => [],
             ],
             [
-                'label'      => 'task action params',
-                'arguments'  => [
+                'label'  => 'task action params',
+                'uri'    => [
                     'task'   => 'main',
                     'action' => 'hello',
                     'arg1',
                     'arg2',
                 ],
-                'moduleName' => '',
-                'taskName'   => 'main',
-                'actionName' => 'hello',
-                'params'     => [
+                'module' => '',
+                'task'   => 'main',
+                'action' => 'hello',
+                'params' => [
                     'arg1',
                     'arg2',
                 ],
             ],
             [
-                'label'      => 'module task main action params',
-                'arguments'  => [
+                'label'  => 'module task main action params',
+                'uri'    => [
                     'module' => 'devtools',
                     'task'   => 'main',
                     'action' => 'hello',
                     'arg1',
                     'arg2',
                 ],
-                'moduleName' => 'devtools',
-                'taskName'   => 'main',
-                'actionName' => 'hello',
-                'params'     => [
+                'module' => 'devtools',
+                'task'   => 'main',
+                'action' => 'hello',
+                'params' => [
                     'arg1',
                     'arg2',
                 ],
             ],
             [
-                'label'      => 'module task echo action params',
-                'arguments'  => [
+                'label'  => 'module task echo action params',
+                'uri'    => [
                     'module' => 'devtools',
                     'task'   => 'echo',
                     'action' => 'hello',
                     'arg1',
                     'arg2',
                 ],
-                'moduleName' => 'devtools',
-                'taskName'   => 'echo',
-                'actionName' => 'hello',
-                'params'     => [
+                'module' => 'devtools',
+                'task'   => 'echo',
+                'action' => 'hello',
+                'params' => [
                     'arg1',
                     'arg2',
                 ],
