@@ -23,6 +23,7 @@ use Phalcon\Events\Manager as EventsManager;
 use Phalcon\Filter\Filter;
 use Phalcon\Html\Escaper;
 use Phalcon\Support\HelperFactory;
+use Phalcon\Tests\Fixtures\Traits\CliTrait;
 use UnitTester;
 
 /**
@@ -32,6 +33,8 @@ use UnitTester;
  */
 class ConstructCest
 {
+    use CliTrait;
+
     /**
      * Tests Phalcon\Di\FactoryDefault\Cli :: __construct()
      *
@@ -74,58 +77,5 @@ class ConstructCest
         $class  = $example['class'];
         $actual = $container->get($example['service']);
         $I->assertInstanceOf($class, $actual);
-    }
-
-    /**
-     * @return string[][]
-     */
-    private function getServices(): array
-    {
-        return [
-//            [
-//                'service' => 'annotations',
-//                'class'   => AnnotationsMemory::class,
-//            ],
-            [
-                'service' => 'dispatcher',
-                'class'   => Dispatcher::class,
-            ],
-            [
-                'service' => 'escaper',
-                'class'   => Escaper::class,
-            ],
-            [
-                'service' => 'eventsManager',
-                'class'   => EventsManager::class,
-            ],
-            [
-                'service' => 'filter',
-                'class'   => Filter::class,
-            ],
-            [
-                'service' => 'helper',
-                'class'   => HelperFactory::class,
-            ],
-//            [
-//                'service' => 'modelsManager',
-//                'class'   => ModelsManager::class,
-//            ],
-//            [
-//                'service' => 'modelsMetadata',
-//                'class'   => Memory::class,
-//            ],
-            [
-                'service' => 'router',
-                'class'   => Router::class,
-            ],
-            [
-                'service' => 'security',
-                'class'   => Security::class,
-            ],
-//            [
-//                'service' => 'transactionManager',
-//                'class'   => Manager::class,
-//            ],
-        ];
     }
 }
