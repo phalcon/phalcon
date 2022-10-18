@@ -36,9 +36,9 @@ class ResetCest
         $actual   = $route->getRouteId();
         $I->assertSame($expected, $actual);
 
-        $route = new Route('test');
-        $route = new Route('test');
-        $route = new Route('test');
+        $route    = new Route('test');
+        $route    = new Route('test');
+        $route    = new Route('test');
         $expected = '3';
         $actual   = $route->getRouteId();
         $I->assertSame($expected, $actual);

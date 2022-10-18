@@ -31,7 +31,7 @@ class GetPatternCest
         Route::reset();
         Route::delimiter('/');
         $pattern = '/:module/:namespace/:task/:action/:params/:delimiter';
-        $route = new Route($pattern);
+        $route   = new Route($pattern);
 
         $expected = $pattern;
         $actual   = $route->getPattern();

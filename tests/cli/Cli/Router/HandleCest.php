@@ -37,7 +37,7 @@ class HandleCest
      */
     public function cliRouterHandle(CliTester $I, Example $example)
     {
-        $label      = $example['label'];
+        $label = $example['label'];
 
         $I->wantToTest('Cli\Router - handle() - ' . $label);
 

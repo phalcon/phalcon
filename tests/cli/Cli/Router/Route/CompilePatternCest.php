@@ -29,8 +29,8 @@ class CompilePatternCest
      *
      * @return void
      *
-     * @author Phalcon Team <team@phalcon.io>
-     * @since  2020-01-05
+     * @author       Phalcon Team <team@phalcon.io>
+     * @since        2020-01-05
      */
     public function cliRouterRouteCompilePattern(CliTester $I, Example $example)
     {

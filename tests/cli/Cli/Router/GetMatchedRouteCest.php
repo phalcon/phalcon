@@ -50,7 +50,9 @@ class GetMatchedRouteCest
         $router->handle('route2');
 
         $expected = "route2";
-        $actual   = $router->getMatchedRoute()->getPattern();
+        $actual   = $router->getMatchedRoute()
+                           ->getPattern()
+        ;
         $I->assertSame($expected, $actual);
     }
 }
