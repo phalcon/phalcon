@@ -27,7 +27,6 @@ use function is_array;
 use function is_string;
 use function ltrim;
 use function strncmp;
-use function substr;
 
 /**
  * This component allows to create CLI applications using Phalcon
@@ -180,7 +179,7 @@ class Console extends AbstractApplication
 
                     $opts[$parts[0]] = $parts[1];
                 } elseif (0 === strncmp($argument, "-", 1)) {
-                    $argument = ltrim($argument, '-');
+                    $argument        = ltrim($argument, '-');
                     $opts[$argument] = true;
                 } else {
                     $args[] = $argument;
