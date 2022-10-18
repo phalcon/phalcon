@@ -26,8 +26,7 @@ use Phalcon\Events\Traits\EventsAwareTrait;
  * @property string $defaultModule
  * @property array  $modules
  */
-abstract class AbstractApplication extends Injectable
-    implements EventsAwareInterface
+abstract class AbstractApplication extends Injectable implements EventsAwareInterface
 {
     use EventsAwareTrait;
 

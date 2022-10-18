@@ -35,15 +35,12 @@ use function method_exists;
 use function preg_split;
 use function spl_object_hash;
 
-
 /**
  * This is the base class for Phalcon\Mvc\Dispatcher and Phalcon\Cli\Dispatcher.
  * This class can't be instantiated directly, you can use it to create your own
  * dispatchers.
  */
-abstract class AbstractDispatcher
-    extends AbstractInjectionAware
-    implements DispatcherInterface, EventsAwareInterface
+abstract class AbstractDispatcher extends AbstractInjectionAware implements DispatcherInterface, EventsAwareInterface
 {
     use EventsAwareTrait;
 

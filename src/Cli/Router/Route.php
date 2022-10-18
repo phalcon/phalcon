@@ -29,7 +29,6 @@ use function str_split;
 use function strlen;
 use function substr;
 
-
 /**
  * This class represents every route added to the router
  */
@@ -144,7 +143,6 @@ class Route implements RouteInterface
     {
         // If a pattern contains ':', maybe there are placeholders to replace
         if (str_contains($pattern, ":")) {
-
             // This is a pattern for valid identifiers
             $idPattern = $this->delimiter . "([a-zA-Z0-9\\_\\-]+)";
             $map       = [

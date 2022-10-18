@@ -72,7 +72,7 @@ interface RouterInterface
      *
      * @return RouteInterface| bool
      */
-    public function getRouteById(string $routeId): RouteInterface | bool;
+    public function getRouteById(string $routeId): RouteInterface|bool;
 
     /**
      * Returns a route object by its name
@@ -81,7 +81,7 @@ interface RouterInterface
      *
      * @return RouteInterface|bool
      */
-    public function getRouteByName(string $name): RouteInterface | bool;
+    public function getRouteByName(string $name): RouteInterface|bool;
 
     /**
      * Return all the routes defined in the router
