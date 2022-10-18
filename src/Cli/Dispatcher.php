@@ -95,9 +95,9 @@ class Dispatcher extends CliDispatcher implements DispatcherInterface
     /**
      * Returns the active task in the dispatcher
      *
-     * @return TaskInterface
+     * @return TaskInterface|null
      */
-    public function getActiveTask(): TaskInterface
+    public function getActiveTask(): ?TaskInterface
     {
         return $this->activeHandler;
     }
