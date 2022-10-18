@@ -13,8 +13,9 @@ declare(strict_types=1);
 
 namespace Phalcon\Dispatcher;
 
-use Exception;
+use Exception as BaseException;
 use Phalcon\Cache\Adapter\AdapterInterface;
+use Phalcon\Cli\Dispatcher\Exception as CliDispatcherException;
 use Phalcon\Cli\TaskInterface;
 use Phalcon\Di\AbstractInjectionAware;
 use Phalcon\Dispatcher\Exception as DispatcherException;
@@ -192,7 +193,7 @@ abstract class AbstractDispatcher extends AbstractInjectionAware implements Disp
      *                         occurred and the operation was stopped by
      *                         returning <tt>false</tt> in the exception handler.
      *
-     * @throws Exception if any uncaught or unhandled exception occurs during
+     * @throws BaseException if any uncaught or unhandled exception occurs during
      *                   the dispatcher process.
      */
     public function dispatch()
@@ -220,7 +221,7 @@ abstract class AbstractDispatcher extends AbstractInjectionAware implements Disp
                 ) {
                     return false;
                 }
-            } catch (Exception $ex) {
+            } catch (BaseException $ex) {
                 // Exception occurred in beforeDispatchLoop.
 
                 /**
@@ -285,7 +286,7 @@ abstract class AbstractDispatcher extends AbstractInjectionAware implements Disp
                     ) {
                         continue;
                     }
-                } catch (Exception $ex) {
+                } catch (BaseException $ex) {
                     if (
                         false === $this->handleException($ex) ||
                         false === $this->finished
@@ -411,7 +412,7 @@ abstract class AbstractDispatcher extends AbstractInjectionAware implements Disp
                         $this->container->remove($handlerClass);
                         continue;
                     }
-                } catch (Exception $ex) {
+                } catch (BaseException $ex) {
                     if (
                         false === $this->handleException($ex) ||
                         false === $this->finished
@@ -436,7 +437,7 @@ abstract class AbstractDispatcher extends AbstractInjectionAware implements Disp
 
                         continue;
                     }
-                } catch (Exception $ex) {
+                } catch (BaseException $ex) {
                     if (
                         false === $this->handleException($ex) ||
                         false === $this->finished
@@ -473,7 +474,7 @@ abstract class AbstractDispatcher extends AbstractInjectionAware implements Disp
                         $this->isControllerInitialize = true;
 
                         $handler->initialize();
-                    } catch (Exception $ex) {
+                    } catch (BaseException $ex) {
                         $this->isControllerInitialize = false;
 
                         /**
@@ -508,7 +509,7 @@ abstract class AbstractDispatcher extends AbstractInjectionAware implements Disp
                         ) {
                             continue;
                         }
-                    } catch (Exception $ex) {
+                    } catch (BaseException $ex) {
                         if (
                             false === $this->handleException($ex) ||
                             false === $this->finished
@@ -583,7 +584,7 @@ abstract class AbstractDispatcher extends AbstractInjectionAware implements Disp
                 if (false === $this->finished) {
                     continue;
                 }
-            } catch (Exception $ex) {
+            } catch (BaseException $ex) {
                 if (
                     false === $this->handleException($ex) ||
                     false === $this->finished
@@ -605,7 +606,7 @@ abstract class AbstractDispatcher extends AbstractInjectionAware implements Disp
                     ) {
                         continue;
                     }
-                } catch (Exception $ex) {
+                } catch (BaseException $ex) {
                     if (
                         false === $this->handleException($ex) ||
                         false === $this->finished
@@ -628,7 +629,7 @@ abstract class AbstractDispatcher extends AbstractInjectionAware implements Disp
                     ) {
                         continue;
                     }
-                } catch (Exception $ex) {
+                } catch (BaseException $ex) {
                     if (
                         false === $this->handleException($ex) ||
                         false === $this->finished
@@ -644,7 +645,7 @@ abstract class AbstractDispatcher extends AbstractInjectionAware implements Disp
             if (true === $hasEventsManager) {
                 try {
                     $this->fireManagerEvent("dispatch:afterDispatch", $value);
-                } catch (Exception $ex) {
+                } catch (BaseException $ex) {
                     /**
                      * Still check for finished here as we want to prioritize
                      * `forwarding()` calls
@@ -666,7 +667,7 @@ abstract class AbstractDispatcher extends AbstractInjectionAware implements Disp
                 // Calling "dispatch:afterDispatchLoop" event
                 // Note: We don't worry about forwarding in after dispatch loop.
                 $this->fireManagerEvent("dispatch:afterDispatchLoop");
-            } catch (Exception $ex) {
+            } catch (BaseException $ex) {
                 // Exception occurred in afterDispatchLoop.
                 if (false === $this->handleException($ex)) {
                     return false;
@@ -1197,6 +1198,15 @@ abstract class AbstractDispatcher extends AbstractInjectionAware implements Disp
     }
 
     /**
+     * Handles a user exception
+     *
+     * @param BaseException $exception
+     *
+     * @return false|void
+     */
+    abstract protected function handleException(BaseException $exception);
+
+    /**
      * Set empty properties to their defaults (where defaults are available)
      */
     protected function resolveEmptyProperties(): void
@@ -1211,6 +1221,17 @@ abstract class AbstractDispatcher extends AbstractInjectionAware implements Disp
             ? $this->actionName
             : $this->defaultAction;
     }
+
+    /**
+     * Throws an internal exception
+     *
+     * @param string $message
+     * @param int    $exceptionCode
+     *
+     * @return false
+     * @throws CliDispatcherException
+     */
+    abstract protected function throwDispatchException(string $message, int $exceptionCode = 0);
 
     /**
      * @param string $input

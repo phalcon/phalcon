@@ -44,9 +44,9 @@ class Route implements RouteInterface
     protected mixed $beforeMatch = null;
 
     /**
-     * @var string|null
+     * @var string
      */
-    protected ?string $compiledPattern = null;
+    protected string $compiledPattern = "";
 
     /**
      * @var array
@@ -214,12 +214,14 @@ class Route implements RouteInterface
             return false;
         }
 
-        $matches          = [];
-        $route            = "";
         $bracketCount     = 0;
-        $parenthesesCount = 0;
         $intermediate     = 0;
+        $marker           = 0;
+        $matches          = [];
+        $notValid         = false;
         $numberMatches    = 0;
+        $parenthesesCount = 0;
+        $route            = "";
 
         $patternArray = str_split($pattern);
         foreach ($patternArray as $cursor => $character) {
