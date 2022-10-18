@@ -29,9 +29,14 @@
         "psr-4": {
             "Phalcon\\": "src/",
             "Phalcon\\Tests\\Benchmarks\\": "tests/benchmarks/",
-            "Phalcon\\Tests\\Fixtures\\": "tests/_data/fixtures/",
+            "Phalcon\\Tests\\Cli\\": "tests/cli/",
             "Phalcon\\Tests\\Integration\\": "tests/integration/",
-            "Phalcon\\Tests\\Unit\\": "tests/unit/"
+            "Phalcon\\Tests\\Unit\\": "tests/unit/",
+            "Phalcon\\Tests\\Controllers\\": "tests/_data/fixtures/controllers/",
+            "Phalcon\\Tests\\Fixtures\\": "tests/_data/fixtures/",
+            "Phalcon\\Tests\\Listener\\": "tests/_data/listener/",
+            "Phalcon\\Tests\\Models\\": "tests/_data/fixtures/models/",
+            "Phalcon\\Tests\\Module\\": "tests/_support/Module/"
         }
     },
     "config": {
