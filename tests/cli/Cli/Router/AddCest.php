@@ -28,6 +28,7 @@ class AddCest
     {
         $I->wantToTest('Cli\Router - add()');
 
+        Router\Route::reset();
         $router = new Router(false);
         $I->assertSame([], $router->getRoutes());
 
