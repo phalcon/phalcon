@@ -17,7 +17,7 @@ use Phalcon\Di\Di;
 use UnitTester;
 
 /**
- * Class GetDefaultCest
+ * Class GetSetDefaultResetCest
  *
  * @package Phalcon\Tests\Unit\Di
  */
