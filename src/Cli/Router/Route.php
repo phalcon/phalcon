@@ -64,7 +64,7 @@ class Route implements RouteInterface
     protected static string $delimiterPath = self::DEFAULT_DELIMITER;
 
     /**
-     * @var string|null
+     * @var string
      */
     protected string $description = "";
 
@@ -74,7 +74,7 @@ class Route implements RouteInterface
     protected string $routeId;
 
     /**
-     * @var string|null
+     * @var string
      */
     protected string $name = "";
 
@@ -98,6 +98,8 @@ class Route implements RouteInterface
      *
      * @param string       $pattern
      * @param array|string $paths
+     *
+     * @throws Exception
      */
     public function __construct(string $pattern, array|string $paths = [])
     {
@@ -546,8 +548,9 @@ class Route implements RouteInterface
         if (!str_starts_with($pattern, "#")) {
             if (str_contains($pattern, "{")) {
                 /**
-                 * The route has named parameters so we need to extract them
+                 * The route has named parameters, so we need to extract them
                  */
+                /** @var array $extracted */
                 $extracted   = $this->extractNamedParams($pattern);
                 $pcrePattern = $extracted[0];
                 $routePaths  = array_merge($routePaths, $extracted[1]);
