@@ -34,10 +34,10 @@ class Friendly
     use LowerTrait;
 
     /**
-     * @param string     $text
-     * @param string     $separator
-     * @param bool       $lowercase
-     * @param mixed|null $replace
+     * @param string       $text
+     * @param string       $separator
+     * @param bool         $lowercase
+     * @param array|string $replace
      *
      * @return string
      * @throws Exception
@@ -46,12 +46,10 @@ class Friendly
         string $text,
         string $separator = '-',
         bool $lowercase = true,
-        $replace = null
+        array|string $replace = []
     ): string {
-        if (null !== $replace) {
-            $replace = $this->checkReplace($replace);
-        } else {
-            $replace = [];
+        if (true === is_string($replace)) {
+            $replace = [$replace];
         }
 
         $matrix = $this->getMatrix($replace);
@@ -70,27 +68,6 @@ class Friendly
         $friendly = preg_replace("/[\\/_|+ -]+/", $separator, $friendly);
 
         return trim($friendly, $separator);
-    }
-
-    /**
-     * @param mixed $replace
-     *
-     * @return array
-     * @throws Exception
-     */
-    private function checkReplace($replace): array
-    {
-        if (true !== is_array($replace) && true !== is_string($replace)) {
-            throw new Exception(
-                "Parameter replace must be an array or a string"
-            );
-        }
-
-        if (true === is_string($replace)) {
-            $replace = [$replace];
-        }
-
-        return $replace;
     }
 
     /**
