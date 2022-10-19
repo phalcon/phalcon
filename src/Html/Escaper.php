@@ -65,7 +65,7 @@ class Escaper implements EscaperInterface
      * If the input is an array, the keys are the attribute names and the
      * values are attribute values. If a value is boolean (true/false) then
      * the attribute will have no value:
-     * `['disabled' => true]` -> `'disabled``
+     * `['disabled' => true]`: `'disabled``
      *
      * The resulting string will have attribute pairs separated by a space.
      *

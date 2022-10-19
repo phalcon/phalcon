@@ -23,6 +23,7 @@ use Phalcon\Flash\Direct;
 use Phalcon\Flash\Session;
 use Phalcon\Html\Escaper;
 use Phalcon\Html\TagFactory;
+use Phalcon\Mvc\Url;
 use Phalcon\Support\HelperFactory;
 
 /**
@@ -105,7 +106,7 @@ class FactoryDefault extends Di
                 true
             ),
 //            "transactionManager" : new Service("Phalcon\\Mvc\\Model\\Transaction\\Manager", true),
-//            "url"                : new Service("Phalcon\\Mvc\\Url", true)
+            "url"           => new Service(Url::class, true),
         ];
     }
 }
