@@ -13,30 +13,6 @@ declare(strict_types=1);
 
 namespace Phalcon\Tests\Fixtures\Traits;
 
-//use DatabaseTester;
-//use PDO;
-//use Phalcon\Annotations\Adapter\Memory as AnnotationsMemory;
-//use Phalcon\Cache\Adapter\Libmemcached as StorageLibmemcached;
-//use Phalcon\Cache\Adapter\Stream as StorageStream;
-//use Phalcon\Cli\Console;
-//use Phalcon\Crypt;
-//use Phalcon\Db\Adapter\AdapterInterface;
-//use Phalcon\Db\Adapter\PdoFactory;
-//use Phalcon\Di;
-//use Phalcon\Di\DiInterface;
-//use Phalcon\Escaper;
-//use Phalcon\Events\Manager as EventsManager;
-//use Phalcon\Filter;
-//use Phalcon\Http\Request;
-//use Phalcon\Http\Response;
-//use Phalcon\Mvc\Model\Manager as ModelsManager;
-//use Phalcon\Mvc\Model\Metadata\Memory as MetadataMemory;
-//use Phalcon\Mvc\View;
-//use Phalcon\Mvc\View\Simple;
-//use Phalcon\Session\Manager;
-//use Phalcon\Storage\Exception;
-//use Phalcon\Url;
-
 //use function getOptionsModelCacheStream;
 //use function getOptionsMysql;
 //use function getOptionsPostgresql;
@@ -47,7 +23,11 @@ use Phalcon\Di\Di;
 use Phalcon\Di\DiInterface;
 use Phalcon\Di\FactoryDefault;
 use Phalcon\Di\FactoryDefault\Cli as CliFactoryDefault;
+use Phalcon\Encryption\Crypt;
 use Phalcon\Events\Manager as EventsManager;
+use Phalcon\Filter\FilterFactory;
+use Phalcon\Html\Escaper;
+use Phalcon\Mvc\Url;
 use Phalcon\Session\Adapter\Libmemcached as SessionLibmemcached;
 use Phalcon\Session\Adapter\Noop as SessionNoop;
 use Phalcon\Session\Adapter\Redis as SessionRedis;
@@ -160,16 +140,16 @@ trait DiTrait
                 return new CliFactoryDefault();
             case 'console':
                 return new Console($options);
-//            case 'crypt':
-//                return new Crypt();
+            case 'crypt':
+                return new Crypt();
             case 'eventsManager':
                 return new EventsManager();
-//            case 'escaper':
-//                return new Escaper();
+            case 'escaper':
+                return new Escaper();
             case 'factoryDefault':
                 return new FactoryDefault();
-//            case 'filter':
-//                return (new Filter\FilterFactory())->newInstance();
+            case 'filter':
+                return (new FilterFactory())->newInstance();
 //            case 'metadataMemory':
 //                return new MetadataMemory();
 //            case 'modelsCacheLibmemcached':
@@ -208,8 +188,8 @@ trait DiTrait
                     ),
                     getOptionsRedis()
                 );
-//            case 'url':
-//                return new Url();
+            case 'url':
+                return new Url();
 //            case 'view':
 //                return new View();
 //            case 'viewSimple':
@@ -245,10 +225,11 @@ trait DiTrait
         $class = $this->newService($service);
         switch ($service) {
 //            case 'annotations':
-//            case 'console':
+            case 'console':
             case 'escaper':
-//            case 'eventsManager':
-//            case 'filter':
+            case 'eventsManager':
+            case 'filter':
+            case 'url':
 //            case 'modelsManager':
 //            case 'modelsMetadata':
 //            case 'request':
