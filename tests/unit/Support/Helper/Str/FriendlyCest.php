@@ -53,24 +53,6 @@ class FriendlyCest
     }
 
     /**
-     * Tests Phalcon\Support\Helper\Str :: friendly() - exception
-     *
-     * @param UnitTester $I
-     *
-     * @author Phalcon Team <team@phalcon.io>
-     * @since  2020-09-09
-     */
-    public function supportHelperStrFriendlyException(UnitTester $I)
-    {
-        $I->expectThrowable(
-            new Exception('Parameter replace must be an array or a string'),
-            function () {
-                (new Friendly())('test', '-', true, true);
-            }
-        );
-    }
-
-    /**
      * @return array
      */
     private function getExamples(): array
@@ -81,7 +63,7 @@ class FriendlyCest
                 'text'      => 'This is a Test',
                 'separator' => '-',
                 'lowercase' => true,
-                'replace'   => null,
+                'replace'   => [],
                 'result'    => 'this-is-a-test',
             ],
             [
@@ -89,7 +71,7 @@ class FriendlyCest
                 'text'      => 'This is a Test',
                 'separator' => '_',
                 'lowercase' => true,
-                'replace'   => null,
+                'replace'   => [],
                 'result'    => 'this_is_a_test',
             ],
             [
@@ -97,7 +79,7 @@ class FriendlyCest
                 'text'      => 'This is a Test',
                 'separator' => '-',
                 'lowercase' => false,
-                'replace'   => null,
+                'replace'   => [],
                 'result'    => 'This-is-a-Test',
             ],
             [
@@ -122,7 +104,7 @@ class FriendlyCest
                     . '`little` \\clean\\ url fun.ction!?-->',
                 'separator' => '-',
                 'lowercase' => true,
-                'replace'   => null,
+                'replace'   => [],
                 'result'    => 'messd-up-text-just-to-stress-test-our-little-clean-url-function',
             ],
             [
