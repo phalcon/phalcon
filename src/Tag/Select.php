@@ -13,16 +13,14 @@ declare(strict_types=1);
 
 namespace Phalcon\Tag;
 
-use Phalcon\Tag as BaseTag;
-use Phalcon\Html\Escaper\EscaperInterface;
 use Phalcon\Mvc\Model\ResultsetInterface;
+use Phalcon\Tag as BaseTag;
 
 use function is_array;
 use function is_object;
 use function is_string;
 use function method_exists;
 use function str_contains;
-use function var_dump;
 
 /**
  * Phalcon\Tag\Select
@@ -36,13 +34,13 @@ abstract class Select
      * Generates a SELECT tag
      *
      * @param array|string $parameters = [
-     *     'id'         => '',
-     *     'name'       => '',
-     *     'value'      => '',
-     *     'useEmpty'   => false,
-     *     'emptyValue' => '',
-     *     'emptyText'  => '',
-     * ]
+     *                                 'id'         => '',
+     *                                 'name'       => '',
+     *                                 'value'      => '',
+     *                                 'useEmpty'   => false,
+     *                                 'emptyValue' => '',
+     *                                 'emptyText'  => '',
+     *                                 ]
      * @param mixed|null   $data
      *
      * @return string
@@ -280,7 +278,7 @@ abstract class Select
                     }
                 } else {
                     $strOptionValue = (string) $optionValue;
-                    $strValue = (string) $value;
+                    $strValue       = (string) $value;
 
                     if ($strOptionValue === $strValue) {
                         $code .= "\t<option selected=\"selected\" value=\""
@@ -303,7 +301,7 @@ abstract class Select
                     }
 
                     $params[0] = $option;
-                    $code     .= call_user_func_array($using, $params);
+                    $code      .= call_user_func_array($using, $params);
                 }
             }
         }

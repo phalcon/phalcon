@@ -228,7 +228,7 @@ class Route implements RouteInterface
         $route            = "";
 
         $patternArray = str_split($pattern);
-        foreach($patternArray as $cursor => $character) {
+        foreach ($patternArray as $cursor => $character) {
             if (0 === $parenthesesCount) {
                 if ('{' === $character) {
                     if (0 === $bracketCount) {
@@ -273,7 +273,7 @@ class Route implements RouteInterface
                                 if (
                                     ($itemChar >= 'a' && $itemChar <= 'z') ||
                                     ($itemChar >= 'A' && $itemChar <= 'Z') ||
-                                    ($itemChar >= '0' && $itemChar <='9') ||
+                                    ($itemChar >= '0' && $itemChar <= '9') ||
                                     $itemChar == '-' ||
                                     $itemChar == '_' ||
                                     $itemChar ==  ':'

@@ -22,5 +22,5 @@ interface BindableInterface
      * Return the model name or models names and parameters keys associated with
      * this class
      */
-    public function getModelName(): array | string;
+    public function getModelName(): array|string;
 }

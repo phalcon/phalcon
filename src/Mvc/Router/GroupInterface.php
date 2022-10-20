@@ -32,8 +32,8 @@ interface GroupInterface
      * @return RouteInterface
      */
     public function add(
-        string $pattern, 
-        mixed $paths = null, 
+        string $pattern,
+        mixed $paths = null,
         mixed $httpMethods = null
     ): RouteInterface;
 
@@ -46,7 +46,7 @@ interface GroupInterface
      * @return RouteInterface
      */
     public function addConnect(
-        string $pattern, 
+        string $pattern,
         mixed $paths = null
     ): RouteInterface;
 

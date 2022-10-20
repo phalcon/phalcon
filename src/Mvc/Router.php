@@ -35,7 +35,6 @@ use function trim;
 
 use const PHP_URL_PATH;
 
-
 /**
  * Phalcon\Mvc\Router is the standard framework router. Routing is the
  * process of taking a URI endpoint (that part of the URI which comes after the
@@ -62,8 +61,7 @@ use const PHP_URL_PATH;
  * echo $router->getControllerName();
  * ```
  */
-class Router extends AbstractInjectionAware
-    implements RouterInterface, EventsAwareInterface
+class Router extends AbstractInjectionAware implements RouterInterface, EventsAwareInterface
 {
     use EventsAwareTrait;
 
@@ -822,7 +820,6 @@ class Router extends AbstractInjectionAware
                         ]
                     );
                 }
-
             } else {
                 $this->fireManagerEvent("router:notMatchedRoute", $route);
             }

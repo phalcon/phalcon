@@ -13,20 +13,20 @@ declare(strict_types=1);
 
 namespace Phalcon\Mvc\Model\MetaData\Strategy;
 
-use Phalcon\Mvc\ModelInterface;
 use Phalcon\Di\DiInterface;
+use Phalcon\Mvc\ModelInterface;
 
 interface StrategyInterface
 {
     /**
      * Read the model's column map, this can't be inferred
      *
-     * @todo Not implemented
-     *
      * @param ModelInterface $model
      * @param DiInterface    $container
      *
      * @return array
+     * @todo Not implemented
+     *
      */
     public function getColumnMaps(
         ModelInterface $model,

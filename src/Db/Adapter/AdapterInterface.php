@@ -372,7 +372,8 @@ interface AdapterInterface
      */
     public function fetchColumn(
         string $sqlQuery,
-        array $placeholders = [], mixed $column = 0
+        array $placeholders = [],
+        mixed $column = 0
     ): string | bool;
 
     /**

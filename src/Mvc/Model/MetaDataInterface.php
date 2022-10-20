@@ -13,8 +13,8 @@ declare(strict_types=1);
 
 namespace Phalcon\Mvc\Model;
 
-use Phalcon\Mvc\ModelInterface;
 use Phalcon\Mvc\Model\MetaData\Strategy\StrategyInterface;
+use Phalcon\Mvc\ModelInterface;
 
 /**
  * Phalcon\Mvc\Model\MetaDataInterface
@@ -66,7 +66,7 @@ interface MetaDataInterface
      *
      * @return array|null
      */
-    public function getColumnMap(ModelInterface $model): array | null;
+    public function getColumnMap(ModelInterface $model): array|null;
 
     /**
      * Returns attributes (which have default values) and their default values
@@ -111,7 +111,7 @@ interface MetaDataInterface
      *
      * @return string|null
      */
-    public function getIdentityField(ModelInterface $model): string | null;
+    public function getIdentityField(ModelInterface $model): string|null;
 
     /**
      * Returns an array of fields which are not part of the primary key
@@ -147,7 +147,7 @@ interface MetaDataInterface
      *
      * @return array|null
      */
-    public function getReverseColumnMap(ModelInterface $model): array | null;
+    public function getReverseColumnMap(ModelInterface $model): array|null;
 
     /**
      * Return the strategy to obtain the meta-data
@@ -180,7 +180,7 @@ interface MetaDataInterface
      *
      * @return array|null
      */
-    public function read(string $key): array | null;
+    public function read(string $key): array|null;
 
     /**
      * Reads the ordered/reversed column map for certain model
@@ -189,7 +189,7 @@ interface MetaDataInterface
      *
      * @return array|null
      */
-    public function readColumnMap(ModelInterface $model): array | null;
+    public function readColumnMap(ModelInterface $model): array|null;
 
     /**
      * Reads column-map information for certain model using a MODEL_* constant
