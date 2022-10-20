@@ -74,7 +74,7 @@ interface ResultsetInterface
      *
      * @return ModelInterface|null
      */
-    public function getLast(): ModelInterface | null;
+    public function getLast(): ModelInterface|null;
 
     /**
      * Returns the error messages produced by a batch operation

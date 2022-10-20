@@ -14,9 +14,9 @@ declare(strict_types=1);
 namespace Phalcon\Mvc\Model;
 
 use Closure;
+use Phalcon\Cache\Adapter\AdapterInterface;
 use Phalcon\Mvc\Controller\BindModelInterface;
 use Phalcon\Mvc\Model\Binder\BindableInterface;
-use Phalcon\Cache\Adapter\AdapterInterface;
 use ReflectionException;
 use ReflectionFunction;
 use ReflectionMethod;
@@ -94,15 +94,15 @@ class Binder implements BinderInterface
         }
 
         $this->boundModels = [];
-        $paramsCache = $this->getParamsFromCache($cacheKey);
+        $paramsCache       = $this->getParamsFromCache($cacheKey);
 
         if (true === is_array($paramsCache)) {
             foreach ($paramsCache as $paramKey => $className) {
-                $paramValue = $params[$paramKey];
-                $boundModel = $this->findBoundModel($paramValue, $className);
+                $paramValue                      = $params[$paramKey];
+                $boundModel                      = $this->findBoundModel($paramValue, $className);
                 $this->originalValues[$paramKey] = $paramValue;
-                $params[$paramKey] = $boundModel;
-                $this->boundModels[$paramKey] = $boundModel;
+                $params[$paramKey]               = $boundModel;
+                $this->boundModels[$paramKey]    = $boundModel;
             }
 
             return $params;
@@ -166,7 +166,7 @@ class Binder implements BinderInterface
      *
      * @return array|null
      */
-    protected function getParamsFromCache(string $cacheKey): array | null
+    protected function getParamsFromCache(string $cacheKey): array|null
     {
         if (true === isset($this->internalCache[$cacheKey])) {
             return $this->internalCache[$cacheKey];
@@ -176,7 +176,7 @@ class Binder implements BinderInterface
             return null;
         }
 
-        $internalParams = $this->cache->get($cacheKey);
+        $internalParams                 = $this->cache->get($cacheKey);
         $this->internalCache[$cacheKey] = $internalParams;
 
         return $internalParams;
@@ -232,7 +232,7 @@ class Binder implements BinderInterface
                 if (null === $realClasses) {
                     if ($handler instanceof BindModelInterface) {
                         $handlerClass = get_class($handler);
-                        $realClasses = $handlerClass::getModelName();
+                        $realClasses  = $handlerClass::getModelName();
                     } elseif ($handler instanceof BindableInterface) {
                         $realClasses = $handler->getModelName();
                     } else {
@@ -252,7 +252,7 @@ class Binder implements BinderInterface
                             . " parameter"
                         );
                     }
-                    $className = $realClasses[$paramKey];
+                    $className  = $realClasses[$paramKey];
                     $boundModel = $this->findBoundModel($paramValue, $className);
                 } elseif (true === is_string($realClasses)) {
                     $className  = $realClasses;

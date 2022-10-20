@@ -34,7 +34,7 @@ interface ModelInterface
      *
      * @return ModelInterface
      */
-    public function appendMessage(MessageInterface $message):  ModelInterface;
+    public function appendMessage(MessageInterface $message): ModelInterface;
 
     /**
      * Assigns values to a model from an array

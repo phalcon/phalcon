@@ -13,8 +13,6 @@ declare(strict_types=1);
 
 namespace Phalcon\Mvc\Model;
 
-use Phalcon\Di\DiInterface;
-
 /**
  * Interface for Phalcon\Mvc\Model\Criteria
  */
@@ -100,7 +98,7 @@ interface CriteriaInterface
      *
      * @return CriteriaInterface
      */
-     public function distinct(mixed $distinct): CriteriaInterface;
+    public function distinct(mixed $distinct): CriteriaInterface;
 
     /**
      * Executes a find using the parameters built with the criteria
@@ -123,14 +121,14 @@ interface CriteriaInterface
      *
      * @return string|array|null
      */
-    public function getColumns(): string | array | null;
+    public function getColumns(): string|array|null;
 
     /**
      * Returns the conditions parameter in the criteria
      *
      * @return string|null
      */
-    public function getConditions(): string | null;
+    public function getConditions(): string|null;
 
     /**
      * Returns the group clause in the criteria
@@ -155,7 +153,7 @@ interface CriteriaInterface
      *
      * @return int|array|null
      */
-    public function getLimit(): int | array | null;
+    public function getLimit(): int|array|null;
 
     /**
      * Returns an internal model name on which the criteria will be applied
@@ -169,7 +167,7 @@ interface CriteriaInterface
      *
      * @return string|null
      */
-    public function getOrderBy(): string | null;
+    public function getOrderBy(): string|null;
 
     /**
      * Returns all the parameters defined in the criteria
@@ -183,7 +181,7 @@ interface CriteriaInterface
      *
      * @return string|null
      */
-    public function getWhere(): string | null;
+    public function getWhere(): string|null;
 
     /**
      * Adds the group-by clause to the criteria

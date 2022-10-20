@@ -14,8 +14,8 @@ declare(strict_types=1);
 namespace Phalcon\Mvc\Model;
 
 use Phalcon\Db\Adapter\AdapterInterface;
-use Phalcon\Mvc\ModelInterface;
 use Phalcon\Mvc\Model\Transaction\ManagerInterface;
+use Phalcon\Mvc\ModelInterface;
 
 /**
  * Interface for Phalcon\Mvc\Model\Transaction

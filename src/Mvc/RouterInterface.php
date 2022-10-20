@@ -32,9 +32,9 @@ interface RouterInterface
      * @return RouteInterface
      */
     public function add(
-        string $pattern, 
-        array|string $paths = [], 
-        array|string $httpMethods = [], 
+        string $pattern,
+        array|string $paths = [],
+        array|string $httpMethods = [],
         int $position = Router::POSITION_LAST
     ): RouteInterface;
 

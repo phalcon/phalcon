@@ -166,8 +166,8 @@ interface DialectInterface
      * @return string
      */
     public function dropColumn(
-        string $tableName, 
-        string $schemaName, 
+        string $tableName,
+        string $schemaName,
         string $columnName
     ): string;
 
@@ -181,8 +181,8 @@ interface DialectInterface
      * @return string
      */
     public function dropForeignKey(
-        string $tableName, 
-        string $schemaName, 
+        string $tableName,
+        string $schemaName,
         string $referenceName
     ): string;
 
@@ -196,8 +196,8 @@ interface DialectInterface
      * @return string
      */
     public function dropIndex(
-        string $tableName, 
-        string $schemaName, 
+        string $tableName,
+        string $schemaName,
         string $indexName
     ): string;
 
@@ -231,8 +231,8 @@ interface DialectInterface
      * @return string
      */
     public function dropView(
-        string $viewName, 
-        string $schemaName = null, 
+        string $viewName,
+        string $schemaName = null,
         bool $ifExists = true
     ): string;
 
@@ -281,8 +281,8 @@ interface DialectInterface
      * @return string
      */
     public function getSqlExpression(
-        array $expression, 
-        string $escapeChar = null, 
+        array $expression,
+        string $escapeChar = null,
         array $bindCounts = []
     ): string;
 
@@ -316,9 +316,9 @@ interface DialectInterface
      * @return string
      */
     public function modifyColumn(
-        string $tableName, 
-        string $schemaName, 
-        ColumnInterface $column, 
+        string $tableName,
+        string $schemaName,
+        ColumnInterface $column,
         ColumnInterface $currentColumn = null
     ): string;
 
@@ -326,7 +326,7 @@ interface DialectInterface
      * Registers custom SQL functions
      */
     public function registerCustomFunction(
-        string $name, 
+        string $name,
         callable $customFunction
     ): Dialect;
 
@@ -389,7 +389,7 @@ interface DialectInterface
      * @return string
      */
     public function tableExists(
-        string $tableName, 
+        string $tableName,
         string $schemaName = null
     ): string;
 
@@ -412,7 +412,7 @@ interface DialectInterface
      * @return string
      */
     public function viewExists(
-        string $viewName, 
+        string $viewName,
         string $schemaName = null
     ): string;
 }

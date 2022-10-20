@@ -24,11 +24,17 @@ use Phalcon\Support\Helper\Str\Friendly;
 use Phalcon\Tag\Exception;
 use Phalcon\Tag\Select;
 
+use function array_merge;
+use function array_reverse;
+use function htmlspecialchars;
+use function implode;
 use function is_array;
 use function is_resource;
 use function is_scalar;
 use function is_string;
-use function str_contains;
+use function str_replace;
+
+use const PHP_EOL;
 
 /**
  * Phalcon\Tag is designed to simplify building of HTML tags.

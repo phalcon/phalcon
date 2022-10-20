@@ -25,8 +25,8 @@ use Phalcon\Mvc\ModelInterface;
 class Row implements EntityInterface, ResultInterface, ArrayAccess, JsonSerializable
 {
     /**
-    * Serializes the object for json_encode
-    *
+     * Serializes the object for json_encode
+     *
      * @return array
      */
     public function jsonSerialize(): array
@@ -118,7 +118,7 @@ class Row implements EntityInterface, ResultInterface, ArrayAccess, JsonSerializ
      *
      * @return ModelInterface|bool
      */
-    public function setDirtyState(int $dirtyState): ModelInterface | bool
+    public function setDirtyState(int $dirtyState): ModelInterface|bool
     {
         return false;
     }

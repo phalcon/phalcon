@@ -250,7 +250,7 @@ class Url extends AbstractInjectionAware implements UrlInterface
             if (null !== $uri) {
                 $baseUri = "/";
             } else {
-                $baseUri = "/" . $uri ."/";
+                $baseUri = "/" . $uri . "/";
             }
 
             $this->baseUri = $baseUri;

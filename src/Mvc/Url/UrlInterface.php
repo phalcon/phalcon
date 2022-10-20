@@ -28,8 +28,8 @@ interface UrlInterface
      * @return string
      */
     public function get(
-        array|string $uri = null, 
-        array|object $arguments = null, 
+        array|string $uri = null,
+        array|object $arguments = null,
         bool $local = null
     ): string;
 
