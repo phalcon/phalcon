@@ -153,7 +153,8 @@ interface ModelInterface
     /**
      * Allows to query the first record that match the specified conditions
      *
-     * TODO: Current method signature must be reviewed in v5. As it must return only ?ModelInterface (it also returns Row).
+     * TODO: Current method signature must be reviewed in v5.
+     *       As it must return only ?ModelInterface (it also returns Row).
      *
      * @see https://github.com/phalcon/cphalcon/issues/15212
      * @see https://github.com/phalcon/cphalcon/issues/15883
@@ -236,8 +237,9 @@ interface ModelInterface
      * @param mixed|null $arguments
      *
      * @return mixed
+     * @todo make arguments array type
      */
-    public function getRelated(string $alias, mixed $arguments = null); // TODO: make arguments array type
+    public function getRelated(string $alias, mixed $arguments = null);
 
     /**
      * Returns schema name where table mapped is located
@@ -386,9 +388,9 @@ interface ModelInterface
      *
      * @param mixed|null $parameters
      *
-     * @return float|ResultsetInterface
+     * @return ResultsetInterface|float
      */
-    public static function sum(mixed $parameters = null): float | ResultsetInterface;
+    public static function sum(mixed $parameters = null): ResultsetInterface | float;
 
     /**
      * Check whether validation process has generated any messages
