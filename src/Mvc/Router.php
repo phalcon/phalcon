@@ -551,7 +551,7 @@ class Router extends AbstractInjectionAware
     /**
      * Returns an array of default parameters
      *
-     * @return string[]
+     * @return array
      */
     public function getDefaults(): array
     {

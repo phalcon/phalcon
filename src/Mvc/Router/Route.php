@@ -222,6 +222,7 @@ class Route implements RouteInterface
         $marker           = 0;
         $matches          = [];
         $numberMatches    = 0;
+        $notValid         = false;
         $parenthesesCount = 0;
         $prevCh           = '\0';
         $route            = "";
@@ -369,15 +370,6 @@ class Route implements RouteInterface
         return [$route, $matches];
     }
 
-    /**
-     * Returns the 'before match' callback if any
-     *
-     * @return callable|null
-     */
-    public function getBeforeMatch(): callable|null
-    {
-        return $this->beforeMatch;
-    }
 
     /**
      * Returns the route's compiled pattern

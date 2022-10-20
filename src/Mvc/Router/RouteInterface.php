@@ -39,6 +39,13 @@ interface RouteInterface
     public function convert(string $name, callable $converter): RouteInterface;
 
     /**
+     * Returns the 'before match' callback if any
+     *
+     * @return callable|null
+     */
+    public function getBeforeMatch(): callable|null;
+
+    /**
      * Returns the route's pattern
      *
      * @return string
