@@ -259,6 +259,9 @@ abstract class Select
                     $optionText  = $option[$usingOne];
                 }
 
+                $optionValue = $escaper->attributes($optionValue);
+                $optionText  = $escaper->html($optionText);
+
                 /**
                  * If the value is equal to the option's value we mark it as
                  * selected
