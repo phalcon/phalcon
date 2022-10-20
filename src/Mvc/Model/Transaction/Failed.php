@@ -31,8 +31,8 @@ class Failed extends Exception
     /**
      * Phalcon\Mvc\Model\Transaction\Failed constructor
      *
-     * @param string message
-     * @param ModelInterface|null record
+     * @param string              $message
+     * @param ModelInterface|null $record
      */
     public function __construct(string $message, ?ModelInterface $record = null)
     {

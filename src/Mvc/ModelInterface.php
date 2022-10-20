@@ -144,7 +144,7 @@ interface ModelInterface
     /**
      * Allows to query a set of records that match the specified conditions
      *
-     * @param array|string|int|null parameters
+     * @param mixed|null $parameters
      *
      * @return ResultsetInterface
      */

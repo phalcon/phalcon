@@ -18,6 +18,7 @@ use Phalcon\Di\DiInterface;
 use Phalcon\Html\Escaper\EscaperInterface;
 use Phalcon\Html\Link\Link;
 use Phalcon\Html\Link\Serializer\Header;
+use Phalcon\Mvc\Url;
 use Phalcon\Mvc\Url\UrlInterface;
 use Phalcon\Support\Helper\Str\Friendly;
 use Phalcon\Tag\Exception;
@@ -70,24 +71,24 @@ class Tag
     /**
      * @var array
      */
-    protected static array $documentAppendTitle;
+    protected static array $documentAppendTitle = [];
 
     /**
      * @var array
      */
-    protected static array $documentPrependTitle;
+    protected static array $documentPrependTitle = [];
 
     /**
      * HTML document title
      *
      * @var string|null
      */
-    protected static ?string $documentTitle = null;
+    protected static ?string $documentTitle = "";
 
     /**
      * @var string|null
      */
-    protected static ?string $documentTitleSeparator = null;
+    protected static ?string $documentTitleSeparator = "";
 
     /**
      * @var int
@@ -113,10 +114,6 @@ class Tag
      */
     public static function appendTitle(array|string $title): void
     {
-        if (null === self::$documentAppendTitle) {
-            self::$documentAppendTitle = [];
-        }
-
         if (true === is_array($title)) {
             self::$documentAppendTitle = $title;
         } else {
@@ -463,10 +460,6 @@ class Tag
         $documentTitleSeparator = $escaper->html(self::$documentTitleSeparator);
 
         if (true === $prepend) {
-            if (null === self::$documentPrependTitle) {
-                self::$documentPrependTitle = [];
-            }
-
             $documentPrependTitle = self::$documentPrependTitle;
 
             if (true !== empty($documentPrependTitle)) {
@@ -482,10 +475,6 @@ class Tag
         }
 
         if (true === $append) {
-            if (null === self::$documentAppendTitle) {
-                self::$documentAppendTitle = [];
-            }
-
             $documentAppendTitle = self::$documentAppendTitle;
 
             if (true !== empty($documentAppendTitle)) {
@@ -519,9 +508,9 @@ class Tag
     /**
      * Returns a URL service from the default DI
      *
-     * @return UrlInterface
+     * @return Url
      */
-    public static function getUrlService(): UrlInterface
+    public static function getUrlService(): Url
     {
         if (null === self::$urlService) {
             $container = self::getDI();
@@ -848,10 +837,6 @@ class Tag
      */
     public static function prependTitle(array|string $title): void
     {
-        if (null === self::$documentPrependTitle) {
-            self::$documentPrependTitle = [];
-        }
-
         if (true === is_array($title)) {
             self::$documentPrependTitle = $title;
         } else {

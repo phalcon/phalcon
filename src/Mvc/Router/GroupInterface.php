@@ -150,9 +150,9 @@ interface GroupInterface
      *
      * @param callable $beforeMatch
      *
-     * @return GroupInterface
+     * @return GroupInterface|null
      */
-    public function beforeMatch(callable $beforeMatch): GroupInterface;
+    public function beforeMatch(callable $beforeMatch): ?GroupInterface;
 
     /**
      * Removes all the pre-defined routes

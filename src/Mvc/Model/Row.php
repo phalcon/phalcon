@@ -50,7 +50,7 @@ class Row implements EntityInterface, ResultInterface, ArrayAccess, JsonSerializ
     /**
      * Gets a record in a specific position of the row
      *
-     * @param string|int index
+     * @param string|int $index
      *
      * @return string|ModelInterface
      */
