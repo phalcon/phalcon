@@ -29,8 +29,6 @@ use Phalcon\Http\Response\Cookies;
 use Phalcon\Mvc\Dispatcher;
 use Phalcon\Mvc\Model\MetaData\Memory;
 use Phalcon\Mvc\Model\Transaction\Manager;
-use Phalcon\Mvc\Router;
-use Phalcon\Mvc\Url;
 use Phalcon\Support\HelperFactory;
 use UnitTester;
 
@@ -90,14 +88,14 @@ class ConstructCest
 //                'service' => 'annotations',
 //                'class'   => MemoryAnnotations::class,
 //            ],
-            [
-                'service' => 'assets',
-                'class'   => ManagerAssets::class,
-            ],
-            [
-                'service' => 'crypt',
-                'class'   => Crypt::class,
-            ],
+        [
+        'service' => 'assets',
+        'class'   => ManagerAssets::class,
+        ],
+        [
+        'service' => 'crypt',
+        'class'   => Crypt::class,
+        ],
 //            [
 //                'service' => 'cookies',
 //                'class'   => Cookies::class,
@@ -106,30 +104,30 @@ class ConstructCest
 //                'service' => 'dispatcher',
 //                'class'   => Dispatcher::class,
 //            ],
-            [
-                'service' => 'escaper',
-                'class'   => Escaper::class,
-            ],
-            [
-                'service' => 'eventsManager',
-                'class'   => ManagerEvents::class,
-            ],
-            [
-                'service' => 'flash',
-                'class'   => Direct::class,
-            ],
-            [
-                'service' => 'flashSession',
-                'class'   => Session::class,
-            ],
-            [
-                'service' => 'filter',
-                'class'   => Filter::class,
-            ],
-            [
-                'service' => 'helper',
-                'class'   => HelperFactory::class,
-            ],
+        [
+        'service' => 'escaper',
+        'class'   => Escaper::class,
+        ],
+        [
+        'service' => 'eventsManager',
+        'class'   => ManagerEvents::class,
+        ],
+        [
+        'service' => 'flash',
+        'class'   => Direct::class,
+        ],
+        [
+        'service' => 'flashSession',
+        'class'   => Session::class,
+        ],
+        [
+        'service' => 'filter',
+        'class'   => Filter::class,
+        ],
+        [
+        'service' => 'helper',
+        'class'   => HelperFactory::class,
+        ],
 //            [
 //                'service' => 'modelsManager',
 //                'class'   => ManagerModel::class,
@@ -150,14 +148,14 @@ class ConstructCest
 //                'service' => 'router',
 //                'class'   => Router::class,
 //            ],
-            [
-                'service' => 'security',
-                'class'   => Security::class,
-            ],
-            [
-                'service' => 'tag',
-                'class'   => TagFactory::class,
-            ],
+        [
+        'service' => 'security',
+        'class'   => Security::class,
+        ],
+        [
+        'service' => 'tag',
+        'class'   => TagFactory::class,
+        ],
 //            [
 //                'service' => 'transactionManager',
 //                'class'   => Manager::class,
