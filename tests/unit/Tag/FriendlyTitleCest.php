@@ -14,7 +14,6 @@ declare(strict_types=1);
 namespace Phalcon\Tests\Unit\Tag;
 
 use Phalcon\Tag;
-use Phalcon\Tag\Exception;
 use Phalcon\Tests\Fixtures\Helpers\TagSetup;
 use UnitTester;
 
