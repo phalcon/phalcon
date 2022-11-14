@@ -281,9 +281,8 @@ jobs:
       #   run: vendor/bin/codecept run --ext DotReporter database --env sqlsrv
 
       - name: Run codacy-coverage-reporter
-        uses: codacy/codacy-coverage-reporter-action@v1
-        with:
-          project-token: ${{ secrets.CODACY_PROJECT_TOKEN }}
+        env:
+          CODACY_PROJECT_TOKEN: ${{ secrets.CODACY_PROJECT_TOKEN }}
         run: |
           bash <(curl -Ls https://coverage.codacy.com/get.sh) report \
             --partial -l php -r tests/_output/unit-coverage.xml
