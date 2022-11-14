@@ -18,5 +18,4 @@ namespace Phalcon\Filter\Validation;
  */
 abstract class AbstractCombinedFieldsValidator extends AbstractValidator
 {
-
 }

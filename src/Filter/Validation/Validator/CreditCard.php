@@ -20,7 +20,6 @@ use function array_reverse;
 use function array_sum;
 use function str_split;
 
-
 /**
  * Checks if a value has a valid credit card number
  *
