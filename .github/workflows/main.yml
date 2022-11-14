@@ -288,3 +288,4 @@ jobs:
             --partial -l php -r tests/_output/unit-coverage.xml
           bash <(curl -Ls https://coverage.codacy.com/get.sh) report \
             --partial -l php -r tests/_output/int-coverage.xml
+          bash <(curl -Ls https://coverage.codacy.com/get.sh) final
