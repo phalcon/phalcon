@@ -227,8 +227,12 @@ jobs:
 #          php tests/_config/generate-db-schemas.php
 
       - name: Run Unit Tests
-        if: always()
-        run: vendor/bin/codecept run --coverage-xml=unit-coverage.xml --ext DotReporter unit
+        env:
+          CODACY_PROJECT_TOKEN: ${{ secrets.CODACY_PROJECT_TOKEN }}
+        run: |
+          vendor/bin/codecept run --coverage-xml=unit-coverage.xml --ext DotReporter unit
+          bash <(curl -Ls https://coverage.codacy.com/get.sh) report \
+            --partial -l php -r tests/_output/unit-coverage.xml
 
 #      - name: Run CLI Tests
 #        if: always()
@@ -236,10 +240,14 @@ jobs:
 #
       - name: Run Integration Tests
         env:
+          CODACY_PROJECT_TOKEN: ${{ secrets.CODACY_PROJECT_TOKEN }}
           DATA_REDIS_PORT: ${{ job.services.redis.ports['6379'] }}
           DATA_MEMCACHED_PORT: ${{ job.services.memcached.ports['11211'] }}
-        if: always()
-        run: vendor/bin/codecept run --coverage-xml=int-coverage.xml --ext DotReporter integration
+        run: |
+          vendor/bin/codecept run --coverage-xml=int-coverage.xml --ext DotReporter integration
+          bash <(curl -Ls https://coverage.codacy.com/get.sh) report \
+            --partial -l php -r tests/_output/int-coverage.xml
+          bash <(curl -Ls https://coverage.codacy.com/get.sh) final
 
 #      - name: Run Database Tests (Common)
 #        env:
@@ -279,13 +287,3 @@ jobs:
       #     DATA_REDIS_PORT: ${{ job.services.redis.ports['6379'] }}
       #     DATA_MEMCACHED_PORT: ${{ job.services.memcached.ports['11211'] }}
       #   run: vendor/bin/codecept run --ext DotReporter database --env sqlsrv
-
-      - name: Run codacy-coverage-reporter
-        env:
-          CODACY_PROJECT_TOKEN: ${{ secrets.CODACY_PROJECT_TOKEN }}
-        run: |
-          bash <(curl -Ls https://coverage.codacy.com/get.sh) report \
-            --partial -l php -r tests/_output/unit-coverage.xml
-          bash <(curl -Ls https://coverage.codacy.com/get.sh) report \
-            --partial -l php -r tests/_output/int-coverage.xml
-          bash <(curl -Ls https://coverage.codacy.com/get.sh) final
