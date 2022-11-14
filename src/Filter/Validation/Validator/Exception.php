@@ -19,5 +19,4 @@ namespace Phalcon\Filter\Validation\Validator;
  */
 class Exception extends \Exception
 {
-
 }

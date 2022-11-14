@@ -20,9 +20,7 @@ use function get_class;
 /**
  * This is a base class for combined fields validators
  */
-abstract class AbstractValidatorComposite
-    extends AbstractValidator
-    implements ValidatorCompositeInterface
+abstract class AbstractValidatorComposite extends AbstractValidator implements ValidatorCompositeInterface
 {
     /**
      * @var array

@@ -445,9 +445,9 @@ class Uniqueness extends AbstractCombinedFieldsValidator
             $attributes = $metaData->getPrimaryKeyAttributes($record);
             foreach ($attributes as $primaryField) {
                 $params["conditions"][] = $this->getColumnNameReal(
-                        $record,
-                        $primaryField
-                    ) . " <> ?" . $index;
+                    $record,
+                    $primaryField
+                ) . " <> ?" . $index;
 
                 $params["bind"][] = $record->readAttribute(
                     $this->getColumnNameReal($record, $primaryField)
