@@ -15,8 +15,6 @@ namespace Phalcon\Support\Helper\Str;
 
 use Phalcon\Traits\Helper\Str\CamelizeTrait;
 
-use function lcfirst;
-
 /**
  * Converts strings to upperCamelCase or lowerCamelCase
  */

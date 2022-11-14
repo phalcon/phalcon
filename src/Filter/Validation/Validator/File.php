@@ -130,13 +130,13 @@ class File extends AbstractValidatorComposite
         $valid     = (string) ($options["messageValid"] ?? null);
 
         $this
-            ->processFileAllowedType($fileEmpty, $iniSize, $valid)
-            ->processFileResolutionEqual($fileEmpty, $iniSize, $valid)
-            ->processFileResolutionMax($fileEmpty, $iniSize, $valid)
-            ->processFileResolutionMin($fileEmpty, $iniSize, $valid)
-            ->processFileSizeEquals($fileEmpty, $iniSize, $valid)
-            ->processFileSizeMax($fileEmpty, $iniSize, $valid)
-            ->processFileSizeMin($fileEmpty, $iniSize, $valid)
+            ->processFileAllowedType($options, $fileEmpty, $iniSize, $valid)
+            ->processFileResolutionEqual($options, $fileEmpty, $iniSize, $valid)
+            ->processFileResolutionMax($options, $fileEmpty, $iniSize, $valid)
+            ->processFileResolutionMin($options, $fileEmpty, $iniSize, $valid)
+            ->processFileSizeEquals($options, $fileEmpty, $iniSize, $valid)
+            ->processFileSizeMax($options, $fileEmpty, $iniSize, $valid)
+            ->processFileSizeMin($options, $fileEmpty, $iniSize, $valid)
         ;
 
         unset(
@@ -163,6 +163,7 @@ class File extends AbstractValidatorComposite
     }
 
     /**
+     * @param array  @options
      * @param string $fileEmpty
      * @param string $iniSize
      * @param string $valid
@@ -170,6 +171,7 @@ class File extends AbstractValidatorComposite
      * @return File
      */
     private function processFileAllowedType(
+        array $options,
         string $fileEmpty,
         string $iniSize,
         string $valid
@@ -194,6 +196,7 @@ class File extends AbstractValidatorComposite
     }
 
     /**
+     * @param array  @options
      * @param string $fileEmpty
      * @param string $iniSize
      * @param string $valid
@@ -201,6 +204,7 @@ class File extends AbstractValidatorComposite
      * @return File
      */
     private function processFileSizeEquals(
+        array $options,
         string $fileEmpty,
         string $iniSize,
         string $valid
@@ -225,6 +229,7 @@ class File extends AbstractValidatorComposite
     }
 
     /**
+     * @param array  @options
      * @param string $fileEmpty
      * @param string $iniSize
      * @param string $valid
@@ -232,6 +237,7 @@ class File extends AbstractValidatorComposite
      * @return File
      */
     private function processFileSizeMax(
+        array $options,
         string $fileEmpty,
         string $iniSize,
         string $valid
@@ -257,6 +263,7 @@ class File extends AbstractValidatorComposite
     }
 
     /**
+     * @param array  @options
      * @param string $fileEmpty
      * @param string $iniSize
      * @param string $valid
@@ -264,6 +271,7 @@ class File extends AbstractValidatorComposite
      * @return File
      */
     private function processFileSizeMin(
+        array $options,
         string $fileEmpty,
         string $iniSize,
         string $valid
@@ -289,6 +297,7 @@ class File extends AbstractValidatorComposite
     }
 
     /**
+     * @param array  @options
      * @param string $fileEmpty
      * @param string $iniSize
      * @param string $valid
@@ -296,6 +305,7 @@ class File extends AbstractValidatorComposite
      * @return File
      */
     private function processFileResolutionEqual(
+        array $options,
         string $fileEmpty,
         string $iniSize,
         string $valid
@@ -320,6 +330,7 @@ class File extends AbstractValidatorComposite
     }
 
     /**
+     * @param array  @options
      * @param string $fileEmpty
      * @param string $iniSize
      * @param string $valid
@@ -327,6 +338,7 @@ class File extends AbstractValidatorComposite
      * @return File
      */
     private function processFileResolutionMax(
+        array $options,
         string $fileEmpty,
         string $iniSize,
         string $valid
@@ -352,6 +364,7 @@ class File extends AbstractValidatorComposite
     }
 
     /**
+     * @param array  @options
      * @param string $fileEmpty
      * @param string $iniSize
      * @param string $valid
@@ -359,6 +372,7 @@ class File extends AbstractValidatorComposite
      * @return File
      */
     private function processFileResolutionMin(
+        array $options,
         string $fileEmpty,
         string $iniSize,
         string $valid

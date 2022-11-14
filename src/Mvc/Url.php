@@ -17,11 +17,9 @@ use Phalcon\Di\AbstractInjectionAware;
 use Phalcon\Mvc\Url\Exception;
 use Phalcon\Mvc\Url\UrlInterface;
 
-use function array_reverse;
 use function is_array;
 use function is_string;
 use function str_contains;
-use function str_split;
 use function strlen;
 
 /**

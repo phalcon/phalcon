@@ -13,12 +13,12 @@ declare(strict_types=1);
 
 namespace Phalcon\Db\Adapter;
 
-use Phalcon\Db\DialectInterface;
-use Phalcon\Db\ResultInterface;
 use Phalcon\Db\ColumnInterface;
+use Phalcon\Db\DialectInterface;
 use Phalcon\Db\IndexInterface;
 use Phalcon\Db\RawValue;
 use Phalcon\Db\ReferenceInterface;
+use Phalcon\Db\ResultInterface;
 
 /**
  * Interface for Phalcon\Db adapters
