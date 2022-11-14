@@ -186,7 +186,7 @@ jobs:
     strategy:
       fail-fast: false
       matrix:
-        php: [ '8.0' ]
+        php: [ '8.0', '8.1' ]
 
     steps:
       - uses: actions/checkout@v3
@@ -227,12 +227,8 @@ jobs:
 #          php tests/_config/generate-db-schemas.php
 
       - name: Run Unit Tests
-        env:
-          CODACY_PROJECT_TOKEN: ${{ secrets.CODACY_PROJECT_TOKEN }}
         run: |
           vendor/bin/codecept run --coverage-xml=unit-coverage.xml --ext DotReporter unit
-          bash <(curl -Ls https://coverage.codacy.com/get.sh) report \
-            --partial -l php -r tests/_output/unit-coverage.xml
 
 #      - name: Run CLI Tests
 #        if: always()
@@ -240,14 +236,10 @@ jobs:
 #
       - name: Run Integration Tests
         env:
-          CODACY_PROJECT_TOKEN: ${{ secrets.CODACY_PROJECT_TOKEN }}
           DATA_REDIS_PORT: ${{ job.services.redis.ports['6379'] }}
           DATA_MEMCACHED_PORT: ${{ job.services.memcached.ports['11211'] }}
         run: |
           vendor/bin/codecept run --coverage-xml=int-coverage.xml --ext DotReporter integration
-          bash <(curl -Ls https://coverage.codacy.com/get.sh) report \
-            --partial -l php -r tests/_output/int-coverage.xml
-          bash <(curl -Ls https://coverage.codacy.com/get.sh) final
 
 #      - name: Run Database Tests (Common)
 #        env:

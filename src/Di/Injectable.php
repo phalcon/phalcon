@@ -33,8 +33,6 @@ use Phalcon\Session\BagInterface;
 use Phalcon\Session\ManagerInterface as SessionManager;
 use Phalcon\Support\HelperFactory;
 
-use function spl_object_hash;
-
 //use Phalcon\Annotations\Adapter;
 //use Phalcon\Db\Adapter\AdapterInterface;
 //use Phalcon\Http\RequestInterface;
