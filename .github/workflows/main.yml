@@ -284,4 +284,8 @@ jobs:
         uses: codacy/codacy-coverage-reporter-action@v1
         with:
           project-token: ${{ secrets.CODACY_PROJECT_TOKEN }}
-          coverage-reports: tests/_output/unit-coverage.xml,tests/_output/int-coverage.xml
+        run: |
+          bash <(curl -Ls https://coverage.codacy.com/get.sh) report \
+            --partial -l php -r tests/_output/unit-coverage.xml
+          bash <(curl -Ls https://coverage.codacy.com/get.sh) report \
+            --partial -l php -r tests/_output/int-coverage.xml
