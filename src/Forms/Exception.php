@@ -18,5 +18,4 @@ namespace Phalcon\Forms;
  */
 class Exception extends \Exception
 {
-
 }
