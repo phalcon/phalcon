@@ -248,10 +248,6 @@ class Di implements DiInterface
      */
     public static function getDefault(): ?DiInterface
     {
-        if (null === self::$defaultContainer) {
-            self::$defaultContainer = new Di();
-        }
-
         return self::$defaultContainer;
     }
 

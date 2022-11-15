@@ -334,13 +334,7 @@ abstract class AbstractAdapter implements AdapterInterface
         $this->checkResizeInput($width, $height, $master);
 
         if ($master !== Enum::TENSILE) {
-            if ($master === Enum::AUTO) {
-                $master = ($this->width / $width) > ($this->height / $height) ? Enum::WIDTH : Enum::HEIGHT;
-            }
-
-            if ($master === Enum::INVERSE) {
-                $master = ($this->width / $width) > ($this->height / $height) ? Enum::HEIGHT : Enum::WIDTH;
-            }
+            $master = $this->checkResizeMaster($width, $height, $master);
 
             switch ($master) {
                 case Enum::WIDTH:
@@ -365,6 +359,8 @@ abstract class AbstractAdapter implements AdapterInterface
                     $width  = (null === $width) ? $this->width : $width;
                     $height = (null === $height) ? $this->height : $height;
                     break;
+
+                    default:
             }
         }
 
@@ -512,15 +508,15 @@ abstract class AbstractAdapter implements AdapterInterface
         int $offsetY = 0,
         int $opacity = 100
     ): AdapterInterface {
-        $temp    = $this->width - $watermark->getWidth();
-        $offsetX = $this->checkHighLow($offsetX, 0, $temp);
+        $temp = $this->width - $watermark->getWidth();
+        $offX = $this->checkHighLow($offsetX, 0, $temp);
 
-        $temp    = $this->height - $watermark->getHeight();
-        $offsetY = $this->checkHighLow($offsetX, 0, $temp);
+        $temp = $this->height - $watermark->getHeight();
+        $offY = $this->checkHighLow($offsetX, 0, $temp);
 
         $opacity = $this->checkHighLow($opacity);
 
-        $this->processWatermark($watermark, $offsetX, $offsetY, $opacity);
+        $this->processWatermark($watermark, $offX, $offY, $opacity);
 
         return $this;
     }
@@ -571,6 +567,34 @@ abstract class AbstractAdapter implements AdapterInterface
                     throw new Exception("height must be specified");
                 }
                 break;
+            default:
         }
+    }
+
+    /**
+     * @param int|null $width
+     * @param int|null $height
+     * @param int      $master
+     *
+     * @return int
+     */
+    private function checkResizeMaster(
+        int $width = null,
+        int $height = null,
+        int $master = Enum::AUTO
+    ) {
+        if ($master === Enum::AUTO) {
+            return ($this->width / $width) > ($this->height / $height)
+                ? Enum::WIDTH
+                : Enum::HEIGHT;
+        }
+
+        if ($master === Enum::INVERSE) {
+            return ($this->width / $width) > ($this->height / $height)
+                ? Enum::HEIGHT
+                : Enum::WIDTH;
+        }
+
+        return $master;
     }
 }
