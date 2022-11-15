@@ -497,10 +497,6 @@ class Validation extends Injectable implements ValidationInterface
         array|object $data = null,
         object $entity = null
     ): Messages|false {
-        if (true === empty($this->validators)) {
-            throw new Exception("There are no validators to validate");
-        }
-
         /**
          * Clear pre-calculated values
          */
