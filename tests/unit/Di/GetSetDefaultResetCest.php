@@ -14,21 +14,17 @@ declare(strict_types=1);
 namespace Phalcon\Tests\Unit\Di;
 
 use Phalcon\Di\Di;
-use Phalcon\Html\Escaper;
-use Phalcon\Support\Collection;
 use UnitTester;
 
-use function spl_object_hash;
-
 /**
- * Class GetSetDefaultResetCest
+ * Class GetDefaultCest
  *
  * @package Phalcon\Tests\Unit\Di
  */
 class GetSetDefaultResetCest
 {
     /**
-     * Tests Phalcon\Di :: getDefault() / setDefault() / reset()
+     * Unit Tests Phalcon\Di :: getDefault()/setDefault()/reset()
      *
      * @param UnitTester $I
      *
@@ -37,35 +33,26 @@ class GetSetDefaultResetCest
      */
     public function diGetSetDefaultReset(UnitTester $I)
     {
-        $I->wantToTest('Di - getDefault() / setDefault() / reset()');
+        $I->wantToTest('Di - getDefault()/setDefault()/reset()');
 
-        $one = new Di();
-        $one->set('collection', Collection::class);
+        $class  = Di::class;
+        $actual = Di::getDefault();
+        $I->assertInstanceOf($class, $actual);
 
-        $two = new Di();
-        $two->set('escaper', Escaper::class);
+        $container = Di::getDefault();
+        $class     = Di::class;
+        $I->assertInstanceOf($class, $container);
 
-        Di::setDefault($one);
-
-        $expected = spl_object_hash($one);
-        $actual   = spl_object_hash(Di::getDefault());
-        $I->assertSame($expected, $actual);
-
-        Di::setDefault($two);
-
-        $expected = spl_object_hash($two);
-        $actual   = spl_object_hash(Di::getDefault());
-        $I->assertSame($expected, $actual);
-
+        // delete it
         Di::reset();
-        $three = Di::getDefault();
 
-        $expected = spl_object_hash($one);
-        $actual   = spl_object_hash($three);
-        $I->assertNotSame($expected, $actual);
+        $actual = Di::getDefault();
+        $I->assertNull($actual);
 
-        $expected = spl_object_hash($two);
-        $actual   = spl_object_hash($three);
-        $I->assertNotSame($expected, $actual);
+        // set it again
+        Di::setDefault($container);
+
+        $actual = Di::getDefault();
+        $I->assertInstanceOf($class, $actual);
     }
 }
