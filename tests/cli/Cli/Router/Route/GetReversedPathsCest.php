@@ -20,6 +20,8 @@ use Phalcon\Cli\Router\Route;
 use Phalcon\Tests\Fixtures\Traits\CliTrait;
 use Phalcon\Tests\Fixtures\Traits\DiTrait;
 
+use function array_flip;
+
 class GetReversedPathsCest
 {
     use CliTrait;
@@ -45,7 +47,7 @@ class GetReversedPathsCest
         $router = new Router(false);
 
         $path     = $example['path'];
-        $expected = $example['expected'];
+        $expected = array_flip($example['expected']);
 
         $route  = $router->add('route', $path);
         $actual = $route->getReversedPaths();

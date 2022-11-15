@@ -17,7 +17,6 @@ use CliTester;
 use Phalcon\Cli\Dispatcher;
 use Phalcon\Cli\Dispatcher\Exception;
 use Phalcon\Di\FactoryDefault\Cli as DiFactoryDefault;
-use phpDocumentor\Reflection\DocBlock\Tags\Example;
 
 class DispatchCest
 {

@@ -26,6 +26,14 @@ use Phalcon\Tests\Fixtures\Tasks\Issue787Task;
 use Phalcon\Tests\Modules\Backend\Module as BackendModule;
 use Phalcon\Tests\Modules\Frontend\Module as FrontendModule;
 
+use function codecept_root_dir;
+use function dataDir;
+use function ob_end_clean;
+use function ob_start;
+use function shell_exec;
+
+use const PHP_OS_FAMILY;
+
 class HandleCest
 {
     /**
@@ -95,7 +103,7 @@ class HandleCest
      * @author Nathan Edwards <https://github.com/npfedwards>
      * @since  2018-12-26
      */
-    public function handleModule(CliTester $I)
+    public function cliConsoleHandleModule(CliTester $I)
     {
         $I->wantToTest("Cli\Console - handle() - BackendModules");
 
@@ -148,7 +156,7 @@ class HandleCest
      * @author Nathan Edwards <https://github.com/npfedwards>
      * @since  2018-12-26
      */
-    public function handleEventBoot(CliTester $I)
+    public function cliConsoleHandleEventBoot(CliTester $I)
     {
         $I->wantToTest("Cli\Console - handle() - Events - console:boot");
 
@@ -177,7 +185,7 @@ class HandleCest
      * @author Nathan Edwards <https://github.com/npfedwards>
      * @since  2018-12-26
      */
-    public function handleEventBeforeStartModule(CliTester $I)
+    public function cliConsoleHandleEventBeforeStartModule(CliTester $I)
     {
         $I->wantToTest("Cli\Console - handle() - Events - console:beforeStartModule");
 
@@ -225,7 +233,7 @@ class HandleCest
      * @author Nathan Edwards <https://github.com/npfedwards>
      * @since  2018-12-26
      */
-    public function handleEventAfterStartModule(CliTester $I)
+    public function cliConsoleHandleEventAfterStartModule(CliTester $I)
     {
         $I->wantToTest("Cli\Console - handle() - Events - console:afterStartModule");
 
@@ -273,7 +281,7 @@ class HandleCest
      * @author Nathan Edwards <https://github.com/npfedwards>
      * @since  2018-12-26
      */
-    public function handleEventBeforeHandleTask(CliTester $I)
+    public function cliConsoleHandleEventBeforeHandleTask(CliTester $I)
     {
         $I->wantToTest("Cli\Console - handle() - Events - console:beforeHandleTask");
 
@@ -302,7 +310,7 @@ class HandleCest
      * @author Nathan Edwards <https://github.com/npfedwards>
      * @since  2018-12-26
      */
-    public function handleEventAfterHandleTask(CliTester $I)
+    public function cliConsoleHandleEventAfterHandleTask(CliTester $I)
     {
         $I->wantToTest("Cli\Console - handle() - Events - console:afterHandleTask");
 
@@ -354,7 +362,7 @@ class HandleCest
      * @author Nathan Edwards <https://github.com/npfedwards>
      * @since  2019-01-06
      */
-    public function handle13724(CliTester $I)
+    public function cliConsoleHandle13724(CliTester $I)
     {
         $I->wantToTest("Cli\Console - handle() - Issue #13724");
         $console = new CliConsole(new DiFactoryDefault());
@@ -401,7 +409,7 @@ class HandleCest
         );
     }
 
-    public function shouldThrowExceptionWhenModuleDoesNotExists(CliTester $I)
+    public function cliConsoleHandleModuleDoesNotExists(CliTester $I)
     {
         $I->wantToTest("Cli\Console - handle() - Throw exception when module does not exists");
 
@@ -425,7 +433,7 @@ class HandleCest
         );
     }
 
-    public function shouldThrowExceptionWhenTaskDoesNotExists(CliTester $I)
+    public function cliConsoleHandleTaskDoesNotExists(CliTester $I)
     {
         $I->wantToTest("Cli\Console - handle() - Throw exception when task does not exists");
 
@@ -452,7 +460,7 @@ class HandleCest
         );
     }
 
-    public function testIssue787(CliTester $I)
+    public function cliConsoleHandle787(CliTester $I)
     {
         $console = new CliConsole(new DiFactoryDefault());
         $console->dispatcher->setDefaultNamespace('Phalcon\Tests\Fixtures\Tasks');
@@ -468,6 +476,30 @@ class HandleCest
             'beforeExecuteRoute' . PHP_EOL . 'initialize' . PHP_EOL,
             Issue787Task::$output
         );
+    }
+
+    /**
+     * @param CliTester $I
+     *
+     * @issue  16186
+     * @return void
+     */
+    public function cliConsoleHandleNoAction(CliTester $I)
+    {
+        $I->wantToTest("Cli\Console - handle() - no action");
+
+        if (PHP_OS_FAMILY === 'Windows') {
+            $I->markTestSkipped('Need to check this under Windows');
+        }
+
+        $script = codecept_root_dir() . 'tests/testbed/cli.php ';
+
+        ob_start();
+        $actual = shell_exec('sudo php ' . $script . 'print');
+        ob_end_clean();
+
+        $expected = 'printMainAction';
+        $I->assertSame($expected, $actual);
     }
 
     /**

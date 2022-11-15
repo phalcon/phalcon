@@ -41,9 +41,7 @@ class GetSetDefaultResetCest
         // Get a new container
         $new = Di::getDefault();
 
-        $containerHash = spl_object_hash($container);
-        $newHash       = spl_object_hash($new);
-        $I->assertNotSame($containerHash, $newHash);
+        $I->assertNull($new);
 
         // set it again
         Di::setDefault($container);
@@ -52,7 +50,8 @@ class GetSetDefaultResetCest
         $actual = Di::getDefault();
         $I->assertInstanceOf($class, $actual);
 
-        $currentHash = spl_object_hash($actual);
+        $containerHash = spl_object_hash($container);
+        $currentHash   = spl_object_hash($actual);
         $I->assertSame($containerHash, $currentHash);
     }
 }
