@@ -360,7 +360,7 @@ abstract class AbstractAdapter implements AdapterInterface
                     $height = (null === $height) ? $this->height : $height;
                     break;
 
-                    default:
+                default:
             }
         }
 

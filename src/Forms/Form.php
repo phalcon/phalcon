@@ -646,7 +646,7 @@ class Form extends Injectable implements Countable, Iterator, AttributesInterfac
     ): bool {
         if (empty($this->elements)) {
             return true;
-    }
+        }
         $whitelist = empty($whitelist) ? $this->whitelist : $whitelist;
         $data      = empty($data) ? $this->data : $data;
         $entity    = null === $entity ? $this->entity : $entity;
@@ -672,7 +672,7 @@ class Form extends Injectable implements Countable, Iterator, AttributesInterfac
 
         /** @var ElementInterface $element */
         foreach ($this->elements as $element) {
-           $validators = $element->getValidators();
+            $validators = $element->getValidators();
 
             if (0 === count($validators)) {
                 continue;
@@ -730,7 +730,7 @@ class Form extends Injectable implements Countable, Iterator, AttributesInterfac
          * Check if there is a method 'afterValidation'
          */
         if (true === method_exists($this, "afterValidation")) {
-           $this->afterValidation($messages);
+            $this->afterValidation($messages);
         }
 
         /**

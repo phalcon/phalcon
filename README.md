@@ -31,16 +31,10 @@ Phalcon Framework
 
 ## Remaining refactoring - alignment with `cphalcon` (v5) 
 - Annotations
-- Cli
 - DataMapper
 - Db
 - Dispatcher
-- Forms
 - Http
-- Image
-- Loader
 - Mvc
 - Paginator
-- Tag
 - Url
-- Validation
