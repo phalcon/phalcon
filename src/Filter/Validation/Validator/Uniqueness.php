@@ -355,7 +355,7 @@ class Uniqueness extends AbstractCombinedFieldsValidator
 
             if ($except) {
                 if (
-                    true === is_array($except) &&
+                    is_array($except) &&
                     array_keys($except) !== range(0, count($except) - 1)
                 ) {
                     foreach ($except as $exceptKey => $fieldExcept) {
@@ -365,7 +365,7 @@ class Uniqueness extends AbstractCombinedFieldsValidator
                             $this->getOption("attribute", $exceptKey)
                         );
 
-                        if (true === is_array($fieldExcept)) {
+                        if (is_array($fieldExcept)) {
                             foreach ($fieldExcept as $singleExcept) {
                                 $notInValues[]    = "?" . $index;
                                 $params["bind"][] = $singleExcept;
@@ -388,7 +388,7 @@ class Uniqueness extends AbstractCombinedFieldsValidator
                         $this->getOption("attribute", $field[0])
                     );
 
-                    if (true === is_array($except)) {
+                    if (is_array($except)) {
                         foreach ($except as $singleExcept) {
                             $notInValues[]    = "?" . $index;
                             $params["bind"][] = $singleExcept;
@@ -411,7 +411,7 @@ class Uniqueness extends AbstractCombinedFieldsValidator
                             $this->getOption("attribute", $item)
                         );
 
-                        if (true === is_array($except)) {
+                        if (is_array($except)) {
                             foreach ($except as $singleExcept) {
                                 $notInValues[]    = "?" . $index;
                                 $params["bind"][] = $singleExcept;

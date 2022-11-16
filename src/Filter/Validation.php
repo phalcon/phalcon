@@ -16,7 +16,7 @@ namespace Phalcon\Filter;
 use Phalcon\Di\Di;
 use Phalcon\Di\Injectable;
 use Phalcon\Filter\Validation\AbstractCombinedFieldsValidator;
-use Phalcon\Filter\Validation\Exception;
+use Phalcon\Filter\Validation\Exception as ValidationException;
 use Phalcon\Filter\Validation\ValidationInterface;
 use Phalcon\Filter\Validation\ValidatorInterface;
 use Phalcon\Messages\MessageInterface;
@@ -102,7 +102,7 @@ class Validation extends Injectable implements ValidationInterface
         $this->combinedFieldsValidators = array_filter(
             $validators,
             function (array $element) {
-                return true === is_array($element[0]) &&
+                return is_array($element[0]) &&
                     $element[1] instanceof AbstractCombinedFieldsValidator;
             }
         );
@@ -122,13 +122,13 @@ class Validation extends Injectable implements ValidationInterface
      * @param ValidatorInterface $validator
      *
      * @return ValidationInterface
-     * @throws Exception
+     * @throws ValidationException
      */
     public function add(
         array|string $field,
         ValidatorInterface $validator
     ): ValidationInterface {
-        if (true === is_array($field)) {
+        if (is_array($field)) {
             // Uniqueness validator for combination of fields is
             // handled differently
             if ($validator instanceof AbstractCombinedFieldsValidator) {
@@ -141,7 +141,7 @@ class Validation extends Injectable implements ValidationInterface
         } elseif (true === is_string($field)) {
             $this->validators[$field][] = $validator;
         } else {
-            throw new Exception(
+            throw new ValidationException(
                 "Field must be passed as array of fields or string"
             );
         }
@@ -227,7 +227,7 @@ class Validation extends Injectable implements ValidationInterface
      */
     public function getLabel(array|string $field): string
     {
-        if (true === is_array($field)) {
+        if (is_array($field)) {
             return join(", ", $field);
         }
 
@@ -295,7 +295,7 @@ class Validation extends Injectable implements ValidationInterface
             return $this->values[$field];
         }
 
-        if (true === is_array($data) && true === isset($data[$field])) {
+        if (is_array($data) && true === isset($data[$field])) {
             return $data[$field];
         }
 
@@ -308,7 +308,7 @@ class Validation extends Injectable implements ValidationInterface
      * @param string $field
      *
      * @return mixed
-     * @throws Exception
+     * @throws ValidationException
      */
     public function getValue(string $field): mixed
     {
@@ -323,7 +323,7 @@ class Validation extends Injectable implements ValidationInterface
             }
         } else {
             if (null === $this->data) {
-                throw new Exception("There is no data to validate");
+                throw new ValidationException("There is no data to validate");
             }
 
             $value = $this->getValueByData($this->data, $field);
@@ -347,7 +347,7 @@ class Validation extends Injectable implements ValidationInterface
                 }
 
                 if (!($filterService instanceof FilterInterface)) {
-                    throw new Exception(
+                    throw new ValidationException(
                         "Returned 'filter' service is invalid"
                     );
                 }
@@ -388,7 +388,7 @@ class Validation extends Injectable implements ValidationInterface
      * @param ValidatorInterface $validator
      *
      * @return ValidationInterface
-     * @throws Exception
+     * @throws ValidationException
      * @todo remove this
      */
     public function rule(
@@ -405,7 +405,7 @@ class Validation extends Injectable implements ValidationInterface
      * @param array        $validators
      *
      * @return ValidationInterface
-     * @throws Exception
+     * @throws ValidationException
      */
     public function rules(
         array|string $field,
@@ -491,7 +491,7 @@ class Validation extends Injectable implements ValidationInterface
      * @param object|null       $entity
      *
      * @return Messages|bool
-     * @throws Exception
+     * @throws ValidationException
      */
     public function validate(
         array|object $data = null,
@@ -531,7 +531,9 @@ class Validation extends Injectable implements ValidationInterface
         foreach ($this->validators as $field => $validators) {
             foreach ($validators as $validator) {
                 if (true !== is_object($validator)) {
-                    throw new Exception("One of the validators is not valid");
+                    throw new ValidationException(
+                        "One of the validators is not valid"
+                    );
                 }
 
                 /**
@@ -545,24 +547,25 @@ class Validation extends Injectable implements ValidationInterface
                 /**
                  * Check if the validation must be canceled if this validator fails
                  */
-                if (false === $validator->validate($this, $field)) {
-                    if ($validator->getOption("cancelOnFail")) {
-                        break;
-                    }
+                if (
+                    false === $validator->validate($this, $field) &&
+                    $validator->getOption("cancelOnFail")
+                ) {
+                    break;
                 }
             }
         }
 
         foreach ($this->combinedFieldsValidators as $scope) {
             if (true !== is_array($scope)) {
-                throw new Exception("The validator scope is not valid");
+                throw new ValidationException("The validator scope is not valid");
             }
 
             $field     = $scope[0];
             $validator = $scope[1];
 
             if (true !== is_object($validator)) {
-                throw new Exception("One of the validators is not valid");
+                throw new ValidationException("One of the validators is not valid");
             }
 
             /**
@@ -576,10 +579,11 @@ class Validation extends Injectable implements ValidationInterface
             /**
              * Check if the validation must be canceled if this validator fails
              */
-            if (false === $validator->validate($this, $field)) {
-                if ($validator->getOption("cancelOnFail")) {
-                    break;
-                }
+            if (
+                false === $validator->validate($this, $field) &&
+                $validator->getOption("cancelOnFail")
+            ) {
+                break;
             }
         }
 
@@ -600,7 +604,7 @@ class Validation extends Injectable implements ValidationInterface
      * @param ValidatorInterface $validator
      *
      * @return bool
-     * @throws Exception
+     * @throws ValidationException
      */
     protected function preChecking(
         array|string $field,
@@ -608,7 +612,7 @@ class Validation extends Injectable implements ValidationInterface
     ): bool {
         $results = [];
 
-        if (true === is_array($field)) {
+        if (is_array($field)) {
             foreach ($field as $singleField) {
                 $results[] = $this->preChecking($singleField, $validator);
 
@@ -628,7 +632,7 @@ class Validation extends Injectable implements ValidationInterface
 
                 $value = $this->getValue($field);
 
-                if (true === is_array($allowEmpty)) {
+                if (is_array($allowEmpty)) {
                     if (in_array($value, $allowEmpty, true)) {
                         return true;
                     }

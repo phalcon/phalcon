@@ -15,7 +15,7 @@ namespace Phalcon\Filter\Validation\Validator;
 
 use Phalcon\Filter\Validation;
 use Phalcon\Filter\Validation\AbstractValidator;
-use Phalcon\Filter\Validation\Exception;
+use Phalcon\Filter\Validation\Exception as ValidationException;
 
 use function in_array;
 use function is_array;
@@ -86,15 +86,15 @@ class ExclusionIn extends AbstractValidator
          */
         $domain = $this->getOption("domain");
         if (
-            true === is_array($domain) &&
+            is_array($domain) &&
             true === isset($domain[$field]) &&
-            true === is_array($domain[$field])
+            is_array($domain[$field])
         ) {
             $domain = $domain[$field];
         }
 
         if (true !== is_array($domain)) {
-            throw new Exception("Option 'domain' must be an array");
+            throw new ValidationException("Option 'domain' must be an array");
         }
 
         $strict = false;
@@ -102,7 +102,7 @@ class ExclusionIn extends AbstractValidator
             $strict = $this->checkArray($this->getOption("strict"), $field);
 
             if (true !== is_bool($strict)) {
-                throw new Exception("Option 'strict' must be a bool");
+                throw new ValidationException("Option 'strict' must be a bool");
             }
         }
 

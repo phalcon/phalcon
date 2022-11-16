@@ -66,7 +66,7 @@ class Flatten
      */
     private function processArray(array $data, $item, bool $deep): array
     {
-        if (true === is_array($item) && true !== $deep) {
+        if (is_array($item) && true !== $deep) {
             $data = array_merge($data, array_values($item));
         }
 
@@ -82,7 +82,7 @@ class Flatten
      */
     private function processArrayDeep(array $data, $item, bool $deep): array
     {
-        if (true === is_array($item) && true === $deep) {
+        if (is_array($item) && true === $deep) {
             $data = array_merge($data, $this->__invoke($item, true));
         }
 

@@ -134,7 +134,7 @@ class Url extends AbstractInjectionAware implements UrlInterface
             $baseUri = $this->getBaseUri();
         }
 
-        if (true === is_array($uri)) {
+        if (is_array($uri)) {
             if (true !== isset($uri["for"])) {
                 throw new Exception(
                     "It's necessary to define the route name with the parameter 'for'"

@@ -120,7 +120,7 @@ class Tag
      */
     public static function appendTitle(array|string $title): void
     {
-        if (true === is_array($title)) {
+        if (is_array($title)) {
             self::$documentAppendTitle = $title;
         } else {
             self::$documentAppendTitle[] = $title;
@@ -868,7 +868,7 @@ class Tag
      */
     public static function prependTitle(array|string $title): void
     {
-        if (true === is_array($title)) {
+        if (is_array($title)) {
             self::$documentPrependTitle = $title;
         } else {
             self::$documentPrependTitle[] = $title;
@@ -1007,7 +1007,7 @@ class Tag
         $newCode = $code;
         foreach ($attrs as $key => $value) {
             if (true === is_string($key) && null !== $value) {
-                if (true === is_array($value) || true === is_resource($value)) {
+                if (is_array($value) || true === is_resource($value)) {
                     throw new Exception(
                         "Value at index: '" . $key . "' type: '"
                         . gettype($value) . "' cannot be rendered"
@@ -1162,7 +1162,7 @@ class Tag
     {
         if (
             true === $merge &&
-            true === is_array(self::$displayValues)
+            is_array(self::$displayValues)
         ) {
             self::$displayValues = array_merge(self::$displayValues, $values);
         } else {

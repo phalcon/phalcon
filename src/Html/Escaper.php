@@ -87,7 +87,7 @@ class Escaper implements EscaperInterface
 
             $key = trim($key);
 
-            if (true === is_array($value)) {
+            if (is_array($value)) {
                 $value = implode(" ", $value);
             }
 

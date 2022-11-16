@@ -79,7 +79,7 @@ abstract class AbstractCache implements CacheInterface
      */
     protected function checkKeys($keys): void
     {
-        if (!(true === is_array($keys) || $keys instanceof Traversable)) {
+        if (!(is_array($keys) || $keys instanceof Traversable)) {
             $exception = $this->getExceptionClass();
             throw new $exception(
                 "The keys need to be an array or instance of Traversable"

@@ -47,7 +47,7 @@ class Pluck
      */
     private function checkArray(array $filtered, string $element, $item): array
     {
-        if (true === is_array($item) && isset($item[$element])) {
+        if (is_array($item) && isset($item[$element])) {
             $filtered[] = $item[$element];
         }
 
