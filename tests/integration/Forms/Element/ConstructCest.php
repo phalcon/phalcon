@@ -26,7 +26,7 @@ class ConstructCest
     /**
      * Tests Phalcon\Forms\Element\* :: __construct()
      *
-     * @dataProvider getExamples
+     * @dataProvider getExamplesWithoutSelect
      *
      * @param IntegrationTester $I
      * @param Example           $example

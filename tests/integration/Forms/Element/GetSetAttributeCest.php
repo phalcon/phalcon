@@ -26,7 +26,7 @@ class GetSetAttributeCest
     /**
      * Tests Phalcon\Forms\Element\* :: getAttribute()/setAttribute()
      *
-     * @dataProvider getExamples
+     * @dataProvider getExamplesWithoutSelect
      *
      * @param IntegrationTester $I
      * @param Example           $example
