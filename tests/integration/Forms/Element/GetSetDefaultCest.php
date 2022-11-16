@@ -27,7 +27,6 @@ use Phalcon\Forms\Element\Select;
 use Phalcon\Forms\Element\Submit;
 use Phalcon\Forms\Element\Text;
 use Phalcon\Forms\Element\TextArea;
-
 use Phalcon\Tests\Fixtures\Traits\FormsTrait;
 
 use function uniqid;
