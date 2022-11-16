@@ -47,8 +47,8 @@ class GetSetAttributesCest
     {
         $I->wantToTest('Forms\Element\* - getAttributes()/setAttributes() - ' . $example[0]);
 
-        $name   = uniqid();
-        $data  = [
+        $name    = uniqid();
+        $data    = [
             'one'   => 'two',
             'three' => 'four',
         ];

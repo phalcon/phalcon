@@ -62,7 +62,7 @@ class GetCest
         $I->expectThrowable(
             new Exception('Element with ID=address is not part of the form'),
             function () use ($form) {
-                $loginForm = $form->get('address');
+                $form->get('address');
             }
         );
     }

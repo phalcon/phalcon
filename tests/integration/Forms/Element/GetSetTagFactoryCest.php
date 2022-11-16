@@ -84,7 +84,7 @@ class GetSetTagFactoryCest
         $element->setForm($form);
 
         $expected = sprintf('<input type="text" id="%s" name="%s" />', $name, $name);
-        $actual = $element->render();
+        $actual   = $element->render();
         $I->assertSame($expected, $actual);
 
         /**
@@ -122,7 +122,7 @@ class GetSetTagFactoryCest
          * From DI
          */
         $expected = sprintf('<input type="text" id="%s" name="%s" />', $name, $name);
-        $actual = $element->render();
+        $actual   = $element->render();
         $I->assertSame($expected, $actual);
 
         $expected = $tagFactoryOne;
