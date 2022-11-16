@@ -52,5 +52,4 @@ class GetSetUserOptionCest
         $actual   = $object->getUserOption('one', 'fallback');
         $I->assertSame($expected, $actual);
     }
-
 }

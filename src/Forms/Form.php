@@ -950,7 +950,7 @@ class Form extends Injectable implements Countable, Iterator, AttributesInterfac
      * @return array
      */
     private function processElements(
-        bool $type,
+        ?bool $type,
         ElementInterface $element,
         array $elements,
         string $name,
