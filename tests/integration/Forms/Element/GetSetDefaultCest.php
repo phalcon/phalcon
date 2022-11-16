@@ -28,10 +28,14 @@ use Phalcon\Forms\Element\Submit;
 use Phalcon\Forms\Element\Text;
 use Phalcon\Forms\Element\TextArea;
 
+use Phalcon\Tests\Fixtures\Traits\FormsTrait;
+
 use function uniqid;
 
 class GetSetDefaultCest
 {
+    use FormsTrait;
+
     /**
      * Tests Phalcon\Forms\Element\* :: getDefault()/setDefault()
      *
@@ -59,26 +63,5 @@ class GetSetDefaultCest
         $expected = $name;
         $actual   = $object->getDefault();
         $I->assertSame($expected, $actual);
-    }
-
-    /**
-     * @return string[][]
-     */
-    private function getExamples(): array
-    {
-        return [
-            ["Check", Check::class],
-            ["Date", Date::class],
-            ["Email", Email::class],
-            ["File", File::class],
-            ["Hidden", Hidden::class],
-            ["Numeric", Numeric::class],
-            ["Password", Password::class],
-            ["Radio", Radio::class],
-            ["Select", Select::class],
-            ["Submit", Submit::class],
-            ["Text", Text::class],
-            ["TextArea", TextArea::class],
-        ];
     }
 }
