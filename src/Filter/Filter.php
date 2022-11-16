@@ -190,7 +190,7 @@ class Filter implements FilterInterface
         /**
          * Filter is an array
          */
-        if (true === is_array($sanitizers)) {
+        if (is_array($sanitizers)) {
             return $this->processArraySanitizers($sanitizers, $value, $noRecursive);
         }
 
@@ -198,7 +198,7 @@ class Filter implements FilterInterface
          * Apply a single sanitizer to the values. Check if the values are an
          * array
          */
-        if (true === is_array($value) && true !== $noRecursive) {
+        if (is_array($value) && true !== $noRecursive) {
             return $this->processArrayValues($value, $sanitizers);
         }
 
@@ -377,7 +377,7 @@ class Filter implements FilterInterface
         array $sanitizerParams,
         bool $noRecursive
     ) {
-        if (true === is_array($value) && true !== $noRecursive) {
+        if (is_array($value) && true !== $noRecursive) {
             $value = $this->processArrayValues(
                 $value,
                 $sanitizerName,
@@ -424,7 +424,7 @@ class Filter implements FilterInterface
          * If `sanitizer` is an array, that means that the sanitizerKey
          * is the name of the sanitizer.
          */
-        if (true === is_array($sanitizer)) {
+        if (is_array($sanitizer)) {
             return [$sanitizerKey, $sanitizer];
         }
 

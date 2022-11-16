@@ -140,7 +140,7 @@ abstract class Select
                 "</option>" . PHP_EOL
             );
         } else {
-            if (true === is_array($options)) {
+            if (is_array($options)) {
                 /**
                  * Create the SELECT's option from an array
                  */
@@ -178,7 +178,7 @@ abstract class Select
             $escaped = $escaper->html((string) $optionValue);
 //            $escaped = htmlspecialchars($optionValue);
 
-            if (true === is_array($optionText)) {
+            if (is_array($optionText)) {
                 $code .= "\t<optgroup label=\""
                     . $escaped . "\">" . PHP_EOL
                     . self::optionsFromArray($optionText, $value, $closeOption)
@@ -187,7 +187,7 @@ abstract class Select
                 continue;
             }
 
-            if (true === is_array($value)) {
+            if (is_array($value)) {
                 if (true === in_array($optionValue, $value)) {
                     $code .= "\t<option selected=\"selected\" value=\""
                         . $escaped . "\">" . $optionText . $closeOption;
@@ -226,7 +226,7 @@ abstract class Select
         $code   = "";
         $params = null;
 
-        if (true === is_array($using)) {
+        if (is_array($using)) {
             if (count($using) !== 2) {
                 throw new Exception("Parameter 'using' requires two values");
             }
@@ -237,7 +237,7 @@ abstract class Select
 
         $escaper = BaseTag::getEscaperService();
         foreach ($resultset as $option) {
-            if (true === is_array($using)) {
+            if (is_array($using)) {
                 if (true === is_object($option)) {
                     if (true === method_exists($option, "readAttribute")) {
                         $optionValue = $option->readAttribute($usingZero);
@@ -264,7 +264,7 @@ abstract class Select
                  * If the value is equal to the option's value we mark it as
                  * selected
                  */
-                if (true === is_array($value)) {
+                if (is_array($value)) {
                     if (true === in_array($optionValue, $value)) {
                         $code .= "\t<option selected=\"selected\" value=\""
                             . $optionValue . "\">"

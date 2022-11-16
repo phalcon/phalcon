@@ -243,7 +243,7 @@ class Gettext extends AbstractAdapter implements ArrayAccess
         if (true !== empty($directory)) {
             $this->directory = $directory;
 
-            if (true === is_array($directory)) {
+            if (is_array($directory)) {
                 foreach ($directory as $index => $item) {
                     bindtextdomain($index, $item);
                 }

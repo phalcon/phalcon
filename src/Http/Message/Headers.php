@@ -216,7 +216,7 @@ class Headers extends Collection
         $headers,
         ?UriInterface $uri = null
     ): Headers {
-        if (true === is_array($headers)) {
+        if (is_array($headers)) {
             $collection = $this->populateHeaders($headers);
             $collection = $this->checkHeaderHost($collection, $uri);
         } else {

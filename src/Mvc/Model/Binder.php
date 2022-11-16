@@ -96,7 +96,7 @@ class Binder implements BinderInterface
         $this->boundModels = [];
         $paramsCache       = $this->getParamsFromCache($cacheKey);
 
-        if (true === is_array($paramsCache)) {
+        if (is_array($paramsCache)) {
             foreach ($paramsCache as $paramKey => $className) {
                 $paramValue                      = $params[$paramKey];
                 $boundModel                      = $this->findBoundModel($paramValue, $className);
@@ -244,7 +244,7 @@ class Binder implements BinderInterface
                     }
                 }
 
-                if (true === is_array($realClasses)) {
+                if (is_array($realClasses)) {
                     if (true !== isset($realClasses[$paramKey])) {
                         throw new Exception(
                             "You should provide model class name for "

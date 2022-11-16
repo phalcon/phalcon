@@ -93,7 +93,7 @@ class Config extends Collection implements ConfigInterface
 
         $this->clear();
 
-        if (true === is_array($toMerge)) {
+        if (is_array($toMerge)) {
             $result = $this->internalMerge($source, $toMerge);
 
             $this->init($result);
@@ -218,9 +218,9 @@ class Config extends Collection implements ConfigInterface
     {
         foreach ($target as $key => $value) {
             if (
-                true === is_array($value) &&
+                is_array($value) &&
                 true === isset($source[$key]) &&
-                true === is_array($source[$key])
+                is_array($source[$key])
             ) {
                 $source[$key] = $this->internalMerge($source[$key], $value);
 
@@ -246,7 +246,7 @@ class Config extends Collection implements ConfigInterface
 
         $this->lowerKeys[$key] = $element;
 
-        if (true === is_array($value)) {
+        if (is_array($value)) {
             $this->data[$element] = new Config($value);
 
             return;

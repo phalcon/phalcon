@@ -53,7 +53,7 @@ class Dynamic
 
         if (
             false !== preg_match_all($pattern, $text, $matches, 2) &&
-            true === is_array($matches)
+            is_array($matches)
         ) {
             foreach ($matches as $match) {
                 if (true !== isset($match[0]) || true !== isset($match[1])) {

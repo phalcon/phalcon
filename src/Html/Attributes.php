@@ -76,7 +76,7 @@ class Attributes extends Collection implements RenderInterface
         $result = "";
         foreach ($results as $key => $value) {
             if (true === is_string($key) && null !== $value) {
-                if (true === is_array($value) || true === is_resource($value)) {
+                if (is_array($value) || true === is_resource($value)) {
                     throw new Exception(
                         'Value at index: "' . $key . '" type: "' .
                         gettype($value) . '" cannot be rendered'

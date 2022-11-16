@@ -352,7 +352,7 @@ class ServerRequestFactory implements ServerRequestFactoryInterface, RequestMeth
     ) {
         $value = $headers->get($name, $defaultValue);
 
-        if (true === is_array($value)) {
+        if (is_array($value)) {
             $value = implode(",", $value);
         }
 
@@ -541,7 +541,7 @@ class ServerRequestFactory implements ServerRequestFactoryInterface, RequestMeth
             /**
              * file is array with 'tmp_name'
              */
-            if (true === is_array($file) && true === isset($file["tmp_name"])) {
+            if (is_array($file) && true === isset($file["tmp_name"])) {
                 $collection->set($key, $this->createUploadedFile($file));
                 continue;
             }
@@ -549,7 +549,7 @@ class ServerRequestFactory implements ServerRequestFactoryInterface, RequestMeth
             /**
              * file is array of elements - recursion
              */
-            if (true === is_array($file)) {
+            if (is_array($file)) {
                 $data = $this->parseUploadedFiles($file);
 
                 $collection->set($key, $data->toArray());

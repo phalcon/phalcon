@@ -347,7 +347,7 @@ class Debug
                 . '<li><a href="#error-tabs-4">Included Files</a></li>'
                 . '<li><a href="#error-tabs-5">Memory</a></li>';
 
-            if (true === is_array($this->data)) {
+            if (is_array($this->data)) {
                 $html .= '<li><a href="#error-tabs-6">Variables</a></li>';
             }
 
@@ -519,7 +519,7 @@ class Debug
                 $varDump = '(empty string)';
             } elseif (true === is_scalar($argument)) {
                 $varDump = $this->escapeString((string) $argument);
-            } elseif (true === is_array($argument)) {
+            } elseif (is_array($argument)) {
                 $varDump = 'Array(' . $this->getArrayDump($argument, $number + 1) . ')';
             } elseif (true === is_object($argument)) {
                 $varDump = 'Object(' . get_class($argument) . ')';
@@ -595,7 +595,7 @@ class Debug
         /**
          * Recursively process the array and enclose it in []
          */
-        if (true === is_array($variable)) {
+        if (is_array($variable)) {
             return 'Array(' . $this->getArrayDump($variable) . ')';
         }
 
@@ -889,7 +889,7 @@ class Debug
     private function printExtraVariables(): string
     {
         $html = '';
-        if (true === is_array($this->data)) {
+        if (is_array($this->data)) {
             $html .= $this->printTableHeader('error-tabs-6', 'Key', 'Value');
 
             foreach ($this->data as $key => $value) {

@@ -296,7 +296,7 @@ class Dump
             $output .= $name . ' ';
         }
 
-        if (true === is_array($variable)) {
+        if (is_array($variable)) {
             $message = $this->getOutputBold('Array')
                 . ' '
                 . $this->getOutputParenthesis('count')

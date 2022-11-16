@@ -491,7 +491,7 @@ class Memory extends AbstractAdapter
             $localAccess = [$accessList];
         }
 
-        if (true === is_array($accessList)) {
+        if (is_array($accessList)) {
             foreach ($localAccess as $accessName) {
                 $accessKey = $componentName . '!' . $accessName;
                 if (true === isset($this->accessList[$accessKey])) {
@@ -870,7 +870,7 @@ class Memory extends AbstractAdapter
         $this->checkExists($this->roles, $roleName, 'Role');
         $this->checkExists($this->componentsNames, $componentName, 'Component');
 
-        if (true === is_array($access)) {
+        if (is_array($access)) {
             foreach ($access as $accessName) {
                 $accessKey = $componentName . '!' . $accessName;
                 if (true !== isset($this->accessList[$accessKey])) {

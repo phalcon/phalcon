@@ -59,7 +59,7 @@ abstract class AbstractValidator implements ValidatorInterface
             (new Whitelist())($options, ["template", "message", 0])
         );
 
-        if (true === is_array($template)) {
+        if (is_array($template)) {
             $this->setTemplates($template);
         } elseif (true === is_string($template)) {
             $this->setTemplate($template);
@@ -165,7 +165,7 @@ abstract class AbstractValidator implements ValidatorInterface
          */
         if (
             "attribute" === $key &&
-            true === is_array($value) &&
+            is_array($value) &&
             true === isset($value[$key])
         ) {
             return $value[$key];
@@ -223,7 +223,7 @@ abstract class AbstractValidator implements ValidatorInterface
      */
     protected function checkArray(mixed $value, string $field): mixed
     {
-        if (true === is_array($value)) {
+        if (is_array($value)) {
             $value = $value[$field] ?? $value;
         }
 
@@ -278,7 +278,7 @@ abstract class AbstractValidator implements ValidatorInterface
     {
         $allowEmpty = $this->getOption("allowEmpty", false);
 
-        if (true === is_array($allowEmpty)) {
+        if (is_array($allowEmpty)) {
             $allowEmpty = true === isset($allowEmpty[$field])
                 ? $allowEmpty[$field]
                 : false;
@@ -302,7 +302,7 @@ abstract class AbstractValidator implements ValidatorInterface
         array $replacements = []
     ): Message {
         $singleField = $field;
-        if (true === is_array($field)) {
+        if (is_array($field)) {
             $singleField = implode(", ", $field);
         }
 
@@ -315,7 +315,7 @@ abstract class AbstractValidator implements ValidatorInterface
 
         return new Message(
             strtr($this->getTemplate($singleField), $replacements),
-            $field,
+            $singleField,
             get_class($this),
             $this->prepareCode($singleField)
         );

@@ -395,7 +395,7 @@ final class ServerRequest extends AbstractRequest implements ServerRequestInterf
     private function checkUploadedFiles(array $files): void
     {
         foreach ($files as $file) {
-            if (true === is_array($file)) {
+            if (is_array($file)) {
                 $this->checkUploadedFiles($file);
             } else {
                 if (!($file instanceof UploadedFileInterface)) {

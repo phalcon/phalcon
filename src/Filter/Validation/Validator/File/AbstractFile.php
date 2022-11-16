@@ -124,7 +124,7 @@ abstract class AbstractFile extends AbstractValidator
         $value = $validation->getValue($field);
 
         if (
-            true === is_array($value) &&
+            is_array($value) &&
             (
                 true !== isset($value["error"]) ||
                 true !== isset($value["tmp_name"]) ||
@@ -168,7 +168,7 @@ abstract class AbstractFile extends AbstractValidator
         $value = $validation->getValue($field);
 
         if (
-            true === is_array($value) &&
+            is_array($value) &&
             (
                 true !== isset($value["name"]) ||
                 true !== isset($value["type"]) ||
@@ -221,7 +221,7 @@ abstract class AbstractFile extends AbstractValidator
             true === empty($post) &&
             true === empty($files) &&
             (int) $length > 0 ||
-            true === is_array($value) &&
+            is_array($value) &&
             true === isset($value["error"]) &&
             $value["error"] === UPLOAD_ERR_INI_SIZE
         ) {
@@ -327,7 +327,7 @@ abstract class AbstractFile extends AbstractValidator
         $value = $validation->getValue($field);
 
         return true === empty($value) ||
-            true === is_array($value) &&
+            is_array($value) &&
             true === isset($value["error"]) &&
             $value["error"] === UPLOAD_ERR_NO_FILE;
     }

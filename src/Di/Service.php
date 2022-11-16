@@ -179,7 +179,7 @@ class Service implements ServiceInterface
                 /**
                  * Array definitions require a 'className' parameter
                  */
-                if (true === is_array($instanceDefinition)) {
+                if (is_array($instanceDefinition)) {
                     $builder  = new Builder();
                     $instance = $builder->build(
                         $container,
