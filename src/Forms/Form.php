@@ -159,26 +159,15 @@ class Form extends Injectable implements Countable, Iterator, AttributesInterfac
              * Walk elements and add the element to a particular position
              */
             foreach ($this->elements as $key => $value) {
-                if ($key === $position) {
-                    if (true === $type) {
-                        /**
-                         * Add the element before position
-                         */
-                        $elements[$name] = $element;
-                        $elements[$key]  = $value;
-                    } else {
-                        /**
-                         * Add the element after position
-                         */
-                        $elements[$key]  = $value;
-                        $elements[$name] = $element;
-                    }
-                } else {
-                    /**
-                     * Copy the element to new array
-                     */
-                    $elements[$key] = $value;
-                }
+                $elements = $this->processElementByPosition(
+                    $key,
+                    $position,
+                    $type,
+                    $element,
+                    $elements,
+                    $name,
+                    $value
+                );
             }
 
             $this->elements = $elements;
@@ -656,10 +645,11 @@ class Form extends Injectable implements Countable, Iterator, AttributesInterfac
         /**
          * Check if there is a method 'beforeValidation'
          */
-        if (true === method_exists($this, "beforeValidation")) {
-            if (false === $this->beforeValidation($data, $entity)) {
-                return false;
-            }
+        if (
+            true === method_exists($this, "beforeValidation") &&
+            false === $this->beforeValidation($data, $entity)
+        ) {
+            return false;
         }
 
         $validationStatus = true;
@@ -947,5 +937,78 @@ class Form extends Injectable implements Countable, Iterator, AttributesInterfac
     public function valid(): bool
     {
         return isset($this->elementsIndexed[$this->position]);
+    }
+
+    /**
+     * @param bool|null        $type
+     * @param ElementInterface $element
+     * @param array            $elements
+     * @param string           $name
+     * @param mixed            $value
+     * @param string           $key
+     *
+     * @return array
+     */
+    private function processElements(
+        bool $type,
+        ElementInterface $element,
+        array $elements,
+        string $name,
+        mixed $value,
+        string $key
+    ): array {
+        if (true === $type) {
+            /**
+             * Add the element before position
+             */
+            $elements[$name] = $element;
+            $elements[$key]  = $value;
+        } else {
+            /**
+             * Add the element after position
+             */
+            $elements[$key]  = $value;
+            $elements[$name] = $element;
+        }
+
+        return $elements;
+    }
+
+    /**
+     * @param int|string       $key
+     * @param string           $position
+     * @param bool|null        $type
+     * @param ElementInterface $element
+     * @param mixed            $elements
+     * @param string           $name
+     * @param mixed            $value
+     *
+     * @return array|mixed
+     */
+    private function processElementByPosition(
+        int|string $key,
+        string $position,
+        ?bool $type,
+        ElementInterface $element,
+        mixed $elements,
+        string $name,
+        mixed $value
+    ): mixed {
+        if ($key === $position) {
+            $elements = $this->processElements(
+                $type,
+                $element,
+                $elements,
+                $name,
+                $value,
+                $key
+            );
+        } else {
+            /**
+             * Copy the element to new array
+             */
+            $elements[$key] = $value;
+        }
+        return $elements;
     }
 }

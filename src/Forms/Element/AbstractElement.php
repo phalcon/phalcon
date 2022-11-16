@@ -18,6 +18,7 @@ use Phalcon\Di\Di;
 use Phalcon\Filter\Validation\ValidatorInterface;
 use Phalcon\Forms\Form;
 use Phalcon\Html\Escaper;
+use Phalcon\Html\Escaper\EscaperInterface;
 use Phalcon\Html\TagFactory;
 use Phalcon\Messages\MessageInterface;
 use Phalcon\Messages\Messages;
@@ -603,9 +604,8 @@ abstract class AbstractElement implements ElementInterface
              */
             if (null === $tagFactory) {
                 $container = Di::getDefault();
-                if (true === $container->has("escaper")) {
-                    $escaper = $container->getShared("escaper");
-                } else {
+                $escaper   = $container->getShared("escaper");
+                if (!($escaper instanceof EscaperInterface)) {
                     $escaper = new Escaper();
                 }
 
