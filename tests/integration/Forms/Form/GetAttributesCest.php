@@ -101,13 +101,14 @@ class GetAttributesCest
         $I->assertEquals($expected, $actual);
 
         // Test action attribute
-        $form->setAction('/some-url');
+        $url = '/some-url';
+        $form->setAction($url);
 
-        $expected = '/some-url';
+        $expected = $url;
         $actual   = $form->getAction();
         $I->assertEquals($expected, $actual);
 
-        $expected = '/some-url';
+        $expected = $url;
         $actual   = $form->getAttributes()->get('action');
         $I->assertEquals($expected, $actual);
 

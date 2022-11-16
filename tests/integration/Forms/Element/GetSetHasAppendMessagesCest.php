@@ -15,25 +15,16 @@ namespace Phalcon\Tests\Integration\Forms\Element;
 
 use Codeception\Example;
 use IntegrationTester;
-use Phalcon\Forms\Element\Check;
-use Phalcon\Forms\Element\Date;
-use Phalcon\Forms\Element\Email;
-use Phalcon\Forms\Element\File;
-use Phalcon\Forms\Element\Hidden;
-use Phalcon\Forms\Element\Numeric;
-use Phalcon\Forms\Element\Password;
-use Phalcon\Forms\Element\Radio;
-use Phalcon\Forms\Element\Select;
-use Phalcon\Forms\Element\Submit;
-use Phalcon\Forms\Element\Text;
-use Phalcon\Forms\Element\TextArea;
 use Phalcon\Messages\Message;
 use Phalcon\Messages\Messages;
+use Phalcon\Tests\Fixtures\Traits\FormsTrait;
 
 use function uniqid;
 
 class GetSetHasAppendMessagesCest
 {
+    use FormsTrait;
+
     /**
      * Tests Phalcon\Forms\Element\* :: getMessages()/setMessages()/hasMessages()/appendMessage()
      *
@@ -49,10 +40,10 @@ class GetSetHasAppendMessagesCest
     {
         $I->wantToTest('Forms\Element\* - getMessages()/setMessages()/appendMessage() - ' . $example[0]);
 
-        $name   = uniqid();
-        $one    = new Message('one', 'two');
-        $two    = new Message('three', 'four');
-        $three  = new Message('five', 'six');
+        $name     = uniqid();
+        $one      = new Message('one', 'two');
+        $two      = new Message('three', 'four');
+        $three    = new Message('five', 'six');
         $messages = new Messages(
             [
                 $one,
@@ -85,26 +76,5 @@ class GetSetHasAppendMessagesCest
 
         $actual = $object->hasMessages();
         $I->assertTrue($actual);
-    }
-
-    /**
-     * @return string[][]
-     */
-    private function getExamples(): array
-    {
-        return [
-            ["Check", Check::class],
-            ["Date", Date::class],
-            ["Email", Email::class],
-            ["File", File::class],
-            ["Hidden", Hidden::class],
-            ["Numeric", Numeric::class],
-            ["Password", Password::class],
-            ["Radio", Radio::class],
-            ["Select", Select::class],
-            ["Submit", Submit::class],
-            ["Text", Text::class],
-            ["TextArea", TextArea::class],
-        ];
     }
 }

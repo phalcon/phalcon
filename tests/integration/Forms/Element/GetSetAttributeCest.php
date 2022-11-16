@@ -15,22 +15,14 @@ namespace Phalcon\Tests\Integration\Forms\Element;
 
 use Codeception\Example;
 use IntegrationTester;
-use Phalcon\Forms\Element\Check;
-use Phalcon\Forms\Element\Date;
-use Phalcon\Forms\Element\Email;
-use Phalcon\Forms\Element\File;
-use Phalcon\Forms\Element\Hidden;
-use Phalcon\Forms\Element\Numeric;
-use Phalcon\Forms\Element\Password;
-use Phalcon\Forms\Element\Radio;
-use Phalcon\Forms\Element\Submit;
-use Phalcon\Forms\Element\Text;
-use Phalcon\Forms\Element\TextArea;
+use Phalcon\Tests\Fixtures\Traits\FormsTrait;
 
 use function uniqid;
 
 class GetSetAttributeCest
 {
+    use FormsTrait;
+
     /**
      * Tests Phalcon\Forms\Element\* :: getAttribute()/setAttribute()
      *
@@ -46,7 +38,7 @@ class GetSetAttributeCest
     {
         $I->wantToTest('Forms\Element\* - getAttribute()/setAttribute() - ' . $example[0]);
 
-        $name  = uniqid();
+        $name = uniqid();
         $data = [
             'one'   => 'two',
             'three' => 'four',
@@ -70,25 +62,5 @@ class GetSetAttributeCest
         $expected = 'four';
         $actual   = $object->getAttribute('one', 'fallback');
         $I->assertSame($expected, $actual);
-    }
-
-    /**
-     * @return string[][]
-     */
-    private function getExamples(): array
-    {
-        return [
-            ["Check", Check::class],
-            ["Date", Date::class],
-            ["Email", Email::class],
-            ["File", File::class],
-            ["Hidden", Hidden::class],
-            ["Numeric", Numeric::class],
-            ["Password", Password::class],
-            ["Radio", Radio::class],
-            ["Submit", Submit::class],
-            ["Text", Text::class],
-            ["TextArea", TextArea::class],
-        ];
     }
 }
