@@ -24,23 +24,15 @@ use Phalcon\Logger\Item;
 class Line extends AbstractFormatter
 {
     /**
-     * Format applied to each message
-     *
-     * @var string
-     */
-    protected string $format;
-
-    /**
      * Line constructor.
      *
      * @param string $format
      * @param string $dateFormat
      */
     public function __construct(
-        string $format = '[%date%][%level%] %message%',
+        protected string $format = '[%date%][%level%] %message%',
         string $dateFormat = 'c'
     ) {
-        $this->format     = $format;
         $this->dateFormat = $dateFormat;
     }
 
@@ -67,6 +59,8 @@ class Line extends AbstractFormatter
     }
 
     /**
+     * Return the format applied to each message
+     *
      * @return string
      */
     public function getFormat(): string
@@ -75,10 +69,16 @@ class Line extends AbstractFormatter
     }
 
     /**
+     * Set the format applied to each message
+     *
      * @param string $format
+     *
+     * @return Line
      */
-    public function setFormat(string $format): void
+    public function setFormat(string $format): Line
     {
         $this->format = $format;
+
+        return $this;
     }
 }

@@ -87,9 +87,8 @@ abstract class AbstractAdapter implements AdapterInterface
     }
 
     /**
-     * Adds a message to the queue
-     */
-    /**
+     * Add a message to the queue
+     *
      * @param Item $item
      *
      * @return AdapterInterface
@@ -102,7 +101,7 @@ abstract class AbstractAdapter implements AdapterInterface
     }
 
     /**
-     * Starts a transaction
+     * Start a transaction
      */
     public function begin(): AdapterInterface
     {
@@ -112,7 +111,7 @@ abstract class AbstractAdapter implements AdapterInterface
     }
 
     /**
-     * Commits the internal transaction
+     * Commit the internal transaction
      *
      * @return AdapterInterface
      * @throws Exception
@@ -135,6 +134,8 @@ abstract class AbstractAdapter implements AdapterInterface
     }
 
     /**
+     * Return the formatter used
+     *
      * @return FormatterInterface
      */
     public function getFormatter(): FormatterInterface
@@ -151,6 +152,8 @@ abstract class AbstractAdapter implements AdapterInterface
     /**
      * Returns the whether the logger is currently in an active transaction or
      * not
+     *
+     * @return bool
      */
     public function inTransaction(): bool
     {
@@ -161,6 +164,8 @@ abstract class AbstractAdapter implements AdapterInterface
      * Processes the message in the adapter
      *
      * @param Item $item
+     *
+     * @return void
      */
     abstract public function process(Item $item): void;
 
@@ -180,8 +185,7 @@ abstract class AbstractAdapter implements AdapterInterface
 
     /**
      * Sets the message formatter
-     */
-    /**
+     *
      * @param FormatterInterface $formatter
      *
      * @return AdapterInterface
@@ -194,8 +198,21 @@ abstract class AbstractAdapter implements AdapterInterface
     }
 
     /**
+     * Returns the formatted item
+     *
+     * @param Item $item
+     *
+     * @return string
+     */
+    protected function getFormattedItem(Item $item): string
+    {
+        return $this->getFormatter()->format($item);
+    }
+
+    /**
      * Checks if the transaction is active
      *
+     * @return void
      * @throws Exception
      */
     private function checkTransaction(): void
@@ -207,6 +224,8 @@ abstract class AbstractAdapter implements AdapterInterface
 
     /**
      * Resets the transaction flag and queue array
+     *
+     * @return void
      */
     private function resetTransaction(): void
     {

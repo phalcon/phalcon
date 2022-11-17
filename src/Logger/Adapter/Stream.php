@@ -62,13 +62,6 @@ class Stream extends AbstractAdapter
     protected string $mode = 'ab';
 
     /**
-     * Stream name
-     *
-     * @var string
-     */
-    protected string $name;
-
-    /**
      * Path options
      *
      * @var array
@@ -83,14 +76,15 @@ class Stream extends AbstractAdapter
      *
      * @throws Exception
      */
-    public function __construct(string $name, array $options = [])
-    {
+    public function __construct(
+        protected string $name,
+        array $options = []
+    ) {
         $mode = $options['mode'] ?? 'ab';
         if (false !== mb_strpos($mode, 'r')) {
             throw new Exception('Adapter cannot be opened in read mode');
         }
 
-        $this->name = $name;
         $this->mode = $mode;
     }
 

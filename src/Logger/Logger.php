@@ -40,9 +40,9 @@ class Logger extends AbstractLogger implements LoggerInterface
      * @throws Exception
      * @throws LoggerException
      */
-    public function alert(string $message, array $context = array()): void
+    public function alert(string $message, array $context = []): void
     {
-        $this->log(self::ALERT, $message, $context);
+        $this->addMessage(Enum::ALERT, $message, $context);
     }
 
     /**
@@ -57,9 +57,9 @@ class Logger extends AbstractLogger implements LoggerInterface
      * @throws Exception
      * @throws LoggerException
      */
-    public function critical(string $message, array $context = array()): void
+    public function critical(string $message, array $context = []): void
     {
-        $this->log(self::CRITICAL, $message, $context);
+        $this->addMessage(Enum::CRITICAL, $message, $context);
     }
 
     /**
@@ -72,9 +72,9 @@ class Logger extends AbstractLogger implements LoggerInterface
      * @throws Exception
      * @throws LoggerException
      */
-    public function debug(string $message, array $context = array()): void
+    public function debug(string $message, array $context = []): void
     {
-        $this->log(self::DEBUG, $message, $context);
+        $this->addMessage(Enum::DEBUG, $message, $context);
     }
 
     /**
@@ -87,9 +87,9 @@ class Logger extends AbstractLogger implements LoggerInterface
      * @throws Exception
      * @throws LoggerException
      */
-    public function emergency(string $message, array $context = array()): void
+    public function emergency(string $message, array $context = []): void
     {
-        $this->log(self::EMERGENCY, $message, $context);
+        $this->addMessage(Enum::EMERGENCY, $message, $context);
     }
 
     /**
@@ -103,9 +103,9 @@ class Logger extends AbstractLogger implements LoggerInterface
      * @throws Exception
      * @throws LoggerException
      */
-    public function error(string $message, array $context = array()): void
+    public function error(string $message, array $context = []): void
     {
-        $this->log(self::ERROR, $message, $context);
+        $this->addMessage(Enum::ERROR, $message, $context);
     }
 
     /**
@@ -120,27 +120,27 @@ class Logger extends AbstractLogger implements LoggerInterface
      * @throws Exception
      * @throws LoggerException
      */
-    public function info(string $message, array $context = array()): void
+    public function info(string $message, array $context = []): void
     {
-        $this->log(self::INFO, $message, $context);
+        $this->addMessage(Enum::INFO, $message, $context);
     }
 
     /**
      * Logs with an arbitrary level.
      *
-     * @param mixed $level
-     * @param mixed $message
-     * @param array $context
+     * @param mixed  $level
+     * @param string $message
+     * @param array  $context
      *
      * @return void
      * @throws Exception
      * @throws LoggerException
      */
-    public function log($level, $message, array $context = []): void
+    public function log(mixed $level, string $message, array $context = []): void
     {
         $intLevel = $this->getLevelNumber($level);
 
-        $this->addMessage($intLevel, (string) $message, $context);
+        $this->addMessage($intLevel, $message, $context);
     }
 
     /**
@@ -153,9 +153,9 @@ class Logger extends AbstractLogger implements LoggerInterface
      * @throws Exception
      * @throws LoggerException
      */
-    public function notice(string $message, array $context = array()): void
+    public function notice(string $message, array $context = []): void
     {
-        $this->log(self::NOTICE, $message, $context);
+        $this->addMessage(Enum::NOTICE, $message, $context);
     }
 
     /**
@@ -171,8 +171,8 @@ class Logger extends AbstractLogger implements LoggerInterface
      * @throws Exception
      * @throws LoggerException
      */
-    public function warning(string $message, array $context = array()): void
+    public function warning(string $message, array $context = []): void
     {
-        $this->log(self::WARNING, $message, $context);
+        $this->addMessage(Enum::WARNING, $message, $context);
     }
 }

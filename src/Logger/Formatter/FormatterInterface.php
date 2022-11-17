@@ -22,8 +22,7 @@ interface FormatterInterface
 {
     /**
      * Applies a format to an item
-     */
-    /**
+     *
      * @param Item $item
      *
      * @return string

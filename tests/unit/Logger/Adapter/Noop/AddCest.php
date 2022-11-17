@@ -16,6 +16,7 @@ namespace Phalcon\Tests\Unit\Logger\Adapter\Noop;
 use DateTimeImmutable;
 use DateTimeZone;
 use Phalcon\Logger\Adapter\Noop;
+use Phalcon\Logger\Enum;
 use Phalcon\Logger\Item;
 use Phalcon\Logger\Logger;
 use UnitTester;
@@ -45,21 +46,21 @@ class AddCest
         $item1 = new Item(
             'Message 1',
             'debug',
-            Logger::DEBUG,
+            Enum::DEBUG,
             $datetime
         );
 
         $item2 = new Item(
             'Message 2',
             'debug',
-            Logger::DEBUG,
+            Enum::DEBUG,
             $datetime
         );
 
         $item3 = new Item(
             'Message 3',
             'debug',
-            Logger::DEBUG,
+            Enum::DEBUG,
             $datetime
         );
 

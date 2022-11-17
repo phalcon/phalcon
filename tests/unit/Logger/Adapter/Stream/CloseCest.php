@@ -16,6 +16,7 @@ namespace Phalcon\Tests\Unit\Logger\Adapter\Stream;
 use DateTimeImmutable;
 use DateTimeZone;
 use Phalcon\Logger\Adapter\Stream;
+use Phalcon\Logger\Enum;
 use Phalcon\Logger\Exception;
 use Phalcon\Logger\Item;
 use Phalcon\Logger\Logger;
@@ -45,7 +46,7 @@ class CloseCest
         $item = new Item(
             'Message 1',
             'debug',
-            Logger::DEBUG,
+            Enum::DEBUG,
             $datetime
         );
         $adapter->process($item);
