@@ -29,31 +29,6 @@ use DateTimeImmutable;
 class Item
 {
     /**
-     * @var array
-     */
-    protected array $context = [];
-
-    /**
-     * @var string
-     */
-    protected string $message;
-
-    /**
-     * @var int
-     */
-    protected int $level;
-
-    /**
-     * @var string
-     */
-    protected string $levelName;
-
-    /**
-     * @var DateTimeImmutable
-     */
-    protected DateTimeImmutable $datetime;
-
-    /**
      * Item constructor.
      *
      * @param string            $message
@@ -63,17 +38,12 @@ class Item
      * @param array             $context
      */
     public function __construct(
-        string $message,
-        string $levelName,
-        int $level,
-        DateTimeImmutable $datetime,
-        array $context = []
+        protected string $message,
+        protected string $levelName,
+        protected int $level,
+        protected DateTimeImmutable $datetime,
+        protected array $context = []
     ) {
-        $this->message   = $message;
-        $this->levelName = $levelName;
-        $this->level     = $level;
-        $this->datetime  = $datetime;
-        $this->context   = $context;
     }
 
     /**

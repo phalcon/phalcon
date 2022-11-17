@@ -15,6 +15,7 @@ namespace Phalcon\Tests\Unit\Logger\Item;
 
 use DateTimeImmutable;
 use DateTimeZone;
+use Phalcon\Logger\Enum;
 use Phalcon\Logger\Item;
 use Phalcon\Logger\Logger;
 use UnitTester;
@@ -41,7 +42,7 @@ class GetContextCest
         $item     = new Item(
             'log message',
             'debug',
-            Logger::DEBUG,
+            Enum::DEBUG,
             $datetime,
             $context
         );

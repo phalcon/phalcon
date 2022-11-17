@@ -18,6 +18,7 @@ use DateTimeImmutable;
 use DateTimeZone;
 use LogicException;
 use Phalcon\Logger\Adapter\Stream;
+use Phalcon\Logger\Enum;
 use Phalcon\Logger\Item;
 use Phalcon\Logger\Logger;
 use UnitTester;
@@ -47,7 +48,7 @@ class ProcessCest
         $item = new Item(
             'Message 1',
             'debug',
-            Logger::DEBUG,
+            Enum::DEBUG,
             $datetime
         );
         $adapter->process($item);
@@ -97,7 +98,7 @@ class ProcessCest
                 $item     = new Item(
                     'Message 1',
                     'debug',
-                    Logger::DEBUG,
+                    Enum::DEBUG,
                     $datetime
                 );
                 $adapter->process($item);

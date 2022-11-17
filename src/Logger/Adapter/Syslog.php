@@ -14,6 +14,7 @@ declare(strict_types=1);
 namespace Phalcon\Logger\Adapter;
 
 use LogicException;
+use Phalcon\Logger\Enum;
 use Phalcon\Logger\Item;
 use Phalcon\Logger\Logger;
 
@@ -49,11 +50,6 @@ class Syslog extends AbstractAdapter
     protected int $facility = 0;
 
     /**
-     * @var string
-     */
-    protected string $name = '';
-
-    /**
      * @var bool
      */
     protected bool $opened = false;
@@ -69,9 +65,10 @@ class Syslog extends AbstractAdapter
      * @param string $name
      * @param array  $options
      */
-    public function __construct(string $name, array $options = [])
-    {
-        $this->name     = $name;
+    public function __construct(
+        protected string $name,
+        array $options = []
+    ) {
         $this->option   = $options['option'] ?? LOG_ODELAY;
         $this->facility = $options['facility'] ?? LOG_USER;
     }
@@ -97,9 +94,8 @@ class Syslog extends AbstractAdapter
      */
     public function process(Item $item): void
     {
-        $formatter = $this->getFormatter();
-        $message   = $formatter->format($item);
-        $result    = $this->openlog($this->name, $this->option, $this->facility);
+        $message = $this->getFormattedItem($item);
+        $result  = $this->openlog($this->name, $this->option, $this->facility);
 
         if (!$result) {
             throw new LogicException(
@@ -143,15 +139,15 @@ class Syslog extends AbstractAdapter
     private function logLevelToSyslog(int $level): int
     {
         $levels = [
-            Logger::ALERT     => LOG_ALERT,
-            Logger::CRITICAL  => LOG_CRIT,
-            Logger::CUSTOM    => LOG_ERR,
-            Logger::DEBUG     => LOG_DEBUG,
-            Logger::EMERGENCY => LOG_EMERG,
-            Logger::ERROR     => LOG_ERR,
-            Logger::INFO      => LOG_INFO,
-            Logger::NOTICE    => LOG_NOTICE,
-            Logger::WARNING   => LOG_WARNING,
+            Enum::ALERT     => LOG_ALERT,
+            Enum::CRITICAL  => LOG_CRIT,
+            Enum::CUSTOM    => LOG_ERR,
+            Enum::DEBUG     => LOG_DEBUG,
+            Enum::EMERGENCY => LOG_EMERG,
+            Enum::ERROR     => LOG_ERR,
+            Enum::INFO      => LOG_INFO,
+            Enum::NOTICE    => LOG_NOTICE,
+            Enum::WARNING   => LOG_WARNING,
         ];
 
         return $levels[$level] ?? LOG_ERR;

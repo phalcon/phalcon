@@ -16,6 +16,7 @@ namespace Phalcon\Tests\Unit\Logger\Formatter\Line;
 use DateTimeImmutable;
 use DateTimeZone;
 use Exception;
+use Phalcon\Logger\Enum;
 use Phalcon\Logger\Formatter\Line;
 use Phalcon\Logger\Item;
 use Phalcon\Logger\Logger;
@@ -44,7 +45,7 @@ class FormatCest
         $item      = new Item(
             'log message',
             'debug',
-            Logger::DEBUG,
+            Enum::DEBUG,
             $datetime
         );
 
@@ -78,7 +79,7 @@ class FormatCest
         $item      = new Item(
             'log message',
             'debug',
-            Logger::DEBUG,
+            Enum::DEBUG,
             $datetime
         );
 
@@ -116,7 +117,7 @@ class FormatCest
         $item     = new Item(
             'log message',
             'debug',
-            Logger::DEBUG,
+            Enum::DEBUG,
             $datetime
         );
 

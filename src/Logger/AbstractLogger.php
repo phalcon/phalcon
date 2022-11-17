@@ -29,11 +29,11 @@ use function strtoupper;
 /**
  * Abstract Logger Class
  *
- * A PSR compatible logger, with various adapters and formatters. A formatter
- * interface is available as well as an adapter one. Adapters can be created
- * easily using the built in AdapterFactory. A LoggerFactory is also available
- * that allows developers to create new instances of the Logger or load them
- * from config files (see Phalcon\Config\Config object).
+ * Abstract logger class, providing common functionality. A formatter interface
+ * is available as well as an adapter one. Adapters can be created easily using
+ * the built in AdapterFactory. A LoggerFactory is also available that allows
+ * developers to create new instances of the Logger or load them from config
+ * files (see Phalcon\Config\Config object).
  *
  * @package Phalcon\Logger
  *
@@ -45,16 +45,6 @@ use function strtoupper;
  */
 abstract class AbstractLogger
 {
-    public const ALERT     = 2;
-    public const CRITICAL  = 1;
-    public const CUSTOM    = 8;
-    public const DEBUG     = 7;
-    public const EMERGENCY = 0;
-    public const ERROR     = 3;
-    public const INFO      = 6;
-    public const NOTICE    = 5;
-    public const WARNING   = 4;
-
     /**
      * The adapter stack
      *
@@ -77,11 +67,6 @@ abstract class AbstractLogger
     protected int $logLevel = 8;
 
     /**
-     * @var string
-     */
-    protected string $name = '';
-
-    /**
      * @var DateTimeZone
      */
     protected DateTimeZone $timezone;
@@ -96,12 +81,12 @@ abstract class AbstractLogger
      *                                    date_Default_timezone_get() is used
      */
     public function __construct(
-        string $name,
+        protected string $name,
         array $adapters = [],
         ?DateTimeZone $timezone = null
     ) {
         if (null == $timezone) {
-            $timezone = new DateTimeZone(date_default_timezone_get() ?: 'UTC');
+            $timezone = new DateTimeZone(date_default_timezone_get());
         }
 
         $this->name     = $name;
@@ -144,7 +129,7 @@ abstract class AbstractLogger
         /**
          * Loop through what has been passed. Check these names with
          * the registered adapters. If they match, add them to the
-         * this->excluded array
+         * $this->excluded array
          */
         foreach ($adapters as $adapter) {
             if (isset($registered[$adapter])) {
@@ -245,7 +230,7 @@ abstract class AbstractLogger
     public function setLogLevel(int $level): AbstractLogger
     {
         $levels         = $this->getLevels();
-        $this->logLevel = isset($levels[$level]) ? $level : self::CUSTOM;
+        $this->logLevel = isset($levels[$level]) ? $level : Enum::CUSTOM;
 
         return $this;
     }
@@ -273,7 +258,7 @@ abstract class AbstractLogger
             }
 
             $levels    = $this->getLevels();
-            $levelName = $levels[$level] ?? $levels[self::CUSTOM];
+            $levelName = $levels[$level] ?? $levels[Enum::CUSTOM];
 
             $item = new Item(
                 $message,
@@ -332,7 +317,7 @@ abstract class AbstractLogger
             }
         }
 
-        return self::CUSTOM;
+        return Enum::CUSTOM;
     }
 
     /**
@@ -343,15 +328,15 @@ abstract class AbstractLogger
     protected function getLevels(): array
     {
         return [
-            self::ALERT     => "ALERT",
-            self::CRITICAL  => "CRITICAL",
-            self::DEBUG     => "DEBUG",
-            self::EMERGENCY => "EMERGENCY",
-            self::ERROR     => "ERROR",
-            self::INFO      => "INFO",
-            self::NOTICE    => "NOTICE",
-            self::WARNING   => "WARNING",
-            self::CUSTOM    => "CUSTOM",
+            Enum::ALERT     => "ALERT",
+            Enum::CRITICAL  => "CRITICAL",
+            Enum::DEBUG     => "DEBUG",
+            Enum::EMERGENCY => "EMERGENCY",
+            Enum::ERROR     => "ERROR",
+            Enum::INFO      => "INFO",
+            Enum::NOTICE    => "NOTICE",
+            Enum::WARNING   => "WARNING",
+            Enum::CUSTOM    => "CUSTOM",
         ];
     }
 }

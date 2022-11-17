@@ -15,6 +15,7 @@ namespace Phalcon\Tests\Unit\Logger\LoggerFactory;
 
 use Phalcon\Logger\Adapter\Stream;
 use Phalcon\Logger\AdapterFactory;
+use Phalcon\Logger\Enum;
 use Phalcon\Logger\Exception as LoggerException;
 use Phalcon\Logger\Logger;
 use Phalcon\Logger\LoggerFactory;
