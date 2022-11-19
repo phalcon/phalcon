@@ -1,3 +1,19 @@
 {
-  "bootstrap": "vendor/autoload.php"
+  "$schema": "./tests/benchmarks/phpbench.schema.json",
+  "runner.bootstrap": "vendor/autoload.php",
+  "runner.path": "./tests/benchmarks",
+  "report.outputs": {
+    "my_csv_output": {
+      "extends": "delimited",
+      "delimiter": ","
+    }
+  },
+  "storage.driver": "xml",
+  "storage.xml_storage_path": "./tests/benchmarks/",
+  "report.generators": {
+    "phalcon": {
+      "generator": "composite",
+      "reports": [ "default", "aggregate" ]
+    }
+  }
 }
