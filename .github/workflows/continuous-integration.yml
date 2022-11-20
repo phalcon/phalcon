@@ -151,14 +151,14 @@ jobs:
         if: always()
         run: |
           vendor/bin/codecept run --coverage-xml=unit-cov.xml --ext DotReporter unit
-          mkdir -p ./code-coverage
-          mv unit-cov.xml ./code-coverage
+          mkdir -p code-coverage
+          mv tests/_output/unit-cov.xml code-coverage
 
       - name: "Upload coverage file"
         uses: "actions/upload-artifact@v3"
         with:
           name: "unit-${{ matrix.php }}-${{ matrix.ts }}-${{ matrix.name }}.coverage"
-          path: "./code-coverage"
+          path: "code-coverage"
 
 
 #  cli-tests:
