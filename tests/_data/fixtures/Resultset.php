@@ -9,14 +9,14 @@
 
 declare(strict_types=1);
 
-namespace Phalcon\Tests\Fixtures\DataMapper\Pdo;
+namespace Phalcon\Tests\Fixtures;
 
-use Phalcon\DataMapper\Pdo\Connection;
-
-class PdoFixture extends Connection
+class Resultset
 {
-    public function callMe(string $name): string
+    public $calculated = '';
+
+    public function __construct(string $calculated)
     {
-        return $name;
+        $this->calculated = $calculated;
     }
 }
