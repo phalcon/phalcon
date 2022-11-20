@@ -827,6 +827,9 @@ jobs:
 
 
   upload-coverage:
+    permissions:
+      contents: read
+
     name: "Upload coverage to Codecov"
     runs-on: "ubuntu-22.04"
     needs:
@@ -854,7 +857,6 @@ jobs:
         working-directory: reports
 
       - name: "Upload to Codacy"
-        runs-on: ubuntu-latest
         with:
           project-token: ${{ secrets.CODACY_PROJECT_TOKEN }}
           directory: reports
