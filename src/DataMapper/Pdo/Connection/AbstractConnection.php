@@ -40,7 +40,7 @@ use function method_exists;
  * Provides array quoting, profiling, a new `perform()` method, new `fetch*()`
  * methods
  */
-abstract class AbstractConnection implements ConnectionInterface
+abstract class AbstractConnection extends PDO implements ConnectionInterface
 {
     /**
      * @var PDO|null
