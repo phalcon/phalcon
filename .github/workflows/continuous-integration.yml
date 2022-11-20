@@ -131,7 +131,7 @@ jobs:
           echo "::set-output name=dir::$(composer config cache-files-dir)"
 
       - name: Setup Composer Cache
-        uses: actions/cache@v2
+        uses: actions/cache@v3
         with:
           path: ${{ steps.composer-cache.outputs.dir }}
           key: ${{ runner.os }}-composer-${{ matrix.php }}-${{ hashFiles('**/composer.lock') }}
@@ -202,7 +202,7 @@ jobs:
 #          echo "::set-output name=dir::$(composer config cache-files-dir)"
 #
 #      - name: Setup Composer Cache
-#        uses: actions/cache@v2
+#        uses: actions/cache@v3
 #        with:
 #          path: ${{ steps.composer-cache.outputs.dir }}
 #          key: ubuntu-composer-${{ matrix.php }}-${{ hashFiles('**/composer.lock') }}
@@ -294,7 +294,7 @@ jobs:
 #          echo "::set-output name=dir::$(composer config cache-files-dir)"
 #
 #      - name: Setup Composer Cache
-#        uses: actions/cache@v2
+#        uses: actions/cache@v3
 #        with:
 #          path: ${{ steps.composer-cache.outputs.dir }}
 #          key: ${{ runner.os }}-composer-${{ matrix.php }}-${{ hashFiles('**/composer.lock') }}
@@ -400,7 +400,7 @@ jobs:
 #          echo "::set-output name=dir::$(composer config cache-files-dir)"
 #
 #      - name: Setup Composer Cache
-#        uses: actions/cache@v2
+#        uses: actions/cache@v3
 #        with:
 #          path: ${{ steps.composer-cache.outputs.dir }}
 #          key: ubuntu-composer-${{ matrix.php }}-${{ hashFiles('**/composer.lock') }}
@@ -510,7 +510,7 @@ jobs:
 #          echo "::set-output name=dir::$(composer config cache-files-dir)"
 #
 #      - name: Setup Composer Cache
-#        uses: actions/cache@v2
+#        uses: actions/cache@v3
 #        with:
 #          path: ${{ steps.composer-cache.outputs.dir }}
 #          key: ubuntu-composer-${{ matrix.php }}-${{ hashFiles('**/composer.lock') }}
@@ -618,7 +618,7 @@ jobs:
 #          echo "::set-output name=dir::$(composer config cache-files-dir)"
 #
 #      - name: Setup Composer Cache
-#        uses: actions/cache@v2
+#        uses: actions/cache@v3
 #        with:
 #          path: ${{ steps.composer-cache.outputs.dir }}
 #          key: ubuntu-composer-${{ matrix.php }}-${{ hashFiles('**/composer.lock') }}
@@ -694,7 +694,7 @@ jobs:
 #          echo "::set-output name=dir::$(composer config cache-files-dir)"
 #
 #      - name: Setup Composer Cache
-#        uses: actions/cache@v2
+#        uses: actions/cache@v3
 #        with:
 #          path: ${{ steps.composer-cache.outputs.dir }}
 #          key: ubuntu-composer-${{ matrix.php }}-${{ hashFiles('**/composer.lock') }}
