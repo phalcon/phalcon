@@ -351,32 +351,14 @@ jobs:
     permissions:
       contents: read # to fetch code (actions/checkout)
 
-    name: db common tests / PHP-${{ matrix.php-version }}-${{ matrix.ts }}-${{ matrix.name }}
-    runs-on: ${{ matrix.os }}
+    name: db common tests / PHP-${{ matrix.php-version }}
+    runs-on: ubuntu-20.04
 
     strategy:
       matrix:
         php-version:
           - '8.0'
           - '8.1'
-        ts:
-          - 'nts'
-          - 'ts'
-        name:
-          - ubuntu-gcc
-          - macos-clang
-        # matrix names should be in next format:
-        #     {php}-{ts}-{os.name}-{compiler}-{arch}
-        include:
-          # Linux
-          - { name: ubuntu-gcc, os: ubuntu-20.04, compiler: gcc }
-          # macOS
-          - { name: macos-clang, os: macos-11, compiler: clang }
-          # Windows
-          - { php: '8.0', ts: 'ts',  arch: 'x64', name: 'windows2019-vs16', os: 'windows-2019', compiler: 'vs16' }
-          - { php: '8.0', ts: 'nts', arch: 'x64', name: 'windows2019-vs16', os: 'windows-2019', compiler: 'vs16' }
-          - { php: '8.1', ts: 'ts',  arch: 'x64', name: 'windows2019-vs16', os: 'windows-2019', compiler: 'vs16' }
-          - { php: '8.1', ts: 'nts', arch: 'x64', name: 'windows2019-vs16', os: 'windows-2019', compiler: 'vs16' }
 
     services:
       mysql:
@@ -416,8 +398,6 @@ jobs:
         shell: pwsh
         run: |
           git config --global core.autocrlf false
-          $SessionSavePath = if ("${{ runner.os }}" -eq "Windows") { 'C:\temp' } else { '/tmp' }
-          Write-Output "SESSION_SAVE_PATH=$SessionSavePath" | Out-File -FilePath $env:GITHUB_ENV -Encoding utf8 -Append
 
       - name: Setup PHP
         uses: shivammathur/setup-php@v2
@@ -428,7 +408,6 @@ jobs:
           tools: pecl, phpize, php-config, composer:v2
           coverage: pcov
         env:
-          PHPTS: ${{ matrix.ts }}
           COMPOSER_TOKEN: ${{ secrets.GITHUB_TOKEN }}
 
       - name: Validate composer
@@ -443,8 +422,8 @@ jobs:
         uses: actions/cache@v2
         with:
           path: ${{ steps.composer-cache.outputs.dir }}
-          key: ${{ runner.os }}-composer-${{ matrix.php }}-${{ hashFiles('**/composer.lock') }}
-          restore-keys: ${{ runner.os }}-composer-${{ matrix.php }}-
+          key: ubuntu-composer-${{ matrix.php-version }}-${{ hashFiles('**/composer.lock') }}
+          restore-keys: ubuntu-composer-${{ matrix.php-version }}-
 
       - run: composer install --prefer-dist
 
@@ -483,31 +462,13 @@ jobs:
       contents: read # to fetch code (actions/checkout)
 
     name: db mysql tests / PHP-${{ matrix.php-version }}-${{ matrix.ts }}-${{ matrix.name }}
-    runs-on: ${{ matrix.os }}
+    runs-on: ubuntu-20.04
 
     strategy:
       matrix:
         php-version:
           - '8.0'
           - '8.1'
-        ts:
-          - 'nts'
-          - 'ts'
-        name:
-          - ubuntu-gcc
-          - macos-clang
-        # matrix names should be in next format:
-        #     {php}-{ts}-{os.name}-{compiler}-{arch}
-        include:
-          # Linux
-          - { name: ubuntu-gcc, os: ubuntu-20.04, compiler: gcc }
-          # macOS
-          - { name: macos-clang, os: macos-11, compiler: clang }
-          # Windows
-          - { php: '8.0', ts: 'ts',  arch: 'x64', name: 'windows2019-vs16', os: 'windows-2019', compiler: 'vs16' }
-          - { php: '8.0', ts: 'nts', arch: 'x64', name: 'windows2019-vs16', os: 'windows-2019', compiler: 'vs16' }
-          - { php: '8.1', ts: 'ts',  arch: 'x64', name: 'windows2019-vs16', os: 'windows-2019', compiler: 'vs16' }
-          - { php: '8.1', ts: 'nts', arch: 'x64', name: 'windows2019-vs16', os: 'windows-2019', compiler: 'vs16' }
 
     services:
       mysql:
@@ -547,8 +508,6 @@ jobs:
         shell: pwsh
         run: |
           git config --global core.autocrlf false
-          $SessionSavePath = if ("${{ runner.os }}" -eq "Windows") { 'C:\temp' } else { '/tmp' }
-          Write-Output "SESSION_SAVE_PATH=$SessionSavePath" | Out-File -FilePath $env:GITHUB_ENV -Encoding utf8 -Append
 
       - name: Setup PHP
         uses: shivammathur/setup-php@v2
@@ -559,7 +518,6 @@ jobs:
           tools: pecl, phpize, php-config, composer:v2
           coverage: pcov
         env:
-          PHPTS: ${{ matrix.ts }}
           COMPOSER_TOKEN: ${{ secrets.GITHUB_TOKEN }}
 
       - name: Validate composer
@@ -574,8 +532,8 @@ jobs:
         uses: actions/cache@v2
         with:
           path: ${{ steps.composer-cache.outputs.dir }}
-          key: ${{ runner.os }}-composer-${{ matrix.php }}-${{ hashFiles('**/composer.lock') }}
-          restore-keys: ${{ runner.os }}-composer-${{ matrix.php }}-
+          key: ubuntu-composer-${{ matrix.php-version }}-${{ hashFiles('**/composer.lock') }}
+          restore-keys: ubuntu-composer-${{ matrix.php-version }}-
 
       - run: composer install --prefer-dist
 
@@ -612,31 +570,13 @@ jobs:
       contents: read # to fetch code (actions/checkout)
 
     name: db postgres tests / PHP-${{ matrix.php-version }}-${{ matrix.ts }}-${{ matrix.name }}
-    runs-on: ${{ matrix.os }}
+    runs-on: ubuntu-20.04
 
     strategy:
       matrix:
         php-version:
           - '8.0'
           - '8.1'
-        ts:
-          - 'nts'
-          - 'ts'
-        name:
-          - ubuntu-gcc
-          - macos-clang
-        # matrix names should be in next format:
-        #     {php}-{ts}-{os.name}-{compiler}-{arch}
-        include:
-          # Linux
-          - { name: ubuntu-gcc, os: ubuntu-20.04, compiler: gcc }
-          # macOS
-          - { name: macos-clang, os: macos-11, compiler: clang }
-          # Windows
-          - { php: '8.0', ts: 'ts',  arch: 'x64', name: 'windows2019-vs16', os: 'windows-2019', compiler: 'vs16' }
-          - { php: '8.0', ts: 'nts', arch: 'x64', name: 'windows2019-vs16', os: 'windows-2019', compiler: 'vs16' }
-          - { php: '8.1', ts: 'ts',  arch: 'x64', name: 'windows2019-vs16', os: 'windows-2019', compiler: 'vs16' }
-          - { php: '8.1', ts: 'nts', arch: 'x64', name: 'windows2019-vs16', os: 'windows-2019', compiler: 'vs16' }
 
     services:
       mysql:
@@ -676,8 +616,6 @@ jobs:
         shell: pwsh
         run: |
           git config --global core.autocrlf false
-          $SessionSavePath = if ("${{ runner.os }}" -eq "Windows") { 'C:\temp' } else { '/tmp' }
-          Write-Output "SESSION_SAVE_PATH=$SessionSavePath" | Out-File -FilePath $env:GITHUB_ENV -Encoding utf8 -Append
 
       - name: Setup PHP
         uses: shivammathur/setup-php@v2
@@ -688,7 +626,6 @@ jobs:
           tools: pecl, phpize, php-config, composer:v2
           coverage: pcov
         env:
-          PHPTS: ${{ matrix.ts }}
           COMPOSER_TOKEN: ${{ secrets.GITHUB_TOKEN }}
 
       - name: Validate composer
@@ -703,8 +640,8 @@ jobs:
         uses: actions/cache@v2
         with:
           path: ${{ steps.composer-cache.outputs.dir }}
-          key: ${{ runner.os }}-composer-${{ matrix.php }}-${{ hashFiles('**/composer.lock') }}
-          restore-keys: ${{ runner.os }}-composer-${{ matrix.php }}-
+          key: ubuntu-composer-${{ matrix.php-version }}-${{ hashFiles('**/composer.lock') }}
+          restore-keys: ubuntu-composer-${{ matrix.php-version }}-
 
       - run: composer install --prefer-dist
 
@@ -741,31 +678,13 @@ jobs:
       contents: read # to fetch code (actions/checkout)
 
     name: db sqlite tests / PHP-${{ matrix.php-version }}-${{ matrix.ts }}-${{ matrix.name }}
-    runs-on: ${{ matrix.os }}
+    runs-on: ubuntu-20.04
 
     strategy:
       matrix:
         php-version:
           - '8.0'
           - '8.1'
-        ts:
-          - 'nts'
-          - 'ts'
-        name:
-          - ubuntu-gcc
-          - macos-clang
-        # matrix names should be in next format:
-        #     {php}-{ts}-{os.name}-{compiler}-{arch}
-        include:
-          # Linux
-          - { name: ubuntu-gcc, os: ubuntu-20.04, compiler: gcc }
-          # macOS
-          - { name: macos-clang, os: macos-11, compiler: clang }
-          # Windows
-          - { php: '8.0', ts: 'ts',  arch: 'x64', name: 'windows2019-vs16', os: 'windows-2019', compiler: 'vs16' }
-          - { php: '8.0', ts: 'nts', arch: 'x64', name: 'windows2019-vs16', os: 'windows-2019', compiler: 'vs16' }
-          - { php: '8.1', ts: 'ts',  arch: 'x64', name: 'windows2019-vs16', os: 'windows-2019', compiler: 'vs16' }
-          - { php: '8.1', ts: 'nts', arch: 'x64', name: 'windows2019-vs16', os: 'windows-2019', compiler: 'vs16' }
 
     steps:
       - uses: actions/checkout@v3
@@ -773,8 +692,6 @@ jobs:
         shell: pwsh
         run: |
           git config --global core.autocrlf false
-          $SessionSavePath = if ("${{ runner.os }}" -eq "Windows") { 'C:\temp' } else { '/tmp' }
-          Write-Output "SESSION_SAVE_PATH=$SessionSavePath" | Out-File -FilePath $env:GITHUB_ENV -Encoding utf8 -Append
 
       - name: Setup PHP
         uses: shivammathur/setup-php@v2
@@ -785,7 +702,6 @@ jobs:
           tools: pecl, phpize, php-config, composer:v2
           coverage: pcov
         env:
-          PHPTS: ${{ matrix.ts }}
           COMPOSER_TOKEN: ${{ secrets.GITHUB_TOKEN }}
 
       - name: Validate composer
@@ -800,8 +716,8 @@ jobs:
         uses: actions/cache@v2
         with:
           path: ${{ steps.composer-cache.outputs.dir }}
-          key: ${{ runner.os }}-composer-${{ matrix.php }}-${{ hashFiles('**/composer.lock') }}
-          restore-keys: ${{ runner.os }}-composer-${{ matrix.php }}-
+          key: ubuntu-composer-${{ matrix.php-version }}-${{ hashFiles('**/composer.lock') }}
+          restore-keys: ubuntu-composer-${{ matrix.php-version }}-
 
       - run: composer install --prefer-dist
 
