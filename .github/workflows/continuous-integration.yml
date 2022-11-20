@@ -157,7 +157,7 @@ jobs:
         uses: "actions/upload-artifact@v3"
         with:
           name: "unit-${{ matrix.php }}-${{ matrix.ts }}-${{ matrix.name }}.coverage"
-          path: "coverage.xml"
+          path: "tests/_output"
 
 
 #  cli-tests:
