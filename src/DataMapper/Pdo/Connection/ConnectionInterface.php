@@ -20,7 +20,6 @@ namespace Phalcon\DataMapper\Pdo\Connection;
 
 use PDO;
 use PDOStatement;
-use Phalcon\DataMapper\Pdo\Parser\ParserInterface;
 use Phalcon\DataMapper\Pdo\Profiler\ProfilerInterface;
 
 /**
