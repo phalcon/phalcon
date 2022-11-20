@@ -758,4 +758,4 @@ jobs:
         working-directory: reports
         run: |
           bash <(curl -Ls https://coverage.codacy.com/get.sh) report \
-            -l PHP $(find . -name '*.coverage' -printf '-r %p ')
+            -l PHP $(find . -name '*.xml' -printf '-r %p ')
