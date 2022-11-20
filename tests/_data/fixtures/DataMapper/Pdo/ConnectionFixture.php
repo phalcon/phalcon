@@ -24,6 +24,6 @@ class ConnectionFixture extends Connection
         array $queries = [],
         ProfilerInterface $profiler = null
     ) {
-        $this->pdo = new PdoFixture();
+        $this->pdo = new PdoFixture($dsn, $username, $password, $options, $queries, $profiler);
     }
 }

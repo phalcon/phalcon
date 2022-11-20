@@ -14,6 +14,7 @@ declare(strict_types=1);
 namespace Phalcon\Tests\Fixtures\Migrations;
 
 use PDO;
+use Phalcon\DataMapper\Pdo\Connection\ConnectionInterface;
 
 /**
  * Class AbstractMigration
@@ -24,7 +25,7 @@ use PDO;
 abstract class AbstractMigration
 {
     /**
-     * @var PDO
+     * @var PDO|ConnectionInterface
      */
     protected $connection;
 
@@ -36,9 +37,9 @@ abstract class AbstractMigration
     /**
      * Migration constructor.
      *
-     * @param PDO|null $connection
+     * @param PDO|ConnectionInterface|null $connection
      */
-    final public function __construct(PDO $connection = null)
+    final public function __construct($connection = null)
     {
         $this->connection = $connection;
 
