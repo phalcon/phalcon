@@ -66,8 +66,6 @@ jobs:
           vendor/bin/phpcs --standard=./phpcs.xml
 
 
-  
-
   unit-tests:
     needs: phpcs
 
@@ -128,7 +126,7 @@ jobs:
       - name: Get Composer Cache Directory
         id: composer-cache
         run: |
-          echo "::set-output name=dir::$(composer config cache-files-dir)"
+          echo "name=dir::$(composer config cache-files-dir)" >> $GITHUB_OUTPUT
 
       - name: Setup Composer Cache
         uses: actions/cache@v3
@@ -151,13 +149,16 @@ jobs:
 
       - name: Run Unit Tests
         if: always()
-        run: vendor/bin/codecept run --coverage-xml=coverage.xml --ext DotReporter unit
+        run: |
+          vendor/bin/codecept run --coverage-xml=unit-cov.xml --ext DotReporter unit
+          mkdir -p ./code-coverage
+          mv unit-cov.xml ./code-coverage
 
       - name: "Upload coverage file"
         uses: "actions/upload-artifact@v3"
         with:
           name: "unit-${{ matrix.php }}-${{ matrix.ts }}-${{ matrix.name }}.coverage"
-          path: "tests/_output"
+          path: "./code-coverage"
 
 
 #  cli-tests:
