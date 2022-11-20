@@ -37,6 +37,7 @@ env:
 
 permissions: {}
 jobs:
+  needs: phpcs
 
   unit-tests:
     permissions:
@@ -811,6 +812,7 @@ jobs:
         working-directory: reports
 
       - name: "Upload to Codacy"
+        runs-on: ubuntu-latest
         with:
           project-token: ${{ secrets.CODACY_PROJECT_TOKEN }}
           directory: reports
