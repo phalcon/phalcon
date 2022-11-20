@@ -126,7 +126,7 @@ jobs:
       - name: Get Composer Cache Directory
         id: composer-cache
         run: |
-          echo "name=dir::$(composer config cache-files-dir)" >> $GITHUB_OUTPUT
+          echo "::set-output name=dir::$(composer config cache-files-dir)"
 
       - name: Setup Composer Cache
         uses: actions/cache@v3
