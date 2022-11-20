@@ -11,7 +11,7 @@
 
 declare(strict_types=1);
 
-namespace Phalcon\Tests\Benchmarks;
+namespace Phalcon\Tests\Benchmarks\Support;
 
 use Phalcon\Support\Collection;
 
