@@ -857,9 +857,8 @@ jobs:
         working-directory: reports
 
       - name: "Upload to Codacy"
-        with:
-          project-token: ${{ secrets.CODACY_PROJECT_TOKEN }}
-          directory: reports
+        env:
+          CODACY_PROJECT_TOKEN: ${{ secrets.CODACY_PROJECT_TOKEN }}
         run: |
           bash <(curl -Ls https://coverage.codacy.com/get.sh) report \
-            -l PHP $(find . -name '*.coverage' -printf '-r %p ')
+            -l PHP $(find . -name './reports/*.coverage' -printf '-r %p ')
