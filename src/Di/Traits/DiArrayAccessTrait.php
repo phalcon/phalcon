@@ -41,6 +41,19 @@ trait DiArrayAccessTrait
     abstract public function has(string $name): bool;
 
     /**
+     * Check if a service is registered using the array syntax
+     *
+     * @param mixed $name
+     *
+     * @return bool
+     */
+    #[\ReturnTypeWillChange]
+    public function offsetExists($name): bool
+    {
+        return $this->has($name);
+    }
+
+    /**
      * Allows to obtain a shared service using the array syntax
      *
      *```php
@@ -52,21 +65,10 @@ trait DiArrayAccessTrait
      * @return mixed|InjectionAwareInterface|null
      * @throws Exception
      */
+    #[\ReturnTypeWillChange]
     public function offsetGet($name)
     {
         return $this->getShared($name);
-    }
-
-    /**
-     * Check if a service is registered using the array syntax
-     *
-     * @param mixed $name
-     *
-     * @return bool
-     */
-    public function offsetExists($name): bool
-    {
-        return $this->has($name);
     }
 
     /**
@@ -79,6 +81,7 @@ trait DiArrayAccessTrait
      * @param mixed $name
      * @param mixed $definition
      */
+    #[\ReturnTypeWillChange]
     public function offsetSet($name, $definition): void
     {
         $this->setShared($name, $definition);
@@ -89,6 +92,7 @@ trait DiArrayAccessTrait
      *
      * @param mixed $name
      */
+    #[\ReturnTypeWillChange]
     public function offsetUnset($name): void
     {
         $this->remove($name);
