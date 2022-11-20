@@ -155,7 +155,7 @@ jobs:
       - name: "Upload coverage file"
         uses: "actions/upload-artifact@v3"
         with:
-          name: "unit-${{ matrix.php }}-${{ matrix.ts }}-${{ matrix.name }}.xml"
+          name: "unit-${{ matrix.php }}-${{ matrix.ts }}-${{ matrix.name }}.coverage"
           path: "tests/_output/unit-cov.xml"
 
 
@@ -758,4 +758,4 @@ jobs:
         working-directory: reports
         run: |
           bash <(curl -Ls https://coverage.codacy.com/get.sh) report \
-            -l PHP $(find . -name '*.xml' -printf '-r %p ')
+            -l PHP $(find . -name '*.coverage' -printf '-r %p ')
