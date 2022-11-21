@@ -76,7 +76,7 @@ jobs:
     permissions:
       contents: read # to fetch code (actions/checkout)
 
-    name: unit tests / PHP-${{ matrix.php }}-${{ matrix.ts }}-${{ matrix.name }}
+    name: Unit tests / PHP-${{ matrix.php }}-${{ matrix.ts }}-${{ matrix.name }}
     runs-on: ${{ matrix.os }}
 
     strategy:
@@ -160,7 +160,7 @@ jobs:
     permissions:
       contents: read # to fetch code (actions/checkout)
 
-    name: cli tests / PHP-${{ matrix.php }}-${{ matrix.ts }}-${{ matrix.name }}
+    name: CLI tests / PHP-${{ matrix.php }}-${{ matrix.ts }}-${{ matrix.name }}
     runs-on: ${{ matrix.os }}
 
     strategy:
@@ -239,37 +239,12 @@ jobs:
 
 
   integration-tests:
-    needs: phpcs
-
+    name: "Integration Tests"
     permissions:
       contents: read # to fetch code (actions/checkout)
 
-    name: integration tests / PHP-${{ matrix.php }}-${{ matrix.ts }}-${{ matrix.name }}
-    runs-on: ${{ matrix.os }}
-
-    strategy:
-      matrix:
-        php:
-          - '8.0'
-          - '8.1'
-        ts:
-          - 'nts'
-          - 'ts'
-        name:
-          - ubuntu-gcc
-          - macos-clang
-        # matrix names should be in next format:
-        #     {php}-{ts}-{os.name}-{compiler}-{arch}
-        include:
-          # Linux
-          - { name: ubuntu-gcc, os: ubuntu-20.04, compiler: gcc }
-          # macOS
-          - { name: macos-clang, os: macos-11, compiler: clang }
-          # Windows
-          - { php: '8.0', ts: 'ts',  arch: 'x64', name: 'windows2019-vs16', os: 'windows-2019', compiler: 'vs16' }
-          - { php: '8.0', ts: 'nts', arch: 'x64', name: 'windows2019-vs16', os: 'windows-2019', compiler: 'vs16' }
-          - { php: '8.1', ts: 'ts',  arch: 'x64', name: 'windows2019-vs16', os: 'windows-2019', compiler: 'vs16' }
-          - { php: '8.1', ts: 'nts', arch: 'x64', name: 'windows2019-vs16', os: 'windows-2019', compiler: 'vs16' }
+    needs: phpcs
+    runs-on: ubuntu-20.04
 
     services:
       redis:
@@ -280,6 +255,13 @@ jobs:
         image: memcached:1.5-alpine
         ports:
           - "11211:11211"
+
+    strategy:
+      fail-fast: false
+      matrix:
+        php:
+          - '8.0'
+          - '8.1'
 
     steps:
       - uses: actions/checkout@v3
