@@ -145,13 +145,13 @@ jobs:
       - name: "Run Unit Tests"
         if: always()
         run: |
-          vendor/bin/codecept run --coverage-xml=unit-cov.xml --ext DotReporter unit
+          vendor/bin/codecept run --coverage-xml=coverage.xml --ext DotReporter unit
 
       - name: "Upload coverage file artifact"
         uses: "actions/upload-artifact@v3"
         with:
           name: "unit-${{ matrix.php }}-${{ matrix.ts }}-${{ matrix.name }}.coverage"
-          path: "tests/_output/unit-cov.xml"
+          path: "tests/_output/coverage.xml"
 
 
   cli-tests:
@@ -229,13 +229,13 @@ jobs:
       - name: "Run Unit Tests"
         if: always()
         run: |
-          vendor/bin/codecept run --coverage-xml=cli-cov.xml --ext DotReporter cli
+          vendor/bin/codecept run --coverage-xml=coverage.xml --ext DotReporter cli
 
       - name: "Upload coverage file artifact"
         uses: "actions/upload-artifact@v3"
         with:
           name: "unit-${{ matrix.php }}-${{ matrix.ts }}-${{ matrix.name }}.coverage"
-          path: "tests/_output/cli-cov.xml"
+          path: "tests/_output/coverage.xml"
 
 
 
@@ -752,6 +752,10 @@ jobs:
         uses: "actions/checkout@v3"
         with:
           fetch-depth: 2
+
+      - name: "Display structure of downloaded files"
+        run: |
+          mkdir -p reports
 
       - name: "Download coverage files"
         uses: "actions/download-artifact@v3"
