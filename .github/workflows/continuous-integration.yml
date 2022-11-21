@@ -249,7 +249,7 @@ jobs:
 
     strategy:
       matrix:
-        php-version:
+        php:
           - '8.0'
           - '8.1'
         ts:
@@ -730,7 +730,7 @@ jobs:
     needs:
       - "unit-tests"
       - "cli-tests"
-#      - "integration-tests"
+      - "integration-tests"
 #      - "db-common-tests"
 #      - "db-mysql-tests"
 #      - "db-postgres-tests"
