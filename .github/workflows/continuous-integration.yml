@@ -40,20 +40,26 @@ jobs:
 
   # PHP CodeSniffer inspection
   phpcs:
-    permissions:
-      contents: read
-
     name: "Validate Tests code style"
     if: "!contains(github.event.head_commit.message, 'ci skip')"
 
+    permissions:
+      contents: read
+
     runs-on: ubuntu-20.04
+
+    strategy:
+      matrix:
+        php:
+          - '8.0'
+          - '8.1'
     steps:
       - uses: actions/checkout@v3
 
       - name: "Setup PHP"
         uses: shivammathur/setup-php@v2
         with:
-          php-version: 8.0
+          php-version: ${{ matrix.php }}
           extensions: ${{ env.EXTENSIONS }}
           ini-values: apc.enable_cli=on, session.save_path=/tmp
           tools: pecl
@@ -329,7 +335,7 @@ jobs:
 
     strategy:
       matrix:
-        php-version:
+        php:
           - '8.0'
           - '8.1'
 
@@ -429,7 +435,7 @@ jobs:
 
     strategy:
       matrix:
-        php-version:
+        php:
           - '8.0'
           - '8.1'
 
@@ -515,7 +521,7 @@ jobs:
 
     strategy:
       matrix:
-        php-version:
+        php:
           - '8.0'
           - '8.1'
 
@@ -605,7 +611,7 @@ jobs:
 
     strategy:
       matrix:
-        php-version:
+        php:
           - '8.0'
           - '8.1'
 
