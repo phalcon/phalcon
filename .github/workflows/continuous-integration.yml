@@ -49,6 +49,7 @@ jobs:
     runs-on: ubuntu-20.04
 
     strategy:
+      fail-fast: true
       matrix:
         php:
           - '8.0'
@@ -264,7 +265,7 @@ jobs:
           - "11211:11211"
 
     strategy:
-      fail-fast: false
+      fail-fast: true
       matrix:
         php:
           - '8.0'
@@ -334,6 +335,7 @@ jobs:
     runs-on: ubuntu-20.04
 
     strategy:
+      fail-fast: true
       matrix:
         php:
           - '8.0'
@@ -425,241 +427,245 @@ jobs:
           path: "coverage.xml"
 
 
-  db-mysql-tests:
-    name: Database MySQL tests / PHP-${{ matrix.php }}
-    needs: phpcs
-
-    permissions:
-      contents: read # to fetch code (actions/checkout)
-    runs-on: ubuntu-20.04
-
-    strategy:
-      matrix:
-        php:
-          - '8.0'
-          - '8.1'
-
-    services:
-      mysql:
-        image: mysql:5.7
-        ports:
-          - "3306:3306"
-        env:
-          MYSQL_ROOT_PASSWORD: secret
-          MYSQL_USER: phalcon
-          MYSQL_DATABASE: phalcon
-          MYSQL_PASSWORD: secret
-      redis:
-        image: redis:5-alpine
-        ports:
-          - "6379:6379"
-      memcached:
-        image: memcached:1.5-alpine
-        ports:
-          - "11211:11211"
-
-    steps:
-      - uses: actions/checkout@v3
-      - name: "Setup platform specific environment"
-        shell: pwsh
-        run: |
-          git config --global core.autocrlf false
-
-      - name: "Setup PHP"
-        uses: shivammathur/setup-php@v2
-        with:
-          php-version: ${{ matrix.php }}
-          extensions: ${{ env.EXTENSIONS }}
-          ini-values: apc.enable_cli=on, session.save_path=${{ env.SESSION_SAVE_PATH }}
-          tools: pecl, phpize, php-config, composer:v2
-          coverage: pcov
-        env:
-          COMPOSER_TOKEN: ${{ secrets.GITHUB_TOKEN }}
-
-      - name: "Validate composer"
-        run: composer validate --no-check-all --no-check-publish
-
-      - name: "Install development dependencies with Composer"
-        uses: "ramsey/composer-install@v2"
-        with:
-          composer-options: "--prefer-dist"
-
-      - name: "Setup Tests"
-        shell: bash
-        run: |
-          if [ "${{ runner.os }}" = "Linux" ]; then
-            ./config/ci/linux-setup-locales.sh
-          fi
-
-          cp tests/_config/.env.default .env
-          vendor/bin/codecept build
-
-      - name: "Run Database Tests (MySQL)"
-        env:
-          DATA_MYSQL_PORT: ${{ job.services.mysql.ports['3306'] }}
-          DATA_MYSQL_USER: root
-          DATA_REDIS_PORT: ${{ job.services.redis.ports['6379'] }}
-          DATA_MEMCACHED_PORT: ${{ job.services.memcached.ports['11211'] }}
-        run: |
-          vendor/bin/codecept run --coverage-xml=coverage.xml --ext DotReporter database --env mysql -g mysql
-
-      - name: "Upload coverage file artifact"
-        uses: "actions/upload-artifact@v3"
-        with:
-          name: "db-mysql-${{ matrix.php }}-${{ matrix.ts }}-${{ matrix.name }}.coverage"
-          path: "coverage.xml"
-
-
-  db-postgres-tests:
-    name: Database PostgreSql tests / PHP-${{ matrix.php }}
-    needs: phpcs
-
-    permissions:
-      contents: read # to fetch code (actions/checkout)
-
-    runs-on: ubuntu-20.04
-
-    strategy:
-      matrix:
-        php:
-          - '8.0'
-          - '8.1'
-
-    services:
-      postgres:
-        image: postgres:12-alpine
-        ports:
-          - "5432:5432"
-        env:
-          POSTGRES_USER: phalcon
-          POSTGRES_PASSWORD: secret
-          POSTGRES_DB: phalcon
-        options: >-
-          --health-cmd pg_isready
-          --health-interval 10s
-          --health-timeout 5s
-          --health-retries 5
-      redis:
-        image: redis:5-alpine
-        ports:
-          - "6379:6379"
-      memcached:
-        image: memcached:1.5-alpine
-        ports:
-          - "11211:11211"
-
-    steps:
-      - uses: actions/checkout@v3
-      - name: "Setup platform specific environment"
-        shell: pwsh
-        run: |
-          git config --global core.autocrlf false
-
-      - name: "Setup PHP"
-        uses: shivammathur/setup-php@v2
-        with:
-          php-version: ${{ matrix.php }}
-          extensions: ${{ env.EXTENSIONS }}
-          ini-values: apc.enable_cli=on, session.save_path=${{ env.SESSION_SAVE_PATH }}
-          tools: pecl, phpize, php-config, composer:v2
-          coverage: pcov
-        env:
-          COMPOSER_TOKEN: ${{ secrets.GITHUB_TOKEN }}
-
-      - name: "Validate composer"
-        run: composer validate --no-check-all --no-check-publish
-
-      - name: "Install development dependencies with Composer"
-        uses: "ramsey/composer-install@v2"
-        with:
-          composer-options: "--prefer-dist"
-
-      - name: "Setup Tests"
-        shell: bash
-        run: |
-          if [ "${{ runner.os }}" = "Linux" ]; then
-            ./config/ci/linux-setup-locales.sh
-          fi
-
-          cp tests/_config/.env.default .env
-          vendor/bin/codecept build
-
-      - name: "Run Database Tests (Postgresql)"
-        env:
-          DATA_MYSQL_PORT: ${{ job.services.mysql.ports['3306'] }}
-          DATA_MYSQL_USER: root
-          DATA_REDIS_PORT: ${{ job.services.redis.ports['6379'] }}
-          DATA_MEMCACHED_PORT: ${{ job.services.memcached.ports['11211'] }}
-        run: |
-          vendor/bin/codecept run --coverage-xml=coverage.xml --ext DotReporter database --env pgsql -g pgsql
-
-      - name: "Upload coverage file artifact"
-        uses: "actions/upload-artifact@v3"
-        with:
-          name: "db-postgres-${{ matrix.php }}-${{ matrix.ts }}-${{ matrix.name }}.coverage"
-          path: "coverage.xml"
-
-
-  db-sqlite-tests:
-    name: Database Sqlite tests / PHP-${{ matrix.php }}
-    needs: phpcs
-
-    permissions:
-      contents: read # to fetch code (actions/checkout)
-
-    runs-on: ubuntu-20.04
-
-    strategy:
-      matrix:
-        php:
-          - '8.0'
-          - '8.1'
-
-    steps:
-      - uses: actions/checkout@v3
-      - name: "Setup platform specific environment"
-        shell: pwsh
-        run: |
-          git config --global core.autocrlf false
-
-      - name: "Setup PHP"
-        uses: shivammathur/setup-php@v2
-        with:
-          php-version: ${{ matrix.php }}
-          extensions: ${{ env.EXTENSIONS }}
-          ini-values: apc.enable_cli=on, session.save_path=${{ env.SESSION_SAVE_PATH }}
-          tools: pecl, phpize, php-config, composer:v2
-          coverage: pcov
-        env:
-          COMPOSER_TOKEN: ${{ secrets.GITHUB_TOKEN }}
-
-      - name: "Validate composer"
-        run: composer validate --no-check-all --no-check-publish
-
-      - name: "Install development dependencies with Composer"
-        uses: "ramsey/composer-install@v2"
-        with:
-          composer-options: "--prefer-dist"
-
-      - name: "Setup Tests"
-        shell: bash
-        run: |
-          if [ "${{ runner.os }}" = "Linux" ]; then
-            ./config/ci/linux-setup-locales.sh
-          fi
-
-          cp tests/_config/.env.default .env
-          vendor/bin/codecept build
-
-      - name: "Run Database Tests (Sqlite)"
-        run: |
-          vendor/bin/codecept run --coverage-xml=coverage.xml --ext DotReporter database --env sqlite -g sqlite
-
-      - name: "Upload coverage file artifact"
-        uses: "actions/upload-artifact@v3"
-        with:
-          name: "db-sqlite-${{ matrix.php }}-${{ matrix.ts }}-${{ matrix.name }}.coverage"
-          path: "coverage.xml"
+#  db-mysql-tests:
+#    name: Database MySQL tests / PHP-${{ matrix.php }}
+#    needs: phpcs
+#
+#    permissions:
+#      contents: read # to fetch code (actions/checkout)
+#
+#    runs-on: ubuntu-20.04
+#
+#    strategy:
+#      fail-fast: true
+#      matrix:
+#        php:
+#          - '8.0'
+#          - '8.1'
+#
+#    services:
+#      mysql:
+#        image: mysql:5.7
+#        ports:
+#          - "3306:3306"
+#        env:
+#          MYSQL_ROOT_PASSWORD: secret
+#          MYSQL_USER: phalcon
+#          MYSQL_DATABASE: phalcon
+#          MYSQL_PASSWORD: secret
+#      redis:
+#        image: redis:5-alpine
+#        ports:
+#          - "6379:6379"
+#      memcached:
+#        image: memcached:1.5-alpine
+#        ports:
+#          - "11211:11211"
+#
+#    steps:
+#      - uses: actions/checkout@v3
+#      - name: "Setup platform specific environment"
+#        shell: pwsh
+#        run: |
+#          git config --global core.autocrlf false
+#
+#      - name: "Setup PHP"
+#        uses: shivammathur/setup-php@v2
+#        with:
+#          php-version: ${{ matrix.php }}
+#          extensions: ${{ env.EXTENSIONS }}
+#          ini-values: apc.enable_cli=on, session.save_path=${{ env.SESSION_SAVE_PATH }}
+#          tools: pecl, phpize, php-config, composer:v2
+#          coverage: pcov
+#        env:
+#          COMPOSER_TOKEN: ${{ secrets.GITHUB_TOKEN }}
+#
+#      - name: "Validate composer"
+#        run: composer validate --no-check-all --no-check-publish
+#
+#      - name: "Install development dependencies with Composer"
+#        uses: "ramsey/composer-install@v2"
+#        with:
+#          composer-options: "--prefer-dist"
+#
+#      - name: "Setup Tests"
+#        shell: bash
+#        run: |
+#          if [ "${{ runner.os }}" = "Linux" ]; then
+#            ./config/ci/linux-setup-locales.sh
+#          fi
+#
+#          cp tests/_config/.env.default .env
+#          vendor/bin/codecept build
+#
+#      - name: "Run Database Tests (MySQL)"
+#        env:
+#          DATA_MYSQL_PORT: ${{ job.services.mysql.ports['3306'] }}
+#          DATA_MYSQL_USER: root
+#          DATA_REDIS_PORT: ${{ job.services.redis.ports['6379'] }}
+#          DATA_MEMCACHED_PORT: ${{ job.services.memcached.ports['11211'] }}
+#        run: |
+#          vendor/bin/codecept run --coverage-xml=coverage.xml --ext DotReporter database --env mysql -g mysql
+#
+#      - name: "Upload coverage file artifact"
+#        uses: "actions/upload-artifact@v3"
+#        with:
+#          name: "db-mysql-${{ matrix.php }}-${{ matrix.ts }}-${{ matrix.name }}.coverage"
+#          path: "coverage.xml"
+#
+#
+#  db-postgres-tests:
+#    name: Database PostgreSql tests / PHP-${{ matrix.php }}
+#    needs: phpcs
+#
+#    permissions:
+#      contents: read # to fetch code (actions/checkout)
+#
+#    runs-on: ubuntu-20.04
+#
+#    strategy:
+#      fail-fast: true
+#      matrix:
+#        php:
+#          - '8.0'
+#          - '8.1'
+#
+#    services:
+#      postgres:
+#        image: postgres:12-alpine
+#        ports:
+#          - "5432:5432"
+#        env:
+#          POSTGRES_USER: phalcon
+#          POSTGRES_PASSWORD: secret
+#          POSTGRES_DB: phalcon
+#        options: >-
+#          --health-cmd pg_isready
+#          --health-interval 10s
+#          --health-timeout 5s
+#          --health-retries 5
+#      redis:
+#        image: redis:5-alpine
+#        ports:
+#          - "6379:6379"
+#      memcached:
+#        image: memcached:1.5-alpine
+#        ports:
+#          - "11211:11211"
+#
+#    steps:
+#      - uses: actions/checkout@v3
+#      - name: "Setup platform specific environment"
+#        shell: pwsh
+#        run: |
+#          git config --global core.autocrlf false
+#
+#      - name: "Setup PHP"
+#        uses: shivammathur/setup-php@v2
+#        with:
+#          php-version: ${{ matrix.php }}
+#          extensions: ${{ env.EXTENSIONS }}
+#          ini-values: apc.enable_cli=on, session.save_path=${{ env.SESSION_SAVE_PATH }}
+#          tools: pecl, phpize, php-config, composer:v2
+#          coverage: pcov
+#        env:
+#          COMPOSER_TOKEN: ${{ secrets.GITHUB_TOKEN }}
+#
+#      - name: "Validate composer"
+#        run: composer validate --no-check-all --no-check-publish
+#
+#      - name: "Install development dependencies with Composer"
+#        uses: "ramsey/composer-install@v2"
+#        with:
+#          composer-options: "--prefer-dist"
+#
+#      - name: "Setup Tests"
+#        shell: bash
+#        run: |
+#          if [ "${{ runner.os }}" = "Linux" ]; then
+#            ./config/ci/linux-setup-locales.sh
+#          fi
+#
+#          cp tests/_config/.env.default .env
+#          vendor/bin/codecept build
+#
+#      - name: "Run Database Tests (Postgresql)"
+#        env:
+#          DATA_MYSQL_PORT: ${{ job.services.mysql.ports['3306'] }}
+#          DATA_MYSQL_USER: root
+#          DATA_REDIS_PORT: ${{ job.services.redis.ports['6379'] }}
+#          DATA_MEMCACHED_PORT: ${{ job.services.memcached.ports['11211'] }}
+#        run: |
+#          vendor/bin/codecept run --coverage-xml=coverage.xml --ext DotReporter database --env pgsql -g pgsql
+#
+#      - name: "Upload coverage file artifact"
+#        uses: "actions/upload-artifact@v3"
+#        with:
+#          name: "db-postgres-${{ matrix.php }}-${{ matrix.ts }}-${{ matrix.name }}.coverage"
+#          path: "coverage.xml"
+#
+#
+#  db-sqlite-tests:
+#    name: Database Sqlite tests / PHP-${{ matrix.php }}
+#    needs: phpcs
+#
+#    permissions:
+#      contents: read # to fetch code (actions/checkout)
+#
+#    runs-on: ubuntu-20.04
+#
+#    strategy:
+#      fail-fast: true
+#      matrix:
+#        php:
+#          - '8.0'
+#          - '8.1'
+#
+#    steps:
+#      - uses: actions/checkout@v3
+#      - name: "Setup platform specific environment"
+#        shell: pwsh
+#        run: |
+#          git config --global core.autocrlf false
+#
+#      - name: "Setup PHP"
+#        uses: shivammathur/setup-php@v2
+#        with:
+#          php-version: ${{ matrix.php }}
+#          extensions: ${{ env.EXTENSIONS }}
+#          ini-values: apc.enable_cli=on, session.save_path=${{ env.SESSION_SAVE_PATH }}
+#          tools: pecl, phpize, php-config, composer:v2
+#          coverage: pcov
+#        env:
+#          COMPOSER_TOKEN: ${{ secrets.GITHUB_TOKEN }}
+#
+#      - name: "Validate composer"
+#        run: composer validate --no-check-all --no-check-publish
+#
+#      - name: "Install development dependencies with Composer"
+#        uses: "ramsey/composer-install@v2"
+#        with:
+#          composer-options: "--prefer-dist"
+#
+#      - name: "Setup Tests"
+#        shell: bash
+#        run: |
+#          if [ "${{ runner.os }}" = "Linux" ]; then
+#            ./config/ci/linux-setup-locales.sh
+#          fi
+#
+#          cp tests/_config/.env.default .env
+#          vendor/bin/codecept build
+#
+#      - name: "Run Database Tests (Sqlite)"
+#        run: |
+#          vendor/bin/codecept run --coverage-xml=coverage.xml --ext DotReporter database --env sqlite -g sqlite
+#
+#      - name: "Upload coverage file artifact"
+#        uses: "actions/upload-artifact@v3"
+#        with:
+#          name: "db-sqlite-${{ matrix.php }}-${{ matrix.ts }}-${{ matrix.name }}.coverage"
+#          path: "coverage.xml"
 
 
   upload-coverage:
@@ -673,9 +679,9 @@ jobs:
       - "cli-tests"
       - "integration-tests"
       - "db-common-tests"
-      - "db-mysql-tests"
-      - "db-postgres-tests"
-      - "db-sqlite-tests"
+#      - "db-mysql-tests"
+#      - "db-postgres-tests"
+#      - "db-sqlite-tests"
 
     steps:
       - name: "Checkout"
