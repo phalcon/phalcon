@@ -154,66 +154,6 @@ jobs:
           path: "tests/_output/unit-cov.xml"
 
 
-  cli-tests:
-    needs: phpcs
-
-    permissions:
-      contents: read # to fetch code (actions/checkout)
-
-    name: cli tests / PHP-${{ matrix.php }}
-    runs-on: ubuntu-20.04
-
-    strategy:
-      matrix:
-        php-version:
-          - '8.0'
-          - '8.1'
-
-    steps:
-      - name: "Setup platform specific environment"
-      - uses: actions/checkout@v3
-        shell: pwsh
-        run: |
-          git config --global core.autocrlf false
-
-      - name: "Setup PHP"
-        uses: shivammathur/setup-php@v2
-        with:
-          php-version: ${{ matrix.php }}
-          extensions: ${{ env.EXTENSIONS }}
-          ini-values: apc.enable_cli=on, session.save_path=${{ env.SESSION_SAVE_PATH }}
-          tools: pecl, phpize, php-config, composer:v2
-          coverage: pcov
-        env:
-          COMPOSER_TOKEN: ${{ secrets.GITHUB_TOKEN }}
-
-      - name: "Validate composer"
-        run: composer validate --no-check-all --no-check-publish
-
-      - name: "Install development dependencies with Composer"
-        uses: "ramsey/composer-install@v2"
-        with:
-          composer-options: "--prefer-dist"
-
-      - name: "Setup Tests"
-        shell: bash
-        run: |
-          if [ "${{ runner.os }}" = "Linux" ]; then
-            ./config/ci/linux-setup-locales.sh
-          fi
-
-          cp tests/_config/.env.default .env
-          vendor/bin/codecept build
-
-      - name: "Run Cli Tests"
-        run: |
-          vendor/bin/codecept run --coverage-xml=cli-cov.xml --ext DotReporter cli
-
-      - name: "Upload coverage file artifact"
-        uses: "actions/upload-artifact@v3"
-        with:
-          name: "unit-${{ matrix.php }}-${{ matrix.ts }}-${{ matrix.name }}.coverage"
-          path: "tests/_output/cli-cov.xml"
 
 
 #  integration-tests:
@@ -716,7 +656,7 @@ jobs:
     runs-on: "ubuntu-22.04"
     needs:
       - "unit-tests"
-      - "cli-tests"
+#      - "cli-tests"
 #      - "integration-tests"
 #      - "db-common-tests"
 #      - "db-mysql-tests"
