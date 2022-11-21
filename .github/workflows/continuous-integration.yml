@@ -76,7 +76,7 @@ jobs:
     permissions:
       contents: read # to fetch code (actions/checkout)
 
-    name: "Unit tests / PHP-${{ matrix.php }}-${{ matrix.ts }}-${{ matrix.name }}"
+    name: Unit tests / PHP-${{ matrix.php }}-${{ matrix.ts }}-${{ matrix.name }}
     runs-on: ${{ matrix.os }}
 
     strategy:
@@ -155,7 +155,7 @@ jobs:
 
 
   cli-tests:
-    name: "CLI tests / PHP-${{ matrix.php }}"
+    name: CLI tests / PHP-${{ matrix.php }}
     needs: phpcs
 
     permissions:
@@ -317,8 +317,9 @@ jobs:
           name: "unit-${{ matrix.php }}-${{ matrix.ts }}-${{ matrix.name }}.coverage"
           path: "tests/_output/coverage.xml"
 
+
   db-common-tests:
-    name: "Database common tests / PHP-${{ matrix.php }}"
+    name: Database common tests / PHP-${{ matrix.php }}
     needs: phpcs
 
     permissions:
@@ -419,7 +420,7 @@ jobs:
 
 
   db-mysql-tests:
-    name: "Database MySQL tests / PHP-${{ matrix.php }}"
+    name: Database MySQL tests / PHP-${{ matrix.php }}
     needs: phpcs
 
     permissions:
@@ -504,7 +505,7 @@ jobs:
 
 
   db-postgres-tests:
-    name: "Database PostgreSql tests / PHP-${{ matrix.php }}"
+    name: Database PostgreSql tests / PHP-${{ matrix.php }}
     needs: phpcs
 
     permissions:
@@ -594,7 +595,7 @@ jobs:
 
 
   db-sqlite-tests:
-    name: "Database Sqlite tests / PHP-${{ matrix.php }}"
+    name: Database Sqlite tests / PHP-${{ matrix.php }}
     needs: phpcs
 
     permissions:
