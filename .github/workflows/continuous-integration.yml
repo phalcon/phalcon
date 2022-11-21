@@ -50,7 +50,7 @@ jobs:
     steps:
       - uses: actions/checkout@v3
 
-      - name: Setup PHP
+      - name: "Setup PHP"
         uses: shivammathur/setup-php@v2
         with:
           php-version: 8.0
@@ -60,9 +60,13 @@ jobs:
         env:
           COMPOSER_TOKEN: ${{ secrets.GITHUB_TOKEN }}
 
-      - name: PHPCS
+      - name: "Install development dependencies with Composer"
+        uses: "ramsey/composer-install@v2"
+        with:
+          composer-options: "--prefer-dist"
+
+      - name: "PHPCS"
         run: |
-          composer install --prefer-dist
           vendor/bin/phpcs --standard=./phpcs.xml
 
 
@@ -101,14 +105,14 @@ jobs:
 
     steps:
       - uses: actions/checkout@v3
-      - name: Setup platform specific environment
+      - name: "Setup platform specific environment"
         shell: pwsh
         run: |
           git config --global core.autocrlf false
           $SessionSavePath = if ("${{ runner.os }}" -eq "Windows") { 'C:\temp' } else { '/tmp' }
           Write-Output "SESSION_SAVE_PATH=$SessionSavePath" | Out-File -FilePath $env:GITHUB_ENV -Encoding utf8 -Append
 
-      - name: Setup PHP
+      - name: "Setup PHP"
         uses: shivammathur/setup-php@v2
         with:
           php-version: ${{ matrix.php }}
@@ -120,24 +124,15 @@ jobs:
           PHPTS: ${{ matrix.ts }}
           COMPOSER_TOKEN: ${{ secrets.GITHUB_TOKEN }}
 
-      - name: Validate composer
+      - name: "Validate composer"
         run: composer validate --no-check-all --no-check-publish
 
-      - name: Get Composer Cache Directory
-        id: composer-cache
-        run: |
-          echo "::set-output name=dir::$(composer config cache-files-dir)"
-
-      - name: Setup Composer Cache
-        uses: actions/cache@v3
+      - name: "Install development dependencies with Composer"
+        uses: "ramsey/composer-install@v2"
         with:
-          path: ${{ steps.composer-cache.outputs.dir }}
-          key: ${{ runner.os }}-composer-${{ matrix.php }}-${{ hashFiles('**/composer.lock') }}
-          restore-keys: ${{ runner.os }}-composer-${{ matrix.php }}-
+          composer-options: "--prefer-dist"
 
-      - run: composer install --prefer-dist
-
-      - name: Setup Tests
+      - name: "Setup Tests"
         shell: bash
         run: |
           if [ "${{ runner.os }}" = "Linux" ]; then
@@ -147,89 +142,80 @@ jobs:
           cp tests/_config/.env.default .env
           vendor/bin/codecept build
 
-      - name: Run Unit Tests
+      - name: "Run Unit Tests"
         if: always()
         run: |
           vendor/bin/codecept run --coverage-xml=unit-cov.xml --ext DotReporter unit
 
-      - name: "Upload coverage file"
+      - name: "Upload coverage file artifact"
         uses: "actions/upload-artifact@v3"
         with:
           name: "unit-${{ matrix.php }}-${{ matrix.ts }}-${{ matrix.name }}.coverage"
           path: "tests/_output/unit-cov.xml"
 
 
-#  cli-tests:
-#    needs: phpcs
-#
-#    permissions:
-#      contents: read # to fetch code (actions/checkout)
-#
-#    name: cli tests / PHP-${{ matrix.php }}
-#    runs-on: ubuntu-20.04
-#
-#    strategy:
-#      matrix:
-#        php-version:
-#          - '8.0'
-#          - '8.1'
-#
-#    steps:
-#      - uses: actions/checkout@v3
-#      - name: Setup platform specific environment
-#        shell: pwsh
-#        run: |
-#          git config --global core.autocrlf false
-#
-#      - name: Setup PHP
-#        uses: shivammathur/setup-php@v2
-#        with:
-#          php-version: ${{ matrix.php }}
-#          extensions: ${{ env.EXTENSIONS }}
-#          ini-values: apc.enable_cli=on, session.save_path=${{ env.SESSION_SAVE_PATH }}
-#          tools: pecl, phpize, php-config, composer:v2
-#          coverage: pcov
-#        env:
-#          COMPOSER_TOKEN: ${{ secrets.GITHUB_TOKEN }}
-#
-#      - name: Validate composer
-#        run: composer validate --no-check-all --no-check-publish
-#
-#      - name: Get Composer Cache Directory
-#        id: composer-cache
-#        run: |
-#          echo "::set-output name=dir::$(composer config cache-files-dir)"
-#
-#      - name: Setup Composer Cache
-#        uses: actions/cache@v3
-#        with:
-#          path: ${{ steps.composer-cache.outputs.dir }}
-#          key: ubuntu-composer-${{ matrix.php }}-${{ hashFiles('**/composer.lock') }}
-#          restore-keys: ubuntu-composer-${{ matrix.php }}-
-#
-#      - run: composer install --prefer-dist
-#
-#      - name: Setup Tests
-#        shell: bash
-#        run: |
-#          if [ "${{ runner.os }}" = "Linux" ]; then
-#            ./config/ci/linux-setup-locales.sh
-#          fi
-#
-#          cp tests/_config/.env.default .env
-#          vendor/bin/codecept build
-#
-#      - name: Run Cli Tests
-#        run: |
-#          vendor/bin/codecept run --coverage-xml=coverage.xml --ext DotReporter cli
-#
-#      - name: "Upload coverage file"
-#        uses: "actions/upload-artifact@v3"
-#        with:
-#          name: "cli-${{ matrix.php }}-${{ matrix.ts }}-${{ matrix.name }}.coverage"
-#          path: "coverage.xml"
-#
-#
+  cli-tests:
+    needs: phpcs
+
+    permissions:
+      contents: read # to fetch code (actions/checkout)
+
+    name: cli tests / PHP-${{ matrix.php }}
+    runs-on: ubuntu-20.04
+
+    strategy:
+      matrix:
+        php-version:
+          - '8.0'
+          - '8.1'
+
+    steps:
+      - name: "Setup platform specific environment"
+      - uses: actions/checkout@v3
+        shell: pwsh
+        run: |
+          git config --global core.autocrlf false
+
+      - name: "Setup PHP"
+        uses: shivammathur/setup-php@v2
+        with:
+          php-version: ${{ matrix.php }}
+          extensions: ${{ env.EXTENSIONS }}
+          ini-values: apc.enable_cli=on, session.save_path=${{ env.SESSION_SAVE_PATH }}
+          tools: pecl, phpize, php-config, composer:v2
+          coverage: pcov
+        env:
+          COMPOSER_TOKEN: ${{ secrets.GITHUB_TOKEN }}
+
+      - name: "Validate composer"
+        run: composer validate --no-check-all --no-check-publish
+
+      - name: "Install development dependencies with Composer"
+        uses: "ramsey/composer-install@v2"
+        with:
+          composer-options: "--prefer-dist"
+
+      - name: "Setup Tests"
+        shell: bash
+        run: |
+          if [ "${{ runner.os }}" = "Linux" ]; then
+            ./config/ci/linux-setup-locales.sh
+          fi
+
+          cp tests/_config/.env.default .env
+          vendor/bin/codecept build
+
+      - name: "Run Cli Tests"
+        run: |
+          vendor/bin/codecept run --coverage-xml=cli-cov.xml --ext DotReporter cli
+
+      - name: "Upload coverage file artifact"
+        uses: "actions/upload-artifact@v3"
+        with:
+          name: "unit-${{ matrix.php }}-${{ matrix.ts }}-${{ matrix.name }}.coverage"
+          path: "tests/_output/cli-cov.xml"
+
+
 #  integration-tests:
 #    needs: phpcs
 #
@@ -730,7 +716,7 @@ jobs:
     runs-on: "ubuntu-22.04"
     needs:
       - "unit-tests"
-#      - "cli-tests"
+      - "cli-tests"
 #      - "integration-tests"
 #      - "db-common-tests"
 #      - "db-mysql-tests"
@@ -755,4 +741,7 @@ jobs:
       - name: "Upload to Codecov"
         uses: "codecov/codecov-action@v3"
         with:
+          token: ${{ secrets.CODECOV_TOKEN }}
           directory: reports
+          fail_ci_if_error: true
+          verbose: true
