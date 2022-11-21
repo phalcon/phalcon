@@ -83,25 +83,25 @@ jobs:
       matrix:
         php:
           - '8.0'
-#          - '8.1'
+          - '8.1'
         ts:
           - 'nts'
-#          - 'ts'
+          - 'ts'
         name:
           - ubuntu-gcc
-#          - macos-clang
+          - macos-clang
         # matrix names should be in next format:
         #     {php}-{ts}-{os.name}-{compiler}-{arch}
         include:
           # Linux
           - { name: ubuntu-gcc, os: ubuntu-20.04, compiler: gcc }
 #          # macOS
-#          - { name: macos-clang, os: macos-11, compiler: clang }
+          - { name: macos-clang, os: macos-11, compiler: clang }
           # Windows
-#          - { php: '8.0', ts: 'ts',  arch: 'x64', name: 'windows2019-vs16', os: 'windows-2019', compiler: 'vs16' }
+          - { php: '8.0', ts: 'ts',  arch: 'x64', name: 'windows2019-vs16', os: 'windows-2019', compiler: 'vs16' }
           - { php: '8.0', ts: 'nts', arch: 'x64', name: 'windows2019-vs16', os: 'windows-2019', compiler: 'vs16' }
-#          - { php: '8.1', ts: 'ts',  arch: 'x64', name: 'windows2019-vs16', os: 'windows-2019', compiler: 'vs16' }
-#          - { php: '8.1', ts: 'nts', arch: 'x64', name: 'windows2019-vs16', os: 'windows-2019', compiler: 'vs16' }
+          - { php: '8.1', ts: 'ts',  arch: 'x64', name: 'windows2019-vs16', os: 'windows-2019', compiler: 'vs16' }
+          - { php: '8.1', ts: 'nts', arch: 'x64', name: 'windows2019-vs16', os: 'windows-2019', compiler: 'vs16' }
 
     steps:
       - uses: actions/checkout@v3
@@ -154,88 +154,88 @@ jobs:
           path: "tests/_output/coverage.xml"
 
 
-#  cli-tests:
-#    needs: phpcs
-#
-#    permissions:
-#      contents: read # to fetch code (actions/checkout)
-#
-#    name: cli tests / PHP-${{ matrix.php }}-${{ matrix.ts }}-${{ matrix.name }}
-#    runs-on: ${{ matrix.os }}
-#
-#    strategy:
-#      matrix:
-#        php:
-#          - '8.0'
-#          - '8.1'
-#        ts:
-#          - 'nts'
-#          - 'ts'
-#        name:
-#          - ubuntu-gcc
-#          - macos-clang
-#        # matrix names should be in next format:
-#        #     {php}-{ts}-{os.name}-{compiler}-{arch}
-#        include:
-#          # Linux
-#          - { name: ubuntu-gcc, os: ubuntu-20.04, compiler: gcc }
-#          # macOS
-#          - { name: macos-clang, os: macos-11, compiler: clang }
-#          # Windows
-#          - { php: '8.0', ts: 'ts',  arch: 'x64', name: 'windows2019-vs16', os: 'windows-2019', compiler: 'vs16' }
-#          - { php: '8.0', ts: 'nts', arch: 'x64', name: 'windows2019-vs16', os: 'windows-2019', compiler: 'vs16' }
-#          - { php: '8.1', ts: 'ts',  arch: 'x64', name: 'windows2019-vs16', os: 'windows-2019', compiler: 'vs16' }
-#          - { php: '8.1', ts: 'nts', arch: 'x64', name: 'windows2019-vs16', os: 'windows-2019', compiler: 'vs16' }
-#
-#    steps:
-#      - uses: actions/checkout@v3
-#      - name: "Setup platform specific environment"
-#        shell: pwsh
-#        run: |
-#          git config --global core.autocrlf false
-#          $SessionSavePath = if ("${{ runner.os }}" -eq "Windows") { 'C:\temp' } else { '/tmp' }
-#          Write-Output "SESSION_SAVE_PATH=$SessionSavePath" | Out-File -FilePath $env:GITHUB_ENV -Encoding utf8 -Append
-#
-#      - name: "Setup PHP"
-#        uses: shivammathur/setup-php@v2
-#        with:
-#          php-version: ${{ matrix.php }}
-#          extensions: ${{ env.EXTENSIONS }}
-#          ini-values: apc.enable_cli=on, session.save_path=${{ env.SESSION_SAVE_PATH }}
-#          tools: pecl, phpize, php-config, composer:v2
-#          coverage: pcov
-#        env:
-#          PHPTS: ${{ matrix.ts }}
-#          COMPOSER_TOKEN: ${{ secrets.GITHUB_TOKEN }}
-#
-#      - name: "Validate composer"
-#        run: composer validate --no-check-all --no-check-publish
-#
-#      - name: "Install development dependencies with Composer"
-#        uses: "ramsey/composer-install@v2"
-#        with:
-#          composer-options: "--prefer-dist"
-#
-#      - name: "Setup Tests"
-#        shell: bash
-#        run: |
-#          if [ "${{ runner.os }}" = "Linux" ]; then
-#            ./config/ci/linux-setup-locales.sh
-#          fi
-#
-#          cp tests/_config/.env.default .env
-#          vendor/bin/codecept build
-#
-#      - name: "Run Unit Tests"
-#        if: always()
-#        run: |
-#          vendor/bin/codecept run --coverage-xml=coverage.xml --ext DotReporter cli
-#
-#      - name: "Upload coverage file artifact"
-#        uses: "actions/upload-artifact@v3"
-#        with:
-#          name: "unit-${{ matrix.php }}-${{ matrix.ts }}-${{ matrix.name }}.coverage"
-#          path: "tests/_output/coverage.xml"
+  cli-tests:
+    needs: phpcs
+
+    permissions:
+      contents: read # to fetch code (actions/checkout)
+
+    name: cli tests / PHP-${{ matrix.php }}-${{ matrix.ts }}-${{ matrix.name }}
+    runs-on: ${{ matrix.os }}
+
+    strategy:
+      matrix:
+        php:
+          - '8.0'
+          - '8.1'
+        ts:
+          - 'nts'
+          - 'ts'
+        name:
+          - ubuntu-gcc
+          - macos-clang
+        # matrix names should be in next format:
+        #     {php}-{ts}-{os.name}-{compiler}-{arch}
+        include:
+          # Linux
+          - { name: ubuntu-gcc, os: ubuntu-20.04, compiler: gcc }
+          # macOS
+          - { name: macos-clang, os: macos-11, compiler: clang }
+          # Windows
+          - { php: '8.0', ts: 'ts',  arch: 'x64', name: 'windows2019-vs16', os: 'windows-2019', compiler: 'vs16' }
+          - { php: '8.0', ts: 'nts', arch: 'x64', name: 'windows2019-vs16', os: 'windows-2019', compiler: 'vs16' }
+          - { php: '8.1', ts: 'ts',  arch: 'x64', name: 'windows2019-vs16', os: 'windows-2019', compiler: 'vs16' }
+          - { php: '8.1', ts: 'nts', arch: 'x64', name: 'windows2019-vs16', os: 'windows-2019', compiler: 'vs16' }
+
+    steps:
+      - uses: actions/checkout@v3
+      - name: "Setup platform specific environment"
+        shell: pwsh
+        run: |
+          git config --global core.autocrlf false
+          $SessionSavePath = if ("${{ runner.os }}" -eq "Windows") { 'C:\temp' } else { '/tmp' }
+          Write-Output "SESSION_SAVE_PATH=$SessionSavePath" | Out-File -FilePath $env:GITHUB_ENV -Encoding utf8 -Append
+
+      - name: "Setup PHP"
+        uses: shivammathur/setup-php@v2
+        with:
+          php-version: ${{ matrix.php }}
+          extensions: ${{ env.EXTENSIONS }}
+          ini-values: apc.enable_cli=on, session.save_path=${{ env.SESSION_SAVE_PATH }}
+          tools: pecl, phpize, php-config, composer:v2
+          coverage: pcov
+        env:
+          PHPTS: ${{ matrix.ts }}
+          COMPOSER_TOKEN: ${{ secrets.GITHUB_TOKEN }}
+
+      - name: "Validate composer"
+        run: composer validate --no-check-all --no-check-publish
+
+      - name: "Install development dependencies with Composer"
+        uses: "ramsey/composer-install@v2"
+        with:
+          composer-options: "--prefer-dist"
+
+      - name: "Setup Tests"
+        shell: bash
+        run: |
+          if [ "${{ runner.os }}" = "Linux" ]; then
+            ./config/ci/linux-setup-locales.sh
+          fi
+
+          cp tests/_config/.env.default .env
+          vendor/bin/codecept build
+
+      - name: "Run Unit Tests"
+        if: always()
+        run: |
+          vendor/bin/codecept run --coverage-xml=coverage.xml --ext DotReporter cli
+
+      - name: "Upload coverage file artifact"
+        uses: "actions/upload-artifact@v3"
+        with:
+          name: "unit-${{ matrix.php }}-${{ matrix.ts }}-${{ matrix.name }}.coverage"
+          path: "tests/_output/coverage.xml"
 
 
 
@@ -740,7 +740,7 @@ jobs:
     runs-on: "ubuntu-22.04"
     needs:
       - "unit-tests"
-#      - "cli-tests"
+      - "cli-tests"
 #      - "integration-tests"
 #      - "db-common-tests"
 #      - "db-mysql-tests"
