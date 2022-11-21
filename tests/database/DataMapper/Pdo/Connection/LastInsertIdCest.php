@@ -41,7 +41,7 @@ class LastInsertIdCest
 
         $template = 'insert into co_invoices (inv_id, inv_cst_id, inv_status_flag, '
             . 'inv_title, inv_total, inv_created_at) values ('
-            . '%id%, 1, 1, "%title%", %total%, "%now%")';
+            . "%id%, 1, 1, '%title%', %total%, '%now%')";
 
         $sql = str_replace(
             [

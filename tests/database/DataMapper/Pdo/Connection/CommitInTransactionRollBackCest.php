@@ -46,7 +46,7 @@ class CommitInTransactionRollBackCest
         $date  = date('Y-m-d H:i:s');
         $sql   = "insert into co_invoices (inv_id, inv_cst_id, inv_status_flag, "
             . "inv_title, inv_total, inv_created_at) values ("
-            . "{$invId}, 1, 1, \"{$title}\", 102, \"{$date}\")";
+            . "{$invId}, 1, 1, '{$title}', 102, '{$date}')";
 
         $result = $connection->exec($sql);
         $I->assertEquals(1, $result);
@@ -93,7 +93,7 @@ class CommitInTransactionRollBackCest
         $date  = date('Y-m-d H:i:s');
         $sql   = "insert into co_invoices (inv_id, inv_cst_id, inv_status_flag, "
             . "inv_title, inv_total, inv_created_at) values ("
-            . "{$invId}, 1, 1, \"{$title}\", 102, \"{$date}\")";
+            . "{$invId}, 1, 1, '{$title}', 102, '{$date}')";
 
         $result = $connection->exec($sql);
         $I->assertEquals(1, $result);
