@@ -271,6 +271,16 @@ jobs:
           - { php: '8.1', ts: 'ts',  arch: 'x64', name: 'windows2019-vs16', os: 'windows-2019', compiler: 'vs16' }
           - { php: '8.1', ts: 'nts', arch: 'x64', name: 'windows2019-vs16', os: 'windows-2019', compiler: 'vs16' }
 
+    services:
+      redis:
+        image: redis:5-alpine
+        ports:
+          - "6379:6379"
+      memcached:
+        image: memcached:1.5-alpine
+        ports:
+          - "11211:11211"
+
     steps:
       - uses: actions/checkout@v3
       - name: "Setup platform specific environment"
