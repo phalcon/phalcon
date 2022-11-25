@@ -241,7 +241,7 @@ jobs:
       - name: "Upload coverage file artifact"
         uses: "actions/upload-artifact@v3"
         with:
-          name: "unit-${{ matrix.php }}-${{ matrix.ts }}-${{ matrix.name }}.coverage"
+          name: "cli-${{ matrix.php }}-${{ matrix.ts }}-${{ matrix.name }}.coverage"
           path: "tests/_output/coverage.xml"
 
 
@@ -321,7 +321,7 @@ jobs:
       - name: "Upload coverage file artifact"
         uses: "actions/upload-artifact@v3"
         with:
-          name: "unit-${{ matrix.php }}-${{ matrix.ts }}-${{ matrix.name }}.coverage"
+          name: "integration-${{ matrix.php }}.coverage"
           path: "tests/_output/coverage.xml"
 
 
@@ -716,4 +716,4 @@ jobs:
           project-token: ${{ secrets.CODACY_PROJECT_TOKEN }}
         run: |
           bash <(curl -Ls https://coverage.codacy.com/get.sh) report \
-            -l clover $(find ./reports/ -name 'coverage.xml' -printf '-r %p ')
+            -l PHP $(find ./reports/ -name 'coverage.xml' -printf '-r %p ')
