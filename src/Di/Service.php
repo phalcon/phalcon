@@ -147,9 +147,7 @@ class Service implements ServiceInterface
             /**
              * String definitions can be class names without implicit parameters
              */
-            if (null !== $container) {
-                $instance = $container->get($instanceDefinition, $parameters);
-            } elseif (true === class_exists($instanceDefinition)) {
+            if (true === class_exists($instanceDefinition)) {
                 $instance = $this->createInstance($instanceDefinition, $parameters);
             } else {
                 throw new ServiceResolutionException();
