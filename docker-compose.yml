@@ -3,7 +3,7 @@
 version: '3'
 
 services:
-  cphalcon-8.0:
+  phalcon-8.0:
     container_name: phalcon-8.0
     hostname: phalcon-80
     build: docker/8.0
@@ -11,10 +11,18 @@ services:
     volumes:
       - .:/srv
 
-  cphalcon-8.1:
+  phalcon-8.1:
     container_name: phalcon-8.1
     hostname: phalcon-81
     build: docker/8.1
+    working_dir: /srv
+    volumes:
+      - .:/srv
+
+  phalcon-8.2:
+    container_name: phalcon-8.2
+    hostname: phalcon-82
+    build: docker/8.2
     working_dir: /srv
     volumes:
       - .:/srv
@@ -30,7 +38,7 @@ services:
 
   postgres:
     container_name: phalcon-postgres
-    image: postgres:12-alpine
+    image: postgres:15-alpine
     environment:
       - POSTGRES_PASSWORD=secret
       - POSTGRES_USER=phalcon
@@ -38,8 +46,8 @@ services:
 
   redis:
     container_name: phalcon-redis
-    image: redis:5-alpine
+    image: redis:6-alpine
 
   memcached:
     container_name: phalcon-memcached
-    image: memcached:1.5-alpine
+    image: memcached:1.6-alpine
