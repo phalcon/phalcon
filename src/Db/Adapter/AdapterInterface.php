@@ -188,37 +188,37 @@ interface AdapterInterface
     /**
      * Returns an array of Phalcon\Db\Column objects describing a table
      *
-     * @param string      $table
-     * @param string|null $schema
+     * @param string $table
+     * @param string $schemaName
      *
      * @return ColumnInterface[]
      */
-    public function describeColumns(string $table, string $schema = null): array;
+    public function describeColumns(string $table, string $schemaName = ""): array;
 
     /**
      * Lists table indexes
      *
-     * @param string      $table
-     * @param string|null $schema
+     * @param string $table
+     * @param string $schemaName
      *
      * @return IndexInterface[]
      */
     public function describeIndexes(
         string $table,
-        string $schema = null
+        string $schemaName = ""
     ): array;
 
     /**
      * Lists table references
      *
-     * @param string      $table
-     * @param string|null $schema
+     * @param string $table
+     * @param string $schemaName
      *
      * @return ReferenceInterface[]
      */
     public function describeReferences(
         string $table,
-        string $schema = null
+        string $schemaName = ""
     ): array;
 
     /**
@@ -303,16 +303,16 @@ interface AdapterInterface
      *
      * @return string
      */
-    public function escapeIdentifier(mixed $identifier): string;
+    public function escapeIdentifier(array|string $identifier): string;
 
     /**
      * Escapes a value to avoid SQL injections
      *
-     * @param string $str
+     * @param string $input
      *
      * @return string
      */
-    public function escapeString(string $str): string;
+    public function escapeString(string $input): string;
 
     /**
      * Sends SQL statements to the database server returning the success state.
@@ -364,16 +364,16 @@ interface AdapterInterface
      * print_r($robot);
      *```
      *
-     * @param string $sqlQuery
-     * @param array  $placeholders
-     * @param mixed  $column
+     * @param string     $sqlQuery
+     * @param array      $placeholders
+     * @param int|string $column
      *
      * @return string|bool
      */
     public function fetchColumn(
         string $sqlQuery,
         array $placeholders = [],
-        mixed $column = 0
+        int|string $column = 0
     ): string | bool;
 
     /**
@@ -414,11 +414,11 @@ interface AdapterInterface
     /**
      * Gets a list of columns
      *
-     * @param mixed $columnList
+     * @param array $columnList
      *
      * @return string
      */
-    public function getColumnList(mixed $columnList): string;
+    public function getColumnList(array $columnList): string;
 
     /**
      * Gets the active connection unique identifier
@@ -532,18 +532,18 @@ interface AdapterInterface
     /**
      * Inserts data into a table using custom RDBMS SQL syntax
      *
-     * @param string     $table
-     * @param array      $values
-     * @param mixed|null $fields
-     * @param mixed|null $dataTypes
+     * @param string $table
+     * @param array  $values
+     * @param array  $fields
+     * @param array  $dataTypes
      *
      * @return bool
      */
     public function insert(
         string $table,
         array $values,
-        mixed $fields = null,
-        mixed $dataTypes = null
+        array $fields = [],
+        array $dataTypes = []
     ): bool;
 
     /**
@@ -563,16 +563,16 @@ interface AdapterInterface
      * INSERT INTO `robots` (`name`, `year`) VALUES ("Astro boy", 1952);
      * ```
      *
-     * @param string     $table
-     * @param mixed      $data
-     * @param mixed|null $dataTypes
+     * @param string $table
+     * @param array  $data
+     * @param array  $dataTypes
      *
      * @return bool
      */
     public function insertAsDict(
         string $table,
-        mixed $data,
-        mixed $dataTypes = null
+        array $data,
+        array $dataTypes = []
     ): bool;
 
     /**
@@ -602,30 +602,30 @@ interface AdapterInterface
     /**
      * Appends a LIMIT clause to sqlQuery argument
      *
-     * @param string $sqlQuery
-     * @param int    $number
+     * @param string    $sqlQuery
+     * @param array|int $number
      *
      * @return string
      */
-    public function limit(string $sqlQuery, int $number): string;
+    public function limit(string $sqlQuery, array|int $number): string;
 
     /**
      * List all tables on a database
      *
-     * @param string|null $schemaName
+     * @param string $schemaName
      *
      * @return array
      */
-    public function listTables(string $schemaName = null): array;
+    public function listTables(string $schemaName = ""): array;
 
     /**
      * List all views on a database
      *
-     * @param string|null $schemaName
+     * @param string $schemaName
      *
      * @return array
      */
-    public function listViews(string $schemaName = null): array;
+    public function listViews(string $schemaName = ""): array;
 
     /**
      * Modifies a table column based on a definition
@@ -700,12 +700,12 @@ interface AdapterInterface
     /**
      * Set if nested transactions should use savepoints
      *
-     * @param bool $nestedTransactionsWithSavepoints
+     * @param bool $flag
      *
      * @return AdapterInterface
      */
     public function setNestedTransactionsWithSavepoints(
-        bool $nestedTransactionsWithSavepoints
+        bool $flag
     ): AdapterInterface;
 
     /**
@@ -719,46 +719,46 @@ interface AdapterInterface
     /**
      * Generates SQL checking for the existence of a schema.table
      *
-     * @param string      $tableName
-     * @param string|null $schemaName
+     * @param string $tableName
+     * @param string $schemaName
      *
-     * @return array
+     * @return bool
      */
     public function tableExists(
         string $tableName,
-        string $schemaName = null
+        string $schemaName = ""
     ): bool;
 
     /**
      * Gets creation options from a table
      *
-     * @param string      $tableName
-     * @param string|null $schemaName
+     * @param string $tableName
+     * @param string $schemaName
      *
      * @return array
      */
     public function tableOptions(
         string $tableName,
-        string $schemaName = null
+        string $schemaName = ""
     ): array;
 
     /**
      * Updates data on a table using custom RDBMS SQL syntax
      *
-     * @param string     $table
-     * @param mixed      $fields
-     * @param mixed      $values
-     * @param mixed|null $whereCondition
-     * @param mixed|null $dataTypes
+     * @param string       $table
+     * @param array        $fields
+     * @param array        $values
+     * @param array|string $whereCondition
+     * @param array        $dataTypes
      *
      * @return bool
      */
     public function update(
         string $table,
-        mixed $fields,
-        mixed $values,
-        mixed $whereCondition = null,
-        mixed $dataTypes = null
+        array $fields,
+        array $values,
+        array|string $whereCondition = [],
+        array $dataTypes = []
     ): bool;
 
     /**
@@ -779,18 +779,18 @@ interface AdapterInterface
      * UPDATE `robots` SET `name` = "Astro boy" WHERE id = 101
      * ```
      *
-     * @param string     $table
-     * @param mixed      $data
-     * @param mixed|null $whereCondition
-     * @param mixed|null $dataTypes
+     * @param string       $table
+     * @param array        $data
+     * @param array|string $whereCondition
+     * @param array        $dataTypes
      *
      * @return bool
      */
     public function updateAsDict(
         string $table,
-        mixed $data,
-        mixed $whereCondition = null,
-        mixed $dataTypes = null
+        array $data,
+        array|string $whereCondition = [],
+        array $dataTypes = []
     ): bool;
 
     /**
@@ -813,13 +813,13 @@ interface AdapterInterface
     /**
      * Generates SQL checking for the existence of a schema.view
      *
-     * @param string      $viewName
-     * @param string|null $schemaName
+     * @param string $viewName
+     * @param string $schemaName
      *
      * @return bool
      */
     public function viewExists(
         string $viewName,
-        string $schemaName = null
+        string $schemaName = ""
     ): bool;
 }

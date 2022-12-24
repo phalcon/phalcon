@@ -120,40 +120,40 @@ interface DialectInterface
     /**
      * Generates SQL to describe a table
      *
-     * @param string      $table
-     * @param string|null $schema
+     * @param string $table
+     * @param string $schemaName
      *
      * @return string
      */
     public function describeColumns(
         string $table,
-        string $schema = null
+        string $schemaName = ""
     ): string;
 
     /**
      * Generates SQL to query indexes on a table
      *
-     * @param string      $table
-     * @param string|null $schema
+     * @param string $table
+     * @param string $schemaName
      *
      * @return string
      */
     public function describeIndexes(
         string $table,
-        string $schema = null
+        string $schemaName = ""
     ): string;
 
     /**
      * Generates SQL to query foreign keys on a table
      *
-     * @param string      $table
-     * @param string|null $schema
+     * @param string $table
+     * @param string $schemaName
      *
      * @return string
      */
     public function describeReferences(
         string $table,
-        string $schema = null
+        string $schemaName = ""
     ): string;
 
     /**
@@ -216,10 +216,15 @@ interface DialectInterface
      *
      * @param string $tableName
      * @param string $schemaName
+     * @param bool        $ifExists
      *
      * @return string
      */
-    public function dropTable(string $tableName, string $schemaName): string;
+    public function dropTable(
+        string $tableName,
+        string $schemaName,
+        bool $ifExists = true
+    ): string;
 
     /**
      * Generates SQL to drop a view
@@ -282,7 +287,7 @@ interface DialectInterface
      */
     public function getSqlExpression(
         array $expression,
-        string $escapeChar = null,
+        string $escapeChar = "",
         array $bindCounts = []
     ): string;
 
@@ -294,16 +299,16 @@ interface DialectInterface
      *
      * @return string
      */
-    public function limit(string $sqlQuery, mixed $number): string;
+    public function limit(string $sqlQuery, array|int $number): string;
 
     /**
      * List all tables in database
      *
-     * @param string|null $schemaName
+     * @param string $schemaName
      *
      * @return string
      */
-    public function listTables(string $schemaName = null): string;
+    public function listTables(string $schemaName = ""): string;
 
     /**
      * Generates SQL to modify a column in a table
@@ -383,36 +388,36 @@ interface DialectInterface
     /**
      * Generates SQL checking for the existence of a schema.table
      *
-     * @param string      $tableName
-     * @param string|null $schemaName
+     * @param string $tableName
+     * @param string $schemaName
      *
      * @return string
      */
     public function tableExists(
         string $tableName,
-        string $schemaName = null
+        string $schemaName = ""
     ): string;
 
     /**
      * Generates the SQL to describe the table creation options
      *
-     * @param string      $table
-     * @param string|null $schema
+     * @param string $table
+     * @param string $schema
      *
      * @return string
      */
-    public function tableOptions(string $table, string $schema = null): string;
+    public function tableOptions(string $table, string $schema = ""): string;
 
     /**
      * Generates SQL checking for the existence of a schema.view
      *
-     * @param string      $viewName
-     * @param string|null $schemaName
+     * @param string $viewName
+     * @param string $schemaName
      *
      * @return string
      */
     public function viewExists(
         string $viewName,
-        string $schemaName = null
+        string $schemaName = ""
     ): string;
 }
