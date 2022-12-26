@@ -13,6 +13,7 @@ declare(strict_types=1);
 
 namespace Phalcon\Db\Adapter\Pdo;
 
+use PDO;
 use Phalcon\Db\Adapter\Pdo\AbstractPdo as PdoAdapter;
 use Phalcon\Db\Column;
 use Phalcon\Db\ColumnInterface;
@@ -23,7 +24,6 @@ use Phalcon\Db\IndexInterface;
 use Phalcon\Db\Reference;
 use Phalcon\Db\ReferenceInterface;
 use Phalcon\Events\Exception as EventsException;
-
 use function preg_match;
 use function strtolower;
 use function substr;
@@ -79,11 +79,11 @@ class Mysql extends PdoAdapter
          * set this option in the descriptor["options"], we do not have to set
          * anything
          */
-        if (true !== isset($descriptor["options"][\PDO::ATTR_EMULATE_PREPARES])) {
-            $descriptor["options"][\PDO::ATTR_EMULATE_PREPARES] = false;
+        if (true !== isset($descriptor["options"][PDO::ATTR_EMULATE_PREPARES])) {
+            $descriptor["options"][PDO::ATTR_EMULATE_PREPARES] = false;
         }
-        if (true !== isset($descriptor["options"][\PDO::ATTR_STRINGIFY_FETCHES])) {
-            $descriptor["options"][\PDO::ATTR_STRINGIFY_FETCHES] = false;
+        if (true !== isset($descriptor["options"][PDO::ATTR_STRINGIFY_FETCHES])) {
+            $descriptor["options"][PDO::ATTR_STRINGIFY_FETCHES] = false;
         }
 
         parent::__construct($descriptor);
@@ -101,8 +101,8 @@ class Mysql extends PdoAdapter
      * @throws EventsException
      */
     public function addForeignKey(
-        string $tableName,
-        string $schemaName,
+        string             $tableName,
+        string             $schemaName,
         ReferenceInterface $reference
     ): bool {
         $foreignKeyCheck = $this->prepare($this->dialect->getForeignKeyChecks());
@@ -131,14 +131,14 @@ class Mysql extends PdoAdapter
      * );
      * ```
      *
-     * @param string $table
+     * @param string $tableName
      * @param string $schemaName
      *
      * @return array|ColumnInterface[]
      * @throws Exception
      */
     public function describeColumns(
-        string $table,
+        string $tableName,
         string $schemaName = ""
     ): array {
         $oldColumn   = null;
@@ -146,7 +146,7 @@ class Mysql extends PdoAdapter
 
         $columns = [];
         $fields  = $this->fetchAll(
-            $this->dialect->describeColumns($table, $schemaName),
+            $this->dialect->describeColumns($tableName, $schemaName),
             Enum::FETCH_NUM
         );
 
@@ -161,7 +161,7 @@ class Mysql extends PdoAdapter
              * By default, the bind types is 2
              */
             $definition = [
-                "bindType" => Column::BIND_PARAM_STR
+                "bindType" => Column::BIND_PARAM_STR,
             ];
 
             /**
@@ -524,18 +524,18 @@ class Mysql extends PdoAdapter
      * );
      * ```
      *
-     * @param string $table
+     * @param string $tableName
      * @param string $schemaName
      *
      * @return array|IndexInterface[]
      */
     public function describeIndexes(
-        string $table,
+        string $tableName,
         string $schemaName = ""
     ): array {
         $indexes = [];
         $records = $this->fetchAll(
-            $this->dialect->describeIndexes($table, $schemaName)
+            $this->dialect->describeIndexes($tableName, $schemaName)
         );
 
         foreach ($records as $index) {
@@ -583,19 +583,19 @@ class Mysql extends PdoAdapter
      * );
      *```
      *
-     * @param string $table
+     * @param string $tableName
      * @param string $schemaName
      *
      * @return array|ReferenceInterface[]
      * @throws Exception
      */
     public function describeReferences(
-        string $table,
+        string $tableName,
         string $schemaName = ""
     ): array {
         $references = [];
         $records    = $this->fetchAll(
-            $this->dialect->describeReferences($table, $schemaName),
+            $this->dialect->describeReferences($tableName, $schemaName),
             Enum::FETCH_NUM
         );
 
@@ -648,7 +648,7 @@ class Mysql extends PdoAdapter
     {
         // In modern MySQL the "utf8mb4" charset is more ideal than just "uf8".
         return [
-            "charset" => "utf8mb4"
+            "charset" => "utf8mb4",
         ];
     }
 }

@@ -13,6 +13,8 @@ declare(strict_types=1);
 
 namespace Phalcon\Db\Adapter\Pdo;
 
+use PDO;
+use PDOStatement;
 use Phalcon\Db\Adapter\AbstractAdapter;
 use Phalcon\Db\Column;
 use Phalcon\Db\Exception;
@@ -21,7 +23,6 @@ use Phalcon\Db\ResultInterface;
 use Phalcon\Events\Exception as EventsException;
 use Phalcon\Events\Traits\EventsAwareTrait;
 use Phalcon\Support\Traits\IniTrait;
-
 use function array_merge;
 use function implode;
 use function intval;
@@ -67,9 +68,9 @@ abstract class AbstractPdo extends AbstractAdapter
     /**
      * PDO Handler
      *
-     * @var \PDO|null
+     * @var PDO|null
      */
-    protected ?\PDO $pdo = null;
+    protected ?PDO $pdo = null;
 
     /**
      * Constructor for Phalcon\Db\Adapter\Pdo
@@ -277,11 +278,11 @@ abstract class AbstractPdo extends AbstractAdapter
         }
 
         if (isset($descriptor["persistent"])) {
-            $options[\PDO::ATTR_PERSISTENT] = (bool) $descriptor["persistent"];
+            $options[PDO::ATTR_PERSISTENT] = (bool) $descriptor["persistent"];
         }
 
         // Set PDO to throw exceptions when an error is encountered.
-        $options[\PDO::ATTR_ERRMODE] = \PDO::ERRMODE_EXCEPTION;
+        $options[PDO::ATTR_ERRMODE] = PDO::ERRMODE_EXCEPTION;
 
         // Check if the user has defined a custom dsn string. It should be in
         // the form of key=value with semicolons delineating sections.
@@ -316,7 +317,7 @@ abstract class AbstractPdo extends AbstractAdapter
         $dsnAttributes = join(";", $dsnParts);
 
         // Create the connection using PDO
-        $this->pdo = new \PDO(
+        $this->pdo = new PDO(
             $this->type . ":" . $dsnAttributes,
             $userName,
             $password,
@@ -346,7 +347,7 @@ abstract class AbstractPdo extends AbstractAdapter
      */
     public function convertBoundParams(
         string $sql,
-        array $parameters = []
+        array  $parameters = []
     ): array {
         $placeHolders = [];
         $bindPattern  = "/\\?(\d+)|:(\w+):/";
@@ -431,8 +432,8 @@ abstract class AbstractPdo extends AbstractAdapter
      */
     public function execute(
         string $sqlStatement,
-        array $bindParams = [],
-        array $bindTypes = []
+        array  $bindParams = [],
+        array  $bindTypes = []
     ): bool {
         /**
          * Execute the beforeQuery event if an EventsManager is available
@@ -505,10 +506,10 @@ abstract class AbstractPdo extends AbstractAdapter
      *```
      */
     public function executePrepared(
-        \PDOStatement $statement,
-        array $placeholders,
-        array $dataTypes = []
-    ): \PDOStatement {
+        PDOStatement $statement,
+        array         $placeholders,
+        array         $dataTypes = []
+    ): PDOStatement {
 
         $forceCasting = $this->iniGetBool("phalcon.db.force_casting");
         foreach ($placeholders as $wildcard => $value) {
@@ -595,9 +596,9 @@ abstract class AbstractPdo extends AbstractAdapter
     /**
      * Return internal PDO handler
      *
-     * @return \PDO|null
+     * @return PDO|null
      */
-    public function getInternalHandler(): \PDO|null
+    public function getInternalHandler(): PDO|null
     {
         return $this->pdo;
     }
@@ -685,9 +686,9 @@ abstract class AbstractPdo extends AbstractAdapter
      *
      * @param string $sqlStatement
      *
-     * @return \PDOStatement
+     * @return PDOStatement
      */
-    public function prepare(string $sqlStatement): \PDOStatement
+    public function prepare(string $sqlStatement): PDOStatement
     {
         return $this->pdo->prepare($sqlStatement);
     }
@@ -721,8 +722,8 @@ abstract class AbstractPdo extends AbstractAdapter
      */
     public function query(
         string $sqlStatement,
-        array $bindParams = [],
-        array $bindTypes = []
+        array  $bindParams = [],
+        array  $bindTypes = []
     ): ResultInterface|bool {
         /**
          * Execute the beforeQuery event if an EventsManager is available

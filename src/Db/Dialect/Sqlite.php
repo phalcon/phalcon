@@ -19,7 +19,6 @@ use Phalcon\Db\Dialect;
 use Phalcon\Db\Exception;
 use Phalcon\Db\IndexInterface;
 use Phalcon\Db\ReferenceInterface;
-
 use function addcslashes;
 use function is_array;
 use function join;
@@ -172,7 +171,7 @@ class Sqlite extends Dialect
         string $schemaName,
         array  $definition
     ): string {
-        $table     = $this->prepareTable($tableName, $schemaName);
+        $tableName = $this->prepareTable($tableName, $schemaName);
         $options   = $definition["options"] ?? [];
         $temporary = $options["temporary"] ?? null;
 
@@ -189,7 +188,7 @@ class Sqlite extends Dialect
         if ($temporary) {
             $sql = "TEMPORARY";
         }
-        $sql .= " TABLE " . $table;
+        $sql .= " TABLE " . $tableName;
 
         $sql .= " (\n\t";
 
@@ -335,16 +334,16 @@ class Sqlite extends Dialect
      * );
      * ```
      *
-     * @param string      $table
+     * @param string      $tableName
      * @param string|null $schemaName
      *
      * @return string
      */
     public function describeColumns(
-        string $table,
+        string $tableName,
         string $schemaName = null
     ): string {
-        return "PRAGMA table_info('" . $table . "')";
+        return "PRAGMA table_info('" . $tableName . "')";
     }
 
     /**
@@ -362,31 +361,31 @@ class Sqlite extends Dialect
     /**
      * Generates SQL to query indexes on a table
      *
-     * @param string $table
+     * @param string $tableName
      * @param string $schemaName
      *
      * @return string
      */
     public function describeIndexes(
-        string $table,
+        string $tableName,
         string $schemaName = ""
     ): string {
-        return "PRAGMA index_list('" . $table . "')";
+        return "PRAGMA index_list('" . $tableName . "')";
     }
 
     /**
      * Generates SQL to query foreign keys on a table
      *
-     * @param string $table
+     * @param string $tableName
      * @param string $schemaName
      *
      * @return string
      */
     public function describeReferences(
-        string $table,
+        string $tableName,
         string $schemaName = ""
     ): string {
-        return "PRAGMA foreign_key_list('" . $table . "')";
+        return "PRAGMA foreign_key_list('" . $tableName . "')";
     }
 
     /**
@@ -480,13 +479,13 @@ class Sqlite extends Dialect
         string $schemaName = null,
         bool   $ifExists = true
     ): string {
-        $table = $this->prepareTable($tableName, $schemaName);
+        $tableName = $this->prepareTable($tableName, $schemaName);
 
         if (true === $ifExists) {
-            return "DROP TABLE IF EXISTS " . $table;
+            return "DROP TABLE IF EXISTS " . $tableName;
         }
 
-        return "DROP TABLE " . $table;
+        return "DROP TABLE " . $tableName;
     }
 
     /**
@@ -709,21 +708,21 @@ class Sqlite extends Dialect
      * );
      * ```
      *
-     * @param string      $table
+     * @param string      $tableName
      * @param string      $schemaName
      * @param string|null $keyName
      *
      * @return string
      */
     public function listIndexesSql(
-        string $table,
+        string $tableName,
         string $schemaName = "",
         string $keyName = null
     ): string {
         $sql = "SELECT sql "
             . "FROM sqlite_master "
             . "WHERE type = 'index' "
-            . "AND tbl_name = " . $this->escape($table) . " COLLATE NOCASE";
+            . "AND tbl_name = " . $this->escape($tableName) . " COLLATE NOCASE";
 
         if (true !== empty($keyName)) {
             $sql .= " AND name = " . $this->escape($keyName) . " COLLATE NOCASE";
@@ -821,12 +820,12 @@ class Sqlite extends Dialect
     /**
      * Generates the SQL to describe the table creation options
      *
-     * @param string $table
+     * @param string $tableName
      * @param string $schemaName
      *
      * @return string
      */
-    public function tableOptions(string $table, string $schemaName = ""): string
+    public function tableOptions(string $tableName, string $schemaName = ""): string
     {
         return "";
     }
@@ -841,14 +840,14 @@ class Sqlite extends Dialect
      */
     public function truncateTable(string $tableName, string $schemaName): string
     {
-        $table = "";
+        $tableName = "";
         if (true !== empty($schemaName)) {
-            $table = "\"" . $schemaName . "\".";
+            $tableName = "\"" . $schemaName . "\".";
         }
 
-        $table .= "\"" . $tableName . "\"";
+        $tableName .= "\"" . $tableName . "\"";
 
-        return "DELETE FROM " . $table;
+        return "DELETE FROM " . $tableName;
     }
 
     /**

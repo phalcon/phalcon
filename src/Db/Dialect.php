@@ -14,7 +14,6 @@ declare(strict_types=1);
 namespace Phalcon\Db;
 
 use Phalcon\Support\Traits\IniTrait;
-
 use function explode;
 use function implode;
 use function is_array;
@@ -159,9 +158,9 @@ abstract class Dialect implements DialectInterface
      * @throws Exception
      */
     final public function getColumnList(
-        array $columnList,
+        array  $columnList,
         string $escapeChar = "",
-        array $bindCounts = []
+        array  $bindCounts = []
     ): string {
         $columns = [];
 
@@ -194,8 +193,8 @@ abstract class Dialect implements DialectInterface
      */
     final public function getSqlColumn(
         array|string $column,
-        string $escapeChar = "",
-        array $bindCounts = []
+        string       $escapeChar = "",
+        array        $bindCounts = []
     ): string {
         if (is_string($column)) {
             return $this->prepareQualified($column, "", $escapeChar);
@@ -271,9 +270,9 @@ abstract class Dialect implements DialectInterface
      * @throws Exception
      */
     public function getSqlExpression(
-        array $expression,
+        array  $expression,
         string $escapeChar = "",
-        array $bindCounts = []
+        array  $bindCounts = []
     ): string {
         if (true !== isset($expression["type"])) {
             throw new Exception("Invalid SQL expression");
@@ -435,16 +434,16 @@ abstract class Dialect implements DialectInterface
      * Transform an intermediate representation of a schema/table into a
      * database system valid expression
      *
-     * @param array|string $table
+     * @param array|string $tableName
      * @param string       $escapeChar
      *
      * @return string
      */
     final public function getSqlTable(
-        array|string $table,
-        string $escapeChar = ""
+        array|string $tableName,
+        string       $escapeChar = ""
     ): string {
-        if (is_array($table)) {
+        if (is_array($tableName)) {
             /**
              * The index "0" is the table name
              * The index "1" is the schema name
@@ -452,14 +451,14 @@ abstract class Dialect implements DialectInterface
              */
 
             return $this->prepareTable(
-                $table[0],
-                $table[1],
-                $table[2],
+                $tableName[0],
+                $tableName[1],
+                $tableName[2],
                 $escapeChar
             );
         }
 
-        return $this->escape($table, $escapeChar);
+        return $this->escape($tableName, $escapeChar);
     }
 
     /**
@@ -508,7 +507,7 @@ abstract class Dialect implements DialectInterface
      * @return $this
      */
     public function registerCustomFunction(
-        string $name,
+        string   $name,
         callable $customFunction
     ): Dialect {
         $this->customFunctions[$name] = $customFunction;
@@ -564,7 +563,7 @@ abstract class Dialect implements DialectInterface
 
         $bindCounts = $definition["bindCounts"] ?? [];
         $columns    = $definition["columns"];
-        $tables     = $definition["tables"];
+        $tableNames = $definition["tables"];
         $escapeChar = $this->escapeChar;
 
         $sql = "SELECT";
@@ -580,7 +579,7 @@ abstract class Dialect implements DialectInterface
         /**
          * Resolve FROM
          */
-        $sql .= " " . $this->getSqlExpressionFrom($tables, $escapeChar);
+        $sql .= " " . $this->getSqlExpressionFrom($tableNames, $escapeChar);
 
         /**
          * Resolve JOINs
@@ -773,7 +772,7 @@ abstract class Dialect implements DialectInterface
      * @return string
      */
     final protected function getSqlExpressionAll(
-        array $expression,
+        array  $expression,
         string $escapeChar = ""
     ): string {
         return $this->prepareQualified(
@@ -794,9 +793,9 @@ abstract class Dialect implements DialectInterface
      * @throws Exception
      */
     final protected function getSqlExpressionBinaryOperations(
-        array $expression,
+        array  $expression,
         string $escapeChar = "",
-        array $bindCounts = []
+        array  $bindCounts = []
     ): string {
         $left = $this->getSqlExpression(
             $expression["left"],
@@ -824,9 +823,9 @@ abstract class Dialect implements DialectInterface
      * @throws Exception
      */
     final protected function getSqlExpressionCase(
-        array $expression,
+        array  $expression,
         string $escapeChar = "",
-        array $bindCounts = []
+        array  $bindCounts = []
     ): string {
         $sql = "CASE " . $this->getSqlExpression($expression["expr"], $escapeChar, $bindCounts);
 
@@ -856,9 +855,9 @@ abstract class Dialect implements DialectInterface
      * @throws Exception
      */
     final protected function getSqlExpressionCastValue(
-        array $expression,
+        array  $expression,
         string $escapeChar = "",
-        array $bindCounts = []
+        array  $bindCounts = []
     ): string {
         $left = $this->getSqlExpression(
             $expression["left"],
@@ -886,9 +885,9 @@ abstract class Dialect implements DialectInterface
      * @throws Exception
      */
     final protected function getSqlExpressionConvertValue(
-        array $expression,
+        array  $expression,
         string $escapeChar = "",
-        array $bindCounts = []
+        array  $bindCounts = []
     ): string {
         $left = $this->getSqlExpression(
             $expression["left"],
@@ -915,20 +914,20 @@ abstract class Dialect implements DialectInterface
      */
     final protected function getSqlExpressionFrom(
         array|string $expression,
-        string $escapeChar = ""
+        string       $escapeChar = ""
     ): string {
-        $tables = $expression;
+        $tableNames = $expression;
         if (is_array($expression)) {
-            $tables = [];
+            $tableNames = [];
 
-            foreach ($expression as $table) {
-                $tables[] = $this->getSqlTable($table, $escapeChar);
+            foreach ($expression as $tableName) {
+                $tableNames[] = $this->getSqlTable($tableName, $escapeChar);
             }
 
-            $tables = join(", ", $tables);
+            $tableNames = join(", ", $tableNames);
         }
 
-        return "FROM " . $tables;
+        return "FROM " . $tableNames;
     }
 
     /**
@@ -942,9 +941,9 @@ abstract class Dialect implements DialectInterface
      * @throws Exception
      */
     final protected function getSqlExpressionFunctionCall(
-        array $expression,
+        array  $expression,
         string $escapeChar = "",
-        array $bindCounts = []
+        array  $bindCounts = []
     ): string {
         $name = $expression["name"];
 
@@ -990,8 +989,8 @@ abstract class Dialect implements DialectInterface
      */
     final protected function getSqlExpressionGroupBy(
         array|string $expression,
-        string $escapeChar = "",
-        array $bindCounts = []
+        string       $escapeChar = "",
+        array        $bindCounts = []
     ): string {
         $fields = $expression;
 
@@ -1026,9 +1025,9 @@ abstract class Dialect implements DialectInterface
      * @throws Exception
      */
     final protected function getSqlExpressionHaving(
-        array $expression,
+        array  $expression,
         string $escapeChar = "",
-        array $bindCounts = []
+        array  $bindCounts = []
     ): string {
         return "HAVING " . $this->getSqlExpression($expression, $escapeChar, $bindCounts);
     }
@@ -1047,8 +1046,8 @@ abstract class Dialect implements DialectInterface
      */
     final protected function getSqlExpressionJoins(
         array|string $expression,
-        string $escapeChar = "",
-        array $bindCounts = []
+        string       $escapeChar = "",
+        array        $bindCounts = []
     ): string {
         $sql = "";
 
@@ -1109,8 +1108,8 @@ abstract class Dialect implements DialectInterface
      */
     final protected function getSqlExpressionLimit(
         array|string $expression,
-        string $escapeChar = "",
-        array $bindCounts = []
+        string       $escapeChar = "",
+        array        $bindCounts = []
     ): string {
         $sql    = "";
         $offset = null;
@@ -1158,9 +1157,9 @@ abstract class Dialect implements DialectInterface
      * @throws Exception
      */
     final protected function getSqlExpressionList(
-        array $expression,
+        array  $expression,
         string $escapeChar = "",
-        array $bindCounts = []
+        array  $bindCounts = []
     ): string {
         $items     = [];
         $separator = ", ";
@@ -1204,12 +1203,12 @@ abstract class Dialect implements DialectInterface
      * @throws Exception
      */
     final protected function getSqlExpressionObject(
-        array $expression,
+        array  $expression,
         string $escapeChar = "",
-        array $bindCounts = []
+        array  $bindCounts = []
     ): string {
         $objectExpression = [
-            "type" => "all"
+            "type" => "all",
         ];
 
         if (
@@ -1241,8 +1240,8 @@ abstract class Dialect implements DialectInterface
      */
     final protected function getSqlExpressionOrderBy(
         array|string $expression,
-        string $escapeChar = "",
-        array $bindCounts = []
+        string       $escapeChar = "",
+        array        $bindCounts = []
     ): string {
         $fields = $expression;
 
@@ -1284,7 +1283,7 @@ abstract class Dialect implements DialectInterface
      * @return string
      */
     final protected function getSqlExpressionQualified(
-        array $expression,
+        array  $expression,
         string $escapeChar = ""
     ): string {
         $column = $expression["name"];
@@ -1308,9 +1307,9 @@ abstract class Dialect implements DialectInterface
      * @throws Exception
      */
     final protected function getSqlExpressionScalar(
-        array $expression,
+        array  $expression,
         string $escapeChar = "",
-        array $bindCounts = []
+        array  $bindCounts = []
     ): string {
         if (isset($expression["column"])) {
             return $this->getSqlColumn($expression["column"]);
@@ -1339,19 +1338,19 @@ abstract class Dialect implements DialectInterface
      * @throws Exception
      */
     final protected function getSqlExpressionUnaryOperations(
-        array $expression,
+        array  $expression,
         string $escapeChar = "",
-        array $bindCounts = []
+        array  $bindCounts = []
     ): string {
         /**
          * Some unary operators use the left operand...
          */
         if (isset($expression["left"])) {
             return $this->getSqlExpression(
-                $expression["left"],
-                $escapeChar,
-                $bindCounts
-            ) . " " . $expression["op"];
+                    $expression["left"],
+                    $escapeChar,
+                    $bindCounts
+                ) . " " . $expression["op"];
         }
 
         /**
@@ -1381,8 +1380,8 @@ abstract class Dialect implements DialectInterface
      */
     final protected function getSqlExpressionWhere(
         array|string $expression,
-        string $escapeChar = "",
-        array $bindCounts = []
+        string       $escapeChar = "",
+        array        $bindCounts = []
     ): string {
         $whereSql = $expression;
         if (is_array($expression)) {
@@ -1420,7 +1419,7 @@ abstract class Dialect implements DialectInterface
     /**
      * Prepares table for this RDBMS
      *
-     * @param string $table
+     * @param string $tableName
      * @param string $schemaName
      * @param string $alias
      * @param string $escapeChar
@@ -1428,29 +1427,29 @@ abstract class Dialect implements DialectInterface
      * @return string
      */
     protected function prepareTable(
-        string $table,
+        string $tableName,
         string $schemaName = "",
         string $alias = "",
         string $escapeChar = ""
     ): string {
-        $table = $this->escape($table, $escapeChar);
+        $tableName = $this->escape($tableName, $escapeChar);
 
         /**
          * Schema
          */
         if (true !== empty($schemaName)) {
-            $table = $this->escapeSchema($schemaName, $escapeChar)
-                . "." . $table;
+            $tableName = $this->escapeSchema($schemaName, $escapeChar)
+                . "." . $tableName;
         }
 
         /**
          * Alias
          */
         if (true !== empty($alias)) {
-            $table .= " AS " . $this->escape($alias, $escapeChar);
+            $tableName .= " AS " . $this->escape($alias, $escapeChar);
         }
 
-        return $table;
+        return $tableName;
     }
 
     /**

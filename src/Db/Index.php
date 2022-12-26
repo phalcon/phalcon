@@ -53,7 +53,7 @@ class Index implements IndexInterface
      */
     public function __construct(
         protected string $name,
-        protected array $columns,
+        protected array  $columns,
         protected string $type = ""
     ) {
     }

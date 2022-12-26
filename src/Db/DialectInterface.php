@@ -28,8 +28,8 @@ interface DialectInterface
      * @return string
      */
     public function addColumn(
-        string $tableName,
-        string $schemaName,
+        string          $tableName,
+        string          $schemaName,
         ColumnInterface $column
     ): string;
 
@@ -43,8 +43,8 @@ interface DialectInterface
      * @return string
      */
     public function addForeignKey(
-        string $tableName,
-        string $schemaName,
+        string             $tableName,
+        string             $schemaName,
         ReferenceInterface $reference
     ): string;
 
@@ -58,8 +58,8 @@ interface DialectInterface
      * @return string
      */
     public function addIndex(
-        string $tableName,
-        string $schemaName,
+        string         $tableName,
+        string         $schemaName,
         IndexInterface $index
     ): string;
 
@@ -73,8 +73,8 @@ interface DialectInterface
      * @return string
      */
     public function addPrimaryKey(
-        string $tableName,
-        string $schemaName,
+        string         $tableName,
+        string         $schemaName,
         IndexInterface $index
     ): string;
 
@@ -99,7 +99,7 @@ interface DialectInterface
     public function createTable(
         string $tableName,
         string $schemaName,
-        array $definition
+        array  $definition
     ): string;
 
     /**
@@ -113,46 +113,46 @@ interface DialectInterface
      */
     public function createView(
         string $viewName,
-        array $definition,
+        array  $definition,
         string $schemaName = ""
     ): string;
 
     /**
      * Generates SQL to describe a table
      *
-     * @param string $table
+     * @param string $tableName
      * @param string $schemaName
      *
      * @return string
      */
     public function describeColumns(
-        string $table,
+        string $tableName,
         string $schemaName = ""
     ): string;
 
     /**
      * Generates SQL to query indexes on a table
      *
-     * @param string $table
+     * @param string $tableName
      * @param string $schemaName
      *
      * @return string
      */
     public function describeIndexes(
-        string $table,
+        string $tableName,
         string $schemaName = ""
     ): string;
 
     /**
      * Generates SQL to query foreign keys on a table
      *
-     * @param string $table
+     * @param string $tableName
      * @param string $schemaName
      *
      * @return string
      */
     public function describeReferences(
-        string $table,
+        string $tableName,
         string $schemaName = ""
     ): string;
 
@@ -187,7 +187,7 @@ interface DialectInterface
     ): string;
 
     /**
-      * Generates SQL to delete an index from a table
+     * Generates SQL to delete an index from a table
      *
      * @param string $tableName
      * @param string $schemaName
@@ -216,14 +216,14 @@ interface DialectInterface
      *
      * @param string $tableName
      * @param string $schemaName
-     * @param bool        $ifExists
+     * @param bool   $ifExists
      *
      * @return string
      */
     public function dropTable(
         string $tableName,
         string $schemaName,
-        bool $ifExists = true
+        bool   $ifExists = true
     ): string;
 
     /**
@@ -238,7 +238,7 @@ interface DialectInterface
     public function dropView(
         string $viewName,
         string $schemaName = "",
-        bool $ifExists = true
+        bool   $ifExists = true
     ): string;
 
     /**
@@ -286,9 +286,9 @@ interface DialectInterface
      * @return string
      */
     public function getSqlExpression(
-        array $expression,
+        array  $expression,
         string $escapeChar = "",
-        array $bindCounts = []
+        array  $bindCounts = []
     ): string;
 
     /**
@@ -321,8 +321,8 @@ interface DialectInterface
      * @return string
      */
     public function modifyColumn(
-        string $tableName,
-        string $schemaName,
+        string          $tableName,
+        string          $schemaName,
         ColumnInterface $column,
         ColumnInterface $currentColumn = null
     ): string;
@@ -331,7 +331,7 @@ interface DialectInterface
      * Registers custom SQL functions
      */
     public function registerCustomFunction(
-        string $name,
+        string   $name,
         callable $customFunction
     ): Dialect;
 
@@ -401,12 +401,12 @@ interface DialectInterface
     /**
      * Generates the SQL to describe the table creation options
      *
-     * @param string $table
-     * @param string $schema
+     * @param string $tableName
+     * @param string $schemaName
      *
      * @return string
      */
-    public function tableOptions(string $table, string $schemaName = ""): string;
+    public function tableOptions(string $tableName, string $schemaName = ""): string;
 
     /**
      * Generates SQL checking for the existence of a schema.view

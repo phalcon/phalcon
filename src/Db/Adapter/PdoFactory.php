@@ -29,9 +29,9 @@ class PdoFactory
     /**
      * Factory to create an instance from a Config object
      *
-     * @param array|\Phalcon\Config\Config config = [
-     *     'adapter' => 'mysql',
-     *     'options' => [
+     * @param array|Config config = [
+     *         'adapter' => 'mysql',
+     *         'options' => [
      *         'host' => 'localhost',
      *         'port' => '3306',
      *         'dbname' => 'blog',
@@ -41,10 +41,10 @@ class PdoFactory
      *         'options' => [],
      *         'dsn' => null,
      *         'charset' => 'utf8mb4'
-     *     ]
-     * ]
+     *         ]
+     *         ]
      */
-    public function load(Config|array $config):  AdapterInterface
+    public function load(Config|array $config): AdapterInterface
     {
         $config = $this->checkConfig($config);
         $config = $this->checkConfigElement($config, "adapter");
@@ -67,7 +67,7 @@ class PdoFactory
      */
     public function newInstance(
         string $name,
-        array $options = []
+        array  $options = []
     ): AdapterInterface {
         $definition = $this->getService($name);
 

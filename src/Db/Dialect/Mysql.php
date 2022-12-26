@@ -13,14 +13,21 @@ declare(strict_types=1);
 
 namespace Phalcon\Db\Dialect;
 
-use Phalcon\Db\Dialect;
 use Phalcon\Db\Column;
+use Phalcon\Db\ColumnInterface;
+use Phalcon\Db\Dialect;
 use Phalcon\Db\Exception;
 use Phalcon\Db\IndexInterface;
-use Phalcon\Db\ColumnInterface;
 use Phalcon\Db\ReferenceInterface;
-use Phalcon\Db\DialectInterface;
-use function str_contains;
+use function addcslashes;
+use function explode;
+use function is_array;
+use function is_float;
+use function is_int;
+use function join;
+use function strtoupper;
+use function substr;
+
 
 /**
  * Generates database specific SQL for the MySQL RDBMS
@@ -40,10 +47,11 @@ class Mysql extends Dialect
      * @param ColumnInterface $column
      *
      * @return string
+     * @throws Exception
      */
     public function addColumn(
-        string $tableName,
-        string $schemaName,
+        string          $tableName,
+        string          $schemaName,
         ColumnInterface $column
     ): string {
         $sql = "ALTER TABLE "
@@ -62,7 +70,7 @@ class Mysql extends Dialect
         $sql .= " NULL";
 
         if (true === $column->hasDefault()) {
-            $defaultValue = $column->getDefault();
+            $defaultValue      = $column->getDefault();
             $upperDefaultValue = strtoupper($defaultValue);
 
             if (
@@ -83,17 +91,7 @@ class Mysql extends Dialect
             $sql .= " AUTO_INCREMENT";
         }
 
-        if (true === $column->isFirst()) {
-            $sql .= " FIRST";
-        } else {
-            $afterPosition = $column->getAfterPosition();
-
-            if ($afterPosition) {
-                $sql .=  " AFTER `" . $afterPosition . "`";
-            }
-        }
-
-        return $sql;
+        return $this->checkFirstAfterPositions($sql, $column);
     }
 
     /**
@@ -107,8 +105,8 @@ class Mysql extends Dialect
      * @throws Exception
      */
     public function addForeignKey(
-        string $tableName,
-        string $schemaName,
+        string             $tableName,
+        string             $schemaName,
         ReferenceInterface $reference
     ): string {
         $sql = "ALTER TABLE "
@@ -151,8 +149,8 @@ class Mysql extends Dialect
      * @throws Exception
      */
     public function addIndex(
-        string $tableName,
-        string $schemaName,
+        string         $tableName,
+        string         $schemaName,
         IndexInterface $index
     ): string {
         $sql = "ALTER TABLE "
@@ -186,8 +184,8 @@ class Mysql extends Dialect
      * @throws Exception
      */
     public function addPrimaryKey(
-        string $tableName,
-        string $schemaName,
+        string         $tableName,
+        string         $schemaName,
         IndexInterface $index
     ): string {
         return "ALTER TABLE "
@@ -210,7 +208,7 @@ class Mysql extends Dialect
     public function createTable(
         string $tableName,
         string $schemaName,
-        array $definition
+        array  $definition
     ): string {
         if (true !== isset($definition["columns"])) {
             throw new Exception(
@@ -218,7 +216,7 @@ class Mysql extends Dialect
             );
         }
 
-        $table     = $this->prepareTable($tableName, $schemaName);
+        $tableName = $this->prepareTable($tableName, $schemaName);
         $options   = $definition["options"] ?? [];
         $temporary = $options["temporary"] ?? null;
 
@@ -226,9 +224,9 @@ class Mysql extends Dialect
          * Create a temporary or normal table
          */
         if ($temporary) {
-            $sql = "CREATE TEMPORARY TABLE " . $table . " (\n\t";
+            $sql = "CREATE TEMPORARY TABLE " . $tableName . " (\n\t";
         } else {
-            $sql = "CREATE TABLE " . $table . " (\n\t";
+            $sql = "CREATE TABLE " . $tableName . " (\n\t";
         }
 
         $createLines = [];
@@ -254,7 +252,7 @@ class Mysql extends Dialect
              * Add a Default clause
              */
             if ($column->hasDefault()) {
-                $defaultValue = $column->getDefault();
+                $defaultValue      = $column->getDefault();
                 $upperDefaultValue = strtoupper($defaultValue);
 
                 if (
@@ -288,7 +286,7 @@ class Mysql extends Dialect
             /**
              * Add a COMMENT clause
              */
-             if ($column->getComment()) {
+            if (true !== empty($column->getComment())) {
                 $columnLine .= " COMMENT '" . $column->getComment() . "'";
             }
 
@@ -311,21 +309,19 @@ class Mysql extends Dialect
                     $indexSql = "PRIMARY KEY ("
                         . $this->getColumnList($index->getColumns())
                         . ")";
+                } elseif (true !== empty($indexType)) {
+                    $indexSql = $indexType
+                        . " KEY `"
+                        . $indexName
+                        . "` ("
+                        . $this->getColumnList($index->getColumns())
+                        . ")";
                 } else {
-                    if (true !== empty($indexType)) {
-                        $indexSql = $indexType
-                            . " KEY `"
-                            . $indexName
-                            . "` ("
-                            . $this->getColumnList($index->getColumns())
-                            . ")";
-                    } else {
-                        $indexSql = "KEY `"
-                            . $indexName
-                            . "` ("
-                            . $this->getColumnList($index->getColumns())
-                            . ")";
-                    }
+                    $indexSql = "KEY `"
+                        . $indexName
+                        . "` ("
+                        . $this->getColumnList($index->getColumns())
+                        . ")";
                 }
 
                 $createLines[] = $indexSql;
@@ -384,7 +380,7 @@ class Mysql extends Dialect
      */
     public function createView(
         string $viewName,
-        array $definition,
+        array  $definition,
         string $schemaName = null
     ): string {
         if (isset($definition["sql"])) {
@@ -408,45 +404,45 @@ class Mysql extends Dialect
      * );
      * ```
      *
-     * @param string $table
+     * @param string $tableName
      * @param string $schemaName
      *
      * @return string
      */
     public function describeColumns(
-        string $table,
+        string $tableName,
         string $schemaName = ""
     ): string {
         return "SHOW FULL COLUMNS FROM "
-            . $this->prepareTable($table, $schemaName);
+            . $this->prepareTable($tableName, $schemaName);
     }
 
     /**
      * Generates SQL to query indexes on a table
      *
-     * @param string $table
+     * @param string $tableName
      * @param string $schemaName
      *
      * @return string
      */
     public function describeIndexes(
-        string $table,
+        string $tableName,
         string $schemaName = ""
     ): string {
         return "SHOW INDEXES FROM "
-            . $this->prepareTable($table, $schemaName);
+            . $this->prepareTable($tableName, $schemaName);
     }
 
     /**
      * Generates SQL to query foreign keys on a table
      *
-     * @param string $table
+     * @param string $tableName
      * @param string $schemaName
      *
      * @return string
      */
     public function describeReferences(
-        string $table,
+        string $tableName,
         string $schemaName = ""
     ): string {
         $sql = "SELECT DISTINCT KCU.TABLE_NAME, KCU.COLUMN_NAME, "
@@ -459,15 +455,15 @@ class Mysql extends Dialect
             . "AND RC.CONSTRAINT_SCHEMA = KCU.CONSTRAINT_SCHEMA "
             . "WHERE KCU.REFERENCED_TABLE_NAME IS NOT NULL AND ";
 
-        if (true !== empty($schema)) {
+        if (true !== empty($schemaName)) {
             $sql .= "KCU.CONSTRAINT_SCHEMA = '"
                 . $schemaName
                 . "' AND KCU.TABLE_NAME = '"
-                . $table
+                . $tableName
                 . "'";
         } else {
             $sql .= "KCU.CONSTRAINT_SCHEMA = DATABASE() "
-                . "AND KCU.TABLE_NAME = '" . $table . "'";
+                . "AND KCU.TABLE_NAME = '" . $tableName . "'";
         }
 
         return $sql;
@@ -559,15 +555,15 @@ class Mysql extends Dialect
     public function dropTable(
         string $tableName,
         string $schemaName = "",
-        bool $ifExists = true
+        bool   $ifExists = true
     ): string {
-        $table = $this->prepareTable($tableName, $schemaName);
+        $tableName = $this->prepareTable($tableName, $schemaName);
 
         if (true === $ifExists) {
-            return "DROP TABLE IF EXISTS " . $table;
+            return "DROP TABLE IF EXISTS " . $tableName;
         }
 
-        return "DROP TABLE " . $table;
+        return "DROP TABLE " . $tableName;
     }
 
     /**
@@ -582,7 +578,7 @@ class Mysql extends Dialect
     public function dropView(
         string $viewName,
         string $schemaName = "",
-        bool $ifExists = true
+        bool   $ifExists = true
     ): string {
         $view = $this->prepareTable($viewName, $schemaName);
 
@@ -603,7 +599,7 @@ class Mysql extends Dialect
 
         switch ($columnType) {
             case Column::TYPE_BIGINTEGER:
-                if (true === $columnSql) {
+                if (true === empty($columnSql)) {
                     $columnSql .= "BIGINT";
                 }
 
@@ -613,7 +609,7 @@ class Mysql extends Dialect
                 break;
 
             case Column::TYPE_BIT:
-                if (true === $columnSql) {
+                if (true === empty($columnSql)) {
                     $columnSql .= "BIT";
                 }
 
@@ -622,21 +618,21 @@ class Mysql extends Dialect
                 break;
 
             case Column::TYPE_BLOB:
-                if (true === $columnSql) {
+                if (true === empty($columnSql)) {
                     $columnSql .= "BLOB";
                 }
 
                 break;
 
             case Column::TYPE_BOOLEAN:
-                if (true === $columnSql) {
+                if (true === empty($columnSql)) {
                     $columnSql .= "TINYINT(1)";
                 }
 
                 break;
 
             case Column::TYPE_CHAR:
-                if (true === $columnSql) {
+                if (true === empty($columnSql)) {
                     $columnSql .= "CHAR";
                 }
 
@@ -645,35 +641,35 @@ class Mysql extends Dialect
                 break;
 
             case Column::TYPE_DATE:
-                if (true === $columnSql) {
+                if (true === empty($columnSql)) {
                     $columnSql .= "DATE";
                 }
 
                 break;
 
             case Column::TYPE_DATETIME:
-                if (true === $columnSql) {
+                if (true === empty($columnSql)) {
                     $columnSql .= "DATETIME";
                 }
 
-                if $column->getSize() > 0 {
+                if ($column->getSize() > 0) {
                     $columnSql .= $this->getColumnSize($column);
                 }
 
                 break;
 
             case Column::TYPE_DECIMAL:
-                if (true === $columnSql) {
+                if (true === empty($columnSql)) {
                     $columnSql .= "DECIMAL";
                 }
 
-                $columnSql .= $this->getColumnSizeAndScale($#column)
-                # . $this->checkColumnUnsigned($column);
+                $columnSql .= $this->getColumnSizeAndScale($column)
+                    . $this->checkColumnUnsigned($column);
 
                 break;
 
             case Column::TYPE_DOUBLE:
-                if (true === $columnSql) {
+                if (true === empty($columnSql)) {
                     $columnSql .= "DOUBLE";
                 }
 
@@ -683,7 +679,7 @@ class Mysql extends Dialect
                 break;
 
             case Column::TYPE_ENUM:
-                if (true === $columnSql) {
+                if (true === empty($columnSql)) {
                     $columnSql .= "ENUM";
                 }
 
@@ -692,7 +688,7 @@ class Mysql extends Dialect
                 break;
 
             case Column::TYPE_FLOAT:
-                if (true === $columnSql) {
+                if (true === empty($columnSql)) {
                     $columnSql .= "FLOAT";
                 }
 
@@ -702,7 +698,7 @@ class Mysql extends Dialect
                 break;
 
             case Column::TYPE_INTEGER:
-                if (true === $columnSql) {
+                if (true === empty($columnSql)) {
                     $columnSql .= "INT";
                 }
 
@@ -712,35 +708,35 @@ class Mysql extends Dialect
                 break;
 
             case Column::TYPE_JSON:
-                if (true === $columnSql) {
+                if (true === empty($columnSql)) {
                     $columnSql .= "JSON";
                 }
 
                 break;
 
             case Column::TYPE_LONGBLOB:
-                if (true === $columnSql) {
+                if (true === empty($columnSql)) {
                     $columnSql .= "LONGBLOB";
                 }
 
                 break;
 
             case Column::TYPE_LONGTEXT:
-                if (true === $columnSql) {
+                if (true === empty($columnSql)) {
                     $columnSql .= "LONGTEXT";
                 }
 
                 break;
 
             case Column::TYPE_MEDIUMBLOB:
-                if (true === $columnSql) {
+                if (true === empty($columnSql)) {
                     $columnSql .= "MEDIUMBLOB";
                 }
 
                 break;
 
             case Column::TYPE_MEDIUMINTEGER:
-                if (true === $columnSql) {
+                if (true === empty($columnSql)) {
                     $columnSql .= "MEDIUMINT";
                 }
 
@@ -750,14 +746,14 @@ class Mysql extends Dialect
                 break;
 
             case Column::TYPE_MEDIUMTEXT:
-                if (true === $columnSql) {
+                if (true === empty($columnSql)) {
                     $columnSql .= "MEDIUMTEXT";
                 }
 
                 break;
 
             case Column::TYPE_SMALLINTEGER:
-                if (true === $columnSql) {
+                if (true === empty($columnSql)) {
                     $columnSql .= "SMALLINT";
                 }
 
@@ -767,43 +763,43 @@ class Mysql extends Dialect
                 break;
 
             case Column::TYPE_TEXT:
-                if (true === $columnSql) {
+                if (true === empty($columnSql)) {
                     $columnSql .= "TEXT";
                 }
 
                 break;
 
             case Column::TYPE_TIME:
-                if (true === $columnSql) {
+                if (true === empty($columnSql)) {
                     $columnSql .= "TIME";
                 }
 
-                if $column->getSize() > 0 {
+                if ($column->getSize() > 0) {
                     $columnSql .= $this->getColumnSize($column);
                 }
 
                 break;
 
             case Column::TYPE_TIMESTAMP:
-                if (true === $columnSql) {
+                if (true === empty($columnSql)) {
                     $columnSql .= "TIMESTAMP";
                 }
 
-                if $column->getSize() > 0 {
+                if ($column->getSize() > 0) {
                     $columnSql .= $this->getColumnSize($column);
                 }
 
                 break;
 
             case Column::TYPE_TINYBLOB:
-                if (true === $columnSql) {
+                if (true === empty($columnSql)) {
                     $columnSql .= "TINYBLOB";
                 }
 
                 break;
 
             case Column::TYPE_TINYINTEGER:
-                if (true === $columnSql) {
+                if (true === empty($columnSql)) {
                     $columnSql .= "TINYINT";
                 }
 
@@ -813,14 +809,14 @@ class Mysql extends Dialect
                 break;
 
             case Column::TYPE_TINYTEXT:
-                if (true === $columnSql) {
+                if (true === empty($columnSql)) {
                     $columnSql .= "TINYTEXT";
                 }
 
                 break;
 
             case Column::TYPE_VARCHAR:
-                if (true === $columnSql) {
+                if (true === empty($columnSql)) {
                     $columnSql .= "VARCHAR";
                 }
 
@@ -893,79 +889,94 @@ class Mysql extends Dialect
 
     /**
      * Generates the SQL to list all views of a schema or user
+     *
+     * @param string $schemaName
+     *
+     * @return string
      */
     public function listViews(string $schemaName = ""): string
     {
         if (true === empty($schemaName)) {
-            return "SELECT `TABLE_NAME` AS view_name FROM `INFORMATION_SCHEMA`.`VIEWS` WHERE `TABLE_SCHEMA` = '" . schemaName . "' ORDER BY view_name";
+            return "SELECT `TABLE_NAME` AS view_name "
+                . "FROM `INFORMATION_SCHEMA`.`VIEWS` "
+                . "WHERE `TABLE_SCHEMA` = '" . $schemaName . "' "
+                . "ORDER BY view_name";
         }
 
-        return "SELECT `TABLE_NAME` AS view_name FROM `INFORMATION_SCHEMA`.`VIEWS` WHERE `TABLE_SCHEMA` = DATABASE() ORDER BY view_name";
+        return "SELECT `TABLE_NAME` AS view_name "
+            . "FROM `INFORMATION_SCHEMA`.`VIEWS` "
+            . "WHERE `TABLE_SCHEMA` = DATABASE() "
+            . "ORDER BY view_name";
     }
 
     /**
      * Generates SQL to modify a column in a table
      */
-    public function modifyColumn(string $tableName, string $schemaName, ColumnInterface $column, <ColumnInterface> currentColumn = null): string
-    {
-        var afterPosition, defaultValue, upperDefaultValue, columnDefinition;
-        string sql;
+    public function modifyColumn(
+        string          $tableName,
+        string          $schemaName,
+        ColumnInterface $column,
+        ColumnInterface $currentColumn = null
+    ): string {
+        $columnDefinition = $this->getColumnDefinition($column);
+        $sql              = "ALTER TABLE "
+            . $this->prepareTable($tableName, $schemaName);
 
-        $columnDefinition = $this->getColumnDefinition($column),
-            sql = "ALTER TABLE " . $this->prepareTable(tableName, schemaName);
-
-        if typeof currentColumn != "object" {
-            $currentColumn = column;
+        if (null === $currentColumn) {
+            $currentColumn = $column;
         }
 
-        if $column->getName() !== currentColumn->getName() {
-            $sql .= " CHANGE COLUMN `" . currentColumn->getName() . "` `" . $column->getName() . "` " . columnDefinition;
+        if ($column->getName() !== $currentColumn->getName()) {
+            $sql .= " CHANGE COLUMN `" .
+                $currentColumn->getName()
+                . "` `" .
+                $column->getName()
+                . "` "
+                . $columnDefinition;
         } else {
-            $sql .= " MODIFY `" . $column->getName() . "` " . columnDefinition;
+            $sql .= " MODIFY `"
+                . $column->getName()
+                . "` " . $columnDefinition;
         }
 
-        if $column->isNotNull() {
-            $sql .= " NOT NULL";
-        } else {
-            // This is required for some types like TIMESTAMP
-            // Query won't be executed if NULL wasn't specified
-            // Even if DEFAULT NULL was specified
-            $sql .= " NULL";
+        if ($column->isNotNull()) {
+            $sql .= " NOT";
         }
+        // This is required for some types like TIMESTAMP
+        // Query won't be executed if NULL wasn't specified
+        // Even if DEFAULT NULL was specified
+        $sql .= " NULL";
 
-        if $column->hasDefault() {
-            $defaultValue = $column->getDefault();
-            $upperDefaultValue = strtoupper(defaultValue);
+        if ($column->hasDefault()) {
+            $defaultValue      = $column->getDefault();
+            $upperDefaultValue = strtoupper($defaultValue);
 
-            if memstr(upperDefaultValue, "CURRENT_TIMESTAMP") || memstr(upperDefaultValue, "NULL") || is_int(defaultValue) || is_float(defaultValue) {
-                $sql .= " DEFAULT " . defaultValue;
-            }  else {
-                $sql .= " DEFAULT \"" . addcslashes(defaultValue, "\"") . "\"";
+            if (
+                str_contains($upperDefaultValue, "CURRENT_TIMESTAMP") ||
+                str_contains($upperDefaultValue, "NULL") ||
+                is_int($defaultValue) ||
+                is_float($defaultValue)
+            ) {
+                $sql .= " DEFAULT " . $defaultValue;
+            } else {
+                $sql .= " DEFAULT \""
+                    . addcslashes($defaultValue, "\"")
+                    . "\"";
             }
         }
 
-        if $column->isAutoIncrement() {
+        if ($column->isAutoIncrement()) {
             $sql .= " AUTO_INCREMENT";
         }
 
         /**
-        * Add a COMMENT clause
-        */
-        if $column->getComment() {
+         * Add a COMMENT clause
+         */
+        if (true !== empty($column->getComment())) {
             $sql .= " COMMENT '" . $column->getComment() . "'";
         }
 
-        if $column->isFirst() {
-            $sql .= " FIRST";
-        } else {
-            $afterPosition = $column->getAfterPosition();
-
-            if afterPosition {
-                $sql .=  " AFTER `" . afterPosition . "`";
-            }
-        }
-
-        return sql;
+        return $this->checkFirstAfterPositions($sql, $column);
     }
 
     /**
@@ -976,10 +987,14 @@ class Mysql extends Dialect
      *
      * echo $sql; // SELECT * FROM robots LOCK IN SHARE MODE
      *```
+     *
+     * @param string $sqlQuery
+     *
+     * @return string
      */
     public function sharedLock(string $sqlQuery): string
     {
-        return sqlQuery . " LOCK IN SHARE MODE";
+        return $sqlQuery . " LOCK IN SHARE MODE";
     }
 
     /**
@@ -990,136 +1005,205 @@ class Mysql extends Dialect
      *
      * echo $dialect->tableExists("posts");
      * ```
+     *
+     * @param string $tableName
+     * @param string $schemaName
+     *
+     * @return string
      */
-    public function tableExists(string $tableName, string $schemaName = ""): string
-    {
+    public function tableExists(
+        string $tableName,
+        string $schemaName = ""
+    ): string {
         if (true !== empty($schemaName)) {
-            return "SELECT IF(COUNT(*) > 0, 1, 0) FROM `INFORMATION_SCHEMA`.`TABLES` WHERE `TABLE_NAME`= '" . tableName . "' AND `TABLE_SCHEMA` = '" . schemaName . "'";
+            return "SELECT IF(COUNT(*) > 0, 1, 0) "
+                . "FROM `INFORMATION_SCHEMA`.`TABLES` "
+                . "WHERE `TABLE_NAME`= '" . $tableName . "' "
+                . "AND `TABLE_SCHEMA` = '" . $schemaName . "'";
         }
 
-        return "SELECT IF(COUNT(*) > 0, 1, 0) FROM `INFORMATION_SCHEMA`.`TABLES` WHERE `TABLE_NAME` = '" . tableName . "' AND `TABLE_SCHEMA` = DATABASE()";
+        return "SELECT IF(COUNT(*) > 0, 1, 0) "
+            . "FROM `INFORMATION_SCHEMA`.`TABLES` "
+            . "WHERE `TABLE_NAME` = '" . $tableName . "' "
+            . "AND `TABLE_SCHEMA` = DATABASE()";
     }
 
     /**
      * Generates the SQL to describe the table creation options
+     *
+     * @param string $tableName
+     * @param string $schemaName
+     *
+     * @return string
      */
-    public function tableOptions(string $table, string $schemaName = ""): string
+    public function tableOptions(string $tableName, string $schemaName = ""): string
     {
-        string sql;
-
-        $sql = "SELECT TABLES.TABLE_TYPE AS table_type,TABLES.AUTO_INCREMENT AS auto_increment,TABLES.ENGINE AS engine,TABLES.TABLE_COLLATION AS table_collation FROM INFORMATION_SCHEMA.TABLES WHERE ";
+        $sql = "SELECT TABLES.TABLE_TYPE AS table_type,"
+            . "TABLES.AUTO_INCREMENT AS auto_increment,"
+            . "TABLES.ENGINE AS engine,"
+            . "TABLES.TABLE_COLLATION AS table_collation "
+            . "FROM INFORMATION_SCHEMA.TABLES WHERE ";
 
         if (true !== empty($schemaName)) {
-            return sql . "TABLES.TABLE_SCHEMA = '" . schema . "' AND TABLES.TABLE_NAME = '" . table . "'";
+            return $sql
+                . "TABLES.TABLE_SCHEMA = '"
+                . $schemaName
+                . "' AND TABLES.TABLE_NAME = '"
+                . $tableName . "'";
         }
 
-        return sql . "TABLES.TABLE_SCHEMA = DATABASE() AND TABLES.TABLE_NAME = '" . table . "'";
+        return $sql . "TABLES.TABLE_SCHEMA = DATABASE() "
+            . "AND TABLES.TABLE_NAME = '" . $tableName . "'";
     }
 
     /**
      * Generates SQL to truncate a table
+     *
+     * @param string $tableName
+     * @param string $schemaName
+     *
+     * @return string
      */
     public function truncateTable(string $tableName, string $schemaName): string
     {
-        string table;
-
-        if schemaName {
-            $table = "`" . schemaName . "`.`" . tableName . "`";
-        } else {
-            $table = "`" . tableName . "`";
+        if (true !== empty($schemaName)) {
+            $tableName = "`" . $schemaName . "`.";
         }
 
-        return "TRUNCATE TABLE " . table;
+        $tableName .= "`" . $tableName . "`";
+
+        return "TRUNCATE TABLE " . $tableName;
     }
 
     /**
      * Generates SQL checking for the existence of a schema.view
+     *
+     * @param string $viewName
+     * @param string $schemaName
+     *
+     * @return string
      */
-    public function viewExists(string $viewName, string $schemaName = ""): string
-    {
+    public function viewExists(
+        string $viewName,
+        string $schemaName = ""
+    ): string {
         if (true !== empty($schemaName)) {
-            return "SELECT IF(COUNT(*) > 0, 1, 0) FROM `INFORMATION_SCHEMA`.`VIEWS` WHERE `TABLE_NAME`= '" . viewName . "' AND `TABLE_SCHEMA`='" . schemaName . "'";
+            return "SELECT IF(COUNT(*) > 0, 1, 0) "
+                . "FROM `INFORMATION_SCHEMA`.`VIEWS` "
+                . "WHERE `TABLE_NAME`= '" . $viewName . "' "
+                . "AND `TABLE_SCHEMA`='" . $schemaName . "'";
         }
 
-        return "SELECT IF(COUNT(*) > 0, 1, 0) FROM `INFORMATION_SCHEMA`.`VIEWS` WHERE `TABLE_NAME`='" . viewName . "' AND `TABLE_SCHEMA` = DATABASE()";
+        return "SELECT IF(COUNT(*) > 0, 1, 0) "
+            . "FROM `INFORMATION_SCHEMA`.`VIEWS` "
+            . "WHERE `TABLE_NAME`='" . $viewName . "' "
+            . "AND `TABLE_SCHEMA` = DATABASE()";
     }
 
     /**
      * Generates SQL to add the table creation options
+     *
+     * @param array $definition
+     *
+     * @return string
      */
     protected function getTableOptions(array $definition): string
     {
-        var options, engine, autoIncrement, tableCollation, collationParts;
-        array tableOptions;
-
-        if !fetch options, definition["options"] {
+        if (true !== isset($definition["options"])) {
             return "";
         }
 
-        $tableOptions = [];
-
+        $tableNameOptions = [];
+        $options          = $definition["options"];
         /**
          * Check if there is an ENGINE option
          */
-        if fetch engine, options["ENGINE"] {
-            if engine {
-                $tableOptions[] = "ENGINE=" . engine;
-            }
+        $engine = $options["ENGINE"] ?? "";
+        if (true !== empty($engine)) {
+            $tableNameOptions[] = "ENGINE=" . $engine;
         }
 
         /**
          * Check if there is an AUTO_INCREMENT option
          */
-        if fetch autoIncrement, options["AUTO_INCREMENT"] {
-            if autoIncrement {
-                $tableOptions[] = "AUTO_INCREMENT=" . autoIncrement;
-            }
+        $autoIncrement = $options["AUTO_INCREMENT"] ?? "";
+        if (true !== empty($autoIncrement)) {
+            $tableNameOptions[] = "AUTO_INCREMENT=" . $autoIncrement;
         }
 
         /**
          * Check if there is a TABLE_COLLATION option
          */
-        if fetch tableCollation, options["TABLE_COLLATION"] {
-            if tableCollation {
-                $collationParts = explode("_", tableCollation),
-                    tableOptions[] = "DEFAULT CHARSET=" . collationParts[0],
-                    tableOptions[] = "COLLATE=" . tableCollation;
-            }
+        $tableNameCollation = $options["TABLE_COLLATION"] ?? "";
+        if (true !== empty($tableNameCollation)) {
+            $collationParts     = explode("_", $tableNameCollation);
+            $tableNameOptions[] = "DEFAULT CHARSET=" . $collationParts[0];
+            $tableNameOptions[] = "COLLATE=" . $tableNameCollation;
         }
 
-        return join(" ", tableOptions);
+        return join(" ", $tableNameOptions);
     }
 
     /**
      * Checks if the size and/or scale are present and encloses those values
      * in parentheses if need be
+     *
+     * @param ColumnInterface $column
+     *
+     * @return string
      */
     private function checkColumnSizeAndScale(ColumnInterface $column): string
     {
-        string columnSql;
-
-        if $column->getSize() {
+        $columnSql = "";
+        if ($column->getSize()) {
             $columnSql .= "(" . $column->getSize();
 
-            if $column->getScale() {
-                $columnSql .= "," . $column->getScale() . ")";
-            } else {
-                $columnSql .= ")";
+            if ($column->getScale()) {
+                $columnSql .= "," . $column->getScale();
             }
+
+            $columnSql .= ")";
         }
 
-        return columnSql;
+        return $columnSql;
     }
 
     /**
      * Checks if a column is unsigned or not and returns the relevant SQL syntax
+     *
+     * @param ColumnInterface $column
+     *
+     * @return string
      */
     private function checkColumnUnsigned(ColumnInterface $column): string
     {
-        if $column->isUnsigned() {
+        if ($column->isUnsigned()) {
             return " UNSIGNED";
         }
 
         return "";
+    }
+
+    /**
+     * @param string          $sql
+     * @param ColumnInterface $column
+     *
+     * @return string
+     */
+    private function checkFirstAfterPositions(
+        string          $sql,
+        ColumnInterface $column
+    ): string {
+        if (true === $column->isFirst()) {
+            $sql .= " FIRST";
+        } else {
+            $afterPosition = $column->getAfterPosition();
+
+            if (true !== empty($afterPosition)) {
+                $sql .= " AFTER `" . $afterPosition . "`";
+            }
+        }
+
+        return $sql;
     }
 }
