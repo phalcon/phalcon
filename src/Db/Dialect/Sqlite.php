@@ -14,14 +14,17 @@ declare(strict_types=1);
 namespace Phalcon\Db\Dialect;
 
 use Phalcon\Db\Column;
+use Phalcon\Db\ColumnInterface;
+use Phalcon\Db\Dialect;
 use Phalcon\Db\Exception;
 use Phalcon\Db\IndexInterface;
-use Phalcon\Db\Dialect;
-use Phalcon\Db\DialectInterface;
-use Phalcon\Db\ColumnInterface;
 use Phalcon\Db\ReferenceInterface;
 
-use function str_contains;
+use function addcslashes;
+use function is_array;
+use function join;
+use function strtoupper;
+use function substr;
 
 /**
  * Generates database specific SQL for the SQLite RDBMS
@@ -41,10 +44,11 @@ class Sqlite extends Dialect
      * @param ColumnInterface $column
      *
      * @return string
+     * @throws Exception
      */
     public function addColumn(
-        string $tableName,
-        string $schemaName,
+        string          $tableName,
+        string          $schemaName,
         ColumnInterface $column
     ): string {
         $sql = "ALTER TABLE "
@@ -88,8 +92,8 @@ class Sqlite extends Dialect
      * @throws Exception
      */
     public function addForeignKey(
-        string $tableName,
-        string $schemaName,
+        string             $tableName,
+        string             $schemaName,
         ReferenceInterface $reference
     ): string {
         throw new Exception(
@@ -105,10 +109,11 @@ class Sqlite extends Dialect
      * @param IndexInterface $index
      *
      * @return string
+     * @throws Exception
      */
     public function addIndex(
-        string $tableName,
-        string $schemaName,
+        string         $tableName,
+        string         $schemaName,
         IndexInterface $index
     ): string {
         $indexType = $index->getType();
@@ -143,8 +148,8 @@ class Sqlite extends Dialect
      * @throws Exception
      */
     public function addPrimaryKey(
-        string $tableName,
-        string $schemaName,
+        string         $tableName,
+        string         $schemaName,
         IndexInterface $index
     ): string {
         throw new Exception(
@@ -165,7 +170,7 @@ class Sqlite extends Dialect
     public function createTable(
         string $tableName,
         string $schemaName,
-        array $definition
+        array  $definition
     ): string {
         $table     = $this->prepareTable($tableName, $schemaName);
         $options   = $definition["options"] ?? [];
@@ -296,18 +301,29 @@ class Sqlite extends Dialect
 
     /**
      * Generates SQL to create a view
+     *
+     * @param string      $viewName
+     * @param array       $definition
+     * @param string|null $schemaName
+     *
+     * @return string
+     * @throws Exception
      */
-    public function createView(string $viewName, array $definition, string schemaName = null): string
-    {
-        var viewSql;
-
-        if unlikely !fetch viewSql, definition["sql"] {
+    public function createView(
+        string $viewName,
+        array  $definition,
+        string $schemaName = null
+    ): string {
+        if (true !== isset($definition["sql"])) {
             throw new Exception(
                 "The index 'sql' is required in the definition array"
             );
         }
 
-        return "CREATE VIEW " . this->prepareTable(viewName, schemaName) . " AS " . viewSql;
+        return "CREATE VIEW "
+            . $this->prepareTable($viewName, $schemaName)
+            . " AS "
+            . $definition["sql"];
     }
 
     /**
@@ -318,49 +334,94 @@ class Sqlite extends Dialect
      *     $dialect->describeColumns("posts")
      * );
      * ```
+     *
+     * @param string      $table
+     * @param string|null $schemaName
+     *
+     * @return string
      */
-    public function describeColumns(string $table, string schema = null): string
-    {
-        return "PRAGMA table_info('" . table . "')";
+    public function describeColumns(
+        string $table,
+        string $schemaName = null
+    ): string {
+        return "PRAGMA table_info('" . $table . "')";
     }
 
     /**
      * Generates SQL to query indexes detail on a table
+     *
+     * @param string $index
+     *
+     * @return string
      */
     public function describeIndex(string $index): string
     {
-        return "PRAGMA index_info('" . index . "')";
+        return "PRAGMA index_info('" . $index . "')";
     }
 
     /**
      * Generates SQL to query indexes on a table
+     *
+     * @param string $table
+     * @param string $schemaName
+     *
+     * @return string
      */
-    public function describeIndexes(string $table, string schemaName = ""): string
-    {
-        return "PRAGMA index_list('" . table . "')";
+    public function describeIndexes(
+        string $table,
+        string $schemaName = ""
+    ): string {
+        return "PRAGMA index_list('" . $table . "')";
     }
 
     /**
      * Generates SQL to query foreign keys on a table
+     *
+     * @param string $table
+     * @param string $schemaName
+     *
+     * @return string
      */
-    public function describeReferences(string $table, string $schemaName = ""): string
-    {
-        return "PRAGMA foreign_key_list('" . table . "')";
+    public function describeReferences(
+        string $table,
+        string $schemaName = ""
+    ): string {
+        return "PRAGMA foreign_key_list('" . $table . "')";
     }
 
     /**
      * Generates SQL to delete a column from a table
+     *
+     * @param string $tableName
+     * @param string $schemaName
+     * @param string $columnName
+     *
+     * @return string
+     * @throws Exception
      */
-    public function dropColumn(string $tableName, string $schemaName, string $columnName): string
-    {
+    public function dropColumn(
+        string $tableName,
+        string $schemaName,
+        string $columnName
+    ): string {
         throw new Exception("Dropping DB column is not supported by SQLite");
     }
 
     /**
      * Generates SQL to delete a foreign key from a table
+     *
+     * @param string $tableName
+     * @param string $schemaName
+     * @param string $referenceName
+     *
+     * @return string
+     * @throws Exception
      */
-    public function dropForeignKey(string $tableName, string $schemaName, string $referenceName): string
-    {
+    public function dropForeignKey(
+        string $tableName,
+        string $schemaName,
+        string $referenceName
+    ): string {
         throw new Exception(
             "Dropping a foreign key constraint is not supported by SQLite"
         );
@@ -368,21 +429,38 @@ class Sqlite extends Dialect
 
     /**
      * Generates SQL to delete an index from a table
+     *
+     * @param string $tableName
+     * @param string $schemaName
+     * @param string $indexName
+     *
+     * @return string
      */
-    public function dropIndex(string $tableName, string $schemaName, string $indexName): string
-    {
-        if schemaName {
-            return "DROP INDEX \"" . schemaName . "\".\"" . indexName . "\"";
+    public function dropIndex(
+        string $tableName,
+        string $schemaName,
+        string $indexName
+    ): string {
+        if (true !== empty($schemaName)) {
+            return "DROP INDEX \"" . $schemaName . "\".\"" . $indexName . "\"";
         }
 
-        return "DROP INDEX \"" . indexName . "\"";
+        return "DROP INDEX \"" . $indexName . "\"";
     }
 
     /**
      * Generates SQL to delete primary key from a table
+     *
+     * @param string $tableName
+     * @param string $schemaName
+     *
+     * @return string
+     * @throws Exception
      */
-    public function dropPrimaryKey(string $tableName, string $schemaName): string
-    {
+    public function dropPrimaryKey(
+        string $tableName,
+        string $schemaName
+    ): string {
         throw new Exception(
             "Removing a primary key after table has been created is not supported by SQLite"
         );
@@ -390,212 +468,236 @@ class Sqlite extends Dialect
 
     /**
      * Generates SQL to drop a table
+     *
+     * @param string      $tableName
+     * @param string|null $schemaName
+     * @param bool        $ifExists
+     *
+     * @return string
      */
-    public function dropTable(string $tableName, string schemaName = null, bool! ifExists = true): string
-    {
-        var table;
+    public function dropTable(
+        string $tableName,
+        string $schemaName = null,
+        bool   $ifExists = true
+    ): string {
+        $table = $this->prepareTable($tableName, $schemaName);
 
-        let table = this->prepareTable(tableName, schemaName);
-
-        if ifExists {
-            return "DROP TABLE IF EXISTS " . table;
+        if (true === $ifExists) {
+            return "DROP TABLE IF EXISTS " . $table;
         }
 
-        return "DROP TABLE " . table;
+        return "DROP TABLE " . $table;
     }
 
     /**
      * Generates SQL to drop a view
+     *
+     * @param string      $viewName
+     * @param string|null $schemaName
+     * @param bool        $ifExists
+     *
+     * @return string
      */
-    public function dropView(string $viewName, string schemaName = null, bool! ifExists = true): string
-    {
-        var view;
+    public function dropView(
+        string $viewName,
+        string $schemaName = "",
+        bool   $ifExists = true
+    ): string {
+        $view = $this->prepareTable($viewName, $schemaName);
 
-        let view = this->prepareTable(viewName, schemaName);
-
-        if ifExists {
-            return "DROP VIEW IF EXISTS " . view;
+        if (true === $ifExists) {
+            return "DROP VIEW IF EXISTS " . $view;
         }
 
-        return "DROP VIEW " . view;
+        return "DROP VIEW " . $view;
     }
 
     /**
-     * Returns a SQL modified with a FOR UPDATE clause. For SQLite it returns
+     * Returns a SQL modified with a FOR UPDATE clause. For SQLite, it returns
      * the original query
+     *
+     * @param string $sqlQuery
+     *
+     * @return string
      */
     public function forUpdate(string $sqlQuery): string
     {
-        return sqlQuery;
+        return $sqlQuery;
     }
 
     /**
      * Gets the column name in SQLite
+     *
+     * @param ColumnInterface $column
+     *
+     * @return string
+     * @throws Exception
      */
     public function getColumnDefinition(ColumnInterface $column): string
     {
-        var columnType, columnSql, typeValues;
-
-        let columnSql  = this->checkColumnTypeSql(column);
-        let columnType = this->checkColumnType(column);
+        $columnSql  = $this->checkColumnTypeSql($column);
+        $columnType = $this->checkColumnType($column);
 
         // SQLite has dynamic column typing. The conversion below maximizes
         // compatibility with other DBMS's while following the type affinity
         // rules: https://www.sqlite.org/datatype3.html.
-        switch columnType {
-
+        switch ($columnType) {
             case Column::TYPE_BIGINTEGER:
-                if empty columnSql {
-                    let columnSql .= "BIGINT";
+                if (true === empty($columnSql)) {
+                    $columnSql .= "BIGINT";
                 }
 
-                if column->isUnsigned() {
-                    let columnSql .= " UNSIGNED";
+                if (true === $column->isUnsigned()) {
+                    $columnSql .= " UNSIGNED";
                 }
 
                 break;
 
             case Column::TYPE_BLOB:
-                if empty columnSql {
-                    let columnSql .= "BLOB";
+                if (true === empty($columnSql)) {
+                    $columnSql .= "BLOB";
                 }
 
                 break;
 
             case Column::TYPE_BOOLEAN:
-                if empty columnSql {
-                    let columnSql .= "TINYINT";
+                if (true === empty($columnSql)) {
+                    $columnSql .= "TINYINT";
                 }
 
                 break;
 
             case Column::TYPE_CHAR:
-                if empty columnSql {
-                    let columnSql .= "CHARACTER";
+                if (true === empty($columnSql)) {
+                    $columnSql .= "CHARACTER";
                 }
 
-                let columnSql .= this->getColumnSize(column);
+                $columnSql .= $this->getColumnSize($column);
 
                 break;
 
             case Column::TYPE_DATE:
-                if empty columnSql {
-                    let columnSql .= "DATE";
+                if (true === empty($columnSql)) {
+                    $columnSql .= "DATE";
                 }
 
                 break;
 
             case Column::TYPE_DATETIME:
-                if empty columnSql {
-                    let columnSql .= "DATETIME";
+                if (true === empty($columnSql)) {
+                    $columnSql .= "DATETIME";
                 }
 
                 break;
 
             case Column::TYPE_DECIMAL:
-                if empty columnSql {
-                    let columnSql .= "NUMERIC";
+                if (true === empty($columnSql)) {
+                    $columnSql .= "NUMERIC";
                 }
 
-                let columnSql .= this->getColumnSizeAndScale(column);
+                $columnSql .= $this->getColumnSizeAndScale($column);
 
                 break;
 
             case Column::TYPE_DOUBLE:
-                if empty columnSql {
-                    let columnSql .= "DOUBLE";
+                if (true === empty($columnSql)) {
+                    $columnSql .= "DOUBLE";
                 }
 
-                if column->isUnsigned() {
-                    let columnSql .= " UNSIGNED";
+                if (true === $column->isUnsigned()) {
+                    $columnSql .= " UNSIGNED";
                 }
 
                 break;
 
             case Column::TYPE_FLOAT:
-                if empty columnSql {
-                    let columnSql .= "FLOAT";
+                if (true === empty($columnSql)) {
+                    $columnSql .= "FLOAT";
                 }
 
                 break;
 
             case Column::TYPE_INTEGER:
-                if empty columnSql {
-                    let columnSql .= "INTEGER";
+                if (true === empty($columnSql)) {
+                    $columnSql .= "INTEGER";
                 }
 
                 break;
 
             case Column::TYPE_LONGBLOB:
-                if empty columnSql {
-                    let columnSql .= "LONGBLOB";
+                if (true === empty($columnSql)) {
+                    $columnSql .= "LONGBLOB";
                 }
 
                 break;
 
             case Column::TYPE_MEDIUMBLOB:
-                if empty columnSql {
-                    let columnSql .= "MEDIUMBLOB";
+                if (true === empty($columnSql)) {
+                    $columnSql .= "MEDIUMBLOB";
                 }
 
                 break;
 
             case Column::TYPE_TEXT:
-                if empty columnSql {
-                    let columnSql .= "TEXT";
+                if (true === empty($columnSql)) {
+                    $columnSql .= "TEXT";
                 }
 
                 break;
 
             case Column::TYPE_TIMESTAMP:
-                if empty columnSql {
-                    let columnSql .= "TIMESTAMP";
+                if (true === empty($columnSql)) {
+                    $columnSql .= "TIMESTAMP";
                 }
 
                 break;
 
             case Column::TYPE_TINYBLOB:
-                if empty columnSql {
-                    let columnSql .= "TINYBLOB";
+                if (true === empty($columnSql)) {
+                    $columnSql .= "TINYBLOB";
                 }
 
                 break;
 
             case Column::TYPE_VARCHAR:
-                if empty columnSql {
-                    let columnSql .= "VARCHAR";
+                if (true === empty($columnSql)) {
+                    $columnSql .= "VARCHAR";
                 }
 
-                let columnSql .= this->getColumnSize(column);
+                $columnSql .= $this->getColumnSize($column);
 
                 break;
 
             default:
-                if empty columnSql {
+                if (true === empty($columnSql)) {
                     throw new Exception(
-                        "Unrecognized SQLite data type at column " . column->getName()
+                        "Unrecognized SQLite data type at column "
+                        . $column->getName()
                     );
                 }
 
-                let typeValues = column->getTypeValues();
-                if !empty typeValues {
-                    if typeof typeValues == "array" {
-                        var value, valueSql;
-
-                        let valueSql = "";
-
-                        for value in typeValues {
-                            let valueSql .= "\"" . addcslashes(value, "\"") . "\", ";
+                $valueSql   = "";
+                $typeValues = $column->getTypeValues();
+                if (true !== empty($typeValues)) {
+                    if (is_array($typeValues)) {
+                        foreach ($typeValues as $value) {
+                            $valueSql .= "\""
+                                . addcslashes($value, "\"")
+                                . "\", ";
                         }
 
-                        let columnSql .= "(" . substr(valueSql, 0, -2) . ")";
+                        $columnSql .= "("
+                            . substr($valueSql, 0, -2)
+                            . ")";
                     } else {
-                        let columnSql .= "(\"" . addcslashes(typeValues, "\"") . "\")";
+                        $columnSql .= "(\""
+                            . addcslashes($typeValues, "\"")
+                            . "\")";
                     }
                 }
         }
 
-        return columnSql;
+        return $columnSql;
     }
 
     /**
@@ -606,18 +708,28 @@ class Sqlite extends Dialect
      *     $dialect->listIndexesSql("blog")
      * );
      * ```
+     *
+     * @param string      $table
+     * @param string      $schemaName
+     * @param string|null $keyName
+     *
+     * @return string
      */
-    public function listIndexesSql(string $table, string schema = null, string keyName = null): string
-    {
-        string sql;
+    public function listIndexesSql(
+        string $table,
+        string $schemaName = "",
+        string $keyName = null
+    ): string {
+        $sql = "SELECT sql "
+            . "FROM sqlite_master "
+            . "WHERE type = 'index' "
+            . "AND tbl_name = " . $this->escape($table) . " COLLATE NOCASE";
 
-        let sql = "SELECT sql FROM sqlite_master WHERE type = 'index' AND tbl_name = ". this->escape(table) ." COLLATE NOCASE";
-
-        if keyName {
-            let sql .= " AND name = ". this->escape(keyName) ." COLLATE NOCASE";
+        if (true !== empty($keyName)) {
+            $sql .= " AND name = " . $this->escape($keyName) . " COLLATE NOCASE";
         }
 
-        return sql;
+        return $sql;
     }
 
     /**
@@ -628,35 +740,64 @@ class Sqlite extends Dialect
      *     $dialect->listTables("blog")
      * );
      * ```
+     *
+     * @param string $schemaName
+     *
+     * @return string
      */
-    public function listTables(string schemaName = ""): string
+    public function listTables(string $schemaName = ""): string
     {
-        return "SELECT tbl_name FROM sqlite_master WHERE type = 'table' ORDER BY tbl_name";
+        return "SELECT tbl_name "
+            . "FROM sqlite_master "
+            . "WHERE type = 'table' ORDER BY tbl_name";
     }
 
     /**
      * Generates the SQL to list all views of a schema or user
+     *
+     * @param string $schemaName
+     *
+     * @return string
      */
     public function listViews(string $schemaName = ""): string
     {
-        return "SELECT tbl_name FROM sqlite_master WHERE type = 'view' ORDER BY tbl_name";
+        return "SELECT tbl_name "
+            . "FROM sqlite_master "
+            . "WHERE type = 'view' "
+            . "ORDER BY tbl_name";
     }
 
     /**
      * Generates SQL to modify a column in a table
+     *
+     * @param string               $tableName
+     * @param string               $schemaName
+     * @param ColumnInterface      $column
+     * @param ColumnInterface|null $currentColumn
+     *
+     * @return string
+     * @throws Exception
      */
-    public function modifyColumn(string $tableName, string $schemaName, ColumnInterface $column, <ColumnInterface> currentColumn = null): string
-    {
+    public function modifyColumn(
+        string           $tableName,
+        string           $schemaName,
+        ColumnInterface  $column,
+        ?ColumnInterface $currentColumn = null
+    ): string {
         throw new Exception("Altering a DB column is not supported by SQLite");
     }
 
     /**
      * Returns a SQL modified a shared lock statement. For now this method
      * returns the original query
+     *
+     * @param string $sqlQuery
+     *
+     * @return string
      */
     public function sharedLock(string $sqlQuery): string
     {
-        return sqlQuery;
+        return $sqlQuery;
     }
 
     /**
@@ -668,9 +809,13 @@ class Sqlite extends Dialect
      * echo $dialect->tableExists("posts");
      * ```
      */
-    public function tableExists(string $tableName, string schemaName = ""): string
-    {
-        return "SELECT CASE WHEN COUNT(*) > 0 THEN 1 ELSE 0 END FROM sqlite_master WHERE type='table' AND tbl_name='" . tableName . "'";
+    public function tableExists(
+        string $tableName,
+        string $schemaName = ""
+    ): string {
+        return "SELECT CASE WHEN COUNT(*) > 0 THEN 1 ELSE 0 END "
+            . "FROM sqlite_master "
+            . "WHERE type='table' AND tbl_name='" . $tableName . "'";
     }
 
     /**
@@ -688,18 +833,22 @@ class Sqlite extends Dialect
 
     /**
      * Generates SQL to truncate a table
+     *
+     * @param string $tableName
+     * @param string $schemaName
+     *
+     * @return string
      */
     public function truncateTable(string $tableName, string $schemaName): string
     {
-        string table;
-
-        if schemaName {
-            let table = "\"" . schemaName . "\".\"" . tableName . "\"";
-        } else {
-            let table = "\"" . tableName . "\"";
+        $table = "";
+        if (true !== empty($schemaName)) {
+            $table = "\"" . $schemaName . "\".";
         }
 
-        return "DELETE FROM " . table;
+        $table .= "\"" . $tableName . "\"";
+
+        return "DELETE FROM " . $table;
     }
 
     /**

@@ -589,7 +589,7 @@ abstract class AbstractAdapter implements AdapterInterface, EventsAwareInterface
      */
     public function dropView(
         string $viewName,
-        string $schemaName = null,
+        string $schemaName = "",
         bool $ifExists = true
     ): bool {
         return $this->execute(

@@ -114,7 +114,7 @@ interface DialectInterface
     public function createView(
         string $viewName,
         array $definition,
-        string $schemaName = null
+        string $schemaName = ""
     ): string;
 
     /**
@@ -237,7 +237,7 @@ interface DialectInterface
      */
     public function dropView(
         string $viewName,
-        string $schemaName = null,
+        string $schemaName = "",
         bool $ifExists = true
     ): string;
 
@@ -406,7 +406,7 @@ interface DialectInterface
      *
      * @return string
      */
-    public function tableOptions(string $table, string $schema = ""): string;
+    public function tableOptions(string $table, string $schemaName = ""): string;
 
     /**
      * Generates SQL checking for the existence of a schema.view

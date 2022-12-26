@@ -292,7 +292,7 @@ interface AdapterInterface
      */
     public function dropView(
         string $viewName,
-        string $schemaName = null,
+        string $schemaName = "",
         bool $ifExists = true
     ): bool;
 
