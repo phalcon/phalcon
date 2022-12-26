@@ -238,7 +238,7 @@ class Column implements ColumnInterface
      *
      * @var string
      */
-     protected string $comment = "";
+    protected string $comment = "";
 
     /**
      * Default column value
@@ -336,7 +336,7 @@ class Column implements ColumnInterface
      */
     public function __construct(
         protected string $name,
-        array $definition
+        array            $definition
     ) {
         /**
          * Get the column type, one of the TYPE_* constants
@@ -420,10 +420,10 @@ class Column implements ColumnInterface
      *
      * @return string
      */
-     public function getComment(): string
-     {
+    public function getComment(): string
+    {
         return $this->comment;
-     }
+    }
 
     /**
      * Default column value
@@ -490,7 +490,7 @@ class Column implements ColumnInterface
      *
      * @return array|string
      */
-    public function getTypeValues(): array | string
+    public function getTypeValues(): array|string
     {
         return $this->typeValues;
     }

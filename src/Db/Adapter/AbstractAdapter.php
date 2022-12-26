@@ -13,18 +13,17 @@ declare(strict_types=1);
 
 namespace Phalcon\Db\Adapter;
 
-use Phalcon\Db\DialectInterface;
 use Phalcon\Db\ColumnInterface;
+use Phalcon\Db\DialectInterface;
 use Phalcon\Db\Enum;
 use Phalcon\Db\Exception;
 use Phalcon\Db\Index;
 use Phalcon\Db\IndexInterface;
+use Phalcon\Db\RawValue;
 use Phalcon\Db\Reference;
 use Phalcon\Db\ReferenceInterface;
-use Phalcon\Db\RawValue;
 use Phalcon\Events\EventsAwareInterface;
 use Phalcon\Events\Traits\EventsAwareTrait;
-
 use function array_keys;
 use function array_values;
 use function explode;
@@ -130,16 +129,16 @@ abstract class AbstractAdapter implements AdapterInterface, EventsAwareInterface
      * Phalcon\Db\Adapter constructor
      *
      * @param array $descriptor = [
-     *     'host'         => 'localhost',
-     *     'port'         => '3306',
-     *     'dbname'       => 'blog',
-     *     'username'     => 'sigma'
-     *     'password'     => 'secret',
-     *     'dialectClass' => null,
-     *     'options'      => [],
-     *     'dsn'          => null,
-     *     'charset'      => 'utf8mb4'
-     * ]
+     *                          'host'         => 'localhost',
+     *                          'port'         => '3306',
+     *                          'dbname'       => 'blog',
+     *                          'username'     => 'sigma'
+     *                          'password'     => 'secret',
+     *                          'dialectClass' => null,
+     *                          'options'      => [],
+     *                          'dsn'          => null,
+     *                          'charset'      => 'utf8mb4'
+     *                          ]
      */
     public function __construct(array $descriptor)
     {
@@ -176,8 +175,8 @@ abstract class AbstractAdapter implements AdapterInterface, EventsAwareInterface
      * @return bool
      */
     public function addColumn(
-        string $tableName,
-        string $schemaName,
+        string          $tableName,
+        string          $schemaName,
         ColumnInterface $column
     ): bool {
         return $this->execute(
@@ -199,8 +198,8 @@ abstract class AbstractAdapter implements AdapterInterface, EventsAwareInterface
      * @return bool
      */
     public function addForeignKey(
-        string $tableName,
-        string $schemaName,
+        string             $tableName,
+        string             $schemaName,
         ReferenceInterface $reference
     ): bool {
         return $this->execute(
@@ -222,8 +221,8 @@ abstract class AbstractAdapter implements AdapterInterface, EventsAwareInterface
      * @return bool
      */
     public function addIndex(
-        string $tableName,
-        string $schemaName,
+        string         $tableName,
+        string         $schemaName,
         IndexInterface $index
     ): bool {
         return $this->execute(
@@ -245,8 +244,8 @@ abstract class AbstractAdapter implements AdapterInterface, EventsAwareInterface
      * @return bool
      */
     public function addPrimaryKey(
-        string $tableName,
-        string $schemaName,
+        string         $tableName,
+        string         $schemaName,
         IndexInterface $index
     ): bool {
         return $this->execute(
@@ -286,7 +285,7 @@ abstract class AbstractAdapter implements AdapterInterface, EventsAwareInterface
     public function createTable(
         string $tableName,
         string $schemaName,
-        array $definition
+        array  $definition
     ): bool {
         $columns = $definition["columns"] ?? [];
         if (true === empty($columns)) {
@@ -314,7 +313,7 @@ abstract class AbstractAdapter implements AdapterInterface, EventsAwareInterface
      */
     public function createView(
         string $viewName,
-        array $definition,
+        array  $definition,
         string $schemaName = null
     ): bool {
         if (true !== isset($definition["sql"])) {
@@ -344,7 +343,7 @@ abstract class AbstractAdapter implements AdapterInterface, EventsAwareInterface
      * DELETE FROM `robots` WHERE `id` = 101
      * ```
      *
-     * @param array|string $table
+     * @param array|string $tableName
      * @param string|null  $whereCondition
      * @param array        $placeholders
      * @param array        $dataTypes
@@ -352,12 +351,12 @@ abstract class AbstractAdapter implements AdapterInterface, EventsAwareInterface
      * @return bool
      */
     public function delete(
-        array|string $table,
-        string $whereCondition = null,
-        array $placeholders = [],
-        array $dataTypes = []
+        array|string $tableName,
+        string       $whereCondition = null,
+        array        $placeholders = [],
+        array        $dataTypes = []
     ): bool {
-        $sql = "DELETE FROM " . $this->escapeIdentifier($table);
+        $sql = "DELETE FROM " . $this->escapeIdentifier($tableName);
 
         if (true !== empty($whereCondition)) {
             $sql .= " WHERE " . $whereCondition;
@@ -378,18 +377,18 @@ abstract class AbstractAdapter implements AdapterInterface, EventsAwareInterface
      * );
      *```
      *
-     * @param string $table
+     * @param string $tableName
      * @param string $schemaName
      *
      * @return array|IndexInterface[]
      */
     public function describeIndexes(
-        string $table,
+        string $tableName,
         string $schemaName = ""
     ): array {
         $indexes = [];
         $records = $this->fetchAll(
-            $this->dialect->describeIndexes($table, $schemaName),
+            $this->dialect->describeIndexes($tableName, $schemaName),
             Enum::FETCH_NUM
         );
 
@@ -420,17 +419,17 @@ abstract class AbstractAdapter implements AdapterInterface, EventsAwareInterface
      * );
      *```
      *
-     * @param string $table
+     * @param string $tableName
      * @param string $schemaName
      *
      * @return array|ReferenceInterface[]
      * @throws Exception
      */
-    public function describeReferences(string $table, string $schemaName = ""): array
+    public function describeReferences(string $tableName, string $schemaName = ""): array
     {
         $references = [];
         $records    = $this->fetchAll(
-            $this->dialect->describeReferences($table, $schemaName),
+            $this->dialect->describeReferences($tableName, $schemaName),
             Enum::FETCH_NUM
         );
 
@@ -567,7 +566,7 @@ abstract class AbstractAdapter implements AdapterInterface, EventsAwareInterface
     public function dropTable(
         string $tableName,
         string $schemaName = null,
-        bool $ifExists = true
+        bool   $ifExists = true
     ): bool {
         return $this->execute(
             $this->dialect->dropTable(
@@ -590,7 +589,7 @@ abstract class AbstractAdapter implements AdapterInterface, EventsAwareInterface
     public function dropView(
         string $viewName,
         string $schemaName = "",
-        bool $ifExists = true
+        bool   $ifExists = true
     ): bool {
         return $this->execute(
             $this->dialect->dropView(
@@ -667,9 +666,9 @@ abstract class AbstractAdapter implements AdapterInterface, EventsAwareInterface
      */
     public function fetchAll(
         string $sqlQuery,
-        int $fetchMode = Enum::FETCH_ASSOC,
-        array $bindParams = [],
-        array $bindTypes = []
+        int    $fetchMode = Enum::FETCH_ASSOC,
+        array  $bindParams = [],
+        array  $bindTypes = []
     ): array {
         $result = $this->query($sqlQuery, $bindParams, $bindTypes);
 
@@ -703,10 +702,10 @@ abstract class AbstractAdapter implements AdapterInterface, EventsAwareInterface
      *```
      */
     public function fetchColumn(
-        string $sqlQuery,
-        array $placeholders = [],
+        string     $sqlQuery,
+        array      $placeholders = [],
         int|string $column = 0
-    ): string | bool {
+    ): string|bool {
         $row = $this->fetchOne($sqlQuery, Enum::FETCH_BOTH, $placeholders);
 
         return $row[$column] ?? false;
@@ -737,9 +736,9 @@ abstract class AbstractAdapter implements AdapterInterface, EventsAwareInterface
      */
     public function fetchOne(
         string $sqlQuery,
-        int $fetchMode = Enum::FETCH_ASSOC,
-        array $bindParams = [],
-        array $bindTypes = []
+        int    $fetchMode = Enum::FETCH_ASSOC,
+        array  $bindParams = [],
+        array  $bindTypes = []
     ): array {
         $result = $this->query($sqlQuery, $bindParams, $bindTypes);
 
@@ -844,9 +843,9 @@ abstract class AbstractAdapter implements AdapterInterface, EventsAwareInterface
      * );
      *```
      *
+     * @return RawValue
      * @todo Return NULL if this is not supported by the adapter
      *
-     * @return RawValue
      */
     public function getDefaultValue(): RawValue
     {
@@ -958,7 +957,7 @@ abstract class AbstractAdapter implements AdapterInterface, EventsAwareInterface
      * INSERT INTO `robots` (`name`, `year`) VALUES ("Astro boy", 1952);
      * ```
      *
-     * @param string $table
+     * @param string $tableName
      * @param array  $values
      * @param array  $fields
      * @param array  $dataTypes
@@ -967,17 +966,17 @@ abstract class AbstractAdapter implements AdapterInterface, EventsAwareInterface
      * @throws Exception
      */
     public function insert(
-        string $table,
-        array $values,
-        array $fields = [],
-        array $dataTypes = []
+        string $tableName,
+        array  $values,
+        array  $fields = [],
+        array  $dataTypes = []
     ): bool {
         /**
          * A valid array with more than one element is required
          */
         if (true === empty($values)) {
             throw new Exception(
-                "Unable to insert into " . $table . " without data"
+                "Unable to insert into " . $tableName . " without data"
             );
         }
 
@@ -1016,9 +1015,9 @@ abstract class AbstractAdapter implements AdapterInterface, EventsAwareInterface
             }
         }
 
-        $tableName = $table;
-        if (strpos($table, ".") > 0) {
-            $tableName = explode(".", $table);
+        $tableName = $tableName;
+        if (strpos($tableName, ".") > 0) {
+            $tableName = explode(".", $tableName);
         }
 
         $escapedTable = $this->escapeIdentifier($tableName);
@@ -1069,7 +1068,7 @@ abstract class AbstractAdapter implements AdapterInterface, EventsAwareInterface
      * INSERT INTO `robots` (`name`, `year`) VALUES ("Astro boy", 1952);
      * ```
      *
-     * @param string $table
+     * @param string $tableName
      * @param array  $data
      * @param array  $dataTypes
      *
@@ -1077,9 +1076,9 @@ abstract class AbstractAdapter implements AdapterInterface, EventsAwareInterface
      * @throws Exception
      */
     public function insertAsDict(
-        string $table,
-        array $data,
-        array $dataTypes = []
+        string $tableName,
+        array  $data,
+        array  $dataTypes = []
     ): bool {
         if (true === empty($data)) {
             return false;
@@ -1087,7 +1086,7 @@ abstract class AbstractAdapter implements AdapterInterface, EventsAwareInterface
 
 
         return $this->insert(
-            $table,
+            $tableName,
             array_keys($data),
             array_values($data),
             $dataTypes
@@ -1137,14 +1136,14 @@ abstract class AbstractAdapter implements AdapterInterface, EventsAwareInterface
      */
     public function listTables(string $schemaName = ""): array
     {
-        $allTables = [];
-        $tables    = $this->fetchAll(
+        $allTables  = [];
+        $tableNames = $this->fetchAll(
             $this->dialect->listTables($schemaName),
             Enum::FETCH_NUM
         );
 
-        foreach ($tables as $table) {
-            $allTables[] = $table[0];
+        foreach ($tableNames as $tableName) {
+            $allTables[] = $tableName[0];
         }
 
         return $allTables;
@@ -1165,14 +1164,14 @@ abstract class AbstractAdapter implements AdapterInterface, EventsAwareInterface
      */
     public function listViews(string $schemaName = ""): array
     {
-        $allTables = [];
-        $tables    = $this->fetchAll(
+        $allTables  = [];
+        $tableNames = $this->fetchAll(
             $this->dialect->listViews($schemaName),
             Enum::FETCH_NUM
         );
 
-        foreach ($tables as $table) {
-            $allTables[] = $table[0];
+        foreach ($tableNames as $tableName) {
+            $allTables[] = $tableName[0];
         }
 
         return $allTables;
@@ -1189,8 +1188,8 @@ abstract class AbstractAdapter implements AdapterInterface, EventsAwareInterface
      * @return bool
      */
     public function modifyColumn(
-        string $tableName,
-        string $schemaName,
+        string          $tableName,
+        string          $schemaName,
         ColumnInterface $column,
         ColumnInterface $currentColumn = null
     ): bool {
@@ -1371,7 +1370,8 @@ abstract class AbstractAdapter implements AdapterInterface, EventsAwareInterface
      *     [
      *         "conditions" => "id = ?",
      *         "bind"       => [$some_unsafe_id],
-     *         "bindTypes"  => [PDO::PARAM_INT], // use only if you use $dataTypes param
+     *         "bindTypes"  => [PDO::PARAM_INT], // use only if you use
+     *         $dataTypes param
      *     ],
      *     [
      *         PDO::PARAM_STR
@@ -1382,7 +1382,7 @@ abstract class AbstractAdapter implements AdapterInterface, EventsAwareInterface
      *
      * Warning! If $whereCondition is string, it is not escaped.
      *
-     * @param string       $table
+     * @param string       $tableName
      * @param array        $fields
      * @param array        $values
      * @param array|string $whereCondition
@@ -1392,11 +1392,11 @@ abstract class AbstractAdapter implements AdapterInterface, EventsAwareInterface
      * @throws Exception
      */
     public function update(
-        string $table,
-        array $fields,
-        array $values,
+        string       $tableName,
+        array        $fields,
+        array        $values,
         array|string $whereCondition = [],
-        array $dataTypes = []
+        array        $dataTypes = []
     ): bool {
         $placeholders  = [];
         $updateValues  = [];
@@ -1446,9 +1446,9 @@ abstract class AbstractAdapter implements AdapterInterface, EventsAwareInterface
         /**
          * Check if we got table and schema and escape it accordingly
          */
-        $tableName = $table;
-        if (strpos($table, ".") > 0) {
-            $tableName = explode(".", $table);
+        $tableName = $tableName;
+        if (strpos($tableName, ".") > 0) {
+            $tableName = explode(".", $tableName);
         }
 
         $escapedTable = $this->escapeIdentifier($tableName);
@@ -1524,7 +1524,7 @@ abstract class AbstractAdapter implements AdapterInterface, EventsAwareInterface
      * UPDATE `robots` SET `name` = "Astro boy" WHERE id = 101
      * ```
      *
-     * @param string       $table
+     * @param string       $tableName
      * @param array        $data
      * @param array|string $whereCondition
      * @param array        $dataTypes
@@ -1533,17 +1533,17 @@ abstract class AbstractAdapter implements AdapterInterface, EventsAwareInterface
      * @throws Exception
      */
     public function updateAsDict(
-        string $table,
-        array $data,
+        string       $tableName,
+        array        $data,
         array|string $whereCondition = [],
-        array $dataTypes = []
+        array        $dataTypes = []
     ): bool {
         if (true === empty($data)) {
             return false;
         }
 
         return $this->update(
-            $table,
+            $tableName,
             array_keys($data),
             array_values($data),
             $whereCondition,
@@ -1590,8 +1590,7 @@ abstract class AbstractAdapter implements AdapterInterface, EventsAwareInterface
     public function viewExists(
         string $viewName,
         string $schemaName = ""
-    ): bool
-    {
+    ): bool {
         $exists = $this->dialect->viewExists($viewName, $schemaName);
 
         return $this->fetchOne($exists, Enum::FETCH_NUM)[0] > 0;

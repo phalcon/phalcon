@@ -23,7 +23,6 @@ use Phalcon\Db\Reference;
 use Phalcon\Db\ReferenceInterface;
 use Phalcon\Events\Exception as EventsException;
 use Throwable;
-
 use function explode;
 use function preg_replace;
 use function strcasecmp;
@@ -116,7 +115,7 @@ class Postgresql extends PdoAdapter
     public function createTable(
         string $tableName,
         string $schemaName,
-        array $definition
+        array  $definition
     ): bool {
         if (
             true !== isset($definition["columns"]) ||
@@ -166,14 +165,14 @@ class Postgresql extends PdoAdapter
      * );
      * ```
      *
-     * @param string $table
+     * @param string $tableName
      * @param string $schemaName
      *
      * @return array|ColumnInterface[]
      * @throws Exception
      */
     public function describeColumns(
-        string $table,
+        string $tableName,
         string $schemaName = ""
     ): array {
         $oldColumn = null;
@@ -185,7 +184,7 @@ class Postgresql extends PdoAdapter
          * 6: key, 7: extra, 8: position, 9 default
          */
         $fields = $this->fetchAll(
-            $this->dialect->describeColumns($table, $schemaName),
+            $this->dialect->describeColumns($tableName, $schemaName),
             Enum::FETCH_NUM
         );
 
@@ -226,7 +225,7 @@ class Postgresql extends PdoAdapter
                     /**
                      * tinyint(1) is boolean
                      */
-                    $definition["type"] = Column::TYPE_BOOLEAN;
+                    $definition["type"]     = Column::TYPE_BOOLEAN;
                     $definition["bindType"] = Column::BIND_PARAM_BOOL;
 
                     break;
@@ -235,9 +234,9 @@ class Postgresql extends PdoAdapter
                  * BIGINT
                  */
                 case (str_contains($columnType, "bigint")):
-                    $definition["type"] = Column::TYPE_BIGINTEGER;
+                    $definition["type"]      = Column::TYPE_BIGINTEGER;
                     $definition["isNumeric"] = true;
-                    $definition["bindType"] = Column::BIND_PARAM_STR;
+                    $definition["bindType"]  = Column::BIND_PARAM_STR;
 
                     break;
 
@@ -245,9 +244,9 @@ class Postgresql extends PdoAdapter
                  * MEDIUMINT
                  */
                 case (str_contains($columnType, "mediumint")):
-                    $definition["type"] = Column::TYPE_MEDIUMINTEGER;
+                    $definition["type"]      = Column::TYPE_MEDIUMINTEGER;
                     $definition["isNumeric"] = true;
-                    $definition["bindType"] = Column::BIND_PARAM_INT;
+                    $definition["bindType"]  = Column::BIND_PARAM_INT;
 
                     break;
 
@@ -255,9 +254,9 @@ class Postgresql extends PdoAdapter
                  * SMALLINT
                  */
                 case (str_contains($columnType, "smallint")):
-                    $definition["type"] = Column::TYPE_SMALLINTEGER;
+                    $definition["type"]      = Column::TYPE_SMALLINTEGER;
                     $definition["isNumeric"] = true;
-                    $definition["bindType"] = Column::BIND_PARAM_INT;
+                    $definition["bindType"]  = Column::BIND_PARAM_INT;
 
                     break;
 
@@ -268,9 +267,9 @@ class Postgresql extends PdoAdapter
                     /**
                      * Smallint/Bigint/Integers/Int are int
                      */
-                    $definition["type"] = Column::TYPE_TINYINTEGER;
+                    $definition["type"]      = Column::TYPE_TINYINTEGER;
                     $definition["isNumeric"] = true;
-                    $definition["bindType"] = Column::BIND_PARAM_INT;
+                    $definition["bindType"]  = Column::BIND_PARAM_INT;
 
                     break;
 
@@ -278,9 +277,9 @@ class Postgresql extends PdoAdapter
                  * INT
                  */
                 case (str_contains($columnType, "int")):
-                    $definition["type"] = Column::TYPE_INTEGER;
+                    $definition["type"]      = Column::TYPE_INTEGER;
                     $definition["isNumeric"] = true;
-                    $definition["bindType"] = Column::BIND_PARAM_INT;
+                    $definition["bindType"]  = Column::BIND_PARAM_INT;
 
                     break;
 
@@ -325,10 +324,10 @@ class Postgresql extends PdoAdapter
                  */
                 case (str_contains($columnType, "decimal")):
                 case (str_contains($columnType, "numeric")):
-                    $definition["type"] = Column::TYPE_DECIMAL;
-                    $definition["size"] = $numericSize;
+                    $definition["type"]      = Column::TYPE_DECIMAL;
+                    $definition["size"]      = $numericSize;
                     $definition["isNumeric"] = true;
-                    $definition["bindType"] = Column::BIND_PARAM_DECIMAL;
+                    $definition["bindType"]  = Column::BIND_PARAM_DECIMAL;
 
                     break;
 
@@ -336,10 +335,10 @@ class Postgresql extends PdoAdapter
                  * DOUBLE
                  */
                 case (str_contains($columnType, "double precision")):
-                    $definition["type"] = Column::TYPE_DOUBLE;
+                    $definition["type"]      = Column::TYPE_DOUBLE;
                     $definition["isNumeric"] = true;
-                    $definition["size"] = $numericSize;
-                    $definition["bindType"] = Column::BIND_PARAM_DECIMAL;
+                    $definition["size"]      = $numericSize;
+                    $definition["bindType"]  = Column::BIND_PARAM_DECIMAL;
 
                     break;
 
@@ -348,10 +347,10 @@ class Postgresql extends PdoAdapter
                  */
                 case (str_contains($columnType, "float")):
                 case (str_contains($columnType, "real")):
-                    $definition["type"] = Column::TYPE_FLOAT;
+                    $definition["type"]      = Column::TYPE_FLOAT;
                     $definition["isNumeric"] = true;
-                    $definition["size"] = $numericSize;
-                    $definition["bindType"] = Column::BIND_PARAM_DECIMAL;
+                    $definition["size"]      = $numericSize;
+                    $definition["bindType"]  = Column::BIND_PARAM_DECIMAL;
 
                     break;
 
@@ -560,19 +559,19 @@ class Postgresql extends PdoAdapter
      * );
      *```
      *
-     * @param string $table
+     * @param string $tableName
      * @param string $schemaName
      *
      * @return array|ReferenceInterface[]
      * @throws Exception
      */
     public function describeReferences(
-        string $table,
+        string $tableName,
         string $schemaName = ""
     ): array {
         $references = [];
         $records    = $this->fetchAll(
-            $this->dialect->describeReferences($table, $schemaName),
+            $this->dialect->describeReferences($tableName, $schemaName),
             Enum::FETCH_NUM
         );
 
@@ -656,8 +655,8 @@ class Postgresql extends PdoAdapter
      * @throws Exception
      */
     public function modifyColumn(
-        string $tableName,
-        string $schemaName,
+        string          $tableName,
+        string          $schemaName,
         ColumnInterface $column,
         ColumnInterface $currentColumn = null
     ): bool {

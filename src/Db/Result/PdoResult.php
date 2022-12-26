@@ -13,10 +13,10 @@ declare(strict_types=1);
 
 namespace Phalcon\Db\Result;
 
+use PDOStatement;
+use Phalcon\Db\Adapter\AdapterInterface;
 use Phalcon\Db\Enum;
 use Phalcon\Db\ResultInterface;
-use Phalcon\Db\Adapter\AdapterInterface;
-
 use function is_object;
 use function preg_match;
 use function str_starts_with;
@@ -61,10 +61,10 @@ class PdoResult implements ResultInterface
      */
     public function __construct(
         protected AdapterInterface $connection,
-        protected \PDOStatement $pdoStatement,
-        protected string $sqlStatement = "",
-        protected array $bindParams = [],
-        protected array $bindTypes = []
+        protected PDOStatement    $pdoStatement,
+        protected string           $sqlStatement = "",
+        protected array            $bindParams = [],
+        protected array            $bindTypes = []
     ) {
     }
 
@@ -188,8 +188,8 @@ class PdoResult implements ResultInterface
      * @param array|null               $constructorArgs
      */
     public function fetchAll(
-        int $mode = Enum::FETCH_DEFAULT,
-        mixed $fetchArgument = Enum::FETCH_ORI_NEXT,
+        int    $mode = Enum::FETCH_DEFAULT,
+        mixed  $fetchArgument = Enum::FETCH_ORI_NEXT,
         ?array $constructorArgs = null
     ): array {
         if ($mode === Enum::FETCH_CLASS) {
@@ -230,9 +230,9 @@ class PdoResult implements ResultInterface
     /**
      * Gets the internal PDO result object
      *
-     * @return \PDOStatement
+     * @return PDOStatement
      */
-    public function getInternalResult(): \PDOStatement
+    public function getInternalResult(): PDOStatement
     {
         return $this->pdoStatement;
     }
@@ -339,13 +339,13 @@ class PdoResult implements ResultInterface
      * @return bool
      */
     public function setFetchMode(
-        int $fetchMode,
+        int                $fetchMode,
         null|object|string $colNoOrClassNameOrObject = null,
-        mixed $ctorargs = null
+        mixed              $ctorargs = null
     ): bool {
         if (
             (
-                (Enum::FETCH_CLASS === $fetchMode || Enum::FETCH_INTO  === $fetchMode) &&
+                (Enum::FETCH_CLASS === $fetchMode || Enum::FETCH_INTO === $fetchMode) &&
                 !$this->pdoStatement->setFetchMode($fetchMode, $colNoOrClassNameOrObject, $ctorargs)
             ) ||
             (

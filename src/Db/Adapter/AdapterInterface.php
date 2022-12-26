@@ -35,8 +35,8 @@ interface AdapterInterface
      * @return bool
      */
     public function addColumn(
-        string $tableName,
-        string $schemaName,
+        string          $tableName,
+        string          $schemaName,
         ColumnInterface $column
     ): bool;
 
@@ -50,8 +50,8 @@ interface AdapterInterface
      * @return bool
      */
     public function addIndex(
-        string $tableName,
-        string $schemaName,
+        string         $tableName,
+        string         $schemaName,
         IndexInterface $index
     ): bool;
 
@@ -65,8 +65,8 @@ interface AdapterInterface
      * @return bool
      */
     public function addForeignKey(
-        string $tableName,
-        string $schemaName,
+        string             $tableName,
+        string             $schemaName,
         ReferenceInterface $reference
     ): bool;
 
@@ -80,8 +80,8 @@ interface AdapterInterface
      * @return bool
      */
     public function addPrimaryKey(
-        string $tableName,
-        string $schemaName,
+        string         $tableName,
+        string         $schemaName,
         IndexInterface $index
     ): bool;
 
@@ -150,7 +150,7 @@ interface AdapterInterface
     public function createTable(
         string $tableName,
         string $schemaName,
-        array $definition
+        array  $definition
     ): bool;
 
     /**
@@ -164,14 +164,14 @@ interface AdapterInterface
      */
     public function createView(
         string $viewName,
-        array $definition,
+        array  $definition,
         string $schemaName = null
     ): bool;
 
     /**
      * Deletes data from a table using custom RDBMS SQL syntax
      *
-     * @param array|string $table
+     * @param array|string $tableName
      * @param string|null  $whereCondition
      * @param array        $placeholders
      * @param array        $dataTypes
@@ -179,45 +179,45 @@ interface AdapterInterface
      * @return bool
      */
     public function delete(
-        array|string $table,
-        string $whereCondition = null,
-        array $placeholders = [],
-        array $dataTypes = []
+        array|string $tableName,
+        string       $whereCondition = null,
+        array        $placeholders = [],
+        array        $dataTypes = []
     ): bool;
 
     /**
      * Returns an array of Phalcon\Db\Column objects describing a table
      *
-     * @param string $table
+     * @param string $tableName
      * @param string $schemaName
      *
      * @return ColumnInterface[]
      */
-    public function describeColumns(string $table, string $schemaName = ""): array;
+    public function describeColumns(string $tableName, string $schemaName = ""): array;
 
     /**
      * Lists table indexes
      *
-     * @param string $table
+     * @param string $tableName
      * @param string $schemaName
      *
      * @return IndexInterface[]
      */
     public function describeIndexes(
-        string $table,
+        string $tableName,
         string $schemaName = ""
     ): array;
 
     /**
      * Lists table references
      *
-     * @param string $table
+     * @param string $tableName
      * @param string $schemaName
      *
      * @return ReferenceInterface[]
      */
     public function describeReferences(
-        string $table,
+        string $tableName,
         string $schemaName = ""
     ): array;
 
@@ -278,7 +278,7 @@ interface AdapterInterface
     public function dropTable(
         string $tableName,
         string $schemaName = null,
-        bool $ifExists = true
+        bool   $ifExists = true
     ): bool;
 
     /**
@@ -293,7 +293,7 @@ interface AdapterInterface
     public function dropView(
         string $viewName,
         string $schemaName = "",
-        bool $ifExists = true
+        bool   $ifExists = true
     ): bool;
 
     /**
@@ -327,8 +327,8 @@ interface AdapterInterface
      */
     public function execute(
         string $sqlStatement,
-        array $bindParams = [],
-        array $bindTypes = []
+        array  $bindParams = [],
+        array  $bindTypes = []
     ): bool;
 
     /**
@@ -343,9 +343,9 @@ interface AdapterInterface
      */
     public function fetchAll(
         string $sqlQuery,
-        int $fetchMode = 2,
-        array $bindParams = [],
-        array $bindTypes = []
+        int    $fetchMode = 2,
+        array  $bindParams = [],
+        array  $bindTypes = []
     ): array;
 
     /**
@@ -371,10 +371,10 @@ interface AdapterInterface
      * @return string|bool
      */
     public function fetchColumn(
-        string $sqlQuery,
-        array $placeholders = [],
+        string     $sqlQuery,
+        array      $placeholders = [],
         int|string $column = 0
-    ): string | bool;
+    ): string|bool;
 
     /**
      * Returns the first row in a SQL query result
@@ -388,9 +388,9 @@ interface AdapterInterface
      */
     public function fetchOne(
         string $sqlQuery,
-        int $fetchMode = 2,
-        array $bindParams = [],
-        array $bindTypes = []
+        int    $fetchMode = 2,
+        array  $bindParams = [],
+        array  $bindTypes = []
     ): array;
 
     /**
@@ -474,9 +474,9 @@ interface AdapterInterface
      * );
      *```
      *
+     * @return RawValue|null
      * @todo Return NULL if this is not supported by the adapter
      *
-     * @return RawValue|null
      */
     public function getDefaultValue(): ?RawValue;
 
@@ -532,7 +532,7 @@ interface AdapterInterface
     /**
      * Inserts data into a table using custom RDBMS SQL syntax
      *
-     * @param string $table
+     * @param string $tableName
      * @param array  $values
      * @param array  $fields
      * @param array  $dataTypes
@@ -540,10 +540,10 @@ interface AdapterInterface
      * @return bool
      */
     public function insert(
-        string $table,
-        array $values,
-        array $fields = [],
-        array $dataTypes = []
+        string $tableName,
+        array  $values,
+        array  $fields = [],
+        array  $dataTypes = []
     ): bool;
 
     /**
@@ -563,16 +563,16 @@ interface AdapterInterface
      * INSERT INTO `robots` (`name`, `year`) VALUES ("Astro boy", 1952);
      * ```
      *
-     * @param string $table
+     * @param string $tableName
      * @param array  $data
      * @param array  $dataTypes
      *
      * @return bool
      */
     public function insertAsDict(
-        string $table,
-        array $data,
-        array $dataTypes = []
+        string $tableName,
+        array  $data,
+        array  $dataTypes = []
     ): bool;
 
     /**
@@ -593,11 +593,12 @@ interface AdapterInterface
      * Returns insert id for the auto_increment column inserted in the last SQL
      * statement
      *
-     * @param string|null $name Name of the sequence object from which the ID should be returned.
+     * @param string|null $name Name of the sequence object from which the ID
+     *                          should be returned.
      *
      * @return string|bool
      */
-    public function lastInsertId(string $name = null): string | bool;
+    public function lastInsertId(string $name = null): string|bool;
 
     /**
      * Appends a LIMIT clause to sqlQuery argument
@@ -638,8 +639,8 @@ interface AdapterInterface
      * @return bool
      */
     public function modifyColumn(
-        string $tableName,
-        string $schemaName,
+        string          $tableName,
+        string          $schemaName,
         ColumnInterface $column,
         ColumnInterface $currentColumn = null
     ): bool;
@@ -657,9 +658,9 @@ interface AdapterInterface
      */
     public function query(
         string $sqlStatement,
-        array $bindParams = [],
-        array $bindTypes = []
-    ): ResultInterface | bool;
+        array  $bindParams = [],
+        array  $bindTypes = []
+    ): ResultInterface|bool;
 
     /**
      * Releases given savepoint
@@ -745,7 +746,7 @@ interface AdapterInterface
     /**
      * Updates data on a table using custom RDBMS SQL syntax
      *
-     * @param string       $table
+     * @param string       $tableName
      * @param array        $fields
      * @param array        $values
      * @param array|string $whereCondition
@@ -754,11 +755,11 @@ interface AdapterInterface
      * @return bool
      */
     public function update(
-        string $table,
-        array $fields,
-        array $values,
+        string       $tableName,
+        array        $fields,
+        array        $values,
         array|string $whereCondition = [],
-        array $dataTypes = []
+        array        $dataTypes = []
     ): bool;
 
     /**
@@ -779,7 +780,7 @@ interface AdapterInterface
      * UPDATE `robots` SET `name` = "Astro boy" WHERE id = 101
      * ```
      *
-     * @param string       $table
+     * @param string       $tableName
      * @param array        $data
      * @param array|string $whereCondition
      * @param array        $dataTypes
@@ -787,10 +788,10 @@ interface AdapterInterface
      * @return bool
      */
     public function updateAsDict(
-        string $table,
-        array $data,
+        string       $tableName,
+        array        $data,
         array|string $whereCondition = [],
-        array $dataTypes = []
+        array        $dataTypes = []
     ): bool;
 
     /**
@@ -804,9 +805,9 @@ interface AdapterInterface
     /**
      * SQLite does not support the DEFAULT keyword
      *
+     * @return bool
      * @deprecated Will re removed in the next version
      *
-     * @return bool
      */
     public function supportsDefaultValue(): bool;
 

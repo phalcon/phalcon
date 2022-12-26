@@ -23,7 +23,6 @@ use Phalcon\Db\IndexInterface;
 use Phalcon\Db\RawValue;
 use Phalcon\Db\Reference;
 use Phalcon\Db\ReferenceInterface;
-
 use function preg_match;
 use function preg_replace;
 use function strcasecmp;
@@ -108,14 +107,14 @@ class Sqlite extends PdoAdapter
      * );
      * ```
      *
-     * @param string $table
+     * @param string $tableName
      * @param string $schemaName
      *
      * @return array|ColumnInterface[]
      * @throws Exception
      */
     public function describeColumns(
-        string $table,
+        string $tableName,
         string $schemaName = ""
     ): array {
         $oldColumn   = null;
@@ -126,7 +125,7 @@ class Sqlite extends PdoAdapter
          * We're using FETCH_NUM to fetch the columns
          */
         $fields = $this->fetchAll(
-            $this->dialect->describeColumns($table, $schemaName),
+            $this->dialect->describeColumns($tableName, $schemaName),
             Enum::FETCH_NUM
         );
 
@@ -135,7 +134,7 @@ class Sqlite extends PdoAdapter
              * By default, the bind types is 2 (string)
              */
             $definition = [
-                "bindType" => Column::BIND_PARAM_STR
+                "bindType" => Column::BIND_PARAM_STR,
             ];
 
             /**
@@ -365,16 +364,16 @@ class Sqlite extends PdoAdapter
      * );
      * ```
      *
-     * @param string $table
+     * @param string $tableName
      * @param string $schemaName
      *
      * @return array|IndexInterface[]
      */
-    public function describeIndexes(string $table, string $schemaName = ""): array
+    public function describeIndexes(string $tableName, string $schemaName = ""): array
     {
         $indexes = [];
         $records = $this->fetchAll(
-            $this->dialect->describeIndexes($table, $schemaName)
+            $this->dialect->describeIndexes($tableName, $schemaName)
         );
         foreach ($records as $index) {
             $keyName = $index["name"];
@@ -396,7 +395,7 @@ class Sqlite extends PdoAdapter
             $indexes[$keyName]["columns"] = $columns;
 
             $indexSql = $this->fetchColumn(
-                $this->dialect->listIndexesSql($table, $schemaName, $keyName)
+                $this->dialect->listIndexesSql($tableName, $schemaName, $keyName)
             );
 
             $indexes[$keyName]["type"] = "";
@@ -424,19 +423,19 @@ class Sqlite extends PdoAdapter
     /**
      * Lists table references
      *
-     * @param string $table
+     * @param string $tableName
      * @param string $schemaName
      *
      * @return array|ReferenceInterface[]
      * @throws Exception
      */
     public function describeReferences(
-        string $table,
+        string $tableName,
         string $schemaName = ""
     ): array {
         $references = [];
         $records    = $this->fetchAll(
-            $this->dialect->describeReferences($table, $schemaName),
+            $this->dialect->describeReferences($tableName, $schemaName),
             Enum::FETCH_NUM
         );
 
