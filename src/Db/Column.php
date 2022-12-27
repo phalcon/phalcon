@@ -336,7 +336,7 @@ class Column implements ColumnInterface
      */
     public function __construct(
         protected string $name,
-        array            $definition
+        array $definition
     ) {
         /**
          * Get the column type, one of the TYPE_* constants

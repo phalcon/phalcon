@@ -18,5 +18,4 @@ namespace Phalcon\Db;
  */
 class Exception extends \Exception
 {
-
 }

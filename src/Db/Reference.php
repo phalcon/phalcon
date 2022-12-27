@@ -97,7 +97,7 @@ class Reference implements ReferenceInterface
      */
     public function __construct(
         protected string $name,
-        array            $definition
+        array $definition
     ) {
         if (true !== isset($definition["referencedTable"])) {
             throw new Exception("Referenced table is required");
@@ -137,7 +137,6 @@ class Reference implements ReferenceInterface
         $this->referencedSchema = $definition["referencedSchema"] ?? "";
         $this->onDelete         = $definition["onDelete"] ?? "";
         $this->onUpdate         = $definition["onUpdate"] ?? "";
-
     }
 
     /**

@@ -28,8 +28,8 @@ interface DialectInterface
      * @return string
      */
     public function addColumn(
-        string          $tableName,
-        string          $schemaName,
+        string $tableName,
+        string $schemaName,
         ColumnInterface $column
     ): string;
 
@@ -43,8 +43,8 @@ interface DialectInterface
      * @return string
      */
     public function addForeignKey(
-        string             $tableName,
-        string             $schemaName,
+        string $tableName,
+        string $schemaName,
         ReferenceInterface $reference
     ): string;
 
@@ -58,8 +58,8 @@ interface DialectInterface
      * @return string
      */
     public function addIndex(
-        string         $tableName,
-        string         $schemaName,
+        string $tableName,
+        string $schemaName,
         IndexInterface $index
     ): string;
 
@@ -73,8 +73,8 @@ interface DialectInterface
      * @return string
      */
     public function addPrimaryKey(
-        string         $tableName,
-        string         $schemaName,
+        string $tableName,
+        string $schemaName,
         IndexInterface $index
     ): string;
 
@@ -99,7 +99,7 @@ interface DialectInterface
     public function createTable(
         string $tableName,
         string $schemaName,
-        array  $definition
+        array $definition
     ): string;
 
     /**
@@ -113,7 +113,7 @@ interface DialectInterface
      */
     public function createView(
         string $viewName,
-        array  $definition,
+        array $definition,
         string $schemaName = ""
     ): string;
 
@@ -223,7 +223,7 @@ interface DialectInterface
     public function dropTable(
         string $tableName,
         string $schemaName,
-        bool   $ifExists = true
+        bool $ifExists = true
     ): string;
 
     /**
@@ -238,7 +238,7 @@ interface DialectInterface
     public function dropView(
         string $viewName,
         string $schemaName = "",
-        bool   $ifExists = true
+        bool $ifExists = true
     ): string;
 
     /**
@@ -286,9 +286,9 @@ interface DialectInterface
      * @return string
      */
     public function getSqlExpression(
-        array  $expression,
+        array $expression,
         string $escapeChar = "",
-        array  $bindCounts = []
+        array $bindCounts = []
     ): string;
 
     /**
@@ -321,8 +321,8 @@ interface DialectInterface
      * @return string
      */
     public function modifyColumn(
-        string          $tableName,
-        string          $schemaName,
+        string $tableName,
+        string $schemaName,
         ColumnInterface $column,
         ColumnInterface $currentColumn = null
     ): string;
@@ -331,7 +331,7 @@ interface DialectInterface
      * Registers custom SQL functions
      */
     public function registerCustomFunction(
-        string   $name,
+        string $name,
         callable $customFunction
     ): Dialect;
 

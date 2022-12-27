@@ -24,6 +24,7 @@ use Phalcon\Db\IndexInterface;
 use Phalcon\Db\Reference;
 use Phalcon\Db\ReferenceInterface;
 use Phalcon\Events\Exception as EventsException;
+
 use function preg_match;
 use function str_starts_with;
 use function strtolower;
@@ -102,8 +103,8 @@ class Mysql extends PdoAdapter
      * @throws EventsException
      */
     public function addForeignKey(
-        string             $tableName,
-        string             $schemaName,
+        string $tableName,
+        string $schemaName,
         ReferenceInterface $reference
     ): bool {
         $foreignKeyCheck = $this->prepare($this->dialect->getForeignKeyChecks());

@@ -23,6 +23,7 @@ use Phalcon\Db\ResultInterface;
 use Phalcon\Events\Exception as EventsException;
 use Phalcon\Events\Traits\EventsAwareTrait;
 use Phalcon\Support\Traits\IniTrait;
+
 use function array_merge;
 use function implode;
 use function intval;
@@ -293,13 +294,12 @@ abstract class AbstractPdo extends AbstractAdapter
         /**
          * Cleanup
          */
-        unset (
+        unset(
             $descriptor["username"],
             $descriptor["password"],
             $descriptor["dialectClass"],
             $descriptor["options"],
             $descriptor["dsn"],
-
         );
 
         /**
@@ -347,7 +347,7 @@ abstract class AbstractPdo extends AbstractAdapter
      */
     public function convertBoundParams(
         string $sql,
-        array  $parameters = []
+        array $parameters = []
     ): array {
         $placeHolders = [];
         $bindPattern  = "/\\?(\d+)|:(\w+):/";
@@ -432,8 +432,8 @@ abstract class AbstractPdo extends AbstractAdapter
      */
     public function execute(
         string $sqlStatement,
-        array  $bindParams = [],
-        array  $bindTypes = []
+        array $bindParams = [],
+        array $bindTypes = []
     ): bool {
         /**
          * Execute the beforeQuery event if an EventsManager is available
@@ -507,8 +507,8 @@ abstract class AbstractPdo extends AbstractAdapter
      */
     public function executePrepared(
         PDOStatement $statement,
-        array         $placeholders,
-        array         $dataTypes = []
+        array $placeholders,
+        array $dataTypes = []
     ): PDOStatement {
 
         $forceCasting = $this->iniGetBool("phalcon.db.force_casting");
@@ -722,8 +722,8 @@ abstract class AbstractPdo extends AbstractAdapter
      */
     public function query(
         string $sqlStatement,
-        array  $bindParams = [],
-        array  $bindTypes = []
+        array $bindParams = [],
+        array $bindTypes = []
     ): ResultInterface|bool {
         /**
          * Execute the beforeQuery event if an EventsManager is available

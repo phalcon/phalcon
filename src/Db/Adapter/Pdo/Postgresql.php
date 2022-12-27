@@ -23,6 +23,7 @@ use Phalcon\Db\Reference;
 use Phalcon\Db\ReferenceInterface;
 use Phalcon\Events\Exception as EventsException;
 use Throwable;
+
 use function explode;
 use function preg_replace;
 use function strcasecmp;
@@ -115,7 +116,7 @@ class Postgresql extends PdoAdapter
     public function createTable(
         string $tableName,
         string $schemaName,
-        array  $definition
+        array $definition
     ): bool {
         if (
             true !== isset($definition["columns"]) ||
@@ -655,8 +656,8 @@ class Postgresql extends PdoAdapter
      * @throws Exception
      */
     public function modifyColumn(
-        string          $tableName,
-        string          $schemaName,
+        string $tableName,
+        string $schemaName,
         ColumnInterface $column,
         ColumnInterface $currentColumn = null
     ): bool {

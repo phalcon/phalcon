@@ -23,6 +23,7 @@ use Phalcon\Db\IndexInterface;
 use Phalcon\Db\RawValue;
 use Phalcon\Db\Reference;
 use Phalcon\Db\ReferenceInterface;
+
 use function preg_match;
 use function preg_replace;
 use function strcasecmp;
