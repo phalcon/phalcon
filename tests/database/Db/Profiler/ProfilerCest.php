@@ -35,6 +35,7 @@ class ProfilerCest
      */
     public function dbProfilerFull(DatabaseTester $I)
     {
+        $I->skipTest('skip until Mvc');
         $I->wantToTest('Db\Profiler - full');
 
         $this->setNewFactoryDefault();
