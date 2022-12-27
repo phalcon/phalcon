@@ -18,7 +18,6 @@ use Phalcon\Db\Profiler\Item;
 use Phalcon\Tests\Fixtures\Migrations\InvoicesMigration;
 use Phalcon\Tests\Fixtures\Traits\DiTrait;
 use Phalcon\Tests\Models\Invoices;
-
 use function substr;
 use function uniqid;
 

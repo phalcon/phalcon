@@ -23,7 +23,7 @@ class GetSizeCest
     /**
      * Tests Phalcon\Db\Column :: getSize()
      *
-     * @param  DatabaseTester $I
+     * @param DatabaseTester $I
      *
      * @author Phalcon Team <team@phalcon.io>
      * @since  2020-02-01
@@ -38,7 +38,7 @@ class GetSizeCest
         $expectedColumns = $this->getColumnsObjects();
 
         foreach ($expectedColumns as $index => $column) {
-            $I->assertEquals(
+            $I->assertSame(
                 $columns[$index]['size'],
                 $column->getSize()
             );

@@ -23,7 +23,8 @@ class GetAfterPositionCest
     /**
      * Tests Phalcon\Db\Column :: getAfterPosition()
      *
-     * @param  DatabaseTester $I
+     * @param DatabaseTester $I
+     *
      * @author Phalcon Team <team@phalcon.io>
      * @since  2020-02-01
      *
@@ -37,7 +38,7 @@ class GetAfterPositionCest
         $expectedColumns = $this->getColumnsObjects();
 
         foreach ($expectedColumns as $index => $column) {
-            $I->assertEquals(
+            $I->assertSame(
                 $columns[$index]['after'],
                 $column->getAfterPosition()
             );

@@ -40,9 +40,9 @@ trait DbTrait
                 'autoIncrement' => true,
                 'primary'       => true,
                 'first'         => true,
-                'after'         => null,
+                'after'         => "",
                 'bindType'      => Column::BIND_PARAM_INT,
-                'typeValues'    => 0,
+                'typeValues'    => [],
                 'typeReference' => Column::TYPE_INTEGER,
             ],
             1  => [
@@ -58,7 +58,7 @@ trait DbTrait
                 'first'         => false,
                 'after'         => 'field_primary',
                 'bindType'      => Column::BIND_PARAM_STR,
-                'typeValues'    => 1,
+                'typeValues'    => [],
                 'typeReference' => Column::TYPE_BLOB,
             ],
             2  => [
@@ -74,7 +74,7 @@ trait DbTrait
                 'first'         => false,
                 'after'         => 'field_blob',
                 'bindType'      => Column::BIND_PARAM_INT,
-                'typeValues'    => 2,
+                'typeValues'    => [],
                 'typeReference' => Column::TYPE_BIT,
             ],
             3  => [
@@ -90,7 +90,7 @@ trait DbTrait
                 'first'         => false,
                 'after'         => 'field_bit',
                 'bindType'      => Column::BIND_PARAM_INT,
-                'typeValues'    => 3,
+                'typeValues'    => [],
                 'typeReference' => Column::TYPE_BIT,
             ],
             4  => [
@@ -107,7 +107,7 @@ trait DbTrait
                 'first'         => false,
                 'after'         => 'field_bit_default',
                 'bindType'      => Column::BIND_PARAM_INT,
-                'typeValues'    => 4,
+                'typeValues'    => [],
                 'typeReference' => Column::TYPE_BIGINTEGER,
             ],
             5  => [
@@ -124,7 +124,7 @@ trait DbTrait
                 'first'         => false,
                 'after'         => 'field_bigint',
                 'bindType'      => Column::BIND_PARAM_INT,
-                'typeValues'    => 5,
+                'typeValues'    => [],
                 'typeReference' => Column::TYPE_BIGINTEGER,
             ],
             6  => [
@@ -140,7 +140,7 @@ trait DbTrait
                 'first'         => false,
                 'after'         => 'field_bigint_default',
                 'bindType'      => Column::BIND_PARAM_INT,
-                'typeValues'    => 6,
+                'typeValues'    => [],
                 'typeReference' => Column::TYPE_TINYINTEGER,
             ],
             7  => [
@@ -156,7 +156,7 @@ trait DbTrait
                 'first'         => false,
                 'after'         => 'field_boolean',
                 'bindType'      => Column::BIND_PARAM_INT,
-                'typeValues'    => 7,
+                'typeValues'    => [],
                 'typeReference' => Column::TYPE_TINYINTEGER,
             ],
             8  => [
@@ -172,7 +172,7 @@ trait DbTrait
                 'first'         => false,
                 'after'         => 'field_boolean_default',
                 'bindType'      => Column::BIND_PARAM_STR,
-                'typeValues'    => 8,
+                'typeValues'    => [],
                 'typeReference' => Column::TYPE_CHAR,
             ],
             9  => [
@@ -188,7 +188,7 @@ trait DbTrait
                 'first'         => false,
                 'after'         => 'field_char',
                 'bindType'      => Column::BIND_PARAM_STR,
-                'typeValues'    => 9,
+                'typeValues'    => [],
                 'typeReference' => Column::TYPE_CHAR,
             ],
             10 => [
@@ -205,7 +205,7 @@ trait DbTrait
                 'first'         => false,
                 'after'         => 'field_char_default',
                 'bindType'      => Column::BIND_PARAM_STR,
-                'typeValues'    => 'a',
+                'typeValues'    => [],
                 'typeReference' => Column::TYPE_DECIMAL,
             ],
             11 => [
@@ -222,7 +222,7 @@ trait DbTrait
                 'first'         => false,
                 'after'         => 'field_decimal',
                 'bindType'      => Column::BIND_PARAM_STR,
-                'typeValues'    => 'b',
+                'typeValues'    => [],
                 'typeReference' => Column::TYPE_DECIMAL,
             ],
             12 => [
@@ -238,7 +238,7 @@ trait DbTrait
                 'first'         => false,
                 'after'         => 'field_decimal_default',
                 'bindType'      => Column::BIND_PARAM_STR,
-                'typeValues'    => 'c',
+                'typeValues'    => [],
                 'typeReference' => Column::TYPE_ENUM,
             ],
             13 => [
@@ -255,7 +255,7 @@ trait DbTrait
                 'first'         => false,
                 'after'         => 'field_enum',
                 'bindType'      => Column::BIND_PARAM_INT,
-                'typeValues'    => 'd',
+                'typeValues'    => [],
                 'typeReference' => Column::TYPE_INTEGER,
             ],
             14 => [
@@ -272,7 +272,7 @@ trait DbTrait
                 'first'         => false,
                 'after'         => 'field_integer',
                 'bindType'      => Column::BIND_PARAM_INT,
-                'typeValues'    => 'e',
+                'typeValues'    => [],
                 'typeReference' => Column::TYPE_INTEGER,
             ],
             15 => [
@@ -288,7 +288,7 @@ trait DbTrait
                 'first'         => false,
                 'after'         => 'field_integer_default',
                 'bindType'      => Column::BIND_PARAM_STR,
-                'typeValues'    => 'f',
+                'typeValues'    => [],
                 'typeReference' => Column::TYPE_JSON,
             ],
             16 => [
@@ -305,7 +305,7 @@ trait DbTrait
                 'first'         => false,
                 'after'         => 'field_json',
                 'bindType'      => Column::BIND_PARAM_DECIMAL,
-                'typeValues'    => 'g',
+                'typeValues'    => [],
                 'typeReference' => Column::TYPE_FLOAT,
             ],
             17 => [
@@ -322,7 +322,7 @@ trait DbTrait
                 'first'         => false,
                 'after'         => 'field_float',
                 'bindType'      => Column::BIND_PARAM_DECIMAL,
-                'typeValues'    => 'h',
+                'typeValues'    => [],
                 'typeReference' => Column::TYPE_FLOAT,
             ],
             18 => [
@@ -338,7 +338,7 @@ trait DbTrait
                 'first'         => false,
                 'after'         => 'field_float_default',
                 'bindType'      => Column::BIND_PARAM_STR,
-                'typeValues'    => 'i',
+                'typeValues'    => [],
                 'typeReference' => Column::TYPE_DATE,
             ],
             19 => [
@@ -354,7 +354,7 @@ trait DbTrait
                 'first'         => false,
                 'after'         => 'field_date',
                 'bindType'      => Column::BIND_PARAM_STR,
-                'typeValues'    => 'j',
+                'typeValues'    => [],
                 'typeReference' => Column::TYPE_DATE,
             ],
             20 => [
@@ -370,7 +370,7 @@ trait DbTrait
                 'first'         => false,
                 'after'         => 'field_date_default',
                 'bindType'      => Column::BIND_PARAM_STR,
-                'typeValues'    => 10,
+                'typeValues'    => [],
                 'typeReference' => Column::TYPE_DATETIME,
             ],
             21 => [
@@ -386,7 +386,7 @@ trait DbTrait
                 'first'         => false,
                 'after'         => 'field_datetime',
                 'bindType'      => Column::BIND_PARAM_STR,
-                'typeValues'    => 11,
+                'typeValues'    => [],
                 'typeReference' => Column::TYPE_DATETIME,
             ],
             22 => [
@@ -402,7 +402,7 @@ trait DbTrait
                 'first'         => false,
                 'after'         => 'field_datetime_default',
                 'bindType'      => Column::BIND_PARAM_STR,
-                'typeValues'    => 12,
+                'typeValues'    => [],
                 'typeReference' => Column::TYPE_TIME,
             ],
             23 => [
@@ -418,7 +418,7 @@ trait DbTrait
                 'first'         => false,
                 'after'         => 'field_time',
                 'bindType'      => Column::BIND_PARAM_STR,
-                'typeValues'    => 13,
+                'typeValues'    => [],
                 'typeReference' => Column::TYPE_TIME,
             ],
             24 => [
@@ -434,7 +434,7 @@ trait DbTrait
                 'first'         => false,
                 'after'         => 'field_time_default',
                 'bindType'      => Column::BIND_PARAM_STR,
-                'typeValues'    => 14,
+                'typeValues'    => [],
                 'typeReference' => Column::TYPE_TIMESTAMP,
             ],
             25 => [
@@ -450,7 +450,7 @@ trait DbTrait
                 'first'         => false,
                 'after'         => 'field_timestamp',
                 'bindType'      => Column::BIND_PARAM_STR,
-                'typeValues'    => 15,
+                'typeValues'    => [],
                 'typeReference' => Column::TYPE_TIMESTAMP,
             ],
             26 => [
@@ -467,7 +467,7 @@ trait DbTrait
                 'first'         => false,
                 'after'         => 'field_timestamp_default',
                 'bindType'      => Column::BIND_PARAM_INT,
-                'typeValues'    => 16,
+                'typeValues'    => [],
                 'typeReference' => Column::TYPE_MEDIUMINTEGER,
             ],
             27 => [
@@ -484,7 +484,7 @@ trait DbTrait
                 'first'         => false,
                 'after'         => 'field_mediumint',
                 'bindType'      => Column::BIND_PARAM_INT,
-                'typeValues'    => 17,
+                'typeValues'    => [],
                 'typeReference' => Column::TYPE_MEDIUMINTEGER,
             ],
             28 => [
@@ -501,7 +501,7 @@ trait DbTrait
                 'first'         => false,
                 'after'         => 'field_mediumint_default',
                 'bindType'      => Column::BIND_PARAM_INT,
-                'typeValues'    => 18,
+                'typeValues'    => [],
                 'typeReference' => Column::TYPE_SMALLINTEGER,
             ],
             29 => [
@@ -518,7 +518,7 @@ trait DbTrait
                 'first'         => false,
                 'after'         => 'field_smallint',
                 'bindType'      => Column::BIND_PARAM_INT,
-                'typeValues'    => 19,
+                'typeValues'    => [],
                 'typeReference' => Column::TYPE_SMALLINTEGER,
             ],
             30 => [
@@ -535,7 +535,7 @@ trait DbTrait
                 'first'         => false,
                 'after'         => 'field_smallint_default',
                 'bindType'      => Column::BIND_PARAM_INT,
-                'typeValues'    => 'aa',
+                'typeValues'    => [],
                 'typeReference' => Column::TYPE_TINYINTEGER,
             ],
             31 => [
@@ -552,7 +552,7 @@ trait DbTrait
                 'first'         => false,
                 'after'         => 'field_tinyint',
                 'bindType'      => Column::BIND_PARAM_INT,
-                'typeValues'    => 'bb',
+                'typeValues'    => [],
                 'typeReference' => Column::TYPE_TINYINTEGER,
             ],
             32 => [
@@ -568,7 +568,7 @@ trait DbTrait
                 'first'         => false,
                 'after'         => 'field_tinyint_default',
                 'bindType'      => Column::BIND_PARAM_STR,
-                'typeValues'    => 'cc',
+                'typeValues'    => [],
                 'typeReference' => Column::TYPE_LONGTEXT,
             ],
             33 => [
@@ -584,7 +584,7 @@ trait DbTrait
                 'first'         => false,
                 'after'         => 'field_longtext',
                 'bindType'      => Column::BIND_PARAM_STR,
-                'typeValues'    => 'dd',
+                'typeValues'    => [],
                 'typeReference' => Column::TYPE_MEDIUMTEXT,
             ],
             34 => [
@@ -600,7 +600,7 @@ trait DbTrait
                 'first'         => false,
                 'after'         => 'field_mediumtext',
                 'bindType'      => Column::BIND_PARAM_STR,
-                'typeValues'    => 'ee',
+                'typeValues'    => [],
                 'typeReference' => Column::TYPE_TINYTEXT,
             ],
             35 => [
@@ -616,7 +616,7 @@ trait DbTrait
                 'first'         => false,
                 'after'         => 'field_tinytext',
                 'bindType'      => Column::BIND_PARAM_STR,
-                'typeValues'    => 'ff',
+                'typeValues'    => [],
                 'typeReference' => Column::TYPE_TEXT,
             ],
             36 => [
@@ -632,7 +632,7 @@ trait DbTrait
                 'first'         => false,
                 'after'         => 'field_text',
                 'bindType'      => Column::BIND_PARAM_STR,
-                'typeValues'    => 'gg',
+                'typeValues'    => [],
                 'typeReference' => Column::TYPE_VARCHAR,
             ],
             37 => [
@@ -648,7 +648,7 @@ trait DbTrait
                 'first'         => false,
                 'after'         => 'field_varchar',
                 'bindType'      => Column::BIND_PARAM_STR,
-                'typeValues'    => 'hh',
+                'typeValues'    => [],
                 'typeReference' => Column::TYPE_VARCHAR,
             ],
         ];

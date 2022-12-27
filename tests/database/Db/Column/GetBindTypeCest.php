@@ -36,7 +36,7 @@ class GetBindTypeCest
         $expectedColumns = $this->getColumnsObjects();
 
         foreach ($expectedColumns as $index => $column) {
-            $I->assertEquals(
+            $I->assertSame(
                 $columns[$index]['bindType'],
                 $column->getBindType()
             );

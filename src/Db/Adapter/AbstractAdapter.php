@@ -148,7 +148,7 @@ abstract class AbstractAdapter implements AdapterInterface, EventsAwareInterface
         /**
          * Dialect class can override the default dialect
          */
-        $dialectClass = "Phalcon\Db\Dialect\\" . $this->dialectType;
+        $dialectClass = "Phalcon\Db\Dialect\\" . ucfirst($this->dialectType);
         if (isset($descriptor["dialectClass"])) {
             $dialectClass = $descriptor["dialectClass"];
         }

@@ -36,7 +36,7 @@ class IsNumericCest
         $expectedColumns = $this->getColumnsObjects();
 
         foreach ($expectedColumns as $index => $column) {
-            $I->assertEquals(
+            $I->assertSame(
                 $columns[$index]['isNumeric'],
                 $column->isNumeric()
             );

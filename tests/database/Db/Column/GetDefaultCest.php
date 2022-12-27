@@ -36,7 +36,7 @@ class GetDefaultCest
         $expectedColumns = $this->getColumnsObjects();
 
         foreach ($expectedColumns as $index => $column) {
-            $I->assertEquals(
+            $I->assertSame(
                 $columns[$index]['default'],
                 $column->getDefault()
             );
