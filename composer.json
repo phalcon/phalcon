@@ -53,7 +53,7 @@
         "codeception/module-asserts": "^1.0",
         "codeception/module-cli": "^1.0",
         "codeception/module-db": "^1.0",
-        "codeception/module-filesystem": "^1.0",
+        "codeception/module-filesystem": "^2.0",
         "codeception/module-memcache": "^2.0",
         "codeception/module-redis": "^1.0",
         "friendsofphp/php-cs-fixer": "^3.0",
