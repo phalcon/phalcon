@@ -351,9 +351,9 @@ class Column implements ColumnInterface
         $this->defaultValue  = $definition["default"] ?? null;
         $this->isFirst       = (bool) ($definition["first"] ?? false);
         $this->isNotNull     = (bool) ($definition["notNull"] ?? true);
-        $this->isNumeric     = $definition["isNumeric"] ?? false;
+        $this->isNumeric     = (bool) ($definition["isNumeric"] ?? false);
         $this->isPrimary     = (bool) ($definition["primary"] ?? false);
-        $this->isUnsigned    = $definition["unsigned"] ?? false;
+        $this->isUnsigned    = (bool) ($definition["unsigned"] ?? false);
         $this->size          = $definition["size"] ?? 0;
         $this->type          = $definition["type"];
         $this->typeReference = $definition["typeReference"] ?? -1;
@@ -505,7 +505,7 @@ class Column implements ColumnInterface
      */
     public function hasDefault(): bool
     {
-        if (false === $this->isAutoIncrement) {
+        if ($this->isAutoIncrement) {
             return false;
         }
 
