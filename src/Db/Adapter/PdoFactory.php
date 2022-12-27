@@ -20,7 +20,6 @@ use Phalcon\Db\Adapter\Pdo\Sqlite;
 use Phalcon\Support\Traits\ConfigTrait;
 use Phalcon\Traits\Factory\FactoryTrait;
 
-
 class PdoFactory
 {
     use ConfigTrait;
@@ -77,7 +76,7 @@ class PdoFactory
      */
     public function newInstance(
         string $name,
-        array  $options = []
+        array $options = []
     ): AdapterInterface {
         $definition = $this->getService($name);
 

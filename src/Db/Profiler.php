@@ -14,6 +14,7 @@ declare(strict_types=1);
 namespace Phalcon\Db;
 
 use Phalcon\Db\Profiler\Item;
+
 use function method_exists;
 
 /**
@@ -173,8 +174,8 @@ class Profiler
      */
     public function startProfile(
         string $sqlStatement,
-        array  $sqlVariables = [],
-        array  $sqlBindTypes = []
+        array $sqlVariables = [],
+        array $sqlBindTypes = []
     ): Profiler {
         $activeProfile = new Item();
 

@@ -35,8 +35,8 @@ interface AdapterInterface
      * @return bool
      */
     public function addColumn(
-        string          $tableName,
-        string          $schemaName,
+        string $tableName,
+        string $schemaName,
         ColumnInterface $column
     ): bool;
 
@@ -50,8 +50,8 @@ interface AdapterInterface
      * @return bool
      */
     public function addIndex(
-        string         $tableName,
-        string         $schemaName,
+        string $tableName,
+        string $schemaName,
         IndexInterface $index
     ): bool;
 
@@ -65,8 +65,8 @@ interface AdapterInterface
      * @return bool
      */
     public function addForeignKey(
-        string             $tableName,
-        string             $schemaName,
+        string $tableName,
+        string $schemaName,
         ReferenceInterface $reference
     ): bool;
 
@@ -80,8 +80,8 @@ interface AdapterInterface
      * @return bool
      */
     public function addPrimaryKey(
-        string         $tableName,
-        string         $schemaName,
+        string $tableName,
+        string $schemaName,
         IndexInterface $index
     ): bool;
 
@@ -150,7 +150,7 @@ interface AdapterInterface
     public function createTable(
         string $tableName,
         string $schemaName,
-        array  $definition
+        array $definition
     ): bool;
 
     /**
@@ -164,7 +164,7 @@ interface AdapterInterface
      */
     public function createView(
         string $viewName,
-        array  $definition,
+        array $definition,
         string $schemaName = null
     ): bool;
 
@@ -180,9 +180,9 @@ interface AdapterInterface
      */
     public function delete(
         array|string $tableName,
-        string       $whereCondition = null,
-        array        $placeholders = [],
-        array        $dataTypes = []
+        string $whereCondition = null,
+        array $placeholders = [],
+        array $dataTypes = []
     ): bool;
 
     /**
@@ -278,7 +278,7 @@ interface AdapterInterface
     public function dropTable(
         string $tableName,
         string $schemaName = null,
-        bool   $ifExists = true
+        bool $ifExists = true
     ): bool;
 
     /**
@@ -293,7 +293,7 @@ interface AdapterInterface
     public function dropView(
         string $viewName,
         string $schemaName = "",
-        bool   $ifExists = true
+        bool $ifExists = true
     ): bool;
 
     /**
@@ -327,8 +327,8 @@ interface AdapterInterface
      */
     public function execute(
         string $sqlStatement,
-        array  $bindParams = [],
-        array  $bindTypes = []
+        array $bindParams = [],
+        array $bindTypes = []
     ): bool;
 
     /**
@@ -343,9 +343,9 @@ interface AdapterInterface
      */
     public function fetchAll(
         string $sqlQuery,
-        int    $fetchMode = 2,
-        array  $bindParams = [],
-        array  $bindTypes = []
+        int $fetchMode = 2,
+        array $bindParams = [],
+        array $bindTypes = []
     ): array;
 
     /**
@@ -371,8 +371,8 @@ interface AdapterInterface
      * @return string|bool
      */
     public function fetchColumn(
-        string     $sqlQuery,
-        array      $placeholders = [],
+        string $sqlQuery,
+        array $placeholders = [],
         int|string $column = 0
     ): string|bool;
 
@@ -388,9 +388,9 @@ interface AdapterInterface
      */
     public function fetchOne(
         string $sqlQuery,
-        int    $fetchMode = 2,
-        array  $bindParams = [],
-        array  $bindTypes = []
+        int $fetchMode = 2,
+        array $bindParams = [],
+        array $bindTypes = []
     ): array;
 
     /**
@@ -541,9 +541,9 @@ interface AdapterInterface
      */
     public function insert(
         string $tableName,
-        array  $values,
-        array  $fields = [],
-        array  $dataTypes = []
+        array $values,
+        array $fields = [],
+        array $dataTypes = []
     ): bool;
 
     /**
@@ -571,8 +571,8 @@ interface AdapterInterface
      */
     public function insertAsDict(
         string $tableName,
-        array  $data,
-        array  $dataTypes = []
+        array $data,
+        array $dataTypes = []
     ): bool;
 
     /**
@@ -639,8 +639,8 @@ interface AdapterInterface
      * @return bool
      */
     public function modifyColumn(
-        string          $tableName,
-        string          $schemaName,
+        string $tableName,
+        string $schemaName,
         ColumnInterface $column,
         ColumnInterface $currentColumn = null
     ): bool;
@@ -658,8 +658,8 @@ interface AdapterInterface
      */
     public function query(
         string $sqlStatement,
-        array  $bindParams = [],
-        array  $bindTypes = []
+        array $bindParams = [],
+        array $bindTypes = []
     ): ResultInterface|bool;
 
     /**
@@ -755,11 +755,11 @@ interface AdapterInterface
      * @return bool
      */
     public function update(
-        string       $tableName,
-        array        $fields,
-        array        $values,
+        string $tableName,
+        array $fields,
+        array $values,
         array|string $whereCondition = [],
-        array        $dataTypes = []
+        array $dataTypes = []
     ): bool;
 
     /**
@@ -788,10 +788,10 @@ interface AdapterInterface
      * @return bool
      */
     public function updateAsDict(
-        string       $tableName,
-        array        $data,
+        string $tableName,
+        array $data,
         array|string $whereCondition = [],
-        array        $dataTypes = []
+        array $dataTypes = []
     ): bool;
 
     /**

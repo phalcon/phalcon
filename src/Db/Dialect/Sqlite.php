@@ -19,6 +19,7 @@ use Phalcon\Db\Dialect;
 use Phalcon\Db\Exception;
 use Phalcon\Db\IndexInterface;
 use Phalcon\Db\ReferenceInterface;
+
 use function addcslashes;
 use function is_array;
 use function join;
@@ -46,8 +47,8 @@ class Sqlite extends Dialect
      * @throws Exception
      */
     public function addColumn(
-        string          $tableName,
-        string          $schemaName,
+        string $tableName,
+        string $schemaName,
         ColumnInterface $column
     ): string {
         $sql = "ALTER TABLE "
@@ -91,8 +92,8 @@ class Sqlite extends Dialect
      * @throws Exception
      */
     public function addForeignKey(
-        string             $tableName,
-        string             $schemaName,
+        string $tableName,
+        string $schemaName,
         ReferenceInterface $reference
     ): string {
         throw new Exception(
@@ -111,8 +112,8 @@ class Sqlite extends Dialect
      * @throws Exception
      */
     public function addIndex(
-        string         $tableName,
-        string         $schemaName,
+        string $tableName,
+        string $schemaName,
         IndexInterface $index
     ): string {
         $indexType = $index->getType();
@@ -147,8 +148,8 @@ class Sqlite extends Dialect
      * @throws Exception
      */
     public function addPrimaryKey(
-        string         $tableName,
-        string         $schemaName,
+        string $tableName,
+        string $schemaName,
         IndexInterface $index
     ): string {
         throw new Exception(
@@ -169,7 +170,7 @@ class Sqlite extends Dialect
     public function createTable(
         string $tableName,
         string $schemaName,
-        array  $definition
+        array $definition
     ): string {
         $tableName = $this->prepareTable($tableName, $schemaName);
         $options   = $definition["options"] ?? [];
@@ -310,7 +311,7 @@ class Sqlite extends Dialect
      */
     public function createView(
         string $viewName,
-        array  $definition,
+        array $definition,
         string $schemaName = null
     ): string {
         if (true !== isset($definition["sql"])) {
@@ -477,7 +478,7 @@ class Sqlite extends Dialect
     public function dropTable(
         string $tableName,
         string $schemaName = null,
-        bool   $ifExists = true
+        bool $ifExists = true
     ): string {
         $tableName = $this->prepareTable($tableName, $schemaName);
 
@@ -500,7 +501,7 @@ class Sqlite extends Dialect
     public function dropView(
         string $viewName,
         string $schemaName = "",
-        bool   $ifExists = true
+        bool $ifExists = true
     ): string {
         $view = $this->prepareTable($viewName, $schemaName);
 
@@ -778,9 +779,9 @@ class Sqlite extends Dialect
      * @throws Exception
      */
     public function modifyColumn(
-        string           $tableName,
-        string           $schemaName,
-        ColumnInterface  $column,
+        string $tableName,
+        string $schemaName,
+        ColumnInterface $column,
         ?ColumnInterface $currentColumn = null
     ): string {
         throw new Exception("Altering a DB column is not supported by SQLite");

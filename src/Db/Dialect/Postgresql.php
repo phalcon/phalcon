@@ -19,6 +19,7 @@ use Phalcon\Db\Dialect;
 use Phalcon\Db\Exception;
 use Phalcon\Db\IndexInterface;
 use Phalcon\Db\ReferenceInterface;
+
 use function addcslashes;
 use function is_array;
 use function join;
@@ -46,8 +47,8 @@ class Postgresql extends Dialect
      * @throws Exception
      */
     public function addColumn(
-        string          $tableName,
-        string          $schemaName,
+        string $tableName,
+        string $schemaName,
         ColumnInterface $column
     ): string {
         $columnDefinition = $this->getColumnDefinition($column);
@@ -83,8 +84,8 @@ class Postgresql extends Dialect
      * @throws Exception
      */
     public function addForeignKey(
-        string             $tableName,
-        string             $schemaName,
+        string $tableName,
+        string $schemaName,
         ReferenceInterface $reference
     ): string {
         $sql = "ALTER TABLE "
@@ -127,8 +128,8 @@ class Postgresql extends Dialect
      * @throws Exception
      */
     public function addIndex(
-        string         $tableName,
-        string         $schemaName,
+        string $tableName,
+        string $schemaName,
         IndexInterface $index
     ): string {
         if ($index->getName() === "PRIMARY") {
@@ -163,8 +164,8 @@ class Postgresql extends Dialect
      * @throws Exception
      */
     public function addPrimaryKey(
-        string         $tableName,
-        string         $schemaName,
+        string $tableName,
+        string $schemaName,
         IndexInterface $index
     ): string {
         return "ALTER TABLE "
@@ -189,7 +190,7 @@ class Postgresql extends Dialect
     public function createTable(
         string $tableName,
         string $schemaName,
-        array  $definition
+        array $definition
     ): string {
 
         if (true !== isset($definition["columns"])) {
@@ -351,7 +352,7 @@ class Postgresql extends Dialect
      */
     public function createView(
         string $viewName,
-        array  $definition,
+        array $definition,
         string $schemaName = ""
     ): string {
         if (true !== isset($definition["sql"])) {
@@ -423,7 +424,6 @@ class Postgresql extends Dialect
             . "WHERE c.table_schema='" . $schemaName
             . "' AND c.table_name='" . $tableName
             . "' ORDER BY c.ordinal_position";
-
     }
 
     /**
@@ -582,7 +582,7 @@ class Postgresql extends Dialect
     public function dropTable(
         string $tableName,
         string $schemaName = "",
-        bool   $ifExists = true
+        bool $ifExists = true
     ): string {
         $tableName = $this->prepareTable($tableName, $schemaName);
 
@@ -605,7 +605,7 @@ class Postgresql extends Dialect
     public function dropView(
         string $viewName,
         string $schemaName = "",
-        bool   $ifExists = true
+        bool $ifExists = true
     ): string {
         $view = $this->prepareTable($viewName, $schemaName);
 
@@ -822,8 +822,8 @@ class Postgresql extends Dialect
      * @throws Exception
      */
     public function modifyColumn(
-        string          $tableName,
-        string          $schemaName,
+        string $tableName,
+        string $schemaName,
         ColumnInterface $column,
         ColumnInterface $currentColumn = null
     ): string {
