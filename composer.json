@@ -51,7 +51,7 @@
         "codeception/codeception": "^4.0",
         "codeception/module-apc": "^1.0",
         "codeception/module-asserts": "^1.0",
-        "codeception/module-cli": "^1.0",
+        "codeception/module-cli": "^2.0",
         "codeception/module-db": "^1.0",
         "codeception/module-filesystem": "^2.0",
         "codeception/module-memcache": "^2.0",
