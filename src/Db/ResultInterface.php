@@ -53,9 +53,17 @@ interface ResultInterface
      * method is affected by the active fetch flag set using
      * `Phalcon\Db\Result\Pdo::setFetchMode()`
      *
+     * @param int        $mode
+     * @param mixed      $fetchArgument
+     * @param array|null $constructorArgs
+     *
      * @return array
      */
-    public function fetchAll(): array;
+    public function fetchAll(
+        int $mode = Enum::FETCH_DEFAULT,
+        mixed $fetchArgument = Enum::FETCH_ORI_NEXT,
+        ?array $constructorArgs = null
+    ): array;
 
     /**
      * Returns an array of strings that corresponds to the fetched row, or FALSE
