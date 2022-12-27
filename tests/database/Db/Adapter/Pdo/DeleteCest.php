@@ -41,6 +41,7 @@ final class DeleteCest
     public function dbAdapterPdoQuery(DatabaseTester $I)
     {
         $I->wantToTest('Db\Adapter\Pdo - delete()');
+        $I->skipTest('skip until Mvc');
 
         $connection = $I->getConnection();
         $db         = $this->container->get('db');
