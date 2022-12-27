@@ -27,22 +27,32 @@ class PdoFactory
     use FactoryTrait;
 
     /**
+     * Constructor.
+     *
+     * @param array $services
+     */
+    public function __construct(array $services = [])
+    {
+        $this->init($services);
+    }
+
+    /**
      * Factory to create an instance from a Config object
      *
-     * @param array|Config config = [
-     *         'adapter' => 'mysql',
-     *         'options' => [
-     *         'host' => 'localhost',
-     *         'port' => '3306',
-     *         'dbname' => 'blog',
-     *         'username' => 'sigma'
-     *         'password' => 'secret',
-     *         'dialectClass' => null,
-     *         'options' => [],
-     *         'dsn' => null,
-     *         'charset' => 'utf8mb4'
-     *         ]
-     *         ]
+     * @param array|Config $config = [
+     *                             'adapter' => 'mysql',
+     *                             'options' => [
+     *                             'host' => 'localhost',
+     *                             'port' => '3306',
+     *                             'dbname' => 'blog',
+     *                             'username' => 'sigma'
+     *                             'password' => 'secret',
+     *                             'dialectClass' => null,
+     *                             'options' => [],
+     *                             'dsn' => null,
+     *                             'charset' => 'utf8mb4'
+     *                             ]
+     *                             ]
      */
     public function load(Config|array $config): AdapterInterface
     {

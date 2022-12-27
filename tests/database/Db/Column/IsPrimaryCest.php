@@ -36,7 +36,7 @@ class IsPrimaryCest
         $expectedColumns = $this->getColumnsObjects();
 
         foreach ($expectedColumns as $index => $column) {
-            $I->assertEquals(
+            $I->assertSame(
                 $columns[$index]['primary'],
                 $column->isPrimary()
             );

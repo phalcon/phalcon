@@ -14,6 +14,7 @@ declare(strict_types=1);
 namespace Phalcon\Tests\Database\Db\Adapter\Pdo;
 
 use DatabaseTester;
+use Phalcon\Db\Adapter\Pdo\Mysql;
 use Phalcon\Db\Column;
 use Phalcon\Tests\Fixtures\Migrations\ComplexDefaultMigration;
 use Phalcon\Tests\Fixtures\Migrations\DialectMigration;
@@ -50,6 +51,7 @@ class DescribeColumnsCest
     {
         $I->wantToTest('Db\Adapter\Pdo - describeColumns() - supported');
 
+        /** @var Mysql $db */
         $db        = $this->container->get('db');
         $migration = new DialectMigration($I->getConnection());
         $columns   = $db->describeColumns($migration->getTable());
@@ -58,7 +60,7 @@ class DescribeColumnsCest
         $I->assertCount($expected, $columns);
 
         $expected = Column::class;
-        $actual = $columns[1];
+        $actual   = $columns[1];
         $I->assertInstanceOf($expected, $actual);
 
         foreach ($columns as $index => $column) {
@@ -67,8 +69,6 @@ class DescribeColumnsCest
 
             $I->assertEquals($expected, $actual);
         }
-
-        $I->assertEquals($expected, $actual);
     }
 
     /**
@@ -85,8 +85,8 @@ class DescribeColumnsCest
     {
         $I->wantToTest('Db\Adapter\Pdo - describeColumns()');
 
-        $db  = $this->container->get('db');
-        $now = date('Y-m-d H:i:s');
+        $db        = $this->container->get('db');
+        $now       = date('Y-m-d H:i:s');
         $migration = new ComplexDefaultMigration($I->getConnection());
         $migration->insert(1, $now, $now);
 
@@ -110,8 +110,8 @@ class DescribeColumnsCest
     {
         $I->wantToTest('Db\Adapter\Pdo - describeColumns() - CheckPostgres Default value');
 
-        $db  = $this->container->get('db');
-        $now = date('Y-m-d H:i:s');
+        $db        = $this->container->get('db');
+        $now       = date('Y-m-d H:i:s');
         $migration = new ComplexDefaultMigration($I->getConnection());
         $migration->insert(1, $now, $now);
 
@@ -144,9 +144,9 @@ class DescribeColumnsCest
     private function getExpected(int $index): array
     {
         $metadata = [
-            // field_primary           int auto_increment primary key,
+            // field_primary            int auto_increment primary key,
             0  => [
-                0 => null,
+                0 => "",
                 1 => Column::BIND_PARAM_INT,
                 2 => false,
                 3 => true,
@@ -156,7 +156,6 @@ class DescribeColumnsCest
                 7 => true,
                 8 => false,
             ],
-            // field_blob               blob                                        null,
             1  => [
                 0 => 'field_primary',
                 1 => Column::BIND_PARAM_STR,
@@ -168,9 +167,9 @@ class DescribeColumnsCest
                 7 => false,
                 8 => false,
             ],
-            // field_binary             binary(10)                                  null,
+            // field_blob               blob                                        null,
             2  => [
-                0 => 'field_blob',
+                0 => "field_blob",
                 1 => Column::BIND_PARAM_STR,
                 2 => false,
                 3 => false,
@@ -180,7 +179,7 @@ class DescribeColumnsCest
                 7 => false,
                 8 => false,
             ],
-            // field_bit                bit(10)                                     null,
+            // field_binary             binary(10)                                  null,
             3  => [
                 0 => 'field_binary',
                 1 => Column::BIND_PARAM_INT,
@@ -192,11 +191,11 @@ class DescribeColumnsCest
                 7 => false,
                 8 => false,
             ],
-            // field_bit_default        bit(10)       default b'1'                  null,
+            // field_bit                bit(10)                                     null,
             4  => [
                 0 => 'field_bit',
                 1 => Column::BIND_PARAM_INT,
-                2 => true,
+                2 => false,
                 3 => false,
                 4 => false,
                 5 => false,
@@ -204,19 +203,19 @@ class DescribeColumnsCest
                 7 => false,
                 8 => false,
             ],
+            // field_bit_default        bit(10)       default b'1'                  null,
+//            5  => [
+//                0 => 'field_bit_default',
+//                1 => Column::BIND_PARAM_INT,
+//                2 => false,
+//                3 => false,
+//                4 => false,
+//                5 => false,
+//                6 => false,
+//                7 => false,
+//                8 => false,
+//            ],
             // field_bigint             bigint        unsigned                      null,
-            5  => [
-                0 => 'field_bit_default',
-                1 => Column::BIND_PARAM_STR,
-                2 => false,
-                3 => false,
-                4 => false,
-                5 => false,
-                6 => true,
-                7 => false,
-                8 => true,
-            ],
-            // field_bigint_default     bigint        default 1                     null,
             6  => [
                 0 => 'field_bigint',
                 1 => Column::BIND_PARAM_STR,
@@ -228,7 +227,7 @@ class DescribeColumnsCest
                 7 => false,
                 8 => false,
             ],
-            // field_boolean            tinyint(1)    unsigned                      null,
+            // field_bigint_default     bigint        default 1                     null,
             7  => [
                 0 => 'field_bigint_default',
                 1 => Column::BIND_PARAM_INT,
@@ -240,7 +239,7 @@ class DescribeColumnsCest
                 7 => false,
                 8 => true,
             ],
-            // field_boolean_default    tinyint(1)    default 1                     null,
+            // field_boolean            tinyint(1)    unsigned                      null,
             8  => [
                 0 => 'field_boolean',
                 1 => Column::BIND_PARAM_INT,
@@ -252,7 +251,7 @@ class DescribeColumnsCest
                 7 => false,
                 8 => false,
             ],
-            // field_char               char(10)                                    null,
+            // field_boolean_default    tinyint(1)    default 1                     null,
             9  => [
                 0 => 'field_boolean_default',
                 1 => Column::BIND_PARAM_STR,
@@ -264,7 +263,7 @@ class DescribeColumnsCest
                 7 => false,
                 8 => false,
             ],
-            // field_char_default       char(10)      default 'ABC'                 null,
+            // field_char               char(10)                                    null,
             10 => [
                 0 => 'field_char',
                 1 => Column::BIND_PARAM_STR,
@@ -276,7 +275,7 @@ class DescribeColumnsCest
                 7 => false,
                 8 => false,
             ],
-            // field_decimal            decimal(10,4)                               null,
+            // field_char_default       char(10)      default 'ABC'                 null,
             11 => [
                 0 => 'field_char_default',
                 1 => Column::BIND_PARAM_STR,
@@ -288,7 +287,7 @@ class DescribeColumnsCest
                 7 => false,
                 8 => false,
             ],
-            // field_decimal_default    decimal(10,4) default 14.5678               null,
+            // field_decimal            decimal(10,4)                               null,
             12 => [
                 0 => 'field_decimal',
                 1 => Column::BIND_PARAM_STR,
@@ -300,7 +299,7 @@ class DescribeColumnsCest
                 7 => false,
                 8 => false,
             ],
-            // field_enum               enum('xs', 's', 'm', 'l', 'xl', 'internal') null,
+            // field_decimal_default    decimal(10,4) default 14.5678               null,
             13 => [
                 0 => 'field_decimal_default',
                 1 => Column::BIND_PARAM_STR,
@@ -312,7 +311,7 @@ class DescribeColumnsCest
                 7 => false,
                 8 => false,
             ],
-            // field_integer            int(10)                                     null,
+            // field_enum               enum('xs', 's', 'm', 'l', 'xl', 'internal') null,
             14 => [
                 0 => 'field_enum',
                 1 => Column::BIND_PARAM_INT,
@@ -324,7 +323,7 @@ class DescribeColumnsCest
                 7 => false,
                 8 => false,
             ],
-            // field_integer_default    int(10)       default 1                     null,
+            // field_integer            int(10)                                     null,
             15 => [
                 0 => 'field_integer',
                 1 => Column::BIND_PARAM_INT,
@@ -336,7 +335,7 @@ class DescribeColumnsCest
                 7 => false,
                 8 => false,
             ],
-            // field_json               json                                        null,
+            // field_integer_default    int(10)       default 1                     null,
             16 => [
                 0 => 'field_integer_default',
                 1 => Column::BIND_PARAM_STR,
@@ -348,7 +347,7 @@ class DescribeColumnsCest
                 7 => false,
                 8 => false,
             ],
-            // field_float              float(10,4)                                 null,
+            // field_json               json                                        null,
             17 => [
                 0 => 'field_json',
                 1 => Column::BIND_PARAM_DECIMAL,
@@ -360,7 +359,7 @@ class DescribeColumnsCest
                 7 => false,
                 8 => false,
             ],
-            // field_float_default      float(10,4)   default 14.5678               null,
+            // field_float              float(10,4)                                 null,
             18 => [
                 0 => 'field_float',
                 1 => Column::BIND_PARAM_DECIMAL,
@@ -372,7 +371,7 @@ class DescribeColumnsCest
                 7 => false,
                 8 => false,
             ],
-            // field_date               date                                        null,
+            // field_float_default      float(10,4)   default 14.5678               null,
             19 => [
                 0 => 'field_float_default',
                 1 => Column::BIND_PARAM_STR,
@@ -384,7 +383,7 @@ class DescribeColumnsCest
                 7 => false,
                 8 => false,
             ],
-            // field_date_default       date          default '2018-10-01'          null,
+            // field_date               date                                        null,
             20 => [
                 0 => 'field_date',
                 1 => Column::BIND_PARAM_STR,
@@ -396,7 +395,7 @@ class DescribeColumnsCest
                 7 => false,
                 8 => false,
             ],
-            // field_datetime           datetime                                    null,
+            // field_date_default       date          default '2018-10-01'          null,
             21 => [
                 0 => 'field_date_default',
                 1 => Column::BIND_PARAM_STR,
@@ -408,7 +407,7 @@ class DescribeColumnsCest
                 7 => false,
                 8 => false,
             ],
-            // field_datetime_default   datetime      default '2018-10-01 12:34:56' null,
+            // field_datetime           datetime                                    null,
             22 => [
                 0 => 'field_datetime',
                 1 => Column::BIND_PARAM_STR,
@@ -420,7 +419,7 @@ class DescribeColumnsCest
                 7 => false,
                 8 => false,
             ],
-            // field_time               time                                        null,
+            // field_datetime_default   datetime      default '2018-10-01 12:34:56' null,
             23 => [
                 0 => 'field_datetime_default',
                 1 => Column::BIND_PARAM_STR,
@@ -432,7 +431,32 @@ class DescribeColumnsCest
                 7 => false,
                 8 => false,
             ],
+            // field_time               time                                        null,
             // field_time_default       time          default '12:34:56'            null,
+            // field_timestamp          timestamp                                   null,
+            // field_timestamp_default  timestamp     default '2018-10-01 12:34:56' null,
+            // field_mediumint          mediumint(10) unsigned                      null,
+            // field_mediumint_default  mediumint(10) default 1                     null,
+            // field_smallint           smallint(10)  unsigned                      null,
+            // field_smallint_default   smallint(10)  default 1                     null,
+            // field_tinyint            tinyint(10)   unsigned                      null,
+            // field_tinyint_default    tinyint(10)   default 1                     null,
+            // field_longtext           longtext                                    null,
+            // field_mediumtext         mediumtext                                  null,
+            // field_tinytext           tinytext                                    null,
+            // field_text               text                                        null,
+            // field_varbinary          varbinary(10)                               null,
+            // field_varchar            varchar(10)                                 null,
+            // field_varchar_default    varchar(10)   default 'D'                   null,
+            // field_integer_default    int(10)       default 1                     null,
+            // field_json               json                                        null,
+            // field_float              float(10,4)                                 null,
+            // field_float_default      float(10,4)   default 14.5678               null,
+            // field_date               date                                        null,
+            // field_date_default       date          default '2018-10-01'          null,
+            // field_datetime           datetime                                    null,
+            // field_datetime_default   datetime      default '2018-10-01 12:34:56' null,
+            // field_time               time                                        null,
             24 => [
                 0 => 'field_time',
                 1 => Column::BIND_PARAM_STR,
@@ -444,7 +468,7 @@ class DescribeColumnsCest
                 7 => false,
                 8 => false,
             ],
-            // field_timestamp          timestamp                                   null,
+            // field_time_default       time          default '12:34:56'            null,
             25 => [
                 0 => 'field_time_default',
                 1 => Column::BIND_PARAM_STR,
@@ -456,7 +480,7 @@ class DescribeColumnsCest
                 7 => false,
                 8 => false,
             ],
-            // field_timestamp_default  timestamp     default '2018-10-01 12:34:56' null,
+            // field_timestamp          timestamp                                   null,
             26 => [
                 0 => 'field_timestamp',
                 1 => Column::BIND_PARAM_STR,
@@ -468,7 +492,7 @@ class DescribeColumnsCest
                 7 => false,
                 8 => false,
             ],
-            // field_mediumint          mediumint(10) unsigned                      null,
+            // field_timestamp_default  timestamp     default '2018-10-01 12:34:56' null,
             27 => [
                 0 => 'field_timestamp_default',
                 1 => Column::BIND_PARAM_INT,
@@ -480,7 +504,7 @@ class DescribeColumnsCest
                 7 => false,
                 8 => true,
             ],
-            // field_mediumint_default  mediumint(10) default 1                     null,
+            // field_mediumint          mediumint(10) unsigned                      null,
             28 => [
                 0 => 'field_mediumint',
                 1 => Column::BIND_PARAM_INT,
@@ -492,7 +516,7 @@ class DescribeColumnsCest
                 7 => false,
                 8 => false,
             ],
-            // field_smallint           smallint(10)  unsigned                      null,
+            // field_mediumint_default  mediumint(10) default 1                     null,
             29 => [
                 0 => 'field_mediumint_default',
                 1 => Column::BIND_PARAM_INT,
@@ -504,7 +528,7 @@ class DescribeColumnsCest
                 7 => false,
                 8 => true,
             ],
-            // field_smallint_default   smallint(10)  default 1                     null,
+            // field_smallint           smallint(10)  unsigned                      null,
             30 => [
                 0 => 'field_smallint',
                 1 => Column::BIND_PARAM_INT,
@@ -516,7 +540,7 @@ class DescribeColumnsCest
                 7 => false,
                 8 => false,
             ],
-            // field_tinyint            tinyint(10)   unsigned                      null,
+            // field_smallint_default   smallint(10)  default 1                     null,
             31 => [
                 0 => 'field_smallint_default',
                 1 => Column::BIND_PARAM_INT,
@@ -528,7 +552,7 @@ class DescribeColumnsCest
                 7 => false,
                 8 => true,
             ],
-            // field_tinyint_default    tinyint(10)   default 1                     null,
+            // field_tinyint            tinyint(10)   unsigned                      null,
             32 => [
                 0 => 'field_tinyint',
                 1 => Column::BIND_PARAM_INT,
@@ -540,7 +564,7 @@ class DescribeColumnsCest
                 7 => false,
                 8 => false,
             ],
-            // field_longtext           longtext                                    null,
+            // field_tinyint_default    tinyint(10)   default 1                     null,
             33 => [
                 0 => 'field_tinyint_default',
                 1 => Column::BIND_PARAM_STR,
@@ -552,7 +576,7 @@ class DescribeColumnsCest
                 7 => false,
                 8 => false,
             ],
-            // field_mediumtext         mediumtext                                  null,
+            // field_longtext           longtext                                    null,
             34 => [
                 0 => 'field_longtext',
                 1 => Column::BIND_PARAM_STR,
@@ -564,7 +588,7 @@ class DescribeColumnsCest
                 7 => false,
                 8 => false,
             ],
-            // field_tinytext           tinytext                                    null,
+            // field_mediumtext         mediumtext                                  null,
             35 => [
                 0 => 'field_mediumtext',
                 1 => Column::BIND_PARAM_STR,
@@ -576,7 +600,7 @@ class DescribeColumnsCest
                 7 => false,
                 8 => false,
             ],
-            // field_text               text                                        null,
+            // field_tinytext           tinytext                                    null,
             36 => [
                 0 => 'field_tinytext',
                 1 => Column::BIND_PARAM_STR,
@@ -588,7 +612,7 @@ class DescribeColumnsCest
                 7 => false,
                 8 => false,
             ],
-            // field_varbinary          varbinary(10)                               null,
+            // field_text               text                                        null,
             37 => [
                 0 => 'field_text',
                 1 => Column::BIND_PARAM_STR,
@@ -600,7 +624,7 @@ class DescribeColumnsCest
                 7 => false,
                 8 => false,
             ],
-            // field_varchar            varchar(10)                                 null,
+            // field_varbinary          varbinary(10)                               null,
             38 => [
                 0 => 'field_varbinary',
                 1 => Column::BIND_PARAM_STR,
@@ -612,7 +636,7 @@ class DescribeColumnsCest
                 7 => false,
                 8 => false,
             ],
-            // field_varchar_default    varchar(10)   default 'D'                   null,
+            // field_varchar            varchar(10)                                 null,
             39 => [
                 0 => 'field_varchar',
                 1 => Column::BIND_PARAM_STR,

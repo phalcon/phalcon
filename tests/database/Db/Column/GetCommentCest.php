@@ -36,8 +36,8 @@ class GetCommentCest
         $expectedColumns = $this->getColumnsObjects();
 
         foreach ($expectedColumns as $index => $column) {
-            $I->assertEquals(
-                isset($columns[$index]['comment']) ? $columns[$index]['comment'] : null,
+            $I->assertSame(
+                isset($columns[$index]['comment']) ? $columns[$index]['comment'] : "",
                 $column->getComment()
             );
         }

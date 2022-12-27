@@ -13,12 +13,10 @@ declare(strict_types=1);
 
 namespace Phalcon\Tests\Fixtures\Traits;
 
-//use function getOptionsModelCacheStream;
-//use function getOptionsMysql;
-//use function getOptionsPostgresql;
-//use function getOptionsSessionStream;
-//use function getOptionsSqlite;
+use DatabaseTester;
 use Phalcon\Cli\Console;
+use Phalcon\Db\Adapter\AdapterInterface;
+use Phalcon\Db\Adapter\PdoFactory;
 use Phalcon\Di\Di;
 use Phalcon\Di\DiInterface;
 use Phalcon\Di\FactoryDefault;
@@ -71,48 +69,48 @@ trait DiTrait
     {
         return $this->container->get($name);
     }
-//
-//    /**
-//     * @param string $driver
-//     *
-//     * @return AdapterInterface
-//     */
-//    protected function newDbConnection(string $driver): AdapterInterface
-//    {
-//        switch ($driver) {
-//            case 'mysql':
-//                $options = getOptionsMysql();
-//                break;
-//            case 'pgsql':
-//                $options = getOptionsPostgresql();
-//                $driver = 'postgresql';
-//                break;
-//            case 'sqlite':
-//                $options = getOptionsSqlite();
-//                break;
-//            case 'sqlsrv':
-//            default:
-//                $options = [];
-//        }
-//
-//        $options['options'][PDO::ATTR_TIMEOUT] = 0;
-//
-//        return (new PdoFactory())->newInstance($driver, $options);
-//    }
-//
-//    /**
-//     * @param DatabaseTester $I
-//     *
-//     * @return AdapterInterface
-//     */
-//    protected function newDbService(DatabaseTester $I): AdapterInterface
-//    {
-//        /** @var PDO $connection */
-//        $connection = $I->getConnection();
-//        $driver     = $connection->getAttribute(PDO::ATTR_DRIVER_NAME);
-//
-//        return $this->newDbConnection($driver);
-//    }
+
+    /**
+     * @param string $driver
+     *
+     * @return AdapterInterface
+     */
+    protected function newDbConnection(string $driver): AdapterInterface
+    {
+        switch ($driver) {
+            case 'mysql':
+                $options = getOptionsMysql();
+                break;
+            case 'pgsql':
+                $options = getOptionsPostgresql();
+                $driver = 'postgresql';
+                break;
+            case 'sqlite':
+                $options = getOptionsSqlite();
+                break;
+            case 'sqlsrv':
+            default:
+                $options = [];
+        }
+
+        $options['options'][\PDO::ATTR_TIMEOUT] = 0;
+
+        return (new PdoFactory())->newInstance($driver, $options);
+    }
+
+    /**
+     * @param DatabaseTester $I
+     *
+     * @return AdapterInterface
+     */
+    protected function newDbService(DatabaseTester $I): AdapterInterface
+    {
+        /** @var \PDO $connection */
+        $connection = $I->getConnection();
+        $driver     = $connection->getAttribute(\PDO::ATTR_DRIVER_NAME);
+
+        return $this->newDbConnection($driver);
+    }
 
     /**
      * Set up a new DI
@@ -207,16 +205,16 @@ trait DiTrait
         Di::reset();
     }
 
-//    /**
-//     * @param DatabaseTester $I
-//     */
-//    protected function setDatabase(DatabaseTester $I)
-//    {
-//        $db = $this->newDbService($I);
-//
-//        $this->container->setShared('db', $db);
-//    }
-//
+    /**
+     * @param DatabaseTester $I
+     */
+    protected function setDatabase(DatabaseTester $I)
+    {
+        $db = $this->newDbService($I);
+
+        $this->container->setShared('db', $db);
+    }
+
     /**
      * @param string $service
      */

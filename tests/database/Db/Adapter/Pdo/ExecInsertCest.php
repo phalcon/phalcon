@@ -18,16 +18,8 @@ use Phalcon\Db\Adapter\Pdo\AbstractPdo;
 use Phalcon\Db\Adapter\Pdo\Mysql;
 use Phalcon\Db\Column;
 use Phalcon\Storage\Exception;
-use Phalcon\Tests\Fixtures\Migrations\AbstractMigration;
-use Phalcon\Tests\Fixtures\Migrations\ComplexDefaultMigration;
 use Phalcon\Tests\Fixtures\Migrations\DialectMigration;
 use Phalcon\Tests\Fixtures\Traits\DiTrait;
-use PHPUnit\Framework\Assert;
-
-use function array_keys;
-use function array_values;
-use function pack;
-use function sprintf;
 
 class ExecInsertCest
 {
@@ -67,7 +59,7 @@ class ExecInsertCest
 
         $connection = $I->getConnection();
         $migration  = new DialectMigration($connection);
-        $sql    = <<<SQL
+        $sql        = <<<SQL
 insert into co_dialect (
     field_primary,
     field_blob,
@@ -122,7 +114,7 @@ insert into co_dialect (
     ?
 )
 SQL;
-        $values        = [
+        $values     = [
             10,                          // field_primary,
             'abcdefgh',                  // field_blob,
             'bin',                       // field_binary,
@@ -149,7 +141,7 @@ SQL;
             'vbin',                      // field_varbinary,
             'abcdef',                    // field_varchar
         ];
-        $types        = [
+        $types      = [
             Column::BIND_PARAM_INT,      // field_primary,
             Column::BIND_PARAM_BLOB,     // field_blob,
             Column::BIND_PARAM_BLOB,     // field_binary,

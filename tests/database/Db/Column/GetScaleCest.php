@@ -47,7 +47,7 @@ class GetScaleCest
         $expectedColumns = $this->getColumnsObjects();
 
         foreach ($expectedColumns as $index => $column) {
-            $I->assertEquals(
+            $I->assertSame(
                 $columns[$index]['scale'] ?? null,
                 $column->getScale()
             );
@@ -82,10 +82,10 @@ class GetScaleCest
 
             $record = FractalDates::findFirst('id = 1');
 
-            $I->assertEquals(1, $record->id);
-            $I->assertEquals('14:15:16.44', $record->ftime);
-            $I->assertEquals('2019-12-25 17:18:19.67', $record->fdatetime);
-            $I->assertEquals('2019-12-25 20:21:22.89', $record->ftimestamp);
+            $I->assertSame(1, $record->id);
+            $I->assertSame('14:15:16.44', $record->ftime);
+            $I->assertSame('2019-12-25 17:18:19.67', $record->fdatetime);
+            $I->assertSame('2019-12-25 20:21:22.89', $record->ftimestamp);
         }
     }
 }

@@ -301,9 +301,9 @@ class Column implements ColumnInterface
     /**
      * Integer column size
      *
-     * @var int
+     * @var int|string
      */
-    protected int $size = 0;
+    protected int|string $size = 0;
 
     /**
      * Column data type
@@ -354,7 +354,7 @@ class Column implements ColumnInterface
         $this->isNumeric     = $definition["isNumeric"] ?? false;
         $this->isPrimary     = (bool) ($definition["primary"] ?? false);
         $this->isUnsigned    = $definition["unsigned"] ?? false;
-        $this->size          = (int) ($definition["size"] ?? 0);
+        $this->size          = $definition["size"] ?? 0;
         $this->type          = $definition["type"];
         $this->typeReference = $definition["typeReference"] ?? -1;
         $this->typeValues    = $definition["typeValues"] ?? [];
@@ -363,7 +363,7 @@ class Column implements ColumnInterface
          * Check if the column has a decimal scale
          */
         if (isset($definition["scale"])) {
-            $this->scale = match ($definition["scale"]) {
+            $this->scale = match ($this->type) {
                 self::TYPE_BIGINTEGER,
                 self::TYPE_DECIMAL,
                 self::TYPE_DOUBLE,
@@ -382,16 +382,19 @@ class Column implements ColumnInterface
          * Check if the field is auto-increment/serial
          */
         if (isset($definition["autoIncrement"])) {
-            $this->isAutoIncrement = match ($definition["autoIncrement"]) {
-                self::TYPE_BIGINTEGER,
-                self::TYPE_INTEGER,
-                self::TYPE_MEDIUMINTEGER,
-                self::TYPE_SMALLINTEGER,
-                self::TYPE_TINYINTEGER => true,
-                default => throw new Exception(
-                    "Column type cannot be auto-increment"
-                ),
-            };
+            $autoIncrement = $definition["autoIncrement"];
+            if (true === $autoIncrement) {
+                $this->isAutoIncrement = match ($this->type) {
+                    self::TYPE_BIGINTEGER,
+                    self::TYPE_INTEGER,
+                    self::TYPE_MEDIUMINTEGER,
+                    self::TYPE_SMALLINTEGER,
+                    self::TYPE_TINYINTEGER => true,
+                    default => throw new Exception(
+                        "Column type cannot be auto-increment"
+                    ),
+                };
+            }
         }
     }
 
@@ -458,9 +461,9 @@ class Column implements ColumnInterface
     /**
      * Integer column size
      *
-     * @return int
+     * @return int|string
      */
-    public function getSize(): int
+    public function getSize(): int | string
     {
         return $this->size;
     }
