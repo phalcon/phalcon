@@ -1446,7 +1446,6 @@ abstract class AbstractAdapter implements AdapterInterface, EventsAwareInterface
         /**
          * Check if we got table and schema and escape it accordingly
          */
-        $tableName = $tableName;
         if (strpos($tableName, ".") > 0) {
             $tableName = explode(".", $tableName);
         }
