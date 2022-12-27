@@ -13,7 +13,7 @@ declare(strict_types=1);
 
 namespace Phalcon\Tests\Unit\Acl\Adapter\Memory;
 
-use Codeception\Util\Stub;
+use Codeception\Stub;
 use Exception;
 use Phalcon\Acl\Adapter\Memory;
 use Phalcon\Acl\Component;
@@ -248,7 +248,7 @@ class IsAllowedCest
                 "You did not provide all necessary parameters for the " .
                 "defined function when checking if 'Members' can 'update' for 'Post'."
             ),
-            function () use ($I) {
+            function () {
                 $acl = new Memory();
 
                 $acl->setDefaultAction(Enum::ALLOW);
