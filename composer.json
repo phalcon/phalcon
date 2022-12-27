@@ -48,19 +48,19 @@
     "require-dev": {
         "ext-gettext": "*",
         "ext-yaml": "*",
-        "codeception/codeception": "^4.0",
-        "codeception/module-apc": "^1.0",
-        "codeception/module-asserts": "^1.0",
+        "codeception/codeception": "^5.0",
+        "codeception/module-apc": "^3.0",
+        "codeception/module-asserts": "^3.0",
         "codeception/module-cli": "^2.0",
-        "codeception/module-db": "^1.0",
-        "codeception/module-filesystem": "^2.0",
-        "codeception/module-memcache": "^2.0",
-        "codeception/module-redis": "^1.0",
-        "friendsofphp/php-cs-fixer": "^3.0",
+        "codeception/module-db": "^3.1",
+        "codeception/module-filesystem": "^3.0",
+        "codeception/module-memcache": "^3.0",
+        "codeception/module-redis": "^3.0",
+        "friendsofphp/php-cs-fixer": "^3.13",
         "pds/skeleton": "^1.0",
         "phpstan/phpstan": "^1.9",
-        "squizlabs/php_codesniffer": "^3.4",
-        "vimeo/psalm": "^4.10",
-        "vlucas/phpdotenv": "^4.0"
+        "squizlabs/php_codesniffer": "^3.7",
+        "vimeo/psalm": "^5.4",
+        "vlucas/phpdotenv": "^5.5"
     }
 }
