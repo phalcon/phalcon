@@ -26,6 +26,7 @@ use Phalcon\Events\EventsAwareInterface;
 use Phalcon\Events\Traits\EventsAwareTrait;
 
 use function array_keys;
+use function array_merge;
 use function array_values;
 use function explode;
 use function is_array;
@@ -580,9 +581,9 @@ abstract class AbstractAdapter implements AdapterInterface, EventsAwareInterface
     /**
      * Drops a view
      *
-     * @param string      $viewName
-     * @param string|null $schemaName
-     * @param bool        $ifExists
+     * @param string $viewName
+     * @param string $schemaName
+     * @param bool   $ifExists
      *
      * @return bool
      */
@@ -1015,7 +1016,6 @@ abstract class AbstractAdapter implements AdapterInterface, EventsAwareInterface
             }
         }
 
-        $tableName = $tableName;
         if (strpos($tableName, ".") > 0) {
             $tableName = explode(".", $tableName);
         }
@@ -1480,7 +1480,9 @@ abstract class AbstractAdapter implements AdapterInterface, EventsAwareInterface
                  * separately
                  */
                 if (true === isset($whereCondition["bind"])) {
-                    merge_append($updateValues, $whereCondition["bind"]);
+                    $condition = $whereCondition["bind"];
+                    $condition = is_array($condition) ? $condition : [$condition];
+                    $updateValues = array_merge($updateValues, $condition);
                 }
 
                 /**
@@ -1488,7 +1490,9 @@ abstract class AbstractAdapter implements AdapterInterface, EventsAwareInterface
                  * be sent to the database system
                  */
                 if (true === isset($whereCondition["bindTypes"])) {
-                    merge_append($bindDataTypes, $whereCondition["bindTypes"]);
+                    $condition = $whereCondition["bindTypes"];
+                    $condition = is_array($condition) ? $condition : [$condition];
+                    $bindDataTypes = array_merge($bindDataTypes, $condition);
                 }
             }
         }

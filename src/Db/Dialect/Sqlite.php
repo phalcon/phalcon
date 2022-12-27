@@ -841,14 +841,12 @@ class Sqlite extends Dialect
      */
     public function truncateTable(string $tableName, string $schemaName): string
     {
-        $tableName = "";
+        $schema = "";
         if (true !== empty($schemaName)) {
-            $tableName = "\"" . $schemaName . "\".";
+            $schema = "\"" . $schemaName . "\".";
         }
 
-        $tableName .= "\"" . $tableName . "\"";
-
-        return "DELETE FROM " . $tableName;
+        return "DELETE FROM " . $schema . "\"" . $tableName . "\"";
     }
 
     /**

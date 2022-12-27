@@ -523,7 +523,7 @@ class Postgresql extends PdoAdapter
              */
             if (null !== $field[9]) {
                 $definition["default"] = preg_replace(
-                    "/^'|'?::[[:alnum:][:space:]]+$/",
+                    "/^('|'?::[[:alnum:][:space:]]+)$/",
                     "",
                     $field[9]
                 );
