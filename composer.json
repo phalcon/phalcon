@@ -61,6 +61,6 @@
         "phpstan/phpstan": "^1.9",
         "squizlabs/php_codesniffer": "^3.4",
         "vimeo/psalm": "^4.10",
-        "vlucas/phpdotenv": "^4.0"
+        "vlucas/phpdotenv": "^5.5"
     }
 }
