@@ -33,22 +33,19 @@ class GetCest
 
         require_once dataDir('fixtures/Annotations/TestClass.php');
 
-        $oAdapter = new Memory();
+        $adapter = new Memory();
 
-        $oClassAnnotations = $oAdapter->get(
-            TestClass::class
-        );
+        $classAnnotations = $adapter->get(TestClass::class);
 
-        $I->assertTrue(is_object($oClassAnnotations));
+        $actual = is_object($classAnnotations);
+        $I->assertTrue($actual);
 
-        $I->assertInstanceOf(
-            Reflection::class,
-            $oClassAnnotations
-        );
+        $expected = Reflection::class;
+        $actual   = $classAnnotations;
+        $I->assertInstanceOf($expected, $actual);
 
-        $I->assertInstanceOf(
-            Collection::class,
-            $oClassAnnotations->getClassAnnotations()
-        );
+        $expected = Collection::class;
+        $actual   = $classAnnotations->getClassAnnotations();
+        $I->assertInstanceOf($expected, $actual);
     }
 }

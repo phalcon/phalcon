@@ -34,32 +34,27 @@ class GetPropertiesCest
 
         require_once dataDir('fixtures/Annotations/TestClass.php');
 
-        $oAdapter = new Apcu(
+        $adapter = new Apcu(
             [
                 'prefix'   => 'nova_prefix',
                 'lifetime' => 3600,
             ]
         );
 
-        $aPropertyAnnotations = $oAdapter->getProperties(
-            TestClass::class
-        );
+        $propertyAnnotations = $adapter->getProperties(TestClass::class);
 
-        $aKeys = array_keys($aPropertyAnnotations);
-        $I->assertEquals(
-            [
-                'testProp1',
-                'testProp3',
-                'testProp4',
-            ],
-            $aKeys
-        );
+        $expected = [
+            'testProp1',
+            'testProp3',
+            'testProp4',
+        ];
+        $actual = array_keys($propertyAnnotations);
+        $I->assertSame($expected, $actual);
 
-        foreach ($aPropertyAnnotations as $oPropertyAnnotation) {
-            $I->assertInstanceOf(
-                Collection::class,
-                $oPropertyAnnotation
-            );
+        foreach ($propertyAnnotations as $propertyAnnotation) {
+            $expected = Collection::class;
+            $actual   = $propertyAnnotation;
+            $I->assertInstanceOf($expected, $actual);
         }
     }
 }

@@ -43,17 +43,18 @@ class ValidCest
         ];
 
         $collection  = new Collection($reflectionData);
-        $annotation  = new Annotation($dataAnnotation);
-        $annotation1 = new Annotation($dataAnnotation1);
 
-        $I->assertTrue($collection->valid());
-
-        $collection->next();
-
-        $I->assertTrue($collection->valid());
+        $actual = $collection->valid();
+        $I->assertTrue($actual);
 
         $collection->next();
 
-        $I->assertFalse($collection->valid());
+        $actual = $collection->valid();
+        $I->assertTrue($actual);
+
+        $collection->next();
+
+        $actual = $collection->valid();
+        $I->assertFalse($actual);
     }
 }

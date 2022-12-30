@@ -32,16 +32,15 @@ class GetPropertyCest
 
         require_once dataDir('fixtures/Annotations/TestClass.php');
 
-        $oAdapter = new Memory();
+        $adapter = new Memory();
 
-        $oPropertyAnnotations = $oAdapter->getProperty(
+        $propertyAnnotations = $adapter->getProperty(
             TestClass::class,
             'testProp1'
         );
 
-        $I->assertInstanceOf(
-            Collection::class,
-            $oPropertyAnnotations
-        );
+        $expected = Collection::class;
+        $actual   = $propertyAnnotations;
+        $I->assertInstanceOf($expected, $actual);
     }
 }

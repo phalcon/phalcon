@@ -43,21 +43,18 @@ class GetCest
         );
 
 
-        $classAnnotations = $adapter->get(
-            TestClass::class
-        );
+        $classAnnotations = $adapter->get(TestClass::class);
 
-        $I->assertTrue(is_object($classAnnotations));
+        $actual = is_object($classAnnotations);
+        $I->assertTrue($actual);
 
-        $I->assertInstanceOf(
-            Reflection::class,
-            $classAnnotations
-        );
+        $expected = Reflection::class;
+        $actual   = $classAnnotations;
+        $I->assertInstanceOf($expected, $actual);
 
-        $I->assertInstanceOf(
-            Collection::class,
-            $classAnnotations->getClassAnnotations()
-        );
+        $expected = Collection::class;
+        $actual   = $classAnnotations->getClassAnnotations();
+        $I->assertInstanceOf($expected, $actual);
 
         $I->safeDeleteFile('testclass.php');
     }

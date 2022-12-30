@@ -47,21 +47,19 @@ class GetMethodsCest
         );
 
         $keys = array_keys($methodAnnotations);
-        $I->assertEquals(
-            [
-                'testMethod1',
-                'testMethod3',
-                'testMethod4',
-                'testMethod5',
-            ],
-            $keys
-        );
+        $expected = [
+            'testMethod1',
+            'testMethod3',
+            'testMethod4',
+            'testMethod5',
+        ];
+        $actual = $keys;
+        $I->assertSame($expected, $actual);
 
-        foreach ($methodAnnotations as $key => $methodAnnotation) {
-            $I->assertInstanceOf(
-                Collection::class,
-                $methodAnnotation
-            );
+        foreach ($methodAnnotations as $methodAnnotation) {
+            $expected = Collection::class;
+            $actual   = $methodAnnotation;
+            $I->assertInstanceOf($expected, $actual);
         }
 
         $I->safeDeleteFile('testclass.php');

@@ -46,10 +46,9 @@ class GetMethodCest
             'testMethod1'
         );
 
-        $I->assertInstanceOf(
-            Collection::class,
-            $methodAnnotation
-        );
+        $expected = Collection::class;
+        $actual   = $methodAnnotation;
+        $I->assertInstanceOf($expected, $actual);
 
         $I->safeDeleteFile('testclass.php');
     }

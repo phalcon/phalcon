@@ -34,28 +34,23 @@ class GetMethodsCest
 
         require_once dataDir('fixtures/Annotations/TestClass.php');
 
-        $oAdapter = new Memory();
+        $adapter = new Memory();
 
-        $aMethodAnnotations = $oAdapter->getMethods(
-            TestClass::class
-        );
+        $methodAnnotations = $adapter->getMethods(TestClass::class);
 
-        $aKeys = array_keys($aMethodAnnotations);
-        $I->assertEquals(
-            [
-                'testMethod1',
-                'testMethod3',
-                'testMethod4',
-                'testMethod5',
-            ],
-            $aKeys
-        );
+        $expected = [
+            'testMethod1',
+            'testMethod3',
+            'testMethod4',
+            'testMethod5',
+        ];
+        $actual = array_keys($methodAnnotations);
+        $I->assertSame($expected, $actual);
 
-        foreach ($aMethodAnnotations as $oMethodAnnotation) {
-            $I->assertInstanceOf(
-                Collection::class,
-                $oMethodAnnotation
-            );
+        foreach ($methodAnnotations as $methodAnnotation) {
+            $expected = Collection::class;
+            $actual   = $methodAnnotation;
+            $I->assertInstanceOf($expected, $actual);
         }
     }
 }
