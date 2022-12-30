@@ -1,13 +1,12 @@
 actor_suffix: Tester
 
 paths:
-    # where the modules stored
     tests  : tests          # where the tests stored
     data   : tests/_data    # directory for fixture data
     support: tests/_support # directory for support code
-    log    : tests/_output
     output : tests/_output  # directory for output
     envs   : tests/_envs    # directory for environment configuration
+    log: tests/_output
 
 settings:
     colors: true
