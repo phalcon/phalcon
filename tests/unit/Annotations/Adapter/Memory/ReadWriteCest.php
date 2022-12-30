@@ -34,19 +34,15 @@ class ReadWriteCest
 
         require_once dataDir('fixtures/Annotations/TestClass.php');
 
-        $oAdapter = new Memory();
+        $adapter = new Memory();
 
-        $oClassAnnotations = $oAdapter->get(
-            TestClass::class
-        );
+        $classAnnotations = $adapter->get(TestClass::class);
 
-        $oAdapter->write('testwrite', $oClassAnnotations);
+        $adapter->write('testwrite', $classAnnotations);
+        $newClass = $adapter->read('testwrite');
 
-        $oNewClass = $oAdapter->read('testwrite');
-
-        $I->assertInstanceOf(
-            Reflection::class,
-            $oNewClass
-        );
+        $expected = Reflection::class;
+        $actual   = $newClass;
+        $I->assertInstanceOf($expected, $actual);
     }
 }

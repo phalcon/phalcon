@@ -46,10 +46,9 @@ class GetPropertyCest
             'testProp1'
         );
 
-        $I->assertInstanceOf(
-            Collection::class,
-            $propertyAnnotation
-        );
+        $expected = Collection::class;
+        $actual   = $propertyAnnotation;
+        $I->assertInstanceOf($expected, $actual);
 
         $I->safeDeleteFile('testclass.php');
     }

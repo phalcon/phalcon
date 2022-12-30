@@ -29,23 +29,22 @@ class GetSetReaderCest
     {
         $I->wantToTest('Annotations\Adapter\Apcu - getReader() / setReader');
 
-        $oAdapter = new Apcu(
+        $adapter = new Apcu(
             [
                 'prefix'   => 'nova_prefix',
                 'lifetime' => 3600,
             ]
         );
 
-        $oReader = new Reader();
-        $oAdapter->setReader($oReader);
+        $reader = new Reader();
+        $adapter->setReader($reader);
 
-        $I->assertSame(
-            $oReader,
-            $oAdapter->getReader()
-        );
+        $expected = $reader;
+        $actual   = $adapter->getReader();
+        $I->assertSame($expected, $actual);
 
-        $oClass  = Reader::class;
-        $oActual = $oAdapter->getReader();
-        $I->assertInstanceOf($oClass, $oActual);
+        $expected = Reader::class;
+        $actual   = $adapter->getReader();
+        $I->assertInstanceOf($expected, $actual);
     }
 }

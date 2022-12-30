@@ -34,21 +34,20 @@ class GetMethodCest
 
         require_once dataDir('fixtures/Annotations/TestClass.php');
 
-        $oAdapter = new Apcu(
+        $adapter = new Apcu(
             [
                 'prefix'   => 'nova_prefix',
                 'lifetime' => 3600,
             ]
         );
 
-        $sMethodAnnotation = $oAdapter->getMethod(
+        $methodAnnotation = $adapter->getMethod(
             TestClass::class,
             'testMethod1'
         );
 
-        $I->assertInstanceOf(
-            Collection::class,
-            $sMethodAnnotation
-        );
+        $expected = Collection::class;
+        $actual   = $methodAnnotation;
+        $I->assertInstanceOf($expected, $actual);
     }
 }

@@ -41,10 +41,7 @@ class ReadCest
             ]
         );
 
-
-        $classAnnotations = $adapter->get(
-            TestClass::class
-        );
+        $classAnnotations = $adapter->get(TestClass::class);
 
         $adapter->write('testwrite', $classAnnotations);
 
@@ -53,10 +50,9 @@ class ReadCest
         );
 
         $newClass = $adapter->read('testwrite');
-        $I->assertInstanceOf(
-            Reflection::class,
-            $newClass
-        );
+        $expected = Reflection::class;
+        $actual   = $newClass;
+        $I->assertInstanceOf($expected, $actual);
 
         $I->safeDeleteFile('testwrite.php');
         $I->safeDeleteFile('testclass.php');

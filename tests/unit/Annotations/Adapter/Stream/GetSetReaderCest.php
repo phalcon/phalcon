@@ -29,22 +29,21 @@ class GetSetReaderCest
     {
         $I->wantToTest('Annotations\Adapter\Stream - getReader() / setReader()');
 
-        $oAdapter = new Stream(
+        $adapter = new Stream(
             [
                 'annotationsDir' => outputDir('tests/annotations/'),
             ]
         );
 
-        $oReader = new Reader();
-        $oAdapter->setReader($oReader);
+        $reader = new Reader();
+        $adapter->setReader($reader);
 
-        $I->assertSame(
-            $oReader,
-            $oAdapter->getReader()
-        );
+        $expected = $reader;
+        $actual   = $adapter->getReader();
+        $I->assertSame($expected, $actual);
 
-        $oClass  = Reader::class;
-        $oActual = $oAdapter->getReader();
-        $I->assertInstanceOf($oClass, $oActual);
+        $expected  = Reader::class;
+        $actual   = $adapter->getReader();
+        $I->assertInstanceOf($expected, $actual);
     }
 }

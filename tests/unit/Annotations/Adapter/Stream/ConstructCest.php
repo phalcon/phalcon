@@ -37,9 +37,8 @@ class ConstructCest
             ]
         );
 
-        $I->assertInstanceOf(
-            AdapterInterface::class,
-            $adapter
-        );
+        $expected = AdapterInterface::class;
+        $actual   = $adapter;
+        $I->assertInstanceOf($expected, $actual);
     }
 }

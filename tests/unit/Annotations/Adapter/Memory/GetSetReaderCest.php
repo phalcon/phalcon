@@ -29,18 +29,16 @@ class GetSetReaderCest
     {
         $I->wantToTest('Annotations\Adapter\Memory - getReader() / setReader()');
 
-        $oAdapter = new Memory();
+        $adapter = new Memory();
+        $reader = new Reader();
+        $adapter->setReader($reader);
 
-        $oReader = new Reader();
-        $oAdapter->setReader($oReader);
+        $expected = $reader;
+        $actual   = $adapter->getReader();
+        $I->assertSame($expected, $actual);
 
-        $I->assertSame(
-            $oReader,
-            $oAdapter->getReader()
-        );
-
-        $oClass  = Reader::class;
-        $oActual = $oAdapter->getReader();
-        $I->assertInstanceOf($oClass, $oActual);
+        $expected = Reader::class;
+        $actual   = $adapter->getReader();
+        $I->assertInstanceOf($expected, $actual);
     }
 }

@@ -42,25 +42,21 @@ class GetPropertiesCest
             ]
         );
 
-        $propertyAnnotations = $adapter->getProperties(
-            TestClass::class
-        );
+        $propertyAnnotations = $adapter->getProperties(TestClass::class);
 
         $keys = array_keys($propertyAnnotations);
-        $I->assertEquals(
-            [
-                'testProp1',
-                'testProp3',
-                'testProp4',
-            ],
-            $keys
-        );
+        $expected = [
+            'testProp1',
+            'testProp3',
+            'testProp4',
+        ];
+        $actual = $keys;
+        $I->assertSame($expected, $actual);
 
-        foreach ($propertyAnnotations as $key => $propertyAnnotation) {
-            $I->assertInstanceOf(
-                Collection::class,
-                $propertyAnnotation
-            );
+        foreach ($propertyAnnotations as $propertyAnnotation) {
+            $expected = Collection::class;
+            $actual   = $propertyAnnotation;
+            $I->assertInstanceOf($expected, $actual);
         }
 
         $I->safeDeleteFile('testclass.php');

@@ -37,30 +37,27 @@ class ReadWriteCest
         $sPrefix = 'nova_prefix';
         $sKey    = 'testwrite';
 
-        $oAdapter = new Apcu(
+        $adapter = new Apcu(
             [
                 'prefix'   => $sPrefix,
                 'lifetime' => 3600,
             ]
         );
 
-        $oClassAnnotations = $oAdapter->get(
-            TestClass::class
-        );
+        $classAnnotations = $adapter->get(TestClass::class);
 
-        $oAdapter->write($sKey, $oClassAnnotations);
+        $adapter->write($sKey, $classAnnotations);
 
-        $oNewClass = $oAdapter->read('testwrite');
+        $newClass = $adapter->read('testwrite');
 
-        $I->assertInstanceOf(
-            Reflection::class,
-            $oNewClass
-        );
+        $expected = Reflection::class;
+        $actual   = $newClass;
+        $I->assertInstanceOf($expected, $actual);
 
         // Check APC value with Codecept
         $sKeyAPC = strtolower("_PHAN" . $sPrefix . $sKey);
 
         $I->seeInApc($sKeyAPC);
-        $I->seeInApc($sKeyAPC, $oClassAnnotations);
+        $I->seeInApc($sKeyAPC, $classAnnotations);
     }
 }

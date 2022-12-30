@@ -40,10 +40,7 @@ class WriteCest
             ]
         );
 
-
-        $classAnnotations = $adapter->get(
-            TestClass::class
-        );
+        $classAnnotations = $adapter->get(TestClass::class);
 
         $adapter->write('testwrite', $classAnnotations);
 
