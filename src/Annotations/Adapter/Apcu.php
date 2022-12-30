@@ -14,9 +14,13 @@ declare(strict_types=1);
 namespace Phalcon\Annotations\Adapter;
 
 use Phalcon\Annotations\Reflection;
+use Phalcon\Support\Traits\PhpApcuTrait;
+
+use function strtolower;
 
 /**
- * Stores the parsed annotations in APCu. This adapter is suitable for production
+ * Stores the parsed annotations in APCu. This adapter is suitable for
+ * production
  *
  *```php
  * use Phalcon\Annotations\Adapter\Apcu;
@@ -26,6 +30,8 @@ use Phalcon\Annotations\Reflection;
  */
 class Apcu extends AbstractAdapter
 {
+    use PhpApcuTrait;
+
     /**
      * @var string
      */
@@ -40,9 +46,9 @@ class Apcu extends AbstractAdapter
      * Constructor
      *
      * @param array $options = [
-     *     'prefix' => 'phalcon'
-     *     'lifetime' => 3600
-     * ]
+     *                       'prefix' => 'phalcon'
+     *                       'lifetime' => 3600
+     *                       ]
      */
     public function __construct(array $options = [])
     {
@@ -57,12 +63,10 @@ class Apcu extends AbstractAdapter
      *
      * @return Reflection|bool
      */
-    public function read(string $key): Reflection | bool
+    public function read(string $key): Reflection|bool
     {
-        return apcu_fetch(
-            strtolower(
-                "_PHAN" . $this->prefix . $key
-            )
+        return $this->phpApcuFetch(
+            strtolower("_PHAN" . $this->prefix . $key)
         );
     }
 
@@ -76,10 +80,8 @@ class Apcu extends AbstractAdapter
      */
     public function write(string $key, Reflection $data): bool
     {
-        return apcu_store(
-            strtolower(
-                "_PHAN" . $this->prefix . $key
-            ),
+        return $this->phpApcuStore(
+            strtolower("_PHAN" . $this->prefix . $key),
             $data,
             $this->ttl
         );

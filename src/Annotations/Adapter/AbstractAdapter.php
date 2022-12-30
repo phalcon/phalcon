@@ -13,10 +13,11 @@ declare(strict_types=1);
 
 namespace Phalcon\Annotations\Adapter;
 
-use Phalcon\Annotations\Reader;
 use Phalcon\Annotations\Collection;
-use Phalcon\Annotations\Reflection;
+use Phalcon\Annotations\Reader;
 use Phalcon\Annotations\ReaderInterface;
+use Phalcon\Annotations\Reflection;
+
 use function get_class;
 use function is_object;
 use function strcasecmp;
@@ -63,10 +64,10 @@ abstract class AbstractAdapter implements AdapterInterface
             /**
              * Get the annotations reader
              */
-            $reader = $this->getReader();
+            $reader            = $this->getReader();
             $parsedAnnotations = $reader->parse($realClassName);
 
-            $classAnnotations = new Reflection($parsedAnnotations);
+            $classAnnotations                  = new Reflection($parsedAnnotations);
             $this->annotations[$realClassName] = $classAnnotations;
             $this->write($realClassName, $classAnnotations);
         }

@@ -13,13 +13,22 @@ declare(strict_types=1);
 
 namespace Phalcon\Annotations\Adapter;
 
-use Phalcon\Annotations\Reflection;
 use Phalcon\Annotations\Exception;
+use Phalcon\Annotations\Reflection;
 use Phalcon\Traits\Php\FileTrait;
 use RuntimeException;
 
+use function restore_error_handler;
+use function serialize;
+use function set_error_handler;
+use function str_replace;
+use function unserialize;
+
+use const E_NOTICE;
+
 /**
- * Stores the parsed annotations in files. This adapter is suitable for production
+ * Stores the parsed annotations in files. This adapter is suitable for
+ * production
  *
  *```php
  * use Phalcon\Annotations\Adapter\Stream;
@@ -44,8 +53,8 @@ class Stream extends AbstractAdapter
      * Constructor
      *
      * @param array $options = [
-     *     'annotationsDir' => 'phalconDir'
-     * ]
+     *                       'annotationsDir' => 'phalconDir'
+     *                       ]
      */
     public function __construct(array $options = [])
     {
@@ -59,7 +68,7 @@ class Stream extends AbstractAdapter
      *
      * @return Reflection|bool|int
      */
-    public function read(string $key): Reflection | bool | int
+    public function read(string $key): Reflection|bool|int
     {
         /**
          * Paths must be normalized before be used as keys
@@ -119,9 +128,9 @@ class Stream extends AbstractAdapter
         $code = serialize($data);
 
         if (true !== $this->phpFilePutContents($path, $code)) {
-              throw new Exception(
-                  "Annotations directory cannot be written"
-              );
+            throw new Exception(
+                "Annotations directory cannot be written"
+            );
         }
     }
 }

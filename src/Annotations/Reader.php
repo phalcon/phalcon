@@ -13,8 +13,9 @@ declare(strict_types=1);
 
 namespace Phalcon\Annotations;
 
-use ReflectionClass;
 use Phalcon\Parsers\Annotations;
+use ReflectionClass;
+
 use function array_keys;
 use function is_array;
 use function is_string;
@@ -67,15 +68,15 @@ class Reader implements ReaderInterface
             /**
              * Line declaration for constants isn't available
              */
-            $line = 1;
-            $arrayKeys = array_keys($constants);
+            $line                = 1;
+            $arrayKeys           = array_keys($constants);
             $anotationsConstants = [];
             foreach ($arrayKeys as $constant) {
                 /**
                  * Read comment from constant docblock
                  */
                 $constantReflection = $reflection->getReflectionConstant($constant);
-                $comment = $constantReflection->getDocComment();
+                $comment            = $constantReflection->getDocComment();
                 if (false !== $comment) {
                     /**
                      * Parse constant docblock comment
@@ -105,7 +106,7 @@ class Reader implements ReaderInterface
             /**
              * Line declaration for properties isn't available
              */
-            $line = 1;
+            $line                  = 1;
             $annotationsProperties = [];
             foreach ($properties as $property) {
                 /**
