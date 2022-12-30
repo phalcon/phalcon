@@ -14,6 +14,7 @@ declare(strict_types=1);
 namespace Phalcon\Annotations\Adapter;
 
 use Phalcon\Annotations\Reflection;
+
 use function strtolower;
 
 /**
@@ -34,7 +35,7 @@ class Memory extends AbstractAdapter
      *
      * @return Reflection|bool
      */
-    public function read(string $key): Reflection | bool
+    public function read(string $key): Reflection|bool
     {
         return $this->data[strtolower($key)] ?? false;
     }

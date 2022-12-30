@@ -55,7 +55,7 @@ class Annotation
             $exprArguments = $reflectionData["arguments"];
             $arguments     = [];
             foreach ($exprArguments as $argument) {
-                $resolvedArgument =  $this->getExpression(
+                $resolvedArgument = $this->getExpression(
                     $argument["expr"]
                 );
 
@@ -66,7 +66,7 @@ class Annotation
                 }
             }
 
-            $this->arguments = $arguments;
+            $this->arguments     = $arguments;
             $this->exprArguments = $exprArguments;
         }
     }
@@ -153,7 +153,7 @@ class Annotation
                 return new Annotation($expr);
 
             default:
-                throw new Exception("The expression ". $type. " is unknown");
+                throw new Exception("The expression " . $type . " is unknown");
         }
 
         return $value;

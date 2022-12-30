@@ -44,13 +44,13 @@ class AnnotationsFactory
      * Factory to create an instance from a Config object
      *
      * @param array|Config $config = [
-     *     'adapter' => 'apcu',
-     *     'options' => [
-     *         'prefix' => 'phalcon',
-     *         'lifetime' => 3600,
-     *         'annotationsDir' => 'phalconDir'
-     *     ]
-     * ]
+     *                             'adapter' => 'apcu',
+     *                             'options' => [
+     *                             'prefix' => 'phalcon',
+     *                             'lifetime' => 3600,
+     *                             'annotationsDir' => 'phalconDir'
+     *                             ]
+     *                             ]
      *
      * @return AdapterInterface
      * @throws SupportException
@@ -73,10 +73,10 @@ class AnnotationsFactory
      *
      * @param string $name
      * @param array  $options = [
-     *     'prefix' => 'phalcon',
-     *     'lifetime' => 3600,
-     *     'annotationsDir' => 'phalconDir'
-     * ]
+     *                        'prefix' => 'phalcon',
+     *                        'lifetime' => 3600,
+     *                        'annotationsDir' => 'phalconDir'
+     *                        ]
      *
      * @return AdapterInterface
      */
