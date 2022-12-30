@@ -27,7 +27,8 @@ class ValidateSignatureCest
     use JWTTrait;
 
     /**
-     * Unit Tests Phalcon\Encryption\Security\JWT\Validator :: validateSignature()
+     * Unit Tests Phalcon\Encryption\Security\JWT\Validator ::
+     * validateSignature()
      *
      * @param UnitTester $I
      *
@@ -67,7 +68,8 @@ class ValidateSignatureCest
     }
 
     /**
-     * Unit Tests Phalcon\Encryption\Security\JWT\Validator :: validateSignature() - exception
+     * Unit Tests Phalcon\Encryption\Security\JWT\Validator ::
+     * validateSignature() - exception
      *
      * @param UnitTester $I
      *

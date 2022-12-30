@@ -25,7 +25,8 @@ class ValidateIssuedAtCest
     use JWTTrait;
 
     /**
-     * Unit Tests Phalcon\Encryption\Security\JWT\Validator :: validateIssuedAt()
+     * Unit Tests Phalcon\Encryption\Security\JWT\Validator ::
+     * validateIssuedAt()
      *
      * @param UnitTester $I
      *

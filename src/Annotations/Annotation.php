@@ -74,11 +74,11 @@ class Annotation
     /**
      * Returns an argument in a specific position
      *
-     * @param int $position
+     * @param int|string $position
      *
      * @return mixed
      */
-    public function getArgument(int $position): mixed
+    public function getArgument(int|string $position): mixed
     {
         return $this->arguments[$position] ?? null;
     }
@@ -196,11 +196,11 @@ class Annotation
     /**
      * Returns an argument in a specific position
      *
-     * @param int $position
+     * @param int|string $position
      *
      * @return bool
      */
-    public function hasArgument(int $position): bool
+    public function hasArgument(int|string $position): bool
     {
         return isset($this->arguments[$position]);
     }

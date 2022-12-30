@@ -44,13 +44,13 @@ class GetPropertiesCest
 
         $propertyAnnotations = $adapter->getProperties(TestClass::class);
 
-        $keys = array_keys($propertyAnnotations);
+        $keys     = array_keys($propertyAnnotations);
         $expected = [
             'testProp1',
             'testProp3',
             'testProp4',
         ];
-        $actual = $keys;
+        $actual   = $keys;
         $I->assertSame($expected, $actual);
 
         foreach ($propertyAnnotations as $propertyAnnotation) {

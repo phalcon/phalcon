@@ -18,6 +18,7 @@ use Phalcon\Annotations\Collection;
 use Phalcon\Annotations\Reader;
 use Phalcon\Annotations\Reflection;
 use UnitTester;
+
 use function dataDir;
 
 class ConstructCest
@@ -25,7 +26,7 @@ class ConstructCest
     /**
      * Executed before each test.
      *
-     * @param  UnitTester $I
+     * @param UnitTester $I
      */
     protected function _before(UnitTester $I)
     {
@@ -50,7 +51,7 @@ class ConstructCest
     /**
      * Tests parsing class annotations
      *
-     * @param  UnitTester $I
+     * @param UnitTester $I
      *
      * @author Phalcon Team <team@phalcon.io>
      * @since  2016-01-26
@@ -134,8 +135,8 @@ class ConstructCest
         $I->assertFalse($actual);
 
         $annotation = $annotations->get('NamedMultipleParams');
-        $expected = 'NamedMultipleParams';
-        $actual   = $annotation->getName();
+        $expected   = 'NamedMultipleParams';
+        $actual     = $annotation->getName();
         $I->assertSame($expected, $actual);
 
         $expected = 2;

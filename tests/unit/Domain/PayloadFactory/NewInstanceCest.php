@@ -40,7 +40,7 @@ class NewInstanceCest
         $payload = $factory->newInstance(
             DomainStatus::ACCEPTED,
             [
-                'one' => 'two'
+                'one' => 'two',
             ]
         );
 

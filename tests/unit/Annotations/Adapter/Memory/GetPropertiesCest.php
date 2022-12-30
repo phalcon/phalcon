@@ -43,7 +43,7 @@ class GetPropertiesCest
             'testProp3',
             'testProp4',
         ];
-        $actual = array_keys($propertyAnnotations);
+        $actual   = array_keys($propertyAnnotations);
         $I->assertSame($expected, $actual);
 
         foreach ($propertyAnnotations as $propertyAnnotation) {

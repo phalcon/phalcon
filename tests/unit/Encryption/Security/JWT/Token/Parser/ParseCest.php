@@ -78,7 +78,8 @@ class ParseCest
     }
 
     /**
-     * Unit Tests Phalcon\Encryption\Security\JWT\Token\Parser :: parse() - no signature
+     * Unit Tests Phalcon\Encryption\Security\JWT\Token\Parser :: parse() - no
+     * signature
      *
      * @param UnitTester $I
      *
@@ -129,8 +130,8 @@ class ParseCest
     }
 
     /**
-     * Unit Tests Phalcon\Encryption\Security\JWT\Token\Parser :: parse() - aud not an
-     * array
+     * Unit Tests Phalcon\Encryption\Security\JWT\Token\Parser :: parse() - aud
+     * not an array
      *
      * @param UnitTester $I
      *
@@ -186,8 +187,8 @@ class ParseCest
     }
 
     /**
-     * Unit Tests Phalcon\Encryption\Security\JWT\Token\Parser :: parse() - exception
-     * claims not array
+     * Unit Tests Phalcon\Encryption\Security\JWT\Token\Parser :: parse() -
+     * exception claims not array
      *
      * @param UnitTester $I
      *
@@ -215,8 +216,8 @@ class ParseCest
     }
 
     /**
-     * Unit Tests Phalcon\Encryption\Security\JWT\Token\Parser :: parse() - exception
-     * headers not array
+     * Unit Tests Phalcon\Encryption\Security\JWT\Token\Parser :: parse() -
+     * exception headers not array
      *
      * @param UnitTester $I
      *
@@ -247,8 +248,8 @@ class ParseCest
     }
 
     /**
-     * Unit Tests Phalcon\Encryption\Security\JWT\Token\Parser :: parse() - exception no
-     * typ
+     * Unit Tests Phalcon\Encryption\Security\JWT\Token\Parser :: parse() -
+     * exception no typ
      *
      * @param UnitTester $I
      *
@@ -280,8 +281,8 @@ class ParseCest
     }
 
     /**
-     * Unit Tests Phalcon\Encryption\Security\JWT\Token\Parser :: parse() - exception
-     * wrong JWT
+     * Unit Tests Phalcon\Encryption\Security\JWT\Token\Parser :: parse() -
+     * exception wrong JWT
      *
      * @param UnitTester $I
      *
