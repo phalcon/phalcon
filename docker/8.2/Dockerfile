@@ -93,6 +93,13 @@ RUN docker-php-ext-enable \
         memcached \
         xdebug
 
+## Setup the phalcon-module
+#RUN cd /tmp && \
+#    git clone https://github.com/niden/phalcon-module && \
+#    cd phalcon-module/ext && \
+#    ./install && \
+#    echo "extension=phalcon" > /usr/local/etc/php/conf.d/phalcon.ini
+
 # Composer
 COPY --from=composer /usr/bin/composer /usr/local/bin/composer
 # Bash script with helper aliases
