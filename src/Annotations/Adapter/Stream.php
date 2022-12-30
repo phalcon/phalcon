@@ -22,6 +22,7 @@ use function restore_error_handler;
 use function serialize;
 use function set_error_handler;
 use function str_replace;
+use function strtolower;
 use function unserialize;
 
 /**
@@ -71,9 +72,7 @@ class Stream extends AbstractAdapter
         /**
          * Paths must be normalized before be used as keys
          */
-        $path = $this->annotationsDir
-            . str_replace(["\\", "/"], "_", $key)
-            . ".php";
+        $path = $this->getFileName($key);
 
         if (true !== $this->phpFileExists($path)) {
             return false;
@@ -120,15 +119,27 @@ class Stream extends AbstractAdapter
         /**
          * Paths must be normalized before be used as keys
          */
-        $path = $this->annotationsDir
-            . str_replace(["\\", "/"], "_", $key)
-            . ".php";
+        $path = $this->getFileName($key);
         $code = serialize($data);
 
-        if (true !== $this->phpFilePutContents($path, $code)) {
+        if (false === $this->phpFilePutContents($path, $code)) {
             throw new Exception(
                 "Annotations directory cannot be written"
             );
         }
+    }
+
+    /**
+     * Returns the normalized name
+     *
+     * @param string $key
+     *
+     * @return string
+     */
+    private function getFileName(string $key): string
+    {
+        return $this->annotationsDir
+            . strtolower(str_replace(["\\", "/", ":"], "_", $key))
+            . ".php";
     }
 }
