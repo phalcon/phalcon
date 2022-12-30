@@ -20,6 +20,7 @@ use Phalcon\Annotations\Reflection;
 use TestClass;
 use UnitTester;
 use User\TestClassNs;
+
 use function dataDir;
 use function is_object;
 
@@ -35,6 +36,7 @@ class ConstructCest
         require_once dataDir('fixtures/Annotations/TestClass.php');
         require_once dataDir('fixtures/Annotations/TestClassNs.php');
     }
+
     /**
      * Tests Phalcon\Annotations\Adapter\Apcu :: __construct()
      *

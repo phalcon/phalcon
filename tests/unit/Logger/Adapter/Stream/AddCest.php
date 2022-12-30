@@ -18,7 +18,6 @@ use DateTimeZone;
 use Phalcon\Logger\Adapter\Stream;
 use Phalcon\Logger\Enum;
 use Phalcon\Logger\Item;
-use Phalcon\Logger\Logger;
 use UnitTester;
 
 use function date_default_timezone_get;

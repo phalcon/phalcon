@@ -15,6 +15,7 @@ namespace Phalcon\Tests\Unit\Annotations\Reader;
 
 use Phalcon\Annotations\Reader;
 use UnitTester;
+
 use function ksort;
 
 class ParseDocBlockCest
@@ -56,7 +57,7 @@ EOF;
             'type' => 300,
         ];
         ksort($parsed[0]);
-        $actual   = $parsed[0];
+        $actual = $parsed[0];
         $I->assertSame($expected, $actual);
 
         $expected = [
@@ -66,7 +67,7 @@ EOF;
             'type' => 300,
         ];
         ksort($parsed[1]);
-        $actual   = $parsed[1];
+        $actual = $parsed[1];
         $I->assertSame($expected, $actual);
 
         $expected = [
@@ -78,44 +79,44 @@ EOF;
                     ],
                 ],
             ],
-            'file' => 'eval code',
-            'line' => 1,
-            'name' => 'SingleParam',
-            'type' => 300,
+            'file'      => 'eval code',
+            'line'      => 1,
+            'name'      => 'SingleParam',
+            'type'      => 300,
         ];
         ksort($parsed[2]);
-        $actual   = $parsed[2];
+        $actual = $parsed[2];
         $I->assertSame($expected, $actual);
 
         $expected = [
             'arguments' => [
                 [
                     'expr' => [
-                        'type' => 303,
+                        'type'  => 303,
                         'value' => 'First',
                     ],
                 ],
                 [
                     'expr' => [
-                        'type' => 307,
+                        'type'  => 307,
                         'value' => 'Second',
                     ],
                 ],
                 [
                     'expr' => [
-                        'type' => 301,
+                        'type'  => 301,
                         'value' => '1',
                     ],
                 ],
                 [
                     'expr' => [
-                        'type' => 302,
+                        'type'  => 302,
                         'value' => '1.1',
                     ],
                 ],
                 [
                     'expr' => [
-                        'type' => 301,
+                        'type'  => 301,
                         'value' => '-10',
                     ],
                 ],
@@ -135,13 +136,13 @@ EOF;
                     ],
                 ],
             ],
-            'file' => 'eval code',
-            'line' => 1,
-            'name' => 'MultipleParams',
-            'type' => 300,
+            'file'      => 'eval code',
+            'line'      => 1,
+            'name'      => 'MultipleParams',
+            'type'      => 300,
         ];
         ksort($parsed[3]);
-        $actual   = $parsed[3];
+        $actual = $parsed[3];
         $I->assertSame($expected, $actual);
     }
 }

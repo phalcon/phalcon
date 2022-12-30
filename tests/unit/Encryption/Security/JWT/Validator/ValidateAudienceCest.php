@@ -25,7 +25,8 @@ class ValidateAudienceCest
     use JWTTrait;
 
     /**
-     * Unit Tests Phalcon\Encryption\Security\JWT\Validator :: validateAudience()
+     * Unit Tests Phalcon\Encryption\Security\JWT\Validator ::
+     * validateAudience()
      *
      * @param UnitTester $I
      *

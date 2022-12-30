@@ -46,14 +46,14 @@ class GetMethodsCest
             TestClass::class
         );
 
-        $keys = array_keys($methodAnnotations);
+        $keys     = array_keys($methodAnnotations);
         $expected = [
             'testMethod1',
             'testMethod3',
             'testMethod4',
             'testMethod5',
         ];
-        $actual = $keys;
+        $actual   = $keys;
         $I->assertSame($expected, $actual);
 
         foreach ($methodAnnotations as $methodAnnotation) {

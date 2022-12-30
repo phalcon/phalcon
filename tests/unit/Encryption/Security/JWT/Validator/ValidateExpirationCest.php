@@ -25,7 +25,8 @@ class ValidateExpirationCest
     use JWTTrait;
 
     /**
-     * Unit Tests Phalcon\Encryption\Security\JWT\Validator :: validateExpiration()
+     * Unit Tests Phalcon\Encryption\Security\JWT\Validator ::
+     * validateExpiration()
      *
      * @param UnitTester $I
      *

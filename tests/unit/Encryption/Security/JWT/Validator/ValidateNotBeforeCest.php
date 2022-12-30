@@ -25,7 +25,8 @@ class ValidateNotBeforeCest
     use JWTTrait;
 
     /**
-     * Unit Tests Phalcon\Encryption\Security\JWT\Validator :: validateNotBefore()
+     * Unit Tests Phalcon\Encryption\Security\JWT\Validator ::
+     * validateNotBefore()
      *
      * @param UnitTester $I
      *

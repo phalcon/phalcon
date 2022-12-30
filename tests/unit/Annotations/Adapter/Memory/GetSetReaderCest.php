@@ -30,7 +30,7 @@ class GetSetReaderCest
         $I->wantToTest('Annotations\Adapter\Memory - getReader() / setReader()');
 
         $adapter = new Memory();
-        $reader = new Reader();
+        $reader  = new Reader();
         $adapter->setReader($reader);
 
         $expected = $reader;

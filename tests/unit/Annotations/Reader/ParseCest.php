@@ -103,7 +103,7 @@ class ParseCest
         $I->assertTrue($actual);
 
         $expected = 9;
-        $actual = $parsing['class'];
+        $actual   = $parsing['class'];
         $I->assertCount($expected, $actual);
 
         // Simple
@@ -123,7 +123,7 @@ class ParseCest
         $I->assertTrue($actual);
 
         $expected = 1;
-        $actual = $parsing['class'][1]['arguments'];
+        $actual   = $parsing['class'][1]['arguments'];
         $I->assertCount($expected, $actual);
 
         $expected = 'Param';
@@ -132,7 +132,7 @@ class ParseCest
 
         // Multiple Params
         $expected = 8;
-        $actual = $parsing['class'][2]['arguments'];
+        $actual   = $parsing['class'][2]['arguments'];
         $I->assertCount($expected, $actual);
 
         $actual = isset($parsing['class'][2]['arguments']);
@@ -177,11 +177,11 @@ class ParseCest
 
         // Single Array Param
         $expected = 1;
-        $actual = $parsing['class'][3]['arguments'];
+        $actual   = $parsing['class'][3]['arguments'];
         $I->assertCount($expected, $actual);
 
         $expected = 3;
-        $actual = $parsing['class'][3]['arguments'][0]['expr']['items'];
+        $actual   = $parsing['class'][3]['arguments'][0]['expr']['items'];
         $I->assertCount($expected, $actual);
 
         $actual = isset($parsing['class'][3]['arguments']);
@@ -210,11 +210,11 @@ class ParseCest
 
         // Hash Params
         $expected = 1;
-        $actual = $parsing['class'][8]['arguments'];
+        $actual   = $parsing['class'][8]['arguments'];
         $I->assertCount($expected, $actual);
 
         $expected = 3;
-        $actual = $parsing['class'][4]['arguments'][0]['expr']['items'];
+        $actual   = $parsing['class'][4]['arguments'][0]['expr']['items'];
         $I->assertCount($expected, $actual);
 
         $actual = isset($parsing['class'][4]['arguments']);
@@ -255,7 +255,7 @@ class ParseCest
 
         // Named Params
         $expected = 2;
-        $actual = $parsing['class'][5]['arguments'];
+        $actual   = $parsing['class'][5]['arguments'];
         $I->assertCount($expected, $actual);
 
         $actual = isset($parsing['class'][5]['arguments']);
@@ -284,7 +284,7 @@ class ParseCest
 
         // Alternative Named Params
         $expected = 2;
-        $actual = $parsing['class'][6]['arguments'];
+        $actual   = $parsing['class'][6]['arguments'];
         $I->assertCount($expected, $actual);
 
         $actual = isset($parsing['class'][6]['arguments']);
@@ -313,11 +313,11 @@ class ParseCest
 
         // Alternative Hash Params
         $expected = 1;
-        $actual = $parsing['class'][7]['arguments'];
+        $actual   = $parsing['class'][7]['arguments'];
         $I->assertCount($expected, $actual);
 
         $expected = 3;
-        $actual = $parsing['class'][7]['arguments'][0]['expr']['items'];
+        $actual   = $parsing['class'][7]['arguments'][0]['expr']['items'];
         $I->assertCount($expected, $actual);
 
         $actual = isset($parsing['class'][7]['arguments']);
@@ -357,11 +357,11 @@ class ParseCest
 
         // Recursive Hash
         $expected = 1;
-        $actual = $parsing['class'][8]['arguments'];
+        $actual   = $parsing['class'][8]['arguments'];
         $I->assertCount($expected, $actual);
 
         $expected = 3;
-        $actual = $parsing['class'][8]['arguments'][0]['expr']['items'];
+        $actual   = $parsing['class'][8]['arguments'][0]['expr']['items'];
         $I->assertCount($expected, $actual);
 
         $actual = isset($parsing['class'][8]['arguments']);
@@ -402,7 +402,7 @@ class ParseCest
 
         // Constants
         $expected = 1;
-        $actual = $parsing['constants'];
+        $actual   = $parsing['constants'];
         $I->assertCount($expected, $actual);
 
         $actual = isset($parsing['constants']);
@@ -417,7 +417,7 @@ class ParseCest
 
         // Properties
         $expected = 3;
-        $actual = $parsing['properties'];
+        $actual   = $parsing['properties'];
         $I->assertCount($expected, $actual);
 
         $actual = isset($parsing['properties']);
@@ -425,7 +425,7 @@ class ParseCest
 
         // Multiple well-ordered annotations
         $expected = 4;
-        $actual = $parsing['properties']['testProp1'];
+        $actual   = $parsing['properties']['testProp1'];
         $I->assertCount($expected, $actual);
 
         $actual = isset($parsing['properties']['testProp1']);
@@ -453,7 +453,7 @@ class ParseCest
 
         // Same line annotations
         $expected = 3;
-        $actual = $parsing['properties']['testProp3'];
+        $actual   = $parsing['properties']['testProp3'];
         $I->assertCount($expected, $actual);
 
         $expected = 'Simple';
@@ -470,7 +470,7 @@ class ParseCest
 
         // Same line annotations
         $expected = 3;
-        $actual = $parsing['properties']['testProp4'];
+        $actual   = $parsing['properties']['testProp4'];
         $I->assertCount($expected, $actual);
 
         $expected = 'Simple';
@@ -496,7 +496,7 @@ class ParseCest
 
         // Properties
         $expected = 4;
-        $actual = $parsing['methods'];
+        $actual   = $parsing['methods'];
         $I->assertCount($expected, $actual);
 
         $actual = isset($parsing['methods']);
@@ -504,7 +504,7 @@ class ParseCest
 
         // Multiple well-ordered annotations
         $expected = 5;
-        $actual = $parsing['methods']['testMethod1'];
+        $actual   = $parsing['methods']['testMethod1'];
         $I->assertCount($expected, $actual);
 
         $actual = isset($parsing['methods']['testMethod1']);
@@ -536,7 +536,7 @@ class ParseCest
 
         // Same line annotations
         $expected = 3;
-        $actual = $parsing['methods']['testMethod3'];
+        $actual   = $parsing['methods']['testMethod3'];
         $I->assertCount($expected, $actual);
 
         $expected = 'Simple';
@@ -553,7 +553,7 @@ class ParseCest
 
         // Unordered annotations
         $expected = 3;
-        $actual = $parsing['methods']['testMethod4'];
+        $actual   = $parsing['methods']['testMethod4'];
         $I->assertCount($expected, $actual);
 
         $expected = 'Simple';
@@ -571,7 +571,7 @@ class ParseCest
 
         // Unordered annotations + extra content
         $expected = 3;
-        $actual = $parsing['methods']['testMethod5'];
+        $actual   = $parsing['methods']['testMethod5'];
         $I->assertCount($expected, $actual);
 
         $expected = 'Simple';

@@ -42,7 +42,7 @@ class GetSetReaderCest
         $actual   = $adapter->getReader();
         $I->assertSame($expected, $actual);
 
-        $expected  = Reader::class;
+        $expected = Reader::class;
         $actual   = $adapter->getReader();
         $I->assertInstanceOf($expected, $actual);
     }
