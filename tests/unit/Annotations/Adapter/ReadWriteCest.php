@@ -11,35 +11,38 @@
 
 declare(strict_types=1);
 
-namespace Phalcon\Tests\Unit\Annotations\Adapter\Stream;
+namespace Phalcon\Tests\Unit\Annotations\Adapter;
 
-use Phalcon\Annotations\Adapter\Stream;
+use Codeception\Example;
 use Phalcon\Annotations\Reflection;
+use Phalcon\Tests\Fixtures\Traits\AnnotationsTrait;
 use TestClass;
 use UnitTester;
 
 use function dataDir;
 use function outputDir;
 
-class ReadCest
+class ReadWriteCest
 {
+    use AnnotationsTrait;
+
     /**
-     * Tests Phalcon\Annotations\Adapter\Stream :: read()
+     * Tests Phalcon\Annotations\Adapter :: read()/write()
      *
-     * @author Phalcon Team <team@phalcon.io>
-     * @since  2018-11-13
+     * @dataProvider getExamples
+     *
+     * @author       Phalcon Team <team@phalcon.io>
+     * @since        2022-12-30
      */
-    public function annotationsAdapterStreamRead(UnitTester $I)
+    public function annotationsAdapterReadWrite(UnitTester $I, Example $example)
     {
-        $I->wantToTest('Annotations\Adapter\Stream - read()');
+        $I->wantToTest('Annotations\Adapter read()/write()');
 
         require_once dataDir('fixtures/Annotations/TestClass.php');
 
-        $adapter = new Stream(
-            [
-                'annotationsDir' => outputDir('tests/annotations/'),
-            ]
-        );
+        $class   = $example['class'];
+        $params  = $example['params'];
+        $adapter = new $class($params);
 
         $classAnnotations = $adapter->get(TestClass::class);
 

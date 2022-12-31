@@ -11,10 +11,11 @@
 
 declare(strict_types=1);
 
-namespace Phalcon\Tests\Unit\Annotations\Adapter\Apcu;
+namespace Phalcon\Tests\Unit\Annotations\Adapter;
 
-use Phalcon\Annotations\Adapter\Apcu;
+use Codeception\Example;
 use Phalcon\Annotations\Collection;
+use Phalcon\Tests\Fixtures\Traits\AnnotationsTrait;
 use TestClass;
 use UnitTester;
 
@@ -22,24 +23,25 @@ use function dataDir;
 
 class GetMethodCest
 {
+    use AnnotationsTrait;
+
     /**
-     * Tests Phalcon\Annotations\Adapter\Apcu :: getMethod()
+     * Tests Phalcon\Annotations\Adapter :: getMethod()
      *
-     * @author Jeremy PASTOURET <https://github.com/jenovateurs>
-     * @since  2020-01-22
+     * @dataProvider getExamples
+     *
+     * @author       Phalcon Team <team@phalcon.io>
+     * @since        2022-12-30
      */
-    public function annotationsAdapterApcuGetMethod(UnitTester $I)
+    public function annotationsAdapterGetMethod(UnitTester $I, Example $example)
     {
-        $I->wantToTest('Annotations\Adapter\Apcu - getMethod()');
+        $I->wantToTest('Annotations\Adapter getMethod()');
 
         require_once dataDir('fixtures/Annotations/TestClass.php');
 
-        $adapter = new Apcu(
-            [
-                'prefix'   => 'nova_prefix',
-                'lifetime' => 3600,
-            ]
-        );
+        $class   = $example['class'];
+        $params  = $example['params'];
+        $adapter = new $class($params);
 
         $methodAnnotation = $adapter->getMethod(
             TestClass::class,
@@ -49,5 +51,7 @@ class GetMethodCest
         $expected = Collection::class;
         $actual   = $methodAnnotation;
         $I->assertInstanceOf($expected, $actual);
+
+        $I->safeDeleteFile('testclass.php');
     }
 }
