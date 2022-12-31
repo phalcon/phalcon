@@ -11,35 +11,39 @@
 
 declare(strict_types=1);
 
-namespace Phalcon\Tests\Unit\Annotations\Adapter\Stream;
+namespace Phalcon\Tests\Unit\Annotations\Adapter;
 
-use Phalcon\Annotations\Adapter\Stream;
+use Codeception\Example;
 use Phalcon\Annotations\Collection;
+use Phalcon\Tests\Fixtures\Traits\AnnotationsTrait;
 use TestClass;
 use UnitTester;
 
 use function dataDir;
-use function outputDir;
 
 class GetPropertyCest
 {
+    use AnnotationsTrait;
+
     /**
-     * Tests Phalcon\Annotations\Adapter\Stream :: getProperty()
+     * Tests Phalcon\Annotations\Adapter :: getProperty()
      *
-     * @author Phalcon Team <team@phalcon.io>
-     * @since  2018-11-13
+     * @dataProvider getExamples
+     *
+     * @author       Phalcon Team <team@phalcon.io>
+     * @since        2022-12-30
      */
-    public function annotationsAdapterStreamGetProperty(UnitTester $I)
-    {
-        $I->wantToTest('Annotations\Adapter\Stream - getProperty()');
+    public function annotationsAdapterGetProperty(
+        UnitTester $I,
+        Example $example
+    ) {
+        $I->wantToTest('Annotations\Adapter getProperty()');
 
         require_once dataDir('fixtures/Annotations/TestClass.php');
 
-        $adapter = new Stream(
-            [
-                'annotationsDir' => outputDir('tests/annotations/'),
-            ]
-        );
+        $class   = $example['class'];
+        $params  = $example['params'];
+        $adapter = new $class($params);
 
         $propertyAnnotation = $adapter->getProperty(
             TestClass::class,

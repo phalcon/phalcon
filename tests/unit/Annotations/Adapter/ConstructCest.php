@@ -11,12 +11,13 @@
 
 declare(strict_types=1);
 
-namespace Phalcon\Tests\Unit\Annotations\Adapter\Apcu;
+namespace Phalcon\Tests\Unit\Annotations\Adapter;
 
+use Codeception\Example;
 use Phalcon\Annotations\Adapter\AdapterInterface;
-use Phalcon\Annotations\Adapter\Apcu;
 use Phalcon\Annotations\Collection;
 use Phalcon\Annotations\Reflection;
+use Phalcon\Tests\Fixtures\Traits\AnnotationsTrait;
 use TestClass;
 use UnitTester;
 use User\TestClassNs;
@@ -26,33 +27,25 @@ use function is_object;
 
 class ConstructCest
 {
+    use AnnotationsTrait;
+
     /**
-     * executed before each test
+     * Tests Phalcon\Annotations\Adapter :: __construct()
+     *
+     * @dataProvider getExamples
+     *
+     * @author       Phalcon Team <team@phalcon.io>
+     * @since        2022-12-30
      */
-    public function _before(UnitTester $I)
+    public function annotationsAdapterConstruct(UnitTester $I, Example $example)
     {
-        $I->checkExtensionIsLoaded('apcu');
+        $I->wantToTest('Annotations\Adapter __construct()');
 
         require_once dataDir('fixtures/Annotations/TestClass.php');
-        require_once dataDir('fixtures/Annotations/TestClassNs.php');
-    }
 
-    /**
-     * Tests Phalcon\Annotations\Adapter\Apcu :: __construct()
-     *
-     * @author Jeremy PASTOURET <https://github.com/jenovateurs>
-     * @since  2020-01-22
-     */
-    public function annotationsAdapterApcuConstruct(UnitTester $I)
-    {
-        $I->wantToTest('Annotations\Adapter\Apcu - __construct()');
-
-        $adapter = new Apcu(
-            [
-                'prefix'   => 'nova_prefix',
-                'lifetime' => 3600,
-            ]
-        );
+        $class   = $example['class'];
+        $params  = $example['params'];
+        $adapter = new $class($params);
 
         $expected = AdapterInterface::class;
         $actual   = $adapter;
@@ -60,13 +53,31 @@ class ConstructCest
     }
 
     /**
-     * @param UnitTester $I
+     * Tests Phalcon\Annotations\Adapter ::
      *
-     * @return void
+     * @dataProvider getExamples
+     *
+     * @author       Phalcon Team <team@phalcon.io>
+     * @since        2022-12-30
      */
-    public function annotationsAdapterApcu(UnitTester $I)
+    public function annotationsAdapter(UnitTester $I, Example $example)
     {
-        $adapter = new Apcu();
+        $I->wantToTest('Annotations\Adapter');
+
+        $I->seeFileFound(
+            dataDir('fixtures/Annotations/TestClass.php')
+        );
+
+        $I->seeFileFound(
+            dataDir('fixtures/Annotations/TestClassNs.php')
+        );
+
+        require_once dataDir('fixtures/Annotations/TestClass.php');
+        require_once dataDir('fixtures/Annotations/TestClassNs.php');
+
+        $class   = $example['class'];
+        $params  = $example['params'];
+        $adapter = new $class($params);
 
         $classAnnotations = $adapter->get(TestClass::class);
 
@@ -94,6 +105,7 @@ class ConstructCest
         $actual   = $classAnnotations->getClassAnnotations();
         $I->assertInstanceOf($expected, $actual);
 
+
         $property = $adapter->getProperty(
             TestClass::class,
             'testProp1'
@@ -101,6 +113,10 @@ class ConstructCest
 
         $actual = is_object($property);
         $I->assertTrue($actual);
+
+        $expected = Collection::class;
+        $actual   = $property;
+        $I->assertInstanceOf($expected, $actual);
 
         $expected = 4;
         $actual   = $property->count();

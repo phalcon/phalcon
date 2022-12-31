@@ -11,37 +11,36 @@
 
 declare(strict_types=1);
 
-namespace Phalcon\Tests\Unit\Annotations\Adapter\Stream;
+namespace Phalcon\Tests\Unit\Annotations\Adapter;
 
-use Phalcon\Annotations\Adapter\Stream;
+use Codeception\Example;
 use Phalcon\Annotations\Collection;
 use Phalcon\Annotations\Reflection;
+use Phalcon\Tests\Fixtures\Traits\AnnotationsTrait;
 use TestClass;
 use UnitTester;
 
-use function dataDir;
-use function outputDir;
-
 class GetCest
 {
+    use AnnotationsTrait;
+
     /**
-     * Tests Phalcon\Annotations\Adapter\Stream :: get()
+     * Tests Phalcon\Annotations\Adapter :: get()
      *
-     * @author Phalcon Team <team@phalcon.io>
-     * @since  2018-11-13
+     * @dataProvider getExamples
+     *
+     * @author       Phalcon Team <team@phalcon.io>
+     * @since        2022-12-30
      */
-    public function annotationsAdapterStreamGet(UnitTester $I)
+    public function annotationsAdapterGet(UnitTester $I, Example $example)
     {
-        $I->wantToTest('Annotations\Adapter\Stream - get()');
+        $I->wantToTest('Annotations\Adapter get()');
 
         require_once dataDir('fixtures/Annotations/TestClass.php');
 
-        $adapter = new Stream(
-            [
-                'annotationsDir' => outputDir('tests/annotations/'),
-            ]
-        );
-
+        $class   = $example['class'];
+        $params  = $example['params'];
+        $adapter = new $class($params);
 
         $classAnnotations = $adapter->get(TestClass::class);
 
@@ -55,7 +54,5 @@ class GetCest
         $expected = Collection::class;
         $actual   = $classAnnotations->getClassAnnotations();
         $I->assertInstanceOf($expected, $actual);
-
-        $I->safeDeleteFile('testclass.php');
     }
 }
