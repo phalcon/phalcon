@@ -1,82 +1,70 @@
 {
-    "name": "phalcon/phalcon",
-    "description": "Phalcon Framework",
-    "keywords": [
-        "php",
-        "framework",
-        "psr-7",
-        "psr-15",
-        "psr-17"
-    ],
-    "license": "MIT",
-    "require": {
-        "php": ">=8.0 <9.0",
-        "ext-apcu": "*",
-        "ext-igbinary": "*",
-        "ext-json": "*",
-        "ext-mbstring": "*",
-        "ext-pdo": "*",
-        "ext-redis": "*",
-        "ext-xml": "*",
-        "payload-interop/payload-interop": "^1.0",
-        "phalcon/traits": "^2.0",
-        "phpbench/phpbench": "^1.2"
-    },
-    "suggest": {
-        "ext-yaml": "*",
-        "ext-gettext": "*"
-    },
-    "autoload": {
-        "psr-4": {
-            "Phalcon\\": "src/",
-            "Phalcon\\Tests\\Benchmarks\\": "tests/benchmarks/",
-            "Phalcon\\Tests\\Cli\\": "tests/cli/",
-            "Phalcon\\Tests\\Integration\\": "tests/integration/",
-            "Phalcon\\Tests\\Unit\\": "tests/unit/",
-            "Phalcon\\Tests\\Controllers\\": "tests/_data/fixtures/controllers/",
-            "Phalcon\\Tests\\Fixtures\\": "tests/_data/fixtures/",
-            "Phalcon\\Tests\\Listener\\": "tests/_data/listener/",
-            "Phalcon\\Tests\\Models\\": "tests/_data/fixtures/models/",
-            "Phalcon\\Tests\\Module\\": "tests/_support/Module/"
-        }
-    },
-    "config": {
-        "optimize-autoloader": true,
-        "preferred-install": "dist",
-        "sort-packages": true
-    },
-    "require-dev": {
-        "ext-gettext": "*",
-        "ext-yaml": "*",
-<<<<<<< HEAD
-        "codeception/codeception": "^5.0",
-        "codeception/module-apc": "^3.0",
-        "codeception/module-asserts": "^3.0",
-        "codeception/module-cli": "^2.0",
-        "codeception/module-db": "^3.1",
-        "codeception/module-filesystem": "^3.0",
-        "codeception/module-memcache": "^3.0",
-        "codeception/module-redis": "^3.0",
-        "friendsofphp/php-cs-fixer": "^3.13",
-=======
-        "codeception/codeception": "^4.0",
-        "codeception/module-apc": "^1.0",
-        "codeception/module-asserts": "^1.0",
-        "codeception/module-cli": "^1.0",
-        "codeception/module-db": "^1.0",
-        "codeception/module-filesystem": "^2.0",
-        "codeception/module-memcache": "^2.0",
-        "codeception/module-redis": "^1.0",
-        "friendsofphp/php-cs-fixer": "^3.0",
->>>>>>> 221562f7 (Bump codeception/module-filesystem from 1.0.3 to 2.0.2)
-        "pds/skeleton": "^1.0",
-        "phpstan/phpstan": "^1.9",
-        "squizlabs/php_codesniffer": "^3.7",
-        "vimeo/psalm": "^5.4",
-        "vlucas/phpdotenv": "^5.5"
-    },
-    "scripts": {
-        "phpcs": "phpcs --standard=phpcs.xml",
-        "phpcbf": "phpcbf --standard=phpcs.xml"
+  "name": "phalcon/phalcon",
+  "description": "Phalcon Framework",
+  "keywords": [
+    "php",
+    "framework",
+    "psr-7",
+    "psr-15",
+    "psr-17"
+  ],
+  "license": "MIT",
+  "require": {
+    "php": ">=8.0 <9.0",
+    "ext-apcu": "*",
+    "ext-igbinary": "*",
+    "ext-json": "*",
+    "ext-mbstring": "*",
+    "ext-pdo": "*",
+    "ext-redis": "*",
+    "ext-xml": "*",
+    "payload-interop/payload-interop": "^1.0",
+    "phalcon/traits": "^1.0",
+    "phpbench/phpbench": "^1.2"
+  },
+  "suggest": {
+    "ext-yaml": "*",
+    "ext-gettext": "*"
+  },
+  "autoload": {
+    "psr-4": {
+      "Phalcon\\": "src/",
+      "Phalcon\\Tests\\Benchmarks\\": "tests/benchmarks/",
+      "Phalcon\\Tests\\Cli\\": "tests/cli/",
+      "Phalcon\\Tests\\Integration\\": "tests/integration/",
+      "Phalcon\\Tests\\Unit\\": "tests/unit/",
+      "Phalcon\\Tests\\Controllers\\": "tests/_data/fixtures/controllers/",
+      "Phalcon\\Tests\\Fixtures\\": "tests/_data/fixtures/",
+      "Phalcon\\Tests\\Listener\\": "tests/_data/listener/",
+      "Phalcon\\Tests\\Models\\": "tests/_data/fixtures/models/",
+      "Phalcon\\Tests\\Module\\": "tests/_support/Module/"
     }
+  },
+  "config": {
+    "optimize-autoloader": true,
+    "preferred-install": "dist",
+    "sort-packages": true
+  },
+  "require-dev": {
+    "ext-gettext": "*",
+    "ext-yaml": "*",
+    "codeception/codeception": "^5.0",
+    "codeception/module-apc": "^3.0",
+    "codeception/module-asserts": "^3.0",
+    "codeception/module-cli": "^2.0",
+    "codeception/module-db": "^3.1",
+    "codeception/module-filesystem": "^3.0",
+    "codeception/module-memcache": "^3.0",
+    "codeception/module-redis": "^3.0",
+    "friendsofphp/php-cs-fixer": "^3.13",
+    "pds/skeleton": "^1.0",
+    "phpstan/phpstan": "^1.9",
+    "squizlabs/php_codesniffer": "^3.7",
+    "vimeo/psalm": "^5.4",
+    "vlucas/phpdotenv": "^5.5"
+  },
+  "scripts": {
+    "phpcs": "phpcs --standard=phpcs.xml",
+    "phpcbf": "phpcbf --standard=phpcs.xml"
+  }
 }
