@@ -23,6 +23,7 @@ use Phalcon\Acl\Role;
 use Phalcon\Acl\RoleAwareInterface;
 use Phalcon\Acl\RoleInterface;
 use Phalcon\Events\Traits\EventsAwareTrait;
+use ReflectionClass;
 use ReflectionException;
 use ReflectionFunction;
 
@@ -45,17 +46,6 @@ use const E_USER_WARNING;
 /**
  * Manages ACL lists in memory
  *
- * @property mixed       $access
- * @property array       $accessList
- * @property mixed       $activeFunction
- * @property int         $activeFunctionCustomArgumentsCount
- * @property string|null $activeKey
- * @property array       $components
- * @property array       $componentsNames
- * @property array       $functions
- * @property int         $noArgumentsDefaultAction
- * @property array       $roleInherits
- * @property array       $roles
  */
 class Memory extends AbstractAdapter
 {
@@ -279,7 +269,10 @@ class Memory extends AbstractAdapter
             /**
              * Check if the role to inherit is repeat
              */
-            if (true === in_array($roleInheritName, $this->roleInherits[$roleName])) {
+            if (true === in_array(
+                    $roleInheritName,
+                    $this->roleInherits[$roleName]
+                )) {
                 continue;
             }
 
@@ -484,8 +477,10 @@ class Memory extends AbstractAdapter
      * @param string $componentName
      * @param mixed  $accessList
      */
-    public function dropComponentAccess(string $componentName, $accessList): void
-    {
+    public function dropComponentAccess(
+        string $componentName,
+        $accessList
+    ): void {
         $localAccess = $accessList;
         if (true === is_string($accessList)) {
             $localAccess = [$accessList];
@@ -695,17 +690,23 @@ class Memory extends AbstractAdapter
              * array
              */
             if (0 === $parameterNumber) {
-                return $haveAccess == Enum::ALLOW && call_user_func($funcAccess);
+                return $haveAccess == Enum::ALLOW && call_user_func(
+                        $funcAccess
+                    );
             }
 
             $parametersForFunction      = [];
-            $numberOfRequiredParameters = $reflectionFunction->getNumberOfRequiredParameters();
+            $numberOfRequiredParameters = $reflectionFunction->getNumberOfRequiredParameters(
+            );
             $userParametersSizeShouldBe = $parameterNumber;
             foreach ($reflectionParameters as $reflectionParameter) {
-                $reflectionClass  = $reflectionParameter->getClass();
+                $reflectionType   = $reflectionParameter->getType();
                 $parameterToCheck = $reflectionParameter->getName();
 
-                if (null !== $reflectionClass) {
+                if (null !== $reflectionType) {
+                    $className       = $reflectionType->getName();
+                    $reflectionClass = new ReflectionClass($className);
+
                     // roleObject is this class
                     if (
                         null !== $roleObject &&
@@ -722,7 +723,9 @@ class Memory extends AbstractAdapter
                     // componentObject is this class
                     if (
                         null !== $componentObject &&
-                        true === $reflectionClass->isInstance($componentObject) &&
+                        true === $reflectionClass->isInstance(
+                            $componentObject
+                        ) &&
                         true !== $hasComponent
                     ) {
                         $hasComponent            = true;
@@ -739,7 +742,9 @@ class Memory extends AbstractAdapter
                     if (
                         true === isset($parameters[$parameterToCheck]) &&
                         true === is_object($parameters[$parameterToCheck]) &&
-                        true !== $reflectionClass->isInstance($parameters[$parameterToCheck])
+                        true !== $reflectionClass->isInstance(
+                            $parameters[$parameterToCheck]
+                        )
                     ) {
                         throw new Exception(
                             'Your passed parameter does not have the ' .
