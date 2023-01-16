@@ -1903,16 +1903,16 @@
         },
         {
             "name": "codeception/codeception",
-            "version": "5.0.6",
+            "version": "5.0.7",
             "source": {
                 "type": "git",
                 "url": "https://github.com/Codeception/Codeception.git",
-                "reference": "994ca6c553eb126fefda6eb5375d2ad1b93d4795"
+                "reference": "9c0bc32bd05cfa3b43dc04c6880489398b99436a"
             },
             "dist": {
                 "type": "zip",
-                "url": "https://api.github.com/repos/Codeception/Codeception/zipball/994ca6c553eb126fefda6eb5375d2ad1b93d4795",
-                "reference": "994ca6c553eb126fefda6eb5375d2ad1b93d4795",
+                "url": "https://api.github.com/repos/Codeception/Codeception/zipball/9c0bc32bd05cfa3b43dc04c6880489398b99436a",
+                "reference": "9c0bc32bd05cfa3b43dc04c6880489398b99436a",
                 "shasum": ""
             },
             "require": {
@@ -1926,7 +1926,7 @@
                 "phpunit/php-code-coverage": "^9.2",
                 "phpunit/php-text-template": "^2.0",
                 "phpunit/php-timer": "^5.0.3",
-                "phpunit/phpunit": "^9.5",
+                "phpunit/phpunit": "^9.5.20",
                 "psy/psysh": "^0.11.2",
                 "sebastian/comparator": "^4.0.5",
                 "sebastian/diff": "^4.0.3",
@@ -2007,7 +2007,7 @@
             ],
             "support": {
                 "issues": "https://github.com/Codeception/Codeception/issues",
-                "source": "https://github.com/Codeception/Codeception/tree/5.0.6"
+                "source": "https://github.com/Codeception/Codeception/tree/5.0.7"
             },
             "funding": [
                 {
@@ -2015,7 +2015,7 @@
                     "type": "open_collective"
                 }
             ],
-            "time": "2022-12-28T13:41:37+00:00"
+            "time": "2023-01-14T20:02:13+00:00"
         },
         {
             "name": "codeception/lib-asserts",
@@ -2381,22 +2381,22 @@
         },
         {
             "name": "codeception/module-redis",
-            "version": "3.0.0",
+            "version": "3.1.0",
             "source": {
                 "type": "git",
                 "url": "https://github.com/Codeception/module-redis.git",
-                "reference": "9d2d7a3323d13a8efc375de53702e867bed174bf"
+                "reference": "53378c72d0da7454389b9f21648c09ad1efc3cbd"
             },
             "dist": {
                 "type": "zip",
-                "url": "https://api.github.com/repos/Codeception/module-redis/zipball/9d2d7a3323d13a8efc375de53702e867bed174bf",
-                "reference": "9d2d7a3323d13a8efc375de53702e867bed174bf",
+                "url": "https://api.github.com/repos/Codeception/module-redis/zipball/53378c72d0da7454389b9f21648c09ad1efc3cbd",
+                "reference": "53378c72d0da7454389b9f21648c09ad1efc3cbd",
                 "shasum": ""
             },
             "require": {
-                "codeception/codeception": "^5.0.0-alpha2",
+                "codeception/codeception": "^5.0",
                 "php": "^8.0",
-                "predis/predis": "^1.1",
+                "predis/predis": "^1.1 | ^2.0",
                 "sebastian/comparator": "^4.0 | ^5.0"
             },
             "require-dev": {
@@ -2428,9 +2428,9 @@
             ],
             "support": {
                 "issues": "https://github.com/Codeception/module-redis/issues",
-                "source": "https://github.com/Codeception/module-redis/tree/3.0.0"
+                "source": "https://github.com/Codeception/module-redis/tree/3.1.0"
             },
-            "time": "2022-02-20T17:40:10+00:00"
+            "time": "2023-01-13T21:19:59+00:00"
         },
         {
             "name": "codeception/stub",
@@ -4115,20 +4115,20 @@
         },
         {
             "name": "phpunit/phpunit",
-            "version": "9.5.27",
+            "version": "9.5.28",
             "source": {
                 "type": "git",
                 "url": "https://github.com/sebastianbergmann/phpunit.git",
-                "reference": "a2bc7ffdca99f92d959b3f2270529334030bba38"
+                "reference": "954ca3113a03bf780d22f07bf055d883ee04b65e"
             },
             "dist": {
                 "type": "zip",
-                "url": "https://api.github.com/repos/sebastianbergmann/phpunit/zipball/a2bc7ffdca99f92d959b3f2270529334030bba38",
-                "reference": "a2bc7ffdca99f92d959b3f2270529334030bba38",
+                "url": "https://api.github.com/repos/sebastianbergmann/phpunit/zipball/954ca3113a03bf780d22f07bf055d883ee04b65e",
+                "reference": "954ca3113a03bf780d22f07bf055d883ee04b65e",
                 "shasum": ""
             },
             "require": {
-                "doctrine/instantiator": "^1.3.1",
+                "doctrine/instantiator": "^1.3.1 || ^2",
                 "ext-dom": "*",
                 "ext-json": "*",
                 "ext-libxml": "*",
@@ -4197,7 +4197,7 @@
             ],
             "support": {
                 "issues": "https://github.com/sebastianbergmann/phpunit/issues",
-                "source": "https://github.com/sebastianbergmann/phpunit/tree/9.5.27"
+                "source": "https://github.com/sebastianbergmann/phpunit/tree/9.5.28"
             },
             "funding": [
                 {
@@ -4213,33 +4213,38 @@
                     "type": "tidelift"
                 }
             ],
-            "time": "2022-12-09T07:31:23+00:00"
+            "time": "2023-01-14T12:32:24+00:00"
         },
         {
             "name": "predis/predis",
-            "version": "v1.1.10",
+            "version": "v2.0.3",
             "source": {
                 "type": "git",
                 "url": "https://github.com/predis/predis.git",
-                "reference": "a2fb02d738bedadcffdbb07efa3a5e7bd57f8d6e"
+                "reference": "ff59f745815150c65ed388f7d64e7660fe961771"
             },
             "dist": {
                 "type": "zip",
-                "url": "https://api.github.com/repos/predis/predis/zipball/a2fb02d738bedadcffdbb07efa3a5e7bd57f8d6e",
-                "reference": "a2fb02d738bedadcffdbb07efa3a5e7bd57f8d6e",
+                "url": "https://api.github.com/repos/predis/predis/zipball/ff59f745815150c65ed388f7d64e7660fe961771",
+                "reference": "ff59f745815150c65ed388f7d64e7660fe961771",
                 "shasum": ""
             },
             "require": {
-                "php": ">=5.3.9"
+                "php": "^7.2 || ^8.0"
             },
             "require-dev": {
-                "phpunit/phpunit": "~4.8"
+                "phpunit/phpunit": "^8.0 || ~9.4.4"
             },
             "suggest": {
                 "ext-curl": "Allows access to Webdis when paired with phpiredis",
                 "ext-phpiredis": "Allows faster serialization and deserialization of the Redis protocol"
             },
             "type": "library",
+            "extra": {
+                "branch-alias": {
+                    "dev-main": "2.0-dev"
+                }
+            },
             "autoload": {
                 "psr-4": {
                     "Predis\\": "src/"
@@ -4262,7 +4267,7 @@
                     "role": "Maintainer"
                 }
             ],
-            "description": "Flexible and feature-complete Redis client for PHP and HHVM",
+            "description": "A flexible and feature-complete Redis client for PHP.",
             "homepage": "http://github.com/predis/predis",
             "keywords": [
                 "nosql",
@@ -4271,7 +4276,7 @@
             ],
             "support": {
                 "issues": "https://github.com/predis/predis/issues",
-                "source": "https://github.com/predis/predis/tree/v1.1.10"
+                "source": "https://github.com/predis/predis/tree/v2.0.3"
             },
             "funding": [
                 {
@@ -4279,7 +4284,7 @@
                     "type": "github"
                 }
             ],
-            "time": "2022-01-05T17:46:08+00:00"
+            "time": "2022-10-11T16:52:29+00:00"
         },
         {
             "name": "psr/event-dispatcher",
