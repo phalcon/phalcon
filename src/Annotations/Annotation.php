@@ -13,7 +13,7 @@ declare(strict_types=1);
 
 namespace Phalcon\Annotations;
 
-use Phalcon\Parsers\Annotations as AnnEnum;
+use Phalcon\Parsers\Enum as AnnEnum;
 
 /**
  * Represents a single annotation in an annotations collection
@@ -43,6 +43,10 @@ class Annotation
 
     /**
      * Constructor
+     *
+     * @param array $reflectionData
+     *
+     * @throws Exception
      */
     public function __construct(array $reflectionData)
     {

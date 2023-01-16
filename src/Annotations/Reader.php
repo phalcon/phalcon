@@ -13,7 +13,7 @@ declare(strict_types=1);
 
 namespace Phalcon\Annotations;
 
-use Phalcon\Parsers\Annotations;
+use Phalcon\Parsers\Parser;
 use ReflectionClass;
 
 use function array_keys;
@@ -46,7 +46,7 @@ class Reader implements ReaderInterface
             /**
              * Read annotations from class
              */
-            $classAnnotations = Annotations::parse(
+            $classAnnotations = Parser::annotationsParse(
                 $comment,
                 $reflection->getFileName(),
                 $reflection->getStartLine()
@@ -75,13 +75,15 @@ class Reader implements ReaderInterface
                 /**
                  * Read comment from constant docblock
                  */
-                $constantReflection = $reflection->getReflectionConstant($constant);
+                $constantReflection = $reflection->getReflectionConstant(
+                    $constant
+                );
                 $comment            = $constantReflection->getDocComment();
                 if (false !== $comment) {
                     /**
                      * Parse constant docblock comment
                      */
-                    $constantAnnotations = Annotations::parse(
+                    $constantAnnotations = Parser::annotationsParse(
                         $comment,
                         $reflection->getFileName(),
                         $line
@@ -117,7 +119,7 @@ class Reader implements ReaderInterface
                     /**
                      * Parse property docblock comment
                      */
-                    $propertyAnnotations = Annotations::parse(
+                    $propertyAnnotations = Parser::annotationsParse(
                         $comment,
                         $reflection->getFileName(),
                         $line
@@ -149,7 +151,7 @@ class Reader implements ReaderInterface
                     /**
                      * Parse method docblock comment
                      */
-                    $methodAnnotations = Annotations::parse(
+                    $methodAnnotations = Parser::annotationsParse(
                         $comment,
                         $method->getFileName(),
                         $method->getStartLine()
@@ -187,6 +189,6 @@ class Reader implements ReaderInterface
             $file = "eval code";
         }
 
-        return Annotations::parse($docBlock, $file, $line);
+        return Parser::annotationsParse($docBlock, $file, $line);
     }
 }
