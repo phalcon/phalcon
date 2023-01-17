@@ -34,7 +34,7 @@ interface FileInterface
     /**
      * Returns the error if any
      */
-    public function getError(): ?string;
+    public function getError(): int;
 
     /**
      * Returns the real name of the uploaded file
