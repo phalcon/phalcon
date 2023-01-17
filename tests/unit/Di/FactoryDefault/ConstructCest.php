@@ -14,6 +14,7 @@ declare(strict_types=1);
 namespace Phalcon\Tests\Unit\Di\FactoryDefault;
 
 use Codeception\Example;
+use Phalcon\Annotations\Adapter\Memory as MemoryAnnotations;
 use Phalcon\Assets\Manager as ManagerAssets;
 use Phalcon\Di\FactoryDefault;
 use Phalcon\Encryption\Crypt;
@@ -24,7 +25,7 @@ use Phalcon\Flash\Direct;
 use Phalcon\Flash\Session;
 use Phalcon\Html\Escaper;
 use Phalcon\Html\TagFactory;
-use Phalcon\Http\Response;
+use Phalcon\Http\Request;
 use Phalcon\Http\Response\Cookies;
 use Phalcon\Mvc\Dispatcher;
 use Phalcon\Mvc\Model\MetaData\Memory;
@@ -49,7 +50,7 @@ class ConstructCest
 
         $container = new FactoryDefault();
 
-        $expected = 11;
+        $expected = 13;
         $actual   = count($container->getServices());
         $I->assertSame($expected, $actual);
     }
@@ -85,10 +86,10 @@ class ConstructCest
     private function getServices(): array
     {
         return [
-//            [
-//                'service' => 'annotations',
-//                'class'   => MemoryAnnotations::class,
-//            ],
+            [
+                'service' => 'annotations',
+                'class'   => MemoryAnnotations::class,
+            ],
         [
         'service' => 'assets',
         'class'   => ManagerAssets::class,
@@ -137,10 +138,10 @@ class ConstructCest
 //                'service' => 'modelsMetadata',
 //                'class'   => Memory::class,
 //            ],
-//            [
-//                'service' => 'request',
-//                'class'   => Request::class,
-//            ],
+            [
+                'service' => 'request',
+                'class'   => Request::class,
+            ],
 //            [
 //                'service' => 'response',
 //                'class'   => Response::class,
