@@ -13,6 +13,7 @@ declare(strict_types=1);
 
 namespace Phalcon\Di;
 
+use Phalcon\Annotations\Adapter\Memory as AnnotationsMemory;
 use Phalcon\Assets\Manager as AssetsManager;
 use Phalcon\Encryption\Crypt;
 use Phalcon\Encryption\Security;
@@ -22,7 +23,10 @@ use Phalcon\Filter\FilterFactory;
 use Phalcon\Flash\Direct;
 use Phalcon\Flash\Session;
 use Phalcon\Html\Escaper;
+use Phalcon\Html\Response;
+use Phalcon\Html\Response\Cookies;
 use Phalcon\Html\TagFactory;
+use Phalcon\Http\Request;
 use Phalcon\Mvc\Url;
 use Phalcon\Support\HelperFactory;
 
@@ -65,7 +69,7 @@ class FactoryDefault extends Di
         $filterFactory = new FilterFactory();
 
         $this->services = [
-//            "annotations"        : new Service("Phalcon\\Annotations\\Adapter\\Memory", true),
+            "annotations"        => new Service(AnnotationsMemory::class, true),
             "assets"        => new Service(
                 [
                     "className" => AssetsManager::class,
@@ -79,7 +83,7 @@ class FactoryDefault extends Di
                 true
             ),
             "crypt"         => new Service(Crypt::class, true),
-//            "cookies"            => new Service("Phalcon\\Http\\Response\\Cookies", true),
+//            "cookies"       => new Service(Cookies::class, true),
 //            "dispatcher"         => new Service("Phalcon\\Mvc\\Dispatcher", true),
             "escaper"       => new Service(Escaper::class, true),
             "eventsManager" => new Service(EventsManager::class, true),
@@ -89,8 +93,8 @@ class FactoryDefault extends Di
             "helper"        => new Service(HelperFactory::class, true),
 //            "modelsManager"      => new Service("Phalcon\\Mvc\\Model\\Manager", true),
 //            "modelsMetadata"     => new Service("Phalcon\\Mvc\\Model\\MetaData\\Memory", true),
-//            "request"            => new Service("Phalcon\\Http\\Request", true),
-//            "response"           => new Service("Phalcon\\Http\\Response", true),
+            "request"            => new Service(Request::class, true),
+//            "response"           => new Service(Response::class, true),
 //            "router"             => new Service("Phalcon\\Mvc\\Router", true),
             "security"      => new Service(Security::class, true),
             "tag"           => new Service(
