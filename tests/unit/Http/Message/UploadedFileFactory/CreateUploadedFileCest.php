@@ -13,6 +13,7 @@ declare(strict_types=1);
 
 namespace Phalcon\Tests\Unit\Http\Message\UploadedFileFactory;
 
+use Page\Http;
 use Phalcon\Http\Message\Factories\UploadedFileFactory;
 use Phalcon\Http\Message\Interfaces\UploadedFileInterface;
 use Phalcon\Http\Message\Stream;
@@ -30,7 +31,7 @@ class CreateUploadedFileCest
     {
         $I->wantToTest('Http\Message\UploadedFileFactory - createUploadedFile()');
         $factory = new UploadedFileFactory();
-        $stream  = new Stream('php://temp');
+        $stream  = new Stream(Http::STREAM_TEMP);
         $file    = $factory->createUploadedFile($stream);
         $class   = UploadedFileInterface::class;
         $I->assertInstanceOf($class, $file);

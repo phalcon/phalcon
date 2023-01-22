@@ -13,6 +13,7 @@ declare(strict_types=1);
 
 namespace Phalcon\Tests\Unit\Http\Message\Response;
 
+use Page\Http;
 use Phalcon\Http\Message\Response;
 use UnitTester;
 
@@ -28,21 +29,21 @@ class WithAddedHeaderCest
     {
         $I->wantToTest('Http\Message\Response - withAddedHeader()');
         $data        = [
-            'Accept' => ['text/html'],
+            'Accept' => [Http::HEADERS_CONTENT_TYPE_HTML],
         ];
-        $response    = new Response('php://memory', 200, $data);
+        $response    = new Response(Http::STREAM_MEMORY, 200, $data);
         $newInstance = $response->withAddedHeader('Cache-Control', ['max-age=0']);
 
         $I->assertNotSame($response, $newInstance);
 
         $expected = [
-            'Accept' => ['text/html'],
+            'Accept' => [Http::HEADERS_CONTENT_TYPE_HTML],
         ];
         $actual   = $response->getHeaders();
         $I->assertSame($expected, $actual);
 
         $expected = [
-            'Accept'        => ['text/html'],
+            'Accept'        => [Http::HEADERS_CONTENT_TYPE_HTML],
             'Cache-Control' => ['max-age=0'],
         ];
         $actual   = $newInstance->getHeaders();
@@ -58,21 +59,21 @@ class WithAddedHeaderCest
     public function httpMessageResponseWithAddedHeaderMerge(UnitTester $I)
     {
         $data        = [
-            'Accept' => ['text/html'],
+            'Accept' => [Http::HEADERS_CONTENT_TYPE_HTML],
         ];
-        $response    = new Response('php://memory', 200, $data);
+        $response    = new Response(Http::STREAM_MEMORY, 200, $data);
         $newInstance = $response->withAddedHeader('Accept', ['text/json']);
 
         $I->assertNotSame($response, $newInstance);
 
         $expected = [
-            'Accept' => ['text/html'],
+            'Accept' => [Http::HEADERS_CONTENT_TYPE_HTML],
         ];
         $actual   = $response->getHeaders();
         $I->assertSame($expected, $actual);
 
         $expected = [
-            'Accept' => ['text/html', 'text/json'],
+            'Accept' => [Http::HEADERS_CONTENT_TYPE_HTML, 'text/json'],
         ];
         $actual   = $newInstance->getHeaders();
         $I->assertSame($expected, $actual);

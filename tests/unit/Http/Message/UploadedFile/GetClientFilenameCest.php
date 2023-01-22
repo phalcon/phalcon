@@ -13,6 +13,7 @@ declare(strict_types=1);
 
 namespace Phalcon\Tests\Unit\Http\Message\UploadedFile;
 
+use Page\Http;
 use Phalcon\Http\Message\UploadedFile;
 use UnitTester;
 
@@ -28,7 +29,7 @@ class GetClientFilenameCest
     {
         $I->wantToTest('Http\Message\UploadedFile - getClientFilename()');
         $file = new UploadedFile(
-            'php://memory',
+            Http::STREAM_MEMORY,
             0,
             UPLOAD_ERR_OK,
             'phalcon.txt'

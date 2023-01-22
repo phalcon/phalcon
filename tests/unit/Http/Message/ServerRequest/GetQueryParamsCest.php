@@ -13,6 +13,7 @@ declare(strict_types=1);
 
 namespace Phalcon\Tests\Unit\Http\Message\ServerRequest;
 
+use Page\Http;
 use Phalcon\Http\Message\ServerRequest;
 use UnitTester;
 
@@ -28,7 +29,7 @@ class GetQueryParamsCest
     {
         $I->wantToTest('Http\Message\ServerRequest - getQueryParams()');
         $params  = ['one' => 'two'];
-        $request = new ServerRequest('GET', null, [], 'php://input', [], [], $params);
+        $request = new ServerRequest('GET', null, [], Http::STREAM, [], [], $params);
 
         $expected = $params;
         $actual   = $request->getQueryParams();

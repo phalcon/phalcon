@@ -13,6 +13,7 @@ declare(strict_types=1);
 
 namespace Phalcon\Tests\Unit\Http\Message\ServerRequest;
 
+use Page\Http;
 use Phalcon\Http\Message\ServerRequest;
 use UnitTester;
 
@@ -28,7 +29,7 @@ class GetCookieParamsCest
     {
         $I->wantToTest('Http\Message\ServerRequest - getCookieParams()');
         $cookies = ['one' => 'two'];
-        $request = new ServerRequest('GET', null, [], 'php://input', [], $cookies);
+        $request = new ServerRequest('GET', null, [], Http::STREAM, [], $cookies);
 
         $expected = $cookies;
         $actual   = $request->getCookieParams();

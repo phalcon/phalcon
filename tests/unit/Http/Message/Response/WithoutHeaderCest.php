@@ -13,6 +13,7 @@ declare(strict_types=1);
 
 namespace Phalcon\Tests\Unit\Http\Message\Response;
 
+use Page\Http;
 use Phalcon\Http\Message\Response;
 use UnitTester;
 
@@ -28,16 +29,16 @@ class WithoutHeaderCest
     {
         $I->wantToTest('Http\Message\Response - withoutHeader()');
         $data        = [
-            'Accept'        => ['text/html'],
+            'Accept'        => [Http::HEADERS_CONTENT_TYPE_HTML],
             'Cache-Control' => ['max-age=0'],
         ];
-        $response    = new Response('php://memory', 200, $data);
+        $response    = new Response(Http::STREAM_MEMORY, 200, $data);
         $newInstance = $response->withoutHeader('Accept');
 
         $I->assertNotSame($response, $newInstance);
 
         $expected = [
-            'Accept'        => ['text/html'],
+            'Accept'        => [Http::HEADERS_CONTENT_TYPE_HTML],
             'Cache-Control' => ['max-age=0'],
         ];
         $actual   = $response->getHeaders();

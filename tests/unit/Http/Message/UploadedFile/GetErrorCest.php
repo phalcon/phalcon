@@ -13,6 +13,7 @@ declare(strict_types=1);
 
 namespace Phalcon\Tests\Unit\Http\Message\UploadedFile;
 
+use Page\Http;
 use Phalcon\Http\Message\UploadedFile;
 use UnitTester;
 
@@ -27,7 +28,7 @@ class GetErrorCest
     public function httpMessageUploadedFileGetError(UnitTester $I)
     {
         $I->wantToTest('Http\Message\UploadedFile - getError()');
-        $file = new UploadedFile('php://memory', 100);
+        $file = new UploadedFile(Http::STREAM_MEMORY, 100);
 
         $expected = UPLOAD_ERR_OK;
         $actual   = $file->getError();

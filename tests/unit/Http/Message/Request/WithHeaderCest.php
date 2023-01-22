@@ -13,6 +13,7 @@ declare(strict_types=1);
 
 namespace Phalcon\Tests\Unit\Http\Message\Request;
 
+use Page\Http;
 use Codeception\Example;
 use Phalcon\Http\Message\Exception\InvalidArgumentException;
 use Phalcon\Http\Message\Request;
@@ -31,10 +32,10 @@ class WithHeaderCest
         $I->wantToTest('Http\Message\Request - withHeader()');
 
         $data = [
-            'Accept' => ['text/html'],
+            'Accept' => [Http::HEADERS_CONTENT_TYPE_HTML],
         ];
 
-        $request = new Request('GET', null, 'php://memory', $data);
+        $request = new Request('GET', null, Http::STREAM_MEMORY, $data);
 
         $newInstance = $request->withHeader(
             'Cache-Control',
@@ -46,7 +47,7 @@ class WithHeaderCest
         $I->assertNotSame($request, $newInstance);
 
         $expected = [
-            'Accept' => ['text/html'],
+            'Accept' => [Http::HEADERS_CONTENT_TYPE_HTML],
         ];
 
         $I->assertSame(
@@ -55,7 +56,7 @@ class WithHeaderCest
         );
 
         $expected = [
-            'Accept'        => ['text/html'],
+            'Accept'        => [Http::HEADERS_CONTENT_TYPE_HTML],
             'Cache-Control' => ['max-age=0'],
         ];
 

@@ -13,6 +13,7 @@ declare(strict_types=1);
 
 namespace Phalcon\Tests\Unit\Http\Message\Request;
 
+use Page\Http;
 use Phalcon\Http\Message\Exception\InvalidArgumentException;
 use Phalcon\Http\Message\Request;
 use UnitTester;
@@ -30,10 +31,10 @@ class WithAddedHeaderCest
         $I->wantToTest('Http\Message\Request - withAddedHeader()');
 
         $data = [
-            'Accept' => ['text/html'],
+            'Accept' => [Http::HEADERS_CONTENT_TYPE_HTML],
         ];
 
-        $request = new Request('GET', null, 'php://memory', $data);
+        $request = new Request('GET', null, Http::STREAM_MEMORY, $data);
 
         $newInstance = $request->withAddedHeader(
             'Cache-Control',
@@ -45,7 +46,7 @@ class WithAddedHeaderCest
         $I->assertNotSame($request, $newInstance);
 
         $expected = [
-            'Accept' => ['text/html'],
+            'Accept' => [Http::HEADERS_CONTENT_TYPE_HTML],
         ];
 
         $I->assertSame(
@@ -54,7 +55,7 @@ class WithAddedHeaderCest
         );
 
         $expected = [
-            'Accept'        => ['text/html'],
+            'Accept'        => [Http::HEADERS_CONTENT_TYPE_HTML],
             'Cache-Control' => ['max-age=0'],
         ];
 
@@ -75,10 +76,10 @@ class WithAddedHeaderCest
         $I->wantToTest('Http\Message\Request - withAddedHeader() - string value');
 
         $data = [
-            'Accept' => ['text/html'],
+            'Accept' => [Http::HEADERS_CONTENT_TYPE_HTML],
         ];
 
-        $request = new Request('GET', null, 'php://memory', $data);
+        $request = new Request('GET', null, Http::STREAM_MEMORY, $data);
 
         $newInstance = $request->withAddedHeader(
             'Cache-Control',
@@ -88,7 +89,7 @@ class WithAddedHeaderCest
         $I->assertNotSame($request, $newInstance);
 
         $expected = [
-            'Accept'        => ['text/html'],
+            'Accept'        => [Http::HEADERS_CONTENT_TYPE_HTML],
             'Cache-Control' => ['max-age=0'],
         ];
 
@@ -133,10 +134,10 @@ class WithAddedHeaderCest
     public function httpMessageRequestWithAddedHeaderMerge(UnitTester $I)
     {
         $data = [
-            'Accept' => ['text/html'],
+            'Accept' => [Http::HEADERS_CONTENT_TYPE_HTML],
         ];
 
-        $request = new Request('GET', null, 'php://input', $data);
+        $request = new Request('GET', null, Http::STREAM, $data);
 
         $newInstance = $request->withAddedHeader(
             'Accept',
@@ -149,7 +150,7 @@ class WithAddedHeaderCest
 
         $expected = [
             'Accept' => [
-                'text/html',
+                Http::HEADERS_CONTENT_TYPE_HTML,
             ],
         ];
 
@@ -160,7 +161,7 @@ class WithAddedHeaderCest
 
         $expected = [
             'Accept' => [
-                'text/html',
+                Http::HEADERS_CONTENT_TYPE_HTML,
                 'text/json',
             ],
         ];

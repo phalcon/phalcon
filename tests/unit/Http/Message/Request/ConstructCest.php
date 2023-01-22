@@ -13,6 +13,7 @@ declare(strict_types=1);
 
 namespace Phalcon\Tests\Unit\Http\Message\Request;
 
+use Page\Http;
 use Phalcon\Http\Message\Exception\InvalidArgumentException;
 use Phalcon\Http\Message\Interfaces\RequestInterface;
 use Phalcon\Http\Message\Request;
@@ -94,7 +95,7 @@ class ConstructCest
                 $request = new Request(
                     'GET',
                     '',
-                    'php://memory',
+                    Http::STREAM_MEMORY,
                     false
                 );
             }
@@ -114,17 +115,17 @@ class ConstructCest
         $request = new Request(
             'GET',
             'https://dev.phalcon.ld:8080/action',
-            'php://memory',
+            Http::STREAM_MEMORY,
             [
                 'Host'          => ['test.phalcon.ld'],
-                'Accept'        => ['text/html'],
+                'Accept'        => [Http::HEADERS_CONTENT_TYPE_HTML],
                 'Cache-Control' => ['max-age=0'],
             ]
         );
 
         $expected = [
             'Host'          => ['dev.phalcon.ld:8080'],
-            'Accept'        => ['text/html'],
+            'Accept'        => [Http::HEADERS_CONTENT_TYPE_HTML],
             'Cache-Control' => ['max-age=0'],
         ];
         $actual   = $request->getHeaders();
