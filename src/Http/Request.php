@@ -1407,8 +1407,8 @@ class Request extends AbstractInjectionAware implements EventsAwareInterface,
         }
 
         foreach ($files as $file) {
-            if (isset($file["error"])) {
-                $error = $file["error"];
+            if (isset($file['error'])) {
+                $error = $file['error'];
 
                 if (
                     true !== is_array($error) &&
@@ -1939,7 +1939,7 @@ class Request extends AbstractInjectionAware implements EventsAwareInterface,
 
             if (
                 is_string($contentType) &&
-                false !== stripos($contentType, "json")
+                false !== stripos($contentType, 'json')
             ) {
                 $cached = $this->getJsonRawBody(true);
                 $cached = true !== is_array($cached) ? [] : $cached;
