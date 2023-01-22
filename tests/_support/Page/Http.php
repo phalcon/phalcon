@@ -36,7 +36,9 @@ class Http
     public const REQUEST_METHOD_TRACE = 'TRACE';
 
     public const STREAM = 'php://input';
+    public const STREAM_MEMORY = 'php://memory';
     public const STREAM_NAME = 'php';
+    public const STREAM_TEMP = 'php://temp';
 
     public const TEST_DOMAIN = 'phalcon.io';
     public const TEST_IP_IPV6 = '2a00:8640:1::224:36ff:feef:1d89';
