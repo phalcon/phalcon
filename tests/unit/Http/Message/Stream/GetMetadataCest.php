@@ -13,6 +13,7 @@ declare(strict_types=1);
 
 namespace Phalcon\Tests\Unit\Http\Message\Stream;
 
+use Page\Http;
 use Codeception\Example;
 use Phalcon\Http\Message\Stream;
 use Phalcon\Tests\Fixtures\Http\Message\StreamFixture;
@@ -77,7 +78,7 @@ class GetMetadataCest
     public function httpMessageStreamGetMetadataInvalidHandle(UnitTester $I)
     {
         $I->wantToTest('Http\Message\Stream - getMetadata() - invalid handle');
-        $stream = new StreamFixture('php://memory', 'rb');
+        $stream = new StreamFixture(Http::STREAM_MEMORY, 'rb');
         $stream->setHandle(null);
 
         $actual = $stream->getMetadata();

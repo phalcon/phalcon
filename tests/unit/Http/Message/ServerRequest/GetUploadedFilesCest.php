@@ -13,6 +13,7 @@ declare(strict_types=1);
 
 namespace Phalcon\Tests\Unit\Http\Message\ServerRequest;
 
+use Page\Http;
 use InvalidArgumentException;
 use Phalcon\Http\Message\ServerRequest;
 use Phalcon\Http\Message\UploadedFile;
@@ -30,14 +31,14 @@ class GetUploadedFilesCest
     {
         $I->wantToTest('Http\Message\ServerRequest - getUploadedFiles()');
         $files   = [
-            new UploadedFile('php://memory', 0),
-            new UploadedFile('php://memory', 0),
+            new UploadedFile(Http::STREAM_MEMORY, 0),
+            new UploadedFile(Http::STREAM_MEMORY, 0),
         ];
         $request = new ServerRequest(
             'GET',
             null,
             [],
-            'php://input',
+            Http::STREAM,
             [],
             [],
             [],
@@ -84,7 +85,7 @@ class GetUploadedFilesCest
                     'GET',
                     null,
                     [],
-                    'php://input',
+                    Http::STREAM,
                     [],
                     [],
                     [],

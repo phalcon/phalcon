@@ -13,6 +13,7 @@ declare(strict_types=1);
 
 namespace Phalcon\Tests\Unit\Http\Message\ServerRequest;
 
+use Page\Http;
 use Phalcon\Http\Message\ServerRequest;
 use UnitTester;
 
@@ -29,11 +30,11 @@ class HasHeaderCest
         $I->wantToTest('Http\Message\ServerRequest - hasHeader()');
         $data    = [
             'Accept' => [
-                'text/html',
+                Http::HEADERS_CONTENT_TYPE_HTML,
                 'text/json',
             ],
         ];
-        $request = new ServerRequest('GET', null, [], 'php://input', $data);
+        $request = new ServerRequest('GET', null, [], Http::STREAM, $data);
 
         $actual = $request->hasHeader('accept');
         $I->assertTrue($actual);

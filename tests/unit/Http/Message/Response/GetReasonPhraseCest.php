@@ -13,6 +13,7 @@ declare(strict_types=1);
 
 namespace Phalcon\Tests\Unit\Http\Message\Response;
 
+use Page\Http;
 use Phalcon\Http\Message\Response;
 use UnitTester;
 
@@ -46,7 +47,7 @@ class GetReasonPhraseCest
     {
         $I->wantToTest('Http\Message\Response - getReasonPhrase() - other port');
 
-        $response = new Response('php://memory', 420);
+        $response = new Response(Http::STREAM_MEMORY, 420);
 
         $I->assertSame(
             'Method Failure',

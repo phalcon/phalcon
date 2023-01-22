@@ -13,6 +13,7 @@ declare(strict_types=1);
 
 namespace Phalcon\Tests\Unit\Http\Message\ServerRequest;
 
+use Page\Http;
 use Phalcon\Http\Message\Headers;
 use Phalcon\Http\Message\ServerRequest;
 use UnitTester;
@@ -29,13 +30,13 @@ class GetHeadersCest
     {
         $I->wantToTest('Http\Message\ServerRequest - getHeaders()');
         $data    = [
-            'Accept'        => ['text/html'],
+            'Accept'        => [Http::HEADERS_CONTENT_TYPE_HTML],
             'Cache-Control' => ['max-age=0'],
         ];
-        $request = new ServerRequest('GET', null, [], 'php://input', $data);
+        $request = new ServerRequest('GET', null, [], Http::STREAM, $data);
 
         $expected = [
-            'Accept'        => ['text/html'],
+            'Accept'        => [Http::HEADERS_CONTENT_TYPE_HTML],
             'Cache-Control' => ['max-age=0'],
         ];
         $actual   = $request->getHeaders();
@@ -52,14 +53,14 @@ class GetHeadersCest
     {
         $I->wantToTest('Http\Message\ServerRequest - getHeaders() - collection');
         $data    = [
-            'Accept'        => ['text/html'],
+            'Accept'        => [Http::HEADERS_CONTENT_TYPE_HTML],
             'Cache-Control' => ['max-age=0'],
         ];
         $headers = new Headers($data);
-        $request = new ServerRequest('GET', null, [], 'php://input', $headers);
+        $request = new ServerRequest('GET', null, [], Http::STREAM, $headers);
 
         $expected = [
-            'Accept'        => ['text/html'],
+            'Accept'        => [Http::HEADERS_CONTENT_TYPE_HTML],
             'Cache-Control' => ['max-age=0'],
         ];
         $actual   = $request->getHeaders();

@@ -13,6 +13,7 @@ declare(strict_types=1);
 
 namespace Phalcon\Tests\Unit\Http\Message\Request;
 
+use Page\Http;
 use Phalcon\Http\Message\Request;
 use UnitTester;
 
@@ -30,17 +31,17 @@ class GetHeaderCest
 
         $data = [
             'Cache-Control' => ['max-age=0'],
-            'Accept'        => ['text/html'],
+            'Accept'        => [Http::HEADERS_CONTENT_TYPE_HTML],
         ];
 
         $request = new Request(
             'GET',
             null,
-            'php://memory',
+            Http::STREAM_MEMORY,
             $data
         );
 
-        $expected = ['text/html'];
+        $expected = [Http::HEADERS_CONTENT_TYPE_HTML];
 
         $I->assertSame(
             $expected,

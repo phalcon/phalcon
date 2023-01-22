@@ -13,6 +13,7 @@ declare(strict_types=1);
 
 namespace Phalcon\Tests\Unit\Http\Message\Request;
 
+use Page\Http;
 use Phalcon\Http\Message\Request;
 use UnitTester;
 
@@ -30,7 +31,7 @@ class GetHeaderLineCest
 
         $data = [
             'Accept' => [
-                'text/html',
+                Http::HEADERS_CONTENT_TYPE_HTML,
                 'text/json',
             ],
         ];
@@ -38,7 +39,7 @@ class GetHeaderLineCest
         $request = new Request(
             'GET',
             null,
-            'php://memory',
+            Http::STREAM_MEMORY,
             $data
         );
 

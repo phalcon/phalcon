@@ -13,6 +13,7 @@ declare(strict_types=1);
 
 namespace Phalcon\Tests\Unit\Http\Message\Stream;
 
+use Page\Http;
 use Phalcon\Http\Message\Stream;
 use Phalcon\Tests\Fixtures\Http\Message\StreamFixture;
 use UnitTester;
@@ -46,7 +47,7 @@ class GetSizeCest
     public function httpMessageStreamGetSizeInvalid(UnitTester $I)
     {
         $I->wantToTest('Http\Message\Stream - getSize() - invalid');
-        $stream   = new Stream('php://memory', 'rb');
+        $stream   = new Stream(Http::STREAM_MEMORY, 'rb');
         $expected = 0;
         $actual   = $stream->getSize();
         $I->assertSame($expected, $actual);
@@ -61,7 +62,7 @@ class GetSizeCest
     public function httpMessageStreamGetSizeInvalidHandle(UnitTester $I)
     {
         $I->wantToTest('Http\Message\Stream - getSize() - invalid');
-        $stream = new StreamFixture('php://memory', 'rb');
+        $stream = new StreamFixture(Http::STREAM_MEMORY, 'rb');
         $stream->setHandle(null);
 
         $actual = $stream->getSize();

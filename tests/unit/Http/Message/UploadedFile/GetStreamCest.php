@@ -13,6 +13,7 @@ declare(strict_types=1);
 
 namespace Phalcon\Tests\Unit\Http\Message\UploadedFile;
 
+use Page\Http;
 use Phalcon\Http\Message\Exception\RuntimeException;
 use Phalcon\Http\Message\Interfaces\StreamInterface;
 use Phalcon\Http\Message\Stream;
@@ -34,7 +35,7 @@ class GetStreamCest
     public function httpMessageUploadedFileGetStream(UnitTester $I)
     {
         $I->wantToTest('Http\Message\UploadedFile - getStream()');
-        $stream = new Stream('php://memory');
+        $stream = new Stream(Http::STREAM_MEMORY);
         $file   = new UploadedFile(
             $stream,
             0,
@@ -57,7 +58,7 @@ class GetStreamCest
     {
         $I->wantToTest('Http\Message\UploadedFile - getStream() - string');
         $file = new UploadedFile(
-            'php://memory',
+            Http::STREAM_MEMORY,
             0,
             UPLOAD_ERR_OK,
             'phalcon.txt'
@@ -80,7 +81,7 @@ class GetStreamCest
         $I->expectThrowable(
             new RuntimeException('Failed to write file to disk.'),
             function () {
-                $stream = new Stream('php://memory');
+                $stream = new Stream(Http::STREAM_MEMORY);
                 $file   = new UploadedFile(
                     $stream,
                     0,
@@ -109,7 +110,7 @@ class GetStreamCest
                 'The file has already been moved to the target location'
             ),
             function () use ($I) {
-                $stream = new Stream('php://memory', 'w+b');
+                $stream = new Stream(Http::STREAM_MEMORY, 'w+b');
                 $stream->write('Phalcon Framework');
 
                 $file   = new UploadedFile($stream, 0);

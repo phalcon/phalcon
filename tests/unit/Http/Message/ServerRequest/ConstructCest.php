@@ -13,6 +13,7 @@ declare(strict_types=1);
 
 namespace Phalcon\Tests\Unit\Http\Message\ServerRequest;
 
+use Page\Http;
 use Phalcon\Http\Message\Interfaces\ServerRequestInterface;
 use Phalcon\Http\Message\ServerRequest;
 use Phalcon\Http\Message\Uri;
@@ -52,7 +53,7 @@ class ConstructCest
             'GET',
             new Uri(),
             [],
-            'php://input',
+            Http::STREAM,
             [
                 'host' => ['127.0.0.1'],
             ]

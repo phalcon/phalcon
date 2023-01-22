@@ -14,6 +14,7 @@ declare(strict_types=1);
 namespace Phalcon\Tests\Unit\Http\Message\Stream;
 
 use Codeception\Example;
+use Page\Http;
 use Phalcon\Http\Message\Interfaces\StreamInterface;
 use Phalcon\Http\Message\Stream;
 use Phalcon\Http\Message\Stream\Input;
@@ -77,7 +78,7 @@ class ConstructCest
         return [
             [
                 'label'   => 'stream',
-                'request' => new Stream('php://temp'),
+                'request' => new Stream(Http::STREAM_TEMP),
             ],
             [
                 'label'   => 'input',

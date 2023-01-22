@@ -14,11 +14,13 @@ declare(strict_types=1);
 namespace Phalcon\Tests\Unit\Http\Message\ServerRequestFactory;
 
 use Codeception\Example;
+use Page\Http;
 use Phalcon\Http\Message\Exception\InvalidArgumentException;
 use Phalcon\Http\Message\Factories\ServerRequestFactory;
 use Phalcon\Http\Message\Interfaces\ServerRequestInterface;
 use Phalcon\Http\Message\UploadedFile;
 use Phalcon\Tests\Fixtures\Http\Message\ServerRequestFactoryFixture;
+use Phalcon\Tests\Unit\Http\Helper\HttpBase;
 use UnitTester;
 
 /**
@@ -32,57 +34,8 @@ use UnitTester;
  * @property array $storePost
  * @property array $storeServer
  */
-class LoadCest
+class LoadCest extends HttpBase
 {
-    /**
-     * @var array
-     */
-    private array $storeCookie = [];
-
-    /**
-     * @var array
-     */
-    private array $storeFiles = [];
-
-    /**
-     * @var array
-     */
-    private array $storeGet = [];
-
-    /**
-     * @var array
-     */
-    private array $storePost = [];
-
-    /**
-     * @var array
-     */
-    private array $storeServer = [];
-
-    public function _before()
-    {
-        $this->storeCookie = $_COOKIE ?? [];
-        $this->storeFiles  = $_FILES ?? [];
-        $this->storeGet    = $_GET ?? [];
-        $this->storePost   = $_POST ?? [];
-        $this->storeServer = $_SERVER ?? [];
-
-        $_SERVER = [];
-        $_GET    = [];
-        $_POST   = [];
-        $_COOKIE = [];
-        $_FILES  = [];
-    }
-
-    public function _after()
-    {
-        $_COOKIE = $this->storeCookie;
-        $_FILES  = $this->storeFiles;
-        $_GET    = $this->storeGet;
-        $_POST   = $this->storePost;
-        $_SERVER = $this->storeServer;
-    }
-
     /**
      * Tests Phalcon\Http\Message\ServerRequestFactory :: load()
      *
@@ -365,29 +318,29 @@ class LoadCest
         $I->wantToTest('Http\Message\ServerRequestFactory - load() - files');
 
         $uploadObject = new UploadedFile(
-            'php://temp',
+            Http::STREAM_TEMP,
             0,
             0,
             'test2',
-            'text/plain'
+            Http::HEADERS_CONTENT_TYPE_PLAIN
         );
 
         $files = [
             [
-                'tmp_name' => 'php://temp',
+                'tmp_name' => Http::STREAM_TEMP,
                 'size'     => 0,
                 'error'    => 0,
                 'name'     => 'test1',
-                'type'     => 'text/plain',
+                'type'     => Http::HEADERS_CONTENT_TYPE_PLAIN,
             ],
             $uploadObject,
             [
                 [
-                    'tmp_name' => 'php://temp',
+                    'tmp_name' => Http::STREAM_TEMP,
                     'size'     => 0,
                     'error'    => 0,
                     'name'     => 'test3',
-                    'type'     => 'text/plain',
+                    'type'     => Http::HEADERS_CONTENT_TYPE_PLAIN,
                 ],
             ],
         ];
@@ -401,7 +354,7 @@ class LoadCest
         $element = $actual[0];
         $I->assertInstanceOf(UploadedFile::class, $element);
         $I->assertSame('test1', $element->getClientFilename());
-        $I->assertSame('text/plain', $element->getClientMediaType());
+        $I->assertSame(Http::HEADERS_CONTENT_TYPE_PLAIN, $element->getClientMediaType());
 
         /** @var UploadedFile $element */
         $element = $actual[1];
@@ -412,7 +365,7 @@ class LoadCest
         $element = $actual[2][0];
         $I->assertInstanceOf(UploadedFile::class, $element);
         $I->assertSame('test3', $element->getClientFilename());
-        $I->assertSame('text/plain', $element->getClientMediaType());
+        $I->assertSame(Http::HEADERS_CONTENT_TYPE_PLAIN, $element->getClientMediaType());
     }
 
     /**
@@ -436,10 +389,10 @@ class LoadCest
             function () {
                 $files = [
                     [
-                        'tmp_name' => 'php://temp',
+                        'tmp_name' => Http::STREAM_TEMP,
                         'size'     => 0,
                         'name'     => 'test1',
-                        'type'     => 'text/plain',
+                        'type'     => Http::HEADERS_CONTENT_TYPE_PLAIN,
                     ],
                 ];
 
@@ -502,7 +455,7 @@ class LoadCest
 
         $factory = new ServerRequestFactory();
         $request = $factory->load(
-            $example['server'],
+            $example[Http::HEADERS_SERVER],
             $example['get'],
             $example['post'],
             $example['cookies'],
@@ -529,7 +482,7 @@ class LoadCest
 
         // Backup
         $params = [
-            'REQUEST_TIME_FLOAT' => $this->storeServer['REQUEST_TIME_FLOAT'],
+            'REQUEST_TIME_FLOAT' => $this->store['SERVER']['REQUEST_TIME_FLOAT'],
             'REQUEST_METHOD'     => 'PUT',
             'one'                => 'two',
         ];
@@ -571,7 +524,7 @@ class LoadCest
 
         $factory = new ServerRequestFactory();
         $request = $factory->load(
-            $example['server'],
+            $example[Http::HEADERS_SERVER],
             $example['get'],
             $example['post'],
             $example['cookies'],
@@ -596,7 +549,6 @@ class LoadCest
         $factory = new ServerRequestFactory();
 
         $request = $factory->load();
-        $_SERVER = $this->storeServer;
 
         $expected = '1.1';
         $actual   = $request->getProtocolVersion();
@@ -694,15 +646,15 @@ class LoadCest
         return [
             [
                 'label'   => 'empty',
-                'server'  => null,
+                Http::HEADERS_SERVER  => null,
                 'get'     => null,
                 'post'    => null,
                 'cookies' => null,
                 'files'   => null,
             ],
             [
-                'label'   => 'server',
-                'server'  => ['one' => 'two'],
+                'label'   => Http::HEADERS_SERVER,
+                Http::HEADERS_SERVER  => ['one' => 'two'],
                 'get'     => null,
                 'post'    => null,
                 'cookies' => null,
@@ -710,7 +662,7 @@ class LoadCest
             ],
             [
                 'label'   => 'get',
-                'server'  => null,
+                Http::HEADERS_SERVER  => null,
                 'get'     => ['one' => 'two'],
                 'post'    => null,
                 'cookies' => null,
@@ -718,7 +670,7 @@ class LoadCest
             ],
             [
                 'label'   => 'post',
-                'server'  => null,
+                Http::HEADERS_SERVER  => null,
                 'get'     => null,
                 'post'    => ['one' => 'two'],
                 'cookies' => null,
@@ -726,7 +678,7 @@ class LoadCest
             ],
             [
                 'label'   => 'cookie',
-                'server'  => null,
+                Http::HEADERS_SERVER  => null,
                 'get'     => null,
                 'post'    => null,
                 'cookies' => ['one' => 'two'],
@@ -734,7 +686,7 @@ class LoadCest
             ],
             [
                 'label'   => 'files',
-                'server'  => null,
+                Http::HEADERS_SERVER  => null,
                 'get'     => null,
                 'post'    => null,
                 'cookies' => null,

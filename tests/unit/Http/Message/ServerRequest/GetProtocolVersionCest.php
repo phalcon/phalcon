@@ -13,6 +13,7 @@ declare(strict_types=1);
 
 namespace Phalcon\Tests\Unit\Http\Message\ServerRequest;
 
+use Page\Http;
 use Phalcon\Http\Message\ServerRequest;
 use UnitTester;
 
@@ -31,7 +32,7 @@ class GetProtocolVersionCest
 //            'GET',
 //            null,
 //            [],
-//            'php://input',
+//            Http::STREAM,
 //            [],
 //            [],
 //            [],
@@ -78,7 +79,7 @@ class GetProtocolVersionCest
 //                    'GET',
 //                    null,
 //                    [],
-//                    'php://input',
+//                    Http::STREAM,
 //                    [],
 //                    [],
 //                    [],

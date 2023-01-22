@@ -13,6 +13,7 @@ declare(strict_types=1);
 
 namespace Phalcon\Tests\Unit\Http\Message\ServerRequest;
 
+use Page\Http;
 use Phalcon\Http\Message\ServerRequest;
 use UnitTester;
 
@@ -29,11 +30,11 @@ class GetHeaderLineCest
         $I->wantToTest('Http\Message\ServerRequest - getHeaderLine()');
         $data    = [
             'Accept' => [
-                'text/html',
+                Http::HEADERS_CONTENT_TYPE_HTML,
                 'text/json',
             ],
         ];
-        $request = new ServerRequest('GET', null, [], 'php://input', $data);
+        $request = new ServerRequest('GET', null, [], Http::STREAM, $data);
 
         $expected = 'text/html,text/json';
         $actual   = $request->getHeaderLine('accept');
