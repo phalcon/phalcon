@@ -33,16 +33,14 @@ class GetHttpHostCest extends HttpBase
     {
         $I->wantToTest('Http\Request - getHttpHost()');
 
-        $store   = $_SERVER ?? [];
-        $_SERVER = $example[0];
+        $_SERVER = array_merge($_SERVER, $example[0]);
 
         $request = new Request();
 
         foreach ($example[1] as $expected) {
-            $I->assertSame($expected, $request->getHttpHost());
+            $actual = $request->getHttpHost();
+            $I->assertSame($expected, $actual);
         }
-
-        $_SERVER = $store;
     }
 
     /**
@@ -53,15 +51,16 @@ class GetHttpHostCest extends HttpBase
      *
      * @dataProvider testInvalidHttpRequestHttpHostProvider
      */
-    public function testInvalidHttpRequestHttpHost(UnitTester $I, Example $example)
-    {
+    public function testInvalidHttpRequestHttpHost(
+        UnitTester $I,
+        Example $example
+    ) {
         $host = $example[0];
 
+        $_SERVER['HTTP_HOST'] = $host;
+
         $request = $this->getRequestObject();
-
-        $request->setStrictHostCheck(true);
-
-        $this->setServerVar('HTTP_HOST', $host);
+        $request->setStrictHostCheck();
 
         $I->expectThrowable(
             new UnexpectedValueException('Invalid host ' . $host),
@@ -71,6 +70,9 @@ class GetHttpHostCest extends HttpBase
         );
     }
 
+    /**
+     * @return array[]
+     */
     private function getExamples(): array
     {
         return [

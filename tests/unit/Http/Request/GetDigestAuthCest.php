@@ -14,9 +14,10 @@ declare(strict_types=1);
 namespace Phalcon\Tests\Unit\Http\Request;
 
 use Phalcon\Http\Request;
+use Phalcon\Tests\Unit\Http\Helper\HttpBase;
 use UnitTester;
 
-class GetDigestAuthCest
+class GetDigestAuthCest extends HttpBase
 {
     /**
      * Tests Phalcon\Http\Request :: getDigestAuth()
@@ -28,13 +29,8 @@ class GetDigestAuthCest
     {
         $I->wantToTest('Http\Request - getDigestAuth()');
 
-        $store   = $_SERVER ?? [];
-        $time    = $_SERVER['REQUEST_TIME_FLOAT'];
-        $_SERVER = [
-            'REQUEST_TIME_FLOAT' => $time,
-            'PHP_AUTH_DIGEST'    => 'Digest realm="phalcon.io",'
-                . 'qop="auth",nonce="abcdef",opaque="123456789"',
-        ];
+        $_SERVER['PHP_AUTH_DIGEST'] = 'Digest realm="phalcon.io",'
+            . 'qop="auth",nonce="abcdef",opaque="123456789"';
 
         $request = new Request();
 
@@ -46,7 +42,5 @@ class GetDigestAuthCest
         ];
         $actual   = $request->getDigestAuth();
         $I->assertSame($expected, $actual);
-
-        $_SERVER = $store;
     }
 }

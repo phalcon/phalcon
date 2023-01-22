@@ -13,10 +13,12 @@ declare(strict_types=1);
 
 namespace Phalcon\Tests\Unit\Http\Request;
 
+use Page\Http;
 use Phalcon\Http\Request;
+use Phalcon\Tests\Unit\Http\Helper\HttpBase;
 use UnitTester;
 
-class GetBestAcceptCest
+class GetBestAcceptCest extends HttpBase
 {
     /**
      * Tests Phalcon\Http\Request :: getBestAccept()
@@ -28,23 +30,16 @@ class GetBestAcceptCest
     {
         $I->wantToTest('Http\Request - getBestAccept()');
 
-        $store   = $_SERVER ?? [];
-        $time    = $_SERVER['REQUEST_TIME_FLOAT'];
-        $_SERVER = [
-            'REQUEST_TIME_FLOAT' => $time,
-            'HTTP_ACCEPT'        => 'text/html,'
-                . 'application/xhtml+xml,application/xml;q=0.9,'
-                . 'image/webp,image/apng,'
-                . 'language'
-                . '*/*;q=0.8',
-        ];
+        $_SERVER['HTTP_ACCEPT'] = 'text/html,'
+            . 'application/xhtml+xml,application/xml;q=0.9,'
+            . 'image/webp,image/apng,'
+            . 'language'
+            . '*/*;q=0.8';
 
         $request = new Request();
 
-        $expected = 'text/html';
+        $expected = Http::HEADERS_CONTENT_TYPE_HTML;
         $actual   = $request->getBestAccept();
         $I->assertSame($expected, $actual);
-
-        $_SERVER = $store;
     }
 }

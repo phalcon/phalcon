@@ -13,10 +13,12 @@ declare(strict_types=1);
 
 namespace Phalcon\Tests\Unit\Http\Request;
 
+use Page\Http;
 use Phalcon\Http\Request;
+use Phalcon\Tests\Unit\Http\Helper\HttpBase;
 use UnitTester;
 
-class IsMethodCest
+class IsMethodCest extends HttpBase
 {
     /**
      * Tests Phalcon\Http\Request :: isMethod()
@@ -28,21 +30,34 @@ class IsMethodCest
     {
         $I->wantToTest('Http\Request - isMethod()');
 
-        $store   = $_SERVER ?? [];
-        $_SERVER = [
-            'REQUEST_METHOD' => 'POST',
-        ];
+        $_SERVER['REQUEST_METHOD'] = Http::REQUEST_METHOD_POST;
 
-        $request = new Request();
+        $request = $this->getRequestObject();
 
-        $I->assertTrue($request->isMethod('POST'));
-        $I->assertTrue($request->isMethod(['GET', 'POST']));
+        $actual = $request->isMethod(Http::REQUEST_METHOD_POST);
+        $I->assertTrue($actual);
 
-        $_SERVER['REQUEST_METHOD'] = 'GET';
+        $actual = $request->isMethod(
+            [
+                Http::REQUEST_METHOD_GET,
+                Http::REQUEST_METHOD_POST,
+            ]
+        );
+        $I->assertTrue($actual);
 
-        $I->assertTrue($request->isMethod('GET'));
-        $I->assertTrue($request->isMethod(['GET', 'POST']));
 
-        $_SERVER = $store;
+        $_SERVER['REQUEST_METHOD'] = Http::REQUEST_METHOD_GET;
+
+        $actual = $request->isMethod(Http::REQUEST_METHOD_GET);
+        $I->assertTrue($actual);
+
+        $actual = $request->isMethod(
+            [
+                Http::REQUEST_METHOD_GET,
+                Http::REQUEST_METHOD_POST,
+            ]
+        );
+        $I->assertTrue($actual);
+
     }
 }

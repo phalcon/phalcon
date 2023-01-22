@@ -13,19 +13,17 @@ declare(strict_types=1);
 
 namespace Phalcon\Tests\Unit\Http\Request;
 
+use Page\Http;
 use Phalcon\Http\Request;
-use Phalcon\Tests\Fixtures\Http\PhpStream;
+use Phalcon\Tests\Unit\Http\Helper\HttpBase;
 use UnitTester;
 
 use function file_get_contents;
 use function file_put_contents;
 use function json_decode;
 use function parse_str;
-use function stream_wrapper_register;
-use function stream_wrapper_restore;
-use function stream_wrapper_unregister;
 
-class GetPutCest
+class GetPutCest extends HttpBase
 {
     /**
      * Tests Phalcon\Http\Request :: getPut()
@@ -38,43 +36,39 @@ class GetPutCest
     {
         $I->wantToTest('Http\Request - getPut()');
 
-        stream_wrapper_unregister('php');
-        stream_wrapper_register('php', PhpStream::class);
+        $this->registerStream();
 
-        file_put_contents('php://input', 'fruit=orange&quantity=4');
+        file_put_contents(Http::STREAM, 'fruit=orange&quantity=4');
 
-        $store   = $_SERVER ?? [];
-        $time    = $_SERVER['REQUEST_TIME_FLOAT'];
-        $_SERVER = [
-            'REQUEST_TIME_FLOAT' => $time,
-            'REQUEST_METHOD'     => 'PUT',
-        ];
+        $_SERVER['REQUEST_METHOD'] = Http::REQUEST_METHOD_PUT;
 
-        $request = new Request();
+        $request = $this->getRequestObject();
 
-        $I->assertTrue($request->hasPut('fruit'));
-        $I->assertTrue($request->hasPut('quantity'));
-        $I->assertFalse($request->hasPut('unknown'));
+        $actual = $request->hasPut('fruit');
+        $I->assertTrue($actual);
 
-        $data = file_get_contents('php://input');
+        $actual = $request->hasPut('quantity');
+        $I->assertTrue($actual);
+
+        $actual = $request->hasPut('unknown');
+        $I->assertFalse($actual);
+
+        $data = file_get_contents(Http::STREAM);
 
         $expected = [
             'fruit'    => 'orange',
             'quantity' => '4',
         ];
 
+        $actual = [];
         parse_str($data, $actual);
 
         $I->assertSame($expected, $actual);
 
-        $I->assertSame(
-            $expected,
-            $request->getPut()
-        );
+        $actual = $request->getPut();
+        $I->assertSame($expected, $actual);
 
-        stream_wrapper_restore('php');
-
-        $_SERVER = $store;
+        $this->unregisterStream();
     }
 
     /**
@@ -88,23 +82,17 @@ class GetPutCest
     {
         $I->wantToTest('Http\Request - getPut() - json');
 
-        stream_wrapper_unregister('php');
-        stream_wrapper_register('php', PhpStream::class);
+        $this->registerStream();
 
         file_put_contents(
-            'php://input',
+            Http::STREAM,
             '{"fruit": "orange", "quantity": "4"}'
         );
 
-        $store   = $_SERVER ?? [];
-        $time    = $_SERVER['REQUEST_TIME_FLOAT'];
-        $_SERVER = [
-            'REQUEST_TIME_FLOAT' => $time,
-            'REQUEST_METHOD'     => 'PUT',
-            'CONTENT_TYPE'       => 'application/json',
-        ];
+        $_SERVER['REQUEST_METHOD'] = Http::REQUEST_METHOD_PUT;
+        $_SERVER['CONTENT_TYPE']   = Http::HEADERS_CONTENT_TYPE_JSON;
 
-        $request = new Request();
+        $request = $this->getRequestObject();
 
         $expected = [
             'fruit'    => 'orange',
@@ -112,19 +100,15 @@ class GetPutCest
         ];
 
         $actual = json_decode(
-            file_get_contents('php://input'),
+            file_get_contents(Http::STREAM),
             true
         );
 
         $I->assertSame($expected, $actual);
 
-        $I->assertSame(
-            $expected,
-            $request->getPut()
-        );
+        $actual = $request->getPut();
+        $I->assertSame($expected, $actual);
 
-        stream_wrapper_restore('php');
-
-        $_SERVER = $store;
+        $this->unregisterStream();
     }
 }

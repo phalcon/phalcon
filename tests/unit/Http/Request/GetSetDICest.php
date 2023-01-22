@@ -28,13 +28,13 @@ class GetSetDICest
     public function httpRequestGetDI(UnitTester $I)
     {
         $I->wantToTest('Http\Request - getDI()');
-        $url       = new Request();
+        $request   = new Request();
         $container = new Di();
 
-        $url->setDI($container);
+        $request->setDI($container);
 
         $class  = Di::class;
-        $actual = $url->getDI();
+        $actual = $request->getDI();
         $I->assertInstanceOf($class, $actual);
 
         $expected = $container;

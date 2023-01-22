@@ -15,13 +15,14 @@ namespace Phalcon\Tests\Unit\Http\Request;
 
 use Phalcon\Http\Request;
 use Phalcon\Storage\Exception;
-use Phalcon\Tests\Fixtures\Traits\DiTrait;
+use Phalcon\Tests\Unit\Http\Helper\HttpBase;
 use UnitTester;
 
-class GetPostCest //extends HttpBase
-{
-    use DiTrait;
+use function strtolower;
+use function uniqid;
 
+class GetPostCest extends HttpBase
+{
     /**
      * Tests Phalcon\Http\Request :: getPost()
      *
@@ -32,18 +33,23 @@ class GetPostCest //extends HttpBase
     {
         $I->wantToTest('Http\Request - getPost()');
 
-        $store = $_POST ?? [];
-        $_POST = [
-            'one' => 'two',
-        ];
+        $key     = uniqid('key-');
+        $value   = uniqid('val-');
+        $unknown = uniqid('unknown-');
 
-        $request = new Request();
+        $_POST[$key] = $value;
 
-        $I->assertTrue($request->hasPost('one'));
-        $I->assertFalse($request->hasPost('unknown'));
-        $I->assertSame('two', $request->getPost('one'));
+        $request = $this->getRequestObject();
 
-        $_POST = $store;
+        $actual = $request->hasPost($key);
+        $I->assertTrue($actual);
+
+        $actual = $request->hasPost($unknown);
+        $I->assertFalse($actual);
+
+        $expected = $value;
+        $actual   = $request->getPost($key);
+        $I->assertSame($expected, $actual);
     }
 
     /**
@@ -57,23 +63,20 @@ class GetPostCest //extends HttpBase
     {
         $I->wantToTest('Http\Request - getPost() - filter');
 
-        $this->setNewFactoryDefault();
+        $key = uniqid('key-');
+        $value = uniqid('VAL-');
 
-        $store = $_POST ?? [];
+        $_POST[$key] = '  ' . $value . '  ';
 
-        $_POST['status'] = ' Active ';
-        $request         = new Request();
-        $request->setDI($this->container);
+        $request = $this->getRequestObject();
 
-        $expected = 'Active';
-        $actual   = $request->getPost('status', 'trim');
+        $expected = $value;
+        $actual   = $request->getPost($key, 'trim');
         $I->assertSame($expected, $actual);
 
-        $expected = 'active';
-        $actual   = $request->getPost('status', ['trim', 'lower']);
+        $expected = strtolower($value);
+        $actual   = $request->getPost($key, ['trim', 'lower']);
         $I->assertSame($expected, $actual);
-
-        $_POST = $store;
     }
 
     /**
@@ -87,18 +90,14 @@ class GetPostCest //extends HttpBase
     {
         $I->wantToTest('Http\Request - getPost() - default');
 
-        $this->setNewFactoryDefault();
+        $unknown = uniqid('unknown-');
+        $default = uniqid('def-');
 
-        $store = $_POST ?? [];
+        $request = $this->getRequestObject();
 
-        $request = new Request();
-        $request->setDI($this->container);
-
-        $expected = 'default';
-        $actual   = $request->getPost('status', null, 'default');
+        $expected = $default;
+        $actual   = $request->getPost($unknown, null, $default);
         $I->assertSame($expected, $actual);
-
-        $_POST = $store;
     }
 
     /**
@@ -112,18 +111,20 @@ class GetPostCest //extends HttpBase
     {
         $I->wantToTest('Http\Request - getPost() - allowNoEmpty');
 
-        $this->setNewFactoryDefault();
+        $key   = uniqid('key-');
+        $value = '0';
 
-        $store = $_POST ?? [];
+        $_POST[$key] = '  ' . $value . '  ';
 
-        $_POST['status'] = ' 0 ';
-        $request         = new Request();
-        $request->setDI($this->container);
+        $request = $this->getRequestObject();
 
-        $expected = '0';
-        $actual   = $request->getPost('status', 'trim', 'zero value', true);
+        $expected = $value;
+        $actual   = $request->getPost(
+            $key,
+            'trim',
+            'zero value',
+            true
+        );
         $I->assertSame($expected, $actual);
-
-        $_POST = $store;
     }
 }

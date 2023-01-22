@@ -13,6 +13,7 @@ declare(strict_types=1);
 
 namespace Phalcon\Tests\Unit\Http\Request;
 
+use Page\Http;
 use Phalcon\Tests\Unit\Http\Helper\HttpBase;
 use UnitTester;
 
@@ -26,29 +27,22 @@ class HasFilesCest extends HttpBase
      */
     public function testRequestHasFiles(UnitTester $I)
     {
-        $store = $_FILES ?? [];
-
         $request = $this->getRequestObject();
-        $_FILES  = [];
 
-        $I->assertFalse(
-            $request->hasFiles()
-        );
+        $actual = $request->hasFiles();
+        $I->assertFalse($actual);
 
         $_FILES = [
             'test' => [
                 'name'     => 'name',
-                'type'     => 'text/plain',
+                'type'     => Http::HEADERS_CONTENT_TYPE_PLAIN,
                 'size'     => 1,
                 'tmp_name' => 'tmp_name',
                 'error'    => 0,
             ],
         ];
 
-        $I->assertTrue(
-            $request->hasFiles()
-        );
-
-        $_FILES = $store;
+        $actual = $request->hasFiles();
+        $I->assertTrue($actual);
     }
 }

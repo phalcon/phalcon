@@ -14,9 +14,12 @@ declare(strict_types=1);
 namespace Phalcon\Tests\Unit\Http\Request;
 
 use Phalcon\Http\Request;
+use Phalcon\Tests\Unit\Http\Helper\HttpBase;
 use UnitTester;
 
-class GetServerCest
+use function uniqid;
+
+class GetServerCest extends HttpBase
 {
     /**
      * Tests Phalcon\Http\Request :: getServer()
@@ -28,17 +31,21 @@ class GetServerCest
     {
         $I->wantToTest('Http\Request - getServer()');
 
-        $store   = $_SERVER ?? [];
-        $_SERVER = [
-            'one' => 'two',
-        ];
+        $key = uniqid('key-');
+        $value = uniqid('val-');
+        $unknown = uniqid('unk-');
+        $_SERVER[$key] = $value;
 
-        $request = new Request();
+        $request = $this->getRequestObject();
 
-        $I->assertTrue($request->hasServer('one'));
-        $I->assertFalse($request->hasServer('unknown'));
-        $I->assertSame('two', $request->getServer('one'));
+        $actual = $request->hasServer($key);
+        $I->assertTrue($actual);
 
-        $_SERVER = $store;
+        $actual = $request->hasServer($unknown);
+        $I->assertFalse($actual);
+
+        $expected = $value;
+        $actual = $request->getServer($key);
+        $I->assertSame($expected, $actual);
     }
 }

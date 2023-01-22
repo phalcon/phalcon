@@ -13,10 +13,12 @@ declare(strict_types=1);
 
 namespace Phalcon\Tests\Unit\Http\Request;
 
+use Page\Http;
 use Phalcon\Http\Request;
+use Phalcon\Tests\Unit\Http\Helper\HttpBase;
 use UnitTester;
 
-class GetClientAddressCest
+class GetClientAddressCest extends HttpBase
 {
     /**
      * Tests Phalcon\Http\Request :: getClientAddress() - trustForwardedHeader
@@ -24,38 +26,42 @@ class GetClientAddressCest
      * @author Phalcon Team <team@phalcon.io>
      * @since  2020-03-17
      */
-    public function httpRequestGetClientAddressTrustForwardedHeader(UnitTester $I)
-    {
-        $I->wantToTest('Http\Request - getClientAddress() - trustForwardedHeader');
+    public function httpRequestGetClientAddressTrustForwardedHeader(
+        UnitTester $I
+    ) {
+        $I->wantToTest(
+            'Http\Request - getClientAddress() - trustForwardedHeader'
+        );
 
-        $store   = $_SERVER ?? [];
-        $time    = $_SERVER['REQUEST_TIME_FLOAT'];
-        $_SERVER = [
-            'REQUEST_TIME_FLOAT'   => $time,
-            'HTTP_X_FORWARDED_FOR' => '10.4.6.1',
-        ];
+        $_SERVER['HTTP_X_FORWARDED_FOR'] = Http::TEST_IP_ONE;
 
         $request = new Request();
 
-        $expected = '10.4.6.1';
+        $expected = Http::TEST_IP_ONE;
         $actual   = $request->getClientAddress(true);
         $I->assertSame($expected, $actual);
+    }
 
-        $_SERVER = $store;
-        $store   = $_SERVER ?? [];
-        $time    = $_SERVER['REQUEST_TIME_FLOAT'];
-        $_SERVER = [
-            'REQUEST_TIME_FLOAT' => $time,
-            'HTTP_CLIENT_IP'     => '10.4.6.2',
-        ];
+    /**
+     * Tests Phalcon\Http\Request :: getClientAddress() - trustForwardedHeader - client IP
+     *
+     * @author Phalcon Team <team@phalcon.io>
+     * @since  2020-03-17
+     */
+    public function httpRequestGetClientAddressTrustForwardedHeaderClientIp(
+        UnitTester $I
+    ) {
+        $I->wantToTest(
+            'Http\Request - getClientAddress() - trustForwardedHeader - client IP'
+        );
+
+        $_SERVER['HTTP_CLIENT_IP'] = Http::TEST_IP_TWO;
 
         $request = new Request();
 
-        $expected = '10.4.6.2';
+        $expected = Http::TEST_IP_TWO;
         $actual   = $request->getClientAddress(true);
         $I->assertSame($expected, $actual);
-
-        $_SERVER = $store;
     }
 
     /**
@@ -68,20 +74,13 @@ class GetClientAddressCest
     {
         $I->wantToTest('Http\Request - getClientAddress()');
 
-        $store   = $_SERVER ?? [];
-        $time    = $_SERVER['REQUEST_TIME_FLOAT'];
-        $_SERVER = [
-            'REQUEST_TIME_FLOAT' => $time,
-            'REMOTE_ADDR'        => '10.4.6.3',
-        ];
+        $_SERVER['REMOTE_ADDR'] = Http::TEST_IP_THREE;
 
         $request = new Request();
 
-        $expected = '10.4.6.3';
+        $expected = Http::TEST_IP_THREE;
         $actual   = $request->getClientAddress();
         $I->assertSame($expected, $actual);
-
-        $_SERVER = $store;
     }
 
     /**
@@ -94,19 +93,12 @@ class GetClientAddressCest
     {
         $I->wantToTest('Http\Request - getClientAddress() - incorrect');
 
-        $store   = $_SERVER ?? [];
-        $time    = $_SERVER['REQUEST_TIME_FLOAT'];
-        $_SERVER = [
-            'REQUEST_TIME_FLOAT' => $time,
-            'REMOTE_ADDR'        => ['10.4.6.3'],
-        ];
+        $_SERVER['REMOTE_ADDR'] = [Http::TEST_IP_THREE];
 
         $request = new Request();
 
         $actual = $request->getClientAddress();
         $I->assertFalse($actual);
-
-        $_SERVER = $store;
     }
 
     /**
@@ -119,20 +111,13 @@ class GetClientAddressCest
     {
         $I->wantToTest('Http\Request - getClientAddress() - multiple');
 
-        $store   = $_SERVER ?? [];
-        $time    = $_SERVER['REQUEST_TIME_FLOAT'];
-        $_SERVER = [
-            'REQUEST_TIME_FLOAT' => $time,
-            'REMOTE_ADDR'        => '10.4.6.4,10.4.6.5',
-        ];
+        $_SERVER['REMOTE_ADDR'] = Http::TEST_IP_MULTI;
 
         $request = new Request();
 
         $expected = '10.4.6.4';
         $actual   = $request->getClientAddress();
         $I->assertSame($expected, $actual);
-
-        $_SERVER = $store;
     }
 
     /**
@@ -145,19 +130,12 @@ class GetClientAddressCest
     {
         $I->wantToTest('Http\Request - getClientAddress() - ipv6');
 
-        $store   = $_SERVER ?? [];
-        $time    = $_SERVER['REQUEST_TIME_FLOAT'];
-        $_SERVER = [
-            'REQUEST_TIME_FLOAT' => $time,
-            'REMOTE_ADDR'        => '2a00:8640:1::224:36ff:feef:1d89',
-        ];
+        $_SERVER['REMOTE_ADDR'] = Http::TEST_IP_IPV6;
 
         $request = new Request();
 
-        $expected = '2a00:8640:1::224:36ff:feef:1d89';
+        $expected = Http::TEST_IP_IPV6;
         $actual   = $request->getClientAddress();
         $I->assertSame($expected, $actual);
-
-        $_SERVER = $store;
     }
 }

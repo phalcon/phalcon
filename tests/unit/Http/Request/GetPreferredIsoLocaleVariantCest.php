@@ -15,12 +15,11 @@ namespace Phalcon\Tests\Unit\Http\Request;
 
 use Codeception\Example;
 use Phalcon\Tests\Fixtures\Traits\DiTrait;
+use Phalcon\Tests\Unit\Http\Helper\HttpBase;
 use UnitTester;
 
-class GetPreferredIsoLocaleVariantCest
+class GetPreferredIsoLocaleVariantCest extends HttpBase
 {
-    use DiTrait;
-
     /**
      * Tests Phalcon\Http\Request :: getPreferredIsoLocaleVariant()
      *
@@ -31,23 +30,21 @@ class GetPreferredIsoLocaleVariantCest
      * @author       Phalcon Team <team@phalcon.io>
      * @since        2018-11-13
      */
-    public function httpRequestGetBestLanguageIso(UnitTester $I, Example $example)
-    {
-        $I->wantToTest('Http\Request - getPreferredIsoLocaleVariant() ' . $example['message']);
+    public function httpRequestGetBestLanguageIso(
+        UnitTester $I,
+        Example $example
+    ) {
+        $I->wantToTest(
+            'Http\Request - getPreferredIsoLocaleVariant() ' . $example['message']
+        );
 
-        $time  = $_SERVER['REQUEST_TIME_FLOAT'];
-        $store = $_SERVER ?? [];
-
-        $this->setNewFactoryDefault();
         $request = $this->container->get('request');
 
-        $_SERVER = [
-            'HTTP_ACCEPT_LANGUAGE' => $example['header'],
-            'REQUEST_TIME_FLOAT'   => $time,
-        ];
-        $I->assertSame($example['result'], $request->getPreferredIsoLocaleVariant());
+        $_SERVER['HTTP_ACCEPT_LANGUAGE'] = $example['header'];
 
-        $_SERVER = $store;
+        $expected = $example['result'];
+        $actual   = $request->getPreferredIsoLocaleVariant();
+        $I->assertSame($expected, $actual);
     }
 
     /**

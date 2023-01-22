@@ -14,9 +14,10 @@ declare(strict_types=1);
 namespace Phalcon\Tests\Unit\Http\Request;
 
 use Phalcon\Http\Request;
+use Phalcon\Tests\Unit\Http\Helper\HttpBase;
 use UnitTester;
 
-class GetBasicAuthCest
+class GetBasicAuthCest extends HttpBase
 {
     /**
      * Tests Phalcon\Http\Request :: getBasicAuth() - empty
@@ -30,7 +31,8 @@ class GetBasicAuthCest
 
         $request = new Request();
 
-        $I->assertNull($request->getBasicAuth());
+        $actual = $request->getBasicAuth();
+        $I->assertNull($actual);
     }
 
     /**
@@ -43,13 +45,8 @@ class GetBasicAuthCest
     {
         $I->wantToTest('Http\Request - getBasicAuth()');
 
-        $store   = $_SERVER ?? [];
-        $time    = $_SERVER['REQUEST_TIME_FLOAT'];
-        $_SERVER = [
-            'REQUEST_TIME_FLOAT' => $time,
-            'PHP_AUTH_USER'      => 'darth',
-            'PHP_AUTH_PW'        => 'vader',
-        ];
+        $_SERVER['PHP_AUTH_USER'] = 'darth';
+        $_SERVER['PHP_AUTH_PW']   = 'vader';
 
         $request = new Request();
 
@@ -59,7 +56,5 @@ class GetBasicAuthCest
         ];
         $actual   = $request->getBasicAuth();
         $I->assertSame($expected, $actual);
-
-        $_SERVER = $store;
     }
 }

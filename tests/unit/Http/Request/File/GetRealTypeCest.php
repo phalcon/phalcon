@@ -13,6 +13,7 @@ declare(strict_types=1);
 
 namespace Phalcon\Tests\Unit\Http\Request\File;
 
+use Page\Http;
 use Phalcon\Http\Request\File;
 use UnitTester;
 
@@ -40,13 +41,15 @@ class GetRealTypeCest
         $file = new File(
             [
                 'name'     => 'test',
-                'type'     => 'text/plain',
+                'type'     => Http::HEADERS_CONTENT_TYPE_PLAIN,
                 'tmp_name' => dataDir('/assets/images/example-jpg.jpg'),
                 'size'     => 1,
                 'error'    => 0,
             ]
         );
 
-        $I->assertSame('image/jpeg', $file->getRealType());
+        $expected = 'image/jpeg';
+        $actual   = $file->getRealType();
+        $I->assertSame($expected, $actual);
     }
 }

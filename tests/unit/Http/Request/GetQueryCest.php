@@ -15,12 +15,14 @@ namespace Phalcon\Tests\Unit\Http\Request;
 
 use Phalcon\Http\Request;
 use Phalcon\Tests\Fixtures\Traits\DiTrait;
+use Phalcon\Tests\Unit\Http\Helper\HttpBase;
 use UnitTester;
 
-class GetQueryCest
-{
-    use DiTrait;
+use function strtolower;
+use function uniqid;
 
+class GetQueryCest extends HttpBase
+{
     /**
      * Tests Phalcon\Http\Request :: getQuery()
      *
@@ -31,21 +33,22 @@ class GetQueryCest
     {
         $I->wantToTest('Http\Request - getQuery()');
 
-        $this->setNewFactoryDefault();
+        $key  = uniqid('key-');
+        $value = uniqid('val-');
+        $unknown = uniqid('unk-');
+        $_GET[$key] = $value;
 
-        $store = $_GET ?? [];
+        $request = $this->getRequestObject();
 
-        $_GET['status'] = ' Active ';
-        $request        = new Request();
+        $actual = $request->hasQuery($key);
+        $I->assertTrue($actual);
 
-        $I->assertTrue($request->hasQuery('status'));
-        $I->assertFalse($request->hasQuery('unknown'));
+        $actual = $request->hasQuery($unknown);
+        $I->assertFalse($actual);
 
-        $expected = ' Active ';
-        $actual   = $request->getQuery('status');
+        $expected = $value;
+        $actual   = $request->getQuery($key);
         $I->assertSame($expected, $actual);
-
-        $_GET = $store;
     }
 
     /**
@@ -58,23 +61,19 @@ class GetQueryCest
     {
         $I->wantToTest('Http\Request - getQuery() - filter');
 
-        $this->setNewFactoryDefault();
+        $key  = uniqid('key-');
+        $value = uniqid('VAL-');
+        $_GET[$key] = '  ' . $value . '  ';
 
-        $store = $_GET ?? [];
+        $request = $this->getRequestObject();
 
-        $_GET['status'] = ' Active ';
-        $request        = new Request();
-        $request->setDI($this->container);
-
-        $expected = 'Active';
-        $actual   = $request->getQuery('status', 'trim');
+        $expected = $value;
+        $actual   = $request->getQuery($key, 'trim');
         $I->assertSame($expected, $actual);
 
-        $expected = 'active';
-        $actual   = $request->getQuery('status', ['trim', 'lower']);
+        $expected = strtolower($value);
+        $actual   = $request->getQuery($key, ['trim', 'lower']);
         $I->assertSame($expected, $actual);
-
-        $_GET = $store;
     }
 
     /**
@@ -87,18 +86,12 @@ class GetQueryCest
     {
         $I->wantToTest('Http\Request - getQuery() - default');
 
-        $this->setNewFactoryDefault();
-
-        $store = $_GET ?? [];
-
-        $request = new Request();
-        $request->setDI($this->container);
+        $key  = uniqid('key-');
+        $request = $this->getRequestObject();
 
         $expected = 'default';
-        $actual   = $request->getQuery('status', null, 'default');
+        $actual   = $request->getQuery($key, null, 'default');
         $I->assertSame($expected, $actual);
-
-        $_GET = $store;
     }
 
     /**
@@ -111,18 +104,14 @@ class GetQueryCest
     {
         $I->wantToTest('Http\Request - getQuery() - allowNoEmpty');
 
-        $this->setNewFactoryDefault();
+        $key  = uniqid('key-');
 
-        $store = $_GET ?? [];
+        $_GET[$key] = ' 0 ';
 
-        $_GET['status'] = ' 0 ';
-        $request        = new Request();
-        $request->setDI($this->container);
+        $request = $this->getRequestObject();
 
         $expected = '0';
-        $actual   = $request->getQuery('status', 'trim', 'zero value', true);
+        $actual   = $request->getQuery($key, 'trim', 'zero value', true);
         $I->assertSame($expected, $actual);
-
-        $_GET = $store;
     }
 }

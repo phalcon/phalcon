@@ -14,10 +14,29 @@ declare(strict_types=1);
 namespace Phalcon\Tests\Unit\Http\Request;
 
 use Phalcon\Http\Request;
+use Phalcon\Tests\Unit\Http\Helper\HttpBase;
 use UnitTester;
 
-class GetHTTPRefererCest
+use function uniqid;
+
+class GetHTTPRefererCest extends HttpBase
 {
+    /**
+     * Tests Phalcon\Http\Request :: getHTTPReferer() - empty
+     *
+     * @author Phalcon Team <team@phalcon.io>
+     * @since  2020-03-17
+     */
+    public function httpRequestGetHTTPRefererEmpty(UnitTester $I)
+    {
+        $I->wantToTest('Http\Request - getHTTPReferer() - empty');
+
+        $request = $this->getRequestObject();
+
+        $actual = $request->getHTTPReferer();
+        $I->assertEmpty($actual);
+    }
+
     /**
      * Tests Phalcon\Http\Request :: getHTTPReferer()
      *
@@ -28,33 +47,13 @@ class GetHTTPRefererCest
     {
         $I->wantToTest('Http\Request - getHTTPReferer()');
 
-        // Empty
-        $store   = $_SERVER ?? [];
-        $time    = $_SERVER['REQUEST_TIME_FLOAT'];
-        $_SERVER = [
-            'REQUEST_TIME_FLOAT' => $time,
-        ];
+        $referrer = uniqid('ref-');
+        $_SERVER['HTTP_REFERER'] = $referrer;
 
-        $request = new Request();
+        $request = $this->getRequestObject();
 
-        $I->assertEmpty($request->getHTTPReferer());
-
-        $_SERVER = $store;
-
-        // Valid
-        $store   = $_SERVER ?? [];
-        $time    = $_SERVER['REQUEST_TIME_FLOAT'];
-        $_SERVER = [
-            'REQUEST_TIME_FLOAT' => $time,
-            'HTTP_REFERER'       => 'Phalcon Referrer',
-        ];
-
-        $request = new Request();
-
-        $expected = 'Phalcon Referrer';
+        $expected = $referrer;
         $actual   = $request->getHTTPReferer();
         $I->assertSame($expected, $actual);
-
-        $_SERVER = $store;
     }
 }

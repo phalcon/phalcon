@@ -13,6 +13,7 @@ declare(strict_types=1);
 
 namespace Phalcon\Tests\Unit\Http\Request\File;
 
+use Page\Http;
 use Phalcon\Http\Request\File;
 use UnitTester;
 
@@ -34,7 +35,7 @@ class GetKeyCest
         $file = new File(
             [
                 'name'     => 'test',
-                'type'     => 'text/plain',
+                'type'     => Http::HEADERS_CONTENT_TYPE_PLAIN,
                 'tmp_name' => dataDir('/assets/images/example-jpg.jpg'),
                 'size'     => 1,
                 'error'    => 0,
@@ -42,6 +43,8 @@ class GetKeyCest
             'abcde'
         );
 
-        $I->assertSame('abcde', $file->getKey());
+        $expected = 'abcde';
+        $actual   = $file->getKey();
+        $I->assertSame($expected, $actual);
     }
 }

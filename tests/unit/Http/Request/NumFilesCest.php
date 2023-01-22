@@ -14,6 +14,7 @@ declare(strict_types=1);
 namespace Phalcon\Tests\Unit\Http\Request;
 
 use Codeception\Example;
+use Page\Http;
 use Phalcon\Tests\Unit\Http\Helper\HttpBase;
 use UnitTester;
 
@@ -36,17 +37,18 @@ class NumFilesCest extends HttpBase
         $request = $this->getRequestObject();
         $_FILES  = $files;
 
-        $I->assertSame(
-            $all,
-            $request->numFiles(false)
-        );
+        $expected = $all;
+        $actual   = $request->numFiles();
+        $I->assertSame($expected, $actual);
 
-        $I->assertSame(
-            $onlySuccessful,
-            $request->numFiles(true)
-        );
+        $expected = $onlySuccessful;
+        $actual   = $request->numFiles(true);
+        $I->assertSame($expected, $actual);
     }
 
+    /**
+     * @return array[]
+     */
     private function filesProvider(): array
     {
         return [
@@ -54,7 +56,7 @@ class NumFilesCest extends HttpBase
                 [
                     'test' => [
                         'name'     => 'name',
-                        'type'     => 'text/plain',
+                        'type'     => Http::HEADERS_CONTENT_TYPE_PLAIN,
                         'size'     => 1,
                         'tmp_name' => 'tmp_name',
                         'error'    => 0,
@@ -67,7 +69,10 @@ class NumFilesCest extends HttpBase
                 [
                     'test' => [
                         'name'     => ['name1', 'name2'],
-                        'type'     => ['text/plain', 'text/plain'],
+                        'type'     => [
+                            Http::HEADERS_CONTENT_TYPE_PLAIN,
+                            Http::HEADERS_CONTENT_TYPE_PLAIN,
+                        ],
                         'size'     => [1, 1],
                         'tmp_name' => ['tmp_name1', 'tmp_name2'],
                         'error'    => [0, 0],

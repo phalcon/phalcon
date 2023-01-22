@@ -13,18 +13,32 @@ declare(strict_types=1);
 
 namespace Phalcon\Tests\Unit\Http\Request;
 
+use Page\Http;
 use Phalcon\Http\Request;
-use Phalcon\Tests\Fixtures\Http\PhpStream;
+use Phalcon\Tests\Unit\Http\Helper\HttpBase;
 use UnitTester;
 
 use function file_put_contents;
 use function parse_str;
-use function stream_wrapper_register;
-use function stream_wrapper_restore;
-use function stream_wrapper_unregister;
 
-class GetRawBodyCest
+class GetRawBodyCest extends HttpBase
 {
+    /**
+     * Tests Phalcon\Http\Request :: getRawBody() - default
+     *
+     * @author Phalcon Team <team@phalcon.io>
+     * @since  2020-03-17
+     */
+    public function httpRequestGetRawBodyDefault(UnitTester $I)
+    {
+        $I->wantToTest('Http\Request - getRawBody() - default');
+
+        // Empty
+        $request = $this->getRequestObject();
+
+        $actual = $request->getRawBody();
+        $I->assertEmpty($actual);
+    }
     /**
      * Tests Phalcon\Http\Request :: getRawBody()
      *
@@ -35,17 +49,12 @@ class GetRawBodyCest
     {
         $I->wantToTest('Http\Request - getRawBody()');
 
-        // Empty
-        $request = new Request();
-        $I->assertEmpty($request->getRawBody());
-
         // Valid
-        stream_wrapper_unregister('php');
-        stream_wrapper_register('php', PhpStream::class);
+        $this->registerStream();
 
-        file_put_contents('php://input', 'fruit=orange&quantity=4');
+        file_put_contents(Http::STREAM, 'fruit=orange&quantity=4');
 
-        $request = new Request();
+        $request = $this->getRequestObject();
 
         $expected = [
             'fruit'    => 'orange',
@@ -57,6 +66,6 @@ class GetRawBodyCest
 
         $I->assertSame($expected, $actual);
 
-        stream_wrapper_restore('php');
+        $this->unregisterStream();
     }
 }

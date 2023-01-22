@@ -13,6 +13,7 @@ declare(strict_types=1);
 
 namespace Phalcon\Tests\Unit\Http\Request;
 
+use Page\Http;
 use Phalcon\Http\Request;
 use Phalcon\Tests\Unit\Http\Helper\HttpBase;
 use UnitTester;
@@ -29,22 +30,26 @@ class IsStrictHostCheckCest extends HttpBase
     {
         $I->wantToTest('Http\Request - getDigestAuth()');
 
-        $store   = $_SERVER ?? [];
-        $_SERVER = [
-            'SERVER_NAME' => 'LOCALHOST:80',
-        ];
+        $host = 'LOCALHOST:80';
+        $_SERVER['SERVER_NAME'] = $host;
 
-        $request = new Request();
-        $request->setStrictHostCheck(true);
+        $request = $this->getRequestObject();
+        $request->setStrictHostCheck();
 
-        $I->assertSame('localhost', $request->getHttpHost());
-        $I->assertTrue($request->isStrictHostCheck());
+        $expected = Http::HOST_LOCALHOST;
+        $actual   = $request->getHttpHost();
+        $I->assertSame($expected, $actual);
+
+        $actual = $request->isStrictHostCheck();
+        $I->assertTrue($actual);
 
         $request->setStrictHostCheck(false);
-        $I->assertSame('LOCALHOST:80', $request->getHttpHost());
 
-        $I->assertFalse($request->isStrictHostCheck());
+        $expected = $host;
+        $actual   = $request->getHttpHost();
+        $I->assertSame($expected, $actual);
 
-        $_SERVER = $store;
+        $actual = $request->isStrictHostCheck();
+        $I->assertFalse($actual);
     }
 }

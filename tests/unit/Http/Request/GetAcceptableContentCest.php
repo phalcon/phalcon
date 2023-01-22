@@ -13,10 +13,12 @@ declare(strict_types=1);
 
 namespace Phalcon\Tests\Unit\Http\Request;
 
+use Page\Http;
 use Phalcon\Http\Request;
+use Phalcon\Tests\Unit\Http\Helper\HttpBase;
 use UnitTester;
 
-class GetAcceptableContentCest
+class GetAcceptableContentCest extends HttpBase
 {
     /**
      * Tests Phalcon\Http\Request :: getAcceptableContent()
@@ -28,21 +30,15 @@ class GetAcceptableContentCest
     {
         $I->wantToTest('Http\Request - getAcceptableContent()');
 
-        $store   = $_SERVER ?? [];
-        $time    = $_SERVER['REQUEST_TIME_FLOAT'];
-        $_SERVER = [
-            'REQUEST_TIME_FLOAT' => $time,
-            'HTTP_ACCEPT'        => 'text/html,'
-                . 'application/xhtml+xml,application/xml;q=0.9,'
-                . 'image/webp,image/apng,'
-                . '*/*;q=0.8',
-        ];
+        $_SERVER['HTTP_ACCEPT'] = 'text/html,'
+            . 'application/xhtml+xml,application/xml;q=0.9,'
+            . 'image/webp,image/apng,'
+            . '*/*;q=0.8';
 
-        $request = new Request();
-
+        $request  = new Request();
         $expected = [
             [
-                'accept'  => 'text/html',
+                'accept'  => Http::HEADERS_CONTENT_TYPE_HTML,
                 'quality' => 1.0,
             ],
             [
@@ -68,7 +64,5 @@ class GetAcceptableContentCest
         ];
         $actual   = $request->getAcceptableContent();
         $I->assertSame($expected, $actual);
-
-        $_SERVER = $store;
     }
 }

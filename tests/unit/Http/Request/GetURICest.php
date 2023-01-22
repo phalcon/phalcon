@@ -13,11 +13,29 @@ declare(strict_types=1);
 
 namespace Phalcon\Tests\Unit\Http\Request;
 
+use Page\Http;
 use Phalcon\Http\Request;
+use Phalcon\Tests\Unit\Http\Helper\HttpBase;
 use UnitTester;
 
-class GetURICest
+class GetURICest extends HttpBase
 {
+    /**
+     * Tests Phalcon\Http\Request :: getURI() - default
+     *
+     * @author Phalcon Team <team@phalcon.io>
+     * @since  2020-03-17
+     */
+    public function httpRequestGetURIDefault(UnitTester $I)
+    {
+        $I->wantToTest('Http\Request - getURI() - default');
+
+        $request = $this->getRequestObject();
+
+        $actual = $request->getURI();
+        $I->assertEmpty($actual);
+    }
+
     /**
      * Tests Phalcon\Http\Request :: getURI()
      *
@@ -28,48 +46,33 @@ class GetURICest
     {
         $I->wantToTest('Http\Request - getURI()');
 
-        $store   = $_SERVER ?? [];
-        $time    = $_SERVER['REQUEST_TIME_FLOAT'];
-        $_SERVER = [
-            'REQUEST_TIME_FLOAT' => $time,
-        ];
+        $uri = Http::TEST_URI . '?a=b';
+        $_SERVER['REQUEST_URI'] = $uri;
 
-        $request = new Request();
+        $request = $this->getRequestObject();
 
-        $I->assertEmpty($request->getURI());
-
-        $_SERVER = $store;
-
-        // Valid
-        $store   = $_SERVER ?? [];
-        $time    = $_SERVER['REQUEST_TIME_FLOAT'];
-        $_SERVER = [
-            'REQUEST_TIME_FLOAT' => $time,
-            'REQUEST_URI'        => 'https://dev.phalcon.io?a=b',
-        ];
-
-        $request = new Request();
-
-        $expected = 'https://dev.phalcon.io?a=b';
+        $expected = $uri;
         $actual   = $request->getURI();
         $I->assertSame($expected, $actual);
+    }
 
-        $_SERVER = $store;
+    /**
+     * Tests Phalcon\Http\Request :: getURI() - only path
+     *
+     * @author Phalcon Team <team@phalcon.io>
+     * @since  2020-03-17
+     */
+    public function httpRequestGetURIOnlyPath(UnitTester $I)
+    {
+        $I->wantToTest('Http\Request - getURI() - only path');
 
-        // Valid - only path
-        $store   = $_SERVER ?? [];
-        $time    = $_SERVER['REQUEST_TIME_FLOAT'];
-        $_SERVER = [
-            'REQUEST_TIME_FLOAT' => $time,
-            'REQUEST_URI'        => 'https://dev.phalcon.io?a=b',
-        ];
+        $uri = Http::TEST_URI . '?a=b';
+        $_SERVER['REQUEST_URI'] = $uri;
 
-        $request = new Request();
+        $request = $this->getRequestObject();
 
-        $expected = 'https://dev.phalcon.io';
+        $expected = Http::TEST_URI;
         $actual   = $request->getURI(true);
         $I->assertSame($expected, $actual);
-
-        $_SERVER = $store;
     }
 }

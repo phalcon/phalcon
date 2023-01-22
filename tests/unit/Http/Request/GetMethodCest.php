@@ -13,94 +13,109 @@ declare(strict_types=1);
 
 namespace Phalcon\Tests\Unit\Http\Request;
 
+use Page\Http;
 use Phalcon\Http\Request;
+use Phalcon\Tests\Unit\Http\Helper\HttpBase;
 use UnitTester;
 
-class GetMethodCest
+use function uniqid;
+
+class GetMethodCest extends HttpBase
 {
     /**
-     * Tests Phalcon\Http\Request :: getMethod()
+     * Tests Phalcon\Http\Request :: getMethod() - default
      *
      * @author Phalcon Team <team@phalcon.io>
      * @since  2020-03-17
      */
-    public function httpRequestGetMethod(UnitTester $I)
+    public function httpRequestGetMethodDefault(UnitTester $I)
     {
-        $I->wantToTest('Http\Request - getMethod()');
-
-        $I->wantToTest('Http\Request - getDigestAuth()');
+        $I->wantToTest('Http\Request - getMethod() - default');
 
         // Default
-        $store   = $_SERVER ?? [];
-        $time    = $_SERVER['REQUEST_TIME_FLOAT'];
-        $_SERVER = [
-            'REQUEST_TIME_FLOAT' => $time,
-        ];
+        $request = $this->getRequestObject();
 
-        $request = new Request();
+        $expected = Http::REQUEST_METHOD_GET;
+        $actual   = $request->getMethod();
+        $I->assertSame($expected, $actual);
+    }
+    /**
+     * Tests Phalcon\Http\Request :: getMethod() - header POST
+     *
+     * @author Phalcon Team <team@phalcon.io>
+     * @since  2020-03-17
+     */
+    public function httpRequestGetMethodHeaderPost(UnitTester $I)
+    {
+        $I->wantToTest('Http\Request - getMethod() - header POST');
 
-        $I->assertSame('GET', $request->getMethod());
+        $_SERVER['REQUEST_METHOD'] = Http::REQUEST_METHOD_POST;
 
-        $_SERVER = $store;
+        $request = $this->getRequestObject();
 
-        // Valid
-        $store   = $_SERVER ?? [];
-        $time    = $_SERVER['REQUEST_TIME_FLOAT'];
-        $_SERVER = [
-            'REQUEST_TIME_FLOAT' => $time,
-            'REQUEST_METHOD'     => 'POST',
-        ];
+        $expected = Http::REQUEST_METHOD_POST;
+        $actual   = $request->getMethod();
+        $I->assertSame($expected, $actual);
+    }
 
-        $request = new Request();
+    /**
+     * Tests Phalcon\Http\Request :: getMethod() - header POST override
+     *
+     * @author Phalcon Team <team@phalcon.io>
+     * @since  2020-03-17
+     */
+    public function httpRequestGetMethodHeaderPostOverride(UnitTester $I)
+    {
+        $I->wantToTest('Http\Request - getMethod() - header POST override');
 
-        $I->assertSame('POST', $request->getMethod());
+        $_SERVER['REQUEST_METHOD'] = Http::REQUEST_METHOD_POST;
+        $_SERVER['X_HTTP_METHOD_OVERRIDE'] = Http::REQUEST_METHOD_TRACE;
 
-        $_SERVER = $store;
+        $request = $this->getRequestObject();
 
-        // Valid POST Override
-        $store   = $_SERVER ?? [];
-        $time    = $_SERVER['REQUEST_TIME_FLOAT'];
-        $_SERVER = [
-            'REQUEST_TIME_FLOAT'     => $time,
-            'REQUEST_METHOD'         => 'POST',
-            'X_HTTP_METHOD_OVERRIDE' => 'TRACE',
-        ];
+        $expected = Http::REQUEST_METHOD_TRACE;
+        $actual   = $request->getMethod();
+        $I->assertSame($expected, $actual);
+    }
 
-        $request = new Request();
-        $I->assertSame('TRACE', $request->getMethod());
+    /**
+     * Tests Phalcon\Http\Request :: getMethod() - header spoof
+     *
+     * @author Phalcon Team <team@phalcon.io>
+     * @since  2020-03-17
+     */
+    public function httpRequestGetMethodHeaderSpoof(UnitTester $I)
+    {
+        $I->wantToTest('Http\Request - getMethod() - header spoof');
 
-        $_SERVER = $store;
+        $_SERVER['REQUEST_METHOD'] = Http::REQUEST_METHOD_POST;
+        $_REQUEST['_method'] = Http::REQUEST_METHOD_CONNECT;
 
-        // Valid POST spoof
-        $store1   = $_SERVER ?? [];
-        $store2   = $_REQUEST ?? [];
-        $time     = $_SERVER['REQUEST_TIME_FLOAT'];
-        $_SERVER  = [
-            'REQUEST_TIME_FLOAT' => $time,
-            'REQUEST_METHOD'     => 'POST',
-        ];
-        $_REQUEST = [
-            '_method' => 'CONNECT',
-        ];
-
-        $request = new Request();
+        $request = $this->getRequestObject();
         $request->setHttpMethodParameterOverride(true);
-        $I->assertSame('CONNECT', $request->getMethod());
 
-        $_SERVER  = $store1;
-        $_REQUEST = $store2;
+        $expected = Http::REQUEST_METHOD_CONNECT;
+        $actual   = $request->getMethod();
+        $I->assertSame($expected, $actual);
+    }
 
-        // Invalid
-        $store   = $_SERVER ?? [];
-        $time    = $_SERVER['REQUEST_TIME_FLOAT'];
-        $_SERVER = [
-            'REQUEST_TIME_FLOAT' => $time,
-            'REQUEST_METHOD'     => 'UNKNOWN',
-        ];
+    /**
+     * Tests Phalcon\Http\Request :: getMethod() - not valid
+     *
+     * @author Phalcon Team <team@phalcon.io>
+     * @since  2020-03-17
+     */
+    public function httpRequestGetMethodNotValid(UnitTester $I)
+    {
+        $I->wantToTest('Http\Request - getMethod() - not valid');
 
-        $request = new Request();
-        $I->assertSame('GET', $request->getMethod());
+        $method = uniqid('meth-');
+        $_SERVER['REQUEST_METHOD'] = $method;
 
-        $_SERVER = $store;
+        $request = $this->getRequestObject();
+
+        $expected = Http::REQUEST_METHOD_GET;
+        $actual   = $request->getMethod();
+        $I->assertSame($expected, $actual);
     }
 }
