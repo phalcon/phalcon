@@ -14,12 +14,11 @@ declare(strict_types=1);
 namespace Phalcon\Tests\Unit\Http\Request;
 
 use Phalcon\Tests\Fixtures\Traits\DiTrait;
+use Phalcon\Tests\Unit\Http\Helper\HttpBase;
 use UnitTester;
 
-class GetBestLanguageCest
+class GetBestLanguageCest extends HttpBase
 {
-    use DiTrait;
-
     /**
      * Tests Phalcon\Http\Request :: getBestLanguage()
      *
@@ -30,58 +29,46 @@ class GetBestLanguageCest
     {
         $I->wantToTest('Http\Request - getBestLanguage()');
 
-        $store = $_SERVER ?? [];
+        $request = $this->getRequestObject();
 
-        $this->setNewFactoryDefault();
-        $request = $this->container->get('request');
-
-        $time    = $_SERVER['REQUEST_TIME_FLOAT'];
-        $_SERVER = [
-            'REQUEST_TIME_FLOAT' => $time,
-            'HTTP_ACCEPT_LANGUAGE' => 'es,es-ar;q=0.8,en;q=0.5,en-us;q=0.3,de-de; q=0.9',
-        ];
+        $_SERVER['HTTP_ACCEPT_LANGUAGE'] = 'es,es-ar;q=0.8,en;q=0.5,en-us;q=0.3,de-de; q=0.9';
 
         $accept = $request->getLanguages();
         $I->assertCount(5, $accept);
 
 
         $firstAccept = $accept[0];
-        $I->assertSame(
-            'es',
-            $firstAccept['language']
-        );
 
-        $I->assertSame(
-            1.0,
-            $firstAccept['quality']
-        );
+        $expected = 'es';
+        $actual   = $firstAccept['language'];
+        $I->assertSame($expected, $actual);
 
+        $expected = 1.0;
+        $actual   = $firstAccept['quality'];
+        $I->assertSame($expected, $actual);
 
         $fourthAccept = $accept[3];
-        $I->assertSame(
-            'en-us',
-            $fourthAccept['language']
-        );
 
-        $I->assertSame(
-            0.3,
-            $fourthAccept['quality']
-        );
+        $expected = 'en-us';
+        $actual   = $fourthAccept['language'];
+        $I->assertSame($expected, $actual);
 
+        $expected = 0.3;
+        $actual   = $fourthAccept['quality'];
+        $I->assertSame($expected, $actual);
 
         $lastAccept = $accept[4];
-        $I->assertSame(
-            'de-de',
-            $lastAccept['language']
-        );
 
-        $I->assertSame(
-            0.9,
-            $lastAccept['quality']
-        );
+        $expected = 'de-de';
+        $actual   = $lastAccept['language'];
+        $I->assertSame($expected, $actual);
 
-        $I->assertSame('es', $request->getBestLanguage());
+        $expected = 0.9;
+        $actual   = $lastAccept['quality'];
+        $I->assertSame($expected, $actual);
 
-        $_SERVER = $store;
+        $expected = 'es';
+        $actual   = $request->getBestLanguage();
+        $I->assertSame($expected, $actual);
     }
 }

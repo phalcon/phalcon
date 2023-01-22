@@ -13,18 +13,31 @@ declare(strict_types=1);
 
 namespace Phalcon\Tests\Unit\Http\Request;
 
+use Page\Http;
 use Phalcon\Http\Request;
-use Phalcon\Tests\Fixtures\Http\PhpStream;
+use Phalcon\Tests\Unit\Http\Helper\HttpBase;
 use UnitTester;
 
 use function file_put_contents;
 use function json_encode;
-use function stream_wrapper_register;
-use function stream_wrapper_restore;
-use function stream_wrapper_unregister;
 
-class GetJsonRawBodyCest
+class GetJsonRawBodyCest extends HttpBase
 {
+    /**
+     * Tests Phalcon\Http\Request :: getJsonRawBody() - empty
+     *
+     * @author Phalcon Team <team@phalcon.io>
+     * @since  2020-03-17
+     */
+    public function httpRequestGetJsonRawBodyEmpty(UnitTester $I)
+    {
+        $I->wantToTest('Http\Request - getJsonRawBody() - empty');
+
+        // Empty
+        $request = $this->getRequestObject();
+        $actual = $request->getRawBody();
+        $I->assertEmpty($actual);
+    }
     /**
      * Tests Phalcon\Http\Request :: getJsonRawBody()
      *
@@ -35,14 +48,7 @@ class GetJsonRawBodyCest
     {
         $I->wantToTest('Http\Request - getJsonRawBody()');
 
-
-        // Empty
-        $request = new Request();
-        $I->assertEmpty($request->getRawBody());
-
-        // Valid
-        stream_wrapper_unregister('php');
-        stream_wrapper_register('php', PhpStream::class);
+        $this->registerStream();
 
         $input = json_encode(
             [
@@ -51,14 +57,14 @@ class GetJsonRawBodyCest
             ]
         );
 
-        file_put_contents('php://input', $input);
+        file_put_contents(Http::STREAM, $input);
 
-        $request = new Request();
+        $request = $this->getRequestObject();
 
         $expected = json_decode($input, true);
         $actual   = $request->getJsonRawBody(true);
         $I->assertSame($expected, $actual);
 
-        stream_wrapper_restore('php');
+        $this->unregisterStream();
     }
 }

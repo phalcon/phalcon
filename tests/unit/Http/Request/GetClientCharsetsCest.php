@@ -14,9 +14,10 @@ declare(strict_types=1);
 namespace Phalcon\Tests\Unit\Http\Request;
 
 use Phalcon\Http\Request;
+use Phalcon\Tests\Unit\Http\Helper\HttpBase;
 use UnitTester;
 
-class GetClientCharsetsCest
+class GetClientCharsetsCest extends HttpBase
 {
     /**
      * Tests Phalcon\Http\Request :: getClientCharsets()
@@ -28,12 +29,7 @@ class GetClientCharsetsCest
     {
         $I->wantToTest('Http\Request - getClientCharsets()');
 
-        $store   = $_SERVER ?? [];
-        $time    = $_SERVER['REQUEST_TIME_FLOAT'];
-        $_SERVER = [
-            'REQUEST_TIME_FLOAT'  => $time,
-            'HTTP_ACCEPT_CHARSET' => 'iso-8859-5,unicode-1-1;q=0.8',
-        ];
+        $_SERVER['HTTP_ACCEPT_CHARSET'] = 'iso-8859-5,unicode-1-1;q=0.8';
 
         $request = new Request();
 
@@ -49,7 +45,5 @@ class GetClientCharsetsCest
         ];
         $actual   = $request->getClientCharsets();
         $I->assertSame($expected, $actual);
-
-        $_SERVER = $store;
     }
 }

@@ -28,10 +28,9 @@ class GetSchemeCest extends HttpBase
     {
         $request = $this->getRequestObject();
 
-        $I->assertSame(
-            'http',
-            $request->getScheme()
-        );
+        $expected = 'http';
+        $actual   = $request->getScheme();
+        $I->assertSame($expected, $actual);
     }
 
     /**
@@ -44,9 +43,8 @@ class GetSchemeCest extends HttpBase
     {
         $request = $this->getRequestObject();
 
-        $this->setServerVar('HTTPS', 'on');
+        $_SERVER['HTTPS'] = 'on';
         $actual = $request->getScheme();
-        $this->unsetServerVar('HTTPS');
 
         $I->assertSame('https', $actual);
     }

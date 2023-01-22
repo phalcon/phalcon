@@ -15,9 +15,10 @@ namespace Phalcon\Tests\Unit\Http\Request;
 
 use Codeception\Example;
 use Phalcon\Http\Request;
+use Phalcon\Tests\Unit\Http\Helper\HttpBase;
 use UnitTester;
 
-class IsCest
+class IsCest extends HttpBase
 {
     /**
      * Tests Is methods
@@ -31,23 +32,15 @@ class IsCest
     {
         $I->wantToTest('Http\Request - is*() - ' . $example[0]);
 
-        $store   = $_SERVER ?? [];
-        $time    = $_SERVER['REQUEST_TIME_FLOAT'];
-        $headers = [
-            'REQUEST_TIME_FLOAT' => $time,
-        ];
-        $headers = array_merge($headers, $example[1]);
-        $_SERVER = $headers;
+        $_SERVER = array_merge($_SERVER, $example[1]);
 
-        $request = new Request();
+        $request = $this->getRequestObject();
 
         $expected = $example[2];
         $class    = $example[3];
         $actual   = $request->$class();
 
         $I->assertSame($expected, $actual);
-
-        $_SERVER = $store;
     }
 
     /**

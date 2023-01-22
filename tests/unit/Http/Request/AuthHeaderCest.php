@@ -57,10 +57,8 @@ class AuthHeaderCest extends HttpBase
 
         $_SERVER = $server;
 
-        $I->assertSame(
-            $expected,
-            $request->$function()
-        );
+        $actual = $request->$function();
+        $I->assertSame($expected, $actual);
     }
 
     /**
@@ -72,7 +70,7 @@ class AuthHeaderCest extends HttpBase
      */
     public function shouldFireEventWhenResolveAuthorization(UnitTester $I)
     {
-        $request = $this->getRequestObject();
+        $request       = $this->getRequestObject();
         $eventsManager = $this->container->getShared('eventsManager');
 
         $eventsManager->attach(
@@ -89,7 +87,7 @@ class AuthHeaderCest extends HttpBase
             'Fired-Before' => 'beforeAuthorizationResolve',
             'Fired-After'  => 'afterAuthorizationResolve',
         ];
-        $actual = $request->getHeaders();
+        $actual   = $request->getHeaders();
         $I->assertSame($expected, $actual);
     }
 
@@ -102,7 +100,7 @@ class AuthHeaderCest extends HttpBase
      */
     public function shouldEnableCustomAuthorizationResolver(UnitTester $I)
     {
-        $request = $this->getRequestObject();
+        $request       = $this->getRequestObject();
         $eventsManager = $this->container->getShared('eventsManager');
 
         $eventsManager->attach(
@@ -115,7 +113,7 @@ class AuthHeaderCest extends HttpBase
         $expected = [
             'Authorization' => 'Negotiate a87421000492aa874209af8bc028',
         ];
-        $actual = $request->getHeaders();
+        $actual   = $request->getHeaders();
         $I->assertSame($expected, $actual);
     }
 
@@ -135,10 +133,13 @@ class AuthHeaderCest extends HttpBase
         $expected = [
             'Authorization' => 'Enigma Secret',
         ];
-        $actual = $request->getHeaders();
+        $actual   = $request->getHeaders();
         $I->assertSame($expected, $actual);
     }
 
+    /**
+     * @return array
+     */
     private function basicAuthProvider(): array
     {
         return [
@@ -270,7 +271,8 @@ class AuthHeaderCest extends HttpBase
                 ],
                 'getBasicAuth',
                 [
-                    'username' => 'myleft', 'password' => '123456',
+                    'username' => 'myleft',
+                    'password' => '123456',
                 ],
             ],
 

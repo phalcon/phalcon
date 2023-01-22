@@ -14,9 +14,10 @@ declare(strict_types=1);
 namespace Phalcon\Tests\Unit\Http\Request;
 
 use Phalcon\Http\Request;
+use Phalcon\Tests\Unit\Http\Helper\HttpBase;
 use UnitTester;
 
-class GetLanguagesCest
+class GetLanguagesCest extends HttpBase
 {
     /**
      * Tests Phalcon\Http\Request :: getLanguages()
@@ -28,14 +29,9 @@ class GetLanguagesCest
     {
         $I->wantToTest('Http\Request - getLanguages()');
 
-        $store   = $_SERVER ?? [];
-        $time    = $_SERVER['REQUEST_TIME_FLOAT'];
-        $_SERVER = [
-            'REQUEST_TIME_FLOAT'   => $time,
-            'HTTP_ACCEPT_LANGUAGE' => 'es,es-ar;q=0.8,en;q=0.5,en-us;q=0.3,de-de; q=0.9',
-        ];
+        $_SERVER['HTTP_ACCEPT_LANGUAGE'] = 'es,es-ar;q=0.8,en;q=0.5,en-us;q=0.3,de-de; q=0.9';
 
-        $request = new Request();
+        $request = $this->getRequestObject();
 
         $expected = [
             [
@@ -61,7 +57,5 @@ class GetLanguagesCest
         ];
         $actual   = $request->getLanguages();
         $I->assertSame($expected, $actual);
-
-        $_SERVER = $store;
     }
 }

@@ -14,9 +14,10 @@ declare(strict_types=1);
 namespace Phalcon\Tests\Unit\Http\Request;
 
 use Phalcon\Http\Request;
+use Phalcon\Tests\Unit\Http\Helper\HttpBase;
 use UnitTester;
 
-class GetHeadersCest
+class GetHeadersCest extends HttpBase
 {
     /**
      * Tests Phalcon\Http\Request :: getHeaders()
@@ -29,14 +30,9 @@ class GetHeadersCest
     {
         $I->wantToTest('Http\Request - getHeaders()');
 
-        $store   = $_SERVER ?? [];
-        $time    = $_SERVER['REQUEST_TIME_FLOAT'];
-        $_SERVER = [
-            'REQUEST_TIME_FLOAT' => $time,
-            'HTTP_FOO'     => 'Bar',
-            'HTTP_BLA_BLA' => 'boo',
-            'HTTP_AUTH'    => true,
-        ];
+        $_SERVER['HTTP_FOO']     = 'Bar';
+        $_SERVER['HTTP_BLA_BLA'] = 'boo';
+        $_SERVER['HTTP_AUTH']    = true;
 
         $request = new Request();
 
@@ -46,8 +42,7 @@ class GetHeadersCest
             'Auth'    => true,
         ];
 
-        $I->assertSame($expected, $request->getHeaders());
-
-        $_SERVER = $store;
+        $actual = $request->getHeaders();
+        $I->assertSame($expected, $actual);
     }
 }

@@ -14,9 +14,12 @@ declare(strict_types=1);
 namespace Phalcon\Tests\Unit\Http\Request;
 
 use Phalcon\Http\Request;
+use Phalcon\Tests\Unit\Http\Helper\HttpBase;
 use UnitTester;
 
-class GetHeaderCest
+use function uniqid;
+
+class GetHeaderCest extends HttpBase
 {
     /**
      * Tests getHeader empty
@@ -29,7 +32,10 @@ class GetHeaderCest
         $I->wantToTest('Http\Request - getHeader() - empty');
 
         $request = new Request();
-        $I->assertEmpty($request->getHeader('LOL'));
+
+        $name = uniqid('name-');
+        $actual = $request->getHeader($name);
+        $I->assertEmpty($actual);
     }
 
     /**
@@ -42,17 +48,13 @@ class GetHeaderCest
     {
         $I->wantToTest('Http\Request - getHeader() - empty');
 
-        $store   = $_SERVER ?? [];
-        $_SERVER = [
-            'HTTP_LOL' => 'zup',
-        ];
+        $value = uniqid('val-');
+        $_SERVER['HTTP_ABCDEF'] = $value;
 
         $request = new Request();
 
-        $expected = 'zup';
-        $actual   = $request->getHeader('LOL');
+        $expected = $value;
+        $actual   = $request->getHeader('ABCDEF');
         $I->assertSame($expected, $actual);
-
-        $_SERVER = $store;
     }
 }

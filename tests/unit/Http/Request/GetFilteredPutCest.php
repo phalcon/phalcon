@@ -13,20 +13,14 @@ declare(strict_types=1);
 
 namespace Phalcon\Tests\Unit\Http\Request;
 
-use Phalcon\Http\Request;
-use Phalcon\Tests\Fixtures\Http\PhpStream;
-use Phalcon\Tests\Fixtures\Traits\DiTrait;
+use Page\Http;
+use Phalcon\Tests\Unit\Http\Helper\HttpBase;
 use UnitTester;
 
 use function file_put_contents;
-use function stream_wrapper_register;
-use function stream_wrapper_restore;
-use function stream_wrapper_unregister;
 
-class GetFilteredPutCest
+class GetFilteredPutCest extends HttpBase
 {
-    use DiTrait;
-
     /**
      * Tests Phalcon\Http\Request :: getFilteredPut()
      *
@@ -37,30 +31,21 @@ class GetFilteredPutCest
     {
         $I->wantToTest('Http\Request - getFilteredPut()');
 
-        stream_wrapper_unregister('php');
-        stream_wrapper_register('php', PhpStream::class);
+        $this->registerStream();
 
-        file_put_contents('php://input', 'no-id=24');
+        file_put_contents(Http::STREAM, 'no-id=24');
 
-        $store   = $_SERVER ?? [];
-        $time    = $_SERVER['REQUEST_TIME_FLOAT'];
-        $_SERVER = [
-            'REQUEST_TIME_FLOAT' => $time,
-            'REQUEST_METHOD'     => 'PUT',
-        ];
+        $_SERVER['REQUEST_METHOD'] = Http::REQUEST_METHOD_PUT;
 
-        $container = $this->newService('factoryDefault');
-        /** @var Request $request */
-        $request = $container->get('request');
+        $request = $this->getRequestObject();
         $request
-            ->setParameterFilters('id', ['absint'], ['put']);
+            ->setParameterFilters('id', ['absint'], ['put'])
+        ;
 
         $expected = 24;
         $actual   = $request->getFilteredPut('id', 24);
         $I->assertSame($expected, $actual);
 
-        stream_wrapper_restore('php');
-
-        $_SERVER = $store;
+        $this->unregisterStream();
     }
 }

@@ -13,43 +13,126 @@ declare(strict_types=1);
 
 namespace Phalcon\Tests\Unit\Http\Request;
 
+use Codeception\Example;
+use Page\Http;
 use Phalcon\Http\Request;
 use UnitTester;
+
+use function uniqid;
 
 class IsValidHttpMethodCest
 {
     /**
      * Tests Phalcon\Http\Request :: isValidHttpMethod()
      *
+     * @dataProvider getExamples
+     *
      * @author Phalcon Team <team@phalcon.io>
      * @since  2020-03-17
      */
-    public function httpRequestIsValidHttpMethod(UnitTester $I)
+    public function httpRequestIsValidHttpMethod(UnitTester $I, Example $example)
     {
-        $I->wantToTest('Http\Request - isValidHttpMethod()');
+        $method = $example[0];
+
+        $I->wantToTest('Http\Request - isValidHttpMethod() - ' . $method);
 
         $request = new Request();
 
-        $I->assertTrue($request->isValidHttpMethod("GET"));
-        $I->assertTrue($request->isValidHttpMethod("POST"));
-        $I->assertTrue($request->isValidHttpMethod("PUT"));
-        $I->assertTrue($request->isValidHttpMethod("DELETE"));
-        $I->assertTrue($request->isValidHttpMethod("HEAD"));
-        $I->assertTrue($request->isValidHttpMethod("OPTIONS"));
-        $I->assertTrue($request->isValidHttpMethod("PATCH"));
-        $I->assertTrue($request->isValidHttpMethod("PURGE"));
-        $I->assertTrue($request->isValidHttpMethod("TRACE"));
-        $I->assertTrue($request->isValidHttpMethod("CONNECT"));
-        $I->assertTrue($request->isValidHttpMethod("get"));
-        $I->assertTrue($request->isValidHttpMethod("post"));
-        $I->assertTrue($request->isValidHttpMethod("put"));
-        $I->assertTrue($request->isValidHttpMethod("delete"));
-        $I->assertTrue($request->isValidHttpMethod("head"));
-        $I->assertTrue($request->isValidHttpMethod("options"));
-        $I->assertTrue($request->isValidHttpMethod("patch"));
-        $I->assertTrue($request->isValidHttpMethod("purge"));
-        $I->assertTrue($request->isValidHttpMethod("trace"));
-        $I->assertTrue($request->isValidHttpMethod("connect"));
-        $I->assertFalse($request->isValidHttpMethod("unknown"));
+        $expected = $example[1];
+        $actual   = $request->isValidHttpMethod($method);
+        $I->assertSame($expected, $actual);
+    }
+
+    /**
+     * @return array[]
+     */
+    private function getExamples(): array
+    {
+        return [
+            [
+                Http::REQUEST_METHOD_CONNECT,
+                true,
+            ],
+            [
+                Http::REQUEST_METHOD_DELETE,
+                true,
+            ],
+            [
+                Http::REQUEST_METHOD_GET,
+                true,
+            ],
+            [
+                Http::REQUEST_METHOD_HEAD,
+                true,
+            ],
+            [
+                Http::REQUEST_METHOD_OPTIONS,
+                true,
+            ],
+            [
+                Http::REQUEST_METHOD_PATCH,
+                true,
+            ],
+            [
+                Http::REQUEST_METHOD_POST,
+                true,
+            ],
+            [
+                Http::REQUEST_METHOD_PURGE,
+                true,
+            ],
+            [
+                Http::REQUEST_METHOD_PUT,
+                true,
+            ],
+            [
+                Http::REQUEST_METHOD_TRACE,
+                true,
+            ],
+            [
+                strtolower(Http::REQUEST_METHOD_CONNECT),
+                true,
+            ],
+            [
+                strtolower(Http::REQUEST_METHOD_DELETE),
+                true,
+            ],
+            [
+                strtolower(Http::REQUEST_METHOD_GET),
+                true,
+            ],
+            [
+                strtolower(Http::REQUEST_METHOD_HEAD),
+                true,
+            ],
+            [
+                strtolower(Http::REQUEST_METHOD_OPTIONS),
+                true,
+            ],
+            [
+                strtolower(Http::REQUEST_METHOD_PATCH),
+                true,
+            ],
+            [
+                strtolower(Http::REQUEST_METHOD_POST),
+                true,
+            ],
+            [
+                strtolower(Http::REQUEST_METHOD_PURGE),
+                true,
+            ],
+            [
+                strtolower(Http::REQUEST_METHOD_PUT),
+                true,
+            ],
+            [
+                strtolower(Http::REQUEST_METHOD_TRACE),
+                true,
+            ],
+            [
+                uniqid('meth-'),
+                false,
+            ]
+        ];
     }
 }

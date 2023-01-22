@@ -13,10 +13,12 @@ declare(strict_types=1);
 
 namespace Phalcon\Tests\Unit\Http\Request;
 
+use Page\Http;
 use Phalcon\Http\Request;
+use Phalcon\Tests\Unit\Http\Helper\HttpBase;
 use UnitTester;
 
-class GetContentTypeCest
+class GetContentTypeCest extends HttpBase
 {
     /**
      * Tests Phalcon\Http\Request :: getContentType()
@@ -28,19 +30,12 @@ class GetContentTypeCest
     {
         $I->wantToTest('Http\Request - getContentType()');
 
-        $store   = $_SERVER ?? [];
-        $time    = $_SERVER['REQUEST_TIME_FLOAT'];
-        $_SERVER = [
-            'REQUEST_TIME_FLOAT' => $time,
-            'CONTENT_TYPE'       => 'application/xhtml+xml',
-        ];
+        $_SERVER['CONTENT_TYPE'] = Http::HEADERS_CONTENT_TYPE_XHTML_XML;
 
         $request = new Request();
 
-        $expected = 'application/xhtml+xml';
+        $expected = Http::HEADERS_CONTENT_TYPE_XHTML_XML;
         $actual   = $request->getContentType();
         $I->assertSame($expected, $actual);
-
-        $_SERVER = $store;
     }
 }

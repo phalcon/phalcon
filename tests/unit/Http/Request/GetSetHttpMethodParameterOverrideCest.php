@@ -27,13 +27,18 @@ class GetSetHttpMethodParameterOverrideCest
      */
     public function httpRequestGetSetHttpMethodParameterOverride(UnitTester $I)
     {
-        $I->wantToTest('Http\Request - getHttpMethodParameterOverride()/setHttpMethodParameterOverride()');
+        $I->wantToTest(
+            'Http\Request - getHttpMethodParameterOverride()/setHttpMethodParameterOverride()'
+        );
 
         $request = new Request();
 
-        $I->assertFalse($request->getHttpMethodParameterOverride());
+        $actual = $request->getHttpMethodParameterOverride();
+        $I->assertFalse($actual);
 
         $request->setHttpMethodParameterOverride(true);
-        $I->assertTrue($request->getHttpMethodParameterOverride());
+
+        $actual = $request->getHttpMethodParameterOverride();
+        $I->assertTrue($actual);
     }
 }

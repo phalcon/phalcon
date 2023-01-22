@@ -27,19 +27,19 @@ class HasHeaderCest extends HttpBase
      */
     public function testHttpRequestCustomHeaderHas(UnitTester $I)
     {
-        $store   = $_SERVER ?? [];
-        $_SERVER = [
-            'HTTP_FOO'     => 'Bar',
-            'HTTP_BLA_BLA' => 'boo',
-            'HTTP_AUTH'    => true,
-        ];
+        $_SERVER['HTTP_FOO']     = 'Bar';
+        $_SERVER['HTTP_BLA_BLA'] = 'boo';
+        $_SERVER['HTTP_AUTH']    = true;
 
-        $request = new Request();
+        $request = $this->getRequestObject();
 
-        $I->assertTrue($request->hasHeader('HTTP_FOO'));
-        $I->assertTrue($request->hasHeader('AUTH'));
-        $I->assertTrue($request->hasHeader('HTTP_BLA_BLA'));
+        $actual = $request->hasHeader('HTTP_FOO');
+        $I->assertTrue($actual);
 
-        $_SERVER = $store;
+        $actual = $request->hasHeader('AUTH');
+        $I->assertTrue($actual);
+
+        $actual = $request->hasHeader('HTTP_BLA_BLA');
+        $I->assertTrue($actual);
     }
 }

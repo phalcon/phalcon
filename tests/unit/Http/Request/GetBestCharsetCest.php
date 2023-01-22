@@ -14,12 +14,11 @@ declare(strict_types=1);
 namespace Phalcon\Tests\Unit\Http\Request;
 
 use Phalcon\Tests\Fixtures\Traits\DiTrait;
+use Phalcon\Tests\Unit\Http\Helper\HttpBase;
 use UnitTester;
 
-class GetBestCharsetCest
+class GetBestCharsetCest extends HttpBase
 {
-    use DiTrait;
-
     /**
      * Tests Phalcon\Http\Request :: getBestCharset()
      *
@@ -30,16 +29,9 @@ class GetBestCharsetCest
     {
         $I->wantToTest('Http\Request - getBestCharset()');
 
-        $store = $_SERVER ?? [];
+        $request = $this->getRequestObject();
 
-        $this->setNewFactoryDefault();
-        $request = $this->container->get('request');
-
-        $time    = $_SERVER['REQUEST_TIME_FLOAT'];
-        $_SERVER = [
-            'REQUEST_TIME_FLOAT' => $time,
-            'HTTP_ACCEPT_CHARSET' => 'iso-8859-5,unicode-1-1;q=0.8',
-        ];
+        $_SERVER['HTTP_ACCEPT_CHARSET'] = 'iso-8859-5,unicode-1-1;q=0.8';
 
         $accept   = $request->getClientCharsets();
         $expected = 2;
@@ -65,7 +57,5 @@ class GetBestCharsetCest
         $expected = 'iso-8859-5';
         $actual   = $request->getBestCharset();
         $I->assertSame($expected, $actual);
-
-        $_SERVER = $store;
     }
 }

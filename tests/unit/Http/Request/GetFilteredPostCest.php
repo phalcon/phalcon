@@ -16,14 +16,13 @@ namespace Phalcon\Tests\Unit\Http\Request;
 use Codeception\Example;
 use Phalcon\Http\Request;
 use Phalcon\Tests\Fixtures\Traits\DiTrait;
+use Phalcon\Tests\Unit\Http\Helper\HttpBase;
 use UnitTester;
 
 use function ucfirst;
 
-class GetFilteredPostCest
+class GetFilteredPostCest extends HttpBase
 {
-    use DiTrait;
-
     /**
      * Tests Phalcon\Http\Request :: getFilteredPost()
      *
@@ -36,10 +35,7 @@ class GetFilteredPostCest
     {
         $I->wantToTest('Http\Request - getFiltered*() - ' . $example[0]);
 
-        $container = $this->newService('factoryDefault');
-
-        /** @var Request $request */
-        $request = $container->get('request');
+        $request = $this->getRequestObject();
 
         $request->setParameterFilters($example[1], $example[2], $example[3]);
 
@@ -68,11 +64,11 @@ class GetFilteredPostCest
     public function httpRequestGetFilteredDefault(UnitTester $I)
     {
         $I->wantToTest('Http\Request - getFiltered*() - default');
-        $container = $this->newService('factoryDefault');
-        /** @var Request $request */
-        $request = $container->get('request');
+
+        $request = $this->getRequestObject();
         $request
-            ->setParameterFilters('id', ['absint'], ['post', 'get']);
+            ->setParameterFilters('id', ['absint'], ['post', 'get'])
+        ;
 
         $_GET  = ['no-id' => '24'];
         $_POST = ['no-id' => '24'];
@@ -86,6 +82,9 @@ class GetFilteredPostCest
         $I->assertSame($expected, $actual);
     }
 
+    /**
+     * @return array[]
+     */
     private function getExamples(): array
     {
         return [

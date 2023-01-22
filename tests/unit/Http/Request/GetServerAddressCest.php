@@ -13,8 +13,11 @@ declare(strict_types=1);
 
 namespace Phalcon\Tests\Unit\Http\Request;
 
+use Page\Http;
 use Phalcon\Tests\Unit\Http\Helper\HttpBase;
 use UnitTester;
+
+use function gethostbyname;
 
 class GetServerAddressCest extends HttpBase
 {
@@ -28,10 +31,9 @@ class GetServerAddressCest extends HttpBase
     {
         $request = $this->getRequestObject();
 
-        $I->assertSame(
-            gethostbyname('localhost'),
-            $request->getServerAddress()
-        );
+        $expected = gethostbyname('localhost');
+        $actual   = $request->getServerAddress();
+        $I->assertSame($expected, $actual);
     }
 
     /**
@@ -44,13 +46,10 @@ class GetServerAddressCest extends HttpBase
     {
         $request = $this->getRequestObject();
 
-        $this->setServerVar('SERVER_ADDR', '192.168.4.1');
-        $actual = $request->getServerAddress();
-        $this->unsetServerVar('SERVER_ADDR');
+        $_SERVER['SERVER_ADDR'] = Http::TEST_IP_ONE;
 
-        $I->assertSame(
-            '192.168.4.1',
-            $actual
-        );
+        $expected = Http::TEST_IP_ONE;
+        $actual = $request->getServerAddress();
+        $I->assertSame($expected, $actual);
     }
 }

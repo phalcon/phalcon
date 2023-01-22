@@ -13,6 +13,7 @@ declare(strict_types=1);
 
 namespace Phalcon\Tests\Unit\Http\Request\File;
 
+use Page\Http;
 use Phalcon\Http\Request\File;
 use UnitTester;
 
@@ -33,7 +34,7 @@ class GetExtensionCest
         $file = new File(
             [
                 'name'      => 'test.php',
-                'type'      => 'text/plain',
+                'type'      => Http::HEADERS_CONTENT_TYPE_PLAIN,
                 'extension' => 'jpg',
                 'tmp_name'  => dataDir('/assets/images/example-jpg.jpg'),
                 'size'      => 1,
@@ -41,6 +42,8 @@ class GetExtensionCest
             ]
         );
 
-        $I->assertSame('php', $file->getExtension());
+        $expected = Http::STREAM_NAME;
+        $actual   = $file->getExtension();
+        $I->assertSame($expected, $actual);
     }
 }
