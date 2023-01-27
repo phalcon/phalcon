@@ -230,20 +230,20 @@ trait DiTrait
             case 'url':
 //            case 'modelsManager':
 //            case 'modelsMetadata':
-//            case 'request':
-//            case 'response':
+            case 'request':
+            case 'response':
                 $this->container->set($service, $class);
                 break;
-//            case 'crypt':
-//                $this->container->set(
-//                    'crypt',
-//                    function () use ($class) {
-//                        $class->setKey('cryptkeycryptkey');
-//
-//                        return $class;
-//                    }
-//                );
-//                break;
+            case 'crypt':
+                $this->container->set(
+                    'crypt',
+                    function () use ($class) {
+                        $class->setKey('cryptkeycryptkey');
+
+                        return $class;
+                    }
+                );
+                break;
 //
 //            case 'modelsCacheLibmemcached':
 //            case 'modelsCacheStream':
