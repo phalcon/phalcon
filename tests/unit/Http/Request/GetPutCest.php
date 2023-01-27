@@ -40,7 +40,7 @@ class GetPutCest extends HttpBase
 
         file_put_contents(Http::STREAM, 'fruit=orange&quantity=4');
 
-        $_SERVER['REQUEST_METHOD'] = Http::REQUEST_METHOD_PUT;
+        $_SERVER['REQUEST_METHOD'] = Http::METHOD_PUT;
 
         $request = $this->getRequestObject();
 
@@ -89,8 +89,8 @@ class GetPutCest extends HttpBase
             '{"fruit": "orange", "quantity": "4"}'
         );
 
-        $_SERVER['REQUEST_METHOD'] = Http::REQUEST_METHOD_PUT;
-        $_SERVER['CONTENT_TYPE']   = Http::HEADERS_CONTENT_TYPE_JSON;
+        $_SERVER['REQUEST_METHOD'] = Http::METHOD_PUT;
+        $_SERVER['CONTENT_TYPE']   = Http::CONTENT_TYPE_JSON;
 
         $request = $this->getRequestObject();
 

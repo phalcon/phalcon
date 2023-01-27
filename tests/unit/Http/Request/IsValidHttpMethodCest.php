@@ -50,83 +50,83 @@ class IsValidHttpMethodCest
     {
         return [
             [
-                Http::REQUEST_METHOD_CONNECT,
+                Http::METHOD_CONNECT,
                 true,
             ],
             [
-                Http::REQUEST_METHOD_DELETE,
+                Http::METHOD_DELETE,
                 true,
             ],
             [
-                Http::REQUEST_METHOD_GET,
+                Http::METHOD_GET,
                 true,
             ],
             [
-                Http::REQUEST_METHOD_HEAD,
+                Http::METHOD_HEAD,
                 true,
             ],
             [
-                Http::REQUEST_METHOD_OPTIONS,
+                Http::METHOD_OPTIONS,
                 true,
             ],
             [
-                Http::REQUEST_METHOD_PATCH,
+                Http::METHOD_PATCH,
                 true,
             ],
             [
-                Http::REQUEST_METHOD_POST,
+                Http::METHOD_POST,
                 true,
             ],
             [
-                Http::REQUEST_METHOD_PURGE,
+                Http::METHOD_PURGE,
                 true,
             ],
             [
-                Http::REQUEST_METHOD_PUT,
+                Http::METHOD_PUT,
                 true,
             ],
             [
-                Http::REQUEST_METHOD_TRACE,
+                Http::METHOD_TRACE,
                 true,
             ],
             [
-                strtolower(Http::REQUEST_METHOD_CONNECT),
+                strtolower(Http::METHOD_CONNECT),
                 true,
             ],
             [
-                strtolower(Http::REQUEST_METHOD_DELETE),
+                strtolower(Http::METHOD_DELETE),
                 true,
             ],
             [
-                strtolower(Http::REQUEST_METHOD_GET),
+                strtolower(Http::METHOD_GET),
                 true,
             ],
             [
-                strtolower(Http::REQUEST_METHOD_HEAD),
+                strtolower(Http::METHOD_HEAD),
                 true,
             ],
             [
-                strtolower(Http::REQUEST_METHOD_OPTIONS),
+                strtolower(Http::METHOD_OPTIONS),
                 true,
             ],
             [
-                strtolower(Http::REQUEST_METHOD_PATCH),
+                strtolower(Http::METHOD_PATCH),
                 true,
             ],
             [
-                strtolower(Http::REQUEST_METHOD_POST),
+                strtolower(Http::METHOD_POST),
                 true,
             ],
             [
-                strtolower(Http::REQUEST_METHOD_PURGE),
+                strtolower(Http::METHOD_PURGE),
                 true,
             ],
             [
-                strtolower(Http::REQUEST_METHOD_PUT),
+                strtolower(Http::METHOD_PUT),
                 true,
             ],
             [
-                strtolower(Http::REQUEST_METHOD_TRACE),
+                strtolower(Http::METHOD_TRACE),
                 true,
             ],
             [

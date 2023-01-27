@@ -40,7 +40,7 @@ class GetPatchCest extends HttpBase
 
         file_put_contents(Http::STREAM, 'fruit=orange&quantity=4');
 
-        $_SERVER['REQUEST_METHOD'] = Http::REQUEST_METHOD_PATCH;
+        $_SERVER['REQUEST_METHOD'] = Http::METHOD_PATCH;
 
         $request = $this->getRequestObject();
 
@@ -86,8 +86,8 @@ class GetPatchCest extends HttpBase
             '{"fruit": "orange", "quantity": "4"}'
         );
 
-        $_SERVER['REQUEST_METHOD'] = Http::REQUEST_METHOD_PATCH;
-        $_SERVER['CONTENT_TYPE']   = Http::HEADERS_CONTENT_TYPE_JSON;
+        $_SERVER['REQUEST_METHOD'] = Http::METHOD_PATCH;
+        $_SERVER['CONTENT_TYPE']   = Http::CONTENT_TYPE_JSON;
 
         $request = $this->getRequestObject();
 

@@ -35,7 +35,7 @@ class GetFilteredPutCest extends HttpBase
 
         file_put_contents(Http::STREAM, 'no-id=24');
 
-        $_SERVER['REQUEST_METHOD'] = Http::REQUEST_METHOD_PUT;
+        $_SERVER['REQUEST_METHOD'] = Http::METHOD_PUT;
 
         $request = $this->getRequestObject();
         $request

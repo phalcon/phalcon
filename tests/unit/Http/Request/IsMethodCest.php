@@ -30,31 +30,31 @@ class IsMethodCest extends HttpBase
     {
         $I->wantToTest('Http\Request - isMethod()');
 
-        $_SERVER['REQUEST_METHOD'] = Http::REQUEST_METHOD_POST;
+        $_SERVER['REQUEST_METHOD'] = Http::METHOD_POST;
 
         $request = $this->getRequestObject();
 
-        $actual = $request->isMethod(Http::REQUEST_METHOD_POST);
+        $actual = $request->isMethod(Http::METHOD_POST);
         $I->assertTrue($actual);
 
         $actual = $request->isMethod(
             [
-                Http::REQUEST_METHOD_GET,
-                Http::REQUEST_METHOD_POST,
+                Http::METHOD_GET,
+                Http::METHOD_POST,
             ]
         );
         $I->assertTrue($actual);
 
 
-        $_SERVER['REQUEST_METHOD'] = Http::REQUEST_METHOD_GET;
+        $_SERVER['REQUEST_METHOD'] = Http::METHOD_GET;
 
-        $actual = $request->isMethod(Http::REQUEST_METHOD_GET);
+        $actual = $request->isMethod(Http::METHOD_GET);
         $I->assertTrue($actual);
 
         $actual = $request->isMethod(
             [
-                Http::REQUEST_METHOD_GET,
-                Http::REQUEST_METHOD_POST,
+                Http::METHOD_GET,
+                Http::METHOD_POST,
             ]
         );
         $I->assertTrue($actual);

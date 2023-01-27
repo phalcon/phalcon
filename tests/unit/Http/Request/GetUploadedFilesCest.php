@@ -33,8 +33,8 @@ class GetUploadedFilesCest extends HttpBase
         $_FILES['photo'] = [
             'name'     => ['f0', 'f1', ['f2', 'f3'], [[[['f4']]]]],
             'type'     => [
-                Http::HEADERS_CONTENT_TYPE_PLAIN,
-                Http::HEADERS_CONTENT_TYPE_CSV,
+                Http::CONTENT_TYPE_PLAIN,
+                Http::CONTENT_TYPE_CSV,
                 ['image/png', 'image/gif'],
                 [[[['application/octet-stream']]]],
             ],

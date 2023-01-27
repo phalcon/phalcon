@@ -38,7 +38,7 @@ class GetAcceptableContentCest extends HttpBase
         $request  = new Request();
         $expected = [
             [
-                'accept'  => Http::HEADERS_CONTENT_TYPE_HTML,
+                'accept'  => Http::CONTENT_TYPE_HTML,
                 'quality' => 1.0,
             ],
             [

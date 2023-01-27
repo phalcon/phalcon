@@ -38,7 +38,7 @@ class GetBestAcceptCest extends HttpBase
 
         $request = new Request();
 
-        $expected = Http::HEADERS_CONTENT_TYPE_HTML;
+        $expected = Http::CONTENT_TYPE_HTML;
         $actual   = $request->getBestAccept();
         $I->assertSame($expected, $actual);
     }

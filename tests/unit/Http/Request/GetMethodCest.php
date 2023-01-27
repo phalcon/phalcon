@@ -35,7 +35,7 @@ class GetMethodCest extends HttpBase
         // Default
         $request = $this->getRequestObject();
 
-        $expected = Http::REQUEST_METHOD_GET;
+        $expected = Http::METHOD_GET;
         $actual   = $request->getMethod();
         $I->assertSame($expected, $actual);
     }
@@ -49,11 +49,11 @@ class GetMethodCest extends HttpBase
     {
         $I->wantToTest('Http\Request - getMethod() - header POST');
 
-        $_SERVER['REQUEST_METHOD'] = Http::REQUEST_METHOD_POST;
+        $_SERVER['REQUEST_METHOD'] = Http::METHOD_POST;
 
         $request = $this->getRequestObject();
 
-        $expected = Http::REQUEST_METHOD_POST;
+        $expected = Http::METHOD_POST;
         $actual   = $request->getMethod();
         $I->assertSame($expected, $actual);
     }
@@ -68,12 +68,12 @@ class GetMethodCest extends HttpBase
     {
         $I->wantToTest('Http\Request - getMethod() - header POST override');
 
-        $_SERVER['REQUEST_METHOD'] = Http::REQUEST_METHOD_POST;
-        $_SERVER['X_HTTP_METHOD_OVERRIDE'] = Http::REQUEST_METHOD_TRACE;
+        $_SERVER['REQUEST_METHOD'] = Http::METHOD_POST;
+        $_SERVER['X_HTTP_METHOD_OVERRIDE'] = Http::METHOD_TRACE;
 
         $request = $this->getRequestObject();
 
-        $expected = Http::REQUEST_METHOD_TRACE;
+        $expected = Http::METHOD_TRACE;
         $actual   = $request->getMethod();
         $I->assertSame($expected, $actual);
     }
@@ -88,13 +88,13 @@ class GetMethodCest extends HttpBase
     {
         $I->wantToTest('Http\Request - getMethod() - header spoof');
 
-        $_SERVER['REQUEST_METHOD'] = Http::REQUEST_METHOD_POST;
-        $_REQUEST['_method'] = Http::REQUEST_METHOD_CONNECT;
+        $_SERVER['REQUEST_METHOD'] = Http::METHOD_POST;
+        $_REQUEST['_method'] = Http::METHOD_CONNECT;
 
         $request = $this->getRequestObject();
         $request->setHttpMethodParameterOverride(true);
 
-        $expected = Http::REQUEST_METHOD_CONNECT;
+        $expected = Http::METHOD_CONNECT;
         $actual   = $request->getMethod();
         $I->assertSame($expected, $actual);
     }
@@ -114,7 +114,7 @@ class GetMethodCest extends HttpBase
 
         $request = $this->getRequestObject();
 
-        $expected = Http::REQUEST_METHOD_GET;
+        $expected = Http::METHOD_GET;
         $actual   = $request->getMethod();
         $I->assertSame($expected, $actual);
     }
