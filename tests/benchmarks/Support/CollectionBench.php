@@ -16,7 +16,6 @@ namespace Phalcon\Tests\Benchmarks\Support;
 use Phalcon\Support\Collection;
 
 use function rand;
-use function range;
 use function uniqid;
 
 /**
