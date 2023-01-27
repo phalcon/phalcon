@@ -31,7 +31,7 @@ class WithAddedHeaderCest
         $I->wantToTest('Http\Message\Request - withAddedHeader()');
 
         $data = [
-            'Accept' => [Http::HEADERS_CONTENT_TYPE_HTML],
+            'Accept' => [Http::CONTENT_TYPE_HTML],
         ];
 
         $request = new Request('GET', null, Http::STREAM_MEMORY, $data);
@@ -46,7 +46,7 @@ class WithAddedHeaderCest
         $I->assertNotSame($request, $newInstance);
 
         $expected = [
-            'Accept' => [Http::HEADERS_CONTENT_TYPE_HTML],
+            'Accept' => [Http::CONTENT_TYPE_HTML],
         ];
 
         $I->assertSame(
@@ -55,7 +55,7 @@ class WithAddedHeaderCest
         );
 
         $expected = [
-            'Accept'        => [Http::HEADERS_CONTENT_TYPE_HTML],
+            'Accept'        => [Http::CONTENT_TYPE_HTML],
             'Cache-Control' => ['max-age=0'],
         ];
 
@@ -76,7 +76,7 @@ class WithAddedHeaderCest
         $I->wantToTest('Http\Message\Request - withAddedHeader() - string value');
 
         $data = [
-            'Accept' => [Http::HEADERS_CONTENT_TYPE_HTML],
+            'Accept' => [Http::CONTENT_TYPE_HTML],
         ];
 
         $request = new Request('GET', null, Http::STREAM_MEMORY, $data);
@@ -89,7 +89,7 @@ class WithAddedHeaderCest
         $I->assertNotSame($request, $newInstance);
 
         $expected = [
-            'Accept'        => [Http::HEADERS_CONTENT_TYPE_HTML],
+            'Accept'        => [Http::CONTENT_TYPE_HTML],
             'Cache-Control' => ['max-age=0'],
         ];
 
@@ -134,7 +134,7 @@ class WithAddedHeaderCest
     public function httpMessageRequestWithAddedHeaderMerge(UnitTester $I)
     {
         $data = [
-            'Accept' => [Http::HEADERS_CONTENT_TYPE_HTML],
+            'Accept' => [Http::CONTENT_TYPE_HTML],
         ];
 
         $request = new Request('GET', null, Http::STREAM, $data);
@@ -150,7 +150,7 @@ class WithAddedHeaderCest
 
         $expected = [
             'Accept' => [
-                Http::HEADERS_CONTENT_TYPE_HTML,
+                Http::CONTENT_TYPE_HTML,
             ],
         ];
 
@@ -161,7 +161,7 @@ class WithAddedHeaderCest
 
         $expected = [
             'Accept' => [
-                Http::HEADERS_CONTENT_TYPE_HTML,
+                Http::CONTENT_TYPE_HTML,
                 'text/json',
             ],
         ];

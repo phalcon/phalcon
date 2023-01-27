@@ -30,11 +30,11 @@ class GetHeaderCest
         $I->wantToTest('Http\Message\ServerRequest - getHeader()');
         $data    = [
             'Cache-Control' => ['max-age=0'],
-            'Accept'        => [Http::HEADERS_CONTENT_TYPE_HTML],
+            'Accept'        => [Http::CONTENT_TYPE_HTML],
         ];
         $request = new ServerRequest('GET', null, [], Http::STREAM, $data);
 
-        $expected = [Http::HEADERS_CONTENT_TYPE_HTML];
+        $expected = [Http::CONTENT_TYPE_HTML];
         $actual   = $request->getHeader('accept');
         $I->assertSame($expected, $actual);
 

@@ -30,14 +30,14 @@ class GetHeadersCest
         $I->wantToTest('Http\Message\Response - getHeaders()');
 
         $data = [
-            'Accept'        => [Http::HEADERS_CONTENT_TYPE_HTML],
+            'Accept'        => [Http::CONTENT_TYPE_HTML],
             'Cache-Control' => ['max-age=0'],
         ];
 
         $response = new Response(Http::STREAM_MEMORY, 200, $data);
 
         $expected = [
-            'Accept'        => [Http::HEADERS_CONTENT_TYPE_HTML],
+            'Accept'        => [Http::CONTENT_TYPE_HTML],
             'Cache-Control' => ['max-age=0'],
         ];
         $actual   = $response->getHeaders();

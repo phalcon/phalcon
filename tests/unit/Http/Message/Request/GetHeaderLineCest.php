@@ -31,7 +31,7 @@ class GetHeaderLineCest
 
         $data = [
             'Accept' => [
-                Http::HEADERS_CONTENT_TYPE_HTML,
+                Http::CONTENT_TYPE_HTML,
                 'text/json',
             ],
         ];

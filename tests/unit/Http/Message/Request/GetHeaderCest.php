@@ -31,7 +31,7 @@ class GetHeaderCest
 
         $data = [
             'Cache-Control' => ['max-age=0'],
-            'Accept'        => [Http::HEADERS_CONTENT_TYPE_HTML],
+            'Accept'        => [Http::CONTENT_TYPE_HTML],
         ];
 
         $request = new Request(
@@ -41,7 +41,7 @@ class GetHeaderCest
             $data
         );
 
-        $expected = [Http::HEADERS_CONTENT_TYPE_HTML];
+        $expected = [Http::CONTENT_TYPE_HTML];
 
         $I->assertSame(
             $expected,

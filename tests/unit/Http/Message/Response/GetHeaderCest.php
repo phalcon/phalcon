@@ -31,12 +31,12 @@ class GetHeaderCest
 
         $data = [
             'cache-control' => ['max-age=0'],
-            'accept'        => [Http::HEADERS_CONTENT_TYPE_HTML],
+            'accept'        => [Http::CONTENT_TYPE_HTML],
         ];
 
         $response = new Response(Http::STREAM_MEMORY, 200, $data);
 
-        $expected = [Http::HEADERS_CONTENT_TYPE_HTML];
+        $expected = [Http::CONTENT_TYPE_HTML];
 
         $I->assertSame(
             $expected,

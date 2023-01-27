@@ -118,14 +118,14 @@ class ConstructCest
             Http::STREAM_MEMORY,
             [
                 'Host'          => ['test.phalcon.ld'],
-                'Accept'        => [Http::HEADERS_CONTENT_TYPE_HTML],
+                'Accept'        => [Http::CONTENT_TYPE_HTML],
                 'Cache-Control' => ['max-age=0'],
             ]
         );
 
         $expected = [
             'Host'          => ['dev.phalcon.ld:8080'],
-            'Accept'        => [Http::HEADERS_CONTENT_TYPE_HTML],
+            'Accept'        => [Http::CONTENT_TYPE_HTML],
             'Cache-Control' => ['max-age=0'],
         ];
         $actual   = $request->getHeaders();
