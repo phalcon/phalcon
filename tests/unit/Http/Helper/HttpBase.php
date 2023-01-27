@@ -15,6 +15,7 @@ namespace Phalcon\Tests\Unit\Http\Helper;
 
 use Page\Http;
 use Phalcon\Http\Request;
+use Phalcon\Http\Response;
 use Phalcon\Tests\Fixtures\Http\PhpStream;
 use Phalcon\Tests\Fixtures\Traits\DiTrait;
 use UnitTester;
@@ -72,39 +73,6 @@ class HttpBase
     }
 
     /**
-     * Checks the get functions on undefined variables
-     *
-     * @author Phalcon Team <team@phalcon.io>
-     * @since  2014-10-05
-     */
-    protected function getEmpty(UnitTester $I, string $function)
-    {
-        $request = $this->getRequestObject();
-
-        $I->assertEmpty(
-            $request->$function('test')
-        );
-    }
-
-    /**
-     * Checks the get functions on defined variables
-     *
-     * @author Phalcon Team <team@phalcon.io>
-     * @since  2014-10-05
-     */
-    protected function getNotEmpty(UnitTester $I, string $function, string $method)
-    {
-        $request  = $this->getRequestObject();
-        $unMethod = "un{$method}";
-
-        $this->$method('test', 1);
-        $actual = $request->$function('test');
-        $this->$unMethod('test');
-
-        $I->assertSame(1, $actual);
-    }
-
-    /**
      * Initializes the request object and returns it
      *
      * @author Phalcon Team <team@phalcon.io>
@@ -124,79 +92,6 @@ class HttpBase
     protected function getResponseObject(): Response
     {
         return $this->container->get('response');
-    }
-
-    /**
-     * Checks the has functions on non defined variables
-     *
-     * @author Phalcon Team <team@phalcon.io>
-     * @since  2014-10-05
-     */
-    protected function hasEmpty(UnitTester $I, string $function)
-    {
-        $request = $this->getRequestObject();
-
-        $I->assertFalse(
-            $request->$function('test')
-        );
-    }
-
-    /**
-     * Checks the has functions on defined variables
-     *
-     * @author Phalcon Team <team@phalcon.io>
-     * @since  2014-10-05
-     */
-    protected function hasNotEmpty(UnitTester $I, string $function, string $method)
-    {
-        $request  = $this->getRequestObject();
-        $unMethod = "un{$method}";
-
-        $this->$method('test', 1);
-        $actual = $request->$function('test');
-        $this->$unMethod('test');
-
-        $I->assertTrue($actual);
-    }
-
-    /**
-     * Checks the get functions for sanitized data
-     *
-     * @author Phalcon Team <team@phalcon.io>
-     * @since  2014-10-05
-     */
-    protected function getSanitized(UnitTester $I, string $function, string $method)
-    {
-        $request  = $this->getRequestObject();
-        $unMethod = "un{$method}";
-
-        $this->$method('test', 'lol<');
-        $expected = 'lol&lt;';
-        $actual   = $request->$function('test', 'string');
-        $this->$unMethod('test');
-
-        $I->assertSame($expected, $actual);
-    }
-
-    /**
-     * Checks the get functions for sanitized data (array filters)
-     *
-     * @param array $filter
-     *
-     * @author Phalcon Team <team@phalcon.io>
-     * @since  2014-10-05
-     */
-    protected function getSanitizedArrayFilter(UnitTester $I, string $function, $filter, string $method)
-    {
-        $request  = $this->getRequestObject();
-        $unMethod = "un{$method}";
-
-        $this->$method('test', 'lol<');
-        $expected = 'lol&lt;';
-        $actual   = $request->$function('test', $filter);
-        $this->$unMethod('test');
-
-        $I->assertSame($expected, $actual);
     }
 
     /**
