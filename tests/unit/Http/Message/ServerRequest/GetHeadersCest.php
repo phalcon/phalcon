@@ -30,13 +30,13 @@ class GetHeadersCest
     {
         $I->wantToTest('Http\Message\ServerRequest - getHeaders()');
         $data    = [
-            'Accept'        => [Http::HEADERS_CONTENT_TYPE_HTML],
+            'Accept'        => [Http::CONTENT_TYPE_HTML],
             'Cache-Control' => ['max-age=0'],
         ];
         $request = new ServerRequest('GET', null, [], Http::STREAM, $data);
 
         $expected = [
-            'Accept'        => [Http::HEADERS_CONTENT_TYPE_HTML],
+            'Accept'        => [Http::CONTENT_TYPE_HTML],
             'Cache-Control' => ['max-age=0'],
         ];
         $actual   = $request->getHeaders();
@@ -53,14 +53,14 @@ class GetHeadersCest
     {
         $I->wantToTest('Http\Message\ServerRequest - getHeaders() - collection');
         $data    = [
-            'Accept'        => [Http::HEADERS_CONTENT_TYPE_HTML],
+            'Accept'        => [Http::CONTENT_TYPE_HTML],
             'Cache-Control' => ['max-age=0'],
         ];
         $headers = new Headers($data);
         $request = new ServerRequest('GET', null, [], Http::STREAM, $headers);
 
         $expected = [
-            'Accept'        => [Http::HEADERS_CONTENT_TYPE_HTML],
+            'Accept'        => [Http::CONTENT_TYPE_HTML],
             'Cache-Control' => ['max-age=0'],
         ];
         $actual   = $request->getHeaders();

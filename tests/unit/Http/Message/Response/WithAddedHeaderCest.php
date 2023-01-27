@@ -29,7 +29,7 @@ class WithAddedHeaderCest
     {
         $I->wantToTest('Http\Message\Response - withAddedHeader()');
         $data        = [
-            'Accept' => [Http::HEADERS_CONTENT_TYPE_HTML],
+            'Accept' => [Http::CONTENT_TYPE_HTML],
         ];
         $response    = new Response(Http::STREAM_MEMORY, 200, $data);
         $newInstance = $response->withAddedHeader('Cache-Control', ['max-age=0']);
@@ -37,13 +37,13 @@ class WithAddedHeaderCest
         $I->assertNotSame($response, $newInstance);
 
         $expected = [
-            'Accept' => [Http::HEADERS_CONTENT_TYPE_HTML],
+            'Accept' => [Http::CONTENT_TYPE_HTML],
         ];
         $actual   = $response->getHeaders();
         $I->assertSame($expected, $actual);
 
         $expected = [
-            'Accept'        => [Http::HEADERS_CONTENT_TYPE_HTML],
+            'Accept'        => [Http::CONTENT_TYPE_HTML],
             'Cache-Control' => ['max-age=0'],
         ];
         $actual   = $newInstance->getHeaders();
@@ -59,7 +59,7 @@ class WithAddedHeaderCest
     public function httpMessageResponseWithAddedHeaderMerge(UnitTester $I)
     {
         $data        = [
-            'Accept' => [Http::HEADERS_CONTENT_TYPE_HTML],
+            'Accept' => [Http::CONTENT_TYPE_HTML],
         ];
         $response    = new Response(Http::STREAM_MEMORY, 200, $data);
         $newInstance = $response->withAddedHeader('Accept', ['text/json']);
@@ -67,13 +67,13 @@ class WithAddedHeaderCest
         $I->assertNotSame($response, $newInstance);
 
         $expected = [
-            'Accept' => [Http::HEADERS_CONTENT_TYPE_HTML],
+            'Accept' => [Http::CONTENT_TYPE_HTML],
         ];
         $actual   = $response->getHeaders();
         $I->assertSame($expected, $actual);
 
         $expected = [
-            'Accept' => [Http::HEADERS_CONTENT_TYPE_HTML, 'text/json'],
+            'Accept' => [Http::CONTENT_TYPE_HTML, 'text/json'],
         ];
         $actual   = $newInstance->getHeaders();
         $I->assertSame($expected, $actual);

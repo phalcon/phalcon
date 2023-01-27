@@ -32,7 +32,7 @@ class WithHeaderCest
         $I->wantToTest('Http\Message\Request - withHeader()');
 
         $data = [
-            'Accept' => [Http::HEADERS_CONTENT_TYPE_HTML],
+            'Accept' => [Http::CONTENT_TYPE_HTML],
         ];
 
         $request = new Request('GET', null, Http::STREAM_MEMORY, $data);
@@ -47,7 +47,7 @@ class WithHeaderCest
         $I->assertNotSame($request, $newInstance);
 
         $expected = [
-            'Accept' => [Http::HEADERS_CONTENT_TYPE_HTML],
+            'Accept' => [Http::CONTENT_TYPE_HTML],
         ];
 
         $I->assertSame(
@@ -56,7 +56,7 @@ class WithHeaderCest
         );
 
         $expected = [
-            'Accept'        => [Http::HEADERS_CONTENT_TYPE_HTML],
+            'Accept'        => [Http::CONTENT_TYPE_HTML],
             'Cache-Control' => ['max-age=0'],
         ];
 

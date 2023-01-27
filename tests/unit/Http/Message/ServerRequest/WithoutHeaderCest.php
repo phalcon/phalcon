@@ -29,7 +29,7 @@ class WithoutHeaderCest
     {
         $I->wantToTest('Http\Message\ServerRequest - withoutHeader()');
         $data        = [
-            'Accept'        => [Http::HEADERS_CONTENT_TYPE_HTML],
+            'Accept'        => [Http::CONTENT_TYPE_HTML],
             'Cache-Control' => ['max-age=0'],
         ];
         $request     = new ServerRequest('GET', null, [], Http::STREAM, $data);
@@ -38,7 +38,7 @@ class WithoutHeaderCest
         $I->assertNotSame($request, $newInstance);
 
         $expected = [
-            'Accept'        => [Http::HEADERS_CONTENT_TYPE_HTML],
+            'Accept'        => [Http::CONTENT_TYPE_HTML],
             'Cache-Control' => ['max-age=0'],
         ];
         $actual   = $request->getHeaders();

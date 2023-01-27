@@ -30,7 +30,7 @@ class WithoutHeaderCest
         $I->wantToTest('Http\Message\Request - withoutHeader()');
 
         $data = [
-            'Accept'        => [Http::HEADERS_CONTENT_TYPE_HTML],
+            'Accept'        => [Http::CONTENT_TYPE_HTML],
             'Cache-Control' => ['max-age=0'],
         ];
 
@@ -41,7 +41,7 @@ class WithoutHeaderCest
         $I->assertNotSame($request, $newInstance);
 
         $expected = [
-            'Accept'        => [Http::HEADERS_CONTENT_TYPE_HTML],
+            'Accept'        => [Http::CONTENT_TYPE_HTML],
             'Cache-Control' => ['max-age=0'],
         ];
 

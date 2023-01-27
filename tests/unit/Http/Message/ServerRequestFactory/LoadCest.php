@@ -322,7 +322,7 @@ class LoadCest extends HttpBase
             0,
             0,
             'test2',
-            Http::HEADERS_CONTENT_TYPE_PLAIN
+            Http::CONTENT_TYPE_PLAIN
         );
 
         $files = [
@@ -331,7 +331,7 @@ class LoadCest extends HttpBase
                 'size'     => 0,
                 'error'    => 0,
                 'name'     => 'test1',
-                'type'     => Http::HEADERS_CONTENT_TYPE_PLAIN,
+                'type'     => Http::CONTENT_TYPE_PLAIN,
             ],
             $uploadObject,
             [
@@ -340,7 +340,7 @@ class LoadCest extends HttpBase
                     'size'     => 0,
                     'error'    => 0,
                     'name'     => 'test3',
-                    'type'     => Http::HEADERS_CONTENT_TYPE_PLAIN,
+                    'type'     => Http::CONTENT_TYPE_PLAIN,
                 ],
             ],
         ];
@@ -354,7 +354,7 @@ class LoadCest extends HttpBase
         $element = $actual[0];
         $I->assertInstanceOf(UploadedFile::class, $element);
         $I->assertSame('test1', $element->getClientFilename());
-        $I->assertSame(Http::HEADERS_CONTENT_TYPE_PLAIN, $element->getClientMediaType());
+        $I->assertSame(Http::CONTENT_TYPE_PLAIN, $element->getClientMediaType());
 
         /** @var UploadedFile $element */
         $element = $actual[1];
@@ -365,7 +365,7 @@ class LoadCest extends HttpBase
         $element = $actual[2][0];
         $I->assertInstanceOf(UploadedFile::class, $element);
         $I->assertSame('test3', $element->getClientFilename());
-        $I->assertSame(Http::HEADERS_CONTENT_TYPE_PLAIN, $element->getClientMediaType());
+        $I->assertSame(Http::CONTENT_TYPE_PLAIN, $element->getClientMediaType());
     }
 
     /**
@@ -392,7 +392,7 @@ class LoadCest extends HttpBase
                         'tmp_name' => Http::STREAM_TEMP,
                         'size'     => 0,
                         'name'     => 'test1',
-                        'type'     => Http::HEADERS_CONTENT_TYPE_PLAIN,
+                        'type'     => Http::CONTENT_TYPE_PLAIN,
                     ],
                 ];
 
@@ -455,7 +455,7 @@ class LoadCest extends HttpBase
 
         $factory = new ServerRequestFactory();
         $request = $factory->load(
-            $example[Http::HEADERS_SERVER],
+            $example[Http::SERVER],
             $example['get'],
             $example['post'],
             $example['cookies'],
@@ -524,7 +524,7 @@ class LoadCest extends HttpBase
 
         $factory = new ServerRequestFactory();
         $request = $factory->load(
-            $example[Http::HEADERS_SERVER],
+            $example[Http::SERVER],
             $example['get'],
             $example['post'],
             $example['cookies'],
@@ -646,15 +646,15 @@ class LoadCest extends HttpBase
         return [
             [
                 'label'   => 'empty',
-                Http::HEADERS_SERVER  => null,
+                Http::SERVER  => null,
                 'get'     => null,
                 'post'    => null,
                 'cookies' => null,
                 'files'   => null,
             ],
             [
-                'label'   => Http::HEADERS_SERVER,
-                Http::HEADERS_SERVER  => ['one' => 'two'],
+                'label'   => Http::SERVER,
+                Http::SERVER  => ['one' => 'two'],
                 'get'     => null,
                 'post'    => null,
                 'cookies' => null,
@@ -662,7 +662,7 @@ class LoadCest extends HttpBase
             ],
             [
                 'label'   => 'get',
-                Http::HEADERS_SERVER  => null,
+                Http::SERVER  => null,
                 'get'     => ['one' => 'two'],
                 'post'    => null,
                 'cookies' => null,
@@ -670,7 +670,7 @@ class LoadCest extends HttpBase
             ],
             [
                 'label'   => 'post',
-                Http::HEADERS_SERVER  => null,
+                Http::SERVER  => null,
                 'get'     => null,
                 'post'    => ['one' => 'two'],
                 'cookies' => null,
@@ -678,7 +678,7 @@ class LoadCest extends HttpBase
             ],
             [
                 'label'   => 'cookie',
-                Http::HEADERS_SERVER  => null,
+                Http::SERVER  => null,
                 'get'     => null,
                 'post'    => null,
                 'cookies' => ['one' => 'two'],
@@ -686,7 +686,7 @@ class LoadCest extends HttpBase
             ],
             [
                 'label'   => 'files',
-                Http::HEADERS_SERVER  => null,
+                Http::SERVER  => null,
                 'get'     => null,
                 'post'    => null,
                 'cookies' => null,

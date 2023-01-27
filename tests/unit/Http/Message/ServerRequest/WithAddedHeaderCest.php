@@ -29,7 +29,7 @@ class WithAddedHeaderCest
     {
         $I->wantToTest('Http\Message\ServerRequest - withAddedHeader()');
         $data        = [
-            'Accept' => [Http::HEADERS_CONTENT_TYPE_HTML],
+            'Accept' => [Http::CONTENT_TYPE_HTML],
         ];
         $request     = new ServerRequest('GET', null, [], Http::STREAM, $data);
         $newInstance = $request->withAddedHeader('Cache-Control', ['max-age=0']);
@@ -37,13 +37,13 @@ class WithAddedHeaderCest
         $I->assertNotSame($request, $newInstance);
 
         $expected = [
-            'Accept' => [Http::HEADERS_CONTENT_TYPE_HTML],
+            'Accept' => [Http::CONTENT_TYPE_HTML],
         ];
         $actual   = $request->getHeaders();
         $I->assertSame($expected, $actual);
 
         $expected = [
-            'Accept'        => [Http::HEADERS_CONTENT_TYPE_HTML],
+            'Accept'        => [Http::CONTENT_TYPE_HTML],
             'Cache-Control' => ['max-age=0'],
         ];
         $actual   = $newInstance->getHeaders();
@@ -59,7 +59,7 @@ class WithAddedHeaderCest
     public function httpMessageServerRequestWithAddedHeaderMerge(UnitTester $I)
     {
         $data        = [
-            'Accept' => [Http::HEADERS_CONTENT_TYPE_HTML],
+            'Accept' => [Http::CONTENT_TYPE_HTML],
         ];
         $request     = new ServerRequest('GET', null, [], Http::STREAM, $data);
         $newInstance = $request->withAddedHeader('Accept', ['text/json']);
@@ -67,13 +67,13 @@ class WithAddedHeaderCest
         $I->assertNotSame($request, $newInstance);
 
         $expected = [
-            'Accept' => [Http::HEADERS_CONTENT_TYPE_HTML],
+            'Accept' => [Http::CONTENT_TYPE_HTML],
         ];
         $actual   = $request->getHeaders();
         $I->assertSame($expected, $actual);
 
         $expected = [
-            'Accept' => [Http::HEADERS_CONTENT_TYPE_HTML, 'text/json'],
+            'Accept' => [Http::CONTENT_TYPE_HTML, 'text/json'],
         ];
         $actual   = $newInstance->getHeaders();
         $I->assertSame($expected, $actual);

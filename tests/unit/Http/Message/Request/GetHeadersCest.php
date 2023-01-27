@@ -31,7 +31,7 @@ class GetHeadersCest
         $I->wantToTest('Http\Message\Request - getHeaders()');
 
         $data = [
-            'Accept'        => [Http::HEADERS_CONTENT_TYPE_HTML],
+            'Accept'        => [Http::CONTENT_TYPE_HTML],
             'Cache-Control' => ['max-age=0'],
         ];
 
@@ -43,7 +43,7 @@ class GetHeadersCest
         );
 
         $expected = [
-            'Accept'        => [Http::HEADERS_CONTENT_TYPE_HTML],
+            'Accept'        => [Http::CONTENT_TYPE_HTML],
             'Cache-Control' => ['max-age=0'],
         ];
         $actual   = $request->getHeaders();
@@ -61,7 +61,7 @@ class GetHeadersCest
         $I->wantToTest('Http\Message\Request - getHeaders()');
 
         $data = [
-            'Accept'        => [Http::HEADERS_CONTENT_TYPE_HTML],
+            'Accept'        => [Http::CONTENT_TYPE_HTML],
             'Cache-Control' => ['max-age=0'],
         ];
 
@@ -75,7 +75,7 @@ class GetHeadersCest
         );
 
         $expected = [
-            'Accept'        => [Http::HEADERS_CONTENT_TYPE_HTML],
+            'Accept'        => [Http::CONTENT_TYPE_HTML],
             'Cache-Control' => ['max-age=0'],
         ];
         $actual   = $request->getHeaders();
