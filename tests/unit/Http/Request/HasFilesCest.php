@@ -35,7 +35,7 @@ class HasFilesCest extends HttpBase
         $_FILES = [
             'test' => [
                 'name'     => 'name',
-                'type'     => Http::HEADERS_CONTENT_TYPE_PLAIN,
+                'type'     => Http::CONTENT_TYPE_PLAIN,
                 'size'     => 1,
                 'tmp_name' => 'tmp_name',
                 'error'    => 0,

@@ -30,11 +30,11 @@ class GetContentTypeCest extends HttpBase
     {
         $I->wantToTest('Http\Request - getContentType()');
 
-        $_SERVER['CONTENT_TYPE'] = Http::HEADERS_CONTENT_TYPE_XHTML_XML;
+        $_SERVER['CONTENT_TYPE'] = Http::CONTENT_TYPE_XHTML_XML;
 
         $request = new Request();
 
-        $expected = Http::HEADERS_CONTENT_TYPE_XHTML_XML;
+        $expected = Http::CONTENT_TYPE_XHTML_XML;
         $actual   = $request->getContentType();
         $I->assertSame($expected, $actual);
     }

@@ -35,7 +35,7 @@ class IsUploadedFileCest
         $file = new File(
             [
                 'name'     => 'test',
-                'type'     => Http::HEADERS_CONTENT_TYPE_PLAIN,
+                'type'     => Http::CONTENT_TYPE_PLAIN,
                 'tmp_name' => dataDir('/assets/images/example-jpg.jpg'),
                 'size'     => 1,
                 'error'    => 0,

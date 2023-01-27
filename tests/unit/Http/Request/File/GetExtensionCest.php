@@ -34,7 +34,7 @@ class GetExtensionCest
         $file = new File(
             [
                 'name'      => 'test.php',
-                'type'      => Http::HEADERS_CONTENT_TYPE_PLAIN,
+                'type'      => Http::CONTENT_TYPE_PLAIN,
                 'extension' => 'jpg',
                 'tmp_name'  => dataDir('/assets/images/example-jpg.jpg'),
                 'size'      => 1,

@@ -36,7 +36,7 @@ class GetFilteredPatchCest extends HttpBase
 
         file_put_contents(Http::STREAM, 'no-id=24');
 
-        $_SERVER['REQUEST_METHOD'] = Http::REQUEST_METHOD_PATCH;
+        $_SERVER['REQUEST_METHOD'] = Http::METHOD_PATCH;
 
         $request = $this->getRequestObject();
         $request

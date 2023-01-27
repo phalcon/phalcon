@@ -56,7 +56,7 @@ class NumFilesCest extends HttpBase
                 [
                     'test' => [
                         'name'     => 'name',
-                        'type'     => Http::HEADERS_CONTENT_TYPE_PLAIN,
+                        'type'     => Http::CONTENT_TYPE_PLAIN,
                         'size'     => 1,
                         'tmp_name' => 'tmp_name',
                         'error'    => 0,
@@ -70,8 +70,8 @@ class NumFilesCest extends HttpBase
                     'test' => [
                         'name'     => ['name1', 'name2'],
                         'type'     => [
-                            Http::HEADERS_CONTENT_TYPE_PLAIN,
-                            Http::HEADERS_CONTENT_TYPE_PLAIN,
+                            Http::CONTENT_TYPE_PLAIN,
+                            Http::CONTENT_TYPE_PLAIN,
                         ],
                         'size'     => [1, 1],
                         'tmp_name' => ['tmp_name1', 'tmp_name2'],
