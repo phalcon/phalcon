@@ -30,9 +30,9 @@ class SetRawCest
         $I->wantToTest('Http\Response\Headers - setRaw()');
 
         $headers = new Headers();
-        $headers->setRaw(Http::HEADERS_CONTENT_TYPE_HTML_RAW);
+        $headers->setRaw(Http::CONTENT_TYPE_HTML_RAW);
 
-        $I->assertTrue($headers->has(Http::HEADERS_CONTENT_TYPE_HTML_RAW));
-        $I->assertFalse($headers->has(Http::HEADERS_CONTENT_TYPE_PLAIN_RAW));
+        $I->assertTrue($headers->has(Http::CONTENT_TYPE_HTML_RAW));
+        $I->assertFalse($headers->has(Http::CONTENT_TYPE_PLAIN_RAW));
     }
 }
