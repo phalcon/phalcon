@@ -31,21 +31,21 @@ class HasCest
 
         $headers = new Headers();
         $headers->set(
-            Http::HEADERS_CONTENT_TYPE,
-            Http::HEADERS_CONTENT_TYPE_HTML_CHARSET
+            Http::CONTENT_TYPE,
+            Http::CONTENT_TYPE_HTML_CHARSET
         );
         $headers->set(
-            Http::HEADERS_CONTENT_ENCODING,
-            Http::HEADERS_CONTENT_ENCODING_GZIP
+            Http::CONTENT_ENCODING,
+            Http::CONTENT_ENCODING_GZIP
         );
 
-        $actual = $headers->has(Http::HEADERS_CONTENT_TYPE);
+        $actual = $headers->has(Http::CONTENT_TYPE);
         $I->assertTrue($actual);
 
-        $actual = $headers->has(Http::HEADERS_CONTENT_ENCODING);
+        $actual = $headers->has(Http::CONTENT_ENCODING);
         $I->assertTrue($actual);
 
-        $actual = $headers->has(Http::HEADERS_SERVER);
+        $actual = $headers->has(Http::SERVER);
         $I->assertFalse($actual);
     }
 }

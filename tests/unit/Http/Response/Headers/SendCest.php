@@ -32,12 +32,12 @@ class SendCest
         $headers = new Headers();
 
         $headers->set(
-            Http::HEADERS_CONTENT_TYPE,
-            Http::HEADERS_CONTENT_TYPE_HTML_CHARSET
+            Http::CONTENT_TYPE,
+            Http::CONTENT_TYPE_HTML_CHARSET
         );
         $headers->set(
-            Http::HEADERS_CONTENT_ENCODING,
-            Http::HEADERS_CONTENT_ENCODING_GZIP
+            Http::CONTENT_ENCODING,
+            Http::CONTENT_ENCODING_GZIP
         );
 
         $actual = $headers->send();
@@ -58,12 +58,12 @@ class SendCest
         $headers = new Headers();
 
         $headers->set(
-            Http::HEADERS_CONTENT_TYPE,
-            Http::HEADERS_CONTENT_TYPE_HTML_CHARSET
+            Http::CONTENT_TYPE,
+            Http::CONTENT_TYPE_HTML_CHARSET
         );
         $headers->set(
-            Http::HEADERS_CONTENT_ENCODING,
-            Http::HEADERS_CONTENT_ENCODING_GZIP
+            Http::CONTENT_ENCODING,
+            Http::CONTENT_ENCODING_GZIP
         );
 
         $actual = $headers->isSent();

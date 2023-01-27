@@ -31,22 +31,22 @@ class SetCest
 
         $headers = new Headers();
         $headers->set(
-            Http::HEADERS_CONTENT_TYPE,
-            Http::HEADERS_CONTENT_TYPE_HTML
+            Http::CONTENT_TYPE,
+            Http::CONTENT_TYPE_HTML
         );
 
-        $expected = Http::HEADERS_CONTENT_TYPE_HTML;
-        $actual   = $headers->get(Http::HEADERS_CONTENT_TYPE);
+        $expected = Http::CONTENT_TYPE_HTML;
+        $actual   = $headers->get(Http::CONTENT_TYPE);
 
         $I->assertSame($expected, $actual);
 
         $headers->set(
-            Http::HEADERS_CONTENT_TYPE,
-            Http::HEADERS_CONTENT_TYPE_PLAIN
+            Http::CONTENT_TYPE,
+            Http::CONTENT_TYPE_PLAIN
         );
 
-        $expected = Http::HEADERS_CONTENT_TYPE_PLAIN;
-        $actual   = $headers->get(Http::HEADERS_CONTENT_TYPE);
+        $expected = Http::CONTENT_TYPE_PLAIN;
+        $actual   = $headers->get(Http::CONTENT_TYPE);
 
         $I->assertSame($expected, $actual);
     }

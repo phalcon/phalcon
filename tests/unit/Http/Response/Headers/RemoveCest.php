@@ -31,21 +31,21 @@ class RemoveCest
 
         $headers = new Headers();
         $headers->set(
-            Http::HEADERS_CONTENT_TYPE,
-            Http::HEADERS_CONTENT_TYPE_HTML_CHARSET
+            Http::CONTENT_TYPE,
+            Http::CONTENT_TYPE_HTML_CHARSET
         );
         $headers->set(
-            Http::HEADERS_CONTENT_ENCODING,
-            Http::HEADERS_CONTENT_ENCODING_GZIP
+            Http::CONTENT_ENCODING,
+            Http::CONTENT_ENCODING_GZIP
         );
 
-        $headers->remove(Http::HEADERS_CONTENT_TYPE);
-        $headers->remove(Http::HEADERS_CONTENT_ENCODING);
+        $headers->remove(Http::CONTENT_TYPE);
+        $headers->remove(Http::CONTENT_ENCODING);
 
-        $actual = $headers->get(Http::HEADERS_CONTENT_TYPE);
+        $actual = $headers->get(Http::CONTENT_TYPE);
         $I->assertEmpty($actual);
 
-        $actual = $headers->get(Http::HEADERS_CONTENT_ENCODING);
+        $actual = $headers->get(Http::CONTENT_ENCODING);
         $I->assertEmpty($actual);
     }
 }
