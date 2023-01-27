@@ -62,7 +62,8 @@ final class Uri extends AbstractCommon implements UriInterface
     private const CHAR_SUB_DELIMS = "!\$&\'\(\)\*\+,;=";
 
     /**
-     * Unreserved characters used in user info, paths, query strings, and fragments.
+     * Unreserved characters used in user info, paths, query strings, and
+     * fragments.
      *
      * @const string
      */
@@ -156,7 +157,9 @@ final class Uri extends AbstractCommon implements UriInterface
                 throw new InvalidArgumentException("The URI cannot be parsed");
             }
 
-            $this->fragment = $this->filterFragment($urlParts["fragment"] ?? "");
+            $this->fragment = $this->filterFragment(
+                $urlParts["fragment"] ?? ""
+            );
             $this->host     = strtolower($urlParts["host"] ?? "");
             $this->path     = $this->filterPath($urlParts["path"] ?? "");
             $this->port     = $this->filterPort($urlParts["port"] ?? null);
@@ -165,7 +168,9 @@ final class Uri extends AbstractCommon implements UriInterface
             $this->userInfo = $this->filterUserInfo($urlParts["user"] ?? "");
 
             if (true === isset($urlParts["pass"])) {
-                $this->userInfo .= ":" . $this->filterUserInfo($urlParts["pass"]);
+                $this->userInfo .= ":" . $this->filterUserInfo(
+                        $urlParts["pass"]
+                    );
             }
         }
     }
@@ -717,7 +722,7 @@ final class Uri extends AbstractCommon implements UriInterface
         $filtered = preg_replace("#:(//)?$#", "", mb_strtolower($scheme));
         $schemes  = [
             "http"  => 1,
-            "https" => 1
+            "https" => 1,
         ];
 
         if ("" === $filtered) {

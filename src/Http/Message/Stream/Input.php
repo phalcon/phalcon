@@ -83,7 +83,8 @@ class Input extends Stream
      * @param int $length
      *
      * @return string
-     * @throws RuntimeException If unable to read or if error occurs while reading.
+     * @throws RuntimeException If unable to read or if error occurs while
+     *                          reading.
      */
     public function getContents(int $length = -1): string
     {

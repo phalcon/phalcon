@@ -48,7 +48,8 @@ use function substr;
 /**
  * Factory for ServerRequest objects
  */
-class ServerRequestFactory implements ServerRequestFactoryInterface, RequestMethodInterface
+class ServerRequestFactory implements ServerRequestFactoryInterface,
+                                      RequestMethodInterface
 {
     /**
      * Create a new server request.
@@ -76,7 +77,6 @@ class ServerRequestFactory implements ServerRequestFactoryInterface, RequestMeth
         $uri,
         array $serverParams = []
     ): ServerRequestInterface {
-
         return new ServerRequest($method, $uri, $serverParams);
     }
 
@@ -116,14 +116,19 @@ class ServerRequestFactory implements ServerRequestFactoryInterface, RequestMeth
         $get               = $this->checkNullArray($get, $globalGet);
         $post              = $this->checkNullArray($post, $globalPost);
         $serverCollection  = $this->parseServer($server);
-        $method            = $serverCollection->get("REQUEST_METHOD", self::METHOD_GET);
+        $method            = $serverCollection->get(
+            "REQUEST_METHOD",
+            self::METHOD_GET
+        );
         $protocol          = $this->parseProtocol($serverCollection);
         $headers           = $this->parseHeaders($serverCollection);
         $filesCollection   = $this->parseUploadedFiles($files);
         $cookiesCollection = $cookies;
 
         if (true === empty($cookies) && true === $headers->has("cookie")) {
-            $cookiesCollection = $this->parseCookieHeader($headers->get("cookie"));
+            $cookiesCollection = $this->parseCookieHeader(
+                $headers->get("cookie")
+            );
         }
 
         return new ServerRequest(

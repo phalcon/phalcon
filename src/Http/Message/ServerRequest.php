@@ -33,7 +33,8 @@ use function is_object;
 /**
  * ServerRequest
  */
-final class ServerRequest extends AbstractRequest implements ServerRequestInterface
+final class ServerRequest extends AbstractRequest implements
+    ServerRequestInterface
 {
     /**
      * @var CollectionInterface
@@ -142,7 +143,10 @@ final class ServerRequest extends AbstractRequest implements ServerRequestInterf
         $this->protocolVersion = $this->processProtocol($protocol);
         $this->method          = $this->processMethod($method);
         $this->uri             = $this->processUri($uri);
-        $this->headers         = $collection->processHeaders($headers, $this->uri);
+        $this->headers         = $collection->processHeaders(
+            $headers,
+            $this->uri
+        );
         $this->body            = $this->processBody($body, "w+b");
         $this->uploadedFiles   = $uploadFiles;
         $this->parsedBody      = $parsedBody;
@@ -300,7 +304,8 @@ final class ServerRequest extends AbstractRequest implements ServerRequestInterf
      * @param array|object|null $data
      *
      * @return ServerRequest
-     * @throws InvalidArgumentException if an unsupported argument type is provided.
+     * @throws InvalidArgumentException if an unsupported argument type is
+     *                                  provided.
      *
      */
     public function withParsedBody($data): ServerRequest

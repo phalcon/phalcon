@@ -22,6 +22,7 @@ namespace Phalcon\Http\Message\Exception;
 
 use Throwable;
 
-class InvalidArgumentException extends \InvalidArgumentException implements Throwable
+class InvalidArgumentException extends \InvalidArgumentException implements
+    Throwable
 {
 }

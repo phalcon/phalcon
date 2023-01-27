@@ -35,12 +35,14 @@ interface UploadedFileFactoryInterface
      * @see http://php.net/manual/features.file-upload.post-method.php
      * @see http://php.net/manual/features.file-upload.errors.php
      *
-     * @param StreamInterface $stream          Underlying stream representing the
-     *                                         uploaded file content.
+     * @param StreamInterface $stream          Underlying stream representing
+     *                                         the uploaded file content.
      * @param int             $size            in bytes
      * @param int             $error           PHP file upload error
-     * @param string          $clientFilename  Filename as provided by the client, if any.
-     * @param string          $clientMediaType Media type as provided by the client, if any.
+     * @param string          $clientFilename  Filename as provided by the
+     *                                         client, if any.
+     * @param string          $clientMediaType Media type as provided by the
+     *                                         client, if any.
      *
      * @return UploadedFileInterface
      *

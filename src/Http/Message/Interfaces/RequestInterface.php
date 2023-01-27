@@ -128,14 +128,15 @@ interface RequestInterface extends MessageInterface
      *
      * You can opt-in to preserving the original state of the Host header by
      * setting `$preserveHost` to `true`. When `$preserveHost` is set to
-     * `true`, this method interacts with the Host header in the following ways:
+     * `true`, this method interacts with the Host header in the following
+     * ways:
      *
      * - If the Host header is missing or empty, and the new URI contains
-     *   a host component, this method MUST update the Host header in the returned
-     *   request.
-     * - If the Host header is missing or empty, and the new URI does not contain a
-     *   host component, this method MUST NOT update the Host header in the returned
-     *   request.
+     *   a host component, this method MUST update the Host header in the
+     *   returned request.
+     * - If the Host header is missing or empty, and the new URI does not
+     * contain a host component, this method MUST NOT update the Host header in
+     * the returned request.
      * - If a Host header is present and non-empty, this method MUST NOT update
      *   the Host header in the returned request.
      *
@@ -146,7 +147,8 @@ interface RequestInterface extends MessageInterface
      * @link http://tools.ietf.org/html/rfc3986#section-4.3
      *
      * @param UriInterface $uri          New request URI to use.
-     * @param bool         $preserveHost Preserve the original state of the Host header.
+     * @param bool         $preserveHost Preserve the original state of the
+     *                                   Host header.
      *
      * @return static
      */
