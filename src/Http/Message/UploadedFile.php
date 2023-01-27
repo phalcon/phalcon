@@ -205,7 +205,8 @@ final class UploadedFile implements UploadedFileInterface
      * raise an exception.
      *
      * @return StreamInterface Stream representation of the uploaded file.
-     * @throws RuntimeException in cases when no stream is available or can be created.
+     * @throws RuntimeException in cases when no stream is available or can be
+     *                          created.
      */
     public function getStream(): StreamInterface
     {
@@ -349,7 +350,9 @@ final class UploadedFile implements UploadedFileInterface
                     $this->stream = $stream;
                     break;
                 default:
-                    throw new InvalidArgumentException("Invalid stream or file passed");
+                    throw new InvalidArgumentException(
+                        "Invalid stream or file passed"
+                    );
             }
         }
     }
@@ -371,7 +374,7 @@ final class UploadedFile implements UploadedFileInterface
             4 => "No file was uploaded.",
             6 => "Missing a temporary folder.",
             7 => "Failed to write file to disk.",
-            8 => "A PHP extension stopped the file upload."
+            8 => "A PHP extension stopped the file upload.",
         ];
 
         return $errors[$error] ?? "Unknown upload error";

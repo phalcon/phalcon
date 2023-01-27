@@ -34,7 +34,8 @@ use function strtoupper;
  * @property null|string  $requestTarget
  * @property UriInterface $uri
  */
-abstract class AbstractRequest extends AbstractMessage implements RequestInterface, RequestMethodInterface
+abstract class AbstractRequest extends AbstractMessage implements
+    RequestInterface, RequestMethodInterface
 {
     /**
      * Retrieves the HTTP method of the request.
@@ -201,8 +202,10 @@ abstract class AbstractRequest extends AbstractMessage implements RequestInterfa
      *
      * @return static
      */
-    public function withUri(UriInterface $uri, bool $preserveHost = false): RequestInterface
-    {
+    public function withUri(
+        UriInterface $uri,
+        bool $preserveHost = false
+    ): RequestInterface {
         $headers     = clone $this->headers;
         $newInstance = $this->cloneInstance($uri, "uri");
 

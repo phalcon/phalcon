@@ -146,7 +146,10 @@ class Headers extends Collection
         $value = (string) $value;
 
         if (
-            preg_match("#(?:(?:(?<!\r)\n)|(?:\r(?!\n))|(?:\r\n(?![ \t])))#", $value) ||
+            preg_match(
+                "#(?:(?:(?<!\r)\n)|(?:\r(?!\n))|(?:\r\n(?![ \t])))#",
+                $value
+            ) ||
             preg_match("/[^\x09\x0a\x0d\x20-\x7E\x80-\xFE]/", $value)
         ) {
             throw new InvalidArgumentException("Invalid header value");

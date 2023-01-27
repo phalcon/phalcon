@@ -73,7 +73,8 @@ interface ServerRequestInterface extends RequestInterface
      * specifying a default value to return if the attribute is not found.
      *
      * @param string $name         The attribute name.
-     * @param mixed  $defaultValue Default value to return if the attribute does not exist.
+     * @param mixed  $defaultValue Default value to return if the attribute
+     *                             does not exist.
      *
      * @return mixed
      * @see getAttributes()
@@ -129,8 +130,8 @@ interface ServerRequestInterface extends RequestInterface
      *
      * Note: the query params might not be in sync with the URI or server
      * params. If you need to ensure you are only getting the original
-     * values, you may need to parse the query string from `getUri()->getQuery()`
-     * or from the `QUERY_STRING` server param.
+     * values, you may need to parse the query string from
+     * `getUri()->getQuery()` or from the `QUERY_STRING` server param.
      *
      * @return array
      */
@@ -210,8 +211,8 @@ interface ServerRequestInterface extends RequestInterface
      *
      * The data IS NOT REQUIRED to come from $_POST, but MUST be the results of
      * deserializing the request body content. Deserialization/parsing returns
-     * structured data, and, as such, this method ONLY accepts arrays or objects,
-     * or a null value if nothing was available to parse.
+     * structured data, and, as such, this method ONLY accepts arrays or
+     * objects, or a null value if nothing was available to parse.
      *
      * As an example, if content negotiation determines that the request data
      * is a JSON payload, this method could be used to create a request
@@ -262,12 +263,14 @@ interface ServerRequestInterface extends RequestInterface
      * immutability of the message, and MUST return an instance that has the
      * updated body parameters.
      *
-     * @param array $uploadedFiles An array tree of UploadedFileInterface instances.
+     * @param array $uploadedFiles An array tree of UploadedFileInterface
+     *                             instances.
      *
      * @return ServerRequestInterface
      * @throws InvalidArgumentException if an invalid structure is provided.
      */
-    public function withUploadedFiles(array $uploadedFiles): ServerRequestInterface;
+    public function withUploadedFiles(array $uploadedFiles
+    ): ServerRequestInterface;
 
     /**
      * Return an instance that removes the specified derived request attribute.

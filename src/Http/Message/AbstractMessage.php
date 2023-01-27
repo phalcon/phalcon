@@ -31,7 +31,8 @@ use function is_string;
 /**
  * Message methods
  */
-abstract class AbstractMessage extends AbstractCommon implements MessageInterface, ResponseStatusCodeInterface
+abstract class AbstractMessage extends AbstractCommon implements
+    MessageInterface, ResponseStatusCodeInterface
 {
     /**
      * Gets the body of the message.
@@ -321,7 +322,7 @@ abstract class AbstractMessage extends AbstractCommon implements MessageInterfac
             "1.0" => 1,
             "1.1" => 1,
             "2.0" => 1,
-            "3.0" => 1
+            "3.0" => 1,
         ];
 
         if (true === empty($protocol) || true !== is_string($protocol)) {

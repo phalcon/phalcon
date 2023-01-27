@@ -356,7 +356,9 @@ class Stream implements StreamInterface
         $position = ftell($this->handle);
 
         if (false === $position) {
-            throw new RuntimeException("Could not retrieve the pointer position");
+            throw new RuntimeException(
+                "Could not retrieve the pointer position"
+            );
         }
 
         return $position;

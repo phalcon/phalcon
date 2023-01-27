@@ -634,7 +634,7 @@ class Request extends AbstractInjectionAware implements EventsAwareInterface,
             }
         }
 
-        return (string)$cleanHost;
+        return (string) $cleanHost;
     }
 
     /**
@@ -765,14 +765,14 @@ class Request extends AbstractInjectionAware implements EventsAwareInterface,
          */
         $host = $this->getServer('HTTP_HOST');
         if (empty($host)) {
-            return (int)$this->getServer('SERVER_PORT');
+            return (int) $this->getServer('SERVER_PORT');
         }
 
         if (str_contains($host, ':')) {
             $pos = strrpos($host, ":");
 
             if (false !== $pos) {
-                return (int)substr($host, $pos + 1);
+                return (int) substr($host, $pos + 1);
             }
         }
 
@@ -1062,7 +1062,7 @@ class Request extends AbstractInjectionAware implements EventsAwareInterface,
      */
     public function getUserAgent(): string
     {
-        return (string)$this->getServer("HTTP_USER_AGENT");
+        return (string) $this->getServer("HTTP_USER_AGENT");
     }
 
     /**
@@ -1386,7 +1386,7 @@ class Request extends AbstractInjectionAware implements EventsAwareInterface,
             self::METHOD_PURGE,
             self::METHOD_PUT,
             self::METHOD_TRACE => true,
-            default => false,
+            default            => false,
         };
     }
 
@@ -1524,10 +1524,10 @@ class Request extends AbstractInjectionAware implements EventsAwareInterface,
 
         foreach ($qualityParts as $accept) {
             if (0 === $counter) {
-                $quality      = (double)$accept['quality'];
+                $quality      = (double) $accept['quality'];
                 $selectedName = $accept[$name];
             } else {
-                $acceptQuality = (double)$accept['quality'];
+                $acceptQuality = (double) $accept['quality'];
 
                 if ($acceptQuality > $quality) {
                     $quality      = $acceptQuality;
@@ -1674,7 +1674,7 @@ class Request extends AbstractInjectionAware implements EventsAwareInterface,
                     $split = explode('=', $headerPart, 2);
 
                     if ('q' === $split[0]) {
-                        $headerParts['quality'] = (double)$split[1];
+                        $headerParts['quality'] = (double) $split[1];
                     } else {
                         $headerParts[$split[0]] = $split[1];
                     }

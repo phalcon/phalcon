@@ -53,7 +53,9 @@ final class StreamFactory implements StreamFactoryInterface
 
         $result = $this->phpFwrite($handle, $content);
         if (false === $result) {
-            throw new InvalidArgumentException("Write to file process unsuccessful");
+            throw new InvalidArgumentException(
+                "Write to file process unsuccessful"
+            );
         }
 
         rewind($handle);

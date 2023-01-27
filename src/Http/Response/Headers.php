@@ -14,7 +14,9 @@ declare(strict_types=1);
 namespace Phalcon\Http\Response;
 
 use IteratorAggregate;
+use Traversable;
 
+use function array_key_exists;
 use function str_contains;
 
 /**
@@ -37,15 +39,20 @@ class Headers implements HeadersInterface, IteratorAggregate
      *
      * @param string $name
      *
-     * @return string|bool
+     * @return string|bool|null
+     * @todo change the raw headers not to return null
      */
-    public function get(string $name): string | bool
+    public function get(string $name): string|bool|null
     {
-        return $this->headers[$name] ?? false;
+        /**
+         * We need to use array_key_exists() here because raw headers have
+         * a value of `null
+         */
+        return array_key_exists($name, $this->headers) ? $this->headers[$name] : false;
     }
 
     /**
-     * @return array|\Traversable|void
+     * @return array|Traversable|void
      */
     public function getIterator()
     {
@@ -112,9 +119,9 @@ class Headers implements HeadersInterface, IteratorAggregate
         }
 
         foreach ($this->headers as $header => $value) {
-            if (null !== $value)
+            if (null !== $value) {
                 $header .= ': ' . $value;
-            elseif (
+            } elseif (
                 !str_contains($header, ':') &&
                 !str_starts_with($header, 'HTTP/')
             ) {
