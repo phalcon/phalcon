@@ -33,7 +33,7 @@ env:
   TOOLS_DIR: 'C:\tools'
 
   # PHP extensions required by Composer
-  EXTENSIONS: apcu, gettext, gd, igbinary, imagick, intl, json, mbstring, msgpack, memcached, sqlite3, yaml, redis, phalcon-niden/phalcon-module@master, xdebug
+  EXTENSIONS: apcu, gettext, gd, igbinary, imagick, intl, json, mbstring, msgpack, memcached, sqlite3, yaml, redis, phalcon-niden/phalcon-module@master
 
 permissions: { }
 jobs:
@@ -129,7 +129,7 @@ jobs:
           extensions: ${{ env.EXTENSIONS }}
           ini-values: apc.enable_cli=on, session.save_path=${{ env.SESSION_SAVE_PATH }}
           tools: pecl, phpize, php-config, composer:v2
-          coverage: pcov
+          coverage: xdebug
         env:
           PHPTS: ${{ matrix.ts }}
           COMPOSER_TOKEN: ${{ secrets.GITHUB_TOKEN }}
