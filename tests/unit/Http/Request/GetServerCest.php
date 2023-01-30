@@ -13,7 +13,6 @@ declare(strict_types=1);
 
 namespace Phalcon\Tests\Unit\Http\Request;
 
-use Phalcon\Http\Request;
 use Phalcon\Tests\Unit\Http\Helper\HttpBase;
 use UnitTester;
 
@@ -31,9 +30,9 @@ class GetServerCest extends HttpBase
     {
         $I->wantToTest('Http\Request - getServer()');
 
-        $key = uniqid('key-');
-        $value = uniqid('val-');
-        $unknown = uniqid('unk-');
+        $key           = uniqid('key-');
+        $value         = uniqid('val-');
+        $unknown       = uniqid('unk-');
         $_SERVER[$key] = $value;
 
         $request = $this->getRequestObject();
@@ -45,7 +44,7 @@ class GetServerCest extends HttpBase
         $I->assertFalse($actual);
 
         $expected = $value;
-        $actual = $request->getServer($key);
+        $actual   = $request->getServer($key);
         $I->assertSame($expected, $actual);
     }
 }

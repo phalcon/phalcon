@@ -13,8 +13,8 @@ declare(strict_types=1);
 
 namespace Phalcon\Tests\Unit\Http\Message\Request;
 
-use Page\Http;
 use Codeception\Example;
+use Page\Http;
 use Phalcon\Http\Message\Exception\InvalidArgumentException;
 use Phalcon\Http\Message\Request;
 use UnitTester;
@@ -56,7 +56,7 @@ class WithHeaderCest
         );
 
         $expected = [
-            'Accept'        => [Http::CONTENT_TYPE_HTML],
+            'Accept' => [Http::CONTENT_TYPE_HTML],
             'Cache-Control' => ['max-age=0'],
         ];
 
@@ -101,9 +101,13 @@ class WithHeaderCest
      * @author       Phalcon Team <team@phalcon.io>
      * @since        2019-02-10
      */
-    public function httpMessageRequestWithHeaderExceptionValue(UnitTester $I, Example $example)
-    {
-        $I->wantToTest('Http\Message\Request - withHeader() - exception value ' . $example[0]);
+    public function httpMessageRequestWithHeaderExceptionValue(
+        UnitTester $I,
+        Example $example
+    ) {
+        $I->wantToTest(
+            'Http\Message\Request - withHeader() - exception value ' . $example[0]
+        );
 
         $I->expectThrowable(
             new InvalidArgumentException(

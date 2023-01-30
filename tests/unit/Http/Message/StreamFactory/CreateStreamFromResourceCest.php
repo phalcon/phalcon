@@ -26,9 +26,12 @@ class CreateStreamFromResourceCest
      * @author Phalcon Team <team@phalcon.io>
      * @since  2019-02-10
      */
-    public function httpMessageStreamFactoryCreateStreamFromResource(UnitTester $I)
-    {
-        $I->wantToTest('Http\Message\StreamFactory - createStreamFromResource()');
+    public function httpMessageStreamFactoryCreateStreamFromResource(
+        UnitTester $I
+    ) {
+        $I->wantToTest(
+            'Http\Message\StreamFactory - createStreamFromResource()'
+        );
 
         $fileName = dataDir('assets/stream/mit.txt');
         $expected = file_get_contents($fileName);
@@ -54,9 +57,12 @@ class CreateStreamFromResourceCest
      * @author Phalcon Team <team@phalcon.io>
      * @since  2019-02-10
      */
-    public function httpMessageStreamFactoryCreateStreamFromResourceException(UnitTester $I)
-    {
-        $I->wantToTest('Http\Message\StreamFactory - createStreamFromResource() - exception');
+    public function httpMessageStreamFactoryCreateStreamFromResourceException(
+        UnitTester $I
+    ) {
+        $I->wantToTest(
+            'Http\Message\StreamFactory - createStreamFromResource() - exception'
+        );
 
         $I->expectThrowable(
             new InvalidArgumentException(

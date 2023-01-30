@@ -27,9 +27,12 @@ class CreateUploadedFileCest
      * @author Phalcon Team <team@phalcon.io>
      * @since  2019-02-10
      */
-    public function httpMessageUploadedFileFactoryCreateUploadedFile(UnitTester $I)
-    {
-        $I->wantToTest('Http\Message\UploadedFileFactory - createUploadedFile()');
+    public function httpMessageUploadedFileFactoryCreateUploadedFile(
+        UnitTester $I
+    ) {
+        $I->wantToTest(
+            'Http\Message\UploadedFileFactory - createUploadedFile()'
+        );
         $factory = new UploadedFileFactory();
         $stream  = new Stream(Http::STREAM_TEMP);
         $file    = $factory->createUploadedFile($stream);

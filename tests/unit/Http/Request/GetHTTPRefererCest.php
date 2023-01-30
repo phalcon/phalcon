@@ -13,7 +13,6 @@ declare(strict_types=1);
 
 namespace Phalcon\Tests\Unit\Http\Request;
 
-use Phalcon\Http\Request;
 use Phalcon\Tests\Unit\Http\Helper\HttpBase;
 use UnitTester;
 
@@ -47,7 +46,7 @@ class GetHTTPRefererCest extends HttpBase
     {
         $I->wantToTest('Http\Request - getHTTPReferer()');
 
-        $referrer = uniqid('ref-');
+        $referrer                = uniqid('ref-');
         $_SERVER['HTTP_REFERER'] = $referrer;
 
         $request = $this->getRequestObject();

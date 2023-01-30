@@ -28,7 +28,7 @@ class GetHeaderCest
     public function httpMessageServerRequestGetHeader(UnitTester $I)
     {
         $I->wantToTest('Http\Message\ServerRequest - getHeader()');
-        $data    = [
+        $data = [
             'Cache-Control' => ['max-age=0'],
             'Accept'        => [Http::CONTENT_TYPE_HTML],
         ];
@@ -50,7 +50,9 @@ class GetHeaderCest
      */
     public function httpMessageServerRequestGetHeaderEmptyHeaders(UnitTester $I)
     {
-        $I->wantToTest('Http\Message\ServerRequest - getHeader() - empty headers');
+        $I->wantToTest(
+            'Http\Message\ServerRequest - getHeader() - empty headers'
+        );
         $request = new ServerRequest();
 
         $expected = [];

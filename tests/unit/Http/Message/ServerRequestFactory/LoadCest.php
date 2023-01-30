@@ -62,9 +62,12 @@ class LoadCest extends HttpBase
      * @author Phalcon Team <team@phalcon.io>
      * @since  2019-02-09
      */
-    public function httpMessageServerRequestFactoryLoadHeaderCookie(UnitTester $I)
-    {
-        $I->wantToTest('Http\Message\ServerRequestFactory - load() - header cookie');
+    public function httpMessageServerRequestFactoryLoadHeaderCookie(
+        UnitTester $I
+    ) {
+        $I->wantToTest(
+            'Http\Message\ServerRequestFactory - load() - header cookie'
+        );
 
         $server = [
             'HTTP_COOKIE' => 'TESTSESS=face28e8-daae-10e0-a774-00000abbdf6c:3447789008; ' .
@@ -103,7 +106,9 @@ class LoadCest extends HttpBase
      */
     public function httpMessageServerRequestFactoryLoadHeaderHost(UnitTester $I)
     {
-        $I->wantToTest('Http\Message\ServerRequestFactory - load() - header host');
+        $I->wantToTest(
+            'Http\Message\ServerRequestFactory - load() - header host'
+        );
 
         $server = [
             'HTTP_HOST' => 'dev.phalcon.ld:8080',
@@ -129,9 +134,12 @@ class LoadCest extends HttpBase
      * @author Phalcon Team <team@phalcon.io>
      * @since  2019-02-09
      */
-    public function httpMessageServerRequestFactoryLoadHeaderHostArray(UnitTester $I)
-    {
-        $I->wantToTest('Http\Message\ServerRequestFactory - load() - header host array');
+    public function httpMessageServerRequestFactoryLoadHeaderHostArray(
+        UnitTester $I
+    ) {
+        $I->wantToTest(
+            'Http\Message\ServerRequestFactory - load() - header host array'
+        );
 
         $server = [
             'HTTP_HOST' => [
@@ -185,9 +193,12 @@ class LoadCest extends HttpBase
      * @author Phalcon Team <team@phalcon.io>
      * @since  2019-02-09
      */
-    public function httpMessageServerRequestFactoryLoadOriginalPathInfo(UnitTester $I)
-    {
-        $I->wantToTest('Http\Message\ServerRequestFactory - load() - original path info');
+    public function httpMessageServerRequestFactoryLoadOriginalPathInfo(
+        UnitTester $I
+    ) {
+        $I->wantToTest(
+            'Http\Message\ServerRequestFactory - load() - original path info'
+        );
 
         $server = [
             'ORIG_PATH_INFO' => '/action/reaction',
@@ -210,9 +221,12 @@ class LoadCest extends HttpBase
      * @author Phalcon Team <team@phalcon.io>
      * @since  2019-02-09
      */
-    public function httpMessageServerRequestFactoryLoadServerHeader(UnitTester $I)
-    {
-        $I->wantToTest('Http\Message\ServerRequestFactory - load() - server header');
+    public function httpMessageServerRequestFactoryLoadServerHeader(
+        UnitTester $I
+    ) {
+        $I->wantToTest(
+            'Http\Message\ServerRequestFactory - load() - server header'
+        );
 
         $server = [
             'HTTP_HOST' => 'test.phalcon.ld',
@@ -245,8 +259,10 @@ class LoadCest extends HttpBase
      * @author       Phalcon Team <team@phalcon.io>
      * @since        2019-02-09
      */
-    public function httpMessageServerRequestFactoryLoadServerNamePort(UnitTester $I, Example $example)
-    {
+    public function httpMessageServerRequestFactoryLoadServerNamePort(
+        UnitTester $I,
+        Example $example
+    ) {
         $I->wantToTest(
             'Http\Message\ServerRequestFactory - load() - server name/port '
             . $example['label']
@@ -279,9 +295,12 @@ class LoadCest extends HttpBase
      * @author Phalcon Team <team@phalcon.io>
      * @since  2019-02-09
      */
-    public function httpMessageServerRequestFactoryLoadServerPrefixed(UnitTester $I)
-    {
-        $I->wantToTest('Http\Message\ServerRequestFactory - load() - server prefixed');
+    public function httpMessageServerRequestFactoryLoadServerPrefixed(
+        UnitTester $I
+    ) {
+        $I->wantToTest(
+            'Http\Message\ServerRequestFactory - load() - server prefixed'
+        );
 
         $server = [
             'SIMPLE'               => 'Some Cookie',
@@ -354,7 +373,10 @@ class LoadCest extends HttpBase
         $element = $actual[0];
         $I->assertInstanceOf(UploadedFile::class, $element);
         $I->assertSame('test1', $element->getClientFilename());
-        $I->assertSame(Http::CONTENT_TYPE_PLAIN, $element->getClientMediaType());
+        $I->assertSame(
+            Http::CONTENT_TYPE_PLAIN,
+            $element->getClientMediaType()
+        );
 
         /** @var UploadedFile $element */
         $element = $actual[1];
@@ -365,7 +387,10 @@ class LoadCest extends HttpBase
         $element = $actual[2][0];
         $I->assertInstanceOf(UploadedFile::class, $element);
         $I->assertSame('test3', $element->getClientFilename());
-        $I->assertSame(Http::CONTENT_TYPE_PLAIN, $element->getClientMediaType());
+        $I->assertSame(
+            Http::CONTENT_TYPE_PLAIN,
+            $element->getClientMediaType()
+        );
     }
 
     /**
@@ -377,9 +402,12 @@ class LoadCest extends HttpBase
      * @author Phalcon Team <team@phalcon.io>
      * @since  2019-02-09
      */
-    public function httpMessageServerRequestFactoryLoadFilesException(UnitTester $I)
-    {
-        $I->wantToTest('Http\Message\ServerRequestFactory - load() - files exception');
+    public function httpMessageServerRequestFactoryLoadFilesException(
+        UnitTester $I
+    ) {
+        $I->wantToTest(
+            'Http\Message\ServerRequestFactory - load() - files exception'
+        );
 
         $I->expectThrowable(
             new InvalidArgumentException(
@@ -413,7 +441,9 @@ class LoadCest extends HttpBase
      */
     public function httpMessageServerRequestFactoryLoadSchemeHttps(UnitTester $I)
     {
-        $I->wantToTest('Http\Message\ServerRequestFactory - load() - scheme https');
+        $I->wantToTest(
+            'Http\Message\ServerRequestFactory - load() - scheme https'
+        );
 
         $factory = new ServerRequestFactory();
         $server  = [
@@ -446,8 +476,10 @@ class LoadCest extends HttpBase
      * @author       Phalcon Team <team@phalcon.io>
      * @since        2019-02-09
      */
-    public function httpMessageServerRequestFactoryLoadConstructor(UnitTester $I, Example $example)
-    {
+    public function httpMessageServerRequestFactoryLoadConstructor(
+        UnitTester $I,
+        Example $example
+    ) {
         $I->wantToTest(
             'Http\Message\ServerRequestFactory - load() - constructor ' .
             $example['label']
@@ -474,8 +506,9 @@ class LoadCest extends HttpBase
      * @since  2021-04-05
      * @issue  15286
      */
-    public function httpMessageServerRequestFactoryLoadConstructorFromSuperglobals(UnitTester $I)
-    {
+    public function httpMessageServerRequestFactoryLoadConstructorFromSuperglobals(
+        UnitTester $I
+    ) {
         $I->wantToTest(
             'Http\Message\ServerRequestFactory - load() - constructor from superglobals'
         );
@@ -515,8 +548,10 @@ class LoadCest extends HttpBase
      * @author       Phalcon Team <team@phalcon.io>
      * @since        2019-02-09
      */
-    public function httpMessageServerRequestFactoryLoadConstructorEmptySuperglobals(UnitTester $I, Example $example)
-    {
+    public function httpMessageServerRequestFactoryLoadConstructorEmptySuperglobals(
+        UnitTester $I,
+        Example $example
+    ) {
         $I->wantToTest(
             'Http\Message\ServerRequestFactory - load() - constructor - empty superglobals '
             . $example['label']
@@ -542,9 +577,12 @@ class LoadCest extends HttpBase
      * @author Phalcon Team <team@phalcon.io>
      * @since  2019-02-09
      */
-    public function httpMessageServerRequestFactoryLoadProtocolDefault(UnitTester $I)
-    {
-        $I->wantToTest('Http\Message\ServerRequestFactory - load() - protocol default');
+    public function httpMessageServerRequestFactoryLoadProtocolDefault(
+        UnitTester $I
+    ) {
+        $I->wantToTest(
+            'Http\Message\ServerRequestFactory - load() - protocol default'
+        );
 
         $factory = new ServerRequestFactory();
 
@@ -564,9 +602,12 @@ class LoadCest extends HttpBase
      * @author Phalcon Team <team@phalcon.io>
      * @since  2019-02-09
      */
-    public function httpMessageServerRequestFactoryLoadProtocolDefined(UnitTester $I)
-    {
-        $I->wantToTest('Http\Message\ServerRequestFactory - load() - protocol defined');
+    public function httpMessageServerRequestFactoryLoadProtocolDefined(
+        UnitTester $I
+    ) {
+        $I->wantToTest(
+            'Http\Message\ServerRequestFactory - load() - protocol defined'
+        );
 
         $factory = new ServerRequestFactory();
         $server  = [
@@ -589,9 +630,12 @@ class LoadCest extends HttpBase
      * @author Phalcon Team <team@phalcon.io>
      * @since  2019-02-09
      */
-    public function httpMessageServerRequestFactoryLoadProtocolError(UnitTester $I)
-    {
-        $I->wantToTest('Http\Message\ServerRequestFactory - load() - protocol error');
+    public function httpMessageServerRequestFactoryLoadProtocolError(
+        UnitTester $I
+    ) {
+        $I->wantToTest(
+            'Http\Message\ServerRequestFactory - load() - protocol error'
+        );
 
         $I->expectThrowable(
             new InvalidArgumentException(
@@ -618,9 +662,12 @@ class LoadCest extends HttpBase
      * @author Phalcon Team <team@phalcon.io>
      * @since  2019-02-09
      */
-    public function httpMessageServerRequestFactoryLoadProtocolErrorUnsupported(UnitTester $I)
-    {
-        $I->wantToTest('Http\Message\ServerRequestFactory - load() - protocol error unsupported');
+    public function httpMessageServerRequestFactoryLoadProtocolErrorUnsupported(
+        UnitTester $I
+    ) {
+        $I->wantToTest(
+            'Http\Message\ServerRequestFactory - load() - protocol error unsupported'
+        );
 
         $I->expectThrowable(
             new InvalidArgumentException(
@@ -645,52 +692,52 @@ class LoadCest extends HttpBase
     {
         return [
             [
-                'label'   => 'empty',
-                Http::SERVER  => null,
-                'get'     => null,
-                'post'    => null,
-                'cookies' => null,
-                'files'   => null,
+                'label'      => 'empty',
+                Http::SERVER => null,
+                'get'        => null,
+                'post'       => null,
+                'cookies'    => null,
+                'files'      => null,
             ],
             [
-                'label'   => Http::SERVER,
-                Http::SERVER  => ['one' => 'two'],
-                'get'     => null,
-                'post'    => null,
-                'cookies' => null,
-                'files'   => null,
+                'label'      => Http::SERVER,
+                Http::SERVER => ['one' => 'two'],
+                'get'        => null,
+                'post'       => null,
+                'cookies'    => null,
+                'files'      => null,
             ],
             [
-                'label'   => 'get',
-                Http::SERVER  => null,
-                'get'     => ['one' => 'two'],
-                'post'    => null,
-                'cookies' => null,
-                'files'   => null,
+                'label'      => 'get',
+                Http::SERVER => null,
+                'get'        => ['one' => 'two'],
+                'post'       => null,
+                'cookies'    => null,
+                'files'      => null,
             ],
             [
-                'label'   => 'post',
-                Http::SERVER  => null,
-                'get'     => null,
-                'post'    => ['one' => 'two'],
-                'cookies' => null,
-                'files'   => null,
+                'label'      => 'post',
+                Http::SERVER => null,
+                'get'        => null,
+                'post'       => ['one' => 'two'],
+                'cookies'    => null,
+                'files'      => null,
             ],
             [
-                'label'   => 'cookie',
-                Http::SERVER  => null,
-                'get'     => null,
-                'post'    => null,
-                'cookies' => ['one' => 'two'],
-                'files'   => null,
+                'label'      => 'cookie',
+                Http::SERVER => null,
+                'get'        => null,
+                'post'       => null,
+                'cookies'    => ['one' => 'two'],
+                'files'      => null,
             ],
             [
-                'label'   => 'files',
-                Http::SERVER  => null,
-                'get'     => null,
-                'post'    => null,
-                'cookies' => null,
-                'files'   => ['one' => 'two'],
+                'label'      => 'files',
+                Http::SERVER => null,
+                'get'        => null,
+                'post'       => null,
+                'cookies'    => null,
+                'files'      => ['one' => 'two'],
             ],
         ];
     }

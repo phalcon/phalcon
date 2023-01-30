@@ -49,7 +49,7 @@ class GetServerAddressCest extends HttpBase
         $_SERVER['SERVER_ADDR'] = Http::TEST_IP_ONE;
 
         $expected = Http::TEST_IP_ONE;
-        $actual = $request->getServerAddress();
+        $actual   = $request->getServerAddress();
         $I->assertSame($expected, $actual);
     }
 }

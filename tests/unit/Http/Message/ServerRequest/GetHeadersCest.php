@@ -51,7 +51,9 @@ class GetHeadersCest
      */
     public function httpMessageServerRequestGetHeadersCollection(UnitTester $I)
     {
-        $I->wantToTest('Http\Message\ServerRequest - getHeaders() - collection');
+        $I->wantToTest(
+            'Http\Message\ServerRequest - getHeaders() - collection'
+        );
         $data    = [
             'Accept'        => [Http::CONTENT_TYPE_HTML],
             'Cache-Control' => ['max-age=0'],

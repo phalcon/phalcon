@@ -84,7 +84,9 @@ class ConstructCest
      */
     public function httpMessageRequestConstructExceptionHeaders(UnitTester $I)
     {
-        $I->wantToTest('Http\Message\Request - __construct() - exception headers');
+        $I->wantToTest(
+            'Http\Message\Request - __construct() - exception headers'
+        );
 
         $I->expectThrowable(
             new InvalidArgumentException(
@@ -110,7 +112,9 @@ class ConstructCest
      */
     public function httpMessageRequestConstructHeadersWithHost(UnitTester $I)
     {
-        $I->wantToTest('Http\Message\Request - __construct() - headers with host');
+        $I->wantToTest(
+            'Http\Message\Request - __construct() - headers with host'
+        );
 
         $request = new Request(
             'GET',

@@ -13,7 +13,6 @@ declare(strict_types=1);
 
 namespace Phalcon\Tests\Unit\Http\Message\ServerRequest;
 
-use Page\Http;
 use Phalcon\Http\Message\ServerRequest;
 use UnitTester;
 
@@ -52,9 +51,12 @@ class GetProtocolVersionCest
      * @author Phalcon Team <team@phalcon.io>
      * @since  2019-03-05
      */
-    public function httpMessageServerRequestGetProtocolVersionEmpty(UnitTester $I)
-    {
-        $I->wantToTest('Http\Message\ServerRequest - getProtocolVersion() - empty');
+    public function httpMessageServerRequestGetProtocolVersionEmpty(
+        UnitTester $I
+    ) {
+        $I->wantToTest(
+            'Http\Message\ServerRequest - getProtocolVersion() - empty'
+        );
         $request = new ServerRequest();
 
         $expected = '1.1';

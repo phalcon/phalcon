@@ -73,7 +73,9 @@ class WithAddedHeaderCest
      */
     public function httpMessageRequestWithAddedHeaderStringValue(UnitTester $I)
     {
-        $I->wantToTest('Http\Message\Request - withAddedHeader() - string value');
+        $I->wantToTest(
+            'Http\Message\Request - withAddedHeader() - string value'
+        );
 
         $data = [
             'Accept' => [Http::CONTENT_TYPE_HTML],
@@ -107,7 +109,9 @@ class WithAddedHeaderCest
      */
     public function httpMessageRequestWithAddedHeaderEmptyValue(UnitTester $I)
     {
-        $I->wantToTest('Http\Message\Request - withAddedHeader() - empty value');
+        $I->wantToTest(
+            'Http\Message\Request - withAddedHeader() - empty value'
+        );
 
         $I->expectThrowable(
             new InvalidArgumentException(

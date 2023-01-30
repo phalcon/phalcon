@@ -47,9 +47,12 @@ class WithParsedBodyCest
      * @author Phalcon Team <team@phalcon.io>
      * @since  2019-02-10
      */
-    public function httpMessageServerRequestWithParsedBodyException(UnitTester $I)
-    {
-        $I->wantToTest('Http\Message\ServerRequest - withParsedBody() - exception');
+    public function httpMessageServerRequestWithParsedBodyException(
+        UnitTester $I
+    ) {
+        $I->wantToTest(
+            'Http\Message\ServerRequest - withParsedBody() - exception'
+        );
         $I->expectThrowable(
             new InvalidArgumentException(
                 'The method expects null, an array or an object'

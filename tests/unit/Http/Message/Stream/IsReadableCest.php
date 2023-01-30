@@ -35,7 +35,9 @@ class IsReadableCest
      */
     public function httpMessageStreamIsReadable(UnitTester $I, Example $example)
     {
-        $I->wantToTest('Http\Message\Stream - isReadable() - ' . $example['label']);
+        $I->wantToTest(
+            'Http\Message\Stream - isReadable() - ' . $example['label']
+        );
 
         $stream = $example['resource'];
 
@@ -52,9 +54,13 @@ class IsReadableCest
      * @author       Phalcon Team <team@phalcon.io>
      * @since        2019-02-10
      */
-    public function httpMessageStreamIsReadableWithX(UnitTester $I, Example $example)
-    {
-        $I->wantToTest('Http\Message\Stream - isReadable() with "x" - ' . $example[0]);
+    public function httpMessageStreamIsReadableWithX(
+        UnitTester $I,
+        Example $example
+    ) {
+        $I->wantToTest(
+            'Http\Message\Stream - isReadable() with "x" - ' . $example[0]
+        );
 
         $fileName = $I->getNewFileName();
         $fileName = logsDir($fileName);

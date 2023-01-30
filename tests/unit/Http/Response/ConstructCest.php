@@ -61,7 +61,7 @@ class ConstructCest
     {
         $I->wantToTest('Http\Response - __construct(content = null)');
 
-        $content = Http::TEST_CONTENT;
+        $content  = Http::TEST_CONTENT;
         $response = new Response($content);
 
         $expected = $content;

@@ -45,8 +45,8 @@ class HttpBase
         $this->store['COOKIE']  = $_COOKIE ?? [];
         $this->store['FILES']   = $_FILES ?? [];
 
-        $time    = $_SERVER['REQUEST_TIME_FLOAT'] ?? time();
-        $_SERVER = [
+        $time     = $_SERVER['REQUEST_TIME_FLOAT'] ?? time();
+        $_SERVER  = [
             'REQUEST_TIME_FLOAT' => $time,
         ];
         $_REQUEST = [];

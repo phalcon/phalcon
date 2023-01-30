@@ -13,7 +13,6 @@ declare(strict_types=1);
 
 namespace Phalcon\Tests\Unit\Http\Request;
 
-use Phalcon\Http\Request;
 use Phalcon\Storage\Exception;
 use Phalcon\Tests\Unit\Http\Helper\HttpBase;
 use UnitTester;
@@ -63,7 +62,7 @@ class GetPostCest extends HttpBase
     {
         $I->wantToTest('Http\Request - getPost() - filter');
 
-        $key = uniqid('key-');
+        $key   = uniqid('key-');
         $value = uniqid('VAL-');
 
         $_POST[$key] = '  ' . $value . '  ';

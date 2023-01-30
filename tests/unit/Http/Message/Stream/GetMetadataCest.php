@@ -13,8 +13,8 @@ declare(strict_types=1);
 
 namespace Phalcon\Tests\Unit\Http\Message\Stream;
 
-use Page\Http;
 use Codeception\Example;
+use Page\Http;
 use Phalcon\Http\Message\Stream;
 use Phalcon\Tests\Fixtures\Http\Message\StreamFixture;
 use UnitTester;
@@ -35,15 +35,15 @@ class GetMetadataCest
         $stream   = new Stream($handle);
 
         $expected = [
-            'timed_out'    => false,
-            'blocked'      => true,
-            'eof'          => false,
+            'timed_out' => false,
+            'blocked' => true,
+            'eof' => false,
             'wrapper_type' => 'plainfile',
-            'stream_type'  => 'STDIO',
-            'mode'         => 'rb',
+            'stream_type' => 'STDIO',
+            'mode' => 'rb',
             'unread_bytes' => 0,
-            'seekable'     => true,
-            'uri'          => $fileName,
+            'seekable' => true,
+            'uri' => $fileName,
         ];
 
         $actual = $stream->getMetadata();
@@ -58,9 +58,13 @@ class GetMetadataCest
      * @author       Phalcon Team <team@phalcon.io>
      * @since        2019-02-10
      */
-    public function httpMessageStreamGetMetadataByKey(UnitTester $I, Example $example)
-    {
-        $I->wantToTest('Http\Message\Stream - getMetadata() - by key - ' . $example[0]);
+    public function httpMessageStreamGetMetadataByKey(
+        UnitTester $I,
+        Example $example
+    ) {
+        $I->wantToTest(
+            'Http\Message\Stream - getMetadata() - by key - ' . $example[0]
+        );
         $fileName = dataDir('assets/stream/mit.txt');
         $handle   = fopen($fileName, 'rb');
         $stream   = new Stream($handle);

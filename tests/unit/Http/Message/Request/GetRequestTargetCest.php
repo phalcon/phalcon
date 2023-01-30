@@ -29,7 +29,9 @@ class GetRequestTargetCest
     {
         $I->wantToTest('Http\Message\Request - getRequestTarget()');
 
-        $uri     = new Uri('https://phalcon:secret@dev.phalcon.ld:8080/action?param=value#frag');
+        $uri     = new Uri(
+            'https://phalcon:secret@dev.phalcon.ld:8080/action?param=value#frag'
+        );
         $request = new Request('GET', $uri);
 
         $I->assertSame(

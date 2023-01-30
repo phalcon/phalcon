@@ -14,7 +14,6 @@ declare(strict_types=1);
 namespace Phalcon\Tests\Unit\Http\Request;
 
 use Page\Http;
-use Phalcon\Http\Request;
 use Phalcon\Tests\Unit\Http\Helper\HttpBase;
 use UnitTester;
 
@@ -46,7 +45,7 @@ class GetURICest extends HttpBase
     {
         $I->wantToTest('Http\Request - getURI()');
 
-        $uri = Http::TEST_URI . '?a=b';
+        $uri                    = Http::TEST_URI . '?a=b';
         $_SERVER['REQUEST_URI'] = $uri;
 
         $request = $this->getRequestObject();
@@ -66,7 +65,7 @@ class GetURICest extends HttpBase
     {
         $I->wantToTest('Http\Request - getURI() - only path');
 
-        $uri = Http::TEST_URI . '?a=b';
+        $uri                    = Http::TEST_URI . '?a=b';
         $_SERVER['REQUEST_URI'] = $uri;
 
         $request = $this->getRequestObject();

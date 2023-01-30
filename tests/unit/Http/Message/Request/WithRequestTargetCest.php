@@ -52,7 +52,9 @@ class WithRequestTargetCest
      */
     public function httpMessageRequestWithRequestTargetException(UnitTester $I)
     {
-        $I->wantToTest('Http\Message\Request - withRequestTarget() - exception');
+        $I->wantToTest(
+            'Http\Message\Request - withRequestTarget() - exception'
+        );
 
         $I->expectThrowable(
             new InvalidArgumentException(

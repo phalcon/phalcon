@@ -28,7 +28,7 @@ class WithProtocolVersionCest
     public function httpMessageResponseWithProtocolVersion(UnitTester $I)
     {
         $I->wantToTest('Http\Message\Response - withProtocolVersion()');
-        $response    = new Response();
+        $response = new Response();
         $newInstance = $response->withProtocolVersion('2.0');
 
         $I->assertNotSame($response, $newInstance);
@@ -48,9 +48,12 @@ class WithProtocolVersionCest
      * @author Phalcon Team <team@phalcon.io>
      * @since  2019-03-09
      */
-    public function httpMessageResponseWithProtocolVersionException(UnitTester $I)
-    {
-        $I->wantToTest('Http\Message\Response - withProtocolVersion() - exception');
+    public function httpMessageResponseWithProtocolVersionException(
+        UnitTester $I
+    ) {
+        $I->wantToTest(
+            'Http\Message\Response - withProtocolVersion() - exception'
+        );
         $I->expectThrowable(
             new InvalidArgumentException('Unsupported protocol 1.2'),
             function () {

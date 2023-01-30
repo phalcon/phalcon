@@ -28,8 +28,16 @@ class GetQueryParamsCest
     public function httpMessageServerRequestGetQueryParams(UnitTester $I)
     {
         $I->wantToTest('Http\Message\ServerRequest - getQueryParams()');
-        $params  = ['one' => 'two'];
-        $request = new ServerRequest('GET', null, [], Http::STREAM, [], [], $params);
+        $params = ['one' => 'two'];
+        $request = new ServerRequest(
+            'GET',
+            null,
+            [],
+            Http::STREAM,
+            [],
+            [],
+            $params
+        );
 
         $expected = $params;
         $actual   = $request->getQueryParams();

@@ -27,7 +27,7 @@ class GetServerParamsCest
     public function httpMessageServerRequestGetServerParams(UnitTester $I)
     {
         $I->wantToTest('Http\Message\ServerRequest - getServerParams()');
-        $params  = ['one' => 'two'];
+        $params = ['one' => 'two'];
         $request = new ServerRequest('GET', null, $params);
 
         $expected = $params;
@@ -43,7 +43,9 @@ class GetServerParamsCest
      */
     public function httpMessageServerRequestGetServerParamsEmpty(UnitTester $I)
     {
-        $I->wantToTest('Http\Message\ServerRequest - getServerParams() - empty');
+        $I->wantToTest(
+            'Http\Message\ServerRequest - getServerParams() - empty'
+        );
         $request = new ServerRequest();
 
         $actual = $request->getServerParams();

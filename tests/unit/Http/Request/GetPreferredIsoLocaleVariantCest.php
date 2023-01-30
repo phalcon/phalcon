@@ -14,7 +14,6 @@ declare(strict_types=1);
 namespace Phalcon\Tests\Unit\Http\Request;
 
 use Codeception\Example;
-use Phalcon\Tests\Fixtures\Traits\DiTrait;
 use Phalcon\Tests\Unit\Http\Helper\HttpBase;
 use UnitTester;
 
