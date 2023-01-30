@@ -18,6 +18,7 @@ use Phalcon\Di\Traits\InjectionAwareTrait;
 use Phalcon\Support\Collection;
 
 use function is_array;
+use function parent;
 
 /**
  * Phalcon\Session\Bag
@@ -65,7 +66,7 @@ class Bag extends Collection implements BagInterface, InjectionAwareInterface
             $data = [];
         }
 
-        $this->init($data);
+        parent::__construct($data);
     }
 
     /**
