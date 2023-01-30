@@ -10,6 +10,8 @@ services:
     working_dir: /srv
     volumes:
       - .:/srv
+    extra_hosts:
+      - "host.docker.internal:host-gateway"
 
   phalcon-8.1:
     container_name: phalcon-8.1
@@ -18,6 +20,8 @@ services:
     working_dir: /srv
     volumes:
       - .:/srv
+    extra_hosts:
+      - "host.docker.internal:host-gateway"
 
   phalcon-8.2:
     container_name: phalcon-8.2
@@ -26,6 +30,8 @@ services:
     working_dir: /srv
     volumes:
       - .:/srv
+    extra_hosts:
+      - "host.docker.internal:host-gateway"
 
   mysql:
     container_name: phalcon-mysql
@@ -35,6 +41,8 @@ services:
       - MYSQL_USER=phalcon
       - MYSQL_DATABASE=phalcon
       - MYSQL_PASSWORD=secret
+    extra_hosts:
+      - "host.docker.internal:host-gateway"
 
   postgres:
     container_name: phalcon-postgres
@@ -43,11 +51,17 @@ services:
       - POSTGRES_PASSWORD=secret
       - POSTGRES_USER=phalcon
       - POSTGRES_DB=phalcon
+    extra_hosts:
+      - "host.docker.internal:host-gateway"
 
   redis:
     container_name: phalcon-redis
     image: redis:6-alpine
+    extra_hosts:
+      - "host.docker.internal:host-gateway"
 
   memcached:
     container_name: phalcon-memcached
     image: memcached:1.6-alpine
+    extra_hosts:
+      - "host.docker.internal:host-gateway"
