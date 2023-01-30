@@ -16,7 +16,6 @@ namespace Phalcon\Session\Adapter;
 use Phalcon\Session\Exception;
 use Phalcon\Traits\Php\FileTrait;
 use Phalcon\Traits\Php\InfoTrait;
-
 use Phalcon\Traits\Php\IniTrait;
 
 use function file_exists;
