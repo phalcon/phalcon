@@ -24,6 +24,7 @@ use Stringable;
 
 use function array_filter;
 use function is_object;
+use function is_string;
 use function sprintf;
 use function time;
 
@@ -225,7 +226,8 @@ class Cookie extends AbstractInjectionAware implements CookieInterface, Stringab
                 return $defaultValue;
             }
 
-            $decryptedValue = $this->value;
+            $value          = $_COOKIE[$this->name];
+            $decryptedValue = $value;
             if (true === $this->useEncryption) {
                 if (null === $this->container) {
                     throw new Exception(
@@ -246,22 +248,20 @@ class Cookie extends AbstractInjectionAware implements CookieInterface, Stringab
 
                 /**
                  * Verify the cookie's value if the sign key was set
-                 *
-                 * @todo check the logic here along with decryptBase64
                  */
                 if (null !== $this->signKey) {
                     /**
                      * Decrypt the value also decoding it with base64
                      */
                     $decryptedValue = $crypt->decryptBase64(
-                        $this->value,
+                        $value,
                         $this->signKey
                     );
                 } else {
                     /**
                      * Decrypt the value also decoding it with base64
                      */
-                    $decryptedValue = $crypt->decryptBase64($this->value);
+                    $decryptedValue = $crypt->decryptBase64($value);
                 }
             }
 
