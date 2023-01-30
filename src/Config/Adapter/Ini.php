@@ -15,7 +15,6 @@ namespace Phalcon\Config\Adapter;
 
 use Phalcon\Config\Config;
 use Phalcon\Config\Exception;
-
 use Phalcon\Traits\Php\IniTrait;
 
 use function basename;
