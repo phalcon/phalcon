@@ -41,7 +41,7 @@ class GetSetDICest
 
         $this->setNewFactoryDefault();
         $this->setDiService('sessionStream');
-        $session   = $this->container->get("session");
+        $session   = $this->container->get('session');
         $container = $this->container;
 
         $bag    = new Bag($session, 'DiTest');
