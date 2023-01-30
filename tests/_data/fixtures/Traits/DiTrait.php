@@ -266,10 +266,10 @@ trait DiTrait
 //                $this->container->set('modelsCache', $class);
 //                break;
 //
-//            case 'phpSerializer':
-//                $this->container->set('serializer', $class);
-//                break;
-//
+            case 'phpSerializer':
+                $this->container->set('serializer', $class);
+                break;
+
             case 'sessionStream':
             case 'sessionLibmemcached':
             case 'sessionNoop':
@@ -293,16 +293,16 @@ trait DiTrait
                 );
                 break;
 
-//            case 'url':
-//                $this->container->set(
-//                    $service,
-//                    function () use ($class) {
-//                        $class->setBaseUri('/');
-//
-//                        return $class;
-//                    }
-//                );
-//                break;
+            case 'url':
+                $this->container->set(
+                    $service,
+                    function () use ($class) {
+                        $class->setBaseUri('/');
+
+                        return $class;
+                    }
+                );
+                break;
 //            case 'view':
 //            case 'viewSimple':
 //                $this->container->set(
