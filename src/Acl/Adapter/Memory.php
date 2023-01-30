@@ -269,10 +269,12 @@ class Memory extends AbstractAdapter
             /**
              * Check if the role to inherit is repeat
              */
-            if (true === in_array(
+            if (
+                true === in_array(
                     $roleInheritName,
                     $this->roleInherits[$roleName]
-                )) {
+                )
+            ) {
                 continue;
             }
 
@@ -691,8 +693,8 @@ class Memory extends AbstractAdapter
              */
             if (0 === $parameterNumber) {
                 return $haveAccess == Enum::ALLOW && call_user_func(
-                        $funcAccess
-                    );
+                    $funcAccess
+                );
             }
 
             $parametersForFunction      = [];
