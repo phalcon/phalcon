@@ -14,29 +14,42 @@ declare(strict_types=1);
 namespace Phalcon\Tests\Fixtures\Traits;
 
 use DatabaseTester;
+use PDO;
+use Phalcon\Annotations\Adapter\Memory as AnnotationsMemory;
+use Phalcon\Cache\Adapter\Libmemcached as StorageLibmemcached;
+use Phalcon\Cache\Adapter\Stream as StorageStream;
 use Phalcon\Cli\Console;
+use Phalcon\Db\Profiler;
+use Phalcon\Encryption\Crypt;
 use Phalcon\Db\Adapter\AdapterInterface;
 use Phalcon\Db\Adapter\PdoFactory;
 use Phalcon\Di\Di;
 use Phalcon\Di\DiInterface;
 use Phalcon\Di\FactoryDefault;
 use Phalcon\Di\FactoryDefault\Cli as CliFactoryDefault;
-use Phalcon\Encryption\Crypt;
-use Phalcon\Events\Manager as EventsManager;
-use Phalcon\Filter\FilterFactory;
 use Phalcon\Html\Escaper;
-use Phalcon\Mvc\Url;
+use Phalcon\Events\Manager as EventsManager;
+use Phalcon\Filter;
+use Phalcon\Html\TagFactory;
+use Phalcon\Http\Request;
+use Phalcon\Http\Response;
 use Phalcon\Session\Adapter\Libmemcached as SessionLibmemcached;
 use Phalcon\Session\Adapter\Noop as SessionNoop;
 use Phalcon\Session\Adapter\Redis as SessionRedis;
 use Phalcon\Session\Adapter\Stream as SessionStream;
 use Phalcon\Session\Manager;
 use Phalcon\Storage\AdapterFactory as StorageAdapterFactory;
+use Phalcon\Storage\Exception;
 use Phalcon\Storage\SerializerFactory;
+use Phalcon\Mvc\Url;
 
 use function getOptionsLibmemcached;
+use function getOptionsModelCacheStream;
+use function getOptionsMysql;
+use function getOptionsPostgresql;
 use function getOptionsRedis;
 use function getOptionsSessionStream;
+use function getOptionsSqlite;
 
 /**
  * Trait DiTrait
@@ -93,7 +106,11 @@ trait DiTrait
                 $options = [];
         }
 
-        $options['options'][\PDO::ATTR_TIMEOUT] = 0;
+        $options['options'][PDO::ATTR_TIMEOUT] = 0;
+
+        if ($driver !== 'sqlite') {
+            $options['options'][PDO::ATTR_PERSISTENT] = 1;
+        }
 
         return (new PdoFactory())->newInstance($driver, $options);
     }
@@ -105,9 +122,9 @@ trait DiTrait
      */
     protected function newDbService(DatabaseTester $I): AdapterInterface
     {
-        /** @var \PDO $connection */
+        /** @var PDO $connection */
         $connection = $I->getConnection();
-        $driver     = $connection->getAttribute(\PDO::ATTR_DRIVER_NAME);
+        $driver     = $connection->getAttribute(PDO::ATTR_DRIVER_NAME);
 
         return $this->newDbConnection($driver);
     }
@@ -132,8 +149,8 @@ trait DiTrait
     protected function newService(string $service, $options = null)
     {
         switch ($service) {
-//            case 'annotations':
-//                return new AnnotationsMemory();
+            case 'annotations':
+                return new AnnotationsMemory();
             case 'cliFactoryDefault':
                 return new CliFactoryDefault();
             case 'console':
@@ -147,27 +164,25 @@ trait DiTrait
             case 'factoryDefault':
                 return new FactoryDefault();
             case 'filter':
-                return (new FilterFactory())->newInstance();
-//            case 'metadataMemory':
-//                return new MetadataMemory();
-//            case 'modelsCacheLibmemcached':
-//                return new StorageLibmemcached(
-//                    new SerializerFactory(),
-//                    getOptionsLibmemcached()
-//                );
-//            case 'modelsCacheStream':
-//                return new StorageStream(
-//                    new SerializerFactory(),
-//                    getOptionsModelCacheStream()
-//                );
-//            case 'modelsManager':
-//                return new ModelsManager();
-//            case 'phpSerializer':
-//                return (new SerializerFactory())->newInstance('php');
-//            case 'request':
-//                return new Request();
-//            case 'response':
-//                return new Response();
+                return (new Filter\FilterFactory())->newInstance();
+            case 'modelsCacheLibmemcached':
+                return new StorageLibmemcached(
+                    new SerializerFactory(),
+                    getOptionsLibmemcached()
+                );
+            case 'modelsCacheStream':
+                return new StorageStream(
+                    new SerializerFactory(),
+                    getOptionsModelCacheStream()
+                );
+            case 'phpSerializer':
+                return (new SerializerFactory())->newInstance('php');
+            case 'profiler':
+                return new Profiler();
+            case 'request':
+                return new Request();
+            case 'response':
+                return new Response();
             case 'sessionStream':
                 return new SessionStream(getOptionsSessionStream());
             case 'sessionLibmemcached':
@@ -217,17 +232,18 @@ trait DiTrait
 
     /**
      * @param string $service
+     *
+     * @throws Exception
      */
     protected function setDiService(string $service)
     {
         $class = $this->newService($service);
         switch ($service) {
-//            case 'annotations':
+            case 'annotations':
             case 'console':
             case 'escaper':
             case 'eventsManager':
             case 'filter':
-            case 'url':
 //            case 'modelsManager':
 //            case 'modelsMetadata':
             case 'request':
@@ -258,15 +274,21 @@ trait DiTrait
             case 'sessionLibmemcached':
             case 'sessionNoop':
             case 'sessionRedis':
-                $container = $this->container;
                 $this->container->set(
                     'session',
-                    function () use ($class, $container) {
-                        $manager = new Manager();
-                        $manager->setDI($container);
-                        $manager->setAdapter($class);
+                    function () use ($class) {
+                        return (new Manager())->setAdapter($class);
+                    }
+                );
+                break;
 
-                        return $manager;
+            case 'tag':
+                $this->container->set(
+                    $service,
+                    function () {
+                        $escaper = $this->container->get("escaper");
+
+                        return new TagFactory($escaper);
                     }
                 );
                 break;
