@@ -17,6 +17,8 @@ use Phalcon\Session\Exception;
 use Phalcon\Traits\Php\FileTrait;
 use Phalcon\Traits\Php\InfoTrait;
 
+use Phalcon\Traits\Php\IniTrait;
+
 use function file_exists;
 use function rtrim;
 
@@ -50,6 +52,7 @@ class Stream extends Noop
 {
     use FileTrait;
     use InfoTrait;
+    use IniTrait;
 
     /**
      * Session options
