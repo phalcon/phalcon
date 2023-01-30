@@ -80,9 +80,10 @@ use const UPLOAD_ERR_OK;
  * $request->getLanguages();
  *```
  */
-class Request extends AbstractInjectionAware implements EventsAwareInterface,
-                                                        RequestInterface,
-                                                        RequestMethodInterface
+class Request extends AbstractInjectionAware implements
+    EventsAwareInterface,
+    RequestInterface,
+    RequestMethodInterface
 {
     use EventsAwareTrait;
 
@@ -265,8 +266,8 @@ class Request extends AbstractInjectionAware implements EventsAwareInterface,
      *
      * @return string|bool
      */
-    public function getClientAddress(bool $trustForwardedHeader = false
-    ): string|bool {
+    public function getClientAddress(bool $trustForwardedHeader = false): string|bool
+    {
         $address = null;
         $server  = $this->getServerArray();
 
@@ -656,8 +657,8 @@ class Request extends AbstractInjectionAware implements EventsAwareInterface,
      *
      * @return array|bool|stdClass
      */
-    public function getJsonRawBody(bool $associative = false
-    ): array|bool|stdClass {
+    public function getJsonRawBody(bool $associative = false): array|bool|stdClass
+    {
         $rawBody = $this->getRawBody();
 
         return json_decode($rawBody, $associative);
@@ -1732,9 +1733,11 @@ class Request extends AbstractInjectionAware implements EventsAwareInterface,
         } else {
             if (true === $this->hasServer('HTTP_AUTHORIZATION')) {
                 $authHeader = $this->getServer('HTTP_AUTHORIZATION');
-            } elseif (true === $this->hasServer(
+            } elseif (
+                true === $this->hasServer(
                     'REDIRECT_HTTP_AUTHORIZATION'
-                )) {
+                )
+            ) {
                 $authHeader = $this->getServer('REDIRECT_HTTP_AUTHORIZATION');
             }
 

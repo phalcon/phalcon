@@ -213,8 +213,7 @@ interface RequestInterface
      *
      * @return stdClass|array|bool
      */
-    public function getJsonRawBody(bool $associative = false
-    ): array|bool|stdClass;
+    public function getJsonRawBody(bool $associative = false): array|bool|stdClass;
 
     /**
      * Return the languages array and their quality accepted by the

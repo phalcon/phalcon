@@ -31,7 +31,9 @@ use function time;
 /**
  * Provide OO wrappers to manage a HTTP cookie.
  */
-class Cookie extends AbstractInjectionAware implements CookieInterface, Stringable
+class Cookie extends AbstractInjectionAware implements
+    CookieInterface,
+    Stringable
 {
     private const COOKIE_PREFIX = '_PHCOOKIE_';
 

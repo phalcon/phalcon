@@ -48,8 +48,9 @@ use function substr;
 /**
  * Factory for ServerRequest objects
  */
-class ServerRequestFactory implements ServerRequestFactoryInterface,
-                                      RequestMethodInterface
+class ServerRequestFactory implements
+    ServerRequestFactoryInterface,
+    RequestMethodInterface
 {
     /**
      * Create a new server request.

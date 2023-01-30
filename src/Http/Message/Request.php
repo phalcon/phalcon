@@ -28,8 +28,9 @@ use Phalcon\Support\Collection\CollectionInterface;
 /**
  * Request object
  */
-final class Request extends AbstractRequest implements RequestInterface,
-                                                       RequestMethodInterface
+final class Request extends AbstractRequest implements
+    RequestInterface,
+    RequestMethodInterface
 {
     /**
      * Request constructor.

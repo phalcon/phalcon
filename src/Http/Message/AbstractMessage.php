@@ -32,7 +32,8 @@ use function is_string;
  * Message methods
  */
 abstract class AbstractMessage extends AbstractCommon implements
-    MessageInterface, ResponseStatusCodeInterface
+    MessageInterface,
+    ResponseStatusCodeInterface
 {
     /**
      * Gets the body of the message.

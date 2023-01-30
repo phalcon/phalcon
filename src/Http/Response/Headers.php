@@ -48,7 +48,10 @@ class Headers implements HeadersInterface, IteratorAggregate
          * We need to use array_key_exists() here because raw headers have
          * a value of `null
          */
-        return array_key_exists($name, $this->headers) ? $this->headers[$name] : false;
+        return array_key_exists(
+            $name,
+            $this->headers
+        ) ? $this->headers[$name] : false;
     }
 
     /**
