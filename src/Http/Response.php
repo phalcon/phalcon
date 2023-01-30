@@ -62,9 +62,10 @@ use const JSON_ERROR_NONE;
  * $response->send();
  *```
  */
-class Response extends Injectable implements EventsAwareInterface,
-                                             ResponseInterface,
-                                             ResponseStatusCodeInterface
+class Response extends Injectable implements
+    EventsAwareInterface,
+    ResponseInterface,
+    ResponseStatusCodeInterface
 {
     use EventsAwareTrait;
     use StatusPhrasesTrait;

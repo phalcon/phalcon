@@ -269,8 +269,7 @@ interface ServerRequestInterface extends RequestInterface
      * @return ServerRequestInterface
      * @throws InvalidArgumentException if an invalid structure is provided.
      */
-    public function withUploadedFiles(array $uploadedFiles
-    ): ServerRequestInterface;
+    public function withUploadedFiles(array $uploadedFiles): ServerRequestInterface;
 
     /**
      * Return an instance that removes the specified derived request attribute.

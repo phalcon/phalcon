@@ -35,7 +35,8 @@ use function strtoupper;
  * @property UriInterface $uri
  */
 abstract class AbstractRequest extends AbstractMessage implements
-    RequestInterface, RequestMethodInterface
+    RequestInterface,
+    RequestMethodInterface
 {
     /**
      * Retrieves the HTTP method of the request.
