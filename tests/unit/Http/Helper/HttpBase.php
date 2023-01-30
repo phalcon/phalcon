@@ -14,6 +14,7 @@ declare(strict_types=1);
 namespace Phalcon\Tests\Unit\Http\Helper;
 
 use Page\Http;
+use Phalcon\Http\Cookie;
 use Phalcon\Http\Request;
 use Phalcon\Http\Response;
 use Phalcon\Tests\Fixtures\Http\PhpStream;
@@ -71,6 +72,34 @@ class HttpBase
         $_COOKIE  = $this->store['COOKIE'];
         $_FILES   = $this->store['FILES'];
     }
+
+    protected function getCookieObject(): Cookie
+    {
+        $name     = 'test';
+        $value    = "phalcon";
+        $expire   = time() - 100;
+        $path     = "/";
+        $secure   = true;
+        $domain   = "phalcon.ld";
+        $httpOnly = true;
+        $options  = ["samesite" => "Lax"];
+
+        $cookie = new Cookie(
+            $name,
+            $value,
+            $expire,
+            $path,
+            $secure,
+            $domain,
+            $httpOnly,
+            $options
+        );
+
+        $cookie->setDI($this->container);
+
+        return $cookie;
+    }
+
 
     /**
      * Initializes the request object and returns it
