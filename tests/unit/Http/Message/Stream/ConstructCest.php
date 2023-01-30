@@ -41,7 +41,9 @@ class ConstructCest
      */
     public function httpMessageStreamConstruct(UnitTester $I, Example $example)
     {
-        $I->wantToTest('Http\Message\Stream - __construct() ' . $example['label']);
+        $I->wantToTest(
+            'Http\Message\Stream - __construct() ' . $example['label']
+        );
 
         $request = $example['request'];
 
@@ -56,8 +58,10 @@ class ConstructCest
      * @author       Phalcon Team <team@phalcon.io>
      * @since        2019-02-08
      */
-    public function httpMessageStreamConstructException(UnitTester $I, Example $example)
-    {
+    public function httpMessageStreamConstructException(
+        UnitTester $I,
+        Example $example
+    ) {
         $I->wantToTest('Http\Message\Stream - __construct() ' . $example[0]);
         $I->expectThrowable(
             new RuntimeException(

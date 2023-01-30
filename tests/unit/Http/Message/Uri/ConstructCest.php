@@ -30,7 +30,7 @@ class ConstructCest
     {
         $I->wantToTest('Http\Message\Uri - __construct()');
 
-        $uri   = new Uri();
+        $uri = new Uri();
         $class = UriInterface::class;
         $I->assertInstanceOf($class, $uri);
     }

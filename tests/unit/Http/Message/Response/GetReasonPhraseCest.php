@@ -45,7 +45,9 @@ class GetReasonPhraseCest
      */
     public function httpMessageResponseGetReasonPhraseOtherPort(UnitTester $I)
     {
-        $I->wantToTest('Http\Message\Response - getReasonPhrase() - other port');
+        $I->wantToTest(
+            'Http\Message\Response - getReasonPhrase() - other port'
+        );
 
         $response = new Response(Http::STREAM_MEMORY, 420);
 

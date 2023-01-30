@@ -55,7 +55,9 @@ class WithProtocolVersionCest
      */
     public function httpMessageRequestWithProtocolVersionEmpty(UnitTester $I)
     {
-        $I->wantToTest('Http\Message\Request - withProtocolVersion() - unsupported protocol');
+        $I->wantToTest(
+            'Http\Message\Request - withProtocolVersion() - unsupported protocol'
+        );
 
         $I->expectThrowable(
             new InvalidArgumentException(
@@ -76,9 +78,12 @@ class WithProtocolVersionCest
      * @author Phalcon Team <team@phalcon.io>
      * @since  2019-02-10
      */
-    public function httpMessageRequestWithProtocolVersionUnsupported(UnitTester $I)
-    {
-        $I->wantToTest('Http\Message\Request - withProtocolVersion() - empty protocol');
+    public function httpMessageRequestWithProtocolVersionUnsupported(
+        UnitTester $I
+    ) {
+        $I->wantToTest(
+            'Http\Message\Request - withProtocolVersion() - empty protocol'
+        );
 
         $I->expectThrowable(
             new InvalidArgumentException(

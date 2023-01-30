@@ -14,7 +14,6 @@ declare(strict_types=1);
 namespace Phalcon\Tests\Unit\Http\Request;
 
 use Page\Http;
-use Phalcon\Http\Request;
 use Phalcon\Tests\Unit\Http\Helper\HttpBase;
 use UnitTester;
 
@@ -95,7 +94,7 @@ class GetPatchCest extends HttpBase
             'fruit'    => 'orange',
             'quantity' => '4',
         ];
-        $actual = json_decode(
+        $actual   = json_decode(
             file_get_contents(Http::STREAM),
             true
         );

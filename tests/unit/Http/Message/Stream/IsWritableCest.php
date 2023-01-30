@@ -35,7 +35,9 @@ class IsWritableCest
      */
     public function httpMessageStreamIsWritable(UnitTester $I, Example $example)
     {
-        $I->wantToTest('Http\Message\Stream - isWritable() - ' . $example['label']);
+        $I->wantToTest(
+            'Http\Message\Stream - isWritable() - ' . $example['label']
+        );
 
         $stream = $example['resource'];
 
@@ -52,8 +54,10 @@ class IsWritableCest
      * @author       Phalcon Team <team@phalcon.io>
      * @since        2019-02-10
      */
-    public function httpMessageStreamIsWritableWithX(UnitTester $I, Example $example)
-    {
+    public function httpMessageStreamIsWritableWithX(
+        UnitTester $I,
+        Example $example
+    ) {
         $I->wantToTest(
             'Http\Message\Stream - isWritable() with "x" - ' . $example[0]
         );

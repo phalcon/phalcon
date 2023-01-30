@@ -14,7 +14,6 @@ declare(strict_types=1);
 namespace Phalcon\Tests\Unit\Http\Request;
 
 use Page\Http;
-use Phalcon\Http\Request;
 use Phalcon\Tests\Unit\Http\Helper\HttpBase;
 use UnitTester;
 
@@ -39,6 +38,7 @@ class GetRawBodyCest extends HttpBase
         $actual = $request->getRawBody();
         $I->assertEmpty($actual);
     }
+
     /**
      * Tests Phalcon\Http\Request :: getRawBody()
      *

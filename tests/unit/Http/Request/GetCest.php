@@ -87,11 +87,11 @@ class GetCest extends HttpBase
         $I->assertSame($expected, $actual);
 
         $expected = 1;
-        $actual = $request->get('id', 'int', 100);
+        $actual   = $request->get('id', 'int', 100);
         $I->assertSame($expected, $actual);
 
         $expected = 1;
-        $actual = $request->get('num', 'int', 100);
+        $actual   = $request->get('num', 'int', 100);
         $I->assertSame($expected, $actual);
 
         $actual = $request->get('age', 'int', 100);

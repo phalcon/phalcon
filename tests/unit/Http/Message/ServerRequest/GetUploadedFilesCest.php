@@ -13,8 +13,8 @@ declare(strict_types=1);
 
 namespace Phalcon\Tests\Unit\Http\Message\ServerRequest;
 
-use Page\Http;
 use InvalidArgumentException;
+use Page\Http;
 use Phalcon\Http\Message\ServerRequest;
 use Phalcon\Http\Message\UploadedFile;
 use UnitTester;
@@ -58,7 +58,9 @@ class GetUploadedFilesCest
      */
     public function httpMessageServerRequestGetUploadedFilesEmpty(UnitTester $I)
     {
-        $I->wantToTest('Http\Message\ServerRequest - getUploadedFiles() - empty');
+        $I->wantToTest(
+            'Http\Message\ServerRequest - getUploadedFiles() - empty'
+        );
         $request = new ServerRequest();
 
         $actual = $request->getUploadedFiles();
@@ -72,9 +74,12 @@ class GetUploadedFilesCest
      * @author Phalcon Team <team@phalcon.io>
      * @since  2019-03-03
      */
-    public function httpMessageServerRequestGetUploadedFilesException(UnitTester $I)
-    {
-        $I->wantToTest('Http\Message\ServerRequest - getUploadedFiles() - exception');
+    public function httpMessageServerRequestGetUploadedFilesException(
+        UnitTester $I
+    ) {
+        $I->wantToTest(
+            'Http\Message\ServerRequest - getUploadedFiles() - exception'
+        );
         $I->expectThrowable(
             new InvalidArgumentException('Invalid uploaded file'),
             function () use ($I) {

@@ -14,7 +14,6 @@ declare(strict_types=1);
 namespace Phalcon\Tests\Unit\Http\Request;
 
 use Page\Http;
-use Phalcon\Http\Request;
 use Phalcon\Tests\Unit\Http\Helper\HttpBase;
 use UnitTester;
 
@@ -58,6 +57,5 @@ class IsMethodCest extends HttpBase
             ]
         );
         $I->assertTrue($actual);
-
     }
 }

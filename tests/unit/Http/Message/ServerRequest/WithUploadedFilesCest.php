@@ -13,8 +13,8 @@ declare(strict_types=1);
 
 namespace Phalcon\Tests\Unit\Http\Message\ServerRequest;
 
-use Page\Http;
 use InvalidArgumentException;
+use Page\Http;
 use Phalcon\Http\Message\ServerRequest;
 use Phalcon\Http\Message\UploadedFile;
 use UnitTester;
@@ -52,9 +52,12 @@ class WithUploadedFilesCest
      * @author Phalcon Team <team@phalcon.io>
      * @since  2019-02-10
      */
-    public function httpMessageServerRequestWithUploadedFilesException(UnitTester $I)
-    {
-        $I->wantToTest('Http\Message\ServerRequest - withUploadedFiles() - exception');
+    public function httpMessageServerRequestWithUploadedFilesException(
+        UnitTester $I
+    ) {
+        $I->wantToTest(
+            'Http\Message\ServerRequest - withUploadedFiles() - exception'
+        );
         $I->expectThrowable(
             new InvalidArgumentException('Invalid uploaded file'),
             function () use ($I) {

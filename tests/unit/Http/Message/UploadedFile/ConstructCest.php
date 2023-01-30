@@ -98,7 +98,9 @@ class ConstructCest
         );
 
         $I->expectThrowable(
-            new InvalidArgumentException('Invalid error. Must be one of the UPLOAD_ERR_* constants'),
+            new InvalidArgumentException(
+                'Invalid error. Must be one of the UPLOAD_ERR_* constants'
+            ),
             function () {
                 $stream = logsDir(
                     uniqid('test')

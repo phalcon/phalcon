@@ -15,7 +15,6 @@ namespace Phalcon\Tests\Unit\Http\Cookie;
 
 use Phalcon\Http\Cookie;
 use Phalcon\Http\Cookie\CookieInterface;
-use Phalcon\Tests\Fixtures\Traits\DiTrait;
 use Phalcon\Tests\Unit\Http\Helper\HttpBase;
 use UnitTester;
 

@@ -33,7 +33,7 @@ class GetHeaderCest extends HttpBase
 
         $request = new Request();
 
-        $name = uniqid('name-');
+        $name   = uniqid('name-');
         $actual = $request->getHeader($name);
         $I->assertEmpty($actual);
     }
@@ -48,7 +48,7 @@ class GetHeaderCest extends HttpBase
     {
         $I->wantToTest('Http\Request - getHeader() - empty');
 
-        $value = uniqid('val-');
+        $value                  = uniqid('val-');
         $_SERVER['HTTP_ABCDEF'] = $value;
 
         $request = new Request();

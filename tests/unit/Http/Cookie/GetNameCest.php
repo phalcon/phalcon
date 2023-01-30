@@ -13,7 +13,6 @@ declare(strict_types=1);
 
 namespace Phalcon\Tests\Unit\Http\Cookie;
 
-use Phalcon\Http\Cookie;
 use Phalcon\Tests\Unit\Http\Helper\HttpBase;
 use UnitTester;
 

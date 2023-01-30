@@ -44,7 +44,9 @@ class GetCookieParamsCest
      */
     public function httpMessageServerRequestGetCookieParamsEmpty(UnitTester $I)
     {
-        $I->wantToTest('Http\Message\ServerRequest - getCookieParams() - empty');
+        $I->wantToTest(
+            'Http\Message\ServerRequest - getCookieParams() - empty'
+        );
         $request = new ServerRequest();
 
         $actual = $request->getCookieParams();

@@ -35,7 +35,9 @@ class IsSeekableCest
      */
     public function httpMessageStreamIsSeekable(UnitTester $I, Example $example)
     {
-        $I->wantToTest('Http\Message\Stream - isSeekable() - ' . $example['label']);
+        $I->wantToTest(
+            'Http\Message\Stream - isSeekable() - ' . $example['label']
+        );
 
         $stream = $example['resource'];
 
@@ -52,8 +54,10 @@ class IsSeekableCest
      * @author       Phalcon Team <team@phalcon.io>
      * @since        2019-02-10
      */
-    public function httpMessageStreamIsSeekableWithX(UnitTester $I, Example $example)
-    {
+    public function httpMessageStreamIsSeekableWithX(
+        UnitTester $I,
+        Example $example
+    ) {
         $I->wantToTest(
             'Http\Message\Stream - isSeekable() with "x" - ' . $example[0]
         );

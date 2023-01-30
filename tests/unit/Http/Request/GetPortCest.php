@@ -25,8 +25,8 @@ class GetPortCest extends HttpBase
      *
      * @dataProvider getExamples
      *
-     * @author Phalcon Team <team@phalcon.io>
-     * @since  2016-06-26
+     * @author       Phalcon Team <team@phalcon.io>
+     * @since        2016-06-26
      */
     public function testHttpRequestPort(UnitTester $I, Example $example)
     {

@@ -13,8 +13,6 @@ declare(strict_types=1);
 
 namespace Phalcon\Tests\Unit\Http\Request;
 
-use Phalcon\Http\Request;
-use Phalcon\Tests\Fixtures\Traits\DiTrait;
 use Phalcon\Tests\Unit\Http\Helper\HttpBase;
 use UnitTester;
 
@@ -33,9 +31,9 @@ class GetQueryCest extends HttpBase
     {
         $I->wantToTest('Http\Request - getQuery()');
 
-        $key  = uniqid('key-');
-        $value = uniqid('val-');
-        $unknown = uniqid('unk-');
+        $key        = uniqid('key-');
+        $value      = uniqid('val-');
+        $unknown    = uniqid('unk-');
         $_GET[$key] = $value;
 
         $request = $this->getRequestObject();
@@ -61,8 +59,8 @@ class GetQueryCest extends HttpBase
     {
         $I->wantToTest('Http\Request - getQuery() - filter');
 
-        $key  = uniqid('key-');
-        $value = uniqid('VAL-');
+        $key        = uniqid('key-');
+        $value      = uniqid('VAL-');
         $_GET[$key] = '  ' . $value . '  ';
 
         $request = $this->getRequestObject();
@@ -86,7 +84,7 @@ class GetQueryCest extends HttpBase
     {
         $I->wantToTest('Http\Request - getQuery() - default');
 
-        $key  = uniqid('key-');
+        $key     = uniqid('key-');
         $request = $this->getRequestObject();
 
         $expected = 'default';
@@ -104,7 +102,7 @@ class GetQueryCest extends HttpBase
     {
         $I->wantToTest('Http\Request - getQuery() - allowNoEmpty');
 
-        $key  = uniqid('key-');
+        $key = uniqid('key-');
 
         $_GET[$key] = ' 0 ';
 

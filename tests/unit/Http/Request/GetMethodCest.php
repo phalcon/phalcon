@@ -14,7 +14,6 @@ declare(strict_types=1);
 namespace Phalcon\Tests\Unit\Http\Request;
 
 use Page\Http;
-use Phalcon\Http\Request;
 use Phalcon\Tests\Unit\Http\Helper\HttpBase;
 use UnitTester;
 
@@ -39,6 +38,7 @@ class GetMethodCest extends HttpBase
         $actual   = $request->getMethod();
         $I->assertSame($expected, $actual);
     }
+
     /**
      * Tests Phalcon\Http\Request :: getMethod() - header POST
      *
@@ -68,7 +68,7 @@ class GetMethodCest extends HttpBase
     {
         $I->wantToTest('Http\Request - getMethod() - header POST override');
 
-        $_SERVER['REQUEST_METHOD'] = Http::METHOD_POST;
+        $_SERVER['REQUEST_METHOD']         = Http::METHOD_POST;
         $_SERVER['X_HTTP_METHOD_OVERRIDE'] = Http::METHOD_TRACE;
 
         $request = $this->getRequestObject();
@@ -89,7 +89,7 @@ class GetMethodCest extends HttpBase
         $I->wantToTest('Http\Request - getMethod() - header spoof');
 
         $_SERVER['REQUEST_METHOD'] = Http::METHOD_POST;
-        $_REQUEST['_method'] = Http::METHOD_CONNECT;
+        $_REQUEST['_method']       = Http::METHOD_CONNECT;
 
         $request = $this->getRequestObject();
         $request->setHttpMethodParameterOverride(true);
@@ -109,7 +109,7 @@ class GetMethodCest extends HttpBase
     {
         $I->wantToTest('Http\Request - getMethod() - not valid');
 
-        $method = uniqid('meth-');
+        $method                    = uniqid('meth-');
         $_SERVER['REQUEST_METHOD'] = $method;
 
         $request = $this->getRequestObject();

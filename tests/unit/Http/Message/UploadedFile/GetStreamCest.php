@@ -101,9 +101,12 @@ class GetStreamCest
      * @author Phalcon Team <team@phalcon.io>
      * @since  2019-02-10
      */
-    public function httpMessageUploadedFileGetStreamExceptionAlreadyMoved(UnitTester $I)
-    {
-        $I->wantToTest('Http\Message\UploadedFile - getStream() - exception already moved');
+    public function httpMessageUploadedFileGetStreamExceptionAlreadyMoved(
+        UnitTester $I
+    ) {
+        $I->wantToTest(
+            'Http\Message\UploadedFile - getStream() - exception already moved'
+        );
 
         $I->expectThrowable(
             new RuntimeException(
@@ -113,7 +116,7 @@ class GetStreamCest
                 $stream = new Stream(Http::STREAM_MEMORY, 'w+b');
                 $stream->write('Phalcon Framework');
 
-                $file   = new UploadedFile($stream, 0);
+                $file = new UploadedFile($stream, 0);
                 $target = $I->getNewFileName();
                 $target = outputDir(
                     'tests/stream/' . $target

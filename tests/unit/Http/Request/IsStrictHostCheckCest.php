@@ -14,7 +14,6 @@ declare(strict_types=1);
 namespace Phalcon\Tests\Unit\Http\Request;
 
 use Page\Http;
-use Phalcon\Http\Request;
 use Phalcon\Tests\Unit\Http\Helper\HttpBase;
 use UnitTester;
 
@@ -30,7 +29,7 @@ class IsStrictHostCheckCest extends HttpBase
     {
         $I->wantToTest('Http\Request - getDigestAuth()');
 
-        $host = 'LOCALHOST:80';
+        $host                   = 'LOCALHOST:80';
         $_SERVER['SERVER_NAME'] = $host;
 
         $request = $this->getRequestObject();

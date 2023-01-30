@@ -11,9 +11,8 @@
 
 namespace Phalcon\Tests\Unit\Http\Cookie;
 
+use Exception;
 use Phalcon\Http\Cookie;
-use Phalcon\Http\Cookie\Exception;
-use Phalcon\Http\Response\Cookies;
 use Phalcon\Tests\Fixtures\Traits\CookieTrait;
 use Phalcon\Tests\Unit\Http\Helper\HttpBase;
 use UnitTester;
@@ -43,8 +42,9 @@ class CookieCest extends HttpBase
      * @author Phalcon Team <team@phalcon.io>
      * @since  2018-05-06
      */
-    public function shouldThrowExceptionIfMessageAuthenticationCodeIsMismatch(UnitTester $I)
-    {
+    public function shouldThrowExceptionIfMessageAuthenticationCodeIsMismatch(
+        UnitTester $I
+    ) {
         /**
          * TODO: Check the exception
          */
@@ -53,7 +53,7 @@ class CookieCest extends HttpBase
         $I->checkExtensionIsLoaded('xdebug');
 
         $I->expectThrowable(
-            new \Exception('Hash does not match.'),
+            new Exception('Hash does not match.'),
             function () use ($I) {
                 $this->setDiService('crypt');
 
@@ -95,8 +95,9 @@ class CookieCest extends HttpBase
      * @author Phalcon Team <team@phalcon.io>
      * @since  2018-05-06
      */
-    public function shouldDecryptValueByUsingMessageAuthenticationCode(UnitTester $I)
-    {
+    public function shouldDecryptValueByUsingMessageAuthenticationCode(
+        UnitTester $I
+    ) {
         $I->checkExtensionIsLoaded('xdebug');
 
         $this->setDiService('crypt');

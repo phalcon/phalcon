@@ -66,7 +66,9 @@ class GetMethodCest
         $I->wantToTest('Http\Message\Request - getMethod() - exception');
 
         $I->expectThrowable(
-            new InvalidArgumentException('Invalid or unsupported method UNKNOWN'),
+            new InvalidArgumentException(
+                'Invalid or unsupported method UNKNOWN'
+            ),
             function () {
                 $request = new Request('UNKNOWN');
             }

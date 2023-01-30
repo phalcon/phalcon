@@ -43,7 +43,8 @@ class GetClientAddressCest extends HttpBase
     }
 
     /**
-     * Tests Phalcon\Http\Request :: getClientAddress() - trustForwardedHeader - client IP
+     * Tests Phalcon\Http\Request :: getClientAddress() - trustForwardedHeader
+     * - client IP
      *
      * @author Phalcon Team <team@phalcon.io>
      * @since  2020-03-17

@@ -81,7 +81,9 @@ class WriteCest
      */
     public function httpMessageStreamWriteNotWritable(UnitTester $I)
     {
-        $I->wantToTest('Http\Message\Stream - write() - exception not writable');
+        $I->wantToTest(
+            'Http\Message\Stream - write() - exception not writable'
+        );
 
         $fileName = $I->getNewFileName();
         $fileName = logsDir($fileName);

@@ -27,11 +27,13 @@ class IsValidHttpMethodCest
      *
      * @dataProvider getExamples
      *
-     * @author Phalcon Team <team@phalcon.io>
-     * @since  2020-03-17
+     * @author       Phalcon Team <team@phalcon.io>
+     * @since        2020-03-17
      */
-    public function httpRequestIsValidHttpMethod(UnitTester $I, Example $example)
-    {
+    public function httpRequestIsValidHttpMethod(
+        UnitTester $I,
+        Example $example
+    ) {
         $method = $example[0];
 
         $I->wantToTest('Http\Request - isValidHttpMethod() - ' . $method);
@@ -132,7 +134,7 @@ class IsValidHttpMethodCest
             [
                 uniqid('meth-'),
                 false,
-            ]
+            ],
         ];
     }
 }
