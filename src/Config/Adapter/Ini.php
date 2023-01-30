@@ -15,7 +15,8 @@ namespace Phalcon\Config\Adapter;
 
 use Phalcon\Config\Config;
 use Phalcon\Config\Exception;
-use Phalcon\Traits\Php\FileTrait;
+
+use Phalcon\Traits\Php\IniTrait;
 
 use function basename;
 use function count;
@@ -72,7 +73,7 @@ use const INI_SCANNER_RAW;
  */
 class Ini extends Config
 {
-    use FileTrait;
+    use IniTrait;
 
     /**
      * Ini constructor.
