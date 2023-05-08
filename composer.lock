@@ -236,16 +236,16 @@
         },
         {
             "name": "phalcon/traits",
-            "version": "2.0.2",
+            "version": "2.0.3",
             "source": {
                 "type": "git",
                 "url": "https://github.com/phalcon/traits.git",
-                "reference": "7c5839785c04d7a087d7ea250b37bb9b7af633f4"
+                "reference": "d76a8f60f7a4795579aa1b516f109b256396a80a"
             },
             "dist": {
                 "type": "zip",
-                "url": "https://api.github.com/repos/phalcon/traits/zipball/7c5839785c04d7a087d7ea250b37bb9b7af633f4",
-                "reference": "7c5839785c04d7a087d7ea250b37bb9b7af633f4",
+                "url": "https://api.github.com/repos/phalcon/traits/zipball/d76a8f60f7a4795579aa1b516f109b256396a80a",
+                "reference": "d76a8f60f7a4795579aa1b516f109b256396a80a",
                 "shasum": ""
             },
             "require": {
@@ -288,7 +288,7 @@
             ],
             "support": {
                 "issues": "https://github.com/phalcon/traits/issues",
-                "source": "https://github.com/phalcon/traits/tree/2.0.2"
+                "source": "https://github.com/phalcon/traits/tree/2.0.3"
             },
             "funding": [
                 {
@@ -300,7 +300,7 @@
                     "type": "open_collective"
                 }
             ],
-            "time": "2023-01-15T15:03:38+00:00"
+            "time": "2023-05-01T14:08:11+00:00"
         },
         {
             "name": "phpbench/container",
