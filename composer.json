@@ -48,7 +48,6 @@
     "require-dev": {
         "ext-gettext": "*",
         "ext-yaml": "*",
-<<<<<<< HEAD
         "codeception/codeception": "^5.0",
         "codeception/module-apc": "^3.0",
         "codeception/module-asserts": "^3.0",
@@ -58,17 +57,6 @@
         "codeception/module-memcache": "^3.0",
         "codeception/module-redis": "^3.0",
         "friendsofphp/php-cs-fixer": "^3.13",
-=======
-        "codeception/codeception": "^4.0",
-        "codeception/module-apc": "^1.0",
-        "codeception/module-asserts": "^1.0",
-        "codeception/module-cli": "^1.0",
-        "codeception/module-db": "^1.0",
-        "codeception/module-filesystem": "^2.0",
-        "codeception/module-memcache": "^2.0",
-        "codeception/module-redis": "^1.0",
-        "friendsofphp/php-cs-fixer": "^3.0",
->>>>>>> 221562f7 (Bump codeception/module-filesystem from 1.0.3 to 2.0.2)
         "pds/skeleton": "^1.0",
         "phpstan/phpstan": "^1.9",
         "squizlabs/php_codesniffer": "^3.7",
