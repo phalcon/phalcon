@@ -48,8 +48,7 @@ RUN pecl install -o -f redis && \
       yaml \
       imagick \
       memcached \
-      xdebug \
-
+      xdebug
 
 # Locale
 RUN sed -i -e 's/# de_DE.UTF-8 UTF-8/de_DE.UTF-8 UTF-8/' /etc/locale.gen && \
