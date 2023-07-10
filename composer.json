@@ -19,7 +19,7 @@
         "ext-redis": "*",
         "ext-xml": "*",
         "payload-interop/payload-interop": "^1.0",
-        "phalcon/traits": "^1.0",
+        "phalcon/traits": "^2.0",
         "phpbench/phpbench": "^1.2"
     },
     "suggest": {
