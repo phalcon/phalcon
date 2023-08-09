@@ -21,11 +21,11 @@ use Phalcon\Encryption\Security\JWT\Token\Signature;
 use Phalcon\Encryption\Security\JWT\Token\Token;
 use Phalcon\Support\Collection;
 use Phalcon\Support\Collection\CollectionInterface;
+use Phalcon\Support\Helper\Json\Encode;
 use Phalcon\Support\Traits\Base64Trait;
 
 use function is_array;
 use function is_string;
-use function json_encode;
 
 /**
  * Builder
@@ -49,6 +49,11 @@ class Builder
     private CollectionInterface $claims;
 
     /**
+     * @var Encode
+     */
+    private Encode $encode;
+
+    /**
      * @var CollectionInterface
      */
     private CollectionInterface $jose;
@@ -59,19 +64,15 @@ class Builder
     private string $passphrase;
 
     /**
-     * @var SignerInterface
-     */
-    private SignerInterface $signer;
-
-    /**
      * Builder constructor.
      *
      * @param SignerInterface $signer
      */
-    public function __construct(SignerInterface $signer)
-    {
+    public function __construct(
+        private SignerInterface $signer
+    ) {
         $this->init();
-        $this->signer = $signer;
+        $this->encode = new Encode();
         $this->jose->set(Enum::ALGO, $this->signer->getAlgHeader());
     }
 
@@ -88,6 +89,36 @@ class Builder
                 Enum::ALGO => 'none',
             ]
         );
+
+        return $this;
+    }
+
+    /**
+     * Adds a custom claim
+     *
+     * @param string $name
+     * @param mixed  $value
+     *
+     * @return Builder
+     */
+    public function addClaim(string $name, mixed $value): Builder
+    {
+        $this->claims->set($name, $value);
+
+        return $this;
+    }
+
+    /**
+     * Adds a custom claim
+     *
+     * @param string $name
+     * @param mixed  $value
+     *
+     * @return Builder
+     */
+    public function addHeader(string $name, mixed $value): Builder
+    {
+        $this->jose->set($name, $value);
 
         return $this;
     }
@@ -182,9 +213,9 @@ class Builder
             throw new ValidatorException('Invalid passphrase (empty)');
         }
 
-        $encodedClaims    = $this->doEncodeUrl(json_encode($this->getClaims()));
+        $encodedClaims    = $this->doEncodeUrl($this->encode->__invoke($this->getClaims()));
         $urlClaims        = new Item($this->getClaims(), $encodedClaims);
-        $encodedHeaders   = $this->doEncodeUrl(json_encode($this->getHeaders()));
+        $encodedHeaders   = $this->doEncodeUrl($this->encode->__invoke($this->getHeaders()));
         $urlHeaders       = new Item($this->getHeaders(), $encodedHeaders);
         $signatureHash    = $this->signer->sign(
             $encodedHeaders . '.' . $encodedClaims,
