@@ -46,5 +46,21 @@ class GetHeadersCest
         $actual   = $builder->getHeaders();
         ksort($actual);
         $I->assertSame($expected, $actual);
+
+
+        $builder = new Builder($signer);
+
+        $builder
+            ->addHeader('abc', 'custom header')
+        ;
+
+        $expected = [
+            'abc' => 'custom header',
+            'alg' => $signer->getAlgHeader(),
+            'typ' => 'JWT',
+        ];
+        $actual   = $builder->getHeaders();
+        ksort($actual);
+        $I->assertSame($expected, $actual);
     }
 }
