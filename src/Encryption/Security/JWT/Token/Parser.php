@@ -14,6 +14,7 @@ declare(strict_types=1);
 namespace Phalcon\Encryption\Security\JWT\Token;
 
 use InvalidArgumentException;
+use Phalcon\Support\Helper\Json\Decode;
 use Phalcon\Support\Traits\Base64Trait;
 
 use function explode;
@@ -30,6 +31,23 @@ use function json_decode;
 class Parser
 {
     use Base64Trait;
+
+    /**
+     * @var Decode
+     */
+    private Decode $decode;
+
+    /**
+     * @param $decode
+     */
+    public function __construct(Decode $decode = null)
+    {
+        if (null === $decode) {
+            $decode = new Decode();
+        }
+
+        $this->decode = $decode;
+    }
 
     /**
      * Parse a token and return it
@@ -60,7 +78,10 @@ class Parser
      */
     private function decodeClaims(string $claims): Item
     {
-        $decoded = json_decode($this->doDecodeUrl($claims), true);
+        $decoded = $this->decode->__invoke(
+            $this->doDecodeUrl($claims),
+            true
+        );
 
         if (true !== is_array($decoded)) {
             throw new InvalidArgumentException(
