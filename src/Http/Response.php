@@ -247,7 +247,7 @@ class Response extends Injectable implements
      *```php
      * // Using a string redirect (internal/external)
      * $response->redirect("posts/index");
-     * $response->redirect("http://en.wikipedia.org", true);
+     * $response->redirect("https://en.wikipedia.org", true);
      * $response->redirect("http://www.example.com/new-location", true, 301);
      *
      * // Making a redirection based on a named route

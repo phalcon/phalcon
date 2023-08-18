@@ -639,7 +639,7 @@ class Request extends AbstractInjectionAware implements
     }
 
     /**
-     * Gets web page that refers active request. ie: http://www.google.com
+     * Gets web page that refers active request. ie: https://www.google.com
      *
      * @return string
      */

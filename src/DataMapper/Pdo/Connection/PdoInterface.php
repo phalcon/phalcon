@@ -362,7 +362,7 @@ interface PdoInterface
      * in other words, if your class initializes property-values to defaults
      * in the constructor, you will be overwriting the values injected by
      * fetchObject() !"
-     * <http://www.php.net/manual/en/pdostatement.fetchobject.php#111744>
+     * <https://www.php.net/manual/en/pdostatement.fetchobject.php#111744>
      *
      * @param string $statement
      * @param array  $values
