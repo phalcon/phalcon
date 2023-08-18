@@ -90,7 +90,7 @@ class Stream implements StreamInterface
      * This method MUST NOT raise an exception in order to conform with PHP's
      * string casting operations.
      *
-     * @see http://php.net/manual/en/language.oop5.magic.php#object.tostring
+     * @see https://php.net/manual/en/language.oop5.magic.php#object.tostring
      *
      * @return string
      */

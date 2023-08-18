@@ -36,7 +36,7 @@ class Headers extends Collection
     /**
      * Ensure Host is the first header.
      *
-     * @see: http://tools.ietf.org/html/rfc7230#section-5.4
+     * @see: https://tools.ietf.org/html/rfc7230#section-5.4
      *
      * @param Headers           $collection
      * @param UriInterface|null $uri
@@ -73,7 +73,7 @@ class Headers extends Collection
     /**
      * Check the name of the header. Throw exception if not valid
      *
-     * @see http://tools.ietf.org/html/rfc7230#section-3.2
+     * @see https://tools.ietf.org/html/rfc7230#section-3.2
      *
      * @param string $name
      *

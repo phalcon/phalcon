@@ -218,7 +218,7 @@ class Manager implements InjectionAwareInterface
      *
      *```php
      * $assets->addJs("scripts/jquery.js");
-     * $assets->addJs("http://jquery.my-cdn.com/jquery.js", false);
+     * $assets->addJs("https://jquery.my-cdn.com/jquery.js", false);
      *```
      *
      * @param string      $path

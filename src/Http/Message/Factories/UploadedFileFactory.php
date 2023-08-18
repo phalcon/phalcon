@@ -35,8 +35,8 @@ final class UploadedFileFactory implements UploadedFileFactoryInterface
      * If a size is not provided it will be determined by checking the size of
      * the stream.
      *
-     * @link http://php.net/manual/features.file-upload.post-method.php
-     * @link http://php.net/manual/features.file-upload.errors.php
+     * @link httsp://php.net/manual/features.file-upload.post-method.php
+     * @link https://php.net/manual/features.file-upload.errors.php
      *
      * @param StreamInterface $stream          The underlying stream
      *                                         representing the uploaded file

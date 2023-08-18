@@ -57,7 +57,7 @@ abstract class AbstractRequest extends AbstractMessage implements
      *
      * This method MUST return a UriInterface instance.
      *
-     * @see http://tools.ietf.org/html/rfc3986#section-4.3
+     * @see https://tools.ietf.org/html/rfc3986#section-4.3
      *
      * @var UriInterface
      */
@@ -148,7 +148,7 @@ abstract class AbstractRequest extends AbstractMessage implements
      * immutability of the message, and MUST return an instance that has the
      * changed request target.
      *
-     * @see http://tools.ietf.org/html/rfc7230#section-5.3 (for the various
+     * @see https://tools.ietf.org/html/rfc7230#section-5.3 (for the various
      *     request-target forms allowed in request messages)
      *
      * @param string|null $requestTarget
@@ -196,7 +196,7 @@ abstract class AbstractRequest extends AbstractMessage implements
      * immutability of the message, and MUST return an instance that has the
      * new UriInterface instance.
      *
-     * @see http://tools.ietf.org/html/rfc3986#section-4.3
+     * @see https://tools.ietf.org/html/rfc3986#section-4.3
      *
      * @param UriInterface $uri
      * @param bool         $preserveHost

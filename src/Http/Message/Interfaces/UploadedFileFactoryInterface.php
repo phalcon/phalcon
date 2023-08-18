@@ -32,8 +32,8 @@ interface UploadedFileFactoryInterface
      * If a size is not provided it will be determined by checking the size of
      * the file.
      *
-     * @see http://php.net/manual/features.file-upload.post-method.php
-     * @see http://php.net/manual/features.file-upload.errors.php
+     * @see https://php.net/manual/features.file-upload.post-method.php
+     * @see https://php.net/manual/features.file-upload.errors.php
      *
      * @param StreamInterface $stream          Underlying stream representing
      *                                         the uploaded file content.
