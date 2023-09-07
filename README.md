@@ -30,11 +30,10 @@ Phalcon Framework
 
 
 ## Remaining refactoring - alignment with `cphalcon` (v5) 
-- Annotations
-- DataMapper
-- Db
-- Dispatcher
-- Http
-- Mvc
-- Paginator
-- Url
+-  Annotations
+-  DataMapper
+-  Db
+-  Dispatcher
+-  Mvc
+-  Paginator
+-  Url
