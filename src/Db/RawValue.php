@@ -46,7 +46,7 @@ class RawValue
         } elseif (null === $value) {
             $this->value = "NULL";
         } else {
-            $this->value = (string) $value;
+            $this->value = (string)$value;
         }
     }
 

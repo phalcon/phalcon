@@ -279,7 +279,7 @@ abstract class AbstractPdo extends AbstractAdapter
         }
 
         if (isset($descriptor["persistent"])) {
-            $options[PDO::ATTR_PERSISTENT] = (bool) $descriptor["persistent"];
+            $options[PDO::ATTR_PERSISTENT] = (bool)$descriptor["persistent"];
         }
 
         // Set PDO to throw exceptions when an error is encountered.
@@ -510,7 +510,6 @@ abstract class AbstractPdo extends AbstractAdapter
         array $placeholders,
         array $dataTypes = []
     ): PDOStatement {
-
         $forceCasting = $this->iniGetBool("phalcon.db.force_casting");
         foreach ($placeholders as $wildcard => $value) {
             if (is_int($wildcard)) {
@@ -529,17 +528,17 @@ abstract class AbstractPdo extends AbstractAdapter
                  * is lost if it is cast as a double
                  */
                 if ($type === Column::BIND_PARAM_DECIMAL) {
-                    $castValue = (string) $value;
+                    $castValue = (string)$value;
                     $type      = Column::BIND_SKIP;
                 } else {
                     $castValue = $value;
                     if (true === $forceCasting && true !== is_array($value)) {
                         $castValue = match ($type) {
-                            Column::BIND_PARAM_INT => intval($value),
-                            Column::BIND_PARAM_STR => (string) $value,
+                            Column::BIND_PARAM_INT  => intval($value),
+                            Column::BIND_PARAM_STR  => (string)$value,
                             Column::BIND_PARAM_NULL => null,
-                            Column::BIND_PARAM_BOOL => (bool) $value,
-                            default => $value,
+                            Column::BIND_PARAM_BOOL => (bool)$value,
+                            default                 => $value,
                         };
                     }
                 }

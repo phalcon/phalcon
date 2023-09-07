@@ -44,7 +44,7 @@ class WithFragmentCest
         $I->assertSame($expected, $actual);
 
         $expected = sprintf($query, 'newspaper');
-        $actual   = (string) $newInstance;
+        $actual   = (string)$newInstance;
         $I->assertSame($expected, $actual);
 
         $newInstance = $uri->withFragment('#newspaper');
@@ -55,7 +55,7 @@ class WithFragmentCest
         $I->assertSame($expected, $actual);
 
         $expected = sprintf($query, '%23newspaper');
-        $actual   = (string) $newInstance;
+        $actual   = (string)$newInstance;
         $I->assertSame($expected, $actual);
     }
 }

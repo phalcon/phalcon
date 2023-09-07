@@ -95,9 +95,9 @@ class FetchOneCest
      * @dataProvider getBindTypes
      * @since        2020-01-25
      *
-     * @group  pgsql
-     * @group  mysql
-     * @group  sqlite
+     * @group        pgsql
+     * @group        mysql
+     * @group        sqlite
      */
     public function dMPdoConnectionFetchOneBindTypes(DatabaseTester $I, Example $example)
     {

@@ -43,7 +43,7 @@ class Style extends AbstractSeries
             [
                 $this->getTag(),
                 $this->getAttributes($url, $attributes),
-                "/"
+                "/",
             ],
             $this->indent(),
         ];

@@ -76,7 +76,7 @@ class CreditCard extends AbstractValidator
             return true;
         }
 
-        $valid = $this->verifyByLuhnAlgorithm((string) $value);
+        $valid = $this->verifyByLuhnAlgorithm((string)$value);
 
         if (!$valid) {
             $validation->appendMessage(

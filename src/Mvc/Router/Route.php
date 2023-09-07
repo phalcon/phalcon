@@ -112,7 +112,7 @@ class Route implements RouteInterface
         $uniqueId = self::$uniqueId;
 
         // TODO: Add a function that increase static members
-        $this->routeId  = (string) $uniqueId;
+        $this->routeId  = (string)$uniqueId;
         self::$uniqueId = $uniqueId + 1;
     }
 
@@ -211,7 +211,7 @@ class Route implements RouteInterface
      *
      * @return array|bool
      */
-    public function extractNamedParams(string $pattern): array | bool
+    public function extractNamedParams(string $pattern): array|bool
     {
         if (0 === strlen($pattern)) {
             return false;
@@ -246,7 +246,7 @@ class Route implements RouteInterface
                             $numberMatches++;
                             $variable = null;
                             $regexp   = null;
-                            $item     = (string) substr(
+                            $item     = (string)substr(
                                 $pattern,
                                 $marker,
                                 $cursor - $marker
@@ -276,11 +276,11 @@ class Route implements RouteInterface
                                     ($itemChar >= '0' && $itemChar <= '9') ||
                                     $itemChar == '-' ||
                                     $itemChar == '_' ||
-                                    $itemChar ==  ':'
+                                    $itemChar == ':'
                                 ) {
                                     if (':' === $itemChar) {
-                                        $variable = (string) substr($item, 0, $cursorVar);
-                                        $regexp   = (string) substr($item, $cursorVar + 1);
+                                        $variable = (string)substr($item, 0, $cursorVar);
+                                        $regexp   = (string)substr($item, $cursorVar + 1);
 
                                         break;
                                     }
@@ -296,7 +296,7 @@ class Route implements RouteInterface
 
                                 if ($variable && $regexp) {
                                     $foundPattern = 0;
-                                    $regexpArray = str_split($regexp);
+                                    $regexpArray  = str_split($regexp);
                                     foreach ($regexpArray as $regexChar) {
                                         if ('\0' === $regexChar) {
                                             break;
@@ -323,7 +323,7 @@ class Route implements RouteInterface
 
                                     $matches[$variable] = $tmp;
                                 } else {
-                                    $route .= "([^/]*)";
+                                    $route          .= "([^/]*)";
                                     $matches[$item] = $tmp;
                                 }
                             } else {
@@ -362,7 +362,7 @@ class Route implements RouteInterface
                     }
                 }
 
-                $route .= $character;
+                $route  .= $character;
                 $prevCh = $character;
             }
         }
@@ -396,7 +396,7 @@ class Route implements RouteInterface
      *
      * @return GroupInterface|null
      */
-    public function getGroup(): GroupInterface | null
+    public function getGroup(): GroupInterface|null
     {
         return $this->group;
     }
@@ -406,7 +406,7 @@ class Route implements RouteInterface
      *
      * @return array|string
      */
-    public function getHttpMethods(): array | string
+    public function getHttpMethods(): array|string
     {
         return $this->methods;
     }
@@ -416,7 +416,7 @@ class Route implements RouteInterface
      *
      * @return string|null
      */
-    public function getHostname(): string | null
+    public function getHostname(): string|null
     {
         return $this->hostname;
     }
@@ -434,7 +434,7 @@ class Route implements RouteInterface
      *
      * @return callable|null
      */
-    public function getMatch(): callable | null
+    public function getMatch(): callable|null
     {
         return $this->match;
     }

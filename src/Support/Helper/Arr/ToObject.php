@@ -25,6 +25,6 @@ class ToObject
      */
     public function __invoke(array $collection): object
     {
-        return (object) $collection;
+        return (object)$collection;
     }
 }

@@ -31,6 +31,6 @@ class IntVal
      */
     public function __invoke(mixed $input): int
     {
-        return (int) filter_var($input, FILTER_SANITIZE_NUMBER_INT);
+        return (int)filter_var($input, FILTER_SANITIZE_NUMBER_INT);
     }
 }

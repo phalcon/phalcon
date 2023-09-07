@@ -54,7 +54,6 @@ class SerializeUnserializeCest
         IntegrationTester $I,
         Example $example
     ) {
-
         $label    = $example[0];
         $type     = $example[1];
         $class    = $example[2];

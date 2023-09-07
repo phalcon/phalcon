@@ -55,7 +55,7 @@ class UnderscoreInvokeCest
         ;
 
         $expected = $example['result'];
-        $actual   = (string) $result;
+        $actual   = (string)$result;
         $I->assertSame($expected, $actual);
 
         $factory = new TagFactory($escaper);
@@ -67,7 +67,7 @@ class UnderscoreInvokeCest
             ->addProperty($example['property'][0], $example['property'][1])
         ;
 
-        $actual = (string) $result;
+        $actual = (string)$result;
         $I->assertSame($expected, $actual);
     }
 

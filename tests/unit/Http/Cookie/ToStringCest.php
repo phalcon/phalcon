@@ -33,7 +33,7 @@ class ToStringCest extends HttpBase
         $cookie = $this->getCookieObject();
 
         $expected = 'phalcon';
-        $actual   = (string) $cookie;
+        $actual   = (string)$cookie;
         $I->assertSame($expected, $actual);
     }
 }

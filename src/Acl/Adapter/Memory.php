@@ -698,8 +698,7 @@ class Memory extends AbstractAdapter
             }
 
             $parametersForFunction      = [];
-            $numberOfRequiredParameters = $reflectionFunction->getNumberOfRequiredParameters(
-            );
+            $numberOfRequiredParameters = $reflectionFunction->getNumberOfRequiredParameters();
             $userParametersSizeShouldBe = $parameterNumber;
             foreach ($reflectionParameters as $reflectionParameter) {
                 $reflectionType   = $reflectionParameter->getType();

@@ -76,7 +76,7 @@ class Memory extends AbstractAdapter
 
         if (true === $result) {
             $current  = $this->data[$prefixedKey];
-            $newValue = (int) $current - $value;
+            $newValue = (int)$current - $value;
             $result   = $newValue;
 
             $this->data[$prefixedKey] = $newValue;
@@ -143,7 +143,7 @@ class Memory extends AbstractAdapter
 
         if ($result) {
             $current  = $this->data[$prefixedKey];
-            $newValue = (int) $current + $value;
+            $newValue = (int)$current + $value;
             $result   = $newValue;
 
             $this->data[$prefixedKey] = $newValue;

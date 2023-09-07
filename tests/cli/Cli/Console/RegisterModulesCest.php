@@ -112,7 +112,7 @@ class RegisterModulesCest
         $console->registerModules(
             [
                 'frontend' => [
-                    'path'      => dataDir('not-a-real-file.php'),
+                    'path' => dataDir('not-a-real-file.php'),
                     'className' => Module::class,
                 ],
             ]

@@ -100,8 +100,8 @@ class Url extends AbstractInjectionAware implements UrlInterface
      *```
      *
      * @param array|string|null $uri = [
-     *     'for' => '',
-     * ]
+     *                               'for' => '',
+     *                               ]
      * @param mixed|null        $arguments
      * @param bool|null         $local
      * @param mixed|null        $baseUri
@@ -194,7 +194,7 @@ class Url extends AbstractInjectionAware implements UrlInterface
         }
 
         if (true === $local) {
-            $strUri = (string) $uri;
+            $strUri = (string)$uri;
             $uri    = preg_replace(
                 "#(?<!:)//+#",
                 "/",
@@ -222,7 +222,7 @@ class Url extends AbstractInjectionAware implements UrlInterface
      *
      * @return string|null
      */
-    public function getBasePath(): string | null
+    public function getBasePath(): string|null
     {
         return $this->basePath;
     }
@@ -273,8 +273,8 @@ class Url extends AbstractInjectionAware implements UrlInterface
      *```
      *
      * @param array|string|null $uri = [
-     *     'for' => ''
-     * ]
+     *                               'for' => ''
+     *                               ]
      *
      * @return string
      * @throws Exception

@@ -134,7 +134,7 @@ abstract class AbstractFile extends AbstractValidator
         ) {
             $label        = $this->prepareLabel($validation, $field);
             $replacePairs = [
-                ":field" => $label
+                ":field" => $label,
             ];
 
             $validation->appendMessage(
@@ -220,7 +220,7 @@ abstract class AbstractFile extends AbstractValidator
             "POST" === $method &&
             true === empty($post) &&
             true === empty($files) &&
-            (int) $length > 0 ||
+            (int)$length > 0 ||
             is_array($value) &&
             true === isset($value["error"]) &&
             $value["error"] === UPLOAD_ERR_INI_SIZE

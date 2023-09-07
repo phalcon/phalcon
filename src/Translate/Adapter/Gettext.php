@@ -171,7 +171,6 @@ class Gettext extends AbstractAdapter implements ArrayAccess
         array $placeholders = [],
         string $domain = null
     ): string {
-
         if (null === $domain) {
             $translation = ngettext($msgid1, $msgid2, $count);
         } else {

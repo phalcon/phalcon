@@ -40,6 +40,6 @@ class BoolVal
             return false;
         }
 
-        return (bool) $input;
+        return (bool)$input;
     }
 }

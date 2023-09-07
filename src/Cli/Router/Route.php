@@ -113,7 +113,7 @@ class Route implements RouteInterface
         $uniqueId = self::$uniqueId;
 
         // TODO: Add a function that increase static members
-        $this->routeId  = (string) $uniqueId;
+        $this->routeId  = (string)$uniqueId;
         self::$uniqueId = $uniqueId + 1;
     }
 
@@ -277,8 +277,8 @@ class Route implements RouteInterface
                                     $itemChar == ':'
                                 ) {
                                     if (':' === $itemChar) {
-                                        $variable = (string) substr($item, 0, $cursorVar);
-                                        $regexp   = (string) substr($item, $cursorVar + 1);
+                                        $variable = (string)substr($item, 0, $cursorVar);
+                                        $regexp   = (string)substr($item, $cursorVar + 1);
 
                                         break;
                                     }

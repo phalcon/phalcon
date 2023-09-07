@@ -45,7 +45,7 @@ class ValidateCest
         $validation = new Validation();
         $validator  = new Digit(['allowEmpty' => true,]);
         $validation->add('price', $validator);
-        $entity = new stdClass();
+        $entity        = new stdClass();
         $entity->price = '';
 
         $validation->bind($entity, []);

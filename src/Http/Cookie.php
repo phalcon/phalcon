@@ -92,7 +92,7 @@ class Cookie extends AbstractInjectionAware implements
      */
     public function __toString(): string
     {
-        return (string) $this->getValue();
+        return (string)$this->getValue();
     }
 
     /**
@@ -411,11 +411,11 @@ class Cookie extends AbstractInjectionAware implements
              */
             if (is_string($this->signKey)) {
                 $encryptValue = $crypt->encryptBase64(
-                    (string) $this->value,
+                    (string)$this->value,
                     $this->signKey
                 );
             } else {
-                $encryptValue = $crypt->encryptBase64((string) $this->value);
+                $encryptValue = $crypt->encryptBase64((string)$this->value);
             }
         }
 

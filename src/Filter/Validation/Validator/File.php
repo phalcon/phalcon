@@ -125,9 +125,9 @@ class File extends AbstractValidatorComposite
      */
     public function __construct(array $options = [])
     {
-        $fileEmpty = (string) ($options["messageFileEmpty"] ?? null);
-        $iniSize   = (string) ($options["messageIniSize"] ?? null);
-        $valid     = (string) ($options["messageValid"] ?? null);
+        $fileEmpty = (string)($options["messageFileEmpty"] ?? null);
+        $iniSize   = (string)($options["messageIniSize"] ?? null);
+        $valid     = (string)($options["messageValid"] ?? null);
 
         $this
             ->processFileAllowedType($options, $fileEmpty, $iniSize, $valid)

@@ -175,7 +175,7 @@ abstract class Select
         $escaper = BaseTag::getEscaperService();
 
         foreach ($data as $optionValue => $optionText) {
-            $escaped = $escaper->html((string) $optionValue);
+            $escaped = $escaper->html((string)$optionValue);
 //            $escaped = htmlspecialchars($optionValue);
 
             if (is_array($optionText)) {
@@ -196,8 +196,8 @@ abstract class Select
                         . $optionText . $closeOption;
                 }
             } else {
-                $strOptionValue = (string) $optionValue;
-                $strValue       = (string) $value;
+                $strOptionValue = (string)$optionValue;
+                $strValue       = (string)$value;
 
                 if ($strOptionValue === $strValue) {
                     $code .= "\t<option selected=\"selected\" value=\""
@@ -277,8 +277,8 @@ abstract class Select
                             . $closeOption;
                     }
                 } else {
-                    $strOptionValue = (string) $optionValue;
-                    $strValue       = (string) $value;
+                    $strOptionValue = (string)$optionValue;
+                    $strValue       = (string)$value;
 
                     if ($strOptionValue === $strValue) {
                         $code .= "\t<option selected=\"selected\" value=\""
@@ -291,7 +291,6 @@ abstract class Select
                     }
                 }
             } else {
-
                 /**
                  * Check if using is a closure
                  */

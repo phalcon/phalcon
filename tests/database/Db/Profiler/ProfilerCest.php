@@ -18,6 +18,7 @@ use Phalcon\Db\Profiler\Item;
 use Phalcon\Tests\Fixtures\Migrations\InvoicesMigration;
 use Phalcon\Tests\Fixtures\Traits\DiTrait;
 use Phalcon\Tests\Models\Invoices;
+
 use function substr;
 use function uniqid;
 
@@ -82,15 +83,15 @@ class ProfilerCest
         $miliseconds = $nanoseconds / 1000000;
         $seconds     = $miliseconds / 1000;
 
-        $miliseconds = substr((string) $miliseconds, 0, 5);
-        $seconds     = substr((string) $seconds, 0, 5);
+        $miliseconds = substr((string)$miliseconds, 0, 5);
+        $seconds     = substr((string)$seconds, 0, 5);
 
         $expected = $miliseconds;
-        $actual   = substr((string) $first->getTotalElapsedMilliseconds(), 0, 5);
+        $actual   = substr((string)$first->getTotalElapsedMilliseconds(), 0, 5);
         $I->assertSame($expected, $actual);
 
         $expected = $seconds;
-        $actual   = substr((string) $first->getTotalElapsedSeconds(), 0, 5);
+        $actual   = substr((string)$first->getTotalElapsedSeconds(), 0, 5);
         $I->assertSame($expected, $actual);
 
         /**
@@ -100,10 +101,10 @@ class ProfilerCest
             + $profiles[1]->getTotalElapsedSeconds()
             + $profiles[2]->getTotalElapsedSeconds();
 
-        $elapsed = substr((string) $elapsed, 0, 5);
+        $elapsed = substr((string)$elapsed, 0, 5);
 
         $expected = $elapsed;
-        $actual   = substr((string) $profiler->getTotalElapsedSeconds(), 0, 5);
+        $actual   = substr((string)$profiler->getTotalElapsedSeconds(), 0, 5);
         $I->assertSame($expected, $actual);
 
         $expected = 3;

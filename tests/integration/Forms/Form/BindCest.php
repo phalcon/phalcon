@@ -16,6 +16,7 @@ namespace Phalcon\Tests\Integration\Forms\Form;
 use IntegrationTester;
 use Phalcon\Forms\Element\Text;
 use Phalcon\Forms\Form;
+use stdClass;
 
 /**
  * Class BindCest
@@ -38,26 +39,25 @@ class BindCest
             'test1' => 'test1',
         ];
 
-        $form->bind($data, new \stdClass());
+        $form->bind($data, new stdClass());
 
         $I->assertEquals("test1", $form->getValue("test1"));
     }
 
     public function testBindWhitelist(IntegrationTester $I)
     {
-
         $I->wantToTest('Forms\Form - bind() with whitelist');
         $form = new Form();
         $form->add(new Text('nameFirst'));
         $form->add(new Text('nameLast'));
 
         $data = [
-            'test1' => 'test1',
+            'test1'     => 'test1',
             'nameFirst' => 'nameFirst',
-            'nameLast' => 'nameLast',
+            'nameLast'  => 'nameLast',
         ];
 
-        $entity = new \stdClass();
+        $entity    = new stdClass();
         $whiteList = ['nameFirst', 'nameLast'];
         $form->bind($data, $entity, $whiteList);
 

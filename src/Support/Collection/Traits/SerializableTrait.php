@@ -44,7 +44,7 @@ trait SerializableTrait
      */
     public function unserialize($serialized)
     {
-        $serialized = (string) $serialized;
+        $serialized = (string)$serialized;
         $data       = unserialize($serialized);
 
         $this->init($data);

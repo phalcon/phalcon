@@ -17,6 +17,7 @@ use DatabaseTester;
 use PDO;
 use Phalcon\Db\Adapter\PdoFactory;
 use Phalcon\Tests\Fixtures\Traits\DiTrait;
+
 use function getOptionsMysql;
 
 class ConnectCest

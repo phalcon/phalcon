@@ -16,6 +16,7 @@ namespace Phalcon\Tests\Integration\Session\Manager;
 use Codeception\Example;
 use IntegrationTester;
 use Phalcon\Session\Manager;
+use Phalcon\Storage\Exception;
 use Phalcon\Tests\Fixtures\Traits\DiTrait;
 
 class ExistsDestroyCest
@@ -30,8 +31,8 @@ class ExistsDestroyCest
      * @param IntegrationTester $I
      * @param Example           $example
      *
-     * @author Phalcon Team <team@phalcon.io>
-     * @since  2018-11-13
+     * @author       Phalcon Team <team@phalcon.io>
+     * @since        2018-11-13
      */
     public function sessionManagerExistsDestroy(IntegrationTester $I, Example $example)
     {
@@ -65,13 +66,13 @@ class ExistsDestroyCest
      * @param IntegrationTester $I
      * @param Example           $example
      *
-     * @throws \Phalcon\Storage\Exception
+     * @throws Exception
      *
      * @issue  https://github.com/phalcon/cphalcon/issues/12326
      * @issue  https://github.com/phalcon/cphalcon/issues/12835
      *
-     * @author Phalcon Team <team@phalcon.io>
-     * @since  2018-11-13
+     * @author       Phalcon Team <team@phalcon.io>
+     * @since        2018-11-13
      */
     public function sessionManagerDestroySuperGlobal(IntegrationTester $I, Example $example)
     {
@@ -110,10 +111,10 @@ class ExistsDestroyCest
      * @param IntegrationTester $I
      * @param Example           $example
      *
-     * @throws \Phalcon\Storage\Exception
+     * @throws Exception
      *
-     * @author Phalcon Team <team@phalcon.io>
-     * @since  2020-09-09
+     * @author       Phalcon Team <team@phalcon.io>
+     * @since        2020-09-09
      */
     public function sessionManagerDestroySuperGlobalUniquid(IntegrationTester $I, Example $example)
     {

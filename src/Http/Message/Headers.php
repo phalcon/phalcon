@@ -61,7 +61,7 @@ class Headers extends Collection
             $collection->remove("host");
 
             $data   = $collection->toArray();
-            $header = ["Host" => [$host]] + (array) $data;
+            $header = ["Host" => [$host]] + (array)$data;
 
             $collection->clear();
             $collection->init($header);
@@ -143,7 +143,7 @@ class Headers extends Collection
             throw new InvalidArgumentException("Invalid header value");
         }
 
-        $value = (string) $value;
+        $value = (string)$value;
 
         if (
             preg_match(
@@ -181,7 +181,7 @@ class Headers extends Collection
         foreach ($valueArray as $value) {
             $this->checkHeaderValue($value);
 
-            $valueData[] = (string) $value;
+            $valueData[] = (string)$value;
         }
 
         return $valueData;
@@ -199,7 +199,7 @@ class Headers extends Collection
         foreach ($headers as $name => $value) {
             $this->checkHeaderName($name);
 
-            $name  = (string) $name;
+            $name  = (string)$name;
             $value = $this->getHeaderValue($value);
 
             $this->set($name, $value);

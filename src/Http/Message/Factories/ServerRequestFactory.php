@@ -204,7 +204,7 @@ class ServerRequestFactory implements
         // works for regname, IPv4 & IPv6
         if (preg_match("|:(\d+)$|", $host, $matches)) {
             $host = substr($host, 0, -1 * (strlen($matches[1]) + 1));
-            $port = (int) $matches[1];
+            $port = (int)$matches[1];
         }
 
         return [$host, $port];
@@ -278,7 +278,7 @@ class ServerRequestFactory implements
         $scheme  = "https";
         $isHttps = true;
         if (true === $server->has("HTTPS")) {
-            $isHttps = (string) $server->get("HTTPS", "on");
+            $isHttps = (string)$server->get("HTTPS", "on");
             $isHttps = "off" !== strtolower($isHttps);
         }
 
@@ -458,7 +458,7 @@ class ServerRequestFactory implements
             return "1.1";
         }
 
-        $protocol      = (string) $server->get("SERVER_PROTOCOL", "HTTP/1.1");
+        $protocol      = (string)$server->get("SERVER_PROTOCOL", "HTTP/1.1");
         $localProtocol = strtolower($protocol);
         $protocols     = [
             "1.0" => 1,
@@ -534,7 +534,7 @@ class ServerRequestFactory implements
          * Loop through the files and check them recursively
          */
         foreach ($files as $key => $file) {
-            $key = (string) $key;
+            $key = (string)$key;
 
             /**
              * UriInterface

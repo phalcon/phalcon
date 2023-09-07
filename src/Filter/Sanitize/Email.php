@@ -32,7 +32,7 @@ class Email
      */
     public function __invoke(mixed $input): string
     {
-        return (string) filter_var(
+        return (string)filter_var(
             $input,
             FILTER_SANITIZE_EMAIL,
             FILTER_FLAG_EMAIL_UNICODE

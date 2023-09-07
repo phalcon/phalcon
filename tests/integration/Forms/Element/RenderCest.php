@@ -60,7 +60,7 @@ class RenderCest
 
         $I->assertSame($expected, $actual);
 
-        $actual = (string) $object;
+        $actual = (string)$object;
         $I->assertSame($expected, $actual);
 
         /**
@@ -73,7 +73,7 @@ class RenderCest
 
         $I->assertSame($expected, $actual);
 
-        $actual = (string) $object;
+        $actual = (string)$object;
         $I->assertSame($expected, $actual);
     }
 

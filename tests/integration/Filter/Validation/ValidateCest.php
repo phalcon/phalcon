@@ -55,9 +55,9 @@ class ValidateCest
         $validation->bind(
             new stdClass(),
             [
-                'day'   => date('d'),
+                'day' => date('d'),
                 'month' => date('m'),
-                'year'  => (string) (intval(date('Y')) + 1),
+                'year' => (string)(intval(date('Y')) + 1),
             ]
         );
 

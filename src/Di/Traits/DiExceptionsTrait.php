@@ -91,7 +91,7 @@ trait DiExceptionsTrait
         if (true !== is_array($arguments)) {
             throw new Exception(
                 'Call arguments must be an array on position ' .
-                (string) $position
+                (string)$position
             );
         }
     }
@@ -110,7 +110,7 @@ trait DiExceptionsTrait
         if (true !== is_array($method)) {
             throw new Exception(
                 'Method call must be an array on position ' .
-                (string) $position
+                (string)$position
             );
         }
     }
@@ -129,7 +129,7 @@ trait DiExceptionsTrait
         if (true !== isset($method['method'])) {
             throw new Exception(
                 'The method name is required on position ' .
-                (string) $position
+                (string)$position
             );
         }
     }
@@ -163,7 +163,7 @@ trait DiExceptionsTrait
         if (true !== is_array($property)) {
             throw new Exception(
                 "Property must be an array on position " .
-                (string) $position
+                (string)$position
             );
         }
     }
@@ -182,7 +182,7 @@ trait DiExceptionsTrait
         if (true !== isset($property['name'])) {
             throw new Exception(
                 'The property name is required on position ' .
-                (string) $position
+                (string)$position
             );
         }
     }
@@ -201,7 +201,7 @@ trait DiExceptionsTrait
         if (true !== isset($property['value'])) {
             throw new Exception(
                 'The property value is required on position ' .
-                (string) $position
+                (string)$position
             );
         }
     }
@@ -221,7 +221,7 @@ trait DiExceptionsTrait
         if (true !== isset($argument[$name])) {
             throw new Exception(
                 'Service "' . $name . '" is required in parameter ' .
-                'on position ' . (string) $position
+                'on position ' . (string)$position
             );
         }
     }

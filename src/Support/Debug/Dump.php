@@ -469,7 +469,7 @@ class Dump
                 . "\"<span style=\"%style%\">%var%</span>\"";
             $context = [
                 'style'  => $this->getStyle('num'),
-                'length' => mb_strlen((string) $variable),
+                'length' => mb_strlen((string)$variable),
                 'var'    => $variable,
             ];
 

@@ -41,7 +41,7 @@ class GetBodyCest
 
         $I->openFile($fileName);
 
-        $I->seeFileContentsEqual((string) $response->getBody());
+        $I->seeFileContentsEqual((string)$response->getBody());
     }
 
     /**

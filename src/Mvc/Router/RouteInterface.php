@@ -57,14 +57,14 @@ interface RouteInterface
      *
      * @return string|null
      */
-    public function getHostname(): string | null;
+    public function getHostname(): string|null;
 
     /**
      * Returns the HTTP methods that constraint matching the route
      *
      * @return array|string
      */
-    public function getHttpMethods(): array | string;
+    public function getHttpMethods(): array|string;
 
     /**
      * Returns the route's name

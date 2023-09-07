@@ -35,7 +35,7 @@ trait DiLoadTrait
             $this->set(
                 $name,
                 $service,
-                (bool) ($service['shared'] ?? false)
+                (bool)($service['shared'] ?? false)
             );
         }
     }

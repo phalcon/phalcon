@@ -94,10 +94,10 @@ class NewInstanceCest
 
         $factory = new HelperFactory();
 
-        $method   = $example[0];
-        $class    = $example[1];
+        $method = $example[0];
+        $class = $example[1];
         $expected = $class;
-        $actual   = $factory->newInstance($method);
+        $actual = $factory->newInstance($method);
         $I->assertInstanceOf($expected, $actual);
     }
 

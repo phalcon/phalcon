@@ -31,6 +31,6 @@ class Special
      */
     public function __invoke(mixed $input): string
     {
-        return (string) filter_var($input, FILTER_SANITIZE_SPECIAL_CHARS);
+        return (string)filter_var($input, FILTER_SANITIZE_SPECIAL_CHARS);
     }
 }

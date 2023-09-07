@@ -44,6 +44,6 @@ class WithBodyCest
 
         $I->openFile($fileName);
 
-        $I->seeFileContentsEqual((string) $newInstance->getBody());
+        $I->seeFileContentsEqual((string)$newInstance->getBody());
     }
 }

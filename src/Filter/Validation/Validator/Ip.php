@@ -116,9 +116,9 @@ class Ip extends AbstractValidator
 
         $options = [
             "options" => [
-                "default" => false
+                "default" => false,
             ],
-            "flags"   => $version | $allowPrivate | $allowReserved
+            "flags"   => $version | $allowPrivate | $allowReserved,
         ];
 
         if (!filter_var($value, FILTER_VALIDATE_IP, $options)) {

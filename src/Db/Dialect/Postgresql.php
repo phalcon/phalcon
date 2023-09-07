@@ -192,7 +192,6 @@ class Postgresql extends Dialect
         string $schemaName,
         array $definition
     ): string {
-
         if (true !== isset($definition["columns"])) {
             throw new Exception(
                 "The index 'columns' is required in the definition array"
@@ -1040,7 +1039,7 @@ class Postgresql extends Dialect
             $columnType === Column::TYPE_FLOAT ||
             $columnType === Column::TYPE_DOUBLE
         ) {
-            $preparedValue = (string) $defaultValue;
+            $preparedValue = (string)$defaultValue;
         } else {
             $preparedValue = "'"
                 . addcslashes($defaultValue, "\'")

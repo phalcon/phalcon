@@ -641,7 +641,7 @@ class Tag
         if (true === is_string($params)) {
             $params = [$params];
             if (true === isset($params[1])) {
-                $local = (bool) $params[1];
+                $local = (bool)$params[1];
             }
         }
 
@@ -708,10 +708,10 @@ class Tag
         }
 
         if (true === isset($params[1])) {
-            $local = (bool) $params[1];
+            $local = (bool)$params[1];
         } else {
             if (true === isset($params["local"])) {
-                $local = (bool) $params["local"];
+                $local = (bool)$params["local"];
 
                 unset($params["local"]);
             }
@@ -984,7 +984,7 @@ class Tag
             "id"     => null,
             "name"   => null,
             "value"  => null,
-            "class"  => null
+            "class"  => null,
         ];
 
         $attrs = [];
@@ -1239,10 +1239,10 @@ class Tag
 
         $local = true;
         if (true === isset($params[1])) {
-            $local = (bool) $params[1];
+            $local = (bool)$params[1];
         } else {
             if (true === isset($params["local"])) {
-                $local = (bool) $params["local"];
+                $local = (bool)$params["local"];
                 unset($params["local"]);
             }
         }

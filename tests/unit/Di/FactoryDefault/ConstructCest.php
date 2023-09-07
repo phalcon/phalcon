@@ -92,21 +92,21 @@ class ConstructCest
                 'class'   => MemoryAnnotations::class,
             ],
             [
-            'service' => 'assets',
-            'class'   => ManagerAssets::class,
+                'service' => 'assets',
+                'class'   => ManagerAssets::class,
             ],
             [
-            'service' => 'crypt',
-            'class'   => Crypt::class,
+                'service' => 'crypt',
+                'class'   => Crypt::class,
             ],
             [
                 'service' => 'cookies',
                 'class'   => Cookies::class,
             ],
-//            [
-//                'service' => 'dispatcher',
-//                'class'   => Dispatcher::class,
-//            ],
+            //            [
+            //                'service' => 'dispatcher',
+            //                'class'   => Dispatcher::class,
+            //            ],
             [
                 'service' => 'escaper',
                 'class'   => Escaper::class,
@@ -131,14 +131,14 @@ class ConstructCest
                 'service' => 'helper',
                 'class'   => HelperFactory::class,
             ],
-//            [
-//                'service' => 'modelsManager',
-//                'class'   => ManagerModel::class,
-//            ],
-//            [
-//                'service' => 'modelsMetadata',
-//                'class'   => Memory::class,
-//            ],
+            //            [
+            //                'service' => 'modelsManager',
+            //                'class'   => ManagerModel::class,
+            //            ],
+            //            [
+            //                'service' => 'modelsMetadata',
+            //                'class'   => Memory::class,
+            //            ],
             [
                 'service' => 'request',
                 'class'   => Request::class,
@@ -147,10 +147,10 @@ class ConstructCest
                 'service' => 'response',
                 'class'   => Response::class,
             ],
-//            [
-//                'service' => 'router',
-//                'class'   => Router::class,
-//            ],
+            //            [
+            //                'service' => 'router',
+            //                'class'   => Router::class,
+            //            ],
             [
                 'service' => 'security',
                 'class'   => Security::class,
@@ -159,10 +159,10 @@ class ConstructCest
                 'service' => 'tag',
                 'class'   => TagFactory::class,
             ],
-//            [
-//                'service' => 'transactionManager',
-//                'class'   => Manager::class,
-//            ],
+            //            [
+            //                'service' => 'transactionManager',
+            //                'class'   => Manager::class,
+            //            ],
             [
                 'service' => 'url',
                 'class'   => Url::class,

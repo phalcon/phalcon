@@ -69,33 +69,33 @@ class FactoryDefault extends Di
         $filterFactory = new FilterFactory();
 
         $this->services = [
-            "annotations"        => new Service(AnnotationsMemory::class, true),
+            "annotations"   => new Service(AnnotationsMemory::class, true),
             "assets"        => new Service(
                 [
                     "className" => AssetsManager::class,
                     "arguments" => [
                         [
                             "type" => "service",
-                            "name" => "tag"
-                        ]
-                    ]
+                            "name" => "tag",
+                        ],
+                    ],
                 ],
                 true
             ),
             "crypt"         => new Service(Crypt::class, true),
             "cookies"       => new Service(Cookies::class, true),
-//            "dispatcher"         => new Service("Phalcon\\Mvc\\Dispatcher", true),
+            //            "dispatcher"         => new Service("Phalcon\\Mvc\\Dispatcher", true),
             "escaper"       => new Service(Escaper::class, true),
             "eventsManager" => new Service(EventsManager::class, true),
             "flash"         => new Service(Direct::class, true),
             "flashSession"  => new Service(Session::class, true),
             "filter"        => new Service($filterFactory->newInstance(), true),
             "helper"        => new Service(HelperFactory::class, true),
-//            "modelsManager"      => new Service("Phalcon\\Mvc\\Model\\Manager", true),
-//            "modelsMetadata"     => new Service("Phalcon\\Mvc\\Model\\MetaData\\Memory", true),
-            "request"            => new Service(Request::class, true),
-            "response"           => new Service(Response::class, true),
-//            "router"             => new Service("Phalcon\\Mvc\\Router", true),
+            //            "modelsManager"      => new Service("Phalcon\\Mvc\\Model\\Manager", true),
+            //            "modelsMetadata"     => new Service("Phalcon\\Mvc\\Model\\MetaData\\Memory", true),
+            "request"       => new Service(Request::class, true),
+            "response"      => new Service(Response::class, true),
+            //            "router"             => new Service("Phalcon\\Mvc\\Router", true),
             "security"      => new Service(Security::class, true),
             "tag"           => new Service(
                 [
@@ -103,13 +103,13 @@ class FactoryDefault extends Di
                     "arguments" => [
                         [
                             "type" => "service",
-                            "name" => "escaper"
-                        ]
-                    ]
+                            "name" => "escaper",
+                        ],
+                    ],
                 ],
                 true
             ),
-//            "transactionManager" : new Service("Phalcon\\Mvc\\Model\\Transaction\\Manager", true),
+            //            "transactionManager" : new Service("Phalcon\\Mvc\\Model\\Transaction\\Manager", true),
             "url"           => new Service(Url::class, true),
         ];
     }

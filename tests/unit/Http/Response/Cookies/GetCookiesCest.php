@@ -58,7 +58,7 @@ class GetCookiesCest extends HttpBase
         $I->assertTrue($actual);
 
         $expected = $value;
-        $actual   = (string) $keys[$name];
+        $actual   = (string)$keys[$name];
         $I->assertSame($expected, $actual);
 
         $expected = 1;

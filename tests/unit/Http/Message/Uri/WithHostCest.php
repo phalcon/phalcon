@@ -45,7 +45,7 @@ class WithHostCest
         $I->assertSame($expected, $actual);
 
         $expected = sprintf($query, 'prod.phalcon.ld');
-        $actual   = (string) $newInstance;
+        $actual   = (string)$newInstance;
         $I->assertSame($expected, $actual);
     }
 }

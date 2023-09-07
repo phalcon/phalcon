@@ -1087,11 +1087,11 @@ class Manager implements InjectionAwareInterface
         }
 
         if (true === isset($params[1])) {
-            $local = (bool) $params[1];
+            $local = (bool)$params[1];
             unset($params[1]);
         } else {
             if (true === isset($params["local"])) {
-                $local = (bool) $params["local"];
+                $local = (bool)$params["local"];
 
                 unset($params["local"]);
             }
@@ -1131,6 +1131,6 @@ class Manager implements InjectionAwareInterface
         $helper->__invoke(""); // no indentation
         $helper->add($tag, $params);
 
-        return (string) $helper;
+        return (string)$helper;
     }
 }

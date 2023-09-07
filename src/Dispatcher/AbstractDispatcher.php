@@ -249,7 +249,6 @@ abstract class AbstractDispatcher extends AbstractInjectionAware implements Disp
                     // Otherwise, bubble Exception
                     throw $ex;
                 }
-
                 // Otherwise, user forwarded, continue
             }
         }

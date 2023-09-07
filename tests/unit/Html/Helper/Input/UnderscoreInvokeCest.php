@@ -73,7 +73,7 @@ class UnderscoreInvokeCest
             }
 
             $expected = sprintf($example['render'], $name);
-            $actual   = (string) $result;
+            $actual   = (string)$result;
             $I->assertSame($expected, $actual);
 
             $factory = new TagFactory($escaper);
@@ -84,7 +84,7 @@ class UnderscoreInvokeCest
                 $result->setValue($example['newValue']);
             }
 
-            $actual = (string) $result;
+            $actual = (string)$result;
             $I->assertSame($expected, $actual);
         }
     }
@@ -115,7 +115,7 @@ class UnderscoreInvokeCest
 
         $expected = '<textarea id="x_name" name="x_name" cols="10" rows="5">' .
             'test text area</textarea>';
-        $actual   = (string) $result;
+        $actual   = (string)$result;
         $I->assertSame($expected, $actual);
 
         $factory = new TagFactory($escaper);
@@ -129,7 +129,7 @@ class UnderscoreInvokeCest
             ]
         );
 
-        $actual = (string) $result;
+        $actual = (string)$result;
         $I->assertSame($expected, $actual);
     }
 

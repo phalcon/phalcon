@@ -83,7 +83,7 @@ class Confirmation extends AbstractValidator
         $value     = $validation->getValue($field);
         $valueWith = $validation->getValue($fieldWith);
 
-        if (true !== $this->compare((string) $value, (string) $valueWith)) {
+        if (true !== $this->compare((string)$value, (string)$valueWith)) {
             $labelWith = $this->checkArray(
                 $this->getOption("labelWith"),
                 $field
@@ -94,7 +94,7 @@ class Confirmation extends AbstractValidator
             }
 
             $replacePairs = [
-                ":with" => $labelWith
+                ":with" => $labelWith,
             ];
 
             $validation->appendMessage(

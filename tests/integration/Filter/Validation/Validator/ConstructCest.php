@@ -38,8 +38,8 @@ class ConstructCest
      */
     public function filterValidationValidatorConstructWithMessage(IntegrationTester $I)
     {
-        $validator_default = new PresenceOf(); // default message
-        $validator_custom = new PresenceOf(['message' => 'Custom message']); // custom message
+        $validator_default = new PresenceOf();                                // default message
+        $validator_custom  = new PresenceOf(['message' => 'Custom message']); // custom message
 
         // expected: FALSE - empty message for default text (not set)
         $I->assertEquals(

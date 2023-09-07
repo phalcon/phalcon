@@ -36,7 +36,7 @@ class RenderCest
         $I->wantToTest('Forms\Form - render() - similar method names');
 
         $tagFactory = new TagFactory(new Escaper());
-        $names = [
+        $names      = [
             'validation',
             'action',
             'useroption',
@@ -52,7 +52,7 @@ class RenderCest
         ];
 
         foreach ($names as $name) {
-            $form    = new Form();
+            $form = new Form();
             $form->setTagFactory($tagFactory);
             $element = new Text($name);
 
@@ -67,7 +67,7 @@ class RenderCest
                 $name,
                 $name
             );
-            $actual = $form->render($name);
+            $actual   = $form->render($name);
             $I->assertSame($expected, $actual);
 
             $actual = $form->getValue($name);
@@ -100,7 +100,7 @@ class RenderCest
 
 
         $expected = '<input type="text" id="name" name="name" class="big-input" />';
-        $actual = $form->render(
+        $actual   = $form->render(
             'name',
             [
                 'class' => 'big-input',

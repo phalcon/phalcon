@@ -411,7 +411,7 @@ class DescribeColumnsCest
                 'isUnsigned'       => false,
             ],
             // field_decimal_default    decimal(10,4) default 14.5678               null,
-            12  => [
+            12 => [
                 'getAfterPosition' => "field_decimal",
                 'getBindType'      => Column::BIND_PARAM_STR,
                 'getComment'       => "",
@@ -431,7 +431,7 @@ class DescribeColumnsCest
                 'isUnsigned'       => false,
             ],
             // field_enum               enum('xs', 's', 'm', 'l', 'xl', 'internal') null,
-            13  => [
+            13 => [
                 'getAfterPosition' => "field_decimal_default",
                 'getBindType'      => Column::BIND_PARAM_STR,
                 'getComment'       => "",
@@ -451,7 +451,7 @@ class DescribeColumnsCest
                 'isUnsigned'       => false,
             ],
             // field_integer            int(10)                                     null,
-            14  => [
+            14 => [
                 'getAfterPosition' => "field_enum",
                 'getBindType'      => Column::BIND_PARAM_INT,
                 'getComment'       => "",
@@ -471,7 +471,7 @@ class DescribeColumnsCest
                 'isUnsigned'       => false,
             ],
             // field_integer_default    int(10)       default 1                     null,
-            15  => [
+            15 => [
                 'getAfterPosition' => "field_integer",
                 'getBindType'      => Column::BIND_PARAM_INT,
                 'getComment'       => "",
@@ -491,7 +491,7 @@ class DescribeColumnsCest
                 'isUnsigned'       => false,
             ],
             // field_json               json                                        null,
-            16  => [
+            16 => [
                 'getAfterPosition' => "field_integer_default",
                 'getBindType'      => Column::BIND_PARAM_STR,
                 'getComment'       => "",
@@ -511,7 +511,7 @@ class DescribeColumnsCest
                 'isUnsigned'       => false,
             ],
             // field_float              float(10,4)                                 null,
-            17  => [
+            17 => [
                 'getAfterPosition' => "field_json",
                 'getBindType'      => Column::BIND_PARAM_DECIMAL,
                 'getComment'       => "",
@@ -531,7 +531,7 @@ class DescribeColumnsCest
                 'isUnsigned'       => false,
             ],
             // field_float_default      float(10,4)   default 14.5678               null,
-            18  => [
+            18 => [
                 'getAfterPosition' => "field_float",
                 'getBindType'      => Column::BIND_PARAM_DECIMAL,
                 'getComment'       => "",
@@ -551,7 +551,7 @@ class DescribeColumnsCest
                 'isUnsigned'       => false,
             ],
             // field_date               date                                        null,
-            19  => [
+            19 => [
                 'getAfterPosition' => "field_float_default",
                 'getBindType'      => Column::BIND_PARAM_STR,
                 'getComment'       => "",
@@ -571,7 +571,7 @@ class DescribeColumnsCest
                 'isUnsigned'       => false,
             ],
             // field_date_default       date          default '2018-10-01'          null,
-            20  => [
+            20 => [
                 'getAfterPosition' => "field_date",
                 'getBindType'      => Column::BIND_PARAM_STR,
                 'getComment'       => "",
@@ -591,7 +591,7 @@ class DescribeColumnsCest
                 'isUnsigned'       => false,
             ],
             // field_datetime           datetime                                    null,
-            21  => [
+            21 => [
                 'getAfterPosition' => "field_date_default",
                 'getBindType'      => Column::BIND_PARAM_STR,
                 'getComment'       => "",
@@ -611,7 +611,7 @@ class DescribeColumnsCest
                 'isUnsigned'       => false,
             ],
             // field_datetime_default   datetime      default '2018-10-01 12:34:56' null,
-            22  => [
+            22 => [
                 'getAfterPosition' => "field_datetime",
                 'getBindType'      => Column::BIND_PARAM_STR,
                 'getComment'       => "",
@@ -631,7 +631,7 @@ class DescribeColumnsCest
                 'isUnsigned'       => false,
             ],
             // field_time               time                                        null,
-            23  => [
+            23 => [
                 'getAfterPosition' => "field_datetime_default",
                 'getBindType'      => Column::BIND_PARAM_STR,
                 'getComment'       => "",
@@ -651,7 +651,7 @@ class DescribeColumnsCest
                 'isUnsigned'       => false,
             ],
             // field_time_default       time          default '12:34:56'            null,
-            24  => [
+            24 => [
                 'getAfterPosition' => "field_time",
                 'getBindType'      => Column::BIND_PARAM_STR,
                 'getComment'       => "",
@@ -671,7 +671,7 @@ class DescribeColumnsCest
                 'isUnsigned'       => false,
             ],
             // field_timestamp          timestamp                                   null,
-            25  => [
+            25 => [
                 'getAfterPosition' => "field_time_default",
                 'getBindType'      => Column::BIND_PARAM_STR,
                 'getComment'       => "",
@@ -691,7 +691,7 @@ class DescribeColumnsCest
                 'isUnsigned'       => false,
             ],
             // field_timestamp_default  timestamp     default '2018-10-01 12:34:56' null,
-            26  => [
+            26 => [
                 'getAfterPosition' => "field_timestamp",
                 'getBindType'      => Column::BIND_PARAM_STR,
                 'getComment'       => "",
@@ -711,7 +711,7 @@ class DescribeColumnsCest
                 'isUnsigned'       => false,
             ],
             // field_mediumint          mediumint(10) unsigned                      null,
-            27  => [
+            27 => [
                 'getAfterPosition' => "field_timestamp_default",
                 'getBindType'      => Column::BIND_PARAM_INT,
                 'getComment'       => "",
@@ -731,7 +731,7 @@ class DescribeColumnsCest
                 'isUnsigned'       => true,
             ],
             // field_mediumint_default  mediumint(10) default 1                     null,
-            28  => [
+            28 => [
                 'getAfterPosition' => "field_mediumint",
                 'getBindType'      => Column::BIND_PARAM_INT,
                 'getComment'       => "",
@@ -751,7 +751,7 @@ class DescribeColumnsCest
                 'isUnsigned'       => false,
             ],
             // field_smallint           smallint(10)  unsigned                      null,
-            29  => [
+            29 => [
                 'getAfterPosition' => "field_mediumint_default",
                 'getBindType'      => Column::BIND_PARAM_INT,
                 'getComment'       => "",
@@ -771,7 +771,7 @@ class DescribeColumnsCest
                 'isUnsigned'       => true,
             ],
             // field_smallint_default   smallint(10)  default 1                     null,
-            30  => [
+            30 => [
                 'getAfterPosition' => "field_smallint",
                 'getBindType'      => Column::BIND_PARAM_INT,
                 'getComment'       => "",
@@ -791,7 +791,7 @@ class DescribeColumnsCest
                 'isUnsigned'       => false,
             ],
             // field_tinyint            tinyint(10)   unsigned                      null,
-            31  => [
+            31 => [
                 'getAfterPosition' => "field_smallint_default",
                 'getBindType'      => Column::BIND_PARAM_INT,
                 'getComment'       => "",
@@ -811,7 +811,7 @@ class DescribeColumnsCest
                 'isUnsigned'       => true,
             ],
             // field_tinyint_default    tinyint(10)   default 1                     null,
-            32  => [
+            32 => [
                 'getAfterPosition' => "field_tinyint",
                 'getBindType'      => Column::BIND_PARAM_INT,
                 'getComment'       => "",
@@ -831,7 +831,7 @@ class DescribeColumnsCest
                 'isUnsigned'       => false,
             ],
             // field_longtext           longtext                                    null,
-            33  => [
+            33 => [
                 'getAfterPosition' => "field_tinyint_default",
                 'getBindType'      => Column::BIND_PARAM_STR,
                 'getComment'       => "",
@@ -851,7 +851,7 @@ class DescribeColumnsCest
                 'isUnsigned'       => false,
             ],
             // field_mediumtext         mediumtext                                  null,
-            34  => [
+            34 => [
                 'getAfterPosition' => "field_longtext",
                 'getBindType'      => Column::BIND_PARAM_STR,
                 'getComment'       => "",
@@ -871,7 +871,7 @@ class DescribeColumnsCest
                 'isUnsigned'       => false,
             ],
             // field_tinytext           tinytext                                    null,
-            35  => [
+            35 => [
                 'getAfterPosition' => "field_mediumtext",
                 'getBindType'      => Column::BIND_PARAM_STR,
                 'getComment'       => "",
@@ -891,7 +891,7 @@ class DescribeColumnsCest
                 'isUnsigned'       => false,
             ],
             // field_text               text                                        null,
-            36  => [
+            36 => [
                 'getAfterPosition' => "field_tinytext",
                 'getBindType'      => Column::BIND_PARAM_STR,
                 'getComment'       => "",
@@ -911,7 +911,7 @@ class DescribeColumnsCest
                 'isUnsigned'       => false,
             ],
             // field_varbinary          varbinary(10)                               null,
-            37  => [
+            37 => [
                 'getAfterPosition' => "field_text",
                 'getBindType'      => Column::BIND_PARAM_STR,
                 'getComment'       => "",
@@ -931,7 +931,7 @@ class DescribeColumnsCest
                 'isUnsigned'       => false,
             ],
             // field_varchar            varchar(10)                                 null,
-            38  => [
+            38 => [
                 'getAfterPosition' => "field_varbinary",
                 'getBindType'      => Column::BIND_PARAM_STR,
                 'getComment'       => "",
@@ -951,7 +951,7 @@ class DescribeColumnsCest
                 'isUnsigned'       => false,
             ],
             // field_varchar_default    varchar(10) 'D'                             null,
-            39  => [
+            39 => [
                 'getAfterPosition' => "field_varchar",
                 'getBindType'      => Column::BIND_PARAM_STR,
                 'getComment'       => "",

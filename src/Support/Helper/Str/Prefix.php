@@ -26,6 +26,6 @@ class Prefix
      */
     public function __invoke($text, string $prefix): string
     {
-        return $prefix . ((string) $text);
+        return $prefix . ((string)$text);
     }
 }

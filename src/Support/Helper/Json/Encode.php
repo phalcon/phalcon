@@ -64,6 +64,6 @@ class Encode
             throw new JsonException(json_last_error_msg(), 5);
         }
 
-        return (string) $encoded;
+        return (string)$encoded;
     }
 }

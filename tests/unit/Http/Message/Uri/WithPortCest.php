@@ -59,7 +59,7 @@ class WithPortCest
         $I->assertSame($expected, $actual);
 
         $expected = $scheme . sprintf($query, $toString);
-        $actual   = (string) $newInstance;
+        $actual   = (string)$newInstance;
         $I->assertSame($expected, $actual);
     }
 

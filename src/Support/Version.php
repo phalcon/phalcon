@@ -153,7 +153,7 @@ class Version
             case self::VERSION_MEDIUM:
             case self::VERSION_MINOR:
             case self::VERSION_SPECIAL_NUMBER:
-                return (string) $version[$part];
+                return (string)$version[$part];
 
             case self::VERSION_SPECIAL:
                 return $this->getSpecial($version[self::VERSION_SPECIAL]);

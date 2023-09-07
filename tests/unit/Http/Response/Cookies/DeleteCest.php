@@ -60,13 +60,13 @@ class DeleteCest extends HttpBase
         $cookies->set($name, $value);
 
         $expected = $value;
-        $actual   = (string) $cookies->get($name);
+        $actual   = (string)$cookies->get($name);
         $I->assertSame($expected, $actual);
 
         $cookies->delete($name);
 
         $expected = '';
-        $actual   = (string) $cookies->get($name);
+        $actual   = (string)$cookies->get($name);
         $I->assertSame($expected, $actual);
     }
 }

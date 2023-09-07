@@ -111,7 +111,7 @@ class ExclusionIn extends AbstractValidator
          */
         if (true === $this->getConditional($value, $domain, $strict)) {
             $replacePairs = [
-                ":domain" => join(", ", $domain)
+                ":domain" => join(", ", $domain),
             ];
 
             $validation->appendMessage(

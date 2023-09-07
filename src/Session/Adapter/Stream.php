@@ -211,7 +211,7 @@ class Stream extends Noop
      */
     protected function getPrefixedName($name): string
     {
-        $name = (string) $name;
+        $name = (string)$name;
 
         return $this->prefix . $name;
     }

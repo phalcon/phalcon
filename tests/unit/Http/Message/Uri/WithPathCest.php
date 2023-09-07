@@ -52,7 +52,7 @@ class WithPathCest
         $I->assertSame($expected, $actual);
 
         $expected = $toString;
-        $actual   = (string) $newInstance;
+        $actual   = (string)$newInstance;
         $I->assertSame($expected, $actual);
     }
 
