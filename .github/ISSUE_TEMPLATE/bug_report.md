@@ -40,11 +40,11 @@ If applicable, add screenshots to help explain your problem.
 
 **Details**
 
- -  Phalcon version
- -  PHP Version: (`php -v`)
- -  Operating System:
- -  Server: Nginx | Apache | Other
- -  Other related info (Database, table schema):
+-  Phalcon version
+-  PHP Version: (`php -v`)
+-  Operating System:
+-  Server: Nginx | Apache | Other
+-  Other related info (Database, table schema):
 
 **Additional context**
 
