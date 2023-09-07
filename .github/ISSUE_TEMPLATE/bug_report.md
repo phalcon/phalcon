@@ -4,12 +4,12 @@ about: Create a report to help us improve
 title: "[BUG]: "
 labels: 'bug, status: unverified'
 assignees: ''
-
 ---
 
 Questions? Forum: https://phalcon.io/forum or Discord: https://phalcon.io/discord
 
 **Describe the bug**
+
 A clear and concise description of what the bug is.
 
 **To Reproduce**
@@ -27,6 +27,7 @@ Steps to reproduce the behavior:
 ```
 
 **Expected behavior**
+
 A clear and concise description of what you expected to happen.
 
 ```php
@@ -34,9 +35,11 @@ A clear and concise description of what you expected to happen.
 ```
 
 **Screenshots**
+
 If applicable, add screenshots to help explain your problem.
 
 **Details**
+
  -  Phalcon version
  -  PHP Version: (`php -v`)
  -  Operating System:
@@ -44,4 +47,5 @@ If applicable, add screenshots to help explain your problem.
  -  Other related info (Database, table schema):
 
 **Additional context**
+
 Add any other context about the problem here.
