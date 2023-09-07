@@ -41,7 +41,7 @@ If applicable, add screenshots to help explain your problem.
 -  PHP Version: (`php -v`)
  - Operating System:
  -  Server: Nginx | Apache | Other
- -  Other related info (Database, table schema):
+  - Other related info (Database, table schema):
 
 **Additional context**
 Add any other context about the problem here.
