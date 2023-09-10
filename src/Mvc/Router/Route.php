@@ -370,6 +370,15 @@ class Route implements RouteInterface
         return [$route, $matches];
     }
 
+    /**
+     * Returns the beforeMatch object
+     *
+     * @return callable|null
+     */
+    public function getBeforeMatch(): callable|null
+    {
+        return $this->beforeMatch;
+    }
 
     /**
      * Returns the route's compiled pattern
