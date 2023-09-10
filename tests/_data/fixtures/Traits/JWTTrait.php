@@ -27,8 +27,24 @@ trait JWTTrait
      */
     protected function newToken($signerClass = Hmac::class, int $issDrift = 0): Token
     {
-        $signer     = new $signerClass();
-        $builder    = new Builder($signer);
+        return $this->generateToken(Builder::class, $signerClass, $issDrift);
+    }
+
+    /**
+     * @param string $builderClass
+     * @param string $signerClass
+     * @param int    $issDrift
+     *
+     * @return Token
+     * @throws ValidatorException
+     */
+    protected function generateToken(
+        string $builderClass = Builder::class,
+        string $signerClass = Hmac::class,
+        int $issDrift = 0
+    ): Token {
+        $signer  = new $signerClass();
+        $builder = new $builderClass($signer);
         $expiry     = strtotime('+1 day');
         $issued     = strtotime('now') + $issDrift;
         $notBefore  = strtotime('-1 day');
