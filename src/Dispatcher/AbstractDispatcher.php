@@ -22,6 +22,7 @@ use Phalcon\Dispatcher\Exception as DispatcherException;
 use Phalcon\Events\EventsAwareInterface;
 use Phalcon\Events\Traits\EventsAwareTrait;
 use Phalcon\Filter\FilterInterface;
+use Phalcon\Mvc\ControllerInterface;
 use Phalcon\Mvc\Model\BinderInterface;
 
 use function array_map;
@@ -46,9 +47,9 @@ abstract class AbstractDispatcher extends AbstractInjectionAware implements Disp
     use EventsAwareTrait;
 
     /**
-     * @var TaskInterface|null
+     * @var TaskInterface|ControllerInterface|null
      */
-    protected ?TaskInterface $activeHandler = null;
+    protected TaskInterface|ControllerInterface|null $activeHandler = null;
 
     /**
      * @var array
