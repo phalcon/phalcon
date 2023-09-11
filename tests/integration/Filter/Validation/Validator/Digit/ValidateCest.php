@@ -173,9 +173,15 @@ class ValidateCest
     }
 
     /**
-     * @dataProvider shouldValidateIntOrStringOfDigitsProvider
+     * @dataProvider getExamplesIntOrStringOfDigits
+     *
+     * @param IntegrationTester $I
+     * @param Example           $example
+     *
+     * @return void
+     * @throws Exception
      */
-    public function filterValidationValidatorDigitShouldValidateIntOrStringOfDigits(IntegrationTester $I, Example $example)
+    public function filterValidationValidatorDigitIntOrStringOfDigits(IntegrationTester $I, Example $example)
     {
         $digit = $example[0];
 
@@ -198,7 +204,10 @@ class ValidateCest
         );
     }
 
-    private function shouldValidateIntOrStringOfDigitsProvider()
+    /**
+     * @return array
+     */
+    private function getExamplesIntOrStringOfDigits()
     {
         return [
             ['123'],
