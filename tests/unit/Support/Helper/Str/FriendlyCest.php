@@ -14,6 +14,7 @@ declare(strict_types=1);
 namespace Phalcon\Tests\Unit\Support\Helper\Str;
 
 use Codeception\Example;
+use Phalcon\Support\Helper\Exception;
 use Phalcon\Support\Helper\Str\Friendly;
 use UnitTester;
 

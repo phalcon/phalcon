@@ -51,8 +51,7 @@ class UnderscoreInvokeCest
             ->add($example['add'])
             ->addHttp($example['http'][0], $example['http'][1])
             ->addName($example['name'][0], $example['name'][1])
-            ->addProperty($example['property'][0], $example['property'][1])
-        ;
+            ->addProperty($example['property'][0], $example['property'][1]);
 
         $expected = $example['result'];
         $actual   = (string)$result;
@@ -64,8 +63,7 @@ class UnderscoreInvokeCest
             ->add($example['add'])
             ->addHttp($example['http'][0], $example['http'][1])
             ->addName($example['name'][0], $example['name'][1])
-            ->addProperty($example['property'][0], $example['property'][1])
-        ;
+            ->addProperty($example['property'][0], $example['property'][1]);
 
         $actual = (string)$result;
         $I->assertSame($expected, $actual);
