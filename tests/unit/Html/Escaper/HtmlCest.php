@@ -53,5 +53,10 @@ class HtmlCest
         $expected = '';
         $actual   = $escaper->html(null);
         $I->assertSame($expected, $actual);
+
+        $escaper  = new Escaper();
+        $expected = '0';
+        $actual   = $escaper->html('0');
+        $I->assertSame($expected, $actual);
     }
 }
