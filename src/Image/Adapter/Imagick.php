@@ -782,7 +782,7 @@ class Imagick extends AbstractAdapter
                 $offsetY = 0;
                 $gravity = constant("Imagick::GRAVITY_CENTER");
             } elseif (true === is_int($offsetY)) {
-                $y = (int) $offsetY;
+                $y = (int)$offsetY;
 
                 $gravity = (true === $offsetX && $y < 0) ? constant("Imagick::GRAVITY_SOUTHEAST") : $gravity;
                 $gravity = (true === $offsetX && $y >= 0) ? constant("Imagick::GRAVITY_NORTHEAST") : $gravity;
@@ -793,7 +793,7 @@ class Imagick extends AbstractAdapter
                 $offsetY = ($y < 0) ? $y * -1 : $offsetY;
             }
         } elseif (true === is_int($offsetX)) {
-            $x = (int) $offsetX;
+            $x = (int)$offsetX;
 
             if ($offsetX) {
                 if (true === is_bool($offsetY)) {
@@ -805,7 +805,7 @@ class Imagick extends AbstractAdapter
                     $offsetY = 0;
                     $offsetX = ($x < 0) ? $x * -1 : $offsetX;
                 } elseif (true === is_float($offsetY)) {
-                    $y = (int) $offsetY;
+                    $y = (int)$offsetY;
 
                     $offsetX = ($x < 0) ? $x * -1 : 0;
                     $offsetY = ($y < 0) ? $y * -1 : $offsetY;

@@ -29,7 +29,7 @@ class SetEtagCest
     {
         $I->wantToTest('Http\Response - setEtag()');
 
-        $etag     = md5((string) time());
+        $etag     = md5((string)time());
         $response = new Response();
 
         $response->setEtag($etag);

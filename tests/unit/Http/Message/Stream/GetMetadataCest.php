@@ -35,15 +35,15 @@ class GetMetadataCest
         $stream   = new Stream($handle);
 
         $expected = [
-            'timed_out' => false,
-            'blocked' => true,
-            'eof' => false,
+            'timed_out'    => false,
+            'blocked'      => true,
+            'eof'          => false,
             'wrapper_type' => 'plainfile',
-            'stream_type' => 'STDIO',
-            'mode' => 'rb',
+            'stream_type'  => 'STDIO',
+            'mode'         => 'rb',
             'unread_bytes' => 0,
-            'seekable' => true,
-            'uri' => $fileName,
+            'seekable'     => true,
+            'uri'          => $fileName,
         ];
 
         $actual = $stream->getMetadata();

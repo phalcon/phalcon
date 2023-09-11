@@ -350,7 +350,7 @@ class Random
                 $index = $this->number($base - 1);
             }
 
-            $byteString .= $alphabet[(int) $index];
+            $byteString .= $alphabet[(int)$index];
         }
 
         return $byteString;

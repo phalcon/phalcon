@@ -795,7 +795,7 @@ abstract class AbstractAdapter implements AdapterInterface, EventsAwareInterface
      */
     public function getConnectionId(): string
     {
-        return (string) $this->connectionId;
+        return (string)$this->connectionId;
     }
 
     /**
@@ -991,10 +991,10 @@ abstract class AbstractAdapter implements AdapterInterface, EventsAwareInterface
          */
         foreach ($values as $position => $value) {
             if (is_object($value) && $value instanceof RawValue) {
-                $placeholders[] = (string) $value;
+                $placeholders[] = (string)$value;
             } else {
                 if (is_object($value)) {
-                    $value = (string) $value;
+                    $value = (string)$value;
                 }
 
                 if (null === $value) {
@@ -1417,10 +1417,10 @@ abstract class AbstractAdapter implements AdapterInterface, EventsAwareInterface
             $escapedField = $this->escapeIdentifier($field);
 
             if (is_object($value) && $value instanceof RawValue) {
-                $placeholders[] = $escapedField . " = " . (string) $value;
+                $placeholders[] = $escapedField . " = " . (string)$value;
             } else {
                 if (is_object($value)) {
-                    $value = (string) $value;
+                    $value = (string)$value;
                 }
 
                 if (null === $value) {
@@ -1463,7 +1463,6 @@ abstract class AbstractAdapter implements AdapterInterface, EventsAwareInterface
             if (is_string($whereCondition)) {
                 $updateSql .= $whereCondition;
             } else {
-
                 /**
                  * Array conditions may have bound params and bound types
                  *
@@ -1479,8 +1478,8 @@ abstract class AbstractAdapter implements AdapterInterface, EventsAwareInterface
                  * separately
                  */
                 if (true === isset($whereCondition["bind"])) {
-                    $condition = $whereCondition["bind"];
-                    $condition = is_array($condition) ? $condition : [$condition];
+                    $condition    = $whereCondition["bind"];
+                    $condition    = is_array($condition) ? $condition : [$condition];
                     $updateValues = array_merge($updateValues, $condition);
                 }
 
@@ -1489,8 +1488,8 @@ abstract class AbstractAdapter implements AdapterInterface, EventsAwareInterface
                  * be sent to the database system
                  */
                 if (true === isset($whereCondition["bindTypes"])) {
-                    $condition = $whereCondition["bindTypes"];
-                    $condition = is_array($condition) ? $condition : [$condition];
+                    $condition     = $whereCondition["bindTypes"];
+                    $condition     = is_array($condition) ? $condition : [$condition];
                     $bindDataTypes = array_merge($bindDataTypes, $condition);
                 }
             }

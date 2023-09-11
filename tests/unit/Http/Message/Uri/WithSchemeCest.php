@@ -45,7 +45,7 @@ class WithSchemeCest
         $I->assertSame($example, $actual);
 
         $example = sprintf($query, 'http');
-        $actual  = (string) $newInstance;
+        $actual  = (string)$newInstance;
         $I->assertSame($example, $actual);
     }
 

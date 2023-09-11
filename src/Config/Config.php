@@ -241,7 +241,7 @@ class Config extends Collection implements ConfigInterface
      */
     protected function setData($element, $value): void
     {
-        $element = (string) $element;
+        $element = (string)$element;
         $key     = ($this->insensitive) ? mb_strtolower($element) : $element;
 
         $this->lowerKeys[$key] = $element;

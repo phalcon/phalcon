@@ -254,7 +254,7 @@ abstract class AbstractElement implements ElementInterface
      *
      * @return string | null
      */
-    public function getLabel(): string | null
+    public function getLabel(): string|null
     {
         return $this->label;
     }
@@ -406,7 +406,7 @@ abstract class AbstractElement implements ElementInterface
 
         $merged = array_merge($this->attributes, $attributes);
 
-        return (string) $tagFactory->{$method}($this->name, $value, $merged);
+        return (string)$tagFactory->{$method}($this->name, $value, $merged);
     }
 
     /**

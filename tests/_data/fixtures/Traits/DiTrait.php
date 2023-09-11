@@ -18,6 +18,7 @@ use PDO;
 use Phalcon\Annotations\Adapter\Memory as AnnotationsMemory;
 use Phalcon\Cache\Adapter\Libmemcached as StorageLibmemcached;
 use Phalcon\Cache\Adapter\Stream as StorageStream;
+use Phalcon\Cache\AdapterFactory;
 use Phalcon\Cli\Console;
 use Phalcon\Db\Profiler;
 use Phalcon\Encryption\Crypt;
@@ -33,6 +34,7 @@ use Phalcon\Filter;
 use Phalcon\Html\TagFactory;
 use Phalcon\Http\Request;
 use Phalcon\Http\Response;
+use Phalcon\Mvc\View;
 use Phalcon\Session\Adapter\Libmemcached as SessionLibmemcached;
 use Phalcon\Session\Adapter\Noop as SessionNoop;
 use Phalcon\Session\Adapter\Redis as SessionRedis;
@@ -203,8 +205,8 @@ trait DiTrait
                 );
             case 'url':
                 return new Url();
-//            case 'view':
-//                return new View();
+            case 'view':
+                return new View();
 //            case 'viewSimple':
 //                return new Simple();
             default:
@@ -308,18 +310,18 @@ trait DiTrait
                     }
                 );
                 break;
-//            case 'view':
-//            case 'viewSimple':
-//                $this->container->set(
-//                    $service,
-//                    function () use ($class) {
-//                        $class->setViewsDir(dataDir('fixtures/views/'));
-//
-//                        return $class;
-//                    }
-//                );
-//                break;
-//
+            case 'view':
+            case 'viewSimple':
+                $this->container->set(
+                    $service,
+                    function () use ($class) {
+                        $class->setViewsDir(dataDir('fixtures/views/'));
+
+                        return $class;
+                    }
+                );
+                break;
+
             default:
                 break;
         }
@@ -327,6 +329,8 @@ trait DiTrait
 
     /**
      * Set up a new Cli\FactoryDefault
+     *
+     * @throws Exception
      */
     protected function setNewCliFactoryDefault()
     {
@@ -337,6 +341,8 @@ trait DiTrait
 
     /**
      * Set up a new FactoryDefault
+     *
+     * @throws Exception
      */
     protected function setNewFactoryDefault()
     {

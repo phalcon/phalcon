@@ -31,7 +31,7 @@ interface LoggerInterface
      *
      * @return void
      */
-    public function alert(string $message, array $context = array()): void;
+    public function alert(string $message, array $context = []): void;
 
     /**
      * Critical conditions.
@@ -43,7 +43,7 @@ interface LoggerInterface
      *
      * @return void
      */
-    public function critical(string $message, array $context = array()): void;
+    public function critical(string $message, array $context = []): void;
 
     /**
      * Detailed debug information.
@@ -53,7 +53,7 @@ interface LoggerInterface
      *
      * @return void
      */
-    public function debug(string $message, array $context = array()): void;
+    public function debug(string $message, array $context = []): void;
 
     /**
      * System is unusable.
@@ -63,7 +63,7 @@ interface LoggerInterface
      *
      * @return void
      */
-    public function emergency(string $message, array $context = array()): void;
+    public function emergency(string $message, array $context = []): void;
 
     /**
      * Runtime errors that do not require immediate action but should typically
@@ -74,7 +74,7 @@ interface LoggerInterface
      *
      * @return void
      */
-    public function error(string $message, array $context = array()): void;
+    public function error(string $message, array $context = []): void;
 
     /**
      * Returns an adapter from the stack
@@ -113,7 +113,7 @@ interface LoggerInterface
      *
      * @return void
      */
-    public function info(string $message, array $context = array()): void;
+    public function info(string $message, array $context = []): void;
 
     /**
      * Logs with an arbitrary level.
@@ -126,7 +126,7 @@ interface LoggerInterface
      *
      * @throws Exception
      */
-    public function log($level, string $message, array $context = array());
+    public function log($level, string $message, array $context = []);
 
     /**
      * Normal but significant events.
@@ -136,7 +136,7 @@ interface LoggerInterface
      *
      * @return void
      */
-    public function notice(string $message, array $context = array()): void;
+    public function notice(string $message, array $context = []): void;
 
-    public function warning(string $message, array $context = array()): void;
+    public function warning(string $message, array $context = []): void;
 }

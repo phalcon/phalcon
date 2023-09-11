@@ -228,7 +228,7 @@ interface RouterInterface
      *
      * @return RouteInterface|null
      */
-    public function getMatchedRoute(): RouteInterface | null;
+    public function getMatchedRoute(): RouteInterface|null;
 
     /**
      * Return the sub expressions in the regular expression matched
@@ -272,7 +272,7 @@ interface RouterInterface
      *
      * @return RouteInterface|bool
      */
-    public function getRouteById(string $routeId): RouteInterface | bool;
+    public function getRouteById(string $routeId): RouteInterface|bool;
 
     /**
      * Returns a route object by its name
@@ -281,7 +281,7 @@ interface RouterInterface
      *
      * @return RouteInterface|bool
      */
-    public function getRouteByName(string $name): RouteInterface | bool;
+    public function getRouteByName(string $name): RouteInterface|bool;
 
     /**
      * Handles routing information received from the rewrite engine

@@ -282,7 +282,7 @@ abstract class AbstractAdapter implements AdapterInterface
      */
     protected function getPrefixedKey($key): string
     {
-        return $this->prefix . ((string) $key);
+        return $this->prefix . ((string)$key);
     }
 
     /**
@@ -323,7 +323,7 @@ abstract class AbstractAdapter implements AdapterInterface
             ;
         }
 
-        return (int) $ttl;
+        return (int)$ttl;
     }
 
     /**

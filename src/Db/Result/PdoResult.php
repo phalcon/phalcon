@@ -295,7 +295,7 @@ class PdoResult implements ResultInterface
                     );
 
                     $row      = $result->fetch();
-                    $rowCount = (int) $row["numrows"];
+                    $rowCount = (int)$row["numrows"];
                 }
             }
 

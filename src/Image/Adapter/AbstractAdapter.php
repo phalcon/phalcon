@@ -304,7 +304,7 @@ abstract class AbstractAdapter implements AdapterInterface
     public function render(string $extension = null, int $quality = 100): string
     {
         if (null === $extension) {
-            $extension = (string) pathinfo($this->file, PATHINFO_EXTENSION);
+            $extension = (string)pathinfo($this->file, PATHINFO_EXTENSION);
         }
 
         if (true === empty($extension)) {
@@ -364,10 +364,10 @@ abstract class AbstractAdapter implements AdapterInterface
             }
         }
 
-        $width   = null === $width ? 0 : $width;
-        $height  = null === $height ? 0 : $height;
-        $width   = (int) max(round($width), 1);
-        $height  = (int) max(round($height), 1);
+        $width  = null === $width ? 0 : $width;
+        $height = null === $height ? 0 : $height;
+        $width  = (int)max(round($width), 1);
+        $height = (int)max(round($height), 1);
 
         $this->processResize($width, $height);
 

@@ -77,7 +77,7 @@ class Connection extends AbstractConnection
             $username,
             $password,
             $options,
-            $queries
+            $queries,
         ];
 
         // Create a new profiler if none has been passed
@@ -101,8 +101,8 @@ class Connection extends AbstractConnection
                 "****",
                 "****",
                 $this->arguments[3],
-                $this->arguments[4]
-            ]
+                $this->arguments[4],
+            ],
         ];
     }
 

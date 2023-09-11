@@ -97,7 +97,7 @@ class Apcu extends AbstractAdapter
      */
     public function delete(string $key): bool
     {
-        return (bool) $this->phpApcuDelete($this->getPrefixedKey($key));
+        return (bool)$this->phpApcuDelete($this->getPrefixedKey($key));
     }
 
     /**

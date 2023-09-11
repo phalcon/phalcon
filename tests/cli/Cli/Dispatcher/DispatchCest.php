@@ -138,7 +138,7 @@ class DispatchCest
         $dispatcher->setActionName('hello');
         $dispatcher->setParams(
             [
-                'hello'   => 'World',
+                'hello' => 'World',
                 'goodbye' => 'Everybody',
             ]
         );

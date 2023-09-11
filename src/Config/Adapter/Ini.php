@@ -100,7 +100,7 @@ class Ini extends Config
 
                 foreach ($directives as $path => $lastValue) {
                     $sections[] = $this->parseIniString(
-                        (string) $path,
+                        (string)$path,
                         $lastValue
                     );
                 }
@@ -132,7 +132,7 @@ class Ini extends Config
             return $this->castArray($ini);
         }
 
-        $ini      = (string) $ini;
+        $ini      = (string)$ini;
         $lowerIni = strtolower($ini);
 
         // Decode null/boolean
@@ -157,10 +157,10 @@ class Ini extends Config
         // Decode float/int
         if (true === is_numeric($ini)) {
             if (preg_match('/[.]+/', $ini)) {
-                return (double) $ini;
+                return (double)$ini;
             }
 
-            return (int) $ini;
+            return (int)$ini;
         }
 
         return $ini;

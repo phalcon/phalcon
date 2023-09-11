@@ -108,7 +108,7 @@ class HeadersCest extends HttpBase
         $actual = isset($headers[Http::STATUS]);
         $I->assertTrue($actual);
 
-        $expected = (string) $code;
+        $expected = (string)$code;
         $actual   = $headers[Http::STATUS];
         $I->assertSame($expected, $actual);
     }

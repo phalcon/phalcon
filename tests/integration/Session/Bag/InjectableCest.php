@@ -41,7 +41,7 @@ class InjectableCest
         /**
          * Set a session bag
          */
-        $data = [
+        $data       = [
             'one'   => 'two',
             'three' => 'four',
             'five'  => 'six',

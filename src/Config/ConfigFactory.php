@@ -149,7 +149,7 @@ class ConfigFactory
             'ini'     => Ini::class,
             'json'    => Json::class,
             'php'     => Php::class,
-            'yaml'    => Yaml::class
+            'yaml'    => Yaml::class,
         ];
     }
 
@@ -173,7 +173,7 @@ class ConfigFactory
 
             $config = [
                 'adapter'  => $extension,
-                'filePath' => $oldConfig
+                'filePath' => $oldConfig,
             ];
         }
 

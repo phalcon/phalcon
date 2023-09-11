@@ -45,7 +45,7 @@ class WithQueryCest
         $I->assertSame($expected, $actual);
 
         $expected = sprintf($query, $expected);
-        $actual   = (string) $newInstance;
+        $actual   = (string)$newInstance;
         $I->assertSame($expected, $actual);
     }
 

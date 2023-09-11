@@ -49,7 +49,7 @@ class WithUserInfoCest
         $I->assertSame($expected, $actual);
 
         $expected = sprintf($query, $example['expected']);
-        $actual   = (string) $newInstance;
+        $actual   = (string)$newInstance;
         $I->assertSame($expected, $actual);
     }
 

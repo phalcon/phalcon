@@ -62,7 +62,8 @@ class CommitInTransactionRollBackCest
                 [
                     0 => $invId,
                 ]
-            );
+            )
+        ;
 
         $I->assertIsArray($all);
         $I->assertEquals($invId, $all['inv_id']);
@@ -107,7 +108,8 @@ class CommitInTransactionRollBackCest
                 [
                     0 => $invId,
                 ]
-            );
+            )
+        ;
 
         $connection->rollBack();
 
@@ -117,7 +119,8 @@ class CommitInTransactionRollBackCest
                 [
                     0 => $invId,
                 ]
-            );
+            )
+        ;
 
         $I->assertIsArray($all);
         $I->assertEmpty($all);

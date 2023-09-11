@@ -38,7 +38,7 @@ trait IniTrait
             'on',
             'yes',
             'y',
-            '1' => true,
+            '1'     => true,
             default => false,
         };
 

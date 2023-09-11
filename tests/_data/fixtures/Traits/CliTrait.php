@@ -13,12 +13,14 @@ declare(strict_types=1);
 
 namespace Phalcon\Tests\Fixtures\Traits;
 
+use Phalcon\Annotations\Adapter\Memory;
 use Phalcon\Cli\Dispatcher;
 use Phalcon\Cli\Router;
 use Phalcon\Encryption\Security;
 use Phalcon\Events\Manager as EventsManager;
 use Phalcon\Filter\Filter;
 use Phalcon\Html\Escaper;
+use Phalcon\Html\TagFactory;
 use Phalcon\Support\HelperFactory;
 
 trait CliTrait
@@ -81,6 +83,10 @@ trait CliTrait
     {
         return [
             [
+                'service' => 'annotations',
+                'class'   => Memory::class,
+            ],
+            [
                 'service' => 'dispatcher',
                 'class'   => Dispatcher::class,
             ],
@@ -107,6 +113,10 @@ trait CliTrait
             [
                 'service' => 'security',
                 'class'   => Security::class,
+            ],
+            [
+                'service' => 'tag',
+                'class'   => TagFactory::class,
             ],
         ];
     }

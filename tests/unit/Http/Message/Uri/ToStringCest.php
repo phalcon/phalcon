@@ -30,7 +30,7 @@ class ToStringCest
         $query = 'https://phalcon:secret@dev.phalcon.ld:8080/action?param=value#frag';
         $uri   = new Uri($query);
 
-        $I->assertSame($query, (string) $uri);
+        $I->assertSame($query, (string)$uri);
     }
 
     /**

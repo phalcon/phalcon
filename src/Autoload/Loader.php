@@ -522,7 +522,7 @@ class Loader
             spl_autoload_unregister(
                 [
                     $this,
-                    "autoload"
+                    "autoload",
                 ]
             );
 

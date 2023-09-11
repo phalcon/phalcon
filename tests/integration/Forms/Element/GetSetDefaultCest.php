@@ -15,18 +15,6 @@ namespace Phalcon\Tests\Integration\Forms\Element;
 
 use Codeception\Example;
 use IntegrationTester;
-use Phalcon\Forms\Element\Check;
-use Phalcon\Forms\Element\Date;
-use Phalcon\Forms\Element\Email;
-use Phalcon\Forms\Element\File;
-use Phalcon\Forms\Element\Hidden;
-use Phalcon\Forms\Element\Numeric;
-use Phalcon\Forms\Element\Password;
-use Phalcon\Forms\Element\Radio;
-use Phalcon\Forms\Element\Select;
-use Phalcon\Forms\Element\Submit;
-use Phalcon\Forms\Element\Text;
-use Phalcon\Forms\Element\TextArea;
 use Phalcon\Tests\Fixtures\Traits\FormsTrait;
 
 use function uniqid;

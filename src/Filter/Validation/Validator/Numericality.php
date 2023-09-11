@@ -77,7 +77,7 @@ class Numericality extends AbstractValidator
         }
 
         // Dump spaces in the string if we have any
-        $value   = (string) $value;
+        $value   = (string)$value;
         $value   = str_replace(" ", "", $value);
         $pattern = "/((^[-]?[0-9,]+(\\.[0-9]+)?$)|(^[-]?[0-9.]+(,[0-9]+)?$))/";
 

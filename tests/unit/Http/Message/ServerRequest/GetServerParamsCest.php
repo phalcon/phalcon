@@ -27,7 +27,7 @@ class GetServerParamsCest
     public function httpMessageServerRequestGetServerParams(UnitTester $I)
     {
         $I->wantToTest('Http\Message\ServerRequest - getServerParams()');
-        $params = ['one' => 'two'];
+        $params  = ['one' => 'two'];
         $request = new ServerRequest('GET', null, $params);
 
         $expected = $params;

@@ -197,7 +197,7 @@ final class Registry extends Collection
      */
     final public function offsetSet($element, $value): void
     {
-        parent::set((string) $element, $value);
+        parent::set((string)$element, $value);
     }
 
     /**

@@ -256,7 +256,7 @@ class Manager implements ManagerInterface
         $cancelable = $event->isCancelable();
 
         // Responses need to be traced?
-        $collected = (bool) $this->collect;
+        $collected = (bool)$this->collect;
 
         // We need to clone the queue before iterate over it
         $iterator = clone $queue;

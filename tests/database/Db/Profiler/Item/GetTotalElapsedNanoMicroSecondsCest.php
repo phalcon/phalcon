@@ -40,7 +40,7 @@ class GetTotalElapsedNanoMicroSecondsCest
         $item->setInitialTime($start);
         $item->setFinalTime($end);
 
-        $expected = (float) ($end - $start);
+        $expected = (float)($end - $start);
         $actual   = $item->getTotalElapsedNanoseconds();
         $I->assertSame($expected, $actual);
 

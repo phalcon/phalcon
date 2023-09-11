@@ -76,7 +76,7 @@ class Escaper implements EscaperInterface
     public function attributes(mixed $input = null): string
     {
         if (true !== is_array($input)) {
-            return $this->phpHtmlSpecialChars((string) $input);
+            return $this->phpHtmlSpecialChars((string)$input);
         }
 
         $result = "";
@@ -95,7 +95,7 @@ class Escaper implements EscaperInterface
 
             if (true !== $value) {
                 $result .= "=\""
-                    . $this->phpHtmlSpecialChars((string) $value)
+                    . $this->phpHtmlSpecialChars((string)$value)
                     . "\"";
             }
 

@@ -32,11 +32,11 @@ class FloatVal
      */
     public function __invoke(mixed $input): float
     {
-        return (double) filter_var(
+        return (double)filter_var(
             $input,
             FILTER_SANITIZE_NUMBER_FLOAT,
             [
-                'flags' => FILTER_FLAG_ALLOW_FRACTION
+                'flags' => FILTER_FLAG_ALLOW_FRACTION,
             ]
         );
     }

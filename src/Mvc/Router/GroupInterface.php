@@ -25,123 +25,147 @@ interface GroupInterface
      * router->add("/about", "About::index");
      *```
      *
-     * @param string     $pattern
-     * @param mixed|null $paths
-     * @param mixed|null $httpMethods
+     * @param string       $pattern
+     * @param array|string $paths
+     * @param array|string $httpMethods
      *
      * @return RouteInterface
      */
     public function add(
         string $pattern,
-        mixed $paths = null,
-        mixed $httpMethods = null
+        array|string $paths = [],
+        array|string $httpMethods = []
     ): RouteInterface;
 
     /**
      * Adds a route to the router that only match if the HTTP method is CONNECT
      *
-     * @param string     $pattern
-     * @param mixed|null $paths
+     * @param string       $pattern
+     * @param array|string $paths
      *
      * @return RouteInterface
      */
     public function addConnect(
         string $pattern,
-        mixed $paths = null
+        array|string $paths = [],
     ): RouteInterface;
 
     /**
      * Adds a route to the router that only match if the HTTP method is DELETE
      *
-     * @param string     $pattern
-     * @param mixed|null $paths
+     * @param string       $pattern
+     * @param array|string $paths
      *
      * @return RouteInterface
      */
     public function addDelete(
         string $pattern,
-        mixed $paths = null
+        array|string $paths = [],
     ): RouteInterface;
 
     /**
      * Adds a route to the router that only match if the HTTP method is GET
      *
-     * @param string     $pattern
-     * @param mixed|null $paths
+     * @param string       $pattern
+     * @param array|string $paths
      *
      * @return RouteInterface
      */
-    public function addGet(string $pattern, mixed $paths = null): RouteInterface;
+    public function addGet(
+        string $pattern,
+        array|string $paths = [],
+    ): RouteInterface;
 
     /**
      * Adds a route to the router that only match if the HTTP method is HEAD
      *
-     * @param string     $pattern
-     * @param mixed|null $paths
+     * @param string       $pattern
+     * @param array|string $paths
      *
      * @return RouteInterface
      */
-    public function addHead(string $pattern, mixed $paths = null): RouteInterface;
+    public function addHead(
+        string $pattern,
+        array|string $paths = [],
+    ): RouteInterface;
 
     /**
      * Add a route to the router that only match if the HTTP method is OPTIONS
      *
-     * @param string     $pattern
-     * @param mixed|null $paths
+     * @param string       $pattern
+     * @param array|string $paths
      *
      * @return RouteInterface
      */
-    public function addOptions(string $pattern, mixed $paths = null): RouteInterface;
+    public function addOptions(
+        string $pattern,
+        array|string $paths = [],
+    ): RouteInterface;
 
     /**
      * Adds a route to the router that only match if the HTTP method is PATCH
      *
-     * @param string     $pattern
-     * @param mixed|null $paths
+     * @param string       $pattern
+     * @param array|string $paths
      *
      * @return RouteInterface
      */
-    public function addPatch(string $pattern, mixed $paths = null): RouteInterface;
+    public function addPatch(
+        string $pattern,
+        array|string $paths = [],
+    ): RouteInterface;
 
     /**
      * Adds a route to the router that only match if the HTTP method is POST
      *
-     * @param string     $pattern
-     * @param mixed|null $paths
+     * @param string       $pattern
+     * @param array|string $paths
      *
      * @return RouteInterface
      */
-    public function addPost(string $pattern, mixed $paths = null): RouteInterface;
+    public function addPost(
+        string $pattern,
+        array|string $paths = [],
+    ): RouteInterface;
 
     /**
      * Adds a route to the router that only match if the HTTP method is PURGE
      *
-     * @param string     $pattern
-     * @param mixed|null $paths
+     * @param string       $pattern
+     * @param array|string $paths
      *
      * @return RouteInterface
      */
-    public function addPurge(string $pattern, mixed $paths = null): RouteInterface;
+    public function addPurge(
+        string $pattern,
+        array|string $paths = [],
+    ): RouteInterface;
 
     /**
      * Adds a route to the router that only match if the HTTP method is PUT
      *
-     * @param string     $pattern
-     * @param mixed|null $paths
+     * @param string       $pattern
+     * @param array|string $paths
      *
      * @return RouteInterface
      */
-    public function addPut(string $pattern, mixed $paths = null): RouteInterface;
+    public function addPut(
+        string $pattern,
+        array|string $paths = [],
+    ): RouteInterface;
 
     /**
      * Adds a route to the router that only match if the HTTP method is TRACE
      *
-     * @param string     $pattern
-     * @param mixed|null $paths
+     * @param string       $pattern
+     * @param array|string $paths
      *
      * @return RouteInterface
      */
-    public function addTrace(string $pattern, mixed $paths = null): RouteInterface;
+    public function addTrace(
+        string $pattern,
+        array|string $paths = [],
+    ): RouteInterface;
 
     /**
      * Sets a callback that is called if the route is matched.
@@ -164,9 +188,9 @@ interface GroupInterface
     /**
      * Returns the 'before match' callback if any
      *
-     * @return callable
+     * @return callable|null
      */
-    public function getBeforeMatch(): callable;
+    public function getBeforeMatch(): callable|null;
 
     /**
      * Returns the hostname restriction
@@ -180,7 +204,7 @@ interface GroupInterface
      *
      * @return array|string
      */
-    public function getPaths(): array | string;
+    public function getPaths(): array|string;
 
     /**
      * Returns the common prefix for all the routes
@@ -208,11 +232,11 @@ interface GroupInterface
     /**
      * Set common paths for all the routes in the group
      *
-     * @param mixed $paths
+     * @param array|string $paths
      *
      * @return GroupInterface
      */
-    public function setPaths(mixed $paths): GroupInterface;
+    public function setPaths(array|string $paths): GroupInterface;
 
     /**
      * Set a common uri prefix for all the routes in this group

@@ -18,7 +18,6 @@ use Phalcon\Di\Traits\InjectionAwareTrait;
 use Phalcon\Support\Collection;
 
 use function is_array;
-use function parent;
 
 /**
  * Phalcon\Session\Bag

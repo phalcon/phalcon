@@ -62,8 +62,8 @@ class FetchColumnCest
          * drivers to fail based on how many decimals they can hold
          */
         $I->assertIsArray($all);
-        $I->assertEquals(101, (int) $all[0]);
-        $I->assertEquals(102, (int) $all[1]);
-        $I->assertEquals(103, (int) $all[2]);
+        $I->assertEquals(101, (int)$all[0]);
+        $I->assertEquals(102, (int)$all[1]);
+        $I->assertEquals(103, (int)$all[2]);
     }
 }

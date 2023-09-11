@@ -122,7 +122,7 @@ class Router extends AbstractInjectionAware implements RouterInterface
             $this->add(
                 "#^(?::delimiter)?([a-zA-Z0-9\\_\\-]+)[:delimiter]{0,1}$#",
                 [
-                    "task" => 1
+                    "task" => 1,
                 ]
             );
 
@@ -296,7 +296,7 @@ class Router extends AbstractInjectionAware implements RouterInterface
                 $pattern = $route->getCompiledPattern();
 
                 if (str_contains($pattern, "^")) {
-                    $routeFound = (bool) preg_match($pattern, $arguments, $matches);
+                    $routeFound = (bool)preg_match($pattern, $arguments, $matches);
                 } else {
                     $routeFound = $pattern === $arguments;
                 }
@@ -325,7 +325,7 @@ class Router extends AbstractInjectionAware implements RouterInterface
                             [
                                 $arguments,
                                 $route,
-                                $this
+                                $this,
                             ]
                         );
                     }
@@ -440,7 +440,7 @@ class Router extends AbstractInjectionAware implements RouterInterface
         if (true === isset($parts["params"])) {
             $params = $parts["params"];
             if (true !== is_array($params)) {
-                $strParams = substr((string) $params, 1);
+                $strParams = substr((string)$params, 1);
 
                 if ($strParams) {
                     $params = explode(Route::getDelimiter(), $strParams);

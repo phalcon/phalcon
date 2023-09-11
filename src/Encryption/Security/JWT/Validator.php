@@ -53,7 +53,7 @@ class Validator
             Enum::ISSUED_AT       => $now,
             Enum::ISSUER          => null,
             Enum::NOT_BEFORE      => $now,
-            Enum::SUBJECT         => null
+            Enum::SUBJECT         => null,
         ];
     }
 
@@ -144,8 +144,8 @@ class Validator
      */
     public function validateExpiration(int $timestamp): Validator
     {
-        $tokenExpirationTime = (int) $this->token->getClaims()
-                                                 ->get(Enum::EXPIRATION_TIME)
+        $tokenExpirationTime = (int)$this->token->getClaims()
+                                                ->get(Enum::EXPIRATION_TIME)
         ;
 
         if (
@@ -168,8 +168,8 @@ class Validator
      */
     public function validateId(string $jwtId): Validator
     {
-        $tokenId = (string) $this->token->getClaims()
-                                        ->get(Enum::ID)
+        $tokenId = (string)$this->token->getClaims()
+                                       ->get(Enum::ID)
         ;
 
         if ($jwtId !== $tokenId) {
@@ -188,8 +188,8 @@ class Validator
      */
     public function validateIssuedAt(int $timestamp): Validator
     {
-        $tokenIssuedAt = (int) $this->token->getClaims()
-                                           ->get(Enum::ISSUED_AT)
+        $tokenIssuedAt = (int)$this->token->getClaims()
+                                          ->get(Enum::ISSUED_AT)
         ;
 
         if ($this->getTimestamp($timestamp) <= $tokenIssuedAt) {
@@ -208,8 +208,8 @@ class Validator
      */
     public function validateIssuer(string $issuer): Validator
     {
-        $tokenIssuer = (string) $this->token->getClaims()
-                                            ->get(Enum::ISSUER)
+        $tokenIssuer = (string)$this->token->getClaims()
+                                           ->get(Enum::ISSUER)
         ;
 
         if ($issuer !== $tokenIssuer) {
@@ -228,8 +228,8 @@ class Validator
      */
     public function validateNotBefore(int $timestamp): Validator
     {
-        $tokenNotBefore = (int) $this->token->getClaims()
-                                            ->get(Enum::NOT_BEFORE)
+        $tokenNotBefore = (int)$this->token->getClaims()
+                                           ->get(Enum::NOT_BEFORE)
         ;
 
         if ($this->getTimestamp($timestamp) <= $tokenNotBefore) {

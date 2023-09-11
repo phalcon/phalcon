@@ -313,7 +313,7 @@ abstract class AbstractLogger
             $levels = $this->getLevels();
 
             if (isset($levels[$level])) {
-                return (int) $level;
+                return (int)$level;
             }
         }
 

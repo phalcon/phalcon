@@ -212,7 +212,7 @@ class Response extends Injectable implements
     {
         $statusCode = substr($this->headers->get('Status'), 0, 3);
 
-        return $statusCode ? (int) $statusCode : null;
+        return $statusCode ? (int)$statusCode : null;
     }
 
     /**
@@ -475,7 +475,7 @@ class Response extends Injectable implements
      */
     public function setContentLength(int $contentLength): ResponseInterface
     {
-        $this->setHeader('Content-Length', (string) $contentLength);
+        $this->setHeader('Content-Length', (string)$contentLength);
 
         return $this;
     }

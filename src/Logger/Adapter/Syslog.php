@@ -16,7 +16,6 @@ namespace Phalcon\Logger\Adapter;
 use LogicException;
 use Phalcon\Logger\Enum;
 use Phalcon\Logger\Item;
-use Phalcon\Logger\Logger;
 
 use function closelog;
 use function openlog;
@@ -102,7 +101,7 @@ class Syslog extends AbstractAdapter
                 sprintf(
                     "Cannot open syslog for name [%s] and facility [%s]",
                     $this->name,
-                    (string) $this->facility
+                    (string)$this->facility
                 )
             );
         }

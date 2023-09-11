@@ -223,7 +223,7 @@ class Stream implements StreamInterface
      */
     public function isReadable(): bool
     {
-        $mode = (string) $this->getMetadata("mode");
+        $mode = (string)$this->getMetadata("mode");
 
         return false !== strpbrk($mode, "r+");
     }
@@ -235,7 +235,7 @@ class Stream implements StreamInterface
      */
     public function isSeekable(): bool
     {
-        return (bool) $this->getMetadata("seekable");
+        return (bool)$this->getMetadata("seekable");
     }
 
     /**
@@ -245,7 +245,7 @@ class Stream implements StreamInterface
      */
     public function isWritable(): bool
     {
-        $mode = (string) $this->getMetadata("mode");
+        $mode = (string)$this->getMetadata("mode");
 
         return false !== strpbrk($mode, "xwca+");
     }

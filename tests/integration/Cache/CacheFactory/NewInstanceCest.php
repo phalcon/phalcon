@@ -17,9 +17,9 @@ use IntegrationTester;
 use Phalcon\Cache\AdapterFactory;
 use Phalcon\Cache\Cache;
 use Phalcon\Cache\CacheFactory;
+use Phalcon\Cache\CacheInterface;
 use Phalcon\Cache\Exception\Exception;
 use Phalcon\Storage\SerializerFactory;
-use Phalcon\Cache\CacheInterface;
 
 use function uniqid;
 
@@ -35,10 +35,10 @@ class NewInstanceCest
     {
         $I->wantToTest('Cache\CacheFactory - newInstance()');
 
-        $serializer     = new SerializerFactory();
+        $serializer = new SerializerFactory();
         $adapterFactory = new AdapterFactory($serializer);
-        $cacheFactory   = new CacheFactory($adapterFactory);
-        $adapter        = $cacheFactory->newInstance('apcu');
+        $cacheFactory = new CacheFactory($adapterFactory);
+        $adapter = $cacheFactory->newInstance('apcu');
 
         $I->assertInstanceOf(Cache::class, $adapter);
         $I->assertInstanceOf(CacheInterface::class, $adapter);

@@ -50,7 +50,7 @@ class GetFilteredValueCest
         $I->wantToTest('Forms\Form - getFilteredValue()');
 
         $entity = new stdClass();
-        $data = ['firstName' => ' test '];
+        $data   = ['firstName' => ' test '];
 
         $form = $this->getForm($data, $entity);
 
@@ -65,7 +65,7 @@ class GetFilteredValueCest
 
     private function getForm(array $data, $entity = null): Form
     {
-        $form = new Form();
+        $form         = new Form();
         $firstNameTag = new Text('firstName');
         $form->add(
             $firstNameTag->setFilters([

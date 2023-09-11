@@ -75,7 +75,7 @@ class Alpha extends AbstractValidator
             return true;
         }
 
-        if (preg_match("/[^[:alpha:]]/imu", (string) $value)) {
+        if (preg_match("/[^[:alpha:]]/imu", (string)$value)) {
             $validation->appendMessage(
                 $this->messageFactory($validation, $field)
             );

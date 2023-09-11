@@ -54,11 +54,11 @@ class Redis extends AbstractAdapter
          * Lets set some defaults and options here
          */
         $options["host"]           = $options["host"] ?? "127.0.0.1";
-        $options["port"]           = (int) ($options["port"] ?? 6379);
+        $options["port"]           = (int)($options["port"] ?? 6379);
         $options["index"]          = $options["index"] ?? 0;
         $options["timeout"]        = $options["timeout"] ?? 0;
-        $options["persistent"]     = (bool) ($options["persistent"] ?? false);
-        $options["persistentId"]   = (string) ($options["persistentId"] ?? "");
+        $options["persistent"]     = (bool)($options["persistent"] ?? false);
+        $options["persistentId"]   = (string)($options["persistentId"] ?? "");
         $options["auth"]           = $options["auth"] ?? "";
         $options["socket"]         = $options["socket"] ?? "";
         $options["connectTimeout"] = $options["connectTimeout"] ?? 0;
@@ -107,8 +107,8 @@ class Redis extends AbstractAdapter
      */
     public function delete(string $key): bool
     {
-        return (bool) $this->getAdapter()
-                           ->unlink($key)
+        return (bool)$this->getAdapter()
+                          ->unlink($key)
         ;
     }
 
@@ -166,8 +166,8 @@ class Redis extends AbstractAdapter
      */
     public function has(string $key): bool
     {
-        return (bool) $this->getAdapter()
-                           ->exists($key)
+        return (bool)$this->getAdapter()
+                          ->exists($key)
         ;
     }
 

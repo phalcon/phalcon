@@ -16,6 +16,7 @@ namespace Phalcon\Di\Traits;
 use Phalcon\Di\Exception;
 use Phalcon\Di\InjectionAwareInterface;
 use Phalcon\Di\ServiceInterface;
+use ReturnTypeWillChange;
 
 trait DiArrayAccessTrait
 {
@@ -47,7 +48,7 @@ trait DiArrayAccessTrait
      *
      * @return bool
      */
-    #[\ReturnTypeWillChange]
+    #[ReturnTypeWillChange]
     public function offsetExists($name): bool
     {
         return $this->has($name);
@@ -65,7 +66,7 @@ trait DiArrayAccessTrait
      * @return mixed|InjectionAwareInterface|null
      * @throws Exception
      */
-    #[\ReturnTypeWillChange]
+    #[ReturnTypeWillChange]
     public function offsetGet($name)
     {
         return $this->getShared($name);
@@ -81,7 +82,7 @@ trait DiArrayAccessTrait
      * @param mixed $name
      * @param mixed $definition
      */
-    #[\ReturnTypeWillChange]
+    #[ReturnTypeWillChange]
     public function offsetSet($name, $definition): void
     {
         $this->setShared($name, $definition);
@@ -92,7 +93,7 @@ trait DiArrayAccessTrait
      *
      * @param mixed $name
      */
-    #[\ReturnTypeWillChange]
+    #[ReturnTypeWillChange]
     public function offsetUnset($name): void
     {
         $this->remove($name);

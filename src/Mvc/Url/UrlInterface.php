@@ -38,7 +38,7 @@ interface UrlInterface
      *
      * @return string|null
      */
-    public function getBasePath(): string | null;
+    public function getBasePath(): string|null;
 
     /**
      * Returns the prefix for all the generated urls. By default, /

@@ -34,20 +34,20 @@ class CustomMessagesCest
     {
         $I->wantToTest('Validation\Validator\File - customMessages[]');
 
-        $options = [
-            'maxSize' => '0.5M',
+        $options    = [
+            'maxSize'          => '0.5M',
             'messageFileEmpty' => 'File is empty',
-            'messageIniSize' => 'Ini size is not valid',
-            'messageValid' => 'File is not valid',
+            'messageIniSize'   => 'Ini size is not valid',
+            'messageValid'     => 'File is not valid',
         ];
-        $file = new File($options);
+        $file       = new File($options);
         $validators = $file->getValidators();
 
         /** @var File\AbstractFile $validator */
         foreach ($validators as $validator) {
             $messageFileEmpty = $validator->getMessageFileEmpty();
-            $messageIniSize = $validator->getMessageIniSize();
-            $messageValid = $validator->getMessageValid();
+            $messageIniSize   = $validator->getMessageIniSize();
+            $messageValid     = $validator->getMessageValid();
 
             $I->assertSame($options['messageFileEmpty'], $messageFileEmpty);
             $I->assertSame($options['messageIniSize'], $messageIniSize);

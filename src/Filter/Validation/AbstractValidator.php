@@ -120,8 +120,8 @@ abstract class AbstractValidator implements ValidatorInterface
         $this->templates = [];
 
         foreach ($templates as $field => $template) {
-            $field                   = (string) $field;
-            $template                = (string) $template;
+            $field                   = (string)$field;
+            $template                = (string)$template;
             $this->templates[$field] = $template;
         }
 
@@ -308,7 +308,7 @@ abstract class AbstractValidator implements ValidatorInterface
 
         $replacements = array_merge(
             [
-                ":field" => $this->prepareLabel($validation, $singleField)
+                ":field" => $this->prepareLabel($validation, $singleField),
             ],
             $replacements
         );

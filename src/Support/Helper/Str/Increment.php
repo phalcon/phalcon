@@ -35,7 +35,7 @@ class Increment
         $number = 1;
 
         if (isset($parts[1])) {
-            $number = ((int) $parts[1]) + 1;
+            $number = ((int)$parts[1]) + 1;
         }
 
         return $parts[0] . $separator . $number;

@@ -66,7 +66,7 @@ class Router extends AbstractInjectionAware implements RouterInterface, EventsAw
     use EventsAwareTrait;
 
     public const POSITION_FIRST = 0;
-    public const POSITION_LAST = 1;
+    public const POSITION_LAST  = 1;
 
     /**
      * @var string
@@ -175,7 +175,7 @@ class Router extends AbstractInjectionAware implements RouterInterface, EventsAw
             $this->add(
                 "#^/([\\w0-9\\_\\-]+)[/]{0,1}$#u",
                 [
-                    "controller" => 1
+                    "controller" => 1,
                 ]
             );
 
@@ -214,11 +214,11 @@ class Router extends AbstractInjectionAware implements RouterInterface, EventsAw
      *
      * @param string       $pattern
      * @param array|string $paths = [
-     *     'module      => '',
-     *     'controller' => '',
-     *     'action'     => '',
-     *     'namespace'  => '',
-     * ]
+     *                            'module      => '',
+     *                            'controller' => '',
+     *                            'action'     => '',
+     *                            'namespace'  => '',
+     *                            ]
      * @param array|string $httpMethods
      * @param int          $position
      *
@@ -246,11 +246,11 @@ class Router extends AbstractInjectionAware implements RouterInterface, EventsAw
      *
      * @param string       $pattern
      * @param array|string $paths = [
-     *     'module      => '',
-     *     'controller' => '',
-     *     'action'     => '',
-     *     'namespace'  => '',
-     * ]
+     *                            'module      => '',
+     *                            'controller' => '',
+     *                            'action'     => '',
+     *                            'namespace'  => '',
+     *                            ]
      * @param int          $position
      *
      * @return RouteInterface
@@ -269,11 +269,11 @@ class Router extends AbstractInjectionAware implements RouterInterface, EventsAw
      *
      * @param string       $pattern
      * @param array|string $paths = [
-     *     'module      => '',
-     *     'controller' => '',
-     *     'action'     => '',
-     *     'namespace'  => ''
-     * ]
+     *                            'module      => '',
+     *                            'controller' => '',
+     *                            'action'     => '',
+     *                            'namespace'  => ''
+     *                            ]
      * @param int          $position
      *
      * @return RouteInterface
@@ -292,11 +292,11 @@ class Router extends AbstractInjectionAware implements RouterInterface, EventsAw
      *
      * @param string       $pattern
      * @param array|string $paths = [
-     *     'module      => '',
-     *     'controller' => '',
-     *     'action'     => '',
-     *     'namespace'  => ''
-     * ]
+     *                            'module      => '',
+     *                            'controller' => '',
+     *                            'action'     => '',
+     *                            'namespace'  => ''
+     *                            ]
      * @param int          $position
      *
      * @return RouteInterface
@@ -315,11 +315,11 @@ class Router extends AbstractInjectionAware implements RouterInterface, EventsAw
      *
      * @param string       $pattern
      * @param array|string $paths = [
-     *     'module      => '',
-     *     'controller' => '',
-     *     'action'     => '',
-     *     'namespace'  => ''
-     * ]
+     *                            'module      => '',
+     *                            'controller' => '',
+     *                            'action'     => '',
+     *                            'namespace'  => ''
+     *                            ]
      * @param int          $position
      *
      * @return RouteInterface
@@ -338,11 +338,11 @@ class Router extends AbstractInjectionAware implements RouterInterface, EventsAw
      *
      * @param string       $pattern
      * @param array|string $paths = [
-     *     'module      => '',
-     *     'controller' => '',
-     *     'action'     => '',
-     *     'namespace'  => ''
-     * ]
+     *                            'module      => '',
+     *                            'controller' => '',
+     *                            'action'     => '',
+     *                            'namespace'  => ''
+     *                            ]
      * @param int          $position
      *
      * @return RouteInterface
@@ -361,11 +361,11 @@ class Router extends AbstractInjectionAware implements RouterInterface, EventsAw
      *
      * @param string       $pattern
      * @param array|string $paths = [
-     *     'module      => '',
-     *     'controller' => '',
-     *     'action'     => '',
-     *     'namespace'  => ''
-     * ]
+     *                            'module      => '',
+     *                            'controller' => '',
+     *                            'action'     => '',
+     *                            'namespace'  => ''
+     *                            ]
      * @param int          $position
      *
      * @return RouteInterface
@@ -384,11 +384,11 @@ class Router extends AbstractInjectionAware implements RouterInterface, EventsAw
      *
      * @param string       $pattern
      * @param array|string $paths = [
-     *     'module      => '',
-     *     'controller' => '',
-     *     'action'     => '',
-     *     'namespace'  => ''
-     * ]
+     *                            'module      => '',
+     *                            'controller' => '',
+     *                            'action'     => '',
+     *                            'namespace'  => ''
+     *                            ]
      * @param int          $position
      *
      * @return RouteInterface
@@ -408,11 +408,11 @@ class Router extends AbstractInjectionAware implements RouterInterface, EventsAw
      *
      * @param string       $pattern
      * @param array|string $paths = [
-     *     'module      => '',
-     *     'controller' => '',
-     *     'action'     => '',
-     *     'namespace'  => ''
-     * ]
+     *                            'module      => '',
+     *                            'controller' => '',
+     *                            'action'     => '',
+     *                            'namespace'  => ''
+     *                            ]
      * @param int          $position
      *
      * @return RouteInterface
@@ -431,11 +431,11 @@ class Router extends AbstractInjectionAware implements RouterInterface, EventsAw
      *
      * @param string       $pattern
      * @param array|string $paths = [
-     *     'module      => '',
-     *     'controller' => '',
-     *     'action'     => '',
-     *     'namespace'  => ''
-     * ]
+     *                            'module      => '',
+     *                            'controller' => '',
+     *                            'action'     => '',
+     *                            'namespace'  => ''
+     *                            ]
      * @param int          $position
      *
      * @return RouteInterface
@@ -454,11 +454,11 @@ class Router extends AbstractInjectionAware implements RouterInterface, EventsAw
      *
      * @param string       $pattern
      * @param array|string $paths = [
-     *     'module      => '',
-     *     'controller' => '',
-     *     'action'     => '',
-     *     'namespace'  => ''
-     * ]
+     *                            'module      => '',
+     *                            'controller' => '',
+     *                            'action'     => '',
+     *                            'namespace'  => ''
+     *                            ]
      * @param int          $position
      *
      * @return RouteInterface
@@ -583,7 +583,7 @@ class Router extends AbstractInjectionAware implements RouterInterface, EventsAw
      *
      * @return RouteInterface|null
      */
-    public function getMatchedRoute(): RouteInterface | null
+    public function getMatchedRoute(): RouteInterface|null
     {
         return $this->matchedRoute;
     }
@@ -635,7 +635,7 @@ class Router extends AbstractInjectionAware implements RouterInterface, EventsAw
      *
      * @return RouteInterface|bool
      */
-    public function getRouteById(string $routeId): RouteInterface | bool
+    public function getRouteById(string $routeId): RouteInterface|bool
     {
         return $this->routes[$routeId] ?? false;
     }
@@ -647,7 +647,7 @@ class Router extends AbstractInjectionAware implements RouterInterface, EventsAw
      *
      * @return RouteInterface|bool
      */
-    public function getRouteByName(string $name): RouteInterface | bool
+    public function getRouteByName(string $name): RouteInterface|bool
     {
         /** @var Route $route */
         foreach ($this->routes as $route) {
@@ -816,7 +816,7 @@ class Router extends AbstractInjectionAware implements RouterInterface, EventsAw
                         [
                             $handledUri,
                             $route,
-                            $this
+                            $this,
                         ]
                     );
                 }

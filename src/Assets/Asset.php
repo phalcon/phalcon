@@ -211,7 +211,7 @@ class Asset implements AssetInterface
              * Get the real template path. If `realpath` fails it will return
              * `false`. Casting it to a string will return an empty string
              */
-            $source = (string) realpath($basePath . $source);
+            $source = (string)realpath($basePath . $source);
         }
 
         return $source;

@@ -16,18 +16,15 @@ namespace Phalcon\Forms;
 use Countable;
 use Iterator;
 use Phalcon\Di\Injectable;
-use Phalcon\Di\DiInterface;
-use Phalcon\Filter\FilterInterface;
+use Phalcon\Filter\Validation;
+use Phalcon\Filter\Validation\ValidationInterface;
 use Phalcon\Forms\Element\ElementInterface;
 use Phalcon\Html\Attributes;
 use Phalcon\Html\Attributes\AttributesInterface;
 use Phalcon\Html\TagFactory;
 use Phalcon\Messages\Messages;
-use Phalcon\Filter\Validation;
-use Phalcon\Filter\Validation\ValidationInterface;
 use Phalcon\Traits\Helper\Str\CamelizeTrait;
 
-use function is_object;
 use function is_string;
 
 /**
@@ -110,8 +107,8 @@ class Form extends Injectable implements Countable, Iterator, AttributesInterfac
         $this->options = $userOptions;
 
         /**
-        * Set form attributes/messages
-        */
+         * Set form attributes/messages
+         */
         $this->attributes = new Attributes();
         $this->messages   = new Messages();
 
@@ -199,8 +196,8 @@ class Form extends Injectable implements Countable, Iterator, AttributesInterfac
             $whitelist = $this->whitelist;
         }
 
-        $filter      = null;
-        $assignData  = [];
+        $filter       = null;
+        $assignData   = [];
         $filteredData = [];
         foreach ($data as $key => $value) {
             /**
@@ -360,12 +357,12 @@ class Form extends Injectable implements Countable, Iterator, AttributesInterfac
      */
     public function getAction(): string
     {
-        return (string) $this->getAttributes()->get("action");
+        return (string)$this->getAttributes()->get("action");
     }
 
     /**
-    * Get Form attributes collection
-    *
+     * Get Form attributes collection
+     *
      * @return Attributes
      */
     public function getAttributes(): Attributes
@@ -388,7 +385,7 @@ class Form extends Injectable implements Countable, Iterator, AttributesInterfac
      *
      * @return object|null
      */
-    public function getEntity(): object | null
+    public function getEntity(): object|null
     {
         return $this->entity;
     }
@@ -466,7 +463,7 @@ class Form extends Injectable implements Countable, Iterator, AttributesInterfac
      *
      * @return TagFactory|null
      */
-    public function getTagFactory(): TagFactory | null
+    public function getTagFactory(): TagFactory|null
     {
         return $this->tagFactory;
     }
@@ -583,7 +580,7 @@ class Form extends Injectable implements Countable, Iterator, AttributesInterfac
     /**
      * @return ValidationInterface|null
      */
-    public function getValidation(): ValidationInterface | null
+    public function getValidation(): ValidationInterface|null
     {
         return $this->validation;
     }
@@ -656,8 +653,8 @@ class Form extends Injectable implements Countable, Iterator, AttributesInterfac
         $validation       = $this->getValidation();
 
         if (null === $validation) {
-             // Create an implicit validation
-             $validation = new Validation();
+            // Create an implicit validation
+            $validation = new Validation();
         }
 
         /** @var ElementInterface $element */
@@ -698,10 +695,11 @@ class Form extends Injectable implements Countable, Iterator, AttributesInterfac
          */
         $messages = $validation->validate($data, $entity);
         if ($messages->count() > 0) {
-           // Add validation messages to relevant elements
+            // Add validation messages to relevant elements
             foreach ($messages as $elementMessage) {
                 $this->get($elementMessage->getField())
-                     ->appendMessage($elementMessage);
+                     ->appendMessage($elementMessage)
+                ;
             }
 
             $messages->rewind();

@@ -292,11 +292,11 @@ class Sqlite extends PdoAdapter
                 preg_match($sizePattern, $columnType, $matches)
             ) {
                 if (isset($matches[1])) {
-                    $definition["size"] = (int) $matches[1];
+                    $definition["size"] = (int)$matches[1];
                 }
 
                 if (isset($matches[2])) {
-                    $definition["scale"] = (int) $matches[2];
+                    $definition["scale"] = (int)$matches[2];
                 }
             }
 

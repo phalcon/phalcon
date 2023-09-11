@@ -112,7 +112,7 @@ class TranslateFactory
         return [
             'csv'     => Csv::class,
             'gettext' => Gettext::class,
-            'array'   => NativeArray::class
+            'array'   => NativeArray::class,
         ];
     }
 }

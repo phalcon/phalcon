@@ -474,7 +474,7 @@ abstract class AbstractConnection extends PDO implements ConnectionInterface
         }
 
         return match ($driver) {
-            "mysql" => [
+            "mysql"  => [
                 "prefix"  => "`",
                 "suffix"  => "`",
                 "find"    => "`",
@@ -486,7 +486,7 @@ abstract class AbstractConnection extends PDO implements ConnectionInterface
                 "find"    => "]",
                 "replace" => "][",
             ],
-            default => [
+            default  => [
                 "prefix"  => "\"",
                 "suffix"  => "\"",
                 "find"    => "\"",
@@ -521,7 +521,7 @@ abstract class AbstractConnection extends PDO implements ConnectionInterface
      */
     public function isConnected(): bool
     {
-        return (bool) $this->pdo;
+        return (bool)$this->pdo;
     }
 
     /**
@@ -625,7 +625,7 @@ abstract class AbstractConnection extends PDO implements ConnectionInterface
         $sth = call_user_func_array(
             [
                 $this->pdo,
-                "query"
+                "query",
             ],
             func_get_args()
         );
@@ -655,14 +655,14 @@ abstract class AbstractConnection extends PDO implements ConnectionInterface
         $quotes  = $this->getQuoteNames();
 
         if (true !== is_array($element)) {
-            $element = (string) $element;
+            $element = (string)$element;
 
             return $quotes["prefix"] . $element . $quotes["suffix"];
         }
 
         // quote array values, not keys, then combine with commas
         foreach ($value as $key => $element) {
-            $element        = (string) $element;
+            $element        = (string)$element;
             $elements[$key] = $quotes["prefix"] . $element . $quotes["suffix"];
         }
 
@@ -868,7 +868,7 @@ abstract class AbstractConnection extends PDO implements ConnectionInterface
         call_user_func_array(
             [
                 $statement,
-                "bindValue"
+                "bindValue",
             ],
             $parameters
         );
@@ -894,7 +894,7 @@ abstract class AbstractConnection extends PDO implements ConnectionInterface
         $result = call_user_func_array(
             [
                 $sth,
-                $method
+                $method,
             ],
             $arguments
         );

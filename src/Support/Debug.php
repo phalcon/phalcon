@@ -510,7 +510,7 @@ class Debug
         }
 
         if (count($arguments) >= 10) {
-            return (string) count($arguments);
+            return (string)count($arguments);
         }
 
         $dump = [];
@@ -518,7 +518,7 @@ class Debug
             if ('' === $argument) {
                 $varDump = '(empty string)';
             } elseif (true === is_scalar($argument)) {
-                $varDump = $this->escapeString((string) $argument);
+                $varDump = $this->escapeString((string)$argument);
             } elseif (is_array($argument)) {
                 $varDump = 'Array(' . $this->getArrayDump($argument, $number + 1) . ')';
             } elseif (true === is_object($argument)) {
@@ -563,7 +563,7 @@ class Debug
          * Scalar variables are just converted to strings
          */
         if (true === is_scalar($variable)) {
-            return (string) $variable;
+            return (string)$variable;
         }
 
         /**

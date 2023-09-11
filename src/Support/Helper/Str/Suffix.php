@@ -26,6 +26,6 @@ class Suffix
      */
     public function __invoke($text, string $suffix): string
     {
-        return ((string) $text) . $suffix;
+        return ((string)$text) . $suffix;
     }
 }

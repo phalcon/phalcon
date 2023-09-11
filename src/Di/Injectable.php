@@ -27,6 +27,7 @@ use Phalcon\Flash\Session;
 use Phalcon\Html\Escaper;
 use Phalcon\Html\Escaper\EscaperInterface;
 use Phalcon\Http\RequestInterface;
+use Phalcon\Mvc\Model\Manager;
 use Phalcon\Mvc\Model\ManagerInterface;
 use Phalcon\Session\Bag;
 use Phalcon\Session\BagInterface;
@@ -75,7 +76,7 @@ use Phalcon\Support\HelperFactory;
  * // * @property Cookies|CookiesInterface $cookies
  * // * @property AdapterInterface $db
  * // * @property Adapter\Memory|Adapter $annotations
- * // * @property \Phalcon\Mvc\Model\Manager|ManagerInterface $modelsManager
+ * // * @property Manager|ManagerInterface $modelsManager
  * // * @property Memory|MetadataInterface $modelsMetadata
  * // * @property ManagerInterface $transactionManager
  * // * @property Bag|BagInterface $persistent
@@ -109,7 +110,7 @@ abstract class Injectable implements InjectionAwareInterface
             $this->persistent = $bucket->get(
                 'sessionBag',
                 [
-                    get_class($this)
+                    get_class($this),
                 ]
             );
 

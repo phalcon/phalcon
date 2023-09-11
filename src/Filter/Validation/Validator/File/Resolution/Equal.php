@@ -83,16 +83,16 @@ class Equal extends AbstractFile
 
         $value   = $validation->getValue($field);
         $tmpName = getimagesize($value["tmp_name"]);
-        $width   = (int) $tmpName[0];
-        $height  = (int) $tmpName[1];
+        $width   = (int)$tmpName[0];
+        $height  = (int)$tmpName[1];
 
         $resolution = $this->checkArray($this->getOption("resolution"), $field);
 
         $resolutionArray = explode("x", $resolution);
-        $equalWidth      = (int) $resolutionArray[0];
-        $equalHeight     = (int) $resolutionArray[1];
+        $equalWidth      = (int)$resolutionArray[0];
+        $equalHeight     = (int)$resolutionArray[1];
 
-        $included = (bool) $this->checkArray(
+        $included = (bool)$this->checkArray(
             $this->getOption("included", false),
             $field
         );

@@ -37,7 +37,7 @@ class Decrement
         $parts  = !is_array($parts) ? [] : $parts;
 
         if (true === isset($parts[1])) {
-            $number = (int) $parts[1];
+            $number = (int)$parts[1];
             $number--;
             if ($number <= 0) {
                 return $parts[0];

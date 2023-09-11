@@ -83,8 +83,7 @@ class GetAttributesCest
                 'attr2' => 'value2',
                 'attr3' => 'value3',
             ]
-        )
-        ;
+        );
 
         $expected = 3;
         $actual   = $form->getAttributes();

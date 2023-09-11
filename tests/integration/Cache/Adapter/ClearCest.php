@@ -50,7 +50,7 @@ class ClearCest
         $adapter    = Stub::construct(
             Apcu::class,
             [
-                $serializer
+                $serializer,
             ],
             [
                 'phpApcuIterator' => false,
@@ -91,7 +91,7 @@ class ClearCest
         $adapter    = Stub::construct(
             Apcu::class,
             [
-                $serializer
+                $serializer,
             ],
             [
                 'phpApcuDelete' => false,

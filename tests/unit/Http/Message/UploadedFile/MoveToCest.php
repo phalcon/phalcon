@@ -46,7 +46,7 @@ class MoveToCest
         $I->seeFileFound($target);
         $I->openFile($target);
 
-        $I->seeFileContentsEqual((string) $stream);
+        $I->seeFileContentsEqual((string)$stream);
     }
 
     /**

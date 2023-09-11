@@ -34,7 +34,7 @@ class ToStringCest
 
         $I->assertSame(
             $expected,
-            (string) $stream
+            (string)$stream
         );
 
         $I->assertSame(

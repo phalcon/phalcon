@@ -66,7 +66,7 @@ class NativeArray extends AbstractAdapter implements ArrayAccess
             throw new Exception('Translation data must be an array');
         }
 
-        $this->triggerError = (bool) ($options['triggerError'] ?? false);
+        $this->triggerError = (bool)($options['triggerError'] ?? false);
         $this->translate    = $options['content'];
     }
 

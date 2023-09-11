@@ -50,7 +50,7 @@ trait ArrayAccessTrait
      */
     public function offsetExists($element): bool
     {
-        $element = (string) $element;
+        $element = (string)$element;
 
         return $this->has($element);
     }
@@ -66,7 +66,7 @@ trait ArrayAccessTrait
      */
     public function offsetGet($element)
     {
-        $element = (string) $element;
+        $element = (string)$element;
 
         return $this->get($element);
     }
@@ -81,7 +81,7 @@ trait ArrayAccessTrait
      */
     public function offsetSet($element, $value): void
     {
-        $element = (string) $element;
+        $element = (string)$element;
 
         $this->set($element, $value);
     }
@@ -95,7 +95,7 @@ trait ArrayAccessTrait
      */
     public function offsetUnset($element): void
     {
-        $element = (string) $element;
+        $element = (string)$element;
 
         $this->remove($element);
     }

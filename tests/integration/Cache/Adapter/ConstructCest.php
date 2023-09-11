@@ -61,10 +61,10 @@ class ConstructCest
      *
      * @param IntegrationTester $I
      *
-     * @author Phalcon Team <team@phalcon.io>
+     * @throws SupportException
      * @since  2020-09-09
      *
-     * @throws SupportException
+     * @author Phalcon Team <team@phalcon.io>
      */
     public function storageAdapterLibmemcachedConstructEmptyOptions(IntegrationTester $I)
     {

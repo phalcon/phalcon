@@ -89,14 +89,14 @@ class Equal extends AbstractFile
         $bytes    = round($this->getFileSizeInBytes($size), 6);
         $fileSize = round(floatval($value["size"]), 6);
 
-        $included = (bool) $this->checkArray(
+        $included = (bool)$this->checkArray(
             $this->getOption("included", false),
             $field
         );
 
         if (true === $this->getConditional($bytes, $fileSize, $included)) {
             $replacePairs = [
-                ":size" => $size
+                ":size" => $size,
             ];
 
             $validation->appendMessage(

@@ -34,14 +34,14 @@ class ClearCest
         $store = $_POST ?? [];
 
         $addressValue = uniqid('add-');
-        $address   = new Text('address');
+        $address      = new Text('address');
         $address->setDefault($addressValue);
 
         $expected = $addressValue;
         $actual   = $address->getValue();
         $I->assertSame($expected, $actual);
 
-        $addressValueNew   = uniqid('addn-');
+        $addressValueNew = uniqid('addn-');
 
         $form = new Form();
         $form->add($address);

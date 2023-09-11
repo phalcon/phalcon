@@ -240,7 +240,7 @@ class Gd extends AbstractAdapter
         int $blue,
         int $opacity
     ): void {
-        $opacity    = (int) round(abs(($opacity * 127 / 100) - 127));
+        $opacity    = (int)round(abs(($opacity * 127 / 100) - 127));
         $image      = $this->image;
         $background = $this->processCreate($this->width, $this->height);
 
@@ -354,8 +354,8 @@ class Gd extends AbstractAdapter
     protected function processMask(AdapterInterface $mask)
     {
         $maskImage  = imagecreatefromstring($mask->render());
-        $maskWidth  = (int) imagesx($maskImage);
-        $maskHeight = (int) imagesy($maskImage);
+        $maskWidth  = (int)imagesx($maskImage);
+        $maskHeight = (int)imagesy($maskImage);
         $alpha      = 127;
 
         imagesavealpha($maskImage, true);
@@ -446,8 +446,8 @@ class Gd extends AbstractAdapter
             $y = 0;
 
             while ($y < $this->height) {
-                $x1 = (int) ($x + ($amount / 2));
-                $y1 = (int) ($y + ($amount / 2));
+                $x1 = (int)($x + ($amount / 2));
+                $y1 = (int)($y + ($amount / 2));
 
                 if ($x1 >= $this->width || $y1 >= $this->height) {
                     break;
@@ -485,7 +485,7 @@ class Gd extends AbstractAdapter
         int $opacity,
         bool $fadeIn
     ): void {
-        $opacity = (int) round(abs(($opacity * 127 / 100) - 127));
+        $opacity = (int)round(abs(($opacity * 127 / 100) - 127));
 
         if ($opacity < 127) {
             $stepping = (127 - $opacity) / $height;
@@ -515,11 +515,11 @@ class Gd extends AbstractAdapter
             $destinationY = $this->height + $offset;
 
             if ($fadeIn) {
-                $destinationOpacity = (int) round(
+                $destinationOpacity = (int)round(
                     $opacity + ($stepping * ($height - $offset))
                 );
             } else {
-                $destinationOpacity = (int) round(
+                $destinationOpacity = (int)round(
                     $opacity + ($stepping * $offset)
                 );
             }
@@ -605,7 +605,7 @@ class Gd extends AbstractAdapter
                 );
         }
 
-        return (string) ob_get_clean();
+        return (string)ob_get_clean();
     }
 
     /**
@@ -737,12 +737,12 @@ class Gd extends AbstractAdapter
      */
     protected function processSharpen(int $amount): void
     {
-        $amount = (int) round(abs(-18 + ($amount * 0.08)), 2);
+        $amount = (int)round(abs(-18 + ($amount * 0.08)), 2);
 
         $matrix = [
             [-1, -1, -1],
             [-1, $amount, -1],
-            [-1, -1, -1]
+            [-1, -1, -1],
         ];
 
         $result = imageconvolution(
@@ -786,10 +786,10 @@ class Gd extends AbstractAdapter
         $bottomLeftY = 0;
         $topRightX   = 0;
         $topRightY   = 0;
-        $offsetX     = (int) $offsetX;
-        $offsetY     = (int) $offsetY;
+        $offsetX     = (int)$offsetX;
+        $offsetY     = (int)$offsetY;
 
-        $opacity = (int) round(abs(($opacity * 127 / 100) - 127));
+        $opacity = (int)round(abs(($opacity * 127 / 100) - 127));
 
         if (true !== empty($fontFile)) {
             $space = imagettfbbox($size, 0, $fontFile, $text);
@@ -799,10 +799,10 @@ class Gd extends AbstractAdapter
             }
 
             if (true === isset($space[0])) {
-                $bottomLeftX = (int) $space[0];
-                $bottomLeftY = (int) $space[1];
-                $topRightX   = (int) $space[4];
-                $topRightY   = (int) $space[5];
+                $bottomLeftX = (int)$space[0];
+                $bottomLeftY = (int)$space[1];
+                $topRightX   = (int)$space[4];
+                $topRightY   = (int)$space[5];
             }
 
             $width  = abs($topRightX - $bottomLeftX) + 10;
@@ -876,11 +876,11 @@ class Gd extends AbstractAdapter
 
         imagesavealpha($overlay, true);
 
-        $width  = (int) imagesx($overlay);
-        $height = (int) imagesy($overlay);
+        $width  = (int)imagesx($overlay);
+        $height = (int)imagesy($overlay);
 
         if ($opacity < 100) {
-            $opacity = (int) round(
+            $opacity = (int)round(
                 abs(
                     ($opacity * 127 / 100) - 127
                 )

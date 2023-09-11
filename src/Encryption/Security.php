@@ -468,7 +468,7 @@ class Security implements InjectionAwareInterface
 
         if (true === $legacy) {
             $salt = $prefix . $this->getSaltBytes($bytes) . "$";
-            return (string) crypt($password, $salt);
+            return (string)crypt($password, $salt);
         }
 
         /**
@@ -483,7 +483,7 @@ class Security implements InjectionAwareInterface
         $algorithm = $this->processAlgorithm();
         $arguments = $this->processArgonOptions($options);
 
-        return (string) password_hash($password, $algorithm, $arguments);
+        return (string)password_hash($password, $algorithm, $arguments);
     }
 
     /**

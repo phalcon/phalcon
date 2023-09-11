@@ -349,11 +349,11 @@ class Column implements ColumnInterface
         $this->bindType      = $definition["bindType"] ?? 2;
         $this->comment       = $definition["comment"] ?? "";
         $this->defaultValue  = $definition["default"] ?? null;
-        $this->isFirst       = (bool) ($definition["first"] ?? false);
-        $this->isNotNull     = (bool) ($definition["notNull"] ?? true);
-        $this->isNumeric     = (bool) ($definition["isNumeric"] ?? false);
-        $this->isPrimary     = (bool) ($definition["primary"] ?? false);
-        $this->isUnsigned    = (bool) ($definition["unsigned"] ?? false);
+        $this->isFirst       = (bool)($definition["first"] ?? false);
+        $this->isNotNull     = (bool)($definition["notNull"] ?? true);
+        $this->isNumeric     = (bool)($definition["isNumeric"] ?? false);
+        $this->isPrimary     = (bool)($definition["primary"] ?? false);
+        $this->isUnsigned    = (bool)($definition["unsigned"] ?? false);
         $this->size          = $definition["size"] ?? 0;
         $this->type          = $definition["type"];
         $this->typeReference = $definition["typeReference"] ?? -1;
@@ -372,7 +372,7 @@ class Column implements ColumnInterface
                 self::TYPE_MEDIUMINTEGER,
                 self::TYPE_SMALLINTEGER,
                 self::TYPE_TINYINTEGER => $definition["scale"],
-                default => throw new Exception(
+                default                => throw new Exception(
                     "Column type does not support scale parameter"
                 ),
             };
@@ -390,7 +390,7 @@ class Column implements ColumnInterface
                     self::TYPE_MEDIUMINTEGER,
                     self::TYPE_SMALLINTEGER,
                     self::TYPE_TINYINTEGER => true,
-                    default => throw new Exception(
+                    default                => throw new Exception(
                         "Column type cannot be auto-increment"
                     ),
                 };
@@ -463,7 +463,7 @@ class Column implements ColumnInterface
      *
      * @return int|string
      */
-    public function getSize(): int | string
+    public function getSize(): int|string
     {
         return $this->size;
     }

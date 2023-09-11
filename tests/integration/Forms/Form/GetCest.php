@@ -32,7 +32,7 @@ class GetCest
 
         $form = new Form();
 
-        $address   = new Text('address');
+        $address = new Text('address');
         $telephone = new Text('telephone');
 
         $form->add($address);

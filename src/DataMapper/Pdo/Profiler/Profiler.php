@@ -196,13 +196,13 @@ class Profiler implements ProfilerInterface
     }
 
     /**
-     * @todo This will be removed when traits are introduced
-     *
      * @param mixed $data
      * @param int   $options
      * @param int   $depth
      *
      * @return string
+     * @todo This will be removed when traits are introduced
+     *
      */
     private function encode(
         mixed $data,

@@ -135,7 +135,7 @@ class Stream extends AbstractAdapter
         }
 
         $data = $this->get($key);
-        $data = (int) $data - $value;
+        $data = (int)$data - $value;
 
         $result = $this->set($key, $data);
         if (false !== $result) {
@@ -257,7 +257,7 @@ class Stream extends AbstractAdapter
         }
 
         $data = $this->get($key);
-        $data = (int) $data + $value;
+        $data = (int)$data + $value;
 
         $result = $this->set($key, $data);
         if (false !== $result) {
@@ -433,7 +433,7 @@ class Stream extends AbstractAdapter
             return false;
         }
 
-        return ((int) $created + (int) $ttl) < time();
+        return ((int)$created + (int)$ttl) < time();
     }
 
     /**

@@ -67,7 +67,6 @@ class HandleCest
         $routes = $this->setupRoutes('router');
         foreach ($routes as $pattern => $parameters) {
             $router->add($pattern, $parameters);
-
         }
 
         $this->assertParameters($I, $router, $example);
@@ -105,7 +104,6 @@ class HandleCest
         $routes = $this->setupRoutes('delimiter');
         foreach ($routes as $pattern => $parameters) {
             $router->add($pattern, $parameters);
-
         }
 
         $this->assertParameters($I, $router, $example);
@@ -614,7 +612,7 @@ class HandleCest
                 "feed {lang:[a-z]+} blog {blog:[a-z\-]+}\.{type:[a-z\-]+}" => 'Feed::get',
                 "posts {year:[0-9]+} s {title:[a-z\-]+}"                   => 'Posts::show',
                 'posts delete {id}'                                        => 'Posts::delete',
-                "show {id:video([0-9]+)} {title:[a-z\-]+}"                 => 'Videos::show'
+                "show {id:video([0-9]+)} {title:[a-z\-]+}"                 => 'Videos::show',
             ],
             'delimiter' => [
                 '/'                                                         => [
@@ -665,7 +663,7 @@ class HandleCest
                 '/posts/delete/{id}'                                        => 'Posts::delete',
                 "/show/{id:video([0-9]+)}/{title:[a-z\-]+}"                 => 'Videos::show',
 
-            ]
+            ],
         ];
 
         return $routes[$test] ?? [];

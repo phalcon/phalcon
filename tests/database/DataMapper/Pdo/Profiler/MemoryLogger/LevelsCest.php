@@ -23,9 +23,9 @@ class LevelsCest
      * @dataProvider getExamples
      * @since        2020-01-25
      *
-     * @group  pgsql
-     * @group  mysql
-     * @group  sqlite
+     * @group        pgsql
+     * @group        mysql
+     * @group        sqlite
      */
     public function dMPdoProfilerMemoryLoggerLevels(DatabaseTester $I, Example $example)
     {
