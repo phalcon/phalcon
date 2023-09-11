@@ -15,12 +15,14 @@ namespace Phalcon\Tests\Unit\Logger\Logger;
 
 use Phalcon\Logger\Adapter\Stream;
 use Phalcon\Logger\Enum;
+use Phalcon\Logger\Formatter\Line;
 use Phalcon\Logger\Logger;
 use UnitTester;
 
 use function logsDir;
 use function sprintf;
 use function strtoupper;
+use function uniqid;
 
 class LogCest
 {
@@ -166,6 +168,54 @@ class LogCest
             );
             $I->dontSeeInThisFile($expected);
         }
+
+        $adapter->close();
+        $I->safeDeleteFile($fileName);
+    }
+
+    /**
+     * Tests Phalcon\Logger :: log() - interpolator
+     *
+     * @param UnitTester $I
+     *
+     * @author Phalcon Team <team@phalcon.io>
+     * @since  2022-09-11
+     */
+    public function loggerLogLogInterpolator(UnitTester $I)
+    {
+        $I->wantToTest('Logger - log() - interpolator');
+
+        $logPath   = logsDir();
+        $fileName  = $I->getNewFileName('log', 'log');
+        $formatter = new Line(
+            '%message%-[%level%]-%server%:%user%',
+            'U.u'
+        );
+        $context  = [
+            'server' => uniqid('srv-'),
+            'user'   => uniqid('usr-'),
+        ];
+        $adapter  = new Stream($logPath . $fileName);
+        $adapter->setFormatter($formatter);
+
+        $logger = new Logger(
+            'my-logger',
+            [
+                'one' => $adapter,
+            ]
+        );
+
+        $logger->log(Enum::DEBUG, 'log message', $context);
+
+        $I->amInPath($logPath);
+        $I->openFile($fileName);
+
+        $expected = sprintf(
+            'log message-[DEBUG]-%s:%s',
+            $context['server'],
+            $context['user']
+        );
+        $I->seeInThisFile($expected);
 
         $adapter->close();
         $I->safeDeleteFile($fileName);
