@@ -173,7 +173,7 @@ class Filter implements FilterInterface
          * $locator->sanitize( 'abcde', ['trim', 'upper'])
          *
          * If the sanitizer requires more than one parameter then we need to
-         * inject those parameters in method also:
+         * inject those parameters in the sanitize also:
          *
          * $locator->sanitize(
          *     '  mary had a little lamb ',
@@ -285,17 +285,20 @@ class Filter implements FilterInterface
              * has been defined it is a straight up; otherwise recursion is
              * required
              */
-            $value = $this->processValueIsArray(
-                $value,
-                $sanitizerName,
-                $sanitizerParams,
-                $noRecursive
-            );
-            $value = $this->processValueIsNotArray(
-                $value,
-                $sanitizerName,
-                $sanitizerParams
-            );
+            if (is_array($value)) {
+                $value = $this->processValueIsArray(
+                    $value,
+                    $sanitizerName,
+                    $sanitizerParams,
+                    $noRecursive
+                );
+            } else {
+                $value = $this->processValueIsNotArray(
+                    $value,
+                    $sanitizerName,
+                    $sanitizerParams
+                );
+            }
         }
 
         return $value;
@@ -330,39 +333,6 @@ class Filter implements FilterInterface
     }
 
     /**
-     * Internal sanitize wrapper for recursion
-     *
-     * @param mixed  $value
-     * @param string $sanitizerName
-     * @param array  $sanitizerParams
-     *
-     * @return false|mixed
-     * @throws Exception
-     */
-    private function sanitizer(
-        $value,
-        string $sanitizerName,
-        array $sanitizerParams = []
-    ) {
-
-        if (true !== $this->has($sanitizerName)) {
-            if (true !== empty($sanitizerName)) {
-                trigger_error(
-                    "Sanitizer '" . $sanitizerName . "' is not registered",
-                    E_USER_NOTICE
-                );
-            }
-
-            return $value;
-        }
-
-        $sanitizerObject = $this->get($sanitizerName);
-        $params          = array_merge([$value], $sanitizerParams);
-
-        return call_user_func_array($sanitizerObject, $params);
-    }
-
-    /**
      * @param mixed  $value
      * @param string $sanitizerName
      * @param array  $sanitizerParams
@@ -372,12 +342,18 @@ class Filter implements FilterInterface
      * @throws Exception
      */
     private function processValueIsArray(
-        $value,
+        mixed $value,
         string $sanitizerName,
         array $sanitizerParams,
         bool $noRecursive
     ) {
-        if (is_array($value) && true !== $noRecursive) {
+        if ($noRecursive) {
+            $value = $this->sanitizer(
+                $value,
+                $sanitizerName,
+                $sanitizerParams
+            );
+        } else {
             $value = $this->processArrayValues(
                 $value,
                 $sanitizerName,
@@ -397,7 +373,7 @@ class Filter implements FilterInterface
      * @throws Exception
      */
     private function processValueIsNotArray(
-        $value,
+        mixed $value,
         string $sanitizerName,
         array $sanitizerParams
     ) {
@@ -410,6 +386,38 @@ class Filter implements FilterInterface
         }
 
         return $value;
+    }
+
+    /**
+     * Internal sanitize wrapper for recursion
+     *
+     * @param mixed  $value
+     * @param string $sanitizerName
+     * @param array  $sanitizerParams
+     *
+     * @return false|mixed
+     * @throws Exception
+     */
+    private function sanitizer(
+        $value,
+        string $sanitizerName,
+        array $sanitizerParams = []
+    ) {
+        if (true !== $this->has($sanitizerName)) {
+            if (true !== empty($sanitizerName)) {
+                trigger_error(
+                    "Sanitizer '" . $sanitizerName . "' is not registered",
+                    E_USER_NOTICE
+                );
+            }
+
+            return $value;
+        }
+
+        $sanitizerObject = $this->get($sanitizerName);
+        $params          = array_merge([$value], $sanitizerParams);
+
+        return call_user_func_array($sanitizerObject, $params);
     }
 
     /**
