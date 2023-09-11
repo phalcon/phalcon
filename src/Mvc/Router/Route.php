@@ -57,7 +57,7 @@ class Route implements RouteInterface
     /**
      * @var string|null
      */
-    protected string $hostname = "";
+    protected ?string $hostname = null;
 
     /**
      * @var array|string
