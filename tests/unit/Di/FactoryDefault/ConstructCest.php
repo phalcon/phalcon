@@ -51,7 +51,7 @@ class ConstructCest
 
         $container = new FactoryDefault();
 
-        $expected = 15;
+        $expected = 17;
         $actual   = count($container->getServices());
         $I->assertSame($expected, $actual);
     }
