@@ -14,7 +14,6 @@ declare(strict_types=1);
 namespace Phalcon\Support\Helper\Json;
 
 use InvalidArgumentException;
-use JsonException;
 
 use function json_encode;
 use function json_last_error;
@@ -72,6 +71,6 @@ class Encode
             throw new InvalidArgumentException($message, $error);
         }
 
-        return (string) $encoded;
+        return (string)$encoded;
     }
 }

@@ -402,7 +402,7 @@ class Micro extends Injectable implements ArrayAccess, EventsAwareInterface
                     $handler = $this->activeHandler;
                 }
 
-                $this->stopped  = false;
+                $this->stopped = false;
 
                 /**
                  * Calls the before handlers
