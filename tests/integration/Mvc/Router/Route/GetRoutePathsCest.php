@@ -31,7 +31,7 @@ class GetRoutePathsCest
     {
         $I->wantToTest('Mvc\Router\Route - getRoutePaths()');
 
-        $arrayDefinition = ["controller" => 'FooBar', "action" => 'baz'];
+        $arrayDefinition  = ["controller" => 'FooBar', "action" => 'baz'];
         $stringDefinition = "FooBar::baz";
 
         $I->assertEquals($arrayDefinition, Route::getRoutePaths($arrayDefinition));

@@ -21,7 +21,7 @@ use Phalcon\Tests\Integration\Mvc\Dispatcher\Helper\BaseDispatcher;
  * Class DispatcherBeforeDispatchCest
  *
  * @package Phalcon\Tests\Integration\Mvc\Dispatcher
- * @todo: refactor
+ * @todo    : refactor
  */
 class DispatcherBeforeDispatchCest extends BaseDispatcher
 {
@@ -49,8 +49,7 @@ class DispatcherBeforeDispatchCest extends BaseDispatcher
                     $forwarded = true;
                 }
             }
-        )
-        ;
+        );
 
         $dispatcher->dispatch();
 
@@ -90,8 +89,7 @@ class DispatcherBeforeDispatchCest extends BaseDispatcher
 
                 return false;
             }
-        )
-        ;
+        );
         $dispatcher->dispatch();
 
         $expected = [
@@ -121,16 +119,14 @@ class DispatcherBeforeDispatchCest extends BaseDispatcher
             function () {
                 throw new Exception('beforeDispatch exception occurred');
             }
-        )
-        ;
+        );
 
         $dispatcher->getEventsManager()->attach(
             'dispatch:beforeException',
             function () {
                 return false;
             }
-        )
-        ;
+        );
 
         $dispatcher->dispatch();
 
@@ -162,8 +158,7 @@ class DispatcherBeforeDispatchCest extends BaseDispatcher
             function () {
                 throw new Exception('beforeDispatch exception occurred');
             }
-        )
-        ;
+        );
 
         $dispatcher->getEventsManager()->attach(
             'dispatch:beforeException',
@@ -174,8 +169,7 @@ class DispatcherBeforeDispatchCest extends BaseDispatcher
 
                 return null;
             }
-        )
-        ;
+        );
 
         $I->expectThrowable(
             Exception::class,
@@ -216,8 +210,7 @@ class DispatcherBeforeDispatchCest extends BaseDispatcher
                     throw new Exception('beforeDispatch exception occurred');
                 }
             }
-        )
-        ;
+        );
 
         $dispatcher->getEventsManager()->attach(
             'dispatch:beforeException',
@@ -232,8 +225,7 @@ class DispatcherBeforeDispatchCest extends BaseDispatcher
                     ]
                 );
             }
-        )
-        ;
+        );
 
         $dispatcher->dispatch();
 

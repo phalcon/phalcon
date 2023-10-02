@@ -85,7 +85,7 @@ class HandleCest
                 'controller' => 3,
                 'action'     => 4,
                 'params'     => 5,
-                'my-number'  => 6
+                'my-number'  => 6,
             ]
         );
 
@@ -116,7 +116,7 @@ class HandleCest
         $I->assertEquals(
             [
                 'my',
-                'my-number' => 123
+                'my-number' => 123,
             ],
             $router->getParams()
         );
@@ -210,7 +210,7 @@ class HandleCest
                 'year'  => 2020,
                 'month' => 10,
                 'day'   => 21,
-                456
+                456,
             ],
             $router->getParams()
         );

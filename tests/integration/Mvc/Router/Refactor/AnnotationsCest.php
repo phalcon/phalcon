@@ -25,7 +25,7 @@ use function is_object;
  * Class AnnotationsCest
  *
  * @package Phalcon\Tests\Integration\Mvc\Router\Refactor
- * @todo: refactor
+ * @todo    : refactor
  */
 class AnnotationsCest
 {

@@ -33,7 +33,7 @@ class HasServiceCest
         $I->wantToTest('Mvc\Micro - hasService()');
 
         $micro = new Micro();
-        $di = new Di();
+        $di    = new Di();
         $micro->setDi($di);
 
 

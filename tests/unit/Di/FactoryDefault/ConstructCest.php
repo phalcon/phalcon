@@ -28,7 +28,6 @@ use Phalcon\Html\TagFactory;
 use Phalcon\Http\Request;
 use Phalcon\Http\Response;
 use Phalcon\Http\Response\Cookies;
-use Phalcon\Mvc\Dispatcher;
 use Phalcon\Mvc\Model\MetaData\Memory;
 use Phalcon\Mvc\Model\Transaction\Manager;
 use Phalcon\Mvc\Url;

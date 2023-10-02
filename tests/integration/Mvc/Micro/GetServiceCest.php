@@ -48,7 +48,7 @@ class GetServiceCest
         $actual   = $micro->getService('escaper');
         $I->assertSame($expected, $actual);
 
-        $dispatcher = new Dispatcher();
+        $dispatcher          = new Dispatcher();
         $micro['dispatcher'] = $dispatcher;
 
         $expected = $dispatcher;
@@ -62,6 +62,7 @@ class GetServiceCest
         $actual   = $micro->getService('router');
         $I->assertSame($expected, $actual);
     }
+
     /**
      * Tests after binding event
      *

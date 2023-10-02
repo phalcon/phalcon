@@ -24,7 +24,7 @@ use Phalcon\Tests\Fixtures\Traits\DiTrait;
  * Class GroupCest
  *
  * @package Phalcon\Tests\Integration\Mvc\Router
- * @todo: refactor
+ * @todo    : refactor
  */
 class GroupCest
 {

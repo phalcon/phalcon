@@ -33,7 +33,7 @@ class OffsetExistsCest
         $I->wantToTest('Mvc\Micro - offsetExists()');
 
         $micro = new Micro();
-        $di = new Di();
+        $di    = new Di();
         $micro->setDi($di);
 
 
@@ -57,7 +57,7 @@ class OffsetExistsCest
             isset($micro['escaper'])
         );
 
-        $dispatcher = new Dispatcher();
+        $dispatcher          = new Dispatcher();
         $micro['dispatcher'] = $dispatcher;
 
         $I->assertTrue(

@@ -21,7 +21,7 @@ use Phalcon\Tests\Integration\Mvc\Dispatcher\Helper\BaseDispatcher;
  * Class DispatcherBeforeExecuteRouteCest
  *
  * @package Phalcon\Tests\Integration\Mvc\Dispatcher
- * @todo: refactor
+ * @todo    : refactor
  */
 class DispatcherBeforeExecuteRouteCest extends BaseDispatcher
 {
@@ -49,8 +49,7 @@ class DispatcherBeforeExecuteRouteCest extends BaseDispatcher
                     $forwarded = true;
                 }
             }
-        )
-        ;
+        );
 
         $dispatcher->dispatch();
 
@@ -95,8 +94,7 @@ class DispatcherBeforeExecuteRouteCest extends BaseDispatcher
 
                 return false;
             }
-        )
-        ;
+        );
 
         $dispatcher->dispatch();
 
@@ -130,16 +128,14 @@ class DispatcherBeforeExecuteRouteCest extends BaseDispatcher
             function () {
                 throw new Exception('beforeExecuteRoute exception occurred');
             }
-        )
-        ;
+        );
 
         $dispatcher->getEventsManager()->attach(
             'dispatch:beforeException',
             function () {
                 return false;
             }
-        )
-        ;
+        );
 
         $dispatcher->dispatch();
 
@@ -174,8 +170,7 @@ class DispatcherBeforeExecuteRouteCest extends BaseDispatcher
             function () {
                 throw new Exception('beforeExecuteRoute exception occurred');
             }
-        )
-        ;
+        );
 
         $dispatcher->getEventsManager()->attach(
             'dispatch:beforeException',
@@ -186,8 +181,7 @@ class DispatcherBeforeExecuteRouteCest extends BaseDispatcher
 
                 return null;
             }
-        )
-        ;
+        );
 
         $I->expectThrowable(
             Exception::class,
@@ -231,8 +225,7 @@ class DispatcherBeforeExecuteRouteCest extends BaseDispatcher
                     throw new Exception('beforeExecuteRoute exception occurred');
                 }
             }
-        )
-        ;
+        );
 
         $dispatcher->getEventsManager()->attach(
             'dispatch:beforeException',
@@ -247,8 +240,7 @@ class DispatcherBeforeExecuteRouteCest extends BaseDispatcher
                     ]
                 );
             }
-        )
-        ;
+        );
 
         $dispatcher->dispatch();
 

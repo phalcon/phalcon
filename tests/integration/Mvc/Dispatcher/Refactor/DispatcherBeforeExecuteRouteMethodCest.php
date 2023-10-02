@@ -21,7 +21,7 @@ use Phalcon\Tests\Integration\Mvc\Dispatcher\Helper\BaseDispatcher;
  * Class DispatcherBeforeExecuteRouteMethodCest
  *
  * @package Phalcon\Tests\Integration\Mvc\Dispatcher
- * @todo: refactor
+ * @todo    : refactor
  */
 class DispatcherBeforeExecuteRouteMethodCest extends BaseDispatcher
 {
@@ -113,8 +113,7 @@ class DispatcherBeforeExecuteRouteMethodCest extends BaseDispatcher
             function () {
                 return false;
             }
-        )
-        ;
+        );
 
         $dispatcher->dispatch();
 
@@ -158,8 +157,7 @@ class DispatcherBeforeExecuteRouteMethodCest extends BaseDispatcher
 
                 return null;
             }
-        )
-        ;
+        );
 
         $I->expectThrowable(
             Exception::class,
@@ -212,8 +210,7 @@ class DispatcherBeforeExecuteRouteMethodCest extends BaseDispatcher
                     ]
                 );
             }
-        )
-        ;
+        );
 
         $dispatcher->dispatch();
 
