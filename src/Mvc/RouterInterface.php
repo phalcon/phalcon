@@ -13,8 +13,8 @@ declare(strict_types=1);
 
 namespace Phalcon\Mvc;
 
-use Phalcon\Mvc\Router\RouteInterface;
 use Phalcon\Mvc\Router\GroupInterface;
+use Phalcon\Mvc\Router\RouteInterface;
 
 /**
  * Interface for Phalcon\Mvc\Router
@@ -228,7 +228,7 @@ interface RouterInterface
      *
      * @return RouteInterface|null
      */
-    public function getMatchedRoute(): RouteInterface | null;
+    public function getMatchedRoute(): RouteInterface|null;
 
     /**
      * Return the sub expressions in the regular expression matched
@@ -268,11 +268,11 @@ interface RouterInterface
     /**
      * Returns a route object by its id
      *
-     * @param mixed $routeId
+     * @param int|string $routeId
      *
      * @return RouteInterface|bool
      */
-    public function getRouteById(mixed $routeId): RouteInterface | bool;
+    public function getRouteById(int|string $routeId): RouteInterface|bool;
 
     /**
      * Returns a route object by its name
@@ -281,7 +281,7 @@ interface RouterInterface
      *
      * @return RouteInterface|bool
      */
-    public function getRouteByName(string $name): RouteInterface | bool;
+    public function getRouteByName(string $name): RouteInterface|bool;
 
     /**
      * Handles routing information received from the rewrite engine

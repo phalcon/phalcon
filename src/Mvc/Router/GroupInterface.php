@@ -229,14 +229,14 @@ interface GroupInterface
     /**
      * Returns the 'before match' callback if any
      *
-     * @return callable
+     * @return callable|null
      */
-    public function getBeforeMatch(): callable;
+    public function getBeforeMatch(): callable|null;
 
     /**
      * Returns the hostname restriction
      *
-     * @return string
+     * @return string|null
      */
     public function getHostname(): string;
 
@@ -245,7 +245,7 @@ interface GroupInterface
      *
      * @return array|string
      */
-    public function getPaths(): array | string;
+    public function getPaths(): array|string;
 
     /**
      * Returns the common prefix for all the routes

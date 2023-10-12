@@ -13,6 +13,7 @@ declare(strict_types=1);
 
 namespace Phalcon\Mvc\Router;
 
+
 use function array_flip;
 use function array_keys;
 use function array_merge;
@@ -28,8 +29,6 @@ use function strlen;
 use function substr;
 
 /**
- * Phalcon\Mvc\Router\Route
- *
  * This class represents every route added to the router
  */
 class Route implements RouteInterface
@@ -40,9 +39,9 @@ class Route implements RouteInterface
     protected mixed $beforeMatch = null;
 
     /**
-     * @var string
+     * @var string|null
      */
-    protected string $compiledPattern = "";
+    protected ?string $compiledPattern = null;
 
     /**
      * @var array
@@ -60,6 +59,11 @@ class Route implements RouteInterface
     protected ?string $hostname = null;
 
     /**
+     * @var string
+     */
+    protected string $routeId = "";
+
+    /**
      * @var array|string
      */
     protected array|string $methods = [];
@@ -72,7 +76,7 @@ class Route implements RouteInterface
     /**
      * @var string|null
      */
-    protected string $name = "";
+    protected ?string $name = null;
 
     /**
      * @var array
@@ -82,12 +86,7 @@ class Route implements RouteInterface
     /**
      * @var string
      */
-    protected string $pattern;
-
-    /**
-     * @var string
-     */
-    protected string $routeId = "";
+    protected string $pattern = "";
 
     /**
      * @var int
@@ -96,11 +95,13 @@ class Route implements RouteInterface
 
     /**
      * Phalcon\Mvc\Router\Route constructor
+     *
+     * TODO: Make paths array, sort out methods
      */
     public function __construct(
         string $pattern,
-        array|string $paths = [],
-        array|string $httpMethods = []
+        array|string|null $paths = null,
+        array|string|null $httpMethods = null
     ) {
         // Configure the route (extract parameters, paths, etc)
         $this->reConfigure($pattern, $paths);
@@ -112,7 +113,8 @@ class Route implements RouteInterface
         $uniqueId = self::$uniqueId;
 
         // TODO: Add a function that increase static members
-        $this->routeId  = (string)$uniqueId;
+        $routeId        = $uniqueId;
+        $this->routeId  = (string)$routeId;
         self::$uniqueId = $uniqueId + 1;
     }
 
@@ -152,7 +154,8 @@ class Route implements RouteInterface
     }
 
     /**
-     * Replaces placeholders from pattern returning a valid PCRE regular expression
+     * Replaces placeholders from pattern returning a valid PCRE
+     * regular expression
      *
      * @param string $pattern
      *
@@ -165,12 +168,12 @@ class Route implements RouteInterface
             // This is a pattern for valid identifiers
             $idPattern = "/([\\w0-9\\_\\-]+)";
             $map       = [
-                ":module"    => $idPattern,
-                ":task"      => $idPattern,
-                ":namespace" => $idPattern,
-                ":action"    => $idPattern,
-                ":params"    => "(/.*)*",
-                ":int"       => "/([0-9]+)",
+                "/:module"     => $idPattern,
+                "/:controller" => $idPattern,
+                "/:namespace"  => $idPattern,
+                "/:action"     => $idPattern,
+                "/:params"     => "(/.*)*",
+                "/:int"        => "/([0-9]+)",
             ];
 
             $pattern = str_replace(
@@ -183,6 +186,8 @@ class Route implements RouteInterface
         /**
          * Check if the pattern has parentheses or square brackets in order to
          * add the regex delimiters
+         *
+         * `u` flag is required to support unicode
          */
         if (str_contains($pattern, "(") || str_contains($pattern, "[")) {
             return "#^" . $pattern . "$#u";
@@ -192,12 +197,12 @@ class Route implements RouteInterface
     }
 
     /**
-     * @param string   $name
-     * @param callable $converter
+     * @param string $name
+     * @param mixed  $converter
      *
      * @return RouteInterface
      */
-    public function convert(string $name, callable $converter): RouteInterface
+    public function convert(string $name, mixed $converter): RouteInterface
     {
         $this->converters[$name] = $converter;
 
@@ -206,64 +211,55 @@ class Route implements RouteInterface
 
     /**
      * Extracts parameters from a string
-     *
-     * @param string $pattern
-     *
-     * @return array|bool
      */
     public function extractNamedParams(string $pattern): array|bool
     {
-        if (0 === strlen($pattern)) {
+        $prevCh           = '\0';
+        $bracketCount     = 0;
+        $parenthesesCount = 0;
+        $foundPattern     = 0;
+        $intermediate     = 0;
+        $numberMatches    = 0;
+
+
+        if (strlen($pattern) === 0) {
             return false;
         }
 
-        $bracketCount     = 0;
-        $intermediate     = 0;
-        $marker           = 0;
-        $matches          = [];
-        $numberMatches    = 0;
-        $notValid         = false;
-        $parenthesesCount = 0;
-        $prevCh           = '\0';
-        $route            = "";
-
-        $patternArray = str_split($pattern);
-        foreach ($patternArray as $cursor => $character) {
-            if (0 === $parenthesesCount) {
-                if ('{' === $character) {
-                    if (0 === $bracketCount) {
+        $matches    = [];
+        $route      = "";
+        $strPattern = str_split($pattern);
+        foreach ($strPattern as $cursor => $ch) {
+            if ($parenthesesCount === 0) {
+                if ($ch === '{') {
+                    if ($bracketCount === 0) {
                         $marker       = $cursor + 1;
                         $intermediate = 0;
                         $notValid     = false;
                     }
 
                     $bracketCount++;
-                } elseif ('}' === $character) {
+                } elseif ($ch == '}') {
                     $bracketCount--;
 
                     if ($intermediate > 0) {
-                        if (0 === $bracketCount) {
+                        if ($bracketCount === 0) {
                             $numberMatches++;
                             $variable = null;
                             $regexp   = null;
-                            $item     = (string)substr(
-                                $pattern,
-                                $marker,
-                                $cursor - $marker
-                            );
+                            $item     = (string)substr($pattern, $marker, $cursor - $marker);
 
-                            $itemArray = str_split($item);
-                            foreach ($itemArray as $cursorVar => $itemChar) {
-                                if ('\0' === $itemChar) {
+                            $strItem = str_split($item);
+                            foreach ($strItem as $cursorVar => $character) {
+                                if ($character === '\0') {
                                     break;
                                 }
 
                                 if (
-                                    0 === $cursorVar &&
+                                    $cursorVar === 0 &&
                                     !(
-                                        ($itemChar >= 'a' && $itemChar <= 'z') ||
-                                        ($itemChar >= 'A' && $itemChar <= 'Z')
-                                    )
+                                        ($character >= 'a' && $character <= 'z') ||
+                                        ($character >= 'A' && $character <= 'Z'))
                                 ) {
                                     $notValid = true;
 
@@ -271,14 +267,14 @@ class Route implements RouteInterface
                                 }
 
                                 if (
-                                    ($itemChar >= 'a' && $itemChar <= 'z') ||
-                                    ($itemChar >= 'A' && $itemChar <= 'Z') ||
-                                    ($itemChar >= '0' && $itemChar <= '9') ||
-                                    $itemChar == '-' ||
-                                    $itemChar == '_' ||
-                                    $itemChar == ':'
+                                    ($character >= 'a' && $character <= 'z') ||
+                                    ($character >= 'A' && $character <= 'Z') ||
+                                    ($character >= '0' && $character <= '9') ||
+                                    $character === '-' ||
+                                    $character === '_' ||
+                                    $character === ':'
                                 ) {
-                                    if (':' === $itemChar) {
+                                    if ($character === ':') {
                                         $variable = (string)substr($item, 0, $cursorVar);
                                         $regexp   = (string)substr($item, $cursorVar + 1);
 
@@ -291,23 +287,24 @@ class Route implements RouteInterface
                                 }
                             }
 
-                            if (false === $notValid) {
+                            if (!$notValid) {
                                 $tmp = $numberMatches;
 
                                 if ($variable && $regexp) {
                                     $foundPattern = 0;
-                                    $regexpArray  = str_split($regexp);
-                                    foreach ($regexpArray as $regexChar) {
-                                        if ('\0' === $regexChar) {
+
+                                    $strRegexpr = str_split($regexp);
+                                    foreach ($strRegexpr as $character) {
+                                        if ($character == '\0') {
                                             break;
                                         }
 
-                                        if (true !== $foundPattern) {
-                                            if ('(' === $regexChar) {
+                                        if (!$foundPattern) {
+                                            if ($character === '(') {
                                                 $foundPattern = 1;
                                             }
                                         } else {
-                                            if (')' === $regexChar) {
+                                            if ($character === ')') {
                                                 $foundPattern = 2;
 
                                                 break;
@@ -315,7 +312,7 @@ class Route implements RouteInterface
                                         }
                                     }
 
-                                    if (2 !== $foundPattern) {
+                                    if ($foundPattern !== 2) {
                                         $route .= "(" . $regexp . ")";
                                     } else {
                                         $route .= $regexp;
@@ -336,13 +333,13 @@ class Route implements RouteInterface
                 }
             }
 
-            if (0 === $bracketCount) {
-                if ('(' === $character) {
+            if ($bracketCount === 0) {
+                if ($ch == '(') {
                     $parenthesesCount++;
-                } elseif (')' === $character) {
+                } elseif ($ch == ')') {
                     $parenthesesCount--;
 
-                    if (0 === $parenthesesCount) {
+                    if ($parenthesesCount === 0) {
                         $numberMatches++;
                     }
                 }
@@ -351,19 +348,14 @@ class Route implements RouteInterface
             if ($bracketCount > 0) {
                 $intermediate++;
             } else {
-                if (0 === $parenthesesCount && $prevCh !== '\\') {
-                    if (
-                        $character === '.' ||
-                        $character === '+' ||
-                        $character === '|' ||
-                        $character === '#'
-                    ) {
+                if ($parenthesesCount == 0 && $prevCh !== '\\') {
+                    if ($ch == '.' || $ch == '+' || $ch == '|' || $ch == '#') {
                         $route .= '\\';
                     }
                 }
 
-                $route  .= $character;
-                $prevCh = $character;
+                $route  .= $ch;
+                $prevCh = $ch;
             }
         }
 
@@ -371,11 +363,11 @@ class Route implements RouteInterface
     }
 
     /**
-     * Returns the beforeMatch object
+     * Returns the 'before match' callback if any
      *
-     * @return callable|null
+     * @return callable
      */
-    public function getBeforeMatch(): callable|null
+    public function getBeforeMatch(): callable
     {
         return $this->beforeMatch;
     }
@@ -431,19 +423,11 @@ class Route implements RouteInterface
     }
 
     /**
-     * @return string
-     */
-    public function getId(): string
-    {
-        return $this->routeId;
-    }
-
-    /**
      * Returns the 'match' callback if any
      *
-     * @return callable|null
+     * @return callable
      */
-    public function getMatch(): callable|null
+    public function getMatch(): callable
     {
         return $this->match;
     }
@@ -451,9 +435,9 @@ class Route implements RouteInterface
     /**
      * Returns the route's name
      *
-     * @return string
+     * @return string|null
      */
-    public function getName(): string
+    public function getName(): string|null
     {
         return $this->name;
     }
@@ -489,7 +473,7 @@ class Route implements RouteInterface
     }
 
     /**
-     * Returns the route's id
+     * Return the unique id of the route
      *
      * @return string
      */
@@ -501,24 +485,27 @@ class Route implements RouteInterface
     /**
      * Returns routePaths
      *
-     * @param array|string $paths
+     * @param array|string|null $paths
      *
      * @return array
      * @throws Exception
      */
-    public static function getRoutePaths(array|string $paths = []): array
+    public static function getRoutePaths(array|string|null $paths = null): array
     {
+        if (null === $paths) {
+            $paths = [];
+        }
+
         if (is_string($paths)) {
             $moduleName     = null;
             $controllerName = null;
             $actionName     = null;
 
             // Explode the short paths using the :: separator
-            $parts      = explode("::", $paths);
-            $countParts = count($parts);
+            $parts = explode("::", $paths);
 
             // Create the array paths dynamically
-            switch ($countParts) {
+            switch (count($parts)) {
                 case 3:
                     $moduleName     = $parts[0];
                     $controllerName = $parts[1];
@@ -538,12 +525,12 @@ class Route implements RouteInterface
             $routePaths = [];
 
             // Process module name
-            if (null !== $moduleName) {
+            if ($moduleName !== null) {
                 $routePaths["module"] = $moduleName;
             }
 
             // Process controller name
-            if (null !== $controllerName) {
+            if ($controllerName !== null) {
                 // Check if we need to obtain the namespace
                 if (str_contains($controllerName, "\\")) {
                     $controllerNameArray = explode("\\", $controllerName);
@@ -558,16 +545,20 @@ class Route implements RouteInterface
                     if ($namespaceName) {
                         $routePaths["namespace"] = $namespaceName;
                     }
+
+                    // Update the namespace
+                    if ($namespaceName) {
+                        $routePaths["namespace"] = $namespaceName;
+                    }
                 } else {
                     $realClassName = $controllerName;
                 }
 
-                // Always pass the task to lowercase
                 $routePaths["controller"] = $realClassName;
             }
 
             // Process action name
-            if (null !== $actionName) {
+            if ($actionName !== null) {
                 $routePaths["action"] = $actionName;
             }
         } else {
@@ -595,11 +586,11 @@ class Route implements RouteInterface
      * );
      *```
      *
-     * @param mixed $callback
+     * @param callable $callback
      *
      * @return RouteInterface
      */
-    public function match(mixed $callback): RouteInterface
+    public function match(callable $callback): RouteInterface
     {
         $this->match = $callback;
 
@@ -608,24 +599,20 @@ class Route implements RouteInterface
 
     /**
      * Reconfigure the route adding a new pattern and a set of paths
-     *
-     * @param string       $pattern
-     * @param array|string $paths
-     *
-     * @return void
-     * @throws Exception
      */
-    public function reConfigure(string $pattern, array|string $paths = []): void
-    {
+    public function reConfigure(
+        string $pattern,
+        array|string|null $paths = null
+    ): void {
         $routePaths = self::getRoutePaths($paths);
 
         /**
          * If the route starts with '#' we assume that it is a regular expression
          */
-        if (!str_contains($pattern, "#")) {
+        if (!str_starts_with($pattern, "#")) {
             if (str_contains($pattern, "{")) {
                 /**
-                 * The route has named parameters so we need to extract them
+                 * The route has named parameters, so we need to extract them
                  */
                 $extracted   = $this->extractNamedParams($pattern);
                 $pcrePattern = $extracted[0];
