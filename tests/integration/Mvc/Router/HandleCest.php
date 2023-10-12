@@ -34,6 +34,7 @@ class HandleCest
         $I->wantToTest('Mvc\Router - handle()');
 
         $router = new Router();
+        $router->setDI(new FactoryDefault());
 
         $router->add(
             '/admin/invoices/list',
@@ -77,6 +78,7 @@ class HandleCest
          * Regular placeholders
          */
         $router = new Router(false);
+        $router->setDI(new FactoryDefault());
         $router->add(
             '/:module/:namespace/:controller/:action/:params/:int',
             [
@@ -85,7 +87,7 @@ class HandleCest
                 'controller' => 3,
                 'action'     => 4,
                 'params'     => 5,
-                'my-number'  => 6,
+                'my-number'  => 6
             ]
         );
 
@@ -116,7 +118,7 @@ class HandleCest
         $I->assertEquals(
             [
                 'my',
-                'my-number' => 123,
+                'my-number' => 123
             ],
             $router->getParams()
         );
@@ -210,7 +212,7 @@ class HandleCest
                 'year'  => 2020,
                 'month' => 10,
                 'day'   => 21,
-                456,
+                456
             ],
             $router->getParams()
         );
@@ -227,6 +229,7 @@ class HandleCest
         $I->wantToTest('Mvc\Router - handle() - short syntax');
 
         $router = new Router(false);
+        $router->setDI(new FactoryDefault());
         $router->add("/about", "About::content");
 
         $router->handle('/about');

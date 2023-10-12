@@ -17,6 +17,8 @@ use IntegrationTester;
 use Phalcon\Mvc\Router\Group;
 use Phalcon\Mvc\Router\Route;
 
+use function uniqid;
+
 class GetSetGroupCest
 {
     /**
