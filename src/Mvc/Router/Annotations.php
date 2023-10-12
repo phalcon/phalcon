@@ -31,7 +31,6 @@ use function str_replace;
 use function strtolower;
 use function strtoupper;
 
-
 /**
  * A router that reads routes annotations from classes/resources
  *

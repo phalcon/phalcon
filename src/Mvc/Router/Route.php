@@ -13,7 +13,6 @@ declare(strict_types=1);
 
 namespace Phalcon\Mvc\Router;
 
-
 use function array_flip;
 use function array_keys;
 use function array_merge;

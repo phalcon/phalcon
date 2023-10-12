@@ -13,7 +13,6 @@ declare(strict_types=1);
 
 namespace Phalcon\Mvc\Router;
 
-
 use function array_merge;
 use function is_array;
 use function is_string;
