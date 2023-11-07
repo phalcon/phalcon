@@ -30,10 +30,9 @@ class GetSetPrefixCest
 
         $group = new Group();
 
-        $I->assertEquals(
-            '',
-            $group->getPrefix()
-        );
+        $expected = null;
+        $actual   = $group->getPrefix();
+        $I->assertSame($expected, $actual);
     }
 
     /**
@@ -50,9 +49,8 @@ class GetSetPrefixCest
 
         $group->setPrefix('/blog');
 
-        $I->assertEquals(
-            '/blog',
-            $group->getPrefix()
-        );
+        $expected = '/blog';
+        $actual   = $group->getPrefix();
+        $I->assertSame($expected, $actual);
     }
 }

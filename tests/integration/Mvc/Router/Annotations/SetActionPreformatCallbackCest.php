@@ -39,7 +39,7 @@ class SetActionPreformatCallbackCest
         $router->setActionPreformatCallback($callback);
         $attachedCallback = $router->getActionPreformatCallback();
 
-        $I->assertEquals(
+        $I->assertSame(
             $callback,
             $attachedCallback
         );

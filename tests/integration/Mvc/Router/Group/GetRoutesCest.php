@@ -51,7 +51,7 @@ class GetRoutesCest
             $group->getRoutes()
         );
 
-        $I->assertEquals(
+        $I->assertSame(
             [
                 $getRoute,
                 $postRoute,

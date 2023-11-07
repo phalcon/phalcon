@@ -53,7 +53,7 @@ class GetRoutesCest
             $router->getRoutes()
         );
 
-        $I->assertEquals(
+        $I->assertSame(
             [
                 $getRoute,
                 $postRoute,

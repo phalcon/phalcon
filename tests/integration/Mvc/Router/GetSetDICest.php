@@ -38,7 +38,7 @@ class GetSetDICest
 
         $router->setDI($di);
 
-        $I->assertEquals(
+        $I->assertSame(
             $di,
             $router->getDI()
         );

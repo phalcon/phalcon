@@ -34,7 +34,7 @@ class GetRoutePathsCest
         $arrayDefinition = ["controller" => 'FooBar', "action" => 'baz'];
         $stringDefinition = "FooBar::baz";
 
-        $I->assertEquals($arrayDefinition, Route::getRoutePaths($arrayDefinition));
-        $I->assertEquals($arrayDefinition, Route::getRoutePaths($stringDefinition));
+        $I->assertSame($arrayDefinition, Route::getRoutePaths($arrayDefinition));
+        $I->assertSame($arrayDefinition, Route::getRoutePaths($stringDefinition));
     }
 }

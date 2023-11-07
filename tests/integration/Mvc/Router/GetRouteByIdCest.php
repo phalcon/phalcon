@@ -63,10 +63,10 @@ class GetRouteByIdCest
          */
         foreach (array_reverse($router->getRoutes()) as $route) {
             $actual = $router->getRoutebyId(
-                $route->getId()
+                $route->getRouteId()
             );
 
-            $I->assertEquals($route, $actual);
+            $I->assertSame($route, $actual);
         }
     }
 
@@ -82,17 +82,26 @@ class GetRouteByIdCest
 
         $router = $this->getRouter(false);
 
-        $usersFind = $router->add('/api/users/find')->setHttpMethods('GET')->setName('usersFind');
-        $usersAdd  = $router->add('/api/users/add')->setHttpMethods('POST')->setName('usersAdd');
+        $usersFind = $router
+            ->add('/api/users/find')
+            ->setHttpMethods('GET')
+            ->setName('usersFind')
+        ;
+        $usersAdd  = $router
+            ->add('/api/users/add')
+            ->setHttpMethods('POST')
+            ->setName('usersAdd')
+        ;
 
-        $I->assertEquals(
-            $usersFind,
-            $router->getRouteById(0)
-        );
+        $actual   = $router->getRouteById(99);
+        $I->assertFalse($actual);
 
-        $I->assertEquals(
-            $usersAdd,
-            $router->getRouteById(1)
-        );
+        $expected = $usersFind;
+        $actual   = $router->getRouteById(0);
+        $I->assertSame($expected, $actual);
+
+        $expected = $usersAdd;
+        $actual   = $router->getRouteById(1);
+        $I->assertSame($expected, $actual);
     }
 }

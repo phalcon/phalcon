@@ -16,7 +16,7 @@ namespace Phalcon\Tests\Integration\Mvc\Router\Annotations;
 use IntegrationTester;
 
 /**
- * Class GetKeyRouteIdsCest
+ * Class GetSetKeyRouteIdsCest
  */
 class GetKeyRouteIdsCest
 {

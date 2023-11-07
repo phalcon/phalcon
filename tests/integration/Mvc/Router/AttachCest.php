@@ -35,12 +35,9 @@ class AttachCest
 
         $router = $this->getRouter(false);
 
-
-        $I->assertCount(
-            0,
-            $router->getRoutes()
-        );
-
+        $expected = 0;
+        $actual   = $router->getRoutes();
+        $I->assertCount($expected, $actual);
 
         $router->attach(
             new Route(
@@ -54,10 +51,37 @@ class AttachCest
             Router::POSITION_FIRST
         );
 
+        $expected = 1;
+        $actual   = $router->getRoutes();
+        $I->assertCount($expected, $actual);
+    }
 
-        $I->assertCount(
-            1,
-            $router->getRoutes()
+    /**
+     * Tests Phalcon\Mvc\Router :: attach() - exception
+     *
+     * @author Phalcon Team <team@phalcon.io>
+     * @since  2023-11-07
+     */
+    public function shouldAttachRouteException(IntegrationTester $I)
+    {
+        $I->wantToTest('Mvc\Router - attach() - exception');
+
+        $I->expectThrowable(
+            new Router\Exception('Invalid route position'),
+            function () {
+                $router = $this->getRouter(false);
+                $router->attach(
+                    new Route(
+                        '/about',
+                        'About::index',
+                        [
+                            'GET',
+                            'HEAD',
+                        ]
+                    ),
+                    99
+                );
+            }
         );
     }
 }

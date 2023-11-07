@@ -14,11 +14,9 @@ declare(strict_types=1);
 namespace Phalcon\Tests\Integration\Mvc\Router\Group;
 
 use IntegrationTester;
+use Phalcon\Mvc\Router\Group;
 
-/**
- * Class GetPathsCest
- */
-class GetPathsCest
+class GetSetPathsCest
 {
     /**
      * Tests Phalcon\Mvc\Router\Group :: getPaths()
@@ -29,6 +27,19 @@ class GetPathsCest
     public function mvcRouterGroupGetPaths(IntegrationTester $I)
     {
         $I->wantToTest('Mvc\Router\Group - getPaths()');
-        $I->skipTest('Need implementation');
+
+        $group = new Group();
+
+        $actual = $group->getPaths();
+        $I->assertNull($actual);
+
+        $paths = [
+            'one',
+            'two',
+        ];
+        $group->setPaths($paths);
+        $expected = $paths;
+        $actual = $group->getPaths();
+        $I->assertSame($expected, $actual);
     }
 }

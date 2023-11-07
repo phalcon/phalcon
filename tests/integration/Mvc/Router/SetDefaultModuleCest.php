@@ -32,7 +32,7 @@ class SetDefaultModuleCest
 
         $router->setDefaultModule('front');
 
-        $I->assertEquals(
+        $I->assertSame(
             'front',
             $router->getDefaults()['module']
         );

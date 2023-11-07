@@ -11,127 +11,49 @@
 
 declare(strict_types=1);
 
-namespace Phalcon\Tests\Integration\Mvc\Router\Refactor;
+namespace Phalcon\Tests\Integration\Mvc\Router\Group;
 
 use Codeception\Example;
 use IntegrationTester;
-use Phalcon\Di\FactoryDefault;
 use Phalcon\Mvc\Router;
 use Phalcon\Mvc\Router\Group;
 use Phalcon\Mvc\Router\Route;
-use Phalcon\Tests\Fixtures\Traits\DiTrait;
+use Phalcon\Tests\Fixtures\Traits\RouterTrait;
 
 /**
- * Class GroupCest
- *
- * @package Phalcon\Tests\Integration\Mvc\Router
- * @todo: refactor
+ * Class GetSetHostnameCest
  */
-class GroupCest
+class GetSetHostnameCest
 {
-    use DiTrait;
+    use RouterTrait;
 
     /**
-     * @dataProvider groupsProvider
+     * Tests Phalcon\Mvc\Router\Group :: getHostname()
+     *
+     * @author Phalcon Team <team@phalcon.io>
+     * @since  2018-11-13
      */
-    public function testGroups(IntegrationTester $I, Example $example)
+    public function mvcRouterGroupGetHostname(IntegrationTester $I)
     {
-        Route::reset();
+        $I->wantToTest('Mvc\Router\Group - getHostname()');
 
-        $router = new Router(false);
-        $router->setDI(new FactoryDefault());
+        $group = new Group();
 
-        $blog = new Group(
-            [
-                'module'     => 'blog',
-                'controller' => 'index',
-            ]
-        );
+        $actual = $group->getHostname();
+        $I->assertNull($actual);
 
-        $blog->setPrefix('/blog');
+        $hostname = 'https://phalcon.io';
+        $group->setHostname($hostname);
 
-        $blog->add(
-            '/save',
-            [
-                'action' => 'save',
-            ]
-        );
-
-        $blog->add(
-            '/edit/{id}',
-            [
-                'action' => 'edit',
-            ]
-        );
-
-        $blog->add(
-            '/about',
-            [
-                'controller' => 'about',
-                'action'     => 'index',
-            ]
-        );
-
-        $router->mount($blog);
-
-
-        $router->handle(
-            $example['route']
-        );
-
-        $I->assertTrue(
-            $router->wasMatched()
-        );
-
-        $I->assertEquals(
-            $example['module'],
-            $router->getModuleName()
-        );
-
-        $I->assertEquals(
-            $example['controller'],
-            $router->getControllerName()
-        );
-
-        $I->assertEquals(
-            $example['action'],
-            $router->getActionName()
-        );
-
-        $I->assertEquals(
-            $blog,
-            $router->getMatchedRoute()->getGroup()
-        );
-    }
-
-    private function groupsProvider(): array
-    {
-        return [
-            [
-                'route'      => '/blog/save',
-                'module'     => 'blog',
-                'controller' => 'index',
-                'action'     => 'save',
-            ],
-            [
-                'route'      => '/blog/edit/1',
-                'module'     => 'blog',
-                'controller' => 'index',
-                'action'     => 'edit',
-            ],
-            [
-                'route'      => '/blog/about',
-                'module'     => 'blog',
-                'controller' => 'about',
-                'action'     => 'index',
-            ],
-        ];
+        $expected = $hostname;
+        $actual = $group->getHostname();
+        $I->assertSame($expected, $actual);
     }
 
     /**
      * @dataProvider getHostnameRoutes
      */
-    public function testHostnameRouteGroup(IntegrationTester $I, Example $example)
+    public function mvcRouterGroupGetHostnameRouteGroup(IntegrationTester $I, Example $example)
     {
         $actualHost   = $example[0];
         $expectedHost = $example[1];
@@ -139,13 +61,7 @@ class GroupCest
 
         Route::reset();
 
-        $this->newDi();
-        $this->setDiService('request');
-
-        $container = $this->getDi();
-
-        $router = new Router(false);
-        $router->setDI($container);
+        $router = $this->getRouter(false);
 
         $router->add(
             '/edit',
@@ -173,12 +89,12 @@ class GroupCest
 
         $router->handle('/edit');
 
-        $I->assertEquals(
+        $I->assertSame(
             $controller,
             $router->getControllerName()
         );
 
-        $I->assertEquals(
+        $I->assertSame(
             $expectedHost,
             $router->getMatchedRoute()->getHostname()
         );
@@ -208,7 +124,7 @@ class GroupCest
     /**
      * @dataProvider getHostnameRoutesRegex
      */
-    public function testHostnameRegexRouteGroup(IntegrationTester $I, Example $example)
+    public function mvcRouterGroupGetHostnameRegexRouteGroup(IntegrationTester $I, Example $example)
     {
         $actualHost   = $example[0];
         $expectedHost = $example[1];
@@ -216,14 +132,7 @@ class GroupCest
 
         Route::reset();
 
-        $this->newDi();
-        $this->setDiService('request');
-
-        $container = $this->getDi();
-
-        $router = new Router(false);
-
-        $router->setDI($container);
+        $router = $this->getRouter(false);
 
         $router->add(
             '/edit',
@@ -251,17 +160,20 @@ class GroupCest
 
         $router->handle('/edit');
 
-        $I->assertEquals(
+        $I->assertSame(
             $controller,
             $router->getControllerName()
         );
 
-        $I->assertEquals(
+        $I->assertSame(
             $expectedHost,
             $router->getMatchedRoute()->getHostname()
         );
     }
 
+    /**
+     * @return array
+     */
     private function getHostnameRoutesRegex(): array
     {
         return [

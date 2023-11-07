@@ -32,9 +32,18 @@ class GetRouteByNameCest
 
         $router = $this->getRouter(false);
 
-        $router->add('/test', ['controller' => 'test', 'action' => 'test'])->setName('test');
-        $router->add('/test2', ['controller' => 'test', 'action' => 'test'])->setName('test2');
-        $router->add('/test3', ['controller' => 'test', 'action' => 'test'])->setName('test3');
+        $router
+            ->add('/test', ['controller' => 'test', 'action' => 'test'])
+            ->setName('test')
+        ;
+        $router
+            ->add('/test2', ['controller' => 'test', 'action' => 'test'])
+            ->setName('test2')
+        ;
+        $router
+            ->add('/test3', ['controller' => 'test', 'action' => 'test'])
+            ->setName('test3')
+        ;
 
         /**
          * We reverse routes so we first check last added route
@@ -43,7 +52,7 @@ class GetRouteByNameCest
             $expected = $router->getRouteByName($route->getName());
             $actual   = $route;
 
-            $I->assertEquals($expected, $actual);
+            $I->assertSame($expected, $actual);
         }
     }
 
@@ -57,18 +66,24 @@ class GetRouteByNameCest
     {
         $router = $this->getRouter(false);
 
-        $usersFind = $router->add('/api/users/find')->setHttpMethods('GET')->setName('usersFind');
-        $usersAdd  = $router->add('/api/users/add')->setHttpMethods('POST')->setName('usersAdd');
+        $usersFind = $router
+            ->add('/api/users/find')
+            ->setHttpMethods('GET')
+            ->setName('usersFind')
+        ;
+        $usersAdd  = $router
+            ->add('/api/users/add')
+            ->setHttpMethods('POST')
+            ->setName('usersAdd')
+        ;
 
-        $I->assertEquals(
-            $usersAdd,
-            $router->getRouteByName('usersAdd')
-        );
+        $expected = $usersAdd;
+        $actual   = $router->getRouteByName('usersAdd');
+        $I->assertSame($expected, $actual);
 
         // second check when the same route goes from name lookup
-        $I->assertEquals(
-            $usersAdd,
-            $router->getRouteByName('usersAdd')
-        );
+        $expected = $usersAdd;
+        $actual   = $router->getRouteByName('usersAdd');
+        $I->assertSame($expected, $actual);
     }
 }

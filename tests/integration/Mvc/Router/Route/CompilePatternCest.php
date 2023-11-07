@@ -38,7 +38,7 @@ class CompilePatternCest
             '/my-simple-route'
         );
 
-        $I->assertEquals(
+        $I->assertSame(
             '/my-simple-route',
             $simpleRoute->getCompiledPattern()
         );
@@ -50,7 +50,7 @@ class CompilePatternCest
             '/:module/:namespace/:controller/:action/:params/:int'
         );
 
-        $I->assertEquals(
+        $I->assertSame(
             '#^/([\\w0-9\\_\\-]+)/([\\w0-9\\_\\-]+)/([\\w0-9\\_\\-]+)/([\\w0-9\\_\\-]+)(/.*)*/([0-9]+)$#u',
             $placeholderRoute->getCompiledPattern()
         );
@@ -62,7 +62,7 @@ class CompilePatternCest
             '/([\\w0-9\\_\\-]+)/([\\w0-9\\_\\-]+)/([\\w0-9\\_\\-]+)/([\\w0-9\\_\\-]+)(/.*)*/([0-9]+)'
         );
 
-        $I->assertEquals(
+        $I->assertSame(
             '#^/([\\w0-9\\_\\-]+)/([\\w0-9\\_\\-]+)/([\\w0-9\\_\\-]+)/([\\w0-9\\_\\-]+)(/.*)*/([0-9]+)$#u',
             $regexRoute->getCompiledPattern()
         );
