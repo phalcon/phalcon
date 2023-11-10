@@ -13,16 +13,22 @@ declare(strict_types=1);
 
 namespace Phalcon\Tests\Integration\Mvc\Router;
 
+use Codeception\Example;
 use IntegrationTester;
 use Phalcon\Di\FactoryDefault;
 use Phalcon\Http\Request;
 use Phalcon\Mvc\Router;
+use Phalcon\Mvc\Router\Group;
+use Phalcon\Mvc\Router\Route;
+use Phalcon\Tests\Fixtures\Traits\RouterTrait;
 
 /**
  * Class HandleCest
  */
 class HandleCest
 {
+    use RouterTrait;
+
     /**
      * Tests Phalcon\Mvc\Router :: handle()
      *
@@ -33,7 +39,7 @@ class HandleCest
     {
         $I->wantToTest('Mvc\Router - handle()');
 
-        $router = new Router();
+        $router = $this->getRouter();
 
         $router->add(
             '/admin/invoices/list',
@@ -43,24 +49,19 @@ class HandleCest
             ]
         );
 
-        $router->handle(
-            '/admin/invoices/list'
-        );
+        $router->handle('/admin/invoices/list');
 
-        $I->assertEquals(
-            'invoices',
-            $router->getControllerName()
-        );
+        $expected = 'invoices';
+        $actual   = $router->getControllerName();
+        $I->assertSame($expected, $actual);
 
-        $I->assertEquals(
-            'list',
-            $router->getActionName()
-        );
+        $expected = 'list';
+        $actual   = $router->getActionName();
+        $I->assertSame($expected, $actual);
 
-        $I->assertEquals(
-            [],
-            $router->getParams()
-        );
+        $expected = [];
+        $actual   = $router->getParams();
+        $I->assertSame($expected, $actual);
     }
 
     /**
@@ -76,7 +77,7 @@ class HandleCest
         /**
          * Regular placeholders
          */
-        $router = new Router(false);
+        $router = $this->getRouter(false);
         $router->add(
             '/:module/:namespace/:controller/:action/:params/:int',
             [
@@ -85,41 +86,34 @@ class HandleCest
                 'controller' => 3,
                 'action'     => 4,
                 'params'     => 5,
-                'my-number'  => 6
+                'my-number'  => 6,
             ]
         );
 
-        $router->handle(
-            '/admin/private/businesses/list/my/123'
-        );
+        $router->handle('/admin/private/businesses/list/my/123');
 
-        $I->assertEquals(
-            'admin',
-            $router->getModuleName()
-        );
+        $expected = 'admin';
+        $actual   = $router->getModuleName();
+        $I->assertSame($expected, $actual);
 
-        $I->assertEquals(
-            'private',
-            $router->getNamespaceName()
-        );
+        $expected = 'private';
+        $actual   = $router->getNamespaceName();
+        $I->assertSame($expected, $actual);
 
-        $I->assertEquals(
-            'businesses',
-            $router->getControllerName()
-        );
+        $expected = 'businesses';
+        $actual   = $router->getControllerName();
+        $I->assertSame($expected, $actual);
 
-        $I->assertEquals(
-            'list',
-            $router->getActionName()
-        );
+        $expected = 'list';
+        $actual   = $router->getActionName();
+        $I->assertSame($expected, $actual);
 
-        $I->assertEquals(
-            [
-                'my',
-                'my-number' => 123
-            ],
-            $router->getParams()
-        );
+        $expected = [
+            'my',
+            'my-number' => '123',
+        ];
+        $actual   = $router->getParams();
+        $I->assertSame($expected, $actual);
 
         /**
          * Parameters
@@ -132,39 +126,32 @@ class HandleCest
             ]
         );
 
-        $router->handle(
-            '/admin/2020/october/21/456'
-        );
+        $router->handle('/admin/2020/october/21/456');
 
-        $I->assertSame(
-            '',
-            $router->getModuleName()
-        );
+        $expected = '';
+        $actual   = $router->getModuleName();
+        $I->assertSame($expected, $actual);
 
-        $I->assertSame(
-            '',
-            $router->getNamespaceName()
-        );
+        $expected = '';
+        $actual   = $router->getNamespaceName();
+        $I->assertSame($expected, $actual);
 
-        $I->assertEquals(
-            'invoices',
-            $router->getControllerName()
-        );
+        $expected = 'invoices';
+        $actual   = $router->getControllerName();
+        $I->assertSame($expected, $actual);
 
-        $I->assertEquals(
-            'view',
-            $router->getActionName()
-        );
+        $expected = 'view';
+        $actual   = $router->getActionName();
+        $I->assertSame($expected, $actual);
 
-        $I->assertEquals(
-            [
-                'invoiceNo' => 456,
-                'year'      => 2020,
-                'month'     => 'october',
-                'day'       => 21,
-            ],
-            $router->getParams()
-        );
+        $expected = [
+            'year'      => '2020',
+            'month'     => 'october',
+            'day'       => '21',
+            'invoiceNo' => '456',
+        ];
+        $actual   = $router->getParams();
+        $I->assertSame($expected, $actual);
 
         /**
          * Named parameters
@@ -181,39 +168,32 @@ class HandleCest
             ]
         );
 
-        $router->handle(
-            '/admin/2020/10/21/456'
-        );
+        $router->handle('/admin/2020/10/21/456');
 
-        $I->assertSame(
-            '',
-            $router->getModuleName()
-        );
+        $expected = '';
+        $actual   = $router->getModuleName();
+        $I->assertSame($expected, $actual);
 
-        $I->assertSame(
-            '',
-            $router->getNamespaceName()
-        );
+        $expected = '';
+        $actual   = $router->getNamespaceName();
+        $I->assertSame($expected, $actual);
 
-        $I->assertEquals(
-            'history',
-            $router->getControllerName()
-        );
+        $expected = 'history';
+        $actual   = $router->getControllerName();
+        $I->assertSame($expected, $actual);
 
-        $I->assertEquals(
-            'search',
-            $router->getActionName()
-        );
+        $expected = 'search';
+        $actual   = $router->getActionName();
+        $I->assertSame($expected, $actual);
 
-        $I->assertEquals(
-            [
-                'year'  => 2020,
-                'month' => 10,
-                'day'   => 21,
-                456
-            ],
-            $router->getParams()
-        );
+        $expected = [
+            '456',
+            'year'  => '2020',
+            'month' => '10',
+            'day'   => '21',
+        ];
+        $actual   = $router->getParams();
+        $I->assertSame($expected, $actual);
     }
 
     /**
@@ -226,35 +206,30 @@ class HandleCest
     {
         $I->wantToTest('Mvc\Router - handle() - short syntax');
 
-        $router = new Router(false);
+        $router = $this->getRouter(false);
         $router->add("/about", "About::content");
 
         $router->handle('/about');
 
-        $I->assertSame(
-            '',
-            $router->getModuleName()
-        );
+        $expected = '';
+        $actual   = $router->getModuleName();
+        $I->assertSame($expected, $actual);
 
-        $I->assertSame(
-            '',
-            $router->getNamespaceName()
-        );
+        $expected = '';
+        $actual   = $router->getNamespaceName();
+        $I->assertSame($expected, $actual);
 
-        $I->assertEquals(
-            'About',
-            $router->getControllerName()
-        );
+        $expected = 'About';
+        $actual   = $router->getControllerName();
+        $I->assertSame($expected, $actual);
 
-        $I->assertEquals(
-            'content',
-            $router->getActionName()
-        );
+        $expected = 'content';
+        $actual   = $router->getActionName();
+        $I->assertSame($expected, $actual);
 
-        $I->assertEquals(
-            [],
-            $router->getParams()
-        );
+        $expected = [];
+        $actual   = $router->getParams();
+        $I->assertSame($expected, $actual);
 
         $_SERVER['REQUEST_METHOD'] = 'POST';
 
@@ -271,23 +246,19 @@ class HandleCest
 
         $router->handle('/about');
 
-        $I->assertNull(
-            $router->getMatchedRoute()
-        );
+        $actual = $router->getMatchedRoute();
+        $I->assertNull($actual);
 
-        $I->assertSame(
-            '',
-            $router->getControllerName()
-        );
+        $expected = '';
+        $actual   = $router->getControllerName();
+        $I->assertSame($expected, $actual);
 
-        $I->assertSame(
-            '',
-            $router->getActionName()
-        );
+        $expected = '';
+        $actual   = $router->getActionName();
+        $I->assertSame($expected, $actual);
 
-        $I->assertEmpty(
-            $router->getParams()
-        );
+        $actual = $router->getParams();
+        $I->assertEmpty($actual);
 
         $router->add(
             "/about",
@@ -298,30 +269,25 @@ class HandleCest
 
         $router->handle('/about');
 
-        $I->assertSame(
-            '',
-            $router->getModuleName()
-        );
+        $expected = '';
+        $actual   = $router->getModuleName();
+        $I->assertSame($expected, $actual);
 
-        $I->assertSame(
-            '',
-            $router->getNamespaceName()
-        );
+        $expected = '';
+        $actual   = $router->getNamespaceName();
+        $I->assertSame($expected, $actual);
 
-        $I->assertEquals(
-            'About',
-            $router->getControllerName()
-        );
+        $expected = 'About';
+        $actual   = $router->getControllerName();
+        $I->assertSame($expected, $actual);
 
-        $I->assertEquals(
-            'content',
-            $router->getActionName()
-        );
+        $expected = 'content';
+        $actual   = $router->getActionName();
+        $I->assertSame($expected, $actual);
 
-        $I->assertEquals(
-            [],
-            $router->getParams()
-        );
+        $expected = [];
+        $actual   = $router->getParams();
+        $I->assertSame($expected, $actual);
     }
 
     /**
@@ -334,36 +300,126 @@ class HandleCest
     {
         $I->wantToTest('Mvc\Router - handle() - numeric');
 
-        $router = new Router();
-
-        $di = new FactoryDefault();
-
-        $router->setDI($di);
+        $router = $this->getRouter();
         $router->handle('/12/34/56');
 
+        $expected = '';
+        $actual   = $router->getModuleName();
+        $I->assertSame($expected, $actual);
+
+        $expected = '';
+        $actual   = $router->getNamespaceName();
+        $I->assertSame($expected, $actual);
+
+        $expected = '12';
+        $actual   = $router->getControllerName();
+        $I->assertSame($expected, $actual);
+
+        $expected = '34';
+        $actual   = $router->getActionName();
+        $I->assertSame($expected, $actual);
+
+        $expected = ['56'];
+        $actual   = $router->getParams();
+        $I->assertSame($expected, $actual);
+    }
+
+    /**
+     * @dataProvider groupsProvider
+     */
+    public function mvcRouterHandleGroups(IntegrationTester $I, Example $example)
+    {
+        Route::reset();
+
+        $router = $this->getRouter(false);
+
+        $blog = new Group(
+            [
+                'module'     => 'blog',
+                'controller' => 'index',
+            ]
+        );
+
+        $blog->setPrefix('/blog');
+
+        $blog->add(
+            '/save',
+            [
+                'action' => 'save',
+            ]
+        );
+
+        $blog->add(
+            '/edit/{id}',
+            [
+                'action' => 'edit',
+            ]
+        );
+
+        $blog->add(
+            '/about',
+            [
+                'controller' => 'about',
+                'action'     => 'index',
+            ]
+        );
+
+        $router->mount($blog);
+
+
+        $router->handle(
+            $example['route']
+        );
+
+        $I->assertTrue(
+            $router->wasMatched()
+        );
+
         $I->assertSame(
-            '',
+            $example['module'],
             $router->getModuleName()
         );
 
         $I->assertSame(
-            '',
-            $router->getNamespaceName()
-        );
-
-        $I->assertEquals(
-            '12',
+            $example['controller'],
             $router->getControllerName()
         );
 
-        $I->assertEquals(
-            '34',
+        $I->assertSame(
+            $example['action'],
             $router->getActionName()
         );
 
-        $I->assertEquals(
-            ['56'],
-            $router->getParams()
+        $I->assertSame(
+            $blog,
+            $router->getMatchedRoute()->getGroup()
         );
+    }
+
+    /**
+     * @return array[]
+     */
+    private function groupsProvider(): array
+    {
+        return [
+            [
+                'route'      => '/blog/save',
+                'module'     => 'blog',
+                'controller' => 'index',
+                'action'     => 'save',
+            ],
+            [
+                'route'      => '/blog/edit/1',
+                'module'     => 'blog',
+                'controller' => 'index',
+                'action'     => 'edit',
+            ],
+            [
+                'route'      => '/blog/about',
+                'module'     => 'blog',
+                'controller' => 'about',
+                'action'     => 'index',
+            ],
+        ];
     }
 }

@@ -191,11 +191,11 @@ class LogCest
             '%message%-[%level%]-%server%:%user%',
             'U.u'
         );
-        $context  = [
+        $context   = [
             'server' => uniqid('srv-'),
             'user'   => uniqid('usr-'),
         ];
-        $adapter  = new Stream($logPath . $fileName);
+        $adapter   = new Stream($logPath . $fileName);
         $adapter->setFormatter($formatter);
 
         $logger = new Logger(

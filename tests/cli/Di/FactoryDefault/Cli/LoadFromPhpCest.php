@@ -35,7 +35,7 @@ class LoadFromPhpCest
         $di->loadFromPhp(dataDir('fixtures/Di/services.php'));
 
         // there are 3 new + 11 from Default
-        $I->assertCount(10, $di->getServices());
+        $I->assertCount(12, $di->getServices());
 
         // check some services
         $actual = $di->get('config');

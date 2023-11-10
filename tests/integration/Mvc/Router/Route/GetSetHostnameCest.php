@@ -33,7 +33,7 @@ class GetSetHostnameCest
         $route = new Route('test');
 
         $actual = $route->getHostname();
-        $I->assertEmpty($actual);
+        $I->assertNull($actual);
 
         $name = uniqid();
         $route->setHostname($name);

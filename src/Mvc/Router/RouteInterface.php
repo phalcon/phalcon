@@ -28,22 +28,14 @@ interface RouteInterface
     public function compilePattern(string $pattern): string;
 
     /**
-     * Adds a converter to perform an additional transformation for certain
-     * parameter.
+     * Adds a converter to perform an additional transformation for certain parameter.
      *
-     * @param string   $name
-     * @param callable $converter
+     * @param string $name
+     * @param mixed  $converter
      *
      * @return RouteInterface
      */
-    public function convert(string $name, callable $converter): RouteInterface;
-
-    /**
-     * Returns the 'before match' callback if any
-     *
-     * @return callable|null
-     */
-    public function getBeforeMatch(): callable|null;
+    public function convert(string $name, mixed $converter): RouteInterface;
 
     /**
      * Returns the route's pattern
@@ -62,16 +54,16 @@ interface RouteInterface
     /**
      * Returns the HTTP methods that constraint matching the route
      *
-     * @return array|string
+     * @return array|string|null
      */
-    public function getHttpMethods(): array|string;
+    public function getHttpMethods(): array|string|null;
 
     /**
      * Returns the route's name
      *
-     * @return string
+     * @return string|null
      */
-    public function getName(): string;
+    public function getName(): string|null;
 
     /**
      * Returns the paths
@@ -96,6 +88,8 @@ interface RouteInterface
 
     /**
      * Returns the route's id
+     *
+     * @return string
      */
     public function getRouteId(): string;
 
@@ -129,14 +123,14 @@ interface RouteInterface
     /**
      * Reconfigure the route adding a new pattern and a set of paths
      *
-     * @param string       $pattern
-     * @param array|string $paths
+     * @param string            $pattern
+     * @param array|string|null $paths
      *
      * @return void
      */
     public function reConfigure(
         string $pattern,
-        array|string $paths = []
+        array|string $paths = null
     ): void;
 
     /**

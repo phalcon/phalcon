@@ -99,7 +99,7 @@ class Application extends AbstractApplication
      * @throws Exception
      * @throws EventsException
      */
-    public function handle(string $uri): ResponseInterface | bool
+    public function handle(string $uri): ResponseInterface|bool
     {
         if (null === $this->container) {
             throw new Exception(
@@ -244,7 +244,7 @@ class Application extends AbstractApplication
                 $moduleObject = call_user_func_array(
                     $module,
                     [
-                        $this->container
+                        $this->container,
                     ]
                 );
             }
@@ -342,7 +342,6 @@ class Application extends AbstractApplication
                      * developer
                      */
                     if (false !== $renderStatus) {
-
                         /**
                          * Automatic render based on the latest controller
                          * executed

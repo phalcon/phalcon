@@ -72,7 +72,7 @@ class DispatcherTestDefaultController extends Controller
     {
         $this->trace('multiplyAction');
 
-        return (int) $a * (int) $b;
+        return (int)$a * (int)$b;
     }
 
     public function forwardLocalAction()

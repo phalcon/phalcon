@@ -13,20 +13,24 @@ declare(strict_types=1);
 
 namespace Phalcon\Mvc\Router;
 
+use Phalcon\Annotations\Adapter\Memory;
 use Phalcon\Annotations\Annotation;
 use Phalcon\Events\Exception as EventsException;
 use Phalcon\Mvc\Router;
-use Phalcon\Mvc\Router\Exception as RouterException;
-use Phalcon\Traits\Helper\Str\CamelizeTrait;
 use Phalcon\Traits\Helper\Str\UncamelizeTrait;
 
 use function array_pop;
+use function call_user_func;
 use function explode;
 use function implode;
 use function is_array;
+use function is_callable;
 use function is_object;
 use function is_string;
-use function str_contains;
+use function preg_match;
+use function str_replace;
+use function strtolower;
+use function strtoupper;
 
 /**
  * A router that reads routes annotations from classes/resources
@@ -40,8 +44,9 @@ use function str_contains;
  *         // Use the annotations router
  *         $router = new Annotations(false);
  *
- *         // This will do the same as above but only if the handled uri starts with /robots
- *         $router->addResource("Robots", "/robots");
+ *         // This will do the same as above but only if the handled uri
+ *         // starts with /invoices
+ *         $router->addResource("Invoices", "/invoices");
  *
  *         return $router;
  *     }
@@ -50,31 +55,30 @@ use function str_contains;
  */
 class Annotations extends Router
 {
-    use CamelizeTrait;
     use UncamelizeTrait;
 
     /**
-     * @var string
+     * @mixed string
      */
     protected string $actionSuffix = "Action";
 
     /**
-     * @var callable|null
+     * @mixed callable|string|null
      */
     protected mixed $actionPreformatCallback = null;
 
     /**
-     * @var string
+     * @mixed string
      */
     protected string $controllerSuffix = "Controller";
 
     /**
-     * @var array
+     * @mixed array
      */
     protected array $handlers = [];
 
     /**
-     * @var string
+     * @mixed string
      */
     protected string $routePrefix = "";
 
@@ -87,12 +91,12 @@ class Annotations extends Router
      * @param string      $handler
      * @param string|null $prefix
      *
-     * @return $this
+     * @return Annotations
      */
     public function addModuleResource(
         string $module,
         string $handler,
-        ?string $prefix = null
+        string $prefix = null
     ): Annotations {
         $this->handlers[] = [$prefix, $handler, $module];
 
@@ -110,7 +114,7 @@ class Annotations extends Router
      */
     public function addResource(
         string $handler,
-        ?string $prefix = null
+        string $prefix = null
     ): Annotations {
         $this->handlers[] = [$prefix, $handler];
 
@@ -118,9 +122,9 @@ class Annotations extends Router
     }
 
     /**
-     * @return callable|null
+     * @return callable|string|null
      */
-    public function getActionPreformatCallback(): ?callable
+    public function getActionPreformatCallback(): callable|string|null
     {
         return $this->actionPreformatCallback;
     }
@@ -141,17 +145,19 @@ class Annotations extends Router
      * @param string $uri
      *
      * @return void
-     * @throws Exception
      * @throws EventsException
+     * @throws Exception
      */
     public function handle(string $uri): void
     {
         if (null === $this->container) {
             throw new Exception(
-                "A dependency injection container is required to access the 'annotations' service"
+                "A dependency injection container is required to "
+                . "access the 'annotations' service"
             );
         }
 
+        /** @var Memory $annotationsService */
         $annotationsService = $this->container->getShared("annotations");
 
         foreach ($this->handlers as $scope) {
@@ -201,19 +207,20 @@ class Annotations extends Router
             if (str_contains($handler, "\\")) {
                 /**
                  * Extract the real class name from the namespaced class
-                 * The lowercase class name is used as controller
+                 * The lowercased class name is used as controller
                  * Extract the namespace from the namespaced class
                  */
-                $handlerNameArray = explode("\\", $handler);
+                $controllerNameArray = explode("\\", $handler);
 
                 // Extract the real class name from the namespaced class
-                $controllerName = array_pop($handlerNameArray);
+                $controllerName = array_pop($controllerNameArray);
 
                 // Extract the namespace from the namespaced class
-                $namespaceName = implode("\\", $handlerNameArray);
+                $namespaceName = implode("\\", $controllerNameArray);
             } else {
                 $controllerName = $handler;
-                $namespaceName  = $this->defaultNamespace;
+
+                $namespaceName = $this->defaultNamespace;
             }
 
             $this->routePrefix = '';
@@ -222,21 +229,20 @@ class Annotations extends Router
              * Check if the scope has a module associated
              */
             $moduleName = $scope[2] ?? null;
-            $moduleName = ($moduleName !== null) ? $moduleName : "";
-
-            $sufixxed = $controllerName . $this->controllerSuffix;
+            $moduleName = $moduleName !== null ? $moduleName : "";
+            $sufixed    = $controllerName . $this->controllerSuffix;
 
             /**
              * Add namespace to class if one is set
              */
             if (null !== $namespaceName) {
-                $sufixxed = $namespaceName . "\\" . $sufixxed;
+                $sufixed = $namespaceName . "\\" . $sufixed;
             }
 
             /**
              * Get the annotations from the class
              */
-            $handlerAnnotations = $annotationsService->get($sufixxed);
+            $handlerAnnotations = $annotationsService->get($sufixed);
 
             if (!is_object($handlerAnnotations)) {
                 continue;
@@ -246,6 +252,7 @@ class Annotations extends Router
              * Process class annotations
              */
             $classAnnotations = $handlerAnnotations->getClassAnnotations();
+
             if (is_object($classAnnotations)) {
                 $annotations = $classAnnotations->getAnnotations();
 
@@ -264,8 +271,8 @@ class Annotations extends Router
              */
             $methodAnnotations = $handlerAnnotations->getMethodsAnnotations();
 
-            if (is_object($methodAnnotations)) {
-                $lowerControllerName = $this->toCamelize($controllerName);
+            if (is_array($methodAnnotations)) {
+                $lowerControllerName = $this->toUncamelize($controllerName);
 
                 foreach ($methodAnnotations as $method => $collection) {
                     if (!is_object($collection)) {
@@ -301,7 +308,6 @@ class Annotations extends Router
      * @param Annotation $annotation
      *
      * @return void
-     * @throws RouterException
      */
     public function processActionAnnotation(
         string $module,
@@ -310,11 +316,7 @@ class Annotations extends Router
         string $action,
         Annotation $annotation
     ): void {
-        $name = $annotation->getName();
-
-        /**
-         * Find if the route is for adding routes
-         */
+        $name    = $annotation->getName();
         $isRoute = match ($name) {
             "Route",
             "Get",
@@ -327,19 +329,26 @@ class Annotations extends Router
         };
 
         $methods = match ($name) {
+            "Get",
+            "Post",
+            "Put",
+            "Patch",
+            "Delete",
             "Options" => strtoupper($name),
             default   => null,
         };
 
-        if (false === $isRoute) {
+        if (true !== $isRoute) {
             return;
         }
 
         $proxyActionName = str_replace($this->actionSuffix, "", $action);
-        $routePrefix     = $this->routePrefix;
 
         if (null !== $this->actionPreformatCallback) {
-            $proxyActionName = call_user_func($this->actionPreformatCallback, $proxyActionName);
+            $proxyActionName = call_user_func(
+                $this->actionPreformatCallback,
+                $proxyActionName
+            );
         }
 
         $actionName = strtolower($proxyActionName);
@@ -375,13 +384,18 @@ class Annotations extends Router
         /**
          * Create the route using the prefix
          */
-        $uri = $routePrefix;
-        if (null !== $value && '/' !== $value) {
-            $uri .= $value;
-        } elseif (empty($routePrefix)) {
-            $uri = $value;
+        if ($value !== null) {
+            if ($value != "/") {
+                $uri = $this->routePrefix . $value;
+            } else {
+                if (true !== empty($this->routePrefix)) {
+                    $uri = $this->routePrefix;
+                } else {
+                    $uri = $value;
+                }
+            }
         } else {
-            $uri .= $actionName;
+            $uri = $this->routePrefix . $actionName;
         }
 
         /**
@@ -392,7 +406,7 @@ class Annotations extends Router
         /**
          * Add HTTP constraint methods
          */
-        if (null !== $methods) {
+        if ($methods === null) {
             $methods = $annotation->getNamedArgument("methods");
         }
 
@@ -403,24 +417,20 @@ class Annotations extends Router
         /**
          * Add the converters
          */
-        $converters = $annotation->getNamedArgument("converts");
-
-        if (is_array($converters)) {
-            foreach ($converters as $parameter => $converter) {
-                $route->convert($parameter, $converter);
+        $converts = $annotation->getNamedArgument("converts");
+        if (is_array($converts)) {
+            foreach ($converts as $param => $convert) {
+                $route->convert($param, $convert);
             }
         }
 
         /**
          * Add the converters
-         *
-         * @todo why is this here twice?
          */
-        $converters = $annotation->getNamedArgument("converters");
-
-        if (is_array($converters)) {
-            foreach ($converters as $parameter => $converter) {
-                $route->convert($parameter, $converter);
+        $converts = $annotation->getNamedArgument("converters");
+        if (is_array($converts)) {
+            foreach ($converts as $param => $convert) {
+                $route->convert($param, $convert);
             }
         }
 
@@ -451,27 +461,13 @@ class Annotations extends Router
     public function processControllerAnnotation(
         string $handler,
         Annotation $annotation
-    ) {
+    ): void {
         /**
          * @RoutePrefix add a prefix for all the routes defined in the model
          */
-        if ($annotation->getName() === "RoutePrefix") {
+        if ($annotation->getName() == "RoutePrefix") {
             $this->routePrefix = $annotation->getArgument(0);
         }
-    }
-
-    /**
-     * Changes the action method suffix
-     *
-     * @param string $actionSuffix
-     *
-     * @return Annotations
-     */
-    public function setActionSuffix(string $actionSuffix): Annotations
-    {
-        $this->actionSuffix = $actionSuffix;
-
-        return $this;
     }
 
     /**
@@ -501,16 +497,16 @@ class Annotations extends Router
      * $annotationRouter->setActionPreformatCallback();
      * ```
      *
-     * @param callable|null $callback
+     * @param callable|string|null $callback
      *
-     * @return string|void
+     * @return Annotations
      * @throws Exception
      */
-    public function setActionPreformatCallback(?callable $callback = null)
+    public function setActionPreformatCallback(callable|string|null $callback = null): Annotations
     {
         if (is_callable($callback)) {
             $this->actionPreformatCallback = $callback;
-        } elseif (null === $callback) {
+        } elseif ($callback === null) {
             $this->actionPreformatCallback = function ($action) {
                 return $this->toUncamelize($action, "-");
             };
@@ -519,6 +515,22 @@ class Annotations extends Router
                 "The 'callback' parameter must be either a callable or NULL."
             );
         }
+
+        return $this;
+    }
+
+    /**
+     * Changes the action method suffix
+     *
+     * @param string $actionSuffix
+     *
+     * @return Annotations
+     */
+    public function setActionSuffix(string $actionSuffix): Annotations
+    {
+        $this->actionSuffix = $actionSuffix;
+
+        return $this;
     }
 
     /**

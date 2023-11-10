@@ -13,6 +13,7 @@ declare(strict_types=1);
 
 namespace Phalcon\Tests\Integration\Mvc\Application;
 
+use Exception;
 use IntegrationTester;
 use Phalcon\Di\FactoryDefault;
 use Phalcon\Mvc\Application;
@@ -139,7 +140,7 @@ class HandleCest
      * Tests Phalcon\Mvc\Application :: handle() - exception handling
      * with forwarding using Dispatcher and Events\Manager
      *
-     * @see https://github.com/phalcon/cphalcon/issues/15117
+     * @see    https://github.com/phalcon/cphalcon/issues/15117
      *
      * @author Phalcon Team <team@phalcon.io>
      * @since  2020-10-17
@@ -202,7 +203,7 @@ class HandleCest
         $application->setDI($di);
 
         $I->expectThrowable(
-            new \Exception('Initialize called'),
+            new Exception('Initialize called'),
             function () use ($application) {
                 $application->handle('/not-found');
             }

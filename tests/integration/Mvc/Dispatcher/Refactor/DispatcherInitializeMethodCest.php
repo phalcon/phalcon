@@ -21,7 +21,7 @@ use Phalcon\Tests\Integration\Mvc\Dispatcher\Helper\BaseDispatcher;
  * Class DispatcherInitializeMethodCest
  *
  * @package Phalcon\Tests\Integration\Mvc\Dispatcher
- * @todo: refactor
+ * @todo    : refactor
  */
 class DispatcherInitializeMethodCest extends BaseDispatcher
 {
@@ -116,8 +116,7 @@ class DispatcherInitializeMethodCest extends BaseDispatcher
                 // Returning <tt>false</tt> should prevent the exception from bubbling up.
                 return false;
             }
-        )
-        ;
+        );
 
         $dispatcher->dispatch();
 
@@ -162,8 +161,7 @@ class DispatcherInitializeMethodCest extends BaseDispatcher
 
                 return null;
             }
-        )
-        ;
+        );
 
         $caughtException = false;
 
@@ -218,8 +216,7 @@ class DispatcherInitializeMethodCest extends BaseDispatcher
                     ]
                 );
             }
-        )
-        ;
+        );
 
         $dispatcher->dispatch();
 

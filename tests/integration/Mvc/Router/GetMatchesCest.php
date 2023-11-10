@@ -14,12 +14,15 @@ declare(strict_types=1);
 namespace Phalcon\Tests\Integration\Mvc\Router;
 
 use IntegrationTester;
+use Phalcon\Tests\Fixtures\Traits\RouterTrait;
 
 /**
  * Class GetMatchesCest
  */
 class GetMatchesCest
 {
+    use RouterTrait;
+
     /**
      * Tests Phalcon\Mvc\Router :: getMatches()
      *
@@ -29,6 +32,22 @@ class GetMatchesCest
     public function mvcRouterGetMatches(IntegrationTester $I)
     {
         $I->wantToTest('Mvc\Router - getMatches()');
-        $I->skipTest('Need implementation');
+
+        $route = '/users/edit/100/';
+
+        $router = $this->getRouter();
+        $router->handle($route);
+
+        $actual = $router->wasMatched();
+        $I->assertTrue($actual);
+
+        $expected = [
+            0 => '/users/edit/100/',
+            1 => 'users',
+            2 => 'edit',
+            3 => '/100/',
+        ];
+        $actual   = $router->getMatches();
+        $I->assertSame($expected, $actual);
     }
 }

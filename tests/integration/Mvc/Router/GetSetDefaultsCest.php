@@ -30,40 +30,28 @@ class GetSetDefaultsCest
 
         $router = new Router();
 
-        $I->assertEquals(
-            [
-                'namespace'  => null,
-                'module'     => null,
-                'controller' => null,
-                'action'     => null,
-                'params'     => [],
-            ],
-            $router->getDefaults()
-        );
+        $expected = [
+            'namespace'  => '',
+            'module'     => '',
+            'controller' => '',
+            'action'     => '',
+            'params'     => [],
+        ];
+        $actual   = $router->getDefaults();
+        $I->assertSame($expected, $actual);
 
-        $router->setDefaults(
-            [
-                'namespace' => 'Phalcon',
-                'module'    => 'front',
-            ]
-        );
+        $defaults = [
+            'namespace'  => 'Phalcon',
+            'module'     => 'front',
+            'controller' => 'Login',
+            'action'     => 'default',
+            'params'     => [1, 2, 3],
+        ];
 
-        $router->setDefaults(
-            [
-                'action' => 'default',
-                'params' => [1, 2, 3],
-            ]
-        );
+        $router->setDefaults($defaults);
 
-        $I->assertEquals(
-            [
-                'namespace'  => 'Phalcon',
-                'module'     => 'front',
-                'controller' => null,
-                'action'     => 'default',
-                'params'     => [1, 2, 3],
-            ],
-            $router->getDefaults()
-        );
+        $expected = $defaults;
+        $actual   = $router->getDefaults();
+        $I->assertSame($expected, $actual);
     }
 }

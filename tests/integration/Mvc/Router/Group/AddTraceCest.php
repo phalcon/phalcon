@@ -51,17 +51,17 @@ class AddTraceCest
         $router->handle('/docs/index');
 
 
-        $I->assertEquals(
+        $I->assertSame(
             'documentation10',
             $router->getControllerName()
         );
 
-        $I->assertEquals(
+        $I->assertSame(
             'index',
             $router->getActionName()
         );
 
-        $I->assertEquals(
+        $I->assertSame(
             [],
             $router->getParams()
         );

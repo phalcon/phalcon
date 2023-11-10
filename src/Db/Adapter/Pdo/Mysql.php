@@ -389,14 +389,6 @@ class Mysql extends PdoAdapter
                     break;
 
                 /**
-                 * VARCHAR
-                 */
-                case str_starts_with($columnType, "varchar"):
-                    $definition["type"] = Column::TYPE_VARCHAR;
-
-                    break;
-
-                /**
                  * CHAR
                  */
                 case str_starts_with($columnType, "char"):
@@ -422,6 +414,7 @@ class Mysql extends PdoAdapter
 
                 /**
                  * Default
+                 * VARCHAR
                  */
                 default:
                     $definition["type"] = Column::TYPE_VARCHAR;

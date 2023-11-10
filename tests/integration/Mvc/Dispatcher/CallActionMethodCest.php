@@ -42,8 +42,7 @@ class CallActionMethodCest extends BaseDispatcher
             $controller,
             'multiplyAction',
             $multiply
-        )
-        ;
+        );
 
         $I->assertEquals(30, $returnValue);
 

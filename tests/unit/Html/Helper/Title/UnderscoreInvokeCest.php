@@ -143,7 +143,7 @@ class UnderscoreInvokeCest
 
         // Start
         $expected = '    <title>' . $title . '</title>' . PHP_EOL;
-        $actual   = (string) $tag->title();
+        $actual   = (string)$tag->title();
         $I->assertSame($expected, $actual);
 
         $tag
@@ -159,9 +159,8 @@ class UnderscoreInvokeCest
             . $separator
             . $title
             . '</title>'
-            . PHP_EOL
-        ;
-        $actual   = (string) $tag->title();
+            . PHP_EOL;
+        $actual   = (string)$tag->title();
         $I->assertSame($expected, $actual);
 
         $tag
@@ -180,9 +179,8 @@ class UnderscoreInvokeCest
             . $separator
             . $title
             . '</title>'
-            . PHP_EOL
-        ;
-        $actual   = (string) $tag->title();
+            . PHP_EOL;
+        $actual   = (string)$tag->title();
         $I->assertSame($expected, $actual);
     }
 

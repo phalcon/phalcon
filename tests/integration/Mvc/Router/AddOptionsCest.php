@@ -46,17 +46,17 @@ class AddOptionsCest
         $router->handle('/docs/index');
 
 
-        $I->assertEquals(
+        $I->assertSame(
             'documentation7',
             $router->getControllerName()
         );
 
-        $I->assertEquals(
+        $I->assertSame(
             'index',
             $router->getActionName()
         );
 
-        $I->assertEquals(
+        $I->assertSame(
             [],
             $router->getParams()
         );

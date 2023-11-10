@@ -51,17 +51,17 @@ class AddPutCest
         $router->handle('/docs/index');
 
 
-        $I->assertEquals(
+        $I->assertSame(
             'documentation5',
             $router->getControllerName()
         );
 
-        $I->assertEquals(
+        $I->assertSame(
             'index',
             $router->getActionName()
         );
 
-        $I->assertEquals(
+        $I->assertSame(
             [],
             $router->getParams()
         );

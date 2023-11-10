@@ -13,8 +13,10 @@ declare(strict_types=1);
 
 namespace Phalcon\Mvc\Router;
 
+use function array_merge;
 use function is_array;
 use function is_string;
+use function method_exists;
 
 /**
  * Helper class to create a group of routes with common attributes
@@ -49,7 +51,7 @@ use function is_string;
  *     ]
  * );
  *
- * //This route maps to a controller different from the default
+ * //This route maps to a controller different than the default
  * $blog->add(
  *     "/blog",
  *     [
@@ -65,38 +67,40 @@ use function is_string;
 class Group implements GroupInterface
 {
     /**
-     * @var callable|null
+     * @mixed $callable|null
      */
     protected mixed $beforeMatch = null;
 
     /**
-     * @var string
+     * @mixed string|null
      */
-    protected string $hostname = '';
+    protected string|null $hostname = null;
 
     /**
-     * @var array|string
+     * @mixed array|string|null
      */
-    protected array|string $paths = [];
+    protected array|string|null $paths = null;
 
     /**
-     * @var string
+     * @mixed string|null
      */
-    protected string $prefix = '';
+    protected string|null $prefix = null;
 
     /**
-     * @var array
+     * @mixed array
      */
     protected array $routes = [];
 
     /**
      * Phalcon\Mvc\Router\Group constructor
      *
-     * @param array|string $paths
+     * @param array|string|null $paths
      */
-    public function __construct(array|string $paths = [])
+    public function __construct(mixed $paths = null)
     {
-        $this->paths = $paths;
+        if (is_array($paths) || is_string($paths)) {
+            $this->paths = $paths;
+        }
 
         if (method_exists($this, "initialize")) {
             $this->initialize($paths);
@@ -110,22 +114,21 @@ class Group implements GroupInterface
      * $router->add("/about", "About::index");
      *```
      *
-     * @param string       $pattern
-     * @param array|string $paths = [
-     *                            'module => '',
-     *                            'controller' => '',
-     *                            'action' => '',
-     *                            'namespace' => ''
-     *                            ]
-     * @param array|string $httpMethods
+     * @param string            $pattern
+     * @param array|string|null $paths = [
+     *                                 'module => '',
+     *                                 'controller' => '',
+     *                                 'action' => '',
+     *                                 'namespace' => ''
+     *                                 ]
+     * @param mixed|null        $httpMethods
      *
      * @return RouteInterface
-     * @throws Exception
      */
     public function add(
         string $pattern,
-        array|string $paths = [],
-        array|string $httpMethods = []
+        mixed $paths = null,
+        mixed $httpMethods = null
     ): RouteInterface {
         return $this->addRoute($pattern, $paths, $httpMethods);
     }
@@ -133,210 +136,180 @@ class Group implements GroupInterface
     /**
      * Adds a route to the router that only match if the HTTP method is CONNECT
      *
-     * @param string       $pattern
-     * @param array|string $paths = [
-     *                            'module      => '',
-     *                            'controller' => '',
-     *                            'action'     => '',
-     *                            'namespace'  => ''
-     *                            ]
+     * @param string            $pattern
+     * @param array|string|null $paths = [
+     *                                 'module => '',
+     *                                 'controller' => '',
+     *                                 'action' => '',
+     *                                 'namespace' => ''
+     *                                 ]
      *
      * @return RouteInterface
-     * @throws Exception
      */
-    public function addConnect(
-        string $pattern,
-        array|string $paths = []
-    ): RouteInterface {
+    public function addConnect(string $pattern, mixed $paths = null): RouteInterface
+    {
         return $this->addRoute($pattern, $paths, "CONNECT");
     }
 
     /**
      * Adds a route to the router that only match if the HTTP method is DELETE
      *
-     * @param string       $pattern
-     * @param array|string $paths = [
-     *                            'module      => '',
-     *                            'controller' => '',
-     *                            'action'     => '',
-     *                            'namespace'  => ''
-     *                            ]
+     * @param string            $pattern
+     * @param array|string|null $paths = [
+     *                                 'module => '',
+     *                                 'controller' => '',
+     *                                 'action' => '',
+     *                                 'namespace' => ''
+     *                                 ]
      *
      * @return RouteInterface
-     * @throws Exception
      */
-    public function addDelete(
-        string $pattern,
-        array|string $paths = []
-    ): RouteInterface {
+    public function addDelete(string $pattern, mixed $paths = null): RouteInterface
+    {
         return $this->addRoute($pattern, $paths, "DELETE");
     }
 
     /**
      * Adds a route to the router that only match if the HTTP method is GET
      *
-     * @param string       $pattern
-     * @param array|string $paths = [
-     *                            'module      => '',
-     *                            'controller' => '',
-     *                            'action'     => '',
-     *                            'namespace'  => ''
-     *                            ]
+     * @param string            $pattern
+     * @param array|string|null $paths = [
+     *                                 'module => '',
+     *                                 'controller' => '',
+     *                                 'action' => '',
+     *                                 'namespace' => ''
+     *                                 ]
      *
      * @return RouteInterface
-     * @throws Exception
      */
-    public function addGet(
-        string $pattern,
-        array|string $paths = []
-    ): RouteInterface {
+    public function addGet(string $pattern, mixed $paths = null): RouteInterface
+    {
         return $this->addRoute($pattern, $paths, "GET");
     }
 
     /**
      * Adds a route to the router that only match if the HTTP method is HEAD
      *
-     * @param string       $pattern
-     * @param array|string $paths = [
-     *                            'module      => '',
-     *                            'controller' => '',
-     *                            'action'     => '',
-     *                            'namespace'  => ''
-     *                            ]
+     * @param string            $pattern
+     * @param array|string|null $paths = [
+     *                                 'module => '',
+     *                                 'controller' => '',
+     *                                 'action' => '',
+     *                                 'namespace' => ''
+     *                                 ]
      *
      * @return RouteInterface
-     * @throws Exception
      */
-    public function addHead(
-        string $pattern,
-        array|string $paths = []
-    ): RouteInterface {
+    public function addHead(string $pattern, mixed $paths = null): RouteInterface
+    {
         return $this->addRoute($pattern, $paths, "HEAD");
     }
 
     /**
      * Add a route to the router that only match if the HTTP method is OPTIONS
      *
-     * @param string       $pattern
-     * @param array|string $paths = [
-     *                            'module      => '',
-     *                            'controller' => '',
-     *                            'action'     => '',
-     *                            'namespace'  => ''
-     *                            ]
+     * @param string            $pattern
+     * @param array|string|null $paths = [
+     *                                 'module => '',
+     *                                 'controller' => '',
+     *                                 'action' => '',
+     *                                 'namespace' => ''
+     *                                 ]
      *
      * @return RouteInterface
-     * @throws Exception
      */
-    public function addOptions(
-        string $pattern,
-        array|string $paths = []
-    ): RouteInterface {
+    public function addOptions(string $pattern, mixed $paths = null): RouteInterface
+    {
         return $this->addRoute($pattern, $paths, "OPTIONS");
     }
 
     /**
      * Adds a route to the router that only match if the HTTP method is PATCH
      *
-     * @param string       $pattern
-     * @param array|string $paths = [
-     *                            'module      => '',
-     *                            'controller' => '',
-     *                            'action'     => '',
-     *                            'namespace'  => ''
-     *                            ]
+     * @param string            $pattern
+     * @param array|string|null $paths = [
+     *                                 'module => '',
+     *                                 'controller' => '',
+     *                                 'action' => '',
+     *                                 'namespace' => ''
+     *                                 ]
      *
      * @return RouteInterface
-     * @throws Exception
      */
-    public function addPatch(
-        string $pattern,
-        array|string $paths = []
-    ): RouteInterface {
+    public function addPatch(string $pattern, mixed $paths = null): RouteInterface
+    {
         return $this->addRoute($pattern, $paths, "PATCH");
     }
 
     /**
      * Adds a route to the router that only match if the HTTP method is POST
      *
-     * @param string       $pattern
-     * @param array|string $paths = [
-     *                            'module      => '',
-     *                            'controller' => '',
-     *                            'action'     => '',
-     *                            'namespace'  => ''
-     *                            ]
+     * @param string            $pattern
+     * @param array|string|null $paths = [
+     *                                 'module => '',
+     *                                 'controller' => '',
+     *                                 'action' => '',
+     *                                 'namespace' => ''
+     *                                 ]
      *
      * @return RouteInterface
-     * @throws Exception
      */
-    public function addPost(
-        string $pattern,
-        array|string $paths = []
-    ): RouteInterface {
+    public function addPost(string $pattern, mixed $paths = null): RouteInterface
+    {
         return $this->addRoute($pattern, $paths, "POST");
     }
 
     /**
      * Adds a route to the router that only match if the HTTP method is PURGE
      *
-     * @param string       $pattern
-     * @param array|string $paths = [
-     *                            'module      => '',
-     *                            'controller' => '',
-     *                            'action'     => '',
-     *                            'namespace'  => ''
-     *                            ]
+     * @param string            $pattern
+     * @param array|string|null $paths = [
+     *                                 'module => '',
+     *                                 'controller' => '',
+     *                                 'action' => '',
+     *                                 'namespace' => ''
+     *                                 ]
      *
      * @return RouteInterface
-     * @throws Exception
      */
-    public function addPurge(
-        string $pattern,
-        array|string $paths = []
-    ): RouteInterface {
+    public function addPurge(string $pattern, mixed $paths = null): RouteInterface
+    {
         return $this->addRoute($pattern, $paths, "PURGE");
     }
 
     /**
      * Adds a route to the router that only match if the HTTP method is PUT
      *
-     * @param string       $pattern
-     * @param array|string $paths = [
-     *                            'module      => '',
-     *                            'controller' => '',
-     *                            'action'     => '',
-     *                            'namespace'  => ''
-     *                            ]
+     * @param string            $pattern
+     * @param array|string|null $paths = [
+     *                                 'module => '',
+     *                                 'controller' => '',
+     *                                 'action' => '',
+     *                                 'namespace' => ''
+     *                                 ]
      *
      * @return RouteInterface
-     * @throws Exception
      */
-    public function addPut(
-        string $pattern,
-        array|string $paths = []
-    ): RouteInterface {
+    public function addPut(string $pattern, mixed $paths = null): RouteInterface
+    {
         return $this->addRoute($pattern, $paths, "PUT");
     }
 
     /**
      * Adds a route to the router that only match if the HTTP method is TRACE
      *
-     * @param string       $pattern
-     * @param array|string $paths = [
-     *                            'module      => '',
-     *                            'controller' => '',
-     *                            'action'     => '',
-     *                            'namespace'  => ''
-     *                            ]
+     * @param string            $pattern
+     * @param array|string|null $paths = [
+     *                                 'module => '',
+     *                                 'controller' => '',
+     *                                 'action' => '',
+     *                                 'namespace' => ''
+     *                                 ]
      *
      * @return RouteInterface
-     * @throws Exception
      */
-    public function addTrace(
-        string $pattern,
-        array|string $paths = []
-    ): RouteInterface {
+    public function addTrace(string $pattern, mixed $paths = null): RouteInterface
+    {
         return $this->addRoute($pattern, $paths, "TRACE");
     }
 
@@ -379,9 +352,9 @@ class Group implements GroupInterface
     /**
      * Returns the hostname restriction
      *
-     * @return string
+     * @return string|null
      */
-    public function getHostname(): string
+    public function getHostname(): string|null
     {
         return $this->hostname;
     }
@@ -389,9 +362,9 @@ class Group implements GroupInterface
     /**
      * Returns the common paths defined for this group
      *
-     * @return array|string
+     * @return array|string|null
      */
-    public function getPaths(): array|string
+    public function getPaths(): array|string|null
     {
         return $this->paths;
     }
@@ -399,9 +372,9 @@ class Group implements GroupInterface
     /**
      * Returns the common prefix for all the routes
      *
-     * @return string
+     * @return string|null
      */
-    public function getPrefix(): string
+    public function getPrefix(): string|null
     {
         return $this->prefix;
     }
@@ -445,7 +418,7 @@ class Group implements GroupInterface
     }
 
     /**
-     * Set a common uri prefix for all the routes in $this group
+     * Set a common uri prefix for all the routes in this group
      *
      * @param string $prefix
      *
@@ -461,49 +434,54 @@ class Group implements GroupInterface
     /**
      * Adds a route applying the common attributes
      *
-     * @param string       $pattern
-     * @param array|string $paths = [
-     *                            'module => '',
-     *                            'controller' => '',
-     *                            'action' => '',
-     *                            'namespace' => ''
-     *                            ]
-     * @param array|string $httpMethods
+     * @param string            $pattern
+     * @param array|string|null $paths [
+     *                                 'module => '',
+     *                                 'controller' => '',
+     *                                 'action' => '',
+     *                                 'namespace' => ''
+     *                                 ]
+     * @param array|string|null $httpMethods
      *
      * @return RouteInterface
-     * @throws Exception
      */
     protected function addRoute(
         string $pattern,
-        array|string $paths = [],
-        array|string $httpMethods = []
+        array|string|null $paths = null,
+        array|string|null $httpMethods = null
     ): RouteInterface {
         /**
          * Check if the paths need to be merged with current paths
          */
-        $mergedPaths = $this->paths;
-        if (is_array($this->paths)) {
+        $defaultPaths = $this->paths;
+
+        if (is_array($defaultPaths)) {
             if (is_string($paths)) {
                 $processedPaths = Route::getRoutePaths($paths);
             } else {
                 $processedPaths = $paths;
             }
 
-            /**
-             * Merge the paths with the default paths
-             */
-            $mergedPaths = array_merge($this->paths, $processedPaths);
+            if (is_array($processedPaths)) {
+                /**
+                 * Merge the paths with the default paths
+                 */
+                $mergedPaths = array_merge($defaultPaths, $processedPaths);
+            } else {
+                $mergedPaths = $defaultPaths;
+            }
+        } else {
+            $mergedPaths = $paths;
         }
 
         /**
          * Every route is internally stored as a Phalcon\Mvc\Router\Route
          */
-        $route = new Route(
+        $route          = new Route(
             $this->prefix . $pattern,
             $mergedPaths,
             $httpMethods
         );
-
         $this->routes[] = $route;
 
         $route->setGroup($this);

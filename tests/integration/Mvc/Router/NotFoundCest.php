@@ -44,22 +44,22 @@ class NotFoundCest
         $router->handle('/');
 
 
-        $I->assertEquals(
+        $I->assertSame(
             'controller',
             $router->getControllerName()
         );
 
-        $I->assertEquals(
+        $I->assertSame(
             'action',
             $router->getActionName()
         );
 
-        $I->assertEquals(
+        $I->assertSame(
             'module',
             $router->getModuleName()
         );
 
-        $I->assertEquals(
+        $I->assertSame(
             'namespace',
             $router->getNamespaceName()
         );

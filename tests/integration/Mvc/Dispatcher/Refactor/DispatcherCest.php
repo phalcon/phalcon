@@ -13,19 +13,19 @@ declare(strict_types=1);
 
 namespace Phalcon\Tests\Integration\Mvc\Dispatcher\Refactor;
 
+use DispatcherTestDefaultNoNamespaceController;
+use IntegrationTester;
 use Phalcon\Mvc\Dispatcher\Exception;
 use Phalcon\Tests\Integration\Mvc\Dispatcher\Helper\BaseDispatcher;
 use Phalcon\Tests\Integration\Mvc\Dispatcher\Helper\DispatcherTestDefaultController;
 use Phalcon\Tests\Integration\Mvc\Dispatcher\Helper\DispatcherTestDefaultSimpleController;
 use Phalcon\Tests\Integration\Mvc\Dispatcher\Helper\DispatcherTestDefaultTwoController;
-use DispatcherTestDefaultNoNamespaceController;
-use IntegrationTester;
 
 /**
  * Class DispatcherCest
  *
  * @package Phalcon\Tests\Integration\Mvc\Dispatcher
- * @todo: refactor
+ * @todo    : refactor
  */
 class DispatcherCest extends BaseDispatcher
 {
@@ -500,8 +500,7 @@ class DispatcherCest extends BaseDispatcher
                     ]
                 );
             }
-        )
-        ;
+        );
 
         $I->expectThrowable(
             new Exception(
@@ -533,8 +532,7 @@ class DispatcherCest extends BaseDispatcher
                 // Don't return an object
                 return 3;
             }
-        )
-        ;
+        );
 
         $I->expectThrowable(
             new Exception(
@@ -856,8 +854,7 @@ class DispatcherCest extends BaseDispatcher
 
                 throw new Exception('Custom error in before exception');
             }
-        )
-        ;
+        );
 
         try {
             $handler = $dispatcher->dispatch();

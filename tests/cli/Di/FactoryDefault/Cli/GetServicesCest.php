@@ -31,7 +31,7 @@ class GetServicesCest
 
         $di = new Di();
 
-        $numberOfFactoryServices = 7;
+        $numberOfFactoryServices = 9;
 
         $I->assertCount($numberOfFactoryServices, $di->getServices());
 

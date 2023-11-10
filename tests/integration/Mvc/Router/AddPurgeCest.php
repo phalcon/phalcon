@@ -46,17 +46,17 @@ class AddPurgeCest
         $router->handle('/docs/index');
 
 
-        $I->assertEquals(
+        $I->assertSame(
             'documentation9',
             $router->getControllerName()
         );
 
-        $I->assertEquals(
+        $I->assertSame(
             'index',
             $router->getActionName()
         );
 
-        $I->assertEquals(
+        $I->assertSame(
             [],
             $router->getParams()
         );

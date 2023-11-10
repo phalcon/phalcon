@@ -32,7 +32,7 @@ class SetDefaultControllerCest
 
         $router->setDefaultController('main');
 
-        $I->assertEquals(
+        $I->assertSame(
             'main',
             $router->getDefaults()['controller']
         );

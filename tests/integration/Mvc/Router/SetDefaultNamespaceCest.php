@@ -32,7 +32,7 @@ class SetDefaultNamespaceCest
 
         $router->setDefaultNamespace('Phalcon');
 
-        $I->assertEquals(
+        $I->assertSame(
             'Phalcon',
             $router->getDefaults()['namespace']
         );

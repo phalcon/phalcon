@@ -13,6 +13,7 @@ declare(strict_types=1);
 
 namespace Phalcon\Di\FactoryDefault;
 
+use Phalcon\Annotations\Adapter\Memory;
 use Phalcon\Cli\Dispatcher;
 use Phalcon\Cli\Router;
 use Phalcon\Di\FactoryDefault;
@@ -21,6 +22,7 @@ use Phalcon\Encryption\Security;
 use Phalcon\Events\Manager as EventsManager;
 use Phalcon\Filter\FilterFactory;
 use Phalcon\Html\Escaper;
+use Phalcon\Html\TagFactory;
 use Phalcon\Support\HelperFactory;
 
 /**
@@ -45,17 +47,29 @@ class Cli extends FactoryDefault
         $filter = new FilterFactory();
 
         $this->services = [
-//            "annotations"        => new Service("Phalcon\\Annotations\\Adapter\\Memory", true),
-        "dispatcher"    => new Service(Dispatcher::class, true),
-        "escaper"       => new Service(Escaper::class, true),
-        "eventsManager" => new Service(EventsManager::class, true),
-        "filter"        => new Service($filter->newInstance(), true),
-        "helper"        => new Service(HelperFactory::class, true),
-//            "modelsManager"      => new Service("Phalcon\\Mvc\\Model\\Manager", true),
-//            "modelsMetadata"     => new Service("Phalcon\\Mvc\\Model\\MetaData\\Memory", true),
-        "router"        => new Service(Router::class, true),
-        "security"      => new Service(Security::class, true),
-//            "transactionManager" => new Service("Phalcon\\Mvc\\Model\\Transaction\\Manager", true)
+            "annotations"   => new Service(Memory::class, true),
+            "dispatcher"    => new Service(Dispatcher::class, true),
+            "escaper"       => new Service(Escaper::class, true),
+            "eventsManager" => new Service(EventsManager::class, true),
+            "filter"        => new Service($filter->newInstance(), true),
+            "helper"        => new Service(HelperFactory::class, true),
+            //            "modelsManager"      => new Service("Phalcon\\Mvc\\Model\\Manager", true),
+            //            "modelsMetadata"     => new Service("Phalcon\\Mvc\\Model\\MetaData\\Memory", true),
+            "router"        => new Service(Router::class, true),
+            "security"      => new Service(Security::class, true),
+            'tag'           => new Service(
+                [
+                    'className' => TagFactory::class,
+                    'arguments' => [
+                        [
+                            'type' => 'service',
+                            'name' => 'escaper',
+                        ],
+                    ],
+                ],
+                true
+            ),
+            //            "transactionManager" => new Service("Phalcon\\Mvc\\Model\\Transaction\\Manager", true)
         ];
     }
 }

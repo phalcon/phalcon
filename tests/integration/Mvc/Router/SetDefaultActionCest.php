@@ -32,7 +32,7 @@ class SetDefaultActionCest
 
         $router->setDefaultAction('default');
 
-        $I->assertEquals(
+        $I->assertSame(
             'default',
             $router->getDefaults()['action']
         );

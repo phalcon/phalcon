@@ -49,6 +49,7 @@ class MainTask extends Task
     ) {
         return '-' . $world . '-' . $symbol . '-' . $country . '-' . (string) $last . '-';
     }
+
     public function noopAction()
     {
         return;

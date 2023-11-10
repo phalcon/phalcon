@@ -33,7 +33,7 @@ class GetSetNameCest
         $route = new Route('test');
 
         $actual = $route->getName();
-        $I->assertEmpty($actual);
+        $I->assertNull($actual);
 
         $name = uniqid();
         $route->setName($name);

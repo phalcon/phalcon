@@ -14,9 +14,9 @@ declare(strict_types=1);
 namespace Phalcon\Tests\Controllers;
 
 /**
- * @RoutePrefix("/robots")
+ * @RoutePrefix("/invoices")
  */
-class RobotsController
+class InvoicesController
 {
     /**
      * @Get("/")
@@ -26,7 +26,7 @@ class RobotsController
     }
 
     /**
-     * @Get("/edit/{id:[0-9]+}", name="edit-robot")
+     * @Get("/edit/{id:[0-9]+}", name="edit-invoice")
      * @param int $id
      */
     public function editAction($id)
@@ -34,7 +34,7 @@ class RobotsController
     }
 
     /**
-     * @Route("/save", methods={"POST", "PUT"}, name="save-robot")
+     * @Route("/save", methods={"POST", "PUT"}, name="save-invoice")
      */
     public function saveAction()
     {

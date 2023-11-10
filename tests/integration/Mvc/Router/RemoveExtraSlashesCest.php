@@ -42,19 +42,16 @@ class RemoveExtraSlashesCest
 
         $router->handle($route);
 
-        $I->assertTrue(
-            $router->wasMatched()
-        );
+        $actual = $router->wasMatched();
+        $I->assertTrue($actual);
 
-        $I->assertEquals(
-            $params['controller'],
-            $router->getControllerName()
-        );
+        $expected = $params['controller'];
+        $actual   = $router->getControllerName();
+        $I->assertSame($expected, $actual);
 
-        $I->assertEquals(
-            $params['action'],
-            $router->getActionName()
-        );
+        $expected = $params['action'];
+        $actual   = $router->getActionName();
+        $I->assertSame($expected, $actual);
     }
 
     private function getMatchingWithExtraSlashes(): array

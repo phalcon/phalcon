@@ -28,7 +28,6 @@ use Phalcon\Html\TagFactory;
 use Phalcon\Http\Request;
 use Phalcon\Http\Response;
 use Phalcon\Http\Response\Cookies;
-use Phalcon\Mvc\Dispatcher;
 use Phalcon\Mvc\Model\MetaData\Memory;
 use Phalcon\Mvc\Model\Transaction\Manager;
 use Phalcon\Mvc\Url;
@@ -51,7 +50,7 @@ class ConstructCest
 
         $container = new FactoryDefault();
 
-        $expected = 15;
+        $expected = 17;
         $actual   = count($container->getServices());
         $I->assertSame($expected, $actual);
     }

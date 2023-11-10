@@ -13,7 +13,6 @@ declare(strict_types=1);
 
 namespace Phalcon\Tests\Integration\Mvc\Dispatcher\Refactor;
 
-use Exception;
 use IntegrationTester;
 use Phalcon\Di\FactoryDefault;
 use Phalcon\Events\Manager;
@@ -25,7 +24,7 @@ use Phalcon\Mvc\View;
  * Class RefactorForwardCest
  *
  * @package Phalcon\Tests\Integration\Mvc\Dispatcher
- * @todo: refactor
+ * @todo    : refactor
  */
 class ForwardCest
 {
@@ -57,9 +56,9 @@ class ForwardCest
             function ($event, $dispatcher, $exception) {
                 $dispatcher->forward(
                     [
-                        'namespace'  => 'Phalcon\Tests\Controllers',
+                        'namespace' => 'Phalcon\Tests\Controllers',
                         'controller' => 'exception',
-                        'action'     => 'second',
+                        'action' => 'second',
                     ]
                 );
 

@@ -22,7 +22,6 @@ use Phalcon\Html\Helper\Input\Email;
 use Phalcon\Html\Helper\Input\File;
 use Phalcon\Html\Helper\Input\Hidden;
 use Phalcon\Html\Helper\Input\Image;
-use Phalcon\Html\Helper\Input\Input;
 use Phalcon\Html\Helper\Input\Month;
 use Phalcon\Html\Helper\Input\Numeric;
 use Phalcon\Html\Helper\Input\Password;

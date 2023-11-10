@@ -67,6 +67,7 @@ use Phalcon\Support\HelperFactory;
  * @property Session                              $flashSession
  * @property Filter|FilterInterface               $filter
  * @property HelperFactory                        $helper
+ * @property Bag|BagInterface                     $persistent
  * @property Security                             $security
  * @property SessionManager                       $session
  * // * @property Router|RouterInterface $router
@@ -79,7 +80,6 @@ use Phalcon\Support\HelperFactory;
  * // * @property Manager|ManagerInterface $modelsManager
  * // * @property Memory|MetadataInterface $modelsMetadata
  * // * @property ManagerInterface $transactionManager
- * // * @property Bag|BagInterface $persistent
  * // * @property View|ViewInterface $view
  */
 abstract class Injectable implements InjectionAwareInterface
