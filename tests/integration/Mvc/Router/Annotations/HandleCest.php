@@ -15,13 +15,13 @@ namespace Phalcon\Tests\Integration\Mvc\Router\Annotations;
 
 use Codeception\Example;
 use IntegrationTester;
+use Phalcon\Events\Exception as EventsException;
 use Phalcon\Mvc\Router\Annotations;
+use Phalcon\Mvc\Router\Exception as RouterException;
 use Phalcon\Mvc\Router\Route;
-
 use Phalcon\Tests\Fixtures\Traits\DiTrait;
 
 use function dataDir;
-use function is_object;
 
 /**
  * Class HandleCest
@@ -47,63 +47,60 @@ class HandleCest
     {
         $I->wantToTest('Mvc\Router\Annotations - handle()');
 
-        $router    = new Annotations(false);
+        $router = new Annotations(false);
         $router->setDI($this->container);
 
-        $router->addResource("Phalcon\Tests\Controllers\Robots", '/');
+        $router->addResource("Phalcon\Tests\Controllers\Invoices", '/');
         $router->addResource("Phalcon\Tests\Controllers\Products", '/products');
         $router->addResource("Phalcon\Tests\Controllers\About", '/about');
 
         $router->handle('/products');
 
-        $I->assertCount(
-            6,
-            $router->getRoutes()
-        );
-
+        $expected = 6;
+        $actual   = $router->getRoutes();
+        $I->assertCount($expected, $actual);
 
         $router = new Annotations(false);
+        $router->setDI($this->container);
 
-        $router->setDI($container);
-
-        $router->addResource("Phalcon\Tests\Controllers\Robots", '/');
+        $router->addResource("Phalcon\Tests\Controllers\Invoices", '/');
         $router->addResource("Phalcon\Tests\Controllers\Products", '/products');
         $router->addResource("Phalcon\Tests\Controllers\About", '/about');
 
         $router->handle('/about');
 
-        $I->assertCount(
-            5,
-            $router->getRoutes()
-        );
+        $expected = 5;
+        $actual   = $router->getRoutes();
+        $I->assertCount($expected, $actual);
     }
 
-    public function testRouterFullResourcesNamespaced(IntegrationTester $I)
+    /**
+     * @param IntegrationTester $I
+     *
+     * @return void
+     * @throws EventsException
+     * @throws RouterException
+     */
+    public function mvcRouterAnnotationsHandleNamespaced(IntegrationTester $I)
     {
+        $I->wantToTest('Mvc\Router\Annotations - handle() - namespaced');
         require_once dataDir('fixtures/controllers/NamespacedAnnotationController.php');
 
-        $container = $this->getDi();
-
-
         $router = new Annotations(false);
-
-        $router->setDI($container);
+        $router->setDI($this->container);
 
         $router->setDefaultNamespace('MyNamespace\\Controllers');
-
         $router->addResource('NamespacedAnnotation', '/namespaced');
 
         $router->handle('/namespaced');
 
-        $I->assertCount(
-            1,
-            $router->getRoutes()
-        );
+        $expected = 1;
+        $actual   = $router->getRoutes();
+        $I->assertCount($expected, $actual);
 
 
         $router = new Annotations(false);
-
-        $router->setDI($container);
+        $router->setDI($this->container);
 
         $router->addResource(
             'MyNamespace\\Controllers\\NamespacedAnnotation',
@@ -111,12 +108,23 @@ class HandleCest
         );
 
         $router->handle('/namespaced/');
+
+        $expected = 1;
+        $actual   = $router->getRoutes();
+        $I->assertCount($expected, $actual);
     }
 
     /**
-     * @dataProvider getRoutes
+     * @dataProvider getRouteExamples
+     *
+     * @param IntegrationTester $I
+     * @param Example           $example
+     *
+     * @return void
+     * @throws EventsException
+     * @throws RouterException
      */
-    public function testRouterFullResources2(IntegrationTester $I, Example $example)
+    public function mvcRouterAnnotationsHandleFullResources(IntegrationTester $I, Example $example)
     {
         $uri        = $example['uri'];
         $method     = $example['method'];
@@ -124,60 +132,50 @@ class HandleCest
         $action     = $example['action'];
         $params     = $example['params'];
 
-        $container = $this->getDi();
-
         $router = new Annotations(false);
+        $router->setDI($this->container);
 
-        $router->setDI($container);
-
-        $router->addResource("Phalcon\Tests\Controllers\Robots");
+        $router->addResource("Phalcon\Tests\Controllers\Invoices");
         $router->addResource("Phalcon\Tests\Controllers\Products");
         $router->addResource("Phalcon\Tests\Controllers\About");
         $router->addResource("Phalcon\Tests\Controllers\Main");
 
         $router->handle('/');
 
-        $I->assertCount(
-            9,
-            $router->getRoutes()
-        );
+        $expected = 9;
+        $actual   = $router->getRoutes();
+        $I->assertCount($expected, $actual);
 
-        $route = $router->getRouteByName('save-robot');
+        $route = $router->getRouteByName('save-invoice');
         $I->assertTrue(is_object($route));
 
-        $I->assertInstanceOf(
-            Route::class,
-            $route
-        );
+        $I->assertInstanceOf(Route::class, $route);
 
         $route = $router->getRouteByName('save-product');
         $I->assertTrue(is_object($route));
 
-        $I->assertInstanceOf(
-            Route::class,
-            $route
-        );
+        $I->assertInstanceOf(Route::class, $route);
 
         $_SERVER['REQUEST_METHOD'] = $method;
         $router->handle($uri);
 
-        $I->assertSame(
-            $controller,
-            $router->getControllerName()
-        );
+        $expected = $controller;
+        $actual   = $router->getControllerName();
+        $I->assertSame($expected, $actual);
 
-        $I->assertSame(
-            $action,
-            $router->getActionName()
-        );
+        $expected = $action;
+        $actual   = $router->getActionName();
+        $I->assertSame($expected, $actual);
 
-        $I->assertSame(
-            $params,
-            $router->getParams()
-        );
+        $expected = $params;
+        $actual   = $router->getParams();
+        $I->assertSame($expected, $actual);
     }
 
-    private function getRoutes(): array
+    /**
+     * @return array[]
+     */
+    private function getRouteExamples(): array
     {
         return [
             [
@@ -211,25 +209,25 @@ class HandleCest
                 'params'     => [],
             ],
             [
-                'uri'        => '/robots/edit/100',
+                'uri'        => '/invoices/edit/100',
                 'method'     => 'GET',
-                'controller' => 'robots',
+                'controller' => 'invoices',
                 'action'     => 'edit',
                 'params'     => [
                     'id' => '100',
                 ],
             ],
             [
-                'uri'        => '/robots',
+                'uri'        => '/invoices',
                 'method'     => 'GET',
-                'controller' => 'robots',
+                'controller' => 'invoices',
                 'action'     => 'index',
                 'params'     => [],
             ],
             [
-                'uri'        => '/robots/save',
+                'uri'        => '/invoices/save',
                 'method'     => 'PUT',
-                'controller' => 'robots',
+                'controller' => 'invoices',
                 'action'     => 'save',
                 'params'     => [],
             ],

@@ -86,7 +86,7 @@ class HandleCest
                 'controller' => 3,
                 'action'     => 4,
                 'params'     => 5,
-                'my-number'  => 6
+                'my-number'  => 6,
             ]
         );
 
@@ -110,7 +110,7 @@ class HandleCest
 
         $expected = [
             'my',
-            'my-number' => '123'
+            'my-number' => '123',
         ];
         $actual   = $router->getParams();
         $I->assertSame($expected, $actual);
@@ -246,7 +246,7 @@ class HandleCest
 
         $router->handle('/about');
 
-        $actual   = $router->getMatchedRoute();
+        $actual = $router->getMatchedRoute();
         $I->assertNull($actual);
 
         $expected = '';
@@ -257,7 +257,7 @@ class HandleCest
         $actual   = $router->getActionName();
         $I->assertSame($expected, $actual);
 
-        $actual   = $router->getParams();
+        $actual = $router->getParams();
         $I->assertEmpty($actual);
 
         $router->add(

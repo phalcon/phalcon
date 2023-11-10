@@ -39,7 +39,7 @@ class GetSetPathsCest
         ];
         $group->setPaths($paths);
         $expected = $paths;
-        $actual = $group->getPaths();
+        $actual   = $group->getPaths();
         $I->assertSame($expected, $actual);
     }
 }

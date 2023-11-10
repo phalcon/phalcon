@@ -67,7 +67,7 @@ class GetSetKeyRouteIdsCest
 
         Route::reset();
 
-        $router = $this->getRouter(false);
+        $router    = $this->getRouter(false);
         $usersFind = $router
             ->add('/api/users/find')
             ->setHttpMethods('GET')

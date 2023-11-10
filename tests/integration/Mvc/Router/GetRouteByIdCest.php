@@ -93,7 +93,7 @@ class GetRouteByIdCest
             ->setName('usersAdd')
         ;
 
-        $actual   = $router->getRouteById(99);
+        $actual = $router->getRouteById(99);
         $I->assertFalse($actual);
 
         $expected = $usersFind;

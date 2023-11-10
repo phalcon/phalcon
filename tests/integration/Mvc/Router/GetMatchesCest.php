@@ -33,7 +33,7 @@ class GetMatchesCest
     {
         $I->wantToTest('Mvc\Router - getMatches()');
 
-        $route  = '/users/edit/100/';
+        $route = '/users/edit/100/';
 
         $router = $this->getRouter();
         $router->handle($route);

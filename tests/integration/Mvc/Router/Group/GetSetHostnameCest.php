@@ -15,7 +15,6 @@ namespace Phalcon\Tests\Integration\Mvc\Router\Group;
 
 use Codeception\Example;
 use IntegrationTester;
-use Phalcon\Mvc\Router;
 use Phalcon\Mvc\Router\Group;
 use Phalcon\Mvc\Router\Route;
 use Phalcon\Tests\Fixtures\Traits\RouterTrait;
@@ -46,7 +45,7 @@ class GetSetHostnameCest
         $group->setHostname($hostname);
 
         $expected = $hostname;
-        $actual = $group->getHostname();
+        $actual   = $group->getHostname();
         $I->assertSame($expected, $actual);
     }
 

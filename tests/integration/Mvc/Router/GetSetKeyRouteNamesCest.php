@@ -82,7 +82,7 @@ class GetSetKeyRouteNamesCest
             ->setName('usersAdd')
         ;
 
-        $actual   = $router->getRouteByName('unknown');
+        $actual = $router->getRouteByName('unknown');
         $I->assertFalse($actual);
 
         $expected = $usersAdd;
