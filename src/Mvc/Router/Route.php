@@ -13,11 +13,17 @@ declare(strict_types=1);
 
 namespace Phalcon\Mvc\Router;
 
+use function array_flip;
+use function array_merge;
+use function array_pop;
+use function explode;
+use function implode;
 use function is_array;
 use function is_string;
-use function str_contains;
+use function str_replace;
 use function str_split;
-use function str_starts_with;
+use function strlen;
+use function substr;
 
 /**
  * Phalcon\Mvc\Router\Route

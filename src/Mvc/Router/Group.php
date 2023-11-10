@@ -13,8 +13,10 @@ declare(strict_types=1);
 
 namespace Phalcon\Mvc\Router;
 
+use function array_merge;
 use function is_array;
 use function is_string;
+use function method_exists;
 
 /**
  * Helper class to create a group of routes with common attributes
@@ -477,7 +479,8 @@ class Group implements GroupInterface
          */
         $route          = new Route(
             $this->prefix . $pattern,
-            $mergedPaths, $httpMethods
+            $mergedPaths,
+            $httpMethods
         );
         $this->routes[] = $route;
 
