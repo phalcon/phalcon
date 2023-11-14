@@ -66,7 +66,16 @@ interface MetaDataInterface
      *
      * @return array|null
      */
-    public function getColumnMap(ModelInterface $model): array | null;
+    public function getColumnMap(ModelInterface $model): array|null;
+
+    /**
+     * Returns attributes (which have default values) and their default values
+     *
+     * @param ModelInterface $model
+     *
+     * @return array
+     */
+    public function getDefaultValues(ModelInterface $model): array;
 
     /**
      * Returns attributes and their data types
@@ -87,15 +96,6 @@ interface MetaDataInterface
     public function getDataTypesNumeric(ModelInterface $model): array;
 
     /**
-     * Returns attributes (which have default values) and their default values
-     *
-     * @param ModelInterface $model
-     *
-     * @return array
-     */
-    public function getDefaultValues(ModelInterface $model): array;
-
-    /**
      * Returns attributes allow empty strings
      *
      * @param ModelInterface $model
@@ -111,7 +111,7 @@ interface MetaDataInterface
      *
      * @return string|null
      */
-    public function getIdentityField(ModelInterface $model): string | null;
+    public function getIdentityField(ModelInterface $model): string|null;
 
     /**
      * Returns an array of fields which are not part of the primary key
@@ -147,7 +147,7 @@ interface MetaDataInterface
      *
      * @return array|null
      */
-    public function getReverseColumnMap(ModelInterface $model): array | null;
+    public function getReverseColumnMap(ModelInterface $model): array|null;
 
     /**
      * Return the strategy to obtain the meta-data
@@ -180,7 +180,7 @@ interface MetaDataInterface
      *
      * @return array|null
      */
-    public function read(string $key): array | null;
+    public function read(string $key): array|null;
 
     /**
      * Reads the ordered/reversed column map for certain model
@@ -189,7 +189,7 @@ interface MetaDataInterface
      *
      * @return array|null
      */
-    public function readColumnMap(ModelInterface $model): array | null;
+    public function readColumnMap(ModelInterface $model): array|null;
 
     /**
      * Reads column-map information for certain model using a MODEL_* constant
@@ -208,7 +208,7 @@ interface MetaDataInterface
      *
      * @return array
      */
-    public function readMetaData(ModelInterface $model): array;
+    public function readMetaData(ModelInterface $model): array | null;
 
     /**
      * Reads meta-data for certain model using a MODEL_* constant
@@ -267,6 +267,21 @@ interface MetaDataInterface
     ): void;
 
     /**
+     * Writes meta-data for certain model using a MODEL_* constant
+     *
+     * @param ModelInterface $model
+     * @param int            $index
+     * @param mixed          $data
+     *
+     * @return mixed
+     */
+    public function writeMetaDataIndex(
+        ModelInterface $model,
+        int $index,
+        array $data
+    ): void;
+
+    /**
      * Set the meta-data extraction strategy
      *
      * @param StrategyInterface $strategy
@@ -284,19 +299,4 @@ interface MetaDataInterface
      * @return void
      */
     public function write(string $key, array $data): void;
-
-    /**
-     * Writes meta-data for certain model using a MODEL_* constant
-     *
-     * @param ModelInterface $model
-     * @param int            $index
-     * @param mixed          $data
-     *
-     * @return mixed
-     */
-    public function writeMetaDataIndex(
-        ModelInterface $model,
-        int $index,
-        mixed $data
-    );
 }
