@@ -208,7 +208,7 @@ interface MetaDataInterface
      *
      * @return array
      */
-    public function readMetaData(ModelInterface $model): array;
+    public function readMetaData(ModelInterface $model): array | null;
 
     /**
      * Reads meta-data for certain model using a MODEL_* constant
@@ -278,8 +278,8 @@ interface MetaDataInterface
     public function writeMetaDataIndex(
         ModelInterface $model,
         int $index,
-        mixed $data
-    );
+        array $data
+    ): void;
 
     /**
      * Set the meta-data extraction strategy
