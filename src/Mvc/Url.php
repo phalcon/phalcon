@@ -16,6 +16,7 @@ namespace Phalcon\Mvc;
 use Phalcon\Di\AbstractInjectionAware;
 use Phalcon\Mvc\Url\Exception;
 use Phalcon\Mvc\Url\UrlInterface;
+use Phalcon\Parsers\Parser;
 
 use function is_array;
 use function is_string;
@@ -186,7 +187,7 @@ class Url extends AbstractInjectionAware implements UrlInterface
 //                $route->getReversedPaths(),
 //                $uri
 //            );
-            $uri = phalcon_replace_paths(
+            $uri = Parser::replacePaths(
                 $route->getPattern(),
                 $route->getReversedPaths(),
                 $uri

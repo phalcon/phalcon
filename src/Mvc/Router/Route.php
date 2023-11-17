@@ -162,38 +162,17 @@ class Route implements RouteInterface
     {
         // If a pattern contains ':', maybe there are placeholders to replace
         if (str_contains($pattern, ":")) {
-            // This is a pattern for valid identifiers
             $idPattern = "/([\\w0-9\\_\\-]+)";
+            $map       = [
+                "/:module"     => $idPattern,
+                "/:controller" => $idPattern,
+                "/:namespace"  => $idPattern,
+                "/:action"     => $idPattern,
+                "/:params"     => "(/.*)*",
+                "/:int"        => "/([0-9]+)",
+            ];
 
-            // Replace the module part
-            if (str_contains($pattern, "/:module")) {
-                $pattern = str_replace("/:module", $idPattern, $pattern);
-            }
-
-            // Replace the controller placeholder
-            if (str_contains($pattern, "/:controller")) {
-                $pattern = str_replace("/:controller", $idPattern, $pattern);
-            }
-
-            // Replace the namespace placeholder
-            if (str_contains($pattern, "/:namespace")) {
-                $pattern = str_replace("/:namespace", $idPattern, $pattern);
-            }
-
-            // Replace the action placeholder
-            if (str_contains($pattern, "/:action")) {
-                $pattern = str_replace("/:action", $idPattern, $pattern);
-            }
-
-            // Replace the params placeholder
-            if (str_contains($pattern, "/:params")) {
-                $pattern = str_replace("/:params", "(/.*)*", $pattern);
-            }
-
-            // Replace the int placeholder
-            if (str_contains($pattern, "/:int")) {
-                $pattern = str_replace("/:int", "/([0-9]+)", $pattern);
-            }
+            $pattern = str_replace(array_keys($map), array_values($map), $pattern);
         }
 
         /**
@@ -446,9 +425,9 @@ class Route implements RouteInterface
     /**
      * Returns the 'match' callback if any
      *
-     * @return callable
+     * @return callable|null
      */
-    public function getMatch(): callable
+    public function getMatch(): callable|null
     {
         return $this->match;
     }

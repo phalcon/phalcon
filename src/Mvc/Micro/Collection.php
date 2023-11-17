@@ -63,7 +63,7 @@ class Collection implements CollectionInterface
      */
     public function delete(
         string $routePattern,
-        callable $handler,
+        callable|string $handler,
         string $name = null
     ): CollectionInterface {
         $this->addMap('DELETE', $routePattern, $handler, $name);
@@ -82,7 +82,7 @@ class Collection implements CollectionInterface
      */
     public function get(
         string $routePattern,
-        callable $handler,
+        callable|string $handler,
         string $name = null
     ): CollectionInterface {
         $this->addMap('GET', $routePattern, $handler, $name);
@@ -131,7 +131,7 @@ class Collection implements CollectionInterface
      */
     public function head(
         string $routePattern,
-        callable $handler,
+        callable|string $handler,
         string $name = null
     ): CollectionInterface {
         $this->addMap('HEAD', $routePattern, $handler, $name);
@@ -160,7 +160,7 @@ class Collection implements CollectionInterface
      */
     public function map(
         string $routePattern,
-        callable $handler,
+        callable|string $handler,
         string $name = null
     ): CollectionInterface {
         $this->addMap('', $routePattern, $handler, $name);
@@ -189,7 +189,7 @@ class Collection implements CollectionInterface
      */
     public function mapVia(
         string $routePattern,
-        callable $handler,
+        callable|string $handler,
         array|string $method,
         string $name = null
     ): CollectionInterface {
@@ -210,7 +210,7 @@ class Collection implements CollectionInterface
      */
     public function options(
         string $routePattern,
-        callable $handler,
+        callable|string $handler,
         string $name = null
     ): CollectionInterface {
         $this->addMap('OPTIONS', $routePattern, $handler, $name);
@@ -229,7 +229,7 @@ class Collection implements CollectionInterface
      */
     public function patch(
         string $routePattern,
-        callable $handler,
+        callable|string $handler,
         string $name = null
     ): CollectionInterface {
         $this->addMap('PATCH', $routePattern, $handler, $name);
@@ -248,7 +248,7 @@ class Collection implements CollectionInterface
      */
     public function post(
         string $routePattern,
-        callable $handler,
+        callable|string $handler,
         string $name = null
     ): CollectionInterface {
         $this->addMap('POST', $routePattern, $handler, $name);
@@ -267,7 +267,7 @@ class Collection implements CollectionInterface
      */
     public function put(
         string $routePattern,
-        callable $handler,
+        callable|string $handler,
         string $name = null
     ): CollectionInterface {
         $this->addMap('PUT', $routePattern, $handler, $name);
@@ -332,7 +332,7 @@ class Collection implements CollectionInterface
     protected function addMap(
         array|string $method,
         string $routePattern,
-        callable $handler,
+        callable|string $handler,
         string $name = null
     ): void {
         $this->handlers[] = [$method, $routePattern, $handler, $name];
