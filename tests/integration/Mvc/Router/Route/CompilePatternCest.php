@@ -14,6 +14,7 @@ declare(strict_types=1);
 namespace Phalcon\Tests\Integration\Mvc\Router\Route;
 
 use IntegrationTester;
+use Phalcon\Mvc\Router\Exception;
 use Phalcon\Mvc\Router\Route;
 
 /**
@@ -23,6 +24,11 @@ class CompilePatternCest
 {
     /**
      * Tests Phalcon\Mvc\Router\Route :: compilePattern()
+     *
+     * @param IntegrationTester $I
+     *
+     * @return void
+     * @throws Exception
      *
      * @author Phalcon Team <team@phalcon.io>
      * @since  2020-10-05
