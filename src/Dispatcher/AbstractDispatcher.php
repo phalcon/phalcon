@@ -18,6 +18,7 @@ use Phalcon\Cache\Adapter\AdapterInterface;
 use Phalcon\Cli\Dispatcher\Exception as CliDispatcherException;
 use Phalcon\Cli\TaskInterface;
 use Phalcon\Di\AbstractInjectionAware;
+use Phalcon\Di\Injectable;
 use Phalcon\Dispatcher\Exception as DispatcherException;
 use Phalcon\Events\EventsAwareInterface;
 use Phalcon\Events\Traits\EventsAwareTrait;
@@ -42,7 +43,7 @@ use function spl_object_hash;
  * This class can't be instantiated directly, you can use it to create your own
  * dispatchers.
  */
-abstract class AbstractDispatcher extends AbstractInjectionAware implements DispatcherInterface, EventsAwareInterface
+abstract class AbstractDispatcher extends Injectable implements DispatcherInterface, EventsAwareInterface
 {
     use EventsAwareTrait;
 

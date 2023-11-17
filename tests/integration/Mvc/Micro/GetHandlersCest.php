@@ -60,17 +60,17 @@ class GetHandlersCest
 
         $I->assertEquals(
             'this is get',
-            $handlers[$getRoute->getId()]()
+            $handlers[$getRoute->getRouteId()]()
         );
 
         $I->assertEquals(
             'this is post',
-            $handlers[$postRoute->getId()]()
+            $handlers[$postRoute->getRouteId()]()
         );
 
         $I->assertEquals(
             'this is head',
-            $handlers[$headRoute->getId()]()
+            $handlers[$headRoute->getRouteId()]()
         );
     }
 }

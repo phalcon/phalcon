@@ -13,6 +13,7 @@ declare(strict_types=1);
 
 namespace Phalcon\Mvc;
 
+use Phalcon\Di\AbstractInjectionAware;
 use Phalcon\Di\Traits\InjectionAwareTrait;
 use Phalcon\Events\EventsAwareInterface;
 use Phalcon\Events\Exception as EventsException;
@@ -55,10 +56,9 @@ use function str_contains;
  * echo $router->getControllerName();
  * ```
  */
-class Router implements RouterInterface, EventsAwareInterface
+class Router extends AbstractInjectionAware implements RouterInterface, EventsAwareInterface
 {
     use EventsAwareTrait;
-    use InjectionAwareTrait;
 
     public const POSITION_FIRST = 0;
     public const POSITION_LAST  = 1;
@@ -745,6 +745,7 @@ class Router implements RouterInterface, EventsAwareInterface
          * Routes are traversed in reversed order
          */
         $reverseRoutes = array_reverse($this->routes);
+
         foreach ($reverseRoutes as $route) {
             $params  = [];
             $matches = null;

@@ -71,7 +71,6 @@ use function is_object;
  */
 class Application extends AbstractApplication
 {
-    use EventsAwareTrait;
     use FileTrait;
 
     /**
