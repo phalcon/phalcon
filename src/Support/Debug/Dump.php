@@ -528,6 +528,8 @@ class Dump
     }
 
     /**
+     * @param string $varName
+     *
      * @return string
      */
     private function getOutputParenthesis(string $varName): string

@@ -67,7 +67,6 @@ class Title extends AbstractHelper
      * Returns the title tags
      *
      * @return string
-     * @throws Exception
      */
     public function __toString()
     {

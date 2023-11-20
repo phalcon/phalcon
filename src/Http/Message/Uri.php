@@ -35,7 +35,6 @@ use function preg_replace;
 use function rawurlencode;
 use function str_replace;
 use function str_split;
-use function strpos;
 use function strtolower;
 use function substr;
 
@@ -644,7 +643,7 @@ final class Uri extends AbstractCommon implements UriInterface
             return null;
         }
 
-        if (null !== $port && ($port < 1 || $port > 65535)) {
+        if ($port < 1 || $port > 65535) {
             throw new InvalidArgumentException(
                 "Invalid port specified. (Valid range 1-65535)"
             );

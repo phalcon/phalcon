@@ -356,14 +356,6 @@ class Postgresql extends PdoAdapter
                     break;
 
                 /**
-                 * MEDIUMBLOB
-                 */
-                case (str_contains($columnType, "mediumblob")):
-                    $definition["type"] = Column::TYPE_TEXT;
-
-                    break;
-
-                /**
                  * LONGBLOB
                  */
                 case (str_contains($columnType, "longblob")):
@@ -444,8 +436,9 @@ class Postgresql extends PdoAdapter
                     break;
 
                 /**
-                 * TEXT
+                 * TEXT, MEDIUMBLOB
                  */
+                case (str_contains($columnType, "mediumblob")):
                 case (str_contains($columnType, "text")):
                     $definition["type"] = Column::TYPE_TEXT;
 
