@@ -682,7 +682,6 @@ jobs:
           name: "db-sqlite-${{ matrix.php }}.coverage"
           path: "tests/_output/coverage.xml"
 
-
   upload-coverage:
     permissions:
       contents: read
@@ -724,6 +723,14 @@ jobs:
           directory: reports
           fail_ci_if_error: true
           verbose: true
+
+      - name: "Upload to Qodana"
+        run: |
+          docker run \
+            -v $(pwd):/data/project/ \
+            -v ./reports/:/data/coverage \
+            -e QODANA_TOKEN="${{ secrets.QODANA_TOKEN }}" \
+            jetbrains/qodana-php
 
       - name: "Upload to Codacy"
         env:
