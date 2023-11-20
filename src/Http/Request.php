@@ -1671,7 +1671,7 @@ class Request extends AbstractInjectionAware implements
             );
 
             foreach ($headerSplit as $headerPart) {
-                if (false !== strpos($headerPart, '=')) {
+                if (str_contains($headerPart, '=')) {
                     $split = explode('=', $headerPart, 2);
 
                     if ('q' === $split[0]) {

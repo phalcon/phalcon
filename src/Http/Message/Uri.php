@@ -201,7 +201,7 @@ final class Uri extends AbstractCommon implements UriInterface
          */
         if ("" !== $path) {
             if (
-                "/" !== substr($path, 0, 1) &&
+                !str_starts_with($path, "/") &&
                 "" !== $authority
             ) {
                 // If the path is rootless and an authority is present,
@@ -436,8 +436,8 @@ final class Uri extends AbstractCommon implements UriInterface
     public function withPath(string $path): UriInterface
     {
         if (
-            false !== strpos($path, "?") ||
-            false !== strpos($path, "#")
+            str_contains($path, "?") ||
+            str_contains($path, "#")
         ) {
             throw new InvalidArgumentException(
                 "Path cannot contain a query string or fragment"
@@ -490,7 +490,7 @@ final class Uri extends AbstractCommon implements UriInterface
      */
     public function withQuery(string $query): UriInterface
     {
-        if (false !== strpos($query, "#")) {
+        if (str_contains($query, "#")) {
             throw new InvalidArgumentException(
                 "Query cannot contain a URI fragment"
             );
@@ -582,7 +582,7 @@ final class Uri extends AbstractCommon implements UriInterface
      */
     private function filterFragment(string $fragment): string
     {
-        if ("" !== $fragment && 0 === strpos($fragment, "#")) {
+        if ("" !== $fragment && str_starts_with($fragment, "#")) {
             $fragment = "%23" . substr($fragment, 1);
         }
 
@@ -624,7 +624,7 @@ final class Uri extends AbstractCommon implements UriInterface
             $path
         );
 
-        if ("" === $path || "/" !== substr($path, 0, 1)) {
+        if ("" === $path || !str_starts_with($path, "/")) {
             return $path;
         }
 
