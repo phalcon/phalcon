@@ -634,7 +634,7 @@ class Debug
              * We assume that classes starting by Phalcon are framework's
              * classes
              */
-            if (preg_match("/^Phalcon/", $className)) {
+            if (str_starts_with($className, "Phalcon")) {
                 /**
                  * Prepare the class name according to the Phalcon's conventions
                  */

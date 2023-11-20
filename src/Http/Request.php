@@ -1829,7 +1829,7 @@ class Request extends AbstractInjectionAware implements
 
             if (is_array($name)) {
                 $parentFiles = $this->smoothFiles(
-                    $names[$index],
+                    $name,
                     $types[$index],
                     $tmpNames[$index],
                     $sizes[$index],

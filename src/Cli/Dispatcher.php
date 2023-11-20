@@ -16,6 +16,7 @@ namespace Phalcon\Cli;
 use Exception;
 use Phalcon\Cli\Dispatcher\Exception as DispatcherException;
 use Phalcon\Dispatcher\AbstractDispatcher as CliDispatcher;
+use Phalcon\Dispatcher\Exception as ExceptionAlias;
 use Phalcon\Filter\Exception as FilterException;
 use Phalcon\Filter\Filter;
 
