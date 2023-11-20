@@ -15,7 +15,6 @@ namespace Phalcon\Annotations;
 
 use Phalcon\Parsers\Parser;
 use ReflectionClass;
-
 use ReflectionException;
 
 use function array_keys;
