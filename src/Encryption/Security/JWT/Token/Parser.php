@@ -38,7 +38,7 @@ class Parser
     private Decode $decode;
 
     /**
-     * @param $decode
+     * @param Decode|null $decode
      */
     public function __construct(Decode $decode = null)
     {

@@ -92,8 +92,8 @@ class File implements FileInterface
     /**
      * Constructor
      *
-     * @param array       $file
-     * @param string|null $key
+     * @param array  $file
+     * @param string $key
      */
     public function __construct(array $file, string $key = '')
     {
