@@ -293,8 +293,8 @@ final class UploadedFile implements UploadedFileInterface
         if (
             true === empty($sapi) ||
             true !== empty($this->fileName) ||
-            "cli" === substr($sapi, 0, 3) ||
-            "phpdbg" === substr($sapi, 0, 6)
+            str_starts_with($sapi, "cli") ||
+            str_starts_with($sapi, "phpdbg")
         ) {
             $this->storeFile($targetPath);
         } else {

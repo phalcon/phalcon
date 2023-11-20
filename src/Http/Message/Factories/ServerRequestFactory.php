@@ -412,7 +412,7 @@ class ServerRequestFactory implements
                  * Apache prefixes environment variables with REDIRECT_
                  * if they are added by rewrite rules
                  */
-                if (0 === strpos($key, "REDIRECT_")) {
+                if (str_starts_with($key, "REDIRECT_")) {
                     $key = substr($key, 9);
                     /**
                      * We will not overwrite existing variables with the
@@ -423,7 +423,7 @@ class ServerRequestFactory implements
                     }
                 }
 
-                if (0 === strpos($key, "HTTP_")) {
+                if (str_starts_with($key, "HTTP_")) {
                     $name = str_replace(
                         "_",
                         "-",
@@ -434,7 +434,7 @@ class ServerRequestFactory implements
                     continue;
                 }
 
-                if (0 === strpos($key, "CONTENT_")) {
+                if (str_starts_with($key, "CONTENT_")) {
                     $name = "content-" . strtolower(substr($key, 8));
 
                     $headers->set($name, $value);
@@ -470,7 +470,7 @@ class ServerRequestFactory implements
         /**
          * 5 characters to distinguish between http and https
          */
-        if ("http/" !== substr($localProtocol, 0, 5)) {
+        if (!str_starts_with($localProtocol, "http/")) {
             throw new InvalidArgumentException(
                 "Incorrect protocol value " . $protocol
             );

@@ -91,7 +91,7 @@ abstract class AbstractAdapter implements AdapterInterface
     ): AdapterInterface {
         if (
             strlen($color) > 1 &&
-            substr($color, 0, 1) === "#"
+            str_starts_with($color, "#")
         ) {
             $color = substr($color, 1);
         }
@@ -461,7 +461,7 @@ abstract class AbstractAdapter implements AdapterInterface
 
         if (
             strlen($color) > 1 &&
-            substr($color, 0, 1) === "#"
+            str_starts_with($color, "#")
         ) {
             $color = substr($color, 1);
         }

@@ -123,7 +123,7 @@ class Csv extends AbstractAdapter implements ArrayAccess
             }
 
             if (
-                '#' === substr($data[0], 0, 1) ||
+                str_starts_with($data[0], '#') ||
                 true !== isset($data[1])
             ) {
                 continue;

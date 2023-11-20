@@ -280,7 +280,7 @@ class Response extends Injectable implements
         if (true === $externalRedirect) {
             $header = $location;
         } else {
-            if (strstr($location, '://')) {
+            if (str_contains($location, '://')) {
                 $matched = preg_match("/^[^:\\/?#]++:/", $location);
                 if ($matched) {
                     $header = $location;

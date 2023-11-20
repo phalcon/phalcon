@@ -204,7 +204,7 @@ class Manager implements ManagerInterface
         }
 
         // All valid events must have a colon separator
-        if (false === strpos($eventType, ':')) {
+        if (!str_contains($eventType, ':')) {
             throw new Exception('Invalid event type ' . $eventType);
         }
 
