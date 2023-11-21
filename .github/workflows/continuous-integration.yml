@@ -78,15 +78,6 @@ jobs:
         run: |
           vendor/bin/phpcs --standard=./phpcs.xml
 
-      - name: "Qodana Analysis"
-        run: |
-          docker run \
-            -p 8080:8080 \
-            -v $(pwd):/data/project \
-            -v $(pwd)/res:/data/results/ \
-            jetbrains/qodana-php:latest \
-            --show-report --baseline=qodana.sarif.json
-
   unit-tests:
     needs: phpcs
 
@@ -690,11 +681,43 @@ jobs:
           name: "db-sqlite-${{ matrix.php }}.coverage"
           path: "tests/_output/coverage.xml"
 
+
+  qodana-analysis:
+    permissions:
+      contents: read
+
+    name: "Qodana Analysis"
+    runs-on: "ubuntu-22.04"
+    needs:
+      - "unit-tests"
+      - "cli-tests"
+      - "integration-tests"
+      #      - "db-common-tests"
+      - "db-mysql-tests"
+      #      - "db-postgres-tests"
+      - "db-sqlite-tests"
+
+    steps:
+      - name: "Checkout"
+        uses: "actions/checkout@v3"
+        with:
+          fetch-depth: 2
+
+      - name: "Qodana Analysis"
+        run: |
+          docker run \
+            -p 8080:8080 \
+            -v $(pwd):/data/project \
+            -v $(pwd)/res:/data/results/ \
+            -e QODANA_TOKEN="${{ secrets.QODANA_TOKEN }}" \
+            jetbrains/qodana-php:latest \
+            --show-report --baseline=qodana.sarif.json
+
   upload-coverage:
     permissions:
       contents: read
 
-    name: "Upload coverage to Codecov/Codacy"
+    name: "Upload coverage"
     runs-on: "ubuntu-22.04"
     needs:
       - "unit-tests"
@@ -739,10 +762,3 @@ jobs:
             -v ./reports/:/data/coverage \
             -e QODANA_TOKEN="${{ secrets.QODANA_TOKEN }}" \
             jetbrains/qodana-php
-
-      - name: "Upload to Codacy"
-        env:
-          project-token: ${{ secrets.CODACY_PROJECT_TOKEN }}
-        run: |
-          bash <(curl -Ls https://coverage.codacy.com/get.sh) report \
-            -l PHP $(find ./reports/ -name 'coverage.xml' -printf '-r %p ')
