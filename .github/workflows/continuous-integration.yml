@@ -78,6 +78,14 @@ jobs:
         run: |
           vendor/bin/phpcs --standard=./phpcs.xml
 
+      - name: "Qodana Analysis"
+        run: |
+          docker run \
+            -p 8080:8080 \
+            -v $(pwd):/data/project \
+            -v $(pwd)/res:/data/results/ \
+            jetbrains/qodana-php:latest \
+            --show-report --baseline=qodana.sarif.json
 
   unit-tests:
     needs: phpcs
