@@ -13,6 +13,7 @@ declare(strict_types=1);
 
 namespace Phalcon\Cache;
 
+use Exception as BaseException;
 use Phalcon\Cache\Adapter\AdapterInterface;
 use Phalcon\Cache\Adapter\Apcu;
 use Phalcon\Cache\Adapter\Libmemcached;
@@ -78,7 +79,7 @@ class AdapterFactory
      *                                      ]
      *
      * @return AdapterInterface
-     * @throws Exception
+     * @throws BaseException
      */
     public function newInstance(string $name, array $options = []): AdapterInterface
     {

@@ -13,6 +13,7 @@ declare(strict_types=1);
 
 namespace Phalcon\Translate;
 
+use Exception as BaseException;
 use Phalcon\Config\ConfigInterface;
 use Phalcon\Support\Traits\ConfigTrait;
 use Phalcon\Traits\Factory\FactoryTrait;
@@ -87,7 +88,7 @@ class TranslateFactory
      * @param array  $options
      *
      * @return AdapterInterface
-     * @throws Exception
+     * @throws BaseException
      */
     public function newInstance(string $name, array $options = []): AdapterInterface
     {

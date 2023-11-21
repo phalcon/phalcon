@@ -13,6 +13,7 @@ declare(strict_types=1);
 
 namespace Phalcon\Translate;
 
+use Exception as BaseException;
 use Phalcon\Traits\Factory\FactoryTrait;
 use Phalcon\Translate\Interpolator\AssociativeArray;
 use Phalcon\Translate\Interpolator\IndexedArray;
@@ -38,7 +39,7 @@ class InterpolatorFactory
      * @param string $name
      *
      * @return InterpolatorInterface
-     * @throws Exception
+     * @throws BaseException
      */
     public function newInstance(string $name): InterpolatorInterface
     {

@@ -13,10 +13,12 @@ declare(strict_types=1);
 
 namespace Phalcon\Db\Adapter;
 
+use Exception as BaseException;
 use Phalcon\Config\Config;
 use Phalcon\Db\Adapter\Pdo\Mysql;
 use Phalcon\Db\Adapter\Pdo\Postgresql;
 use Phalcon\Db\Adapter\Pdo\Sqlite;
+use Phalcon\Support\Exception as SupportException;
 use Phalcon\Support\Traits\ConfigTrait;
 use Phalcon\Traits\Factory\FactoryTrait;
 
@@ -52,6 +54,9 @@ class PdoFactory
      *                             'charset' => 'utf8mb4'
      *                             ]
      *                             ]
+     *
+     * @return AdapterInterface
+     * @throws SupportException
      */
     public function load(Config|array $config): AdapterInterface
     {
@@ -73,6 +78,7 @@ class PdoFactory
      * @param array  $options
      *
      * @return AdapterInterface
+     * @throws BaseException
      */
     public function newInstance(
         string $name,

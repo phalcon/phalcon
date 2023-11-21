@@ -13,6 +13,7 @@ declare(strict_types=1);
 
 namespace Phalcon\Config;
 
+use Exception as BaseException;
 use Phalcon\Config\Adapter\Grouped;
 use Phalcon\Config\Adapter\Ini;
 use Phalcon\Config\Adapter\Json;
@@ -108,7 +109,7 @@ class ConfigFactory
      * @param mixed|null $params
      *
      * @return ConfigInterface
-     * @throws Exception
+     * @throws BaseException
      */
     public function newInstance(
         string $name,
