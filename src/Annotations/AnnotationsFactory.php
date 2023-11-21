@@ -13,6 +13,7 @@ declare(strict_types=1);
 
 namespace Phalcon\Annotations;
 
+use Exception as BaseException;
 use Phalcon\Annotations\Adapter\AdapterInterface;
 use Phalcon\Annotations\Adapter\Apcu;
 use Phalcon\Annotations\Adapter\Memory;
@@ -79,6 +80,7 @@ class AnnotationsFactory
      *                        ]
      *
      * @return AdapterInterface
+     * @throws BaseException
      */
     public function newInstance(
         string $name,

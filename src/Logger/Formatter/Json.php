@@ -48,7 +48,6 @@ class Json extends AbstractFormatter
      * @param Item $item
      *
      * @return string
-     * @throws JsonException
      */
     public function format(Item $item): string
     {

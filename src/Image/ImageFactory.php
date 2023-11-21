@@ -13,10 +13,12 @@ declare(strict_types=1);
 
 namespace Phalcon\Image;
 
+use Exception as BaseException;
 use Phalcon\Config\Config;
 use Phalcon\Image\Adapter\AdapterInterface;
 use Phalcon\Image\Adapter\Gd;
 use Phalcon\Image\Adapter\Imagick;
+use Phalcon\Support\Exception as SupportException;
 use Phalcon\Support\Traits\ConfigTrait;
 use Phalcon\Traits\Factory\FactoryTrait;
 
@@ -47,6 +49,7 @@ class ImageFactory
      *                                             ]
      *
      * @return AdapterInterface
+     * @throws SupportException
      */
     public function load($config): AdapterInterface
     {
@@ -67,6 +70,14 @@ class ImageFactory
 
     /**
      * Creates a new instance
+     *
+     * @param string   $name
+     * @param string   $file
+     * @param int|null $width
+     * @param int|null $height
+     *
+     * @return AdapterInterface
+     * @throws BaseException
      */
     public function newInstance(
         string $name,
