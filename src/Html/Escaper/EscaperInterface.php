@@ -66,6 +66,7 @@ interface EscaperInterface
     /**
      * Sets the encoding to be used by the escaper
      *
+     * @param string $encoding
      *
      * @return EscaperInterface
      */

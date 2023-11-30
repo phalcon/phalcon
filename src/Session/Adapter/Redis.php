@@ -13,8 +13,8 @@ declare(strict_types=1);
 
 namespace Phalcon\Session\Adapter;
 
+use Exception;
 use Phalcon\Storage\AdapterFactory;
-use Phalcon\Support\Exception;
 
 /**
  * Phalcon\Session\Adapter\Redis

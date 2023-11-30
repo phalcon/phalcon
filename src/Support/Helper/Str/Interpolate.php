@@ -28,6 +28,10 @@ class Interpolate
     /**
      * @param string $message
      * @param array  $context
+     * @param string $leftToken
+     * @param string $rightToken
+     *
+     * @return string
      */
     public function __invoke(
         string $message,

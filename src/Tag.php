@@ -619,6 +619,7 @@ class Tag
      *                                 'id'    => '',
      *                                 'name'  => '',
      *                                 ]
+     * @param bool         $local
      *
      * @return string
      * @throws Exception

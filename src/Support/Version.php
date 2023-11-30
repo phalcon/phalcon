@@ -148,18 +148,14 @@ class Version
     {
         $version = $this->getVersion();
 
-        switch ($part) {
-            case self::VERSION_MAJOR:
-            case self::VERSION_MEDIUM:
-            case self::VERSION_MINOR:
-            case self::VERSION_SPECIAL_NUMBER:
-                return (string)$version[$part];
-
-            case self::VERSION_SPECIAL:
-                return $this->getSpecial($version[self::VERSION_SPECIAL]);
-            default:
-                return $this->get();
-        }
+        return match ($part) {
+            self::VERSION_MAJOR,
+            self::VERSION_MEDIUM,
+            self::VERSION_MINOR,
+            self::VERSION_SPECIAL_NUMBER => (string)$version[$part],
+            self::VERSION_SPECIAL        => $this->getSpecial($version[self::VERSION_SPECIAL]),
+            default                      => $this->get(),
+        };
     }
 
     /**

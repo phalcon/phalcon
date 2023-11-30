@@ -306,6 +306,7 @@ class Annotations extends Router
      * @param Annotation $annotation
      *
      * @return void
+     * @throws Exception
      */
     public function processActionAnnotation(
         string $module,
