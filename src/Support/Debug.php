@@ -46,10 +46,6 @@ use function sprintf;
 class Debug
 {
     /**
-     * @var bool
-     */
-    protected static bool $isActive;
-    /**
      * @var array
      */
     protected array $blacklist = ["request" => [], "server" => []];
@@ -61,6 +57,10 @@ class Debug
      * @var bool
      */
     protected bool $hideDocumentRoot = false;
+    /**
+     * @var bool
+     */
+    protected static bool $isActive;
     /**
      * @var bool
      */
@@ -220,29 +220,6 @@ class Debug
     }
 
     /**
-     * Throws an exception when a notice or warning is raised
-     *
-     * @param int    $severity
-     * @param string $message
-     * @param string $file
-     * @param int    $line
-     * @param array  $context
-     *
-     * @throws ErrorException
-     */
-    public function onUncaughtLowSeverity(
-        int $severity,
-        string $message,
-        string $file,
-        int $line,
-        array $context = []
-    ): void {
-        if (error_reporting() & $severity) {
-            throw new ErrorException($message, 0, $severity, $file, $line);
-        }
-    }
-
-    /**
      * Handles uncaught exceptions
      *
      * @param Throwable $exception
@@ -285,6 +262,29 @@ class Debug
         echo $exception->getMessage();
 
         return false;
+    }
+
+    /**
+     * Throws an exception when a notice or warning is raised
+     *
+     * @param int    $severity
+     * @param string $message
+     * @param string $file
+     * @param int    $line
+     * @param array  $context
+     *
+     * @throws ErrorException
+     */
+    public function onUncaughtLowSeverity(
+        int $severity,
+        string $message,
+        string $file,
+        int $line,
+        array $context = []
+    ): void {
+        if (error_reporting() & $severity) {
+            throw new ErrorException($message, 0, $severity, $file, $line);
+        }
     }
 
     /**

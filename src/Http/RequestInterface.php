@@ -135,6 +135,13 @@ interface RequestInterface
     public function getDigestAuth(): array;
 
     /**
+     * Return the web page that refers active request. ie: https://phalcon.io
+     *
+     * @return string
+     */
+    public function getHTTPReferer(): string;
+
+    /**
      * Return the HTTP header from request data
      *
      * @param string $header
@@ -200,20 +207,13 @@ interface RequestInterface
     public function getHttpHost(): string;
 
     /**
-     * Return the web page that refers active request. ie: https://phalcon.io
-     *
-     * @return string
-     */
-    public function getHTTPReferer(): string;
-
-    /**
      * Return the decoded JSON HTTP raw request body
      *
      * @param bool $associative
      *
      * @return stdClass|array|bool
      */
-    public function getJsonRawBody(bool $associative = false): array|bool|stdClass;
+    public function getJsonRawBody(bool $associative = false): array | bool | stdClass;
 
     /**
      * Return the languages array and their quality accepted by the
@@ -244,23 +244,6 @@ interface RequestInterface
      * @return int
      */
     public function getPort(): int;
-
-    /**
-     * Return the HTTP URI which request has been made to
-     *
-     *```php
-     * // Returns /some/path?with=queryParams
-     * $uri = $request->getURI();
-     *
-     * // Returns /some/path
-     * $uri = $request->getURI(true);
-     *```
-     *
-     * @param bool $onlyPath If true, query part will be omitted
-     *
-     * @return string
-     */
-    public function getURI(bool $onlyPath = false): string;
 
     /**
      * Return a variable from the $_POST superglobal applying filters if needed.
@@ -389,6 +372,23 @@ interface RequestInterface
     public function getServerName(): string;
 
     /**
+     * Return the HTTP URI which request has been made to
+     *
+     *```php
+     * // Returns /some/path?with=queryParams
+     * $uri = $request->getURI();
+     *
+     * // Returns /some/path
+     * $uri = $request->getURI(true);
+     *```
+     *
+     * @param bool $onlyPath If true, query part will be omitted
+     *
+     * @return string
+     */
+    public function getURI(bool $onlyPath = false): string;
+
+    /**
      * Return the attached files as Phalcon\Http\Request\FileInterface
      * compatible instances
      *
@@ -435,15 +435,6 @@ interface RequestInterface
     public function hasHeader(string $header): bool;
 
     /**
-     * Return whether the $_GET superglobal has certain index
-     *
-     * @param string $name
-     *
-     * @return bool
-     */
-    public function hasQuery(string $name): bool;
-
-    /**
      * Return whether the $_POST superglobal has certain index
      *
      * @param string $name
@@ -460,6 +451,15 @@ interface RequestInterface
      * @return bool
      */
     public function hasPut(string $name): bool;
+
+    /**
+     * Return whether the $_GET superglobal has certain index
+     *
+     * @param string $name
+     *
+     * @return bool
+     */
+    public function hasQuery(string $name): bool;
 
     /**
      * Return whether the $_SERVER superglobal has certain index

@@ -44,48 +44,42 @@ class Reference implements ReferenceInterface
      * @var array
      */
     protected array $columns;
-
-    /**
-     * Referenced Columns
-     *
-     * @var array
-     */
-    protected array $referencedColumns;
-
-    /**
-     * Referenced Schema
-     *
-     * @var string
-     */
-    protected string $referencedSchema;
-
-    /**
-     * Referenced Table
-     *
-     * @var string
-     */
-    protected string $referencedTable;
-
-    /**
-     * Schema name
-     *
-     * @var string
-     */
-    protected string $schemaName;
-
     /**
      * ON DELETE
      *
      * @var string
      */
     protected string $onDelete;
-
     /**
      * ON UPDATE
      *
      * @var string
      */
     protected string $onUpdate;
+    /**
+     * Referenced Columns
+     *
+     * @var array
+     */
+    protected array $referencedColumns;
+    /**
+     * Referenced Schema
+     *
+     * @var string
+     */
+    protected string $referencedSchema;
+    /**
+     * Referenced Table
+     *
+     * @var string
+     */
+    protected string $referencedTable;
+    /**
+     * Schema name
+     *
+     * @var string
+     */
+    protected string $schemaName;
 
     /**
      * Phalcon\Db\Reference constructor
@@ -160,6 +154,26 @@ class Reference implements ReferenceInterface
     }
 
     /**
+     * ON DELETE
+     *
+     * @return string
+     */
+    public function getOnDelete(): string
+    {
+        return $this->onDelete;
+    }
+
+    /**
+     * ON UPDATE
+     *
+     * @return string
+     */
+    public function getOnUpdate(): string
+    {
+        return $this->onUpdate;
+    }
+
+    /**
      * Referenced Columns
      *
      * @return array
@@ -197,25 +211,5 @@ class Reference implements ReferenceInterface
     public function getSchemaName(): string
     {
         return $this->schemaName;
-    }
-
-    /**
-     * ON DELETE
-     *
-     * @return string
-     */
-    public function getOnDelete(): string
-    {
-        return $this->onDelete;
-    }
-
-    /**
-     * ON UPDATE
-     *
-     * @return string
-     */
-    public function getOnUpdate(): string
-    {
-        return $this->onUpdate;
     }
 }

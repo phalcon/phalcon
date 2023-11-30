@@ -34,14 +34,13 @@ abstract class Dialect implements DialectInterface
     use IniTrait;
 
     /**
-     * @var string
-     */
-    protected string $escapeChar;
-
-    /**
      * @var array
      */
     protected array $customFunctions = [];
+    /**
+     * @var string
+     */
+    protected string $escapeChar;
 
     /**
      * Generate SQL to create a new savepoint
@@ -191,7 +190,7 @@ abstract class Dialect implements DialectInterface
      * @throws Exception
      */
     final public function getSqlColumn(
-        array|string $column,
+        array | string $column,
         string $escapeChar = "",
         array $bindCounts = []
     ): string {
@@ -439,7 +438,7 @@ abstract class Dialect implements DialectInterface
      * @return string
      */
     final public function getSqlTable(
-        array|string $tableName,
+        array | string $tableName,
         string $escapeChar = ""
     ): string {
         if (is_array($tableName)) {
@@ -482,7 +481,7 @@ abstract class Dialect implements DialectInterface
      *
      * @return string
      */
-    public function limit(string $sqlQuery, array|int $number): string
+    public function limit(string $sqlQuery, array | int $number): string
     {
         if (is_array($number)) {
             $sqlQuery .= " LIMIT " . $number[0];
@@ -685,16 +684,6 @@ abstract class Dialect implements DialectInterface
     }
 
     /**
-     * Checks whether the platform supports savepoints
-     *
-     * @return bool
-     */
-    public function supportsSavepoints(): bool
-    {
-        return true;
-    }
-
-    /**
      * Checks whether the platform supports releasing savepoints.
      *
      * @return bool
@@ -705,27 +694,13 @@ abstract class Dialect implements DialectInterface
     }
 
     /**
-     * Returns the size of the column enclosed in parentheses
+     * Checks whether the platform supports savepoints
      *
-     * @param ColumnInterface $column
-     *
-     * @return string
+     * @return bool
      */
-    protected function getColumnSize(ColumnInterface $column): string
+    public function supportsSavepoints(): bool
     {
-        return "(" . $column->getSize() . ")";
-    }
-
-    /**
-     * Returns the column size and scale enclosed in parentheses
-     *
-     * @param ColumnInterface $column
-     *
-     * @return string
-     */
-    protected function getColumnSizeAndScale(ColumnInterface $column): string
-    {
-        return "(" . $column->getSize() . "," . $column->getScale() . ")";
+        return true;
     }
 
     /**
@@ -760,6 +735,30 @@ abstract class Dialect implements DialectInterface
         }
 
         return $column->getType();
+    }
+
+    /**
+     * Returns the size of the column enclosed in parentheses
+     *
+     * @param ColumnInterface $column
+     *
+     * @return string
+     */
+    protected function getColumnSize(ColumnInterface $column): string
+    {
+        return "(" . $column->getSize() . ")";
+    }
+
+    /**
+     * Returns the column size and scale enclosed in parentheses
+     *
+     * @param ColumnInterface $column
+     *
+     * @return string
+     */
+    protected function getColumnSizeAndScale(ColumnInterface $column): string
+    {
+        return "(" . $column->getSize() . "," . $column->getScale() . ")";
     }
 
     /**
@@ -912,7 +911,7 @@ abstract class Dialect implements DialectInterface
      * @return string
      */
     final protected function getSqlExpressionFrom(
-        array|string $expression,
+        array | string $expression,
         string $escapeChar = ""
     ): string {
         $tableNames = $expression;
@@ -987,7 +986,7 @@ abstract class Dialect implements DialectInterface
      * @throws Exception
      */
     final protected function getSqlExpressionGroupBy(
-        array|string $expression,
+        array | string $expression,
         string $escapeChar = "",
         array $bindCounts = []
     ): string {
@@ -1044,7 +1043,7 @@ abstract class Dialect implements DialectInterface
      * @throws Exception
      */
     final protected function getSqlExpressionJoins(
-        array|string $expression,
+        array | string $expression,
         string $escapeChar = "",
         array $bindCounts = []
     ): string {
@@ -1106,7 +1105,7 @@ abstract class Dialect implements DialectInterface
      * @throws Exception
      */
     final protected function getSqlExpressionLimit(
-        array|string $expression,
+        array | string $expression,
         string $escapeChar = "",
         array $bindCounts = []
     ): string {
@@ -1238,7 +1237,7 @@ abstract class Dialect implements DialectInterface
      * @throws Exception
      */
     final protected function getSqlExpressionOrderBy(
-        array|string $expression,
+        array | string $expression,
         string $escapeChar = "",
         array $bindCounts = []
     ): string {
@@ -1346,10 +1345,10 @@ abstract class Dialect implements DialectInterface
          */
         if (isset($expression["left"])) {
             return $this->getSqlExpression(
-                $expression["left"],
-                $escapeChar,
-                $bindCounts
-            ) . " " . $expression["op"];
+                    $expression["left"],
+                    $escapeChar,
+                    $bindCounts
+                ) . " " . $expression["op"];
         }
 
         /**
@@ -1378,7 +1377,7 @@ abstract class Dialect implements DialectInterface
      * @throws Exception
      */
     final protected function getSqlExpressionWhere(
-        array|string $expression,
+        array | string $expression,
         string $escapeChar = "",
         array $bindCounts = []
     ): string {
@@ -1416,6 +1415,27 @@ abstract class Dialect implements DialectInterface
     }
 
     /**
+     * Prepares qualified for this RDBMS
+     *
+     * @param string $column
+     * @param string $domain
+     * @param string $escapeChar
+     *
+     * @return string
+     */
+    protected function prepareQualified(
+        string $column,
+        string $domain = "",
+        string $escapeChar = ""
+    ): string {
+        if ("" !== $domain) {
+            return $this->escape($domain . "." . $column, $escapeChar);
+        }
+
+        return $this->escape($column, $escapeChar);
+    }
+
+    /**
      * Prepares table for this RDBMS
      *
      * @param string $tableName
@@ -1449,26 +1469,5 @@ abstract class Dialect implements DialectInterface
         }
 
         return $tableName;
-    }
-
-    /**
-     * Prepares qualified for this RDBMS
-     *
-     * @param string $column
-     * @param string $domain
-     * @param string $escapeChar
-     *
-     * @return string
-     */
-    protected function prepareQualified(
-        string $column,
-        string $domain = "",
-        string $escapeChar = ""
-    ): string {
-        if ("" !== $domain) {
-            return $this->escape($domain . "." . $column, $escapeChar);
-        }
-
-        return $this->escape($column, $escapeChar);
     }
 }

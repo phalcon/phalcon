@@ -20,14 +20,14 @@ namespace Phalcon\Di;
 interface InjectionAwareInterface
 {
     /**
+     * Returns the internal dependency injector
+     */
+    public function getDI(): ?DiInterface;
+
+    /**
      * Sets the dependency injector
      *
      * @param DiInterface $container
      */
     public function setDI(DiInterface $container): void;
-
-    /**
-     * Returns the internal dependency injector
-     */
-    public function getDI(): ?DiInterface;
 }

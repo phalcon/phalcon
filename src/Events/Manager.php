@@ -55,6 +55,16 @@ class Manager implements ManagerInterface
     protected ?array $responses = [];
 
     /**
+     * Returns if priorities are enabled
+     *
+     * @return bool
+     */
+    public function arePrioritiesEnabled(): bool
+    {
+        return $this->enablePriorities;
+    }
+
+    /**
      * Attach a listener to the events manager
      *
      * @param string $eventType
@@ -88,16 +98,6 @@ class Manager implements ManagerInterface
 
         // Insert the handler in the queue
         $priorityQueue->insert($handler, $priority);
-    }
-
-    /**
-     * Returns if priorities are enabled
-     *
-     * @return bool
-     */
-    public function arePrioritiesEnabled(): bool
-    {
-        return $this->enablePriorities;
     }
 
     /**
@@ -434,20 +434,20 @@ class Manager implements ManagerInterface
     /**
      * @param string|null $type
      */
-    private function processDetachAllNullType(?string $type): void
+    private function processDetachAllNotNullType(?string $type): void
     {
-        if (null === $type) {
-            $this->events = [];
+        if (null !== $type && true === isset($this->events[$type])) {
+            unset($this->events[$type]);
         }
     }
 
     /**
      * @param string|null $type
      */
-    private function processDetachAllNotNullType(?string $type): void
+    private function processDetachAllNullType(?string $type): void
     {
-        if (null !== $type && true === isset($this->events[$type])) {
-            unset($this->events[$type]);
+        if (null === $type) {
+            $this->events = [];
         }
     }
 }

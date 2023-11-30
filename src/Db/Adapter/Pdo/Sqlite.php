@@ -502,17 +502,6 @@ class Sqlite extends PdoAdapter
     }
 
     /**
-     * Check whether the database system requires an explicit value for identity
-     * columns
-     *
-     * @return bool
-     */
-    public function useExplicitIdValue(): bool
-    {
-        return true;
-    }
-
-    /**
      * SQLite does not support the DEFAULT keyword
      *
      * @return bool
@@ -522,6 +511,17 @@ class Sqlite extends PdoAdapter
     public function supportsDefaultValue(): bool
     {
         return false;
+    }
+
+    /**
+     * Check whether the database system requires an explicit value for identity
+     * columns
+     *
+     * @return bool
+     */
+    public function useExplicitIdValue(): bool
+    {
+        return true;
     }
 
     /**

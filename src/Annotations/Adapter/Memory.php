@@ -35,7 +35,7 @@ class Memory extends AbstractAdapter
      *
      * @return Reflection|bool
      */
-    public function read(string $key): Reflection|bool
+    public function read(string $key): Reflection | bool
     {
         return $this->data[strtolower($key)] ?? false;
     }

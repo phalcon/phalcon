@@ -45,21 +45,6 @@ class Flatten
     /**
      * @param array<int|string,mixed> $data
      * @param mixed                   $item
-     *
-     * @return array<int|string,mixed>
-     */
-    private function processNotArray(array $data, $item): array
-    {
-        if (true !== is_array($item)) {
-            $data[] = $item;
-        }
-
-        return $data;
-    }
-
-    /**
-     * @param array<int|string,mixed> $data
-     * @param mixed                   $item
      * @param bool                    $deep
      *
      * @return array<int|string,mixed>
@@ -84,6 +69,21 @@ class Flatten
     {
         if (is_array($item) && true === $deep) {
             $data = array_merge($data, $this->__invoke($item, true));
+        }
+
+        return $data;
+    }
+
+    /**
+     * @param array<int|string,mixed> $data
+     * @param mixed                   $item
+     *
+     * @return array<int|string,mixed>
+     */
+    private function processNotArray(array $data, $item): array
+    {
+        if (true !== is_array($item)) {
+            $data[] = $item;
         }
 
         return $data;

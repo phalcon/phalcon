@@ -693,8 +693,8 @@ class Memory extends AbstractAdapter
              */
             if (0 === $parameterNumber) {
                 return $haveAccess == Enum::ALLOW && call_user_func(
-                    $funcAccess
-                );
+                        $funcAccess
+                    );
             }
 
             $parametersForFunction      = [];
@@ -820,18 +820,6 @@ class Memory extends AbstractAdapter
     }
 
     /**
-     * Check whether role exist in the roles list
-     *
-     * @param string $roleName
-     *
-     * @return bool
-     */
-    public function isRole(string $roleName): bool
-    {
-        return isset($this->roles[$roleName]);
-    }
-
-    /**
      * Check whether component exist in the components list
      *
      * @param string $componentName
@@ -841,6 +829,18 @@ class Memory extends AbstractAdapter
     public function isComponent(string $componentName): bool
     {
         return isset($this->components[$componentName]);
+    }
+
+    /**
+     * Check whether role exist in the roles list
+     *
+     * @param string $roleName
+     *
+     * @return bool
+     */
+    public function isRole(string $roleName): bool
+    {
+        return isset($this->roles[$roleName]);
     }
 
     /**

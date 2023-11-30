@@ -162,6 +162,17 @@ abstract class AbstractPdo extends AbstractAdapter
     }
 
     /**
+     * Closes the active connection returning success. Phalcon automatically
+     * closes and destroys active connections when the request ends
+     *
+     * @return void
+     */
+    public function close(): void
+    {
+        $this->pdo = null;
+    }
+
+    /**
      * Commits the active transaction in the connection
      *
      * @param bool $nesting
@@ -223,17 +234,6 @@ abstract class AbstractPdo extends AbstractAdapter
         $this->transactionLevel--;
 
         return $this->releaseSavepoint($savepointName);
-    }
-
-    /**
-     * Closes the active connection returning success. Phalcon automatically
-     * closes and destroys active connections when the request ends
-     *
-     * @return void
-     */
-    public function close(): void
-    {
-        $this->pdo = null;
     }
 
     /**
@@ -597,7 +597,7 @@ abstract class AbstractPdo extends AbstractAdapter
      *
      * @return PDO|null
      */
-    public function getInternalHandler(): PDO|null
+    public function getInternalHandler(): PDO | null
     {
         return $this->pdo;
     }
@@ -657,7 +657,7 @@ abstract class AbstractPdo extends AbstractAdapter
      *
      * @return string|bool
      */
-    public function lastInsertId(string $name = null): string|bool
+    public function lastInsertId(string $name = null): string | bool
     {
         return $this->pdo->lastInsertId($name);
     }
@@ -723,7 +723,7 @@ abstract class AbstractPdo extends AbstractAdapter
         string $sqlStatement,
         array $bindParams = [],
         array $bindTypes = []
-    ): ResultInterface|bool {
+    ): ResultInterface | bool {
         /**
          * Execute the beforeQuery event if an EventsManager is available
          */

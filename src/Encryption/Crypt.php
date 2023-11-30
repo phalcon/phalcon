@@ -13,6 +13,7 @@ declare(strict_types=1);
 
 namespace Phalcon\Encryption;
 
+use Exception as BaseException;
 use Phalcon\Encryption\Crypt\CryptInterface;
 use Phalcon\Encryption\Crypt\Exception\Exception;
 use Phalcon\Encryption\Crypt\Exception\Mismatch;
@@ -145,17 +146,14 @@ class Crypt implements CryptInterface
      * @var string
      */
     protected string $key = "";
-
-    /**
-     * @var int
-     */
-    protected int $padding = 0;
-
     /**
      * @var PadFactory
      */
     protected PadFactory $padFactory;
-
+    /**
+     * @var int
+     */
+    protected int $padding = 0;
     /**
      * Whether calculating message digest enabled or not.
      *
@@ -361,16 +359,6 @@ class Crypt implements CryptInterface
     }
 
     /**
-     * Returns a list of available ciphers.
-     *
-     * @return array
-     */
-    public function getAvailableCiphers(): array
-    {
-        return $this->availableCiphers;
-    }
-
-    /**
      * Returns the auth data
      *
      * @return string
@@ -401,6 +389,16 @@ class Crypt implements CryptInterface
     }
 
     /**
+     * Returns a list of available ciphers.
+     *
+     * @return array
+     */
+    public function getAvailableCiphers(): array
+    {
+        return $this->availableCiphers;
+    }
+
+    /**
      * Return a list of registered hashing algorithms suitable for hash_hmac.
      *
      * @return array
@@ -415,16 +413,6 @@ class Crypt implements CryptInterface
     }
 
     /**
-     * Get the name of hashing algorithm.
-     *
-     * @return string
-     */
-    public function getHashAlgorithm(): string
-    {
-        return $this->hashAlgorithm;
-    }
-
-    /**
      * Returns the current cipher
      *
      * @return string
@@ -432,6 +420,16 @@ class Crypt implements CryptInterface
     public function getCipher(): string
     {
         return $this->cipher;
+    }
+
+    /**
+     * Get the name of hashing algorithm.
+     *
+     * @return string
+     */
+    public function getHashAlgorithm(): string
+    {
+        return $this->hashAlgorithm;
     }
 
     /**
@@ -518,6 +516,23 @@ class Crypt implements CryptInterface
     }
 
     /**
+     * Set the name of hashing algorithm.
+     *
+     * @param string $hashAlgorithm
+     *
+     * @return CryptInterface
+     * @throws Exception
+     */
+    public function setHashAlgorithm(string $hashAlgorithm): CryptInterface
+    {
+        $this->checkCipherHashIsAvailable($hashAlgorithm, "hash");
+
+        $this->hashAlgorithm = $hashAlgorithm;
+
+        return $this;
+    }
+
+    /**
      * Sets the encryption key.
      *
      * The `$key` should have been previously generated in a cryptographically
@@ -539,23 +554,6 @@ class Crypt implements CryptInterface
     public function setKey(string $key): CryptInterface
     {
         $this->key = $key;
-
-        return $this;
-    }
-
-    /**
-     * Set the name of hashing algorithm.
-     *
-     * @param string $hashAlgorithm
-     *
-     * @return CryptInterface
-     * @throws Exception
-     */
-    public function setHashAlgorithm(string $hashAlgorithm): CryptInterface
-    {
-        $this->checkCipherHashIsAvailable($hashAlgorithm, "hash");
-
-        $this->hashAlgorithm = $hashAlgorithm;
 
         return $this;
     }
@@ -667,7 +665,7 @@ class Crypt implements CryptInterface
      * @param int    $paddingType
      *
      * @return string
-     * @throws Exception
+     * @throws BaseException
      */
     protected function cryptUnpadText(
         string $input,
@@ -783,29 +781,6 @@ class Crypt implements CryptInterface
 
     /**
      * @param string $mode
-     * @param string $input
-     * @param int    $blockSize
-     *
-     * @return string
-     * @throws Exception
-     */
-    protected function encryptGetPadded(
-        string $mode,
-        string $input,
-        int $blockSize
-    ): string {
-        if (
-            0 !== $this->padding &&
-            true === $this->checkIsMode(["cbc", "ecb"], $mode)
-        ) {
-            return $this->cryptPadText($input, $mode, $blockSize, $this->padding);
-        }
-
-        return $input;
-    }
-
-    /**
-     * @param string $mode
      * @param string $padded
      * @param string $encryptKey
      * @param string $iv
@@ -869,6 +844,29 @@ class Crypt implements CryptInterface
          * mode this is an empty string
          */
         return $encrypted . $authTag;
+    }
+
+    /**
+     * @param string $mode
+     * @param string $input
+     * @param int    $blockSize
+     *
+     * @return string
+     * @throws Exception
+     */
+    protected function encryptGetPadded(
+        string $mode,
+        string $input,
+        int $blockSize
+    ): string {
+        if (
+            0 !== $this->padding &&
+            true === $this->checkIsMode(["cbc", "ecb"], $mode)
+        ) {
+            return $this->cryptPadText($input, $mode, $blockSize, $this->padding);
+        }
+
+        return $input;
     }
 
     /**

@@ -118,7 +118,7 @@ class Row implements EntityInterface, ResultInterface, ArrayAccess, JsonSerializ
      *
      * @return ModelInterface|bool
      */
-    public function setDirtyState(int $dirtyState): ModelInterface|bool
+    public function setDirtyState(int $dirtyState): ModelInterface | bool
     {
         return false;
     }

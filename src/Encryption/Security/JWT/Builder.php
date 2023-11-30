@@ -77,23 +77,6 @@ class Builder
     }
 
     /**
-     * @return Builder
-     */
-    public function init(): Builder
-    {
-        $this->passphrase = '';
-        $this->claims     = new Collection();
-        $this->jose       = new Collection(
-            [
-                Enum::TYPE => 'JWT',
-                Enum::ALGO => 'none',
-            ]
-        );
-
-        return $this;
-    }
-
-    /**
      * Adds a custom claim
      *
      * @param string $name
@@ -196,6 +179,14 @@ class Builder
     }
 
     /**
+     * @return string
+     */
+    public function getPassphrase(): string
+    {
+        return $this->passphrase;
+    }
+
+    /**
      * @return string|null
      */
     public function getSubject(): ?string
@@ -228,11 +219,20 @@ class Builder
     }
 
     /**
-     * @return string
+     * @return Builder
      */
-    public function getPassphrase(): string
+    public function init(): Builder
     {
-        return $this->passphrase;
+        $this->passphrase = '';
+        $this->claims     = new Collection();
+        $this->jose       = new Collection(
+            [
+                Enum::TYPE => 'JWT',
+                Enum::ALGO => 'none',
+            ]
+        );
+
+        return $this;
     }
 
     /**
@@ -376,24 +376,6 @@ class Builder
     }
 
     /**
-     * The "sub" (subject) claim identifies the principal that is the
-     * subject of the JWT.  The claims in a JWT are normally statements
-     * about the subject.  The subject value MUST either be scoped to be
-     * locally unique in the context of the issuer or be globally unique.
-     * The processing of this claim is generally application specific.  The
-     * "sub" value is a case-sensitive string containing a StringOrURI
-     * value.  Use of this claim is OPTIONAL.
-     *
-     * @param string $subject
-     *
-     * @return Builder
-     */
-    public function setSubject(string $subject): Builder
-    {
-        return $this->setClaim(Enum::SUBJECT, $subject);
-    }
-
-    /**
      * @param string $passphrase
      *
      * @return Builder
@@ -413,6 +395,24 @@ class Builder
         $this->passphrase = $passphrase;
 
         return $this;
+    }
+
+    /**
+     * The "sub" (subject) claim identifies the principal that is the
+     * subject of the JWT.  The claims in a JWT are normally statements
+     * about the subject.  The subject value MUST either be scoped to be
+     * locally unique in the context of the issuer or be globally unique.
+     * The processing of this claim is generally application specific.  The
+     * "sub" value is a case-sensitive string containing a StringOrURI
+     * value.  Use of this claim is OPTIONAL.
+     *
+     * @param string $subject
+     *
+     * @return Builder
+     */
+    public function setSubject(string $subject): Builder
+    {
+        return $this->setClaim(Enum::SUBJECT, $subject);
     }
 
     /**

@@ -341,7 +341,7 @@ class PdoResult implements ResultInterface
      */
     public function setFetchMode(
         int $fetchMode,
-        null|object|string $colNoOrClassNameOrObject = null,
+        null | object | string $colNoOrClassNameOrObject = null,
         mixed $ctorargs = null
     ): bool {
         if (

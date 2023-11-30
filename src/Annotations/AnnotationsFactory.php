@@ -18,7 +18,7 @@ use Phalcon\Annotations\Adapter\AdapterInterface;
 use Phalcon\Annotations\Adapter\Apcu;
 use Phalcon\Annotations\Adapter\Memory;
 use Phalcon\Annotations\Adapter\Stream;
-use Phalcon\Config\Config;
+use Phalcon\Config\ConfigInterface;
 use Phalcon\Support\Exception as SupportException;
 use Phalcon\Support\Traits\ConfigTrait;
 use Phalcon\Traits\Factory\FactoryTrait;
@@ -44,19 +44,19 @@ class AnnotationsFactory
     /**
      * Factory to create an instance from a Config object
      *
-     * @param array|Config $config = [
-     *                             'adapter' => 'apcu',
-     *                             'options' => [
-     *                             'prefix' => 'phalcon',
-     *                             'lifetime' => 3600,
-     *                             'annotationsDir' => 'phalconDir'
-     *                             ]
-     *                             ]
+     * @param array|ConfigInterface $config = [
+     *                                      'adapter' => 'apcu',
+     *                                      'options' => [
+     *                                      'prefix' => 'phalcon',
+     *                                      'lifetime' => 3600,
+     *                                      'annotationsDir' => 'phalconDir'
+     *                                      ]
+     *                                      ]
      *
      * @return AdapterInterface
      * @throws SupportException
      */
-    public function load(array|Config $config): AdapterInterface
+    public function load(array | ConfigInterface $config): AdapterInterface
     {
         $config = $this->checkConfig($config);
         $config = $this->checkConfigElement($config, "adapter");

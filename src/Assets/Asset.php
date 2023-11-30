@@ -40,17 +40,14 @@ class Asset implements AssetInterface
      * @var array<string, string>
      */
     protected array $attributes;
-
-    /**
-     * @var bool
-     */
-    protected bool $isAutoVersion = false;
-
     /**
      * @var bool
      */
     protected bool $filter;
-
+    /**
+     * @var bool
+     */
+    protected bool $isAutoVersion = false;
     /**
      * @var bool
      */
@@ -397,6 +394,20 @@ class Asset implements AssetInterface
     }
 
     /**
+     * Sets the asset's path
+     *
+     * @param string $path
+     *
+     * @return AssetInterface
+     */
+    public function setPath(string $path): AssetInterface
+    {
+        $this->path = $path;
+
+        return $this;
+    }
+
+    /**
      * Sets the asset's source path
      *
      * @param string $sourcePath
@@ -448,20 +459,6 @@ class Asset implements AssetInterface
     public function setType(string $type): AssetInterface
     {
         $this->type = $type;
-
-        return $this;
-    }
-
-    /**
-     * Sets the asset's path
-     *
-     * @param string $path
-     *
-     * @return AssetInterface
-     */
-    public function setPath(string $path): AssetInterface
-    {
-        $this->path = $path;
 
         return $this;
     }

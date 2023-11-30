@@ -41,21 +41,6 @@ interface AdapterInterface
     ): bool;
 
     /**
-     * Adds an index to a table
-     *
-     * @param string         $tableName
-     * @param string         $schemaName
-     * @param IndexInterface $index
-     *
-     * @return bool
-     */
-    public function addIndex(
-        string $tableName,
-        string $schemaName,
-        IndexInterface $index
-    ): bool;
-
-    /**
      * Adds a foreign key to a table
      *
      * @param string             $tableName
@@ -68,6 +53,21 @@ interface AdapterInterface
         string $tableName,
         string $schemaName,
         ReferenceInterface $reference
+    ): bool;
+
+    /**
+     * Adds an index to a table
+     *
+     * @param string         $tableName
+     * @param string         $schemaName
+     * @param IndexInterface $index
+     *
+     * @return bool
+     */
+    public function addIndex(
+        string $tableName,
+        string $schemaName,
+        IndexInterface $index
     ): bool;
 
     /**
@@ -179,7 +179,7 @@ interface AdapterInterface
      * @return bool
      */
     public function delete(
-        array|string $tableName,
+        array | string $tableName,
         string $whereCondition = null,
         array $placeholders = [],
         array $dataTypes = []
@@ -303,7 +303,7 @@ interface AdapterInterface
      *
      * @return string
      */
-    public function escapeIdentifier(array|string $identifier): string;
+    public function escapeIdentifier(array | string $identifier): string;
 
     /**
      * Escapes a value to avoid SQL injections
@@ -373,8 +373,8 @@ interface AdapterInterface
     public function fetchColumn(
         string $sqlQuery,
         array $placeholders = [],
-        int|string $column = 0
-    ): string|bool;
+        int | string $column = 0
+    ): string | bool;
 
     /**
      * Returns the first row in a SQL query result
@@ -428,27 +428,6 @@ interface AdapterInterface
     public function getConnectionId(): string;
 
     /**
-     * Return descriptor used to connect to the active database
-     *
-     * @return array
-     */
-    public function getDescriptor(): array;
-
-    /**
-     * Returns internal dialect instance
-     *
-     * @return DialectInterface
-     */
-    public function getDialect(): DialectInterface;
-
-    /**
-     * Returns the name of the dialect used
-     *
-     * @return string
-     */
-    public function getDialectType(): string;
-
-    /**
      * Return the default identity value to insert in an identity column
      *
      * @return RawValue
@@ -481,6 +460,27 @@ interface AdapterInterface
     public function getDefaultValue(): ?RawValue;
 
     /**
+     * Return descriptor used to connect to the active database
+     *
+     * @return array
+     */
+    public function getDescriptor(): array;
+
+    /**
+     * Returns internal dialect instance
+     *
+     * @return DialectInterface
+     */
+    public function getDialect(): DialectInterface;
+
+    /**
+     * Returns the name of the dialect used
+     *
+     * @return string
+     */
+    public function getDialectType(): string;
+
+    /**
      * Return internal PDO handler
      *
      * @return mixed
@@ -504,16 +504,16 @@ interface AdapterInterface
     /**
      * Active SQL statement in the object
      *
-     * @return string
+     * @return array
      */
-    public function getSQLStatement(): string;
+    public function getSQLBindTypes(): array;
 
     /**
      * Active SQL statement in the object
      *
-     * @return array
+     * @return string
      */
-    public function getSQLBindTypes(): array;
+    public function getSQLStatement(): string;
 
     /**
      * Active SQL statement in the object
@@ -598,7 +598,7 @@ interface AdapterInterface
      *
      * @return string|bool
      */
-    public function lastInsertId(string $name = null): string|bool;
+    public function lastInsertId(string $name = null): string | bool;
 
     /**
      * Appends a LIMIT clause to sqlQuery argument
@@ -608,7 +608,7 @@ interface AdapterInterface
      *
      * @return string
      */
-    public function limit(string $sqlQuery, array|int $number): string;
+    public function limit(string $sqlQuery, array | int $number): string;
 
     /**
      * List all tables on a database
@@ -660,7 +660,7 @@ interface AdapterInterface
         string $sqlStatement,
         array $bindParams = [],
         array $bindTypes = []
-    ): ResultInterface|bool;
+    ): ResultInterface | bool;
 
     /**
      * Releases given savepoint
@@ -690,15 +690,6 @@ interface AdapterInterface
     public function rollbackSavepoint(string $name): bool;
 
     /**
-     * Returns a SQL modified with a LOCK IN SHARE MODE clause
-     *
-     * @param string $sqlQuery
-     *
-     * @return string
-     */
-    public function sharedLock(string $sqlQuery): string;
-
-    /**
      * Set if nested transactions should use savepoints
      *
      * @param bool $flag
@@ -710,12 +701,30 @@ interface AdapterInterface
     ): AdapterInterface;
 
     /**
+     * Returns a SQL modified with a LOCK IN SHARE MODE clause
+     *
+     * @param string $sqlQuery
+     *
+     * @return string
+     */
+    public function sharedLock(string $sqlQuery): string;
+
+    /**
      * Check whether the database system requires a sequence to produce
      * auto-numeric values
      *
      * @return bool
      */
     public function supportSequences(): bool;
+
+    /**
+     * SQLite does not support the DEFAULT keyword
+     *
+     * @return bool
+     * @deprecated Will re removed in the next version
+     *
+     */
+    public function supportsDefaultValue(): bool;
 
     /**
      * Generates SQL checking for the existence of a schema.table
@@ -758,7 +767,7 @@ interface AdapterInterface
         string $tableName,
         array $fields,
         array $values,
-        array|string $whereCondition = [],
+        array | string $whereCondition = [],
         array $dataTypes = []
     ): bool;
 
@@ -790,7 +799,7 @@ interface AdapterInterface
     public function updateAsDict(
         string $tableName,
         array $data,
-        array|string $whereCondition = [],
+        array | string $whereCondition = [],
         array $dataTypes = []
     ): bool;
 
@@ -801,15 +810,6 @@ interface AdapterInterface
      * @return bool
      */
     public function useExplicitIdValue(): bool;
-
-    /**
-     * SQLite does not support the DEFAULT keyword
-     *
-     * @return bool
-     * @deprecated Will re removed in the next version
-     *
-     */
-    public function supportsDefaultValue(): bool;
 
     /**
      * Generates SQL checking for the existence of a schema.view

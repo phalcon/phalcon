@@ -201,6 +201,16 @@ class Manager implements ManagerInterface
     }
 
     /**
+     * Get internal options
+     *
+     * @return array
+     */
+    public function getOptions(): array
+    {
+        return $this->options;
+    }
+
+    /**
      * Check whether a session variable is set in an application context
      *
      * @param string $key
@@ -217,16 +227,6 @@ class Manager implements ManagerInterface
         $uniqueKey = $this->getUniqueKey($key);
 
         return isset($_SESSION[$uniqueKey]);
-    }
-
-    /**
-     * Get internal options
-     *
-     * @return array
-     */
-    public function getOptions(): array
-    {
-        return $this->options;
     }
 
     /**

@@ -61,10 +61,10 @@ class Order
      *
      * @return array<int|string,mixed>
      */
-    private function checkObject(array $sorted, $attribute, $item): array
+    private function checkNonObject(array $sorted, $attribute, $item): array
     {
-        if (true === is_object($item)) {
-            $key          = $item->{$attribute};
+        if (true !== is_object($item)) {
+            $key          = $item[$attribute];
             $sorted[$key] = $item;
         }
 
@@ -78,10 +78,10 @@ class Order
      *
      * @return array<int|string,mixed>
      */
-    private function checkNonObject(array $sorted, $attribute, $item): array
+    private function checkObject(array $sorted, $attribute, $item): array
     {
-        if (true !== is_object($item)) {
-            $key          = $item[$attribute];
+        if (true === is_object($item)) {
+            $key          = $item->{$attribute};
             $sorted[$key] = $item;
         }
 

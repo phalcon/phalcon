@@ -63,7 +63,7 @@ class ConfigFactory
     /**
      * Load a config to create a new instance
      *
-     * @param string|array|Config $config = [
+     * @param array|string|Config $config = [
      *                                    'adapter'   => 'ini',
      *                                    'filePath'  => 'config.ini',
      *                                    'mode'      => null,
@@ -73,7 +73,7 @@ class ConfigFactory
      * @return ConfigInterface
      * @throws Exception
      */
-    public function load($config): ConfigInterface
+    public function load(array | string | Config $config): ConfigInterface
     {
         $configArray = $this->parseConfig($config);
 

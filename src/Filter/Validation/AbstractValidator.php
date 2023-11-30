@@ -30,23 +30,21 @@ use function is_string;
 abstract class AbstractValidator implements ValidatorInterface
 {
     /**
+     * @var array
+     */
+    protected array $options = [];
+    /**
      * Message template
      *
      * @var string|null
      */
     protected ?string $template = null;
-
     /**
      * Message templates
      *
      * @var array
      */
     protected array $templates = [];
-
-    /**
-     * @var array
-     */
-    protected array $options = [];
 
     /**
      * Phalcon\Filter\Validation\Validator constructor
@@ -73,6 +71,38 @@ abstract class AbstractValidator implements ValidatorInterface
         }
 
         $this->options = $options;
+    }
+
+    /**
+     * Returns an option in the validator's options
+     * Returns null if the option hasn't set
+     *
+     * @param string     $key
+     * @param mixed|null $defaultValue
+     *
+     * @return mixed
+     */
+    public function getOption(string $key, mixed $defaultValue = null): mixed
+    {
+        if (true !== isset($this->options[$key])) {
+            return $defaultValue;
+        }
+
+        $value = $this->options[$key];
+
+        /*
+         * If we have `attribute` as a key, it means it is a Uniqueness
+         * validator, we can have here multiple fields, so we need to check it
+         */
+        if (
+            "attribute" === $key &&
+            is_array($value) &&
+            true === isset($value[$key])
+        ) {
+            return $value[$key];
+        }
+
+        return $value;
     }
 
     /**
@@ -109,6 +139,79 @@ abstract class AbstractValidator implements ValidatorInterface
     }
 
     /**
+     * Checks if an option is defined
+     *
+     * @param string $key
+     *
+     * @return bool
+     */
+    public function hasOption(string $key): bool
+    {
+        return isset($this->options[$key]);
+    }
+
+    /**
+     * Create a default message by factory
+     *
+     * @param Validation   $validation
+     * @param array|string $field
+     * @param array        $replacements
+     *
+     * @return Message
+     */
+    public function messageFactory(
+        Validation $validation,
+        array | string $field,
+        array $replacements = []
+    ): Message {
+        $singleField = $field;
+        if (is_array($field)) {
+            $singleField = implode(", ", $field);
+        }
+
+        $replacements = array_merge(
+            [
+                ":field" => $this->prepareLabel($validation, $singleField),
+            ],
+            $replacements
+        );
+
+        return new Message(
+            strtr($this->getTemplate($singleField), $replacements),
+            $singleField,
+            get_class($this),
+            $this->prepareCode($singleField)
+        );
+    }
+
+    /**
+     * Sets an option in the validator
+     *
+     * @param string $key
+     * @param mixed  $value
+     *
+     * @return void
+     */
+    public function setOption(string $key, mixed $value): void
+    {
+        $this->options[$key] = $value;
+    }
+
+    /**
+     * Set a new template message
+     *
+     * @param string $template
+     *
+     * @return ValidatorInterface
+     */
+    public function setTemplate(string $template): ValidatorInterface
+    {
+        $this->template = $template;
+
+        return $this;
+    }
+
+    /**
      * Clear current templates and set new from an array,
      *
      * @param array $templates
@@ -129,77 +232,6 @@ abstract class AbstractValidator implements ValidatorInterface
     }
 
     /**
-     * Set a new template message
-     *
-     * @param string $template
-     *
-     * @return ValidatorInterface
-     */
-    public function setTemplate(string $template): ValidatorInterface
-    {
-        $this->template = $template;
-
-        return $this;
-    }
-
-    /**
-     * Returns an option in the validator's options
-     * Returns null if the option hasn't set
-     *
-     * @param string     $key
-     * @param mixed|null $defaultValue
-     *
-     * @return mixed
-     */
-    public function getOption(string $key, mixed $defaultValue = null): mixed
-    {
-        if (true !== isset($this->options[$key])) {
-            return $defaultValue;
-        }
-
-        $value = $this->options[$key];
-
-        /*
-         * If we have `attribute` as a key, it means it is a Uniqueness
-         * validator, we can have here multiple fields, so we need to check it
-         */
-        if (
-            "attribute" === $key &&
-            is_array($value) &&
-            true === isset($value[$key])
-        ) {
-            return $value[$key];
-        }
-
-        return $value;
-    }
-
-    /**
-     * Checks if an option is defined
-     *
-     * @param string $key
-     *
-     * @return bool
-     */
-    public function hasOption(string $key): bool
-    {
-        return isset($this->options[$key]);
-    }
-
-    /**
-     * Sets an option in the validator
-     *
-     * @param string $key
-     * @param mixed  $value
-     *
-     * @return void
-     */
-    public function setOption(string $key, mixed $value): void
-    {
-        $this->options[$key] = $value;
-    }
-
-    /**
      * Executes the validation
      *
      * @param Validation $validation
@@ -211,6 +243,27 @@ abstract class AbstractValidator implements ValidatorInterface
         Validation $validation,
         string $field
     ): bool;
+
+    /**
+     * Checks if field can be empty.
+     *
+     * @param string $field
+     * @param mixed  $value
+     *
+     * @return bool
+     */
+    protected function allowEmpty(string $field, mixed $value): bool
+    {
+        $allowEmpty = $this->getOption("allowEmpty", false);
+
+        if (is_array($allowEmpty)) {
+            $allowEmpty = true === isset($allowEmpty[$field])
+                ? $allowEmpty[$field]
+                : false;
+        }
+
+        return true === $allowEmpty && true === empty($value);
+    }
 
     /**
      * Checks if a value is an array and returns the element based on the
@@ -264,60 +317,5 @@ abstract class AbstractValidator implements ValidatorInterface
         }
 
         return $label;
-    }
-
-    /**
-     * Checks if field can be empty.
-     *
-     * @param string $field
-     * @param mixed  $value
-     *
-     * @return bool
-     */
-    protected function allowEmpty(string $field, mixed $value): bool
-    {
-        $allowEmpty = $this->getOption("allowEmpty", false);
-
-        if (is_array($allowEmpty)) {
-            $allowEmpty = true === isset($allowEmpty[$field])
-                ? $allowEmpty[$field]
-                : false;
-        }
-
-        return true === $allowEmpty && true === empty($value);
-    }
-
-    /**
-     * Create a default message by factory
-     *
-     * @param Validation   $validation
-     * @param array|string $field
-     * @param array        $replacements
-     *
-     * @return Message
-     */
-    public function messageFactory(
-        Validation $validation,
-        array|string $field,
-        array $replacements = []
-    ): Message {
-        $singleField = $field;
-        if (is_array($field)) {
-            $singleField = implode(", ", $field);
-        }
-
-        $replacements = array_merge(
-            [
-                ":field" => $this->prepareLabel($validation, $singleField),
-            ],
-            $replacements
-        );
-
-        return new Message(
-            strtr($this->getTemplate($singleField), $replacements),
-            $singleField,
-            get_class($this),
-            $this->prepareCode($singleField)
-        );
     }
 }

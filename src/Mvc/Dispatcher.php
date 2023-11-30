@@ -134,7 +134,7 @@ class Dispatcher extends BaseDispatcher implements DispatcherInterface
      *
      * @return ControllerInterface|null
      */
-    public function getActiveController(): ControllerInterface|null
+    public function getActiveController(): ControllerInterface | null
     {
         return $this->activeHandler;
     }
@@ -165,7 +165,7 @@ class Dispatcher extends BaseDispatcher implements DispatcherInterface
      *
      * @return ControllerInterface|null
      */
-    public function getLastController(): ControllerInterface|null
+    public function getLastController(): ControllerInterface | null
     {
         return $this->lastHandler;
     }

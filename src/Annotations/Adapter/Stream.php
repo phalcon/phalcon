@@ -67,7 +67,7 @@ class Stream extends AbstractAdapter
      *
      * @return Reflection|bool|int
      */
-    public function read(string $key): Reflection|bool|int
+    public function read(string $key): Reflection | bool | int
     {
         /**
          * Paths must be normalized before be used as keys

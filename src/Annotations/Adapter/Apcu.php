@@ -63,7 +63,7 @@ class Apcu extends AbstractAdapter
      *
      * @return Reflection|bool
      */
-    public function read(string $key): Reflection|bool
+    public function read(string $key): Reflection | bool
     {
         return $this->phpApcuFetch(
             strtolower("_PHAN" . $this->prefix . $key)

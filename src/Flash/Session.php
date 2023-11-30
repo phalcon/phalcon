@@ -54,6 +54,33 @@ class Session extends AbstractFlash
     }
 
     /**
+     * Returns the Session Service
+     *
+     * @return ManagerInterface
+     * @throws Exception
+     */
+    public function getSessionService(): ManagerInterface
+    {
+        if (null !== $this->sessionService) {
+            return $this->sessionService;
+        }
+
+        if (
+            null !== $this->container &&
+            true === $this->container->has('session')
+        ) {
+            $this->sessionService = $this->container->getShared('session');
+
+            return $this->sessionService;
+        }
+
+        throw new Exception(
+            "A dependency injection container is required to access " .
+            "the 'session' service"
+        );
+    }
+
+    /**
      * Checks whether there are messages
      *
      * @param string|null $type
@@ -167,32 +194,5 @@ class Session extends AbstractFlash
         $session->set(self::SESSION_KEY, $messages);
 
         return $messages;
-    }
-
-    /**
-     * Returns the Session Service
-     *
-     * @return ManagerInterface
-     * @throws Exception
-     */
-    public function getSessionService(): ManagerInterface
-    {
-        if (null !== $this->sessionService) {
-            return $this->sessionService;
-        }
-
-        if (
-            null !== $this->container &&
-            true === $this->container->has('session')
-        ) {
-            $this->sessionService = $this->container->getShared('session');
-
-            return $this->sessionService;
-        }
-
-        throw new Exception(
-            "A dependency injection container is required to access " .
-            "the 'session' service"
-        );
     }
 }

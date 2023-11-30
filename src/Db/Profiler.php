@@ -112,13 +112,13 @@ class Profiler
     }
 
     /**
-     * Returns the total time in nanoseconds spent by the profiles
+     * Returns all the processed profiles
      *
-     * @return float
+     * @return Item[]
      */
-    public function getTotalElapsedNanoseconds(): float
+    public function getProfiles(): array
     {
-        return $this->totalNanoseconds;
+        return $this->allProfiles;
     }
 
     /**
@@ -132,6 +132,16 @@ class Profiler
     }
 
     /**
+     * Returns the total time in nanoseconds spent by the profiles
+     *
+     * @return float
+     */
+    public function getTotalElapsedNanoseconds(): float
+    {
+        return $this->totalNanoseconds;
+    }
+
+    /**
      * Returns the total time in seconds spent by the profiles
      *
      * @return float
@@ -139,16 +149,6 @@ class Profiler
     public function getTotalElapsedSeconds(): float
     {
         return $this->getTotalElapsedMilliseconds() / 1000;
-    }
-
-    /**
-     * Returns all the processed profiles
-     *
-     * @return Item[]
-     */
-    public function getProfiles(): array
-    {
-        return $this->allProfiles;
     }
 
     /**

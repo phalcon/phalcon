@@ -14,7 +14,6 @@ declare(strict_types=1);
 namespace Phalcon\Mvc;
 
 use Phalcon\Di\AbstractInjectionAware;
-use Phalcon\Di\Traits\InjectionAwareTrait;
 use Phalcon\Events\EventsAwareInterface;
 use Phalcon\Events\Exception as EventsException;
 use Phalcon\Events\Traits\EventsAwareTrait;
@@ -97,21 +96,18 @@ class Router extends AbstractInjectionAware implements RouterInterface, EventsAw
      * @var array
      */
     protected array $defaultParams = [];
-
-    /**
-     * @var array
-     */
-    protected array $keyRouteNames = [];
-
     /**
      * @var array
      */
     protected array $keyRouteIds = [];
-
+    /**
+     * @var array
+     */
+    protected array $keyRouteNames = [];
     /**
      * @var RouteInterface|null
      */
-    protected RouteInterface|null $matchedRoute = null;
+    protected RouteInterface | null $matchedRoute = null;
 
     /**
      * @var array
@@ -131,7 +127,7 @@ class Router extends AbstractInjectionAware implements RouterInterface, EventsAw
     /**
      * @var array|string|null
      */
-    protected array|string|null $notFoundPaths = null;
+    protected array | string | null $notFoundPaths = null;
 
     /**
      * @var array
@@ -222,8 +218,8 @@ class Router extends AbstractInjectionAware implements RouterInterface, EventsAw
      */
     public function add(
         string $pattern,
-        array|string|null $paths = null,
-        array|string|null $httpMethods = null,
+        array | string | null $paths = null,
+        array | string | null $httpMethods = null,
         int $position = Router::POSITION_LAST
     ): RouteInterface {
         /**
@@ -253,7 +249,7 @@ class Router extends AbstractInjectionAware implements RouterInterface, EventsAw
      */
     public function addConnect(
         string $pattern,
-        array|string|null $paths = null,
+        array | string | null $paths = null,
         int $position = Router::POSITION_LAST
     ): RouteInterface {
         return $this->add($pattern, $paths, "CONNECT", $position);
@@ -276,7 +272,7 @@ class Router extends AbstractInjectionAware implements RouterInterface, EventsAw
      */
     public function addDelete(
         string $pattern,
-        array|string|null $paths = null,
+        array | string | null $paths = null,
         int $position = Router::POSITION_LAST
     ): RouteInterface {
         return $this->add($pattern, $paths, "DELETE", $position);
@@ -299,7 +295,7 @@ class Router extends AbstractInjectionAware implements RouterInterface, EventsAw
      */
     public function addGet(
         string $pattern,
-        array|string|null $paths = null,
+        array | string | null $paths = null,
         int $position = Router::POSITION_LAST
     ): RouteInterface {
         return $this->add($pattern, $paths, "GET", $position);
@@ -322,7 +318,7 @@ class Router extends AbstractInjectionAware implements RouterInterface, EventsAw
      */
     public function addHead(
         string $pattern,
-        array|string|null $paths = null,
+        array | string | null $paths = null,
         int $position = Router::POSITION_LAST
     ): RouteInterface {
         return $this->add($pattern, $paths, "HEAD", $position);
@@ -345,7 +341,7 @@ class Router extends AbstractInjectionAware implements RouterInterface, EventsAw
      */
     public function addOptions(
         string $pattern,
-        array|string|null $paths = null,
+        array | string | null $paths = null,
         int $position = Router::POSITION_LAST
     ): RouteInterface {
         return $this->add($pattern, $paths, "OPTIONS", $position);
@@ -368,7 +364,7 @@ class Router extends AbstractInjectionAware implements RouterInterface, EventsAw
      */
     public function addPatch(
         string $pattern,
-        array|string|null $paths = null,
+        array | string | null $paths = null,
         int $position = Router::POSITION_LAST
     ): RouteInterface {
         return $this->add($pattern, $paths, "PATCH", $position);
@@ -391,7 +387,7 @@ class Router extends AbstractInjectionAware implements RouterInterface, EventsAw
      */
     public function addPost(
         string $pattern,
-        array|string|null $paths = null,
+        array | string | null $paths = null,
         int $position = Router::POSITION_LAST
     ): RouteInterface {
         return $this->add($pattern, $paths, "POST", $position);
@@ -415,7 +411,7 @@ class Router extends AbstractInjectionAware implements RouterInterface, EventsAw
      */
     public function addPurge(
         string $pattern,
-        array|string|null $paths = null,
+        array | string | null $paths = null,
         int $position = Router::POSITION_LAST
     ): RouteInterface {
         return $this->add($pattern, $paths, "PURGE", $position);
@@ -438,7 +434,7 @@ class Router extends AbstractInjectionAware implements RouterInterface, EventsAw
      */
     public function addPut(
         string $pattern,
-        array|string|null $paths = null,
+        array | string | null $paths = null,
         int $position = Router::POSITION_LAST
     ): RouteInterface {
         return $this->add($pattern, $paths, "PUT", $position);
@@ -461,7 +457,7 @@ class Router extends AbstractInjectionAware implements RouterInterface, EventsAw
      */
     public function addTrace(
         string $pattern,
-        array|string|null $paths = null,
+        array | string | null $paths = null,
         int $position = Router::POSITION_LAST
     ): RouteInterface {
         return $this->add($pattern, $paths, "TRACE", $position);
@@ -559,17 +555,17 @@ class Router extends AbstractInjectionAware implements RouterInterface, EventsAw
     /**
      * @return array
      */
-    public function getKeyRouteNames(): array
+    public function getKeyRouteIds(): array
     {
-        return $this->keyRouteNames;
+        return $this->keyRouteIds;
     }
 
     /**
      * @return array
      */
-    public function getKeyRouteIds(): array
+    public function getKeyRouteNames(): array
     {
-        return $this->keyRouteIds;
+        return $this->keyRouteNames;
     }
 
     /**
@@ -577,7 +573,7 @@ class Router extends AbstractInjectionAware implements RouterInterface, EventsAw
      *
      * @return RouteInterface|null
      */
-    public function getMatchedRoute(): RouteInterface|null
+    public function getMatchedRoute(): RouteInterface | null
     {
         return $this->matchedRoute;
     }
@@ -629,7 +625,7 @@ class Router extends AbstractInjectionAware implements RouterInterface, EventsAw
      *
      * @return RouteInterface|bool
      */
-    public function getRouteById(int|string $routeId): RouteInterface|bool
+    public function getRouteById(int | string $routeId): RouteInterface | bool
     {
         if (isset($this->keyRouteIds[$routeId])) {
             return $this->routes[$this->keyRouteIds[$routeId]];
@@ -658,7 +654,7 @@ class Router extends AbstractInjectionAware implements RouterInterface, EventsAw
      *
      * @return RouteInterface|bool
      */
-    public function getRouteByName(string $name): RouteInterface|bool
+    public function getRouteByName(string $name): RouteInterface | bool
     {
         if (isset($this->keyRouteNames[$name])) {
             return $this->routes[$this->keyRouteNames[$name]];
@@ -1086,7 +1082,7 @@ class Router extends AbstractInjectionAware implements RouterInterface, EventsAw
      *
      * @return RouterInterface
      */
-    public function notFound(array|string $paths): RouterInterface
+    public function notFound(array | string $paths): RouterInterface
     {
         $this->notFoundPaths = $paths;
 
@@ -1212,18 +1208,6 @@ class Router extends AbstractInjectionAware implements RouterInterface, EventsAw
     }
 
     /**
-     * @param array $routeNames
-     *
-     * @return Router
-     */
-    public function setKeyRouteNames(array $routeNames): Router
-    {
-        $this->keyRouteNames = $routeNames;
-
-        return $this;
-    }
-
-    /**
      * @param array $routeIds
      *
      * @return Router
@@ -1231,6 +1215,18 @@ class Router extends AbstractInjectionAware implements RouterInterface, EventsAw
     public function setKeyRouteIds(array $routeIds): Router
     {
         $this->keyRouteIds = $routeIds;
+
+        return $this;
+    }
+
+    /**
+     * @param array $routeNames
+     *
+     * @return Router
+     */
+    public function setKeyRouteNames(array $routeNames): Router
+    {
+        $this->keyRouteNames = $routeNames;
 
         return $this;
     }

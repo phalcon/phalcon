@@ -109,16 +109,6 @@ class Profiler implements ProfilerInterface
     }
 
     /**
-     * Returns the underlying logger instance.
-     *
-     * @return LoggerInterface
-     */
-    public function getLogger(): LoggerInterface
-    {
-        return $this->logger;
-    }
-
-    /**
      * Returns the level at which to log profile messages.
      *
      * @return int
@@ -126,6 +116,16 @@ class Profiler implements ProfilerInterface
     public function getLogLevel(): int
     {
         return $this->logLevel;
+    }
+
+    /**
+     * Returns the underlying logger instance.
+     *
+     * @return LoggerInterface
+     */
+    public function getLogger(): LoggerInterface
+    {
+        return $this->logger;
     }
 
     /**

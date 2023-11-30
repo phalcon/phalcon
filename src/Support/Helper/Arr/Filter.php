@@ -27,7 +27,7 @@ class Filter
      * @param array<int|string,mixed> $collection
      * @param callable|null           $method
      *
-     * @return mixed[]
+     * @return array
      */
     public function __invoke(array $collection, callable $method = null)
     {

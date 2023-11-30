@@ -294,19 +294,6 @@ class Collection implements
     }
 
     /**
-     * Internal method to set data
-     *
-     * @param string $element Name of the element
-     * @param mixed  $value   Value to store for the element
-     */
-    protected function setData(string $element, $value): void
-    {
-        $key                   = $this->processKey($element);
-        $this->data[$element]  = $value;
-        $this->lowerKeys[$key] = $element;
-    }
-
-    /**
      * Checks if we need insensitive keys and if so, converts the element to
      * lowercase
      */
@@ -317,5 +304,18 @@ class Collection implements
         }
 
         return $element;
+    }
+
+    /**
+     * Internal method to set data
+     *
+     * @param string $element Name of the element
+     * @param mixed  $value   Value to store for the element
+     */
+    protected function setData(string $element, $value): void
+    {
+        $key                   = $this->processKey($element);
+        $this->data[$element]  = $value;
+        $this->lowerKeys[$key] = $element;
     }
 }

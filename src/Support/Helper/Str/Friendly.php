@@ -45,7 +45,7 @@ class Friendly
         string $text,
         string $separator = '-',
         bool $lowercase = true,
-        array|string $replace = []
+        array | string $replace = []
     ): string {
         if (true === is_string($replace)) {
             $replace = [$replace];

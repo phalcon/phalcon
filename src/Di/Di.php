@@ -71,25 +71,23 @@ class Di implements DiInterface
     use EventsAwareTrait;
 
     /**
+     * Latest DI build
+     *
+     * @var DiInterface|null
+     */
+    protected static ?DiInterface $defaultContainer = null;
+    /**
      * List of registered services
      *
      * @var ServiceInterface[]
      */
     protected array $services = [];
-
     /**
      * List of shared instances
      *
      * @var array
      */
     protected array $sharedInstances = [];
-
-    /**
-     * Latest DI build
-     *
-     * @var DiInterface|null
-     */
-    protected static ?DiInterface $defaultContainer = null;
 
     /**
      * Phalcon\Di\Di constructor

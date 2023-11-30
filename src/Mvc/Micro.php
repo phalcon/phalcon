@@ -141,7 +141,7 @@ class Micro extends Injectable implements ArrayAccess, EventsAwareInterface
      *
      * @return $this
      */
-    public function after(callable|MiddlewareInterface $handler): Micro
+    public function after(callable | MiddlewareInterface $handler): Micro
     {
         $this->afterHandlers[] = $handler;
 
@@ -155,7 +155,7 @@ class Micro extends Injectable implements ArrayAccess, EventsAwareInterface
      *
      * @return $this
      */
-    public function afterBinding(callable|MiddlewareInterface $handler): Micro
+    public function afterBinding(callable | MiddlewareInterface $handler): Micro
     {
         $this->afterBindingHandlers[] = $handler;
 
@@ -169,7 +169,7 @@ class Micro extends Injectable implements ArrayAccess, EventsAwareInterface
      *
      * @return $this
      */
-    public function before(callable|MiddlewareInterface $handler): Micro
+    public function before(callable | MiddlewareInterface $handler): Micro
     {
         $this->beforeHandlers[] = $handler;
 
@@ -184,7 +184,7 @@ class Micro extends Injectable implements ArrayAccess, EventsAwareInterface
      *
      * @return RouteInterface
      */
-    public function delete(string $routePattern, array|callable $handler): RouteInterface
+    public function delete(string $routePattern, array | callable $handler): RouteInterface
     {
         return $this->addRoute('addDelete', $routePattern, $handler);
     }
@@ -226,7 +226,7 @@ class Micro extends Injectable implements ArrayAccess, EventsAwareInterface
      *
      * @return RouteInterface
      */
-    public function get(string $routePattern, array|callable $handler): RouteInterface
+    public function get(string $routePattern, array | callable $handler): RouteInterface
     {
         return $this->addRoute('addGet', $routePattern, $handler);
     }
@@ -270,7 +270,7 @@ class Micro extends Injectable implements ArrayAccess, EventsAwareInterface
      *
      * @return BinderInterface|null
      */
-    public function getModelBinder(): BinderInterface|null
+    public function getModelBinder(): BinderInterface | null
     {
         return $this->modelBinder;
     }
@@ -402,7 +402,7 @@ class Micro extends Injectable implements ArrayAccess, EventsAwareInterface
                 }
 
                 $this->activeHandler = $handler;
-                $this->stopped = false;
+                $this->stopped       = false;
 
                 /**
                  * Calls the before handlers
@@ -737,7 +737,7 @@ class Micro extends Injectable implements ArrayAccess, EventsAwareInterface
      *
      * @return RouteInterface
      */
-    public function head(string $routePattern, array|callable $handler): RouteInterface
+    public function head(string $routePattern, array | callable $handler): RouteInterface
     {
         return $this->addRoute('addHead', $routePattern, $handler);
     }
@@ -750,7 +750,7 @@ class Micro extends Injectable implements ArrayAccess, EventsAwareInterface
      *
      * @return RouteInterface
      */
-    public function map(string $routePattern, array|callable $handler): RouteInterface
+    public function map(string $routePattern, array | callable $handler): RouteInterface
     {
         return $this->addRoute('add', $routePattern, $handler);
     }
@@ -927,7 +927,7 @@ class Micro extends Injectable implements ArrayAccess, EventsAwareInterface
      *
      * @return RouteInterface
      */
-    public function options(string $routePattern, array|callable $handler): RouteInterface
+    public function options(string $routePattern, array | callable $handler): RouteInterface
     {
         return $this->addRoute('addOptions', $routePattern, $handler);
     }
@@ -940,7 +940,7 @@ class Micro extends Injectable implements ArrayAccess, EventsAwareInterface
      *
      * @return RouteInterface
      */
-    public function patch(string $routePattern, array|callable $handler): RouteInterface
+    public function patch(string $routePattern, array | callable $handler): RouteInterface
     {
         return $this->addRoute('addPatch', $routePattern, $handler);
     }
@@ -953,7 +953,7 @@ class Micro extends Injectable implements ArrayAccess, EventsAwareInterface
      *
      * @return RouteInterface
      */
-    public function post(string $routePattern, array|callable $handler): RouteInterface
+    public function post(string $routePattern, array | callable $handler): RouteInterface
     {
         return $this->addRoute('addPost', $routePattern, $handler);
     }
@@ -966,7 +966,7 @@ class Micro extends Injectable implements ArrayAccess, EventsAwareInterface
      *
      * @return RouteInterface
      */
-    public function put(string $routePattern, array|callable $handler): RouteInterface
+    public function put(string $routePattern, array | callable $handler): RouteInterface
     {
         return $this->addRoute('addPut', $routePattern, $handler);
     }
@@ -1004,7 +1004,7 @@ class Micro extends Injectable implements ArrayAccess, EventsAwareInterface
      */
     public function setModelBinder(
         BinderInterface $modelBinder,
-        AdapterInterface|string|null $cache = null
+        AdapterInterface | string | null $cache = null
     ): Micro {
         if (is_string($cache)) {
             $cache = $this->getService($cache);
@@ -1074,7 +1074,7 @@ class Micro extends Injectable implements ArrayAccess, EventsAwareInterface
     private function addRoute(
         string $method,
         string $routePattern,
-        array|callable $handler
+        array | callable $handler
     ): RouteInterface {
         /**
          * We create a router even if there is no one in the DI

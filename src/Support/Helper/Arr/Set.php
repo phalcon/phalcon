@@ -42,10 +42,10 @@ class Set
      *
      * @return array<int|string,mixed>
      */
-    private function checkNull(array $collection, $value, $index): array
+    private function checkNotNull(array $collection, $value, $index): array
     {
-        if (null === $index) {
-            $collection[] = $value;
+        if (null !== $index) {
+            $collection[$index] = $value;
         }
 
         return $collection;
@@ -58,10 +58,10 @@ class Set
      *
      * @return array<int|string,mixed>
      */
-    private function checkNotNull(array $collection, $value, $index): array
+    private function checkNull(array $collection, $value, $index): array
     {
-        if (null !== $index) {
-            $collection[$index] = $value;
+        if (null === $index) {
+            $collection[] = $value;
         }
 
         return $collection;

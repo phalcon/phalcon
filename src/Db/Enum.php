@@ -26,6 +26,7 @@ class Enum
     public const FETCH_CLASS      = PDO::FETCH_CLASS;
     public const FETCH_CLASSTYPE  = PDO::FETCH_CLASSTYPE;
     public const FETCH_COLUMN     = PDO::FETCH_COLUMN;
+    public const FETCH_DEFAULT    = PDO::FETCH_DEFAULT;
     public const FETCH_FUNC       = PDO::FETCH_FUNC;
     public const FETCH_GROUP      = PDO::FETCH_GROUP;
     public const FETCH_INTO       = PDO::FETCH_INTO;
@@ -38,5 +39,4 @@ class Enum
     public const FETCH_PROPS_LATE = PDO::FETCH_PROPS_LATE;
     public const FETCH_SERIALIZE  = PDO::FETCH_SERIALIZE;
     public const FETCH_UNIQUE     = PDO::FETCH_UNIQUE;
-    public const FETCH_DEFAULT    = PDO::FETCH_DEFAULT;
 }

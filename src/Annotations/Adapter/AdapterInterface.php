@@ -50,28 +50,6 @@ interface AdapterInterface
     public function getConstants(string $className): array;
 
     /**
-     * Returns the annotations found in a specific property
-     *
-     * @param string $className
-     * @param string $propertyName
-     *
-     * @return Collection
-     */
-    public function getProperty(
-        string $className,
-        string $propertyName
-    ): Collection;
-
-    /**
-     * Returns the annotations found in all the class' methods
-     *
-     * @param string $className
-     *
-     * @return array
-     */
-    public function getProperties(string $className): array;
-
-    /**
      * Returns the annotations found in a specific method
      *
      * @param string $className
@@ -92,6 +70,28 @@ interface AdapterInterface
      * @return array
      */
     public function getMethods(string $className): array;
+
+    /**
+     * Returns the annotations found in all the class' methods
+     *
+     * @param string $className
+     *
+     * @return array
+     */
+    public function getProperties(string $className): array;
+
+    /**
+     * Returns the annotations found in a specific property
+     *
+     * @param string $className
+     * @param string $propertyName
+     *
+     * @return Collection
+     */
+    public function getProperty(
+        string $className,
+        string $propertyName
+    ): Collection;
 
     /**
      * Returns the annotation reader

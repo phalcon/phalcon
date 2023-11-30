@@ -30,7 +30,7 @@ interface ValidationInterface
      * @return ValidationInterface
      */
     public function add(
-        array|string $field,
+        array | string $field,
         ValidatorInterface $validator
     ): ValidationInterface;
 
@@ -56,7 +56,7 @@ interface ValidationInterface
      */
     public function bind(
         object $entity,
-        array|object $data
+        array | object $data
     ): ValidationInterface;
 
     /**
@@ -64,7 +64,7 @@ interface ValidationInterface
      *
      * @return object|null
      */
-    public function getEntity(): object|null;
+    public function getEntity(): object | null;
 
     /**
      * Returns all the filters or a specific one
@@ -117,7 +117,7 @@ interface ValidationInterface
      * @todo remove this
      */
     public function rule(
-        array|string $field,
+        array | string $field,
         ValidatorInterface $validator
     ): ValidationInterface;
 
@@ -144,7 +144,7 @@ interface ValidationInterface
      */
     public function setFilters(
         string $field,
-        array|string $filters
+        array | string $filters
     ): ValidationInterface;
 
     /**
@@ -165,7 +165,7 @@ interface ValidationInterface
      * @return Messages|false
      */
     public function validate(
-        array|object $data = null,
+        array | object $data = null,
         object $entity = null
-    ): Messages|false;
+    ): Messages | false;
 }

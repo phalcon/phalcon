@@ -163,23 +163,6 @@ class Version
     }
 
     /**
-     * Area where the version number is set. The format is as follows:
-     * ABBCCDE
-     *
-     * A - Major version
-     * B - Med version (two digits)
-     * C - Min version (two digits)
-     * D - Special release: 1 = alpha, 2 = beta, 3 = RC, 4 = stable
-     * E - Special release version i.e. RC1, Beta2 etc.
-     *
-     * @return int[]
-     */
-    protected function getVersion(): array
-    {
-        return [6, 0, 0, 1, 1];
-    }
-
-    /**
      * Translates a number to a special release.
      *
      * @param int $special
@@ -195,5 +178,22 @@ class Version
         ];
 
         return $map[$special] ?? "";
+    }
+
+    /**
+     * Area where the version number is set. The format is as follows:
+     * ABBCCDE
+     *
+     * A - Major version
+     * B - Med version (two digits)
+     * C - Min version (two digits)
+     * D - Special release: 1 = alpha, 2 = beta, 3 = RC, 4 = stable
+     * E - Special release version i.e. RC1, Beta2 etc.
+     *
+     * @return int[]
+     */
+    protected function getVersion(): array
+    {
+        return [6, 0, 0, 1, 1];
     }
 }

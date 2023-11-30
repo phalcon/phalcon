@@ -23,21 +23,21 @@ interface RelationInterface
      *
      * @return array|string
      */
-    public function getFields(): array|string;
+    public function getFields(): array | string;
 
     /**
      * Returns the foreign key configuration
      *
      * @return array|string
      */
-    public function getForeignKey(): array|string;
+    public function getForeignKey(): array | string;
 
     /**
      * Gets the intermediate fields for has-*-through relations
      *
      * @return array|string
      */
-    public function getIntermediateFields(): array|string;
+    public function getIntermediateFields(): array | string;
 
     /**
      * Gets the intermediate model for has-*-through relations
@@ -51,7 +51,7 @@ interface RelationInterface
      *
      * @return array|string
      */
-    public function getIntermediateReferencedFields(): array|string;
+    public function getIntermediateReferencedFields(): array | string;
 
     /**
      * Returns an option by the specified name
@@ -82,7 +82,7 @@ interface RelationInterface
      *
      * @return array|string
      */
-    public function getReferencedFields(): array|string;
+    public function getReferencedFields(): array | string;
 
     /**
      * Returns the referenced model
@@ -130,8 +130,8 @@ interface RelationInterface
      * @return mixed
      */
     public function setIntermediateRelation(
-        array|string $intermediateFields,
+        array | string $intermediateFields,
         string $intermediateModel,
-        array|string $intermediateReferencedFields
+        array | string $intermediateReferencedFields
     );
 }

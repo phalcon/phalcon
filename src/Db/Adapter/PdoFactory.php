@@ -14,7 +14,7 @@ declare(strict_types=1);
 namespace Phalcon\Db\Adapter;
 
 use Exception as BaseException;
-use Phalcon\Config\Config;
+use Phalcon\Config\ConfigInterface;
 use Phalcon\Db\Adapter\Pdo\Mysql;
 use Phalcon\Db\Adapter\Pdo\Postgresql;
 use Phalcon\Db\Adapter\Pdo\Sqlite;
@@ -40,25 +40,26 @@ class PdoFactory
     /**
      * Factory to create an instance from a Config object
      *
-     * @param array|Config $config = [
-     *                             'adapter' => 'mysql',
-     *                             'options' => [
-     *                             'host' => 'localhost',
-     *                             'port' => '3306',
-     *                             'dbname' => 'blog',
-     *                             'username' => 'sigma'
-     *                             'password' => 'secret',
-     *                             'dialectClass' => null,
-     *                             'options' => [],
-     *                             'dsn' => null,
-     *                             'charset' => 'utf8mb4'
-     *                             ]
-     *                             ]
+     * @param array|ConfigInterface $config = [
+     *                                      'adapter' => 'mysql',
+     *                                      'options' => [
+     *                                      'host' => 'localhost',
+     *                                      'port' => '3306',
+     *                                      'dbname' => 'blog',
+     *                                      'username' => 'sigma'
+     *                                      'password' => 'secret',
+     *                                      'dialectClass' => null,
+     *                                      'options' => [],
+     *                                      'dsn' => null,
+     *                                      'charset' => 'utf8mb4'
+     *                                      ]
+     *                                      ]
      *
      * @return AdapterInterface
      * @throws SupportException
+     * @throws BaseException
      */
-    public function load(Config|array $config): AdapterInterface
+    public function load(array | ConfigInterface $config): AdapterInterface
     {
         $config = $this->checkConfig($config);
         $config = $this->checkConfigElement($config, "adapter");

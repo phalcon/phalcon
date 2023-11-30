@@ -33,8 +33,8 @@ interface RouterInterface
      */
     public function add(
         string $pattern,
-        array|string|null $paths = null,
-        array|string|null $httpMethods = null,
+        array | string | null $paths = null,
+        array | string | null $httpMethods = null,
         int $position = Router::POSITION_LAST
     ): RouteInterface;
 
@@ -49,7 +49,7 @@ interface RouterInterface
      */
     public function addConnect(
         string $pattern,
-        array|string|null $paths = null,
+        array | string | null $paths = null,
         int $position = Router::POSITION_LAST
     ): RouteInterface;
 
@@ -64,22 +64,7 @@ interface RouterInterface
      */
     public function addDelete(
         string $pattern,
-        array|string|null $paths = null,
-        int $position = Router::POSITION_LAST
-    ): RouteInterface;
-
-    /**
-     * Adds a route to the router that only match if the HTTP method is HEAD
-     *
-     * @param string            $pattern
-     * @param array|string|null $paths
-     * @param int               $position
-     *
-     * @return RouteInterface
-     */
-    public function addHead(
-        string $pattern,
-        array|string|null $paths = null,
+        array | string | null $paths = null,
         int $position = Router::POSITION_LAST
     ): RouteInterface;
 
@@ -94,7 +79,22 @@ interface RouterInterface
      */
     public function addGet(
         string $pattern,
-        array|string|null $paths = null,
+        array | string | null $paths = null,
+        int $position = Router::POSITION_LAST
+    ): RouteInterface;
+
+    /**
+     * Adds a route to the router that only match if the HTTP method is HEAD
+     *
+     * @param string            $pattern
+     * @param array|string|null $paths
+     * @param int               $position
+     *
+     * @return RouteInterface
+     */
+    public function addHead(
+        string $pattern,
+        array | string | null $paths = null,
         int $position = Router::POSITION_LAST
     ): RouteInterface;
 
@@ -109,7 +109,7 @@ interface RouterInterface
      */
     public function addOptions(
         string $pattern,
-        array|string|null $paths = null,
+        array | string | null $paths = null,
         int $position = Router::POSITION_LAST
     ): RouteInterface;
 
@@ -124,7 +124,7 @@ interface RouterInterface
      */
     public function addPatch(
         string $pattern,
-        array|string|null $paths = null,
+        array | string | null $paths = null,
         int $position = Router::POSITION_LAST
     ): RouteInterface;
 
@@ -139,7 +139,7 @@ interface RouterInterface
      */
     public function addPost(
         string $pattern,
-        array|string|null $paths = null,
+        array | string | null $paths = null,
         int $position = Router::POSITION_LAST
     ): RouteInterface;
 
@@ -155,7 +155,7 @@ interface RouterInterface
      */
     public function addPurge(
         string $pattern,
-        array|string|null $paths = null,
+        array | string | null $paths = null,
         int $position = Router::POSITION_LAST
     ): RouteInterface;
 
@@ -170,7 +170,7 @@ interface RouterInterface
      */
     public function addPut(
         string $pattern,
-        array|string|null $paths = null,
+        array | string | null $paths = null,
         int $position = Router::POSITION_LAST
     ): RouteInterface;
 
@@ -185,7 +185,7 @@ interface RouterInterface
      */
     public function addTrace(
         string $pattern,
-        array|string|null $paths = null,
+        array | string | null $paths = null,
         int $position = Router::POSITION_LAST
     ): RouteInterface;
 
@@ -228,7 +228,7 @@ interface RouterInterface
      *
      * @return RouteInterface|null
      */
-    public function getMatchedRoute(): RouteInterface|null;
+    public function getMatchedRoute(): RouteInterface | null;
 
     /**
      * Return the sub expressions in the regular expression matched
@@ -259,20 +259,13 @@ interface RouterInterface
     public function getParams(): array;
 
     /**
-     * Return all the routes defined in the router
-     *
-     * @return RouteInterface[]
-     */
-    public function getRoutes(): array;
-
-    /**
      * Returns a route object by its id
      *
      * @param int|string $routeId
      *
      * @return RouteInterface|bool
      */
-    public function getRouteById(int|string $routeId): RouteInterface|bool;
+    public function getRouteById(int | string $routeId): RouteInterface | bool;
 
     /**
      * Returns a route object by its name
@@ -281,7 +274,14 @@ interface RouterInterface
      *
      * @return RouteInterface|bool
      */
-    public function getRouteByName(string $name): RouteInterface|bool;
+    public function getRouteByName(string $name): RouteInterface | bool;
+
+    /**
+     * Return all the routes defined in the router
+     *
+     * @return RouteInterface[]
+     */
+    public function getRoutes(): array;
 
     /**
      * Handles routing information received from the rewrite engine

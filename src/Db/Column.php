@@ -78,17 +78,14 @@ class Column implements ColumnInterface
      * Big integer abstract data type
      */
     public const TYPE_BIGINTEGER = 14;
-
-    /**
-     * Bit abstract data type
-     */
-    public const TYPE_BIT = 19;
-
     /**
      * Binary abstract data type
      */
     public const TYPE_BINARY = 26;
-
+    /**
+     * Bit abstract data type
+     */
+    public const TYPE_BIT = 19;
     /**
      * Blob abstract data type
      */
@@ -303,7 +300,7 @@ class Column implements ColumnInterface
      *
      * @var int|string
      */
-    protected int|string $size = 0;
+    protected int | string $size = 0;
 
     /**
      * Column data type
@@ -324,7 +321,7 @@ class Column implements ColumnInterface
      *
      * @var array|string
      */
-    protected array|string $typeValues = [];
+    protected array | string $typeValues = [];
 
     /**
      * Phalcon\Db\Column constructor
@@ -463,7 +460,7 @@ class Column implements ColumnInterface
      *
      * @return int|string
      */
-    public function getSize(): int|string
+    public function getSize(): int | string
     {
         return $this->size;
     }
@@ -493,7 +490,7 @@ class Column implements ColumnInterface
      *
      * @return array|string
      */
-    public function getTypeValues(): array|string
+    public function getTypeValues(): array | string
     {
         return $this->typeValues;
     }

@@ -43,42 +43,34 @@ class Form extends Injectable implements Countable, Iterator, AttributesInterfac
      * @var array
      */
     protected array $data = [];
-
-    /**
-     * @var array
-     */
-    protected array $filteredData = [];
-
     /**
      * @var array
      */
     protected array $elements = [];
-
     /**
      * @var array
      */
     protected array $elementsIndexed = [];
-
     /**
      * @var object|null
      */
     protected ?object $entity = null;
-
+    /**
+     * @var array
+     */
+    protected array $filteredData = [];
     /**
      * @var Messages
      */
     protected Messages $messages;
-
-    /**
-     * @var int
-     */
-    protected int $position = 0;
-
     /**
      * @var array
      */
     protected array $options = [];
-
+    /**
+     * @var int
+     */
+    protected int $position = 0;
     /**
      * @var TagFactory|null
      */
@@ -269,7 +261,7 @@ class Form extends Injectable implements Countable, Iterator, AttributesInterfac
      *
      * @return $this
      */
-    public function clear(array|string $fields = null): Form
+    public function clear(array | string $fields = null): Form
     {
         $data = $this->data;
 
@@ -385,7 +377,7 @@ class Form extends Injectable implements Countable, Iterator, AttributesInterfac
      *
      * @return object|null
      */
-    public function getEntity(): object|null
+    public function getEntity(): object | null
     {
         return $this->entity;
     }
@@ -463,7 +455,7 @@ class Form extends Injectable implements Countable, Iterator, AttributesInterfac
      *
      * @return TagFactory|null
      */
-    public function getTagFactory(): TagFactory|null
+    public function getTagFactory(): TagFactory | null
     {
         return $this->tagFactory;
     }
@@ -491,6 +483,14 @@ class Form extends Injectable implements Countable, Iterator, AttributesInterfac
     public function getUserOptions(): array
     {
         return $this->options;
+    }
+
+    /**
+     * @return ValidationInterface|null
+     */
+    public function getValidation(): ValidationInterface | null
+    {
+        return $this->validation;
     }
 
     /**
@@ -575,14 +575,6 @@ class Form extends Injectable implements Countable, Iterator, AttributesInterfac
         }
 
         return null;
-    }
-
-    /**
-     * @return ValidationInterface|null
-     */
-    public function getValidation(): ValidationInterface|null
-    {
-        return $this->validation;
     }
 
     /**
@@ -764,22 +756,6 @@ class Form extends Injectable implements Countable, Iterator, AttributesInterfac
     }
 
     /**
-     * Renders a specific item in the form
-     *
-     * @param string $name
-     * @param array  $attributes
-     *
-     * @return string
-     * @throws Exception
-     */
-    public function render(string $name, array $attributes = []): string
-    {
-        $element = $this->get($name);
-
-        return $element->render($attributes);
-    }
-
-    /**
      * Removes an element from the form
      *
      * @param string $name
@@ -803,6 +779,22 @@ class Form extends Injectable implements Countable, Iterator, AttributesInterfac
         $this->elementsIndexed = [];
 
         return false;
+    }
+
+    /**
+     * Renders a specific item in the form
+     *
+     * @param string $name
+     * @param array  $attributes
+     *
+     * @return string
+     * @throws Exception
+     */
+    public function render(string $name, array $attributes = []): string
+    {
+        $element = $this->get($name);
+
+        return $element->render($attributes);
     }
 
     /**
@@ -871,34 +863,6 @@ class Form extends Injectable implements Countable, Iterator, AttributesInterfac
     }
 
     /**
-     * Sets the default validation
-     *
-     * @param ValidationInterface $validation
-     *
-     * @return $this
-     */
-    public function setValidation(ValidationInterface $validation): Form
-    {
-        $this->validation = $validation;
-
-        return $this;
-    }
-
-    /**
-     * Sets the default whitelist
-     *
-     * @param array $whitelist
-     *
-     * @return $this
-     */
-    public function setWhitelist(array $whitelist): Form
-    {
-        $this->whitelist = $whitelist;
-
-        return $this;
-    }
-
-    /**
      * Sets an option for the form
      *
      * @param string $option
@@ -928,6 +892,34 @@ class Form extends Injectable implements Countable, Iterator, AttributesInterfac
     }
 
     /**
+     * Sets the default validation
+     *
+     * @param ValidationInterface $validation
+     *
+     * @return $this
+     */
+    public function setValidation(ValidationInterface $validation): Form
+    {
+        $this->validation = $validation;
+
+        return $this;
+    }
+
+    /**
+     * Sets the default whitelist
+     *
+     * @param array $whitelist
+     *
+     * @return $this
+     */
+    public function setWhitelist(array $whitelist): Form
+    {
+        $this->whitelist = $whitelist;
+
+        return $this;
+    }
+
+    /**
      * Check if the current element in the iterator is valid
      *
      * @return bool
@@ -935,6 +927,44 @@ class Form extends Injectable implements Countable, Iterator, AttributesInterfac
     public function valid(): bool
     {
         return isset($this->elementsIndexed[$this->position]);
+    }
+
+    /**
+     * @param int|string       $key
+     * @param string           $position
+     * @param bool|null        $type
+     * @param ElementInterface $element
+     * @param mixed            $elements
+     * @param string           $name
+     * @param mixed            $value
+     *
+     * @return array|mixed
+     */
+    private function processElementByPosition(
+        int | string $key,
+        string $position,
+        ?bool $type,
+        ElementInterface $element,
+        mixed $elements,
+        string $name,
+        mixed $value
+    ): mixed {
+        if ($key === $position) {
+            $elements = $this->processElements(
+                $type,
+                $element,
+                $elements,
+                $name,
+                $value,
+                $key
+            );
+        } else {
+            /**
+             * Copy the element to new array
+             */
+            $elements[$key] = $value;
+        }
+        return $elements;
     }
 
     /**
@@ -969,44 +999,6 @@ class Form extends Injectable implements Countable, Iterator, AttributesInterfac
             $elements[$name] = $element;
         }
 
-        return $elements;
-    }
-
-    /**
-     * @param int|string       $key
-     * @param string           $position
-     * @param bool|null        $type
-     * @param ElementInterface $element
-     * @param mixed            $elements
-     * @param string           $name
-     * @param mixed            $value
-     *
-     * @return array|mixed
-     */
-    private function processElementByPosition(
-        int|string $key,
-        string $position,
-        ?bool $type,
-        ElementInterface $element,
-        mixed $elements,
-        string $name,
-        mixed $value
-    ): mixed {
-        if ($key === $position) {
-            $elements = $this->processElements(
-                $type,
-                $element,
-                $elements,
-                $name,
-                $value,
-                $key
-            );
-        } else {
-            /**
-             * Copy the element to new array
-             */
-            $elements[$key] = $value;
-        }
         return $elements;
     }
 }

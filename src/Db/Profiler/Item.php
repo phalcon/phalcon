@@ -104,16 +104,6 @@ class Item
     }
 
     /**
-     * Returns the total time in nanoseconds spent by the profile
-     *
-     * @return float
-     */
-    public function getTotalElapsedNanoseconds(): float
-    {
-        return $this->finalTime - $this->initialTime;
-    }
-
-    /**
      * Returns the total time in milliseconds spent by the profile
      *
      * @return float
@@ -121,6 +111,16 @@ class Item
     public function getTotalElapsedMilliseconds(): float
     {
         return $this->getTotalElapsedNanoseconds() / 1000000;
+    }
+
+    /**
+     * Returns the total time in nanoseconds spent by the profile
+     *
+     * @return float
+     */
+    public function getTotalElapsedNanoseconds(): float
+    {
+        return $this->finalTime - $this->initialTime;
     }
 
     /**

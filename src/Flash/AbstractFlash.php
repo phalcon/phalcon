@@ -126,6 +126,57 @@ abstract class AbstractFlash implements FlashInterface, InjectionAwareInterface
     }
 
     /**
+     * Outputs a message formatting it with HTML
+     *
+     *```php
+     * $flash->outputMessage("error", $message);
+     *```
+     *
+     * @param string $type
+     * @param mixed  $message
+     *
+     * @return string|null
+     * @throws Exception
+     */
+    public function outputMessage(string $type, $message): ?string
+    {
+        $content = '';
+
+        if (true !== is_array($message) && true !== is_string($message)) {
+            throw new Exception('The message must be an array or a string');
+        }
+
+        /**
+         * Make this an array. Same code processes string and array
+         */
+        if (true !== is_array($message)) {
+            $message = [$message];
+        }
+
+        foreach ($message as $item) {
+            $prepared = $this->prepareEscapedMessage($item);
+            $html     = $this->prepareHtmlMessage($type, $prepared);
+
+            if (true === $this->implicitFlush) {
+                echo $html;
+            } else {
+                $content          .= $html;
+                $this->messages[] = $html;
+            }
+        }
+
+        /**
+         * We return the message as a string if the implicitFlush is turned
+         * off
+         */
+        if (true !== $this->implicitFlush) {
+            return $content;
+        }
+
+        return null;
+    }
+
+    /**
      * Set the autoescape mode in generated HTML
      *
      * @param bool $autoescape
@@ -241,57 +292,6 @@ abstract class AbstractFlash implements FlashInterface, InjectionAwareInterface
     }
 
     /**
-     * Outputs a message formatting it with HTML
-     *
-     *```php
-     * $flash->outputMessage("error", $message);
-     *```
-     *
-     * @param string $type
-     * @param mixed  $message
-     *
-     * @return string|null
-     * @throws Exception
-     */
-    public function outputMessage(string $type, $message): ?string
-    {
-        $content = '';
-
-        if (true !== is_array($message) && true !== is_string($message)) {
-            throw new Exception('The message must be an array or a string');
-        }
-
-        /**
-         * Make this an array. Same code processes string and array
-         */
-        if (true !== is_array($message)) {
-            $message = [$message];
-        }
-
-        foreach ($message as $item) {
-            $prepared = $this->prepareEscapedMessage($item);
-            $html     = $this->prepareHtmlMessage($type, $prepared);
-
-            if (true === $this->implicitFlush) {
-                echo $html;
-            } else {
-                $content          .= $html;
-                $this->messages[] = $html;
-            }
-        }
-
-        /**
-         * We return the message as a string if the implicitFlush is turned
-         * off
-         */
-        if (true !== $this->implicitFlush) {
-            return $content;
-        }
-
-        return null;
-    }
-
-    /**
      * Shows a HTML warning message
      *
      *```php
@@ -305,6 +305,30 @@ abstract class AbstractFlash implements FlashInterface, InjectionAwareInterface
     public function warning(string $message): ?string
     {
         return $this->message('warning', $message);
+    }
+
+    /**
+     * Checks the collection and returns the content as a string
+     * (array is joined)
+     *
+     * @param array  $collection
+     * @param string $type
+     *
+     * @return string
+     */
+    private function checkClasses(array $collection, string $type): string
+    {
+        $content = $collection[$type] ?? '';
+
+        if (true !== empty($content)) {
+            if (true !== is_array($content)) {
+                $content = [$content];
+            }
+
+            $content = join(' ', $content);
+        }
+
+        return $content;
     }
 
     /**
@@ -388,29 +412,5 @@ abstract class AbstractFlash implements FlashInterface, InjectionAwareInterface
                 'message'      => $message,
             ]
         );
-    }
-
-    /**
-     * Checks the collection and returns the content as a string
-     * (array is joined)
-     *
-     * @param array  $collection
-     * @param string $type
-     *
-     * @return string
-     */
-    private function checkClasses(array $collection, string $type): string
-    {
-        $content = $collection[$type] ?? '';
-
-        if (true !== empty($content)) {
-            if (true !== is_array($content)) {
-                $content = [$content];
-            }
-
-            $content = join(' ', $content);
-        }
-
-        return $content;
     }
 }

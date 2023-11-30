@@ -67,27 +67,22 @@ class Route implements RouteInterface
      * @var string
      */
     protected string $description = "";
-
-    /**
-     * @var string
-     */
-    protected string $routeId;
-
     /**
      * @var string
      */
     protected string $name = "";
-
     /**
      * @var array
      */
     protected array $paths = [];
-
     /**
      * @var string
      */
     protected string $pattern;
-
+    /**
+     * @var string
+     */
+    protected string $routeId;
     /**
      * @var int
      */
@@ -101,7 +96,7 @@ class Route implements RouteInterface
      *
      * @throws Exception
      */
-    public function __construct(string $pattern, array|string $paths = [])
+    public function __construct(string $pattern, array | string $paths = [])
     {
         // Get the delimiter from the static member delimiterPath
         $this->delimiter = self::$delimiterPath;
@@ -210,7 +205,7 @@ class Route implements RouteInterface
      *
      * @return array|bool
      */
-    public function extractNamedParams(string $pattern): array|bool
+    public function extractNamedParams(string $pattern): array | bool
     {
         if (0 === strlen($pattern)) {
             return false;
@@ -463,7 +458,7 @@ class Route implements RouteInterface
      * @return void
      * @throws Exception
      */
-    public function reConfigure(string $pattern, array|string $paths = []): void
+    public function reConfigure(string $pattern, array | string $paths = []): void
     {
         if (is_string($paths)) {
             $moduleName = null;
