@@ -43,6 +43,7 @@ class LazyLoader
      * @param BinderInterface|null $modelBinder
      *
      * @return mixed
+     * @throws Exception
      */
     public function callMethod(
         string $method,

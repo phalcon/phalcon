@@ -22,6 +22,7 @@ use Phalcon\Acl\Exception;
 use Phalcon\Acl\Role;
 use Phalcon\Acl\RoleAwareInterface;
 use Phalcon\Acl\RoleInterface;
+use Phalcon\Events\Exception as EventsException;
 use Phalcon\Events\Traits\EventsAwareTrait;
 use ReflectionClass;
 use ReflectionException;
@@ -590,6 +591,7 @@ class Memory extends AbstractAdapter
      * @return bool
      * @throws Exception
      * @throws ReflectionException
+     * @throws EventsException
      */
     public function isAllowed(
         $roleName,

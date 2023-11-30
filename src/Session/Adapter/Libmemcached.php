@@ -13,8 +13,8 @@ declare(strict_types=1);
 
 namespace Phalcon\Session\Adapter;
 
+use Exception;
 use Phalcon\Storage\AdapterFactory;
-use Phalcon\Support\Exception as SupportException;
 
 /**
  * Class Libmemcached
@@ -42,7 +42,7 @@ class Libmemcached extends AbstractAdapter
      *     'prefix'            => 'sess-memc-'
      * ]
      *
-     * @throws SupportException
+     * @throws Exception
      */
     public function __construct(AdapterFactory $factory, array $options = [])
     {

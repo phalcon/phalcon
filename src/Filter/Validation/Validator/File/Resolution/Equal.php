@@ -123,11 +123,11 @@ class Equal extends AbstractFile
     /**
      * Executes the conditional
      *
-     * @param int $sourceWidth
-     * @param int $targetWidth
-     * @param int $sourceHeight
-     * @param int $targetHeight
-     *
+     * @param int  $sourceWidth
+     * @param int  $targetWidth
+     * @param int  $sourceHeight
+     * @param int  $targetHeight
+     * @param bool $included
      *
      * @return bool
      */

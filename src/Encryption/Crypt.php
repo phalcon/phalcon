@@ -760,7 +760,7 @@ class Crypt implements CryptInterface
      * @param string $cryptText
      *
      * @return string
-     * @throws Exception
+     * @throws BaseException
      */
     protected function decryptUnpadCbcEcb(
         string $mode,
