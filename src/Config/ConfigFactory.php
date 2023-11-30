@@ -178,14 +178,8 @@ class ConfigFactory
             ];
         }
 
-        if (true === is_object($config) && $config instanceof ConfigInterface) {
+        if ($config instanceof ConfigInterface) {
             $config = $config->toArray();
-        }
-
-        if (true !== is_array($config)) {
-            throw new Exception(
-                'Config must be array or Phalcon\\Config\\Config object'
-            );
         }
 
         $this->checkConfigArray($config);
