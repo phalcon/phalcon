@@ -681,7 +681,6 @@ jobs:
           name: "db-sqlite-${{ matrix.php }}.coverage"
           path: "tests/_output/coverage.xml"
 
-
   qodana-analysis:
     permissions:
       contents: read
@@ -701,17 +700,15 @@ jobs:
       - name: "Checkout"
         uses: "actions/checkout@v3"
         with:
-          fetch-depth: 2
+          ref: ${{ github.event.pull_request.head.sha }}  # to check out the actual pull request commit, not the merge commit
+          fetch-depth: 0  # a full history is required for pull request analysis
 
-      - name: "Qodana Analysis"
-        run: |
-          docker run \
-            -p 8080:8080 \
-            -v $(pwd):/data/project \
-            -v $(pwd)/res:/data/results/ \
-            -e QODANA_TOKEN="${{ secrets.QODANA_TOKEN }}" \
-            jetbrains/qodana-php:latest \
-            --show-report --baseline=qodana.sarif.json
+      - name: 'Qodana Scan'
+        uses: JetBrains/qodana-action@v2023.2
+        env:
+          QODANA_TOKEN: ${{ secrets.QODANA_TOKEN }}
+        with:
+          args: --baseline,qodana.sarif.json
 
   upload-coverage:
     permissions:
