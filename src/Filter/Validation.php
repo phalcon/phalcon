@@ -47,7 +47,7 @@ class Validation extends Injectable implements ValidationInterface
     /**
      * @var array|object
      */
-    protected array|object $data;
+    protected array | object $data;
 
     /**
      * @var object|null
@@ -125,7 +125,7 @@ class Validation extends Injectable implements ValidationInterface
      * @throws ValidationException
      */
     public function add(
-        array|string $field,
+        array | string $field,
         ValidatorInterface $validator
     ): ValidationInterface {
         if (is_array($field)) {
@@ -175,7 +175,7 @@ class Validation extends Injectable implements ValidationInterface
      */
     public function bind(
         object $entity,
-        array|object $data
+        array | object $data
     ): ValidationInterface {
         $this->setEntity($entity);
 
@@ -187,7 +187,7 @@ class Validation extends Injectable implements ValidationInterface
     /**
      * @return array|object
      */
-    public function getData(): array|object
+    public function getData(): array | object
     {
         return $this->data;
     }
@@ -225,7 +225,7 @@ class Validation extends Injectable implements ValidationInterface
      *
      * @return string
      */
-    public function getLabel(array|string $field): string
+    public function getLabel(array | string $field): string
     {
         if (is_array($field)) {
             return join(", ", $field);
@@ -252,54 +252,6 @@ class Validation extends Injectable implements ValidationInterface
     public function getValidators(): array
     {
         return $this->validators;
-    }
-
-    /**
-     * Gets the value to validate in the object entity source
-     *
-     * @param object $entity
-     * @param string $field
-     *
-     * @return mixed
-     */
-    public function getValueByEntity(
-        object $entity,
-        string $field
-    ): mixed {
-        $method = "get" . $this->toCamelize($field);
-
-        if (true === method_exists($entity, $method)) {
-            return $entity->{$method}();
-        }
-
-        if (true === method_exists($entity, "readAttribute")) {
-            return $entity->readAttribute($field);
-        }
-
-        return $entity->{$field} ?? null;
-    }
-
-    /**
-     * Gets the value to validate in the array/object data source
-     *
-     * @param array|object $data
-     * @param string       $field
-     *
-     * @return mixed
-     */
-    public function getValueByData(
-        array|object $data,
-        string $field
-    ): mixed {
-        if (true === isset($this->values[$field])) {
-            return $this->values[$field];
-        }
-
-        if (is_array($data) && true === isset($data[$field])) {
-            return $data[$field];
-        }
-
-        return $data->{$field} ?? null;
     }
 
     /**
@@ -382,6 +334,54 @@ class Validation extends Injectable implements ValidationInterface
     }
 
     /**
+     * Gets the value to validate in the array/object data source
+     *
+     * @param array|object $data
+     * @param string       $field
+     *
+     * @return mixed
+     */
+    public function getValueByData(
+        array | object $data,
+        string $field
+    ): mixed {
+        if (true === isset($this->values[$field])) {
+            return $this->values[$field];
+        }
+
+        if (is_array($data) && true === isset($data[$field])) {
+            return $data[$field];
+        }
+
+        return $data->{$field} ?? null;
+    }
+
+    /**
+     * Gets the value to validate in the object entity source
+     *
+     * @param object $entity
+     * @param string $field
+     *
+     * @return mixed
+     */
+    public function getValueByEntity(
+        object $entity,
+        string $field
+    ): mixed {
+        $method = "get" . $this->toCamelize($field);
+
+        if (true === method_exists($entity, $method)) {
+            return $entity->{$method}();
+        }
+
+        if (true === method_exists($entity, "readAttribute")) {
+            return $entity->readAttribute($field);
+        }
+
+        return $entity->{$field} ?? null;
+    }
+
+    /**
      * Alias of `add` method
      *
      * @param array|string       $field
@@ -392,7 +392,7 @@ class Validation extends Injectable implements ValidationInterface
      * @todo remove this
      */
     public function rule(
-        array|string $field,
+        array | string $field,
         ValidatorInterface $validator
     ): ValidationInterface {
         return $this->add($field, $validator);
@@ -408,7 +408,7 @@ class Validation extends Injectable implements ValidationInterface
      * @throws ValidationException
      */
     public function rules(
-        array|string $field,
+        array | string $field,
         array $validators
     ): ValidationInterface {
         foreach ($validators as $validator) {
@@ -441,8 +441,8 @@ class Validation extends Injectable implements ValidationInterface
      * @return ValidationInterface
      */
     public function setFilters(
-        array|string $field,
-        array|string $filters
+        array | string $field,
+        array | string $filters
     ): ValidationInterface {
         $fields = $field;
         if (true !== is_array($field)) {
@@ -494,9 +494,9 @@ class Validation extends Injectable implements ValidationInterface
      * @throws ValidationException
      */
     public function validate(
-        array|object $data = null,
+        array | object $data = null,
         object $entity = null
-    ): Messages|false {
+    ): Messages | false {
         /**
          * Clear pre-calculated values
          */
@@ -607,7 +607,7 @@ class Validation extends Injectable implements ValidationInterface
      * @throws ValidationException
      */
     protected function preChecking(
-        array|string $field,
+        array | string $field,
         ValidatorInterface $validator
     ): bool {
         $results = [];

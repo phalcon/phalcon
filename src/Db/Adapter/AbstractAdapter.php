@@ -352,7 +352,7 @@ abstract class AbstractAdapter implements AdapterInterface, EventsAwareInterface
      * @return bool
      */
     public function delete(
-        array|string $tableName,
+        array | string $tableName,
         string $whereCondition = null,
         array $placeholders = [],
         array $dataTypes = []
@@ -621,7 +621,7 @@ abstract class AbstractAdapter implements AdapterInterface, EventsAwareInterface
      *
      * @return string
      */
-    public function escapeIdentifier(array|string $identifier): string
+    public function escapeIdentifier(array | string $identifier): string
     {
         if (is_array($identifier)) {
             return $this->dialect->escape($identifier[0])
@@ -705,8 +705,8 @@ abstract class AbstractAdapter implements AdapterInterface, EventsAwareInterface
     public function fetchColumn(
         string $sqlQuery,
         array $placeholders = [],
-        int|string $column = 0
-    ): string|bool {
+        int | string $column = 0
+    ): string | bool {
         $row = $this->fetchOne($sqlQuery, Enum::FETCH_BOTH, $placeholders);
 
         return $row[$column] ?? false;
@@ -1115,7 +1115,7 @@ abstract class AbstractAdapter implements AdapterInterface, EventsAwareInterface
      *
      * @return string
      */
-    public function limit(string $sqlQuery, array|int $number): string
+    public function limit(string $sqlQuery, array | int $number): string
     {
         return $this->dialect->limit($sqlQuery, $number);
     }
@@ -1298,6 +1298,17 @@ abstract class AbstractAdapter implements AdapterInterface, EventsAwareInterface
     }
 
     /**
+     * Check whether the database system support the DEFAULT
+     * keyword (SQLite does not support it)
+     *
+     * @deprecated Will re removed in the next version
+     */
+    public function supportsDefaultValue(): bool
+    {
+        return true;
+    }
+
+    /**
      * Generates SQL checking for the existence of a schema.table
      *
      *```php
@@ -1395,7 +1406,7 @@ abstract class AbstractAdapter implements AdapterInterface, EventsAwareInterface
         string $tableName,
         array $fields,
         array $values,
-        array|string $whereCondition = [],
+        array | string $whereCondition = [],
         array $dataTypes = []
     ): bool {
         $placeholders  = [];
@@ -1537,7 +1548,7 @@ abstract class AbstractAdapter implements AdapterInterface, EventsAwareInterface
     public function updateAsDict(
         string $tableName,
         array $data,
-        array|string $whereCondition = [],
+        array | string $whereCondition = [],
         array $dataTypes = []
     ): bool {
         if (true === empty($data)) {
@@ -1562,17 +1573,6 @@ abstract class AbstractAdapter implements AdapterInterface, EventsAwareInterface
     public function useExplicitIdValue(): bool
     {
         return false;
-    }
-
-    /**
-     * Check whether the database system support the DEFAULT
-     * keyword (SQLite does not support it)
-     *
-     * @deprecated Will re removed in the next version
-     */
-    public function supportsDefaultValue(): bool
-    {
-        return true;
     }
 
     /**

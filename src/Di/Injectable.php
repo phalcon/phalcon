@@ -134,7 +134,7 @@ abstract class Injectable implements InjectionAwareInterface
          * Fallback to the PHP userland if the cache is not available
          */
         if (true === $bucket->has($propertyName)) {
-            $service             = $bucket->getShared($propertyName);
+            $service = $bucket->getShared($propertyName);
             $this->$propertyName = $service;
 
             return $service;

@@ -58,7 +58,7 @@ interface ColumnInterface
      *
      * @return int|string
      */
-    public function getSize(): int|string;
+    public function getSize(): int | string;
 
     /**
      * Returns column type
@@ -79,7 +79,7 @@ interface ColumnInterface
      *
      * @return array|string
      */
-    public function getTypeValues(): array|string;
+    public function getTypeValues(): array | string;
 
 
     /**

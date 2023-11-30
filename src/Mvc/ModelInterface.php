@@ -61,7 +61,7 @@ interface ModelInterface
      */
     public static function average(
         array $parameters = []
-    ): ResultsetInterface|float;
+    ): ResultsetInterface | float;
 
     /**
      * Assigns values to a model from an array returning a new model
@@ -123,7 +123,7 @@ interface ModelInterface
      *
      * @return int|ResultsetInterface
      */
-    public static function count(mixed $parameters = null): int|ResultsetInterface;
+    public static function count(mixed $parameters = null): int | ResultsetInterface;
 
     /**
      * Inserts a model instance. If the instance already exists in the
@@ -246,7 +246,7 @@ interface ModelInterface
      *
      * @return string|null
      */
-    public function getSchema(): string|null;
+    public function getSchema(): string | null;
 
     /**
      * Returns table name mapped in the model
@@ -332,7 +332,7 @@ interface ModelInterface
      *
      * @return ModelInterface|bool
      */
-    public function setDirtyState(int $dirtyState): ModelInterface|bool;
+    public function setDirtyState(int $dirtyState): ModelInterface | bool;
 
     /**
      * Sets the DependencyInjection connection service used to read data
@@ -390,14 +390,7 @@ interface ModelInterface
      *
      * @return ResultsetInterface|float
      */
-    public static function sum(mixed $parameters = null): ResultsetInterface|float;
-
-    /**
-     * Check whether validation process has generated any messages
-     *
-     * @return bool
-     */
-    public function validationHasFailed(): bool;
+    public static function sum(mixed $parameters = null): ResultsetInterface | float;
 
     /**
      * Updates a model instance. If the instance doesn't exist in the
@@ -407,4 +400,11 @@ interface ModelInterface
      * @return bool
      */
     public function update(): bool;
+
+    /**
+     * Check whether validation process has generated any messages
+     *
+     * @return bool
+     */
+    public function validationHasFailed(): bool;
 }

@@ -119,14 +119,13 @@ class TagFactory
     use FactoryTrait;
 
     /**
-     * @var EscaperInterface
-     */
-    private EscaperInterface $escaper;
-
-    /**
      * @var array
      */
     protected array $services = [];
+    /**
+     * @var EscaperInterface
+     */
+    private EscaperInterface $escaper;
 
     /**
      * TagFactory constructor.

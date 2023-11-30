@@ -52,32 +52,26 @@ class View extends Injectable implements EventsAwareInterface //ViewInterface
      * Render Level: To the action view
      */
     public const LEVEL_ACTION_VIEW = 1;
-
-    /**
-     * Render Level: To the templates "before"
-     */
-    public const LEVEL_BEFORE_TEMPLATE = 2;
-
-    /**
-     * Render Level: To the controller layout
-     */
-    public const LEVEL_LAYOUT = 3;
-
-    /**
-     * Render Level: To the main layout
-     */
-    public const LEVEL_MAIN_LAYOUT = 5;
-
-    /**
-     * Render Level: No render any view
-     */
-    public const LEVEL_NO_RENDER = 0;
-
     /**
      * Render Level: Render to the templates "after"
      */
     public const LEVEL_AFTER_TEMPLATE = 4;
-
+    /**
+     * Render Level: To the templates "before"
+     */
+    public const LEVEL_BEFORE_TEMPLATE = 2;
+    /**
+     * Render Level: To the controller layout
+     */
+    public const LEVEL_LAYOUT = 3;
+    /**
+     * Render Level: To the main layout
+     */
+    public const LEVEL_MAIN_LAYOUT = 5;
+    /**
+     * Render Level: No render any view
+     */
+    public const LEVEL_NO_RENDER = 0;
     /**
      * @var string
      */
@@ -109,21 +103,6 @@ class View extends Injectable implements EventsAwareInterface //ViewInterface
     }
 
     /**
-     * Starts rendering process enabling the output buffering
-     *
-     * @return $this
-     */
-    public function start(): View
-    {
-        ob_start();
-
-        $this->content = null;
-
-        return $this;
-    }
-
-
-    /**
      * Sets the views directory. Depending on your platform,
      * always add a trailing slash or backslash
      *
@@ -132,7 +111,7 @@ class View extends Injectable implements EventsAwareInterface //ViewInterface
      * @return $this
      * @throws Exception
      */
-    public function setViewsDir(array|string $viewsDir): View
+    public function setViewsDir(array | string $viewsDir): View
     {
         if (is_string($viewsDir)) {
             $this->viewsDirs = [$this->toDirSeparator($viewsDir)];
@@ -151,6 +130,20 @@ class View extends Injectable implements EventsAwareInterface //ViewInterface
 
             $this->viewsDirs = $newViewsDir;
         }
+
+        return $this;
+    }
+
+    /**
+     * Starts rendering process enabling the output buffering
+     *
+     * @return $this
+     */
+    public function start(): View
+    {
+        ob_start();
+
+        $this->content = null;
 
         return $this;
     }

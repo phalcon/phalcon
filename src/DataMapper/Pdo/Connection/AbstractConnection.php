@@ -128,7 +128,7 @@ abstract class AbstractConnection extends PDO implements ConnectionInterface
      *
      * @return string|null
      */
-    public function errorCode(): string|null
+    public function errorCode(): string | null
     {
         $this->connect();
 
@@ -421,7 +421,7 @@ abstract class AbstractConnection extends PDO implements ConnectionInterface
      *
      * @return bool|int|string|array|null
      */
-    public function getAttribute(int $attribute): bool|int|string|array|null
+    public function getAttribute(int $attribute): bool | int | string | array | null
     {
         $this->connect();
 
@@ -618,7 +618,7 @@ abstract class AbstractConnection extends PDO implements ConnectionInterface
         string $statement,
         ?int $mode = null,
         ...$arguments
-    ): PDOStatement|false {
+    ): PDOStatement | false {
         $this->connect();
         $this->profiler->start(__FUNCTION__);
 
@@ -838,6 +838,42 @@ abstract class AbstractConnection extends PDO implements ConnectionInterface
     }
 
     /**
+     * Helper method to get data from PDO based on the method passed
+     *
+     * @param string $method
+     * @param array  $arguments
+     * @param string $statement
+     * @param array  $values
+     *
+     * @return array
+     */
+    protected function fetchData(
+        string $method,
+        array $arguments,
+        string $statement,
+        array $values = []
+    ): array {
+        $sth    = $this->perform($statement, $values);
+        $result = call_user_func_array(
+            [
+                $sth,
+                $method,
+            ],
+            $arguments
+        );
+
+        /**
+         * If this returns boolean or anything other than an array, return
+         * an empty array back
+         */
+        if (true !== is_array($result)) {
+            $result = [];
+        }
+
+        return $result;
+    }
+
+    /**
      * Bind a value using the proper PDO::PARAM_* type.
      *
      * @param PDOStatement $statement
@@ -872,41 +908,5 @@ abstract class AbstractConnection extends PDO implements ConnectionInterface
             ],
             $parameters
         );
-    }
-
-    /**
-     * Helper method to get data from PDO based on the method passed
-     *
-     * @param string $method
-     * @param array  $arguments
-     * @param string $statement
-     * @param array  $values
-     *
-     * @return array
-     */
-    protected function fetchData(
-        string $method,
-        array $arguments,
-        string $statement,
-        array $values = []
-    ): array {
-        $sth    = $this->perform($statement, $values);
-        $result = call_user_func_array(
-            [
-                $sth,
-                $method,
-            ],
-            $arguments
-        );
-
-        /**
-         * If this returns boolean or anything other than an array, return
-         * an empty array back
-         */
-        if (true !== is_array($result)) {
-            $result = [];
-        }
-
-        return $result;
     }
 }

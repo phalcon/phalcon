@@ -78,17 +78,14 @@ class Cookies extends AbstractInjectionAware implements CookiesInterface
      * @var array
      */
     protected array $cookies = [];
-
-    /**
-     * @var bool
-     */
-    protected bool $isSent = false;
-
     /**
      * @var bool
      */
     protected bool $isRegistered = false;
-
+    /**
+     * @var bool
+     */
+    protected bool $isSent = false;
     /**
      * The cookie's sign key.
      *

@@ -117,19 +117,6 @@ class Binder implements BinderInterface
     }
 
     /**
-     * Find the model by param value.
-     *
-     * @param mixed  $paramValue
-     * @param string $className
-     *
-     * @return mixed|null
-     */
-    protected function findBoundModel(mixed $paramValue, string $className)
-    {
-        return $className::findFirst($paramValue);
-    }
-
-    /**
      * Return the active bound models
      *
      * @return array
@@ -137,16 +124,6 @@ class Binder implements BinderInterface
     public function getBoundModels(): array
     {
         return $this->boundModels;
-    }
-
-    /**
-     * Return the array for original values
-     *
-     * @return array
-     */
-    public function getOriginalValues(): array
-    {
-        return $this->originalValues;
     }
 
     /**
@@ -160,13 +137,50 @@ class Binder implements BinderInterface
     }
 
     /**
+     * Return the array for original values
+     *
+     * @return array
+     */
+    public function getOriginalValues(): array
+    {
+        return $this->originalValues;
+    }
+
+    /**
+     * Gets cache instance
+     *
+     * @param AdapterInterface $cache
+     *
+     * @return BinderInterface
+     */
+    public function setCache(AdapterInterface $cache): BinderInterface
+    {
+        $this->cache = $cache;
+
+        return $this;
+    }
+
+    /**
+     * Find the model by param value.
+     *
+     * @param mixed  $paramValue
+     * @param string $className
+     *
+     * @return mixed|null
+     */
+    protected function findBoundModel(mixed $paramValue, string $className)
+    {
+        return $className::findFirst($paramValue);
+    }
+
+    /**
      * Get params classes from cache by key
      *
      * @param string $cacheKey
      *
      * @return array|null
      */
-    protected function getParamsFromCache(string $cacheKey): array|null
+    protected function getParamsFromCache(string $cacheKey): array | null
     {
         if (true === isset($this->internalCache[$cacheKey])) {
             return $this->internalCache[$cacheKey];
@@ -281,19 +295,5 @@ class Binder implements BinderInterface
         $this->internalCache[$cacheKey] = $paramsCache;
 
         return $params;
-    }
-
-    /**
-     * Gets cache instance
-     *
-     * @param AdapterInterface $cache
-     *
-     * @return BinderInterface
-     */
-    public function setCache(AdapterInterface $cache): BinderInterface
-    {
-        $this->cache = $cache;
-
-        return $this;
     }
 }

@@ -13,7 +13,6 @@ declare(strict_types=1);
 
 namespace Phalcon\Logger\Formatter;
 
-use JsonException;
 use Phalcon\Logger\Item;
 
 use function json_encode;

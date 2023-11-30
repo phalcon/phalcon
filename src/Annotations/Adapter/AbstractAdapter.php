@@ -105,35 +105,6 @@ abstract class AbstractAdapter implements AdapterInterface
     }
 
     /**
-     * Returns the annotations found in a specific property
-     *
-     * @param string $className
-     * @param string $propertyName
-     *
-     * @return Collection
-     */
-    public function getProperty(
-        string $className,
-        string $propertyName
-    ): Collection {
-        $properties = $this->get($className)->getPropertiesAnnotations();
-
-        return $properties[$propertyName] ?? new Collection();
-    }
-
-    /**
-     * Returns the annotations found in all the class' properties
-     *
-     * @param string $className
-     *
-     * @return array
-     */
-    public function getProperties(string $className): array
-    {
-        return $this->get($className)->getPropertiesAnnotations();
-    }
-
-    /**
      * Returns the annotations found in a specific method
      *
      * @param string $className
@@ -167,6 +138,35 @@ abstract class AbstractAdapter implements AdapterInterface
     public function getMethods(string $className): array
     {
         return $this->get($className)->getMethodsAnnotations();
+    }
+
+    /**
+     * Returns the annotations found in all the class' properties
+     *
+     * @param string $className
+     *
+     * @return array
+     */
+    public function getProperties(string $className): array
+    {
+        return $this->get($className)->getPropertiesAnnotations();
+    }
+
+    /**
+     * Returns the annotations found in a specific property
+     *
+     * @param string $className
+     * @param string $propertyName
+     *
+     * @return Collection
+     */
+    public function getProperty(
+        string $className,
+        string $propertyName
+    ): Collection {
+        $properties = $this->get($className)->getPropertiesAnnotations();
+
+        return $properties[$propertyName] ?? new Collection();
     }
 
     /**

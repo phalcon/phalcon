@@ -67,17 +67,14 @@ class Collection implements Countable, IteratorAggregate
      * @var array<int, FilterInterface>
      */
     protected array $filters = [];
-
-    /**
-     * @var bool
-     */
-    protected bool $join = true;
-
     /**
      * @var bool
      */
     protected bool $isLocal = true;
-
+    /**
+     * @var bool
+     */
+    protected bool $join = true;
     /**
      * @var string
      */
@@ -539,6 +536,20 @@ class Collection implements Countable, IteratorAggregate
     }
 
     /**
+     * Sets a base source path for all the assets in this collection
+     *
+     * @param string $sourcePath
+     *
+     * @return Collection
+     */
+    public function setSourcePath(string $sourcePath): Collection
+    {
+        $this->sourcePath = $sourcePath;
+
+        return $this;
+    }
+
+    /**
      * Sets if the target local or not
      *
      * @param bool $flag
@@ -576,20 +587,6 @@ class Collection implements Countable, IteratorAggregate
     public function setTargetUri(string $targetUri): Collection
     {
         $this->targetUri = $targetUri;
-
-        return $this;
-    }
-
-    /**
-     * Sets a base source path for all the assets in this collection
-     *
-     * @param string $sourcePath
-     *
-     * @return Collection
-     */
-    public function setSourcePath(string $sourcePath): Collection
-    {
-        $this->sourcePath = $sourcePath;
 
         return $this;
     }

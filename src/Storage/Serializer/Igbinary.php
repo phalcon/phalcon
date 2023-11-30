@@ -76,18 +76,6 @@ class Igbinary extends AbstractSerializer
     }
 
     /**
-     * Wrapper for `igbinary_serialize`
-     *
-     * @param mixed $value
-     *
-     * @return string|null
-     */
-    protected function phpIgbinarySerialize($value): ?string
-    {
-        return igbinary_serialize($value);
-    }
-
-    /**
      * Wrapper for `igbinary_unserialize`
      *
      * @param string $value
@@ -97,5 +85,17 @@ class Igbinary extends AbstractSerializer
     protected function doUnserialize($value)
     {
         return igbinary_unserialize($value);
+    }
+
+    /**
+     * Wrapper for `igbinary_serialize`
+     *
+     * @param mixed $value
+     *
+     * @return string|null
+     */
+    protected function phpIgbinarySerialize($value): ?string
+    {
+        return igbinary_serialize($value);
     }
 }

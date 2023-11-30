@@ -16,15 +16,15 @@ namespace Phalcon\Image;
 class Enum
 {
     // Resizing constraints
-    public const AUTO    = 4;
-    public const HEIGHT  = 3;
-    public const INVERSE = 5;
-    public const NONE    = 1;
-    public const PRECISE = 6;
-    public const TENSILE = 7;
-    public const WIDTH   = 2;
+    public const AUTO       = 4;
+    public const HEIGHT     = 3;
+    public const HORIZONTAL = 11;
+    public const INVERSE    = 5;
+    public const NONE       = 1;
+    public const PRECISE    = 6;
+    public const TENSILE    = 7;
 
     // Flipping directions
-    public const HORIZONTAL = 11;
-    public const VERTICAL   = 12;
+    public const VERTICAL = 12;
+    public const WIDTH    = 2;
 }

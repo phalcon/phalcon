@@ -40,7 +40,7 @@ class Route implements RouteInterface
     /**
      * @mixed string|null
      */
-    protected string|null $compiledPattern = null;
+    protected string | null $compiledPattern = null;
 
     /**
      * @mixed array
@@ -50,43 +50,36 @@ class Route implements RouteInterface
     /**
      * @mixed GroupInterface|null
      */
-    protected GroupInterface|null $group = null;
+    protected GroupInterface | null $group = null;
 
     /**
      * @mixed string|null
      */
-    protected string|null $hostname = null;
-
-    /**
-     * @mixed string
-     */
-    protected string $routeId = "";
-
-    /**
-     * @mixed array|string|null
-     */
-    protected array|string|null $methods = [];
-
+    protected string | null $hostname = null;
     /**
      * @mixed callable|null
      */
     protected mixed $match = null;
-
+    /**
+     * @mixed array|string|null
+     */
+    protected array | string | null $methods = [];
     /**
      * @mixed string|null
      */
-    protected string|null $name = null;
-
+    protected string | null $name = null;
     /**
      * @mixed array
      */
     protected array $paths = [];
-
     /**
      * @mixed string
      */
     protected string $pattern = '';
-
+    /**
+     * @mixed string
+     */
+    protected string $routeId = "";
     /**
      * @mixed $int
      */
@@ -103,8 +96,8 @@ class Route implements RouteInterface
      */
     public function __construct(
         string $pattern,
-        array|string $paths = null,
-        array|string $httpMethods = null
+        array | string $paths = null,
+        array | string $httpMethods = null
     ) {
         // Configure the route (extract parameters, paths, etc)
         $this->reConfigure($pattern, $paths);
@@ -208,7 +201,7 @@ class Route implements RouteInterface
      *
      * @return array|bool
      */
-    public function extractNamedParams(string $pattern): array|bool
+    public function extractNamedParams(string $pattern): array | bool
     {
         $bracketCount     = 0;
         $intermediate     = 0;
@@ -369,7 +362,7 @@ class Route implements RouteInterface
      *
      * @return callable|null
      */
-    public function getBeforeMatch(): callable|null
+    public function getBeforeMatch(): callable | null
     {
         return $this->beforeMatch;
     }
@@ -399,9 +392,17 @@ class Route implements RouteInterface
      *
      * @return GroupInterface|null
      */
-    public function getGroup(): GroupInterface|null
+    public function getGroup(): GroupInterface | null
     {
         return $this->group;
+    }
+
+    /**
+     * Returns the hostname restriction if any
+     */
+    public function getHostname(): string | null
+    {
+        return $this->hostname;
     }
 
     /**
@@ -409,17 +410,9 @@ class Route implements RouteInterface
      *
      * @return array|string|null
      */
-    public function getHttpMethods(): array|string|null
+    public function getHttpMethods(): array | string | null
     {
         return $this->methods;
-    }
-
-    /**
-     * Returns the hostname restriction if any
-     */
-    public function getHostname(): string|null
-    {
-        return $this->hostname;
     }
 
     /**
@@ -427,7 +420,7 @@ class Route implements RouteInterface
      *
      * @return callable|null
      */
-    public function getMatch(): callable|null
+    public function getMatch(): callable | null
     {
         return $this->match;
     }
@@ -437,7 +430,7 @@ class Route implements RouteInterface
      *
      * @return string|null
      */
-    public function getName(): string|null
+    public function getName(): string | null
     {
         return $this->name;
     }
@@ -492,7 +485,7 @@ class Route implements RouteInterface
      * @return array
      * @throws Exception
      */
-    public static function getRoutePaths(array|string|null $paths = null): array
+    public static function getRoutePaths(array | string | null $paths = null): array
     {
         if ($paths === null) {
             $paths = [];
@@ -601,7 +594,7 @@ class Route implements RouteInterface
      */
     public function reConfigure(
         string $pattern,
-        array|string|null $paths = null
+        array | string | null $paths = null
     ): void {
         $routePaths = self::getRoutePaths($paths);
 
@@ -669,6 +662,24 @@ class Route implements RouteInterface
     }
 
     /**
+     * Sets a hostname restriction to the route
+     *
+     *```php
+     * $route->setHostname("localhost");
+     *```
+     *
+     * @param string $hostname
+     *
+     * @return RouteInterface
+     */
+    public function setHostname(string $hostname): RouteInterface
+    {
+        $this->hostname = $hostname;
+
+        return $this;
+    }
+
+    /**
      * Sets a set of HTTP methods that constraint the matching of the route (alias of via)
      *
      *```php
@@ -686,27 +697,9 @@ class Route implements RouteInterface
      *
      * @return RouteInterface
      */
-    public function setHttpMethods(array|string $httpMethods): RouteInterface
+    public function setHttpMethods(array | string $httpMethods): RouteInterface
     {
         return $this->via($httpMethods);
-    }
-
-    /**
-     * Sets a hostname restriction to the route
-     *
-     *```php
-     * $route->setHostname("localhost");
-     *```
-     *
-     * @param string $hostname
-     *
-     * @return RouteInterface
-     */
-    public function setHostname(string $hostname): RouteInterface
-    {
-        $this->hostname = $hostname;
-
-        return $this;
     }
 
     /**
@@ -750,7 +743,7 @@ class Route implements RouteInterface
      *
      * @return RouteInterface
      */
-    public function via(array|string|null $httpMethods): RouteInterface
+    public function via(array | string | null $httpMethods): RouteInterface
     {
         $this->methods = $httpMethods;
 

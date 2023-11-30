@@ -26,7 +26,7 @@ class Select extends AbstractElement
     /**
      * @var object|array|null
      */
-    protected object|array|null $optionsValues = null;
+    protected object | array | null $optionsValues = null;
 
     /**
      * Constructor
@@ -37,7 +37,7 @@ class Select extends AbstractElement
      */
     public function __construct(
         string $name,
-        object|array|null $options = null,
+        object | array | null $options = null,
         array $attributes = []
     ) {
         $this->optionsValues = $options;
@@ -50,7 +50,7 @@ class Select extends AbstractElement
      *
      * @param array|string option
      */
-    public function addOption(array|string $option): ElementInterface
+    public function addOption(array | string $option): ElementInterface
     {
         if (is_array($option)) {
             foreach ($option as $key => $value) {
@@ -68,7 +68,7 @@ class Select extends AbstractElement
      *
      * @return array|object
      */
-    public function getOptions(): array|object
+    public function getOptions(): array | object
     {
         return $this->optionsValues;
     }
@@ -97,7 +97,7 @@ class Select extends AbstractElement
      *
      * @param array|object options
      */
-    public function setOptions(array|object $options): ElementInterface
+    public function setOptions(array | object $options): ElementInterface
     {
         $this->optionsValues = $options;
 

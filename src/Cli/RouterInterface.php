@@ -28,7 +28,7 @@ interface RouterInterface
      *
      * @return RouteInterface
      */
-    public function add(string $pattern, array|string $paths = []): RouteInterface;
+    public function add(string $pattern, array | string $paths = []): RouteInterface;
 
     /**
      * Returns processed action name
@@ -72,7 +72,7 @@ interface RouterInterface
      *
      * @return RouteInterface| bool
      */
-    public function getRouteById(string $routeId): RouteInterface|bool;
+    public function getRouteById(string $routeId): RouteInterface | bool;
 
     /**
      * Returns a route object by its name
@@ -81,7 +81,7 @@ interface RouterInterface
      *
      * @return RouteInterface|bool
      */
-    public function getRouteByName(string $name): RouteInterface|bool;
+    public function getRouteByName(string $name): RouteInterface | bool;
 
     /**
      * Return all the routes defined in the router
@@ -104,7 +104,7 @@ interface RouterInterface
      *
      * @return void
      */
-    public function handle(array|string $arguments = []): void;
+    public function handle(array | string $arguments = []): void;
 
     /**
      * Sets the default action name
@@ -125,15 +125,6 @@ interface RouterInterface
     public function setDefaultModule(string $moduleName): RouterInterface;
 
     /**
-     * Sets an array of default paths
-     *
-     * @param array $defaults
-     *
-     * @return RouterInterface
-     */
-    public function setDefaults(array $defaults): RouterInterface;
-
-    /**
      * Sets the default task name
      *
      * @param string $taskName
@@ -141,6 +132,15 @@ interface RouterInterface
      * @return RouterInterface
      */
     public function setDefaultTask(string $taskName): RouterInterface;
+
+    /**
+     * Sets an array of default paths
+     *
+     * @param array $defaults
+     *
+     * @return RouterInterface
+     */
+    public function setDefaults(array $defaults): RouterInterface;
 
     /**
      * Check if the router matches any of the defined routes

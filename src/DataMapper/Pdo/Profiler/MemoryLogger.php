@@ -154,29 +154,6 @@ class MemoryLogger implements LoggerInterface
     }
 
     /**
-     * @param string $message
-     * @param array  $context
-     *
-     * @return void
-     */
-    public function notice(string $message, array $context = []): void
-    {
-        $this->log(Enum::NOTICE, $message, $context);
-    }
-
-
-    /**
-     * @param string $message
-     * @param array  $context
-     *
-     * @return void
-     */
-    public function warning(string $message, array $context = []): void
-    {
-        $this->log(Enum::WARNING, $message, $context);
-    }
-
-    /**
      * Logs a message.
      *
      * @param mixed  $level
@@ -191,5 +168,27 @@ class MemoryLogger implements LoggerInterface
         }
 
         $this->messages[] = strtr($message, $replace);
+    }
+
+    /**
+     * @param string $message
+     * @param array  $context
+     *
+     * @return void
+     */
+    public function notice(string $message, array $context = []): void
+    {
+        $this->log(Enum::NOTICE, $message, $context);
+    }
+
+    /**
+     * @param string $message
+     * @param array  $context
+     *
+     * @return void
+     */
+    public function warning(string $message, array $context = []): void
+    {
+        $this->log(Enum::WARNING, $message, $context);
     }
 }

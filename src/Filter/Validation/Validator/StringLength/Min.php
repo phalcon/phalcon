@@ -120,14 +120,6 @@ class Min extends AbstractValidator
     }
 
     /**
-     * @return string
-     */
-    protected function getOptionField(): string
-    {
-        return "min";
-    }
-
-    /**
      * Executes the conditional
      *
      * @param int  $source
@@ -146,5 +138,13 @@ class Min extends AbstractValidator
         }
 
         return $source < $target;
+    }
+
+    /**
+     * @return string
+     */
+    protected function getOptionField(): string
+    {
+        return "min";
     }
 }

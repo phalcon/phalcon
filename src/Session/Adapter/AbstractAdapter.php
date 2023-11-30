@@ -69,6 +69,19 @@ abstract class AbstractAdapter implements SessionHandlerInterface
     }
 
     /**
+     * Open
+     *
+     * @param string $savePath
+     * @param string $sessionName
+     *
+     * @return bool
+     */
+    public function open($savePath, $sessionName): bool
+    {
+        return true;
+    }
+
+    /**
      * Read
      *
      * @param string $sessionId
@@ -80,19 +93,6 @@ abstract class AbstractAdapter implements SessionHandlerInterface
         $data = $this->adapter->get($sessionId);
 
         return null === $data ? '' : $data;
-    }
-
-    /**
-     * Open
-     *
-     * @param string $savePath
-     * @param string $sessionName
-     *
-     * @return bool
-     */
-    public function open($savePath, $sessionName): bool
-    {
-        return true;
     }
 
     /**

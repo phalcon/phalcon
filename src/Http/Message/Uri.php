@@ -168,8 +168,8 @@ final class Uri extends AbstractCommon implements UriInterface
 
             if (true === isset($urlParts["pass"])) {
                 $this->userInfo .= ":" . $this->filterUserInfo(
-                    $urlParts["pass"]
-                );
+                        $urlParts["pass"]
+                    );
             }
         }
     }
@@ -541,6 +541,18 @@ final class Uri extends AbstractCommon implements UriInterface
     }
 
     /**
+     * Proxy method for parse_url for tests
+     *
+     * @param string $url
+     *
+     * @return array|false|int|string|null
+     */
+    protected function phpParseUrl(string $url)
+    {
+        return parse_url($url);
+    }
+
+    /**
      * If the value passed is empty it returns it prefixed and suffixed with
      * the passed parameters
      *
@@ -710,6 +722,24 @@ final class Uri extends AbstractCommon implements UriInterface
     }
 
     /**
+     * Filters a string (query or fragment) based on a pattern
+     *
+     * @param string $value
+     *
+     * @return string
+     */
+    private function filterQueryOrFragment(string $value): string
+    {
+        return $this->filterString(
+            "/(?:[^"
+            . self::CHAR_UNRESERVED
+            . self::CHAR_SUB_DELIMS
+            . "%:@\/\?]+|%(?![A-Fa-f0-9]{2}))/u",
+            $this->filterUtf8($value)
+        );
+    }
+
+    /**
      * Filters the passed scheme - only allowed schemes
      *
      * @param string $scheme
@@ -737,39 +767,6 @@ final class Uri extends AbstractCommon implements UriInterface
         }
 
         return $filtered;
-    }
-
-    /**
-     * @param string $element
-     *
-     * @return array
-     */
-    private function splitQueryValue(string $element): array
-    {
-        $data = explode("=", $element, 2);
-        if (true !== isset($data[1])) {
-            $data[] = null;
-        }
-
-        return $data;
-    }
-
-    /**
-     * Filters a string (query or fragment) based on a pattern
-     *
-     * @param string $value
-     *
-     * @return string
-     */
-    private function filterQueryOrFragment(string $value): string
-    {
-        return $this->filterString(
-            "/(?:[^"
-            . self::CHAR_UNRESERVED
-            . self::CHAR_SUB_DELIMS
-            . "%:@\/\?]+|%(?![A-Fa-f0-9]{2}))/u",
-            $this->filterUtf8($value)
-        );
     }
 
     /**
@@ -847,14 +844,17 @@ final class Uri extends AbstractCommon implements UriInterface
     }
 
     /**
-     * Proxy method for parse_url for tests
+     * @param string $element
      *
-     * @param string $url
-     *
-     * @return array|false|int|string|null
+     * @return array
      */
-    protected function phpParseUrl(string $url)
+    private function splitQueryValue(string $element): array
     {
-        return parse_url($url);
+        $data = explode("=", $element, 2);
+        if (true !== isset($data[1])) {
+            $data[] = null;
+        }
+
+        return $data;
     }
 }

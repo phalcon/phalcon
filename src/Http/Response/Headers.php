@@ -42,7 +42,7 @@ class Headers implements HeadersInterface, IteratorAggregate
      * @return string|bool|null
      * @todo change the raw headers not to return null
      */
-    public function get(string $name): string|bool|null
+    public function get(string $name): string | bool | null
     {
         /**
          * We need to use array_key_exists() here because raw headers have

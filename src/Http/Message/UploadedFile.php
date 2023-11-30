@@ -34,7 +34,6 @@ use function is_resource;
 use function is_string;
 use function is_writable;
 use function move_uploaded_file;
-use function substr;
 
 /**
  * UploadedFile class
@@ -381,6 +380,14 @@ final class UploadedFile implements UploadedFileInterface
     }
 
     /**
+     * @todo Remove this when we get traits
+     */
+    private function isBetween(int $value, int $from, int $to): bool
+    {
+        return $value >= $from && $value <= $to;
+    }
+
+    /**
      * Store a file in the new location (stream)
      *
      * @param string $targetPath
@@ -403,13 +410,5 @@ final class UploadedFile implements UploadedFileInterface
         }
 
         fclose($handle);
-    }
-
-    /**
-     * @todo Remove this when we get traits
-     */
-    private function isBetween(int $value, int $from, int $to): bool
-    {
-        return $value >= $from && $value <= $to;
     }
 }

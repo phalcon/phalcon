@@ -13,8 +13,6 @@ declare(strict_types=1);
 
 namespace Phalcon\Html\Helper;
 
-use Phalcon\Html\Exception;
-
 use function array_merge;
 use function implode;
 
@@ -34,16 +32,14 @@ class Title extends AbstractHelper
      * @var array
      */
     protected array $prepend = [];
-
-    /**
-     * @var string
-     */
-    protected string $title = '';
-
     /**
      * @var string
      */
     protected string $separator = '';
+    /**
+     * @var string
+     */
+    protected string $title = '';
 
     /**
      * Sets the separator and returns the object back

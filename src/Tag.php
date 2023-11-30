@@ -44,13 +44,13 @@ use const PHP_EOL;
 class Tag
 {
     public const HTML32               = 1;
+    public const HTML401_FRAMESET     = 4;
     public const HTML401_STRICT       = 2;
     public const HTML401_TRANSITIONAL = 3;
-    public const HTML401_FRAMESET     = 4;
     public const HTML5                = 5;
+    public const XHTML10_FRAMESET     = 8;
     public const XHTML10_STRICT       = 6;
     public const XHTML10_TRANSITIONAL = 7;
-    public const XHTML10_FRAMESET     = 8;
     public const XHTML11              = 9;
     public const XHTML20              = 10;
     public const XHTML5               = 11;
@@ -118,7 +118,7 @@ class Tag
      *
      * @return void
      */
-    public static function appendTitle(array|string $title): void
+    public static function appendTitle(array | string $title): void
     {
         if (is_array($title)) {
             self::$documentAppendTitle = $title;
@@ -139,7 +139,7 @@ class Tag
      *
      * @return string
      */
-    public static function checkField(array|string $parameters): string
+    public static function checkField(array | string $parameters): string
     {
         return self::inputFieldChecked("checkbox", $parameters);
     }
@@ -156,7 +156,7 @@ class Tag
      *
      * @return string
      */
-    public static function colorField(array|string $parameters): string
+    public static function colorField(array | string $parameters): string
     {
         return self::inputField("color", $parameters);
     }
@@ -173,7 +173,7 @@ class Tag
      *
      * @return string
      */
-    public static function dateField(array|string $parameters): string
+    public static function dateField(array | string $parameters): string
     {
         return self::inputField("date", $parameters);
     }
@@ -190,7 +190,7 @@ class Tag
      *
      * @return string
      */
-    public static function dateTimeField(array|string $parameters): string
+    public static function dateTimeField(array | string $parameters): string
     {
         return self::inputField("datetime", $parameters);
     }
@@ -207,7 +207,7 @@ class Tag
      *
      * @return string
      */
-    public static function dateTimeLocalField(array|string $parameters): string
+    public static function dateTimeLocalField(array | string $parameters): string
     {
         return self::inputField("datetime-local", $parameters);
     }
@@ -237,7 +237,7 @@ class Tag
      *
      * @return string
      */
-    public static function emailField(array|string $parameters): string
+    public static function emailField(array | string $parameters): string
     {
         return self::inputField("email", $parameters);
     }
@@ -264,7 +264,7 @@ class Tag
      *
      * @return string
      */
-    public static function fileField(array|string $parameters): string
+    public static function fileField(array | string $parameters): string
     {
         return self::inputField("file", $parameters);
     }
@@ -283,7 +283,7 @@ class Tag
      *
      * @return string
      */
-    public static function formLegacy(array|string $parameters): string
+    public static function formLegacy(array | string $parameters): string
     {
         $params = true !== is_array($parameters) ? [$parameters] : $parameters;
 
@@ -332,13 +332,27 @@ class Tag
         string $text,
         string $separator = "-",
         bool $lowercase = true,
-        array|string $replace = []
+        array | string $replace = []
     ): string {
         try {
             return (new Friendly())->__invoke($text, $separator, $lowercase, $replace);
         } catch (\Exception $ex) {
             throw new Exception($ex->getMessage());
         }
+    }
+
+    /**
+     * Internally gets the request dispatcher
+     *
+     * @return DiInterface
+     */
+    public static function getDI(): DiInterface
+    {
+        if (null === self::$container) {
+            self::$container = Di::getDefault();
+        }
+
+        return self::$container;
     }
 
     /**
@@ -420,7 +434,7 @@ class Tag
     /**
      * Obtains the 'escaper' service if required
      */
-    public static function getEscaper(array $parameters): EscaperInterface|null
+    public static function getEscaper(array $parameters): EscaperInterface | null
     {
         $autoescape = true === isset($parameters["escape"])
             ? $parameters["escape"]
@@ -431,20 +445,6 @@ class Tag
         }
 
         return self::getEscaperService();
-    }
-
-    /**
-     * Internally gets the request dispatcher
-     *
-     * @return DiInterface
-     */
-    public static function getDI(): DiInterface
-    {
-        if (null === self::$container) {
-            self::$container = Di::getDefault();
-        }
-
-        return self::$container;
     }
 
     /**
@@ -568,7 +568,7 @@ class Tag
      *
      * @return mixed|null
      */
-    public static function getValue(int|string $name, array $parameters = [])
+    public static function getValue(int | string $name, array $parameters = [])
     {
         $value = $parameters["value"] ?? null;
         if (null === $value) {
@@ -595,7 +595,7 @@ class Tag
      *
      * @return bool
      */
-    public static function hasValue(int|string $name): bool
+    public static function hasValue(int | string $name): bool
     {
         /**
          * Check if there is a predefined or a POST value for it
@@ -616,7 +616,7 @@ class Tag
      *
      * @return string
      */
-    public static function hiddenField(array|string $parameters): string
+    public static function hiddenField(array | string $parameters): string
     {
         return self::inputField("hidden", $parameters);
     }
@@ -634,7 +634,7 @@ class Tag
      * @return string
      */
     public static function image(
-        array|string $parameters = [],
+        array | string $parameters = [],
         bool $local = true
     ): string {
         $params = $parameters;
@@ -680,7 +680,7 @@ class Tag
      *
      * @return string
      */
-    public static function imageInput(array|string $parameters): string
+    public static function imageInput(array | string $parameters): string
     {
         return self::inputField("image", $parameters, true);
     }
@@ -699,7 +699,7 @@ class Tag
      * @return string
      */
     public static function javascriptInclude(
-        array|string $parameters = [],
+        array | string $parameters = [],
         bool $local = true
     ): string {
         $params = $parameters;
@@ -762,7 +762,7 @@ class Tag
      * @return string
      */
     public static function linkTo(
-        array|string $parameters,
+        array | string $parameters,
         string $text = null,
         bool $local = true
     ): string {
@@ -820,7 +820,7 @@ class Tag
      *
      * @return string
      */
-    public static function monthField(array|string $parameters): string
+    public static function monthField(array | string $parameters): string
     {
         return self::inputField("month", $parameters);
     }
@@ -837,7 +837,7 @@ class Tag
      *
      * @return string
      */
-    public static function numericField(array|string $parameters): string
+    public static function numericField(array | string $parameters): string
     {
         return self::inputField("number", $parameters);
     }
@@ -854,25 +854,9 @@ class Tag
      *
      * @return string
      */
-    public static function passwordField(array|string $parameters): string
+    public static function passwordField(array | string $parameters): string
     {
         return self::inputField("password", $parameters);
-    }
-
-    /**
-     * Prepends a text to current document title
-     *
-     * @param array|string $title
-     *
-     * @return void
-     */
-    public static function prependTitle(array|string $title): void
-    {
-        if (is_array($title)) {
-            self::$documentPrependTitle = $title;
-        } else {
-            self::$documentPrependTitle[] = $title;
-        }
     }
 
     /**
@@ -882,7 +866,7 @@ class Tag
      *
      * @return string
      */
-    public static function preload(array|string $parameters): string
+    public static function preload(array | string $parameters): string
     {
         $params = $parameters;
         if (true === is_string($params)) {
@@ -920,6 +904,22 @@ class Tag
     }
 
     /**
+     * Prepends a text to current document title
+     *
+     * @param array|string $title
+     *
+     * @return void
+     */
+    public static function prependTitle(array | string $title): void
+    {
+        if (is_array($title)) {
+            self::$documentPrependTitle = $title;
+        } else {
+            self::$documentPrependTitle[] = $title;
+        }
+    }
+
+    /**
      * Builds an HTML input[type="radio"] tag
      *
      * @param array|string $parameters = [
@@ -931,7 +931,7 @@ class Tag
      *
      * @return string
      */
-    public static function radioField(array|string $parameters): string
+    public static function radioField(array | string $parameters): string
     {
         return self::inputFieldChecked("radio", $parameters);
     }
@@ -948,7 +948,7 @@ class Tag
      *
      * @return string
      */
-    public static function rangeField(array|string $parameters): string
+    public static function rangeField(array | string $parameters): string
     {
         return self::inputField("range", $parameters);
     }
@@ -1069,7 +1069,7 @@ class Tag
      *
      * @return string
      */
-    public static function searchField(array|string $parameters): string
+    public static function searchField(array | string $parameters): string
     {
         return self::inputField("search", $parameters);
     }
@@ -1090,7 +1090,7 @@ class Tag
      * @return string
      * @throws Exception
      */
-    public static function select(array|string $parameters, $data = null): string
+    public static function select(array | string $parameters, $data = null): string
     {
         return Select::selectField($parameters, $data);
     }
@@ -1111,7 +1111,7 @@ class Tag
      * @return string
      * @throws Exception
      */
-    public static function selectStatic(array|string $parameters, $data = null): string
+    public static function selectStatic(array | string $parameters, $data = null): string
     {
         return Select::selectField($parameters, $data);
     }
@@ -1126,6 +1126,18 @@ class Tag
     public static function setAutoescape(bool $autoescape): void
     {
         self::$autoEscape = $autoescape;
+    }
+
+    /**
+     * Sets the dependency injector container.
+     *
+     * @param DiInterface $container
+     *
+     * @return void
+     */
+    public static function setDI(DiInterface $container): void
+    {
+        self::$container = $container;
     }
 
     /**
@@ -1168,18 +1180,6 @@ class Tag
         } else {
             self::$displayValues = $values;
         }
-    }
-
-    /**
-     * Sets the dependency injector container.
-     *
-     * @param DiInterface $container
-     *
-     * @return void
-     */
-    public static function setDI(DiInterface $container): void
-    {
-        self::$container = $container;
     }
 
     /**
@@ -1228,7 +1228,7 @@ class Tag
      * @throws Exception
      */
     public static function stylesheetLink(
-        array|string $parameters = null,
+        array | string $parameters = null,
         bool $local = true
     ): string {
         if (true !== is_array($parameters)) {
@@ -1285,7 +1285,7 @@ class Tag
      *
      * @return string
      */
-    public static function submitButton(array|string $parameters): string
+    public static function submitButton(array | string $parameters): string
     {
         return self::inputField("submit", $parameters, true);
     }
@@ -1304,7 +1304,7 @@ class Tag
      */
     public static function tagHtml(
         string $tagName,
-        array|string $parameters = [],
+        array | string $parameters = [],
         bool $selfClose = false,
         bool $onlyStart = false,
         bool $useEol = false
@@ -1361,7 +1361,7 @@ class Tag
      *
      * @return string
      */
-    public static function telField(array|string $parameters): string
+    public static function telField(array | string $parameters): string
     {
         return self::inputField("tel", $parameters);
     }
@@ -1378,7 +1378,7 @@ class Tag
      *
      * @return string
      */
-    public static function textArea(array|string $parameters): string
+    public static function textArea(array | string $parameters): string
     {
         $params = $parameters;
         if (true !== is_array($parameters)) {
@@ -1436,7 +1436,7 @@ class Tag
      *
      * @return string
      */
-    public static function textField(array|string $parameters): string
+    public static function textField(array | string $parameters): string
     {
         return self::inputField("text", $parameters);
     }
@@ -1453,7 +1453,7 @@ class Tag
      *
      * @return string
      */
-    public static function timeField(array|string $parameters): string
+    public static function timeField(array | string $parameters): string
     {
         return self::inputField("time", $parameters);
     }
@@ -1470,7 +1470,7 @@ class Tag
      *
      * @return string
      */
-    public static function urlField(array|string $parameters): string
+    public static function urlField(array | string $parameters): string
     {
         return self::inputField("url", $parameters);
     }
@@ -1487,7 +1487,7 @@ class Tag
      *
      * @return string
      */
-    public static function weekField(array|string $parameters): string
+    public static function weekField(array | string $parameters): string
     {
         return self::inputField("week", $parameters);
     }
@@ -1509,7 +1509,7 @@ class Tag
      */
     final protected static function inputField(
         string $type,
-        array|string $parameters,
+        array | string $parameters,
         bool $asValue = false
     ): string {
         $params = [];
@@ -1573,7 +1573,7 @@ class Tag
      */
     final protected static function inputFieldChecked(
         string $type,
-        array|string $parameters
+        array | string $parameters
     ): string {
         $params = $parameters;
         if (true !== is_array($parameters)) {

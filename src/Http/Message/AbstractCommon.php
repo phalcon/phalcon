@@ -26,6 +26,20 @@ use Phalcon\Http\Message\Exception\InvalidArgumentException;
 abstract class AbstractCommon
 {
     /**
+     * Checks the element passed if it is a string
+     *
+     * @param mixed $element
+     */
+    final protected function checkStringParameter($element): void
+    {
+        if (true !== is_string($element)) {
+            throw new InvalidArgumentException(
+                "Method requires a string argument"
+            );
+        }
+    }
+
+    /**
      * Returns a new instance having set the parameter
      *
      * @param mixed  $element
@@ -46,19 +60,5 @@ abstract class AbstractCommon
         $newInstance->$property = $element;
 
         return $newInstance;
-    }
-
-    /**
-     * Checks the element passed if it is a string
-     *
-     * @param mixed $element
-     */
-    final protected function checkStringParameter($element): void
-    {
-        if (true !== is_string($element)) {
-            throw new InvalidArgumentException(
-                "Method requires a string argument"
-            );
-        }
     }
 }

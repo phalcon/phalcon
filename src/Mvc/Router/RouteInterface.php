@@ -49,21 +49,21 @@ interface RouteInterface
      *
      * @return string|null
      */
-    public function getHostname(): string|null;
+    public function getHostname(): string | null;
 
     /**
      * Returns the HTTP methods that constraint matching the route
      *
      * @return array|string|null
      */
-    public function getHttpMethods(): array|string|null;
+    public function getHttpMethods(): array | string | null;
 
     /**
      * Returns the route's name
      *
      * @return string|null
      */
-    public function getName(): string|null;
+    public function getName(): string | null;
 
     /**
      * Returns the paths
@@ -94,6 +94,26 @@ interface RouteInterface
     public function getRouteId(): string;
 
     /**
+     * Reconfigure the route adding a new pattern and a set of paths
+     *
+     * @param string            $pattern
+     * @param array|string|null $paths
+     *
+     * @return void
+     */
+    public function reConfigure(
+        string $pattern,
+        array | string $paths = null
+    ): void;
+
+    /**
+     * Resets the internal route id generator
+     *
+     * @return void
+     */
+    public static function reset(): void;
+
+    /**
      * Sets a hostname restriction to the route
      *
      * @param string $hostname
@@ -109,7 +129,7 @@ interface RouteInterface
      *
      * @return RouteInterface
      */
-    public function setHttpMethods(array|string $httpMethods): RouteInterface;
+    public function setHttpMethods(array | string $httpMethods): RouteInterface;
 
     /**
      * Sets the route's name
@@ -121,31 +141,11 @@ interface RouteInterface
     public function setName(string $name): RouteInterface;
 
     /**
-     * Reconfigure the route adding a new pattern and a set of paths
-     *
-     * @param string            $pattern
-     * @param array|string|null $paths
-     *
-     * @return void
-     */
-    public function reConfigure(
-        string $pattern,
-        array|string $paths = null
-    ): void;
-
-    /**
-     * Resets the internal route id generator
-     *
-     * @return void
-     */
-    public static function reset(): void;
-
-    /**
      * Set one or more HTTP methods that constraint the matching of the route
      *
      * @param array|string $httpMethods
      *
      * @return RouteInterface
      */
-    public function via(array|string $httpMethods): RouteInterface;
+    public function via(array | string $httpMethods): RouteInterface;
 }

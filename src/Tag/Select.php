@@ -47,7 +47,7 @@ abstract class Select
      * @throws Exception
      */
     public static function selectField(
-        array|string $parameters,
+        array | string $parameters,
         mixed $data = null
     ): string {
         $params = $parameters;

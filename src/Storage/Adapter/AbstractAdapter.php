@@ -52,38 +52,32 @@ abstract class AbstractAdapter implements AdapterInterface
      * @var string
      */
     protected string $defaultSerializer = 'php';
-
-    /**
-     * Serializer Factory
-     *
-     * @var SerializerFactory
-     */
-    protected SerializerFactory $serializerFactory;
-
     /**
      * Name of the default TTL (time to live)
      *
      * @var int
      */
     protected int $lifetime = 3600;
-
     /**
      * @var array
      */
     protected array $options = [];
-
-
     /**
      * @var string
      */
     protected string $prefix = 'ph-memo-';
-
     /**
      * Serializer
      *
      * @var SerializerInterface|null
      */
     protected ?SerializerInterface $serializer;
+    /**
+     * Serializer Factory
+     *
+     * @var SerializerFactory
+     */
+    protected SerializerFactory $serializerFactory;
 
     /**
      * AbstractAdapter constructor.

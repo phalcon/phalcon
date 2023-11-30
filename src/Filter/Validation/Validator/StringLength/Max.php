@@ -67,14 +67,6 @@ class Max extends Min
     protected ?string $template = "Field :field must not exceed :max characters long";
 
     /**
-     * @return string
-     */
-    protected function getOptionField(): string
-    {
-        return "max";
-    }
-
-    /**
      * Executes the conditional
      *
      * @param int  $source
@@ -93,5 +85,13 @@ class Max extends Min
         }
 
         return $source > $target;
+    }
+
+    /**
+     * @return string
+     */
+    protected function getOptionField(): string
+    {
+        return "max";
     }
 }

@@ -15,6 +15,7 @@ namespace Phalcon\Translate;
 
 use Exception as BaseException;
 use Phalcon\Config\ConfigInterface;
+use Phalcon\Support\Exception as SupportException;
 use Phalcon\Support\Traits\ConfigTrait;
 use Phalcon\Traits\Factory\FactoryTrait;
 use Phalcon\Translate\Adapter\AdapterInterface;
@@ -35,20 +36,15 @@ class TranslateFactory
     use FactoryTrait;
 
     /**
-     * @var InterpolatorFactory
-     */
-    private InterpolatorFactory $interpolator;
-
-    /**
      * AdapterFactory constructor.
      *
      * @param InterpolatorFactory $interpolator
      * @param array               $services
      */
-    public function __construct(InterpolatorFactory $interpolator, array $services = [])
-    {
-        $this->interpolator = $interpolator;
-
+    public function __construct(
+        private InterpolatorFactory $interpolator,
+        array $services = []
+    ) {
         $this->init($services);
     }
 
@@ -70,9 +66,10 @@ class TranslateFactory
      *                                      ]
      *
      * @return AdapterInterface
-     * @throws Exception
+     * @throws SupportException
+     * @throws BaseException
      */
-    public function load($config): AdapterInterface
+    public function load(array | ConfigInterface $config): AdapterInterface
     {
         $config  = $this->checkConfig($config);
         $name    = $config['adapter'];

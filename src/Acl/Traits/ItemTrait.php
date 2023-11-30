@@ -22,6 +22,12 @@ namespace Phalcon\Acl\Traits;
 trait ItemTrait
 {
     /**
+     * Role description
+     *
+     * @var string|null
+     */
+    private ?string $description = null;
+    /**
      * Role name
      *
      * @var string
@@ -29,11 +35,12 @@ trait ItemTrait
     private string $name;
 
     /**
-     * Role description
-     *
-     * @var string|null
+     * @return string
      */
-    private ?string $description = null;
+    public function __toString(): string
+    {
+        return $this->name;
+    }
 
     /**
      * @return string|null
@@ -47,14 +54,6 @@ trait ItemTrait
      * @return string
      */
     public function getName(): string
-    {
-        return $this->name;
-    }
-
-    /**
-     * @return string
-     */
-    public function __toString(): string
     {
         return $this->name;
     }

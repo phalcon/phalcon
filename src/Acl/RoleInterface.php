@@ -19,11 +19,11 @@ namespace Phalcon\Acl;
 interface RoleInterface
 {
     /**
-     * Returns the role name
+     * Magic method __toString
      *
      * @return string
      */
-    public function getName(): string;
+    public function __toString(): string;
 
     /**
      * Returns role description
@@ -33,9 +33,9 @@ interface RoleInterface
     public function getDescription(): ?string;
 
     /**
-     * Magic method __toString
+     * Returns the role name
      *
      * @return string
      */
-    public function __toString(): string;
+    public function getName(): string;
 }

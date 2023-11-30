@@ -66,18 +66,6 @@ class Noop implements SessionHandlerInterface
     }
 
     /**
-     * Read
-     *
-     * @param string $sessionId
-     *
-     * @return string
-     */
-    public function read($sessionId): string
-    {
-        return '';
-    }
-
-    /**
      * Open
      *
      * @param string $savePath
@@ -88,6 +76,18 @@ class Noop implements SessionHandlerInterface
     public function open($savePath, $sessionName): bool
     {
         return true;
+    }
+
+    /**
+     * Read
+     *
+     * @param string $sessionId
+     *
+     * @return string
+     */
+    public function read($sessionId): string
+    {
+        return '';
     }
 
     /**

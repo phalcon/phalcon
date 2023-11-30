@@ -169,7 +169,7 @@ class Uniqueness extends AbstractCombinedFieldsValidator
      */
     protected function isUniqueness(
         Validation $validation,
-        array|string $field
+        array | string $field
     ): bool {
 //
 // @todo: Restore when new Collection is reintroduced
@@ -445,9 +445,9 @@ class Uniqueness extends AbstractCombinedFieldsValidator
             $attributes = $metaData->getPrimaryKeyAttributes($record);
             foreach ($attributes as $primaryField) {
                 $params["conditions"][] = $this->getColumnNameReal(
-                    $record,
-                    $primaryField
-                ) . " <> ?" . $index;
+                        $record,
+                        $primaryField
+                    ) . " <> ?" . $index;
 
                 $params["bind"][] = $record->readAttribute(
                     $this->getColumnNameReal($record, $primaryField)

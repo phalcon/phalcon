@@ -23,29 +23,25 @@ use JsonSerializable;
 class Message implements MessageInterface, JsonSerializable
 {
     /**
-     * @var string
+     * @var int
      */
-    protected string $message;
-
+    protected int $code;
     /**
      * @var string
      */
     protected string $field;
-
     /**
      * @var string
      */
-    protected string $type;
-
-    /**
-     * @var int
-     */
-    protected int $code;
-
+    protected string $message;
     /**
      * @var array
      */
     protected array $metaData = [];
+    /**
+     * @var string
+     */
+    protected string $type;
 
     /**
      * Phalcon\Messages\Message constructor
@@ -119,6 +115,23 @@ class Message implements MessageInterface, JsonSerializable
     }
 
     /**
+     * Serializes the object for json_encode
+     *
+     * @return array
+     * @link https://php.net/manual/en/jsonserializable.jsonserialize.php
+     */
+    public function jsonSerialize(): array
+    {
+        return [
+            "field"    => $this->field,
+            "message"  => $this->message,
+            "type"     => $this->type,
+            "code"     => $this->code,
+            "metaData" => $this->metaData,
+        ];
+    }
+
+    /**
      * Sets code for the message
      *
      * @param int $code
@@ -186,22 +199,5 @@ class Message implements MessageInterface, JsonSerializable
         $this->type = $type;
 
         return $this;
-    }
-
-    /**
-     * Serializes the object for json_encode
-     *
-     * @return array
-     * @link https://php.net/manual/en/jsonserializable.jsonserialize.php
-     */
-    public function jsonSerialize(): array
-    {
-        return [
-            "field"    => $this->field,
-            "message"  => $this->message,
-            "type"     => $this->type,
-            "code"     => $this->code,
-            "metaData" => $this->metaData,
-        ];
     }
 }

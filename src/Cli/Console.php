@@ -36,7 +36,7 @@ class Console extends AbstractApplication
     /**
      * @var array|string
      */
-    protected array|string $arguments = [];
+    protected array | string $arguments = [];
 
     /**
      * @var array

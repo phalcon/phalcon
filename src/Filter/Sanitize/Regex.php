@@ -30,9 +30,9 @@ class Regex
      * @return string|string[]|null
      */
     public function __invoke(
-        array|string $input,
-        array|string $pattern,
-        array|string $replace
+        array | string $input,
+        array | string $pattern,
+        array | string $replace
     ) {
         return preg_replace($pattern, $replace, $input);
     }
