@@ -174,7 +174,6 @@ abstract class AbstractConnection extends PDO implements ConnectionInterface
      * @param array  $values
      *
      * @return int
-     * @throws Exception
      */
     public function fetchAffected(string $statement, array $values = []): int
     {
@@ -191,7 +190,6 @@ abstract class AbstractConnection extends PDO implements ConnectionInterface
      * @param array  $values
      *
      * @return array
-     * @throws Exception
      */
     public function fetchAll(string $statement, array $values = []): array
     {
@@ -216,7 +214,6 @@ abstract class AbstractConnection extends PDO implements ConnectionInterface
      * @param array  $values
      *
      * @return array
-     * @throws Exception
      */
     public function fetchAssoc(string $statement, array $values = []): array
     {
@@ -241,7 +238,6 @@ abstract class AbstractConnection extends PDO implements ConnectionInterface
      * @param int    $column
      *
      * @return array
-     * @throws Exception
      */
     public function fetchColumn(
         string $statement,
@@ -266,7 +262,6 @@ abstract class AbstractConnection extends PDO implements ConnectionInterface
      * @param int    $flags
      *
      * @return array
-     * @throws Exception
      */
     public function fetchGroup(
         string $statement,
@@ -296,7 +291,6 @@ abstract class AbstractConnection extends PDO implements ConnectionInterface
      * @param array  $arguments
      *
      * @return object
-     * @throws Exception
      */
     public function fetchObject(
         string $statement,
@@ -325,7 +319,6 @@ abstract class AbstractConnection extends PDO implements ConnectionInterface
      * @param array  $arguments
      *
      * @return array
-     * @throws Exception
      */
     public function fetchObjects(
         string $statement,
@@ -345,7 +338,6 @@ abstract class AbstractConnection extends PDO implements ConnectionInterface
      * @param array  $values
      *
      * @return array
-     * @throws Exception
      */
     public function fetchOne(string $statement, array $values = []): array
     {
@@ -365,7 +357,6 @@ abstract class AbstractConnection extends PDO implements ConnectionInterface
      * @param array  $values
      *
      * @return array
-     * @throws Exception
      */
     public function fetchPairs(string $statement, array $values = []): array
     {
@@ -385,7 +376,6 @@ abstract class AbstractConnection extends PDO implements ConnectionInterface
      * @param array  $values
      *
      * @return array
-     * @throws Exception
      */
     public function fetchUnique(string $statement, array $values = []): array
     {
@@ -404,7 +394,6 @@ abstract class AbstractConnection extends PDO implements ConnectionInterface
      * @param array  $values
      *
      * @return mixed
-     * @throws Exception
      */
     public function fetchValue(string $statement, array $values = []): mixed
     {
@@ -539,7 +528,7 @@ abstract class AbstractConnection extends PDO implements ConnectionInterface
      * Returns the last inserted autoincrement sequence value. If the profiler
      * is enabled, the operation will be recorded.
      *
-     * @param string|null $name
+     * @param string $name
      *
      * @return string
      */
@@ -565,7 +554,6 @@ abstract class AbstractConnection extends PDO implements ConnectionInterface
      * @param array  $values
      *
      * @return PDOStatement
-     * @throws Exception
      */
     public function perform(
         string $statement,
@@ -594,7 +582,6 @@ abstract class AbstractConnection extends PDO implements ConnectionInterface
      * @param array  $options
      *
      * @return PDOStatement
-     * @throws Exception
      */
     public function prepare(
         string $statement,
@@ -733,7 +720,6 @@ abstract class AbstractConnection extends PDO implements ConnectionInterface
      * @param array  $values
      *
      * @return Generator
-     * @throws Exception
      */
     public function yieldAll(string $statement, array $values = []): Generator
     {
@@ -750,7 +736,6 @@ abstract class AbstractConnection extends PDO implements ConnectionInterface
      * @param array  $values
      *
      * @return Generator
-     * @throws Exception
      */
     public function yieldAssoc(
         string $statement,
@@ -770,7 +755,6 @@ abstract class AbstractConnection extends PDO implements ConnectionInterface
      * @param array  $values
      *
      * @return Generator
-     * @throws Exception
      */
     public function yieldColumns(
         string $statement,
@@ -797,7 +781,6 @@ abstract class AbstractConnection extends PDO implements ConnectionInterface
      * @param array  $arguments
      *
      * @return Generator
-     * @throws Exception
      */
     public function yieldObjects(
         string $statement,
@@ -825,7 +808,6 @@ abstract class AbstractConnection extends PDO implements ConnectionInterface
      * @param array  $values
      *
      * @return Generator
-     * @throws Exception
      */
     public function yieldPairs(
         string $statement,
@@ -844,7 +826,6 @@ abstract class AbstractConnection extends PDO implements ConnectionInterface
      * @param array  $values
      *
      * @return Generator
-     * @throws Exception
      */
     public function yieldUnique(
         string $statement,
@@ -865,7 +846,6 @@ abstract class AbstractConnection extends PDO implements ConnectionInterface
      * @param array  $values
      *
      * @return array
-     * @throws Exception
      */
     protected function fetchData(
         string $method,

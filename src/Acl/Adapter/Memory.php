@@ -695,8 +695,8 @@ class Memory extends AbstractAdapter
              */
             if (0 === $parameterNumber) {
                 return $haveAccess == Enum::ALLOW && call_user_func(
-                    $funcAccess
-                );
+                        $funcAccess
+                    );
             }
 
             $parametersForFunction      = [];

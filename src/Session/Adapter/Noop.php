@@ -48,7 +48,7 @@ class Noop implements SessionHandlerInterface
      *
      * @return bool
      */
-    public function destroy(string $sessionId): bool
+    public function destroy($sessionId): bool
     {
         return true;
     }
@@ -56,13 +56,13 @@ class Noop implements SessionHandlerInterface
     /**
      * Garbage Collector
      *
-     * @param int $maxLifetime
+     * @param int $maxlifetime
      *
-     * @return false|int
+     * @return bool
      */
-    public function gc(int $maxLifetime): false|int
+    public function gc($maxlifetime): bool
     {
-        return 1;
+        return true;
     }
 
     /**
@@ -73,7 +73,7 @@ class Noop implements SessionHandlerInterface
      *
      * @return bool
      */
-    public function open(string $savePath, string $sessionName): bool
+    public function open($savePath, $sessionName): bool
     {
         return true;
     }
@@ -85,7 +85,7 @@ class Noop implements SessionHandlerInterface
      *
      * @return string
      */
-    public function read(string $sessionId): string
+    public function read($sessionId): string
     {
         return '';
     }
@@ -98,7 +98,7 @@ class Noop implements SessionHandlerInterface
      *
      * @return bool
      */
-    public function write(string $sessionId, string $data): bool
+    public function write($sessionId, $data): bool
     {
         return true;
     }

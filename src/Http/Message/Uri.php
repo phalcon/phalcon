@@ -168,8 +168,8 @@ final class Uri extends AbstractCommon implements UriInterface
 
             if (true === isset($urlParts["pass"])) {
                 $this->userInfo .= ":" . $this->filterUserInfo(
-                    $urlParts["pass"]
-                );
+                        $urlParts["pass"]
+                    );
             }
         }
     }

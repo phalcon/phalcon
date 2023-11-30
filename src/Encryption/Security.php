@@ -20,7 +20,6 @@ use Phalcon\Encryption\Security\Random;
 use Phalcon\Http\RequestInterface;
 use Phalcon\Session\ManagerInterface as SessionInterface;
 use Phalcon\Traits\Helper\Str\StartsWithTrait;
-use ValueError;
 
 use function crypt;
 use function hash_equals;
@@ -120,12 +119,12 @@ class Security implements InjectionAwareInterface
     /**
      * @var RequestInterface|null
      */
-    private ?RequestInterface $localRequest;
+    private ?RequestInterface $localRequest = null;
 
     /**
      * @var SessionInterface|null
      */
-    private ?SessionInterface $localSession;
+    private ?SessionInterface $localSession = null;
 
     /**
      * Security constructor.
@@ -176,7 +175,7 @@ class Security implements InjectionAwareInterface
      */
     public function checkToken(
         string $tokenKey = null,
-        mixed $tokenValue = null,
+        $tokenValue = null,
         bool $destroyIfValid = true
     ): bool {
         $tokenKey = $this->processTokenKey($tokenKey);
@@ -225,10 +224,9 @@ class Security implements InjectionAwareInterface
         string $algo,
         bool $raw = false
     ): string {
-        try {
-            $hmac = hash_hmac($algo, $data, $key, $raw);
-        } catch (ValueError $ex) {
-            throw new Exception($ex->getMessage());
+        $hmac = hash_hmac($algo, $data, $key, $raw);
+        if (false === $hmac) {
+            throw new Exception('Unknown hashing algorithm: ' . $algo);
         }
 
         return $hmac;
@@ -276,7 +274,7 @@ class Security implements InjectionAwareInterface
     {
         $info = password_get_info($hash);
 
-        return null !== $info ? $info : [];
+        return null === $info ? [] : $info;
     }
 
     /**
@@ -344,8 +342,11 @@ class Security implements InjectionAwareInterface
     {
         /** @var SessionInterface|null $session */
         $session = $this->getLocalService('session', 'localSession');
+        if (null !== $session) {
+            return $session->get($this->tokenValueSessionId);
+        }
 
-        return $session?->get($this->tokenValueSessionId);
+        return null;
     }
 
     /**
@@ -363,10 +364,12 @@ class Security implements InjectionAwareInterface
 
             /** @var SessionInterface|null $session */
             $session = $this->getLocalService('session', 'localSession');
-            $session?->set(
-                $this->tokenValueSessionId,
-                $this->token
-            );
+            if (null !== $session) {
+                $session->set(
+                    $this->tokenValueSessionId,
+                    $this->token
+                );
+            }
         }
 
         return $this->token;
@@ -411,7 +414,6 @@ class Security implements InjectionAwareInterface
      * @param array  $options
      *
      * @return string
-     * @throws Exception
      */
     public function hash(string $password, array $options = []): string
     {
@@ -466,7 +468,7 @@ class Security implements InjectionAwareInterface
 
         if (true === $legacy) {
             $salt = $prefix . $this->getSaltBytes($bytes) . "$";
-            return crypt($password, $salt);
+            return (string)crypt($password, $salt);
         }
 
         /**
@@ -481,7 +483,7 @@ class Security implements InjectionAwareInterface
         $algorithm = $this->processAlgorithm();
         $arguments = $this->processArgonOptions($options);
 
-        return password_hash($password, $algorithm, $arguments);
+        return (string)password_hash($password, $algorithm, $arguments);
     }
 
     /**
@@ -545,10 +547,8 @@ class Security implements InjectionAwareInterface
      *
      * @return RequestInterface|SessionInterface|null
      */
-    protected function getLocalService(
-        string $name,
-        string $property
-    ): RequestInterface | SessionInterface | null {
+    protected function getLocalService(string $name, string $property)
+    {
         if (
             null === $this->$property &&
             null !== $this->container &&
