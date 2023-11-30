@@ -1,74 +1,83 @@
 {
-    "name": "phalcon/phalcon",
-    "description": "Phalcon Framework",
-    "keywords": [
-        "php",
-        "framework",
-        "psr-7",
-        "psr-15",
-        "psr-17"
-    ],
-    "license": "MIT",
-    "require": {
-        "php": ">=8.0 <9.0",
-        "ext-apcu": "*",
-        "ext-igbinary": "*",
-        "ext-json": "*",
-        "ext-fileinfo": "*",
-        "ext-mbstring": "*",
-        "ext-pdo": "*",
-        "ext-redis": "*",
-        "ext-xml": "*",
-        "payload-interop/payload-interop": "^1.0",
-        "phalcon/traits": "^2.0",
-        "phpbench/phpbench": "^1.2"
-    },
-    "suggest": {
-        "ext-gd": "to use Image\\Adapter\\Gd",
-        "ext-imagick": "to use Image\\Adapter\\Imagick",
-        "ext-memcached": "to use Cache\\Adapter\\Libmemcached, Storage\\Adapter\\Libmemcached",
-        "ext-openssl": "to use Encryption\\Crypt",
-        "ext-yaml": "to use Config\\Adapter\\Yaml"
-    },
-    "autoload": {
-        "psr-4": {
-            "Phalcon\\": "src/",
-            "Phalcon\\Tests\\Benchmarks\\": "tests/benchmarks/",
-            "Phalcon\\Tests\\Cli\\": "tests/cli/",
-            "Phalcon\\Tests\\Integration\\": "tests/integration/",
-            "Phalcon\\Tests\\Unit\\": "tests/unit/",
-            "Phalcon\\Tests\\Controllers\\": "tests/_data/fixtures/controllers/",
-            "Phalcon\\Tests\\Fixtures\\": "tests/_data/fixtures/",
-            "Phalcon\\Tests\\Listener\\": "tests/_data/listener/",
-            "Phalcon\\Tests\\Models\\": "tests/_data/fixtures/models/",
-            "Phalcon\\Tests\\Module\\": "tests/_support/Module/"
-        }
-    },
-    "config": {
-        "optimize-autoloader": true,
-        "preferred-install": "dist",
-        "sort-packages": true
-    },
-    "require-dev": {
-        "ext-gettext": "*",
-        "ext-yaml": "*",
-        "codeception/codeception": "^5.0",
-        "codeception/module-apc": "^3.0",
-        "codeception/module-asserts": "^3.0",
-        "codeception/module-cli": "^2.0",
-        "codeception/module-db": "^3.1",
-        "codeception/module-filesystem": "^3.0",
-        "codeception/module-memcache": "^3.0",
-        "codeception/module-redis": "^3.0",
-        "friendsofphp/php-cs-fixer": "^3.13",
-        "pds/skeleton": "^1.0",
-        "phpstan/phpstan": "^1.9",
-        "squizlabs/php_codesniffer": "^3.7",
-        "vimeo/psalm": "^5.4",
-        "vlucas/phpdotenv": "^5.5"
-    },
-    "scripts": {
-        "cs": "phpcs --standard=phpcs.xml",
-        "cs-fix": "phpcbf --standard=phpcs.xml"
+  "name": "phalcon/phalcon",
+  "description": "Phalcon Framework",
+  "keywords": [
+    "php",
+    "framework",
+    "psr-7",
+    "psr-15",
+    "psr-17"
+  ],
+  "license": "MIT",
+  "require": {
+    "php": ">=8.0 <9.0",
+    "ext-apcu": "*",
+    "ext-igbinary": "*",
+    "ext-json": "*",
+    "ext-fileinfo": "*",
+    "ext-mbstring": "*",
+    "ext-pdo": "*",
+    "ext-redis": "*",
+    "ext-xml": "*",
+    "payload-interop/payload-interop": "^1.0",
+    "phalcon/traits": "^2.0",
+    "phpbench/phpbench": "^1.2"
+  },
+  "suggest": {
+    "ext-gd": "to use Image\\Adapter\\Gd",
+    "ext-imagick": "to use Image\\Adapter\\Imagick",
+    "ext-memcached": "to use Cache\\Adapter\\Libmemcached, Storage\\Adapter\\Libmemcached",
+    "ext-openssl": "to use Encryption\\Crypt",
+    "ext-yaml": "to use Config\\Adapter\\Yaml"
+  },
+  "autoload": {
+    "psr-4": {
+      "Phalcon\\": "src/",
+      "Phalcon\\Tests\\Benchmarks\\": "tests/benchmarks/",
+      "Phalcon\\Tests\\Cli\\": "tests/cli/",
+      "Phalcon\\Tests\\Integration\\": "tests/integration/",
+      "Phalcon\\Tests\\Unit\\": "tests/unit/",
+      "Phalcon\\Tests\\Controllers\\": "tests/_data/fixtures/controllers/",
+      "Phalcon\\Tests\\Fixtures\\": "tests/_data/fixtures/",
+      "Phalcon\\Tests\\Listener\\": "tests/_data/listener/",
+      "Phalcon\\Tests\\Models\\": "tests/_data/fixtures/models/",
+      "Phalcon\\Tests\\Module\\": "tests/_support/Module/"
     }
+  },
+  "config": {
+    "optimize-autoloader": true,
+    "preferred-install": "dist",
+    "sort-packages": true
+  },
+  "require-dev": {
+    "ext-gettext": "*",
+    "ext-yaml": "*",
+    "codeception/codeception": "^5.0",
+    "codeception/module-apc": "^3.0",
+    "codeception/module-asserts": "^3.0",
+    "codeception/module-cli": "^2.0",
+    "codeception/module-db": "^3.1",
+    "codeception/module-filesystem": "^3.0",
+    "codeception/module-memcache": "^3.0",
+    "codeception/module-redis": "^3.0",
+    "friendsofphp/php-cs-fixer": "^3.13",
+    "pds/skeleton": "^1.0",
+    "phpstan/phpstan": "^1.9",
+    "squizlabs/php_codesniffer": "^3.7",
+    "vimeo/psalm": "^5.4",
+    "vlucas/phpdotenv": "^5.5"
+  },
+  "scripts": {
+    "cs": "phpcs --standard=phpcs.xml",
+    "cs-fix": "phpcbf --standard=phpcs.xml",
+    "test-unit": "php vendor/bin/codecept run --ext DotReporter unit",
+    "test-cli": "php vendor/bin/codecept run --ext DotReporter cli",
+    "test-integration": "php vendor/bin/codecept run --ext DotReporter integration",
+    "test-db-common": "php vendor/bin/codecept run --ext DotReporter database -g common",
+    "test-db-mysql": "php vendor/bin/codecept run --ext DotReporter database --env mysql -g mysql",
+    "test-db-pgsql": "php vendor/bin/codecept run --ext DotReporter database --env pgsql -g pgsql",
+    "test-db-sqlite": "php vendor/bin/codecept run --ext DotReporter database --env sqlite -g sqlite",
+    "test-db": "test-db-common && test-db-mysql && test-db-pgsql && test-db-sqlite",
+    "test-all": "test-unit && test-cli && test-integration && test-db"
+  }
 }

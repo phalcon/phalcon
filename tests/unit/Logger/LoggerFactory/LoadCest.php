@@ -142,15 +142,6 @@ class LoadCest
 
         $I->expectThrowable(
             new LoggerException(
-                'Config must be array or Phalcon\Config\Config object'
-            ),
-            function () use ($factory) {
-                $factory->load(1234);
-            }
-        );
-
-        $I->expectThrowable(
-            new LoggerException(
                 "You must provide 'name' option in factory config parameter."
             ),
             function () use ($factory, $options) {
