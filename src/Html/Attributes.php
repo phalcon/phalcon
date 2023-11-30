@@ -42,7 +42,8 @@ class Attributes extends Collection implements RenderInterface
     }
 
     /**
-     * @param array $attributes
+     * @param string $code
+     * @param array  $attributes
      *
      * @return string
      * @throws Exception

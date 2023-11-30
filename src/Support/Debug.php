@@ -60,7 +60,7 @@ class Debug
     /**
      * @var bool
      */
-    protected bool $isActive;
+    protected static bool $isActive;
     /**
      * @var bool
      */
@@ -225,7 +225,6 @@ class Debug
      * @param Throwable $exception
      *
      * @return bool
-     * @throws ReflectionException
      */
     public function onUncaughtException(Throwable $exception): bool
     {
@@ -241,11 +240,11 @@ class Debug
         /**
          * Avoid that multiple exceptions being showed
          */
-        if (true !== $this->isActive) {
+        if (true !== self::$isActive) {
             /**
              * Globally block the debug component to avoid other exceptions to be shown
              */
-            $this->isActive = true;
+            self::$isActive = true;
 
             /**
              * Print the HTML, @TODO, add an option to store the HTML
@@ -255,7 +254,7 @@ class Debug
             /**
              * Unlock the exception renderer
              */
-            $this->isActive = false;
+            self::$isActive = false;
 
             return true;
         }
