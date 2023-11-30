@@ -19,6 +19,7 @@ use Phalcon\Html\Escaper\EscaperInterface;
 use Phalcon\Html\Link\Link;
 use Phalcon\Html\Link\Serializer\Header;
 use Phalcon\Mvc\Url;
+use Phalcon\Mvc\Url\Exception as UrlException;
 use Phalcon\Mvc\Url\UrlInterface;
 use Phalcon\Support\Helper\Str\Friendly;
 use Phalcon\Tag\Exception;
@@ -138,6 +139,7 @@ class Tag
      *                                 ]
      *
      * @return string
+     * @throws Exception
      */
     public static function checkField(array | string $parameters): string
     {
@@ -155,6 +157,7 @@ class Tag
      *                                 ]
      *
      * @return string
+     * @throws Exception
      */
     public static function colorField(array | string $parameters): string
     {
@@ -172,6 +175,7 @@ class Tag
      *                                 ]
      *
      * @return string
+     * @throws Exception
      */
     public static function dateField(array | string $parameters): string
     {
@@ -189,6 +193,7 @@ class Tag
      *                                 ]
      *
      * @return string
+     * @throws Exception
      */
     public static function dateTimeField(array | string $parameters): string
     {
@@ -206,6 +211,7 @@ class Tag
      *                                 ]
      *
      * @return string
+     * @throws Exception
      */
     public static function dateTimeLocalField(array | string $parameters): string
     {
@@ -219,6 +225,7 @@ class Tag
      * @param mixed  $value
      *
      * @return void
+     * @throws Exception
      */
     public static function displayTo(string $id, mixed $value): void
     {
@@ -236,6 +243,7 @@ class Tag
      *                                 ]
      *
      * @return string
+     * @throws Exception
      */
     public static function emailField(array | string $parameters): string
     {
@@ -263,6 +271,7 @@ class Tag
      *                                 ]
      *
      * @return string
+     * @throws Exception
      */
     public static function fileField(array | string $parameters): string
     {
@@ -282,6 +291,8 @@ class Tag
      *                                 ]
      *
      * @return string
+     * @throws Exception
+     * @throws UrlException
      */
     public static function formLegacy(array | string $parameters): string
     {
@@ -357,82 +368,58 @@ class Tag
 
     /**
      * Get the document type declaration of content
+     *
+     * @return string
      */
     public static function getDocType(): string
     {
-        switch (self::$documentType) {
-            case 1:
-                return "<!DOCTYPE html PUBLIC \"-//W3C//DTD HTML 3.2 Final//EN\">"
-                    . PHP_EOL;
-            /* no break */
-
-            case 2:
-                return "<!DOCTYPE html PUBLIC \"-//W3C//DTD HTML 4.01//EN\""
-                    . PHP_EOL
-                    . "\t\"http://www.w3.org/TR/html4/strict.dtd\">"
-                    . PHP_EOL;
-            /* no break */
-
-            case 3:
-                return "<!DOCTYPE html PUBLIC \"-//W3C//DTD HTML 4.01 Transitional//EN\""
-                    . PHP_EOL
-                    . "\t\"http://www.w3.org/TR/html4/loose.dtd\">"
-                    . PHP_EOL;
-            /* no break */
-
-            case 4:
-                return "<!DOCTYPE html PUBLIC \"-//W3C//DTD HTML 4.01 Frameset//EN\""
-                    . PHP_EOL
-                    . "\t\"http://www.w3.org/TR/html4/frameset.dtd\">"
-                    . PHP_EOL;
-            /* no break */
-
-            case 6:
-                return "<!DOCTYPE html PUBLIC \"-//W3C//DTD XHTML 1.0 Strict//EN\""
-                    . PHP_EOL
-                    . "\t\"http://www.w3.org/TR/xhtml1/DTD/xhtml1-strict.dtd\">"
-                    . PHP_EOL;
-            /* no break */
-
-            case 7:
-                return "<!DOCTYPE html PUBLIC \"-//W3C//DTD XHTML 1.0 Transitional//EN\""
-                    . PHP_EOL
-                    . "\t\"http://www.w3.org/TR/xhtml1/DTD/xhtml1-transitional.dtd\">"
-                    . PHP_EOL;
-            /* no break */
-
-            case 8:
-                return "<!DOCTYPE html PUBLIC \"-//W3C//DTD XHTML 1.0 Frameset//EN\""
-                    . PHP_EOL
-                    . "\t\"http://www.w3.org/TR/xhtml1/DTD/xhtml1-frameset.dtd\">"
-                    . PHP_EOL;
-            /* no break */
-
-            case 9:
-                return "<!DOCTYPE html PUBLIC \"-//W3C//DTD XHTML 1.1//EN\""
-                    . PHP_EOL
-                    . "\t\"http://www.w3.org/TR/xhtml11/DTD/xhtml11.dtd\">"
-                    . PHP_EOL;
-            /* no break */
-
-            case 10:
-                return "<!DOCTYPE html PUBLIC \"-//W3C//DTD XHTML 2.0//EN\""
-                    . PHP_EOL
-                    . "\t\"http://www.w3.org/MarkUp/DTD/xhtml2.dtd\">"
-                    . PHP_EOL;
-            /* no break */
-
-            case 5:
-            case 11:
-                return "<!DOCTYPE html>" . PHP_EOL;
-            /* no break */
-        }
-
-        return "";
+        return match (self::$documentType) {
+            1       => "<!DOCTYPE html PUBLIC \"-//W3C//DTD HTML 3.2 Final//EN\">"
+                . PHP_EOL,
+            2       => "<!DOCTYPE html PUBLIC \"-//W3C//DTD HTML 4.01//EN\""
+                . PHP_EOL
+                . "\t\"http://www.w3.org/TR/html4/strict.dtd\">"
+                . PHP_EOL,
+            3       => "<!DOCTYPE html PUBLIC \"-//W3C//DTD HTML 4.01 Transitional//EN\""
+                . PHP_EOL
+                . "\t\"http://www.w3.org/TR/html4/loose.dtd\">"
+                . PHP_EOL,
+            4       => "<!DOCTYPE html PUBLIC \"-//W3C//DTD HTML 4.01 Frameset//EN\""
+                . PHP_EOL
+                . "\t\"http://www.w3.org/TR/html4/frameset.dtd\">"
+                . PHP_EOL,
+            6       => "<!DOCTYPE html PUBLIC \"-//W3C//DTD XHTML 1.0 Strict//EN\""
+                . PHP_EOL
+                . "\t\"http://www.w3.org/TR/xhtml1/DTD/xhtml1-strict.dtd\">"
+                . PHP_EOL,
+            7       => "<!DOCTYPE html PUBLIC \"-//W3C//DTD XHTML 1.0 Transitional//EN\""
+                . PHP_EOL
+                . "\t\"http://www.w3.org/TR/xhtml1/DTD/xhtml1-transitional.dtd\">"
+                . PHP_EOL,
+            8       => "<!DOCTYPE html PUBLIC \"-//W3C//DTD XHTML 1.0 Frameset//EN\""
+                . PHP_EOL
+                . "\t\"http://www.w3.org/TR/xhtml1/DTD/xhtml1-frameset.dtd\">"
+                . PHP_EOL,
+            9       => "<!DOCTYPE html PUBLIC \"-//W3C//DTD XHTML 1.1//EN\""
+                . PHP_EOL
+                . "\t\"http://www.w3.org/TR/xhtml11/DTD/xhtml11.dtd\">"
+                . PHP_EOL,
+            10      => "<!DOCTYPE html PUBLIC \"-//W3C//DTD XHTML 2.0//EN\""
+                . PHP_EOL
+                . "\t\"http://www.w3.org/MarkUp/DTD/xhtml2.dtd\">"
+                . PHP_EOL,
+            5, 11   => "<!DOCTYPE html>" . PHP_EOL,
+            default => "",
+        };
     }
 
     /**
      * Obtains the 'escaper' service if required
+     *
+     * @param array $parameters
+     *
+     * @return EscaperInterface|null
+     * @throws Exception
      */
     public static function getEscaper(array $parameters): EscaperInterface | null
     {
@@ -540,6 +527,7 @@ class Tag
      * Returns a URL service from the default DI
      *
      * @return Url
+     * @throws Exception
      */
     public static function getUrlService(): Url
     {
@@ -615,6 +603,7 @@ class Tag
      *                                 ]
      *
      * @return string
+     * @throws Exception
      */
     public static function hiddenField(array | string $parameters): string
     {
@@ -632,6 +621,8 @@ class Tag
      *                                 ]
      *
      * @return string
+     * @throws Exception
+     * @throws UrlException
      */
     public static function image(
         array | string $parameters = [],
@@ -679,6 +670,7 @@ class Tag
      *                                 ]
      *
      * @return string
+     * @throws Exception
      */
     public static function imageInput(array | string $parameters): string
     {
@@ -697,6 +689,8 @@ class Tag
      * @param bool         $local
      *
      * @return string
+     * @throws Exception
+     * @throws UrlException
      */
     public static function javascriptInclude(
         array | string $parameters = [],
@@ -760,6 +754,8 @@ class Tag
      * @param bool         $local
      *
      * @return string
+     * @throws Exception
+     * @throws UrlException
      */
     public static function linkTo(
         array | string $parameters,
@@ -819,6 +815,7 @@ class Tag
      *                                 ]
      *
      * @return string
+     * @throws Exception
      */
     public static function monthField(array | string $parameters): string
     {
@@ -836,6 +833,7 @@ class Tag
      *                                 ]
      *
      * @return string
+     * @throws Exception
      */
     public static function numericField(array | string $parameters): string
     {
@@ -853,6 +851,7 @@ class Tag
      *                                 ]
      *
      * @return string
+     * @throws Exception
      */
     public static function passwordField(array | string $parameters): string
     {
@@ -930,6 +929,7 @@ class Tag
      *                                 ]
      *
      * @return string
+     * @throws Exception
      */
     public static function radioField(array | string $parameters): string
     {
@@ -947,6 +947,7 @@ class Tag
      *                                 ]
      *
      * @return string
+     * @throws Exception
      */
     public static function rangeField(array | string $parameters): string
     {
@@ -971,6 +972,7 @@ class Tag
      *                           ]
      *
      * @return string
+     * @throws Exception
      */
     public static function renderAttributes(string $code, array $attributes): string
     {
@@ -1029,6 +1031,7 @@ class Tag
      * @param bool $append
      *
      * @return string
+     * @throws Exception
      */
     public static function renderTitle(
         bool $prepend = true,
@@ -1068,6 +1071,7 @@ class Tag
      *                                 ]
      *
      * @return string
+     * @throws Exception
      */
     public static function searchField(array | string $parameters): string
     {
@@ -1184,6 +1188,10 @@ class Tag
 
     /**
      * Set the document type of content
+     *
+     * @param int $doctype
+     *
+     * @return void
      */
     public static function setDocType(int $doctype): void
     {
@@ -1226,6 +1234,7 @@ class Tag
      *
      * @return string
      * @throws Exception
+     * @throws UrlException
      */
     public static function stylesheetLink(
         array | string $parameters = null,
@@ -1284,6 +1293,7 @@ class Tag
      * @param array|string $parameters
      *
      * @return string
+     * @throws Exception
      */
     public static function submitButton(array | string $parameters): string
     {
@@ -1360,6 +1370,7 @@ class Tag
      *                                 ]
      *
      * @return string
+     * @throws Exception
      */
     public static function telField(array | string $parameters): string
     {
@@ -1377,6 +1388,7 @@ class Tag
      *                                 ]
      *
      * @return string
+     * @throws Exception
      */
     public static function textArea(array | string $parameters): string
     {
@@ -1435,6 +1447,7 @@ class Tag
      *                                 ]
      *
      * @return string
+     * @throws Exception
      */
     public static function textField(array | string $parameters): string
     {
@@ -1452,6 +1465,7 @@ class Tag
      *                                 ]
      *
      * @return string
+     * @throws Exception
      */
     public static function timeField(array | string $parameters): string
     {
@@ -1469,6 +1483,7 @@ class Tag
      *                                 ]
      *
      * @return string
+     * @throws Exception
      */
     public static function urlField(array | string $parameters): string
     {
@@ -1486,6 +1501,7 @@ class Tag
      *                                 ]
      *
      * @return string
+     * @throws Exception
      */
     public static function weekField(array | string $parameters): string
     {
@@ -1506,6 +1522,7 @@ class Tag
      * @param bool         $asValue
      *
      * @return string
+     * @throws Exception
      */
     final protected static function inputField(
         string $type,
@@ -1570,6 +1587,12 @@ class Tag
 
     /**
      * Builds INPUT tags that implements the checked attribute
+     *
+     * @param string       $type
+     * @param array|string $parameters
+     *
+     * @return string
+     * @throws Exception
      */
     final protected static function inputFieldChecked(
         string $type,
