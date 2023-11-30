@@ -312,12 +312,12 @@ class Manager implements InjectionAwareInterface
      * @param string $name
      *
      * @return Collection
-     * @throws BaseException
+     * @throws Exception
      */
     public function get(string $name): Collection
     {
         if (true !== isset($this->collections[$name])) {
-            throw new BaseException('The collection does not exist in the manager');
+            throw new Exception('The collection does not exist in the manager');
         }
 
         return $this->collections[$name];
@@ -387,7 +387,7 @@ class Manager implements InjectionAwareInterface
      * @param string     $type
      *
      * @return string|null
-     * @throws BaseException
+     * @throws Exception
      */
     public function output(Collection $collection, string $type): ?string
     {
@@ -483,7 +483,7 @@ class Manager implements InjectionAwareInterface
                  * We need a valid final target path
                  */
                 if (true === empty($targetPath)) {
-                    throw new BaseException(
+                    throw new Exception(
                         "Asset '" . $sourcePath . "' does not have a valid target path"
                     );
                 }
@@ -541,7 +541,7 @@ class Manager implements InjectionAwareInterface
                          * Filters must be valid objects
                          */
                         if (true !== is_object($filter)) {
-                            throw new BaseException('Filter is invalid');
+                            throw new Exception('Filter is invalid');
                         }
 
                         /**
@@ -634,7 +634,7 @@ class Manager implements InjectionAwareInterface
      * @param string|null $name
      *
      * @return string|null
-     * @throws BaseException
+     * @throws Exception
      */
     public function outputCss(string $name = null): ?string
     {
@@ -653,7 +653,7 @@ class Manager implements InjectionAwareInterface
      * @param string     $type
      *
      * @return string
-     * @throws BaseException
+     * @throws Exception
      */
     public function outputInline(Collection $collection, string $type): string
     {
@@ -676,7 +676,7 @@ class Manager implements InjectionAwareInterface
                      * Filters must be valid objects
                      */
                     if (true !== is_object($filter)) {
-                        throw new BaseException('Filter is invalid');
+                        throw new Exception('Filter is invalid');
                     }
 
                     /**
@@ -726,7 +726,7 @@ class Manager implements InjectionAwareInterface
      * @param string|null $name
      *
      * @return string
-     * @throws BaseException
+     * @throws Exception
      */
     public function outputInlineCss(string $name = null): string
     {
@@ -744,7 +744,7 @@ class Manager implements InjectionAwareInterface
      * @param string|null $name
      *
      * @return string
-     * @throws BaseException
+     * @throws Exception
      */
     public function outputInlineJs(string $name = null): string
     {
@@ -762,7 +762,7 @@ class Manager implements InjectionAwareInterface
      * @param string|null $name
      *
      * @return string|null
-     * @throws BaseException
+     * @throws Exception
      */
     public function outputJs(string $name = null): ?string
     {
@@ -874,6 +874,7 @@ class Manager implements InjectionAwareInterface
      * @param bool  $local
      *
      * @return string
+     * @throws BaseException
      */
     private function cssLink($parameters = [], bool $local = true): string
     {
@@ -922,7 +923,7 @@ class Manager implements InjectionAwareInterface
      * @param string     $completeTargetPath
      *
      * @return bool
-     * @throws BaseException
+     * @throws Exception
      */
     private function getJoin(Collection $collection, string $completeTargetPath): bool
     {
@@ -936,13 +937,13 @@ class Manager implements InjectionAwareInterface
              * We need a valid final target path
              */
             if (true === empty($completeTargetPath)) {
-                throw new BaseException(
+                throw new Exception(
                     "Path '" . $completeTargetPath . "' is not a valid target path (1)"
                 );
             }
 
             if (true === is_dir($completeTargetPath)) {
-                throw new BaseException(
+                throw new Exception(
                     "Path '" . $completeTargetPath . "' is not a valid target path (2), it is a directory."
                 );
             }
@@ -998,7 +999,7 @@ class Manager implements InjectionAwareInterface
      * @param string $completeSourcePath
      *
      * @return string
-     * @throws BaseException
+     * @throws Exception
      */
     private function getSourcePath(Asset $asset, string $completeSourcePath): string
     {
@@ -1010,7 +1011,7 @@ class Manager implements InjectionAwareInterface
         if (true === empty($sourcePath)) {
             $sourcePath = $asset->getPath();
 
-            throw new BaseException(
+            throw new Exception(
                 "Asset '" . $sourcePath . "' does not have a valid source path"
             );
         }
@@ -1024,7 +1025,7 @@ class Manager implements InjectionAwareInterface
      * @param bool   $filterNeeded
      *
      * @return bool
-     * @throws BaseException
+     * @throws Exception
      */
     private function isFilterNeeded(
         Asset $asset,
@@ -1037,7 +1038,7 @@ class Manager implements InjectionAwareInterface
              * Make sure the target path is not the same source path
              */
             if ($targetPath === $sourcePath) {
-                throw new BaseException(
+                throw new Exception(
                     "Asset '" . $targetPath . "' have the same source and target paths"
                 );
             }
@@ -1059,6 +1060,13 @@ class Manager implements InjectionAwareInterface
      * @param bool  $local
      *
      * @return string
+     */
+    /**
+     * @param      $parameters
+     * @param bool $local
+     *
+     * @return string
+     * @throws BaseException
      */
     private function jsLink($parameters = [], bool $local = true): string
     {

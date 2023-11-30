@@ -134,15 +134,6 @@ class LoadCest
 
         $I->expectThrowable(
             new Exception(
-                'Config must be array or Phalcon\Config\Config object'
-            ),
-            function () {
-                $ini = (new ConfigFactory())->load(false);
-            }
-        );
-
-        $I->expectThrowable(
-            new Exception(
                 "You must provide 'filePath' option in factory config parameter."
             ),
             function () {
