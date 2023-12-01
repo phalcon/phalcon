@@ -18,7 +18,6 @@ use Phalcon\Encryption\Crypt;
 use Phalcon\Encryption\Crypt\Exception\Exception;
 use Phalcon\Tests\Fixtures\Crypt\CryptFixture;
 use UnitTester;
-
 use ValueError;
 
 use function str_repeat;
