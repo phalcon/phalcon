@@ -11,8 +11,6 @@ declare(strict_types=1);
 
 namespace Phalcon\Html\Helper\Input;
 
-use Phalcon\Html\Exception;
-
 /**
  * Class Textarea
  *

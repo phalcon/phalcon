@@ -21,7 +21,6 @@ namespace Phalcon\Http\Message;
 use Phalcon\Http\Message\Exception\InvalidArgumentException;
 use Phalcon\Http\Message\Interfaces\UriInterface;
 use Phalcon\Support\Collection;
-use Phalcon\Support\Collection\CollectionInterface;
 
 use function is_array;
 use function is_numeric;

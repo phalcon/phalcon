@@ -59,7 +59,7 @@ class PdoFactory
      * @throws SupportException
      * @throws BaseException
      */
-    public function load(array|ConfigInterface $config): AdapterInterface
+    public function load(array | ConfigInterface $config): AdapterInterface
     {
         $config = $this->checkConfig($config);
         $config = $this->checkConfigElement($config, "adapter");

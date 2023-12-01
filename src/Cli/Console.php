@@ -16,7 +16,6 @@ namespace Phalcon\Cli;
 use Phalcon\Application\AbstractApplication;
 use Phalcon\Cli\Console\Exception;
 use Phalcon\Cli\Router\Route;
-
 use Phalcon\Events\Exception as EventsException;
 
 use function array_merge;

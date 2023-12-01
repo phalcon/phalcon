@@ -311,7 +311,7 @@ class Crypt implements CryptInterface
 
         try {
             $iv = $this->phpOpensslRandomPseudoBytes($this->ivLength);
-        } catch (\Exception) {
+        } catch (BaseException) {
             throw new Exception("Cannot calculate Random Pseudo Bytes");
         }
 

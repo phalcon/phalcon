@@ -21,7 +21,6 @@ use function array_merge;
 use function array_unique;
 use function call_user_func;
 use function hash;
-use function is_array;
 use function is_callable;
 use function is_string;
 use function rtrim;
@@ -186,7 +185,7 @@ class Loader
      */
     public function addNamespace(
         string $namespace,
-        array|string $directories,
+        array | string $directories,
         bool $prepend = false
     ): Loader {
         $nsSeparator  = '\\';
@@ -727,7 +726,7 @@ class Loader
      * @return array
      */
     private function checkDirectories(
-        array|string $directories,
+        array | string $directories,
         string $dirSeparator
     ): array {
         if (is_string($directories)) {
