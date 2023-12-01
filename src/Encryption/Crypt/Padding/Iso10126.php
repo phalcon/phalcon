@@ -25,8 +25,7 @@ use function substr;
 class Iso10126 implements PadInterface
 {
     /**
-     * @param string $input
-     * @param int    $blockSize
+     * @param int $paddingSize
      *
      * @return string
      */

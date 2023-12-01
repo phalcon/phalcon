@@ -670,7 +670,6 @@ class Manager implements InjectionAwareInterface
             foreach ($codes as $code) {
                 $attributes = $code->getAttributes();
                 $content    = $code->getContent();
-                /** @var FilterInterface $filter */
                 foreach ($filters as $filter) {
                     /**
                      * Filters must be valid objects

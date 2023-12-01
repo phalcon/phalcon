@@ -76,7 +76,6 @@ class Stream extends AbstractAdapter
      *                                   ]
      *
      * @throws StorageException
-     * @throws SupportException
      */
     public function __construct(
         SerializerFactory $factory,
@@ -301,16 +300,16 @@ class Stream extends AbstractAdapter
      * from the adapter.
      *
      * @param string $key
-     * @param mixed  $value
+     * @param mixed  $data
      *
      * @return bool
      */
-    public function setForever(string $key, $value): bool
+    public function setForever(string $key, mixed $data): bool
     {
         $payload = [
             'created' => time(),
             'ttl'     => 'forever',
-            'content' => $this->getSerializedData($value),
+            'content' => $this->getSerializedData($data),
         ];
 
         return $this->storePayload($payload, $key);

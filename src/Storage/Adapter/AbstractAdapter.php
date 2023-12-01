@@ -284,9 +284,10 @@ abstract class AbstractAdapter implements AdapterInterface
      *
      * @param mixed $content
      *
-     * @return mixed
+     * @return mixed|string|null
+     * @throws Exception
      */
-    protected function getSerializedData($content)
+    protected function getSerializedData(mixed $content)
     {
         if (null !== $this->serializer) {
             $this->serializer->setData($content);
@@ -345,7 +346,8 @@ abstract class AbstractAdapter implements AdapterInterface
     /**
      * Initializes the serializer
      *
-     * @throws SupportException
+     * @return void
+     * @throws Exception
      */
     protected function initSerializer(): void
     {

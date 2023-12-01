@@ -34,7 +34,7 @@ class AdapterFactory
     use FactoryTrait;
 
     /**
-     * @var SerializerFactory
+     * @var SerializerFactory|null
      */
     private ?SerializerFactory $serializerFactory;
 

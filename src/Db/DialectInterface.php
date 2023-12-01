@@ -105,9 +105,9 @@ interface DialectInterface
     /**
      * Generates SQL to create a view
      *
-     * @param string      $viewName
-     * @param array       $definition
-     * @param string|null $schemaName
+     * @param string $viewName
+     * @param array  $definition
+     * @param string $schemaName
      *
      * @return string
      */
@@ -229,9 +229,9 @@ interface DialectInterface
     /**
      * Generates SQL to drop a view
      *
-     * @param string      $viewName
-     * @param string|null $schemaName
-     * @param bool        $ifExists
+     * @param string $viewName
+     * @param string $schemaName
+     * @param bool   $ifExists
      *
      * @return string
      */
@@ -279,9 +279,9 @@ interface DialectInterface
      * Transforms an intermediate representation for an expression into a
      * database system valid expression
      *
-     * @param array       $expression
-     * @param string|null $escapeChar
-     * @param array       $bindCounts
+     * @param array  $expression
+     * @param string $escapeChar
+     * @param array  $bindCounts
      *
      * @return string
      */

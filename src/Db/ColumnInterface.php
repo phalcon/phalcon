@@ -21,7 +21,7 @@ interface ColumnInterface
     /**
      * Check whether field absolute to position in table
      *
-     * @return string|null
+     * @return string
      */
     public function getAfterPosition(): string;
 

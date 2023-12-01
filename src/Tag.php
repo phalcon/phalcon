@@ -732,10 +732,8 @@ class Tag
             ;
         }
 
-        $code = self::renderAttributes("<script", $params)
+        return self::renderAttributes("<script", $params)
             . "></script>" . PHP_EOL;
-
-        return $code;
     }
 
     /**
@@ -799,10 +797,8 @@ class Tag
         $url            = self::getUrlService();
         $params["href"] = $url->get($action, $query, $local);
 
-        $code = self::renderAttributes("<a", $params)
+        return self::renderAttributes("<a", $params)
             . ">" . $text . "</a>";
-
-        return $code;
     }
 
     /**

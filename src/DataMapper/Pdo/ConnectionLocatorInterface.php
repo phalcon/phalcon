@@ -57,7 +57,7 @@ interface ConnectionLocatorInterface
     /**
      * Sets the default connection registry entry.
      *
-     * @param ConnectionInterface $callable
+     * @param ConnectionInterface $callableObject
      *
      * @return ConnectionLocatorInterface
      */
@@ -69,7 +69,7 @@ interface ConnectionLocatorInterface
      * Sets a read connection registry entry by name.
      *
      * @param string   $name
-     * @param callable $callable
+     * @param callable $callableObject
      *
      * @return ConnectionLocatorInterface
      */
@@ -82,7 +82,7 @@ interface ConnectionLocatorInterface
      * Sets a write connection registry entry by name.
      *
      * @param string   $name
-     * @param callable $callable
+     * @param callable $callableObject
      *
      * @return ConnectionLocatorInterface
      */

@@ -50,7 +50,9 @@ abstract class Select
         array | string $parameters,
         mixed $data = null
     ): string {
-        $params = $parameters;
+        $emptyText  = '';
+        $emptyValue = '';
+        $params     = $parameters;
         if (true === is_string($params)) {
             $params = [$parameters, $data];
         }
@@ -165,6 +167,7 @@ abstract class Select
      * @param string $closeOption
      *
      * @return string
+     * @throws Exception
      */
     private static function optionsFromArray(
         array $data,
@@ -215,7 +218,13 @@ abstract class Select
     /**
      * Generate the OPTION tags based on a resultset
      *
-     * @param array using
+     * @param ResultsetInterface $resultset
+     * @param mixed              $using
+     * @param mixed              $value
+     * @param string             $closeOption
+     *
+     * @return string
+     * @throws Exception
      */
     private static function optionsFromResultset(
         ResultsetInterface $resultset,
@@ -277,7 +286,7 @@ abstract class Select
                             . $closeOption;
                     }
                 } else {
-                    $strOptionValue = (string)$optionValue;
+                    $strOptionValue = $optionValue;
                     $strValue       = (string)$value;
 
                     if ($strOptionValue === $strValue) {

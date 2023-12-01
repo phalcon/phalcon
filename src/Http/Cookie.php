@@ -114,13 +114,8 @@ class Cookie extends AbstractInjectionAware implements
             }
         }
 
-        $this->value         = null;
-        $options             = $this->options;
-        $options['expires']  = $options['expires'] ?? time() - 691200;
-        $options['domain']   = $options['domain'] ?? $this->domain;
-        $options['path']     = $options['path'] ?? $this->path;
-        $options['secure']   = $options['secure'] ?? $this->secure;
-        $options['httponly'] = $options['httponly'] ?? $this->httpOnly;
+        $this->value = null;
+        $options     = $this->getCookieOptions();
 
         setcookie($this->name, "", $options);
     }
@@ -422,12 +417,7 @@ class Cookie extends AbstractInjectionAware implements
         /**
          * Sets the cookie using the standard 'setcookie' function
          */
-        $options             = $this->options;
-        $options['expires']  = $options['expires'] ?? $this->expire;
-        $options['domain']   = $options['domain'] ?? $this->domain;
-        $options['path']     = $options['path'] ?? $this->path;
-        $options['secure']   = $options['secure'] ?? $this->secure;
-        $options['httponly'] = $options['httponly'] ?? $this->httpOnly;
+        $options = $this->getCookieOptions();
 
         setcookie($this->name, $encryptValue, $options);
 
@@ -616,5 +606,20 @@ class Cookie extends AbstractInjectionAware implements
         if (true !== $this->isRestored) {
             $this->restore();
         }
+    }
+
+    /**
+     * @return array
+     */
+    private function getCookieOptions(): array
+    {
+        $options             = $this->options;
+        $options['expires']  = $options['expires'] ?? time() - 691200;
+        $options['domain']   = $options['domain'] ?? $this->domain;
+        $options['path']     = $options['path'] ?? $this->path;
+        $options['secure']   = $options['secure'] ?? $this->secure;
+        $options['httponly'] = $options['httponly'] ?? $this->httpOnly;
+
+        return $options;
     }
 }

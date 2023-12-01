@@ -46,7 +46,6 @@ class Meta extends AbstractSeries
      * @param string $content
      *
      * @return Meta
-     * @throws Exception
      */
     public function addHttp(string $httpEquiv, string $content): Meta
     {
@@ -58,7 +57,6 @@ class Meta extends AbstractSeries
      * @param string $content
      *
      * @return Meta
-     * @throws Exception
      */
     public function addName(string $name, string $content): Meta
     {
@@ -72,7 +70,6 @@ class Meta extends AbstractSeries
      * @param string $content
      *
      * @return Meta
-     * @throws Exception
      */
     public function addProperty(string $name, string $content): Meta
     {
@@ -95,7 +92,6 @@ class Meta extends AbstractSeries
      * @param string $content
      *
      * @return Meta
-     * @throws Exception
      */
     private function addElement(
         string $element,

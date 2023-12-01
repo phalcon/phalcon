@@ -72,6 +72,9 @@ abstract class AbstractAdapter implements AdapterInterface
 
     /**
      * Prevent serialization
+     *
+     * @return array
+     * @throws Exception
      */
     public function __serialize(): array
     {
@@ -80,6 +83,11 @@ abstract class AbstractAdapter implements AdapterInterface
 
     /**
      * Prevent unserialization
+     *
+     * @param array $data
+     *
+     * @return void
+     * @throws Exception
      */
     public function __unserialize(array $data): void
     {

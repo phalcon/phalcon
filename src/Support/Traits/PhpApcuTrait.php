@@ -99,7 +99,7 @@ trait PhpApcuTrait
     /**
      * @param string $pattern
      *
-     * @return APCuIterator|false
+     * @return APCuIterator
      */
     protected function phpApcuIterator(string $pattern)
     {

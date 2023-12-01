@@ -68,6 +68,7 @@ class CreditCard extends AbstractValidator
      * @param string     $field
      *
      * @return bool
+     * @throws Validation\Exception
      */
     public function validate(Validation $validation, string $field): bool
     {

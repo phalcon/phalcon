@@ -110,13 +110,13 @@ interface AdapterInterface
     public function set(string $key, $value, $ttl = null): bool;
 
     /**
-     * Stores data in the adapter forever. The key needs to manually deleted
+     * Stores data in the adapter forever. The key needs to be manually deleted
      * from the adapter.
      *
      * @param string $key
-     * @param mixed  $value
+     * @param mixed  $data
      *
      * @return bool
      */
-    public function setForever(string $key, $value): bool;
+    public function setForever(string $key, mixed $data): bool;
 }

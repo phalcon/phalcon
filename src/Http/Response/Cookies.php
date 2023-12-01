@@ -129,6 +129,7 @@ class Cookies extends AbstractInjectionAware implements CookiesInterface
      * @param string $name
      *
      * @return CookieInterface
+     * @throws Exception
      */
     public function get(string $name): CookieInterface
     {

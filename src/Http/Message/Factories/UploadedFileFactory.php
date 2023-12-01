@@ -38,17 +38,14 @@ final class UploadedFileFactory implements UploadedFileFactoryInterface
      * @link httsp://php.net/manual/features.file-upload.post-method.php
      * @link https://php.net/manual/features.file-upload.errors.php
      *
-     * @param StreamInterface $stream          The underlying stream
-     *                                         representing the uploaded file
-     *                                         content.
-     * @param int             $size            The size of the file in bytes.
-     * @param int             $error           The PHP file upload error.
-     * @param string          $clientFilename  The filename as provided by the
-     *                                         client, if any.
-     * @param string          $clientMediaType The media type as provided by
-     *                                         the client, if any.
+     * @param StreamInterface $stream          The underlying stream representing the uploaded file content
+     * @param int|null        $size            The size of the file in bytes
+     * @param int             $error           The PHP file upload error
+     * @param string|null     $clientFilename  The filename as provided by the client, if any
+     * @param string|null     $clientMediaType The media type as provided by the client, if any
      *
      * @throws InvalidArgumentException If the file resource is not readable.
+     * @return UploadedFileInterface
      */
     public function createUploadedFile(
         StreamInterface $stream,

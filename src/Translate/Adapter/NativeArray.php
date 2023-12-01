@@ -102,7 +102,7 @@ class NativeArray extends AbstractAdapter implements ArrayAccess
     /**
      * Returns the translation related to the given key
      *
-     * @param string $index
+     * @param string $translateKey
      * @param array  $placeholders
      *
      * @return string

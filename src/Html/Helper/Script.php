@@ -29,7 +29,6 @@ class Script extends AbstractSeries
      * @param array  $attributes
      *
      * @return $this
-     * @throws Exception
      */
     public function add(string $href, array $attributes = [])
     {

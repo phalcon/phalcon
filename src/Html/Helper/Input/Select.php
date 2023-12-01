@@ -72,10 +72,10 @@ class Select extends AbstractList
     /**
      * Add an element to the list
      *
-     * @param string $text
-     * @param string $value
-     * @param array  $attributes
-     * @param bool   $raw
+     * @param string      $text
+     * @param string|null $value
+     * @param array       $attributes
+     * @param bool        $raw
      *
      * @return Select
      */
@@ -106,8 +106,8 @@ class Select extends AbstractList
     /**
      * Creates an option group
      *
-     * @param string $label
-     * @param array  $attributes
+     * @param string|null $label
+     * @param array       $attributes
      *
      * @return Select
      */
@@ -181,8 +181,8 @@ class Select extends AbstractList
      * Checks if the value has been passed and if it is the same as the
      * value stored in the object
      *
-     * @param array  $attributes
-     * @param string $value
+     * @param array       $attributes
+     * @param string|null $value
      *
      * @return array
      */

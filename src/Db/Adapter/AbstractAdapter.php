@@ -1428,7 +1428,7 @@ abstract class AbstractAdapter implements AdapterInterface, EventsAwareInterface
             $escapedField = $this->escapeIdentifier($field);
 
             if (is_object($value) && $value instanceof RawValue) {
-                $placeholders[] = $escapedField . " = " . (string)$value;
+                $placeholders[] = $escapedField . " = " . $value;
             } else {
                 if (is_object($value)) {
                     $value = (string)$value;

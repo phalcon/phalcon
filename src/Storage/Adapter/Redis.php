@@ -20,6 +20,8 @@ use Phalcon\Storage\SerializerFactory;
 use Phalcon\Support\Exception as SupportException;
 use Redis as RedisService;
 
+use RedisException;
+
 use function constant;
 use function defined;
 use function is_bool;
@@ -43,8 +45,6 @@ class Redis extends AbstractAdapter
      *
      * @param SerializerFactory $factory
      * @param array             $options
-     *
-     * @throws SupportException
      */
     public function __construct(
         SerializerFactory $factory,
@@ -78,7 +78,9 @@ class Redis extends AbstractAdapter
      * Flushes/clears the cache
      *
      * @return bool
+     * @throws RedisException
      * @throws StorageException
+     * @throws SupportException
      */
     public function clear(): bool
     {
@@ -93,8 +95,10 @@ class Redis extends AbstractAdapter
      * @param string $key
      * @param int    $value
      *
-     * @return bool|int
+     * @return bool|int|RedisService
+     * @throws RedisException
      * @throws StorageException
+     * @throws SupportException
      */
     public function decrement(string $key, int $value = 1)
     {
@@ -109,7 +113,9 @@ class Redis extends AbstractAdapter
      * @param string $key
      *
      * @return bool
+     * @throws RedisException
      * @throws StorageException
+     * @throws SupportException
      */
     public function delete(string $key): bool
     {
@@ -123,7 +129,9 @@ class Redis extends AbstractAdapter
      * server(s)
      *
      * @return mixed|RedisService
+     * @throws RedisException
      * @throws StorageException
+     * @throws SupportException
      */
     public function getAdapter()
     {
@@ -151,6 +159,7 @@ class Redis extends AbstractAdapter
      * @param string $prefix
      *
      * @return array
+     * @throws RedisException
      * @throws StorageException
      */
     public function getKeys(string $prefix = ''): array
@@ -168,6 +177,7 @@ class Redis extends AbstractAdapter
      * @param string $key
      *
      * @return bool
+     * @throws RedisException
      * @throws StorageException
      */
     public function has(string $key): bool
@@ -183,7 +193,8 @@ class Redis extends AbstractAdapter
      * @param string $key
      * @param int    $value
      *
-     * @return bool|false|int
+     * @return bool|int|RedisService
+     * @throws RedisException
      * @throws StorageException
      */
     public function increment(string $key, int $value = 1)
@@ -229,14 +240,16 @@ class Redis extends AbstractAdapter
      * from the adapter.
      *
      * @param string $key
-     * @param mixed  $value
+     * @param mixed  $data
      *
      * @return bool
+     * @throws RedisException
+     * @throws StorageException
      */
-    public function setForever(string $key, $value): bool
+    public function setForever(string $key, mixed $data): bool
     {
         $result = $this->getAdapter()
-                       ->set($key, $this->getSerializedData($value))
+                       ->set($key, $this->getSerializedData($data))
         ;
 
         return is_bool($result) ? $result : false;
@@ -317,6 +330,7 @@ class Redis extends AbstractAdapter
      * @param RedisService $connection
      *
      * @return Redis
+     * @throws RedisException
      * @throws StorageException
      */
     private function checkIndex(RedisService $connection): Redis
@@ -337,6 +351,9 @@ class Redis extends AbstractAdapter
      * the custom one is set.
      *
      * @param RedisService $connection
+     *
+     * @return void
+     * @throws RedisException
      */
     private function setSerializer(RedisService $connection)
     {

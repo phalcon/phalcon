@@ -17,6 +17,7 @@ use Countable;
 use Iterator;
 use Phalcon\Di\Injectable;
 use Phalcon\Filter\Validation;
+use Phalcon\Filter\Validation\Exception as ValidationException;
 use Phalcon\Filter\Validation\ValidationInterface;
 use Phalcon\Forms\Element\ElementInterface;
 use Phalcon\Html\Attributes;
@@ -613,9 +614,13 @@ class Form extends Injectable implements Countable, Iterator, AttributesInterfac
     /**
      * Validates the form
      *
-     * @param array data
-     * @param object entity
-     * @param array whitelist
+     * @param array       $data
+     * @param object|null $entity
+     * @param array       $whitelist
+     *
+     * @return bool
+     * @throws Exception
+     * @throws ValidationException
      */
     public function isValid(
         array $data = [],
@@ -811,7 +816,9 @@ class Form extends Injectable implements Countable, Iterator, AttributesInterfac
     /**
      * Sets the form's action
      *
-     * @return Form
+     * @param string $action
+     *
+     * @return $this
      */
     public function setAction(string $action): Form
     {

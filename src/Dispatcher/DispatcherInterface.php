@@ -158,8 +158,6 @@ interface DispatcherInterface
     /**
      * Set a param by its name or numeric index
      *
-     * @param mixed value
-     *
      * @param string $parameter
      * @param mixed  $value
      *

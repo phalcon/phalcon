@@ -444,6 +444,7 @@ class Group implements GroupInterface
      * @param array|string|null $httpMethods
      *
      * @return RouteInterface
+     * @throws Exception
      */
     protected function addRoute(
         string $pattern,

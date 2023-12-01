@@ -187,6 +187,8 @@ class PdoResult implements ResultInterface
      * @param int                      $mode
      * @param int|string|callable|null $fetchArgument
      * @param array|null               $constructorArgs
+     *
+     * @return array
      */
     public function fetchAll(
         int $mode = Enum::FETCH_DEFAULT,

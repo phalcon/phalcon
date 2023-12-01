@@ -308,9 +308,10 @@ class Crypt implements CryptInterface
         $this->checkCipherHashIsAvailable($this->cipher, "cipher");
         $mode      = $this->getMode();
         $blockSize = $this->getBlockSize($mode);
-        $iv        = $this->phpOpensslRandomPseudoBytes($this->ivLength);
 
-        if (false === $iv) {
+        try {
+            $iv = $this->phpOpensslRandomPseudoBytes($this->ivLength);
+        } catch (\Exception) {
             throw new Exception("Cannot calculate Random Pseudo Bytes");
         }
 

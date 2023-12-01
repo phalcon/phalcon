@@ -43,8 +43,10 @@ class Doctype
     /**
      * Produce a <doctype> tag
      *
-     * @param string $flag
+     * @param int    $flag
      * @param string $delimiter
+     *
+     * @return void
      */
     public function __invoke(
         int $flag = self::HTML5,

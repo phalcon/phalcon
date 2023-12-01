@@ -65,7 +65,6 @@ abstract class AbstractList extends AbstractHelper
      * Generates and returns the HTML for the list.
      *
      * @return string
-     * @throws Exception
      */
     public function __toString()
     {

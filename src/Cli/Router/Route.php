@@ -272,8 +272,8 @@ class Route implements RouteInterface
                                     $itemChar == ':'
                                 ) {
                                     if (':' === $itemChar) {
-                                        $variable = (string)substr($item, 0, $cursorVar);
-                                        $regexp   = (string)substr($item, $cursorVar + 1);
+                                        $variable = substr($item, 0, $cursorVar);
+                                        $regexp   = substr($item, $cursorVar + 1);
 
                                         break;
                                     }

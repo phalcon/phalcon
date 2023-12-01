@@ -48,7 +48,9 @@ class Select extends AbstractElement
     /**
      * Adds an option to the current options
      *
-     * @param array|string option
+     * @param array|string $option
+     *
+     * @return ElementInterface
      */
     public function addOption(array | string $option): ElementInterface
     {
@@ -95,7 +97,9 @@ class Select extends AbstractElement
     /**
      * Set the choice's options
      *
-     * @param array|object options
+     * @param array|object $options
+     *
+     * @return ElementInterface
      */
     public function setOptions(array | object $options): ElementInterface
     {

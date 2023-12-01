@@ -13,6 +13,7 @@ declare(strict_types=1);
 
 namespace Phalcon\Translate\Adapter;
 
+use Exception as BaseException;
 use Phalcon\Translate\Exception;
 use Phalcon\Translate\InterpolatorFactory;
 
@@ -132,6 +133,7 @@ abstract class AbstractAdapter implements AdapterInterface
      * @param array  $placeholders
      *
      * @return string
+     * @throws BaseException
      */
     protected function replacePlaceholders(
         string $translation,

@@ -284,9 +284,9 @@ interface AdapterInterface
     /**
      * Drops a view
      *
-     * @param string      $viewName
-     * @param string|null $schemaName
-     * @param bool        $ifExists
+     * @param string $viewName
+     * @param string $schemaName
+     * @param bool   $ifExists
      *
      * @return bool
      */

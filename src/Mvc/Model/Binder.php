@@ -78,6 +78,7 @@ class Binder implements BinderInterface
      *
      * @return array
      * @throws Exception
+     * @throws ReflectionException
      */
     public function bindToHandler(
         object $handler,
@@ -288,9 +289,7 @@ class Binder implements BinderInterface
             }
         }
 
-        if (null !== $this->cache) {
-            $this->cache->set($cacheKey, $paramsCache);
-        }
+        $this->cache?->set($cacheKey, $paramsCache);
 
         $this->internalCache[$cacheKey] = $paramsCache;
 

@@ -39,7 +39,6 @@ class Friendly
      * @param array|string $replace
      *
      * @return string
-     * @throws Exception
      */
     public function __invoke(
         string $text,
@@ -73,7 +72,6 @@ class Friendly
      * @param mixed $replace
      *
      * @return array
-     * @throws Exception
      */
     private function getMatrix(array $replace): array
     {
