@@ -13,7 +13,6 @@ declare(strict_types=1);
 
 namespace Phalcon\Support\Helper\Str;
 
-use Phalcon\Support\Helper\Exception;
 use Phalcon\Traits\Helper\Str\LowerTrait;
 
 use function array_keys;

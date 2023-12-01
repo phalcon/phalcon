@@ -15,7 +15,6 @@ namespace Phalcon\Image\Adapter;
 
 use Phalcon\Image\Enum;
 use Phalcon\Image\Exception;
-
 use ValueError;
 
 use function array_map;

@@ -59,7 +59,7 @@ class LoggerFactory
      * @return Logger
      * @throws SupportException
      */
-    public function load(array|ConfigInterface $config): Logger
+    public function load(array | ConfigInterface $config): Logger
     {
         $data     = [];
         $config   = $this->checkConfig($config);

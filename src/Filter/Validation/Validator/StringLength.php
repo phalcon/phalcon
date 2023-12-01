@@ -85,15 +85,15 @@ class StringLength extends AbstractValidatorComposite
      * Constructor
      *
      * @param array $options = [
-     *     'min'             => 100,
-     *     'message'         => '',
-     *     'messageMinimum'  => '',
-     *     'included'        => '',
-     *     'includedMinimum' => false,
-     *     'max'             => 1000,
-     *     'messageMaximum'  => '',
-     *     'includedMaximum' => false,
-     *     ]
+     *                       'min'             => 100,
+     *                       'message'         => '',
+     *                       'messageMinimum'  => '',
+     *                       'included'        => '',
+     *                       'includedMinimum' => false,
+     *                       'max'             => 1000,
+     *                       'messageMaximum'  => '',
+     *                       'includedMaximum' => false,
+     *                       ]
      */
     public function __construct(array $options = [])
     {

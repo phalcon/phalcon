@@ -14,10 +14,8 @@ declare(strict_types=1);
 namespace Phalcon\Support\Traits;
 
 use Phalcon\Config\ConfigInterface;
-use Phalcon\Support\Exception;
 
 use function is_array;
-use function is_object;
 
 /**
  * Trait ConfigTrait
@@ -31,7 +29,7 @@ trait ConfigTrait
      *
      * @return array
      */
-    protected function checkConfig(array|ConfigInterface $config): array
+    protected function checkConfig(array | ConfigInterface $config): array
     {
         if ($config instanceof ConfigInterface) {
             return $config->toArray();

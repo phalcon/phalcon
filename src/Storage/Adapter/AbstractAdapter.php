@@ -18,7 +18,6 @@ use DateTime;
 use Exception;
 use Phalcon\Storage\Serializer\SerializerInterface;
 use Phalcon\Storage\SerializerFactory;
-use Phalcon\Support\Exception as SupportException;
 use Phalcon\Traits\Helper\Str\StartsWithTrait;
 
 use function is_object;

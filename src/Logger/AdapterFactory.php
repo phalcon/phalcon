@@ -18,7 +18,6 @@ use Phalcon\Logger\Adapter\AdapterInterface;
 use Phalcon\Logger\Adapter\Noop;
 use Phalcon\Logger\Adapter\Stream;
 use Phalcon\Logger\Adapter\Syslog;
-use Phalcon\Support\Exception as SupportException;
 use Phalcon\Traits\Factory\FactoryTrait;
 
 /**

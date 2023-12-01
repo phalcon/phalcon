@@ -19,7 +19,6 @@ use FilesystemIterator;
 use Iterator;
 use Phalcon\Storage\Exception as StorageException;
 use Phalcon\Storage\SerializerFactory;
-use Phalcon\Support\Exception as SupportException;
 use Phalcon\Traits\Helper\Str\DirFromFileTrait;
 use Phalcon\Traits\Helper\Str\DirSeparatorTrait;
 use Phalcon\Traits\Php\FileTrait;

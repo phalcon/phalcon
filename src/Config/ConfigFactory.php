@@ -21,8 +21,6 @@ use Phalcon\Config\Adapter\Php;
 use Phalcon\Config\Adapter\Yaml;
 use Phalcon\Traits\Factory\FactoryTrait;
 
-use function is_array;
-use function is_object;
 use function is_string;
 use function lcfirst;
 use function pathinfo;
