@@ -53,6 +53,7 @@ class Row implements EntityInterface, ResultInterface, ArrayAccess, JsonSerializ
      * @param string|int $index
      *
      * @return string|ModelInterface
+     * @throws Exception
      */
     public function offsetGet(mixed $index)
     {
@@ -71,6 +72,7 @@ class Row implements EntityInterface, ResultInterface, ArrayAccess, JsonSerializ
      * @param mixed $value
      *
      * @return void
+     * @throws Exception
      */
     public function offsetSet(mixed $offset, mixed $value)
     {

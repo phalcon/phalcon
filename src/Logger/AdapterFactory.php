@@ -13,6 +13,7 @@ declare(strict_types=1);
 
 namespace Phalcon\Logger;
 
+use Exception as BaseException;
 use Phalcon\Logger\Adapter\AdapterInterface;
 use Phalcon\Logger\Adapter\Noop;
 use Phalcon\Logger\Adapter\Stream;
@@ -47,7 +48,7 @@ class AdapterFactory
      * @param array  $options
      *
      * @return AdapterInterface
-     * @throws SupportException
+     * @throws BaseException
      */
     public function newInstance(
         string $name,

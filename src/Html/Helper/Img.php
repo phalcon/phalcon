@@ -29,7 +29,6 @@ class Img extends AbstractHelper
      * @param array  $attributes
      *
      * @return string
-     * @throws Exception
      */
     public function __invoke(string $src, array $attributes = [])
     {

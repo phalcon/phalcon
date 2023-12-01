@@ -114,7 +114,7 @@ class ConnectionLocator implements ConnectionLocatorInterface
     /**
      * Sets the default connection factory.
      *
-     * @param ConnectionInterface $callable
+     * @param ConnectionInterface $callableObject
      *
      * @return ConnectionLocatorInterface
      */
@@ -130,7 +130,7 @@ class ConnectionLocator implements ConnectionLocatorInterface
      * Sets a read connection factory by name.
      *
      * @param string   $name
-     * @param callable $callable
+     * @param callable $callableObject
      *
      * @return ConnectionLocatorInterface
      */
@@ -147,7 +147,7 @@ class ConnectionLocator implements ConnectionLocatorInterface
      * Sets a write connection factory by name.
      *
      * @param string   $name
-     * @param callable $callable
+     * @param callable $callableObject
      *
      * @return ConnectionLocatorInterface
      */

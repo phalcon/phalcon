@@ -55,9 +55,9 @@ class Collection implements CollectionInterface
     /**
      * Maps a route to a handler that only matches if the HTTP method is DELETE.
      *
-     * @param string      $routePattern
-     * @param callable    $handler
-     * @param string|null $name
+     * @param string          $routePattern
+     * @param callable|string $handler
+     * @param string|null     $name
      *
      * @return CollectionInterface
      */
@@ -74,9 +74,9 @@ class Collection implements CollectionInterface
     /**
      * Maps a route to a handler that only matches if the HTTP method is GET.
      *
-     * @param string      $routePattern
-     * @param callable    $handler
-     * @param string|null $name
+     * @param string          $routePattern
+     * @param callable|string $handler
+     * @param string|null     $name
      *
      * @return CollectionInterface
      */
@@ -124,7 +124,7 @@ class Collection implements CollectionInterface
      * Maps a route to a handler that only matches if the HTTP method is HEAD.
      *
      * @param string      $routePattern
-     * @param callable    $handler
+     * @param callable|string $handler
      * @param string|null $name
      *
      * @return CollectionInterface
@@ -153,7 +153,7 @@ class Collection implements CollectionInterface
      * Maps a route to a handler.
      *
      * @param string      $routePattern
-     * @param callable    $handler
+     * @param callable|string $handler
      * @param string|null $name
      *
      * @return CollectionInterface
@@ -181,7 +181,7 @@ class Collection implements CollectionInterface
      * ```
      *
      * @param string       $routePattern
-     * @param callable     $handler
+     * @param callable|string     $handler
      * @param array|string $method
      * @param string|null  $name
      *
@@ -203,7 +203,7 @@ class Collection implements CollectionInterface
      * OPTIONS.
      *
      * @param string      $routePattern
-     * @param callable    $handler
+     * @param callable|string $handler
      * @param string|null $name
      *
      * @return CollectionInterface
@@ -222,7 +222,7 @@ class Collection implements CollectionInterface
      * Maps a route to a handler that only matches if the HTTP method is PATCH.
      *
      * @param string      $routePattern
-     * @param callable    $handler
+     * @param callable|string $handler
      * @param string|null $name
      *
      * @return CollectionInterface
@@ -241,7 +241,7 @@ class Collection implements CollectionInterface
      * Maps a route to a handler that only matches if the HTTP method is POST.
      *
      * @param string      $routePattern
-     * @param callable    $handler
+     * @param callable|string $handler
      * @param string|null $name
      *
      * @return CollectionInterface
@@ -260,7 +260,7 @@ class Collection implements CollectionInterface
      * Maps a route to a handler that only matches if the HTTP method is PUT.
      *
      * @param string      $routePattern
-     * @param callable    $handler
+     * @param callable|string $handler
      * @param string|null $name
      *
      * @return CollectionInterface
@@ -324,7 +324,7 @@ class Collection implements CollectionInterface
      *
      * @param array|string $method
      * @param string       $routePattern
-     * @param callable     $handler
+     * @param callable|string     $handler
      * @param string|null  $name
      *
      * @return void

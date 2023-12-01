@@ -13,6 +13,7 @@ declare(strict_types=1);
 
 namespace Phalcon\Http\Response;
 
+use Generator;
 use IteratorAggregate;
 use Traversable;
 
@@ -55,7 +56,7 @@ class Headers implements HeadersInterface, IteratorAggregate
     }
 
     /**
-     * @return array|Traversable|void
+     * @return array|Generator|Traversable
      */
     public function getIterator()
     {

@@ -16,6 +16,8 @@ namespace Phalcon\Image\Adapter;
 use Phalcon\Image\Enum;
 use Phalcon\Image\Exception;
 
+use ValueError;
+
 use function array_map;
 use function max;
 use function pathinfo;
@@ -84,27 +86,13 @@ abstract class AbstractAdapter implements AdapterInterface
      * @param int    $opacity
      *
      * @return AdapterInterface
+     * @throws Exception
      */
     public function background(
         string $color,
         int $opacity = 100
     ): AdapterInterface {
-        if (
-            strlen($color) > 1 &&
-            str_starts_with($color, "#")
-        ) {
-            $color = substr($color, 1);
-        }
-
-        if (strlen($color) === 3) {
-            $color = preg_replace("/./", "$0$0", $color);
-        }
-
-        $split = str_split($color, 2);
-        if (false === $split) {
-            throw new Exception("Cannot calculate color");
-        }
-        $colors = array_map("hexdec", $split);
+        $colors = $this->getColors($color);
 
         $this->processBackground($colors[0], $colors[1], $colors[2], $opacity);
 
@@ -447,6 +435,7 @@ abstract class AbstractAdapter implements AdapterInterface
      * @param string|null $fontFile
      *
      * @return AdapterInterface
+     * @throws Exception
      */
     public function text(
         string $text,
@@ -459,23 +448,7 @@ abstract class AbstractAdapter implements AdapterInterface
     ): AdapterInterface {
         $opacity = $this->checkHighLow($opacity);
 
-        if (
-            strlen($color) > 1 &&
-            str_starts_with($color, "#")
-        ) {
-            $color = substr($color, 1);
-        }
-
-        if (strlen($color) === 3) {
-            $color = preg_replace("/./", "$0$0", $color);
-        }
-
-        $split = str_split($color, 2);
-        if (false === $split) {
-            throw new Exception("Cannot calculate color");
-        }
-
-        $colors = array_map("hexdec", $split);
+        $colors = $this->getColors($color);
 
         $this->processText(
             $text,
@@ -596,5 +569,33 @@ abstract class AbstractAdapter implements AdapterInterface
         }
 
         return $master;
+    }
+
+    /**
+     * @param string $color
+     *
+     * @return array
+     * @throws Exception
+     */
+    private function getColors(string $color): array
+    {
+        try {
+            if (
+                strlen($color) > 1 &&
+                str_starts_with($color, "#")
+            ) {
+                $color = substr($color, 1);
+            }
+
+            if (strlen($color) === 3) {
+                $color = preg_replace("/./", "$0$0", $color);
+            }
+
+            $split = str_split($color, 2);
+
+            return array_map("hexdec", $split);
+        } catch (ValueError) {
+            throw new Exception("Cannot calculate color");
+        }
     }
 }

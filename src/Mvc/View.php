@@ -73,7 +73,7 @@ class View extends Injectable implements EventsAwareInterface //ViewInterface
      */
     public const LEVEL_NO_RENDER = 0;
     /**
-     * @var string
+     * @var string|null
      */
     protected ?string $content = '';
 

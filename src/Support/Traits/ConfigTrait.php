@@ -27,14 +27,13 @@ use function is_object;
 trait ConfigTrait
 {
     /**
-     * @param mixed $config
+     * @param array|ConfigInterface $config
      *
      * @return array
-     * @throws Exception
      */
-    protected function checkConfig($config): array
+    protected function checkConfig(array|ConfigInterface $config): array
     {
-        if (true === is_object($config) && $config instanceof ConfigInterface) {
+        if ($config instanceof ConfigInterface) {
             return $config->toArray();
         }
 

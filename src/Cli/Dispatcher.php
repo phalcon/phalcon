@@ -16,6 +16,7 @@ namespace Phalcon\Cli;
 use Exception;
 use Phalcon\Cli\Dispatcher\Exception as DispatcherException;
 use Phalcon\Dispatcher\AbstractDispatcher as CliDispatcher;
+use Phalcon\Events\Exception as EventsException;
 use Phalcon\Filter\Exception as FilterException;
 use Phalcon\Filter\Filter;
 
@@ -245,6 +246,7 @@ class Dispatcher extends CliDispatcher implements DispatcherInterface
      * @param Exception $exception
      *
      * @return false|void
+     * @throws EventsException
      */
     protected function handleException(Exception $exception)
     {

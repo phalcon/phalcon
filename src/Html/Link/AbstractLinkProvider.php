@@ -130,7 +130,7 @@ abstract class AbstractLinkProvider
     /**
      * Returns the object hash key
      *
-     * @param mixed link
+     * @param mixed $link
      *
      * @return string
      */

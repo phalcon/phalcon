@@ -225,6 +225,7 @@ class Debug
      * @param Throwable $exception
      *
      * @return bool
+     * @throws ReflectionException
      */
     public function onUncaughtException(Throwable $exception): bool
     {

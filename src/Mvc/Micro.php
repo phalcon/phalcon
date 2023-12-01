@@ -151,7 +151,7 @@ class Micro extends Injectable implements ArrayAccess, EventsAwareInterface
     /**
      * Appends a afterBinding middleware to be called after model binding
      *
-     * @param callable $handler
+     * @param callable|MiddlewareInterface $handler
      *
      * @return $this
      */
@@ -179,8 +179,8 @@ class Micro extends Injectable implements ArrayAccess, EventsAwareInterface
     /**
      * Maps a route to a handler that only matches if the HTTP method is DELETE
      *
-     * @param string   $routePattern
-     * @param callable $handler
+     * @param string         $routePattern
+     * @param array|callable $handler
      *
      * @return RouteInterface
      */
@@ -222,7 +222,7 @@ class Micro extends Injectable implements ArrayAccess, EventsAwareInterface
      * Maps a route to a handler that only matches if the HTTP method is GET
      *
      * @param string   $routePattern
-     * @param callable $handler
+     * @param array|callable $handler
      *
      * @return RouteInterface
      */
@@ -733,7 +733,7 @@ class Micro extends Injectable implements ArrayAccess, EventsAwareInterface
      * Maps a route to a handler that only matches if the HTTP method is HEAD
      *
      * @param string   $routePattern
-     * @param callable $handler
+     * @param array|callable $handler
      *
      * @return RouteInterface
      */
@@ -746,7 +746,7 @@ class Micro extends Injectable implements ArrayAccess, EventsAwareInterface
      * Maps a route to a handler without any HTTP method constraint
      *
      * @param string   $routePattern
-     * @param callable $handler
+     * @param array|callable $handler
      *
      * @return RouteInterface
      */
@@ -923,7 +923,7 @@ class Micro extends Injectable implements ArrayAccess, EventsAwareInterface
      * Maps a route to a handler that only matches if the HTTP method is OPTIONS
      *
      * @param string   $routePattern
-     * @param callable $handler
+     * @param array|callable $handler
      *
      * @return RouteInterface
      */
@@ -936,7 +936,7 @@ class Micro extends Injectable implements ArrayAccess, EventsAwareInterface
      * Maps a route to a handler that only matches if the HTTP method is PATCH
      *
      * @param string   $routePattern
-     * @param callable $handler
+     * @param array|callable $handler
      *
      * @return RouteInterface
      */
@@ -949,7 +949,7 @@ class Micro extends Injectable implements ArrayAccess, EventsAwareInterface
      * Maps a route to a handler that only matches if the HTTP method is POST
      *
      * @param string   $routePattern
-     * @param callable $handler
+     * @param array|callable $handler
      *
      * @return RouteInterface
      */
@@ -962,7 +962,7 @@ class Micro extends Injectable implements ArrayAccess, EventsAwareInterface
      * Maps a route to a handler that only matches if the HTTP method is PUT
      *
      * @param string   $routePattern
-     * @param callable $handler
+     * @param array|callable $handler
      *
      * @return RouteInterface
      */
@@ -1067,7 +1067,7 @@ class Micro extends Injectable implements ArrayAccess, EventsAwareInterface
      *
      * @param string   $method
      * @param string   $routePattern
-     * @param callable $handler
+     * @param array|callable $handler
      *
      * @return RouteInterface
      */

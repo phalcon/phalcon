@@ -31,7 +31,6 @@ class Anchor extends AbstractHelper
      * @param bool   $raw
      *
      * @return string
-     * @throws Exception
      */
     public function __invoke(
         string $href,

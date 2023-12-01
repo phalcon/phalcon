@@ -148,6 +148,7 @@ class Router extends AbstractInjectionAware implements RouterInterface
      * @param array|string $paths
      *
      * @return RouteInterface
+     * @throws Exception
      */
     public function add(string $pattern, array | string $paths = []): RouteInterface
     {

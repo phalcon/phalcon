@@ -31,7 +31,6 @@ class Textarea extends AbstractInput
      * Returns the HTML for the input.
      *
      * @return string
-     * @throws Exception
      */
     public function __toString()
     {

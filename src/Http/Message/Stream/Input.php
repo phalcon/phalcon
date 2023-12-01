@@ -105,7 +105,7 @@ class Input extends Stream
     /**
      * Returns whether the stream is writeable.
      *
-     * @return void
+     * @return bool
      */
     public function isWritable(): bool
     {

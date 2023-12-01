@@ -63,9 +63,9 @@ interface StreamFactoryInterface
      *
      * The stream MUST be readable and may be writable.
      *
-     * @param resource $resource PHP resource to use as basis of stream.
+     * @param resource $phpResource PHP resource to use as basis of stream.
      *
      * @return StreamInterface
      */
-    public function createStreamFromResource($resource): StreamInterface;
+    public function createStreamFromResource($phpResource): StreamInterface;
 }

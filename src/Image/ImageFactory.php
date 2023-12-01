@@ -15,6 +15,7 @@ namespace Phalcon\Image;
 
 use Exception as BaseException;
 use Phalcon\Config\Config;
+use Phalcon\Config\ConfigInterface;
 use Phalcon\Image\Adapter\AdapterInterface;
 use Phalcon\Image\Adapter\Gd;
 use Phalcon\Image\Adapter\Imagick;
@@ -41,17 +42,16 @@ class ImageFactory
     /**
      * Factory to create an instance from a Config object
      *
-     * @param array|Config $config                 = [
+     * @param array|ConfigInterface $config                 = [
      *                                             'adapter' => 'gd',
      *                                             'file'    => 'image.jpg',
      *                                             'height'  => null,
      *                                             'width'   => null
      *                                             ]
      *
-     * @return AdapterInterface
-     * @throws SupportException
+     * @throws BaseException
      */
-    public function load($config): AdapterInterface
+    public function load(array|ConfigInterface $config): AdapterInterface
     {
         $config = $this->checkConfig($config);
         $config = $this->checkConfigElement($config, "adapter");

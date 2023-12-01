@@ -25,9 +25,6 @@ interface DiInterface extends ArrayAccess
      * Only is successful if a service hasn't been registered previously
      * with the same name
      *
-     * @param mixed definition
-     */
-    /**
      * @param string $name
      * @param mixed  $definition
      * @param bool   $shared

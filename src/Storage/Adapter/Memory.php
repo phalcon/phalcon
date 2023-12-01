@@ -184,13 +184,13 @@ class Memory extends AbstractAdapter
      * from the adapter.
      *
      * @param string $key
-     * @param mixed  $value
+     * @param mixed  $data
      *
      * @return bool
      */
-    public function setForever(string $key, $value): bool
+    public function setForever(string $key, mixed $data): bool
     {
-        return $this->set($key, $value);
+        return $this->set($key, $data);
     }
 
     /**

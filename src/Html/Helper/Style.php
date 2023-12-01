@@ -34,7 +34,6 @@ class Style extends AbstractSeries
      * @param array  $attributes
      *
      * @return $this
-     * @throws Exception
      */
     public function add(string $url, array $attributes = [])
     {

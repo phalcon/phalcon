@@ -151,16 +151,13 @@ class Manager implements ManagerInterface
     {
         $value = null;
 
-        if (false === $this->exists()) {
-            // To use $_SESSION variable we need to start session first
-            return $value;
-        }
+        if ($this->exists()) {
+            $uniqueKey = $this->getUniqueKey($key);
+            $value     = $_SESSION[$uniqueKey] ?? $defaultValue;
 
-        $uniqueKey = $this->getUniqueKey($key);
-        $value     = $_SESSION[$uniqueKey] ?? $defaultValue;
-
-        if (true === $remove) {
-            unset($_SESSION[$uniqueKey]);
+            if (true === $remove) {
+                unset($_SESSION[$uniqueKey]);
+            }
         }
 
         return $value;
@@ -358,7 +355,6 @@ class Manager implements ManagerInterface
      * started)
      *
      * @return bool
-     * @throws Exception
      */
     public function start(): bool
     {

@@ -507,6 +507,7 @@ class Request extends AbstractInjectionAware implements
      * </code>
      *
      * @return array
+     * @throws EventsException
      */
     public function getHeaders(): array
     {
@@ -1580,6 +1581,7 @@ class Request extends AbstractInjectionAware implements
      * @param bool        $noRecursive
      *
      * @return mixed
+     * @throws Exception
      */
     final protected function getHelper(
         array $source,
@@ -1733,7 +1735,7 @@ class Request extends AbstractInjectionAware implements
             null !== $this->container &&
             null === $this->eventsManager
         ) {
-            /** @var ManagerInterface eventsManager */
+            /** @var ManagerInterface $eventsManager */
             $this->eventsManager = $this->container->getShared('eventsManager');
         }
 

@@ -185,15 +185,15 @@ class Apcu extends AbstractAdapter
      * from the adapter.
      *
      * @param string $key
-     * @param mixed  $value
+     * @param mixed  $data
      *
      * @return bool
      */
-    public function setForever(string $key, $value): bool
+    public function setForever(string $key, mixed $data): bool
     {
         $result = $this->phpApcuStore(
             $this->getPrefixedKey($key),
-            $this->getSerializedData($value)
+            $this->getSerializedData($data)
         );
 
         return is_bool($result) ? $result : false;

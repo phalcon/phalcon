@@ -54,7 +54,7 @@ class AnnotationsFactory
      *                                      ]
      *
      * @return AdapterInterface
-     * @throws SupportException
+     * @throws BaseException
      */
     public function load(array | ConfigInterface $config): AdapterInterface
     {

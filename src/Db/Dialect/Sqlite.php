@@ -492,9 +492,9 @@ class Sqlite extends Dialect
     /**
      * Generates SQL to drop a view
      *
-     * @param string      $viewName
-     * @param string|null $schemaName
-     * @param bool        $ifExists
+     * @param string $viewName
+     * @param string $schemaName
+     * @param bool   $ifExists
      *
      * @return string
      */

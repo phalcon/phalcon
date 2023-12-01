@@ -79,6 +79,8 @@ abstract class AbstractLogger
      *                                    for logging (default [])
      * @param DateTimeZone|null $timezone Timezone. If omitted,
      *                                    date_Default_timezone_get() is used
+     *
+     * @throws Exception
      */
     public function __construct(
         protected string $name,
@@ -89,7 +91,6 @@ abstract class AbstractLogger
             $timezone = new DateTimeZone(date_default_timezone_get());
         }
 
-        $this->name     = $name;
         $this->timezone = $timezone;
 
         $this->setAdapters($adapters);

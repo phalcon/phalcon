@@ -40,8 +40,6 @@ class Libmemcached extends AbstractAdapter
      *
      * @param SerializerFactory $factory
      * @param array             $options
-     *
-     * @throws SupportException
      */
     public function __construct(
         SerializerFactory $factory,
@@ -237,18 +235,19 @@ class Libmemcached extends AbstractAdapter
     }
 
     /**
-     * Stores data in the adapter forever. The key needs to manually deleted
+     * Stores data in the adapter forever. The key needs to be manually deleted
      * from the adapter.
      *
      * @param string $key
-     * @param mixed  $value
+     * @param mixed  $data
      *
      * @return bool
+     * @throws StorageException
      */
-    public function setForever(string $key, $value): bool
+    public function setForever(string $key, mixed $data): bool
     {
         $result = $this->getAdapter()
-                       ->set($key, $this->getSerializedData($value), 0)
+                       ->set($key, $this->getSerializedData($data), 0)
         ;
 
         return is_bool($result) ? $result : false;
@@ -293,6 +292,9 @@ class Libmemcached extends AbstractAdapter
      * the custom one is set.
      *
      * @param Memcached $connection
+     *
+     * @return void
+     * @throws SupportException
      */
     private function setSerializer(Memcached $connection)
     {

@@ -84,7 +84,7 @@ class StringLength extends AbstractValidatorComposite
     /**
      * Constructor
      *
-     * @param array options = [
+     * @param array $options = [
      *     'min'             => 100,
      *     'message'         => '',
      *     'messageMinimum'  => '',
