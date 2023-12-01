@@ -24,7 +24,6 @@ use Phalcon\Traits\Helper\Str\LowerTrait;
 use Phalcon\Traits\Helper\Str\StartsWithTrait;
 use Phalcon\Traits\Php\InfoTrait;
 use Phalcon\Traits\Php\UrlTrait;
-
 use ValueError;
 
 use function base64_decode;
