@@ -39,7 +39,7 @@ class Item extends AbstractItem
     public function get(string $name, mixed $defaultValue = null)
     {
         if (true !== $this->has($name)) {
-            return $default;
+            return $defaultValue;
         }
 
         return $this->data['payload'][$name];
