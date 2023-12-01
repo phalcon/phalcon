@@ -25,6 +25,8 @@ use Phalcon\Traits\Helper\Str\StartsWithTrait;
 use Phalcon\Traits\Php\InfoTrait;
 use Phalcon\Traits\Php\UrlTrait;
 
+use ValueError;
+
 use function base64_decode;
 use function base64_encode;
 use function hash;
@@ -311,7 +313,7 @@ class Crypt implements CryptInterface
 
         try {
             $iv = $this->phpOpensslRandomPseudoBytes($this->ivLength);
-        } catch (BaseException) {
+        } catch (ValueError) {
             throw new Exception("Cannot calculate Random Pseudo Bytes");
         }
 
