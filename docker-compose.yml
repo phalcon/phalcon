@@ -33,6 +33,16 @@ services:
     extra_hosts:
       - "host.docker.internal:host-gateway"
 
+  phalcon-8.3:
+    container_name: phalcon-8.3
+    hostname: phalcon-83
+    build: docker/8.3
+    working_dir: /srv
+    volumes:
+      - .:/srv
+    extra_hosts:
+      - "host.docker.internal:host-gateway"
+
   mysql:
     container_name: phalcon-mysql
     image: mysql:5.7
