@@ -2231,21 +2231,22 @@
         },
         {
             "name": "codeception/module-db",
-            "version": "3.1.1",
+            "version": "3.1.2",
             "source": {
                 "type": "git",
                 "url": "https://github.com/Codeception/module-db.git",
-                "reference": "185889230bccfc65d2c03624879ade5357ec43f9"
+                "reference": "5666795f745ba0cd758ee0fe2744ee0209c451bf"
             },
             "dist": {
                 "type": "zip",
-                "url": "https://api.github.com/repos/Codeception/module-db/zipball/185889230bccfc65d2c03624879ade5357ec43f9",
-                "reference": "185889230bccfc65d2c03624879ade5357ec43f9",
+                "url": "https://api.github.com/repos/Codeception/module-db/zipball/5666795f745ba0cd758ee0fe2744ee0209c451bf",
+                "reference": "5666795f745ba0cd758ee0fe2744ee0209c451bf",
                 "shasum": ""
             },
             "require": {
                 "codeception/codeception": "*@dev",
                 "ext-json": "*",
+                "ext-mbstring": "*",
                 "ext-pdo": "*",
                 "php": "^8.0"
             },
@@ -2279,9 +2280,9 @@
             ],
             "support": {
                 "issues": "https://github.com/Codeception/module-db/issues",
-                "source": "https://github.com/Codeception/module-db/tree/3.1.1"
+                "source": "https://github.com/Codeception/module-db/tree/3.1.2"
             },
-            "time": "2023-03-18T07:35:25+00:00"
+            "time": "2024-01-12T08:18:43+00:00"
         },
         {
             "name": "codeception/module-filesystem",
