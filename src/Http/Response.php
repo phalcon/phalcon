@@ -29,7 +29,7 @@ use Phalcon\Http\Response\Headers;
 use Phalcon\Http\Response\HeadersInterface;
 use Phalcon\Http\Traits\StatusPhrasesTrait;
 use Phalcon\Mvc\Url\UrlInterface;
-use Phalcon\Mvc\ViewInterface;
+use Phalcon\Mvc\View\ViewInterface;
 use Phalcon\Support\Helper\File\Basename;
 
 use function addcslashes;

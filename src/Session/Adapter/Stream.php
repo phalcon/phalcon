@@ -113,7 +113,7 @@ class Stream extends Noop
      *
      * @return bool
      */
-    public function destroy($sessionId): bool
+    public function destroy(string $sessionId): bool
     {
         $file = $this->path . $this->getPrefixedName($sessionId);
 
@@ -125,14 +125,14 @@ class Stream extends Noop
     }
 
     /**
-     * @param int $maxlifetime
+     * @param int $maxLifetime
      *
-     * @return bool
+     * @return false|int
      */
-    public function gc($maxlifetime): bool
+    public function gc(int $maxLifetime): false|int
     {
         $pattern = $this->path . $this->prefix . "*";
-        $time    = time() - $maxlifetime;
+        $time    = time() - $maxLifetime;
 
         foreach (glob($pattern) as $file) {
             if (
@@ -155,7 +155,7 @@ class Stream extends Noop
      *
      * @return bool
      */
-    public function open($savePath, $sessionName): bool
+    public function open(string $savePath, string $sessionName): bool
     {
         return true;
     }
@@ -165,7 +165,7 @@ class Stream extends Noop
      *
      * @return string
      */
-    public function read($sessionId): string
+    public function read(string $sessionId): string
     {
         $name = $this->path . $this->getPrefixedName($sessionId);
         $data = "";
@@ -193,7 +193,7 @@ class Stream extends Noop
      *
      * @return bool
      */
-    public function write($sessionId, $data): bool
+    public function write(string $sessionId, string $data): bool
     {
         $name = $this->path . $this->getPrefixedName($sessionId);
 

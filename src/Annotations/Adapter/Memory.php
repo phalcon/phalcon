@@ -43,8 +43,10 @@ class Memory extends AbstractAdapter
     /**
      * Writes parsed annotations to memory
      */
-    public function write(string $key, Reflection $data): void
+    public function write(string $key, Reflection $data): bool
     {
         $this->data[strtolower($key)] = $data;
+
+        return true;
     }
 }

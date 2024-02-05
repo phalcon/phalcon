@@ -303,6 +303,17 @@ class Imagick extends AbstractAdapter
     }
 
     /**
+     * @param int $width
+     * @param int $height
+     *
+     * @return false|GdImage|resource
+     */
+    protected function processCreate(int $width, int $height)
+    {
+        return false;
+    }
+
+    /**
      * Execute a crop.
      *
      * @param int $width

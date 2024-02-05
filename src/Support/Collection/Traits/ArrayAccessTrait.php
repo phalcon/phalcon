@@ -48,7 +48,7 @@ trait ArrayAccessTrait
      *
      * @return bool
      */
-    public function offsetExists($element): bool
+    public function offsetExists(mixed $element): bool
     {
         $element = (string)$element;
 
@@ -64,7 +64,7 @@ trait ArrayAccessTrait
      *
      * @return mixed
      */
-    public function offsetGet($element)
+    public function offsetGet(mixed $element): mixed
     {
         $element = (string)$element;
 
@@ -79,7 +79,7 @@ trait ArrayAccessTrait
      * @param mixed $element
      * @param mixed $value
      */
-    public function offsetSet($element, $value): void
+    public function offsetSet(mixed $element, mixed $value): void
     {
         $element = (string)$element;
 
@@ -93,7 +93,7 @@ trait ArrayAccessTrait
      *
      * @param mixed $element
      */
-    public function offsetUnset($element): void
+    public function offsetUnset(mixed $element): void
     {
         $element = (string)$element;
 

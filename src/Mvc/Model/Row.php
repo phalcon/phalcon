@@ -42,7 +42,7 @@ class Row implements EntityInterface, ResultInterface, ArrayAccess, JsonSerializ
      *
      * @return bool
      */
-    public function offsetExists(mixed $index)
+    public function offsetExists(mixed $index): bool
     {
         return isset($this->$index);
     }
@@ -55,7 +55,7 @@ class Row implements EntityInterface, ResultInterface, ArrayAccess, JsonSerializ
      * @return string|ModelInterface
      * @throws Exception
      */
-    public function offsetGet(mixed $index)
+    public function offsetGet(mixed $index): string|ModelInterface
     {
         if (true !== $this->offsetExists($index)) {
             throw new Exception("The index does not exist in the row");
@@ -74,7 +74,7 @@ class Row implements EntityInterface, ResultInterface, ArrayAccess, JsonSerializ
      * @return void
      * @throws Exception
      */
-    public function offsetSet(mixed $offset, mixed $value)
+    public function offsetSet(mixed $offset, mixed $value): void
     {
         throw new Exception("Row is an immutable ArrayAccess object");
     }
@@ -88,7 +88,7 @@ class Row implements EntityInterface, ResultInterface, ArrayAccess, JsonSerializ
      * @return void
      * @throws Exception
      */
-    public function offsetUnset(mixed $offset)
+    public function offsetUnset(mixed $offset): void
     {
         throw new Exception("Row is an immutable ArrayAccess object");
     }

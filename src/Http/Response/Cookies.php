@@ -336,7 +336,7 @@ class Cookies extends AbstractInjectionAware implements CookiesInterface
              */
             $response->setCookies($this);
 
-            $this->registered = true;
+            $this->isRegistered = true;
         }
 
         return $this;

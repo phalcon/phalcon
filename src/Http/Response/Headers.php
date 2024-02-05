@@ -56,9 +56,9 @@ class Headers implements HeadersInterface, IteratorAggregate
     }
 
     /**
-     * @return array|Generator|Traversable
+     * @return Traversable
      */
-    public function getIterator()
+    public function getIterator(): Traversable
     {
         foreach ($this->headers as $index => $header) {
             yield $index => $header;

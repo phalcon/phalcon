@@ -47,7 +47,7 @@ abstract class AbstractAdapter implements SessionHandlerInterface
      *
      * @return bool
      */
-    public function destroy($sessionId): bool
+    public function destroy(string $sessionId): bool
     {
         if (true !== empty($sessionId) && $this->adapter->has($sessionId)) {
             return $this->adapter->delete($sessionId);
@@ -59,11 +59,11 @@ abstract class AbstractAdapter implements SessionHandlerInterface
     /**
      * Garbage Collector
      *
-     * @param int $maxlifetime
+     * @param int $maxLifetime
      *
-     * @return bool
+     * @return false|int
      */
-    public function gc($maxlifetime): bool
+    public function gc(int $maxLifetime): false|int
     {
         return true;
     }
@@ -76,7 +76,7 @@ abstract class AbstractAdapter implements SessionHandlerInterface
      *
      * @return bool
      */
-    public function open($savePath, $sessionName): bool
+    public function open(string $savePath, string $sessionName): bool
     {
         return true;
     }
@@ -88,7 +88,7 @@ abstract class AbstractAdapter implements SessionHandlerInterface
      *
      * @return string
      */
-    public function read($sessionId): string
+    public function read(string $sessionId): string
     {
         $data = $this->adapter->get($sessionId);
 
@@ -104,7 +104,7 @@ abstract class AbstractAdapter implements SessionHandlerInterface
      *
      * @return bool
      */
-    public function write($sessionId, $data): bool
+    public function write(string $sessionId, string $data): bool
     {
         return $this->adapter->set($sessionId, $data);
     }

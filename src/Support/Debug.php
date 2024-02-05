@@ -60,7 +60,7 @@ class Debug
     /**
      * @var bool
      */
-    protected static bool $isActive;
+    protected bool $isActive;
     /**
      * @var bool
      */
@@ -241,11 +241,11 @@ class Debug
         /**
          * Avoid that multiple exceptions being showed
          */
-        if (true !== self::$isActive) {
+        if (true !== $this->isActive) {
             /**
              * Globally block the debug component to avoid other exceptions to be shown
              */
-            self::$isActive = true;
+            $this->isActive = true;
 
             /**
              * Print the HTML, @TODO, add an option to store the HTML
@@ -255,7 +255,7 @@ class Debug
             /**
              * Unlock the exception renderer
              */
-            self::$isActive = false;
+            $this->isActive = false;
 
             return true;
         }
