@@ -54,7 +54,7 @@ class GcCest
         sleep(2);
 
         $actual = $adapter->gc(1);
-        $I->assertTrue($actual);
+        $I->assertNotFalse($actual);
 
         $I->dontSeeFileFound('gc_1', cacheDir('sessions'));
         $I->dontSeeFileFound('gc_2', cacheDir('sessions'));

@@ -46,7 +46,7 @@ class GcCest
          */
         sleep(2);
         $actual = $adapter->gc(1);
-        $I->assertTrue($actual);
+        $I->assertNotFalse($actual);
         $I->dontSeeInMemcached('sess-memc-gc_1');
         $I->dontSeeInMemcached('sess-memc-gc_2');
     }
