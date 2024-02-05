@@ -3,16 +3,6 @@
 version: '3'
 
 services:
-  phalcon-8.0:
-    container_name: phalcon-8.0
-    hostname: phalcon-80
-    build: docker/8.0
-    working_dir: /srv
-    volumes:
-      - .:/srv
-    extra_hosts:
-      - "host.docker.internal:host-gateway"
-
   phalcon-8.1:
     container_name: phalcon-8.1
     hostname: phalcon-81
