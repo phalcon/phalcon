@@ -111,8 +111,6 @@ jobs:
 #          # macOS
 #          - { name: macos-clang, os: macos-12, compiler: clang }
 #          # Windows
-#          - { php: '8.0', ts: 'ts',  arch: 'x64', name: 'windows2019-vs16', os: 'windows-2019', compiler: 'vs16' }
-#          - { php: '8.0', ts: 'nts', arch: 'x64', name: 'windows2019-vs16', os: 'windows-2019', compiler: 'vs16' }
 #          - { php: '8.1', ts: 'ts',  arch: 'x64', name: 'windows2019-vs16', os: 'windows-2019', compiler: 'vs16' }
 #          - { php: '8.1', ts: 'nts', arch: 'x64', name: 'windows2019-vs16', os: 'windows-2019', compiler: 'vs16' }
 
@@ -197,8 +195,6 @@ jobs:
     #          # macOS
     #          - { name: macos-clang, os: macos-11, compiler: clang }
     #          # Windows
-    #          - { php: '8.0', ts: 'ts',  arch: 'x64', name: 'windows2019-vs16', os: 'windows-2019', compiler: 'vs16' }
-    #          - { php: '8.0', ts: 'nts', arch: 'x64', name: 'windows2019-vs16', os: 'windows-2019', compiler: 'vs16' }
     #          - { php: '8.1', ts: 'ts',  arch: 'x64', name: 'windows2019-vs16', os: 'windows-2019', compiler: 'vs16' }
     #          - { php: '8.1', ts: 'nts', arch: 'x64', name: 'windows2019-vs16', os: 'windows-2019', compiler: 'vs16' }
 
@@ -277,9 +273,9 @@ jobs:
       fail-fast: true
       matrix:
         php:
-          - '8.0'
           - '8.1'
-    #          - '8.2'
+#          - '8.2'
+#          - '8.3'
 
     steps:
       - uses: actions/checkout@v3
@@ -349,7 +345,6 @@ jobs:
   #      fail-fast: true
   #      matrix:
   #        php:
-  #          - '8.0'
   #          - '8.1'
   #
   #    services:
@@ -452,9 +447,9 @@ jobs:
       fail-fast: true
       matrix:
         php:
-          - '8.0'
           - '8.1'
-    #          - '8.2'
+#          - '8.2'
+#          - '8.3'
 
     services:
       mysql:
@@ -541,7 +536,6 @@ jobs:
   #      fail-fast: true
   #      matrix:
   #        php:
-  #          - '8.0'
   #          - '8.1'
   #
   #    services:
@@ -634,9 +628,9 @@ jobs:
       fail-fast: true
       matrix:
         php:
-          - '8.0'
           - '8.1'
-    #          - '8.2'
+#          - '8.2'
+#          - '8.3'
 
     steps:
       - uses: actions/checkout@v3
