@@ -3,31 +3,28 @@
 namespace Helper;
 
 use Codeception\Module;
-use PHPUnit\Framework\SkippedTestError;
-
+use PHPUnit\Framework\SkippedTestSuiteError;
 use ReflectionClass;
 use ReflectionException;
+
 use function array_slice;
 use function array_unshift;
 use function call_user_func_array;
 use function extension_loaded;
 use function file_exists;
 use function func_get_args;
+use function gc_collect_cycles;
 use function glob;
 use function is_dir;
 use function is_file;
 use function is_object;
 use function rmdir;
 use function sprintf;
-use function strtolower;
 use function substr;
 use function uniqid;
 use function unlink;
 
-use const DIRECTORY_SEPARATOR;
 use const GLOB_MARK;
-use const PHP_EOL;
-use const PHP_OS;
 
 // here you can define custom actions
 // all public methods declared in helper class will be available in $I
@@ -38,7 +35,7 @@ class Unit extends Module
      * Calls private or protected method.
      *
      * @param string|object $obj
-     * @param string $method
+     * @param string        $method
      *
      * @return mixed
      * @throws ReflectionException
@@ -165,6 +162,6 @@ class Unit extends Module
      */
     public function skipTest(string $message)
     {
-        throw new SkippedTestError($message);
+        throw new SkippedTestSuiteError($message);
     }
 }
