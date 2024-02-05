@@ -175,7 +175,7 @@ final class Registry extends Collection
      *
      * @link https://php.net/manual/en/arrayaccess.offsetexists.php
      */
-    final public function offsetExists($element): bool
+    final public function offsetExists(mixed $element): bool
     {
         return parent::has($element);
     }
@@ -185,7 +185,7 @@ final class Registry extends Collection
      *
      * @link https://php.net/manual/en/arrayaccess.offsetget.php
      */
-    final public function offsetGet($element)
+    final public function offsetGet(mixed $element): mixed
     {
         return parent::get($element);
     }
@@ -195,7 +195,7 @@ final class Registry extends Collection
      *
      * @link https://php.net/manual/en/arrayaccess.offsetset.php
      */
-    final public function offsetSet($element, $value): void
+    final public function offsetSet(mixed $element, mixed $value): void
     {
         parent::set((string)$element, $value);
     }
@@ -205,7 +205,7 @@ final class Registry extends Collection
      *
      * @link https://php.net/manual/en/arrayaccess.offsetunset.php
      */
-    final public function offsetUnset($element): void
+    final public function offsetUnset(mixed $element): void
     {
         parent::remove($element);
     }

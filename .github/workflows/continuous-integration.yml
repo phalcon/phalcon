@@ -76,7 +76,11 @@ jobs:
 
       - name: "PHPCS"
         run: |
-          vendor/bin/phpcs --standard=./phpcs.xml
+          composer cs
+
+      - name: "Psalm"
+        run: |
+          composer analyze
 
   unit-tests:
     needs: phpcs

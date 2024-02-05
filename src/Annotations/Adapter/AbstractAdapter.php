@@ -180,6 +180,15 @@ abstract class AbstractAdapter implements AdapterInterface
     }
 
     /**
+     * Reads parsed annotations
+     *
+     * @param string $key
+     *
+     * @return Reflection|bool
+     */
+    abstract public function read(string $key): Reflection | bool;
+
+    /**
      * Sets the annotations parser
      *
      * @param ReaderInterface $reader
@@ -190,4 +199,14 @@ abstract class AbstractAdapter implements AdapterInterface
     {
         $this->reader = $reader;
     }
+
+    /**
+     * Writes parsed annotations
+     *
+     * @param string     $key
+     * @param Reflection $data
+     *
+     * @return void
+     */
+    abstract public function write(string $key, Reflection $data): bool;
 }

@@ -104,9 +104,9 @@ trait MessagesHelperTrait
      *
      * @param mixed $offset
      *
-     * @return mixed|null
+     * @return mixed
      */
-    public function offsetGet($offset)
+    public function offsetGet($offset): mixed
     {
         return $this->messages[$offset] ?? null;
     }

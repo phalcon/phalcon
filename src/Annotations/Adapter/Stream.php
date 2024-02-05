@@ -65,9 +65,9 @@ class Stream extends AbstractAdapter
      *
      * @param string $key
      *
-     * @return Reflection|bool|int
+     * @return Reflection|bool
      */
-    public function read(string $key): Reflection | bool | int
+    public function read(string $key): Reflection | bool
     {
         /**
          * Paths must be normalized before be used as keys
@@ -114,7 +114,7 @@ class Stream extends AbstractAdapter
      * @return void
      * @throws Exception
      */
-    public function write(string $key, Reflection $data): void
+    public function write(string $key, Reflection $data): bool
     {
         /**
          * Paths must be normalized before be used as keys
@@ -127,6 +127,8 @@ class Stream extends AbstractAdapter
                 "Annotations directory cannot be written"
             );
         }
+
+        return true;
     }
 
     /**
