@@ -144,7 +144,7 @@ class Stream extends Noop
             }
         }
 
-        return true;
+        return 1;
     }
 
     /**
