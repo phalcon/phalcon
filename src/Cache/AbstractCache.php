@@ -24,7 +24,7 @@ use Traversable;
  *
  * @property AdapterInterface $adapter
  */
-abstract class AbstractCache implements CacheInterface
+abstract class AbstractCache
 {
     /**
      * The adapter
