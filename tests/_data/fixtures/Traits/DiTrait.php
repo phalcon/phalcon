@@ -34,6 +34,11 @@ use Phalcon\Filter;
 use Phalcon\Html\TagFactory;
 use Phalcon\Http\Request;
 use Phalcon\Http\Response;
+use Phalcon\Mvc\Model\MetaData\Apcu as MetaDataApcu;
+use Phalcon\Mvc\Model\MetaData\Memory as MetaDataMemory;
+use Phalcon\Mvc\Model\MetaData\Libmemcached as MetaDataMemcached;
+use Phalcon\Mvc\Model\MetaData\Redis as MetaDataRedis;
+use Phalcon\Mvc\Model\MetaData\Stream as MetaDataStream;
 use Phalcon\Mvc\View;
 use Phalcon\Session\Adapter\Libmemcached as SessionLibmemcached;
 use Phalcon\Session\Adapter\Noop as SessionNoop;
@@ -167,6 +172,27 @@ trait DiTrait
                 return new FactoryDefault();
             case 'filter':
                 return (new Filter\FilterFactory())->newInstance();
+            case 'metadataMemory':
+                return new MetaDataMemory();
+            case 'metadataApcu':
+                return new MetaDataApcu(
+                    new AdapterFactory(new SerializerFactory()),
+                    []
+                );
+            case 'metadataLibmemcached':
+                return new MetaDataMemcached(
+                    new AdapterFactory(new SerializerFactory()),
+                    getOptionsLibmemcached()
+                );
+            case 'metadataRedis':
+                return new MetaDataRedis(
+                    new AdapterFactory(new SerializerFactory()),
+                    getOptionsRedis()
+                );
+            case 'metadataStream':
+                return new MetaDataStream(
+                    ['options' => ['storageDir' => outputDir()] ],
+                );
             case 'modelsCacheLibmemcached':
                 return new StorageLibmemcached(
                     new SerializerFactory(),
@@ -247,7 +273,7 @@ trait DiTrait
             case 'eventsManager':
             case 'filter':
 //            case 'modelsManager':
-//            case 'modelsMetadata':
+            case 'modelsMetadata':
             case 'request':
             case 'response':
                 $this->container->set($service, $class);

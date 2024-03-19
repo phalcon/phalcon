@@ -94,7 +94,7 @@ class FactoryDefault extends Di
             'filter'        => new Service($filterFactory->newInstance(), true),
             'helper'        => new Service(HelperFactory::class, true),
             //            'modelsManager'      => new Service('Phalcon\\Mvc\\Model\\Manager', true),
-            //            'modelsMetadata'     => new Service('Phalcon\\Mvc\\Model\\MetaData\\Memory', true),
+            'modelsMetadata'     => new Service('Phalcon\\Mvc\\Model\\MetaData\\Memory', true),
             'request'       => new Service(Request::class, true),
             'response'      => new Service(Response::class, true),
             'router'        => new Service(Router::class, true),
