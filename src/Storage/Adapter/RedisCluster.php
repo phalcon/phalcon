@@ -19,7 +19,6 @@ use Phalcon\Storage\Exception as StorageException;
 use Phalcon\Storage\SerializerFactory;
 use Phalcon\Support\Exception as SupportException;
 use RedisCluster as RedisService;
-
 use Throwable;
 
 use function defined;
@@ -57,12 +56,14 @@ class RedisCluster extends Redis
      * If you don't have cluster seeds configured in your redis.ini,
      * you should pass hosts as an array, eg. `$options = ["hosts" => ["a-host:7000", "b-host:7001"]]`.
      *
-     * You can provide authentication data offering a string `user=password` or array `["user" => "name", "password" => "secret"]`.
+     * You can provide authentication data offering a string `user=password` or
+     * array `["user" => "name", "password" => "secret"]`.
      *
-     * `timeout` is the amount of time library will wait when connecting or writing to the cluster
+     * The `timeout` is the amount of time library will wait when connecting or writing to the cluster
      * `readTimeout` is the amount of time library will wait for a result from the cluster.
      *
-     * `context` is an array of values used for ssl/tls stream context options eg `["verify_peer" => 0, "local_cert" => "file:///path/to/cert.pem"]`
+     * The `context` is an array of values used for ssl/tls stream context
+     * options eg `["verify_peer" => 0, "local_cert" => "file:///path/to/cert.pem"]`
      *
      * @param SerializerFactory $factory
      * @param array{
