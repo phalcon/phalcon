@@ -21,6 +21,7 @@ use Phalcon\Cache\Adapter\Apcu;
 use Phalcon\Cache\Adapter\Libmemcached;
 use Phalcon\Cache\Adapter\Memory;
 use Phalcon\Cache\Adapter\Redis;
+use Phalcon\Cache\Adapter\RedisCluster;
 use Phalcon\Cache\Adapter\Stream;
 use Phalcon\Storage\Exception as CacheException;
 use Phalcon\Storage\SerializerFactory;
@@ -29,6 +30,7 @@ use Phalcon\Tests\Fixtures\Cache\Adapter\Libmemcached as LibmemcachedFixture;
 
 use function getOptionsLibmemcached;
 use function getOptionsRedis;
+use function getOptionsRedisCluster;
 use function outputDir;
 use function sprintf;
 
@@ -185,6 +187,13 @@ class ConstructCest
                 'label'     => 'default',
                 'class'     => Redis::class,
                 'options'   => getOptionsRedis(),
+                'extension' => 'redis',
+            ],
+            [
+                'className' => 'RedisCluster',
+                'label'     => 'default',
+                'class'     => RedisCluster::class,
+                'options'   => getOptionsRedisCluster(),
                 'extension' => 'redis',
             ],
             [
