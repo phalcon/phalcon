@@ -50,11 +50,11 @@ class Redis extends AbstractAdapter
         SerializerFactory $factory,
         array $options = []
     ) {
-        $options = $this->getDefaultOptions( $options );
+        $options = $this->getDefaultOptions($options);
         parent::__construct($factory, $options);
     }
 
-    protected function getDefaultOptions( $options ): array
+    protected function getDefaultOptions($options): array
     {
         /**
          * Lets set some defaults and options here
