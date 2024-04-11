@@ -13,6 +13,8 @@ declare(strict_types=1);
 
 namespace Phalcon\Storage\Adapter;
 
+use DateInterval;
+use Exception as BaseException;
 use Phalcon\Storage\Exception as StorageException;
 use Phalcon\Storage\SerializerFactory;
 use Phalcon\Support\Exception as SupportException;
@@ -21,6 +23,8 @@ use Redis as RedisConsts;
 use Throwable;
 
 use function defined;
+use function is_bool;
+use function is_int;
 use function mb_strtolower;
 
 /**
@@ -112,6 +116,21 @@ class RedisCluster extends Redis
     }
 
     /**
+     * Decrements a stored number
+     *
+     * @param string $key
+     * @param int $value
+     *
+     * @return int
+     * @throws StorageException|SupportException
+     */
+    public function decrement(string $key, int $value = 1)
+    {
+        return $this->getAdapter()
+            ->decrBy($key, $value);
+    }
+
+    /**
      * Reads data from the adapter
      *
      * @param string $key
@@ -148,6 +167,7 @@ class RedisCluster extends Redis
                     $options["context"]
                 );
             } catch (Throwable $e) {
+                var_dump($options);
                 throw new StorageException(
                     sprintf(
                         "Could not connect to the Redis cluster server due to: %s",
@@ -164,6 +184,100 @@ class RedisCluster extends Redis
         }
 
         return $this->adapter;
+    }
+
+    /**
+     * Stores data in the adapter
+     *
+     * @param string $prefix
+     *
+     * @return array
+     * @throws StorageException|SupportException
+     */
+    public function getKeys(string $prefix = ''): array
+    {
+        return $this->getFilteredKeys(
+            $this->getAdapter()
+                ->keys('*'),
+            $prefix
+        );
+    }
+
+    /**
+     * Checks if an element exists in the cache
+     *
+     * @param string $key
+     *
+     * @return bool
+     * @throws StorageException|SupportException
+     */
+    public function has(string $key): bool
+    {
+        return (bool)$this->getAdapter()
+            ->exists($key);
+    }
+
+    /**
+     * Increments a stored number
+     *
+     * @param string $key
+     * @param int $value
+     *
+     * @return int
+     * @throws StorageException|SupportException
+     */
+    public function increment(string $key, int $value = 1)
+    {
+        return $this->getAdapter()
+            ->incrBy($key, $value);
+    }
+
+    /**
+     * Stores data in the adapter. If the TTL is `null` (default) or not defined
+     * then the default TTL will be used, as set in this adapter. If the TTL
+     * is `0` or a negative number, a `delete()` will be issued, since this
+     * item has expired. If you need to set this key forever, you should use
+     * the `setForever()` method.
+     *
+     * @param string $key
+     * @param mixed $value
+     * @param DateInterval|int|null $ttl
+     *
+     * @return bool
+     * @throws BaseException
+     */
+    public function set(string $key, $value, $ttl = null): bool
+    {
+        if (true === is_int($ttl) && $ttl < 1) {
+            return $this->delete($key);
+        }
+
+        $result = $this->getAdapter()
+            ->set(
+                $key,
+                $this->getSerializedData($value),
+                $this->getTtl($ttl)
+            );
+
+        return is_bool($result) ? $result : false;
+    }
+
+    /**
+     * Stores data in the adapter forever. The key needs to manually deleted
+     * from the adapter.
+     *
+     * @param string $key
+     * @param mixed $value
+     *
+     * @return bool
+     * @throws StorageException|SupportException
+     */
+    public function setForever(string $key, $value): bool
+    {
+        $result = $this->getAdapter()
+            ->set($key, $this->getSerializedData($value));
+
+        return is_bool($result) ? $result : false;
     }
 
     /**

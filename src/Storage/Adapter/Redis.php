@@ -19,7 +19,6 @@ use Phalcon\Storage\Exception as StorageException;
 use Phalcon\Storage\SerializerFactory;
 use Phalcon\Support\Exception as SupportException;
 use Redis as RedisService;
-use RedisException;
 
 use function constant;
 use function defined;
@@ -43,7 +42,9 @@ class Redis extends AbstractAdapter
      * Redis constructor.
      *
      * @param SerializerFactory $factory
-     * @param array             $options
+     * @param array $options
+     *
+     * @throws SupportException
      */
     public function __construct(
         SerializerFactory $factory,
@@ -58,17 +59,17 @@ class Redis extends AbstractAdapter
         /**
          * Lets set some defaults and options here
          */
-        $options["host"]           = $options["host"] ?? "127.0.0.1";
-        $options["port"]           = (int)($options["port"] ?? 6379);
-        $options["index"]          = $options["index"] ?? 0;
-        $options["timeout"]        = $options["timeout"] ?? 0;
-        $options["persistent"]     = (bool)($options["persistent"] ?? false);
-        $options["persistentId"]   = (string)($options["persistentId"] ?? "");
-        $options["auth"]           = $options["auth"] ?? "";
-        $options["socket"]         = $options["socket"] ?? "";
+        $options["host"] = $options["host"] ?? "127.0.0.1";
+        $options["port"] = (int)($options["port"] ?? 6379);
+        $options["index"] = $options["index"] ?? 0;
+        $options["timeout"] = $options["timeout"] ?? 0;
+        $options["persistent"] = (bool)($options["persistent"] ?? false);
+        $options["persistentId"] = (string)($options["persistentId"] ?? "");
+        $options["auth"] = $options["auth"] ?? "";
+        $options["socket"] = $options["socket"] ?? "";
         $options["connectTimeout"] = $options["connectTimeout"] ?? 0;
-        $options["retryInterval"]  = $options["retryInterval"] ?? 0;
-        $options["readTimeout"]    = $options["readTimeout"] ?? 0;
+        $options["retryInterval"] = $options["retryInterval"] ?? 0;
+        $options["readTimeout"] = $options["readTimeout"] ?? 0;
 
         return $options;
     }
@@ -77,33 +78,27 @@ class Redis extends AbstractAdapter
      * Flushes/clears the cache
      *
      * @return bool
-     * @throws RedisException
      * @throws StorageException
-     * @throws SupportException
      */
     public function clear(): bool
     {
         return $this->getAdapter()
-                    ->flushDB()
-        ;
+            ->flushDB();
     }
 
     /**
      * Decrements a stored number
      *
      * @param string $key
-     * @param int    $value
+     * @param int $value
      *
-     * @return bool|int|RedisService
-     * @throws RedisException
+     * @return bool|int
      * @throws StorageException
-     * @throws SupportException
      */
     public function decrement(string $key, int $value = 1)
     {
         return $this->getAdapter()
-                    ->decrBy($key, $value)
-        ;
+            ->decrBy($key, $value);
     }
 
     /**
@@ -112,15 +107,12 @@ class Redis extends AbstractAdapter
      * @param string $key
      *
      * @return bool
-     * @throws RedisException
      * @throws StorageException
-     * @throws SupportException
      */
     public function delete(string $key): bool
     {
         return (bool)$this->getAdapter()
-                          ->unlink($key)
-        ;
+            ->unlink($key);
     }
 
     /**
@@ -128,9 +120,7 @@ class Redis extends AbstractAdapter
      * server(s)
      *
      * @return mixed|RedisService
-     * @throws RedisException
      * @throws StorageException
-     * @throws SupportException
      */
     public function getAdapter()
     {
@@ -140,8 +130,7 @@ class Redis extends AbstractAdapter
             $this
                 ->checkConnect($connection)
                 ->checkAuth($connection)
-                ->checkIndex($connection)
-            ;
+                ->checkIndex($connection);
 
             $connection->setOption(RedisService::OPT_PREFIX, $this->prefix);
 
@@ -158,14 +147,13 @@ class Redis extends AbstractAdapter
      * @param string $prefix
      *
      * @return array
-     * @throws RedisException
      * @throws StorageException
      */
     public function getKeys(string $prefix = ''): array
     {
         return $this->getFilteredKeys(
             $this->getAdapter()
-                 ->keys('*'),
+                ->keys('*'),
             $prefix
         );
     }
@@ -176,31 +164,27 @@ class Redis extends AbstractAdapter
      * @param string $key
      *
      * @return bool
-     * @throws RedisException
      * @throws StorageException
      */
     public function has(string $key): bool
     {
         return (bool)$this->getAdapter()
-                          ->exists($key)
-        ;
+            ->exists($key);
     }
 
     /**
      * Increments a stored number
      *
      * @param string $key
-     * @param int    $value
+     * @param int $value
      *
-     * @return bool|int|RedisService
-     * @throws RedisException
+     * @return bool|false|int
      * @throws StorageException
      */
     public function increment(string $key, int $value = 1)
     {
         return $this->getAdapter()
-                    ->incrBy($key, $value)
-        ;
+            ->incrBy($key, $value);
     }
 
     /**
@@ -210,8 +194,8 @@ class Redis extends AbstractAdapter
      * item has expired. If you need to set this key forever, you should use
      * the `setForever()` method.
      *
-     * @param string                $key
-     * @param mixed                 $value
+     * @param string $key
+     * @param mixed $value
      * @param DateInterval|int|null $ttl
      *
      * @return bool
@@ -224,12 +208,11 @@ class Redis extends AbstractAdapter
         }
 
         $result = $this->getAdapter()
-                       ->set(
-                           $key,
-                           $this->getSerializedData($value),
-                           $this->getTtl($ttl)
-                       )
-        ;
+            ->set(
+                $key,
+                $this->getSerializedData($value),
+                $this->getTtl($ttl)
+            );
 
         return is_bool($result) ? $result : false;
     }
@@ -239,17 +222,14 @@ class Redis extends AbstractAdapter
      * from the adapter.
      *
      * @param string $key
-     * @param mixed  $data
+     * @param mixed $value
      *
      * @return bool
-     * @throws RedisException
-     * @throws StorageException
      */
-    public function setForever(string $key, mixed $data): bool
+    public function setForever(string $key, $value): bool
     {
         $result = $this->getAdapter()
-                       ->set($key, $this->getSerializedData($data))
-        ;
+            ->set($key, $this->getSerializedData($value));
 
         return is_bool($result) ? $result : false;
     }
@@ -287,20 +267,20 @@ class Redis extends AbstractAdapter
      */
     private function checkConnect(RedisService $connection): Redis
     {
-        $options       = $this->options;
-        $host          = $options["host"];
-        $port          = $options["port"];
-        $timeout       = $options["timeout"];
+        $options = $this->options;
+        $host = $options["host"];
+        $port = $options["port"];
+        $timeout = $options["timeout"];
         $retryInterval = $options["retryInterval"];
-        $readTimeout   = $options["readTimeout"];
+        $readTimeout = $options["readTimeout"];
 
         if (true === $options["persistent"]) {
-            $method    = "connect";
+            $method = "connect";
             $parameter = null;
         } else {
-            $method       = "pconnect";
+            $method = "pconnect";
             $persistentId = $options["persistentId"];
-            $parameter    = !empty($persistentId) ?: "persistentId" . $options["index"];
+            $parameter = !empty($persistentId) ?: "persistentId" . $options["index"];
         }
 
         $result = $connection->$method(
@@ -329,7 +309,6 @@ class Redis extends AbstractAdapter
      * @param RedisService $connection
      *
      * @return Redis
-     * @throws RedisException
      * @throws StorageException
      */
     private function checkIndex(RedisService $connection): Redis
@@ -350,15 +329,12 @@ class Redis extends AbstractAdapter
      * the custom one is set.
      *
      * @param RedisService $connection
-     *
-     * @return void
-     * @throws RedisException
      */
     private function setSerializer(RedisService $connection)
     {
         $map = [
             'redis_none' => RedisService::SERIALIZER_NONE,
-            'redis_php'  => RedisService::SERIALIZER_PHP,
+            'redis_php' => RedisService::SERIALIZER_PHP,
         ];
 
         /**
