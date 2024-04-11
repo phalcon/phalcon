@@ -32,12 +32,12 @@ use function mb_strtolower;
  *
  * @property array $options
  */
-class RedisCluster extends AbstractAdapter
+class RedisCluster extends Redis
 {
     /**
      * @var string
      */
-    protected string $prefix = 'ph-reds-';
+    protected string $prefix = 'ph-redc-';
 
     /**
      * You can create and connect to a cluster either by passing it one or more 'seed' nodes, or by defining
@@ -74,6 +74,7 @@ class RedisCluster extends AbstractAdapter
      *     auth: string|array,
      *     context: string
      * } $options
+     * @throws SupportException
      */
     public function __construct(
         SerializerFactory $factory,
