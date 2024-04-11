@@ -310,6 +310,16 @@ if (!function_exists('getOptionsRedis')) {
     }
 }
 
+if (!function_exists('getOptionsRedisCluster')) {
+    function getOptionsRedisCluster(): array
+    {
+        return [
+            'hosts' => explode(',', env('DATA_REDIS_CLUSTER_HOSTS')),
+            'auth' => env('DATA_REDIS_CLUSTER_AUTH')
+        ];
+    }
+}
+
 if (!function_exists('getOptionsSessionStream')) {
     /**
      * Get Session Stream options

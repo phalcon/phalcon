@@ -19,11 +19,13 @@ use Phalcon\Cache\Adapter\Apcu;
 use Phalcon\Cache\Adapter\Libmemcached;
 use Phalcon\Cache\Adapter\Memory;
 use Phalcon\Cache\Adapter\Redis;
+use Phalcon\Cache\Adapter\RedisCluster;
 use Phalcon\Cache\Adapter\Stream;
 use Phalcon\Storage\SerializerFactory;
 
 use function array_merge;
 use function getOptionsRedis;
+use function getOptionsRedisCluster;
 use function outputDir;
 use function sprintf;
 
@@ -193,6 +195,44 @@ class GetPrefixCest
                 'class'     => Redis::class,
                 'options'   => array_merge(
                     getOptionsRedis(),
+                    [
+                        'prefix' => 'my-prefix',
+                    ]
+                ),
+                'expected'  => 'my-prefix',
+                'extension' => 'redis',
+            ],
+            [
+                'className' => 'RedisCluster',
+                'label'     => 'default',
+                'class'     => RedisCluster::class,
+                'options'   => array_merge(
+                    getOptionsRedisCluster(),
+                    [
+                    ]
+                ),
+                'expected'  => 'ph-redc-',
+                'extension' => 'redis',
+            ],
+            [
+                'className' => 'RedisCluster',
+                'label'     => 'empty',
+                'class'     => RedisCluster::class,
+                'options'   => array_merge(
+                    getOptionsRedisCluster(),
+                    [
+                        'prefix' => '',
+                    ]
+                ),
+                'expected'  => '',
+                'extension' => 'redis',
+            ],
+            [
+                'className' => 'RedisCLuster',
+                'label'     => 'prefix set',
+                'class'     => RedisCluster::class,
+                'options'   => array_merge(
+                    getOptionsRedisCluster(),
                     [
                         'prefix' => 'my-prefix',
                     ]

@@ -19,6 +19,7 @@ use Phalcon\Storage\Exception as StorageException;
 use Phalcon\Storage\SerializerFactory;
 use Phalcon\Support\Exception as SupportException;
 use RedisCluster as RedisService;
+use Redis as RedisConsts;
 use Throwable;
 
 use function defined;
@@ -77,10 +78,13 @@ class RedisCluster extends Redis
      * } $options
      * @throws SupportException
      */
-    public function __construct(
-        SerializerFactory $factory,
-        array $options = []
-    ) {
+    public function __construct(SerializerFactory $factory, array $options = [])
+    {
+        parent::__construct($factory, $options);
+    }
+
+    protected function getDefaultOptions($options): array
+    {
         /**
          * Lets set some defaults and options here
          */
@@ -92,7 +96,7 @@ class RedisCluster extends Redis
         $options["auth"] = $options["auth"] ?? "";
         $options["context"] = $options["context"] ?? null;
 
-        parent::__construct($factory, $options);
+        return $options;
     }
 
     /**
@@ -163,16 +167,17 @@ class RedisCluster extends Redis
                     $options["context"]
                 );
             } catch (Throwable $e) {
+                var_dump($options);
                 throw new StorageException(
                     sprintf(
-                        "Could not connect to the Redis cluster server [%s]",
-                        $options["name"] ?? $options['hosts'],
+                        "Could not connect to the Redis cluster server due to: %s",
+                        $e->getMessage()
                     ),
                     previous: $e
                 );
             }
 
-            $connection->setOption(RedisService::OPT_PREFIX, $this->prefix);
+            $connection->setOption(RedisConsts::OPT_PREFIX, $this->prefix);
 
             $this->setSerializer($connection);
             $this->adapter = $connection;
@@ -208,7 +213,7 @@ class RedisCluster extends Redis
      */
     public function has(string $key): bool
     {
-        return $this->getAdapter()
+        return (bool)$this->getAdapter()
             ->exists($key);
     }
 
@@ -285,31 +290,31 @@ class RedisCluster extends Redis
     private function setSerializer(RedisService $connection): void
     {
         $map = [
-            'redis_none' => RedisService::SERIALIZER_NONE,
-            'redis_php' => RedisService::SERIALIZER_PHP,
+            'redis_none' => RedisConsts::SERIALIZER_NONE,
+            'redis_php' => RedisConsts::SERIALIZER_PHP,
         ];
 
         /**
          * In case IGBINARY or MSGPACK are not defined for previous versions
          * of Redis
          */
-        if (defined('\\RedisCluster::SERIALIZER_IGBINARY')) {
-            $map['redis_igbinary'] = \RedisCluster::SERIALIZER_IGBINARY;
+        if (defined('\\Redis::SERIALIZER_IGBINARY')) {
+            $map['redis_igbinary'] = RedisConsts::SERIALIZER_IGBINARY;
         }
 
-        if (defined('\\RedisCLuster::SERIALIZER_MSGPACK')) {
-            $map['redis_msgpack'] = \RedisCluster::SERIALIZER_MSGPACK;
+        if (defined('\\Redis::SERIALIZER_MSGPACK')) {
+            $map['redis_msgpack'] = RedisConsts::SERIALIZER_MSGPACK;
         }
 
-        if (defined('\\RedisCluster::SERIALIZER_JSON')) {
-            $map['redis_json'] = \RedisCluster::SERIALIZER_JSON;
+        if (defined('\\Redis::SERIALIZER_JSON')) {
+            $map['redis_json'] = RedisConsts::SERIALIZER_JSON;
         }
 
         $serializer = mb_strtolower($this->defaultSerializer);
 
         if (true === isset($map[$serializer])) {
             $this->defaultSerializer = '';
-            $connection->setOption(RedisService::OPT_SERIALIZER, $map[$serializer]);
+            $connection->setOption(RedisConsts::OPT_SERIALIZER, $map[$serializer]);
         }
 
         $this->initSerializer();
