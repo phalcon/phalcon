@@ -13,8 +13,6 @@ declare(strict_types=1);
 
 namespace Phalcon\Storage\Adapter;
 
-use DateInterval;
-use Exception as BaseException;
 use Phalcon\Storage\Exception as StorageException;
 use Phalcon\Storage\SerializerFactory;
 use Phalcon\Support\Exception as SupportException;
@@ -23,8 +21,6 @@ use Redis as RedisConsts;
 use Throwable;
 
 use function defined;
-use function is_bool;
-use function is_int;
 use function mb_strtolower;
 
 /**
