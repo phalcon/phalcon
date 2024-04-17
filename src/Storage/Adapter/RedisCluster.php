@@ -148,7 +148,6 @@ class RedisCluster extends Redis
                     $options["context"]
                 );
             } catch (Throwable $e) {
-                var_dump($options);
                 throw new StorageException(
                     sprintf(
                         "Could not connect to the Redis cluster server due to: %s",

@@ -19,6 +19,7 @@ use Phalcon\Storage\Adapter\Apcu;
 use Phalcon\Storage\Adapter\Libmemcached;
 use Phalcon\Storage\Adapter\Memory;
 use Phalcon\Storage\Adapter\Redis;
+use Phalcon\Storage\Adapter\RedisCluster;
 use Phalcon\Storage\Adapter\Stream;
 use Phalcon\Storage\SerializerFactory;
 use stdClass;
@@ -26,6 +27,7 @@ use stdClass;
 use function array_merge;
 use function getOptionsLibmemcached;
 use function getOptionsRedis;
+use function getOptionsRedisCluster;
 use function outputDir;
 use function sprintf;
 use function uniqid;
@@ -345,6 +347,88 @@ class GetSetCest
                 Redis::class,
                 array_merge(
                     getOptionsRedis(),
+                    [
+                        'persistent' => true,
+                    ]
+                ),
+                uniqid(),
+            ],
+            [
+                'RedisCLuster',
+                'null',
+                'redis',
+                RedisCluster::class,
+                getOptionsRedisCluster(),
+                null,
+            ],
+            [
+                'RedisCluster',
+                'true',
+                'redis',
+                RedisCluster::class,
+                getOptionsRedisCluster(),
+                true,
+            ],
+            [
+                'RedisCluster',
+                'false',
+                'redis',
+                RedisCluster::class,
+                getOptionsRedisCluster(),
+                false,
+            ],
+            [
+                'RedisCluster',
+                'integer',
+                'redis',
+                RedisCluster::class,
+                getOptionsRedisCluster(),
+                123456,
+            ],
+            [
+                'RedisCluster',
+                'float',
+                'redis',
+                RedisCluster::class,
+                getOptionsRedisCluster(),
+                123.456,
+            ],
+            [
+                'RedisCluster',
+                'string',
+                'redis',
+                RedisCluster::class,
+                getOptionsRedisCluster(),
+                uniqid(),
+            ],
+            [
+                'RedisCluster',
+                'object',
+                'redis',
+                RedisCluster::class,
+                getOptionsRedisCluster(),
+                new stdClass(),
+            ],
+            [
+                'RedisCluster',
+                'custom serializer',
+                'redis',
+                RedisCluster::class,
+                array_merge(
+                    getOptionsRedisCluster(),
+                    [
+                        'defaultSerializer' => 'Base64',
+                    ]
+                ),
+                uniqid(),
+            ],
+            [
+                'RedisCluster',
+                'persistent',
+                'redis',
+                RedisCluster::class,
+                array_merge(
+                    getOptionsRedisCluster(),
                     [
                         'persistent' => true,
                     ]

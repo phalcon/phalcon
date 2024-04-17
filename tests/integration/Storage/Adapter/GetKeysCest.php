@@ -13,6 +13,7 @@ declare(strict_types=1);
 
 namespace Phalcon\Tests\Integration\Storage\Adapter;
 
+use Codeception\Example;
 use Codeception\Stub;
 use IntegrationTester;
 use Phalcon\Storage\Adapter\AdapterInterface;
@@ -20,6 +21,7 @@ use Phalcon\Storage\Adapter\Apcu;
 use Phalcon\Storage\Adapter\Libmemcached;
 use Phalcon\Storage\Adapter\Memory;
 use Phalcon\Storage\Adapter\Redis;
+use Phalcon\Storage\Adapter\RedisCluster;
 use Phalcon\Storage\Adapter\Stream;
 use Phalcon\Storage\Exception as StorageException;
 use Phalcon\Storage\SerializerFactory;
@@ -171,6 +173,8 @@ class GetKeysCest
     /**
      * Tests Phalcon\Storage\Adapter\Redis :: getKeys()
      *
+     * @dataProvider getRedisExamples
+     *
      * @param IntegrationTester $I
      *
      * @throws HelperException
@@ -179,18 +183,32 @@ class GetKeysCest
      * @author Phalcon Team <team@phalcon.io>
      * @since  2020-09-09
      */
-    public function storageAdapterRedisGetKeys(IntegrationTester $I)
+    public function storageAdapterRedisGetKeys(IntegrationTester $I, Example $example)
     {
-        $I->wantToTest('Storage\Adapter\Redis - getKeys()');
+        $I->wantToTest(
+            sprintf(
+                'Storage\Adapter\%s - getKeys()',
+                $example['className']
+            )
+        );
+
+        $extension = $example['extension'];
+        $class     = $example['class'];
+        $options   = $example['options'];
+        $prefix   = $example['prefix'];
+
+        if (!empty($extension)) {
+            $I->checkExtensionIsLoaded($extension);
+        }
 
         $I->checkExtensionIsLoaded('redis');
 
         $serializer = new SerializerFactory();
-        $adapter    = new Redis($serializer, getOptionsRedis());
+        $adapter    = new $class($serializer, $options);
 
         $I->assertTrue($adapter->clear());
 
-        $this->runTest($adapter, $I, 'ph-reds-');
+        $this->runTest($adapter, $I, $prefix);
     }
 
     /**
@@ -396,5 +414,27 @@ class GetKeysCest
         $I->assertTrue($actual);
 
         return [$key1, $key2, $key3, $key4];
+    }
+
+    public function getRedisExamples(): array
+    {
+        return [
+            [
+                'className' => 'Redis',
+                'label'     => 'default',
+                'class'     => Redis::class,
+                'options'   => getOptionsRedis(),
+                'extension' => 'redis',
+                'prefix'    => 'ph-reds-',
+            ],
+            [
+                'className' => 'RedisCluster',
+                'label'     => 'default',
+                'class'     => RedisCluster::class,
+                'options'   => getOptionsRedisCluster(),
+                'extension' => 'redis',
+                'prefix'    => 'ph-redc-',
+            ],
+        ];
     }
 }

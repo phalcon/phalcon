@@ -19,11 +19,13 @@ use Phalcon\Storage\Adapter\Apcu;
 use Phalcon\Storage\Adapter\Libmemcached;
 use Phalcon\Storage\Adapter\Memory;
 use Phalcon\Storage\Adapter\Redis;
+use Phalcon\Storage\Adapter\RedisCluster;
 use Phalcon\Storage\Adapter\Stream;
 use Phalcon\Storage\SerializerFactory;
 
 use function getOptionsLibmemcached;
 use function getOptionsRedis;
+use function getOptionsRedisCluster;
 use function outputDir;
 use function sprintf;
 use function uniqid;
@@ -113,6 +115,13 @@ class DeleteCest
                 'label'     => 'default',
                 'class'     => Redis::class,
                 'options'   => getOptionsRedis(),
+                'extension' => 'redis',
+            ],
+            [
+                'className' => 'RedisCluster',
+                'label'     => 'default',
+                'class'     => RedisCluster::class,
+                'options'   => getOptionsRedisCluster(),
                 'extension' => 'redis',
             ],
             [
