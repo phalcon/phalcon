@@ -23,7 +23,7 @@ use Phalcon\Cache\Exception\InvalidArgumentException;
  *
  * @property AdapterInterface $adapter
  */
-class Cache extends AbstractCache
+class Cache extends AbstractCache implements CacheInterface
 {
     /**
      * Wipes clean the entire cache's keys.
