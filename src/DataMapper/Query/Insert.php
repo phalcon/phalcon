@@ -20,7 +20,6 @@ namespace Phalcon\DataMapper\Query;
 
 use Phalcon\DataMapper\Pdo\Connection;
 
-use function array_key_exists;
 use function is_int;
 
 /**
@@ -81,20 +80,6 @@ class Insert extends AbstractQuery
     }
 
     /**
-     * Adds table(s) in the query
-     *
-     * @param string $table
-     *
-     * @return Insert
-     */
-    public function into(string $table): self
-    {
-        $this->store["FROM"] = $table;
-
-        return $this;
-    }
-
-    /**
      * Returns the id of the last inserted record
      *
      * @param string|null $name
@@ -119,6 +104,31 @@ class Insert extends AbstractQuery
     }
 
     /**
+     * Adds table(s) in the query
+     *
+     * @param string $table
+     *
+     * @return Insert
+     */
+    public function into(string $table): self
+    {
+        $this->store["FROM"] = $table;
+
+        return $this;
+    }
+
+    /**
+     * Resets the internal store
+     */
+    public function reset(): void
+    {
+        parent::reset();
+
+        $this->store["FROM"]      = "";
+        $this->store["RETURNING"] = [];
+    }
+
+    /**
      * Adds the `RETURNING` clause
      *
      * @param array $columns
@@ -133,17 +143,6 @@ class Insert extends AbstractQuery
         );
 
         return $this;
-    }
-
-    /**
-     * Resets the internal store
-     */
-    public function reset(): void
-    {
-        parent::reset();
-
-        $this->store["FROM"]      = "";
-        $this->store["RETURNING"] = [];
     }
 
     /**
@@ -174,7 +173,7 @@ class Insert extends AbstractQuery
      */
     private function buildColumns(): string
     {
-        $columns = [];
+        $columns  = [];
         $keyArray = array_keys($this->store["COLUMNS"]);
         foreach ($keyArray as $column) {
             $columns[] = $this->quoteIdentifier($column);

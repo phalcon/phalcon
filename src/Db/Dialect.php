@@ -1345,10 +1345,10 @@ abstract class Dialect implements DialectInterface
          */
         if (isset($expression["left"])) {
             return $this->getSqlExpression(
-                    $expression["left"],
-                    $escapeChar,
-                    $bindCounts
-                ) . " " . $expression["op"];
+                $expression["left"],
+                $escapeChar,
+                $bindCounts
+            ) . " " . $expression["op"];
         }
 
         /**

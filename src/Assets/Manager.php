@@ -690,21 +690,21 @@ class Manager implements InjectionAwareInterface
                     $joinedContent .= $content;
                 } else {
                     $html .= $this->tagFactory->element(
-                            $type,
-                            $content,
-                            $attributes,
-                            true
-                        ) . PHP_EOL;
+                        $type,
+                        $content,
+                        $attributes,
+                        true
+                    ) . PHP_EOL;
                 }
             }
 
             if (true === $join) {
                 $html .= $this->tagFactory->element(
-                        $type,
-                        $joinedContent,
-                        $attributes,
-                        true
-                    ) . PHP_EOL;
+                    $type,
+                    $joinedContent,
+                    $attributes,
+                    true
+                ) . PHP_EOL;
             }
 
             /**
