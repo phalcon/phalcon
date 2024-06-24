@@ -24,11 +24,7 @@ use Phalcon\Logger\Enum;
 use Phalcon\Logger\LoggerInterface;
 
 /**
- *
  * A naive memory-based logger.
- *
- * @package Aura.Sql
- *
  */
 class MemoryLogger implements LoggerInterface
 {
