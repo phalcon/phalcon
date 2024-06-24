@@ -40,8 +40,10 @@ use function trim;
  * @method array  fetchAssoc(string $statement, array $values = [])
  * @method array  fetchColumn(string $statement, array $values = [], int $column = 0)
  * @method array  fetchGroup(string $statement, array $values = [], int $flags = PDO::FETCH_ASSOC)
- * @method object fetchObject(string $statement, array $values = [], string $className = "stdClass", array $arguments = [])
- * @method array  fetchObjects(string $statement, array $values = [], string $className = "stdClass", array $arguments = [])
+ * @method object fetchObject(string $statement, array $values = [], string $className = "stdClass", array $arguments =
+ *         [])
+ * @method array  fetchObjects(string $statement, array $values = [], string $className = "stdClass", array $arguments
+ *         = [])
  * @method array  fetchOne(string $statement, array $values = [])
  * @method array  fetchPairs(string $statement, array $values = [])
  * @method array  fetchUnique(string $statement, array $values = [])
@@ -92,12 +94,12 @@ class Select extends AbstractConditions
             return call_user_func_array(
                 [
                     $this->connection,
-                    $method
+                    $method,
                 ],
                 array_merge(
                     [
                         $this->getStatement(),
-                        $this->getBindValues()
+                        $this->getBindValues(),
                     ],
                     $params
                 )
@@ -124,20 +126,6 @@ class Select extends AbstractConditions
         int $type = -1
     ): self {
         $this->having($condition, $value, $type);
-
-        return $this;
-    }
-
-    /**
-     * The `AS` statement for the query - useful in sub-queries
-     *
-     * @param string $asAlias
-     *
-     * @return Select
-     */
-    public function asAlias(string $asAlias): self
-    {
-        $this->asAlias = $asAlias;
 
         return $this;
     }
@@ -188,6 +176,20 @@ class Select extends AbstractConditions
     }
 
     /**
+     * The `AS` statement for the query - useful in sub-queries
+     *
+     * @param string $asAlias
+     *
+     * @return Select
+     */
+    public function asAlias(string $asAlias): self
+    {
+        $this->asAlias = $asAlias;
+
+        return $this;
+    }
+
+    /**
      * The columns to select from. If a key is set in the array element, the
      * key will be used as the alias
      *
@@ -227,20 +229,6 @@ class Select extends AbstractConditions
     }
 
     /**
-     * Adds table(s) in the query
-     *
-     * @param string $table
-     *
-     * @return Select
-     */
-    public function from(string $table): self
-    {
-        $this->store["FROM"][] = [$table];
-
-        return $this;
-    }
-
-    /**
      * Enable the `FOR UPDATE` for the query
      *
      * @param bool $enable
@@ -250,6 +238,20 @@ class Select extends AbstractConditions
     public function forUpdate(bool $enable = true): self
     {
         $this->forUpdate = $enable;
+
+        return $this;
+    }
+
+    /**
+     * Adds table(s) in the query
+     *
+     * @param string $table
+     *
+     * @return Select
+     */
+    public function from(string $table): self
+    {
+        $this->store["FROM"][] = [$table];
 
         return $this;
     }
@@ -271,7 +273,7 @@ class Select extends AbstractConditions
      *
      * @return Select
      */
-    public function groupBy(array|string $groupBy): self
+    public function groupBy(array | string $groupBy): self
     {
         $this->processValue("GROUP", $groupBy);
 

@@ -123,6 +123,17 @@ class Update extends AbstractConditions
     }
 
     /**
+     * Resets the internal store
+     */
+    public function reset(): void
+    {
+        parent::reset();
+
+        $this->store["FROM"]      = "";
+        $this->store["RETURNING"] = [];
+    }
+
+    /**
      * Adds the `RETURNING` clause
      *
      * @param array $columns
@@ -137,17 +148,6 @@ class Update extends AbstractConditions
         );
 
         return $this;
-    }
-
-    /**
-     * Resets the internal store
-     */
-    public function reset(): void
-    {
-        parent::reset();
-
-        $this->store["FROM"]      = "";
-        $this->store["RETURNING"] = [];
     }
 
     /**

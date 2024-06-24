@@ -56,23 +56,6 @@ class Delete extends AbstractConditions
     }
 
     /**
-     * Adds the `RETURNING` clause
-     *
-     * @param array $columns
-     *
-     * @return Delete
-     */
-    public function returning(array $columns): self
-    {
-        $this->store["RETURNING"] = array_merge(
-            $this->store["RETURNING"],
-            $columns
-        );
-
-        return $this;
-    }
-
-    /**
      * @return string
      */
     public function getStatement(): string
@@ -93,5 +76,22 @@ class Delete extends AbstractConditions
 
         $this->store["FROM"]      = "";
         $this->store["RETURNING"] = [];
+    }
+
+    /**
+     * Adds the `RETURNING` clause
+     *
+     * @param array $columns
+     *
+     * @return Delete
+     */
+    public function returning(array $columns): self
+    {
+        $this->store["RETURNING"] = array_merge(
+            $this->store["RETURNING"],
+            $columns
+        );
+
+        return $this;
     }
 }
