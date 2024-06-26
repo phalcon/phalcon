@@ -296,6 +296,14 @@ jobs:
           redis-node-5-port: 5005
           sleep-duration: 5 # Define the sleep duration for docker to start and ready for accepting connections (Here we set default to 5seconds)
 
+      # Running Test
+      - name: Running Test
+        run: |
+          sudo apt-get install -y redis-tools
+          docker ps -a
+          redis-cli -h 127.0.0.1 -p 5000 ping
+          redis-cli -h 127.0.0.1 -p 5000 cluster nodes
+
       - name: "Setup PHP"
         uses: shivammathur/setup-php@v2
         with:
