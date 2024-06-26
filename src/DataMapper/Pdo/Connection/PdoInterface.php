@@ -169,7 +169,7 @@ interface PdoInterface
      *
      * @param string $statement
      * @param array  $values
-     * @param string $className
+     * @param string $class
      * @param array  $arguments
      *
      * @return array
@@ -177,7 +177,7 @@ interface PdoInterface
     public function fetchObjects(
         string $statement,
         array $values = [],
-        string $className = "stdClass",
+        string $class = "stdClass",
         array $arguments = []
     ): array;
 
