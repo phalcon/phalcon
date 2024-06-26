@@ -52,7 +52,7 @@ class Debug
     /**
      * @var mixed
      */
-    protected $data;
+    protected mixed $data;
     /**
      * @var bool
      */
@@ -61,6 +61,7 @@ class Debug
      * @var bool
      */
     protected static bool $isActive = false;
+
     /**
      * @var bool
      */
@@ -100,7 +101,7 @@ class Debug
      *
      * @return $this
      */
-    public function debugVar($variable): Debug
+    public function debugVar(mixed $variable): Debug
     {
         $this->data[] = [
             $variable,
@@ -225,6 +226,7 @@ class Debug
      * @param Throwable $exception
      *
      * @return bool
+     * @throws ReflectionException
      */
     public function onUncaughtException(Throwable $exception): bool
     {
@@ -542,7 +544,7 @@ class Debug
      *
      * @return string
      */
-    protected function getVarDump($variable): string
+    protected function getVarDump(mixed $variable): string
     {
         if (true === $variable) {
             return 'true';
