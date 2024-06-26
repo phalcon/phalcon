@@ -652,8 +652,8 @@ abstract class MetaData extends Injectable implements MetaDataInterface
      */
     public function write(string $key, array $data): void
     {
+        $option = $this->iniGetBool("orm.exception_on_failed_metadata_save");
         try {
-            $option = $this->iniGetBool("orm.exception_on_failed_metadata_save");
             $result = $this->adapter->set($key, $data);
             if (false === $result) {
                 $this->throwWriteException($option);

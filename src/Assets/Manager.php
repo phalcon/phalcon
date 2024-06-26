@@ -13,7 +13,6 @@ declare(strict_types=1);
 
 namespace Phalcon\Assets;
 
-use Exception as BaseException;
 use Phalcon\Assets\Asset\Css as AssetCss;
 use Phalcon\Assets\Asset\Js as AssetJs;
 use Phalcon\Assets\Inline\Css as InlineCss;
@@ -312,12 +311,12 @@ class Manager implements InjectionAwareInterface
      * @param string $name
      *
      * @return Collection
-     * @throws BaseException
+     * @throws Exception
      */
     public function get(string $name): Collection
     {
         if (true !== isset($this->collections[$name])) {
-            throw new BaseException('The collection does not exist in the manager');
+            throw new Exception('The collection does not exist in the manager');
         }
 
         return $this->collections[$name];

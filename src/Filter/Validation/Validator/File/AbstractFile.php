@@ -209,9 +209,9 @@ abstract class AbstractFile extends AbstractValidator
         string $field
     ): bool {
         $value  = $validation->getValue($field);
-        $server = $_SERVER ?? [];
-        $post   = $_POST ?? [];
-        $files  = $_FILES ?? [];
+        $server = $_SERVER;
+        $post   = $_POST;
+        $files  = $_FILES;
         $method = $server["REQUEST_METHOD"] ?? "GET";
         $length = $server["CONTENT_LENGTH"] ?? 0;
 
