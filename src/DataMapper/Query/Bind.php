@@ -135,8 +135,8 @@ class Bind
     /**
      * Processes an array - if passed as an `inline` parameter
      *
-     * @param array $array
-     * @param int   $type
+     * @param array<string, mixed> $data
+     * @param int                  $type
      *
      * @return string
      */

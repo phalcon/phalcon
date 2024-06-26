@@ -26,7 +26,7 @@ class InterpolatorFactory
     /**
      * InterpolatorFactor constructor.
      *
-     * @param array $services
+     * @param array<string, string> $services
      */
     public function __construct(array $services = [])
     {

@@ -39,8 +39,8 @@ class Csv extends AbstractAdapter implements ArrayAccess
     /**
      * Csv constructor.
      *
-     * @param InterpolatorFactory $interpolator
-     * @param array               $options   = [
+     * @param InterpolatorFactory   $interpolator
+     * @param array<string, string> $options   = [
      *                                       'content'   => '',
      *                                       'delimiter' => ';',
      *                                       'enclosure' => '"'
@@ -79,8 +79,8 @@ class Csv extends AbstractAdapter implements ArrayAccess
     /**
      * Returns the translation related to the given key
      *
-     * @param string $translateKey
-     * @param array  $placeholders
+     * @param string                $translateKey
+     * @param array<string, string> $placeholders
      *
      * @return string
      */

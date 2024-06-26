@@ -56,7 +56,7 @@ abstract class AbstractCache implements CacheInterface
     /**
      * Checks the key. If it contains invalid characters an exception is thrown
      *
-     * @param mixed $key
+     * @param string $key
      *
      * @throws InvalidArgumentException
      */
@@ -153,7 +153,7 @@ abstract class AbstractCache implements CacheInterface
      * @throws InvalidArgumentException MUST be thrown if the $key string is
      * not a legal value.
      */
-    protected function doGet(string $key, $default = null)
+    protected function doGet(string $key, mixed $default = null)
     {
         $this->checkKey($key);
 

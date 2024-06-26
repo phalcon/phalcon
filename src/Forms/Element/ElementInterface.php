@@ -179,9 +179,11 @@ interface ElementInterface
     /**
      * Generate the HTML to label the element
      *
+     * @param array $attributes
+     *
      * @return string
      */
-    public function label(): string;
+    public function label(array $attributes = []): string;
 
     /**
      * Renders the element widget

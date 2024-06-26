@@ -68,7 +68,7 @@ class Friendly
     }
 
     /**
-     * @param mixed $replace
+     * @param array<string, string> $replace
      *
      * @return array
      */

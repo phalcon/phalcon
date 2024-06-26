@@ -33,6 +33,13 @@ interface ColumnInterface
     public function getBindType(): int;
 
     /**
+     * Column's comment
+     *
+     * @return string
+     */
+    public function getComment(): string;
+
+    /**
      * Returns default value of column
      *
      * @return mixed

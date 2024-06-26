@@ -13,6 +13,7 @@ declare(strict_types=1);
 
 namespace Phalcon\Image\Adapter;
 
+use GdImage;
 use Imagick as ImagickNative;
 use ImagickDraw;
 use ImagickDrawException;

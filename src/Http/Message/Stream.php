@@ -179,11 +179,11 @@ class Stream implements StreamInterface
      * The keys returned are identical to the keys returned from PHP's
      * stream_get_meta_data() function.
      *
-     * @param mixed|null $key
+     * @param string|null $key
      *
-     * @return array|mixed|null
+     * @return array|bool|int|mixed|string|null
      */
-    public function getMetadata(string $key = null)
+    public function getMetadata(?string $key = null)
     {
         if (null === $this->handle) {
             return null;

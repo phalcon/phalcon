@@ -42,13 +42,13 @@ class Session extends AbstractFlash
     /**
      * Returns the messages in the session flasher
      *
-     * @param mixed|null $type
-     * @param bool       $remove
+     * @param string|null $type
+     * @param bool        $remove
      *
      * @return array
      * @throws Exception
      */
-    public function getMessages($type = null, bool $remove = true): array
+    public function getMessages(?string $type = null, bool $remove = true): array
     {
         return $this->getSessionMessages($remove, $type);
     }
@@ -144,13 +144,13 @@ class Session extends AbstractFlash
     /**
      * Returns the messages stored in session
      *
-     * @param bool       $remove
-     * @param mixed|null $type
+     * @param bool        $remove
+     * @param string|null $type
      *
      * @return array
      * @throws Exception
      */
-    protected function getSessionMessages(bool $remove, string $type = null): array
+    protected function getSessionMessages(bool $remove, ?string $type = null): array
     {
         $session  = $this->getSessionService();
         $messages = $session->get(self::SESSION_KEY);

@@ -13,6 +13,7 @@ declare(strict_types=1);
 
 namespace Phalcon\Image\Adapter;
 
+use GdImage;
 use Phalcon\Image\Enum;
 use Phalcon\Image\Exception;
 use ValueError;

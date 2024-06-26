@@ -163,10 +163,10 @@ class File extends AbstractValidatorComposite
     }
 
     /**
-     * @param array  @options
-     * @param string $fileEmpty
-     * @param string $iniSize
-     * @param string $valid
+     * @param array<string, mixed> $options
+     * @param string               $fileEmpty
+     * @param string               $iniSize
+     * @param string               $valid
      *
      * @return File
      */
@@ -196,7 +196,7 @@ class File extends AbstractValidatorComposite
     }
 
     /**
-     * @param array  @options
+     * @param array  $options
      * @param string $fileEmpty
      * @param string $iniSize
      * @param string $valid
@@ -229,7 +229,7 @@ class File extends AbstractValidatorComposite
     }
 
     /**
-     * @param array  @options
+     * @param array  $options
      * @param string $fileEmpty
      * @param string $iniSize
      * @param string $valid
@@ -263,7 +263,7 @@ class File extends AbstractValidatorComposite
     }
 
     /**
-     * @param array  @options
+     * @param array  $options
      * @param string $fileEmpty
      * @param string $iniSize
      * @param string $valid
@@ -297,7 +297,7 @@ class File extends AbstractValidatorComposite
     }
 
     /**
-     * @param array  @options
+     * @param array  $options
      * @param string $fileEmpty
      * @param string $iniSize
      * @param string $valid
@@ -330,7 +330,7 @@ class File extends AbstractValidatorComposite
     }
 
     /**
-     * @param array  @options
+     * @param array  $options
      * @param string $fileEmpty
      * @param string $iniSize
      * @param string $valid
@@ -364,7 +364,7 @@ class File extends AbstractValidatorComposite
     }
 
     /**
-     * @param array  @options
+     * @param array  $options
      * @param string $fileEmpty
      * @param string $iniSize
      * @param string $valid

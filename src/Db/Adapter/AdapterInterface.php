@@ -299,7 +299,7 @@ interface AdapterInterface
     /**
      * Escapes a column/table/schema name
      *
-     * @param mixed $identifier
+     * @param array|string $identifier
      *
      * @return string
      */

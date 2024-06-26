@@ -27,8 +27,8 @@ class AssociativeArray implements InterpolatorInterface
     /**
      * Replaces placeholders by the values passed
      *
-     * @param string $translation
-     * @param array  $placeholders
+     * @param string                $translation
+     * @param array<string, string> $placeholders
      *
      * @return string
      */

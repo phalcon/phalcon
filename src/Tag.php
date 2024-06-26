@@ -1513,6 +1513,7 @@ class Tag
         bool $asValue = false
     ): string {
         $params = [];
+        $id     = '';
 
         if (true !== is_array($parameters)) {
             $params[] = $parameters;

@@ -67,15 +67,15 @@ class RedisCluster extends Redis
      * options eg `["verify_peer" => 0, "local_cert" => "file:///path/to/cert.pem"]`
      *
      * @param SerializerFactory $factory
-     * @param array{
-     *     name?: string,
+     * @param array             $options {
+     *     name: ?string,
      *     hosts: array,
      *     timeout: float,
      *     readTimeout: float,
      *     persistent: bool,
      *     auth: string|array,
      *     context: string
-     * } $options
+     * }
      * @throws SupportException
      */
     public function __construct(SerializerFactory $factory, array $options = [])

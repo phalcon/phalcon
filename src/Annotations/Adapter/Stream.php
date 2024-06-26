@@ -111,7 +111,7 @@ class Stream extends AbstractAdapter
      * @param string     $key
      * @param Reflection $data
      *
-     * @return void
+     * @return bool
      * @throws Exception
      */
     public function write(string $key, Reflection $data): bool

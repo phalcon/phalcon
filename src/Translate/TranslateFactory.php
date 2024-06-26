@@ -38,8 +38,8 @@ class TranslateFactory
     /**
      * AdapterFactory constructor.
      *
-     * @param InterpolatorFactory $interpolator
-     * @param array               $services
+     * @param InterpolatorFactory   $interpolator
+     * @param array<string, string> $services
      */
     public function __construct(
         private InterpolatorFactory $interpolator,
@@ -51,19 +51,19 @@ class TranslateFactory
     /**
      * Factory to create an instance from a Config object
      *
-     * @param array|ConfigInterface $config = [
-     *                                      'adapter' => 'ini,
-     *                                      'options' => [
-     *                                      'content'       => '',
-     *                                      'delimiter'     => ';',
-     *                                      'enclosure'     => '"',
-     *                                      'locale'        => '',
-     *                                      'defaultDomain' => '',
-     *                                      'directory'     => '',
-     *                                      'category'      => ''
-     *                                      'triggerError'  => false
-     *                                      ]
-     *                                      ]
+     * @param array<string, mixed>|ConfigInterface $config = {
+     *      'adapter'       : string,
+     *      'options'       : array {
+     *          'content'       : string,
+     *          'delimiter'     : string,
+     *          'enclosure'     : string,
+     *          'locale'        : string,
+     *          'defaultDomain' : string,
+     *          'directory'     : string,
+     *          'category'      : string,
+     *          'triggerError'  : bool,
+     *      }
+     * }
      *
      * @return AdapterInterface
      * @throws SupportException
@@ -81,8 +81,8 @@ class TranslateFactory
     /**
      * Create a new instance of the adapter
      *
-     * @param string $name
-     * @param array  $options
+     * @param string               $name
+     * @param array<string, mixed> $options
      *
      * @return AdapterInterface
      * @throws BaseException
