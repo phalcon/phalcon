@@ -52,7 +52,7 @@ class Debug
     /**
      * @var mixed
      */
-    protected mixed $data;
+    protected mixed $data = null;
     /**
      * @var bool
      */

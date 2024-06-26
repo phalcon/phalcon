@@ -232,20 +232,19 @@ class Request extends AbstractInjectionAware implements
     public function getClientAddress(bool $trustForwardedHeader = false): string | bool
     {
         $address = null;
-        $server  = $this->getServerArray();
 
         /**
          * Proxies uses this IP
          */
         if (true === $trustForwardedHeader) {
-            $address = $server['HTTP_X_FORWARDED_FOR'] ?? null;
+            $address = $_SERVER['HTTP_X_FORWARDED_FOR'] ?? null;
             if (null === $address) {
-                $address = $server['HTTP_CLIENT_IP'] ?? null;
+                $address = $_SERVER['HTTP_CLIENT_IP'] ?? null;
             }
         }
 
         if (null === $address) {
-            $address = $server['REMOTE_ADDR'] ?? null;
+            $address = $_SERVER['REMOTE_ADDR'] ?? null;
         }
 
         if (true !== is_string($address)) {
@@ -281,9 +280,7 @@ class Request extends AbstractInjectionAware implements
      */
     public function getContentType(): string | null
     {
-        $server = $this->getServerArray();
-
-        return $server['CONTENT_TYPE'] ?? null;
+        return $_SERVER['CONTENT_TYPE'] ?? null;
     }
 
     /**
@@ -295,11 +292,9 @@ class Request extends AbstractInjectionAware implements
     public function getDigestAuth(): array
     {
         $auth   = [];
-        $server = $this->getServerArray();
-
-        if (isset($server['PHP_AUTH_DIGEST'])) {
+        if (isset($_SERVER['PHP_AUTH_DIGEST'])) {
             $matches = [];
-            $digest  = $server['PHP_AUTH_DIGEST'];
+            $digest  = $_SERVER['PHP_AUTH_DIGEST'];
 
             if (
                 !preg_match_all(
@@ -464,9 +459,7 @@ class Request extends AbstractInjectionAware implements
      */
     public function getHTTPReferer(): string
     {
-        $server = $this->getServerArray();
-
-        return $server['HTTP_REFERER'] ?? '';
+        return $_SERVER['HTTP_REFERER'] ?? '';
     }
 
     /**
@@ -479,14 +472,13 @@ class Request extends AbstractInjectionAware implements
     final public function getHeader(string $header): string
     {
         $name   = strtoupper(strtr($header, '-', '_'));
-        $server = $this->getServerArray();
 
-        if (isset($server[$name])) {
-            return $server[$name];
+        if (isset($_SERVER[$name])) {
+            return $_SERVER[$name];
         }
 
-        if (isset($server['HTTP_' . $name])) {
-            return $server['HTTP_' . $name];
+        if (isset($_SERVER['HTTP_' . $name])) {
+            return $_SERVER['HTTP_' . $name];
         }
 
         return '';
@@ -518,8 +510,7 @@ class Request extends AbstractInjectionAware implements
             'CONTENT_MD5'    => true,
         ];
 
-        $server = $this->getServerArray();
-        foreach ($server as $name => $value) {
+        foreach ($_SERVER as $name => $value) {
             // Note: The starts_with uses case-insensitive search here
             if (str_starts_with(strtoupper($name), 'HTTP_')) {
                 $name = ucwords(
@@ -695,13 +686,11 @@ class Request extends AbstractInjectionAware implements
      */
     final public function getMethod(): string
     {
-        $server = $this->getServerArray();
-
-        if (true !== isset($server['REQUEST_METHOD'])) {
+        if (true !== isset($_SERVER['REQUEST_METHOD'])) {
             return self::METHOD_GET;
         }
 
-        $returnMethod = strtoupper($server['REQUEST_METHOD']);
+        $returnMethod = strtoupper($_SERVER['REQUEST_METHOD']);
 
         if (self::METHOD_POST === $returnMethod) {
             $overriddenMethod = $this->getHeader('X-HTTP-METHOD-OVERRIDE');
@@ -958,9 +947,7 @@ class Request extends AbstractInjectionAware implements
      */
     public function getServer(string $name): string | null
     {
-        $server = $this->getServerArray();
-
-        return $server[$name] ?? null;
+        return $_SERVER[$name] ?? null;
     }
 
     /**
@@ -1029,7 +1016,7 @@ class Request extends AbstractInjectionAware implements
         bool $namedKeys = false
     ): array {
         $files      = [];
-        $superFiles = $_FILES ?? [];
+        $superFiles = $_FILES;
 
         if (true !== empty($superFiles)) {
             foreach ($superFiles as $prefix => $input) {
@@ -1067,7 +1054,7 @@ class Request extends AbstractInjectionAware implements
                 } else {
                     if (
                         false === $onlySuccessful ||
-                        UPLOAD_ERR_OK === $file['error']
+                        UPLOAD_ERR_OK === $input['error']
                     ) {
                         $files = $this->processFiles(
                             $files,
@@ -1186,7 +1173,7 @@ class Request extends AbstractInjectionAware implements
      */
     final public function hasServer(string $name): bool
     {
-        return array_key_exists($name, $this->getServerArray());
+        return array_key_exists($name, $_SERVER);
     }
 
     /**
@@ -1428,7 +1415,7 @@ class Request extends AbstractInjectionAware implements
     public function numFiles(bool $onlySuccessful = false): int
     {
         $numberFiles = 0;
-        $files       = $_FILES ?? [];
+        $files       = $_FILES;
 
         if (empty($files)) {
             return 0;
@@ -1729,7 +1716,6 @@ class Request extends AbstractInjectionAware implements
     {
         $authHeader = null;
         $headers    = [];
-        $server     = $this->getServerArray();
 
         if (
             null !== $this->container &&
@@ -1743,7 +1729,7 @@ class Request extends AbstractInjectionAware implements
             $resolved = $this->fireManagerEvent(
                 'request:beforeAuthorizationResolve',
                 [
-                    'server' => $server,
+                    'server' => $_SERVER,
                 ]
             );
 
@@ -1808,7 +1794,7 @@ class Request extends AbstractInjectionAware implements
                 'request:afterAuthorizationResolve',
                 [
                     'headers' => $headers,
-                    'server'  => $server,
+                    'server'  => $_SERVER,
                 ]
             );
 
@@ -1951,14 +1937,6 @@ class Request extends AbstractInjectionAware implements
             $notAllowEmpty,
             $noRecursive
         );
-    }
-
-    /**
-     * @return array
-     */
-    private function getServerArray(): array
-    {
-        return $_SERVER ?? [];
     }
 
     /**
