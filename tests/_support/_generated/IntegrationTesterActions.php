@@ -1,4 +1,4 @@
-<?php  //[STAMP] 01eb342492366c113d87c1371fc45d89
+<?php  //[STAMP] 45489313b3bfa94f3dfb42dc87699345
 // phpcs:ignoreFile
 namespace _generated;
 
@@ -2621,7 +2621,7 @@ trait IntegrationTesterActions
      * Calls private or protected method.
      *
      * @param string|object $obj
-     * @param string $method
+     * @param string        $method
      *
      * @return mixed
      * @throws ReflectionException

@@ -56,7 +56,7 @@ jobs:
           - '8.2'
           - '8.3'
     steps:
-      - uses: actions/checkout@v3
+      - uses: actions/checkout@v4
 
       - name: "Setup PHP"
         uses: shivammathur/setup-php@v2
@@ -115,7 +115,7 @@ jobs:
 #          - { php: '8.1', ts: 'nts', arch: 'x64', name: 'windows2019-vs16', os: 'windows-2019', compiler: 'vs16' }
 
     steps:
-      - uses: actions/checkout@v3
+      - uses: actions/checkout@v4
       - name: "Setup platform specific environment"
         shell: pwsh
         run: |
@@ -199,7 +199,7 @@ jobs:
     #          - { php: '8.1', ts: 'nts', arch: 'x64', name: 'windows2019-vs16', os: 'windows-2019', compiler: 'vs16' }
 
     steps:
-      - uses: actions/checkout@v3
+      - uses: actions/checkout@v4
       - name: "Setup platform specific environment"
         shell: pwsh
         run: |
@@ -278,7 +278,7 @@ jobs:
 #          - '8.3'
 
     steps:
-      - uses: actions/checkout@v3
+      - uses: actions/checkout@v4
       - name: "Setup platform specific environment"
         shell: pwsh
         run: |
@@ -380,7 +380,7 @@ jobs:
   #          - "11211:11211"
   #
   #    steps:
-  #      - uses: actions/checkout@v3
+  #      - uses: actions/checkout@v4
   #      - name: "Setup platform specific environment"
   #        shell: pwsh
   #        run: |
@@ -471,7 +471,7 @@ jobs:
           - "11211:11211"
 
     steps:
-      - uses: actions/checkout@v3
+      - uses: actions/checkout@v4
       - name: "Setup platform specific environment"
         shell: pwsh
         run: |
@@ -562,7 +562,7 @@ jobs:
   #          - "11211:11211"
   #
   #    steps:
-  #      - uses: actions/checkout@v3
+  #      - uses: actions/checkout@v4
   #      - name: "Setup platform specific environment"
   #        shell: pwsh
   #        run: |
@@ -633,7 +633,7 @@ jobs:
 #          - '8.3'
 
     steps:
-      - uses: actions/checkout@v3
+      - uses: actions/checkout@v4
       - name: "Setup platform specific environment"
         shell: pwsh
         run: |
@@ -696,7 +696,7 @@ jobs:
 
     steps:
       - name: "Checkout"
-        uses: "actions/checkout@v3"
+        uses: "actions/checkout@v4"
         with:
           ref: ${{ github.event.pull_request.head.sha }}  # to check out the actual pull request commit, not the merge commit
           fetch-depth: 0  # a full history is required for pull request analysis
@@ -725,7 +725,7 @@ jobs:
 
     steps:
       - name: "Checkout"
-        uses: "actions/checkout@v3"
+        uses: "actions/checkout@v4"
         with:
           fetch-depth: 2
 
