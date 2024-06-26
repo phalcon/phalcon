@@ -1721,7 +1721,6 @@ class Request extends AbstractInjectionAware implements
             null !== $this->container &&
             null === $this->eventsManager
         ) {
-            /** @var ManagerInterface $eventsManager */
             $this->eventsManager = $this->container->getShared('eventsManager');
         }
 

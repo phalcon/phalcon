@@ -68,7 +68,7 @@ class Gettext extends AbstractAdapter implements ArrayAccess
     protected string $defaultDomain;
 
     /**
-     * @var string|array
+     * @var string|array<string, string>
      */
     protected $directory;
 
@@ -80,8 +80,8 @@ class Gettext extends AbstractAdapter implements ArrayAccess
     /**
      * Gettext constructor.
      *
-     * @param InterpolatorFactory $interpolator
-     * @param array               $options   = [
+     * @param InterpolatorFactory   $interpolator
+     * @param array<string, string> $options   = [
      *                                       'locale'        => '',
      *                                       'defaultDomain' => '',
      *                                       'directory'     => '',
@@ -122,7 +122,7 @@ class Gettext extends AbstractAdapter implements ArrayAccess
     }
 
     /**
-     * @return array|string
+     * @return array<string, string>|string
      */
     public function getDirectory()
     {
@@ -156,11 +156,11 @@ class Gettext extends AbstractAdapter implements ArrayAccess
      * Some languages have more than one form for plural messages dependent on
      * the count.
      *
-     * @param string      $msgid1
-     * @param string      $msgid2
-     * @param int         $count
-     * @param array       $placeholders
-     * @param string|null $domain
+     * @param string                $msgid1
+     * @param string                $msgid2
+     * @param int                   $count
+     * @param array<string, string> $placeholders
+     * @param string|null           $domain
      *
      * @return string
      */
@@ -187,8 +187,8 @@ class Gettext extends AbstractAdapter implements ArrayAccess
      * $translator->query("你好 %name%！", ["name" => "Phalcon"]);
      * ```
      *
-     * @param string $translateKey
-     * @param array  $placeholders
+     * @param string                $translateKey
+     * @param array<string, string> $placeholders
      *
      * @return string
      */
@@ -235,7 +235,7 @@ class Gettext extends AbstractAdapter implements ArrayAccess
      * );
      * ```
      *
-     * @param string|array $directory
+     * @param string|array<string, string> $directory
      */
     public function setDirectory($directory): void
     {
@@ -278,8 +278,8 @@ class Gettext extends AbstractAdapter implements ArrayAccess
      * $gettext->setLocale(LC_ALL, "de_DE@euro", "de_DE", "de", "ge");
      * ```
      *
-     * @param int   $category
-     * @param array $localeArray
+     * @param int                  $category
+     * @param array<string, mixed> $localeArray
      *
      * @return false|string
      */
@@ -299,7 +299,7 @@ class Gettext extends AbstractAdapter implements ArrayAccess
     /**
      * Gets default options
      *
-     * @return array
+     * @return array<string, mixed>
      */
     protected function getOptionsDefault(): array
     {
@@ -312,7 +312,7 @@ class Gettext extends AbstractAdapter implements ArrayAccess
     /**
      * Validator for constructor
      *
-     * @param array $options
+     * @param array<string, mixed> $options
      *
      * @throws Exception
      */

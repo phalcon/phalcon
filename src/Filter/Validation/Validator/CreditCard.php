@@ -105,7 +105,7 @@ class CreditCard extends AbstractValidator
         $reversed = array_reverse($digits);
 
         foreach ($reversed as $position => $digit) {
-            $hash .= ($position % 2 ? $digit * 2 : $digit);
+            $hash .= ($position % 2 ? (int) $digit * 2 : $digit);
         }
 
         $result = array_sum(str_split($hash));

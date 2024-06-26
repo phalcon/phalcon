@@ -236,7 +236,7 @@ class Uniqueness extends AbstractCombinedFieldsValidator
         /** @var ModelInterface $className */
         $className = get_class($record);
 
-        return $className::count($params) == 0;
+        return $className::count($params) === 0;
     }
 
 

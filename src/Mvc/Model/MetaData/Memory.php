@@ -26,9 +26,9 @@ class Memory extends MetaData
     /**
      * Phalcon\Mvc\Model\MetaData\Memory constructor
      *
-     * @param array options
+     * @param array<string, mixed> $options
      */
-    public function __construct($options = null)
+    public function __construct(array $options = [])
     {
     }
 

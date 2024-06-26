@@ -28,9 +28,12 @@ class Libmemcached extends MetaData
     /**
      * Phalcon\Mvc\Model\MetaData\Libmemcached constructor
      *
-     * @param array options
+     * @param AdapterFactory       $factory
+     * @param array<string, mixed> $options
+     *
+     * @throws \Exception
      */
-    public function __construct(AdapterFactory $factory, ?array $options = [])
+    public function __construct(AdapterFactory $factory, array $options = [])
     {
         $options["persistentId"] = $options["persistentId"] ?? "ph-mm-mcid-";
         $options["prefix"]       = $options["prefix"] ?? "ph-mm-memc-";

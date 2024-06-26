@@ -294,12 +294,12 @@ interface DialectInterface
     /**
      * Generates the SQL for LIMIT clause
      *
-     * @param string $sqlQuery
-     * @param mixed  $number
+     * @param string    $sqlQuery
+     * @param array|int $number
      *
      * @return string
      */
-    public function limit(string $sqlQuery, array | int $number): string;
+    public function limit(string $sqlQuery, array|int $number): string;
 
     /**
      * List all tables in database

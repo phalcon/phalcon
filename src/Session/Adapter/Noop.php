@@ -68,8 +68,8 @@ class Noop implements SessionHandlerInterface
     /**
      * Open
      *
-     * @param string $savePath
-     * @param string $sessionName
+     * @param string $path
+     * @param string $name
      *
      * @return bool
      */
@@ -81,7 +81,7 @@ class Noop implements SessionHandlerInterface
     /**
      * Read
      *
-     * @param string $sessionId
+     * @param string $id
      *
      * @return string
      */
@@ -93,7 +93,7 @@ class Noop implements SessionHandlerInterface
     /**
      * Write
      *
-     * @param string $sessionId
+     * @param string $id
      * @param string $data
      *
      * @return bool

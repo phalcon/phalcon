@@ -490,7 +490,7 @@ class Validation extends Injectable implements ValidationInterface
      * @param array|object|null $data
      * @param object|null       $entity
      *
-     * @return Messages|bool
+     * @return Messages|false
      * @throws ValidationException
      */
     public function validate(

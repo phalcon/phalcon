@@ -161,7 +161,7 @@ class Stream extends Noop
     }
 
     /**
-     * @param string $sessionId
+     * @param string $id
      *
      * @return string
      */
@@ -188,7 +188,7 @@ class Stream extends Noop
     }
 
     /**
-     * @param string $sessionId
+     * @param string $id
      * @param string $data
      *
      * @return bool

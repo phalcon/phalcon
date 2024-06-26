@@ -290,7 +290,6 @@ final class UploadedFile implements UploadedFileInterface
 
         $sapi = constant("PHP_SAPI");
         if (
-            true === empty($sapi) ||
             true !== empty($this->fileName) ||
             str_starts_with($sapi, "cli") ||
             str_starts_with($sapi, "phpdbg")

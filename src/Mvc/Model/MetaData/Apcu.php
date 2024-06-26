@@ -39,9 +39,12 @@ class Apcu extends MetaData
     /**
      * Phalcon\Mvc\Model\MetaData\Apcu constructor
      *
-     * @param array options
+     * @param AdapterFactory       $factory
+     * @param array<string, mixed> $options
+     *
+     * @throws \Exception
      */
-    public function __construct(AdapterFactory $factory, ?array $options = null)
+    public function __construct(AdapterFactory $factory, array $options = [])
     {
         $options["prefix"]   = $options["prefix"] ?? "ph-mm-apcu-";
         $options["lifetime"] = $options["lifetime"] ?? 172800;

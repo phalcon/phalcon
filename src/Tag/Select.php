@@ -33,7 +33,7 @@ abstract class Select
     /**
      * Generates a SELECT tag
      *
-     * @param array|string $parameters = [
+     * @param array<string, mixed>|string $parameters = [
      *                                 'id'         => '',
      *                                 'name'       => '',
      *                                 'value'      => '',
@@ -232,8 +232,10 @@ abstract class Select
         mixed $value,
         string $closeOption
     ): string {
-        $code   = "";
-        $params = null;
+        $code      = "";
+        $params    = null;
+        $usingZero = '';
+        $usingOne  = '';
 
         if (is_array($using)) {
             if (count($using) !== 2) {

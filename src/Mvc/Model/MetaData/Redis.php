@@ -42,9 +42,12 @@ class Redis extends MetaData
     /**
      * Phalcon\Mvc\Model\MetaData\Redis constructor
      *
-     * @param array options
+     * @param AdapterFactory       $factory
+     * @param array<string, mixed> $options
+     *
+     * @throws \Exception
      */
-    public function __construct(AdapterFactory $factory, ?array $options = [])
+    public function __construct(AdapterFactory $factory, array $options = [])
     {
         $options["prefix"]   = $options["prefix"] ?? "ph-mm-reds-";
         $options["lifetime"] = $options["lifetime"] ?? 172800;
