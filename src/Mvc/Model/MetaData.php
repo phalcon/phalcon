@@ -21,8 +21,8 @@ use Phalcon\Mvc\Model\MetaData\Strategy\StrategyInterface;
 use Phalcon\Mvc\ModelInterface;
 use Phalcon\Support\Traits\IniTrait;
 
-use function is_array;
 use function call_user_func;
+use function is_array;
 use function method_exists;
 
 /**
@@ -49,22 +49,22 @@ abstract class MetaData extends Injectable implements MetaDataInterface
 {
     use IniTrait;
 
-    public const MODELS_ATTRIBUTES = 0;
+    public const MODELS_ATTRIBUTES               = 0;
     public const MODELS_AUTOMATIC_DEFAULT_INSERT = 10;
     public const MODELS_AUTOMATIC_DEFAULT_UPDATE = 11;
-    public const MODELS_COLUMN_MAP = 0;
-    public const MODELS_DATE_AT = 6;
-    public const MODELS_DATE_IN = 7;
-    public const MODELS_DATA_TYPES = 4;
-    public const MODELS_DATA_TYPES_BIND = 9;
-    public const MODELS_DATA_TYPES_NUMERIC = 5;
-    public const MODELS_DEFAULT_VALUES = 12;
-    public const MODELS_EMPTY_STRING_VALUES = 13;
-    public const MODELS_IDENTITY_COLUMN = 8;
-    public const MODELS_NON_PRIMARY_KEY = 2;
-    public const MODELS_NOT_NULL = 3;
-    public const MODELS_PRIMARY_KEY = 1;
-    public const MODELS_REVERSE_COLUMN_MAP = 1;
+    public const MODELS_COLUMN_MAP               = 0;
+    public const MODELS_DATA_TYPES               = 4;
+    public const MODELS_DATA_TYPES_BIND          = 9;
+    public const MODELS_DATA_TYPES_NUMERIC       = 5;
+    public const MODELS_DATE_AT                  = 6;
+    public const MODELS_DATE_IN                  = 7;
+    public const MODELS_DEFAULT_VALUES           = 12;
+    public const MODELS_EMPTY_STRING_VALUES      = 13;
+    public const MODELS_IDENTITY_COLUMN          = 8;
+    public const MODELS_NON_PRIMARY_KEY          = 2;
+    public const MODELS_NOT_NULL                 = 3;
+    public const MODELS_PRIMARY_KEY              = 1;
+    public const MODELS_REVERSE_COLUMN_MAP       = 1;
 
     /**
      * @var CacheAdapterInterface|null
@@ -198,24 +198,19 @@ abstract class MetaData extends Injectable implements MetaDataInterface
     }
 
     /**
-     * Returns attributes (which have default values) and their default values
+     * Returns a ColumnMap Unique key for meta-data is created using className
      *
-     *```php
-     * print_r(
-     *     $metaData->getDefaultValues(
-     *         new Robots()
-     *     )
-     * );
-     *```
+     * @return string
      */
-    public function getDefaultValues(ModelInterface $model): array
+    final public function getColumnMapUniqueKey(ModelInterface $model): string | null
     {
-
-        $data = $this->readMetaDataIndex($model, self::MODELS_DEFAULT_VALUES);
-        if (true === is_array($data)) {
-            return $data;
+        $key = get_class($model);
+        if (false === isset($this->columnMap[$key])) {
+            if (false === $this->initializeColumnMap($model, $key)) {
+                return null;
+            }
         }
-        throw new Exception("The meta-data is invalid or is corrupt");
+        return $key;
     }
 
     /**
@@ -231,7 +226,6 @@ abstract class MetaData extends Injectable implements MetaDataInterface
      */
     public function getDataTypes(ModelInterface $model): array
     {
-
         $data = $this->readMetaDataIndex($model, self::MODELS_DATA_TYPES);
         if (true === is_array($data)) {
             return $data;
@@ -252,8 +246,27 @@ abstract class MetaData extends Injectable implements MetaDataInterface
      */
     public function getDataTypesNumeric(ModelInterface $model): array
     {
-
         $data = $this->readMetaDataIndex($model, self::MODELS_DATA_TYPES_NUMERIC);
+        if (true === is_array($data)) {
+            return $data;
+        }
+        throw new Exception("The meta-data is invalid or is corrupt");
+    }
+
+    /**
+     * Returns attributes (which have default values) and their default values
+     *
+     *```php
+     * print_r(
+     *     $metaData->getDefaultValues(
+     *         new Robots()
+     *     )
+     * );
+     *```
+     */
+    public function getDefaultValues(ModelInterface $model): array
+    {
+        $data = $this->readMetaDataIndex($model, self::MODELS_DEFAULT_VALUES);
         if (true === is_array($data)) {
             return $data;
         }
@@ -294,6 +307,39 @@ abstract class MetaData extends Injectable implements MetaDataInterface
     public function getIdentityField(ModelInterface $model): string | null
     {
         return $this->readMetaDataIndex($model, self::MODELS_IDENTITY_COLUMN);
+    }
+
+    /**
+     * Returns a MetaData Unique key for meta-data is created using className
+     *
+     * @return string
+     */
+    final public function getMetaDataUniqueKey(ModelInterface $model): string | null
+    {
+        $key = get_class($model);
+        if (false === isset($this->metaData[$key])) {
+            if (false === $this->initializeMetaData($model, $key)) {
+                return null;
+            }
+        }
+        return $key;
+    }
+
+    /**
+     * Returns the model UniqueID based on model and array row primary key(s) value(s)
+     */
+    public function getModelUUID(ModelInterface $model, array $row): string | null
+    {
+        $pks = $this->readMetaDataIndex($model, MetaData::MODELS_PRIMARY_KEY);
+        if (null === $pks) {
+            return null;
+        }
+        $uuid = get_class($model);
+
+        foreach ($pks as $pk) {
+            $uuid = $uuid . ':' . $row[$pk];
+        }
+        return $uuid;
     }
 
     /**
@@ -373,6 +419,7 @@ abstract class MetaData extends Injectable implements MetaDataInterface
         if (true === is_array($data) || null === $data) {
             return $data;
         }
+
         throw new Exception("The meta-data is invalid or is corrupt");
     }
 
@@ -405,22 +452,21 @@ abstract class MetaData extends Injectable implements MetaDataInterface
         if (true === is_array($columnMap)) {
             return isset($columnMap[$attribute]);
         }
-        return isset($this->readMetaData($model)[MEtaData::MODELS_DATA_TYPES][$attribute]);
+        return isset($this->readMetaData($model)[MetaData::MODELS_DATA_TYPES][$attribute]);
     }
 
-    /**
-     * Checks if the internal meta-data container is empty
-     *
-     *```php
-     * var_dump(
-     *     $metaData->isEmpty()
-     * );
-     *```
-     */
-    // TODO: changed to is empty, check if it's ok
+
     public function isEmpty(): bool
     {
         return empty($this->metaData);
+    }
+
+    /**
+     * Compares if two models are the same in memory
+     */
+    public function modelEquals(ModelInterface $first, ModelInterface $other): bool
+    {
+        return spl_object_id($first) === spl_object_id($other);
     }
 
     /**
@@ -495,6 +541,7 @@ abstract class MetaData extends Injectable implements MetaDataInterface
         if ($key !== null) {
             return $this->metaData[$key];
         }
+
         return null;
     }
 
@@ -516,6 +563,7 @@ abstract class MetaData extends Injectable implements MetaDataInterface
         if ($key !== null) {
             return $this->metaData[$key][$index];
         }
+
         return null;
     }
 
@@ -528,7 +576,7 @@ abstract class MetaData extends Injectable implements MetaDataInterface
      */
     public function reset(): void
     {
-        $this->metaData = [];
+        $this->metaData  = [];
         $this->columnMap = [];
     }
 
@@ -567,6 +615,10 @@ abstract class MetaData extends Injectable implements MetaDataInterface
     }
 
     /**
+     * Initialize old behaviour for compatability
+     */
+    // TODO: check compatability
+    /**
      * Set the attributes that allow empty string values
      *
      *```php
@@ -598,7 +650,7 @@ abstract class MetaData extends Injectable implements MetaDataInterface
     /**
      * Writes the metadata to adapter
      */
-    public function write(?string $key, array $data): void
+    public function write(string $key, array $data): void
     {
         try {
             $option = $this->iniGetBool("orm.exception_on_failed_metadata_save");
@@ -626,83 +678,31 @@ abstract class MetaData extends Injectable implements MetaDataInterface
      * );
      *```
      */
-    final public function writeMetaDataIndex(ModelInterface $model, int $index, array $data): void
-    {
+    final public function writeMetaDataIndex(
+        ModelInterface $model,
+        int $index,
+        mixed $data
+    ): void {
         $key = $this->getMetaDataUniqueKey($model);
+
         if ($key !== null) {
             $this->metaData[$key][$index] = $data;
         }
     }
 
     /**
-     * Initialize old behaviour for compatability
+     * @param ModelInterface $model
+     * @param                $key
+     * @param                $table
+     * @param                $schema
+     *
+     * @return void
+     * @throws Exception
      */
-    // TODO: check compatability
     final protected function initialize(ModelInterface $model, $key, $table, $schema)
     {
         $this->initializeMetaData($model, $key);
         $this->initializeColumnMap($model, $key);
-    }
-
-    /**
-     * Initialize the metadata for certain table
-     */
-    final protected function initializeMetaData(ModelInterface $model, $key): bool
-    {
-        $prefixKey = "";
-
-        $strategy = null;
-
-        if ($key !== null) {
-            $metaData = $this->metaData;
-
-            if (false === isset($metaData[$key])) {
-                /**
-                 * The meta-data is read from the adapter always if not available in metaData property
-                 */
-                $prefixKey = "meta-" . $key;
-                $data = $this->read($prefixKey);
-
-                if ($data !== null) {
-                    $this->metaData[$key] = $data;
-                } else {
-                    /**
-                     * Check if there is a method "metaData" in the model to retrieve meta-data from it
-                     */
-                    if (method_exists($model, "metaData")) {
-                        $modelMetadata = call_user_func([$model, "metaData"]);
-
-                        if (false === is_array($modelMetadata)) {
-                            throw new Exception(
-                                "Invalid meta-data for model " . get_class($model)
-                            );
-                        }
-                    } else {
-                        /**
-                         * Get the meta-data extraction strategy
-                         */
-                        $container = $this->getDI();
-                        $strategy = $this->getStrategy();
-                        $modelMetadata = $strategy->getMetaData(
-                            $model,
-                            $container
-                        );
-                    }
-
-                    /**
-                     * Store the meta-data locally
-                     */
-                    $this->metaData[$key] = $modelMetadata;
-
-                    /**
-                     * Store the meta-data in the adapter
-                     */
-                    $this->{"write"}($prefixKey, $modelMetadata);
-                }
-            }
-            return true;
-        }
-        return false;
     }
 
     /**
@@ -730,7 +730,7 @@ abstract class MetaData extends Injectable implements MetaDataInterface
          * Check if the meta-data is already in the adapter
          */
         $prefixKey = 'map-' . $key;
-        $data = $this->{'read'}($prefixKey);
+        $data      = $this->{'read'}($prefixKey);
 
         if ($data !== null) {
             $this->columnMap[$key] = $data;
@@ -741,13 +741,13 @@ abstract class MetaData extends Injectable implements MetaDataInterface
          * Get the meta-data extraction strategy
          */
         $container = $this->getDI();
-        $strategy = $this->getStrategy();
+        $strategy  = $this->getStrategy();
 
         /**
          * Get the meta-data
          * Update the column map locally
          */
-        $modelColumnMap = $strategy->getColumnMaps($model, $container);
+        $modelColumnMap        = $strategy->getColumnMaps($model, $container);
         $this->columnMap[$key] = $modelColumnMap;
 
         /**
@@ -755,6 +755,67 @@ abstract class MetaData extends Injectable implements MetaDataInterface
          */
         $this->{'write'}($prefixKey, $modelColumnMap);
         return true;
+    }
+
+    /**
+     * Initialize the metadata for certain table
+     */
+    final protected function initializeMetaData(ModelInterface $model, $key): bool
+    {
+        $prefixKey = "";
+
+        $strategy = null;
+
+        if ($key !== null) {
+            $metaData = $this->metaData;
+
+            if (false === isset($metaData[$key])) {
+                /**
+                 * The meta-data is read from the adapter always if not available in metaData property
+                 */
+                $prefixKey = "meta-" . $key;
+                $data      = $this->read($prefixKey);
+
+                if ($data !== null) {
+                    $this->metaData[$key] = $data;
+                } else {
+                    /**
+                     * Check if there is a method "metaData" in the model to retrieve meta-data from it
+                     */
+                    if (method_exists($model, "metaData")) {
+                        $modelMetadata = call_user_func([$model, "metaData"]);
+
+                        if (false === is_array($modelMetadata)) {
+                            throw new Exception(
+                                "Invalid meta-data for model " . get_class($model)
+                            );
+                        }
+                    } else {
+                        /**
+                         * Get the meta-data extraction strategy
+                         */
+                        $container     = $this->getDI();
+                        $strategy      = $this->getStrategy();
+                        $modelMetadata = $strategy->getMetaData(
+                            $model,
+                            $container
+                        );
+                    }
+
+                    /**
+                     * Store the meta-data locally
+                     */
+                    $this->metaData[$key] = $modelMetadata;
+
+                    /**
+                     * Store the meta-data in the adapter
+                     */
+                    $this->{"write"}($prefixKey, $modelMetadata);
+                }
+            }
+            return true;
+        }
+        return false;
     }
 
     /**
@@ -769,73 +830,5 @@ abstract class MetaData extends Injectable implements MetaDataInterface
         } else {
             trigger_error($message);
         }
-    }
-
-    /**
-     * @todo Remove this when we get traits
-     */
-    protected function getArrVal(?array $collection, string $index, mixed $defaultValue): mixed
-    {
-        if (false === isset($collection[$index])) {
-            return $defaultValue;
-        }
-        return $collection[$index];
-    }
-
-    /**
-     * Returns a MetaData Unique key for meta-data is created using className
-     *
-     * @return string
-     */
-    final public function getMetaDataUniqueKey(ModelInterface $model): string | null
-    {
-        $key = get_class($model);
-        if (false === isset($this->metaData[$key])) {
-            if (false === $this->initializeMetaData($model, $key)) {
-                return null;
-            }
-        }
-        return $key;
-    }
-
-    /**
-     * Returns a ColumnMap Unique key for meta-data is created using className
-     *
-     * @return string
-     */
-    final public function getColumnMapUniqueKey(ModelInterface $model): string | null
-    {
-        $key = get_class($model);
-        if (false === isset($this->columnMap[$key])) {
-            if (false === $this->initializeColumnMap($model, $key)) {
-                return null;
-            }
-        }
-        return $key;
-    }
-
-    /**
-     * Returns the model UniqueID based on model and array row primary key(s) value(s)
-     */
-    public function getModelUUID(ModelInterface $model, array $row): string | null
-    {
-        $pks = $this->readMetaDataIndex($model, MetaData::MODELS_PRIMARY_KEY);
-        if (null === $pks) {
-            return null;
-        }
-        $uuid = get_class($model);
-
-        foreach ($pks as $pk) {
-            $uuid = $uuid . ':' . $row[$pk];
-        }
-        return $uuid;
-    }
-
-    /**
-     * Compares if two models are the same in memory
-     */
-    public function modelEquals(ModelInterface $first, ModelInterface $other): bool
-    {
-        return spl_object_id($first) === spl_object_id($other);
     }
 }

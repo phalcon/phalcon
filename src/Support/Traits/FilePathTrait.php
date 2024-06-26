@@ -11,7 +11,7 @@
 
 declare(strict_types=1);
 
-namespace Phalcon\Support\Trait;
+namespace Phalcon\Support\Traits;
 
 use function str_replace;
 

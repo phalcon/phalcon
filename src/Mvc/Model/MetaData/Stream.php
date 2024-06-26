@@ -13,15 +13,16 @@ declare(strict_types=1);
 
 namespace Phalcon\Mvc\Model\MetaData;
 
-use Phalcon\Mvc\Model\MetaData;
 use Phalcon\Mvc\Model\Exception;
+use Phalcon\Mvc\Model\MetaData;
+use Phalcon\Support\Traits\FilePathTrait;
 use Phalcon\Support\Traits\IniTrait;
 
-use function var_export;
+use function array_key_exists;
 use function file_exists;
 use function file_put_contents;
 use function is_null;
-use function array_key_exists;
+use function var_export;
 
 /**
  * Phalcon\Mvc\Model\MetaData\Stream
@@ -79,7 +80,7 @@ class Stream extends MetaData
     public function write(?string $key, array $data): void
     {
         try {
-            $path = $this->metaDataDir . $this->prepareVirtualPath($key) . ".php";
+            $path   = $this->metaDataDir . $this->prepareVirtualPath($key) . ".php";
             $option = $this->iniGetBool("phalcon.orm.exception_on_failed_metadata_save");
 
             if (false === file_put_contents($path, "<?php return " . var_export($data, true) . "; ")) {

@@ -109,13 +109,13 @@ class Stream extends Noop
     }
 
     /**
-     * @param string $sessionId
+     * @param string $id
      *
      * @return bool
      */
-    public function destroy(string $sessionId): bool
+    public function destroy(string $id): bool
     {
-        $file = $this->path . $this->getPrefixedName($sessionId);
+        $file = $this->path . $this->getPrefixedName($id);
 
         if (true === file_exists($file) && true === is_file($file)) {
             unlink($file);
@@ -125,14 +125,14 @@ class Stream extends Noop
     }
 
     /**
-     * @param int $maxLifetime
+     * @param int $max_lifetime
      *
      * @return false|int
      */
-    public function gc(int $maxLifetime): false|int
+    public function gc(int $max_lifetime): false|int
     {
         $pattern = $this->path . $this->prefix . "*";
-        $time    = time() - $maxLifetime;
+        $time    = time() - $max_lifetime;
 
         foreach (glob($pattern) as $file) {
             if (
@@ -150,12 +150,12 @@ class Stream extends Noop
     /**
      * Ignore the savePath and use local defined path
      *
-     * @param string $savePath
-     * @param string $sessionName
+     * @param string $path
+     * @param string $name
      *
      * @return bool
      */
-    public function open(string $savePath, string $sessionName): bool
+    public function open(string $path, string $name): bool
     {
         return true;
     }
@@ -165,9 +165,9 @@ class Stream extends Noop
      *
      * @return string
      */
-    public function read(string $sessionId): string
+    public function read(string $id): string
     {
-        $name = $this->path . $this->getPrefixedName($sessionId);
+        $name = $this->path . $this->getPrefixedName($id);
         $data = "";
 
         if (true === $this->phpFileExists($name)) {
@@ -193,9 +193,9 @@ class Stream extends Noop
      *
      * @return bool
      */
-    public function write(string $sessionId, string $data): bool
+    public function write(string $id, string $data): bool
     {
-        $name = $this->path . $this->getPrefixedName($sessionId);
+        $name = $this->path . $this->getPrefixedName($id);
 
         return (
             false !== $this->phpFilePutContents($name, $data, LOCK_EX)

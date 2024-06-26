@@ -184,9 +184,9 @@ abstract class AbstractAdapter implements AdapterInterface
      *
      * @param string $key
      *
-     * @return Reflection|bool
+     * @return Reflection|bool|int
      */
-    abstract public function read(string $key): Reflection | bool;
+    abstract public function read(string $key): Reflection | bool | int;
 
     /**
      * Sets the annotations parser
@@ -206,7 +206,7 @@ abstract class AbstractAdapter implements AdapterInterface
      * @param string     $key
      * @param Reflection $data
      *
-     * @return void
+     * @return bool
      */
     abstract public function write(string $key, Reflection $data): bool;
 }

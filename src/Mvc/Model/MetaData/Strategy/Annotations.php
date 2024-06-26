@@ -13,15 +13,15 @@ declare(strict_types=1);
 
 namespace Phalcon\Mvc\Model\MetaData\Strategy;
 
-use Phalcon\Di\DiInterface;
 use Phalcon\Db\Column;
-use Phalcon\Mvc\ModelInterface;
-use Phalcon\Mvc\Model\MetaData;
+use Phalcon\Di\DiInterface;
 use Phalcon\Mvc\Model\Exception;
+use Phalcon\Mvc\Model\MetaData;
+use Phalcon\Mvc\ModelInterface;
 
-use function is_object;
-use function get_class;
 use function count;
+use function get_class;
+use function is_object;
 
 class Annotations implements StrategyInterface
 {
@@ -36,7 +36,7 @@ class Annotations implements StrategyInterface
 
         $annotations = $container->get("annotations");
 
-        $className = get_class($model);
+        $className  = get_class($model);
         $reflection = $annotations->get($className);
 
         if (false === is_object($reflection)) {
@@ -56,7 +56,7 @@ class Annotations implements StrategyInterface
             );
         }
 
-        $orderedColumnMap = [];
+        $orderedColumnMap  = [];
         $reversedColumnMap = [];
         $hasReversedColumn = false;
 
@@ -83,7 +83,7 @@ class Annotations implements StrategyInterface
             }
 
             $orderedColumnMap[$columnName] = $property;
-            $reversedColumnMap[$property] = $columnName;
+            $reversedColumnMap[$property]  = $columnName;
 
             if (false === $hasReversedColumn && $columnName !== $property) {
                 $hasReversedColumn = true;
@@ -111,7 +111,7 @@ class Annotations implements StrategyInterface
 
         $annotations = $container->get("annotations");
 
-        $className = get_class($model);
+        $className  = get_class($model);
         $reflection = $annotations->get($className);
 
         if (false === is_object($reflection)) {
@@ -134,17 +134,17 @@ class Annotations implements StrategyInterface
         /**
          * Initialize meta-data
          */
-        $attributes = [];
-        $primaryKeys = [];
-        $nonPrimaryKeys = [];
-        $numericTyped = [];
-        $notNull = [];
-        $fieldTypes = [];
-        $fieldBindTypes = [];
-        $identityField = false;
-        $skipOnInsert = [];
-        $skipOnUpdate = [];
-        $defaultValues = [];
+        $attributes        = [];
+        $primaryKeys       = [];
+        $nonPrimaryKeys    = [];
+        $numericTyped      = [];
+        $notNull           = [];
+        $fieldTypes        = [];
+        $fieldBindTypes    = [];
+        $identityField     = false;
+        $skipOnInsert      = [];
+        $skipOnUpdate      = [];
+        $defaultValues     = [];
         $emptyStringValues = [];
 
         foreach ($propertiesAnnotations as $property => $propAnnotations) {
@@ -177,151 +177,151 @@ class Annotations implements StrategyInterface
 
             switch ($feature) {
                 case "biginteger":
-                        $fieldTypes[$columnName] = Column::TYPE_BIGINTEGER;
-                        $fieldBindTypes[$columnName] = Column::BIND_PARAM_STR;
-                        $numericTyped[$columnName] = true;
+                    $fieldTypes[$columnName]     = Column::TYPE_BIGINTEGER;
+                    $fieldBindTypes[$columnName] = Column::BIND_PARAM_STR;
+                    $numericTyped[$columnName]   = true;
                     break;
 
                 case "bit":
-                        $fieldTypes[$columnName] = Column::TYPE_BIT;
-                        $fieldBindTypes[$columnName] = Column::BIND_PARAM_INT;
-                        $numericTyped[$columnName] = true;
+                    $fieldTypes[$columnName]     = Column::TYPE_BIT;
+                    $fieldBindTypes[$columnName] = Column::BIND_PARAM_INT;
+                    $numericTyped[$columnName]   = true;
                     break;
 
                 case "blob":
-                        $fieldTypes[$columnName] = Column::TYPE_BLOB;
-                        $fieldBindTypes[$columnName] = Column::BIND_PARAM_BLOB;
+                    $fieldTypes[$columnName]     = Column::TYPE_BLOB;
+                    $fieldBindTypes[$columnName] = Column::BIND_PARAM_BLOB;
                     break;
 
                 case "boolean":
-                        $fieldTypes[$columnName] = Column::TYPE_BOOLEAN;
-                        $fieldBindTypes[$columnName] = Column::BIND_PARAM_BOOL;
+                    $fieldTypes[$columnName]     = Column::TYPE_BOOLEAN;
+                    $fieldBindTypes[$columnName] = Column::BIND_PARAM_BOOL;
                     break;
 
                 case "char":
-                        $fieldTypes[$columnName] = Column::TYPE_CHAR;
-                        $fieldBindTypes[$columnName] = Column::BIND_PARAM_STR;
+                    $fieldTypes[$columnName]     = Column::TYPE_CHAR;
+                    $fieldBindTypes[$columnName] = Column::BIND_PARAM_STR;
                     break;
 
                 case "date":
-                        $fieldTypes[$columnName] = Column::TYPE_DATE;
-                        $fieldBindTypes[$columnName] = Column::BIND_PARAM_STR;
+                    $fieldTypes[$columnName]     = Column::TYPE_DATE;
+                    $fieldBindTypes[$columnName] = Column::BIND_PARAM_STR;
                     break;
 
                 case "datetime":
-                        $fieldTypes[$columnName] = Column::TYPE_DATETIME;
-                        $fieldBindTypes[$columnName] = Column::BIND_PARAM_STR;
+                    $fieldTypes[$columnName]     = Column::TYPE_DATETIME;
+                    $fieldBindTypes[$columnName] = Column::BIND_PARAM_STR;
                     break;
 
                 case "decimal":
-                        $fieldTypes[$columnName] = Column::TYPE_DECIMAL;
-                        $fieldBindTypes[$columnName] = Column::BIND_PARAM_DECIMAL;
-                        $numericTyped[$columnName] = true;
+                    $fieldTypes[$columnName]     = Column::TYPE_DECIMAL;
+                    $fieldBindTypes[$columnName] = Column::BIND_PARAM_DECIMAL;
+                    $numericTyped[$columnName]   = true;
                     break;
 
                 case "double":
-                        $fieldTypes[$columnName] = Column::TYPE_DOUBLE;
-                        $fieldBindTypes[$columnName] = Column::BIND_PARAM_DECIMAL;
-                        $numericTyped[$columnName] = true;
+                    $fieldTypes[$columnName]     = Column::TYPE_DOUBLE;
+                    $fieldBindTypes[$columnName] = Column::BIND_PARAM_DECIMAL;
+                    $numericTyped[$columnName]   = true;
                     break;
 
                 case "enum":
-                        $fieldTypes[$columnName] = Column::TYPE_ENUM;
-                        $fieldBindTypes[$columnName] = Column::BIND_PARAM_STR;
-                        $numericTyped[$columnName] = true;
+                    $fieldTypes[$columnName]     = Column::TYPE_ENUM;
+                    $fieldBindTypes[$columnName] = Column::BIND_PARAM_STR;
+                    $numericTyped[$columnName]   = true;
                     break;
 
                 case "float":
-                        $fieldTypes[$columnName] = Column::TYPE_FLOAT;
-                        $fieldBindTypes[$columnName] = Column::BIND_PARAM_DECIMAL;
-                        $numericTyped[$columnName] = true;
+                    $fieldTypes[$columnName]     = Column::TYPE_FLOAT;
+                    $fieldBindTypes[$columnName] = Column::BIND_PARAM_DECIMAL;
+                    $numericTyped[$columnName]   = true;
                     break;
 
                 case "integer":
-                        $fieldTypes[$columnName] = Column::TYPE_INTEGER;
-                        $fieldBindTypes[$columnName] = Column::BIND_PARAM_INT;
-                        $numericTyped[$columnName] = true;
+                    $fieldTypes[$columnName]     = Column::TYPE_INTEGER;
+                    $fieldBindTypes[$columnName] = Column::BIND_PARAM_INT;
+                    $numericTyped[$columnName]   = true;
                     break;
 
                 case "json":
-                        $fieldTypes[$columnName] = Column::TYPE_JSON;
-                        $fieldBindTypes[$columnName] = Column::BIND_PARAM_STR;
+                    $fieldTypes[$columnName]     = Column::TYPE_JSON;
+                    $fieldBindTypes[$columnName] = Column::BIND_PARAM_STR;
                     break;
 
                 case "jsonb":
-                        $fieldTypes[$columnName] = Column::TYPE_JSONB;
-                        $fieldBindTypes[$columnName] = Column::BIND_PARAM_STR;
+                    $fieldTypes[$columnName]     = Column::TYPE_JSONB;
+                    $fieldBindTypes[$columnName] = Column::BIND_PARAM_STR;
                     break;
 
                 case "longblob":
-                        $fieldTypes[$columnName] = Column::TYPE_LONGBLOB;
-                        $fieldBindTypes[$columnName] = Column::BIND_PARAM_BLOB;
+                    $fieldTypes[$columnName]     = Column::TYPE_LONGBLOB;
+                    $fieldBindTypes[$columnName] = Column::BIND_PARAM_BLOB;
                     break;
 
                 case "longtext":
-                        $fieldTypes[$columnName] = Column::TYPE_LONGTEXT;
-                        $fieldBindTypes[$columnName] = Column::BIND_PARAM_STR;
+                    $fieldTypes[$columnName]     = Column::TYPE_LONGTEXT;
+                    $fieldBindTypes[$columnName] = Column::BIND_PARAM_STR;
                     break;
 
                 case "mediumblob":
-                        $fieldTypes[$columnName] = Column::TYPE_MEDIUMBLOB;
-                        $fieldBindTypes[$columnName] = Column::BIND_PARAM_BLOB;
+                    $fieldTypes[$columnName]     = Column::TYPE_MEDIUMBLOB;
+                    $fieldBindTypes[$columnName] = Column::BIND_PARAM_BLOB;
                     break;
 
                 case "mediumint":
-                        $fieldTypes[$columnName] = Column::TYPE_MEDIUMINTEGER;
-                        $fieldBindTypes[$columnName] = Column::BIND_PARAM_INT;
-                        $numericTyped[$columnName] = true;
+                    $fieldTypes[$columnName]     = Column::TYPE_MEDIUMINTEGER;
+                    $fieldBindTypes[$columnName] = Column::BIND_PARAM_INT;
+                    $numericTyped[$columnName]   = true;
                     break;
 
                 case "mediumtext":
-                        $fieldTypes[$columnName] = Column::TYPE_MEDIUMTEXT;
-                        $fieldBindTypes[$columnName] = Column::BIND_PARAM_STR;
+                    $fieldTypes[$columnName]     = Column::TYPE_MEDIUMTEXT;
+                    $fieldBindTypes[$columnName] = Column::BIND_PARAM_STR;
                     break;
 
                 case "smallint":
-                        $fieldTypes[$columnName] = Column::TYPE_SMALLINTEGER;
-                        $fieldBindTypes[$columnName] = Column::BIND_PARAM_INT;
-                        $numericTyped[$columnName] = true;
+                    $fieldTypes[$columnName]     = Column::TYPE_SMALLINTEGER;
+                    $fieldBindTypes[$columnName] = Column::BIND_PARAM_INT;
+                    $numericTyped[$columnName]   = true;
                     break;
 
                 case "text":
-                        $fieldTypes[$columnName] = Column::TYPE_TEXT;
-                        $fieldBindTypes[$columnName] = Column::BIND_PARAM_STR;
+                    $fieldTypes[$columnName]     = Column::TYPE_TEXT;
+                    $fieldBindTypes[$columnName] = Column::BIND_PARAM_STR;
                     break;
 
                 case "time":
-                        $fieldTypes[$columnName] = Column::TYPE_TIME;
-                        $fieldBindTypes[$columnName] = Column::BIND_PARAM_STR;
+                    $fieldTypes[$columnName]     = Column::TYPE_TIME;
+                    $fieldBindTypes[$columnName] = Column::BIND_PARAM_STR;
                     break;
 
                 case "timestamp":
-                        $fieldTypes[$columnName] = Column::TYPE_TIMESTAMP;
-                        $fieldBindTypes[$columnName] = Column::BIND_PARAM_STR;
+                    $fieldTypes[$columnName]     = Column::TYPE_TIMESTAMP;
+                    $fieldBindTypes[$columnName] = Column::BIND_PARAM_STR;
                     break;
 
                 case "tinyblob":
-                        $fieldTypes[$columnName] = Column::TYPE_TINYBLOB;
-                        $fieldBindTypes[$columnName] = Column::BIND_PARAM_BLOB;
+                    $fieldTypes[$columnName]     = Column::TYPE_TINYBLOB;
+                    $fieldBindTypes[$columnName] = Column::BIND_PARAM_BLOB;
                     break;
 
                 case "tinyint":
-                        $fieldTypes[$columnName] = Column::TYPE_TINYINTEGER;
-                        $fieldBindTypes[$columnName] = Column::BIND_PARAM_INT;
-                        $numericTyped[$columnName] = true;
+                    $fieldTypes[$columnName]     = Column::TYPE_TINYINTEGER;
+                    $fieldBindTypes[$columnName] = Column::BIND_PARAM_INT;
+                    $numericTyped[$columnName]   = true;
                     break;
 
                 case "tinytext":
-                        $fieldTypes[$columnName] = Column::TYPE_TINYTEXT;
-                        $fieldBindTypes[$columnName] = Column::BIND_PARAM_STR;
+                    $fieldTypes[$columnName]     = Column::TYPE_TINYTEXT;
+                    $fieldBindTypes[$columnName] = Column::BIND_PARAM_STR;
                     break;
 
                 default:
                     /**
                      * By default all columns are varchar/string
                      */
-                        $fieldTypes[$columnName] = Column::TYPE_VARCHAR;
-                        $fieldBindTypes[$columnName] = Column::BIND_PARAM_STR;
+                    $fieldTypes[$columnName]     = Column::TYPE_VARCHAR;
+                    $fieldBindTypes[$columnName] = Column::BIND_PARAM_STR;
             }
 
             /**
@@ -397,7 +397,7 @@ class Annotations implements StrategyInterface
             MetaData::MODELS_AUTOMATIC_DEFAULT_INSERT => $skipOnInsert,
             MetaData::MODELS_AUTOMATIC_DEFAULT_UPDATE => $skipOnUpdate,
             MetaData::MODELS_DEFAULT_VALUES           => $defaultValues,
-            MetaData::MODELS_EMPTY_STRING_VALUES      => $emptyStringValues
+            MetaData::MODELS_EMPTY_STRING_VALUES      => $emptyStringValues,
         ];
     }
 }

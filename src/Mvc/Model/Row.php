@@ -55,7 +55,7 @@ class Row implements EntityInterface, ResultInterface, ArrayAccess, JsonSerializ
      * @return string|ModelInterface
      * @throws Exception
      */
-    public function offsetGet(mixed $index): string|ModelInterface
+    public function offsetGet(mixed $index): string | ModelInterface
     {
         if (true !== $this->offsetExists($index)) {
             throw new Exception("The index does not exist in the row");
