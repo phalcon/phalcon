@@ -297,7 +297,7 @@ jobs:
           sleep-duration: 5 # Define the sleep duration for docker to start and ready for accepting connections (Here we set default to 5seconds)
 
       # Running Test
-      - name: Running Test
+      - name: Test Redis Cluster
         run: |
           sudo apt-get install -y redis-tools
           docker ps -a
