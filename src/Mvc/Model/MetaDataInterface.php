@@ -206,9 +206,9 @@ interface MetaDataInterface
      *
      * @param ModelInterface $model
      *
-     * @return array
+     * @return array| null
      */
-    public function readMetaData(ModelInterface $model): array;
+    public function readMetaData(ModelInterface $model): array | null;
 
     /**
      * Reads meta-data for certain model using a MODEL_* constant
