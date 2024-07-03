@@ -247,7 +247,7 @@ class Config extends Collection implements ConfigInterface
         $this->lowerKeys[$key] = $element;
 
         if (is_array($value)) {
-            $this->data[$element] = new Config($value);
+            $this->data[$element] = new Config($value, $this->insensitive);
 
             return;
         }
