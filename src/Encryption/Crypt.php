@@ -601,8 +601,8 @@ class Crypt implements CryptInterface
         $method    = "getAvailable";
         $method    .= ("hash" === $cipher) ? "HashAlgorithms" : "Ciphers";
         $available = $this->$method();
-        $upper     = $this->toLower($cipher);
-        if (true !== isset($available[$upper])) {
+        $lower     = $this->toLower($cipher);
+        if (true !== isset($available[$lower])) {
             throw new Exception(
                 sprintf(
                     "The %s algorithm '%s' is not supported on this system.",
