@@ -14,12 +14,12 @@ declare(strict_types=1);
 namespace Phalcon\Cache\Adapter;
 
 use Phalcon\Cache\Adapter\AdapterInterface as CacheAdapterInterface;
-use Phalcon\Storage\Adapter\Apcu as StorageApcu;
+use Phalcon\Storage\Adapter\Weak as StorageWeak;
 
 /**
- * Apcu adapter
+ * Weak adapter
  */
-class Apcu extends StorageApcu implements CacheAdapterInterface
+class Weak extends StorageWeak implements CacheAdapterInterface
 {
     /**
      * EventType prefix.

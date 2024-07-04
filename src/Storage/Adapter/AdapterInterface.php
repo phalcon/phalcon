@@ -31,9 +31,9 @@ interface AdapterInterface
      * @param string $key
      * @param int    $value
      *
-     * @return int | bool
+     * @return false|int
      */
-    public function decrement(string $key, int $value = 1);
+    public function decrement(string $key, int $value = 1): false | int;
 
     /**
      * Deletes data from the adapter
@@ -52,14 +52,14 @@ interface AdapterInterface
      *
      * @return mixed
      */
-    public function get(string $key, $defaultValue = null);
+    public function get(string $key, mixed $defaultValue = null): mixed;
 
     /**
      * Returns the adapter - connects to the storage if not connected
      *
      * @return mixed
      */
-    public function getAdapter();
+    public function getAdapter(): mixed;
 
     /**
      * Returns all the keys stored
@@ -72,6 +72,8 @@ interface AdapterInterface
 
     /**
      * Returns the prefix for the keys
+     *
+     * @return string
      */
     public function getPrefix(): string;
 
@@ -90,9 +92,9 @@ interface AdapterInterface
      * @param string $key
      * @param int    $value
      *
-     * @return int | bool
+     * @return false|int
      */
-    public function increment(string $key, int $value = 1);
+    public function increment(string $key, int $value = 1): false | int;
 
     /**
      * Stores data in the adapter. If the TTL is `null` (default) or not defined
@@ -107,7 +109,7 @@ interface AdapterInterface
      *
      * @return bool
      */
-    public function set(string $key, $value, $ttl = null): bool;
+    public function set(string $key, mixed $value, mixed $ttl = null): bool;
 
     /**
      * Stores data in the adapter forever. The key needs to be manually deleted

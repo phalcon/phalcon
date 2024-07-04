@@ -63,7 +63,7 @@ class Cache extends AbstractCache
      *                                  array nor a Traversable, or if any of
      *                                  the $keys are not a legal value.
      */
-    public function deleteMultiple($keys): bool
+    public function deleteMultiple(mixed $keys): bool
     {
         return $this->doDeleteMultiple($keys);
     }
@@ -99,7 +99,7 @@ class Cache extends AbstractCache
      * @throws InvalidArgumentException MUST be thrown if $keys is neither an
      * array nor a Traversable, or if any of the $keys are not a legal value.
      */
-    public function getMultiple($keys, $default = null)
+    public function getMultiple(mixed $keys, $default = null)
     {
         return $this->doGetMultiple($keys, $default);
     }
@@ -159,7 +159,7 @@ class Cache extends AbstractCache
      * @throws InvalidArgumentException MUST be thrown if $values is neither an
      * array nor a Traversable, or if any of the $values are not a legal value.
      */
-    public function setMultiple($values, $ttl = null): bool
+    public function setMultiple(mixed $values, mixed $ttl = null): bool
     {
         return $this->doSetMultiple($values, $ttl);
     }
