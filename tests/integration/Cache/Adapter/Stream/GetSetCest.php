@@ -16,6 +16,7 @@ namespace Phalcon\Tests\Integration\Cache\Adapter\Stream;
 use IntegrationTester;
 use Phalcon\Cache\Adapter\Stream;
 use Phalcon\Cache\Exception as CacheException;
+use Phalcon\Storage\Exception as StorageException;
 use Phalcon\Storage\SerializerFactory;
 use Phalcon\Support\Exception as HelperException;
 use stdClass;
@@ -39,7 +40,7 @@ class GetSetCest
      * @author Phalcon Team <team@phalcon.io>
      * @since  2020-09-09
      */
-    public function storageAdapterStreamSet(IntegrationTester $I)
+    public function cacheAdapterStreamSet(IntegrationTester $I)
     {
         $I->wantToTest('Cache\Adapter\Stream - set()');
 
@@ -69,13 +70,15 @@ class GetSetCest
      *
      * @param IntegrationTester $I
      *
-     * @throws HelperException
-     * @throws CacheException
+     * @return void
+     * @throws StorageException
      *
      * @author Phalcon Team <team@phalcon.io>
      * @since  2020-09-09
      */
-    public function storageAdapterStreamGet(IntegrationTester $I)
+    /**
+     */
+    public function cacheAdapterStreamGet(IntegrationTester $I)
     {
         $I->wantToTest('Cache\Adapter\Stream - get()');
 
@@ -111,6 +114,74 @@ class GetSetCest
     }
 
     /**
+     * Tests Phalcon\Cache\Adapter\Stream :: get() - with prefix
+     *
+     * @param IntegrationTester $I
+     *
+     * @throws StorageException
+     *
+     * @author Phalcon Team <team@phalcon.io>
+     * @since  2023-06-01
+     * @issue  16348
+     */
+    public function cacheAdapterStreamGetWithPrefix(IntegrationTester $I)
+    {
+        $I->wantToTest('Cache\Adapter\Stream - get() with prefix');
+
+        $I->safeDeleteDirectory(outputDir() . 'en/');
+
+        $serializer = new SerializerFactory();
+        $adapter    = new Stream(
+            $serializer,
+            [
+                'storageDir' => outputDir(),
+                'prefix'     => 'en',
+            ]
+        );
+
+        $target = outputDir() . 'en/';
+
+        $data   = 123;
+        $actual = $adapter->set('men', $data);
+        $I->assertTrue($actual);
+
+        $expected = 123;
+        $actual   = $adapter->get('men');
+        $I->assertNotNull($actual);
+        $I->assertEquals($expected, $actual);
+
+
+        $data   = 'abc';
+        $actual = $adapter->set('barmen', $data);
+        $I->assertTrue($actual);
+
+        $expected = 'abc';
+        $actual   = $adapter->get('barmen');
+        $I->assertNotNull($actual);
+        $I->assertEquals($expected, $actual);
+
+        $data   = 'xyz';
+        $actual = $adapter->set('bar', $data);
+        $I->assertTrue($actual);
+
+        $expected = 'xyz';
+        $actual   = $adapter->get('bar');
+        $I->assertNotNull($actual);
+        $I->assertEquals($expected, $actual);
+
+        $expected = [
+            'enbar',
+            'enbarmen',
+            'enmen',
+        ];
+        $actual   = $adapter->getKeys();
+        sort($actual);
+        $I->assertEquals($expected, $actual);
+
+        $I->safeDeleteFile($target);
+    }
+
+    /**
      * Tests Phalcon\Cache\Adapter\Stream :: get() - errors
      *
      * @param IntegrationTester $I
@@ -121,9 +192,13 @@ class GetSetCest
      * @author Phalcon Team <team@phalcon.io>
      * @since  2020-09-09
      */
-    public function storageAdapterStreamGetErrors(IntegrationTester $I)
+    public function cacheAdapterStreamGetErrors(IntegrationTester $I)
     {
         $I->wantToTest('Cache\Adapter\Stream - get() - errors');
+
+        if (version_compare(PHP_VERSION, '8.3.0', '>=')) {
+            $I->markTestSkipped('Since PHP 8.3 warnings causing session ID/Name lock.');
+        }
 
         $serializer = new SerializerFactory();
         $adapter    = new Stream(

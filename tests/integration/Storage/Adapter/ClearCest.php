@@ -20,8 +20,8 @@ use Phalcon\Storage\Adapter\Apcu;
 use Phalcon\Storage\Adapter\Libmemcached;
 use Phalcon\Storage\Adapter\Memory;
 use Phalcon\Storage\Adapter\Redis;
-use Phalcon\Storage\Adapter\RedisCluster;
 use Phalcon\Storage\Adapter\Stream;
+use Phalcon\Storage\Adapter\Weak;
 use Phalcon\Storage\Exception as StorageException;
 use Phalcon\Storage\SerializerFactory;
 use Phalcon\Support\Exception;
@@ -29,7 +29,6 @@ use Phalcon\Support\Exception as HelperException;
 
 use function getOptionsLibmemcached;
 use function getOptionsRedis;
-use function getOptionsRedisCluster;
 use function outputDir;
 use function uniqid;
 
@@ -217,6 +216,53 @@ class ClearCest
     }
 
     /**
+     * Tests Phalcon\Storage\Adapter\Weak :: clear()
+     *
+     * @param IntegrationTester $I
+     *
+     * @throws HelperException
+     *
+     * @author       Phalcon Team <team@phalcon.io>
+     * @since        2023-07-17
+     */
+    public function storageAdapterWealClear(IntegrationTester $I)
+    {
+
+        $I->wantToTest('Storage\Storate\Weak - getAdapter()');
+
+        $serializer = new SerializerFactory();
+        $adapter    = new Weak($serializer);
+
+        $obj1 = new \stdClass();
+        $obj1->id = 1;
+        $obj2 = new \stdClass();
+        $obj2->id = 2;
+        $key1 = uniqid();
+        $key2 = uniqid();
+        $adapter->set($key1, $obj1);
+        $adapter->set($key2, $obj2);
+
+        $temp = $adapter->get($key1);
+        $I->assertEquals($temp, $adapter->get($key1));
+        $I->assertEquals($temp, $obj1);
+
+        $temp = $adapter->get($key2);
+        $I->assertEquals($temp, $adapter->get($key2));
+        $I->assertEquals($temp, $obj2);
+
+        $actual = $adapter->clear();
+        $I->assertTrue($actual);
+        $actual = $adapter->has($key1);
+        $I->assertFalse($actual);
+
+        $actual = $adapter->has($key2);
+        $I->assertFalse($actual);
+
+        $actual = $adapter->clear();
+        $I->assertTrue($actual);
+    }
+
+    /**
      * @return array[]
      */
     private function getExamples(): array
@@ -246,13 +292,6 @@ class ClearCest
                 'label'     => 'default',
                 'class'     => Redis::class,
                 'options'   => getOptionsRedis(),
-                'extension' => 'redis',
-            ],
-            [
-                'className' => 'RedisCluster',
-                'label'     => 'default',
-                'class'     => RedisCluster::class,
-                'options'   => getOptionsRedisCluster(),
                 'extension' => 'redis',
             ],
             [

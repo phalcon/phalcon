@@ -56,8 +56,8 @@ class GetMultipleCest
         $I->assertEquals($expected, $actual);
 
         $expected = [
-            $key1 => 'test1',
-            $key2 => 'test2',
+            $key1     => 'test1',
+            $key2     => 'test2',
             'unknown' => 'default-unknown',
         ];
         $actual   = $adapter->getMultiple([$key1, $key2, 'unknown'], 'default-unknown');

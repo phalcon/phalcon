@@ -20,15 +20,13 @@ use Phalcon\Cache\Adapter\Apcu;
 use Phalcon\Cache\Adapter\Libmemcached;
 use Phalcon\Cache\Adapter\Memory;
 use Phalcon\Cache\Adapter\Redis;
-use Phalcon\Cache\Adapter\RedisCluster;
 use Phalcon\Cache\Adapter\Stream;
+use Phalcon\Cache\Adapter\Weak;
 use Phalcon\Storage\SerializerFactory;
 use Redis as NativeRedis;
-use RedisCluster as NativeRedisCluster;
 
 use function getOptionsLibmemcached;
 use function getOptionsRedis;
-use function getOptionsRedisCluster;
 use function outputDir;
 use function sprintf;
 use function uniqid;
@@ -43,7 +41,7 @@ class GetSetCest
      * @author       Phalcon Team <team@phalcon.io>
      * @since        2020-09-09
      */
-    public function storageAdapterGetSetWithZeroTtl(IntegrationTester $I, Example $example)
+    public function cacheAdapterGetSetWithZeroTtl(IntegrationTester $I, Example $example)
     {
         $I->wantToTest(
             sprintf(
@@ -81,6 +79,39 @@ class GetSetCest
         $I->assertFalse($result);
     }
 
+     /**
+     * Tests Phalcon\Cache\Adapter\Weak :: get()/set()
+     *
+     * @author       Phalcon Team <team@phalcon.io>
+     * @since        2023-07-17
+     */
+    public function cacheAdapterWeakGetSet(IntegrationTester $I)
+    {
+        $I->wantToTest('Cache\Adapter\Weak - get()/set()');
+
+
+        $serializer = new SerializerFactory();
+        $adapter    = new Weak($serializer);
+
+        $key = uniqid();
+        $obj = new \stdClass();
+        $result = $adapter->set($key, "test");
+        $I->assertFalse($result);
+        $result = $adapter->set($key, $obj);
+        $I->assertTrue($result);
+        $result = $adapter->has($key);
+        $I->assertTrue($result);
+
+        /**
+         * There is no TTl.
+         */
+        $result = $adapter->set($key, $obj, 0);
+        $I->assertTrue($result);
+
+        $result = $adapter->has($key);
+        $I->assertTrue($result);
+    }
+
     /**
      * @return array[]
      */
@@ -115,14 +146,6 @@ class GetSetCest
                 'class'     => Redis::class,
                 'options'   => getOptionsRedis(),
                 'expected'  => NativeRedis::class,
-                'extension' => 'redis',
-            ],
-            [
-                'className' => 'RedisCluster',
-                'label'     => 'default',
-                'class'     => RedisCluster::class,
-                'options'   => getOptionsRedisCluster(),
-                'expected'  => NativeRedisCluster::class,
                 'extension' => 'redis',
             ],
             [

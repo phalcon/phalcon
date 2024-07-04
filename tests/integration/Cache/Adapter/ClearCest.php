@@ -20,13 +20,12 @@ use Phalcon\Cache\Adapter\Apcu;
 use Phalcon\Cache\Adapter\Libmemcached;
 use Phalcon\Cache\Adapter\Memory;
 use Phalcon\Cache\Adapter\Redis;
-use Phalcon\Cache\Adapter\RedisCluster;
 use Phalcon\Cache\Adapter\Stream;
+use Phalcon\Cache\Adapter\Weak;
 use Phalcon\Storage\SerializerFactory;
 
 use function getOptionsLibmemcached;
 use function getOptionsRedis;
-use function getOptionsRedisCluster;
 use function outputDir;
 use function uniqid;
 
@@ -42,7 +41,7 @@ class ClearCest
      * @author Phalcon Team <team@phalcon.io>
      * @since  2020-09-09
      */
-    public function storageAdapterApcuClearIteratorError(IntegrationTester $I)
+    public function cacheAdapterApcuClearIteratorError(IntegrationTester $I)
     {
         $I->wantToTest('Cache\Adapter\Apcu - clear() - iterator error');
 
@@ -52,7 +51,7 @@ class ClearCest
         $adapter    = Stub::construct(
             Apcu::class,
             [
-                $serializer,
+                $serializer
             ],
             [
                 'phpApcuIterator' => false,
@@ -83,7 +82,7 @@ class ClearCest
      * @author Phalcon Team <team@phalcon.io>
      * @since  2020-09-09
      */
-    public function storageAdapterApcuClearDeleteError(IntegrationTester $I)
+    public function cacheAdapterApcuClearDeleteError(IntegrationTester $I)
     {
         $I->wantToTest('Cache\Adapter\Apcu - clear() - delete error');
 
@@ -93,7 +92,7 @@ class ClearCest
         $adapter    = Stub::construct(
             Apcu::class,
             [
-                $serializer,
+                $serializer
             ],
             [
                 'phpApcuDelete' => false,
@@ -125,7 +124,7 @@ class ClearCest
      * @author Phalcon Team <team@phalcon.io>
      * @since  2020-09-09
      */
-    public function storageAdapterStreamClearCannotDeleteFile(IntegrationTester $I)
+    public function cacheAdapterStreamClearCannotDeleteFile(IntegrationTester $I)
     {
         $I->wantToTest('Cache\Adapter\Stream - clear() - cannot delete file');
 
@@ -167,11 +166,11 @@ class ClearCest
      * @author       Phalcon Team <team@phalcon.io>
      * @since        2020-09-09
      */
-    public function storageAdapterClear(IntegrationTester $I, Example $example)
+    public function cacheAdapterClear(IntegrationTester $I, Example $example)
     {
         $I->wantToTest(
             sprintf(
-                'Cache\Adapter\%s - getPrefix()',
+                'Cache\Adapter\%s - getClear()',
                 $example['className']
             )
         );
@@ -214,6 +213,53 @@ class ClearCest
     }
 
     /**
+     * Tests Phalcon\Cache\Adapter\Weak :: clear()
+     *
+     * @param IntegrationTester $I
+     *
+     * @throws HelperException
+     *
+     * @author       Phalcon Team <team@phalcon.io>
+     * @since        2023-07-17
+     */
+    public function cacheAdapterWealClear(IntegrationTester $I)
+    {
+
+        $I->wantToTest('Cache\Adapter\Weak - getAdapter()');
+
+        $serializer = new SerializerFactory();
+        $adapter    = new Weak($serializer);
+
+        $obj1 = new \stdClass();
+        $obj1->id = 1;
+        $obj2 = new \stdClass();
+        $obj2->id = 2;
+        $key1 = uniqid();
+        $key2 = uniqid();
+        $adapter->set($key1, $obj1);
+        $adapter->set($key2, $obj2);
+
+        $temp = $adapter->get($key1);
+        $I->assertEquals($temp, $adapter->get($key1));
+        $I->assertEquals($temp, $obj1);
+
+        $temp = $adapter->get($key2);
+        $I->assertEquals($temp, $adapter->get($key2));
+        $I->assertEquals($temp, $obj2);
+
+        $actual = $adapter->clear();
+        $I->assertTrue($actual);
+        $actual = $adapter->has($key1);
+        $I->assertFalse($actual);
+
+        $actual = $adapter->has($key2);
+        $I->assertFalse($actual);
+
+        $actual = $adapter->clear();
+        $I->assertTrue($actual);
+    }
+
+    /**
      * @return array[]
      */
     private function getExamples(): array
@@ -243,13 +289,6 @@ class ClearCest
                 'label'     => 'default',
                 'class'     => Redis::class,
                 'options'   => getOptionsRedis(),
-                'extension' => 'redis',
-            ],
-            [
-                'className' => 'RedisCluster',
-                'label'     => 'default',
-                'class'     => RedisCluster::class,
-                'options'   => getOptionsRedisCluster(),
                 'extension' => 'redis',
             ],
             [

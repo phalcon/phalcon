@@ -17,6 +17,8 @@ use IntegrationTester;
 use Phalcon\Session\Bag;
 use Phalcon\Tests\Fixtures\Traits\DiTrait;
 
+use function uniqid;
+
 /**
  * Class InitCest
  *
@@ -38,22 +40,33 @@ class InitCest
     {
         $I->wantToTest('Session\Bag - init()');
 
+        $store = $_SESSION ?? [];
+
         $this->setNewFactoryDefault();
         $this->setDiService('sessionStream');
+
+        $name = uniqid();
+        $_SESSION[$name] = [
+            'one'   => 'two',
+            'three' => 'four',
+        ];
+
         $data = [
             'one'   => 'two',
             'three' => 'four',
             'five'  => 'six',
         ];
 
-        $collection = new Bag($this->container->get("session"), 'BagTest');
+        $collection = new Bag($this->container->get("session"), $name);
 
-        $expected = 3;
+        $expected = 2;
         $actual   = $collection->count();
         $I->assertEquals($expected, $actual);
 
         $collection->init($data);
         $actual = $collection->toArray();
         $I->assertEquals($data, $actual);
+
+        $_SESSION = $store;
     }
 }

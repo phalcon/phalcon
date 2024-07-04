@@ -19,13 +19,11 @@ use Phalcon\Storage\Adapter\Apcu;
 use Phalcon\Storage\Adapter\Libmemcached;
 use Phalcon\Storage\Adapter\Memory;
 use Phalcon\Storage\Adapter\Redis;
-use Phalcon\Storage\Adapter\RedisCluster;
 use Phalcon\Storage\Adapter\Stream;
 use Phalcon\Storage\SerializerFactory;
 
 use function getOptionsLibmemcached;
 use function getOptionsRedis;
-use function getOptionsRedisCluster;
 use function outputDir;
 use function uniqid;
 
@@ -91,6 +89,51 @@ class DecrementCest
     }
 
     /**
+     * Tests Phalcon\Storage\Adapter\Redis :: decrement()
+     *
+     * @param IntegrationTester $I
+     *
+     * @author Phalcon Team <team@phalcon.io>
+     * @since  2020-09-09
+     */
+    public function storageAdapterRedisDecrement(IntegrationTester $I)
+    {
+        $I->wantToTest('Storage\Adapter\Redis - decrement()');
+
+        $I->checkExtensionIsLoaded('redis');
+
+        $serializer = new SerializerFactory();
+        $adapter    = new Redis($serializer, getOptionsRedis());
+
+        $key      = uniqid();
+        $expected = 100;
+        $actual   = $adapter->increment($key, 100);
+        $I->assertEquals($expected, $actual);
+
+        $expected = 99;
+        $actual   = $adapter->decrement($key);
+        $I->assertEquals($expected, $actual);
+
+        $actual = $adapter->get($key);
+        $I->assertEquals($expected, $actual);
+
+        $expected = 90;
+        $actual   = $adapter->decrement($key, 9);
+        $I->assertEquals($expected, $actual);
+
+        $actual = $adapter->get($key);
+        $I->assertEquals($expected, $actual);
+
+        /**
+         * unknown key
+         */
+        $key      = uniqid();
+        $expected = -9;
+        $actual   = $adapter->decrement($key, 9);
+        $I->assertEquals($expected, $actual);
+    }
+
+    /**
      * @return array[]
      */
     private function getExamples(): array
@@ -116,20 +159,6 @@ class DecrementCest
                 'options'   => [],
                 'extension' => '',
                 'unknown'   => false,
-            ],
-            [
-                'className' => 'Redis',
-                'class'     => Redis::class,
-                'options'   => getOptionsRedis(),
-                'extension' => 'redis',
-                'unknown'   => -1,
-            ],
-            [
-                'className' => 'RedisCluster',
-                'class'     => RedisCluster::class,
-                'options'   => getOptionsRedisCluster(),
-                'extension' => 'redis',
-                'unknown'   => -1,
             ],
             [
                 'className' => 'Stream',
