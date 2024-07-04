@@ -16,9 +16,10 @@ namespace Phalcon\Storage\Adapter;
 use DateInterval;
 use DateTime;
 use Exception;
+use Phalcon\Events\EventsAwareInterface;
+use Phalcon\Events\Traits\EventsAwareTrait;
 use Phalcon\Storage\Serializer\SerializerInterface;
 use Phalcon\Storage\SerializerFactory;
-use Phalcon\Traits\Helper\Str\StartsWithTrait;
 
 use function is_object;
 use function mb_strtolower;
@@ -36,9 +37,9 @@ use function mb_strtolower;
  * @property SerializerInterface $serializer
  * @property SerializerFactory   $serializerFactory
  */
-abstract class AbstractAdapter implements AdapterInterface
+abstract class AbstractAdapter implements AdapterInterface, EventsAwareInterface
 {
-    use StartsWithTrait;
+    use EventsAwareTrait;
 
     /**
      * @var mixed
@@ -51,26 +52,38 @@ abstract class AbstractAdapter implements AdapterInterface
      * @var string
      */
     protected string $defaultSerializer = 'php';
+
+    /**
+     * EventType prefix.
+     *
+     * @var string
+     */
+    protected string $eventType = "storage";
+
     /**
      * Name of the default TTL (time to live)
      *
      * @var int
      */
     protected int $lifetime = 3600;
+
     /**
      * @var array
      */
     protected array $options = [];
+
     /**
      * @var string
      */
     protected string $prefix = 'ph-memo-';
+
     /**
      * Serializer
      *
      * @var SerializerInterface|null
      */
     protected ?SerializerInterface $serializer;
+
     /**
      * Serializer Factory
      *
@@ -125,7 +138,16 @@ abstract class AbstractAdapter implements AdapterInterface
      *
      * @return int | bool
      */
-    abstract public function decrement(string $key, int $value = 1);
+    public function decrement(string $key, int $value = 1): false | int
+    {
+        $this->fireManagerEvent($this->eventType . ":beforeDecrement", $key);
+
+        $result = $this->doDecrement($key, $value);
+
+        $this->fireManagerEvent($this->eventType . ":afterDecrement", $key);
+
+        return $result;
+    }
 
     /**
      * Deletes data from the adapter
@@ -134,7 +156,16 @@ abstract class AbstractAdapter implements AdapterInterface
      *
      * @return bool
      */
-    abstract public function delete(string $key): bool;
+    public function delete(string $key): bool
+    {
+        $this->fireManagerEvent($this->eventType . ":beforeDelete", $key);
+
+        $result = $this->doDelete($key);
+
+        $this->fireManagerEvent($this->eventType . ":afterDelete", $key);
+
+        return $result;
+    }
 
     /**
      * Reads data from the adapter
@@ -144,15 +175,15 @@ abstract class AbstractAdapter implements AdapterInterface
      *
      * @return mixed|null
      */
-    public function get(string $key, $defaultValue = null)
+    public function get(string $key, mixed $defaultValue = null): mixed
     {
-        if (true !== $this->has($key)) {
-            return $defaultValue;
-        }
+        $this->fireManagerEvent($this->eventType . ":beforeGet", $key);
 
-        $content = $this->doGet($key);
+        $result = $this->doGet($key, $defaultValue);
 
-        return $this->getUnserializedData($content, $defaultValue);
+        $this->fireManagerEvent($this->eventType . ":afterGet", $key);
+
+        return $result;
     }
 
     /**
@@ -160,13 +191,14 @@ abstract class AbstractAdapter implements AdapterInterface
      *
      * @return mixed
      */
-    public function getAdapter()
+    public function getAdapter(): mixed
     {
         return $this->adapter;
     }
 
-
     /**
+     * Name of the default serializer class
+     *
      * @return string
      */
     public function getDefaultSerializer(): string
@@ -196,11 +228,20 @@ abstract class AbstractAdapter implements AdapterInterface
     /**
      * Checks if an element exists in the cache
      *
-     * @param string $key
+     * @param string key
      *
      * @return bool
      */
-    abstract public function has(string $key): bool;
+    public function has(string $key): bool
+    {
+        $this->fireManagerEvent($this->eventType . ":beforeHas", $key);
+
+        $result = $this->doHas($key);
+
+        $this->fireManagerEvent($this->eventType . ":afterHas", $key);
+
+        return $result;
+    }
 
     /**
      * Increments a stored number
@@ -210,10 +251,23 @@ abstract class AbstractAdapter implements AdapterInterface
      *
      * @return int | bool
      */
-    abstract public function increment(string $key, int $value = 1);
+    public function increment(string $key, int $value = 1): false | int
+    {
+        $this->fireManagerEvent($this->eventType . ":beforeIncrement", $key);
+
+        $result = $this->doIncrement($key, $value);
+
+        $this->fireManagerEvent($this->eventType . ":afterIncrement", $key);
+
+        return $result;
+    }
 
     /**
-     * Stores data in the adapter
+     * Stores data in the adapter. If the TTL is `null` (default) or not defined
+     * then the default TTL will be used, as set in this adapter. If the TTL
+     * is `0` or a negative number, a `delete()` will be issued, since this
+     * item has expired. If you need to set this key forever, you should use
+     * the `setForever()` method.
      *
      * @param string                $key
      * @param mixed                 $value
@@ -221,7 +275,16 @@ abstract class AbstractAdapter implements AdapterInterface
      *
      * @return bool
      */
-    abstract public function set(string $key, $value, $ttl = null): bool;
+    public function set(string $key, mixed $value, mixed $ttl = null): bool
+    {
+        $this->fireManagerEvent($this->eventType . ":beforeSet", $key);
+
+        $result = $this->doSet($key, $value, $ttl);
+
+        $this->fireManagerEvent($this->eventType . ":afterSet", $key);
+
+        return $result;
+    }
 
     /**
      * @param string $serializer
@@ -232,16 +295,84 @@ abstract class AbstractAdapter implements AdapterInterface
     }
 
     /**
+     * Decrements a stored number
+     *
+     * @param string $key
+     * @param int    $value
+     *
+     * @return false|int
+     */
+    abstract protected function doDecrement(string $key, int $value = 1): false | int;
+
+    /**
+     * Deletes data from the adapter
+     *
+     * @param string $key
+     *
+     * @return bool
+     */
+    abstract protected function doDelete(string $key): bool;
+
+    /**
      * @param string $key
      *
      * @return mixed
      */
-    protected function doGet(string $key)
+    protected function doGet(string $key, mixed $defaultValue = null): mixed
     {
-        return $this->getAdapter()
-                    ->get($key)
-        ;
+        if (true !== $this->has($key)) {
+            return $defaultValue;
+        }
+
+        $content = $this->doGetData($key);
+        $result  = $this->getUnserializedData($content, $defaultValue);
+
+        return $result;
     }
+
+    /**
+     * @param string $key
+     *
+     * @return mixed
+     */
+    protected function doGetData(string $key): mixed
+    {
+        return $this->getAdapter()->get($key);
+    }
+
+    /**
+     * Checks if an element exists in the cache
+     *
+     * @param string key
+     *
+     * @return bool
+     */
+    abstract protected function doHas(string $key): bool;
+
+    /**
+     * Increments a stored number
+     *
+     * @param string $key
+     * @param int    $value
+     *
+     * @return false|int
+     */
+    abstract protected function doIncrement(string $key, int $value = 1): false | int;
+
+    /**
+     * Stores data in the adapter. If the TTL is `null` (default) or not defined
+     * then the default TTL will be used, as set in this adapter. If the TTL
+     * is `0` or a negative number, a `delete()` will be issued, since this
+     * item has expired. If you need to set this key forever, you should use
+     * the `setForever()` method.
+     *
+     * @param string                $key
+     * @param mixed                 $value
+     * @param DateInterval|int|null $ttl
+     *
+     * @return bool
+     */
+    abstract protected function doSet(string $key, mixed $value, mixed $ttl = null): bool;
 
     /**
      * Filters the keys array based on global and passed prefix
@@ -258,7 +389,7 @@ abstract class AbstractAdapter implements AdapterInterface
         $keys    = !$keys ? [] : $keys;
 
         foreach ($keys as $key) {
-            if (true === $this->toStartsWith($key, $needle)) {
+            if (str_starts_with($key, $needle)) {
                 $results[] = $key;
             }
         }
@@ -273,7 +404,7 @@ abstract class AbstractAdapter implements AdapterInterface
      *
      * @return string
      */
-    protected function getPrefixedKey($key): string
+    protected function getPrefixedKey(mixed $key): string
     {
         return $this->prefix . ((string)$key);
     }
@@ -286,7 +417,7 @@ abstract class AbstractAdapter implements AdapterInterface
      * @return mixed|string|null
      * @throws Exception
      */
-    protected function getSerializedData(mixed $content)
+    protected function getSerializedData(mixed $content): mixed
     {
         if (null !== $this->serializer) {
             $this->serializer->setData($content);
@@ -304,7 +435,7 @@ abstract class AbstractAdapter implements AdapterInterface
      * @return int
      * @throws Exception
      */
-    protected function getTtl($ttl): int
+    protected function getTtl(mixed $ttl): int
     {
         if (null === $ttl) {
             return $this->lifetime;
@@ -328,14 +459,17 @@ abstract class AbstractAdapter implements AdapterInterface
      *
      * @return mixed
      */
-    protected function getUnserializedData($content, $defaultValue = null)
-    {
+    protected function getUnserializedData(
+        mixed $content,
+        mixed $defaultValue = null
+    ): mixed {
         if (null !== $this->serializer) {
+            $this->serializer->unserialize($content);
+
             if (true !== $this->serializer->isSuccess()) {
                 return $defaultValue;
             }
 
-            $this->serializer->unserialize($content);
             $content = $this->serializer->getData();
         }
 

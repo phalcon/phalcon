@@ -13,18 +13,15 @@ declare(strict_types=1);
 
 namespace Phalcon\Storage\Adapter;
 
-use DateInterval;
-use Exception as BaseException;
 use Phalcon\Storage\Exception as StorageException;
 use Phalcon\Storage\SerializerFactory;
 use Phalcon\Support\Exception as SupportException;
-use RedisCluster as RedisService;
 use Redis as RedisConsts;
+use RedisCluster as RedisService;
 use Throwable;
 
 use function defined;
 use function is_bool;
-use function is_int;
 use function mb_strtolower;
 
 /**
@@ -68,35 +65,20 @@ class RedisCluster extends Redis
      *
      * @param SerializerFactory $factory
      * @param array             $options {
-     *     name: ?string,
-     *     hosts: array,
-     *     timeout: float,
-     *     readTimeout: float,
-     *     persistent: bool,
-     *     auth: string|array,
-     *     context: string
-     * }
+     *                                   name: ?string,
+     *                                   hosts: array,
+     *                                   timeout: float,
+     *                                   readTimeout: float,
+     *                                   persistent: bool,
+     *                                   auth: string|array,
+     *                                   context: string
+     *                                   }
+     *
      * @throws SupportException
      */
     public function __construct(SerializerFactory $factory, array $options = [])
     {
         parent::__construct($factory, $options);
-    }
-
-    protected function getDefaultOptions($options): array
-    {
-        /**
-         * Lets set some defaults and options here
-         */
-        $options["name"] = $options["name"] ?? null;
-        $options["hosts"] = $options["hosts"] ?? ["127.0.0.1:6379"];
-        $options["timeout"] = $options["timeout"] ?? 0;
-        $options["readTimeout"] = $options["readTimeout"] ?? 0;
-        $options["persistent"] = (bool)($options["persistent"] ?? false);
-        $options["auth"] = $options["auth"] ?? "";
-        $options["context"] = $options["context"] ?? null;
-
-        return $options;
     }
 
     /**
@@ -116,42 +98,13 @@ class RedisCluster extends Redis
     }
 
     /**
-     * Decrements a stored number
-     *
-     * @param string $key
-     * @param int $value
-     *
-     * @return int
-     * @throws StorageException|SupportException
-     */
-    public function decrement(string $key, int $value = 1)
-    {
-        return $this->getAdapter()
-            ->decrBy($key, $value);
-    }
-
-    /**
-     * Reads data from the adapter
-     *
-     * @param string $key
-     *
-     * @return bool
-     * @throws StorageException|SupportException
-     */
-    public function delete(string $key): bool
-    {
-        return (bool)$this->getAdapter()
-            ->del($key);
-    }
-
-    /**
      * Returns the already connected adapter or connects to the Redis
      * server(s)
      *
      * @return RedisService
      * @throws StorageException|SupportException
      */
-    public function getAdapter()
+    public function getAdapter(): mixed
     {
         if (null === $this->adapter) {
             $options = $this->options;
@@ -197,68 +150,9 @@ class RedisCluster extends Redis
     {
         return $this->getFilteredKeys(
             $this->getAdapter()
-                ->keys('*'),
+                 ->keys('*'),
             $prefix
         );
-    }
-
-    /**
-     * Checks if an element exists in the cache
-     *
-     * @param string $key
-     *
-     * @return bool
-     * @throws StorageException|SupportException
-     */
-    public function has(string $key): bool
-    {
-        return (bool)$this->getAdapter()
-            ->exists($key);
-    }
-
-    /**
-     * Increments a stored number
-     *
-     * @param string $key
-     * @param int $value
-     *
-     * @return int
-     * @throws StorageException|SupportException
-     */
-    public function increment(string $key, int $value = 1)
-    {
-        return $this->getAdapter()
-            ->incrBy($key, $value);
-    }
-
-    /**
-     * Stores data in the adapter. If the TTL is `null` (default) or not defined
-     * then the default TTL will be used, as set in this adapter. If the TTL
-     * is `0` or a negative number, a `delete()` will be issued, since this
-     * item has expired. If you need to set this key forever, you should use
-     * the `setForever()` method.
-     *
-     * @param string $key
-     * @param mixed $value
-     * @param DateInterval|int|null $ttl
-     *
-     * @return bool
-     * @throws BaseException
-     */
-    public function set(string $key, $value, $ttl = null): bool
-    {
-        if (true === is_int($ttl) && $ttl < 1) {
-            return $this->delete($key);
-        }
-
-        $result = $this->getAdapter()
-            ->set(
-                $key,
-                $this->getSerializedData($value),
-                $this->getTtl($ttl)
-            );
-
-        return is_bool($result) ? $result : false;
     }
 
     /**
@@ -266,17 +160,64 @@ class RedisCluster extends Redis
      * from the adapter.
      *
      * @param string $key
-     * @param mixed $value
+     * @param mixed  $value
      *
      * @return bool
      * @throws StorageException|SupportException
      */
-    public function setForever(string $key, $value): bool
+    public function setForever(string $key, mixed $data): bool
     {
         $result = $this->getAdapter()
-            ->set($key, $this->getSerializedData($value));
+                       ->set($key, $this->getSerializedData($data))
+        ;
 
         return is_bool($result) ? $result : false;
+    }
+
+    /**
+     * Decrements a stored number
+     *
+     * @param string $key
+     * @param int    $value
+     *
+     * @return int
+     * @throws StorageException|SupportException
+     */
+    protected function doDecrement(string $key, int $value = 1): false | int
+    {
+        return $this->getAdapter()
+                    ->decrBy($key, $value)
+        ;
+    }
+
+    /**
+     * Reads data from the adapter
+     *
+     * @param string $key
+     *
+     * @return bool
+     * @throws StorageException|SupportException
+     */
+    protected function doDelete(string $key): bool
+    {
+        return (bool)$this->getAdapter()->del($key);
+    }
+
+
+    protected function getDefaultOptions($options): array
+    {
+        /**
+         * Lets set some defaults and options here
+         */
+        $options["name"]        = $options["name"] ?? null;
+        $options["hosts"]       = $options["hosts"] ?? ["127.0.0.1:6379"];
+        $options["timeout"]     = $options["timeout"] ?? 0;
+        $options["readTimeout"] = $options["readTimeout"] ?? 0;
+        $options["persistent"]  = (bool)($options["persistent"] ?? false);
+        $options["auth"]        = $options["auth"] ?? "";
+        $options["context"]     = $options["context"] ?? null;
+
+        return $options;
     }
 
     /**
@@ -284,13 +225,14 @@ class RedisCluster extends Redis
      * the custom one is set.
      *
      * @param RedisService $connection
+     *
      * @throws SupportException
      */
     private function setSerializer(RedisService $connection): void
     {
         $map = [
             'redis_none' => RedisConsts::SERIALIZER_NONE,
-            'redis_php' => RedisConsts::SERIALIZER_PHP,
+            'redis_php'  => RedisConsts::SERIALIZER_PHP,
         ];
 
         /**

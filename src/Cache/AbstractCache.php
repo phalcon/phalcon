@@ -16,6 +16,8 @@ namespace Phalcon\Cache;
 use DateInterval;
 use Phalcon\Cache\Adapter\AdapterInterface;
 use Phalcon\Cache\Exception\InvalidArgumentException;
+use Phalcon\Events\EventsAwareInterface;
+use Phalcon\Events\Traits\EventsAwareTrait;
 use Traversable;
 
 /**
@@ -24,8 +26,10 @@ use Traversable;
  *
  * @property AdapterInterface $adapter
  */
-abstract class AbstractCache implements CacheInterface
+abstract class AbstractCache implements CacheInterface, EventsAwareInterface
 {
+    use EventsAwareTrait;
+
     /**
      * The adapter
      *
@@ -77,7 +81,7 @@ abstract class AbstractCache implements CacheInterface
      *
      * @throws InvalidArgumentException
      */
-    protected function checkKeys($keys): void
+    protected function checkKeys(mixed $keys): void
     {
         if (!(is_array($keys) || $keys instanceof Traversable)) {
             $exception = $this->getExceptionClass();
@@ -110,9 +114,15 @@ abstract class AbstractCache implements CacheInterface
      */
     protected function doDelete(string $key): bool
     {
+        $this->fireManagerEvent("cache:beforeDelete", $key);
+
         $this->checkKey($key);
 
-        return $this->adapter->delete($key);
+        $result = $this->adapter->delete($key);
+
+        $this->fireManagerEvent("cache:afterDelete", $key);
+
+        return $result;
     }
 
     /**
@@ -129,6 +139,8 @@ abstract class AbstractCache implements CacheInterface
      */
     protected function doDeleteMultiple($keys): bool
     {
+        $this->fireManagerEvent("cache:beforeDeleteMultiple", $keys);
+
         $this->checkKeys($keys);
 
         $result = true;
@@ -137,6 +149,8 @@ abstract class AbstractCache implements CacheInterface
                 $result = false;
             }
         }
+
+        $this->fireManagerEvent("cache:afterDeleteMultiple", $keys);
 
         return $result;
     }
@@ -155,9 +169,15 @@ abstract class AbstractCache implements CacheInterface
      */
     protected function doGet(string $key, mixed $default = null)
     {
+        $this->fireManagerEvent('cache:beforeGet', $key);
+
         $this->checkKey($key);
 
-        return $this->adapter->get($key, $default);
+        $result = $this->adapter->get($key, $default);
+
+        $this->fireManagerEvent('cache:afterGet', $key);
+
+        return $result;
     }
 
     /**
@@ -174,14 +194,18 @@ abstract class AbstractCache implements CacheInterface
      * @throws InvalidArgumentException MUST be thrown if $keys is neither an
      * array nor a Traversable, or if any of the $keys are not a legal value.
      */
-    protected function doGetMultiple($keys, $default = null)
+    protected function doGetMultiple(mixed $keys, mixed $default = null)
     {
+        $this->fireManagerEvent('cache:beforeGetMultiple', $keys);
+
         $this->checkKeys($keys);
 
         $results = [];
         foreach ($keys as $element) {
             $results[$element] = $this->get($element, $default);
         }
+
+        $this->fireManagerEvent('cache:afterGetMultiple', $keys);
 
         return $results;
     }
@@ -198,9 +222,15 @@ abstract class AbstractCache implements CacheInterface
      */
     protected function doHas(string $key): bool
     {
+        $this->fireManagerEvent('cache:beforeHas', $key);
+
         $this->checkKey($key);
 
-        return $this->adapter->has($key);
+        $result = $this->adapter->has($key);
+
+        $this->fireManagerEvent('cache:afterHas', $key);
+
+        return $result;
     }
 
     /**
@@ -221,11 +251,17 @@ abstract class AbstractCache implements CacheInterface
      * @throws InvalidArgumentException MUST be thrown if the $key string is not
      * a legal value.
      */
-    protected function doSet(string $key, $value, $ttl = null): bool
+    protected function doSet(string $key, mixed $value, mixed $ttl = null): bool
     {
+        $this->fireManagerEvent('cache:beforeSet', $key);
+
         $this->checkKey($key);
 
-        return $this->adapter->set($key, $value, $ttl);
+        $result = $this->adapter->set($key, $value, $ttl);
+
+        $this->fireManagerEvent('cache:afterSet', $key);
+
+        return $result;
     }
 
     /**
@@ -245,8 +281,10 @@ abstract class AbstractCache implements CacheInterface
      * @throws InvalidArgumentException MUST be thrown if $values is neither an
      * array nor a Traversable, or if any of the $values are not a legal value.
      */
-    protected function doSetMultiple($values, $ttl = null): bool
+    protected function doSetMultiple(mixed $values, mixed $ttl = null): bool
     {
+        $this->fireManagerEvent('cache:beforeSetMultiple', $values);
+
         $this->checkKeys($values);
 
         $result = true;
@@ -255,6 +293,8 @@ abstract class AbstractCache implements CacheInterface
                 $result = false;
             }
         }
+
+        $this->fireManagerEvent('cache:afterSetMultiple', $values);
 
         return $result;
     }
