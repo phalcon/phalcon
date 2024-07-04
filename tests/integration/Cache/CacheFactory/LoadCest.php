@@ -17,9 +17,9 @@ use IntegrationTester;
 use Phalcon\Cache\AdapterFactory;
 use Phalcon\Cache\Cache;
 use Phalcon\Cache\CacheFactory;
-use Phalcon\Cache\CacheInterface;
 use Phalcon\Storage\SerializerFactory;
 use Phalcon\Tests\Fixtures\Traits\FactoryTrait;
+use Phalcon\Cache\CacheInterface;
 
 class LoadCest
 {

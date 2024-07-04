@@ -19,13 +19,12 @@ use Phalcon\Cache\Adapter\Apcu;
 use Phalcon\Cache\Adapter\Libmemcached;
 use Phalcon\Cache\Adapter\Memory;
 use Phalcon\Cache\Adapter\Redis;
-use Phalcon\Cache\Adapter\RedisCluster;
 use Phalcon\Cache\Adapter\Stream;
+use Phalcon\Cache\Adapter\Weak;
 use Phalcon\Storage\SerializerFactory;
 
 use function array_merge;
 use function getOptionsRedis;
-use function getOptionsRedisCluster;
 use function outputDir;
 use function sprintf;
 
@@ -39,7 +38,7 @@ class GetPrefixCest
      * @author       Phalcon Team <team@phalcon.io>
      * @since        2020-09-09
      */
-    public function storageAdapterGetSetPrefix(IntegrationTester $I, Example $example)
+    public function cacheAdapterGetSetPrefix(IntegrationTester $I, Example $example)
     {
         $I->wantToTest(
             sprintf(
@@ -203,44 +202,6 @@ class GetPrefixCest
                 'extension' => 'redis',
             ],
             [
-                'className' => 'RedisCluster',
-                'label'     => 'default',
-                'class'     => RedisCluster::class,
-                'options'   => array_merge(
-                    getOptionsRedisCluster(),
-                    [
-                    ]
-                ),
-                'expected'  => 'ph-redc-',
-                'extension' => 'redis',
-            ],
-            [
-                'className' => 'RedisCluster',
-                'label'     => 'empty',
-                'class'     => RedisCluster::class,
-                'options'   => array_merge(
-                    getOptionsRedisCluster(),
-                    [
-                        'prefix' => '',
-                    ]
-                ),
-                'expected'  => '',
-                'extension' => 'redis',
-            ],
-            [
-                'className' => 'RedisCLuster',
-                'label'     => 'prefix set',
-                'class'     => RedisCluster::class,
-                'options'   => array_merge(
-                    getOptionsRedisCluster(),
-                    [
-                        'prefix' => 'my-prefix',
-                    ]
-                ),
-                'expected'  => 'my-prefix',
-                'extension' => 'redis',
-            ],
-            [
                 'className' => 'Stream',
                 'label'     => 'default',
                 'class'     => Stream::class,
@@ -270,6 +231,35 @@ class GetPrefixCest
                     'prefix'     => 'my-prefix',
                 ],
                 'expected'  => 'my-prefix',
+                'extension' => '',
+            ],
+            [
+                'className' => 'Weak',
+                'label'     => 'default',
+                'class'     => Weak::class,
+                'options'   => [
+                ],
+                'expected'  => '',
+                'extension' => '',
+            ],
+            [
+                'className' => 'Weak',
+                'label'     => 'empty',
+                'class'     => Weak::class,
+                'options'   => [
+                    'prefix' => '',
+                ],
+                'expected'  => '',
+                'extension' => '',
+            ],
+            [
+                'className' => 'Weak',
+                'label'     => 'prefix set',
+                'class'     => Weak::class,
+                'options'   => [
+                    'prefix' => 'my-prefix',
+                ],
+                'expected'  => '',
                 'extension' => '',
             ],
         ];

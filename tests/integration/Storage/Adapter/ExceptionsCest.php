@@ -13,10 +13,8 @@ declare(strict_types=1);
 
 namespace Phalcon\Tests\Integration\Storage\Adapter;
 
-use Codeception\Example;
 use IntegrationTester;
 use Phalcon\Storage\Adapter\Redis;
-use Phalcon\Storage\Adapter\RedisCluster;
 use Phalcon\Storage\Adapter\Stream;
 use Phalcon\Storage\Exception as StorageException;
 use Phalcon\Storage\SerializerFactory;
@@ -25,7 +23,6 @@ use Phalcon\Support\Exception as HelperException;
 use function array_merge;
 use function file_put_contents;
 use function getOptionsRedis;
-use function getOptionsRedisCluster;
 use function is_dir;
 use function mkdir;
 use function outputDir;
@@ -70,38 +67,25 @@ class ExceptionsCest
     /**
      * Tests Phalcon\Storage\Adapter\Redis :: get() - failed auth
      *
-     * @dataProvider getExamples
-     *
      * @param IntegrationTester $I
      *
      * @author Phalcon Team <team@phalcon.io>
      * @since  2020-09-09
      */
-    public function storageAdapterRedisGetSetFailedAuth(IntegrationTester $I, Example $example)
+    public function storageAdapterRedisGetSetFailedAuth(IntegrationTester $I)
     {
-        $I->wantToTest(
-            sprintf(
-                'Storage\Adapter\%s - get()/set() - failed auth',
-                $example['className']
-            )
-        );
+        $I->wantToTest('Storage\Adapter\Redis - get()/set() - failed auth');
 
-        $extension = $example['extension'];
-        $class     = $example['class'];
-        $options   = $example['options'];
-
-        if (!empty($extension)) {
-            $I->checkExtensionIsLoaded($extension);
-        }
+        $I->checkExtensionIsLoaded('redis');
 
         $I->expectThrowable(
-            StorageException::class,
-            function () use ($class, $options) {
+            new StorageException('Failed to authenticate with the Redis server'),
+            function () {
                 $serializer = new SerializerFactory();
-                $adapter    = new $class(
+                $adapter    = new Redis(
                     $serializer,
                     array_merge(
-                        $options,
+                        getOptionsRedis(),
                         [
                             'auth' => 'something',
                         ]
@@ -127,6 +111,10 @@ class ExceptionsCest
     public function storageAdapterStreamGetErrors(IntegrationTester $I)
     {
         $I->wantToTest('Storage\Adapter\Stream - get() - errors');
+
+        if (version_compare(PHP_VERSION, '8.3.0', '>=')) {
+            $I->markTestSkipped('Invalid `unserialize()` will generate warning but still works.');
+        }
 
         $serializer = new SerializerFactory();
         $adapter    = new Stream(
@@ -170,25 +158,5 @@ class ExceptionsCest
         $I->assertSame($expected, $actual);
 
         $I->safeDeleteFile($target . 'test-key');
-    }
-
-    private function getExamples(): array
-    {
-        return [
-            [
-                'className' => 'Redis',
-                'label'     => 'default',
-                'class'     => Redis::class,
-                'options'   => getOptionsRedis(),
-                'extension' => 'redis',
-            ],
-            [
-                'className' => 'RedisCluster',
-                'label'     => 'default',
-                'class'     => RedisCluster::class,
-                'options'   => getOptionsRedisCluster(),
-                'extension' => 'redis',
-            ],
-        ];
     }
 }

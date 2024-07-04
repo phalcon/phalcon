@@ -20,15 +20,13 @@ use Phalcon\Storage\Adapter\Apcu;
 use Phalcon\Storage\Adapter\Libmemcached;
 use Phalcon\Storage\Adapter\Memory;
 use Phalcon\Storage\Adapter\Redis;
-use Phalcon\Storage\Adapter\RedisCluster;
 use Phalcon\Storage\Adapter\Stream;
+use Phalcon\Storage\Adapter\Weak;
 use Phalcon\Storage\SerializerFactory;
 use Redis as NativeRedis;
-use RedisCluster as NativeRedisCluster;
 
 use function getOptionsLibmemcached;
 use function getOptionsRedis;
-use function getOptionsRedisCluster;
 use function outputDir;
 use function sprintf;
 
@@ -109,20 +107,20 @@ class GetAdapterCest
                 'extension' => 'redis',
             ],
             [
-                'className' => 'RedisCluster',
-                'label'     => 'default',
-                'class'     => RedisCluster::class,
-                'options'   => getOptionsRedisCluster(),
-                'expected'  => NativeRedisCluster::class,
-                'extension' => 'redis',
-            ],
-            [
                 'className' => 'Stream',
                 'label'     => 'default',
                 'class'     => Stream::class,
                 'options'   => [
                     'storageDir' => outputDir(),
                 ],
+                'expected'  => null,
+                'extension' => '',
+            ],
+            [
+                'className' => 'Weak',
+                'label'     => 'default',
+                'class'     => Weak::class,
+                'options'   => [],
                 'expected'  => null,
                 'extension' => '',
             ],

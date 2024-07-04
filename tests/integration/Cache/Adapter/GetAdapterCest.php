@@ -20,15 +20,13 @@ use Phalcon\Cache\Adapter\Apcu;
 use Phalcon\Cache\Adapter\Libmemcached;
 use Phalcon\Cache\Adapter\Memory;
 use Phalcon\Cache\Adapter\Redis;
-use Phalcon\Cache\Adapter\RedisCluster;
 use Phalcon\Cache\Adapter\Stream;
+use Phalcon\Cache\Adapter\Weak;
 use Phalcon\Storage\SerializerFactory;
 use Redis as NativeRedis;
-use RedisCluster as NativeRedisCluster;
 
 use function getOptionsLibmemcached;
 use function getOptionsRedis;
-use function getOptionsRedisCluster;
 use function outputDir;
 use function sprintf;
 
@@ -42,7 +40,7 @@ class GetAdapterCest
      * @author       Phalcon Team <team@phalcon.io>
      * @since        2020-09-09
      */
-    public function storageAdapterGetAdapter(IntegrationTester $I, Example $example)
+    public function cacheAdapterGetAdapter(IntegrationTester $I, Example $example)
     {
         $I->wantToTest(
             sprintf(
@@ -109,20 +107,20 @@ class GetAdapterCest
                 'extension' => 'redis',
             ],
             [
-                'className' => 'RedisCluster',
-                'label'     => 'default',
-                'class'     => RedisCluster::class,
-                'options'   => getOptionsRedisCluster(),
-                'expected'  => NativeRedisCluster::class,
-                'extension' => 'redis',
-            ],
-            [
                 'className' => 'Stream',
                 'label'     => 'default',
                 'class'     => Stream::class,
                 'options'   => [
                     'storageDir' => outputDir(),
                 ],
+                'expected'  => null,
+                'extension' => '',
+            ],
+            [
+                'className' => 'Weak',
+                'label'     => 'default',
+                'class'     => Weak::class,
+                'options'   => [],
                 'expected'  => null,
                 'extension' => '',
             ],

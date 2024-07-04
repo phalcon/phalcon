@@ -19,13 +19,12 @@ use Phalcon\Storage\Adapter\Apcu;
 use Phalcon\Storage\Adapter\Libmemcached;
 use Phalcon\Storage\Adapter\Memory;
 use Phalcon\Storage\Adapter\Redis;
-use Phalcon\Storage\Adapter\RedisCluster;
 use Phalcon\Storage\Adapter\Stream;
+use Phalcon\Storage\Adapter\Weak;
 use Phalcon\Storage\SerializerFactory;
 
 use function getOptionsLibmemcached;
 use function getOptionsRedis;
-use function getOptionsRedisCluster;
 use function outputDir;
 
 class GetSetDefaultSerializerCest
@@ -70,6 +69,30 @@ class GetSetDefaultSerializerCest
     }
 
     /**
+     * Tests Phalcon\Storage\Adapter\Weak :: GetSetDefaultSerializer()
+     *
+     * @param IntegrationTester $I
+     *
+     * @author       Phalcon Team <team@phalcon.io>
+     * @since        2023-07-17
+     */
+    public function storageAdapterWeakGetSetDefaultSerializerNone(IntegrationTester $I)
+    {
+
+        $I->wantToTest('Storage\Adapter\Weak - GetSetDefaultSerializer()');
+
+        $serializer = new SerializerFactory();
+        $adapter    = new Weak($serializer);
+
+        $actual = $adapter->getDefaultSerializer();
+        $I->assertEquals('none', $actual);
+
+        $adapter->setDefaultSerializer('Base64');
+        $actual = $adapter->getDefaultSerializer();
+        $I->assertEquals('none', $actual);
+    }
+
+    /**
      * @return array[]
      */
     private function getExamples(): array
@@ -99,13 +122,6 @@ class GetSetDefaultSerializerCest
                 'label'     => 'default',
                 'class'     => Redis::class,
                 'options'   => getOptionsRedis(),
-                'extension' => 'redis',
-            ],
-            [
-                'className' => 'RedisCluster',
-                'label'     => 'default',
-                'class'     => RedisCluster::class,
-                'options'   => getOptionsRedisCluster(),
                 'extension' => 'redis',
             ],
             [

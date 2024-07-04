@@ -16,7 +16,6 @@ namespace Phalcon\Tests\Integration\Cache\Adapter\Redis;
 use Codeception\Example;
 use IntegrationTester;
 use Phalcon\Cache\Adapter\Redis;
-use Phalcon\Cache\Adapter\RedisCluster;
 use Phalcon\Storage\Exception as StorageException;
 use Phalcon\Storage\SerializerFactory;
 use Phalcon\Support\Exception as HelperException;
@@ -25,7 +24,6 @@ use stdClass;
 
 use function array_merge;
 use function getOptionsRedis;
-use function getOptionsRedisCluster;
 use function uniqid;
 
 class GetSetCest
@@ -46,7 +44,7 @@ class GetSetCest
      * @author       Phalcon Team <team@phalcon.io>
      * @since        2020-09-09
      */
-    public function storageAdapterRedisGetSet(IntegrationTester $I, Example $example)
+    public function cacheAdapterRedisGetSet(IntegrationTester $I, Example $example)
     {
         $I->wantToTest('Cache\Adapter\Redis - get()/set() - ' . $example[0]);
 
@@ -63,39 +61,7 @@ class GetSetCest
     }
 
     /**
-     * Tests Phalcon\Cache\Adapter\RedisCluster :: get()
-     *
-     * @dataProvider getExamples
-     *
-     * @param IntegrationTester $I
-     * @param Example           $example
-     *
-     * @throws HelperException
-     * @throws StorageException
-     *
-     * @author       Phalcon Team <team@phalcon.io>
-     * @since        2020-09-09
-     */
-    public function storageAdapterRedisClusterGetSet(IntegrationTester $I, Example $example)
-    {
-        $I->wantToTest('Cache\Adapter\Redis - get()/set() - ' . $example[0]);
-
-        $serializer = new SerializerFactory();
-        $adapter    = new RedisCluster($serializer, getOptionsRedisCluster());
-
-        $key    = uniqid();
-        $actual = $adapter->set($key, $example[1]);
-        $I->assertTrue($actual);
-
-        $expected = $example[1];
-        $actual   = $adapter->get($key);
-        $I->assertEquals($expected, $actual);
-    }
-
-    /**
      * Tests Phalcon\Cache\Adapter\Redis :: get() - persistent
-     *
-     * @dataProvider getAdapterExamples
      *
      * @param IntegrationTester $I
      *
@@ -105,28 +71,15 @@ class GetSetCest
      * @author Phalcon Team <team@phalcon.io>
      * @since  2020-09-09
      */
-    public function storageAdapterRedisGetSetPersistent(IntegrationTester $I, Example $example)
+    public function cacheAdapterRedisGetSetPersistent(IntegrationTester $I)
     {
-        $I->wantToTest(
-            sprintf(
-                'Cache\Adapter\%s - get()/set() - persistent',
-                $example['className']
-            )
-        );
-
-        $extension = $example['extension'];
-        $class     = $example['class'];
-        $options   = $example['options'];
-
-        if (!empty($extension)) {
-            $I->checkExtensionIsLoaded($extension);
-        }
+        $I->wantToTest('Cache\Adapter\Redis - get()/set() - persistent');
 
         $serializer = new SerializerFactory();
-        $adapter    = new $class(
+        $adapter    = new Redis(
             $serializer,
             array_merge(
-                $options,
+                getOptionsRedis(),
                 [
                     'persistent' => true,
                 ]
@@ -150,7 +103,7 @@ class GetSetCest
      * @author Phalcon Team <team@phalcon.io>
      * @since  2020-09-09
      */
-    public function storageAdapterRedisGetSetWrongIndex(IntegrationTester $I)
+    public function cacheAdapterRedisGetSetWrongIndex(IntegrationTester $I)
     {
         $I->wantToTest('Cache\Adapter\Redis - get()/set() - wrong index');
 
@@ -176,38 +129,23 @@ class GetSetCest
     /**
      * Tests Phalcon\Cache\Adapter\Redis :: get() - failed auth
      *
-     * @dataProvider getAdapterExamples
-     *
      * @param IntegrationTester $I
      *
      * @author Phalcon Team <team@phalcon.io>
      * @since  2020-09-09
      */
-    public function storageAdapterRedisGetSetFailedAuth(IntegrationTester $I, Example $example)
+    public function cacheAdapterRedisGetSetFailedAuth(IntegrationTester $I)
     {
-        $I->wantToTest(
-            sprintf(
-                'Cache\Adapter\%s - get()/set() - failed auth',
-                $example['className']
-            )
-        );
-
-        $extension = $example['extension'];
-        $class     = $example['class'];
-        $options   = $example['options'];
-
-        if (!empty($extension)) {
-            $I->checkExtensionIsLoaded($extension);
-        }
+        $I->wantToTest('Cache\Adapter\Redis - get()/set() - failed auth');
 
         $I->expectThrowable(
-            StorageException::class,
-            function () use ($options, $class) {
+            new StorageException('Failed to authenticate with the Redis server'),
+            function () {
                 $serializer = new SerializerFactory();
-                $adapter    = new $class(
+                $adapter    = new Redis(
                     $serializer,
                     array_merge(
-                        $options,
+                        getOptionsRedis(),
                         [
                             'auth' => 'something',
                         ]
@@ -222,8 +160,6 @@ class GetSetCest
     /**
      * Tests Phalcon\Cache\Adapter\Redis :: get()/set() - custom serializer
      *
-     * @dataProvider getAdapterExamples
-     *
      * @param IntegrationTester $I
      *
      * @throws HelperException
@@ -232,28 +168,15 @@ class GetSetCest
      * @author Phalcon Team <team@phalcon.io>
      * @since  2020-09-09
      */
-    public function storageAdapterRedisGetSetCustomSerializer(IntegrationTester $I, Example $example): void
+    public function cacheAdapterRedisGetSetCustomSerializer(IntegrationTester $I)
     {
-        $I->wantToTest(
-            sprintf(
-                'Cache\Adapter\%s - get()/set() - custom serializer',
-                $example['className']
-            )
-        );
-
-        $extension = $example['extension'];
-        $class     = $example['class'];
-        $options   = $example['options'];
-
-        if (!empty($extension)) {
-            $I->checkExtensionIsLoaded($extension);
-        }
+        $I->wantToTest('Cache\Adapter\Redis - get()/set() - custom serializer');
 
         $serializer = new SerializerFactory();
-        $adapter    = new $class(
+        $adapter    = new Redis(
             $serializer,
             array_merge(
-                $options,
+                getOptionsRedis(),
                 [
                     'defaultSerializer' => 'Base64',
                 ]
@@ -293,26 +216,6 @@ class GetSetCest
             [
                 'object',
                 new stdClass(),
-            ],
-        ];
-    }
-
-    private function getAdapterExamples(): array
-    {
-        return [
-            [
-                'className' => 'Redis',
-                'label' => 'default',
-                'class' => Redis::class,
-                'options' => getOptionsRedis(),
-                'extension' => 'redis',
-            ],
-            [
-                'className' => 'RedisCluster',
-                'label' => 'default',
-                'class' => RedisCluster::class,
-                'options' => getOptionsRedisCluster(),
-                'extension' => 'redis',
             ],
         ];
     }

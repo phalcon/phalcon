@@ -18,10 +18,12 @@ use IntegrationTester;
 use Phalcon\Cache\Adapter\Apcu;
 use Phalcon\Cache\Adapter\Libmemcached;
 use Phalcon\Cache\Adapter\Memory;
+use Phalcon\Cache\Adapter\Redis;
 use Phalcon\Cache\Adapter\Stream;
 use Phalcon\Storage\SerializerFactory;
 
 use function getOptionsLibmemcached;
+use function getOptionsRedis;
 use function outputDir;
 use function uniqid;
 
@@ -35,7 +37,7 @@ class DecrementCest
      * @author       Phalcon Team <team@phalcon.io>
      * @since        2020-09-09
      */
-    public function storageAdapterClear(IntegrationTester $I, Example $example)
+    public function cacheAdapterClear(IntegrationTester $I, Example $example)
     {
         $I->wantToTest(
             sprintf(
@@ -113,13 +115,13 @@ class DecrementCest
                 'extension' => '',
                 'unknown'   => false,
             ],
-            //            [
-            //                'className' => 'Redis',
-            //                'class'     => Redis::class,
-            //                'options'   => getOptionsRedis(),
-            //                'extension' => 'redis',
-            //                'unknown'   => 1,
-            //            ],
+//            [
+//                'className' => 'Redis',
+//                'class'     => Redis::class,
+//                'options'   => getOptionsRedis(),
+//                'extension' => 'redis',
+//                'unknown'   => 1,
+//            ],
             [
                 'className' => 'Stream',
                 'class'     => Stream::class,

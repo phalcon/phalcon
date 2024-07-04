@@ -19,13 +19,11 @@ use Phalcon\Storage\Adapter\Apcu;
 use Phalcon\Storage\Adapter\Libmemcached;
 use Phalcon\Storage\Adapter\Memory;
 use Phalcon\Storage\Adapter\Redis;
-use Phalcon\Storage\Adapter\RedisCluster;
 use Phalcon\Storage\Adapter\Stream;
 use Phalcon\Storage\SerializerFactory;
 
 use function getOptionsLibmemcached;
 use function getOptionsRedis;
-use function getOptionsRedisCluster;
 use function outputDir;
 use function uniqid;
 
@@ -93,29 +91,19 @@ class IncrementCest
     /**
      * Tests Phalcon\Storage\Adapter\Redis :: increment()
      *
-     * @dataProvider getRedisExamples
-     *
      * @param IntegrationTester $I
      *
      * @author Phalcon Team <team@phalcon.io>
      * @since  2020-09-09
      */
-    public function storageAdapterRedisIncrement(IntegrationTester $I, Example $example)
+    public function storageAdapterRedisIncrement(IntegrationTester $I)
     {
-        $I->wantToTest(
-            sprintf(
-                'Storage\Adapter\%s - increment()',
-                $example['className']
-            )
-        );
+        $I->wantToTest('Storage\Adapter\Redis - increment()');
 
         $I->checkExtensionIsLoaded('redis');
 
-        $class     = $example['class'];
-        $options   = $example['options'];
-
         $serializer = new SerializerFactory();
-        $adapter    = new $class($serializer, $options);
+        $adapter    = new Redis($serializer, getOptionsRedis());
 
         $key      = uniqid();
         $expected = 1;
@@ -183,24 +171,6 @@ class IncrementCest
                 ],
                 'extension' => '',
                 'unknown'   => false,
-            ],
-        ];
-    }
-
-    private function getRedisExamples()
-    {
-        return [
-            [
-                'className' => 'Redis',
-                'class' => Redis::class,
-                'options' => getOptionsRedis(),
-                'unknown' => -1,
-            ],
-            [
-                'className' => 'RedisCluster',
-                'class' => RedisCluster::class,
-                'options' => getOptionsRedisCluster(),
-                'unknown' => -1,
             ],
         ];
     }

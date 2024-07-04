@@ -13,26 +13,21 @@ declare(strict_types=1);
 
 namespace Phalcon\Tests\Integration\Cache\Adapter\Redis;
 
-use Codeception\Example;
 use IntegrationTester;
 use Phalcon\Cache\Adapter\Redis;
-use Phalcon\Cache\Adapter\RedisCluster;
 use Phalcon\Cache\Exception as CacheException;
 use Phalcon\Storage\SerializerFactory;
 use Phalcon\Support\Exception as HelperException;
 use Phalcon\Tests\Fixtures\Traits\RedisTrait;
 
 use function getOptionsRedis;
-use function getOptionsRedisCluster;
 
 class GetKeysCest
 {
     use RedisTrait;
 
     /**
-     * Tests Phalcon\Cache\Adapter\Redis* :: getKeys()
-     *
-     * @dataProvider getExamples
+     * Tests Phalcon\Cache\Adapter\Redis :: getKeys()
      *
      * @param IntegrationTester $I
      *
@@ -42,25 +37,12 @@ class GetKeysCest
      * @author Phalcon Team <team@phalcon.io>
      * @since  2020-09-09
      */
-    public function storageAdapterRedisGetKeys(IntegrationTester $I, Example $example): void
+    public function cacheAdapterRedisGetKeys(IntegrationTester $I)
     {
-        $I->wantToTest(
-            sprintf(
-                'Cache\Adapter\%s - getKeys()',
-                $example['className']
-            )
-        );
-
-        $extension = $example['extension'];
-        $class     = $example['class'];
-        $options   = $example['options'];
-
-        if (!empty($extension)) {
-            $I->checkExtensionIsLoaded($extension);
-        }
+        $I->wantToTest('Cache\Adapter\Redis - getKeys()');
 
         $serializer = new SerializerFactory();
-        $adapter    = new $class($serializer, $options);
+        $adapter    = new Redis($serializer, getOptionsRedis());
 
         $I->assertTrue($adapter->clear());
 
@@ -78,46 +60,22 @@ class GetKeysCest
         $actual = $adapter->has('one-2');
         $I->assertTrue($actual);
 
-        $prefix = $example['prefix'];
         $expected = [
-            "{$prefix}-key-1",
-            "{$prefix}-key-2",
-            "{$prefix}-one-1",
-            "{$prefix}-one-2",
+            'ph-reds-key-1',
+            'ph-reds-key-2',
+            'ph-reds-one-1',
+            'ph-reds-one-2',
         ];
         $actual   = $adapter->getKeys();
         sort($actual);
         $I->assertEquals($expected, $actual);
 
         $expected = [
-            "{$prefix}-one-1",
-            "{$prefix}-one-2",
+            'ph-reds-one-1',
+            'ph-reds-one-2',
         ];
-
         $actual   = $adapter->getKeys("one");
         sort($actual);
         $I->assertEquals($expected, $actual);
-    }
-
-    private function getExamples(): array
-    {
-        return [
-            [
-                'className' => 'Redis',
-                'label' => 'default',
-                'class' => Redis::class,
-                'options' => getOptionsRedis(),
-                'extension' => 'redis',
-                'prefix' => 'ph-reds',
-            ],
-            [
-                'className' => 'RedisCluster',
-                'label' => 'default',
-                'class' => RedisCluster::class,
-                'options' => getOptionsRedisCluster(),
-                'extension' => 'redis',
-                'prefix' => 'ph-redc',
-            ],
-        ];
     }
 }

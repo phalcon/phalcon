@@ -13,18 +13,14 @@ declare(strict_types=1);
 
 namespace Phalcon\Tests\Integration\Cache\Adapter\Redis;
 
-use Codeception\Example;
 use IntegrationTester;
 use Phalcon\Cache\Adapter\Redis;
-use Phalcon\Cache\Adapter\RedisCluster;
 use Phalcon\Cache\Exception as CacheException;
-use Phalcon\Storage\Exception;
 use Phalcon\Storage\SerializerFactory;
 use Phalcon\Support\Exception as HelperException;
 use Phalcon\Tests\Fixtures\Traits\RedisTrait;
 
 use function getOptionsRedis;
-use function getOptionsRedisCluster;
 use function uniqid;
 
 class DecrementCest
@@ -32,9 +28,7 @@ class DecrementCest
     use RedisTrait;
 
     /**
-     * Tests Phalcon\Cache\Adapter\Redis* :: decrement()
-     *
-     * @dataProvider getExamples
+     * Tests Phalcon\Cache\Adapter\Redis :: decrement()
      *
      * @param IntegrationTester $I
      *
@@ -44,25 +38,12 @@ class DecrementCest
      * @author Phalcon Team <team@phalcon.io>
      * @since  2020-09-09
      */
-    public function storageAdapterRedisDecrement(IntegrationTester $I, Example $example): void
+    public function cacheAdapterRedisDecrement(IntegrationTester $I)
     {
-        $I->wantToTest(
-            sprintf(
-                'Cache\Adapter\%s - decrement()',
-                $example['className']
-            )
-        );
-
-        $extension = $example['extension'];
-        $class     = $example['class'];
-        $options   = $example['options'];
-
-        if (!empty($extension)) {
-            $I->checkExtensionIsLoaded($extension);
-        }
+        $I->wantToTest('Cache\Adapter\Redis - decrement()');
 
         $serializer = new SerializerFactory();
-        $adapter    = new $class($serializer, $options);
+        $adapter    = new Redis($serializer, getOptionsRedis());
 
         $key      = uniqid();
         $expected = 100;
@@ -90,25 +71,5 @@ class DecrementCest
         $expected = -9;
         $actual   = $adapter->decrement($key, 9);
         $I->assertEquals($expected, $actual);
-    }
-
-    private function getExamples(): array
-    {
-        return [
-            [
-                'className' => 'Redis',
-                'label'     => 'default',
-                'class'     => Redis::class,
-                'options'   => getOptionsRedis(),
-                'extension' => 'redis',
-            ],
-            [
-                'className' => 'RedisCluster',
-                'label'     => 'default',
-                'class'     => RedisCluster::class,
-                'options'   => getOptionsRedisCluster(),
-                'extension' => 'redis',
-            ],
-        ];
     }
 }

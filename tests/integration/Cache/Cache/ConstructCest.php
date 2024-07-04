@@ -16,8 +16,8 @@ namespace Phalcon\Tests\Integration\Cache\Cache;
 use IntegrationTester;
 use Phalcon\Cache\AdapterFactory;
 use Phalcon\Cache\Cache;
-use Phalcon\Cache\CacheInterface;
 use Phalcon\Storage\SerializerFactory;
+use Phalcon\Cache\CacheInterface;
 
 class ConstructCest
 {
