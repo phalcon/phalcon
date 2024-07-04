@@ -46,6 +46,8 @@ class Weak extends AbstractAdapter
         SerializerFactory $factory,
         protected array $options = []
     ) {
+        parent::__construct($factory, $options);
+
         $this->defaultSerializer = "none";
         $this->prefix            = "";
     }
