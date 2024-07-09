@@ -1,7 +1,3 @@
-# For local development only.
-
-version: '3'
-
 services:
   phalcon-8.1:
     container_name: phalcon-8.1
