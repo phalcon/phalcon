@@ -29,7 +29,9 @@ use Phalcon\Http\Request;
 use Phalcon\Http\Response;
 use Phalcon\Http\Response\Cookies;
 use Phalcon\Mvc\Dispatcher;
+use Phalcon\Mvc\Model\Manager as ModelsManager;
 use Phalcon\Mvc\Model\MetaData\Memory;
+use Phalcon\Mvc\Model\Transaction\Manager as TransactionManager;
 use Phalcon\Mvc\Router;
 use Phalcon\Mvc\Url;
 use Phalcon\Support\HelperFactory;
@@ -51,7 +53,7 @@ class ConstructCest
 
         $container = new FactoryDefault();
 
-        $expected = 18;
+        $expected = 20;
         $actual   = count($container->getServices());
         $I->assertSame($expected, $actual);
     }
@@ -131,10 +133,10 @@ class ConstructCest
                 'service' => 'helper',
                 'class'   => HelperFactory::class,
             ],
-            //            [
-            //                'service' => 'modelsManager',
-            //                'class'   => ManagerModel::class,
-            //            ],
+            [
+                'service' => 'modelsManager',
+                'class'   => ModelsManager::class,
+            ],
             [
                 'service' => 'modelsMetadata',
                 'class'   => Memory::class,
@@ -160,10 +162,10 @@ class ConstructCest
                 'service' => 'tag',
                 'class'   => TagFactory::class,
             ],
-            //            [
-            //                'service' => 'transactionManager',
-            //                'class'   => Manager::class,
-            //            ],
+            [
+                'service' => 'transactionManager',
+                'class'   => TransactionManager::class,
+            ],
             [
                 'service' => 'url',
                 'class'   => Url::class,
