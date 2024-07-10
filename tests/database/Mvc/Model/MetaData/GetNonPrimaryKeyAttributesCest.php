@@ -29,6 +29,7 @@ class GetNonPrimaryKeyAttributesCest
     public function _before(DatabaseTester $I)
     {
         $this->setNewFactoryDefault();
+        $this->setDatabase($I);
     }
 
     /**
@@ -57,6 +58,7 @@ class GetNonPrimaryKeyAttributesCest
 
         $adapter = $this->newService($service);
         $adapter->setDi($this->container);
+        $connection = $I->getConnection();
 
         $adapter->reset();
 
