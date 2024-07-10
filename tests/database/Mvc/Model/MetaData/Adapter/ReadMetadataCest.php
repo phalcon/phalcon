@@ -20,10 +20,10 @@ use Phalcon\Storage\Exception;
 use Phalcon\Tests\Fixtures\Migrations\AlbumMigration;
 use Phalcon\Tests\Fixtures\Migrations\AlbumPhotoMigration;
 use Phalcon\Tests\Fixtures\Migrations\PhotoMigration;
-use Phalcon\Tests\Fixtures\models\Album;
-use Phalcon\Tests\Fixtures\models\AlbumPhoto;
-use Phalcon\Tests\Fixtures\models\Photo;
 use Phalcon\Tests\Fixtures\Traits\DiTrait;
+use Phalcon\Tests\Models\Album;
+use Phalcon\Tests\Models\AlbumPhoto;
+use Phalcon\Tests\Models\Photo;
 
 use function array_keys;
 
@@ -34,6 +34,7 @@ class ReadMetadataCest
     public function _before(DatabaseTester $I)
     {
         $this->setNewFactoryDefault();
+        $this->setDatabase($I);
     }
 
     /**
@@ -42,27 +43,27 @@ class ReadMetadataCest
      * @dataProvider getExamples
      *
      * @param DatabaseTester $I
-     * @param Example $example
+     * @param Example        $example
      *
      * @return void
      * @throws Exception
-     * @author Phalcon Team <team@phalcon.io>
-     * @since  2023-07-01
+     * @author       Phalcon Team <team@phalcon.io>
+     * @since        2023-07-01
      *
-     * @group  mysql
+     * @group        mysql
      *
      */
     public function mvcModelMetadataGetAttributesRedis(
         DatabaseTester $I,
         Example $example
     ) {
-        $keys = $example['keys'];
+        $keys    = $example['keys'];
         $service = $example['service'];
 
         $I->wantToTest('Mvc\Model\MetaData - readMetadata() - ' . $service);
 
         $connection = $I->getConnection();
-        $adapter = $this->newService($service);
+        $adapter    = $this->newService($service);
 
         /**
          * Cleanup Redis
@@ -78,30 +79,30 @@ class ReadMetadataCest
         /** @var MetaData $metadata */
         $metadata = $this->container->get('modelsMetadata');
 
-        $model = new Album();
-        $expected = [
+        $model     = new Album();
+        $expected  = [
             'id',
             'name',
             'album_id',
             'photo_id',
         ];
-        $actual = $metadata->getAttributes($model);
+        $actual    = $metadata->getAttributes($model);
         $columnMap = $metadata->getColumnMap($model);
         $I->assertEquals($expected, $actual);
 
-        $model = new AlbumPhoto();
-        $expected = [
+        $model     = new AlbumPhoto();
+        $expected  = [
             'id',
             'photo_id',
             'album_id',
             'position',
         ];
-        $actual = $metadata->getAttributes($model);
+        $actual    = $metadata->getAttributes($model);
         $columnMap = $metadata->getColumnMap($model);
         $I->assertEquals($expected, $actual);
 
-        $model = new Photo();
-        $expected = [
+        $model     = new Photo();
+        $expected  = [
             'id',
             'date_uploaded',
             'original_filename',
@@ -120,7 +121,7 @@ class ReadMetadataCest
             'battles',
             'wins',
         ];
-        $actual = $metadata->getAttributes($model);
+        $actual    = $metadata->getAttributes($model);
         $columnMap = $metadata->getColumnMap($model);
         $I->assertEquals($expected, $actual);
 
@@ -167,7 +168,7 @@ class ReadMetadataCest
     private function getKeyData(): array
     {
         return [
-        'meta-phalcon\tests\fixtures\models\albumphoto' => [
+        'meta-phalcon\tests\models\albumphoto' => [
             0 => [
                 'id',
                 'photo_id',
@@ -214,15 +215,15 @@ class ReadMetadataCest
             ],
             13 => [],
         ],
-        'map-phalcon\tests\fixtures\models\album' => [
+        'map-phalcon\tests\models\album' => [
             0 => null,
             1 => null,
         ],
-        'map-phalcon\tests\fixtures\models\albumphoto' => [
+        'map-phalcon\tests\models\albumphoto' => [
             0 => null,
             1 => null,
         ],
-        'meta-phalcon\tests\fixtures\models\photo' => [
+        'meta-phalcon\tests\models\photo' => [
             0 => [
                 'id',
                 'date_uploaded',
@@ -343,11 +344,11 @@ class ReadMetadataCest
             ],
             13 => [],
         ],
-        'map-phalcon\tests\fixtures\models\photo' => [
+        'map-phalcon\tests\models\photo' => [
             0 => null,
             1 => null,
         ],
-        'meta-phalcon\tests\fixtures\models\album' => [
+        'meta-phalcon\tests\models\album' => [
             0 => [
                 'id',
                 'name',

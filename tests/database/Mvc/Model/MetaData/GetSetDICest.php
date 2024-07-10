@@ -67,6 +67,30 @@ class GetSetDICest
     }
 
     /**
+     * Tests Phalcon\Mvc\Model\MetaData :: getDI() - exception
+     *
+     * @param  DatabaseTester $I
+     *
+     * @author Phalcon Team <team@phalcon.io>
+     * @since  2020-05-05
+     *
+     * @group  common
+     */
+    public function mvcModelMetadataGetDIThrowsException(DatabaseTester $I)
+    {
+        $I->wantToTest('Mvc\Model\MetaData - getDI() - exception');
+
+        $I->expectThrowable(
+            new ExpectedException(
+                'A dependency injection container is required to access internal services'
+            ),
+            function () {
+                (new Memory())->getDI();
+            }
+        );
+    }
+
+    /**
      * @return array[]
      */
     private function getExamples(): array

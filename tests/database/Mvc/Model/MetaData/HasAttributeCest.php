@@ -29,6 +29,7 @@ class HasAttributeCest
     public function _before(DatabaseTester $I)
     {
         $this->setNewFactoryDefault();
+        $this->setDatabase($I);
     }
 
     /**
@@ -56,6 +57,7 @@ class HasAttributeCest
 
         $adapter = $this->newService($service);
         $adapter->setDi($this->container);
+        $connection = $I->getConnection();
 
         $adapter->reset();
 
