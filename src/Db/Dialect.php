@@ -1447,7 +1447,7 @@ abstract class Dialect implements DialectInterface
      */
     protected function prepareTable(
         string $tableName,
-        string $schemaName = "",
+        ?string $schemaName = null,
         string $alias = "",
         string $escapeChar = ""
     ): string {

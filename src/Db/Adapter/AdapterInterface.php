@@ -193,7 +193,7 @@ interface AdapterInterface
      *
      * @return ColumnInterface[]
      */
-    public function describeColumns(string $tableName, string $schemaName = ""): array;
+    public function describeColumns(string $tableName, ?string $schemaName = null): array;
 
     /**
      * Lists table indexes
@@ -205,7 +205,7 @@ interface AdapterInterface
      */
     public function describeIndexes(
         string $tableName,
-        string $schemaName = ""
+        ?string $schemaName = null
     ): array;
 
     /**
@@ -218,7 +218,7 @@ interface AdapterInterface
      */
     public function describeReferences(
         string $tableName,
-        string $schemaName = ""
+        ?string $schemaName = null
     ): array;
 
     /**
@@ -292,7 +292,7 @@ interface AdapterInterface
      */
     public function dropView(
         string $viewName,
-        string $schemaName = "",
+        ?string $schemaName = null,
         bool $ifExists = true
     ): bool;
 
@@ -617,7 +617,7 @@ interface AdapterInterface
      *
      * @return array
      */
-    public function listTables(string $schemaName = ""): array;
+    public function listTables(?string $schemaName = null): array;
 
     /**
      * List all views on a database
@@ -626,7 +626,7 @@ interface AdapterInterface
      *
      * @return array
      */
-    public function listViews(string $schemaName = ""): array;
+    public function listViews(?string $schemaName = null): array;
 
     /**
      * Modifies a table column based on a definition
@@ -736,7 +736,7 @@ interface AdapterInterface
      */
     public function tableExists(
         string $tableName,
-        string $schemaName = ""
+        ?string $schemaName = null
     ): bool;
 
     /**
@@ -749,7 +749,7 @@ interface AdapterInterface
      */
     public function tableOptions(
         string $tableName,
-        string $schemaName = ""
+        ?string $schemaName = null
     ): array;
 
     /**
@@ -821,6 +821,6 @@ interface AdapterInterface
      */
     public function viewExists(
         string $viewName,
-        string $schemaName = ""
+        ?string $schemaName = null
     ): bool;
 }

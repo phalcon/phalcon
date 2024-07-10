@@ -23,11 +23,20 @@ use Phalcon\Mvc\Router\GroupInterface;
 use Phalcon\Mvc\Router\Route;
 use Phalcon\Mvc\Router\RouteInterface;
 
+use function array_merge;
 use function array_reverse;
+use function call_user_func_array;
+use function explode;
 use function is_array;
+use function is_callable;
 use function is_int;
 use function is_string;
-use function str_contains;
+use function parse_url;
+use function preg_match;
+use function rtrim;
+use function trim;
+
+use const PHP_URL_PATH;
 
 /**
  * Phalcon\Mvc\Router is the standard framework router. Routing is the

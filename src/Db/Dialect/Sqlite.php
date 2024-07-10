@@ -369,7 +369,7 @@ class Sqlite extends Dialect
      */
     public function describeIndexes(
         string $tableName,
-        string $schemaName = ""
+        ?string $schemaName = null
     ): string {
         return "PRAGMA index_list('" . $tableName . "')";
     }
@@ -384,7 +384,7 @@ class Sqlite extends Dialect
      */
     public function describeReferences(
         string $tableName,
-        string $schemaName = ""
+        ?string $schemaName = null
     ): string {
         return "PRAGMA foreign_key_list('" . $tableName . "')";
     }
@@ -500,7 +500,7 @@ class Sqlite extends Dialect
      */
     public function dropView(
         string $viewName,
-        string $schemaName = "",
+        ?string $schemaName = null,
         bool $ifExists = true
     ): string {
         $view = $this->prepareTable($viewName, $schemaName);
@@ -717,7 +717,7 @@ class Sqlite extends Dialect
      */
     public function listIndexesSql(
         string $tableName,
-        string $schemaName = "",
+        ?string $schemaName = null,
         string $keyName = null
     ): string {
         $sql = "SELECT sql "
@@ -745,7 +745,7 @@ class Sqlite extends Dialect
      *
      * @return string
      */
-    public function listTables(string $schemaName = ""): string
+    public function listTables(?string $schemaName = null): string
     {
         return "SELECT tbl_name "
             . "FROM sqlite_master "
@@ -759,7 +759,7 @@ class Sqlite extends Dialect
      *
      * @return string
      */
-    public function listViews(string $schemaName = ""): string
+    public function listViews(?string $schemaName = null): string
     {
         return "SELECT tbl_name "
             . "FROM sqlite_master "
@@ -811,7 +811,7 @@ class Sqlite extends Dialect
      */
     public function tableExists(
         string $tableName,
-        string $schemaName = ""
+        ?string $schemaName = null
     ): string {
         return "SELECT CASE WHEN COUNT(*) > 0 THEN 1 ELSE 0 END "
             . "FROM sqlite_master "
@@ -826,7 +826,7 @@ class Sqlite extends Dialect
      *
      * @return string
      */
-    public function tableOptions(string $tableName, string $schemaName = ""): string
+    public function tableOptions(string $tableName, ?string $schemaName = null): string
     {
         return "";
     }
@@ -857,7 +857,7 @@ class Sqlite extends Dialect
      *
      * @return string
      */
-    public function viewExists(string $viewName, string $schemaName = ""): string
+    public function viewExists(string $viewName, ?string $schemaName = null): string
     {
         return "SELECT CASE WHEN COUNT(*) > 0 THEN 1 ELSE 0 END FROM "
             . "sqlite_master WHERE type='view' AND tbl_name='" . $viewName . "'";

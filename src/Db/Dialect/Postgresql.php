@@ -352,7 +352,7 @@ class Postgresql extends Dialect
     public function createView(
         string $viewName,
         array $definition,
-        string $schemaName = ""
+        ?string $schemaName = null
     ): string {
         if (true !== isset($definition["sql"])) {
             throw new Exception(
@@ -382,7 +382,7 @@ class Postgresql extends Dialect
      */
     public function describeColumns(
         string $tableName,
-        string $schemaName = ""
+        ?string $schemaName = null
     ): string {
         if (true === empty($schemaName)) {
             $schemaName = "public";
@@ -435,7 +435,7 @@ class Postgresql extends Dialect
      */
     public function describeIndexes(
         string $tableName,
-        string $schemaName = ""
+        ?string $schemaName = null
     ): string {
         return "SELECT 0 as c0, "
             . "t.relname as table_name, "
@@ -462,7 +462,7 @@ class Postgresql extends Dialect
      */
     public function describeReferences(
         string $tableName,
-        string $schemaName = ""
+        ?string $schemaName = null
     ): string {
         if (true === empty($schemaName)) {
             $schemaName = "public";
@@ -580,7 +580,7 @@ class Postgresql extends Dialect
      */
     public function dropTable(
         string $tableName,
-        string $schemaName = "",
+        ?string $schemaName = null,
         bool $ifExists = true
     ): string {
         $tableName = $this->prepareTable($tableName, $schemaName);
@@ -603,7 +603,7 @@ class Postgresql extends Dialect
      */
     public function dropView(
         string $viewName,
-        string $schemaName = "",
+        ?string $schemaName = null,
         bool $ifExists = true
     ): string {
         $view = $this->prepareTable($viewName, $schemaName);
@@ -778,7 +778,7 @@ class Postgresql extends Dialect
      *
      * @return string
      */
-    public function listTables(string $schemaName = ""): string
+    public function listTables(?string $schemaName = null): string
     {
         if (true === empty($schemaName)) {
             $schemaName = "public";
@@ -797,7 +797,7 @@ class Postgresql extends Dialect
      *
      * @return string
      */
-    public function listViews(string $schemaName = ""): string
+    public function listViews(?string $schemaName = null): string
     {
         if (true === empty($schemaName)) {
             $schemaName = "public";
@@ -946,7 +946,7 @@ class Postgresql extends Dialect
      */
     public function tableExists(
         string $tableName,
-        string $schemaName = ""
+        ?string $schemaName = null
     ): string {
         if (true !== empty($schemaName)) {
             $schemaName = "public";
@@ -969,7 +969,7 @@ class Postgresql extends Dialect
      */
     public function tableOptions(
         string $tableName,
-        string $schemaName = ""
+        ?string $schemaName = null
     ): string {
         return "";
     }
@@ -999,7 +999,7 @@ class Postgresql extends Dialect
      */
     public function viewExists(
         string $viewName,
-        string $schemaName = ""
+        ?string $schemaName = null
     ): string {
         if (true !== empty($schemaName)) {
             $schemaName = "public";
