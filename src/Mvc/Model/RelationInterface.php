@@ -28,9 +28,9 @@ interface RelationInterface
     /**
      * Returns the foreign key configuration
      *
-     * @return array|string
+     * @return array|false|string
      */
-    public function getForeignKey(): array | string;
+    public function getForeignKey(): array | false | string;
 
     /**
      * Gets the intermediate fields for has-*-through relations
@@ -73,9 +73,9 @@ interface RelationInterface
     /**
      * Returns parameters that must be always used when the related records are obtained
      *
-     * @return array
+     * @return array|false
      */
-    public function getParams(): array;
+    public function getParams(): array | false;
 
     /**
      * Returns the referenced fields

@@ -18,9 +18,11 @@ use Phalcon\Mvc\Url\Exception;
 use Phalcon\Mvc\Url\UrlInterface;
 use Phalcon\Parsers\Parser;
 
+use function http_build_query;
 use function is_array;
 use function is_string;
-use function str_contains;
+use function preg_match;
+use function preg_replace;
 use function strlen;
 
 /**

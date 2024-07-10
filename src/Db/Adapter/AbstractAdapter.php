@@ -385,7 +385,7 @@ abstract class AbstractAdapter implements AdapterInterface, EventsAwareInterface
      */
     public function describeIndexes(
         string $tableName,
-        string $schemaName = ""
+        ?string $schemaName = null
     ): array {
         $indexes = [];
         $records = $this->fetchAll(
@@ -426,7 +426,7 @@ abstract class AbstractAdapter implements AdapterInterface, EventsAwareInterface
      * @return array|ReferenceInterface[]
      * @throws Exception
      */
-    public function describeReferences(string $tableName, string $schemaName = ""): array
+    public function describeReferences(string $tableName, ?string $schemaName = null): array
     {
         $references = [];
         $records    = $this->fetchAll(
@@ -589,7 +589,7 @@ abstract class AbstractAdapter implements AdapterInterface, EventsAwareInterface
      */
     public function dropView(
         string $viewName,
-        string $schemaName = "",
+        ?string $schemaName = null,
         bool $ifExists = true
     ): bool {
         return $this->execute(
@@ -1134,7 +1134,7 @@ abstract class AbstractAdapter implements AdapterInterface, EventsAwareInterface
      * @return array
      * @todo optimize this
      */
-    public function listTables(string $schemaName = ""): array
+    public function listTables(?string $schemaName = null): array
     {
         $allTables  = [];
         $tableNames = $this->fetchAll(
@@ -1162,7 +1162,7 @@ abstract class AbstractAdapter implements AdapterInterface, EventsAwareInterface
      *
      * @return array
      */
-    public function listViews(string $schemaName = ""): array
+    public function listViews(?string $schemaName = null): array
     {
         $allTables  = [];
         $tableNames = $this->fetchAll(
@@ -1324,7 +1324,7 @@ abstract class AbstractAdapter implements AdapterInterface, EventsAwareInterface
      */
     public function tableExists(
         string $tableName,
-        string $schemaName = ""
+        ?string $schemaName = null
     ): bool {
         $exists = $this->dialect->tableExists($tableName, $schemaName);
 
@@ -1347,7 +1347,7 @@ abstract class AbstractAdapter implements AdapterInterface, EventsAwareInterface
      */
     public function tableOptions(
         string $tableName,
-        string $schemaName = ""
+        ?string $schemaName = null
     ): array {
         $options = $this->dialect->tableOptions($tableName, $schemaName);
 
@@ -1591,7 +1591,7 @@ abstract class AbstractAdapter implements AdapterInterface, EventsAwareInterface
      */
     public function viewExists(
         string $viewName,
-        string $schemaName = ""
+        ?string $schemaName = null
     ): bool {
         $exists = $this->dialect->viewExists($viewName, $schemaName);
 

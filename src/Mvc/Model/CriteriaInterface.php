@@ -29,8 +29,8 @@ interface CriteriaInterface
      */
     public function andWhere(
         string $conditions,
-        mixed $bindParams = null,
-        mixed $bindTypes = null
+        ?array $bindParams = null,
+        ?array $bindTypes = null
     ): CriteriaInterface;
 
     /**
@@ -324,8 +324,8 @@ interface CriteriaInterface
      */
     public function orWhere(
         string $conditions,
-        mixed $bindParams = null,
-        mixed $bindTypes = null
+        ?array $bindParams = null,
+        ?array $bindTypes = null
     ): CriteriaInterface;
 
     /**
@@ -389,7 +389,7 @@ interface CriteriaInterface
      */
     public function where(
         string $conditions,
-        mixed $bindParams = null,
-        mixed $bindTypes = null
+        ?array $bindParams = null,
+        ?array $bindTypes = null
     ): CriteriaInterface;
 }

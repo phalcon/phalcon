@@ -141,7 +141,7 @@ class Mysql extends PdoAdapter
      */
     public function describeColumns(
         string $tableName,
-        string $schemaName = ""
+        ?string $schemaName = null
     ): array {
         $oldColumn   = null;
         $sizePattern = "#\\((\d+)(?:,\\s*(\d+))*\\)#";
@@ -524,7 +524,7 @@ class Mysql extends PdoAdapter
      */
     public function describeIndexes(
         string $tableName,
-        string $schemaName = ""
+        ?string $schemaName = null
     ): array {
         $indexes = [];
         $records = $this->fetchAll(
@@ -584,7 +584,7 @@ class Mysql extends PdoAdapter
      */
     public function describeReferences(
         string $tableName,
-        string $schemaName = ""
+        ?string $schemaName = null
     ): array {
         $references = [];
         $records    = $this->fetchAll(

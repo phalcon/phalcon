@@ -15,6 +15,8 @@ namespace Phalcon\Mvc;
 
 use Phalcon\Di\Injectable;
 
+use function method_exists;
+
 /**
  * Every application controller should extend this class that encapsulates all
  * the controller functionality

@@ -114,7 +114,7 @@ interface DialectInterface
     public function createView(
         string $viewName,
         array $definition,
-        string $schemaName = ""
+        ?string $schemaName = null
     ): string;
 
     /**
@@ -127,7 +127,7 @@ interface DialectInterface
      */
     public function describeColumns(
         string $tableName,
-        string $schemaName = ""
+        ?string $schemaName = null
     ): string;
 
     /**
@@ -140,7 +140,7 @@ interface DialectInterface
      */
     public function describeIndexes(
         string $tableName,
-        string $schemaName = ""
+        ?string $schemaName = null
     ): string;
 
     /**
@@ -153,7 +153,7 @@ interface DialectInterface
      */
     public function describeReferences(
         string $tableName,
-        string $schemaName = ""
+        ?string $schemaName = null
     ): string;
 
     /**
@@ -237,7 +237,7 @@ interface DialectInterface
      */
     public function dropView(
         string $viewName,
-        string $schemaName = "",
+        ?string $schemaName = null,
         bool $ifExists = true
     ): string;
 
@@ -308,7 +308,7 @@ interface DialectInterface
      *
      * @return string
      */
-    public function listTables(string $schemaName = ""): string;
+    public function listTables(?string $schemaName = null): string;
 
     /**
      * Generates SQL to modify a column in a table
@@ -395,7 +395,7 @@ interface DialectInterface
      */
     public function tableExists(
         string $tableName,
-        string $schemaName = ""
+        ?string $schemaName = null
     ): string;
 
     /**
@@ -406,7 +406,7 @@ interface DialectInterface
      *
      * @return string
      */
-    public function tableOptions(string $tableName, string $schemaName = ""): string;
+    public function tableOptions(string $tableName, ?string $schemaName = null): string;
 
     /**
      * Generates SQL checking for the existence of a schema.view
@@ -418,6 +418,6 @@ interface DialectInterface
      */
     public function viewExists(
         string $viewName,
-        string $schemaName = ""
+        ?string $schemaName = null
     ): string;
 }

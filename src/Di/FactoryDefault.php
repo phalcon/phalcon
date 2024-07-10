@@ -28,6 +28,9 @@ use Phalcon\Http\Request;
 use Phalcon\Http\Response;
 use Phalcon\Http\Response\Cookies;
 use Phalcon\Mvc\Dispatcher;
+use Phalcon\Mvc\Model\Manager as ModelsManager;
+use Phalcon\Mvc\Model\MetaData\Memory as MetadataManager;
+use Phalcon\Mvc\Model\Transaction\Manager as TransactionManager;
 use Phalcon\Mvc\Router;
 use Phalcon\Mvc\Url;
 use Phalcon\Support\HelperFactory;
@@ -71,8 +74,8 @@ class FactoryDefault extends Di
         $filterFactory = new FilterFactory();
 
         $this->services = [
-            'annotations'   => new Service(AnnotationsMemory::class, true),
-            'assets'        => new Service(
+            'annotations'        => new Service(AnnotationsMemory::class, true),
+            'assets'             => new Service(
                 [
                     'className' => AssetsManager::class,
                     'arguments' => [
@@ -84,22 +87,22 @@ class FactoryDefault extends Di
                 ],
                 true
             ),
-            'crypt'         => new Service(Crypt::class, true),
-            'cookies'       => new Service(Cookies::class, true),
-            'dispatcher'    => new Service(Dispatcher::class, true),
-            'escaper'       => new Service(Escaper::class, true),
-            'eventsManager' => new Service(EventsManager::class, true),
-            'flash'         => new Service(Direct::class, true),
-            'flashSession'  => new Service(Session::class, true),
-            'filter'        => new Service($filterFactory->newInstance(), true),
-            'helper'        => new Service(HelperFactory::class, true),
-            //            'modelsManager'      => new Service('Phalcon\\Mvc\\Model\\Manager', true),
-            'modelsMetadata'     => new Service('Phalcon\\Mvc\\Model\\MetaData\\Memory', true),
-            'request'       => new Service(Request::class, true),
-            'response'      => new Service(Response::class, true),
-            'router'        => new Service(Router::class, true),
-            'security'      => new Service(Security::class, true),
-            'tag'           => new Service(
+            'crypt'              => new Service(Crypt::class, true),
+            'cookies'            => new Service(Cookies::class, true),
+            'dispatcher'         => new Service(Dispatcher::class, true),
+            'escaper'            => new Service(Escaper::class, true),
+            'eventsManager'      => new Service(EventsManager::class, true),
+            'flash'              => new Service(Direct::class, true),
+            'flashSession'       => new Service(Session::class, true),
+            'filter'             => new Service($filterFactory->newInstance(), true),
+            'helper'             => new Service(HelperFactory::class, true),
+            'modelsManager'      => new Service(ModelsManager::class, true),
+            'modelsMetadata'     => new Service(MetadataManager::class, true),
+            'request'            => new Service(Request::class, true),
+            'response'           => new Service(Response::class, true),
+            'router'             => new Service(Router::class, true),
+            'security'           => new Service(Security::class, true),
+            'tag'                => new Service(
                 [
                     'className' => TagFactory::class,
                     'arguments' => [
@@ -111,8 +114,8 @@ class FactoryDefault extends Di
                 ],
                 true
             ),
-            //            'transactionManager' : new Service('Phalcon\\Mvc\\Model\\Transaction\\Manager', true),
-            'url'           => new Service(Url::class, true),
+            'transactionManager' => new Service(TransactionManager::class, true),
+            'url'                => new Service(Url::class, true),
         ];
     }
 }

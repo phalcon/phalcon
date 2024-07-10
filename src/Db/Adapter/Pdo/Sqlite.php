@@ -116,7 +116,7 @@ class Sqlite extends PdoAdapter
      */
     public function describeColumns(
         string $tableName,
-        string $schemaName = ""
+        ?string $schemaName = null
     ): array {
         $oldColumn   = null;
         $sizePattern = "#\\((\d+)(?:,\\s*(\d+))*\\)#";
@@ -370,7 +370,7 @@ class Sqlite extends PdoAdapter
      *
      * @return array|IndexInterface[]
      */
-    public function describeIndexes(string $tableName, string $schemaName = ""): array
+    public function describeIndexes(string $tableName, ?string $schemaName = null): array
     {
         $indexes = [];
         $records = $this->fetchAll(
@@ -432,7 +432,7 @@ class Sqlite extends PdoAdapter
      */
     public function describeReferences(
         string $tableName,
-        string $schemaName = ""
+        ?string $schemaName = null
     ): array {
         $references = [];
         $records    = $this->fetchAll(
