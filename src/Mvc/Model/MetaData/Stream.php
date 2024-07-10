@@ -85,7 +85,7 @@ class Stream extends MetaData
      */
     public function write(?string $key, array $data): void
     {
-        $option = $this->iniGetBool("phalcon.orm.exception_on_failed_metadata_save");
+        $option = $this->iniGetBool("orm.exception_on_failed_metadata_save");
         try {
             $path = $this->metaDataDir . $this->prepareVirtualPath($key) . ".php";
 

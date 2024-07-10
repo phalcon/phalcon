@@ -19,11 +19,15 @@ use Phalcon\Di\Injectable;
 use Phalcon\Mvc\Model\MetaData\Strategy\Introspection;
 use Phalcon\Mvc\Model\MetaData\Strategy\StrategyInterface;
 use Phalcon\Mvc\ModelInterface;
-use Phalcon\Support\Traits\IniTrait;
+use Phalcon\Parsers\Parser;
+use Phalcon\Traits\Php\IniTrait;
+use Phalcon\Support\Settings;
 
 use function call_user_func;
 use function is_array;
+use function mb_strtolower;
 use function method_exists;
+use function var_dump;
 
 /**
  * Phalcon\Mvc\Model\MetaData
@@ -191,25 +195,28 @@ abstract class MetaData extends Injectable implements MetaDataInterface
     public function getColumnMap(ModelInterface $model): array | null
     {
         $data = $this->readColumnMapIndex($model, self::MODELS_COLUMN_MAP);
+
         if (true === is_array($data) || null === $data) {
             return $data;
         }
+
         throw new Exception("The meta-data is invalid or is corrupt");
     }
 
     /**
      * Returns a ColumnMap Unique key for meta-data is created using className
      *
-     * @return string
+     * @return string|null
      */
     final public function getColumnMapUniqueKey(ModelInterface $model): string | null
     {
-        $key = get_class($model);
+        $key = mb_strtolower(get_class($model));
         if (false === isset($this->columnMap[$key])) {
             if (false === $this->initializeColumnMap($model, $key)) {
                 return null;
             }
         }
+
         return $key;
     }
 
@@ -316,12 +323,13 @@ abstract class MetaData extends Injectable implements MetaDataInterface
      */
     final public function getMetaDataUniqueKey(ModelInterface $model): string | null
     {
-        $key = get_class($model);
+        $key = mb_strtolower(get_class($model));
         if (false === isset($this->metaData[$key])) {
             if (false === $this->initializeMetaData($model, $key)) {
                 return null;
             }
         }
+
         return $key;
     }
 
@@ -490,13 +498,15 @@ abstract class MetaData extends Injectable implements MetaDataInterface
      */
     final public function readColumnMap(ModelInterface $model): array | null
     {
-        if ($this->iniGetBool("orm.column_renaming")) {
+        if (Settings::get("orm.column_renaming")) {
             return null;
         }
+
         $keyName = $this->getColumnMapUniqueKey($model);
         if ($keyName !== null) {
             return $this->columnMap[$keyName];
         }
+
         return null;
     }
 
@@ -514,13 +524,15 @@ abstract class MetaData extends Injectable implements MetaDataInterface
      */
     final public function readColumnMapIndex(ModelInterface $model, int $index): array | null
     {
-        if ($this->iniGetBool("orm.column_renaming")) {
+        if (true !== Settings::get('orm.column_renaming')) {
             return null;
         }
+
         $keyName = $this->getColumnMapUniqueKey($model);
         if ($keyName !== null) {
             return $this->columnMap[$keyName][$index];
         }
+
         return null;
     }
 
@@ -556,8 +568,9 @@ abstract class MetaData extends Injectable implements MetaDataInterface
      *     )
      * );
      *```
+     * @todo check the return type; 8 seems to be only string
      */
-    final public function readMetaDataIndex(ModelInterface $model, int $index): array | null
+    final public function readMetaDataIndex(ModelInterface $model, int $index): array | string | null
     {
         $key = $this->getMetaDataUniqueKey($model);
         if ($key !== null) {
@@ -652,7 +665,7 @@ abstract class MetaData extends Injectable implements MetaDataInterface
      */
     public function write(string $key, array $data): void
     {
-        $option = $this->iniGetBool("orm.exception_on_failed_metadata_save");
+        $option = Settings::get("orm.exception_on_failed_metadata_save");
         try {
             $result = $this->adapter->set($key, $data);
             if (false === $result) {
@@ -699,7 +712,7 @@ abstract class MetaData extends Injectable implements MetaDataInterface
      * @return void
      * @throws Exception
      */
-    final protected function initialize(ModelInterface $model, $key, $table, $schema)
+    final protected function initialize(ModelInterface $model, string $key, $table, $schema)
     {
         $this->initializeMetaData($model, $key);
         $this->initializeColumnMap($model, $key);
@@ -717,7 +730,7 @@ abstract class MetaData extends Injectable implements MetaDataInterface
         /**
          * Check for a column map, store in columnMap in order and reversed order
          */
-        if (false === $this->iniGetBool("orm.column_renaming")) {
+        if (false === Settings::get("orm.column_renaming")) {
             return false;
         }
 
@@ -730,10 +743,11 @@ abstract class MetaData extends Injectable implements MetaDataInterface
          * Check if the meta-data is already in the adapter
          */
         $prefixKey = 'map-' . $key;
-        $data      = $this->{'read'}($prefixKey);
+        $data      = $this->read($prefixKey);
 
         if ($data !== null) {
             $this->columnMap[$key] = $data;
+
             return true;
         }
 
@@ -753,23 +767,24 @@ abstract class MetaData extends Injectable implements MetaDataInterface
         /**
          * Write the data to the adapter
          */
-        $this->{'write'}($prefixKey, $modelColumnMap);
+        $this->write($prefixKey, $modelColumnMap);
+
         return true;
     }
 
     /**
      * Initialize the metadata for certain table
+     *
+     * @param ModelInterface $model
+     * @param string         $key
+     *
+     * @return bool
+     * @throws Exception
      */
-    final protected function initializeMetaData(ModelInterface $model, $key): bool
+    final protected function initializeMetaData(ModelInterface $model, ?string $key): bool
     {
-        $prefixKey = "";
-
-        $strategy = null;
-
         if ($key !== null) {
-            $metaData = $this->metaData;
-
-            if (false === isset($metaData[$key])) {
+            if (false === isset($this->metaData[$key])) {
                 /**
                  * The meta-data is read from the adapter always if not available in metaData property
                  */
@@ -810,11 +825,13 @@ abstract class MetaData extends Injectable implements MetaDataInterface
                     /**
                      * Store the meta-data in the adapter
                      */
-                    $this->{"write"}($prefixKey, $modelMetadata);
+                    $this->write($prefixKey, $modelMetadata);
                 }
             }
+
             return true;
         }
+
         return false;
     }
 
