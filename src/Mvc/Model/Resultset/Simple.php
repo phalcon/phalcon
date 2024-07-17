@@ -20,7 +20,8 @@ use Phalcon\Mvc\Model\ResultInterface;
 use Phalcon\Mvc\Model\Resultset;
 use Phalcon\Mvc\Model\Row;
 use Phalcon\Mvc\ModelInterface;
-use Phalcon\Parsers\Parser;
+
+use Phalcon\Support\Settings;
 
 use function get_class;
 use function is_array;
@@ -48,7 +49,7 @@ class Simple extends Resultset
     public function __construct(
         protected array | string $columnMap,
         protected ModelInterface | Row $model,
-        ResultInterface | false $result,
+        mixed $result,
         mixed $cache = null,
         protected bool $keepSnapshots = false
     ) {
@@ -95,7 +96,7 @@ class Simple extends Resultset
      *
      * @return ModelInterface|null
      */
-    final public function current(): ModelInterface | null
+    final public function current(): ModelInterface | Row | null
     {
         $activeRow = $this->activeRow;
 
@@ -136,7 +137,7 @@ class Simple extends Resultset
                  * Set records as dirty state PERSISTENT by default
                  * Performs the standard hydration based on objects
                  */
-                if (Parser::settingGet("orm.late_state_binding")) {
+                if (Settings::get("orm.late_state_binding")) {
                     if ($this->model instanceof Model) {
                         $modelName = get_class($this->model);
                     } else {

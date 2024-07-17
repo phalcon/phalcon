@@ -1026,7 +1026,7 @@ abstract class Model extends AbstractInjectionAware implements EntityInterface, 
         mixed $columnMap,
         int $dirtyState = 0,
         bool $keepSnapshots = null
-    ): ModelInterface {
+    ): ModelInterface|ResultInterface {
         $instance = clone $base;
 
         // Change the dirty state to persistent
@@ -4761,7 +4761,7 @@ abstract class Model extends AbstractInjectionAware implements EntityInterface, 
         string $functionName,
         string $alias,
         array | string | null $parameters = null
-    ): ResultsetInterface {
+    ): mixed {
         $bindParams = [];
         $bindTypes  = [];
 

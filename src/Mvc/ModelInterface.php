@@ -18,6 +18,7 @@ use Phalcon\Di\DiInterface;
 use Phalcon\Messages\MessageInterface;
 use Phalcon\Mvc\Model\CriteriaInterface;
 use Phalcon\Mvc\Model\MetaDataInterface;
+use Phalcon\Mvc\Model\ResultInterface;
 use Phalcon\Mvc\Model\ResultsetInterface;
 use Phalcon\Mvc\Model\Row;
 use Phalcon\Mvc\Model\TransactionInterface;
@@ -79,6 +80,21 @@ interface ModelInterface
     ): ModelInterface;
 
     /**
+     * Returns a hydrated result based on the data and the column map
+     *
+     * @param array $data
+     * @param mixed $columnMap
+     * @param int   $hydrationMode
+     *
+     * @return mixed
+     */
+    public static function cloneResultMapHydrate(
+        array $data,
+        mixed $columnMap,
+        int $hydrationMode
+    );
+
+    /**
      * Assigns values to a model from an array returning a new model
      *
      * @param ModelInterface|Row $base
@@ -95,22 +111,7 @@ interface ModelInterface
         mixed $columnMap,
         int $dirtyState = 0,
         bool $keepSnapshots = false
-    ): ModelInterface;
-
-    /**
-     * Returns a hydrated result based on the data and the column map
-     *
-     * @param array $data
-     * @param mixed $columnMap
-     * @param int   $hydrationMode
-     *
-     * @return mixed
-     */
-    public static function cloneResultMapHydrate(
-        array $data,
-        mixed $columnMap,
-        int $hydrationMode
-    );
+    ): ModelInterface|ResultInterface;
 
     /**
      * Allows to count how many records match the specified conditions

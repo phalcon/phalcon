@@ -22,7 +22,7 @@ use Phalcon\Cache\CacheInterface;
 use Phalcon\Db\Enum;
 use Phalcon\Messages\MessageInterface;
 use Phalcon\Mvc\ModelInterface;
-use Phalcon\Parsers\Parser;
+use Phalcon\Support\Settings;
 use SeekableIterator;
 use Serializable;
 
@@ -121,16 +121,12 @@ abstract class Resultset
      * @var int
      */
     protected int $pointer = 0;
-    /**
-     * Phalcon\Db\ResultInterface or false for empty resultset
-     *
-     * @var ResultInterface|bool
-     */
-    protected ResultInterface | bool $result;
+
     /**
      * @var mixed|null
      */
     protected mixed $row = null;
+
     /**
      * @var array|null
      */
@@ -145,13 +141,13 @@ abstract class Resultset
      * @throws Exception
      */
     public function __construct(
-        ResultInterface | false $result,
+        protected mixed $result,
         mixed $cache = null
     ) {
         /**
          * 'false' is given as result for empty result-sets
          */
-        if (false === $result) {
+        if (!is_object($result)) {
             $this->count = 0;
             $this->rows  = [];
 
@@ -204,7 +200,7 @@ abstract class Resultset
         /**
          * Small result-sets with less equals 32 rows are fetched at once
          */
-        $prefetchRecords = (int)Parser::settingGet("orm.resultset_prefetch_records");
+        $prefetchRecords = (int)Settings::get("orm.resultset_prefetch_records");
         if ($prefetchRecords > 0 && $rowCount <= $prefetchRecords) {
             /**
              * Fetch ALL rows from database

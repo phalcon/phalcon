@@ -34,6 +34,7 @@ use function is_string;
 use function join;
 use function preg_match_all;
 use function preg_replace;
+use function var_dump;
 
 /**
  * Phalcon\Db\Adapter\Pdo is the Phalcon\Db that internally uses PDO to connect

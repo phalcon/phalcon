@@ -52,9 +52,13 @@ final class DeleteCest
 
         $I->assertSame(3, Invoices::count());
 
-        $db->delete($migration->getTable(), 'inv_id > :id', [
-            'id' => 1,
-        ]);
+        $db->delete(
+            $migration->getTable(),
+            'inv_id > :id',
+            [
+                'id' => 1,
+            ]
+        );
 
         $I->assertSame(1, Invoices::count());
     }

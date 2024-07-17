@@ -204,18 +204,19 @@ abstract class Dialect implements DialectInterface
              * The index "0" is the column field
              */
             $columnField      = $column[0];
-            $columnExpression = [
-                "type" => "qualified",
-                "name" => $columnField,
-            ];
-
             if (is_array($columnField)) {
-                $columnExpression["type"] = "scalar";
-            }
-
-            if ("*" === $columnField) {
                 $columnExpression = [
-                    "type" => "all",
+                    "type"  => "scalar",
+                    "value" => $columnField
+                ];
+            } elseif ($columnField === "*") {
+                $columnExpression = [
+                    "type" => "all"
+                ];
+            } else {
+                $columnExpression = [
+                    "type" => "qualified",
+                    "name" => $columnField
                 ];
             }
 
@@ -773,9 +774,11 @@ abstract class Dialect implements DialectInterface
         array $expression,
         string $escapeChar = ""
     ): string {
+        $domain = $expression["domain"] ?? '';
+
         return $this->prepareQualified(
             "*",
-            $expression["domain"],
+            $domain,
             $escapeChar
         );
     }
