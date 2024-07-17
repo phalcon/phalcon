@@ -1340,7 +1340,7 @@ class Query implements QueryInterface, InjectionAwareInterface
             );
         }
 
-        $joins = $select["joins"] ?? null;
+        $joins = $select["joins"] ?? [];
 
         // Join existing JOINS with automatic Joins
         if (count($joins)) {
@@ -2018,7 +2018,7 @@ class Query implements QueryInterface, InjectionAwareInterface
              * Simulate a column map
              */
             if (!$isComplex && $isSimpleStd) {
-                if ($column["sqlAlias"]) {
+                if (isset($column["sqlAlias"])) {
                     $sqlAlias                   = $column["sqlAlias"];
                     $simpleColumnMap[$sqlAlias] = $aliasCopy;
                 } else {
@@ -3596,7 +3596,7 @@ class Query implements QueryInterface, InjectionAwareInterface
      */
     final protected function getMultiJoin(
         string $joinType,
-        string $joinSource,
+        mixed $joinSource,
         string $modelAlias,
         string $joinAlias,
         RelationInterface $relation

@@ -16,7 +16,7 @@ namespace Phalcon\Mvc\Model\Behavior;
 use Phalcon\Mvc\Model\AbstractBehavior;
 use Phalcon\Mvc\Model\Exception;
 use Phalcon\Mvc\ModelInterface;
-use Phalcon\Parsers\Parser;
+use Phalcon\Support\Settings;
 
 /**
  * Instead of permanently delete a record it marks the record as deleted
@@ -94,12 +94,11 @@ class SoftDelete extends AbstractBehavior
 
         if (
             true === $modelsManager->isKeepingSnapshots($model) &&
-            Parser::settingGet("orm.update_snapshot_on_save")
+            Settings::get("orm.update_snapshot_on_save")
         ) {
             $metaData = $model->getModelsMetaData();
 
             $model->setSnapshotData($updateModel->getSnapshotData());
-
             $model->setOldSnapshotData($updateModel->getOldSnapshotData());
         }
     }
