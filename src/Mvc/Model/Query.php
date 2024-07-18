@@ -1855,8 +1855,6 @@ class Query implements QueryInterface, InjectionAwareInterface
         array $bindTypes,
         bool $simulate = false
     ): ResultsetInterface | array {
-        $manager = $this->manager;
-
         /**
          * Get a database connection
          */
@@ -1866,7 +1864,7 @@ class Query implements QueryInterface, InjectionAwareInterface
         foreach ($models as $modelName) {
             // Load model if it is not loaded
             if (!isset($this->modelsInstances[$modelName])) {
-                $model                             = $manager->load($modelName);
+                $model                             = $this->manager->load($modelName);
                 $this->modelsInstances[$modelName] = $model;
             } else {
                 $model = $this->modelsInstances[$modelName];
@@ -1906,7 +1904,7 @@ class Query implements QueryInterface, InjectionAwareInterface
                 throw new Exception("Invalid column definition");
             }
 
-            if (is_scalar($column["type"])) {
+            if ($column["type"] === "scalar") {
                 if (!isset($column["balias"])) {
                     $isComplex = true;
                 }
@@ -1924,7 +1922,7 @@ class Query implements QueryInterface, InjectionAwareInterface
                 if ($haveScalars) {
                     $isComplex = true;
                 } else {
-                    if ($numberObjects == 1) {
+                    if ($numberObjects === 1) {
                         $isSimpleStd = false;
                     } else {
                         $isComplex = true;
@@ -1936,38 +1934,38 @@ class Query implements QueryInterface, InjectionAwareInterface
         }
 
         // Processing selected columns
-        $instance        = null;
-        $selectColumns   = [];
+        $instance = null;
+        $selectColumns = [];
         $simpleColumnMap = [];
-        $metaData        = $this->metaData;
 
         foreach ($columns as $aliasCopy => $column) {
             $sqlColumn = $column["column"];
 
             // Complete objects are treated in a different way
-            if (is_object($column["type"])) {
+            if ($column["type"] === "object") {
                 $modelName = $column["model"];
 
                 /**
                  * Base instance
                  */
                 if (!isset($this->modelsInstances[$modelName])) {
-                    $instance                          = $manager->load($modelName);
+                    $instance                          = $this->manager->load($modelName);
                     $this->modelsInstances[$modelName] = $instance;
                 } else {
                     $instance = $this->modelsInstances[$modelName];
                 }
 
-                $attributes = $metaData->getAttributes($instance);
+                $attributes = $this->metaData->getAttributes($instance);
 
                 if ($isComplex) {
                     /**
                      * If the resultset is complex we open every model into
                      * their columns
                      */
-                    $columnMap = null;
                     if (Settings::get("orm.column_renaming")) {
-                        $columnMap = $metaData->getColumnMap($instance);
+                       $columnMap = $this->metaData->getColumnMap($instance);
+                } else {
+                        $columnMap = null;
                     }
 
                     // Add every attribute in the model to the generated select
@@ -1975,7 +1973,7 @@ class Query implements QueryInterface, InjectionAwareInterface
                         $selectColumns[] = [
                             $attribute,
                             $sqlColumn,
-                            "_" . $sqlColumn . "_" . $attribute,
+                            "_" . $sqlColumn . "_" . $attribute
                         ];
                     }
 
@@ -1988,7 +1986,7 @@ class Query implements QueryInterface, InjectionAwareInterface
                     $columns1[$aliasCopy]["columnMap"]  = $columnMap;
 
                     // Check if the model keeps snapshots
-                    $isKeepingSnapshots = (bool)$manager->isKeepingSnapshots($instance);
+                    $isKeepingSnapshots = (bool) $this->manager->isKeepingSnapshots($instance);
                     if ($isKeepingSnapshots) {
                         $columns1[$aliasCopy]["keepSnapshots"] = $isKeepingSnapshots;
                     }
@@ -2005,7 +2003,7 @@ class Query implements QueryInterface, InjectionAwareInterface
                 /**
                  * Create an alias if the column doesn't have one
                  */
-                if ($aliasCopy == "int") {
+                if (is_int($aliasCopy)) {
                     $columnAlias = [$sqlColumn, null];
                 } else {
                     $columnAlias = [$sqlColumn, null, $aliasCopy];
@@ -2133,15 +2131,15 @@ class Query implements QueryInterface, InjectionAwareInterface
                  * Get the column map
                  */
                 if (!Settings::get("orm.cast_on_hydrate")) {
-                    $simpleColumnMap = $metaData->getColumnMap($resultObject);
+                    $simpleColumnMap = $this->metaData->getColumnMap($resultObject);
                 } else {
-                    $columnMap      = $metaData->getColumnMap($resultObject);
-                    $typesColumnMap = $metaData->getDataTypes($resultObject);
+                    $columnMap      = $this->metaData->getColumnMap($resultObject);
+                    $typesColumnMap = $this->metaData->getDataTypes($resultObject);
 
                     if ($columnMap === null) {
                         $simpleColumnMap = [];
 
-                        foreach ($metaData->getAttributes($resultObject) as $attribute) {
+                        foreach ($this->metaData->getAttributes($resultObject) as $attribute) {
                             $simpleColumnMap[$attribute] = [
                                 $attribute,
                                 $typesColumnMap[$attribute],
@@ -2162,7 +2160,7 @@ class Query implements QueryInterface, InjectionAwareInterface
                 /**
                  * Check if the model keeps snapshots
                  */
-                $isKeepingSnapshots = (bool)$manager->isKeepingSnapshots($resultObject);
+                $isKeepingSnapshots = (bool)$this->manager->isKeepingSnapshots($resultObject);
             }
 
             if (
