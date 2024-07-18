@@ -24,6 +24,7 @@ use Phalcon\Mvc\Model\Query\StatusInterface;
 use Phalcon\Mvc\Model\Resultset\Simple;
 use Phalcon\Mvc\ModelInterface;
 use Phalcon\Parsers\Parser;
+use Phalcon\Support\Settings;
 use Phalcon\Traits\Helper\Str\CamelizeTrait;
 use ReflectionClass;
 use ReflectionProperty;
@@ -1404,7 +1405,11 @@ class Manager implements ManagerInterface, InjectionAwareInterface, EventsAwareI
         $reusable = (bool)$relation->isReusable();
 
         if ($reusable) {
-            $uniqueKey = unique_key($referencedModel, [$findParams, $retrieveMethod]);
+            $uniqueKey = sha1(
+                $referencedModel
+                . implode('-', $findParams)
+                . $retrieveMethod
+            );
             $records   = $this->getReusableRecords($referencedModel, $uniqueKey);
 
             if (is_array($records) || is_object($records)) {
@@ -1717,7 +1722,7 @@ class Manager implements ManagerInterface, InjectionAwareInterface, EventsAwareI
      */
     public function isKeepingSnapshots(ModelInterface $model): bool
     {
-        if (Parser::settingGet("orm.dynamic_update")) {
+        if (Settings::get("orm.dynamic_update")) {
             return true;
         }
 
@@ -1733,7 +1738,7 @@ class Manager implements ManagerInterface, InjectionAwareInterface, EventsAwareI
      */
     public function isUsingDynamicUpdate(ModelInterface $model): bool
     {
-        if (Parser::settingGet("orm.dynamic_update")) {
+        if (Settings::get("orm.dynamic_update")) {
             return true;
         }
 

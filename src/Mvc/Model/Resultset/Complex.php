@@ -21,6 +21,7 @@ use Phalcon\Mvc\Model\Resultset;
 use Phalcon\Mvc\Model\ResultsetInterface;
 use Phalcon\Mvc\Model\Row;
 use Phalcon\Parsers\Parser;
+use Phalcon\Support\Settings;
 use stdClass;
 
 use function get_class;
@@ -203,7 +204,7 @@ class Complex extends Resultset implements ResultsetInterface
                         // Check if the resultset must keep snapshots
                         $keepSnapshots = $column["keepSnapshots"] ?? false;
 
-                        if (Parser::settingGet("orm.late_state_binding")) {
+                        if (Settings::get("orm.late_state_binding")) {
                             if ($column["instance"] instanceof Model) {
                                 $modelName = get_class($column["instance"]);
                             } else {

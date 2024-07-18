@@ -47,7 +47,7 @@ class Simple extends Resultset
      * @throws Exception
      */
     public function __construct(
-        protected array | string $columnMap,
+        protected mixed $columnMap,
         protected ModelInterface | Row $model,
         mixed $result,
         mixed $cache = null,
