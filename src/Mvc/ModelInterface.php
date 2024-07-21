@@ -172,9 +172,9 @@ interface ModelInterface
      *
      * @param string $eventName
      *
-     * @return bool
+     * @return bool|null
      */
-    public function fireEvent(string $eventName): bool;
+    public function fireEvent(string $eventName): bool|null;
 
     /**
      * Fires an event, implicitly calls behaviors and listeners in the events
@@ -183,9 +183,9 @@ interface ModelInterface
      *
      * @param string $eventName
      *
-     * @return bool
+     * @return bool|null
      */
-    public function fireEventCancel(string $eventName): bool;
+    public function fireEventCancel(string $eventName): bool|null;
 
     /**
      * Returns one of the DIRTY_STATE_* constants telling if the record exists
