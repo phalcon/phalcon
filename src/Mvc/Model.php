@@ -1041,7 +1041,7 @@ abstract class Model extends AbstractInjectionAware implements EntityInterface, 
                 continue;
             }
 
-            if (is_array($columnMap)) {
+            if (!is_array($columnMap)) {
                 $instance->$key = $value;
 
                 continue;
@@ -1094,7 +1094,7 @@ abstract class Model extends AbstractInjectionAware implements EntityInterface, 
                     case Column::TYPE_MEDIUMINTEGER:
                     case Column::TYPE_SMALLINTEGER:
                     case Column::TYPE_TINYINTEGER:
-                        $castValue = intval($value, 10);
+                        $castValue = intval($value);
                         break;
 
                     case Column::TYPE_DECIMAL:

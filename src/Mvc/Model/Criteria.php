@@ -956,7 +956,7 @@ class Criteria implements CriteriaInterface, InjectionAwareInterface
         /**
          * Update or merge existing bound parameters
          */
-        if (null !== $bindTypes) {
+        if (is_array($bindParams)) {
             if (isset($this->params["bind"])) {
                 $this->params["bind"] = array_merge(
                     $this->params["bind"],
@@ -970,7 +970,7 @@ class Criteria implements CriteriaInterface, InjectionAwareInterface
         /**
          * Update or merge existing bind types parameters
          */
-        if (null !== $bindTypes) {
+        if (is_array($bindTypes)) {
             if (isset($this->params["bindTypes"])) {
                 $this->params["bindTypes"] = array_merge(
                     $this->params["bindTypes"],
