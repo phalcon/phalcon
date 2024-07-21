@@ -1441,7 +1441,7 @@ abstract class Model extends AbstractInjectionAware implements EntityInterface, 
              * If the attribute is currently set in the object add it to the
              * conditions
              */
-            if (!isset($this->$attributeField)) {
+            if (!property_exists($this, $attributeField)) {
                 throw new Exception(
                     "Cannot delete the record because the primary key attribute: '"
                     . $attributeField
@@ -2046,9 +2046,9 @@ abstract class Model extends AbstractInjectionAware implements EntityInterface, 
      *
      * @param string $eventName
      *
-     * @return bool
+     * @return bool|null
      */
-    public function fireEvent(string $eventName): bool
+    public function fireEvent(string $eventName): bool|null
     {
         /**
          * Check if there is a method with the same name of the event
@@ -2073,9 +2073,9 @@ abstract class Model extends AbstractInjectionAware implements EntityInterface, 
      *
      * @param string $eventName
      *
-     * @return bool
+     * @return bool|null
      */
-    public function fireEventCancel(string $eventName): bool
+    public function fireEventCancel(string $eventName): bool|null
     {
         /**
          * Check if there is a method with the same name of the event
