@@ -450,9 +450,9 @@ abstract class Dialect implements DialectInterface
              */
 
             return $this->prepareTable(
-                $tableName[0],
-                $tableName[1],
-                $tableName[2],
+                $tableName[0] ?? null,
+                $tableName[1] ?? null,
+                $tableName[2] ?? '',
                 $escapeChar
             );
         }

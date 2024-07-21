@@ -42,6 +42,7 @@ use function is_subclass_of;
 use function lcfirst;
 use function method_exists;
 use function str_replace;
+use function var_dump;
 
 /**
  * This class takes a PHQL intermediate representation and executes it.
@@ -128,7 +129,7 @@ class Query implements QueryInterface, InjectionAwareInterface
     private const PHQL_T_ELSE         = 411;
     private const PHQL_T_ENCLOSED     = 356;
     private const PHQL_T_END          = 412;
-    private const PHQL_T_EQUALS       = '=';
+    private const PHQL_T_EQUALS       = 61; //'=';
     private const PHQL_T_EXISTS       = 408;
     private const PHQL_T_EXPR         = 354;
     private const PHQL_T_FALSE        = 335;

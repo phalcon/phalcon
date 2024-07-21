@@ -4100,6 +4100,7 @@ abstract class Model extends AbstractInjectionAware implements EntityInterface, 
         $bindDataTypes       = $metaData->getBindTypes($this);
         $automaticAttributes = $metaData->getAutomaticCreateAttributes($this);
         $defaultValues       = $metaData->getDefaultValues($this);
+        $value = null;
 
         $columnMap = null;
         if (Settings::get("orm.column_renaming")) {
