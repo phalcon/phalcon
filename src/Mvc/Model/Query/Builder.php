@@ -84,9 +84,9 @@ class Builder implements BuilderInterface, InjectionAwareInterface
     protected array | string | null $columns = null;
 
     /**
-     * @var array|string|null
+     * @var array|int|string|null
      */
-    protected array | string | null $conditions = null;
+    protected array | int | string | null $conditions = null;
 
     /**
      * @var DiInterface|null
@@ -124,9 +124,9 @@ class Builder implements BuilderInterface, InjectionAwareInterface
     protected array $joins = [];
 
     /**
-     * @var array|string
+     * @var array|string|int|null
      */
-    protected array | string | null $limit = null;
+    protected array | string | int | null $limit = null;
 
     /**
      * @var array|string

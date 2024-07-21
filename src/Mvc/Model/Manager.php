@@ -1880,15 +1880,16 @@ class Manager implements ManagerInterface, InjectionAwareInterface, EventsAwareI
          */
         if (isset($this->behaviors[mb_strtolower(get_class($model))])) {
             $modelsBehaviors = $this->behaviors[mb_strtolower(get_class($model))];
-        }
-        /**
-         * Notify all the events on the behavior
-         */
-        foreach ($modelsBehaviors as $behavior) {
-            $status = $behavior->notify($eventName, $model);
 
-            if ($status === false) {
-                return false;
+            /**
+             * Notify all the events on the behavior
+             */
+            foreach ($modelsBehaviors as $behavior) {
+                $status = $behavior->notify($eventName, $model);
+
+                if ($status === false) {
+                    return false;
+                }
             }
         }
 

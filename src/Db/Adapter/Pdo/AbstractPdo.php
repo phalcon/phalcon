@@ -22,7 +22,7 @@ use Phalcon\Db\Result\PdoResult;
 use Phalcon\Db\ResultInterface;
 use Phalcon\Events\Exception as EventsException;
 use Phalcon\Events\Traits\EventsAwareTrait;
-use Phalcon\Support\Traits\IniTrait;
+use Phalcon\Support\Settings;
 
 use function array_merge;
 use function implode;
@@ -34,7 +34,6 @@ use function is_string;
 use function join;
 use function preg_match_all;
 use function preg_replace;
-use function var_dump;
 
 /**
  * Phalcon\Db\Adapter\Pdo is the Phalcon\Db that internally uses PDO to connect
@@ -57,8 +56,6 @@ use function var_dump;
 abstract class AbstractPdo extends AbstractAdapter
 {
     use EventsAwareTrait;
-    use IniTrait;
-
 
     /**
      * Last affected rows
@@ -511,7 +508,7 @@ abstract class AbstractPdo extends AbstractAdapter
         array $placeholders,
         array $dataTypes = []
     ): PDOStatement {
-        $forceCasting = $this->iniGetBool("phalcon.db.force_casting");
+        $forceCasting = Settings::get('db.force_casting');
         foreach ($placeholders as $wildcard => $value) {
             if (is_int($wildcard)) {
                 $parameter = $wildcard + 1;

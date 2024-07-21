@@ -352,7 +352,7 @@ class Criteria implements CriteriaInterface, InjectionAwareInterface
 
         if (count($data)) {
             $metaData  = $container->getShared("modelsMetadata");
-            $model     = $modelName(null, $container);
+            $model     = new $modelName(null, $container);
             $dataTypes = $metaData->getDataTypes($model);
             $columnMap = $metaData->getReverseColumnMap($model);
 
