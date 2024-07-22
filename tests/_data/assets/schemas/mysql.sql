@@ -239,6 +239,8 @@ CREATE TABLE `co_products` (
   ) ENGINE=InnoDB DEFAULT CHARSET=utf8;
             
 
+DROP TABLE IF EXISTS co_rb_test_model;CREATE TABLE co_rb_test_model (id SMALLINT, name VARCHAR(10) NOT NULL);
+
 
 drop table if exists `co_setters`;
             
