@@ -3996,11 +3996,8 @@ abstract class Model extends AbstractInjectionAware implements EntityInterface, 
                 /**
                  * Create a new message
                  */
-                if (!isset($foreignKey["message"])) {
-                    $message = "Record is referenced by model " . $relationClass;
-                }
+                $message = $foreignKey["message"] ?? "Record is referenced by model " . $relationClass;
 
-                $message = $foreignKey["message"];
                 /**
                  * Create a message
                  */

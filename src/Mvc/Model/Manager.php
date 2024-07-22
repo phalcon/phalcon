@@ -1400,12 +1400,20 @@ class Manager implements ManagerInterface, InjectionAwareInterface, EventsAwareI
         /**
          * Find first results could be reusable
          */
-        $reusable = (bool)$relation->isReusable();
+        $reusable = $relation->isReusable();
 
         if ($reusable) {
+            /**
+             * @todo hack to get the unique identifier based on params
+             */
+            $glue = !is_array($findParams) ? [$findParams] : $findParams;
+            $bind = $glue['bind'] ?? [];
+            unset($glue['di']);
+            unset($glue['bind']);
+            $glue = $glue + $bind;
             $uniqueKey = sha1(
                 $referencedModel
-                . implode('-', $findParams)
+                . implode('-', $glue)
                 . $retrieveMethod
             );
             $records   = $this->getReusableRecords($referencedModel, $uniqueKey);
