@@ -52,7 +52,7 @@ class Complex extends Resultset implements ResultsetInterface
      * @param mixed|null           $cache
      */
     public function __construct(
-        protected array $columnTypes,
+        protected ?array $columnTypes,
         ?ResultInterface $result = null,
         mixed $cache = null
     ) {
@@ -97,7 +97,7 @@ class Complex extends Resultset implements ResultsetInterface
         $this->count       = count($data["rows"]);
         $this->cache       = $data["cache"];
         $this->columnTypes = $data["columnTypes"];
-        $this->hydrateMode = $data["hydrateMode"];
+        $this->hydrateMode = (int) $data["hydrateMode"];
     }
 
     /**
@@ -388,6 +388,6 @@ class Complex extends Resultset implements ResultsetInterface
         $this->count       = count($resultset["rows"]);
         $this->cache       = $resultset["cache"];
         $this->columnTypes = $resultset["columnTypes"];
-        $this->hydrateMode = $resultset["hydrateMode"];
+        $this->hydrateMode = (int) $resultset["hydrateMode"];
     }
 }
