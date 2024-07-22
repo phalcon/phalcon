@@ -48,7 +48,7 @@ class Simple extends Resultset
      */
     public function __construct(
         protected mixed $columnMap,
-        protected ModelInterface | Row $model,
+        protected mixed $model,
         mixed $result,
         mixed $cache = null,
         protected bool $keepSnapshots = false
@@ -84,7 +84,7 @@ class Simple extends Resultset
         $this->count       = count($data["rows"]);
         $this->cache       = $data["cache"];
         $this->columnMap   = $data["columnMap"];
-        $this->hydrateMode = $data["hydrateMode"];
+        $this->hydrateMode = (int) $data["hydrateMode"];
 
         if (isset($data["keepSnapshots"])) {
             $this->keepSnapshots = $data["keepSnapshots"];
@@ -332,7 +332,7 @@ class Simple extends Resultset
         $this->count       = count($resultset["rows"]);
         $this->cache       = $resultset["cache"];
         $this->columnMap   = $resultset["columnMap"];
-        $this->hydrateMode = $resultset["hydrateMode"];
+        $this->hydrateMode = (int) $resultset["hydrateMode"];
 
         if (isset($resultset["keepSnapshots"])) {
             $this->keepSnapshots = $resultset["keepSnapshots"];
