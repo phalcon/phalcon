@@ -4138,7 +4138,7 @@ abstract class Model extends AbstractInjectionAware implements EntityInterface, 
                      * This isset checks that the property be defined in the
                      * model
                      */
-                    if (isset($this->$attributeField)) {
+                    if (property_exists($this, $attributeField)) {
                         $value = $this->$attributeField;
                         if ($value === null && isset($defaultValues[$field])) {
                             $snapshot[$attributeField]           = $defaultValues[$field];
@@ -4227,7 +4227,7 @@ abstract class Model extends AbstractInjectionAware implements EntityInterface, 
             /**
              * Check if the developer set an explicit value for the column
              */
-            if (isset($this->$attributeField)) {
+            if (property_exists($this, $attributeField)) {
                 $value = $this->$attributeField;
                 if ($value === null || $value === "") {
                     if ($useExplicitIdentity) {

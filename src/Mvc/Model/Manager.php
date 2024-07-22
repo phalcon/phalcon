@@ -817,8 +817,6 @@ class Manager implements ManagerInterface, InjectionAwareInterface, EventsAwareI
      */
     public function createQuery(string $phql): QueryInterface
     {
-        $container = $this->container;
-
         if (null === $this->container) {
             throw new Exception(
                 "A dependency injection container is required to access the services related to the ORM"

@@ -27,7 +27,6 @@ use function call_user_func;
 use function is_array;
 use function mb_strtolower;
 use function method_exists;
-use function var_dump;
 
 /**
  * Phalcon\Mvc\Model\MetaData

@@ -42,7 +42,6 @@ use function is_subclass_of;
 use function lcfirst;
 use function method_exists;
 use function str_replace;
-use function var_dump;
 
 /**
  * This class takes a PHQL intermediate representation and executes it.
@@ -1707,10 +1706,8 @@ class Query implements QueryInterface, InjectionAwareInterface
     ): StatusInterface {
         $modelName = $intermediate["model"];
 
-        $manager = $this->manager;
-
         if (!isset($this->modelsInstances[$modelName])) {
-            $model = $manager->load($modelName);
+            $model = $this->manager->load($modelName);
         } else {
             $model = $this->modelsInstances[$modelName];
         }
@@ -1722,9 +1719,7 @@ class Query implements QueryInterface, InjectionAwareInterface
             $bindTypes
         );
 
-        $metaData   = $this->metaData;
-        $attributes = $metaData->getAttributes($model);
-
+        $attributes = $this->metaData->getAttributes($model);
         $automaticFields = false;
 
         /**
@@ -1737,7 +1732,7 @@ class Query implements QueryInterface, InjectionAwareInterface
             $fields          = $attributes;
 
             if (Settings::get("orm.column_renaming")) {
-                $columnMap = $metaData->getColumnMap($model);
+                $columnMap = $this->metaData->getColumnMap($model);
             }
         } else {
             $fields = $intermediate["fields"];
@@ -1827,7 +1822,7 @@ class Query implements QueryInterface, InjectionAwareInterface
         /**
          * Get model from the Models Manager
          */
-        $insertModel = $manager->load($modelName);
+        $insertModel = $this->manager->load($modelName);
 
         $insertModel->assign($insertValues);
 
