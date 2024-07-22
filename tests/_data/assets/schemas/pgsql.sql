@@ -145,6 +145,8 @@ create table co_products
 );
             
 
+DROP TABLE IF EXISTS co_rb_test_model;CREATE TABLE co_rb_test_model (id SMALLINT, name VARCHAR(10) NOT NULL);
+
 
 drop table if exists co_setters;
             

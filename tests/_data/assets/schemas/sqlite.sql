@@ -94,6 +94,8 @@ create table objects
 
 
 
+
+
 drop table if exists co_setters;
             
 create table co_setters
