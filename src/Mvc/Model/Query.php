@@ -13,6 +13,7 @@ declare(strict_types=1);
 
 namespace Phalcon\Mvc\Model;
 
+use PDOException;
 use Phalcon\Db\Adapter\AdapterInterface;
 use Phalcon\Db\Column;
 use Phalcon\Db\RawValue;
@@ -1660,21 +1661,27 @@ class Query implements QueryInterface, InjectionAwareInterface
         $records->rewind();
 
         while ($records->valid()) {
-            $record = $records->current();
+            try {
+                $record = $records->current();
 
-            /**
-             * We delete every record found
-             */
-            if (!$record->delete()) {
                 /**
-                 * Rollback the transaction
+                 * We delete every record found
                  */
+                if (!$record->delete()) {
+                    /**
+                     * Rollback the transaction
+                     */
+                    $connection->rollback();
+
+                    return new Status(false, $record);
+                }
+
+                $records->next();
+            } catch (PDOException $ex) {
                 $connection->rollback();
 
-                return new Status(false, $record);
+                throw $ex;
             }
-
-            $records->next();
         }
 
         /**
@@ -1719,7 +1726,7 @@ class Query implements QueryInterface, InjectionAwareInterface
             $bindTypes
         );
 
-        $attributes = $this->metaData->getAttributes($model);
+        $attributes      = $this->metaData->getAttributes($model);
         $automaticFields = false;
 
         /**
@@ -1930,8 +1937,8 @@ class Query implements QueryInterface, InjectionAwareInterface
         }
 
         // Processing selected columns
-        $instance = null;
-        $selectColumns = [];
+        $instance        = null;
+        $selectColumns   = [];
         $simpleColumnMap = [];
 
         foreach ($columns as $aliasCopy => $column) {
@@ -1959,8 +1966,8 @@ class Query implements QueryInterface, InjectionAwareInterface
                      * their columns
                      */
                     if (Settings::get("orm.column_renaming")) {
-                       $columnMap = $this->metaData->getColumnMap($instance);
-                } else {
+                        $columnMap = $this->metaData->getColumnMap($instance);
+                    } else {
                         $columnMap = null;
                     }
 
@@ -1969,7 +1976,7 @@ class Query implements QueryInterface, InjectionAwareInterface
                         $selectColumns[] = [
                             $attribute,
                             $sqlColumn,
-                            "_" . $sqlColumn . "_" . $attribute
+                            "_" . $sqlColumn . "_" . $attribute,
                         ];
                     }
 
@@ -1982,7 +1989,7 @@ class Query implements QueryInterface, InjectionAwareInterface
                     $columns1[$aliasCopy]["columnMap"]  = $columnMap;
 
                     // Check if the model keeps snapshots
-                    $isKeepingSnapshots = (bool) $this->manager->isKeepingSnapshots($instance);
+                    $isKeepingSnapshots = (bool)$this->manager->isKeepingSnapshots($instance);
                     if ($isKeepingSnapshots) {
                         $columns1[$aliasCopy]["keepSnapshots"] = $isKeepingSnapshots;
                     }
@@ -2295,13 +2302,17 @@ class Query implements QueryInterface, InjectionAwareInterface
                         );
                     }
 
+                    $updateValue = $bindParams[$wildcard];
+
                     unset($selectBindParams[$wildcard]);
                     unset($selectBindTypes[$wildcard]);
 
                     break;
-
-                case self::PHQL_T_BPLACEHOLDER:
-                    throw new Exception("Not supported");
+                /**
+                 * @todo duplicate branch
+                 */
+//                case self::PHQL_T_BPLACEHOLDER:
+//                    throw new Exception("Not supported");
 
                 default:
                     $updateValue = new RawValue(
@@ -2343,6 +2354,32 @@ class Query implements QueryInterface, InjectionAwareInterface
          */
         $connection->begin();
         $records->rewind();
+
+        while ($records->valid()) {
+            try {
+                $record = $records->current();
+
+                $record->assign($updateValues);
+
+                /**
+                 * We apply the executed values to every record found
+                 */
+                if (!$record->update()) {
+                    /**
+                     * Rollback the transaction on failure
+                     */
+                    $connection->rollback();
+
+                    return new Status(false, $record);
+                }
+
+                $records->next();
+            } catch (\PDOException $ex) {
+                $connection->rollback();
+
+                throw $ex;
+            }
+        }
 
         //for record in iterator(records) {
         while ($records->valid()) {

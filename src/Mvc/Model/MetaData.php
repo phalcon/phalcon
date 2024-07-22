@@ -323,8 +323,12 @@ abstract class MetaData extends Injectable implements MetaDataInterface
      *     )
      * );
      *```
+     *
+     * @param ModelInterface $model
+     *
+     * @return bool|string|null
      */
-    public function getIdentityField(ModelInterface $model): string | null
+    public function getIdentityField(ModelInterface $model): bool | string | null
     {
         return $this->readMetaDataIndex($model, self::MODELS_IDENTITY_COLUMN);
     }
@@ -583,7 +587,7 @@ abstract class MetaData extends Injectable implements MetaDataInterface
      *```
      * @todo check the return type; 8 seems to be only string
      */
-    final public function readMetaDataIndex(ModelInterface $model, int $index): array | string | null
+    final public function readMetaDataIndex(ModelInterface $model, int $index): mixed
     {
         $key = $this->getMetaDataUniqueKey($model);
         if ($key !== null) {
