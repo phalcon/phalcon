@@ -109,9 +109,9 @@ interface MetaDataInterface
      *
      * @param ModelInterface $model
      *
-     * @return string|null
+     * @return bool|string|null
      */
-    public function getIdentityField(ModelInterface $model): string | null;
+    public function getIdentityField(ModelInterface $model): bool | string | null;
 
     /**
      * Returns an array of fields which are not part of the primary key
