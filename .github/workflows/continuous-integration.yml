@@ -652,8 +652,9 @@ jobs:
 
       - name: "Upload to Codacy"
         run: |
-          bash <(curl -Ls https://coverage.codacy.com/get.sh) report \
-            -l php $(find ./reports/ -name '*.xml' | sed 's,^, -r ,' | xargs echo)
+          bash <(curl -Ls https://coverage.codacy.com/get.sh)
+#          bash <(curl -Ls https://coverage.codacy.com/get.sh) report \
+#            -l php $(find ./reports/ -name '*.xml' | sed 's,^, -r ,' | xargs echo)
 
 #      - name: "Upload to Codacy"
 #        uses: codacy/codacy-coverage-reporter-action@v1.3.0
