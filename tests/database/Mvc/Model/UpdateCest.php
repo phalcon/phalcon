@@ -14,6 +14,7 @@ declare(strict_types=1);
 namespace Phalcon\Tests\Database\Mvc\Model;
 
 use DatabaseTester;
+use PDO;
 use Phalcon\Mvc\ModelInterface;
 use Phalcon\Tests\Fixtures\Migrations\CustomersDefaultsMigration;
 use Phalcon\Tests\Fixtures\Migrations\InvoicesMigration;
@@ -42,62 +43,6 @@ class UpdateCest
     }
 
     /**
-     * Tests Phalcon\Mvc\Model :: update()
-     *
-     * @author Phalcon Team <team@phalcon.io>
-     * @since  2020-01-31
-     *
-     * @group  mysql
-     * @group  sqlite
-     * @group  pgsql
-     */
-    public function mvcModelUpdate(DatabaseTester $I)
-    {
-        $I->wantToTest('Mvc\Model - update()');
-
-        $title   = uniqid('inv-');
-        $invoice = new Invoices();
-        $invoice->assign(
-            [
-                'inv_title' => $title,
-            ]
-        );
-
-        $result = $invoice->save();
-        $I->assertNotFalse($result);
-
-        $invoice->inv_cst_id      = 456;
-        $invoice->inv_status_flag = 2;
-
-        $result = $invoice->update();
-        $I->assertNotFalse($result);
-
-        /**
-         * Get the record again to ensure that the update is successful
-         */
-        $record = Invoices::findFirst(
-            [
-                'conditions' => 'inv_title = :title:',
-                'bind'       => [
-                    'title' => $title,
-                ],
-            ]
-        );
-
-        $I->assertEquals(
-            [
-                'inv_id'          => $invoice->inv_id,
-                'inv_title'       => $title,
-                'inv_cst_id'      => 456,
-                'inv_status_flag' => 2,
-                'inv_total'       => null,
-                'inv_created_at'  => null,
-            ],
-            $record->toArray()
-        );
-    }
-
-    /**
      * Tests Phalcon\Mvc\Model :: update() - with default values
      *
      * @see    https://github.com/phalcon/cphalcon/issues/14924
@@ -113,7 +58,7 @@ class UpdateCest
     {
         $I->wantToTest('Mvc\Model - update() - with default values');
 
-        /** @var \PDO $connection */
+        /** @var PDO $connection */
         $connection = $I->getConnection();
 
         $customersMigration = new CustomersDefaultsMigration($connection);
@@ -184,7 +129,7 @@ class UpdateCest
     {
         $I->wantToTest('Mvc\Model - update() - via setters and local method');
 
-        /** @var \PDO $connection */
+        /** @var PDO $connection */
         $connection = $I->getConnection();
 
         $settersMigration = new SettersMigration($connection);
@@ -225,6 +170,62 @@ class UpdateCest
         $I->assertEquals($firstValue, Setters::findFirst(1)->getColumn1());
         $I->assertEquals($secondValue, Setters::findFirst(1)->getColumn2());
         $I->assertEquals('value3', Setters::findFirst(1)->getColumn3());
+    }
+
+    /**
+     * Tests Phalcon\Mvc\Model :: update()
+     *
+     * @author Phalcon Team <team@phalcon.io>
+     * @since  2020-01-31
+     *
+     * @group  mysql
+     * @group  sqlite
+     * @group  pgsql
+     */
+    public function mvcModelUpdate(DatabaseTester $I)
+    {
+        $I->wantToTest('Mvc\Model - update()');
+
+        $title   = uniqid('inv-');
+        $invoice = new Invoices();
+        $invoice->assign(
+            [
+                'inv_title' => $title,
+            ]
+        );
+
+        $result = $invoice->save();
+        $I->assertNotFalse($result);
+
+        $invoice->inv_cst_id      = 456;
+        $invoice->inv_status_flag = 2;
+
+        $result = $invoice->update();
+        $I->assertNotFalse($result);
+
+        /**
+         * Get the record again to ensure that the update is successful
+         */
+        $record = Invoices::findFirst(
+            [
+                'conditions' => 'inv_title = :title:',
+                'bind'       => [
+                    'title' => $title,
+                ],
+            ]
+        );
+
+        $I->assertEquals(
+            [
+                'inv_id'          => $invoice->inv_id,
+                'inv_title'       => $title,
+                'inv_cst_id'      => 456,
+                'inv_status_flag' => 2,
+                'inv_total'       => null,
+                'inv_created_at'  => null,
+            ],
+            $record->toArray()
+        );
     }
 
     private function setColumn1(ModelInterface $model, string $value): void

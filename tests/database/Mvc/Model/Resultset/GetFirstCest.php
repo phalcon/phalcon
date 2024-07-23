@@ -35,7 +35,8 @@ class GetFirstCest
     /**
      * Executed before each test
      *
-     * @param  DatabaseTester $I
+     * @param DatabaseTester $I
+     *
      * @return void
      */
     public function _before(DatabaseTester $I): void
@@ -54,7 +55,7 @@ class GetFirstCest
     /**
      * Tests Mvc\Model\Resultset :: getFirst() - Issue 15027
      *
-     * @param  DatabaseTester $I
+     * @param DatabaseTester $I
      *
      * @author Phalcon Team <team@phalcon.io>
      * @since  2020-05-06

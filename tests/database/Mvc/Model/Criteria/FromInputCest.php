@@ -26,7 +26,8 @@ class FromInputCest
     /**
      * Executed before each test
      *
-     * @param  DatabaseTester $I
+     * @param DatabaseTester $I
+     *
      * @return void
      */
     public function _before(DatabaseTester $I): void
@@ -43,7 +44,7 @@ class FromInputCest
     /**
      * Tests Phalcon\Mvc\Model\Criteria :: fromInput()
      *
-     * @param  DatabaseTester $I
+     * @param DatabaseTester $I
      *
      * @author Phalcon Team <team@phalcon.io>
      * @since  2020-03-05
@@ -68,7 +69,7 @@ class FromInputCest
             ]
         );
 
-        $builder  = $criteria->createBuilder();
+        $builder = $criteria->createBuilder();
 
         if ($I->getDriver() === 'sqlite') {
             $expected = 'SELECT [Phalcon\Tests\Models\Invoices].* '

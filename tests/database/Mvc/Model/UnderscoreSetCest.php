@@ -12,6 +12,7 @@
 namespace Phalcon\Tests\Integration\Mvc\Model;
 
 use DatabaseTester;
+use PDO;
 use Phalcon\Mvc\Model;
 use Phalcon\Tests\Fixtures\Migrations\CustomersMigration;
 use Phalcon\Tests\Fixtures\Migrations\InvoicesMigration;
@@ -22,15 +23,15 @@ class UnderscoreSetCest
 {
     use DiTrait;
 
+    public function _after(DatabaseTester $I)
+    {
+        $this->container['db']->close();
+    }
+
     public function _before(DatabaseTester $I)
     {
         $this->setNewFactoryDefault();
         $this->setDatabase($I);
-    }
-
-    public function _after(DatabaseTester $I)
-    {
-        $this->container['db']->close();
     }
 
     /**
@@ -142,6 +143,130 @@ class UnderscoreSetCest
     }
 
     /**
+     * Tests Phalcon\Mvc\Model :: __set() undefined property with associative
+     * array
+     *
+     * @see    https://github.com/phalcon/cphalcon/issues/14021
+     *
+     * @author Balázs Németh <https://github.com/zsilbi>
+     * @since  2019-05-02
+     *
+     * @group  mysql
+     * @group  pgsql
+     * @group  sqlite
+     */
+    public function mvcModelUnderscoreSetUndefinedPropertyWithAssociativeArray(DatabaseTester $I)
+    {
+        $I->wantToTest('Mvc\Model - __set() undefined property with associative array');
+
+        $associativeArray = [
+            'cst_id'         => 123,
+            'cst_name_first' => 'cst_firstName',
+        ];
+
+        $customer                            = new Models\Customers();
+        $customer->whatEverUndefinedProperty = $associativeArray;
+
+        $I->assertEquals(
+            [
+                'cst_id'          => null,
+                'cst_status_flag' => null,
+                'cst_name_last'   => null,
+                'cst_name_first'  => null,
+            ],
+            $customer->toArray()
+        );
+    }
+
+    /**
+     * Tests Phalcon\Mvc\Model :: __set() with an array as properties of a
+     * belongs-to related record
+     *
+     * @author Balázs Németh <https://github.com/zsilbi>
+     * @since  2019-05-02
+     *
+     * @group  mysql
+     * @group  pgsql
+     * @group  sqlite
+     */
+    public function mvcModelUnderscoreSetWithArrayOfBelongsToRelatedRecord(DatabaseTester $I)
+    {
+        $I->wantToTest('Mvc\Model - __set() with an array as properties of a belongs-to related record');
+
+        $invoice           = new Models\Invoices();
+        $invoice->customer = [
+            'cst_id'          => 33,
+            'cst_status_flag' => 1,
+        ];
+
+        $customer = $invoice->customer;
+
+        $I->assertInstanceOf(
+            Models\Customers::class,
+            $customer
+        );
+
+        $I->assertEquals(
+            $invoice->getDirtyState(),
+            Model::DIRTY_STATE_TRANSIENT
+        );
+
+        $I->assertEquals(
+            33,
+            $customer->cst_id
+        );
+
+        $I->assertEquals(
+            1,
+            $customer->cst_status_flag
+        );
+    }
+
+    /**
+     * Tests Phalcon\Mvc\Model :: __set() with an array as properties of a
+     * has-one related record
+     *
+     * @author Balázs Németh <https://github.com/zsilbi>
+     * @since  2019-05-02
+     *
+     * @group  mysql
+     * @group  pgsql
+     * @group  sqlite
+     */
+    public function mvcModelUnderscoreSetWithArrayOfHasOneRelatedRecord(DatabaseTester $I)
+    {
+        $I->wantToTest('Mvc\Model - __set() with an array as properties of a has-one related record');
+
+        $invoice           = new Models\Invoices();
+        $invoice->customer = [
+            'cst_id'         => 99,
+            'cst_name_first' => 'cst_firstName',
+        ];
+
+        $customer = $invoice->customer;
+
+        $I->assertInstanceOf(
+            Models\Customers::class,
+            $customer
+        );
+
+        $I->assertEquals(
+            Model::DIRTY_STATE_TRANSIENT,
+            $invoice->getDirtyState()
+        );
+
+        $I->assertEquals(
+            99,
+            $customer->cst_id
+        );
+
+        $I->assertEquals(
+            'cst_firstName',
+            $customer->cst_name_first
+        );
+    }
+
+    /**
      * Tests Phalcon\Mvc\Model :: __set() with belongs-to related record
      *
      * @author Balázs Németh <https://github.com/zsilbi>
@@ -172,8 +297,7 @@ class UnderscoreSetCest
     }
 
     /**
-     * Tests Phalcon\Mvc\Model :: __set() with an array as properties of a
-     * belongs-to related record
+     * Tests Phalcon\Mvc\Model :: __set() with has-many related records
      *
      * @author Balázs Németh <https://github.com/zsilbi>
      * @since  2019-05-02
@@ -182,36 +306,151 @@ class UnderscoreSetCest
      * @group  pgsql
      * @group  sqlite
      */
-    public function mvcModelUnderscoreSetWithArrayOfBelongsToRelatedRecord(DatabaseTester $I)
+    public function mvcModelUnderscoreSetWithHasManyRelatedRecords(DatabaseTester $I)
     {
-        $I->wantToTest('Mvc\Model - __set() with an array as properties of a belongs-to related record');
+        $I->wantToTest('Mvc\Model - __set() with has-many related records');
 
-        $invoice           = new Models\Invoices();
-        $invoice->customer = [
-            'cst_id'          => 33,
-            'cst_status_flag' => 1
+        /** @var PDO $connection */
+        $connection = $I->getConnection();
+
+        $invoicesMigration = new InvoicesMigration($connection);
+        $invoicesMigration->clear();
+
+        $customersMigration = new CustomersMigration($connection);
+        $customersMigration->clear();
+
+        $customer           = new Models\Customers();
+        $customer->invoices = [
+            new Models\Invoices(),
+            new Models\Invoices(),
         ];
 
-        $customer = $invoice->customer;
+        $invoices = $customer->invoices;
+
+        $I->assertIsArray(
+            $invoices
+        );
+
+        $I->assertEquals(
+            Model::DIRTY_STATE_TRANSIENT,
+            $customer->getDirtyState()
+        );
+
+        $I->assertCount(
+            2,
+            $invoices
+        );
 
         $I->assertInstanceOf(
-            Models\Customers::class,
-            $customer
+            Models\Invoices::class,
+            $invoices[0]
         );
 
         $I->assertEquals(
-            $invoice->getDirtyState(),
-            Model::DIRTY_STATE_TRANSIENT
+            Model::DIRTY_STATE_TRANSIENT,
+            $customer->getDirtyState()
+        );
+
+        $I->assertTrue(
+            $customer->save()
+        );
+
+        $customer = Models\Customers::findFirst();
+
+        $I->assertTrue(
+            $customer->save()
+        );
+
+        /*
+         * @see https://github.com/phalcon/cphalcon/issues/13938
+         */
+        $customer = Models\Customers::findFirst();
+
+        $customer->invoices->delete();
+
+        $I->assertCount(
+            0,
+            $customer->getRelated('camelCaseInvoices')
+        );
+
+        $customer->invoices = [
+            new Models\Invoices(),
+            new Models\Invoices(),
+        ];
+
+        $I->assertTrue($customer->save());
+
+        $I->assertCount(
+            2,
+            $customer->camelCaseInvoices
+        );
+
+        $customer->camelCaseInvoices->delete();
+
+        $I->assertCount(
+            0,
+            $customer->getRelated('camelCaseInvoices')
+        );
+
+        $customer->camelCaseInvoices = [
+            new Models\Invoices(),
+            new Models\Invoices(),
+        ];
+
+        $I->assertTrue(
+            $customer->save()
+        );
+
+        $I->assertCount(
+            2,
+            $customer->getRelated('camelCaseInvoices')
+        );
+    }
+
+    /**
+     * Tests Phalcon\Mvc\Model :: __set() with has-many-to-many related records
+     *
+     * @author Balázs Németh <https://github.com/zsilbi>
+     * @since  2019-05-02
+     *
+     * @group  mysql
+     * @group  pgsql
+     * @group  sqlite
+     */
+    public function mvcModelUnderscoreSetWithHasManyToManyRelatedRecords(DatabaseTester $I)
+    {
+        $I->wantToTest('Mvc\Model - __set() with has-many-to-many related records');
+
+        $order           = new Models\Orders();
+        $order->products = [
+            new Models\Products(),
+            new Models\Products(),
+        ];
+
+        $products = $order->products;
+
+        $I->assertIsArray(
+            $products
         );
 
         $I->assertEquals(
-            33,
-            $customer->cst_id
+            Model::DIRTY_STATE_TRANSIENT,
+            $order->getDirtyState()
+        );
+
+        $I->assertCount(
+            2,
+            $products
+        );
+
+        $I->assertInstanceOf(
+            Models\Products::class,
+            $products[0]
         );
 
         $I->assertEquals(
-            1,
-            $customer->cst_status_flag
+            Model::DIRTY_STATE_TRANSIENT,
+            $order->getDirtyState()
         );
     }
 
@@ -272,244 +511,6 @@ class UnderscoreSetCest
         $I->assertEquals(
             Model::DIRTY_STATE_TRANSIENT,
             $order->getDirtyState()
-        );
-    }
-
-    /**
-     * Tests Phalcon\Mvc\Model :: __set() with an array as properties of a
-     * has-one related record
-     *
-     * @author Balázs Németh <https://github.com/zsilbi>
-     * @since  2019-05-02
-     *
-     * @group  mysql
-     * @group  pgsql
-     * @group  sqlite
-     */
-    public function mvcModelUnderscoreSetWithArrayOfHasOneRelatedRecord(DatabaseTester $I)
-    {
-        $I->wantToTest('Mvc\Model - __set() with an array as properties of a has-one related record');
-
-        $invoice           = new Models\Invoices();
-        $invoice->customer = [
-            'cst_id'         => 99,
-            'cst_name_first' => 'cst_firstName'
-        ];
-
-        $customer = $invoice->customer;
-
-        $I->assertInstanceOf(
-            Models\Customers::class,
-            $customer
-        );
-
-        $I->assertEquals(
-            Model::DIRTY_STATE_TRANSIENT,
-            $invoice->getDirtyState()
-        );
-
-        $I->assertEquals(
-            99,
-            $customer->cst_id
-        );
-
-        $I->assertEquals(
-            'cst_firstName',
-            $customer->cst_name_first
-        );
-    }
-
-    /**
-     * Tests Phalcon\Mvc\Model :: __set() with has-many related records
-     *
-     * @author Balázs Németh <https://github.com/zsilbi>
-     * @since  2019-05-02
-     *
-     * @group  mysql
-     * @group  pgsql
-     * @group  sqlite
-     */
-    public function mvcModelUnderscoreSetWithHasManyRelatedRecords(DatabaseTester $I)
-    {
-        $I->wantToTest('Mvc\Model - __set() with has-many related records');
-
-        /** @var \PDO $connection */
-        $connection = $I->getConnection();
-
-        $invoicesMigration = new InvoicesMigration($connection);
-        $invoicesMigration->clear();
-
-        $customersMigration = new CustomersMigration($connection);
-        $customersMigration->clear();
-
-        $customer           = new Models\Customers();
-        $customer->invoices = [
-            new Models\Invoices(),
-            new Models\Invoices()
-        ];
-
-        $invoices = $customer->invoices;
-
-        $I->assertIsArray(
-            $invoices
-        );
-
-        $I->assertEquals(
-            Model::DIRTY_STATE_TRANSIENT,
-            $customer->getDirtyState()
-        );
-
-        $I->assertCount(
-            2,
-            $invoices
-        );
-
-        $I->assertInstanceOf(
-            Models\Invoices::class,
-            $invoices[0]
-        );
-
-        $I->assertEquals(
-            Model::DIRTY_STATE_TRANSIENT,
-            $customer->getDirtyState()
-        );
-
-        $I->assertTrue(
-            $customer->save()
-        );
-
-        $customer = Models\Customers::findFirst();
-
-        $I->assertTrue(
-            $customer->save()
-        );
-
-        /*
-         * @see https://github.com/phalcon/cphalcon/issues/13938
-         */
-        $customer = Models\Customers::findFirst();
-
-        $customer->invoices->delete();
-
-        $I->assertCount(
-            0,
-            $customer->getRelated('camelCaseInvoices')
-        );
-
-        $customer->invoices = [
-            new Models\Invoices(),
-            new Models\Invoices()
-        ];
-
-        $I->assertTrue($customer->save());
-
-        $I->assertCount(
-            2,
-            $customer->camelCaseInvoices
-        );
-
-        $customer->camelCaseInvoices->delete();
-
-        $I->assertCount(
-            0,
-            $customer->getRelated('camelCaseInvoices')
-        );
-
-        $customer->camelCaseInvoices = [
-            new Models\Invoices(),
-            new Models\Invoices()
-        ];
-
-        $I->assertTrue(
-            $customer->save()
-        );
-
-        $I->assertCount(
-            2,
-            $customer->getRelated('camelCaseInvoices')
-        );
-    }
-
-    /**
-     * Tests Phalcon\Mvc\Model :: __set() with has-many-to-many related records
-     *
-     * @author Balázs Németh <https://github.com/zsilbi>
-     * @since  2019-05-02
-     *
-     * @group  mysql
-     * @group  pgsql
-     * @group  sqlite
-     */
-    public function mvcModelUnderscoreSetWithHasManyToManyRelatedRecords(DatabaseTester $I)
-    {
-        $I->wantToTest('Mvc\Model - __set() with has-many-to-many related records');
-
-        $order           = new Models\Orders();
-        $order->products = [
-            new Models\Products(),
-            new Models\Products()
-        ];
-
-        $products = $order->products;
-
-        $I->assertIsArray(
-            $products
-        );
-
-        $I->assertEquals(
-            Model::DIRTY_STATE_TRANSIENT,
-            $order->getDirtyState()
-        );
-
-        $I->assertCount(
-            2,
-            $products
-        );
-
-        $I->assertInstanceOf(
-            Models\Products::class,
-            $products[0]
-        );
-
-        $I->assertEquals(
-            Model::DIRTY_STATE_TRANSIENT,
-            $order->getDirtyState()
-        );
-    }
-
-    /**
-     * Tests Phalcon\Mvc\Model :: __set() undefined property with associative
-     * array
-     *
-     * @see    https://github.com/phalcon/cphalcon/issues/14021
-     *
-     * @author Balázs Németh <https://github.com/zsilbi>
-     * @since  2019-05-02
-     *
-     * @group  mysql
-     * @group  pgsql
-     * @group  sqlite
-     */
-    public function mvcModelUnderscoreSetUndefinedPropertyWithAssociativeArray(DatabaseTester $I)
-    {
-        $I->wantToTest('Mvc\Model - __set() undefined property with associative array');
-
-        $associativeArray = [
-            'cst_id'         => 123,
-            'cst_name_first' => 'cst_firstName',
-        ];
-
-        $customer                            = new Models\Customers();
-        $customer->whatEverUndefinedProperty = $associativeArray;
-
-        $I->assertEquals(
-            [
-                'cst_id'          => null,
-                'cst_status_flag' => null,
-                'cst_name_last'   => null,
-                'cst_name_first'  => null
-            ],
-            $customer->toArray()
         );
     }
 }

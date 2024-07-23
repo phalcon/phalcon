@@ -72,7 +72,7 @@ class CloneResultMapCest
             'inv_status_flag' => $example['inv_status_flag'],
             'inv_title'       => $example['inv_title'],
             'inv_total'       => $example['inv_total'],
-            'inv_created_at'  => $example['inv_created_at']
+            'inv_created_at'  => $example['inv_created_at'],
         ];
 
         /**
@@ -140,7 +140,7 @@ class CloneResultMapCest
         foreach ($columnMap as $mappedField => $field) {
             $typedColumnMap[$mappedField] = [
                 $field,
-                $dataTypes[$mappedField]
+                $dataTypes[$mappedField],
             ];
         }
 
@@ -155,7 +155,7 @@ class CloneResultMapCest
                 'inv_status_flag' => $example['inv_status_flag'],
                 'inv_title'       => $example['inv_title'],
                 'inv_total'       => $example['inv_total'],
-                'inv_created_at'  => $example['inv_created_at']
+                'inv_created_at'  => $example['inv_created_at'],
             ],
             $typedColumnMap
         );
@@ -231,7 +231,7 @@ class CloneResultMapCest
                 'inv_title'       => 'Test title',
                 'inv_total'       => 3.14,
                 'inv_created_at'  => '2020-10-05 20:43',
-            ]
+            ],
         ];
     }
 }

@@ -74,7 +74,7 @@ class OrderByCest
         $actual   = $phql;
         $I->assertEquals($expected, $actual);
 
-        $phql    = $builder
+        $phql = $builder
             ->orderBy('inv_title DESC')
             ->getPhql()
         ;

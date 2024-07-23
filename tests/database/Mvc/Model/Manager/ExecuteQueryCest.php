@@ -29,7 +29,8 @@ class ExecuteQueryCest
     /**
      * Executed before each test
      *
-     * @param  DatabaseTester $I
+     * @param DatabaseTester $I
+     *
      * @return void
      */
     public function _before(DatabaseTester $I): void
@@ -46,7 +47,7 @@ class ExecuteQueryCest
     /**
      * Tests Phalcon\Mvc\Model\Manager :: executeQuery() - Issue 15024
      *
-     * @param  DatabaseTester $I
+     * @param DatabaseTester $I
      *
      * @author Phalcon Team <team@phalcon.io>
      * @since  2020-05-06

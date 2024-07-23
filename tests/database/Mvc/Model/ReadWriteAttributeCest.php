@@ -71,6 +71,45 @@ class ReadWriteAttributeCest
     }
 
     /**
+     * Tests Phalcon\Mvc\Model :: writeAttribute() undefined property with
+     * associative array
+     *
+     * @issue  14021
+     * @author Balázs Németh <https://github.com/zsilbi>
+     * @since  2019-04-30
+     *
+     * @group  mysql
+     * @group  pgsql
+     * @group  sqlite
+     */
+    public function mvcModelWriteAttributeUndefinedPropertyWithAssociativeArray(DatabaseTester $I)
+    {
+        $I->wantToTest(
+            'Phalcon\Mvc\Model :: writeAttribute() undefined property with associative array'
+        );
+
+        $array = [
+            'inv_id'    => 123,
+            'inv_title' => uniqid('inv-'),
+        ];
+
+        $invoice = new Invoices();
+        $invoice->writeAttribute('whatEverUndefinedProperty', $array);
+
+        $I->assertEquals(
+            [
+                'inv_id'          => null,
+                'inv_title'       => null,
+                'inv_cst_id'      => null,
+                'inv_status_flag' => null,
+                'inv_total'       => null,
+                'inv_created_at'  => null,
+            ],
+            $invoice->toArray()
+        );
+    }
+
+    /**
      * Tests Phalcon\Mvc\Model :: writeAttribute() with associative array
      *
      * @author Balázs Németh <https://github.com/zsilbi>
@@ -102,45 +141,6 @@ class ReadWriteAttributeCest
             [
                 'inv_id'          => 123,
                 'inv_title'       => $array,
-                'inv_cst_id'      => null,
-                'inv_status_flag' => null,
-                'inv_total'       => null,
-                'inv_created_at'  => null,
-            ],
-            $invoice->toArray()
-        );
-    }
-
-    /**
-     * Tests Phalcon\Mvc\Model :: writeAttribute() undefined property with
-     * associative array
-     *
-     * @issue  14021
-     * @author Balázs Németh <https://github.com/zsilbi>
-     * @since  2019-04-30
-     *
-     * @group  mysql
-     * @group  pgsql
-     * @group  sqlite
-     */
-    public function mvcModelWriteAttributeUndefinedPropertyWithAssociativeArray(DatabaseTester $I)
-    {
-        $I->wantToTest(
-            'Phalcon\Mvc\Model :: writeAttribute() undefined property with associative array'
-        );
-
-        $array = [
-            'inv_id'    => 123,
-            'inv_title' => uniqid('inv-'),
-        ];
-
-        $invoice = new Invoices();
-        $invoice->writeAttribute('whatEverUndefinedProperty', $array);
-
-        $I->assertEquals(
-            [
-                'inv_id'          => null,
-                'inv_title'       => null,
                 'inv_cst_id'      => null,
                 'inv_status_flag' => null,
                 'inv_total'       => null,

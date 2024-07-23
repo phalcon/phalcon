@@ -15,12 +15,7 @@ namespace Phalcon\Tests\Database\Mvc\Model\Manager;
 
 use DatabaseTester;
 use Phalcon\Mvc\Model\ManagerInterface;
-use Phalcon\Mvc\Model\Query\StatusInterface;
-use Phalcon\Mvc\Model\Resultset\Complex;
-use Phalcon\Mvc\Model\Resultset\Simple;
-use Phalcon\Storage\Exception;
 use Phalcon\Tests\Fixtures\Traits\DiTrait;
-use Phalcon\Tests\Models\Invoices;
 
 use function spl_object_hash;
 
@@ -31,7 +26,7 @@ class CreateBuilderCest
     /**
      * Tests Phalcon\Mvc\Model\Manager :: createBuilder()
      *
-     * @param  DatabaseTester $I
+     * @param DatabaseTester $I
      *
      * @author Phalcon Team <team@phalcon.io>
      * @since  2022-07-04
@@ -58,8 +53,8 @@ class CreateBuilderCest
         $actual     = spl_object_hash($getBuilder);
         $I->assertSame($expected, $actual);
 
-        $builder    = $manager->createBuilder();
-        $expected   = spl_object_hash($builder);
+        $builder  = $manager->createBuilder();
+        $expected = spl_object_hash($builder);
         $I->assertNotSame($expected, $actual);
     }
 }

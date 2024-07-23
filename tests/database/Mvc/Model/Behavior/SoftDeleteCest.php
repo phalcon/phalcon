@@ -14,12 +14,12 @@ declare(strict_types=1);
 namespace Phalcon\Tests\Database\Mvc\Model\Behavior;
 
 use DatabaseTester;
+use Phalcon\Events\Event;
+use Phalcon\Events\Manager as EventManager;
 use Phalcon\Tests\Fixtures\Migrations\InvoicesMigration;
 use Phalcon\Tests\Fixtures\Traits\DiTrait;
 use Phalcon\Tests\Models\Invoices;
 use Phalcon\Tests\Models\InvoicesBehavior;
-use Phalcon\Events\Event;
-use Phalcon\Events\Manager as EventManager;
 
 use function uniqid;
 

@@ -94,42 +94,6 @@ class AssignCest
     }
 
     /**
-     * Tests Phalcon\Mvc\Model :: assign() - incomplete
-     *
-     * @author Phalcon Team <team@phalcon.io>
-     * @since  2020-01-29
-     *
-     * @group  mysql
-     * @group  pgsql
-     * @group  sqlite
-     */
-    public function mvcModelAssignIncomplete(DatabaseTester $I)
-    {
-        $I->wantToTest('Mvc\Model - assign() - incomplete');
-
-        $title   = uniqid('inv-');
-        $invoice = new Invoices();
-        $invoice->assign(
-            [
-                'inv_id'    => 1,
-                'inv_title' => $title,
-            ]
-        );
-
-        $I->assertEquals(
-            [
-                'inv_id'          => 1,
-                'inv_cst_id'      => null,
-                'inv_status_flag' => null,
-                'inv_title'       => $title,
-                'inv_total'       => null,
-                'inv_created_at'  => null,
-            ],
-            $invoice->toArray()
-        );
-    }
-
-    /**
      * Tests Phalcon\Mvc\Model :: assign() - auto_increment primary
      *
      * Current test serves for example with PHP 7.4 and nullable model's
@@ -166,6 +130,42 @@ class AssignCest
     }
 
     /**
+     * Tests Phalcon\Mvc\Model :: assign() - incomplete
+     *
+     * @author Phalcon Team <team@phalcon.io>
+     * @since  2020-01-29
+     *
+     * @group  mysql
+     * @group  pgsql
+     * @group  sqlite
+     */
+    public function mvcModelAssignIncomplete(DatabaseTester $I)
+    {
+        $I->wantToTest('Mvc\Model - assign() - incomplete');
+
+        $title   = uniqid('inv-');
+        $invoice = new Invoices();
+        $invoice->assign(
+            [
+                'inv_id'    => 1,
+                'inv_title' => $title,
+            ]
+        );
+
+        $I->assertEquals(
+            [
+                'inv_id'          => 1,
+                'inv_cst_id'      => null,
+                'inv_status_flag' => null,
+                'inv_title'       => $title,
+                'inv_total'       => null,
+                'inv_created_at'  => null,
+            ],
+            $invoice->toArray()
+        );
+    }
+
+    /**
      * Tests Phalcon\Mvc\Model :: assign() - with transaction
      *
      * @author Phalcon Team <team@phalcon.io>
@@ -179,7 +179,7 @@ class AssignCest
     {
         $I->wantToTest('Mvc\Model - assign() - with transaction');
 
-        $title   = uniqid('inv-');
+        $title       = uniqid('inv-');
         $manager     = new Manager();
         $transaction = $manager->get();
         $invoice     = new Invoices();

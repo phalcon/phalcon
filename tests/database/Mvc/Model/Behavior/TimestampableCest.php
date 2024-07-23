@@ -14,13 +14,13 @@ declare(strict_types=1);
 namespace Phalcon\Tests\Database\Mvc\Model\Behavior;
 
 use DatabaseTester;
+use DateTime;
+use Phalcon\Events\Event;
+use Phalcon\Events\Manager as EventManager;
 use Phalcon\Tests\Fixtures\Migrations\InvoicesMigration;
 use Phalcon\Tests\Fixtures\Traits\DiTrait;
 use Phalcon\Tests\Models\Invoices;
 use Phalcon\Tests\Models\InvoicesBehavior;
-use Phalcon\Events\Event;
-use Phalcon\Events\Manager as EventManager;
-use DateTime;
 
 use function uniqid;
 
@@ -54,13 +54,13 @@ final class TimestampableCest
         /** Add row to Timestampable then */
         $title = uniqid('inv-');
 
-        $invoice = new InvoicesBehavior();
-        $invoice->inv_cst_id = 2;
+        $invoice                  = new InvoicesBehavior();
+        $invoice->inv_cst_id      = 2;
         $invoice->inv_status_flag = Invoices::STATUS_PAID;
-        $invoice->inv_title = $title;
-        $invoice->inv_total = 100.12;
+        $invoice->inv_title       = $title;
+        $invoice->inv_total       = 100.12;
 
-        $date    = date('Y-m-d');
+        $date = date('Y-m-d');
         $invoice->save();
 
         $I->assertNotEmpty($invoice->inv_created_at);
@@ -99,10 +99,10 @@ final class TimestampableCest
 
         $invoice = new InvoicesBehavior();
         $invoice->setEventsManager($eventsManager);
-        $invoice->inv_cst_id = 2;
+        $invoice->inv_cst_id      = 2;
         $invoice->inv_status_flag = Invoices::STATUS_PAID;
-        $invoice->inv_title = $title;
-        $invoice->inv_total = 100.12;
+        $invoice->inv_title       = $title;
+        $invoice->inv_total       = 100.12;
 
         $invoice->save();
 

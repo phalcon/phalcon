@@ -27,7 +27,8 @@ class UnserializeCest
     /**
      * Executed before each test
      *
-     * @param  DatabaseTester $I
+     * @param DatabaseTester $I
+     *
      * @return void
      */
     public function _before(DatabaseTester $I): void
@@ -43,7 +44,7 @@ class UnserializeCest
     /**
      * Tests Phalcon\Mvc\Model\Resultset\Complex :: unserialize()
      *
-     * @param  DatabaseTester $I
+     * @param DatabaseTester $I
      *
      * @author Phalcon Team <team@phalcon.io>
      * @since  2020-05-06
@@ -59,15 +60,15 @@ class UnserializeCest
         $expected = [
             'cache'       => null,
             'rows'        => [],
-            'columnTypes' => [ ['__FAKE__'] ],
-            'hydrateMode' => 0
+            'columnTypes' => [['__FAKE__']],
+            'hydrateMode' => 0,
         ];
 
         $I->assertTrue($this->container->has('serializer'));
 
         $complex->unserialize(serialize($expected));
 
-        $I->assertEquals([ ['__FAKE__'] ], $I->getProtectedProperty($complex, 'columnTypes'));
+        $I->assertEquals([['__FAKE__']], $I->getProtectedProperty($complex, 'columnTypes'));
         $I->assertEquals(0, $I->getProtectedProperty($complex, 'hydrateMode'));
     }
 }

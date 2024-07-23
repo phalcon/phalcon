@@ -21,7 +21,7 @@ class GetColumnsCest
     /**
      * Tests Phalcon\Mvc\Model\Criteria :: getColumns()
      *
-     * @param  DatabaseTester $I
+     * @param DatabaseTester $I
      *
      * @author Phalcon Team <team@phalcon.io>
      * @since  2020-02-01
@@ -34,7 +34,8 @@ class GetColumnsCest
 
         $criteria = new Criteria();
         $criteria
-            ->columns('inv_id, inv_cst_id, inv_total');
+            ->columns('inv_id, inv_cst_id, inv_total')
+        ;
 
         $expected = 'inv_id, inv_cst_id, inv_total';
         $actual   = $criteria->getColumns();
@@ -44,7 +45,7 @@ class GetColumnsCest
     /**
      * Tests Phalcon\Mvc\Model\Criteria :: getColumns() - array
      *
-     * @param  DatabaseTester $I
+     * @param DatabaseTester $I
      *
      * @author Phalcon Team <team@phalcon.io>
      * @since  2020-02-01
@@ -63,7 +64,8 @@ class GetColumnsCest
                     'cst_id' => 'inv_cst_id',
                     'total'  => 'inv_total',
                 ]
-            );
+            )
+        ;
 
         $expected = [
             'id'     => 'inv_id',
