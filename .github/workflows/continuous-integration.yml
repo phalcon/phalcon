@@ -604,10 +604,9 @@ jobs:
       - "unit-tests"
       - "cli-tests"
       - "integration-tests"
-      #      - "db-common-tests"
       - "db-mysql-tests"
       #      - "db-postgres-tests"
-      - "db-sqlite-tests"
+      #      - "db-sqlite-tests"
 
     steps:
       - name: "Checkout"
