@@ -827,7 +827,6 @@ abstract class MetaData extends Injectable implements MetaDataInterface
                         /**
                          * Get the meta-data extraction strategy
                          */
-                        var_dump(get_class($model));
                         $container     = $this->getDI();
                         $strategy      = $this->getStrategy();
                         $modelMetadata = $strategy->getMetaData(
