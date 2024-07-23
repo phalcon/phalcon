@@ -46,7 +46,7 @@ class ConstantsCest
         $type = [
             [Column::TYPE_BIGINTEGER, 14],
             [Column::TYPE_BIT, 19],
-            [Column::TYPE_BINARY, 27],
+            [Column::TYPE_BINARY, 26],
             [Column::TYPE_BLOB, 11],
             [Column::TYPE_BOOLEAN, 8],
             [Column::TYPE_CHAR, 5],
@@ -71,7 +71,7 @@ class ConstantsCest
             [Column::TYPE_TINYBLOB, 10],
             [Column::TYPE_TINYINTEGER, 26],
             [Column::TYPE_TINYTEXT, 25],
-            [Column::TYPE_VARBINARY, 28],
+            [Column::TYPE_VARBINARY, 27],
             [Column::TYPE_VARCHAR, 2],
         ];
         foreach ($type as $item) {

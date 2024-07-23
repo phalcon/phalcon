@@ -383,7 +383,7 @@ class FindFirstCest
 
         $customer = $invoice->getRelated('customer');
 
-        $I->assertNull($customer);
+        $I->assertFalse($customer);
     }
 
     /**
