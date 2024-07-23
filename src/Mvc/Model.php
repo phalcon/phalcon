@@ -2341,7 +2341,7 @@ abstract class Model extends AbstractInjectionAware implements EntityInterface, 
      *
      * @return Simple|false
      */
-    public function getRelated(string $alias, mixed $arguments = null): Simple | false
+    public function getRelated(string $alias, mixed $arguments = null): mixed
     {
         /**
          * Query the relation by alias
@@ -2934,6 +2934,7 @@ abstract class Model extends AbstractInjectionAware implements EntityInterface, 
         $attributes = $this->toArray(null, false);
         $dirtyState = $this->dirtyState;
         $manager    = $this->getModelsManager();
+        $snapshot   = null;
 
         if (
             $manager->isKeepingSnapshots($this) &&
@@ -3371,7 +3372,7 @@ abstract class Model extends AbstractInjectionAware implements EntityInterface, 
                 method_exists($this, $method)
             ) {
                 $data[$attributeField] = $this->$method();
-            } elseif (isset($this->$attributeField)) {
+            } elseif (property_exists($this, $attributeField)) {
                 $data[$attributeField] = $this->$attributeField;
             } else {
                 $data[$attributeField] = null;

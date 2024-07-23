@@ -160,7 +160,7 @@ class Query implements QueryInterface, InjectionAwareInterface
     private const PHQL_T_JOIN      = 318;
     private const PHQL_T_LEFT      = 319;
     private const PHQL_T_LEFTJOIN  = 361;
-    private const PHQL_T_LESS      = '<';
+    private const PHQL_T_LESS      = 60; // '<';
     private const PHQL_T_LESSEQUAL = 271;
     private const PHQL_T_LIKE      = 268;
     private const PHQL_T_LIMIT     = 312;
@@ -2374,7 +2374,7 @@ class Query implements QueryInterface, InjectionAwareInterface
                 }
 
                 $records->next();
-            } catch (\PDOException $ex) {
+            } catch (PDOException $ex) {
                 $connection->rollback();
 
                 throw $ex;
@@ -2494,585 +2494,584 @@ class Query implements QueryInterface, InjectionAwareInterface
                     $exprRight = $expr["right"];
                     $right     = $this->getExpression($exprRight, $tempNotQuoting);
                 }
+            }
 
-                /**
-                 * Every node in the AST has a unique integer type
-                 */
-                switch ($exprType) {
-                    case self::PHQL_T_LESS:
-                        $exprReturn = [
-                            "type"  => "binary-op",
-                            "op"    => "<",
-                            "left"  => $left,
-                            "right" => $right,
-                        ];
+            /**
+             * Every node in the AST has a unique integer type
+             */
+            switch ($exprType) {
+                case self::PHQL_T_LESS:
+                    $exprReturn = [
+                        "type"  => "binary-op",
+                        "op"    => "<",
+                        "left"  => $left,
+                        "right" => $right,
+                    ];
 
-                        break;
+                    break;
 
-                    case self::PHQL_T_EQUALS:
-                        $exprReturn = [
-                            "type"  => "binary-op",
-                            "op"    => "=",
-                            "left"  => $left,
-                            "right" => $right,
-                        ];
+                case self::PHQL_T_EQUALS:
+                    $exprReturn = [
+                        "type"  => "binary-op",
+                        "op"    => "=",
+                        "left"  => $left,
+                        "right" => $right,
+                    ];
 
-                        break;
+                    break;
 
-                    case self::PHQL_T_GREATER:
-                        $exprReturn = [
-                            "type"  => "binary-op",
-                            "op"    => ">",
-                            "left"  => $left,
-                            "right" => $right,
-                        ];
+                case self::PHQL_T_GREATER:
+                    $exprReturn = [
+                        "type"  => "binary-op",
+                        "op"    => ">",
+                        "left"  => $left,
+                        "right" => $right,
+                    ];
 
-                        break;
+                    break;
 
-                    case self::PHQL_T_NOTEQUALS:
-                        $exprReturn = [
-                            "type"  => "binary-op",
-                            "op"    => "<>",
-                            "left"  => $left,
-                            "right" => $right,
-                        ];
+                case self::PHQL_T_NOTEQUALS:
+                    $exprReturn = [
+                        "type"  => "binary-op",
+                        "op"    => "<>",
+                        "left"  => $left,
+                        "right" => $right,
+                    ];
 
-                        break;
+                    break;
 
-                    case self::PHQL_T_LESSEQUAL:
-                        $exprReturn = [
-                            "type"  => "binary-op",
-                            "op"    => "<=",
-                            "left"  => $left,
-                            "right" => $right,
-                        ];
+                case self::PHQL_T_LESSEQUAL:
+                    $exprReturn = [
+                        "type"  => "binary-op",
+                        "op"    => "<=",
+                        "left"  => $left,
+                        "right" => $right,
+                    ];
 
-                        break;
+                    break;
 
-                    case self::PHQL_T_GREATEREQUAL:
-                        $exprReturn = [
-                            "type"  => "binary-op",
-                            "op"    => ">=",
-                            "left"  => $left,
-                            "right" => $right,
-                        ];
+                case self::PHQL_T_GREATEREQUAL:
+                    $exprReturn = [
+                        "type"  => "binary-op",
+                        "op"    => ">=",
+                        "left"  => $left,
+                        "right" => $right,
+                    ];
 
-                        break;
+                    break;
 
-                    case self::PHQL_T_AND:
-                        $exprReturn = [
-                            "type"  => "binary-op",
-                            "op"    => "AND",
-                            "left"  => $left,
-                            "right" => $right,
-                        ];
+                case self::PHQL_T_AND:
+                    $exprReturn = [
+                        "type"  => "binary-op",
+                        "op"    => "AND",
+                        "left"  => $left,
+                        "right" => $right,
+                    ];
 
-                        break;
+                    break;
 
-                    case self::PHQL_T_OR:
-                        $exprReturn = [
-                            "type"  => "binary-op",
-                            "op"    => "OR",
-                            "left"  => $left,
-                            "right" => $right,
-                        ];
+                case self::PHQL_T_OR:
+                    $exprReturn = [
+                        "type"  => "binary-op",
+                        "op"    => "OR",
+                        "left"  => $left,
+                        "right" => $right,
+                    ];
 
-                        break;
+                    break;
 
-                    case self::PHQL_T_QUALIFIED:
-                        $exprReturn = $this->getQualified($expr);
-                        break;
+                case self::PHQL_T_QUALIFIED:
+                    $exprReturn = $this->getQualified($expr);
+                    break;
 
-                    case self::PHQL_T_ADD:
-                        $exprReturn = [
-                            "type"  => "binary-op",
-                            "op"    => "+",
-                            "left"  => $left,
-                            "right" => $right,
-                        ];
+                case self::PHQL_T_ADD:
+                    $exprReturn = [
+                        "type"  => "binary-op",
+                        "op"    => "+",
+                        "left"  => $left,
+                        "right" => $right,
+                    ];
 
-                        break;
+                    break;
 
-                    case self::PHQL_T_SUB:
-                        $exprReturn = [
-                            "type"  => "binary-op",
-                            "op"    => "-",
-                            "left"  => $left,
-                            "right" => $right,
-                        ];
+                case self::PHQL_T_SUB:
+                    $exprReturn = [
+                        "type"  => "binary-op",
+                        "op"    => "-",
+                        "left"  => $left,
+                        "right" => $right,
+                    ];
 
-                        break;
+                    break;
 
-                    case self::PHQL_T_MUL:
-                        $exprReturn = [
-                            "type"  => "binary-op",
-                            "op"    => "*",
-                            "left"  => $left,
-                            "right" => $right,
-                        ];
+                case self::PHQL_T_MUL:
+                    $exprReturn = [
+                        "type"  => "binary-op",
+                        "op"    => "*",
+                        "left"  => $left,
+                        "right" => $right,
+                    ];
 
-                        break;
+                    break;
 
-                    case self::PHQL_T_DIV:
-                        $exprReturn = [
-                            "type"  => "binary-op",
-                            "op"    => "/",
-                            "left"  => $left,
-                            "right" => $right,
-                        ];
+                case self::PHQL_T_DIV:
+                    $exprReturn = [
+                        "type"  => "binary-op",
+                        "op"    => "/",
+                        "left"  => $left,
+                        "right" => $right,
+                    ];
 
-                        break;
+                    break;
 
-                    case self::PHQL_T_MOD:
-                        $exprReturn = [
-                            "type"  => "binary-op",
-                            "op"    => "%",
-                            "left"  => $left,
-                            "right" => $right,
-                        ];
+                case self::PHQL_T_MOD:
+                    $exprReturn = [
+                        "type"  => "binary-op",
+                        "op"    => "%",
+                        "left"  => $left,
+                        "right" => $right,
+                    ];
 
-                        break;
+                    break;
 
-                    case self::PHQL_T_BITWISE_AND:
-                        $exprReturn = [
-                            "type"  => "binary-op",
-                            "op"    => "&",
-                            "left"  => $left,
-                            "right" => $right,
-                        ];
+                case self::PHQL_T_BITWISE_AND:
+                    $exprReturn = [
+                        "type"  => "binary-op",
+                        "op"    => "&",
+                        "left"  => $left,
+                        "right" => $right,
+                    ];
 
-                        break;
+                    break;
 
-                    case self::PHQL_T_BITWISE_OR:
-                        $exprReturn = [
-                            "type"  => "binary-op",
-                            "op"    => "|",
-                            "left"  => $left,
-                            "right" => $right,
-                        ];
+                case self::PHQL_T_BITWISE_OR:
+                    $exprReturn = [
+                        "type"  => "binary-op",
+                        "op"    => "|",
+                        "left"  => $left,
+                        "right" => $right,
+                    ];
 
-                        break;
+                    break;
 
-                    case self::PHQL_T_ENCLOSED:
-                    case self::PHQL_T_SUBQUERY:
-                        $exprReturn = [
-                            "type" => "parentheses",
-                            "left" => $left,
-                        ];
+                case self::PHQL_T_ENCLOSED:
+                case self::PHQL_T_SUBQUERY:
+                    $exprReturn = [
+                        "type" => "parentheses",
+                        "left" => $left,
+                    ];
 
-                        break;
+                    break;
 
-                    case self::PHQL_T_MINUS:
-                        $exprReturn = [
-                            "type"  => "unary-op",
-                            "op"    => "-",
-                            "right" => $right,
-                        ];
+                case self::PHQL_T_MINUS:
+                    $exprReturn = [
+                        "type"  => "unary-op",
+                        "op"    => "-",
+                        "right" => $right,
+                    ];
 
-                        break;
+                    break;
 
-                    case self::PHQL_T_INTEGER:
-                    case self::PHQL_T_DOUBLE:
-                    case self::PHQL_T_HINTEGER:
-                        $exprReturn = [
-                            "type"  => "literal",
-                            "value" => $expr["value"],
-                        ];
+                case self::PHQL_T_INTEGER:
+                case self::PHQL_T_DOUBLE:
+                case self::PHQL_T_HINTEGER:
+                    $exprReturn = [
+                        "type"  => "literal",
+                        "value" => $expr["value"],
+                    ];
 
-                        break;
+                    break;
 
-                    case self::PHQL_T_TRUE:
-                        $exprReturn = [
-                            "type"  => "literal",
-                            "value" => "TRUE",
-                        ];
+                case self::PHQL_T_TRUE:
+                    $exprReturn = [
+                        "type"  => "literal",
+                        "value" => "TRUE",
+                    ];
 
-                        break;
+                    break;
 
-                    case self::PHQL_T_FALSE:
-                        $exprReturn = [
-                            "type"  => "literal",
-                            "value" => "FALSE",
-                        ];
+                case self::PHQL_T_FALSE:
+                    $exprReturn = [
+                        "type"  => "literal",
+                        "value" => "FALSE",
+                    ];
 
-                        break;
+                    break;
 
-                    case self::PHQL_T_STRING:
-                        $value = $expr["value"];
+                case self::PHQL_T_STRING:
+                    $value = $expr["value"];
 
-                        if ($quoting) {
-                            /**
-                             * Check if static literals have single quotes and
-                             * escape them
-                             */
-                            if (str_contains($value, "'")) {
-                                $escapedValue = Parser::ormSingleQuotes($value);
-                            } else {
-                                $escapedValue = $value;
-                            }
-
-                            $exprValue = "'" . $escapedValue . "'";
+                    if ($quoting) {
+                        /**
+                         * Check if static literals have single quotes and
+                         * escape them
+                         */
+                        if (str_contains($value, "'")) {
+                            $escapedValue = Parser::ormSingleQuotes($value);
                         } else {
-                            $exprValue = $value;
+                            $escapedValue = $value;
                         }
 
-                        $exprReturn = [
-                            "type"  => "literal",
-                            "value" => $exprValue,
-                        ];
+                        $exprValue = "'" . $escapedValue . "'";
+                    } else {
+                        $exprValue = $value;
+                    }
 
-                        break;
+                    $exprReturn = [
+                        "type"  => "literal",
+                        "value" => $exprValue,
+                    ];
 
-                    case self::PHQL_T_NPLACEHOLDER:
-                        $exprReturn = [
-                            "type"  => "placeholder",
-                            "value" => str_replace("?", ":", $expr["value"]),
-                        ];
+                    break;
 
-                        break;
+                case self::PHQL_T_NPLACEHOLDER:
+                    $exprReturn = [
+                        "type"  => "placeholder",
+                        "value" => str_replace("?", ":", $expr["value"]),
+                    ];
 
-                    case self::PHQL_T_SPLACEHOLDER:
-                        $exprReturn = [
-                            "type"  => "placeholder",
-                            "value" => ":" . $expr["value"],
-                        ];
+                    break;
 
-                        break;
+                case self::PHQL_T_SPLACEHOLDER:
+                    $exprReturn = [
+                        "type"  => "placeholder",
+                        "value" => ":" . $expr["value"],
+                    ];
 
-                    case self::PHQL_T_BPLACEHOLDER:
-                        $value = $expr["value"];
+                    break;
 
-                        if (str_contains($value, ":")) {
-                            $valueParts = explode(":", $value);
-                            $name       = $valueParts[0];
-                            $bindType   = $valueParts[1];
+                case self::PHQL_T_BPLACEHOLDER:
+                    $value = $expr["value"];
+                    if (str_contains($value, ":")) {
+                        $valueParts = explode(":", $value);
+                        $name       = $valueParts[0];
+                        $bindType   = $valueParts[1];
 
-                            switch ($bindType) {
-                                case "str":
-                                    $this->bindTypes[$name] = Column::BIND_PARAM_STR;
+                        switch ($bindType) {
+                            case "str":
+                                $this->bindTypes[$name] = Column::BIND_PARAM_STR;
 
-                                    $exprReturn = [
-                                        "type"  => "placeholder",
-                                        "value" => ":" . $name,
-                                    ];
+                                $exprReturn = [
+                                    "type"  => "placeholder",
+                                    "value" => ":" . $name,
+                                ];
 
-                                    break;
+                                break;
 
-                                case "int":
-                                    $this->bindTypes[$name] = Column::BIND_PARAM_INT;
+                            case "int":
+                                $this->bindTypes[$name] = Column::BIND_PARAM_INT;
 
-                                    $exprReturn = [
-                                        "type"  => "placeholder",
-                                        "value" => ":" . $name,
-                                    ];
+                                $exprReturn = [
+                                    "type"  => "placeholder",
+                                    "value" => ":" . $name,
+                                ];
 
-                                    break;
+                                break;
 
-                                case "double":
-                                    $this->bindTypes[$name] = Column::BIND_PARAM_DECIMAL;
+                            case "double":
+                                $this->bindTypes[$name] = Column::BIND_PARAM_DECIMAL;
 
-                                    $exprReturn = [
-                                        "type"  => "placeholder",
-                                        "value" => ":" . $name,
-                                    ];
+                                $exprReturn = [
+                                    "type"  => "placeholder",
+                                    "value" => ":" . $name,
+                                ];
 
-                                    break;
+                                break;
 
-                                case "bool":
-                                    $this->bindTypes[$name] = Column::BIND_PARAM_BOOL;
+                            case "bool":
+                                $this->bindTypes[$name] = Column::BIND_PARAM_BOOL;
 
-                                    $exprReturn = [
-                                        "type"  => "placeholder",
-                                        "value" => ":" . $name,
-                                    ];
+                                $exprReturn = [
+                                    "type"  => "placeholder",
+                                    "value" => ":" . $name,
+                                ];
 
-                                    break;
+                                break;
 
-                                case "blob":
-                                    $this->bindTypes[$name] = Column::BIND_PARAM_BLOB;
+                            case "blob":
+                                $this->bindTypes[$name] = Column::BIND_PARAM_BLOB;
 
-                                    $exprReturn = [
-                                        "type"  => "placeholder",
-                                        "value" => ":" . $name,
-                                    ];
+                                $exprReturn = [
+                                    "type"  => "placeholder",
+                                    "value" => ":" . $name,
+                                ];
 
-                                    break;
+                                break;
 
-                                case "null":
-                                    $this->bindTypes[$name] = Column::BIND_PARAM_NULL;
+                            case "null":
+                                $this->bindTypes[$name] = Column::BIND_PARAM_NULL;
 
-                                    $exprReturn = [
-                                        "type"  => "placeholder",
-                                        "value" => ":" . $name,
-                                    ];
+                                $exprReturn = [
+                                    "type"  => "placeholder",
+                                    "value" => ":" . $name,
+                                ];
 
-                                    break;
+                                break;
 
-                                case "array":
-                                case "array-str":
-                                case "array-int":
-                                    if (isset($this->bindParams[$name])) {
-                                        throw new Exception(
-                                            "Bind value is required for array type placeholder: " . $name
-                                        );
-                                    }
-
-                                    $bind = $this->bindParams[$name];
-
-                                    if (!is_array($bind)) {
-                                        throw new Exception(
-                                            "Bind type requires an array in placeholder: " . $name
-                                        );
-                                    }
-
-                                    if (empty($bind)) {
-                                        throw new Exception(
-                                            "At least one value must be bound in placeholder: " . $name
-                                        );
-                                    }
-
-                                    $exprReturn = [
-                                        "type"     => "placeholder",
-                                        "value"    => ":" . $name,
-                                        "rawValue" => $name,
-                                        "times"    => count($bind),
-                                    ];
-
-                                    break;
-
-                                default:
+                            case "array":
+                            case "array-str":
+                            case "array-int":
+                                if (!isset($this->bindParams[$name])) {
                                     throw new Exception(
-                                        "Unknown bind type: " . $bindType
+                                        "Bind value is required for array type placeholder: " . $name
                                     );
-                            }
-                        } else {
-                            $exprReturn = [
-                                "type"  => "placeholder",
-                                "value" => ":" . $value,
-                            ];
+                                }
+
+                                $bind = $this->bindParams[$name];
+
+                                if (!is_array($bind)) {
+                                    throw new Exception(
+                                        "Bind type requires an array in placeholder: " . $name
+                                    );
+                                }
+
+                                if (empty($bind)) {
+                                    throw new Exception(
+                                        "At least one value must be bound in placeholder: " . $name
+                                    );
+                                }
+
+                                $exprReturn = [
+                                    "type"     => "placeholder",
+                                    "value"    => ":" . $name,
+                                    "rawValue" => $name,
+                                    "times"    => count($bind),
+                                ];
+
+                                break;
+
+                            default:
+                                throw new Exception(
+                                    "Unknown bind type: " . $bindType
+                                );
                         }
-
-                        break;
-
-                    case self::PHQL_T_NULL:
+                    } else {
                         $exprReturn = [
-                            "type"  => "literal",
-                            "value" => "NULL",
+                            "type"  => "placeholder",
+                            "value" => ":" . $value,
                         ];
+                    }
 
-                        break;
+                    break;
 
-                    case self::PHQL_T_LIKE:
-                        $exprReturn = [
-                            "type"  => "binary-op",
-                            "op"    => "LIKE",
-                            "left"  => $left,
-                            "right" => $right,
-                        ];
+                case self::PHQL_T_NULL:
+                    $exprReturn = [
+                        "type"  => "literal",
+                        "value" => "NULL",
+                    ];
 
-                        break;
+                    break;
 
-                    case self::PHQL_T_NLIKE:
-                        $exprReturn = [
-                            "type"  => "binary-op",
-                            "op"    => "NOT LIKE",
-                            "left"  => $left,
-                            "right" => $right,
-                        ];
+                case self::PHQL_T_LIKE:
+                    $exprReturn = [
+                        "type"  => "binary-op",
+                        "op"    => "LIKE",
+                        "left"  => $left,
+                        "right" => $right,
+                    ];
 
-                        break;
+                    break;
 
-                    case self::PHQL_T_ILIKE:
-                        $exprReturn = [
-                            "type"  => "binary-op",
-                            "op"    => "ILIKE",
-                            "left"  => $left,
-                            "right" => $right,
-                        ];
+                case self::PHQL_T_NLIKE:
+                    $exprReturn = [
+                        "type"  => "binary-op",
+                        "op"    => "NOT LIKE",
+                        "left"  => $left,
+                        "right" => $right,
+                    ];
 
-                        break;
+                    break;
 
-                    case self::PHQL_T_NILIKE:
-                        $exprReturn = [
-                            "type"  => "binary-op",
-                            "op"    => "NOT ILIKE",
-                            "left"  => $left,
-                            "right" => $right,
-                        ];
+                case self::PHQL_T_ILIKE:
+                    $exprReturn = [
+                        "type"  => "binary-op",
+                        "op"    => "ILIKE",
+                        "left"  => $left,
+                        "right" => $right,
+                    ];
 
-                        break;
+                    break;
 
-                    case self::PHQL_T_NOT:
-                        $exprReturn = [
-                            "type"  => "unary-op",
-                            "op"    => "NOT ",
-                            "right" => $right,
-                        ];
+                case self::PHQL_T_NILIKE:
+                    $exprReturn = [
+                        "type"  => "binary-op",
+                        "op"    => "NOT ILIKE",
+                        "left"  => $left,
+                        "right" => $right,
+                    ];
 
-                        break;
+                    break;
 
-                    case self::PHQL_T_ISNULL:
-                        $exprReturn = [
-                            "type" => "unary-op",
-                            "op"   => " IS NULL",
-                            "left" => $left,
-                        ];
+                case self::PHQL_T_NOT:
+                    $exprReturn = [
+                        "type"  => "unary-op",
+                        "op"    => "NOT ",
+                        "right" => $right,
+                    ];
 
-                        break;
+                    break;
 
-                    case self::PHQL_T_ISNOTNULL:
-                        $exprReturn = [
-                            "type" => "unary-op",
-                            "op"   => " IS NOT NULL",
-                            "left" => $left,
-                        ];
+                case self::PHQL_T_ISNULL:
+                    $exprReturn = [
+                        "type" => "unary-op",
+                        "op"   => " IS NULL",
+                        "left" => $left,
+                    ];
 
-                        break;
+                    break;
 
-                    case self::PHQL_T_IN:
-                        $exprReturn = [
-                            "type"  => "binary-op",
-                            "op"    => "IN",
-                            "left"  => $left,
-                            "right" => $right,
-                        ];
+                case self::PHQL_T_ISNOTNULL:
+                    $exprReturn = [
+                        "type" => "unary-op",
+                        "op"   => " IS NOT NULL",
+                        "left" => $left,
+                    ];
 
-                        break;
+                    break;
 
-                    case self::PHQL_T_NOTIN:
-                        $exprReturn = [
-                            "type"  => "binary-op",
-                            "op"    => "NOT IN",
-                            "left"  => $left,
-                            "right" => $right,
-                        ];
+                case self::PHQL_T_IN:
+                    $exprReturn = [
+                        "type"  => "binary-op",
+                        "op"    => "IN",
+                        "left"  => $left,
+                        "right" => $right,
+                    ];
 
-                        break;
+                    break;
 
-                    case self::PHQL_T_EXISTS:
-                        $exprReturn = [
-                            "type"  => "unary-op",
-                            "op"    => "EXISTS",
-                            "right" => $right,
-                        ];
+                case self::PHQL_T_NOTIN:
+                    $exprReturn = [
+                        "type"  => "binary-op",
+                        "op"    => "NOT IN",
+                        "left"  => $left,
+                        "right" => $right,
+                    ];
 
-                        break;
+                    break;
 
-                    case self::PHQL_T_DISTINCT:
-                        $exprReturn = [
-                            "type"  => "unary-op",
-                            "op"    => "DISTINCT ",
-                            "right" => $right,
-                        ];
+                case self::PHQL_T_EXISTS:
+                    $exprReturn = [
+                        "type"  => "unary-op",
+                        "op"    => "EXISTS",
+                        "right" => $right,
+                    ];
 
-                        break;
+                    break;
 
-                    case self::PHQL_T_BETWEEN_NOT:
-                        $exprReturn = [
-                            "type"  => "binary-op",
-                            "op"    => "BETWEEN NOT",
-                            "left"  => $left,
-                            "right" => $right,
-                        ];
+                case self::PHQL_T_DISTINCT:
+                    $exprReturn = [
+                        "type"  => "unary-op",
+                        "op"    => "DISTINCT ",
+                        "right" => $right,
+                    ];
 
-                        break;
+                    break;
 
-                    case self::PHQL_T_BETWEEN:
-                        $exprReturn = [
-                            "type"  => "binary-op",
-                            "op"    => "BETWEEN",
-                            "left"  => $left,
-                            "right" => $right,
-                        ];
+                case self::PHQL_T_BETWEEN_NOT:
+                    $exprReturn = [
+                        "type"  => "binary-op",
+                        "op"    => "BETWEEN NOT",
+                        "left"  => $left,
+                        "right" => $right,
+                    ];
 
-                        break;
+                    break;
 
-                    case self::PHQL_T_AGAINST:
-                        $exprReturn = [
-                            "type"  => "binary-op",
-                            "op"    => "AGAINST",
-                            "left"  => $left,
-                            "right" => $right,
-                        ];
+                case self::PHQL_T_BETWEEN:
+                    $exprReturn = [
+                        "type"  => "binary-op",
+                        "op"    => "BETWEEN",
+                        "left"  => $left,
+                        "right" => $right,
+                    ];
 
-                        break;
+                    break;
 
-                    case self::PHQL_T_CAST:
-                        $exprReturn = [
-                            "type"  => "cast",
-                            "left"  => $left,
-                            "right" => $right,
-                        ];
+                case self::PHQL_T_AGAINST:
+                    $exprReturn = [
+                        "type"  => "binary-op",
+                        "op"    => "AGAINST",
+                        "left"  => $left,
+                        "right" => $right,
+                    ];
 
-                        break;
+                    break;
 
-                    case self::PHQL_T_CONVERT:
-                        $exprReturn = [
-                            "type"  => "convert",
-                            "left"  => $left,
-                            "right" => $right,
-                        ];
+                case self::PHQL_T_CAST:
+                    $exprReturn = [
+                        "type"  => "cast",
+                        "left"  => $left,
+                        "right" => $right,
+                    ];
 
-                        break;
+                    break;
 
-                    case self::PHQL_T_RAW_QUALIFIED:
-                        $exprReturn = [
-                            "type"  => "literal",
-                            "value" => $expr["name"],
-                        ];
+                case self::PHQL_T_CONVERT:
+                    $exprReturn = [
+                        "type"  => "convert",
+                        "left"  => $left,
+                        "right" => $right,
+                    ];
 
-                        break;
+                    break;
 
-                    case self::PHQL_T_FCALL:
-                        $exprReturn = $this->getFunctionCall($expr);
+                case self::PHQL_T_RAW_QUALIFIED:
+                    $exprReturn = [
+                        "type"  => "literal",
+                        "value" => $expr["name"],
+                    ];
 
-                        break;
+                    break;
 
-                    case self::PHQL_T_CASE:
-                        $exprReturn = $this->getCaseExpression($expr);
+                case self::PHQL_T_FCALL:
+                    $exprReturn = $this->getFunctionCall($expr);
 
-                        break;
+                    break;
 
-                    case self::PHQL_T_SELECT:
-                        $exprReturn = [
-                            "type"  => "select",
-                            "value" => $this->_prepareSelect($expr, true),
-                        ];
+                case self::PHQL_T_CASE:
+                    $exprReturn = $this->getCaseExpression($expr);
 
-                        break;
+                    break;
 
-                    default:
-                        throw new Exception("Unknown expression type " . $exprType);
-                }
+                case self::PHQL_T_SELECT:
+                    $exprReturn = [
+                        "type"  => "select",
+                        "value" => $this->_prepareSelect($expr, true),
+                    ];
 
-                return $exprReturn;
+                    break;
+
+                default:
+                    throw new Exception("Unknown expression type " . $exprType);
             }
 
-            /**
-             * It's a qualified column
-             */
-            if (isset($expr["domain"])) {
-                return $this->getQualified($expr);
-            }
-
-            /**
-             * If the expression doesn't have a type it's a list of nodes
-             */
-            if (isset($expr[0])) {
-                $listItems = [];
-
-                foreach ($expr as $exprListItem) {
-                    $listItems[] = $this->getExpression($exprListItem);
-                }
-
-                return [
-                    "type" => "list",
-                    $listItems,
-                ];
-            }
-
-            throw new Exception("Unknown expression");
+            return $exprReturn;
         }
+
+        /**
+         * It's a qualified column
+         */
+        if (isset($expr["domain"])) {
+            return $this->getQualified($expr);
+        }
+
+        /**
+         * If the expression doesn't have a type it's a list of nodes
+         */
+        if (isset($expr[0])) {
+            $listItems = [];
+
+            foreach ($expr as $exprListItem) {
+                $listItems[] = $this->getExpression($exprListItem);
+            }
+
+            return [
+                "type" => "list",
+                $listItems,
+            ];
+        }
+
+        throw new Exception("Unknown expression");
     }
 
     /**

@@ -363,14 +363,14 @@ interface ManagerInterface
      * @param array|string|null $parameters
      * @param string|null       $method
      *
-     * @return Simple|int|false
+     * @return ModelInterface|Simple|int|false
      */
     public function getRelationRecords(
         RelationInterface $relation,
         ModelInterface $record,
         array | string | null $parameters = null,
         string $method = null
-    ): Simple | int | false;
+    ): ModelInterface | Simple | int | false;
 
     /**
      * Query all the relationships defined on a model
