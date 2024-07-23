@@ -650,15 +650,7 @@ jobs:
         run: ls -R
         working-directory: reports
 
-      - name: "Upload to Codecov"
-        uses: "codecov/codecov-action@v3"
-        with:
-          token: ${{ secrets.CODECOV_TOKEN }}
-          directory: reports
-          fail_ci_if_error: true
-          verbose: true
-
-      - name: Codacy Code Coverage
+      - name: "Upload to Codacy"
         uses: codacy/codacy-coverage-reporter-action@v1.3.0
         with:
           project-token: ${{ secrets.CODACY_PROJECT_TOKEN }}
