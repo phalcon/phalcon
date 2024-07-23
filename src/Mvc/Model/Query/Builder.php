@@ -766,10 +766,8 @@ class Builder implements BuilderInterface, InjectionAwareInterface
      */
     final public function getPhql(): string
     {
-        $container = $this->container;
-        if (!is_object($container)) {
-            $container       = Di::getDefault();
-            $this->container = $container;
+        if (!is_object($this->container)) {
+            $this->container = Di::getDefault();
         }
 
         $models = $this->models;
@@ -810,8 +808,8 @@ class Builder implements BuilderInterface, InjectionAwareInterface
              * Get the models metadata service to obtain the column names,
              * column map and primary key
              */
-            $metaData      = $container->getShared("modelsMetadata");
-            $modelInstance = new $model(null, $container);
+            $metaData      = $this->container->getShared("modelsMetadata");
+            $modelInstance = new $model(null, $this->container);
             $noPrimary     = true;
             $primaryKeys   = $metaData->getPrimaryKeyAttributes($modelInstance);
 
@@ -1075,6 +1073,7 @@ class Builder implements BuilderInterface, InjectionAwareInterface
         $limit = $this->limit;
         if ($limit !== null) {
             $number = null;
+            $offset = null;
 
             if (is_array($limit)) {
                 $number = $limit["number"];
@@ -1813,7 +1812,7 @@ class Builder implements BuilderInterface, InjectionAwareInterface
         if ($operator !== Builder::OPERATOR_AND && $operator !== Builder::OPERATOR_OR) {
             throw new Exception(
                 sprintf(
-                    "Operator % is not available.",
+                    "Operator %s is not available.",
                     $operator
                 )
             );
@@ -1869,7 +1868,7 @@ class Builder implements BuilderInterface, InjectionAwareInterface
         if ($operator !== Builder::OPERATOR_AND && $operator !== Builder::OPERATOR_OR) {
             throw new Exception(
                 sprintf(
-                    "Operator % is not available.",
+                    "Operator %s is not available.",
                     $operator
                 )
             );
@@ -1926,7 +1925,7 @@ class Builder implements BuilderInterface, InjectionAwareInterface
         if ($operator !== Builder::OPERATOR_AND && $operator !== Builder::OPERATOR_OR) {
             throw new Exception(
                 sprintf(
-                    "Operator % is not available.",
+                    "Operator %s is not available.",
                     $operator
                 )
             );
@@ -1974,7 +1973,7 @@ class Builder implements BuilderInterface, InjectionAwareInterface
         if ($operator !== Builder::OPERATOR_AND && $operator !== Builder::OPERATOR_OR) {
             throw new Exception(
                 sprintf(
-                    "Operator % is not available.",
+                    "Operator %s is not available.",
                     $operator
                 )
             );

@@ -4095,6 +4095,7 @@ abstract class Model extends AbstractInjectionAware implements
         array | string $table,
         bool | string $identityField
     ): bool {
+        $attributeField      = null;
         $bindSkip            = Column::BIND_SKIP;
         $manager             = $this->modelsManager;
         $fields              = [];
@@ -5283,6 +5284,7 @@ abstract class Model extends AbstractInjectionAware implements
         array $arguments
     ) {
         $extraMethod = null;
+        $type        = "find";
 
         /**
          * Check if the method starts with "findFirst"
