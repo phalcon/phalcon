@@ -72,14 +72,14 @@ use function method_exists;
  * }
  * ```
  */
-abstract class Resultset
-    implements ResultsetInterface,
-               Iterator,
-               SeekableIterator,
-               Countable,
-               ArrayAccess,
-               Serializable,
-               JsonSerializable
+abstract class Resultset implements
+    ResultsetInterface,
+    Iterator,
+    SeekableIterator,
+    Countable,
+    ArrayAccess,
+    Serializable,
+    JsonSerializable
 {
     public const HYDRATE_ARRAYS      = 1;
     public const HYDRATE_OBJECTS     = 2;

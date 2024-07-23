@@ -110,8 +110,12 @@ use function unserialize;
  * }
  * ```
  */
-abstract class Model extends AbstractInjectionAware implements EntityInterface, ModelInterface, ResultInterface,
-                                                               Serializable, JsonSerializable
+abstract class Model extends AbstractInjectionAware implements
+    EntityInterface,
+    ModelInterface,
+    ResultInterface,
+    Serializable,
+    JsonSerializable
 {
     use CamelizeTrait;
     use UncamelizeTrait;
@@ -481,7 +485,7 @@ abstract class Model extends AbstractInjectionAware implements EntityInterface, 
                     $dirtyState = self::DIRTY_STATE_TRANSIENT;
                 }
 
-                unset ($this->related[$lowerProperty]);
+                unset($this->related[$lowerProperty]);
 
                 $this->dirtyRelated[$lowerProperty] = $value;
                 $this->dirtyState                   = $dirtyState;
