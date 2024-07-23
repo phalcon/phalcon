@@ -1,4 +1,4 @@
-FROM composer:2.4.2 as composer
+FROM composer:2.4.2 AS composer
 FROM php:8.3-fpm
 
 COPY ./extra.ini /usr/local/etc/php/conf.d/
@@ -38,7 +38,8 @@ RUN apt update -y && \
         nano \
         sudo \
         wget \
-        zip
+        zip && \
+    rm -rf /var/lib/apt/lists/* /var/cache/apt/archives/*
 
 # PECL Packages
 RUN pecl install -o -f redis && \
