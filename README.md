@@ -2,9 +2,6 @@
 Phalcon Framework
 
 [![PDS Skeleton](https://img.shields.io/badge/pds-skeleton-blue.svg?style=flat-square)](https://github.com/php-pds/skeleton)
-[![Scrutinizer Code Quality](https://scrutinizer-ci.com/g/phalcon/phalcon/badges/quality-score.png?b=v6.0.x)](https://scrutinizer-ci.com/g/phalcon/phalcon/?branch=v6.0.x)
-[![Code Coverage](https://scrutinizer-ci.com/g/phalcon/phalcon/badges/coverage.png?b=v5.0.x)](https://scrutinizer-ci.com/g/phalcon/phalcon/?branch=v5.0.x)
-[![codecov](https://codecov.io/gh/phalcon/phalcon/branch/v6.0.x/graph/badge.svg?token=C7GZV0S29F)](https://codecov.io/gh/phalcon/phalcon)
 
 ## Implemented
 
@@ -30,10 +27,5 @@ Phalcon Framework
 
 
 ## Remaining refactoring - alignment with `cphalcon` (v5) 
--  Annotations
--  DataMapper
--  Db
--  Dispatcher
--  Mvc
 -  Paginator
 -  Url
