@@ -59,41 +59,6 @@ class GetSetWriteCest
 
     /**
      * Database Tests Phalcon\DataMapper\Pdo\ConnectionLocator :: getWrite() -
-     * random
-     *
-     * @since  2020-01-25
-     */
-    public function dMPdoConnectionLocatorGetWriteRandom(DatabaseTester $I)
-    {
-        $I->wantToTest('DataMapper\Pdo\ConnectionLocator - getWrite() - random');
-
-        $master  = $I->getDataMapperConnection();
-        $write1  = $I->getDataMapperConnection();
-        $write2  = $I->getDataMapperConnection();
-        $locator = new ConnectionLocator(
-            $master,
-            [],
-            [
-                "write1" => function () use ($write1) {
-                    return $write1;
-                },
-                "write2" => function () use ($write2) {
-                    return $write2;
-                },
-            ]
-        );
-
-        $hashes = [
-            spl_object_hash($write1),
-            spl_object_hash($write2),
-        ];
-
-        $actual = $locator->getWrite();
-        $I->assertTrue(in_array(spl_object_hash($actual), $hashes));
-    }
-
-    /**
-     * Database Tests Phalcon\DataMapper\Pdo\ConnectionLocator :: getWrite() -
      * empty
      *
      * @since  2020-01-25
@@ -139,5 +104,40 @@ class GetSetWriteCest
                 $locator->getWrite("unknown");
             }
         );
+    }
+
+    /**
+     * Database Tests Phalcon\DataMapper\Pdo\ConnectionLocator :: getWrite() -
+     * random
+     *
+     * @since  2020-01-25
+     */
+    public function dMPdoConnectionLocatorGetWriteRandom(DatabaseTester $I)
+    {
+        $I->wantToTest('DataMapper\Pdo\ConnectionLocator - getWrite() - random');
+
+        $master  = $I->getDataMapperConnection();
+        $write1  = $I->getDataMapperConnection();
+        $write2  = $I->getDataMapperConnection();
+        $locator = new ConnectionLocator(
+            $master,
+            [],
+            [
+                "write1" => function () use ($write1) {
+                    return $write1;
+                },
+                "write2" => function () use ($write2) {
+                    return $write2;
+                },
+            ]
+        );
+
+        $hashes = [
+            spl_object_hash($write1),
+            spl_object_hash($write2),
+        ];
+
+        $actual = $locator->getWrite();
+        $I->assertTrue(in_array(spl_object_hash($actual), $hashes));
     }
 }

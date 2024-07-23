@@ -20,39 +20,6 @@ use stdClass;
 class FetchObjectCest
 {
     /**
-     * Database Tests Phalcon\DataMapper\Pdo\Connection :: fetchObject()
-     *
-     * @since  2020-01-25
-     *
-     * @group  pgsql
-     * @group  mysql
-     * @group  sqlite
-     */
-    public function dMPdoConnectionFetchObject(DatabaseTester $I)
-    {
-        $I->wantToTest('DataMapper\Pdo\Connection - fetchObject()');
-
-        /** @var Connection $connection */
-        $connection = $I->getDataMapperConnection();
-        $migration  = new InvoicesMigration($connection);
-        $migration->clear();
-
-        $result = $migration->insert(1, 1, 1, null, 101);
-        $I->assertEquals(1, $result);
-
-        $all = $connection->fetchObject(
-            'select inv_id, inv_total from co_invoices WHERE inv_id = ?',
-            [
-                0 => 1,
-            ]
-        );
-
-        $I->assertInstanceOf(stdClass::class, $all);
-        $I->assertEquals(1, $all->inv_id);
-        $I->assertEquals(101, $all->inv_total);
-    }
-
-    /**
      * Tests Phalcon\DataMapper\Pdo\Connection :: fetchObject() - ctor
      *
      * @since  2020-01-25
@@ -82,6 +49,39 @@ class FetchObjectCest
 
         $I->assertInstanceOf(Resultset::class, $all);
         $I->assertEquals('vader', $all->calculated);
+        $I->assertEquals(1, $all->inv_id);
+        $I->assertEquals(101, $all->inv_total);
+    }
+
+    /**
+     * Database Tests Phalcon\DataMapper\Pdo\Connection :: fetchObject()
+     *
+     * @since  2020-01-25
+     *
+     * @group  pgsql
+     * @group  mysql
+     * @group  sqlite
+     */
+    public function dMPdoConnectionFetchObject(DatabaseTester $I)
+    {
+        $I->wantToTest('DataMapper\Pdo\Connection - fetchObject()');
+
+        /** @var Connection $connection */
+        $connection = $I->getDataMapperConnection();
+        $migration  = new InvoicesMigration($connection);
+        $migration->clear();
+
+        $result = $migration->insert(1, 1, 1, null, 101);
+        $I->assertEquals(1, $result);
+
+        $all = $connection->fetchObject(
+            'select inv_id, inv_total from co_invoices WHERE inv_id = ?',
+            [
+                0 => 1,
+            ]
+        );
+
+        $I->assertInstanceOf(stdClass::class, $all);
         $I->assertEquals(1, $all->inv_id);
         $I->assertEquals(101, $all->inv_total);
     }

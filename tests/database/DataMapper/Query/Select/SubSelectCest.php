@@ -43,7 +43,8 @@ class SubSelectCest
                     ->from('co_invoices')
                     ->asAlias('inv')
                     ->getStatement()
-            );
+            )
+        ;
 
         $expected = "SELECT * FROM (SELECT inv_id FROM co_invoices) AS inv";
         $actual   = $select->getStatement();

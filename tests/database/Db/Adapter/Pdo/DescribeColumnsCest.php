@@ -38,6 +38,56 @@ class DescribeColumnsCest
     }
 
     /**
+     * Tests Phalcon\Db\Adapter\Pdo :: describeColumns()
+     *
+     * @param DatabaseTester $I
+     *
+     * @author Jeremy PASTOURET <https://github.com/jenovateurs>
+     * @since  2020-03-09
+     *
+     * @group  pgsql
+     */
+    public function dbAdapterPdoDescribeColumnsDefaultPostgres(DatabaseTester $I)
+    {
+        $I->wantToTest('Db\Adapter\Pdo - describeColumns() - CheckPostgres Default value');
+
+        $db        = $this->container->get('db');
+        $now       = date('Y-m-d H:i:s');
+        $migration = new ComplexDefaultMigration($I->getConnection());
+        $migration->insert(1, $now, $now);
+
+        $columns = $db->describeColumns($migration->getTable());
+
+        $I->assertRegexp('/CURRENT_TIMESTAMP|now\(\)/i', $columns[1]->getDefault());
+        $I->assertRegexp('/CURRENT_TIMESTAMP|now\(\)/i', $columns[2]->getDefault());
+    }
+
+    /**
+     * Tests Phalcon\Db\Adapter\Pdo :: describeColumns()
+     *
+     * @param DatabaseTester $I
+     *
+     * @author Phalcon Team <team@phalcon.io>
+     * @since  2020-03-02
+     *
+     * @group  mysql
+     */
+    public function dbAdapterPdoDescribeColumnsOnUpdate(DatabaseTester $I)
+    {
+        $I->wantToTest('Db\Adapter\Pdo - describeColumns()');
+
+        $db        = $this->container->get('db');
+        $now       = date('Y-m-d H:i:s');
+        $migration = new ComplexDefaultMigration($I->getConnection());
+        $migration->insert(1, $now, $now);
+
+        $columns = $db->describeColumns($migration->getTable());
+
+        $I->assertSame('CURRENT_TIMESTAMP on update CURRENT_TIMESTAMP', $columns[2]->getDefault());
+        $I->assertSame('NULL on update CURRENT_TIMESTAMP', $columns[3]->getDefault());
+    }
+
+    /**
      * Tests Phalcon\Db\Adapter\Pdo :: describeColumns() - supported
      *
      * @param DatabaseTester $I
@@ -69,56 +119,6 @@ class DescribeColumnsCest
 
             $I->assertEquals($expected, $actual);
         }
-    }
-
-    /**
-     * Tests Phalcon\Db\Adapter\Pdo :: describeColumns()
-     *
-     * @param DatabaseTester $I
-     *
-     * @author Phalcon Team <team@phalcon.io>
-     * @since  2020-03-02
-     *
-     * @group  mysql
-     */
-    public function dbAdapterPdoDescribeColumnsOnUpdate(DatabaseTester $I)
-    {
-        $I->wantToTest('Db\Adapter\Pdo - describeColumns()');
-
-        $db        = $this->container->get('db');
-        $now       = date('Y-m-d H:i:s');
-        $migration = new ComplexDefaultMigration($I->getConnection());
-        $migration->insert(1, $now, $now);
-
-        $columns = $db->describeColumns($migration->getTable());
-
-        $I->assertSame('CURRENT_TIMESTAMP on update CURRENT_TIMESTAMP', $columns[2]->getDefault());
-        $I->assertSame('NULL on update CURRENT_TIMESTAMP', $columns[3]->getDefault());
-    }
-
-    /**
-     * Tests Phalcon\Db\Adapter\Pdo :: describeColumns()
-     *
-     * @param DatabaseTester $I
-     *
-     * @author Jeremy PASTOURET <https://github.com/jenovateurs>
-     * @since  2020-03-09
-     *
-     * @group  pgsql
-     */
-    public function dbAdapterPdoDescribeColumnsDefaultPostgres(DatabaseTester $I)
-    {
-        $I->wantToTest('Db\Adapter\Pdo - describeColumns() - CheckPostgres Default value');
-
-        $db        = $this->container->get('db');
-        $now       = date('Y-m-d H:i:s');
-        $migration = new ComplexDefaultMigration($I->getConnection());
-        $migration->insert(1, $now, $now);
-
-        $columns = $db->describeColumns($migration->getTable());
-
-        $I->assertRegexp('/CURRENT_TIMESTAMP|now\(\)/i', $columns[1]->getDefault());
-        $I->assertRegexp('/CURRENT_TIMESTAMP|now\(\)/i', $columns[2]->getDefault());
     }
 
     /**

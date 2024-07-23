@@ -58,6 +58,37 @@ class FetchOneCest
     }
 
     /**
+     * Tests Phalcon\DataMapper\Pdo\Connection :: fetchOne() - bind types
+     *
+     * @dataProvider getBindTypes
+     * @since        2020-01-25
+     *
+     * @group        pgsql
+     * @group        mysql
+     * @group        sqlite
+     */
+    public function dMPdoConnectionFetchOneBindTypes(DatabaseTester $I, Example $example)
+    {
+        $I->wantToTest('DataMapper\Pdo\Connection - fetchOne() - bind types - ' . $example[0]);
+
+        /** @var Connection $connection */
+        $connection = $I->getDataMapperConnection();
+        $migration  = new InvoicesMigration($connection);
+        $migration->clear();
+
+        $result = $migration->insert(1, 1, 1, 'test-1');
+        $I->assertEquals(1, $result);
+
+        $all = $connection->fetchOne(
+            'select * from co_invoices WHERE ' . $example[1],
+            $example[2]
+        );
+
+        $I->assertIsArray($all);
+        $I->assertEquals(1, $all['inv_id']);
+    }
+
+    /**
      * Tests Phalcon\DataMapper\Pdo\Connection :: fetchOne() - no result
      *
      * @since  2020-01-25
@@ -87,37 +118,6 @@ class FetchOneCest
 
         $I->assertIsArray($all);
         $I->assertIsEmpty($all);
-    }
-
-    /**
-     * Tests Phalcon\DataMapper\Pdo\Connection :: fetchOne() - bind types
-     *
-     * @dataProvider getBindTypes
-     * @since        2020-01-25
-     *
-     * @group        pgsql
-     * @group        mysql
-     * @group        sqlite
-     */
-    public function dMPdoConnectionFetchOneBindTypes(DatabaseTester $I, Example $example)
-    {
-        $I->wantToTest('DataMapper\Pdo\Connection - fetchOne() - bind types - ' . $example[0]);
-
-        /** @var Connection $connection */
-        $connection = $I->getDataMapperConnection();
-        $migration  = new InvoicesMigration($connection);
-        $migration->clear();
-
-        $result = $migration->insert(1, 1, 1, 'test-1');
-        $I->assertEquals(1, $result);
-
-        $all = $connection->fetchOne(
-            'select * from co_invoices WHERE ' . $example[1],
-            $example[2]
-        );
-
-        $I->assertIsArray($all);
-        $I->assertEquals(1, $all['inv_id']);
     }
 
     /**

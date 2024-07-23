@@ -48,7 +48,8 @@ class GetBindValuesCest
                     'three' => true,
                     'four'  => [1, 2, 3],
                 ]
-            );
+            )
+        ;
 
         $expected = [
             'one'   => [100, PDO::PARAM_INT],
@@ -64,7 +65,8 @@ class GetBindValuesCest
                 [
                     'five' => 'active',
                 ]
-            );
+            )
+        ;
 
         $expected = [
             'one'   => [100, PDO::PARAM_INT],
