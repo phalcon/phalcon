@@ -2268,15 +2268,11 @@ abstract class Model extends AbstractInjectionAware implements
      */
     public function getModelsMetaData(): MetaDataInterface
     {
-        $metaData = $this->modelsMetaData;
-
-        if ($metaData === null) {
-            $container = $this->container;
-
+        if ($this->modelsMetaData === null) {
             /**
              * Obtain the models-metadata service from the DI
              */
-            $metaData = $container->getShared("modelsMetadata");
+            $metaData = $this->container->getShared("modelsMetadata");
 
             if (!is_object($metaData)) {
                 throw new Exception(
@@ -2291,7 +2287,7 @@ abstract class Model extends AbstractInjectionAware implements
             $this->modelsMetaData = $metaData;
         }
 
-        return $metaData;
+        return $this->modelsMetaData;
     }
 
     /**
@@ -2343,9 +2339,11 @@ abstract class Model extends AbstractInjectionAware implements
     /**
      * Returns related records based on defined relations
      *
-     * @param array arguments
+     * @param string     $alias
+     * @param mixed|null $arguments
      *
-     * @return Simple|false
+     * @return mixed
+     * @throws Exception
      */
     public function getRelated(string $alias, mixed $arguments = null): mixed
     {
