@@ -49,6 +49,7 @@ use Phalcon\Traits\Helper\Str\UncamelizeTrait;
 use Serializable;
 
 use function array_intersect;
+use function array_key_exists;
 use function array_keys;
 use function array_merge;
 use function floatval;
@@ -72,6 +73,7 @@ use function strtolower;
 use function substr;
 use function trigger_error;
 use function unserialize;
+use function var_dump;
 
 /**
  * Phalcon\Mvc\Model connects business objects and database tables to create a
@@ -5285,15 +5287,19 @@ abstract class Model extends AbstractInjectionAware implements EntityInterface, 
          * Check if the method starts with "findFirst"
          */
         if (str_starts_with($method, "findFirstBy")) {
-            $type        = "findFirst";
-            $extraMethod = substr($method, 11);
-        } /**
+           $type        = "findFirst";
+           $extraMethod = substr($method, 11);
+        }
+
+        /**
          * Check if the method starts with "find"
          */
         elseif (str_starts_with($method, "findBy")) {
-            $type        = "find";
+            $type = "find";
             $extraMethod = substr($method, 6);
-        } /**
+        }
+
+        /**
          * Check if the method starts with "count"
          */
         elseif (str_starts_with($method, "countBy")) {
@@ -5310,7 +5316,7 @@ abstract class Model extends AbstractInjectionAware implements EntityInterface, 
             return false;
         }
 
-        if (!isset($arguments[0])) {
+        if (!array_key_exists(0, $arguments)) {
             throw new Exception(
                 "The static method '"
                 . $method . "' in '"
