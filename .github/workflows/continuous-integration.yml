@@ -159,11 +159,17 @@ jobs:
         run: |
           vendor/bin/codecept run --coverage-xml=coverage.xml --ext DotReporter unit
 
-      - name: "Upload coverage file"
-        run: |
-          bash <(curl -Ls https://coverage.codacy.com/get.sh) report \
-            -l PHP --project-token: ${{ secrets.CODACY_PROJECT_TOKEN }} \
-            -r tests/_output/coverage.xml --partial
+#      - name: "Upload coverage file"
+#        run: |
+#          bash <(curl -Ls https://coverage.codacy.com/get.sh) report \
+#            -l PHP --project-token: ${{ secrets.CODACY_PROJECT_TOKEN }} \
+#            -r tests/_output/coverage.xml --partial
+
+      - name: "Upload coverage file artifact"
+        uses: "actions/upload-artifact@v4"
+        with:
+          name: "unit-${{ matrix.php }}.coverage"
+          path: "tests/_output/coverage.xml"
 
   cli-tests:
     name: CLI tests / PHP-${{ matrix.php }}-${{ matrix.ts }}-${{ matrix.name }}
@@ -242,11 +248,17 @@ jobs:
         run: |
           vendor/bin/codecept run --coverage-xml=coverage.xml --ext DotReporter cli
 
-      - name: "Upload coverage file"
-        run: |
-          bash <(curl -Ls https://coverage.codacy.com/get.sh) report \
-            -l PHP --project-token: ${{ secrets.CODACY_PROJECT_TOKEN }} \
-            -r tests/_output/coverage.xml --partial
+#      - name: "Upload coverage file"
+#        run: |
+#          bash <(curl -Ls https://coverage.codacy.com/get.sh) report \
+#            -l PHP --project-token: ${{ secrets.CODACY_PROJECT_TOKEN }} \
+#            -r tests/_output/coverage.xml --partial
+
+      - name: "Upload coverage file artifact"
+        uses: "actions/upload-artifact@v4"
+        with:
+          name: "cli-${{ matrix.php }}.coverage"
+          path: "tests/_output/coverage.xml"
 
   integration-tests:
     name: "Integration Tests"
@@ -342,11 +354,17 @@ jobs:
         run: |
           vendor/bin/codecept run --coverage-xml=coverage.xml --ext DotReporter integration
 
-      - name: "Upload coverage file"
-        run: |
-          bash <(curl -Ls https://coverage.codacy.com/get.sh) report \
-            -l PHP --project-token: ${{ secrets.CODACY_PROJECT_TOKEN }} \
-            -r tests/_output/coverage.xml --partial
+#      - name: "Upload coverage file"
+#        run: |
+#          bash <(curl -Ls https://coverage.codacy.com/get.sh) report \
+#            -l PHP --project-token: ${{ secrets.CODACY_PROJECT_TOKEN }} \
+#            -r tests/_output/coverage.xml --partial
+
+      - name: "Upload coverage file artifact"
+        uses: "actions/upload-artifact@v4"
+        with:
+          name: "integration-${{ matrix.php }}.coverage"
+          path: "tests/_output/coverage.xml"
 
   db-mysql-tests:
     name: Database MySQL tests / PHP-${{ matrix.php }}
@@ -430,11 +448,17 @@ jobs:
         run: |
           vendor/bin/codecept run --coverage-xml=coverage.xml --ext DotReporter database --env mysql -g mysql -g common
 
-      - name: "Upload coverage file"
-        run: |
-          bash <(curl -Ls https://coverage.codacy.com/get.sh) report \
-            -l PHP --project-token: ${{ secrets.CODACY_PROJECT_TOKEN }} \
-            -r tests/_output/coverage.xml
+#      - name: "Upload coverage file"
+#        run: |
+#          bash <(curl -Ls https://coverage.codacy.com/get.sh) report \
+#            -l PHP --project-token: ${{ secrets.CODACY_PROJECT_TOKEN }} \
+#            -r tests/_output/coverage.xml
+
+      - name: "Upload coverage file artifact"
+        uses: "actions/upload-artifact@v4"
+        with:
+          name: "db-mysql-${{ matrix.php }}.coverage"
+          path: "tests/_output/coverage.xml"
 
 
   #  db-postgres-tests:
@@ -593,3 +617,69 @@ jobs:
 #          name: "db-sqlite-${{ matrix.php }}.coverage"
 #          path: "tests/_output/coverage.xml"
 #
+  upload-coverage:
+    permissions:
+      contents: read
+
+    name: "Upload coverage"
+    runs-on: "ubuntu-22.04"
+    needs:
+      - "unit-tests"
+      - "cli-tests"
+      - "integration-tests"
+      - "db-mysql-tests"
+#      - "db-postgres-tests"
+#      - "db-sqlite-tests"
+
+    steps:
+      - name: "Checkout"
+        uses: "actions/checkout@v4"
+        with:
+          fetch-depth: 2
+
+      - name: "Display structure of downloaded files"
+        run: |
+          mkdir -p reports
+
+      - name: "Download coverage files"
+        uses: "actions/download-artifact@v4"
+        with:
+          path: "reports"
+
+      - name: "Display structure of downloaded files"
+        run: ls -R
+        working-directory: reports
+
+      - name: "Upload to Codecov"
+        uses: "codecov/codecov-action@v3"
+        with:
+          token: ${{ secrets.CODECOV_TOKEN }}
+          directory: reports
+          fail_ci_if_error: true
+          verbose: true
+
+      - name: Codacy Code Coverage
+        uses: codacy/codacy-coverage-reporter-action@v1.3.0
+        with:
+          project-token: ${{ secrets.CODACY_PROJECT_TOKEN }}
+          # or
+          # api-token: ${{ secrets.CODACY_API_TOKEN }}
+          coverage-reports: reports
+          # or a comma-separated list for multiple reports
+          # coverage-reports: <PATH_TO_REPORT>, <PATH_TO_REPORT>
+
+#      - name: "Upload to Codecov"
+#        uses: "codecov/codecov-action@v3"
+#        with:
+#          token: ${{ secrets.CODECOV_TOKEN }}
+#          directory: reports
+#          fail_ci_if_error: true
+#          verbose: true
+#
+#      - name: "Upload to Qodana"
+#        run: |
+#          docker run \
+#            -v $(pwd):/data/project/ \
+#            -v ./reports/:/data/coverage \
+#            -e QODANA_TOKEN="${{ secrets.QODANA_TOKEN }}" \
+#            jetbrains/qodana-php
