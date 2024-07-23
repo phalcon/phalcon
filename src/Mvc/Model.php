@@ -492,10 +492,10 @@ abstract class Model extends AbstractInjectionAware implements
 
                 return $value;
             }
-        } /**
-         * Check if the value is an array
-         */
-        elseif (is_array($value)) {
+        } elseif (is_array($value)) {
+            /**
+             * Check if the value is an array
+             */
             $lowerProperty = strtolower($property);
             $modelName     = get_class($this);
             $manager       = $this->getModelsManager();
@@ -5290,16 +5290,16 @@ abstract class Model extends AbstractInjectionAware implements
         if (str_starts_with($method, "findFirstBy")) {
             $type        = "findFirst";
             $extraMethod = substr($method, 11);
-        } /**
-         * Check if the method starts with "find"
-         */
-        elseif (str_starts_with($method, "findBy")) {
+        } elseif (str_starts_with($method, "findBy")) {
+            /**
+             * Check if the method starts with "find"
+             */
             $type        = "find";
             $extraMethod = substr($method, 6);
-        } /**
-         * Check if the method starts with "count"
-         */
-        elseif (str_starts_with($method, "countBy")) {
+        } elseif (str_starts_with($method, "countBy")) {
+            /**
+             * Check if the method starts with "count"
+             */
             $type        = "count";
             $extraMethod = substr($method, 7);
         }
