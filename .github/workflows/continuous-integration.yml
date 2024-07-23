@@ -616,11 +616,9 @@ jobs:
           fetch-depth: 0  # a full history is required for pull request analysis
 
       - name: 'Qodana Scan'
-        uses: jetbrains/qodana-php:2024.1
+        uses: JetBrains/qodana-action@v2024.1
         env:
-          QODANA_TOKEN: ${{ secrets.QODANA_TOKEN }}
-        with:
-          args: --baseline,qodana.sarif.json
+          QODANA_TOKEN: ${{ secrets.QODANA_TOKEN }} # read the steps about it below
 
   upload-coverage:
     permissions:
