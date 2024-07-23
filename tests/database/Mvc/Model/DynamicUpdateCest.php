@@ -52,7 +52,7 @@ class DynamicUpdateCest
     {
         $I->wantToTest('Mvc\Model - DynamicUpdate System Wide Disabled');
 
-        $connection = $I->getConnection();
+        $connection         = $I->getConnection();
         $customersMigration = new CustomersMigration($connection);
         $customersMigration->insert(90, 1);
 
@@ -115,7 +115,7 @@ class DynamicUpdateCest
     {
         $I->wantToTest('Mvc\Model - DynamicUpdate System Wide Disabled Cherry pick');
 
-        $connection = $I->getConnection();
+        $connection         = $I->getConnection();
         $customersMigration = new CustomersMigration($connection);
         $customersMigration->insert(90, 1);
 
@@ -177,7 +177,7 @@ class DynamicUpdateCest
     {
         $I->wantToTest('Mvc\Model - DynamicUpdate System Wide Enabled');
 
-        $connection = $I->getConnection();
+        $connection         = $I->getConnection();
         $customersMigration = new CustomersMigration($connection);
         $customersMigration->insert(90, 1);
 

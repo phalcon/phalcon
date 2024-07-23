@@ -13,6 +13,7 @@ declare(strict_types=1);
 
 namespace Phalcon\Mvc\Model\MetaData;
 
+use Exception;
 use Phalcon\Cache\AdapterFactory;
 use Phalcon\Mvc\Model\MetaData;
 
@@ -31,7 +32,7 @@ class Libmemcached extends MetaData
      * @param AdapterFactory       $factory
      * @param array<string, mixed> $options
      *
-     * @throws \Exception
+     * @throws Exception
      */
     public function __construct(AdapterFactory $factory, array $options = [])
     {

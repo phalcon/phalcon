@@ -21,7 +21,6 @@ use Phalcon\Mvc\Model\ResultInterface;
 use Phalcon\Mvc\Model\Resultset;
 use Phalcon\Mvc\Model\Row;
 use Phalcon\Mvc\ModelInterface;
-
 use Phalcon\Support\Settings;
 
 use function get_class;
@@ -85,7 +84,7 @@ class Simple extends Resultset
         $this->count       = count($data["rows"]);
         $this->cache       = $data["cache"];
         $this->columnMap   = $data["columnMap"];
-        $this->hydrateMode = (int) $data["hydrateMode"];
+        $this->hydrateMode = (int)$data["hydrateMode"];
 
         if (isset($data["keepSnapshots"])) {
             $this->keepSnapshots = $data["keepSnapshots"];
@@ -329,7 +328,7 @@ class Simple extends Resultset
         $this->count       = count($resultset["rows"]);
         $this->cache       = $resultset["cache"];
         $this->columnMap   = $resultset["columnMap"];
-        $this->hydrateMode = (int) $resultset["hydrateMode"];
+        $this->hydrateMode = (int)$resultset["hydrateMode"];
 
         if (isset($resultset["keepSnapshots"])) {
             $this->keepSnapshots = $resultset["keepSnapshots"];

@@ -18,7 +18,6 @@ use Phalcon\Mvc\Model\Resultset;
 use Phalcon\Tests\Fixtures\Migrations\CustomersMigration;
 use Phalcon\Tests\Fixtures\Migrations\InvoicesMigration;
 use Phalcon\Tests\Fixtures\Traits\DiTrait;
-use Phalcon\Tests\Models;
 use Phalcon\Tests\Models\Invoices;
 
 class UnderscoreCallStaticCest
