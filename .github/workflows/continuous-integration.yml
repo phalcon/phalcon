@@ -634,7 +634,7 @@ jobs:
       - "integration-tests"
       - "db-mysql-tests"
       #      - "db-postgres-tests"
-      - "db-sqlite-tests"
+      #      - "db-sqlite-tests"
 
     steps:
       - name: "Checkout"
