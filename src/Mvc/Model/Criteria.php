@@ -349,6 +349,7 @@ class Criteria implements CriteriaInterface, InjectionAwareInterface
         string $operator = "AND"
     ): CriteriaInterface {
         $conditions = [];
+        $bind       = [];
 
         if (count($data)) {
             $metaData  = $container->getShared("modelsMetadata");
@@ -359,7 +360,6 @@ class Criteria implements CriteriaInterface, InjectionAwareInterface
             /**
              * We look for attributes in the array passed as data
              */
-            $bind = [];
             foreach ($data as $field => $value) {
                 if (is_array($columnMap) && count($columnMap)) {
                     $attribute = $columnMap[$field];

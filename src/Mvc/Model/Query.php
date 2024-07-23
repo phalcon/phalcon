@@ -377,6 +377,9 @@ class Query implements QueryInterface, InjectionAwareInterface
      */
     public function execute(array $bindParams = [], array $bindTypes = []): mixed
     {
+        $key          = null;
+        $cache        = null;
+        $lifetime     = 3600;
         $uniqueRow    = $this->uniqueRow;
         $cacheOptions = $this->cacheOptions;
 
@@ -1861,6 +1864,9 @@ class Query implements QueryInterface, InjectionAwareInterface
         /**
          * Get a database connection
          */
+        $model           = null;
+        $isSimpleStd     = false;
+        $connection      = null;
         $connectionTypes = [];
         $models          = $intermediate["models"];
 
