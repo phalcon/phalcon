@@ -119,6 +119,7 @@ abstract class MetaData extends Injectable implements MetaDataInterface
         if (true === is_array($data)) {
             return $data;
         }
+
         throw new Exception("The meta-data is invalid or is corrupt");
     }
 
@@ -137,6 +138,7 @@ abstract class MetaData extends Injectable implements MetaDataInterface
         if (true === is_array($data)) {
             return $data;
         }
+
         throw new Exception("The meta-data is invalid or is corrupt");
     }
 
@@ -157,6 +159,7 @@ abstract class MetaData extends Injectable implements MetaDataInterface
         if (true === is_array($data)) {
             return $data;
         }
+
         throw new Exception("The meta-data is invalid or is corrupt");
     }
 
@@ -177,6 +180,7 @@ abstract class MetaData extends Injectable implements MetaDataInterface
         if (true === is_array($data)) {
             return $data;
         }
+
         throw new Exception("The meta-data is invalid or is corrupt");
     }
 
@@ -250,6 +254,7 @@ abstract class MetaData extends Injectable implements MetaDataInterface
         if (true === is_array($data)) {
             return $data;
         }
+
         throw new Exception("The meta-data is invalid or is corrupt");
     }
 
@@ -270,6 +275,7 @@ abstract class MetaData extends Injectable implements MetaDataInterface
         if (true === is_array($data)) {
             return $data;
         }
+
         throw new Exception("The meta-data is invalid or is corrupt");
     }
 
@@ -290,6 +296,7 @@ abstract class MetaData extends Injectable implements MetaDataInterface
         if (true === is_array($data)) {
             return $data;
         }
+
         throw new Exception("The meta-data is invalid or is corrupt");
     }
 
@@ -310,6 +317,7 @@ abstract class MetaData extends Injectable implements MetaDataInterface
         if (true === is_array($data)) {
             return $data;
         }
+
         throw new Exception("The meta-data is invalid or is corrupt");
     }
 
@@ -359,11 +367,13 @@ abstract class MetaData extends Injectable implements MetaDataInterface
         if (null === $pks) {
             return null;
         }
+
         $uuid = get_class($model);
 
         foreach ($pks as $pk) {
             $uuid = $uuid . ':' . $row[$pk];
         }
+
         return $uuid;
     }
 
@@ -384,6 +394,7 @@ abstract class MetaData extends Injectable implements MetaDataInterface
         if (true === is_array($data)) {
             return $data;
         }
+
         throw new Exception("The meta-data is invalid or is corrupt");
     }
 
@@ -404,6 +415,7 @@ abstract class MetaData extends Injectable implements MetaDataInterface
         if (true === is_array($data)) {
             return $data;
         }
+
         throw new Exception("The meta-data is invalid or is corrupt");
     }
 
@@ -424,6 +436,7 @@ abstract class MetaData extends Injectable implements MetaDataInterface
         if (true === is_array($data)) {
             return $data;
         }
+
         throw new Exception("The meta-data is invalid or is corrupt");
     }
 
@@ -456,6 +469,7 @@ abstract class MetaData extends Injectable implements MetaDataInterface
         if (null === $this->strategy) {
             $this->strategy = new Introspection();
         }
+
         return $this->strategy;
     }
 
@@ -477,6 +491,7 @@ abstract class MetaData extends Injectable implements MetaDataInterface
         if (true === is_array($columnMap)) {
             return isset($columnMap[$attribute]);
         }
+
         return isset($this->readMetaData($model)[MetaData::MODELS_DATA_TYPES][$attribute]);
     }
 
