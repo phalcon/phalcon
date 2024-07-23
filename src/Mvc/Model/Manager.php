@@ -1377,7 +1377,6 @@ class Manager implements ManagerInterface, InjectionAwareInterface, EventsAwareI
         ];
 
         $findArguments = $this->mergeFindParameters($findParams, $parameters);
-
         if (is_array($extraParameters)) {
             $findParams = $this->mergeFindParameters(
                 $extraParameters,
@@ -1390,7 +1389,7 @@ class Manager implements ManagerInterface, InjectionAwareInterface, EventsAwareI
         /**
          * Check the right method to get the data
          */
-        if ($method === null) {
+        if (null === $method) {
             switch ($relation->getType()) {
                 case Relation::BELONGS_TO:
                 case Relation::HAS_ONE:
@@ -1414,21 +1413,8 @@ class Manager implements ManagerInterface, InjectionAwareInterface, EventsAwareI
         $reusable = $relation->isReusable();
 
         if ($reusable) {
-            /**
-             * @todo hack to get the unique identifier based on params
-             */
-            $glue = !is_array($findParams) ? [$findParams] : $findParams;
-            $bind = $glue['bind'] ?? [];
-            unset($glue['di']);
-            unset($glue['bind']);
-            $glue      = $glue + $bind;
-            $uniqueKey = sha1(
-                $referencedModel
-                . implode('-', $glue)
-                . $retrieveMethod
-            );
-
-            $records = $this->getReusableRecords($referencedModel, $uniqueKey);
+            $uniqueKey = $this->getUniqueKey($referencedModel, [$findParams, $retrieveMethod]);
+            $records   = $this->getReusableRecords($referencedModel, $uniqueKey);
 
             if (is_array($records) || is_object($records)) {
                 return $records;
@@ -2209,5 +2195,55 @@ class Manager implements ManagerInterface, InjectionAwareInterface, EventsAwareI
         }
 
         return isset($this->$collection[$keyRelation]);
+    }
+
+    /**
+     * Creates a unique key to be used as index in a hash
+     */
+    private function getUniqueKey(mixed $prefix, mixed $value): string|null
+    {
+        $result = '';
+
+        if (is_string($prefix)) {
+            $result .= $prefix;
+        }
+
+        if (is_array($value)) {
+            $result .= $this->getUniqueKeyArray($value);
+        } else {
+            $result .= $this->getUniqueKeyVal($value);
+        }
+
+        return ($result !== '') ? $result : null;
+    }
+
+    private function getUniqueKeyArray(array $value): string
+    {
+        $return = '[';
+        $length = count($value);
+        $counter = 0;
+
+        foreach ($value as $item) {
+            if (!is_object($item)) {
+                if (is_array($item)) {
+                    $return .= $this->getUniqueKeyArray($item);
+                } else {
+                    $return .= $this->getUniqueKeyVal($item);
+                }
+            }
+
+            if (++$counter !== $length) {
+                $return .= ',';
+            }
+        }
+
+        $return .= ']';
+
+        return $return;
+    }
+
+    private function getUniqueKeyVal(mixed $value): string
+    {
+        return is_string($value) ? $value : strval($value);
     }
 }
