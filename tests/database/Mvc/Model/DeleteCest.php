@@ -382,7 +382,7 @@ class DeleteCest
          * @var Invoices  $invoice
          */
         $customer = Customers::findFirst($customerId); // Model A
-        $invoice  = Invoices::findFirst($invoiceId); // Model B
+        $invoice  = Invoices::findFirst($invoiceId);   // Model B
 
         /**
          * Step 2:

@@ -14,6 +14,7 @@ declare(strict_types=1);
 namespace Phalcon\Tests\Database\Mvc\Model;
 
 use DatabaseTester;
+use Exception;
 use Phalcon\Events\Manager;
 use Phalcon\Tests\Fixtures\Migrations\InvoicesMigration;
 use Phalcon\Tests\Fixtures\Traits\DiTrait;
@@ -36,14 +37,15 @@ class GetSetEventsManagerCest
     /**
      * Executed before each test
      *
-     * @param  DatabaseTester $I
+     * @param DatabaseTester $I
+     *
      * @return void
      */
     public function _before(DatabaseTester $I): void
     {
         try {
             $this->setNewFactoryDefault();
-        } catch (\Exception $e) {
+        } catch (Exception $e) {
             $I->fail($e->getMessage());
         }
 
@@ -55,7 +57,7 @@ class GetSetEventsManagerCest
     /**
      * Tests Phalcon\Mvc\Model :: getEventsManager()
      *
-     * @param  DatabaseTester $I
+     * @param DatabaseTester $I
      *
      * @author Phalcon Team <team@phalcon.io>
      * @since  2020-02-01

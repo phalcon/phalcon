@@ -161,7 +161,7 @@ class CacheCest
     }
 
     /**
-     * @return \string[][]
+     * @return string[][]
      */
     private function getValidSerializers(): array
     {

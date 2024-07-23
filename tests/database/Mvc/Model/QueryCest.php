@@ -46,10 +46,16 @@ class QueryCest
      */
     private InvoicesMigration $invoiceMigration;
 
+    public function _after(DatabaseTester $I)
+    {
+        $this->container['db']->close();
+    }
+
     /**
      * Executed before each test
      *
-     * @param  DatabaseTester $I
+     * @param DatabaseTester $I
+     *
      * @return void
      */
     public function _before(DatabaseTester $I): void
@@ -63,18 +69,13 @@ class QueryCest
         $this->setDatabase($I);
 
         $this->customerMigration = new CustomersMigration($I->getConnection());
-        $this->invoiceMigration = new InvoicesMigration($I->getConnection());
-    }
-
-    public function _after(DatabaseTester $I)
-    {
-        $this->container['db']->close();
+        $this->invoiceMigration  = new InvoicesMigration($I->getConnection());
     }
 
     /**
      * Tests Phalcon\Mvc\Model :: query()
      *
-     * @param  DatabaseTester $I
+     * @param DatabaseTester $I
      *
      * @author Phalcon Team <team@phalcon.io>
      * @since  2018-11-13
@@ -101,7 +102,7 @@ class QueryCest
     /**
      * Tests Phalcon\Mvc\Model :: query() - Issue 14535
      *
-     * @param  DatabaseTester $I
+     * @param DatabaseTester $I
      *
      * @author Phalcon Team <team@phalcon.io>
      * @since  2020-05-01
@@ -133,7 +134,7 @@ class QueryCest
     /**
      * Tests Phalcon\Mvc\Model :: query() - Issue 14783
      *
-     * @param  DatabaseTester $I
+     * @param DatabaseTester $I
      *
      * @author Phalcon Team <team@phalcon.io>
      * @since  2018-11-13
@@ -178,6 +179,24 @@ class QueryCest
     }
 
     /**
+     * Seed Invoices' table by some data.
+     *
+     * @param DatabaseTester $I
+     *
+     * @return void
+     */
+    private function addTestData(DatabaseTester $I)
+    {
+        for ($counter = 1; $counter <= 50; $counter++) {
+            $firstName = uniqid('inv-', true);
+            $lastName  = uniqid('inv-', true);
+
+            $this->customerMigration->insert($counter, 1, $firstName, $lastName);
+            $this->invoiceMigration->insert($counter, $counter, 1, $firstName);
+        }
+    }
+
+    /**
      * Transforming method used for test
      *
      * @param Row $row
@@ -193,22 +212,5 @@ class QueryCest
         $invoice->customer = $customer;
 
         return $invoice;
-    }
-
-    /**
-     * Seed Invoices' table by some data.
-     *
-     * @param DatabaseTester $I
-     * @return void
-     */
-    private function addTestData(DatabaseTester $I)
-    {
-        for ($counter = 1; $counter <= 50; $counter++) {
-            $firstName = uniqid('inv-', true);
-            $lastName  = uniqid('inv-', true);
-
-            $this->customerMigration->insert($counter, 1, $firstName, $lastName);
-            $this->invoiceMigration->insert($counter, $counter, 1, $firstName);
-        }
     }
 }

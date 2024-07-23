@@ -13,13 +13,13 @@ namespace Phalcon\Tests\Database\Mvc\Model\Query;
 
 use Codeception\Util\Debug;
 use DatabaseTester;
+use PDOException;
 use Phalcon\Mvc\Model\Manager;
-use Phalcon\Storage\Exception;
 use Phalcon\Tests\Fixtures\Migrations\RollbackTestMigration;
 use Phalcon\Tests\Fixtures\Traits\DiTrait;
 use Phalcon\Tests\Fixtures\Traits\RecordsTrait;
-use PDOException;
 use RuntimeException;
+use Throwable;
 
 class RollbackOnExceptionCest
 {
@@ -125,7 +125,7 @@ class RollbackOnExceptionCest
             return "Update $name";
         } catch (PDOException $exc) {
             return $exc::class . ' ' . $exc->getMessage();
-        } catch (\Throwable $exc) {
+        } catch (Throwable $exc) {
             return get_class($exc) . ' ' . $exc->getMessage();
         }
     }

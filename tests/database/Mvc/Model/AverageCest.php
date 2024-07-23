@@ -34,7 +34,8 @@ class AverageCest
     /**
      * Executed before each test
      *
-     * @param  DatabaseTester $I
+     * @param DatabaseTester $I
+     *
      * @return void
      */
     public function _before(DatabaseTester $I): void
@@ -53,7 +54,7 @@ class AverageCest
     /**
      * Tests Phalcon\Mvc\Model :: average()
      *
-     * @param  DatabaseTester $I
+     * @param DatabaseTester $I
      *
      * @author Phalcon Team <team@phalcon.io>
      * @since  2020-01-30
@@ -124,12 +125,12 @@ class AverageCest
             ]
         );
         $I->assertInstanceOf(Simple::class, $results);
-        $I->assertEquals(1, (int) $results[0]->inv_cst_id);
-        $I->assertEquals(21, (int) $results[0]->average);
-        $I->assertEquals(2, (int) $results[1]->inv_cst_id);
-        $I->assertEquals(4, (int) $results[1]->average);
-        $I->assertEquals(3, (int) $results[2]->inv_cst_id);
-        $I->assertEquals(1, (int) $results[2]->average);
+        $I->assertEquals(1, (int)$results[0]->inv_cst_id);
+        $I->assertEquals(21, (int)$results[0]->average);
+        $I->assertEquals(2, (int)$results[1]->inv_cst_id);
+        $I->assertEquals(4, (int)$results[1]->average);
+        $I->assertEquals(3, (int)$results[2]->inv_cst_id);
+        $I->assertEquals(1, (int)$results[2]->average);
 
         $results = Invoices::average(
             [
@@ -139,11 +140,11 @@ class AverageCest
             ]
         );
         $I->assertInstanceOf(Simple::class, $results);
-        $I->assertEquals(3, (int) $results[0]->inv_cst_id);
-        $I->assertEquals(1, (int) $results[0]->average);
-        $I->assertEquals(2, (int) $results[1]->inv_cst_id);
-        $I->assertEquals(4, (int) $results[1]->average);
-        $I->assertEquals(1, (int) $results[2]->inv_cst_id);
-        $I->assertEquals(21, (int) $results[2]->average);
+        $I->assertEquals(3, (int)$results[0]->inv_cst_id);
+        $I->assertEquals(1, (int)$results[0]->average);
+        $I->assertEquals(2, (int)$results[1]->inv_cst_id);
+        $I->assertEquals(4, (int)$results[1]->average);
+        $I->assertEquals(1, (int)$results[2]->inv_cst_id);
+        $I->assertEquals(21, (int)$results[2]->average);
     }
 }

@@ -72,7 +72,7 @@ class SerializeCest
         $I->assertNotFalse($result);
 
         $serialized = serialize($invoice);
-        $newObject = unserialize($serialized);
+        $newObject  = unserialize($serialized);
 
         $I->assertEquals(2, $newObject->inv_cst_id);
         $I->assertEquals(3, $newObject->inv_status_flag);

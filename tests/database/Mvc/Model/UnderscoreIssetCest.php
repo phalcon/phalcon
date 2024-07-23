@@ -12,6 +12,7 @@
 namespace Phalcon\Tests\Integration\Mvc\Model;
 
 use DatabaseTester;
+use PDO;
 use Phalcon\Tests\Fixtures\Migrations\CustomersMigration;
 use Phalcon\Tests\Fixtures\Traits\DiTrait;
 use Phalcon\Tests\Models;
@@ -20,15 +21,15 @@ class UnderscoreIssetCest
 {
     use DiTrait;
 
+    public function _after(DatabaseTester $I)
+    {
+        $this->container['db']->close();
+    }
+
     public function _before(DatabaseTester $I)
     {
         $this->setNewFactoryDefault();
         $this->setDatabase($I);
-    }
-
-    public function _after(DatabaseTester $I)
-    {
-        $this->container['db']->close();
     }
 
     /**
@@ -44,7 +45,7 @@ class UnderscoreIssetCest
     public function mvcModelUnderscoreIsset(DatabaseTester $I)
     {
         $I->wantToTest("Mvc\Model - __isset()");
-        /** @var \PDO $connection */
+        /** @var PDO $connection */
         $connection = $I->getConnection();
 
         $customersMigration = new CustomersMigration($connection);

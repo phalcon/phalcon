@@ -27,7 +27,8 @@ class LimitCest
     /**
      * Executed before each test
      *
-     * @param  DatabaseTester $I
+     * @param DatabaseTester $I
+     *
      * @return void
      */
     public function _before(DatabaseTester $I): void
@@ -40,38 +41,9 @@ class LimitCest
     }
 
     /**
-     * Tests Phalcon\Mvc\Model\Criteria :: limit() - null
-     *
-     * @param  DatabaseTester $I
-     *
-     * @author Phalcon Team <team@phalcon.io>
-     * @since  2020-05-04
-     *
-     * @group  common
-     */
-    public function mvcModelCriteriaNoLimit(DatabaseTester $I)
-    {
-        $I->wantToTest('Mvc\Model\Criteria - limit() - null');
-
-        $criteria = new Criteria();
-        $criteria->setDI($this->container);
-        $criteria->setModelName(Invoices::class);
-
-        $builder = $criteria->createBuilder();
-
-        $I->assertInstanceOf(Builder::class, $builder);
-
-        $expected = 'SELECT [Phalcon\Tests\Models\Invoices].* '
-            . 'FROM [Phalcon\Tests\Models\Invoices]';
-
-        $I->assertEquals($expected, $builder->getPhql());
-        $I->assertEquals(null, $criteria->getLimit());
-    }
-
-    /**
      * Tests Phalcon\Mvc\Model\Criteria :: limit()
      *
-     * @param  DatabaseTester $I
+     * @param DatabaseTester $I
      *
      * @author Phalcon Team <team@phalcon.io>
      * @since  2020-02-01
@@ -105,7 +77,7 @@ class LimitCest
     /**
      * Tests Phalcon\Mvc\Model\Criteria :: limit() - offset
      *
-     * @param  DatabaseTester $I
+     * @param DatabaseTester $I
      *
      * @author Phalcon Team <team@phalcon.io>
      * @since  2020-02-01
@@ -140,5 +112,34 @@ class LimitCest
         ];
 
         $I->assertEquals($expected, $criteria->getLimit());
+    }
+
+    /**
+     * Tests Phalcon\Mvc\Model\Criteria :: limit() - null
+     *
+     * @param DatabaseTester $I
+     *
+     * @author Phalcon Team <team@phalcon.io>
+     * @since  2020-05-04
+     *
+     * @group  common
+     */
+    public function mvcModelCriteriaNoLimit(DatabaseTester $I)
+    {
+        $I->wantToTest('Mvc\Model\Criteria - limit() - null');
+
+        $criteria = new Criteria();
+        $criteria->setDI($this->container);
+        $criteria->setModelName(Invoices::class);
+
+        $builder = $criteria->createBuilder();
+
+        $I->assertInstanceOf(Builder::class, $builder);
+
+        $expected = 'SELECT [Phalcon\Tests\Models\Invoices].* '
+            . 'FROM [Phalcon\Tests\Models\Invoices]';
+
+        $I->assertEquals($expected, $builder->getPhql());
+        $I->assertEquals(null, $criteria->getLimit());
     }
 }

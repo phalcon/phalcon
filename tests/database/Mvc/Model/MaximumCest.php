@@ -98,12 +98,12 @@ class MaximumCest
             ]
         );
         $I->assertInstanceOf(Simple::class, $results);
-        $I->assertEquals(1, (int) $results[0]->inv_cst_id);
-        $I->assertEquals(89, (int) $results[0]->maximum);
-        $I->assertEquals(2, (int) $results[1]->inv_cst_id);
-        $I->assertEquals(13, (int) $results[1]->maximum);
-        $I->assertEquals(3, (int) $results[2]->inv_cst_id);
-        $I->assertEquals(1, (int) $results[2]->maximum);
+        $I->assertEquals(1, (int)$results[0]->inv_cst_id);
+        $I->assertEquals(89, (int)$results[0]->maximum);
+        $I->assertEquals(2, (int)$results[1]->inv_cst_id);
+        $I->assertEquals(13, (int)$results[1]->maximum);
+        $I->assertEquals(3, (int)$results[2]->inv_cst_id);
+        $I->assertEquals(1, (int)$results[2]->maximum);
 
         $results = Invoices::maximum(
             [
@@ -113,11 +113,11 @@ class MaximumCest
             ]
         );
         $I->assertInstanceOf(Simple::class, $results);
-        $I->assertEquals(3, (int) $results[0]->inv_cst_id);
-        $I->assertEquals(1, (int) $results[0]->maximum);
-        $I->assertEquals(2, (int) $results[1]->inv_cst_id);
-        $I->assertEquals(13, (int) $results[1]->maximum);
-        $I->assertEquals(1, (int) $results[2]->inv_cst_id);
-        $I->assertEquals(89, (int) $results[2]->maximum);
+        $I->assertEquals(3, (int)$results[0]->inv_cst_id);
+        $I->assertEquals(1, (int)$results[0]->maximum);
+        $I->assertEquals(2, (int)$results[1]->inv_cst_id);
+        $I->assertEquals(13, (int)$results[1]->maximum);
+        $I->assertEquals(1, (int)$results[2]->inv_cst_id);
+        $I->assertEquals(89, (int)$results[2]->maximum);
     }
 }

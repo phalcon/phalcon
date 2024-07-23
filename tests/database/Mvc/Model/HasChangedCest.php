@@ -21,15 +21,15 @@ class HasChangedCest
 {
     use DiTrait;
 
+    public function _after(DatabaseTester $I)
+    {
+        $this->container['db']->close();
+    }
+
     public function _before(DatabaseTester $I)
     {
         $this->setNewFactoryDefault();
         $this->setDatabase($I);
-    }
-
-    public function _after(DatabaseTester $I)
-    {
-        $this->container['db']->close();
     }
 
     /**

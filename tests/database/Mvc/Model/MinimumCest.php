@@ -97,12 +97,12 @@ class MinimumCest
             ]
         );
         $I->assertInstanceOf(Simple::class, $results);
-        $I->assertEquals(1, (int) $results[0]->inv_cst_id);
-        $I->assertEquals(21, (int) $results[0]->minimum);
-        $I->assertEquals(2, (int) $results[1]->inv_cst_id);
-        $I->assertEquals(144, (int) $results[1]->minimum);
-        $I->assertEquals(3, (int) $results[2]->inv_cst_id);
-        $I->assertEquals(377, (int) $results[2]->minimum);
+        $I->assertEquals(1, (int)$results[0]->inv_cst_id);
+        $I->assertEquals(21, (int)$results[0]->minimum);
+        $I->assertEquals(2, (int)$results[1]->inv_cst_id);
+        $I->assertEquals(144, (int)$results[1]->minimum);
+        $I->assertEquals(3, (int)$results[2]->inv_cst_id);
+        $I->assertEquals(377, (int)$results[2]->minimum);
 
         $results = Invoices::minimum(
             [
@@ -112,11 +112,11 @@ class MinimumCest
             ]
         );
         $I->assertInstanceOf(Simple::class, $results);
-        $I->assertEquals(3, (int) $results[0]->inv_cst_id);
-        $I->assertEquals(377, (int) $results[0]->minimum);
-        $I->assertEquals(2, (int) $results[1]->inv_cst_id);
-        $I->assertEquals(144, (int) $results[1]->minimum);
-        $I->assertEquals(1, (int) $results[2]->inv_cst_id);
-        $I->assertEquals(21, (int) $results[2]->minimum);
+        $I->assertEquals(3, (int)$results[0]->inv_cst_id);
+        $I->assertEquals(377, (int)$results[0]->minimum);
+        $I->assertEquals(2, (int)$results[1]->inv_cst_id);
+        $I->assertEquals(144, (int)$results[1]->minimum);
+        $I->assertEquals(1, (int)$results[2]->inv_cst_id);
+        $I->assertEquals(21, (int)$results[2]->minimum);
     }
 }
