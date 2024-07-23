@@ -13,11 +13,6 @@ declare(strict_types=1);
 
 namespace Phalcon\Tests\Models;
 
-use Phalcon\Tests\Models\Invoices;
-
-/**
- * Class InvoicesGetters
- */
 class InvoicesGetters extends Invoices
 {
     /**

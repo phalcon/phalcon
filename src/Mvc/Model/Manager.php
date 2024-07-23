@@ -31,8 +31,10 @@ use ReflectionProperty;
 
 use function array_key_exists;
 use function array_merge;
+use function array_pop;
 use function call_user_func_array;
 use function class_exists;
+use function explode;
 use function get_class;
 use function implode;
 use function is_array;
@@ -1162,13 +1164,18 @@ class Manager implements ManagerInterface, InjectionAwareInterface, EventsAwareI
     public function getModelSource(ModelInterface $model): string
     {
         $entityName = mb_strtolower(get_class($model));
+        $modelArray = explode("\\", get_class($model));
+
+        // Extract the real class name from the namespaced class
+        $modelName = array_pop($modelArray);
+
+        // Extract the namespace from the namespaced class
+        $namespaceName = implode("\\", $modelArray);
 
         if (!isset($this->sources[$entityName])) {
             $this->setModelSource(
                 $model,
-                $this->toCamelize(
-                    get_class_ns($model)
-                )
+                $this->toCamelize($namespaceName)
             );
         }
 
@@ -1232,7 +1239,7 @@ class Manager implements ManagerInterface, InjectionAwareInterface, EventsAwareI
         ModelInterface $record,
         array | string | null $parameters = null,
         string $method = null
-    ): Simple | int | false {
+    ): Simple | ModelInterface | int | false {
         /**
          * Re-use bound parameters
          */
@@ -1444,7 +1451,7 @@ class Manager implements ManagerInterface, InjectionAwareInterface, EventsAwareI
             $this->setReusableRecords($referencedModel, $uniqueKey, $records);
         }
 
-        return $records;
+        return null === $records ? false : $records;
     }
 
     /**
