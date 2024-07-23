@@ -32,12 +32,7 @@ class FromInputCest
      */
     public function _before(DatabaseTester $I): void
     {
-        try {
-            $this->setNewFactoryDefault();
-        } catch (Exception $e) {
-            $I->fail($e->getMessage());
-        }
-
+        $this->setNewFactoryDefault();
         $this->setDatabase($I);
     }
 
