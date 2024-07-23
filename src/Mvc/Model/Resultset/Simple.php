@@ -13,6 +13,7 @@ declare(strict_types=1);
 
 namespace Phalcon\Mvc\Model\Resultset;
 
+use Phalcon\Db\Enum;
 use Phalcon\Di\Di;
 use Phalcon\Mvc\Model;
 use Phalcon\Mvc\Model\Exception;
@@ -237,7 +238,7 @@ class Simple extends Resultset
                 $result->execute();
             }
 
-            $records = $result->fetchAll();
+            $records = $result->fetchAll(Enum::FETCH_ASSOC);
 
             $this->row  = null;
             $this->rows = $records; // keep result-set in memory
@@ -249,17 +250,11 @@ class Simple extends Resultset
          * Only rename when it is Model
          */
         if ($renameColumns && !($this->model instanceof Row)) {
-            /**
-             * Get the resultset column map
-             */
-            $columnMap = $this->columnMap;
-
-            if (!is_array($columnMap)) {
+            if (!is_array($this->columnMap)) {
                 return $records;
             }
 
             $renamedRecords = [];
-
             if (is_array($records)) {
                 foreach ($records as $record) {
                     $renamed = [];
@@ -268,21 +263,23 @@ class Simple extends Resultset
                             /**
                              * Check if the key is part of the column map
                              */
-                            if (!isset($columnMap[$key])) {
+                            if (!isset($this->columnMap[$key])) {
                                 throw new Exception(
                                     "Column '" . $key . "' is not part of the column map"
                                 );
                             }
 
-                            $renamedKey = $columnMap[$key];
+                            $renamedKey = $this->columnMap[$key];
+
                             if (is_array($renamedKey)) {
                                 if (!isset($renamedKey[0])) {
                                     throw new Exception(
                                         "Column '" . $key . "' is not part of the column map"
                                     );
                                 }
+
+                                $renamedKey = $renamedKey[0];
                             }
-                            $renamedKey = $renamedKey[0];
 
                             $renamed[$renamedKey] = $value;
                         }
