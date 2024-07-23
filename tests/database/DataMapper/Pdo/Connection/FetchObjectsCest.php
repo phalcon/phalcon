@@ -20,49 +20,6 @@ use stdClass;
 class FetchObjectsCest
 {
     /**
-     * Database Tests Phalcon\DataMapper\Pdo\Connection :: fetchObjects()
-     *
-     * @since  2020-01-25
-     *
-     * @group  pgsql
-     * @group  mysql
-     * @group  sqlite
-     */
-    public function dMPdoConnectionFetchObjects(DatabaseTester $I)
-    {
-        $I->wantToTest('DataMapper\Pdo\Connection - fetchObjects()');
-
-        /** @var Connection $connection */
-        $connection = $I->getDataMapperConnection();
-        $migration  = new InvoicesMigration($connection);
-        $migration->clear();
-
-        $result = $migration->insert(1);
-        $I->assertEquals(1, $result);
-        $result = $migration->insert(2);
-        $I->assertEquals(1, $result);
-        $result = $migration->insert(3);
-        $I->assertEquals(1, $result);
-        $result = $migration->insert(4);
-        $I->assertEquals(1, $result);
-
-        $all = $connection->fetchObjects(
-            'SELECT * from co_invoices'
-        );
-        $I->assertCount(4, $all);
-
-        $I->assertInstanceOf(stdClass::class, $all[0]);
-        $I->assertInstanceOf(stdClass::class, $all[1]);
-        $I->assertInstanceOf(stdClass::class, $all[2]);
-        $I->assertInstanceOf(stdClass::class, $all[3]);
-
-        $I->assertEquals(1, $all[0]->inv_id);
-        $I->assertEquals(2, $all[1]->inv_id);
-        $I->assertEquals(3, $all[2]->inv_id);
-        $I->assertEquals(4, $all[3]->inv_id);
-    }
-
-    /**
      * Tests Phalcon\DataMapper\Pdo\Connection :: fetchObjects() - ctor
      *
      * @since  2020-01-25
@@ -113,5 +70,48 @@ class FetchObjectsCest
         $I->assertEquals('darth', $all[1]->calculated);
         $I->assertEquals('darth', $all[2]->calculated);
         $I->assertEquals('darth', $all[3]->calculated);
+    }
+
+    /**
+     * Database Tests Phalcon\DataMapper\Pdo\Connection :: fetchObjects()
+     *
+     * @since  2020-01-25
+     *
+     * @group  pgsql
+     * @group  mysql
+     * @group  sqlite
+     */
+    public function dMPdoConnectionFetchObjects(DatabaseTester $I)
+    {
+        $I->wantToTest('DataMapper\Pdo\Connection - fetchObjects()');
+
+        /** @var Connection $connection */
+        $connection = $I->getDataMapperConnection();
+        $migration  = new InvoicesMigration($connection);
+        $migration->clear();
+
+        $result = $migration->insert(1);
+        $I->assertEquals(1, $result);
+        $result = $migration->insert(2);
+        $I->assertEquals(1, $result);
+        $result = $migration->insert(3);
+        $I->assertEquals(1, $result);
+        $result = $migration->insert(4);
+        $I->assertEquals(1, $result);
+
+        $all = $connection->fetchObjects(
+            'SELECT * from co_invoices'
+        );
+        $I->assertCount(4, $all);
+
+        $I->assertInstanceOf(stdClass::class, $all[0]);
+        $I->assertInstanceOf(stdClass::class, $all[1]);
+        $I->assertInstanceOf(stdClass::class, $all[2]);
+        $I->assertInstanceOf(stdClass::class, $all[3]);
+
+        $I->assertEquals(1, $all[0]->inv_id);
+        $I->assertEquals(2, $all[1]->inv_id);
+        $I->assertEquals(3, $all[2]->inv_id);
+        $I->assertEquals(4, $all[3]->inv_id);
     }
 }

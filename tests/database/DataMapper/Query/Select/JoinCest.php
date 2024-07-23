@@ -20,62 +20,6 @@ use Phalcon\DataMapper\Query\QueryFactory;
 class JoinCest
 {
     /**
-     * Database Tests Phalcon\DataMapper\Query\Select :: join() - left
-     *
-     * @since  2020-01-20
-     *
-     * @group  pgsql
-     * @group  mysql
-     * @group  sqlite
-     */
-    public function dMQuerySelectJoinLeft(DatabaseTester $I)
-    {
-        $I->wantToTest('DataMapper\Query\Select - join() - left');
-
-        $connection = $I->getDataMapperConnection();
-        $factory    = new QueryFactory();
-        $select     = $factory->newSelect($connection);
-
-        $select
-            ->from('co_invoices')
-            ->join($select::JOIN_LEFT, 'co_customers', 'inv_cst_id = cst_id')
-        ;
-
-        $expected = "SELECT * FROM co_invoices "
-            . "LEFT JOIN co_customers ON inv_cst_id = cst_id";
-        $actual   = $select->getStatement();
-        $I->assertEquals($expected, $actual);
-    }
-
-    /**
-     * Database Tests Phalcon\DataMapper\Query\Select :: join() - on right
-     *
-     * @since  2020-01-20
-     *
-     * @group  pgsql
-     * @group  mysql
-     * @group  sqlite
-     */
-    public function dMQuerySelectJoinRight(DatabaseTester $I)
-    {
-        $I->wantToTest('DataMapper\Query\Select - join() - on right');
-
-        $connection = $I->getDataMapperConnection();
-        $factory    = new QueryFactory();
-        $select     = $factory->newSelect($connection);
-
-        $select
-            ->from('co_invoices')
-            ->join($select::JOIN_RIGHT, 'co_customers', 'inv_cst_id = cst_id')
-        ;
-
-        $expected = "SELECT * FROM co_invoices "
-            . "RIGHT JOIN co_customers ON inv_cst_id = cst_id";
-        $actual   = $select->getStatement();
-        $I->assertEquals($expected, $actual);
-    }
-
-    /**
      * Database Tests Phalcon\DataMapper\Query\Select :: join() - inner
      *
      * @since  2020-01-20
@@ -105,6 +49,34 @@ class JoinCest
     }
 
     /**
+     * Database Tests Phalcon\DataMapper\Query\Select :: join() - left
+     *
+     * @since  2020-01-20
+     *
+     * @group  pgsql
+     * @group  mysql
+     * @group  sqlite
+     */
+    public function dMQuerySelectJoinLeft(DatabaseTester $I)
+    {
+        $I->wantToTest('DataMapper\Query\Select - join() - left');
+
+        $connection = $I->getDataMapperConnection();
+        $factory    = new QueryFactory();
+        $select     = $factory->newSelect($connection);
+
+        $select
+            ->from('co_invoices')
+            ->join($select::JOIN_LEFT, 'co_customers', 'inv_cst_id = cst_id')
+        ;
+
+        $expected = "SELECT * FROM co_invoices "
+            . "LEFT JOIN co_customers ON inv_cst_id = cst_id";
+        $actual   = $select->getStatement();
+        $I->assertEquals($expected, $actual);
+    }
+
+    /**
      * Database Tests Phalcon\DataMapper\Query\Select :: join()
      *
      * @since  2020-01-20
@@ -128,6 +100,34 @@ class JoinCest
 
         $expected = "SELECT * FROM co_invoices "
             . "NATURAL JOIN co_customers ON inv_cst_id = cst_id";
+        $actual   = $select->getStatement();
+        $I->assertEquals($expected, $actual);
+    }
+
+    /**
+     * Database Tests Phalcon\DataMapper\Query\Select :: join() - on right
+     *
+     * @since  2020-01-20
+     *
+     * @group  pgsql
+     * @group  mysql
+     * @group  sqlite
+     */
+    public function dMQuerySelectJoinRight(DatabaseTester $I)
+    {
+        $I->wantToTest('DataMapper\Query\Select - join() - on right');
+
+        $connection = $I->getDataMapperConnection();
+        $factory    = new QueryFactory();
+        $select     = $factory->newSelect($connection);
+
+        $select
+            ->from('co_invoices')
+            ->join($select::JOIN_RIGHT, 'co_customers', 'inv_cst_id = cst_id')
+        ;
+
+        $expected = "SELECT * FROM co_invoices "
+            . "RIGHT JOIN co_customers ON inv_cst_id = cst_id";
         $actual   = $select->getStatement();
         $I->assertEquals($expected, $actual);
     }

@@ -19,6 +19,40 @@ use Phalcon\DataMapper\Query\QueryFactory;
 class WhereCest
 {
     /**
+     * Database Tests Phalcon\DataMapper\Query\Select :: orWhere() - bind values
+     *
+     * @since  2020-01-20
+     */
+    public function dMQuerySelectOrWhereBind(DatabaseTester $I)
+    {
+        $I->wantToTest('DataMapper\Query\Select - orWhere() - bind values');
+
+        $connection = $I->getDataMapperConnection();
+        $factory    = new QueryFactory();
+        $select     = $factory->newSelect($connection);
+
+        $select
+            ->from('co_invoices')
+            ->appendWhere('inv_total > ', 100)
+            ->orWhere("inv_status_flag = :status")
+            ->bindValue('status', 1)
+        ;
+
+        $expected = "SELECT * FROM co_invoices "
+            . "WHERE inv_total > :__1__ "
+            . "OR inv_status_flag = :status";
+        $actual   = $select->getStatement();
+        $I->assertEquals($expected, $actual);
+
+        $expected = [
+            '__1__'  => [100, 1],
+            'status' => [1, 1],
+        ];
+        $actual   = $select->getBindValues();
+        $I->assertEquals($expected, $actual);
+    }
+
+    /**
      * Database Tests Phalcon\DataMapper\Query\Select :: where()
      *
      * @since  2020-01-20
@@ -86,40 +120,6 @@ class WhereCest
             '__3__' => [3, 1],
             '__4__' => [1, 1],
             'total' => [100, 1],
-        ];
-        $actual   = $select->getBindValues();
-        $I->assertEquals($expected, $actual);
-    }
-
-    /**
-     * Database Tests Phalcon\DataMapper\Query\Select :: orWhere() - bind values
-     *
-     * @since  2020-01-20
-     */
-    public function dMQuerySelectOrWhereBind(DatabaseTester $I)
-    {
-        $I->wantToTest('DataMapper\Query\Select - orWhere() - bind values');
-
-        $connection = $I->getDataMapperConnection();
-        $factory    = new QueryFactory();
-        $select     = $factory->newSelect($connection);
-
-        $select
-            ->from('co_invoices')
-            ->appendWhere('inv_total > ', 100)
-            ->orWhere("inv_status_flag = :status")
-            ->bindValue('status', 1)
-        ;
-
-        $expected = "SELECT * FROM co_invoices "
-            . "WHERE inv_total > :__1__ "
-            . "OR inv_status_flag = :status";
-        $actual   = $select->getStatement();
-        $I->assertEquals($expected, $actual);
-
-        $expected = [
-            '__1__'  => [100, 1],
-            'status' => [1, 1],
         ];
         $actual   = $select->getBindValues();
         $I->assertEquals($expected, $actual);
