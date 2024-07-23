@@ -50,10 +50,11 @@ abstract class AbstractValidator implements ValidatorInterface
      * Phalcon\Filter\Validation\Validator constructor
      *
      * @param mixed[] $options {
-     *     @type string  'message'
-     *     @type string  'template'
-     *     @type boolean 'allowEmpty'
-     * }
+     *
+     * @type string  'message'
+     * @type string  'template'
+     * @type boolean 'allowEmpty'
+     *                         }
      */
     public function __construct(array $options = [])
     {

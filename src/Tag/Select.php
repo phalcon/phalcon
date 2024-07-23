@@ -34,14 +34,14 @@ abstract class Select
      * Generates a SELECT tag
      *
      * @param array<string, mixed>|string $parameters = [
-     *                                 'id'         => '',
-     *                                 'name'       => '',
-     *                                 'value'      => '',
-     *                                 'useEmpty'   => false,
-     *                                 'emptyValue' => '',
-     *                                 'emptyText'  => '',
-     *                                 ]
-     * @param mixed|null   $data
+     *                                                'id'         => '',
+     *                                                'name'       => '',
+     *                                                'value'      => '',
+     *                                                'useEmpty'   => false,
+     *                                                'emptyValue' => '',
+     *                                                'emptyText'  => '',
+     *                                                ]
+     * @param mixed|null                  $data
      *
      * @return string
      * @throws Exception

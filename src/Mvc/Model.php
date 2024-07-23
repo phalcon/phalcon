@@ -4206,7 +4206,7 @@ abstract class Model extends AbstractInjectionAware implements
              * Not all the database systems require an explicit value for
              * identity columns
              */
-            $useExplicitIdentity = (bool)$connection->useExplicitIdValue();
+            $useExplicitIdentity = $connection->useExplicitIdValue();
 
             if ($useExplicitIdentity) {
                 $fields[] = $identityField;
@@ -4368,7 +4368,7 @@ abstract class Model extends AbstractInjectionAware implements
         /**
          * Check if the model must use dynamic update
          */
-        $useDynamicUpdate    = (bool)$manager->isUsingDynamicUpdate($this);
+        $useDynamicUpdate    = $manager->isUsingDynamicUpdate($this);
         $snapshot            = $this->snapshot;
         $dataTypes           = $metaData->getDataTypes($this);
         $bindDataTypes       = $metaData->getBindTypes($this);
@@ -5556,7 +5556,7 @@ abstract class Model extends AbstractInjectionAware implements
                  * Get the value of the field from the current model
                  * Check if the relation is a has-many-to-many
                  */
-                $isThrough = (bool)$relation->isThrough();
+                $isThrough = $relation->isThrough();
 
                 /**
                  * Many-to-Many

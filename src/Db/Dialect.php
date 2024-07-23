@@ -203,20 +203,20 @@ abstract class Dialect implements DialectInterface
             /**
              * The index "0" is the column field
              */
-            $columnField      = $column[0];
+            $columnField = $column[0];
             if (is_array($columnField)) {
                 $columnExpression = [
                     "type"  => "scalar",
-                    "value" => $columnField
+                    "value" => $columnField,
                 ];
             } elseif ($columnField === "*") {
                 $columnExpression = [
-                    "type" => "all"
+                    "type" => "all",
                 ];
             } else {
                 $columnExpression = [
                     "type" => "qualified",
-                    "name" => $columnField
+                    "name" => $columnField,
                 ];
             }
 

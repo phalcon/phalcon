@@ -2200,7 +2200,7 @@ class Manager implements ManagerInterface, InjectionAwareInterface, EventsAwareI
     /**
      * Creates a unique key to be used as index in a hash
      */
-    private function getUniqueKey(mixed $prefix, mixed $value): string|null
+    private function getUniqueKey(mixed $prefix, mixed $value): string | null
     {
         $result = '';
 
@@ -2219,8 +2219,8 @@ class Manager implements ManagerInterface, InjectionAwareInterface, EventsAwareI
 
     private function getUniqueKeyArray(array $value): string
     {
-        $return = '[';
-        $length = count($value);
+        $return  = '[';
+        $length  = count($value);
         $counter = 0;
 
         foreach ($value as $item) {

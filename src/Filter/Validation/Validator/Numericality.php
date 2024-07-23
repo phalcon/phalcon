@@ -17,7 +17,6 @@ use Phalcon\Filter\Validation;
 use Phalcon\Filter\Validation\AbstractValidator;
 
 use function preg_match;
-use function str_replace;
 
 /**
  * Check for a valid numeric value
@@ -72,8 +71,8 @@ class Numericality extends AbstractValidator
     public function validate(Validation $validation, string $field): bool
     {
         // Dump spaces in the string if we have any
-        $value   = $validation->getValue($field);
-        $value   = (string) $value;
+        $value = $validation->getValue($field);
+        $value = (string)$value;
 
         if (true === $this->allowEmpty($field, $value)) {
             return true;
