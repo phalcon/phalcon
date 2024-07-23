@@ -26,9 +26,6 @@ use Phalcon\Tests\Models\InvoicesMap;
 use function date;
 use function getOptionsMysql;
 use function uniqid;
-use function version_compare;
-
-use const PHP_VERSION;
 
 class ToArrayCest
 {
@@ -204,7 +201,7 @@ class ToArrayCest
                 'created_at'  => $date,
             ],
         ];
-        $actual = $result->toArray();
+        $actual   = $result->toArray();
         $I->assertSame($expected, $actual);
     }
 

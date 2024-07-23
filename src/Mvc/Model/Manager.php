@@ -25,7 +25,7 @@ use Phalcon\Mvc\Model\Resultset\Simple;
 use Phalcon\Mvc\ModelInterface;
 use Phalcon\Parsers\Parser;
 use Phalcon\Support\Settings;
-use Phalcon\Traits\Helper\Str\CamelizeTrait;
+use Phalcon\Traits\Helper\Str\UncamelizeTrait;
 use ReflectionClass;
 use ReflectionProperty;
 
@@ -68,9 +68,9 @@ use function strtolower;
  */
 class Manager implements ManagerInterface, InjectionAwareInterface, EventsAwareInterface
 {
-    use CamelizeTrait;
     use EventsAwareTrait;
     use InjectionAwareTrait;
+    use UncamelizeTrait;
 
     /**
      * @var array
@@ -1175,7 +1175,7 @@ class Manager implements ManagerInterface, InjectionAwareInterface, EventsAwareI
         if (!isset($this->sources[$entityName])) {
             $this->setModelSource(
                 $model,
-                $this->toCamelize($namespaceName)
+                $this->toUncamelize($modelName)
             );
         }
 
@@ -1357,7 +1357,11 @@ class Manager implements ManagerInterface, InjectionAwareInterface, EventsAwareI
             $placeholders["APR0"] = $record->readAttribute($fields);
         } else {
             foreach ($relation->getFields() as $refPosition => $field) {
-                $conditions[]                       = "[" . $referencedFields[$refPosition] . "] = :APR" . $refPosition . ":";
+                $conditions[] = "["
+                    . $referencedFields[$refPosition]
+                    . "] = :APR"
+                    . $refPosition . ":";
+
                 $placeholders["APR" . $refPosition] = $record->readAttribute($field);
             }
         }
@@ -1417,13 +1421,14 @@ class Manager implements ManagerInterface, InjectionAwareInterface, EventsAwareI
             $bind = $glue['bind'] ?? [];
             unset($glue['di']);
             unset($glue['bind']);
-            $glue = $glue + $bind;
+            $glue      = $glue + $bind;
             $uniqueKey = sha1(
                 $referencedModel
                 . implode('-', $glue)
                 . $retrieveMethod
             );
-            $records   = $this->getReusableRecords($referencedModel, $uniqueKey);
+
+            $records = $this->getReusableRecords($referencedModel, $uniqueKey);
 
             if (is_array($records) || is_object($records)) {
                 return $records;

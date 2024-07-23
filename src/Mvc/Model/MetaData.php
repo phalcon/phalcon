@@ -20,8 +20,8 @@ use Phalcon\Mvc\Model\MetaData\Strategy\Introspection;
 use Phalcon\Mvc\Model\MetaData\Strategy\StrategyInterface;
 use Phalcon\Mvc\ModelInterface;
 use Phalcon\Parsers\Parser;
-use Phalcon\Traits\Php\IniTrait;
 use Phalcon\Support\Settings;
+use Phalcon\Traits\Php\IniTrait;
 
 use function call_user_func;
 use function is_array;
@@ -220,6 +220,20 @@ abstract class MetaData extends Injectable implements MetaDataInterface
     }
 
     /**
+     * Returns the DependencyInjector container
+     */
+    public function getDI(): DiInterface
+    {
+        if (null === $this->container) {
+            throw new Exception(
+                "A dependency injection container is required to access internal services"
+            );
+        }
+
+        return $this->container;
+    }
+
+    /**
      * Returns attributes and their data types
      *
      *```php
@@ -277,20 +291,6 @@ abstract class MetaData extends Injectable implements MetaDataInterface
             return $data;
         }
         throw new Exception("The meta-data is invalid or is corrupt");
-    }
-
-    /**
-     * Returns the DependencyInjector container
-     */
-    public function getDI(): DiInterface
-    {
-        if (null === $this->container) {
-            throw new Exception(
-                "A dependency injection container is required to access internal services"
-            );
-        }
-
-        return $this->container;
     }
 
     /**
@@ -585,6 +585,7 @@ abstract class MetaData extends Injectable implements MetaDataInterface
      *     )
      * );
      *```
+     *
      * @todo check the return type; 8 seems to be only string
      */
     final public function readMetaDataIndex(ModelInterface $model, int $index): mixed
@@ -826,6 +827,7 @@ abstract class MetaData extends Injectable implements MetaDataInterface
                         /**
                          * Get the meta-data extraction strategy
                          */
+                        var_dump(get_class($model));
                         $container     = $this->getDI();
                         $strategy      = $this->getStrategy();
                         $modelMetadata = $strategy->getMetaData(

@@ -80,21 +80,6 @@ interface ModelInterface
     ): ModelInterface;
 
     /**
-     * Returns a hydrated result based on the data and the column map
-     *
-     * @param array $data
-     * @param mixed $columnMap
-     * @param int   $hydrationMode
-     *
-     * @return mixed
-     */
-    public static function cloneResultMapHydrate(
-        array $data,
-        mixed $columnMap,
-        int $hydrationMode
-    );
-
-    /**
      * Assigns values to a model from an array returning a new model
      *
      * @param ModelInterface|Row $base
@@ -111,7 +96,22 @@ interface ModelInterface
         mixed $columnMap,
         int $dirtyState = 0,
         bool $keepSnapshots = false
-    ): ModelInterface|ResultInterface;
+    ): ModelInterface | ResultInterface;
+
+    /**
+     * Returns a hydrated result based on the data and the column map
+     *
+     * @param array $data
+     * @param mixed $columnMap
+     * @param int   $hydrationMode
+     *
+     * @return mixed
+     */
+    public static function cloneResultMapHydrate(
+        array $data,
+        mixed $columnMap,
+        int $hydrationMode
+    );
 
     /**
      * Allows to count how many records match the specified conditions
@@ -174,7 +174,7 @@ interface ModelInterface
      *
      * @return bool|null
      */
-    public function fireEvent(string $eventName): bool|null;
+    public function fireEvent(string $eventName): bool | null;
 
     /**
      * Fires an event, implicitly calls behaviors and listeners in the events
@@ -185,7 +185,7 @@ interface ModelInterface
      *
      * @return bool|null
      */
-    public function fireEventCancel(string $eventName): bool|null;
+    public function fireEventCancel(string $eventName): bool | null;
 
     /**
      * Returns one of the DIRTY_STATE_* constants telling if the record exists

@@ -69,11 +69,11 @@ use function method_exists;
 use function property_exists;
 use function serialize;
 use function spl_object_id;
+use function str_starts_with;
 use function strtolower;
 use function substr;
 use function trigger_error;
 use function unserialize;
-use function var_dump;
 
 /**
  * Phalcon\Mvc\Model connects business objects and database tables to create a
@@ -1028,7 +1028,7 @@ abstract class Model extends AbstractInjectionAware implements EntityInterface, 
         mixed $columnMap,
         int $dirtyState = 0,
         bool $keepSnapshots = null
-    ): ModelInterface|ResultInterface {
+    ): ModelInterface | ResultInterface {
         $instance = clone $base;
 
         // Change the dirty state to persistent
@@ -2050,7 +2050,7 @@ abstract class Model extends AbstractInjectionAware implements EntityInterface, 
      *
      * @return bool|null
      */
-    public function fireEvent(string $eventName): bool|null
+    public function fireEvent(string $eventName): bool | null
     {
         /**
          * Check if there is a method with the same name of the event
@@ -2077,7 +2077,7 @@ abstract class Model extends AbstractInjectionAware implements EntityInterface, 
      *
      * @return bool|null
      */
-    public function fireEventCancel(string $eventName): bool|null
+    public function fireEventCancel(string $eventName): bool | null
     {
         /**
          * Check if there is a method with the same name of the event
@@ -2349,9 +2349,8 @@ abstract class Model extends AbstractInjectionAware implements EntityInterface, 
          * Query the relation by alias
          */
         $className  = get_class($this);
-        $manager    = $this->modelsManager;
         $lowerAlias = strtolower($alias);
-        $relation   = $manager->getRelationByAlias(
+        $relation   = $this->modelsManager->getRelationByAlias(
             $className,
             $lowerAlias
         );
@@ -2391,7 +2390,7 @@ abstract class Model extends AbstractInjectionAware implements EntityInterface, 
              * the models manager needs to calculate the unique key from
              * the passed arguments and then check its internal cache
              */
-            $result = $manager->getRelationRecords($relation, $this, $arguments);
+            $result = $this->modelsManager->getRelationRecords($relation, $this, $arguments);
 
             /**
              * We store relationship objects in the related cache if there were no arguments.
@@ -2402,7 +2401,7 @@ abstract class Model extends AbstractInjectionAware implements EntityInterface, 
              * Individually queried related records are handled by Manager.
              * The Manager also checks and stores reusable records.
              */
-            $result = $manager->getRelationRecords($relation, $this, $arguments);
+            $result = $this->modelsManager->getRelationRecords($relation, $this, $arguments);
         }
 
         return $result;
@@ -3302,7 +3301,7 @@ abstract class Model extends AbstractInjectionAware implements EntityInterface, 
     {
         $result = self::groupResult("SUM", "sumatory", $parameters);
 
-        return is_string($result) ? (float) $result : $result;
+        return is_string($result) ? (float)$result : $result;
         //return self::groupResult("SUM", "sumatory", $parameters);
     }
 
@@ -4103,7 +4102,7 @@ abstract class Model extends AbstractInjectionAware implements EntityInterface, 
         $bindDataTypes       = $metaData->getBindTypes($this);
         $automaticAttributes = $metaData->getAutomaticCreateAttributes($this);
         $defaultValues       = $metaData->getDefaultValues($this);
-        $value = null;
+        $value               = null;
 
         $columnMap = null;
         if (Settings::get("orm.column_renaming")) {
@@ -4697,7 +4696,6 @@ abstract class Model extends AbstractInjectionAware implements EntityInterface, 
         string $method,
         array $arguments
     ) {
-        $manager     = $this->modelsManager;
         $relation    = false;
         $queryMethod = null;
         $extraArgs   = $arguments[0] ?? null;
@@ -4707,7 +4705,7 @@ abstract class Model extends AbstractInjectionAware implements EntityInterface, 
          */
         if (str_starts_with($method, "get")) {
             $alias    = substr($method, 3);
-            $relation = $manager->getRelationByAlias(
+            $relation = $this->modelsManager->getRelationByAlias(
                 $modelName,
                 $alias
             );
@@ -4728,8 +4726,7 @@ abstract class Model extends AbstractInjectionAware implements EntityInterface, 
          */
         if (str_starts_with($method, "count")) {
             $queryMethod = "count";
-
-            $relation = $manager->getRelationByAlias(
+            $relation    = $this->modelsManager->getRelationByAlias(
                 $modelName,
                 substr($method, 5)
             );
@@ -4741,7 +4738,7 @@ abstract class Model extends AbstractInjectionAware implements EntityInterface, 
                 return false;
             }
 
-            return $manager->getRelationRecords(
+            return $this->modelsManager->getRelationRecords(
                 $relation,
                 $this,
                 $extraArgs,
@@ -5287,19 +5284,15 @@ abstract class Model extends AbstractInjectionAware implements EntityInterface, 
          * Check if the method starts with "findFirst"
          */
         if (str_starts_with($method, "findFirstBy")) {
-           $type        = "findFirst";
-           $extraMethod = substr($method, 11);
-        }
-
-        /**
+            $type        = "findFirst";
+            $extraMethod = substr($method, 11);
+        } /**
          * Check if the method starts with "find"
          */
         elseif (str_starts_with($method, "findBy")) {
-            $type = "find";
+            $type        = "find";
             $extraMethod = substr($method, 6);
-        }
-
-        /**
+        } /**
          * Check if the method starts with "count"
          */
         elseif (str_starts_with($method, "countBy")) {

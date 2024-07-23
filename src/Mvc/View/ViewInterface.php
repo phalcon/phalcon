@@ -154,14 +154,14 @@ interface ViewInterface extends ViewBaseInterface
      *
      * @param array|string $templateAfter
      */
-    public function setTemplateAfter(array|string $templateAfter);
+    public function setTemplateAfter(array | string $templateAfter);
 
     /**
      * Appends template before controller layout
      *
      * @param array|string $templateBefore
      */
-    public function setTemplateBefore(array|string $templateBefore);
+    public function setTemplateBefore(array | string $templateBefore);
 
     /**
      * Starts rendering process enabling the output buffering
