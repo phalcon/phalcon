@@ -3298,7 +3298,10 @@ abstract class Model extends AbstractInjectionAware implements EntityInterface, 
      */
     public static function sum(mixed $parameters = null): float | ResultsetInterface
     {
-        return self::groupResult("SUM", "sumatory", $parameters);
+        $result = self::groupResult("SUM", "sumatory", $parameters);
+
+        return is_string($result) ? (float) $result : $result;
+        //return self::groupResult("SUM", "sumatory", $parameters);
     }
 
     /**
