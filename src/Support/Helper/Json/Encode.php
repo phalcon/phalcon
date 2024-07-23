@@ -56,7 +56,7 @@ class Encode
         /**
          * Need to clear the json_last_error() before the code below
          */
-        $encoded = json_encode(null);
+        json_encode(null);
         $encoded = json_encode($data, $options, $depth);
         $error   = json_last_error();
         $message = json_last_error_msg();

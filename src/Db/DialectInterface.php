@@ -299,7 +299,7 @@ interface DialectInterface
      *
      * @return string
      */
-    public function limit(string $sqlQuery, array|int $number): string;
+    public function limit(string $sqlQuery, array | int $number): string;
 
     /**
      * List all tables in database

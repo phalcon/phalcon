@@ -63,7 +63,7 @@ abstract class AbstractAdapter implements SessionHandlerInterface
      *
      * @return false|int
      */
-    public function gc(int $max_lifetime): false|int
+    public function gc(int $max_lifetime): false | int
     {
         return 1;
     }

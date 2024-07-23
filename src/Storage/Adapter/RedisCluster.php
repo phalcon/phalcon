@@ -21,7 +21,6 @@ use RedisCluster as RedisService;
 use Throwable;
 
 use function defined;
-use function is_bool;
 use function mb_strtolower;
 
 /**
@@ -136,71 +135,6 @@ class RedisCluster extends Redis
         }
 
         return $this->adapter;
-    }
-
-    /**
-     * Stores data in the adapter
-     *
-     * @param string $prefix
-     *
-     * @return array
-     * @throws StorageException|SupportException
-     */
-    public function getKeys(string $prefix = ''): array
-    {
-        return $this->getFilteredKeys(
-            $this->getAdapter()
-                 ->keys('*'),
-            $prefix
-        );
-    }
-
-    /**
-     * Stores data in the adapter forever. The key needs to manually deleted
-     * from the adapter.
-     *
-     * @param string $key
-     * @param mixed  $value
-     *
-     * @return bool
-     * @throws StorageException|SupportException
-     */
-    public function setForever(string $key, mixed $data): bool
-    {
-        $result = $this->getAdapter()
-                       ->set($key, $this->getSerializedData($data))
-        ;
-
-        return is_bool($result) ? $result : false;
-    }
-
-    /**
-     * Decrements a stored number
-     *
-     * @param string $key
-     * @param int    $value
-     *
-     * @return int
-     * @throws StorageException|SupportException
-     */
-    protected function doDecrement(string $key, int $value = 1): false | int
-    {
-        return $this->getAdapter()
-                    ->decrBy($key, $value)
-        ;
-    }
-
-    /**
-     * Reads data from the adapter
-     *
-     * @param string $key
-     *
-     * @return bool
-     * @throws StorageException|SupportException
-     */
-    protected function doDelete(string $key): bool
-    {
-        return (bool)$this->getAdapter()->del($key);
     }
 
 

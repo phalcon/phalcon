@@ -52,18 +52,18 @@ class TranslateFactory
      * Factory to create an instance from a Config object
      *
      * @param array<string, mixed>|ConfigInterface $config = {
-     *      'adapter'       : string,
-     *      'options'       : array {
-     *          'content'       : string,
-     *          'delimiter'     : string,
-     *          'enclosure'     : string,
-     *          'locale'        : string,
-     *          'defaultDomain' : string,
-     *          'directory'     : string,
-     *          'category'      : string,
-     *          'triggerError'  : bool,
-     *      }
-     * }
+     *                                                     'adapter'       : string,
+     *                                                     'options'       : array {
+     *                                                     'content'       : string,
+     *                                                     'delimiter'     : string,
+     *                                                     'enclosure'     : string,
+     *                                                     'locale'        : string,
+     *                                                     'defaultDomain' : string,
+     *                                                     'directory'     : string,
+     *                                                     'category'      : string,
+     *                                                     'triggerError'  : bool,
+     *                                                     }
+     *                                                     }
      *
      * @return AdapterInterface
      * @throws SupportException

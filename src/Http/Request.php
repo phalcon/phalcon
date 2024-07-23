@@ -16,7 +16,6 @@ namespace Phalcon\Http;
 use Phalcon\Di\AbstractInjectionAware;
 use Phalcon\Events\EventsAwareInterface;
 use Phalcon\Events\Exception as EventsException;
-use Phalcon\Events\ManagerInterface;
 use Phalcon\Events\Traits\EventsAwareTrait;
 use Phalcon\Filter\FilterInterface;
 use Phalcon\Http\Message\Interfaces\RequestMethodInterface;
@@ -291,7 +290,7 @@ class Request extends AbstractInjectionAware implements
      */
     public function getDigestAuth(): array
     {
-        $auth   = [];
+        $auth = [];
         if (isset($_SERVER['PHP_AUTH_DIGEST'])) {
             $matches = [];
             $digest  = $_SERVER['PHP_AUTH_DIGEST'];
@@ -471,7 +470,7 @@ class Request extends AbstractInjectionAware implements
      */
     final public function getHeader(string $header): string
     {
-        $name   = strtoupper(strtr($header, '-', '_'));
+        $name = strtoupper(strtr($header, '-', '_'));
 
         if (isset($_SERVER[$name])) {
             return $_SERVER[$name];

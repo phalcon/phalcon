@@ -18,31 +18,6 @@ use Phalcon\Messages\MessageInterface;
 class MessageFixture implements MessageInterface
 {
     /**
-     * @var string
-     */
-    protected string $message;
-
-    /**
-     * @var string
-     */
-    protected string $field;
-
-    /**
-     * @var string
-     */
-    protected string $type;
-
-    /**
-     * @var int
-     */
-    protected int $code;
-
-    /**
-     * @var array
-     */
-    protected array $metaData = [];
-
-    /**
      * Phalcon\Messages\Message constructor
      *
      * @param string $message
@@ -52,17 +27,12 @@ class MessageFixture implements MessageInterface
      * @param array  $metaData
      */
     public function __construct(
-        string $message,
-        string $field = "",
-        string $type = "",
-        int $code = 0,
-        array $metaData = []
+        protected string $message,
+        protected string $field = "",
+        protected string $type = "",
+        protected int $code = 0,
+        protected array $metaData = []
     ) {
-        $this->message  = $message;
-        $this->field    = $field;
-        $this->type     = $type;
-        $this->code     = $code;
-        $this->metaData = $metaData;
     }
 
     /**

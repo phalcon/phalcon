@@ -46,7 +46,7 @@ class Settings
      *
      * @return bool|int|null
      */
-    public static function get(string $key): bool|int|null
+    public static function get(string $key): bool | int | null
     {
         return self::$settings[$key] ?? null;
     }
@@ -57,7 +57,7 @@ class Settings
      *
      * @return void
      */
-    public static function set(string $key, bool|int $value): void
+    public static function set(string $key, bool | int $value): void
     {
         if (true === isset(self::$settings[$key])) {
             self::$settings[$key] = $value;

@@ -129,7 +129,7 @@ class Stream extends Noop
      *
      * @return false|int
      */
-    public function gc(int $max_lifetime): false|int
+    public function gc(int $max_lifetime): false | int
     {
         $pattern = $this->path . $this->prefix . "*";
         $time    = time() - $max_lifetime;
