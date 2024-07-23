@@ -6,13 +6,13 @@ labels: 'bug, status: unverified'
 assignees: ''
 ---
 
-Questions? Forum: https://phalcon.io/forum or Discord: https://phalcon.io/discord
+Questions? Discussions: https://phalcon.io/discussions or Discord: https://phalcon.io/discord
 
-**Describe the bug**
+## Describe the bug
 
 A clear and concise description of what the bug is.
 
-**To Reproduce**
+## To Reproduce
 
 Steps to reproduce the behavior:
 
@@ -26,7 +26,7 @@ Steps to reproduce the behavior:
 // paste output here
 ```
 
-**Expected behavior**
+## Expected behavior
 
 A clear and concise description of what you expected to happen.
 
@@ -34,18 +34,18 @@ A clear and concise description of what you expected to happen.
 // paste code
 ```
 
-**Screenshots**
+## Screenshots
 
 If applicable, add screenshots to help explain your problem.
 
-**Details**
+## Details
 
--  Phalcon version
--  PHP Version: (`php -v`)
--  Operating System:
--  Server: Nginx | Apache | Other
--  Other related info (Database, table schema):
+- Phalcon version
+- PHP Version: (`php -v`)
+- Operating System:
+- Server: Nginx | Apache | Other
+- Other related info (Database, table schema):
 
-**Additional context**
+## Additional context
 
 Add any other context about the problem here.
