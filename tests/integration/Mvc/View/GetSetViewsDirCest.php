@@ -30,15 +30,12 @@ class GetSetViewsDirCest
 
         $view = new View();
 
-        $view->setBasePath(
-            dataDir()
-        );
+        $view->setBasePath(dataDir());
 
         $view->setViewsDir('views/');
 
-        $I->assertEquals(
-            'views/',
-            $view->getViewsDir()
-        );
+        $expected = 'views/';
+        $actual   = $view->getViewsDir();
+        $I->assertSame($expected, $actual);
     }
 }
