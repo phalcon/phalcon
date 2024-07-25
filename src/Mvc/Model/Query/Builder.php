@@ -697,9 +697,9 @@ class Builder implements BuilderInterface, InjectionAwareInterface
     /**
      * Return the current having clause
      *
-     * @return string
+     * @return string|null
      */
-    public function getHaving(): string
+    public function getHaving(): string|null
     {
         return $this->having;
     }
@@ -753,7 +753,7 @@ class Builder implements BuilderInterface, InjectionAwareInterface
      *
      * @return array|string
      */
-    public function getOrderBy(): array | string
+    public function getOrderBy(): array | string | null
     {
         return $this->order;
     }
@@ -1643,7 +1643,7 @@ class Builder implements BuilderInterface, InjectionAwareInterface
      *
      * @return BuilderInterface
      */
-    public function orderBy(array | string $orderBy): BuilderInterface
+    public function orderBy(array | string | null $orderBy): BuilderInterface
     {
         $this->order = $orderBy;
 
