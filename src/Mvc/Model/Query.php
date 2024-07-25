@@ -2713,7 +2713,7 @@ class Query implements QueryInterface, InjectionAwareInterface
                          * escape them
                          */
                         if (str_contains($value, "'")) {
-                            $escapedValue = Parser::ormSingleQuotes($value);
+                            $escapedValue = $this->ormSingleQuotes($value);
                         } else {
                             $escapedValue = $value;
                         }
@@ -4490,5 +4490,18 @@ class Query implements QueryInterface, InjectionAwareInterface
         }
 
         return $model->getWriteConnection();
+    }
+
+    private function ormSingleQuotes(mixed $str): mixed
+    {
+        // Check if input is a string
+        if (!is_string($str)) {
+            return $str;
+        }
+
+        // Replace unescaped single quotes with double single quotes
+        $escaped = preg_replace("/(?<!\\\\)'/", "''", $str);
+
+        return $escaped;
     }
 }

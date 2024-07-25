@@ -51,9 +51,11 @@ class Doctype
     public function __invoke(
         int $flag = self::HTML5,
         string $delimiter = PHP_EOL
-    ): void {
+    ): self {
         $this->flag      = $flag;
         $this->delimiter = $delimiter;
+
+        return $this;
     }
 
     /**

@@ -58,6 +58,18 @@ abstract class AbstractSeries extends AbstractHelper
     }
 
     /**
+     * Resets the internal store.
+     *
+     * @return $this
+     */
+    public function reset(): static
+    {
+        $this->store = [];
+
+        return $this;
+    }
+
+    /**
      * Returns the tag name.
      *
      * @return string
