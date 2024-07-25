@@ -1,4 +1,4 @@
-<?php  //[STAMP] 45489313b3bfa94f3dfb42dc87699345
+<?php  //[STAMP] eb3fa26ba59cfd570afa406bac83e5b9
 // phpcs:ignoreFile
 namespace _generated;
 
@@ -2612,6 +2612,17 @@ trait IntegrationTesterActions
      */
     public function writeToFile(string $filename, string $contents): void {
         $this->getScenario()->runStep(new \Codeception\Step\Action('writeToFile', func_get_args()));
+    }
+
+ 
+    /**
+     * [!] Method is generated. Documentation taken from corresponding module.
+     *
+     * Returns a directory string with the trailing directory separator
+     * @see \Helper\Unit::getDirSeparator()
+     */
+    public function getDirSeparator(string $directory): string {
+        return $this->getScenario()->runStep(new \Codeception\Step\Action('getDirSeparator', func_get_args()));
     }
 
  
