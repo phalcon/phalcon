@@ -13,7 +13,7 @@ declare(strict_types=1);
 
 namespace Phalcon\Annotations;
 
-use Phalcon\Parsers\Enum as AnnEnum;
+use Phalcon\Parsers\Annotations\Enum as AnnEnum;
 
 /**
  * Represents a single annotation in an annotations collection

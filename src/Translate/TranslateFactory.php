@@ -24,10 +24,6 @@ use Phalcon\Translate\Adapter\Gettext;
 use Phalcon\Translate\Adapter\NativeArray;
 
 /**
- * Class TranslateFactory
- *
- * @package Phalcon\Translate
- *
  * @property InterpolatorFactory $interpolator
  */
 class TranslateFactory
