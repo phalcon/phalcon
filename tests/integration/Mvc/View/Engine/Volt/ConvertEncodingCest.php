@@ -17,6 +17,9 @@ use IntegrationTester;
 use Phalcon\Mvc\View;
 use Phalcon\Mvc\View\Engine\Volt;
 
+use function chr;
+use function str_split;
+
 /**
  * Class ConvertEncodingCest
  */
@@ -38,14 +41,14 @@ class ConvertEncodingCest
         $text     = 'Schlüssel';
         $from     = 'latin1';
         $to       = 'utf8';
-        $expected = 'SchlÃ¼ssel';
+        $expected = 'Schl' . chr(252) . 'ssel';
         $actual   = $engine->convertEncoding($text, $from, $to);
         $I->assertEquals($expected, $actual);
 
-        $text     = 'SchlÃ¼ssel';
+        $text     = 'Schl' . chr(252) . 'ssel';
         $from     = 'utf8';
         $to       = 'latin1';
-        $expected = 'Schlüssel';
+        $expected = 'Schl' . chr(195) . chr(188) . 'ssel';
         $actual   = $engine->convertEncoding($text, $from, $to);
         $I->assertEquals($expected, $actual);
 
