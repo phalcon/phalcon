@@ -35,11 +35,11 @@ use Phalcon\Html\TagFactory;
 use Phalcon\Http\Request;
 use Phalcon\Http\Response;
 use Phalcon\Mvc\Model\Manager as ModelsManager;
-use Phalcon\Mvc\Model\Metadata\Apcu as MetadataApcu;
-use Phalcon\Mvc\Model\Metadata\Memory as MetadataMemory;
-use Phalcon\Mvc\Model\Metadata\Libmemcached as MetadataMemcached;
-use Phalcon\Mvc\Model\Metadata\Redis as MetadataRedis;
-use Phalcon\Mvc\Model\Metadata\Stream as MetadataStream;
+use Phalcon\Mvc\Model\MetaData\Apcu as MetaDataApcu;
+use Phalcon\Mvc\Model\MetaData\Memory as MetaDataMemory;
+use Phalcon\Mvc\Model\MetaData\Libmemcached as MetaDataMemcached;
+use Phalcon\Mvc\Model\MetaData\Redis as MetaDataRedis;
+use Phalcon\Mvc\Model\MetaData\Stream as MetaDataStream;
 use Phalcon\Mvc\View;
 use Phalcon\Mvc\View\Simple;
 use Phalcon\Session\Adapter\Libmemcached as SessionLibmemcached;
@@ -176,24 +176,24 @@ trait DiTrait
             case 'filter':
                 return (new Filter\FilterFactory())->newInstance();
             case 'metadataMemory':
-                return new MetadataMemory();
+                return new MetaDataMemory();
             case 'metadataApcu':
-                return new MetadataApcu(
+                return new MetaDataApcu(
                     new AdapterFactory(new SerializerFactory()),
                     []
                 );
             case 'metadataLibmemcached':
-                return new MetadataMemcached(
+                return new MetaDataMemcached(
                     new AdapterFactory(new SerializerFactory()),
                     getOptionsLibmemcached()
                 );
             case 'metadataRedis':
-                return new MetadataRedis(
+                return new MetaDataRedis(
                     new AdapterFactory(new SerializerFactory()),
                     getOptionsRedis()
                 );
             case 'metadataStream':
-                return new MetadataStream(
+                return new MetaDataStream(
                     new AdapterFactory(new SerializerFactory()),
                     ['options' => ['storageDir' => outputDir()] ],
                 );
