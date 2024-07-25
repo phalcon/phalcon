@@ -23,6 +23,9 @@ use Phalcon\Events\Manager as EventsManager;
 use Phalcon\Filter\FilterFactory;
 use Phalcon\Html\Escaper;
 use Phalcon\Html\TagFactory;
+use Phalcon\Mvc\Model\Manager as ModelsManager;
+use Phalcon\Mvc\Model\MetaData\Memory as MetadataMemory;
+use Phalcon\Mvc\Model\Transaction\Manager as TransactionManager;
 use Phalcon\Support\HelperFactory;
 
 /**
@@ -32,8 +35,6 @@ use Phalcon\Support\HelperFactory;
  * registers all the services provided by the framework.
  * Thanks to this, the developer does not need to register each service individually.
  * This class is specially suitable for CLI applications
- *
- * @property Router $router
  */
 class Cli extends FactoryDefault
 {
@@ -53,8 +54,8 @@ class Cli extends FactoryDefault
             "eventsManager" => new Service(EventsManager::class, true),
             "filter"        => new Service($filter->newInstance(), true),
             "helper"        => new Service(HelperFactory::class, true),
-            //            "modelsManager"      => new Service("Phalcon\\Mvc\\Model\\Manager", true),
-            //            "modelsMetadata"     => new Service("Phalcon\\Mvc\\Model\\MetaData\\Memory", true),
+            "modelsManager"  => new Service(ModelsManager::class, true),
+            "modelsMetadata" => new Service(MetadataMemory::class, true),
             "router"        => new Service(Router::class, true),
             "security"      => new Service(Security::class, true),
             'tag'           => new Service(
@@ -69,7 +70,7 @@ class Cli extends FactoryDefault
                 ],
                 true
             ),
-            //            "transactionManager" => new Service("Phalcon\\Mvc\\Model\\Transaction\\Manager", true)
+            "transactionManager" => new Service(TransactionManager::class, true)
         ];
     }
 }
