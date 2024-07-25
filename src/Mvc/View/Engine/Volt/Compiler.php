@@ -1780,6 +1780,8 @@ class Compiler implements InjectionAwareInterface
                 }
             }
         }
+
+        return null;
     }
 
     /**
