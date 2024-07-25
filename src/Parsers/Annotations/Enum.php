@@ -185,14 +185,14 @@ class Enum
     public const PHVOLT_SCANNER_RETCODE_EOF        = -1;
     public const PHVOLT_SCANNER_RETCODE_ERR        = -2;
     public const PHVOLT_SCANNER_RETCODE_IMPOSSIBLE = -3;
-    public const PHVOLT_T_ADD                      = '+';
+    public const PHVOLT_T_ADD                      = 43; //'+';
 
     /* Literals & Identifiers */
     public const PHVOLT_T_ADD_ASSIGN  = 281;
     public const PHVOLT_T_AND         = 266;
     public const PHVOLT_T_ARRAY       = 360;
     public const PHVOLT_T_ARRAYACCESS = 361;
-    public const PHVOLT_T_ASSIGN      = '=';
+    public const PHVOLT_T_ASSIGN      = 61; //'=';
     public const PHVOLT_T_AUTOESCAPE  = 317;
     public const PHVOLT_T_BLOCK       = 307;
 
@@ -201,21 +201,21 @@ class Enum
     public const PHVOLT_T_CACHE            = 314;
     public const PHVOLT_T_CALL             = 325;
     public const PHVOLT_T_CASE             = 412;
-    public const PHVOLT_T_CBRACKET_CLOSE   = '}';
-    public const PHVOLT_T_CBRACKET_OPEN    = '{';
+    public const PHVOLT_T_CBRACKET_CLOSE   = 125; //'}';
+    public const PHVOLT_T_CBRACKET_OPEN    = 123; //'{';
     public const PHVOLT_T_CLOSE_DELIMITER  = 331;
     public const PHVOLT_T_CLOSE_EDELIMITER = 333;
     public const PHVOLT_T_COLON            = 277;
     public const PHVOLT_T_COMMA            = 269;
-    public const PHVOLT_T_CONCAT           = '~';
+    public const PHVOLT_T_CONCAT           = 126; //'~';
     public const PHVOLT_T_CONTINUE         = 319;
     public const PHVOLT_T_DECR             = 280;
     public const PHVOLT_T_DEFAULT          = 413;
     public const PHVOLT_T_DEFINED          = 312;
-    public const PHVOLT_T_DIV              = '/';
+    public const PHVOLT_T_DIV              = 47; //'/';
     public const PHVOLT_T_DIV_ASSIGN       = 284;
     public const PHVOLT_T_DO               = 316;
-    public const PHVOLT_T_DOT              = '.';
+    public const PHVOLT_T_DOT              = 46; //'.';
     public const PHVOLT_T_DOUBLE           = 259;
     public const PHVOLT_T_ECHO             = 359;
     public const PHVOLT_T_ELSE             = 301;
@@ -242,7 +242,7 @@ class Enum
     public const PHVOLT_T_FCALL        = 350;
     public const PHVOLT_T_FILTER       = 124;
     public const PHVOLT_T_FOR          = 304;
-    public const PHVOLT_T_GREATER      = '>';
+    public const PHVOLT_T_GREATER      = 62; //'>';
     public const PHVOLT_T_GREATEREQUAL = 271;
     public const PHVOLT_T_IDENTICAL    = 274;
     public const PHVOLT_T_IDENTIFIER   = 265;
@@ -262,14 +262,14 @@ class Enum
     public const PHVOLT_T_ISSCALAR       = 390;
     public const PHVOLT_T_ISSET          = 363;
     public const PHVOLT_T_ITERABLE       = 385;
-    public const PHVOLT_T_LESS           = '<';
+    public const PHVOLT_T_LESS           = 60; //'<';
     public const PHVOLT_T_LESSEQUAL      = 270;
     public const PHVOLT_T_MACRO          = 322;
     public const PHVOLT_T_MINUS          = 368;
-    public const PHVOLT_T_MOD            = '%';
-    public const PHVOLT_T_MUL            = '*';
+    public const PHVOLT_T_MOD            = 37; //'%';
+    public const PHVOLT_T_MUL            = 42; //'*';
     public const PHVOLT_T_MUL_ASSIGN     = 283;
-    public const PHVOLT_T_NOT            = '!';
+    public const PHVOLT_T_NOT            = 33; //'!';
     public const PHVOLT_T_NOTEQUALS      = 273;
     public const PHVOLT_T_NOTIDENTICAL   = 275;
     public const PHVOLT_T_NOT_IN         = 367;
@@ -287,25 +287,25 @@ class Enum
     public const PHVOLT_T_OPEN_DELIMITER    = 330;
     public const PHVOLT_T_OPEN_EDELIMITER   = 332;
     public const PHVOLT_T_OR                = 267;
-    public const PHVOLT_T_PARENTHESES_CLOSE = ')';
-    public const PHVOLT_T_PARENTHESES_OPEN  = '(';
-    public const PHVOLT_T_PIPE              = '|';
+    public const PHVOLT_T_PARENTHESES_CLOSE = 41; //')';
+    public const PHVOLT_T_PARENTHESES_OPEN  = 40; //'(';
+    public const PHVOLT_T_PIPE              = 124; //'|';
     public const PHVOLT_T_PLUS              = 369;
     public const PHVOLT_T_POW               = 278;
     public const PHVOLT_T_QUALIFIED         = 355;
-    public const PHVOLT_T_QUESTION          = '?';
+    public const PHVOLT_T_QUESTION          = 63; //'?';
     public const PHVOLT_T_RANGE             = 276;
     public const PHVOLT_T_RAW               = 400;
     public const PHVOLT_T_RAW_FRAGMENT      = 357;
     public const PHVOLT_T_RESOLVED_EXPR     = 364;
     public const PHVOLT_T_RETURN            = 327;
-    public const PHVOLT_T_SBRACKET_CLOSE    = ']';
-    public const PHVOLT_T_SBRACKET_OPEN     = '[';
+    public const PHVOLT_T_SBRACKET_CLOSE    = 91; //']';
+    public const PHVOLT_T_SBRACKET_OPEN     = 93; //'[';
     public const PHVOLT_T_SCALAR            = 384;
     public const PHVOLT_T_SET               = 306;
     public const PHVOLT_T_SLICE             = 365;
     public const PHVOLT_T_STRING            = 260;
-    public const PHVOLT_T_SUB               = '-';
+    public const PHVOLT_T_SUB               = 45; //'-';
     public const PHVOLT_T_SUB_ASSIGN        = 282;
 
     /* switch/ -case statement */
