@@ -161,7 +161,7 @@ class View extends Injectable implements ViewInterface, EventsAwareInterface
      * @var string
      */
     protected string $partialsDir = ""; // TODO: Make always array
-/**
+    /**
      * @var array|null
      */
     protected ?array $pickView = null;

@@ -14,13 +14,11 @@ declare(strict_types=1);
 namespace Phalcon\Mvc\View\Engine\Volt;
 
 use Closure;
-use Phalcon\Di\DiInterface;
-use Phalcon\Di\Injectable;
 use Phalcon\Di\InjectionAwareInterface;
 use Phalcon\Di\Traits\InjectionAwareTrait;
 use Phalcon\Mvc\View\ViewBaseInterface;
-use Phalcon\Parsers\Volt\Enum;
 use Phalcon\Parsers\Parser;
+use Phalcon\Parsers\Volt\Enum;
 use Phalcon\Support\Traits\FilePathTrait;
 use Phalcon\Traits\Helper\Str\CamelizeTrait;
 
@@ -108,34 +106,28 @@ class Compiler implements InjectionAwareInterface
      * @var bool
      */
     protected bool $extended = false;
-
-    /**
-     * @var array
-     */
-    protected array $extensions = [];
-
     /**
      * @var array|bool
      *
      * TODO: Make it always array
      */
-    protected array|bool $extendedBlocks;
-
+    protected array | bool $extendedBlocks;
+    /**
+     * @var array
+     */
+    protected array $extensions = [];
     /**
      * @var array
      */
     protected array $filters = [];
-
-    /**
-     * @var int
-     */
-    protected int $foreachLevel = 0;
-
     /**
      * @var array
      */
     protected array $forElsePointers = [];
-
+    /**
+     * @var int
+     */
+    protected int $foreachLevel = 0;
     /**
      * @var array
      */
@@ -238,6 +230,7 @@ class Compiler implements InjectionAwareInterface
      * @param array $expr
      *
      * @return string
+     * @throws Exception
      */
     public function attributeReader(array $expr): string
     {
@@ -252,8 +245,8 @@ class Compiler implements InjectionAwareInterface
              * Check if the variable is the loop context
              */
             if ($variable === "loop") {
-                $level = $this->foreachLevel;
-                $exprCode .= "$" . $this->getUniquePrefix() . $level . "loop";
+                $level                      = $this->foreachLevel;
+                $exprCode                   .= "$" . $this->getUniquePrefix() . $level . "loop";
                 $this->loopPointers[$level] = $level;
             } else {
                 /**
@@ -284,7 +277,7 @@ class Compiler implements InjectionAwareInterface
         }
 
         $exprCode .= "->";
-        $right     = $expr["right"];
+        $right    = $expr["right"];
 
         if ($right["type"] == Enum::PHVOLT_T_IDENTIFIER) {
             $exprCode .= $right["value"];
@@ -305,25 +298,25 @@ class Compiler implements InjectionAwareInterface
      * require $compiler->getCompiledTemplatePath();
      *```
      *
-     * @param string templatePath
-     * @param bool extendsMode
+     * @param string $templatePath
+     * @param bool   $extendsMode
      *
-     * @throws \Phalcon\Mvc\View\Engine\Volt\Exception
-     * @return mixed
+     * @return array|mixed|string|null
+     * @throws Exception
      */
-    public function compile(string $templatePath, bool $extendsMode = false)
+    public function compile(string $templatePath, bool $extendsMode = false): mixed
     {
         /**
          * Re-initialize some properties already initialized when the object is
          * cloned
          */
-        $this->extended = false;
+        $this->extended       = false;
         $this->extendedBlocks = false;
-        $this->blocks = null;
-        $this->level = 0;
-        $this->foreachLevel = 0;
-        $this->blockLevel = 0;
-        $this->exprLevel = 0;
+        $this->blocks         = null;
+        $this->level          = 0;
+        $this->foreachLevel   = 0;
+        $this->blockLevel     = 0;
+        $this->exprLevel      = 0;
 
         $compilation = null;
 
@@ -409,7 +402,7 @@ class Compiler implements InjectionAwareInterface
                     . $templateSepPath
                     . $compiledExtension;
             }
-        } elseif (is_object($compiledPath) && $compiledPath instanceof Closure) {
+        } elseif ($compiledPath instanceof Closure) {
             /**
              * A closure can dynamically compile the path
              */
@@ -512,7 +505,7 @@ class Compiler implements InjectionAwareInterface
         /**
          * "autoescape" mode
          */
-        $autoescape       = (bool) $statement["enable"];
+        $autoescape       = (bool)$statement["enable"];
         $oldAutoescape    = $this->autoescape;
         $this->autoescape = $autoescape;
 
@@ -532,7 +525,7 @@ class Compiler implements InjectionAwareInterface
      * @param array $statement
      * @param bool  $extendsMode
      *
-     * @return void
+     * @return string
      */
     public function compileCall(array $statement, bool $extendsMode): string
     {
@@ -688,14 +681,14 @@ class Compiler implements InjectionAwareInterface
      * @param string $compiledPath
      * @param bool   $extendsMode
      *
-     * @return mixed
+     * @return array|string
      * @throws Exception
      */
     public function compileFile(
         string $path,
         string $compiledPath,
         bool $extendsMode = false
-    ) {
+    ): array|string {
         if ($path == $compiledPath) {
             throw new Exception(
                 "Template path and compilation template path cannot be the same"
@@ -742,6 +735,27 @@ class Compiler implements InjectionAwareInterface
         }
 
         return $compilation;
+    }
+
+    /**
+     * Generates a 'forelse' PHP code
+     *
+     * @return string
+     */
+    public function compileForElse(): string
+    {
+        $level = $this->foreachLevel;
+
+        if (!isset($this->forElsePointers[$level])) {
+            return "";
+        }
+
+        $prefix = $this->forElsePointers[$level];
+        if (isset($this->loopPointers[$level])) {
+            return '<?php $' . $prefix . 'incr++; } if (!$' . $prefix . 'iterated) { ?>';
+        }
+
+        return '<?php } if (!$' . $prefix . 'iterated) { ?>';
     }
 
     /**
@@ -797,8 +811,8 @@ class Compiler implements InjectionAwareInterface
                 $type = $bstatement["type"];
 
                 if ($type == Enum::PHVOLT_T_ELSEFOR) {
-                    $compilation .= '<?php $' . $prefixLevel . 'iterated = false; ?>';
-                    $forElse      = $prefixLevel;
+                    $compilation                   .= '<?php $' . $prefixLevel . 'iterated = false; ?>';
+                    $forElse                       = $prefixLevel;
                     $this->forElsePointers[$level] = $forElse;
 
                     break;
@@ -869,12 +883,16 @@ class Compiler implements InjectionAwareInterface
          * Generate the loop context inside the cycle
          */
         if (isset($loopContext[$level])) {
-            $compilation .= '<?php $' . $prefixLevel . 'loop->first = ($' . $prefixLevel . 'incr == 0); ';
-            $compilation .= '$' . $prefixLevel . 'loop->index = $' . $prefixLevel . 'incr + 1; ';
-            $compilation .= '$' . $prefixLevel . 'loop->index0 = $' . $prefixLevel . 'incr; ';
-            $compilation .= '$' . $prefixLevel . 'loop->revindex = $' . $prefixLevel . 'loop->length - $' . $prefixLevel . 'incr; ';
-            $compilation .= '$' . $prefixLevel . 'loop->revindex0 = $' . $prefixLevel . 'loop->length - ($' . $prefixLevel . 'incr + 1); ';
-            $compilation .= '$' . $prefixLevel . 'loop->last = ($' . $prefixLevel . 'incr == ($' . $prefixLevel . 'loop->length - 1)); ?>';
+            $compilation .= '<?php $'
+                . $prefixLevel . 'loop->first = ($' . $prefixLevel . 'incr == 0); '
+                . '$' . $prefixLevel . 'loop->index = $' . $prefixLevel . 'incr + 1; '
+                . '$' . $prefixLevel . 'loop->index0 = $' . $prefixLevel . 'incr; '
+                . '$' . $prefixLevel . 'loop->revindex = $' . $prefixLevel
+                . 'loop->length - $' . $prefixLevel . 'incr; '
+                . '$' . $prefixLevel . 'loop->revindex0 = $' . $prefixLevel
+                . 'loop->length - ($' . $prefixLevel . 'incr + 1); '
+                . '$' . $prefixLevel . 'loop->last = ($' . $prefixLevel
+                . 'incr == ($' . $prefixLevel . 'loop->length - 1)); ?>';
         }
 
         /**
@@ -906,27 +924,6 @@ class Compiler implements InjectionAwareInterface
         $this->foreachLevel--;
 
         return $compilation;
-    }
-
-    /**
-     * Generates a 'forelse' PHP code
-     *
-     * @return string
-     */
-    public function compileForElse(): string
-    {
-        $level = $this->foreachLevel;
-
-        if (!isset($this->forElsePointers[$level])) {
-            return "";
-        }
-
-        $prefix = $this->forElsePointers[$level];
-        if (isset($this->loopPointers[$level])) {
-            return '<?php $' . $prefix . 'incr++; } if (!$' . $prefix . 'iterated) { ?>';
-        }
-
-        return '<?php } if (!$' . $prefix . 'iterated) { ?>';
     }
 
     /**
@@ -1081,8 +1078,8 @@ class Compiler implements InjectionAwareInterface
          * Register the macro
          */
         $this->macros[$name] = $name;
-        $macroName = '$' . "this->macros['" . $name . "']";
-        $code = "<?php ";
+        $macroName           = '$' . "this->macros['" . $name . "']";
+        $code                = "<?php ";
 
         if (!isset($statement["parameters"])) {
             $code .= $macroName . " = function() { ?>";
@@ -1181,7 +1178,6 @@ class Compiler implements InjectionAwareInterface
      * $compiler = new Compiler();
      *
      * // {% set a = ['first': 1] %}
-
      * $source = [
      *     "type" => 306,
      *     "assignments" => [
@@ -1280,6 +1276,7 @@ class Compiler implements InjectionAwareInterface
      * @param bool   $extendsMode
      *
      * @return string
+     * @throws Exception
      */
     public function compileString(string $viewCode, bool $extendsMode = false): string
     {
@@ -1364,8 +1361,8 @@ class Compiler implements InjectionAwareInterface
      */
     final public function expression(array $expr, bool $doubleQuotes = false): string
     {
-        $exprCode = null;
-        $leftCode = null;
+        $exprCode  = null;
+        $leftCode  = null;
         $rightCode = null;
         $this->exprLevel++;
 
@@ -1490,9 +1487,6 @@ class Compiler implements InjectionAwareInterface
                     break;
 
                 case 61:
-                    $exprCode = $leftCode . " > " . $rightCode;
-                    break;
-
                 case 62:
                     $exprCode = $leftCode . " > " . $rightCode;
                     break;
@@ -1511,6 +1505,7 @@ class Compiler implements InjectionAwareInterface
 
                 case 258:
                 case 259:
+                case Enum::PHVOLT_T_RESOLVED_EXPR:
                     $exprCode = $expr["value"];
                     break;
 
@@ -1733,10 +1728,6 @@ class Compiler implements InjectionAwareInterface
                     $exprCode = "+" . $rightCode;
                     break;
 
-                case Enum::PHVOLT_T_RESOLVED_EXPR:
-                    $exprCode = $expr["value"];
-                    break;
-
                 default:
                     throw new Exception(
                         "Unknown expression "
@@ -1764,7 +1755,7 @@ class Compiler implements InjectionAwareInterface
      *
      * @return mixed
      */
-    final public function fireExtensionEvent(string $name, array $arguments = [])
+    final public function fireExtensionEvent(string $name, array $arguments = []): mixed
     {
         foreach ($this->extensions as $extension) {
             /**
@@ -1797,14 +1788,13 @@ class Compiler implements InjectionAwareInterface
      * @param array $expr
      * @param bool  $doubleQuotes
      *
-     * @throws \Phalcon\Mvc\View\Engine\Volt\Exception
      * @return string
+     * @throws Exception
      */
     public function functionCall(array $expr, bool $doubleQuotes = false): string
     {
-        $code          = null;
-        $nameExpr      = $expr["name"];
-        $nameType      = $nameExpr["type"];
+        $nameExpr = $expr["name"];
+        $nameType = $nameExpr["type"];
 
         /**
          * The TagFactory helpers sometimes receive line endings
@@ -1859,13 +1849,11 @@ class Compiler implements InjectionAwareInterface
                      * Execute the function closure returning the compiled
                      * definition
                      */
-                    if (is_object($definition)) {
-                        if ($definition instanceof Closure) {
-                            return call_user_func_array(
-                                $definition,
-                                [$arguments, $funcArguments]
-                            );
-                        }
+                    if ($definition instanceof Closure) {
+                        return call_user_func_array(
+                            $definition,
+                            [$arguments, $funcArguments]
+                        );
                     }
 
                     throw new Exception(
@@ -1939,6 +1927,7 @@ class Compiler implements InjectionAwareInterface
 
             /**
              * Check if it's a method in Phalcon\Tag
+             *
              * @todo This needs a lot of refactoring and will break a lot of applications if removed
              */
             if ($name === "preload") {
@@ -1947,9 +1936,10 @@ class Compiler implements InjectionAwareInterface
 
             /**
              * Check if it's a method in Phalcon\Tag
+             *
              * @todo This needs a lot of refactoring and will break a lot of applications if removed
              */
-            $method = lcfirst($this->toCamelize($name));
+            $method       = lcfirst($this->toCamelize($name));
             $arrayHelpers = [
                 'link_to'        => true,
                 'image'          => true,
@@ -2128,6 +2118,7 @@ class Compiler implements InjectionAwareInterface
      * contexts
      *
      * @return string
+     * @throws Exception
      */
     public function getUniquePrefix(): string
     {
@@ -2147,7 +2138,7 @@ class Compiler implements InjectionAwareInterface
                 $this->prefix = call_user_func_array(
                     $this->prefix,
                     [
-                        $this
+                        $this,
                     ]
                 );
             }
@@ -2188,6 +2179,7 @@ class Compiler implements InjectionAwareInterface
      * @param string $left
      *
      * @return string
+     * @throws Exception
      */
     public function resolveTest(array $test, string $left): string
     {
@@ -2454,7 +2446,6 @@ class Compiler implements InjectionAwareInterface
      */
     final protected function resolveFilter(array $filter, string $left): string
     {
-        $code = null;
         $type = $filter["type"];
 
         /**
@@ -2480,7 +2471,6 @@ class Compiler implements InjectionAwareInterface
         }
 
         $funcArguments = null;
-        $arguments     = null;
 
         /**
          * Resolve arguments
@@ -2551,13 +2541,11 @@ class Compiler implements InjectionAwareInterface
             /**
              * The definition is a closure
              */
-            if (is_object($definition)) {
-                if ($definition instanceof Closure) {
-                    return call_user_func_array(
-                        $definition,
-                        [$arguments, $funcArguments]
-                    );
-                }
+            if ($definition instanceof Closure) {
+                return call_user_func_array(
+                    $definition,
+                    [$arguments, $funcArguments]
+                );
             }
 
             /**
@@ -2658,7 +2646,7 @@ class Compiler implements InjectionAwareInterface
      * @param array $statements
      * @param bool  $extendsMode
      *
-     * @return string
+     * @return ?string
      * @throws Exception
      */
     final protected function statementList(
@@ -2842,9 +2830,9 @@ class Compiler implements InjectionAwareInterface
                         );
                     }
 
-                    $this->extended = true;
+                    $this->extended       = true;
                     $this->extendedBlocks = $tempCompilation;
-                    $blockMode = $extended;
+                    $blockMode            = $extended;
 
                     break;
 
@@ -2951,8 +2939,10 @@ class Compiler implements InjectionAwareInterface
     /**
      * Compiles a block of statements
      *
-     * @param array statements
-     * @return string|array
+     * @param mixed $statements
+     *
+     * @return mixed
+     * @throws Exception
      */
     final protected function statementListOrExtends(mixed $statements): mixed
     {
@@ -2992,6 +2982,34 @@ class Compiler implements InjectionAwareInterface
     }
 
     /**
+     * @param string $filename1
+     * @param string $filename2
+     *
+     * @return bool
+     */
+    private function compareMtime(string $filename1, string $filename2): bool
+    {
+        $statbuffer1 = @stat($filename1);
+        $statbuffer2 = @stat($filename2);
+
+        if ($statbuffer1 === false || $statbuffer2 === false) {
+            trigger_error("stat failed for one of the files", E_USER_WARNING);
+            return false;
+        }
+
+        return $statbuffer1['mtime'] >= $statbuffer2['mtime'];
+    }
+
+    private function getUniquePathKey(?string $path): string
+    {
+        if ($path) {
+            return "v" . hash('crc32b', $path);
+        }
+
+        return '';
+    }
+
+    /**
      * @param array $expression
      *
      * @return bool
@@ -3027,33 +3045,5 @@ class Compiler implements InjectionAwareInterface
         }
 
         return false;
-    }
-
-    /**
-     * @param string $filename1
-     * @param string $filename2
-     *
-     * @return bool
-     */
-    private function compareMtime(string $filename1, string $filename2)
-    {
-        $statbuffer1 = @stat($filename1);
-        $statbuffer2 = @stat($filename2);
-
-        if ($statbuffer1 === false || $statbuffer2 === false) {
-            trigger_error("stat failed for one of the files", E_USER_WARNING);
-            return false;
-        }
-
-        return $statbuffer1['mtime'] >= $statbuffer2['mtime'];
-    }
-
-    private function getUniquePathKey(?string $path): string
-    {
-        if ($path) {
-            return "v" . hash('crc32b', $path);
-        }
-
-        return '';
     }
 }
