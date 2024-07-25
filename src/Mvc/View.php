@@ -838,10 +838,11 @@ class View extends Injectable implements ViewInterface, EventsAwareInterface
              */
             $renderView = $pickView[0];
 
-            if ($layoutName === null) {
-                if (isset($pickView[1])) {
-                    $layoutName = $pickView[1];
-                }
+            if (
+                $layoutName === null &&
+                isset($pickView[1])
+            ) {
+                $layoutName = $pickView[1];
             }
         }
 
@@ -882,93 +883,88 @@ class View extends Injectable implements ViewInterface, EventsAwareInterface
             /**
              * Inserts view related to action
              */
-            if (
-                $renderLevel >= self::LEVEL_ACTION_VIEW &&
-                !isset($disabledLevels[self::LEVEL_ACTION_VIEW])
-            ) {
-                $this->currentRenderLevel = self::LEVEL_ACTION_VIEW;
+            if ($renderLevel >= self::LEVEL_ACTION_VIEW) {
+                if (!isset($disabledLevels[self::LEVEL_ACTION_VIEW])) {
+                    $this->currentRenderLevel = self::LEVEL_ACTION_VIEW;
 
-                $this->engineRender(
-                    $engines,
-                    $renderView,
-                    $silence
-                );
+                    $this->engineRender(
+                        $engines,
+                        $renderView,
+                        $silence
+                    );
+                }
             }
 
             /**
              * Inserts templates before layout
              */
-            if (
-                $renderLevel >= self::LEVEL_BEFORE_TEMPLATE &&
-                !isset($disabledLevels[self::LEVEL_BEFORE_TEMPLATE])
-            ) {
-                $this->currentRenderLevel = self::LEVEL_BEFORE_TEMPLATE;
-                $templatesBefore          = $this->templatesBefore;
-                $silence                  = false;
+            if ($renderLevel >= self::LEVEL_BEFORE_TEMPLATE) {
+                if (!isset($disabledLevels[self::LEVEL_BEFORE_TEMPLATE])) {
+                    $this->currentRenderLevel = self::LEVEL_BEFORE_TEMPLATE;
+                    $templatesBefore          = $this->templatesBefore;
+                    $silence                  = false;
 
-                foreach ($templatesBefore as $templateBefore) {
-                    $this->engineRender(
-                        $engines,
-                        $layoutsDir . $templateBefore,
-                        $silence
-                    );
+                    foreach ($templatesBefore as $templateBefore) {
+                        $this->engineRender(
+                            $engines,
+                            $layoutsDir . $templateBefore,
+                            $silence
+                        );
+                    }
+
+                    $silence = true;
                 }
-
-                $silence = true;
             }
 
             /**
              * Inserts controller layout
              */
-            if (
-                $renderLevel >= self::LEVEL_LAYOUT &&
-                !isset($disabledLevels[self::LEVEL_LAYOUT])
-            ) {
-                $this->currentRenderLevel = self::LEVEL_LAYOUT;
+            if ($renderLevel >= self::LEVEL_LAYOUT) {
+                if (!isset($disabledLevels[self::LEVEL_LAYOUT])) {
+                    $this->currentRenderLevel = self::LEVEL_LAYOUT;
 
-                $this->engineRender(
-                    $engines,
-                    $layoutsDir . $layoutName,
-                    $silence
-                );
+                    $this->engineRender(
+                        $engines,
+                        $layoutsDir . $layoutName,
+                        $silence
+                    );
+                }
             }
 
             /**
              * Inserts templates after layout
              */
-            if (
-                $renderLevel >= self::LEVEL_AFTER_TEMPLATE &&
-                !isset($disabledLevels[self::LEVEL_AFTER_TEMPLATE])
-            ) {
-                $this->currentRenderLevel = self::LEVEL_AFTER_TEMPLATE;
-                $templatesAfter           = $this->templatesAfter;
-                $silence                  = false;
+            if ($renderLevel >= self::LEVEL_AFTER_TEMPLATE) {
+                if (!isset($disabledLevels[self::LEVEL_AFTER_TEMPLATE])) {
+                    $this->currentRenderLevel = self::LEVEL_AFTER_TEMPLATE;
+                    $templatesAfter           = $this->templatesAfter;
+                    $silence                  = false;
 
-                foreach ($templatesAfter as $templateAfter) {
-                    $this->engineRender(
-                        $engines,
-                        $layoutsDir . $templateAfter,
-                        $silence
-                    );
+                    foreach ($templatesAfter as $templateAfter) {
+                        $this->engineRender(
+                            $engines,
+                            $layoutsDir . $templateAfter,
+                            $silence
+                        );
+                    }
+
+                    $silence = true;
                 }
-
-                $silence = true;
             }
 
             /**
              * Inserts main view
              */
-            if (
-                $renderLevel >= self::LEVEL_MAIN_LAYOUT &&
-                !isset($disabledLevels[self::LEVEL_MAIN_LAYOUT])
-            ) {
-                $this->currentRenderLevel = self::LEVEL_MAIN_LAYOUT;
+            if ($renderLevel >= self::LEVEL_MAIN_LAYOUT) {
+                if (!isset($disabledLevels[self::LEVEL_MAIN_LAYOUT])) {
+                    $this->currentRenderLevel = self::LEVEL_MAIN_LAYOUT;
 
-                $this->engineRender(
-                    $engines,
-                    $this->mainView,
-                    $silence
-                );
+                    $this->engineRender(
+                        $engines,
+                        $this->mainView,
+                        $silence
+                    );
+                }
             }
 
             $this->currentRenderLevel = 0;
@@ -1404,7 +1400,7 @@ class View extends Injectable implements ViewInterface, EventsAwareInterface
                     }
 
                     $engine->render($viewEnginePath, $viewParams, $mustClean);
-                    $this->fireManagerEvent("view:afterRenderView");
+                    $this->fireManagerEvent("view:afterRenderView", $viewEnginePath);
 
                     return;
                 }
@@ -1419,7 +1415,7 @@ class View extends Injectable implements ViewInterface, EventsAwareInterface
         if (null !== $this->eventsManager) {
             $this->activeRenderPaths = $viewEnginePaths;
 
-            $this->fireManagerEvent("view:notFoundView", $viewEnginePath);
+            $this->fireManagerEvent("view:notFoundView", $viewPath);
         }
 
         if (!$silence) {

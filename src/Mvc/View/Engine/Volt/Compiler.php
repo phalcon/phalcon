@@ -622,7 +622,7 @@ class Compiler implements InjectionAwareInterface
          */
         $exprCode = $this->expression($expr);
 
-        if ($expr["type"] == Enum::PHVOLT_T_FCALL)  {
+        if ($expr["type"] == Enum::PHVOLT_T_FCALL) {
             if ($this->isTagFactory($expr) === true) {
                 $exprCode = $this->expression($expr, true);
             }
@@ -1096,10 +1096,10 @@ class Compiler implements InjectionAwareInterface
                 $variableName = $parameter["variable"];
 
                 $code .= 'if (isset($__p[' . $position . '])) { ';
-                $code .= '$' . $variableName . ' = $__p[' . $position .'];';
+                $code .= '$' . $variableName . ' = $__p[' . $position . '];';
                 $code .= ' } else { ';
                 $code .= 'if (array_key_exists("' . $variableName . '", $__p)) { ';
-                $code .= '$' . $variableName . ' = $__p["' . $variableName .'"];';
+                $code .= '$' . $variableName . ' = $__p["' . $variableName . '"];';
                 $code .= ' } else { ';
 
                 if (isset($parameter["default"])) {
@@ -1130,7 +1130,7 @@ class Compiler implements InjectionAwareInterface
              */
             $code .= $this->statementList($statement["block_statements"], $extendsMode)
                 . '<?php }; ';
-        }  else {
+        } else {
             $code .= '<?php }; ';
         }
 
@@ -1365,6 +1365,8 @@ class Compiler implements InjectionAwareInterface
     final public function expression(array $expr, bool $doubleQuotes = false): string
     {
         $exprCode = null;
+        $leftCode = null;
+        $rightCode = null;
         $this->exprLevel++;
 
         /**
@@ -1515,10 +1517,10 @@ class Compiler implements InjectionAwareInterface
                 case Enum::PHVOLT_T_STRING:
                     if ($doubleQuotes === false) {
                         $exprCode = "'" . str_replace(
-                                "'",
-                                "\\'",
-                                $expr["value"]
-                            ) . "'";
+                            "'",
+                            "\\'",
+                            $expr["value"]
+                        ) . "'";
                     } else {
                         $exprCode = "\"" . $expr["value"] . "\"";
                     }
@@ -1589,7 +1591,6 @@ class Compiler implements InjectionAwareInterface
                     break;
 
                 case Enum::PHVOLT_T_SLICE:
-
                     /**
                      * Evaluate the start part of the slice
                      */
@@ -2732,7 +2733,6 @@ class Compiler implements InjectionAwareInterface
              * Compile the statement according to the statement's type
              */
             switch ($type) {
-
                 case Enum::PHVOLT_T_RAW_FRAGMENT:
                     $compilation .= $statement["value"];
                     break;
@@ -2924,7 +2924,6 @@ class Compiler implements InjectionAwareInterface
                         . $statement["file"] . " on line "
                         . $statement["line"]
                     );
-
             }
         }
 
