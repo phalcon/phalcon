@@ -35,8 +35,7 @@ class PickCest
         $I->wantToTest('Mvc\View - pick()');
 
         $container = new Di();
-
-        $view = new View();
+        $view      = new View();
 
         $view->setViewsDir(
             $I->getDirSeparator(dataDir('fixtures/views'))

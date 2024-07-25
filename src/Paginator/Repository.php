@@ -45,8 +45,8 @@ class Repository implements RepositoryInterface, JsonSerializable
     public function __get(string $property): mixed
     {
         $method = "get" . $this->toCamelize(
-                $this->getRealNameProperty($property)
-            );
+            $this->getRealNameProperty($property)
+        );
 
         if (method_exists($this, $method)) {
             return $this->$method();

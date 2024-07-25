@@ -17,7 +17,6 @@ use IntegrationTester;
 use Phalcon\Events\Manager;
 use Phalcon\Mvc\View;
 use Phalcon\Tests\Fixtures\Mvc\View\AfterRenderListener;
-
 use Phalcon\Tests\Fixtures\Traits\DiTrait;
 
 use function dataDir;

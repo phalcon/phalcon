@@ -218,6 +218,8 @@ class Simple extends Injectable implements ViewBaseInterface, EventsAwareInterfa
      */
     public function partial(string $partialPath, mixed $params = null): void
     {
+        $viewParams = $this->viewParams;
+
         /**
          * Start output buffering
          */
@@ -228,8 +230,6 @@ class Simple extends Injectable implements ViewBaseInterface, EventsAwareInterfa
          * symbol table
          */
         if (is_array($params)) {
-            $viewParams = $this->viewParams;
-
             /**
              * Merge or assign the new params as parameters
              */
