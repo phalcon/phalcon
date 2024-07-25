@@ -31,6 +31,15 @@ use const GLOB_MARK;
 
 class Unit extends Module
 {
+
+    /**
+     * Returns a directory string with the trailing directory separator
+     */
+    public function getDirSeparator(string $directory): string
+    {
+        return rtrim($directory, DIRECTORY_SEPARATOR) . DIRECTORY_SEPARATOR;
+    }
+
     /**
      * Calls private or protected method.
      *

@@ -21,6 +21,9 @@ use Phalcon\Events\Manager as EventsManager;
 use Phalcon\Filter\Filter;
 use Phalcon\Html\Escaper;
 use Phalcon\Html\TagFactory;
+use Phalcon\Mvc\Model\Manager;
+use Phalcon\Mvc\Model\MetaData\Memory as MetadataMemory;
+use Phalcon\Mvc\Model\Transaction\Manager as TransactionManager;
 use Phalcon\Support\HelperFactory;
 
 trait CliTrait
@@ -107,6 +110,14 @@ trait CliTrait
                 'class'   => HelperFactory::class,
             ],
             [
+                'service' => 'modelsManager',
+                'class'   => Manager::class,
+            ],
+            [
+                'service' => 'modelsMetadata',
+                'class'   => MetadataMemory::class,
+            ],
+            [
                 'service' => 'router',
                 'class'   => Router::class,
             ],
@@ -117,6 +128,10 @@ trait CliTrait
             [
                 'service' => 'tag',
                 'class'   => TagFactory::class,
+            ],
+            [
+                'service' => 'transactionManager',
+                'class'   => TransactionManager::class,
             ],
         ];
     }
