@@ -361,9 +361,9 @@ class View extends Injectable implements ViewInterface, EventsAwareInterface
     /**
      * Returns the path (or paths) of the views that are currently rendered
      *
-     * @return string|array
+     * @return array|string
      */
-    public function getActiveRenderPath(): string | array
+    public function getActiveRenderPath(): array | string
     {
         $viewsDirsCount   = count($this->getViewsDirs());
         $activeRenderPath = $this->activeRenderPaths;
@@ -374,7 +374,7 @@ class View extends Injectable implements ViewInterface, EventsAwareInterface
             }
         }
 
-        if ($activeRenderPath === null) {
+        if (empty($activeRenderPath)) {
             $activeRenderPath = "";
         }
 
@@ -1290,7 +1290,7 @@ class View extends Injectable implements ViewInterface, EventsAwareInterface
     public function setViewsDir(array | string $viewsDir): View
     {
         if (is_string($viewsDir)) {
-            $this->viewsDirs = [$this->toDirSeparator($viewsDir)];
+            $this->viewsDirs = $this->toDirSeparator($viewsDir);
         } else {
             $newViewsDir = [];
 
@@ -1475,18 +1475,18 @@ class View extends Injectable implements ViewInterface, EventsAwareInterface
             $engines           = [];
             $registeredEngines = $this->registeredEngines;
 
-            if (null === $this->container) {
-                throw new Exception(
-                    "A dependency injection container is required to access application services"
-                );
-            }
-
             if (empty($registeredEngines)) {
                 /**
                  * We use Phalcon\Mvc\View\Engine\Php as default
                  */
                 $engines[".phtml"] = new PhpEngine($this, $this->container);
             } else {
+                if (null === $this->container) {
+                    throw new Exception(
+                        "A dependency injection container is required to access application services"
+                    );
+                }
+
                 foreach ($registeredEngines as $extension => $engineService) {
                     if (is_object($engineService)) {
                         /**

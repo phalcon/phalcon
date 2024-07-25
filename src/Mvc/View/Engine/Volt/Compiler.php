@@ -15,6 +15,7 @@ namespace Phalcon\Mvc\View\Engine\Volt;
 
 use Closure;
 use Phalcon\Di\DiInterface;
+use Phalcon\Di\Injectable;
 use Phalcon\Di\InjectionAwareInterface;
 use Phalcon\Di\Traits\InjectionAwareTrait;
 use Phalcon\Mvc\View\ViewBaseInterface;
@@ -82,11 +83,6 @@ class Compiler implements InjectionAwareInterface
      * TODO: Make array only?
      */
     protected ?array $blocks = null;
-
-    /**
-     * @var DiInterface|null
-     */
-    protected ?DiInterface $container = null;
 
     /**
      * @var string|null
