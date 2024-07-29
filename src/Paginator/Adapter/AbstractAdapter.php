@@ -17,33 +17,38 @@ use Phalcon\Paginator\Exception;
 use Phalcon\Paginator\Repository;
 use Phalcon\Paginator\RepositoryInterface;
 
+/**
+ * Phalcon\Paginator\Adapter\AbstractAdapter
+ */
 abstract class AbstractAdapter implements AdapterInterface
 {
     /**
      * Number of rows to show in the paginator. By default is null
      *
-     * @var int
+     * @var int|null
      */
     protected ?int $limitRows = null;
 
     /**
      * Current page in paginate
      *
-     * @var int
+     * @var int|null
      */
     protected ?int $page = null;
 
     /**
      * Repository for pagination
      *
-     * @var RepositoryInterface
+     * @var RepositoryInterface|null
      */
-    protected RepositoryInterface $repository;
+    protected ?RepositoryInterface $repository = null;
 
     /**
      * Phalcon\Paginator\Adapter\AbstractAdapter constructor
      *
      * @param array $config
+     *
+     * @throws Exception
      */
     public function __construct(
         protected array $config
@@ -66,9 +71,9 @@ abstract class AbstractAdapter implements AdapterInterface
     /**
      * Get current rows limit
      *
-     * @return int
+     * @return int|null
      */
-    public function getLimit(): int
+    public function getLimit(): int | null
     {
         return $this->limitRows;
     }

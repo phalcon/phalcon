@@ -1,7 +1,21 @@
+# environment
 .env
+
+# dev
+.local/
+boxfile.yml
+
+# ide
+.idea
+*.iml
+
+# testing
 .php_cs.cache
 .php-cs-fixer.cache
-boxfile.yml
 tests/_output/
 tests/_support/_generated/
+tests/_data/phalcon_test.sqlite
+tests/_data/phalcon_test.sqlite_snapshot
+
+# libs
 vendor/
