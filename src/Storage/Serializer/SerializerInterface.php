@@ -23,7 +23,7 @@ use Serializable;
 interface SerializerInterface extends Serializable
 {
     /**
-     * @var mixed
+     * @return mixed
      */
     public function getData();
 

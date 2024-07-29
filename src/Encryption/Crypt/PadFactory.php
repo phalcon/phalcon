@@ -13,6 +13,7 @@ declare(strict_types=1);
 
 namespace Phalcon\Encryption\Crypt;
 
+use Exception as BaseException;
 use Phalcon\Encryption\Crypt;
 use Phalcon\Encryption\Crypt\Exception\Exception;
 use Phalcon\Encryption\Crypt\Padding\Ansi;
@@ -48,7 +49,7 @@ class PadFactory
      * @param string $name
      *
      * @return PadInterface
-     * @throws Exception
+     * @throws BaseException
      */
     public function newInstance(string $name): PadInterface
     {

@@ -58,15 +58,13 @@ class Annotations extends Router
     use UncamelizeTrait;
 
     /**
-     * @mixed string
-     */
-    protected string $actionSuffix = "Action";
-
-    /**
      * @mixed callable|string|null
      */
     protected mixed $actionPreformatCallback = null;
-
+    /**
+     * @mixed string
+     */
+    protected string $actionSuffix = "Action";
     /**
      * @mixed string
      */
@@ -124,7 +122,7 @@ class Annotations extends Router
     /**
      * @return callable|string|null
      */
-    public function getActionPreformatCallback(): callable|string|null
+    public function getActionPreformatCallback(): callable | string | null
     {
         return $this->actionPreformatCallback;
     }
@@ -308,6 +306,7 @@ class Annotations extends Router
      * @param Annotation $annotation
      *
      * @return void
+     * @throws Exception
      */
     public function processActionAnnotation(
         string $module,
@@ -502,7 +501,7 @@ class Annotations extends Router
      * @return Annotations
      * @throws Exception
      */
-    public function setActionPreformatCallback(callable|string|null $callback = null): Annotations
+    public function setActionPreformatCallback(callable | string | null $callback = null): Annotations
     {
         if (is_callable($callback)) {
             $this->actionPreformatCallback = $callback;

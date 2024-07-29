@@ -111,14 +111,14 @@ interface ElementInterface
      *
      * @return Form|null
      */
-    public function getForm(): Form|null;
+    public function getForm(): Form | null;
 
     /**
      * Returns the element's label
      *
      * @return string|null
      */
-    public function getLabel(): string|null;
+    public function getLabel(): string | null;
 
     /**
      * Returns the messages that belong to the element. The element needs to
@@ -179,9 +179,11 @@ interface ElementInterface
     /**
      * Generate the HTML to label the element
      *
+     * @param array $attributes
+     *
      * @return string
      */
-    public function label(): string;
+    public function label(array $attributes = []): string;
 
     /**
      * Renders the element widget
@@ -231,7 +233,7 @@ interface ElementInterface
      *
      * @return ElementInterface
      */
-    public function setFilters(array|string $filters): ElementInterface;
+    public function setFilters(array | string $filters): ElementInterface;
 
     /**
      * Sets the parent form to the element

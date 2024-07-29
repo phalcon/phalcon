@@ -41,7 +41,6 @@ final class DeleteCest
     public function dbAdapterPdoQuery(DatabaseTester $I)
     {
         $I->wantToTest('Db\Adapter\Pdo - delete()');
-        $I->skipTest('skip until Mvc');
 
         $connection = $I->getConnection();
         $db         = $this->container->get('db');
@@ -53,9 +52,13 @@ final class DeleteCest
 
         $I->assertSame(3, Invoices::count());
 
-        $db->delete($migration->getTable(), 'inv_id > :id', [
-            'id' => 1,
-        ]);
+        $db->delete(
+            $migration->getTable(),
+            'inv_id > :id',
+            [
+                'id' => 1,
+            ]
+        );
 
         $I->assertSame(1, Invoices::count());
     }

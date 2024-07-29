@@ -36,12 +36,12 @@ class Database extends Module
     /**
      * @var string
      */
-    private $password   = '';
+    private $password = '';
 
     /**
      * @var string
      */
-    private $username   = '';
+    private $username = '';
 
     /**
      * @param TestInterface $test
@@ -57,14 +57,6 @@ class Database extends Module
     }
 
     /**
-     * @return string
-     */
-    public function getDriver(): string
-    {
-        return $this->driver;
-    }
-
-    /**
      * @return PDO
      * @throws ModuleException
      */
@@ -74,21 +66,15 @@ class Database extends Module
     }
 
     /**
-     * @return array
+     * @return Connection
      */
-    public function getDatabaseOptions(): array
+    public function getDataMapperConnection(): Connection
     {
-        switch ($this->driver) {
-            case 'pgsql':
-            case 'postgres':
-                return getOptionsPostgresql();
-            case 'sqlsrv':
-                return getOptionsSqlite();
-            case 'mysql':
-                return getOptionsMysql();
-            default:
-                return [];
-        }
+        return new Connection(
+            $this->getDatabaseDsn(),
+            $this->getDatabaseUsername(),
+            $this->getDatabasePassword()
+        );
     }
 
     /**
@@ -148,6 +134,24 @@ class Database extends Module
     }
 
     /**
+     * @return array
+     */
+    public function getDatabaseOptions(): array
+    {
+        switch ($this->driver) {
+            case 'pgsql':
+            case 'postgres':
+                return getOptionsPostgresql();
+            case 'sqlsrv':
+                return getOptionsSqlite();
+            case 'mysql':
+                return getOptionsMysql();
+            default:
+                return [];
+        }
+    }
+
+    /**
      * @return string
      */
     public function getDatabasePassword(): string
@@ -164,14 +168,10 @@ class Database extends Module
     }
 
     /**
-     * @return Connection
+     * @return string
      */
-    public function getDataMapperConnection(): Connection
+    public function getDriver(): string
     {
-        return new Connection(
-            $this->getDatabaseDsn(),
-            $this->getDatabaseUsername(),
-            $this->getDatabasePassword()
-        );
+        return $this->driver;
     }
 }

@@ -32,7 +32,7 @@ use function is_array;
 class NativeArray extends AbstractAdapter implements ArrayAccess
 {
     /**
-     * @var array
+     * @var array<string, string>
      */
     private array $translate = [];
 
@@ -44,11 +44,11 @@ class NativeArray extends AbstractAdapter implements ArrayAccess
     /**
      * NativeArray constructor.
      *
-     * @param InterpolatorFactory $interpolator
-     * @param array               $options = [
-     *                                     'content'      => '',
-     *                                     'triggerError' => false
-     *                                     ]
+     * @param InterpolatorFactory  $interpolator
+     * @param array<string, mixed> $options = [
+     *                                      'content'      => '',
+     *                                      'triggerError' => false
+     *                                      ]
      *
      * @throws Exception
      */
@@ -102,8 +102,8 @@ class NativeArray extends AbstractAdapter implements ArrayAccess
     /**
      * Returns the translation related to the given key
      *
-     * @param string $index
-     * @param array  $placeholders
+     * @param string                $translateKey
+     * @param array<string, string> $placeholders
      *
      * @return string
      * @throws Exception
@@ -123,7 +123,7 @@ class NativeArray extends AbstractAdapter implements ArrayAccess
     /**
      * Returns the internal array
      *
-     * @return array
+     * @return array<string, string>
      */
     public function toArray(): array
     {

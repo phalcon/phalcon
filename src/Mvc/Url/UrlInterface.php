@@ -28,8 +28,8 @@ interface UrlInterface
      * @return string
      */
     public function get(
-        array|string $uri = null,
-        array|object $arguments = null,
+        array | string $uri = null,
+        array | object $arguments = null,
         bool $local = null
     ): string;
 
@@ -38,7 +38,7 @@ interface UrlInterface
      *
      * @return string|null
      */
-    public function getBasePath(): string|null;
+    public function getBasePath(): string | null;
 
     /**
      * Returns the prefix for all the generated urls. By default, /
@@ -46,6 +46,15 @@ interface UrlInterface
      * @return string
      */
     public function getBaseUri(): string;
+
+    /**
+     * Generates a local path
+     *
+     * @param string|null $path
+     *
+     * @return string
+     */
+    public function path(?string $path = null): string;
 
     /**
      * Sets a base paths for all the generated paths
@@ -64,13 +73,4 @@ interface UrlInterface
      * @return UrlInterface
      */
     public function setBaseUri(string $baseUri): UrlInterface;
-
-    /**
-     * Generates a local path
-     *
-     * @param string|null $path
-     *
-     * @return string
-     */
-    public function path(?string $path = null): string;
 }

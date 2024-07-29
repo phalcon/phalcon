@@ -47,17 +47,14 @@ abstract class AbstractElement implements ElementInterface
      * @var string|null
      */
     protected ?string $label = null;
-
-    /**
-     * @var string
-     */
-    protected string $method = "inputText";
-
     /**
      * @var Messages
      */
     protected Messages $messages;
-
+    /**
+     * @var string
+     */
+    protected string $method = "inputText";
     /**
      * @var string
      */
@@ -244,7 +241,7 @@ abstract class AbstractElement implements ElementInterface
      *
      * @return Form|null
      */
-    public function getForm(): Form|null
+    public function getForm(): Form | null
     {
         return $this->form;
     }
@@ -254,7 +251,7 @@ abstract class AbstractElement implements ElementInterface
      *
      * @return string | null
      */
-    public function getLabel(): string|null
+    public function getLabel(): string | null
     {
         return $this->label;
     }
@@ -285,7 +282,7 @@ abstract class AbstractElement implements ElementInterface
      *
      * @return TagFactory|null
      */
-    public function getTagFactory(): TagFactory|null
+    public function getTagFactory(): TagFactory | null
     {
         return $this->tagFactory;
     }
@@ -463,7 +460,7 @@ abstract class AbstractElement implements ElementInterface
      * @return ElementInterface
      */
     public function setFilters(
-        array|string $filters
+        array | string $filters
     ): ElementInterface {
         if (true === is_string($filters)) {
             $filters = [$filters];

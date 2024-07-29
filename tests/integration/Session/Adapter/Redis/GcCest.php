@@ -35,6 +35,6 @@ class GcCest
         $adapter = $this->newService('sessionRedis');
 
         $actual = $adapter->gc(1);
-        $I->assertTrue($actual);
+        $I->assertNotFalse($actual);
     }
 }

@@ -38,7 +38,7 @@ trait PhpOpensslTrait
     /**
      * @param int $length
      *
-     * @return false|string
+     * @return string
      *
      * @link https://php.net/manual/en/function.openssl-random-pseudo-bytes
      */

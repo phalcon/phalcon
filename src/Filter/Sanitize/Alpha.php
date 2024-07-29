@@ -27,7 +27,7 @@ class Alpha
      *
      * @return string|string[]|null
      */
-    public function __invoke(array|string $input)
+    public function __invoke(array | string $input)
     {
         return preg_replace("/[^A-Za-z]/", "", $input);
     }

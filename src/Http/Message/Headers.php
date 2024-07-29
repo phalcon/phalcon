@@ -21,7 +21,6 @@ namespace Phalcon\Http\Message;
 use Phalcon\Http\Message\Exception\InvalidArgumentException;
 use Phalcon\Http\Message\Interfaces\UriInterface;
 use Phalcon\Support\Collection;
-use Phalcon\Support\Collection\CollectionInterface;
 
 use function is_array;
 use function is_numeric;
@@ -41,7 +40,7 @@ class Headers extends Collection
      * @param Headers           $collection
      * @param UriInterface|null $uri
      *
-     * @return CollectionInterface
+     * @return Headers
      */
     final public function checkHeaderHost(
         Headers $collection,
@@ -61,7 +60,7 @@ class Headers extends Collection
             $collection->remove("host");
 
             $data   = $collection->toArray();
-            $header = ["Host" => [$host]] + (array)$data;
+            $header = ["Host" => [$host]] + $data;
 
             $collection->clear();
             $collection->init($header);
@@ -211,12 +210,13 @@ class Headers extends Collection
     /**
      * Sets the headers
      *
-     * @param mixed $headers
+     * @param mixed             $headers
+     * @param UriInterface|null $uri
      *
      * @return Headers
      */
     final public function processHeaders(
-        $headers,
+        mixed $headers,
         ?UriInterface $uri = null
     ): Headers {
         if (is_array($headers)) {

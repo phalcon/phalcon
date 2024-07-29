@@ -13,6 +13,7 @@ declare(strict_types=1);
 
 namespace Phalcon\Translate\Adapter;
 
+use Exception as BaseException;
 use Phalcon\Translate\Exception;
 use Phalcon\Translate\InterpolatorFactory;
 
@@ -32,29 +33,23 @@ abstract class AbstractAdapter implements AdapterInterface
     protected string $defaultInterpolator = '';
 
     /**
-     * @var InterpolatorFactory
-     */
-    protected InterpolatorFactory $interpolatorFactory;
-
-    /**
      * AbstractAdapter constructor.
      *
-     * @param InterpolatorFactory $interpolator
-     * @param array               $options
+     * @param InterpolatorFactory  $interpolatorFactory
+     * @param array<string, mixed> $options
      */
     public function __construct(
-        InterpolatorFactory $interpolator,
+        protected InterpolatorFactory $interpolatorFactory,
         array $options = []
     ) {
         $this->defaultInterpolator = $options['defaultInterpolator'] ?? 'associativeArray';
-        $this->interpolatorFactory = $interpolator;
     }
 
     /**
      * Returns the translation string of the given key (alias of method 't')
      *
-     * @param string $translateKey
-     * @param array  $placeholders
+     * @param string                $translateKey
+     * @param array<string, string> $placeholders
      *
      * @return string
      */
@@ -70,7 +65,7 @@ abstract class AbstractAdapter implements AdapterInterface
      *
      * @return bool
      */
-    public function offsetExists($translateKey): bool
+    public function offsetExists(mixed $translateKey): bool
     {
         return $this->has($translateKey);
     }
@@ -82,7 +77,7 @@ abstract class AbstractAdapter implements AdapterInterface
      *
      * @return string
      */
-    public function offsetGet($translateKey)
+    public function offsetGet(mixed $translateKey)
     {
         return $this->query($translateKey, []);
     }
@@ -115,8 +110,8 @@ abstract class AbstractAdapter implements AdapterInterface
     /**
      * Returns the translation string of the given key
      *
-     * @param string $translateKey
-     * @param array  $placeholders
+     * @param string                $translateKey
+     * @param array<string, string> $placeholders
      *
      * @return string
      */
@@ -128,10 +123,11 @@ abstract class AbstractAdapter implements AdapterInterface
     /**
      * Replaces placeholders by the values passed
      *
-     * @param string $translation
-     * @param array  $placeholders
+     * @param string                $translation
+     * @param array<string, string> $placeholders
      *
      * @return string
+     * @throws BaseException
      */
     protected function replacePlaceholders(
         string $translation,

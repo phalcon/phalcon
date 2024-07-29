@@ -110,7 +110,7 @@ class Date extends AbstractValidator
             return false;
         }
 
-        $date   = DateTime::createFromFormat($format, $value);
+        DateTime::createFromFormat($format, $value);
         $errors = DateTime::getLastErrors();
 
         return 0 === $errors["warning_count"] && 0 === $errors["error_count"];

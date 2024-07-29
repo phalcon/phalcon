@@ -14,6 +14,7 @@ declare(strict_types=1);
 namespace Phalcon\Tests\Integration\Mvc\Router\Route;
 
 use IntegrationTester;
+use Phalcon\Mvc\Router\Exception;
 use Phalcon\Mvc\Router\Route;
 
 /**
@@ -24,6 +25,11 @@ class CompilePatternCest
     /**
      * Tests Phalcon\Mvc\Router\Route :: compilePattern()
      *
+     * @param IntegrationTester $I
+     *
+     * @return void
+     * @throws Exception
+     *
      * @author Phalcon Team <team@phalcon.io>
      * @since  2020-10-05
      */
@@ -31,40 +37,31 @@ class CompilePatternCest
     {
         $I->wantToTest('Mvc\Router\Route - compilePattern()');
 
-        /**
-         * Simple
-         */
-        $simpleRoute = new Route(
-            '/my-simple-route'
-        );
+        $route = '/my-simple-route';
+        $simpleRoute = new Route($route);
 
-        $I->assertSame(
-            '/my-simple-route',
-            $simpleRoute->getCompiledPattern()
-        );
+        $expected = $route;
+        $actual   = $simpleRoute->getCompiledPattern();
+        $I->assertSame($expected, $actual);
 
         /**
          * Placeholder
          */
-        $placeholderRoute = new Route(
-            '/:module/:namespace/:controller/:action/:params/:int'
-        );
+        $route = '/:module/:namespace/:controller/:action/:params/:int';
+        $placeholderRoute = new Route($route);
 
-        $I->assertSame(
-            '#^/([\\w0-9\\_\\-]+)/([\\w0-9\\_\\-]+)/([\\w0-9\\_\\-]+)/([\\w0-9\\_\\-]+)(/.*)*/([0-9]+)$#u',
-            $placeholderRoute->getCompiledPattern()
-        );
+        $expected = '#^/([\\w0-9\\_\\-]+)/([\\w0-9\\_\\-]+)/([\\w0-9\\_\\-]+)/([\\w0-9\\_\\-]+)(/.*)*/([0-9]+)$#u';
+        $actual   = $placeholderRoute->getCompiledPattern();
+        $I->assertSame($expected, $actual);
 
         /**
          * Custom regex
          */
-        $regexRoute = new Route(
-            '/([\\w0-9\\_\\-]+)/([\\w0-9\\_\\-]+)/([\\w0-9\\_\\-]+)/([\\w0-9\\_\\-]+)(/.*)*/([0-9]+)'
-        );
+        $route = '/([\\w0-9\\_\\-]+)/([\\w0-9\\_\\-]+)/([\\w0-9\\_\\-]+)/([\\w0-9\\_\\-]+)(/.*)*/([0-9]+)';
+        $regexRoute = new Route($route);
 
-        $I->assertSame(
-            '#^/([\\w0-9\\_\\-]+)/([\\w0-9\\_\\-]+)/([\\w0-9\\_\\-]+)/([\\w0-9\\_\\-]+)(/.*)*/([0-9]+)$#u',
-            $regexRoute->getCompiledPattern()
-        );
+        $expected = '#^/([\\w0-9\\_\\-]+)/([\\w0-9\\_\\-]+)/([\\w0-9\\_\\-]+)/([\\w0-9\\_\\-]+)(/.*)*/([0-9]+)$#u';
+        $actual   = $regexRoute->getCompiledPattern();
+        $I->assertSame($expected, $actual);
     }
 }

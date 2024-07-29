@@ -13,6 +13,7 @@ declare(strict_types=1);
 
 namespace Phalcon\Autoload;
 
+use Phalcon\Events\Exception as EventsException;
 use Phalcon\Events\Traits\EventsAwareTrait;
 use Phalcon\Traits\Helper\Str\StartsWithTrait;
 
@@ -20,7 +21,6 @@ use function array_merge;
 use function array_unique;
 use function call_user_func;
 use function hash;
-use function is_array;
 use function is_callable;
 use function is_string;
 use function rtrim;
@@ -177,16 +177,15 @@ class Loader
     }
 
     /**
-     * @param string $namespace
-     * @param mixed  $directories
-     * @param bool   $prepend
+     * @param string       $namespace
+     * @param array|string $directories
+     * @param bool         $prepend
      *
-     * @return Loader
-     * @throws Exception
+     * @return $this
      */
     public function addNamespace(
         string $namespace,
-        $directories,
+        array | string $directories,
         bool $prepend = false
     ): Loader {
         $nsSeparator  = '\\';
@@ -215,6 +214,7 @@ class Loader
      * @param string $className
      *
      * @return bool
+     * @throws EventsException
      */
     public function autoload(string $className): bool
     {
@@ -336,6 +336,9 @@ class Loader
 
     /**
      * Checks if a file exists and then adds the file by doing virtual require
+     *
+     * @return void
+     * @throws EventsException
      */
     public function loadFiles(): void
     {
@@ -351,6 +354,11 @@ class Loader
 
     /**
      * Register the autoload method
+     *
+     * @param bool $prepend
+     *
+     * @return $this
+     * @throws EventsException
      */
     public function register(bool $prepend = false): Loader
     {
@@ -493,7 +501,6 @@ class Loader
      * @param bool  $merge
      *
      * @return Loader
-     * @throws Exception
      */
     public function setNamespaces(array $namespaces, bool $merge = false): Loader
     {
@@ -538,6 +545,7 @@ class Loader
      * @param string $file The file to require
      *
      * @return bool
+     * @throws EventsException
      */
     protected function requireFile(string $file): bool
     {
@@ -611,6 +619,7 @@ class Loader
      * @param string $className
      *
      * @return bool
+     * @throws EventsException
      */
     private function autoloadCheckClasses(string $className): bool
     {
@@ -636,6 +645,7 @@ class Loader
      * @param bool   $isDirectory
      *
      * @return bool
+     * @throws EventsException
      */
     private function autoloadCheckDirectories(
         array $directories,
@@ -679,6 +689,7 @@ class Loader
      * @param string $className
      *
      * @return bool
+     * @throws EventsException
      */
     private function autoloadCheckNamespaces(string $className): bool
     {
@@ -709,20 +720,15 @@ class Loader
      * to normalize the directories with the proper directory separator at the
      * end
      *
-     * @param mixed  $directories
-     * @param string $dirSeparator
+     * @param array|string $directories
+     * @param string       $dirSeparator
      *
-     * @return array<string, string>
-     * @throws Exception
+     * @return array
      */
-    private function checkDirectories($directories, string $dirSeparator): array
-    {
-        if (!is_string($directories) && !is_array($directories)) {
-            throw new Exception(
-                'The directories parameter is not a string or array'
-            );
-        }
-
+    private function checkDirectories(
+        array | string $directories,
+        string $dirSeparator
+    ): array {
         if (is_string($directories)) {
             $directories = [$directories];
         }

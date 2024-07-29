@@ -63,11 +63,6 @@ class Collection implements
     protected array $data = [];
 
     /**
-     * @var bool
-     */
-    protected bool $insensitive = true;
-
-    /**
      * @var array<int|string, mixed>
      */
     protected array $lowerKeys = [];
@@ -78,9 +73,28 @@ class Collection implements
      * @param array<int|string, mixed> $data
      * @param bool                     $insensitive
      */
-    public function __construct(array $data = [], bool $insensitive = true)
+    public function __construct(
+        array $data = [],
+        protected bool $insensitive = true
+    ) {
+        $this->init($data);
+    }
+
+    /**
+     * @return mixed[]
+     */
+    public function __serialize(): array
     {
-        $this->insensitive = $insensitive;
+        return $this->data;
+    }
+
+    /**
+     * @param array $data
+     *
+     * @return void
+     */
+    public function __unserialize(array $data): void
+    {
         $this->init($data);
     }
 
@@ -294,19 +308,6 @@ class Collection implements
     }
 
     /**
-     * Internal method to set data
-     *
-     * @param string $element Name of the element
-     * @param mixed  $value   Value to store for the element
-     */
-    protected function setData(string $element, $value): void
-    {
-        $key                   = $this->processKey($element);
-        $this->data[$element]  = $value;
-        $this->lowerKeys[$key] = $element;
-    }
-
-    /**
      * Checks if we need insensitive keys and if so, converts the element to
      * lowercase
      */
@@ -317,5 +318,18 @@ class Collection implements
         }
 
         return $element;
+    }
+
+    /**
+     * Internal method to set data
+     *
+     * @param string $element Name of the element
+     * @param mixed  $value   Value to store for the element
+     */
+    protected function setData(string $element, $value): void
+    {
+        $key                   = $this->processKey($element);
+        $this->data[$element]  = $value;
+        $this->lowerKeys[$key] = $element;
     }
 }

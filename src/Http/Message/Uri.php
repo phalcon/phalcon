@@ -35,7 +35,6 @@ use function preg_replace;
 use function rawurlencode;
 use function str_replace;
 use function str_split;
-use function strpos;
 use function strtolower;
 use function substr;
 
@@ -201,7 +200,7 @@ final class Uri extends AbstractCommon implements UriInterface
          */
         if ("" !== $path) {
             if (
-                "/" !== substr($path, 0, 1) &&
+                !str_starts_with($path, "/") &&
                 "" !== $authority
             ) {
                 // If the path is rootless and an authority is present,
@@ -436,8 +435,8 @@ final class Uri extends AbstractCommon implements UriInterface
     public function withPath(string $path): UriInterface
     {
         if (
-            false !== strpos($path, "?") ||
-            false !== strpos($path, "#")
+            str_contains($path, "?") ||
+            str_contains($path, "#")
         ) {
             throw new InvalidArgumentException(
                 "Path cannot contain a query string or fragment"
@@ -490,7 +489,7 @@ final class Uri extends AbstractCommon implements UriInterface
      */
     public function withQuery(string $query): UriInterface
     {
-        if (false !== strpos($query, "#")) {
+        if (str_contains($query, "#")) {
             throw new InvalidArgumentException(
                 "Query cannot contain a URI fragment"
             );
@@ -542,6 +541,18 @@ final class Uri extends AbstractCommon implements UriInterface
     }
 
     /**
+     * Proxy method for parse_url for tests
+     *
+     * @param string $url
+     *
+     * @return array|false|int|string|null
+     */
+    protected function phpParseUrl(string $url)
+    {
+        return parse_url($url);
+    }
+
+    /**
      * If the value passed is empty it returns it prefixed and suffixed with
      * the passed parameters
      *
@@ -582,7 +593,7 @@ final class Uri extends AbstractCommon implements UriInterface
      */
     private function filterFragment(string $fragment): string
     {
-        if ("" !== $fragment && 0 === strpos($fragment, "#")) {
+        if ("" !== $fragment && str_starts_with($fragment, "#")) {
             $fragment = "%23" . substr($fragment, 1);
         }
 
@@ -624,7 +635,7 @@ final class Uri extends AbstractCommon implements UriInterface
             $path
         );
 
-        if ("" === $path || "/" !== substr($path, 0, 1)) {
+        if ("" === $path || !str_starts_with($path, "/")) {
             return $path;
         }
 
@@ -644,7 +655,7 @@ final class Uri extends AbstractCommon implements UriInterface
             return null;
         }
 
-        if (null !== $port && ($port < 1 || $port > 65535)) {
+        if ($port < 1 || $port > 65535) {
             throw new InvalidArgumentException(
                 "Invalid port specified. (Valid range 1-65535)"
             );
@@ -711,6 +722,24 @@ final class Uri extends AbstractCommon implements UriInterface
     }
 
     /**
+     * Filters a string (query or fragment) based on a pattern
+     *
+     * @param string $value
+     *
+     * @return string
+     */
+    private function filterQueryOrFragment(string $value): string
+    {
+        return $this->filterString(
+            "/(?:[^"
+            . self::CHAR_UNRESERVED
+            . self::CHAR_SUB_DELIMS
+            . "%:@\/\?]+|%(?![A-Fa-f0-9]{2}))/u",
+            $this->filterUtf8($value)
+        );
+    }
+
+    /**
      * Filters the passed scheme - only allowed schemes
      *
      * @param string $scheme
@@ -738,39 +767,6 @@ final class Uri extends AbstractCommon implements UriInterface
         }
 
         return $filtered;
-    }
-
-    /**
-     * @param string $element
-     *
-     * @return array
-     */
-    private function splitQueryValue(string $element): array
-    {
-        $data = explode("=", $element, 2);
-        if (true !== isset($data[1])) {
-            $data[] = null;
-        }
-
-        return $data;
-    }
-
-    /**
-     * Filters a string (query or fragment) based on a pattern
-     *
-     * @param string $value
-     *
-     * @return string
-     */
-    private function filterQueryOrFragment(string $value): string
-    {
-        return $this->filterString(
-            "/(?:[^"
-            . self::CHAR_UNRESERVED
-            . self::CHAR_SUB_DELIMS
-            . "%:@\/\?]+|%(?![A-Fa-f0-9]{2}))/u",
-            $this->filterUtf8($value)
-        );
     }
 
     /**
@@ -848,14 +844,17 @@ final class Uri extends AbstractCommon implements UriInterface
     }
 
     /**
-     * Proxy method for parse_url for tests
+     * @param string $element
      *
-     * @param string $url
-     *
-     * @return array|false|int|string|null
+     * @return array
      */
-    protected function phpParseUrl(string $url)
+    private function splitQueryValue(string $element): array
     {
-        return parse_url($url);
+        $data = explode("=", $element, 2);
+        if (true !== isset($data[1])) {
+            $data[] = null;
+        }
+
+        return $data;
     }
 }

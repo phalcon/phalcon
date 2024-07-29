@@ -13,6 +13,7 @@ declare(strict_types=1);
 
 namespace Phalcon\Filter\Validation;
 
+use Exception as BaseException;
 use Phalcon\Filter\Validation\Validator\Alnum;
 use Phalcon\Filter\Validation\Validator\Alpha;
 use Phalcon\Filter\Validation\Validator\Between;
@@ -56,6 +57,7 @@ class ValidatorFactory
      * @param string $name
      *
      * @return ValidatorInterface
+     * @throws BaseException
      */
     public function newInstance(string $name): ValidatorInterface
     {

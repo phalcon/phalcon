@@ -48,11 +48,9 @@ interface BagInterface
     public function __unset(string $element): void;
 
     /**
-     * @param array $data
-     *
      * @return void
      */
-    public function init(array $data = []): void;
+    public function clear(): void;
 
     /**
      * @param string      $element
@@ -75,6 +73,13 @@ interface BagInterface
     public function has(string $element): bool;
 
     /**
+     * @param array $data
+     *
+     * @return void
+     */
+    public function init(array $data = []): void;
+
+    /**
      * @param string $element
      *
      * @return void
@@ -88,9 +93,4 @@ interface BagInterface
      * @return void
      */
     public function set(string $element, mixed $value): void;
-
-    /**
-     * @return void
-     */
-    public function clear(): void;
 }

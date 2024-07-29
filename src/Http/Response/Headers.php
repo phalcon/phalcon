@@ -42,7 +42,7 @@ class Headers implements HeadersInterface, IteratorAggregate
      * @return string|bool|null
      * @todo change the raw headers not to return null
      */
-    public function get(string $name): string|bool|null
+    public function get(string $name): string | bool | null
     {
         /**
          * We need to use array_key_exists() here because raw headers have
@@ -55,9 +55,9 @@ class Headers implements HeadersInterface, IteratorAggregate
     }
 
     /**
-     * @return array|Traversable|void
+     * @return Traversable
      */
-    public function getIterator()
+    public function getIterator(): Traversable
     {
         foreach ($this->headers as $index => $header) {
             yield $index => $header;

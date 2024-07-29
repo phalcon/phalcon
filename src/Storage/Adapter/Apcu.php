@@ -76,31 +76,6 @@ class Apcu extends AbstractAdapter
     }
 
     /**
-     * Decrements a stored number
-     *
-     * @param string $key
-     * @param int    $value
-     *
-     * @return bool|int
-     */
-    public function decrement(string $key, int $value = 1)
-    {
-        return $this->phpApcuDec($this->getPrefixedKey($key), $value);
-    }
-
-    /**
-     * Reads data from the adapter
-     *
-     * @param string $key
-     *
-     * @return bool
-     */
-    public function delete(string $key): bool
-    {
-        return (bool)$this->phpApcuDelete($this->getPrefixedKey($key));
-    }
-
-    /**
      * Stores data in the adapter
      *
      * @param string $prefix
@@ -125,13 +100,67 @@ class Apcu extends AbstractAdapter
     }
 
     /**
+     * Stores data in the adapter forever. The key needs to manually deleted
+     * from the adapter.
+     *
+     * @param string $key
+     * @param mixed  $data
+     *
+     * @return bool
+     */
+    public function setForever(string $key, mixed $data): bool
+    {
+        $result = $this->phpApcuStore(
+            $this->getPrefixedKey($key),
+            $this->getSerializedData($data)
+        );
+
+        return is_bool($result) ? $result : false;
+    }
+
+    /**
+     * Decrements a stored number
+     *
+     * @param string $key
+     * @param int    $value
+     *
+     * @return bool|int
+     */
+    protected function doDecrement(string $key, int $value = 1): false | int
+    {
+        return $this->phpApcuDec($this->getPrefixedKey($key), $value);
+    }
+
+    /**
+     * Reads data from the adapter
+     *
+     * @param string $key
+     *
+     * @return bool
+     */
+    protected function doDelete(string $key): bool
+    {
+        return (bool)$this->phpApcuDelete($this->getPrefixedKey($key));
+    }
+
+    /**
+     * @param string $key
+     *
+     * @return mixed
+     */
+    protected function doGetData(string $key): mixed
+    {
+        return $this->phpApcuFetch($this->getPrefixedKey($key));
+    }
+
+    /**
      * Checks if an element exists in the cache
      *
      * @param string $key
      *
      * @return bool
      */
-    public function has(string $key): bool
+    protected function doHas(string $key): bool
     {
         $result = $this->phpApcuExists($this->getPrefixedKey($key));
 
@@ -146,7 +175,7 @@ class Apcu extends AbstractAdapter
      *
      * @return bool|int
      */
-    public function increment(string $key, int $value = 1)
+    protected function doIncrement(string $key, int $value = 1): false | int
     {
         return $this->phpApcuInc($this->getPrefixedKey($key), $value);
     }
@@ -165,7 +194,7 @@ class Apcu extends AbstractAdapter
      * @return bool
      * @throws Exception
      */
-    public function set(string $key, $value, $ttl = null): bool
+    protected function doSet(string $key, mixed $value, mixed $ttl = null): bool
     {
         if (true === is_int($ttl) && $ttl < 1) {
             return $this->delete($key);
@@ -178,34 +207,5 @@ class Apcu extends AbstractAdapter
         );
 
         return is_bool($result) ? $result : false;
-    }
-
-    /**
-     * Stores data in the adapter forever. The key needs to manually deleted
-     * from the adapter.
-     *
-     * @param string $key
-     * @param mixed  $value
-     *
-     * @return bool
-     */
-    public function setForever(string $key, $value): bool
-    {
-        $result = $this->phpApcuStore(
-            $this->getPrefixedKey($key),
-            $this->getSerializedData($value)
-        );
-
-        return is_bool($result) ? $result : false;
-    }
-
-    /**
-     * @param string $key
-     *
-     * @return mixed
-     */
-    protected function doGet(string $key)
-    {
-        return $this->phpApcuFetch($this->getPrefixedKey($key));
     }
 }

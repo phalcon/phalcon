@@ -126,8 +126,10 @@ final class Response extends AbstractMessage implements ResponseInterface
     /**
      * Set a valid status code and phrase
      *
-     * @param mixed $code
-     * @param mixed $phrase
+     * @param int    $code
+     * @param string $phrase
+     *
+     * @return void
      */
     protected function processCode(int $code, string $phrase = ""): void
     {

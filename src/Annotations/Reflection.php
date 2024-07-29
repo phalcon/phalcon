@@ -44,16 +44,14 @@ class Reflection
      * @var array
      */
     protected array $constantAnnotations = [];
-
-    /**
-     * @var array
-     */
-    protected array $propertyAnnotations = [];
-
     /**
      * @var array
      */
     protected array $methodAnnotations = [];
+    /**
+     * @var array
+     */
+    protected array $propertyAnnotations = [];
 
     /**
      * Constructor
@@ -70,7 +68,7 @@ class Reflection
      *
      * @return Collection|null
      */
-    public function getClassAnnotations(): Collection|null
+    public function getClassAnnotations(): Collection | null
     {
         if (
             null === $this->classAnnotations &&
@@ -96,19 +94,6 @@ class Reflection
     }
 
     /**
-     * Returns the annotations found in the properties' docblocks
-     *
-     * @return Collection[]
-     */
-    public function getPropertiesAnnotations(): array
-    {
-        return $this->traverseCollection(
-            "properties",
-            "propertyAnnotations"
-        );
-    }
-
-    /**
      * Returns the annotations found in the methods' docblocks
      *
      * @return Collection[]
@@ -118,6 +103,19 @@ class Reflection
         return $this->traverseCollection(
             "methods",
             "methodAnnotations"
+        );
+    }
+
+    /**
+     * Returns the annotations found in the properties' docblocks
+     *
+     * @return Collection[]
+     */
+    public function getPropertiesAnnotations(): array
+    {
+        return $this->traverseCollection(
+            "properties",
+            "propertyAnnotations"
         );
     }
 

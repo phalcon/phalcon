@@ -19,13 +19,13 @@ use const PHP_EOL;
 class Doctype
 {
     public const HTML32               = 1;
+    public const HTML401_FRAMESET     = 4;
     public const HTML401_STRICT       = 2;
     public const HTML401_TRANSITIONAL = 3;
-    public const HTML401_FRAMESET     = 4;
     public const HTML5                = 5;
+    public const XHTML10_FRAMESET     = 8;
     public const XHTML10_STRICT       = 6;
     public const XHTML10_TRANSITIONAL = 7;
-    public const XHTML10_FRAMESET     = 8;
     public const XHTML11              = 9;
     public const XHTML20              = 10;
     public const XHTML5               = 11;
@@ -43,15 +43,19 @@ class Doctype
     /**
      * Produce a <doctype> tag
      *
-     * @param string $flag
+     * @param int    $flag
      * @param string $delimiter
+     *
+     * @return self
      */
     public function __invoke(
         int $flag = self::HTML5,
         string $delimiter = PHP_EOL
-    ): void {
+    ): self {
         $this->flag      = $flag;
         $this->delimiter = $delimiter;
+
+        return $this;
     }
 
     /**

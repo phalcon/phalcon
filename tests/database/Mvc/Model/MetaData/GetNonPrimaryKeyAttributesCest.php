@@ -29,6 +29,7 @@ class GetNonPrimaryKeyAttributesCest
     public function _before(DatabaseTester $I)
     {
         $this->setNewFactoryDefault();
+        $this->setDatabase($I);
     }
 
     /**
@@ -37,14 +38,14 @@ class GetNonPrimaryKeyAttributesCest
      * @dataProvider getExamples
      *
      * @param DatabaseTester $I
-     * @param Example $example
+     * @param Example        $example
      *
-     * @author Phalcon Team <team@phalcon.io>
-     * @since  2020-02-01
+     * @author       Phalcon Team <team@phalcon.io>
+     * @since        2020-02-01
      *
-     * @group  mysql
-     * @group  pgsql
-     * @group  sqlite
+     * @group        mysql
+     * @group        pgsql
+     * @group        sqlite
      */
     public function mvcModelMetadataGetNonPrimaryKeyAttributes(
         DatabaseTester $I,
@@ -57,6 +58,7 @@ class GetNonPrimaryKeyAttributesCest
 
         $adapter = $this->newService($service);
         $adapter->setDi($this->container);
+        $connection = $I->getConnection();
 
         $adapter->reset();
 
@@ -73,7 +75,7 @@ class GetNonPrimaryKeyAttributesCest
             'inv_total',
             'inv_created_at',
         ];
-        $actual = $metadata->getNonPrimaryKeyAttributes($model);
+        $actual   = $metadata->getNonPrimaryKeyAttributes($model);
 
         $I->assertEquals($expected, $actual);
 
@@ -100,19 +102,19 @@ class GetNonPrimaryKeyAttributesCest
     {
         return [
             [
-                'service' => 'metadataMemory',
+                'service'   => 'metadataMemory',
                 'className' => 'Memory',
             ],
             [
-                'service' => 'metadataApcu',
+                'service'   => 'metadataApcu',
                 'className' => 'Apcu',
             ],
             [
-                'service' => 'metadataRedis',
+                'service'   => 'metadataRedis',
                 'className' => 'Redis',
             ],
             [
-                'service' => 'metadataLibmemcached',
+                'service'   => 'metadataLibmemcached',
                 'className' => 'Libmemcached',
             ],
         ];

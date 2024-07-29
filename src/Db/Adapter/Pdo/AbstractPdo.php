@@ -22,7 +22,7 @@ use Phalcon\Db\Result\PdoResult;
 use Phalcon\Db\ResultInterface;
 use Phalcon\Events\Exception as EventsException;
 use Phalcon\Events\Traits\EventsAwareTrait;
-use Phalcon\Support\Traits\IniTrait;
+use Phalcon\Support\Settings;
 
 use function array_merge;
 use function implode;
@@ -56,8 +56,6 @@ use function preg_replace;
 abstract class AbstractPdo extends AbstractAdapter
 {
     use EventsAwareTrait;
-    use IniTrait;
-
 
     /**
      * Last affected rows
@@ -162,6 +160,17 @@ abstract class AbstractPdo extends AbstractAdapter
     }
 
     /**
+     * Closes the active connection returning success. Phalcon automatically
+     * closes and destroys active connections when the request ends
+     *
+     * @return void
+     */
+    public function close(): void
+    {
+        $this->pdo = null;
+    }
+
+    /**
      * Commits the active transaction in the connection
      *
      * @param bool $nesting
@@ -223,17 +232,6 @@ abstract class AbstractPdo extends AbstractAdapter
         $this->transactionLevel--;
 
         return $this->releaseSavepoint($savepointName);
-    }
-
-    /**
-     * Closes the active connection returning success. Phalcon automatically
-     * closes and destroys active connections when the request ends
-     *
-     * @return void
-     */
-    public function close(): void
-    {
-        $this->pdo = null;
     }
 
     /**
@@ -510,7 +508,7 @@ abstract class AbstractPdo extends AbstractAdapter
         array $placeholders,
         array $dataTypes = []
     ): PDOStatement {
-        $forceCasting = $this->iniGetBool("phalcon.db.force_casting");
+        $forceCasting = Settings::get('db.force_casting');
         foreach ($placeholders as $wildcard => $value) {
             if (is_int($wildcard)) {
                 $parameter = $wildcard + 1;
@@ -597,7 +595,7 @@ abstract class AbstractPdo extends AbstractAdapter
      *
      * @return PDO|null
      */
-    public function getInternalHandler(): PDO|null
+    public function getInternalHandler(): PDO | null
     {
         return $this->pdo;
     }
@@ -657,7 +655,7 @@ abstract class AbstractPdo extends AbstractAdapter
      *
      * @return string|bool
      */
-    public function lastInsertId(string $name = null): string|bool
+    public function lastInsertId(string $name = null): string | bool
     {
         return $this->pdo->lastInsertId($name);
     }
@@ -723,7 +721,7 @@ abstract class AbstractPdo extends AbstractAdapter
         string $sqlStatement,
         array $bindParams = [],
         array $bindTypes = []
-    ): ResultInterface|bool {
+    ): ResultInterface | bool {
         /**
          * Execute the beforeQuery event if an EventsManager is available
          */

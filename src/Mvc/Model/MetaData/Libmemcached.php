@@ -13,8 +13,9 @@ declare(strict_types=1);
 
 namespace Phalcon\Mvc\Model\MetaData;
 
-use Phalcon\Mvc\Model\MetaData;
+use Exception;
 use Phalcon\Cache\AdapterFactory;
+use Phalcon\Mvc\Model\MetaData;
 
 /**
  * Phalcon\Mvc\Model\MetaData\Libmemcached
@@ -28,14 +29,17 @@ class Libmemcached extends MetaData
     /**
      * Phalcon\Mvc\Model\MetaData\Libmemcached constructor
      *
-     * @param array options
+     * @param AdapterFactory       $factory
+     * @param array<string, mixed> $options
+     *
+     * @throws Exception
      */
-    public function __construct(AdapterFactory $factory, ?array $options = [])
+    public function __construct(AdapterFactory $factory, array $options = [])
     {
-        $options["persistentId"] = $this->getArrVal($options, "persistentId", "ph-mm-mcid-");
-        $options["prefix"] = $this->getArrVal($options, "prefix", "ph-mm-memc-");
-        $options["lifetime"] = $this->getArrVal($options, "lifetime", 172800);
-        $this->adapter = $factory->newInstance("libmemcached", $options);
+        $options["persistentId"] = $options["persistentId"] ?? "ph-mm-mcid-";
+        $options["prefix"]       = $options["prefix"] ?? "ph-mm-memc-";
+        $options["lifetime"]     = $options["lifetime"] ?? 172800;
+        $this->adapter           = $factory->newInstance("libmemcached", $options);
     }
 
     /**

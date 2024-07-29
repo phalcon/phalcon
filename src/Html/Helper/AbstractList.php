@@ -11,8 +11,6 @@ declare(strict_types=1);
 
 namespace Phalcon\Html\Helper;
 
-use Phalcon\Html\Exception;
-
 use const PHP_EOL;
 
 /**
@@ -65,7 +63,6 @@ abstract class AbstractList extends AbstractHelper
      * Generates and returns the HTML for the list.
      *
      * @return string
-     * @throws Exception
      */
     public function __toString()
     {

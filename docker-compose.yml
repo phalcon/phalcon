@@ -3,7 +3,17 @@ services:
   phalcon-8.2:
     container_name: phalcon-8.2
     hostname: phalcon-82
-    build: docker/8.2
+    build: resources/docker/8.2
+    working_dir: /srv
+    volumes:
+      - .:/srv
+    extra_hosts:
+      - "host.docker.internal:host-gateway"
+
+  phalcon-8.3:
+    container_name: phalcon-8.3
+    hostname: phalcon-83
+    build: resources/docker/8.3
     working_dir: /srv
     links:
       - mysql
@@ -50,6 +60,71 @@ services:
   redis:
     container_name: phalcon-redis
     image: redis:6-alpine
+    extra_hosts:
+      - "host.docker.internal:host-gateway"
+
+  redis-node-0:
+    container_name: phalcon-redis-node-0
+    image: docker.io/bitnami/redis-cluster:7.2
+    environment:
+      - 'REDIS_PASSWORD=bitnami'
+      - 'REDIS_NODES=phalcon-redis-node-0 phalcon-redis-node-1 phalcon-redis-node-2 phalcon-redis-node-3 phalcon-redis-node-4 phalcon-redis-node-5'
+    extra_hosts:
+      - "host.docker.internal:host-gateway"
+
+  redis-node-1:
+    container_name: phalcon-redis-node-1
+    image: docker.io/bitnami/redis-cluster:7.2
+    environment:
+      - 'REDIS_PASSWORD=bitnami'
+      - 'REDIS_NODES=phalcon-redis-node-0 phalcon-redis-node-1 phalcon-redis-node-2 phalcon-redis-node-3 phalcon-redis-node-4 phalcon-redis-node-5'
+    extra_hosts:
+      - "host.docker.internal:host-gateway"
+
+  redis-node-2:
+    container_name: phalcon-redis-node-2
+    image: docker.io/bitnami/redis-cluster:7.2
+    environment:
+      - 'REDIS_PASSWORD=bitnami'
+      - 'REDIS_NODES=phalcon-redis-node-0 phalcon-redis-node-1 phalcon-redis-node-2 phalcon-redis-node-3 phalcon-redis-node-4 phalcon-redis-node-5'
+    extra_hosts:
+      - "host.docker.internal:host-gateway"
+
+  redis-node-3:
+    container_name: phalcon-redis-node-3
+    image: docker.io/bitnami/redis-cluster:7.2
+    environment:
+      - 'REDIS_PASSWORD=bitnami'
+      - 'REDIS_NODES=phalcon-redis-node-0 phalcon-redis-node-1 phalcon-redis-node-2 phalcon-redis-node-3 phalcon-redis-node-4 phalcon-redis-node-5'
+    extra_hosts:
+      - "host.docker.internal:host-gateway"
+
+  redis-node-4:
+    container_name: phalcon-redis-node-4
+    image: docker.io/bitnami/redis-cluster:7.2
+    environment:
+      - 'REDIS_PASSWORD=bitnami'
+      - 'REDIS_NODES=phalcon-redis-node-0 phalcon-redis-node-1 phalcon-redis-node-2 phalcon-redis-node-3 phalcon-redis-node-4 phalcon-redis-node-5'
+    extra_hosts:
+      - "host.docker.internal:host-gateway"
+
+  redis-node-5:
+    container_name: phalcon-redis-node-5
+    image: docker.io/bitnami/redis-cluster:7.2
+    depends_on:
+      - redis-node-0
+      - redis-node-1
+      - redis-node-2
+      - redis-node-3
+      - redis-node-4
+    environment:
+      - 'REDIS_PASSWORD=bitnami'
+      - 'REDISCLI_AUTH=bitnami'
+      - 'REDIS_CLUSTER_REPLICAS=1'
+      - 'REDIS_NODES=phalcon-redis-node-0 phalcon-redis-node-1 phalcon-redis-node-2 phalcon-redis-node-3 phalcon-redis-node-4 phalcon-redis-node-5'
+      - 'REDIS_CLUSTER_CREATOR=yes'
+    extra_hosts:
+      - "host.docker.internal:host-gateway"
 
   memcached:
     container_name: phalcon-memcached

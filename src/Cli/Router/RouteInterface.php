@@ -101,7 +101,7 @@ interface RouteInterface
      *
      * @return void
      */
-    public function reConfigure(string $pattern, array|string $paths = []): void;
+    public function reConfigure(string $pattern, array | string $paths = []): void;
 
     /**
      * Resets the internal route id generator

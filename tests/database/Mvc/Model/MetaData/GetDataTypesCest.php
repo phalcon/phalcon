@@ -38,14 +38,14 @@ class GetDataTypesCest
      * @dataProvider getExamples
      *
      * @param DatabaseTester $I
-     * @param Example $example
+     * @param Example        $example
      *
-     * @author Phalcon Team <team@phalcon.io>
-     * @since  2020-02-01
+     * @author       Phalcon Team <team@phalcon.io>
+     * @since        2020-02-01
      *
-     * @group  mysql
-     * @group  pgsql
-     * @group  sqlite
+     * @group        mysql
+     * @group        pgsql
+     * @group        sqlite
      */
     public function mvcModelMetadataGetDataTypes(
         DatabaseTester $I,
@@ -85,8 +85,33 @@ class GetDataTypesCest
 
         $I->assertTrue($adapter->isEmpty());
 
-        $actual   = $adapter->getDataTypes($model);
+        $actual = $adapter->getDataTypes($model);
         $I->assertEquals($expected, $actual);
+    }
+
+    /**
+     * @return array[]
+     */
+    private function getExamples(): array
+    {
+        return [
+            [
+                'service'   => 'metadataMemory',
+                'className' => 'Memory',
+            ],
+            [
+                'service'   => 'metadataApcu',
+                'className' => 'Apcu',
+            ],
+            [
+                'service'   => 'metadataRedis',
+                'className' => 'Redis',
+            ],
+            [
+                'service'   => 'metadataLibmemcached',
+                'className' => 'Libmemcached',
+            ],
+        ];
     }
 
     private function getTypes(DatabaseTester $I)
@@ -121,30 +146,5 @@ class GetDataTypesCest
                     'inv_created_at'  => 17,
                 ];
         }
-    }
-
-    /**
-     * @return array[]
-     */
-    private function getExamples(): array
-    {
-        return [
-            [
-                'service' => 'metadataMemory',
-                'className' => 'Memory',
-            ],
-            [
-                'service' => 'metadataApcu',
-                'className' => 'Apcu',
-            ],
-            [
-                'service' => 'metadataRedis',
-                'className' => 'Redis',
-            ],
-            [
-                'service' => 'metadataLibmemcached',
-                'className' => 'Libmemcached',
-            ],
-        ];
     }
 }

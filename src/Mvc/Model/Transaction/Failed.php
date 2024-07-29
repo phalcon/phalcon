@@ -56,7 +56,7 @@ class Failed extends Exception
      *
      * @return MessageInterface[]|string
      */
-    public function getRecordMessages(): array|string
+    public function getRecordMessages(): array | string
     {
         if (null !== $this->record) {
             return $this->record->getMessages();

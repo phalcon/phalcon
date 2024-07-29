@@ -34,12 +34,14 @@ use Phalcon\Filter;
 use Phalcon\Html\TagFactory;
 use Phalcon\Http\Request;
 use Phalcon\Http\Response;
+use Phalcon\Mvc\Model\Manager as ModelsManager;
 use Phalcon\Mvc\Model\MetaData\Apcu as MetaDataApcu;
 use Phalcon\Mvc\Model\MetaData\Memory as MetaDataMemory;
 use Phalcon\Mvc\Model\MetaData\Libmemcached as MetaDataMemcached;
 use Phalcon\Mvc\Model\MetaData\Redis as MetaDataRedis;
 use Phalcon\Mvc\Model\MetaData\Stream as MetaDataStream;
 use Phalcon\Mvc\View;
+use Phalcon\Mvc\View\Simple;
 use Phalcon\Session\Adapter\Libmemcached as SessionLibmemcached;
 use Phalcon\Session\Adapter\Noop as SessionNoop;
 use Phalcon\Session\Adapter\Redis as SessionRedis;
@@ -57,6 +59,7 @@ use function getOptionsPostgresql;
 use function getOptionsRedis;
 use function getOptionsSessionStream;
 use function getOptionsSqlite;
+use function outputDir;
 
 /**
  * Trait DiTrait
@@ -191,6 +194,7 @@ trait DiTrait
                 );
             case 'metadataStream':
                 return new MetaDataStream(
+                    new AdapterFactory(new SerializerFactory()),
                     ['options' => ['storageDir' => outputDir()] ],
                 );
             case 'modelsCacheLibmemcached':
@@ -203,6 +207,8 @@ trait DiTrait
                     new SerializerFactory(),
                     getOptionsModelCacheStream()
                 );
+            case 'modelsManager':
+                return new ModelsManager();
             case 'phpSerializer':
                 return (new SerializerFactory())->newInstance('php');
             case 'profiler':
@@ -233,8 +239,8 @@ trait DiTrait
                 return new Url();
             case 'view':
                 return new View();
-//            case 'viewSimple':
-//                return new Simple();
+            case 'viewSimple':
+                return new Simple();
             default:
                 return null;
         }
@@ -272,7 +278,7 @@ trait DiTrait
             case 'escaper':
             case 'eventsManager':
             case 'filter':
-//            case 'modelsManager':
+            case 'modelsManager':
             case 'modelsMetadata':
             case 'request':
             case 'response':
@@ -288,12 +294,12 @@ trait DiTrait
                     }
                 );
                 break;
-//
-//            case 'modelsCacheLibmemcached':
-//            case 'modelsCacheStream':
-//                $this->container->set('modelsCache', $class);
-//                break;
-//
+
+            case 'modelsCacheLibmemcached':
+            case 'modelsCacheStream':
+                $this->container->set('modelsCache', $class);
+                break;
+
             case 'phpSerializer':
                 $this->container->set('serializer', $class);
                 break;

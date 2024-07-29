@@ -62,11 +62,11 @@ class Security implements InjectionAwareInterface
     public const CRYPT_ARGON2I    = 10;
     public const CRYPT_ARGON2ID   = 11;
     public const CRYPT_BCRYPT     = 0;
-    public const CRYPT_DEFAULT    = 0;
     public const CRYPT_BLOWFISH   = 4;
     public const CRYPT_BLOWFISH_A = 5;
     public const CRYPT_BLOWFISH_X = 6;
     public const CRYPT_BLOWFISH_Y = 7;
+    public const CRYPT_DEFAULT    = 0;
     public const CRYPT_MD5        = 3;
     public const CRYPT_SHA256     = 8;
     public const CRYPT_SHA512     = 9;
@@ -313,22 +313,6 @@ class Security implements InjectionAwareInterface
     }
 
     /**
-     * Returns the value of the CSRF token in session
-     *
-     * @return string|null
-     */
-    public function getSessionToken(): ?string
-    {
-        /** @var SessionInterface|null $session */
-        $session = $this->getLocalService('session', 'localSession');
-        if (null !== $session) {
-            return $session->get($this->tokenValueSessionId);
-        }
-
-        return null;
-    }
-
-    /**
      * Generate a >22-length pseudo random string to be used as salt for
      * passwords
      *
@@ -347,6 +331,22 @@ class Security implements InjectionAwareInterface
         }
 
         return $safeBytes;
+    }
+
+    /**
+     * Returns the value of the CSRF token in session
+     *
+     * @return string|null
+     */
+    public function getSessionToken(): ?string
+    {
+        /** @var SessionInterface|null $session */
+        $session = $this->getLocalService('session', 'localSession');
+        if (null !== $session) {
+            return $session->get($this->tokenValueSessionId);
+        }
+
+        return null;
     }
 
     /**

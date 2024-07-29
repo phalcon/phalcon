@@ -13,7 +13,9 @@ declare(strict_types=1);
 
 namespace Phalcon\Translate;
 
+use Exception as BaseException;
 use Phalcon\Config\ConfigInterface;
+use Phalcon\Support\Exception as SupportException;
 use Phalcon\Support\Traits\ConfigTrait;
 use Phalcon\Traits\Factory\FactoryTrait;
 use Phalcon\Translate\Adapter\AdapterInterface;
@@ -22,10 +24,6 @@ use Phalcon\Translate\Adapter\Gettext;
 use Phalcon\Translate\Adapter\NativeArray;
 
 /**
- * Class TranslateFactory
- *
- * @package Phalcon\Translate
- *
  * @property InterpolatorFactory $interpolator
  */
 class TranslateFactory
@@ -34,44 +32,40 @@ class TranslateFactory
     use FactoryTrait;
 
     /**
-     * @var InterpolatorFactory
-     */
-    private InterpolatorFactory $interpolator;
-
-    /**
      * AdapterFactory constructor.
      *
-     * @param InterpolatorFactory $interpolator
-     * @param array               $services
+     * @param InterpolatorFactory   $interpolator
+     * @param array<string, string> $services
      */
-    public function __construct(InterpolatorFactory $interpolator, array $services = [])
-    {
-        $this->interpolator = $interpolator;
-
+    public function __construct(
+        private InterpolatorFactory $interpolator,
+        array $services = []
+    ) {
         $this->init($services);
     }
 
     /**
      * Factory to create an instance from a Config object
      *
-     * @param array|ConfigInterface $config = [
-     *                                      'adapter' => 'ini,
-     *                                      'options' => [
-     *                                      'content'       => '',
-     *                                      'delimiter'     => ';',
-     *                                      'enclosure'     => '"',
-     *                                      'locale'        => '',
-     *                                      'defaultDomain' => '',
-     *                                      'directory'     => '',
-     *                                      'category'      => ''
-     *                                      'triggerError'  => false
-     *                                      ]
-     *                                      ]
+     * @param array<string, mixed>|ConfigInterface $config = {
+     *                                                     'adapter'       : string,
+     *                                                     'options'       : array {
+     *                                                     'content'       : string,
+     *                                                     'delimiter'     : string,
+     *                                                     'enclosure'     : string,
+     *                                                     'locale'        : string,
+     *                                                     'defaultDomain' : string,
+     *                                                     'directory'     : string,
+     *                                                     'category'      : string,
+     *                                                     'triggerError'  : bool,
+     *                                                     }
+     *                                                     }
      *
      * @return AdapterInterface
-     * @throws Exception
+     * @throws SupportException
+     * @throws BaseException
      */
-    public function load($config): AdapterInterface
+    public function load(array | ConfigInterface $config): AdapterInterface
     {
         $config  = $this->checkConfig($config);
         $name    = $config['adapter'];
@@ -83,11 +77,11 @@ class TranslateFactory
     /**
      * Create a new instance of the adapter
      *
-     * @param string $name
-     * @param array  $options
+     * @param string               $name
+     * @param array<string, mixed> $options
      *
      * @return AdapterInterface
-     * @throws Exception
+     * @throws BaseException
      */
     public function newInstance(string $name, array $options = []): AdapterInterface
     {

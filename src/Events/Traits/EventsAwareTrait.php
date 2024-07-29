@@ -60,7 +60,7 @@ trait EventsAwareTrait
      * Helper method to fire an event
      *
      * @param string $eventName
-     * @param        $data
+     * @param mixed  $data
      * @param bool   $cancellable
      *
      * @return bool|mixed|null
@@ -68,7 +68,7 @@ trait EventsAwareTrait
      */
     protected function fireManagerEvent(
         string $eventName,
-        $data = null,
+        mixed $data = null,
         bool $cancellable = true
     ) {
         if (null !== $this->eventsManager) {

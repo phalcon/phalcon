@@ -16,10 +16,13 @@ namespace Phalcon\Mvc;
 use Phalcon\Di\AbstractInjectionAware;
 use Phalcon\Mvc\Url\Exception;
 use Phalcon\Mvc\Url\UrlInterface;
+use Phalcon\Parsers\Parser;
 
+use function http_build_query;
 use function is_array;
 use function is_string;
-use function str_contains;
+use function preg_match;
+use function preg_replace;
 use function strlen;
 
 /**
@@ -44,13 +47,11 @@ class Url extends AbstractInjectionAware implements UrlInterface
     /**
      * @var string|null
      */
-    protected ?string $baseUri = null;
-
+    protected ?string $basePath = null;
     /**
      * @var string|null
      */
-    protected ?string $basePath = null;
-
+    protected ?string $baseUri = null;
     /**
      * @var RouterInterface|null
      */
@@ -110,7 +111,7 @@ class Url extends AbstractInjectionAware implements UrlInterface
      * @throws Exception
      */
     public function get(
-        array|string $uri = null,
+        array | string $uri = null,
         mixed $arguments = null,
         bool $local = null,
         mixed $baseUri = null
@@ -186,7 +187,7 @@ class Url extends AbstractInjectionAware implements UrlInterface
 //                $route->getReversedPaths(),
 //                $uri
 //            );
-            $uri = phalcon_replace_paths(
+            $uri = Parser::replacePaths(
                 $route->getPattern(),
                 $route->getReversedPaths(),
                 $uri
@@ -222,7 +223,7 @@ class Url extends AbstractInjectionAware implements UrlInterface
      *
      * @return string|null
      */
-    public function getBasePath(): string|null
+    public function getBasePath(): string | null
     {
         return $this->basePath;
     }
@@ -279,7 +280,7 @@ class Url extends AbstractInjectionAware implements UrlInterface
      * @return string
      * @throws Exception
      */
-    public function getStatic(array|string $uri = null): string
+    public function getStatic(array | string $uri = null): string
     {
         return $this->get(
             $uri,
@@ -301,6 +302,18 @@ class Url extends AbstractInjectionAware implements UrlInterface
         }
 
         return $this->getBaseUri();
+    }
+
+    /**
+     * Generates a local path
+     *
+     * @param string|null $path
+     *
+     * @return string
+     */
+    public function path(string $path = null): string
+    {
+        return $this->basePath . $path;
     }
 
     /**
@@ -361,17 +374,5 @@ class Url extends AbstractInjectionAware implements UrlInterface
         $this->staticBaseUri = $staticBaseUri;
 
         return $this;
-    }
-
-    /**
-     * Generates a local path
-     *
-     * @param string|null $path
-     *
-     * @return string
-     */
-    public function path(string $path = null): string
-    {
-        return $this->basePath . $path;
     }
 }

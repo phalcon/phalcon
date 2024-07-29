@@ -45,14 +45,24 @@ class Manager implements ManagerInterface
     protected bool $enablePriorities = false;
 
     /**
-     * @var array
+     * @var array|null
      */
     protected ?array $events = [];
 
     /**
-     * @var array
+     * @var array|null
      */
     protected ?array $responses = [];
+
+    /**
+     * Returns if priorities are enabled
+     *
+     * @return bool
+     */
+    public function arePrioritiesEnabled(): bool
+    {
+        return $this->enablePriorities;
+    }
 
     /**
      * Attach a listener to the events manager
@@ -88,16 +98,6 @@ class Manager implements ManagerInterface
 
         // Insert the handler in the queue
         $priorityQueue->insert($handler, $priority);
-    }
-
-    /**
-     * Returns if priorities are enabled
-     *
-     * @return bool
-     */
-    public function arePrioritiesEnabled(): bool
-    {
-        return $this->enablePriorities;
     }
 
     /**
@@ -190,7 +190,7 @@ class Manager implements ManagerInterface
      * @param mixed|null $data
      * @param bool       $cancelable
      *
-     * @return false|mixed|null
+     * @return mixed
      * @throws Exception
      */
     public function fire(
@@ -198,13 +198,13 @@ class Manager implements ManagerInterface
         object $source,
         $data = null,
         bool $cancelable = true
-    ) {
+    ): mixed {
         if (true === empty($this->events)) {
             return null;
         }
 
         // All valid events must have a colon separator
-        if (false === strpos($eventType, ':')) {
+        if (!str_contains($eventType, ':')) {
             throw new Exception('Invalid event type ' . $eventType);
         }
 
@@ -244,19 +244,19 @@ class Manager implements ManagerInterface
      * @param SplPriorityQueue $queue
      * @param EventInterface   $event
      *
-     * @return false|mixed|null
+     * @return mixed
      */
     final public function fireQueue(
         SplPriorityQueue $queue,
         EventInterface $event
-    ) {
+    ): mixed {
         $status = null;
 
         // Tell if the event is cancelable
         $cancelable = $event->isCancelable();
 
         // Responses need to be traced?
-        $collected = (bool)$this->collect;
+        $collected = $this->collect;
 
         // We need to clone the queue before iterate over it
         $iterator = clone $queue;
@@ -353,7 +353,7 @@ class Manager implements ManagerInterface
      *
      * @return bool
      */
-    public function isValidHandler($handler): bool
+    public function isValidHandler(mixed $handler): bool
     {
         if (true !== is_object($handler) && true !== is_callable($handler)) {
             return false;
@@ -370,10 +370,10 @@ class Manager implements ManagerInterface
      * @return false|mixed
      */
     private function checkFireHandlerClosure(
-        $status,
-        $handler,
+        mixed $status,
+        mixed $handler,
         EventInterface $event
-    ) {
+    ): mixed {
         // Check if the event is a closure
         if ($handler instanceof Closure || true === is_callable($handler)) {
             // Call the function in the PHP userland
@@ -398,10 +398,10 @@ class Manager implements ManagerInterface
      * @return mixed
      */
     private function checkFireHandlerMethod(
-        $status,
-        $handler,
+        mixed $status,
+        mixed $handler,
         EventInterface $event
-    ) {
+    ): mixed {
         $eventName = $event->getType();
 
         // Check if the listener has implemented an event with the same name
@@ -424,20 +424,10 @@ class Manager implements ManagerInterface
      *
      * @throws Exception
      */
-    private function checkHandler($handler): void
+    private function checkHandler(mixed $handler): void
     {
         if (false === $this->isValidHandler($handler)) {
             throw new Exception('Event handler must be an Object or Callable');
-        }
-    }
-
-    /**
-     * @param string|null $type
-     */
-    private function processDetachAllNullType(?string $type): void
-    {
-        if (null === $type) {
-            $this->events = [];
         }
     }
 
@@ -448,6 +438,16 @@ class Manager implements ManagerInterface
     {
         if (null !== $type && true === isset($this->events[$type])) {
             unset($this->events[$type]);
+        }
+    }
+
+    /**
+     * @param string|null $type
+     */
+    private function processDetachAllNullType(?string $type): void
+    {
+        if (null === $type) {
+            $this->events = [];
         }
     }
 }

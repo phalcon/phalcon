@@ -187,6 +187,8 @@ class PdoResult implements ResultInterface
      * @param int                      $mode
      * @param int|string|callable|null $fetchArgument
      * @param array|null               $constructorArgs
+     *
+     * @return array
      */
     public function fetchAll(
         int $mode = Enum::FETCH_DEFAULT,
@@ -341,7 +343,7 @@ class PdoResult implements ResultInterface
      */
     public function setFetchMode(
         int $fetchMode,
-        null|object|string $colNoOrClassNameOrObject = null,
+        null | object | string $colNoOrClassNameOrObject = null,
         mixed $ctorargs = null
     ): bool {
         if (

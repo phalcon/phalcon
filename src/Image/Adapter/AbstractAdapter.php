@@ -13,8 +13,10 @@ declare(strict_types=1);
 
 namespace Phalcon\Image\Adapter;
 
+use GdImage;
 use Phalcon\Image\Enum;
 use Phalcon\Image\Exception;
+use ValueError;
 
 use function array_map;
 use function max;
@@ -84,27 +86,13 @@ abstract class AbstractAdapter implements AdapterInterface
      * @param int    $opacity
      *
      * @return AdapterInterface
+     * @throws Exception
      */
     public function background(
         string $color,
         int $opacity = 100
     ): AdapterInterface {
-        if (
-            strlen($color) > 1 &&
-            substr($color, 0, 1) === "#"
-        ) {
-            $color = substr($color, 1);
-        }
-
-        if (strlen($color) === 3) {
-            $color = preg_replace("/./", "$0$0", $color);
-        }
-
-        $split = str_split($color, 2);
-        if (false === $split) {
-            throw new Exception("Cannot calculate color");
-        }
-        $colors = array_map("hexdec", $split);
+        $colors = $this->getColors($color);
 
         $this->processBackground($colors[0], $colors[1], $colors[2], $opacity);
 
@@ -447,6 +435,7 @@ abstract class AbstractAdapter implements AdapterInterface
      * @param string|null $fontFile
      *
      * @return AdapterInterface
+     * @throws Exception
      */
     public function text(
         string $text,
@@ -459,23 +448,7 @@ abstract class AbstractAdapter implements AdapterInterface
     ): AdapterInterface {
         $opacity = $this->checkHighLow($opacity);
 
-        if (
-            strlen($color) > 1 &&
-            substr($color, 0, 1) === "#"
-        ) {
-            $color = substr($color, 1);
-        }
-
-        if (strlen($color) === 3) {
-            $color = preg_replace("/./", "$0$0", $color);
-        }
-
-        $split = str_split($color, 2);
-        if (false === $split) {
-            throw new Exception("Cannot calculate color");
-        }
-
-        $colors = array_map("hexdec", $split);
+        $colors = $this->getColors($color);
 
         $this->processText(
             $text,
@@ -532,6 +505,167 @@ abstract class AbstractAdapter implements AdapterInterface
     {
         return min($max, max($value, $min));
     }
+
+
+    /**
+     * @param int $red
+     * @param int $green
+     * @param int $blue
+     * @param int $opacity
+     *
+     * @return void
+     */
+    abstract protected function processBackground(
+        int $red,
+        int $green,
+        int $blue,
+        int $opacity
+    ): void;
+
+    /**
+     * @param int $radius
+     *
+     * @return void
+     */
+    abstract protected function processBlur(int $radius): void;
+
+    /**
+     * @param int $width
+     * @param int $height
+     *
+     * @return false|GdImage|resource
+     */
+    abstract protected function processCreate(int $width, int $height);
+
+    /**
+     * @param int $width
+     * @param int $height
+     * @param int $offsetX
+     * @param int $offsetY
+     *
+     * @return void
+     */
+    abstract protected function processCrop(
+        int $width,
+        int $height,
+        int $offsetX,
+        int $offsetY
+    ): void;
+
+    /**
+     * @param int $direction
+     *
+     * @return void
+     */
+    abstract protected function processFlip(int $direction): void;
+
+    /**
+     * @param AdapterInterface $mask
+     *
+     * @return void
+     */
+    abstract protected function processMask(AdapterInterface $mask);
+
+    /**
+     * @param int $amount
+     *
+     * @return void
+     */
+    abstract protected function processPixelate(int $amount): void;
+
+    /**
+     * @param int  $height
+     * @param int  $opacity
+     * @param bool $fadeIn
+     *
+     * @return void
+     */
+    abstract protected function processReflection(
+        int $height,
+        int $opacity,
+        bool $fadeIn
+    ): void;
+
+    /**
+     * @param string $extension
+     * @param int    $quality
+     *
+     * @return string
+     * @throws Exception
+     */
+    abstract protected function processRender(string $extension, int $quality);
+
+    /**
+     * @param int $width
+     * @param int $height
+     *
+     * @return void
+     */
+    abstract protected function processResize(int $width, int $height): void;
+
+    /**
+     * @param int $degrees
+     *
+     * @return void
+     */
+    abstract protected function processRotate(int $degrees): void;
+
+    /**
+     * @param string $file
+     * @param int    $quality
+     *
+     * @return void
+     * @throws Exception
+     */
+    abstract protected function processSave(string $file, int $quality): void;
+
+    /**
+     * @param int $amount
+     *
+     * @return void
+     */
+    abstract protected function processSharpen(int $amount): void;
+
+    /**
+     * @param string      $text
+     * @param mixed       $offsetX
+     * @param mixed       $offsetY
+     * @param int         $opacity
+     * @param int         $red
+     * @param int         $green
+     * @param int         $blue
+     * @param int         $size
+     * @param string|null $fontFile
+     *
+     * @return void
+     * @throws Exception
+     */
+    abstract protected function processText(
+        string $text,
+        mixed $offsetX,
+        mixed $offsetY,
+        int $opacity,
+        int $red,
+        int $green,
+        int $blue,
+        int $size,
+        string $fontFile = null
+    ): void;
+
+    /**
+     * @param AdapterInterface $watermark
+     * @param int              $offsetX
+     * @param int              $offsetY
+     * @param int              $opacity
+     *
+     * @return void
+     */
+    abstract protected function processWatermark(
+        AdapterInterface $watermark,
+        int $offsetX,
+        int $offsetY,
+        int $opacity
+    ): void;
 
     /**
      * Resize the image to the given size
@@ -596,5 +730,33 @@ abstract class AbstractAdapter implements AdapterInterface
         }
 
         return $master;
+    }
+
+    /**
+     * @param string $color
+     *
+     * @return array
+     * @throws Exception
+     */
+    private function getColors(string $color): array
+    {
+        try {
+            if (
+                strlen($color) > 1 &&
+                str_starts_with($color, "#")
+            ) {
+                $color = substr($color, 1);
+            }
+
+            if (strlen($color) === 3) {
+                $color = preg_replace("/./", "$0$0", $color);
+            }
+
+            $split = str_split($color, 2);
+
+            return array_map("hexdec", $split);
+        } catch (ValueError) {
+            throw new Exception("Cannot calculate color");
+        }
     }
 }

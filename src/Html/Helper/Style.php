@@ -11,8 +11,6 @@ declare(strict_types=1);
 
 namespace Phalcon\Html\Helper;
 
-use Phalcon\Html\Exception;
-
 use function array_merge;
 
 /**
@@ -34,7 +32,6 @@ class Style extends AbstractSeries
      * @param array  $attributes
      *
      * @return $this
-     * @throws Exception
      */
     public function add(string $url, array $attributes = [])
     {

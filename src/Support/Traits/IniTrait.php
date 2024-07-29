@@ -33,7 +33,7 @@ trait IniTrait
             return $defaultValue;
         }
 
-        $value = match (strtolower($value)) {
+        return match (strtolower($value)) {
             'true',
             'on',
             'yes',
@@ -41,7 +41,5 @@ trait IniTrait
             '1'     => true,
             default => false,
         };
-
-        return $value;
     }
 }

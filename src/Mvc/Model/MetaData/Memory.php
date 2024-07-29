@@ -14,7 +14,6 @@ declare(strict_types=1);
 namespace Phalcon\Mvc\Model\MetaData;
 
 use Phalcon\Mvc\Model\MetaData;
-use Phalcon\Mvc\Model\Exception;
 
 /**
  * Phalcon\Mvc\Model\MetaData\Memory
@@ -27,9 +26,9 @@ class Memory extends MetaData
     /**
      * Phalcon\Mvc\Model\MetaData\Memory constructor
      *
-     * @param array options
+     * @param array<string, mixed> $options
      */
-    public function __construct($options = null)
+    public function __construct(array $options = [])
     {
     }
 
@@ -46,6 +45,5 @@ class Memory extends MetaData
      */
     public function write(?string $key, array $data): void
     {
-        return;
     }
 }

@@ -16,7 +16,6 @@ namespace Phalcon\Http;
 use Phalcon\Di\AbstractInjectionAware;
 use Phalcon\Events\EventsAwareInterface;
 use Phalcon\Events\Exception as EventsException;
-use Phalcon\Events\ManagerInterface;
 use Phalcon\Events\Traits\EventsAwareTrait;
 use Phalcon\Filter\FilterInterface;
 use Phalcon\Http\Message\Interfaces\RequestMethodInterface;
@@ -43,7 +42,6 @@ use function preg_replace;
 use function preg_split;
 use function str_replace;
 use function stripos;
-use function strpos;
 use function strrpos;
 use function strtolower;
 use function strtoupper;
@@ -96,22 +94,18 @@ class Request extends AbstractInjectionAware implements
      * @var bool
      */
     private bool $methodOverride = false;
-
-    /**
-     * @var array
-     */
-    private array $queryFilters = [];
-
     /**
      * @var array|null
      */
     private ?array $patchCache = null;
-
     /**
      * @var array|null
      */
     private ?array $putCache = null;
-
+    /**
+     * @var array
+     */
+    private array $queryFilters = [];
     /**
      * @var string
      */
@@ -177,7 +171,7 @@ class Request extends AbstractInjectionAware implements
      *
      * @return string[]|null
      */
-    public function getBasicAuth(): array|null
+    public function getBasicAuth(): array | null
     {
         if (
             true !== $this->hasServer('PHP_AUTH_USER') ||
@@ -226,38 +220,6 @@ class Request extends AbstractInjectionAware implements
     }
 
     /**
-     * Return the HTTP method parameter override flag
-     *
-     * @return bool
-     */
-    public function getHttpMethodParameterOverride(): bool
-    {
-        return $this->methodOverride;
-    }
-
-    /**
-     * Gets the preferred ISO locale variant.
-     *
-     * Gets the preferred locale accepted by the client from the
-     * "Accept-Language" request HTTP header and returns the
-     * base part of it i.e. `en` instead of `en-US`.
-     *
-     * Note: This method relies on the `$_SERVER["HTTP_ACCEPT_LANGUAGE"]`
-     * header.
-     *
-     * @link https://www.iso.org/standard/50707.html
-     *
-     * @return string
-     */
-    public function getPreferredIsoLocaleVariant(): string
-    {
-        $language = $this->getBestLanguage();
-        $language = explode('-', $language);
-
-        return '*' !== $language[0] ? $language[0] : '';
-    }
-
-    /**
      * Gets most possible client IPv4 Address. This method searches in
      * `$_SERVER["REMOTE_ADDR"]` and optionally in
      * `$_SERVER["HTTP_X_FORWARDED_FOR"]`
@@ -266,23 +228,22 @@ class Request extends AbstractInjectionAware implements
      *
      * @return string|bool
      */
-    public function getClientAddress(bool $trustForwardedHeader = false): string|bool
+    public function getClientAddress(bool $trustForwardedHeader = false): string | bool
     {
         $address = null;
-        $server  = $this->getServerArray();
 
         /**
          * Proxies uses this IP
          */
         if (true === $trustForwardedHeader) {
-            $address = $server['HTTP_X_FORWARDED_FOR'] ?? null;
+            $address = $_SERVER['HTTP_X_FORWARDED_FOR'] ?? null;
             if (null === $address) {
-                $address = $server['HTTP_CLIENT_IP'] ?? null;
+                $address = $_SERVER['HTTP_CLIENT_IP'] ?? null;
             }
         }
 
         if (null === $address) {
-            $address = $server['REMOTE_ADDR'] ?? null;
+            $address = $_SERVER['REMOTE_ADDR'] ?? null;
         }
 
         if (true !== is_string($address)) {
@@ -316,11 +277,9 @@ class Request extends AbstractInjectionAware implements
      *
      * @return string|null
      */
-    public function getContentType(): string|null
+    public function getContentType(): string | null
     {
-        $server = $this->getServerArray();
-
-        return $server['CONTENT_TYPE'] ?? null;
+        return $_SERVER['CONTENT_TYPE'] ?? null;
     }
 
     /**
@@ -331,12 +290,10 @@ class Request extends AbstractInjectionAware implements
      */
     public function getDigestAuth(): array
     {
-        $auth   = [];
-        $server = $this->getServerArray();
-
-        if (isset($server['PHP_AUTH_DIGEST'])) {
+        $auth = [];
+        if (isset($_SERVER['PHP_AUTH_DIGEST'])) {
             $matches = [];
-            $digest  = $server['PHP_AUTH_DIGEST'];
+            $digest  = $_SERVER['PHP_AUTH_DIGEST'];
 
             if (
                 !preg_match_all(
@@ -360,8 +317,10 @@ class Request extends AbstractInjectionAware implements
     }
 
     /**
-     * Retrieves a query/get value always sanitized with the preset filters
+     * Gets filtered data
      *
+     * @param string      $methodKey
+     * @param string      $method
      * @param string|null $name
      * @param mixed|null  $defaultValue
      * @param bool        $notAllowEmpty
@@ -369,16 +328,19 @@ class Request extends AbstractInjectionAware implements
      *
      * @return mixed
      */
-    public function getFilteredQuery(
+    public function getFilteredData(
+        string $methodKey,
+        string $method,
         string $name = null,
         mixed $defaultValue = null,
         bool $notAllowEmpty = false,
         bool $noRecursive = false
     ): mixed {
-        return $this->getFilteredData(
-            self::METHOD_GET,
-            'getQuery',
+        $filters = $this->queryFilters[$methodKey][$name] ?? [];
+
+        return $this->{$method}(
             $name,
+            $filters,
             $defaultValue,
             $notAllowEmpty,
             $noRecursive
@@ -464,6 +426,42 @@ class Request extends AbstractInjectionAware implements
     }
 
     /**
+     * Retrieves a query/get value always sanitized with the preset filters
+     *
+     * @param string|null $name
+     * @param mixed|null  $defaultValue
+     * @param bool        $notAllowEmpty
+     * @param bool        $noRecursive
+     *
+     * @return mixed
+     */
+    public function getFilteredQuery(
+        string $name = null,
+        mixed $defaultValue = null,
+        bool $notAllowEmpty = false,
+        bool $noRecursive = false
+    ): mixed {
+        return $this->getFilteredData(
+            self::METHOD_GET,
+            'getQuery',
+            $name,
+            $defaultValue,
+            $notAllowEmpty,
+            $noRecursive
+        );
+    }
+
+    /**
+     * Gets web page that refers active request. ie: https://www.google.com
+     *
+     * @return string
+     */
+    public function getHTTPReferer(): string
+    {
+        return $_SERVER['HTTP_REFERER'] ?? '';
+    }
+
+    /**
      * Gets HTTP header from request data
      *
      * @param string $header
@@ -472,15 +470,14 @@ class Request extends AbstractInjectionAware implements
      */
     final public function getHeader(string $header): string
     {
-        $name   = strtoupper(strtr($header, '-', '_'));
-        $server = $this->getServerArray();
+        $name = strtoupper(strtr($header, '-', '_'));
 
-        if (isset($server[$name])) {
-            return $server[$name];
+        if (isset($_SERVER[$name])) {
+            return $_SERVER[$name];
         }
 
-        if (isset($server['HTTP_' . $name])) {
-            return $server['HTTP_' . $name];
+        if (isset($_SERVER['HTTP_' . $name])) {
+            return $_SERVER['HTTP_' . $name];
         }
 
         return '';
@@ -501,6 +498,7 @@ class Request extends AbstractInjectionAware implements
      * </code>
      *
      * @return array
+     * @throws EventsException
      */
     public function getHeaders(): array
     {
@@ -511,8 +509,7 @@ class Request extends AbstractInjectionAware implements
             'CONTENT_MD5'    => true,
         ];
 
-        $server = $this->getServerArray();
-        foreach ($server as $name => $value) {
+        foreach ($_SERVER as $name => $value) {
             // Note: The starts_with uses case-insensitive search here
             if (str_starts_with(strtoupper($name), 'HTTP_')) {
                 $name = ucwords(
@@ -639,15 +636,13 @@ class Request extends AbstractInjectionAware implements
     }
 
     /**
-     * Gets web page that refers active request. ie: https://www.google.com
+     * Return the HTTP method parameter override flag
      *
-     * @return string
+     * @return bool
      */
-    public function getHTTPReferer(): string
+    public function getHttpMethodParameterOverride(): bool
     {
-        $server = $this->getServerArray();
-
-        return $server['HTTP_REFERER'] ?? '';
+        return $this->methodOverride;
     }
 
     /**
@@ -657,7 +652,7 @@ class Request extends AbstractInjectionAware implements
      *
      * @return array|bool|stdClass
      */
-    public function getJsonRawBody(bool $associative = false): array|bool|stdClass
+    public function getJsonRawBody(bool $associative = false): array | bool | stdClass
     {
         $rawBody = $this->getRawBody();
 
@@ -690,13 +685,11 @@ class Request extends AbstractInjectionAware implements
      */
     final public function getMethod(): string
     {
-        $server = $this->getServerArray();
-
-        if (true !== isset($server['REQUEST_METHOD'])) {
+        if (true !== isset($_SERVER['REQUEST_METHOD'])) {
             return self::METHOD_GET;
         }
 
-        $returnMethod = strtoupper($server['REQUEST_METHOD']);
+        $returnMethod = strtoupper($_SERVER['REQUEST_METHOD']);
 
         if (self::METHOD_POST === $returnMethod) {
             $overriddenMethod = $this->getHeader('X-HTTP-METHOD-OVERRIDE');
@@ -818,6 +811,28 @@ class Request extends AbstractInjectionAware implements
     }
 
     /**
+     * Gets the preferred ISO locale variant.
+     *
+     * Gets the preferred locale accepted by the client from the
+     * "Accept-Language" request HTTP header and returns the
+     * base part of it i.e. `en` instead of `en-US`.
+     *
+     * Note: This method relies on the `$_SERVER["HTTP_ACCEPT_LANGUAGE"]`
+     * header.
+     *
+     * @link https://www.iso.org/standard/50707.html
+     *
+     * @return string
+     */
+    public function getPreferredIsoLocaleVariant(): string
+    {
+        $language = $this->getBestLanguage();
+        $language = explode('-', $language);
+
+        return '*' !== $language[0] ? $language[0] : '';
+    }
+
+    /**
      * Gets a variable from put request
      *
      *```php
@@ -929,11 +944,9 @@ class Request extends AbstractInjectionAware implements
      *
      * @return string|null
      */
-    public function getServer(string $name): string|null
+    public function getServer(string $name): string | null
     {
-        $server = $this->getServerArray();
-
-        return $server[$name] ?? null;
+        return $_SERVER[$name] ?? null;
     }
 
     /**
@@ -961,6 +974,35 @@ class Request extends AbstractInjectionAware implements
     }
 
     /**
+     * Gets HTTP URI which request has been made to
+     *
+     *```php
+     * // Returns /some/path?with=queryParams
+     * $uri = $request->getURI();
+     *
+     * // Returns /some/path
+     * $uri = $request->getURI(true);
+     *```
+     *
+     * @param bool $onlyPath If true, query part will be omitted
+     *
+     * @return string
+     */
+    final public function getURI(bool $onlyPath = false): string
+    {
+        $requestURI = $this->getServer("REQUEST_URI");
+        if (null === $requestURI) {
+            return '';
+        }
+
+        if (true === $onlyPath) {
+            $requestURI = explode('?', $requestURI)[0];
+        }
+
+        return $requestURI;
+    }
+
+    /**
      * Gets attached files as Phalcon\Http\Request\File instances
      *
      * @param bool $onlySuccessful
@@ -973,7 +1015,7 @@ class Request extends AbstractInjectionAware implements
         bool $namedKeys = false
     ): array {
         $files      = [];
-        $superFiles = $_FILES ?? [];
+        $superFiles = $_FILES;
 
         if (true !== empty($superFiles)) {
             foreach ($superFiles as $prefix => $input) {
@@ -1011,7 +1053,7 @@ class Request extends AbstractInjectionAware implements
                 } else {
                     if (
                         false === $onlySuccessful ||
-                        UPLOAD_ERR_OK === $file['error']
+                        UPLOAD_ERR_OK === $input['error']
                     ) {
                         $files = $this->processFiles(
                             $files,
@@ -1025,35 +1067,6 @@ class Request extends AbstractInjectionAware implements
         }
 
         return $files;
-    }
-
-    /**
-     * Gets HTTP URI which request has been made to
-     *
-     *```php
-     * // Returns /some/path?with=queryParams
-     * $uri = $request->getURI();
-     *
-     * // Returns /some/path
-     * $uri = $request->getURI(true);
-     *```
-     *
-     * @param bool $onlyPath If true, query part will be omitted
-     *
-     * @return string
-     */
-    final public function getURI(bool $onlyPath = false): string
-    {
-        $requestURI = $this->getServer("REQUEST_URI");
-        if (null === $requestURI) {
-            return '';
-        }
-
-        if (true === $onlyPath) {
-            $requestURI = explode('?', $requestURI)[0];
-        }
-
-        return $requestURI;
     }
 
     /**
@@ -1159,7 +1172,7 @@ class Request extends AbstractInjectionAware implements
      */
     final public function hasServer(string $name): bool
     {
-        return array_key_exists($name, $this->getServerArray());
+        return array_key_exists($name, $_SERVER);
     }
 
     /**
@@ -1294,17 +1307,6 @@ class Request extends AbstractInjectionAware implements
     }
 
     /**
-     * Checks whether HTTP method is PUT.
-     * if _SERVER["REQUEST_METHOD"]==="PUT"
-     *
-     * @return bool
-     */
-    public function isPut(): bool
-    {
-        return $this->getMethod() === self::METHOD_PUT;
-    }
-
-    /**
      * Checks whether HTTP method is PURGE (Squid and Varnish support).
      * if _SERVER["REQUEST_METHOD"]==="PURGE"
      *
@@ -1316,6 +1318,17 @@ class Request extends AbstractInjectionAware implements
     }
 
     /**
+     * Checks whether HTTP method is PUT.
+     * if _SERVER["REQUEST_METHOD"]==="PUT"
+     *
+     * @return bool
+     */
+    public function isPut(): bool
+    {
+        return $this->getMethod() === self::METHOD_PUT;
+    }
+
+    /**
      * Checks whether request has been made using any secure layer
      *
      * @return bool
@@ -1323,17 +1336,6 @@ class Request extends AbstractInjectionAware implements
     public function isSecure(): bool
     {
         return $this->getScheme() === "https";
-    }
-
-    /**
-     * Checks if the `Request::getHttpHost` method will be use strict validation
-     * of host name or not
-     *
-     * @return bool
-     */
-    public function isStrictHostCheck(): bool
-    {
-        return $this->strictHostCheck;
     }
 
     /**
@@ -1354,6 +1356,17 @@ class Request extends AbstractInjectionAware implements
         }
 
         return str_contains($contentType, 'application/soap+xml');
+    }
+
+    /**
+     * Checks if the `Request::getHttpHost` method will be use strict validation
+     * of host name or not
+     *
+     * @return bool
+     */
+    public function isStrictHostCheck(): bool
+    {
+        return $this->strictHostCheck;
     }
 
     /**
@@ -1401,7 +1414,7 @@ class Request extends AbstractInjectionAware implements
     public function numFiles(bool $onlySuccessful = false): int
     {
         $numberFiles = 0;
-        $files       = $_FILES ?? [];
+        $files       = $_FILES;
 
         if (empty($files)) {
             return 0;
@@ -1554,6 +1567,7 @@ class Request extends AbstractInjectionAware implements
      * @param bool        $noRecursive
      *
      * @return mixed
+     * @throws Exception
      */
     final protected function getHelper(
         array $source,
@@ -1601,6 +1615,60 @@ class Request extends AbstractInjectionAware implements
     }
 
     /**
+     * Process a request header and return an array of values with their
+     * qualities
+     *
+     * @param string $serverIndex
+     * @param string $name
+     *
+     * @return array
+     */
+    final protected function getQualityHeader(
+        string $serverIndex,
+        string $name
+    ): array {
+        $returnedParts = [];
+        $serverValue   = $this->getServer($serverIndex);
+        $serverValue   = (null === $serverValue) ? '' : $serverValue;
+
+        $parts = preg_split(
+            "/,\\s*/",
+            $serverValue,
+            -1,
+            PREG_SPLIT_NO_EMPTY
+        );
+
+        foreach ($parts as $part) {
+            $headerParts = [];
+            $headerSplit = preg_split(
+                "/\s*;\s*/",
+                trim($part),
+                -1,
+                PREG_SPLIT_NO_EMPTY
+            );
+
+            foreach ($headerSplit as $headerPart) {
+                if (str_contains($headerPart, '=')) {
+                    $split = explode('=', $headerPart, 2);
+
+                    if ('q' === $split[0]) {
+                        $headerParts['quality'] = (double)$split[1];
+                    } else {
+                        $headerParts[$split[0]] = $split[1];
+                    }
+                } else {
+                    $headerParts[$name]     = $headerPart;
+                    $headerParts["quality"] = 1.0;
+                }
+            }
+
+            $returnedParts[] = $headerParts;
+        }
+
+        return $returnedParts;
+    }
+
+    /**
      * Recursively counts file in an array of files
      *
      * @param mixed $data
@@ -1638,60 +1706,6 @@ class Request extends AbstractInjectionAware implements
     }
 
     /**
-     * Process a request header and return an array of values with their
-     * qualities
-     *
-     * @param string $serverIndex
-     * @param string $name
-     *
-     * @return array
-     */
-    final protected function getQualityHeader(
-        string $serverIndex,
-        string $name
-    ): array {
-        $returnedParts = [];
-        $serverValue   = $this->getServer($serverIndex);
-        $serverValue   = (null === $serverValue) ? '' : $serverValue;
-
-        $parts = preg_split(
-            "/,\\s*/",
-            $serverValue,
-            -1,
-            PREG_SPLIT_NO_EMPTY
-        );
-
-        foreach ($parts as $part) {
-            $headerParts = [];
-            $headerSplit = preg_split(
-                "/\s*;\s*/",
-                trim($part),
-                -1,
-                PREG_SPLIT_NO_EMPTY
-            );
-
-            foreach ($headerSplit as $headerPart) {
-                if (false !== strpos($headerPart, '=')) {
-                    $split = explode('=', $headerPart, 2);
-
-                    if ('q' === $split[0]) {
-                        $headerParts['quality'] = (double)$split[1];
-                    } else {
-                        $headerParts[$split[0]] = $split[1];
-                    }
-                } else {
-                    $headerParts[$name]     = $headerPart;
-                    $headerParts["quality"] = 1.0;
-                }
-            }
-
-            $returnedParts[] = $headerParts;
-        }
-
-        return $returnedParts;
-    }
-
-    /**
      * Resolve authorization headers.
      *
      * @return array
@@ -1701,13 +1715,11 @@ class Request extends AbstractInjectionAware implements
     {
         $authHeader = null;
         $headers    = [];
-        $server     = $this->getServerArray();
 
         if (
             null !== $this->container &&
             null === $this->eventsManager
         ) {
-            /** @var ManagerInterface eventsManager */
             $this->eventsManager = $this->container->getShared('eventsManager');
         }
 
@@ -1715,7 +1727,7 @@ class Request extends AbstractInjectionAware implements
             $resolved = $this->fireManagerEvent(
                 'request:beforeAuthorizationResolve',
                 [
-                    'server' => $server,
+                    'server' => $_SERVER,
                 ]
             );
 
@@ -1780,7 +1792,7 @@ class Request extends AbstractInjectionAware implements
                 'request:afterAuthorizationResolve',
                 [
                     'headers' => $headers,
-                    'server'  => $server,
+                    'server'  => $_SERVER,
                 ]
             );
 
@@ -1829,7 +1841,7 @@ class Request extends AbstractInjectionAware implements
 
             if (is_array($name)) {
                 $parentFiles = $this->smoothFiles(
-                    $names[$index],
+                    $name,
                     $types[$index],
                     $tmpNames[$index],
                     $sizes[$index],
@@ -1866,45 +1878,6 @@ class Request extends AbstractInjectionAware implements
         }
 
         return $this->filterService;
-    }
-
-    /**
-     * @return array
-     */
-    private function getServerArray(): array
-    {
-        return $_SERVER ?? [];
-    }
-
-    /**
-     * Gets filtered data
-     *
-     * @param string      $methodKey
-     * @param string      $method
-     * @param string|null $name
-     * @param mixed|null  $defaultValue
-     * @param bool        $notAllowEmpty
-     * @param bool        $noRecursive
-     *
-     * @return mixed
-     */
-    public function getFilteredData(
-        string $methodKey,
-        string $method,
-        string $name = null,
-        mixed $defaultValue = null,
-        bool $notAllowEmpty = false,
-        bool $noRecursive = false
-    ): mixed {
-        $filters = $this->queryFilters[$methodKey][$name] ?? [];
-
-        return $this->{$method}(
-            $name,
-            $filters,
-            $defaultValue,
-            $notAllowEmpty,
-            $noRecursive
-        );
     }
 
     /**

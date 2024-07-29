@@ -13,6 +13,7 @@ declare(strict_types=1);
 
 namespace Phalcon\Encryption\Security;
 
+use Exception as BaseException;
 use Phalcon\Traits\Php\UrlTrait;
 
 /**
@@ -163,7 +164,7 @@ class Random
      * @param int $len
      *
      * @return string
-     * @throws \Exception If secure random number generator is not available or unexpected partial read
+     * @throws BaseException If secure random number generator is not available or unexpected partial read
      */
     public function base64(int $len = 16): string
     {
@@ -187,11 +188,11 @@ class Random
      * echo $random->base64Safe(); // GD8JojhzSTrqX7Q8J6uug
      *```
      *
-     * @param int|null $len
-     * @param bool     $padding
+     * @param int  $len
+     * @param bool $padding
      *
      * @return string
-     * @throws Exception If secure random number generator is not available or unexpected partial read
+     * @throws BaseException If secure random number generator is not available or unexpected partial read
      *
      * @link https://www.ietf.org/rfc/rfc3548.txt
      */
@@ -226,7 +227,7 @@ class Random
      * @param int $len
      *
      * @return string
-     * @throws \Exception If secure random number generator is not available or unexpected partial read
+     * @throws BaseException If secure random number generator is not available or unexpected partial read
      */
     public function bytes(int $len = 16): string
     {
@@ -252,7 +253,7 @@ class Random
      * @param int $len
      *
      * @return string
-     * @throws Exception If secure random number generator is not available or unexpected partial read
+     * @throws BaseException If secure random number generator is not available or unexpected partial read
      */
     public function hex(int $len = 16): string
     {
@@ -275,7 +276,7 @@ class Random
      * @param int $len
      *
      * @return int
-     * @throws Exception If secure random number generator is not available, unexpected partial read or $len <= 0
+     * @throws BaseException If secure random number generator is not available, unexpected partial read or $len <= 0
      */
     public function number(int $len): int
     {
@@ -306,7 +307,7 @@ class Random
      *```
      *
      * @return string
-     * @throws Exception If secure random number generator is not available or unexpected partial read
+     * @throws BaseException If secure random number generator is not available or unexpected partial read
      *
      * @link https://www.ietf.org/rfc/rfc4122.txt
      */
@@ -350,7 +351,7 @@ class Random
                 $index = $this->number($base - 1);
             }
 
-            $byteString .= $alphabet[(int)$index];
+            $byteString .= $alphabet[$index];
         }
 
         return $byteString;

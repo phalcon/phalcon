@@ -571,7 +571,7 @@ class Gd extends AbstractAdapter
      * @param string $extension
      * @param int    $quality
      *
-     * @return false|string
+     * @return string
      * @throws Exception
      */
     protected function processRender(string $extension, int $quality)

@@ -26,7 +26,10 @@ class Manager
     /**
      * Creates a form registering it in the forms manager
      *
-     * @param object entity
+     * @param string      $name
+     * @param object|null $entity
+     *
+     * @return Form
      */
     public function create(string $name, ?object $entity = null): Form
     {

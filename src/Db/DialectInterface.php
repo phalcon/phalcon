@@ -105,16 +105,16 @@ interface DialectInterface
     /**
      * Generates SQL to create a view
      *
-     * @param string      $viewName
-     * @param array       $definition
-     * @param string|null $schemaName
+     * @param string $viewName
+     * @param array  $definition
+     * @param string $schemaName
      *
      * @return string
      */
     public function createView(
         string $viewName,
         array $definition,
-        string $schemaName = ""
+        ?string $schemaName = null
     ): string;
 
     /**
@@ -127,7 +127,7 @@ interface DialectInterface
      */
     public function describeColumns(
         string $tableName,
-        string $schemaName = ""
+        ?string $schemaName = null
     ): string;
 
     /**
@@ -140,7 +140,7 @@ interface DialectInterface
      */
     public function describeIndexes(
         string $tableName,
-        string $schemaName = ""
+        ?string $schemaName = null
     ): string;
 
     /**
@@ -153,7 +153,7 @@ interface DialectInterface
      */
     public function describeReferences(
         string $tableName,
-        string $schemaName = ""
+        ?string $schemaName = null
     ): string;
 
     /**
@@ -229,15 +229,15 @@ interface DialectInterface
     /**
      * Generates SQL to drop a view
      *
-     * @param string      $viewName
-     * @param string|null $schemaName
-     * @param bool        $ifExists
+     * @param string $viewName
+     * @param string $schemaName
+     * @param bool   $ifExists
      *
      * @return string
      */
     public function dropView(
         string $viewName,
-        string $schemaName = "",
+        ?string $schemaName = null,
         bool $ifExists = true
     ): string;
 
@@ -279,9 +279,9 @@ interface DialectInterface
      * Transforms an intermediate representation for an expression into a
      * database system valid expression
      *
-     * @param array       $expression
-     * @param string|null $escapeChar
-     * @param array       $bindCounts
+     * @param array  $expression
+     * @param string $escapeChar
+     * @param array  $bindCounts
      *
      * @return string
      */
@@ -294,12 +294,12 @@ interface DialectInterface
     /**
      * Generates the SQL for LIMIT clause
      *
-     * @param string $sqlQuery
-     * @param mixed  $number
+     * @param string    $sqlQuery
+     * @param array|int $number
      *
      * @return string
      */
-    public function limit(string $sqlQuery, array|int $number): string;
+    public function limit(string $sqlQuery, array | int $number): string;
 
     /**
      * List all tables in database
@@ -308,7 +308,7 @@ interface DialectInterface
      *
      * @return string
      */
-    public function listTables(string $schemaName = ""): string;
+    public function listTables(?string $schemaName = null): string;
 
     /**
      * Generates SQL to modify a column in a table
@@ -395,7 +395,7 @@ interface DialectInterface
      */
     public function tableExists(
         string $tableName,
-        string $schemaName = ""
+        ?string $schemaName = null
     ): string;
 
     /**
@@ -406,7 +406,7 @@ interface DialectInterface
      *
      * @return string
      */
-    public function tableOptions(string $tableName, string $schemaName = ""): string;
+    public function tableOptions(string $tableName, ?string $schemaName = null): string;
 
     /**
      * Generates SQL checking for the existence of a schema.view
@@ -418,6 +418,6 @@ interface DialectInterface
      */
     public function viewExists(
         string $viewName,
-        string $schemaName = ""
+        ?string $schemaName = null
     ): string;
 }

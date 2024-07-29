@@ -109,13 +109,13 @@ class Stream extends Noop
     }
 
     /**
-     * @param string $sessionId
+     * @param string $id
      *
      * @return bool
      */
-    public function destroy($sessionId): bool
+    public function destroy(string $id): bool
     {
-        $file = $this->path . $this->getPrefixedName($sessionId);
+        $file = $this->path . $this->getPrefixedName($id);
 
         if (true === file_exists($file) && true === is_file($file)) {
             unlink($file);
@@ -125,14 +125,14 @@ class Stream extends Noop
     }
 
     /**
-     * @param int $maxlifetime
+     * @param int $max_lifetime
      *
-     * @return bool
+     * @return false|int
      */
-    public function gc($maxlifetime): bool
+    public function gc(int $max_lifetime): false | int
     {
         $pattern = $this->path . $this->prefix . "*";
-        $time    = time() - $maxlifetime;
+        $time    = time() - $max_lifetime;
 
         foreach (glob($pattern) as $file) {
             if (
@@ -144,30 +144,30 @@ class Stream extends Noop
             }
         }
 
-        return true;
+        return 1;
     }
 
     /**
      * Ignore the savePath and use local defined path
      *
-     * @param string $savePath
-     * @param string $sessionName
+     * @param string $path
+     * @param string $name
      *
      * @return bool
      */
-    public function open($savePath, $sessionName): bool
+    public function open(string $path, string $name): bool
     {
         return true;
     }
 
     /**
-     * @param string $sessionId
+     * @param string $id
      *
      * @return string
      */
-    public function read($sessionId): string
+    public function read(string $id): string
     {
-        $name = $this->path . $this->getPrefixedName($sessionId);
+        $name = $this->path . $this->getPrefixedName($id);
         $data = "";
 
         if (true === $this->phpFileExists($name)) {
@@ -188,14 +188,14 @@ class Stream extends Noop
     }
 
     /**
-     * @param string $sessionId
+     * @param string $id
      * @param string $data
      *
      * @return bool
      */
-    public function write($sessionId, $data): bool
+    public function write(string $id, string $data): bool
     {
-        $name = $this->path . $this->getPrefixedName($sessionId);
+        $name = $this->path . $this->getPrefixedName($id);
 
         return (
             false !== $this->phpFilePutContents($name, $data, LOCK_EX)

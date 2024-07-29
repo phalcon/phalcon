@@ -13,8 +13,9 @@ declare(strict_types=1);
 
 namespace Phalcon\Mvc\Model\MetaData;
 
-use Phalcon\Mvc\Model\MetaData;
+use Exception;
 use Phalcon\Cache\AdapterFactory;
+use Phalcon\Mvc\Model\MetaData;
 
 /**
  * Phalcon\Mvc\Model\MetaData\Apcu
@@ -39,12 +40,15 @@ class Apcu extends MetaData
     /**
      * Phalcon\Mvc\Model\MetaData\Apcu constructor
      *
-     * @param array options
+     * @param AdapterFactory       $factory
+     * @param array<string, mixed> $options
+     *
+     * @throws Exception
      */
-    public function __construct(AdapterFactory $factory, ?array $options = null)
+    public function __construct(AdapterFactory $factory, array $options = [])
     {
-        $options["prefix"] = $this->getArrVal($options, "prefix", "ph-mm-apcu-");
-        $options["lifetime"] = $this->getArrVal($options, "lifetime", 172800);
-        $this->adapter = $factory->newInstance("apcu", $options);
+        $options["prefix"]   = $options["prefix"] ?? "ph-mm-apcu-";
+        $options["lifetime"] = $options["lifetime"] ?? 172800;
+        $this->adapter       = $factory->newInstance("apcu", $options);
     }
 }

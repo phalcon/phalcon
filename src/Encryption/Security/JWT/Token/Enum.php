@@ -20,21 +20,20 @@ namespace Phalcon\Encryption\Security\JWT\Token;
  */
 class Enum
 {
-    /**
-     * Headers
-     */
-    public const TYPE         = 'typ';
-    public const ALGO         = 'alg';
-    public const CONTENT_TYPE = 'cty';
-
+    public const ALGO = 'alg';
     /**
      * Claims
      */
     public const AUDIENCE        = 'aud';
+    public const CONTENT_TYPE    = 'cty';
     public const EXPIRATION_TIME = 'exp';
     public const ID              = 'jti';
     public const ISSUED_AT       = 'iat';
     public const ISSUER          = 'iss';
     public const NOT_BEFORE      = 'nbf';
     public const SUBJECT         = 'sub';
+    /**
+     * Headers
+     */
+    public const TYPE = 'typ';
 }

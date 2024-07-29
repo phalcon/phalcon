@@ -32,9 +32,10 @@ class SetGetLimitCest
     {
         $this->setNewFactoryDefault();
         $this->setDatabase($I);
+
         /** @var PDO $connection */
         $connection = $I->getConnection();
-        (new InvoicesMigration($connection))->create();
+        (new InvoicesMigration($connection));
     }
 
     /**

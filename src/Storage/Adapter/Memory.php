@@ -62,6 +62,32 @@ class Memory extends AbstractAdapter
     }
 
     /**
+     * Stores data in the adapter
+     *
+     * @param string $prefix
+     *
+     * @return array
+     */
+    public function getKeys(string $prefix = ''): array
+    {
+        return $this->getFilteredKeys(array_keys($this->data), $prefix);
+    }
+
+    /**
+     * Stores data in the adapter forever. The key needs to manually deleted
+     * from the adapter.
+     *
+     * @param string $key
+     * @param mixed  $data
+     *
+     * @return bool
+     */
+    public function setForever(string $key, mixed $data): bool
+    {
+        return $this->set($key, $data);
+    }
+
+    /**
      * Decrements a stored number
      *
      * @param string $key
@@ -69,7 +95,7 @@ class Memory extends AbstractAdapter
      *
      * @return bool|int
      */
-    public function decrement(string $key, int $value = 1)
+    protected function doDecrement(string $key, int $value = 1): false | int
     {
         $prefixedKey = $this->getPrefixedKey($key);
         $result      = array_key_exists($prefixedKey, $this->data);
@@ -92,7 +118,7 @@ class Memory extends AbstractAdapter
      *
      * @return bool
      */
-    public function delete(string $key): bool
+    protected function doDelete(string $key): bool
     {
         $prefixedKey = $this->getPrefixedKey($key);
         $exists      = array_key_exists($prefixedKey, $this->data);
@@ -103,15 +129,13 @@ class Memory extends AbstractAdapter
     }
 
     /**
-     * Stores data in the adapter
+     * @param string $key
      *
-     * @param string $prefix
-     *
-     * @return array
+     * @return mixed
      */
-    public function getKeys(string $prefix = ''): array
+    protected function doGetData(string $key): mixed
     {
-        return $this->getFilteredKeys(array_keys($this->data), $prefix);
+        return $this->data[$this->getPrefixedKey($key)];
     }
 
     /**
@@ -121,7 +145,7 @@ class Memory extends AbstractAdapter
      *
      * @return bool
      */
-    public function has(string $key): bool
+    protected function doHas(string $key): bool
     {
         $prefixedKey = $this->getPrefixedKey($key);
 
@@ -136,7 +160,7 @@ class Memory extends AbstractAdapter
      *
      * @return bool|int
      */
-    public function increment(string $key, int $value = 1)
+    protected function doIncrement(string $key, int $value = 1): false | int
     {
         $prefixedKey = $this->getPrefixedKey($key);
         $result      = array_key_exists($prefixedKey, $this->data);
@@ -165,7 +189,7 @@ class Memory extends AbstractAdapter
      *
      * @return bool
      */
-    public function set(string $key, $value, $ttl = null): bool
+    protected function doSet(string $key, mixed $value, mixed $ttl = null): bool
     {
         if (true === is_int($ttl) && $ttl < 1) {
             return $this->delete($key);
@@ -177,29 +201,5 @@ class Memory extends AbstractAdapter
         $this->data[$prefixedKey] = $content;
 
         return true;
-    }
-
-    /**
-     * Stores data in the adapter forever. The key needs to manually deleted
-     * from the adapter.
-     *
-     * @param string $key
-     * @param mixed  $value
-     *
-     * @return bool
-     */
-    public function setForever(string $key, $value): bool
-    {
-        return $this->set($key, $value);
-    }
-
-    /**
-     * @param string $key
-     *
-     * @return mixed
-     */
-    protected function doGet(string $key)
-    {
-        return $this->data[$this->getPrefixedKey($key)];
     }
 }

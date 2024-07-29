@@ -16,6 +16,7 @@ namespace Phalcon\Cli;
 use Phalcon\Application\AbstractApplication;
 use Phalcon\Cli\Console\Exception;
 use Phalcon\Cli\Router\Route;
+use Phalcon\Events\Exception as EventsException;
 
 use function array_merge;
 use function array_shift;
@@ -36,7 +37,7 @@ class Console extends AbstractApplication
     /**
      * @var array|string
      */
-    protected array|string $arguments = [];
+    protected array | string $arguments = [];
 
     /**
      * @var array
@@ -48,9 +49,10 @@ class Console extends AbstractApplication
      *
      * @param array $arguments
      *
-     * @return mixed|bool
+     * @return bool|mixed|null
      * @throws Exception
      * @throws Router\Exception
+     * @throws EventsException
      */
     public function handle(array $arguments = [])
     {

@@ -105,35 +105,6 @@ abstract class AbstractAdapter implements AdapterInterface
     }
 
     /**
-     * Returns the annotations found in a specific property
-     *
-     * @param string $className
-     * @param string $propertyName
-     *
-     * @return Collection
-     */
-    public function getProperty(
-        string $className,
-        string $propertyName
-    ): Collection {
-        $properties = $this->get($className)->getPropertiesAnnotations();
-
-        return $properties[$propertyName] ?? new Collection();
-    }
-
-    /**
-     * Returns the annotations found in all the class' properties
-     *
-     * @param string $className
-     *
-     * @return array
-     */
-    public function getProperties(string $className): array
-    {
-        return $this->get($className)->getPropertiesAnnotations();
-    }
-
-    /**
      * Returns the annotations found in a specific method
      *
      * @param string $className
@@ -170,6 +141,35 @@ abstract class AbstractAdapter implements AdapterInterface
     }
 
     /**
+     * Returns the annotations found in all the class' properties
+     *
+     * @param string $className
+     *
+     * @return array
+     */
+    public function getProperties(string $className): array
+    {
+        return $this->get($className)->getPropertiesAnnotations();
+    }
+
+    /**
+     * Returns the annotations found in a specific property
+     *
+     * @param string $className
+     * @param string $propertyName
+     *
+     * @return Collection
+     */
+    public function getProperty(
+        string $className,
+        string $propertyName
+    ): Collection {
+        $properties = $this->get($className)->getPropertiesAnnotations();
+
+        return $properties[$propertyName] ?? new Collection();
+    }
+
+    /**
      * Returns the annotation reader
      *
      * @return ReaderInterface
@@ -178,6 +178,15 @@ abstract class AbstractAdapter implements AdapterInterface
     {
         return $this->reader ?? new Reader();
     }
+
+    /**
+     * Reads parsed annotations
+     *
+     * @param string $key
+     *
+     * @return Reflection|bool|int
+     */
+    abstract public function read(string $key): Reflection | bool | int;
 
     /**
      * Sets the annotations parser
@@ -190,4 +199,14 @@ abstract class AbstractAdapter implements AdapterInterface
     {
         $this->reader = $reader;
     }
+
+    /**
+     * Writes parsed annotations
+     *
+     * @param string     $key
+     * @param Reflection $data
+     *
+     * @return bool
+     */
+    abstract public function write(string $key, Reflection $data): bool;
 }

@@ -13,7 +13,6 @@ declare(strict_types=1);
 
 namespace Phalcon\Tests\Database\Paginator\Adapter\QueryBuilder;
 
-use Codeception\Util\Debug;
 use DatabaseTester;
 use Phalcon\Paginator\Adapter\AdapterInterface;
 use Phalcon\Paginator\Adapter\QueryBuilder;
@@ -37,7 +36,7 @@ class ConstructCest
 
         /** @var PDO $connection */
         $connection = $I->getConnection();
-        (new InvoicesMigration($connection))->create();
+        (new InvoicesMigration($connection));
     }
 
     /**

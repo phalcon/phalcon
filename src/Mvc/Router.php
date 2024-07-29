@@ -13,7 +13,7 @@ declare(strict_types=1);
 
 namespace Phalcon\Mvc;
 
-use Phalcon\Di\Traits\InjectionAwareTrait;
+use Phalcon\Di\AbstractInjectionAware;
 use Phalcon\Events\EventsAwareInterface;
 use Phalcon\Events\Exception as EventsException;
 use Phalcon\Events\Traits\EventsAwareTrait;
@@ -23,11 +23,20 @@ use Phalcon\Mvc\Router\GroupInterface;
 use Phalcon\Mvc\Router\Route;
 use Phalcon\Mvc\Router\RouteInterface;
 
+use function array_merge;
 use function array_reverse;
+use function call_user_func_array;
+use function explode;
 use function is_array;
+use function is_callable;
 use function is_int;
 use function is_string;
-use function str_contains;
+use function parse_url;
+use function preg_match;
+use function rtrim;
+use function trim;
+
+use const PHP_URL_PATH;
 
 /**
  * Phalcon\Mvc\Router is the standard framework router. Routing is the
@@ -55,10 +64,9 @@ use function str_contains;
  * echo $router->getControllerName();
  * ```
  */
-class Router implements RouterInterface, EventsAwareInterface
+class Router extends AbstractInjectionAware implements RouterInterface, EventsAwareInterface
 {
     use EventsAwareTrait;
-    use InjectionAwareTrait;
 
     public const POSITION_FIRST = 0;
     public const POSITION_LAST  = 1;
@@ -97,21 +105,18 @@ class Router implements RouterInterface, EventsAwareInterface
      * @var array
      */
     protected array $defaultParams = [];
-
-    /**
-     * @var array
-     */
-    protected array $keyRouteNames = [];
-
     /**
      * @var array
      */
     protected array $keyRouteIds = [];
-
+    /**
+     * @var array
+     */
+    protected array $keyRouteNames = [];
     /**
      * @var RouteInterface|null
      */
-    protected RouteInterface|null $matchedRoute = null;
+    protected RouteInterface | null $matchedRoute = null;
 
     /**
      * @var array
@@ -131,7 +136,7 @@ class Router implements RouterInterface, EventsAwareInterface
     /**
      * @var array|string|null
      */
-    protected array|string|null $notFoundPaths = null;
+    protected array | string | null $notFoundPaths = null;
 
     /**
      * @var array
@@ -222,8 +227,8 @@ class Router implements RouterInterface, EventsAwareInterface
      */
     public function add(
         string $pattern,
-        array|string|null $paths = null,
-        array|string|null $httpMethods = null,
+        array | string | null $paths = null,
+        array | string | null $httpMethods = null,
         int $position = Router::POSITION_LAST
     ): RouteInterface {
         /**
@@ -253,7 +258,7 @@ class Router implements RouterInterface, EventsAwareInterface
      */
     public function addConnect(
         string $pattern,
-        array|string|null $paths = null,
+        array | string | null $paths = null,
         int $position = Router::POSITION_LAST
     ): RouteInterface {
         return $this->add($pattern, $paths, "CONNECT", $position);
@@ -276,7 +281,7 @@ class Router implements RouterInterface, EventsAwareInterface
      */
     public function addDelete(
         string $pattern,
-        array|string|null $paths = null,
+        array | string | null $paths = null,
         int $position = Router::POSITION_LAST
     ): RouteInterface {
         return $this->add($pattern, $paths, "DELETE", $position);
@@ -299,7 +304,7 @@ class Router implements RouterInterface, EventsAwareInterface
      */
     public function addGet(
         string $pattern,
-        array|string|null $paths = null,
+        array | string | null $paths = null,
         int $position = Router::POSITION_LAST
     ): RouteInterface {
         return $this->add($pattern, $paths, "GET", $position);
@@ -322,7 +327,7 @@ class Router implements RouterInterface, EventsAwareInterface
      */
     public function addHead(
         string $pattern,
-        array|string|null $paths = null,
+        array | string | null $paths = null,
         int $position = Router::POSITION_LAST
     ): RouteInterface {
         return $this->add($pattern, $paths, "HEAD", $position);
@@ -345,7 +350,7 @@ class Router implements RouterInterface, EventsAwareInterface
      */
     public function addOptions(
         string $pattern,
-        array|string|null $paths = null,
+        array | string | null $paths = null,
         int $position = Router::POSITION_LAST
     ): RouteInterface {
         return $this->add($pattern, $paths, "OPTIONS", $position);
@@ -368,7 +373,7 @@ class Router implements RouterInterface, EventsAwareInterface
      */
     public function addPatch(
         string $pattern,
-        array|string|null $paths = null,
+        array | string | null $paths = null,
         int $position = Router::POSITION_LAST
     ): RouteInterface {
         return $this->add($pattern, $paths, "PATCH", $position);
@@ -391,7 +396,7 @@ class Router implements RouterInterface, EventsAwareInterface
      */
     public function addPost(
         string $pattern,
-        array|string|null $paths = null,
+        array | string | null $paths = null,
         int $position = Router::POSITION_LAST
     ): RouteInterface {
         return $this->add($pattern, $paths, "POST", $position);
@@ -415,7 +420,7 @@ class Router implements RouterInterface, EventsAwareInterface
      */
     public function addPurge(
         string $pattern,
-        array|string|null $paths = null,
+        array | string | null $paths = null,
         int $position = Router::POSITION_LAST
     ): RouteInterface {
         return $this->add($pattern, $paths, "PURGE", $position);
@@ -438,7 +443,7 @@ class Router implements RouterInterface, EventsAwareInterface
      */
     public function addPut(
         string $pattern,
-        array|string|null $paths = null,
+        array | string | null $paths = null,
         int $position = Router::POSITION_LAST
     ): RouteInterface {
         return $this->add($pattern, $paths, "PUT", $position);
@@ -461,7 +466,7 @@ class Router implements RouterInterface, EventsAwareInterface
      */
     public function addTrace(
         string $pattern,
-        array|string|null $paths = null,
+        array | string | null $paths = null,
         int $position = Router::POSITION_LAST
     ): RouteInterface {
         return $this->add($pattern, $paths, "TRACE", $position);
@@ -559,17 +564,17 @@ class Router implements RouterInterface, EventsAwareInterface
     /**
      * @return array
      */
-    public function getKeyRouteNames(): array
+    public function getKeyRouteIds(): array
     {
-        return $this->keyRouteNames;
+        return $this->keyRouteIds;
     }
 
     /**
      * @return array
      */
-    public function getKeyRouteIds(): array
+    public function getKeyRouteNames(): array
     {
-        return $this->keyRouteIds;
+        return $this->keyRouteNames;
     }
 
     /**
@@ -577,7 +582,7 @@ class Router implements RouterInterface, EventsAwareInterface
      *
      * @return RouteInterface|null
      */
-    public function getMatchedRoute(): RouteInterface|null
+    public function getMatchedRoute(): RouteInterface | null
     {
         return $this->matchedRoute;
     }
@@ -629,7 +634,7 @@ class Router implements RouterInterface, EventsAwareInterface
      *
      * @return RouteInterface|bool
      */
-    public function getRouteById(int|string $routeId): RouteInterface|bool
+    public function getRouteById(int | string $routeId): RouteInterface | bool
     {
         if (isset($this->keyRouteIds[$routeId])) {
             return $this->routes[$this->keyRouteIds[$routeId]];
@@ -658,7 +663,7 @@ class Router implements RouterInterface, EventsAwareInterface
      *
      * @return RouteInterface|bool
      */
-    public function getRouteByName(string $name): RouteInterface|bool
+    public function getRouteByName(string $name): RouteInterface | bool
     {
         if (isset($this->keyRouteNames[$name])) {
             return $this->routes[$this->keyRouteNames[$name]];
@@ -745,6 +750,7 @@ class Router implements RouterInterface, EventsAwareInterface
          * Routes are traversed in reversed order
          */
         $reverseRoutes = array_reverse($this->routes);
+
         foreach ($reverseRoutes as $route) {
             $params  = [];
             $matches = null;
@@ -1085,7 +1091,7 @@ class Router implements RouterInterface, EventsAwareInterface
      *
      * @return RouterInterface
      */
-    public function notFound(array|string $paths): RouterInterface
+    public function notFound(array | string $paths): RouterInterface
     {
         $this->notFoundPaths = $paths;
 
@@ -1211,18 +1217,6 @@ class Router implements RouterInterface, EventsAwareInterface
     }
 
     /**
-     * @param array $routeNames
-     *
-     * @return Router
-     */
-    public function setKeyRouteNames(array $routeNames): Router
-    {
-        $this->keyRouteNames = $routeNames;
-
-        return $this;
-    }
-
-    /**
      * @param array $routeIds
      *
      * @return Router
@@ -1230,6 +1224,18 @@ class Router implements RouterInterface, EventsAwareInterface
     public function setKeyRouteIds(array $routeIds): Router
     {
         $this->keyRouteIds = $routeIds;
+
+        return $this;
+    }
+
+    /**
+     * @param array $routeNames
+     *
+     * @return Router
+     */
+    public function setKeyRouteNames(array $routeNames): Router
+    {
+        $this->keyRouteNames = $routeNames;
 
         return $this;
     }

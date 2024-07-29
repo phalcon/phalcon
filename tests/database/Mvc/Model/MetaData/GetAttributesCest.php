@@ -38,14 +38,14 @@ class GetAttributesCest
      * @dataProvider getExamples
      *
      * @param DatabaseTester $I
-     * @param Example $example
+     * @param Example        $example
      *
-     * @author Phalcon Team <team@phalcon.io>
-     * @since  2020-02-01
+     * @author       Phalcon Team <team@phalcon.io>
+     * @since        2020-02-01
      *
-     * @group  mysql
-     * @group  pgsql
-     * @group  sqlite
+     * @group        mysql
+     * @group        pgsql
+     * @group        sqlite
      */
     public function mvcModelMetadataGetAttributes(
         DatabaseTester $I,
@@ -55,7 +55,7 @@ class GetAttributesCest
 
         $service = $example['service'];
 
-        $adapter = $this->newService($service);
+        $adapter    = $this->newService($service);
         $connection = $I->getConnection();
         $adapter->setDi($this->container);
 
@@ -84,7 +84,7 @@ class GetAttributesCest
 
         $I->assertNotEquals($adapter, $metadata);
 
-        $actual   = $adapter->getAttributes($model);
+        $actual = $adapter->getAttributes($model);
         $I->assertEquals($expected, $actual);
     }
 
@@ -95,19 +95,19 @@ class GetAttributesCest
     {
         return [
             [
-                'service' => 'metadataMemory',
+                'service'   => 'metadataMemory',
                 'className' => 'Memory',
             ],
             [
-                'service' => 'metadataApcu',
+                'service'   => 'metadataApcu',
                 'className' => 'Apcu',
             ],
             [
-                'service' => 'metadataRedis',
+                'service'   => 'metadataRedis',
                 'className' => 'Redis',
             ],
             [
-                'service' => 'metadataLibmemcached',
+                'service'   => 'metadataLibmemcached',
                 'className' => 'Libmemcached',
             ],
         ];

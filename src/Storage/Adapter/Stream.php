@@ -19,7 +19,6 @@ use FilesystemIterator;
 use Iterator;
 use Phalcon\Storage\Exception as StorageException;
 use Phalcon\Storage\SerializerFactory;
-use Phalcon\Support\Exception as SupportException;
 use Phalcon\Traits\Helper\Str\DirFromFileTrait;
 use Phalcon\Traits\Helper\Str\DirSeparatorTrait;
 use Phalcon\Traits\Php\FileTrait;
@@ -34,7 +33,6 @@ use function mkdir;
 use function restore_error_handler;
 use function serialize;
 use function set_error_handler;
-use function str_replace;
 use function time;
 use function unlink;
 
@@ -76,7 +74,6 @@ class Stream extends AbstractAdapter
      *                                   ]
      *
      * @throws StorageException
-     * @throws SupportException
      */
     public function __construct(
         SerializerFactory $factory,
@@ -113,83 +110,12 @@ class Stream extends AbstractAdapter
                 true !== $this->phpUnlink($file->getPathName())
             ) {
                 $result = false;
+                break;
             }
         }
 
         return $result;
     }
-
-    /**
-     * Decrements a stored number
-     *
-     * @param string $key
-     * @param int    $value
-     *
-     * @return bool|int
-     * @throws BaseException
-     */
-    public function decrement(string $key, int $value = 1)
-    {
-        if (true !== $this->has($key)) {
-            return false;
-        }
-
-        $data = $this->get($key);
-        $data = (int)$data - $value;
-
-        $result = $this->set($key, $data);
-        if (false !== $result) {
-            $result = $data;
-        }
-
-        return $result;
-    }
-
-    /**
-     * Reads data from the adapter
-     *
-     * @param string $key
-     *
-     * @return bool
-     */
-    public function delete(string $key): bool
-    {
-        if (true !== $this->has($key)) {
-            return false;
-        }
-
-        $filepath = $this->getFilepath($key);
-
-        return unlink($filepath);
-    }
-
-    /**
-     * Reads data from the adapter
-     *
-     * @param string     $key
-     * @param mixed|null $defaultValue
-     *
-     * @return mixed|null
-     */
-    public function get(string $key, $defaultValue = null)
-    {
-        $filepath = $this->getFilepath($key);
-
-        if (true !== $this->phpFileExists($filepath)) {
-            return $defaultValue;
-        }
-
-        $payload = $this->getPayload($filepath);
-
-        if (empty($payload) || $this->isExpired($payload)) {
-            return $defaultValue;
-        }
-
-        $content = $payload['content'] ?? null;
-
-        return $this->getUnserializedData($content, $defaultValue);
-    }
-
 
     /**
      * Stores data in the adapter
@@ -219,13 +145,104 @@ class Stream extends AbstractAdapter
     }
 
     /**
+     * Stores data in the adapter forever. The key needs to manually deleted
+     * from the adapter.
+     *
+     * @param string $key
+     * @param mixed  $data
+     *
+     * @return bool
+     */
+    public function setForever(string $key, mixed $data): bool
+    {
+        $payload = [
+            'created' => time(),
+            'ttl'     => 'forever',
+            'content' => $this->getSerializedData($data),
+        ];
+
+        return $this->storePayload($payload, $key);
+    }
+
+    /**
+     * Decrements a stored number
+     *
+     * @param string $key
+     * @param int    $value
+     *
+     * @return bool|int
+     * @throws BaseException
+     */
+    protected function doDecrement(string $key, int $value = 1): false | int
+    {
+        if (true !== $this->has($key)) {
+            return false;
+        }
+
+        $data = $this->get($key);
+        $data = (int)$data - $value;
+
+        $result = $this->set($key, $data);
+        if (false !== $result) {
+            $result = $data;
+        }
+
+        return $result;
+    }
+
+    /**
+     * Reads data from the adapter
+     *
+     * @param string $key
+     *
+     * @return bool
+     */
+    protected function doDelete(string $key): bool
+    {
+        if (true !== $this->has($key)) {
+            return false;
+        }
+
+        $filepath = $this->getFilepath($key);
+
+        return unlink($filepath);
+    }
+
+    /**
+     * Reads data from the adapter
+     *
+     * @param string     $key
+     * @param mixed|null $defaultValue
+     *
+     * @return mixed|null
+     */
+    protected function doGet(string $key, mixed $defaultValue = null): mixed
+    {
+        $filepath = $this->getFilepath($key);
+
+        if (true !== $this->phpFileExists($filepath)) {
+            return $defaultValue;
+        }
+
+        $payload = $this->getPayload($filepath);
+
+        if (empty($payload) || $this->isExpired($payload)) {
+            return $defaultValue;
+        }
+
+        $content = $payload['content'] ?? null;
+
+        return $this->getUnserializedData($content, $defaultValue);
+    }
+
+    /**
      * Checks if an element exists in the cache and is not expired
      *
      * @param string $key
      *
      * @return bool
      */
-    public function has(string $key): bool
+    protected function doHas(string $key): bool
     {
         $filepath = $this->getFilepath($key);
 
@@ -250,7 +267,7 @@ class Stream extends AbstractAdapter
      * @return bool|int
      * @throws BaseException
      */
-    public function increment(string $key, int $value = 1)
+    protected function doIncrement(string $key, int $value = 1): false | int
     {
         if (true !== $this->has($key)) {
             return false;
@@ -281,7 +298,7 @@ class Stream extends AbstractAdapter
      * @return bool
      * @throws BaseException
      */
-    public function set(string $key, $value, $ttl = null): bool
+    protected function doSet(string $key, mixed $value, mixed $ttl = null): bool
     {
         if (true === is_int($ttl) && $ttl < 1) {
             return $this->delete($key);
@@ -290,26 +307,6 @@ class Stream extends AbstractAdapter
         $payload = [
             'created' => time(),
             'ttl'     => $this->getTtl($ttl),
-            'content' => $this->getSerializedData($value),
-        ];
-
-        return $this->storePayload($payload, $key);
-    }
-
-    /**
-     * Stores data in the adapter forever. The key needs to manually deleted
-     * from the adapter.
-     *
-     * @param string $key
-     * @param mixed  $value
-     *
-     * @return bool
-     */
-    public function setForever(string $key, $value): bool
-    {
-        $payload = [
-            'created' => time(),
-            'ttl'     => 'forever',
             'content' => $this->getSerializedData($value),
         ];
 
@@ -328,9 +325,7 @@ class Stream extends AbstractAdapter
         $dirPrefix   = $this->toDirSeparator(
             $this->storageDir . $this->prefix
         );
-        $dirFromFile = $this->toDirFromFile(
-            str_replace($this->prefix, '', $key)
-        );
+        $dirFromFile = $this->toDirFromFile($this->getKeyWithoutPrefix($key));
 
         return $this->toDirSeparator($dirPrefix . $dirFromFile);
     }
@@ -344,7 +339,7 @@ class Stream extends AbstractAdapter
      */
     private function getFilepath(string $key): string
     {
-        return $this->getDir($key) . str_replace($this->prefix, '', $key);
+        return $this->getDir($key) . $this->getKeyWithoutPrefix($key);
     }
 
     /**
@@ -363,6 +358,23 @@ class Stream extends AbstractAdapter
             ),
             RecursiveIteratorIterator::CHILD_FIRST
         );
+    }
+
+    /**
+     * Check if the key has the prefix and remove it, otherwise just return the
+     * key unaltered
+     *
+     * @param string $key
+     *
+     * @return string
+     */
+    private function getKeyWithoutPrefix(string $key): string
+    {
+        if (str_starts_with($key, $this->prefix)) {
+            return substr($key, strlen($this->prefix));
+        }
+
+        return $key;
     }
 
     /**

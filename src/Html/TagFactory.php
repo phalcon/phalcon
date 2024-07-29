@@ -11,6 +11,7 @@ declare(strict_types=1);
 
 namespace Phalcon\Html;
 
+use Exception as BaseException;
 use Phalcon\Html\Escaper\EscaperInterface;
 use Phalcon\Html\Helper\Anchor;
 use Phalcon\Html\Helper\Base;
@@ -118,14 +119,13 @@ class TagFactory
     use FactoryTrait;
 
     /**
-     * @var EscaperInterface
-     */
-    private EscaperInterface $escaper;
-
-    /**
      * @var array
      */
     protected array $services = [];
+    /**
+     * @var EscaperInterface
+     */
+    private EscaperInterface $escaper;
 
     /**
      * TagFactory constructor.
@@ -147,6 +147,7 @@ class TagFactory
      * @param array  $args
      *
      * @return false|mixed
+     * @throws Exception
      */
     public function __call(string $name, array $args)
     {
@@ -175,6 +176,7 @@ class TagFactory
      * @param string $name
      *
      * @return mixed
+     * @throws BaseException
      */
     public function newInstance(string $name)
     {

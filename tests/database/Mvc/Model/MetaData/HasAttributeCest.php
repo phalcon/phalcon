@@ -29,6 +29,7 @@ class HasAttributeCest
     public function _before(DatabaseTester $I)
     {
         $this->setNewFactoryDefault();
+        $this->setDatabase($I);
     }
 
     /**
@@ -37,14 +38,14 @@ class HasAttributeCest
      * @dataProvider getExamples
      *
      * @param DatabaseTester $I
-     * @param Example $example
+     * @param Example        $example
      *
-     * @author Phalcon Team <team@phalcon.io>
-     * @since  2018-11-13
+     * @author       Phalcon Team <team@phalcon.io>
+     * @since        2018-11-13
      *
-     * @group  mysql
-     * @group  pgsql
-     * @group  sqlite
+     * @group        mysql
+     * @group        pgsql
+     * @group        sqlite
      */
     public function mvcModelMetadataHasAttribute(
         DatabaseTester $I,
@@ -56,6 +57,7 @@ class HasAttributeCest
 
         $adapter = $this->newService($service);
         $adapter->setDi($this->container);
+        $connection = $I->getConnection();
 
         $adapter->reset();
 
@@ -102,19 +104,19 @@ class HasAttributeCest
     {
         return [
             [
-                'service' => 'metadataMemory',
+                'service'   => 'metadataMemory',
                 'className' => 'Memory',
             ],
             [
-                'service' => 'metadataApcu',
+                'service'   => 'metadataApcu',
                 'className' => 'Apcu',
             ],
             [
-                'service' => 'metadataRedis',
+                'service'   => 'metadataRedis',
                 'className' => 'Redis',
             ],
             [
-                'service' => 'metadataLibmemcached',
+                'service'   => 'metadataLibmemcached',
                 'className' => 'Libmemcached',
             ],
         ];

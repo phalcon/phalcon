@@ -42,15 +42,42 @@ class Session extends AbstractFlash
     /**
      * Returns the messages in the session flasher
      *
-     * @param mixed|null $type
-     * @param bool       $remove
+     * @param string|null $type
+     * @param bool        $remove
      *
      * @return array
      * @throws Exception
      */
-    public function getMessages($type = null, bool $remove = true): array
+    public function getMessages(?string $type = null, bool $remove = true): array
     {
         return $this->getSessionMessages($remove, $type);
+    }
+
+    /**
+     * Returns the Session Service
+     *
+     * @return ManagerInterface
+     * @throws Exception
+     */
+    public function getSessionService(): ManagerInterface
+    {
+        if (null !== $this->sessionService) {
+            return $this->sessionService;
+        }
+
+        if (
+            null !== $this->container &&
+            true === $this->container->has('session')
+        ) {
+            $this->sessionService = $this->container->getShared('session');
+
+            return $this->sessionService;
+        }
+
+        throw new Exception(
+            "A dependency injection container is required to access " .
+            "the 'session' service"
+        );
     }
 
     /**
@@ -117,13 +144,13 @@ class Session extends AbstractFlash
     /**
      * Returns the messages stored in session
      *
-     * @param bool       $remove
-     * @param mixed|null $type
+     * @param bool        $remove
+     * @param string|null $type
      *
      * @return array
      * @throws Exception
      */
-    protected function getSessionMessages(bool $remove, string $type = null): array
+    protected function getSessionMessages(bool $remove, ?string $type = null): array
     {
         $session  = $this->getSessionService();
         $messages = $session->get(self::SESSION_KEY);
@@ -167,32 +194,5 @@ class Session extends AbstractFlash
         $session->set(self::SESSION_KEY, $messages);
 
         return $messages;
-    }
-
-    /**
-     * Returns the Session Service
-     *
-     * @return ManagerInterface
-     * @throws Exception
-     */
-    public function getSessionService(): ManagerInterface
-    {
-        if (null !== $this->sessionService) {
-            return $this->sessionService;
-        }
-
-        if (
-            null !== $this->container &&
-            true === $this->container->has('session')
-        ) {
-            $this->sessionService = $this->container->getShared('session');
-
-            return $this->sessionService;
-        }
-
-        throw new Exception(
-            "A dependency injection container is required to access " .
-            "the 'session' service"
-        );
     }
 }

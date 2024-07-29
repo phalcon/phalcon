@@ -79,9 +79,9 @@ class Max extends Equal
         bool $included = false
     ) {
         if (true === $included) {
-            return $target <= $source;
+            return $target >= $source;
         }
 
-        return $target < $source;
+        return $target > $source;
     }
 }

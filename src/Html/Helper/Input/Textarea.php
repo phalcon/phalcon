@@ -11,8 +11,6 @@ declare(strict_types=1);
 
 namespace Phalcon\Html\Helper\Input;
 
-use Phalcon\Html\Exception;
-
 /**
  * Class Textarea
  *
@@ -31,7 +29,6 @@ class Textarea extends AbstractInput
      * Returns the HTML for the input.
      *
      * @return string
-     * @throws Exception
      */
     public function __toString()
     {

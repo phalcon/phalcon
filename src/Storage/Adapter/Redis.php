@@ -28,8 +28,6 @@ use function mb_strtolower;
 
 /**
  * Redis adapter
- *
- * @property array $options
  */
 class Redis extends AbstractAdapter
 {
@@ -50,21 +48,7 @@ class Redis extends AbstractAdapter
         SerializerFactory $factory,
         array $options = []
     ) {
-        /**
-         * Lets set some defaults and options here
-         */
-        $options["host"]           = $options["host"] ?? "127.0.0.1";
-        $options["port"]           = (int)($options["port"] ?? 6379);
-        $options["index"]          = $options["index"] ?? 0;
-        $options["timeout"]        = $options["timeout"] ?? 0;
-        $options["persistent"]     = (bool)($options["persistent"] ?? false);
-        $options["persistentId"]   = (string)($options["persistentId"] ?? "");
-        $options["auth"]           = $options["auth"] ?? "";
-        $options["socket"]         = $options["socket"] ?? "";
-        $options["connectTimeout"] = $options["connectTimeout"] ?? 0;
-        $options["retryInterval"]  = $options["retryInterval"] ?? 0;
-        $options["readTimeout"]    = $options["readTimeout"] ?? 0;
-
+        $options = $this->getDefaultOptions($options);
         parent::__construct($factory, $options);
     }
 
@@ -82,44 +66,13 @@ class Redis extends AbstractAdapter
     }
 
     /**
-     * Decrements a stored number
-     *
-     * @param string $key
-     * @param int    $value
-     *
-     * @return bool|int
-     * @throws StorageException
-     */
-    public function decrement(string $key, int $value = 1)
-    {
-        return $this->getAdapter()
-                    ->decrBy($key, $value)
-        ;
-    }
-
-    /**
-     * Reads data from the adapter
-     *
-     * @param string $key
-     *
-     * @return bool
-     * @throws StorageException
-     */
-    public function delete(string $key): bool
-    {
-        return (bool)$this->getAdapter()
-                          ->unlink($key)
-        ;
-    }
-
-    /**
      * Returns the already connected adapter or connects to the Redis
      * server(s)
      *
      * @return mixed|RedisService
      * @throws StorageException
      */
-    public function getAdapter()
+    public function getAdapter(): mixed
     {
         if (null === $this->adapter) {
             $connection = new RedisService();
@@ -157,6 +110,53 @@ class Redis extends AbstractAdapter
     }
 
     /**
+     * Stores data in the adapter forever. The key needs to manually deleted
+     * from the adapter.
+     *
+     * @param string $key
+     * @param mixed  $value
+     *
+     * @return bool
+     */
+    public function setForever(string $key, mixed $data): bool
+    {
+        $result = $this->getAdapter()
+                       ->set($key, $this->getSerializedData($data))
+        ;
+
+        return is_bool($result) ? $result : false;
+    }
+
+    /**
+     * Decrements a stored number
+     *
+     * @param string $key
+     * @param int    $value
+     *
+     * @return bool|int
+     * @throws StorageException
+     */
+    protected function doDecrement(string $key, int $value = 1): false | int
+    {
+        return $this->getAdapter()
+                    ->decrBy($key, $value)
+        ;
+    }
+
+    /**
+     * Reads data from the adapter
+     *
+     * @param string $key
+     *
+     * @return bool
+     * @throws StorageException
+     */
+    protected function doDelete(string $key): bool
+    {
+        return (bool)$this->getAdapter()->unlink($key);
+    }
+
+    /**
      * Checks if an element exists in the cache
      *
      * @param string $key
@@ -164,11 +164,9 @@ class Redis extends AbstractAdapter
      * @return bool
      * @throws StorageException
      */
-    public function has(string $key): bool
+    protected function doHas(string $key): bool
     {
-        return (bool)$this->getAdapter()
-                          ->exists($key)
-        ;
+        return (bool)$this->getAdapter()->exists($key);
     }
 
     /**
@@ -180,11 +178,9 @@ class Redis extends AbstractAdapter
      * @return bool|false|int
      * @throws StorageException
      */
-    public function increment(string $key, int $value = 1)
+    protected function doIncrement(string $key, int $value = 1): false | int
     {
-        return $this->getAdapter()
-                    ->incrBy($key, $value)
-        ;
+        return $this->getAdapter()->incrBy($key, $value);
     }
 
     /**
@@ -201,7 +197,7 @@ class Redis extends AbstractAdapter
      * @return bool
      * @throws BaseException
      */
-    public function set(string $key, $value, $ttl = null): bool
+    protected function doSet(string $key, mixed $value, mixed $ttl = null): bool
     {
         if (true === is_int($ttl) && $ttl < 1) {
             return $this->delete($key);
@@ -218,22 +214,24 @@ class Redis extends AbstractAdapter
         return is_bool($result) ? $result : false;
     }
 
-    /**
-     * Stores data in the adapter forever. The key needs to manually deleted
-     * from the adapter.
-     *
-     * @param string $key
-     * @param mixed  $value
-     *
-     * @return bool
-     */
-    public function setForever(string $key, $value): bool
+    protected function getDefaultOptions($options): array
     {
-        $result = $this->getAdapter()
-                       ->set($key, $this->getSerializedData($value))
-        ;
+        /**
+         * Lets set some defaults and options here
+         */
+        $options["host"]           = $options["host"] ?? "127.0.0.1";
+        $options["port"]           = (int)($options["port"] ?? 6379);
+        $options["index"]          = $options["index"] ?? 0;
+        $options["timeout"]        = $options["timeout"] ?? 0;
+        $options["persistent"]     = (bool)($options["persistent"] ?? false);
+        $options["persistentId"]   = (string)($options["persistentId"] ?? "");
+        $options["auth"]           = $options["auth"] ?? "";
+        $options["socket"]         = $options["socket"] ?? "";
+        $options["connectTimeout"] = $options["connectTimeout"] ?? 0;
+        $options["retryInterval"]  = $options["retryInterval"] ?? 0;
+        $options["readTimeout"]    = $options["readTimeout"] ?? 0;
 
-        return is_bool($result) ? $result : false;
+        return $options;
     }
 
     /**
@@ -332,7 +330,7 @@ class Redis extends AbstractAdapter
      *
      * @param RedisService $connection
      */
-    private function setSerializer(RedisService $connection)
+    private function setSerializer(RedisService $connection): void
     {
         $map = [
             'redis_none' => RedisService::SERIALIZER_NONE,

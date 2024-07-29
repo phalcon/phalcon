@@ -121,23 +121,6 @@ abstract class AbstractLink
     }
 
     /**
-     * Determines if a href is a templated link or not.
-     *
-     * @see https://tools.ietf.org/html/rfc6570
-     *
-     * @param string $href
-     *
-     * @return bool
-     */
-    protected function hrefIsTemplated(string $href): bool
-    {
-        return (
-            false !== mb_strpos($href, "{") &&
-            false !== mb_strpos($href, "}")
-        );
-    }
-
-    /**
      * @param string $key
      * @param mixed  $value
      *
@@ -207,5 +190,22 @@ abstract class AbstractLink
         $newInstance->rels->remove($key);
 
         return $newInstance;
+    }
+
+    /**
+     * Determines if a href is a templated link or not.
+     *
+     * @see https://tools.ietf.org/html/rfc6570
+     *
+     * @param string $href
+     *
+     * @return bool
+     */
+    protected function hrefIsTemplated(string $href): bool
+    {
+        return (
+            false !== mb_strpos($href, "{") &&
+            false !== mb_strpos($href, "}")
+        );
     }
 }

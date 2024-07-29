@@ -22,6 +22,7 @@ use Phalcon\Acl\Exception;
 use Phalcon\Acl\Role;
 use Phalcon\Acl\RoleAwareInterface;
 use Phalcon\Acl\RoleInterface;
+use Phalcon\Events\Exception as EventsException;
 use Phalcon\Events\Traits\EventsAwareTrait;
 use ReflectionClass;
 use ReflectionException;
@@ -590,6 +591,7 @@ class Memory extends AbstractAdapter
      * @return bool
      * @throws Exception
      * @throws ReflectionException
+     * @throws EventsException
      */
     public function isAllowed(
         $roleName,
@@ -820,18 +822,6 @@ class Memory extends AbstractAdapter
     }
 
     /**
-     * Check whether role exist in the roles list
-     *
-     * @param string $roleName
-     *
-     * @return bool
-     */
-    public function isRole(string $roleName): bool
-    {
-        return isset($this->roles[$roleName]);
-    }
-
-    /**
      * Check whether component exist in the components list
      *
      * @param string $componentName
@@ -841,6 +831,18 @@ class Memory extends AbstractAdapter
     public function isComponent(string $componentName): bool
     {
         return isset($this->components[$componentName]);
+    }
+
+    /**
+     * Check whether role exist in the roles list
+     *
+     * @param string $roleName
+     *
+     * @return bool
+     */
+    public function isRole(string $roleName): bool
+    {
+        return isset($this->roles[$roleName]);
     }
 
     /**

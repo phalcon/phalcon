@@ -17,7 +17,6 @@ use Codeception\Example;
 use DatabaseTester;
 use Phalcon\Mvc\Model\Exception as ExpectedException;
 use Phalcon\Mvc\Model\MetaData\Memory;
-use Phalcon\Storage\Exception;
 use Phalcon\Tests\Fixtures\Traits\DiTrait;
 
 class GetSetDICest
@@ -25,18 +24,27 @@ class GetSetDICest
     use DiTrait;
 
     /**
-     * Executed before each test
+     * Tests Phalcon\Mvc\Model\MetaData :: getDI() - exception
      *
-     * @param  DatabaseTester $I
-     * @return void
+     * @param DatabaseTester $I
+     *
+     * @author Phalcon Team <team@phalcon.io>
+     * @since  2020-05-05
+     *
+     * @group  common
      */
-    public function _before(DatabaseTester $I): void
+    public function mvcModelMetadataGetDIThrowsException(DatabaseTester $I)
     {
-        try {
-            $this->setNewFactoryDefault();
-        } catch (Exception $e) {
-            $I->fail($e->getMessage());
-        }
+        $I->wantToTest('Mvc\Model\MetaData - getDI() - exception');
+
+        $I->expectThrowable(
+            new ExpectedException(
+                'A dependency injection container is required to access internal services'
+            ),
+            function () {
+                (new Memory())->getDI();
+            }
+        );
     }
 
     /**
@@ -45,12 +53,12 @@ class GetSetDICest
      * @dataProvider getExamples
      *
      * @param DatabaseTester $I
-     * @param Example $example
+     * @param Example        $example
      *
-     * @author Phalcon Team <team@phalcon.io>
-     * @since  2020-02-01
+     * @author       Phalcon Team <team@phalcon.io>
+     * @since        2020-02-01
      *
-     * @group  common
+     * @group        common
      */
     public function mvcModelMetadataGetSetDI(
         DatabaseTester $I,
@@ -58,6 +66,7 @@ class GetSetDICest
     ) {
         $I->wantToTest('Mvc\Model\MetaData - getDI() / setDI()');
 
+        $this->setNewFactoryDefault();
         $service = $example['service'];
 
         $metadata = $this->newService($service);
@@ -73,19 +82,19 @@ class GetSetDICest
     {
         return [
             [
-                'service' => 'metadataMemory',
+                'service'   => 'metadataMemory',
                 'className' => 'Memory',
             ],
             [
-                'service' => 'metadataApcu',
+                'service'   => 'metadataApcu',
                 'className' => 'Apcu',
             ],
             [
-                'service' => 'metadataRedis',
+                'service'   => 'metadataRedis',
                 'className' => 'Redis',
             ],
             [
-                'service' => 'metadataLibmemcached',
+                'service'   => 'metadataLibmemcached',
                 'className' => 'Libmemcached',
             ],
         ];

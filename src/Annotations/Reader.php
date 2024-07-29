@@ -15,6 +15,7 @@ namespace Phalcon\Annotations;
 
 use Phalcon\Parsers\Parser;
 use ReflectionClass;
+use ReflectionException;
 
 use function array_keys;
 use function is_array;
@@ -31,6 +32,7 @@ class Reader implements ReaderInterface
      * @param string $className
      *
      * @return array
+     * @throws ReflectionException
      */
     public function parse(string $className): array
     {

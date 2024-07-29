@@ -78,17 +78,14 @@ class Cookies extends AbstractInjectionAware implements CookiesInterface
      * @var array
      */
     protected array $cookies = [];
-
-    /**
-     * @var bool
-     */
-    protected bool $isSent = false;
-
     /**
      * @var bool
      */
     protected bool $isRegistered = false;
-
+    /**
+     * @var bool
+     */
+    protected bool $isSent = false;
     /**
      * The cookie's sign key.
      *
@@ -132,6 +129,7 @@ class Cookies extends AbstractInjectionAware implements CookiesInterface
      * @param string $name
      *
      * @return CookieInterface
+     * @throws Exception
      */
     public function get(string $name): CookieInterface
     {
@@ -338,7 +336,7 @@ class Cookies extends AbstractInjectionAware implements CookiesInterface
              */
             $response->setCookies($this);
 
-            $this->registered = true;
+            $this->isRegistered = true;
         }
 
         return $this;

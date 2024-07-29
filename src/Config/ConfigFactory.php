@@ -13,6 +13,7 @@ declare(strict_types=1);
 
 namespace Phalcon\Config;
 
+use Exception as BaseException;
 use Phalcon\Config\Adapter\Grouped;
 use Phalcon\Config\Adapter\Ini;
 use Phalcon\Config\Adapter\Json;
@@ -20,8 +21,6 @@ use Phalcon\Config\Adapter\Php;
 use Phalcon\Config\Adapter\Yaml;
 use Phalcon\Traits\Factory\FactoryTrait;
 
-use function is_array;
-use function is_object;
 use function is_string;
 use function lcfirst;
 use function pathinfo;
@@ -62,7 +61,7 @@ class ConfigFactory
     /**
      * Load a config to create a new instance
      *
-     * @param string|array|Config $config = [
+     * @param array|string|Config $config = [
      *                                    'adapter'   => 'ini',
      *                                    'filePath'  => 'config.ini',
      *                                    'mode'      => null,
@@ -72,7 +71,7 @@ class ConfigFactory
      * @return ConfigInterface
      * @throws Exception
      */
-    public function load($config): ConfigInterface
+    public function load(array | string | Config $config): ConfigInterface
     {
         $configArray = $this->parseConfig($config);
 
@@ -108,7 +107,7 @@ class ConfigFactory
      * @param mixed|null $params
      *
      * @return ConfigInterface
-     * @throws Exception
+     * @throws BaseException
      */
     public function newInstance(
         string $name,
@@ -177,14 +176,8 @@ class ConfigFactory
             ];
         }
 
-        if (true === is_object($config) && $config instanceof ConfigInterface) {
+        if ($config instanceof ConfigInterface) {
             $config = $config->toArray();
-        }
-
-        if (true !== is_array($config)) {
-            throw new Exception(
-                'Config must be array or Phalcon\\Config\\Config object'
-            );
         }
 
         $this->checkConfigArray($config);

@@ -55,15 +55,15 @@ class Collection implements CollectionInterface
     /**
      * Maps a route to a handler that only matches if the HTTP method is DELETE.
      *
-     * @param string      $routePattern
-     * @param callable    $handler
-     * @param string|null $name
+     * @param string          $routePattern
+     * @param callable|string $handler
+     * @param string|null     $name
      *
      * @return CollectionInterface
      */
     public function delete(
         string $routePattern,
-        callable $handler,
+        callable | string $handler,
         string $name = null
     ): CollectionInterface {
         $this->addMap('DELETE', $routePattern, $handler, $name);
@@ -74,15 +74,15 @@ class Collection implements CollectionInterface
     /**
      * Maps a route to a handler that only matches if the HTTP method is GET.
      *
-     * @param string      $routePattern
-     * @param callable    $handler
-     * @param string|null $name
+     * @param string          $routePattern
+     * @param callable|string $handler
+     * @param string|null     $name
      *
      * @return CollectionInterface
      */
     public function get(
         string $routePattern,
-        callable $handler,
+        callable | string $handler,
         string $name = null
     ): CollectionInterface {
         $this->addMap('GET', $routePattern, $handler, $name);
@@ -123,15 +123,15 @@ class Collection implements CollectionInterface
     /**
      * Maps a route to a handler that only matches if the HTTP method is HEAD.
      *
-     * @param string      $routePattern
-     * @param callable    $handler
-     * @param string|null $name
+     * @param string          $routePattern
+     * @param callable|string $handler
+     * @param string|null     $name
      *
      * @return CollectionInterface
      */
     public function head(
         string $routePattern,
-        callable $handler,
+        callable | string $handler,
         string $name = null
     ): CollectionInterface {
         $this->addMap('HEAD', $routePattern, $handler, $name);
@@ -152,15 +152,15 @@ class Collection implements CollectionInterface
     /**
      * Maps a route to a handler.
      *
-     * @param string      $routePattern
-     * @param callable    $handler
-     * @param string|null $name
+     * @param string          $routePattern
+     * @param callable|string $handler
+     * @param string|null     $name
      *
      * @return CollectionInterface
      */
     public function map(
         string $routePattern,
-        callable $handler,
+        callable | string $handler,
         string $name = null
     ): CollectionInterface {
         $this->addMap('', $routePattern, $handler, $name);
@@ -180,17 +180,17 @@ class Collection implements CollectionInterface
      * );
      * ```
      *
-     * @param string       $routePattern
-     * @param callable     $handler
-     * @param array|string $method
-     * @param string|null  $name
+     * @param string          $routePattern
+     * @param callable|string $handler
+     * @param array|string    $method
+     * @param string|null     $name
      *
      * @return CollectionInterface
      */
     public function mapVia(
         string $routePattern,
-        callable $handler,
-        array|string $method,
+        callable | string $handler,
+        array | string $method,
         string $name = null
     ): CollectionInterface {
         $this->addMap($method, $routePattern, $handler, $name);
@@ -202,15 +202,15 @@ class Collection implements CollectionInterface
      * Maps a route to a handler that only matches if the HTTP method is
      * OPTIONS.
      *
-     * @param string      $routePattern
-     * @param callable    $handler
-     * @param string|null $name
+     * @param string          $routePattern
+     * @param callable|string $handler
+     * @param string|null     $name
      *
      * @return CollectionInterface
      */
     public function options(
         string $routePattern,
-        callable $handler,
+        callable | string $handler,
         string $name = null
     ): CollectionInterface {
         $this->addMap('OPTIONS', $routePattern, $handler, $name);
@@ -221,15 +221,15 @@ class Collection implements CollectionInterface
     /**
      * Maps a route to a handler that only matches if the HTTP method is PATCH.
      *
-     * @param string      $routePattern
-     * @param callable    $handler
-     * @param string|null $name
+     * @param string          $routePattern
+     * @param callable|string $handler
+     * @param string|null     $name
      *
      * @return CollectionInterface
      */
     public function patch(
         string $routePattern,
-        callable $handler,
+        callable | string $handler,
         string $name = null
     ): CollectionInterface {
         $this->addMap('PATCH', $routePattern, $handler, $name);
@@ -240,15 +240,15 @@ class Collection implements CollectionInterface
     /**
      * Maps a route to a handler that only matches if the HTTP method is POST.
      *
-     * @param string      $routePattern
-     * @param callable    $handler
-     * @param string|null $name
+     * @param string          $routePattern
+     * @param callable|string $handler
+     * @param string|null     $name
      *
      * @return CollectionInterface
      */
     public function post(
         string $routePattern,
-        callable $handler,
+        callable | string $handler,
         string $name = null
     ): CollectionInterface {
         $this->addMap('POST', $routePattern, $handler, $name);
@@ -259,15 +259,15 @@ class Collection implements CollectionInterface
     /**
      * Maps a route to a handler that only matches if the HTTP method is PUT.
      *
-     * @param string      $routePattern
-     * @param callable    $handler
-     * @param string|null $name
+     * @param string          $routePattern
+     * @param callable|string $handler
+     * @param string|null     $name
      *
      * @return CollectionInterface
      */
     public function put(
         string $routePattern,
-        callable $handler,
+        callable | string $handler,
         string $name = null
     ): CollectionInterface {
         $this->addMap('PUT', $routePattern, $handler, $name);
@@ -322,17 +322,17 @@ class Collection implements CollectionInterface
     /**
      * Internal function to add a handler to the group.
      *
-     * @param array|string $method
-     * @param string       $routePattern
-     * @param callable     $handler
-     * @param string|null  $name
+     * @param array|string    $method
+     * @param string          $routePattern
+     * @param callable|string $handler
+     * @param string|null     $name
      *
      * @return void
      */
     protected function addMap(
-        array|string $method,
+        array | string $method,
         string $routePattern,
-        callable $handler,
+        callable | string $handler,
         string $name = null
     ): void {
         $this->handlers[] = [$method, $routePattern, $handler, $name];

@@ -13,7 +13,6 @@ declare(strict_types=1);
 
 namespace Phalcon\Support\Helper\Str;
 
-use Phalcon\Support\Helper\Exception;
 use Phalcon\Traits\Helper\Str\LowerTrait;
 
 use function array_keys;
@@ -39,13 +38,12 @@ class Friendly
      * @param array|string $replace
      *
      * @return string
-     * @throws Exception
      */
     public function __invoke(
         string $text,
         string $separator = '-',
         bool $lowercase = true,
-        array|string $replace = []
+        array | string $replace = []
     ): string {
         if (true === is_string($replace)) {
             $replace = [$replace];
@@ -70,10 +68,9 @@ class Friendly
     }
 
     /**
-     * @param mixed $replace
+     * @param array<string, string> $replace
      *
      * @return array
-     * @throws Exception
      */
     private function getMatrix(array $replace): array
     {

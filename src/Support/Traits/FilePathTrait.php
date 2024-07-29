@@ -11,14 +11,14 @@
 
 declare(strict_types=1);
 
-namespace Phalcon\Support\Trait;
+namespace Phalcon\Support\Traits;
 
 use function str_replace;
 
 trait FilePathTrait
 {
-    public function prepareVirtualPath($key): string
+    public function prepareVirtualPath(string $key, string $separator = '_'): string
     {
-        return str_replace(['/', '\\', ':'], '_', $key);
+        return str_replace(['/', '\\', ':'], $separator, $key);
     }
 }

@@ -26,14 +26,6 @@ use const ENT_QUOTES;
 class Attributes extends Collection implements RenderInterface
 {
     /**
-     * Render attributes as HTML attributes
-     */
-    public function render(): string
-    {
-        return $this->renderAttributes($this->toArray());
-    }
-
-    /**
      * Alias of the render method
      */
     public function __toString(): string
@@ -42,8 +34,15 @@ class Attributes extends Collection implements RenderInterface
     }
 
     /**
-     * @param string $code
-     * @param array  $attributes
+     * Render attributes as HTML attributes
+     */
+    public function render(): string
+    {
+        return $this->renderAttributes($this->toArray());
+    }
+
+    /**
+     * @param array $attributes
      *
      * @return string
      * @throws Exception

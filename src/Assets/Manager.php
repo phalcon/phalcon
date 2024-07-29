@@ -13,6 +13,7 @@ declare(strict_types=1);
 
 namespace Phalcon\Assets;
 
+use Exception as BaseException;
 use Phalcon\Assets\Asset\Css as AssetCss;
 use Phalcon\Assets\Asset\Js as AssetJs;
 use Phalcon\Assets\Inline\Css as InlineCss;
@@ -873,6 +874,7 @@ class Manager implements InjectionAwareInterface
      * @param bool  $local
      *
      * @return string
+     * @throws Exception
      */
     private function cssLink($parameters = [], bool $local = true): string
     {
@@ -914,23 +916,6 @@ class Manager implements InjectionAwareInterface
          * Call the callback to generate the HTML
          */
         return call_user_func_array($callback, $parameters);
-    }
-
-    /**
-     * @param mixed $parameters
-     * @param bool  $local
-     *
-     * @return string
-     */
-    private function jsLink($parameters = [], bool $local = true): string
-    {
-        return $this->processParameters(
-            $parameters,
-            $local,
-            "script",
-            "application/javascript",
-            "src"
-        );
     }
 
     /**
@@ -1071,7 +1056,34 @@ class Manager implements InjectionAwareInterface
     }
 
     /**
+     * @param mixed $parameters
+     * @param bool  $local
+     *
+     * @return string
+     * @throws Exception
+     */
+    private function jsLink($parameters = [], bool $local = true): string
+    {
+        return $this->processParameters(
+            $parameters,
+            $local,
+            "script",
+            "application/javascript",
+            "src"
+        );
+    }
+
+    /**
      * Processes common parameters for js/css link generation
+     *
+     * @param        $parameters
+     * @param bool   $local
+     * @param string $helperClass
+     * @param string $type
+     * @param string $name
+     *
+     * @return string
+     * @throws BaseException
      */
     private function processParameters(
         $parameters,

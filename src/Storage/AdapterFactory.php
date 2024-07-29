@@ -13,12 +13,14 @@ declare(strict_types=1);
 
 namespace Phalcon\Storage;
 
+use Exception as BaseException;
 use Phalcon\Storage\Adapter\AdapterInterface;
 use Phalcon\Storage\Adapter\Apcu;
 use Phalcon\Storage\Adapter\Libmemcached;
 use Phalcon\Storage\Adapter\Memory;
 use Phalcon\Storage\Adapter\Redis;
 use Phalcon\Storage\Adapter\Stream;
+use Phalcon\Storage\Adapter\Weak;
 use Phalcon\Traits\Factory\FactoryTrait;
 
 /**
@@ -53,11 +55,29 @@ class AdapterFactory
     /**
      * Create a new instance of the adapter
      *
-     * @param string $name
-     * @param array  $options
+     * @param array options = [
+     *             'servers' => [
+     *             [
+     *             'host' => '127.0.0.1',
+     *             'port' => 11211,
+     *             'weight' => 1
+     *             ]
+     *             ],
+     *             'defaultSerializer' => 'Php',
+     *             'lifetime' => 3600,
+     *             'serializer' => null,
+     *             'prefix' => '',
+     *             'host' => '127.0.0.1',
+     *             'port' => 6379,
+     *             'index' => 0,
+     *             'persistent' => false,
+     *             'auth' => '',
+     *             'socket' => '',
+     *             'storageDir' => '',
+     *             ]
      *
      * @return AdapterInterface
-     * @throws Exception
+     * @throws BaseException
      */
     public function newInstance(string $name, array $options = []): AdapterInterface
     {
@@ -85,6 +105,7 @@ class AdapterFactory
             'memory'       => Memory::class,
             'redis'        => Redis::class,
             'stream'       => Stream::class,
+            'weak'         => Weak::class,
         ];
     }
 }

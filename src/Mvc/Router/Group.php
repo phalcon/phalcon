@@ -74,17 +74,17 @@ class Group implements GroupInterface
     /**
      * @mixed string|null
      */
-    protected string|null $hostname = null;
+    protected string | null $hostname = null;
 
     /**
      * @mixed array|string|null
      */
-    protected array|string|null $paths = null;
+    protected array | string | null $paths = null;
 
     /**
      * @mixed string|null
      */
-    protected string|null $prefix = null;
+    protected string | null $prefix = null;
 
     /**
      * @mixed array
@@ -344,7 +344,7 @@ class Group implements GroupInterface
      *
      * @return callable|null
      */
-    public function getBeforeMatch(): callable|null
+    public function getBeforeMatch(): callable | null
     {
         return $this->beforeMatch;
     }
@@ -354,7 +354,7 @@ class Group implements GroupInterface
      *
      * @return string|null
      */
-    public function getHostname(): string|null
+    public function getHostname(): string | null
     {
         return $this->hostname;
     }
@@ -364,7 +364,7 @@ class Group implements GroupInterface
      *
      * @return array|string|null
      */
-    public function getPaths(): array|string|null
+    public function getPaths(): array | string | null
     {
         return $this->paths;
     }
@@ -374,7 +374,7 @@ class Group implements GroupInterface
      *
      * @return string|null
      */
-    public function getPrefix(): string|null
+    public function getPrefix(): string | null
     {
         return $this->prefix;
     }
@@ -410,7 +410,7 @@ class Group implements GroupInterface
      *
      * @return GroupInterface
      */
-    public function setPaths(array|string $paths): GroupInterface
+    public function setPaths(array | string $paths): GroupInterface
     {
         $this->paths = $paths;
 
@@ -444,11 +444,12 @@ class Group implements GroupInterface
      * @param array|string|null $httpMethods
      *
      * @return RouteInterface
+     * @throws Exception
      */
     protected function addRoute(
         string $pattern,
-        array|string|null $paths = null,
-        array|string|null $httpMethods = null
+        array | string | null $paths = null,
+        array | string | null $httpMethods = null
     ): RouteInterface {
         /**
          * Check if the paths need to be merged with current paths

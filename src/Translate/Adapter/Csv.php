@@ -39,8 +39,8 @@ class Csv extends AbstractAdapter implements ArrayAccess
     /**
      * Csv constructor.
      *
-     * @param InterpolatorFactory $interpolator
-     * @param array               $options   = [
+     * @param InterpolatorFactory   $interpolator
+     * @param array<string, string> $options = [
      *                                       'content'   => '',
      *                                       'delimiter' => ';',
      *                                       'enclosure' => '"'
@@ -79,8 +79,8 @@ class Csv extends AbstractAdapter implements ArrayAccess
     /**
      * Returns the translation related to the given key
      *
-     * @param string $translateKey
-     * @param array  $placeholders
+     * @param string                $translateKey
+     * @param array<string, string> $placeholders
      *
      * @return string
      */
@@ -89,6 +89,16 @@ class Csv extends AbstractAdapter implements ArrayAccess
         $translation = $this->translate[$translateKey] ?? $translateKey;
 
         return $this->replacePlaceholders($translation, $placeholders);
+    }
+
+    /**
+     * Returns the internal array
+     *
+     * @return array
+     */
+    public function toArray(): array
+    {
+        return $this->translate;
     }
 
     /**
@@ -123,7 +133,7 @@ class Csv extends AbstractAdapter implements ArrayAccess
             }
 
             if (
-                '#' === substr($data[0], 0, 1) ||
+                str_starts_with($data[0], '#') ||
                 true !== isset($data[1])
             ) {
                 continue;
@@ -133,15 +143,5 @@ class Csv extends AbstractAdapter implements ArrayAccess
         }
 
         fclose($pointer);
-    }
-
-    /**
-     * Returns the internal array
-     *
-     * @return array
-     */
-    public function toArray(): array
-    {
-        return $this->translate;
     }
 }

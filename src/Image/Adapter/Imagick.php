@@ -13,6 +13,7 @@ declare(strict_types=1);
 
 namespace Phalcon\Image\Adapter;
 
+use GdImage;
 use Imagick as ImagickNative;
 use ImagickDraw;
 use ImagickDrawException;
@@ -22,6 +23,7 @@ use ImagickPixelException;
 use Phalcon\Image\Enum;
 use Phalcon\Image\Exception;
 
+use function constant;
 use function is_bool;
 use function is_float;
 use function is_int;
@@ -236,10 +238,14 @@ class Imagick extends AbstractAdapter
         while (true) {
             $background->newImage($this->width, $this->height, $pixel1);
 
-            if (true !== $background->getImageAlphaChannel()) {
-                $background->setImageAlphaChannel(
-                    constant("Imagick::ALPHACHANNEL_SET")
-                );
+            try {
+                if (true !== $background->getImageAlphaChannel()) {
+                    $background->setImageAlphaChannel(
+                        constant("Imagick::ALPHACHANNEL_SET")
+                    );
+                }
+            } catch (ImagickException) {
+                throw new Exception("Imagick::getImageAlphaChannel failed");
             }
 
             $background->setImageBackgroundColor($pixel2);
@@ -295,6 +301,17 @@ class Imagick extends AbstractAdapter
                 break;
             }
         }
+    }
+
+    /**
+     * @param int $width
+     * @param int $height
+     *
+     * @return false|GdImage|resource
+     */
+    protected function processCreate(int $width, int $height)
+    {
+        return false;
     }
 
     /**
@@ -782,7 +799,7 @@ class Imagick extends AbstractAdapter
                 $offsetY = 0;
                 $gravity = constant("Imagick::GRAVITY_CENTER");
             } elseif (true === is_int($offsetY)) {
-                $y = (int)$offsetY;
+                $y = $offsetY;
 
                 $gravity = (true === $offsetX && $y < 0) ? constant("Imagick::GRAVITY_SOUTHEAST") : $gravity;
                 $gravity = (true === $offsetX && $y >= 0) ? constant("Imagick::GRAVITY_NORTHEAST") : $gravity;
@@ -793,7 +810,7 @@ class Imagick extends AbstractAdapter
                 $offsetY = ($y < 0) ? $y * -1 : $offsetY;
             }
         } elseif (true === is_int($offsetX)) {
-            $x = (int)$offsetX;
+            $x = $offsetX;
 
             if ($offsetX) {
                 if (true === is_bool($offsetY)) {

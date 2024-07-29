@@ -36,13 +36,6 @@ interface ProfilerInterface
     public function finish(string $statement = null, array $values = []): void;
 
     /**
-     * Returns the underlying logger instance.
-     *
-     * @return LoggerInterface
-     */
-    public function getLogger(): LoggerInterface;
-
-    /**
      * Returns the log message format string, with placeholders.
      *
      * @return string
@@ -55,6 +48,13 @@ interface ProfilerInterface
      * @return int
      */
     public function getLogLevel(): int;
+
+    /**
+     * Returns the underlying logger instance.
+     *
+     * @return LoggerInterface
+     */
+    public function getLogger(): LoggerInterface;
 
     /**
      * Returns true if logging is active.

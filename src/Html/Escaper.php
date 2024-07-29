@@ -311,6 +311,23 @@ class Escaper implements EscaperInterface
     }
 
     /**
+     * Proxy method for testing
+     *
+     * @param string $input
+     *
+     * @return string
+     */
+    protected function phpHtmlSpecialChars(string $input): string
+    {
+        return htmlspecialchars(
+            $input,
+            $this->flags,
+            $this->encoding,
+            $this->doubleEncode
+        );
+    }
+
+    /**
      * @param string $input
      *
      * @return string
@@ -328,22 +345,5 @@ class Escaper implements EscaperInterface
     private function doEscapeJs(string $input): string
     {
         return $input;
-    }
-
-    /**
-     * Proxy method for testing
-     *
-     * @param string $input
-     *
-     * @return string
-     */
-    protected function phpHtmlSpecialChars(string $input): string
-    {
-        return htmlspecialchars(
-            $input,
-            $this->flags,
-            $this->encoding,
-            $this->doubleEncode
-        );
     }
 }

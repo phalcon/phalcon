@@ -144,7 +144,7 @@ class Uniqueness extends AbstractCombinedFieldsValidator
     protected function getColumnNameReal(mixed $record, string $field): string
     {
         // Caching columnMap
-        $columnRenaming = (bool)ini_get("phalcon.orm.column_renaming");
+        $columnRenaming = (bool)ini_get("orm.column_renaming");
         if (true === $columnRenaming && true === empty($this->columnMap)) {
             $this->columnMap = $record
                 ->getDI()
@@ -169,7 +169,7 @@ class Uniqueness extends AbstractCombinedFieldsValidator
      */
     protected function isUniqueness(
         Validation $validation,
-        array|string $field
+        array | string $field
     ): bool {
 //
 // @todo: Restore when new Collection is reintroduced
@@ -236,7 +236,7 @@ class Uniqueness extends AbstractCombinedFieldsValidator
         /** @var ModelInterface $className */
         $className = get_class($record);
 
-        return $className::count($params) == 0;
+        return $className::count($params) === 0;
     }
 
 

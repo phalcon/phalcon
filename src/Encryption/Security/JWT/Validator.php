@@ -58,16 +58,6 @@ class Validator
     }
 
     /**
-     * Return an array with validation errors (if any)
-     *
-     * @return array
-     */
-    public function getErrors(): array
-    {
-        return $this->errors;
-    }
-
-    /**
      * Return the value of a claim
      *
      * @param string $claim
@@ -77,6 +67,16 @@ class Validator
     public function get(string $claim): mixed
     {
         return $this->claims[$claim] ?? null;
+    }
+
+    /**
+     * Return an array with validation errors (if any)
+     *
+     * @return array
+     */
+    public function getErrors(): array
+    {
+        return $this->errors;
     }
 
     /**
@@ -115,7 +115,7 @@ class Validator
      *
      * @return Validator
      */
-    public function validateAudience(array|string $audience): Validator
+    public function validateAudience(array | string $audience): Validator
     {
         if (true === is_string($audience)) {
             $audience = [$audience];

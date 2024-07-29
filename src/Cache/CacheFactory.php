@@ -13,8 +13,10 @@ declare(strict_types=1);
 
 namespace Phalcon\Cache;
 
+use Exception as BaseException;
 use Phalcon\Cache\Exception\Exception;
 use Phalcon\Config\ConfigInterface;
+use Phalcon\Support\Exception as SupportException;
 use Phalcon\Support\Traits\ConfigTrait;
 
 /**
@@ -27,16 +29,11 @@ class CacheFactory
     use ConfigTrait;
 
     /**
-     * @var AdapterFactory
-     */
-    protected AdapterFactory $adapterFactory;
-
-    /**
      * Constructor
      */
-    public function __construct(AdapterFactory $factory)
-    {
-        $this->adapterFactory = $factory;
+    public function __construct(
+        protected AdapterFactory $adapterFactory
+    ) {
     }
 
     /**
@@ -67,9 +64,10 @@ class CacheFactory
      *                                                     ]
      *
      * @return CacheInterface
-     * @throws Exception
+     * @throws BaseException
+     * @throws SupportException
      */
-    public function load($config): CacheInterface
+    public function load(array | ConfigInterface $config): CacheInterface
     {
         $config  = $this->checkConfig($config);
         $name    = $config['adapter'];
@@ -104,7 +102,7 @@ class CacheFactory
      *                                      ]
      *
      * @return CacheInterface
-     * @throws Exception
+     * @throws BaseException
      */
     public function newInstance(string $name, array $options = []): CacheInterface
     {

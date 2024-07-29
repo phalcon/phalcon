@@ -15,6 +15,7 @@ namespace Phalcon\Logger;
 
 use DateTimeZone;
 use Phalcon\Config\ConfigInterface;
+use Phalcon\Support\Exception as SupportException;
 use Phalcon\Support\Traits\ConfigTrait;
 
 /**
@@ -54,8 +55,11 @@ class LoggerFactory
      *                                      ],
      *                                      ]
      *                                      ]
+     *
+     * @return Logger
+     * @throws SupportException
      */
-    public function load($config): Logger
+    public function load(array | ConfigInterface $config): Logger
     {
         $data     = [];
         $config   = $this->checkConfig($config);

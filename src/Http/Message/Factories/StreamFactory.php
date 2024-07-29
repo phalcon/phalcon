@@ -92,7 +92,7 @@ final class StreamFactory implements StreamFactoryInterface
      *
      * @param resource $phpResource
      *
-     * @return StreamInterface|void
+     * @return StreamInterface
      */
     public function createStreamFromResource($phpResource): StreamInterface
     {

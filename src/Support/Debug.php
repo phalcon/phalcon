@@ -46,21 +46,22 @@ use function sprintf;
 class Debug
 {
     /**
-     * @var bool
-     */
-    protected static bool $isActive;
-    /**
      * @var array
      */
     protected array $blacklist = ["request" => [], "server" => []];
     /**
      * @var mixed
      */
-    protected $data;
+    protected mixed $data = null;
     /**
      * @var bool
      */
     protected bool $hideDocumentRoot = false;
+    /**
+     * @var bool
+     */
+    protected static bool $isActive = false;
+
     /**
      * @var bool
      */
@@ -100,7 +101,7 @@ class Debug
      *
      * @return $this
      */
-    public function debugVar($variable): Debug
+    public function debugVar(mixed $variable): Debug
     {
         $this->data[] = [
             $variable,
@@ -220,34 +221,12 @@ class Debug
     }
 
     /**
-     * Throws an exception when a notice or warning is raised
-     *
-     * @param int    $severity
-     * @param string $message
-     * @param string $file
-     * @param int    $line
-     * @param array  $context
-     *
-     * @throws ErrorException
-     */
-    public function onUncaughtLowSeverity(
-        int $severity,
-        string $message,
-        string $file,
-        int $line,
-        array $context = []
-    ): void {
-        if (error_reporting() & $severity) {
-            throw new ErrorException($message, 0, $severity, $file, $line);
-        }
-    }
-
-    /**
      * Handles uncaught exceptions
      *
      * @param Throwable $exception
      *
      * @return bool
+     * @throws ReflectionException
      */
     public function onUncaughtException(Throwable $exception): bool
     {
@@ -285,6 +264,29 @@ class Debug
         echo $exception->getMessage();
 
         return false;
+    }
+
+    /**
+     * Throws an exception when a notice or warning is raised
+     *
+     * @param int    $severity
+     * @param string $message
+     * @param string $file
+     * @param int    $line
+     * @param array  $context
+     *
+     * @throws ErrorException
+     */
+    public function onUncaughtLowSeverity(
+        int $severity,
+        string $message,
+        string $file,
+        int $line,
+        array $context = []
+    ): void {
+        if (error_reporting() & $severity) {
+            throw new ErrorException($message, 0, $severity, $file, $line);
+        }
     }
 
     /**
@@ -542,7 +544,7 @@ class Debug
      *
      * @return string
      */
-    protected function getVarDump($variable): string
+    protected function getVarDump(mixed $variable): string
     {
         if (true === $variable) {
             return 'true';
@@ -634,7 +636,7 @@ class Debug
              * We assume that classes starting by Phalcon are framework's
              * classes
              */
-            if (preg_match("/^Phalcon/", $className)) {
+            if (str_starts_with($className, "Phalcon")) {
                 /**
                  * Prepare the class name according to the Phalcon's conventions
                  */

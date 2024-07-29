@@ -21,7 +21,7 @@ interface ColumnInterface
     /**
      * Check whether field absolute to position in table
      *
-     * @return string|null
+     * @return string
      */
     public function getAfterPosition(): string;
 
@@ -31,6 +31,13 @@ interface ColumnInterface
      * @return int
      */
     public function getBindType(): int;
+
+    /**
+     * Column's comment
+     *
+     * @return string
+     */
+    public function getComment(): string;
 
     /**
      * Returns default value of column
@@ -58,7 +65,7 @@ interface ColumnInterface
      *
      * @return int|string
      */
-    public function getSize(): int|string;
+    public function getSize(): int | string;
 
     /**
      * Returns column type
@@ -79,7 +86,7 @@ interface ColumnInterface
      *
      * @return array|string
      */
-    public function getTypeValues(): array|string;
+    public function getTypeValues(): array | string;
 
 
     /**

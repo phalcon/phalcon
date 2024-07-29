@@ -116,7 +116,7 @@ class Sqlite extends PdoAdapter
      */
     public function describeColumns(
         string $tableName,
-        string $schemaName = ""
+        ?string $schemaName = null
     ): array {
         $oldColumn   = null;
         $sizePattern = "#\\((\d+)(?:,\\s*(\d+))*\\)#";
@@ -370,7 +370,7 @@ class Sqlite extends PdoAdapter
      *
      * @return array|IndexInterface[]
      */
-    public function describeIndexes(string $tableName, string $schemaName = ""): array
+    public function describeIndexes(string $tableName, ?string $schemaName = null): array
     {
         $indexes = [];
         $records = $this->fetchAll(
@@ -432,7 +432,7 @@ class Sqlite extends PdoAdapter
      */
     public function describeReferences(
         string $tableName,
-        string $schemaName = ""
+        ?string $schemaName = null
     ): array {
         $references = [];
         $records    = $this->fetchAll(
@@ -502,17 +502,6 @@ class Sqlite extends PdoAdapter
     }
 
     /**
-     * Check whether the database system requires an explicit value for identity
-     * columns
-     *
-     * @return bool
-     */
-    public function useExplicitIdValue(): bool
-    {
-        return true;
-    }
-
-    /**
      * SQLite does not support the DEFAULT keyword
      *
      * @return bool
@@ -522,6 +511,17 @@ class Sqlite extends PdoAdapter
     public function supportsDefaultValue(): bool
     {
         return false;
+    }
+
+    /**
+     * Check whether the database system requires an explicit value for identity
+     * columns
+     *
+     * @return bool
+     */
+    public function useExplicitIdValue(): bool
+    {
+        return true;
     }
 
     /**

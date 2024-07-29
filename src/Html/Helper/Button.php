@@ -11,8 +11,6 @@ declare(strict_types=1);
 
 namespace Phalcon\Html\Helper;
 
-use Phalcon\Html\Exception;
-
 /**
  * Class Button
  *
@@ -28,7 +26,6 @@ class Button extends AbstractHelper
      * @param bool   $raw
      *
      * @return string
-     * @throws Exception
      */
     public function __invoke(
         string $text,

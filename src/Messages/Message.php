@@ -23,31 +23,6 @@ use JsonSerializable;
 class Message implements MessageInterface, JsonSerializable
 {
     /**
-     * @var string
-     */
-    protected string $message;
-
-    /**
-     * @var string
-     */
-    protected string $field;
-
-    /**
-     * @var string
-     */
-    protected string $type;
-
-    /**
-     * @var int
-     */
-    protected int $code;
-
-    /**
-     * @var array
-     */
-    protected array $metaData = [];
-
-    /**
      * Phalcon\Messages\Message constructor
      *
      * @param string $message
@@ -57,17 +32,12 @@ class Message implements MessageInterface, JsonSerializable
      * @param array  $metaData
      */
     public function __construct(
-        string $message,
-        string $field = "",
-        string $type = "",
-        int $code = 0,
-        array $metaData = []
+        protected string $message,
+        protected string $field = "",
+        protected string $type = "",
+        protected int $code = 0,
+        protected array $metaData = []
     ) {
-        $this->message  = $message;
-        $this->field    = $field;
-        $this->type     = $type;
-        $this->code     = $code;
-        $this->metaData = $metaData;
     }
 
     /**
@@ -116,6 +86,23 @@ class Message implements MessageInterface, JsonSerializable
     public function getType(): string
     {
         return $this->type;
+    }
+
+    /**
+     * Serializes the object for json_encode
+     *
+     * @return array
+     * @link https://php.net/manual/en/jsonserializable.jsonserialize.php
+     */
+    public function jsonSerialize(): array
+    {
+        return [
+            "field"    => $this->field,
+            "message"  => $this->message,
+            "type"     => $this->type,
+            "code"     => $this->code,
+            "metaData" => $this->metaData,
+        ];
     }
 
     /**
@@ -186,22 +173,5 @@ class Message implements MessageInterface, JsonSerializable
         $this->type = $type;
 
         return $this;
-    }
-
-    /**
-     * Serializes the object for json_encode
-     *
-     * @return array
-     * @link https://php.net/manual/en/jsonserializable.jsonserialize.php
-     */
-    public function jsonSerialize(): array
-    {
-        return [
-            "field"    => $this->field,
-            "message"  => $this->message,
-            "type"     => $this->type,
-            "code"     => $this->code,
-            "metaData" => $this->metaData,
-        ];
     }
 }

@@ -78,7 +78,7 @@ class Manager implements ManagerInterface
      *
      * @return mixed
      */
-    public function __get($key)
+    public function __get(string $key): mixed
     {
         return $this->get($key);
     }
@@ -101,7 +101,7 @@ class Manager implements ManagerInterface
      * @param string $key
      * @param mixed  $value
      */
-    public function __set(string $key, $value): void
+    public function __set(string $key, mixed $value): void
     {
         $this->set($key, $value);
     }
@@ -147,20 +147,20 @@ class Manager implements ManagerInterface
      *
      * @return mixed|null
      */
-    public function get(string $key, $defaultValue = null, bool $remove = false)
-    {
+    public function get(
+        string $key,
+        mixed $defaultValue = null,
+        bool $remove = false
+    ): mixed {
         $value = null;
 
-        if (false === $this->exists()) {
-            // To use $_SESSION variable we need to start session first
-            return $value;
-        }
+        if ($this->exists()) {
+            $uniqueKey = $this->getUniqueKey($key);
+            $value     = $_SESSION[$uniqueKey] ?? $defaultValue;
 
-        $uniqueKey = $this->getUniqueKey($key);
-        $value     = $_SESSION[$uniqueKey] ?? $defaultValue;
-
-        if (true === $remove) {
-            unset($_SESSION[$uniqueKey]);
+            if (true === $remove) {
+                unset($_SESSION[$uniqueKey]);
+            }
         }
 
         return $value;
@@ -193,11 +193,21 @@ class Manager implements ManagerInterface
      */
     public function getName(): string
     {
-        if ('' !== $this->name) {
+        if ('' === $this->name) {
             $this->name = session_name();
         }
 
         return $this->name;
+    }
+
+    /**
+     * Get internal options
+     *
+     * @return array
+     */
+    public function getOptions(): array
+    {
+        return $this->options;
     }
 
     /**
@@ -217,16 +227,6 @@ class Manager implements ManagerInterface
         $uniqueKey = $this->getUniqueKey($key);
 
         return isset($_SESSION[$uniqueKey]);
-    }
-
-    /**
-     * Get internal options
-     *
-     * @return array
-     */
-    public function getOptions(): array
-    {
-        return $this->options;
     }
 
     /**
@@ -358,7 +358,6 @@ class Manager implements ManagerInterface
      * started)
      *
      * @return bool
-     * @throws Exception
      */
     public function start(): bool
     {
@@ -374,6 +373,18 @@ class Manager implements ManagerInterface
          */
         if (true === $this->phpHeadersSent()) {
             return false;
+        }
+
+        /**
+         * Verify that the session value is alphanumeric, otherwise we
+         * unset the cookie to allow it to be created by session_start().
+         */
+        $name = $this->getName();
+        if (isset($_COOKIE[$name])) {
+            $value = $_COOKIE[$name];
+            if (!preg_match("/^[a-z0-9]+$/iD", $value)) {
+                unset($_COOKIE[$name]);
+            }
         }
 
         /**

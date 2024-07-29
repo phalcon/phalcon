@@ -13,6 +13,7 @@ declare(strict_types=1);
 
 namespace Phalcon\Support;
 
+use Exception as BaseException;
 use Phalcon\Support\Helper\Arr\Blacklist;
 use Phalcon\Support\Helper\Arr\Chunk;
 use Phalcon\Support\Helper\Arr\Filter;
@@ -155,7 +156,7 @@ class HelperFactory
      * @param array  $arguments
      *
      * @return mixed
-     * @throws Exception
+     * @throws BaseException
      */
     public function __call(string $name, array $arguments)
     {
@@ -167,7 +168,8 @@ class HelperFactory
     /**
      * @param string $name
      *
-     * @throws \Exception
+     * @return mixed
+     * @throws BaseException
      */
     public function newInstance(string $name)
     {

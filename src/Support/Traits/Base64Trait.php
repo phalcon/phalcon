@@ -21,18 +21,6 @@ use function str_replace;
 trait Base64Trait
 {
     /**
-     * Encode a json string in Base64 Url format.
-     *
-     * @param string $input
-     *
-     * @return string
-     */
-    private function doEncodeUrl(string $input): string
-    {
-        return str_replace('=', '', strtr(base64_encode($input), '+/', '-_'));
-    }
-
-    /**
      * Decode a Base64 Url string to a json string
      *
      * @param string $input
@@ -52,5 +40,17 @@ trait Base64Trait
         }
 
         return $data;
+    }
+
+    /**
+     * Encode a json string in Base64 Url format.
+     *
+     * @param string $input
+     *
+     * @return string
+     */
+    private function doEncodeUrl(string $input): string
+    {
+        return str_replace('=', '', strtr(base64_encode($input), '+/', '-_'));
     }
 }

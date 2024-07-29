@@ -25,22 +25,6 @@ use Phalcon\Config\ConfigInterface;
 trait DiLoadTrait
 {
     /**
-     * Loads services from a Config object.
-     */
-    protected function loadFromConfig(ConfigInterface $config): void
-    {
-        $services = $config->toArray();
-
-        foreach ($services as $name => $service) {
-            $this->set(
-                $name,
-                $service,
-                (bool)($service['shared'] ?? false)
-            );
-        }
-    }
-
-    /**
      * Loads services from a php config file.
      *
      * ```php
@@ -117,5 +101,21 @@ trait DiLoadTrait
         $services = new Yaml($filePath, $callbacks);
 
         $this->loadFromConfig($services);
+    }
+
+    /**
+     * Loads services from a Config object.
+     */
+    protected function loadFromConfig(ConfigInterface $config): void
+    {
+        $services = $config->toArray();
+
+        foreach ($services as $name => $service) {
+            $this->set(
+                $name,
+                $service,
+                (bool)($service['shared'] ?? false)
+            );
+        }
     }
 }

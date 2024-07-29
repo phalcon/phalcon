@@ -2,7 +2,9 @@
 
 /**
  * This file is part of the Phalcon Framework.
+ *
  * (c) Phalcon Team <team@phalcon.io>
+ *
  * For the full copyright and license information, please view the LICENSE.txt
  * file that was distributed with this source code.
  */
@@ -11,7 +13,6 @@ declare(strict_types=1);
 
 namespace Phalcon\Tests\Database\Paginator\Adapter\Model;
 
-use Codeception\Util\Debug;
 use DatabaseTester;
 use PDO;
 use Phalcon\Paginator\Adapter\Model;
@@ -32,9 +33,10 @@ class ConstructCest
     {
         $this->setNewFactoryDefault();
         $this->setDatabase($I);
+
         /** @var PDO $connection */
         $connection = $I->getConnection();
-        (new InvoicesMigration($connection))->create();
+        (new InvoicesMigration($connection));
     }
 
     /**
@@ -42,6 +44,7 @@ class ConstructCest
      *
      * @author Phalcon Team <team@phalcon.io>
      * @since  2019-11-01
+     *
      * @group  mysql
      * @group  pgsql
      * @group  sqlite
@@ -53,7 +56,7 @@ class ConstructCest
         $title = uniqid('inv-');
         /** @var PDO $connection */
         $connection = $I->getConnection();
-        $migration = new InvoicesMigration($connection);
+        $migration  = new InvoicesMigration($connection);
         $migration->insert(4, null, 0, $title);
 
         $paginator = new Model(

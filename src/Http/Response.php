@@ -29,7 +29,7 @@ use Phalcon\Http\Response\Headers;
 use Phalcon\Http\Response\HeadersInterface;
 use Phalcon\Http\Traits\StatusPhrasesTrait;
 use Phalcon\Mvc\Url\UrlInterface;
-use Phalcon\Mvc\ViewInterface;
+use Phalcon\Mvc\View\ViewInterface;
 use Phalcon\Support\Helper\File\Basename;
 
 use function addcslashes;
@@ -40,7 +40,6 @@ use function json_last_error_msg;
 use function preg_match;
 use function rawurlencode;
 use function readfile;
-use function strstr;
 use function strtolower;
 use function substr;
 
@@ -192,7 +191,7 @@ class Response extends Injectable implements
      *
      * @return string|null
      */
-    public function getReasonPhrase(): string|null
+    public function getReasonPhrase(): string | null
     {
         $statusReasonPhrase = substr($this->headers->get('Status'), 4);
 
@@ -208,7 +207,7 @@ class Response extends Injectable implements
      *
      * @return int|null
      */
-    public function getStatusCode(): int|null
+    public function getStatusCode(): int | null
     {
         $statusCode = substr($this->headers->get('Status'), 0, 3);
 
@@ -280,7 +279,7 @@ class Response extends Injectable implements
         if (true === $externalRedirect) {
             $header = $location;
         } else {
-            if (strstr($location, '://')) {
+            if (str_contains($location, '://')) {
                 $matched = preg_match("/^[^:\\/?#]++:/", $location);
                 if ($matched) {
                     $header = $location;
@@ -403,7 +402,7 @@ class Response extends Injectable implements
      * @return ResponseInterface|bool
      * @throws EventsException
      */
-    public function sendHeaders(): ResponseInterface|bool
+    public function sendHeaders(): ResponseInterface | bool
     {
         if (false === $this->fireManagerEvent('response:beforeSendHeaders')) {
             return false;
@@ -748,6 +747,20 @@ class Response extends Injectable implements
     }
 
     /**
+     * Send a raw header to the response
+     *
+     *```php
+     * $response->setRawHeader("HTTP/1.1 404 Not Found");
+     *```
+     */
+    public function setRawHeader(string $header): ResponseInterface
+    {
+        $this->headers->setRaw($header);
+
+        return $this;
+    }
+
+    /**
      * Sets the HTTP response code
      *
      *```php
@@ -797,20 +810,6 @@ class Response extends Injectable implements
          * We also define a 'Status' header with the HTTP status
          */
         $this->headers->set('Status', $code . ' ' . $message);
-
-        return $this;
-    }
-
-    /**
-     * Send a raw header to the response
-     *
-     *```php
-     * $response->setRawHeader("HTTP/1.1 404 Not Found");
-     *```
-     */
-    public function setRawHeader(string $header): ResponseInterface
-    {
-        $this->headers->setRaw($header);
 
         return $this;
     }

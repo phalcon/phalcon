@@ -101,7 +101,7 @@ class Syslog extends AbstractAdapter
                 sprintf(
                     "Cannot open syslog for name [%s] and facility [%s]",
                     $this->name,
-                    (string)$this->facility
+                    $this->facility
                 )
             );
         }

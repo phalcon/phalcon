@@ -48,7 +48,7 @@ interface PdoInterface
      *
      * @return string|null
      */
-    public function errorCode(): string|null;
+    public function errorCode(): string | null;
 
     /**
      * Gets the most recent error info.
@@ -65,7 +65,7 @@ interface PdoInterface
      *
      * @return int|false
      */
-    public function exec(string $statement): int|false;
+    public function exec(string $statement): int | false;
 
     /**
      * Performs a statement and returns the number of affected rows.
@@ -169,7 +169,7 @@ interface PdoInterface
      *
      * @param string $statement
      * @param array  $values
-     * @param string $className
+     * @param string $class
      * @param array  $arguments
      *
      * @return array
@@ -177,7 +177,7 @@ interface PdoInterface
     public function fetchObjects(
         string $statement,
         array $values = [],
-        string $className = "stdClass",
+        string $class = "stdClass",
         array $arguments = []
     ): array;
 
@@ -229,7 +229,7 @@ interface PdoInterface
      *
      * @return bool|int|string|array|null
      */
-    public function getAttribute(int $attribute): bool|int|string|array|null;
+    public function getAttribute(int $attribute): bool | int | string | array | null;
 
     /**
      * Return an array of available PDO drivers (empty array if none available)
@@ -255,7 +255,7 @@ interface PdoInterface
      *
      * @return string|false
      */
-    public function lastInsertId(string $name = null): string|false;
+    public function lastInsertId(string $name = null): string | false;
 
     /**
      * Prepares an SQL statement for execution.
@@ -268,7 +268,7 @@ interface PdoInterface
     public function prepare(
         string $statement,
         array $options = []
-    ): PDOStatement|false;
+    ): PDOStatement | false;
 
     /**
      * Queries the database and returns a PDOStatement. If the profiler is
@@ -284,7 +284,7 @@ interface PdoInterface
         string $statement,
         ?int $mode = null,
         mixed ...$arguments
-    ): PDOStatement|false;
+    ): PDOStatement | false;
 
     /**
      * Quotes a value for use in an SQL statement. This differs from
@@ -297,9 +297,9 @@ interface PdoInterface
      * @return string|false
      */
     public function quote(
-        string|int|array|float|null $value,
+        string | int | array | float | null $value,
         int $type = PDO::PARAM_STR
-    ): string|false;
+    ): string | false;
 
     /**
      * Rolls back the current transaction, and restores autocommit mode. If the

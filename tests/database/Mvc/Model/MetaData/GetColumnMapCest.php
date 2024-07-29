@@ -16,7 +16,6 @@ namespace Phalcon\Tests\Database\Mvc\Model\MetaData;
 use Codeception\Example;
 use DatabaseTester;
 use Phalcon\Mvc\Model\MetaData;
-use Phalcon\Storage\Exception;
 use Phalcon\Tests\Fixtures\Traits\DiTrait;
 use Phalcon\Tests\Models\Invoices;
 use Phalcon\Tests\Models\InvoicesMap;
@@ -31,17 +30,13 @@ class GetColumnMapCest
     /**
      * Executed before each test
      *
-     * @param  DatabaseTester $I
+     * @param DatabaseTester $I
+     *
      * @return void
      */
     public function _before(DatabaseTester $I): void
     {
-        try {
-            $this->setNewFactoryDefault();
-        } catch (Exception $e) {
-            $I->fail($e->getMessage());
-        }
-
+        $this->setNewFactoryDefault();
         $this->setDatabase($I);
     }
 
@@ -51,14 +46,14 @@ class GetColumnMapCest
      * @dataProvider getExamples
      *
      * @param DatabaseTester $I
-     * @param Example $example
+     * @param Example        $example
      *
-     * @author Phalcon Team <team@phalcon.io>
-     * @since  2020-02-01
+     * @author       Phalcon Team <team@phalcon.io>
+     * @since        2020-02-01
      *
-     * @group  mysql
-     * @group  pgsql
-     * @group  sqlite
+     * @group        mysql
+     * @group        pgsql
+     * @group        sqlite
      */
     public function mvcModelMetadataGetColumnMap(
         DatabaseTester $I,
@@ -117,19 +112,19 @@ class GetColumnMapCest
     {
         return [
             [
-                'service' => 'metadataMemory',
+                'service'   => 'metadataMemory',
                 'className' => 'Memory',
             ],
             [
-                'service' => 'metadataApcu',
+                'service'   => 'metadataApcu',
                 'className' => 'Apcu',
             ],
             [
-                'service' => 'metadataRedis',
+                'service'   => 'metadataRedis',
                 'className' => 'Redis',
             ],
             [
-                'service' => 'metadataLibmemcached',
+                'service'   => 'metadataLibmemcached',
                 'className' => 'Libmemcached',
             ],
         ];

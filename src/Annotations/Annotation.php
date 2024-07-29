@@ -13,7 +13,7 @@ declare(strict_types=1);
 
 namespace Phalcon\Annotations;
 
-use Phalcon\Parsers\Enum as AnnEnum;
+use Phalcon\Parsers\Annotations\Enum as AnnEnum;
 
 /**
  * Represents a single annotation in an annotations collection
@@ -82,7 +82,7 @@ class Annotation
      *
      * @return mixed
      */
-    public function getArgument(int|string $position): mixed
+    public function getArgument(int | string $position): mixed
     {
         return $this->arguments[$position] ?? null;
     }
@@ -204,7 +204,7 @@ class Annotation
      *
      * @return bool
      */
-    public function hasArgument(int|string $position): bool
+    public function hasArgument(int | string $position): bool
     {
         return isset($this->arguments[$position]);
     }

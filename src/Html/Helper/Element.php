@@ -11,8 +11,6 @@ declare(strict_types=1);
 
 namespace Phalcon\Html\Helper;
 
-use Phalcon\Html\Exception;
-
 /**
  * Class Element
  *
@@ -29,7 +27,6 @@ class Element extends AbstractHelper
      * @param bool   $raw
      *
      * @return string
-     * @throws Exception
      */
     public function __invoke(
         string $tag,

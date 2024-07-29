@@ -40,18 +40,18 @@ interface ResponseInterface
     public function getContent(): string;
 
     /**
-     * Returns the status code
-     *
-     * @return int|null
-     */
-    public function getStatusCode(): int|null;
-
-    /**
      * Returns headers set by the user
      *
      * @return HeadersInterface
      */
     public function getHeaders(): HeadersInterface;
+
+    /**
+     * Returns the status code
+     *
+     * @return int|null
+     */
+    public function getStatusCode(): int | null;
 
     /**
      * Checks if a header exists
@@ -90,6 +90,27 @@ interface ResponseInterface
      * @return ResponseInterface
      */
     public function resetHeaders(): ResponseInterface;
+
+    /**
+     * Prints out HTTP response to the client
+     *
+     * @return ResponseInterface
+     */
+    public function send(): ResponseInterface;
+
+    /**
+     * Sends cookies to the client
+     *
+     * @return ResponseInterface
+     */
+    public function sendCookies(): ResponseInterface;
+
+    /**
+     * Sends headers to the client
+     *
+     * @return ResponseInterface|bool
+     */
+    public function sendHeaders(): ResponseInterface | bool;
 
     /**
      * Sets HTTP response body
@@ -203,25 +224,4 @@ interface ResponseInterface
         int $code,
         string $message = null
     ): ResponseInterface;
-
-    /**
-     * Prints out HTTP response to the client
-     *
-     * @return ResponseInterface
-     */
-    public function send(): ResponseInterface;
-
-    /**
-     * Sends cookies to the client
-     *
-     * @return ResponseInterface
-     */
-    public function sendCookies(): ResponseInterface;
-
-    /**
-     * Sends headers to the client
-     *
-     * @return ResponseInterface|bool
-     */
-    public function sendHeaders(): ResponseInterface|bool;
 }

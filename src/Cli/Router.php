@@ -148,8 +148,9 @@ class Router extends AbstractInjectionAware implements RouterInterface
      * @param array|string $paths
      *
      * @return RouteInterface
+     * @throws Exception
      */
-    public function add(string $pattern, array|string $paths = []): RouteInterface
+    public function add(string $pattern, array | string $paths = []): RouteInterface
     {
         $route   = new Route($pattern, $paths);
         $routeId = $route->getRouteId();
@@ -174,7 +175,7 @@ class Router extends AbstractInjectionAware implements RouterInterface
      *
      * @return RouteInterface|null
      */
-    public function getMatchedRoute(): RouteInterface|null
+    public function getMatchedRoute(): RouteInterface | null
     {
         return $this->matchedRoute;
     }
@@ -203,21 +204,21 @@ class Router extends AbstractInjectionAware implements RouterInterface
      * Returns processed extra params
      *
      * @return array
-     * @todo deprecate this in future versions
      */
-    public function getParams(): array
+    public function getParameters(): array
     {
-        return $this->getParameters();
+        return $this->parameters;
     }
 
     /**
      * Returns processed extra params
      *
      * @return array
+     * @todo deprecate this in future versions
      */
-    public function getParameters(): array
+    public function getParams(): array
     {
-        return $this->parameters;
+        return $this->getParameters();
     }
 
     /**
@@ -227,7 +228,7 @@ class Router extends AbstractInjectionAware implements RouterInterface
      *
      * @return RouteInterface|bool
      */
-    public function getRouteById(string $routeId): RouteInterface|bool
+    public function getRouteById(string $routeId): RouteInterface | bool
     {
         return $this->routes[$routeId] ?? false;
     }
@@ -239,7 +240,7 @@ class Router extends AbstractInjectionAware implements RouterInterface
      *
      * @return RouteInterface|bool
      */
-    public function getRouteByName(string $name): RouteInterface|bool
+    public function getRouteByName(string $name): RouteInterface | bool
     {
         /** @var RouteInterface $route */
         foreach ($this->routes as $route) {
@@ -279,7 +280,7 @@ class Router extends AbstractInjectionAware implements RouterInterface
      * @return void
      * @throws Exception
      */
-    public function handle(array|string $arguments = []): void
+    public function handle(array | string $arguments = []): void
     {
         $routeFound         = false;
         $parts              = [];
@@ -493,6 +494,20 @@ class Router extends AbstractInjectionAware implements RouterInterface
     }
 
     /**
+     * Sets the default controller name
+     *
+     * @param string $taskName
+     *
+     * @return RouterInterface
+     */
+    public function setDefaultTask(string $taskName): RouterInterface
+    {
+        $this->defaultTask = $taskName;
+
+        return $this;
+    }
+
+    /**
      * Sets an array of default paths. If a route is missing a path the router
      * will use the defined here. This method must not be used to set a 404
      * route
@@ -516,20 +531,6 @@ class Router extends AbstractInjectionAware implements RouterInterface
         $this->defaultTask   = $defaults["task"] ?? $this->defaultTask;
         $this->defaultAction = $defaults["action"] ?? $this->defaultAction;
         $this->defaultParams = $defaults["params"] ?? $this->defaultParams;
-
-        return $this;
-    }
-
-    /**
-     * Sets the default controller name
-     *
-     * @param string $taskName
-     *
-     * @return RouterInterface
-     */
-    public function setDefaultTask(string $taskName): RouterInterface
-    {
-        $this->defaultTask = $taskName;
 
         return $this;
     }

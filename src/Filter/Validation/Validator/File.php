@@ -163,10 +163,10 @@ class File extends AbstractValidatorComposite
     }
 
     /**
-     * @param array  @options
-     * @param string $fileEmpty
-     * @param string $iniSize
-     * @param string $valid
+     * @param array<string, mixed> $options
+     * @param string               $fileEmpty
+     * @param string               $iniSize
+     * @param string               $valid
      *
      * @return File
      */
@@ -196,108 +196,7 @@ class File extends AbstractValidatorComposite
     }
 
     /**
-     * @param array  @options
-     * @param string $fileEmpty
-     * @param string $iniSize
-     * @param string $valid
-     *
-     * @return File
-     */
-    private function processFileSizeEquals(
-        array $options,
-        string $fileEmpty,
-        string $iniSize,
-        string $valid
-    ): File {
-        if (true === isset($options["equalSize"])) {
-            $validator = new EqualFileSize(
-                [
-                    "size"    => $options["equalSize"],
-                    "message" => $options["messageEqualSize"] ?? null,
-                ]
-            );
-
-            $this->processSettings(
-                $validator,
-                $fileEmpty,
-                $iniSize,
-                $valid
-            );
-        }
-
-        return $this;
-    }
-
-    /**
-     * @param array  @options
-     * @param string $fileEmpty
-     * @param string $iniSize
-     * @param string $valid
-     *
-     * @return File
-     */
-    private function processFileSizeMax(
-        array $options,
-        string $fileEmpty,
-        string $iniSize,
-        string $valid
-    ): File {
-        if (true === isset($options["maxSize"])) {
-            $validator = new MaxFileSize(
-                [
-                    "size"     => $options["maxSize"],
-                    "message"  => $options["messageSize"] ?? null,
-                    "included" => $options["includedSize"] ?? false,
-                ]
-            );
-
-            $this->processSettings(
-                $validator,
-                $fileEmpty,
-                $iniSize,
-                $valid
-            );
-        }
-
-        return $this;
-    }
-
-    /**
-     * @param array  @options
-     * @param string $fileEmpty
-     * @param string $iniSize
-     * @param string $valid
-     *
-     * @return File
-     */
-    private function processFileSizeMin(
-        array $options,
-        string $fileEmpty,
-        string $iniSize,
-        string $valid
-    ): File {
-        if (true === isset($options["minSize"])) {
-            $validator = new MinFileSize(
-                [
-                    "size"     => $options["minSize"],
-                    "message"  => $options["messageMinSize"] ?? null,
-                    "included" => $options["includedMinSize"] ?? false,
-                ]
-            );
-
-            $this->processSettings(
-                $validator,
-                $fileEmpty,
-                $iniSize,
-                $valid
-            );
-        }
-
-        return $this;
-    }
-
-    /**
-     * @param array  @options
+     * @param array  $options
      * @param string $fileEmpty
      * @param string $iniSize
      * @param string $valid
@@ -330,7 +229,7 @@ class File extends AbstractValidatorComposite
     }
 
     /**
-     * @param array  @options
+     * @param array  $options
      * @param string $fileEmpty
      * @param string $iniSize
      * @param string $valid
@@ -364,7 +263,7 @@ class File extends AbstractValidatorComposite
     }
 
     /**
-     * @param array  @options
+     * @param array  $options
      * @param string $fileEmpty
      * @param string $iniSize
      * @param string $valid
@@ -383,6 +282,107 @@ class File extends AbstractValidatorComposite
                     "size"     => $options["minResolution"],
                     "message"  => $options["messageMinResolution"] ?? null,
                     "included" => $options["includedMinResolution"] ?? false,
+                ]
+            );
+
+            $this->processSettings(
+                $validator,
+                $fileEmpty,
+                $iniSize,
+                $valid
+            );
+        }
+
+        return $this;
+    }
+
+    /**
+     * @param array  $options
+     * @param string $fileEmpty
+     * @param string $iniSize
+     * @param string $valid
+     *
+     * @return File
+     */
+    private function processFileSizeEquals(
+        array $options,
+        string $fileEmpty,
+        string $iniSize,
+        string $valid
+    ): File {
+        if (true === isset($options["equalSize"])) {
+            $validator = new EqualFileSize(
+                [
+                    "size"    => $options["equalSize"],
+                    "message" => $options["messageEqualSize"] ?? null,
+                ]
+            );
+
+            $this->processSettings(
+                $validator,
+                $fileEmpty,
+                $iniSize,
+                $valid
+            );
+        }
+
+        return $this;
+    }
+
+    /**
+     * @param array  $options
+     * @param string $fileEmpty
+     * @param string $iniSize
+     * @param string $valid
+     *
+     * @return File
+     */
+    private function processFileSizeMax(
+        array $options,
+        string $fileEmpty,
+        string $iniSize,
+        string $valid
+    ): File {
+        if (true === isset($options["maxSize"])) {
+            $validator = new MaxFileSize(
+                [
+                    "size"     => $options["maxSize"],
+                    "message"  => $options["messageSize"] ?? null,
+                    "included" => $options["includedSize"] ?? false,
+                ]
+            );
+
+            $this->processSettings(
+                $validator,
+                $fileEmpty,
+                $iniSize,
+                $valid
+            );
+        }
+
+        return $this;
+    }
+
+    /**
+     * @param array  $options
+     * @param string $fileEmpty
+     * @param string $iniSize
+     * @param string $valid
+     *
+     * @return File
+     */
+    private function processFileSizeMin(
+        array $options,
+        string $fileEmpty,
+        string $iniSize,
+        string $valid
+    ): File {
+        if (true === isset($options["minSize"])) {
+            $validator = new MinFileSize(
+                [
+                    "size"     => $options["minSize"],
+                    "message"  => $options["messageMinSize"] ?? null,
+                    "included" => $options["includedMinSize"] ?? false,
                 ]
             );
 

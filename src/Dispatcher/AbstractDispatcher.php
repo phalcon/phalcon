@@ -17,7 +17,7 @@ use Exception as BaseException;
 use Phalcon\Cache\Adapter\AdapterInterface;
 use Phalcon\Cli\Dispatcher\Exception as CliDispatcherException;
 use Phalcon\Cli\TaskInterface;
-use Phalcon\Di\AbstractInjectionAware;
+use Phalcon\Di\Injectable;
 use Phalcon\Dispatcher\Exception as DispatcherException;
 use Phalcon\Events\EventsAwareInterface;
 use Phalcon\Events\Traits\EventsAwareTrait;
@@ -42,30 +42,26 @@ use function spl_object_hash;
  * This class can't be instantiated directly, you can use it to create your own
  * dispatchers.
  */
-abstract class AbstractDispatcher extends AbstractInjectionAware implements DispatcherInterface, EventsAwareInterface
+abstract class AbstractDispatcher extends Injectable implements DispatcherInterface, EventsAwareInterface
 {
     use EventsAwareTrait;
-
-    /**
-     * @var TaskInterface|ControllerInterface|null
-     */
-    protected TaskInterface|ControllerInterface|null $activeHandler = null;
-
-    /**
-     * @var array
-     */
-    protected array $activeMethodMap = [];
 
     /**
      * @var string
      */
     protected string $actionName = "";
-
     /**
      * @var string
      */
     protected string $actionSuffix = "Action";
-
+    /**
+     * @var TaskInterface|ControllerInterface|null
+     */
+    protected TaskInterface | ControllerInterface | null $activeHandler = null;
+    /**
+     * @var array
+     */
+    protected array $activeMethodMap = [];
     /**
      * @var array
      */
@@ -75,42 +71,34 @@ abstract class AbstractDispatcher extends AbstractInjectionAware implements Disp
      * @var string
      */
     protected string $defaultAction = "";
-
-    /**
-     * @var string
-     */
-    protected string $defaultNamespace = "";
-
     /**
      * @var string
      */
     protected string $defaultHandler = "";
-
-    /**
-     * @var array
-     */
-    protected array $handlerHashes = [];
-
     /**
      * @var string
      */
-    protected string $handlerName = "";
-
-    /**
-     * @var string
-     */
-    protected string $handlerSuffix = "";
-
+    protected string $defaultNamespace = "";
     /**
      * @var bool
      */
     protected bool $finished = false;
-
     /**
      * @var bool
      */
     protected bool $forwarded = false;
-
+    /**
+     * @var array
+     */
+    protected array $handlerHashes = [];
+    /**
+     * @var string
+     */
+    protected string $handlerName = "";
+    /**
+     * @var string
+     */
+    protected string $handlerSuffix = "";
     /**
      * @var bool
      */
@@ -180,7 +168,7 @@ abstract class AbstractDispatcher extends AbstractInjectionAware implements Disp
     ): mixed {
         return call_user_func_array(
             [$handler, $actionMethod],
-            $parameters
+            array_values($parameters)
         );
     }
 
@@ -803,6 +791,38 @@ abstract class AbstractDispatcher extends AbstractInjectionAware implements Disp
     }
 
     /**
+     * Possible class name that will be located to dispatch the request
+     */
+    public function getHandlerClass(): string
+    {
+        $this->resolveEmptyProperties();
+
+        $handlerSuffix = $this->handlerSuffix;
+        $handlerName   = $this->handlerName;
+        $namespaceName = $this->namespaceName;
+
+        // We don't camelize the classes if they are in namespaces
+        if (true !== str_contains($handlerName, "\\")) {
+            $camelizedClass = $this->toCamelCase($handlerName);
+        } else {
+            $camelizedClass = $handlerName;
+        }
+
+        // Create the complete controller class name prepending the namespace
+        if ($namespaceName) {
+            if (true !== str_ends_with($namespaceName, "\\")) {
+                $namespaceName .= "\\";
+            }
+
+            $handlerClass = $namespaceName . $camelizedClass . $handlerSuffix;
+        } else {
+            $handlerClass = $camelizedClass . $handlerSuffix;
+        }
+
+        return $handlerClass;
+    }
+
+    /**
      * Gets the default handler suffix
      *
      * @return string
@@ -817,7 +837,7 @@ abstract class AbstractDispatcher extends AbstractInjectionAware implements Disp
      *
      * @return BinderInterface|null
      */
-    public function getModelBinder(): BinderInterface|null
+    public function getModelBinder(): BinderInterface | null
     {
         return $this->modelBinder;
     }
@@ -853,8 +873,8 @@ abstract class AbstractDispatcher extends AbstractInjectionAware implements Disp
      * @todo deprecate this in the future
      */
     public function getParam(
-        int|string $parameter,
-        array|string $filters = [],
+        int | string $parameter,
+        array | string $filters = [],
         mixed $defaultValue = null
     ): mixed {
         return $this->getParameter($parameter, $filters, $defaultValue);
@@ -868,10 +888,11 @@ abstract class AbstractDispatcher extends AbstractInjectionAware implements Disp
      * @param mixed|null   $defaultValue
      *
      * @return mixed
+     * @throws CliDispatcherException
      */
     public function getParameter(
-        int|string $parameter,
-        array|string $filters = [],
+        int | string $parameter,
+        array | string $filters = [],
         mixed $defaultValue = null
     ): mixed {
         if (true !== isset($this->parameters[$parameter])) {
@@ -901,6 +922,16 @@ abstract class AbstractDispatcher extends AbstractInjectionAware implements Disp
      * Gets action params
      *
      * @return array
+     */
+    public function getParameters(): array
+    {
+        return $this->parameters;
+    }
+
+    /**
+     * Gets action params
+     *
+     * @return array
      * @todo deprecate this in the future
      */
     public function getParams(): array
@@ -909,13 +940,13 @@ abstract class AbstractDispatcher extends AbstractInjectionAware implements Disp
     }
 
     /**
-     * Gets action params
+     * Returns value returned by the latest dispatched action
      *
-     * @return array
+     * @return mixed|null
      */
-    public function getParameters(): array
+    public function getReturnedValue(): mixed
     {
-        return $this->parameters;
+        return $this->returnedValue;
     }
 
     /**
@@ -926,7 +957,7 @@ abstract class AbstractDispatcher extends AbstractInjectionAware implements Disp
      * @return bool
      * @todo deprecate this in the future
      */
-    public function hasParam(int|string $parameter): bool
+    public function hasParam(int | string $parameter): bool
     {
         return $this->hasParameter($parameter);
     }
@@ -938,7 +969,7 @@ abstract class AbstractDispatcher extends AbstractInjectionAware implements Disp
      *
      * @return bool
      */
-    public function hasParameter(int|string $parameter): bool
+    public function hasParameter(int | string $parameter): bool
     {
         return isset($this->parameters[$parameter]);
     }
@@ -966,6 +997,17 @@ abstract class AbstractDispatcher extends AbstractInjectionAware implements Disp
         $this->actionName = $actionName;
     }
 
+    /**
+     * Sets the default action suffix
+     *
+     * @param string $actionSuffix
+     *
+     * @return void
+     */
+    public function setActionSuffix(string $actionSuffix): void
+    {
+        $this->actionSuffix = $actionSuffix;
+    }
 
     /**
      * Sets the default action name
@@ -989,114 +1031,6 @@ abstract class AbstractDispatcher extends AbstractInjectionAware implements Disp
     public function setDefaultNamespace(string $defaultNamespace): void
     {
         $this->defaultNamespace = $defaultNamespace;
-    }
-
-    /**
-     * Possible class name that will be located to dispatch the request
-     */
-    public function getHandlerClass(): string
-    {
-        $this->resolveEmptyProperties();
-
-        $handlerSuffix = $this->handlerSuffix;
-        $handlerName   = $this->handlerName;
-        $namespaceName = $this->namespaceName;
-
-        // We don't camelize the classes if they are in namespaces
-        if (true !== str_contains($handlerName, "\\")) {
-            $camelizedClass = $this->toCamelCase($handlerName);
-        } else {
-            $camelizedClass = $handlerName;
-        }
-
-        // Create the complete controller class name prepending the namespace
-        if ($namespaceName) {
-            if (true !== str_ends_with($namespaceName, "\\")) {
-                $namespaceName .= "\\";
-            }
-
-            $handlerClass = $namespaceName . $camelizedClass . $handlerSuffix;
-        } else {
-            $handlerClass = $camelizedClass . $handlerSuffix;
-        }
-
-        return $handlerClass;
-    }
-
-    /**
-     * Set a param by its name or numeric index
-     *
-     * @param int|string $parameter
-     * @param mixed      $value
-     *
-     * @return void
-     * @todo deprecate this in the future
-     */
-    public function setParam(int|string $parameter, mixed $value): void
-    {
-        $this->setParameter($parameter, $value);
-    }
-
-    /**
-     * Set a param by its name or numeric index
-     *
-     * @param int|string $parameter
-     * @param mixed      $value
-     *
-     * @return void
-     */
-    public function setParameter(int|string $parameter, mixed $value): void
-    {
-        $this->parameters[$parameter] = $value;
-    }
-
-    /**
-     * Sets action params to be dispatched
-     *
-     * @param array $parameters
-     *
-     * @return void
-     * @todo deprecate this in the future
-     */
-    public function setParams(array $parameters): void
-    {
-        $this->setParameters($parameters);
-    }
-
-    /**
-     * Sets action params to be dispatched
-     *
-     * @param array $parameters
-     *
-     * @return void
-     */
-    public function setParameters(array $parameters): void
-    {
-        $this->parameters = $parameters;
-    }
-
-    /**
-     * Sets the latest returned value by an action manually
-     *
-     * @param mixed $value
-     *
-     * @return void
-     */
-    public function setReturnedValue(mixed $value): void
-    {
-        $this->returnedValue = $value;
-    }
-
-    /**
-     * Sets the default action suffix
-     *
-     * @param string $actionSuffix
-     *
-     * @return void
-     */
-    public function setActionSuffix(string $actionSuffix): void
-    {
-        $this->actionSuffix = $actionSuffix;
     }
 
     /**
@@ -1137,7 +1071,7 @@ abstract class AbstractDispatcher extends AbstractInjectionAware implements Disp
      */
     public function setModelBinder(
         BinderInterface $modelBinder,
-        AdapterInterface|string $cache = null
+        AdapterInterface | string $cache = null
     ): DispatcherInterface {
         if (true === is_string($cache)) {
             $cache = $this->container->get($cache);
@@ -1178,13 +1112,67 @@ abstract class AbstractDispatcher extends AbstractInjectionAware implements Disp
     }
 
     /**
-     * Returns value returned by the latest dispatched action
+     * Set a param by its name or numeric index
      *
-     * @return mixed|null
+     * @param int|string $parameter
+     * @param mixed      $value
+     *
+     * @return void
+     * @todo deprecate this in the future
      */
-    public function getReturnedValue(): mixed
+    public function setParam(int | string $parameter, mixed $value): void
     {
-        return $this->returnedValue;
+        $this->setParameter($parameter, $value);
+    }
+
+    /**
+     * Set a param by its name or numeric index
+     *
+     * @param int|string $parameter
+     * @param mixed      $value
+     *
+     * @return void
+     */
+    public function setParameter(int | string $parameter, mixed $value): void
+    {
+        $this->parameters[$parameter] = $value;
+    }
+
+    /**
+     * Sets action params to be dispatched
+     *
+     * @param array $parameters
+     *
+     * @return void
+     */
+    public function setParameters(array $parameters): void
+    {
+        $this->parameters = $parameters;
+    }
+
+    /**
+     * Sets action params to be dispatched
+     *
+     * @param array $parameters
+     *
+     * @return void
+     * @todo deprecate this in the future
+     */
+    public function setParams(array $parameters): void
+    {
+        $this->setParameters($parameters);
+    }
+
+    /**
+     * Sets the latest returned value by an action manually
+     *
+     * @param mixed $value
+     *
+     * @return void
+     */
+    public function setReturnedValue(mixed $value): void
+    {
+        $this->returnedValue = $value;
     }
 
     /**

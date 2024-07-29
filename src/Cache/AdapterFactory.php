@@ -13,12 +13,14 @@ declare(strict_types=1);
 
 namespace Phalcon\Cache;
 
+use Exception as BaseException;
 use Phalcon\Cache\Adapter\AdapterInterface;
 use Phalcon\Cache\Adapter\Apcu;
 use Phalcon\Cache\Adapter\Libmemcached;
 use Phalcon\Cache\Adapter\Memory;
 use Phalcon\Cache\Adapter\Redis;
 use Phalcon\Cache\Adapter\Stream;
+use Phalcon\Cache\Adapter\Weak;
 use Phalcon\Cache\Exception\Exception;
 use Phalcon\Storage\SerializerFactory;
 use Phalcon\Traits\Factory\FactoryTrait;
@@ -33,7 +35,7 @@ class AdapterFactory
     use FactoryTrait;
 
     /**
-     * @var SerializerFactory
+     * @var SerializerFactory|null
      */
     private ?SerializerFactory $serializerFactory;
 
@@ -78,7 +80,7 @@ class AdapterFactory
      *                                      ]
      *
      * @return AdapterInterface
-     * @throws Exception
+     * @throws BaseException
      */
     public function newInstance(string $name, array $options = []): AdapterInterface
     {
@@ -111,6 +113,7 @@ class AdapterFactory
             "memory"       => Memory::class,
             "redis"        => Redis::class,
             "stream"       => Stream::class,
+            "weak"         => Weak::class,
         ];
     }
 }

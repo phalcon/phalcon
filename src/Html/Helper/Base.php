@@ -11,8 +11,6 @@ declare(strict_types=1);
 
 namespace Phalcon\Html\Helper;
 
-use Phalcon\Html\Exception;
-
 use function array_merge;
 
 /**
@@ -29,7 +27,6 @@ class Base extends AbstractHelper
      * @param array  $attributes
      *
      * @return string
-     * @throws Exception
      */
     public function __invoke(string $href, array $attributes = [])
     {

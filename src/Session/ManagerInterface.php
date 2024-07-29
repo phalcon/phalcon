@@ -61,17 +61,17 @@ interface ManagerInterface
     public function __unset(string $key): void;
 
     /**
+     * Destroy/end a session
+     *
+     */
+    public function destroy(): void;
+
+    /**
      * Check whether the session has been started
      *
      * @return bool
      */
     public function exists(): bool;
-
-    /**
-     * Destroy/end a session
-     *
-     */
-    public function destroy(): void;
 
     /**
      * Gets a session variable from an application context
@@ -85,18 +85,18 @@ interface ManagerInterface
     public function get(string $key, $defaultValue = null, bool $remove = false);
 
     /**
-     * Returns the session id
-     *
-     * @return string
-     */
-    public function getId(): string;
-
-    /**
      * Returns the stored session adapter
      *
      * @return SessionHandlerInterface|null
      */
     public function getAdapter(): ?SessionHandlerInterface;
+
+    /**
+     * Returns the session id
+     *
+     * @return string
+     */
+    public function getId(): string;
 
     /**
      * Returns the name of the session
@@ -120,6 +120,15 @@ interface ManagerInterface
      * @return bool
      */
     public function has(string $key): bool;
+
+    /**
+     * Regenerates the session id using the adapter.
+     *
+     * @param bool $deleteOldSession
+     *
+     * @return ManagerInterface
+     */
+    public function regenerateId(bool $deleteOldSession = true): ManagerInterface;
 
     /**
      * Removes a session variable from an application context
@@ -173,13 +182,6 @@ interface ManagerInterface
     public function setOptions(array $options): void;
 
     /**
-     * Returns the status of the current session.
-     *
-     * @return int
-     */
-    public function status(): int;
-
-    /**
      * Starts the session (if headers are already sent the session will not be
      * started)
      *
@@ -188,11 +190,9 @@ interface ManagerInterface
     public function start(): bool;
 
     /**
-     * Regenerates the session id using the adapter.
+     * Returns the status of the current session.
      *
-     * @param bool $deleteOldSession
-     *
-     * @return ManagerInterface
+     * @return int
      */
-    public function regenerateId(bool $deleteOldSession = true): ManagerInterface;
+    public function status(): int;
 }

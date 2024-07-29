@@ -40,8 +40,6 @@ class Libmemcached extends AbstractAdapter
      *
      * @param SerializerFactory $factory
      * @param array             $options
-     *
-     * @throws SupportException
      */
     public function __construct(
         SerializerFactory $factory,
@@ -74,44 +72,13 @@ class Libmemcached extends AbstractAdapter
     }
 
     /**
-     * Decrements a stored number
-     *
-     * @param string $key
-     * @param int    $value
-     *
-     * @return bool|int
-     * @throws StorageException
-     */
-    public function decrement(string $key, int $value = 1)
-    {
-        return $this->getAdapter()
-                    ->decrement($key, $value)
-        ;
-    }
-
-    /**
-     * Reads data from the adapter
-     *
-     * @param string $key
-     *
-     * @return bool
-     * @throws StorageException
-     */
-    public function delete(string $key): bool
-    {
-        return $this->getAdapter()
-                    ->delete($key, 0)
-        ;
-    }
-
-    /**
      * Returns the already connected adapter or connects to the Memcached
      * server(s)
      *
      * @return Memcached|mixed
      * @throws StorageException
      */
-    public function getAdapter()
+    public function getAdapter(): mixed
     {
         if (null === $this->adapter) {
             $persistentId = $this->options['persistentId'] ?? 'ph-mcid-';
@@ -173,6 +140,56 @@ class Libmemcached extends AbstractAdapter
     }
 
     /**
+     * Stores data in the adapter forever. The key needs to be manually deleted
+     * from the adapter.
+     *
+     * @param string $key
+     * @param mixed  $data
+     *
+     * @return bool
+     * @throws StorageException
+     */
+    public function setForever(string $key, mixed $data): bool
+    {
+        $result = $this->getAdapter()
+                       ->set($key, $this->getSerializedData($data), 0)
+        ;
+
+        return is_bool($result) ? $result : false;
+    }
+
+    /**
+     * Decrements a stored number
+     *
+     * @param string $key
+     * @param int    $value
+     *
+     * @return bool|int
+     * @throws StorageException
+     */
+    protected function doDecrement(string $key, int $value = 1): false | int
+    {
+        return $this->getAdapter()
+                    ->decrement($key, $value)
+        ;
+    }
+
+    /**
+     * Reads data from the adapter
+     *
+     * @param string $key
+     *
+     * @return bool
+     * @throws StorageException
+     */
+    protected function doDelete(string $key): bool
+    {
+        return $this->getAdapter()
+                    ->delete($key, 0)
+        ;
+    }
+
+    /**
      * Checks if an element exists in the cache
      *
      * @param string $key
@@ -180,7 +197,7 @@ class Libmemcached extends AbstractAdapter
      * @return bool
      * @throws StorageException
      */
-    public function has(string $key): bool
+    protected function doHas(string $key): bool
     {
         $connection = $this->getAdapter();
         $connection->get($key);
@@ -197,11 +214,9 @@ class Libmemcached extends AbstractAdapter
      * @return bool|int
      * @throws StorageException
      */
-    public function increment(string $key, int $value = 1)
+    protected function doIncrement(string $key, int $value = 1): false | int
     {
-        return $this->getAdapter()
-                    ->increment($key, $value)
-        ;
+        return $this->getAdapter()->increment($key, $value);
     }
 
     /**
@@ -219,7 +234,7 @@ class Libmemcached extends AbstractAdapter
      * @throws BaseException
      * @throws StorageException
      */
-    public function set(string $key, $value, $ttl = null): bool
+    protected function doSet(string $key, mixed $value, mixed $ttl = null): bool
     {
         if (true === is_int($ttl) && $ttl < 1) {
             return $this->delete($key);
@@ -231,24 +246,6 @@ class Libmemcached extends AbstractAdapter
                            $this->getSerializedData($value),
                            $this->getTtl($ttl)
                        )
-        ;
-
-        return is_bool($result) ? $result : false;
-    }
-
-    /**
-     * Stores data in the adapter forever. The key needs to manually deleted
-     * from the adapter.
-     *
-     * @param string $key
-     * @param mixed  $value
-     *
-     * @return bool
-     */
-    public function setForever(string $key, $value): bool
-    {
-        $result = $this->getAdapter()
-                       ->set($key, $this->getSerializedData($value), 0)
         ;
 
         return is_bool($result) ? $result : false;
@@ -293,8 +290,11 @@ class Libmemcached extends AbstractAdapter
      * the custom one is set.
      *
      * @param Memcached $connection
+     *
+     * @return void
+     * @throws SupportException
      */
-    private function setSerializer(Memcached $connection)
+    private function setSerializer(Memcached $connection): void
     {
         $map = [
             'memcached_php'      => Memcached::SERIALIZER_PHP,

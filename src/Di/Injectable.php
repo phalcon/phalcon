@@ -13,7 +13,10 @@ declare(strict_types=1);
 
 namespace Phalcon\Di;
 
+use Phalcon\Annotations\Adapter\AdapterInterface as AnnotationsAdapterInterface;
+use Phalcon\Annotations\Adapter\Memory as AnnotationsMemory;
 use Phalcon\Assets\Manager as AssetsManager;
+use Phalcon\Db\Adapter\AdapterInterface as DbAdapterInterface;
 use Phalcon\Di\Traits\InjectionAwareTrait;
 use Phalcon\Encryption\Crypt;
 use Phalcon\Encryption\Crypt\CryptInterface;
@@ -26,9 +29,18 @@ use Phalcon\Flash\Direct;
 use Phalcon\Flash\Session;
 use Phalcon\Html\Escaper;
 use Phalcon\Html\Escaper\EscaperInterface;
+use Phalcon\Http\Request;
 use Phalcon\Http\RequestInterface;
+use Phalcon\Http\Response;
+use Phalcon\Http\Response\Cookies;
+use Phalcon\Http\Response\CookiesInterface;
+use Phalcon\Http\ResponseInterface;
 use Phalcon\Mvc\Model\Manager;
 use Phalcon\Mvc\Model\ManagerInterface;
+use Phalcon\Mvc\Router;
+use Phalcon\Mvc\RouterInterface;
+use Phalcon\Mvc\Url;
+use Phalcon\Mvc\Url\UrlInterface;
 use Phalcon\Session\Bag;
 use Phalcon\Session\BagInterface;
 use Phalcon\Session\ManagerInterface as SessionManager;
@@ -57,28 +69,29 @@ use Phalcon\Support\HelperFactory;
  * This class allows to access services in the services container by just only
  * accessing a public property with the same name of a registered service
  *
- * @property AssetsManager                        $assets
- * @property DiInterface|null                     $container
- * @property DiInterface|null                     $di
- * @property Crypt|CryptInterface                 $crypt
- * @property EventsManager|EventsManagerInterface $eventsManager
- * @property Escaper|EscaperInterface             $escaper
- * @property Direct                               $flash
- * @property Session                              $flashSession
- * @property Filter|FilterInterface               $filter
- * @property HelperFactory                        $helper
- * @property Bag|BagInterface                     $persistent
- * @property Security                             $security
- * @property SessionManager                       $session
- * // * @property Router|RouterInterface $router
- * // * @property Url|UrlInterface $url
- * // * @property Request|RequestInterface $request
- * // * @property Response|ResponseInterface $response
- * // * @property Cookies|CookiesInterface $cookies
- * // * @property AdapterInterface $db
- * // * @property Adapter\Memory|Adapter $annotations
+ * @property AnnotationsMemory|AnnotationsAdapterInterface $annotations
+ * @property AssetsManager                                 $assets
+ * @property DiInterface|null                              $container
+ * @property DbAdapterInterface                            $db
+ * @property DiInterface|null                              $di
+ * @property Cookies|CookiesInterface                      $cookies
+ * @property Crypt|CryptInterface                          $crypt
+ * @property EventsManager|EventsManagerInterface          $eventsManager
+ * @property Escaper|EscaperInterface                      $escaper
+ * @property Direct                                        $flash
+ * @property Session                                       $flashSession
+ * @property Filter|FilterInterface                        $filter
+ * @property HelperFactory                                 $helper
+ * @property Bag|BagInterface                              $persistent
+ * @property Request|RequestInterface                      $request
+ * @property Response|ResponseInterface                    $response
+ * @property Router|RouterInterface                        $router
+ * @property Security                                      $security
+ * @property SessionManager                                $session
+ * @property Url|UrlInterface                              $url
+ *
  * // * @property Manager|ManagerInterface $modelsManager
- * // * @property Memory|MetadataInterface $modelsMetadata
+ * // * @property AnnotationsMemory|MetadataInterface $modelsMetadata
  * // * @property ManagerInterface $transactionManager
  * // * @property View|ViewInterface $view
  */
@@ -121,7 +134,7 @@ abstract class Injectable implements InjectionAwareInterface
          * Fallback to the PHP userland if the cache is not available
          */
         if (true === $bucket->has($propertyName)) {
-            $service             = $bucket->getShared($propertyName);
+            $service = $bucket->getShared($propertyName);
             $this->$propertyName = $service;
 
             return $service;

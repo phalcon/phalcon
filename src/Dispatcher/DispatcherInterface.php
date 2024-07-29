@@ -63,7 +63,7 @@ interface DispatcherInterface
      *
      * @return mixed
      */
-    public function getParam(string $parameter, string|array $filters = []): mixed;
+    public function getParam(string $parameter, string | array $filters = []): mixed;
 
     /**
      * Gets action params
@@ -157,8 +157,6 @@ interface DispatcherInterface
 
     /**
      * Set a param by its name or numeric index
-     *
-     * @param mixed value
      *
      * @param string $parameter
      * @param mixed  $value

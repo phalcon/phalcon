@@ -67,6 +67,8 @@ abstract class AbstractLinkProvider
      * with that relationship are available, an empty array or \Traversable
      * MUST be returned.
      *
+     * @param string $rel
+     *
      * @return array
      */
     protected function doGetLinksByRel(string $rel): array
@@ -128,7 +130,7 @@ abstract class AbstractLinkProvider
     /**
      * Returns the object hash key
      *
-     * @param mixed link
+     * @param mixed $link
      *
      * @return string
      */

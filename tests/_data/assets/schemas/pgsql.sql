@@ -1,5 +1,9 @@
 
 
+
+
+
+
 drop table if exists complex_default;
             
 create table complex_default
@@ -128,6 +132,8 @@ create table private.co_orders_x_products
             
 
 
+
+
 drop table if exists co_products;
             
 create table co_products
@@ -138,6 +144,8 @@ create table co_products
       prd_name varchar(70)
 );
             
+
+DROP TABLE IF EXISTS co_rb_test_model;CREATE TABLE co_rb_test_model (id SMALLINT, name VARCHAR(10) NOT NULL);
 
 
 drop table if exists co_setters;

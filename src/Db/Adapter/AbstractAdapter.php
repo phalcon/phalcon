@@ -352,7 +352,7 @@ abstract class AbstractAdapter implements AdapterInterface, EventsAwareInterface
      * @return bool
      */
     public function delete(
-        array|string $tableName,
+        array | string $tableName,
         string $whereCondition = null,
         array $placeholders = [],
         array $dataTypes = []
@@ -385,7 +385,7 @@ abstract class AbstractAdapter implements AdapterInterface, EventsAwareInterface
      */
     public function describeIndexes(
         string $tableName,
-        string $schemaName = ""
+        ?string $schemaName = null
     ): array {
         $indexes = [];
         $records = $this->fetchAll(
@@ -426,7 +426,7 @@ abstract class AbstractAdapter implements AdapterInterface, EventsAwareInterface
      * @return array|ReferenceInterface[]
      * @throws Exception
      */
-    public function describeReferences(string $tableName, string $schemaName = ""): array
+    public function describeReferences(string $tableName, ?string $schemaName = null): array
     {
         $references = [];
         $records    = $this->fetchAll(
@@ -589,7 +589,7 @@ abstract class AbstractAdapter implements AdapterInterface, EventsAwareInterface
      */
     public function dropView(
         string $viewName,
-        string $schemaName = "",
+        ?string $schemaName = null,
         bool $ifExists = true
     ): bool {
         return $this->execute(
@@ -621,7 +621,7 @@ abstract class AbstractAdapter implements AdapterInterface, EventsAwareInterface
      *
      * @return string
      */
-    public function escapeIdentifier(array|string $identifier): string
+    public function escapeIdentifier(array | string $identifier): string
     {
         if (is_array($identifier)) {
             return $this->dialect->escape($identifier[0])
@@ -705,8 +705,8 @@ abstract class AbstractAdapter implements AdapterInterface, EventsAwareInterface
     public function fetchColumn(
         string $sqlQuery,
         array $placeholders = [],
-        int|string $column = 0
-    ): string|bool {
+        int | string $column = 0
+    ): string | bool {
         $row = $this->fetchOne($sqlQuery, Enum::FETCH_BOTH, $placeholders);
 
         return $row[$column] ?? false;
@@ -1115,7 +1115,7 @@ abstract class AbstractAdapter implements AdapterInterface, EventsAwareInterface
      *
      * @return string
      */
-    public function limit(string $sqlQuery, array|int $number): string
+    public function limit(string $sqlQuery, array | int $number): string
     {
         return $this->dialect->limit($sqlQuery, $number);
     }
@@ -1134,7 +1134,7 @@ abstract class AbstractAdapter implements AdapterInterface, EventsAwareInterface
      * @return array
      * @todo optimize this
      */
-    public function listTables(string $schemaName = ""): array
+    public function listTables(?string $schemaName = null): array
     {
         $allTables  = [];
         $tableNames = $this->fetchAll(
@@ -1162,7 +1162,7 @@ abstract class AbstractAdapter implements AdapterInterface, EventsAwareInterface
      *
      * @return array
      */
-    public function listViews(string $schemaName = ""): array
+    public function listViews(?string $schemaName = null): array
     {
         $allTables  = [];
         $tableNames = $this->fetchAll(
@@ -1298,6 +1298,17 @@ abstract class AbstractAdapter implements AdapterInterface, EventsAwareInterface
     }
 
     /**
+     * Check whether the database system support the DEFAULT
+     * keyword (SQLite does not support it)
+     *
+     * @deprecated Will re removed in the next version
+     */
+    public function supportsDefaultValue(): bool
+    {
+        return true;
+    }
+
+    /**
      * Generates SQL checking for the existence of a schema.table
      *
      *```php
@@ -1313,7 +1324,7 @@ abstract class AbstractAdapter implements AdapterInterface, EventsAwareInterface
      */
     public function tableExists(
         string $tableName,
-        string $schemaName = ""
+        ?string $schemaName = null
     ): bool {
         $exists = $this->dialect->tableExists($tableName, $schemaName);
 
@@ -1336,7 +1347,7 @@ abstract class AbstractAdapter implements AdapterInterface, EventsAwareInterface
      */
     public function tableOptions(
         string $tableName,
-        string $schemaName = ""
+        ?string $schemaName = null
     ): array {
         $options = $this->dialect->tableOptions($tableName, $schemaName);
 
@@ -1395,7 +1406,7 @@ abstract class AbstractAdapter implements AdapterInterface, EventsAwareInterface
         string $tableName,
         array $fields,
         array $values,
-        array|string $whereCondition = [],
+        array | string $whereCondition = [],
         array $dataTypes = []
     ): bool {
         $placeholders  = [];
@@ -1417,7 +1428,7 @@ abstract class AbstractAdapter implements AdapterInterface, EventsAwareInterface
             $escapedField = $this->escapeIdentifier($field);
 
             if (is_object($value) && $value instanceof RawValue) {
-                $placeholders[] = $escapedField . " = " . (string)$value;
+                $placeholders[] = $escapedField . " = " . $value;
             } else {
                 if (is_object($value)) {
                     $value = (string)$value;
@@ -1537,7 +1548,7 @@ abstract class AbstractAdapter implements AdapterInterface, EventsAwareInterface
     public function updateAsDict(
         string $tableName,
         array $data,
-        array|string $whereCondition = [],
+        array | string $whereCondition = [],
         array $dataTypes = []
     ): bool {
         if (true === empty($data)) {
@@ -1565,17 +1576,6 @@ abstract class AbstractAdapter implements AdapterInterface, EventsAwareInterface
     }
 
     /**
-     * Check whether the database system support the DEFAULT
-     * keyword (SQLite does not support it)
-     *
-     * @deprecated Will re removed in the next version
-     */
-    public function supportsDefaultValue(): bool
-    {
-        return true;
-    }
-
-    /**
      * Generates SQL checking for the existence of a schema.view
      *
      *```php
@@ -1591,7 +1591,7 @@ abstract class AbstractAdapter implements AdapterInterface, EventsAwareInterface
      */
     public function viewExists(
         string $viewName,
-        string $schemaName = ""
+        ?string $schemaName = null
     ): bool {
         $exists = $this->dialect->viewExists($viewName, $schemaName);
 

@@ -411,7 +411,7 @@ class Mysql extends Dialect
      */
     public function describeColumns(
         string $tableName,
-        string $schemaName = ""
+        ?string $schemaName = null
     ): string {
         return "SHOW FULL COLUMNS FROM "
             . $this->prepareTable($tableName, $schemaName);
@@ -427,7 +427,7 @@ class Mysql extends Dialect
      */
     public function describeIndexes(
         string $tableName,
-        string $schemaName = ""
+        ?string $schemaName = null
     ): string {
         return "SHOW INDEXES FROM "
             . $this->prepareTable($tableName, $schemaName);
@@ -443,7 +443,7 @@ class Mysql extends Dialect
      */
     public function describeReferences(
         string $tableName,
-        string $schemaName = ""
+        ?string $schemaName = null
     ): string {
         $sql = "SELECT DISTINCT KCU.TABLE_NAME, KCU.COLUMN_NAME, "
             . "KCU.CONSTRAINT_NAME, KCU.REFERENCED_TABLE_SCHEMA, "
@@ -554,7 +554,7 @@ class Mysql extends Dialect
      */
     public function dropTable(
         string $tableName,
-        string $schemaName = "",
+        ?string $schemaName = null,
         bool $ifExists = true
     ): string {
         $tableName = $this->prepareTable($tableName, $schemaName);
@@ -577,7 +577,7 @@ class Mysql extends Dialect
      */
     public function dropView(
         string $viewName,
-        string $schemaName = "",
+        ?string $schemaName = null,
         bool $ifExists = true
     ): string {
         $view = $this->prepareTable($viewName, $schemaName);
@@ -878,7 +878,7 @@ class Mysql extends Dialect
      *
      * @return string
      */
-    public function listTables(string $schemaName = ""): string
+    public function listTables(?string $schemaName = null): string
     {
         if (true === empty($schemaName)) {
             return "SHOW TABLES FROM `" . $schemaName . "`";
@@ -894,7 +894,7 @@ class Mysql extends Dialect
      *
      * @return string
      */
-    public function listViews(string $schemaName = ""): string
+    public function listViews(?string $schemaName = null): string
     {
         if (true === empty($schemaName)) {
             return "SELECT `TABLE_NAME` AS view_name "
@@ -1013,7 +1013,7 @@ class Mysql extends Dialect
      */
     public function tableExists(
         string $tableName,
-        string $schemaName = ""
+        ?string $schemaName = null
     ): string {
         if (true !== empty($schemaName)) {
             return "SELECT IF(COUNT(*) > 0, 1, 0) "
@@ -1036,7 +1036,7 @@ class Mysql extends Dialect
      *
      * @return string
      */
-    public function tableOptions(string $tableName, string $schemaName = ""): string
+    public function tableOptions(string $tableName, ?string $schemaName = null): string
     {
         $sql = "SELECT TABLES.TABLE_TYPE AS table_type,"
             . "TABLES.AUTO_INCREMENT AS auto_increment,"
@@ -1085,7 +1085,7 @@ class Mysql extends Dialect
      */
     public function viewExists(
         string $viewName,
-        string $schemaName = ""
+        ?string $schemaName = null
     ): string {
         if (true !== empty($schemaName)) {
             return "SELECT IF(COUNT(*) > 0, 1, 0) "

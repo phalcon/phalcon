@@ -14,11 +14,9 @@ declare(strict_types=1);
 namespace Phalcon\Mvc\Model\MetaData\Strategy;
 
 use Phalcon\Di\DiInterface;
-use Phalcon\Db\Adapter\AdapterInterface;
-use Phalcon\Db\Column;
-use Phalcon\Mvc\ModelInterface;
 use Phalcon\Mvc\Model\Exception;
 use Phalcon\Mvc\Model\MetaData;
+use Phalcon\Mvc\ModelInterface;
 
 use function method_exists;
 
@@ -34,22 +32,21 @@ class Introspection implements StrategyInterface
      */
     final public function getColumnMaps(ModelInterface $model, DiInterface $container): array
     {
-
-        $orderedColumnMap = null;
+        $orderedColumnMap  = null;
         $reversedColumnMap = null;
 
         /**
          * Check for a columnMap() method on the model
          */
         if (true === method_exists($model, "columnMap")) {
-            $userColumnMap = call_user_func([$model,"columnMap"]);
+            $userColumnMap = call_user_func([$model, "columnMap"]);
 
             if (false === is_array($userColumnMap)) {
                 throw new Exception("columnMap() not returned an array");
             }
 
             $reversedColumnMap = [];
-            $orderedColumnMap = $userColumnMap;
+            $orderedColumnMap  = $userColumnMap;
 
             foreach ($userColumnMap as $name => $userName) {
                 $reversedColumnMap[$userName] = $name;
@@ -68,7 +65,7 @@ class Introspection implements StrategyInterface
     final public function getMetaData(ModelInterface $model, DiInterface $container): array
     {
         $schema = $model->getSchema();
-        $table = $model->getSource();
+        $table  = $model->getSource();
 
         /**
          * Check if the mapped table exists on the database
@@ -115,20 +112,20 @@ class Introspection implements StrategyInterface
         /**
          * Initialize meta-data
          */
-        $attributes = [];
-        $primaryKeys = [];
-        $nonPrimaryKeys = [];
-        $numericTyped = [];
-        $notNull = [];
-        $fieldTypes = [];
-        $fieldBindTypes = [];
-        $automaticDefault = [];
-        $identityField = false;
-        $defaultValues = [];
+        $attributes        = [];
+        $primaryKeys       = [];
+        $nonPrimaryKeys    = [];
+        $numericTyped      = [];
+        $notNull           = [];
+        $fieldTypes        = [];
+        $fieldBindTypes    = [];
+        $automaticDefault  = [];
+        $identityField     = false;
+        $defaultValues     = [];
         $emptyStringValues = [];
 
         foreach ($columns as $column) {
-            $fieldName = $column->getName();
+            $fieldName    = $column->getName();
             $attributes[] = $fieldName;
 
             /**
@@ -198,7 +195,7 @@ class Introspection implements StrategyInterface
             MetaData::MODELS_AUTOMATIC_DEFAULT_INSERT => $automaticDefault,
             MetaData::MODELS_AUTOMATIC_DEFAULT_UPDATE => $automaticDefault,
             MetaData::MODELS_DEFAULT_VALUES           => $defaultValues,
-            MetaData::MODELS_EMPTY_STRING_VALUES      => $emptyStringValues
+            MetaData::MODELS_EMPTY_STRING_VALUES      => $emptyStringValues,
         ];
     }
 }

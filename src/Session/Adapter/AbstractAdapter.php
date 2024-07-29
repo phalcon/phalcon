@@ -43,14 +43,14 @@ abstract class AbstractAdapter implements SessionHandlerInterface
     /**
      * Destroy
      *
-     * @param string $sessionId
+     * @param string $id
      *
      * @return bool
      */
-    public function destroy($sessionId): bool
+    public function destroy(string $id): bool
     {
-        if (true !== empty($sessionId) && $this->adapter->has($sessionId)) {
-            return $this->adapter->delete($sessionId);
+        if (true !== empty($id) && $this->adapter->has($id)) {
+            return $this->adapter->delete($id);
         }
 
         return true;
@@ -59,11 +59,24 @@ abstract class AbstractAdapter implements SessionHandlerInterface
     /**
      * Garbage Collector
      *
-     * @param int $maxlifetime
+     * @param int $max_lifetime
+     *
+     * @return false|int
+     */
+    public function gc(int $max_lifetime): false | int
+    {
+        return 1;
+    }
+
+    /**
+     * Open
+     *
+     * @param string $path
+     * @param string $name
      *
      * @return bool
      */
-    public function gc($maxlifetime): bool
+    public function open(string $path, string $name): bool
     {
         return true;
     }
@@ -71,41 +84,28 @@ abstract class AbstractAdapter implements SessionHandlerInterface
     /**
      * Read
      *
-     * @param string $sessionId
+     * @param string $id
      *
      * @return string
      */
-    public function read($sessionId): string
+    public function read(string $id): string
     {
-        $data = $this->adapter->get($sessionId);
+        $data = $this->adapter->get($id);
 
         return null === $data ? '' : $data;
-    }
-
-    /**
-     * Open
-     *
-     * @param string $savePath
-     * @param string $sessionName
-     *
-     * @return bool
-     */
-    public function open($savePath, $sessionName): bool
-    {
-        return true;
     }
 
     /**
      * Write
      *
      *
-     * @param string $sessionId
+     * @param string $id
      * @param string $data
      *
      * @return bool
      */
-    public function write($sessionId, $data): bool
+    public function write(string $id, string $data): bool
     {
-        return $this->adapter->set($sessionId, $data);
+        return $this->adapter->set($id, $data);
     }
 }

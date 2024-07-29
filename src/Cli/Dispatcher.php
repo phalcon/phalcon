@@ -50,13 +50,11 @@ class Dispatcher extends CliDispatcher implements DispatcherInterface
     /**
      * @var string
      */
-    protected string $defaultHandler = "main";
-
+    protected string $defaultAction = "main";
     /**
      * @var string
      */
-    protected string $defaultAction = "main";
-
+    protected string $defaultHandler = "main";
     /**
      * @var string
      */
@@ -124,8 +122,8 @@ class Dispatcher extends CliDispatcher implements DispatcherInterface
      * @throws FilterException
      */
     public function getOption(
-        int|string $option,
-        array|string $filters = [],
+        int | string $option,
+        array | string $filters = [],
         mixed $defaultValue = null
     ): mixed {
         if (true !== isset($this->options[$option])) {
@@ -188,7 +186,7 @@ class Dispatcher extends CliDispatcher implements DispatcherInterface
      *
      * @return bool
      */
-    public function hasOption(int|string $option): bool
+    public function hasOption(int | string $option): bool
     {
         return isset($this->options[$option]);
     }

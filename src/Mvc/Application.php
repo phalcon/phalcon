@@ -17,13 +17,15 @@ use Closure;
 use Phalcon\Application\AbstractApplication;
 use Phalcon\Application\Exception as ApplicationException;
 use Phalcon\Events\Exception as EventsException;
-use Phalcon\Events\Traits\EventsAwareTrait;
 use Phalcon\Http\ResponseInterface;
 use Phalcon\Mvc\Application\Exception;
 use Phalcon\Traits\Php\FileTrait;
 
+use function call_user_func_array;
+use function class_exists;
 use function is_array;
 use function is_object;
+use function is_string;
 
 /**
  * This component encapsulates all the complex operations behind instantiating
@@ -71,7 +73,6 @@ use function is_object;
  */
 class Application extends AbstractApplication
 {
-    use EventsAwareTrait;
     use FileTrait;
 
     /**
@@ -99,7 +100,7 @@ class Application extends AbstractApplication
      * @throws Exception
      * @throws EventsException
      */
-    public function handle(string $uri): ResponseInterface|bool
+    public function handle(string $uri): ResponseInterface | bool
     {
         if (null === $this->container) {
             throw new Exception(

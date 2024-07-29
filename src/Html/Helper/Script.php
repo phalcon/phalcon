@@ -11,8 +11,6 @@ declare(strict_types=1);
 
 namespace Phalcon\Html\Helper;
 
-use Phalcon\Html\Exception;
-
 use function array_merge;
 
 /**
@@ -29,7 +27,6 @@ class Script extends AbstractSeries
      * @param array  $attributes
      *
      * @return $this
-     * @throws Exception
      */
     public function add(string $href, array $attributes = [])
     {

@@ -21,4 +21,10 @@ use Phalcon\Storage\Adapter\Memory as StorageMemory;
  */
 class Memory extends StorageMemory implements CacheAdapterInterface
 {
+    /**
+     * EventType prefix.
+     *
+     * @var string
+     */
+    protected string $eventType = "cache";
 }

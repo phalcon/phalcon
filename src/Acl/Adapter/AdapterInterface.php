@@ -141,14 +141,6 @@ interface AdapterInterface
     public function getDefaultAction(): int;
 
     /**
-     * Returns the default ACL access level for no arguments provided in
-     * `isAllowed` action if a `function` (callable) exists for `accessKey`
-     *
-     * @return int
-     */
-    public function getNoArgumentsDefaultAction(): int;
-
-    /**
      * Returns the inherited roles for a passed role name. If no role name
      * has been specified it will return the whole array. If the role has not
      * been found it returns an empty array
@@ -158,6 +150,14 @@ interface AdapterInterface
      * @return array<int|string, string|array<int, string>>
      */
     public function getInheritedRoles(string $roleName = ""): array;
+
+    /**
+     * Returns the default ACL access level for no arguments provided in
+     * `isAllowed` action if a `function` (callable) exists for `accessKey`
+     *
+     * @return int
+     */
+    public function getNoArgumentsDefaultAction(): int;
 
     /**
      * Return an array with every role registered in the list

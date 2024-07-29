@@ -148,32 +148,4 @@ class GetAddSetNamespacesCest
         $actual   = $loader->getNamespaces();
         $I->assertSame($expected, $actual);
     }
-
-    /**
-     * Tests Phalcon\Autoload\Loader ::
-     * getNamespaces()/addNamespace()/setNamespace() - exception
-     *
-     * @param UnitTester $I
-     *
-     * @author Phalcon Team <team@phalcon.io>
-     * @since  2020-09-09
-     */
-    public function autoloaderLoaderGetAddSetNamespacesException(UnitTester $I)
-    {
-        $I->wantToTest(
-            'Autoload\Loader - getNamespaces()/addNamespace()/setNamespace() - exception'
-        );
-
-        $I->expectThrowable(
-            new Exception(
-                'The directories parameter is not a string or array'
-            ),
-            function () {
-                $loader = new Loader();
-                $loader
-                    ->addNamespace('Phalcon\Loader', 1234)
-                ;
-            }
-        );
-    }
 }

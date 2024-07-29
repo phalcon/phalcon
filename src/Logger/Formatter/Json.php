@@ -13,7 +13,6 @@ declare(strict_types=1);
 
 namespace Phalcon\Logger\Formatter;
 
-use JsonException;
 use Phalcon\Logger\Item;
 
 use function json_encode;
@@ -48,7 +47,6 @@ class Json extends AbstractFormatter
      * @param Item $item
      *
      * @return string
-     * @throws JsonException
      */
     public function format(Item $item): string
     {

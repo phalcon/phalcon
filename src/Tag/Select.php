@@ -33,24 +33,26 @@ abstract class Select
     /**
      * Generates a SELECT tag
      *
-     * @param array|string $parameters = [
-     *                                 'id'         => '',
-     *                                 'name'       => '',
-     *                                 'value'      => '',
-     *                                 'useEmpty'   => false,
-     *                                 'emptyValue' => '',
-     *                                 'emptyText'  => '',
-     *                                 ]
-     * @param mixed|null   $data
+     * @param array<string, mixed>|string $parameters = [
+     *                                                'id'         => '',
+     *                                                'name'       => '',
+     *                                                'value'      => '',
+     *                                                'useEmpty'   => false,
+     *                                                'emptyValue' => '',
+     *                                                'emptyText'  => '',
+     *                                                ]
+     * @param mixed|null                  $data
      *
      * @return string
      * @throws Exception
      */
     public static function selectField(
-        array|string $parameters,
+        array | string $parameters,
         mixed $data = null
     ): string {
-        $params = $parameters;
+        $emptyText  = '';
+        $emptyValue = '';
+        $params     = $parameters;
         if (true === is_string($params)) {
             $params = [$parameters, $data];
         }
@@ -165,6 +167,7 @@ abstract class Select
      * @param string $closeOption
      *
      * @return string
+     * @throws Exception
      */
     private static function optionsFromArray(
         array $data,
@@ -215,7 +218,13 @@ abstract class Select
     /**
      * Generate the OPTION tags based on a resultset
      *
-     * @param array using
+     * @param ResultsetInterface $resultset
+     * @param mixed              $using
+     * @param mixed              $value
+     * @param string             $closeOption
+     *
+     * @return string
+     * @throws Exception
      */
     private static function optionsFromResultset(
         ResultsetInterface $resultset,
@@ -223,8 +232,10 @@ abstract class Select
         mixed $value,
         string $closeOption
     ): string {
-        $code   = "";
-        $params = null;
+        $code      = "";
+        $params    = null;
+        $usingZero = '';
+        $usingOne  = '';
 
         if (is_array($using)) {
             if (count($using) !== 2) {
@@ -277,7 +288,7 @@ abstract class Select
                             . $closeOption;
                     }
                 } else {
-                    $strOptionValue = (string)$optionValue;
+                    $strOptionValue = $optionValue;
                     $strValue       = (string)$value;
 
                     if ($strOptionValue === $strValue) {
