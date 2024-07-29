@@ -53,7 +53,6 @@ class PickCest
         $actual   = $view->getContent();
         $I->assertEquals($expected, $actual);
 
-
         $view->start();
         $view->setLayout('pick');
         $view->pick(['currentrender/other']);
