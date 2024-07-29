@@ -16,6 +16,7 @@ namespace Phalcon\Mvc;
 use Closure;
 use Phalcon\Di\Injectable;
 use Phalcon\Events\EventsAwareInterface;
+use Phalcon\Events\Exception as EventsException;
 use Phalcon\Events\Traits\EventsAwareTrait;
 use Phalcon\Mvc\View\Engine\Php as PhpEngine;
 use Phalcon\Mvc\View\Exception;
@@ -368,10 +369,12 @@ class View extends Injectable implements ViewInterface, EventsAwareInterface
         $viewsDirsCount   = count($this->getViewsDirs());
         $activeRenderPath = $this->activeRenderPaths;
 
-        if ($viewsDirsCount === 1) {
-            if (is_array($activeRenderPath) && !empty($activeRenderPath)) {
-                $activeRenderPath = $activeRenderPath[0];
-            }
+        if (
+            $viewsDirsCount === 1 &&
+            is_array($activeRenderPath) &&
+            !empty($activeRenderPath)
+        ) {
+            $activeRenderPath = $activeRenderPath[0];
         }
 
         if (empty($activeRenderPath)) {
@@ -483,6 +486,8 @@ class View extends Injectable implements ViewInterface, EventsAwareInterface
      * @param mixed|null $params
      *
      * @return string
+     * @throws EventsException
+     * @throws Exception
      */
     public function getPartial(
         string $partialPath,
@@ -682,6 +687,8 @@ class View extends Injectable implements ViewInterface, EventsAwareInterface
      * @param mixed|null $params
      *
      * @return void
+     * @throws EventsException
+     * @throws Exception
      */
     public function partial(string $partialPath, mixed $params = null)
     {
@@ -775,6 +782,15 @@ class View extends Injectable implements ViewInterface, EventsAwareInterface
 
     /**
      * Processes the view and templates; Fires events if needed
+     *
+     * @param string $controllerName
+     * @param string $actionName
+     * @param array  $params
+     * @param bool   $fireEvents
+     *
+     * @return bool
+     * @throws EventsException
+     * @throws Exception
      */
     public function processRender(
         string $controllerName,
@@ -883,88 +899,93 @@ class View extends Injectable implements ViewInterface, EventsAwareInterface
             /**
              * Inserts view related to action
              */
-            if ($renderLevel >= self::LEVEL_ACTION_VIEW) {
-                if (!isset($disabledLevels[self::LEVEL_ACTION_VIEW])) {
-                    $this->currentRenderLevel = self::LEVEL_ACTION_VIEW;
+            if (
+                $renderLevel >= self::LEVEL_ACTION_VIEW &&
+                !isset($disabledLevels[self::LEVEL_ACTION_VIEW])
+            ) {
+                $this->currentRenderLevel = self::LEVEL_ACTION_VIEW;
 
-                    $this->engineRender(
-                        $engines,
-                        $renderView,
-                        $silence
-                    );
-                }
+                $this->engineRender(
+                    $engines,
+                    $renderView,
+                    $silence
+                );
             }
 
             /**
              * Inserts templates before layout
              */
-            if ($renderLevel >= self::LEVEL_BEFORE_TEMPLATE) {
-                if (!isset($disabledLevels[self::LEVEL_BEFORE_TEMPLATE])) {
-                    $this->currentRenderLevel = self::LEVEL_BEFORE_TEMPLATE;
-                    $templatesBefore          = $this->templatesBefore;
-                    $silence                  = false;
+            if (
+                $renderLevel >= self::LEVEL_BEFORE_TEMPLATE &&
+                !isset($disabledLevels[self::LEVEL_BEFORE_TEMPLATE])
+            ) {
+                $this->currentRenderLevel = self::LEVEL_BEFORE_TEMPLATE;
+                $templatesBefore          = $this->templatesBefore;
+                $silence                  = false;
 
-                    foreach ($templatesBefore as $templateBefore) {
-                        $this->engineRender(
-                            $engines,
-                            $layoutsDir . $templateBefore,
-                            $silence
-                        );
-                    }
-
-                    $silence = true;
+                foreach ($templatesBefore as $templateBefore) {
+                    $this->engineRender(
+                        $engines,
+                        $layoutsDir . $templateBefore,
+                        $silence
+                    );
                 }
+
+                $silence = true;
             }
 
             /**
              * Inserts controller layout
              */
-            if ($renderLevel >= self::LEVEL_LAYOUT) {
-                if (!isset($disabledLevels[self::LEVEL_LAYOUT])) {
-                    $this->currentRenderLevel = self::LEVEL_LAYOUT;
+            if (
+                $renderLevel >= self::LEVEL_LAYOUT &&
+                !isset($disabledLevels[self::LEVEL_LAYOUT])
+            ) {
+                $this->currentRenderLevel = self::LEVEL_LAYOUT;
 
-                    $this->engineRender(
-                        $engines,
-                        $layoutsDir . $layoutName,
-                        $silence
-                    );
-                }
+                $this->engineRender(
+                    $engines,
+                    $layoutsDir . $layoutName,
+                    $silence
+                );
             }
 
             /**
              * Inserts templates after layout
              */
-            if ($renderLevel >= self::LEVEL_AFTER_TEMPLATE) {
-                if (!isset($disabledLevels[self::LEVEL_AFTER_TEMPLATE])) {
-                    $this->currentRenderLevel = self::LEVEL_AFTER_TEMPLATE;
-                    $templatesAfter           = $this->templatesAfter;
-                    $silence                  = false;
+            if (
+                $renderLevel >= self::LEVEL_AFTER_TEMPLATE &&
+                !isset($disabledLevels[self::LEVEL_AFTER_TEMPLATE])
+            ) {
+                $this->currentRenderLevel = self::LEVEL_AFTER_TEMPLATE;
+                $templatesAfter           = $this->templatesAfter;
+                $silence                  = false;
 
-                    foreach ($templatesAfter as $templateAfter) {
-                        $this->engineRender(
-                            $engines,
-                            $layoutsDir . $templateAfter,
-                            $silence
-                        );
-                    }
-
-                    $silence = true;
+                foreach ($templatesAfter as $templateAfter) {
+                    $this->engineRender(
+                        $engines,
+                        $layoutsDir . $templateAfter,
+                        $silence
+                    );
                 }
+
+                $silence = true;
             }
 
             /**
              * Inserts main view
              */
-            if ($renderLevel >= self::LEVEL_MAIN_LAYOUT) {
-                if (!isset($disabledLevels[self::LEVEL_MAIN_LAYOUT])) {
-                    $this->currentRenderLevel = self::LEVEL_MAIN_LAYOUT;
+            if (
+                $renderLevel >= self::LEVEL_MAIN_LAYOUT &&
+                !isset($disabledLevels[self::LEVEL_MAIN_LAYOUT])
+            ) {
+                $this->currentRenderLevel = self::LEVEL_MAIN_LAYOUT;
 
-                    $this->engineRender(
-                        $engines,
-                        $this->mainView,
-                        $silence
-                    );
-                }
+                $this->engineRender(
+                    $engines,
+                    $this->mainView,
+                    $silence
+                );
             }
 
             $this->currentRenderLevel = 0;
@@ -1017,6 +1038,8 @@ class View extends Injectable implements ViewInterface, EventsAwareInterface
      * @param array  $params
      *
      * @return View|bool|$this
+     * @throws EventsException
+     * @throws Exception
      */
     public function render(
         string $controllerName,
@@ -1328,6 +1351,8 @@ class View extends Injectable implements ViewInterface, EventsAwareInterface
      * @param array  $params
      *
      * @return string
+     * @throws EventsException
+     * @throws Exception
      */
     public function toString(
         string $controllerName,
@@ -1360,8 +1385,9 @@ class View extends Injectable implements ViewInterface, EventsAwareInterface
      * @param bool   $silence
      * @param bool   $mustClean
      *
-     * @return mixed
+     * @return void
      * @throws Exception
+     * @throws EventsException
      */
     protected function engineRender(
         array $engines,
@@ -1446,7 +1472,7 @@ class View extends Injectable implements ViewInterface, EventsAwareInterface
      *
      * @return bool
      */
-    final protected function isAbsolutePath(string $path)
+    final protected function isAbsolutePath(string $path): bool
     {
         if (PHP_OS === "WINNT") {
             return strlen($path) >= 3 && $path[1] == ':' && $path[2] == '\\';
