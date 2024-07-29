@@ -1,5 +1,5 @@
 FROM composer:2.4.2 AS composer
-FROM php:8.2-fpm
+FROM php:8.3-fpm
 
 COPY ./extra.ini /usr/local/etc/php/conf.d/
 
@@ -8,7 +8,7 @@ ENV MY_USER="phalcon" \
     MY_GROUP="phalcon" \
     MY_UID="1000" \
     MY_GID="1000" \
-    PHP_VERSION="8.2" \
+    PHP_VERSION="8.3" \
     LANG=en_US.UTF-8 \
     LANGUAGE=en_US.UTF-8 \
     LC_ALL=en_US.UTF-8

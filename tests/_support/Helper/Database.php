@@ -8,6 +8,7 @@ namespace Helper;
 use Codeception\Exception\ModuleException;
 use Codeception\Module;
 use Codeception\TestInterface;
+use Codeception\Util\Debug;
 use PDO;
 use Phalcon\DataMapper\Pdo\Connection;
 

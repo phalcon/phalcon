@@ -6,6 +6,9 @@
         xmlns="https://getpsalm.org/schema/config"
         xsi:schemaLocation="https://getpsalm.org/schema/config vendor/vimeo/psalm/config.xsd"
         autoloader="vendor/autoload.php"
+        cacheDirectory=".local/cache"
+        findUnusedBaselineEntry="true"
+        findUnusedCode="true"
 >
     <projectFiles>
         <directory name="src" />
