@@ -64,10 +64,12 @@ class QueryBuilder extends AbstractAdapter
      * Phalcon\Paginator\Adapter\QueryBuilder
      *
      * @param array $config = [
-     *                      'limit' => 10,
-     *                      'builder' => null,
-     *                      'columns' => ''
-     *                      ]
+     *     'limit' => 10,
+     *     'builder' => null,
+     *     'columns' => ''
+     * ]
+     *
+     * @throws Exception
      */
     public function __construct(array $config)
     {
@@ -78,15 +80,13 @@ class QueryBuilder extends AbstractAdapter
         if (!isset($config["builder"])) {
             throw new Exception("Parameter 'builder' is required");
         }
-
-        $builder = $config["builder"];
-
-        if (!($builder instanceof Builder)) {
+        if ($config['builder'] instanceof Builder === false) {
             throw new Exception(
                 "Parameter 'builder' must be an instance " .
                 "of Phalcon\\Mvc\\Model\\Query\\Builder"
             );
         }
+        $builder = $config['builder'];
 
         if (isset($config["columns"])) {
             $this->columns = $config["columns"];
@@ -104,7 +104,7 @@ class QueryBuilder extends AbstractAdapter
      */
     public function getCurrentPage(): int
     {
-        return $this->page;
+        return (int)$this->page;
     }
 
     /**
@@ -138,8 +138,12 @@ class QueryBuilder extends AbstractAdapter
          */
         $totalBuilder = clone $builder;
 
-        $limit      = $this->limitRows;
-        $numberPage = $this->page;
+        $limit = $this->limitRows;
+        $numberPage = (int)$this->page;
+
+        if (!$numberPage) {
+            $numberPage = 1;
+        }
 
         $number = $limit * ($numberPage - 1);
 
@@ -147,9 +151,9 @@ class QueryBuilder extends AbstractAdapter
          * Set the limit clause avoiding negative offsets
          */
         if ($number < $limit) {
-            $builder->limit($limit);
+            $builder->limit((int)$limit);
         } else {
-            $builder->limit($limit, $number);
+            $builder->limit((int)$limit, $number);
         }
 
         $query = $builder->getQuery();

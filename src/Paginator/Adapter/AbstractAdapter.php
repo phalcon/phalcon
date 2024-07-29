@@ -17,6 +17,9 @@ use Phalcon\Paginator\Exception;
 use Phalcon\Paginator\Repository;
 use Phalcon\Paginator\RepositoryInterface;
 
+/**
+ * Phalcon\Paginator\Adapter\AbstractAdapter
+ */
 abstract class AbstractAdapter implements AdapterInterface
 {
     /**
@@ -36,14 +39,16 @@ abstract class AbstractAdapter implements AdapterInterface
     /**
      * Repository for pagination
      *
-     * @var RepositoryInterface
+     * @var RepositoryInterface|null
      */
-    protected RepositoryInterface $repository;
+    protected ?RepositoryInterface $repository = null;
 
     /**
      * Phalcon\Paginator\Adapter\AbstractAdapter constructor
      *
      * @param array $config
+     *
+     * @throws Exception
      */
     public function __construct(
         protected array $config
@@ -66,9 +71,9 @@ abstract class AbstractAdapter implements AdapterInterface
     /**
      * Get current rows limit
      *
-     * @return int
+     * @return int|null
      */
-    public function getLimit(): int
+    public function getLimit(): int | null
     {
         return $this->limitRows;
     }

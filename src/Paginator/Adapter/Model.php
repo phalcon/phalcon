@@ -104,6 +104,11 @@ class Model extends AbstractAdapter
             $parameters = (array)$parameters;
         }
 
+        // Prevents 0 or negative page numbers
+        if ($pageNumber <= 0) {
+            $pageNumber = 1;
+        }
+
         // This can return int or ResultsetInterface if it's grouped
         $rowCountResult = call_user_func([$modelClass, "count"], $parameters);
 

@@ -23,9 +23,9 @@ interface AdapterInterface
     /**
      * Get current rows limit
      *
-     * @return int
+     * @return int|null
      */
-    public function getLimit(): int;
+    public function getLimit(): int | null;
 
     /**
      * Returns a slice of the resultset to show in the pagination
