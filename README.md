@@ -12,7 +12,7 @@ Phalcon Framework
 |---------------------------------------------------------------------------|-------------------------|
 | ![PSR-3](https://img.shields.io/badge/PSR-3-blue.svg?style=flat-square)   | `Phalcon\Logger\Logger` |
 | ![PSR-4](https://img.shields.io/badge/PSR-4-blue.svg?style=flat-square)   | `Phalcon\Autoloader`    |
-| ![PSR-7](https://img.shields.io/badge/PSR-7-red.svg?style=flat-square)   | `Phalcon\Http\Message` |
+| ![PSR-7](https://img.shields.io/badge/PSR-7-red.svg?style=flat-square)    | `Phalcon\Http\Message` |
 | ![PSR-12](https://img.shields.io/badge/PSR-12-blue.svg?style=flat-square) | Coding Standard         |
 | ![PSR-13](https://img.shields.io/badge/PSR-13-blue.svg?style=flat-square) | `Phalcon\Html\Tag\Link` |
 | ![PSR-16](https://img.shields.io/badge/PSR-16-blue.svg?style=flat-square) | `Phalcon\Cache\Cache`   |
@@ -29,6 +29,7 @@ Phalcon Framework
 | ![PSR-18](https://img.shields.io/badge/PSR-17-red.svg?style=flat-square) | HTTP Client            |
 
 
-## Remaining refactoring - alignment with `cphalcon` (v5) 
--  Paginator
--  Url
+## Remaining refactoring / alignment with `cphalcon` (v5) 
+- Url
+- Pull requests to `cphalcon`
+- Convert tests to phpunit.

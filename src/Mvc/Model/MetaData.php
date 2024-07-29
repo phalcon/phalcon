@@ -831,7 +831,7 @@ abstract class MetaData extends Injectable implements MetaDataInterface
                      * Check if there is a method "metaData" in the model to retrieve meta-data from it
                      */
                     if (method_exists($model, "metaData")) {
-                        $modelMetadata = call_user_func([$model, "metaData"]);
+                        $modelMetadata = $model->metaData();
 
                         if (false === is_array($modelMetadata)) {
                             throw new Exception(
