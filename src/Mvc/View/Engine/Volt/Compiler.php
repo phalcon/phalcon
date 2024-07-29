@@ -23,6 +23,7 @@ use Phalcon\Support\Traits\FilePathTrait;
 use Phalcon\Traits\Helper\Str\CamelizeTrait;
 
 use function addslashes;
+use function array_key_exists;
 use function array_unshift;
 use function call_user_func;
 use function call_user_func_array;
@@ -2353,7 +2354,7 @@ class Compiler implements InjectionAwareInterface
                  * If name is a string then is a block name
                  */
                 if (is_string($name)) {
-                    if (isset($blocks[$name])) {
+                    if (array_key_exists($name, $blocks)) {
                         /**
                          * The block is set in the local template
                          */
@@ -2776,7 +2777,7 @@ class Compiler implements InjectionAwareInterface
                     $blocks          = $this->blocks;
 
                     if ($blockMode) {
-                        if (null === $blocks) {
+                        if (!is_array($blocks)) {
                             $blocks = [];
                         }
 

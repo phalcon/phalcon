@@ -46,7 +46,7 @@ class Php extends AbstractEngine
         /**
          * Require the file
          */
-        require_once $path;
+        require $path;
 
         if (true === $mustClean) {
             $this->view->setContent(ob_get_contents());
