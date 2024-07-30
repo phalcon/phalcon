@@ -13,7 +13,6 @@ declare(strict_types=1);
 
 namespace Phalcon\Tests\Unit\Container;
 
-
 use Phalcon\Container\Container;
 use Phalcon\Container\Definitions\Definitions;
 use Phalcon\Tests\Fixtures\Container\TestProvider;

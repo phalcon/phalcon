@@ -38,7 +38,7 @@ class GetCallCest extends AbstractLazyTest
     /**
      * @return Definitions
      */
-    protected function definitions() : Definitions
+    protected function definitions(): Definitions
     {
         $definitions = parent::definitions();
         $definitions->{TestWithInterface::class}->argument('one', 'ten');
