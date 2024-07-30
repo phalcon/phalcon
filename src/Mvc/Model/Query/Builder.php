@@ -118,7 +118,7 @@ class Builder implements BuilderInterface, InjectionAwareInterface
     /**
      * @var array|string|null
      */
-    protected array | string | null $models;
+    protected array | string | null $models = null;
 
     /**
      * @var int
@@ -147,7 +147,12 @@ class Builder implements BuilderInterface, InjectionAwareInterface
             /**
              * Process conditions
              */
-            $this->conditions = $params[0] ?? $params['conditions'] ?? [];
+            $this->conditions = [];
+            if (isset($params[0])) {
+                $this->conditions = (string)$params[0];
+            } elseif (isset($params['conditions'])) {
+                $this->conditions = (string)$params['conditions'];
+            }
         }
 
         if (is_array($this->conditions)) {
@@ -175,107 +180,113 @@ class Builder implements BuilderInterface, InjectionAwareInterface
 
             $this->bindParams = $mergedParams;
             $this->bindTypes = $mergedTypes;
-
-            /**
-             * Assign bind types
-             */
-            if (isset($params["bind"])) {
-                $this->bindParams = $params['bind'];
-            }
-
-            if (isset($params["bindTypes"])) {
-                $this->bindTypes = $params['bindTypes'];
-            }
-
-            /**
-             * Assign SELECT DISTINCT / SELECT ALL clause
-             */
-            if (isset($params["distinct"])) {
-                $this->distinct = $params['distinct'];
-            }
-
-            /**
-             * Assign FROM clause
-             */
-            if (isset($params["models"])) {
-                $this->models = $params['models'];
-            }
-
-            /**
-             * Assign COLUMNS clause
-             */
-            if (isset($params["columns"])) {
-                $this->columns = $params['columns'];
-            }
-
-            /**
-             * Assign JOIN clause
-             */
-            if (isset($params["joins"])) {
-                $this->joins = $params['joins'];
-            }
-
-            /**
-             * Assign GROUP clause
-             */
-            if (isset($params["bind"])) {
-                $this->groupBy($params['group']);
-            }
-
-            /**
-             * Assign HAVING clause
-             */
-            if (isset($params["having"])) {
-                $this->having = $params['having'];
-            }
-
-            /**
-             * Assign ORDER clause
-             */
-            if (isset($params["order"])) {
-                $this->order = $params['order'];
-            }
-
-            /**
-             * Assign LIMIT clause
-             */
-            if (isset($params["limit"])) {
-                if (is_array($params['limit'])) {
-                    if (isset($params['limit'][0]) && is_int($params['limit'][0])) {
-                        $this->limit = $params['limit'][0];
-                    }
-                    if (isset($params['limit'][1]) && is_int($params['limit'][1])) {
-                        $this->offset = $params['limit'][1];
-                    }
-                } else {
-                    $this->limit = $params['limit'];
-                }
-            }
-
-            /**
-             * Assign OFFSET clause
-             */
-            if (isset($params["offset"])) {
-                $this->offset = $params['offset'];
-            }
-
-            /**
-             * Assign FOR UPDATE clause
-             */
-            if (isset($params["for_update"])) {
-                $this->forUpdate = $params['for_update'];
-            }
-
-            /**
-             * Assign SHARED LOCK clause
-             */
-            if (isset($params["shared_lock"])) {
-                $this->sharedLock = $params['shared_lock'];
-            }
         } else {
             if (is_string($params) && $params !== '') {
                 $this->conditions = $params;
             }
+        }
+
+        /**
+         * Assign bind types
+         */
+        if (isset($params["bind"])) {
+            $this->bindParams = $params['bind'];
+        }
+
+        if (isset($params["bindTypes"])) {
+            $this->bindTypes = $params['bindTypes'];
+        }
+
+        /**
+         * Assign SELECT DISTINCT / SELECT ALL clause
+         */
+        if (isset($params["distinct"])) {
+            $this->distinct = $params['distinct'];
+        }
+
+        /**
+         * Assign FROM clause
+         */
+        if (isset($params["models"])) {
+            $this->models = $params['models'];
+        }
+
+        /**
+         * Assign COLUMNS clause
+         */
+        if (isset($params["columns"])) {
+            $this->columns = $params['columns'];
+        }
+
+        /**
+         * Assign JOIN clause
+         */
+        if (isset($params["joins"])) {
+            $this->joins = $params['joins'];
+        }
+
+        /**
+         * Assign GROUP clause
+         */
+        if (isset($params["group"])) {
+            $this->groupBy($params['group']);
+        }
+
+        /**
+         * Assign HAVING clause
+         */
+        if (isset($params["having"])) {
+            $this->having = $params['having'];
+        }
+
+        /**
+         * Assign ORDER clause
+         */
+        if (isset($params["order"])) {
+            $this->order = $params['order'];
+        }
+
+        /**
+         * Assign LIMIT clause
+         */
+        if (isset($params["limit"])) {
+            if (is_array($params['limit'])) {
+                if (isset($params['limit'][0]) && is_int($params['limit'][0])) {
+                    $this->limit = $params['limit'][0];
+                }
+                if (isset($params['limit'][1]) && is_int($params['limit'][1])) {
+                    $this->offset = $params['limit'][1];
+                }
+                if (isset($params['limit']['number']) && is_int($params['limit']['number'])) {
+                    $this->limit = $params['limit']['number'];
+                }
+                if (isset($params['limit']['offset']) && is_int($params['limit']['offset'])) {
+                    $this->offset = $params['limit']['offset'];
+                }
+            } else {
+                $this->limit = $params['limit'];
+            }
+        }
+
+        /**
+         * Assign OFFSET clause
+         */
+        if (isset($params["offset"])) {
+            $this->offset = $params['offset'];
+        }
+
+        /**
+         * Assign FOR UPDATE clause
+         */
+        if (isset($params["for_update"])) {
+            $this->forUpdate = $params['for_update'];
+        }
+
+        /**
+         * Assign SHARED LOCK clause
+         */
+        if (isset($params["shared_lock"])) {
+            $this->sharedLock = $params['shared_lock'];
         }
 
         /**
@@ -900,43 +911,42 @@ class Builder implements BuilderInterface, InjectionAwareInterface
          * Process having clause
          */
         $having = $this->having;
-        if ($having !== null) {
-            if (trim($having) !== '') {
-                $phql .= " HAVING " . $having;
-            }
+        if ($having !== null && trim($having) !== '') {
+            $phql .= " HAVING " . $having;
         }
 
         /**
          * Process order clause
          */
-        if ($this->order) {
-            if (is_array($this->order)) {
-                $orderItems = [];
+        if (is_array($this->order)) {
+            $orderItems = [];
 
-                foreach ($this->order as $orderItem) {
-                    /**
-                     * For case 'ORDER BY 1'
-                     */
-                    if (is_int($orderItem)) {
-                        $orderItems[] = $orderItem;
+            foreach ($this->order as $orderItem) {
+                /**
+                 * For case 'ORDER BY 1'
+                 */
+                if (is_int($orderItem)) {
+                    $orderItems[] = $orderItem;
 
-                        continue;
-                    }
-
-                    if (str_contains($orderItem, " ")) {
-                        $itemExplode = explode(" ", $orderItem);
-                        $orderItems[] = $this->autoescape($itemExplode[0]) . " " . $itemExplode[1];
-
-                        continue;
-                    }
-
-                    $orderItems[] = $this->autoescape($orderItem);
+                    continue;
                 }
 
-                $phql .= " ORDER BY " . join(", ", $orderItems);
-            } else {
-                $phql .= " ORDER BY " . $this->order;
+                if (str_contains($orderItem, " ")) {
+                    $itemExplode = explode(" ", $orderItem);
+                    $orderItems[] = $this->autoescape($itemExplode[0]) . " " . $itemExplode[1];
+
+                    continue;
+                }
+
+                $orderItems[] = $this->autoescape($orderItem);
             }
+
+            if (count($orderItems) > 0) {
+                $phql .= " ORDER BY " . join(", ", $orderItems);
+            }
+        }
+        if (is_string($this->order) && trim($this->order) !== '') {
+            $phql .= " ORDER BY " . $this->order;
         }
 
         /**

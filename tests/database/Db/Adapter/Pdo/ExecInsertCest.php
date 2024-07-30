@@ -13,6 +13,7 @@ declare(strict_types=1);
 
 namespace Phalcon\Tests\Database\Db\Adapter\Pdo;
 
+use Codeception\Attribute\Group;
 use DatabaseTester;
 use Phalcon\Db\Adapter\Pdo\AbstractPdo;
 use Phalcon\Db\Adapter\Pdo\Mysql;
@@ -53,13 +54,20 @@ class ExecInsertCest
      *
      * @group  mysql
      */
+    #[Group('mysql')]
     public function dbAdapterPdoInsert(DatabaseTester $I)
     {
         $I->wantToTest('Db\Adapter\Pdo - execute() (insert)');
 
+        // This test is buggy and ignores @group, skip manually.
+        if ($I->getDriver() !== 'mysql') {
+            $I->skipTest('Driver ' . $I->getDriver() . ' not supported');
+            return;
+        }
+
         $connection = $I->getConnection();
-        $migration  = new DialectMigration($connection);
-        $sql        = <<<SQL
+        new DialectMigration($connection);
+        $sql = <<<SQL
 insert into co_dialect (
     field_primary,
     field_blob,
@@ -114,7 +122,7 @@ insert into co_dialect (
     ?
 )
 SQL;
-        $values     = [
+        $values = [
             10,                          // field_primary,
             'abcdefgh',                  // field_blob,
             'bin',                       // field_binary,
@@ -141,7 +149,7 @@ SQL;
             'vbin',                      // field_varbinary,
             'abcdef',                    // field_varchar
         ];
-        $types      = [
+        $types = [
             Column::BIND_PARAM_INT,      // field_primary,
             Column::BIND_PARAM_BLOB,     // field_blob,
             Column::BIND_PARAM_BLOB,     // field_binary,
