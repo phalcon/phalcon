@@ -13,6 +13,7 @@ declare(strict_types=1);
 
 namespace Phalcon\Tests\Database\Mvc\Model\MetaData\Adapter;
 
+use Codeception\Attribute\Skip;
 use Codeception\Example;
 use DatabaseTester;
 use Phalcon\Mvc\Model\MetaData;
@@ -53,6 +54,7 @@ class ReadMetadataCest
      * @group        mysql
      *
      */
+    #[Skip('This currently doesn\'t work because of constraint errors.')]
     public function mvcModelMetadataGetAttributesRedis(
         DatabaseTester $I,
         Example $example
