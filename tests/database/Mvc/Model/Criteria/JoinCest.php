@@ -13,11 +13,17 @@ declare(strict_types=1);
 
 namespace Phalcon\Tests\Database\Mvc\Model\Criteria;
 
+use Codeception\Attribute\Group;
 use DatabaseTester;
 use Phalcon\Mvc\Model\Criteria;
 use Phalcon\Mvc\Model\Query\Builder;
 use Phalcon\Mvc\Model\Resultset\Simple;
 use Phalcon\Storage\Exception;
+use Phalcon\Tests\Fixtures\Migrations\CustomersMigration;
+use Phalcon\Tests\Fixtures\Migrations\InvoicesMigration;
+use Phalcon\Tests\Fixtures\Migrations\OrdersMigration;
+use Phalcon\Tests\Fixtures\Migrations\OrdersProductsMigration;
+use Phalcon\Tests\Fixtures\Migrations\ProductsMigration;
 use Phalcon\Tests\Fixtures\Traits\DiTrait;
 use Phalcon\Tests\Models\Customers;
 use Phalcon\Tests\Models\Invoices;
@@ -53,6 +59,9 @@ class JoinCest
     {
         $I->wantToTest('Mvc\Model\Criteria - join()');
 
+        new InvoicesMigration($I->getConnection());
+        new CustomersMigration($I->getConnection());
+
         $criteria = new Criteria();
         $criteria->setDI($this->container);
 
@@ -83,11 +92,21 @@ class JoinCest
      * @group  mysql
      * @group  pgsql
      */
+    #[Group('mysql', 'pgsql')]
     public function mvcModelCriteriaJoinManyToManyMultipleSchema(DatabaseTester $I)
     {
         $I->wantToTest('Mvc\Model\Criteria - join() and use ManyToMany with Multiple schemas');
 
         $this->setDatabase($I);
+        // Why is group not working here?
+        if ($I->getDriver() !== 'mysql' && $I->getDriver() !== 'pgsql') {
+            $I->skipTest('Driver ' . $I->getDriver() . ' not supported');
+            return;
+        }
+
+        new OrdersMigration($I->getConnection());
+        new ProductsMigration($I->getConnection());
+        new OrdersProductsMigration($I->getConnection());
 
         /**
          * The following test needs to skip sqlite because I think
