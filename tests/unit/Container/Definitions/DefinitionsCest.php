@@ -34,6 +34,8 @@ use Phalcon\Tests\Fixtures\Container\TestInterface;
 use Phalcon\Tests\Fixtures\Container\TestWithInterface;
 use UnitTester;
 
+use function uniqid;
+
 class DefinitionsCest
 {
     protected Definitions $definitions;
@@ -144,28 +146,30 @@ class DefinitionsCest
      */
     public function containerDefinitionsDefinitionsMagicValues(UnitTester $I): void
     {
+        $name = uniqid('val');
+
         // not defined
-        $actual = isset($this->definitions->one);
+        $actual = isset($this->definitions->$name);
         $I->assertFalse($actual);
 
-        $this->definitions->one = 'ten';
+        $this->definitions->$name = 'ten';
 
-        $actual = isset($this->definitions->one);
+        $actual = isset($this->definitions->$name);
         $I->assertTrue($actual);
 
         $expected = 'ten';
-        $actual   = $this->definitions->one;
+        $actual   = $this->definitions->$name;
         $I->assertSame($expected, $actual);
 
-        unset($this->definitions->one);
+        unset($this->definitions->$name);
 
-        $actual = isset($this->definitions->one);
+        $actual = isset($this->definitions->$name);
         $I->assertFalse($actual);
 
         $I->expectThrowable(
-            new NotFound("Value definition 'one' not found."),
-            function () {
-                $this->definitions->one;
+            new NotFound("Value definition '$name' not found."),
+            function () use ($name) {
+                $this->definitions->$name;
             }
         );
     }
