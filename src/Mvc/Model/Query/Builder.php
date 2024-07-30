@@ -887,10 +887,8 @@ class Builder implements BuilderInterface, InjectionAwareInterface
         }
 
         // Only append where conditions if it's string
-        if (is_string($conditions)) {
-            if (trim($conditions) !== '') {
-                $phql .= " WHERE " . $conditions;
-            }
+        if (is_string($conditions) && trim($conditions) !== '') {
+            $phql .= " WHERE " . $conditions;
         }
 
         /**
