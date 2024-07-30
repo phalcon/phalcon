@@ -19,7 +19,7 @@ use Phalcon\DataMapper\Pdo\Connection\ConnectionInterface;
 /**
  * Class AbstractMigration
  *
- * @property PDO    $connection
+ * @property PDO $connection
  * @property string $table
  */
 abstract class AbstractMigration
@@ -92,21 +92,21 @@ abstract class AbstractMigration
 
         $driver = $this->getDriverName();
 
-//        if ($driver === 'mysql') {
-//            return $this->connection->exec(
-//                'truncate table ' . $this->table . ';'
-//            );
-//        }
-//
-//        if ($driver === 'sqlite') {
+        if ($driver === 'mysql') {
+            return $this->connection->exec(
+                'TRUNCATE TABLE ' . $this->table . ';'
+            );
+        }
+
+        if ($driver === 'sqlite') {
             return $this->connection->exec(
                 'delete from ' . $this->table . ';'
             );
-//        }
-//
-//        return $this->connection->exec(
-//            'truncate table ' . $this->table . ' cascade;'
-//        );
+        }
+
+        return $this->connection->exec(
+            'truncate table ' . $this->table . ' cascade;'
+        );
     }
 
     /**
