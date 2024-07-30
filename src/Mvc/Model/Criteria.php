@@ -282,7 +282,7 @@ class Criteria implements CriteriaInterface, InjectionAwareInterface
          */
         $builder = $manager->createBuilder($this->params);
 
-        $builder->from($this->model);
+        $builder->from((string)$this->model);
 
         return $builder;
     }

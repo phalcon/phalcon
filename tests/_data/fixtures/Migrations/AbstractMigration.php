@@ -43,6 +43,7 @@ abstract class AbstractMigration
     {
         $this->connection = $connection;
 
+        $this->create();
         $this->clear();
     }
 
@@ -93,20 +94,20 @@ abstract class AbstractMigration
         $driver = $this->getDriverName();
 
         if ($driver === 'mysql') {
-            return $this->connection->exec(
+            $result = $this->connection->exec(
                 'TRUNCATE TABLE ' . $this->table . ';'
             );
-        }
-
-        if ($driver === 'sqlite') {
-            return $this->connection->exec(
-                'delete from ' . $this->table . ';'
+        } elseif ($driver === 'sqlite') {
+            $result = $this->connection->exec(
+                'DELETE FROM ' . $this->table . ';'
+            );
+        } else {
+            $result = $this->connection->exec(
+                'TRUNCATE TABLE ' . $this->table . ' CASCADE;'
             );
         }
 
-        return $this->connection->exec(
-            'truncate table ' . $this->table . ' cascade;'
-        );
+        return $result;
     }
 
     /**
@@ -117,7 +118,7 @@ abstract class AbstractMigration
     public function drop(): void
     {
         $this->connection->exec(
-            'drop table if exists ' . $this->table . ';'
+            'DROP TABLE IF EXISTS ' . $this->table . ';'
         );
     }
 
