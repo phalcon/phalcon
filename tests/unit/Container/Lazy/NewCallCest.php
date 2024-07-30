@@ -35,7 +35,7 @@ class NewCallCest extends AbstractLazyTest
         $I->assertSame($expected, $actual);
     }
 
-    protected function definitions() : Definitions
+    protected function definitions(): Definitions
     {
         $definitions = parent::definitions();
         $definitions->{TestWithInterface::class}->argument('one', 'ten');

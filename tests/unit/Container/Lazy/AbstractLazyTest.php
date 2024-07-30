@@ -21,7 +21,7 @@ abstract class AbstractLazyTest
 {
     protected Container $container;
 
-    public function _before() : void
+    public function _before(): void
     {
         $this->container = new Container($this->definitions());
     }
@@ -39,7 +39,7 @@ abstract class AbstractLazyTest
      *
      * @return mixed
      */
-    protected function actual(AbstractLazy $lazy) : mixed
+    protected function actual(AbstractLazy $lazy): mixed
     {
         return $lazy($this->container);
     }
