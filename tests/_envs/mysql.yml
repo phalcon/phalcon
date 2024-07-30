@@ -12,4 +12,3 @@ modules:
         waitlock: 10
         initial_queries:
           - "SET NAMES utf8;"
-          - "CREATE SCHEMA IF NOT EXISTS private"

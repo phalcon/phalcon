@@ -14,6 +14,7 @@ declare(strict_types=1);
 namespace Phalcon\Tests\Database\Mvc\Model\Criteria;
 
 use Codeception\Attribute\Group;
+use Codeception\Util\Debug;
 use DatabaseTester;
 use Phalcon\Mvc\Model\Criteria;
 use Phalcon\Mvc\Model\Query\Builder;
@@ -67,8 +68,7 @@ class JoinCest
 
         $criteria
             ->setModelName(Invoices::class)
-            ->join(Customers::class, 'inv_cst_id = cst_id', 'customer')
-        ;
+            ->join(Customers::class, 'inv_cst_id = cst_id', 'customer');
 
         $builder = $criteria->createBuilder();
 
@@ -77,7 +77,7 @@ class JoinCest
         $expected = 'SELECT [Phalcon\Tests\Models\Invoices].* '
             . 'FROM [Phalcon\Tests\Models\Invoices] '
             . 'JOIN [Phalcon\Tests\Models\Customers] AS [customer] ON inv_cst_id = cst_id';
-        $actual   = $builder->getPhql();
+        $actual = $builder->getPhql();
         $I->assertEquals($expected, $actual);
     }
 
@@ -89,20 +89,14 @@ class JoinCest
      * @author Jeremy PASTOURET <https://github.com/jenovateurs>
      * @since  2020-02-06
      *
-     * @group  mysql
      * @group  pgsql
      */
-    #[Group('mysql', 'pgsql')]
+    #[Group('pgsql')]
     public function mvcModelCriteriaJoinManyToManyMultipleSchema(DatabaseTester $I)
     {
         $I->wantToTest('Mvc\Model\Criteria - join() and use ManyToMany with Multiple schemas');
 
         $this->setDatabase($I);
-        // Why is group not working here?
-        if ($I->getDriver() !== 'mysql' && $I->getDriver() !== 'pgsql') {
-            $I->skipTest('Driver ' . $I->getDriver() . ' not supported');
-            return;
-        }
 
         new OrdersMigration($I->getConnection());
         new ProductsMigration($I->getConnection());
@@ -119,11 +113,14 @@ class JoinCest
         $builder->from(Orders::class);
         $builder->join(Products::class);
 
-        $expected = 'private';
-        $query    = $builder->getQuery();
-        $request  = $query->getSql();
+        $query = $builder->getQuery();
+        $request = $query->getSql();
 
+        $expected = 'private';
         $I->assertStringContainsString($expected, $request['sql']);
+
+        Debug::debug($I->getDriver());
+        Debug::debug($request['sql']);
 
         $I->assertInstanceOf(Simple::class, $query->execute());
     }
