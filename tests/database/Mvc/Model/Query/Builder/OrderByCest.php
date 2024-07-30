@@ -60,7 +60,7 @@ class OrderByCest
     {
         $I->wantToTest('Mvc\Model\Query\Builder :: orderBy()');
 
-        $builder = new Builder();
+        $builder = new Builder(null, $this->container);
         $phql    = $builder
             ->columns('inv_id, inv_title')
             ->addFrom(Invoices::class)

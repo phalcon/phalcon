@@ -13,7 +13,6 @@ declare(strict_types=1);
 
 namespace Phalcon\Mvc\Model\Query;
 
-use Phalcon\Di\Di;
 use Phalcon\Db\Column;
 use Phalcon\Di\DiInterface;
 use Phalcon\Mvc\Model\Exception;
@@ -190,7 +189,7 @@ class Builder implements BuilderInterface, InjectionAwareInterface
          * Assign bind types
          */
         if (isset($params["bind"])) {
-            $this->bindParams = $params['bind'];
+            $this->bindParams = $params['bind'] ?? [];
         }
 
         if (isset($params["bindTypes"])) {
@@ -200,71 +199,54 @@ class Builder implements BuilderInterface, InjectionAwareInterface
         /**
          * Assign SELECT DISTINCT / SELECT ALL clause
          */
-        if (isset($params["distinct"])) {
-            $this->distinct = $params['distinct'];
-        }
+        $this->distinct = $params['distinct'] ?? null;
 
         /**
          * Assign FROM clause
          */
-        if (isset($params["models"])) {
-            $this->models = $params['models'];
-        }
+        $this->models = $params['models'] ?? null;
 
         /**
          * Assign COLUMNS clause
          */
-        if (isset($params["columns"])) {
-            $this->columns = $params['columns'];
-        }
+        $this->columns = $params['columns'] ?? null;
 
         /**
          * Assign JOIN clause
          */
-        if (isset($params["joins"])) {
-            $this->joins = $params['joins'];
-        }
+        $this->joins = $params['joins'] ?? [];
 
         /**
          * Assign GROUP clause
          */
-        if (isset($params["group"])) {
-            $this->groupBy($params['group']);
-        }
+        $this->groupBy($params['group'] ?? []);
 
         /**
          * Assign HAVING clause
          */
-        if (isset($params["having"])) {
-            $this->having = $params['having'];
-        }
+        $this->having = $params['having'] ?? null;
 
         /**
          * Assign ORDER clause
          */
-        if (isset($params["order"])) {
-            $this->order = $params['order'];
-        }
+        $this->order = $params['order'] ?? [];
 
         /**
          * Assign LIMIT clause
          */
-        if (isset($params["limit"])) {
-            if (is_array($params['limit'])) {
-                if (isset($params['limit'][0]) && is_int($params['limit'][0])) {
-                    $this->limit = $params['limit'][0];
-                }
-                if (isset($params['limit'][1]) && is_int($params['limit'][1])) {
-                    $this->offset = $params['limit'][1];
-                }
-                if (isset($params['limit']['number']) && is_int($params['limit']['number'])) {
-                    $this->limit = $params['limit']['number'];
-                }
-                if (isset($params['limit']['offset']) && is_int($params['limit']['offset'])) {
-                    $this->offset = $params['limit']['offset'];
-                }
-            } else {
-                $this->limit = $params['limit'];
+        $this->limit = $params['limit'] ?? 0;
+        if (isset($params["limit"]) && is_array($params['limit'])) {
+            if (isset($params['limit'][0]) && is_numeric($params['limit'][0])) {
+                $this->limit = (int)$params['limit'][0];
+            }
+            if (isset($params['limit'][1]) && is_numeric($params['limit'][1])) {
+                $this->offset = (int)$params['limit'][1];
+            }
+            if (isset($params['limit']['number']) && is_numeric($params['limit']['number'])) {
+                $this->limit = (int)$params['limit']['number'];
+            }
+            if (isset($params['limit']['offset']) && is_numeric($params['limit']['offset'])) {
+                $this->offset = (int)$params['limit']['offset'];
             }
         }
 
@@ -272,22 +254,18 @@ class Builder implements BuilderInterface, InjectionAwareInterface
          * Assign OFFSET clause
          */
         if (isset($params["offset"])) {
-            $this->offset = $params['offset'];
+            $this->offset = $params['offset'] ?? 0;
         }
 
         /**
          * Assign FOR UPDATE clause
          */
-        if (isset($params["for_update"])) {
-            $this->forUpdate = $params['for_update'];
-        }
+        $this->forUpdate = $params['for_update'] ?? false;
 
         /**
          * Assign SHARED LOCK clause
          */
-        if (isset($params["shared_lock"])) {
-            $this->sharedLock = $params['shared_lock'];
-        }
+        $this->sharedLock = $params['shared_lock'] ?? false;
 
         /**
          * Update the dependency injector if any
@@ -658,7 +636,7 @@ class Builder implements BuilderInterface, InjectionAwareInterface
     {
         $container = $this->container;
         if (!is_object($container)) {
-            $container = Di::getDefault();
+            $container = $this->getDI();
             if ($container === null) {
                 throw new Exception('Di container required');
             }

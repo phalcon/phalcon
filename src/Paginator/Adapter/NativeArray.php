@@ -76,17 +76,15 @@ class NativeArray extends AbstractAdapter
             $show
         );
 
-        //Fix next
+        // Fix next
+        $next = $totalPages;
         if ($pageNumber < $totalPages) {
             $next = $pageNumber + 1;
-        } else {
-            $next = $totalPages;
         }
 
+        $previous = 1;
         if ($pageNumber > 1) {
             $previous = $pageNumber - 1;
-        } else {
-            $previous = 1;
         }
 
         return $this->getRepository(

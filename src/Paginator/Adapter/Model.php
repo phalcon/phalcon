@@ -127,10 +127,9 @@ class Model extends AbstractAdapter
             $next = $totalPages;
         }
 
+            $previous = 1;
         if ($pageNumber > 1) {
             $previous = $pageNumber - 1;
-        } else {
-            $previous = 1;
         }
 
         return $this->getRepository(

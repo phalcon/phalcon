@@ -14,7 +14,6 @@ declare(strict_types=1);
 namespace Phalcon\Tests\Database\Mvc\Model\Criteria;
 
 use Codeception\Attribute\Group;
-use Codeception\Util\Debug;
 use DatabaseTester;
 use Phalcon\Mvc\Model\Criteria;
 use Phalcon\Mvc\Model\Query\Builder;
@@ -118,9 +117,6 @@ class JoinCest
 
         $expected = 'private';
         $I->assertStringContainsString($expected, $request['sql']);
-
-        Debug::debug($I->getDriver());
-        Debug::debug($request['sql']);
 
         $I->assertInstanceOf(Simple::class, $query->execute());
     }

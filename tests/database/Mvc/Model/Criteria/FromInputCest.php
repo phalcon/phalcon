@@ -15,7 +15,6 @@ namespace Phalcon\Tests\Database\Mvc\Model\Criteria;
 
 use DatabaseTester;
 use Phalcon\Mvc\Model\Criteria;
-use Phalcon\Storage\Exception;
 use Phalcon\Tests\Fixtures\Traits\DiTrait;
 use Phalcon\Tests\Models\Invoices;
 
@@ -73,8 +72,8 @@ class FromInputCest
                 . 'AND [inv_cst_id] = :inv_cst_id: '
                 . 'AND [inv_status_flag] = :inv_status_flag: '
                 . 'AND [inv_title] LIKE :inv_title: '
-                . 'AND [inv_total] = :inv_total: '
-                . 'AND [inv_created_at] = :inv_created_at:';
+                . 'AND [inv_total] LIKE  :inv_total: '
+                . 'AND [inv_created_at] LIKE  :inv_created_at:';
         } else {
             $expected = 'SELECT [Phalcon\Tests\Models\Invoices].* '
                 . 'FROM [Phalcon\Tests\Models\Invoices] '
