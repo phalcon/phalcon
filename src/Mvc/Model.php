@@ -29,6 +29,7 @@ use Phalcon\Mvc\Model\BehaviorInterface;
 use Phalcon\Mvc\Model\Criteria;
 use Phalcon\Mvc\Model\CriteriaInterface;
 use Phalcon\Mvc\Model\Exception;
+use Phalcon\Mvc\Model\Manager;
 use Phalcon\Mvc\Model\ManagerInterface;
 use Phalcon\Mvc\Model\MetaDataInterface;
 use Phalcon\Mvc\Model\QueryInterface;
@@ -6298,6 +6299,7 @@ abstract class Model extends AbstractInjectionAware implements
         mixed $limit = null
     ): QueryInterface {
         $container = Di::getDefault();
+        /** @var Manager $manager */
         $manager   = $container->getShared("modelsManager");
 
         /**
@@ -6309,6 +6311,8 @@ abstract class Model extends AbstractInjectionAware implements
 
         if ($limit != null) {
             $builder->limit($limit);
+        } elseif (isset($params['limit'])) {
+            $builder->limit($params['limit'], $params['offset'] ?? null);
         }
 
         $query = $builder->getQuery();

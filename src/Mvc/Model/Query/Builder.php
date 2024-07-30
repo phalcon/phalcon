@@ -71,9 +71,9 @@ class Builder implements BuilderInterface, InjectionAwareInterface
     protected array | string | null $columns = null;
 
     /**
-     * @var string|null
+     * @var array|string|null
      */
-    protected string | null $conditions = null;
+    protected array | string | null $conditions = null;
 
     /**
      * @var DiInterface|null
@@ -113,7 +113,7 @@ class Builder implements BuilderInterface, InjectionAwareInterface
     /**
      * @var array|int|string
      */
-    protected array | int | string $limit;
+    protected array | int | string $limit = 0;
 
     /**
      * @var array|string|null
@@ -128,7 +128,7 @@ class Builder implements BuilderInterface, InjectionAwareInterface
     /**
      * @var array|string
      */
-    protected array | string $order;
+    protected array | string $order = [];
 
     /**
      * @var bool
@@ -147,7 +147,7 @@ class Builder implements BuilderInterface, InjectionAwareInterface
             /**
              * Process conditions
              */
-            $this->conditions = $params[0] ?? $params['conditions'];
+            $this->conditions = $params[0] ?? $params['conditions'] ?? [];
         }
 
         if (is_array($this->conditions)) {
