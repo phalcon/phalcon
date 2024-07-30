@@ -1,5 +1,15 @@
 # For local development only.
 services:
+  phalcon-8.1:
+    container_name: phalcon-8.1
+    hostname: phalcon-81
+    build: resources/docker/8.1
+    working_dir: /srv
+    volumes:
+      - .:/srv
+    extra_hosts:
+      - "host.docker.internal:host-gateway"
+
   phalcon-8.2:
     container_name: phalcon-8.2
     hostname: phalcon-82
