@@ -1,6 +1,6 @@
 <?php
 
-/**
+/*
  * This file is part of the Phalcon Framework.
  *
  * (c) Phalcon Team <team@phalcon.io>
@@ -11,13 +11,8 @@
 
 declare(strict_types=1);
 
-namespace Phalcon\Paginator;
+namespace Phalcon\Factory;
 
-/**
- * Phalcon\Paginator\Exception
- *
- * Exceptions thrown in Phalcon\Paginator will use this class
- */
 class Exception extends \Exception
 {
 }

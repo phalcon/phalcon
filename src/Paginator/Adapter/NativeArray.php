@@ -1,6 +1,6 @@
 <?php
 
-/**
+/*
  * This file is part of the Phalcon Framework.
  *
  * (c) Phalcon Team <team@phalcon.io>
@@ -8,7 +8,6 @@
  * For the full copyright and license information, please view the LICENSE.txt
  * file that was distributed with this source code.
  */
-
 declare(strict_types=1);
 
 namespace Phalcon\Paginator\Adapter;
@@ -16,15 +15,11 @@ namespace Phalcon\Paginator\Adapter;
 use Phalcon\Paginator\Exception;
 use Phalcon\Paginator\RepositoryInterface;
 
-use function array_slice;
-use function is_array;
-
 /**
+ * Phalcon\Paginator\Adapter\NativeArray
  * Pagination using a PHP array as source of data
- *
  * ```php
  * use Phalcon\Paginator\Adapter\NativeArray;
- *
  * $paginator = new NativeArray(
  *     [
  *         "data"  => [
@@ -44,31 +39,29 @@ class NativeArray extends AbstractAdapter
 {
     /**
      * Returns a slice of the resultset to show in the pagination
-     *
-     * @return RepositoryInterface
-     * @throws Exception
      */
     public function paginate(): RepositoryInterface
     {
         /**
          * TODO: Rewrite the whole method!
          */
-        $items = $this->config["data"];
+        $config = $this->config;
+        $items = $config["data"];
 
         if (!is_array($items)) {
             throw new Exception("Invalid data for paginator");
         }
 
-        $show       = (int) $this->limitRows;
-        $pageNumber = (int) $this->page;
+        $show = (int)$this->limitRows;
+        $pageNumber = (int)$this->page;
 
         if ($pageNumber <= 0) {
             $pageNumber = 1;
         }
 
-        $number       = count($items);
+        $number = count($items);
         $roundedTotal = $number / floatval($show);
-        $totalPages   = (int) $roundedTotal;
+        $totalPages = (int)$roundedTotal;
 
         /**
          * Increase total pages if wasn't integer
@@ -83,7 +76,7 @@ class NativeArray extends AbstractAdapter
             $show
         );
 
-        //Fix next
+        // Fix next
         $next = $totalPages;
         if ($pageNumber < $totalPages) {
             $next = $pageNumber + 1;

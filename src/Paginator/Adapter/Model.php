@@ -1,6 +1,6 @@
 <?php
 
-/**
+/*
  * This file is part of the Phalcon Framework.
  *
  * (c) Phalcon Team <team@phalcon.io>
@@ -8,24 +8,18 @@
  * For the full copyright and license information, please view the LICENSE.txt
  * file that was distributed with this source code.
  */
-
 declare(strict_types=1);
 
 namespace Phalcon\Paginator\Adapter;
 
 use Phalcon\Paginator\RepositoryInterface;
 
-use function call_user_func;
-use function is_array;
-use function is_object;
-
 /**
+ * Phalcon\Paginator\Adapter\Model
  * This adapter allows to paginate data using a Phalcon\Mvc\Model resultset as a
  * base.
- *
  * ```php
  * use Phalcon\Paginator\Adapter\Model;
- *
  * $paginator = new Model(
  *     [
  *         "model" => Robots::class,
@@ -33,8 +27,6 @@ use function is_object;
  *         "page"  => $currentPage,
  *     ]
  * );
- *
- *
  * $paginator = new Model(
  *     [
  *         "model" => Robots::class,
@@ -45,8 +37,6 @@ use function is_object;
  *         "page"  => $currentPage,
  *     ]
  * );
- *
- *
  * $paginator = new Model(
  *     [
  *         "model" => Robots::class,
@@ -61,7 +51,6 @@ use function is_object;
  *         "page"  => $currentPage,
  *     ]
  * );
- *
  * $paginator = new Model(
  *     [
  *         "model" => Robots::class,
@@ -70,8 +59,6 @@ use function is_object;
  *         "page"  => $currentPage,
  *     ]
  * );
- *
- *
  * $paginator = new Model(
  *     [
  *         "model" => Robots::class,
@@ -80,7 +67,6 @@ use function is_object;
  *         "page"  => $currentPage,
  *     ]
  * );
- *
  * $paginate = $paginator->paginate();
  *```
  */
@@ -88,19 +74,19 @@ class Model extends AbstractAdapter
 {
     /**
      * Returns a slice of the resultset to show in the pagination
-     *
-     * @return RepositoryInterface
      */
     public function paginate(): RepositoryInterface
     {
-        $pageItems  = [];
-        $limit      = $this->limitRows;
-        $pageNumber = $this->page;
-        $modelClass = $this->config["model"];
+        $pageItems = [];
 
-        $parameters = $this->config["parameters"] ?? [];
+        $limit = (int)$this->limitRows;
+        $config = $this->config;
+        $pageNumber = (int)$this->page;
+        $modelClass = $config["model"];
 
-        if (!is_array($parameters)) {
+        $parameters = $config['parameters'] ?? [];
+
+        if (is_array($parameters) === false) {
             $parameters = (array)$parameters;
         }
 
@@ -118,14 +104,14 @@ class Model extends AbstractAdapter
             $rowcount = (int)$rowCountResult;
         }
 
-        if ($rowcount % $limit !== 0) {
+        if ($rowcount % $limit != 0) {
             $totalPages = (int)($rowcount / $limit + 1);
         } else {
             $totalPages = (int)($rowcount / $limit);
         }
 
         if ($rowcount > 0) {
-            $parameters["limit"]  = $limit;
+            $parameters["limit"] = $limit;
             $parameters["offset"] = $limit * ($pageNumber - 1);
 
             $pageItems = call_user_func(
@@ -136,11 +122,12 @@ class Model extends AbstractAdapter
 
         // Fix next
         $next = $pageNumber + 1;
+
         if ($next > $totalPages) {
             $next = $totalPages;
         }
 
-        $previous = 1;
+            $previous = 1;
         if ($pageNumber > 1) {
             $previous = $pageNumber - 1;
         }

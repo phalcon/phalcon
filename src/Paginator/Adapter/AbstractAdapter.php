@@ -1,6 +1,6 @@
 <?php
 
-/**
+/*
  * This file is part of the Phalcon Framework.
  *
  * (c) Phalcon Team <team@phalcon.io>
@@ -22,6 +22,13 @@ use Phalcon\Paginator\RepositoryInterface;
  */
 abstract class AbstractAdapter implements AdapterInterface
 {
+    /**
+     * Configuration of paginator
+     *
+     * @var array
+     */
+    protected array $config;
+
     /**
      * Number of rows to show in the paginator. By default is null
      *
@@ -50,21 +57,26 @@ abstract class AbstractAdapter implements AdapterInterface
      *
      * @throws Exception
      */
-    public function __construct(
-        protected array $config
-    ) {
-        $this->repository = new Repository();
+    public function __construct(array $config)
+    {
+        $this->config = $config;
 
         if (isset($config["limit"])) {
-            $this->setLimit($config["limit"]);
+            $this->setLimit(
+                $config["limit"]
+            );
         }
 
         if (isset($config["page"])) {
-            $this->setCurrentPage($config["page"]);
+            $this->setCurrentPage(
+                $config["page"]
+            );
         }
 
         if (isset($config["repository"])) {
-            $this->setRepository($config["repository"]);
+            $this->setRepository(
+                $config["repository"]
+            );
         }
     }
 
@@ -97,15 +109,14 @@ abstract class AbstractAdapter implements AdapterInterface
      *
      * @param int $limit
      *
-     * @return AdapterInterface
      * @throws Exception
+     * @return AdapterInterface
      */
     public function setLimit(int $limit): AdapterInterface
     {
         if ($limit <= 0) {
             throw new Exception("Limit must be greater than zero");
         }
-
         $this->limitRows = $limit;
 
         return $this;
@@ -134,7 +145,11 @@ abstract class AbstractAdapter implements AdapterInterface
      */
     protected function getRepository(array $properties = null): RepositoryInterface
     {
-        if (null !== $properties) {
+        if ($this->repository instanceof RepositoryInterface === false) {
+            $this->repository = new Repository();
+        }
+
+        if ($properties !== null) {
             $this->repository->setProperties($properties);
         }
 

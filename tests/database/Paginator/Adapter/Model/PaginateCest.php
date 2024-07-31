@@ -32,10 +32,9 @@ class PaginateCest
     {
         $this->setNewFactoryDefault();
         $this->setDatabase($I);
-
         /** @var PDO $connection */
         $connection = $I->getConnection();
-        (new InvoicesMigration($connection));
+        (new InvoicesMigration($connection))->create();
     }
 
     /**

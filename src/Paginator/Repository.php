@@ -1,6 +1,6 @@
 <?php
 
-/**
+/*
  * This file is part of the Phalcon Framework.
  *
  * (c) Phalcon Team <team@phalcon.io>
@@ -8,33 +8,21 @@
  * For the full copyright and license information, please view the LICENSE.txt
  * file that was distributed with this source code.
  */
-
 declare(strict_types=1);
 
 namespace Phalcon\Paginator;
 
 use JsonSerializable;
-use Phalcon\Traits\Helper\Str\CamelizeTrait;
-
-use function get_class;
-use function method_exists;
-use function trigger_error;
+use Phalcon\Support\Helper\Str\Camelize;
 
 /**
+ * Phalcon\Paginator\Repository
  * Repository of current state Phalcon\Paginator\AdapterInterface::paginate()
  */
 class Repository implements RepositoryInterface, JsonSerializable
 {
-    use CamelizeTrait;
-
-    /**
-     * @var array
-     */
     protected array $aliases = [];
 
-    /**
-     * @var array
-     */
     protected array $properties = [];
 
     /**
@@ -44,27 +32,23 @@ class Repository implements RepositoryInterface, JsonSerializable
      */
     public function __get(string $property): mixed
     {
-        $method = "get" . $this->toCamelize(
-            $this->getRealNameProperty($property)
-        );
+        $camelize = new Camelize();
+        $method = "get" . $camelize($this->getRealNameProperty($property));
 
         if (method_exists($this, $method)) {
-            return $this->$method();
+            return $this->{$method}();
         }
 
         /**
          * A notice is shown if the property is not defined
          */
-        trigger_error(
-            "Access to undefined property "
-            . get_class($this) . "::" . $property
-        );
+        trigger_error("Access to undefined property " . get_class($this) . "::" . $property);
 
         return null;
     }
 
     /**
-     * @return array
+     * {@inheritdoc}
      */
     public function getAliases(): array
     {
@@ -72,7 +56,7 @@ class Repository implements RepositoryInterface, JsonSerializable
     }
 
     /**
-     * @return int
+     * {@inheritdoc}
      */
     public function getCurrent(): int
     {
@@ -80,7 +64,7 @@ class Repository implements RepositoryInterface, JsonSerializable
     }
 
     /**
-     * @return int
+     * {@inheritdoc}
      */
     public function getFirst(): int
     {
@@ -88,15 +72,15 @@ class Repository implements RepositoryInterface, JsonSerializable
     }
 
     /**
-     * @return mixed
+     * {@inheritdoc}
      */
     public function getItems(): mixed
     {
-        return $this->getProperty(self::PROPERTY_ITEMS, null);
+        return $this->getProperty(self::PROPERTY_ITEMS);
     }
 
     /**
-     * @return int
+     * {@inheritdoc}
      */
     public function getLast(): int
     {
@@ -104,7 +88,7 @@ class Repository implements RepositoryInterface, JsonSerializable
     }
 
     /**
-     * @return int
+     * {@inheritdoc}
      */
     public function getLimit(): int
     {
@@ -112,7 +96,7 @@ class Repository implements RepositoryInterface, JsonSerializable
     }
 
     /**
-     * @return int
+     * {@inheritdoc}
      */
     public function getNext(): int
     {
@@ -120,7 +104,7 @@ class Repository implements RepositoryInterface, JsonSerializable
     }
 
     /**
-     * @return int
+     * {@inheritdoc}
      */
     public function getPrevious(): int
     {
@@ -128,7 +112,7 @@ class Repository implements RepositoryInterface, JsonSerializable
     }
 
     /**
-     * @return int
+     * {@inheritdoc}
      */
     public function getTotalItems(): int
     {
@@ -136,7 +120,7 @@ class Repository implements RepositoryInterface, JsonSerializable
     }
 
     /**
-     * @return array
+     * See [jsonSerialize](https://php.net/manual/en/jsonserializable.jsonserialize.php)
      */
     public function jsonSerialize(): array
     {
@@ -144,9 +128,7 @@ class Repository implements RepositoryInterface, JsonSerializable
     }
 
     /**
-     * @param array $aliases
-     *
-     * @return RepositoryInterface
+     * {@inheritdoc}
      */
     public function setAliases(array $aliases): RepositoryInterface
     {
@@ -156,9 +138,7 @@ class Repository implements RepositoryInterface, JsonSerializable
     }
 
     /**
-     * @param array $properties
-     *
-     * @return RepositoryInterface
+     * {@inheritdoc}
      */
     public function setProperties(array $properties): RepositoryInterface
     {
@@ -169,11 +149,6 @@ class Repository implements RepositoryInterface, JsonSerializable
 
     /**
      * Gets value of property by name
-     *
-     * @param string     $property
-     * @param mixed|null $defaultValue
-     *
-     * @return mixed
      */
     protected function getProperty(string $property, mixed $defaultValue = null): mixed
     {
@@ -182,13 +157,15 @@ class Repository implements RepositoryInterface, JsonSerializable
 
     /**
      * Resolve alias property name
-     *
-     * @param string $property
-     *
-     * @return string
      */
     protected function getRealNameProperty(string $property): string
     {
-        return $this->aliases[$property] ?? $property;
+        $aliases = $this->getAliases();
+
+        if (isset($aliases[$property])) {
+            return $aliases[$property];
+        }
+
+        return $property;
     }
 }

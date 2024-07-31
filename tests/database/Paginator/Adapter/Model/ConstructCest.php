@@ -14,6 +14,7 @@ declare(strict_types=1);
 namespace Phalcon\Tests\Database\Paginator\Adapter\Model;
 
 use DatabaseTester;
+use PDO;
 use Phalcon\Paginator\Adapter\Model;
 use Phalcon\Tests\Fixtures\Migrations\InvoicesMigration;
 use Phalcon\Tests\Fixtures\Traits\DiTrait;
