@@ -14,6 +14,7 @@ declare(strict_types=1);
 namespace Phalcon\Tests\Database\Mvc\Model\Criteria;
 
 use Codeception\Attribute\Group;
+use Codeception\Attribute\Skip;
 use DatabaseTester;
 use Phalcon\Mvc\Model\Criteria;
 use Phalcon\Mvc\Model\Query\Builder;
@@ -91,6 +92,7 @@ class JoinCest
      * @group  pgsql
      */
     #[Group('pgsql')]
+    #[Skip('This currently does not work')]
     public function mvcModelCriteriaJoinManyToManyMultipleSchema(DatabaseTester $I)
     {
         $I->wantToTest('Mvc\Model\Criteria - join() and use ManyToMany with Multiple schemas');

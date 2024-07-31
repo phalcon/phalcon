@@ -451,8 +451,8 @@ class Builder implements BuilderInterface, InjectionAwareInterface
      */
     public function betweenHaving(
         string $expr,
-        string | float $minimum,
-        string | float $maximum,
+        string | float | int $minimum,
+        string | float | int $maximum,
         string $operator = BuilderInterface::OPERATOR_AND
     ): BuilderInterface {
         return $this->conditionBetween("Having", $operator, $expr, $minimum, $maximum);
@@ -465,18 +465,18 @@ class Builder implements BuilderInterface, InjectionAwareInterface
      * $builder->betweenWhere("price", 100.25, 200.50);
      *```
      *
-     * @param string       $expr
-     * @param string|float $minimum
-     * @param string|float $maximum
-     * @param string       $operator
+     * @param string           $expr
+     * @param string|float|int $minimum
+     * @param string|float|int $maximum
+     * @param string           $operator
      *
      * @throws Exception
      * @return BuilderInterface
      */
     public function betweenWhere(
         string $expr,
-        string | float $minimum,
-        string | float $maximum,
+        string | float | int $minimum,
+        string | float | int $maximum,
         string $operator = BuilderInterface::OPERATOR_AND
     ): BuilderInterface {
         return $this->conditionBetween("Where", $operator, $expr, $minimum, $maximum);
@@ -1396,18 +1396,18 @@ class Builder implements BuilderInterface, InjectionAwareInterface
      * $builder->notBetweenHaving("SUM(Robots.price)", 100.25, 200.50);
      *```
      *
-     * @param string       $expr
-     * @param string|float $minimum
-     * @param string|float $maximum
-     * @param string       $operator
+     * @param string           $expr
+     * @param string|float|int $minimum
+     * @param string|float|int $maximum
+     * @param string           $operator
      *
      * @throws Exception
      * @return BuilderInterface
      */
     public function notBetweenHaving(
         string $expr,
-        string | float $minimum,
-        string | float $maximum,
+        string | float | int $minimum,
+        string | float | int $maximum,
         string $operator = BuilderInterface::OPERATOR_AND
     ): BuilderInterface {
         return $this->conditionNotBetween(
@@ -1426,18 +1426,18 @@ class Builder implements BuilderInterface, InjectionAwareInterface
      * $builder->notBetweenWhere("price", 100.25, 200.50);
      *```
      *
-     * @param string       $expr
-     * @param string|float $minimum
-     * @param string|float $maximum
-     * @param string       $operator
+     * @param string           $expr
+     * @param string|float|int $minimum
+     * @param string|float|int $maximum
+     * @param string           $operator
      *
      * @throws Exception
      * @return BuilderInterface
      */
     public function notBetweenWhere(
         string $expr,
-        string | float $minimum,
-        string | float $maximum,
+        string | float | int $minimum,
+        string | float | int $maximum,
         string $operator = BuilderInterface::OPERATOR_AND
     ): BuilderInterface {
         return $this->conditionNotBetween(
@@ -1727,11 +1727,11 @@ class Builder implements BuilderInterface, InjectionAwareInterface
     /**
      * Appends a BETWEEN condition
      *
-     * @param string       $clause
-     * @param string       $operator
-     * @param string       $expr
-     * @param string|float $minimum
-     * @param string|float $maximum
+     * @param string           $clause
+     * @param string           $operator
+     * @param string           $expr
+     * @param string|float|int $minimum
+     * @param string|float|int $maximum
      *
      * @throws Exception
      * @return BuilderInterface
@@ -1740,8 +1740,8 @@ class Builder implements BuilderInterface, InjectionAwareInterface
         string $clause,
         string $operator,
         string $expr,
-        string | float $minimum,
-        string | float $maximum
+        string | float | int $minimum,
+        string | float | int $maximum
     ): BuilderInterface {
         if ($operator !== self::OPERATOR_AND && $operator !== self::OPERATOR_OR) {
             throw new Exception(
@@ -1850,11 +1850,11 @@ class Builder implements BuilderInterface, InjectionAwareInterface
     /**
      * Appends a NOT BETWEEN condition
      *
-     * @param string       $clause
-     * @param string       $operator
-     * @param string       $expr
-     * @param string|float $minimum
-     * @param string|float $maximum
+     * @param string           $clause
+     * @param string           $operator
+     * @param string           $expr
+     * @param string|float|int $minimum
+     * @param string|float|int $maximum
      *
      * @throws Exception
      * @return BuilderInterface
@@ -1863,8 +1863,8 @@ class Builder implements BuilderInterface, InjectionAwareInterface
         string $clause,
         string $operator,
         string $expr,
-        string | float $minimum,
-        string | float $maximum
+        string | float | int $minimum,
+        string | float | int $maximum
     ): BuilderInterface {
         if ($operator !== self::OPERATOR_AND && $operator !== self::OPERATOR_OR) {
             throw new Exception(
