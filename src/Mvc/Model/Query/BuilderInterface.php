@@ -54,17 +54,17 @@ interface BuilderInterface
     /**
      * Appends a BETWEEN condition to the current conditions
      *
-     * @param string       $expr
-     * @param string|float $minimum
-     * @param string|float $maximum
-     * @param string       $operator
+     * @param string           $expr
+     * @param string|float|int $minimum
+     * @param string|float|int $maximum
+     * @param string           $operator
      *
      * @return BuilderInterface
      */
     public function betweenWhere(
         string $expr,
-        string | float $minimum,
-        string | float $maximum,
+        string | float | int $minimum,
+        string | float | int $maximum,
         string $operator = BuilderInterface::OPERATOR_AND
     ): BuilderInterface;
 
@@ -356,17 +356,17 @@ interface BuilderInterface
     /**
      * Appends a NOT BETWEEN condition to the current conditions
      *
-     * @param string       $expr
-     * @param string|float $minimum
-     * @param string|float $maximum
-     * @param string       $operator
+     * @param string           $expr
+     * @param string|float|int $minimum
+     * @param string|float|int $maximum
+     * @param string           $operator
      *
      * @return BuilderInterface
      */
     public function notBetweenWhere(
         string $expr,
-        string | float $minimum,
-        string | float $maximum,
+        string | float | int $minimum,
+        string | float | int $maximum,
         string $operator = BuilderInterface::OPERATOR_AND
     ): BuilderInterface;
 

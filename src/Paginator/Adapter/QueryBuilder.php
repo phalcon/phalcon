@@ -88,7 +88,10 @@ class QueryBuilder extends AbstractAdapter
         }
         $builder = $config['builder'];
 
-        if (isset($config["columns"])) {
+        if (
+            isset($config["columns"]) &&
+            (is_array($config['columns']) || is_string($config['columns']))
+        ) {
             $this->columns = $config["columns"];
         }
 
