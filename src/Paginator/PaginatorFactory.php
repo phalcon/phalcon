@@ -15,7 +15,6 @@ namespace Phalcon\Paginator;
 
 use Phalcon\Config\Config;
 use Phalcon\Paginator\Adapter\AdapterInterface;
-use Phalcon\Paginator\Adapter\NativeArray;
 use Phalcon\Support\Traits\ConfigTrait;
 use Phalcon\Traits\Factory\FactoryTrait;
 
@@ -83,7 +82,6 @@ class PaginatorFactory
      * @param string $name
      * @param array $options
      *
-     * @throws Exception
      * @return AdapterInterface
      */
     public function newInstance(string $name, array $options = []): AdapterInterface
@@ -95,7 +93,8 @@ class PaginatorFactory
             return $instance;
         }
 
-        throw $this->getException("$name is not an instance of \\Phalcon\\Paginator\\Adapter\\AdapterInterface");
+        $exception = $this->getExceptionClass();
+        throw new $exception("$name is not an instance of \\Phalcon\\Paginator\\Adapter\\AdapterInterface");
     }
 
     /**
