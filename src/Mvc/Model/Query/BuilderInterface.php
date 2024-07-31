@@ -21,12 +21,12 @@ use Phalcon\Mvc\Model\QueryInterface;
 interface BuilderInterface
 {
     public const OPERATOR_AND = "and";
-    public const OPERATOR_OR  = "or";
+    public const OPERATOR_OR = "or";
 
     /**
      * Add a model to take part of the query
      *
-     * @param string      $model
+     * @param string $model
      * @param string|null $alias
      *
      * @return BuilderInterface
@@ -40,8 +40,8 @@ interface BuilderInterface
      * Appends a condition to the current conditions using a AND operator
      *
      * @param string $conditions
-     * @param array  $bindParams
-     * @param array  $bindTypes
+     * @param array $bindParams
+     * @param array $bindTypes
      *
      * @return BuilderInterface
      */
@@ -55,16 +55,16 @@ interface BuilderInterface
      * Appends a BETWEEN condition to the current conditions
      *
      * @param string $expr
-     * @param mixed  $minimum
-     * @param mixed  $maximum
+     * @param string|float $minimum
+     * @param string|float $maximum
      * @param string $operator
      *
      * @return BuilderInterface
      */
     public function betweenWhere(
         string $expr,
-        mixed $minimum,
-        mixed $maximum,
+        string | float $minimum,
+        string | float $maximum,
         string $operator = BuilderInterface::OPERATOR_AND
     ): BuilderInterface;
 
@@ -122,15 +122,15 @@ interface BuilderInterface
      * Sets SELECT DISTINCT / SELECT ALL flag
      *
      *```php
-     * $builder->distinct("status");
-     * $builder->distinct(null);
+     * $builder->distinct();
+     * $builder->distinct(false);
      *```
      *
-     * @param mixed $distinct
+     * @param bool|string $distinct
      *
      * @return BuilderInterface
      */
-    public function distinct(mixed $distinct): BuilderInterface;
+    public function distinct(bool | string $distinct): BuilderInterface;
 
     /**
      * Sets a FOR UPDATE clause
@@ -171,16 +171,16 @@ interface BuilderInterface
     /**
      * Return the columns to be queried
      *
-     * @return array|string
+     * @return array|string|null
      */
-    public function getColumns(): array | string;
+    public function getColumns(): array | string | null;
 
     /**
      * Returns SELECT DISTINCT / SELECT ALL flag
      *
-     * @return bool
+     * @return bool|string|null
      */
-    public function getDistinct(): bool;
+    public function getDistinct(): bool | string | null;
 
     /**
      * Return the models who makes part of the query
@@ -201,7 +201,7 @@ interface BuilderInterface
      *
      * @return string|null
      */
-    public function getHaving(): string|null;
+    public function getHaving(): string | null;
 
     /**
      * Return join parts of the query
@@ -234,7 +234,7 @@ interface BuilderInterface
     /**
      * Return the set ORDER BY clause
      *
-     * @return array|string
+     * @return array|string|null
      */
     public function getOrderBy(): array | string | null;
 
@@ -262,18 +262,18 @@ interface BuilderInterface
     /**
      * Sets a GROUP BY clause
      *
-     * @param mixed $group
+     * @param array|string $group
      *
      * @return BuilderInterface
      */
-    public function groupBy(mixed $group): BuilderInterface;
+    public function groupBy(array | string $group): BuilderInterface;
 
     /**
      * Sets a HAVING condition clause
      *
      * @param string $conditions
-     * @param array  $bindParams
-     * @param array  $bindTypes
+     * @param array $bindParams
+     * @param array $bindTypes
      *
      * @return BuilderInterface
      */
@@ -287,7 +287,7 @@ interface BuilderInterface
      * Appends an IN condition to the current conditions
      *
      * @param string $expr
-     * @param array  $values
+     * @param array $values
      * @param string $operator
      *
      * @return BuilderInterface
@@ -301,7 +301,7 @@ interface BuilderInterface
     /**
      * Adds an INNER join to the query
      *
-     * @param string      $model
+     * @param string $model
      * @param string|null $conditions
      * @param string|null $alias
      *
@@ -316,7 +316,7 @@ interface BuilderInterface
     /**
      * Adds an :type: join (by default type - INNER) to the query
      *
-     * @param string      $model
+     * @param string $model
      * @param string|null $conditions
      * @param string|null $alias
      *
@@ -331,7 +331,7 @@ interface BuilderInterface
     /**
      * Adds a LEFT join to the query
      *
-     * @param string      $model
+     * @param string $model
      * @param string|null $conditions
      * @param string|null $alias
      *
@@ -346,27 +346,27 @@ interface BuilderInterface
     /**
      * Sets a LIMIT clause
      *
-     * @param int        $limit
-     * @param mixed|null $offset
+     * @param int $limit
+     * @param int|null $offset
      *
      * @return BuilderInterface
      */
-    public function limit(int $limit, mixed $offset = null): BuilderInterface;
+    public function limit(int $limit, ?int $offset = null): BuilderInterface;
 
     /**
      * Appends a NOT BETWEEN condition to the current conditions
      *
      * @param string $expr
-     * @param mixed  $minimum
-     * @param mixed  $maximum
+     * @param string|float $minimum
+     * @param string|float $maximum
      * @param string $operator
      *
      * @return BuilderInterface
      */
     public function notBetweenWhere(
         string $expr,
-        mixed $minimum,
-        mixed $maximum,
+        string | float $minimum,
+        string | float $maximum,
         string $operator = BuilderInterface::OPERATOR_AND
     ): BuilderInterface;
 
@@ -374,7 +374,7 @@ interface BuilderInterface
      * Appends a NOT IN condition to the current conditions
      *
      * @param string $expr
-     * @param array  $values
+     * @param array $values
      * @param string $operator
      *
      * @return BuilderInterface
@@ -398,8 +398,8 @@ interface BuilderInterface
      * Appends a condition to the current conditions using an OR operator
      *
      * @param string $conditions
-     * @param array  $bindParams
-     * @param array  $bindTypes
+     * @param array $bindParams
+     * @param array $bindTypes
      *
      * @return BuilderInterface
      */
@@ -419,7 +419,7 @@ interface BuilderInterface
     /**
      * Adds a RIGHT join to the query
      *
-     * @param string      $model
+     * @param string $model
      * @param string|null $conditions
      * @param string|null $alias
      *
@@ -435,7 +435,7 @@ interface BuilderInterface
      * Set default bind parameters
      *
      * @param array $bindParams
-     * @param bool  $merge
+     * @param bool $merge
      *
      * @return BuilderInterface
      */
@@ -448,7 +448,7 @@ interface BuilderInterface
      * Set default bind types
      *
      * @param array $bindTypes
-     * @param bool  $merge
+     * @param bool $merge
      *
      * @return BuilderInterface
      */
@@ -461,8 +461,8 @@ interface BuilderInterface
      * Sets conditions for the query
      *
      * @param string $conditions
-     * @param array  $bindParams
-     * @param array  $bindTypes
+     * @param array $bindParams
+     * @param array $bindTypes
      *
      * @return BuilderInterface
      */

@@ -71,7 +71,7 @@ class NativeArray extends AbstractAdapter
         $totalPages   = (int) $roundedTotal;
 
         /**
-         * Increase totalpages if wasn't integer
+         * Increase total pages if wasn't integer
          */
         if ($totalPages != $roundedTotal) {
             $totalPages++;

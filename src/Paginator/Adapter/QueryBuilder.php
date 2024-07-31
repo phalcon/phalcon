@@ -120,8 +120,8 @@ class QueryBuilder extends AbstractAdapter
     /**
      * Returns a slice of the resultset to show in the pagination
      *
-     * @return RepositoryInterface
      * @throws Exception
+     * @return RepositoryInterface
      */
     public function paginate(): RepositoryInterface
     {
@@ -138,7 +138,7 @@ class QueryBuilder extends AbstractAdapter
          */
         $totalBuilder = clone $builder;
 
-        $limit = $this->limitRows;
+        $limit      = $this->limitRows;
         $numberPage = (int)$this->page;
 
         if (!$numberPage) {
@@ -192,14 +192,10 @@ class QueryBuilder extends AbstractAdapter
          * Change 'COUNT()' parameters, when the query contains 'GROUP BY'
          */
         if ($hasGroup) {
-            if (is_array($groups)) {
-                $groupColumn = implode(", ", $groups);
-            } else {
-                $groupColumn = $groups;
-            }
+            $groupColumn = implode(", ", $groups);
 
             if (!$hasHaving) {
-                $totalBuilder->groupBy(null)->columns(
+                $totalBuilder->groupBy('')->columns(
                     [
                         "COUNT(DISTINCT " . $groupColumn . ") AS [rowcount]",
                     ]
@@ -249,16 +245,15 @@ class QueryBuilder extends AbstractAdapter
                 $sql["bind"]
             );
 
-            $rowcount   = $row ? intval($row["rowcount"]) : 0;
-            $totalPages = intval(ceil($rowcount / $limit));
+            $rowcount = $row ? intval($row["rowcount"]) : 0;
         } else {
-            $result     = $totalQuery->execute();
-            $row        = $result->getFirst();
-            $rowcount   = $row ? intval($row->rowcount) : 0;
-            $totalPages = intval(ceil($rowcount / $limit));
+            $result   = $totalQuery->execute();
+            $row      = $result->getFirst();
+            $rowcount = $row ? intval($row->rowcount) : 0;
         }
 
-        $next = $totalPages;
+        $totalPages = intval(ceil($rowcount / $limit));
+        $next       = $totalPages;
         if ($numberPage < $totalPages) {
             $next = $numberPage + 1;
         }
