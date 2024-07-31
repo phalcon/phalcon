@@ -80,7 +80,7 @@ class PaginatorFactory
      * Create a new instance of the adapter
      *
      * @param string $name
-     * @param array $options
+     * @param array  $options
      *
      * @throws Exception
      * @return AdapterInterface

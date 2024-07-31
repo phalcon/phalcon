@@ -46,22 +46,22 @@ class NativeArray extends AbstractAdapter
          * TODO: Rewrite the whole method!
          */
         $config = $this->config;
-        $items = $config["data"];
+        $items  = $config["data"];
 
         if (!is_array($items)) {
             throw new Exception("Invalid data for paginator");
         }
 
-        $show = (int)$this->limitRows;
+        $show       = (int)$this->limitRows;
         $pageNumber = (int)$this->page;
 
         if ($pageNumber <= 0) {
             $pageNumber = 1;
         }
 
-        $number = count($items);
+        $number       = count($items);
         $roundedTotal = $number / floatval($show);
-        $totalPages = (int)$roundedTotal;
+        $totalPages   = (int)$roundedTotal;
 
         /**
          * Increase total pages if wasn't integer

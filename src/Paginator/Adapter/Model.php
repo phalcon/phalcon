@@ -79,8 +79,8 @@ class Model extends AbstractAdapter
     {
         $pageItems = [];
 
-        $limit = (int)$this->limitRows;
-        $config = $this->config;
+        $limit      = (int)$this->limitRows;
+        $config     = $this->config;
         $pageNumber = (int)$this->page;
         $modelClass = $config["model"];
 
@@ -111,7 +111,7 @@ class Model extends AbstractAdapter
         }
 
         if ($rowcount > 0) {
-            $parameters["limit"] = $limit;
+            $parameters["limit"]  = $limit;
             $parameters["offset"] = $limit * ($pageNumber - 1);
 
             $pageItems = call_user_func(
@@ -127,7 +127,7 @@ class Model extends AbstractAdapter
             $next = $totalPages;
         }
 
-            $previous = 1;
+        $previous = 1;
         if ($pageNumber > 1) {
             $previous = $pageNumber - 1;
         }

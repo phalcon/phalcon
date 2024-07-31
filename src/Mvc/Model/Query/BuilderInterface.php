@@ -26,7 +26,7 @@ interface BuilderInterface
     /**
      * Add a model to take part of the query
      *
-     * @param string $model
+     * @param string      $model
      * @param string|null $alias
      *
      * @return BuilderInterface
@@ -40,8 +40,8 @@ interface BuilderInterface
      * Appends a condition to the current conditions using a AND operator
      *
      * @param string $conditions
-     * @param array $bindParams
-     * @param array $bindTypes
+     * @param array  $bindParams
+     * @param array  $bindTypes
      *
      * @return BuilderInterface
      */
@@ -54,10 +54,10 @@ interface BuilderInterface
     /**
      * Appends a BETWEEN condition to the current conditions
      *
-     * @param string $expr
+     * @param string       $expr
      * @param string|float $minimum
      * @param string|float $maximum
-     * @param string $operator
+     * @param string       $operator
      *
      * @return BuilderInterface
      */
@@ -272,8 +272,8 @@ interface BuilderInterface
      * Sets a HAVING condition clause
      *
      * @param string $conditions
-     * @param array $bindParams
-     * @param array $bindTypes
+     * @param array  $bindParams
+     * @param array  $bindTypes
      *
      * @return BuilderInterface
      */
@@ -287,7 +287,7 @@ interface BuilderInterface
      * Appends an IN condition to the current conditions
      *
      * @param string $expr
-     * @param array $values
+     * @param array  $values
      * @param string $operator
      *
      * @return BuilderInterface
@@ -301,7 +301,7 @@ interface BuilderInterface
     /**
      * Adds an INNER join to the query
      *
-     * @param string $model
+     * @param string      $model
      * @param string|null $conditions
      * @param string|null $alias
      *
@@ -316,7 +316,7 @@ interface BuilderInterface
     /**
      * Adds an :type: join (by default type - INNER) to the query
      *
-     * @param string $model
+     * @param string      $model
      * @param string|null $conditions
      * @param string|null $alias
      *
@@ -331,7 +331,7 @@ interface BuilderInterface
     /**
      * Adds a LEFT join to the query
      *
-     * @param string $model
+     * @param string      $model
      * @param string|null $conditions
      * @param string|null $alias
      *
@@ -346,7 +346,7 @@ interface BuilderInterface
     /**
      * Sets a LIMIT clause
      *
-     * @param int $limit
+     * @param int      $limit
      * @param int|null $offset
      *
      * @return BuilderInterface
@@ -356,10 +356,10 @@ interface BuilderInterface
     /**
      * Appends a NOT BETWEEN condition to the current conditions
      *
-     * @param string $expr
+     * @param string       $expr
      * @param string|float $minimum
      * @param string|float $maximum
-     * @param string $operator
+     * @param string       $operator
      *
      * @return BuilderInterface
      */
@@ -374,7 +374,7 @@ interface BuilderInterface
      * Appends a NOT IN condition to the current conditions
      *
      * @param string $expr
-     * @param array $values
+     * @param array  $values
      * @param string $operator
      *
      * @return BuilderInterface
@@ -398,8 +398,8 @@ interface BuilderInterface
      * Appends a condition to the current conditions using an OR operator
      *
      * @param string $conditions
-     * @param array $bindParams
-     * @param array $bindTypes
+     * @param array  $bindParams
+     * @param array  $bindTypes
      *
      * @return BuilderInterface
      */
@@ -419,7 +419,7 @@ interface BuilderInterface
     /**
      * Adds a RIGHT join to the query
      *
-     * @param string $model
+     * @param string      $model
      * @param string|null $conditions
      * @param string|null $alias
      *
@@ -435,7 +435,7 @@ interface BuilderInterface
      * Set default bind parameters
      *
      * @param array $bindParams
-     * @param bool $merge
+     * @param bool  $merge
      *
      * @return BuilderInterface
      */
@@ -448,7 +448,7 @@ interface BuilderInterface
      * Set default bind types
      *
      * @param array $bindTypes
-     * @param bool $merge
+     * @param bool  $merge
      *
      * @return BuilderInterface
      */
@@ -461,8 +461,8 @@ interface BuilderInterface
      * Sets conditions for the query
      *
      * @param string $conditions
-     * @param array $bindParams
-     * @param array $bindTypes
+     * @param array  $bindParams
+     * @param array  $bindTypes
      *
      * @return BuilderInterface
      */

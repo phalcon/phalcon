@@ -152,7 +152,7 @@ class Builder implements BuilderInterface, InjectionAwareInterface
      * Phalcon\Mvc\Model\Query\Builder constructor
      *
      * @param array|string|null $params
-     * @param DiInterface|null $container
+     * @param DiInterface|null  $container
      */
     public function __construct(
         array | string | null $params = null,
@@ -319,7 +319,7 @@ class Builder implements BuilderInterface, InjectionAwareInterface
      * );
      *```
      *
-     * @param string $model
+     * @param string      $model
      * @param string|null $alias
      *
      * @return BuilderInterface
@@ -358,8 +358,8 @@ class Builder implements BuilderInterface, InjectionAwareInterface
      *```
      *
      * @param string $conditions
-     * @param array $bindParams
-     * @param array $bindTypes
+     * @param array  $bindParams
+     * @param array  $bindTypes
      *
      * @return BuilderInterface
      */
@@ -394,8 +394,8 @@ class Builder implements BuilderInterface, InjectionAwareInterface
      *```
      *
      * @param string $conditions
-     * @param array $bindParams
-     * @param array $bindTypes
+     * @param array  $bindParams
+     * @param array  $bindTypes
      *
      * @return BuilderInterface
      */
@@ -441,10 +441,10 @@ class Builder implements BuilderInterface, InjectionAwareInterface
      * $builder->betweenHaving("SUM(Robots.price)", 100.25, 200.50);
      *```
      *
-     * @param string $expr
+     * @param string       $expr
      * @param string|float $minimum
      * @param string|float $maximum
-     * @param string $operator
+     * @param string       $operator
      *
      * @throws Exception
      * @return BuilderInterface
@@ -465,10 +465,10 @@ class Builder implements BuilderInterface, InjectionAwareInterface
      * $builder->betweenWhere("price", 100.25, 200.50);
      *```
      *
-     * @param string $expr
+     * @param string       $expr
      * @param string|float $minimum
      * @param string|float $maximum
-     * @param string $operator
+     * @param string       $operator
      *
      * @throws Exception
      * @return BuilderInterface
@@ -1168,8 +1168,8 @@ class Builder implements BuilderInterface, InjectionAwareInterface
      *```
      *
      * @param string $conditions
-     * @param array $bindParams
-     * @param array $bindTypes
+     * @param array  $bindParams
+     * @param array  $bindTypes
      *
      * @return BuilderInterface
      */
@@ -1204,7 +1204,7 @@ class Builder implements BuilderInterface, InjectionAwareInterface
      *```
      *
      * @param string $expr
-     * @param array $values
+     * @param array  $values
      * @param string $operator
      *
      * @throws Exception
@@ -1229,7 +1229,7 @@ class Builder implements BuilderInterface, InjectionAwareInterface
      *```
      *
      * @param string $expr
-     * @param array $values
+     * @param array  $values
      * @param string $operator
      *
      * @throws Exception
@@ -1266,7 +1266,7 @@ class Builder implements BuilderInterface, InjectionAwareInterface
      * );
      *```
      *
-     * @param string $model
+     * @param string      $model
      * @param string|null $conditions
      * @param string|null $alias
      *
@@ -1313,7 +1313,7 @@ class Builder implements BuilderInterface, InjectionAwareInterface
      * );
      *```
      *
-     * @param string $model
+     * @param string      $model
      * @param string|null $conditions
      * @param string|null $alias
      * @param string|null $type
@@ -1342,7 +1342,7 @@ class Builder implements BuilderInterface, InjectionAwareInterface
      * );
      *```
      *
-     * @param string $model
+     * @param string      $model
      * @param string|null $conditions
      * @param string|null $alias
      *
@@ -1367,7 +1367,7 @@ class Builder implements BuilderInterface, InjectionAwareInterface
      * $builder->limit("100", "20");
      * ```
      *
-     * @param int $limit
+     * @param int      $limit
      * @param int|null $offset
      *
      * @return BuilderInterface
@@ -1396,10 +1396,10 @@ class Builder implements BuilderInterface, InjectionAwareInterface
      * $builder->notBetweenHaving("SUM(Robots.price)", 100.25, 200.50);
      *```
      *
-     * @param string $expr
+     * @param string       $expr
      * @param string|float $minimum
      * @param string|float $maximum
-     * @param string $operator
+     * @param string       $operator
      *
      * @throws Exception
      * @return BuilderInterface
@@ -1426,10 +1426,10 @@ class Builder implements BuilderInterface, InjectionAwareInterface
      * $builder->notBetweenWhere("price", 100.25, 200.50);
      *```
      *
-     * @param string $expr
+     * @param string       $expr
      * @param string|float $minimum
      * @param string|float $maximum
-     * @param string $operator
+     * @param string       $operator
      *
      * @throws Exception
      * @return BuilderInterface
@@ -1457,7 +1457,7 @@ class Builder implements BuilderInterface, InjectionAwareInterface
      *```
      *
      * @param string $expr
-     * @param array $values
+     * @param array  $values
      * @param string $operator
      *
      * @throws Exception
@@ -1479,7 +1479,7 @@ class Builder implements BuilderInterface, InjectionAwareInterface
      *```
      *
      * @param string $expr
-     * @param array $values
+     * @param array  $values
      * @param string $operator
      *
      * @throws Exception
@@ -1526,8 +1526,8 @@ class Builder implements BuilderInterface, InjectionAwareInterface
      *```
      *
      * @param string $conditions
-     * @param array $bindParams
-     * @param array $bindTypes
+     * @param array  $bindParams
+     * @param array  $bindTypes
      *
      * @return BuilderInterface
      */
@@ -1611,7 +1611,7 @@ class Builder implements BuilderInterface, InjectionAwareInterface
      * );
      *```
      *
-     * @param string $model
+     * @param string      $model
      * @param string|null $conditions
      * @param string|null $alias
      *
@@ -1631,7 +1631,7 @@ class Builder implements BuilderInterface, InjectionAwareInterface
      * Set default bind parameters
      *
      * @param array $bindParams
-     * @param bool $merge
+     * @param bool  $merge
      *
      * @return BuilderInterface
      */
@@ -1650,7 +1650,7 @@ class Builder implements BuilderInterface, InjectionAwareInterface
      * Set default bind types
      *
      * @param array $bindTypes
-     * @param bool $merge
+     * @param bool  $merge
      *
      * @return BuilderInterface
      */
@@ -1695,8 +1695,8 @@ class Builder implements BuilderInterface, InjectionAwareInterface
      *```
      *
      * @param string $conditions
-     * @param array $bindParams
-     * @param array $bindTypes
+     * @param array  $bindParams
+     * @param array  $bindTypes
      *
      * @return BuilderInterface
      */
@@ -1727,9 +1727,9 @@ class Builder implements BuilderInterface, InjectionAwareInterface
     /**
      * Appends a BETWEEN condition
      *
-     * @param string $clause
-     * @param string $operator
-     * @param string $expr
+     * @param string       $clause
+     * @param string       $operator
+     * @param string       $expr
      * @param string|float $minimum
      * @param string|float $maximum
      *
@@ -1789,7 +1789,7 @@ class Builder implements BuilderInterface, InjectionAwareInterface
      * @param string $clause
      * @param string $operator
      * @param string $expr
-     * @param array $values
+     * @param array  $values
      *
      * @throws Exception
      * @return BuilderInterface
@@ -1850,9 +1850,9 @@ class Builder implements BuilderInterface, InjectionAwareInterface
     /**
      * Appends a NOT BETWEEN condition
      *
-     * @param string $clause
-     * @param string $operator
-     * @param string $expr
+     * @param string       $clause
+     * @param string       $operator
+     * @param string       $expr
      * @param string|float $minimum
      * @param string|float $maximum
      *
@@ -1911,7 +1911,7 @@ class Builder implements BuilderInterface, InjectionAwareInterface
      * @param string $clause
      * @param string $operator
      * @param string $expr
-     * @param array $values
+     * @param array  $values
      *
      * @throws Exception
      * @return BuilderInterface
