@@ -442,8 +442,8 @@ class Builder implements BuilderInterface, InjectionAwareInterface
      *```
      *
      * @param string       $expr
-     * @param string|float $minimum
-     * @param string|float $maximum
+     * @param string|float|int $minimum
+     * @param string|float|int $maximum
      * @param string       $operator
      *
      * @throws Exception
