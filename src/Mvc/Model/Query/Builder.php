@@ -441,10 +441,10 @@ class Builder implements BuilderInterface, InjectionAwareInterface
      * $builder->betweenHaving("SUM(Robots.price)", 100.25, 200.50);
      *```
      *
-     * @param string       $expr
+     * @param string           $expr
      * @param string|float|int $minimum
      * @param string|float|int $maximum
-     * @param string       $operator
+     * @param string           $operator
      *
      * @throws Exception
      * @return BuilderInterface
@@ -542,7 +542,8 @@ class Builder implements BuilderInterface, InjectionAwareInterface
      * Sets SELECT DISTINCT / SELECT ALL flag
      *
      *```php
-     * $builder->distinct();
+     * $builder->distinct("status");
+     * $builder->distinct(true);
      * $builder->distinct(false);
      *```
      *
@@ -1969,6 +1970,11 @@ class Builder implements BuilderInterface, InjectionAwareInterface
         return $this;
     }
 
+    /**
+     * @param array $conditions
+     *
+     * @return string
+     */
     private function mergeConditions(array $conditions): string
     {
         $mergedConditions = [];
