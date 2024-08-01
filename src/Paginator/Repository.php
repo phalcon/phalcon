@@ -43,13 +43,16 @@ class Repository implements RepositoryInterface, JsonSerializable
         $method = "get" . $this->toCamelize($this->getRealNameProperty($property));
 
         if (method_exists($this, $method)) {
-            return $this->{$method}();
+            return $this->$method();
         }
 
         /**
          * A notice is shown if the property is not defined
          */
-        trigger_error("Access to undefined property " . get_class($this) . "::" . $property);
+        trigger_error(
+            "Access to undefined property "
+            . get_class($this) . "::" . $property
+        );
 
         return null;
     }
@@ -127,7 +130,7 @@ class Repository implements RepositoryInterface, JsonSerializable
     }
 
     /**
-     * See [jsonSerialize](https://php.net/manual/en/jsonserializable.jsonserialize.php)
+     * @return array
      */
     public function jsonSerialize(): array
     {
@@ -176,12 +179,6 @@ class Repository implements RepositoryInterface, JsonSerializable
      */
     protected function getRealNameProperty(string $property): string
     {
-        $aliases = $this->getAliases();
-
-        if (isset($aliases[$property])) {
-            return $aliases[$property];
-        }
-
-        return $property;
+        return $this->aliases[$property] ?? $property;
     }
 }

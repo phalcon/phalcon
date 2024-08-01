@@ -60,21 +60,15 @@ abstract class AbstractAdapter implements AdapterInterface
         $this->config     = $config;
 
         if (isset($config["limit"])) {
-            $this->setLimit(
-                $config["limit"]
-            );
+            $this->setLimit($config["limit"]);
         }
 
         if (isset($config["page"])) {
-            $this->setCurrentPage(
-                $config["page"]
-            );
+            $this->setCurrentPage($config["page"]);
         }
 
         if (isset($config["repository"])) {
-            $this->setRepository(
-                $config["repository"]
-            );
+            $this->setRepository($config["repository"]);
         }
     }
 
@@ -115,6 +109,7 @@ abstract class AbstractAdapter implements AdapterInterface
         if ($limit <= 0) {
             throw new Exception("Limit must be greater than zero");
         }
+
         $this->limitRows = $limit;
 
         return $this;
@@ -143,7 +138,7 @@ abstract class AbstractAdapter implements AdapterInterface
      */
     protected function getRepository(array $properties = null): RepositoryInterface
     {
-        if ($properties !== null) {
+        if (null !== $properties) {
             $this->repository->setProperties($properties);
         }
 

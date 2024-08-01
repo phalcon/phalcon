@@ -18,8 +18,10 @@ use Phalcon\Paginator\RepositoryInterface;
 /**
  * This adapter allows to paginate data using a Phalcon\Mvc\Model resultset as a
  * base.
+ *
  * ```php
  * use Phalcon\Paginator\Adapter\Model;
+ *
  * $paginator = new Model(
  *     [
  *         "model" => Robots::class,
@@ -27,6 +29,8 @@ use Phalcon\Paginator\RepositoryInterface;
  *         "page"  => $currentPage,
  *     ]
  * );
+ *
+ *
  * $paginator = new Model(
  *     [
  *         "model" => Robots::class,
@@ -37,6 +41,8 @@ use Phalcon\Paginator\RepositoryInterface;
  *         "page"  => $currentPage,
  *     ]
  * );
+ *
+ *
  * $paginator = new Model(
  *     [
  *         "model" => Robots::class,
@@ -51,6 +57,8 @@ use Phalcon\Paginator\RepositoryInterface;
  *         "page"  => $currentPage,
  *     ]
  * );
+ *
+ *
  * $paginator = new Model(
  *     [
  *         "model" => Robots::class,
@@ -59,6 +67,8 @@ use Phalcon\Paginator\RepositoryInterface;
  *         "page"  => $currentPage,
  *     ]
  * );
+ *
+ *
  * $paginator = new Model(
  *     [
  *         "model" => Robots::class,
@@ -67,6 +77,7 @@ use Phalcon\Paginator\RepositoryInterface;
  *         "page"  => $currentPage,
  *     ]
  * );
+ *
  * $paginate = $paginator->paginate();
  *```
  */
@@ -124,7 +135,6 @@ class Model extends AbstractAdapter
 
         // Fix next
         $next = $pageNumber + 1;
-
         if ($next > $totalPages) {
             $next = $totalPages;
         }

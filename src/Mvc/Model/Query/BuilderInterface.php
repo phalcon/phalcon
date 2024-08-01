@@ -122,8 +122,9 @@ interface BuilderInterface
      * Sets SELECT DISTINCT / SELECT ALL flag
      *
      *```php
-     * $builder->distinct();
+     * $builder->distinct("status");
      * $builder->distinct(false);
+     * $builder->distinct(true);
      *```
      *
      * @param bool|string $distinct
