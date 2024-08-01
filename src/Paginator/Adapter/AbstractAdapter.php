@@ -60,21 +60,15 @@ abstract class AbstractAdapter implements AdapterInterface
         $this->config     = $config;
 
         if (isset($config["limit"])) {
-            $this->setLimit(
-                $config["limit"]
-            );
+            $this->setLimit($config["limit"]);
         }
 
         if (isset($config["page"])) {
-            $this->setCurrentPage(
-                $config["page"]
-            );
+            $this->setCurrentPage($config["page"]);
         }
 
         if (isset($config["repository"])) {
-            $this->setRepository(
-                $config["repository"]
-            );
+            $this->setRepository($config["repository"]);
         }
     }
 
