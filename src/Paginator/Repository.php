@@ -1,6 +1,6 @@
 <?php
 
-/*
+/**
  * This file is part of the Phalcon Framework.
  *
  * (c) Phalcon Team <team@phalcon.io>
@@ -8,6 +8,7 @@
  * For the full copyright and license information, please view the LICENSE.txt
  * file that was distributed with this source code.
  */
+
 declare(strict_types=1);
 
 namespace Phalcon\Paginator;
@@ -16,15 +17,20 @@ use JsonSerializable;
 use Phalcon\Traits\Helper\Str\CamelizeTrait;
 
 /**
- * Phalcon\Paginator\Repository
  * Repository of current state Phalcon\Paginator\AdapterInterface::paginate()
  */
 class Repository implements RepositoryInterface, JsonSerializable
 {
     use CamelizeTrait;
 
+    /**
+     * @var array
+     */
     protected array $aliases = [];
 
+    /**
+     * @var array
+     */
     protected array $properties = [];
 
     /**

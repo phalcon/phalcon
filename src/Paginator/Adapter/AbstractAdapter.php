@@ -1,6 +1,6 @@
 <?php
 
-/*
+/**
  * This file is part of the Phalcon Framework.
  *
  * (c) Phalcon Team <team@phalcon.io>
@@ -17,9 +17,6 @@ use Phalcon\Paginator\Exception;
 use Phalcon\Paginator\Repository;
 use Phalcon\Paginator\RepositoryInterface;
 
-/**
- * Phalcon\Paginator\Adapter\AbstractAdapter
- */
 abstract class AbstractAdapter implements AdapterInterface
 {
     /**
@@ -60,7 +57,7 @@ abstract class AbstractAdapter implements AdapterInterface
     public function __construct(array $config)
     {
         $this->repository = new Repository();
-        $this->config = $config;
+        $this->config     = $config;
 
         if (isset($config["limit"])) {
             $this->setLimit(

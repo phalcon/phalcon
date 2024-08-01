@@ -1,6 +1,6 @@
 <?php
 
-/*
+/**
  * This file is part of the Phalcon Framework.
  *
  * (c) Phalcon Team <team@phalcon.io>
@@ -16,7 +16,6 @@ namespace Phalcon\Mvc\Model;
 use Phalcon\Mvc\ModelInterface;
 
 /**
- * Phalcon\Mvc\Model\QueryInterface
  * Interface for Phalcon\Mvc\Model\Query
  */
 interface QueryInterface

@@ -1,4 +1,4 @@
-<?php  //[STAMP] f64438bcd80da11d7be9df79a61b64e7
+<?php  //[STAMP] 64122c766a307bc5f5d92f058bca14e6
 // phpcs:ignoreFile
 namespace _generated;
 
@@ -12,375 +12,7 @@ trait UnitTesterActions
      */
     abstract protected function getScenario();
 
-
-    /**
-     * [!] Method is generated. Documentation taken from corresponding module.
-     *
-     * Make sure you are connected to the right database.
-     *
-     * ```php
-     * <?php
-     * $I->seeNumRecords(2, 'users');   //executed on default database
-     * $I->amConnectedToDatabase('db_books');
-     * $I->seeNumRecords(30, 'books');  //executed on db_books database
-     * //All the next queries will be on db_books
-     * ```
-     *
-     * @throws ModuleConfigException
-     * @see \Codeception\Module\Db::amConnectedToDatabase()
-     */
-    public function amConnectedToDatabase(string $databaseKey): void {
-        $this->getScenario()->runStep(new \Codeception\Step\Condition('amConnectedToDatabase', func_get_args()));
-    }
-
- 
-    /**
-     * [!] Method is generated. Documentation taken from corresponding module.
-     *
-     * Can be used with a callback if you don't want to change the current database in your test.
-     *
-     * ```php
-     * <?php
-     * $I->seeNumRecords(2, 'users');   //executed on default database
-     * $I->performInDatabase('db_books', function($I) {
-     *     $I->seeNumRecords(30, 'books');  //executed on db_books database
-     * });
-     * $I->seeNumRecords(2, 'users');  //executed on default database
-     * ```
-     * List of actions can be pragmatically built using `Codeception\Util\ActionSequence`:
-     *
-     * ```php
-     * <?php
-     * $I->performInDatabase('db_books', ActionSequence::build()
-     *     ->seeNumRecords(30, 'books')
-     * );
-     * ```
-     * Alternatively an array can be used:
-     *
-     * ```php
-     * $I->performInDatabase('db_books', ['seeNumRecords' => [30, 'books']]);
-     * ```
-     *
-     * Choose the syntax you like the most and use it,
-     *
-     * Actions executed from array or ActionSequence will print debug output for actions, and adds an action name to
-     * exception on failure.
-     *
-     * @param $databaseKey
-     * @param ActionSequence|array|callable $actions
-     * @throws ModuleConfigException
-     * @see \Codeception\Module\Db::performInDatabase()
-     */
-    public function performInDatabase($databaseKey, $actions): void {
-        $this->getScenario()->runStep(new \Codeception\Step\Action('performInDatabase', func_get_args()));
-    }
-
- 
-    /**
-     * [!] Method is generated. Documentation taken from corresponding module.
-     *
-     * Inserts an SQL record into a database. This record will be erased after the test,
-     * unless you've configured "skip_cleanup_if_failed", and the test fails.
-     *
-     * ```php
-     * <?php
-     * $I->haveInDatabase('users', array('name' => 'miles', 'email' => 'miles@davis.com'));
-     * ```
-     * @see \Codeception\Module\Db::haveInDatabase()
-     */
-    public function haveInDatabase(string $table, array $data): int {
-        return $this->getScenario()->runStep(new \Codeception\Step\Action('haveInDatabase', func_get_args()));
-    }
-
- 
-    /**
-     * [!] Method is generated. Documentation taken from corresponding module.
-     *
-     * Asserts that a row with the given column values exists.
-     * Provide table name and column values.
-     *
-     * ```php
-     * <?php
-     * $I->seeInDatabase('users', ['name' => 'Davert', 'email' => 'davert@mail.com']);
-     * ```
-     * Fails if no such user found.
-     *
-     * Comparison expressions can be used as well:
-     *
-     * ```php
-     * <?php
-     * $I->seeInDatabase('posts', ['num_comments >=' => '0']);
-     * $I->seeInDatabase('users', ['email like' => 'miles@davis.com']);
-     * ```
-     *
-     * Supported operators: `<`, `>`, `>=`, `<=`, `!=`, `like`.
-     * @see \Codeception\Module\Db::seeInDatabase()
-     */
-    public function seeInDatabase(string $table, array $criteria = []): void {
-        $this->getScenario()->runStep(new \Codeception\Step\Assertion('seeInDatabase', func_get_args()));
-    }
-    /**
-     * [!] Method is generated. Documentation taken from corresponding module.
-     *
-     * [!] Conditional Assertion: Test won't be stopped on fail
-     * Asserts that a row with the given column values exists.
-     * Provide table name and column values.
-     *
-     * ```php
-     * <?php
-     * $I->seeInDatabase('users', ['name' => 'Davert', 'email' => 'davert@mail.com']);
-     * ```
-     * Fails if no such user found.
-     *
-     * Comparison expressions can be used as well:
-     *
-     * ```php
-     * <?php
-     * $I->seeInDatabase('posts', ['num_comments >=' => '0']);
-     * $I->seeInDatabase('users', ['email like' => 'miles@davis.com']);
-     * ```
-     *
-     * Supported operators: `<`, `>`, `>=`, `<=`, `!=`, `like`.
-     * @see \Codeception\Module\Db::seeInDatabase()
-     */
-    public function canSeeInDatabase(string $table, array $criteria = []): void {
-        $this->getScenario()->runStep(new \Codeception\Step\ConditionalAssertion('seeInDatabase', func_get_args()));
-    }
-
- 
-    /**
-     * [!] Method is generated. Documentation taken from corresponding module.
-     *
-     * Asserts that the given number of records were found in the database.
-     *
-     * ```php
-     * <?php
-     * $I->seeNumRecords(1, 'users', ['name' => 'davert'])
-     * ```
-     *
-     * @param int $expectedNumber Expected number
-     * @param string $table Table name
-     * @param array $criteria Search criteria [Optional]
-     * @see \Codeception\Module\Db::seeNumRecords()
-     */
-    public function seeNumRecords(int $expectedNumber, string $table, array $criteria = []): void {
-        $this->getScenario()->runStep(new \Codeception\Step\Assertion('seeNumRecords', func_get_args()));
-    }
-    /**
-     * [!] Method is generated. Documentation taken from corresponding module.
-     *
-     * [!] Conditional Assertion: Test won't be stopped on fail
-     * Asserts that the given number of records were found in the database.
-     *
-     * ```php
-     * <?php
-     * $I->seeNumRecords(1, 'users', ['name' => 'davert'])
-     * ```
-     *
-     * @param int $expectedNumber Expected number
-     * @param string $table Table name
-     * @param array $criteria Search criteria [Optional]
-     * @see \Codeception\Module\Db::seeNumRecords()
-     */
-    public function canSeeNumRecords(int $expectedNumber, string $table, array $criteria = []): void {
-        $this->getScenario()->runStep(new \Codeception\Step\ConditionalAssertion('seeNumRecords', func_get_args()));
-    }
-
- 
-    /**
-     * [!] Method is generated. Documentation taken from corresponding module.
-     *
-     * Effect is opposite to ->seeInDatabase
-     *
-     * Asserts that there is no record with the given column values in a database.
-     * Provide table name and column values.
-     *
-     * ``` php
-     * <?php
-     * $I->dontSeeInDatabase('users', ['name' => 'Davert', 'email' => 'davert@mail.com']);
-     * ```
-     * Fails if such user was found.
-     *
-     * Comparison expressions can be used as well:
-     *
-     * ```php
-     * <?php
-     * $I->dontSeeInDatabase('posts', ['num_comments >=' => '0']);
-     * $I->dontSeeInDatabase('users', ['email like' => 'miles%']);
-     * ```
-     *
-     * Supported operators: `<`, `>`, `>=`, `<=`, `!=`, `like`.
-     * @see \Codeception\Module\Db::dontSeeInDatabase()
-     */
-    public function dontSeeInDatabase(string $table, array $criteria = []): void {
-        $this->getScenario()->runStep(new \Codeception\Step\Action('dontSeeInDatabase', func_get_args()));
-    }
-    /**
-     * [!] Method is generated. Documentation taken from corresponding module.
-     *
-     * [!] Conditional Assertion: Test won't be stopped on fail
-     * Effect is opposite to ->seeInDatabase
-     *
-     * Asserts that there is no record with the given column values in a database.
-     * Provide table name and column values.
-     *
-     * ``` php
-     * <?php
-     * $I->dontSeeInDatabase('users', ['name' => 'Davert', 'email' => 'davert@mail.com']);
-     * ```
-     * Fails if such user was found.
-     *
-     * Comparison expressions can be used as well:
-     *
-     * ```php
-     * <?php
-     * $I->dontSeeInDatabase('posts', ['num_comments >=' => '0']);
-     * $I->dontSeeInDatabase('users', ['email like' => 'miles%']);
-     * ```
-     *
-     * Supported operators: `<`, `>`, `>=`, `<=`, `!=`, `like`.
-     * @see \Codeception\Module\Db::dontSeeInDatabase()
-     */
-    public function cantSeeInDatabase(string $table, array $criteria = []): void {
-        $this->getScenario()->runStep(new \Codeception\Step\ConditionalAssertion('dontSeeInDatabase', func_get_args()));
-    }
-
- 
-    /**
-     * [!] Method is generated. Documentation taken from corresponding module.
-     *
-     * Fetches all values from the column in database.
-     * Provide table name, desired column and criteria.
-     *
-     * ``` php
-     * <?php
-     * $mails = $I->grabColumnFromDatabase('users', 'email', array('name' => 'RebOOter'));
-     * ```
-     * @see \Codeception\Module\Db::grabColumnFromDatabase()
-     */
-    public function grabColumnFromDatabase(string $table, string $column, array $criteria = []): array {
-        return $this->getScenario()->runStep(new \Codeception\Step\Action('grabColumnFromDatabase', func_get_args()));
-    }
-
- 
-    /**
-     * [!] Method is generated. Documentation taken from corresponding module.
-     *
-     * Fetches a single column value from a database.
-     * Provide table name, desired column and criteria.
-     *
-     * ``` php
-     * <?php
-     * $mail = $I->grabFromDatabase('users', 'email', array('name' => 'Davert'));
-     * ```
-     * Comparison expressions can be used as well:
-     *
-     * ```php
-     * <?php
-     * $postNum = $I->grabFromDatabase('posts', 'num_comments', ['num_comments >=' => 100]);
-     * $mail = $I->grabFromDatabase('users', 'email', ['email like' => 'miles%']);
-     * ```
-     *
-     * Supported operators: `<`, `>`, `>=`, `<=`, `!=`, `like`.
-     *
-     * @return mixed Returns a single column value or false
-     * @see \Codeception\Module\Db::grabFromDatabase()
-     */
-    public function grabFromDatabase(string $table, string $column, array $criteria = []) {
-        return $this->getScenario()->runStep(new \Codeception\Step\Action('grabFromDatabase', func_get_args()));
-    }
-
- 
-    /**
-     * [!] Method is generated. Documentation taken from corresponding module.
-     *
-     * Fetches a whole entry from a database.
-     * Make the test fail if the entry is not found.
-     * Provide table name, desired column and criteria.
-     *
-     * ``` php
-     * <?php
-     * $mail = $I->grabEntryFromDatabase('users', array('name' => 'Davert'));
-     * ```
-     * Comparison expressions can be used as well:
-     *
-     * ```php
-     * <?php
-     * $post = $I->grabEntryFromDatabase('posts', ['num_comments >=' => 100]);
-     * $user = $I->grabEntryFromDatabase('users', ['email like' => 'miles%']);
-     * ```
-     *
-     * Supported operators: `<`, `>`, `>=`, `<=`, `!=`, `like`.
-     *
-     * @return array Returns a single entry value
-     * @throws PDOException|Exception
-     * @see \Codeception\Module\Db::grabEntryFromDatabase()
-     */
-    public function grabEntryFromDatabase(string $table, array $criteria = []): array {
-        return $this->getScenario()->runStep(new \Codeception\Step\Action('grabEntryFromDatabase', func_get_args()));
-    }
-
- 
-    /**
-     * [!] Method is generated. Documentation taken from corresponding module.
-     *
-     * Fetches a set of entries from a database.
-     * Provide table name and criteria.
-     *
-     * ``` php
-     * <?php
-     * $mail = $I->grabEntriesFromDatabase('users', array('name' => 'Davert'));
-     * ```
-     * Comparison expressions can be used as well:
-     *
-     * ```php
-     * <?php
-     * $post = $I->grabEntriesFromDatabase('posts', ['num_comments >=' => 100]);
-     * $user = $I->grabEntriesFromDatabase('users', ['email like' => 'miles%']);
-     * ```
-     *
-     * Supported operators: `<`, `>`, `>=`, `<=`, `!=`, `like`.
-     *
-     * @return array<array<string, mixed>> Returns an array of all matched rows
-     * @throws PDOException|Exception
-     * @see \Codeception\Module\Db::grabEntriesFromDatabase()
-     */
-    public function grabEntriesFromDatabase(string $table, array $criteria = []): array {
-        return $this->getScenario()->runStep(new \Codeception\Step\Action('grabEntriesFromDatabase', func_get_args()));
-    }
-
- 
-    /**
-     * [!] Method is generated. Documentation taken from corresponding module.
-     *
-     * Returns the number of rows in a database
-     *
-     * @param string $table    Table name
-     * @param array  $criteria Search criteria [Optional]
-     * @return int
-     * @see \Codeception\Module\Db::grabNumRecords()
-     */
-    public function grabNumRecords(string $table, array $criteria = []): int {
-        return $this->getScenario()->runStep(new \Codeception\Step\Action('grabNumRecords', func_get_args()));
-    }
-
- 
-    /**
-     * [!] Method is generated. Documentation taken from corresponding module.
-     *
-     * Update an SQL record into a database.
-     *
-     * ```php
-     * <?php
-     * $I->updateInDatabase('users', array('isAdmin' => true), array('email' => 'miles@davis.com'));
-     * ```
-     * @see \Codeception\Module\Db::updateInDatabase()
-     */
-    public function updateInDatabase(string $table, array $data, array $criteria = []): void {
-        $this->getScenario()->runStep(new \Codeception\Step\Action('updateInDatabase', func_get_args()));
-    }
-
- 
+    
     /**
      * [!] Method is generated. Documentation taken from corresponding module.
      *
@@ -398,7 +30,7 @@ trait UnitTesterActions
         return $this->getScenario()->runStep(new \Codeception\Step\Action('grabValueFromApc', func_get_args()));
     }
 
-
+ 
     /**
      * [!] Method is generated. Documentation taken from corresponding module.
      *
@@ -443,7 +75,7 @@ trait UnitTesterActions
         $this->getScenario()->runStep(new \Codeception\Step\ConditionalAssertion('seeInApc', func_get_args()));
     }
 
-
+ 
     /**
      * [!] Method is generated. Documentation taken from corresponding module.
      *
@@ -486,7 +118,7 @@ trait UnitTesterActions
         $this->getScenario()->runStep(new \Codeception\Step\ConditionalAssertion('dontSeeInApc', func_get_args()));
     }
 
-
+ 
     /**
      * [!] Method is generated. Documentation taken from corresponding module.
      *
@@ -516,7 +148,7 @@ trait UnitTesterActions
         return $this->getScenario()->runStep(new \Codeception\Step\Action('haveInApc', func_get_args()));
     }
 
-
+ 
     /**
      * [!] Method is generated. Documentation taken from corresponding module.
      *
@@ -527,7 +159,7 @@ trait UnitTesterActions
         $this->getScenario()->runStep(new \Codeception\Step\Action('flushApc', func_get_args()));
     }
 
-
+ 
     /**
      * [!] Method is generated. Documentation taken from corresponding module.
      *
@@ -560,7 +192,7 @@ trait UnitTesterActions
         $this->getScenario()->runStep(new \Codeception\Step\Action('expectThrowable', func_get_args()));
     }
 
-
+ 
     /**
      * [!] Method is generated. Documentation taken from corresponding module.
      *
@@ -571,7 +203,7 @@ trait UnitTesterActions
         return $this->getScenario()->runStep(new \Codeception\Step\Action('assertFileNotExists', func_get_args()));
     }
 
-
+ 
     /**
      * [!] Method is generated. Documentation taken from corresponding module.
      *
@@ -585,7 +217,7 @@ trait UnitTesterActions
         return $this->getScenario()->runStep(new \Codeception\Step\Action('assertGreaterOrEquals', func_get_args()));
     }
 
-
+ 
     /**
      * [!] Method is generated. Documentation taken from corresponding module.
      *
@@ -598,7 +230,7 @@ trait UnitTesterActions
         return $this->getScenario()->runStep(new \Codeception\Step\Action('assertIsEmpty', func_get_args()));
     }
 
-
+ 
     /**
      * [!] Method is generated. Documentation taken from corresponding module.
      *
@@ -612,7 +244,7 @@ trait UnitTesterActions
         return $this->getScenario()->runStep(new \Codeception\Step\Action('assertLessOrEquals', func_get_args()));
     }
 
-
+ 
     /**
      * [!] Method is generated. Documentation taken from corresponding module.
      *
@@ -623,7 +255,7 @@ trait UnitTesterActions
         return $this->getScenario()->runStep(new \Codeception\Step\Action('assertNotRegExp', func_get_args()));
     }
 
-
+ 
     /**
      * [!] Method is generated. Documentation taken from corresponding module.
      *
@@ -634,7 +266,7 @@ trait UnitTesterActions
         return $this->getScenario()->runStep(new \Codeception\Step\Action('assertRegExp', func_get_args()));
     }
 
-
+ 
     /**
      * [!] Method is generated. Documentation taken from corresponding module.
      *
@@ -647,7 +279,7 @@ trait UnitTesterActions
         return $this->getScenario()->runStep(new \Codeception\Step\Action('assertThatItsNot', func_get_args()));
     }
 
-
+ 
     /**
      * [!] Method is generated. Documentation taken from corresponding module.
      *
@@ -661,7 +293,7 @@ trait UnitTesterActions
         return $this->getScenario()->runStep(new \Codeception\Step\Action('assertArrayHasKey', func_get_args()));
     }
 
-
+ 
     /**
      * [!] Method is generated. Documentation taken from corresponding module.
      *
@@ -675,7 +307,7 @@ trait UnitTesterActions
         return $this->getScenario()->runStep(new \Codeception\Step\Action('assertArrayNotHasKey', func_get_args()));
     }
 
-
+ 
     /**
      * [!] Method is generated. Documentation taken from corresponding module.
      *
@@ -686,7 +318,7 @@ trait UnitTesterActions
         return $this->getScenario()->runStep(new \Codeception\Step\Action('assertClassHasAttribute', func_get_args()));
     }
 
-
+ 
     /**
      * [!] Method is generated. Documentation taken from corresponding module.
      *
@@ -697,7 +329,7 @@ trait UnitTesterActions
         return $this->getScenario()->runStep(new \Codeception\Step\Action('assertClassHasStaticAttribute', func_get_args()));
     }
 
-
+ 
     /**
      * [!] Method is generated. Documentation taken from corresponding module.
      *
@@ -708,7 +340,7 @@ trait UnitTesterActions
         return $this->getScenario()->runStep(new \Codeception\Step\Action('assertClassNotHasAttribute', func_get_args()));
     }
 
-
+ 
     /**
      * [!] Method is generated. Documentation taken from corresponding module.
      *
@@ -719,7 +351,7 @@ trait UnitTesterActions
         return $this->getScenario()->runStep(new \Codeception\Step\Action('assertClassNotHasStaticAttribute', func_get_args()));
     }
 
-
+ 
     /**
      * [!] Method is generated. Documentation taken from corresponding module.
      *
@@ -732,7 +364,7 @@ trait UnitTesterActions
         return $this->getScenario()->runStep(new \Codeception\Step\Action('assertContains', func_get_args()));
     }
 
-
+ 
     /**
      * [!] Method is generated. Documentation taken from corresponding module.
      *
@@ -743,7 +375,7 @@ trait UnitTesterActions
         return $this->getScenario()->runStep(new \Codeception\Step\Action('assertContainsEquals', func_get_args()));
     }
 
-
+ 
     /**
      * [!] Method is generated. Documentation taken from corresponding module.
      *
@@ -754,7 +386,7 @@ trait UnitTesterActions
         return $this->getScenario()->runStep(new \Codeception\Step\Action('assertContainsOnly', func_get_args()));
     }
 
-
+ 
     /**
      * [!] Method is generated. Documentation taken from corresponding module.
      *
@@ -765,7 +397,7 @@ trait UnitTesterActions
         return $this->getScenario()->runStep(new \Codeception\Step\Action('assertContainsOnlyInstancesOf', func_get_args()));
     }
 
-
+ 
     /**
      * [!] Method is generated. Documentation taken from corresponding module.
      *
@@ -778,7 +410,7 @@ trait UnitTesterActions
         return $this->getScenario()->runStep(new \Codeception\Step\Action('assertCount', func_get_args()));
     }
 
-
+ 
     /**
      * [!] Method is generated. Documentation taken from corresponding module.
      *
@@ -789,7 +421,7 @@ trait UnitTesterActions
         return $this->getScenario()->runStep(new \Codeception\Step\Action('assertDirectoryDoesNotExist', func_get_args()));
     }
 
-
+ 
     /**
      * [!] Method is generated. Documentation taken from corresponding module.
      *
@@ -800,7 +432,7 @@ trait UnitTesterActions
         return $this->getScenario()->runStep(new \Codeception\Step\Action('assertDirectoryExists', func_get_args()));
     }
 
-
+ 
     /**
      * [!] Method is generated. Documentation taken from corresponding module.
      *
@@ -811,7 +443,7 @@ trait UnitTesterActions
         return $this->getScenario()->runStep(new \Codeception\Step\Action('assertDirectoryIsNotReadable', func_get_args()));
     }
 
-
+ 
     /**
      * [!] Method is generated. Documentation taken from corresponding module.
      *
@@ -822,7 +454,7 @@ trait UnitTesterActions
         return $this->getScenario()->runStep(new \Codeception\Step\Action('assertDirectoryIsNotWritable', func_get_args()));
     }
 
-
+ 
     /**
      * [!] Method is generated. Documentation taken from corresponding module.
      *
@@ -833,7 +465,7 @@ trait UnitTesterActions
         return $this->getScenario()->runStep(new \Codeception\Step\Action('assertDirectoryIsReadable', func_get_args()));
     }
 
-
+ 
     /**
      * [!] Method is generated. Documentation taken from corresponding module.
      *
@@ -844,7 +476,7 @@ trait UnitTesterActions
         return $this->getScenario()->runStep(new \Codeception\Step\Action('assertDirectoryIsWritable', func_get_args()));
     }
 
-
+ 
     /**
      * [!] Method is generated. Documentation taken from corresponding module.
      *
@@ -855,7 +487,7 @@ trait UnitTesterActions
         return $this->getScenario()->runStep(new \Codeception\Step\Action('assertDoesNotMatchRegularExpression', func_get_args()));
     }
 
-
+ 
     /**
      * [!] Method is generated. Documentation taken from corresponding module.
      *
@@ -868,7 +500,7 @@ trait UnitTesterActions
         return $this->getScenario()->runStep(new \Codeception\Step\Action('assertEmpty', func_get_args()));
     }
 
-
+ 
     /**
      * [!] Method is generated. Documentation taken from corresponding module.
      *
@@ -882,7 +514,7 @@ trait UnitTesterActions
         return $this->getScenario()->runStep(new \Codeception\Step\Action('assertEquals', func_get_args()));
     }
 
-
+ 
     /**
      * [!] Method is generated. Documentation taken from corresponding module.
      *
@@ -896,7 +528,7 @@ trait UnitTesterActions
         return $this->getScenario()->runStep(new \Codeception\Step\Action('assertEqualsCanonicalizing', func_get_args()));
     }
 
-
+ 
     /**
      * [!] Method is generated. Documentation taken from corresponding module.
      *
@@ -910,7 +542,7 @@ trait UnitTesterActions
         return $this->getScenario()->runStep(new \Codeception\Step\Action('assertEqualsIgnoringCase', func_get_args()));
     }
 
-
+ 
     /**
      * [!] Method is generated. Documentation taken from corresponding module.
      *
@@ -924,7 +556,7 @@ trait UnitTesterActions
         return $this->getScenario()->runStep(new \Codeception\Step\Action('assertEqualsWithDelta', func_get_args()));
     }
 
-
+ 
     /**
      * [!] Method is generated. Documentation taken from corresponding module.
      *
@@ -937,7 +569,7 @@ trait UnitTesterActions
         return $this->getScenario()->runStep(new \Codeception\Step\Action('assertFalse', func_get_args()));
     }
 
-
+ 
     /**
      * [!] Method is generated. Documentation taken from corresponding module.
      *
@@ -948,7 +580,7 @@ trait UnitTesterActions
         return $this->getScenario()->runStep(new \Codeception\Step\Action('assertFileDoesNotExist', func_get_args()));
     }
 
-
+ 
     /**
      * [!] Method is generated. Documentation taken from corresponding module.
      *
@@ -959,7 +591,7 @@ trait UnitTesterActions
         return $this->getScenario()->runStep(new \Codeception\Step\Action('assertFileEquals', func_get_args()));
     }
 
-
+ 
     /**
      * [!] Method is generated. Documentation taken from corresponding module.
      *
@@ -970,7 +602,7 @@ trait UnitTesterActions
         return $this->getScenario()->runStep(new \Codeception\Step\Action('assertFileEqualsCanonicalizing', func_get_args()));
     }
 
-
+ 
     /**
      * [!] Method is generated. Documentation taken from corresponding module.
      *
@@ -981,7 +613,7 @@ trait UnitTesterActions
         return $this->getScenario()->runStep(new \Codeception\Step\Action('assertFileEqualsIgnoringCase', func_get_args()));
     }
 
-
+ 
     /**
      * [!] Method is generated. Documentation taken from corresponding module.
      *
@@ -992,7 +624,7 @@ trait UnitTesterActions
         return $this->getScenario()->runStep(new \Codeception\Step\Action('assertFileExists', func_get_args()));
     }
 
-
+ 
     /**
      * [!] Method is generated. Documentation taken from corresponding module.
      *
@@ -1003,7 +635,7 @@ trait UnitTesterActions
         return $this->getScenario()->runStep(new \Codeception\Step\Action('assertFileIsNotReadable', func_get_args()));
     }
 
-
+ 
     /**
      * [!] Method is generated. Documentation taken from corresponding module.
      *
@@ -1014,7 +646,7 @@ trait UnitTesterActions
         return $this->getScenario()->runStep(new \Codeception\Step\Action('assertFileIsNotWritable', func_get_args()));
     }
 
-
+ 
     /**
      * [!] Method is generated. Documentation taken from corresponding module.
      *
@@ -1025,7 +657,7 @@ trait UnitTesterActions
         return $this->getScenario()->runStep(new \Codeception\Step\Action('assertFileIsReadable', func_get_args()));
     }
 
-
+ 
     /**
      * [!] Method is generated. Documentation taken from corresponding module.
      *
@@ -1036,7 +668,7 @@ trait UnitTesterActions
         return $this->getScenario()->runStep(new \Codeception\Step\Action('assertFileIsWritable', func_get_args()));
     }
 
-
+ 
     /**
      * [!] Method is generated. Documentation taken from corresponding module.
      *
@@ -1047,7 +679,7 @@ trait UnitTesterActions
         return $this->getScenario()->runStep(new \Codeception\Step\Action('assertFileNotEquals', func_get_args()));
     }
 
-
+ 
     /**
      * [!] Method is generated. Documentation taken from corresponding module.
      *
@@ -1058,7 +690,7 @@ trait UnitTesterActions
         return $this->getScenario()->runStep(new \Codeception\Step\Action('assertFileNotEqualsCanonicalizing', func_get_args()));
     }
 
-
+ 
     /**
      * [!] Method is generated. Documentation taken from corresponding module.
      *
@@ -1069,7 +701,7 @@ trait UnitTesterActions
         return $this->getScenario()->runStep(new \Codeception\Step\Action('assertFileNotEqualsIgnoringCase', func_get_args()));
     }
 
-
+ 
     /**
      * [!] Method is generated. Documentation taken from corresponding module.
      *
@@ -1082,7 +714,7 @@ trait UnitTesterActions
         return $this->getScenario()->runStep(new \Codeception\Step\Action('assertFinite', func_get_args()));
     }
 
-
+ 
     /**
      * [!] Method is generated. Documentation taken from corresponding module.
      *
@@ -1096,7 +728,7 @@ trait UnitTesterActions
         return $this->getScenario()->runStep(new \Codeception\Step\Action('assertGreaterThan', func_get_args()));
     }
 
-
+ 
     /**
      * [!] Method is generated. Documentation taken from corresponding module.
      *
@@ -1110,7 +742,7 @@ trait UnitTesterActions
         return $this->getScenario()->runStep(new \Codeception\Step\Action('assertGreaterThanOrEqual', func_get_args()));
     }
 
-
+ 
     /**
      * [!] Method is generated. Documentation taken from corresponding module.
      *
@@ -1123,7 +755,7 @@ trait UnitTesterActions
         return $this->getScenario()->runStep(new \Codeception\Step\Action('assertInfinite', func_get_args()));
     }
 
-
+ 
     /**
      * [!] Method is generated. Documentation taken from corresponding module.
      *
@@ -1136,7 +768,7 @@ trait UnitTesterActions
         return $this->getScenario()->runStep(new \Codeception\Step\Action('assertInstanceOf', func_get_args()));
     }
 
-
+ 
     /**
      * [!] Method is generated. Documentation taken from corresponding module.
      *
@@ -1149,7 +781,7 @@ trait UnitTesterActions
         return $this->getScenario()->runStep(new \Codeception\Step\Action('assertIsArray', func_get_args()));
     }
 
-
+ 
     /**
      * [!] Method is generated. Documentation taken from corresponding module.
      *
@@ -1162,7 +794,7 @@ trait UnitTesterActions
         return $this->getScenario()->runStep(new \Codeception\Step\Action('assertIsBool', func_get_args()));
     }
 
-
+ 
     /**
      * [!] Method is generated. Documentation taken from corresponding module.
      *
@@ -1175,7 +807,7 @@ trait UnitTesterActions
         return $this->getScenario()->runStep(new \Codeception\Step\Action('assertIsCallable', func_get_args()));
     }
 
-
+ 
     /**
      * [!] Method is generated. Documentation taken from corresponding module.
      *
@@ -1188,7 +820,7 @@ trait UnitTesterActions
         return $this->getScenario()->runStep(new \Codeception\Step\Action('assertIsClosedResource', func_get_args()));
     }
 
-
+ 
     /**
      * [!] Method is generated. Documentation taken from corresponding module.
      *
@@ -1201,7 +833,7 @@ trait UnitTesterActions
         return $this->getScenario()->runStep(new \Codeception\Step\Action('assertIsFloat', func_get_args()));
     }
 
-
+ 
     /**
      * [!] Method is generated. Documentation taken from corresponding module.
      *
@@ -1214,7 +846,7 @@ trait UnitTesterActions
         return $this->getScenario()->runStep(new \Codeception\Step\Action('assertIsInt', func_get_args()));
     }
 
-
+ 
     /**
      * [!] Method is generated. Documentation taken from corresponding module.
      *
@@ -1227,7 +859,7 @@ trait UnitTesterActions
         return $this->getScenario()->runStep(new \Codeception\Step\Action('assertIsIterable', func_get_args()));
     }
 
-
+ 
     /**
      * [!] Method is generated. Documentation taken from corresponding module.
      *
@@ -1240,7 +872,7 @@ trait UnitTesterActions
         return $this->getScenario()->runStep(new \Codeception\Step\Action('assertIsNotArray', func_get_args()));
     }
 
-
+ 
     /**
      * [!] Method is generated. Documentation taken from corresponding module.
      *
@@ -1253,7 +885,7 @@ trait UnitTesterActions
         return $this->getScenario()->runStep(new \Codeception\Step\Action('assertIsNotBool', func_get_args()));
     }
 
-
+ 
     /**
      * [!] Method is generated. Documentation taken from corresponding module.
      *
@@ -1266,7 +898,7 @@ trait UnitTesterActions
         return $this->getScenario()->runStep(new \Codeception\Step\Action('assertIsNotCallable', func_get_args()));
     }
 
-
+ 
     /**
      * [!] Method is generated. Documentation taken from corresponding module.
      *
@@ -1279,7 +911,7 @@ trait UnitTesterActions
         return $this->getScenario()->runStep(new \Codeception\Step\Action('assertIsNotClosedResource', func_get_args()));
     }
 
-
+ 
     /**
      * [!] Method is generated. Documentation taken from corresponding module.
      *
@@ -1292,7 +924,7 @@ trait UnitTesterActions
         return $this->getScenario()->runStep(new \Codeception\Step\Action('assertIsNotFloat', func_get_args()));
     }
 
-
+ 
     /**
      * [!] Method is generated. Documentation taken from corresponding module.
      *
@@ -1305,7 +937,7 @@ trait UnitTesterActions
         return $this->getScenario()->runStep(new \Codeception\Step\Action('assertIsNotInt', func_get_args()));
     }
 
-
+ 
     /**
      * [!] Method is generated. Documentation taken from corresponding module.
      *
@@ -1318,7 +950,7 @@ trait UnitTesterActions
         return $this->getScenario()->runStep(new \Codeception\Step\Action('assertIsNotIterable', func_get_args()));
     }
 
-
+ 
     /**
      * [!] Method is generated. Documentation taken from corresponding module.
      *
@@ -1331,7 +963,7 @@ trait UnitTesterActions
         return $this->getScenario()->runStep(new \Codeception\Step\Action('assertIsNotNumeric', func_get_args()));
     }
 
-
+ 
     /**
      * [!] Method is generated. Documentation taken from corresponding module.
      *
@@ -1344,7 +976,7 @@ trait UnitTesterActions
         return $this->getScenario()->runStep(new \Codeception\Step\Action('assertIsNotObject', func_get_args()));
     }
 
-
+ 
     /**
      * [!] Method is generated. Documentation taken from corresponding module.
      *
@@ -1355,7 +987,7 @@ trait UnitTesterActions
         return $this->getScenario()->runStep(new \Codeception\Step\Action('assertIsNotReadable', func_get_args()));
     }
 
-
+ 
     /**
      * [!] Method is generated. Documentation taken from corresponding module.
      *
@@ -1368,7 +1000,7 @@ trait UnitTesterActions
         return $this->getScenario()->runStep(new \Codeception\Step\Action('assertIsNotResource', func_get_args()));
     }
 
-
+ 
     /**
      * [!] Method is generated. Documentation taken from corresponding module.
      *
@@ -1381,7 +1013,7 @@ trait UnitTesterActions
         return $this->getScenario()->runStep(new \Codeception\Step\Action('assertIsNotScalar', func_get_args()));
     }
 
-
+ 
     /**
      * [!] Method is generated. Documentation taken from corresponding module.
      *
@@ -1394,7 +1026,7 @@ trait UnitTesterActions
         return $this->getScenario()->runStep(new \Codeception\Step\Action('assertIsNotString', func_get_args()));
     }
 
-
+ 
     /**
      * [!] Method is generated. Documentation taken from corresponding module.
      *
@@ -1405,7 +1037,7 @@ trait UnitTesterActions
         return $this->getScenario()->runStep(new \Codeception\Step\Action('assertIsNotWritable', func_get_args()));
     }
 
-
+ 
     /**
      * [!] Method is generated. Documentation taken from corresponding module.
      *
@@ -1418,7 +1050,7 @@ trait UnitTesterActions
         return $this->getScenario()->runStep(new \Codeception\Step\Action('assertIsNumeric', func_get_args()));
     }
 
-
+ 
     /**
      * [!] Method is generated. Documentation taken from corresponding module.
      *
@@ -1431,7 +1063,7 @@ trait UnitTesterActions
         return $this->getScenario()->runStep(new \Codeception\Step\Action('assertIsObject', func_get_args()));
     }
 
-
+ 
     /**
      * [!] Method is generated. Documentation taken from corresponding module.
      *
@@ -1442,7 +1074,7 @@ trait UnitTesterActions
         return $this->getScenario()->runStep(new \Codeception\Step\Action('assertIsReadable', func_get_args()));
     }
 
-
+ 
     /**
      * [!] Method is generated. Documentation taken from corresponding module.
      *
@@ -1455,7 +1087,7 @@ trait UnitTesterActions
         return $this->getScenario()->runStep(new \Codeception\Step\Action('assertIsResource', func_get_args()));
     }
 
-
+ 
     /**
      * [!] Method is generated. Documentation taken from corresponding module.
      *
@@ -1468,7 +1100,7 @@ trait UnitTesterActions
         return $this->getScenario()->runStep(new \Codeception\Step\Action('assertIsScalar', func_get_args()));
     }
 
-
+ 
     /**
      * [!] Method is generated. Documentation taken from corresponding module.
      *
@@ -1481,7 +1113,7 @@ trait UnitTesterActions
         return $this->getScenario()->runStep(new \Codeception\Step\Action('assertIsString', func_get_args()));
     }
 
-
+ 
     /**
      * [!] Method is generated. Documentation taken from corresponding module.
      *
@@ -1492,7 +1124,7 @@ trait UnitTesterActions
         return $this->getScenario()->runStep(new \Codeception\Step\Action('assertIsWritable', func_get_args()));
     }
 
-
+ 
     /**
      * [!] Method is generated. Documentation taken from corresponding module.
      *
@@ -1503,7 +1135,7 @@ trait UnitTesterActions
         return $this->getScenario()->runStep(new \Codeception\Step\Action('assertJson', func_get_args()));
     }
 
-
+ 
     /**
      * [!] Method is generated. Documentation taken from corresponding module.
      *
@@ -1514,7 +1146,7 @@ trait UnitTesterActions
         return $this->getScenario()->runStep(new \Codeception\Step\Action('assertJsonFileEqualsJsonFile', func_get_args()));
     }
 
-
+ 
     /**
      * [!] Method is generated. Documentation taken from corresponding module.
      *
@@ -1525,7 +1157,7 @@ trait UnitTesterActions
         return $this->getScenario()->runStep(new \Codeception\Step\Action('assertJsonFileNotEqualsJsonFile', func_get_args()));
     }
 
-
+ 
     /**
      * [!] Method is generated. Documentation taken from corresponding module.
      *
@@ -1536,7 +1168,7 @@ trait UnitTesterActions
         return $this->getScenario()->runStep(new \Codeception\Step\Action('assertJsonStringEqualsJsonFile', func_get_args()));
     }
 
-
+ 
     /**
      * [!] Method is generated. Documentation taken from corresponding module.
      *
@@ -1547,7 +1179,7 @@ trait UnitTesterActions
         return $this->getScenario()->runStep(new \Codeception\Step\Action('assertJsonStringEqualsJsonString', func_get_args()));
     }
 
-
+ 
     /**
      * [!] Method is generated. Documentation taken from corresponding module.
      *
@@ -1558,7 +1190,7 @@ trait UnitTesterActions
         return $this->getScenario()->runStep(new \Codeception\Step\Action('assertJsonStringNotEqualsJsonFile', func_get_args()));
     }
 
-
+ 
     /**
      * [!] Method is generated. Documentation taken from corresponding module.
      *
@@ -1569,7 +1201,7 @@ trait UnitTesterActions
         return $this->getScenario()->runStep(new \Codeception\Step\Action('assertJsonStringNotEqualsJsonString', func_get_args()));
     }
 
-
+ 
     /**
      * [!] Method is generated. Documentation taken from corresponding module.
      *
@@ -1583,7 +1215,7 @@ trait UnitTesterActions
         return $this->getScenario()->runStep(new \Codeception\Step\Action('assertLessThan', func_get_args()));
     }
 
-
+ 
     /**
      * [!] Method is generated. Documentation taken from corresponding module.
      *
@@ -1597,7 +1229,7 @@ trait UnitTesterActions
         return $this->getScenario()->runStep(new \Codeception\Step\Action('assertLessThanOrEqual', func_get_args()));
     }
 
-
+ 
     /**
      * [!] Method is generated. Documentation taken from corresponding module.
      *
@@ -1608,7 +1240,7 @@ trait UnitTesterActions
         return $this->getScenario()->runStep(new \Codeception\Step\Action('assertMatchesRegularExpression', func_get_args()));
     }
 
-
+ 
     /**
      * [!] Method is generated. Documentation taken from corresponding module.
      *
@@ -1621,7 +1253,7 @@ trait UnitTesterActions
         return $this->getScenario()->runStep(new \Codeception\Step\Action('assertNan', func_get_args()));
     }
 
-
+ 
     /**
      * [!] Method is generated. Documentation taken from corresponding module.
      *
@@ -1634,7 +1266,7 @@ trait UnitTesterActions
         return $this->getScenario()->runStep(new \Codeception\Step\Action('assertNotContains', func_get_args()));
     }
 
-
+ 
     /**
      * [!] Method is generated. Documentation taken from corresponding module.
      *
@@ -1645,7 +1277,7 @@ trait UnitTesterActions
         return $this->getScenario()->runStep(new \Codeception\Step\Action('assertNotContainsEquals', func_get_args()));
     }
 
-
+ 
     /**
      * [!] Method is generated. Documentation taken from corresponding module.
      *
@@ -1656,7 +1288,7 @@ trait UnitTesterActions
         return $this->getScenario()->runStep(new \Codeception\Step\Action('assertNotContainsOnly', func_get_args()));
     }
 
-
+ 
     /**
      * [!] Method is generated. Documentation taken from corresponding module.
      *
@@ -1669,7 +1301,7 @@ trait UnitTesterActions
         return $this->getScenario()->runStep(new \Codeception\Step\Action('assertNotCount', func_get_args()));
     }
 
-
+ 
     /**
      * [!] Method is generated. Documentation taken from corresponding module.
      *
@@ -1682,7 +1314,7 @@ trait UnitTesterActions
         return $this->getScenario()->runStep(new \Codeception\Step\Action('assertNotEmpty', func_get_args()));
     }
 
-
+ 
     /**
      * [!] Method is generated. Documentation taken from corresponding module.
      *
@@ -1696,7 +1328,7 @@ trait UnitTesterActions
         return $this->getScenario()->runStep(new \Codeception\Step\Action('assertNotEquals', func_get_args()));
     }
 
-
+ 
     /**
      * [!] Method is generated. Documentation taken from corresponding module.
      *
@@ -1710,7 +1342,7 @@ trait UnitTesterActions
         return $this->getScenario()->runStep(new \Codeception\Step\Action('assertNotEqualsCanonicalizing', func_get_args()));
     }
 
-
+ 
     /**
      * [!] Method is generated. Documentation taken from corresponding module.
      *
@@ -1724,7 +1356,7 @@ trait UnitTesterActions
         return $this->getScenario()->runStep(new \Codeception\Step\Action('assertNotEqualsIgnoringCase', func_get_args()));
     }
 
-
+ 
     /**
      * [!] Method is generated. Documentation taken from corresponding module.
      *
@@ -1738,7 +1370,7 @@ trait UnitTesterActions
         return $this->getScenario()->runStep(new \Codeception\Step\Action('assertNotEqualsWithDelta', func_get_args()));
     }
 
-
+ 
     /**
      * [!] Method is generated. Documentation taken from corresponding module.
      *
@@ -1751,7 +1383,7 @@ trait UnitTesterActions
         return $this->getScenario()->runStep(new \Codeception\Step\Action('assertNotFalse', func_get_args()));
     }
 
-
+ 
     /**
      * [!] Method is generated. Documentation taken from corresponding module.
      *
@@ -1764,7 +1396,7 @@ trait UnitTesterActions
         return $this->getScenario()->runStep(new \Codeception\Step\Action('assertNotInstanceOf', func_get_args()));
     }
 
-
+ 
     /**
      * [!] Method is generated. Documentation taken from corresponding module.
      *
@@ -1777,7 +1409,7 @@ trait UnitTesterActions
         return $this->getScenario()->runStep(new \Codeception\Step\Action('assertNotNull', func_get_args()));
     }
 
-
+ 
     /**
      * [!] Method is generated. Documentation taken from corresponding module.
      *
@@ -1791,7 +1423,7 @@ trait UnitTesterActions
         return $this->getScenario()->runStep(new \Codeception\Step\Action('assertNotSame', func_get_args()));
     }
 
-
+ 
     /**
      * [!] Method is generated. Documentation taken from corresponding module.
      *
@@ -1805,7 +1437,7 @@ trait UnitTesterActions
         return $this->getScenario()->runStep(new \Codeception\Step\Action('assertNotSameSize', func_get_args()));
     }
 
-
+ 
     /**
      * [!] Method is generated. Documentation taken from corresponding module.
      *
@@ -1818,7 +1450,7 @@ trait UnitTesterActions
         return $this->getScenario()->runStep(new \Codeception\Step\Action('assertNotTrue', func_get_args()));
     }
 
-
+ 
     /**
      * [!] Method is generated. Documentation taken from corresponding module.
      *
@@ -1831,7 +1463,7 @@ trait UnitTesterActions
         return $this->getScenario()->runStep(new \Codeception\Step\Action('assertNull', func_get_args()));
     }
 
-
+ 
     /**
      * [!] Method is generated. Documentation taken from corresponding module.
      *
@@ -1842,7 +1474,7 @@ trait UnitTesterActions
         return $this->getScenario()->runStep(new \Codeception\Step\Action('assertObjectHasAttribute', func_get_args()));
     }
 
-
+ 
     /**
      * [!] Method is generated. Documentation taken from corresponding module.
      *
@@ -1853,7 +1485,7 @@ trait UnitTesterActions
         return $this->getScenario()->runStep(new \Codeception\Step\Action('assertObjectNotHasAttribute', func_get_args()));
     }
 
-
+ 
     /**
      * [!] Method is generated. Documentation taken from corresponding module.
      *
@@ -1867,7 +1499,7 @@ trait UnitTesterActions
         return $this->getScenario()->runStep(new \Codeception\Step\Action('assertSame', func_get_args()));
     }
 
-
+ 
     /**
      * [!] Method is generated. Documentation taken from corresponding module.
      *
@@ -1881,7 +1513,7 @@ trait UnitTesterActions
         return $this->getScenario()->runStep(new \Codeception\Step\Action('assertSameSize', func_get_args()));
     }
 
-
+ 
     /**
      * [!] Method is generated. Documentation taken from corresponding module.
      *
@@ -1892,7 +1524,7 @@ trait UnitTesterActions
         return $this->getScenario()->runStep(new \Codeception\Step\Action('assertStringContainsString', func_get_args()));
     }
 
-
+ 
     /**
      * [!] Method is generated. Documentation taken from corresponding module.
      *
@@ -1903,7 +1535,7 @@ trait UnitTesterActions
         return $this->getScenario()->runStep(new \Codeception\Step\Action('assertStringContainsStringIgnoringCase', func_get_args()));
     }
 
-
+ 
     /**
      * [!] Method is generated. Documentation taken from corresponding module.
      *
@@ -1914,7 +1546,7 @@ trait UnitTesterActions
         return $this->getScenario()->runStep(new \Codeception\Step\Action('assertStringEndsNotWith', func_get_args()));
     }
 
-
+ 
     /**
      * [!] Method is generated. Documentation taken from corresponding module.
      *
@@ -1925,7 +1557,7 @@ trait UnitTesterActions
         return $this->getScenario()->runStep(new \Codeception\Step\Action('assertStringEndsWith', func_get_args()));
     }
 
-
+ 
     /**
      * [!] Method is generated. Documentation taken from corresponding module.
      *
@@ -1936,7 +1568,7 @@ trait UnitTesterActions
         return $this->getScenario()->runStep(new \Codeception\Step\Action('assertStringEqualsFile', func_get_args()));
     }
 
-
+ 
     /**
      * [!] Method is generated. Documentation taken from corresponding module.
      *
@@ -1947,7 +1579,7 @@ trait UnitTesterActions
         return $this->getScenario()->runStep(new \Codeception\Step\Action('assertStringEqualsFileCanonicalizing', func_get_args()));
     }
 
-
+ 
     /**
      * [!] Method is generated. Documentation taken from corresponding module.
      *
@@ -1958,7 +1590,7 @@ trait UnitTesterActions
         return $this->getScenario()->runStep(new \Codeception\Step\Action('assertStringEqualsFileIgnoringCase', func_get_args()));
     }
 
-
+ 
     /**
      * [!] Method is generated. Documentation taken from corresponding module.
      *
@@ -1969,7 +1601,7 @@ trait UnitTesterActions
         return $this->getScenario()->runStep(new \Codeception\Step\Action('assertStringMatchesFormat', func_get_args()));
     }
 
-
+ 
     /**
      * [!] Method is generated. Documentation taken from corresponding module.
      *
@@ -1980,7 +1612,7 @@ trait UnitTesterActions
         return $this->getScenario()->runStep(new \Codeception\Step\Action('assertStringMatchesFormatFile', func_get_args()));
     }
 
-
+ 
     /**
      * [!] Method is generated. Documentation taken from corresponding module.
      *
@@ -1991,7 +1623,7 @@ trait UnitTesterActions
         return $this->getScenario()->runStep(new \Codeception\Step\Action('assertStringNotContainsString', func_get_args()));
     }
 
-
+ 
     /**
      * [!] Method is generated. Documentation taken from corresponding module.
      *
@@ -2002,7 +1634,7 @@ trait UnitTesterActions
         return $this->getScenario()->runStep(new \Codeception\Step\Action('assertStringNotContainsStringIgnoringCase', func_get_args()));
     }
 
-
+ 
     /**
      * [!] Method is generated. Documentation taken from corresponding module.
      *
@@ -2013,7 +1645,7 @@ trait UnitTesterActions
         return $this->getScenario()->runStep(new \Codeception\Step\Action('assertStringNotEqualsFile', func_get_args()));
     }
 
-
+ 
     /**
      * [!] Method is generated. Documentation taken from corresponding module.
      *
@@ -2024,7 +1656,7 @@ trait UnitTesterActions
         return $this->getScenario()->runStep(new \Codeception\Step\Action('assertStringNotEqualsFileCanonicalizing', func_get_args()));
     }
 
-
+ 
     /**
      * [!] Method is generated. Documentation taken from corresponding module.
      *
@@ -2035,7 +1667,7 @@ trait UnitTesterActions
         return $this->getScenario()->runStep(new \Codeception\Step\Action('assertStringNotEqualsFileIgnoringCase', func_get_args()));
     }
 
-
+ 
     /**
      * [!] Method is generated. Documentation taken from corresponding module.
      *
@@ -2046,7 +1678,7 @@ trait UnitTesterActions
         return $this->getScenario()->runStep(new \Codeception\Step\Action('assertStringNotMatchesFormat', func_get_args()));
     }
 
-
+ 
     /**
      * [!] Method is generated. Documentation taken from corresponding module.
      *
@@ -2057,7 +1689,7 @@ trait UnitTesterActions
         return $this->getScenario()->runStep(new \Codeception\Step\Action('assertStringNotMatchesFormatFile', func_get_args()));
     }
 
-
+ 
     /**
      * [!] Method is generated. Documentation taken from corresponding module.
      *
@@ -2068,7 +1700,7 @@ trait UnitTesterActions
         return $this->getScenario()->runStep(new \Codeception\Step\Action('assertStringStartsNotWith', func_get_args()));
     }
 
-
+ 
     /**
      * [!] Method is generated. Documentation taken from corresponding module.
      *
@@ -2079,7 +1711,7 @@ trait UnitTesterActions
         return $this->getScenario()->runStep(new \Codeception\Step\Action('assertStringStartsWith', func_get_args()));
     }
 
-
+ 
     /**
      * [!] Method is generated. Documentation taken from corresponding module.
      *
@@ -2092,7 +1724,7 @@ trait UnitTesterActions
         return $this->getScenario()->runStep(new \Codeception\Step\Action('assertThat', func_get_args()));
     }
 
-
+ 
     /**
      * [!] Method is generated. Documentation taken from corresponding module.
      *
@@ -2105,7 +1737,7 @@ trait UnitTesterActions
         return $this->getScenario()->runStep(new \Codeception\Step\Action('assertTrue', func_get_args()));
     }
 
-
+ 
     /**
      * [!] Method is generated. Documentation taken from corresponding module.
      *
@@ -2116,7 +1748,7 @@ trait UnitTesterActions
         return $this->getScenario()->runStep(new \Codeception\Step\Action('assertXmlFileEqualsXmlFile', func_get_args()));
     }
 
-
+ 
     /**
      * [!] Method is generated. Documentation taken from corresponding module.
      *
@@ -2127,7 +1759,7 @@ trait UnitTesterActions
         return $this->getScenario()->runStep(new \Codeception\Step\Action('assertXmlFileNotEqualsXmlFile', func_get_args()));
     }
 
-
+ 
     /**
      * [!] Method is generated. Documentation taken from corresponding module.
      *
@@ -2140,7 +1772,7 @@ trait UnitTesterActions
         return $this->getScenario()->runStep(new \Codeception\Step\Action('assertXmlStringEqualsXmlFile', func_get_args()));
     }
 
-
+ 
     /**
      * [!] Method is generated. Documentation taken from corresponding module.
      *
@@ -2154,7 +1786,7 @@ trait UnitTesterActions
         return $this->getScenario()->runStep(new \Codeception\Step\Action('assertXmlStringEqualsXmlString', func_get_args()));
     }
 
-
+ 
     /**
      * [!] Method is generated. Documentation taken from corresponding module.
      *
@@ -2167,7 +1799,7 @@ trait UnitTesterActions
         return $this->getScenario()->runStep(new \Codeception\Step\Action('assertXmlStringNotEqualsXmlFile', func_get_args()));
     }
 
-
+ 
     /**
      * [!] Method is generated. Documentation taken from corresponding module.
      *
@@ -2181,7 +1813,7 @@ trait UnitTesterActions
         return $this->getScenario()->runStep(new \Codeception\Step\Action('assertXmlStringNotEqualsXmlString', func_get_args()));
     }
 
-
+ 
     /**
      * [!] Method is generated. Documentation taken from corresponding module.
      *
@@ -2192,7 +1824,7 @@ trait UnitTesterActions
         return $this->getScenario()->runStep(new \Codeception\Step\Action('fail', func_get_args()));
     }
 
-
+ 
     /**
      * [!] Method is generated. Documentation taken from corresponding module.
      *
@@ -2203,7 +1835,7 @@ trait UnitTesterActions
         return $this->getScenario()->runStep(new \Codeception\Step\Action('markTestIncomplete', func_get_args()));
     }
 
-
+ 
     /**
      * [!] Method is generated. Documentation taken from corresponding module.
      *
@@ -2214,7 +1846,7 @@ trait UnitTesterActions
         return $this->getScenario()->runStep(new \Codeception\Step\Action('markTestSkipped', func_get_args()));
     }
 
-
+ 
     /**
      * [!] Method is generated. Documentation taken from corresponding module.
      *
@@ -2226,7 +1858,7 @@ trait UnitTesterActions
         $this->getScenario()->runStep(new \Codeception\Step\Condition('amInPath', func_get_args()));
     }
 
-
+ 
     /**
      * [!] Method is generated. Documentation taken from corresponding module.
      *
@@ -2245,7 +1877,7 @@ trait UnitTesterActions
         $this->getScenario()->runStep(new \Codeception\Step\Action('openFile', func_get_args()));
     }
 
-
+ 
     /**
      * [!] Method is generated. Documentation taken from corresponding module.
      *
@@ -2261,7 +1893,7 @@ trait UnitTesterActions
         $this->getScenario()->runStep(new \Codeception\Step\Action('deleteFile', func_get_args()));
     }
 
-
+ 
     /**
      * [!] Method is generated. Documentation taken from corresponding module.
      *
@@ -2277,7 +1909,7 @@ trait UnitTesterActions
         $this->getScenario()->runStep(new \Codeception\Step\Action('deleteDir', func_get_args()));
     }
 
-
+ 
     /**
      * [!] Method is generated. Documentation taken from corresponding module.
      *
@@ -2293,7 +1925,7 @@ trait UnitTesterActions
         $this->getScenario()->runStep(new \Codeception\Step\Action('copyDir', func_get_args()));
     }
 
-
+ 
     /**
      * [!] Method is generated. Documentation taken from corresponding module.
      *
@@ -2330,7 +1962,7 @@ trait UnitTesterActions
         $this->getScenario()->runStep(new \Codeception\Step\ConditionalAssertion('seeInThisFile', func_get_args()));
     }
 
-
+ 
     /**
      * [!] Method is generated. Documentation taken from corresponding module.
      *
@@ -2371,7 +2003,7 @@ trait UnitTesterActions
         $this->getScenario()->runStep(new \Codeception\Step\ConditionalAssertion('seeNumberNewLines', func_get_args()));
     }
 
-
+ 
     /**
      * [!] Method is generated. Documentation taken from corresponding module.
      *
@@ -2392,7 +2024,7 @@ trait UnitTesterActions
         $this->getScenario()->runStep(new \Codeception\Step\ConditionalAssertion('seeThisFileMatches', func_get_args()));
     }
 
-
+ 
     /**
      * [!] Method is generated. Documentation taken from corresponding module.
      *
@@ -2431,7 +2063,7 @@ trait UnitTesterActions
         $this->getScenario()->runStep(new \Codeception\Step\ConditionalAssertion('seeFileContentsEqual', func_get_args()));
     }
 
-
+ 
     /**
      * [!] Method is generated. Documentation taken from corresponding module.
      *
@@ -2464,7 +2096,7 @@ trait UnitTesterActions
         $this->getScenario()->runStep(new \Codeception\Step\ConditionalAssertion('dontSeeInThisFile', func_get_args()));
     }
 
-
+ 
     /**
      * [!] Method is generated. Documentation taken from corresponding module.
      *
@@ -2475,7 +2107,7 @@ trait UnitTesterActions
         $this->getScenario()->runStep(new \Codeception\Step\Action('deleteThisFile', func_get_args()));
     }
 
-
+ 
     /**
      * [!] Method is generated. Documentation taken from corresponding module.
      *
@@ -2508,7 +2140,7 @@ trait UnitTesterActions
         $this->getScenario()->runStep(new \Codeception\Step\ConditionalAssertion('seeFileFound', func_get_args()));
     }
 
-
+ 
     /**
      * [!] Method is generated. Documentation taken from corresponding module.
      *
@@ -2529,7 +2161,7 @@ trait UnitTesterActions
         $this->getScenario()->runStep(new \Codeception\Step\ConditionalAssertion('dontSeeFileFound', func_get_args()));
     }
 
-
+ 
     /**
      * [!] Method is generated. Documentation taken from corresponding module.
      *
@@ -2545,7 +2177,7 @@ trait UnitTesterActions
         $this->getScenario()->runStep(new \Codeception\Step\Action('cleanDir', func_get_args()));
     }
 
-
+ 
     /**
      * [!] Method is generated. Documentation taken from corresponding module.
      *
@@ -2556,7 +2188,7 @@ trait UnitTesterActions
         $this->getScenario()->runStep(new \Codeception\Step\Action('writeToFile', func_get_args()));
     }
 
-
+ 
     /**
      * [!] Method is generated. Documentation taken from corresponding module.
      *
@@ -2567,7 +2199,7 @@ trait UnitTesterActions
         return $this->getScenario()->runStep(new \Codeception\Step\Action('getDirSeparator', func_get_args()));
     }
 
-
+ 
     /**
      * [!] Method is generated. Documentation taken from corresponding module.
      *
@@ -2584,7 +2216,7 @@ trait UnitTesterActions
         return $this->getScenario()->runStep(new \Codeception\Step\Action('callProtectedMethod', func_get_args()));
     }
 
-
+ 
     /**
      * [!] Method is generated. Documentation taken from corresponding module.
      *
@@ -2597,7 +2229,7 @@ trait UnitTesterActions
         return $this->getScenario()->runStep(new \Codeception\Step\Action('checkExtensionIsLoaded', func_get_args()));
     }
 
-
+ 
     /**
      * [!] Method is generated. Documentation taken from corresponding module.
      *
@@ -2613,7 +2245,7 @@ trait UnitTesterActions
         return $this->getScenario()->runStep(new \Codeception\Step\Action('getNewFileName', func_get_args()));
     }
 
-
+ 
     /**
      * [!] Method is generated. Documentation taken from corresponding module.
      *
@@ -2624,7 +2256,7 @@ trait UnitTesterActions
         return $this->getScenario()->runStep(new \Codeception\Step\Action('getProtectedProperty', func_get_args()));
     }
 
-
+ 
     /**
      * [!] Method is generated. Documentation taken from corresponding module.
      *
@@ -2635,7 +2267,7 @@ trait UnitTesterActions
         return $this->getScenario()->runStep(new \Codeception\Step\Action('safeDeleteDirectory', func_get_args()));
     }
 
-
+ 
     /**
      * [!] Method is generated. Documentation taken from corresponding module.
      *
@@ -2646,7 +2278,7 @@ trait UnitTesterActions
         return $this->getScenario()->runStep(new \Codeception\Step\Action('safeDeleteFile', func_get_args()));
     }
 
-
+ 
     /**
      * [!] Method is generated. Documentation taken from corresponding module.
      *
@@ -2657,7 +2289,7 @@ trait UnitTesterActions
         return $this->getScenario()->runStep(new \Codeception\Step\Action('setProtectedProperty', func_get_args()));
     }
 
-
+ 
     /**
      * [!] Method is generated. Documentation taken from corresponding module.
      *
