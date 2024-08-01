@@ -39,6 +39,9 @@ class NativeArray extends AbstractAdapter
 {
     /**
      * Returns a slice of the resultset to show in the pagination
+     *
+     * @throws Exception
+     * @return RepositoryInterface
      */
     public function paginate(): RepositoryInterface
     {

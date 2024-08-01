@@ -14,7 +14,6 @@ declare(strict_types=1);
 namespace Phalcon\Paginator;
 
 /**
- * Phalcon\Paginator\RepositoryInterface
  * Interface for the repository of current state
  * Phalcon\Paginator\AdapterInterface::paginate()
  */
@@ -31,46 +30,64 @@ interface RepositoryInterface
 
     /**
      * Gets the aliases for properties repository
+     *
+     * @return array
      */
     public function getAliases(): array;
 
     /**
      * Gets number of the current page
+     *
+     * @return int
      */
     public function getCurrent(): int;
 
     /**
      * Gets number of the first page
+     *
+     * @return int
      */
     public function getFirst(): int;
 
     /**
      * Gets the items on the current page
+     *
+     * @return mixed
      */
     public function getItems(): mixed;
 
     /**
      * Gets number of the last page
+     *
+     * @return int
      */
     public function getLast(): int;
 
     /**
      * Gets current rows limit
+     *
+     * @return int
      */
     public function getLimit(): int;
 
     /**
      * Gets number of the next page
+     *
+     * @return int
      */
     public function getNext(): int;
 
     /**
      * Gets number of the previous page
+     *
+     * @return int
      */
     public function getPrevious(): int;
 
     /**
      * Gets the total number of items
+     *
+     * @return int
      */
     public function getTotalItems(): int;
 

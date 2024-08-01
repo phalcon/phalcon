@@ -23,11 +23,18 @@ interface QueryInterface
 {
     /**
      * Sets the cache parameters of the query
+     *
+     * @param array $cacheOptions
+     *
+     * @return QueryInterface
      */
     public function cache(array $cacheOptions): QueryInterface;
 
     /**
      * Executes a parsed PHQL statement
+     *
+     * @param array $bindParams
+     * @param array $bindTypes
      *
      * @return mixed
      */
@@ -55,6 +62,11 @@ interface QueryInterface
 
     /**
      * Executes the query returning the first result
+     *
+     * @param array $bindParams
+     * @param array $bindTypes
+     *
+     * @return ModelInterface
      */
     public function getSingleResult(array $bindParams = [], array $bindTypes = []): ModelInterface;
 
@@ -71,21 +83,39 @@ interface QueryInterface
 
     /**
      * Set default bind parameters
+     *
+     * @param array $bindParams
+     * @param bool  $merge
+     *
+     * @return QueryInterface
      */
     public function setBindParams(array $bindParams, bool $merge = false): QueryInterface;
 
     /**
      * Set default bind parameters
+     *
+     * @param array $bindTypes
+     * @param bool  $merge
+     *
+     * @return QueryInterface
      */
     public function setBindTypes(array $bindTypes, bool $merge = false): QueryInterface;
 
     /**
      * Set SHARED LOCK clause
+     *
+     * @param bool $sharedLock
+     *
+     * @return QueryInterface
      */
     public function setSharedLock(bool $sharedLock = false): QueryInterface;
 
     /**
      * Tells to the query if only the first row in the resultset must be returned
+     *
+     * @param bool $uniqueRow
+     *
+     * @return QueryInterface
      */
     public function setUniqueRow(bool $uniqueRow): QueryInterface;
 }

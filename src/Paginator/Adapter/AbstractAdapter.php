@@ -59,6 +59,7 @@ abstract class AbstractAdapter implements AdapterInterface
      */
     public function __construct(array $config)
     {
+        $this->repository = new Repository();
         $this->config = $config;
 
         if (isset($config["limit"])) {
@@ -145,10 +146,6 @@ abstract class AbstractAdapter implements AdapterInterface
      */
     protected function getRepository(array $properties = null): RepositoryInterface
     {
-        if ($this->repository instanceof RepositoryInterface === false) {
-            $this->repository = new Repository();
-        }
-
         if ($properties !== null) {
             $this->repository->setProperties($properties);
         }

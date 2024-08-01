@@ -277,6 +277,10 @@ class QueryBuilder extends AbstractAdapter
 
     /**
      * Set query builder object
+     *
+     * @param Builder $builder
+     *
+     * @return QueryBuilder
      */
     public function setQueryBuilder(Builder $builder): QueryBuilder
     {

@@ -13,7 +13,7 @@ declare(strict_types=1);
 namespace Phalcon\Paginator;
 
 use JsonSerializable;
-use Phalcon\Support\Helper\Str\Camelize;
+use Phalcon\Traits\Helper\Str\CamelizeTrait;
 
 /**
  * Phalcon\Paginator\Repository
@@ -21,6 +21,8 @@ use Phalcon\Support\Helper\Str\Camelize;
  */
 class Repository implements RepositoryInterface, JsonSerializable
 {
+    use CamelizeTrait;
+
     protected array $aliases = [];
 
     protected array $properties = [];
@@ -32,8 +34,7 @@ class Repository implements RepositoryInterface, JsonSerializable
      */
     public function __get(string $property): mixed
     {
-        $camelize = new Camelize();
-        $method   = "get" . $camelize($this->getRealNameProperty($property));
+        $method = "get" . $this->toCamelize($this->getRealNameProperty($property));
 
         if (method_exists($this, $method)) {
             return $this->{$method}();
@@ -149,6 +150,11 @@ class Repository implements RepositoryInterface, JsonSerializable
 
     /**
      * Gets value of property by name
+     *
+     * @param string     $property
+     * @param mixed|null $defaultValue
+     *
+     * @return mixed
      */
     protected function getProperty(string $property, mixed $defaultValue = null): mixed
     {
@@ -157,6 +163,10 @@ class Repository implements RepositoryInterface, JsonSerializable
 
     /**
      * Resolve alias property name
+     *
+     * @param string $property
+     *
+     * @return string
      */
     protected function getRealNameProperty(string $property): string
     {
