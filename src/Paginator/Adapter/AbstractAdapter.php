@@ -43,9 +43,9 @@ abstract class AbstractAdapter implements AdapterInterface
     /**
      * Repository for pagination
      *
-     * @var RepositoryInterface|null
+     * @var RepositoryInterface
      */
-    protected ?RepositoryInterface $repository = null;
+    protected RepositoryInterface $repository;
 
     /**
      * Phalcon\Paginator\Adapter\AbstractAdapter constructor
