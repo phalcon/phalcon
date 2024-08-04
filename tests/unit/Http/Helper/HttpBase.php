@@ -13,13 +13,13 @@ declare(strict_types=1);
 
 namespace Phalcon\Tests\Unit\Http\Helper;
 
-use Page\Http;
+use Phalcon\Tests\Fixtures\Page\Http;
 use Phalcon\Http\Cookie;
 use Phalcon\Http\Request;
 use Phalcon\Http\Response;
 use Phalcon\Tests\Fixtures\Http\PhpStream;
 use Phalcon\Tests\Fixtures\Traits\DiTrait;
-use UnitTester;
+use Phalcon\Tests\UnitTestCase;
 
 use function header_remove;
 use function stream_wrapper_register;
@@ -27,7 +27,7 @@ use function stream_wrapper_restore;
 use function stream_wrapper_unregister;
 use function time;
 
-class HttpBase
+class HttpBase extends UnitTestCase
 {
     use DiTrait;
 
@@ -36,7 +36,7 @@ class HttpBase
     /**
      * executed before each test
      */
-    public function _before(UnitTester $I)
+    public function setUp(): void
     {
         $this->store['SERVER']  = $_SERVER ?? [];
         $this->store['REQUEST'] = $_REQUEST ?? [];
@@ -63,7 +63,7 @@ class HttpBase
     /**
      * executed after each test
      */
-    public function _after(UnitTester $I)
+    public function _after(): void
     {
         $_SERVER  = $this->store['SERVER'];
         $_REQUEST = $this->store['REQUEST'];

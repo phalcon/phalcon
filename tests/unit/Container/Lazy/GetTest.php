@@ -16,40 +16,34 @@ namespace Phalcon\Tests\Unit\Container\Lazy;
 use Phalcon\Container\Exception\NotFound;
 use Phalcon\Container\Lazy\Get;
 use stdClass;
-use UnitTester;
+use Phalcon\Tests\UnitTestCase;
 
-class GetTest extends AbstractLazyTest
+final class GetTest extends AbstractLazyBase
 {
     /**
-     * @param UnitTester $I
-     *
      * @return void
      */
-    public function containerLazyGet(UnitTester $I): void
+    public function testContainerLazyGet(): void
     {
         $lazy = new Get(stdClass::class);
         $get1 = $this->actual($lazy);
-        $I->assertInstanceOf(stdClass::class, $get1);
+        $this->assertInstanceOf(stdClass::class, $get1);
 
         $get2 = $this->actual($lazy);
-        $I->assertInstanceOf(stdClass::class, $get2);
+        $this->assertInstanceOf(stdClass::class, $get2);
 
-        $I->assertSame($get1, $get2);
+        $this->assertSame($get1, $get2);
     }
 
     /**
-     * @param UnitTester $I
-     *
      * @return void
      */
-    public function containerLazyGetNoSuchClass(UnitTester $I): void
+    public function testContainerLazyGetNoSuchClass(): void
     {
-        $I->expectThrowable(
-            new NotFound('NoSuchClass'),
-            function () {
-                $lazy = new Get('NoSuchClass');
-                $this->actual($lazy);
-            }
-        );
+        $this->expectException(NotFound::class);
+        $this->expectExceptionMessage('NoSuchClass');
+
+        $lazy = new Get('NoSuchClass');
+        $this->actual($lazy);
     }
 }

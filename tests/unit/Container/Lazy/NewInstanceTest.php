@@ -13,27 +13,23 @@ declare(strict_types=1);
 
 namespace Phalcon\Tests\Unit\Container\Lazy;
 
-use Capsule\Di\Exception;
 use Phalcon\Container\Lazy\NewInstance;
 use stdClass;
-use UnitTester;
 
-class NewInstanceTest extends AbstractLazyTest
+final class NewInstanceTest extends AbstractLazyBase
 {
     /**
-     * @param UnitTester $I
-     *
      * @return void
      */
-    public function containerLazyStaticCall(UnitTester $I): void
+    public function testContainerLazyStaticCall(): void
     {
         $lazy = new NewInstance(stdClass::CLASS);
         $new1 = $this->actual($lazy);
-        $I->assertInstanceOf(stdClass::CLASS, $new1);
+        $this->assertInstanceOf(stdClass::CLASS, $new1);
 
         $new2 = $this->actual($lazy);
-        $I->assertInstanceOf(stdClass::CLASS, $new2);
+        $this->assertInstanceOf(stdClass::CLASS, $new2);
 
-        $I->assertNotSame($new1, $new2);
+        $this->assertNotSame($new1, $new2);
     }
 }
