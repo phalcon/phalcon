@@ -15,54 +15,59 @@ namespace Phalcon\Tests\Fixtures\Traits;
 
 use Codeception\Example;
 use Phalcon\Translate\Adapter\Gettext;
-use Phalcon\Translate\Adapter\NativeArray;
 use Phalcon\Translate\Exception;
 use Phalcon\Translate\InterpolatorFactory;
-use UnitTester;
-
-use function sprintf;
+use Phalcon\Tests\_support\UnitTester;
 
 trait TranslateGettextHelperTrait
 {
     /**
-     * @return string
-     */
-    abstract protected function func(): string;
-
-    /**
-     * @return array
-     */
-    abstract protected function getGettextConfig(): array;
-
-    /**
-     * Tests Phalcon\Translate\Adapter\Gettext :: query()
-     *
-     * @dataProvider getQueryProvider
+     * Tests Phalcon\Translate\Adapter\Gettext :: query() - array access and
+     * UTF8 strings
      *
      * @param UnitTester $I
-     * @param Example    $data
      *
      * @throws Exception
      *
      * @author Phalcon Team <team@phalcon.io>
      * @since  2020-09-09
      */
-    public function translateAdapterGettextQuery(UnitTester $I, Example $data)
+    public function testTranslateAdapterGettextWithArrayAccessAndUTF8Strings()
     {
-        $I->wantToTest(
-            sprintf(
-                'Translate\Adapter\Gettext - %s - %s',
-                $this->func(),
-                $data['language']
-            )
-        );
+        $language = $this->getGettextConfig();
 
+        $translator = new Gettext(new InterpolatorFactory(), $language);
+
+        $vars = [
+            'fname' => 'John',
+            'lname' => 'Doe',
+            'mname' => 'D.',
+        ];
+
+        $expected = 'Привет, John D. Doe!';
+        $actual   = $translator->{$this->func()}('Привет, %fname% %mname% %lname%!', $vars);
+        $this->assertSame($expected, $actual);
+    }
+
+    /**
+     * Tests Phalcon\Translate\Adapter\Gettext :: query()
+     *
+     * @dataProvider getQueryProvider
+     *
+     * @throws Exception
+     *
+     * @author       Phalcon Team <team@phalcon.io>
+     * @since        2020-09-09
+     */
+    public function translateAdapterGettextQuery(
+        array $tests
+    ): void {
         $language   = $this->getGettextConfig();
         $translator = new Gettext(new InterpolatorFactory(), $language);
 
-        foreach ($data['tests'] as $key => $expected) {
+        foreach ($tests as $key => $expected) {
             $actual = $translator->{$this->func()}($key);
-            $I->assertEquals($expected, $actual);
+            $this->assertSame($expected, $actual);
         }
     }
 
@@ -77,31 +82,23 @@ trait TranslateGettextHelperTrait
      *
      * @throws Exception
      *
-     * @author Phalcon Team <team@phalcon.io>
-     * @since  2020-09-09
+     * @author       Phalcon Team <team@phalcon.io>
+     * @since        2020-09-09
      */
     public function translateAdapterGettextVariableSubstitutionNoVariables(
-        UnitTester $I,
-        Example $data
-    ) {
-        $I->wantToTest(
-            sprintf(
-                'Translate\Adapter\Gettext - variable substitution no variables - %s',
-                $data['language']
-            )
-        );
-
+        array $tests
+    ): void {
         $language   = $this->getGettextConfig();
         $translator = new Gettext(new InterpolatorFactory(), $language);
 
-        foreach ($data['tests'] as $key => $expected) {
+        foreach ($tests as $key => $expected) {
             $actual = $translator->{$this->func()}(
                 $key,
                 [
                     'name' => 'my friend',
                 ]
             );
-            $I->assertEquals($expected, $actual);
+            $this->assertSame($expected, $actual);
         }
     }
 
@@ -116,26 +113,18 @@ trait TranslateGettextHelperTrait
      *
      * @throws Exception
      *
-     * @author Phalcon Team <team@phalcon.io>
-     * @since  2020-09-09
+     * @author       Phalcon Team <team@phalcon.io>
+     * @since        2020-09-09
      */
     public function translateAdapterGettextVariableSubstitutionOneVariable(
-        UnitTester $I,
-        Example $data
-    ) {
-        $I->wantToTest(
-            sprintf(
-                'Translate\Adapter\Gettext - variable substitution one variable - %s',
-                $data['language']
-            )
-        );
-
+        array $tests
+    ): void {
         $language   = $this->getGettextConfig();
         $translator = new Gettext(new InterpolatorFactory(), $language);
 
-        foreach ($data['tests'] as $key => $expected) {
+        foreach ($tests as $key => $expected) {
             $actual = $translator->{$this->func()}($key, ['name' => 'my friend']);
-            $I->assertEquals($expected, $actual);
+            $this->assertSame($expected, $actual);
         }
     }
 
@@ -145,25 +134,14 @@ trait TranslateGettextHelperTrait
      *
      * @dataProvider getQueryTwoVariables
      *
-     * @param UnitTester $I
-     * @param Example    $data
-     *
      * @throws Exception
      *
-     * @author Phalcon Team <team@phalcon.io>
-     * @since  2020-09-09
+     * @author       Phalcon Team <team@phalcon.io>
+     * @since        2020-09-09
      */
     public function translateAdapterGettextVariableSubstitutionTwoVariable(
-        UnitTester $I,
-        Example $data
-    ) {
-        $I->wantToTest(
-            sprintf(
-                'Translate\Adapter\Gettext - variable substitution two variables - %s',
-                $data['language']
-            )
-        );
-
+        array $tests
+    ): void {
         $language   = $this->getGettextConfig();
         $translator = new Gettext(new InterpolatorFactory(), $language);
 
@@ -172,38 +150,36 @@ trait TranslateGettextHelperTrait
             'artist' => 'Kansas',
         ];
 
-        foreach ($data['tests'] as $key => $expected) {
+        foreach ($tests as $key => $expected) {
             $actual = $translator->{$this->func()}($key, $vars);
-            $I->assertEquals($expected, $actual);
+            $this->assertSame($expected, $actual);
         }
     }
 
     /**
-     * Tests Phalcon\Translate\Adapter\Gettext :: query() - array access and
-     * UTF8 strings
-     *
-     * @param UnitTester $I
-     *
-     * @throws Exception
-     *
-     * @author Phalcon Team <team@phalcon.io>
-     * @since  2020-09-09
+     * @return string
      */
-    public function testWithArrayAccessAndUTF8Strings(UnitTester $I)
+    abstract protected function func(): string;
+
+    /**
+     * @return array
+     */
+    abstract protected function getGettextConfig(): array;
+
+    /**
+     * Data provider for the query one variable substitution
+     *
+     * @return array[]
+     */
+    private function getQueryOneVariable(): array
     {
-        $language = $this->getGettextConfig();
-
-        $translator = new Gettext(new InterpolatorFactory(), $language);
-
-        $vars = [
-            'fname' => 'John',
-            'lname' => 'Doe',
-            'mname' => 'D.',
+        return [
+            [
+                [
+                    'hello-key' => 'Hello my friend',
+                ],
+            ],
         ];
-
-        $expected = 'Привет, John D. Doe!';
-        $actual   = $translator->{$this->func()}('Привет, %fname% %mname% %lname%!', $vars);
-        $I->assertEquals($expected, $actual);
     }
 
     /**
@@ -215,29 +191,9 @@ trait TranslateGettextHelperTrait
     {
         return [
             [
-                'language' => 'English',
-                'code'     => 'en',
-                'tests'    => [
+                [
                     'hi'  => 'Hello',
                     'bye' => 'Bye',
-                ],
-            ],
-        ];
-    }
-
-    /**
-     * Data provider for the query one variable substitution
-     *
-     * @return array[]
-     */
-    private function getQueryOneVariable(): array
-    {
-        return [
-            [
-                'language' => 'English',
-                'code'     => 'en',
-                'tests'    => [
-                    'hello-key' => 'Hello my friend',
                 ],
             ],
         ];
@@ -252,9 +208,7 @@ trait TranslateGettextHelperTrait
     {
         return [
             [
-                'language' => 'English',
-                'code'     => 'en',
-                'tests'    => [
+                [
                     'song-key' => 'The song is Dust in the wind (Kansas)',
                 ],
             ],

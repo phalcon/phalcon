@@ -15,21 +15,21 @@ namespace Phalcon\Tests\Fixtures\Helpers;
 
 use Phalcon\Tag;
 use Phalcon\Tests\Fixtures\Traits\DiTrait;
-use UnitTester;
+use Phalcon\Tests\UnitTestCase;
 
-class TagSetup
+class TagSetup extends UnitTestCase
 {
     use DiTrait;
 
     protected $doctype = Tag::HTML5;
 
-    public function _after(UnitTester $I)
+    public function tearDown(): void
     {
         Tag::setDocType($this->doctype);
         Tag::resetInput();
     }
 
-    public function _before(UnitTester $I)
+    public function setUp(): void
     {
         $this->newDi();
         $this->setDiService('escaper');
@@ -195,7 +195,7 @@ class TagSetup
     /**
      * Runs a doctype test, one for each doctype
      */
-    protected function runDoctypeTest(UnitTester $I, int $doctype)
+    protected function runDoctypeTest(int $doctype)
     {
         Tag::resetInput();
 
@@ -203,14 +203,13 @@ class TagSetup
 
         $expected = $this->docTypeToString($doctype);
         $actual   = Tag::getDocType();
-        $I->assertSame($expected, $actual);
+        $this->assertSame($expected, $actual);
     }
 
     /**
      * Runs the test for a Tag::$function with $options
      */
     protected function testFieldParameter(
-        UnitTester $I,
         string $function,
         $options,
         string $expected,
@@ -231,6 +230,6 @@ class TagSetup
 
         $actual = Tag::$function($options);
 
-        $I->assertSame($expected, $actual);
+        $this->assertSame($expected, $actual);
     }
 }

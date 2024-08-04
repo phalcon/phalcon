@@ -16,11 +16,6 @@ namespace Phalcon\Tests\Fixtures\Di;
 use Phalcon\Di\Exception;
 use Phalcon\Di\Traits\DiExceptionsTrait;
 
-/**
- * Trait DiExceptionsTrait
- *
- * @package Phalcon\Di\Traits
- */
 class DiExceptionsProxy
 {
     use DiExceptionsTrait;

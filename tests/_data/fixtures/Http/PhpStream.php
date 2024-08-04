@@ -160,6 +160,6 @@ class PhpStream
 
     protected function getBufferFilename(): string
     {
-        return codecept_output_dir('tests/stream/php_input.txt');
+        return outputDir('/tests/stream/php_input.txt');
     }
 }

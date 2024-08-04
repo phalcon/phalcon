@@ -13,8 +13,6 @@ declare(strict_types=1);
 
 namespace Phalcon\Tests\Fixtures\Di;
 
-use Phalcon\Html\EscaperInterface;
-
 /**
  * Class ServiceComponent
  *

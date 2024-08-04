@@ -13,21 +13,21 @@ declare(strict_types=1);
 
 namespace Phalcon\Tests\Fixtures\Traits;
 
-use UnitTester;
-
-use function dataDir;
+use function extension_loaded;
 
 trait TranslateGettextTrait
 {
     /**
      * Executed before each test
      */
-    public function _before(UnitTester $I)
+    public function _setUp()
     {
-        $I->checkExtensionIsLoaded('gettext');
+        if (!extension_loaded('gettext')) {
+            $this->markTestSkipped('Warning: gettext extension is not loaded');
+        }
 
         if (!setlocale(LC_ALL, 'en_US.utf8')) {
-            $I->skipTest('Locale en_US.utf8 not enabled');
+            $this->markTestSkipped('Locale en_US.utf8 not enabled');
         }
     }
 

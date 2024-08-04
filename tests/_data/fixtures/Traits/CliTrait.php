@@ -82,56 +82,56 @@ trait CliTrait
         ];
     }
 
-    private function getServices(): array
+    public static function getServices(): array
     {
         return [
             [
-                'service' => 'annotations',
-                'class'   => Memory::class,
+                'annotations',
+                Memory::class,
             ],
             [
-                'service' => 'dispatcher',
-                'class'   => Dispatcher::class,
+                'dispatcher',
+                Dispatcher::class,
             ],
             [
-                'service' => 'escaper',
-                'class'   => Escaper::class,
+                'escaper',
+                Escaper::class,
             ],
             [
-                'service' => 'eventsManager',
-                'class'   => EventsManager::class,
+                'eventsManager',
+                EventsManager::class,
             ],
             [
-                'service' => 'filter',
-                'class'   => Filter::class,
+                'filter',
+                Filter::class,
             ],
             [
-                'service' => 'helper',
-                'class'   => HelperFactory::class,
+                'helper',
+                HelperFactory::class,
             ],
             [
-                'service' => 'modelsManager',
-                'class'   => Manager::class,
+                'modelsManager',
+                Manager::class,
             ],
             [
-                'service' => 'modelsMetadata',
-                'class'   => MetadataMemory::class,
+                'modelsMetadata',
+                MetadataMemory::class,
             ],
             [
-                'service' => 'router',
-                'class'   => Router::class,
+                'router',
+                Router::class,
             ],
             [
-                'service' => 'security',
-                'class'   => Security::class,
+                'security',
+                Security::class,
             ],
             [
-                'service' => 'tag',
-                'class'   => TagFactory::class,
+                'tag',
+                TagFactory::class,
             ],
             [
-                'service' => 'transactionManager',
-                'class'   => TransactionManager::class,
+                'transactionManager',
+                TransactionManager::class,
             ],
         ];
     }

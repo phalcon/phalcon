@@ -17,53 +17,115 @@ use Codeception\Example;
 use Phalcon\Translate\Adapter\NativeArray;
 use Phalcon\Translate\Exception;
 use Phalcon\Translate\InterpolatorFactory;
-use UnitTester;
+use Phalcon\Tests\_support\UnitTester;
 
-use function sprintf;
-
-/**
- * Trait TranslateNativeArrayHelperTrait
- *
- * @package Phalcon\Tests\Fixtures\Traits
- */
 trait TranslateNativeArrayHelperTrait
 {
     /**
-     * @return string
+     * Data provider for the query one variable substitution
+     *
+     * @return array[]
      */
-    abstract protected function func(): string;
+    public static function getQueryOneVariable(): array
+    {
+        return [
+            [
+                'en',
+                [
+                    'hello-key' => 'Hello my friend',
+                ],
+            ],
+            [
+                'es',
+                [
+                    'hello-key' => 'Hola my friend',
+                ],
+            ],
+            [
+                'fr',
+                [
+                    'hello-key' => 'Bonjour my friend',
+                ],
+            ],
+        ];
+    }
 
     /**
-     * @return array
+     * Data provider for the query tests
+     *
+     * @return array[]
      */
-    abstract protected function getArrayConfig(): array;
+    public static function getQueryProvider(): array
+    {
+        return [
+            [
+                'en',
+                [
+                    'hi'  => 'Hello',
+                    'bye' => 'Good Bye',
+                ],
+            ],
+            [
+                'es',
+                [
+                    'hi'  => 'Hola',
+                    'bye' => 'Adiós',
+                ],
+            ],
+            [
+                'fr',
+                [
+                    'hi'  => 'Bonjour',
+                    'bye' => 'Au revoir',
+                ],
+            ],
+        ];
+    }
+
+    /**
+     * Data provider for the query one variable substitution
+     *
+     * @return array[]
+     */
+    public static function getQueryTwoVariables(): array
+    {
+        return [
+            [
+                'en',
+                [
+                    'song-key' => 'This song is Dust in the wind (Kansas)',
+                ],
+            ],
+            [
+                'es',
+                [
+                    'song-key' => 'La canción es Dust in the wind (Kansas)',
+                ],
+            ],
+            [
+                'fr',
+                [
+                    'song-key' => 'La chanson est Dust in the wind (Kansas)',
+                ],
+            ],
+        ];
+    }
 
     /**
      * Tests Phalcon\Translate\Adapter\NativeArray :: query()
      *
      * @dataProvider getQueryProvider
      *
-     * @param UnitTester $I
-     * @param Example    $data
-     *
      * @throws Exception
      *
-     * @author Phalcon Team <team@phalcon.io>
-     * @since  2020-09-09
+     * @author       Phalcon Team <team@phalcon.io>
+     * @since        2020-09-09
      */
-    public function translateAdapterNativearrayQuery(
-        UnitTester $I,
-        Example $data
-    ) {
-        $I->wantToTest(
-            sprintf(
-                'Translate\Adapter\NativeArray - %s - %s',
-                $this->func(),
-                $data['language']
-            )
-        );
-
-        $language   = $this->getArrayConfig()[$data['code']];
+    public function testTranslateAdapterNativearrayQuery(
+        string $code,
+        array $tests
+    ): void {
+        $language   = $this->getArrayConfig()[$code];
         $translator = new NativeArray(
             new InterpolatorFactory(),
             [
@@ -71,10 +133,10 @@ trait TranslateNativeArrayHelperTrait
             ]
         );
 
-        foreach ($data['tests'] as $key => $expected) {
+        foreach ($tests as $key => $expected) {
             $actual = $translator->{$this->func()}($key);
 
-            $I->assertEquals($expected, $actual);
+            $this->assertSame($expected, $actual);
         }
     }
 
@@ -84,26 +146,16 @@ trait TranslateNativeArrayHelperTrait
      *
      * @dataProvider getQueryProvider
      *
-     * @param UnitTester $I
-     * @param Example    $data
-     *
      * @throws Exception
      *
-     * @author Phalcon Team <team@phalcon.io>
-     * @since  2020-09-09
+     * @author       Phalcon Team <team@phalcon.io>
+     * @since        2020-09-09
      */
-    public function translateAdapterNativearrayVariableSubstitutionNoVariables(
-        UnitTester $I,
-        Example $data
-    ) {
-        $I->wantToTest(
-            sprintf(
-                'Translate\Adapter\NativeArray - variable substitution no variables - %s',
-                $data['language']
-            )
-        );
-
-        $language   = $this->getArrayConfig()[$data['code']];
+    public function testTranslateAdapterNativearrayVariableSubstitutionNoVariables(
+        string $code,
+        array $tests
+    ): void {
+        $language   = $this->getArrayConfig()[$code];
         $translator = new NativeArray(
             new InterpolatorFactory(),
             [
@@ -111,7 +163,7 @@ trait TranslateNativeArrayHelperTrait
             ]
         );
 
-        foreach ($data['tests'] as $key => $expected) {
+        foreach ($tests as $key => $expected) {
             $actual = $translator->{$this->func()}(
                 $key,
                 [
@@ -119,7 +171,7 @@ trait TranslateNativeArrayHelperTrait
                 ]
             );
 
-            $I->assertEquals($expected, $actual);
+            $this->assertSame($expected, $actual);
         }
     }
 
@@ -129,23 +181,13 @@ trait TranslateNativeArrayHelperTrait
      *
      * @dataProvider getQueryOneVariable
      *
-     * @param UnitTester $I
-     * @param Example    $data
-     *
      * @throws Exception
      */
-    public function translateAdapterNativearrayVariableSubstitutionOneVariable(
-        UnitTester $I,
-        Example $data
-    ) {
-        $I->wantToTest(
-            sprintf(
-                'Translate\Adapter\NativeArray - variable substitution one variable - %s',
-                $data['language']
-            )
-        );
-
-        $language   = $this->getArrayConfig()[$data['code']];
+    public function testTranslateAdapterNativearrayVariableSubstitutionOneVariable(
+        string $code,
+        array $tests
+    ): void {
+        $language   = $this->getArrayConfig()[$code];
         $translator = new NativeArray(
             new InterpolatorFactory(),
             [
@@ -153,9 +195,9 @@ trait TranslateNativeArrayHelperTrait
             ]
         );
 
-        foreach ($data['tests'] as $key => $expected) {
+        foreach ($tests as $key => $expected) {
             $actual = $translator->{$this->func()}($key, ['name' => 'my friend']);
-            $I->assertEquals($expected, $actual);
+            $this->assertSame($expected, $actual);
         }
     }
 
@@ -170,21 +212,14 @@ trait TranslateNativeArrayHelperTrait
      *
      * @throws Exception
      *
-     * @author Phalcon Team <team@phalcon.io>
-     * @since  2020-09-09
+     * @author       Phalcon Team <team@phalcon.io>
+     * @since        2020-09-09
      */
-    public function translateAdapterNativearrayVariableSubstitutionTwoVariable(
-        UnitTester $I,
-        Example $data
-    ) {
-        $I->wantToTest(
-            sprintf(
-                'Translate\Adapter\NativeArray - variable substitution two variables - %s',
-                $data['language']
-            )
-        );
-
-        $language   = $this->getArrayConfig()[$data['code']];
+    public function testTranslateAdapterNativearrayVariableSubstitutionTwoVariable(
+        string $code,
+        array $tests
+    ): void {
+        $language   = $this->getArrayConfig()[$code];
         $translator = new NativeArray(
             new InterpolatorFactory(),
             [
@@ -197,10 +232,10 @@ trait TranslateNativeArrayHelperTrait
             'artist' => 'Kansas',
         ];
 
-        foreach ($data['tests'] as $key => $expected) {
+        foreach ($tests as $key => $expected) {
             $actual = $translator->{$this->func()}($key, $vars);
 
-            $I->assertEquals($expected, $actual);
+            $this->assertSame($expected, $actual);
         }
     }
 
@@ -208,14 +243,12 @@ trait TranslateNativeArrayHelperTrait
      * Tests Phalcon\Translate\Adapter\NativeArray :: query() - array access
      * and UTF8 strings
      *
-     * @param UnitTester $I
-     *
      * @throws Exception
      *
      * @author Phalcon Team <team@phalcon.io>
      * @since  2020-09-09
      */
-    public function testWithArrayAccessAndUTF8Strings(UnitTester $I)
+    public function testWithArrayAccessAndUTF8Strings(): void
     {
         $language = $this->getArrayConfig()['ru'];
 
@@ -233,105 +266,16 @@ trait TranslateNativeArrayHelperTrait
         ];
         $expected = 'Привет, John D. Doe!';
         $actual   = $translator->{$this->func()}('Hello %fname% %mname% %lname%!', $vars);
-        $I->assertEquals($expected, $actual);
+        $this->assertSame($expected, $actual);
     }
 
     /**
-     * Data provider for the query tests
-     *
-     * @return array[]
+     * @return string
      */
-    private function getQueryProvider(): array
-    {
-        return [
-            [
-                'language' => 'English',
-                'code'     => 'en',
-                'tests'    => [
-                    'hi'  => 'Hello',
-                    'bye' => 'Good Bye',
-                ],
-            ],
-            [
-                'language' => 'Spanish',
-                'code'     => 'es',
-                'tests'    => [
-                    'hi'  => 'Hola',
-                    'bye' => 'Adiós',
-                ],
-            ],
-            [
-                'language' => 'French',
-                'code'     => 'fr',
-                'tests'    => [
-                    'hi'  => 'Bonjour',
-                    'bye' => 'Au revoir',
-                ],
-            ],
-        ];
-    }
+    abstract protected function func(): string;
 
     /**
-     * Data provider for the query one variable substitution
-     *
-     * @return array[]
+     * @return array
      */
-    private function getQueryOneVariable(): array
-    {
-        return [
-            [
-                'language' => 'English',
-                'code'     => 'en',
-                'tests'    => [
-                    'hello-key' => 'Hello my friend',
-                ],
-            ],
-            [
-                'language' => 'Spanish',
-                'code'     => 'es',
-                'tests'    => [
-                    'hello-key' => 'Hola my friend',
-                ],
-            ],
-            [
-                'language' => 'French',
-                'code'     => 'fr',
-                'tests'    => [
-                    'hello-key' => 'Bonjour my friend',
-                ],
-            ],
-        ];
-    }
-
-    /**
-     * Data provider for the query one variable substitution
-     *
-     * @return array[]
-     */
-    private function getQueryTwoVariables(): array
-    {
-        return [
-            [
-                'language' => 'English',
-                'code'     => 'en',
-                'tests'    => [
-                    'song-key' => 'This song is Dust in the wind (Kansas)',
-                ],
-            ],
-            [
-                'language' => 'Spanish',
-                'code'     => 'es',
-                'tests'    => [
-                    'song-key' => 'La canción es Dust in the wind (Kansas)',
-                ],
-            ],
-            [
-                'language' => 'French',
-                'code'     => 'fr',
-                'tests'    => [
-                    'song-key' => 'La chanson est Dust in the wind (Kansas)',
-                ],
-            ],
-        ];
-    }
+    abstract protected function getArrayConfig(): array;
 }

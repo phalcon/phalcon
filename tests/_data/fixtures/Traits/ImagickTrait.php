@@ -13,15 +13,13 @@ declare(strict_types=1);
 
 namespace Phalcon\Tests\Fixtures\Traits;
 
-use UnitTester;
-
 trait ImagickTrait
 {
     /**
      * executed before each test
      */
-    public function _before(UnitTester $I)
+    public function setUp(): void
     {
-        $I->checkExtensionIsLoaded('imagick');
+        $this->checkExtensionIsLoaded('imagick');
     }
 }

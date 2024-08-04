@@ -1,7 +1,5 @@
 <?php
 
-declare(strict_types=1);
-
 /**
  * This file is part of the Phalcon Framework.
  *
@@ -11,9 +9,9 @@ declare(strict_types=1);
  * file that was distributed with this source code.
  */
 
-namespace Phalcon\Tests\Fixtures\Container;
+declare(strict_types=1);
 
-use stdClass;
+namespace Phalcon\Tests\Fixtures\Container;
 
 class TestWithOptionalConstructorArguments
 {

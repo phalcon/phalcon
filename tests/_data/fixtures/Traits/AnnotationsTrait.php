@@ -21,23 +21,23 @@ use function outputDir;
 
 trait AnnotationsTrait
 {
-    private function getExamples(): array
+    public static function getExamples(): array
     {
         return [
             [
-                "class"  => Apcu::class,
-                "params" => [
+                Apcu::class,
+                [
                     'prefix'   => 'nova_prefix',
                     'lifetime' => 3600,
                 ],
             ],
             [
-                "class"  => Memory::class,
-                "params" => [],
+                Memory::class,
+                [],
             ],
             [
-                "class"  => Stream::class,
-                "params" => [
+                Stream::class,
+                [
                     'annotationsDir' => outputDir('tests/annotations/'),
                 ],
             ],

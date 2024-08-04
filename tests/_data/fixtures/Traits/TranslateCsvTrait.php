@@ -13,8 +13,6 @@ declare(strict_types=1);
 
 namespace Phalcon\Tests\Fixtures\Traits;
 
-use function dataDir;
-
 trait TranslateCsvTrait
 {
     protected function getCsvConfig(): array
