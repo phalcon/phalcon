@@ -140,7 +140,7 @@ jobs:
         run: composer validate --no-check-all --no-check-publish
 
       - name: "Install development dependencies with Composer"
-        uses: "ramsey/composer-install@v2"
+        uses: "ramsey/composer-install@v3"
         with:
           composer-options: "--prefer-dist"
 
@@ -157,7 +157,7 @@ jobs:
       - name: "Run Unit Tests"
         if: always()
         run: |
-          vendor/bin/codecept run --coverage-xml=coverage.xml --ext DotReporter unit
+          composer test-unit-coverage
 
 #      - name: "Upload coverage file"
 #        run: |
@@ -677,7 +677,7 @@ jobs:
       - name: "Display structure of downloaded files"
         run: ls -R
         working-directory: reports
-      
+
 #      - name: "Upload to Codacy"
 #        run: |
 #          bash <(curl -Ls https://coverage.codacy.com/get.sh) report \

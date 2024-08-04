@@ -54,14 +54,14 @@ class ConstructCest
 
         $container = new Cli();
 
-        if ('sessionBag' === $example['service']) {
+        if ('sessionBag' === $example[0]) {
             $params = ['someName'];
         } else {
             $params = null;
         }
 
-        $class  = $example['class'];
-        $actual = $container->get($example['service'], $params);
+        $class  = $example[1];
+        $actual = $container->get($example[0], $params);
         $I->assertInstanceOf($class, $actual);
     }
 }
