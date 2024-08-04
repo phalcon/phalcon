@@ -178,37 +178,37 @@ class LinkToTest extends TagSetup
     {
         Tag::resetInput();
 
-        $url  = 'http://phalcon.io/en/';
+        $url  = 'https://phalcon.io/en/';
         $name = 'x_name';
 
         $this->assertSame(
-            '<a href="http://phalcon.io/en/">x_name</a>',
+            '<a href="https://phalcon.io/en/">x_name</a>',
             Tag::linkTo($url, $name, false)
         );
 
         Tag::resetInput();
 
         $options = [
-            'http://phalcon.io/en/',
+            'https://phalcon.io/en/',
             'x_name',
             false,
         ];
 
         $this->assertSame(
-            '<a href="http://phalcon.io/en/">x_name</a>',
+            '<a href="https://phalcon.io/en/">x_name</a>',
             Tag::linkTo($options)
         );
 
         Tag::resetInput();
 
         $options = [
-            'http://phalcon.io/en/',
+            'https://phalcon.io/en/',
             'text'  => 'x_name',
             'local' => false,
         ];
 
         $this->assertSame(
-            '<a href="http://phalcon.io/en/">x_name</a>',
+            '<a href="https://phalcon.io/en/">x_name</a>',
             Tag::linkTo($options)
         );
 

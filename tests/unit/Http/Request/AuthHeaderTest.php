@@ -203,17 +203,17 @@ final class AuthHeaderTest extends HttpBase
                 [
                     'HTTP_AUTHORIZATION' => 'Digest username="myleft", ' .
                         'realm="myleft", qop="auth", ' .
-                        'algorithm="MD5", uri="http://localhost:81/", ' .
+                        'algorithm="MD5", uri="https://localhost:81/", ' .
                         'nonce="nonce", nc=nc, cnonce="cnonce", ' .
                         'opaque="opaque", response="response"',
                 ],
                 [
                     'Authorization'   => 'Digest username="myleft", realm="myleft", ' .
-                        'qop="auth", algorithm="MD5", uri="http://localhost:81/", ' .
+                        'qop="auth", algorithm="MD5", uri="https://localhost:81/", ' .
                         'nonce="nonce", nc=nc, cnonce="cnonce", ' .
                         'opaque="opaque", response="response"',
                     'Php-Auth-Digest' => 'Digest username="myleft", realm="myleft", ' .
-                        'qop="auth", algorithm="MD5", uri="http://localhost:81/", ' .
+                        'qop="auth", algorithm="MD5", uri="https://localhost:81/", ' .
                         'nonce="nonce", nc=nc, cnonce="cnonce", ' .
                         'opaque="opaque", response="response"',
                 ],
@@ -223,17 +223,17 @@ final class AuthHeaderTest extends HttpBase
             [
                 [
                     'REDIRECT_HTTP_AUTHORIZATION' => 'Digest username="myleft", realm="myleft", ' .
-                        'qop="auth", algorithm="MD5", uri="http://localhost:81/", ' .
+                        'qop="auth", algorithm="MD5", uri="https://localhost:81/", ' .
                         'nonce="nonce", nc=nc, cnonce="cnonce", ' .
                         'opaque="opaque", response="response"',
                 ],
                 [
                     'Authorization'   => 'Digest username="myleft", realm="myleft", ' .
-                        'qop="auth", algorithm="MD5", uri="http://localhost:81/", ' .
+                        'qop="auth", algorithm="MD5", uri="https://localhost:81/", ' .
                         'nonce="nonce", nc=nc, cnonce="cnonce", ' .
                         'opaque="opaque", response="response"',
                     'Php-Auth-Digest' => 'Digest username="myleft", realm="myleft", ' .
-                        'qop="auth", algorithm="MD5", uri="http://localhost:81/", ' .
+                        'qop="auth", algorithm="MD5", uri="https://localhost:81/", ' .
                         'nonce="nonce", nc=nc, cnonce="cnonce", ' .
                         'opaque="opaque", response="response"',
                 ],
@@ -283,7 +283,7 @@ final class AuthHeaderTest extends HttpBase
                 [
                     'PHP_AUTH_DIGEST' => 'Digest username="myleft", ' .
                         'realm="myleft", qop="auth", algorithm="MD5", ' .
-                        'uri="http://localhost:81/", nonce="nonce", nc=nc, ' .
+                        'uri="https://localhost:81/", nonce="nonce", nc=nc, ' .
                         'cnonce="cnonce", opaque="opaque", response="response"',
                 ],
                 'getDigestAuth',
@@ -292,7 +292,7 @@ final class AuthHeaderTest extends HttpBase
                     'realm'     => 'myleft',
                     'qop'       => 'auth',
                     'algorithm' => 'MD5',
-                    'uri'       => 'http://localhost:81/',
+                    'uri'       => 'https://localhost:81/',
                     'nonce'     => 'nonce',
                     'nc'        => 'nc',
                     'cnonce'    => 'cnonce',
@@ -304,7 +304,7 @@ final class AuthHeaderTest extends HttpBase
             [
                 [
                     'PHP_AUTH_DIGEST' => 'Digest username=myleft, realm=myleft, ' .
-                        'qop=auth, algorithm=MD5, uri=http://localhost:81/, ' .
+                        'qop=auth, algorithm=MD5, uri=https://localhost:81/, ' .
                         'nonce=nonce, nc=nc, cnonce=cnonce, opaque=opaque, response=response',
                 ],
                 'getDigestAuth',
@@ -313,7 +313,7 @@ final class AuthHeaderTest extends HttpBase
                     'realm'     => 'myleft',
                     'qop'       => 'auth',
                     'algorithm' => 'MD5',
-                    'uri'       => 'http://localhost:81/',
+                    'uri'       => 'https://localhost:81/',
                     'nonce'     => 'nonce',
                     'nc'        => 'nc',
                     'cnonce'    => 'cnonce',
@@ -325,7 +325,7 @@ final class AuthHeaderTest extends HttpBase
             [
                 [
                     'PHP_AUTH_DIGEST' => 'Digest username=myleft realm=myleft ' .
-                        'qop=auth algorithm=MD5 uri=http://localhost:81/ ' .
+                        'qop=auth algorithm=MD5 uri=https://localhost:81/ ' .
                         'nonce=nonce nc=nc cnonce=cnonce opaque=opaque response=response',
                 ],
                 'getDigestAuth',
@@ -334,7 +334,7 @@ final class AuthHeaderTest extends HttpBase
                     'realm'     => 'myleft',
                     'qop'       => 'auth',
                     'algorithm' => 'MD5',
-                    'uri'       => 'http://localhost:81/',
+                    'uri'       => 'https://localhost:81/',
                     'nonce'     => 'nonce',
                     'nc'        => 'nc',
                     'cnonce'    => 'cnonce',

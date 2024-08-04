@@ -107,8 +107,8 @@ class StylesheetLinkTest extends TagSetup
     {
         Tag::resetInput();
 
-        $options  = 'http://phalcon.io/css/phalcon.css';
-        $expected = '<link rel="stylesheet" type="text/css" href="http://phalcon.io/css/phalcon.css" />' . PHP_EOL;
+        $options  = 'https://phalcon.io/css/phalcon.css';
+        $expected = '<link rel="stylesheet" type="text/css" href="https://phalcon.io/css/phalcon.css" />' . PHP_EOL;
 
         Tag::setDocType(
             Tag::XHTML10_STRICT
@@ -120,8 +120,8 @@ class StylesheetLinkTest extends TagSetup
 
         Tag::resetInput();
 
-        $options  = 'http://phalcon.io/css/phalcon.css';
-        $expected = '<link rel="stylesheet" type="text/css" href="http://phalcon.io/css/phalcon.css">' . PHP_EOL;
+        $options  = 'https://phalcon.io/css/phalcon.css';
+        $expected = '<link rel="stylesheet" type="text/css" href="https://phalcon.io/css/phalcon.css">' . PHP_EOL;
 
         Tag::setDocType(
             Tag::HTML5
@@ -142,8 +142,8 @@ class StylesheetLinkTest extends TagSetup
     {
         Tag::resetInput();
 
-        $options  = ['http://phalcon.io/css/phalcon.css'];
-        $expected = '<link rel="stylesheet" type="text/css" href="http://phalcon.io/css/phalcon.css" />' . PHP_EOL;
+        $options  = ['https://phalcon.io/css/phalcon.css'];
+        $expected = '<link rel="stylesheet" type="text/css" href="https://phalcon.io/css/phalcon.css" />' . PHP_EOL;
 
         Tag::setDocType(
             Tag::XHTML10_STRICT
@@ -155,8 +155,8 @@ class StylesheetLinkTest extends TagSetup
 
         Tag::resetInput();
 
-        $options  = ['http://phalcon.io/css/phalcon.css'];
-        $expected = '<link rel="stylesheet" type="text/css" href="http://phalcon.io/css/phalcon.css">' . PHP_EOL;
+        $options  = ['https://phalcon.io/css/phalcon.css'];
+        $expected = '<link rel="stylesheet" type="text/css" href="https://phalcon.io/css/phalcon.css">' . PHP_EOL;
 
         Tag::setDocType(
             Tag::HTML5

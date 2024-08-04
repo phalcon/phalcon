@@ -98,7 +98,7 @@ class ValidateCest
 
         $messages = $validation->validate(
             [
-                'url' => 'http://phalcon.io',
+                'url' => 'https://phalcon.io',
             ]
         );
 
@@ -139,8 +139,8 @@ class ValidateCest
 
         $messages = $validation->validate(
             [
-                'url'        => 'http://google.com',
-                'anotherUrl' => 'http://google.com',
+                'url'        => 'https://google.com',
+                'anotherUrl' => 'https://google.com',
             ]
         );
 
@@ -152,7 +152,7 @@ class ValidateCest
         $messages = $validation->validate(
             [
                 'url'        => '://google.',
-                'anotherUrl' => 'http://google.com',
+                'anotherUrl' => 'https://google.com',
             ]
         );
 
@@ -239,7 +239,7 @@ class ValidateCest
 
         $messages = $validation->validate(
             [
-                'url' => 'http://phalcon.io',
+                'url' => 'https://phalcon.io',
             ]
         );
 

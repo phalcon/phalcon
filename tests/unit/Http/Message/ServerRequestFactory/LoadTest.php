@@ -660,7 +660,7 @@ final class LoadTest extends HttpBase
     {
         return [
             [
-                'http://dev.phalcon.ld',
+                'https://dev.phalcon.ld',
                 '',
                 'dev.phalcon.ld',
                 null,
@@ -671,7 +671,7 @@ final class LoadTest extends HttpBase
                 '',
             ],
             [
-                'http://dev.phalcon.ld',
+                'https://dev.phalcon.ld',
                 '',
                 'dev.phalcon.ld',
                 8080,
@@ -682,7 +682,7 @@ final class LoadTest extends HttpBase
                 '',
             ],
             [
-                'http://dev.phalcon.ld/action/reaction',
+                'https://dev.phalcon.ld/action/reaction',
                 '',
                 'dev.phalcon.ld',
                 8080,
@@ -693,7 +693,7 @@ final class LoadTest extends HttpBase
                 '',
             ],
             [
-                'http://dev.phalcon.ld/action/reaction?one=two',
+                'https://dev.phalcon.ld/action/reaction?one=two',
                 'one=two',
                 'dev.phalcon.ld',
                 8080,
@@ -704,7 +704,7 @@ final class LoadTest extends HttpBase
                 '',
             ],
             [
-                'http://dev.phalcon.ld/action/reaction?one=two#fragment',
+                'https://dev.phalcon.ld/action/reaction?one=two#fragment',
                 'one=two',
                 'dev.phalcon.ld',
                 8080,

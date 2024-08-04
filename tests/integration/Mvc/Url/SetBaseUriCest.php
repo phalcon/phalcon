@@ -235,50 +235,50 @@ class SetBaseUriCest
         return [
             [
                 [
-                    'base_url' => 'http://www.test.com',
+                    'base_url' => 'https://www.test.com',
                     'get'      => '',
                 ],
-                'http://www.test.com',
+                'https://www.test.com',
             ],
             [
                 [
-                    'base_url' => 'http://www.test.com',
+                    'base_url' => 'https://www.test.com',
                     'get'      => '/',
                 ],
-                'http://www.test.com/',
+                'https://www.test.com/',
             ],
             [
                 [
-                    'base_url' => 'http://www.test.com',
+                    'base_url' => 'https://www.test.com',
                     'get'      => '/path',
                 ],
-                'http://www.test.com/path',
+                'https://www.test.com/path',
             ],
             //Test urls that contains colons in schema definition and as parameter
             [
                 [
-                    'base_url' => 'http://www.test.com',
+                    'base_url' => 'https://www.test.com',
                     'get'      => '/controller/action/param/colon:param',
                 ],
-                'http://www.test.com/controller/action/param/colon:param',
+                'https://www.test.com/controller/action/param/colon:param',
             ],
             [
                 [
-                    'base_url' => 'base_url\' => \'http://www.test.com',
-                    'get'      => 'http://www.example.com',
+                    'base_url' => 'base_url\' => \'https://www.test.com',
+                    'get'      => 'https://www.example.com',
                 ],
-                'http://www.example.com',
+                'https://www.example.com',
             ],
             [
                 [
-                    'base_url' => 'base_url\' => \'http://www.test.com',
+                    'base_url' => 'base_url\' => \'https://www.test.com',
                     'get'      => '//www.example.com',
                 ],
                 '//www.example.com',
             ],
             [
                 [
-                    'base_url' => 'base_url\' => \'http://www.test.com',
+                    'base_url' => 'base_url\' => \'https://www.test.com',
                     'get'      => 'schema:example.com',
                 ],
                 'schema:example.com',
@@ -291,11 +291,11 @@ class SetBaseUriCest
         return [
             [
                 [
-                    'base_url'   => 'http://www.test.com/?_url=/',
+                    'base_url'   => 'https://www.test.com/?_url=/',
                     'get'        => 'path',
                     'second_get' => ['params' => 'one'],
                 ],
-                'http://www.test.com/?_url=/path&params=one',
+                'https://www.test.com/?_url=/path&params=one',
             ],
         ];
     }
