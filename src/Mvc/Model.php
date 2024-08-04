@@ -264,7 +264,7 @@ abstract class Model extends AbstractInjectionAware implements
      * @param string $method
      * @param array  $arguments
      *
-     * @return mixed
+     * @return bool|int|mixed|Simple|ModelInterface|ModelInterface[]|null
      * @throws Exception
      */
     public function __call(string $method, array $arguments)
@@ -312,7 +312,7 @@ abstract class Model extends AbstractInjectionAware implements
      * @param string $method
      * @param array  $arguments
      *
-     * @return mixed
+     * @return bool|ModelInterface|ModelInterface[]|null
      * @throws Exception
      */
     public static function __callStatic(string $method, array $arguments)
@@ -341,7 +341,8 @@ abstract class Model extends AbstractInjectionAware implements
      *
      * @param string $property
      *
-     * @return mixed
+     * @return mixed|null
+     * @throws Exception
      */
     public function __get(string $property)
     {
@@ -428,7 +429,8 @@ abstract class Model extends AbstractInjectionAware implements
     /**
      * Serializes a model
      *
-     * @return string[]
+     * @return array
+     * @throws Exception
      */
     public function __serialize(): array
     {
@@ -461,7 +463,7 @@ abstract class Model extends AbstractInjectionAware implements
      * @param string $property
      * @param mixed  $value
      *
-     * @return mixed
+     * @return array|mixed|ModelInterface
      * @throws Exception
      */
     public function __set(string $property, mixed $value)
@@ -743,6 +745,10 @@ abstract class Model extends AbstractInjectionAware implements
 
     /***
      * Append messages to this model from another Model.
+     *
+     * @param ModelInterface $model
+     *
+     * @return void
      */
     public function appendMessagesFrom(ModelInterface $model): void
     {
@@ -1023,7 +1029,7 @@ abstract class Model extends AbstractInjectionAware implements
      * @param int       $dirtyState
      * @param bool|null $keepSnapshots
      *
-     * @return ModelInterface
+     * @return ModelInterface|ResultInterface
      * @throws Exception
      */
     public static function cloneResultMap(
@@ -1168,7 +1174,8 @@ abstract class Model extends AbstractInjectionAware implements
      * @param mixed $columnMap
      * @param int   $hydrationMode
      *
-     * @return mixed
+     * @return array|mixed|object
+     * @throws Exception
      */
     public static function cloneResultMapHydrate(
         array $data,
@@ -1264,7 +1271,9 @@ abstract class Model extends AbstractInjectionAware implements
      * echo "There are ", $number, " mechanical robots\n";
      * ```
      *
-     * @param array|string|null parameters
+     * @param array|string|null $parameters
+     *
+     * @return int|ResultsetInterface
      */
     public static function count(
         mixed $parameters = null
@@ -1315,6 +1324,7 @@ abstract class Model extends AbstractInjectionAware implements
      *```
      *
      * @return bool
+     * @throws Exception
      */
     public function create(): bool
     {
@@ -1540,6 +1550,8 @@ abstract class Model extends AbstractInjectionAware implements
      * @param CollectionInterface $visited
      *
      * @return bool
+     * @throws Exception
+     * @throws ValidationFailed
      */
     public function doSave(CollectionInterface $visited): bool
     {
@@ -1883,23 +1895,25 @@ abstract class Model extends AbstractInjectionAware implements
      * $transaction2->rollback();
      * ```
      *
-     * @param array|string|int|null $parameters = [
-     *                                          'conditions' => '',
-     *                                          'columns' => '',
-     *                                          'bind' => [],
-     *                                          'bindTypes' => [],
-     *                                          'order' => '',
-     *                                          'limit' => 10,
-     *                                          'offset' => 5,
-     *                                          'group' => 'name, status',
-     *                                          'for_updated' => false,
-     *                                          'shared_lock' => false,
-     *                                          'cache' => [
-     *                                          'lifetime' => 3600,
-     *                                          'key' => 'my-find-key'
-     *                                          ],
-     *                                          'hydration' => null
-     *                                          ]
+     * @param array|string|int|null $parameters = {
+     *      @option string "conditions"
+     *      @option string "columns"
+     *      @option array  "bind"
+     *      @option array  "bindTypes"
+     *      @option string "order"
+     *      @option int    "limit"
+     *      @option int    "offset"
+     *      @option string "group"
+     *      @option bool   "for_updated"
+     *      @option bool   "shared_lock"
+     *      @option array  "cache" {
+     *          @option string "lifetime"
+     *          @option string "key"
+     *      },
+     *      @option ?bool  "hydration"
+     * }
+     *
+     * @return ResultsetInterface
      */
     public static function find(
         mixed $parameters = null
@@ -1997,25 +2011,26 @@ abstract class Model extends AbstractInjectionAware implements
      * );
      * ```
      *
-     * @param array|string|int|null $parameters = [
-     *                                          'conditions' => '',
-     *                                          'columns' => '',
-     *                                          'bind' => [],
-     *                                          'bindTypes' => [],
-     *                                          'order' => '',
-     *                                          'limit' => 10,
-     *                                          'offset' => 5,
-     *                                          'group' => 'name, status',
-     *                                          'for_updated' => false,
-     *                                          'shared_lock' => false,
-     *                                          'cache' => [
-     *                                          'lifetime' => 3600,
-     *                                          'key' => 'my-find-key'
-     *                                          ],
-     *                                          'hydration' => null
-     *                                          ]
+     * @param array|string|int|null $parameters = {
+     *      @option string "conditions"
+     *      @option string "columns"
+     *      @option array  "bind"
+     *      @option array  "bindTypes"
+     *      @option string "order"
+     *      @option int    "limit"
+     *      @option int    "offset"
+     *      @option string "group"
+     *      @option bool   "for_updated"
+     *      @option bool   "shared_lock"
+     *      @option array  "cache" {
+     *          @option string "lifetime"
+     *          @option string "key"
+     *      },
+     *      @option ?bool  "hydration"
+     * }
      *
      * @return ModelInterface|Row|null
+     * @throws Exception
      */
     public static function findFirst(
         mixed $parameters = null
@@ -2526,6 +2541,8 @@ abstract class Model extends AbstractInjectionAware implements
     /**
      * Returns the DependencyInjection connection service name used to write
      * data related to the model
+     *
+     * @return string
      */
     final public function getWriteConnectionService(): string
     {
@@ -2552,8 +2569,11 @@ abstract class Model extends AbstractInjectionAware implements
      * $hasChanged = $robot->hasChanged(["type", "name"], true); // returns false
      *```
      *
-     * @param string|array fieldName
-     * @param boolean allFields
+     * @param array|string $fieldName
+     * @param bool         $allFields
+     *
+     * @return bool
+     * @throws Exception
      */
     public function hasChanged(
         mixed $fieldName = null,
@@ -2915,6 +2935,8 @@ abstract class Model extends AbstractInjectionAware implements
      *```
      *
      * @return bool
+     * @throws Exception
+     * @throws ValidationFailed
      */
     public function save(): bool
     {
@@ -2928,6 +2950,7 @@ abstract class Model extends AbstractInjectionAware implements
      * static properties
      *
      * @return string
+     * @throws Exception
      */
     public function serialize(): string
     {
@@ -3002,8 +3025,11 @@ abstract class Model extends AbstractInjectionAware implements
      * This method is used internally to set old snapshot data when the model
      * was set up to keep snapshot data
      *
-     * @param array data
-     * @param array columnMap
+     * @param array      $data
+     * @param array|null $columnMap
+     *
+     * @return void
+     * @throws Exception
      */
     public function setOldSnapshotData(array $data, ?array $columnMap = null)
     {
@@ -3316,7 +3342,11 @@ abstract class Model extends AbstractInjectionAware implements
      * );
      *```
      *
-     * @param array $columns
+     * @param array|null $columns
+     * @param bool       $useGetter
+     *
+     * @return array
+     * @throws Exception
      */
     public function toArray(array $columns = null, bool $useGetter = true): array
     {
@@ -3612,6 +3642,7 @@ abstract class Model extends AbstractInjectionAware implements
      * @param array $attributes
      *
      * @return void
+     * @throws Exception
      */
     protected function allowEmptyStringValues(array $attributes): void
     {
@@ -3647,32 +3678,31 @@ abstract class Model extends AbstractInjectionAware implements
      * @param mixed  $fields
      * @param string $referenceModel
      * @param string $referencedFields
-     * @param array  $options = [
-     *                        'reusable' => false,
-     *                        'alias' => 'someAlias',
-     *                        'foreignKey' => [
-     *                        'message' => null,
-     *                        'allowNulls' => false,
-     *                        'action' => null
-     *                        ],
-     *                        'params' => [
-     *                        'conditions' => '',
-     *                        'columns' => '',
-     *                        'bind' => [],
-     *                        'bindTypes' => [],
-     *                        'order' => '',
-     *                        'limit' => 10,
-     *                        'offset' => 5,
-     *                        'group' => 'name, status',
-     *                        'for_updated' => false,
-     *                        'shared_lock' => false,
-     *                        'cache' => [
-     *                        'lifetime' => 3600,
-     *                        'key' => 'my-find-key'
-     *                        ],
-     *                        'hydration' => null
-     *                        ]
-     *                        ]
+     * @param array  $options {
+     *      @option bool   "reusable"
+     *      @option string "alias"
+     *      @option array  "foreignKey" {
+     *          @option string|null "message"
+     *          @option bool        "allowNulls"
+     *          @option string|null "action"
+     *      }
+     *      @option array params {
+     *          @option string "conditions"
+     *          @option string "columns"
+     *          @option array  "bind"
+     *          @option array  "bindTypes"
+     *          @option string "order"
+     *          @option int    "limit"
+     *          @option int    "offset"
+     *          @option string "group"
+     *          @option bool   "for_updated"
+     *          @option bool   "shared_lock"
+     *          @option array  "cache" {
+     *              @option int    "lifetime"
+     *              @option string "key"
+     *          }
+     *      @option string "hydration"
+     * }
      *
      * @return Relation
      */
@@ -3887,6 +3917,7 @@ abstract class Model extends AbstractInjectionAware implements
      * foreign keys (cascade) when deleting records
      *
      * @return bool
+     * @throws Exception
      */
     final protected function checkForeignKeysReverseCascade(): bool
     {
@@ -4351,7 +4382,12 @@ abstract class Model extends AbstractInjectionAware implements
     /**
      * Sends a pre-build UPDATE SQL statement to the relational database system
      *
-     * @param string|array table
+     * @param MetaDataInterface $metaData
+     * @param AdapterInterface  $connection
+     * @param array|string      $table
+     *
+     * @return bool
+     * @throws Exception
      */
     protected function doLowUpdate(
         MetaDataInterface $metaData,
@@ -4691,7 +4727,7 @@ abstract class Model extends AbstractInjectionAware implements
      * @param string $method
      * @param array  $arguments
      *
-     * @return false|int|Simple
+     * @return false|int|mixed|Simple|ModelInterface
      * @throws Exception
      */
     protected function getRelatedRecords(
@@ -4755,11 +4791,11 @@ abstract class Model extends AbstractInjectionAware implements
     /**
      * Generate a PHQL SELECT statement for an aggregate
      *
-     * @param string functionName
-     * @param string alias
-     * @param array|string|null parameters
+     * @param string            $functionName
+     * @param string            $alias
+     * @param array|string|null $parameters
      *
-     * @return ResultsetInterface
+     * @return mixed
      */
     protected static function groupResult(
         string $functionName,
@@ -5042,32 +5078,36 @@ abstract class Model extends AbstractInjectionAware implements
      * }
      *```
      *
-     * @param array $options = [
-     *                       'reusable' => false,
-     *                       'alias' => 'someAlias',
-     *                       'foreignKey' => [
-     *                       'message' => null,
-     *                       'allowNulls' => false,
-     *                       'action' => null
-     *                       ],
-     *                       'params' => [
-     *                       'conditions' => '',
-     *                       'columns' => '',
-     *                       'bind' => [],
-     *                       'bindTypes' => [],
-     *                       'order' => '',
-     *                       'limit' => 10,
-     *                       'offset' => 5,
-     *                       'group' => 'name, status',
-     *                       'for_updated' => false,
-     *                       'shared_lock' => false,
-     *                       'cache' => [
-     *                       'lifetime' => 3600,
-     *                       'key' => 'my-find-key'
-     *                       ],
-     *                       'hydration' => null
-     *                       ]
-     *                       ]
+     * @param mixed  $fields
+     * @param string $referenceModel
+     * @param string $referencedFields
+     * @param array  $options {
+     *      @option bool   "reusable"
+     *      @option string "alias"
+     *      @option array  "foreignKey" {
+     *          @option string|null "message"
+     *          @option bool        "allowNulls"
+     *          @option string|null "action"
+     *      }
+     *      @option array params {
+     *          @option string "conditions"
+     *          @option string "columns"
+     *          @option array  "bind"
+     *          @option array  "bindTypes"
+     *          @option string "order"
+     *          @option int    "limit"
+     *          @option int    "offset"
+     *          @option string "group"
+     *          @option bool   "for_updated"
+     *          @option bool   "shared_lock"
+     *          @option array  "cache" {
+     *              @option int    "lifetime"
+     *              @option string "key"
+     *          }
+     *      @option string "hydration"
+     * }
+     *
+     * @return Relation
      */
     protected function hasMany(
         mixed $fields,
@@ -5106,38 +5146,39 @@ abstract class Model extends AbstractInjectionAware implements
      * }
      *```
      *
-     * @param string|array fields
-     * @param string intermediateModel
-     * @param string|array intermediateFields
-     * @param string|array intermediateReferencedFields
-     * @param string referenceModel
-     * @param string|array referencedFields
-     * @param array $options = [
-     *                       'reusable' => false,
-     *                       'alias' => 'someAlias',
-     *                       'foreignKey' => [
-     *                       'message' => null,
-     *                       'allowNulls' => false,
-     *                       'action' => null
-     *                       ],
-     *                       'params' => [
-     *                       'conditions' => '',
-     *                       'columns' => '',
-     *                       'bind' => [],
-     *                       'bindTypes' => [],
-     *                       'order' => '',
-     *                       'limit' => 10,
-     *                       'offset' => 5,
-     *                       'group' => 'name, status',
-     *                       'for_updated' => false,
-     *                       'shared_lock' => false,
-     *                       'cache' => [
-     *                       'lifetime' => 3600,
-     *                       'key' => 'my-find-key'
-     *                       ],
-     *                       'hydration' => null
-     *                       ]
-     *                       ]
+     * @param mixed        $fields
+     * @param string       $intermediateModel
+     * @param array|string $intermediateFields
+     * @param array|string $intermediateReferencedFields
+     * @param string       $referenceModel
+     * @param string       $referencedFields
+     * @param array        $options {
+     *      @option bool   "reusable"
+     *      @option string "alias"
+     *      @option array  "foreignKey" {
+     *          @option string|null "message"
+     *          @option bool        "allowNulls"
+     *          @option string|null "action"
+     *      }
+     *      @option array params {
+     *          @option string "conditions"
+     *          @option string "columns"
+     *          @option array  "bind"
+     *          @option array  "bindTypes"
+     *          @option string "order"
+     *          @option int    "limit"
+     *          @option int    "offset"
+     *          @option string "group"
+     *          @option bool   "for_updated"
+     *          @option bool   "shared_lock"
+     *          @option array  "cache" {
+     *              @option int    "lifetime"
+     *              @option string "key"
+     *          }
+     *      @option string "hydration"
+     * }
+     *
+     * @return Relation
      */
     protected function hasManyToMany(
         mixed $fields,
@@ -5177,32 +5218,36 @@ abstract class Model extends AbstractInjectionAware implements
      * }
      *```
      *
-     * @param array $options = [
-     *                       'reusable' => false,
-     *                       'alias' => 'someAlias',
-     *                       'foreignKey' => [
-     *                       'message' => null,
-     *                       'allowNulls' => false,
-     *                       'action' => null
-     *                       ],
-     *                       'params' => [
-     *                       'conditions' => '',
-     *                       'columns' => '',
-     *                       'bind' => [],
-     *                       'bindTypes' => [],
-     *                       'order' => '',
-     *                       'limit' => 10,
-     *                       'offset' => 5,
-     *                       'group' => 'name, status',
-     *                       'for_updated' => false,
-     *                       'shared_lock' => false,
-     *                       'cache' => [
-     *                       'lifetime' => 3600,
-     *                       'key' => 'my-find-key'
-     *                       ],
-     *                       'hydration' => null
-     *                       ]
-     *                       ]
+     * @param mixed  $fields
+     * @param string $referenceModel
+     * @param string $referencedFields
+     * @param array  $options {
+     *      @option bool   "reusable"
+     *      @option string "alias"
+     *      @option array  "foreignKey" {
+     *          @option string|null "message"
+     *          @option bool        "allowNulls"
+     *          @option string|null "action"
+     *      }
+     *      @option array params {
+     *          @option string "conditions"
+     *          @option string "columns"
+     *          @option array  "bind"
+     *          @option array  "bindTypes"
+     *          @option string "order"
+     *          @option int    "limit"
+     *          @option int    "offset"
+     *          @option string "group"
+     *          @option bool   "for_updated"
+     *          @option bool   "shared_lock"
+     *          @option array  "cache" {
+     *              @option int    "lifetime"
+     *              @option string "key"
+     *          }
+     *      @option string "hydration"
+     * }
+     *
+     * @return Relation
      */
     protected function hasOne(
         mixed $fields,
@@ -5241,11 +5286,39 @@ abstract class Model extends AbstractInjectionAware implements
      * }
      *```
      *
-     * @param string|array $fields
-     * @param string|array $intermediateFields
-     * @param string|array $intermediateReferencedFields
-     * @param string|array $referencedFields
-     * @param array        $options
+     * @param mixed        $fields
+     * @param string       $intermediateModel
+     * @param array|string $intermediateFields
+     * @param array|string $intermediateReferencedFields
+     * @param string       $referenceModel
+     * @param string       $referencedFields
+     * @param array        $options {
+     *      @option bool   "reusable"
+     *      @option string "alias"
+     *      @option array  "foreignKey" {
+     *          @option string|null "message"
+     *          @option bool        "allowNulls"
+     *          @option string|null "action"
+     *      }
+     *      @option array params {
+     *          @option string "conditions"
+     *          @option string "columns"
+     *          @option array  "bind"
+     *          @option array  "bindTypes"
+     *          @option string "order"
+     *          @option int    "limit"
+     *          @option int    "offset"
+     *          @option string "group"
+     *          @option bool   "for_updated"
+     *          @option bool   "shared_lock"
+     *          @option array  "cache" {
+     *              @option int    "lifetime"
+     *              @option string "key"
+     *          }
+     *      @option string "hydration"
+     * }
+     *
+     * @return Relation
      */
     protected function hasOneThrough(
         mixed $fields,
@@ -5407,6 +5480,10 @@ abstract class Model extends AbstractInjectionAware implements
      *     }
      * }
      *```
+     *
+     * @param bool $keepSnapshot
+     *
+     * @return void
      */
     protected function keepSnapshots(bool $keepSnapshot): void
     {
@@ -5458,6 +5535,9 @@ abstract class Model extends AbstractInjectionAware implements
     /**
      * Executes internal events after save a record
      *
+     * @param bool $success
+     * @param bool $exists
+     *
      * @return bool
      */
     protected function postSave(bool $success, bool $exists): bool
@@ -5476,10 +5556,12 @@ abstract class Model extends AbstractInjectionAware implements
     /**
      * Save the related records assigned in the has-one/has-many relations
      *
-     * @param ModelInterface[] related
-     * @param CollectionInterface visited
+     * @param AdapterInterface    $connection
+     * @param array               $related
+     * @param CollectionInterface $visited
      *
      * @return bool
+     * @throws Exception
      */
     protected function postSaveRelatedRecords(
         AdapterInterface $connection,
@@ -5696,7 +5778,12 @@ abstract class Model extends AbstractInjectionAware implements
     /**
      * Executes internal hooks before save a record
      *
+     * @param MetaDataInterface $metaData
+     * @param bool              $exists
+     * @param mixed             $identityField
+     *
      * @return bool
+     * @throws Exception
      */
     protected function preSave(
         MetaDataInterface $metaData,
@@ -5951,12 +6038,13 @@ abstract class Model extends AbstractInjectionAware implements
     /**
      * Saves related records that must be stored prior to save the master record
      *
-     * @param ModelInterface[] related
-     * @param CollectionInterface visited
+     * @param AdapterInterface    $connection
+     * @param array               $related
+     * @param CollectionInterface $visited
      *
      * @return bool
+     * @throws Exception
      */
-
     protected function preSaveRelatedRecords(
         AdapterInterface $connection,
         array $related,
@@ -6129,6 +6217,7 @@ abstract class Model extends AbstractInjectionAware implements
      * @param array $attributes
      *
      * @return void
+     * @throws Exception
      */
     protected function skipAttributesOnCreate(array $attributes): void
     {
@@ -6165,6 +6254,7 @@ abstract class Model extends AbstractInjectionAware implements
      * @param array $attributes
      *
      * @return void
+     * @throws Exception
      */
     protected function skipAttributesOnUpdate(array $attributes): void
     {
@@ -6270,6 +6360,11 @@ abstract class Model extends AbstractInjectionAware implements
 
     /**
      * Attempts to find key case-insensitively
+     *
+     * @param array  $columnMap
+     * @param string $key
+     *
+     * @return string
      */
     private static function caseInsensitiveColumnMap(
         array $columnMap,
