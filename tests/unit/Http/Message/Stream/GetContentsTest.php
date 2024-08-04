@@ -32,7 +32,7 @@ final class GetContentsTest extends UnitTestCase
         }
 
         $fileName = dataDir('assets/stream/mit.txt');
-        $stream = new Stream($fileName, 'rb');
+        $stream   = new Stream($fileName, 'rb');
 
         $this->assertFileContentsEqual($fileName, $stream->getContents());
     }

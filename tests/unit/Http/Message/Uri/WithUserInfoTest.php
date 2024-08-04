@@ -40,7 +40,7 @@ final class WithUserInfoTest extends UnitTestCase
         $newInstance = $uri->withUserInfo($user, $pass);
         $this->assertNotSame($uri, $newInstance);
 
-        $actual   = $newInstance->getUserInfo();
+        $actual = $newInstance->getUserInfo();
         $this->assertSame($expected, $actual);
 
         $expected = sprintf($query, $expected);

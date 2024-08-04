@@ -40,7 +40,7 @@ final class WithPathTest extends UnitTestCase
             $this->markTestSkipped('Need to check the UTF8 on Mac/Win');
         }
 
-        $uri      = new Uri($source);
+        $uri         = new Uri($source);
         $newInstance = $uri->withPath($path);
 
         $this->assertNotSame($uri, $newInstance);
@@ -66,8 +66,8 @@ final class WithPathTest extends UnitTestCase
             'Path cannot contain a query string or fragment'
         );
 
-        $query    = 'https://phalcon:secret@dev.phalcon.ld:8080/action?param=value#frag';
-        $uri      = new Uri($query);
+        $query = 'https://phalcon:secret@dev.phalcon.ld:8080/action?param=value#frag';
+        $uri   = new Uri($query);
         $uri->withPath('/login#frag');
     }
 

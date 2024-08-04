@@ -14,9 +14,9 @@ declare(strict_types=1);
 namespace Phalcon\Tests\Unit\Translate\Adapter\Csv;
 
 use Phalcon\Tests\Fixtures\Traits\TranslateCsvTrait;
+use Phalcon\Tests\UnitTestCase;
 use Phalcon\Translate\Adapter\Csv;
 use Phalcon\Translate\InterpolatorFactory;
-use Phalcon\Tests\UnitTestCase;
 
 final class ArrayAccessTest extends UnitTestCase
 {

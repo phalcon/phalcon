@@ -43,7 +43,7 @@ final class GetSetOptionsTest extends UnitTestCase
             $manager->setOptions($set);
         }
 
-        $actual   = $manager->getOptions();
+        $actual = $manager->getOptions();
         $this->assertSame($expected, $actual);
     }
 

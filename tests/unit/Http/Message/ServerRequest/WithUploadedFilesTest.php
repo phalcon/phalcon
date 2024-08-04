@@ -56,10 +56,10 @@ final class WithUploadedFilesTest extends UnitTestCase
         $this->expectException(InvalidArgumentException::class);
         $this->expectExceptionMessage('Invalid uploaded file');
 
-        $files       = [
+        $files   = [
             'something-else',
         ];
-        $request     = new ServerRequest();
+        $request = new ServerRequest();
         $request->withUploadedFiles($files);
     }
 }

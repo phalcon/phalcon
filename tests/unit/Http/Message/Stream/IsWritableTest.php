@@ -37,7 +37,7 @@ final class IsWritableTest extends UnitTestCase
         mixed $stream,
         bool $expected
     ): void {
-        $actual   = $stream->isWritable();
+        $actual = $stream->isWritable();
         $this->assertSame($expected, $actual);
     }
 
@@ -58,7 +58,7 @@ final class IsWritableTest extends UnitTestCase
 
         $stream = new Stream($fileName, $mode);
 
-        $actual   = $stream->isWritable();
+        $actual = $stream->isWritable();
         $this->assertSame($expected, $actual);
     }
 

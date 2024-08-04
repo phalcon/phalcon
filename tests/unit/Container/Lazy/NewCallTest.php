@@ -25,7 +25,7 @@ final class NewCallTest extends AbstractLazyBase
      */
     public function testContainerLazyNewCall(): void
     {
-        $lazy = new NewCall(TestWithInterface::class, 'getValue', []);
+        $lazy   = new NewCall(TestWithInterface::class, 'getValue', []);
         $actual = $this->actual($lazy);
 
         $expected = 'two';

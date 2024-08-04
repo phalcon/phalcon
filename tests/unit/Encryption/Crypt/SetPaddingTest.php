@@ -13,16 +13,51 @@ declare(strict_types=1);
 
 namespace Phalcon\Tests\Unit\Encryption\Crypt;
 
-use Codeception\Example;
 use Phalcon\Encryption\Crypt;
 use Phalcon\Encryption\Crypt\Exception\Exception;
 use Phalcon\Encryption\Crypt\Exception\Mismatch;
 use Phalcon\Tests\UnitTestCase;
 
-use function var_dump;
-
 final class SetPaddingTest extends UnitTestCase
 {
+    /**
+     * @return array[]
+     */
+    public static function getExamples(): array
+    {
+        $ciphers  = [
+            'AES-256-CBC',
+            'AES-256-CFB',
+        ];
+        $paddings = [
+            Crypt::PADDING_ANSI_X_923,
+            Crypt::PADDING_PKCS7,
+            Crypt::PADDING_ISO_10126,
+            Crypt::PADDING_ISO_IEC_7816_4,
+            Crypt::PADDING_ZERO,
+            Crypt::PADDING_SPACE,
+        ];
+        $signed   = [
+            false,
+            true,
+        ];
+
+        $result = [];
+        foreach ($ciphers as $cipher) {
+            foreach ($signed as $signedValue) {
+                foreach ($paddings as $padding) {
+                    $result[] = [
+                        'cipher'  => $cipher,
+                        'padding' => $padding,
+                        'sign'    => $signedValue,
+                    ];
+                }
+            }
+        }
+
+        return $result;
+    }
+
     /**
      * Tests Phalcon\Encryption\Crypt :: setPadding()
      *
@@ -65,43 +100,5 @@ final class SetPaddingTest extends UnitTestCase
             $actual    = $crypt->decrypt($encrypted);
             $this->assertSame($expected, $actual);
         }
-    }
-
-    /**
-     * @return array[]
-     */
-    public static function getExamples(): array
-    {
-        $ciphers  = [
-            'AES-256-CBC',
-            'AES-256-CFB',
-        ];
-        $paddings = [
-            Crypt::PADDING_ANSI_X_923,
-            Crypt::PADDING_PKCS7,
-            Crypt::PADDING_ISO_10126,
-            Crypt::PADDING_ISO_IEC_7816_4,
-            Crypt::PADDING_ZERO,
-            Crypt::PADDING_SPACE,
-        ];
-        $signed   = [
-            false,
-            true,
-        ];
-
-        $result = [];
-        foreach ($ciphers as $cipher) {
-            foreach ($signed as $signedValue) {
-                foreach ($paddings as $padding) {
-                    $result[] = [
-                        'cipher'  => $cipher,
-                        'padding' => $padding,
-                        'sign'    => $signedValue,
-                    ];
-                }
-            }
-        }
-
-        return $result;
     }
 }

@@ -24,9 +24,9 @@ final class InterpolateTest extends UnitTestCase
      *
      * @dataProvider getExamples
      *
-     * @return void
-     * @param Example    $example
+     * @param Example $example
      *
+     * @return void
      * @author       Phalcon Team <team@phalcon.io>
      * @since        2021-04-28
      */
@@ -35,7 +35,7 @@ final class InterpolateTest extends UnitTestCase
         string $format,
         array $context
     ): void {
-        $actual   = (new Interpolate())($format, $context);
+        $actual = (new Interpolate())($format, $context);
         $this->assertSame($expected, $actual);
     }
 

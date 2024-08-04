@@ -40,7 +40,7 @@ final class GetHandlerClassTest extends UnitTestCase
         $dispatcher->setControllerName($controller);
         $dispatcher->setHandlerSuffix($suffix);
 
-        $actual   = $dispatcher->getHandlerClass();
+        $actual = $dispatcher->getHandlerClass();
         $this->assertSame($expected, $actual);
     }
 

@@ -34,7 +34,7 @@ final class AuthHeaderTest extends HttpBase
         array $server,
         array $expected
     ): void {
-        $_SERVER  = $server;
+        $_SERVER = $server;
 
         $request = $this->getRequestObject();
         $actual  = $request->getHeaders();

@@ -26,8 +26,8 @@ final class EnvTest extends AbstractLazyBase
      */
     public function testContainerLazyEnv(): void
     {
-        $varname = 'TEST_VAR';
-        $lazy = new Env($varname);
+        $varname  = 'TEST_VAR';
+        $lazy     = new Env($varname);
         $expected = random_int(1, 100);
         putenv("TEST_VAR={$expected}");
 
@@ -40,8 +40,8 @@ final class EnvTest extends AbstractLazyBase
      */
     public function testContainerLazyEnvType(): void
     {
-        $varname = 'TEST_VAR';
-        $lazy = new Env($varname, 'int');
+        $varname  = 'TEST_VAR';
+        $lazy     = new Env($varname, 'int');
         $expected = random_int(1, 100);
         putenv("TEST_VAR={$expected}");
 

@@ -13,7 +13,6 @@ declare(strict_types=1);
 
 namespace Phalcon\Tests\Unit\Support\Collection\Collection;
 
-use Codeception\Stub;
 use Phalcon\Support\Collection;
 use Phalcon\Tests\Fixtures\Support\Collection\CollectionJsonEncodeFixture;
 use Phalcon\Tests\UnitTestCase;

@@ -30,7 +30,7 @@ class RegisterTest extends UnitTestCase
      */
     public function testDiRegister(): void
     {
-         $container = new Di();
+        $container = new Di();
         $container->register(new SomeServiceProvider());
 
         $expected = 'bar';

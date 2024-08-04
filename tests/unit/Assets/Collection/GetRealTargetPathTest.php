@@ -13,8 +13,8 @@ declare(strict_types=1);
 
 namespace Phalcon\Tests\Unit\Assets\Collection;
 
-use Codeception\Stub;
 use Phalcon\Assets\Collection;
+use Phalcon\Tests\Fixtures\Assets\CollectionFileExistsFixture;
 use Phalcon\Tests\UnitTestCase;
 
 use function dataDir;
@@ -57,12 +57,7 @@ final class GetRealTargetPathTest extends UnitTestCase
             $this->markTestSkipped('Need to fix Windows new lines...');
         }
 
-        $collection        = Stub::make(
-            Collection::class,
-            [
-                'phpFileExists' => false,
-            ]
-        );
+        $collection        = new CollectionFileExistsFixture();
         $targetPath        = '/assets';
         $basePath          = dataDir('assets');
         $constructRealPath = realpath($basePath . $targetPath);

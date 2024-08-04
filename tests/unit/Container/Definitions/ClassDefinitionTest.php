@@ -499,11 +499,13 @@ final class ClassDefinitionTest extends AbstractDefinitionBase
         $definitions = $this->definitions;
 
         $definitions->{TestWithInterface::class}
-            ->argument('one', 'parent');
+            ->argument('one', 'parent')
+        ;
 
         $definitions->{TestWithInterfaceParent::class}
             ->inherit($definitions)
-            ->argument('two', 'child');
+            ->argument('two', 'child')
+        ;
 
         $object = $this->container->new(TestWithInterfaceParent::class);
 

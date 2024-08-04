@@ -13,7 +13,6 @@ declare(strict_types=1);
 
 namespace Phalcon\Tests\Unit\Encryption\Crypt\PadFactory;
 
-use Codeception\Example;
 use Exception;
 use Phalcon\Encryption\Crypt;
 use Phalcon\Encryption\Crypt\Padding\Ansi;
@@ -29,64 +28,6 @@ use Phalcon\Tests\UnitTestCase;
 
 final class NewInstanceTest extends UnitTestCase
 {
-    /**
-     * Tests Phalcon\Encryption\Crypt\PadFactory :: newInstance()
-     *
-     * @dataProvider getExamples
-     *
-     * @return void
-     *
-     * @author       Phalcon Team <team@phalcon.io>
-     * @since        2021-10-18
-     */
-    public function testEncryptionCryptPadFactoryNewInstance(
-        string $name,
-        string $class
-    ): void {
-        $factory = new PadFactory();
-        $adapter = $factory->newInstance($name);
-
-        $this->assertInstanceOf($class, $adapter);
-        $this->assertInstanceOf(PadInterface::class, $adapter);
-    }
-
-    /**
-     * Tests Phalcon\Encryption\Crypt\PadFactory :: newInstance() - exception
-     *
-     * @return void
-     *
-     * @author Phalcon Team <team@phalcon.io>
-     * @since  2021-10-18
-     */
-    public function testEncryptionCryptPadFactoryNewInstanceException(): void
-    {
-        $this->expectException(Exception::class);
-        $this->expectExceptionMessage("Service unknown is not registered");
-
-        $factory = new PadFactory();
-        $factory->newInstance("unknown");
-    }
-
-    /**
-     * Tests Phalcon\Encryption\Crypt\PadFactory :: padNumberToService()
-     *
-     * @dataProvider getPadNumberExamples
-     *
-     * @return void
-     *
-     * @author       Phalcon Team <team@phalcon.io>
-     * @since        2021-10-18
-     */
-    public function testEncryptionCryptPadNumberToService(
-        int $padding,
-        string $expected
-    ): void {
-        $factory = new PadFactory();
-
-        $actual   = $factory->padNumberToService($padding);
-        $this->assertSame($expected, $actual);
-    }
-
     /**
      * @return array<array-key, array<array-key, string>>
      */
@@ -167,5 +108,63 @@ final class NewInstanceTest extends UnitTestCase
                 "noop",
             ],
         ];
+    }
+
+    /**
+     * Tests Phalcon\Encryption\Crypt\PadFactory :: newInstance()
+     *
+     * @dataProvider getExamples
+     *
+     * @return void
+     *
+     * @author       Phalcon Team <team@phalcon.io>
+     * @since        2021-10-18
+     */
+    public function testEncryptionCryptPadFactoryNewInstance(
+        string $name,
+        string $class
+    ): void {
+        $factory = new PadFactory();
+        $adapter = $factory->newInstance($name);
+
+        $this->assertInstanceOf($class, $adapter);
+        $this->assertInstanceOf(PadInterface::class, $adapter);
+    }
+
+    /**
+     * Tests Phalcon\Encryption\Crypt\PadFactory :: newInstance() - exception
+     *
+     * @return void
+     *
+     * @author Phalcon Team <team@phalcon.io>
+     * @since  2021-10-18
+     */
+    public function testEncryptionCryptPadFactoryNewInstanceException(): void
+    {
+        $this->expectException(Exception::class);
+        $this->expectExceptionMessage("Service unknown is not registered");
+
+        $factory = new PadFactory();
+        $factory->newInstance("unknown");
+    }
+
+    /**
+     * Tests Phalcon\Encryption\Crypt\PadFactory :: padNumberToService()
+     *
+     * @dataProvider getPadNumberExamples
+     *
+     * @return void
+     *
+     * @author       Phalcon Team <team@phalcon.io>
+     * @since        2021-10-18
+     */
+    public function testEncryptionCryptPadNumberToService(
+        int $padding,
+        string $expected
+    ): void {
+        $factory = new PadFactory();
+
+        $actual = $factory->padNumberToService($padding);
+        $this->assertSame($expected, $actual);
     }
 }

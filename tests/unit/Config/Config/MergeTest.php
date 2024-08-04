@@ -64,16 +64,16 @@ final class MergeTest extends UnitTestCase
         /**
          * As Config object
          */
-        $actual   = $source->merge($target)
-                           ->toArray()
+        $actual = $source->merge($target)
+                         ->toArray()
         ;
         $this->assertSame($expected, $actual);
 
         /**
          * As array
          */
-        $actual   = $source->merge($target)
-                           ->toArray()
+        $actual = $source->merge($target)
+                         ->toArray()
         ;
         $this->assertSame($expected, $actual);
     }

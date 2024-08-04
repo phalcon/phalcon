@@ -24,9 +24,9 @@ final class DecrementTest extends UnitTestCase
      *
      * @dataProvider getExamples
      *
-     * @return void
-     * @param Example    $example
+     * @param Example $example
      *
+     * @return void
      * @author       Phalcon Team <team@phalcon.io>
      * @since        2020-09-09
      */
@@ -35,8 +35,8 @@ final class DecrementTest extends UnitTestCase
         string $expected,
         string $separator
     ): void {
-        $object   = new Decrement();
-        $actual   = $object($source, $separator);
+        $object = new Decrement();
+        $actual = $object($source, $separator);
         $this->assertSame($expected, $actual);
     }
 
@@ -46,11 +46,11 @@ final class DecrementTest extends UnitTestCase
     public static function getExamples()
     {
         return [
-            ['file_2',  'file_1', '_'],
-            ['file_1',  'file', '_'],
-            ['file_3',  'file_2', '_'],
+            ['file_2', 'file_1', '_'],
+            ['file_1', 'file', '_'],
+            ['file_3', 'file_2', '_'],
             ['file _1', 'file ', '_'],
-            ['file-1',  'file', '-'],
+            ['file-1', 'file', '-'],
         ];
     }
 }

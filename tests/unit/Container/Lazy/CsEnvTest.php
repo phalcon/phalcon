@@ -24,7 +24,7 @@ final class CsEnvTest extends AbstractLazyBase
     public function testContainerLazyCsEnv(): void
     {
         $varname = 'TEST_VAR';
-        $lazy = new CsEnv($varname, 'int');
+        $lazy    = new CsEnv($varname, 'int');
 
         $expected = array_fill(0, 3, random_int(1, 100));
         putenv("TEST_VAR=" . implode(',', $expected));

@@ -25,7 +25,7 @@ final class CallableNewTest extends AbstractLazyBase
      */
     public function testContainerLazyCallableNew(): void
     {
-        $lazy = new CallableNew(stdClass::CLASS);
+        $lazy     = new CallableNew(stdClass::CLASS);
         $callable = $this->actual($lazy);
         $this->assertInstanceOf(Closure::CLASS, $callable);
 

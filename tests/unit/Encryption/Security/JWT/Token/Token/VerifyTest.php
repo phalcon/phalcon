@@ -11,7 +11,6 @@ declare(strict_types=1);
 
 namespace Phalcon\Tests\Unit\Encryption\Security\JWT\Token\Token;
 
-use Codeception\Stub;
 use Phalcon\Encryption\Security\JWT\Builder;
 use Phalcon\Encryption\Security\JWT\Signer\Hmac;
 use Phalcon\Tests\UnitTestCase;
@@ -82,14 +81,12 @@ final class VerifyTest extends UnitTestCase
             ->getToken()
         ;
 
-        $signer = Stub::make(
-            Hmac::class,
-            [
-                'getAlgHeader' => 'xyz',
-            ]
-        );
+        $mock = $this->createMock(Hmac::class);
+        $mock
+            ->method('getAlgHeader')
+            ->willReturn('xyz');
 
-        $actual = $token->verify($signer, $passphrase);
+        $actual = $token->verify($mock, $passphrase);
         $this->assertFalse($actual);
     }
 }

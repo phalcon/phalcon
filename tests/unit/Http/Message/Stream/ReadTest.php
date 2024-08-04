@@ -52,7 +52,7 @@ final class ReadTest extends UnitTestCase
         $this->expectExceptionMessage('A valid resource is required.');
 
         $fileName = dataDir('assets/stream/mit.txt');
-        $stream = new Stream($fileName, 'rb');
+        $stream   = new Stream($fileName, 'rb');
         $stream->detach();
         $stream->read(10);
     }

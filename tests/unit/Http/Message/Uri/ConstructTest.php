@@ -28,7 +28,7 @@ final class ConstructTest extends UnitTestCase
      */
     public function testHttpMessageUriConstruct(): void
     {
-        $uri = new Uri();
+        $uri   = new Uri();
         $class = UriInterface::class;
         $this->assertInstanceOf($class, $uri);
     }

@@ -71,8 +71,6 @@ final class SetMultipleTest extends UnitTestCase
         $factory    = new AdapterFactory($serializer);
         $instance   = $factory->newInstance('apcu');
 
-        $adapter = new Cache($instance);
-
         $mock = $this
             ->getMockBuilder(Cache::class)
             ->setConstructorArgs([$instance])

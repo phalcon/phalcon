@@ -37,8 +37,7 @@ final class IsReadableTest extends UnitTestCase
         mixed $stream,
         bool $expected
     ): void {
-
-        $actual   = $stream->isReadable();
+        $actual = $stream->isReadable();
         $this->assertSame($expected, $actual);
     }
 

@@ -13,7 +13,6 @@ declare(strict_types=1);
 
 namespace Phalcon\Tests\Unit\Encryption\Security\Random;
 
-use Codeception\Example;
 use Phalcon\Encryption\Security\Random;
 use Phalcon\Tests\UnitTestCase;
 
@@ -21,6 +20,21 @@ use function is_string;
 
 final class Base64Test extends UnitTestCase
 {
+    /**
+     * @return int[][]
+     */
+    public static function base64Provider(): array
+    {
+        return [
+            [2],
+            [12],
+            [16],
+            [24],
+            [48],
+            [100],
+        ];
+    }
+
     /**
      * Tests Phalcon\Encryption\Security\Random :: base64()
      *
@@ -63,20 +77,5 @@ final class Base64Test extends UnitTestCase
         }
 
         return strlen($string) == $len;
-    }
-
-    /**
-     * @return int[][]
-     */
-    public static function base64Provider(): array
-    {
-        return [
-            [2],
-            [12],
-            [16],
-            [24],
-            [48],
-            [100],
-        ];
     }
 }

@@ -35,7 +35,7 @@ final class GetFilteredPostTest extends HttpBase
         array $filters,
         array $scope,
         string $value,
-        int|string $expected
+        int | string $expected
     ): void {
         $request = $this->getRequestObject();
 
@@ -51,8 +51,8 @@ final class GetFilteredPostTest extends HttpBase
             ];
         }
 
-        $method   = 'getFiltered' . ucfirst($method);
-        $actual   = $request->$method($name);
+        $method = 'getFiltered' . ucfirst($method);
+        $actual = $request->$method($name);
         $this->assertSame($expected, $actual);
     }
 

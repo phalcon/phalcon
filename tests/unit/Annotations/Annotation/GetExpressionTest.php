@@ -19,7 +19,7 @@ use Phalcon\Tests\UnitTestCase;
 
 final class GetExpressionTest extends UnitTestCase
 {
-    private int $PHANNOT_T_STRING = 303;
+    private int $PHANNOT_T_STRING     = 303;
     private int $PHANNOT_T_ANNOTATION = 300;
 
     /**
@@ -84,7 +84,7 @@ final class GetExpressionTest extends UnitTestCase
         $this->expectException(Exception::class);
         $this->expectExceptionMessage('The expression 99 is unknown');
 
-        $value  = 'test';
+        $value = 'test';
 
         $oneExpr = [
             'type'  => 99,

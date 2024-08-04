@@ -95,10 +95,10 @@ final class FormatTest extends UnitTestCase
      */
     public function testLoggerFormatterLineFormatCustomWithMilliseconds(): void
     {
-         $formatter = new Line(
-             '%message%-[%level%]-%date%',
-             'U.u'
-         );
+        $formatter = new Line(
+            '%message%-[%level%]-%date%',
+            'U.u'
+        );
 
         $timezone = date_default_timezone_get();
         $datetime = new DateTimeImmutable('now', new DateTimeZone($timezone));
@@ -137,10 +137,10 @@ final class FormatTest extends UnitTestCase
      */
     public function testLoggerFormatterLineFormatCustomInterpolator(): void
     {
-         $formatter = new Line(
-             '%message%-[%level%]-%date%-%server%:%user%',
-             'U.u'
-         );
+        $formatter = new Line(
+            '%message%-[%level%]-%date%-%server%:%user%',
+            'U.u'
+        );
 
         $timezone = date_default_timezone_get();
         $datetime = new DateTimeImmutable('now', new DateTimeZone($timezone));

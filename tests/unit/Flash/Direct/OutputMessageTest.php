@@ -38,7 +38,7 @@ final class OutputMessageTest extends UnitTestCase
             'The message must be an array or a string'
         );
 
-        $flash   = new Direct(new Escaper());
+        $flash = new Direct(new Escaper());
         $flash->outputMessage('success', false);
     }
 
@@ -47,9 +47,9 @@ final class OutputMessageTest extends UnitTestCase
      *
      * @dataProvider getExamples
      *
-     * @return void
-     * @param Example    $example
+     * @param Example $example
      *
+     * @return void
      * @author       Phalcon Team <team@phalcon.io>
      * @since        2020-09-09
      */

@@ -30,17 +30,17 @@ final class TextTest extends UnitTestCase
      *
      * @dataProvider getExamples
      *
-     * @return void
-     * @param Example    $example
+     * @param Example $example
      *
+     * @return void
      * @author       Phalcon Team <team@phalcon.io>
      * @since        2018-11-13
      */
     public function testImageAdapterGdText(
         int $index,
         string $text,
-        bool|int $offsetX,
-        bool|int $offsetY,
+        bool | int $offsetX,
+        bool | int $offsetY,
         int $opacity,
         string $color,
         int $size,

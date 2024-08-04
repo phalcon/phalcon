@@ -13,74 +13,12 @@ declare(strict_types=1);
 
 namespace Phalcon\Tests\Unit\Support\Collection\ReadOnlyCollection;
 
-use Codeception\Example;
 use Phalcon\Support\Collection\ReadOnlyCollection;
-use stdClass;
 use Phalcon\Tests\UnitTestCase;
+use stdClass;
 
 final class GetTest extends UnitTestCase
 {
-    /**
-     * Tests Phalcon\Support\Collection\ReadOnlyCollection :: get()
-     *
-     * @return void
-     *
-     * @author Phalcon Team <team@phalcon.io>
-     * @since  2020-09-09
-     */
-    public function testSupportCollectionGet(): void
-    {
-        $data = [
-            'one'   => 'two',
-            'three' => 'four',
-            'five'  => 'six',
-        ];
-
-        $collection = new ReadOnlyCollection($data);
-        $expected   = 'four';
-
-        $actual = $collection->get('three');
-        $this->assertSame($expected, $actual);
-
-        $actual = $collection->get('THREE');
-        $this->assertSame($expected, $actual);
-
-        $actual = $collection->get(uniqid(), 'four');
-        $this->assertSame($expected, $actual);
-
-        $actual = $collection['three'];
-        $this->assertSame($expected, $actual);
-
-        $actual = $collection->three;
-        $this->assertSame($expected, $actual);
-
-        $actual = $collection->offsetGet('three');
-        $this->assertSame($expected, $actual);
-    }
-
-    /**
-     * Tests Phalcon\Support\Collection :: get() - cast
-     *
-     * @dataProvider getExamples
-     *
-     * @author       Phalcon Team <team@phalcon.io>
-     * @since        2020-09-09
-     */
-    public function helperArrGetCast(
-        string $cast,
-        mixed $value,
-        mixed $expected
-    ): void {
-        $collection = new ReadOnlyCollection(
-            [
-                'value' => $value,
-            ]
-        );
-
-        $actual   = $collection->get('value', null, $cast);
-        $this->assertEquals($expected, $actual);
-    }
-
     /**
      * @return array
      */
@@ -141,5 +79,66 @@ final class GetTest extends UnitTestCase
                 null,
             ],
         ];
+    }
+
+    /**
+     * Tests Phalcon\Support\Collection :: get() - cast
+     *
+     * @dataProvider getExamples
+     *
+     * @author       Phalcon Team <team@phalcon.io>
+     * @since        2020-09-09
+     */
+    public function helperArrGetCast(
+        string $cast,
+        mixed $value,
+        mixed $expected
+    ): void {
+        $collection = new ReadOnlyCollection(
+            [
+                'value' => $value,
+            ]
+        );
+
+        $actual = $collection->get('value', null, $cast);
+        $this->assertEquals($expected, $actual);
+    }
+
+    /**
+     * Tests Phalcon\Support\Collection\ReadOnlyCollection :: get()
+     *
+     * @return void
+     *
+     * @author Phalcon Team <team@phalcon.io>
+     * @since  2020-09-09
+     */
+    public function testSupportCollectionGet(): void
+    {
+        $data = [
+            'one'   => 'two',
+            'three' => 'four',
+            'five'  => 'six',
+        ];
+
+        $collection = new ReadOnlyCollection($data);
+        $expected   = 'four';
+
+        $actual = $collection->get('three');
+        $this->assertSame($expected, $actual);
+
+        $actual = $collection->get('THREE');
+        $this->assertSame($expected, $actual);
+
+        $actual = $collection->get(uniqid(), 'four');
+        $this->assertSame($expected, $actual);
+
+        $actual = $collection['three'];
+        $this->assertSame($expected, $actual);
+
+        $actual = $collection->three;
+        $this->assertSame($expected, $actual);
+
+        $actual = $collection->offsetGet('three');
+        $this->assertSame($expected, $actual);
     }
 }

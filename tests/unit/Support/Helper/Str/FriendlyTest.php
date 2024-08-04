@@ -33,7 +33,7 @@ final class FriendlyTest extends UnitTestCase
         string $text,
         string $separator,
         bool $lowercase,
-        array|string $replace,
+        array | string $replace,
         string $result
     ): void {
         $object   = new Friendly();
@@ -91,7 +91,7 @@ final class FriendlyTest extends UnitTestCase
             ],
             [
                 "Mess'd up --text-- just (to) stress /test/ ?our! "
-                    . '`little` \\clean\\ url fun.ction!?-->',
+                . '`little` \\clean\\ url fun.ction!?-->',
                 '-',
                 true,
                 [],

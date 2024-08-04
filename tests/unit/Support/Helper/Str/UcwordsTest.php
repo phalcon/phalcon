@@ -33,8 +33,8 @@ final class UcwordsTest extends UnitTestCase
         string $text,
         string $expected
     ): void {
-        $object   = new Ucwords();
-        $actual   = $object($text);
+        $object = new Ucwords();
+        $actual = $object($text);
 
         $this->assertSame($expected, $actual);
     }

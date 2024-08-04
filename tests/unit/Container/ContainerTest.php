@@ -41,7 +41,7 @@ final class ContainerTest extends UnitTestCase
     public function testContainerContainerGet(): void
     {
         $expected = $this->container->get(stdClass::class);
-        $actual = $this->container->get(stdClass::class);
+        $actual   = $this->container->get(stdClass::class);
         $this->assertSame($expected, $actual);
 
         $expected = 'oneval';

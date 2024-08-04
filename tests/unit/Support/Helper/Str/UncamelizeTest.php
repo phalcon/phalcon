@@ -32,8 +32,8 @@ final class UncamelizeTest extends UnitTestCase
         string $expected,
         string $delimiter
     ): void {
-        $object    = new Uncamelize();
-        $actual    = $object($value, $delimiter);
+        $object = new Uncamelize();
+        $actual = $object($value, $delimiter);
 
         $this->assertSame($expected, $actual);
     }

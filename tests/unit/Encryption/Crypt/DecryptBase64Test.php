@@ -20,7 +20,7 @@ use Phalcon\Tests\UnitTestCase;
 final class DecryptBase64Test extends UnitTestCase
 {
     /**
-     * Tests decrypt without using HMAC
+     * Tests decrypt using HMAC
      *
      * @return void
      *
@@ -28,16 +28,19 @@ final class DecryptBase64Test extends UnitTestCase
      * @since  2021-10-18
      * @issue  https://github.com/phalcon/cphalcon/issues/13379
      */
-    public function testEncryptionCryptDecryptBase64UnsignedKeyMismatchNoException(): void
+    public function testEncryptionCryptDecryptBase64DecryptSignedString(): void
     {
         $crypt = new Crypt();
-        $crypt->useSigning(false);
-        $actual = $crypt->decryptBase64(
-            $crypt->encryptBase64('le text', 'encrypt key'),
-            'wrong key'
-        );
+        $crypt
+            ->useSigning(true)
+            ->setKey('secret')
+        ;
 
-        $this->assertNotEmpty($actual);
+        $expected  = 'le text';
+        $encrypted = $crypt->encryptBase64($expected);
+        $actual    = $crypt->decryptBase64($encrypted);
+
+        $this->assertSame($expected, $actual);
     }
 
     /**
@@ -62,7 +65,7 @@ final class DecryptBase64Test extends UnitTestCase
     }
 
     /**
-     * Tests decrypt using HMAC
+     * Tests decrypt without using HMAC
      *
      * @return void
      *
@@ -70,18 +73,15 @@ final class DecryptBase64Test extends UnitTestCase
      * @since  2021-10-18
      * @issue  https://github.com/phalcon/cphalcon/issues/13379
      */
-    public function testEncryptionCryptDecryptBase64DecryptSignedString(): void
+    public function testEncryptionCryptDecryptBase64UnsignedKeyMismatchNoException(): void
     {
         $crypt = new Crypt();
-        $crypt
-            ->useSigning(true)
-            ->setKey('secret')
-        ;
+        $crypt->useSigning(false);
+        $actual = $crypt->decryptBase64(
+            $crypt->encryptBase64('le text', 'encrypt key'),
+            'wrong key'
+        );
 
-        $expected = 'le text';
-        $encrypted = $crypt->encryptBase64($expected);
-        $actual = $crypt->decryptBase64($encrypted);
-
-        $this->assertSame($expected, $actual);
+        $this->assertNotEmpty($actual);
     }
 }

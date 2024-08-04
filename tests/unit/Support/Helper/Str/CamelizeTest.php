@@ -24,9 +24,9 @@ final class CamelizeTest extends UnitTestCase
      *
      * @dataProvider getSources
      *
-     * @return void
-     * @param Example    $example
+     * @param Example $example
      *
+     * @return void
      * @author       Phalcon Team <team@phalcon.io>
      * @since        2020-09-09
      */
@@ -36,7 +36,7 @@ final class CamelizeTest extends UnitTestCase
         ?string $delimiter,
         bool $lowercase
     ): void {
-        $object    = new Camelize();
+        $object = new Camelize();
 
         $actual = $object($value, $delimiter, $lowercase);
         $this->assertSame($expected, $actual);

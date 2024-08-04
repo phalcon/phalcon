@@ -28,7 +28,7 @@ final class FilterTest extends UnitTestCase
      */
     public function testAssetsFiltersJsMinFilter(): void
     {
-        $jsmin = new JsMin();
+        $jsmin  = new JsMin();
         $source = "// nothing special here
 var a = 1;";
 

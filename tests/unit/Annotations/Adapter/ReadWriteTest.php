@@ -79,7 +79,7 @@ final class ReadWriteTest extends UnitTestCase
         $parameters = [
             'annotationsDir' => outputDir('tests/annotations/'),
         ];
-        $adapter = new StreamFileExistsFixture($parameters);
+        $adapter    = new StreamFileExistsFixture($parameters);
 
         $actual = $adapter->read('testwrite');
         $this->assertFalse($actual);
@@ -97,7 +97,7 @@ final class ReadWriteTest extends UnitTestCase
         $parameters = [
             'annotationsDir' => outputDir('tests/annotations/'),
         ];
-        $adapter          = new StreamFileGetContentsFixture($parameters);
+        $adapter    = new StreamFileGetContentsFixture($parameters);
         $adapter->get(AnnotationsTestClass::class);
 
         $actual = $adapter->read('testprop1');
@@ -120,7 +120,7 @@ final class ReadWriteTest extends UnitTestCase
         $parameters = [
             'annotationsDir' => outputDir('tests/annotations/'),
         ];
-        $adapter          = new StreamUnserializeFixture($parameters);
+        $adapter    = new StreamUnserializeFixture($parameters);
         $adapter->get(AnnotationsTestClass::class);
         $adapter->read('testprop1');
     }

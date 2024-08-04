@@ -34,8 +34,8 @@ final class IncrementTest extends UnitTestCase
         string $expected,
         string $separator
     ): void {
-        $object   = new Increment();
-        $actual   = $object($source, $separator);
+        $object = new Increment();
+        $actual = $object($source, $separator);
         $this->assertSame($expected, $actual);
     }
 
@@ -49,7 +49,7 @@ final class IncrementTest extends UnitTestCase
             ["file_1", "file_2", "_"],
             ["file_2", "file_3", "_"],
             ["file_", "file_1", "_"],
-            ["file ","file _1", "_"],
+            ["file ", "file _1", "_"],
             ["file", "file-1", "-"],
         ];
     }

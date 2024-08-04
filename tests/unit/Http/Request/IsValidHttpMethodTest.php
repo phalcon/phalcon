@@ -36,7 +36,7 @@ final class IsValidHttpMethodTest extends UnitTestCase
     ): void {
         $request = new Request();
 
-        $actual   = $request->isValidHttpMethod($method);
+        $actual = $request->isValidHttpMethod($method);
         $this->assertSame($expected, $actual);
     }
 

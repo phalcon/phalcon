@@ -24,9 +24,9 @@ final class IsValidHandlerTest extends UnitTestCase
      *
      * @dataProvider getExamples
      *
-     * @return void
-     * @param Example    $example
+     * @param Example $example
      *
+     * @return void
      * @author       Phalcon Team <team@phalcon.io>
      * @since        2020-09-09
      */
@@ -34,9 +34,9 @@ final class IsValidHandlerTest extends UnitTestCase
         bool $expected,
         mixed $handler
     ): void {
-        $manager  = new Manager();
+        $manager = new Manager();
 
-        $actual   = $manager->isValidHandler($handler);
+        $actual = $manager->isValidHandler($handler);
         $this->assertSame($expected, $actual);
     }
 

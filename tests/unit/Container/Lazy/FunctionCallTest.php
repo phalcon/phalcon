@@ -27,7 +27,7 @@ final class FunctionCallTest extends AbstractLazyBase
     {
         require_once dataDir('fixtures/Container/functions.php');
 
-        $lazy = new FunctionCall(
+        $lazy   = new FunctionCall(
             'Phalcon\Tests\Fixtures\Container\test',
             ['ten']
         );

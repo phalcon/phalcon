@@ -13,13 +13,74 @@ declare(strict_types=1);
 
 namespace Phalcon\Tests\Unit\Support\Collection\Collection;
 
-use Codeception\Example;
 use Phalcon\Support\Collection;
-use stdClass;
 use Phalcon\Tests\UnitTestCase;
+use stdClass;
 
 final class GetTest extends UnitTestCase
 {
+    /**
+     * @return array[]
+     */
+    public static function getExamples(): array
+    {
+        $sample      = new stdClass();
+        $sample->one = 'two';
+
+        return [
+            [
+                'boolean',
+                1,
+                true,
+            ],
+            [
+                'bool',
+                1,
+                true,
+            ],
+            [
+                'integer',
+                "123",
+                123,
+            ],
+            [
+                'int',
+                "123",
+                123,
+            ],
+            [
+                'float',
+                "123.45",
+                123.45,
+            ],
+            [
+                'double',
+                "123.45",
+                123.45,
+            ],
+            [
+                'string',
+                123,
+                "123",
+            ],
+            [
+                'array',
+                $sample,
+                ['one' => 'two'],
+            ],
+            [
+                'object',
+                ['one' => 'two'],
+                $sample,
+            ],
+            [
+                'null',
+                1234,
+                null,
+            ],
+        ];
+    }
+
     /**
      * Tests Phalcon\Support\Collection :: get()
      *
@@ -92,69 +153,7 @@ final class GetTest extends UnitTestCase
             ]
         );
 
-        $actual   = $collection->get('value', null, $cast);
+        $actual = $collection->get('value', null, $cast);
         $this->assertEquals($expected, $actual);
-    }
-
-    /**
-     * @return array[]
-     */
-    public static function getExamples(): array
-    {
-        $sample      = new stdClass();
-        $sample->one = 'two';
-
-        return [
-            [
-                'boolean',
-                1,
-                true,
-            ],
-            [
-                'bool',
-                1,
-                true,
-            ],
-            [
-                'integer',
-                "123",
-                123,
-            ],
-            [
-                'int',
-                "123",
-                123,
-            ],
-            [
-                'float',
-                "123.45",
-                123.45,
-            ],
-            [
-                'double',
-                "123.45",
-                123.45,
-            ],
-            [
-                'string',
-                123,
-                "123",
-            ],
-            [
-                'array',
-                $sample,
-                ['one' => 'two'],
-            ],
-            [
-                'object',
-                ['one' => 'two'],
-                $sample,
-            ],
-            [
-                'null',
-                1234,
-                null,
-            ],
-        ];
     }
 }

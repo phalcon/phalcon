@@ -103,7 +103,7 @@ final class GetTest extends UnitTestCase
             'value' => $value,
         ];
 
-        $actual   = $object($collection, 'value', null, $cast);
+        $actual = $object($collection, 'value', null, $cast);
         $this->assertEquals($expected, $actual);
     }
 

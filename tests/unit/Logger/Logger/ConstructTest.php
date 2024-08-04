@@ -68,9 +68,9 @@ final class ConstructTest extends UnitTestCase
      */
     public function testLoggerConstructStreamWithJsonConstants(): void
     {
-        $fileName = $this->getNewFileName('log', 'log');
+        $fileName   = $this->getNewFileName('log', 'log');
         $outputPath = logsDir();
-        $adapter = new Stream($outputPath . $fileName);
+        $adapter    = new Stream($outputPath . $fileName);
 
         $adapter->setFormatter(new Json());
 
@@ -113,7 +113,7 @@ final class ConstructTest extends UnitTestCase
      */
     public function testLoggerConstructStreamReadOnlyModeException(): void
     {
-        $fileName = $this->getNewFileName('log', 'log');
+        $fileName   = $this->getNewFileName('log', 'log');
         $outputPath = logsDir();
 
         $file = $outputPath . $fileName;

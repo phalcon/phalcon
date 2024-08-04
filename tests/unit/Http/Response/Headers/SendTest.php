@@ -51,7 +51,7 @@ final class SendTest extends UnitTestCase
      */
     public function testHttpResponseHeadersSendTwice(): void
     {
-         $headers = new Headers();
+        $headers = new Headers();
 
         $headers->set(
             Http::CONTENT_TYPE,

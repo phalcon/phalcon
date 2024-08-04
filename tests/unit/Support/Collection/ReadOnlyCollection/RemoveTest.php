@@ -30,9 +30,9 @@ final class RemoveTest extends UnitTestCase
     public function testSupportCollectionRemove(): void
     {
         $data       = [
-            'one' => 'two',
+            'one'   => 'two',
             'three' => 'four',
-            'five' => 'six',
+            'five'  => 'six',
         ];
         $collection = new ReadOnlyCollection($data);
 
@@ -52,9 +52,9 @@ final class RemoveTest extends UnitTestCase
     public function testSupportCollectionRemoveInsensitive(): void
     {
         $data       = [
-            'one' => 'two',
+            'one'   => 'two',
             'three' => 'four',
-            'five' => 'six',
+            'five'  => 'six',
         ];
         $collection = new ReadOnlyCollection($data);
 
@@ -71,18 +71,18 @@ final class RemoveTest extends UnitTestCase
      * @author Phalcon Team <team@phalcon.io>
      * @since  2020-09-09
      */
-    public function testSupportCollectionRemoveUnset(): void
+    public function testSupportCollectionRemoveOffsetUnset(): void
     {
         $data       = [
-            'one' => 'two',
+            'one'   => 'two',
             'three' => 'four',
-            'five' => 'six',
+            'five'  => 'six',
         ];
         $collection = new ReadOnlyCollection($data);
 
         $this->expectException(Exception::class);
         $this->expectExceptionMessage('The object is read only');
-        unset($collection['five']);
+        $collection->offsetUnset('five');
     }
 
     /**
@@ -96,9 +96,9 @@ final class RemoveTest extends UnitTestCase
     public function testSupportCollectionRemoveUnderscoreUnset(): void
     {
         $data       = [
-            'one' => 'two',
+            'one'   => 'two',
             'three' => 'four',
-            'five' => 'six',
+            'five'  => 'six',
         ];
         $collection = new ReadOnlyCollection($data);
 
@@ -115,17 +115,17 @@ final class RemoveTest extends UnitTestCase
      * @author Phalcon Team <team@phalcon.io>
      * @since  2020-09-09
      */
-    public function testSupportCollectionRemoveOffsetUnset(): void
+    public function testSupportCollectionRemoveUnset(): void
     {
         $data       = [
-            'one' => 'two',
+            'one'   => 'two',
             'three' => 'four',
-            'five' => 'six',
+            'five'  => 'six',
         ];
         $collection = new ReadOnlyCollection($data);
 
         $this->expectException(Exception::class);
         $this->expectExceptionMessage('The object is read only');
-        $collection->offsetUnset('five');
+        unset($collection['five']);
     }
 }

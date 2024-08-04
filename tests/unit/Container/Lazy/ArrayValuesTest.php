@@ -27,7 +27,7 @@ final class ArrayValuesTest extends AbstractLazyBase
         $varname = 'TEST_VAR_ONE';
         $lazy    = new ArrayValues(
             [
-                $varname => new Env($varname)
+                $varname => new Env($varname),
             ]
         );
 
@@ -74,11 +74,11 @@ final class ArrayValuesTest extends AbstractLazyBase
     public function testContainerLazyArrayValuesRecursion(): void
     {
         $lazy = new ArrayValues([
-            'one' => new Env('TEST_VAR_ONE', 'int'),
+            'one'   => new Env('TEST_VAR_ONE', 'int'),
             [
                 'two' => new Env('TEST_VAR_TWO', 'int'),
             ],
-            'three' => 'dib'
+            'three' => 'dib',
         ]);
 
         $one = random_int(1, 100);
@@ -88,7 +88,7 @@ final class ArrayValuesTest extends AbstractLazyBase
         putenv("TEST_VAR_TWO={$two}");
 
         $expect = [
-            'one' => $one,
+            'one'   => $one,
             [
                 'two' => $two,
             ],
@@ -116,7 +116,7 @@ final class ArrayValuesTest extends AbstractLazyBase
             [
                 'four',
                 'five',
-                'six'   => 'twenty',
+                'six' => 'twenty',
             ]
         );
 

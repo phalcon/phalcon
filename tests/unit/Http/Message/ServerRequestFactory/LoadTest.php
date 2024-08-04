@@ -425,9 +425,9 @@ final class LoadTest extends HttpBase
      *
      * @dataProvider getConstructorExamples
      *
-     * @return void
-     * @param Example    $example
+     * @param Example $example
      *
+     * @return void
      * @author       Phalcon Team <team@phalcon.io>
      * @since        2019-02-09
      */

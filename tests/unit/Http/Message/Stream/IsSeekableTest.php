@@ -37,7 +37,7 @@ final class IsSeekableTest extends UnitTestCase
         mixed $stream,
         bool $expected
     ): void {
-        $actual   = $stream->isSeekable();
+        $actual = $stream->isSeekable();
         $this->assertSame($expected, $actual);
     }
 
@@ -58,7 +58,7 @@ final class IsSeekableTest extends UnitTestCase
 
         $stream = new Stream($fileName, $mode);
 
-        $actual   = $stream->isSeekable();
+        $actual = $stream->isSeekable();
         $this->assertSame($expected, $actual);
     }
 

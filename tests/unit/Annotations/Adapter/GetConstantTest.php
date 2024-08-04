@@ -39,7 +39,7 @@ final class GetConstantTest extends UnitTestCase
     ): void {
         require_once dataDir('fixtures/Annotations/AnnotationsTestClass.php');
 
-        $adapter = new $class($params);
+        $adapter        = new $class($params);
         $methodConstant = $adapter->getConstant(
             AnnotationsTestClass::class,
             'TEST_CONST1'

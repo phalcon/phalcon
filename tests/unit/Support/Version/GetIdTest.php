@@ -43,7 +43,7 @@ final class GetIdTest extends UnitTestCase
     ): void {
         $version = new $class();
 
-        $actual   = $version->getId();
+        $actual = $version->getId();
         $this->assertTrue(is_string($actual));
         $this->assertSame($expected, $actual);
     }

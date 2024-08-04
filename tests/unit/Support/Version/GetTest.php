@@ -29,9 +29,9 @@ final class GetTest extends UnitTestCase
      *
      * @dataProvider getExamples
      *
-     * @return void
-     * @param Example    $example
+     * @param Example $example
      *
+     * @return void
      * @author       Phalcon Team <team@phalcon.io>
      * @since        2020-09-09
      */
@@ -41,7 +41,7 @@ final class GetTest extends UnitTestCase
     ): void {
         $version = new $class();
 
-        $actual   = $version->get();
+        $actual = $version->get();
         $this->assertTrue(is_string($actual));
         $this->assertSame($expected, $actual);
     }

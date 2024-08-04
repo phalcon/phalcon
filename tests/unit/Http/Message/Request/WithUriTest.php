@@ -27,8 +27,8 @@ final class WithUriTest extends UnitTestCase
      */
     public function testHttpMessageRequestWithUri(): void
     {
-        $query = 'https://phalcon:secret@dev.phalcon.ld:8080/action?param=value#frag';
-        $uri = new Uri($query);
+        $query   = 'https://phalcon:secret@dev.phalcon.ld:8080/action?param=value#frag';
+        $uri     = new Uri($query);
         $request = new Request();
 
         $newInstance = $request->withUri($uri);

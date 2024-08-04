@@ -35,7 +35,7 @@ final class IsTest extends HttpBase
         $_SERVER = array_merge($_SERVER, $server);
 
         $request = $this->getRequestObject();
-        $actual   = $request->$method();
+        $actual  = $request->$method();
 
         $this->assertSame($expected, $actual);
     }

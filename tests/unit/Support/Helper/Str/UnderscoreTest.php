@@ -34,7 +34,7 @@ final class UnderscoreTest extends UnitTestCase
         string $expected
     ): void {
         $object = new Underscore();
-        $actual   = $object($text);
+        $actual = $object($text);
         $this->assertSame($expected, $actual);
     }
 

@@ -105,7 +105,7 @@ final class GetStreamTest extends UnitTestCase
         $stream = new Stream(Http::STREAM_MEMORY, 'w+b');
         $stream->write('Phalcon Framework');
 
-        $file = new UploadedFile($stream, 0);
+        $file   = new UploadedFile($stream, 0);
         $target = $this->getNewFileName();
         $target = outputDir(
             'tests/stream/' . $target

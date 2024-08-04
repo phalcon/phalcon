@@ -59,7 +59,7 @@ final class GetTest extends UnitTestCase
             ]
         );
 
-        $actual   = $collection->get('value', null, $cast);
+        $actual = $collection->get('value', null, $cast);
         $this->assertEquals($expected, $actual);
     }
 

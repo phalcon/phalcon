@@ -33,8 +33,8 @@ final class UpperTest extends UnitTestCase
         string $text,
         string $expected
     ): void {
-        $object   = new Upper();
-        $actual   = $object($text);
+        $object = new Upper();
+        $actual = $object($text);
         $this->assertSame($expected, $actual);
     }
 
@@ -52,8 +52,8 @@ final class UpperTest extends UnitTestCase
         string $text,
         string $expected
     ): void {
-        $object   = new Upper();
-        $actual   = $object($text);
+        $object = new Upper();
+        $actual = $object($text);
         $this->assertSame($expected, $actual);
     }
 

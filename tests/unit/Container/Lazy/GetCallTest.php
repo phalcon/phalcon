@@ -25,7 +25,7 @@ final class GetCallTest extends AbstractLazyBase
      */
     public function testContainerLazyGetCall(): void
     {
-        $lazy = new GetCall(TestWithInterface::class, 'getValue', []);
+        $lazy   = new GetCall(TestWithInterface::class, 'getValue', []);
         $actual = $this->actual($lazy);
 
         $expected = 'two';

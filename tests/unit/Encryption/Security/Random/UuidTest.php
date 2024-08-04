@@ -29,7 +29,7 @@ final class UuidTest extends UnitTestCase
     public function testEncryptionSecurityRandomUuid(): void
     {
         $random = new Random();
-        $uuid = $random->uuid();
+        $uuid   = $random->uuid();
 
         // Test forbidden characters
         $this->assertMatchesRegularExpression(

@@ -20,19 +20,21 @@ use Phalcon\Tests\UnitTestCase;
 final class AddComponentTest extends UnitTestCase
 {
     /**
-     * Tests Phalcon\Acl\Adapter\Memory :: addComponent() - string
+     * Tests Phalcon\Acl\Adapter\Memory :: addComponent() - numeric key
      *
      * @return void
      *
      * @author Phalcon Team <team@phalcon.io>
      * @since  2018-11-13
      */
-    public function testAclAdapterMemoryAddComponentString(): void
+    public function testAclAdapterMemoryAddComponentNumericKey(): void
     {
-        $acl = new Memory();
+        $acl       = new Memory();
+        $component = new Component('11', 'Customer component');
+        $actual    = $acl->addComponent($component, ['index']);
 
-        $actual = $acl->addComponent('Customer', ['index']);
         $this->assertTrue($actual);
+        $this->assertTrue($acl->isComponent('11'));
     }
 
     /**
@@ -53,20 +55,18 @@ final class AddComponentTest extends UnitTestCase
     }
 
     /**
-     * Tests Phalcon\Acl\Adapter\Memory :: addComponent() - numeric key
+     * Tests Phalcon\Acl\Adapter\Memory :: addComponent() - string
      *
      * @return void
      *
      * @author Phalcon Team <team@phalcon.io>
      * @since  2018-11-13
      */
-    public function testAclAdapterMemoryAddComponentNumericKey(): void
+    public function testAclAdapterMemoryAddComponentString(): void
     {
-        $acl       = new Memory();
-        $component = new Component('11', 'Customer component');
-        $actual    = $acl->addComponent($component, ['index']);
+        $acl = new Memory();
 
+        $actual = $acl->addComponent('Customer', ['index']);
         $this->assertTrue($actual);
-        $this->assertTrue($acl->isComponent('11'));
     }
 }

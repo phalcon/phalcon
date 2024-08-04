@@ -37,7 +37,7 @@ final class CaseTest extends UnitTestCase
         string $expected,
         ?string $delimiter
     ): void {
-        $object    = new $class();
+        $object = new $class();
 
         $actual = $object($value, $delimiter);
         $this->assertSame($expected, $actual);

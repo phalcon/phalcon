@@ -96,7 +96,7 @@ final class NewInstanceTest extends UnitTestCase
         $factory = new HelperFactory();
 
         $expected = $className;
-        $actual = $factory->newInstance($method);
+        $actual   = $factory->newInstance($method);
         $this->assertInstanceOf($expected, $actual);
     }
 

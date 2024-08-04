@@ -22,10 +22,10 @@ final class GetPreferredIsoLocaleVariantTest extends HttpBase
     /**
      * Tests Phalcon\Http\Request :: getPreferredIsoLocaleVariant()
      *
-     * @return void
-     * @param Example    $example
+     * @param Example $example
      *
      * @dataProvider getExamples
+     * @return void
      * @author       Phalcon Team <team@phalcon.io>
      * @since        2018-11-13
      */
@@ -37,7 +37,7 @@ final class GetPreferredIsoLocaleVariantTest extends HttpBase
 
         $_SERVER['HTTP_ACCEPT_LANGUAGE'] = $header;
 
-        $actual   = $request->getPreferredIsoLocaleVariant();
+        $actual = $request->getPreferredIsoLocaleVariant();
         $this->assertSame($expected, $actual);
     }
 

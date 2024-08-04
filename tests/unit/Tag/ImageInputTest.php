@@ -18,35 +18,6 @@ use Phalcon\Tests\Fixtures\Helpers\TagSetup;
 class ImageInputTest extends TagSetup
 {
     /**
-     * Tests Phalcon\Tag :: imageInput() - string as a parameter
-     *
-     * @author Phalcon Team <team@phalcon.io>
-     * @since  2014-09-05
-     */
-    public function testTagImageInputStringParameter(): void
-    {
-        $options  = 'x_name';
-        $expected = '<input type="image" value="x_name"';
-
-        $this->testFieldParameter(
-            'imageInput',
-            $options,
-            $expected,
-            false
-        );
-
-        $options  = 'x_name';
-        $expected = '<input type="image" value="x_name"';
-
-        $this->testFieldParameter(
-            'imageInput',
-            $options,
-            $expected,
-            true
-        );
-    }
-
-    /**
      * Tests Phalcon\Tag :: imageInput() - array as a parameter
      *
      * @author Phalcon Team <team@phalcon.io>
@@ -166,46 +137,31 @@ class ImageInputTest extends TagSetup
     }
 
     /**
-     * Tests Phalcon\Tag :: imageInput() - setDefault
+     * Tests Phalcon\Tag :: imageInput() - string as a parameter
      *
      * @author Phalcon Team <team@phalcon.io>
      * @since  2014-09-05
      */
-    public function testTagImageInputWithSetDefault(): void
+    public function testTagImageInputStringParameter(): void
     {
-        $options  = [
-            'x_name',
-            'name'  => 'x_other',
-            'class' => 'x_class',
-            'size'  => '10',
-        ];
-        $expected = '<input type="image" name="x_other" '
-            . 'value="x_name" class="x_class" size="10"';
+        $options  = 'x_name';
+        $expected = '<input type="image" value="x_name"';
 
         $this->testFieldParameter(
             'imageInput',
             $options,
             $expected,
-            false,
-            'setDefault'
+            false
         );
 
-        $options  = [
-            'x_name',
-            'name'  => 'x_other',
-            'class' => 'x_class',
-            'size'  => '10',
-        ];
-        $expected = '<input type="image" '
-            . 'name="x_other" value="x_name" class="x_class" '
-            . 'size="10"';
+        $options  = 'x_name';
+        $expected = '<input type="image" value="x_name"';
 
         $this->testFieldParameter(
             'imageInput',
             $options,
             $expected,
-            true,
-            'setDefault'
+            true
         );
     }
 
@@ -255,6 +211,93 @@ class ImageInputTest extends TagSetup
     }
 
     /**
+     * Tests Phalcon\Tag :: imageInput() - displayTo and element not present
+     *
+     * @author Phalcon Team <team@phalcon.io>
+     * @since  2014-09-05
+     */
+    public function testTagImageInputWithDisplayToElementNotPresent(): void
+    {
+        $options = [
+            'x_name',
+            'name'  => 'x_other',
+            'class' => 'x_class',
+            'size'  => '10',
+        ];
+
+        $expected = '<input type="image" name="x_other" value="x_name" class="x_class" size="10"';
+
+        $this->testFieldParameter(
+            'imageInput',
+            $options,
+            $expected,
+            false,
+            'displayTo'
+        );
+
+        $options = [
+            'x_name',
+            'name'  => 'x_other',
+            'class' => 'x_class',
+            'size'  => '10',
+        ];
+
+        $expected = '<input type="image" name="x_other" value="x_name" class="x_class" size="10"';
+
+        $this->testFieldParameter(
+            'imageInput',
+            $options,
+            $expected,
+            true,
+            'displayTo'
+        );
+    }
+
+    /**
+     * Tests Phalcon\Tag :: imageInput() - setDefault
+     *
+     * @author Phalcon Team <team@phalcon.io>
+     * @since  2014-09-05
+     */
+    public function testTagImageInputWithSetDefault(): void
+    {
+        $options  = [
+            'x_name',
+            'name'  => 'x_other',
+            'class' => 'x_class',
+            'size'  => '10',
+        ];
+        $expected = '<input type="image" name="x_other" '
+            . 'value="x_name" class="x_class" size="10"';
+
+        $this->testFieldParameter(
+            'imageInput',
+            $options,
+            $expected,
+            false,
+            'setDefault'
+        );
+
+        $options  = [
+            'x_name',
+            'name'  => 'x_other',
+            'class' => 'x_class',
+            'size'  => '10',
+        ];
+        $expected = '<input type="image" '
+            . 'name="x_other" value="x_name" class="x_class" '
+            . 'size="10"';
+
+        $this->testFieldParameter(
+            'imageInput',
+            $options,
+            $expected,
+            true,
+            'setDefault'
+        );
+    }
+
+    /**
      * Tests Phalcon\Tag :: imageInput() - setDefault and element not present
      *
      * @author Phalcon Team <team@phalcon.io>
@@ -296,49 +339,6 @@ class ImageInputTest extends TagSetup
             $expected,
             true,
             'setDefault'
-        );
-    }
-
-    /**
-     * Tests Phalcon\Tag :: imageInput() - displayTo and element not present
-     *
-     * @author Phalcon Team <team@phalcon.io>
-     * @since  2014-09-05
-     */
-    public function testTagImageInputWithDisplayToElementNotPresent(): void
-    {
-        $options = [
-            'x_name',
-            'name'  => 'x_other',
-            'class' => 'x_class',
-            'size'  => '10',
-        ];
-
-        $expected = '<input type="image" name="x_other" value="x_name" class="x_class" size="10"';
-
-        $this->testFieldParameter(
-            'imageInput',
-            $options,
-            $expected,
-            false,
-            'displayTo'
-        );
-
-        $options = [
-            'x_name',
-            'name'  => 'x_other',
-            'class' => 'x_class',
-            'size'  => '10',
-        ];
-
-        $expected = '<input type="image" name="x_other" value="x_name" class="x_class" size="10"';
-
-        $this->testFieldParameter(
-            'imageInput',
-            $options,
-            $expected,
-            true,
-            'displayTo'
         );
     }
 }

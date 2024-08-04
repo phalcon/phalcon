@@ -26,7 +26,7 @@ final class UseEncryptionIsTest extends HttpBase
      */
     public function testHttpCookieUseEncryption(): void
     {
-          $this->setDiService('sessionStream');
+        $this->setDiService('sessionStream');
 
         $cookie = $this->getCookieObject();
 

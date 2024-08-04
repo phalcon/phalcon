@@ -13,12 +13,27 @@ declare(strict_types=1);
 
 namespace Phalcon\Tests\Unit\Encryption\Security;
 
-use Codeception\Example;
 use Phalcon\Encryption\Security;
 use Phalcon\Tests\UnitTestCase;
 
 final class ComputeHmacTest extends UnitTestCase
 {
+    /**
+     * @return array
+     */
+    public static function hmacProvider(): array
+    {
+        $data = [];
+
+        for ($i = 1; $i < 256; ++$i) {
+            $data[] = [
+                str_repeat('a', $i),
+            ];
+        }
+
+        return $data;
+    }
+
     /**
      * Tests the HMAC computation
      *
@@ -53,21 +68,5 @@ final class ComputeHmacTest extends UnitTestCase
             hash_hmac('md5', $text, $keys[2]),
             $security->computeHmac($text, $keys[2], 'md5')
         );
-    }
-
-    /**
-     * @return array
-     */
-    public static function hmacProvider(): array
-    {
-        $data = [];
-
-        for ($i = 1; $i < 256; ++$i) {
-            $data[] = [
-                str_repeat('a', $i),
-            ];
-        }
-
-        return $data;
     }
 }

@@ -13,13 +13,13 @@ declare(strict_types=1);
 
 namespace Phalcon\Tests\Unit\Logger\Adapter\Stream;
 
-use Codeception\Stub;
 use DateTimeImmutable;
 use DateTimeZone;
 use LogicException;
 use Phalcon\Logger\Adapter\Stream;
 use Phalcon\Logger\Enum;
 use Phalcon\Logger\Item;
+use Phalcon\Tests\Fixtures\Logger\Adapter\StreamFopenFixture;
 use Phalcon\Tests\UnitTestCase;
 
 use function date_default_timezone_get;
@@ -80,15 +80,7 @@ final class ProcessTest extends UnitTestCase
             "' cannot be opened with mode 'ab'"
         );
 
-        $adapter = Stub::construct(
-            Stream::class,
-            [
-                $outputPath . $fileName,
-            ],
-            [
-                'phpFopen' => false,
-            ]
-        );
+        $adapter = new StreamFopenFixture($outputPath . $fileName);
 
         $timezone = date_default_timezone_get();
         $datetime = new DateTimeImmutable('now', new DateTimeZone($timezone));

@@ -27,9 +27,9 @@ final class BasenameTest extends UnitTestCase
      *
      * @dataProvider getAsciiExamples
      *
-     * @return void
-     * @param Example    $example
+     * @param Example $example
      *
+     * @return void
      * @author       Ian Hu <hu2008yinxiang@163.com>
      * @since        2020-09-09
      */
@@ -54,9 +54,9 @@ final class BasenameTest extends UnitTestCase
      *
      * @dataProvider getNonAsciiExamples
      *
-     * @return void
-     * @param Example    $example
+     * @param Example $example
      *
+     * @return void
      * @author       Ian Hu <hu2008yinxiang@163.com>
      * @since        2020-09-09
      */
@@ -68,8 +68,8 @@ final class BasenameTest extends UnitTestCase
             $this->markTestSkipped('Need to fix Windows new lines...');
         }
 
-        $object   = new Basename();
-        $actual   = $object($path);
+        $object = new Basename();
+        $actual = $object($path);
         $this->assertSame($expected, $actual);
     }
 
