@@ -66,14 +66,14 @@ class JavascriptIncludeTest extends TagSetup
      */
     public function testTagJavascriptIncludeRemote(): void
     {
-        $options = 'http://my.local.com/js/phalcon.js';
+        $options = 'https://my.local.com/js/phalcon.js';
 
         Tag::setDocType(
             Tag::HTML5
         );
 
         $this->assertSame(
-            '<script src="http://my.local.com/js/phalcon.js"></script>' . PHP_EOL,
+            '<script src="https://my.local.com/js/phalcon.js"></script>' . PHP_EOL,
             Tag::javascriptInclude($options, false)
         );
     }
@@ -87,12 +87,12 @@ class JavascriptIncludeTest extends TagSetup
      */
     public function testTagJavascriptIncludeWithArrayRemote(): void
     {
-        $options = ['http://my.local.com/js/phalcon.js'];
+        $options = ['https://my.local.com/js/phalcon.js'];
 
         Tag::setDocType(Tag::HTML5);
 
         $this->assertSame(
-            '<script src="http://my.local.com/js/phalcon.js"></script>' . PHP_EOL,
+            '<script src="https://my.local.com/js/phalcon.js"></script>' . PHP_EOL,
             Tag::javascriptInclude($options, false)
         );
     }

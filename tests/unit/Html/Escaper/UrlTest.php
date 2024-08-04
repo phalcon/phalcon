@@ -30,8 +30,8 @@ final class UrlTest extends UnitTestCase
     {
         $escaper = new Escaper();
 
-        $expected = 'http%3A%2F%2Fphalcon.io%2Fa.php%3Fc%3Dd%26e%3Df';
-        $actual   = $escaper->url('http://phalcon.io/a.php?c=d&e=f');
+        $expected = 'https%3A%2F%2Fphalcon.io%2Fa.php%3Fc%3Dd%26e%3Df';
+        $actual   = $escaper->url('https://phalcon.io/a.php?c=d&e=f');
         $this->assertSame($expected, $actual);
     }
 }

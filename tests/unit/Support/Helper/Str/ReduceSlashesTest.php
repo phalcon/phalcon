@@ -35,8 +35,8 @@ final class ReduceSlashesTest extends UnitTestCase
         $actual   = $object('app/controllers//IndexController');
         $this->assertSame($expected, $actual);
 
-        $expected = 'http://foo/bar/baz/buz';
-        $actual   = $object('http://foo//bar/baz/buz');
+        $expected = 'https://foo/bar/baz/buz';
+        $actual   = $object('https://foo//bar/baz/buz');
         $this->assertSame($expected, $actual);
 
         $expected = Http::STREAM_MEMORY;

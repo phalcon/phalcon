@@ -193,16 +193,16 @@ class ImageTest extends TagSetup
      */
     public function testTagImageStringParameterRemoteLink(): void
     {
-        $options  = 'http://phalcon.io/img/hello.gif';
-        $expected = '<img src="http://phalcon.io/img/hello.gif" />';
+        $options  = 'https://phalcon.io/img/hello.gif';
+        $expected = '<img src="https://phalcon.io/img/hello.gif" />';
 
         Tag::setDocType(Tag::XHTML10_STRICT);
         $actual = Tag::image($options, false);
 
         $this->assertSame($expected, $actual);
 
-        $options  = 'http://phalcon.io/img/hello.gif';
-        $expected = '<img src="http://phalcon.io/img/hello.gif">';
+        $options  = 'https://phalcon.io/img/hello.gif';
+        $expected = '<img src="https://phalcon.io/img/hello.gif">';
 
         Tag::setDocType(Tag::HTML5);
         $actual = Tag::image($options, false);
@@ -250,7 +250,7 @@ class ImageTest extends TagSetup
     public function testTagImageArrayParameterRemoteLink(): void
     {
         $options = [
-            'http://phalcon.io/img/hello.gif',
+            'https://phalcon.io/img/hello.gif',
             'alt' => 'Hello',
         ];
 
@@ -259,12 +259,12 @@ class ImageTest extends TagSetup
         );
 
         $this->assertSame(
-            '<img src="http://phalcon.io/img/hello.gif" alt="Hello" />',
+            '<img src="https://phalcon.io/img/hello.gif" alt="Hello" />',
             Tag::image($options, false)
         );
 
         $options = [
-            'http://phalcon.io/img/hello.gif',
+            'https://phalcon.io/img/hello.gif',
             'alt' => 'Hello',
         ];
 
@@ -273,7 +273,7 @@ class ImageTest extends TagSetup
         );
 
         $this->assertSame(
-            '<img src="http://phalcon.io/img/hello.gif" alt="Hello">',
+            '<img src="https://phalcon.io/img/hello.gif" alt="Hello">',
             Tag::image($options, false)
         );
     }
