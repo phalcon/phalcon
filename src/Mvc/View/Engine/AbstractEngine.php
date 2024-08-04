@@ -63,8 +63,8 @@ abstract class AbstractEngine extends Injectable implements EngineInterface, Eve
     /**
      * Renders a partial inside another view
      *
-     * @param string partialPath
-     * @param mixed|null params
+     * @param string     $partialPath
+     * @param mixed|null $params
      *
      * @return void
      */
@@ -72,7 +72,7 @@ abstract class AbstractEngine extends Injectable implements EngineInterface, Eve
         string $partialPath,
         mixed $params = null
     ): void {
-        // TODO: Make params arrayO: Make params array
+        // TODO: Make params array
         $this->view->partial($partialPath, $params);
     }
 }

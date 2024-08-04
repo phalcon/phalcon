@@ -73,7 +73,7 @@ abstract class AbstractAdapter implements AdapterInterface
     /**
      * Returns the translation related to the given key
      *
-     * @param mixed $translateKey
+     * @param mixed $offset
      *
      * @return string
      */

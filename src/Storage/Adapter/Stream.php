@@ -170,8 +170,7 @@ class Stream extends AbstractAdapter
      * @param string $key
      * @param int    $value
      *
-     * @return bool|int
-     * @throws BaseException
+     * @return false|int
      */
     protected function doDecrement(string $key, int $value = 1): false | int
     {
@@ -264,7 +263,7 @@ class Stream extends AbstractAdapter
      * @param string $key
      * @param int    $value
      *
-     * @return bool|int
+     * @return false|int
      * @throws BaseException
      */
     protected function doIncrement(string $key, int $value = 1): false | int

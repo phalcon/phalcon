@@ -20,6 +20,8 @@ use Phalcon\Storage\SerializerFactory;
 use Phalcon\Support\Exception as SupportException;
 use Redis as RedisService;
 
+use RedisException;
+
 use function constant;
 use function defined;
 use function is_bool;
@@ -114,9 +116,11 @@ class Redis extends AbstractAdapter
      * from the adapter.
      *
      * @param string $key
-     * @param mixed  $value
+     * @param mixed  $data
      *
      * @return bool
+     * @throws StorageException
+     * @throws RedisException
      */
     public function setForever(string $key, mixed $data): bool
     {
@@ -133,7 +137,8 @@ class Redis extends AbstractAdapter
      * @param string $key
      * @param int    $value
      *
-     * @return bool|int
+     * @return false|int
+     * @throws RedisException
      * @throws StorageException
      */
     protected function doDecrement(string $key, int $value = 1): false | int
@@ -149,6 +154,7 @@ class Redis extends AbstractAdapter
      * @param string $key
      *
      * @return bool
+     * @throws RedisException
      * @throws StorageException
      */
     protected function doDelete(string $key): bool
@@ -162,6 +168,7 @@ class Redis extends AbstractAdapter
      * @param string $key
      *
      * @return bool
+     * @throws RedisException
      * @throws StorageException
      */
     protected function doHas(string $key): bool
@@ -175,7 +182,8 @@ class Redis extends AbstractAdapter
      * @param string $key
      * @param int    $value
      *
-     * @return bool|false|int
+     * @return false|int
+     * @throws RedisException
      * @throws StorageException
      */
     protected function doIncrement(string $key, int $value = 1): false | int

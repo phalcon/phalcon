@@ -22,8 +22,8 @@ interface CriteriaInterface
      * Appends a condition to the current conditions using an AND operator
      *
      * @param string     $conditions
-     * @param mixed|null $bindParams
-     * @param mixed|null $bindTypes
+     * @param array|null $bindParams
+     * @param array|null $bindTypes
      *
      * @return CriteriaInterface
      */
@@ -317,8 +317,8 @@ interface CriteriaInterface
      * Appends a condition to the current conditions using an OR operator
      *
      * @param string     $conditions
-     * @param mixed|null $bindParams
-     * @param mixed|null $bindTypes
+     * @param array|null $bindParams
+     * @param array|null $bindTypes
      *
      * @return CriteriaInterface
      */
@@ -382,8 +382,8 @@ interface CriteriaInterface
      * Sets the conditions parameter in the criteria
      *
      * @param string     $conditions
-     * @param mixed|null $bindParams
-     * @param mixed|null $bindTypes
+     * @param array|null $bindParams
+     * @param array|null $bindTypes
      *
      * @return CriteriaInterface
      */
