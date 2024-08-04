@@ -22,6 +22,7 @@ use Phalcon\Di\Traits\DiInstanceTrait;
 use Phalcon\Di\Traits\DiLoadTrait;
 use Phalcon\Events\ManagerInterface;
 use Phalcon\Events\Traits\EventsAwareTrait;
+use stdClass;
 
 /**
  * Phalcon\Di\Di is a component that implements Dependency Injection/Service
@@ -61,7 +62,7 @@ use Phalcon\Events\Traits\EventsAwareTrait;
  * $request = $di->getRequest();
  *```
  */
-class Di implements DiInterface
+class Di extends stdClass implements DiInterface
 {
     use DiArrayAccessTrait;
     use DiEventsTrait;

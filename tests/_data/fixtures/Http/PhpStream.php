@@ -37,6 +37,13 @@ class PhpStream
     protected $data = '';
 
     /**
+     * Workaround for PHP 8.3
+     *
+     * @var mixed|null
+     */
+    public mixed $context = null;
+
+    /**
      * Constructor
      */
     public function __construct()

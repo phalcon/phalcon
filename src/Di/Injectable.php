@@ -45,6 +45,7 @@ use Phalcon\Session\Bag;
 use Phalcon\Session\BagInterface;
 use Phalcon\Session\ManagerInterface as SessionManager;
 use Phalcon\Support\HelperFactory;
+use stdClass;
 
 //use Phalcon\Annotations\Adapter;
 //use Phalcon\Db\Adapter\AdapterInterface;
@@ -95,7 +96,7 @@ use Phalcon\Support\HelperFactory;
  * // * @property ManagerInterface $transactionManager
  * // * @property View|ViewInterface $view
  */
-abstract class Injectable implements InjectionAwareInterface
+abstract class Injectable extends stdClass implements InjectionAwareInterface
 {
     use InjectionAwareTrait;
 
