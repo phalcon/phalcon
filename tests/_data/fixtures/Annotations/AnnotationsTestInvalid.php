@@ -11,14 +11,9 @@
 
 declare(strict_types=1);
 
-namespace Phalcon\Tests\Fixtures\Translate\Adapter;
-
-use Phalcon\Translate\Adapter\NativeArray;
-
-class NativeAdapter extends NativeArray
+/**
+ * @Invalid(
+ */
+class AnnotationsTestInvalid
 {
-    public function notFound(string $index): string
-    {
-        return '';
-    }
 }

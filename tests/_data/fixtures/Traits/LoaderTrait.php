@@ -1,7 +1,5 @@
 <?php
 
-declare(strict_types=1);
-
 /**
  * This file is part of the Phalcon Framework.
  *
@@ -9,28 +7,28 @@ declare(strict_types=1);
  * file that was distributed with this source code.
  */
 
-namespace Phalcon\Tests\Fixtures\Traits;
+declare(strict_types=1);
 
-use UnitTester;
+namespace Phalcon\Tests\Fixtures\Traits;
 
 trait LoaderTrait
 {
+    /**
+     * @var string
+     */
+    protected string $includePath = '';
+    
     /**
      * @var array
      */
     protected array $loaders = [];
 
     /**
-     * @var string
-     */
-    protected string $includePath = '';
-
-    /**
      * Executed before each test
      *
-     * @param UnitTester $I
+     * @return void
      */
-    public function _before(UnitTester $I)
+    public function setUp(): void
     {
         $this->loaders = spl_autoload_functions();
 
@@ -44,9 +42,9 @@ trait LoaderTrait
     /**
      * Executed after each test
      *
-     * @param UnitTester $I
+     * @return void
      */
-    public function _after(UnitTester $I)
+    public function tearDown(): void
     {
         $loaders = spl_autoload_functions();
 

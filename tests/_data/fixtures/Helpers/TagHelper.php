@@ -20,12 +20,12 @@ class TagHelper extends TagSetup
     /**
      * @var string
      */
-    protected $function = '';
+    protected string $function = '';
 
     /**
      * @var string
      */
-    protected $inputType = '';
+    protected string $inputType = '';
 
     /**
      * Tests Phalcon\Tag :: weekField() - string as a parameter
@@ -33,20 +33,13 @@ class TagHelper extends TagSetup
      * @author Phalcon Team <team@phalcon.io>
      * @since  2014-09-05
      */
-    public function tagFieldStringParameter(UnitTester $I)
+    public function testTagFieldStringParameter()
     {
-        $I->wantToTest(
-            sprintf(
-                'Tag - %s() - string parameter',
-                $this->function
-            )
-        );
-
         $options  = 'x_name';
         $expected = '<input type="' . $this->inputType . '" id="x_name" name="x_name"';
 
-        $this->testFieldParameter($I, $this->function, $options, $expected);
-        $this->testFieldParameter($I, $this->function, $options, $expected, true);
+        $this->testFieldParameter($this->function, $options, $expected);
+        $this->testFieldParameter($this->function, $options, $expected, true);
     }
 
     /**
@@ -55,15 +48,8 @@ class TagHelper extends TagSetup
      * @author Phalcon Team <team@phalcon.io>
      * @since  2014-09-05
      */
-    public function tagFieldArrayParameter(UnitTester $I)
+    public function testTagFieldArrayParameter()
     {
-        $I->wantToTest(
-            sprintf(
-                'Tag - %s() - array parameter',
-                $this->function
-            )
-        );
-
         $options = [
             'x_name',
             'class' => 'x_class',
@@ -71,8 +57,8 @@ class TagHelper extends TagSetup
 
         $expected = '<input type="' . $this->inputType . '" id="x_name" name="x_name" class="x_class"';
 
-        $this->testFieldParameter($I, $this->function, $options, $expected);
-        $this->testFieldParameter($I, $this->function, $options, $expected, true);
+        $this->testFieldParameter($this->function, $options, $expected);
+        $this->testFieldParameter($this->function, $options, $expected, true);
     }
 
     /**
@@ -81,15 +67,8 @@ class TagHelper extends TagSetup
      * @author Phalcon Team <team@phalcon.io>
      * @since  2014-09-05
      */
-    public function tagFieldArrayParameterWithId(UnitTester $I)
+    public function testTagFieldArrayParameterWithId()
     {
-        $I->wantToTest(
-            sprintf(
-                'Tag - %s() - array parameter with id',
-                $this->function
-            )
-        );
-
         $options = [
             'x_name',
             'id'    => 'x_id',
@@ -100,8 +79,8 @@ class TagHelper extends TagSetup
         $expected = '<input type="' . $this->inputType . '" id="x_id" name="x_name" '
             . 'class="x_class" size="10"';
 
-        $this->testFieldParameter($I, $this->function, $options, $expected);
-        $this->testFieldParameter($I, $this->function, $options, $expected, true);
+        $this->testFieldParameter($this->function, $options, $expected);
+        $this->testFieldParameter($this->function, $options, $expected, true);
     }
 
     /**
@@ -110,15 +89,8 @@ class TagHelper extends TagSetup
      * @author Phalcon Team <team@phalcon.io>
      * @since  2014-09-05
      */
-    public function tagFieldArrayParameterWithNameNoId(UnitTester $I)
+    public function testTagFieldArrayParameterWithNameNoId()
     {
-        $I->wantToTest(
-            sprintf(
-                'Tag - %s() - array parameter with name no id',
-                $this->function
-            )
-        );
-
         $options = [
             'x_name',
             'name'  => 'x_other',
@@ -128,8 +100,8 @@ class TagHelper extends TagSetup
 
         $expected = '<input type="' . $this->inputType . '" id="x_name" name="x_other" class="x_class" size="10"';
 
-        $this->testFieldParameter($I, $this->function, $options, $expected);
-        $this->testFieldParameter($I, $this->function, $options, $expected, true);
+        $this->testFieldParameter($this->function, $options, $expected);
+        $this->testFieldParameter($this->function, $options, $expected, true);
     }
 
     /**
@@ -138,15 +110,8 @@ class TagHelper extends TagSetup
      * @author Phalcon Team <team@phalcon.io>
      * @since  2014-09-05
      */
-    public function tagFieldWithSetDefault(UnitTester $I)
+    public function testTagFieldWithSetDefault()
     {
-        $I->wantToTest(
-            sprintf(
-                'Tag - %s() - setDefault()',
-                $this->function
-            )
-        );
-
         $options = [
             'x_name',
             'name'  => 'x_other',
@@ -157,8 +122,8 @@ class TagHelper extends TagSetup
         $expected = '<input type="' . $this->inputType . '" id="x_name" '
             . 'name="x_other" value="x_value" class="x_class" size="10"';
 
-        $this->testFieldParameter($I, $this->function, $options, $expected, false, 'setDefault');
-        $this->testFieldParameter($I, $this->function, $options, $expected, true, 'setDefault');
+        $this->testFieldParameter($this->function, $options, $expected, false, 'setDefault');
+        $this->testFieldParameter($this->function, $options, $expected, true, 'setDefault');
     }
 
     /**
@@ -167,15 +132,8 @@ class TagHelper extends TagSetup
      * @author Phalcon Team <team@phalcon.io>
      * @since  2014-09-05
      */
-    public function tagFieldWithDisplayTo(UnitTester $I)
+    public function testTagFieldWithDisplayTo()
     {
-        $I->wantToTest(
-            sprintf(
-                'Tag - %s() - string displayTo()',
-                $this->function
-            )
-        );
-
         $options = [
             'x_name',
             'name'  => 'x_other',
@@ -186,8 +144,8 @@ class TagHelper extends TagSetup
         $expected = '<input type="' . $this->inputType . '" id="x_name" '
             . 'name="x_other" value="x_value" class="x_class" size="10"';
 
-        $this->testFieldParameter($I, $this->function, $options, $expected, false, 'displayTo');
-        $this->testFieldParameter($I, $this->function, $options, $expected, true, 'displayTo');
+        $this->testFieldParameter($this->function, $options, $expected, false, 'displayTo');
+        $this->testFieldParameter($this->function, $options, $expected, true, 'displayTo');
     }
 
     /**
@@ -196,15 +154,8 @@ class TagHelper extends TagSetup
      * @author Phalcon Team <team@phalcon.io>
      * @since  2014-09-05
      */
-    public function tagFieldWithSetDefaultElementNotPresent(UnitTester $I)
+    public function testTagFieldWithSetDefaultElementNotPresent()
     {
-        $I->wantToTest(
-            sprintf(
-                'Tag - %s() - setDefault() element not present',
-                $this->function
-            )
-        );
-
         $options = [
             'x_name',
             'name'  => 'x_other',
@@ -215,8 +166,8 @@ class TagHelper extends TagSetup
         $expected = '<input type="' . $this->inputType . '" id="x_name" '
             . 'name="x_other" value="x_value" class="x_class" size="10"';
 
-        $this->testFieldParameter($I, $this->function, $options, $expected, false, 'setDefault');
-        $this->testFieldParameter($I, $this->function, $options, $expected, true, 'setDefault');
+        $this->testFieldParameter($this->function, $options, $expected, false, 'setDefault');
+        $this->testFieldParameter($this->function, $options, $expected, true, 'setDefault');
     }
 
     /**
@@ -225,15 +176,8 @@ class TagHelper extends TagSetup
      * @author Phalcon Team <team@phalcon.io>
      * @since  2014-09-05
      */
-    public function tagFieldWithDisplayToElementNotPresent(UnitTester $I)
+    public function testTagFieldWithDisplayToElementNotPresent()
     {
-        $I->wantToTest(
-            sprintf(
-                'Tag - %s() - displayTo() element not present',
-                $this->function
-            )
-        );
-
         $options = [
             'x_name',
             'name'  => 'x_other',
@@ -244,7 +188,7 @@ class TagHelper extends TagSetup
         $expected = '<input type="' . $this->inputType . '" id="x_name" '
             . 'name="x_other" value="x_value" class="x_class" size="10"';
 
-        $this->testFieldParameter($I, $this->function, $options, $expected, false, 'displayTo');
-        $this->testFieldParameter($I, $this->function, $options, $expected, true, 'displayTo');
+        $this->testFieldParameter($this->function, $options, $expected, false, 'displayTo');
+        $this->testFieldParameter($this->function, $options, $expected, true, 'displayTo');
     }
 }

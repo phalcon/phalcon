@@ -13,8 +13,6 @@ declare(strict_types=1);
 
 namespace Phalcon\Tests\Fixtures\Traits;
 
-use UnitTester;
-
 /**
  * Trait GdTrait
  */
@@ -23,18 +21,15 @@ trait GdTrait
     /**
      * executed before each test
      */
-    public function _before(UnitTester $I)
+    public function setUp(): void
     {
-        $I->checkExtensionIsLoaded('gd');
+        $this->checkExtensionIsLoaded('gd');
     }
 
-    /**
-     * @param UnitTester $I
-     */
-    private function checkJpegSupport(UnitTester $I): void
+    private function checkJpegSupport(): void
     {
         if (true !== $this->hasJpegSupport()) {
-            $I->skipTest(
+            $this->markTestSkipped(
                 "Extension 'gd' is compiled without JPEG support."
             );
         }
