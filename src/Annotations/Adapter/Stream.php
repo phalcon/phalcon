@@ -25,6 +25,8 @@ use function str_replace;
 use function strtolower;
 use function unserialize;
 
+use const E_NOTICE;
+
 /**
  * Stores the parsed annotations in files. This adapter is suitable for
  * production
@@ -89,7 +91,7 @@ class Stream extends AbstractAdapter
             function () use (&$warning) {
                 $warning = true;
             },
-            E_WARNING
+            E_WARNING | E_NOTICE
         );
 
         $contents = unserialize($contents);

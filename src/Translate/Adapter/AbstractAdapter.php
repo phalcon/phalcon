@@ -61,13 +61,13 @@ abstract class AbstractAdapter implements AdapterInterface
     /**
      * Check whether a translation key exists
      *
-     * @param mixed $translateKey
+     * @param mixed $offset
      *
      * @return bool
      */
-    public function offsetExists(mixed $translateKey): bool
+    public function offsetExists(mixed $offset): bool
     {
-        return $this->has($translateKey);
+        return $this->has($offset);
     }
 
     /**
@@ -77,9 +77,9 @@ abstract class AbstractAdapter implements AdapterInterface
      *
      * @return string
      */
-    public function offsetGet(mixed $translateKey)
+    public function offsetGet(mixed $offset): mixed
     {
-        return $this->query($translateKey, []);
+        return $this->query($offset);
     }
 
     /**
