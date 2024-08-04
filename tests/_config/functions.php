@@ -1,7 +1,5 @@
 <?php
 
-declare(strict_types=1);
-
 /**
  * This file is part of the Phalcon Framework.
  *
@@ -10,6 +8,8 @@ declare(strict_types=1);
  * For the full copyright and license information, please view the LICENSE.txt
  * file that was distributed with this source code.
  */
+
+declare(strict_types=1);
 
 use Codeception\Util\Autoload;
 
@@ -75,20 +75,21 @@ if (!function_exists('loadFolders')) {
     function loadFolders()
     {
         $folders = [
-            'annotations',
-            'assets',
-            'cache',
-            'cache/models',
-            'image',
-            'image/gd',
-            'image/imagick',
-            'logs',
-            'session',
-            'stream',
+            'coverage',
+            'tests' . DIRECTORY_SEPARATOR . 'annotations',
+            'tests' . DIRECTORY_SEPARATOR . 'assets',
+            'tests' . DIRECTORY_SEPARATOR . 'cache',
+            'tests' . DIRECTORY_SEPARATOR . 'cache/models',
+            'tests' . DIRECTORY_SEPARATOR . 'image',
+            'tests' . DIRECTORY_SEPARATOR . 'image/gd',
+            'tests' . DIRECTORY_SEPARATOR . 'image/imagick',
+            'tests' . DIRECTORY_SEPARATOR . 'logs',
+            'tests' . DIRECTORY_SEPARATOR . 'session',
+            'tests' . DIRECTORY_SEPARATOR . 'stream',
         ];
 
         foreach ($folders as $folder) {
-            $item = outputDir('tests' . DIRECTORY_SEPARATOR . $folder);
+            $item = outputDir($folder);
 
             if (true !== file_exists($item)) {
                 mkdir($item, 0777, true);
@@ -136,12 +137,23 @@ if (!function_exists('loadIni')) {
  * Directories
  *******************************************************************************/
 /**
+ * Returns the root dir
+ */
+if (!function_exists('rootDir')) {
+    function rootDir(string $fileName = ''): string
+    {
+        return dirname(dirname(dirname(__FILE__))) . DIRECTORY_SEPARATOR
+            . $fileName;
+    }
+}
+
+/**
  * Returns the cache folder
  */
 if (!function_exists('cacheDir')) {
     function cacheDir(string $fileName = ''): string
     {
-        return codecept_output_dir()
+        return outputDir()
             . 'tests' . DIRECTORY_SEPARATOR
             . 'cache' . DIRECTORY_SEPARATOR
             . $fileName;
@@ -154,7 +166,10 @@ if (!function_exists('cacheDir')) {
 if (!function_exists('dataDir')) {
     function dataDir(string $fileName = ''): string
     {
-        return codecept_data_dir() . $fileName;
+        return rootDir()
+            . 'tests' . DIRECTORY_SEPARATOR
+            . '_data' . DIRECTORY_SEPARATOR
+            . $fileName;
     }
 }
 
@@ -164,7 +179,7 @@ if (!function_exists('dataDir')) {
 if (!function_exists('logsDir')) {
     function logsDir(string $fileName = ''): string
     {
-        return codecept_output_dir()
+        return outputDir()
             . 'tests' . DIRECTORY_SEPARATOR
             . 'logs' . DIRECTORY_SEPARATOR
             . $fileName;
@@ -177,7 +192,7 @@ if (!function_exists('logsDir')) {
 if (!function_exists('cacheModelsDir')) {
     function cacheModelsDir(string $fileName = ''): string
     {
-        return codecept_output_dir()
+        return outputDir()
             . 'tests' . DIRECTORY_SEPARATOR
             . 'cache' . DIRECTORY_SEPARATOR
             . 'models' . DIRECTORY_SEPARATOR
@@ -191,7 +206,10 @@ if (!function_exists('cacheModelsDir')) {
 if (!function_exists('outputDir')) {
     function outputDir(string $fileName = ''): string
     {
-        return codecept_output_dir() . $fileName;
+        return rootDir()
+            . 'tests' . DIRECTORY_SEPARATOR
+            . '_output' . DIRECTORY_SEPARATOR
+            . $fileName;
     }
 }
 
