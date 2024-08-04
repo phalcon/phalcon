@@ -14,4 +14,3 @@ modules:
     - Asserts
     - Filesystem
     - Helper\Database
-    - Helper\Unit

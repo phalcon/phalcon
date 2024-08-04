@@ -13,11 +13,11 @@ declare(strict_types=1);
 
 namespace Phalcon\Tests\Fixtures\Traits;
 
-use UnitTester;
+use IntegrationTester;
 
 trait ApcuTrait
 {
-    public function _before(UnitTester $I)
+    public function _before(IntegrationTester $I)
     {
         $I->checkExtensionIsLoaded('apcu');
     }
