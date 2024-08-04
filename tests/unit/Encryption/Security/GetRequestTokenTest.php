@@ -20,6 +20,11 @@ use Phalcon\Tests\UnitTestCase;
 
 final class GetRequestTokenTest extends UnitTestCase
 {
+    /**
+     * @var array
+     */
+    protected array $store = [];
+
     use DiTrait;
 
     /**

@@ -13,7 +13,9 @@ declare(strict_types=1);
 
 namespace Phalcon\Tests\Fixtures\Container;
 
-class TestWithInterface implements TestInterface
+use stdClass;
+
+class TestWithInterface extends stdClass implements TestInterface
 {
     /**
      * @param string $one
