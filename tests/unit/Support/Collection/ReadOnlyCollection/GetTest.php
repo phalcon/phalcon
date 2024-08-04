@@ -67,6 +67,7 @@ final class GetTest extends UnitTestCase
      * @since        2020-09-09
      */
     public function helperArrGetCast(
+        string $cast,
         mixed $value,
         mixed $expected
     ): void {
@@ -76,7 +77,7 @@ final class GetTest extends UnitTestCase
             ]
         );
 
-        $actual   = $collection->get('value', null, $example[0]);
+        $actual   = $collection->get('value', null, $cast);
         $this->assertEquals($expected, $actual);
     }
 
@@ -90,42 +91,52 @@ final class GetTest extends UnitTestCase
 
         return [
             [
+                'boolean',
                 1,
                 true,
             ],
             [
+                'bool',
                 1,
                 true,
             ],
             [
+                'integer',
                 "123",
                 123,
             ],
             [
+                'int',
                 "123",
                 123,
             ],
             [
+                'float',
                 "123.45",
                 123.45,
             ],
             [
+                'double',
                 "123.45",
                 123.45,
             ],
             [
+                'string',
                 123,
                 "123",
             ],
             [
+                'array',
                 $sample,
                 ['one' => 'two'],
             ],
             [
+                'object',
                 ['one' => 'two'],
                 $sample,
             ],
             [
+                'null',
                 1234,
                 null,
             ],
