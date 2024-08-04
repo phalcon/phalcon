@@ -164,7 +164,7 @@ class Libmemcached extends AbstractAdapter
      * @param string $key
      * @param int    $value
      *
-     * @return bool|int
+     * @return false|int
      * @throws StorageException
      */
     protected function doDecrement(string $key, int $value = 1): false | int
@@ -211,7 +211,7 @@ class Libmemcached extends AbstractAdapter
      * @param string $key
      * @param int    $value
      *
-     * @return bool|int
+     * @return false|int
      * @throws StorageException
      */
     protected function doIncrement(string $key, int $value = 1): false | int

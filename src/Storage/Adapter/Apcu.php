@@ -124,7 +124,7 @@ class Apcu extends AbstractAdapter
      * @param string $key
      * @param int    $value
      *
-     * @return bool|int
+     * @return false|int
      */
     protected function doDecrement(string $key, int $value = 1): false | int
     {
@@ -173,7 +173,7 @@ class Apcu extends AbstractAdapter
      * @param string $key
      * @param int    $value
      *
-     * @return bool|int
+     * @return false|int
      */
     protected function doIncrement(string $key, int $value = 1): false | int
     {

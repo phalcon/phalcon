@@ -1212,8 +1212,8 @@ class Manager implements ManagerInterface, InjectionAwareInterface, EventsAwareI
     /**
      * Returns a relation by its alias
      *
-     * @param string modelName
-     * @param string alias
+     * @param string $modelName
+     * @param string $alias
      *
      * @return RelationInterface|bool
      */
@@ -1229,10 +1229,11 @@ class Manager implements ManagerInterface, InjectionAwareInterface, EventsAwareI
      *
      * @param RelationInterface $relation
      * @param ModelInterface    $record
-     * @param mixed|null        $parameters
+     * @param array|string|null $parameters
      * @param string|null       $method
      *
-     * @return Simple|int|false
+     * @return Simple|ModelInterface|int|false
+     * @throws Exception
      */
     public function getRelationRecords(
         RelationInterface $relation,
@@ -2028,9 +2029,9 @@ class Manager implements ManagerInterface, InjectionAwareInterface, EventsAwareI
     /**
      * Stores a reusable record in the internal list
      *
-     * @param ModelInterface $model
-     * @param string         $key
-     * @param mixed          $records
+     * @param string $modelName
+     * @param string $key
+     * @param mixed  $records
      *
      * @return void
      */

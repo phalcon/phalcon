@@ -136,7 +136,7 @@ abstract class AbstractAdapter implements AdapterInterface, EventsAwareInterface
      * @param string $key
      * @param int    $value
      *
-     * @return int | bool
+     * @return false|int
      */
     public function decrement(string $key, int $value = 1): false | int
     {
@@ -228,7 +228,7 @@ abstract class AbstractAdapter implements AdapterInterface, EventsAwareInterface
     /**
      * Checks if an element exists in the cache
      *
-     * @param string key
+     * @param string $key
      *
      * @return bool
      */
@@ -249,7 +249,7 @@ abstract class AbstractAdapter implements AdapterInterface, EventsAwareInterface
      * @param string $key
      * @param int    $value
      *
-     * @return int | bool
+     * @return false|int
      */
     public function increment(string $key, int $value = 1): false | int
     {
@@ -343,7 +343,7 @@ abstract class AbstractAdapter implements AdapterInterface, EventsAwareInterface
     /**
      * Checks if an element exists in the cache
      *
-     * @param string key
+     * @param string $key
      *
      * @return bool
      */

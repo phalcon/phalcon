@@ -143,8 +143,8 @@ class Weak extends AbstractAdapter
     /**
      * Reads data from the adapter
      *
-     * @param string key
-     * @param mixed|null   defaultValue
+     * @param string     $key
+     * @param mixed|null $defaultValue
      *
      * @return mixed
      */

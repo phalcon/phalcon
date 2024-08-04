@@ -321,9 +321,11 @@ class Query implements QueryInterface, InjectionAwareInterface
     /**
      * Phalcon\Mvc\Model\Query constructor
      *
-     * @param string|null phql
-     * @param DiInterface|null container
-     * @param array options
+     * @param string|null      $phql
+     * @param DiInterface|null $container
+     * @param array            $options
+     *
+     * @throws Exception
      */
     public function __construct(
         protected ?string $phql = null,

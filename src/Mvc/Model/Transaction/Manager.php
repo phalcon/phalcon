@@ -102,7 +102,9 @@ class Manager implements ManagerInterface, InjectionAwareInterface
     /**
      * Phalcon\Mvc\Model\Transaction\Manager constructor
      *
-     * @param DiInterface|null container
+     * @param DiInterface|null $container
+     *
+     * @throws Exception
      */
     public function __construct(?DiInterface $container = null)
     {
@@ -201,9 +203,10 @@ class Manager implements ManagerInterface, InjectionAwareInterface
     /**
      * Create/Returns a new transaction or an existing one
      *
-     * @param bool autoBegin
+     * @param bool $autoBegin
      *
      * @return TransactionInterface
+     * @throws Exception
      */
     public function getOrCreateTransaction(bool $autoBegin = true): TransactionInterface
     {
