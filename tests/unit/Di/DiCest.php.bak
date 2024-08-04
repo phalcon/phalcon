@@ -33,7 +33,7 @@ use function is_string;
 /**
  * Tests the \Phalcon\Di component
  */
-class DiCest
+class DiTest extends UnitTestCase
 {
     /**
      * @var DiInterface
@@ -43,7 +43,7 @@ class DiCest
     /**
      * executed before each test
      */
-    public function _before(UnitTester $I)
+    public function _before(): void
     {
         Di::reset();
 
@@ -56,7 +56,7 @@ class DiCest
      * @author Phalcon Team <team@phalcon.io>
      * @since  2020-09-09
      */
-    public function testAttempt(UnitTester $I)
+    public function testAttempt(): void
     {
         $this->phDi->set(
             'escape4',
@@ -81,11 +81,11 @@ class DiCest
 
         $class  = Escaper::class;
         $actual = $this->phDi->get('escape4');
-        $I->assertInstanceOf($class, $actual);
+        $this->assertInstanceOf($class, $actual);
 
         $class  = stdClass::class;
         $actual = $this->phDi->get('escape4');
-        $I->assertInstanceOf($class, $actual);
+        $this->assertInstanceOf($class, $actual);
     }
 
     /**
@@ -94,14 +94,14 @@ class DiCest
      * @author Phalcon Team <team@phalcon.io>
      * @since  2020-09-09
      */
-    public function testMagicGetCall(UnitTester $I)
+    public function testMagicGetCall(): void
     {
         $this->phDi->set(
             'escape8',
             Escaper::class
         );
 
-        $I->assertInstanceOf(
+        $this->assertInstanceOf(
             Escaper::class,
             $this->phDi->getEscaper8()
         );
@@ -113,13 +113,13 @@ class DiCest
      * @author Phalcon Team <team@phalcon.io>
      * @since  2020-09-09
      */
-    public function testMagicSetCall(UnitTester $I)
+    public function testMagicSetCall(): void
     {
         $this->phDi->setEscaper9(
             Escaper::class
         );
 
-        $I->assertInstanceOf(
+        $this->assertInstanceOf(
             Escaper::class,
             $this->phDi->get('escape9')
         );
@@ -131,7 +131,7 @@ class DiCest
      * @author Phalcon Team <team@phalcon.io>
      * @since  2020-09-09
      */
-    public function testSetParameters(UnitTester $I)
+    public function testSetParameters(): void
     {
         $this->phDi->set(
             'someComponent1',
@@ -153,7 +153,7 @@ class DiCest
             ]
         );
 
-        $I->assertSame(
+        $this->assertSame(
             100,
             $someComponent1->someProperty
         );
@@ -166,7 +166,7 @@ class DiCest
             ]
         );
 
-        $I->assertSame(
+        $this->assertSame(
             500,
             $someComponent2->someProperty
         );
@@ -178,11 +178,11 @@ class DiCest
      * @author Phalcon Team <team@phalcon.io>
      * @since  2020-09-09
      */
-    public function testGetRawService(UnitTester $I)
+    public function testGetRawService(): void
     {
         $this->phDi->set('service1', 'some-service');
 
-        $I->assertSame(
+        $this->assertSame(
             'some-service',
             $this->phDi->getRaw('service1')
         );
@@ -194,11 +194,11 @@ class DiCest
      * @author Phalcon Team <team@phalcon.io>
      * @since  2020-09-09
      */
-    public function testRegisteringViaArrayAccess(UnitTester $I)
+    public function testRegisteringViaArrayAccess(): void
     {
         $this->phDi['simple'] = SimpleComponent::class;
 
-        $I->assertInstanceOf(
+        $this->assertInstanceOf(
             SimpleComponent::class,
             $this->phDi->get('simple')
         );
@@ -210,7 +210,7 @@ class DiCest
      * @author Phalcon Team <team@phalcon.io>
      * @since  2020-09-09
      */
-    public function testComplexInjection(UnitTester $I)
+    public function testComplexInjection(): void
     {
         $response = new Response();
 
@@ -319,9 +319,9 @@ class DiCest
 
         $component = $this->phDi->get('simpleConstructor');
 
-        $I->assertTrue(is_string($component->getResponse()));
+        $this->assertTrue(is_string($component->getResponse()));
 
-        $I->assertSame(
+        $this->assertSame(
             'response',
             $component->getResponse()
         );
@@ -329,9 +329,9 @@ class DiCest
 
         $component = $this->phDi->get('simpleSetters');
 
-        $I->assertTrue(is_string($component->getResponse()));
+        $this->assertTrue(is_string($component->getResponse()));
 
-        $I->assertSame(
+        $this->assertSame(
             'response',
             $component->getResponse()
         );
@@ -339,26 +339,26 @@ class DiCest
 
         $component = $this->phDi->get('simpleProperties');
 
-        $I->assertTrue(is_string($component->getResponse()));
-        $I->assertSame('response', $component->getResponse());
+        $this->assertTrue(is_string($component->getResponse()));
+        $this->assertSame('response', $component->getResponse());
 
 
         $component = $this->phDi->get('complexConstructor');
 
-        $I->assertTrue(is_object($component->getResponse()));
-        $I->assertSame($response, $component->getResponse());
+        $this->assertTrue(is_object($component->getResponse()));
+        $this->assertSame($response, $component->getResponse());
 
 
         $component = $this->phDi->get('complexSetters');
 
-        $I->assertTrue(is_object($component->getResponse()));
-        $I->assertSame($response, $component->getResponse());
+        $this->assertTrue(is_object($component->getResponse()));
+        $this->assertSame($response, $component->getResponse());
 
 
         $component = $this->phDi->get('complexProperties');
 
-        $I->assertTrue(is_object($component->getResponse()));
-        $I->assertSame($response, $component->getResponse());
+        $this->assertTrue(is_object($component->getResponse()));
+        $this->assertSame($response, $component->getResponse());
     }
 
     /**
@@ -367,11 +367,11 @@ class DiCest
      * @author Caio Almeida <caio.f.r.amd@gmail.com>
      * @since  2017-04-11
      */
-    public function testRegistersServiceProvider(UnitTester $I)
+    public function testRegistersServiceProvider(): void
     {
         $this->phDi->register(new SomeServiceProvider());
 
-        $I->assertSame(
+        $this->assertSame(
             'bar',
             $this->phDi['foo']
         );
@@ -379,7 +379,7 @@ class DiCest
 
         $service = $this->phDi->get('fooAction');
 
-        $I->assertInstanceOf(
+        $this->assertInstanceOf(
             SomeComponent::class,
             $service
         );
@@ -391,39 +391,39 @@ class DiCest
      * @author Gorka Guridi <gorka.guridi@gmail.com>
      * @since  2017-04-12
      */
-    public function testYamlLoader(UnitTester $I)
+    public function testYamlLoader(): void
     {
-        $I->checkExtensionIsLoaded('yaml');
+        $this->checkExtensionIsLoaded('yaml');
 
         $this->phDi->loadFromYaml(
             dataDir('fixtures/Di/services.yml')
         );
 
-        $I->assertTrue(
+        $this->assertTrue(
             $this->phDi->has('unit-test')
         );
 
-        $I->assertFalse(
+        $this->assertFalse(
             $this->phDi->getService('unit-test')->isShared()
         );
 
-        $I->assertTrue(
+        $this->assertTrue(
             $this->phDi->has('config')
         );
 
-        $I->assertTrue(
+        $this->assertTrue(
             $this->phDi->getService('config')->isShared()
         );
 
-        $I->assertTrue(
+        $this->assertTrue(
             $this->phDi->has('component')
         );
 
-        $I->assertFalse(
+        $this->assertFalse(
             $this->phDi->getService('component')->isShared()
         );
 
-        $I->assertInstanceOf(
+        $this->assertInstanceOf(
             Config::class,
             $this->phDi->get('component')->someProperty
         );
@@ -435,37 +435,37 @@ class DiCest
      * @author Gorka Guridi <gorka.guridi@gmail.com>
      * @since  2017-04-12
      */
-    public function testPhpLoader(UnitTester $I)
+    public function testPhpLoader(): void
     {
         $this->phDi->loadFromPhp(
             dataDir('fixtures/Di/services.php')
         );
 
-        $I->assertTrue(
+        $this->assertTrue(
             $this->phDi->has('unit-test')
         );
 
-        $I->assertFalse(
+        $this->assertFalse(
             $this->phDi->getService('unit-test')->isShared()
         );
 
-        $I->assertTrue(
+        $this->assertTrue(
             $this->phDi->has('config')
         );
 
-        $I->assertTrue(
+        $this->assertTrue(
             $this->phDi->getService('config')->isShared()
         );
 
-        $I->assertTrue(
+        $this->assertTrue(
             $this->phDi->has('component')
         );
 
-        $I->assertFalse(
+        $this->assertFalse(
             $this->phDi->getService('component')->isShared()
         );
 
-        $I->assertInstanceOf(
+        $this->assertInstanceOf(
             Config::class,
             $this->phDi->get('component')->someProperty
         );
@@ -474,12 +474,12 @@ class DiCest
     /**
      * Tests resolving service
      *
-     * @param UnitTester $I
+     * @return void
      *
      * @author Phalcon Team <team@phalcon.io>
      * @since  2020-09-09
      */
-    public function testResolvingService(UnitTester $I)
+    public function testResolvingService(): void
     {
         $container = new Di();
 
@@ -498,19 +498,19 @@ class DiCest
         );
 
         $actual = $container->getService('resolved')->isResolved();
-        $I->assertFalse($actual);
+        $this->assertFalse($actual);
 
         $actual = $container->getService('notResolved')->isResolved();
-        $I->assertFalse($actual);
+        $this->assertFalse($actual);
 
 
         $container->get('resolved');
 
         $actual = $container->getService('resolved')->isResolved();
-        $I->assertTrue($actual);
+        $this->assertTrue($actual);
 
         $actual = $container->getService('notResolved')->isResolved();
-        $I->assertFalse($actual);
+        $this->assertFalse($actual);
     }
 
 }
