@@ -13,11 +13,6 @@ declare(strict_types=1);
 
 namespace Phalcon\Tests\Unit\Storage\Adapter;
 
-use Codeception\Example;
-use Codeception\Stub;
-use Phalcon\Tests\Fixtures\Storage\Adapter\StreamFileGetContentsFixture;
-use Phalcon\Tests\Fixtures\Storage\Adapter\StreamFopenFixture;
-use Phalcon\Tests\UnitTestCase;
 use Phalcon\Storage\Adapter\Apcu;
 use Phalcon\Storage\Adapter\Libmemcached;
 use Phalcon\Storage\Adapter\Memory;
@@ -27,15 +22,84 @@ use Phalcon\Storage\Adapter\Weak;
 use Phalcon\Storage\Exception as StorageException;
 use Phalcon\Storage\SerializerFactory;
 use Phalcon\Support\Exception as HelperException;
+use Phalcon\Tests\Fixtures\Storage\Adapter\StreamFileGetContentsFixture;
+use Phalcon\Tests\Fixtures\Storage\Adapter\StreamFopenFixture;
+use Phalcon\Tests\UnitTestCase;
+use stdClass;
 
 use function getOptionsLibmemcached;
 use function getOptionsRedis;
 use function outputDir;
-use function sprintf;
 use function uniqid;
 
 final class HasTest extends UnitTestCase
 {
+    /**
+     * @return array[]
+     */
+    public static function getExamples(): array
+    {
+        return [
+            [
+                Apcu::class,
+                [],
+                'apcu',
+            ],
+            [
+                Libmemcached::class,
+                getOptionsLibmemcached(),
+                'memcached',
+            ],
+            [
+                Memory::class,
+                [],
+                '',
+            ],
+            [
+                Redis::class,
+                getOptionsRedis(),
+                'redis',
+            ],
+            [
+                Stream::class,
+                [
+                    'storageDir' => outputDir(),
+                ],
+                '',
+            ],
+        ];
+    }
+
+    /**
+     * Tests Phalcon\Storage\Adapter\* :: has()
+     *
+     * @dataProvider getExamples
+     *
+     * @author       Phalcon Team <team@phalcon.io>
+     * @since        2020-09-09
+     */
+    public function testStorageAdapterHas(
+        string $class,
+        array $options,
+        ?string $extension
+    ): void {
+        if (!empty($extension)) {
+            $this->checkExtensionIsLoaded($extension);
+        }
+
+        $serializer = new SerializerFactory();
+        $adapter    = new $class($serializer, $options);
+
+        $key = uniqid();
+
+        $actual = $adapter->has($key);
+        $this->assertFalse($actual);
+
+        $adapter->set($key, 'test');
+        $actual = $adapter->has($key);
+        $this->assertTrue($actual);
+    }
+
     /**
      * Tests Phalcon\Storage\Adapter\Stream :: has() - cannot open file
      *
@@ -95,36 +159,6 @@ final class HasTest extends UnitTestCase
     }
 
     /**
-     * Tests Phalcon\Storage\Adapter\* :: has()
-     *
-     * @dataProvider getExamples
-     *
-     * @author       Phalcon Team <team@phalcon.io>
-     * @since        2020-09-09
-     */
-    public function testStorageAdapterHas(
-        string $class,
-        array $options,
-        ?string $extension
-    ): void {
-        if (!empty($extension)) {
-            $this->checkExtensionIsLoaded($extension);
-        }
-
-        $serializer = new SerializerFactory();
-        $adapter    = new $class($serializer, $options);
-
-        $key = uniqid();
-
-        $actual = $adapter->has($key);
-        $this->assertFalse($actual);
-
-        $adapter->set($key, 'test');
-        $actual = $adapter->has($key);
-        $this->assertTrue($actual);
-    }
-
-    /**
      * Tests Phalcon\Storage\Adapter\Weak :: has()
      *
      * @return void
@@ -137,9 +171,9 @@ final class HasTest extends UnitTestCase
         $serializer = new SerializerFactory();
         $adapter    = new Weak($serializer);
 
-        $obj1 = new \stdClass();
+        $obj1 = new stdClass();
 
-        $key1 = uniqid();
+        $key1   = uniqid();
         $actual = $adapter->has($key1);
         $this->assertFalse($actual);
 
@@ -147,41 +181,5 @@ final class HasTest extends UnitTestCase
 
         $actual = $adapter->has($key1);
         $this->assertTrue($actual);
-    }
-
-    /**
-     * @return array[]
-     */
-    public static function getExamples(): array
-    {
-        return [
-            [
-                Apcu::class,
-                [],
-                'apcu',
-            ],
-            [
-                Libmemcached::class,
-                getOptionsLibmemcached(),
-                'memcached',
-            ],
-            [
-                Memory::class,
-                [],
-                '',
-            ],
-            [
-                Redis::class,
-                getOptionsRedis(),
-                'redis',
-            ],
-            [
-                Stream::class,
-                [
-                    'storageDir' => outputDir(),
-                ],
-                '',
-            ],
-        ];
     }
 }

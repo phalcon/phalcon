@@ -13,14 +13,13 @@ declare(strict_types=1);
 
 namespace Phalcon\Tests\Unit\Storage\Adapter;
 
-use Codeception\Example;
-use Phalcon\Tests\UnitTestCase;
 use Phalcon\Storage\Adapter\Apcu;
 use Phalcon\Storage\Adapter\Libmemcached;
 use Phalcon\Storage\Adapter\Memory;
 use Phalcon\Storage\Adapter\Redis;
 use Phalcon\Storage\Adapter\Stream;
 use Phalcon\Storage\SerializerFactory;
+use Phalcon\Tests\UnitTestCase;
 
 use function getOptionsLibmemcached;
 use function getOptionsRedis;
@@ -29,6 +28,45 @@ use function uniqid;
 
 final class DecrementTest extends UnitTestCase
 {
+    /**
+     * @return array[]
+     */
+    public static function getExamples(): array
+    {
+        return [
+            [
+                'Apcu',
+                Apcu::class,
+                [],
+                'apcu',
+                -1,
+            ],
+            [
+                'Libmemcached',
+                Libmemcached::class,
+                getOptionsLibmemcached(),
+                'memcached',
+                false,
+            ],
+            [
+                'Memory',
+                Memory::class,
+                [],
+                '',
+                false,
+            ],
+            [
+                'Stream',
+                Stream::class,
+                [
+                    'storageDir' => outputDir(),
+                ],
+                '',
+                false,
+            ],
+        ];
+    }
+
     /**
      * Tests Phalcon\Storage\Adapter\* :: decrement()
      *
@@ -123,44 +161,5 @@ final class DecrementTest extends UnitTestCase
         $expected = -9;
         $actual   = $adapter->decrement($key, 9);
         $this->assertEquals($expected, $actual);
-    }
-
-    /**
-     * @return array[]
-     */
-    public static function getExamples(): array
-    {
-        return [
-            [
-                'Apcu',
-                Apcu::class,
-                [],
-                'apcu',
-                -1,
-            ],
-            [
-                'Libmemcached',
-                Libmemcached::class,
-                getOptionsLibmemcached(),
-                'memcached',
-                false,
-            ],
-            [
-                'Memory',
-                Memory::class,
-                [],
-                '',
-                false,
-            ],
-            [
-                'Stream',
-                Stream::class,
-                [
-                    'storageDir' => outputDir(),
-                ],
-                '',
-                false,
-            ],
-        ];
     }
 }
