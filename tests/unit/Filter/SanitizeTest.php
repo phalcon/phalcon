@@ -30,7 +30,7 @@ final class SanitizeTest extends UnitTestCase
      *
      * @dataProvider getExamples
      *
-     * @param Example    $example
+     * @param Example $example
      *
      * @author       Phalcon Team <team@phalcon.io>
      * @since        2021-11-07

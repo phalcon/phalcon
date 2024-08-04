@@ -60,11 +60,11 @@ final class NewInstanceTest extends UnitTestCase
     /**
      * Tests Phalcon\Filter\FilterFactory :: newInstance() - services
      *
-     * @return void
-     * @param Example    $example
+     * @param Example $example
      *
      * @dataProvider getData
      *
+     * @return void
      * @author       Phalcon Team <team@phalcon.io>
      * @since        2020-09-09
      */

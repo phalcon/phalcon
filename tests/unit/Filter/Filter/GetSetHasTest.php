@@ -138,7 +138,7 @@ final class GetSetHasTest extends UnitTestCase
             }
         );
 
-        $value  = 'cheese';
+        $value = 'cheese';
         $actual = $locator->sanitize($value, 'testappend');
 
         $expected = $value . 'test';

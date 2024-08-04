@@ -36,7 +36,7 @@ final class SanitizeMultipleTest extends UnitTestCase
      */
     public function testFilterFilterSanitize(
         mixed $source,
-        array|string $filters,
+        array | string $filters,
         bool $noRecursive,
         mixed $expected
     ): void {
@@ -98,9 +98,9 @@ final class SanitizeMultipleTest extends UnitTestCase
      */
     public function testFilterFilterSanitizeCustomFilters(
         array $source,
-        array|string $filters,
+        array | string $filters,
         bool $noRecursive,
-        array|int $expected
+        array | int $expected
     ): void {
         $locator = new FilterFactory();
         $filter  = $locator->newInstance();
