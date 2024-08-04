@@ -30,6 +30,7 @@ use function call_user_func_array;
 use function file_exists;
 use function file_get_contents;
 use function file_put_contents;
+use function filemtime;
 use function hash;
 use function implode;
 use function is_array;
@@ -445,7 +446,7 @@ class Compiler implements InjectionAwareInterface
                  * Compare modification timestamps to check if the file
                  * needs to be recompiled
                  */
-                if ($this->compareMtime($templatePath, $compiledTemplatePath)) {
+                if (filemtime($templatePath) !== filemtime($compiledTemplatePath)) {
                     $compilation = $this->compileFile(
                         $templatePath,
                         $compiledTemplatePath,
@@ -2985,24 +2986,10 @@ class Compiler implements InjectionAwareInterface
     }
 
     /**
-     * @param string $filename1
-     * @param string $filename2
+     * @param string|null $path
      *
-     * @return bool
+     * @return string
      */
-    private function compareMtime(string $filename1, string $filename2): bool
-    {
-        $statbuffer1 = @stat($filename1);
-        $statbuffer2 = @stat($filename2);
-
-        if ($statbuffer1 === false || $statbuffer2 === false) {
-            trigger_error("stat failed for one of the files", E_USER_WARNING);
-            return false;
-        }
-
-        return $statbuffer1['mtime'] >= $statbuffer2['mtime'];
-    }
-
     private function getUniquePathKey(?string $path): string
     {
         if ($path) {

@@ -7,12 +7,17 @@
  *
  * For the full copyright and license information, please view the LICENSE.txt
  * file that was distributed with this source code.
+ *
+ * Minifying logic supported by Minify by Mathias Mullie
+ * @link https://github.com/matthiasmullie/minify
+ * @license https://github.com/matthiasmullie/minify/blob/master/LICENSE
  */
 
 declare(strict_types=1);
 
 namespace Phalcon\Assets\Filters;
 
+use MatthiasMullie\Minify\CSS;
 use Phalcon\Assets\FilterInterface;
 
 /**
@@ -35,6 +40,9 @@ class CssMin implements FilterInterface
      */
     public function filter(string $content): string
     {
-        return $content;
+        $minifier = new CSS();
+        $minifier->add($content);
+
+        return $minifier->minify();
     }
 }
