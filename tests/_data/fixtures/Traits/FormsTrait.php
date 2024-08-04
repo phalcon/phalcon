@@ -25,7 +25,6 @@ use Phalcon\Forms\Element\Select;
 use Phalcon\Forms\Element\Submit;
 use Phalcon\Forms\Element\Text;
 use Phalcon\Forms\Element\TextArea;
-use UnitTester;
 
 /**
  * Trait GdTrait

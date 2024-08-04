@@ -16,7 +16,6 @@ namespace Phalcon\Tests\Fixtures\Listener;
 use IntegrationTester;
 use Phalcon\Events\Event;
 use Phalcon\Tests\Integration\Mvc\View\Engine\Volt\RenderCest;
-use UnitTester;
 
 /**
  * Class ViewCompileListener
@@ -26,7 +25,7 @@ class ViewCompileListener
     /** @var RenderCest */
     protected $testCase;
 
-    /** @var UnitTester */
+    /** @var IntegrationTester */
     protected $tester;
 
     protected $before = '';

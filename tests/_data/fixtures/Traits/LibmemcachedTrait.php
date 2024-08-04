@@ -13,7 +13,7 @@ declare(strict_types=1);
 
 namespace Phalcon\Tests\Fixtures\Traits;
 
-use UnitTester;
+use IntegrationTester;
 
 use function getOptionsLibmemcached;
 
@@ -21,7 +21,7 @@ trait LibmemcachedTrait
 {
     protected array $options = [];
 
-    public function _before(UnitTester $I)
+    public function _before(IntegrationTester $I)
     {
         $I->checkExtensionIsLoaded('memcached');
 

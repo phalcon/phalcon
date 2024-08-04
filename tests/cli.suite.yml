@@ -4,4 +4,3 @@ modules:
     - Asserts
     - Cli
     - \Helper\Cli
-    - \Helper\Unit

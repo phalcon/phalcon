@@ -11,4 +11,3 @@ modules:
     - Asserts
     - Filesystem
     - Helper\Integration
-    - Helper\Unit

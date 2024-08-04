@@ -13,7 +13,7 @@ declare(strict_types=1);
 
 namespace Phalcon\Tests\Fixtures\Traits;
 
-use UnitTester;
+use IntegrationTester;
 
 use function getOptionsRedis;
 
@@ -22,9 +22,9 @@ trait RedisTrait
     protected array $options = [];
 
     /**
-     * @param UnitTester $I
+     * @param IntegrationTester $I
      */
-    public function _before(UnitTester $I)
+    public function _before(IntegrationTester $I)
     {
         $I->checkExtensionIsLoaded('redis');
 

@@ -10,13 +10,20 @@ use Codeception\Module;
 use Codeception\TestInterface;
 use PDO;
 use Phalcon\DataMapper\Pdo\Connection;
+use PHPUnit\Framework\SkippedTestSuiteError;
+use ReflectionClass;
+use ReflectionException;
 
 use function date;
 use function env;
+use function file_exists;
+use function gc_collect_cycles;
 use function getOptionsMysql;
 use function getOptionsPostgresql;
 use function getOptionsSqlite;
+use function is_file;
 use function sprintf;
+use function unlink;
 
 /**
  * Class Database
@@ -172,5 +179,40 @@ class Database extends Module
     public function getDriver(): string
     {
         return $this->driver;
+    }
+
+    /**
+     * @throws ReflectionException
+     */
+    public function getProtectedProperty($obj, $prop)
+    {
+        $reflection = new ReflectionClass($obj);
+
+        $property = $reflection->getProperty($prop);
+
+        $property->setAccessible(true);
+
+        return $property->getValue($obj);
+    }
+
+    /**
+     * @param string $filename
+     */
+    public function safeDeleteFile(string $filename)
+    {
+        if (file_exists($filename) && is_file($filename)) {
+            gc_collect_cycles();
+            unlink($filename);
+        }
+    }
+
+    /**
+     * Throws the SkippedTestError exception to skip a test
+     *
+     * @param string $message The message to display
+     */
+    public function skipTest(string $message)
+    {
+        throw new SkippedTestSuiteError($message);
     }
 }

@@ -1,4 +1,4 @@
-<?php  //[STAMP] eb3fa26ba59cfd570afa406bac83e5b9
+<?php  //[STAMP] 0b9dedad07f1f0d03256e9d906f436a2
 // phpcs:ignoreFile
 namespace _generated;
 
@@ -2618,38 +2618,10 @@ trait IntegrationTesterActions
     /**
      * [!] Method is generated. Documentation taken from corresponding module.
      *
-     * Returns a directory string with the trailing directory separator
-     * @see \Helper\Unit::getDirSeparator()
-     */
-    public function getDirSeparator(string $directory): string {
-        return $this->getScenario()->runStep(new \Codeception\Step\Action('getDirSeparator', func_get_args()));
-    }
-
- 
-    /**
-     * [!] Method is generated. Documentation taken from corresponding module.
-     *
-     * Calls private or protected method.
-     *
-     * @param string|object $obj
-     * @param string        $method
-     *
-     * @return mixed
-     * @throws ReflectionException
-     * @see \Helper\Unit::callProtectedMethod()
-     */
-    public function callProtectedMethod($obj, string $method) {
-        return $this->getScenario()->runStep(new \Codeception\Step\Action('callProtectedMethod', func_get_args()));
-    }
-
- 
-    /**
-     * [!] Method is generated. Documentation taken from corresponding module.
-     *
      * Checks if an extension is loaded and if not, skips the test
      *
      * @param string $extension The extension to check
-     * @see \Helper\Unit::checkExtensionIsLoaded()
+     * @see \Helper\Integration::checkExtensionIsLoaded()
      */
     public function checkExtensionIsLoaded(string $extension) {
         return $this->getScenario()->runStep(new \Codeception\Step\Action('checkExtensionIsLoaded', func_get_args()));
@@ -2659,27 +2631,11 @@ trait IntegrationTesterActions
     /**
      * [!] Method is generated. Documentation taken from corresponding module.
      *
-     * Returns a unique file name
-     *
-     * @param string $prefix A prefix for the file
-     * @param string $suffix A suffix for the file
-     *
-     * @return string
-     * @see \Helper\Unit::getNewFileName()
+     * Returns a directory string with the trailing directory separator
+     * @see \Helper\Integration::getDirSeparator()
      */
-    public function getNewFileName(string $prefix = "", string $suffix = "log") {
-        return $this->getScenario()->runStep(new \Codeception\Step\Action('getNewFileName', func_get_args()));
-    }
-
- 
-    /**
-     * [!] Method is generated. Documentation taken from corresponding module.
-     *
-     * @throws ReflectionException
-     * @see \Helper\Unit::getProtectedProperty()
-     */
-    public function getProtectedProperty($obj, $prop) {
-        return $this->getScenario()->runStep(new \Codeception\Step\Action('getProtectedProperty', func_get_args()));
+    public function getDirSeparator(string $directory): string {
+        return $this->getScenario()->runStep(new \Codeception\Step\Action('getDirSeparator', func_get_args()));
     }
 
  
@@ -2687,7 +2643,7 @@ trait IntegrationTesterActions
      * [!] Method is generated. Documentation taken from corresponding module.
      *
      * @param string $directory
-     * @see \Helper\Unit::safeDeleteDirectory()
+     * @see \Helper\Integration::safeDeleteDirectory()
      */
     public function safeDeleteDirectory(string $directory) {
         return $this->getScenario()->runStep(new \Codeception\Step\Action('safeDeleteDirectory', func_get_args()));
@@ -2698,7 +2654,7 @@ trait IntegrationTesterActions
      * [!] Method is generated. Documentation taken from corresponding module.
      *
      * @param string $filename
-     * @see \Helper\Unit::safeDeleteFile()
+     * @see \Helper\Integration::safeDeleteFile()
      */
     public function safeDeleteFile(string $filename) {
         return $this->getScenario()->runStep(new \Codeception\Step\Action('safeDeleteFile', func_get_args()));
@@ -2708,21 +2664,10 @@ trait IntegrationTesterActions
     /**
      * [!] Method is generated. Documentation taken from corresponding module.
      *
-     * @throws ReflectionException
-     * @see \Helper\Unit::setProtectedProperty()
-     */
-    public function setProtectedProperty($obj, $prop, $value) {
-        return $this->getScenario()->runStep(new \Codeception\Step\Action('setProtectedProperty', func_get_args()));
-    }
-
- 
-    /**
-     * [!] Method is generated. Documentation taken from corresponding module.
-     *
      * Throws the SkippedTestError exception to skip a test
      *
      * @param string $message The message to display
-     * @see \Helper\Unit::skipTest()
+     * @see \Helper\Integration::skipTest()
      */
     public function skipTest(string $message) {
         return $this->getScenario()->runStep(new \Codeception\Step\Action('skipTest', func_get_args()));
