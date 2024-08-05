@@ -18,7 +18,12 @@ use Phalcon\Filter\Validation\AbstractValidator;
 
 use function array_reverse;
 use function array_sum;
+use function restore_error_handler;
+use function set_error_handler;
 use function str_split;
+
+use const E_NOTICE;
+use const E_WARNING;
 
 /**
  * Checks if a value has a valid credit card number
@@ -108,7 +113,21 @@ class CreditCard extends AbstractValidator
             $hash .= ($position % 2 ? (int)$digit * 2 : $digit);
         }
 
-        $result = array_sum(str_split($hash));
+        $warning = false;
+        set_error_handler(
+            function () use (&$warning) {
+                $warning = true;
+            },
+            E_WARNING
+        );
+
+        $result = array_sum(str_split($hash)); // Sum the digits
+
+        restore_error_handler();
+
+        if ($warning) {
+            return false;
+        }
 
         return (0 === $result % 10);
     }
