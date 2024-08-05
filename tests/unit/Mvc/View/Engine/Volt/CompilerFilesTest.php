@@ -28,6 +28,19 @@ use const PHP_EOL;
 
 class CompilerFilesTest extends UnitTestCase
 {
+    public function setUp(): void
+    {
+        $compiledFiles = [
+            dataDir('fixtures/views/blocks/base.volt.php'),
+            dataDir('fixtures/views/blocks/index/login.volt.php'),
+            dataDir('fixtures/views/blocks/index/main.volt.php'),
+            dataDir('fixtures/views/blocks/partials/header.volt.php'),
+        ];
+        foreach ($compiledFiles as $fileName) {
+            $this->safeDeleteFile($fileName);
+        }
+    }
+
     public function tearDown(): void
     {
         $compiledFiles = [
@@ -46,19 +59,6 @@ class CompilerFilesTest extends UnitTestCase
             dataDir('fixtures/views/partials/footer.volt.php'),
         ];
 
-        foreach ($compiledFiles as $fileName) {
-            $this->safeDeleteFile($fileName);
-        }
-    }
-
-    public function setUp(): void
-    {
-        $compiledFiles = [
-            dataDir('fixtures/views/blocks/base.volt.php'),
-            dataDir('fixtures/views/blocks/index/login.volt.php'),
-            dataDir('fixtures/views/blocks/index/main.volt.php'),
-            dataDir('fixtures/views/blocks/partials/header.volt.php'),
-        ];
         foreach ($compiledFiles as $fileName) {
             $this->safeDeleteFile($fileName);
         }
@@ -108,12 +108,9 @@ class CompilerFilesTest extends UnitTestCase
             dataDir('fixtures/views/blocks/index/login.volt.php')
         );
 
-        $this->openFile(
-            dataDir('fixtures/views/blocks/index/login.volt.php')
-        );
-
+        $file     = dataDir('fixtures/views/blocks/index/login.volt.php');
         $expected = sprintf($template, '<p>This is the login page</p>');
-        $this->seeFileContentsEqual($expected);
+        $this->assertFileContentsEqual($file, $expected);
 
         /**
          * Main page = header output
@@ -148,7 +145,7 @@ class CompilerFilesTest extends UnitTestCase
             dataDir('fixtures/views/extends/children.extends.volt.php')
         );
 
-        $file = dataDir('fixtures/views/extends/children.extends.volt.php');
+        $file     = dataDir('fixtures/views/extends/children.extends.volt.php');
         $contents = '<!DOCTYPE HTML PUBLIC "-//W3C//DTD HTML 4.01//EN">'
             . '<html lang="en"><html xmlns="http://www.w3.org/1999/xhtml">'
             . '<head><style type="text/css">.important { color: #336699; }</style>'
@@ -179,7 +176,7 @@ class CompilerFilesTest extends UnitTestCase
             dataDir('fixtures/views/extends/import.volt.php')
         );
 
-        $file = dataDir('fixtures/views/extends/import.volt.php');
+        $file     = dataDir('fixtures/views/extends/import.volt.php');
         $contents = '<div class="header"><h1>This is the header</h1></div>'
             . '<div class="footer"><p>This is the footer</p></div>';
         $this->assertFileContentsEqual($file, $contents);
@@ -205,8 +202,8 @@ class CompilerFilesTest extends UnitTestCase
             dataDir('fixtures/views/extends/import2.volt.php')
         );
 
-        $file = dataDir('fixtures/views/extends/import2.volt.php');
-        $contents = '<div class="header"><h1>This is the header</h1></div>';
+        $file     = dataDir('fixtures/views/extends/import2.volt.php');
+        $contents = '<div class="header"><h1>This is the title</h1></div>';
         $this->assertFileContentsEqual($file, $contents);
     }
 }
