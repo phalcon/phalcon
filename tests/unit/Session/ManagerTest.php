@@ -19,10 +19,10 @@ use Phalcon\Session\Manager;
 use PHPUnit\Framework\Attributes\TestWith;
 use Phalcon\Tests\UnitTestCase;
 
-use function session_abort;
-use function session_destroy;
-use function session_name;
-use function session_status;
+use function testSession_abort;
+use function testSession_destroy;
+use function testSession_name;
+use function testSession_status;
 
 use const PHP_SESSION_ACTIVE;
 

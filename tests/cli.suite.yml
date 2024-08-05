@@ -1,6 +1,0 @@
-actor: CliTester
-modules:
-  enabled:
-    - Asserts
-    - Cli
-    - \Helper\Cli
