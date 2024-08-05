@@ -17,14 +17,13 @@ use DateInterval;
 use Phalcon\Cache\Adapter\AdapterInterface;
 use Phalcon\Cache\Exception\InvalidArgumentException;
 use Phalcon\Events\EventsAwareInterface;
+use Phalcon\Events\Exception as EventsException;
 use Phalcon\Events\Traits\EventsAwareTrait;
 use Traversable;
 
 /**
  * This component offers caching capabilities for your application.
  * Phalcon\Cache implements PSR-16.
- *
- * @property AdapterInterface $adapter
  */
 abstract class AbstractCache implements CacheInterface, EventsAwareInterface
 {
@@ -111,6 +110,7 @@ abstract class AbstractCache implements CacheInterface, EventsAwareInterface
      *
      * @throws InvalidArgumentException MUST be thrown if the $key string is
      *                                  not a legal value.
+     * @throws EventsException
      */
     protected function doDelete(string $key): bool
     {
@@ -136,6 +136,7 @@ abstract class AbstractCache implements CacheInterface, EventsAwareInterface
      * @throws InvalidArgumentException MUST be thrown if $keys is neither an
      *                                  array nor a Traversable, or if any of
      *                                  the $keys are not a legal value.
+     * @throws EventsException
      */
     protected function doDeleteMultiple($keys): bool
     {
@@ -166,6 +167,7 @@ abstract class AbstractCache implements CacheInterface, EventsAwareInterface
      *
      * @throws InvalidArgumentException MUST be thrown if the $key string is
      * not a legal value.
+     * @throws EventsException
      */
     protected function doGet(string $key, mixed $default = null)
     {
@@ -193,6 +195,7 @@ abstract class AbstractCache implements CacheInterface, EventsAwareInterface
      *
      * @throws InvalidArgumentException MUST be thrown if $keys is neither an
      * array nor a Traversable, or if any of the $keys are not a legal value.
+     * @throws EventsException
      */
     protected function doGetMultiple(mixed $keys, mixed $default = null)
     {
@@ -219,6 +222,7 @@ abstract class AbstractCache implements CacheInterface, EventsAwareInterface
      *
      * @throws InvalidArgumentException MUST be thrown if the $key string is
      * not a legal value.
+     * @throws EventsException
      */
     protected function doHas(string $key): bool
     {
@@ -250,6 +254,7 @@ abstract class AbstractCache implements CacheInterface, EventsAwareInterface
      *
      * @throws InvalidArgumentException MUST be thrown if the $key string is not
      * a legal value.
+     * @throws EventsException
      */
     protected function doSet(string $key, mixed $value, mixed $ttl = null): bool
     {
@@ -280,6 +285,7 @@ abstract class AbstractCache implements CacheInterface, EventsAwareInterface
      *
      * @throws InvalidArgumentException MUST be thrown if $values is neither an
      * array nor a Traversable, or if any of the $values are not a legal value.
+     * @throws EventsException
      */
     protected function doSetMultiple(mixed $values, mixed $ttl = null): bool
     {

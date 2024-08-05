@@ -155,6 +155,7 @@ class Tag
      *                                 ]
      *
      * @return string
+     * @throws Exception
      */
     public static function colorField(array | string $parameters): string
     {
@@ -172,6 +173,7 @@ class Tag
      *                                 ]
      *
      * @return string
+     * @throws Exception
      */
     public static function dateField(array | string $parameters): string
     {
@@ -189,6 +191,7 @@ class Tag
      *                                 ]
      *
      * @return string
+     * @throws Exception
      */
     public static function dateTimeField(array | string $parameters): string
     {
@@ -206,6 +209,7 @@ class Tag
      *                                 ]
      *
      * @return string
+     * @throws Exception
      */
     public static function dateTimeLocalField(array | string $parameters): string
     {
@@ -236,6 +240,7 @@ class Tag
      *                                 ]
      *
      * @return string
+     * @throws Exception
      */
     public static function emailField(array | string $parameters): string
     {
@@ -263,6 +268,7 @@ class Tag
      *                                 ]
      *
      * @return string
+     * @throws Exception
      */
     public static function fileField(array | string $parameters): string
     {
@@ -282,6 +288,8 @@ class Tag
      *                                 ]
      *
      * @return string
+     * @throws Exception
+     * @throws Url\Exception
      */
     public static function formLegacy(array | string $parameters): string
     {
@@ -433,6 +441,11 @@ class Tag
 
     /**
      * Obtains the 'escaper' service if required
+     *
+     * @param array $parameters
+     *
+     * @return EscaperInterface|null
+     * @throws Exception
      */
     public static function getEscaper(array $parameters): EscaperInterface | null
     {
@@ -540,6 +553,7 @@ class Tag
      * Returns a URL service from the default DI
      *
      * @return Url
+     * @throws Exception
      */
     public static function getUrlService(): Url
     {
@@ -615,6 +629,7 @@ class Tag
      *                                 ]
      *
      * @return string
+     * @throws Exception
      */
     public static function hiddenField(array | string $parameters): string
     {
@@ -630,8 +645,11 @@ class Tag
      *                                 'id'    => '',
      *                                 'name'  => '',
      *                                 ]
+     * @param bool         $local
      *
      * @return string
+     * @throws Exception
+     * @throws Url\Exception
      */
     public static function image(
         array | string $parameters = [],
@@ -679,6 +697,7 @@ class Tag
      *                                 ]
      *
      * @return string
+     * @throws Exception
      */
     public static function imageInput(array | string $parameters): string
     {
@@ -697,6 +716,8 @@ class Tag
      * @param bool         $local
      *
      * @return string
+     * @throws Exception
+     * @throws Url\Exception
      */
     public static function javascriptInclude(
         array | string $parameters = [],
@@ -760,6 +781,8 @@ class Tag
      * @param bool         $local
      *
      * @return string
+     * @throws Exception
+     * @throws Url\Exception
      */
     public static function linkTo(
         array | string $parameters,
@@ -819,6 +842,7 @@ class Tag
      *                                 ]
      *
      * @return string
+     * @throws Exception
      */
     public static function monthField(array | string $parameters): string
     {
@@ -836,6 +860,7 @@ class Tag
      *                                 ]
      *
      * @return string
+     * @throws Exception
      */
     public static function numericField(array | string $parameters): string
     {
@@ -853,6 +878,7 @@ class Tag
      *                                 ]
      *
      * @return string
+     * @throws Exception
      */
     public static function passwordField(array | string $parameters): string
     {
@@ -947,6 +973,7 @@ class Tag
      *                                 ]
      *
      * @return string
+     * @throws Exception
      */
     public static function rangeField(array | string $parameters): string
     {
@@ -971,6 +998,7 @@ class Tag
      *                           ]
      *
      * @return string
+     * @throws Exception
      */
     public static function renderAttributes(string $code, array $attributes): string
     {
@@ -1068,6 +1096,7 @@ class Tag
      *                                 ]
      *
      * @return string
+     * @throws Exception
      */
     public static function searchField(array | string $parameters): string
     {
@@ -1226,6 +1255,7 @@ class Tag
      *
      * @return string
      * @throws Exception
+     * @throws Url\Exception
      */
     public static function stylesheetLink(
         array | string $parameters = null,
@@ -1284,6 +1314,7 @@ class Tag
      * @param array|string $parameters
      *
      * @return string
+     * @throws Exception
      */
     public static function submitButton(array | string $parameters): string
     {
@@ -1360,6 +1391,7 @@ class Tag
      *                                 ]
      *
      * @return string
+     * @throws Exception
      */
     public static function telField(array | string $parameters): string
     {
@@ -1377,6 +1409,7 @@ class Tag
      *                                 ]
      *
      * @return string
+     * @throws Exception
      */
     public static function textArea(array | string $parameters): string
     {
@@ -1435,6 +1468,7 @@ class Tag
      *                                 ]
      *
      * @return string
+     * @throws Exception
      */
     public static function textField(array | string $parameters): string
     {
@@ -1452,6 +1486,7 @@ class Tag
      *                                 ]
      *
      * @return string
+     * @throws Exception
      */
     public static function timeField(array | string $parameters): string
     {
@@ -1469,6 +1504,7 @@ class Tag
      *                                 ]
      *
      * @return string
+     * @throws Exception
      */
     public static function urlField(array | string $parameters): string
     {
@@ -1486,6 +1522,7 @@ class Tag
      *                                 ]
      *
      * @return string
+     * @throws Exception
      */
     public static function weekField(array | string $parameters): string
     {
@@ -1496,16 +1533,17 @@ class Tag
      * Builds generic INPUT tags
      *
      * @param string       $type
-     * @param array|string $parameters = [
-     *                                 'id'    => '',
-     *                                 'name'  => '',
-     *                                 'value' => '',
-     *                                 'class' => '',
-     *                                 'type'  => '',
-     *                                 ]
+     * @param array|string $parameters = {
+     *      @option string "id"
+     *      @option string "name"
+     *      @option string "value"
+     *      @option string "class"
+     *      @option string "type"
+     * }
      * @param bool         $asValue
      *
      * @return string
+     * @throws Exception
      */
     final protected static function inputField(
         string $type,
@@ -1571,6 +1609,12 @@ class Tag
 
     /**
      * Builds INPUT tags that implements the checked attribute
+     *
+     * @param string       $type
+     * @param array|string $parameters
+     *
+     * @return string
+     * @throws Exception
      */
     final protected static function inputFieldChecked(
         string $type,
