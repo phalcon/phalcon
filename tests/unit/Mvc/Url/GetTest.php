@@ -13,32 +13,11 @@ declare(strict_types=1);
 
 namespace Phalcon\Tests\Unit\Mvc\Url;
 
-use Codeception\Example;
-use Phalcon\Tests\UnitTestCase;
 use Phalcon\Mvc\Url;
+use Phalcon\Tests\UnitTestCase;
 
 final class GetTest extends UnitTestCase
 {
-    /**
-     * Tests Phalcon\Mvc\Url :: get()
-     *
-     * @dataProvider getExamples
-     *
-     * @author       Phalcon Team <team@phalcon.io>
-     * @since        2018-11-13
-     */
-    public function testMvcUrlGet(
-        string $expected,
-        ?string $name
-    ): void {
-        $url = new Url();
-
-        $url->setBaseUri('https://phalcon.io');
-
-        $actual   = $url->get($name);
-        $this->assertEquals($expected, $actual);
-    }
-
     /**
      * @return array
      */
@@ -62,5 +41,25 @@ final class GetTest extends UnitTestCase
                 '/en/team',
             ],
         ];
+    }
+
+    /**
+     * Tests Phalcon\Mvc\Url :: get()
+     *
+     * @dataProvider getExamples
+     *
+     * @author       Phalcon Team <team@phalcon.io>
+     * @since        2018-11-13
+     */
+    public function testMvcUrlGet(
+        string $expected,
+        ?string $name
+    ): void {
+        $url = new Url();
+
+        $url->setBaseUri('https://phalcon.io');
+
+        $actual = $url->get($name);
+        $this->assertEquals($expected, $actual);
     }
 }

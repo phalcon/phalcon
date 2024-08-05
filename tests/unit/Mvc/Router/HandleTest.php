@@ -13,18 +13,44 @@ declare(strict_types=1);
 
 namespace Phalcon\Tests\Unit\Mvc\Router;
 
-use Codeception\Example;
-use Phalcon\Tests\UnitTestCase;
 use Phalcon\Di\FactoryDefault;
 use Phalcon\Http\Request;
 use Phalcon\Mvc\Router;
 use Phalcon\Mvc\Router\Group;
 use Phalcon\Mvc\Router\Route;
 use Phalcon\Tests\Fixtures\Traits\RouterTrait;
+use Phalcon\Tests\UnitTestCase;
 
 final class HandleTest extends UnitTestCase
 {
     use RouterTrait;
+
+    /**
+     * @return array[]
+     */
+    public static function groupsProvider(): array
+    {
+        return [
+            [
+                '/blog/save',
+                'blog',
+                'index',
+                'save',
+            ],
+            [
+                '/blog/edit/1',
+                'blog',
+                'index',
+                'edit',
+            ],
+            [
+                '/blog/about',
+                'blog',
+                'about',
+                'index',
+            ],
+        ];
+    }
 
     /**
      * Tests Phalcon\Mvc\Router :: handle()
@@ -51,6 +77,188 @@ final class HandleTest extends UnitTestCase
         $this->assertSame($expected, $actual);
 
         $expected = 'list';
+        $actual   = $router->getActionName();
+        $this->assertSame($expected, $actual);
+
+        $expected = [];
+        $actual   = $router->getParams();
+        $this->assertSame($expected, $actual);
+    }
+
+    /**
+     * @dataProvider groupsProvider
+     */
+    public function testMvcRouterHandleGroups(
+        string $route,
+        string $module,
+        string $controller,
+        string $action
+    ): void {
+        Route::reset();
+
+        $router = $this->getRouter(false);
+
+        $blog = new Group(
+            [
+                'module'     => 'blog',
+                'controller' => 'index',
+            ]
+        );
+
+        $blog->setPrefix('/blog');
+
+        $blog->add(
+            '/save',
+            [
+                'action' => 'save',
+            ]
+        );
+
+        $blog->add(
+            '/edit/{id}',
+            [
+                'action' => 'edit',
+            ]
+        );
+
+        $blog->add(
+            '/about',
+            [
+                'controller' => 'about',
+                'action'     => 'index',
+            ]
+        );
+
+        $router->mount($blog);
+        $router->handle($route);
+
+        $this->assertTrue($router->wasMatched());
+        $this->assertSame($module, $router->getModuleName());
+        $this->assertSame($controller, $router->getControllerName());
+        $this->assertSame($action, $router->getActionName());
+
+        $this->assertSame(
+            $blog,
+            $router->getMatchedRoute()->getGroup()
+        );
+    }
+
+    /**
+     * Tests Phalcon\Mvc\Router :: handle() - numeric
+     *
+     * @author Phalcon Team <team@phalcon.io>
+     * @since  2020-10-17
+     */
+    public function testMvcRouterHandleNumeric(): void
+    {
+        $router = $this->getRouter();
+        $router->handle('/12/34/56');
+
+        $expected = '';
+        $actual   = $router->getModuleName();
+        $this->assertSame($expected, $actual);
+
+        $expected = '';
+        $actual   = $router->getNamespaceName();
+        $this->assertSame($expected, $actual);
+
+        $expected = '12';
+        $actual   = $router->getControllerName();
+        $this->assertSame($expected, $actual);
+
+        $expected = '34';
+        $actual   = $router->getActionName();
+        $this->assertSame($expected, $actual);
+
+        $expected = ['56'];
+        $actual   = $router->getParams();
+        $this->assertSame($expected, $actual);
+    }
+
+    /**
+     * Tests Phalcon\Mvc\Router :: handle() - short syntax
+     *
+     * @author Phalcon Team <team@phalcon.io>
+     * @since  2020-10-20
+     */
+    public function testMvcRouterHandleShortSyntax(): void
+    {
+        $router = $this->getRouter(false);
+        $router->add("/about", "About::content");
+
+        $router->handle('/about');
+
+        $expected = '';
+        $actual   = $router->getModuleName();
+        $this->assertSame($expected, $actual);
+
+        $expected = '';
+        $actual   = $router->getNamespaceName();
+        $this->assertSame($expected, $actual);
+
+        $expected = 'About';
+        $actual   = $router->getControllerName();
+        $this->assertSame($expected, $actual);
+
+        $expected = 'content';
+        $actual   = $router->getActionName();
+        $this->assertSame($expected, $actual);
+
+        $expected = [];
+        $actual   = $router->getParams();
+        $this->assertSame($expected, $actual);
+
+        $_SERVER['REQUEST_METHOD'] = 'POST';
+
+        $container = new FactoryDefault();
+        $container->set('request', new Request());
+
+        $router = new Router(false);
+        $router->setDI($container);
+        $router->add(
+            "/about",
+            "About::content",
+            ["GET"]
+        );
+
+        $router->handle('/about');
+
+        $actual = $router->getMatchedRoute();
+        $this->assertNull($actual);
+
+        $expected = '';
+        $actual   = $router->getControllerName();
+        $this->assertSame($expected, $actual);
+
+        $expected = '';
+        $actual   = $router->getActionName();
+        $this->assertSame($expected, $actual);
+
+        $actual = $router->getParams();
+        $this->assertEmpty($actual);
+
+        $router->add(
+            "/about",
+            "About::content",
+            ["POST"],
+            Router::POSITION_FIRST
+        );
+
+        $router->handle('/about');
+
+        $expected = '';
+        $actual   = $router->getModuleName();
+        $this->assertSame($expected, $actual);
+
+        $expected = '';
+        $actual   = $router->getNamespaceName();
+        $this->assertSame($expected, $actual);
+
+        $expected = 'About';
+        $actual   = $router->getControllerName();
+        $this->assertSame($expected, $actual);
+
+        $expected = 'content';
         $actual   = $router->getActionName();
         $this->assertSame($expected, $actual);
 
@@ -187,214 +395,5 @@ final class HandleTest extends UnitTestCase
         ];
         $actual   = $router->getParams();
         $this->assertSame($expected, $actual);
-    }
-
-    /**
-     * Tests Phalcon\Mvc\Router :: handle() - short syntax
-     *
-     * @author Phalcon Team <team@phalcon.io>
-     * @since  2020-10-20
-     */
-    public function testMvcRouterHandleShortSyntax(): void
-    {
-        $router = $this->getRouter(false);
-        $router->add("/about", "About::content");
-
-        $router->handle('/about');
-
-        $expected = '';
-        $actual   = $router->getModuleName();
-        $this->assertSame($expected, $actual);
-
-        $expected = '';
-        $actual   = $router->getNamespaceName();
-        $this->assertSame($expected, $actual);
-
-        $expected = 'About';
-        $actual   = $router->getControllerName();
-        $this->assertSame($expected, $actual);
-
-        $expected = 'content';
-        $actual   = $router->getActionName();
-        $this->assertSame($expected, $actual);
-
-        $expected = [];
-        $actual   = $router->getParams();
-        $this->assertSame($expected, $actual);
-
-        $_SERVER['REQUEST_METHOD'] = 'POST';
-
-        $container = new FactoryDefault();
-        $container->set('request', new Request());
-
-        $router = new Router(false);
-        $router->setDI($container);
-        $router->add(
-            "/about",
-            "About::content",
-            ["GET"]
-        );
-
-        $router->handle('/about');
-
-        $actual = $router->getMatchedRoute();
-        $this->assertNull($actual);
-
-        $expected = '';
-        $actual   = $router->getControllerName();
-        $this->assertSame($expected, $actual);
-
-        $expected = '';
-        $actual   = $router->getActionName();
-        $this->assertSame($expected, $actual);
-
-        $actual = $router->getParams();
-        $this->assertEmpty($actual);
-
-        $router->add(
-            "/about",
-            "About::content",
-            ["POST"],
-            Router::POSITION_FIRST
-        );
-
-        $router->handle('/about');
-
-        $expected = '';
-        $actual   = $router->getModuleName();
-        $this->assertSame($expected, $actual);
-
-        $expected = '';
-        $actual   = $router->getNamespaceName();
-        $this->assertSame($expected, $actual);
-
-        $expected = 'About';
-        $actual   = $router->getControllerName();
-        $this->assertSame($expected, $actual);
-
-        $expected = 'content';
-        $actual   = $router->getActionName();
-        $this->assertSame($expected, $actual);
-
-        $expected = [];
-        $actual   = $router->getParams();
-        $this->assertSame($expected, $actual);
-    }
-
-    /**
-     * Tests Phalcon\Mvc\Router :: handle() - numeric
-     *
-     * @author Phalcon Team <team@phalcon.io>
-     * @since  2020-10-17
-     */
-    public function testMvcRouterHandleNumeric(): void
-    {
-        $router = $this->getRouter();
-        $router->handle('/12/34/56');
-
-        $expected = '';
-        $actual   = $router->getModuleName();
-        $this->assertSame($expected, $actual);
-
-        $expected = '';
-        $actual   = $router->getNamespaceName();
-        $this->assertSame($expected, $actual);
-
-        $expected = '12';
-        $actual   = $router->getControllerName();
-        $this->assertSame($expected, $actual);
-
-        $expected = '34';
-        $actual   = $router->getActionName();
-        $this->assertSame($expected, $actual);
-
-        $expected = ['56'];
-        $actual   = $router->getParams();
-        $this->assertSame($expected, $actual);
-    }
-
-    /**
-     * @dataProvider groupsProvider
-     */
-    public function testMvcRouterHandleGroups(
-        string $route,
-        string $module,
-        string $controller,
-        string $action
-    ): void {
-        Route::reset();
-
-        $router = $this->getRouter(false);
-
-        $blog = new Group(
-            [
-                'module'     => 'blog',
-                'controller' => 'index',
-            ]
-        );
-
-        $blog->setPrefix('/blog');
-
-        $blog->add(
-            '/save',
-            [
-                'action' => 'save',
-            ]
-        );
-
-        $blog->add(
-            '/edit/{id}',
-            [
-                'action' => 'edit',
-            ]
-        );
-
-        $blog->add(
-            '/about',
-            [
-                'controller' => 'about',
-                'action'     => 'index',
-            ]
-        );
-
-        $router->mount($blog);
-        $router->handle($route);
-
-        $this->assertTrue($router->wasMatched());
-        $this->assertSame($module, $router->getModuleName());
-        $this->assertSame($controller, $router->getControllerName());
-        $this->assertSame($action, $router->getActionName());
-
-        $this->assertSame(
-            $blog,
-            $router->getMatchedRoute()->getGroup()
-        );
-    }
-
-    /**
-     * @return array[]
-     */
-    public static function groupsProvider(): array
-    {
-        return [
-            [
-                '/blog/save',
-                'blog',
-                'index',
-                'save',
-            ],
-            [
-                '/blog/edit/1',
-                'blog',
-                'index',
-                'edit',
-            ],
-            [
-                '/blog/about',
-                'blog',
-                'about',
-                'index',
-            ],
-        ];
     }
 }

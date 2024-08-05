@@ -13,43 +13,12 @@ declare(strict_types=1);
 
 namespace Phalcon\Tests\Unit\Mvc\Router;
 
-use Codeception\Example;
-use Phalcon\Tests\UnitTestCase;
 use Phalcon\Tests\Fixtures\Traits\RouterTrait;
+use Phalcon\Tests\UnitTestCase;
 
 final class RemoveExtraSlashesTest extends UnitTestCase
 {
     use RouterTrait;
-
-    /**
-     * Tests removing extra slashes
-     *
-     * @author       Andy Gutierrez <andres.gutierrez@phalcon.io>
-     * @since        2012-12-16
-     *
-     * @dataProvider getMatchingWithExtraSlashes
-     */
-    public function testRemovingExtraSlashes(
-        string $route,
-        array $params
-    ): void {
-        $router = $this->getRouter();
-
-        $router->removeExtraSlashes(true);
-
-        $router->handle($route);
-
-        $actual = $router->wasMatched();
-        $this->assertTrue($actual);
-
-        $expected = $params['controller'];
-        $actual   = $router->getControllerName();
-        $this->assertSame($expected, $actual);
-
-        $expected = $params['action'];
-        $actual   = $router->getActionName();
-        $this->assertSame($expected, $actual);
-    }
 
     /**
      * @return array[]
@@ -81,5 +50,35 @@ final class RemoveExtraSlashesTest extends UnitTestCase
                 ],
             ],
         ];
+    }
+
+    /**
+     * Tests removing extra slashes
+     *
+     * @author       Andy Gutierrez <andres.gutierrez@phalcon.io>
+     * @since        2012-12-16
+     *
+     * @dataProvider getMatchingWithExtraSlashes
+     */
+    public function testRemovingExtraSlashes(
+        string $route,
+        array $params
+    ): void {
+        $router = $this->getRouter();
+
+        $router->removeExtraSlashes(true);
+
+        $router->handle($route);
+
+        $actual = $router->wasMatched();
+        $this->assertTrue($actual);
+
+        $expected = $params['controller'];
+        $actual   = $router->getControllerName();
+        $this->assertSame($expected, $actual);
+
+        $expected = $params['action'];
+        $actual   = $router->getActionName();
+        $this->assertSame($expected, $actual);
     }
 }

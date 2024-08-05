@@ -25,6 +25,6 @@ final class AddResourceTest extends UnitTestCase
      */
     public function testMvcRouterAnnotationsAddResource(): void
     {
-         $this->markTestSkipped('Need implementation');
+        $this->markTestSkipped('Need implementation');
     }
 }

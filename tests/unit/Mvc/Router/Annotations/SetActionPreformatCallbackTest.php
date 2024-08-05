@@ -13,9 +13,9 @@ declare(strict_types=1);
 
 namespace Phalcon\Tests\Unit\Mvc\Router\Annotations;
 
-use Phalcon\Tests\UnitTestCase;
 use Phalcon\Mvc\Router\Annotations;
 use Phalcon\Support\Helper\Str\Uncamelize;
+use Phalcon\Tests\UnitTestCase;
 
 final class SetActionPreformatCallbackTest extends UnitTestCase
 {

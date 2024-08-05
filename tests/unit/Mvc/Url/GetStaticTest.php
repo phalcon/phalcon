@@ -13,8 +13,8 @@ declare(strict_types=1);
 
 namespace Phalcon\Tests\Unit\Mvc\Url;
 
-use Phalcon\Tests\UnitTestCase;
 use Phalcon\Mvc\Url;
+use Phalcon\Tests\UnitTestCase;
 
 final class GetStaticTest extends UnitTestCase
 {
