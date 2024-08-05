@@ -42,31 +42,6 @@ final class GetRequestTokenTest extends UnitTestCase
 
     /**
      * Tests Phalcon\Security :: getRequestToken() and getSessionToken()
-     * without session initialization
-     *
-     * @return void
-     *
-     * @author Phalcon Team <team@phalcon.io>
-     * @since  2020-09-09
-     */
-    public function testEncryptionSecurityGetTokensWithoutSessionInitialization(): void
-    {
-        /** @var Manager $session */
-        $session = $this->container->getShared('session');
-
-        $session->start();
-
-        $security = new Security();
-        $security->setDI($this->container);
-
-        $this->assertNull($security->getSessionToken());
-        $this->assertNull($security->getRequestToken());
-
-        $session->destroy();
-    }
-
-    /**
-     * Tests Phalcon\Security :: getRequestToken() and getSessionToken()
      *
      * @return void
      *
@@ -130,5 +105,30 @@ final class GetRequestTokenTest extends UnitTestCase
         $session->destroy();
 
         $_POST = $store;
+    }
+
+    /**
+     * Tests Phalcon\Security :: getRequestToken() and getSessionToken()
+     * without session initialization
+     *
+     * @return void
+     *
+     * @author Phalcon Team <team@phalcon.io>
+     * @since  2020-09-09
+     */
+    public function testEncryptionSecurityGetTokensWithoutSessionInitialization(): void
+    {
+        /** @var Manager $session */
+        $session = $this->container->getShared('session');
+
+        $session->start();
+
+        $security = new Security();
+        $security->setDI($this->container);
+
+        $this->assertNull($security->getSessionToken());
+        $this->assertNull($security->getRequestToken());
+
+        $session->destroy();
     }
 }

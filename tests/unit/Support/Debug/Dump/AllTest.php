@@ -14,8 +14,8 @@ declare(strict_types=1);
 namespace Phalcon\Tests\Unit\Support\Debug\Dump;
 
 use Phalcon\Support\Debug\Dump;
-use stdClass;
 use Phalcon\Tests\UnitTestCase;
+use stdClass;
 
 final class AllTest extends UnitTestCase
 {

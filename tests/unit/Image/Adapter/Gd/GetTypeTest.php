@@ -13,7 +13,6 @@ declare(strict_types=1);
 
 namespace Phalcon\Tests\Unit\Image\Adapter\Gd;
 
-use Codeception\Example;
 use Phalcon\Image\Adapter\Gd;
 use Phalcon\Tests\Fixtures\Traits\GdTrait;
 use Phalcon\Tests\UnitTestCase;
@@ -28,28 +27,6 @@ use const IMAGETYPE_XBM;
 final class GetTypeTest extends UnitTestCase
 {
     use GdTrait;
-
-    /**
-     * Tests Phalcon\Image\Adapter\Gd :: getType()
-     *
-     * @dataProvider getExamples
-     *
-     * @return void
-     * @since        2022-07-19
-     *
-     * @author       Phalcon Team <team@phalcon.io>
-     */
-    public function testImageAdapterGdGetType(
-        string $source,
-        int $expected
-    ): void {
-        $this->checkJpegSupport();
-
-        $gd = new Gd($source);
-
-        $actual = $gd->getType();
-        $this->assertSame($expected, $actual);
-    }
 
     /**
      * @return array[]
@@ -82,5 +59,27 @@ final class GetTypeTest extends UnitTestCase
                 IMAGETYPE_XBM,
             ],
         ];
+    }
+
+    /**
+     * Tests Phalcon\Image\Adapter\Gd :: getType()
+     *
+     * @dataProvider getExamples
+     *
+     * @return void
+     * @since        2022-07-19
+     *
+     * @author       Phalcon Team <team@phalcon.io>
+     */
+    public function testImageAdapterGdGetType(
+        string $source,
+        int $expected
+    ): void {
+        $this->checkJpegSupport();
+
+        $gd = new Gd($source);
+
+        $actual = $gd->getType();
+        $this->assertSame($expected, $actual);
     }
 }

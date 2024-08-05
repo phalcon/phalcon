@@ -13,39 +13,11 @@ declare(strict_types=1);
 
 namespace Phalcon\Tests\Unit\Http\Request;
 
-use Codeception\Example;
 use Phalcon\Tests\Fixtures\Page\Http;
 use Phalcon\Tests\Unit\Http\Helper\HttpBase;
-use Phalcon\Tests\UnitTestCase;
 
 final class GetPortTest extends HttpBase
 {
-    /**
-     * Tests Request::getPort
-     *
-     * @dataProvider getExamples
-     *
-     * @author       Phalcon Team <team@phalcon.io>
-     * @since        2016-06-26
-     */
-    public function testHttpRequestPort(
-        string $https,
-        string $host,
-        int $expected
-    ): void {
-        $request = $this->getRequestObject();
-
-        $_SERVER['HTTPS']     = $https;
-        $_SERVER['HTTP_HOST'] = $host;
-
-        if ('unset' === $https) {
-            unset($_SERVER['https']);
-        }
-
-        $actual = $request->getPort();
-        $this->assertSame($expected, $actual);
-    }
-
     /**
      * @return array[]
      */
@@ -78,5 +50,31 @@ final class GetPortTest extends HttpBase
                 8082,
             ],
         ];
+    }
+
+    /**
+     * Tests Request::getPort
+     *
+     * @dataProvider getExamples
+     *
+     * @author       Phalcon Team <team@phalcon.io>
+     * @since        2016-06-26
+     */
+    public function testHttpRequestPort(
+        string $https,
+        string $host,
+        int $expected
+    ): void {
+        $request = $this->getRequestObject();
+
+        $_SERVER['HTTPS']     = $https;
+        $_SERVER['HTTP_HOST'] = $host;
+
+        if ('unset' === $https) {
+            unset($_SERVER['https']);
+        }
+
+        $actual = $request->getPort();
+        $this->assertSame($expected, $actual);
     }
 }

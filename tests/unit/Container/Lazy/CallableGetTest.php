@@ -16,7 +16,6 @@ namespace Phalcon\Tests\Unit\Container\Lazy;
 use Closure;
 use Phalcon\Container\Lazy\CallableGet;
 use stdClass;
-use Phalcon\Tests\UnitTestCase;
 
 final class CallableGetTest extends AbstractLazyBase
 {

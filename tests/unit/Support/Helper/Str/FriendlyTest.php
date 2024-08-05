@@ -13,41 +13,11 @@ declare(strict_types=1);
 
 namespace Phalcon\Tests\Unit\Support\Helper\Str;
 
-use Codeception\Example;
 use Phalcon\Support\Helper\Str\Friendly;
 use Phalcon\Tests\UnitTestCase;
 
 final class FriendlyTest extends UnitTestCase
 {
-    /**
-     * Tests Phalcon\Support\Helper\Str :: friendly()
-     *
-     * @dataProvider getExamples
-     *
-     * @return void
-     *
-     * @author       Phalcon Team <team@phalcon.io>
-     * @since        2020-09-09
-     */
-    public function testSupportHelperStrFriendly(
-        string $text,
-        string $separator,
-        bool $lowercase,
-        array|string $replace,
-        string $result
-    ): void {
-        $object   = new Friendly();
-        $expected = $result;
-        $actual   = $object->__invoke(
-            $text,
-            $separator,
-            $lowercase,
-            $replace
-        );
-
-        $this->assertSame($expected, $actual);
-    }
-
     /**
      * @return array
      */
@@ -91,7 +61,7 @@ final class FriendlyTest extends UnitTestCase
             ],
             [
                 "Mess'd up --text-- just (to) stress /test/ ?our! "
-                    . '`little` \\clean\\ url fun.ction!?-->',
+                . '`little` \\clean\\ url fun.ction!?-->',
                 '-',
                 true,
                 [],
@@ -112,5 +82,34 @@ final class FriendlyTest extends UnitTestCase
                 'P_rch_l_rb_v_rd',
             ],
         ];
+    }
+
+    /**
+     * Tests Phalcon\Support\Helper\Str :: friendly()
+     *
+     * @dataProvider getExamples
+     *
+     * @return void
+     *
+     * @author       Phalcon Team <team@phalcon.io>
+     * @since        2020-09-09
+     */
+    public function testSupportHelperStrFriendly(
+        string $text,
+        string $separator,
+        bool $lowercase,
+        array | string $replace,
+        string $result
+    ): void {
+        $object   = new Friendly();
+        $expected = $result;
+        $actual   = $object->__invoke(
+            $text,
+            $separator,
+            $lowercase,
+            $replace
+        );
+
+        $this->assertSame($expected, $actual);
     }
 }

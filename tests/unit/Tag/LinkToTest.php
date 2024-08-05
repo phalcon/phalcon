@@ -19,69 +19,6 @@ use Phalcon\Tests\Fixtures\Helpers\TagSetup;
 class LinkToTest extends TagSetup
 {
     /**
-     * Tests Phalcon\Tag :: linkTo() - string as URL and name
-     *
-     * @author Phalcon Team <team@phalcon.io>
-     * @since  2014-09-29
-     */
-    public function testTagLinkToWithStringAsURLAndName(): void
-    {
-        $url  = 'x_url';
-        $name = 'x_name';
-
-        $this->assertSame(
-            '<a href="/x_url">x_name</a>',
-            Tag::linkTo($url, $name)
-        );
-    }
-
-    /**
-     * Tests Phalcon\Tag :: linkTo() - string as URL and name
-     *
-     * @issue  https://github.com/phalcon/cphalcon/issues/2002
-     * @author Phalcon Team <team@phalcon.io>
-     * @author Dreamszhu <dreamsxin@qq.com>
-     * @since  2014-03-10
-     */
-    public function testTagLinkToWithQueryParam(): void
-    {
-        $actual = Tag::linkTo(
-            [
-                'signup/register',
-                'Register Here!',
-                'class' => 'btn-primary',
-                'query' => [
-                    'from'  => 'github',
-                    'token' => '123456',
-                ],
-            ]
-        );
-
-        $this->assertSame(
-            '<a href="/signup/register?from=github&amp;token=123456" class="btn-primary">Register Here!</a>',
-            $actual
-        );
-    }
-
-    /**
-     * Tests Phalcon\Tag :: linkTo() - empty string as URL and string as name
-     * parameter
-     *
-     * @author Phalcon Team <team@phalcon.io>
-     * @since  2014-09-29
-     */
-    public function testTagLinkToWithEmptyStringAsURLAndStringAsName(): void
-    {
-        $url  = '';
-        $name = 'x_name';
-
-        $this->assertSame(
-            '<a href="/">x_name</a>',
-            Tag::linkTo($url, $name)
-        );
-    }
-
-    /**
      * Tests Phalcon\Tag :: linkTo() - array as a parameter
      *
      * @author Phalcon Team <team@phalcon.io>
@@ -220,6 +157,69 @@ class LinkToTest extends TagSetup
         $this->assertSame(
             '<a href="mailto:someone@phalcon.io">someone@phalcon.io</a>',
             Tag::linkTo($url, $name, false)
+        );
+    }
+
+    /**
+     * Tests Phalcon\Tag :: linkTo() - empty string as URL and string as name
+     * parameter
+     *
+     * @author Phalcon Team <team@phalcon.io>
+     * @since  2014-09-29
+     */
+    public function testTagLinkToWithEmptyStringAsURLAndStringAsName(): void
+    {
+        $url  = '';
+        $name = 'x_name';
+
+        $this->assertSame(
+            '<a href="/">x_name</a>',
+            Tag::linkTo($url, $name)
+        );
+    }
+
+    /**
+     * Tests Phalcon\Tag :: linkTo() - string as URL and name
+     *
+     * @issue  https://github.com/phalcon/cphalcon/issues/2002
+     * @author Phalcon Team <team@phalcon.io>
+     * @author Dreamszhu <dreamsxin@qq.com>
+     * @since  2014-03-10
+     */
+    public function testTagLinkToWithQueryParam(): void
+    {
+        $actual = Tag::linkTo(
+            [
+                'signup/register',
+                'Register Here!',
+                'class' => 'btn-primary',
+                'query' => [
+                    'from'  => 'github',
+                    'token' => '123456',
+                ],
+            ]
+        );
+
+        $this->assertSame(
+            '<a href="/signup/register?from=github&amp;token=123456" class="btn-primary">Register Here!</a>',
+            $actual
+        );
+    }
+
+    /**
+     * Tests Phalcon\Tag :: linkTo() - string as URL and name
+     *
+     * @author Phalcon Team <team@phalcon.io>
+     * @since  2014-09-29
+     */
+    public function testTagLinkToWithStringAsURLAndName(): void
+    {
+        $url  = 'x_url';
+        $name = 'x_name';
+
+        $this->assertSame(
+            '<a href="/x_url">x_name</a>',
+            Tag::linkTo($url, $name)
         );
     }
 }

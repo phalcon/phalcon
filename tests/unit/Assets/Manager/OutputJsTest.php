@@ -48,60 +48,6 @@ final class OutputJsTest extends UnitTestCase
     }
 
     /**
-     * Tests Phalcon\Assets\Manager :: outputJs() - implicit
-     *
-     * @author Phalcon Team <team@phalcon.io>
-     * @since  2014-10-13
-     */
-    public function testAssetsManagerOutputJsImplicit(): void
-    {
-        $manager = new Manager(new TagFactory(new Escaper()));
-
-        $manager->addJs('js/script1.js');
-        $manager->addJs('js/script2.js');
-
-        $manager->addAsset(new Js('/js/script3.js', false));
-        $manager->useImplicitOutput(false);
-
-        $expected = '<script type="application/javascript" src="/js/script1.js"></script>' . PHP_EOL
-            . '<script type="application/javascript" src="/js/script2.js"></script>' . PHP_EOL
-            . '<script type="application/javascript" src="/js/script3.js"></script>' . PHP_EOL;
-
-        $this->assertSame($expected, $manager->outputJs());
-    }
-
-    /**
-     * Tests Phalcon\Assets\Manager :: outputJs() - not implicit
-     *
-     * @author Phalcon Team <team@phalcon.io>
-     * @since  2014-10-13
-     */
-    public function testAssetsManagerOutputJsNotImplicit(): void
-    {
-        $manager = new Manager(new TagFactory(new Escaper()));
-
-        $manager->addJs('js/script1.js');
-        $manager->addJs('js/script2.js');
-
-        $manager->addAsset(
-            new Js(
-                '/js/script3.js',
-                false
-            )
-        );
-
-        $expected = '<script type="application/javascript" src="/js/script1.js"></script>' . PHP_EOL .
-            '<script type="application/javascript" src="/js/script2.js"></script>' . PHP_EOL .
-            '<script type="application/javascript" src="/js/script3.js"></script>' . PHP_EOL;
-
-        ob_start();
-        $manager->outputJs();
-        $actual = ob_get_clean();
-
-        $this->assertSame($expected, $actual);
-    }
-
-    /**
      * Tests Phalcon\Assets\Manager :: outputJs - basic
      *
      * @author Phalcon Team <team@phalcon.io>
@@ -117,6 +63,33 @@ final class OutputJsTest extends UnitTestCase
                 ->addJs(dataDir('assets/assets/jquery.js'), false, false)
                 ->setTargetPath(outputDir('tests/assets/combined.js'))
                 ->setTargetUri('production/combined.js')
+        ;
+
+        $expected = sprintf(
+            '<script type="application/javascript" src="%s"></script>%s',
+            dataDir('assets/assets/jquery.js'),
+            PHP_EOL
+        );
+
+        $this->assertSame($expected, $manager->outputJs('js'));
+    }
+
+    /**
+     * Tests Phalcon\Assets\Manager :: outputJs - disabled join
+     *
+     * @author Phalcon Team <team@phalcon.io>
+     * @since  2014-10-13
+     */
+    public function testAssetsManagerOutputJsDisabledJoin(): void
+    {
+        $manager = new Manager(new TagFactory(new Escaper()));
+        $manager->useImplicitOutput(false);
+
+        $manager->collection('js')
+                ->addJs(dataDir('assets/assets/jquery.js'), false, false)
+                ->setTargetPath(outputDir('tests/assets/combined.js'))
+                ->setTargetUri('production/combined.js')
+                ->join(false)
         ;
 
         $expected = sprintf(
@@ -157,30 +130,26 @@ final class OutputJsTest extends UnitTestCase
     }
 
     /**
-     * Tests Phalcon\Assets\Manager :: outputJs - disabled join
+     * Tests Phalcon\Assets\Manager :: outputJs() - implicit
      *
      * @author Phalcon Team <team@phalcon.io>
      * @since  2014-10-13
      */
-    public function testAssetsManagerOutputJsDisabledJoin(): void
+    public function testAssetsManagerOutputJsImplicit(): void
     {
         $manager = new Manager(new TagFactory(new Escaper()));
+
+        $manager->addJs('js/script1.js');
+        $manager->addJs('js/script2.js');
+
+        $manager->addAsset(new Js('/js/script3.js', false));
         $manager->useImplicitOutput(false);
 
-        $manager->collection('js')
-                ->addJs(dataDir('assets/assets/jquery.js'), false, false)
-                ->setTargetPath(outputDir('tests/assets/combined.js'))
-                ->setTargetUri('production/combined.js')
-                ->join(false)
-        ;
+        $expected = '<script type="application/javascript" src="/js/script1.js"></script>' . PHP_EOL
+            . '<script type="application/javascript" src="/js/script2.js"></script>' . PHP_EOL
+            . '<script type="application/javascript" src="/js/script3.js"></script>' . PHP_EOL;
 
-        $expected = sprintf(
-            '<script type="application/javascript" src="%s"></script>%s',
-            dataDir('assets/assets/jquery.js'),
-            PHP_EOL
-        );
-
-        $this->assertSame($expected, $manager->outputJs('js'));
+        $this->assertSame($expected, $manager->outputJs());
     }
 
     /**
@@ -257,6 +226,37 @@ final class OutputJsTest extends UnitTestCase
         );
 
         $this->assertSame($expectedCSS, $manager->outputCss('header'));
+    }
+
+    /**
+     * Tests Phalcon\Assets\Manager :: outputJs() - not implicit
+     *
+     * @author Phalcon Team <team@phalcon.io>
+     * @since  2014-10-13
+     */
+    public function testAssetsManagerOutputJsNotImplicit(): void
+    {
+        $manager = new Manager(new TagFactory(new Escaper()));
+
+        $manager->addJs('js/script1.js');
+        $manager->addJs('js/script2.js');
+
+        $manager->addAsset(
+            new Js(
+                '/js/script3.js',
+                false
+            )
+        );
+
+        $expected = '<script type="application/javascript" src="/js/script1.js"></script>' . PHP_EOL .
+            '<script type="application/javascript" src="/js/script2.js"></script>' . PHP_EOL .
+            '<script type="application/javascript" src="/js/script3.js"></script>' . PHP_EOL;
+
+        ob_start();
+        $manager->outputJs();
+        $actual = ob_get_clean();
+
+        $this->assertSame($expected, $actual);
     }
 
     /**

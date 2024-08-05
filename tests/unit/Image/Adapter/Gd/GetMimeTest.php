@@ -13,7 +13,6 @@ declare(strict_types=1);
 
 namespace Phalcon\Tests\Unit\Image\Adapter\Gd;
 
-use Codeception\Example;
 use Phalcon\Image\Adapter\Gd;
 use Phalcon\Tests\Fixtures\Traits\GdTrait;
 use Phalcon\Tests\UnitTestCase;
@@ -23,28 +22,6 @@ use function dataDir;
 final class GetMimeTest extends UnitTestCase
 {
     use GdTrait;
-
-    /**
-     * Tests Phalcon\Image\Adapter\Gd :: getMime()
-     *
-     * @dataProvider getExamples
-     *
-     * @return void
-     *
-     * @author       Phalcon Team <team@phalcon.io>
-     * @since        2018-11-13
-     */
-    public function testImageAdapterGdGetMime(
-        string $source,
-        string $expected
-    ): void {
-        $this->checkJpegSupport();
-
-        $gd = new Gd($source);
-
-        $actual = $gd->getMime();
-        $this->assertSame($expected, $actual);
-    }
 
     /**
      * @return array[]
@@ -77,5 +54,27 @@ final class GetMimeTest extends UnitTestCase
                 'image/xbm',
             ],
         ];
+    }
+
+    /**
+     * Tests Phalcon\Image\Adapter\Gd :: getMime()
+     *
+     * @dataProvider getExamples
+     *
+     * @return void
+     *
+     * @author       Phalcon Team <team@phalcon.io>
+     * @since        2018-11-13
+     */
+    public function testImageAdapterGdGetMime(
+        string $source,
+        string $expected
+    ): void {
+        $this->checkJpegSupport();
+
+        $gd = new Gd($source);
+
+        $actual = $gd->getMime();
+        $this->assertSame($expected, $actual);
     }
 }

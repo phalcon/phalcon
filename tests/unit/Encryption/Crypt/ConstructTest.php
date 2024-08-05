@@ -13,7 +13,6 @@ declare(strict_types=1);
 
 namespace Phalcon\Tests\Unit\Encryption\Crypt;
 
-use Codeception\Stub;
 use Phalcon\Encryption\Crypt;
 use Phalcon\Encryption\Crypt\Exception\Exception;
 use Phalcon\Tests\Fixtures\Encryption\Crypt\CryptFunctionExistsFixture;
@@ -21,23 +20,6 @@ use Phalcon\Tests\UnitTestCase;
 
 final class ConstructTest extends UnitTestCase
 {
-    /**
-     * Tests Phalcon\Encryption\Crypt :: __construct()
-     *
-     * @return void
-     *
-     * @author Phalcon Team <team@phalcon.io>
-     * @since  2021-10-18
-     */
-    public function testEncryptionCryptConstruct(): void
-    {
-        $crypt = new Crypt();
-        $this->assertInstanceOf(Crypt::class, $crypt);
-
-        $crypt = new Crypt('aes-256-cfb', true);
-        $this->assertInstanceOf(Crypt::class, $crypt);
-    }
-
     /**
      * Tests the Crypt constants
      *
@@ -53,6 +35,23 @@ final class ConstructTest extends UnitTestCase
         $this->assertSame(4, Crypt::PADDING_ISO_IEC_7816_4);
         $this->assertSame(5, Crypt::PADDING_ZERO);
         $this->assertSame(6, Crypt::PADDING_SPACE);
+    }
+
+    /**
+     * Tests Phalcon\Encryption\Crypt :: __construct()
+     *
+     * @return void
+     *
+     * @author Phalcon Team <team@phalcon.io>
+     * @since  2021-10-18
+     */
+    public function testEncryptionCryptConstruct(): void
+    {
+        $crypt = new Crypt();
+        $this->assertInstanceOf(Crypt::class, $crypt);
+
+        $crypt = new Crypt('aes-256-cfb', true);
+        $this->assertInstanceOf(Crypt::class, $crypt);
     }
 
     /**

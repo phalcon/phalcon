@@ -48,28 +48,6 @@ final class DefinitionsTest extends UnitTestCase
     /**
      * @return void
      */
-    public function testContainerDefinitionsDefinitionsNamedEntries(): void
-    {
-        $this->definitions->one = new ClassDefinition(TestWithInterface::class);
-
-        $expected = ClassDefinition::class;
-        $actual   = $this->definitions->one;
-        $this->assertInstanceOf($expected, $actual);
-
-        $this->definitions->two = new ClassDefinition(TestWithInterface::class);
-
-        $expected = ClassDefinition::class;
-        $actual   = $this->definitions->two;
-        $this->assertInstanceOf($expected, $actual);
-
-        $expected = $this->definitions->one;
-        $actual   = $this->definitions->two;
-        $this->assertNotSame($expected, $actual);
-    }
-
-    /**
-     * @return void
-     */
     public function testContainerDefinitionsDefinitionsAliasedEntries(): void
     {
         $this->definitions->{'one.copy'} = $this->definitions->{TestWithInterface::class};
@@ -82,6 +60,48 @@ final class DefinitionsTest extends UnitTestCase
     /**
      * @return void
      */
+    public function testContainerDefinitionsDefinitionsArray(): void
+    {
+        $expected = ArrayValues::class;
+        $actual   = $this->definitions->array(['one']);
+        $this->assertInstanceOf($expected, $actual);
+    }
+
+    /**
+     * @return void
+     */
+    public function testContainerDefinitionsDefinitionsCall(): void
+    {
+        $expected = Call::class;
+        $actual   = $this->definitions->call(function () {
+            return true;
+        });
+        $this->assertInstanceOf($expected, $actual);
+    }
+
+    /**
+     * @return void
+     */
+    public function testContainerDefinitionsDefinitionsCallableGet(): void
+    {
+        $expected = CallableGet::class;
+        $actual   = $this->definitions->callableGet(TestInterface::class);
+        $this->assertInstanceOf($expected, $actual);
+    }
+
+    /**
+     * @return void
+     */
+    public function testContainerDefinitionsDefinitionsCallableNew(): void
+    {
+        $expected = CallableNew::class;
+        $actual   = $this->definitions->callableNew(TestInterface::class);
+        $this->assertInstanceOf($expected, $actual);
+    }
+
+    /**
+     * @return void
+     */
     public function testContainerDefinitionsDefinitionsClonedEntries(): void
     {
         $this->definitions->{'one.copy'} = clone $this->definitions->{TestWithInterface::class};
@@ -89,6 +109,90 @@ final class DefinitionsTest extends UnitTestCase
         $expected = $this->definitions->{TestWithInterface::class};
         $actual   = $this->definitions->{'one.copy'};
         $this->assertNotSame($expected, $actual);
+    }
+
+    /**
+     * @return void
+     */
+    public function testContainerDefinitionsDefinitionsCsEnv(): void
+    {
+        $expected = Env::class;
+        $actual   = $this->definitions->csEnv('TEST_ENV');
+        $this->assertInstanceOf($expected, $actual);
+
+        $expected = Env::class;
+        $actual   = $this->definitions->csEnv('TEST_ENV', 'int');
+        $this->assertInstanceOf($expected, $actual);
+    }
+
+    /**
+     * @return void
+     */
+    public function testContainerDefinitionsDefinitionsEnv(): void
+    {
+        $expected = Env::class;
+        $actual   = $this->definitions->env('TEST_ENV');
+        $this->assertInstanceOf($expected, $actual);
+
+        $expected = Env::class;
+        $actual   = $this->definitions->env('TEST_ENV', 'int');
+        $this->assertInstanceOf($expected, $actual);
+    }
+
+    /**
+     * @return void
+     */
+    public function testContainerDefinitionsDefinitionsFunctionCall(): void
+    {
+        $expected = FunctionCall::class;
+        $actual   = $this->definitions->functionCall(
+            'Capsule\Di\fake',
+            ['one']
+        );
+        $this->assertInstanceOf($expected, $actual);
+    }
+
+    /**
+     * @return void
+     */
+    public function testContainerDefinitionsDefinitionsGet(): void
+    {
+        $expected = Get::class;
+        $actual   = $this->definitions->get(TestInterface::class);
+        $this->assertInstanceOf($expected, $actual);
+    }
+
+    /**
+     * @return void
+     */
+    public function testContainerDefinitionsDefinitionsGetCall(): void
+    {
+        $expected = GetCall::class;
+        $actual   = $this->definitions->getCall(
+            TestInterface::class,
+            'getValue'
+        );
+        $this->assertInstanceOf($expected, $actual);
+    }
+
+    /**
+     * @return void
+     */
+    public function testContainerDefinitionsDefinitionsIncludeFile(): void
+    {
+        $expected = IncludeFile::class;
+        $actual   = $this->definitions->include('includeFile.php');
+        $this->assertInstanceOf($expected, $actual);
+    }
+
+    /**
+     * @return void
+     */
+    public function testContainerDefinitionsDefinitionsMagicGetInterface(): void
+    {
+        $expected = InterfaceDefinition::class;
+        $actual   = $this->definitions->{TestInterface::class};
+        $this->assertInstanceOf($expected, $actual);
     }
 
     /**
@@ -167,127 +271,23 @@ final class DefinitionsTest extends UnitTestCase
     /**
      * @return void
      */
-    public function testContainerDefinitionsDefinitionsMagicGetInterface(): void
+    public function testContainerDefinitionsDefinitionsNamedEntries(): void
     {
-        $expected = InterfaceDefinition::class;
-        $actual   = $this->definitions->{TestInterface::class};
-        $this->assertInstanceOf($expected, $actual);
-    }
+        $this->definitions->one = new ClassDefinition(TestWithInterface::class);
 
-    /**
-     * @return void
-     */
-    public function testContainerDefinitionsDefinitionsCall(): void
-    {
-        $expected = Call::class;
-        $actual   = $this->definitions->call(function () {
-            return true;
-        });
-        $this->assertInstanceOf($expected, $actual);
-    }
-
-    /**
-     * @return void
-     */
-    public function testContainerDefinitionsDefinitionsCallableGet(): void
-    {
-        $expected = CallableGet::class;
-        $actual   = $this->definitions->callableGet(TestInterface::class);
-        $this->assertInstanceOf($expected, $actual);
-    }
-
-    /**
-     * @return void
-     */
-    public function testContainerDefinitionsDefinitionsCallableNew(): void
-    {
-        $expected = CallableNew::class;
-        $actual   = $this->definitions->callableNew(TestInterface::class);
-        $this->assertInstanceOf($expected, $actual);
-    }
-
-    /**
-     * @return void
-     */
-    public function testContainerDefinitionsDefinitionsCsEnv(): void
-    {
-        $expected = Env::class;
-        $actual   = $this->definitions->csEnv('TEST_ENV');
+        $expected = ClassDefinition::class;
+        $actual   = $this->definitions->one;
         $this->assertInstanceOf($expected, $actual);
 
-        $expected = Env::class;
-        $actual   = $this->definitions->csEnv('TEST_ENV', 'int');
-        $this->assertInstanceOf($expected, $actual);
-    }
+        $this->definitions->two = new ClassDefinition(TestWithInterface::class);
 
-    /**
-     * @return void
-     */
-    public function testContainerDefinitionsDefinitionsEnv(): void
-    {
-        $expected = Env::class;
-        $actual   = $this->definitions->env('TEST_ENV');
+        $expected = ClassDefinition::class;
+        $actual   = $this->definitions->two;
         $this->assertInstanceOf($expected, $actual);
 
-        $expected = Env::class;
-        $actual   = $this->definitions->env('TEST_ENV', 'int');
-        $this->assertInstanceOf($expected, $actual);
-    }
-
-    /**
-     * @return void
-     */
-    public function testContainerDefinitionsDefinitionsArray(): void
-    {
-        $expected = ArrayValues::class;
-        $actual   = $this->definitions->array(['one']);
-        $this->assertInstanceOf($expected, $actual);
-    }
-
-    /**
-     * @return void
-     */
-    public function testContainerDefinitionsDefinitionsFunctionCall(): void
-    {
-        $expected = FunctionCall::class;
-        $actual   = $this->definitions->functionCall(
-            'Capsule\Di\fake',
-            ['one']
-        );
-        $this->assertInstanceOf($expected, $actual);
-    }
-
-    /**
-     * @return void
-     */
-    public function testContainerDefinitionsDefinitionsGet(): void
-    {
-        $expected = Get::class;
-        $actual   = $this->definitions->get(TestInterface::class);
-        $this->assertInstanceOf($expected, $actual);
-    }
-
-    /**
-     * @return void
-     */
-    public function testContainerDefinitionsDefinitionsGetCall(): void
-    {
-        $expected = GetCall::class;
-        $actual   = $this->definitions->getCall(
-            TestInterface::class,
-            'getValue'
-        );
-        $this->assertInstanceOf($expected, $actual);
-    }
-
-    /**
-     * @return void
-     */
-    public function testContainerDefinitionsDefinitionsIncludeFile(): void
-    {
-        $expected = IncludeFile::class;
-        $actual   = $this->definitions->include('includeFile.php');
-        $this->assertInstanceOf($expected, $actual);
+        $expected = $this->definitions->one;
+        $actual   = $this->definitions->two;
+        $this->assertNotSame($expected, $actual);
     }
 
     /**

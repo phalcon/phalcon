@@ -15,25 +15,9 @@ namespace Phalcon\Tests\Unit\Http\Request;
 
 use Phalcon\Tests\Fixtures\Page\Http;
 use Phalcon\Tests\Unit\Http\Helper\HttpBase;
-use Phalcon\Tests\UnitTestCase;
 
 final class GetServerNameTest extends HttpBase
 {
-    /**
-     * Tests Phalcon\Http\Request :: getServerName() - default
-     *
-     * @author Phalcon Team <team@phalcon.io>
-     * @since  2020-03-17
-     */
-    public function testHttpRequestGetServerNameDefault(): void
-    {
-        $request = $this->getRequestObject();
-
-        $expected = Http::HOST_LOCALHOST;
-        $actual   = $request->getServerName();
-        $this->assertSame($expected, $actual);
-    }
-
     /**
      * Tests Phalcon\Http\Request :: getServerName()
      *
@@ -47,6 +31,21 @@ final class GetServerNameTest extends HttpBase
         $request = $this->getRequestObject();
 
         $expected = Http::TEST_DOMAIN;
+        $actual   = $request->getServerName();
+        $this->assertSame($expected, $actual);
+    }
+
+    /**
+     * Tests Phalcon\Http\Request :: getServerName() - default
+     *
+     * @author Phalcon Team <team@phalcon.io>
+     * @since  2020-03-17
+     */
+    public function testHttpRequestGetServerNameDefault(): void
+    {
+        $request = $this->getRequestObject();
+
+        $expected = Http::HOST_LOCALHOST;
         $actual   = $request->getServerName();
         $this->assertSame($expected, $actual);
     }

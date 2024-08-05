@@ -14,7 +14,6 @@ declare(strict_types=1);
 namespace Phalcon\Tests\Unit\Http\Cookie;
 
 use Phalcon\Tests\Unit\Http\Helper\HttpBase;
-use Phalcon\Tests\UnitTestCase;
 
 final class UseEncryptionIsTest extends HttpBase
 {
@@ -26,7 +25,7 @@ final class UseEncryptionIsTest extends HttpBase
      */
     public function testHttpCookieUseEncryption(): void
     {
-          $this->setDiService('sessionStream');
+        $this->setDiService('sessionStream');
 
         $cookie = $this->getCookieObject();
 

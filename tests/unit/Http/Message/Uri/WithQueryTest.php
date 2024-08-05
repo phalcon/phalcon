@@ -13,13 +13,42 @@ declare(strict_types=1);
 
 namespace Phalcon\Tests\Unit\Http\Message\Uri;
 
-use Codeception\Example;
 use InvalidArgumentException;
 use Phalcon\Http\Message\Uri;
 use Phalcon\Tests\UnitTestCase;
 
 final class WithQueryTest extends UnitTestCase
 {
+    public static function getExamples(): array
+    {
+        return [
+            [
+                'p^aram',
+                'p%5Earam',
+            ],
+            [
+                'p^aram=valu`',
+                'p%5Earam=valu%60',
+            ],
+            [
+                'param[]',
+                'param%5B%5D',
+            ],
+            [
+                'param[]=valu`',
+                'param%5B%5D=valu%60',
+            ],
+            [
+                '?param=valu',
+                'param=valu',
+            ],
+            [
+                'p^aram&all[]=va lu`&param<>=`test',
+                'p%5Earam&all%5B%5D=va%20lu%60&param%3C%3E=%60test',
+            ],
+        ];
+    }
+
     /**
      * Tests Phalcon\Http\Message\Uri :: withQuery()
      *
@@ -65,35 +94,5 @@ final class WithQueryTest extends UnitTestCase
         );
 
         $uri->withQuery('/login#frag');
-    }
-
-    public static function getExamples(): array
-    {
-        return [
-            [
-                'p^aram',
-                'p%5Earam',
-            ],
-            [
-                'p^aram=valu`',
-                'p%5Earam=valu%60',
-            ],
-            [
-                'param[]',
-                'param%5B%5D',
-            ],
-            [
-                'param[]=valu`',
-                'param%5B%5D=valu%60',
-            ],
-            [
-                '?param=valu',
-                'param=valu',
-            ],
-            [
-                'p^aram&all[]=va lu`&param<>=`test',
-                'p%5Earam&all%5B%5D=va%20lu%60&param%3C%3E=%60test',
-            ],
-        ];
     }
 }

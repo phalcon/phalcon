@@ -26,91 +26,6 @@ final class TextTest extends UnitTestCase
     use GdTrait;
 
     /**
-     * Tests Phalcon\Image\Adapter\Gd :: text()
-     *
-     * @dataProvider getExamples
-     *
-     * @return void
-     * @param Example    $example
-     *
-     * @author       Phalcon Team <team@phalcon.io>
-     * @since        2018-11-13
-     */
-    public function testImageAdapterGdText(
-        int $index,
-        string $text,
-        bool|int $offsetX,
-        bool|int $offsetY,
-        int $opacity,
-        string $color,
-        int $size,
-        ?string $font,
-        string $hash
-    ): void {
-        $this->checkJpegSupport();
-
-        $outputDir   = 'tests/image/gd/';
-        $image       = new Gd(dataDir('assets/images/example-jpg.jpg'));
-        $outputImage = $index . 'text.jpg';
-        $output      = outputDir($outputDir . '/' . $outputImage);
-
-        $image
-            ->text(
-                $text,
-                $offsetX,
-                $offsetY,
-                $opacity,
-                $color,
-                $size,
-                $font
-            )
-            ->save($output)
-        ;
-
-        $this->assertFileExists(outputDir($outputDir) . $outputImage);
-
-        $this->assertTrue($this->checkImageHash($output, $hash));
-        $this->safeDeleteFile($outputImage);
-    }
-
-    /**
-     * Tests Phalcon\Image\Adapter\Gd :: text()
-     *
-     * @author Phalcon Team <team@phalcon.io>
-     * @since  2021-04-20
-     * @issue  15188
-     */
-    public function testImageAdapterGdTextWithFont(): void
-    {
-        $this->checkJpegSupport();
-
-        $outputDir = 'tests/image/gd/';
-
-        $image       = dataDir('assets/images/example-jpg.jpg');
-        $outputImage = '15188-text.jpg';
-        $output      = outputDir($outputDir . '/' . $outputImage);
-        $text        = 'Hello Phalcon!';
-        $offsetX     = 50;
-        $offsetY     = 75;
-        $opacity     = 60;
-        $color       = '0000FF';
-        $size        = 24;
-        $font        = dataDir('assets/fonts/Roboto-Light.ttf');
-        $hash        = 'fbf9f3e3c3c18183';
-
-        $object = new Gd($image);
-        $object
-            ->text($text, $offsetX, $offsetY, $opacity, $color, $size, $font)
-            ->save($output)
-        ;
-
-        $this->assertFileExists(outputDir($outputDir) . $outputImage);
-
-        $this->assertTrue($this->checkImageHash($output, $hash));
-        $this->safeDeleteFile($outputImage);
-    }
-
-    /**
      * @return array[]
      */
     public static function getExamples(): array
@@ -183,5 +98,90 @@ final class TextTest extends UnitTestCase
                 'fbf9f3e3c3c18183',
             ],
         ];
+    }
+
+    /**
+     * Tests Phalcon\Image\Adapter\Gd :: text()
+     *
+     * @dataProvider getExamples
+     *
+     * @param Example $example
+     *
+     * @return void
+     * @author       Phalcon Team <team@phalcon.io>
+     * @since        2018-11-13
+     */
+    public function testImageAdapterGdText(
+        int $index,
+        string $text,
+        bool | int $offsetX,
+        bool | int $offsetY,
+        int $opacity,
+        string $color,
+        int $size,
+        ?string $font,
+        string $hash
+    ): void {
+        $this->checkJpegSupport();
+
+        $outputDir   = 'tests/image/gd/';
+        $image       = new Gd(dataDir('assets/images/example-jpg.jpg'));
+        $outputImage = $index . 'text.jpg';
+        $output      = outputDir($outputDir . '/' . $outputImage);
+
+        $image
+            ->text(
+                $text,
+                $offsetX,
+                $offsetY,
+                $opacity,
+                $color,
+                $size,
+                $font
+            )
+            ->save($output)
+        ;
+
+        $this->assertFileExists(outputDir($outputDir) . $outputImage);
+
+        $this->assertTrue($this->checkImageHash($output, $hash));
+        $this->safeDeleteFile($outputImage);
+    }
+
+    /**
+     * Tests Phalcon\Image\Adapter\Gd :: text()
+     *
+     * @author Phalcon Team <team@phalcon.io>
+     * @since  2021-04-20
+     * @issue  15188
+     */
+    public function testImageAdapterGdTextWithFont(): void
+    {
+        $this->checkJpegSupport();
+
+        $outputDir = 'tests/image/gd/';
+
+        $image       = dataDir('assets/images/example-jpg.jpg');
+        $outputImage = '15188-text.jpg';
+        $output      = outputDir($outputDir . '/' . $outputImage);
+        $text        = 'Hello Phalcon!';
+        $offsetX     = 50;
+        $offsetY     = 75;
+        $opacity     = 60;
+        $color       = '0000FF';
+        $size        = 24;
+        $font        = dataDir('assets/fonts/Roboto-Light.ttf');
+        $hash        = 'fbf9f3e3c3c18183';
+
+        $object = new Gd($image);
+        $object
+            ->text($text, $offsetX, $offsetY, $opacity, $color, $size, $font)
+            ->save($output)
+        ;
+
+        $this->assertFileExists(outputDir($outputDir) . $outputImage);
+
+        $this->assertTrue($this->checkImageHash($output, $hash));
+        $this->safeDeleteFile($outputImage);
     }
 }

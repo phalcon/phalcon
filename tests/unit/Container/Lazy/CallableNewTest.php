@@ -16,7 +16,6 @@ namespace Phalcon\Tests\Unit\Container\Lazy;
 use Closure;
 use Phalcon\Container\Lazy\CallableNew;
 use stdClass;
-use Phalcon\Tests\UnitTestCase;
 
 final class CallableNewTest extends AbstractLazyBase
 {
@@ -25,7 +24,7 @@ final class CallableNewTest extends AbstractLazyBase
      */
     public function testContainerLazyCallableNew(): void
     {
-        $lazy = new CallableNew(stdClass::CLASS);
+        $lazy     = new CallableNew(stdClass::CLASS);
         $callable = $this->actual($lazy);
         $this->assertInstanceOf(Closure::CLASS, $callable);
 

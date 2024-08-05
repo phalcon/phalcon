@@ -27,38 +27,6 @@ final class SetTest extends UnitTestCase
      * @author Phalcon Team <team@phalcon.io>
      * @since  2020-09-09
      */
-    public function testSupportCollectionSet(): void
-    {
-        $this->expectException(Exception::class);
-        $this->expectExceptionMessage('The object is read only');
-        $collection = new ReadOnlyCollection();
-        $collection->set('three', 123);
-    }
-
-    /**
-     * Tests Phalcon\Support\Collection\ReadOnlyCollection :: set()
-     *
-     * @return void
-     *
-     * @author Phalcon Team <team@phalcon.io>
-     * @since  2020-09-09
-     */
-    public function testSupportCollectionSetProperty(): void
-    {
-        $this->expectException(Exception::class);
-        $this->expectExceptionMessage('The object is read only');
-        $collection        = new ReadOnlyCollection();
-        $collection->three = 'Phalcon';
-    }
-
-    /**
-     * Tests Phalcon\Support\Collection\ReadOnlyCollection :: set()
-     *
-     * @return void
-     *
-     * @author Phalcon Team <team@phalcon.io>
-     * @since  2020-09-09
-     */
     public function testSupportCollectionOffsetSet(): void
     {
         $this->expectException(Exception::class);
@@ -75,11 +43,43 @@ final class SetTest extends UnitTestCase
      * @author Phalcon Team <team@phalcon.io>
      * @since  2020-09-09
      */
+    public function testSupportCollectionSet(): void
+    {
+        $this->expectException(Exception::class);
+        $this->expectExceptionMessage('The object is read only');
+        $collection = new ReadOnlyCollection();
+        $collection->set('three', 123);
+    }
+
+    /**
+     * Tests Phalcon\Support\Collection\ReadOnlyCollection :: set()
+     *
+     * @return void
+     *
+     * @author Phalcon Team <team@phalcon.io>
+     * @since  2020-09-09
+     */
     public function testSupportCollectionSetArray(): void
     {
         $this->expectException(Exception::class);
         $this->expectExceptionMessage('The object is read only');
         $collection          = new ReadOnlyCollection();
         $collection['three'] = true;
+    }
+
+    /**
+     * Tests Phalcon\Support\Collection\ReadOnlyCollection :: set()
+     *
+     * @return void
+     *
+     * @author Phalcon Team <team@phalcon.io>
+     * @since  2020-09-09
+     */
+    public function testSupportCollectionSetProperty(): void
+    {
+        $this->expectException(Exception::class);
+        $this->expectExceptionMessage('The object is read only');
+        $collection        = new ReadOnlyCollection();
+        $collection->three = 'Phalcon';
     }
 }

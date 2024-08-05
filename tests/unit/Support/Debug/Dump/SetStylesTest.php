@@ -14,11 +14,37 @@ declare(strict_types=1);
 namespace Phalcon\Tests\Unit\Support\Debug\Dump;
 
 use Phalcon\Support\Debug\Dump;
-use ReflectionException;
 use Phalcon\Tests\UnitTestCase;
+use ReflectionException;
 
 final class SetStylesTest extends UnitTestCase
 {
+    /**
+     * Tests Phalcon\Support\Debug\Dump :: getStyle()
+     *
+     * @return void
+     *
+     * @throws ReflectionException
+     *
+     * @author Phalcon Team <team@phalcon.io>
+     * @since  2020-09-09
+     */
+    public function testSupportDebugDumpGetStyle(): void
+    {
+        $dump = new Dump(
+            [],
+            true
+        );
+
+        $expected = 'color:gray';
+        $actual   = $this->callProtectedMethod($dump, 'getStyle', 'unknown');
+        $this->assertSame($expected, $actual);
+
+        $expected = 'color:blue';
+        $actual   = $this->callProtectedMethod($dump, 'getStyle', 'int');
+        $this->assertSame($expected, $actual);
+    }
+
     /**
      * Tests Phalcon\Support\Debug\Dump :: setStyles()
      *
@@ -47,32 +73,6 @@ final class SetStylesTest extends UnitTestCase
         );
 
         $expected = 'color:indigo';
-        $actual   = $this->callProtectedMethod($dump, 'getStyle', 'int');
-        $this->assertSame($expected, $actual);
-    }
-
-    /**
-     * Tests Phalcon\Support\Debug\Dump :: getStyle()
-     *
-     * @return void
-     *
-     * @throws ReflectionException
-     *
-     * @author Phalcon Team <team@phalcon.io>
-     * @since  2020-09-09
-     */
-    public function testSupportDebugDumpGetStyle(): void
-    {
-        $dump = new Dump(
-            [],
-            true
-        );
-
-        $expected = 'color:gray';
-        $actual   = $this->callProtectedMethod($dump, 'getStyle', 'unknown');
-        $this->assertSame($expected, $actual);
-
-        $expected = 'color:blue';
         $actual   = $this->callProtectedMethod($dump, 'getStyle', 'int');
         $this->assertSame($expected, $actual);
     }

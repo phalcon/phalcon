@@ -14,8 +14,8 @@ declare(strict_types=1);
 namespace Phalcon\Tests\Unit\Http\Message\Stream;
 
 use Phalcon\Http\Message\Stream;
-use RuntimeException;
 use Phalcon\Tests\UnitTestCase;
+use RuntimeException;
 
 final class ReadTest extends UnitTestCase
 {
@@ -52,7 +52,7 @@ final class ReadTest extends UnitTestCase
         $this->expectExceptionMessage('A valid resource is required.');
 
         $fileName = dataDir('assets/stream/mit.txt');
-        $stream = new Stream($fileName, 'rb');
+        $stream   = new Stream($fileName, 'rb');
         $stream->detach();
         $stream->read(10);
     }

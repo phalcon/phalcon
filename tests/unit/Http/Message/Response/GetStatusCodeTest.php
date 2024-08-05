@@ -14,8 +14,8 @@ declare(strict_types=1);
 namespace Phalcon\Tests\Unit\Http\Message\Response;
 
 use InvalidArgumentException;
-use Phalcon\Tests\Fixtures\Page\Http;
 use Phalcon\Http\Message\Response;
+use Phalcon\Tests\Fixtures\Page\Http;
 use Phalcon\Tests\UnitTestCase;
 
 final class GetStatusCodeTest extends UnitTestCase

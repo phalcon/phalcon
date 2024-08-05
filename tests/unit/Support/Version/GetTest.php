@@ -25,28 +25,6 @@ use function is_string;
 final class GetTest extends UnitTestCase
 {
     /**
-     * Tests get()
-     *
-     * @dataProvider getExamples
-     *
-     * @return void
-     * @param Example    $example
-     *
-     * @author       Phalcon Team <team@phalcon.io>
-     * @since        2020-09-09
-     */
-    public function testSupportVersionGet(
-        string $class,
-        string $expected
-    ): void {
-        $version = new $class();
-
-        $actual   = $version->get();
-        $this->assertTrue(is_string($actual));
-        $this->assertSame($expected, $actual);
-    }
-
-    /**
      * @return string[][]
      */
     public static function getExamples(): array
@@ -69,5 +47,27 @@ final class GetTest extends UnitTestCase
                 '5.0.0',
             ],
         ];
+    }
+
+    /**
+     * Tests get()
+     *
+     * @dataProvider getExamples
+     *
+     * @param Example $example
+     *
+     * @return void
+     * @author       Phalcon Team <team@phalcon.io>
+     * @since        2020-09-09
+     */
+    public function testSupportVersionGet(
+        string $class,
+        string $expected
+    ): void {
+        $version = new $class();
+
+        $actual = $version->get();
+        $this->assertTrue(is_string($actual));
+        $this->assertSame($expected, $actual);
     }
 }

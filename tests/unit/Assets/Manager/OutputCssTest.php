@@ -32,16 +32,56 @@ final class OutputCssTest extends UnitTestCase
 {
     use DiTrait;
 
-    public function tearDown(): void
-    {
-        $this->resetDi();
-    }
-
     public function setUp(): void
     {
         $this->newDi();
         $this->setDiService('escaper');
         $this->setDiService('url');
+    }
+
+    public function tearDown(): void
+    {
+        $this->resetDi();
+    }
+
+    /**
+     * Tests Phalcon\Assets\Manager :: outputCss() - filter chain custom filter
+     * with cssmin
+     *
+     * @issue  https://github.com/phalcon/cphalcon/issues/1198
+     *
+     * @author Phalcon Team <team@phalcon.io>
+     * @since  2013-09-15
+     */
+    public function testAssetsManagerOutputCssFilterChainCustomFilterWithCssmin(): void
+    {
+        $fileName = $this->getNewFileName('assets_', 'css');
+        $fileName = outputDir('tests/assets/' . $fileName);
+        $cssFile  = dataDir('assets/assets/1198.css');
+        $manager  = new Manager(new TagFactory(new Escaper()));
+
+        $manager->useImplicitOutput(false);
+
+        $css = $manager->collection('css');
+
+        $css
+            ->setTargetPath($fileName)
+            ->addCss($cssFile)
+            ->addFilter(new UppercaseFilter())
+            ->addFilter(new TrimFilter())
+            ->join(true)
+        ;
+
+        $manager->outputCss('css');
+
+        $needle  = 'A{TEXT-DECORATION:NONE;}B{FONT-WEIGHT:BOLD;}';
+        $content = file_get_contents($fileName);
+        $this->assertStringContainsString(
+            $needle,
+            $content
+        );
+
+        $this->safeDeleteFile($fileName);
     }
 
     /**
@@ -92,45 +132,5 @@ final class OutputCssTest extends UnitTestCase
         $actual = ob_get_clean();
 
         $this->assertSame($expected, $actual);
-    }
-
-    /**
-     * Tests Phalcon\Assets\Manager :: outputCss() - filter chain custom filter
-     * with cssmin
-     *
-     * @issue  https://github.com/phalcon/cphalcon/issues/1198
-     *
-     * @author Phalcon Team <team@phalcon.io>
-     * @since  2013-09-15
-     */
-    public function testAssetsManagerOutputCssFilterChainCustomFilterWithCssmin(): void
-    {
-        $fileName = $this->getNewFileName('assets_', 'css');
-        $fileName = outputDir('tests/assets/' . $fileName);
-        $cssFile  = dataDir('assets/assets/1198.css');
-        $manager  = new Manager(new TagFactory(new Escaper()));
-
-        $manager->useImplicitOutput(false);
-
-        $css = $manager->collection('css');
-
-        $css
-            ->setTargetPath($fileName)
-            ->addCss($cssFile)
-            ->addFilter(new UppercaseFilter())
-            ->addFilter(new TrimFilter())
-            ->join(true)
-        ;
-
-        $manager->outputCss('css');
-
-        $needle  = 'A{TEXT-DECORATION:NONE;}B{FONT-WEIGHT:BOLD;}';
-        $content = file_get_contents($fileName);
-        $this->assertStringContainsString(
-            $needle,
-            $content
-        );
-
-        $this->safeDeleteFile($fileName);
     }
 }

@@ -13,12 +13,9 @@ declare(strict_types=1);
 
 namespace Phalcon\Tests\Unit\Assets\Asset;
 
-use Codeception\Example;
 use Phalcon\Assets\Asset;
 use Phalcon\Tests\Fixtures\Traits\AssetsTrait;
 use Phalcon\Tests\UnitTestCase;
-
-use function uniqid;
 
 final class GetSetPathTest extends UnitTestCase
 {

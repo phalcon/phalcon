@@ -13,13 +13,13 @@ declare(strict_types=1);
 
 namespace Phalcon\Tests\Unit\Logger\Adapter\Syslog;
 
-use Codeception\Stub;
 use DateTimeImmutable;
 use DateTimeZone;
 use LogicException;
 use Phalcon\Logger\Adapter\Syslog;
 use Phalcon\Logger\Enum;
 use Phalcon\Logger\Item;
+use Phalcon\Tests\Fixtures\Logger\Adapter\SyslogFopenFixture;
 use Phalcon\Tests\UnitTestCase;
 
 use function date_default_timezone_get;
@@ -69,15 +69,7 @@ final class ProcessTest extends UnitTestCase
             . "] and facility [8]"
         );
 
-        $adapter = Stub::construct(
-            Syslog::class,
-            [
-                $fileName,
-            ],
-            [
-                'openlog' => false,
-            ]
-        );
+        $adapter = new SyslogFopenFixture($fileName);
 
         $timezone = date_default_timezone_get();
         $datetime = new DateTimeImmutable('now', new DateTimeZone($timezone));

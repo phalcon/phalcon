@@ -54,23 +54,6 @@ final class GetAdapterTest extends UnitTestCase
     }
 
     /**
-     * Tests Phalcon\Logger :: getAdapter() - unknown
-     *
-     * @return void
-     *
-     * @author Phalcon Team <team@phalcon.io>
-     * @since  2020-09-09
-     */
-    public function testLoggerGetAdapterUnknown(): void
-    {
-        $this->expectException(Exception::class);
-        $this->expectExceptionMessage('Adapter does not exist for this logger');
-
-        $logger = new Logger('my-logger');
-        $logger->getAdapter('unknown');
-    }
-
-    /**
      * Tests Phalcon\Logger :: getAdapter() - for transaction
      *
      * @return void
@@ -147,5 +130,22 @@ final class GetAdapterTest extends UnitTestCase
 
         $this->safeDeleteFile($outputPath . $fileName1);
         $this->safeDeleteFile($outputPath . $fileName2);
+    }
+
+    /**
+     * Tests Phalcon\Logger :: getAdapter() - unknown
+     *
+     * @return void
+     *
+     * @author Phalcon Team <team@phalcon.io>
+     * @since  2020-09-09
+     */
+    public function testLoggerGetAdapterUnknown(): void
+    {
+        $this->expectException(Exception::class);
+        $this->expectExceptionMessage('Adapter does not exist for this logger');
+
+        $logger = new Logger('my-logger');
+        $logger->getAdapter('unknown');
     }
 }

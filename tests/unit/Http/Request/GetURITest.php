@@ -15,24 +15,9 @@ namespace Phalcon\Tests\Unit\Http\Request;
 
 use Phalcon\Tests\Fixtures\Page\Http;
 use Phalcon\Tests\Unit\Http\Helper\HttpBase;
-use Phalcon\Tests\UnitTestCase;
 
 final class GetURITest extends HttpBase
 {
-    /**
-     * Tests Phalcon\Http\Request :: getURI() - default
-     *
-     * @author Phalcon Team <team@phalcon.io>
-     * @since  2020-03-17
-     */
-    public function testHttpRequestGetURIDefault(): void
-    {
-        $request = $this->getRequestObject();
-
-        $actual = $request->getURI();
-        $this->assertEmpty($actual);
-    }
-
     /**
      * Tests Phalcon\Http\Request :: getURI()
      *
@@ -49,6 +34,20 @@ final class GetURITest extends HttpBase
         $expected = $uri;
         $actual   = $request->getURI();
         $this->assertSame($expected, $actual);
+    }
+
+    /**
+     * Tests Phalcon\Http\Request :: getURI() - default
+     *
+     * @author Phalcon Team <team@phalcon.io>
+     * @since  2020-03-17
+     */
+    public function testHttpRequestGetURIDefault(): void
+    {
+        $request = $this->getRequestObject();
+
+        $actual = $request->getURI();
+        $this->assertEmpty($actual);
     }
 
     /**

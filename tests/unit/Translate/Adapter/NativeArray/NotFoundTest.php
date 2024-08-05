@@ -15,10 +15,10 @@ namespace Phalcon\Tests\Unit\Translate\Adapter\NativeArray;
 
 use Phalcon\Tests\Fixtures\Traits\TranslateNativeArrayTrait;
 use Phalcon\Tests\Fixtures\Translate\Adapter\NativeAdapterFixture;
+use Phalcon\Tests\UnitTestCase;
 use Phalcon\Translate\Adapter\NativeArray;
 use Phalcon\Translate\Exception;
 use Phalcon\Translate\InterpolatorFactory;
-use Phalcon\Tests\UnitTestCase;
 
 final class NotFoundTest extends UnitTestCase
 {
@@ -45,6 +45,30 @@ final class NotFoundTest extends UnitTestCase
 
         $expected = 'unknown';
         $actual   = $translator->query($expected);
+        $this->assertSame($expected, $actual);
+    }
+
+    /**
+     * Tests Phalcon\Translate\Adapter\NativeArray :: notFound() - custom
+     *
+     * @return void
+     *
+     * @author Phalcon Team <team@phalcon.io>
+     * @since  2020-09-09
+     */
+    public function testTranslateAdapterNativearrayNotFoundCustom(): void
+    {
+        $language = $this->getArrayConfig()['en'];
+
+        $translator = new NativeAdapterFixture(
+            new InterpolatorFactory(),
+            [
+                'content' => $language,
+            ]
+        );
+
+        $expected = '';
+        $actual   = $translator->query('unknown');
         $this->assertSame($expected, $actual);
     }
 
@@ -99,29 +123,5 @@ final class NotFoundTest extends UnitTestCase
         );
 
         $translator->query('unknown');
-    }
-
-    /**
-     * Tests Phalcon\Translate\Adapter\NativeArray :: notFound() - custom
-     *
-     * @return void
-     *
-     * @author Phalcon Team <team@phalcon.io>
-     * @since  2020-09-09
-     */
-    public function testTranslateAdapterNativearrayNotFoundCustom(): void
-    {
-        $language = $this->getArrayConfig()['en'];
-
-        $translator = new NativeAdapterFixture(
-            new InterpolatorFactory(),
-            [
-                'content' => $language,
-            ]
-        );
-
-        $expected = '';
-        $actual   = $translator->query('unknown');
-        $this->assertSame($expected, $actual);
     }
 }

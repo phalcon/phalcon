@@ -35,19 +35,18 @@ final class GetUserInfoTest extends UnitTestCase
     }
 
     /**
-     * Tests Phalcon\Http\Message\Uri :: getUserInfo() - only user
+     * Tests Phalcon\Http\Message\Uri :: getUserInfo() - empty
      *
      * @author Phalcon Team <team@phalcon.io>
      * @since  2019-02-07
      */
-    public function testHttpUriGetUserInfoOnlyUser(): void
+    public function testHttpUriGetUserInfoEmpty(): void
     {
-        $query = 'https://phalcon@dev.phalcon.ld:8080/action?param=value#frag';
+        $query = 'https://dev.phalcon.ld:8080/action?param=value#frag';
         $uri   = new Uri($query);
 
-        $expected = 'phalcon';
-        $actual   = $uri->getUserInfo();
-        $this->assertSame($expected, $actual);
+        $actual = $uri->getUserInfo();
+        $this->assertEmpty($actual);
     }
 
     /**
@@ -67,17 +66,18 @@ final class GetUserInfoTest extends UnitTestCase
     }
 
     /**
-     * Tests Phalcon\Http\Message\Uri :: getUserInfo() - empty
+     * Tests Phalcon\Http\Message\Uri :: getUserInfo() - only user
      *
      * @author Phalcon Team <team@phalcon.io>
      * @since  2019-02-07
      */
-    public function testHttpUriGetUserInfoEmpty(): void
+    public function testHttpUriGetUserInfoOnlyUser(): void
     {
-        $query = 'https://dev.phalcon.ld:8080/action?param=value#frag';
+        $query = 'https://phalcon@dev.phalcon.ld:8080/action?param=value#frag';
         $uri   = new Uri($query);
 
-        $actual = $uri->getUserInfo();
-        $this->assertEmpty($actual);
+        $expected = 'phalcon';
+        $actual   = $uri->getUserInfo();
+        $this->assertSame($expected, $actual);
     }
 }

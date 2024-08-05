@@ -15,28 +15,12 @@ namespace Phalcon\Tests\Unit\Http\Request;
 
 use Phalcon\Tests\Fixtures\Page\Http;
 use Phalcon\Tests\Unit\Http\Helper\HttpBase;
-use Phalcon\Tests\UnitTestCase;
 
 use function file_put_contents;
 use function parse_str;
 
 final class GetRawBodyTest extends HttpBase
 {
-    /**
-     * Tests Phalcon\Http\Request :: getRawBody() - default
-     *
-     * @author Phalcon Team <team@phalcon.io>
-     * @since  2020-03-17
-     */
-    public function testHttpRequestGetRawBodyDefault(): void
-    {
-        // Empty
-        $request = $this->getRequestObject();
-
-        $actual = $request->getRawBody();
-        $this->assertEmpty($actual);
-    }
-
     /**
      * Tests Phalcon\Http\Request :: getRawBody()
      *
@@ -63,5 +47,20 @@ final class GetRawBodyTest extends HttpBase
         $this->assertSame($expected, $actual);
 
         $this->unregisterStream();
+    }
+
+    /**
+     * Tests Phalcon\Http\Request :: getRawBody() - default
+     *
+     * @author Phalcon Team <team@phalcon.io>
+     * @since  2020-03-17
+     */
+    public function testHttpRequestGetRawBodyDefault(): void
+    {
+        // Empty
+        $request = $this->getRequestObject();
+
+        $actual = $request->getRawBody();
+        $this->assertEmpty($actual);
     }
 }

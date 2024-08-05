@@ -15,24 +15,9 @@ namespace Phalcon\Tests\Unit\Http\Request;
 
 use Phalcon\Tests\Fixtures\Page\Http;
 use Phalcon\Tests\Unit\Http\Helper\HttpBase;
-use Phalcon\Tests\UnitTestCase;
 
 final class GetUserAgentTest extends HttpBase
 {
-    /**
-     * Tests Phalcon\Http\Request :: getUserAgent() - default
-     *
-     * @author Phalcon Team <team@phalcon.io>
-     * @since  2020-03-17
-     */
-    public function testHttpRequestGetUserAgentDefault(): void
-    {
-        $request = $this->getRequestObject();
-
-        $actual = $request->getUserAgent();
-        $this->assertEmpty($actual);
-    }
-
     /**
      * Tests Phalcon\Http\Request :: getUserAgent()
      *
@@ -48,5 +33,19 @@ final class GetUserAgentTest extends HttpBase
         $expected = Http::TEST_USER_AGENT;
         $actual   = $request->getUserAgent();
         $this->assertSame($expected, $actual);
+    }
+
+    /**
+     * Tests Phalcon\Http\Request :: getUserAgent() - default
+     *
+     * @author Phalcon Team <team@phalcon.io>
+     * @since  2020-03-17
+     */
+    public function testHttpRequestGetUserAgentDefault(): void
+    {
+        $request = $this->getRequestObject();
+
+        $actual = $request->getUserAgent();
+        $this->assertEmpty($actual);
     }
 }

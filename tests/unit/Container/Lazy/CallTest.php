@@ -14,7 +14,6 @@ declare(strict_types=1);
 namespace Phalcon\Tests\Unit\Container\Lazy;
 
 use Phalcon\Container\Lazy\Call;
-use Phalcon\Tests\UnitTestCase;
 
 final class CallTest extends AbstractLazyBase
 {

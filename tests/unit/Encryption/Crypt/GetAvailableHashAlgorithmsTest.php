@@ -13,9 +13,7 @@ declare(strict_types=1);
 
 namespace Phalcon\Tests\Unit\Encryption\Crypt;
 
-use Codeception\Stub;
 use Phalcon\Encryption\Crypt;
-use Phalcon\Tests\Fixtures\Encryption\Crypt\CryptFunctionExistsFixture;
 use Phalcon\Tests\Fixtures\Encryption\Crypt\CryptFunctionExistsTwiceFixture;
 use Phalcon\Tests\UnitTestCase;
 

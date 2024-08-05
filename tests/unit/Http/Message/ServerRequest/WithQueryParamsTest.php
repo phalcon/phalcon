@@ -26,7 +26,7 @@ final class WithQueryParamsTest extends UnitTestCase
      */
     public function testHttpMessageServerRequestWithQueryParams(): void
     {
-        $request = new ServerRequest();
+        $request     = new ServerRequest();
         $newInstance = $request->withQueryParams(
             [
                 'one' => 'two',

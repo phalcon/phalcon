@@ -13,30 +13,11 @@ declare(strict_types=1);
 
 namespace Phalcon\Tests\Unit\Http\Message\Uri;
 
-use Codeception\Example;
 use Phalcon\Http\Message\Uri;
 use Phalcon\Tests\UnitTestCase;
 
 final class GetAuthorityTest extends UnitTestCase
 {
-    /**
-     * Tests Phalcon\Http\Message\Uri :: getAuthority()
-     *
-     * @dataProvider getExamples
-     *
-     * @author       Phalcon Team <team@phalcon.io>
-     * @since        2019-02-09
-     */
-    public function testHttpMessageUriGetAuthority(
-        string $uriStr,
-        string $expected
-    ): void {
-        $uri = new Uri($uriStr);
-
-        $this->assertSame($expected, $uri->getAuthority());
-    }
-
-
     public static function getExamples(): array
     {
         return [
@@ -65,5 +46,22 @@ final class GetAuthorityTest extends UnitTestCase
                 'phalcon:secret@dev.phalcon.ld:8080',
             ],
         ];
+    }
+
+    /**
+     * Tests Phalcon\Http\Message\Uri :: getAuthority()
+     *
+     * @dataProvider getExamples
+     *
+     * @author       Phalcon Team <team@phalcon.io>
+     * @since        2019-02-09
+     */
+    public function testHttpMessageUriGetAuthority(
+        string $uriStr,
+        string $expected
+    ): void {
+        $uri = new Uri($uriStr);
+
+        $this->assertSame($expected, $uri->getAuthority());
     }
 }

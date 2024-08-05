@@ -13,8 +13,6 @@ declare(strict_types=1);
 
 namespace Phalcon\Tests\Unit\Storage\Adapter;
 
-use Codeception\Example;
-use Phalcon\Tests\UnitTestCase;
 use Memcached as NativeMemcached;
 use Phalcon\Storage\Adapter\Apcu;
 use Phalcon\Storage\Adapter\Libmemcached;
@@ -23,45 +21,15 @@ use Phalcon\Storage\Adapter\Redis;
 use Phalcon\Storage\Adapter\Stream;
 use Phalcon\Storage\Adapter\Weak;
 use Phalcon\Storage\SerializerFactory;
+use Phalcon\Tests\UnitTestCase;
 use Redis as NativeRedis;
 
 use function getOptionsLibmemcached;
 use function getOptionsRedis;
 use function outputDir;
-use function sprintf;
 
 final class GetAdapterTest extends UnitTestCase
 {
-    /**
-     * Tests Phalcon\Storage\Adapter\* :: getAdapter()
-     *
-     * @dataProvider getExamples
-     *
-     * @author       Phalcon Team <team@phalcon.io>
-     * @since        2020-09-09
-     */
-    public function testStorageAdapterGetAdapter(
-        string $class,
-        array $options,
-        ?string $expected,
-        string $extension,
-    ): void {
-        if (!empty($extension)) {
-            $this->checkExtensionIsLoaded($extension);
-        }
-
-        $serializer = new SerializerFactory();
-        $adapter    = new $class($serializer, $options);
-
-        $actual   = $adapter->getAdapter();
-
-        if (null === $expected) {
-            $this->assertNull($actual);
-        } else {
-            $this->assertInstanceOf($expected, $actual);
-        }
-    }
-
     /**
      * @return array[]
      */
@@ -107,5 +75,35 @@ final class GetAdapterTest extends UnitTestCase
                 '',
             ],
         ];
+    }
+
+    /**
+     * Tests Phalcon\Storage\Adapter\* :: getAdapter()
+     *
+     * @dataProvider getExamples
+     *
+     * @author       Phalcon Team <team@phalcon.io>
+     * @since        2020-09-09
+     */
+    public function testStorageAdapterGetAdapter(
+        string $class,
+        array $options,
+        ?string $expected,
+        string $extension,
+    ): void {
+        if (!empty($extension)) {
+            $this->checkExtensionIsLoaded($extension);
+        }
+
+        $serializer = new SerializerFactory();
+        $adapter    = new $class($serializer, $options);
+
+        $actual = $adapter->getAdapter();
+
+        if (null === $expected) {
+            $this->assertNull($actual);
+        } else {
+            $this->assertInstanceOf($expected, $actual);
+        }
     }
 }

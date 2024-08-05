@@ -14,10 +14,10 @@ declare(strict_types=1);
 namespace Phalcon\Tests\Unit\Translate\Adapter\Gettext;
 
 use Phalcon\Tests\Fixtures\Traits\TranslateGettextTrait;
+use Phalcon\Tests\UnitTestCase;
 use Phalcon\Translate\Adapter\Gettext;
 use Phalcon\Translate\Exception;
 use Phalcon\Translate\InterpolatorFactory;
-use Phalcon\Tests\UnitTestCase;
 
 final class OffsetUnsetTest extends UnitTestCase
 {

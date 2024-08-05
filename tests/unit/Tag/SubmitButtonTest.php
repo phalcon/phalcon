@@ -18,21 +18,6 @@ use Phalcon\Tests\Fixtures\Helpers\TagSetup;
 class SubmitButtonTest extends TagSetup
 {
     /**
-     * Tests Phalcon\Tag :: submitButton() - string as a parameter
-     *
-     * @author Phalcon Team <team@phalcon.io>
-     * @since  2014-09-05
-     */
-    public function testTagSubmitButtonStringParameter(): void
-    {
-        $options  = 'x_name';
-        $expected = '<input type="submit" value="x_name"';
-
-        $this->testFieldParameter('submitButton', $options, $expected);
-        $this->testFieldParameter('submitButton', $options, $expected, true);
-    }
-
-    /**
      * Tests Phalcon\Tag :: submitButton() - array as a parameter
      *
      * @author Phalcon Team <team@phalcon.io>
@@ -94,24 +79,18 @@ class SubmitButtonTest extends TagSetup
     }
 
     /**
-     * Tests Phalcon\Tag :: submitButton() - setDefault
+     * Tests Phalcon\Tag :: submitButton() - string as a parameter
      *
      * @author Phalcon Team <team@phalcon.io>
      * @since  2014-09-05
      */
-    public function testTagSubmitButtonWithSetDefault(): void
+    public function testTagSubmitButtonStringParameter(): void
     {
-        $options = [
-            'x_name',
-            'name'  => 'x_other',
-            'class' => 'x_class',
-            'size'  => '10',
-        ];
+        $options  = 'x_name';
+        $expected = '<input type="submit" value="x_name"';
 
-        $expected = '<input type="submit" name="x_other" value="x_name" class="x_class" size="10"';
-
-        $this->testFieldParameter('submitButton', $options, $expected, false, 'setDefault');
-        $this->testFieldParameter('submitButton', $options, $expected, true, 'setDefault');
+        $this->testFieldParameter('submitButton', $options, $expected);
+        $this->testFieldParameter('submitButton', $options, $expected, true);
     }
 
     /**
@@ -136,27 +115,6 @@ class SubmitButtonTest extends TagSetup
     }
 
     /**
-     * Tests Phalcon\Tag :: submitButton() - setDefault and element not present
-     *
-     * @author Phalcon Team <team@phalcon.io>
-     * @since  2014-09-05
-     */
-    public function testTagSubmitButtonWithSetDefaultElementNotPresent(): void
-    {
-        $options = [
-            'x_name',
-            'name'  => 'x_other',
-            'class' => 'x_class',
-            'size'  => '10',
-        ];
-
-        $expected = '<input type="submit" name="x_other" value="x_name" class="x_class" size="10"';
-
-        $this->testFieldParameter('submitButton', $options, $expected, false, 'setDefault');
-        $this->testFieldParameter('submitButton', $options, $expected, true, 'setDefault');
-    }
-
-    /**
      * Tests Phalcon\Tag :: submitButton() - displayTo and element not present
      *
      * @author Phalcon Team <team@phalcon.io>
@@ -175,5 +133,47 @@ class SubmitButtonTest extends TagSetup
 
         $this->testFieldParameter('submitButton', $options, $expected, false, 'displayTo');
         $this->testFieldParameter('submitButton', $options, $expected, true, 'displayTo');
+    }
+
+    /**
+     * Tests Phalcon\Tag :: submitButton() - setDefault
+     *
+     * @author Phalcon Team <team@phalcon.io>
+     * @since  2014-09-05
+     */
+    public function testTagSubmitButtonWithSetDefault(): void
+    {
+        $options = [
+            'x_name',
+            'name'  => 'x_other',
+            'class' => 'x_class',
+            'size'  => '10',
+        ];
+
+        $expected = '<input type="submit" name="x_other" value="x_name" class="x_class" size="10"';
+
+        $this->testFieldParameter('submitButton', $options, $expected, false, 'setDefault');
+        $this->testFieldParameter('submitButton', $options, $expected, true, 'setDefault');
+    }
+
+    /**
+     * Tests Phalcon\Tag :: submitButton() - setDefault and element not present
+     *
+     * @author Phalcon Team <team@phalcon.io>
+     * @since  2014-09-05
+     */
+    public function testTagSubmitButtonWithSetDefaultElementNotPresent(): void
+    {
+        $options = [
+            'x_name',
+            'name'  => 'x_other',
+            'class' => 'x_class',
+            'size'  => '10',
+        ];
+
+        $expected = '<input type="submit" name="x_other" value="x_name" class="x_class" size="10"';
+
+        $this->testFieldParameter('submitButton', $options, $expected, false, 'setDefault');
+        $this->testFieldParameter('submitButton', $options, $expected, true, 'setDefault');
     }
 }

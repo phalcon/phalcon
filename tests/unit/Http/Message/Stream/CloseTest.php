@@ -46,8 +46,8 @@ final class CloseTest extends UnitTestCase
     public function testHttpMessageStreamCloseDetach(): void
     {
         $fileName = dataDir('assets/stream/mit.txt');
-        $handle = fopen($fileName, 'rb');
-        $stream = new Stream($handle);
+        $handle   = fopen($fileName, 'rb');
+        $stream   = new Stream($handle);
 
         $stream->close();
 

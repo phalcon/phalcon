@@ -15,7 +15,6 @@ namespace Phalcon\Tests\Unit\Http\Response;
 
 use Phalcon\Tests\Fixtures\Page\Http;
 use Phalcon\Tests\Unit\Http\Helper\HttpBase;
-use Phalcon\Tests\UnitTestCase;
 
 final class RemoveHeaderTest extends HttpBase
 {

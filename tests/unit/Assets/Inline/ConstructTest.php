@@ -37,38 +37,6 @@ final class ConstructTest extends UnitTestCase
     }
 
     /**
-     * Tests Phalcon\Assets\Asset :: __construct() - css filter
-     *
-     * @return void
-     *
-     * @author Phalcon Team <team@phalcon.io>
-     * @since  2020-09-09
-     */
-    public function testAssetsInlineConstructCssFilter(): void
-    {
-        $content = 'p {color: #000099}';
-        $asset   = new Inline('css', $content);
-        $actual  = $asset->getFilter();
-        $this->assertTrue($actual);
-    }
-
-    /**
-     * Tests Phalcon\Assets\Asset :: __construct() - css filter set
-     *
-     * @return void
-     *
-     * @author Phalcon Team <team@phalcon.io>
-     * @since  2020-09-09
-     */
-    public function testAssetsInlineConstructCssFilterSet(): void
-    {
-        $content = 'p {color: #000099}';
-        $asset   = new Inline('css', $content, false);
-        $actual  = $asset->getFilter();
-        $this->assertFalse($actual);
-    }
-
-    /**
      * Tests Phalcon\Assets\Asset :: __construct() - css attributes
      *
      * @return void
@@ -113,6 +81,38 @@ final class ConstructTest extends UnitTestCase
     }
 
     /**
+     * Tests Phalcon\Assets\Asset :: __construct() - css filter
+     *
+     * @return void
+     *
+     * @author Phalcon Team <team@phalcon.io>
+     * @since  2020-09-09
+     */
+    public function testAssetsInlineConstructCssFilter(): void
+    {
+        $content = 'p {color: #000099}';
+        $asset   = new Inline('css', $content);
+        $actual  = $asset->getFilter();
+        $this->assertTrue($actual);
+    }
+
+    /**
+     * Tests Phalcon\Assets\Asset :: __construct() - css filter set
+     *
+     * @return void
+     *
+     * @author Phalcon Team <team@phalcon.io>
+     * @since  2020-09-09
+     */
+    public function testAssetsInlineConstructCssFilterSet(): void
+    {
+        $content = 'p {color: #000099}';
+        $asset   = new Inline('css', $content, false);
+        $actual  = $asset->getFilter();
+        $this->assertFalse($actual);
+    }
+
+    /**
      * Tests Phalcon\Assets\Asset :: __construct() - js
      *
      * @return void
@@ -128,38 +128,6 @@ final class ConstructTest extends UnitTestCase
         $expected = 'js';
         $actual   = $asset->getType();
         $this->assertSame($expected, $actual);
-    }
-
-    /**
-     * Tests Phalcon\Assets\Asset :: __construct() - js filter
-     *
-     * @return void
-     *
-     * @author Phalcon Team <team@phalcon.io>
-     * @since  2020-09-09
-     */
-    public function testAssetsInlineConstructJsFilter(): void
-    {
-        $content = '<script>alert("Hello");</script>';
-        $asset   = new Inline('js', $content);
-        $actual  = $asset->getFilter();
-        $this->assertTrue($actual);
-    }
-
-    /**
-     * Tests Phalcon\Assets\Asset :: __construct() - js filter set
-     *
-     * @return void
-     *
-     * @author Phalcon Team <team@phalcon.io>
-     * @since  2020-09-09
-     */
-    public function testAssetsInlineConstructJsFilterSet(): void
-    {
-        $content = '<script>alert("Hello");</script>';
-        $asset   = new Inline('js', $content, false);
-        $actual  = $asset->getFilter();
-        $this->assertFalse($actual);
     }
 
     /**
@@ -198,5 +166,37 @@ final class ConstructTest extends UnitTestCase
 
         $actual = $asset->getAttributes();
         $this->assertSame($attributes, $actual);
+    }
+
+    /**
+     * Tests Phalcon\Assets\Asset :: __construct() - js filter
+     *
+     * @return void
+     *
+     * @author Phalcon Team <team@phalcon.io>
+     * @since  2020-09-09
+     */
+    public function testAssetsInlineConstructJsFilter(): void
+    {
+        $content = '<script>alert("Hello");</script>';
+        $asset   = new Inline('js', $content);
+        $actual  = $asset->getFilter();
+        $this->assertTrue($actual);
+    }
+
+    /**
+     * Tests Phalcon\Assets\Asset :: __construct() - js filter set
+     *
+     * @return void
+     *
+     * @author Phalcon Team <team@phalcon.io>
+     * @since  2020-09-09
+     */
+    public function testAssetsInlineConstructJsFilterSet(): void
+    {
+        $content = '<script>alert("Hello");</script>';
+        $asset   = new Inline('js', $content, false);
+        $actual  = $asset->getFilter();
+        $this->assertFalse($actual);
     }
 }

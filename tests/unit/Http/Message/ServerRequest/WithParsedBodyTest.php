@@ -53,7 +53,7 @@ final class WithParsedBodyTest extends UnitTestCase
             'The method expects null, an array or an object'
         );
 
-        $request     = new ServerRequest();
+        $request = new ServerRequest();
         $request->withParsedBody('something');
     }
 }

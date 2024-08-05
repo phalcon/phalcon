@@ -13,8 +13,8 @@ declare(strict_types=1);
 
 namespace Phalcon\Tests\Unit\Http\Message\UploadedFile;
 
-use Phalcon\Tests\Fixtures\Page\Http;
 use Phalcon\Http\Message\UploadedFile;
+use Phalcon\Tests\Fixtures\Page\Http;
 use Phalcon\Tests\UnitTestCase;
 
 final class GetClientMediaTypeTest extends UnitTestCase

@@ -14,8 +14,8 @@ declare(strict_types=1);
 namespace Phalcon\Tests\Unit\Http\Message\Stream;
 
 use Phalcon\Http\Message\Stream;
-use RuntimeException;
 use Phalcon\Tests\UnitTestCase;
+use RuntimeException;
 
 final class RewindTest extends UnitTestCase
 {

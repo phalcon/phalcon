@@ -14,14 +14,13 @@ declare(strict_types=1);
 namespace Phalcon\Tests\Unit\Http\Message\ServerRequestFactory;
 
 use Codeception\Example;
-use Phalcon\Tests\Fixtures\Page\Http;
 use Phalcon\Http\Message\Exception\InvalidArgumentException;
 use Phalcon\Http\Message\Factories\ServerRequestFactory;
 use Phalcon\Http\Message\Interfaces\ServerRequestInterface;
 use Phalcon\Http\Message\UploadedFile;
 use Phalcon\Tests\Fixtures\Http\Message\ServerRequestFactoryFixture;
+use Phalcon\Tests\Fixtures\Page\Http;
 use Phalcon\Tests\Unit\Http\Helper\HttpBase;
-use Phalcon\Tests\UnitTestCase;
 
 /**
  * Class LoadTest extends UnitTestCase
@@ -37,6 +36,121 @@ use Phalcon\Tests\UnitTestCase;
 final class LoadTest extends HttpBase
 {
     /**
+     * @return array
+     */
+    public static function getConstructorExamples(): array
+    {
+        return [
+            [
+                null,
+                null,
+                null,
+                null,
+                null,
+            ],
+            [
+                ['one' => 'two'],
+                null,
+                null,
+                null,
+                null,
+            ],
+            [
+                null,
+                ['one' => 'two'],
+                null,
+                null,
+                null,
+            ],
+            [
+                null,
+                null,
+                ['one' => 'two'],
+                null,
+                null,
+            ],
+            [
+                null,
+                null,
+                null,
+                ['one' => 'two'],
+                null,
+            ],
+            [
+                null,
+                null,
+                null,
+                null,
+                ['one' => 'two'],
+            ],
+        ];
+    }
+
+    /**
+     * @return array
+     */
+    public static function getServerNameExamples(): array
+    {
+        return [
+            [
+                'https://dev.phalcon.ld',
+                '',
+                'dev.phalcon.ld',
+                null,
+                'dev.phalcon.ld',
+                null,
+                '',
+                '',
+                '',
+            ],
+            [
+                'https://dev.phalcon.ld',
+                '',
+                'dev.phalcon.ld',
+                8080,
+                'dev.phalcon.ld',
+                8080,
+                '',
+                '',
+                '',
+            ],
+            [
+                'https://dev.phalcon.ld/action/reaction',
+                '',
+                'dev.phalcon.ld',
+                8080,
+                'dev.phalcon.ld',
+                8080,
+                '/action/reaction',
+                '',
+                '',
+            ],
+            [
+                'https://dev.phalcon.ld/action/reaction?one=two',
+                'one=two',
+                'dev.phalcon.ld',
+                8080,
+                'dev.phalcon.ld',
+                8080,
+                '/action/reaction',
+                'one=two',
+                '',
+            ],
+            [
+                'https://dev.phalcon.ld/action/reaction?one=two#fragment',
+                'one=two',
+                'dev.phalcon.ld',
+                8080,
+                'dev.phalcon.ld',
+                8080,
+                '/action/reaction',
+                'one=two',
+                'fragment',
+            ],
+        ];
+    }
+
+    /**
      * Tests Phalcon\Http\Message\ServerRequestFactory :: load()
      *
      * @return void
@@ -50,6 +164,197 @@ final class LoadTest extends HttpBase
         $request = $factory->load();
 
         $this->assertInstanceOf(ServerRequestInterface::class, $request);
+    }
+
+    /**
+     * Tests Phalcon\Http\Message\ServerRequestFactory :: load() - constructor
+     *
+     * @dataProvider getConstructorExamples
+     *
+     * @param Example $example
+     *
+     * @return void
+     * @author       Phalcon Team <team@phalcon.io>
+     * @since        2019-02-09
+     */
+    public function testHttpMessageServerRequestFactoryLoadConstructor(
+        ?array $server,
+        ?array $get,
+        ?array $post,
+        ?array $cookies,
+        ?array $files
+    ): void {
+        $factory = new ServerRequestFactory();
+        $request = $factory->load(
+            $server,
+            $get,
+            $post,
+            $cookies,
+            $files
+        );
+
+        $this->assertInstanceOf(ServerRequestInterface::class, $request);
+    }
+
+    /**
+     * Tests Phalcon\Http\Message\ServerRequestFactory :: load() - constructor
+     * - empty superglobals
+     *
+     * @dataProvider getConstructorExamples
+     *
+     * @return void
+     *
+     * @author       Phalcon Team <team@phalcon.io>
+     * @since        2019-02-09
+     */
+    public function testHttpMessageServerRequestFactoryLoadConstructorEmptySuperglobals(
+        ?array $server,
+        ?array $get,
+        ?array $post,
+        ?array $cookies,
+        ?array $files
+    ): void {
+        $factory = new ServerRequestFactory();
+        $request = $factory->load(
+            $server,
+            $get,
+            $post,
+            $cookies,
+            $files
+        );
+        $this->assertInstanceOf(ServerRequestInterface::class, $request);
+    }
+
+    /**
+     * Tests Phalcon\Http\Message\ServerRequestFactory :: load() - constructor
+     *
+     * @return void
+     *
+     * @author Phalcon Team <team@phalcon.io>
+     * @since  2021-04-05
+     * @issue  15286
+     */
+    public function testHttpMessageServerRequestFactoryLoadConstructorFromSuperglobals(): void
+    {
+        // Backup
+        $params = [
+            'REQUEST_TIME_FLOAT' => $this->store['SERVER']['REQUEST_TIME_FLOAT'],
+            'REQUEST_METHOD'     => 'PUT',
+            'one'                => 'two',
+        ];
+
+        $_SERVER = $params;
+
+        $factory = new ServerRequestFactory();
+        $request = $factory->load();
+
+        $expected = 'PUT';
+        $actual   = $request->getMethod();
+        $this->assertSame($expected, $actual);
+
+        $expected = $params;
+        $actual   = $request->getServerParams();
+        $this->assertSame($expected, $actual);
+
+        $this->assertInstanceOf(ServerRequestInterface::class, $request);
+    }
+
+    /**
+     * Tests Phalcon\Http\Message\ServerRequestFactory :: load() - files
+     * prefixed
+     *
+     * @return void
+     *
+     * @author Phalcon Team <team@phalcon.io>
+     * @since  2019-02-09
+     */
+    public function testHttpMessageServerRequestFactoryLoadFiles(): void
+    {
+        $uploadObject = new UploadedFile(
+            Http::STREAM_TEMP,
+            0,
+            0,
+            'test2',
+            Http::CONTENT_TYPE_PLAIN
+        );
+
+        $files = [
+            [
+                'tmp_name' => Http::STREAM_TEMP,
+                'size'     => 0,
+                'error'    => 0,
+                'name'     => 'test1',
+                'type'     => Http::CONTENT_TYPE_PLAIN,
+            ],
+            $uploadObject,
+            [
+                [
+                    'tmp_name' => Http::STREAM_TEMP,
+                    'size'     => 0,
+                    'error'    => 0,
+                    'name'     => 'test3',
+                    'type'     => Http::CONTENT_TYPE_PLAIN,
+                ],
+            ],
+        ];
+
+        $factory = new ServerRequestFactory();
+        $request = $factory->load(null, null, null, null, $files);
+
+        $actual = $request->getUploadedFiles();
+
+        /** @var UploadedFile $element */
+        $element = $actual[0];
+        $this->assertInstanceOf(UploadedFile::class, $element);
+        $this->assertSame('test1', $element->getClientFilename());
+        $this->assertSame(
+            Http::CONTENT_TYPE_PLAIN,
+            $element->getClientMediaType()
+        );
+
+        /** @var UploadedFile $element */
+        $element = $actual[1];
+        $this->assertInstanceOf(UploadedFile::class, $element);
+        $this->assertSame($uploadObject, $element);
+
+        /** @var UploadedFile $element */
+        $element = $actual[2][0];
+        $this->assertInstanceOf(UploadedFile::class, $element);
+        $this->assertSame('test3', $element->getClientFilename());
+        $this->assertSame(
+            Http::CONTENT_TYPE_PLAIN,
+            $element->getClientMediaType()
+        );
+    }
+
+    /**
+     * Tests Phalcon\Http\Message\ServerRequestFactory :: load() - files
+     * exception prefixed
+     *
+     * @return void
+     *
+     * @author Phalcon Team <team@phalcon.io>
+     * @since  2019-02-09
+     */
+    public function testHttpMessageServerRequestFactoryLoadFilesException(): void
+    {
+        $this->expectException(InvalidArgumentException::class);
+        $this->expectExceptionMessage(
+            'The file array must contain tmp_name, size and error; ' .
+            'one or more are missing'
+        );
+
+        $files = [
+            [
+                'tmp_name' => Http::STREAM_TEMP,
+                'size'     => 0,
+                'name'     => 'test1',
+                'type'     => Http::CONTENT_TYPE_PLAIN,
+            ],
+        ];
+
+        $factory = new ServerRequestFactory();
+        $factory->load(null, null, null, null, $files);
     }
 
     /**
@@ -191,6 +496,126 @@ final class LoadTest extends HttpBase
     }
 
     /**
+     * Tests Phalcon\Http\Message\ServerRequestFactory :: load() - protocol
+     * default
+     *
+     * @return void
+     *
+     * @author Phalcon Team <team@phalcon.io>
+     * @since  2019-02-09
+     */
+    public function testHttpMessageServerRequestFactoryLoadProtocolDefault(): void
+    {
+        $factory = new ServerRequestFactory();
+
+        $request = $factory->load();
+
+        $expected = '1.1';
+        $actual   = $request->getProtocolVersion();
+        $this->assertSame($expected, $actual);
+    }
+
+    /**
+     * Tests Phalcon\Http\Message\ServerRequestFactory :: load() - protocol
+     * defined
+     *
+     * @return void
+     *
+     * @author Phalcon Team <team@phalcon.io>
+     * @since  2019-02-09
+     */
+    public function testHttpMessageServerRequestFactoryLoadProtocolDefined(): void
+    {
+        $factory = new ServerRequestFactory();
+        $server  = [
+            'SERVER_PROTOCOL' => 'HTTP/2.0',
+        ];
+
+        $request = $factory->load($server);
+
+        $expected = '2.0';
+        $actual   = $request->getProtocolVersion();
+        $this->assertSame($expected, $actual);
+    }
+
+    /**
+     * Tests Phalcon\Http\Message\ServerRequestFactory :: load() - protocol
+     * error
+     *
+     * @return void
+     *
+     * @author Phalcon Team <team@phalcon.io>
+     * @since  2019-02-09
+     */
+    public function testHttpMessageServerRequestFactoryLoadProtocolError(): void
+    {
+        $this->expectException(InvalidArgumentException::class);
+        $this->expectExceptionMessage('Incorrect protocol value HTTX/4.5');
+
+        $factory = new ServerRequestFactory();
+
+        $server = [
+            'SERVER_PROTOCOL' => 'HTTX/4.5',
+        ];
+
+        $factory->load($server);
+    }
+
+    /**
+     * Tests Phalcon\Http\Message\ServerRequestFactory :: load() - protocol
+     * error unsupported
+     *
+     * @return void
+     *
+     * @author Phalcon Team <team@phalcon.io>
+     * @since  2019-02-09
+     */
+    public function testHttpMessageServerRequestFactoryLoadProtocolErrorUnsupported(): void
+    {
+        $this->expectException(InvalidArgumentException::class);
+        $this->expectExceptionMessage('Unsupported protocol HTTP/4.5');
+
+        $factory = new ServerRequestFactory();
+
+        $server = [
+            'SERVER_PROTOCOL' => 'HTTP/4.5',
+        ];
+
+        $factory->load($server);
+    }
+
+    /**
+     * Tests Phalcon\Http\Message\ServerRequestFactory :: load() - scheme https
+     * prefixed
+     *
+     * @return void
+     *
+     * @author Phalcon Team <team@phalcon.io>
+     * @since  2019-02-09
+     */
+    public function testHttpMessageServerRequestFactoryLoadSchemeHttps(): void
+    {
+        $factory = new ServerRequestFactory();
+        $server  = [
+            'HTTPS' => 'on',
+        ];
+
+        $request = $factory->load($server);
+        $uri     = $request->getUri();
+        $this->assertSame('https', $uri->getScheme());
+
+        $server = [
+            'HTTPS' => 'off',
+        ];
+
+        $request  = $factory->load($server);
+        $uri      = $request->getUri();
+        $expected = 'http';
+        $actual   = $uri->getScheme();
+        $this->assertSame($expected, $actual);
+    }
+
+    /**
      * Tests Phalcon\Http\Message\ServerRequestFactory :: load() - server header
      *
      * @return void
@@ -289,431 +714,5 @@ final class LoadTest extends HttpBase
 
         $actual = $request->getHeaders();
         $this->assertSame($expected, $actual);
-    }
-
-    /**
-     * Tests Phalcon\Http\Message\ServerRequestFactory :: load() - files
-     * prefixed
-     *
-     * @return void
-     *
-     * @author Phalcon Team <team@phalcon.io>
-     * @since  2019-02-09
-     */
-    public function testHttpMessageServerRequestFactoryLoadFiles(): void
-    {
-        $uploadObject = new UploadedFile(
-            Http::STREAM_TEMP,
-            0,
-            0,
-            'test2',
-            Http::CONTENT_TYPE_PLAIN
-        );
-
-        $files = [
-            [
-                'tmp_name' => Http::STREAM_TEMP,
-                'size'     => 0,
-                'error'    => 0,
-                'name'     => 'test1',
-                'type'     => Http::CONTENT_TYPE_PLAIN,
-            ],
-            $uploadObject,
-            [
-                [
-                    'tmp_name' => Http::STREAM_TEMP,
-                    'size'     => 0,
-                    'error'    => 0,
-                    'name'     => 'test3',
-                    'type'     => Http::CONTENT_TYPE_PLAIN,
-                ],
-            ],
-        ];
-
-        $factory = new ServerRequestFactory();
-        $request = $factory->load(null, null, null, null, $files);
-
-        $actual = $request->getUploadedFiles();
-
-        /** @var UploadedFile $element */
-        $element = $actual[0];
-        $this->assertInstanceOf(UploadedFile::class, $element);
-        $this->assertSame('test1', $element->getClientFilename());
-        $this->assertSame(
-            Http::CONTENT_TYPE_PLAIN,
-            $element->getClientMediaType()
-        );
-
-        /** @var UploadedFile $element */
-        $element = $actual[1];
-        $this->assertInstanceOf(UploadedFile::class, $element);
-        $this->assertSame($uploadObject, $element);
-
-        /** @var UploadedFile $element */
-        $element = $actual[2][0];
-        $this->assertInstanceOf(UploadedFile::class, $element);
-        $this->assertSame('test3', $element->getClientFilename());
-        $this->assertSame(
-            Http::CONTENT_TYPE_PLAIN,
-            $element->getClientMediaType()
-        );
-    }
-
-    /**
-     * Tests Phalcon\Http\Message\ServerRequestFactory :: load() - files
-     * exception prefixed
-     *
-     * @return void
-     *
-     * @author Phalcon Team <team@phalcon.io>
-     * @since  2019-02-09
-     */
-    public function testHttpMessageServerRequestFactoryLoadFilesException(): void
-    {
-        $this->expectException(InvalidArgumentException::class);
-        $this->expectExceptionMessage(
-            'The file array must contain tmp_name, size and error; ' .
-            'one or more are missing'
-        );
-
-        $files = [
-            [
-                'tmp_name' => Http::STREAM_TEMP,
-                'size'     => 0,
-                'name'     => 'test1',
-                'type'     => Http::CONTENT_TYPE_PLAIN,
-            ],
-        ];
-
-        $factory = new ServerRequestFactory();
-        $factory->load(null, null, null, null, $files);
-    }
-
-    /**
-     * Tests Phalcon\Http\Message\ServerRequestFactory :: load() - scheme https
-     * prefixed
-     *
-     * @return void
-     *
-     * @author Phalcon Team <team@phalcon.io>
-     * @since  2019-02-09
-     */
-    public function testHttpMessageServerRequestFactoryLoadSchemeHttps(): void
-    {
-        $factory = new ServerRequestFactory();
-        $server  = [
-            'HTTPS' => 'on',
-        ];
-
-        $request = $factory->load($server);
-        $uri     = $request->getUri();
-        $this->assertSame('https', $uri->getScheme());
-
-        $server = [
-            'HTTPS' => 'off',
-        ];
-
-        $request  = $factory->load($server);
-        $uri      = $request->getUri();
-        $expected = 'http';
-        $actual   = $uri->getScheme();
-        $this->assertSame($expected, $actual);
-    }
-
-    /**
-     * Tests Phalcon\Http\Message\ServerRequestFactory :: load() - constructor
-     *
-     * @dataProvider getConstructorExamples
-     *
-     * @return void
-     * @param Example    $example
-     *
-     * @author       Phalcon Team <team@phalcon.io>
-     * @since        2019-02-09
-     */
-    public function testHttpMessageServerRequestFactoryLoadConstructor(
-        ?array $server,
-        ?array $get,
-        ?array $post,
-        ?array $cookies,
-        ?array $files
-    ): void {
-        $factory = new ServerRequestFactory();
-        $request = $factory->load(
-            $server,
-            $get,
-            $post,
-            $cookies,
-            $files
-        );
-
-        $this->assertInstanceOf(ServerRequestInterface::class, $request);
-    }
-
-    /**
-     * Tests Phalcon\Http\Message\ServerRequestFactory :: load() - constructor
-     *
-     * @return void
-     *
-     * @author Phalcon Team <team@phalcon.io>
-     * @since  2021-04-05
-     * @issue  15286
-     */
-    public function testHttpMessageServerRequestFactoryLoadConstructorFromSuperglobals(): void
-    {
-        // Backup
-        $params = [
-            'REQUEST_TIME_FLOAT' => $this->store['SERVER']['REQUEST_TIME_FLOAT'],
-            'REQUEST_METHOD'     => 'PUT',
-            'one'                => 'two',
-        ];
-
-        $_SERVER = $params;
-
-        $factory = new ServerRequestFactory();
-        $request = $factory->load();
-
-        $expected = 'PUT';
-        $actual   = $request->getMethod();
-        $this->assertSame($expected, $actual);
-
-        $expected = $params;
-        $actual   = $request->getServerParams();
-        $this->assertSame($expected, $actual);
-
-        $this->assertInstanceOf(ServerRequestInterface::class, $request);
-    }
-
-    /**
-     * Tests Phalcon\Http\Message\ServerRequestFactory :: load() - constructor
-     * - empty superglobals
-     *
-     * @dataProvider getConstructorExamples
-     *
-     * @return void
-     *
-     * @author       Phalcon Team <team@phalcon.io>
-     * @since        2019-02-09
-     */
-    public function testHttpMessageServerRequestFactoryLoadConstructorEmptySuperglobals(
-        ?array $server,
-        ?array $get,
-        ?array $post,
-        ?array $cookies,
-        ?array $files
-    ): void {
-        $factory = new ServerRequestFactory();
-        $request = $factory->load(
-            $server,
-            $get,
-            $post,
-            $cookies,
-            $files
-        );
-        $this->assertInstanceOf(ServerRequestInterface::class, $request);
-    }
-
-    /**
-     * Tests Phalcon\Http\Message\ServerRequestFactory :: load() - protocol
-     * default
-     *
-     * @return void
-     *
-     * @author Phalcon Team <team@phalcon.io>
-     * @since  2019-02-09
-     */
-    public function testHttpMessageServerRequestFactoryLoadProtocolDefault(): void
-    {
-        $factory = new ServerRequestFactory();
-
-        $request = $factory->load();
-
-        $expected = '1.1';
-        $actual   = $request->getProtocolVersion();
-        $this->assertSame($expected, $actual);
-    }
-
-    /**
-     * Tests Phalcon\Http\Message\ServerRequestFactory :: load() - protocol
-     * defined
-     *
-     * @return void
-     *
-     * @author Phalcon Team <team@phalcon.io>
-     * @since  2019-02-09
-     */
-    public function testHttpMessageServerRequestFactoryLoadProtocolDefined(): void
-    {
-        $factory = new ServerRequestFactory();
-        $server  = [
-            'SERVER_PROTOCOL' => 'HTTP/2.0',
-        ];
-
-        $request = $factory->load($server);
-
-        $expected = '2.0';
-        $actual   = $request->getProtocolVersion();
-        $this->assertSame($expected, $actual);
-    }
-
-    /**
-     * Tests Phalcon\Http\Message\ServerRequestFactory :: load() - protocol
-     * error
-     *
-     * @return void
-     *
-     * @author Phalcon Team <team@phalcon.io>
-     * @since  2019-02-09
-     */
-    public function testHttpMessageServerRequestFactoryLoadProtocolError(): void
-    {
-        $this->expectException(InvalidArgumentException::class);
-        $this->expectExceptionMessage('Incorrect protocol value HTTX/4.5');
-
-        $factory = new ServerRequestFactory();
-
-        $server = [
-            'SERVER_PROTOCOL' => 'HTTX/4.5',
-        ];
-
-        $factory->load($server);
-    }
-
-    /**
-     * Tests Phalcon\Http\Message\ServerRequestFactory :: load() - protocol
-     * error unsupported
-     *
-     * @return void
-     *
-     * @author Phalcon Team <team@phalcon.io>
-     * @since  2019-02-09
-     */
-    public function testHttpMessageServerRequestFactoryLoadProtocolErrorUnsupported(): void
-    {
-        $this->expectException(InvalidArgumentException::class);
-        $this->expectExceptionMessage('Unsupported protocol HTTP/4.5');
-
-        $factory = new ServerRequestFactory();
-
-        $server = [
-            'SERVER_PROTOCOL' => 'HTTP/4.5',
-        ];
-
-        $factory->load($server);
-    }
-
-    /**
-     * @return array
-     */
-    public static function getConstructorExamples(): array
-    {
-        return [
-            [
-                null,
-                null,
-                null,
-                null,
-                null,
-            ],
-            [
-                ['one' => 'two'],
-                null,
-                null,
-                null,
-                null,
-            ],
-            [
-                null,
-                ['one' => 'two'],
-                null,
-                null,
-                null,
-            ],
-            [
-                null,
-                null,
-                ['one' => 'two'],
-                null,
-                null,
-            ],
-            [
-                null,
-                null,
-                null,
-                ['one' => 'two'],
-                null,
-            ],
-            [
-                null,
-                null,
-                null,
-                null,
-                ['one' => 'two'],
-            ],
-        ];
-    }
-
-    /**
-     * @return array
-     */
-    public static function getServerNameExamples(): array
-    {
-        return [
-            [
-                'https://dev.phalcon.ld',
-                '',
-                'dev.phalcon.ld',
-                null,
-                'dev.phalcon.ld',
-                null,
-                '',
-                '',
-                '',
-            ],
-            [
-                'https://dev.phalcon.ld',
-                '',
-                'dev.phalcon.ld',
-                8080,
-                'dev.phalcon.ld',
-                8080,
-                '',
-                '',
-                '',
-            ],
-            [
-                'https://dev.phalcon.ld/action/reaction',
-                '',
-                'dev.phalcon.ld',
-                8080,
-                'dev.phalcon.ld',
-                8080,
-                '/action/reaction',
-                '',
-                '',
-            ],
-            [
-                'https://dev.phalcon.ld/action/reaction?one=two',
-                'one=two',
-                'dev.phalcon.ld',
-                8080,
-                'dev.phalcon.ld',
-                8080,
-                '/action/reaction',
-                'one=two',
-                '',
-            ],
-            [
-                'https://dev.phalcon.ld/action/reaction?one=two#fragment',
-                'one=two',
-                'dev.phalcon.ld',
-                8080,
-                'dev.phalcon.ld',
-                8080,
-                '/action/reaction',
-                'one=two',
-                'fragment',
-            ],
-        ];
     }
 }

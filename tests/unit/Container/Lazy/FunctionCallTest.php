@@ -14,7 +14,6 @@ declare(strict_types=1);
 namespace Phalcon\Tests\Unit\Container\Lazy;
 
 use Phalcon\Container\Lazy\FunctionCall;
-use Phalcon\Tests\UnitTestCase;
 
 use function supportDir;
 
@@ -27,7 +26,7 @@ final class FunctionCallTest extends AbstractLazyBase
     {
         require_once dataDir('fixtures/Container/functions.php');
 
-        $lazy = new FunctionCall(
+        $lazy   = new FunctionCall(
             'Phalcon\Tests\Fixtures\Container\test',
             ['ten']
         );

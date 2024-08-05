@@ -28,8 +28,8 @@ final class GetBodyTest extends UnitTestCase
     public function testHttpMessageRequestGetBody(): void
     {
         $fileName = dataDir('/assets/stream/mit.txt');
-        $stream = new Stream($fileName, 'rb');
-        $request = new Request('GET', null, $stream);
+        $stream   = new Stream($fileName, 'rb');
+        $request  = new Request('GET', null, $stream);
 
         $this->assertFileContentsEqual(
             $fileName,

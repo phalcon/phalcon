@@ -26,7 +26,7 @@ final class WithCookieParamsTest extends UnitTestCase
      */
     public function testHttpMessageServerRequestWithCookieParams(): void
     {
-        $request = new ServerRequest();
+        $request     = new ServerRequest();
         $newInstance = $request->withCookieParams(
             [
                 'one' => 'two',

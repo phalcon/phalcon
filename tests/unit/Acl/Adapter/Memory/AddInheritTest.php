@@ -42,6 +42,35 @@ final class AddInheritTest extends UnitTestCase
     }
 
     /**
+     * Tests Phalcon\Acl\Adapter\Memory :: addInherit() - infinite loop
+     * exception
+     *
+     * @return void
+     *
+     * @author  Phalcon Team <team@phalcon.io>
+     * @since   2021-09-27
+     */
+    public function testAclAdapterMemoryAddInheritInfiniteLoopException(): void
+    {
+        $this->expectException(Exception::class);
+        $this->expectExceptionMessage(
+            "Role 'administrator' (to inherit) produces an infinite loop"
+        );
+
+        $acl = new Memory();
+
+        $acl->addRole(new Role('administrator'));
+        $acl->addRole(new Role('member'));
+        $acl->addRole(new Role('guest'));
+
+        $acl->addInherit('administrator', 'member');
+        // Twice to ensure it gets ignored
+        $acl->addInherit('administrator', 'member');
+        $acl->addInherit('member', 'guest');
+        $acl->addInherit('guest', 'administrator');
+    }
+
+    /**
      * Tests Phalcon\Acl\Adapter\Memory :: addInherit()
      *
      * @return void
@@ -132,34 +161,5 @@ final class AddInheritTest extends UnitTestCase
 
         //Add Inherit
         $acl->addInherit('administrator', 'unknown');
-    }
-
-    /**
-     * Tests Phalcon\Acl\Adapter\Memory :: addInherit() - infinite loop
-     * exception
-     *
-     * @return void
-     *
-     * @author  Phalcon Team <team@phalcon.io>
-     * @since   2021-09-27
-     */
-    public function testAclAdapterMemoryAddInheritInfiniteLoopException(): void
-    {
-        $this->expectException(Exception::class);
-        $this->expectExceptionMessage(
-            "Role 'administrator' (to inherit) produces an infinite loop"
-        );
-
-        $acl = new Memory();
-
-        $acl->addRole(new Role('administrator'));
-        $acl->addRole(new Role('member'));
-        $acl->addRole(new Role('guest'));
-
-        $acl->addInherit('administrator', 'member');
-        // Twice to ensure it gets ignored
-        $acl->addInherit('administrator', 'member');
-        $acl->addInherit('member', 'guest');
-        $acl->addInherit('guest', 'administrator');
     }
 }

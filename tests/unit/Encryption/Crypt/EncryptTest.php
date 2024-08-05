@@ -13,19 +13,27 @@ declare(strict_types=1);
 
 namespace Phalcon\Tests\Unit\Encryption\Crypt;
 
-use Codeception\Stub;
 use Phalcon\Encryption\Crypt;
 use Phalcon\Encryption\Crypt\Exception\Exception;
 use Phalcon\Tests\Fixtures\Encryption\Crypt\CryptFixture;
 use Phalcon\Tests\Fixtures\Encryption\Crypt\CryptOpensslRandomPseudoBytesFixture;
 use Phalcon\Tests\UnitTestCase;
-use ValueError;
 
 use function str_repeat;
 use function substr;
 
 final class EncryptTest extends UnitTestCase
 {
+    public static function getExceptionCiphers(): array
+    {
+        return [
+            ['aes-128-gcm'],
+            ['aes-128-ccm'],
+            ['aes-256-gcm'],
+            ['aes-256-ccm'],
+        ];
+    }
+
     /**
      * Tests Phalcon\Encryption\Crypt :: encrypt()
      *
@@ -89,107 +97,22 @@ final class EncryptTest extends UnitTestCase
     }
 
     /**
-     * Tests Phalcon\Encryption\Crypt :: encrypt() - empty key
+     * Tests Phalcon\Encryption\Crypt :: encrypt() - cannot calculate Random
+     * Pseudo Bytes
      *
      * @return void
      *
      * @author Phalcon Team <team@phalcon.io>
      * @since  2021-10-18
      */
-    public function testEncryptionCryptEncryptExceptionEmptyKey(): void
+    public function testEncryptionCryptEncryptCannotCalculateRandomPseudoBytes(): void
     {
         $this->expectException(Exception::class);
-        $this->expectExceptionMessage('Encryption key cannot be empty');
+        $this->expectExceptionMessage("Cannot calculate Random Pseudo Bytes");
 
-        $crypt = new Crypt();
-        $crypt->encrypt('sample text', '');
-    }
+        $crypt = new CryptOpensslRandomPseudoBytesFixture();
 
-    /**
-     * Tests Phalcon\Encryption\Crypt :: encrypt() - unsupported algo
-     *
-     * @return void
-     *
-     * @author Phalcon Team <team@phalcon.io>
-     * @since  2021-10-18
-     */
-    public function testEncryptionCryptEncryptExceptionUnsupportedAlgo(): void
-    {
-        $this->expectException(Exception::class);
-        $this->expectExceptionMessage(
-            "The cipher algorithm 'AES-128-ECB' is not supported on this system."
-        );
-
-        $crypt = new Crypt();
-        $crypt->setCipher('AES-128-ECB');
-    }
-
-    /**
-     * Tests Phalcon\Encryption\Crypt :: encrypt() - gcm/ccm with data
-     *
-     * @return void
-     *
-     * @author Phalcon Team <team@phalcon.io>
-     * @since  2021-10-18
-     */
-    public function testEncryptionCryptEncryptGcmCcmWithData(): void
-    {
-        $ciphers = [
-            'aes-128-gcm',
-            'aes-128-ccm',
-            'aes-256-gcm',
-            'aes-256-ccm',
-        ];
-
-
-        foreach ($ciphers as $cipher) {
-            $crypt = new Crypt();
-            $crypt
-                ->setCipher($cipher)
-                ->setKey('123456')
-                ->setAuthTag('1234')
-                ->setAuthData('abcd')
-            ;
-
-            $encryption = $crypt->encrypt('phalcon');
-
-            $crypt = new Crypt();
-            $crypt
-                ->setCipher($cipher)
-                ->setKey('123456')
-                ->setAuthData('abcd')
-            ;
-
-            $actual = $crypt->decrypt($encryption);
-            $this->assertSame('phalcon', $actual);
-        }
-    }
-
-    /**
-     * Tests Phalcon\Encryption\Crypt :: encrypt() - gcm/ccm exception without
-     * data
-     *
-     * @dataProvider getExceptionCiphers
-     * @return void
-     *
-     * @author Phalcon Team <team@phalcon.io>
-     * @since  2021-10-18
-     */
-    public function testEncryptionCryptEncryptGcmCcmExceptionWithoutData(
-        string $cipher
-    ): void {
-        $this->expectException(Exception::class);
-        $this->expectExceptionMessage(
-            "Auth data must be provided when using AEAD mode"
-        );
-
-        $crypt = new Crypt();
-        $crypt
-            ->setCipher($cipher)
-            ->setKey('123456')
-        ;
-
-        $crypt->encrypt('phalcon');
+        $crypt->encrypt('test', '1234');
     }
 
     /**
@@ -264,31 +187,106 @@ final class EncryptTest extends UnitTestCase
     }
 
     /**
-     * Tests Phalcon\Encryption\Crypt :: encrypt() - cannot calculate Random
-     * Pseudo Bytes
+     * Tests Phalcon\Encryption\Crypt :: encrypt() - empty key
      *
      * @return void
      *
      * @author Phalcon Team <team@phalcon.io>
      * @since  2021-10-18
      */
-    public function testEncryptionCryptEncryptCannotCalculateRandomPseudoBytes(): void
+    public function testEncryptionCryptEncryptExceptionEmptyKey(): void
     {
         $this->expectException(Exception::class);
-        $this->expectExceptionMessage("Cannot calculate Random Pseudo Bytes");
+        $this->expectExceptionMessage('Encryption key cannot be empty');
 
-        $crypt = new CryptOpensslRandomPseudoBytesFixture();
-
-        $crypt->encrypt('test', '1234');
+        $crypt = new Crypt();
+        $crypt->encrypt('sample text', '');
     }
 
-    public static function getExceptionCiphers(): array
+    /**
+     * Tests Phalcon\Encryption\Crypt :: encrypt() - unsupported algo
+     *
+     * @return void
+     *
+     * @author Phalcon Team <team@phalcon.io>
+     * @since  2021-10-18
+     */
+    public function testEncryptionCryptEncryptExceptionUnsupportedAlgo(): void
     {
-        return [
-            ['aes-128-gcm'],
-            ['aes-128-ccm'],
-            ['aes-256-gcm'],
-            ['aes-256-ccm'],
+        $this->expectException(Exception::class);
+        $this->expectExceptionMessage(
+            "The cipher algorithm 'AES-128-ECB' is not supported on this system."
+        );
+
+        $crypt = new Crypt();
+        $crypt->setCipher('AES-128-ECB');
+    }
+
+    /**
+     * Tests Phalcon\Encryption\Crypt :: encrypt() - gcm/ccm exception without
+     * data
+     *
+     * @dataProvider getExceptionCiphers
+     * @return void
+     *
+     * @author       Phalcon Team <team@phalcon.io>
+     * @since        2021-10-18
+     */
+    public function testEncryptionCryptEncryptGcmCcmExceptionWithoutData(
+        string $cipher
+    ): void {
+        $this->expectException(Exception::class);
+        $this->expectExceptionMessage(
+            "Auth data must be provided when using AEAD mode"
+        );
+
+        $crypt = new Crypt();
+        $crypt
+            ->setCipher($cipher)
+            ->setKey('123456')
+        ;
+
+        $crypt->encrypt('phalcon');
+    }
+
+    /**
+     * Tests Phalcon\Encryption\Crypt :: encrypt() - gcm/ccm with data
+     *
+     * @return void
+     *
+     * @author Phalcon Team <team@phalcon.io>
+     * @since  2021-10-18
+     */
+    public function testEncryptionCryptEncryptGcmCcmWithData(): void
+    {
+        $ciphers = [
+            'aes-128-gcm',
+            'aes-128-ccm',
+            'aes-256-gcm',
+            'aes-256-ccm',
         ];
+
+
+        foreach ($ciphers as $cipher) {
+            $crypt = new Crypt();
+            $crypt
+                ->setCipher($cipher)
+                ->setKey('123456')
+                ->setAuthTag('1234')
+                ->setAuthData('abcd')
+            ;
+
+            $encryption = $crypt->encrypt('phalcon');
+
+            $crypt = new Crypt();
+            $crypt
+                ->setCipher($cipher)
+                ->setKey('123456')
+                ->setAuthData('abcd')
+            ;
+
+            $actual = $crypt->decrypt($encryption);
+            $this->assertSame('phalcon', $actual);
+        }
     }
 }

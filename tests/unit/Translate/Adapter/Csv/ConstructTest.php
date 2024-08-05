@@ -14,14 +14,13 @@ declare(strict_types=1);
 namespace Phalcon\Tests\Unit\Translate\Adapter\Csv;
 
 use ArrayAccess;
-use Codeception\Stub;
 use Phalcon\Tests\Fixtures\Traits\TranslateCsvTrait;
 use Phalcon\Tests\Fixtures\Translate\Adapter\CsvFopenFixture;
+use Phalcon\Tests\UnitTestCase;
 use Phalcon\Translate\Adapter\AdapterInterface;
 use Phalcon\Translate\Adapter\Csv;
 use Phalcon\Translate\Exception;
 use Phalcon\Translate\InterpolatorFactory;
-use Phalcon\Tests\UnitTestCase;
 
 use function dataDir;
 
@@ -78,7 +77,7 @@ final class ConstructTest extends UnitTestCase
         $this->expectException(Exception::class);
         $this->expectExceptionMessage($message);
 
-        $language   = $this->getCsvConfig()['en'];
+        $language = $this->getCsvConfig()['en'];
         (new CsvFopenFixture(new InterpolatorFactory(), $language));
     }
 }

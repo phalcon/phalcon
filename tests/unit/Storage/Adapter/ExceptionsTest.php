@@ -13,12 +13,12 @@ declare(strict_types=1);
 
 namespace Phalcon\Tests\Unit\Storage\Adapter;
 
-use Phalcon\Tests\UnitTestCase;
 use Phalcon\Storage\Adapter\Redis;
 use Phalcon\Storage\Adapter\Stream;
 use Phalcon\Storage\Exception as StorageException;
 use Phalcon\Storage\SerializerFactory;
 use Phalcon\Support\Exception as HelperException;
+use Phalcon\Tests\UnitTestCase;
 
 use function array_merge;
 use function file_put_contents;
@@ -31,35 +31,6 @@ use function uniqid;
 
 final class ExceptionsTest extends UnitTestCase
 {
-    /**
-     * Tests Phalcon\Storage\Adapter\Redis :: get() - wrong index
-     *
-     * @return void
-     *
-     * @author Phalcon Team <team@phalcon.io>
-     * @since  2020-09-09
-     */
-    public function testStorageAdapterRedisGetSetWrongIndex(): void
-    {
-        $this->checkExtensionIsLoaded('redis');
-
-        $this->expectException(StorageException::class);
-        $this->expectExceptionMessage('Redis server selected database failed');
-
-        $serializer = new SerializerFactory();
-        $adapter    = new Redis(
-            $serializer,
-            array_merge(
-                getOptionsRedis(),
-                [
-                    'index' => 99,
-                ]
-            )
-        );
-
-        $adapter->get('test');
-    }
-
     /**
      * Tests Phalcon\Storage\Adapter\Redis :: get() - failed auth
      *
@@ -84,6 +55,35 @@ final class ExceptionsTest extends UnitTestCase
                 getOptionsRedis(),
                 [
                     'auth' => 'something',
+                ]
+            )
+        );
+
+        $adapter->get('test');
+    }
+
+    /**
+     * Tests Phalcon\Storage\Adapter\Redis :: get() - wrong index
+     *
+     * @return void
+     *
+     * @author Phalcon Team <team@phalcon.io>
+     * @since  2020-09-09
+     */
+    public function testStorageAdapterRedisGetSetWrongIndex(): void
+    {
+        $this->checkExtensionIsLoaded('redis');
+
+        $this->expectException(StorageException::class);
+        $this->expectExceptionMessage('Redis server selected database failed');
+
+        $serializer = new SerializerFactory();
+        $adapter    = new Redis(
+            $serializer,
+            array_merge(
+                getOptionsRedis(),
+                [
+                    'index' => 99,
                 ]
             )
         );

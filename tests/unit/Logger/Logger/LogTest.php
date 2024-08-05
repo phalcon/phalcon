@@ -90,6 +90,50 @@ final class LogTest extends UnitTestCase
     }
 
     /**
+     * Tests Phalcon\Logger :: log() - interpolator
+     *
+     * @return void
+     *
+     * @author Phalcon Team <team@phalcon.io>
+     * @since  2022-09-11
+     */
+    public function testLoggerLogLogInterpolator(): void
+    {
+        $logPath   = logsDir();
+        $fileName  = $this->getNewFileName('log', 'log');
+        $formatter = new Line(
+            '%message%-[%level%]-%server%:%user%',
+            'U.u'
+        );
+        $context   = [
+            'server' => uniqid('srv-'),
+            'user'   => uniqid('usr-'),
+        ];
+        $adapter   = new Stream($logPath . $fileName);
+        $adapter->setFormatter($formatter);
+
+        $logger = new Logger(
+            'my-logger',
+            [
+                'one' => $adapter,
+            ]
+        );
+
+        $logger->log(Enum::DEBUG, 'log message', $context);
+
+        $contents = file_get_contents($logPath . $fileName);
+        $expected = sprintf(
+            'log message-[DEBUG]-%s:%s',
+            $context['server'],
+            $context['user']
+        );
+        $this->assertStringContainsString($expected, $contents);
+
+        $adapter->close();
+        $this->safeDeleteFile($fileName);
+    }
+
+    /**
      * Tests Phalcon\Logger :: log() - logLevel
      *
      * @return void
@@ -162,50 +206,6 @@ final class LogTest extends UnitTestCase
             );
             $this->assertStringNotContainsString($expected, $contents);
         }
-
-        $adapter->close();
-        $this->safeDeleteFile($fileName);
-    }
-
-    /**
-     * Tests Phalcon\Logger :: log() - interpolator
-     *
-     * @return void
-     *
-     * @author Phalcon Team <team@phalcon.io>
-     * @since  2022-09-11
-     */
-    public function testLoggerLogLogInterpolator(): void
-    {
-        $logPath   = logsDir();
-        $fileName  = $this->getNewFileName('log', 'log');
-        $formatter = new Line(
-            '%message%-[%level%]-%server%:%user%',
-            'U.u'
-        );
-        $context   = [
-            'server' => uniqid('srv-'),
-            'user'   => uniqid('usr-'),
-        ];
-        $adapter   = new Stream($logPath . $fileName);
-        $adapter->setFormatter($formatter);
-
-        $logger = new Logger(
-            'my-logger',
-            [
-                'one' => $adapter,
-            ]
-        );
-
-        $logger->log(Enum::DEBUG, 'log message', $context);
-
-        $contents = file_get_contents($logPath . $fileName);
-        $expected = sprintf(
-            'log message-[DEBUG]-%s:%s',
-            $context['server'],
-            $context['user']
-        );
-        $this->assertStringContainsString($expected, $contents);
 
         $adapter->close();
         $this->safeDeleteFile($fileName);

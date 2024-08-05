@@ -13,7 +13,6 @@ declare(strict_types=1);
 
 namespace Phalcon\Tests\Unit\Assets\Asset\Js;
 
-use Codeception\Example;
 use Phalcon\Assets\Asset\Js;
 use Phalcon\Tests\Fixtures\Traits\AssetsTrait;
 use Phalcon\Tests\UnitTestCase;
@@ -21,60 +20,6 @@ use Phalcon\Tests\UnitTestCase;
 final class ConstructTest extends UnitTestCase
 {
     use AssetsTrait;
-
-    /**
-     * Tests Phalcon\Assets\Asset\Js :: __construct() - local
-     *
-     * @dataProvider providerJs
-     *
-     * @return void
-     *
-     * @author       Phalcon Team <team@phalcon.io>
-     * @since        2020-09-09
-     */
-    public function testAssetsAssetJsConstructLocal(
-        string $path,
-        bool $local
-    ): void {
-        $asset = new Js($path, $local);
-
-        $expected = $local;
-        $actual   = $asset->isLocal();
-
-        $this->assertSame($expected, $actual);
-    }
-
-    /**
-     * Tests Phalcon\Assets\Asset\Js :: __construct() - filter
-     *
-     * @return void
-     *
-     * @author Phalcon Team <team@phalcon.io>
-     * @since  2020-09-09
-     */
-    public function testAssetsAssetJsConstructFilter(): void
-    {
-        $asset = new Js('js/jquery.js');
-
-        $actual = $asset->getFilter();
-        $this->assertTrue($actual);
-    }
-
-    /**
-     * Tests Phalcon\Assets\Asset\Js :: __construct() - filter set
-     *
-     * @return void
-     *
-     * @author Phalcon Team <team@phalcon.io>
-     * @since  2020-09-09
-     */
-    public function testAssetsAssetJsConstructFilterSet(): void
-    {
-        $asset = new Js('js/jquery.js', true, false);
-
-        $actual = $asset->getFilter();
-        $this->assertFalse($actual);
-    }
 
     /**
      * Tests Phalcon\Assets\Asset\Js :: __construct() - attributes
@@ -116,6 +61,60 @@ final class ConstructTest extends UnitTestCase
 
         $expected = $attributes;
         $actual   = $asset->getAttributes();
+        $this->assertSame($expected, $actual);
+    }
+
+    /**
+     * Tests Phalcon\Assets\Asset\Js :: __construct() - filter
+     *
+     * @return void
+     *
+     * @author Phalcon Team <team@phalcon.io>
+     * @since  2020-09-09
+     */
+    public function testAssetsAssetJsConstructFilter(): void
+    {
+        $asset = new Js('js/jquery.js');
+
+        $actual = $asset->getFilter();
+        $this->assertTrue($actual);
+    }
+
+    /**
+     * Tests Phalcon\Assets\Asset\Js :: __construct() - filter set
+     *
+     * @return void
+     *
+     * @author Phalcon Team <team@phalcon.io>
+     * @since  2020-09-09
+     */
+    public function testAssetsAssetJsConstructFilterSet(): void
+    {
+        $asset = new Js('js/jquery.js', true, false);
+
+        $actual = $asset->getFilter();
+        $this->assertFalse($actual);
+    }
+
+    /**
+     * Tests Phalcon\Assets\Asset\Js :: __construct() - local
+     *
+     * @dataProvider providerJs
+     *
+     * @return void
+     *
+     * @author       Phalcon Team <team@phalcon.io>
+     * @since        2020-09-09
+     */
+    public function testAssetsAssetJsConstructLocal(
+        string $path,
+        bool $local
+    ): void {
+        $asset = new Js($path, $local);
+
+        $expected = $local;
+        $actual   = $asset->isLocal();
+
         $this->assertSame($expected, $actual);
     }
 }

@@ -14,10 +14,10 @@ declare(strict_types=1);
 namespace Phalcon\Tests\Unit\Translate\TranslateFactory;
 
 use Phalcon\Tests\Fixtures\Traits\FactoryTrait;
+use Phalcon\Tests\UnitTestCase;
 use Phalcon\Translate\Adapter\Gettext;
 use Phalcon\Translate\InterpolatorFactory;
 use Phalcon\Translate\TranslateFactory;
-use Phalcon\Tests\UnitTestCase;
 
 use function strtolower;
 
@@ -34,33 +34,6 @@ final class LoadTest extends UnitTestCase
         }
 
         $this->init();
-    }
-
-    /**
-     * Tests Phalcon\Translate\Factory :: load() - Phalcon\Config
-     *
-     * @author Wojciech Ślawski <jurigag@gmail.com>
-     * @since  2017-03-02
-     */
-    public function testTranslateFactoryLoadConfig(): void
-    {
-        /**
-         * This test will run only on Linux - unless we figure out how to
-         * properly set locales on windows/macos
-         */
-        if ('linux' === strtolower(PHP_OS)) {
-            $options      = $this->config->translate;
-            $interpolator = new InterpolatorFactory();
-            $factory      = new TranslateFactory($interpolator);
-            $adapter      = $factory->load($options);
-            $locale       = $options->options->locale[0];
-
-            $this->assertInstanceOf(Gettext::class, $adapter);
-            $this->assertSame($options->options->category, $adapter->getCategory());
-            $this->assertSame($locale, $adapter->getLocale());
-            $this->assertSame($options->options->defaultDomain, $adapter->getDefaultDomain());
-            $this->assertSame($options->options->directory, $adapter->getDirectory());
-        }
     }
 
     /**
@@ -87,6 +60,33 @@ final class LoadTest extends UnitTestCase
             $this->assertSame($locale, $adapter->getLocale());
             $this->assertSame($options['options']['defaultDomain'], $adapter->getDefaultDomain());
             $this->assertSame($options['options']['directory'], $adapter->getDirectory());
+        }
+    }
+
+    /**
+     * Tests Phalcon\Translate\Factory :: load() - Phalcon\Config
+     *
+     * @author Wojciech Ślawski <jurigag@gmail.com>
+     * @since  2017-03-02
+     */
+    public function testTranslateFactoryLoadConfig(): void
+    {
+        /**
+         * This test will run only on Linux - unless we figure out how to
+         * properly set locales on windows/macos
+         */
+        if ('linux' === strtolower(PHP_OS)) {
+            $options      = $this->config->translate;
+            $interpolator = new InterpolatorFactory();
+            $factory      = new TranslateFactory($interpolator);
+            $adapter      = $factory->load($options);
+            $locale       = $options->options->locale[0];
+
+            $this->assertInstanceOf(Gettext::class, $adapter);
+            $this->assertSame($options->options->category, $adapter->getCategory());
+            $this->assertSame($locale, $adapter->getLocale());
+            $this->assertSame($options->options->defaultDomain, $adapter->getDefaultDomain());
+            $this->assertSame($options->options->directory, $adapter->getDirectory());
         }
     }
 }

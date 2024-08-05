@@ -14,8 +14,8 @@ declare(strict_types=1);
 namespace Phalcon\Tests\Unit\Support\Helper\Arr;
 
 use Phalcon\Support\Helper\Arr\Blacklist;
-use stdClass;
 use Phalcon\Tests\UnitTestCase;
+use stdClass;
 
 final class BlackListTest extends UnitTestCase
 {

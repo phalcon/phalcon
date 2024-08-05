@@ -15,27 +15,11 @@ namespace Phalcon\Tests\Unit\Http\Request;
 
 use Phalcon\Tests\Fixtures\Page\Http;
 use Phalcon\Tests\Unit\Http\Helper\HttpBase;
-use Phalcon\Tests\UnitTestCase;
 
 use function gethostbyname;
 
 final class GetServerAddressTest extends HttpBase
 {
-    /**
-     * Tests getServerAddress default
-     *
-     * @author Phalcon Team <team@phalcon.io>
-     * @since  2014-10-04
-     */
-    public function testHttpRequestGetServerAddressDefault(): void
-    {
-        $request = $this->getRequestObject();
-
-        $expected = gethostbyname('localhost');
-        $actual   = $request->getServerAddress();
-        $this->assertSame($expected, $actual);
-    }
-
     /**
      * Tests getServerAddress
      *
@@ -49,6 +33,21 @@ final class GetServerAddressTest extends HttpBase
         $_SERVER['SERVER_ADDR'] = Http::TEST_IP_ONE;
 
         $expected = Http::TEST_IP_ONE;
+        $actual   = $request->getServerAddress();
+        $this->assertSame($expected, $actual);
+    }
+
+    /**
+     * Tests getServerAddress default
+     *
+     * @author Phalcon Team <team@phalcon.io>
+     * @since  2014-10-04
+     */
+    public function testHttpRequestGetServerAddressDefault(): void
+    {
+        $request = $this->getRequestObject();
+
+        $expected = gethostbyname('localhost');
         $actual   = $request->getServerAddress();
         $this->assertSame($expected, $actual);
     }

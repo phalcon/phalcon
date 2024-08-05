@@ -80,65 +80,6 @@ final class ParseTest extends UnitTestCase
     }
 
     /**
-     * Unit Tests Phalcon\Encryption\Security\JWT\Token\Parser :: parse() - no
-     * signature
-     *
-     * @return void
-     *
-     * @author Phalcon Team <team@phalcon.io>
-     * @since  2020-09-09
-     */
-    public function testEncryptionSecurityJWTTokenParserParseNoSignature(): void
-    {
-        $source    = $this->newToken(None::class);
-        $parser    = new Parser();
-        $token     = $parser->parse($source->getToken());
-        $headers   = $token->getHeaders();
-        $claims    = $token->getClaims();
-        $signature = $token->getSignature();
-
-        $this->assertInstanceOf(Item::class, $headers);
-        $this->assertInstanceOf(Item::class, $claims);
-        $this->assertInstanceOf(Signature::class, $signature);
-
-        $this->assertTrue($headers->has('typ'));
-        $this->assertTrue($headers->has('alg'));
-
-        $this->assertSame('JWT', $headers->get('typ'));
-        $this->assertSame('none', $headers->get('alg'));
-
-        $this->assertTrue($claims->has('aud'));
-        $this->assertTrue($claims->has('exp'));
-        $this->assertTrue($claims->has('jti'));
-        $this->assertTrue($claims->has('iat'));
-        $this->assertTrue($claims->has('iss'));
-        $this->assertTrue($claims->has('nbf'));
-        $this->assertTrue($claims->has('sub'));
-
-        $this->assertSame(['my-audience'], $claims->get('aud'));
-        $this->assertSame(
-            $token->getClaims()
-                  ->get('exp'),
-            $claims->get('exp')
-        );
-        $this->assertSame('PH-JWT', $claims->get('jti'));
-        $this->assertSame(
-            $token->getClaims()
-                  ->get('iat'),
-            $claims->get('iat')
-        );
-        $this->assertSame('Phalcon JWT', $claims->get('iss'));
-        $this->assertSame(
-            $token->getClaims()
-                  ->get('nbf'),
-            $claims->get('nbf')
-        );
-        $this->assertSame('Mary had a little lamb', $claims->get('sub'));
-
-        $this->assertEmpty($signature->getEncoded());
-    }
-
-    /**
      * Unit Tests Phalcon\Encryption\Security\JWT\Token\Parser :: parse() - aud
      * not an array
      *
@@ -296,5 +237,64 @@ final class ParseTest extends UnitTestCase
 
         $parser = new Parser();
         $parser->parse($tokenString);
+    }
+
+    /**
+     * Unit Tests Phalcon\Encryption\Security\JWT\Token\Parser :: parse() - no
+     * signature
+     *
+     * @return void
+     *
+     * @author Phalcon Team <team@phalcon.io>
+     * @since  2020-09-09
+     */
+    public function testEncryptionSecurityJWTTokenParserParseNoSignature(): void
+    {
+        $source    = $this->newToken(None::class);
+        $parser    = new Parser();
+        $token     = $parser->parse($source->getToken());
+        $headers   = $token->getHeaders();
+        $claims    = $token->getClaims();
+        $signature = $token->getSignature();
+
+        $this->assertInstanceOf(Item::class, $headers);
+        $this->assertInstanceOf(Item::class, $claims);
+        $this->assertInstanceOf(Signature::class, $signature);
+
+        $this->assertTrue($headers->has('typ'));
+        $this->assertTrue($headers->has('alg'));
+
+        $this->assertSame('JWT', $headers->get('typ'));
+        $this->assertSame('none', $headers->get('alg'));
+
+        $this->assertTrue($claims->has('aud'));
+        $this->assertTrue($claims->has('exp'));
+        $this->assertTrue($claims->has('jti'));
+        $this->assertTrue($claims->has('iat'));
+        $this->assertTrue($claims->has('iss'));
+        $this->assertTrue($claims->has('nbf'));
+        $this->assertTrue($claims->has('sub'));
+
+        $this->assertSame(['my-audience'], $claims->get('aud'));
+        $this->assertSame(
+            $token->getClaims()
+                  ->get('exp'),
+            $claims->get('exp')
+        );
+        $this->assertSame('PH-JWT', $claims->get('jti'));
+        $this->assertSame(
+            $token->getClaims()
+                  ->get('iat'),
+            $claims->get('iat')
+        );
+        $this->assertSame('Phalcon JWT', $claims->get('iss'));
+        $this->assertSame(
+            $token->getClaims()
+                  ->get('nbf'),
+            $claims->get('nbf')
+        );
+        $this->assertSame('Mary had a little lamb', $claims->get('sub'));
+
+        $this->assertEmpty($signature->getEncoded());
     }
 }

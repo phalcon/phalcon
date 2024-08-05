@@ -13,12 +13,31 @@ declare(strict_types=1);
 
 namespace Phalcon\Tests\Unit\Encryption\Security;
 
-use Codeception\Example;
 use Phalcon\Encryption\Security;
 use Phalcon\Tests\UnitTestCase;
 
 final class CheckHashTest extends UnitTestCase
 {
+    /**
+     * @return array[]
+     */
+    public static function getExamples(): array
+    {
+        return [
+            [Security::CRYPT_ARGON2I],
+            [Security::CRYPT_ARGON2ID],
+            [Security::CRYPT_BCRYPT],
+            [Security::CRYPT_DEFAULT],
+            [Security::CRYPT_BLOWFISH],
+            [Security::CRYPT_BLOWFISH_A],
+            [Security::CRYPT_BLOWFISH_X],
+            [Security::CRYPT_BLOWFISH_Y],
+            [Security::CRYPT_MD5],
+            [Security::CRYPT_SHA256],
+            [Security::CRYPT_SHA512],
+        ];
+    }
+
     /**
      * Tests Phalcon\Security :: checkHash()
      *
@@ -55,25 +74,5 @@ final class CheckHashTest extends UnitTestCase
 
         $actual = $security->checkHash($password, $password, 2);
         $this->assertFalse($actual);
-    }
-
-    /**
-     * @return array[]
-     */
-    public static function getExamples(): array
-    {
-        return [
-            [Security::CRYPT_ARGON2I],
-            [Security::CRYPT_ARGON2ID],
-            [Security::CRYPT_BCRYPT],
-            [Security::CRYPT_DEFAULT],
-            [Security::CRYPT_BLOWFISH],
-            [Security::CRYPT_BLOWFISH_A],
-            [Security::CRYPT_BLOWFISH_X],
-            [Security::CRYPT_BLOWFISH_Y],
-            [Security::CRYPT_MD5],
-            [Security::CRYPT_SHA256],
-            [Security::CRYPT_SHA512],
-        ];
     }
 }

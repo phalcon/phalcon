@@ -13,7 +13,6 @@ declare(strict_types=1);
 
 namespace Phalcon\Tests\Unit\Assets\Asset\Css;
 
-use Codeception\Example;
 use Phalcon\Assets\Asset\Css;
 use Phalcon\Tests\Fixtures\Traits\AssetsTrait;
 use Phalcon\Tests\UnitTestCase;
@@ -21,57 +20,6 @@ use Phalcon\Tests\UnitTestCase;
 final class ConstructTest extends UnitTestCase
 {
     use AssetsTrait;
-
-    /**
-     * Tests Phalcon\Assets\Asset\Css :: __construct() - local
-     *
-     * @dataProvider providerCss
-     *
-     * @return void
-     *
-     * @author       Phalcon Team <team@phalcon.io>
-     * @since        2020-09-09
-     */
-    public function testAssetsAssetCssConstructLocal(
-        string $path,
-        bool $local
-    ): void {
-        $asset = new Css($path, $local);
-
-        $expected = $local;
-        $actual   = $asset->isLocal();
-        $this->assertSame($expected, $actual);
-    }
-
-    /**
-     * Tests Phalcon\Assets\Asset\Css :: __construct() - filter
-     *
-     * @return void
-     *
-     * @author Phalcon Team <team@phalcon.io>
-     * @since  2020-09-09
-     */
-    public function testAssetsAssetCssConstructFilter(): void
-    {
-        $asset  = new Css('css/docs.css');
-        $actual = $asset->getFilter();
-        $this->assertTrue($actual);
-    }
-
-    /**
-     * Tests Phalcon\Assets\Asset\Css :: __construct() - filter set
-     *
-     * @return void
-     *
-     * @author Phalcon Team <team@phalcon.io>
-     * @since  2020-09-09
-     */
-    public function testAssetsAssetCssConstructFilterSet(): void
-    {
-        $asset  = new Css('css/docs.css', true, false);
-        $actual = $asset->getFilter();
-        $this->assertFalse($actual);
-    }
 
     /**
      * Tests Phalcon\Assets\Asset\Css :: __construct() - attributes
@@ -113,5 +61,56 @@ final class ConstructTest extends UnitTestCase
 
         $actual = $asset->getAttributes();
         $this->assertSame($attributes, $actual);
+    }
+
+    /**
+     * Tests Phalcon\Assets\Asset\Css :: __construct() - filter
+     *
+     * @return void
+     *
+     * @author Phalcon Team <team@phalcon.io>
+     * @since  2020-09-09
+     */
+    public function testAssetsAssetCssConstructFilter(): void
+    {
+        $asset  = new Css('css/docs.css');
+        $actual = $asset->getFilter();
+        $this->assertTrue($actual);
+    }
+
+    /**
+     * Tests Phalcon\Assets\Asset\Css :: __construct() - filter set
+     *
+     * @return void
+     *
+     * @author Phalcon Team <team@phalcon.io>
+     * @since  2020-09-09
+     */
+    public function testAssetsAssetCssConstructFilterSet(): void
+    {
+        $asset  = new Css('css/docs.css', true, false);
+        $actual = $asset->getFilter();
+        $this->assertFalse($actual);
+    }
+
+    /**
+     * Tests Phalcon\Assets\Asset\Css :: __construct() - local
+     *
+     * @dataProvider providerCss
+     *
+     * @return void
+     *
+     * @author       Phalcon Team <team@phalcon.io>
+     * @since        2020-09-09
+     */
+    public function testAssetsAssetCssConstructLocal(
+        string $path,
+        bool $local
+    ): void {
+        $asset = new Css($path, $local);
+
+        $expected = $local;
+        $actual   = $asset->isLocal();
+        $this->assertSame($expected, $actual);
     }
 }

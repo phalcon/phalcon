@@ -28,7 +28,7 @@ final class GetSetDateFormatTest extends UnitTestCase
      */
     public function testLoggerFormatterJsonGetSetDateFormat(): void
     {
-         $newFormat = 'YmdHis';
+        $newFormat = 'YmdHis';
 
         /**
          * Default

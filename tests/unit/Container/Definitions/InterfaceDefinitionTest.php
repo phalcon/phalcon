@@ -20,23 +20,9 @@ use Phalcon\Container\Exception\NotFound;
 use Phalcon\Tests\Fixtures\Container\TestInterface;
 use Phalcon\Tests\Fixtures\Container\TestWithInterface;
 use stdClass;
-use Phalcon\Tests\UnitTestCase;
 
 final class InterfaceDefinitionTest extends AbstractDefinitionBase
 {
-    /**
-     * @return void
-     */
-    public function testContainerDefinitionsInterfaceDefinitionConstructorNotInterface(): void
-    {
-        $this->expectException(NotFound::class);
-        $this->expectExceptionMessage(
-            "Interface '" . TestWithInterface::class . "' not found."
-        );
-
-        (new InterfaceDefinition(TestWithInterface::class));
-    }
-
     /**
      * @return void
      */
@@ -48,35 +34,6 @@ final class InterfaceDefinitionTest extends AbstractDefinitionBase
         $expected = stdClass::class;
         $actual   = $this->actual($definition);
         $this->assertInstanceOf($expected, $actual);
-    }
-
-    /**
-     * @return void
-     */
-    public function testContainerDefinitionsInterfaceDefinitionFactory(): void
-    {
-        $definition = new InterfaceDefinition(TestInterface::class);
-        $definition->factory(
-            function (Container $container) {
-                return new stdClass();
-            }
-        );
-
-        $expected = stdClass::class;
-        $actual   = $this->actual($definition);
-        $this->assertInstanceOf($expected, $actual);
-    }
-
-    /**
-     * @return void
-     */
-    public function testContainerDefinitionsInterfaceDefinitionClassNotFound(): void
-    {
-        $this->expectException(NotFound::class);
-        $this->expectExceptionMessage("Class 'NoSuchClass' not found.");
-
-        $definition = new InterfaceDefinition(TestInterface::class);
-        $definition->class('NoSuchClass');
     }
 
     /**
@@ -96,5 +53,47 @@ final class InterfaceDefinitionTest extends AbstractDefinitionBase
                 ],
             ]
         );
+    }
+
+    /**
+     * @return void
+     */
+    public function testContainerDefinitionsInterfaceDefinitionClassNotFound(): void
+    {
+        $this->expectException(NotFound::class);
+        $this->expectExceptionMessage("Class 'NoSuchClass' not found.");
+
+        $definition = new InterfaceDefinition(TestInterface::class);
+        $definition->class('NoSuchClass');
+    }
+
+    /**
+     * @return void
+     */
+    public function testContainerDefinitionsInterfaceDefinitionConstructorNotInterface(): void
+    {
+        $this->expectException(NotFound::class);
+        $this->expectExceptionMessage(
+            "Interface '" . TestWithInterface::class . "' not found."
+        );
+
+        (new InterfaceDefinition(TestWithInterface::class));
+    }
+
+    /**
+     * @return void
+     */
+    public function testContainerDefinitionsInterfaceDefinitionFactory(): void
+    {
+        $definition = new InterfaceDefinition(TestInterface::class);
+        $definition->factory(
+            function (Container $container) {
+                return new stdClass();
+            }
+        );
+
+        $expected = stdClass::class;
+        $actual   = $this->actual($definition);
+        $this->assertInstanceOf($expected, $actual);
     }
 }

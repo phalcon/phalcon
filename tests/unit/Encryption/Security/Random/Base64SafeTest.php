@@ -13,35 +13,11 @@ declare(strict_types=1);
 
 namespace Phalcon\Tests\Unit\Encryption\Security\Random;
 
-use Codeception\Example;
 use Phalcon\Encryption\Security\Random;
 use Phalcon\Tests\UnitTestCase;
 
 final class Base64SafeTest extends UnitTestCase
 {
-    /**
-     * Tests Phalcon\Encryption\Security\Random :: base64Safe()
-     *
-     * @return void
-     *
-     * @author       Phalcon Team <team@phalcon.io>
-     * @since        2020-09-09
-     *
-     * @dataProvider base64SafeProvider
-     */
-    public function testEncryptionSecurityRandomBase64Safe(
-        int $len,
-        bool $padding,
-        string $pattern
-    ): void {
-        $random = new Random();
-
-        $this->assertMatchesRegularExpression(
-            '#^[' . $pattern . ']+$#i',
-            $random->base64Safe($len, $padding)
-        );
-    }
-
     /**
      * @return array[]
      */
@@ -109,5 +85,28 @@ final class Base64SafeTest extends UnitTestCase
                 'a-z0-9_=-',
             ],
         ];
+    }
+
+    /**
+     * Tests Phalcon\Encryption\Security\Random :: base64Safe()
+     *
+     * @return void
+     *
+     * @author       Phalcon Team <team@phalcon.io>
+     * @since        2020-09-09
+     *
+     * @dataProvider base64SafeProvider
+     */
+    public function testEncryptionSecurityRandomBase64Safe(
+        int $len,
+        bool $padding,
+        string $pattern
+    ): void {
+        $random = new Random();
+
+        $this->assertMatchesRegularExpression(
+            '#^[' . $pattern . ']+$#i',
+            $random->base64Safe($len, $padding)
+        );
     }
 }

@@ -70,7 +70,7 @@ final class AddComponentAccessTest extends UnitTestCase
         $this->expectException(Exception::class);
         $this->expectExceptionMessage('Invalid value for the accessList');
 
-        $acl = new Memory();
+        $acl  = new Memory();
         $post = new Component('Post');
 
         $acl->addComponent($post, ['update']);

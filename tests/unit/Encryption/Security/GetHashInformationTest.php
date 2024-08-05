@@ -13,7 +13,6 @@ declare(strict_types=1);
 
 namespace Phalcon\Tests\Unit\Encryption\Security;
 
-use Codeception\Example;
 use Phalcon\Encryption\Security;
 use Phalcon\Tests\UnitTestCase;
 
@@ -23,47 +22,6 @@ use const PASSWORD_ARGON2_DEFAULT_TIME_COST;
 
 final class GetHashInformationTest extends UnitTestCase
 {
-    /**
-     * Tests Phalcon\Security :: getHashInformation()
-     *
-     * @dataProvider getExamples
-     *
-     * @return void
-     *
-     * @author       Phalcon Team <team@phalcon.io>
-     * @since        2020-09-09
-     */
-    public function testEncryptionSecurityGetHashInformation(
-        int $hash,
-        array $expected
-    ): void {
-        $security = new Security();
-        $password = 'PhalconROCKS!';
-
-        $security->setDefaultHash($hash);
-
-        $hash     = $security->hash($password);
-        $actual   = $security->getHashInformation($hash);
-        $this->assertSame($expected, $actual);
-    }
-
-    /**
-     * Tests Phalcon\Security :: checkHash() - false
-     *
-     * @return void
-     *
-     * @author Phalcon Team <team@phalcon.io>
-     * @since  2020-09-09
-     */
-    public function testEncryptionSecurityCheckHashFalse(): void
-    {
-        $security = new Security();
-        $password = 'PhalconROCKS!';
-
-        $actual = $security->checkHash($password, $password, 2);
-        $this->assertFalse($actual);
-    }
-
     /**
      * @return array[]
      */
@@ -175,5 +133,46 @@ final class GetHashInformationTest extends UnitTestCase
                 ],
             ],
         ];
+    }
+
+    /**
+     * Tests Phalcon\Security :: checkHash() - false
+     *
+     * @return void
+     *
+     * @author Phalcon Team <team@phalcon.io>
+     * @since  2020-09-09
+     */
+    public function testEncryptionSecurityCheckHashFalse(): void
+    {
+        $security = new Security();
+        $password = 'PhalconROCKS!';
+
+        $actual = $security->checkHash($password, $password, 2);
+        $this->assertFalse($actual);
+    }
+
+    /**
+     * Tests Phalcon\Security :: getHashInformation()
+     *
+     * @dataProvider getExamples
+     *
+     * @return void
+     *
+     * @author       Phalcon Team <team@phalcon.io>
+     * @since        2020-09-09
+     */
+    public function testEncryptionSecurityGetHashInformation(
+        int $hash,
+        array $expected
+    ): void {
+        $security = new Security();
+        $password = 'PhalconROCKS!';
+
+        $security->setDefaultHash($hash);
+
+        $hash   = $security->hash($password);
+        $actual = $security->getHashInformation($hash);
+        $this->assertSame($expected, $actual);
     }
 }

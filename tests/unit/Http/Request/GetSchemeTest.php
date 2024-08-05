@@ -14,25 +14,9 @@ declare(strict_types=1);
 namespace Phalcon\Tests\Unit\Http\Request;
 
 use Phalcon\Tests\Unit\Http\Helper\HttpBase;
-use Phalcon\Tests\UnitTestCase;
 
 final class GetSchemeTest extends HttpBase
 {
-    /**
-     * Tests getScheme default
-     *
-     * @author Phalcon Team <team@phalcon.io>
-     * @since  2014-10-04
-     */
-    public function testHttpRequestGetSchemeDefault(): void
-    {
-        $request = $this->getRequestObject();
-
-        $expected = 'http';
-        $actual   = $request->getScheme();
-        $this->assertSame($expected, $actual);
-    }
-
     /**
      * Tests getScheme with HTTPS
      *
@@ -47,5 +31,20 @@ final class GetSchemeTest extends HttpBase
         $actual           = $request->getScheme();
 
         $this->assertSame('https', $actual);
+    }
+
+    /**
+     * Tests getScheme default
+     *
+     * @author Phalcon Team <team@phalcon.io>
+     * @since  2014-10-04
+     */
+    public function testHttpRequestGetSchemeDefault(): void
+    {
+        $request = $this->getRequestObject();
+
+        $expected = 'http';
+        $actual   = $request->getScheme();
+        $this->assertSame($expected, $actual);
     }
 }

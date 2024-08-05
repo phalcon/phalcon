@@ -13,7 +13,6 @@ declare(strict_types=1);
 
 namespace Phalcon\Tests\Unit\Flash\Direct;
 
-use Codeception\Example;
 use Phalcon\Flash\Direct;
 use Phalcon\Html\Escaper;
 use Phalcon\Tests\UnitTestCase;
@@ -26,89 +25,6 @@ use const PHP_EOL;
 
 final class OutputTest extends UnitTestCase
 {
-    /**
-     * Tests Phalcon\Flash\Direct :: output() - combinations
-     *
-     * @dataProvider getExamples
-     *
-     * @return void
-     *
-     * @author       Phalcon Team <team@phalcon.io>
-     * @since        2020-09-09
-     */
-    public function testFlashDirectOutputCombinations(
-        array|string $message,
-        string $expected,
-        array $classes,
-        array $iconClasses,
-        bool $autoHtml,
-        bool $autoescape,
-        bool $implicit,
-        string $template
-    ): void {
-        $flash = new Direct(new Escaper());
-        $flash
-            ->setCssClasses($classes)
-            ->setCssIconClasses($iconClasses)
-            ->setAutomaticHtml($autoHtml)
-            ->setAutoescape($autoescape)
-            ->setCustomTemplate($template)
-            ->setImplicitFlush($implicit)
-        ;
-        if (true === $implicit) {
-            ob_start();
-            $flash->outputMessage('success', $message);
-            $actual = ob_get_contents();
-            ob_end_clean();
-        } else {
-            $actual = $flash->outputMessage('success', $message);
-        }
-
-        $this->assertSame($expected, $actual);
-    }
-
-    /**
-     * Tests Phalcon\Flash\Direct :: output()
-     *
-     * @return void
-     *
-     * @author Phalcon Team <team@phalcon.io>
-     * @since  2020-09-09
-     */
-    public function testFlashDirectOutput(): void
-    {
-        $flash = new Direct(new Escaper());
-        $flash->setImplicitFlush(false);
-        $flash->success('hello');
-        $flash->warning('goodbye');
-
-        ob_start();
-        $flash->output(false);
-        $actual = ob_get_contents();
-        ob_end_clean();
-        $expected = '<div class="successMessage">hello</div>' . PHP_EOL .
-            '<div class="warningMessage">goodbye</div>' . PHP_EOL;
-        $this->assertSame($expected, $actual);
-
-        /**
-         * remove them
-         */
-        ob_start();
-        $flash->output();
-        $actual = ob_get_contents();
-        ob_end_clean();
-        $expected = '<div class="successMessage">hello</div>' . PHP_EOL .
-            '<div class="warningMessage">goodbye</div>' . PHP_EOL;
-        $this->assertSame($expected, $actual);
-
-        ob_start();
-        $flash->output();
-        $actual = ob_get_contents();
-        ob_end_clean();
-        $expected = '';
-        $this->assertSame($expected, $actual);
-    }
-
     /**
      * @return array[]
      */
@@ -204,7 +120,7 @@ final class OutputTest extends UnitTestCase
             [
                 [$message, $message],
                 'sample &lt;phalcon&gt; message'
-                    . 'sample &lt;phalcon&gt; message',
+                . 'sample &lt;phalcon&gt; message',
                 [],
                 [],
                 false,
@@ -215,7 +131,7 @@ final class OutputTest extends UnitTestCase
             [
                 $message,
                 '<div>sample <phalcon> message</div>'
-                    . PHP_EOL,
+                . PHP_EOL,
                 [],
                 [],
                 true,
@@ -226,9 +142,9 @@ final class OutputTest extends UnitTestCase
             [
                 [$message, $message],
                 '<div>sample <phalcon> message</div>'
-                    . PHP_EOL
-                    . '<div>sample <phalcon> message</div>'
-                    . PHP_EOL,
+                . PHP_EOL
+                . '<div>sample <phalcon> message</div>'
+                . PHP_EOL,
                 [],
                 [],
                 true,
@@ -329,7 +245,7 @@ final class OutputTest extends UnitTestCase
             [
                 [$message, $message],
                 'sample &lt;phalcon&gt; message'
-                    . 'sample &lt;phalcon&gt; message',
+                . 'sample &lt;phalcon&gt; message',
                 $classes,
                 [],
                 false,
@@ -340,7 +256,7 @@ final class OutputTest extends UnitTestCase
             [
                 $message,
                 '<div class="successPhalcon">sample <phalcon> message</div>'
-                    . PHP_EOL,
+                . PHP_EOL,
                 $classes,
                 [],
                 true,
@@ -351,9 +267,9 @@ final class OutputTest extends UnitTestCase
             [
                 [$message, $message],
                 '<div class="successPhalcon">sample <phalcon> message</div>'
-                    . PHP_EOL
-                    . '<div class="successPhalcon">sample <phalcon> message</div>'
-                    . PHP_EOL,
+                . PHP_EOL
+                . '<div class="successPhalcon">sample <phalcon> message</div>'
+                . PHP_EOL,
                 $classes,
                 [],
                 true,
@@ -434,7 +350,7 @@ final class OutputTest extends UnitTestCase
             [
                 [$message, $message],
                 'sample &lt;phalcon&gt; message'
-                    . 'sample &lt;phalcon&gt; message',
+                . 'sample &lt;phalcon&gt; message',
                 $classes,
                 $iconClasses,
                 false,
@@ -445,9 +361,9 @@ final class OutputTest extends UnitTestCase
             [
                 $message,
                 '<div class="successPhalcon">'
-                    . '<i class="successIconPhalcon"></i> '
-                    . 'sample <phalcon> message</div>'
-                    . PHP_EOL,
+                . '<i class="successIconPhalcon"></i> '
+                . 'sample <phalcon> message</div>'
+                . PHP_EOL,
                 $classes,
                 $iconClasses,
                 true,
@@ -458,13 +374,13 @@ final class OutputTest extends UnitTestCase
             [
                 [$message, $message],
                 '<div class="successPhalcon">'
-                    . '<i class="successIconPhalcon"></i> '
-                    . 'sample <phalcon> message</div>'
-                    . PHP_EOL
-                    . '<div class="successPhalcon">'
-                    . '<i class="successIconPhalcon"></i> '
-                    . 'sample <phalcon> message</div>'
-                    . PHP_EOL,
+                . '<i class="successIconPhalcon"></i> '
+                . 'sample <phalcon> message</div>'
+                . PHP_EOL
+                . '<div class="successPhalcon">'
+                . '<i class="successIconPhalcon"></i> '
+                . 'sample <phalcon> message</div>'
+                . PHP_EOL,
                 $classes,
                 $iconClasses,
                 true,
@@ -475,8 +391,8 @@ final class OutputTest extends UnitTestCase
             [
                 $message,
                 '<div class="successPhalcon">'
-                    . '<i class="successIconPhalcon"></i> '
-                    . 'sample <phalcon> message</div>',
+                . '<i class="successIconPhalcon"></i> '
+                . 'sample <phalcon> message</div>',
                 $classes,
                 $iconClasses,
                 true,
@@ -487,11 +403,11 @@ final class OutputTest extends UnitTestCase
             [
                 [$message, $message],
                 '<div class="successPhalcon">'
-                    . '<i class="successIconPhalcon"></i> '
-                    . 'sample <phalcon> message</div>'
-                    . '<div class="successPhalcon">'
-                    . '<i class="successIconPhalcon"></i> '
-                    . 'sample <phalcon> message</div>',
+                . '<i class="successIconPhalcon"></i> '
+                . 'sample <phalcon> message</div>'
+                . '<div class="successPhalcon">'
+                . '<i class="successIconPhalcon"></i> '
+                . 'sample <phalcon> message</div>',
                 $classes,
                 $iconClasses,
                 true,
@@ -502,9 +418,9 @@ final class OutputTest extends UnitTestCase
             [
                 $message,
                 '<div class="successPhalcon">'
-                    . '<i class="successIconPhalcon"></i> '
-                    . 'sample <phalcon> message</div>'
-                    . PHP_EOL,
+                . '<i class="successIconPhalcon"></i> '
+                . 'sample <phalcon> message</div>'
+                . PHP_EOL,
                 $classes,
                 $iconClasses,
                 true,
@@ -515,13 +431,13 @@ final class OutputTest extends UnitTestCase
             [
                 [$message, $message],
                 '<div class="successPhalcon">'
-                    . '<i class="successIconPhalcon"></i> '
-                    . 'sample <phalcon> message</div>'
-                    . PHP_EOL
-                    . '<div class="successPhalcon">'
-                    . '<i class="successIconPhalcon"></i> '
-                    . 'sample <phalcon> message</div>'
-                    . PHP_EOL,
+                . '<i class="successIconPhalcon"></i> '
+                . 'sample <phalcon> message</div>'
+                . PHP_EOL
+                . '<div class="successPhalcon">'
+                . '<i class="successIconPhalcon"></i> '
+                . 'sample <phalcon> message</div>'
+                . PHP_EOL,
                 $classes,
                 $iconClasses,
                 true,
@@ -532,9 +448,9 @@ final class OutputTest extends UnitTestCase
             [
                 $message,
                 '<div class="successPhalcon">'
-                    . '<i class="successIconPhalcon"></i> '
-                    . 'sample &lt;phalcon&gt; message</div>'
-                    . PHP_EOL,
+                . '<i class="successIconPhalcon"></i> '
+                . 'sample &lt;phalcon&gt; message</div>'
+                . PHP_EOL,
                 $classes,
                 $iconClasses,
                 true,
@@ -545,13 +461,13 @@ final class OutputTest extends UnitTestCase
             [
                 [$message, $message],
                 '<div class="successPhalcon">'
-                    . '<i class="successIconPhalcon"></i> '
-                    . 'sample &lt;phalcon&gt; message</div>'
-                    . PHP_EOL
-                    . '<div class="successPhalcon">'
-                    . '<i class="successIconPhalcon"></i> '
-                    . 'sample &lt;phalcon&gt; message</div>'
-                    . PHP_EOL,
+                . '<i class="successIconPhalcon"></i> '
+                . 'sample &lt;phalcon&gt; message</div>'
+                . PHP_EOL
+                . '<div class="successPhalcon">'
+                . '<i class="successIconPhalcon"></i> '
+                . 'sample &lt;phalcon&gt; message</div>'
+                . PHP_EOL,
                 $classes,
                 $iconClasses,
                 true,
@@ -562,8 +478,8 @@ final class OutputTest extends UnitTestCase
             [
                 $message,
                 '<div class="successPhalcon">'
-                    . '<i class="successIconPhalcon"></i> '
-                    . 'sample &lt;phalcon&gt; message</div>',
+                . '<i class="successIconPhalcon"></i> '
+                . 'sample &lt;phalcon&gt; message</div>',
                 $classes,
                 $iconClasses,
                 true,
@@ -574,11 +490,11 @@ final class OutputTest extends UnitTestCase
             [
                 [$message, $message],
                 '<div class="successPhalcon">'
-                    . '<i class="successIconPhalcon"></i> '
-                    . 'sample &lt;phalcon&gt; message</div>'
-                    . '<div class="successPhalcon">'
-                    . '<i class="successIconPhalcon"></i> '
-                    . 'sample &lt;phalcon&gt; message</div>',
+                . '<i class="successIconPhalcon"></i> '
+                . 'sample &lt;phalcon&gt; message</div>'
+                . '<div class="successPhalcon">'
+                . '<i class="successIconPhalcon"></i> '
+                . 'sample &lt;phalcon&gt; message</div>',
                 $classes,
                 $iconClasses,
                 true,
@@ -589,9 +505,9 @@ final class OutputTest extends UnitTestCase
             [
                 $message,
                 '<div class="successPhalcon">'
-                    . '<i class="successIconPhalcon"></i> '
-                    . 'sample &lt;phalcon&gt; message</div>'
-                    . PHP_EOL,
+                . '<i class="successIconPhalcon"></i> '
+                . 'sample &lt;phalcon&gt; message</div>'
+                . PHP_EOL,
                 $classes,
                 $iconClasses,
                 true,
@@ -602,13 +518,13 @@ final class OutputTest extends UnitTestCase
             [
                 [$message, $message],
                 '<div class="successPhalcon">'
-                    . '<i class="successIconPhalcon"></i> '
-                    . 'sample &lt;phalcon&gt; message</div>'
-                    . PHP_EOL
-                    . '<div class="successPhalcon">'
-                    . '<i class="successIconPhalcon"></i> '
-                    . 'sample &lt;phalcon&gt; message</div>'
-                    . PHP_EOL,
+                . '<i class="successIconPhalcon"></i> '
+                . 'sample &lt;phalcon&gt; message</div>'
+                . PHP_EOL
+                . '<div class="successPhalcon">'
+                . '<i class="successIconPhalcon"></i> '
+                . 'sample &lt;phalcon&gt; message</div>'
+                . PHP_EOL,
                 $classes,
                 $iconClasses,
                 true,
@@ -619,8 +535,8 @@ final class OutputTest extends UnitTestCase
             [
                 $message,
                 '<div class="successPhalcon">'
-                    . '<i class="successIconPhalcon"></i> '
-                    . 'sample &lt;phalcon&gt; message</div>',
+                . '<i class="successIconPhalcon"></i> '
+                . 'sample &lt;phalcon&gt; message</div>',
                 $classes,
                 $iconClasses,
                 true,
@@ -631,11 +547,11 @@ final class OutputTest extends UnitTestCase
             [
                 [$message, $message],
                 '<div class="successPhalcon">'
-                    . '<i class="successIconPhalcon"></i> '
-                    . 'sample &lt;phalcon&gt; message</div>'
-                    . '<div class="successPhalcon">'
-                    . '<i class="successIconPhalcon"></i> '
-                    . 'sample &lt;phalcon&gt; message</div>',
+                . '<i class="successIconPhalcon"></i> '
+                . 'sample &lt;phalcon&gt; message</div>'
+                . '<div class="successPhalcon">'
+                . '<i class="successIconPhalcon"></i> '
+                . 'sample &lt;phalcon&gt; message</div>',
                 $classes,
                 $iconClasses,
                 true,
@@ -644,5 +560,88 @@ final class OutputTest extends UnitTestCase
                 $template,
             ],
         ];
+    }
+
+    /**
+     * Tests Phalcon\Flash\Direct :: output()
+     *
+     * @return void
+     *
+     * @author Phalcon Team <team@phalcon.io>
+     * @since  2020-09-09
+     */
+    public function testFlashDirectOutput(): void
+    {
+        $flash = new Direct(new Escaper());
+        $flash->setImplicitFlush(false);
+        $flash->success('hello');
+        $flash->warning('goodbye');
+
+        ob_start();
+        $flash->output(false);
+        $actual = ob_get_contents();
+        ob_end_clean();
+        $expected = '<div class="successMessage">hello</div>' . PHP_EOL .
+            '<div class="warningMessage">goodbye</div>' . PHP_EOL;
+        $this->assertSame($expected, $actual);
+
+        /**
+         * remove them
+         */
+        ob_start();
+        $flash->output();
+        $actual = ob_get_contents();
+        ob_end_clean();
+        $expected = '<div class="successMessage">hello</div>' . PHP_EOL .
+            '<div class="warningMessage">goodbye</div>' . PHP_EOL;
+        $this->assertSame($expected, $actual);
+
+        ob_start();
+        $flash->output();
+        $actual = ob_get_contents();
+        ob_end_clean();
+        $expected = '';
+        $this->assertSame($expected, $actual);
+    }
+
+    /**
+     * Tests Phalcon\Flash\Direct :: output() - combinations
+     *
+     * @dataProvider getExamples
+     *
+     * @return void
+     *
+     * @author       Phalcon Team <team@phalcon.io>
+     * @since        2020-09-09
+     */
+    public function testFlashDirectOutputCombinations(
+        array | string $message,
+        string $expected,
+        array $classes,
+        array $iconClasses,
+        bool $autoHtml,
+        bool $autoescape,
+        bool $implicit,
+        string $template
+    ): void {
+        $flash = new Direct(new Escaper());
+        $flash
+            ->setCssClasses($classes)
+            ->setCssIconClasses($iconClasses)
+            ->setAutomaticHtml($autoHtml)
+            ->setAutoescape($autoescape)
+            ->setCustomTemplate($template)
+            ->setImplicitFlush($implicit)
+        ;
+        if (true === $implicit) {
+            ob_start();
+            $flash->outputMessage('success', $message);
+            $actual = ob_get_contents();
+            ob_end_clean();
+        } else {
+            $actual = $flash->outputMessage('success', $message);
+        }
+
+        $this->assertSame($expected, $actual);
     }
 }

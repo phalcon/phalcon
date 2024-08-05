@@ -13,11 +13,10 @@ declare(strict_types=1);
 
 namespace Phalcon\Tests\Unit\Http\Response;
 
-use Phalcon\Tests\Fixtures\Page\Http;
 use Phalcon\Mvc\Micro;
 use Phalcon\Tests\_data\fixtures\Micro\HttpResponseContentMiddleware;
+use Phalcon\Tests\Fixtures\Page\Http;
 use Phalcon\Tests\Unit\Http\Helper\HttpBase;
-use Phalcon\Tests\UnitTestCase;
 
 use function ob_get_clean;
 use function ob_start;
@@ -68,6 +67,81 @@ final class GetSetStatusCodeTest extends HttpBase
 
         $expected = Http::MESSAGE_404_NOT_FOUND;
         $actual   = $headers->get(Http::STATUS);
+        $this->assertSame($expected, $actual);
+    }
+
+    /**
+     * Tests the setStatusCode after send
+     *
+     * @author Phalcon Team <team@phalcon.io>
+     * @since  2014-10-08
+     */
+    public function testHttpResponseSetStatusCodeSend(): void
+    {
+        $response = $this->getResponseObject();
+
+        $body = ['test' => 123];
+        $response
+            ->resetHeaders()
+            ->setStatusCode(Http::CODE_404)
+            ->setContentType(Http::CONTENT_TYPE_JSON, Http::UTF8)
+            ->setJsonContent($body, JSON_NUMERIC_CHECK)
+        ;
+
+        ob_start();
+        $response->send();
+        $contents = ob_get_clean();
+
+        $expected = [
+            'Status: ' . Http::MESSAGE_404_NOT_FOUND,
+            'Content-Type: ' . Http::CONTENT_TYPE_JSON,
+        ];
+        $actual   = xdebug_get_headers();
+        $this->assertSame($expected, $actual);
+
+        $expected = '{"test":123}';
+        $actual   = $contents;
+        $this->assertSame($expected, $actual);
+    }
+
+    /**
+     * Tests the setStatusCode after send
+     *
+     * @author Phalcon Team <team@phalcon.io>
+     * @since  2014-10-08
+     * @todo   enable with MVC
+     */
+    public function testHttpResponseSetStatusCodeSendMicro(): void
+    {
+        $this->markTestSkipped('TODO: Enable with MVC');
+        $application = new Micro($this->container);
+
+        $application->before(new HttpResponseContentMiddleware());
+        $application->notFound(
+            function () {
+                return '404 - handler';
+            }
+        );
+        $application->get(
+            "/",
+            function () {
+                return '200 - "/"';
+            }
+        );
+
+        ob_start();
+        $application->handle("/");
+        $contents = ob_get_clean();
+
+        $expected = [
+            "Status: 404 Not Found",
+            "Content-Type: application/json",
+        ];
+        $actual   = xdebug_get_headers();
+        $this->assertSame($expected, $actual);
+
+        $expected = '{"test":123}';
+        $actual   = $contents;
         $this->assertSame($expected, $actual);
     }
 
@@ -156,81 +230,6 @@ final class GetSetStatusCodeTest extends HttpBase
 
         $expected = $status;
         $actual   = $headers->get(Http::STATUS);
-        $this->assertSame($expected, $actual);
-    }
-
-    /**
-     * Tests the setStatusCode after send
-     *
-     * @author Phalcon Team <team@phalcon.io>
-     * @since  2014-10-08
-     */
-    public function testHttpResponseSetStatusCodeSend(): void
-    {
-        $response = $this->getResponseObject();
-
-        $body = ['test' => 123];
-        $response
-            ->resetHeaders()
-            ->setStatusCode(Http::CODE_404)
-            ->setContentType(Http::CONTENT_TYPE_JSON, Http::UTF8)
-            ->setJsonContent($body, JSON_NUMERIC_CHECK)
-        ;
-
-        ob_start();
-        $response->send();
-        $contents = ob_get_clean();
-
-        $expected = [
-            'Status: ' . Http::MESSAGE_404_NOT_FOUND,
-            'Content-Type: ' . Http::CONTENT_TYPE_JSON,
-        ];
-        $actual   = xdebug_get_headers();
-        $this->assertSame($expected, $actual);
-
-        $expected = '{"test":123}';
-        $actual   = $contents;
-        $this->assertSame($expected, $actual);
-    }
-
-    /**
-     * Tests the setStatusCode after send
-     *
-     * @author Phalcon Team <team@phalcon.io>
-     * @since  2014-10-08
-     * @todo   enable with MVC
-     */
-    public function testHttpResponseSetStatusCodeSendMicro(): void
-    {
-        $this->markTestSkipped('TODO: Enable with MVC');
-        $application = new Micro($this->container);
-
-        $application->before(new HttpResponseContentMiddleware());
-        $application->notFound(
-            function () {
-                return '404 - handler';
-            }
-        );
-        $application->get(
-            "/",
-            function () {
-                return '200 - "/"';
-            }
-        );
-
-        ob_start();
-        $application->handle("/");
-        $contents = ob_get_clean();
-
-        $expected = [
-            "Status: 404 Not Found",
-            "Content-Type: application/json",
-        ];
-        $actual   = xdebug_get_headers();
-        $this->assertSame($expected, $actual);
-
-        $expected = '{"test":123}';
-        $actual   = $contents;
         $this->assertSame($expected, $actual);
     }
 }

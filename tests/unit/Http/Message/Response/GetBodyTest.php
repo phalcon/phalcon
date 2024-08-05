@@ -32,7 +32,7 @@ final class GetBodyTest extends UnitTestCase
         }
 
         $fileName = dataDir('/assets/stream/mit.txt');
-        $stream = new Stream($fileName, 'rb');
+        $stream   = new Stream($fileName, 'rb');
         $response = new Response($stream);
 
         $this->assertFileContentsEqual(

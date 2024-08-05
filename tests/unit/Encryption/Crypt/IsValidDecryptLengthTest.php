@@ -13,12 +13,8 @@ declare(strict_types=1);
 
 namespace Phalcon\Tests\Unit\Encryption\Crypt;
 
-use Codeception\Stub;
-use Phalcon\Encryption\Crypt;
 use Phalcon\Tests\Fixtures\Encryption\Crypt\CryptOpensslCipherIvLengthFixture;
 use Phalcon\Tests\UnitTestCase;
-
-use function uniqid;
 
 final class IsValidDecryptLengthTest extends UnitTestCase
 {

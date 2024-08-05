@@ -34,6 +34,63 @@ final class ReadWriteTest extends UnitTestCase
     use AnnotationsTrait;
 
     /**
+     * Tests Phalcon\Annotations\Adapter :: read()
+     *
+     * @author       Phalcon Team <team@phalcon.io>
+     * @since        2022-12-30
+     */
+    public function testAnnotationsAdapterReadFileExists(): void
+    {
+        $parameters = [
+            'annotationsDir' => outputDir('tests/annotations/'),
+        ];
+        $adapter    = new StreamFileExistsFixture($parameters);
+
+        $actual = $adapter->read('testwrite');
+        $this->assertFalse($actual);
+    }
+
+    /**
+     * Tests Phalcon\Annotations\Adapter :: read()
+     *
+     * @author       Phalcon Team <team@phalcon.io>
+     * @since        2022-12-30
+     */
+    public function testAnnotationsAdapterReadFileGetContents(): void
+    {
+        require_once dataDir('fixtures/Annotations/AnnotationsTestClass.php');
+        $parameters = [
+            'annotationsDir' => outputDir('tests/annotations/'),
+        ];
+        $adapter    = new StreamFileGetContentsFixture($parameters);
+        $adapter->get(AnnotationsTestClass::class);
+
+        $actual = $adapter->read('testprop1');
+        $this->assertFalse($actual);
+    }
+
+    /**
+     * Tests Phalcon\Annotations\Adapter :: read()
+     *
+     * @author       Phalcon Team <team@phalcon.io>
+     * @since        2022-12-30
+     */
+    public function testAnnotationsAdapterReadUnserialize(): void
+    {
+        require_once dataDir('fixtures/Annotations/AnnotationsTestClass.php');
+
+        $this->expectException(RuntimeException::class);
+        $this->expectExceptionMessage('Cannot read annotation data');
+
+        $parameters = [
+            'annotationsDir' => outputDir('tests/annotations/'),
+        ];
+        $adapter    = new StreamUnserializeFixture($parameters);
+        $adapter->get(AnnotationsTestClass::class);
+        $adapter->read('testprop1');
+    }
+
+    /**
      * Tests Phalcon\Annotations\Adapter :: read()/write()
      *
      * @dataProvider getExamples
@@ -66,63 +123,6 @@ final class ReadWriteTest extends UnitTestCase
         if (Stream::class === $class) {
             $this->safeDeleteFile(outputDir('tests/annotations/testwrite.php'));
         }
-    }
-
-    /**
-     * Tests Phalcon\Annotations\Adapter :: read()
-     *
-     * @author       Phalcon Team <team@phalcon.io>
-     * @since        2022-12-30
-     */
-    public function testAnnotationsAdapterReadFileExists(): void
-    {
-        $parameters = [
-            'annotationsDir' => outputDir('tests/annotations/'),
-        ];
-        $adapter = new StreamFileExistsFixture($parameters);
-
-        $actual = $adapter->read('testwrite');
-        $this->assertFalse($actual);
-    }
-
-    /**
-     * Tests Phalcon\Annotations\Adapter :: read()
-     *
-     * @author       Phalcon Team <team@phalcon.io>
-     * @since        2022-12-30
-     */
-    public function testAnnotationsAdapterReadFileGetContents(): void
-    {
-        require_once dataDir('fixtures/Annotations/AnnotationsTestClass.php');
-        $parameters = [
-            'annotationsDir' => outputDir('tests/annotations/'),
-        ];
-        $adapter          = new StreamFileGetContentsFixture($parameters);
-        $adapter->get(AnnotationsTestClass::class);
-
-        $actual = $adapter->read('testprop1');
-        $this->assertFalse($actual);
-    }
-
-    /**
-     * Tests Phalcon\Annotations\Adapter :: read()
-     *
-     * @author       Phalcon Team <team@phalcon.io>
-     * @since        2022-12-30
-     */
-    public function testAnnotationsAdapterReadUnserialize(): void
-    {
-        require_once dataDir('fixtures/Annotations/AnnotationsTestClass.php');
-
-        $this->expectException(RuntimeException::class);
-        $this->expectExceptionMessage('Cannot read annotation data');
-
-        $parameters = [
-            'annotationsDir' => outputDir('tests/annotations/'),
-        ];
-        $adapter          = new StreamUnserializeFixture($parameters);
-        $adapter->get(AnnotationsTestClass::class);
-        $adapter->read('testprop1');
     }
 
     /**

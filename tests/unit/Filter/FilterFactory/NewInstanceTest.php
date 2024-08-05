@@ -43,46 +43,6 @@ use Phalcon\Tests\UnitTestCase;
 final class NewInstanceTest extends UnitTestCase
 {
     /**
-     * Tests Phalcon\Filter\FilterFactory :: newInstance()
-     *
-     * @return void
-     *
-     * @author Phalcon Team <team@phalcon.io>
-     * @since  2020-09-09
-     */
-    public function testFilterFilterFactoryNewInstance(): void
-    {
-        $factory = new FilterFactory();
-
-        $this->assertInstanceOf(FilterInterface::class, $factory->newInstance());
-    }
-
-    /**
-     * Tests Phalcon\Filter\FilterFactory :: newInstance() - services
-     *
-     * @return void
-     * @param Example    $example
-     *
-     * @dataProvider getData
-     *
-     * @author       Phalcon Team <team@phalcon.io>
-     * @since        2020-09-09
-     */
-    public function testFilterFilterFactoryNewInstanceServices(
-        string $name,
-        string $class
-    ): void {
-        $factory  = new FilterFactory();
-        $instance = $factory->newInstance();
-
-        $interface = FilterInterface::class;
-        $this->assertInstanceOf($interface, $instance);
-
-        $actual = $instance->get($name);
-        $this->assertInstanceOf($class, $actual);
-    }
-
-    /**
      * Returns the example data
      */
     public static function getData(): array
@@ -110,5 +70,45 @@ final class NewInstanceTest extends UnitTestCase
             [Filter::FILTER_UPPERWORDS, UpperWords::class],
             [Filter::FILTER_URL, Url::class],
         ];
+    }
+
+    /**
+     * Tests Phalcon\Filter\FilterFactory :: newInstance()
+     *
+     * @return void
+     *
+     * @author Phalcon Team <team@phalcon.io>
+     * @since  2020-09-09
+     */
+    public function testFilterFilterFactoryNewInstance(): void
+    {
+        $factory = new FilterFactory();
+
+        $this->assertInstanceOf(FilterInterface::class, $factory->newInstance());
+    }
+
+    /**
+     * Tests Phalcon\Filter\FilterFactory :: newInstance() - services
+     *
+     * @param Example $example
+     *
+     * @dataProvider getData
+     *
+     * @return void
+     * @author       Phalcon Team <team@phalcon.io>
+     * @since        2020-09-09
+     */
+    public function testFilterFilterFactoryNewInstanceServices(
+        string $name,
+        string $class
+    ): void {
+        $factory  = new FilterFactory();
+        $instance = $factory->newInstance();
+
+        $interface = FilterInterface::class;
+        $this->assertInstanceOf($interface, $instance);
+
+        $actual = $instance->get($name);
+        $this->assertInstanceOf($class, $actual);
     }
 }

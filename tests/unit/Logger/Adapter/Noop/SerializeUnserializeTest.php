@@ -36,7 +36,7 @@ final class SerializeUnserializeTest extends UnitTestCase
         $this->expectExceptionMessage("This object cannot be serialized");
 
         $adapter = new Noop();
-        $object = serialize($adapter);
+        $object  = serialize($adapter);
     }
 
     /**
