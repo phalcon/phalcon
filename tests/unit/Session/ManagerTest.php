@@ -13,11 +13,10 @@ declare(strict_types=1);
 
 namespace Phalcon\Tests\Unit\Session;
 
-use Codeception\Example;
 use Phalcon\Session\Adapter\Noop;
 use Phalcon\Session\Manager;
-use PHPUnit\Framework\Attributes\TestWith;
 use Phalcon\Tests\UnitTestCase;
+use PHPUnit\Framework\Attributes\TestWith;
 
 use function session_abort;
 use function session_destroy;
@@ -80,7 +79,7 @@ final class ManagerTest extends UnitTestCase
         $session->start();
 
         // Check if session value has been sanitized
-        $actual   = isset($_COOKIE[$name]);
+        $actual = isset($_COOKIE[$name]);
         $this->assertSame($expected, $actual);
     }
 }

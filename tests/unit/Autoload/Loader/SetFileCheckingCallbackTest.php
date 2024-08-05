@@ -13,8 +13,10 @@ declare(strict_types=1);
 
 namespace Phalcon\Tests\Unit\Autoload\Loader;
 
+use Codeception\Example;
 use Phalcon\Autoload\Exception;
 use Phalcon\Autoload\Loader;
+use Phalcon\Events\Exception as EventsException;
 use Phalcon\Tests\Fixtures\Traits\LoaderTrait;
 use Phalcon\Tests\UnitTestCase;
 
@@ -38,56 +40,13 @@ final class SetFileCheckingCallbackTest extends UnitTestCase
     }
 
     /**
-     * Tests Phalcon\Autoload\Loader :: setFileCheckingCallback()
-     *
-     * @dataProvider getExamples
-     *
-     * @return void
-     *
-     * @author       Phalcon Team <team@phalcon.io>
-     * @since        2020-09-09
-     * @issue  https://github.com/phalcon/cphalcon/issues/13360
-     * @issue  https://github.com/phalcon/cphalcon/issues/10472
-     */
-    public function testAutoloaderLoaderSetFileCheckingCallback(
-        ?string $callback
-    ): void {
-        $loader = new Loader();
-
-        $loader->setFileCheckingCallback($callback);
-
-        $loader->setFiles(
-            [
-                dataDir('fixtures/Loader/Example/Functions/FunctionsNoClassThree.php'),
-            ]
-        );
-
-        $loader->setNamespaces(
-            [
-                'Example\Namespaces' => dataDir('fixtures/Loader/Example/Namespaces'),
-            ],
-            true
-        );
-
-        $loader->register();
-
-        $actual = function_exists('noClass3Foo');
-        $this->assertTrue($actual);
-
-        $actual = function_exists('noClass3Bar');
-        $this->assertTrue($actual);
-
-        $actual = class_exists('\Example\Namespaces\Engines\Diesel');
-        $this->assertTrue($actual);
-    }
-
-    /**
      * Tests Phalcon\Autoload\Loader :: setFileCheckingCallback() - exception
-     *
-     * @return void
      *
      * @author Phalcon Team <team@phalcon.io>
      * @since  2020-09-09
+     *
+     * @return void
+     * @throws Exception
      */
     public function testAutoloaderLoaderSetFileCheckingCallbackException(): void
     {
@@ -103,42 +62,94 @@ final class SetFileCheckingCallbackTest extends UnitTestCase
     /**
      * Tests Phalcon\Autoload\Loader :: setFileCheckingCallback()
      *
-     * @return void
-     *
      * @author Phalcon Team <team@phalcon.io>
      * @since  2020-09-09
      * @issue  https://github.com/phalcon/cphalcon/issues/13360
      * @issue  https://github.com/phalcon/cphalcon/issues/10472
+     *
+     * @return void
+     * @throws EventsException
+     * @throws Exception
      */
     public function testAutoloaderLoaderSetFileCheckingCallbackFalse(): void
     {
         $loader = new Loader();
 
-        $loader->setFileCheckingCallback(
-            function ($file) {
-                return false;
-            }
-        );
-
-        $loader->setFiles(
-            [
-                dataDir('fixtures/Loader/Example/Functions/FunctionsNoClassThree.php'),
-            ]
-        );
-
-        $loader->setNamespaces(
-            [
-                'Example' => dataDir('fixtures/Loader/Example/'),
-            ],
-            true
-        );
-
-        $loader->register();
+        $loader
+            ->setFiles(
+                [
+                    dataDir('fixtures/Loader/Example/Functions/FunctionsNoClassThree.php'),
+                ]
+            )
+            ->setNamespaces(
+                [
+                    'Example' => dataDir('fixtures/Loader/Example/'),
+                ],
+                true
+            )
+            ->setFileCheckingCallback(
+                function ($file) {
+                    return false;
+                }
+            )
+            ->register()
+        ;
 
         $actual = function_exists('noClass3Foo');
         $this->assertFalse($actual);
 
         $actual = function_exists('noClass3Bar');
         $this->assertFalse($actual);
+
+        $loader->unregister();
+    }
+
+    /**
+     * Tests Phalcon\Autoload\Loader :: setFileCheckingCallback()
+     *
+     * @dataProvider getExamples
+     *
+     * @author       Phalcon Team <team@phalcon.io>
+     * @since        2020-09-09
+     * @issue  https://github.com/phalcon/cphalcon/issues/13360
+     * @issue  https://github.com/phalcon/cphalcon/issues/10472
+     *
+     * @param string|null $callback
+     *
+     * @return void
+     * @throws Exception
+     * @throws EventsException
+     */
+    public function testAutoloaderLoaderSetFileCheckingCallbackValid(
+        ?string $callback
+    ): void {
+        $loader = new Loader();
+
+        $loader
+            ->setFiles(
+                [
+                    dataDir('fixtures/Loader/Example/Functions/FunctionsNoClassThree.php'),
+                ]
+            )
+            ->setNamespaces(
+                [
+                    'Example\Namespaces' => dataDir('fixtures/Loader/Example/Namespaces'),
+                ],
+                true
+            )
+            ->setFileCheckingCallback($callback)
+            ->register()
+        ;
+
+        $actual = function_exists('noClass3Foo');
+        $this->assertTrue($actual);
+
+        $actual = function_exists('noClass3Bar');
+        $this->assertTrue($actual);
+
+        $actual = class_exists('\Example\Namespaces\Engines\Diesel');
+        $this->assertTrue($actual);
+
+        $loader->unregister();
     }
 }
