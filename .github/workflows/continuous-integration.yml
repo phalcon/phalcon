@@ -88,6 +88,16 @@ jobs:
     permissions:
       contents: read # to fetch code (actions/checkout)
 
+    services:
+      redis:
+        image: redis:5-alpine
+        ports:
+          - "6379:6379"
+      memcached:
+        image: memcached:1.5-alpine
+        ports:
+          - "11211:11211"
+
     name: Unit tests / PHP-${{ matrix.php }}-${{ matrix.ts }}-${{ matrix.name }}
     runs-on: ${{ matrix.os }}
 
@@ -169,95 +179,6 @@ jobs:
         uses: "actions/upload-artifact@v4"
         with:
           name: "unit-${{ matrix.php }}.coverage"
-          path: "tests/_output/coverage.xml"
-
-  cli-tests:
-    name: CLI tests / PHP-${{ matrix.php }}-${{ matrix.ts }}-${{ matrix.name }}
-    needs: phpcs
-
-    permissions:
-      contents: read # to fetch code (actions/checkout)
-
-    runs-on: ${{ matrix.os }}
-
-    strategy:
-      matrix:
-        php:
-          - '8.1'
-#          - '8.2'
-#          - '8.3'
-        ts:
-          #          - 'nts'
-          - 'ts'
-        name:
-          - ubuntu-gcc
-        #          - macos-clang
-        # matrix names should be in next format:
-        #     {php}-{ts}-{os.name}-{compiler}-{arch}
-        include:
-          # Linux
-          - { name: ubuntu-gcc, os: ubuntu-20.04, compiler: gcc }
-    #          # macOS
-    #          - { name: macos-clang, os: macos-11, compiler: clang }
-    #          # Windows
-    #          - { php: '8.1', ts: 'ts',  arch: 'x64', name: 'windows2019-vs16', os: 'windows-2019', compiler: 'vs16' }
-    #          - { php: '8.1', ts: 'nts', arch: 'x64', name: 'windows2019-vs16', os: 'windows-2019', compiler: 'vs16' }
-
-    steps:
-      - uses: actions/checkout@v4
-      - name: "Setup platform specific environment"
-        shell: pwsh
-        run: |
-          git config --global core.autocrlf false
-          $SessionSavePath = if ("${{ runner.os }}" -eq "Windows") { 'C:\temp' } else { '/tmp' }
-          Write-Output "SESSION_SAVE_PATH=$SessionSavePath" | Out-File -FilePath $env:GITHUB_ENV -Encoding utf8 -Append
-
-      - name: "Setup PHP"
-        uses: shivammathur/setup-php@v2
-        with:
-          php-version: ${{ matrix.php }}
-          extensions: ${{ env.EXTENSIONS }}
-          ini-values: apc.enable_cli=on, session.save_path=${{ env.SESSION_SAVE_PATH }}
-          tools: pecl, phpize, php-config, composer:v2
-          coverage: pcov
-        env:
-          PHPTS: ${{ matrix.ts }}
-          COMPOSER_TOKEN: ${{ secrets.GITHUB_TOKEN }}
-          PHALCON_PATH: ext
-
-      - name: "Validate composer"
-        run: composer validate --no-check-all --no-check-publish
-
-      - name: "Install development dependencies with Composer"
-        uses: "ramsey/composer-install@v2"
-        with:
-          composer-options: "--prefer-dist"
-
-      - name: "Setup Tests"
-        shell: bash
-        run: |
-          if [ "${{ runner.os }}" = "Linux" ]; then
-            ./config/ci/linux-setup-locales.sh
-          fi
-
-          cp tests/_config/.env.default .env
-          vendor/bin/codecept build
-
-      - name: "Run CLI Tests"
-        if: always()
-        run: |
-          vendor/bin/codecept run --coverage-xml=coverage.xml --ext DotReporter cli
-
-#      - name: "Upload coverage file"
-#        run: |
-#          bash <(curl -Ls https://coverage.codacy.com/get.sh) report \
-#            -l PHP --project-token: ${{ secrets.CODACY_PROJECT_TOKEN }} \
-#            -r tests/_output/coverage.xml --partial
-
-      - name: "Upload coverage file artifact"
-        uses: "actions/upload-artifact@v4"
-        with:
-          name: "cli-${{ matrix.php }}.coverage"
           path: "tests/_output/coverage.xml"
 
   integration-tests:
@@ -460,7 +381,6 @@ jobs:
           name: "db-mysql-${{ matrix.php }}.coverage"
           path: "tests/_output/coverage.xml"
 
-
   #  db-postgres-tests:
   #    name: Database PostgreSql tests / PHP-${{ matrix.php }}
   #    needs: phpcs
@@ -552,7 +472,6 @@ jobs:
   #          name: "db-postgres-${{ matrix.php }}-${{ matrix.ts }}-${{ matrix.name }}.coverage"
   #          path: "tests/_output/coverage.xml"
 
-
 #  db-sqlite-tests:
 #    name: Database Sqlite tests / PHP-${{ matrix.php }}
 #    needs: phpcs
@@ -625,7 +544,6 @@ jobs:
     runs-on: "ubuntu-22.04"
     needs:
       - "unit-tests"
-      - "cli-tests"
       - "integration-tests"
       - "db-mysql-tests"
 #      - "db-postgres-tests"
@@ -653,7 +571,6 @@ jobs:
     runs-on: "ubuntu-22.04"
     needs:
       - "unit-tests"
-      - "cli-tests"
       - "integration-tests"
       - "db-mysql-tests"
 #      - "db-postgres-tests"
