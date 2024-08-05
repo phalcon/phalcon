@@ -42,8 +42,6 @@ class PhpTest extends UnitTestCase
      */
     public function testMvcViewEngineVoltExtensionsPhp(): void
     {
-        $this->wantToTest('Mvc\View\Engine\Volt\Extensions - php');
-
         $compiler = new Compiler();
 
         $source   = '{{ str_replace("a", "b", "aabb") }}';
