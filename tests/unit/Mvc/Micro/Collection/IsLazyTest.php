@@ -13,13 +13,24 @@ declare(strict_types=1);
 
 namespace Phalcon\Tests\Unit\Mvc\Micro\Collection;
 
-use Codeception\Example;
 use Phalcon\Mvc\Micro\Collection;
 use Phalcon\Tests\Fixtures\Micro\HttpMethodHandler;
 use Phalcon\Tests\UnitTestCase;
 
 class IsLazyTest extends UnitTestCase
 {
+    public static function booleanProvider(): array
+    {
+        return [
+            [
+                true,
+            ],
+            [
+                false,
+            ],
+        ];
+    }
+
     /**
      * Tests Phalcon\Mvc\Micro\Collection :: isLazy()
      *
@@ -31,7 +42,7 @@ class IsLazyTest extends UnitTestCase
     public function testMvcMicroCollectionIsLazy(
         bool $lazy
     ): void {
-        $collection = new Collection();
+        $collection        = new Collection();
         $httpMethodHandler = new HttpMethodHandler();
 
         $collection->setHandler($httpMethodHandler, $lazy);
@@ -56,17 +67,5 @@ class IsLazyTest extends UnitTestCase
         $this->assertFalse(
             $collection->isLazy()
         );
-    }
-
-    public static function booleanProvider(): array
-    {
-        return [
-            [
-                true,
-            ],
-            [
-                false,
-            ],
-        ];
     }
 }
