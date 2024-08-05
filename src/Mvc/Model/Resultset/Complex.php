@@ -145,20 +145,11 @@ class Complex extends Resultset implements ResultsetInterface
         /**
          * Each row in a complex result is a Phalcon\Mvc\Model\Row instance
          */
-        switch ($hydrateMode) {
-            case Resultset::HYDRATE_RECORDS:
-                $activeRow = new Row();
-                break;
-
-            case Resultset::HYDRATE_ARRAYS:
-                $activeRow = [];
-                break;
-
-            case Resultset::HYDRATE_OBJECTS:
-            default:
-                $activeRow = new stdClass();
-                break;
-        }
+        $activeRow = match ($hydrateMode) {
+            Resultset::HYDRATE_RECORDS => new Row(),
+            Resultset::HYDRATE_ARRAYS  => [],
+            default                    => new stdClass(),
+        };
 
         /**
          * Set records as dirty state PERSISTENT by default

@@ -1101,46 +1101,30 @@ abstract class Model extends AbstractInjectionAware implements
             }
 
             if ($value != "" && $value !== null) {
-                switch ($attribute[1]) {
-                    case Column::TYPE_INTEGER:
-                    case Column::TYPE_MEDIUMINTEGER:
-                    case Column::TYPE_SMALLINTEGER:
-                    case Column::TYPE_TINYINTEGER:
-                        $castValue = intval($value);
-                        break;
-
-                    case Column::TYPE_DECIMAL:
-                    case Column::TYPE_DOUBLE:
-                    case Column::TYPE_FLOAT:
-                        $castValue = (double)$value;
-                        break;
-
-                    case Column::TYPE_BOOLEAN:
-                        $castValue = (bool)$value;
-                        break;
-
-                    default:
-                        $castValue = $value;
-                        break;
-                }
+                $castValue = match ($attribute[1]) {
+                    Column::TYPE_INTEGER,
+                    Column::TYPE_MEDIUMINTEGER,
+                    Column::TYPE_SMALLINTEGER,
+                    Column::TYPE_TINYINTEGER => intval($value),
+                    Column::TYPE_DECIMAL,
+                    Column::TYPE_DOUBLE,
+                    Column::TYPE_FLOAT       => (double)$value,
+                    Column::TYPE_BOOLEAN     => (bool)$value,
+                    default                  => $value,
+                };
             } else {
-                switch ($attribute[1]) {
-                    case Column::TYPE_BIGINTEGER:
-                    case Column::TYPE_BOOLEAN:
-                    case Column::TYPE_DECIMAL:
-                    case Column::TYPE_DOUBLE:
-                    case Column::TYPE_FLOAT:
-                    case Column::TYPE_INTEGER:
-                    case Column::TYPE_MEDIUMINTEGER:
-                    case Column::TYPE_SMALLINTEGER:
-                    case Column::TYPE_TINYINTEGER:
-                        $castValue = null;
-                        break;
-
-                    default:
-                        $castValue = $value;
-                        break;
-                }
+                $castValue = match ($attribute[1]) {
+                    Column::TYPE_BIGINTEGER,
+                    Column::TYPE_BOOLEAN,
+                    Column::TYPE_DECIMAL,
+                    Column::TYPE_DOUBLE,
+                    Column::TYPE_FLOAT,
+                    Column::TYPE_INTEGER,
+                    Column::TYPE_MEDIUMINTEGER,
+                    Column::TYPE_SMALLINTEGER,
+                    Column::TYPE_TINYINTEGER => null,
+                    default                  => $value,
+                };
             }
 
             $attributeName            = $attribute[0];
@@ -4506,32 +4490,19 @@ abstract class Model extends AbstractInjectionAware implements
                                         $updateValue = $value->getValue();
                                     }
 
-                                    switch ($dataType) {
-                                        case Column::TYPE_BOOLEAN:
-                                            $changed = (bool)$snapshotValue !== (bool)$updateValue;
-                                            break;
-
-                                        case Column::TYPE_DECIMAL:
-                                        case Column::TYPE_FLOAT:
-                                            $changed = floatval($snapshotValue) !== floatval($updateValue);
-                                            break;
-
-                                        case Column::TYPE_INTEGER:
-                                        case Column::TYPE_DATE:
-                                        case Column::TYPE_DATETIME:
-                                        case Column::TYPE_CHAR:
-                                        case Column::TYPE_TEXT:
-                                        case Column::TYPE_VARCHAR:
-                                        case Column::TYPE_BIGINTEGER:
-                                            $changed = (string)$snapshotValue !== (string)$updateValue;
-                                            break;
-
-                                        /**
-                                         * Any other type is not really supported...
-                                         */
-                                        default:
-                                            $changed = $updateValue != $snapshotValue;
-                                    }
+                                    $changed = match ($dataType) {
+                                        Column::TYPE_BOOLEAN    => (bool)$snapshotValue !== (bool)$updateValue,
+                                        Column::TYPE_DECIMAL,
+                                        Column::TYPE_FLOAT      => floatval($snapshotValue) !== floatval($updateValue),
+                                        Column::TYPE_INTEGER,
+                                        Column::TYPE_DATE,
+                                        Column::TYPE_DATETIME,
+                                        Column::TYPE_CHAR,
+                                        Column::TYPE_TEXT,
+                                        Column::TYPE_VARCHAR,
+                                        Column::TYPE_BIGINTEGER => (string)$snapshotValue !== (string)$updateValue,
+                                        default                 => $updateValue != $snapshotValue,
+                                    };
                                 }
                             }
                         }

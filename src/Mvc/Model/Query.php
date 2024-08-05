@@ -484,46 +484,29 @@ class Query implements QueryInterface, InjectionAwareInterface
 
         $type = $this->type;
 
-        switch ($type) {
-            case self::PHQL_T_SELECT:
-                $result = $this->executeSelect(
-                    $intermediate,
-                    $mergedParams,
-                    $mergedTypes
-                );
-
-                break;
-
-            case self::PHQL_T_INSERT:
-                $result = $this->executeInsert(
-                    $intermediate,
-                    $mergedParams,
-                    $mergedTypes
-                );
-
-                break;
-
-            case self::PHQL_T_UPDATE:
-                $result = $this->executeUpdate(
-                    $intermediate,
-                    $mergedParams,
-                    $mergedTypes
-                );
-
-                break;
-
-            case self::PHQL_T_DELETE:
-                $result = $this->executeDelete(
-                    $intermediate,
-                    $mergedParams,
-                    $mergedTypes
-                );
-
-                break;
-
-            default:
-                throw new Exception("Unknown statement " . $type);
-        }
+        $result = match ($type) {
+            self::PHQL_T_SELECT => $this->executeSelect(
+                $intermediate,
+                $mergedParams,
+                $mergedTypes
+            ),
+            self::PHQL_T_INSERT => $this->executeInsert(
+                $intermediate,
+                $mergedParams,
+                $mergedTypes
+            ),
+            self::PHQL_T_UPDATE => $this->executeUpdate(
+                $intermediate,
+                $mergedParams,
+                $mergedTypes
+            ),
+            self::PHQL_T_DELETE => $this->executeDelete(
+                $intermediate,
+                $mergedParams,
+                $mergedTypes
+            ),
+            default             => throw new Exception("Unknown statement " . $type),
+        };
 
         /**
          * We store the resultset in the cache if any
@@ -735,28 +718,15 @@ class Query implements QueryInterface, InjectionAwareInterface
                 $this->ast  = $ast;
                 $this->type = $type;
 
-                switch ($type) {
-                    case self::PHQL_T_SELECT:
-                        $irPhql = $this->_prepareSelect();
-                        break;
-
-                    case self::PHQL_T_INSERT:
-                        $irPhql = $this->_prepareInsert();
-                        break;
-
-                    case self::PHQL_T_UPDATE:
-                        $irPhql = $this->_prepareUpdate();
-                        break;
-
-                    case self::PHQL_T_DELETE:
-                        $irPhql = $this->_prepareDelete();
-                        break;
-
-                    default:
-                        throw new Exception(
-                            "Unknown statement " . $type . ", when preparing: " . $phql
-                        );
-                }
+                $irPhql = match ($type) {
+                    self::PHQL_T_SELECT => $this->_prepareSelect(),
+                    self::PHQL_T_INSERT => $this->_prepareInsert(),
+                    self::PHQL_T_UPDATE => $this->_prepareUpdate(),
+                    self::PHQL_T_DELETE => $this->_prepareDelete(),
+                    default             => throw new Exception(
+                        "Unknown statement " . $type . ", when preparing: " . $phql
+                    ),
+                };
             }
         }
 
