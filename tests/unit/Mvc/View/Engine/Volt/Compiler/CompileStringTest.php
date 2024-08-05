@@ -13,7 +13,6 @@ declare(strict_types=1);
 
 namespace Phalcon\Tests\Unit\Mvc\View\Engine\Volt\Compiler;
 
-use Codeception\Example;
 use Phalcon\Html\TagFactory;
 use Phalcon\Mvc\View\Engine\Volt\Compiler;
 use Phalcon\Mvc\View\Exception;
@@ -30,192 +29,6 @@ class CompileStringTest extends UnitTestCase
     use DiTrait;
 
     private TagFactory $tag;
-
-    /**
-     * Tests Phalcon\Mvc\View\Engine\Volt\Compiler :: compileString()
-     *
-     * @author       Phalcon Team <team@phalcon.io>
-     * @since        2017-01-17
-     *
-     * @dataProvider getVoltCompileString
-     */
-    public function testMvcViewEngineVoltCompilerCompileString(
-        string $param,
-        string $expected
-    ): void {
-        $this->setNewFactoryDefault();
-        $volt = new Compiler();
-        $volt->setDI($this->container);
-
-        $actual = $volt->compileString($param);
-        $this->assertSame($expected, $actual);
-    }
-
-    /**
-     * Tests Phalcon\Mvc\View\Engine\Volt\Compiler :: compileString() - executed
-     * error
-     *
-     * @author       Phalcon Team <team@phalcon.io>
-     * @since        2022-07-02
-     */
-    public function testMvcViewEngineVoltCompilerCompileStringExecuted(): void
-    {
-        $this->setNewFactoryDefault();
-        $volt = new Compiler();
-        $volt->setDI($this->container);
-
-        /**
-         * Pass the DI TagFactory here so that it can compile
-         */
-        $this->tag = $this->container->getShared('tag');
-
-        // ---------------------------------------------------------------------
-        // Doctype
-        // ---------------------------------------------------------------------
-        $source   = "{{ tag.doctype(5, '-') }}";
-        $expected = '<?= $this->tag->doctype(5, "-") ?>';
-        $actual   = $volt->compileString($source);
-        $this->assertSame($expected, $actual);
-
-        // Doctype executed in code
-        $expected = "<!DOCTYPE html>-";
-        $actual   = (string)$this->tag->doctype(5, '-');
-        $this->assertSame($expected, $actual);
-
-        // Doctype after volt parsing
-        $code     = 'echo $this->tag->doctype(5, "-");';
-        $expected = "<!DOCTYPE html>-";
-
-        ob_start();
-        eval($code);
-        $actual = ob_get_clean();
-        $this->assertSame($expected, $actual);
-
-        // ---------------------------------------------------------------------
-        // Title with custom line endings
-        // ---------------------------------------------------------------------
-        $source   = "{{ tag.title('+', '-') }}";
-        $expected = "<?= \$this->tag->title(\"+\", \"-\") ?>";
-        $actual   = $volt->compileString($source);
-        $this->assertSame($expected, $actual);
-
-        // Title executed in code
-        $expected = "+<title>test</title>-";
-        $actual   = (string)$this->tag->title("+", "-")->set('test');
-        $this->assertSame($expected, $actual);
-
-        // Title after volt parsing
-        $code     = 'echo $this->tag->title("+", "-")->set("test");';
-        $expected = "+<title>test</title>-";
-
-        ob_start();
-        eval($code);
-        $actual = ob_get_clean();
-        $this->assertSame($expected, $actual);
-
-        // ---------------------------------------------------------------------
-        // Title with custom line endings
-        // ---------------------------------------------------------------------
-        $source   = "{{ tag.title('\t', '\n\n') }}";
-        $expected = "<?= \$this->tag->title(\"\t\", \"\n\n\") ?>";
-        $actual   = $volt->compileString($source);
-        $this->assertSame($expected, $actual);
-
-        // Title executed in code
-        $expected = "\t<title>test</title>\n\n";
-        $actual   = (string)$this->tag->title("\t", "\n\n")->set('test');
-        $this->assertSame($expected, $actual);
-
-        // Title after volt parsing
-        $code     = 'echo $this->tag->title("\t", "\n\n")->set("test");';
-        $expected = "\t<title>test</title>\n\n";
-
-        ob_start();
-        eval($code);
-        $actual = ob_get_clean();
-        $this->assertSame($expected, $actual);
-
-        // ---------------------------------------------------------------------
-        // Style
-        // ---------------------------------------------------------------------
-        $source   = "{{ tag.style().add('/css/some.css') }}";
-        $expected = "<?= \$this->tag->style()->add(\"/css/some.css\") ?>";
-        $actual   = $volt->compileString($source);
-        $this->assertSame($expected, $actual);
-
-        // Style executed in code
-        $this->tag->style()->reset();
-        $expected = '+<link rel="stylesheet" type="text/css" href="/css/some.css" media="screen" />'
-            . PHP_EOL
-            . '+<link rel="stylesheet" type="text/css" href="/css/other.css" media="screen" />'
-            . PHP_EOL;
-        $actual   = (string)$this->tag->style('+')->add('/css/some.css')->add('/css/other.css');
-        $this->assertSame($expected, $actual);
-
-        // Style after volt parsing
-        $this->tag->style()->reset();
-        $code     = 'echo $this->tag->style("+")->add("/css/some.css")->add("/css/other.css");';
-        $expected = '+<link rel="stylesheet" type="text/css" href="/css/some.css" media="screen" />'
-            . PHP_EOL
-            . '+<link rel="stylesheet" type="text/css" href="/css/other.css" media="screen" />'
-            . PHP_EOL;
-
-        ob_start();
-        eval($code);
-        $actual = ob_get_clean();
-        $this->assertSame($expected, $actual);
-
-        // ---------------------------------------------------------------------
-        // Script
-        // ---------------------------------------------------------------------
-        $source   = "{{ tag.script().add('/js/some.js') }}";
-        $expected = "<?= \$this->tag->script()->add(\"/js/some.js\") ?>";
-        $actual   = $volt->compileString($source);
-        $this->assertSame($expected, $actual);
-
-        // Script executed in code
-        $expected = '+<script type="application/javascript" src="/js/some.js"></script>'
-            . PHP_EOL
-            . '+<script type="application/javascript" src="/js/other.js"></script>'
-            . PHP_EOL;
-        $this->tag->script()->reset();
-        $actual = (string)$this->tag->script('+')->add('/js/some.js')->add('/js/other.js');
-        $this->assertSame($expected, $actual);
-
-        // Script after volt parsing
-        $this->tag->script()->reset();
-        $code     = 'echo $this->tag->script("+")->add("/js/some.js")->add("/js/other.js");';
-        $expected = '+<script type="application/javascript" src="/js/some.js"></script>'
-            . PHP_EOL
-            . '+<script type="application/javascript" src="/js/other.js"></script>'
-            . PHP_EOL;
-
-        ob_start();
-        eval($code);
-        $actual = ob_get_clean();
-        $this->assertSame($expected, $actual);
-    }
-
-    /**
-     * Tests Phalcon\Mvc\View\Engine\Volt\Compiler :: compileString() - syntax
-     * error
-     *
-     * @author       Phalcon Team <team@phalcon.io>
-     * @since        2017-01-17
-     *
-     * @dataProvider getVoltCompileStringErrors
-     */
-    public function testMvcViewEngineVoltCompilerCompileStringSyntaxError(
-        string $code,
-        string $message
-    ): void {
-        $volt = new Compiler();
-
-        $this->expectException(Exception::class);
-        $this->expectExceptionMessage($message);
-
-        $volt->compileString($code);
-    }
 
     /**
      * @return string[][]
@@ -699,5 +512,191 @@ class CompileStringTest extends UnitTestCase
                 'Unknown filter type in eval code on line 1',
             ],
         ];
+    }
+
+    /**
+     * Tests Phalcon\Mvc\View\Engine\Volt\Compiler :: compileString()
+     *
+     * @author       Phalcon Team <team@phalcon.io>
+     * @since        2017-01-17
+     *
+     * @dataProvider getVoltCompileString
+     */
+    public function testMvcViewEngineVoltCompilerCompileString(
+        string $param,
+        string $expected
+    ): void {
+        $this->setNewFactoryDefault();
+        $volt = new Compiler();
+        $volt->setDI($this->container);
+
+        $actual = $volt->compileString($param);
+        $this->assertSame($expected, $actual);
+    }
+
+    /**
+     * Tests Phalcon\Mvc\View\Engine\Volt\Compiler :: compileString() - executed
+     * error
+     *
+     * @author       Phalcon Team <team@phalcon.io>
+     * @since        2022-07-02
+     */
+    public function testMvcViewEngineVoltCompilerCompileStringExecuted(): void
+    {
+        $this->setNewFactoryDefault();
+        $volt = new Compiler();
+        $volt->setDI($this->container);
+
+        /**
+         * Pass the DI TagFactory here so that it can compile
+         */
+        $this->tag = $this->container->getShared('tag');
+
+        // ---------------------------------------------------------------------
+        // Doctype
+        // ---------------------------------------------------------------------
+        $source   = "{{ tag.doctype(5, '-') }}";
+        $expected = '<?= $this->tag->doctype(5, "-") ?>';
+        $actual   = $volt->compileString($source);
+        $this->assertSame($expected, $actual);
+
+        // Doctype executed in code
+        $expected = "<!DOCTYPE html>-";
+        $actual   = (string)$this->tag->doctype(5, '-');
+        $this->assertSame($expected, $actual);
+
+        // Doctype after volt parsing
+        $code     = 'echo $this->tag->doctype(5, "-");';
+        $expected = "<!DOCTYPE html>-";
+
+        ob_start();
+        eval($code);
+        $actual = ob_get_clean();
+        $this->assertSame($expected, $actual);
+
+        // ---------------------------------------------------------------------
+        // Title with custom line endings
+        // ---------------------------------------------------------------------
+        $source   = "{{ tag.title('+', '-') }}";
+        $expected = "<?= \$this->tag->title(\"+\", \"-\") ?>";
+        $actual   = $volt->compileString($source);
+        $this->assertSame($expected, $actual);
+
+        // Title executed in code
+        $expected = "+<title>test</title>-";
+        $actual   = (string)$this->tag->title("+", "-")->set('test');
+        $this->assertSame($expected, $actual);
+
+        // Title after volt parsing
+        $code     = 'echo $this->tag->title("+", "-")->set("test");';
+        $expected = "+<title>test</title>-";
+
+        ob_start();
+        eval($code);
+        $actual = ob_get_clean();
+        $this->assertSame($expected, $actual);
+
+        // ---------------------------------------------------------------------
+        // Title with custom line endings
+        // ---------------------------------------------------------------------
+        $source   = "{{ tag.title('\t', '\n\n') }}";
+        $expected = "<?= \$this->tag->title(\"\t\", \"\n\n\") ?>";
+        $actual   = $volt->compileString($source);
+        $this->assertSame($expected, $actual);
+
+        // Title executed in code
+        $expected = "\t<title>test</title>\n\n";
+        $actual   = (string)$this->tag->title("\t", "\n\n")->set('test');
+        $this->assertSame($expected, $actual);
+
+        // Title after volt parsing
+        $code     = 'echo $this->tag->title("\t", "\n\n")->set("test");';
+        $expected = "\t<title>test</title>\n\n";
+
+        ob_start();
+        eval($code);
+        $actual = ob_get_clean();
+        $this->assertSame($expected, $actual);
+
+        // ---------------------------------------------------------------------
+        // Style
+        // ---------------------------------------------------------------------
+        $source   = "{{ tag.style().add('/css/some.css') }}";
+        $expected = "<?= \$this->tag->style()->add(\"/css/some.css\") ?>";
+        $actual   = $volt->compileString($source);
+        $this->assertSame($expected, $actual);
+
+        // Style executed in code
+        $this->tag->style()->reset();
+        $expected = '+<link rel="stylesheet" type="text/css" href="/css/some.css" media="screen" />'
+            . PHP_EOL
+            . '+<link rel="stylesheet" type="text/css" href="/css/other.css" media="screen" />'
+            . PHP_EOL;
+        $actual   = (string)$this->tag->style('+')->add('/css/some.css')->add('/css/other.css');
+        $this->assertSame($expected, $actual);
+
+        // Style after volt parsing
+        $this->tag->style()->reset();
+        $code     = 'echo $this->tag->style("+")->add("/css/some.css")->add("/css/other.css");';
+        $expected = '+<link rel="stylesheet" type="text/css" href="/css/some.css" media="screen" />'
+            . PHP_EOL
+            . '+<link rel="stylesheet" type="text/css" href="/css/other.css" media="screen" />'
+            . PHP_EOL;
+
+        ob_start();
+        eval($code);
+        $actual = ob_get_clean();
+        $this->assertSame($expected, $actual);
+
+        // ---------------------------------------------------------------------
+        // Script
+        // ---------------------------------------------------------------------
+        $source   = "{{ tag.script().add('/js/some.js') }}";
+        $expected = "<?= \$this->tag->script()->add(\"/js/some.js\") ?>";
+        $actual   = $volt->compileString($source);
+        $this->assertSame($expected, $actual);
+
+        // Script executed in code
+        $expected = '+<script type="application/javascript" src="/js/some.js"></script>'
+            . PHP_EOL
+            . '+<script type="application/javascript" src="/js/other.js"></script>'
+            . PHP_EOL;
+        $this->tag->script()->reset();
+        $actual = (string)$this->tag->script('+')->add('/js/some.js')->add('/js/other.js');
+        $this->assertSame($expected, $actual);
+
+        // Script after volt parsing
+        $this->tag->script()->reset();
+        $code     = 'echo $this->tag->script("+")->add("/js/some.js")->add("/js/other.js");';
+        $expected = '+<script type="application/javascript" src="/js/some.js"></script>'
+            . PHP_EOL
+            . '+<script type="application/javascript" src="/js/other.js"></script>'
+            . PHP_EOL;
+
+        ob_start();
+        eval($code);
+        $actual = ob_get_clean();
+        $this->assertSame($expected, $actual);
+    }
+
+    /**
+     * Tests Phalcon\Mvc\View\Engine\Volt\Compiler :: compileString() - syntax
+     * error
+     *
+     * @author       Phalcon Team <team@phalcon.io>
+     * @since        2017-01-17
+     *
+     * @dataProvider getVoltCompileStringErrors
+     */
+    public function testMvcViewEngineVoltCompilerCompileStringSyntaxError(
+        string $code,
+        string $message
+    ): void {
+        $volt = new Compiler();
+
+        $this->expectException(Exception::class);
+        $this->expectExceptionMessage($message);
+
+        $volt->compileString($code);
     }
 }
