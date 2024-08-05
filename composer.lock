@@ -4,7 +4,7 @@
         "Read more about it at https://getcomposer.org/doc/01-basic-usage.md#installing-dependencies",
         "This file is @generated automatically"
     ],
-    "content-hash": "ae3c9f73e4e1d7f650575c978e49a3fa",
+    "content-hash": "e2898f01531cbeb374aa4822a8836385",
     "packages": [
         {
             "name": "matthiasmullie/minify",
@@ -6239,7 +6239,6 @@
     "prefer-lowest": false,
     "platform": {
         "php": ">=8.1 <9.0",
-        "ext-apcu": "*",
         "ext-fileinfo": "*",
         "ext-json": "*",
         "ext-mbstring": "*",
