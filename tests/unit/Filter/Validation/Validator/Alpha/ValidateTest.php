@@ -13,17 +13,89 @@ declare(strict_types=1);
 
 namespace Phalcon\Tests\Unit\Filter\Validation\Validator\Alpha;
 
-use Codeception\Example;
-use Phalcon\Tests\UnitTestCase;
 use Phalcon\Filter\Validation;
 use Phalcon\Filter\Validation\Exception;
 use Phalcon\Filter\Validation\Validator\Alpha;
 use Phalcon\Messages\Message;
 use Phalcon\Messages\Messages;
+use Phalcon\Tests\UnitTestCase;
 use stdClass;
 
 final class ValidateTest extends UnitTestCase
 {
+    public static function alphaProvider(): array
+    {
+        return [
+            ['a'],
+            ['asdavafaiwnoabwiubafpowf'],
+            ['QWERTYUIOPASDFGHJKL'],
+            ['aSdFgHjKl'],
+            [null],
+        ];
+    }
+
+    public static function nonAlphaProvider(): array
+    {
+        return [
+            ['1'],
+            [123],
+            ['a-b-c-d'],
+            ['a-1-c-2'],
+            ['a1c2'],
+            ['o0o0o0o0'],
+        ];
+    }
+
+    public static function nonLatinCharactersProvider(): array
+    {
+        return [
+            ['йцукенг'],
+            ['ждлорпа'],
+            ['Señor'],
+            ['cocoñùт'],
+            ['COCOÑÙТ'],
+            ['JÄGER'],
+            ['šš'],
+            ['あいうえお'],
+            ['零一二三四五'],
+        ];
+    }
+
+    /**
+     * Tests Phalcon\Filter\Validation\Validator\Alpha :: validate() - Alphabetic
+     * Characters
+     *
+     * @author       Phalcon Team <team@phalcon.io>
+     * @since        2016-06-10
+     *
+     * @dataProvider alphaProvider
+     */
+    public function testFilterValidationValidatorAlphaValidateAlphabeticCharacters(
+        ?string $input
+    ): void {
+        $validation = new Validation();
+
+        $validation->add(
+            'name',
+            new Alpha(
+                [
+                    'message' => ':field must contain only letters',
+                ]
+            )
+        );
+
+        $messages = $validation->validate(
+            [
+                'name' => $input,
+            ]
+        );
+
+        $this->assertSame(
+            0,
+            $messages->count()
+        );
+    }
+
     /**
      * Tests Phalcon\Filter\Validation\Validator\Alpha :: validate() - empty
      *
@@ -44,46 +116,6 @@ final class ValidateTest extends UnitTestCase
         $validation->bind($entity, []);
         $result = $validator->validate($validation, 'name');
         $this->assertTrue($result);
-    }
-
-    /**
-     * Tests Phalcon\Filter\Validation\Validator\Alpha :: validate() - single field
-     *
-     * @author Wojciech Ślawski <jurigag@gmail.com>
-     * @since  2016-06-05
-     */
-    public function testFilterValidationValidatorAlphaValidateSingleField(): void
-    {
-        $validation = new Validation();
-
-        $validation->add(
-            'name',
-            new Alpha()
-        );
-
-
-        $messages = $validation->validate(
-            [
-                'name' => 'Asd',
-            ]
-        );
-
-        $this->assertSame(
-            0,
-            $messages->count()
-        );
-
-
-        $messages = $validation->validate(
-            [
-                'name' => 'Asd123',
-            ]
-        );
-
-        $this->assertSame(
-            1,
-            $messages->count()
-        );
     }
 
     /**
@@ -175,7 +207,7 @@ final class ValidateTest extends UnitTestCase
      * @dataProvider nonAlphaProvider
      */
     public function testFilterValidationValidatorAlphaValidateNonAlphabeticCharacters(
-        int|string $input
+        int | string $input
     ): void {
         $validation = new Validation();
 
@@ -206,41 +238,6 @@ final class ValidateTest extends UnitTestCase
         );
 
         $this->assertEquals($expected, $actual);
-    }
-
-    /**
-     * Tests Phalcon\Filter\Validation\Validator\Alpha :: validate() - Alphabetic
-     * Characters
-     *
-     * @author       Phalcon Team <team@phalcon.io>
-     * @since        2016-06-10
-     *
-     * @dataProvider alphaProvider
-     */
-    public function testFilterValidationValidatorAlphaValidateAlphabeticCharacters(
-        ?string $input
-    ): void {
-        $validation = new Validation();
-
-        $validation->add(
-            'name',
-            new Alpha(
-                [
-                    'message' => ':field must contain only letters',
-                ]
-            )
-        );
-
-        $messages = $validation->validate(
-            [
-                'name' => $input,
-            ]
-        );
-
-        $this->assertSame(
-            0,
-            $messages->count()
-        );
     }
 
     /**
@@ -278,41 +275,43 @@ final class ValidateTest extends UnitTestCase
         );
     }
 
-    public static function nonAlphaProvider(): array
+    /**
+     * Tests Phalcon\Filter\Validation\Validator\Alpha :: validate() - single field
+     *
+     * @author Wojciech Ślawski <jurigag@gmail.com>
+     * @since  2016-06-05
+     */
+    public function testFilterValidationValidatorAlphaValidateSingleField(): void
     {
-        return [
-            ['1'],
-            [123],
-            ['a-b-c-d'],
-            ['a-1-c-2'],
-            ['a1c2'],
-            ['o0o0o0o0'],
-        ];
-    }
+        $validation = new Validation();
 
-    public static function alphaProvider(): array
-    {
-        return [
-            ['a'],
-            ['asdavafaiwnoabwiubafpowf'],
-            ['QWERTYUIOPASDFGHJKL'],
-            ['aSdFgHjKl'],
-            [null],
-        ];
-    }
+        $validation->add(
+            'name',
+            new Alpha()
+        );
 
-    public static function nonLatinCharactersProvider(): array
-    {
-        return [
-            ['йцукенг'],
-            ['ждлорпа'],
-            ['Señor'],
-            ['cocoñùт'],
-            ['COCOÑÙТ'],
-            ['JÄGER'],
-            ['šš'],
-            ['あいうえお'],
-            ['零一二三四五'],
-        ];
+
+        $messages = $validation->validate(
+            [
+                'name' => 'Asd',
+            ]
+        );
+
+        $this->assertSame(
+            0,
+            $messages->count()
+        );
+
+
+        $messages = $validation->validate(
+            [
+                'name' => 'Asd123',
+            ]
+        );
+
+        $this->assertSame(
+            1,
+            $messages->count()
+        );
     }
 }
