@@ -13,6 +13,7 @@ declare(strict_types=1);
 
 namespace Phalcon\Storage\Adapter;
 
+use APCUIterator;
 use DateInterval;
 use Exception;
 use Phalcon\Storage\SerializerFactory;
@@ -58,16 +59,11 @@ class Apcu extends AbstractAdapter
      */
     public function clear(): bool
     {
-        $pattern = '/^' . $this->prefix . '/';
-        $apc     = $this->phpApcuIterator($pattern);
         $result  = true;
-
-        if (true !== is_object($apc)) {
-            return false;
-        }
+        $apc     = $this->getKeys();
 
         foreach ($apc as $item) {
-            if (true !== $this->phpApcuDelete($item['key'])) {
+            if (true !== $this->phpApcuDelete($item)) {
                 $result = false;
             }
         }
@@ -85,12 +81,8 @@ class Apcu extends AbstractAdapter
     public function getKeys(string $prefix = ''): array
     {
         $pattern = '/^' . $this->prefix . $prefix . '/';
-        $apc     = $this->phpApcuIterator($pattern);
+        $apc     = new APCuIterator($pattern);
         $results = [];
-
-        if (true !== is_object($apc)) {
-            return $results;
-        }
 
         foreach ($apc as $item) {
             $results[] = $item['key'];

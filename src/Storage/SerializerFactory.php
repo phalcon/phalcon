@@ -31,11 +31,6 @@ use Phalcon\Storage\Serializer\RedisPhp;
 use Phalcon\Storage\Serializer\SerializerInterface;
 use Phalcon\Traits\Factory\FactoryTrait;
 
-/**
- * Class SerializerFactory
- *
- * @package Phalcon\Storage
- */
 class SerializerFactory
 {
     use FactoryTrait;
