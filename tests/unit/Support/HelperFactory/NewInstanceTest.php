@@ -13,7 +13,6 @@ declare(strict_types=1);
 
 namespace Phalcon\Tests\Unit\Support\HelperFactory;
 
-use Codeception\Example;
 use Phalcon\Support\Exception;
 use Phalcon\Support\Helper\Arr\Blacklist;
 use Phalcon\Support\Helper\Arr\Chunk;
@@ -80,45 +79,6 @@ use Phalcon\Tests\UnitTestCase;
 final class NewInstanceTest extends UnitTestCase
 {
     /**
-     * Tests Phalcon\Support :: newInstance()
-     *
-     * @dataProvider getExamples
-     *
-     * @return void
-     *
-     * @author       Phalcon Team <team@phalcon.io>
-     * @since        2020-09-09
-     */
-    public function testSupportHelperFactoryNewInstance(
-        string $method,
-        string $className
-    ): void {
-        $factory = new HelperFactory();
-
-        $expected = $className;
-        $actual = $factory->newInstance($method);
-        $this->assertInstanceOf($expected, $actual);
-    }
-
-    /**
-     * Tests Phalcon\Support :: newInstance()
-     *
-     * @return void
-     *
-     * @author       Phalcon Team <team@phalcon.io>
-     * @since        2020-09-09
-     */
-    public function testSupportHelperFactoryNewInstanceException(): void
-    {
-        $name = uniqid('service-');
-        $this->expectException(Exception::class);
-        $this->expectExceptionMessage('Service ' . $name . ' is not registered');
-
-        $factory = new HelperFactory();
-        $factory->newInstance($name);
-    }
-
-    /**
      * @return string[][]
      */
     public static function getExamples(): array
@@ -184,5 +144,44 @@ final class NewInstanceTest extends UnitTestCase
             ["underscore", Underscore::class],
             ["upper", Upper::class],
         ];
+    }
+
+    /**
+     * Tests Phalcon\Support :: newInstance()
+     *
+     * @dataProvider getExamples
+     *
+     * @return void
+     *
+     * @author       Phalcon Team <team@phalcon.io>
+     * @since        2020-09-09
+     */
+    public function testSupportHelperFactoryNewInstance(
+        string $method,
+        string $className
+    ): void {
+        $factory = new HelperFactory();
+
+        $expected = $className;
+        $actual   = $factory->newInstance($method);
+        $this->assertInstanceOf($expected, $actual);
+    }
+
+    /**
+     * Tests Phalcon\Support :: newInstance()
+     *
+     * @return void
+     *
+     * @author       Phalcon Team <team@phalcon.io>
+     * @since        2020-09-09
+     */
+    public function testSupportHelperFactoryNewInstanceException(): void
+    {
+        $name = uniqid('service-');
+        $this->expectException(Exception::class);
+        $this->expectExceptionMessage('Service ' . $name . ' is not registered');
+
+        $factory = new HelperFactory();
+        $factory->newInstance($name);
     }
 }

@@ -13,7 +13,6 @@ declare(strict_types=1);
 
 namespace Phalcon\Tests\Unit\Image\Adapter\Gd;
 
-use Codeception\Example;
 use Phalcon\Image\Adapter\Gd;
 use Phalcon\Image\Enum;
 use Phalcon\Image\Exception;
@@ -25,74 +24,6 @@ use function dataDir;
 final class ResizeTest extends UnitTestCase
 {
     use GdTrait;
-
-    /**
-     * Tests Phalcon\Image\Adapter\Gd :: resize()
-     *
-     * @dataProvider getExamples
-     *
-     * @return void
-     *
-     * @author       Phalcon Team <team@phalcon.io>
-     * @since        2018-11-13
-     */
-    public function testImageAdapterGdResize(
-        string $source,
-        string $file,
-        int $height,
-        int $width,
-        string $hash
-    ): void {
-        $this->checkJpegSupport();
-
-        $outputDir = 'tests/image/gd/';
-        $output    = outputDir($outputDir . '/' . $file);
-
-        $image = new Gd($source);
-
-        $image->resize($width, $height)
-              ->save($output)
-        ;
-
-        $this->assertFileExists(outputDir($outputDir) . $file);
-
-        $actual = $image->getWidth();
-        $this->assertSame($width, $actual);
-
-        $actual = $image->getHeight();
-        $this->assertSame($height, $actual);
-
-        $actual = $this->checkImageHash($output, $hash);
-        $this->assertTrue($actual);
-
-        $this->safeDeleteFile($file);
-    }
-
-    /**
-     * Tests Phalcon\Image\Adapter\Gd :: resize()
-     *
-     * @dataProvider getExamplesExceptions
-     *
-     * @return void
-     *
-     * @author       Phalcon Team <team@phalcon.io>
-     * @since        2018-11-13
-     */
-    public function testImageAdapterGdResizeExceptions(
-        int $master,
-        ?int $height,
-        ?int $width,
-        string $message
-    ): void {
-        $this->checkJpegSupport();
-
-        $source = dataDir('assets/images/example-jpg.jpg');
-        $image  = new Gd($source);
-
-        $this->expectException(Exception::class);
-        $this->expectExceptionMessage($message);
-        $image->resize($width, $height, $master);
-    }
 
     /**
      * @return array[]
@@ -184,5 +115,73 @@ final class ResizeTest extends UnitTestCase
                 'height must be specified',
             ],
         ];
+    }
+
+    /**
+     * Tests Phalcon\Image\Adapter\Gd :: resize()
+     *
+     * @dataProvider getExamples
+     *
+     * @return void
+     *
+     * @author       Phalcon Team <team@phalcon.io>
+     * @since        2018-11-13
+     */
+    public function testImageAdapterGdResize(
+        string $source,
+        string $file,
+        int $height,
+        int $width,
+        string $hash
+    ): void {
+        $this->checkJpegSupport();
+
+        $outputDir = 'tests/image/gd/';
+        $output    = outputDir($outputDir . '/' . $file);
+
+        $image = new Gd($source);
+
+        $image->resize($width, $height)
+              ->save($output)
+        ;
+
+        $this->assertFileExists(outputDir($outputDir) . $file);
+
+        $actual = $image->getWidth();
+        $this->assertSame($width, $actual);
+
+        $actual = $image->getHeight();
+        $this->assertSame($height, $actual);
+
+        $actual = $this->checkImageHash($output, $hash);
+        $this->assertTrue($actual);
+
+        $this->safeDeleteFile($file);
+    }
+
+    /**
+     * Tests Phalcon\Image\Adapter\Gd :: resize()
+     *
+     * @dataProvider getExamplesExceptions
+     *
+     * @return void
+     *
+     * @author       Phalcon Team <team@phalcon.io>
+     * @since        2018-11-13
+     */
+    public function testImageAdapterGdResizeExceptions(
+        int $master,
+        ?int $height,
+        ?int $width,
+        string $message
+    ): void {
+        $this->checkJpegSupport();
+
+        $source = dataDir('assets/images/example-jpg.jpg');
+        $image  = new Gd($source);
+
+        $this->expectException(Exception::class);
+        $this->expectExceptionMessage($message);
+        $image->resize($width, $height, $master);
     }
 }

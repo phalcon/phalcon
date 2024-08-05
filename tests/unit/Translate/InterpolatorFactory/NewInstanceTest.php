@@ -13,15 +13,25 @@ declare(strict_types=1);
 
 namespace Phalcon\Tests\Unit\Translate\InterpolatorFactory;
 
-use Codeception\Example;
+use Phalcon\Tests\UnitTestCase;
 use Phalcon\Translate\Exception;
 use Phalcon\Translate\Interpolator\AssociativeArray;
 use Phalcon\Translate\Interpolator\IndexedArray;
 use Phalcon\Translate\InterpolatorFactory;
-use Phalcon\Tests\UnitTestCase;
 
 final class NewInstanceTest extends UnitTestCase
 {
+    /**
+     * @return string[][]
+     */
+    public static function getExamples(): array
+    {
+        return [
+            ['associativeArray', AssociativeArray::class],
+            ['indexedArray', IndexedArray::class],
+        ];
+    }
+
     /**
      * Tests Phalcon\Translate\InterpolatorFactory :: newInstance()
      *
@@ -56,16 +66,5 @@ final class NewInstanceTest extends UnitTestCase
 
         $adapter = new InterpolatorFactory();
         $adapter->newInstance('unknown');
-    }
-
-    /**
-     * @return string[][]
-     */
-    public static function getExamples(): array
-    {
-        return [
-            ['associativeArray', AssociativeArray::class],
-            ['indexedArray', IndexedArray::class],
-        ];
     }
 }

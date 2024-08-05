@@ -13,128 +13,94 @@ declare(strict_types=1);
 
 namespace Phalcon\Tests\Unit\Http\Request;
 
-use Codeception\Example;
 use Phalcon\Tests\Fixtures\Listener\CustomAuthorizationListener;
 use Phalcon\Tests\Fixtures\Listener\NegotiateAuthorizationListener;
 use Phalcon\Tests\Unit\Http\Helper\HttpBase;
-use Phalcon\Tests\UnitTestCase;
 
 final class AuthHeaderTest extends HttpBase
 {
     /**
-     * Tests basic auth headers
-     *
-     * @issue  https://github.com/phalcon/cphalcon/issues/12480
-     * @author       Phalcon Team <team@phalcon.io>
-     * @since        2016-12-18
-     *
-     * @dataProvider basicAuthProvider
+     * @return array[]
      */
-    public function testHttpRequestCorrectHandleAuth(
-        array $server,
-        array $expected
-    ): void {
-        $_SERVER  = $server;
-
-        $request = $this->getRequestObject();
-        $actual  = $request->getHeaders();
-
-        ksort($actual);
-        ksort($expected);
-
-        $this->assertSame($expected, $actual);
-    }
-
-    /**
-     * @dataProvider authProvider
-     */
-    public function testHttpRequestGetAuthFromHeaders(
-        array $server,
-        string $function,
-        array $expected
-    ): void {
-        $request = $this->getRequestObject();
-
-        $_SERVER = $server;
-
-        $actual = $request->$function();
-        $this->assertSame($expected, $actual);
-    }
-
-    /**
-     * Tests fire authorization events.
-     *
-     * @issue  https://github.com/phalcon/cphalcon/issues/13327
-     * @author Phalcon Team <team@phalcon.io>
-     * @since  2018-03-25
-     */
-    public function testHttpRequestFireEventWhenResolveAuthorization(): void
+    public static function authProvider(): array
     {
-        $request       = $this->getRequestObject();
-        $eventsManager = $this->container->getShared('eventsManager');
+        return [
+            [
+                [
+                    'PHP_AUTH_USER' => 'myleft',
+                    'PHP_AUTH_PW'   => '123456',
+                ],
+                'getBasicAuth',
+                [
+                    'username' => 'myleft',
+                    'password' => '123456',
+                ],
+            ],
 
-        $eventsManager->attach(
-            'request',
-            new CustomAuthorizationListener()
-        );
+            [
+                [
+                    'PHP_AUTH_DIGEST' => 'Digest username="myleft", ' .
+                        'realm="myleft", qop="auth", algorithm="MD5", ' .
+                        'uri="https://localhost:81/", nonce="nonce", nc=nc, ' .
+                        'cnonce="cnonce", opaque="opaque", response="response"',
+                ],
+                'getDigestAuth',
+                [
+                    'username'  => 'myleft',
+                    'realm'     => 'myleft',
+                    'qop'       => 'auth',
+                    'algorithm' => 'MD5',
+                    'uri'       => 'https://localhost:81/',
+                    'nonce'     => 'nonce',
+                    'nc'        => 'nc',
+                    'cnonce'    => 'cnonce',
+                    'opaque'    => 'opaque',
+                    'response'  => 'response',
+                ],
+            ],
 
-        $_SERVER = [
-            'HTTP_CUSTOM_KEY' => 'Custom-Value',
+            [
+                [
+                    'PHP_AUTH_DIGEST' => 'Digest username=myleft, realm=myleft, ' .
+                        'qop=auth, algorithm=MD5, uri=https://localhost:81/, ' .
+                        'nonce=nonce, nc=nc, cnonce=cnonce, opaque=opaque, response=response',
+                ],
+                'getDigestAuth',
+                [
+                    'username'  => 'myleft',
+                    'realm'     => 'myleft',
+                    'qop'       => 'auth',
+                    'algorithm' => 'MD5',
+                    'uri'       => 'https://localhost:81/',
+                    'nonce'     => 'nonce',
+                    'nc'        => 'nc',
+                    'cnonce'    => 'cnonce',
+                    'opaque'    => 'opaque',
+                    'response'  => 'response',
+                ],
+            ],
+
+            [
+                [
+                    'PHP_AUTH_DIGEST' => 'Digest username=myleft realm=myleft ' .
+                        'qop=auth algorithm=MD5 uri=https://localhost:81/ ' .
+                        'nonce=nonce nc=nc cnonce=cnonce opaque=opaque response=response',
+                ],
+                'getDigestAuth',
+                [
+                    'username'  => 'myleft',
+                    'realm'     => 'myleft',
+                    'qop'       => 'auth',
+                    'algorithm' => 'MD5',
+                    'uri'       => 'https://localhost:81/',
+                    'nonce'     => 'nonce',
+                    'nc'        => 'nc',
+                    'cnonce'    => 'cnonce',
+                    'opaque'    => 'opaque',
+                    'response'  => 'response',
+                ],
+            ],
         ];
-
-        $expected = [
-            'Custom-Key'   => 'Custom-Value',
-            'Fired-Before' => 'beforeAuthorizationResolve',
-            'Fired-After'  => 'afterAuthorizationResolve',
-        ];
-        $actual   = $request->getHeaders();
-        $this->assertSame($expected, $actual);
-    }
-
-    /**
-     * Tests custom authorization resolver.
-     *
-     * @issue  https://github.com/phalcon/cphalcon/issues/13327
-     * @author Phalcon Team <team@phalcon.io>
-     * @since  2018-03-25
-     */
-    public function testHttpRequestEnableCustomAuthorizationResolver(): void
-    {
-        $request       = $this->getRequestObject();
-        $eventsManager = $this->container->getShared('eventsManager');
-
-        $eventsManager->attach(
-            'request',
-            new NegotiateAuthorizationListener()
-        );
-
-        $_SERVER['CUSTOM_KERBEROS_AUTH'] = 'Negotiate a87421000492aa874209af8bc028';
-
-        $expected = [
-            'Authorization' => 'Negotiate a87421000492aa874209af8bc028',
-        ];
-        $actual   = $request->getHeaders();
-        $this->assertSame($expected, $actual);
-    }
-
-    /**
-     * Tests custom authorization header.
-     *
-     * @issue  https://github.com/phalcon/cphalcon/issues/13327
-     * @author Phalcon Team <team@phalcon.io>
-     * @since  2018-03-25
-     */
-    public function testHttpRequestResolveCustomAuthorizationHeaders(): void
-    {
-        $request = $this->getRequestObject();
-
-        $_SERVER['HTTP_AUTHORIZATION'] = 'Enigma Secret';
-
-        $expected = [
-            'Authorization' => 'Enigma Secret',
-        ];
-        $actual   = $request->getHeaders();
-        $this->assertSame($expected, $actual);
     }
 
     /**
@@ -262,86 +228,118 @@ final class AuthHeaderTest extends HttpBase
     }
 
     /**
-     * @return array[]
+     * Tests basic auth headers
+     *
+     * @issue  https://github.com/phalcon/cphalcon/issues/12480
+     * @author       Phalcon Team <team@phalcon.io>
+     * @since        2016-12-18
+     *
+     * @dataProvider basicAuthProvider
      */
-    public static function authProvider(): array
+    public function testHttpRequestCorrectHandleAuth(
+        array $server,
+        array $expected
+    ): void {
+        $_SERVER = $server;
+
+        $request = $this->getRequestObject();
+        $actual  = $request->getHeaders();
+
+        ksort($actual);
+        ksort($expected);
+
+        $this->assertSame($expected, $actual);
+    }
+
+    /**
+     * Tests custom authorization resolver.
+     *
+     * @issue  https://github.com/phalcon/cphalcon/issues/13327
+     * @author Phalcon Team <team@phalcon.io>
+     * @since  2018-03-25
+     */
+    public function testHttpRequestEnableCustomAuthorizationResolver(): void
     {
-        return [
-            [
-                [
-                    'PHP_AUTH_USER' => 'myleft',
-                    'PHP_AUTH_PW'   => '123456',
-                ],
-                'getBasicAuth',
-                [
-                    'username' => 'myleft',
-                    'password' => '123456',
-                ],
-            ],
+        $request       = $this->getRequestObject();
+        $eventsManager = $this->container->getShared('eventsManager');
 
-            [
-                [
-                    'PHP_AUTH_DIGEST' => 'Digest username="myleft", ' .
-                        'realm="myleft", qop="auth", algorithm="MD5", ' .
-                        'uri="https://localhost:81/", nonce="nonce", nc=nc, ' .
-                        'cnonce="cnonce", opaque="opaque", response="response"',
-                ],
-                'getDigestAuth',
-                [
-                    'username'  => 'myleft',
-                    'realm'     => 'myleft',
-                    'qop'       => 'auth',
-                    'algorithm' => 'MD5',
-                    'uri'       => 'https://localhost:81/',
-                    'nonce'     => 'nonce',
-                    'nc'        => 'nc',
-                    'cnonce'    => 'cnonce',
-                    'opaque'    => 'opaque',
-                    'response'  => 'response',
-                ],
-            ],
+        $eventsManager->attach(
+            'request',
+            new NegotiateAuthorizationListener()
+        );
 
-            [
-                [
-                    'PHP_AUTH_DIGEST' => 'Digest username=myleft, realm=myleft, ' .
-                        'qop=auth, algorithm=MD5, uri=https://localhost:81/, ' .
-                        'nonce=nonce, nc=nc, cnonce=cnonce, opaque=opaque, response=response',
-                ],
-                'getDigestAuth',
-                [
-                    'username'  => 'myleft',
-                    'realm'     => 'myleft',
-                    'qop'       => 'auth',
-                    'algorithm' => 'MD5',
-                    'uri'       => 'https://localhost:81/',
-                    'nonce'     => 'nonce',
-                    'nc'        => 'nc',
-                    'cnonce'    => 'cnonce',
-                    'opaque'    => 'opaque',
-                    'response'  => 'response',
-                ],
-            ],
+        $_SERVER['CUSTOM_KERBEROS_AUTH'] = 'Negotiate a87421000492aa874209af8bc028';
 
-            [
-                [
-                    'PHP_AUTH_DIGEST' => 'Digest username=myleft realm=myleft ' .
-                        'qop=auth algorithm=MD5 uri=https://localhost:81/ ' .
-                        'nonce=nonce nc=nc cnonce=cnonce opaque=opaque response=response',
-                ],
-                'getDigestAuth',
-                [
-                    'username'  => 'myleft',
-                    'realm'     => 'myleft',
-                    'qop'       => 'auth',
-                    'algorithm' => 'MD5',
-                    'uri'       => 'https://localhost:81/',
-                    'nonce'     => 'nonce',
-                    'nc'        => 'nc',
-                    'cnonce'    => 'cnonce',
-                    'opaque'    => 'opaque',
-                    'response'  => 'response',
-                ],
-            ],
+        $expected = [
+            'Authorization' => 'Negotiate a87421000492aa874209af8bc028',
         ];
+        $actual   = $request->getHeaders();
+        $this->assertSame($expected, $actual);
+    }
+
+    /**
+     * Tests fire authorization events.
+     *
+     * @issue  https://github.com/phalcon/cphalcon/issues/13327
+     * @author Phalcon Team <team@phalcon.io>
+     * @since  2018-03-25
+     */
+    public function testHttpRequestFireEventWhenResolveAuthorization(): void
+    {
+        $request       = $this->getRequestObject();
+        $eventsManager = $this->container->getShared('eventsManager');
+
+        $eventsManager->attach(
+            'request',
+            new CustomAuthorizationListener()
+        );
+
+        $_SERVER = [
+            'HTTP_CUSTOM_KEY' => 'Custom-Value',
+        ];
+
+        $expected = [
+            'Custom-Key'   => 'Custom-Value',
+            'Fired-Before' => 'beforeAuthorizationResolve',
+            'Fired-After'  => 'afterAuthorizationResolve',
+        ];
+        $actual   = $request->getHeaders();
+        $this->assertSame($expected, $actual);
+    }
+
+    /**
+     * @dataProvider authProvider
+     */
+    public function testHttpRequestGetAuthFromHeaders(
+        array $server,
+        string $function,
+        array $expected
+    ): void {
+        $request = $this->getRequestObject();
+
+        $_SERVER = $server;
+
+        $actual = $request->$function();
+        $this->assertSame($expected, $actual);
+    }
+
+    /**
+     * Tests custom authorization header.
+     *
+     * @issue  https://github.com/phalcon/cphalcon/issues/13327
+     * @author Phalcon Team <team@phalcon.io>
+     * @since  2018-03-25
+     */
+    public function testHttpRequestResolveCustomAuthorizationHeaders(): void
+    {
+        $request = $this->getRequestObject();
+
+        $_SERVER['HTTP_AUTHORIZATION'] = 'Enigma Secret';
+
+        $expected = [
+            'Authorization' => 'Enigma Secret',
+        ];
+        $actual   = $request->getHeaders();
+        $this->assertSame($expected, $actual);
     }
 }

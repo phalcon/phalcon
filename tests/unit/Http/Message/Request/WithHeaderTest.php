@@ -13,14 +13,23 @@ declare(strict_types=1);
 
 namespace Phalcon\Tests\Unit\Http\Message\Request;
 
-use Codeception\Example;
-use Phalcon\Tests\Fixtures\Page\Http;
 use Phalcon\Http\Message\Exception\InvalidArgumentException;
 use Phalcon\Http\Message\Request;
+use Phalcon\Tests\Fixtures\Page\Http;
 use Phalcon\Tests\UnitTestCase;
 
 final class WithHeaderTest extends UnitTestCase
 {
+    public static function getExamples(): array
+    {
+        return [
+            [true],
+            ["some \r\n"],
+            ["some \r"],
+            ["some \n"],
+        ];
+    }
+
     /**
      * Tests Phalcon\Http\Message\Request :: withHeader()
      *
@@ -102,16 +111,5 @@ final class WithHeaderTest extends UnitTestCase
 
         $request = new Request();
         $request->withHeader('Cache-Control', [$value]);
-    }
-
-
-    public static function getExamples(): array
-    {
-        return [
-            [true],
-            ["some \r\n"],
-            ["some \r"],
-            ["some \n"],
-        ];
     }
 }

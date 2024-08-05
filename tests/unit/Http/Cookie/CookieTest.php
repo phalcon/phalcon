@@ -15,7 +15,6 @@ use Exception;
 use Phalcon\Http\Cookie;
 use Phalcon\Tests\Fixtures\Traits\CookieTrait;
 use Phalcon\Tests\Unit\Http\Helper\HttpBase;
-use Phalcon\Tests\UnitTestCase;
 
 use function explode;
 use function uniqid;
@@ -32,6 +31,43 @@ final class CookieTest extends HttpBase
         parent::setUp();
 
         $this->setDiService('sessionStream');
+    }
+
+    /**
+     * Tests Cookie::getValue using message authentication code
+     *
+     * @test
+     * @author Phalcon Team <team@phalcon.io>
+     * @since  2018-05-06
+     */
+    public function testHttpCookieDecryptValueByUsingMessageAuthenticationCode(): void
+    {
+        $this->checkExtensionIsLoaded('xdebug');
+
+        $this->setDiService('crypt');
+
+        $name  = uniqid('nam-');
+        $value = uniqid('val-');
+        $time  = time() + 3600;
+
+        $cookie = new Cookie($name, $value, $time);
+
+        $cookie->setDI($this->container);
+        $cookie->useEncryption(true);
+        $cookie->setSignKey('12345678901234567890123456789012');
+
+        $cookie->send();
+
+        $this->setProtectedProperty($cookie, 'isRead', false);
+
+        $rawCookie = $this->getCookie($name);
+        $rawValue  = explode(';', $rawCookie)[0];
+
+        $_COOKIE[$name] = $rawValue;
+
+        $expected = $value;
+        $actual   = $cookie->getValue();
+        $this->assertSame($expected, $actual);
     }
 
     /**
@@ -83,42 +119,5 @@ final class CookieTest extends HttpBase
         $_COOKIE[$cookieName] = str_repeat('X', 64) . $originalValue;
 
         $cookie->getValue();
-    }
-
-    /**
-     * Tests Cookie::getValue using message authentication code
-     *
-     * @test
-     * @author Phalcon Team <team@phalcon.io>
-     * @since  2018-05-06
-     */
-    public function testHttpCookieDecryptValueByUsingMessageAuthenticationCode(): void
-    {
-        $this->checkExtensionIsLoaded('xdebug');
-
-        $this->setDiService('crypt');
-
-        $name  = uniqid('nam-');
-        $value = uniqid('val-');
-        $time  = time() + 3600;
-
-        $cookie = new Cookie($name, $value, $time);
-
-        $cookie->setDI($this->container);
-        $cookie->useEncryption(true);
-        $cookie->setSignKey('12345678901234567890123456789012');
-
-        $cookie->send();
-
-        $this->setProtectedProperty($cookie, 'isRead', false);
-
-        $rawCookie = $this->getCookie($name);
-        $rawValue  = explode(';', $rawCookie)[0];
-
-        $_COOKIE[$name] = $rawValue;
-
-        $expected = $value;
-        $actual   = $cookie->getValue();
-        $this->assertSame($expected, $actual);
     }
 }

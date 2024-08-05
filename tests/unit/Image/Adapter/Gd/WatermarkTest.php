@@ -72,45 +72,6 @@ final class WatermarkTest extends UnitTestCase
      * @author Phalcon Team <team@phalcon.io>
      * @since  2018-11-13
      */
-    public function testImageAdapterGdWatermarkPngInsideJpg(): void
-    {
-        $this->checkJpegSupport();
-
-        $image = new Gd(
-            dataDir('assets/images/example-jpg.jpg')
-        );
-
-        $watermark = new Gd(
-            dataDir('assets/images/example-png.png')
-        );
-
-        $outputDir   = 'tests/image/gd/';
-        $outputImage = 'watermark.jpg';
-        $output      = outputDir($outputDir . '/' . $outputImage);
-        $offsetX     = 200;
-        $offsetY     = 200;
-
-        $hash = 'fbf9f3e3c3c18183';
-
-        $image->watermark($watermark, $offsetX, $offsetY)
-              ->save($output)
-        ;
-
-        $this->assertFileExists(outputDir($outputDir) . $outputImage);
-
-        $this->assertTrue(
-            $this->checkImageHash($output, $hash)
-        );
-
-        $this->safeDeleteFile($outputImage);
-    }
-
-    /**
-     * Tests Phalcon\Image\Adapter\Gd :: watermark()
-     *
-     * @author Phalcon Team <team@phalcon.io>
-     * @since  2018-11-13
-     */
     public function testImageAdapterGdWatermarkJpgInsidePng(): void
     {
         $this->checkJpegSupport();
@@ -135,6 +96,45 @@ final class WatermarkTest extends UnitTestCase
 
         // Resize to 200 pixels on the shortest side
         $image->watermark($watermark, $offsetX, $offsetY, $opacity)
+              ->save($output)
+        ;
+
+        $this->assertFileExists(outputDir($outputDir) . $outputImage);
+
+        $this->assertTrue(
+            $this->checkImageHash($output, $hash)
+        );
+
+        $this->safeDeleteFile($outputImage);
+    }
+
+    /**
+     * Tests Phalcon\Image\Adapter\Gd :: watermark()
+     *
+     * @author Phalcon Team <team@phalcon.io>
+     * @since  2018-11-13
+     */
+    public function testImageAdapterGdWatermarkPngInsideJpg(): void
+    {
+        $this->checkJpegSupport();
+
+        $image = new Gd(
+            dataDir('assets/images/example-jpg.jpg')
+        );
+
+        $watermark = new Gd(
+            dataDir('assets/images/example-png.png')
+        );
+
+        $outputDir   = 'tests/image/gd/';
+        $outputImage = 'watermark.jpg';
+        $output      = outputDir($outputDir . '/' . $outputImage);
+        $offsetX     = 200;
+        $offsetY     = 200;
+
+        $hash = 'fbf9f3e3c3c18183';
+
+        $image->watermark($watermark, $offsetX, $offsetY)
               ->save($output)
         ;
 

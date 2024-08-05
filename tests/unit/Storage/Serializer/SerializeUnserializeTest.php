@@ -13,8 +13,6 @@ declare(strict_types=1);
 
 namespace Phalcon\Tests\Unit\Storage\Serializer;
 
-use Codeception\Example;
-use Phalcon\Tests\UnitTestCase;
 use Phalcon\Storage\Serializer\Base64;
 use Phalcon\Storage\Serializer\Igbinary;
 use Phalcon\Storage\Serializer\Json;
@@ -29,6 +27,7 @@ use Phalcon\Storage\Serializer\RedisJson;
 use Phalcon\Storage\Serializer\RedisMsgpack;
 use Phalcon\Storage\Serializer\RedisNone;
 use Phalcon\Storage\Serializer\RedisPhp;
+use Phalcon\Tests\UnitTestCase;
 use stdClass;
 
 use function igbinary_serialize;
@@ -38,39 +37,6 @@ use function serialize;
 final class SerializeUnserializeTest extends UnitTestCase
 {
     private const TEXT = 'Phalcon Framework';
-
-    /**
-     * Tests Phalcon\Storage\Serializer\Igbinary :: serialize()
-     *
-     * @dataProvider getExamples
-     *
-     * @return void
-     *
-     * @author       Phalcon Team <team@phalcon.io>
-     * @since        2022-02-24
-     */
-    public function testStorageSerializerSerializeUnserialize(
-        string $class,
-        mixed $data,
-        mixed $expected
-    ): void {
-        $serializer = new $class($data);
-        $serialized = $serializer->serialize();
-
-        $actual = $serialized;
-        $this->assertSame($expected, $actual);
-
-        $serializer = new $class();
-        $serializer->unserialize($serialized);
-
-        /**
-         * assertEquals here because stdClass will not refer to the same
-         * object when unserialized
-         */
-        $expected = $data;
-        $actual   = $serializer->getData();
-        $this->assertEquals($expected, $actual);
-    }
 
     /**
      * @return array[]
@@ -321,5 +287,38 @@ final class SerializeUnserializeTest extends UnitTestCase
                 null,
             ],
         ];
+    }
+
+    /**
+     * Tests Phalcon\Storage\Serializer\Igbinary :: serialize()
+     *
+     * @dataProvider getExamples
+     *
+     * @return void
+     *
+     * @author       Phalcon Team <team@phalcon.io>
+     * @since        2022-02-24
+     */
+    public function testStorageSerializerSerializeUnserialize(
+        string $class,
+        mixed $data,
+        mixed $expected
+    ): void {
+        $serializer = new $class($data);
+        $serialized = $serializer->serialize();
+
+        $actual = $serialized;
+        $this->assertSame($expected, $actual);
+
+        $serializer = new $class();
+        $serializer->unserialize($serialized);
+
+        /**
+         * assertEquals here because stdClass will not refer to the same
+         * object when unserialized
+         */
+        $expected = $data;
+        $actual   = $serializer->getData();
+        $this->assertEquals($expected, $actual);
     }
 }

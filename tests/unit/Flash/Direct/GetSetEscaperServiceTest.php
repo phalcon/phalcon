@@ -24,6 +24,26 @@ use function spl_object_hash;
 final class GetSetEscaperServiceTest extends UnitTestCase
 {
     /**
+     * Tests Phalcon\Flash\Direct :: getEscaperService() - exception
+     *
+     * @return void
+     *
+     * @author Phalcon Team <team@phalcon.io>
+     * @since  2020-09-09
+     */
+    public function testFlashDirectGetEscaperServiceException(): void
+    {
+        $this->expectException(Exception::class);
+        $this->expectExceptionMessage(
+            'A dependency injection container is required to access the ' .
+            '\'escaper\' service'
+        );
+
+        $flash = new Direct();
+        $flash->getEscaperService();
+    }
+
+    /**
      * Tests Phalcon\Flash\Direct :: getEscaperService()/setEscaperService()
      *
      * @return void
@@ -65,25 +85,5 @@ final class GetSetEscaperServiceTest extends UnitTestCase
 
         $actual = $flash->getEscaperService();
         $this->assertSame(spl_object_hash($escaper), spl_object_hash($actual));
-    }
-
-    /**
-     * Tests Phalcon\Flash\Direct :: getEscaperService() - exception
-     *
-     * @return void
-     *
-     * @author Phalcon Team <team@phalcon.io>
-     * @since  2020-09-09
-     */
-    public function testFlashDirectGetEscaperServiceException(): void
-    {
-        $this->expectException(Exception::class);
-        $this->expectExceptionMessage(
-            'A dependency injection container is required to access the ' .
-            '\'escaper\' service'
-        );
-
-        $flash = new Direct();
-        $flash->getEscaperService();
     }
 }

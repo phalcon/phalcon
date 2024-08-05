@@ -16,7 +16,6 @@ namespace Phalcon\Tests\Unit\Http\Response;
 use Phalcon\Http\Response;
 use Phalcon\Http\Response\Cookies;
 use Phalcon\Tests\Unit\Http\Helper\HttpBase;
-use Phalcon\Tests\UnitTestCase;
 
 use function uniqid;
 

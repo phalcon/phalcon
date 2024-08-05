@@ -13,8 +13,6 @@ declare(strict_types=1);
 
 namespace Phalcon\Tests\Unit\Storage\Adapter;
 
-use Codeception\Example;
-use Phalcon\Tests\UnitTestCase;
 use Phalcon\Storage\Adapter\Apcu;
 use Phalcon\Storage\Adapter\Libmemcached;
 use Phalcon\Storage\Adapter\Memory;
@@ -22,39 +20,14 @@ use Phalcon\Storage\Adapter\Redis;
 use Phalcon\Storage\Adapter\Stream;
 use Phalcon\Storage\Adapter\Weak;
 use Phalcon\Storage\SerializerFactory;
+use Phalcon\Tests\UnitTestCase;
 
 use function array_merge;
 use function getOptionsRedis;
 use function outputDir;
-use function sprintf;
 
 final class GetPrefixTest extends UnitTestCase
 {
-    /**
-     * Tests Phalcon\Storage\Adapter\* :: getPrefix()
-     *
-     * @dataProvider getExamples
-     *
-     * @author       Phalcon Team <team@phalcon.io>
-     * @since        2020-09-09
-     */
-    public function testStorageAdapterGetSetPrefix(
-        string $class,
-        array $options,
-        string $expected,
-        string $extension
-    ): void {
-        if (!empty($extension)) {
-            $this->checkExtensionIsLoaded($extension);
-        }
-
-        $serializer = new SerializerFactory();
-        $adapter    = new $class($serializer, $options);
-
-        $actual   = $adapter->getPrefix();
-        $this->assertSame($expected, $actual);
-    }
-
     public static function getExamples(): array
     {
         return [
@@ -218,5 +191,30 @@ final class GetPrefixTest extends UnitTestCase
                 '',
             ],
         ];
+    }
+
+    /**
+     * Tests Phalcon\Storage\Adapter\* :: getPrefix()
+     *
+     * @dataProvider getExamples
+     *
+     * @author       Phalcon Team <team@phalcon.io>
+     * @since        2020-09-09
+     */
+    public function testStorageAdapterGetSetPrefix(
+        string $class,
+        array $options,
+        string $expected,
+        string $extension
+    ): void {
+        if (!empty($extension)) {
+            $this->checkExtensionIsLoaded($extension);
+        }
+
+        $serializer = new SerializerFactory();
+        $adapter    = new $class($serializer, $options);
+
+        $actual = $adapter->getPrefix();
+        $this->assertSame($expected, $actual);
     }
 }

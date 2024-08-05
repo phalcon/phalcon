@@ -28,31 +28,6 @@ final class RotateTest extends UnitTestCase
     public static function getExamples(): array
     {
         return [
-//            [
-//                'label'   => 'gif',
-//                'degrees' => 0,
-//                'hash'    => 'ffffffffffffffff',
-//            ],
-//            [
-//                'label'   => 'gif',
-//                'degrees' => 45,
-//                'hash'    => '387cfeff7f3f1e0c',
-//            ],
-//            [
-//                'label'   => 'gif',
-//                'degrees' => 90,
-//                'hash'    => 'ffffffffffffffff',
-//            ],
-//            [
-//                'label'   => 'gif',
-//                'degrees' => 180,
-//                'hash'    => 'ffffffffffffffff',
-//            ],
-//            [
-//                'label'   => 'gif',
-//                'degrees' => 270,
-//                'hash'    => 'ffffffffffffffff',
-//            ],
             [
                 'jpg',
                 0,
@@ -103,6 +78,31 @@ final class RotateTest extends UnitTestCase
                 270,
                 '0008387ffff06000',
             ],
+//            [
+//                'label'   => 'gif',
+//                'degrees' => 0,
+//                'hash'    => 'ffffffffffffffff',
+//            ],
+//            [
+//                'label'   => 'gif',
+//                'degrees' => 45,
+//                'hash'    => '387cfeff7f3f1e0c',
+//            ],
+//            [
+//                'label'   => 'gif',
+//                'degrees' => 90,
+//                'hash'    => 'ffffffffffffffff',
+//            ],
+//            [
+//                'label'   => 'gif',
+//                'degrees' => 180,
+//                'hash'    => 'ffffffffffffffff',
+//            ],
+//            [
+//                'label'   => 'gif',
+//                'degrees' => 270,
+//                'hash'    => 'ffffffffffffffff',
+//            ],
 //            [
 //                'label'   => 'wbmp',
 //                'degrees' => 0,

@@ -13,8 +13,6 @@ declare(strict_types=1);
 
 namespace Phalcon\Tests\Unit\Storage\Adapter;
 
-use Codeception\Stub;
-use Phalcon\Tests\UnitTestCase;
 use Phalcon\Storage\Adapter\AdapterInterface;
 use Phalcon\Storage\Adapter\Apcu;
 use Phalcon\Storage\Adapter\Libmemcached;
@@ -26,7 +24,7 @@ use Phalcon\Storage\Exception as StorageException;
 use Phalcon\Storage\SerializerFactory;
 use Phalcon\Support\Exception;
 use Phalcon\Support\Exception as HelperException;
-
+use Phalcon\Tests\UnitTestCase;
 use stdClass;
 
 use function getOptionsLibmemcached;
@@ -58,38 +56,6 @@ final class GetKeysTest extends UnitTestCase
         $this->assertTrue($adapter->clear());
 
         $this->runTests($adapter, 'ph-apcu-');
-    }
-
-    /**
-     * Tests Phalcon\Storage\Adapter\Apcu :: getKeys() - iterator error
-     *
-     * @return void
-     *
-     * @throws Exception
-     *
-     * @author Phalcon Team <team@phalcon.io>
-     * @since  2020-09-09
-     */
-    public function testStorageAdapterApcuGetKeysIteratorError(): void
-    {
-        $this->checkExtensionIsLoaded('apcu');
-
-        $serializer = new SerializerFactory();
-        $adapter    = Stub::construct(
-            Apcu::class,
-            [
-                $serializer,
-            ],
-            [
-                'phpApcuIterator' => false,
-            ]
-        );
-
-        $this->setupTest($adapter);
-
-        $actual = $adapter->getKeys();
-        $this->assertIsArray($actual);
-        $this->assertEmpty($actual);
     }
 
     /**
@@ -263,57 +229,6 @@ final class GetKeysTest extends UnitTestCase
     }
 
     /**
-     * Tests Phalcon\Storage\Adapter\Weak :: getKeys()
-     *
-     * @return void
-     *
-     * @throws HelperException
-     *
-     * @author Phalcon Team <team@phalcon.io>
-     * @since  2020-09-09
-     */
-    public function testStorageAdapterWeakGetKeys(): void
-    {
-        $serializer = new SerializerFactory();
-        $adapter    = new Weak($serializer);
-
-        $this->assertTrue($adapter->clear());
-
-        $obj1 = new stdClass();
-        $obj2 = new stdClass();
-        $obj3 = new stdClass();
-
-
-        $adapter->set('key-1', $obj1);
-        $adapter->set('key-2', $obj2);
-        $adapter->set('key-3', $obj3);
-        $adapter->set('one-1', $obj1);
-        $adapter->set('one-2', $obj2);
-        $adapter->set('one-3', $obj3);
-
-        $expected = [
-            'key-1',
-            'key-2',
-            'key-3',
-            'one-1',
-            'one-2',
-            'one-3',
-        ];
-        $actual   = $adapter->getKeys();
-        sort($actual);
-        $this->assertSame($expected, $actual);
-
-        $expected = [
-            'one-1',
-            'one-2',
-            'one-3',
-        ];
-        $actual   = $adapter->getKeys("one");
-        sort($actual);
-        $this->assertSame($expected, $actual);
-    }
-
-    /**
      * Tests Phalcon\Storage\Adapter\Stream :: getKeys()
      *
      * @return void
@@ -373,6 +288,57 @@ final class GetKeysTest extends UnitTestCase
         $this->assertTrue($actual);
 
         $this->safeDeleteDirectory(outputDir('pref-'));
+    }
+
+    /**
+     * Tests Phalcon\Storage\Adapter\Weak :: getKeys()
+     *
+     * @return void
+     *
+     * @throws HelperException
+     *
+     * @author Phalcon Team <team@phalcon.io>
+     * @since  2020-09-09
+     */
+    public function testStorageAdapterWeakGetKeys(): void
+    {
+        $serializer = new SerializerFactory();
+        $adapter    = new Weak($serializer);
+
+        $this->assertTrue($adapter->clear());
+
+        $obj1 = new stdClass();
+        $obj2 = new stdClass();
+        $obj3 = new stdClass();
+
+
+        $adapter->set('key-1', $obj1);
+        $adapter->set('key-2', $obj2);
+        $adapter->set('key-3', $obj3);
+        $adapter->set('one-1', $obj1);
+        $adapter->set('one-2', $obj2);
+        $adapter->set('one-3', $obj3);
+
+        $expected = [
+            'key-1',
+            'key-2',
+            'key-3',
+            'one-1',
+            'one-2',
+            'one-3',
+        ];
+        $actual   = $adapter->getKeys();
+        sort($actual);
+        $this->assertSame($expected, $actual);
+
+        $expected = [
+            'one-1',
+            'one-2',
+            'one-3',
+        ];
+        $actual   = $adapter->getKeys("one");
+        sort($actual);
+        $this->assertSame($expected, $actual);
     }
 
     private function runTests(

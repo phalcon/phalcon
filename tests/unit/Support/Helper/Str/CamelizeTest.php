@@ -20,29 +20,6 @@ use Phalcon\Tests\UnitTestCase;
 final class CamelizeTest extends UnitTestCase
 {
     /**
-     * Tests Phalcon\Support\Helper\Str :: camelize()
-     *
-     * @dataProvider getSources
-     *
-     * @return void
-     * @param Example    $example
-     *
-     * @author       Phalcon Team <team@phalcon.io>
-     * @since        2020-09-09
-     */
-    public function testSupportHelperStrCamelize(
-        string $value,
-        string $expected,
-        ?string $delimiter,
-        bool $lowercase
-    ): void {
-        $object    = new Camelize();
-
-        $actual = $object($value, $delimiter, $lowercase);
-        $this->assertSame($expected, $actual);
-    }
-
-    /**
      * @return array
      */
     public static function getSources(): array
@@ -75,5 +52,28 @@ final class CamelizeTest extends UnitTestCase
             ['customer Session', 'customerSession', ' -_', true],
             ['customer-Session', 'customerSession', ' -_', true],
         ];
+    }
+
+    /**
+     * Tests Phalcon\Support\Helper\Str :: camelize()
+     *
+     * @dataProvider getSources
+     *
+     * @param Example $example
+     *
+     * @return void
+     * @author       Phalcon Team <team@phalcon.io>
+     * @since        2020-09-09
+     */
+    public function testSupportHelperStrCamelize(
+        string $value,
+        string $expected,
+        ?string $delimiter,
+        bool $lowercase
+    ): void {
+        $object = new Camelize();
+
+        $actual = $object($value, $delimiter, $lowercase);
+        $this->assertSame($expected, $actual);
     }
 }

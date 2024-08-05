@@ -59,13 +59,13 @@ final class NumberTest extends UnitTestCase
      * @author Phalcon Team <team@phalcon.io>
      * @since  2020-09-09
      */
-    public function testEncryptionSecurityRandomNumberZero(): void
+    public function testEncryptionSecurityRandomNumberNegative(): void
     {
         $this->expectException(Exception::class);
         $this->expectExceptionMessage('Input number must be a positive integer');
 
         $random = new Random();
-        $random->number(0);
+        $random->number(-1);
     }
 
     /**
@@ -76,12 +76,12 @@ final class NumberTest extends UnitTestCase
      * @author Phalcon Team <team@phalcon.io>
      * @since  2020-09-09
      */
-    public function testEncryptionSecurityRandomNumberNegative(): void
+    public function testEncryptionSecurityRandomNumberZero(): void
     {
         $this->expectException(Exception::class);
         $this->expectExceptionMessage('Input number must be a positive integer');
 
         $random = new Random();
-        $random->number(-1);
+        $random->number(0);
     }
 }

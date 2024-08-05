@@ -19,28 +19,6 @@ use Phalcon\Tests\UnitTestCase;
 final class VariableTest extends UnitTestCase
 {
     /**
-     * Tests Phalcon\Support\Debug\Dump :: variable()
-     *
-     * @return void
-     *
-     * @author Phalcon Team <team@phalcon.io>
-     * @since  2020-09-09
-     */
-    public function testSupportDebugDumpVariable(): void
-    {
-        $test = 'value';
-        $dump = new Dump();
-
-        $expected = trim(
-            file_get_contents(
-                dataDir('fixtures/Support/Dump/variable_output.txt')
-            )
-        );
-        $actual   = $dump->variable($test);
-        $this->assertSame($expected, $actual);
-    }
-
-    /**
      * Tests Phalcon\Support\Debug\Dump :: variable() - name
      *
      * @return void
@@ -60,6 +38,28 @@ final class VariableTest extends UnitTestCase
         );
 
         $actual = $dump->variable($test, 'super');
+        $this->assertSame($expected, $actual);
+    }
+
+    /**
+     * Tests Phalcon\Support\Debug\Dump :: variable()
+     *
+     * @return void
+     *
+     * @author Phalcon Team <team@phalcon.io>
+     * @since  2020-09-09
+     */
+    public function testSupportDebugDumpVariable(): void
+    {
+        $test = 'value';
+        $dump = new Dump();
+
+        $expected = trim(
+            file_get_contents(
+                dataDir('fixtures/Support/Dump/variable_output.txt')
+            )
+        );
+        $actual   = $dump->variable($test);
         $this->assertSame($expected, $actual);
     }
 }

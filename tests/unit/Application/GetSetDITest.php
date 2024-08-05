@@ -22,23 +22,6 @@ use function spl_object_hash;
 final class GetSetDITest extends UnitTestCase
 {
     /**
-     * Tests Phalcon\Application\* :: getDI()/setDI() - construct
-     *
-     * @return void
-     *
-     * @author Phalcon Team <team@phalcon.io>
-     * @since  2020-09-09
-     */
-    public function testApplicationGetSetDiConstruct(): void
-    {
-        $container   = new FactoryDefault();
-        $application = new ApplicationFixture($container);
-
-        $actual = $application->getDI();
-        $this->assertSame(spl_object_hash($container), spl_object_hash($actual));
-    }
-
-    /**
      * Tests Phalcon\Acl\Role :: getDI()/setDI()
      *
      * @return void
@@ -52,6 +35,23 @@ final class GetSetDITest extends UnitTestCase
         $application = new ApplicationFixture();
 
         $application->setDI($container);
+        $actual = $application->getDI();
+        $this->assertSame(spl_object_hash($container), spl_object_hash($actual));
+    }
+
+    /**
+     * Tests Phalcon\Application\* :: getDI()/setDI() - construct
+     *
+     * @return void
+     *
+     * @author Phalcon Team <team@phalcon.io>
+     * @since  2020-09-09
+     */
+    public function testApplicationGetSetDiConstruct(): void
+    {
+        $container   = new FactoryDefault();
+        $application = new ApplicationFixture($container);
+
         $actual = $application->getDI();
         $this->assertSame(spl_object_hash($container), spl_object_hash($actual));
     }

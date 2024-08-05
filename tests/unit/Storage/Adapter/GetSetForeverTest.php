@@ -13,9 +13,6 @@ declare(strict_types=1);
 
 namespace Phalcon\Tests\Unit\Storage\Adapter;
 
-use Codeception\Example;
-use Phalcon\Tests\UnitTestCase;
-use Memcached as NativeMemcached;
 use Phalcon\Storage\Adapter\Apcu;
 use Phalcon\Storage\Adapter\Libmemcached;
 use Phalcon\Storage\Adapter\Memory;
@@ -23,16 +20,52 @@ use Phalcon\Storage\Adapter\Redis;
 use Phalcon\Storage\Adapter\Stream;
 use Phalcon\Storage\Adapter\Weak;
 use Phalcon\Storage\SerializerFactory;
-use Redis as NativeRedis;
+use Phalcon\Tests\UnitTestCase;
+use stdClass;
 
 use function getOptionsLibmemcached;
 use function getOptionsRedis;
 use function outputDir;
-use function sprintf;
 use function uniqid;
 
 final class GetSetForeverTest extends UnitTestCase
 {
+    /**
+     * @return array[]
+     */
+    public static function getExamples(): array
+    {
+        return [
+            [
+                'class'     => Apcu::class,
+                'options'   => [],
+                'extension' => 'apcu',
+            ],
+            [
+                'class'     => Libmemcached::class,
+                'options'   => getOptionsLibmemcached(),
+                'extension' => 'memcached',
+            ],
+            [
+                'class'     => Memory::class,
+                'options'   => [],
+                'extension' => '',
+            ],
+            [
+                'class'     => Redis::class,
+                'options'   => getOptionsRedis(),
+                'extension' => 'redis',
+            ],
+            [
+                'class'     => Stream::class,
+                'options'   => [
+                    'storageDir' => outputDir(),
+                ],
+                'extension' => '',
+            ],
+        ];
+    }
+
     /**
      * Tests Phalcon\Storage\Adapter\* :: get()/setForever()
      *
@@ -81,8 +114,8 @@ final class GetSetForeverTest extends UnitTestCase
         $serializer = new SerializerFactory();
         $adapter    = new Weak($serializer);
 
-        $key = uniqid();
-        $obj = new \stdClass();
+        $key    = uniqid();
+        $obj    = new stdClass();
         $result = $adapter->setForever($key, "test");
         $this->assertFalse($result);
         $result = $adapter->setForever($key, $obj);
@@ -95,41 +128,5 @@ final class GetSetForeverTest extends UnitTestCase
          */
         $result = $adapter->delete($key);
         $this->assertTrue($result);
-    }
-
-    /**
-     * @return array[]
-     */
-    public static function getExamples(): array
-    {
-        return [
-            [
-                'class'     => Apcu::class,
-                'options'   => [],
-                'extension' => 'apcu',
-            ],
-            [
-                'class'     => Libmemcached::class,
-                'options'   => getOptionsLibmemcached(),
-                'extension' => 'memcached',
-            ],
-            [
-                'class'     => Memory::class,
-                'options'   => [],
-                'extension' => '',
-            ],
-            [
-                'class'     => Redis::class,
-                'options'   => getOptionsRedis(),
-                'extension' => 'redis',
-            ],
-            [
-                'class'     => Stream::class,
-                'options'   => [
-                    'storageDir' => outputDir(),
-                ],
-                'extension' => '',
-            ],
-        ];
     }
 }

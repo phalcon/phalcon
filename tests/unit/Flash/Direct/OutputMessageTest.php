@@ -24,22 +24,24 @@ use const PHP_EOL;
 final class OutputMessageTest extends UnitTestCase
 {
     /**
-     * Tests Phalcon\Flash\Direct :: outputMessage() - exception
-     *
-     * @return void
-     *
-     * @author Phalcon Team <team@phalcon.io>
-     * @since  2020-09-09
+     * @return array
      */
-    public function testFlashDirectOutputMessageException(): void
+    public static function getExamples(): array
     {
-        $this->expectException(Exception::class);
-        $this->expectExceptionMessage(
-            'The message must be an array or a string'
-        );
-
-        $flash   = new Direct(new Escaper());
-        $flash->outputMessage('success', false);
+        return [
+            [
+                'error',
+            ],
+            [
+                'notice',
+            ],
+            [
+                'success',
+            ],
+            [
+                'warning',
+            ],
+        ];
     }
 
     /**
@@ -47,9 +49,9 @@ final class OutputMessageTest extends UnitTestCase
      *
      * @dataProvider getExamples
      *
-     * @return void
-     * @param Example    $example
+     * @param Example $example
      *
+     * @return void
      * @author       Phalcon Team <team@phalcon.io>
      * @since        2020-09-09
      */
@@ -72,23 +74,21 @@ final class OutputMessageTest extends UnitTestCase
     }
 
     /**
-     * @return array
+     * Tests Phalcon\Flash\Direct :: outputMessage() - exception
+     *
+     * @return void
+     *
+     * @author Phalcon Team <team@phalcon.io>
+     * @since  2020-09-09
      */
-    public static function getExamples(): array
+    public function testFlashDirectOutputMessageException(): void
     {
-        return [
-            [
-                'error',
-            ],
-            [
-                'notice',
-            ],
-            [
-                'success',
-            ],
-            [
-                'warning',
-            ],
-        ];
+        $this->expectException(Exception::class);
+        $this->expectExceptionMessage(
+            'The message must be an array or a string'
+        );
+
+        $flash = new Direct(new Escaper());
+        $flash->outputMessage('success', false);
     }
 }

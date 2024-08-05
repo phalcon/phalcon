@@ -13,33 +13,14 @@ declare(strict_types=1);
 
 namespace Phalcon\Tests\Unit\Http\Request;
 
-use Codeception\Example;
-use Phalcon\Tests\Fixtures\Page\Http;
 use Phalcon\Http\Request;
+use Phalcon\Tests\Fixtures\Page\Http;
 use Phalcon\Tests\UnitTestCase;
 
 use function uniqid;
 
 final class IsValidHttpMethodTest extends UnitTestCase
 {
-    /**
-     * Tests Phalcon\Http\Request :: isValidHttpMethod()
-     *
-     * @dataProvider getExamples
-     *
-     * @author       Phalcon Team <team@phalcon.io>
-     * @since        2020-03-17
-     */
-    public function testHttpRequestIsValidHttpMethod(
-        string $method,
-        bool $expected
-    ): void {
-        $request = new Request();
-
-        $actual   = $request->isValidHttpMethod($method);
-        $this->assertSame($expected, $actual);
-    }
-
     /**
      * @return array[]
      */
@@ -131,5 +112,23 @@ final class IsValidHttpMethodTest extends UnitTestCase
                 false,
             ],
         ];
+    }
+
+    /**
+     * Tests Phalcon\Http\Request :: isValidHttpMethod()
+     *
+     * @dataProvider getExamples
+     *
+     * @author       Phalcon Team <team@phalcon.io>
+     * @since        2020-03-17
+     */
+    public function testHttpRequestIsValidHttpMethod(
+        string $method,
+        bool $expected
+    ): void {
+        $request = new Request();
+
+        $actual = $request->isValidHttpMethod($method);
+        $this->assertSame($expected, $actual);
     }
 }

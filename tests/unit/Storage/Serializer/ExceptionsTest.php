@@ -13,10 +13,9 @@ declare(strict_types=1);
 
 namespace Phalcon\Tests\Unit\Storage\Serializer;
 
-use Codeception\Stub;
+use Exception;
 use InvalidArgumentException;
 use Phalcon\Storage\Serializer\Base64;
-use Phalcon\Storage\Serializer\Igbinary;
 use Phalcon\Storage\Serializer\Json;
 use Phalcon\Storage\Serializer\Msgpack;
 use Phalcon\Storage\Serializer\Php;
@@ -28,9 +27,6 @@ use Phalcon\Tests\UnitTestCase;
 use stdClass;
 
 use function json_encode;
-use function trigger_error;
-
-use const E_WARNING;
 
 final class ExceptionsTest extends UnitTestCase
 {
@@ -120,7 +116,7 @@ final class ExceptionsTest extends UnitTestCase
      *
      * @return void
      *
-     * @throws \Exception
+     * @throws Exception
      * @author Phalcon Team <team@phalcon.io>
      * @since  2022-02-24
      */
@@ -137,32 +133,26 @@ final class ExceptionsTest extends UnitTestCase
     }
 
     /**
-     * Tests Phalcon\Storage\Serializer\Igbinary :: unserialize() - fail warning
-     * string
+     * Tests Phalcon\Storage\Serializer\Json :: serialize() - error
      *
      * @return void
      *
-     * @throws \Exception
-     * @since  2022-02-24
      * @author Phalcon Team <team@phalcon.io>
+     * @since  2020-09-09
      */
-    public function testStorageSerializerIgbinaryUnserializeFailWarning(): void
+    public function testStorageSerializerJsonSerializeError(): void
     {
-        $serializer = Stub::make(
-            Igbinary::class,
-            [
-                'phpIgbinaryUnserialize' => function () {
-                    trigger_error('Unserialize Error', E_WARNING);
-                },
-            ]
+        $this->expectException(InvalidArgumentException::class);
+        $this->expectExceptionMessage(
+            "Data for the JSON serializer cannot be of type 'object' " .
+            "without implementing 'JsonSerializable'"
         );
 
-        $serializer->unserialize('Phalcon Framework');
-        $actual = $serializer->getData();
-        $this->assertEmpty($actual);
+        $example      = new stdClass();
+        $example->one = 'two';
 
-        $actual = $serializer->isSuccess();
-        $this->assertFalse($actual);
+        $serializer = new Json($example);
+        $serializer->serialize();
     }
 
     /**
@@ -195,29 +185,6 @@ final class ExceptionsTest extends UnitTestCase
     }
 
     /**
-     * Tests Phalcon\Storage\Serializer\Json :: serialize() - error
-     *
-     * @return void
-     *
-     * @author Phalcon Team <team@phalcon.io>
-     * @since  2020-09-09
-     */
-    public function testStorageSerializerJsonSerializeError(): void
-    {
-        $this->expectException(InvalidArgumentException::class);
-        $this->expectExceptionMessage(
-            "Data for the JSON serializer cannot be of type 'object' " .
-            "without implementing 'JsonSerializable'"
-        );
-
-        $example      = new stdClass();
-        $example->one = 'two';
-
-        $serializer = new Json($example);
-        $serializer->serialize();
-    }
-
-    /**
      * Tests Phalcon\Storage\Serializer\Msgpack :: unserialize() - error
      *
      * @return void
@@ -230,6 +197,22 @@ final class ExceptionsTest extends UnitTestCase
         $serializer = new Msgpack();
 
         $serialized = '??hello?messagepack"';
+        $serializer->unserialize($serialized);
+
+        $this->assertEmpty($serializer->getData());
+    }
+
+    /**
+     * Tests Phalcon\Storage\Serializer\Php :: unserialize() - error
+     *
+     * @author Phalcon Team <team@phalcon.io>
+     * @since  2020-09-09
+     */
+    public function testStorageSerializerPhpUnserializeError(): void
+    {
+        $serializer = new Php();
+
+        $serialized = '{??hello?unserialize"';
         $serializer->unserialize($serialized);
 
         $this->assertEmpty($serializer->getData());
@@ -252,21 +235,5 @@ final class ExceptionsTest extends UnitTestCase
 
         $serialized = new stdClass();
         $serializer->unserialize($serialized);
-    }
-
-    /**
-     * Tests Phalcon\Storage\Serializer\Php :: unserialize() - error
-     *
-     * @author Phalcon Team <team@phalcon.io>
-     * @since  2020-09-09
-     */
-    public function testStorageSerializerPhpUnserializeError(): void
-    {
-        $serializer = new Php();
-
-        $serialized = '{??hello?unserialize"';
-        $serializer->unserialize($serialized);
-
-        $this->assertEmpty($serializer->getData());
     }
 }

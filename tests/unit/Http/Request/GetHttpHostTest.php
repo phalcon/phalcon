@@ -13,58 +13,12 @@ declare(strict_types=1);
 
 namespace Phalcon\Tests\Unit\Http\Request;
 
-use Codeception\Example;
 use Phalcon\Http\Request;
 use Phalcon\Tests\Unit\Http\Helper\HttpBase;
 use UnexpectedValueException;
-use Phalcon\Tests\UnitTestCase;
 
 final class GetHttpHostTest extends HttpBase
 {
-    /**
-     * Tests getHttpHost
-     *
-     * @author       Phalcon Team <team@phalcon.io>
-     * @since        2014-10-04
-     *
-     * @dataProvider getExamples
-     */
-    public function testHttpRequestHttpHost(
-        array $server,
-        array $data
-    ): void {
-        $_SERVER = array_merge($_SERVER, $server);
-
-        $request = new Request();
-
-        foreach ($data as $expected) {
-            $actual = $request->getHttpHost();
-            $this->assertSame($expected, $actual);
-        }
-    }
-
-    /**
-     * Tests getHttpHost by using invalid host
-     *
-     * @author       Phalcon Team <team@phalcon.io>
-     * @since        2016-06-26
-     *
-     * @dataProvider getExamplesInvalid
-     */
-    public function testInvalidHttpRequestHttpHost(
-        string $host
-    ): void {
-        $_SERVER['HTTP_HOST'] = $host;
-
-        $request = $this->getRequestObject();
-        $request->setStrictHostCheck();
-
-        $this->expectException(UnexpectedValueException::class);
-        $this->expectExceptionMessage('Invalid host ' . $host);
-
-        $request->getHttpHost();
-    }
-
     /**
      * @return array[]
      */
@@ -184,5 +138,49 @@ final class GetHttpHostTest extends HttpBase
                 'foo@bar',
             ],
         ];
+    }
+
+    /**
+     * Tests getHttpHost
+     *
+     * @author       Phalcon Team <team@phalcon.io>
+     * @since        2014-10-04
+     *
+     * @dataProvider getExamples
+     */
+    public function testHttpRequestHttpHost(
+        array $server,
+        array $data
+    ): void {
+        $_SERVER = array_merge($_SERVER, $server);
+
+        $request = new Request();
+
+        foreach ($data as $expected) {
+            $actual = $request->getHttpHost();
+            $this->assertSame($expected, $actual);
+        }
+    }
+
+    /**
+     * Tests getHttpHost by using invalid host
+     *
+     * @author       Phalcon Team <team@phalcon.io>
+     * @since        2016-06-26
+     *
+     * @dataProvider getExamplesInvalid
+     */
+    public function testInvalidHttpRequestHttpHost(
+        string $host
+    ): void {
+        $_SERVER['HTTP_HOST'] = $host;
+
+        $request = $this->getRequestObject();
+        $request->setStrictHostCheck();
+
+        $this->expectException(UnexpectedValueException::class);
+        $this->expectExceptionMessage('Invalid host ' . $host);
+
+        $request->getHttpHost();
     }
 }

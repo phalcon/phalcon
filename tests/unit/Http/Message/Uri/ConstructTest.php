@@ -28,53 +28,9 @@ final class ConstructTest extends UnitTestCase
      */
     public function testHttpMessageUriConstruct(): void
     {
-        $uri = new Uri();
+        $uri   = new Uri();
         $class = UriInterface::class;
         $this->assertInstanceOf($class, $uri);
-    }
-
-    /**
-     * Tests Phalcon\Http\Message\Uri :: __construct() - parse
-     *
-     * @author Phalcon Team <team@phalcon.io>
-     * @since  2019-02-09
-     */
-    public function testHttpMessageUriConstructParse(): void
-    {
-        $source = "https://phalcon:secret@dev.phalcon.ld:8080/action?param=value#newspaper";
-        $uri    = new Uri($source);
-
-        $expected = "https";
-        $actual   = $uri->getScheme();
-        $this->assertSame($expected, $actual);
-
-        $expected = "phalcon:secret";
-        $actual   = $uri->getUserInfo();
-        $this->assertSame($expected, $actual);
-
-        $expected = "phalcon:secret@dev.phalcon.ld:8080";
-        $actual   = $uri->getAuthority();
-        $this->assertSame($expected, $actual);
-
-        $expected = "dev.phalcon.ld";
-        $actual   = $uri->getHost();
-        $this->assertSame($expected, $actual);
-
-        $expected = 8080;
-        $actual   = $uri->getPort();
-        $this->assertSame($expected, $actual);
-
-        $expected = "/action";
-        $actual   = $uri->getPath();
-        $this->assertSame($expected, $actual);
-
-        $expected = "param=value";
-        $actual   = $uri->getQuery();
-        $this->assertSame($expected, $actual);
-
-        $expected = "newspaper";
-        $actual   = $uri->getFragment();
-        $this->assertSame($expected, $actual);
     }
 
     /**
@@ -143,5 +99,49 @@ final class ConstructTest extends UnitTestCase
         $this->expectExceptionMessage('The URI cannot be parsed');
 
         (new Uri('https://'));
+    }
+
+    /**
+     * Tests Phalcon\Http\Message\Uri :: __construct() - parse
+     *
+     * @author Phalcon Team <team@phalcon.io>
+     * @since  2019-02-09
+     */
+    public function testHttpMessageUriConstructParse(): void
+    {
+        $source = "https://phalcon:secret@dev.phalcon.ld:8080/action?param=value#newspaper";
+        $uri    = new Uri($source);
+
+        $expected = "https";
+        $actual   = $uri->getScheme();
+        $this->assertSame($expected, $actual);
+
+        $expected = "phalcon:secret";
+        $actual   = $uri->getUserInfo();
+        $this->assertSame($expected, $actual);
+
+        $expected = "phalcon:secret@dev.phalcon.ld:8080";
+        $actual   = $uri->getAuthority();
+        $this->assertSame($expected, $actual);
+
+        $expected = "dev.phalcon.ld";
+        $actual   = $uri->getHost();
+        $this->assertSame($expected, $actual);
+
+        $expected = 8080;
+        $actual   = $uri->getPort();
+        $this->assertSame($expected, $actual);
+
+        $expected = "/action";
+        $actual   = $uri->getPath();
+        $this->assertSame($expected, $actual);
+
+        $expected = "param=value";
+        $actual   = $uri->getQuery();
+        $this->assertSame($expected, $actual);
+
+        $expected = "newspaper";
+        $actual   = $uri->getFragment();
+        $this->assertSame($expected, $actual);
     }
 }

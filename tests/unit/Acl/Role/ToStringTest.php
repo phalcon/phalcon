@@ -35,7 +35,7 @@ final class ToStringTest extends UnitTestCase
         $this->assertSame($expected, $actual);
 
         $expected = 'Administrator';
-        $actual   = (string) $role;
+        $actual   = (string)$role;
         $this->assertSame($expected, $actual);
     }
 }

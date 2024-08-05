@@ -146,7 +146,7 @@ final class UnderscoreInvokeTest extends UnitTestCase
         $factory = new TagFactory($escaper);
         $locator = $factory->newInstance('doctype');
 
-        $actual = (string) $locator($flag, $delimiter);
+        $actual = (string)$locator($flag, $delimiter);
         $this->assertSame($expected, $actual);
     }
 }

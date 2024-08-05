@@ -13,31 +13,11 @@ declare(strict_types=1);
 
 namespace Phalcon\Tests\Unit\Support\Helper\Str;
 
-use Codeception\Example;
 use Phalcon\Support\Helper\Str\Uncamelize;
 use Phalcon\Tests\UnitTestCase;
 
 final class UncamelizeTest extends UnitTestCase
 {
-    /**
-     * Tests Phalcon\Text :: uncamelize()
-     *
-     * @dataProvider getSources
-     *
-     * @author       Phalcon Team <team@phalcon.io>
-     * @since        2020-09-09
-     */
-    public function testSupportHelperStrUncamelize(
-        string $value,
-        string $expected,
-        string $delimiter
-    ): void {
-        $object    = new Uncamelize();
-        $actual    = $object($value, $delimiter);
-
-        $this->assertSame($expected, $actual);
-    }
-
     /**
      * @return array
      */
@@ -63,5 +43,24 @@ final class UncamelizeTest extends UnitTestCase
             ['CameLiZe', 'came-li-ze', '-'],
             ['CAMELIZE', 'c/a/m/e/l/i/z/e', '/'],
         ];
+    }
+
+    /**
+     * Tests Phalcon\Text :: uncamelize()
+     *
+     * @dataProvider getSources
+     *
+     * @author       Phalcon Team <team@phalcon.io>
+     * @since        2020-09-09
+     */
+    public function testSupportHelperStrUncamelize(
+        string $value,
+        string $expected,
+        string $delimiter
+    ): void {
+        $object = new Uncamelize();
+        $actual = $object($value, $delimiter);
+
+        $this->assertSame($expected, $actual);
     }
 }

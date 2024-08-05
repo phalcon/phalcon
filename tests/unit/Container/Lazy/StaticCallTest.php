@@ -15,7 +15,6 @@ namespace Phalcon\Tests\Unit\Container\Lazy;
 
 use Phalcon\Container\Lazy\StaticCall;
 use Phalcon\Tests\Fixtures\Container\TestWithInterface;
-use Phalcon\Tests\UnitTestCase;
 
 final class StaticCallTest extends AbstractLazyBase
 {

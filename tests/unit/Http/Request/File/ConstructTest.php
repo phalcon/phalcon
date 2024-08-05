@@ -13,9 +13,9 @@ declare(strict_types=1);
 
 namespace Phalcon\Tests\Unit\Http\Request\File;
 
-use Phalcon\Tests\Fixtures\Page\Http;
 use Phalcon\Http\Request\File;
 use Phalcon\Http\Request\FileInterface;
+use Phalcon\Tests\Fixtures\Page\Http;
 use Phalcon\Tests\UnitTestCase;
 
 use function dataDir;

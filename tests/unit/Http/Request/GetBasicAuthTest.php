@@ -15,24 +15,9 @@ namespace Phalcon\Tests\Unit\Http\Request;
 
 use Phalcon\Http\Request;
 use Phalcon\Tests\Unit\Http\Helper\HttpBase;
-use Phalcon\Tests\UnitTestCase;
 
 final class GetBasicAuthTest extends HttpBase
 {
-    /**
-     * Tests Phalcon\Http\Request :: getBasicAuth() - empty
-     *
-     * @author Phalcon Team <team@phalcon.io>
-     * @since  2020-03-17
-     */
-    public function testHttpRequestGetBasicAuthEmpty(): void
-    {
-        $request = new Request();
-
-        $actual = $request->getBasicAuth();
-        $this->assertNull($actual);
-    }
-
     /**
      * Tests Phalcon\Http\Request :: getBasicAuth()
      *
@@ -52,5 +37,19 @@ final class GetBasicAuthTest extends HttpBase
         ];
         $actual   = $request->getBasicAuth();
         $this->assertSame($expected, $actual);
+    }
+
+    /**
+     * Tests Phalcon\Http\Request :: getBasicAuth() - empty
+     *
+     * @author Phalcon Team <team@phalcon.io>
+     * @since  2020-03-17
+     */
+    public function testHttpRequestGetBasicAuthEmpty(): void
+    {
+        $request = new Request();
+
+        $actual = $request->getBasicAuth();
+        $this->assertNull($actual);
     }
 }

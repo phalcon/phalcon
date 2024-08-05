@@ -40,37 +40,6 @@ final class EndsWithTest extends UnitTestCase
     }
 
     /**
-     * Tests Phalcon\Support\Helper\Str :: endsWith() - empty strings
-     *
-     * @return void
-     *
-     * @author Phalcon Team <team@phalcon.io>
-     * @since  2020-09-09
-     */
-    public function testSupportHelperStrEndsWithEmpty(): void
-    {
-        $object = new EndsWith();
-        $actual = $object('', '');
-        $this->assertFalse($actual);
-    }
-
-    /**
-     * Tests Phalcon\Support\Helper\Str :: endsWith() - finding an empty string
-     *
-     * @return void
-     *
-     * @author Phalcon Team <team@phalcon.io>
-     * @since  2020-09-09
-     */
-    public function testSupportHelperStrEndsWithEmptySearchString(): void
-    {
-        $object = new EndsWith();
-        $actual = $object('', 'hello');
-        $this->assertFalse($actual);
-    }
-
-
-    /**
      * Tests Phalcon\Support\Helper\Str :: endsWith() - case insensitive flag
      *
      * @return void
@@ -109,6 +78,36 @@ final class EndsWithTest extends UnitTestCase
         $this->assertFalse($actual);
 
         $actual = $object('Hello', 'O', false);
+        $this->assertFalse($actual);
+    }
+
+    /**
+     * Tests Phalcon\Support\Helper\Str :: endsWith() - empty strings
+     *
+     * @return void
+     *
+     * @author Phalcon Team <team@phalcon.io>
+     * @since  2020-09-09
+     */
+    public function testSupportHelperStrEndsWithEmpty(): void
+    {
+        $object = new EndsWith();
+        $actual = $object('', '');
+        $this->assertFalse($actual);
+    }
+
+    /**
+     * Tests Phalcon\Support\Helper\Str :: endsWith() - finding an empty string
+     *
+     * @return void
+     *
+     * @author Phalcon Team <team@phalcon.io>
+     * @since  2020-09-09
+     */
+    public function testSupportHelperStrEndsWithEmptySearchString(): void
+    {
+        $object = new EndsWith();
+        $actual = $object('', 'hello');
         $this->assertFalse($actual);
     }
 }

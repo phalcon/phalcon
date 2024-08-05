@@ -15,8 +15,8 @@ namespace Phalcon\Tests\Unit\Http\Message\Stream;
 
 use Phalcon\Http\Message\Stream;
 use Phalcon\Tests\Fixtures\Http\Message\StreamFixture;
-use RuntimeException;
 use Phalcon\Tests\UnitTestCase;
+use RuntimeException;
 
 use function logsDir;
 

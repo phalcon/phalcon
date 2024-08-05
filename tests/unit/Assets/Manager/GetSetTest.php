@@ -32,7 +32,7 @@ final class GetSetTest extends UnitTestCase
      */
     public function testAssetsManagerGetSet(): void
     {
-        $manager = new Manager(new TagFactory(new Escaper()));
+        $manager    = new Manager(new TagFactory(new Escaper()));
         $collection = new Collection();
 
         $manager->set('hangout', $collection);

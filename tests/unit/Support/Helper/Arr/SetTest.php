@@ -19,46 +19,6 @@ use Phalcon\Tests\UnitTestCase;
 final class SetTest extends UnitTestCase
 {
     /**
-     * Tests Phalcon\Support\Helper\Arr :: set() - numeric
-     *
-     * @return void
-     *
-     * @author Phalcon Team <team@phalcon.io>
-     * @since  2020-09-09
-     */
-    public function testSupportHelperArrSetNumeric(): void
-    {
-        $object     = new Set();
-        $collection = [];
-
-        $expected = [
-            1 => 'Phalcon',
-        ];
-        $actual   = $object($collection, 'Phalcon', 1);
-        $this->assertSame($expected, $actual);
-    }
-
-    /**
-     * Tests Phalcon\Support\Helper\Arr :: set() - string
-     *
-     * @return void
-     *
-     * @author Phalcon Team <team@phalcon.io>
-     * @since  2020-09-09
-     */
-    public function testSupportHelperArrSetString(): void
-    {
-        $object     = new Set();
-        $collection = [];
-
-        $expected = [
-            'suffix' => 'Framework',
-        ];
-        $actual   = $object($collection, 'Framework', 'suffix');
-        $this->assertSame($expected, $actual);
-    }
-
-    /**
      * Tests Phalcon\Support\Helper\Arr :: set() - no index
      *
      * @return void
@@ -75,6 +35,26 @@ final class SetTest extends UnitTestCase
             0 => 'Phalcon',
         ];
         $actual   = $object($collection, 'Phalcon');
+        $this->assertSame($expected, $actual);
+    }
+
+    /**
+     * Tests Phalcon\Support\Helper\Arr :: set() - numeric
+     *
+     * @return void
+     *
+     * @author Phalcon Team <team@phalcon.io>
+     * @since  2020-09-09
+     */
+    public function testSupportHelperArrSetNumeric(): void
+    {
+        $object     = new Set();
+        $collection = [];
+
+        $expected = [
+            1 => 'Phalcon',
+        ];
+        $actual   = $object($collection, 'Phalcon', 1);
         $this->assertSame($expected, $actual);
     }
 
@@ -97,6 +77,26 @@ final class SetTest extends UnitTestCase
             1 => 'Framework',
         ];
         $actual   = $object($collection, 'Framework', 1);
+        $this->assertSame($expected, $actual);
+    }
+
+    /**
+     * Tests Phalcon\Support\Helper\Arr :: set() - string
+     *
+     * @return void
+     *
+     * @author Phalcon Team <team@phalcon.io>
+     * @since  2020-09-09
+     */
+    public function testSupportHelperArrSetString(): void
+    {
+        $object     = new Set();
+        $collection = [];
+
+        $expected = [
+            'suffix' => 'Framework',
+        ];
+        $actual   = $object($collection, 'Framework', 'suffix');
         $this->assertSame($expected, $actual);
     }
 }

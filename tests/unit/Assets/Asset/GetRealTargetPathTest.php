@@ -13,10 +13,7 @@ declare(strict_types=1);
 
 namespace Phalcon\Tests\Unit\Assets\Asset;
 
-use Codeception\Example;
-use Codeception\Stub;
 use Phalcon\Assets\Asset;
-use Phalcon\Tests\Fixtures\Assets\AssetFileExistsFixture;
 use Phalcon\Tests\Fixtures\Assets\AssetFileExistsPositiveFixture;
 use Phalcon\Tests\Fixtures\Traits\AssetsTrait;
 use Phalcon\Tests\UnitTestCase;
@@ -63,7 +60,7 @@ final class GetRealTargetPathTest extends UnitTestCase
             $this->markTestSkipped('Need to fix Windows new lines...');
         }
 
-        $file = 'assets/assets/1198.css';
+        $file  = 'assets/assets/1198.css';
         $asset = new AssetFileExistsPositiveFixture('css', $file);
 
         $expected = dataDir($file);

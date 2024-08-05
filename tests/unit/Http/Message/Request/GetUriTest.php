@@ -27,8 +27,8 @@ final class GetUriTest extends UnitTestCase
      */
     public function testHttpMessageRequestGetUri(): void
     {
-        $query = 'https://phalcon:secret@dev.phalcon.ld:8080/action?param=value#frag';
-        $uri = new Uri($query);
+        $query   = 'https://phalcon:secret@dev.phalcon.ld:8080/action?param=value#frag';
+        $uri     = new Uri($query);
         $request = new Request('GET', $uri);
 
         $this->assertSame(

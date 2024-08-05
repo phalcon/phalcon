@@ -13,7 +13,6 @@ declare(strict_types=1);
 
 namespace Phalcon\Tests\Unit\Http\Message\Stream;
 
-use Codeception\Example;
 use Phalcon\Http\Message\Stream;
 use Phalcon\Http\Message\Stream\Input;
 use Phalcon\Http\Message\Stream\Memory;
@@ -25,43 +24,6 @@ use function logsDir;
 
 final class IsWritableTest extends UnitTestCase
 {
-    /**
-     * Tests Phalcon\Http\Message\Stream :: isWritable()
-     *
-     * @dataProvider getExamples
-     *
-     * @author       Phalcon Team <team@phalcon.io>
-     * @since        2019-02-10
-     */
-    public function testHttpMessageStreamIsWritable(
-        mixed $stream,
-        bool $expected
-    ): void {
-        $actual   = $stream->isWritable();
-        $this->assertSame($expected, $actual);
-    }
-
-    /**
-     * Tests Phalcon\Http\Message\Stream :: isWritable() - with "x"
-     *
-     * @dataProvider getExamplesX
-     *
-     * @author       Phalcon Team <team@phalcon.io>
-     * @since        2019-02-10
-     */
-    public function testHttpMessageStreamIsWritableWithX(
-        string $mode,
-        bool $expected
-    ) {
-        $fileName = $this->getNewFileName();
-        $fileName = logsDir($fileName);
-
-        $stream = new Stream($fileName, $mode);
-
-        $actual   = $stream->isWritable();
-        $this->assertSame($expected, $actual);
-    }
-
     /**
      * @return array[]
      */
@@ -236,5 +198,42 @@ final class IsWritableTest extends UnitTestCase
             ['x+', true],
             ['x+b', true],
         ];
+    }
+
+    /**
+     * Tests Phalcon\Http\Message\Stream :: isWritable()
+     *
+     * @dataProvider getExamples
+     *
+     * @author       Phalcon Team <team@phalcon.io>
+     * @since        2019-02-10
+     */
+    public function testHttpMessageStreamIsWritable(
+        mixed $stream,
+        bool $expected
+    ): void {
+        $actual = $stream->isWritable();
+        $this->assertSame($expected, $actual);
+    }
+
+    /**
+     * Tests Phalcon\Http\Message\Stream :: isWritable() - with "x"
+     *
+     * @dataProvider getExamplesX
+     *
+     * @author       Phalcon Team <team@phalcon.io>
+     * @since        2019-02-10
+     */
+    public function testHttpMessageStreamIsWritableWithX(
+        string $mode,
+        bool $expected
+    ) {
+        $fileName = $this->getNewFileName();
+        $fileName = logsDir($fileName);
+
+        $stream = new Stream($fileName, $mode);
+
+        $actual = $stream->isWritable();
+        $this->assertSame($expected, $actual);
     }
 }

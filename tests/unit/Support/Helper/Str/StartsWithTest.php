@@ -41,40 +41,6 @@ final class StartsWithTest extends UnitTestCase
     }
 
     /**
-     * Tests Phalcon\Support\Helper\Str :: startsWith() - empty strings
-     *
-     * @return void
-     *
-     * @author Phalcon Team <team@phalcon.io>
-     * @since  2020-09-09
-     */
-    public function testSupportHelperStrStartsWithEmpty(): void
-    {
-        $object = new StartsWith();
-
-        $actual = $object('', '');
-        $this->assertFalse($actual);
-    }
-
-    /**
-     * Tests Phalcon\Support\Helper\Str :: startsWith() - finding an empty
-     * string
-     *
-     * @return void
-     *
-     * @author Phalcon Team <team@phalcon.io>
-     * @since  2020-09-09
-     */
-    public function testSupportHelperStrStartsWithEmptySearchString(): void
-    {
-        $object = new StartsWith();
-
-        $actual = $object('', 'hello');
-        $this->assertFalse($actual);
-    }
-
-
-    /**
      * Tests Phalcon\Support\Helper\Str :: startsWith() - case insensitive flag
      *
      * @return void
@@ -115,6 +81,39 @@ final class StartsWithTest extends UnitTestCase
         $this->assertFalse($actual);
 
         $actual = $object('Hello', 'h', false);
+        $this->assertFalse($actual);
+    }
+
+    /**
+     * Tests Phalcon\Support\Helper\Str :: startsWith() - empty strings
+     *
+     * @return void
+     *
+     * @author Phalcon Team <team@phalcon.io>
+     * @since  2020-09-09
+     */
+    public function testSupportHelperStrStartsWithEmpty(): void
+    {
+        $object = new StartsWith();
+
+        $actual = $object('', '');
+        $this->assertFalse($actual);
+    }
+
+    /**
+     * Tests Phalcon\Support\Helper\Str :: startsWith() - finding an empty
+     * string
+     *
+     * @return void
+     *
+     * @author Phalcon Team <team@phalcon.io>
+     * @since  2020-09-09
+     */
+    public function testSupportHelperStrStartsWithEmptySearchString(): void
+    {
+        $object = new StartsWith();
+
+        $actual = $object('', 'hello');
         $this->assertFalse($actual);
     }
 }

@@ -15,7 +15,6 @@ namespace Phalcon\Tests\Unit\Http\Request;
 
 use Phalcon\Tests\Fixtures\Page\Http;
 use Phalcon\Tests\Unit\Http\Helper\HttpBase;
-use Phalcon\Tests\UnitTestCase;
 
 use function file_get_contents;
 use function file_put_contents;

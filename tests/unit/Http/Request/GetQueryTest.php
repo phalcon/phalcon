@@ -14,7 +14,6 @@ declare(strict_types=1);
 namespace Phalcon\Tests\Unit\Http\Request;
 
 use Phalcon\Tests\Unit\Http\Helper\HttpBase;
-use Phalcon\Tests\UnitTestCase;
 
 use function strtolower;
 use function uniqid;
@@ -48,25 +47,21 @@ final class GetQueryTest extends HttpBase
     }
 
     /**
-     * Tests Phalcon\Http\Request :: getQuery() - filter
+     * Tests Phalcon\Http\Request :: getQuery() - allowNoEmpty
      *
      * @author Phalcon Team <team@phalcon.io>
      * @since  2019-12-01
      */
-    public function testHttpRequestGetQueryFilter(): void
+    public function testHttpRequestGetQueryAllowNoEmpty(): void
     {
-        $key        = uniqid('key-');
-        $value      = uniqid('VAL-');
-        $_GET[$key] = '  ' . $value . '  ';
+        $key = uniqid('key-');
+
+        $_GET[$key] = ' 0 ';
 
         $request = $this->getRequestObject();
 
-        $expected = $value;
-        $actual   = $request->getQuery($key, 'trim');
-        $this->assertSame($expected, $actual);
-
-        $expected = strtolower($value);
-        $actual   = $request->getQuery($key, ['trim', 'lower']);
+        $expected = '0';
+        $actual   = $request->getQuery($key, 'trim', 'zero value', true);
         $this->assertSame($expected, $actual);
     }
 
@@ -87,21 +82,25 @@ final class GetQueryTest extends HttpBase
     }
 
     /**
-     * Tests Phalcon\Http\Request :: getQuery() - allowNoEmpty
+     * Tests Phalcon\Http\Request :: getQuery() - filter
      *
      * @author Phalcon Team <team@phalcon.io>
      * @since  2019-12-01
      */
-    public function testHttpRequestGetQueryAllowNoEmpty(): void
+    public function testHttpRequestGetQueryFilter(): void
     {
-        $key = uniqid('key-');
-
-        $_GET[$key] = ' 0 ';
+        $key        = uniqid('key-');
+        $value      = uniqid('VAL-');
+        $_GET[$key] = '  ' . $value . '  ';
 
         $request = $this->getRequestObject();
 
-        $expected = '0';
-        $actual   = $request->getQuery($key, 'trim', 'zero value', true);
+        $expected = $value;
+        $actual   = $request->getQuery($key, 'trim');
+        $this->assertSame($expected, $actual);
+
+        $expected = strtolower($value);
+        $actual   = $request->getQuery($key, ['trim', 'lower']);
         $this->assertSame($expected, $actual);
     }
 }

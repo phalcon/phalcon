@@ -21,53 +21,6 @@ use Phalcon\Tests\UnitTestCase;
 final class GetSetHasTest extends UnitTestCase
 {
     /**
-     * Tests Phalcon\Filter :: get()/set()/has() - has()
-     *
-     * @return void
-     *
-     * @author Phalcon Team <team@phalcon.io>
-     * @since  2020-09-09
-     */
-    public function testFilterFilterGetSetHasHas(): void
-    {
-        $services = [
-            'helloFilter' => function () {
-                return new HelloService();
-            },
-        ];
-
-        $locator = new Filter($services);
-
-        $actual = $locator->has('helloFilter');
-        $this->assertTrue($actual);
-    }
-
-    /**
-     * Tests Phalcon\Filter :: get()/set()/has() - get()
-     *
-     * @return void
-     *
-     * @author Phalcon Team <team@phalcon.io>
-     * @since  2020-09-09
-     */
-    public function testFilterFilterLocatorGetSetHasGet(): void
-    {
-        $services = [
-            'helloFilter' => function () {
-                return new HelloService();
-            },
-        ];
-
-        $locator = new Filter($services);
-        $actual  = $locator->has('helloFilter');
-        $this->assertTrue($actual);
-
-        $class  = Closure::class;
-        $actual = $locator->get('helloFilter');
-        $this->assertInstanceOf($class, $actual);
-    }
-
-    /**
      * Tests Phalcon\Filter :: get()/set()/has() - get() same
      *
      * @return void
@@ -89,6 +42,28 @@ final class GetSetHasTest extends UnitTestCase
         $expected = 'Hello Phalcon [count: 2]';
         $actual   = $locator->get('helloFilter')('Phalcon');
         $this->assertSame($expected, $actual);
+    }
+
+    /**
+     * Tests Phalcon\Filter :: get()/set()/has() - has()
+     *
+     * @return void
+     *
+     * @author Phalcon Team <team@phalcon.io>
+     * @since  2020-09-09
+     */
+    public function testFilterFilterGetSetHasHas(): void
+    {
+        $services = [
+            'helloFilter' => function () {
+                return new HelloService();
+            },
+        ];
+
+        $locator = new Filter($services);
+
+        $actual = $locator->has('helloFilter');
+        $this->assertTrue($actual);
     }
 
     /**
@@ -143,5 +118,30 @@ final class GetSetHasTest extends UnitTestCase
 
         $expected = $value . 'test';
         $this->assertSame($expected, $actual);
+    }
+
+    /**
+     * Tests Phalcon\Filter :: get()/set()/has() - get()
+     *
+     * @return void
+     *
+     * @author Phalcon Team <team@phalcon.io>
+     * @since  2020-09-09
+     */
+    public function testFilterFilterLocatorGetSetHasGet(): void
+    {
+        $services = [
+            'helloFilter' => function () {
+                return new HelloService();
+            },
+        ];
+
+        $locator = new Filter($services);
+        $actual  = $locator->has('helloFilter');
+        $this->assertTrue($actual);
+
+        $class  = Closure::class;
+        $actual = $locator->get('helloFilter');
+        $this->assertInstanceOf($class, $actual);
     }
 }

@@ -13,34 +13,11 @@ declare(strict_types=1);
 
 namespace Phalcon\Tests\Unit\Dispatcher;
 
-use Codeception\Example;
 use Phalcon\Mvc\Dispatcher;
 use Phalcon\Tests\UnitTestCase;
 
 final class GetActiveMethodTest extends UnitTestCase
 {
-    /**
-     * Tests Phalcon\Dispatcher :: getActiveMethod()
-     *
-     * @author       Phalcon Team <team@phalcon.io>
-     * @since        2018-11-13
-     *
-     * @dataProvider getExamples
-     */
-    public function testDispatcherGetActiveMethod(
-        string $actionName,
-        string $expected
-    ): void {
-        $dispatcher = new Dispatcher();
-        $dispatcher->setActionSuffix('Action');
-
-
-        $dispatcher->setActionName($actionName);
-
-        $actual = $dispatcher->getActiveMethod();
-        $this->assertSame($expected, $actual);
-    }
-
     /**
      * @return array[]
      */
@@ -67,5 +44,27 @@ final class GetActiveMethodTest extends UnitTestCase
                 'expected'   => 'thirdPageAction',
             ],
         ];
+    }
+
+    /**
+     * Tests Phalcon\Dispatcher :: getActiveMethod()
+     *
+     * @author       Phalcon Team <team@phalcon.io>
+     * @since        2018-11-13
+     *
+     * @dataProvider getExamples
+     */
+    public function testDispatcherGetActiveMethod(
+        string $actionName,
+        string $expected
+    ): void {
+        $dispatcher = new Dispatcher();
+        $dispatcher->setActionSuffix('Action');
+
+
+        $dispatcher->setActionName($actionName);
+
+        $actual = $dispatcher->getActiveMethod();
+        $this->assertSame($expected, $actual);
     }
 }

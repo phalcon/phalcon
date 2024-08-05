@@ -13,8 +13,6 @@ declare(strict_types=1);
 
 namespace Phalcon\Tests\Unit\Storage\SerializerFactory;
 
-use Codeception\Example;
-use Phalcon\Tests\UnitTestCase;
 use Phalcon\Storage\Exception;
 use Phalcon\Storage\Serializer\Base64;
 use Phalcon\Storage\Serializer\Igbinary;
@@ -31,11 +29,35 @@ use Phalcon\Storage\Serializer\RedisMsgpack;
 use Phalcon\Storage\Serializer\RedisNone;
 use Phalcon\Storage\Serializer\RedisPhp;
 use Phalcon\Storage\SerializerFactory;
+use Phalcon\Tests\UnitTestCase;
 
 use function uniqid;
 
 final class NewInstanceTest extends UnitTestCase
 {
+    /**
+     * @return string[][]
+     */
+    public static function getExamples(): array
+    {
+        return [
+            ['base64', Base64::class],
+            ['igbinary', Igbinary::class],
+            ['json', Json::class],
+            ['memcached_igbinary', MemcachedIgbinary::class],
+            ['memcached_json', MemcachedJson::class],
+            ['memcached_php', MemcachedPhp::class],
+            ['msgpack', Msgpack::class],
+            ['none', None::class],
+            ['php', Php::class],
+            ['redis_igbinary', RedisIgbinary::class],
+            ['redis_json', RedisJson::class],
+            ['redis_msgpack', RedisMsgpack::class],
+            ['redis_none', RedisNone::class],
+            ['redis_php', RedisPhp::class],
+        ];
+    }
+
     /**
      * Tests Phalcon\Storage\SerializerFactory :: newInstance()
      *
@@ -73,28 +95,5 @@ final class NewInstanceTest extends UnitTestCase
 
         $factory = new SerializerFactory();
         $factory->newInstance($name);
-    }
-
-    /**
-     * @return string[][]
-     */
-    public static function getExamples(): array
-    {
-        return [
-            ['base64', Base64::class],
-            ['igbinary', Igbinary::class],
-            ['json', Json::class],
-            ['memcached_igbinary', MemcachedIgbinary::class],
-            ['memcached_json', MemcachedJson::class],
-            ['memcached_php', MemcachedPhp::class],
-            ['msgpack', Msgpack::class],
-            ['none', None::class],
-            ['php', Php::class],
-            ['redis_igbinary', RedisIgbinary::class],
-            ['redis_json', RedisJson::class],
-            ['redis_msgpack', RedisMsgpack::class],
-            ['redis_none', RedisNone::class],
-            ['redis_php', RedisPhp::class],
-        ];
     }
 }

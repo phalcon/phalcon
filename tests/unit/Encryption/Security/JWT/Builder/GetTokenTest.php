@@ -54,7 +54,7 @@ final class GetTokenTest extends UnitTestCase
         $this->expectException(ValidatorException::class);
         $this->expectExceptionMessage("Invalid passphrase (empty)");
 
-        $signer = new Hmac();
+        $signer  = new Hmac();
         $builder = new Builder($signer);
         $builder->getToken();
     }

@@ -28,7 +28,7 @@ final class InTransactionTest extends UnitTestCase
      */
     public function testLoggerAdapterStreamInTransaction(): void
     {
-         $fileName   = $this->getNewFileName('log', 'log');
+        $fileName   = $this->getNewFileName('log', 'log');
         $outputPath = logsDir();
         $adapter    = new Stream($outputPath . $fileName);
 

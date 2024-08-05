@@ -15,7 +15,6 @@ namespace Phalcon\Tests\Unit\Http\Cookie;
 
 use Phalcon\Http\Cookie\Exception;
 use Phalcon\Tests\Unit\Http\Helper\HttpBase;
-use Phalcon\Tests\UnitTestCase;
 
 final class SetSignKeyTest extends HttpBase
 {

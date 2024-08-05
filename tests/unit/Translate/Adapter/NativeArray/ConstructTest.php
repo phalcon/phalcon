@@ -15,11 +15,11 @@ namespace Phalcon\Tests\Unit\Translate\Adapter\NativeArray;
 
 use ArrayAccess;
 use Phalcon\Tests\Fixtures\Traits\TranslateNativeArrayTrait;
+use Phalcon\Tests\UnitTestCase;
 use Phalcon\Translate\Adapter\AdapterInterface;
 use Phalcon\Translate\Adapter\NativeArray;
 use Phalcon\Translate\Exception;
 use Phalcon\Translate\InterpolatorFactory;
-use Phalcon\Tests\UnitTestCase;
 
 final class ConstructTest extends UnitTestCase
 {
@@ -57,22 +57,6 @@ final class ConstructTest extends UnitTestCase
 
     /**
      * Tests Phalcon\Translate\Adapter\NativeArray :: __construct() - Exception
-     *
-     * @return void
-     *
-     * @author Phalcon Team <team@phalcon.io>
-     * @since  2020-09-09
-     */
-    public function testTranslateAdapterNativeArrayContentParamExist(): void
-    {
-        $this->expectException(Exception::class);
-        $this->expectExceptionMessage('Translation content was not provided');
-
-        (new NativeArray(new InterpolatorFactory(), []));
-    }
-
-    /**
-     * Tests Phalcon\Translate\Adapter\NativeArray :: __construct() - Exception
      * content not array
      *
      * @return void
@@ -91,5 +75,21 @@ final class ConstructTest extends UnitTestCase
                 'content' => 1234,
             ]
         ));
+    }
+
+    /**
+     * Tests Phalcon\Translate\Adapter\NativeArray :: __construct() - Exception
+     *
+     * @return void
+     *
+     * @author Phalcon Team <team@phalcon.io>
+     * @since  2020-09-09
+     */
+    public function testTranslateAdapterNativeArrayContentParamExist(): void
+    {
+        $this->expectException(Exception::class);
+        $this->expectExceptionMessage('Translation content was not provided');
+
+        (new NativeArray(new InterpolatorFactory(), []));
     }
 }

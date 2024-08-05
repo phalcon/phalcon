@@ -13,8 +13,8 @@ declare(strict_types=1);
 
 namespace Phalcon\Tests\Unit\Http\Response\Headers;
 
-use Phalcon\Tests\Fixtures\Page\Http;
 use Phalcon\Http\Response\Headers;
+use Phalcon\Tests\Fixtures\Page\Http;
 use Phalcon\Tests\UnitTestCase;
 
 final class SendTest extends UnitTestCase
@@ -51,7 +51,7 @@ final class SendTest extends UnitTestCase
      */
     public function testHttpResponseHeadersSendTwice(): void
     {
-         $headers = new Headers();
+        $headers = new Headers();
 
         $headers->set(
             Http::CONTENT_TYPE,

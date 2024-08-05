@@ -14,12 +14,12 @@ declare(strict_types=1);
 namespace Phalcon\Tests\Unit\Translate\TranslateFactory;
 
 use Phalcon\Tests\Fixtures\Traits\TranslateCsvTrait;
+use Phalcon\Tests\UnitTestCase;
 use Phalcon\Translate\Adapter\AdapterInterface;
 use Phalcon\Translate\Adapter\Csv;
 use Phalcon\Translate\Exception;
 use Phalcon\Translate\InterpolatorFactory;
 use Phalcon\Translate\TranslateFactory;
-use Phalcon\Tests\UnitTestCase;
 
 use function uniqid;
 

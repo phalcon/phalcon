@@ -23,23 +23,6 @@ use Phalcon\Tests\UnitTestCase;
 final class AttachTest extends UnitTestCase
 {
     /**
-     * Tests Phalcon\Events\Manager :: attach() - exception
-     *
-     * @return void
-     *
-     * @author Phalcon Team <team@phalcon.io>
-     * @since  2020-09-09
-     */
-    public function testEventsManagerAttachException(): void
-    {
-        $this->expectException(Exception::class);
-        $this->expectExceptionMessage('Event handler must be an Object or Callable');
-
-        $manager = new Manager();
-        $manager->attach('test:detachable', false);
-    }
-
-    /**
      * Tests Phalcon\Events\Manager :: attach() - by name after detatch all
      *
      * @return void
@@ -101,5 +84,22 @@ final class AttachTest extends UnitTestCase
         $expected = TwoListener::class;
         $actual   = $logListeners[0];
         $this->assertInstanceOf($expected, $actual);
+    }
+
+    /**
+     * Tests Phalcon\Events\Manager :: attach() - exception
+     *
+     * @return void
+     *
+     * @author Phalcon Team <team@phalcon.io>
+     * @since  2020-09-09
+     */
+    public function testEventsManagerAttachException(): void
+    {
+        $this->expectException(Exception::class);
+        $this->expectExceptionMessage('Event handler must be an Object or Callable');
+
+        $manager = new Manager();
+        $manager->attach('test:detachable', false);
     }
 }

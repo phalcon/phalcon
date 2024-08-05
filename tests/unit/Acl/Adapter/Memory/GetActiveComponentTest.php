@@ -20,21 +20,6 @@ use Phalcon\Tests\UnitTestCase;
 final class GetActiveComponentTest extends UnitTestCase
 {
     /**
-     * Tests Phalcon\Acl\Adapter\Memory :: getActiveComponent() - default
-     *
-     * @return void
-     *
-     * @author Phalcon Team <team@phalcon.io>
-     * @since  2018-11-13
-     */
-    public function testAclAdapterMemoryGetActiveComponentDefault(): void
-    {
-        $acl = new Memory();
-
-        $this->assertNull($acl->getActiveComponent());
-    }
-
-    /**
      * Tests Phalcon\Acl\Adapter\Memory :: getActiveComponent()
      *
      * @return void
@@ -60,5 +45,20 @@ final class GetActiveComponentTest extends UnitTestCase
         $expected = 'Login';
         $actual   = $acl->getActiveComponent();
         $this->assertSame($expected, $actual);
+    }
+
+    /**
+     * Tests Phalcon\Acl\Adapter\Memory :: getActiveComponent() - default
+     *
+     * @return void
+     *
+     * @author Phalcon Team <team@phalcon.io>
+     * @since  2018-11-13
+     */
+    public function testAclAdapterMemoryGetActiveComponentDefault(): void
+    {
+        $acl = new Memory();
+
+        $this->assertNull($acl->getActiveComponent());
     }
 }

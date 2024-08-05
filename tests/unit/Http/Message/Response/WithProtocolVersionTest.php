@@ -27,7 +27,7 @@ final class WithProtocolVersionTest extends UnitTestCase
      */
     public function testHttpMessageResponseWithProtocolVersion(): void
     {
-        $response = new Response();
+        $response    = new Response();
         $newInstance = $response->withProtocolVersion('2.0');
 
         $this->assertNotSame($response, $newInstance);

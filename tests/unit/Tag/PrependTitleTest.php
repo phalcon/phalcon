@@ -49,32 +49,34 @@ class PrependTitleTest extends UnitTestCase
     }
 
     /**
-     * Tests Phalcon\Tag :: prependTitle() - separator
+     * Tests Phalcon\Tag :: prependTitle() - array
      *
      * @author Phalcon Team <team@phalcon.io>
      * @since  2012-09-05
      */
-    public function testTagPrependTitleSeparator(): void
+    public function testTagPrependTitleArray(): void
     {
         Tag::resetInput();
 
-        Tag::setTitle('Title');
-        Tag::setTitleSeparator('|');
+        Tag::setTitle('Main');
+        Tag::setTitleSeparator(' - ');
 
-        Tag::prependTitle('Class');
+        Tag::prependTitle(
+            ['Category', 'Title']
+        );
 
         $this->assertSame(
-            'Title',
+            'Main',
             Tag::getTitle(false, false)
         );
 
         $this->assertSame(
-            'Class|Title',
+            'Title - Category - Main',
             Tag::getTitle(true, false)
         );
 
         $this->assertSame(
-            '<title>Class|Title</title>' . PHP_EOL,
+            '<title>Title - Category - Main</title>' . PHP_EOL,
             Tag::renderTitle()
         );
     }
@@ -94,39 +96,6 @@ class PrependTitleTest extends UnitTestCase
 
         Tag::prependTitle('Category');
         Tag::prependTitle('Title');
-
-        $this->assertSame(
-            'Main',
-            Tag::getTitle(false, false)
-        );
-
-        $this->assertSame(
-            'Title - Category - Main',
-            Tag::getTitle(true, false)
-        );
-
-        $this->assertSame(
-            '<title>Title - Category - Main</title>' . PHP_EOL,
-            Tag::renderTitle()
-        );
-    }
-
-    /**
-     * Tests Phalcon\Tag :: prependTitle() - array
-     *
-     * @author Phalcon Team <team@phalcon.io>
-     * @since  2012-09-05
-     */
-    public function testTagPrependTitleArray(): void
-    {
-        Tag::resetInput();
-
-        Tag::setTitle('Main');
-        Tag::setTitleSeparator(' - ');
-
-        Tag::prependTitle(
-            ['Category', 'Title']
-        );
 
         $this->assertSame(
             'Main',
@@ -175,6 +144,37 @@ class PrependTitleTest extends UnitTestCase
 
         $this->assertSame(
             '<title>Main</title>' . PHP_EOL,
+            Tag::renderTitle()
+        );
+    }
+
+    /**
+     * Tests Phalcon\Tag :: prependTitle() - separator
+     *
+     * @author Phalcon Team <team@phalcon.io>
+     * @since  2012-09-05
+     */
+    public function testTagPrependTitleSeparator(): void
+    {
+        Tag::resetInput();
+
+        Tag::setTitle('Title');
+        Tag::setTitleSeparator('|');
+
+        Tag::prependTitle('Class');
+
+        $this->assertSame(
+            'Title',
+            Tag::getTitle(false, false)
+        );
+
+        $this->assertSame(
+            'Class|Title',
+            Tag::getTitle(true, false)
+        );
+
+        $this->assertSame(
+            '<title>Class|Title</title>' . PHP_EOL,
             Tag::renderTitle()
         );
     }

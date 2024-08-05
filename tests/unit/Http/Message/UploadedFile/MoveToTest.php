@@ -13,11 +13,11 @@ declare(strict_types=1);
 
 namespace Phalcon\Tests\Unit\Http\Message\UploadedFile;
 
-use Phalcon\Tests\Fixtures\Page\Http;
 use Phalcon\Http\Message\Exception\InvalidArgumentException;
 use Phalcon\Http\Message\Exception\RuntimeException;
 use Phalcon\Http\Message\Stream;
 use Phalcon\Http\Message\UploadedFile;
+use Phalcon\Tests\Fixtures\Page\Http;
 use Phalcon\Tests\UnitTestCase;
 
 use function outputDir;
@@ -44,6 +44,29 @@ final class MoveToTest extends UnitTestCase
         $this->assertFileExists($target);
 
         $this->assertFileContentsEqual($target, (string)$stream);
+    }
+
+    /**
+     * Tests Phalcon\Http\Message\UploadedFile :: moveTo() - already moved
+     *
+     * @author Phalcon Team <team@phalcon.io>
+     * @since  2019-02-10
+     */
+    public function testHttpMessageUploadedFileMoveToAlreadyMoved(): void
+    {
+        $this->expectException(RuntimeException::class);
+        $this->expectExceptionMessage('File has already been moved');
+
+        $stream = new Stream(Http::STREAM_MEMORY, 'w+b');
+        $stream->write('Phalcon Framework');
+
+        $file   = new UploadedFile($stream, 0);
+        $target = $this->getNewFileName();
+
+        $target = outputDir('tests/stream/' . $target);
+
+        $file->moveTo($target);
+        $file->moveTo($target);
     }
 
     /**
@@ -86,28 +109,5 @@ final class MoveToTest extends UnitTestCase
 
         $file = new UploadedFile($stream, 0);
         $file->moveTo("");
-    }
-
-    /**
-     * Tests Phalcon\Http\Message\UploadedFile :: moveTo() - already moved
-     *
-     * @author Phalcon Team <team@phalcon.io>
-     * @since  2019-02-10
-     */
-    public function testHttpMessageUploadedFileMoveToAlreadyMoved(): void
-    {
-        $this->expectException(RuntimeException::class);
-        $this->expectExceptionMessage('File has already been moved');
-
-        $stream = new Stream(Http::STREAM_MEMORY, 'w+b');
-        $stream->write('Phalcon Framework');
-
-        $file   = new UploadedFile($stream, 0);
-        $target = $this->getNewFileName();
-
-        $target = outputDir('tests/stream/' . $target);
-
-        $file->moveTo($target);
-        $file->moveTo($target);
     }
 }

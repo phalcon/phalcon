@@ -13,8 +13,6 @@ declare(strict_types=1);
 
 namespace Phalcon\Tests\Unit\Storage\Adapter;
 
-use Codeception\Example;
-use Phalcon\Tests\UnitTestCase;
 use Phalcon\Storage\Adapter\Apcu;
 use Phalcon\Storage\Adapter\Libmemcached;
 use Phalcon\Storage\Adapter\Memory;
@@ -22,56 +20,17 @@ use Phalcon\Storage\Adapter\Redis;
 use Phalcon\Storage\Adapter\Stream;
 use Phalcon\Storage\Adapter\Weak;
 use Phalcon\Storage\SerializerFactory;
+use Phalcon\Tests\UnitTestCase;
 use stdClass;
 
 use function array_merge;
 use function getOptionsLibmemcached;
 use function getOptionsRedis;
 use function outputDir;
-use function sprintf;
 use function uniqid;
 
 final class GetSetTest extends UnitTestCase
 {
-    /**
-     * Tests Phalcon\Storage\Adapter\* :: get()/set()
-     *
-     * @dataProvider getExamples
-     *
-     * @author       Phalcon Team <team@phalcon.io>
-     * @since        2020-09-09
-     */
-    public function testStorageAdapterGetSet(
-        string $extension,
-        string $class,
-        array $options,
-        mixed $value
-    ): void {
-        if (!empty($extension)) {
-            $this->checkExtensionIsLoaded($extension);
-        }
-
-        $serializer = new SerializerFactory();
-        $adapter    = new $class($serializer, $options);
-
-        $key = uniqid('k-');
-
-        $result = $adapter->set($key, $value);
-        $this->assertTrue($result);
-
-        $result = $adapter->has($key);
-        $this->assertTrue($result);
-
-        /**
-         * This will issue delete
-         */
-        $result = $adapter->set($key, $value, 0);
-        $this->assertTrue($result);
-
-        $result = $adapter->has($key);
-        $this->assertFalse($result);
-    }
-
     /**
      * Tests Phalcon\Storage\Adapter\Weak :: get()/set()
      *
@@ -84,7 +43,7 @@ final class GetSetTest extends UnitTestCase
         $adapter    = new Weak($serializer);
 
         $key = uniqid();
-        $obj = new \stdClass();
+        $obj = new stdClass();
         $result = $adapter->set($key, "test");
         $this->assertFalse($result);
         $result = $adapter->set($key, $obj);
@@ -366,5 +325,44 @@ final class GetSetTest extends UnitTestCase
                 new stdClass(),
             ],
         ];
+    }
+
+    /**
+     * Tests Phalcon\Storage\Adapter\* :: get()/set()
+     *
+     * @dataProvider getExamples
+     *
+     * @author       Phalcon Team <team@phalcon.io>
+     * @since        2020-09-09
+     */
+    public function testStorageAdapterGetSet(
+        string $extension,
+        string $class,
+        array $options,
+        mixed $value
+    ): void {
+        if (!empty($extension)) {
+            $this->checkExtensionIsLoaded($extension);
+        }
+
+        $serializer = new SerializerFactory();
+        $adapter    = new $class($serializer, $options);
+
+        $key = uniqid('k-');
+
+        $result = $adapter->set($key, $value);
+        $this->assertTrue($result);
+
+        $result = $adapter->has($key);
+        $this->assertTrue($result);
+
+        /**
+         * This will issue delete
+         */
+        $result = $adapter->set($key, $value, 0);
+        $this->assertTrue($result);
+
+        $result = $adapter->has($key);
+        $this->assertFalse($result);
     }
 }

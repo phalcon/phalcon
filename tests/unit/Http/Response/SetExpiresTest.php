@@ -15,8 +15,8 @@ namespace Phalcon\Tests\Unit\Http\Response;
 
 use DateTime;
 use DateTimeZone;
-use Phalcon\Tests\Fixtures\Page\Http;
 use Phalcon\Http\Response;
+use Phalcon\Tests\Fixtures\Page\Http;
 use Phalcon\Tests\UnitTestCase;
 
 final class SetExpiresTest extends UnitTestCase

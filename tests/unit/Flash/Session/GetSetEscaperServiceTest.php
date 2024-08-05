@@ -32,6 +32,26 @@ final class GetSetEscaperServiceTest extends UnitTestCase
     }
 
     /**
+     * Tests Phalcon\Flash\Session :: getEscaperService() - exception
+     *
+     * @return void
+     *
+     * @author Phalcon Team <team@phalcon.io>
+     * @since  2020-09-09
+     */
+    public function testFlashSessionGetEscaperServiceException(): void
+    {
+        $this->expectException(Exception::class);
+        $this->expectExceptionMessage(
+            "A dependency injection container is required to " .
+            "access the 'escaper' service"
+        );
+
+        $flash = new Session();
+        $flash->getEscaperService();
+    }
+
+    /**
      * Tests Phalcon\Flash\Session :: getEscaperService()/setEscaperService()
      *
      * @return void
@@ -78,25 +98,5 @@ final class GetSetEscaperServiceTest extends UnitTestCase
 
         $actual = $flash->getEscaperService();
         $this->assertSame(spl_object_hash($escaper), spl_object_hash($actual));
-    }
-
-    /**
-     * Tests Phalcon\Flash\Session :: getEscaperService() - exception
-     *
-     * @return void
-     *
-     * @author Phalcon Team <team@phalcon.io>
-     * @since  2020-09-09
-     */
-    public function testFlashSessionGetEscaperServiceException(): void
-    {
-        $this->expectException(Exception::class);
-        $this->expectExceptionMessage(
-            "A dependency injection container is required to " .
-            "access the 'escaper' service"
-        );
-
-        $flash = new Session();
-        $flash->getEscaperService();
     }
 }

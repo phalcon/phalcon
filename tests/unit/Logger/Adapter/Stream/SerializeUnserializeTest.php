@@ -33,9 +33,9 @@ final class SerializeUnserializeTest extends UnitTestCase
         $this->expectException(Exception::class);
         $this->expectExceptionMessage('This object cannot be serialized');
 
-        $fileName = $this->getNewFileName('log', 'log');
+        $fileName   = $this->getNewFileName('log', 'log');
         $outputPath = logsDir();
-        $adapter = new Stream($outputPath . $fileName);
+        $adapter    = new Stream($outputPath . $fileName);
 
         $object = serialize($adapter);
     }

@@ -20,26 +20,6 @@ use Phalcon\Tests\UnitTestCase;
 final class InterpolateTest extends UnitTestCase
 {
     /**
-     * Tests Phalcon\Support\Helper\Str\Interpolate :: __invoke
-     *
-     * @dataProvider getExamples
-     *
-     * @return void
-     * @param Example    $example
-     *
-     * @author       Phalcon Team <team@phalcon.io>
-     * @since        2021-04-28
-     */
-    public function testSupportHelperHelperStrInterpolateInvoke(
-        string $expected,
-        string $format,
-        array $context
-    ): void {
-        $actual   = (new Interpolate())($format, $context);
-        $this->assertSame($expected, $actual);
-    }
-
-    /**
      * @return array
      */
     public static function getExamples(): array
@@ -83,5 +63,25 @@ final class InterpolateTest extends UnitTestCase
                 ],
             ],
         ];
+    }
+
+    /**
+     * Tests Phalcon\Support\Helper\Str\Interpolate :: __invoke
+     *
+     * @dataProvider getExamples
+     *
+     * @param Example $example
+     *
+     * @return void
+     * @author       Phalcon Team <team@phalcon.io>
+     * @since        2021-04-28
+     */
+    public function testSupportHelperHelperStrInterpolateInvoke(
+        string $expected,
+        string $format,
+        array $context
+    ): void {
+        $actual = (new Interpolate())($format, $context);
+        $this->assertSame($expected, $actual);
     }
 }

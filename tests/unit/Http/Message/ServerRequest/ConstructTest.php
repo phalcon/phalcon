@@ -13,10 +13,10 @@ declare(strict_types=1);
 
 namespace Phalcon\Tests\Unit\Http\Message\ServerRequest;
 
-use Phalcon\Tests\Fixtures\Page\Http;
 use Phalcon\Http\Message\Interfaces\ServerRequestInterface;
 use Phalcon\Http\Message\ServerRequest;
 use Phalcon\Http\Message\Uri;
+use Phalcon\Tests\Fixtures\Page\Http;
 use Phalcon\Tests\UnitTestCase;
 
 final class ConstructTest extends UnitTestCase

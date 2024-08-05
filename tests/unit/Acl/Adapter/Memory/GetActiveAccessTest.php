@@ -27,21 +27,6 @@ final class GetActiveAccessTest extends UnitTestCase
      * @author Phalcon Team <team@phalcon.io>
      * @since  2018-11-13
      */
-    public function testAclAdapterMemoryGetActiveAccessDefault(): void
-    {
-        $acl = new Memory();
-
-        $this->assertNull($acl->getActiveAccess());
-    }
-
-    /**
-     * Tests Phalcon\Acl\Adapter\Memory :: getActiveAccess() - default
-     *
-     * @return void
-     *
-     * @author Phalcon Team <team@phalcon.io>
-     * @since  2018-11-13
-     */
     public function testAclAdapterMemoryGetActiveAccess(): void
     {
         $acl = new Memory();
@@ -54,5 +39,20 @@ final class GetActiveAccessTest extends UnitTestCase
         $this->assertTrue($actual);
 
         $this->assertSame('index', $acl->getActiveAccess());
+    }
+
+    /**
+     * Tests Phalcon\Acl\Adapter\Memory :: getActiveAccess() - default
+     *
+     * @return void
+     *
+     * @author Phalcon Team <team@phalcon.io>
+     * @since  2018-11-13
+     */
+    public function testAclAdapterMemoryGetActiveAccessDefault(): void
+    {
+        $acl = new Memory();
+
+        $this->assertNull($acl->getActiveAccess());
     }
 }
