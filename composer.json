@@ -14,7 +14,6 @@
   "license": "MIT",
   "require": {
     "php": ">=8.1 <9.0",
-    "ext-apcu": "*",
     "ext-fileinfo": "*",
     "ext-json": "*",
     "ext-mbstring": "*",
@@ -45,7 +44,6 @@
   "autoload-dev": {
     "psr-4": {
       "Phalcon\\Tests\\Benchmarks\\": "tests/benchmarks/",
-      "Phalcon\\Tests\\Cli\\": "tests/cli/",
       "Phalcon\\Tests\\Database\\": "tests/database/",
       "Phalcon\\Tests\\Integration\\": "tests/integration/",
       "Phalcon\\Tests\\": "tests/",
@@ -92,7 +90,6 @@
     "test-unit": "vendor/bin/phpunit tests/unit/",
     "test-unit-coverage": "vendor/bin/phpunit tests/unit/ --coverage-clover tests/_output/coverage.xml",
     "test-unit-coverage-html": "vendor/bin/phpunit tests/unit/ --coverage-html tests/_output/coverage/",
-    "test-cli": "php vendor/bin/codecept run --ext DotReporter cli",
     "test-integration": "php vendor/bin/codecept run --ext DotReporter integration",
     "test-db-common": "php vendor/bin/codecept run --ext DotReporter database -g common",
     "test-db-mysql": "php vendor/bin/codecept run --ext DotReporter database --env mysql -g mysql",
