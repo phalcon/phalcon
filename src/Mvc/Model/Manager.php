@@ -17,6 +17,7 @@ use Phalcon\Db\Adapter\AdapterInterface;
 use Phalcon\Di\InjectionAwareInterface;
 use Phalcon\Di\Traits\InjectionAwareTrait;
 use Phalcon\Events\EventsAwareInterface;
+use Phalcon\Events\Exception as EventsException;
 use Phalcon\Events\ManagerInterface as EventsManagerInterface;
 use Phalcon\Events\Traits\EventsAwareTrait;
 use Phalcon\Mvc\Model\Query\BuilderInterface;
@@ -27,6 +28,7 @@ use Phalcon\Parsers\Parser;
 use Phalcon\Support\Settings;
 use Phalcon\Traits\Helper\Str\UncamelizeTrait;
 use ReflectionClass;
+use ReflectionException;
 use ReflectionProperty;
 
 use function array_key_exists;
@@ -816,6 +818,7 @@ class Manager implements ManagerInterface, InjectionAwareInterface, EventsAwareI
      * @param string $phql
      *
      * @return QueryInterface
+     * @throws Exception
      */
     public function createQuery(string $phql): QueryInterface
     {
@@ -866,6 +869,7 @@ class Manager implements ManagerInterface, InjectionAwareInterface, EventsAwareI
      * @param array|null $types
      *
      * @return ResultsetInterface|StatusInterface
+     * @throws Exception
      */
     public function executeQuery(
         string $phql,
@@ -915,7 +919,8 @@ class Manager implements ManagerInterface, InjectionAwareInterface, EventsAwareI
      * @param mixed|null     $parameters
      * @param string|null    $method
      *
-     * @return ResultsetInterface | bool
+     * @return ResultsetInterface|bool
+     * @throws Exception
      */
     public function getBelongsToRecords(
         string $modelName,
@@ -1001,6 +1006,15 @@ class Manager implements ManagerInterface, InjectionAwareInterface, EventsAwareI
 
     /**
      * Gets hasMany related records from a model
+     *
+     * @param string         $modelName
+     * @param string         $modelRelation
+     * @param ModelInterface $record
+     * @param mixed|null     $parameters
+     * @param string|null    $method
+     *
+     * @return ResultsetInterface|bool
+     * @throws Exception
      */
     public function getHasManyRecords(
         string $modelName,
@@ -1073,6 +1087,15 @@ class Manager implements ManagerInterface, InjectionAwareInterface, EventsAwareI
 
     /**
      * Gets belongsTo related records from a model
+     *
+     * @param string         $modelName
+     * @param string         $modelRelation
+     * @param ModelInterface $record
+     * @param mixed|null     $parameters
+     * @param string|null    $method
+     *
+     * @return ModelInterface|bool
+     * @throws Exception
      */
     public function getHasOneRecords(
         string $modelName,
@@ -1160,6 +1183,10 @@ class Manager implements ManagerInterface, InjectionAwareInterface, EventsAwareI
 
     /**
      * Returns the mapped source for a model
+     *
+     * @param ModelInterface $model
+     *
+     * @return string
      */
     public function getModelSource(ModelInterface $model): string
     {
@@ -1667,6 +1694,7 @@ class Manager implements ManagerInterface, InjectionAwareInterface, EventsAwareI
      * @param ModelInterface $model
      *
      * @return bool
+     * @throws EventsException
      */
     public function initialize(ModelInterface $model): bool
     {
@@ -1764,6 +1792,7 @@ class Manager implements ManagerInterface, InjectionAwareInterface, EventsAwareI
      * @param string         $property
      *
      * @return bool
+     * @throws ReflectionException
      */
     final public function isVisibleModelProperty(
         ModelInterface $model,
@@ -1805,6 +1834,7 @@ class Manager implements ManagerInterface, InjectionAwareInterface, EventsAwareI
      * @param string $modelName
      *
      * @return ModelInterface
+     * @throws Exception
      */
     public function load(string $modelName): ModelInterface
     {
@@ -1831,6 +1861,8 @@ class Manager implements ManagerInterface, InjectionAwareInterface, EventsAwareI
      * @param ModelInterface $model
      * @param string         $eventName
      * @param mixed          $data
+     *
+     * @return mixed
      */
     public function missingMethod(
         ModelInterface $model,
@@ -1875,6 +1907,9 @@ class Manager implements ManagerInterface, InjectionAwareInterface, EventsAwareI
      *
      * @param string         $eventName
      * @param ModelInterface $model
+     *
+     * @return bool|mixed|null
+     * @throws EventsException
      */
     public function notifyEvent(string $eventName, ModelInterface $model)
     {
@@ -2076,6 +2111,7 @@ class Manager implements ManagerInterface, InjectionAwareInterface, EventsAwareI
      * @param array          $connectionServices
      *
      * @return AdapterInterface
+     * @throws Exception
      */
     protected function getConnection(
         ModelInterface $model,
@@ -2200,6 +2236,11 @@ class Manager implements ManagerInterface, InjectionAwareInterface, EventsAwareI
 
     /**
      * Creates a unique key to be used as index in a hash
+     *
+     * @param mixed $prefix
+     * @param mixed $value
+     *
+     * @return string|null
      */
     private function getUniqueKey(mixed $prefix, mixed $value): string | null
     {
@@ -2218,6 +2259,11 @@ class Manager implements ManagerInterface, InjectionAwareInterface, EventsAwareI
         return ($result !== '') ? $result : null;
     }
 
+    /**
+     * @param array $value
+     *
+     * @return string
+     */
     private function getUniqueKeyArray(array $value): string
     {
         $return  = '[';

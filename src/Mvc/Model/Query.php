@@ -14,6 +14,7 @@ declare(strict_types=1);
 namespace Phalcon\Mvc\Model;
 
 use PDOException;
+use Phalcon\Cache\Exception\InvalidArgumentException;
 use Phalcon\Db\Adapter\AdapterInterface;
 use Phalcon\Db\Column;
 use Phalcon\Db\RawValue;
@@ -252,54 +253,67 @@ class Query implements QueryInterface, InjectionAwareInterface
      * @var array
      */
     protected ?array $intermediate = null;
+
     /**
      * @var array|null
      */
     protected static ?array $internalPhqlCache = null;
+
     /**
      * @var ManagerInterface|null
      */
     protected ?ManagerInterface $manager = null;
+
     /**
      * @var MetaDataInterface|null
      */
     protected ?MetaDataInterface $metaData = null;
+
     /**
      * @var array
      */
     protected array $models = [];
+
     /**
      * @var array
      */
     protected array $modelsInstances = [];
+
     /**
      * @var int
      */
     protected int $nestingLevel = -1;
+
     /**
      * @var bool
      */
     protected bool $sharedLock = false;
+
     /**
      * @var array
      */
     protected array $sqlAliases = [];
+
     /**
      * @var array
      */
     protected array $sqlAliasesModels = [];
+
     /**
      * @var array
      */
     protected array $sqlAliasesModelsInstances = [];
+
     /**
      * @var array
      */
     protected array $sqlColumnAliases = [];
+
     /**
      * @var array
      */
     protected array $sqlModelsAliases = [];
+
     /**
      * TransactionInterface so that the query can wrap a transaction
      * around batch updates and intermediate selects within the transaction.
@@ -309,10 +323,12 @@ class Query implements QueryInterface, InjectionAwareInterface
      * @var TransactionInterface|null
      */
     protected ?TransactionInterface $transaction = null;
+
     /**
      * @var int|null
      */
     protected ?int $type = null;
+
     /**
      * @var bool
      */
@@ -375,7 +391,12 @@ class Query implements QueryInterface, InjectionAwareInterface
     /**
      * Executes a parsed PHQL statement
      *
+     * @param array $bindParams
+     * @param array $bindTypes
+     *
      * @return mixed
+     * @throws Exception
+     * @throws InvalidArgumentException
      */
     public function execute(array $bindParams = [], array $bindTypes = []): mixed
     {
@@ -590,6 +611,7 @@ class Query implements QueryInterface, InjectionAwareInterface
      *
      * @return ModelInterface
      * @throws Exception
+     * @throws InvalidArgumentException
      */
     public function getSingleResult(
         array $bindParams = [],
@@ -668,7 +690,7 @@ class Query implements QueryInterface, InjectionAwareInterface
      * generating another intermediate representation that could be executed by
      * Phalcon\Mvc\Model\Query
      *
-     * @return array
+     * @return array|array[]
      * @throws Exception
      */
     public function parse(): array
@@ -2424,6 +2446,7 @@ class Query implements QueryInterface, InjectionAwareInterface
      * @param array $argument
      *
      * @return array|string[]
+     * @throws Exception
      */
     final protected function getCallArgument(array $argument): array
     {
@@ -2442,6 +2465,7 @@ class Query implements QueryInterface, InjectionAwareInterface
      * @param array $expr
      *
      * @return array
+     * @throws Exception
      */
     final protected function getCaseExpression(array $expr): array
     {
@@ -2475,7 +2499,8 @@ class Query implements QueryInterface, InjectionAwareInterface
      * @param array $expr
      * @param bool  $quoting
      *
-     * @return array
+     * @return array|string[]
+     * @throws Exception
      */
     final protected function getExpression(array $expr, bool $quoting = true): array
     {
@@ -3088,6 +3113,7 @@ class Query implements QueryInterface, InjectionAwareInterface
      * @param array $expr
      *
      * @return array
+     * @throws Exception
      */
     final protected function getFunctionCall(array $expr): array
     {
@@ -3136,7 +3162,8 @@ class Query implements QueryInterface, InjectionAwareInterface
      *
      * @param array $group
      *
-     * @return array
+     * @return array|\string[][]
+     * @throws Exception
      */
     final protected function getGroupClause(array $group): array
     {
@@ -4107,6 +4134,8 @@ class Query implements QueryInterface, InjectionAwareInterface
      * @param array          $bindTypes
      *
      * @return ResultsetInterface
+     * @throws Exception
+     * @throws InvalidArgumentException
      */
     final protected function getRelatedRecords(
         ModelInterface $model,
@@ -4427,7 +4456,7 @@ class Query implements QueryInterface, InjectionAwareInterface
      * @param ManagerInterface $manager
      * @param array            $qualifiedName
      *
-     * @return string
+     * @return array|string
      * @throws Exception
      */
     final protected function getTable(
@@ -4494,6 +4523,11 @@ class Query implements QueryInterface, InjectionAwareInterface
         return $model->getWriteConnection();
     }
 
+    /**
+     * @param mixed $str
+     *
+     * @return mixed
+     */
     private function ormSingleQuotes(mixed $str): mixed
     {
         // Check if input is a string
