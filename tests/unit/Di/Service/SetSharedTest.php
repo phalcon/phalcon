@@ -13,13 +13,30 @@ declare(strict_types=1);
 
 namespace Phalcon\Tests\Unit\Di\Service;
 
-use Codeception\Example;
 use Phalcon\Di\Service;
 use Phalcon\Html\Escaper;
 use Phalcon\Tests\UnitTestCase;
 
 class SetSharedTest extends UnitTestCase
 {
+    /**
+     * @return Service[][]
+     */
+    public static function getExamples(): array
+    {
+        return [
+            [
+                new Service(Escaper::class),
+            ],
+            [
+                new Service(Escaper::class, true),
+            ],
+            [
+                new Service(Escaper::class, false),
+            ],
+        ];
+    }
+
     /**
      * Tests Phalcon\Di\Service :: setShared()
      *
@@ -42,23 +59,5 @@ class SetSharedTest extends UnitTestCase
 
         $actual = $service->isShared();
         $this->assertFalse($actual);
-    }
-
-    /**
-     * @return Service[][]
-     */
-    public static function getExamples(): array
-    {
-        return [
-            [
-                new Service(Escaper::class),
-            ],
-            [
-                new Service(Escaper::class, true),
-            ],
-            [
-                new Service(Escaper::class, false),
-            ],
-        ];
     }
 }

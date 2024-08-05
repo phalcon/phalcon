@@ -14,8 +14,8 @@ declare(strict_types=1);
 namespace Phalcon\Tests\Unit\Di;
 
 use Phalcon\Di\Di;
-use stdClass;
 use Phalcon\Tests\UnitTestCase;
+use stdClass;
 
 class GetServicesTest extends UnitTestCase
 {

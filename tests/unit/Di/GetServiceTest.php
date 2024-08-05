@@ -35,7 +35,7 @@ class GetServiceTest extends UnitTestCase
         $container = new Di();
 
         // set a service and get it to check
-        $class = Service::class;
+        $class  = Service::class;
         $actual = $container->set('escaper', Escaper::class);
         $this->assertInstanceOf($class, $actual);
 
