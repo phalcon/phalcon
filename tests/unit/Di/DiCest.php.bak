@@ -43,7 +43,7 @@ class DiTest extends UnitTestCase
     /**
      * executed before each test
      */
-    public function _before(): void
+    public function setUp(): void
     {
         Di::reset();
 

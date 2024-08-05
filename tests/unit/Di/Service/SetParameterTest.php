@@ -61,6 +61,25 @@ class SetParameterTest extends UnitTestCase
     }
 
     /**
+     * Unit Tests Phalcon\Di\Service :: setParameter() - exception
+     *
+     * @return void
+     *
+     * @author Phalcon Team <team@phalcon.io>
+     * @since  2019-09-09
+     */
+    public function testDiServiceSetParameterException(): void
+    {
+        $this->expectException(Exception::class);
+        $this->expectExceptionMessage(
+            'Definition must be an array to update its parameters'
+        );
+
+        $service = new Service(Escaper::class);
+        $service->setParameter(1, [1]);
+    }
+
+    /**
      * Unit Tests Phalcon\Di\Service :: setParameter() - with arguments
      *
      * @return void
@@ -70,15 +89,15 @@ class SetParameterTest extends UnitTestCase
      */
     public function testDiServiceSetParameterWithArguments(): void
     {
-         $service = new Service(
-             [
+        $service = new Service(
+            [
                 'className' => Escaper::class,
                 'arguments' => [
                     0 => ['one'],
                 ],
-             ],
-             true
-         );
+            ],
+            true
+        );
 
         $expected = [
             'className' => Escaper::class,
@@ -97,24 +116,5 @@ class SetParameterTest extends UnitTestCase
         ];
         $actual   = $service->getDefinition();
         $this->assertSame($expected, $actual);
-    }
-
-    /**
-     * Unit Tests Phalcon\Di\Service :: setParameter() - exception
-     *
-     * @return void
-     *
-     * @author Phalcon Team <team@phalcon.io>
-     * @since  2019-09-09
-     */
-    public function testDiServiceSetParameterException(): void
-    {
-        $this->expectException(Exception::class);
-        $this->expectExceptionMessage(
-            'Definition must be an array to update its parameters'
-        );
-
-        $service = new Service(Escaper::class);
-        $service->setParameter(1, [1]);
     }
 }

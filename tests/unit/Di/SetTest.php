@@ -13,7 +13,6 @@ declare(strict_types=1);
 
 namespace Phalcon\Tests\Unit\Di;
 
-use Codeception\Example;
 use Phalcon\Di\Di;
 use Phalcon\Di\Exception;
 use Phalcon\Html\Escaper;
@@ -22,6 +21,34 @@ use Phalcon\Tests\UnitTestCase;
 
 class SetTest extends UnitTestCase
 {
+    /**
+     * @return array
+     */
+    public static function getExamples(): array
+    {
+        return [
+            [
+                'escaper',
+                Escaper::class,
+                Escaper::class,
+            ],
+            [
+                'escaper',
+                function () {
+                    return new Escaper();
+                },
+                Escaper::class,
+            ],
+            [
+                'escaper',
+                [
+                    'className' => Escaper::class,
+                ],
+                Escaper::class,
+            ],
+        ];
+    }
+
     /**
      * Unit Tests Phalcon\Di :: set()
      *
@@ -44,6 +71,27 @@ class SetTest extends UnitTestCase
         $container->set($name, $service);
 
         $actual = $container->get($class);
+        $this->assertInstanceOf($class, $actual);
+    }
+
+    /**
+     * Unit Tests Phalcon\Di :: set() - alias
+     *
+     * @return void
+     *
+     * @author Phalcon Team <team@phalcon.io>
+     * @since  2019-09-09
+     */
+    public function testDiSetAlias(): void
+    {
+        $container = new Di();
+        $escaper   = new Escaper();
+
+        $container->set('alias', Escaper::class);
+        $container->set(Escaper::class, $escaper);
+
+        $class  = Escaper::class;
+        $actual = $container->get('alias');
         $this->assertInstanceOf($class, $actual);
     }
 
@@ -82,55 +130,5 @@ class SetTest extends UnitTestCase
         $collection = $container->getService('collection');
         $actual     = $collection->isShared();
         $this->assertTrue($actual);
-    }
-
-
-    /**
-     * Unit Tests Phalcon\Di :: set() - alias
-     *
-     * @return void
-     *
-     * @author Phalcon Team <team@phalcon.io>
-     * @since  2019-09-09
-     */
-    public function testDiSetAlias(): void
-    {
-        $container = new Di();
-        $escaper   = new Escaper();
-
-        $container->set('alias', Escaper::class);
-        $container->set(Escaper::class, $escaper);
-
-        $class  = Escaper::class;
-        $actual = $container->get('alias');
-        $this->assertInstanceOf($class, $actual);
-    }
-
-    /**
-     * @return array
-     */
-    public static function getExamples(): array
-    {
-        return [
-            [
-                'escaper',
-                Escaper::class,
-                Escaper::class,
-            ],
-            [
-                'escaper',
-                function () {
-                    return new Escaper();
-                },
-                Escaper::class,
-            ],
-            [
-                'escaper',
-                [
-                    'className' => Escaper::class,
-                ],
-                Escaper::class,
-            ],
-        ];
     }
 }

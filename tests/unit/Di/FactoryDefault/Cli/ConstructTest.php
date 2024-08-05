@@ -18,7 +18,7 @@ use Phalcon\Di\FactoryDefault\Cli;
 use Phalcon\Tests\Fixtures\Traits\CliTrait;
 use Phalcon\Tests\UnitTestCase;
 
-class ConstructTest extends UnitTestCase
+final class ConstructTest extends UnitTestCase
 {
     use CliTrait;
 
@@ -58,7 +58,13 @@ class ConstructTest extends UnitTestCase
     ): void {
         $container = new Cli();
 
-        $actual = $container->get($class);
+        if ('sessionBag' === $class) {
+            $params = ['someName'];
+        } else {
+            $params = null;
+        }
+
+        $actual = $container->get($class, $params);
         $this->assertInstanceOf($service, $actual);
     }
 }

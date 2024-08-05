@@ -61,6 +61,29 @@ class GetTest extends UnitTestCase
     }
 
     /**
+     * Unit Tests Phalcon\Di :: get() - exception
+     *
+     * @return void
+     *
+     * @author Phalcon Team <team@phalcon.io>
+     * @since  2019-09-09
+     */
+    public function testDiGetException(): void
+    {
+        // setup
+        $container = new Di();
+
+        // non exists service
+        $this->expectException(Exception::class);
+        $this->expectExceptionMessage(
+            "Service 'non-exists' was not found in the " .
+            "dependency injection container"
+        );
+
+        $container->get('non-exists');
+    }
+
+    /**
      * Unit Tests Phalcon\Di :: get() - shared
      *
      * @return void
@@ -86,28 +109,5 @@ class GetTest extends UnitTestCase
         $expected = spl_object_hash($escaper);
         $actual   = spl_object_hash($actual);
         $this->assertSame($expected, $actual);
-    }
-
-    /**
-     * Unit Tests Phalcon\Di :: get() - exception
-     *
-     * @return void
-     *
-     * @author Phalcon Team <team@phalcon.io>
-     * @since  2019-09-09
-     */
-    public function testDiGetException(): void
-    {
-        // setup
-        $container = new Di();
-
-        // non exists service
-        $this->expectException(Exception::class);
-        $this->expectExceptionMessage(
-            "Service 'non-exists' was not found in the " .
-            "dependency injection container"
-        );
-
-        $container->get('non-exists');
     }
 }
