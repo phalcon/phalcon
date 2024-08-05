@@ -97,16 +97,6 @@ trait PhpApcuTrait
     }
 
     /**
-     * @param string $pattern
-     *
-     * @return APCuIterator
-     */
-    protected function phpApcuIterator(string $pattern)
-    {
-        return new APCuIterator($pattern);
-    }
-
-    /**
      * @param string|array $key
      * @param mixed        $var
      * @param int          $ttl
