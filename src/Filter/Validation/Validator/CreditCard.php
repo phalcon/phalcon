@@ -22,7 +22,6 @@ use function restore_error_handler;
 use function set_error_handler;
 use function str_split;
 
-use const E_NOTICE;
 use const E_WARNING;
 
 /**
