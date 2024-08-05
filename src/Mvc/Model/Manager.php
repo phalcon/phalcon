@@ -1356,16 +1356,11 @@ class Manager implements ManagerInterface, InjectionAwareInterface, EventsAwareI
              */
             $query = $builder->getQuery();
 
-            switch ($relation->getType()) {
-                case Relation::HAS_MANY_THROUGH:
-                    return $query->execute();
-
-                case Relation::HAS_ONE_THROUGH:
-                    return $query->setUniqueRow(true)->execute();
-
-                default:
-                    throw new Exception("Unknown relation type");
-            }
+            return match ($relation->getType()) {
+                Relation::HAS_MANY_THROUGH => $query->execute(),
+                Relation::HAS_ONE_THROUGH  => $query->setUniqueRow(true)->execute(),
+                default                    => throw new Exception("Unknown relation type"),
+            };
         }
 
         $conditions = [];
@@ -1418,19 +1413,11 @@ class Manager implements ManagerInterface, InjectionAwareInterface, EventsAwareI
          * Check the right method to get the data
          */
         if (null === $method) {
-            switch ($relation->getType()) {
-                case Relation::BELONGS_TO:
-                case Relation::HAS_ONE:
-                    $retrieveMethod = "findFirst";
-                    break;
-
-                case Relation::HAS_MANY:
-                    $retrieveMethod = "find";
-                    break;
-
-                default:
-                    throw new Exception("Unknown relation type");
-            }
+            $retrieveMethod = match ($relation->getType()) {
+                Relation::BELONGS_TO, Relation::HAS_ONE => "findFirst",
+                Relation::HAS_MANY                      => "find",
+                default                                 => throw new Exception("Unknown relation type"),
+            };
         } else {
             $retrieveMethod = $method;
         }
