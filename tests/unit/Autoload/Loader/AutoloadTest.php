@@ -171,42 +171,6 @@ final class AutoloadTest extends UnitTestCase
     }
 
     /**
-     * Tests Phalcon\Autoloader\Loader :: autoload() = namespaces 404
-     *
-     * @return void
-     *
-     * @author Phalcon Team <team@phalcon.io>
-     * @since  2020-09-09
-     */
-    public function testAutoloaderLoaderAutoloadNamespaces404(): void
-    {
-        if (PHP_OS_FAMILY === 'Windows') {
-            $this->markTestSkipped('Need to fix Windows new lines...');
-        }
-
-        $loader = new Loader(true);
-        $loader
-            ->addNamespace(
-                'Example\Namespaces\Adapter',
-                dataDir('fixtures/Loader/Example/Namespaces/Adapter/')
-            )
-        ;
-
-        $loader->autoload('Example\Namespaces\Adapter\Unknown');
-
-        $expected = [
-            'Loading: Example\Namespaces\Adapter\Unknown',
-            'Class: 404: Example\Namespaces\Adapter\Unknown',
-            'Require: 404: ' .
-            dataDir('fixtures/Loader/Example/Namespaces/Adapter/Unknown.php'),
-            'Namespace: 404: Example\Namespaces\Adapter\Unknown',
-            'Directories: 404: Example\Namespaces\Adapter\Unknown',
-        ];
-        $actual   = $loader->getDebug();
-        $this->assertSame($expected, $actual);
-    }
-
-    /**
      * Tests Phalcon\Autoloader\Loader :: autoload() = namespaces multiple
      * folders
      *
@@ -286,6 +250,42 @@ final class AutoloadTest extends UnitTestCase
             //            'Load: No folders registered: Example\\',
             'Namespace: 404: Example\Namespaces\Adapter\Mongo',
             'Directories: 404: Example\Namespaces\Adapter\Mongo',
+        ];
+        $actual   = $loader->getDebug();
+        $this->assertSame($expected, $actual);
+    }
+
+    /**
+     * Tests Phalcon\Autoloader\Loader :: autoload() = namespaces 404
+     *
+     * @return void
+     *
+     * @author Phalcon Team <team@phalcon.io>
+     * @since  2020-09-09
+     */
+    public function testAutoloaderLoaderAutoloadNamespaces404(): void
+    {
+        if (PHP_OS_FAMILY === 'Windows') {
+            $this->markTestSkipped('Need to fix Windows new lines...');
+        }
+
+        $loader = new Loader(true);
+        $loader
+            ->addNamespace(
+                'Example\Namespaces\Adapter',
+                dataDir('fixtures/Loader/Example/Namespaces/Adapter/')
+            )
+        ;
+
+        $loader->autoload('Example\Namespaces\Adapter\Unknown');
+
+        $expected = [
+            'Loading: Example\Namespaces\Adapter\Unknown',
+            'Class: 404: Example\Namespaces\Adapter\Unknown',
+            'Require: 404: ' .
+            dataDir('fixtures/Loader/Example/Namespaces/Adapter/Unknown.php'),
+            'Namespace: 404: Example\Namespaces\Adapter\Unknown',
+            'Directories: 404: Example\Namespaces\Adapter\Unknown',
         ];
         $actual   = $loader->getDebug();
         $this->assertSame($expected, $actual);
