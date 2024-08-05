@@ -13,9 +13,6 @@ declare(strict_types=1);
 
 namespace Phalcon\Tests\Fixtures\Filter\Sanitize;
 
-/**
- * Class IPv4
- */
 class IPv4
 {
     /**

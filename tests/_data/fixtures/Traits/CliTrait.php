@@ -31,41 +31,41 @@ trait CliTrait
     /**
      * @return array[]
      */
-    protected function getExamplesShortPaths(): array
+    public static function getExamplesShortPaths(): array
     {
         return [
             [
-                'path'     => 'Feed',
-                'expected' => [
+                'Feed',
+                [
                     'task' => 'feed',
                 ],
             ],
             [
-                'path'     => 'Feed::get',
-                'expected' => [
+                'Feed::get',
+                [
                     'task'   => 'feed',
                     'action' => 'get',
                 ],
             ],
             [
-                'path'     => 'News::Posts::show',
-                'expected' => [
+                'News::Posts::show',
+                [
                     'module' => 'News',
                     'task'   => 'posts',
                     'action' => 'show',
                 ],
             ],
             [
-                'path'     => 'MyApp\\Tasks\\Posts::show',
-                'expected' => [
+                'MyApp\\Tasks\\Posts::show',
+                [
                     'namespace' => 'MyApp\\Tasks',
                     'task'      => 'posts',
                     'action'    => 'show',
                 ],
             ],
             [
-                'path'     => 'News::MyApp\\Tasks\\Posts::show',
-                'expected' => [
+                'News::MyApp\\Tasks\\Posts::show',
+                [
                     'module'    => 'News',
                     'namespace' => 'MyApp\\Tasks',
                     'task'      => 'posts',
@@ -73,8 +73,8 @@ trait CliTrait
                 ],
             ],
             [
-                'path'     => '\\Posts::show',
-                'expected' => [
+                '\\Posts::show',
+                [
                     'task'   => 'posts',
                     'action' => 'show',
                 ],
