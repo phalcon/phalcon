@@ -13,8 +13,8 @@ declare(strict_types=1);
 
 namespace Phalcon\Tests\Unit\Mvc\Router\Route;
 
-use Phalcon\Tests\UnitTestCase;
 use Phalcon\Mvc\Router\Route;
+use Phalcon\Tests\UnitTestCase;
 
 use function uniqid;
 

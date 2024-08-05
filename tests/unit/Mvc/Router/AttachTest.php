@@ -13,10 +13,10 @@ declare(strict_types=1);
 
 namespace Phalcon\Tests\Unit\Mvc\Router;
 
-use Phalcon\Tests\UnitTestCase;
 use Phalcon\Mvc\Router;
 use Phalcon\Mvc\Router\Route;
 use Phalcon\Tests\Fixtures\Traits\RouterTrait;
+use Phalcon\Tests\UnitTestCase;
 
 final class AttachTest extends UnitTestCase
 {

@@ -13,9 +13,9 @@ declare(strict_types=1);
 
 namespace Phalcon\Tests\Unit\Mvc\Router\Route;
 
-use Phalcon\Tests\UnitTestCase;
 use Phalcon\Mvc\Router\Exception;
 use Phalcon\Mvc\Router\Route;
+use Phalcon\Tests\UnitTestCase;
 
 final class CompilePatternTest extends UnitTestCase
 {
@@ -30,7 +30,7 @@ final class CompilePatternTest extends UnitTestCase
      */
     public function testMvcRouterRouteCompilePattern(): void
     {
-        $route = '/my-simple-route';
+        $route       = '/my-simple-route';
         $simpleRoute = new Route($route);
 
         $expected = $route;
@@ -40,7 +40,7 @@ final class CompilePatternTest extends UnitTestCase
         /**
          * Placeholder
          */
-        $route = '/:module/:namespace/:controller/:action/:params/:int';
+        $route            = '/:module/:namespace/:controller/:action/:params/:int';
         $placeholderRoute = new Route($route);
 
         $expected = '#^/([\\w0-9\\_\\-]+)/([\\w0-9\\_\\-]+)/([\\w0-9\\_\\-]+)/([\\w0-9\\_\\-]+)(/.*)*/([0-9]+)$#u';
@@ -50,7 +50,7 @@ final class CompilePatternTest extends UnitTestCase
         /**
          * Custom regex
          */
-        $route = '/([\\w0-9\\_\\-]+)/([\\w0-9\\_\\-]+)/([\\w0-9\\_\\-]+)/([\\w0-9\\_\\-]+)(/.*)*/([0-9]+)';
+        $route      = '/([\\w0-9\\_\\-]+)/([\\w0-9\\_\\-]+)/([\\w0-9\\_\\-]+)/([\\w0-9\\_\\-]+)(/.*)*/([0-9]+)';
         $regexRoute = new Route($route);
 
         $expected = '#^/([\\w0-9\\_\\-]+)/([\\w0-9\\_\\-]+)/([\\w0-9\\_\\-]+)/([\\w0-9\\_\\-]+)(/.*)*/([0-9]+)$#u';

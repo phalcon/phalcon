@@ -13,152 +13,18 @@ declare(strict_types=1);
 
 namespace Phalcon\Tests\Unit\Mvc\Router\Annotations;
 
-use Codeception\Example;
-use Phalcon\Tests\UnitTestCase;
 use Phalcon\Events\Exception as EventsException;
 use Phalcon\Mvc\Router\Annotations;
 use Phalcon\Mvc\Router\Exception as RouterException;
 use Phalcon\Mvc\Router\Route;
 use Phalcon\Tests\Fixtures\Traits\DiTrait;
+use Phalcon\Tests\UnitTestCase;
 
 use function dataDir;
 
 final class HandleTest extends UnitTestCase
 {
     use DiTrait;
-
-    public function setUp(): void
-    {
-        $this->newDi();
-        $this->setDiService('request');
-        $this->setDiService('annotations');
-    }
-
-    /**
-     * Tests Phalcon\Mvc\Router\Annotations :: handle()
-     *
-     * @author Phalcon Team <team@phalcon.io>
-     * @since  2018-11-13
-     */
-    public function testMvcRouterAnnotationsHandle(): void
-    {
-        $router = new Annotations(false);
-        $router->setDI($this->container);
-
-        $router->addResource("Phalcon\Tests\Controllers\Invoices", '/');
-        $router->addResource("Phalcon\Tests\Controllers\Products", '/products');
-        $router->addResource("Phalcon\Tests\Controllers\About", '/about');
-
-        $router->handle('/products');
-
-        $expected = 6;
-        $actual   = $router->getRoutes();
-        $this->assertCount($expected, $actual);
-
-        $router = new Annotations(false);
-        $router->setDI($this->container);
-
-        $router->addResource("Phalcon\Tests\Controllers\Invoices", '/');
-        $router->addResource("Phalcon\Tests\Controllers\Products", '/products');
-        $router->addResource("Phalcon\Tests\Controllers\About", '/about');
-
-        $router->handle('/about');
-
-        $expected = 5;
-        $actual   = $router->getRoutes();
-        $this->assertCount($expected, $actual);
-    }
-
-    /**
-     * @return void
-     * @throws EventsException
-     * @throws RouterException
-     */
-    public function testMvcRouterAnnotationsHandleNamespaced(): void
-    {
-        require_once dataDir('fixtures/controllers/NamespacedAnnotationController.php');
-
-        $router = new Annotations(false);
-        $router->setDI($this->container);
-
-        $router->setDefaultNamespace('MyNamespace\\Controllers');
-        $router->addResource('NamespacedAnnotation', '/namespaced');
-
-        $router->handle('/namespaced');
-
-        $expected = 1;
-        $actual   = $router->getRoutes();
-        $this->assertCount($expected, $actual);
-
-
-        $router = new Annotations(false);
-        $router->setDI($this->container);
-
-        $router->addResource(
-            'MyNamespace\\Controllers\\NamespacedAnnotation',
-            '/namespaced'
-        );
-
-        $router->handle('/namespaced/');
-
-        $expected = 1;
-        $actual   = $router->getRoutes();
-        $this->assertCount($expected, $actual);
-    }
-
-    /**
-     * @dataProvider getRouteExamples
-     *
-     * @return void
-     * @throws EventsException
-     * @throws RouterException
-     */
-    public function testMvcRouterAnnotationsHandleFullResources(
-        string $uri,
-        string $method,
-        string $controller,
-        string $action,
-        array $params
-    ): void {
-        $router = new Annotations(false);
-        $router->setDI($this->container);
-
-        $router->addResource("Phalcon\Tests\Controllers\Invoices");
-        $router->addResource("Phalcon\Tests\Controllers\Products");
-        $router->addResource("Phalcon\Tests\Controllers\About");
-        $router->addResource("Phalcon\Tests\Controllers\Main");
-
-        $router->handle('/');
-
-        $expected = 9;
-        $actual   = $router->getRoutes();
-        $this->assertCount($expected, $actual);
-
-        $route = $router->getRouteByName('save-invoice');
-        $this->assertTrue(is_object($route));
-
-        $this->assertInstanceOf(Route::class, $route);
-
-        $route = $router->getRouteByName('save-product');
-        $this->assertTrue(is_object($route));
-
-        $this->assertInstanceOf(Route::class, $route);
-
-        $_SERVER['REQUEST_METHOD'] = $method;
-        $router->handle($uri);
-
-        $expected = $controller;
-        $actual   = $router->getControllerName();
-        $this->assertSame($expected, $actual);
-
-        $expected = $action;
-        $actual   = $router->getActionName();
-        $this->assertSame($expected, $actual);
-
-        $expected = $params;
-        $actual   = $router->getParams();
-        $this->assertSame($expected, $actual);
-    }
 
     /**
      * @return array[]
@@ -241,5 +107,138 @@ final class HandleTest extends UnitTestCase
                 [],
             ],
         ];
+    }
+
+    public function setUp(): void
+    {
+        $this->newDi();
+        $this->setDiService('request');
+        $this->setDiService('annotations');
+    }
+
+    /**
+     * Tests Phalcon\Mvc\Router\Annotations :: handle()
+     *
+     * @author Phalcon Team <team@phalcon.io>
+     * @since  2018-11-13
+     */
+    public function testMvcRouterAnnotationsHandle(): void
+    {
+        $router = new Annotations(false);
+        $router->setDI($this->container);
+
+        $router->addResource("Phalcon\Tests\Controllers\Invoices", '/');
+        $router->addResource("Phalcon\Tests\Controllers\Products", '/products');
+        $router->addResource("Phalcon\Tests\Controllers\About", '/about');
+
+        $router->handle('/products');
+
+        $expected = 6;
+        $actual   = $router->getRoutes();
+        $this->assertCount($expected, $actual);
+
+        $router = new Annotations(false);
+        $router->setDI($this->container);
+
+        $router->addResource("Phalcon\Tests\Controllers\Invoices", '/');
+        $router->addResource("Phalcon\Tests\Controllers\Products", '/products');
+        $router->addResource("Phalcon\Tests\Controllers\About", '/about');
+
+        $router->handle('/about');
+
+        $expected = 5;
+        $actual   = $router->getRoutes();
+        $this->assertCount($expected, $actual);
+    }
+
+    /**
+     * @dataProvider getRouteExamples
+     *
+     * @return void
+     * @throws EventsException
+     * @throws RouterException
+     */
+    public function testMvcRouterAnnotationsHandleFullResources(
+        string $uri,
+        string $method,
+        string $controller,
+        string $action,
+        array $params
+    ): void {
+        $router = new Annotations(false);
+        $router->setDI($this->container);
+
+        $router->addResource("Phalcon\Tests\Controllers\Invoices");
+        $router->addResource("Phalcon\Tests\Controllers\Products");
+        $router->addResource("Phalcon\Tests\Controllers\About");
+        $router->addResource("Phalcon\Tests\Controllers\Main");
+
+        $router->handle('/');
+
+        $expected = 9;
+        $actual   = $router->getRoutes();
+        $this->assertCount($expected, $actual);
+
+        $route = $router->getRouteByName('save-invoice');
+        $this->assertTrue(is_object($route));
+
+        $this->assertInstanceOf(Route::class, $route);
+
+        $route = $router->getRouteByName('save-product');
+        $this->assertTrue(is_object($route));
+
+        $this->assertInstanceOf(Route::class, $route);
+
+        $_SERVER['REQUEST_METHOD'] = $method;
+        $router->handle($uri);
+
+        $expected = $controller;
+        $actual   = $router->getControllerName();
+        $this->assertSame($expected, $actual);
+
+        $expected = $action;
+        $actual   = $router->getActionName();
+        $this->assertSame($expected, $actual);
+
+        $expected = $params;
+        $actual   = $router->getParams();
+        $this->assertSame($expected, $actual);
+    }
+
+    /**
+     * @return void
+     * @throws EventsException
+     * @throws RouterException
+     */
+    public function testMvcRouterAnnotationsHandleNamespaced(): void
+    {
+        require_once dataDir('fixtures/controllers/NamespacedAnnotationController.php');
+
+        $router = new Annotations(false);
+        $router->setDI($this->container);
+
+        $router->setDefaultNamespace('MyNamespace\\Controllers');
+        $router->addResource('NamespacedAnnotation', '/namespaced');
+
+        $router->handle('/namespaced');
+
+        $expected = 1;
+        $actual   = $router->getRoutes();
+        $this->assertCount($expected, $actual);
+
+
+        $router = new Annotations(false);
+        $router->setDI($this->container);
+
+        $router->addResource(
+            'MyNamespace\\Controllers\\NamespacedAnnotation',
+            '/namespaced'
+        );
+
+        $router->handle('/namespaced/');
+
+        $expected = 1;
+        $actual   = $router->getRoutes();
+        $this->assertCount($expected, $actual);
     }
 }

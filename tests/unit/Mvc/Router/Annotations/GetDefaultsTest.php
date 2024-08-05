@@ -25,6 +25,6 @@ final class GetDefaultsTest extends UnitTestCase
      */
     public function testMvcRouterAnnotationsGetDefaults(): void
     {
-       $this->markTestSkipped('Need implementation');
+        $this->markTestSkipped('Need implementation');
     }
 }

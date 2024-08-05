@@ -13,8 +13,8 @@ declare(strict_types=1);
 
 namespace Phalcon\Tests\Unit\Mvc\Router\Group;
 
-use Phalcon\Tests\UnitTestCase;
 use Phalcon\Mvc\Router\Group;
+use Phalcon\Tests\UnitTestCase;
 
 final class GetSetPathsTest extends UnitTestCase
 {

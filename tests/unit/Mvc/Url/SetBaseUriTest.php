@@ -13,137 +13,15 @@ declare(strict_types=1);
 
 namespace Phalcon\Tests\Unit\Mvc\Url;
 
-use Codeception\Example;
-use Phalcon\Tests\UnitTestCase;
 use Phalcon\Mvc\Router;
 use Phalcon\Tests\Fixtures\Traits\DiTrait;
 use Phalcon\Tests\Fixtures\Traits\RouterTrait;
+use Phalcon\Tests\UnitTestCase;
 
 final class SetBaseUriTest extends UnitTestCase
 {
     use DiTrait;
     use RouterTrait;
-
-    /**
-     * executed before each test
-     */
-    public function setUp(): void
-    {
-        $this->newDi();
-        $this->setDiService('url');
-        $this->setupRoutes();
-    }
-
-    /**
-     * Tests the url with a controller and action
-     *
-     * @author       Nikolaos Dimopoulos <nikos@phalcon.io>
-     * @since        2014-09-04
-     *
-     * @dataProvider getUrlToSetBaseUri
-     */
-    public function testMvcUrlSetBaseUri(
-        string $baseUri,
-        array $param,
-        string $expected
-    ): void {
-        $url = $this->getService('url');
-
-        $url->setBaseUri($baseUri);
-        $actual = $url->get($param);
-
-        $this->assertEquals($expected, $actual);
-    }
-
-    /**
-     * Tests the url with a controller and action
-     *
-     * @author       Olivier Monaco <olivier.monaco@nospam.free.fr>
-     * @since        2015-02-03
-     * @issue  https://github.com/phalcon/cphalcon/issues/3315
-     *
-     * @dataProvider getUrlToSetWithoutDi
-     */
-    public function testMvcUrlGetCorrectUrl(
-        string $baseUrl,
-        string $name,
-        string $expected
-    ): void {
-        $url = $this->getService('url');
-
-        $url->setBaseUri($baseUrl);
-        $actual = $url->get($name);
-
-        $this->assertEquals($expected, $actual);
-    }
-
-    /**
-     * Test should avoid double slash when joining baseUri to provided uri
-     *
-     * @author       Olivier Monaco <olivier.monaco@nospam.free.fr>
-     * @since        2015-02-03
-     * @issue        @3315
-     *
-     * @dataProvider getUrlToSetWithoutDiTwoParam
-     */
-    public function testMvcUrlGetCorrectUrlWithGetParam(
-        string $baseUrl,
-        string $name,
-        array $params,
-        string $expected
-    ): void {
-        $url = $this->getService('url');
-
-        $url->setBaseUri($baseUrl);
-
-        $actual = $url->get($name, $params);
-
-        $this->assertEquals($expected, $actual);
-    }
-
-    /**
-     * Tests the base url
-     *
-     * @author       Nikolaos Dimopoulos <nikos@phalcon.io>
-     * @since        2014-09-04
-     *
-     * @dataProvider getUrlToSetServer
-     */
-    public function shouldGetCorrectUrlWithServer(
-        string $phpSelf,
-        string $name,
-        string $expected
-    ): void {
-        $store = $_SERVER;
-
-        $_SERVER['PHP_SELF'] = $phpSelf;
-        $url = $this->getService('url');
-
-        $actual = $url->get($name);
-
-        $this->assertEquals($expected, $actual);
-    }
-
-    /**
-     * @return array
-     */
-    public static function getUrlToSetServer(): array
-    {
-        return [
-            //Tests the base url
-            [
-                '/index.php',
-                null,
-                '/',
-            ],
-            //Tests a different url
-            [
-                '/index.php',
-                'classes/api/Some',
-                '/classes/api/Some',
-            ],
-        ];
-    }
 
     /**
      * @return array
@@ -261,6 +139,27 @@ final class SetBaseUriTest extends UnitTestCase
     }
 
     /**
+     * @return array
+     */
+    public static function getUrlToSetServer(): array
+    {
+        return [
+            //Tests the base url
+            [
+                '/index.php',
+                null,
+                '/',
+            ],
+            //Tests a different url
+            [
+                '/index.php',
+                'classes/api/Some',
+                '/classes/api/Some',
+            ],
+        ];
+    }
+
+    /**
      * @return array[]
      */
     public static function getUrlToSetWithoutDi(): array
@@ -318,6 +217,106 @@ final class SetBaseUriTest extends UnitTestCase
                 'https://www.test.com/?_url=/path&params=one',
             ],
         ];
+    }
+
+    /**
+     * executed before each test
+     */
+    public function setUp(): void
+    {
+        $this->newDi();
+        $this->setDiService('url');
+        $this->setupRoutes();
+    }
+
+    /**
+     * Tests the base url
+     *
+     * @author       Nikolaos Dimopoulos <nikos@phalcon.io>
+     * @since        2014-09-04
+     *
+     * @dataProvider getUrlToSetServer
+     */
+    public function shouldGetCorrectUrlWithServer(
+        string $phpSelf,
+        string $name,
+        string $expected
+    ): void {
+        $store = $_SERVER;
+
+        $_SERVER['PHP_SELF'] = $phpSelf;
+        $url                 = $this->getService('url');
+
+        $actual = $url->get($name);
+
+        $this->assertEquals($expected, $actual);
+    }
+
+    /**
+     * Tests the url with a controller and action
+     *
+     * @author       Olivier Monaco <olivier.monaco@nospam.free.fr>
+     * @since        2015-02-03
+     * @issue  https://github.com/phalcon/cphalcon/issues/3315
+     *
+     * @dataProvider getUrlToSetWithoutDi
+     */
+    public function testMvcUrlGetCorrectUrl(
+        string $baseUrl,
+        string $name,
+        string $expected
+    ): void {
+        $url = $this->getService('url');
+
+        $url->setBaseUri($baseUrl);
+        $actual = $url->get($name);
+
+        $this->assertEquals($expected, $actual);
+    }
+
+    /**
+     * Test should avoid double slash when joining baseUri to provided uri
+     *
+     * @author       Olivier Monaco <olivier.monaco@nospam.free.fr>
+     * @since        2015-02-03
+     * @issue        @3315
+     *
+     * @dataProvider getUrlToSetWithoutDiTwoParam
+     */
+    public function testMvcUrlGetCorrectUrlWithGetParam(
+        string $baseUrl,
+        string $name,
+        array $params,
+        string $expected
+    ): void {
+        $url = $this->getService('url');
+
+        $url->setBaseUri($baseUrl);
+
+        $actual = $url->get($name, $params);
+
+        $this->assertEquals($expected, $actual);
+    }
+
+    /**
+     * Tests the url with a controller and action
+     *
+     * @author       Nikolaos Dimopoulos <nikos@phalcon.io>
+     * @since        2014-09-04
+     *
+     * @dataProvider getUrlToSetBaseUri
+     */
+    public function testMvcUrlSetBaseUri(
+        string $baseUri,
+        array $param,
+        string $expected
+    ): void {
+        $url = $this->getService('url');
+
+        $url->setBaseUri($baseUri);
+        $actual = $url->get($param);
+
+        $this->assertEquals($expected, $actual);
     }
 
     /**
