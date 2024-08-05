@@ -88,6 +88,16 @@ jobs:
     permissions:
       contents: read # to fetch code (actions/checkout)
 
+    services:
+      redis:
+        image: redis:5-alpine
+        ports:
+          - "6379:6379"
+      memcached:
+        image: memcached:1.5-alpine
+        ports:
+          - "11211:11211"
+
     name: Unit tests / PHP-${{ matrix.php }}-${{ matrix.ts }}-${{ matrix.name }}
     runs-on: ${{ matrix.os }}
 
