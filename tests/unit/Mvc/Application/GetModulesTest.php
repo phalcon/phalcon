@@ -13,31 +13,12 @@ declare(strict_types=1);
 
 namespace Phalcon\Tests\Unit\Mvc\Application;
 
-use Phalcon\Tests\UnitTestCase;
 use Phalcon\Mvc\Application;
 use Phalcon\Tests\Modules\Frontend\Module;
+use Phalcon\Tests\UnitTestCase;
 
 class GetModulesTest extends UnitTestCase
 {
-    /**
-     * Tests Phalcon\Mvc\Application :: getModules() - empty
-     *
-     * @author Phalcon Team <team@phalcon.io>
-     * @since  2018-11-13
-     *
-     * @author Nathan Edwards <https://github.com/npfedwards>
-     * @since  2018-12-26
-     */
-    public function testMvcApplicationGetModulesEmpty(): void
-    {
-        $application = new Application();
-
-        $this->assertEquals(
-            [],
-            $application->getModules()
-        );
-    }
-
     /**
      * Tests Phalcon\Mvc\Application :: getModules()
      *
@@ -66,6 +47,25 @@ class GetModulesTest extends UnitTestCase
 
         $this->assertEquals(
             $definition,
+            $application->getModules()
+        );
+    }
+
+    /**
+     * Tests Phalcon\Mvc\Application :: getModules() - empty
+     *
+     * @author Phalcon Team <team@phalcon.io>
+     * @since  2018-11-13
+     *
+     * @author Nathan Edwards <https://github.com/npfedwards>
+     * @since  2018-12-26
+     */
+    public function testMvcApplicationGetModulesEmpty(): void
+    {
+        $application = new Application();
+
+        $this->assertEquals(
+            [],
             $application->getModules()
         );
     }

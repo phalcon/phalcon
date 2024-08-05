@@ -13,10 +13,10 @@ declare(strict_types=1);
 
 namespace Phalcon\Tests\Unit\Mvc\Application;
 
-use Phalcon\Tests\UnitTestCase;
 use Phalcon\Application\Exception;
 use Phalcon\Mvc\Application;
 use Phalcon\Tests\Modules\Frontend\Module;
+use Phalcon\Tests\UnitTestCase;
 
 class GetModuleTest extends UnitTestCase
 {
