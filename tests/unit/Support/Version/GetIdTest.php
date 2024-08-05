@@ -13,12 +13,11 @@ declare(strict_types=1);
 
 namespace Phalcon\Tests\Unit\Support\Version;
 
-use Codeception\Example;
-use Phalcon\Tests\Fixtures\Traits\VersionTrait;
 use Phalcon\Tests\Fixtures\Support\Version\VersionAlphaFixture;
 use Phalcon\Tests\Fixtures\Support\Version\VersionBetaFixture;
 use Phalcon\Tests\Fixtures\Support\Version\VersionRcFixture;
 use Phalcon\Tests\Fixtures\Support\Version\VersionStableFixture;
+use Phalcon\Tests\Fixtures\Traits\VersionTrait;
 use Phalcon\Tests\UnitTestCase;
 
 use function is_string;
@@ -26,27 +25,6 @@ use function is_string;
 final class GetIdTest extends UnitTestCase
 {
     use VersionTrait;
-
-    /**
-     * Tests get()
-     *
-     * @dataProvider getExamples
-     *
-     * @return void
-     *
-     * @author       Phalcon Team <team@phalcon.io>
-     * @since        2020-09-09
-     */
-    public function testSupportVersionGetId(
-        string $class,
-        string $expected
-    ): void {
-        $version = new $class();
-
-        $actual = $version->getId();
-        $this->assertTrue(is_string($actual));
-        $this->assertSame($expected, $actual);
-    }
 
     /**
      * @return string[][]
@@ -71,5 +49,26 @@ final class GetIdTest extends UnitTestCase
                 '5000000',
             ],
         ];
+    }
+
+    /**
+     * Tests get()
+     *
+     * @dataProvider getExamples
+     *
+     * @return void
+     *
+     * @author       Phalcon Team <team@phalcon.io>
+     * @since        2020-09-09
+     */
+    public function testSupportVersionGetId(
+        string $class,
+        string $expected
+    ): void {
+        $version = new $class();
+
+        $actual = $version->getId();
+        $this->assertTrue(is_string($actual));
+        $this->assertSame($expected, $actual);
     }
 }

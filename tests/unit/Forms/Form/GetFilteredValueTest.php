@@ -13,9 +13,9 @@ declare(strict_types=1);
 
 namespace Phalcon\Tests\Unit\Forms\Form;
 
-use Phalcon\Tests\UnitTestCase;
 use Phalcon\Forms\Element\Text;
 use Phalcon\Forms\Form;
+use Phalcon\Tests\UnitTestCase;
 use stdClass;
 
 /**
@@ -23,16 +23,12 @@ use stdClass;
  */
 final class GetFilteredValueTest extends UnitTestCase
 {
-    /**
-     * Tests Phalcon\Forms\Form :: getFilteredValue()
-     *
-     * @author Phalcon Team <team@phalcon.io>
-     * @since  2021-11-03
-     */
-    public function testGetFilteredValueWithoutEntity(): void
+    public function testGetFilteredValueWithEntity(): void
     {
-        $data = ['firstName' => ' test '];
-        $form = $this->getForm($data);
+        $entity = new stdClass();
+        $data   = ['firstName' => ' test '];
+
+        $form = $this->getForm($data, $entity);
 
         $expected = $data['firstName'];
         $actual   = $form->getValue("firstName");
@@ -43,12 +39,16 @@ final class GetFilteredValueTest extends UnitTestCase
         $this->assertSame($expected, $actual);
     }
 
-    public function testGetFilteredValueWithEntity(): void
+    /**
+     * Tests Phalcon\Forms\Form :: getFilteredValue()
+     *
+     * @author Phalcon Team <team@phalcon.io>
+     * @since  2021-11-03
+     */
+    public function testGetFilteredValueWithoutEntity(): void
     {
-        $entity = new stdClass();
-        $data   = ['firstName' => ' test '];
-
-        $form = $this->getForm($data, $entity);
+        $data = ['firstName' => ' test '];
+        $form = $this->getForm($data);
 
         $expected = $data['firstName'];
         $actual   = $form->getValue("firstName");

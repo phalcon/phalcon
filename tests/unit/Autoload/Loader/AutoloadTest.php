@@ -13,7 +13,6 @@ declare(strict_types=1);
 
 namespace Phalcon\Tests\Unit\Autoload\Loader;
 
-use Example\Namespaces\Engines\Alcohol;
 use Example\Namespaces\Adapter\Another;
 use Example\Namespaces\Adapter\Mongo;
 use Phalcon\Autoload\Loader;
@@ -80,6 +79,52 @@ final class AutoloadTest extends UnitTestCase
     }
 
     /**
+     * Tests Phalcon\Autoloader\Loader :: autoload() = extension
+     *
+     * @return void
+     *
+     * @author Phalcon Team <team@phalcon.io>
+     * @since  2020-09-09
+     */
+    public function testAutoloaderLoaderAutoloadExtension(): void
+    {
+        if (PHP_OS_FAMILY === 'Windows') {
+            $this->markTestSkipped('Need to fix Windows new lines...');
+        }
+
+        $loader = new Loader(true);
+        $loader
+            ->setExtensions(
+                [
+                    'inc',
+                ]
+            )
+            ->setNamespaces(
+                [
+                    'Example\Namespaces\Base' => dataDir('fixtures/Loader/Example/Namespaces/Base/'),
+                    'Example\Namespaces'      => dataDir('fixtures/Loader/Example/Namespaces/'),
+                    'Example'                 => dataDir('fixtures/Loader/Example/Namespaces/'),
+                ]
+            )
+        ;
+
+        $loader->autoload('Example\Namespaces\Engines\Alcohol');
+
+        $expected = [
+            'Loading: Example\Namespaces\Engines\Alcohol',
+            'Class: 404: Example\Namespaces\Engines\Alcohol',
+            'Require: 404: ' .
+            dataDir('fixtures/Loader/Example/Namespaces/Engines/Alcohol.php'),
+            'Require: ' .
+            dataDir('fixtures/Loader/Example/Namespaces/Engines/Alcohol.inc'),
+            'Namespace: Example\Namespaces\ - ' .
+            dataDir('fixtures/Loader/Example/Namespaces/Engines/Alcohol.inc'),
+        ];
+        $actual   = $loader->getDebug();
+        $this->assertSame($expected, $actual);
+    }
+
+    /**
      * Tests Phalcon\Autoloader\Loader :: autoload() = namespaces
      *
      * @return void
@@ -120,6 +165,42 @@ final class AutoloadTest extends UnitTestCase
             'Namespace: Example\Namespaces\Adapter\ - ' .
             dataDir('fixtures/Loader/Example/Namespaces/Adapter/') .
             'Mongo.php',
+        ];
+        $actual   = $loader->getDebug();
+        $this->assertSame($expected, $actual);
+    }
+
+    /**
+     * Tests Phalcon\Autoloader\Loader :: autoload() = namespaces 404
+     *
+     * @return void
+     *
+     * @author Phalcon Team <team@phalcon.io>
+     * @since  2020-09-09
+     */
+    public function testAutoloaderLoaderAutoloadNamespaces404(): void
+    {
+        if (PHP_OS_FAMILY === 'Windows') {
+            $this->markTestSkipped('Need to fix Windows new lines...');
+        }
+
+        $loader = new Loader(true);
+        $loader
+            ->addNamespace(
+                'Example\Namespaces\Adapter',
+                dataDir('fixtures/Loader/Example/Namespaces/Adapter/')
+            )
+        ;
+
+        $loader->autoload('Example\Namespaces\Adapter\Unknown');
+
+        $expected = [
+            'Loading: Example\Namespaces\Adapter\Unknown',
+            'Class: 404: Example\Namespaces\Adapter\Unknown',
+            'Require: 404: ' .
+            dataDir('fixtures/Loader/Example/Namespaces/Adapter/Unknown.php'),
+            'Namespace: 404: Example\Namespaces\Adapter\Unknown',
+            'Directories: 404: Example\Namespaces\Adapter\Unknown',
         ];
         $actual   = $loader->getDebug();
         $this->assertSame($expected, $actual);
@@ -205,88 +286,6 @@ final class AutoloadTest extends UnitTestCase
             //            'Load: No folders registered: Example\\',
             'Namespace: 404: Example\Namespaces\Adapter\Mongo',
             'Directories: 404: Example\Namespaces\Adapter\Mongo',
-        ];
-        $actual   = $loader->getDebug();
-        $this->assertSame($expected, $actual);
-    }
-
-    /**
-     * Tests Phalcon\Autoloader\Loader :: autoload() = namespaces 404
-     *
-     * @return void
-     *
-     * @author Phalcon Team <team@phalcon.io>
-     * @since  2020-09-09
-     */
-    public function testAutoloaderLoaderAutoloadNamespaces404(): void
-    {
-        if (PHP_OS_FAMILY === 'Windows') {
-            $this->markTestSkipped('Need to fix Windows new lines...');
-        }
-
-        $loader = new Loader(true);
-        $loader
-            ->addNamespace(
-                'Example\Namespaces\Adapter',
-                dataDir('fixtures/Loader/Example/Namespaces/Adapter/')
-            )
-        ;
-
-        $loader->autoload('Example\Namespaces\Adapter\Unknown');
-
-        $expected = [
-            'Loading: Example\Namespaces\Adapter\Unknown',
-            'Class: 404: Example\Namespaces\Adapter\Unknown',
-            'Require: 404: ' .
-            dataDir('fixtures/Loader/Example/Namespaces/Adapter/Unknown.php'),
-            'Namespace: 404: Example\Namespaces\Adapter\Unknown',
-            'Directories: 404: Example\Namespaces\Adapter\Unknown',
-        ];
-        $actual   = $loader->getDebug();
-        $this->assertSame($expected, $actual);
-    }
-
-    /**
-     * Tests Phalcon\Autoloader\Loader :: autoload() = extension
-     *
-     * @return void
-     *
-     * @author Phalcon Team <team@phalcon.io>
-     * @since  2020-09-09
-     */
-    public function testAutoloaderLoaderAutoloadExtension(): void
-    {
-        if (PHP_OS_FAMILY === 'Windows') {
-            $this->markTestSkipped('Need to fix Windows new lines...');
-        }
-
-        $loader = new Loader(true);
-        $loader
-            ->setExtensions(
-                [
-                    'inc',
-                ]
-            )
-            ->setNamespaces(
-                [
-                    'Example\Namespaces\Base' => dataDir('fixtures/Loader/Example/Namespaces/Base/'),
-                    'Example\Namespaces'      => dataDir('fixtures/Loader/Example/Namespaces/'),
-                    'Example'                 => dataDir('fixtures/Loader/Example/Namespaces/'),
-                ]
-            )
-        ;
-
-        $loader->autoload('Example\Namespaces\Engines\Alcohol');
-
-        $expected = [
-            'Loading: Example\Namespaces\Engines\Alcohol',
-            'Class: 404: Example\Namespaces\Engines\Alcohol',
-            'Require: 404: ' .
-            dataDir('fixtures/Loader/Example/Namespaces/Engines/Alcohol.php'),
-            'Require: ' .
-            dataDir('fixtures/Loader/Example/Namespaces/Engines/Alcohol.inc'),
-            'Namespace: Example\Namespaces\ - ' .
-            dataDir('fixtures/Loader/Example/Namespaces/Engines/Alcohol.inc'),
         ];
         $actual   = $loader->getDebug();
         $this->assertSame($expected, $actual);

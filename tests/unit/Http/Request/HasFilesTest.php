@@ -15,7 +15,6 @@ namespace Phalcon\Tests\Unit\Http\Request;
 
 use Phalcon\Tests\Fixtures\Page\Http;
 use Phalcon\Tests\Unit\Http\Helper\HttpBase;
-use Phalcon\Tests\UnitTestCase;
 
 final class HasFilesTest extends HttpBase
 {

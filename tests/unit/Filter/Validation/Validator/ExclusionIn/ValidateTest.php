@@ -13,36 +13,69 @@ declare(strict_types=1);
 
 namespace Phalcon\Tests\Unit\Filter\Validation\Validator\ExclusionIn;
 
-use Phalcon\Tests\UnitTestCase;
 use Phalcon\Filter\Validation;
 use Phalcon\Filter\Validation\Exception;
 use Phalcon\Filter\Validation\Validator\ExclusionIn;
 use Phalcon\Messages\Message;
 use Phalcon\Messages\Messages;
+use Phalcon\Tests\UnitTestCase;
 use stdClass;
 
 final class ValidateTest extends UnitTestCase
 {
-    /**
-     * Tests Phalcon\Filter\Validation\Validator\ExclusionIn :: validate() - empty
-     *
-     * @return void
-     * @throws Exception
-     *
-     * @author Phalcon Team <team@phalcon.io>
-     * @since  2023-08-03
-     */
-    public function testFilterValidationValidatorExclusionInValidateEmpty(): void
+    public function testFilterValidationValidatorExclusionInCustomMessage(): void
     {
         $validation = new Validation();
-        $validator  = new ExclusionIn(['allowEmpty' => true,]);
-        $validation->add('price', $validator);
-        $entity        = new stdClass();
-        $entity->price = '';
 
-        $validation->bind($entity, []);
-        $result = $validator->validate($validation, 'price');
-        $this->assertTrue($result);
+        $validation->add(
+            'status',
+            new ExclusionIn(
+                [
+                    'message' => 'The status must not be A=Active or I=Inactive',
+                    'domain'  => ['A', 'I'],
+                ]
+            )
+        );
+
+
+        $messages = $validation->validate(
+            [
+                'status' => 'A',
+            ]
+        );
+
+        $expected = new Messages(
+            [
+                new Message(
+                    'The status must not be A=Active or I=Inactive',
+                    'status',
+                    ExclusionIn::class,
+                    0
+                ),
+            ]
+        );
+
+        $this->assertEquals($expected, $messages);
+
+
+        $messages = $validation->validate(
+            [
+                'status' => 'A',
+            ]
+        );
+
+        $this->assertEquals($expected, $messages);
+
+        $messages = $validation->validate(
+            [
+                'status' => 'X',
+            ]
+        );
+
+        $this->assertSame(
+            0,
+            $messages->count()
+        );
     }
 
     /**
@@ -106,109 +139,6 @@ final class ValidateTest extends UnitTestCase
 
         $validation->bind($entity, []);
         $validator->validate($validation, 'status');
-    }
-
-    /**
-     * Tests exclusion in validator with single field
-     *
-     * @author Wojciech Ślawski <jurigag@gmail.com>
-     * @since  2016-06-05
-     */
-    public function testFilterValidationValidatorExclusionInSingleField(): void
-    {
-        $validation = new Validation();
-
-        $validation->add(
-            'status',
-            new ExclusionIn(
-                [
-                    'domain' => ['A', 'I'],
-                ]
-            )
-        );
-
-        $messages = $validation->validate(
-            [
-                'status' => 'A',
-            ]
-        );
-
-        $expected = new Messages(
-            [
-                new Message(
-                    'Field status must not be a part of list: A, I',
-                    'status',
-                    ExclusionIn::class,
-                    0
-                ),
-            ]
-        );
-        $actual   = $messages;
-        $this->assertEquals($expected, $actual);
-
-        $messages = $validation->validate(['status' => 'A']);
-        $actual   = $messages;
-        $this->assertEquals($expected, $actual);
-
-        $messages = $validation->validate(['status' => 'X']);
-        $expected = 0;
-        $actual   = $messages->count();
-        $this->assertSame($expected, $actual);
-    }
-
-    /**
-     * Tests exclusion in validator with multiple field and single domain
-     *
-     * @author Wojciech Ślawski <jurigag@gmail.com>
-     * @since  2016-06-05
-     */
-    public function testFilterValidationValidatorExclusionInMultipleFieldSingleDomain(): void
-    {
-        $validation = new Validation();
-
-        $validationMessages = [
-            'type'        => 'Type cant be mechanic or cyborg.',
-            'anotherType' => 'AnotherType cant by mechanic or cyborg.',
-        ];
-
-        $validation->add(
-            [
-                'type',
-                'anotherType',
-            ],
-            new ExclusionIn(
-                [
-                    'domain'  => ['mechanic', 'cyborg'],
-                    'message' => $validationMessages,
-                ]
-            )
-        );
-        $messages = $validation->validate(['type' => 'hydraulic', 'anotherType' => 'hydraulic']);
-        $expected = 0;
-        $actual   = $messages->count();
-        $this->assertSame($expected, $actual);
-
-        $messages = $validation->validate(['type' => 'cyborg', 'anotherType' => 'hydraulic']);
-        $expected = 1;
-        $actual   = $messages->count();
-        $this->assertSame($expected, $actual);
-
-        $expected = $validationMessages['type'];
-        $actual   = $messages->offsetGet(0)->getMessage();
-        $this->assertSame($expected, $actual);
-
-        $messages = $validation->validate(['type' => 'cyborg', 'anotherType' => 'mechanic']);
-        $expected = 2;
-        $actual   = $messages->count();
-        $this->assertSame($expected, $actual);
-
-        $expected = $validationMessages['type'];
-        $actual   = $messages->offsetGet(0)->getMessage();
-        $this->assertSame($expected, $actual);
-
-        $expected = $validationMessages['anotherType'];
-        $actual   = $messages->offsetGet(1)->getMessage();
-        $this->assertSame($expected, $actual);
     }
 
     /**
@@ -276,7 +206,68 @@ final class ValidateTest extends UnitTestCase
         $this->assertSame($expected, $actual);
     }
 
-    public function testFilterValidationValidatorExclusionInCustomMessage(): void
+    /**
+     * Tests exclusion in validator with multiple field and single domain
+     *
+     * @author Wojciech Ślawski <jurigag@gmail.com>
+     * @since  2016-06-05
+     */
+    public function testFilterValidationValidatorExclusionInMultipleFieldSingleDomain(): void
+    {
+        $validation = new Validation();
+
+        $validationMessages = [
+            'type'        => 'Type cant be mechanic or cyborg.',
+            'anotherType' => 'AnotherType cant by mechanic or cyborg.',
+        ];
+
+        $validation->add(
+            [
+                'type',
+                'anotherType',
+            ],
+            new ExclusionIn(
+                [
+                    'domain'  => ['mechanic', 'cyborg'],
+                    'message' => $validationMessages,
+                ]
+            )
+        );
+        $messages = $validation->validate(['type' => 'hydraulic', 'anotherType' => 'hydraulic']);
+        $expected = 0;
+        $actual   = $messages->count();
+        $this->assertSame($expected, $actual);
+
+        $messages = $validation->validate(['type' => 'cyborg', 'anotherType' => 'hydraulic']);
+        $expected = 1;
+        $actual   = $messages->count();
+        $this->assertSame($expected, $actual);
+
+        $expected = $validationMessages['type'];
+        $actual   = $messages->offsetGet(0)->getMessage();
+        $this->assertSame($expected, $actual);
+
+        $messages = $validation->validate(['type' => 'cyborg', 'anotherType' => 'mechanic']);
+        $expected = 2;
+        $actual   = $messages->count();
+        $this->assertSame($expected, $actual);
+
+        $expected = $validationMessages['type'];
+        $actual   = $messages->offsetGet(0)->getMessage();
+        $this->assertSame($expected, $actual);
+
+        $expected = $validationMessages['anotherType'];
+        $actual   = $messages->offsetGet(1)->getMessage();
+        $this->assertSame($expected, $actual);
+    }
+
+    /**
+     * Tests exclusion in validator with single field
+     *
+     * @author Wojciech Ślawski <jurigag@gmail.com>
+     * @since  2016-06-05
+     */
+    public function testFilterValidationValidatorExclusionInSingleField(): void
     {
         $validation = new Validation();
 
@@ -284,12 +275,10 @@ final class ValidateTest extends UnitTestCase
             'status',
             new ExclusionIn(
                 [
-                    'message' => 'The status must not be A=Active or I=Inactive',
-                    'domain'  => ['A', 'I'],
+                    'domain' => ['A', 'I'],
                 ]
             )
         );
-
 
         $messages = $validation->validate(
             [
@@ -300,34 +289,45 @@ final class ValidateTest extends UnitTestCase
         $expected = new Messages(
             [
                 new Message(
-                    'The status must not be A=Active or I=Inactive',
+                    'Field status must not be a part of list: A, I',
                     'status',
                     ExclusionIn::class,
                     0
                 ),
             ]
         );
+        $actual   = $messages;
+        $this->assertEquals($expected, $actual);
 
-        $this->assertEquals($expected, $messages);
+        $messages = $validation->validate(['status' => 'A']);
+        $actual   = $messages;
+        $this->assertEquals($expected, $actual);
 
+        $messages = $validation->validate(['status' => 'X']);
+        $expected = 0;
+        $actual   = $messages->count();
+        $this->assertSame($expected, $actual);
+    }
 
-        $messages = $validation->validate(
-            [
-                'status' => 'A',
-            ]
-        );
+    /**
+     * Tests Phalcon\Filter\Validation\Validator\ExclusionIn :: validate() - empty
+     *
+     * @return void
+     * @throws Exception
+     *
+     * @author Phalcon Team <team@phalcon.io>
+     * @since  2023-08-03
+     */
+    public function testFilterValidationValidatorExclusionInValidateEmpty(): void
+    {
+        $validation = new Validation();
+        $validator  = new ExclusionIn(['allowEmpty' => true,]);
+        $validation->add('price', $validator);
+        $entity        = new stdClass();
+        $entity->price = '';
 
-        $this->assertEquals($expected, $messages);
-
-        $messages = $validation->validate(
-            [
-                'status' => 'X',
-            ]
-        );
-
-        $this->assertSame(
-            0,
-            $messages->count()
-        );
+        $validation->bind($entity, []);
+        $result = $validator->validate($validation, 'price');
+        $this->assertTrue($result);
     }
 }

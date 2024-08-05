@@ -17,7 +17,6 @@ use DateTime;
 use DateTimeZone;
 use Phalcon\Tests\Fixtures\Page\Http;
 use Phalcon\Tests\Unit\Http\Helper\HttpBase;
-use Phalcon\Tests\UnitTestCase;
 
 final class SetCacheTest extends HttpBase
 {

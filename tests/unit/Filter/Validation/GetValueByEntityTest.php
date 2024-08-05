@@ -13,15 +13,25 @@ declare(strict_types=1);
 
 namespace Phalcon\Tests\Unit\Filter\Validation;
 
-use Phalcon\Tests\UnitTestCase;
 use Phalcon\Filter\Validation;
 use Phalcon\Tests\Models\EntityWithGetter;
 use Phalcon\Tests\Models\EntityWithHook;
 use Phalcon\Tests\Models\EntityWithPublic;
+use Phalcon\Tests\UnitTestCase;
 
 final class GetValueByEntityTest extends UnitTestCase
 {
     public const NAME = 'John Doe';
+
+    public function testFilterValidationGetValueByEntityGetter(): void
+    {
+        $entity = new EntityWithGetter(self::NAME);
+
+        $validation = new Validation();
+        $value      = $validation->getValueByEntity($entity, 'name');
+
+        $this->assertSame($entity->getName(), $value);
+    }
 
     /**
      * Tests Phalcon\Filter\Validation :: getValueByEntity()
@@ -37,16 +47,6 @@ final class GetValueByEntityTest extends UnitTestCase
         $value      = $validation->getValueByEntity($entity, 'name');
 
         $this->assertSame($entity->name, $value);
-    }
-
-    public function testFilterValidationGetValueByEntityGetter(): void
-    {
-        $entity = new EntityWithGetter(self::NAME);
-
-        $validation = new Validation();
-        $value      = $validation->getValueByEntity($entity, 'name');
-
-        $this->assertSame($entity->getName(), $value);
     }
 
     public function testFilterValidationGetValueByEntityReadAttribute(): void

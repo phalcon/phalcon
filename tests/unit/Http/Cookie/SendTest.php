@@ -15,7 +15,6 @@ namespace Phalcon\Tests\Unit\Http\Cookie;
 
 use Phalcon\Http\Cookie\CookieInterface;
 use Phalcon\Tests\Unit\Http\Helper\HttpBase;
-use Phalcon\Tests\UnitTestCase;
 
 final class SendTest extends HttpBase
 {

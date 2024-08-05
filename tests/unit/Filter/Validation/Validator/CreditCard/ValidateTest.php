@@ -13,12 +13,12 @@ declare(strict_types=1);
 
 namespace Phalcon\Tests\Unit\Filter\Validation\Validator\CreditCard;
 
-use Phalcon\Tests\UnitTestCase;
 use Phalcon\Filter\Validation;
 use Phalcon\Filter\Validation\Exception;
 use Phalcon\Filter\Validation\Validator\CreditCard;
 use Phalcon\Messages\Message;
 use Phalcon\Messages\Messages;
+use Phalcon\Tests\UnitTestCase;
 use stdClass;
 
 final class ValidateTest extends UnitTestCase
@@ -46,33 +46,50 @@ final class ValidateTest extends UnitTestCase
     }
 
     /**
-     * Tests Phalcon\Filter\Validation\Validator\CreditCard :: validate() - single
-     * field
+     * Tests Phalcon\Filter\Validation\Validator\CreditCard :: validate() - invalid
+     * card numbers
      *
-     * @author Wojciech Ślawski <jurigag@gmail.com>
-     * @since  2016-06-05
+     * @author Caio Almeida <caio.f.r.amd@gmail.com>
+     * @since  2015-09-06
      */
-    public function testFilterValidationValidatorCreditCardValidateSingleField(): void
+    public function testFilterValidationValidatorCreditCardValidateInvalidCreditCard(): void
     {
-        $validation = new Validation();
+        $cards = [
+            '1203191201121221',
+            '102030102320',
+            '120120s201023',
+            '20323200003230',
+            '12010012',
+        ];
 
-        $validation->add('creditCard', new CreditCard());
+        foreach ($cards as $number) {
+            $validation = new Validation();
 
-        $expected = 0;
-        $actual   = $validation->validate(
-            [
-                'creditCard' => 4601587377626131,
-            ]
-        );
-        $this->assertCount($expected, $actual);
+            $validation->add(
+                'creditCard',
+                new CreditCard()
+            );
 
-        $expected = 1;
-        $actual   = $validation->validate(
-            [
-                'creditCard' => 46015873776261312,
-            ]
-        );
-        $this->assertCount($expected, $actual);
+
+            $expected = new Messages(
+                [
+                    new Message(
+                        'Field creditCard is not valid for a credit card number',
+                        'creditCard',
+                        CreditCard::class,
+                        0
+                    ),
+                ]
+            );
+
+            $actual = $validation->validate(
+                [
+                    'creditCard' => $number,
+                ]
+            );
+
+            $this->assertEquals($expected, $actual);
+        }
     }
 
     /**
@@ -159,6 +176,36 @@ final class ValidateTest extends UnitTestCase
     }
 
     /**
+     * Tests Phalcon\Filter\Validation\Validator\CreditCard :: validate() - single
+     * field
+     *
+     * @author Wojciech Ślawski <jurigag@gmail.com>
+     * @since  2016-06-05
+     */
+    public function testFilterValidationValidatorCreditCardValidateSingleField(): void
+    {
+        $validation = new Validation();
+
+        $validation->add('creditCard', new CreditCard());
+
+        $expected = 0;
+        $actual   = $validation->validate(
+            [
+                'creditCard' => 4601587377626131,
+            ]
+        );
+        $this->assertCount($expected, $actual);
+
+        $expected = 1;
+        $actual   = $validation->validate(
+            [
+                'creditCard' => 46015873776261312,
+            ]
+        );
+        $this->assertCount($expected, $actual);
+    }
+
+    /**
      * Tests Phalcon\Filter\Validation\Validator\CreditCard :: validate() - valid card
      * numbers
      *
@@ -191,53 +238,6 @@ final class ValidateTest extends UnitTestCase
                     ]
                 )
             );
-        }
-    }
-
-    /**
-     * Tests Phalcon\Filter\Validation\Validator\CreditCard :: validate() - invalid
-     * card numbers
-     *
-     * @author Caio Almeida <caio.f.r.amd@gmail.com>
-     * @since  2015-09-06
-     */
-    public function testFilterValidationValidatorCreditCardValidateInvalidCreditCard(): void
-    {
-        $cards = [
-            '1203191201121221',
-            '102030102320',
-            '120120s201023',
-            '20323200003230',
-            '12010012',
-        ];
-
-        foreach ($cards as $number) {
-            $validation = new Validation();
-
-            $validation->add(
-                'creditCard',
-                new CreditCard()
-            );
-
-
-            $expected = new Messages(
-                [
-                    new Message(
-                        'Field creditCard is not valid for a credit card number',
-                        'creditCard',
-                        CreditCard::class,
-                        0
-                    ),
-                ]
-            );
-
-            $actual = $validation->validate(
-                [
-                    'creditCard' => $number,
-                ]
-            );
-
-            $this->assertEquals($expected, $actual);
         }
     }
 }

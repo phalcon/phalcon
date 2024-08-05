@@ -13,11 +13,10 @@ declare(strict_types=1);
 
 namespace Phalcon\Tests\Unit\Session;
 
-use Codeception\Example;
 use Phalcon\Session\Adapter\Noop;
 use Phalcon\Session\Manager;
-use PHPUnit\Framework\Attributes\TestWith;
 use Phalcon\Tests\UnitTestCase;
+use PHPUnit\Framework\Attributes\TestWith;
 
 use function testSession_abort;
 use function testSession_destroy;

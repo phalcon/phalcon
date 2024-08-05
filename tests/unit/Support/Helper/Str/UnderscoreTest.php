@@ -13,31 +13,11 @@ declare(strict_types=1);
 
 namespace Phalcon\Tests\Unit\Support\Helper\Str;
 
-use Codeception\Example;
 use Phalcon\Support\Helper\Str\Underscore;
 use Phalcon\Tests\UnitTestCase;
 
 final class UnderscoreTest extends UnitTestCase
 {
-    /**
-     * Tests Phalcon\Support\Helper\Str :: underscore()
-     *
-     * @dataProvider getExamples
-     *
-     * @return void
-     *
-     * @author       Phalcon Team <team@phalcon.io>
-     * @since        2020-09-09
-     */
-    public function testSupportHelperStrUnderscore(
-        string $text,
-        string $expected
-    ): void {
-        $object = new Underscore();
-        $actual = $object($text);
-        $this->assertSame($expected, $actual);
-    }
-
     /**
      * @return string[][]
      */
@@ -61,5 +41,24 @@ final class UnderscoreTest extends UnitTestCase
                 'Awesome_Phalcon',
             ],
         ];
+    }
+
+    /**
+     * Tests Phalcon\Support\Helper\Str :: underscore()
+     *
+     * @dataProvider getExamples
+     *
+     * @return void
+     *
+     * @author       Phalcon Team <team@phalcon.io>
+     * @since        2020-09-09
+     */
+    public function testSupportHelperStrUnderscore(
+        string $text,
+        string $expected
+    ): void {
+        $object = new Underscore();
+        $actual = $object($text);
+        $this->assertSame($expected, $actual);
     }
 }

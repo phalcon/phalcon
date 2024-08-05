@@ -19,6 +19,28 @@ use Phalcon\Tests\Fixtures\Helpers\TagSetup;
 class JavascriptIncludeTest extends TagSetup
 {
     /**
+     * Tests Phalcon\Tag :: javascriptInclude() - HTML5
+     *
+     * @issue https://github.com/phalcon/cphalcon/issues/13341
+     *
+     * @author Phalcon Team <team@phalcon.io>
+     * @since  2018-12-22
+     */
+    public function testTagJavascriptIncludeHtml5(): void
+    {
+        $url = 'js/phalcon.js';
+
+        Tag::setDocType(
+            Tag::HTML32
+        );
+
+        $this->assertSame(
+            '<script type="text/javascript" src="/js/phalcon.js"></script>' . PHP_EOL,
+            Tag::javascriptInclude($url)
+        );
+    }
+
+    /**
      * Tests Phalcon\Tag :: javascriptInclude() - string as a parameter local
      *
      * @author Phalcon Team <team@phalcon.io>
@@ -27,26 +49,6 @@ class JavascriptIncludeTest extends TagSetup
     public function testTagJavascriptIncludeLocal(): void
     {
         $options = 'js/phalcon.js';
-
-        Tag::setDocType(
-            Tag::HTML5
-        );
-
-        $this->assertSame(
-            '<script src="/js/phalcon.js"></script>' . PHP_EOL,
-            Tag::javascriptInclude($options)
-        );
-    }
-
-    /**
-     * Tests Phalcon\Tag :: javascriptInclude() - array as a parameter local
-     *
-     * @author Phalcon Team <team@phalcon.io>
-     * @since  2014-09-29
-     */
-    public function testTagJavascriptIncludeWithArrayLocal(): void
-    {
-        $options = ['js/phalcon.js'];
 
         Tag::setDocType(
             Tag::HTML5
@@ -79,6 +81,26 @@ class JavascriptIncludeTest extends TagSetup
     }
 
     /**
+     * Tests Phalcon\Tag :: javascriptInclude() - array as a parameter local
+     *
+     * @author Phalcon Team <team@phalcon.io>
+     * @since  2014-09-29
+     */
+    public function testTagJavascriptIncludeWithArrayLocal(): void
+    {
+        $options = ['js/phalcon.js'];
+
+        Tag::setDocType(
+            Tag::HTML5
+        );
+
+        $this->assertSame(
+            '<script src="/js/phalcon.js"></script>' . PHP_EOL,
+            Tag::javascriptInclude($options)
+        );
+    }
+
+    /**
      * Tests Phalcon\Tag :: javascriptInclude() - array parameter for a remote
      * link
      *
@@ -94,28 +116,6 @@ class JavascriptIncludeTest extends TagSetup
         $this->assertSame(
             '<script src="https://my.local.com/js/phalcon.js"></script>' . PHP_EOL,
             Tag::javascriptInclude($options, false)
-        );
-    }
-
-    /**
-     * Tests Phalcon\Tag :: javascriptInclude() - HTML5
-     *
-     * @issue https://github.com/phalcon/cphalcon/issues/13341
-     *
-     * @author Phalcon Team <team@phalcon.io>
-     * @since  2018-12-22
-     */
-    public function testTagJavascriptIncludeHtml5(): void
-    {
-        $url = 'js/phalcon.js';
-
-        Tag::setDocType(
-            Tag::HTML32
-        );
-
-        $this->assertSame(
-            '<script type="text/javascript" src="/js/phalcon.js"></script>' . PHP_EOL,
-            Tag::javascriptInclude($url)
         );
     }
 }

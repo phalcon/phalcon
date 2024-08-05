@@ -13,38 +13,14 @@ declare(strict_types=1);
 
 namespace Phalcon\Tests\Unit\Session\Manager;
 
-use Phalcon\Tests\UnitTestCase;
 use Phalcon\Session\Exception;
 use Phalcon\Session\Manager;
 use Phalcon\Tests\Fixtures\Traits\DiTrait;
+use Phalcon\Tests\UnitTestCase;
 
 final class GetSetNameTest extends UnitTestCase
 {
     use DiTrait;
-
-    /**
-     * Tests Phalcon\Session\Manager :: getName()/setName()
-     *
-     * @return void
-     *
-     * @author Phalcon Team <team@phalcon.io>
-     * @since  2020-09-09
-     */
-    public function testSessionManagerGetSetName(): void
-    {
-        $manager = new Manager();
-        $files   = $this->newService('sessionStream');
-        $manager->setAdapter($files);
-
-        if (false !== $manager->exists()) {
-            $manager->destroy();
-        }
-
-        $manager->setName('myname');
-        $expected = 'myname';
-        $actual   = $manager->getName();
-        $this->assertEquals($expected, $actual);
-    }
 
     /**
      * Tests Phalcon\Session\Manager :: getName()/setName() - not valid name
@@ -93,5 +69,29 @@ final class GetSetNameTest extends UnitTestCase
         }
 
         $this->assertTrue($valid);
+    }
+
+    /**
+     * Tests Phalcon\Session\Manager :: getName()/setName()
+     *
+     * @return void
+     *
+     * @author Phalcon Team <team@phalcon.io>
+     * @since  2020-09-09
+     */
+    public function testSessionManagerGetSetName(): void
+    {
+        $manager = new Manager();
+        $files   = $this->newService('sessionStream');
+        $manager->setAdapter($files);
+
+        if (false !== $manager->exists()) {
+            $manager->destroy();
+        }
+
+        $manager->setName('myname');
+        $expected = 'myname';
+        $actual   = $manager->getName();
+        $this->assertEquals($expected, $actual);
     }
 }

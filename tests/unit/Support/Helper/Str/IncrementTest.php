@@ -13,12 +13,26 @@ declare(strict_types=1);
 
 namespace Phalcon\Tests\Unit\Support\Helper\Str;
 
-use Codeception\Example;
 use Phalcon\Support\Helper\Str\Increment;
 use Phalcon\Tests\UnitTestCase;
 
 final class IncrementTest extends UnitTestCase
 {
+    /**
+     * @return array
+     */
+    public static function strProvider()
+    {
+        return [
+            ["file", "file_1", "_"],
+            ["file_1", "file_2", "_"],
+            ["file_2", "file_3", "_"],
+            ["file_", "file_1", "_"],
+            ["file ", "file _1", "_"],
+            ["file", "file-1", "-"],
+        ];
+    }
+
     /**
      * Tests Phalcon\Support\Helper\Str :: increment()
      *
@@ -37,20 +51,5 @@ final class IncrementTest extends UnitTestCase
         $object = new Increment();
         $actual = $object($source, $separator);
         $this->assertSame($expected, $actual);
-    }
-
-    /**
-     * @return array
-     */
-    public static function strProvider()
-    {
-        return [
-            ["file", "file_1", "_"],
-            ["file_1", "file_2", "_"],
-            ["file_2", "file_3", "_"],
-            ["file_", "file_1", "_"],
-            ["file ", "file _1", "_"],
-            ["file", "file-1", "-"],
-        ];
     }
 }

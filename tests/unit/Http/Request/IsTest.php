@@ -13,33 +13,10 @@ declare(strict_types=1);
 
 namespace Phalcon\Tests\Unit\Http\Request;
 
-use Codeception\Example;
 use Phalcon\Tests\Unit\Http\Helper\HttpBase;
-use Phalcon\Tests\UnitTestCase;
 
 final class IsTest extends HttpBase
 {
-    /**
-     * Tests Is methods
-     *
-     * @author       Phalcon Team <team@phalcon.io>
-     * @since        2020-03-17
-     *
-     * @dataProvider getExamples
-     */
-    public function testHttpRequestIs(
-        array $server,
-        bool $expected,
-        string $method
-    ): void {
-        $_SERVER = array_merge($_SERVER, $server);
-
-        $request = $this->getRequestObject();
-        $actual  = $request->$method();
-
-        $this->assertSame($expected, $actual);
-    }
-
     /**
      * @return array|array[]
      */
@@ -191,5 +168,26 @@ final class IsTest extends HttpBase
                 'isSoap',
             ],
         ];
+    }
+
+    /**
+     * Tests Is methods
+     *
+     * @author       Phalcon Team <team@phalcon.io>
+     * @since        2020-03-17
+     *
+     * @dataProvider getExamples
+     */
+    public function testHttpRequestIs(
+        array $server,
+        bool $expected,
+        string $method
+    ): void {
+        $_SERVER = array_merge($_SERVER, $server);
+
+        $request = $this->getRequestObject();
+        $actual  = $request->$method();
+
+        $this->assertSame($expected, $actual);
     }
 }

@@ -51,6 +51,7 @@ final class DestroyTest extends UnitTestCase
 
         $this->doesNotHaveMemcachedKey($key);
     }
+
     /**
      * Tests Phalcon\Session\Adapter\Noop :: destroy()
      *

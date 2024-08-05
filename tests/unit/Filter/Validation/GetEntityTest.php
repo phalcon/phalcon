@@ -13,8 +13,8 @@ declare(strict_types=1);
 
 namespace Phalcon\Tests\Unit\Filter\Validation;
 
-use Phalcon\Tests\UnitTestCase;
 use Phalcon\Filter\Validation;
+use Phalcon\Tests\UnitTestCase;
 use stdClass;
 
 final class GetEntityTest extends UnitTestCase

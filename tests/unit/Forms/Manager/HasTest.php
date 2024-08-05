@@ -13,9 +13,9 @@ declare(strict_types=1);
 
 namespace Phalcon\Tests\Unit\Forms\Manager;
 
-use Phalcon\Tests\UnitTestCase;
 use Phalcon\Forms\Form;
 use Phalcon\Forms\Manager;
+use Phalcon\Tests\UnitTestCase;
 
 final class HasTest extends UnitTestCase
 {

@@ -13,7 +13,6 @@ declare(strict_types=1);
 
 namespace Phalcon\Tests\Unit\Http\Message\Uri;
 
-use Codeception\Example;
 use Phalcon\Http\Message\Uri;
 use Phalcon\Tests\UnitTestCase;
 
@@ -21,33 +20,6 @@ use function sprintf;
 
 final class WithUserInfoTest extends UnitTestCase
 {
-    /**
-     * Tests Phalcon\Http\Message\Uri :: withUserInfo()
-     *
-     * @dataProvider getExamples
-     *
-     * @author       Phalcon Team <team@phalcon.io>
-     * @since        2019-02-09
-     */
-    public function testHttpMessageUriWithUserInfo(
-        string $user,
-        ?string $pass,
-        string $expected
-    ): void {
-        $query = 'https://%s@dev.phalcon.ld:8080/action?param=value#frag';
-        $uri   = new Uri(sprintf($query, 'zephir:module'));
-
-        $newInstance = $uri->withUserInfo($user, $pass);
-        $this->assertNotSame($uri, $newInstance);
-
-        $actual = $newInstance->getUserInfo();
-        $this->assertSame($expected, $actual);
-
-        $expected = sprintf($query, $expected);
-        $actual   = (string)$newInstance;
-        $this->assertSame($expected, $actual);
-    }
-
     /**
      * @return string[][]
      */
@@ -95,5 +67,32 @@ final class WithUserInfoTest extends UnitTestCase
                 '%25ZZ:%25GG',
             ],
         ];
+    }
+
+    /**
+     * Tests Phalcon\Http\Message\Uri :: withUserInfo()
+     *
+     * @dataProvider getExamples
+     *
+     * @author       Phalcon Team <team@phalcon.io>
+     * @since        2019-02-09
+     */
+    public function testHttpMessageUriWithUserInfo(
+        string $user,
+        ?string $pass,
+        string $expected
+    ): void {
+        $query = 'https://%s@dev.phalcon.ld:8080/action?param=value#frag';
+        $uri   = new Uri(sprintf($query, 'zephir:module'));
+
+        $newInstance = $uri->withUserInfo($user, $pass);
+        $this->assertNotSame($uri, $newInstance);
+
+        $actual = $newInstance->getUserInfo();
+        $this->assertSame($expected, $actual);
+
+        $expected = sprintf($query, $expected);
+        $actual   = (string)$newInstance;
+        $this->assertSame($expected, $actual);
     }
 }

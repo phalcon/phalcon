@@ -11,10 +11,10 @@
 
 namespace Phalcon\Tests\Unit\Forms\Form;
 
-use Phalcon\Tests\UnitTestCase;
 use Phalcon\Forms\Element\Text;
 use Phalcon\Forms\Form;
 use Phalcon\Tests\Fixtures\Traits\DiTrait;
+use Phalcon\Tests\UnitTestCase;
 
 final class IteratorTest extends UnitTestCase
 {

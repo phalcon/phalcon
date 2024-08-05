@@ -13,56 +13,12 @@ declare(strict_types=1);
 
 namespace Phalcon\Tests\Unit\Support\Registry;
 
-use Codeception\Example;
 use Phalcon\Support\Registry;
-use stdClass;
 use Phalcon\Tests\UnitTestCase;
+use stdClass;
 
 final class GetTest extends UnitTestCase
 {
-    /**
-     * Tests Phalcon\Support\Registry :: get()
-     *
-     * @author Phalcon Team <team@phalcon.io>
-     * @since  2018-11-13
-     */
-    public function testSupportRegistryGet(): void
-    {
-        $data = [
-            'one'   => 'two',
-            'three' => 'four',
-            'five'  => 'six',
-        ];
-
-        $registry = new Registry($data);
-
-        $expected = 'four';
-        $actual   = $registry->get('three');
-        $this->assertSame($expected, $actual);
-    }
-
-    /**
-     * Tests Phalcon\Support\Registry :: get() - cast
-     *
-     * @dataProvider getExamples
-     *
-     * @since        2019-10-12
-     */
-    public function testSupportRegistryGetCast(
-        string $cast,
-        mixed $value,
-        mixed $expected
-    ): void {
-        $collection = new Registry(
-            [
-                'value' => $value,
-            ]
-        );
-
-        $actual = $collection->get('value', null, $cast);
-        $this->assertEquals($expected, $actual);
-    }
-
     /**
      * @return array[]
      */
@@ -123,5 +79,48 @@ final class GetTest extends UnitTestCase
                 null,
             ],
         ];
+    }
+
+    /**
+     * Tests Phalcon\Support\Registry :: get()
+     *
+     * @author Phalcon Team <team@phalcon.io>
+     * @since  2018-11-13
+     */
+    public function testSupportRegistryGet(): void
+    {
+        $data = [
+            'one'   => 'two',
+            'three' => 'four',
+            'five'  => 'six',
+        ];
+
+        $registry = new Registry($data);
+
+        $expected = 'four';
+        $actual   = $registry->get('three');
+        $this->assertSame($expected, $actual);
+    }
+
+    /**
+     * Tests Phalcon\Support\Registry :: get() - cast
+     *
+     * @dataProvider getExamples
+     *
+     * @since        2019-10-12
+     */
+    public function testSupportRegistryGetCast(
+        string $cast,
+        mixed $value,
+        mixed $expected
+    ): void {
+        $collection = new Registry(
+            [
+                'value' => $value,
+            ]
+        );
+
+        $actual = $collection->get('value', null, $cast);
+        $this->assertEquals($expected, $actual);
     }
 }

@@ -13,7 +13,6 @@ declare(strict_types=1);
 
 namespace Phalcon\Tests\Unit\Assets\Asset;
 
-use Codeception\Example;
 use Phalcon\Assets\Asset;
 use Phalcon\Tests\Fixtures\Traits\AssetsTrait;
 use Phalcon\Tests\UnitTestCase;
@@ -21,6 +20,40 @@ use Phalcon\Tests\UnitTestCase;
 final class GetRealSourcePathTest extends UnitTestCase
 {
     use AssetsTrait;
+
+    /**
+     * @return string[][]
+     */
+    public static function localProvider(): array
+    {
+        return [
+            [
+                'css',
+                'css/docs.css',
+            ],
+            [
+                'js',
+                'js/jquery.js',
+            ],
+        ];
+    }
+
+    /**
+     * @return string[][]
+     */
+    public static function remoteProvider(): array
+    {
+        return [
+            [
+                'css',
+                'https://phalcon.ld/css/docs.css',
+            ],
+            [
+                'js',
+                'https://phalcon.ld/js/jquery.js',
+            ],
+        ];
+    }
 
     /**
      * Tests Phalcon\Assets\Asset :: getRealSourcePath() - css/js local
@@ -64,39 +97,5 @@ final class GetRealSourcePathTest extends UnitTestCase
         $expected = $path;
         $actual   = $asset->getRealSourcePath();
         $this->assertSame($expected, $actual);
-    }
-
-    /**
-     * @return string[][]
-     */
-    public static function localProvider(): array
-    {
-        return [
-            [
-                'css',
-                'css/docs.css',
-            ],
-            [
-                'js',
-                'js/jquery.js',
-            ],
-        ];
-    }
-
-    /**
-     * @return string[][]
-     */
-    public static function remoteProvider(): array
-    {
-        return [
-            [
-                'css',
-                'https://phalcon.ld/css/docs.css',
-            ],
-            [
-                'js',
-                'https://phalcon.ld/js/jquery.js',
-            ],
-        ];
     }
 }

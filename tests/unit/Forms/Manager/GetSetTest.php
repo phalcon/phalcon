@@ -13,13 +13,28 @@ declare(strict_types=1);
 
 namespace Phalcon\Tests\Unit\Forms\Manager;
 
-use Phalcon\Tests\UnitTestCase;
 use Phalcon\Forms\Exception;
 use Phalcon\Forms\Form;
 use Phalcon\Forms\Manager;
+use Phalcon\Tests\UnitTestCase;
 
 final class GetSetTest extends UnitTestCase
 {
+    /**
+     * Tests Phalcon\Forms\Manager :: get() non-existent form
+     *
+     * @author Sid Roberts <https://github.com/SidRoberts>
+     * @since  2019-05-23
+     */
+    public function testFormsManagerGetNonexistentForm(): void
+    {
+        $this->expectException(Exception::class);
+        $this->expectExceptionMessage("There is no form with name='login'");
+
+        $manager   = new Manager();
+        $loginForm = $manager->get('login');
+    }
+
     /**
      * Tests Phalcon\Forms\Manager :: get() / set()
      *
@@ -37,20 +52,5 @@ final class GetSetTest extends UnitTestCase
         $expected = $loginForm;
         $actual   = $manager->get('login');
         $this->assertSame($expected, $actual);
-    }
-
-    /**
-     * Tests Phalcon\Forms\Manager :: get() non-existent form
-     *
-     * @author Sid Roberts <https://github.com/SidRoberts>
-     * @since  2019-05-23
-     */
-    public function testFormsManagerGetNonexistentForm(): void
-    {
-        $this->expectException(Exception::class);
-        $this->expectExceptionMessage("There is no form with name='login'");
-
-        $manager = new Manager();
-        $loginForm = $manager->get('login');
     }
 }

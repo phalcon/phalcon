@@ -16,7 +16,6 @@ namespace Phalcon\Tests\Unit\Container\Lazy;
 use Phalcon\Container\Definitions\Definitions;
 use Phalcon\Container\Lazy\GetCall;
 use Phalcon\Tests\Fixtures\Container\TestWithInterface;
-use Phalcon\Tests\UnitTestCase;
 
 final class GetCallTest extends AbstractLazyBase
 {

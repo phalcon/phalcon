@@ -231,12 +231,12 @@ final class ClearTest extends UnitTestCase
         $serializer = new SerializerFactory();
         $adapter    = new Weak($serializer);
 
-        $obj1 = new stdClass();
+        $obj1     = new stdClass();
         $obj1->id = 1;
-        $obj2 = new stdClass();
+        $obj2     = new stdClass();
         $obj2->id = 2;
-        $key1 = uniqid();
-        $key2 = uniqid();
+        $key1     = uniqid();
+        $key2     = uniqid();
         $adapter->set($key1, $obj1);
         $adapter->set($key2, $obj2);
 

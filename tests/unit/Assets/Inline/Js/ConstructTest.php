@@ -36,36 +36,6 @@ final class ConstructTest extends UnitTestCase
     }
 
     /**
-     * Tests Phalcon\Assets\Inline\Js :: __construct() - filter
-     *
-     * @return void
-     *
-     * @author Phalcon Team <team@phalcon.io>
-     * @since  2020-09-09
-     */
-    public function testAssetsInlineJsConstructFilter(): void
-    {
-        $asset  = new Js('<script>alert("Hello");</script>');
-        $actual = $asset->getFilter();
-        $this->assertTrue($actual);
-    }
-
-    /**
-     * Tests Phalcon\Assets\Inline\Js :: __construct() - filter set
-     *
-     * @return void
-     *
-     * @author Phalcon Team <team@phalcon.io>
-     * @since  2020-09-09
-     */
-    public function testAssetsInlineJsConstructFilterSet(): void
-    {
-        $asset  = new Js('<script>alert("Hello");</script>', false);
-        $actual = $asset->getFilter();
-        $this->assertFalse($actual);
-    }
-
-    /**
      * Tests Phalcon\Assets\Inline\Js :: __construct() - attributes
      *
      * @return void
@@ -105,5 +75,35 @@ final class ConstructTest extends UnitTestCase
         );
         $actual = $asset->getAttributes();
         $this->assertSame($attributes, $actual);
+    }
+
+    /**
+     * Tests Phalcon\Assets\Inline\Js :: __construct() - filter
+     *
+     * @return void
+     *
+     * @author Phalcon Team <team@phalcon.io>
+     * @since  2020-09-09
+     */
+    public function testAssetsInlineJsConstructFilter(): void
+    {
+        $asset  = new Js('<script>alert("Hello");</script>');
+        $actual = $asset->getFilter();
+        $this->assertTrue($actual);
+    }
+
+    /**
+     * Tests Phalcon\Assets\Inline\Js :: __construct() - filter set
+     *
+     * @return void
+     *
+     * @author Phalcon Team <team@phalcon.io>
+     * @since  2020-09-09
+     */
+    public function testAssetsInlineJsConstructFilterSet(): void
+    {
+        $asset  = new Js('<script>alert("Hello");</script>', false);
+        $actual = $asset->getFilter();
+        $this->assertFalse($actual);
     }
 }

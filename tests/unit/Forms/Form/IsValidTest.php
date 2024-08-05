@@ -13,7 +13,6 @@ declare(strict_types=1);
 
 namespace Phalcon\Tests\Unit\Forms\Form;
 
-use Phalcon\Tests\UnitTestCase;
 use Phalcon\Filter\Validation;
 use Phalcon\Filter\Validation\Validator\PresenceOf;
 use Phalcon\Filter\Validation\Validator\Regex;
@@ -22,9 +21,63 @@ use Phalcon\Forms\Form;
 use Phalcon\Messages\Message;
 use Phalcon\Messages\Messages;
 use Phalcon\Tests\Fixtures\Forms\ValidationForm;
+use Phalcon\Tests\UnitTestCase;
 
 final class IsValidTest extends UnitTestCase
 {
+    /**
+     * Tests Form::isValid()
+     *
+     * @issue  https://github.com/phalcon/cphalcon/issues/13149
+     * @author Phalcon Team <team@phalcon.io>
+     * @since  2018-11-13
+     */
+    public function testFormsFormRemoveIsValidCancelOnFail(): void
+    {
+        $form = new ValidationForm();
+
+        $data = [
+            'fullname' => '',
+            'email'    => '',
+            'subject'  => '',
+            'message'  => '',
+        ];
+
+        $actual = $form->isValid($data);
+        $this->assertFalse($actual);
+
+        /**
+         * 6 validators in total
+         */
+        $messages = $form->getMessages();
+        $this->assertCount(4, $messages);
+
+        $data = [
+            'fullname' => '',
+            'email'    => 'team@phalcon.io',
+            'subject'  => 'Some subject',
+            'message'  => 'Some message',
+        ];
+
+        $actual = $form->isValid($data);
+        $this->assertFalse($actual);
+
+        $messages = $form->getMessages();
+        $this->assertCount(1, $messages);
+
+        $expected = new Messages(
+            [
+                new Message(
+                    'your fullname is required',
+                    'fullname',
+                    PresenceOf::class
+                ),
+            ]
+        );
+
+        $this->assertEquals($expected, $messages);
+    }
+
     /**
      * Tests Form::isValid()
      *
@@ -118,58 +171,5 @@ final class IsValidTest extends UnitTestCase
             $expected,
             $form->get('address')->getMessages()
         );
-    }
-
-    /**
-     * Tests Form::isValid()
-     *
-     * @issue  https://github.com/phalcon/cphalcon/issues/13149
-     * @author Phalcon Team <team@phalcon.io>
-     * @since  2018-11-13
-     */
-    public function testFormsFormRemoveIsValidCancelOnFail(): void
-    {
-        $form = new ValidationForm();
-
-        $data = [
-            'fullname' => '',
-            'email'    => '',
-            'subject'  => '',
-            'message'  => '',
-        ];
-
-        $actual = $form->isValid($data);
-        $this->assertFalse($actual);
-
-        /**
-         * 6 validators in total
-         */
-        $messages = $form->getMessages();
-        $this->assertCount(4, $messages);
-
-        $data = [
-            'fullname' => '',
-            'email'    => 'team@phalcon.io',
-            'subject'  => 'Some subject',
-            'message'  => 'Some message',
-        ];
-
-        $actual = $form->isValid($data);
-        $this->assertFalse($actual);
-
-        $messages = $form->getMessages();
-        $this->assertCount(1, $messages);
-
-        $expected = new Messages(
-            [
-                new Message(
-                    'your fullname is required',
-                    'fullname',
-                    PresenceOf::class
-                ),
-            ]
-        );
-
-        $this->assertEquals($expected, $messages);
     }
 }

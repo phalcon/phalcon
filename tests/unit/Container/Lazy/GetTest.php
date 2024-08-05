@@ -16,7 +16,6 @@ namespace Phalcon\Tests\Unit\Container\Lazy;
 use Phalcon\Container\Exception\NotFound;
 use Phalcon\Container\Lazy\Get;
 use stdClass;
-use Phalcon\Tests\UnitTestCase;
 
 final class GetTest extends AbstractLazyBase
 {

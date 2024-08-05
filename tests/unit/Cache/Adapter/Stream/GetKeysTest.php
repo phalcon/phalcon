@@ -13,11 +13,10 @@ declare(strict_types=1);
 
 namespace Phalcon\Tests\Unit\Cache\Adapter\Stream;
 
-use Phalcon\Tests\UnitTestCase;
 use Phalcon\Cache\Adapter\Stream;
-use Phalcon\Cache\Exception as CacheException;
 use Phalcon\Storage\SerializerFactory;
 use Phalcon\Support\Exception as HelperException;
+use Phalcon\Tests\UnitTestCase;
 
 use function outputDir;
 use function sort;

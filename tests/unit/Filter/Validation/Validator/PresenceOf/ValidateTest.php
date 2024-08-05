@@ -13,63 +13,124 @@ declare(strict_types=1);
 
 namespace Phalcon\Tests\Unit\Filter\Validation\Validator\PresenceOf;
 
-use Codeception\Example;
-use Phalcon\Tests\UnitTestCase;
 use Phalcon\Filter\Validation;
 use Phalcon\Filter\Validation\Exception;
 use Phalcon\Filter\Validation\Validator\PresenceOf;
 use Phalcon\Messages\Message;
 use Phalcon\Messages\Messages;
+use Phalcon\Tests\UnitTestCase;
 use stdClass;
 
 final class ValidateTest extends UnitTestCase
 {
-    /**
-     * Tests Phalcon\Filter\Validation\Validator\PresenceOf :: validate() - empty
-     *
-     * @return void
-     *
-     * @return void
-     * @throws Exception
-     *
-     * @author Phalcon Team <team@phalcon.io>
-     * @since  2023-08-03
-     */
-    public function testFilterValidationValidatorPresenceOfValidateEmpty(): void
+    public static function getSingleFieldExamples(): array
     {
-        $validation = new Validation();
-        $validator  = new PresenceOf(['allowEmpty' => true,]);
-        $validation->add('price', $validator);
-        $entity        = new stdClass();
-        $entity->price = '';
+        return [
+            [
+                'SomeValue',
+                0,
+            ],
 
-        $validation->bind($entity, []);
-        $result = $validator->validate($validation, 'price');
-        $this->assertTrue($result);
+            [
+                '',
+                1,
+            ],
+        ];
     }
 
     /**
-     * Tests presence of validator with single field
+     * Tests cancel validation on first fail
      *
-     * @author       Wojciech Ślawski <jurigag@gmail.com>
-     * @since        2016-06-05
-     *
-     * @dataProvider getSingleFieldExamples
+     * @author Phalcon Team <team@phalcon.io>
+     * @since  2013-03-01
      */
-    public function testFilterValidationValidatorPresenceOfSingleField(
-        string $name,
-        int $expected
-    ): void {
+    public function testFilterValidationValidatorPresenceOfCancelOnFail(): void
+    {
         $validation = new Validation();
-        $validation->add('name', new PresenceOf());
 
-        $messages = $validation->validate(
+        $validation
+            ->add('name', new PresenceOf(['message' => 'The name is required']))
+            ->add(
+                'email',
+                new PresenceOf([
+                    'message'      => 'The email is required',
+                    'cancelOnFail' => true,
+                ])
+            )
+            ->add('login', new PresenceOf(['message' => 'The login is required']))
+        ;
+
+        $expected = new Messages(
             [
-                'name' => $name,
+                new Message(
+                    'The name is required',
+                    'name',
+                    PresenceOf::class
+                ),
+                new Message(
+                    'The email is required',
+                    'email',
+                    PresenceOf::class
+                ),
+                new Message(
+                    'The login is required',
+                    'login',
+                    PresenceOf::class
+                ),
             ]
         );
 
-        $this->assertSame($expected, $messages->count());
+        $actual = $validation->validate(
+            []
+        );
+
+        $this->assertEquals($expected, $actual);
+    }
+
+    /**
+     * Tests mixed fields
+     *
+     * @author Phalcon Team <team@phalcon.io>
+     * @since  2013-03-01
+     */
+    public function testFilterValidationValidatorPresenceOfMixedFields(): void
+    {
+        $validation = new Validation();
+
+        $validation
+            ->add('name', new PresenceOf(['message' => 'The name is required']))
+            ->add('email', new PresenceOf(['message' => 'The email is required']))
+            ->add('login', new PresenceOf(['message' => 'The login is required']))
+        ;
+
+        $expected = new Messages(
+            [
+                new Message(
+                    'The name is required',
+                    'name',
+                    PresenceOf::class,
+                    0
+                ),
+                new Message(
+                    'The email is required',
+                    'email',
+                    PresenceOf::class,
+                    0
+                ),
+                new Message(
+                    'The login is required',
+                    'login',
+                    PresenceOf::class,
+                    0
+                ),
+            ]
+        );
+
+        $actual = $validation->validate(
+            []
+        );
+
+        $this->assertEquals($expected, $actual);
     }
 
     /**
@@ -185,112 +246,50 @@ final class ValidateTest extends UnitTestCase
     }
 
     /**
-     * Tests mixed fields
+     * Tests presence of validator with single field
      *
-     * @author Phalcon Team <team@phalcon.io>
-     * @since  2013-03-01
+     * @author       Wojciech Ślawski <jurigag@gmail.com>
+     * @since        2016-06-05
+     *
+     * @dataProvider getSingleFieldExamples
      */
-    public function testFilterValidationValidatorPresenceOfMixedFields(): void
-    {
+    public function testFilterValidationValidatorPresenceOfSingleField(
+        string $name,
+        int $expected
+    ): void {
         $validation = new Validation();
+        $validation->add('name', new PresenceOf());
 
-        $validation
-            ->add('name', new PresenceOf(['message' => 'The name is required']))
-            ->add('email', new PresenceOf(['message' => 'The email is required']))
-            ->add('login', new PresenceOf(['message' => 'The login is required']))
-        ;
-
-        $expected = new Messages(
+        $messages = $validation->validate(
             [
-                new Message(
-                    'The name is required',
-                    'name',
-                    PresenceOf::class,
-                    0
-                ),
-                new Message(
-                    'The email is required',
-                    'email',
-                    PresenceOf::class,
-                    0
-                ),
-                new Message(
-                    'The login is required',
-                    'login',
-                    PresenceOf::class,
-                    0
-                ),
+                'name' => $name,
             ]
         );
 
-        $actual = $validation->validate(
-            []
-        );
-
-        $this->assertEquals($expected, $actual);
+        $this->assertSame($expected, $messages->count());
     }
 
     /**
-     * Tests cancel validation on first fail
+     * Tests Phalcon\Filter\Validation\Validator\PresenceOf :: validate() - empty
+     *
+     * @return void
+     *
+     * @return void
+     * @throws Exception
      *
      * @author Phalcon Team <team@phalcon.io>
-     * @since  2013-03-01
+     * @since  2023-08-03
      */
-    public function testFilterValidationValidatorPresenceOfCancelOnFail(): void
+    public function testFilterValidationValidatorPresenceOfValidateEmpty(): void
     {
         $validation = new Validation();
+        $validator  = new PresenceOf(['allowEmpty' => true,]);
+        $validation->add('price', $validator);
+        $entity        = new stdClass();
+        $entity->price = '';
 
-        $validation
-            ->add('name', new PresenceOf(['message' => 'The name is required']))
-            ->add(
-                'email',
-                new PresenceOf([
-                    'message'      => 'The email is required',
-                    'cancelOnFail' => true,
-                ])
-            )
-            ->add('login', new PresenceOf(['message' => 'The login is required']))
-        ;
-
-        $expected = new Messages(
-            [
-                new Message(
-                    'The name is required',
-                    'name',
-                    PresenceOf::class
-                ),
-                new Message(
-                    'The email is required',
-                    'email',
-                    PresenceOf::class
-                ),
-                new Message(
-                    'The login is required',
-                    'login',
-                    PresenceOf::class
-                ),
-            ]
-        );
-
-        $actual = $validation->validate(
-            []
-        );
-
-        $this->assertEquals($expected, $actual);
-    }
-
-    public static function getSingleFieldExamples(): array
-    {
-        return [
-            [
-                'SomeValue',
-                0,
-            ],
-
-            [
-                '',
-                1,
-            ],
-        ];
+        $validation->bind($entity, []);
+        $result = $validator->validate($validation, 'price');
+        $this->assertTrue($result);
     }
 }

@@ -13,9 +13,9 @@ declare(strict_types=1);
 
 namespace Phalcon\Tests\Unit\Filter\Validation\ValidatorFactory;
 
-use Phalcon\Tests\UnitTestCase;
 use Phalcon\Filter\Validation\Validator\Alnum;
 use Phalcon\Filter\Validation\ValidatorFactory;
+use Phalcon\Tests\UnitTestCase;
 
 final class NewInstanceTest extends UnitTestCase
 {

@@ -13,7 +13,6 @@ declare(strict_types=1);
 
 namespace Phalcon\Tests\Unit\Logger\Logger;
 
-use Codeception\Example;
 use DateTime;
 use Phalcon\Logger\Adapter\Stream;
 use Phalcon\Logger\Logger;
@@ -28,6 +27,23 @@ use function strtoupper;
 
 final class LevelsTest extends UnitTestCase
 {
+    /**
+     * @return string[][]
+     */
+    public static function getExamples(): array
+    {
+        return [
+            ['alert'],
+            ['critical'],
+            ['debug'],
+            ['emergency'],
+            ['error'],
+            ['info'],
+            ['notice'],
+            ['warning'],
+        ];
+    }
+
     /**
      * Tests Phalcon\Logger :: alert()
      *
@@ -87,22 +103,5 @@ final class LevelsTest extends UnitTestCase
         $this->assertLessThan($nSecondThreshold, $nInterval);
 
         $this->safeDeleteFile($fileName);
-    }
-
-    /**
-     * @return string[][]
-     */
-    public static function getExamples(): array
-    {
-        return [
-            ['alert'],
-            ['critical'],
-            ['debug'],
-            ['emergency'],
-            ['error'],
-            ['info'],
-            ['notice'],
-            ['warning'],
-        ];
     }
 }

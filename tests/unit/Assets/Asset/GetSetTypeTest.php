@@ -13,13 +13,30 @@ declare(strict_types=1);
 
 namespace Phalcon\Tests\Unit\Assets\Asset;
 
-use Codeception\Example;
 use Phalcon\Assets\Asset;
-use Phalcon\Tests\Fixtures\Traits\AssetsTrait;
 use Phalcon\Tests\UnitTestCase;
 
 final class GetSetTypeTest extends UnitTestCase
 {
+    /**
+     * @return string[][]
+     */
+    public static function provider(): array
+    {
+        return [
+            [
+                'type'    => 'css',
+                'path'    => 'css/docs.css',
+                'newType' => 'js',
+            ],
+            [
+                'type'    => 'css',
+                'path'    => 'js/jquery.js',
+                'newType' => 'js',
+            ],
+        ];
+    }
+
     /**
      * Tests Phalcon\Assets\Asset :: getType()/setType()
      *
@@ -41,24 +58,5 @@ final class GetSetTypeTest extends UnitTestCase
         $expected = $newType;
         $actual   = $asset->getType();
         $this->assertSame($expected, $actual);
-    }
-
-    /**
-     * @return string[][]
-     */
-    public static function provider(): array
-    {
-        return [
-            [
-                'type'    => 'css',
-                'path'    => 'css/docs.css',
-                'newType' => 'js',
-            ],
-            [
-                'type'    => 'css',
-                'path'    => 'js/jquery.js',
-                'newType' => 'js',
-            ],
-        ];
     }
 }

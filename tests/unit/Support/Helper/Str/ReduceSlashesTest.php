@@ -13,8 +13,8 @@ declare(strict_types=1);
 
 namespace Phalcon\Tests\Unit\Support\Helper\Str;
 
-use Phalcon\Tests\Fixtures\Page\Http;
 use Phalcon\Support\Helper\Str\ReduceSlashes;
+use Phalcon\Tests\Fixtures\Page\Http;
 use Phalcon\Tests\UnitTestCase;
 
 final class ReduceSlashesTest extends UnitTestCase

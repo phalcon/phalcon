@@ -13,8 +13,6 @@ declare(strict_types=1);
 
 namespace Phalcon\Tests\Unit\Cli\Console;
 
-use Phalcon\Tests\UnitTestCase;
-use Codeception\Example;
 use Phalcon\Cli\Console as CliConsole;
 use Phalcon\Cli\Console\Exception as ConsoleException;
 use Phalcon\Cli\Dispatcher;
@@ -22,196 +20,49 @@ use Phalcon\Cli\Router;
 use Phalcon\Cli\Router\Exception as RouterException;
 use Phalcon\Di\Exception as DiException;
 use Phalcon\Di\FactoryDefault\Cli as DiFactoryDefault;
+use Phalcon\Tests\UnitTestCase;
 
 final class SetArgumentTest extends UnitTestCase
 {
     /**
-     * Tests Phalcon\Cli\Console :: setArgument()
-     *
-     * @author Phalcon Team <team@phalcon.io>
-     * @since  2018-11-13
-     *
-     * @author Nathan Edwards <https://github.com/npfedwards>
-     * @since  2018-12-26
+     * @return array[]
      */
-    public function testCliConsoleSetArgument(): void
+    public static function getExamplesRouter(): array
     {
-        $di      = new DiFactoryDefault();
-        $console = new CliConsole($di);
-
-        $di->setShared(
-            'router',
-            function () {
-                $router = new Router(true);
-
-                return $router;
-            }
-        );
-
-        /** @var Dispatcher $dispatcher */
-        $dispatcher = $di->getShared('dispatcher');
-        $dispatcher->setDefaultNamespace('Phalcon\Tests\Fixtures\Tasks');
-        $console->setArgument(
+        return [
             [
-                'php',
+                [
+                    'php',
+                ],
                 'main',
-                'arguments',
-                'a',
-                'b',
-                'c',
-                'd',
-            ]
-        )
-                ->handle()
-        ;
-
-        $expected = 'main';
-        $actual   = $dispatcher->getTaskName();
-        $this->assertSame($expected, $actual);
-
-        $expected = 'arguments';
-        $actual   = $dispatcher->getActionName();
-        $this->assertSame($expected, $actual);
-
-        $expected = ['a', 'b', 'c', 'd'];
-        $actual   = $dispatcher->getParameters();
-        $this->assertSame($expected, $actual);
-
-        $expected = [];
-        $actual   = $dispatcher->getOptions();
-        $this->assertSame($expected, $actual);
-
-        $console->setArgument(
+                'main',
+                [],
+                'mainAction',
+            ],
             [
-                'php',
-                '--country=usa',
-                '-last',
+                [
+                    'php',
+                    'echo',
+                ],
+                'echo',
                 'main',
-                'arguments',
-                'a',
-                'b',
-            ]
-        )
-                ->handle()
-        ;
-
-        $expected = 'main';
-        $actual   = $dispatcher->getTaskName();
-        $this->assertSame($expected, $actual);
-
-        $expected = 'arguments';
-        $actual   = $dispatcher->getActionName();
-        $this->assertSame($expected, $actual);
-
-        $expected = ['a', 'b'];
-        $actual   = $dispatcher->getParameters();
-        $this->assertSame($expected, $actual);
-
-        $expected = [
-            'country' => 'usa',
-            'last'    => true,
+                [],
+                'echoMainAction',
+            ],
+            [
+                [
+                    'php',
+                    'main',
+                    'hello',
+                    'World',
+                    '#####',
+                ],
+                'main',
+                'hello',
+                ['World', '#####'],
+                'Hello World#####',
+            ],
         ];
-        $actual   = $dispatcher->getOptions();
-        $this->assertSame($expected, $actual);
-    }
-
-    /**
-     * @dataProvider getExamplesStrShift
-     *
-     *
-     * @return void
-     * @throws ConsoleException
-     * @throws DiException
-     * @throws RouterException
-     */
-    public function testCliConsoleSetArgumentStrShift(
-        bool $str,
-        bool $shift,
-        array $argument,
-        string $taskName,
-        string $actionName,
-        array $params,
-        mixed $returnedValue
-    ): void {
-        $di      = new DiFactoryDefault();
-        $console = new CliConsole($di);
-
-
-        /** @var Dispatcher $dispatcher */
-        $dispatcher = $di->getShared('dispatcher');
-        $dispatcher->setDefaultNamespace('Phalcon\Tests\Fixtures\Tasks');
-
-        $console->setArgument($argument, $str, $shift)
-                ->handle()
-        ;
-
-        $expected = $taskName;
-        $actual   = $dispatcher->getTaskName();
-        $this->assertSame($expected, $actual);
-
-        $expected = $actionName;
-        $actual   = $dispatcher->getActionName();
-        $this->assertSame($expected, $actual);
-
-        $expected = $params;
-        $actual   = $dispatcher->getParameters();
-        $this->assertSame($expected, $actual);
-
-        $expected = $returnedValue;
-        $actual   = $dispatcher->getReturnedValue();
-        $this->assertSame($expected, $actual);
-    }
-
-    /**
-     * @dataProvider getExamplesRouter
-     *
-     * @return void
-     * @throws ConsoleException
-     * @throws RouterException
-     * @throws DiException
-     */
-    public function testCliConsoleSetArgumentRouter(
-        array $argument,
-        string $taskName,
-        string $actionName,
-        array $params,
-        mixed $returnedValue
-    ): void {
-        $di      = new DiFactoryDefault();
-        $console = new CliConsole($di);
-
-        $di->setShared(
-            'router',
-            function () {
-                $router = new Router(true);
-
-                return $router;
-            }
-        );
-
-        /** @var Dispatcher $dispatcher */
-        $dispatcher = $di->getShared('dispatcher');
-        $dispatcher->setDefaultNamespace('Phalcon\Tests\Fixtures\Tasks');
-
-        $console->setArgument($argument)
-                ->handle()
-        ;
-
-        $expected = $taskName;
-        $actual   = $dispatcher->getTaskName();
-        $this->assertSame($expected, $actual);
-
-        $expected = $actionName;
-        $actual   = $dispatcher->getActionName();
-        $this->assertSame($expected, $actual);
-
-        $expected = $params;
-        $actual   = $dispatcher->getParameters();
-        $this->assertSame($expected, $actual);
-
-        $expected = $returnedValue;
-        $actual   = $dispatcher->getReturnedValue();
-        $this->assertSame($expected, $actual);
     }
 
     /**
@@ -321,43 +172,191 @@ final class SetArgumentTest extends UnitTestCase
     }
 
     /**
-     * @return array[]
+     * Tests Phalcon\Cli\Console :: setArgument()
+     *
+     * @author Phalcon Team <team@phalcon.io>
+     * @since  2018-11-13
+     *
+     * @author Nathan Edwards <https://github.com/npfedwards>
+     * @since  2018-12-26
      */
-    public static function getExamplesRouter(): array
+    public function testCliConsoleSetArgument(): void
     {
-        return [
+        $di      = new DiFactoryDefault();
+        $console = new CliConsole($di);
+
+        $di->setShared(
+            'router',
+            function () {
+                $router = new Router(true);
+
+                return $router;
+            }
+        );
+
+        /** @var Dispatcher $dispatcher */
+        $dispatcher = $di->getShared('dispatcher');
+        $dispatcher->setDefaultNamespace('Phalcon\Tests\Fixtures\Tasks');
+        $console->setArgument(
             [
-                [
-                    'php',
-                ],
+                'php',
                 'main',
-                'main',
-                [],
-                'mainAction',
-            ],
+                'arguments',
+                'a',
+                'b',
+                'c',
+                'd',
+            ]
+        )
+                ->handle()
+        ;
+
+        $expected = 'main';
+        $actual   = $dispatcher->getTaskName();
+        $this->assertSame($expected, $actual);
+
+        $expected = 'arguments';
+        $actual   = $dispatcher->getActionName();
+        $this->assertSame($expected, $actual);
+
+        $expected = ['a', 'b', 'c', 'd'];
+        $actual   = $dispatcher->getParameters();
+        $this->assertSame($expected, $actual);
+
+        $expected = [];
+        $actual   = $dispatcher->getOptions();
+        $this->assertSame($expected, $actual);
+
+        $console->setArgument(
             [
-                [
-                    'php',
-                    'echo',
-                ],
-                'echo',
+                'php',
+                '--country=usa',
+                '-last',
                 'main',
-                [],
-                'echoMainAction',
-            ],
-            [
-                [
-                    'php',
-                    'main',
-                    'hello',
-                    'World',
-                    '#####',
-                ],
-                'main',
-                'hello',
-                ['World', '#####'],
-                'Hello World#####',
-            ],
+                'arguments',
+                'a',
+                'b',
+            ]
+        )
+                ->handle()
+        ;
+
+        $expected = 'main';
+        $actual   = $dispatcher->getTaskName();
+        $this->assertSame($expected, $actual);
+
+        $expected = 'arguments';
+        $actual   = $dispatcher->getActionName();
+        $this->assertSame($expected, $actual);
+
+        $expected = ['a', 'b'];
+        $actual   = $dispatcher->getParameters();
+        $this->assertSame($expected, $actual);
+
+        $expected = [
+            'country' => 'usa',
+            'last'    => true,
         ];
+        $actual   = $dispatcher->getOptions();
+        $this->assertSame($expected, $actual);
+    }
+
+    /**
+     * @dataProvider getExamplesRouter
+     *
+     * @return void
+     * @throws ConsoleException
+     * @throws RouterException
+     * @throws DiException
+     */
+    public function testCliConsoleSetArgumentRouter(
+        array $argument,
+        string $taskName,
+        string $actionName,
+        array $params,
+        mixed $returnedValue
+    ): void {
+        $di      = new DiFactoryDefault();
+        $console = new CliConsole($di);
+
+        $di->setShared(
+            'router',
+            function () {
+                $router = new Router(true);
+
+                return $router;
+            }
+        );
+
+        /** @var Dispatcher $dispatcher */
+        $dispatcher = $di->getShared('dispatcher');
+        $dispatcher->setDefaultNamespace('Phalcon\Tests\Fixtures\Tasks');
+
+        $console->setArgument($argument)
+                ->handle()
+        ;
+
+        $expected = $taskName;
+        $actual   = $dispatcher->getTaskName();
+        $this->assertSame($expected, $actual);
+
+        $expected = $actionName;
+        $actual   = $dispatcher->getActionName();
+        $this->assertSame($expected, $actual);
+
+        $expected = $params;
+        $actual   = $dispatcher->getParameters();
+        $this->assertSame($expected, $actual);
+
+        $expected = $returnedValue;
+        $actual   = $dispatcher->getReturnedValue();
+        $this->assertSame($expected, $actual);
+    }
+
+    /**
+     * @dataProvider getExamplesStrShift
+     *
+     *
+     * @return void
+     * @throws ConsoleException
+     * @throws DiException
+     * @throws RouterException
+     */
+    public function testCliConsoleSetArgumentStrShift(
+        bool $str,
+        bool $shift,
+        array $argument,
+        string $taskName,
+        string $actionName,
+        array $params,
+        mixed $returnedValue
+    ): void {
+        $di      = new DiFactoryDefault();
+        $console = new CliConsole($di);
+
+
+        /** @var Dispatcher $dispatcher */
+        $dispatcher = $di->getShared('dispatcher');
+        $dispatcher->setDefaultNamespace('Phalcon\Tests\Fixtures\Tasks');
+
+        $console->setArgument($argument, $str, $shift)
+                ->handle()
+        ;
+
+        $expected = $taskName;
+        $actual   = $dispatcher->getTaskName();
+        $this->assertSame($expected, $actual);
+
+        $expected = $actionName;
+        $actual   = $dispatcher->getActionName();
+        $this->assertSame($expected, $actual);
+
+        $expected = $params;
+        $actual   = $dispatcher->getParameters();
+        $this->assertSame($expected, $actual);
+
+        $expected = $returnedValue;
+        $actual   = $dispatcher->getReturnedValue();
+        $this->assertSame($expected, $actual);
     }
 }

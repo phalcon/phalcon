@@ -13,12 +13,11 @@ declare(strict_types=1);
 
 namespace Phalcon\Tests\Unit\Cache\Cache;
 
-
-use Phalcon\Tests\UnitTestCase;
 use Phalcon\Cache\AdapterFactory;
 use Phalcon\Cache\Cache;
 use Phalcon\Cache\Exception\InvalidArgumentException;
 use Phalcon\Storage\SerializerFactory;
+use Phalcon\Tests\UnitTestCase;
 
 use function uniqid;
 
@@ -57,36 +56,6 @@ final class SetMultipleTest extends UnitTestCase
         ];
         $actual   = $adapter->getMultiple([$key1, $key2, 'unknown'], 'default-unknown');
         $this->assertEquals($expected, $actual);
-    }
-
-    /**
-     * Tests Phalcon\Cache :: setMultiple() - false
-     *
-     * @author Phalcon Team <team@phalcon.io>
-     * @since  2020-09-09
-     */
-    public function testCacheCacheSetMultipleFalse(): void
-    {
-        $serializer = new SerializerFactory();
-        $factory    = new AdapterFactory($serializer);
-        $instance   = $factory->newInstance('apcu');
-
-        $mock = $this
-            ->getMockBuilder(Cache::class)
-            ->setConstructorArgs([$instance])
-            ->getMock();
-        $mock->method('set')->willReturn(false);
-
-        $key1   = uniqid();
-        $key2   = uniqid();
-        $actual = $mock->setMultiple(
-            [
-                $key1 => 'test1',
-                $key2 => 'test2',
-            ]
-        );
-
-        $this->assertFalse($actual);
     }
 
     /**
@@ -134,5 +103,36 @@ final class SetMultipleTest extends UnitTestCase
         $adapter = new Cache($instance);
 
         $actual = $adapter->setMultiple(1234);
+    }
+
+    /**
+     * Tests Phalcon\Cache :: setMultiple() - false
+     *
+     * @author Phalcon Team <team@phalcon.io>
+     * @since  2020-09-09
+     */
+    public function testCacheCacheSetMultipleFalse(): void
+    {
+        $serializer = new SerializerFactory();
+        $factory    = new AdapterFactory($serializer);
+        $instance   = $factory->newInstance('apcu');
+
+        $mock = $this
+            ->getMockBuilder(Cache::class)
+            ->setConstructorArgs([$instance])
+            ->getMock()
+        ;
+        $mock->method('set')->willReturn(false);
+
+        $key1   = uniqid();
+        $key2   = uniqid();
+        $actual = $mock->setMultiple(
+            [
+                $key1 => 'test1',
+                $key2 => 'test2',
+            ]
+        );
+
+        $this->assertFalse($actual);
     }
 }

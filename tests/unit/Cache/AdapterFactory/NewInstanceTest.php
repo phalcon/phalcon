@@ -13,8 +13,6 @@ declare(strict_types=1);
 
 namespace Phalcon\Tests\Unit\Cache\AdapterFactory;
 
-use Codeception\Example;
-use Phalcon\Tests\UnitTestCase;
 use Phalcon\Cache\Adapter\Apcu;
 use Phalcon\Cache\Adapter\Libmemcached;
 use Phalcon\Cache\Adapter\Memory;
@@ -24,6 +22,7 @@ use Phalcon\Cache\Adapter\Weak;
 use Phalcon\Cache\AdapterFactory;
 use Phalcon\Cache\Exception\Exception;
 use Phalcon\Storage\SerializerFactory;
+use Phalcon\Tests\UnitTestCase;
 
 use function getOptionsLibmemcached;
 use function getOptionsRedis;
@@ -32,6 +31,44 @@ use function uniqid;
 
 final class NewInstanceTest extends UnitTestCase
 {
+    public static function getExamples(): array
+    {
+        return [
+            [
+                'apcu',
+                Apcu::class,
+                [],
+            ],
+            [
+                'libmemcached',
+                Libmemcached::class,
+                getOptionsLibmemcached(),
+            ],
+            [
+                'memory',
+                Memory::class,
+                [],
+            ],
+            [
+                'redis',
+                Redis::class,
+                getOptionsRedis(),
+            ],
+            [
+                'stream',
+                Stream::class,
+                [
+                    'storageDir' => outputDir(),
+                ],
+            ],
+            [
+                'weak',
+                Weak::class,
+                [],
+            ],
+        ];
+    }
+
     /**
      * Tests Phalcon\Cache\AdapterFactory :: newInstance()
      *
@@ -77,43 +114,5 @@ final class NewInstanceTest extends UnitTestCase
         $adapter    = new AdapterFactory($serializer);
 
         $service = $adapter->newInstance($name);
-    }
-
-    public static function getExamples(): array
-    {
-        return [
-            [
-                'apcu',
-                Apcu::class,
-                [],
-            ],
-            [
-                'libmemcached',
-                Libmemcached::class,
-                getOptionsLibmemcached(),
-            ],
-            [
-                'memory',
-                Memory::class,
-                [],
-            ],
-            [
-                'redis',
-                Redis::class,
-                getOptionsRedis(),
-            ],
-            [
-                'stream',
-                Stream::class,
-                [
-                    'storageDir' => outputDir(),
-                ],
-            ],
-            [
-                'weak',
-                Weak::class,
-                [],
-            ],
-        ];
     }
 }

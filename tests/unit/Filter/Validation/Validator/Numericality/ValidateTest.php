@@ -13,86 +13,86 @@ declare(strict_types=1);
 
 namespace Phalcon\Tests\Unit\Filter\Validation\Validator\Numericality;
 
-use Codeception\Example;
-use Phalcon\Tests\UnitTestCase;
 use Phalcon\Filter\Validation;
 use Phalcon\Filter\Validation\Exception;
 use Phalcon\Filter\Validation\Validator\Numericality;
+use Phalcon\Tests\UnitTestCase;
 use stdClass;
 
 final class ValidateTest extends UnitTestCase
 {
     /**
-     * Tests Phalcon\Filter\Validation\Validator\Numericality :: validate() - empty
-     *
-     * @return void
-     *
-     * @return void
-     * @throws Exception
-     *
-     * @author Phalcon Team <team@phalcon.io>
-     * @since  2023-08-03
+     * @return array
      */
-    public function testFilterValidationValidatorNumericalityValidateEmpty(): void
+    public static function getExamples(): array
     {
-        $validation = new Validation();
-        $validator  = new Numericality(['allowEmpty' => true,]);
-        $validation->add('price', $validator);
-        $entity        = new stdClass();
-        $entity->price = '';
-
-        $validation->bind($entity, []);
-        $result = $validator->validate($validation, 'price');
-        $this->assertTrue($result);
-    }
-
-    /**
-     * Tests Phalcon\Filter\Validation\Validator\Numericality :: validate()
-     *
-     * @dataProvider getMixedExamples
-     *
-     * @author       Phalcon Team <team@phalcon.io>
-     * @since        2018-11-13
-     */
-    public function testFilterValidationValidatorNumericalityValidate(
-        mixed $price,
-        bool $expected
-    ): void {
-        $entity        = new stdClass();
-        $entity->price = $price;
-
-        $validation = new Validation();
-        $validation->setEntity($entity);
-        $validator = new Numericality();
-
-        $actual = $validator->validate($validation, 'price');
-        $this->assertSame($expected, $actual);
-    }
-
-    /**
-     * Tests numericality validator with single field
-     *
-     * @author       Wojciech Ślawski <jurigag@gmail.com>
-     * @author       Andrey Izman <izmanw@gmail.com>
-     * @since        2016-06-05
-     *
-     * @dataProvider getExamples
-     */
-    public function testFilterValidationValidatorNumericalitySingleField(
-        mixed $amount,
-        int $expected
-    ): void {
-        $validation = new Validation();
-        $validation->add('amount', new Numericality());
-
-        $messages = $validation->validate(
+        return [
             [
-                'amount' => $amount,
-            ]
-        );
+                'amount'   => 123,
+                'expected' => 0,
+            ],
+            [
+                'amount'   => 123.12,
+                'expected' => 0,
+            ],
+            [
+                'amount'   => '-12,000',
+                'expected' => 0,
+            ],
+            [
+                'amount'   => '-12,0@0',
+                'expected' => 1,
+            ],
+            [
+                'amount'   => '-12,0@@0',
+                'expected' => 1,
+            ],
+            [
+                'amount'   => '123abc',
+                'expected' => 1,
+            ],
+            [
+                'amount'   => '123.12e3',
+                'expected' => 1,
+            ],
+        ];
+    }
 
-        $actual = $messages->count();
-        $this->assertSame($expected, $actual);
+    /**
+     * @return array[]
+     */
+    public static function getMixedExamples(): array
+    {
+        return [
+            [1, true],
+            [123, true],
+            [123.45, true],
+            ['1 234.56', false],
+            ['1,234.56', true],
+            ['1.23', true],
+            ['1.123,56', true],
+            ['1 234.56aa', false],
+            ['1,234.56aa', false],
+            ['1.23aa', false],
+            ['1.123,56aa', false],
+            [-1, true],
+            [-123, true],
+            [-123.45, true],
+            ['-1 234.56', false],
+            ['-1,234.56', true],
+            ['-1.23', true],
+            ['-1.123,56', true],
+            ['-1 234.56aa', false],
+            ['-1,234.56aa', false],
+            ['-1.23aa', false],
+            ['-1.123,56aa', false],
+            ['-12,000', true],
+            ['-12,0@0', false],
+            ['-12,0@@0', false],
+            [' 1', false],
+            ['1 ', false],
+            ['1 1', false],
+        ];
     }
 
     /**
@@ -169,76 +169,75 @@ final class ValidateTest extends UnitTestCase
     }
 
     /**
-     * @return array
+     * Tests numericality validator with single field
+     *
+     * @author       Wojciech Ślawski <jurigag@gmail.com>
+     * @author       Andrey Izman <izmanw@gmail.com>
+     * @since        2016-06-05
+     *
+     * @dataProvider getExamples
      */
-    public static function getExamples(): array
-    {
-        return [
+    public function testFilterValidationValidatorNumericalitySingleField(
+        mixed $amount,
+        int $expected
+    ): void {
+        $validation = new Validation();
+        $validation->add('amount', new Numericality());
+
+        $messages = $validation->validate(
             [
-                'amount'   => 123,
-                'expected' => 0,
-            ],
-            [
-                'amount'   => 123.12,
-                'expected' => 0,
-            ],
-            [
-                'amount'   => '-12,000',
-                'expected' => 0,
-            ],
-            [
-                'amount'   => '-12,0@0',
-                'expected' => 1,
-            ],
-            [
-                'amount'   => '-12,0@@0',
-                'expected' => 1,
-            ],
-            [
-                'amount'   => '123abc',
-                'expected' => 1,
-            ],
-            [
-                'amount'   => '123.12e3',
-                'expected' => 1,
-            ],
-        ];
+                'amount' => $amount,
+            ]
+        );
+
+        $actual = $messages->count();
+        $this->assertSame($expected, $actual);
     }
 
     /**
-     * @return array[]
+     * Tests Phalcon\Filter\Validation\Validator\Numericality :: validate()
+     *
+     * @dataProvider getMixedExamples
+     *
+     * @author       Phalcon Team <team@phalcon.io>
+     * @since        2018-11-13
      */
-    public static function getMixedExamples(): array
+    public function testFilterValidationValidatorNumericalityValidate(
+        mixed $price,
+        bool $expected
+    ): void {
+        $entity        = new stdClass();
+        $entity->price = $price;
+
+        $validation = new Validation();
+        $validation->setEntity($entity);
+        $validator = new Numericality();
+
+        $actual = $validator->validate($validation, 'price');
+        $this->assertSame($expected, $actual);
+    }
+
+    /**
+     * Tests Phalcon\Filter\Validation\Validator\Numericality :: validate() - empty
+     *
+     * @return void
+     *
+     * @return void
+     * @throws Exception
+     *
+     * @author Phalcon Team <team@phalcon.io>
+     * @since  2023-08-03
+     */
+    public function testFilterValidationValidatorNumericalityValidateEmpty(): void
     {
-        return [
-            [1, true],
-            [123, true],
-            [123.45, true],
-            ['1 234.56', false],
-            ['1,234.56', true],
-            ['1.23', true],
-            ['1.123,56', true],
-            ['1 234.56aa', false],
-            ['1,234.56aa', false],
-            ['1.23aa', false],
-            ['1.123,56aa', false],
-            [-1, true],
-            [-123, true],
-            [-123.45, true],
-            ['-1 234.56', false],
-            ['-1,234.56', true],
-            ['-1.23', true],
-            ['-1.123,56', true],
-            ['-1 234.56aa', false],
-            ['-1,234.56aa', false],
-            ['-1.23aa', false],
-            ['-1.123,56aa', false],
-            ['-12,000', true],
-            ['-12,0@0', false],
-            ['-12,0@@0', false],
-            [' 1', false],
-            ['1 ', false],
-            ['1 1', false],
-        ];
+        $validation = new Validation();
+        $validator  = new Numericality(['allowEmpty' => true,]);
+        $validation->add('price', $validator);
+        $entity        = new stdClass();
+        $entity->price = '';
+
+        $validation->bind($entity, []);
+        $result = $validator->validate($validation, 'price');
+        $this->assertTrue($result);
     }
 }

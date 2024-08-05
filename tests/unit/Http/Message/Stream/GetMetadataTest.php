@@ -13,14 +13,29 @@ declare(strict_types=1);
 
 namespace Phalcon\Tests\Unit\Http\Message\Stream;
 
-use Codeception\Example;
-use Phalcon\Tests\Fixtures\Page\Http;
 use Phalcon\Http\Message\Stream;
 use Phalcon\Tests\Fixtures\Http\Message\StreamFixture;
+use Phalcon\Tests\Fixtures\Page\Http;
 use Phalcon\Tests\UnitTestCase;
 
 final class GetMetadataTest extends UnitTestCase
 {
+    public static function getExamples(): array
+    {
+        return [
+            ['timed_out', false,],
+            ['blocked', true,],
+            ['eof', false,],
+            ['wrapper_type', 'plainfile',],
+            ['stream_type', 'STDIO',],
+            ['mode', 'rb',],
+            ['unread_bytes', 0,],
+            ['seekable', true,],
+            ['uri', dataDir('assets/stream/mit.txt'),],
+            ['unknown', [],],
+        ];
+    }
+
     /**
      * Tests Phalcon\Http\Message\Stream :: getMetadata()
      *
@@ -82,21 +97,5 @@ final class GetMetadataTest extends UnitTestCase
 
         $actual = $stream->getMetadata();
         $this->assertNull($actual);
-    }
-
-    public static function getExamples(): array
-    {
-        return [
-            ['timed_out', false,],
-            ['blocked', true,],
-            ['eof', false,],
-            ['wrapper_type', 'plainfile',],
-            ['stream_type', 'STDIO',],
-            ['mode', 'rb',],
-            ['unread_bytes', 0,],
-            ['seekable', true,],
-            ['uri', dataDir('assets/stream/mit.txt'),],
-            ['unknown', [],],
-        ];
     }
 }

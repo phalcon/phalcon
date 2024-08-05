@@ -13,9 +13,9 @@ declare(strict_types=1);
 
 namespace Phalcon\Tests\Unit\Http\Message\Stream;
 
-use Phalcon\Tests\Fixtures\Page\Http;
 use Phalcon\Http\Message\Stream;
 use Phalcon\Tests\Fixtures\Http\Message\StreamFixture;
+use Phalcon\Tests\Fixtures\Page\Http;
 use Phalcon\Tests\UnitTestCase;
 
 use function dataDir;

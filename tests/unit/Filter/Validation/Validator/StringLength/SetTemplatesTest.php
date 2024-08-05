@@ -13,8 +13,8 @@ declare(strict_types=1);
 
 namespace Phalcon\Tests\Unit\Filter\Validation\Validator\StringLength;
 
-use Phalcon\Tests\UnitTestCase;
 use Phalcon\Filter\Validation\Validator\StringLength;
+use Phalcon\Tests\UnitTestCase;
 
 final class SetTemplatesTest extends UnitTestCase
 {

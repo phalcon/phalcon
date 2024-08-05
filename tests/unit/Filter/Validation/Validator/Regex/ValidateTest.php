@@ -13,47 +13,17 @@ declare(strict_types=1);
 
 namespace Phalcon\Tests\Unit\Filter\Validation\Validator\Regex;
 
-use Phalcon\Tests\UnitTestCase;
 use Phalcon\Filter\Validation;
 use Phalcon\Filter\Validation\Exception;
 use Phalcon\Filter\Validation\Validator\Regex;
 use Phalcon\Messages\Message;
 use Phalcon\Messages\Messages;
+use Phalcon\Tests\UnitTestCase;
 use stdClass;
 
 final class ValidateTest extends UnitTestCase
 {
-    /**
-     * Tests Phalcon\Filter\Validation\Validator\Regex :: validate() - empty
-     *
-     * @return void
-     *
-     * @return void
-     * @throws Exception
-     *
-     * @author Phalcon Team <team@phalcon.io>
-     * @since  2023-08-03
-     */
-    public function testFilterValidationValidatorRegexValidateEmpty(): void
-    {
-        $validation = new Validation();
-        $validator  = new Regex(['allowEmpty' => true,]);
-        $validation->add('price', $validator);
-        $entity        = new stdClass();
-        $entity->price = '';
-
-        $validation->bind($entity, []);
-        $result = $validator->validate($validation, 'price');
-        $this->assertTrue($result);
-    }
-
-    /**
-     * Tests regex validator with single field
-     *
-     * @author Wojciech Ślawski <jurigag@gmail.com>
-     * @since  2016-06-05
-     */
-    public function testFilterValidationValidatorRegexSingleField(): void
+    public function testFilterValidationValidatorRegexCustomMessage(): void
     {
         $validation = new Validation();
 
@@ -62,9 +32,11 @@ final class ValidateTest extends UnitTestCase
             new Regex(
                 [
                     'pattern' => '/[A-Z]{3}\-[0-9]{3}/',
+                    'message' => 'The car plate is not valid',
                 ]
             )
         );
+
 
         $messages = $validation->validate(
             []
@@ -73,7 +45,7 @@ final class ValidateTest extends UnitTestCase
         $expected = new Messages(
             [
                 new Message(
-                    'Field car_plate does not match the required format',
+                    'The car plate is not valid',
                     'car_plate',
                     Regex::class,
                     0
@@ -82,6 +54,7 @@ final class ValidateTest extends UnitTestCase
         );
 
         $this->assertEquals($expected, $messages);
+
 
         $messages = $validation->validate(
             [
@@ -93,84 +66,6 @@ final class ValidateTest extends UnitTestCase
             0,
             $messages->count()
         );
-    }
-
-    /**
-     * Tests regex validator with multiple field and single pattern
-     *
-     * @author Wojciech Ślawski <jurigag@gmail.com>
-     * @since  2016-06-05
-     */
-    public function testFilterValidationValidatorRegexMultipleFieldSinglePattern(): void
-    {
-        $validation = new Validation();
-
-        $validationMessages = [
-            'name' => 'Name can be only lowercase letters.',
-            'type' => 'Type can be only lowercase letters.',
-        ];
-
-        $validation->add(
-            [
-                'name',
-                'type',
-            ],
-            new Regex(
-                [
-                    'pattern' => '/^[a-z]+$/',
-                    'message' => $validationMessages,
-                ]
-            )
-        );
-
-        $messages = $validation->validate(
-            [
-                'name' => 'somevalue',
-                'type' => 'somevalue',
-            ]
-        );
-
-        $this->assertSame(
-            0,
-            $messages->count()
-        );
-
-        $messages = $validation->validate(
-            [
-                'name' => 'SomeValue',
-                'type' => 'somevalue',
-            ]
-        );
-
-        $this->assertSame(
-            1,
-            $messages->count()
-        );
-
-        $expected = $validationMessages['name'];
-        $actual   = $messages->offsetGet(0)->getMessage();
-        $this->assertSame($expected, $actual);
-
-        $messages = $validation->validate(
-            [
-                'name' => 'SomeValue',
-                'type' => 'SomeValue',
-            ]
-        );
-
-
-        $this->assertSame(
-            2,
-            $messages->count()
-        );
-
-        $expected = $validationMessages['name'];
-        $actual   = $messages->offsetGet(0)->getMessage();
-        $this->assertSame($expected, $actual);
-
-        $expected = $validationMessages['type'];
-        $actual   = $messages->offsetGet(1)->getMessage();
-        $this->assertSame($expected, $actual);
     }
 
     /**
@@ -277,7 +172,91 @@ final class ValidateTest extends UnitTestCase
         );
     }
 
-    public function testFilterValidationValidatorRegexCustomMessage(): void
+    /**
+     * Tests regex validator with multiple field and single pattern
+     *
+     * @author Wojciech Ślawski <jurigag@gmail.com>
+     * @since  2016-06-05
+     */
+    public function testFilterValidationValidatorRegexMultipleFieldSinglePattern(): void
+    {
+        $validation = new Validation();
+
+        $validationMessages = [
+            'name' => 'Name can be only lowercase letters.',
+            'type' => 'Type can be only lowercase letters.',
+        ];
+
+        $validation->add(
+            [
+                'name',
+                'type',
+            ],
+            new Regex(
+                [
+                    'pattern' => '/^[a-z]+$/',
+                    'message' => $validationMessages,
+                ]
+            )
+        );
+
+        $messages = $validation->validate(
+            [
+                'name' => 'somevalue',
+                'type' => 'somevalue',
+            ]
+        );
+
+        $this->assertSame(
+            0,
+            $messages->count()
+        );
+
+        $messages = $validation->validate(
+            [
+                'name' => 'SomeValue',
+                'type' => 'somevalue',
+            ]
+        );
+
+        $this->assertSame(
+            1,
+            $messages->count()
+        );
+
+        $expected = $validationMessages['name'];
+        $actual   = $messages->offsetGet(0)->getMessage();
+        $this->assertSame($expected, $actual);
+
+        $messages = $validation->validate(
+            [
+                'name' => 'SomeValue',
+                'type' => 'SomeValue',
+            ]
+        );
+
+
+        $this->assertSame(
+            2,
+            $messages->count()
+        );
+
+        $expected = $validationMessages['name'];
+        $actual   = $messages->offsetGet(0)->getMessage();
+        $this->assertSame($expected, $actual);
+
+        $expected = $validationMessages['type'];
+        $actual   = $messages->offsetGet(1)->getMessage();
+        $this->assertSame($expected, $actual);
+    }
+
+    /**
+     * Tests regex validator with single field
+     *
+     * @author Wojciech Ślawski <jurigag@gmail.com>
+     * @since  2016-06-05
+     */
+    public function testFilterValidationValidatorRegexSingleField(): void
     {
         $validation = new Validation();
 
@@ -286,11 +265,9 @@ final class ValidateTest extends UnitTestCase
             new Regex(
                 [
                     'pattern' => '/[A-Z]{3}\-[0-9]{3}/',
-                    'message' => 'The car plate is not valid',
                 ]
             )
         );
-
 
         $messages = $validation->validate(
             []
@@ -299,7 +276,7 @@ final class ValidateTest extends UnitTestCase
         $expected = new Messages(
             [
                 new Message(
-                    'The car plate is not valid',
+                    'Field car_plate does not match the required format',
                     'car_plate',
                     Regex::class,
                     0
@@ -308,7 +285,6 @@ final class ValidateTest extends UnitTestCase
         );
 
         $this->assertEquals($expected, $messages);
-
 
         $messages = $validation->validate(
             [
@@ -320,5 +296,29 @@ final class ValidateTest extends UnitTestCase
             0,
             $messages->count()
         );
+    }
+
+    /**
+     * Tests Phalcon\Filter\Validation\Validator\Regex :: validate() - empty
+     *
+     * @return void
+     *
+     * @return void
+     * @throws Exception
+     *
+     * @author Phalcon Team <team@phalcon.io>
+     * @since  2023-08-03
+     */
+    public function testFilterValidationValidatorRegexValidateEmpty(): void
+    {
+        $validation = new Validation();
+        $validator  = new Regex(['allowEmpty' => true,]);
+        $validation->add('price', $validator);
+        $entity        = new stdClass();
+        $entity->price = '';
+
+        $validation->bind($entity, []);
+        $result = $validator->validate($validation, 'price');
+        $this->assertTrue($result);
     }
 }

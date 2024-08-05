@@ -13,9 +13,8 @@ declare(strict_types=1);
 
 namespace Phalcon\Tests\Unit\Forms\Element;
 
-use Codeception\Example;
-use Phalcon\Tests\UnitTestCase;
 use Phalcon\Tests\Fixtures\Traits\FormsTrait;
+use Phalcon\Tests\UnitTestCase;
 
 use function array_flip;
 use function uniqid;

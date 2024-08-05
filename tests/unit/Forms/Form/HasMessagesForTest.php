@@ -13,12 +13,12 @@ declare(strict_types=1);
 
 namespace Phalcon\Tests\Unit\Forms\Form;
 
-use Phalcon\Tests\UnitTestCase;
 use Phalcon\Filter\Validation\Validator\Regex;
 use Phalcon\Forms\Element\Text;
 use Phalcon\Forms\Form;
 use Phalcon\Messages\Message;
 use Phalcon\Messages\Messages;
+use Phalcon\Tests\UnitTestCase;
 
 final class HasMessagesForTest extends UnitTestCase
 {

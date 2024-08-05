@@ -14,8 +14,8 @@ declare(strict_types=1);
 namespace Phalcon\Tests\Unit\Support\Helper\Arr;
 
 use Phalcon\Support\Helper\Arr\Group;
-use stdClass;
 use Phalcon\Tests\UnitTestCase;
+use stdClass;
 
 final class GroupTest extends UnitTestCase
 {
@@ -71,6 +71,27 @@ final class GroupTest extends UnitTestCase
     }
 
     /**
+     * Tests Phalcon\Support\Helper\Arr :: group() - function
+     *
+     * @return void
+     *
+     * @author Phalcon Team <team@phalcon.io>
+     * @since  2020-09-09
+     */
+    public function testSupportHelperArrGroupFunction(): void
+    {
+        $object     = new Group();
+        $collection = ['one', 'two', 'three'];
+
+        $expected = [
+            3 => ['one', 'two'],
+            5 => ['three'],
+        ];
+        $actual   = $object($collection, 'strlen');
+        $this->assertSame($expected, $actual);
+    }
+
+    /**
      * Tests Phalcon\Support\Helper\Arr :: group() - object
      *
      * @return void
@@ -100,27 +121,6 @@ final class GroupTest extends UnitTestCase
             'Paul'  => [$paul],
         ];
         $actual   = $object($collection, 'name');
-        $this->assertSame($expected, $actual);
-    }
-
-    /**
-     * Tests Phalcon\Support\Helper\Arr :: group() - function
-     *
-     * @return void
-     *
-     * @author Phalcon Team <team@phalcon.io>
-     * @since  2020-09-09
-     */
-    public function testSupportHelperArrGroupFunction(): void
-    {
-        $object     = new Group();
-        $collection = ['one', 'two', 'three'];
-
-        $expected = [
-            3 => ['one', 'two'],
-            5 => ['three'],
-        ];
-        $actual   = $object($collection, 'strlen');
         $this->assertSame($expected, $actual);
     }
 }

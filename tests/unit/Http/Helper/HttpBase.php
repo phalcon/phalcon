@@ -13,11 +13,11 @@ declare(strict_types=1);
 
 namespace Phalcon\Tests\Unit\Http\Helper;
 
-use Phalcon\Tests\Fixtures\Page\Http;
 use Phalcon\Http\Cookie;
 use Phalcon\Http\Request;
 use Phalcon\Http\Response;
 use Phalcon\Tests\Fixtures\Http\PhpStream;
+use Phalcon\Tests\Fixtures\Page\Http;
 use Phalcon\Tests\Fixtures\Traits\DiTrait;
 use Phalcon\Tests\UnitTestCase;
 
@@ -32,6 +32,19 @@ class HttpBase extends UnitTestCase
     use DiTrait;
 
     protected $store = [];
+
+    /**
+     * executed after each test
+     */
+    public function _after(): void
+    {
+        $_SERVER  = $this->store['SERVER'];
+        $_REQUEST = $this->store['REQUEST'];
+        $_GET     = $this->store['GET'];
+        $_POST    = $this->store['POST'];
+        $_COOKIE  = $this->store['COOKIE'];
+        $_FILES   = $this->store['FILES'];
+    }
 
     /**
      * executed before each test
@@ -58,19 +71,6 @@ class HttpBase extends UnitTestCase
         header_remove();
 
         $this->setNewFactoryDefault();
-    }
-
-    /**
-     * executed after each test
-     */
-    public function _after(): void
-    {
-        $_SERVER  = $this->store['SERVER'];
-        $_REQUEST = $this->store['REQUEST'];
-        $_GET     = $this->store['GET'];
-        $_POST    = $this->store['POST'];
-        $_COOKIE  = $this->store['COOKIE'];
-        $_FILES   = $this->store['FILES'];
     }
 
     protected function getCookieObject(): Cookie

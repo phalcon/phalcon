@@ -13,7 +13,6 @@ declare(strict_types=1);
 
 namespace Phalcon\Tests\Unit\Http\Message\Uri;
 
-use Codeception\Example;
 use InvalidArgumentException;
 use Phalcon\Http\Message\Uri;
 use Phalcon\Tests\UnitTestCase;
@@ -22,6 +21,54 @@ use function sprintf;
 
 final class WithPortTest extends UnitTestCase
 {
+    /**
+     * @return array[]
+     */
+    public static function getExamples(): array
+    {
+        return [
+            [
+                'https',
+                null,
+                null,
+                '',
+            ],
+            [
+                'http',
+                8080,
+                8080,
+                ':8080',
+            ],
+            [
+                'http',
+                80,
+                null,
+                '',
+            ],
+            [
+                'https',
+                443,
+                null,
+                '',
+            ],
+        ];
+    }
+
+    /**
+     * @return array[]
+     */
+    public static function getExceptions(): array
+    {
+        return [
+            [
+                -2,
+            ],
+            [
+                70000,
+            ],
+        ];
+    }
+
     /**
      * Tests Phalcon\Http\Message\Uri :: withPort()
      *
@@ -79,53 +126,5 @@ final class WithPortTest extends UnitTestCase
         $uri   = new Uri(sprintf($query, ':4300'));
 
         $uri->withPort($source);
-    }
-
-    /**
-     * @return array[]
-     */
-    public static function getExamples(): array
-    {
-        return [
-            [
-                'https',
-                null,
-                null,
-                '',
-            ],
-            [
-                'http',
-                8080,
-                8080,
-                ':8080',
-            ],
-            [
-                'http',
-                80,
-                null,
-                '',
-            ],
-            [
-                'https',
-                443,
-                null,
-                '',
-            ],
-        ];
-    }
-
-    /**
-     * @return array[]
-     */
-    public static function getExceptions(): array
-    {
-        return [
-            [
-                -2,
-            ],
-            [
-                70000,
-            ],
-        ];
     }
 }

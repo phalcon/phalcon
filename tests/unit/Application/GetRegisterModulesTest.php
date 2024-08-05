@@ -20,6 +20,48 @@ use Phalcon\Tests\UnitTestCase;
 final class GetRegisterModulesTest extends UnitTestCase
 {
     /**
+     * Tests Phalcon\Acl\Role :: getModule()
+     *
+     * @return void
+     *
+     * @author Phalcon Team <team@phalcon.io>
+     * @since  2020-09-09
+     */
+    public function testApplicationGetModule(): void
+    {
+        $application = new ApplicationFixture();
+
+        $modules = [
+            'admin'    => [1],
+            'invoices' => [2],
+        ];
+        $application->registerModules($modules);
+
+        $expected = [1];
+        $actual   = $application->getModule('admin');
+        $this->assertSame($expected, $actual);
+    }
+
+    /**
+     * Tests Phalcon\Acl\Role :: getModule() - exception
+     *
+     * @return void
+     *
+     * @author Phalcon Team <team@phalcon.io>
+     * @since  2020-09-09
+     */
+    public function testApplicationGetModuleException(): void
+    {
+        $this->expectException(Exception::class);
+        $this->expectExceptionMessage(
+            "Module 'no-module' is not registered in the application container"
+        );
+
+        $application = new ApplicationFixture();
+        $application->getModule('no-module');
+    }
+
+    /**
      * Tests Phalcon\Application\* :: registerModules()
      *
      * @return void
@@ -75,47 +117,5 @@ final class GetRegisterModulesTest extends UnitTestCase
         $expected = array_merge($modules2, $modules1);
         $actual   = $application->getModules();
         $this->assertSame($expected, $actual);
-    }
-
-    /**
-     * Tests Phalcon\Acl\Role :: getModule()
-     *
-     * @return void
-     *
-     * @author Phalcon Team <team@phalcon.io>
-     * @since  2020-09-09
-     */
-    public function testApplicationGetModule(): void
-    {
-        $application = new ApplicationFixture();
-
-        $modules = [
-            'admin'    => [1],
-            'invoices' => [2],
-        ];
-        $application->registerModules($modules);
-
-        $expected = [1];
-        $actual   = $application->getModule('admin');
-        $this->assertSame($expected, $actual);
-    }
-
-    /**
-     * Tests Phalcon\Acl\Role :: getModule() - exception
-     *
-     * @return void
-     *
-     * @author Phalcon Team <team@phalcon.io>
-     * @since  2020-09-09
-     */
-    public function testApplicationGetModuleException(): void
-    {
-        $this->expectException(Exception::class);
-        $this->expectExceptionMessage(
-            "Module 'no-module' is not registered in the application container"
-        );
-
-        $application = new ApplicationFixture();
-        $application->getModule('no-module');
     }
 }

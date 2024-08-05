@@ -11,16 +11,34 @@ declare(strict_types=1);
 
 namespace Phalcon\Tests\Unit\Cache\Adapter\Weak;
 
-use Codeception\Example;
-use Phalcon\Tests\UnitTestCase;
 use Phalcon\Cache\Adapter\Weak;
 use Phalcon\Events\Event;
 use Phalcon\Events\Manager;
 use Phalcon\Storage\SerializerFactory;
+use Phalcon\Tests\UnitTestCase;
 use RuntimeException;
 
 final class EventsTest extends UnitTestCase
 {
+    public static function getEvents(): array
+    {
+        // Event, Method, Data
+        return [
+            ['beforeDelete', 'delete', ['test']],
+            ['afterDelete', 'delete', ['test']],
+            ['beforeIncrement', 'increment', ['test']],
+            ['afterIncrement', 'increment', ['test']],
+            ['beforeGet', 'get', ['test']],
+            ['afterGet', 'get', ['test']],
+            ['beforeDecrement', 'decrement', ['test']],
+            ['afterDecrement', 'decrement', ['test']],
+            ['beforeHas', 'has', ['test']],
+            ['afterHas', 'has', ['test']],
+            ['beforeSet', 'set', ['test', 'test']],
+            ['afterSet', 'set', ['test', 'test']],
+        ];
+    }
+
     /**
      * Tests Cache\Adapter\Weak() :: getEventsManager()
      *
@@ -86,24 +104,5 @@ final class EventsTest extends UnitTestCase
         call_user_func_array([$adapter, $method], $data);
         call_user_func_array([$adapter, $method], $data);
         $this->assertEquals(2, $counter);
-    }
-
-    public static function getEvents(): array
-    {
-        // Event, Method, Data
-        return [
-            ['beforeDelete', 'delete', ['test']],
-            ['afterDelete', 'delete', ['test']],
-            ['beforeIncrement', 'increment', ['test']],
-            ['afterIncrement', 'increment', ['test']],
-            ['beforeGet', 'get', ['test']],
-            ['afterGet', 'get', ['test']],
-            ['beforeDecrement', 'decrement', ['test']],
-            ['afterDecrement', 'decrement', ['test']],
-            ['beforeHas', 'has', ['test']],
-            ['afterHas', 'has', ['test']],
-            ['beforeSet', 'set', ['test', 'test']],
-            ['afterSet', 'set', ['test', 'test']],
-        ];
     }
 }

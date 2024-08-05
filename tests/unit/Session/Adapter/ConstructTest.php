@@ -36,8 +36,8 @@ final class ConstructTest extends UnitTestCase
      * *
      * @return void
      *
-     * @author Phalcon Team <team@phalcon.io>
-     * @since  2020-09-09
+     * @author       Phalcon Team <team@phalcon.io>
+     * @since        2020-09-09
      */
     public function testSessionAdapterConstruct(
         string $name

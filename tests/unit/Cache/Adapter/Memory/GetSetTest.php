@@ -13,15 +13,35 @@ declare(strict_types=1);
 
 namespace Phalcon\Tests\Unit\Cache\Adapter\Memory;
 
-use Codeception\Example;
-use Phalcon\Tests\UnitTestCase;
 use Phalcon\Cache\Adapter\Memory;
 use Phalcon\Storage\SerializerFactory;
 use Phalcon\Support\Exception as HelperException;
+use Phalcon\Tests\UnitTestCase;
 use stdClass;
 
 final class GetSetTest extends UnitTestCase
 {
+    public static function getExamples(): array
+    {
+        return [
+            [
+                'random string',
+            ],
+            [
+                123456,
+            ],
+            [
+                123.456,
+            ],
+            [
+                true,
+            ],
+            [
+                new stdClass(),
+            ],
+        ];
+    }
+
     /**
      * Tests Phalcon\Cache\Adapter\Memory :: get()
      *
@@ -47,26 +67,5 @@ final class GetSetTest extends UnitTestCase
         $expected = $value;
         $actual   = $adapter->get($key);
         $this->assertEquals($expected, $actual);
-    }
-
-    public static function getExamples(): array
-    {
-        return [
-            [
-                'random string',
-            ],
-            [
-                123456,
-            ],
-            [
-                123.456,
-            ],
-            [
-                true,
-            ],
-            [
-                new stdClass(),
-            ],
-        ];
     }
 }

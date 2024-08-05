@@ -13,34 +13,16 @@ declare(strict_types=1);
 
 namespace Phalcon\Tests\Unit\Cli\Console;
 
-use Phalcon\Tests\UnitTestCase;
 use Phalcon\Cli\Console as CliConsole;
 use Phalcon\Di\FactoryDefault\Cli as DiFactoryDefault;
 use Phalcon\Tests\Fixtures\Traits\DiTrait;
 use Phalcon\Tests\Modules\Backend\Module as BackendModule;
 use Phalcon\Tests\Modules\Frontend\Module as FrontendModule;
+use Phalcon\Tests\UnitTestCase;
 
 final class GetModulesTest extends UnitTestCase
 {
     use DiTrait;
-
-    /**
-     * Tests Phalcon\Cli\Console :: getModules() - empty
-     *
-     * @author Phalcon Team <team@phalcon.io>
-     * @since  2018-11-13
-     *
-     * @author Nathan Edwards <https://github.com/npfedwards>
-     * @since  2018-12-26
-     */
-    public function testCliConsoleGetModulesEmpty(): void
-    {
-        $console = new CliConsole(new DiFactoryDefault());
-
-        $expected = [];
-        $actual   = $console->getModules();
-        $this->assertSame($expected, $actual);
-    }
 
     /**
      * Tests Phalcon\Cli\Console :: getModules()
@@ -69,6 +51,24 @@ final class GetModulesTest extends UnitTestCase
         $console->registerModules($definition);
 
         $expected = $definition;
+        $actual   = $console->getModules();
+        $this->assertSame($expected, $actual);
+    }
+
+    /**
+     * Tests Phalcon\Cli\Console :: getModules() - empty
+     *
+     * @author Phalcon Team <team@phalcon.io>
+     * @since  2018-11-13
+     *
+     * @author Nathan Edwards <https://github.com/npfedwards>
+     * @since  2018-12-26
+     */
+    public function testCliConsoleGetModulesEmpty(): void
+    {
+        $console = new CliConsole(new DiFactoryDefault());
+
+        $expected = [];
         $actual   = $console->getModules();
         $this->assertSame($expected, $actual);
     }

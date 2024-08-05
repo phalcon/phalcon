@@ -13,7 +13,6 @@ declare(strict_types=1);
 
 namespace Phalcon\Tests\Unit\Config\Config;
 
-use Codeception\Example;
 use Phalcon\Config\Config;
 use Phalcon\Config\Exception;
 use Phalcon\Tests\Fixtures\Traits\ConfigTrait;
@@ -22,61 +21,6 @@ use Phalcon\Tests\UnitTestCase;
 final class MergeTest extends UnitTestCase
 {
     use ConfigTrait;
-
-    /**
-     * Tests Phalcon\Config\Config :: merge()
-     *
-     * @author Phalcon Team <team@phalcon.io>
-     * @since  2019-02-15
-     */
-    public function testConfigMergeConfig(): void
-    {
-        $config = $this->getConfig();
-
-        $expected = $this->getMergedByConfig();
-        $actual   = $config;
-        $this->assertEquals($expected, $actual);
-    }
-
-    /**
-     * Tests Phalcon\Config\Config :: merge()
-     *
-     * @dataProvider getExamples
-     *
-     * @return void
-     * @link         https://github.com/phalcon/cphalcon/issues/13351
-     * @link         https://github.com/phalcon/cphalcon/issues/13201
-     * @link         https://github.com/phalcon/cphalcon/issues/13768
-     * @link         https://github.com/phalcon/cphalcon/issues/12779
-     * @link         https://github.com/phalcon/phalcon/issues/196
-     *
-     * @author       Phalcon Team <team@phalcon.io>
-     * @since        2121-10-21
-     */
-    public function testConfigMergeConfigCases(
-        array $source,
-        array $target,
-        array $expected
-    ): void {
-        $source = new Config($source);
-        $target = new Config($target);
-
-        /**
-         * As Config object
-         */
-        $actual = $source->merge($target)
-                         ->toArray()
-        ;
-        $this->assertSame($expected, $actual);
-
-        /**
-         * As array
-         */
-        $actual = $source->merge($target)
-                         ->toArray()
-        ;
-        $this->assertSame($expected, $actual);
-    }
 
     /**
      * @return array<array-key, array<string, mixed>>
@@ -355,6 +299,61 @@ final class MergeTest extends UnitTestCase
                 ],
             ],
         ];
+    }
+
+    /**
+     * Tests Phalcon\Config\Config :: merge()
+     *
+     * @author Phalcon Team <team@phalcon.io>
+     * @since  2019-02-15
+     */
+    public function testConfigMergeConfig(): void
+    {
+        $config = $this->getConfig();
+
+        $expected = $this->getMergedByConfig();
+        $actual   = $config;
+        $this->assertEquals($expected, $actual);
+    }
+
+    /**
+     * Tests Phalcon\Config\Config :: merge()
+     *
+     * @dataProvider getExamples
+     *
+     * @return void
+     * @link         https://github.com/phalcon/cphalcon/issues/13351
+     * @link         https://github.com/phalcon/cphalcon/issues/13201
+     * @link         https://github.com/phalcon/cphalcon/issues/13768
+     * @link         https://github.com/phalcon/cphalcon/issues/12779
+     * @link         https://github.com/phalcon/phalcon/issues/196
+     *
+     * @author       Phalcon Team <team@phalcon.io>
+     * @since        2121-10-21
+     */
+    public function testConfigMergeConfigCases(
+        array $source,
+        array $target,
+        array $expected
+    ): void {
+        $source = new Config($source);
+        $target = new Config($target);
+
+        /**
+         * As Config object
+         */
+        $actual = $source->merge($target)
+                         ->toArray()
+        ;
+        $this->assertSame($expected, $actual);
+
+        /**
+         * As array
+         */
+        $actual = $source->merge($target)
+                         ->toArray()
+        ;
+        $this->assertSame($expected, $actual);
     }
 
     /**

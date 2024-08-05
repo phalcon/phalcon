@@ -13,12 +13,11 @@ declare(strict_types=1);
 
 namespace Phalcon\Tests\Unit\Cli\Router\Route;
 
-use Phalcon\Tests\UnitTestCase;
-use Codeception\Example;
 use Phalcon\Cli\Router;
 use Phalcon\Cli\Router\Route;
 use Phalcon\Tests\Fixtures\Traits\CliTrait;
 use Phalcon\Tests\Fixtures\Traits\DiTrait;
+use Phalcon\Tests\UnitTestCase;
 
 use function array_flip;
 

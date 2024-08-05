@@ -13,40 +13,14 @@ declare(strict_types=1);
 
 namespace Phalcon\Tests\Unit\Cli\Dispatcher;
 
-use Phalcon\Tests\UnitTestCase;
-use Codeception\Example;
 use Phalcon\Cli\Dispatcher;
+use Phalcon\Tests\UnitTestCase;
 
 /**
  * Class GetHandlerClassTest extends UnitTestCase
  */
 final class GetHandlerClassTest extends UnitTestCase
 {
-    /**
-     * Tests Phalcon\Cli\Dispatcher :: getHandlerClass()
-     *
-     * @dataProvider getTestCases
-     *
-     * @author       Phalcon Team <team@phalcon.io>
-     * @since        2018-11-13
-     */
-    public function testCliDispatcherGetHandlerClass(
-        string $namespace,
-        string $task,
-        string $suffix,
-        string $expected
-    ): void {
-        $dispatcher = new Dispatcher();
-
-        // test the handler name
-        $dispatcher->setNamespaceName($namespace);
-        $dispatcher->setTaskName($task);
-        $dispatcher->setHandlerSuffix($suffix);
-
-        $actual   = $dispatcher->getHandlerClass();
-        $this->assertSame($expected, $actual);
-    }
-
     /**
      * @return array[]
      */
@@ -72,5 +46,30 @@ final class GetHandlerClassTest extends UnitTestCase
             ['ola_phalcon\\', 'HelloPhalcon', 'Ctrl', 'ola_phalcon\\HelloPhalconCtrl'],
             ['Ola\\', 'Hello\\Phalcon', 'Ctrl', 'Ola\\Hello\\PhalconCtrl'],
         ];
+    }
+
+    /**
+     * Tests Phalcon\Cli\Dispatcher :: getHandlerClass()
+     *
+     * @dataProvider getTestCases
+     *
+     * @author       Phalcon Team <team@phalcon.io>
+     * @since        2018-11-13
+     */
+    public function testCliDispatcherGetHandlerClass(
+        string $namespace,
+        string $task,
+        string $suffix,
+        string $expected
+    ): void {
+        $dispatcher = new Dispatcher();
+
+        // test the handler name
+        $dispatcher->setNamespaceName($namespace);
+        $dispatcher->setTaskName($task);
+        $dispatcher->setHandlerSuffix($suffix);
+
+        $actual = $dispatcher->getHandlerClass();
+        $this->assertSame($expected, $actual);
     }
 }

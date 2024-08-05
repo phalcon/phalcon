@@ -34,41 +34,6 @@ final class ReadWriteTest extends UnitTestCase
     use AnnotationsTrait;
 
     /**
-     * Tests Phalcon\Annotations\Adapter :: read()/write()
-     *
-     * @dataProvider getExamples
-     *
-     * @author       Phalcon Team <team@phalcon.io>
-     * @since        2022-12-30
-     */
-    public function testAnnotationsAdapterReadWrite(
-        string $class,
-        array $params
-    ): void {
-        require_once dataDir('fixtures/Annotations/AnnotationsTestClass.php');
-
-        $adapter          = new $class($params);
-        $classAnnotations = $adapter->get(AnnotationsTestClass::class);
-
-        $adapter->write('testwrite', $classAnnotations);
-
-        if (Stream::class === $class) {
-            $this->assertFileExists(
-                outputDir('tests/annotations/testwrite.php')
-            );
-        }
-
-        $newClass = $adapter->read('testwrite');
-        $expected = Reflection::class;
-        $actual   = $newClass;
-        $this->assertInstanceOf($expected, $actual);
-
-        if (Stream::class === $class) {
-            $this->safeDeleteFile(outputDir('tests/annotations/testwrite.php'));
-        }
-    }
-
-    /**
      * Tests Phalcon\Annotations\Adapter :: read()
      *
      * @author       Phalcon Team <team@phalcon.io>
@@ -123,6 +88,41 @@ final class ReadWriteTest extends UnitTestCase
         $adapter    = new StreamUnserializeFixture($parameters);
         $adapter->get(AnnotationsTestClass::class);
         $adapter->read('testprop1');
+    }
+
+    /**
+     * Tests Phalcon\Annotations\Adapter :: read()/write()
+     *
+     * @dataProvider getExamples
+     *
+     * @author       Phalcon Team <team@phalcon.io>
+     * @since        2022-12-30
+     */
+    public function testAnnotationsAdapterReadWrite(
+        string $class,
+        array $params
+    ): void {
+        require_once dataDir('fixtures/Annotations/AnnotationsTestClass.php');
+
+        $adapter          = new $class($params);
+        $classAnnotations = $adapter->get(AnnotationsTestClass::class);
+
+        $adapter->write('testwrite', $classAnnotations);
+
+        if (Stream::class === $class) {
+            $this->assertFileExists(
+                outputDir('tests/annotations/testwrite.php')
+            );
+        }
+
+        $newClass = $adapter->read('testwrite');
+        $expected = Reflection::class;
+        $actual   = $newClass;
+        $this->assertInstanceOf($expected, $actual);
+
+        if (Stream::class === $class) {
+            $this->safeDeleteFile(outputDir('tests/annotations/testwrite.php'));
+        }
     }
 
     /**

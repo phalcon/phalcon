@@ -15,7 +15,6 @@ namespace Phalcon\Tests\Unit\Container\Lazy;
 
 use Phalcon\Container\Lazy\Call;
 use Phalcon\Container\Lazy\RequireFile;
-use Phalcon\Tests\UnitTestCase;
 
 use function dataDir;
 use function supportDir;

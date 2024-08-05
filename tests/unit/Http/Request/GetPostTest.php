@@ -15,7 +15,6 @@ namespace Phalcon\Tests\Unit\Http\Request;
 
 use Phalcon\Storage\Exception;
 use Phalcon\Tests\Unit\Http\Helper\HttpBase;
-use Phalcon\Tests\UnitTestCase;
 
 use function strtolower;
 use function uniqid;
@@ -50,27 +49,28 @@ final class GetPostTest extends HttpBase
     }
 
     /**
-     * Tests Phalcon\Http\Request :: getPost() - filter
+     * Tests Phalcon\Http\Request :: getPost() - allowNoEmpty
      *
      * @throws Exception
      * @since  2019-12-01
      * @author Phalcon Team <team@phalcon.io>
      */
-    public function testHttpRequestGetPostFilter(): void
+    public function testHttpRequestGetPostAllowNoEmpty(): void
     {
         $key   = uniqid('key-');
-        $value = uniqid('VAL-');
+        $value = '0';
 
         $_POST[$key] = '  ' . $value . '  ';
 
         $request = $this->getRequestObject();
 
         $expected = $value;
-        $actual   = $request->getPost($key, 'trim');
-        $this->assertSame($expected, $actual);
-
-        $expected = strtolower($value);
-        $actual   = $request->getPost($key, ['trim', 'lower']);
+        $actual   = $request->getPost(
+            $key,
+            'trim',
+            'zero value',
+            true
+        );
         $this->assertSame($expected, $actual);
     }
 
@@ -94,28 +94,27 @@ final class GetPostTest extends HttpBase
     }
 
     /**
-     * Tests Phalcon\Http\Request :: getPost() - allowNoEmpty
+     * Tests Phalcon\Http\Request :: getPost() - filter
      *
      * @throws Exception
      * @since  2019-12-01
      * @author Phalcon Team <team@phalcon.io>
      */
-    public function testHttpRequestGetPostAllowNoEmpty(): void
+    public function testHttpRequestGetPostFilter(): void
     {
         $key   = uniqid('key-');
-        $value = '0';
+        $value = uniqid('VAL-');
 
         $_POST[$key] = '  ' . $value . '  ';
 
         $request = $this->getRequestObject();
 
         $expected = $value;
-        $actual   = $request->getPost(
-            $key,
-            'trim',
-            'zero value',
-            true
-        );
+        $actual   = $request->getPost($key, 'trim');
+        $this->assertSame($expected, $actual);
+
+        $expected = strtolower($value);
+        $actual   = $request->getPost($key, ['trim', 'lower']);
         $this->assertSame($expected, $actual);
     }
 }

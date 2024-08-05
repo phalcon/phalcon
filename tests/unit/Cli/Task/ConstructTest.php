@@ -13,33 +13,26 @@ declare(strict_types=1);
 
 namespace Phalcon\Tests\Unit\Cli\Task;
 
-use Phalcon\Tests\UnitTestCase;
 use Phalcon\Cli\Task;
 use Phalcon\Di\FactoryDefault\Cli as DiFactoryDefault;
 use Phalcon\Support\Registry;
 use Phalcon\Tests\Fixtures\Tasks\EchoTask;
 use Phalcon\Tests\Fixtures\Tasks\MainTask;
 use Phalcon\Tests\Fixtures\Tasks\OnConstructTask;
+use Phalcon\Tests\UnitTestCase;
 
 final class ConstructTest extends UnitTestCase
 {
-    /**
-     * Tests Phalcon\Cli\Task :: __construct()
-     *
-     * @author Phalcon Team <team@phalcon.io>
-     * @since  2018-11-13
-     */
-    public function testCliTaskConstruct(): void
+    public function echoTask(): void
     {
-        $task = new Task();
+        $task = new EchoTask();
+        $di   = new DiFactoryDefault();
 
-        $class = Task::class;
-        $this->assertInstanceOf($class, $task);
+        $task->setDI($di);
 
-        $task = new OnConstructTask();
-
-        $actual = $task->onConstructExecuted;
-        $this->assertTrue($actual);
+        $expected = 'echoMainAction';
+        $actual   = $task->mainAction();
+        $this->assertSame($expected, $actual);
     }
 
     public function extendTask(): void
@@ -69,15 +62,22 @@ final class ConstructTest extends UnitTestCase
         $this->assertSame($expected, $actual);
     }
 
-    public function echoTask(): void
+    /**
+     * Tests Phalcon\Cli\Task :: __construct()
+     *
+     * @author Phalcon Team <team@phalcon.io>
+     * @since  2018-11-13
+     */
+    public function testCliTaskConstruct(): void
     {
-        $task = new EchoTask();
-        $di   = new DiFactoryDefault();
+        $task = new Task();
 
-        $task->setDI($di);
+        $class = Task::class;
+        $this->assertInstanceOf($class, $task);
 
-        $expected = 'echoMainAction';
-        $actual   = $task->mainAction();
-        $this->assertSame($expected, $actual);
+        $task = new OnConstructTask();
+
+        $actual = $task->onConstructExecuted;
+        $this->assertTrue($actual);
     }
 }

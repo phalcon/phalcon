@@ -15,27 +15,11 @@ namespace Phalcon\Tests\Unit\Http\Request;
 
 use Phalcon\Http\Request;
 use Phalcon\Tests\Unit\Http\Helper\HttpBase;
-use Phalcon\Tests\UnitTestCase;
 
 use function uniqid;
 
 final class GetHeaderTest extends HttpBase
 {
-    /**
-     * Tests getHeader empty
-     *
-     * @author Phalcon Team <team@phalcon.io>
-     * @since  2014-10-04
-     */
-    public function testHttpRequestHeaderGetEmpty(): void
-    {
-        $request = new Request();
-
-        $name   = uniqid('name-');
-        $actual = $request->getHeader($name);
-        $this->assertEmpty($actual);
-    }
-
     /**
      * Tests getHeader
      *
@@ -52,5 +36,20 @@ final class GetHeaderTest extends HttpBase
         $expected = $value;
         $actual   = $request->getHeader('ABCDEF');
         $this->assertSame($expected, $actual);
+    }
+
+    /**
+     * Tests getHeader empty
+     *
+     * @author Phalcon Team <team@phalcon.io>
+     * @since  2014-10-04
+     */
+    public function testHttpRequestHeaderGetEmpty(): void
+    {
+        $request = new Request();
+
+        $name   = uniqid('name-');
+        $actual = $request->getHeader($name);
+        $this->assertEmpty($actual);
     }
 }

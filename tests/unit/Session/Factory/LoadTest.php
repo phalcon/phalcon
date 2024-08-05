@@ -27,6 +27,20 @@ final class LoadTest extends UnitTestCase
     }
 
     /**
+     * Tests Phalcon\Session\Factory :: load() - array
+     *
+     * @author Wojciech Ślawski <jurigag@gmail.com>
+     * @since  2017-03-02
+     */
+    public function testSessionFactoryLoadArray(): void
+    {
+        $options = $this->arrayConfig['session'];
+        $data    = $options;
+
+        $this->runTests($options, $data);
+    }
+
+    /**
      * Tests Phalcon\Session\Factory :: load() - Config
      *
      * @author Wojciech Ślawski <jurigag@gmail.com>
@@ -56,19 +70,5 @@ final class LoadTest extends UnitTestCase
         );
 
         $this->assertEquals($expected, $actual);
-    }
-
-    /**
-     * Tests Phalcon\Session\Factory :: load() - array
-     *
-     * @author Wojciech Ślawski <jurigag@gmail.com>
-     * @since  2017-03-02
-     */
-    public function testSessionFactoryLoadArray(): void
-    {
-        $options = $this->arrayConfig['session'];
-        $data    = $options;
-
-        $this->runTests($options, $data);
     }
 }

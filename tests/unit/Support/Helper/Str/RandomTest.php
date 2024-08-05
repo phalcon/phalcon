@@ -22,21 +22,41 @@ use function strlen;
 final class RandomTest extends UnitTestCase
 {
     /**
-     * Tests Phalcon\Support\Helper\Str :: random() - constants
-     *
-     * @return void
-     *
-     * @author Phalcon Team <team@phalcon.io>
-     * @since  2020-09-09
+     * @return int[][]
      */
-    public function testSupportHelperStrRandomConstants(): void
+    public static function oneToTenProvider(): array
     {
-        $this->assertSame(0, Random::RANDOM_ALNUM);
-        $this->assertSame(1, Random::RANDOM_ALPHA);
-        $this->assertSame(2, Random::RANDOM_HEXDEC);
-        $this->assertSame(3, Random::RANDOM_NUMERIC);
-        $this->assertSame(4, Random::RANDOM_NOZERO);
-        $this->assertSame(5, Random::RANDOM_DISTINCT);
+        return [
+            [1],
+            [2],
+            [3],
+            [4],
+            [5],
+            [6],
+            [7],
+            [8],
+            [9],
+            [10],
+        ];
+    }
+
+    /**
+     * @return int[][]
+     */
+    public static function randomDistinctProvider(): array
+    {
+        return [
+            [1],
+            [10],
+            [100],
+            [200],
+            [500],
+            [1000],
+            [2000],
+            [3000],
+            [4000],
+            [5000],
+        ];
     }
 
     /**
@@ -90,6 +110,49 @@ final class RandomTest extends UnitTestCase
     }
 
     /**
+     * Tests Phalcon\Support\Helper\Str :: random() - constants
+     *
+     * @return void
+     *
+     * @author Phalcon Team <team@phalcon.io>
+     * @since  2020-09-09
+     */
+    public function testSupportHelperStrRandomConstants(): void
+    {
+        $this->assertSame(0, Random::RANDOM_ALNUM);
+        $this->assertSame(1, Random::RANDOM_ALPHA);
+        $this->assertSame(2, Random::RANDOM_HEXDEC);
+        $this->assertSame(3, Random::RANDOM_NUMERIC);
+        $this->assertSame(4, Random::RANDOM_NOZERO);
+        $this->assertSame(5, Random::RANDOM_DISTINCT);
+    }
+
+    /**
+     * Tests Phalcon\Support\Helper\Str :: random() - distinct type
+     *
+     * @dataProvider randomDistinctProvider
+     *
+     * @param Example $example
+     *
+     * @return void
+     * @author       Phalcon Team <team@phalcon.io>
+     * @since        2020-09-09
+     */
+    public function testSupportHelperStrRandomDistinct(
+        int $i
+    ): void {
+        $object = new Random();
+        $source = $object(Random::RANDOM_DISTINCT, $i);
+
+        $this->assertMatchesRegularExpression(
+            '#^[2345679ACDEFHJKLMNPRSTUVWXYZ]+$#',
+            $source
+        );
+
+        $this->assertSame($i, strlen($source));
+    }
+
+    /**
      * Tests Phalcon\Support\Helper\Str :: random() - hexdec
      *
      * @dataProvider oneToTenProvider
@@ -108,31 +171,6 @@ final class RandomTest extends UnitTestCase
         $this->assertSame(
             1,
             preg_match('/[a-f0-9]+/', $source, $matches)
-        );
-
-        $this->assertSame($source, $matches[0]);
-        $this->assertSame($i, strlen($source));
-    }
-
-    /**
-     * Tests Phalcon\Support\Helper\Str :: random() - numeric
-     *
-     * @dataProvider oneToTenProvider
-     *
-     * @return void
-     *
-     * @author       Phalcon Team <team@phalcon.io>
-     * @since        2020-09-09
-     */
-    public function testSupportHelperStrRandomNumeric(
-        int $i
-    ): void {
-        $object = new Random();
-        $source = $object(Random::RANDOM_NUMERIC, $i);
-
-        $this->assertSame(
-            1,
-            preg_match('/[0-9]+/', $source, $matches)
         );
 
         $this->assertSame($source, $matches[0]);
@@ -165,65 +203,27 @@ final class RandomTest extends UnitTestCase
     }
 
     /**
-     * Tests Phalcon\Support\Helper\Str :: random() - distinct type
+     * Tests Phalcon\Support\Helper\Str :: random() - numeric
      *
-     * @dataProvider randomDistinctProvider
-     *
-     * @param Example $example
+     * @dataProvider oneToTenProvider
      *
      * @return void
+     *
      * @author       Phalcon Team <team@phalcon.io>
      * @since        2020-09-09
      */
-    public function testSupportHelperStrRandomDistinct(
+    public function testSupportHelperStrRandomNumeric(
         int $i
     ): void {
         $object = new Random();
-        $source = $object(Random::RANDOM_DISTINCT, $i);
+        $source = $object(Random::RANDOM_NUMERIC, $i);
 
-        $this->assertMatchesRegularExpression(
-            '#^[2345679ACDEFHJKLMNPRSTUVWXYZ]+$#',
-            $source
+        $this->assertSame(
+            1,
+            preg_match('/[0-9]+/', $source, $matches)
         );
 
+        $this->assertSame($source, $matches[0]);
         $this->assertSame($i, strlen($source));
-    }
-
-    /**
-     * @return int[][]
-     */
-    public static function oneToTenProvider(): array
-    {
-        return [
-            [1],
-            [2],
-            [3],
-            [4],
-            [5],
-            [6],
-            [7],
-            [8],
-            [9],
-            [10],
-        ];
-    }
-
-    /**
-     * @return int[][]
-     */
-    public static function randomDistinctProvider(): array
-    {
-        return [
-            [1],
-            [10],
-            [100],
-            [200],
-            [500],
-            [1000],
-            [2000],
-            [3000],
-            [4000],
-            [5000],
-        ];
     }
 }

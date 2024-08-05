@@ -20,27 +20,6 @@ use Phalcon\Tests\UnitTestCase;
 final class IsValidHandlerTest extends UnitTestCase
 {
     /**
-     * Tests Phalcon\Events\Manager :: isValidHandler()
-     *
-     * @dataProvider getExamples
-     *
-     * @param Example $example
-     *
-     * @return void
-     * @author       Phalcon Team <team@phalcon.io>
-     * @since        2020-09-09
-     */
-    public function testEventsManagerIsValidHandler(
-        bool $expected,
-        mixed $handler
-    ): void {
-        $manager = new Manager();
-
-        $actual = $manager->isValidHandler($handler);
-        $this->assertSame($expected, $actual);
-    }
-
-    /**
      * @return array[]
      */
     public static function getExamples(): array
@@ -72,5 +51,26 @@ final class IsValidHandlerTest extends UnitTestCase
                 $closureHandler,
             ],
         ];
+    }
+
+    /**
+     * Tests Phalcon\Events\Manager :: isValidHandler()
+     *
+     * @dataProvider getExamples
+     *
+     * @param Example $example
+     *
+     * @return void
+     * @author       Phalcon Team <team@phalcon.io>
+     * @since        2020-09-09
+     */
+    public function testEventsManagerIsValidHandler(
+        bool $expected,
+        mixed $handler
+    ): void {
+        $manager = new Manager();
+
+        $actual = $manager->isValidHandler($handler);
+        $this->assertSame($expected, $actual);
     }
 }

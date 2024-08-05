@@ -13,9 +13,9 @@ declare(strict_types=1);
 
 namespace Phalcon\Tests\Unit\Session\Manager;
 
-use Phalcon\Tests\UnitTestCase;
 use Phalcon\Session\Manager;
 use Phalcon\Tests\Fixtures\Traits\DiTrait;
+use Phalcon\Tests\UnitTestCase;
 
 final class HasTest extends UnitTestCase
 {

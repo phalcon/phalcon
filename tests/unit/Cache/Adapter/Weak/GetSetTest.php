@@ -14,17 +14,37 @@ declare(strict_types=1);
 namespace Phalcon\Tests\Unit\Cache\Adapter\Weak;
 
 use ArrayObject;
-use Codeception\Example;
-use Phalcon\Tests\UnitTestCase;
 use Phalcon\Cache\Adapter\Weak;
 use Phalcon\Storage\SerializerFactory;
 use Phalcon\Support\Exception as HelperException;
+use Phalcon\Tests\UnitTestCase;
 use SplObjectStorage;
 use SplQueue;
 use stdClass;
 
 final class GetSetTest extends UnitTestCase
 {
+    /**
+     * @return array
+     */
+    public static function getExamples(): array
+    {
+        return [
+            [
+                new stdClass(),
+            ],
+            [
+                new ArrayObject(),
+            ],
+            [
+                new SplObjectStorage(),
+            ],
+            [
+                new SplQueue(),
+            ],
+        ];
+    }
+
     /**
      * Tests Phalcon\Cache\Adapter\Weak :: get()
      *
@@ -50,26 +70,5 @@ final class GetSetTest extends UnitTestCase
         $expected = $value;
         $actual   = $adapter->get($key);
         $this->assertEquals($expected, $actual);
-    }
-
-    /**
-     * @return array
-     */
-    public static function getExamples(): array
-    {
-        return [
-            [
-                new stdClass(),
-            ],
-            [
-                new ArrayObject(),
-            ],
-            [
-                new SplObjectStorage(),
-            ],
-            [
-                new SplQueue(),
-            ],
-        ];
     }
 }

@@ -18,45 +18,10 @@ use Phalcon\Filter\FilterFactory;
 use Phalcon\Tests\UnitTestCase;
 
 use function call_user_func_array;
-use function implode;
 use function is_array;
-use function phpversion;
-use function version_compare;
 
 final class SanitizeTest extends UnitTestCase
 {
-    /**
-     * Tests Phalcon\Filter\Sanitize\*t :: __invoke()
-     *
-     * @dataProvider getExamples
-     *
-     * @param Example $example
-     *
-     * @author       Phalcon Team <team@phalcon.io>
-     * @since        2021-11-07
-     */
-    public function testFilterFilterSanitize(
-        string $class,
-        string $method,
-        mixed $source,
-        mixed $expected
-    ): void {
-        $factory = new FilterFactory();
-        $filter  = $factory->newInstance();
-        if (true === empty($method)) {
-            $sanitizer = $filter->get($class);
-            if (is_array($source)) {
-                $actual = call_user_func_array([$sanitizer, '__invoke'], $source);
-            } else {
-                $actual = $sanitizer->__invoke($source);
-            }
-        } else {
-            $actual = call_user_func_array([$filter, $method], $source);
-        }
-
-        $this->assertEquals($expected, $actual);
-    }
-
     /**
      * @return array[]
      */
@@ -812,5 +777,37 @@ final class SanitizeTest extends UnitTestCase
                 'https://phalcon.io',
             ],
         ];
+    }
+
+    /**
+     * Tests Phalcon\Filter\Sanitize\*t :: __invoke()
+     *
+     * @dataProvider getExamples
+     *
+     * @param Example $example
+     *
+     * @author       Phalcon Team <team@phalcon.io>
+     * @since        2021-11-07
+     */
+    public function testFilterFilterSanitize(
+        string $class,
+        string $method,
+        mixed $source,
+        mixed $expected
+    ): void {
+        $factory = new FilterFactory();
+        $filter  = $factory->newInstance();
+        if (true === empty($method)) {
+            $sanitizer = $filter->get($class);
+            if (is_array($source)) {
+                $actual = call_user_func_array([$sanitizer, '__invoke'], $source);
+            } else {
+                $actual = $sanitizer->__invoke($source);
+            }
+        } else {
+            $actual = call_user_func_array([$filter, $method], $source);
+        }
+
+        $this->assertEquals($expected, $actual);
     }
 }

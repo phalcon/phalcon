@@ -13,9 +13,6 @@ declare(strict_types=1);
 
 namespace Phalcon\Tests\Unit\Cache\Adapter;
 
-use Phalcon\Tests\Fixtures\Cache\Adapter\ApcuApcuDeleteFixture;
-use Phalcon\Tests\Fixtures\Cache\Adapter\StreamUnlinkFixture;
-use Phalcon\Tests\UnitTestCase;
 use Phalcon\Cache\Adapter\Apcu;
 use Phalcon\Cache\Adapter\Libmemcached;
 use Phalcon\Cache\Adapter\Memory;
@@ -23,6 +20,9 @@ use Phalcon\Cache\Adapter\Redis;
 use Phalcon\Cache\Adapter\Stream;
 use Phalcon\Cache\Adapter\Weak;
 use Phalcon\Storage\SerializerFactory;
+use Phalcon\Tests\Fixtures\Cache\Adapter\ApcuApcuDeleteFixture;
+use Phalcon\Tests\Fixtures\Cache\Adapter\StreamUnlinkFixture;
+use Phalcon\Tests\UnitTestCase;
 use stdClass;
 
 use function getOptionsLibmemcached;
@@ -33,32 +33,39 @@ use function uniqid;
 final class ClearTest extends UnitTestCase
 {
     /**
-     * Tests Phalcon\Cache\Adapter\Apcu :: clear() - iterator error
-     *
-     * @return void
-     *
-     * @author Phalcon Team <team@phalcon.io>
-     * @since  2020-09-09
+     * @return array[]
      */
-    public function testCacheAdapterApcuClearIteratorError(): void
+    public static function getExamples(): array
     {
-        $this->checkExtensionIsLoaded('apcu');
-
-        $serializer = new SerializerFactory();
-        $adapter    = new ApcuApcuDeleteFixture($serializer);
-
-        $key1 = uniqid();
-        $key2 = uniqid();
-        $adapter->set($key1, 'test');
-        $actual = $adapter->has($key1);
-        $this->assertTrue($actual);
-
-        $adapter->set($key2, 'test');
-        $actual = $adapter->has($key2);
-        $this->assertTrue($actual);
-
-        $actual = $adapter->clear();
-        $this->assertFalse($actual);
+        return [
+            [
+                Apcu::class,
+                [],
+                'apcu',
+            ],
+            [
+                Libmemcached::class,
+                getOptionsLibmemcached(),
+                'memcached',
+            ],
+            [
+                Memory::class,
+                [],
+                '',
+            ],
+            [
+                Redis::class,
+                getOptionsRedis(),
+                'redis',
+            ],
+            [
+                Stream::class,
+                [
+                    'storageDir' => outputDir(),
+                ],
+                '',
+            ],
+        ];
     }
 
     /**
@@ -91,22 +98,19 @@ final class ClearTest extends UnitTestCase
     }
 
     /**
-     * Tests Phalcon\Cache\Adapter\Stream :: clear() - cannot delete file
+     * Tests Phalcon\Cache\Adapter\Apcu :: clear() - iterator error
      *
      * @return void
      *
      * @author Phalcon Team <team@phalcon.io>
      * @since  2020-09-09
      */
-    public function testCacheAdapterStreamClearCannotDeleteFile(): void
+    public function testCacheAdapterApcuClearIteratorError(): void
     {
+        $this->checkExtensionIsLoaded('apcu');
+
         $serializer = new SerializerFactory();
-        $adapter    = new StreamUnlinkFixture(
-            $serializer,
-            [
-                'storageDir' => outputDir(),
-            ]
-        );
+        $adapter    = new ApcuApcuDeleteFixture($serializer);
 
         $key1 = uniqid();
         $key2 = uniqid();
@@ -120,8 +124,6 @@ final class ClearTest extends UnitTestCase
 
         $actual = $adapter->clear();
         $this->assertFalse($actual);
-
-        $this->safeDeleteDirectory(outputDir('ph-strm'));
     }
 
     /**
@@ -171,6 +173,40 @@ final class ClearTest extends UnitTestCase
     }
 
     /**
+     * Tests Phalcon\Cache\Adapter\Stream :: clear() - cannot delete file
+     *
+     * @return void
+     *
+     * @author Phalcon Team <team@phalcon.io>
+     * @since  2020-09-09
+     */
+    public function testCacheAdapterStreamClearCannotDeleteFile(): void
+    {
+        $serializer = new SerializerFactory();
+        $adapter    = new StreamUnlinkFixture(
+            $serializer,
+            [
+                'storageDir' => outputDir(),
+            ]
+        );
+
+        $key1 = uniqid();
+        $key2 = uniqid();
+        $adapter->set($key1, 'test');
+        $actual = $adapter->has($key1);
+        $this->assertTrue($actual);
+
+        $adapter->set($key2, 'test');
+        $actual = $adapter->has($key2);
+        $this->assertTrue($actual);
+
+        $actual = $adapter->clear();
+        $this->assertFalse($actual);
+
+        $this->safeDeleteDirectory(outputDir('ph-strm'));
+    }
+
+    /**
      * Tests Phalcon\Cache\Adapter\Weak :: clear()
      *
      * @return void
@@ -183,12 +219,12 @@ final class ClearTest extends UnitTestCase
         $serializer = new SerializerFactory();
         $adapter    = new Weak($serializer);
 
-        $obj1 = new stdClass();
+        $obj1     = new stdClass();
         $obj1->id = 1;
-        $obj2 = new stdClass();
+        $obj2     = new stdClass();
         $obj2->id = 2;
-        $key1 = uniqid();
-        $key2 = uniqid();
+        $key1     = uniqid();
+        $key2     = uniqid();
         $adapter->set($key1, $obj1);
         $adapter->set($key2, $obj2);
 
@@ -210,41 +246,5 @@ final class ClearTest extends UnitTestCase
 
         $actual = $adapter->clear();
         $this->assertTrue($actual);
-    }
-
-    /**
-     * @return array[]
-     */
-    public static function getExamples(): array
-    {
-        return [
-            [
-                Apcu::class,
-                [],
-                'apcu',
-            ],
-            [
-                Libmemcached::class,
-                getOptionsLibmemcached(),
-                'memcached',
-            ],
-            [
-                Memory::class,
-                [],
-                '',
-            ],
-            [
-                Redis::class,
-                getOptionsRedis(),
-                'redis',
-            ],
-            [
-                Stream::class,
-                [
-                    'storageDir' => outputDir(),
-                ],
-                '',
-            ],
-        ];
     }
 }

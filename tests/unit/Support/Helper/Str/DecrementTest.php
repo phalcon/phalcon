@@ -20,6 +20,20 @@ use Phalcon\Tests\UnitTestCase;
 final class DecrementTest extends UnitTestCase
 {
     /**
+     * @return array
+     */
+    public static function getExamples()
+    {
+        return [
+            ['file_2', 'file_1', '_'],
+            ['file_1', 'file', '_'],
+            ['file_3', 'file_2', '_'],
+            ['file _1', 'file ', '_'],
+            ['file-1', 'file', '-'],
+        ];
+    }
+
+    /**
      * Tests Phalcon\Support\Helper\Str :: decrement() - string
      *
      * @dataProvider getExamples
@@ -38,19 +52,5 @@ final class DecrementTest extends UnitTestCase
         $object = new Decrement();
         $actual = $object($source, $separator);
         $this->assertSame($expected, $actual);
-    }
-
-    /**
-     * @return array
-     */
-    public static function getExamples()
-    {
-        return [
-            ['file_2', 'file_1', '_'],
-            ['file_1', 'file', '_'],
-            ['file_3', 'file_2', '_'],
-            ['file _1', 'file ', '_'],
-            ['file-1', 'file', '-'],
-        ];
     }
 }

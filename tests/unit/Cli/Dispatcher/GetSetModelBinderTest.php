@@ -13,9 +13,9 @@ declare(strict_types=1);
 
 namespace Phalcon\Tests\Unit\Cli\Dispatcher;
 
-use Phalcon\Tests\UnitTestCase;
 use Phalcon\Cli\Dispatcher;
 use Phalcon\Mvc\Model\Binder;
+use Phalcon\Tests\UnitTestCase;
 
 /**
  * Class GetSetModelBinderTest extends UnitTestCase

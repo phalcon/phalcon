@@ -13,10 +13,10 @@ declare(strict_types=1);
 
 namespace Phalcon\Tests\Unit\Cli\Dispatcher;
 
-use Phalcon\Tests\UnitTestCase;
 use Phalcon\Cli\Dispatcher;
 use Phalcon\Cli\Dispatcher\Exception;
 use Phalcon\Di\FactoryDefault\Cli as DiFactoryDefault;
+use Phalcon\Tests\UnitTestCase;
 
 final class DispatchTest extends UnitTestCase
 {
@@ -136,7 +136,7 @@ final class DispatchTest extends UnitTestCase
         $dispatcher->setActionName('hello');
         $dispatcher->setParams(
             [
-                'hello' => 'World',
+                'hello'   => 'World',
                 'goodbye' => 'Everybody',
             ]
         );

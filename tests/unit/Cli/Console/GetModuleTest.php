@@ -13,12 +13,12 @@ declare(strict_types=1);
 
 namespace Phalcon\Tests\Unit\Cli\Console;
 
-use Phalcon\Tests\UnitTestCase;
 use Phalcon\Application\Exception;
 use Phalcon\Cli\Console as CliConsole;
 use Phalcon\Di\FactoryDefault\Cli as DiFactoryDefault;
 use Phalcon\Tests\Modules\Backend\Module as BackendModule;
 use Phalcon\Tests\Modules\Frontend\Module as FrontendModule;
+use Phalcon\Tests\UnitTestCase;
 
 final class GetModuleTest extends UnitTestCase
 {

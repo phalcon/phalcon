@@ -13,10 +13,10 @@ declare(strict_types=1);
 
 namespace Phalcon\Tests\Unit\Cli\Task;
 
-use Phalcon\Tests\UnitTestCase;
 use Phalcon\Cli\Task;
 use Phalcon\Di\FactoryDefault\Cli as CliDi;
 use Phalcon\Events\Manager;
+use Phalcon\Tests\UnitTestCase;
 
 final class UnderscoreGetTest extends UnitTestCase
 {

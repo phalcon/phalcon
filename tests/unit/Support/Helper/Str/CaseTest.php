@@ -13,7 +13,6 @@ declare(strict_types=1);
 
 namespace Phalcon\Tests\Unit\Support\Helper\Str;
 
-use Codeception\Example;
 use Phalcon\Support\Helper\Str\KebabCase;
 use Phalcon\Support\Helper\Str\PascalCase;
 use Phalcon\Support\Helper\Str\SnakeCase;
@@ -21,28 +20,6 @@ use Phalcon\Tests\UnitTestCase;
 
 final class CaseTest extends UnitTestCase
 {
-    /**
-     * Tests Phalcon\Support\Helper\Str :: *Case()
-     *
-     * @dataProvider getSources
-     *
-     * @return void
-     *
-     * @author       Phalcon Team <team@phalcon.io>
-     * @since        2022-01-02
-     */
-    public function testSupportHelperStrCase(
-        string $class,
-        string $value,
-        string $expected,
-        ?string $delimiter
-    ): void {
-        $object = new $class();
-
-        $actual = $object($value, $delimiter);
-        $this->assertSame($expected, $actual);
-    }
-
     /**
      * @return array
      */
@@ -119,5 +96,27 @@ final class CaseTest extends UnitTestCase
             [KebabCase::class, 'customer Session', 'customer-Session', ' -_'],
             [KebabCase::class, 'customer-Session', 'customer-Session', ' -_'],
         ];
+    }
+
+    /**
+     * Tests Phalcon\Support\Helper\Str :: *Case()
+     *
+     * @dataProvider getSources
+     *
+     * @return void
+     *
+     * @author       Phalcon Team <team@phalcon.io>
+     * @since        2022-01-02
+     */
+    public function testSupportHelperStrCase(
+        string $class,
+        string $value,
+        string $expected,
+        ?string $delimiter
+    ): void {
+        $object = new $class();
+
+        $actual = $object($value, $delimiter);
+        $this->assertSame($expected, $actual);
     }
 }

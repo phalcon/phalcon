@@ -13,12 +13,11 @@ declare(strict_types=1);
 
 namespace Phalcon\Tests\Unit\Forms\Element;
 
-use Codeception\Example;
-use Phalcon\Tests\UnitTestCase;
 use Phalcon\Filter\Validation\Validator\Alnum;
 use Phalcon\Filter\Validation\Validator\Digit;
 use Phalcon\Filter\Validation\Validator\StringLength;
 use Phalcon\Tests\Fixtures\Traits\FormsTrait;
+use Phalcon\Tests\UnitTestCase;
 
 use function uniqid;
 

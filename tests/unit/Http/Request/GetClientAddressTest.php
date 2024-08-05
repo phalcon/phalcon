@@ -13,48 +13,12 @@ declare(strict_types=1);
 
 namespace Phalcon\Tests\Unit\Http\Request;
 
-use Phalcon\Tests\Fixtures\Page\Http;
 use Phalcon\Http\Request;
+use Phalcon\Tests\Fixtures\Page\Http;
 use Phalcon\Tests\Unit\Http\Helper\HttpBase;
-use Phalcon\Tests\UnitTestCase;
 
 final class GetClientAddressTest extends HttpBase
 {
-    /**
-     * Tests Phalcon\Http\Request :: getClientAddress() - trustForwardedHeader
-     *
-     * @author Phalcon Team <team@phalcon.io>
-     * @since  2020-03-17
-     */
-    public function testHttpRequestGetClientAddressTrustForwardedHeader(): void
-    {
-        $_SERVER['HTTP_X_FORWARDED_FOR'] = Http::TEST_IP_ONE;
-
-        $request = new Request();
-
-        $expected = Http::TEST_IP_ONE;
-        $actual   = $request->getClientAddress(true);
-        $this->assertSame($expected, $actual);
-    }
-
-    /**
-     * Tests Phalcon\Http\Request :: getClientAddress() - trustForwardedHeader
-     * - client IP
-     *
-     * @author Phalcon Team <team@phalcon.io>
-     * @since  2020-03-17
-     */
-    public function testHttpRequestGetClientAddressTrustForwardedHeaderClientIp(): void
-    {
-        $_SERVER['HTTP_CLIENT_IP'] = Http::TEST_IP_TWO;
-
-        $request = new Request();
-
-        $expected = Http::TEST_IP_TWO;
-        $actual   = $request->getClientAddress(true);
-        $this->assertSame($expected, $actual);
-    }
-
     /**
      * Tests Phalcon\Http\Request :: getClientAddress()
      *
@@ -89,6 +53,23 @@ final class GetClientAddressTest extends HttpBase
     }
 
     /**
+     * Tests Phalcon\Http\Request :: getClientAddress() - ipv6
+     *
+     * @author Phalcon Team <team@phalcon.io>
+     * @since  2020-03-17
+     */
+    public function testHttpRequestGetClientAddressIpv6(): void
+    {
+        $_SERVER['REMOTE_ADDR'] = Http::TEST_IP_IPV6;
+
+        $request = new Request();
+
+        $expected = Http::TEST_IP_IPV6;
+        $actual   = $request->getClientAddress();
+        $this->assertSame($expected, $actual);
+    }
+
+    /**
      * Tests Phalcon\Http\Request :: getClientAddress() - multiple
      *
      * @author Phalcon Team <team@phalcon.io>
@@ -106,19 +87,37 @@ final class GetClientAddressTest extends HttpBase
     }
 
     /**
-     * Tests Phalcon\Http\Request :: getClientAddress() - ipv6
+     * Tests Phalcon\Http\Request :: getClientAddress() - trustForwardedHeader
      *
      * @author Phalcon Team <team@phalcon.io>
      * @since  2020-03-17
      */
-    public function testHttpRequestGetClientAddressIpv6(): void
+    public function testHttpRequestGetClientAddressTrustForwardedHeader(): void
     {
-        $_SERVER['REMOTE_ADDR'] = Http::TEST_IP_IPV6;
+        $_SERVER['HTTP_X_FORWARDED_FOR'] = Http::TEST_IP_ONE;
 
         $request = new Request();
 
-        $expected = Http::TEST_IP_IPV6;
-        $actual   = $request->getClientAddress();
+        $expected = Http::TEST_IP_ONE;
+        $actual   = $request->getClientAddress(true);
+        $this->assertSame($expected, $actual);
+    }
+
+    /**
+     * Tests Phalcon\Http\Request :: getClientAddress() - trustForwardedHeader
+     * - client IP
+     *
+     * @author Phalcon Team <team@phalcon.io>
+     * @since  2020-03-17
+     */
+    public function testHttpRequestGetClientAddressTrustForwardedHeaderClientIp(): void
+    {
+        $_SERVER['HTTP_CLIENT_IP'] = Http::TEST_IP_TWO;
+
+        $request = new Request();
+
+        $expected = Http::TEST_IP_TWO;
+        $actual   = $request->getClientAddress(true);
         $this->assertSame($expected, $actual);
     }
 }

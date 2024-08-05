@@ -13,10 +13,10 @@ declare(strict_types=1);
 
 namespace Phalcon\Tests\Unit\Filter\Validation;
 
-use Phalcon\Tests\UnitTestCase;
 use Phalcon\Filter\Validation;
 use Phalcon\Filter\Validation\Validator\Date;
 use Phalcon\Filter\Validation\Validator\Email;
+use Phalcon\Tests\UnitTestCase;
 
 final class GetSetValidatorsTest extends UnitTestCase
 {

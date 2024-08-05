@@ -28,6 +28,56 @@ final class RotateTest extends UnitTestCase
     public static function getExamples(): array
     {
         return [
+            [
+                'jpg',
+                0,
+                'fbf9f3e3c3c18183',
+            ],
+            [
+                'jpg',
+                45,
+                '60f0f83c1c0f0f06',
+            ],
+            [
+                'jpg',
+                90,
+                'ff3f0f0703009dff',
+            ],
+            [
+                'jpg',
+                180,
+                'c18183c3c7cf9fdf',
+            ],
+            [
+                'jpg',
+                270,
+                'ffb900c0e0f0fcff',
+            ],
+            [
+                'png',
+                0,
+                '30787c3c1e181818',
+            ],
+            [
+                'png',
+                45,
+                '001c1c1c7c3c0000',
+            ],
+            [
+                'png',
+                90,
+                '00060ffffe1c1000',
+            ],
+            [
+                'png',
+                180,
+                '181818783c3e1e0c',
+            ],
+            [
+                'png',
+                270,
+                '0008387ffff06000',
+            ],
 //            [
 //                'label'   => 'gif',
 //                'degrees' => 0,
@@ -53,56 +103,6 @@ final class RotateTest extends UnitTestCase
 //                'degrees' => 270,
 //                'hash'    => 'ffffffffffffffff',
 //            ],
-[
-    'jpg',
-    0,
-    'fbf9f3e3c3c18183',
-],
-[
-    'jpg',
-    45,
-    '60f0f83c1c0f0f06',
-],
-[
-    'jpg',
-    90,
-    'ff3f0f0703009dff',
-],
-[
-    'jpg',
-    180,
-    'c18183c3c7cf9fdf',
-],
-[
-    'jpg',
-    270,
-    'ffb900c0e0f0fcff',
-],
-[
-    'png',
-    0,
-    '30787c3c1e181818',
-],
-[
-    'png',
-    45,
-    '001c1c1c7c3c0000',
-],
-[
-    'png',
-    90,
-    '00060ffffe1c1000',
-],
-[
-    'png',
-    180,
-    '181818783c3e1e0c',
-],
-[
-    'png',
-    270,
-    '0008387ffff06000',
-],
 //            [
 //                'label'   => 'wbmp',
 //                'degrees' => 0,

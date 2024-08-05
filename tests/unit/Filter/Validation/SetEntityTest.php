@@ -13,8 +13,8 @@ declare(strict_types=1);
 
 namespace Phalcon\Tests\Unit\Filter\Validation;
 
-use Phalcon\Tests\UnitTestCase;
 use Phalcon\Filter\Validation;
+use Phalcon\Tests\UnitTestCase;
 use stdClass;
 
 final class SetEntityTest extends UnitTestCase
@@ -27,7 +27,7 @@ final class SetEntityTest extends UnitTestCase
      */
     public function testFilterValidationSetEntity(): void
     {
-        $user = new stdClass();
+        $user       = new stdClass();
         $validation = new Validation();
 
         $validation->setEntity($user);

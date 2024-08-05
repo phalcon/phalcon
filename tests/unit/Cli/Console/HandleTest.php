@@ -13,8 +13,6 @@ declare(strict_types=1);
 
 namespace Phalcon\Tests\Unit\Cli\Console;
 
-use Phalcon\Tests\UnitTestCase;
-use Codeception\Example;
 use Exception;
 use Phalcon\Cli\Console as CliConsole;
 use Phalcon\Cli\Console\Exception as ConsoleException;
@@ -25,8 +23,8 @@ use Phalcon\Events\Event;
 use Phalcon\Tests\Fixtures\Tasks\Issue787Task;
 use Phalcon\Tests\Modules\Backend\Module as BackendModule;
 use Phalcon\Tests\Modules\Frontend\Module as FrontendModule;
+use Phalcon\Tests\UnitTestCase;
 
-use function codecept_root_dir;
 use function dataDir;
 use function ob_end_clean;
 use function ob_start;
@@ -37,6 +35,56 @@ use const PHP_OS_FAMILY;
 
 final class HandleTest extends UnitTestCase
 {
+    /**
+     * @return array
+     */
+    public static function getExamplesHandle(): array
+    {
+        return [
+            [
+                [],
+                'main',
+                'main',
+                [],
+                'mainAction',
+            ],
+            [
+                [
+                    'task' => 'echo',
+                ],
+                'echo',
+                'main',
+                [],
+                'echoMainAction',
+            ],
+            [
+                [
+                    'task'   => 'main',
+                    'action' => 'hello',
+                ],
+                'main',
+                'hello',
+                [],
+                'Hello !',
+            ],
+            [
+                [
+                    'task'   => 'main',
+                    'action' => 'hello',
+                    'World',
+                    '#####',
+                ],
+                'main',
+                'hello',
+                [
+                    'World',
+                    '#####',
+                ],
+                'Hello World#####',
+            ],
+        ];
+    }
+
     /**
      * Tests Phalcon\Cli\Console :: handle()
      *
@@ -92,77 +140,79 @@ final class HandleTest extends UnitTestCase
     }
 
     /**
-     * Tests Phalcon\Cli\Console :: handle() - BackendModules
+     * Tests Phalcon\Cli\Console :: handle() - Issue #13724
+     * Handling a BackendModule twice causes final class already exists error #13724
+     * <https://github.com/phalcon/cphalcon/issues/13724>
      *
      * @author Nathan Edwards <https://github.com/npfedwards>
-     * @since  2018-12-26
+     * @since  2019-01-06
      */
-    public function testCliConsoleHandleModule(): void
+    public function testCliConsoleHandle13724(): void
     {
         $console = new CliConsole(new DiFactoryDefault());
 
+        $dispatcher = $console->dispatcher;
+        $dispatcher->setNamespaceName('Phalcon\Tests\Modules\Backend\Tasks');
+
         $console->registerModules(
             [
-                'frontend' => [
-                    'className' => FrontendModule::class,
-                    'path'      => dataDir('/fixtures/modules/frontend/Module.php'),
-                ],
-                'backend'  => [
+                'backend' => [
                     'className' => BackendModule::class,
                     'path'      => dataDir('fixtures/modules/backend/Module.php'),
                 ],
             ]
         );
 
+        $console->handle(
+            [
+                'module' => 'backend',
+                'action' => 'noop',
+            ]
+        );
+
+        $console = new CliConsole(new DiFactoryDefault());
+
         $dispatcher = $console->dispatcher;
         $dispatcher->setNamespaceName('Phalcon\Tests\Modules\Backend\Tasks');
 
-        $this->expectException(Exception::class);
-        $this->expectExceptionMessage('Task Run');
+        $console->registerModules(
+            [
+                'backend' => [
+                    'className' => BackendModule::class,
+                    'path'      => dataDir('fixtures/modules/backend/Module.php'),
+                ],
+            ]
+        );
 
         $console->handle(
             [
                 'module' => 'backend',
-                'action' => 'throw',
+                'action' => 'noop',
             ]
         );
 
-        $expected = 'main';
-        $actual   = $dispatcher->getTaskName();
-        $this->assertSame($expected, $actual);
-
-        $expected = 'throw';
-        $actual   = $dispatcher->getActionName();
-        $this->assertSame($expected, $actual);
-
-        $expected = 'backend';
-        $actual   = $dispatcher->getModuleName();
-        $this->assertSame($expected, $actual);
+        /**
+         * If we are here there were no errors
+         */
+        $this->assertTrue(true);
     }
 
-    /**
-     * Tests Phalcon\Cli\Console :: handle()
-     *
-     * @author Nathan Edwards <https://github.com/npfedwards>
-     * @since  2018-12-26
-     */
-    public function testCliConsoleHandleEventBoot(): void
+    public function testCliConsoleHandle787(): void
     {
         $console = new CliConsole(new DiFactoryDefault());
+        $console->dispatcher->setDefaultNamespace('Phalcon\Tests\Fixtures\Tasks');
 
-        $eventsManager = $console->eventsManager;
-
-        $eventsManager->attach(
-            'console:boot',
-            function (Event $event, $console) {
-                throw new Exception('Console Boot Event Fired');
-            }
+        $console->handle(
+            [
+                'task'   => 'issue787',
+                'action' => 'main',
+            ]
         );
 
-        $this->expectException(Exception::class);
-        $this->expectExceptionMessage('Console Boot Event Fired');
-
-        $console->handle();
+        $this->assertSame(
+            'beforeExecuteRoute' . PHP_EOL . 'initialize' . PHP_EOL,
+            Issue787Task::$output
+        );
     }
 
     /**
@@ -171,16 +221,16 @@ final class HandleTest extends UnitTestCase
      * @author Nathan Edwards <https://github.com/npfedwards>
      * @since  2018-12-26
      */
-    public function testCliConsoleHandleEventBeforeStartModule(): void
+    public function testCliConsoleHandleEventAfterHandleTask(): void
     {
         $console = new CliConsole(new DiFactoryDefault());
 
         $eventsManager = $console->eventsManager;
 
         $eventsManager->attach(
-            'console:beforeStartModule',
-            function (Event $event, $console, $moduleName) {
-                throw new Exception('Console Before Start BackendModule Event Fired');
+            'console:afterHandleTask',
+            function (Event $event, $console, $moduleObject) {
+                throw new Exception('Console After Handle Task Event Fired');
             }
         );
 
@@ -192,15 +242,15 @@ final class HandleTest extends UnitTestCase
                 ],
                 'backend'  => [
                     'className' => BackendModule::class,
+                    'path'      => dataDir('fixtures/modules/backend/Module.php'),
                 ],
             ]
         );
-
         $console->dispatcher->setNamespaceName('Phalcon\Tests\Modules\Backend\Tasks');
 
         $this->expectException(Exception::class);
         $this->expectExceptionMessage(
-            'Console Before Start BackendModule Event Fired'
+            'Console After Handle Task Event Fired'
         );
 
         $console->handle(
@@ -290,16 +340,16 @@ final class HandleTest extends UnitTestCase
      * @author Nathan Edwards <https://github.com/npfedwards>
      * @since  2018-12-26
      */
-    public function testCliConsoleHandleEventAfterHandleTask(): void
+    public function testCliConsoleHandleEventBeforeStartModule(): void
     {
         $console = new CliConsole(new DiFactoryDefault());
 
         $eventsManager = $console->eventsManager;
 
         $eventsManager->attach(
-            'console:afterHandleTask',
-            function (Event $event, $console, $moduleObject) {
-                throw new Exception('Console After Handle Task Event Fired');
+            'console:beforeStartModule',
+            function (Event $event, $console, $moduleName) {
+                throw new Exception('Console Before Start BackendModule Event Fired');
             }
         );
 
@@ -311,15 +361,15 @@ final class HandleTest extends UnitTestCase
                 ],
                 'backend'  => [
                     'className' => BackendModule::class,
-                    'path'      => dataDir('fixtures/modules/backend/Module.php'),
                 ],
             ]
         );
+
         $console->dispatcher->setNamespaceName('Phalcon\Tests\Modules\Backend\Tasks');
 
         $this->expectException(Exception::class);
         $this->expectExceptionMessage(
-            'Console After Handle Task Event Fired'
+            'Console Before Start BackendModule Event Fired'
         );
 
         $console->handle(
@@ -331,61 +381,77 @@ final class HandleTest extends UnitTestCase
     }
 
     /**
-     * Tests Phalcon\Cli\Console :: handle() - Issue #13724
-     * Handling a BackendModule twice causes final class already exists error #13724
-     * <https://github.com/phalcon/cphalcon/issues/13724>
+     * Tests Phalcon\Cli\Console :: handle()
      *
      * @author Nathan Edwards <https://github.com/npfedwards>
-     * @since  2019-01-06
+     * @since  2018-12-26
      */
-    public function testCliConsoleHandle13724(): void
+    public function testCliConsoleHandleEventBoot(): void
     {
         $console = new CliConsole(new DiFactoryDefault());
 
-        $dispatcher = $console->dispatcher;
-        $dispatcher->setNamespaceName('Phalcon\Tests\Modules\Backend\Tasks');
+        $eventsManager = $console->eventsManager;
 
-        $console->registerModules(
-            [
-                'backend' => [
-                    'className' => BackendModule::class,
-                    'path'      => dataDir('fixtures/modules/backend/Module.php'),
-                ],
-            ]
+        $eventsManager->attach(
+            'console:boot',
+            function (Event $event, $console) {
+                throw new Exception('Console Boot Event Fired');
+            }
         );
 
-        $console->handle(
-            [
-                'module' => 'backend',
-                'action' => 'noop',
-            ]
-        );
+        $this->expectException(Exception::class);
+        $this->expectExceptionMessage('Console Boot Event Fired');
 
+        $console->handle();
+    }
+
+    /**
+     * Tests Phalcon\Cli\Console :: handle() - BackendModules
+     *
+     * @author Nathan Edwards <https://github.com/npfedwards>
+     * @since  2018-12-26
+     */
+    public function testCliConsoleHandleModule(): void
+    {
         $console = new CliConsole(new DiFactoryDefault());
 
-        $dispatcher = $console->dispatcher;
-        $dispatcher->setNamespaceName('Phalcon\Tests\Modules\Backend\Tasks');
-
         $console->registerModules(
             [
-                'backend' => [
+                'frontend' => [
+                    'className' => FrontendModule::class,
+                    'path'      => dataDir('/fixtures/modules/frontend/Module.php'),
+                ],
+                'backend'  => [
                     'className' => BackendModule::class,
                     'path'      => dataDir('fixtures/modules/backend/Module.php'),
                 ],
             ]
         );
 
+        $dispatcher = $console->dispatcher;
+        $dispatcher->setNamespaceName('Phalcon\Tests\Modules\Backend\Tasks');
+
+        $this->expectException(Exception::class);
+        $this->expectExceptionMessage('Task Run');
+
         $console->handle(
             [
                 'module' => 'backend',
-                'action' => 'noop',
+                'action' => 'throw',
             ]
         );
 
-        /**
-         * If we are here there were no errors
-         */
-        $this->assertTrue(true);
+        $expected = 'main';
+        $actual   = $dispatcher->getTaskName();
+        $this->assertSame($expected, $actual);
+
+        $expected = 'throw';
+        $actual   = $dispatcher->getActionName();
+        $this->assertSame($expected, $actual);
+
+        $expected = 'backend';
+        $actual   = $dispatcher->getModuleName();
+        $this->assertSame($expected, $actual);
     }
 
     public function testCliConsoleHandleModuleDoesNotExists(): void
@@ -409,6 +475,26 @@ final class HandleTest extends UnitTestCase
         );
     }
 
+    /**
+     * @issue  16186
+     * @return void
+     */
+    public function testCliConsoleHandleNoAction(): void
+    {
+        if (PHP_OS_FAMILY === 'Windows') {
+            $this->markTestSkipped('Need to check this under Windows');
+        }
+
+        $script = rootDir() . 'tests/testbed/cli.php ';
+
+        ob_start();
+        $actual = shell_exec('sudo php ' . $script . 'print');
+        ob_end_clean();
+
+        $expected = 'printMainAction';
+        $this->assertSame($expected, $actual);
+    }
+
     public function testCliConsoleHandleTaskDoesNotExists(): void
     {
         $console = new CliConsole(new DiFactoryDefault());
@@ -430,93 +516,5 @@ final class HandleTest extends UnitTestCase
                 '!',
             ]
         );
-    }
-
-    public function testCliConsoleHandle787(): void
-    {
-        $console = new CliConsole(new DiFactoryDefault());
-        $console->dispatcher->setDefaultNamespace('Phalcon\Tests\Fixtures\Tasks');
-
-        $console->handle(
-            [
-                'task'   => 'issue787',
-                'action' => 'main',
-            ]
-        );
-
-        $this->assertSame(
-            'beforeExecuteRoute' . PHP_EOL . 'initialize' . PHP_EOL,
-            Issue787Task::$output
-        );
-    }
-
-    /**
-     * @issue  16186
-     * @return void
-     */
-    public function testCliConsoleHandleNoAction(): void
-    {
-        if (PHP_OS_FAMILY === 'Windows') {
-            $this->markTestSkipped('Need to check this under Windows');
-        }
-
-        $script = rootDir() . 'tests/testbed/cli.php ';
-
-        ob_start();
-        $actual = shell_exec('sudo php ' . $script . 'print');
-        ob_end_clean();
-
-        $expected = 'printMainAction';
-        $this->assertSame($expected, $actual);
-    }
-
-    /**
-     * @return array
-     */
-    public static function getExamplesHandle(): array
-    {
-        return [
-            [
-                [],
-                'main',
-                'main',
-                [],
-                'mainAction',
-            ],
-            [
-                [
-                    'task' => 'echo',
-                ],
-                'echo',
-                'main',
-                [],
-                'echoMainAction',
-            ],
-            [
-                [
-                    'task'   => 'main',
-                    'action' => 'hello',
-                ],
-                'main',
-                'hello',
-                [],
-                'Hello !',
-            ],
-            [
-                [
-                    'task'   => 'main',
-                    'action' => 'hello',
-                    'World',
-                    '#####',
-                ],
-                'main',
-                'hello',
-                [
-                    'World',
-                    '#####',
-                ],
-                'Hello World#####',
-            ],
-        ];
     }
 }

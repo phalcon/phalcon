@@ -13,10 +13,10 @@ declare(strict_types=1);
 
 namespace Phalcon\Tests\Unit\Http\Message\Request;
 
-use Phalcon\Tests\Fixtures\Page\Http;
 use Phalcon\Http\Message\Exception\InvalidArgumentException;
 use Phalcon\Http\Message\Interfaces\RequestInterface;
 use Phalcon\Http\Message\Request;
+use Phalcon\Tests\Fixtures\Page\Http;
 use Phalcon\Tests\UnitTestCase;
 
 final class ConstructTest extends UnitTestCase
@@ -51,22 +51,6 @@ final class ConstructTest extends UnitTestCase
     }
 
     /**
-     * Tests Phalcon\Http\Message\Request :: __construct() - exception uri
-     *
-     * @author Phalcon Team <team@phalcon.io>
-     * @since  2019-02-08
-     */
-    public function testHttpMessageRequestConstructExceptionUri(): void
-    {
-        $this->expectException(InvalidArgumentException::class);
-        $this->expectExceptionMessage(
-            'Invalid uri passed as a parameter'
-        );
-
-        (new Request('GET', false));
-    }
-
-    /**
      * Tests Phalcon\Http\Message\Request :: __construct() - exception headers
      *
      * @author Phalcon Team <team@phalcon.io>
@@ -86,6 +70,22 @@ final class ConstructTest extends UnitTestCase
             Http::STREAM_MEMORY,
             false
         ));
+    }
+
+    /**
+     * Tests Phalcon\Http\Message\Request :: __construct() - exception uri
+     *
+     * @author Phalcon Team <team@phalcon.io>
+     * @since  2019-02-08
+     */
+    public function testHttpMessageRequestConstructExceptionUri(): void
+    {
+        $this->expectException(InvalidArgumentException::class);
+        $this->expectExceptionMessage(
+            'Invalid uri passed as a parameter'
+        );
+
+        (new Request('GET', false));
     }
 
     /**

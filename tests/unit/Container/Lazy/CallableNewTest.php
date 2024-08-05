@@ -16,7 +16,6 @@ namespace Phalcon\Tests\Unit\Container\Lazy;
 use Closure;
 use Phalcon\Container\Lazy\CallableNew;
 use stdClass;
-use Phalcon\Tests\UnitTestCase;
 
 final class CallableNewTest extends AbstractLazyBase
 {

@@ -13,37 +13,11 @@ declare(strict_types=1);
 
 namespace Phalcon\Tests\Unit\Dispatcher;
 
-use Codeception\Example;
 use Phalcon\Mvc\Dispatcher;
 use Phalcon\Tests\UnitTestCase;
 
 final class GetHandlerClassTest extends UnitTestCase
 {
-    /**
-     * Tests Phalcon\Dispatcher :: getHandlerClass()
-     *
-     * @dataProvider getTestCases
-     *
-     * @author       Phalcon Team <team@phalcon.io>
-     * @since        2018-11-13
-     */
-    public function testDispatcherGetHandlerClass(
-        string $namespace,
-        string $controller,
-        string $suffix,
-        string $expected
-    ): void {
-        $dispatcher = new Dispatcher();
-
-        // test the handler name
-        $dispatcher->setNamespaceName($namespace);
-        $dispatcher->setControllerName($controller);
-        $dispatcher->setHandlerSuffix($suffix);
-
-        $actual = $dispatcher->getHandlerClass();
-        $this->assertSame($expected, $actual);
-    }
-
     /**
      * @return array[]
      */
@@ -69,5 +43,30 @@ final class GetHandlerClassTest extends UnitTestCase
             ['ola_phalcon\\', 'HelloPhalcon', 'Ctrl', 'ola_phalcon\\HelloPhalconCtrl'],
             ['Ola\\', 'Hello\\Phalcon', 'Ctrl', 'Ola\\Hello\\PhalconCtrl'],
         ];
+    }
+
+    /**
+     * Tests Phalcon\Dispatcher :: getHandlerClass()
+     *
+     * @dataProvider getTestCases
+     *
+     * @author       Phalcon Team <team@phalcon.io>
+     * @since        2018-11-13
+     */
+    public function testDispatcherGetHandlerClass(
+        string $namespace,
+        string $controller,
+        string $suffix,
+        string $expected
+    ): void {
+        $dispatcher = new Dispatcher();
+
+        // test the handler name
+        $dispatcher->setNamespaceName($namespace);
+        $dispatcher->setControllerName($controller);
+        $dispatcher->setHandlerSuffix($suffix);
+
+        $actual = $dispatcher->getHandlerClass();
+        $this->assertSame($expected, $actual);
     }
 }

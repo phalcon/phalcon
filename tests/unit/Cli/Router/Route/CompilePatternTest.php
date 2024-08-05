@@ -13,34 +13,11 @@ declare(strict_types=1);
 
 namespace Phalcon\Tests\Unit\Cli\Router\Route;
 
-use Phalcon\Tests\UnitTestCase;
-use Codeception\Example;
 use Phalcon\Cli\Router\Route;
+use Phalcon\Tests\UnitTestCase;
 
 final class CompilePatternTest extends UnitTestCase
 {
-    /**
-     * Tests Phalcon\Cli\Router\Route :: compilePattern()
-     *
-     * @dataProvider getExamples
-     *
-     * @return void
-     *
-     * @author       Phalcon Team <team@phalcon.io>
-     * @since        2020-01-05
-     */
-    public function testCliRouterRouteCompilePattern(
-        string $pattern,
-        string $expected
-    ): void {
-        Route::reset();
-        Route::delimiter('/');
-        $route = new Route('test');
-
-        $actual   = $route->compilePattern($pattern);
-        $this->assertSame($expected, $actual);
-    }
-
     /**
      * @return array
      */
@@ -76,5 +53,27 @@ final class CompilePatternTest extends UnitTestCase
                 '#^/([a-zA-Z0-9\_\-]+)/([a-zA-Z0-9\_\-]+)/([a-zA-Z0-9\_\-]+)/([a-zA-Z0-9\_\-]+)(/.*)*//$#',
             ],
         ];
+    }
+
+    /**
+     * Tests Phalcon\Cli\Router\Route :: compilePattern()
+     *
+     * @dataProvider getExamples
+     *
+     * @return void
+     *
+     * @author       Phalcon Team <team@phalcon.io>
+     * @since        2020-01-05
+     */
+    public function testCliRouterRouteCompilePattern(
+        string $pattern,
+        string $expected
+    ): void {
+        Route::reset();
+        Route::delimiter('/');
+        $route = new Route('test');
+
+        $actual = $route->compilePattern($pattern);
+        $this->assertSame($expected, $actual);
     }
 }

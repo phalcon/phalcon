@@ -13,13 +13,12 @@ declare(strict_types=1);
 
 namespace Phalcon\Tests\Unit\Filter\Validation\Validator\Url;
 
-use Codeception\Example;
-use Phalcon\Tests\UnitTestCase;
 use Phalcon\Filter\Validation;
 use Phalcon\Filter\Validation\Exception;
 use Phalcon\Filter\Validation\Validator\Url;
 use Phalcon\Messages\Message;
 use Phalcon\Messages\Messages;
+use Phalcon\Tests\UnitTestCase;
 use stdClass;
 
 use const FILTER_FLAG_PATH_REQUIRED;
@@ -27,49 +26,72 @@ use const FILTER_FLAG_QUERY_REQUIRED;
 
 final class ValidateTest extends UnitTestCase
 {
-    /**
-     * Tests Phalcon\Filter\Validation\Validator\Url :: validate() - empty
-     *
-     * @return void
-     *
-     * @return void
-     * @throws Exception
-     *
-     * @author Phalcon Team <team@phalcon.io>
-     * @since  2023-08-03
-     */
-    public function testFilterValidationValidatorUrlValidateEmpty(): void
+    public static function getExamples(): array
     {
-        $validation = new Validation();
-        $validator  = new Url(['allowEmpty' => true,]);
-        $validation->add('url', $validator);
-        $entity      = new stdClass();
-        $entity->url = '';
-
-        $validation->bind($entity, []);
-        $result = $validator->validate($validation, 'url');
-        $this->assertTrue($result);
+        return [
+            [
+                FILTER_FLAG_PATH_REQUIRED,
+                'phalcon.io',
+            ],
+            [
+                FILTER_FLAG_QUERY_REQUIRED,
+                'https://',
+            ],
+            [
+                [
+                    'flags' => [
+                        FILTER_FLAG_PATH_REQUIRED,
+                    ],
+                ],
+                'phalcon.io',
+            ],
+            [
+                [
+                    'flags' => [
+                        FILTER_FLAG_QUERY_REQUIRED,
+                    ],
+                ],
+                'https://',
+            ],
+            [
+                [
+                    'flags' => [
+                        FILTER_FLAG_PATH_REQUIRED,
+                        FILTER_FLAG_QUERY_REQUIRED,
+                    ],
+                ],
+                'phalconphp',
+            ],
+        ];
     }
 
     /**
-     * Tests Phalcon\Filter\Validation\Validator\Url :: validate() - single field
+     * Tests Phalcon\Filter\Validation\Validator\Url :: validate() - custom message
      *
      * @author Wojciech Ślawski <jurigag@gmail.com>
      * @since  2016-06-05
      */
-    public function testFilterValidationValidatorUrlSingleField(): void
+    public function testFilterValidationValidatorUrlCustomMessage(): void
     {
         $validation = new Validation();
 
-        $validation->add('url', new Url());
+        $validation->add(
+            'url',
+            new Url(
+                [
+                    'message' => 'The url is not valid',
+                ]
+            )
+        );
 
-
-        $messages = $validation->validate([]);
+        $messages = $validation->validate(
+            []
+        );
 
         $expected = new Messages(
             [
                 new Message(
-                    'Field url must be a url',
+                    'The url is not valid',
                     'url',
                     Url::class,
                     0
@@ -99,6 +121,54 @@ final class ValidateTest extends UnitTestCase
             0,
             $messages->count()
         );
+    }
+
+    /**
+     * Tests Phalcon\Filter\Validation\Validator\Url :: validate() - flags
+     *
+     * @dataProvider getExamples
+     *
+     * @author       Phalcon Team <team@phalcon.io>
+     * @since        2019-05-10
+     */
+    public function testFilterValidationValidatorUrlFlags(
+        array | int $options,
+        string $url
+    ): void {
+        $validation = new Validation();
+
+        $validation->add(
+            'url',
+            new Url(
+                [
+                    'options' => $options,
+                ]
+            )
+        );
+
+        $messages = $validation->validate(
+            [
+                'url' => $url,
+            ]
+        );
+
+        $this->assertSame(
+            1,
+            $messages->count()
+        );
+
+        $expected = new Messages(
+            [
+                new Message(
+                    'Field url must be a url',
+                    'url',
+                    Url::class,
+                    0
+                ),
+            ]
+        );
+
+        $this->assertEquals($expected, $messages);
     }
 
     /**
@@ -181,32 +251,24 @@ final class ValidateTest extends UnitTestCase
     }
 
     /**
-     * Tests Phalcon\Filter\Validation\Validator\Url :: validate() - custom message
+     * Tests Phalcon\Filter\Validation\Validator\Url :: validate() - single field
      *
      * @author Wojciech Ślawski <jurigag@gmail.com>
      * @since  2016-06-05
      */
-    public function testFilterValidationValidatorUrlCustomMessage(): void
+    public function testFilterValidationValidatorUrlSingleField(): void
     {
         $validation = new Validation();
 
-        $validation->add(
-            'url',
-            new Url(
-                [
-                    'message' => 'The url is not valid',
-                ]
-            )
-        );
+        $validation->add('url', new Url());
 
-        $messages = $validation->validate(
-            []
-        );
+
+        $messages = $validation->validate([]);
 
         $expected = new Messages(
             [
                 new Message(
-                    'The url is not valid',
+                    'Field url must be a url',
                     'url',
                     Url::class,
                     0
@@ -239,89 +301,26 @@ final class ValidateTest extends UnitTestCase
     }
 
     /**
-     * Tests Phalcon\Filter\Validation\Validator\Url :: validate() - flags
+     * Tests Phalcon\Filter\Validation\Validator\Url :: validate() - empty
      *
-     * @dataProvider getExamples
+     * @return void
      *
-     * @author       Phalcon Team <team@phalcon.io>
-     * @since        2019-05-10
+     * @return void
+     * @throws Exception
+     *
+     * @author Phalcon Team <team@phalcon.io>
+     * @since  2023-08-03
      */
-    public function testFilterValidationValidatorUrlFlags(
-        array|int $options,
-        string $url
-    ): void {
-        $validation = new Validation();
-
-        $validation->add(
-            'url',
-            new Url(
-                [
-                    'options' => $options,
-                ]
-            )
-        );
-
-        $messages = $validation->validate(
-            [
-                'url' => $url,
-            ]
-        );
-
-        $this->assertSame(
-            1,
-            $messages->count()
-        );
-
-        $expected = new Messages(
-            [
-                new Message(
-                    'Field url must be a url',
-                    'url',
-                    Url::class,
-                    0
-                ),
-            ]
-        );
-
-        $this->assertEquals($expected, $messages);
-    }
-
-    public static function getExamples(): array
+    public function testFilterValidationValidatorUrlValidateEmpty(): void
     {
-        return [
-            [
-                FILTER_FLAG_PATH_REQUIRED,
-                'phalcon.io',
-            ],
-            [
-                FILTER_FLAG_QUERY_REQUIRED,
-                'https://',
-            ],
-            [
-                [
-                    'flags' => [
-                        FILTER_FLAG_PATH_REQUIRED,
-                    ],
-                ],
-                'phalcon.io',
-            ],
-            [
-                [
-                    'flags' => [
-                        FILTER_FLAG_QUERY_REQUIRED,
-                    ],
-                ],
-                'https://',
-            ],
-            [
-                [
-                    'flags' => [
-                        FILTER_FLAG_PATH_REQUIRED,
-                        FILTER_FLAG_QUERY_REQUIRED,
-                    ],
-                ],
-                'phalconphp',
-            ],
-        ];
+        $validation = new Validation();
+        $validator  = new Url(['allowEmpty' => true,]);
+        $validation->add('url', $validator);
+        $entity      = new stdClass();
+        $entity->url = '';
+
+        $validation->bind($entity, []);
+        $result = $validator->validate($validation, 'url');
+        $this->assertTrue($result);
     }
 }

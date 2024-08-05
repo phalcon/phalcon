@@ -13,9 +13,9 @@ declare(strict_types=1);
 
 namespace Phalcon\Tests\Unit\Cli\Console;
 
-use Phalcon\Tests\UnitTestCase;
 use Phalcon\Cli\Console as CliConsole;
 use Phalcon\Di\FactoryDefault\Cli as DiFactoryDefault;
+use Phalcon\Tests\UnitTestCase;
 
 final class GetSetDefaultModuleTest extends UnitTestCase
 {

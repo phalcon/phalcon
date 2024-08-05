@@ -14,12 +14,12 @@ declare(strict_types=1);
 namespace Phalcon\Tests\Unit\Cache\Adapter\Redis;
 
 use Codeception\Example;
-use Phalcon\Tests\UnitTestCase;
 use Phalcon\Cache\Adapter\Redis;
 use Phalcon\Storage\Exception as StorageException;
 use Phalcon\Storage\SerializerFactory;
 use Phalcon\Support\Exception as HelperException;
 use Phalcon\Tests\Fixtures\Traits\RedisTrait;
+use Phalcon\Tests\UnitTestCase;
 use stdClass;
 
 use function array_merge;
@@ -29,6 +29,27 @@ use function uniqid;
 final class GetSetTest extends UnitTestCase
 {
     use RedisTrait;
+
+    public static function getExamples(): array
+    {
+        return [
+            [
+                'random string',
+            ],
+            [
+                123456,
+            ],
+            [
+                123.456,
+            ],
+            [
+                true,
+            ],
+            [
+                new stdClass(),
+            ],
+        ];
+    }
 
     /**
      * Tests Phalcon\Cache\Adapter\Redis :: get()
@@ -57,6 +78,68 @@ final class GetSetTest extends UnitTestCase
         $expected = $value;
         $actual   = $adapter->get($key);
         $this->assertEquals($expected, $actual);
+    }
+
+    /**
+     * Tests Phalcon\Cache\Adapter\Redis :: get()/set() - custom serializer
+     *
+     * @return void
+     *
+     * @throws HelperException
+     * @throws StorageException
+     *
+     * @author Phalcon Team <team@phalcon.io>
+     * @since  2020-09-09
+     */
+    public function testCacheAdapterRedisGetSetCustomSerializer(): void
+    {
+        $serializer = new SerializerFactory();
+        $adapter    = new Redis(
+            $serializer,
+            array_merge(
+                getOptionsRedis(),
+                [
+                    'defaultSerializer' => 'Base64',
+                ]
+            )
+        );
+
+        $key    = uniqid();
+        $source = 'Phalcon Framework';
+
+        $actual = $adapter->set($key, $source);
+        $this->assertTrue($actual);
+
+        $expected = $source;
+        $actual   = $adapter->get($key);
+        $this->assertEquals($expected, $actual);
+    }
+
+    /**
+     * Tests Phalcon\Cache\Adapter\Redis :: get() - failed auth
+     *
+     * @return void
+     *
+     * @author Phalcon Team <team@phalcon.io>
+     * @since  2020-09-09
+     */
+    public function testCacheAdapterRedisGetSetFailedAuth(): void
+    {
+        $this->expectException(StorageException::class);
+        $this->expectExceptionMessage('Failed to authenticate with the Redis server');
+
+        $serializer = new SerializerFactory();
+        $adapter    = new Redis(
+            $serializer,
+            array_merge(
+                getOptionsRedis(),
+                [
+                    'auth' => 'something',
+                ]
+            )
+        );
+
+        $adapter->get('test');
     }
 
     /**
@@ -117,88 +200,5 @@ final class GetSetTest extends UnitTestCase
         );
 
         $adapter->get('test');
-    }
-
-    /**
-     * Tests Phalcon\Cache\Adapter\Redis :: get() - failed auth
-     *
-     * @return void
-     *
-     * @author Phalcon Team <team@phalcon.io>
-     * @since  2020-09-09
-     */
-    public function testCacheAdapterRedisGetSetFailedAuth(): void
-    {
-        $this->expectException(StorageException::class);
-        $this->expectExceptionMessage('Failed to authenticate with the Redis server');
-
-        $serializer = new SerializerFactory();
-        $adapter    = new Redis(
-            $serializer,
-            array_merge(
-                getOptionsRedis(),
-                [
-                    'auth' => 'something',
-                ]
-            )
-        );
-
-        $adapter->get('test');
-    }
-
-    /**
-     * Tests Phalcon\Cache\Adapter\Redis :: get()/set() - custom serializer
-     *
-     * @return void
-     *
-     * @throws HelperException
-     * @throws StorageException
-     *
-     * @author Phalcon Team <team@phalcon.io>
-     * @since  2020-09-09
-     */
-    public function testCacheAdapterRedisGetSetCustomSerializer(): void
-    {
-        $serializer = new SerializerFactory();
-        $adapter    = new Redis(
-            $serializer,
-            array_merge(
-                getOptionsRedis(),
-                [
-                    'defaultSerializer' => 'Base64',
-                ]
-            )
-        );
-
-        $key    = uniqid();
-        $source = 'Phalcon Framework';
-
-        $actual = $adapter->set($key, $source);
-        $this->assertTrue($actual);
-
-        $expected = $source;
-        $actual   = $adapter->get($key);
-        $this->assertEquals($expected, $actual);
-    }
-
-    public static function getExamples(): array
-    {
-        return [
-            [
-                'random string',
-            ],
-            [
-                123456,
-            ],
-            [
-                123.456,
-            ],
-            [
-                true,
-            ],
-            [
-                new stdClass(),
-            ],
-        ];
     }
 }

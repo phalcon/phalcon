@@ -13,9 +13,9 @@ declare(strict_types=1);
 
 namespace Phalcon\Tests\Unit\Cli\Router;
 
-use Phalcon\Tests\UnitTestCase;
 use Phalcon\Cli\Router;
 use Phalcon\Di\Di;
+use Phalcon\Tests\UnitTestCase;
 
 final class GetSetDITest extends UnitTestCase
 {

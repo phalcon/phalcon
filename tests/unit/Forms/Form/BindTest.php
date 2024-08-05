@@ -13,9 +13,9 @@ declare(strict_types=1);
 
 namespace Phalcon\Tests\Unit\Forms\Form;
 
-use Phalcon\Tests\UnitTestCase;
 use Phalcon\Forms\Element\Text;
 use Phalcon\Forms\Form;
+use Phalcon\Tests\UnitTestCase;
 use stdClass;
 
 /**
@@ -23,26 +23,6 @@ use stdClass;
  */
 final class BindTest extends UnitTestCase
 {
-    /**
-     * Tests Phalcon\Forms\Form :: bind()
-     *
-     * @author Phalcon Team <team@phalcon.io>
-     * @since  2018-11-13
-     */
-    public function testFormsFormBind(): void
-    {
-        $form = new Form();
-        $form->add(new Text('test1'));
-
-        $data = [
-            'test1' => 'test1',
-        ];
-
-        $form->bind($data, new stdClass());
-
-        $this->assertEquals("test1", $form->getValue("test1"));
-    }
-
     public function testBindWhitelist(): void
     {
         $form = new Form();
@@ -62,5 +42,25 @@ final class BindTest extends UnitTestCase
         $this->assertEquals("nameFirst", $form->getValue("nameFirst"));
         $this->assertEquals("nameLast", $form->getValue("nameLast"));
         $this->assertNull($form->getValue("test1"));
+    }
+
+    /**
+     * Tests Phalcon\Forms\Form :: bind()
+     *
+     * @author Phalcon Team <team@phalcon.io>
+     * @since  2018-11-13
+     */
+    public function testFormsFormBind(): void
+    {
+        $form = new Form();
+        $form->add(new Text('test1'));
+
+        $data = [
+            'test1' => 'test1',
+        ];
+
+        $form->bind($data, new stdClass());
+
+        $this->assertEquals("test1", $form->getValue("test1"));
     }
 }

@@ -14,7 +14,6 @@ declare(strict_types=1);
 namespace Phalcon\Tests\Unit\Container\Lazy;
 
 use Phalcon\Container\Lazy\FunctionCall;
-use Phalcon\Tests\UnitTestCase;
 
 use function supportDir;
 

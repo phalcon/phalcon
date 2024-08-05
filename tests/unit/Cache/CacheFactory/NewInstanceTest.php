@@ -13,13 +13,13 @@ declare(strict_types=1);
 
 namespace Phalcon\Tests\Unit\Cache\CacheFactory;
 
-use Phalcon\Tests\UnitTestCase;
 use Phalcon\Cache\AdapterFactory;
 use Phalcon\Cache\Cache;
 use Phalcon\Cache\CacheFactory;
+use Phalcon\Cache\CacheInterface;
 use Phalcon\Cache\Exception\Exception;
 use Phalcon\Storage\SerializerFactory;
-use Phalcon\Cache\CacheInterface;
+use Phalcon\Tests\UnitTestCase;
 
 use function uniqid;
 

@@ -18,8 +18,8 @@ use Phalcon\Container\Definitions\Definitions;
 use Phalcon\Tests\Fixtures\Container\TestProvider;
 use Phalcon\Tests\Fixtures\Container\TestWithDefaultConstructorParameters;
 use Phalcon\Tests\Fixtures\Container\TestWithInterface;
-use stdClass;
 use Phalcon\Tests\UnitTestCase;
+use stdClass;
 
 final class ContainerTest extends UnitTestCase
 {
@@ -33,6 +33,30 @@ final class ContainerTest extends UnitTestCase
                 new TestProvider(),
             ]
         );
+    }
+
+    /**
+     * @return void
+     */
+    public function testContainerContainerCallableGet(): void
+    {
+        $callable = $this->container->callableGet(stdClass::class);
+
+        $expected = $callable(stdClass::class);
+        $actual   = $callable(stdClass::class);
+        $this->assertSame($expected, $actual);
+    }
+
+    /**
+     * @return void
+     */
+    public function testContainerContainerCallableNew(): void
+    {
+        $callable = $this->container->callableNew(stdClass::class);
+
+        $expected = $callable(stdClass::class);
+        $actual   = $callable(stdClass::class);
+        $this->assertNotSame($expected, $actual);
     }
 
     /**
@@ -91,29 +115,5 @@ final class ContainerTest extends UnitTestCase
         $expected = 'lazyval';
         $actual   = $this->container->new('lazyval');
         $this->assertSame($expected, $actual);
-    }
-
-    /**
-     * @return void
-     */
-    public function testContainerContainerCallableGet(): void
-    {
-        $callable = $this->container->callableGet(stdClass::class);
-
-        $expected = $callable(stdClass::class);
-        $actual   = $callable(stdClass::class);
-        $this->assertSame($expected, $actual);
-    }
-
-    /**
-     * @return void
-     */
-    public function testContainerContainerCallableNew(): void
-    {
-        $callable = $this->container->callableNew(stdClass::class);
-
-        $expected = $callable(stdClass::class);
-        $actual   = $callable(stdClass::class);
-        $this->assertNotSame($expected, $actual);
     }
 }

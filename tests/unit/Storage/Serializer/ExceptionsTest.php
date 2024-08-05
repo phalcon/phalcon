@@ -16,7 +16,6 @@ namespace Phalcon\Tests\Unit\Storage\Serializer;
 use Exception;
 use InvalidArgumentException;
 use Phalcon\Storage\Serializer\Base64;
-use Phalcon\Storage\Serializer\Igbinary;
 use Phalcon\Storage\Serializer\Json;
 use Phalcon\Storage\Serializer\Msgpack;
 use Phalcon\Storage\Serializer\Php;
@@ -28,9 +27,6 @@ use Phalcon\Tests\UnitTestCase;
 use stdClass;
 
 use function json_encode;
-use function trigger_error;
-
-use const E_WARNING;
 
 final class ExceptionsTest extends UnitTestCase
 {

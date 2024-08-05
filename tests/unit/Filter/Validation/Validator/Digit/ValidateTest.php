@@ -13,11 +13,10 @@ declare(strict_types=1);
 
 namespace Phalcon\Tests\Unit\Filter\Validation\Validator\Digit;
 
-use Codeception\Example;
-use Phalcon\Tests\UnitTestCase;
 use Phalcon\Filter\Validation;
 use Phalcon\Filter\Validation\Exception;
 use Phalcon\Filter\Validation\Validator\Digit;
+use Phalcon\Tests\UnitTestCase;
 use stdClass;
 
 use const PHP_INT_MAX;
@@ -25,37 +24,32 @@ use const PHP_INT_MAX;
 final class ValidateTest extends UnitTestCase
 {
     /**
-     * Tests Phalcon\Filter\Validation\Validator\Digit :: validate() - empty
-     *
-     * @return void
-     *
-     * @return void
-     * @throws Exception
-     *
-     * @author Phalcon Team <team@phalcon.io>
-     * @since  2023-08-03
+     * @return array
      */
-    public function testFilterValidationValidatorDigitValidateEmpty(): void
+    public static function getExamplesIntOrStringOfDigits()
     {
-        $validation = new Validation();
-        $validator  = new Digit(['allowEmpty' => true,]);
-        $validation->add('price', $validator);
-        $entity        = new stdClass();
-        $entity->price = '';
-
-        $validation->bind($entity, []);
-        $result = $validator->validate($validation, 'price');
-        $this->assertTrue($result);
+        return [
+            ['123'],
+            [123],
+            [PHP_INT_MAX],
+            [0xFFFFFF],
+            [100000],
+            [-100000],
+            [0],
+            ['0'],
+            ['00001233422003400'],
+        ];
     }
 
     /**
-     * Tests digit validator with single field
+     * @dataProvider getExamplesIntOrStringOfDigits
      *
-     * @author Wojciech Ślawski <jurigag@gmail.com>
-     * @since  2016-06-05
+     * @return void
+     * @throws Exception
      */
-    public function testFilterValidationValidatorDigitSingleField(): void
-    {
+    public function testFilterValidationValidatorDigitIntOrStringOfDigits(
+        mixed $digit
+    ): void {
         $validation = new Validation();
 
         $validation->add(
@@ -63,27 +57,14 @@ final class ValidateTest extends UnitTestCase
             new Digit()
         );
 
-
         $messages = $validation->validate(
             [
-                'amount' => '123',
+                'amount' => $digit,
             ]
         );
 
         $this->assertSame(
             0,
-            $messages->count()
-        );
-
-
-        $messages = $validation->validate(
-            [
-                'amount' => '123abc',
-            ]
-        );
-
-        $this->assertSame(
-            1,
             $messages->count()
         );
     }
@@ -168,14 +149,13 @@ final class ValidateTest extends UnitTestCase
     }
 
     /**
-     * @dataProvider getExamplesIntOrStringOfDigits
+     * Tests digit validator with single field
      *
-     * @return void
-     * @throws Exception
+     * @author Wojciech Ślawski <jurigag@gmail.com>
+     * @since  2016-06-05
      */
-    public function testFilterValidationValidatorDigitIntOrStringOfDigits(
-        mixed $digit
-    ): void {
+    public function testFilterValidationValidatorDigitSingleField(): void
+    {
         $validation = new Validation();
 
         $validation->add(
@@ -183,9 +163,10 @@ final class ValidateTest extends UnitTestCase
             new Digit()
         );
 
+
         $messages = $validation->validate(
             [
-                'amount' => $digit,
+                'amount' => '123',
             ]
         );
 
@@ -193,23 +174,41 @@ final class ValidateTest extends UnitTestCase
             0,
             $messages->count()
         );
+
+
+        $messages = $validation->validate(
+            [
+                'amount' => '123abc',
+            ]
+        );
+
+        $this->assertSame(
+            1,
+            $messages->count()
+        );
     }
 
     /**
-     * @return array
+     * Tests Phalcon\Filter\Validation\Validator\Digit :: validate() - empty
+     *
+     * @return void
+     *
+     * @return void
+     * @throws Exception
+     *
+     * @author Phalcon Team <team@phalcon.io>
+     * @since  2023-08-03
      */
-    public static function getExamplesIntOrStringOfDigits()
+    public function testFilterValidationValidatorDigitValidateEmpty(): void
     {
-        return [
-            ['123'],
-            [123],
-            [PHP_INT_MAX],
-            [0xFFFFFF],
-            [100000],
-            [-100000],
-            [0],
-            ['0'],
-            ['00001233422003400'],
-        ];
+        $validation = new Validation();
+        $validator  = new Digit(['allowEmpty' => true,]);
+        $validation->add('price', $validator);
+        $entity        = new stdClass();
+        $entity->price = '';
+
+        $validation->bind($entity, []);
+        $result = $validator->validate($validation, 'price');
+        $this->assertTrue($result);
     }
 }

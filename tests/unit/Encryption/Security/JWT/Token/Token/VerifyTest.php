@@ -84,7 +84,8 @@ final class VerifyTest extends UnitTestCase
         $mock = $this->createMock(Hmac::class);
         $mock
             ->method('getAlgHeader')
-            ->willReturn('xyz');
+            ->willReturn('xyz')
+        ;
 
         $actual = $token->verify($mock, $passphrase);
         $this->assertFalse($actual);

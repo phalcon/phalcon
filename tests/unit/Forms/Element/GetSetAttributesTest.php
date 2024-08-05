@@ -13,8 +13,6 @@ declare(strict_types=1);
 
 namespace Phalcon\Tests\Unit\Forms\Element;
 
-use Codeception\Example;
-use Phalcon\Tests\UnitTestCase;
 use Phalcon\Forms\Element\Check;
 use Phalcon\Forms\Element\Date;
 use Phalcon\Forms\Element\Email;
@@ -26,12 +24,33 @@ use Phalcon\Forms\Element\Radio;
 use Phalcon\Forms\Element\Submit;
 use Phalcon\Forms\Element\Text;
 use Phalcon\Forms\Element\TextArea;
+use Phalcon\Tests\UnitTestCase;
 
 use function array_flip;
 use function uniqid;
 
 final class GetSetAttributesTest extends UnitTestCase
 {
+    /**
+     * @return string[][]
+     */
+    public static function getExamples(): array
+    {
+        return [
+            [Check::class],
+            [Date::class],
+            [Email::class],
+            [File::class],
+            [Hidden::class],
+            [Numeric::class],
+            [Password::class],
+            [Radio::class],
+            [Submit::class],
+            [Text::class],
+            [TextArea::class],
+        ];
+    }
+
     /**
      * Tests Phalcon\Forms\Element\* :: getAttributes()/setAttributes()
      *
@@ -69,25 +88,5 @@ final class GetSetAttributesTest extends UnitTestCase
         $expected = $flipped;
         $actual   = $object->getAttributes();
         $this->assertSame($expected, $actual);
-    }
-
-    /**
-     * @return string[][]
-     */
-    public static function getExamples(): array
-    {
-        return [
-            [Check::class],
-            [Date::class],
-            [Email::class],
-            [File::class],
-            [Hidden::class],
-            [Numeric::class],
-            [Password::class],
-            [Radio::class],
-            [Submit::class],
-            [Text::class],
-            [TextArea::class],
-        ];
     }
 }

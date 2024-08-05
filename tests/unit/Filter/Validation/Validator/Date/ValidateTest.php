@@ -13,188 +13,114 @@ declare(strict_types=1);
 
 namespace Phalcon\Tests\Unit\Filter\Validation\Validator\Date;
 
-use Codeception\Example;
-use Phalcon\Tests\UnitTestCase;
 use Phalcon\Filter\Validation;
 use Phalcon\Filter\Validation\Exception;
 use Phalcon\Filter\Validation\Validator\Date;
 use Phalcon\Messages\Message;
 use Phalcon\Messages\Messages;
+use Phalcon\Tests\UnitTestCase;
 use stdClass;
 
 final class ValidateTest extends UnitTestCase
 {
-    /**
-     * Tests Phalcon\Filter\Validation\Validator\Date :: validate() - empty
-     *
-     * @return void
-     *
-     * @return void
-     * @throws Exception
-     *
-     * @author Phalcon Team <team@phalcon.io>
-     * @since  2023-08-03
-     */
-    public function testFilterValidationValidatorDateValidateEmpty(): void
+    public static function getInvalidDates(): array
     {
-        $validation = new Validation();
-        $validator  = new Date(['allowEmpty' => true,]);
-        $validation->add('start_date', $validator);
-        $entity             = new stdClass();
-        $entity->start_date = '';
-
-        $validation->bind($entity, []);
-        $result = $validator->validate($validation, 'start_date');
-        $this->assertTrue($result);
-    }
-
-    /**
-     * Tests Phalcon\Filter\Validation\Validator\Date :: validate() - single field
-     *
-     * @return void
-     *
-     * @return void
-     * @throws Exception
-     *
-     * @author Phalcon Team <tram@phalcon.io>
-     * @since  2023-08-03
-     */
-    public function testFilterValidationValidatorDateValidateSingleField(): void
-    {
-        $validation = new Validation();
-        $validation->add('start_date', new Date());
-
-        $messages = $validation->validate(
-            [
-                'start_date' => '2022-12-31',
-            ]
-        );
-
-        $expected = 0;
-        $actual   = $messages->count();
-        $this->assertSame($expected, $actual);
-
-        $messages = $validation->validate(
-            [
-                'start_date' => '19450101',
-            ]
-        );
-
-        $expected = 1;
-        $actual   = $messages->count();
-        $this->assertSame($expected, $actual);
-    }
-
-    /**
-     * @return void
-     *
-     * @return void
-     * @throws Exception
-     *
-     * @author Phalcon Team <tram@phalcon.io>
-     * @since  2023-08-03
-     */
-    public function testFilterValidationValidatorDateValidateMultipleField(): void
-    {
-        $validation = new Validation();
-
-        $validationMessages = [
-            'start_date' => 'start_date must be date.',
-            'end_date'   => 'end_date must by date.',
+        return [
+            ['', 'Y-m-d'],
+            [false, 'Y-m-d'],
+            [null, 'Y-m-d'],
+            [new stdClass(), 'Y-m-d'],
+            ['2015-13-01', 'Y-m-d'],
+            ['2015-01-32', 'Y-m-d'],
+            ['2015-01', 'Y-m-d'],
+            ['2015-01-01', 'd-m-Y'],
         ];
+    }
+
+    public static function getValidDates(): array
+    {
+        return [
+            ['2012-01-01', 'Y-m-d'],
+            ['2013-31-12', 'Y-d-m'],
+            ['01/01/2014', 'd/m/Y'],
+            ['12@12@2015', 'd@m@Y'],
+        ];
+    }
+
+    /**
+     * Tests detect invalid dates
+     *
+     * @author       Gustavo Verzola <verzola@gmail.com>
+     * @since        2015-03-09
+     *
+     * @dataProvider getInvalidDates
+     */
+    public function testFilterValidationValidatorDateDetectInvalidDates(
+        mixed $date,
+        string $format
+    ): void {
+        $validation = new Validation();
 
         $validation->add(
-            ['start_date', 'end_date'],
+            'date',
             new Date(
                 [
-                    'message' => $validationMessages,
+                    'format' => $format,
+                ]
+            )
+        );
+
+        $expected = new Messages(
+            [
+                new Message(
+                    'Field date is not a valid date',
+                    'date',
+                    Date::class,
+                    0
+                ),
+            ]
+        );
+
+        $actual = $validation->validate(
+            [
+                'date' => $date,
+            ]
+        );
+
+        $this->assertEquals($expected, $actual);
+    }
+
+    /**
+     * Tests detect valid dates
+     *
+     * @author       Gustavo Verzola <verzola@gmail.com>
+     * @since        2015-03-09
+     *
+     * @dataProvider getValidDates
+     */
+    public function testFilterValidationValidatorDateDetectValidDates(
+        string $date,
+        string $format
+    ): void {
+        $validation = new Validation();
+
+        $validation->add(
+            'date',
+            new Date(
+                [
+                    'format' => $format,
                 ]
             )
         );
 
         $messages = $validation->validate(
             [
-                'start_date' => '2022-12-31',
-                'end_date'   => '2023-01-01',
-            ]
-        );
-
-        $expected = 0;
-        $actual   = $messages->count();
-        $this->assertSame($expected, $actual);
-
-
-        $messages = $validation->validate(
-            [
-                'start_date' => '20230101',
-                'end_date'   => '2022-12-31',
-            ]
-        );
-
-        $expected = 1;
-        $actual   = $messages->count();
-        $this->assertSame($expected, $actual);
-
-        $expected = $validationMessages['start_date'];
-        $actual   = $messages->offsetGet(0)->getMessage();
-        $this->assertSame($expected, $actual);
-
-        $messages = $validation->validate(
-            [
-                'start_date' => '20230101',
-                'end_date'   => '20230101',
-            ]
-        );
-
-        $expected = 2;
-        $actual   = $messages->count();
-        $this->assertSame($expected, $actual);
-
-        $expected = $validationMessages['start_date'];
-        $actual   = $messages->offsetGet(0)->getMessage();
-        $this->assertSame($expected, $actual);
-
-        $expected = $validationMessages['end_date'];
-        $actual   = $messages->offsetGet(1)->getMessage();
-        $this->assertSame($expected, $actual);
-    }
-
-    /**
-     * Tests date validator with single field
-     *
-     * @author Wojciech Ślawski <jurigag@gmail.com>
-     * @since  2016-06-05
-     */
-    public function testFilterValidationValidatorDateSingleField(): void
-    {
-        $validation = new Validation();
-
-        $validation->add(
-            'date',
-            new Date()
-        );
-
-
-        $messages = $validation->validate(
-            [
-                'date' => '2016-06-05',
+                'date' => $date,
             ]
         );
 
         $this->assertSame(
             0,
-            $messages->count()
-        );
-
-
-        $messages = $validation->validate(
-            [
-                'date' => '2016-06-32',
-            ]
-        );
-
-        $this->assertSame(
-            1,
             $messages->count()
         );
     }
@@ -277,31 +203,24 @@ final class ValidateTest extends UnitTestCase
     }
 
     /**
-     * Tests detect valid dates
+     * Tests date validator with single field
      *
-     * @author       Gustavo Verzola <verzola@gmail.com>
-     * @since        2015-03-09
-     *
-     * @dataProvider getValidDates
+     * @author Wojciech Ślawski <jurigag@gmail.com>
+     * @since  2016-06-05
      */
-    public function testFilterValidationValidatorDateDetectValidDates(
-        string $date,
-        string $format
-    ): void {
+    public function testFilterValidationValidatorDateSingleField(): void
+    {
         $validation = new Validation();
 
         $validation->add(
             'date',
-            new Date(
-                [
-                    'format' => $format,
-                ]
-            )
+            new Date()
         );
+
 
         $messages = $validation->validate(
             [
-                'date' => $date,
+                'date' => '2016-06-05',
             ]
         );
 
@@ -309,72 +228,152 @@ final class ValidateTest extends UnitTestCase
             0,
             $messages->count()
         );
+
+
+        $messages = $validation->validate(
+            [
+                'date' => '2016-06-32',
+            ]
+        );
+
+        $this->assertSame(
+            1,
+            $messages->count()
+        );
     }
 
     /**
-     * Tests detect invalid dates
+     * Tests Phalcon\Filter\Validation\Validator\Date :: validate() - empty
      *
-     * @author       Gustavo Verzola <verzola@gmail.com>
-     * @since        2015-03-09
+     * @return void
      *
-     * @dataProvider getInvalidDates
+     * @return void
+     * @throws Exception
+     *
+     * @author Phalcon Team <team@phalcon.io>
+     * @since  2023-08-03
      */
-    public function testFilterValidationValidatorDateDetectInvalidDates(
-        mixed $date,
-        string $format
-    ): void {
+    public function testFilterValidationValidatorDateValidateEmpty(): void
+    {
+        $validation = new Validation();
+        $validator  = new Date(['allowEmpty' => true,]);
+        $validation->add('start_date', $validator);
+        $entity             = new stdClass();
+        $entity->start_date = '';
+
+        $validation->bind($entity, []);
+        $result = $validator->validate($validation, 'start_date');
+        $this->assertTrue($result);
+    }
+
+    /**
+     * @return void
+     *
+     * @return void
+     * @throws Exception
+     *
+     * @author Phalcon Team <tram@phalcon.io>
+     * @since  2023-08-03
+     */
+    public function testFilterValidationValidatorDateValidateMultipleField(): void
+    {
         $validation = new Validation();
 
+        $validationMessages = [
+            'start_date' => 'start_date must be date.',
+            'end_date'   => 'end_date must by date.',
+        ];
+
         $validation->add(
-            'date',
+            ['start_date', 'end_date'],
             new Date(
                 [
-                    'format' => $format,
+                    'message' => $validationMessages,
                 ]
             )
         );
 
-        $expected = new Messages(
+        $messages = $validation->validate(
             [
-                new Message(
-                    'Field date is not a valid date',
-                    'date',
-                    Date::class,
-                    0
-                ),
+                'start_date' => '2022-12-31',
+                'end_date'   => '2023-01-01',
             ]
         );
 
-        $actual = $validation->validate(
+        $expected = 0;
+        $actual   = $messages->count();
+        $this->assertSame($expected, $actual);
+
+
+        $messages = $validation->validate(
             [
-                'date' => $date,
+                'start_date' => '20230101',
+                'end_date'   => '2022-12-31',
             ]
         );
 
-        $this->assertEquals($expected, $actual);
+        $expected = 1;
+        $actual   = $messages->count();
+        $this->assertSame($expected, $actual);
+
+        $expected = $validationMessages['start_date'];
+        $actual   = $messages->offsetGet(0)->getMessage();
+        $this->assertSame($expected, $actual);
+
+        $messages = $validation->validate(
+            [
+                'start_date' => '20230101',
+                'end_date'   => '20230101',
+            ]
+        );
+
+        $expected = 2;
+        $actual   = $messages->count();
+        $this->assertSame($expected, $actual);
+
+        $expected = $validationMessages['start_date'];
+        $actual   = $messages->offsetGet(0)->getMessage();
+        $this->assertSame($expected, $actual);
+
+        $expected = $validationMessages['end_date'];
+        $actual   = $messages->offsetGet(1)->getMessage();
+        $this->assertSame($expected, $actual);
     }
 
-    public static function getValidDates(): array
+    /**
+     * Tests Phalcon\Filter\Validation\Validator\Date :: validate() - single field
+     *
+     * @return void
+     *
+     * @return void
+     * @throws Exception
+     *
+     * @author Phalcon Team <tram@phalcon.io>
+     * @since  2023-08-03
+     */
+    public function testFilterValidationValidatorDateValidateSingleField(): void
     {
-        return [
-            ['2012-01-01', 'Y-m-d'],
-            ['2013-31-12', 'Y-d-m'],
-            ['01/01/2014', 'd/m/Y'],
-            ['12@12@2015', 'd@m@Y'],
-        ];
-    }
+        $validation = new Validation();
+        $validation->add('start_date', new Date());
 
-    public static function getInvalidDates(): array
-    {
-        return [
-            ['', 'Y-m-d'],
-            [false, 'Y-m-d'],
-            [null, 'Y-m-d'],
-            [new stdClass(), 'Y-m-d'],
-            ['2015-13-01', 'Y-m-d'],
-            ['2015-01-32', 'Y-m-d'],
-            ['2015-01', 'Y-m-d'],
-            ['2015-01-01', 'd-m-Y'],
-        ];
+        $messages = $validation->validate(
+            [
+                'start_date' => '2022-12-31',
+            ]
+        );
+
+        $expected = 0;
+        $actual   = $messages->count();
+        $this->assertSame($expected, $actual);
+
+        $messages = $validation->validate(
+            [
+                'start_date' => '19450101',
+            ]
+        );
+
+        $expected = 1;
+        $actual   = $messages->count();
+        $this->assertSame($expected, $actual);
     }
 }

@@ -13,12 +13,94 @@ declare(strict_types=1);
 
 namespace Phalcon\Tests\Unit\Filter\Validation\Validator\Ip;
 
-use Phalcon\Tests\UnitTestCase;
 use Phalcon\Filter\Validation;
 use Phalcon\Filter\Validation\Validator\Ip;
+use Phalcon\Tests\UnitTestCase;
 
 final class ValidateTest extends UnitTestCase
 {
+    /**
+     * Tests Phalcon\Filter\Validation\Validator\Ip :: validate() - multiple field
+     *
+     * @author Gorka Guridi <gorka.guridi@gmail.com>
+     * @since  2016-12-17
+     */
+    public function testFilterValidationValidatorIpMultipleField(): void
+    {
+        $validation = new Validation();
+
+        $validation->add(
+            [
+                'ip',
+                'anotherIp',
+            ],
+            new Ip(
+                [
+                    'message'       => [
+                        'ip'        => 'This is a test message for ip',
+                        'anotherIp' => 'This is a test message for another ip',
+                    ],
+                    'version'       => [
+                        'ip'        => Ip::VERSION_4,
+                        'anotherIp' => Ip::VERSION_6,
+                    ],
+                    'allowPrivate'  => [
+                        'ip'        => true,
+                        'anotherIp' => false,
+                    ],
+                    'allowReserved' => [
+                        'ip'        => true,
+                        'anotherIp' => false,
+                    ],
+                    'allowEmpty'    => [
+                        'ip'        => false,
+                        'anotherIp' => true,
+                    ],
+                ]
+            )
+        );
+
+
+        $messages = $validation->validate(
+            [
+                'ip'        => '127.0.0.1',
+                'anotherIp' => '127.0.0.1',
+            ]
+        );
+
+        $this->assertCount(1, $messages);
+
+
+        $messages = $validation->validate(
+            [
+                'ip'        => '192.168.10.20',
+                'anotherIp' => '192.168.10.20',
+            ]
+        );
+
+        $this->assertCount(1, $messages);
+
+
+        $messages = $validation->validate(
+            [
+                'ip'        => '192.168.10.20',
+                'anotherIp' => '',
+            ]
+        );
+
+        $this->assertCount(0, $messages);
+
+
+        $messages = $validation->validate(
+            [
+                'ip'        => '2001:cdba:0000:0000:0000:0000:3257:9652',
+                'anotherIp' => '2001:cdba:0000:0000:0000:0000:3257:9652',
+            ]
+        );
+
+        $this->assertCount(1, $messages);
+    }
+
     /**
      * Tests Phalcon\Filter\Validation\Validator\Ip :: validate() - single field
      *
@@ -127,87 +209,5 @@ final class ValidateTest extends UnitTestCase
                 ]
             )
         );
-    }
-
-    /**
-     * Tests Phalcon\Filter\Validation\Validator\Ip :: validate() - multiple field
-     *
-     * @author Gorka Guridi <gorka.guridi@gmail.com>
-     * @since  2016-12-17
-     */
-    public function testFilterValidationValidatorIpMultipleField(): void
-    {
-        $validation = new Validation();
-
-        $validation->add(
-            [
-                'ip',
-                'anotherIp',
-            ],
-            new Ip(
-                [
-                    'message'       => [
-                        'ip'        => 'This is a test message for ip',
-                        'anotherIp' => 'This is a test message for another ip',
-                    ],
-                    'version'       => [
-                        'ip'        => Ip::VERSION_4,
-                        'anotherIp' => Ip::VERSION_6,
-                    ],
-                    'allowPrivate'  => [
-                        'ip'        => true,
-                        'anotherIp' => false,
-                    ],
-                    'allowReserved' => [
-                        'ip'        => true,
-                        'anotherIp' => false,
-                    ],
-                    'allowEmpty'    => [
-                        'ip'        => false,
-                        'anotherIp' => true,
-                    ],
-                ]
-            )
-        );
-
-
-        $messages = $validation->validate(
-            [
-                'ip'        => '127.0.0.1',
-                'anotherIp' => '127.0.0.1',
-            ]
-        );
-
-        $this->assertCount(1, $messages);
-
-
-        $messages = $validation->validate(
-            [
-                'ip'        => '192.168.10.20',
-                'anotherIp' => '192.168.10.20',
-            ]
-        );
-
-        $this->assertCount(1, $messages);
-
-
-        $messages = $validation->validate(
-            [
-                'ip'        => '192.168.10.20',
-                'anotherIp' => '',
-            ]
-        );
-
-        $this->assertCount(0, $messages);
-
-
-        $messages = $validation->validate(
-            [
-                'ip'        => '2001:cdba:0000:0000:0000:0000:3257:9652',
-                'anotherIp' => '2001:cdba:0000:0000:0000:0000:3257:9652',
-            ]
-        );
-
-        $this->assertCount(1, $messages);
     }
 }

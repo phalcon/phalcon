@@ -13,10 +13,10 @@ declare(strict_types=1);
 
 namespace Phalcon\Tests\Unit\Cache\Adapter\Memory;
 
-use Phalcon\Tests\UnitTestCase;
 use Phalcon\Cache\Adapter\Memory;
 use Phalcon\Storage\SerializerFactory;
 use Phalcon\Support\Exception as HelperException;
+use Phalcon\Tests\UnitTestCase;
 
 final class GetKeysTest extends UnitTestCase
 {

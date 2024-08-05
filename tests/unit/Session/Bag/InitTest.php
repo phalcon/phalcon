@@ -13,11 +13,10 @@ declare(strict_types=1);
 
 namespace Phalcon\Tests\Unit\Session\Bag;
 
-use Phalcon\Session\Adapter\Stream;
-use Phalcon\Session\Manager;
-use Phalcon\Tests\UnitTestCase;
 use Phalcon\Session\Bag;
+use Phalcon\Session\Manager;
 use Phalcon\Tests\Fixtures\Traits\DiTrait;
+use Phalcon\Tests\UnitTestCase;
 
 use function uniqid;
 
@@ -42,7 +41,7 @@ final class InitTest extends UnitTestCase
         $this->setNewFactoryDefault();
         $this->setDiService('sessionStream');
 
-        $name = uniqid();
+        $name            = uniqid();
         $_SESSION[$name] = [
             'one'   => 'two',
             'three' => 'four',

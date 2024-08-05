@@ -13,9 +13,6 @@ declare(strict_types=1);
 
 namespace Phalcon\Tests\Unit\Filter\Validation\Validator;
 
-use Codeception\Example;
-use Phalcon\Tests\Fixtures\Traits\ValidationTrait;
-use Phalcon\Tests\UnitTestCase;
 use Phalcon\Filter\Validation\Validator\Alnum;
 use Phalcon\Filter\Validation\Validator\Alpha;
 use Phalcon\Filter\Validation\Validator\Between;
@@ -37,45 +34,14 @@ use Phalcon\Filter\Validation\Validator\StringLength;
 use Phalcon\Filter\Validation\Validator\Uniqueness;
 use Phalcon\Filter\Validation\Validator\Url;
 use Phalcon\Filter\Validation\ValidatorInterface;
+use Phalcon\Tests\Fixtures\Traits\ValidationTrait;
+use Phalcon\Tests\UnitTestCase;
 
 use function uniqid;
 
 final class GetSetHasOptionTest extends UnitTestCase
 {
     use ValidationTrait;
-
-    /**
-     * Tests Phalcon\Filter\Validation\Validator :: getOption()/hasOption()/setOption()
-     *
-     * @dataProvider getClasses
-     *
-     * @author       Phalcon Team <team@phalcon.io>
-     * @since        2023-09-20
-     */
-    public function testFilterValidationValidatorGetSetHasOption(
-        string $class
-    ): void {
-        $name      = uniqid('nam-');
-        $value     = uniqid('val-');
-        $validator = new $class();
-
-        $this->assertInstanceOf(
-            ValidatorInterface::class,
-            $validator
-        );
-
-        $actual = $validator->hasOption($name);
-        $this->assertFalse($actual);
-
-        $validator->setOption($name, $value);
-
-        $actual = $validator->hasOption($name);
-        $this->assertTrue($actual);
-
-        $expected = $value;
-        $actual   = $validator->getOption($name);
-        $this->assertSame($expected, $actual);
-    }
 
     public static function getExamples(): array
     {
@@ -165,5 +131,38 @@ final class GetSetHasOptionTest extends UnitTestCase
                 Url::class,
             ],
         ];
+    }
+
+    /**
+     * Tests Phalcon\Filter\Validation\Validator :: getOption()/hasOption()/setOption()
+     *
+     * @dataProvider getClasses
+     *
+     * @author       Phalcon Team <team@phalcon.io>
+     * @since        2023-09-20
+     */
+    public function testFilterValidationValidatorGetSetHasOption(
+        string $class
+    ): void {
+        $name      = uniqid('nam-');
+        $value     = uniqid('val-');
+        $validator = new $class();
+
+        $this->assertInstanceOf(
+            ValidatorInterface::class,
+            $validator
+        );
+
+        $actual = $validator->hasOption($name);
+        $this->assertFalse($actual);
+
+        $validator->setOption($name, $value);
+
+        $actual = $validator->hasOption($name);
+        $this->assertTrue($actual);
+
+        $expected = $value;
+        $actual   = $validator->getOption($name);
+        $this->assertSame($expected, $actual);
     }
 }

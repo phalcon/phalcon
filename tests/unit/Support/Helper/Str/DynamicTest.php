@@ -14,8 +14,8 @@ declare(strict_types=1);
 namespace Phalcon\Tests\Unit\Support\Helper\Str;
 
 use Phalcon\Support\Helper\Str\Dynamic;
-use RuntimeException;
 use Phalcon\Tests\UnitTestCase;
+use RuntimeException;
 
 final class DynamicTest extends UnitTestCase
 {

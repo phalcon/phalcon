@@ -28,14 +28,6 @@ abstract class AbstractLazyBase extends UnitTestCase
     }
 
     /**
-     * @return Definitions
-     */
-    protected function definitions(): Definitions
-    {
-        return new Definitions();
-    }
-
-    /**
      * @param AbstractLazy $lazy
      *
      * @return mixed
@@ -43,5 +35,13 @@ abstract class AbstractLazyBase extends UnitTestCase
     protected function actual(AbstractLazy $lazy): mixed
     {
         return $lazy($this->container);
+    }
+
+    /**
+     * @return Definitions
+     */
+    protected function definitions(): Definitions
+    {
+        return new Definitions();
     }
 }

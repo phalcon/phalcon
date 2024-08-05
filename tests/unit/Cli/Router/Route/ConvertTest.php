@@ -13,15 +13,36 @@ declare(strict_types=1);
 
 namespace Phalcon\Tests\Unit\Cli\Router\Route;
 
-use Phalcon\Tests\UnitTestCase;
-use Codeception\Example;
 use Phalcon\Cli\Router;
 use Phalcon\Cli\Router\Route;
 use Phalcon\Tests\Fixtures\Traits\DiTrait;
+use Phalcon\Tests\UnitTestCase;
 
 final class ConvertTest extends UnitTestCase
 {
     use DiTrait;
+
+    public static function getExamplesConverters(): array
+    {
+        return [
+            [
+                'some-controller my-action-name this-is-a-country',
+                [
+                    'task'   => 'somecontroller',
+                    'action' => 'myactionname',
+                    'params' => ['this-is-a-country'],
+                ],
+            ],
+            [
+                'BINARY 1101',
+                [
+                    'task'   => 'binary',
+                    'action' => 'index',
+                    'params' => [1011],
+                ],
+            ],
+        ];
+    }
 
     /**
      * @dataProvider getExamplesConverters
@@ -104,27 +125,5 @@ final class ConvertTest extends UnitTestCase
         ];
         $actual   = $route1->getConverters();
         $this->assertSame($expected, $actual);
-    }
-
-    public static function getExamplesConverters(): array
-    {
-        return [
-            [
-                'some-controller my-action-name this-is-a-country',
-                [
-                    'task'   => 'somecontroller',
-                    'action' => 'myactionname',
-                    'params' => ['this-is-a-country'],
-                ],
-            ],
-            [
-                'BINARY 1101',
-                [
-                    'task'   => 'binary',
-                    'action' => 'index',
-                    'params' => [1011],
-                ],
-            ],
-        ];
     }
 }

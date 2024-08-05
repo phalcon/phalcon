@@ -13,9 +13,9 @@ declare(strict_types=1);
 
 namespace Phalcon\Tests\Unit\Cli\Task;
 
-use Phalcon\Tests\UnitTestCase;
 use Phalcon\Cli\Task;
 use Phalcon\Events\Manager;
+use Phalcon\Tests\UnitTestCase;
 
 final class GetSetEventsManagerTest extends UnitTestCase
 {

@@ -21,6 +21,47 @@ use Phalcon\Tests\UnitTestCase;
 final class RenderHtmlTest extends UnitTestCase
 {
     /**
+     * Tests Phalcon\Debug :: renderHtml() - with backtrace
+     *
+     * @return void
+     *
+     * @author Phalcon Team <team@phalcon.io>
+     * @since  2020-09-09
+     */
+    public function debugRenderHtmlWithBacktrace(): void
+    {
+        $exception = new Exception('exception message', 1234);
+        $debug     = new Debug();
+        $debug->setShowBackTrace(true);
+
+        $actual = $debug->renderHtml($exception);
+        $this->assertStringContainsString(
+            '<div class="error-info">',
+            $actual
+        );
+        $this->assertStringContainsString(
+            '<li><a href="#error-tabs-1">Backtrace</a></li>',
+            $actual
+        );
+        $this->assertStringContainsString(
+            '<li><a href="#error-tabs-2">Request</a></li>',
+            $actual
+        );
+        $this->assertStringContainsString(
+            '<li><a href="#error-tabs-3">Server</a></li>',
+            $actual
+        );
+        $this->assertStringContainsString(
+            '<li><a href="#error-tabs-4">Included Files</a></li>',
+            $actual
+        );
+        $this->assertStringContainsString(
+            '<li><a href="#error-tabs-5">Memory</a></li>',
+            $actual
+        );
+    }
+
+    /**
      * Tests Phalcon\Debug :: renderHtml()
      *
      * @return void
@@ -81,46 +122,5 @@ final class RenderHtmlTest extends UnitTestCase
 
         $actual = $debug->renderHtml($exception);
         $this->assertSame($expected, $actual);
-    }
-
-    /**
-     * Tests Phalcon\Debug :: renderHtml() - with backtrace
-     *
-     * @return void
-     *
-     * @author Phalcon Team <team@phalcon.io>
-     * @since  2020-09-09
-     */
-    public function debugRenderHtmlWithBacktrace(): void
-    {
-        $exception = new Exception('exception message', 1234);
-        $debug     = new Debug();
-        $debug->setShowBackTrace(true);
-
-        $actual = $debug->renderHtml($exception);
-        $this->assertStringContainsString(
-            '<div class="error-info">',
-            $actual
-        );
-        $this->assertStringContainsString(
-            '<li><a href="#error-tabs-1">Backtrace</a></li>',
-            $actual
-        );
-        $this->assertStringContainsString(
-            '<li><a href="#error-tabs-2">Request</a></li>',
-            $actual
-        );
-        $this->assertStringContainsString(
-            '<li><a href="#error-tabs-3">Server</a></li>',
-            $actual
-        );
-        $this->assertStringContainsString(
-            '<li><a href="#error-tabs-4">Included Files</a></li>',
-            $actual
-        );
-        $this->assertStringContainsString(
-            '<li><a href="#error-tabs-5">Memory</a></li>',
-            $actual
-        );
     }
 }

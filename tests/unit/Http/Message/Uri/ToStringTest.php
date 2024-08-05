@@ -33,22 +33,6 @@ final class ToStringTest extends UnitTestCase
     }
 
     /**
-     * Tests Phalcon\Http\Message\Uri :: __toString() - path no lead slash
-     *
-     * @author Phalcon Team <team@phalcon.io>
-     * @since  2019-02-07
-     */
-    public function testHttpUriToStringPathNoLeadSlash(): void
-    {
-        $uri = new Uri('https://dev.phalcon.ld');
-
-        $newInstance = $uri->withPath('action/reaction');
-        $expected    = 'https://dev.phalcon.ld/action/reaction';
-        $actual      = $newInstance->__toString();
-        $this->assertSame($expected, $actual);
-    }
-
-    /**
      * Tests Phalcon\Http\Message\Uri :: __toString() - path many slashes
      *
      * @author Phalcon Team <team@phalcon.io>
@@ -59,6 +43,22 @@ final class ToStringTest extends UnitTestCase
         $uri = new Uri('https://dev.phalcon.ld');
 
         $newInstance = $uri->withPath('///action/reaction');
+        $expected    = 'https://dev.phalcon.ld/action/reaction';
+        $actual      = $newInstance->__toString();
+        $this->assertSame($expected, $actual);
+    }
+
+    /**
+     * Tests Phalcon\Http\Message\Uri :: __toString() - path no lead slash
+     *
+     * @author Phalcon Team <team@phalcon.io>
+     * @since  2019-02-07
+     */
+    public function testHttpUriToStringPathNoLeadSlash(): void
+    {
+        $uri = new Uri('https://dev.phalcon.ld');
+
+        $newInstance = $uri->withPath('action/reaction');
         $expected    = 'https://dev.phalcon.ld/action/reaction';
         $actual      = $newInstance->__toString();
         $this->assertSame($expected, $actual);

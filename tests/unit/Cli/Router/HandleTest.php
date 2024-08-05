@@ -13,7 +13,6 @@ declare(strict_types=1);
 
 namespace Phalcon\Tests\Unit\Cli\Router;
 
-use Codeception\Example;
 use Phalcon\Cli\Router;
 use Phalcon\Cli\Router\Exception;
 use Phalcon\Cli\Router\Route;
@@ -21,93 +20,6 @@ use Phalcon\Tests\UnitTestCase;
 
 final class HandleTest extends UnitTestCase
 {
-    /**
-     * Tests Phalcon\Cli\Router :: handle()
-     *
-     * @dataProvider getExamplesRouterHandle
-     *
-     * @return void
-     * @throws Exception
-     *
-     * @author       Phalcon Team <team@phalcon.io>
-     * @since        2018-11-13
-     */
-    public function testCliRouterHandle(
-        array $uri,
-        string $module,
-        string $task,
-        string $action,
-        array $params
-    ): void {
-        $router = new Router();
-
-        $this->assertParameters(
-            $router,
-            $uri,
-            $module,
-            $task,
-            $action,
-            $params
-        );
-    }
-
-    /**
-     * @dataProvider getExamplesRouter
-     *
-     * @return void
-     * @throws Exception
-     */
-    public function testCliRouterHandleRouter(
-        string $uri,
-        string $module,
-        string $task,
-        string $action,
-        array $params
-    ): void {
-        Route::reset();
-
-        $router = new Router();
-        $routes = $this->setupRoutes('router');
-        foreach ($routes as $pattern => $parameters) {
-            $router->add($pattern, $parameters);
-        }
-
-        $this->assertParameters(
-            $router,
-            $uri,
-            $module,
-            $task,
-            $action,
-            $params
-        );
-    }
-
-    /**
-     * @dataProvider getExamplesRouterParams
-     */
-    public function cliRouterHandleRouterParams(
-        string $uri,
-        string $module,
-        string $task,
-        string $action,
-        array $params
-    ): void {
-        $router = new Router();
-
-        $router->add('some {name}');
-        $router->add('some {name} {id:[0-9]+}');
-        $router->add('some {name} {id:[0-9]+} {date}');
-
-        $this->assertParameters(
-            $router,
-            $uri,
-            $module,
-            $task,
-            $action,
-            $params
-        );
-    }
-
     /**
      * @dataProvider getExamplesDelimiter
      *
@@ -156,122 +68,147 @@ final class HandleTest extends UnitTestCase
     }
 
     /**
-     * @return void
+     * @dataProvider getExamplesRouterParams
      */
-    private function assertParameters(
-        Router $router,
-        array|string $uri,
+    public function cliRouterHandleRouterParams(
+        string $uri,
         string $module,
         string $task,
         string $action,
         array $params
     ): void {
-        $router->handle($uri);
+        $router = new Router();
 
-        $expected = $module;
-        $actual   = $router->getModuleName();
-        $this->assertSame($expected, $actual);
+        $router->add('some {name}');
+        $router->add('some {name} {id:[0-9]+}');
+        $router->add('some {name} {id:[0-9]+} {date}');
 
-        $expected = $task;
-        $actual   = $router->getTaskName();
-        $this->assertSame($expected, $actual);
-
-        $expected = $action;
-        $actual   = $router->getActionName();
-        $this->assertSame($expected, $actual);
-
-        $expected = $params;
-        $actual   = $router->getParams();
-        $this->assertSame($expected, $actual);
+        $this->assertParameters(
+            $router,
+            $uri,
+            $module,
+            $task,
+            $action,
+            $params
+        );
     }
 
     /**
      * @return array[]
      */
-    public static function getExamplesRouterHandle(): array
+    public static function getExamplesDelimiter(): array
     {
         return [
             [
-                'uri'    => [],
-                'module' => '',
-                'task'   => '',
-                'action' => '',
-                'params' => [],
+                '/',
+                'devtools',
+                'main',
+                'hello',
+                [],
             ],
             [
-                'uri'    => [
-                    'task' => 'main',
-                ],
-                'module' => '',
-                'task'   => 'main',
-                'action' => '',
-                'params' => [],
+                '/documentation/index/hellao/aaadpqñda/bbbAdld/cc-ccc',
+                '',
+                'documentation',
+                'index',
+                ['hellao', 'aaadpqñda', 'bbbAdld', 'cc-ccc'],
             ],
             [
-                'uri'    => [
-                    'task' => 'echo',
-                ],
-                'module' => '',
-                'task'   => 'echo',
-                'action' => '',
-                'params' => [],
+                '/documentation/index/',
+                '',
+                'documentation',
+                'index',
+                [],
             ],
             [
-                'uri'    => [
-                    'task'   => 'main',
-                    'action' => 'hello',
-                ],
-                'module' => '',
-                'task'   => 'main',
-                'action' => 'hello',
-                'params' => [],
+                '/documentation/index',
+                '',
+                'documentation',
+                'index',
+                [],
             ],
             [
-                'uri'    => [
-                    'task'   => 'main',
-                    'action' => 'hello',
-                    'arg1',
-                    'arg2',
-                ],
-                'module' => '',
-                'task'   => 'main',
-                'action' => 'hello',
-                'params' => [
-                    'arg1',
-                    'arg2',
+                '/documentation/',
+                '',
+                'documentation',
+                '',
+                [],
+            ],
+            [
+                '/system/admin/a/edit/hellao/aaadp',
+                '',
+                'admin',
+                'edit',
+                ['hellao', 'aaadp'],
+            ],
+            [
+                '/es/news',
+                '',
+                'news',
+                'index',
+                ['language' => 'es'],
+            ],
+            [
+                '/admin/posts/edit/100',
+                'admin',
+                'posts',
+                'edit',
+                ['id' => '100'],
+            ],
+            [
+                '/posts/2010/02/10/title/content',
+                '',
+                'posts',
+                'show',
+                [
+                    0       => 'title',
+                    1       => 'content',
+                    'year'  => '2010',
+                    'month' => '02',
+                    'day'   => '10',
                 ],
             ],
             [
-                'uri'    => [
-                    'module' => 'devtools',
-                    'task'   => 'main',
-                    'action' => 'hello',
-                    'arg1',
-                    'arg2',
-                ],
-                'module' => 'devtools',
-                'task'   => 'main',
-                'action' => 'hello',
-                'params' => [
-                    'arg1',
-                    'arg2',
-                ],
+                '/manual/en/translate.adapter.txt',
+                '',
+                'manual',
+                'show',
+                ['language' => 'en', 'file' => 'translate.adapter'],
             ],
             [
-                'uri'    => [
-                    'module' => 'devtools',
-                    'task'   => 'echo',
-                    'action' => 'hello',
-                    'arg1',
-                    'arg2',
-                ],
-                'module' => 'devtools',
-                'task'   => 'echo',
-                'action' => 'hello',
-                'params' => [
-                    'arg1',
-                    'arg2',
-                ],
+                '/named-manual/en/translate.adapter.txt',
+                '',
+                'manual',
+                'show',
+                ['language' => 'en', 'file' => 'translate.adapter'],
+            ],
+            [
+                '/posts/1999/s/le-nice-title',
+                '',
+                'posts',
+                'show',
+                ['year' => '1999', 'title' => 'le-nice-title'],
+            ],
+            [
+                '/feed/fr/blog/diaporema.json',
+                '',
+                'feed',
+                'get',
+                ['lang' => 'fr', 'blog' => 'diaporema', 'type' => 'json'],
+            ],
+            [
+                '/posts/delete/150',
+                '',
+                'posts',
+                'delete',
+                ['id' => '150'],
+            ],
+            [
+                '/very/static/route',
+                '',
+                'static',
+                'route',
+                [],
             ],
         ];
     }
@@ -426,6 +363,97 @@ final class HandleTest extends UnitTestCase
     /**
      * @return array[]
      */
+    public static function getExamplesRouterHandle(): array
+    {
+        return [
+            [
+                'uri'    => [],
+                'module' => '',
+                'task'   => '',
+                'action' => '',
+                'params' => [],
+            ],
+            [
+                'uri'    => [
+                    'task' => 'main',
+                ],
+                'module' => '',
+                'task'   => 'main',
+                'action' => '',
+                'params' => [],
+            ],
+            [
+                'uri'    => [
+                    'task' => 'echo',
+                ],
+                'module' => '',
+                'task'   => 'echo',
+                'action' => '',
+                'params' => [],
+            ],
+            [
+                'uri'    => [
+                    'task'   => 'main',
+                    'action' => 'hello',
+                ],
+                'module' => '',
+                'task'   => 'main',
+                'action' => 'hello',
+                'params' => [],
+            ],
+            [
+                'uri'    => [
+                    'task'   => 'main',
+                    'action' => 'hello',
+                    'arg1',
+                    'arg2',
+                ],
+                'module' => '',
+                'task'   => 'main',
+                'action' => 'hello',
+                'params' => [
+                    'arg1',
+                    'arg2',
+                ],
+            ],
+            [
+                'uri'    => [
+                    'module' => 'devtools',
+                    'task'   => 'main',
+                    'action' => 'hello',
+                    'arg1',
+                    'arg2',
+                ],
+                'module' => 'devtools',
+                'task'   => 'main',
+                'action' => 'hello',
+                'params' => [
+                    'arg1',
+                    'arg2',
+                ],
+            ],
+            [
+                'uri'    => [
+                    'module' => 'devtools',
+                    'task'   => 'echo',
+                    'action' => 'hello',
+                    'arg1',
+                    'arg2',
+                ],
+                'module' => 'devtools',
+                'task'   => 'echo',
+                'action' => 'hello',
+                'params' => [
+                    'arg1',
+                    'arg2',
+                ],
+            ],
+        ];
+    }
+
+    /**
+     * @return array[]
+     */
     public static function getExamplesRouterParams(): array
     {
         return [
@@ -460,126 +488,6 @@ final class HandleTest extends UnitTestCase
                     'id'   => '100',
                     'date' => '2011-01-02',
                 ],
-            ],
-        ];
-    }
-
-    /**
-     * @return array[]
-     */
-    public static function getExamplesDelimiter(): array
-    {
-        return [
-            [
-                '/',
-                'devtools',
-                'main',
-                'hello',
-                [],
-            ],
-            [
-                '/documentation/index/hellao/aaadpqñda/bbbAdld/cc-ccc',
-                '',
-                'documentation',
-                'index',
-                ['hellao', 'aaadpqñda', 'bbbAdld', 'cc-ccc'],
-            ],
-            [
-                '/documentation/index/',
-                '',
-                'documentation',
-                'index',
-                [],
-            ],
-            [
-                '/documentation/index',
-                '',
-                'documentation',
-                'index',
-                [],
-            ],
-            [
-                '/documentation/',
-                '',
-                'documentation',
-                '',
-                [],
-            ],
-            [
-                '/system/admin/a/edit/hellao/aaadp',
-                '',
-                'admin',
-                'edit',
-                ['hellao', 'aaadp'],
-            ],
-            [
-                '/es/news',
-                '',
-                'news',
-                'index',
-                ['language' => 'es'],
-            ],
-            [
-                '/admin/posts/edit/100',
-                'admin',
-                'posts',
-                'edit',
-                ['id' => '100'],
-            ],
-            [
-                '/posts/2010/02/10/title/content',
-                '',
-                'posts',
-                'show',
-                [
-                    0       => 'title',
-                    1       => 'content',
-                    'year'  => '2010',
-                    'month' => '02',
-                    'day'   => '10',
-                ],
-            ],
-            [
-                '/manual/en/translate.adapter.txt',
-                '',
-                'manual',
-                'show',
-                ['language' => 'en', 'file' => 'translate.adapter'],
-            ],
-            [
-                '/named-manual/en/translate.adapter.txt',
-                '',
-                'manual',
-                'show',
-                ['language' => 'en', 'file' => 'translate.adapter'],
-            ],
-            [
-                '/posts/1999/s/le-nice-title',
-                '',
-                'posts',
-                'show',
-                ['year' => '1999', 'title' => 'le-nice-title'],
-            ],
-            [
-                '/feed/fr/blog/diaporema.json',
-                '',
-                'feed',
-                'get',
-                ['lang' => 'fr', 'blog' => 'diaporema', 'type' => 'json'],
-            ],
-            [
-                '/posts/delete/150',
-                '',
-                'posts',
-                'delete',
-                ['id' => '150'],
-            ],
-            [
-                '/very/static/route',
-                '',
-                'static',
-                'route',
-                [],
             ],
         ];
     }
@@ -689,5 +597,96 @@ final class HandleTest extends UnitTestCase
         ];
 
         return $routes[$test] ?? [];
+    }
+
+    /**
+     * Tests Phalcon\Cli\Router :: handle()
+     *
+     * @dataProvider getExamplesRouterHandle
+     *
+     * @return void
+     * @throws Exception
+     *
+     * @author       Phalcon Team <team@phalcon.io>
+     * @since        2018-11-13
+     */
+    public function testCliRouterHandle(
+        array $uri,
+        string $module,
+        string $task,
+        string $action,
+        array $params
+    ): void {
+        $router = new Router();
+
+        $this->assertParameters(
+            $router,
+            $uri,
+            $module,
+            $task,
+            $action,
+            $params
+        );
+    }
+
+    /**
+     * @dataProvider getExamplesRouter
+     *
+     * @return void
+     * @throws Exception
+     */
+    public function testCliRouterHandleRouter(
+        string $uri,
+        string $module,
+        string $task,
+        string $action,
+        array $params
+    ): void {
+        Route::reset();
+
+        $router = new Router();
+        $routes = $this->setupRoutes('router');
+        foreach ($routes as $pattern => $parameters) {
+            $router->add($pattern, $parameters);
+        }
+
+        $this->assertParameters(
+            $router,
+            $uri,
+            $module,
+            $task,
+            $action,
+            $params
+        );
+    }
+
+    /**
+     * @return void
+     */
+    private function assertParameters(
+        Router $router,
+        array | string $uri,
+        string $module,
+        string $task,
+        string $action,
+        array $params
+    ): void {
+        $router->handle($uri);
+
+        $expected = $module;
+        $actual   = $router->getModuleName();
+        $this->assertSame($expected, $actual);
+
+        $expected = $task;
+        $actual   = $router->getTaskName();
+        $this->assertSame($expected, $actual);
+
+        $expected = $action;
+        $actual   = $router->getActionName();
+        $this->assertSame($expected, $actual);
+
+        $expected = $params;
+        $actual   = $router->getParams();
+        $this->assertSame($expected, $actual);
     }
 }

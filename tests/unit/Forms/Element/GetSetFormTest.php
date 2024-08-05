@@ -14,9 +14,9 @@ declare(strict_types=1);
 namespace Phalcon\Tests\Unit\Forms\Element;
 
 use Codeception\Example;
-use Phalcon\Tests\UnitTestCase;
 use Phalcon\Forms\Form;
 use Phalcon\Tests\Fixtures\Traits\FormsTrait;
+use Phalcon\Tests\UnitTestCase;
 
 use function uniqid;
 
@@ -25,16 +25,17 @@ final class GetSetFormTest extends UnitTestCase
     use FormsTrait;
 
     /**
-     * Tests Phalcon\Forms\Element\* :: getForm()/setForm()
+     * Tests Phalcon\Forms\Element\* :: getForm()/add()
      *
      * @dataProvider getExamples
      *
-     * @return void
+     * @param Example $example
      *
+     * @return void
      * @author       Phalcon Team <team@phalcon.io>
      * @since        2021-12-05
      */
-    public function testFormsElementGetSetForm(
+    public function testFormsElementGetFormAdd(
         string $class
     ): void {
         $name   = uniqid();
@@ -49,17 +50,16 @@ final class GetSetFormTest extends UnitTestCase
     }
 
     /**
-     * Tests Phalcon\Forms\Element\* :: getForm()/add()
+     * Tests Phalcon\Forms\Element\* :: getForm()/setForm()
      *
      * @dataProvider getExamples
      *
      * @return void
-     * @param Example           $example
      *
      * @author       Phalcon Team <team@phalcon.io>
      * @since        2021-12-05
      */
-    public function testFormsElementGetFormAdd(
+    public function testFormsElementGetSetForm(
         string $class
     ): void {
         $name   = uniqid();

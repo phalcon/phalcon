@@ -13,8 +13,6 @@ declare(strict_types=1);
 
 namespace Phalcon\Tests\Unit\Forms\Element;
 
-use Codeception\Example;
-use Phalcon\Tests\UnitTestCase;
 use Phalcon\Forms\Element\Check;
 use Phalcon\Forms\Element\Date;
 use Phalcon\Forms\Element\Email;
@@ -29,54 +27,12 @@ use Phalcon\Forms\Element\Text;
 use Phalcon\Forms\Element\TextArea;
 use Phalcon\Html\Escaper;
 use Phalcon\Html\TagFactory;
+use Phalcon\Tests\UnitTestCase;
 
 use function uniqid;
 
 final class RenderTest extends UnitTestCase
 {
-    /**
-     * Tests Phalcon\Forms\Element\* :: clear()
-     *
-     * @dataProvider getExamples
-     *
-     * @return void
-     *
-     * @author       Phalcon Team <team@phalcon.io>
-     * @since        2021-12-05
-     */
-    public function testFormsElementRender(
-        string $class,
-        string $subject1,
-        array $attributes,
-        string $subject2
-    ): void {
-        $name    = uniqid();
-        $factory = new TagFactory(new Escaper());
-        $object  = new $class($name);
-        $object->setTagFactory($factory);
-
-        $expected = str_replace(":name:", $name, $subject1);
-        $actual   = $object->render();
-
-        $this->assertSame($expected, $actual);
-
-        $actual = (string)$object;
-        $this->assertSame($expected, $actual);
-
-        /**
-         * With attributes
-         */
-        $object->setAttributes($attributes);
-
-        $expected = str_replace(":name:", $name, $subject2);
-        $actual   = $object->render();
-
-        $this->assertSame($expected, $actual);
-
-        $actual = (string)$object;
-        $this->assertSame($expected, $actual);
-    }
-
     /**
      * @return string[][]
      */
@@ -158,5 +114,48 @@ final class RenderTest extends UnitTestCase
                 '<textarea ' . $htmlLine . '></textarea>',
             ],
         ];
+    }
+
+    /**
+     * Tests Phalcon\Forms\Element\* :: clear()
+     *
+     * @dataProvider getExamples
+     *
+     * @return void
+     *
+     * @author       Phalcon Team <team@phalcon.io>
+     * @since        2021-12-05
+     */
+    public function testFormsElementRender(
+        string $class,
+        string $subject1,
+        array $attributes,
+        string $subject2
+    ): void {
+        $name    = uniqid();
+        $factory = new TagFactory(new Escaper());
+        $object  = new $class($name);
+        $object->setTagFactory($factory);
+
+        $expected = str_replace(":name:", $name, $subject1);
+        $actual   = $object->render();
+
+        $this->assertSame($expected, $actual);
+
+        $actual = (string)$object;
+        $this->assertSame($expected, $actual);
+
+        /**
+         * With attributes
+         */
+        $object->setAttributes($attributes);
+
+        $expected = str_replace(":name:", $name, $subject2);
+        $actual   = $object->render();
+
+        $this->assertSame($expected, $actual);
+
+        $actual = (string)$object;
+        $this->assertSame($expected, $actual);
     }
 }

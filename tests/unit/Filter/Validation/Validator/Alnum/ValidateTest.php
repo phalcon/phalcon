@@ -13,10 +13,10 @@ declare(strict_types=1);
 
 namespace Phalcon\Tests\Unit\Filter\Validation\Validator\Alnum;
 
-use Phalcon\Tests\UnitTestCase;
 use Phalcon\Filter\Validation;
 use Phalcon\Filter\Validation\Exception;
 use Phalcon\Filter\Validation\Validator\Alnum;
+use Phalcon\Tests\UnitTestCase;
 use stdClass;
 
 final class ValidateTest extends UnitTestCase
@@ -43,38 +43,6 @@ final class ValidateTest extends UnitTestCase
         $validation->bind($entity, []);
         $result = $validator->validate($validation, 'name');
         $this->assertTrue($result);
-    }
-
-    /**
-     * Tests Phalcon\Filter\Validation\Validator\Alnum :: validate() - single field
-     *
-     * @author Wojciech Ślawski <jurigag@gmail.com>
-     * @since  2016-06-05
-     */
-    public function testFilterValidationValidatorAlnumValidateSingleField(): void
-    {
-        $validation = new Validation();
-        $validation->add('name', new Alnum());
-
-        $messages = $validation->validate(
-            [
-                'name' => 'SomeValue123',
-            ]
-        );
-
-        $expected = 0;
-        $actual   = $messages->count();
-        $this->assertSame($expected, $actual);
-
-        $messages = $validation->validate(
-            [
-                'name' => 'SomeValue123!@#',
-            ]
-        );
-
-        $expected = 1;
-        $actual   = $messages->count();
-        $this->assertSame($expected, $actual);
     }
 
     /**
@@ -149,6 +117,38 @@ final class ValidateTest extends UnitTestCase
 
         $expected = $validationMessages['type'];
         $actual   = $messages->offsetGet(1)->getMessage();
+        $this->assertSame($expected, $actual);
+    }
+
+    /**
+     * Tests Phalcon\Filter\Validation\Validator\Alnum :: validate() - single field
+     *
+     * @author Wojciech Ślawski <jurigag@gmail.com>
+     * @since  2016-06-05
+     */
+    public function testFilterValidationValidatorAlnumValidateSingleField(): void
+    {
+        $validation = new Validation();
+        $validation->add('name', new Alnum());
+
+        $messages = $validation->validate(
+            [
+                'name' => 'SomeValue123',
+            ]
+        );
+
+        $expected = 0;
+        $actual   = $messages->count();
+        $this->assertSame($expected, $actual);
+
+        $messages = $validation->validate(
+            [
+                'name' => 'SomeValue123!@#',
+            ]
+        );
+
+        $expected = 1;
+        $actual   = $messages->count();
         $this->assertSame($expected, $actual);
     }
 }

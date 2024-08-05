@@ -13,11 +13,11 @@ declare(strict_types=1);
 
 namespace Phalcon\Tests\Unit\Session\Manager;
 
-use Phalcon\Tests\UnitTestCase;
 use Phalcon\Session\Adapter\Noop;
 use Phalcon\Session\Manager;
 use Phalcon\Session\ManagerInterface;
 use Phalcon\Tests\Fixtures\Session\ExtendedManager;
+use Phalcon\Tests\UnitTestCase;
 use SessionHandlerInterface;
 
 final class ConstructTest extends UnitTestCase

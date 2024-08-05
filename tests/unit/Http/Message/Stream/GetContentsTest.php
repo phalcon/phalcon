@@ -14,8 +14,8 @@ declare(strict_types=1);
 namespace Phalcon\Tests\Unit\Http\Message\Stream;
 
 use Phalcon\Http\Message\Stream;
-use RuntimeException;
 use Phalcon\Tests\UnitTestCase;
+use RuntimeException;
 
 final class GetContentsTest extends UnitTestCase
 {
@@ -35,6 +35,23 @@ final class GetContentsTest extends UnitTestCase
         $stream   = new Stream($fileName, 'rb');
 
         $this->assertFileContentsEqual($fileName, $stream->getContents());
+    }
+
+    /**
+     * Tests Phalcon\Http\Message\Stream :: getContents() - exception
+     *
+     * @author Phalcon Team <team@phalcon.io>
+     * @since  2019-02-10
+     */
+    public function testHttpMessageStreamGetContentsException(): void
+    {
+        $this->expectException(RuntimeException::class);
+        $this->expectExceptionMessage('The resource is not readable.');
+
+        $fileName = dataDir('assets/stream/mit-empty.txt');
+        $stream   = new Stream($fileName, 'wb');
+
+        $stream->getContents();
     }
 
     /**
@@ -64,22 +81,5 @@ final class GetContentsTest extends UnitTestCase
             . PHP_EOL;
         $actual   = $stream->getContents();
         $this->assertSame($expected, $actual);
-    }
-
-    /**
-     * Tests Phalcon\Http\Message\Stream :: getContents() - exception
-     *
-     * @author Phalcon Team <team@phalcon.io>
-     * @since  2019-02-10
-     */
-    public function testHttpMessageStreamGetContentsException(): void
-    {
-        $this->expectException(RuntimeException::class);
-        $this->expectExceptionMessage('The resource is not readable.');
-
-        $fileName = dataDir('assets/stream/mit-empty.txt');
-        $stream   = new Stream($fileName, 'wb');
-
-        $stream->getContents();
     }
 }

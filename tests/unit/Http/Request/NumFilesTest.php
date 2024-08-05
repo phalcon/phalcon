@@ -13,38 +13,11 @@ declare(strict_types=1);
 
 namespace Phalcon\Tests\Unit\Http\Request;
 
-use Codeception\Example;
 use Phalcon\Tests\Fixtures\Page\Http;
 use Phalcon\Tests\Unit\Http\Helper\HttpBase;
-use Phalcon\Tests\UnitTestCase;
 
 final class NumFilesTest extends HttpBase
 {
-    /**
-     * Tests Request::numFiles
-     *
-     * @author       Phalcon Team <team@phalcon.io>
-     * @since        2019-11-07
-     *
-     * @dataProvider filesProvider
-     */
-    public function testRequestNumFiles(
-        array $files,
-        int $all,
-        int $onlySuccessful
-    ): void {
-        $request = $this->getRequestObject();
-        $_FILES  = $files;
-
-        $expected = $all;
-        $actual   = $request->numFiles();
-        $this->assertSame($expected, $actual);
-
-        $expected = $onlySuccessful;
-        $actual   = $request->numFiles(true);
-        $this->assertSame($expected, $actual);
-    }
-
     /**
      * @return array[]
      */
@@ -136,5 +109,30 @@ final class NumFilesTest extends HttpBase
                 0,
             ],
         ];
+    }
+
+    /**
+     * Tests Request::numFiles
+     *
+     * @author       Phalcon Team <team@phalcon.io>
+     * @since        2019-11-07
+     *
+     * @dataProvider filesProvider
+     */
+    public function testRequestNumFiles(
+        array $files,
+        int $all,
+        int $onlySuccessful
+    ): void {
+        $request = $this->getRequestObject();
+        $_FILES  = $files;
+
+        $expected = $all;
+        $actual   = $request->numFiles();
+        $this->assertSame($expected, $actual);
+
+        $expected = $onlySuccessful;
+        $actual   = $request->numFiles(true);
+        $this->assertSame($expected, $actual);
     }
 }

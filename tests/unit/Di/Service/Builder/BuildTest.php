@@ -24,27 +24,6 @@ use Phalcon\Tests\UnitTestCase;
 class BuildTest extends UnitTestCase
 {
     /**
-     * Unit Tests Phalcon\Di\Service\Builder :: build() - exception className
-     *
-     * @return void
-     *
-     * @author Phalcon Team <team@phalcon.io>
-     * @since  2019-09-09
-     */
-    public function testDiServiceBuilderBuildExceptionClassName(): void
-    {
-        $this->expectException(Exception::class);
-        $this->expectExceptionMessage(
-            "Invalid service definition. Missing 'className' parameter"
-        );
-
-        $container = new Di();
-        $builder   = new Builder();
-
-        $builder->build($container, []);
-    }
-
-    /**
      * Unit Tests Phalcon\Di\Service\Builder :: build() - exception argument
      * type
      *
@@ -73,6 +52,27 @@ class BuildTest extends UnitTestCase
     }
 
     /**
+     * Unit Tests Phalcon\Di\Service\Builder :: build() - exception className
+     *
+     * @return void
+     *
+     * @author Phalcon Team <team@phalcon.io>
+     * @since  2019-09-09
+     */
+    public function testDiServiceBuilderBuildExceptionClassName(): void
+    {
+        $this->expectException(Exception::class);
+        $this->expectExceptionMessage(
+            "Invalid service definition. Missing 'className' parameter"
+        );
+
+        $container = new Di();
+        $builder   = new Builder();
+
+        $builder->build($container, []);
+    }
+
+    /**
      * Unit Tests Phalcon\Di\Service\Builder :: build() - exception unknown
      * service type
      *
@@ -96,6 +96,489 @@ class BuildTest extends UnitTestCase
                 0 => [
                     'type'  => 'unknown',
                     'value' => 'one',
+                ],
+            ],
+        ];
+
+        $builder->build($container, $definition);
+    }
+
+    /**
+     * Unit Tests Phalcon\Di\Service\Builder :: build() - instance with calls
+     * exception
+     *
+     * @return void
+     *
+     * @author Phalcon Team <team@phalcon.io>
+     * @since  2019-09-09
+     */
+    public function testDiServiceBuilderBuildInstanceWithCallsException(): void
+    {
+        $this->expectException(Exception::class);
+        $this->expectExceptionMessage(
+            'Setter injection parameters must be an array'
+        );
+
+        $container = new Di();
+        $builder   = new Builder();
+
+        $definition = [
+            'className' => PropertiesComponent::class,
+            'arguments' => [
+                [
+                    'type'  => 'parameter',
+                    'value' => 'one',
+                ],
+                [
+                    'type'  => 'parameter',
+                    'value' => 2,
+                ],
+            ],
+            'calls'     => 1234,
+        ];
+
+        $builder->build($container, $definition);
+    }
+
+    /**
+     * Unit Tests Phalcon\Di\Service\Builder :: build() - instance with calls
+     * exception method arguments
+     *
+     * @return void
+     *
+     * @author Phalcon Team <team@phalcon.io>
+     * @since  2019-09-09
+     */
+    public function testDiServiceBuilderBuildInstanceWithCallsExceptionMethodArguments(): void
+    {
+        $container = new Di();
+        $builder   = new Builder();
+
+        $definition = [
+            'className' => PropertiesComponent::class,
+            'arguments' => [
+                [
+                    'type'  => 'parameter',
+                    'value' => 'one',
+                ],
+                [
+                    'type'  => 'parameter',
+                    'value' => 2,
+                ],
+            ],
+            'calls'     => [
+                0 => [
+                    'method'    => 'transform',
+                    'arguments' => [
+                        [
+                            'type'  => 'parameter',
+                            'value' => 444,
+                        ],
+                    ],
+                ],
+            ],
+        ];
+
+        $instance = $builder->build($container, $definition);
+
+        $class = PropertiesComponent::class;
+        $this->assertInstanceOf($class, $instance);
+
+        $expected = 'one';
+        $actual   = $instance->getName();
+        $this->assertSame($expected, $actual);
+
+        $expected = 444;
+        $actual   = $instance->getType();
+        $this->assertSame($expected, $actual);
+    }
+
+    /**
+     * Unit Tests Phalcon\Di\Service\Builder :: build() - instance with calls
+     * exception method arguments is array
+     *
+     * @return void
+     *
+     * @author Phalcon Team <team@phalcon.io>
+     * @since  2019-09-09
+     */
+    public function testDiServiceBuilderBuildInstanceWithCallsExceptionMethodArgumentsIsArray(): void
+    {
+        $this->expectException(Exception::class);
+        $this->expectExceptionMessage(
+            'Call arguments must be an array on position 0'
+        );
+
+        $container = new Di();
+        $builder   = new Builder();
+
+        $definition = [
+            'className' => PropertiesComponent::class,
+            'arguments' => [
+                [
+                    'type'  => 'parameter',
+                    'value' => 'one',
+                ],
+                [
+                    'type'  => 'parameter',
+                    'value' => 2,
+                ],
+            ],
+            'calls'     => [
+                0 => [
+                    'method'    => 'transform',
+                    'arguments' => 444,
+                ],
+            ],
+        ];
+
+        $builder->build($container, $definition);
+    }
+
+    /**
+     * Unit Tests Phalcon\Di\Service\Builder :: build() - instance with calls
+     * exception method exists
+     *
+     * @return void
+     *
+     * @author Phalcon Team <team@phalcon.io>
+     * @since  2019-09-09
+     */
+    public function testDiServiceBuilderBuildInstanceWithCallsExceptionMethodExists(): void
+    {
+        $this->expectException(Exception::class);
+        $this->expectExceptionMessage(
+            'The method name is required on position 0'
+        );
+
+        $container = new Di();
+        $builder   = new Builder();
+
+        $definition = [
+            'className' => PropertiesComponent::class,
+            'arguments' => [
+                [
+                    'type'  => 'parameter',
+                    'value' => 'one',
+                ],
+                [
+                    'type'  => 'parameter',
+                    'value' => 2,
+                ],
+            ],
+            'calls'     => [
+                0 => [
+                    'methodName',
+                ],
+            ],
+        ];
+
+        $builder->build($container, $definition);
+    }
+
+    /**
+     * Unit Tests Phalcon\Di\Service\Builder :: build() - instance with calls
+     * exception method no arguments
+     *
+     * @return void
+     *
+     * @author Phalcon Team <team@phalcon.io>
+     * @since  2019-09-09
+     */
+    public function testDiServiceBuilderBuildInstanceWithCallsExceptionMethodNoArguments(): void
+    {
+        $container = new Di();
+        $builder   = new Builder();
+
+        $definition = [
+            'className' => PropertiesComponent::class,
+            'arguments' => [
+                [
+                    'type'  => 'parameter',
+                    'value' => 'one',
+                ],
+                [
+                    'type'  => 'parameter',
+                    'value' => 2,
+                ],
+            ],
+            'calls'     => [
+                0 => [
+                    'method' => 'calculate',
+                ],
+            ],
+        ];
+
+        $instance = $builder->build($container, $definition);
+
+        $class = PropertiesComponent::class;
+        $this->assertInstanceOf($class, $instance);
+
+        $expected = 'one';
+        $actual   = $instance->getName();
+        $this->assertSame($expected, $actual);
+
+        $expected = 555;
+        $actual   = $instance->getType();
+        $this->assertSame($expected, $actual);
+    }
+
+    /**
+     * Unit Tests Phalcon\Di\Service\Builder :: build() - instance with calls
+     * exception method position
+     *
+     * @return void
+     *
+     * @author Phalcon Team <team@phalcon.io>
+     * @since  2019-09-09
+     */
+    public function testDiServiceBuilderBuildInstanceWithCallsExceptionMethodPosition(): void
+    {
+        $this->expectException(Exception::class);
+        $this->expectExceptionMessage(
+            'Method call must be an array on position 0'
+        );
+
+        $container = new Di();
+        $builder   = new Builder();
+
+        $definition = [
+            'className' => PropertiesComponent::class,
+            'arguments' => [
+                [
+                    'type'  => 'parameter',
+                    'value' => 'one',
+                ],
+                [
+                    'type'  => 'parameter',
+                    'value' => 2,
+                ],
+            ],
+            'calls'     => [
+                0 => 'methodName',
+            ],
+        ];
+
+        $builder->build($container, $definition);
+    }
+
+    /**
+     * Unit Tests Phalcon\Di\Service\Builder :: build() - instance with
+     * properties
+     *
+     * @return void
+     *
+     * @author Phalcon Team <team@phalcon.io>
+     * @since  2019-09-09
+     */
+    public function testDiServiceBuilderBuildInstanceWithProperties(): void
+    {
+        $container = new Di();
+        $builder   = new Builder();
+
+        $definition = [
+            'className'  => PropertiesComponent::class,
+            'arguments'  => [
+                [
+                    'type'  => 'parameter',
+                    'value' => 'one',
+                ],
+                [
+                    'type'  => 'parameter',
+                    'value' => 2,
+                ],
+            ],
+            'properties' => [
+                0 => [
+                    'name'  => 'propertyName',
+                    'value' => [
+                        'type'  => 'parameter',
+                        'value' => 'set-one',
+                    ],
+                ],
+                1 => [
+                    'name'  => 'propertyType',
+                    'value' => [
+                        'type'  => 'parameter',
+                        'value' => 100,
+                    ],
+                ],
+            ],
+        ];
+
+        $instance = $builder->build($container, $definition);
+
+        $class = PropertiesComponent::class;
+        $this->assertInstanceOf($class, $instance);
+
+        $expected = 'one';
+        $actual   = $instance->getName();
+        $this->assertSame($expected, $actual);
+
+        $expected = 2;
+        $actual   = $instance->getType();
+        $this->assertSame($expected, $actual);
+
+        $expected = 'set-one';
+        $actual   = $instance->propertyName;
+        $this->assertSame($expected, $actual);
+
+        $expected = 100;
+        $actual   = $instance->propertyType;
+        $this->assertSame($expected, $actual);
+    }
+
+    /**
+     * Unit Tests Phalcon\Di\Service\Builder :: build() - instance with
+     * properties
+     *
+     * @return void
+     *
+     * @author Phalcon Team <team@phalcon.io>
+     * @since  2019-09-09
+     */
+    public function testDiServiceBuilderBuildInstanceWithPropertiesException(): void
+    {
+        $this->expectException(Exception::class);
+        $this->expectExceptionMessage(
+            'Setter injection parameters must be an array'
+        );
+
+        $container = new Di();
+        $builder   = new Builder();
+
+        $definition = [
+            'className'  => PropertiesComponent::class,
+            'arguments'  => [
+                [
+                    'type'  => 'parameter',
+                    'value' => 'one',
+                ],
+                [
+                    'type'  => 'parameter',
+                    'value' => 2,
+                ],
+            ],
+            'properties' => 1234,
+        ];
+
+        $builder->build($container, $definition);
+    }
+
+    /**
+     * Unit Tests Phalcon\Di\Service\Builder :: build() - instance with
+     * properties exception property is array
+     *
+     * @return void
+     *
+     * @author Phalcon Team <team@phalcon.io>
+     * @since  2019-09-09
+     */
+    public function testDiServiceBuilderBuildInstanceWithPropertiesExceptionPropertyIsArray(): void
+    {
+        $this->expectException(Exception::class);
+        $this->expectExceptionMessage(
+            'Property must be an array on position 0'
+        );
+
+        $container = new Di();
+        $builder   = new Builder();
+
+        $definition = [
+            'className'  => PropertiesComponent::class,
+            'arguments'  => [
+                [
+                    'type'  => 'parameter',
+                    'value' => 'one',
+                ],
+                [
+                    'type'  => 'parameter',
+                    'value' => 2,
+                ],
+            ],
+            'properties' => [
+                0 => 1,
+            ],
+        ];
+
+        $builder->build($container, $definition);
+    }
+
+    /**
+     * Unit Tests Phalcon\Di\Service\Builder :: build() - instance with
+     * properties exception property name exists
+     *
+     * @return void
+     *
+     * @author Phalcon Team <team@phalcon.io>
+     * @since  2019-09-09
+     */
+    public function testDiServiceBuilderBuildInstanceWithPropertiesExceptionPropertyNameExists(): void
+    {
+        $this->expectException(Exception::class);
+        $this->expectExceptionMessage(
+            'The property name is required on position 0'
+        );
+
+        $container = new Di();
+        $builder   = new Builder();
+
+        $definition = [
+            'className'  => PropertiesComponent::class,
+            'arguments'  => [
+                [
+                    'type'  => 'parameter',
+                    'value' => 'one',
+                ],
+                [
+                    'type'  => 'parameter',
+                    'value' => 2,
+                ],
+            ],
+            'properties' => [
+                0 => [
+                    'one' => 1,
+                ],
+            ],
+        ];
+
+        $builder->build($container, $definition);
+    }
+
+    /**
+     * Unit Tests Phalcon\Di\Service\Builder :: build() - instance with
+     * properties exception property value exists
+     *
+     * @return void
+     *
+     * @author Phalcon Team <team@phalcon.io>
+     * @since  2019-09-09
+     */
+    public function testDiServiceBuilderBuildInstanceWithPropertiesExceptionPropertyValueExists(): void
+    {
+        $this->expectException(Exception::class);
+        $this->expectExceptionMessage(
+            'The property value is required on position 0'
+        );
+
+        $container = new Di();
+        $builder   = new Builder();
+
+        $definition = [
+            'className'  => PropertiesComponent::class,
+            'arguments'  => [
+                [
+                    'type'  => 'parameter',
+                    'value' => 'one',
+                ],
+                [
+                    'type'  => 'parameter',
+                    'value' => 2,
+                ],
+            ],
+            'properties' => [
+                0 => [
+                    'name' => 'propertyName',
                 ],
             ],
         ];
@@ -263,489 +746,6 @@ class BuildTest extends UnitTestCase
 
         $expected = 3;
         $actual   = $service->getType();
-        $this->assertSame($expected, $actual);
-    }
-
-    /**
-     * Unit Tests Phalcon\Di\Service\Builder :: build() - instance with
-     * properties
-     *
-     * @return void
-     *
-     * @author Phalcon Team <team@phalcon.io>
-     * @since  2019-09-09
-     */
-    public function testDiServiceBuilderBuildInstanceWithPropertiesException(): void
-    {
-        $this->expectException(Exception::class);
-        $this->expectExceptionMessage(
-            'Setter injection parameters must be an array'
-        );
-
-        $container = new Di();
-        $builder   = new Builder();
-
-        $definition = [
-            'className'  => PropertiesComponent::class,
-            'arguments'  => [
-                [
-                    'type'  => 'parameter',
-                    'value' => 'one',
-                ],
-                [
-                    'type'  => 'parameter',
-                    'value' => 2,
-                ],
-            ],
-            'properties' => 1234,
-        ];
-
-        $builder->build($container, $definition);
-    }
-
-    /**
-     * Unit Tests Phalcon\Di\Service\Builder :: build() - instance with
-     * properties exception property is array
-     *
-     * @return void
-     *
-     * @author Phalcon Team <team@phalcon.io>
-     * @since  2019-09-09
-     */
-    public function testDiServiceBuilderBuildInstanceWithPropertiesExceptionPropertyIsArray(): void
-    {
-        $this->expectException(Exception::class);
-        $this->expectExceptionMessage(
-            'Property must be an array on position 0'
-        );
-
-        $container = new Di();
-        $builder   = new Builder();
-
-        $definition = [
-            'className'  => PropertiesComponent::class,
-            'arguments'  => [
-                [
-                    'type'  => 'parameter',
-                    'value' => 'one',
-                ],
-                [
-                    'type'  => 'parameter',
-                    'value' => 2,
-                ],
-            ],
-            'properties' => [
-                0 => 1,
-            ],
-        ];
-
-        $builder->build($container, $definition);
-    }
-
-    /**
-     * Unit Tests Phalcon\Di\Service\Builder :: build() - instance with
-     * properties exception property name exists
-     *
-     * @return void
-     *
-     * @author Phalcon Team <team@phalcon.io>
-     * @since  2019-09-09
-     */
-    public function testDiServiceBuilderBuildInstanceWithPropertiesExceptionPropertyNameExists(): void
-    {
-        $this->expectException(Exception::class);
-        $this->expectExceptionMessage(
-            'The property name is required on position 0'
-        );
-
-        $container = new Di();
-        $builder   = new Builder();
-
-        $definition = [
-            'className'  => PropertiesComponent::class,
-            'arguments'  => [
-                [
-                    'type'  => 'parameter',
-                    'value' => 'one',
-                ],
-                [
-                    'type'  => 'parameter',
-                    'value' => 2,
-                ],
-            ],
-            'properties' => [
-                0 => [
-                    'one' => 1,
-                ],
-            ],
-        ];
-
-        $builder->build($container, $definition);
-    }
-
-    /**
-     * Unit Tests Phalcon\Di\Service\Builder :: build() - instance with
-     * properties exception property value exists
-     *
-     * @return void
-     *
-     * @author Phalcon Team <team@phalcon.io>
-     * @since  2019-09-09
-     */
-    public function testDiServiceBuilderBuildInstanceWithPropertiesExceptionPropertyValueExists(): void
-    {
-        $this->expectException(Exception::class);
-        $this->expectExceptionMessage(
-            'The property value is required on position 0'
-        );
-
-        $container = new Di();
-        $builder   = new Builder();
-
-        $definition = [
-            'className'  => PropertiesComponent::class,
-            'arguments'  => [
-                [
-                    'type'  => 'parameter',
-                    'value' => 'one',
-                ],
-                [
-                    'type'  => 'parameter',
-                    'value' => 2,
-                ],
-            ],
-            'properties' => [
-                0 => [
-                    'name' => 'propertyName',
-                ],
-            ],
-        ];
-
-        $builder->build($container, $definition);
-    }
-
-    /**
-     * Unit Tests Phalcon\Di\Service\Builder :: build() - instance with
-     * properties
-     *
-     * @return void
-     *
-     * @author Phalcon Team <team@phalcon.io>
-     * @since  2019-09-09
-     */
-    public function testDiServiceBuilderBuildInstanceWithProperties(): void
-    {
-        $container = new Di();
-        $builder   = new Builder();
-
-        $definition = [
-            'className'  => PropertiesComponent::class,
-            'arguments'  => [
-                [
-                    'type'  => 'parameter',
-                    'value' => 'one',
-                ],
-                [
-                    'type'  => 'parameter',
-                    'value' => 2,
-                ],
-            ],
-            'properties' => [
-                0 => [
-                    'name'  => 'propertyName',
-                    'value' => [
-                        'type'  => 'parameter',
-                        'value' => 'set-one',
-                    ],
-                ],
-                1 => [
-                    'name'  => 'propertyType',
-                    'value' => [
-                        'type'  => 'parameter',
-                        'value' => 100,
-                    ],
-                ],
-            ],
-        ];
-
-        $instance = $builder->build($container, $definition);
-
-        $class = PropertiesComponent::class;
-        $this->assertInstanceOf($class, $instance);
-
-        $expected = 'one';
-        $actual   = $instance->getName();
-        $this->assertSame($expected, $actual);
-
-        $expected = 2;
-        $actual   = $instance->getType();
-        $this->assertSame($expected, $actual);
-
-        $expected = 'set-one';
-        $actual   = $instance->propertyName;
-        $this->assertSame($expected, $actual);
-
-        $expected = 100;
-        $actual   = $instance->propertyType;
-        $this->assertSame($expected, $actual);
-    }
-
-    /**
-     * Unit Tests Phalcon\Di\Service\Builder :: build() - instance with calls
-     * exception
-     *
-     * @return void
-     *
-     * @author Phalcon Team <team@phalcon.io>
-     * @since  2019-09-09
-     */
-    public function testDiServiceBuilderBuildInstanceWithCallsException(): void
-    {
-        $this->expectException(Exception::class);
-        $this->expectExceptionMessage(
-            'Setter injection parameters must be an array'
-        );
-
-        $container = new Di();
-        $builder   = new Builder();
-
-        $definition = [
-            'className' => PropertiesComponent::class,
-            'arguments' => [
-                [
-                    'type'  => 'parameter',
-                    'value' => 'one',
-                ],
-                [
-                    'type'  => 'parameter',
-                    'value' => 2,
-                ],
-            ],
-            'calls'     => 1234,
-        ];
-
-        $builder->build($container, $definition);
-    }
-
-    /**
-     * Unit Tests Phalcon\Di\Service\Builder :: build() - instance with calls
-     * exception method position
-     *
-     * @return void
-     *
-     * @author Phalcon Team <team@phalcon.io>
-     * @since  2019-09-09
-     */
-    public function testDiServiceBuilderBuildInstanceWithCallsExceptionMethodPosition(): void
-    {
-        $this->expectException(Exception::class);
-        $this->expectExceptionMessage(
-            'Method call must be an array on position 0'
-        );
-
-        $container = new Di();
-        $builder   = new Builder();
-
-        $definition = [
-            'className' => PropertiesComponent::class,
-            'arguments' => [
-                [
-                    'type'  => 'parameter',
-                    'value' => 'one',
-                ],
-                [
-                    'type'  => 'parameter',
-                    'value' => 2,
-                ],
-            ],
-            'calls'     => [
-                0 => 'methodName',
-            ],
-        ];
-
-        $builder->build($container, $definition);
-    }
-
-    /**
-     * Unit Tests Phalcon\Di\Service\Builder :: build() - instance with calls
-     * exception method exists
-     *
-     * @return void
-     *
-     * @author Phalcon Team <team@phalcon.io>
-     * @since  2019-09-09
-     */
-    public function testDiServiceBuilderBuildInstanceWithCallsExceptionMethodExists(): void
-    {
-        $this->expectException(Exception::class);
-        $this->expectExceptionMessage(
-            'The method name is required on position 0'
-        );
-
-        $container = new Di();
-        $builder   = new Builder();
-
-        $definition = [
-            'className' => PropertiesComponent::class,
-            'arguments' => [
-                [
-                    'type'  => 'parameter',
-                    'value' => 'one',
-                ],
-                [
-                    'type'  => 'parameter',
-                    'value' => 2,
-                ],
-            ],
-            'calls'     => [
-                0 => [
-                    'methodName',
-                ],
-            ],
-        ];
-
-        $builder->build($container, $definition);
-    }
-
-    /**
-     * Unit Tests Phalcon\Di\Service\Builder :: build() - instance with calls
-     * exception method arguments is array
-     *
-     * @return void
-     *
-     * @author Phalcon Team <team@phalcon.io>
-     * @since  2019-09-09
-     */
-    public function testDiServiceBuilderBuildInstanceWithCallsExceptionMethodArgumentsIsArray(): void
-    {
-        $this->expectException(Exception::class);
-        $this->expectExceptionMessage(
-            'Call arguments must be an array on position 0'
-        );
-
-        $container = new Di();
-        $builder   = new Builder();
-
-        $definition = [
-            'className' => PropertiesComponent::class,
-            'arguments' => [
-                [
-                    'type'  => 'parameter',
-                    'value' => 'one',
-                ],
-                [
-                    'type'  => 'parameter',
-                    'value' => 2,
-                ],
-            ],
-            'calls'     => [
-                0 => [
-                    'method'    => 'transform',
-                    'arguments' => 444,
-                ],
-            ],
-        ];
-
-        $builder->build($container, $definition);
-    }
-
-    /**
-     * Unit Tests Phalcon\Di\Service\Builder :: build() - instance with calls
-     * exception method arguments
-     *
-     * @return void
-     *
-     * @author Phalcon Team <team@phalcon.io>
-     * @since  2019-09-09
-     */
-    public function testDiServiceBuilderBuildInstanceWithCallsExceptionMethodArguments(): void
-    {
-        $container = new Di();
-        $builder   = new Builder();
-
-        $definition = [
-            'className' => PropertiesComponent::class,
-            'arguments' => [
-                [
-                    'type'  => 'parameter',
-                    'value' => 'one',
-                ],
-                [
-                    'type'  => 'parameter',
-                    'value' => 2,
-                ],
-            ],
-            'calls'     => [
-                0 => [
-                    'method'    => 'transform',
-                    'arguments' => [
-                        [
-                            'type'  => 'parameter',
-                            'value' => 444,
-                        ],
-                    ],
-                ],
-            ],
-        ];
-
-        $instance = $builder->build($container, $definition);
-
-        $class = PropertiesComponent::class;
-        $this->assertInstanceOf($class, $instance);
-
-        $expected = 'one';
-        $actual   = $instance->getName();
-        $this->assertSame($expected, $actual);
-
-        $expected = 444;
-        $actual   = $instance->getType();
-        $this->assertSame($expected, $actual);
-    }
-
-    /**
-     * Unit Tests Phalcon\Di\Service\Builder :: build() - instance with calls
-     * exception method no arguments
-     *
-     * @return void
-     *
-     * @author Phalcon Team <team@phalcon.io>
-     * @since  2019-09-09
-     */
-    public function testDiServiceBuilderBuildInstanceWithCallsExceptionMethodNoArguments(): void
-    {
-        $container = new Di();
-        $builder   = new Builder();
-
-        $definition = [
-            'className' => PropertiesComponent::class,
-            'arguments' => [
-                [
-                    'type'  => 'parameter',
-                    'value' => 'one',
-                ],
-                [
-                    'type'  => 'parameter',
-                    'value' => 2,
-                ],
-            ],
-            'calls'     => [
-                0 => [
-                    'method' => 'calculate',
-                ],
-            ],
-        ];
-
-        $instance = $builder->build($container, $definition);
-
-        $class = PropertiesComponent::class;
-        $this->assertInstanceOf($class, $instance);
-
-        $expected = 'one';
-        $actual   = $instance->getName();
-        $this->assertSame($expected, $actual);
-
-        $expected = 555;
-        $actual   = $instance->getType();
         $this->assertSame($expected, $actual);
     }
 }

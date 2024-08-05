@@ -13,11 +13,11 @@ declare(strict_types=1);
 
 namespace Phalcon\Tests\Unit\Cache\Cache;
 
-use Phalcon\Tests\UnitTestCase;
 use Phalcon\Cache\Adapter\AdapterInterface;
 use Phalcon\Cache\AdapterFactory;
 use Phalcon\Cache\Cache;
 use Phalcon\Storage\SerializerFactory;
+use Phalcon\Tests\UnitTestCase;
 
 final class GetAdapterTest extends UnitTestCase
 {

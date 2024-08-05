@@ -13,8 +13,8 @@ declare(strict_types=1);
 
 namespace Phalcon\Tests\Unit\Forms\Element\Select;
 
-use Phalcon\Tests\UnitTestCase;
 use Phalcon\Forms\Element\Select;
+use Phalcon\Tests\UnitTestCase;
 
 use function uniqid;
 

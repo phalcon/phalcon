@@ -24,7 +24,6 @@ use Phalcon\Cache\Adapter\Stream;
 use Phalcon\Cache\Adapter\Weak;
 use Phalcon\Storage\SerializerFactory;
 use Redis as NativeRedis;
-
 use stdClass;
 
 use function getOptionsLibmemcached;

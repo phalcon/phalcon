@@ -13,9 +13,8 @@ declare(strict_types=1);
 
 namespace Phalcon\Tests\Unit\Forms\Element;
 
-use Codeception\Example;
-use Phalcon\Tests\UnitTestCase;
 use Phalcon\Tests\Fixtures\Traits\FormsTrait;
+use Phalcon\Tests\UnitTestCase;
 
 use function array_flip;
 use function uniqid;
@@ -43,7 +42,7 @@ final class GetSetFiltersTest extends UnitTestCase
             'striptags',
         ];
         $flipped = array_flip($data);
-        $object = new $class($name);
+        $object  = new $class($name);
 
         $expected = [];
         $actual   = $object->getFilters();

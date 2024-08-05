@@ -13,21 +13,15 @@ declare(strict_types=1);
 
 namespace Phalcon\Tests\Unit\Filter\Validation\Validator\InclusionIn;
 
-use Phalcon\Tests\UnitTestCase;
 use Phalcon\Filter\Validation;
 use Phalcon\Filter\Validation\Validator\InclusionIn;
 use Phalcon\Messages\Message;
 use Phalcon\Messages\Messages;
+use Phalcon\Tests\UnitTestCase;
 
 final class ValidateTest extends UnitTestCase
 {
-    /**
-     * Tests inclusion in validator with single field
-     *
-     * @author Wojciech Ślawski <jurigag@gmail.com>
-     * @since  2016-06-05
-     */
-    public function testFilterValidationValidatorInclusioninSingleField(): void
+    public function testFilterValidationValidatorInclusioninCustomMessage(): void
     {
         $validation = new Validation();
 
@@ -35,7 +29,8 @@ final class ValidateTest extends UnitTestCase
             'status',
             new InclusionIn(
                 [
-                    'domain' => ['A', 'I'],
+                    'message' => 'The status must be A=Active or I=Inactive',
+                    'domain'  => ['A', 'I'],
                 ]
             )
         );
@@ -48,7 +43,7 @@ final class ValidateTest extends UnitTestCase
         $expected = new Messages(
             [
                 new Message(
-                    'Field status must be a part of list: A, I',
+                    'The status must be A=Active or I=Inactive',
                     'status',
                     InclusionIn::class,
                     0
@@ -58,106 +53,16 @@ final class ValidateTest extends UnitTestCase
 
         $this->assertEquals($expected, $messages);
 
-        $messages = $validation->validate(
-            [
-                'status' => 'X',
-            ]
-        );
+
+        $messages = $validation->validate(['status' => 'x=1']);
 
         $this->assertEquals($expected, $messages);
 
-        $messages = $validation->validate(
-            [
-                'status' => 'A',
-            ]
-        );
+        $messages = $validation->validate(['status' => 'A']);
 
         $this->assertSame(
             0,
             $messages->count()
-        );
-    }
-
-    /**
-     * Tests inclusion in validator with single multiple field and single domain
-     *
-     * @author Wojciech Ślawski <jurigag@gmail.com>
-     * @since  2016-06-05
-     */
-    public function testFilterValidationValidatorInclusioninMultipleFieldSingleDomain(): void
-    {
-        $validation = new Validation();
-
-        $validationMessages = [
-            'type'        => 'Type must be mechanical or cyborg.',
-            'anotherType' => 'AnotherType must be mechanical or cyborg.',
-        ];
-
-        $validation->add(
-            [
-                'type',
-                'anotherType',
-            ],
-            new InclusionIn(
-                [
-                    'domain'  => ['mechanical', 'cyborg'],
-                    'message' => $validationMessages,
-                ]
-            )
-        );
-
-
-        $messages = $validation->validate(
-            [
-                'type'        => 'cyborg',
-                'anotherType' => 'cyborg',
-            ]
-        );
-
-        $this->assertSame(
-            0,
-            $messages->count()
-        );
-
-
-        $messages = $validation->validate(
-            [
-                'type'        => 'hydraulic',
-                'anotherType' => 'cyborg',
-            ]
-        );
-
-        $this->assertSame(
-            1,
-            $messages->count()
-        );
-
-        $this->assertSame(
-            $validationMessages['type'],
-            $messages->offsetGet(0)->getMessage()
-        );
-
-
-        $messages = $validation->validate(
-            [
-                'type'        => 'hydraulic',
-                'anotherType' => 'hydraulic',
-            ]
-        );
-
-        $this->assertSame(
-            2,
-            $messages->count()
-        );
-
-        $this->assertSame(
-            $validationMessages['type'],
-            $messages->offsetGet(0)->getMessage()
-        );
-
-        $this->assertSame(
-            $validationMessages['anotherType'],
-            $messages->offsetGet(1)->getMessage()
         );
     }
 
@@ -263,7 +168,96 @@ final class ValidateTest extends UnitTestCase
         );
     }
 
-    public function testFilterValidationValidatorInclusioninCustomMessage(): void
+    /**
+     * Tests inclusion in validator with single multiple field and single domain
+     *
+     * @author Wojciech Ślawski <jurigag@gmail.com>
+     * @since  2016-06-05
+     */
+    public function testFilterValidationValidatorInclusioninMultipleFieldSingleDomain(): void
+    {
+        $validation = new Validation();
+
+        $validationMessages = [
+            'type'        => 'Type must be mechanical or cyborg.',
+            'anotherType' => 'AnotherType must be mechanical or cyborg.',
+        ];
+
+        $validation->add(
+            [
+                'type',
+                'anotherType',
+            ],
+            new InclusionIn(
+                [
+                    'domain'  => ['mechanical', 'cyborg'],
+                    'message' => $validationMessages,
+                ]
+            )
+        );
+
+
+        $messages = $validation->validate(
+            [
+                'type'        => 'cyborg',
+                'anotherType' => 'cyborg',
+            ]
+        );
+
+        $this->assertSame(
+            0,
+            $messages->count()
+        );
+
+
+        $messages = $validation->validate(
+            [
+                'type'        => 'hydraulic',
+                'anotherType' => 'cyborg',
+            ]
+        );
+
+        $this->assertSame(
+            1,
+            $messages->count()
+        );
+
+        $this->assertSame(
+            $validationMessages['type'],
+            $messages->offsetGet(0)->getMessage()
+        );
+
+
+        $messages = $validation->validate(
+            [
+                'type'        => 'hydraulic',
+                'anotherType' => 'hydraulic',
+            ]
+        );
+
+        $this->assertSame(
+            2,
+            $messages->count()
+        );
+
+        $this->assertSame(
+            $validationMessages['type'],
+            $messages->offsetGet(0)->getMessage()
+        );
+
+        $this->assertSame(
+            $validationMessages['anotherType'],
+            $messages->offsetGet(1)->getMessage()
+        );
+    }
+
+    /**
+     * Tests inclusion in validator with single field
+     *
+     * @author Wojciech Ślawski <jurigag@gmail.com>
+     * @since  2016-06-05
+     */
+    public function testFilterValidationValidatorInclusioninSingleField(): void
     {
         $validation = new Validation();
 
@@ -271,8 +265,7 @@ final class ValidateTest extends UnitTestCase
             'status',
             new InclusionIn(
                 [
-                    'message' => 'The status must be A=Active or I=Inactive',
-                    'domain'  => ['A', 'I'],
+                    'domain' => ['A', 'I'],
                 ]
             )
         );
@@ -285,7 +278,7 @@ final class ValidateTest extends UnitTestCase
         $expected = new Messages(
             [
                 new Message(
-                    'The status must be A=Active or I=Inactive',
+                    'Field status must be a part of list: A, I',
                     'status',
                     InclusionIn::class,
                     0
@@ -295,12 +288,19 @@ final class ValidateTest extends UnitTestCase
 
         $this->assertEquals($expected, $messages);
 
-
-        $messages = $validation->validate(['status' => 'x=1']);
+        $messages = $validation->validate(
+            [
+                'status' => 'X',
+            ]
+        );
 
         $this->assertEquals($expected, $messages);
 
-        $messages = $validation->validate(['status' => 'A']);
+        $messages = $validation->validate(
+            [
+                'status' => 'A',
+            ]
+        );
 
         $this->assertSame(
             0,

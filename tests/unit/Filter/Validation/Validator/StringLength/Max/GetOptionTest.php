@@ -13,8 +13,8 @@ declare(strict_types=1);
 
 namespace Phalcon\Tests\Unit\Filter\Validation\Validator\StringLength\Max;
 
-use Phalcon\Tests\UnitTestCase;
 use Phalcon\Filter\Validation\Validator\StringLength\Max;
+use Phalcon\Tests\UnitTestCase;
 
 final class GetOptionTest extends UnitTestCase
 {

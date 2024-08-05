@@ -13,15 +13,50 @@ declare(strict_types=1);
 
 namespace Phalcon\Tests\Unit\Cli\Console;
 
-use Phalcon\Tests\UnitTestCase;
 use Phalcon\Cli\Console as CliConsole;
 use Phalcon\Cli\Console\Exception;
 use Phalcon\Di\FactoryDefault\Cli as DiFactoryDefault;
 use Phalcon\Tests\Modules\Backend\Module;
 use Phalcon\Tests\Modules\Frontend\Module as FrontendModule;
+use Phalcon\Tests\UnitTestCase;
 
 final class RegisterModulesTest extends UnitTestCase
 {
+    /**
+     * Tests Phalcon\Cli\Console :: registerModules() - bad path throws
+     * exception
+     *
+     * @author Sid Roberts <https://github.com/SidRoberts>
+     * @since  2019-05-15
+     */
+    public function registerModulesBadPathThrowsAnException(): void
+    {
+        $console = new CliConsole(new DiFactoryDefault());
+
+        $console->registerModules(
+            [
+                'frontend' => [
+                    'path'      => dataDir('not-a-real-file.php'),
+                    'className' => Module::class,
+                ],
+            ]
+        );
+
+        $this->expectException(Exception::class);
+        $this->expectExceptionMessage(
+            "Module definition path '"
+            . dataDir('not-a-real-file.php')
+            . "' doesn't exist"
+        );
+
+        $console->handle(
+            [
+                'module' => 'frontend',
+                'task'   => 'echo',
+            ]
+        );
+    }
+
     /**
      * Tests Phalcon\Cli\Console :: registerModules()
      *
@@ -92,40 +127,5 @@ final class RegisterModulesTest extends UnitTestCase
         $expected = 'backend';
         $actual   = $console->getModules();
         $this->assertArrayHasKey($expected, $actual);
-    }
-
-    /**
-     * Tests Phalcon\Cli\Console :: registerModules() - bad path throws
-     * exception
-     *
-     * @author Sid Roberts <https://github.com/SidRoberts>
-     * @since  2019-05-15
-     */
-    public function registerModulesBadPathThrowsAnException(): void
-    {
-        $console = new CliConsole(new DiFactoryDefault());
-
-        $console->registerModules(
-            [
-                'frontend' => [
-                    'path' => dataDir('not-a-real-file.php'),
-                    'className' => Module::class,
-                ],
-            ]
-        );
-
-        $this->expectException(Exception::class);
-        $this->expectExceptionMessage(
-            "Module definition path '"
-            . dataDir('not-a-real-file.php')
-            . "' doesn't exist"
-        );
-
-        $console->handle(
-            [
-                'module' => 'frontend',
-                'task'   => 'echo',
-            ]
-        );
     }
 }

@@ -13,12 +13,11 @@ declare(strict_types=1);
 
 namespace Phalcon\Tests\Unit\Cache\Adapter\Stream;
 
-use Phalcon\Tests\UnitTestCase;
 use Phalcon\Cache\Adapter\Stream;
-use Phalcon\Cache\Exception as CacheException;
 use Phalcon\Storage\Exception as StorageException;
 use Phalcon\Storage\SerializerFactory;
 use Phalcon\Support\Exception as HelperException;
+use Phalcon\Tests\UnitTestCase;
 use stdClass;
 
 use function file_put_contents;
@@ -29,49 +28,6 @@ use function sleep;
 
 final class GetSetTest extends UnitTestCase
 {
-    /**
-     * Tests Phalcon\Cache\Adapter\Stream :: set()
-     *
-     * @return void
-     *
-     * @throws HelperException
-     *
-     * @author Phalcon Team <team@phalcon.io>
-     * @since  2020-09-09
-     */
-    public function testCacheAdapterStreamSet(): void
-    {
-        $serializer = new SerializerFactory();
-        $adapter    = new Stream(
-            $serializer,
-            [
-                'storageDir' => outputDir(),
-            ]
-        );
-
-        $data   = 'Phalcon Framework';
-        $actual = $adapter->set('test-key', $data);
-        $this->assertTrue($actual);
-
-        $target = outputDir() . 'ph-strm/te/st/-k/';
-
-        $data = 's:3:"ttl";i:3600;s:7:"content";s:25:"s:17:"Phalcon Framework";';
-        $this->assertFileContentsContains($target . 'test-key', $data);
-
-        $this->safeDeleteFile($target . 'test-key');
-    }
-
-    /**
-     * Tests Phalcon\Cache\Adapter\Stream :: get()
-     *
-     * @return void
-     *
-     * @return void
-     * @throws StorageException
-     *
-     * @author Phalcon Team <team@phalcon.io>
-     * @since  2020-09-09
-     */
     /**
      */
     public function testCacheAdapterStreamGet(): void
@@ -102,6 +58,78 @@ final class GetSetTest extends UnitTestCase
         $this->assertTrue($actual);
 
         $actual = $adapter->get('test-key');
+        $this->assertEquals($expected, $actual);
+
+        $this->safeDeleteFile($target . 'test-key');
+    }
+
+    /**
+     * Tests Phalcon\Cache\Adapter\Stream :: get()
+     *
+     * @return void
+     *
+     * @return void
+     * @throws StorageException
+     *
+     * @author Phalcon Team <team@phalcon.io>
+     * @since  2020-09-09
+     */
+
+    /**
+     * Tests Phalcon\Cache\Adapter\Stream :: get() - errors
+     *
+     * @return void
+     *
+     * @throws HelperException
+     *
+     * @author Phalcon Team <team@phalcon.io>
+     * @since  2020-09-09
+     */
+    public function testCacheAdapterStreamGetErrors(): void
+    {
+        if (version_compare(PHP_VERSION, '8.3.0', '>=')) {
+            $this->markTestSkipped('Since PHP 8.3 warnings causing session ID/Name lock.');
+        }
+
+        $serializer = new SerializerFactory();
+        $adapter    = new Stream(
+            $serializer,
+            [
+                'storageDir' => outputDir(),
+            ]
+        );
+
+        $target = outputDir() . 'ph-strm/te/st/-k/';
+        if (true !== is_dir($target)) {
+            mkdir($target, 0777, true);
+        }
+
+        // Unknown key
+        $expected = 'test';
+        $actual   = $adapter->get(uniqid(), 'test');
+        $this->assertEquals($expected, $actual);
+
+        // Invalid stored object
+        $actual = file_put_contents(
+            $target . 'test-key',
+            '{'
+        );
+        $this->assertNotFalse($actual);
+
+        $expected = 'test';
+        $actual   = $adapter->get('test-key', 'test');
+        $this->assertEquals($expected, $actual);
+
+        // Expiry
+        $data = 'Phalcon Framework';
+
+        $actual = $adapter->set('test-key', $data, 1);
+        $this->assertTrue($actual);
+
+        sleep(2);
+
+        $expected = 'test';
+        $actual   = $adapter->get('test-key', 'test');
         $this->assertEquals($expected, $actual);
 
         $this->safeDeleteFile($target . 'test-key');
@@ -174,7 +202,7 @@ final class GetSetTest extends UnitTestCase
     }
 
     /**
-     * Tests Phalcon\Cache\Adapter\Stream :: get() - errors
+     * Tests Phalcon\Cache\Adapter\Stream :: set()
      *
      * @return void
      *
@@ -183,12 +211,8 @@ final class GetSetTest extends UnitTestCase
      * @author Phalcon Team <team@phalcon.io>
      * @since  2020-09-09
      */
-    public function testCacheAdapterStreamGetErrors(): void
+    public function testCacheAdapterStreamSet(): void
     {
-        if (version_compare(PHP_VERSION, '8.3.0', '>=')) {
-            $this->markTestSkipped('Since PHP 8.3 warnings causing session ID/Name lock.');
-        }
-
         $serializer = new SerializerFactory();
         $adapter    = new Stream(
             $serializer,
@@ -197,38 +221,14 @@ final class GetSetTest extends UnitTestCase
             ]
         );
 
-        $target = outputDir() . 'ph-strm/te/st/-k/';
-        if (true !== is_dir($target)) {
-            mkdir($target, 0777, true);
-        }
-
-        // Unknown key
-        $expected = 'test';
-        $actual   = $adapter->get(uniqid(), 'test');
-        $this->assertEquals($expected, $actual);
-
-        // Invalid stored object
-        $actual = file_put_contents(
-            $target . 'test-key',
-            '{'
-        );
-        $this->assertNotFalse($actual);
-
-        $expected = 'test';
-        $actual   = $adapter->get('test-key', 'test');
-        $this->assertEquals($expected, $actual);
-
-        // Expiry
-        $data = 'Phalcon Framework';
-
-        $actual = $adapter->set('test-key', $data, 1);
+        $data   = 'Phalcon Framework';
+        $actual = $adapter->set('test-key', $data);
         $this->assertTrue($actual);
 
-        sleep(2);
+        $target = outputDir() . 'ph-strm/te/st/-k/';
 
-        $expected = 'test';
-        $actual   = $adapter->get('test-key', 'test');
-        $this->assertEquals($expected, $actual);
+        $data = 's:3:"ttl";i:3600;s:7:"content";s:25:"s:17:"Phalcon Framework";';
+        $this->assertFileContentsContains($target . 'test-key', $data);
 
         $this->safeDeleteFile($target . 'test-key');
     }

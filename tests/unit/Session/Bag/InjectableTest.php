@@ -13,10 +13,10 @@ declare(strict_types=1);
 
 namespace Phalcon\Tests\Unit\Session\Bag;
 
-use Phalcon\Tests\UnitTestCase;
 use Phalcon\Session\Bag;
 use Phalcon\Tests\Fixtures\Session\InjectableBag;
 use Phalcon\Tests\Fixtures\Traits\DiTrait;
+use Phalcon\Tests\UnitTestCase;
 
 final class InjectableTest extends UnitTestCase
 {

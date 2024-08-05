@@ -13,9 +13,8 @@ declare(strict_types=1);
 
 namespace Phalcon\Tests\Unit\Filter\Validation\Validator;
 
-use Phalcon\Tests\UnitTestCase;
-use Phalcon\Filter\Validation\Validator\Url;
 use Phalcon\Tests\Fixtures\Traits\ValidationTrait;
+use Phalcon\Tests\UnitTestCase;
 
 use function uniqid;
 
@@ -28,8 +27,8 @@ final class GetSetOptionTest extends UnitTestCase
      *
      * @dataProvider getClasses
      *
-     * @author Phalcon Team <team@phalcon.io>
-     * @since  2018-11-13
+     * @author       Phalcon Team <team@phalcon.io>
+     * @since        2018-11-13
      */
     public function testFilterValidationValidatorUrlGetSetOption(
         string $class

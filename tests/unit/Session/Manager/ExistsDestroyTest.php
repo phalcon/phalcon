@@ -14,10 +14,11 @@ declare(strict_types=1);
 namespace Phalcon\Tests\Unit\Session\Manager;
 
 use Codeception\Example;
+use Phalcon\Session\Manager;
+use Phalcon\Storage\Exception;
+use Phalcon\Tests\Fixtures\Traits\DiTrait;
 use Phalcon\Tests\Fixtures\Traits\SessionTrait;
 use Phalcon\Tests\UnitTestCase;
-use Phalcon\Session\Manager;
-use Phalcon\Tests\Fixtures\Traits\DiTrait;
 
 final class ExistsDestroyTest extends UnitTestCase
 {
@@ -25,54 +26,20 @@ final class ExistsDestroyTest extends UnitTestCase
     use SessionTrait;
 
     /**
-     * Tests Phalcon\Session\Manager :: exists()/destroy()
-     *
-     * @dataProvider getClassNames
-     *
-     * @return void
-     *
-     * @author Phalcon Team <team@phalcon.io>
-     * @since  2018-11-13
-     */
-    public function testSessionManagerExistsDestroy(
-        string $name
-    ): void {
-        $store    = $_SESSION ?? [];
-        $_SESSION = [];
-
-        $manager = new Manager();
-        $files   = $this->newService($name);
-        $manager->setAdapter($files);
-
-        $actual = $manager->start();
-        $this->assertTrue($actual);
-
-        $actual = $manager->exists();
-        $this->assertTrue($actual);
-
-        $manager->destroy();
-
-        $actual = $manager->exists();
-        $this->assertFalse($actual);
-
-        $_SESSION = $store;
-    }
-
-    /**
      * Tests Phalcon\Session\Manager :: destroy() - clean $_SESSION
      *
      * @dataProvider getClassNames
      *
-     * @return void
-     * @param Example           $example
+     * @param Example $example
      *
-     * @throws \Phalcon\Storage\Exception
+     * @return void
+     * @throws Exception
      *
      * @issue  https://github.com/phalcon/cphalcon/issues/12326
      * @issue  https://github.com/phalcon/cphalcon/issues/12835
      *
-     * @author Phalcon Team <team@phalcon.io>
-     * @since  2018-11-13
+     * @author       Phalcon Team <team@phalcon.io>
+     * @since        2018-11-13
      */
     public function testSessionManagerDestroySuperGlobal(
         string $name
@@ -108,13 +75,13 @@ final class ExistsDestroyTest extends UnitTestCase
      *
      * @dataProvider getClassNames
      *
+     * @param Example $example
+     *
      * @return void
-     * @param Example           $example
+     * @throws Exception
      *
-     * @throws \Phalcon\Storage\Exception
-     *
-     * @author Phalcon Team <team@phalcon.io>
-     * @since  2020-09-09
+     * @author       Phalcon Team <team@phalcon.io>
+     * @since        2020-09-09
      */
     public function testSessionManagerDestroySuperGlobalUniquid(
         string $name
@@ -144,6 +111,40 @@ final class ExistsDestroyTest extends UnitTestCase
 
         $manager->destroy();
         $this->assertArrayNotHasKey('aaa#test1', $_SESSION);
+
+        $actual = $manager->exists();
+        $this->assertFalse($actual);
+
+        $_SESSION = $store;
+    }
+
+    /**
+     * Tests Phalcon\Session\Manager :: exists()/destroy()
+     *
+     * @dataProvider getClassNames
+     *
+     * @return void
+     *
+     * @author       Phalcon Team <team@phalcon.io>
+     * @since        2018-11-13
+     */
+    public function testSessionManagerExistsDestroy(
+        string $name
+    ): void {
+        $store    = $_SESSION ?? [];
+        $_SESSION = [];
+
+        $manager = new Manager();
+        $files   = $this->newService($name);
+        $manager->setAdapter($files);
+
+        $actual = $manager->start();
+        $this->assertTrue($actual);
+
+        $actual = $manager->exists();
+        $this->assertTrue($actual);
+
+        $manager->destroy();
 
         $actual = $manager->exists();
         $this->assertFalse($actual);

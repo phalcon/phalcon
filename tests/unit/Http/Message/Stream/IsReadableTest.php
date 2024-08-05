@@ -13,7 +13,6 @@ declare(strict_types=1);
 
 namespace Phalcon\Tests\Unit\Http\Message\Stream;
 
-use Codeception\Example;
 use Phalcon\Http\Message\Stream;
 use Phalcon\Http\Message\Stream\Input;
 use Phalcon\Http\Message\Stream\Memory;
@@ -25,42 +24,6 @@ use function logsDir;
 
 final class IsReadableTest extends UnitTestCase
 {
-    /**
-     * Tests Phalcon\Http\Message\Stream :: isReadable()
-     *
-     * @dataProvider getExamples
-     *
-     * @author       Phalcon Team <team@phalcon.io>
-     * @since        2019-02-10
-     */
-    public function testHttpMessageStreamIsReadable(
-        mixed $stream,
-        bool $expected
-    ): void {
-        $actual = $stream->isReadable();
-        $this->assertSame($expected, $actual);
-    }
-
-    /**
-     * Tests Phalcon\Http\Message\Stream :: isReadable() - with "x"
-     *
-     * @dataProvider getExamplesX
-     *
-     * @author       Phalcon Team <team@phalcon.io>
-     * @since        2019-02-10
-     */
-    public function testHttpMessageStreamIsReadableWithX(
-        string $mode,
-        bool $expected
-    ): void {
-        $fileName = $this->getNewFileName();
-        $fileName = logsDir($fileName);
-
-        $stream = new Stream($fileName, $mode);
-
-        $this->assertSame($expected, $stream->isReadable());
-    }
-
     /**
      * @return array[]
      */
@@ -235,5 +198,41 @@ final class IsReadableTest extends UnitTestCase
             ['x+', true],
             ['x+b', true],
         ];
+    }
+
+    /**
+     * Tests Phalcon\Http\Message\Stream :: isReadable()
+     *
+     * @dataProvider getExamples
+     *
+     * @author       Phalcon Team <team@phalcon.io>
+     * @since        2019-02-10
+     */
+    public function testHttpMessageStreamIsReadable(
+        mixed $stream,
+        bool $expected
+    ): void {
+        $actual = $stream->isReadable();
+        $this->assertSame($expected, $actual);
+    }
+
+    /**
+     * Tests Phalcon\Http\Message\Stream :: isReadable() - with "x"
+     *
+     * @dataProvider getExamplesX
+     *
+     * @author       Phalcon Team <team@phalcon.io>
+     * @since        2019-02-10
+     */
+    public function testHttpMessageStreamIsReadableWithX(
+        string $mode,
+        bool $expected
+    ): void {
+        $fileName = $this->getNewFileName();
+        $fileName = logsDir($fileName);
+
+        $stream = new Stream($fileName, $mode);
+
+        $this->assertSame($expected, $stream->isReadable());
     }
 }

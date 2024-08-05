@@ -13,10 +13,10 @@ declare(strict_types=1);
 
 namespace Phalcon\Tests\Unit\Forms\Form;
 
-use Phalcon\Tests\UnitTestCase;
 use Phalcon\Forms\Element\Text;
 use Phalcon\Forms\Exception;
 use Phalcon\Forms\Form;
+use Phalcon\Tests\UnitTestCase;
 
 final class GetTest extends UnitTestCase
 {
@@ -30,7 +30,7 @@ final class GetTest extends UnitTestCase
     {
         $form = new Form();
 
-        $address = new Text('address');
+        $address   = new Text('address');
         $telephone = new Text('telephone');
 
         $form->add($address);

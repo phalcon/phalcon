@@ -26,6 +26,81 @@ final class TextTest extends UnitTestCase
     use GdTrait;
 
     /**
+     * @return array[]
+     */
+    public static function getExamples(): array
+    {
+        return [
+            [
+                1,
+                'Hello Phalcon!',
+                false,
+                false,
+                100,
+                '000000',
+                12,
+                null,
+                'fbf9f3e3c3c18183',
+            ],
+            [
+                2,
+                'Hello Phalcon!',
+                50,
+                false,
+                100,
+                '000000',
+                12,
+                null,
+                'fbf9f3e3c3c18183',
+            ],
+            [
+                3,
+                'Hello Phalcon!',
+                50,
+                75,
+                100,
+                '000000',
+                12,
+                null,
+                'fbf9f3e3c3c18183',
+            ],
+            [
+                4,
+                'Hello Phalcon!',
+                50,
+                75,
+                60,
+                '000000',
+                12,
+                null,
+                'fbf9f3e3c3c18183',
+            ],
+            [
+                5,
+                'Hello Phalcon!',
+                50,
+                75,
+                60,
+                '00FF00',
+                12,
+                null,
+                'fbf9f3e3c3c18183',
+            ],
+            [
+                6,
+                'Hello Phalcon!',
+                50,
+                75,
+                60,
+                '0000FF',
+                24,
+                null,
+                'fbf9f3e3c3c18183',
+            ],
+        ];
+    }
+
+    /**
      * Tests Phalcon\Image\Adapter\Gd :: text()
      *
      * @dataProvider getExamples
@@ -108,80 +183,5 @@ final class TextTest extends UnitTestCase
 
         $this->assertTrue($this->checkImageHash($output, $hash));
         $this->safeDeleteFile($outputImage);
-    }
-
-    /**
-     * @return array[]
-     */
-    public static function getExamples(): array
-    {
-        return [
-            [
-                1,
-                'Hello Phalcon!',
-                false,
-                false,
-                100,
-                '000000',
-                12,
-                null,
-                'fbf9f3e3c3c18183',
-            ],
-            [
-                2,
-                'Hello Phalcon!',
-                50,
-                false,
-                100,
-                '000000',
-                12,
-                null,
-                'fbf9f3e3c3c18183',
-            ],
-            [
-                3,
-                'Hello Phalcon!',
-                50,
-                75,
-                100,
-                '000000',
-                12,
-                null,
-                'fbf9f3e3c3c18183',
-            ],
-            [
-                4,
-                'Hello Phalcon!',
-                50,
-                75,
-                60,
-                '000000',
-                12,
-                null,
-                'fbf9f3e3c3c18183',
-            ],
-            [
-                5,
-                'Hello Phalcon!',
-                50,
-                75,
-                60,
-                '00FF00',
-                12,
-                null,
-                'fbf9f3e3c3c18183',
-            ],
-            [
-                6,
-                'Hello Phalcon!',
-                50,
-                75,
-                60,
-                '0000FF',
-                24,
-                null,
-                'fbf9f3e3c3c18183',
-            ],
-        ];
     }
 }

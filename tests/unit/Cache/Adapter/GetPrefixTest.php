@@ -13,8 +13,6 @@ declare(strict_types=1);
 
 namespace Phalcon\Tests\Unit\Cache\Adapter;
 
-use Codeception\Example;
-use Phalcon\Tests\UnitTestCase;
 use Phalcon\Cache\Adapter\Apcu;
 use Phalcon\Cache\Adapter\Libmemcached;
 use Phalcon\Cache\Adapter\Memory;
@@ -22,39 +20,14 @@ use Phalcon\Cache\Adapter\Redis;
 use Phalcon\Cache\Adapter\Stream;
 use Phalcon\Cache\Adapter\Weak;
 use Phalcon\Storage\SerializerFactory;
+use Phalcon\Tests\UnitTestCase;
 
 use function array_merge;
 use function getOptionsRedis;
 use function outputDir;
-use function sprintf;
 
 final class GetPrefixTest extends UnitTestCase
 {
-    /**
-     * Tests Phalcon\Cache\Adapter\* :: getPrefix()
-     *
-     * @dataProvider getExamples
-     *
-     * @author       Phalcon Team <team@phalcon.io>
-     * @since        2020-09-09
-     */
-    public function testCacheAdapterGetSetPrefix(
-        string $class,
-        array $options,
-        string $expected,
-        string $extension
-    ): void {
-        if (!empty($extension)) {
-            $this->checkExtensionIsLoaded($extension);
-        }
-
-        $serializer = new SerializerFactory();
-        $adapter    = new $class($serializer, $options);
-
-        $actual = $adapter->getPrefix();
-        $this->assertEquals($expected, $actual);
-    }
-
     /**
      * @return array[]
      */
@@ -221,5 +194,30 @@ final class GetPrefixTest extends UnitTestCase
                 '',
             ],
         ];
+    }
+
+    /**
+     * Tests Phalcon\Cache\Adapter\* :: getPrefix()
+     *
+     * @dataProvider getExamples
+     *
+     * @author       Phalcon Team <team@phalcon.io>
+     * @since        2020-09-09
+     */
+    public function testCacheAdapterGetSetPrefix(
+        string $class,
+        array $options,
+        string $expected,
+        string $extension
+    ): void {
+        if (!empty($extension)) {
+            $this->checkExtensionIsLoaded($extension);
+        }
+
+        $serializer = new SerializerFactory();
+        $adapter    = new $class($serializer, $options);
+
+        $actual = $adapter->getPrefix();
+        $this->assertEquals($expected, $actual);
     }
 }

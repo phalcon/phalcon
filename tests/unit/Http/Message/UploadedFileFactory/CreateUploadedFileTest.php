@@ -13,10 +13,10 @@ declare(strict_types=1);
 
 namespace Phalcon\Tests\Unit\Http\Message\UploadedFileFactory;
 
-use Phalcon\Tests\Fixtures\Page\Http;
 use Phalcon\Http\Message\Factories\UploadedFileFactory;
 use Phalcon\Http\Message\Interfaces\UploadedFileInterface;
 use Phalcon\Http\Message\Stream;
+use Phalcon\Tests\Fixtures\Page\Http;
 use Phalcon\Tests\UnitTestCase;
 
 final class CreateUploadedFileTest extends UnitTestCase

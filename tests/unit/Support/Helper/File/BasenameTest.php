@@ -22,58 +22,6 @@ use function basename;
 final class BasenameTest extends UnitTestCase
 {
     /**
-     * Tests Phalcon\Support\Helper\File :: basename() with ASCII $uri
-     * it should be same as PHP's basename
-     *
-     * @dataProvider getAsciiExamples
-     *
-     * @param Example $example
-     *
-     * @return void
-     * @author       Ian Hu <hu2008yinxiang@163.com>
-     * @since        2020-09-09
-     */
-    public function testSupportHelperFileBasenamePureASCII(
-        string $path,
-        string $suffix
-    ): void {
-        if (PHP_OS_FAMILY === 'Windows') {
-            $this->markTestSkipped('Need to fix Windows new lines...');
-        }
-
-        $object = new Basename();
-
-        $expected = basename($path, $suffix);
-        $actual   = $object($path, $suffix);
-        $this->assertSame($expected, $actual);
-    }
-
-    /**
-     * Tests Phalcon\Support\Helper\File :: basename() with non-ASCII $uri
-     * support
-     *
-     * @dataProvider getNonAsciiExamples
-     *
-     * @param Example $example
-     *
-     * @return void
-     * @author       Ian Hu <hu2008yinxiang@163.com>
-     * @since        2020-09-09
-     */
-    public function testSupportHelperFileBasenameNonASCII(
-        string $path,
-        string $expected
-    ): void {
-        if (PHP_OS_FAMILY === 'Windows') {
-            $this->markTestSkipped('Need to fix Windows new lines...');
-        }
-
-        $object = new Basename();
-        $actual = $object($path);
-        $this->assertSame($expected, $actual);
-    }
-
-    /**
      * @return string[][]
      */
     public static function getAsciiExamples(): array
@@ -137,5 +85,57 @@ final class BasenameTest extends UnitTestCase
                 'ελληνικά.txt',
             ],
         ];
+    }
+
+    /**
+     * Tests Phalcon\Support\Helper\File :: basename() with non-ASCII $uri
+     * support
+     *
+     * @dataProvider getNonAsciiExamples
+     *
+     * @param Example $example
+     *
+     * @return void
+     * @author       Ian Hu <hu2008yinxiang@163.com>
+     * @since        2020-09-09
+     */
+    public function testSupportHelperFileBasenameNonASCII(
+        string $path,
+        string $expected
+    ): void {
+        if (PHP_OS_FAMILY === 'Windows') {
+            $this->markTestSkipped('Need to fix Windows new lines...');
+        }
+
+        $object = new Basename();
+        $actual = $object($path);
+        $this->assertSame($expected, $actual);
+    }
+
+    /**
+     * Tests Phalcon\Support\Helper\File :: basename() with ASCII $uri
+     * it should be same as PHP's basename
+     *
+     * @dataProvider getAsciiExamples
+     *
+     * @param Example $example
+     *
+     * @return void
+     * @author       Ian Hu <hu2008yinxiang@163.com>
+     * @since        2020-09-09
+     */
+    public function testSupportHelperFileBasenamePureASCII(
+        string $path,
+        string $suffix
+    ): void {
+        if (PHP_OS_FAMILY === 'Windows') {
+            $this->markTestSkipped('Need to fix Windows new lines...');
+        }
+
+        $object = new Basename();
+
+        $expected = basename($path, $suffix);
+        $actual   = $object($path, $suffix);
+        $this->assertSame($expected, $actual);
     }
 }

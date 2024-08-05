@@ -19,8 +19,8 @@ use Phalcon\Tests\UnitTestCase;
 
 final class GetExpressionTest extends UnitTestCase
 {
-    private int $PHANNOT_T_STRING     = 303;
     private int $PHANNOT_T_ANNOTATION = 300;
+    private int $PHANNOT_T_STRING     = 303;
 
     /**
      * Tests Phalcon\Annotations\Annotation :: getExpression()

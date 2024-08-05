@@ -13,182 +13,14 @@ declare(strict_types=1);
 
 namespace Phalcon\Tests\Unit\Filter\Validation\Validator\Confirmation;
 
-use Phalcon\Tests\UnitTestCase;
 use Phalcon\Filter\Validation;
 use Phalcon\Filter\Validation\Validator\Confirmation;
 use Phalcon\Messages\Message;
 use Phalcon\Messages\Messages;
+use Phalcon\Tests\UnitTestCase;
 
 final class ValidateTest extends UnitTestCase
 {
-    /**
-     * Tests Phalcon\Filter\Validation\Validator\Confirmation :: validate() - single
-     * field
-     *
-     * @return void
-     *
-     * @since  2016-06-05
-     * @author Wojciech Ślawski <jurigag@gmail.com>
-     */
-    public function testFilterValidationValidatorConfirmationValidateSingleField(): void
-    {
-        $validation = new Validation();
-
-        $validation->add(
-            'name',
-            new Confirmation(
-                [
-                    'with' => 'nameWith',
-                ]
-            )
-        );
-
-        $messages = $validation->validate(
-            [
-                'name'     => 'SomeValue',
-                'nameWith' => 'SomeValue',
-            ]
-        );
-
-        $this->assertSame(
-            0,
-            $messages->count()
-        );
-
-
-        $messages = $validation->validate(
-            [
-                'name'     => 'SomeValue',
-                'nameWith' => 'SomeValue123',
-            ]
-        );
-
-        $this->assertSame(
-            1,
-            $messages->count()
-        );
-
-
-        // https://github.com/phalcon/cphalcon/issues/15252
-        $messages = $validation->validate(
-            [
-                'name'     => '000012345',
-                'nameWith' => '12345',
-            ]
-        );
-
-        $this->assertSame(
-            1,
-            $messages->count(),
-            "Phalcon\Filter\Validation\Validator\Confirmation failed to compare 000012345=12345"
-        );
-
-        $messages = $validation->validate(
-            [
-                'name'     => 'asd',
-                'nameWith' => 'asdß',
-            ]
-        );
-
-        $this->assertSame(
-            1,
-            $messages->count(),
-            "Phalcon\Filter\Validation\Validator\Confirmation failed to compare asd=asdß"
-        );
-    }
-
-    /**
-     * Tests Phalcon\Filter\Validation\Validator\Confirmation :: validate() - multiple
-     * field
-     *
-     * @return void
-     *
-     * @since  2016-06-05
-     * @author Wojciech Ślawski <jurigag@gmail.com>
-     */
-    public function testFilterValidationValidatorConfirmationValidateMultipleField(): void
-    {
-        $validation = new Validation();
-
-        $validationMessages = [
-            'name' => 'Name must be same as nameWith.',
-            'type' => 'Type must be same as typeWith.',
-        ];
-
-        $validation->add(
-            ['name', 'type'],
-            new Confirmation(
-                [
-                    'with'    => [
-                        'name' => 'nameWith',
-                        'type' => 'typeWith',
-                    ],
-                    'message' => $validationMessages,
-                ]
-            )
-        );
-
-
-        $messages = $validation->validate(
-            [
-                'name'     => 'SomeValue',
-                'nameWith' => 'SomeValue',
-                'type'     => 'SomeValue',
-                'typeWith' => 'SomeValue',
-            ]
-        );
-
-        $this->assertSame(
-            0,
-            $messages->count()
-        );
-
-
-        $messages = $validation->validate(
-            [
-                'name'     => 'SomeValue',
-                'nameWith' => 'SomeValue123',
-                'type'     => 'SomeValue',
-                'typeWith' => 'SomeValue',
-            ]
-        );
-
-        $this->assertSame(
-            1,
-            $messages->count()
-        );
-
-        $this->assertSame(
-            $validationMessages['name'],
-            $messages->offsetGet(0)->getMessage()
-        );
-
-
-        $messages = $validation->validate(
-            [
-                'name'     => 'SomeValue',
-                'nameWith' => 'SomeValue123',
-                'type'     => 'SomeValue',
-                'typeWith' => 'SomeValue123',
-            ]
-        );
-
-        $this->assertSame(
-            2,
-            $messages->count()
-        );
-
-        $this->assertSame(
-            $validationMessages['name'],
-            $messages->offsetGet(0)->getMessage()
-        );
-
-        $this->assertSame(
-            $validationMessages['type'],
-            $messages->offsetGet(1)->getMessage()
-        );
-    }
-
     /**
      * Tests Phalcon\Filter\Validation\Validator\Confirmation :: validate() - empty
      * value
@@ -314,6 +146,174 @@ final class ValidateTest extends UnitTestCase
         $this->assertSame(
             0,
             $messages->count()
+        );
+    }
+
+    /**
+     * Tests Phalcon\Filter\Validation\Validator\Confirmation :: validate() - multiple
+     * field
+     *
+     * @return void
+     *
+     * @since  2016-06-05
+     * @author Wojciech Ślawski <jurigag@gmail.com>
+     */
+    public function testFilterValidationValidatorConfirmationValidateMultipleField(): void
+    {
+        $validation = new Validation();
+
+        $validationMessages = [
+            'name' => 'Name must be same as nameWith.',
+            'type' => 'Type must be same as typeWith.',
+        ];
+
+        $validation->add(
+            ['name', 'type'],
+            new Confirmation(
+                [
+                    'with'    => [
+                        'name' => 'nameWith',
+                        'type' => 'typeWith',
+                    ],
+                    'message' => $validationMessages,
+                ]
+            )
+        );
+
+
+        $messages = $validation->validate(
+            [
+                'name'     => 'SomeValue',
+                'nameWith' => 'SomeValue',
+                'type'     => 'SomeValue',
+                'typeWith' => 'SomeValue',
+            ]
+        );
+
+        $this->assertSame(
+            0,
+            $messages->count()
+        );
+
+
+        $messages = $validation->validate(
+            [
+                'name'     => 'SomeValue',
+                'nameWith' => 'SomeValue123',
+                'type'     => 'SomeValue',
+                'typeWith' => 'SomeValue',
+            ]
+        );
+
+        $this->assertSame(
+            1,
+            $messages->count()
+        );
+
+        $this->assertSame(
+            $validationMessages['name'],
+            $messages->offsetGet(0)->getMessage()
+        );
+
+
+        $messages = $validation->validate(
+            [
+                'name'     => 'SomeValue',
+                'nameWith' => 'SomeValue123',
+                'type'     => 'SomeValue',
+                'typeWith' => 'SomeValue123',
+            ]
+        );
+
+        $this->assertSame(
+            2,
+            $messages->count()
+        );
+
+        $this->assertSame(
+            $validationMessages['name'],
+            $messages->offsetGet(0)->getMessage()
+        );
+
+        $this->assertSame(
+            $validationMessages['type'],
+            $messages->offsetGet(1)->getMessage()
+        );
+    }
+
+    /**
+     * Tests Phalcon\Filter\Validation\Validator\Confirmation :: validate() - single
+     * field
+     *
+     * @return void
+     *
+     * @since  2016-06-05
+     * @author Wojciech Ślawski <jurigag@gmail.com>
+     */
+    public function testFilterValidationValidatorConfirmationValidateSingleField(): void
+    {
+        $validation = new Validation();
+
+        $validation->add(
+            'name',
+            new Confirmation(
+                [
+                    'with' => 'nameWith',
+                ]
+            )
+        );
+
+        $messages = $validation->validate(
+            [
+                'name'     => 'SomeValue',
+                'nameWith' => 'SomeValue',
+            ]
+        );
+
+        $this->assertSame(
+            0,
+            $messages->count()
+        );
+
+
+        $messages = $validation->validate(
+            [
+                'name'     => 'SomeValue',
+                'nameWith' => 'SomeValue123',
+            ]
+        );
+
+        $this->assertSame(
+            1,
+            $messages->count()
+        );
+
+
+        // https://github.com/phalcon/cphalcon/issues/15252
+        $messages = $validation->validate(
+            [
+                'name'     => '000012345',
+                'nameWith' => '12345',
+            ]
+        );
+
+        $this->assertSame(
+            1,
+            $messages->count(),
+            "Phalcon\Filter\Validation\Validator\Confirmation failed to compare 000012345=12345"
+        );
+
+        $messages = $validation->validate(
+            [
+                'name'     => 'asd',
+                'nameWith' => 'asdß',
+            ]
+        );
+
+        $this->assertSame(
+            1,
+            $messages->count(),
+            "Phalcon\Filter\Validation\Validator\Confirmation failed to compare asd=asdß"
         );
     }
 }

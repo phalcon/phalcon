@@ -48,6 +48,25 @@ final class GetSetDataTest extends UnitTestCase
     }
 
     /**
+     * Tests Phalcon\Events\Event - setData() - empty
+     *
+     * @author Phalcon Team <team@phalcon.io>
+     * @since  2021-10-06
+     */
+    public function testEventsEventGetSetDataEmpty(): void
+    {
+        $data     = [1, 2, 3];
+        $event    = new Event('some-type:beforeSome', $this, $data);
+        $expected = $data;
+        $actual   = $event->getData();
+        $this->assertSame($expected, $actual);
+
+        $event->setData();
+        $actual = $event->getData();
+        $this->assertNull($actual);
+    }
+
+    /**
      * Tests Phalcon\Events\Event - setData() - overwrite
      *
      * @author Phalcon Team <team@phalcon.io>
@@ -66,24 +85,5 @@ final class GetSetDataTest extends UnitTestCase
         $expected = $newData;
         $actual   = $event->getData();
         $this->assertSame($expected, $actual);
-    }
-
-    /**
-     * Tests Phalcon\Events\Event - setData() - empty
-     *
-     * @author Phalcon Team <team@phalcon.io>
-     * @since  2021-10-06
-     */
-    public function testEventsEventGetSetDataEmpty(): void
-    {
-        $data     = [1, 2, 3];
-        $event    = new Event('some-type:beforeSome', $this, $data);
-        $expected = $data;
-        $actual   = $event->getData();
-        $this->assertSame($expected, $actual);
-
-        $event->setData();
-        $actual = $event->getData();
-        $this->assertNull($actual);
     }
 }

@@ -14,9 +14,9 @@ declare(strict_types=1);
 namespace Phalcon\Tests\Unit\Session\Manager;
 
 use Codeception\Stub;
-use Phalcon\Tests\UnitTestCase;
 use Phalcon\Session\Manager;
 use Phalcon\Tests\Fixtures\Traits\DiTrait;
+use Phalcon\Tests\UnitTestCase;
 
 final class StartTest extends UnitTestCase
 {

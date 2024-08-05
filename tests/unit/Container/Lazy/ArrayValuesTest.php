@@ -15,7 +15,6 @@ namespace Phalcon\Tests\Unit\Container\Lazy;
 
 use Phalcon\Container\Lazy\ArrayValues;
 use Phalcon\Container\Lazy\Env;
-use Phalcon\Tests\UnitTestCase;
 
 final class ArrayValuesTest extends AbstractLazyBase
 {
@@ -71,37 +70,6 @@ final class ArrayValuesTest extends AbstractLazyBase
     /**
      * @return void
      */
-    public function testContainerLazyArrayValuesRecursion(): void
-    {
-        $lazy = new ArrayValues([
-            'one'   => new Env('TEST_VAR_ONE', 'int'),
-            [
-                'two' => new Env('TEST_VAR_TWO', 'int'),
-            ],
-            'three' => 'dib',
-        ]);
-
-        $one = random_int(1, 100);
-        putenv("TEST_VAR_ONE={$one}");
-
-        $two = random_int(1, 100);
-        putenv("TEST_VAR_TWO={$two}");
-
-        $expect = [
-            'one'   => $one,
-            [
-                'two' => $two,
-            ],
-            'three' => 'dib',
-        ];
-
-        $actual = $lazy($this->container);
-        $this->assertSame($expect, $actual);
-    }
-
-    /**
-     * @return void
-     */
     public function testContainerLazyArrayValuesMerge(): void
     {
         $lazy = new ArrayValues(
@@ -131,6 +99,37 @@ final class ArrayValuesTest extends AbstractLazyBase
 
         $actual = $lazy($this->container);
 
+        $this->assertSame($expect, $actual);
+    }
+
+    /**
+     * @return void
+     */
+    public function testContainerLazyArrayValuesRecursion(): void
+    {
+        $lazy = new ArrayValues([
+            'one'   => new Env('TEST_VAR_ONE', 'int'),
+            [
+                'two' => new Env('TEST_VAR_TWO', 'int'),
+            ],
+            'three' => 'dib',
+        ]);
+
+        $one = random_int(1, 100);
+        putenv("TEST_VAR_ONE={$one}");
+
+        $two = random_int(1, 100);
+        putenv("TEST_VAR_TWO={$two}");
+
+        $expect = [
+            'one'   => $one,
+            [
+                'two' => $two,
+            ],
+            'three' => 'dib',
+        ];
+
+        $actual = $lazy($this->container);
         $this->assertSame($expect, $actual);
     }
 }

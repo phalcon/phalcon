@@ -14,10 +14,10 @@ declare(strict_types=1);
 namespace Phalcon\Tests\Unit\Forms\Element;
 
 use Codeception\Example;
-use Phalcon\Tests\UnitTestCase;
 use Phalcon\Messages\Message;
 use Phalcon\Messages\Messages;
 use Phalcon\Tests\Fixtures\Traits\FormsTrait;
+use Phalcon\Tests\UnitTestCase;
 
 use function uniqid;
 
@@ -30,9 +30,9 @@ final class GetSetHasAppendMessagesTest extends UnitTestCase
      *
      * @dataProvider getExamples
      *
-     * @return void
-     * @param Example           $example
+     * @param Example $example
      *
+     * @return void
      * @author       Phalcon Team <team@phalcon.io>
      * @since        2021-12-05
      */
@@ -52,8 +52,8 @@ final class GetSetHasAppendMessagesTest extends UnitTestCase
 
         $object = new $class($name);
 
-        $className  = Messages::class;
-        $actual = $object->getMessages();
+        $className = Messages::class;
+        $actual    = $object->getMessages();
         $this->assertInstanceOf($className, $actual);
 
         $actual = $object->hasMessages();

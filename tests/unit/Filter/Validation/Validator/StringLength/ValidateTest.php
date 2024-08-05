@@ -13,168 +13,16 @@ declare(strict_types=1);
 
 namespace Phalcon\Tests\Unit\Filter\Validation\Validator\StringLength;
 
-use Phalcon\Tests\UnitTestCase;
 use Phalcon\Filter\Validation;
 use Phalcon\Filter\Validation\Validator\StringLength;
 use Phalcon\Filter\Validation\Validator\StringLength\Max;
 use Phalcon\Filter\Validation\Validator\StringLength\Min;
 use Phalcon\Messages\Message;
 use Phalcon\Messages\Messages;
+use Phalcon\Tests\UnitTestCase;
 
 final class ValidateTest extends UnitTestCase
 {
-    /**
-     * Tests Phalcon\Filter\Validation\Validator\StringLength :: validate() - single
-     * field
-     *
-     * @author Wojciech Ślawski <jurigag@gmail.com>
-     * @since  2016-06-05
-     */
-    public function testFilterValidationValidatorStringLengthValidateSingleField(): void
-    {
-        $validation = new Validation();
-
-        $validation->add(
-            'name',
-            new StringLength(
-                [
-                    'min' => 3,
-                    'max' => 9,
-                ]
-            )
-        );
-
-
-        $messages = $validation->validate(
-            [
-                'name' => 'SomeValue',
-            ]
-        );
-
-        $this->assertSame(
-            0,
-            $messages->count()
-        );
-
-
-        $messages = $validation->validate(
-            [
-                'name' => 'SomeValue123',
-            ]
-        );
-
-        $this->assertSame(
-            1,
-            $messages->count()
-        );
-    }
-
-    /**
-     * Tests Phalcon\Filter\Validation\Validator\StringLength :: validate() - minimum
-     *
-     * @author Phalcon Team <team@phalcon.io>
-     * @since  2013-03-09
-     */
-    public function testFilterValidationValidatorStringLengthValidateMinimum(): void
-    {
-        $validation = new Validation();
-
-        $validation->add(
-            'name',
-            new StringLength(
-                [
-                    'min' => 3,
-                ]
-            )
-        );
-
-
-        $messages = $validation->validate(
-            [
-                'name' => 'Something',
-            ]
-        );
-
-        $this->assertSame(
-            0,
-            $messages->count()
-        );
-
-
-        $expected = new Messages(
-            [
-                new Message(
-                    'Field name must be at least 3 characters long',
-                    'name',
-                    Min::class,
-                    0
-                ),
-            ]
-        );
-
-        $messages = $validation->validate(
-            [
-                'name' => 'So',
-            ]
-        );
-
-        $this->assertEquals($expected, $messages);
-    }
-
-    /**
-     * Tests Phalcon\Filter\Validation\Validator\StringLength :: validate() - minimum
-     * custom message
-     *
-     * @author Phalcon Team <team@phalcon.io>
-     * @since  2013-03-09
-     */
-    public function testFilterValidationValidatorStringLengthValidateMinimumWithCustomMessage(): void
-    {
-        $validation = new Validation();
-
-        $validation->add(
-            'message',
-            new StringLength(
-                [
-                    'min'            => 3,
-                    'messageMinimum' => 'The message is too short',
-                ]
-            )
-        );
-
-
-        $messages = $validation->validate(
-            [
-                'message' => 'Something',
-            ]
-        );
-
-        $this->assertSame(
-            0,
-            $messages->count()
-        );
-
-
-        $expected = new Messages(
-            [
-                new Message(
-                    'The message is too short',
-                    'message',
-                    Min::class,
-                    0
-                ),
-            ]
-        );
-
-        $messages = $validation->validate(
-            [
-                'message' => 'So',
-            ]
-        );
-
-        $this->assertEquals($expected, $messages);
-    }
-
     /**
      * Tests Phalcon\Filter\Validation\Validator\StringLength :: validate() - maximum
      *
@@ -281,37 +129,20 @@ final class ValidateTest extends UnitTestCase
     }
 
     /**
-     * Tests Phalcon\Filter\Validation\Validator\StringLength :: validate()
-     * multiple field and single min, max
+     * Tests Phalcon\Filter\Validation\Validator\StringLength :: validate() - minimum
      *
-     * @author Wojciech Ślawski <jurigag@gmail.com>
-     * @since  2016-06-05
+     * @author Phalcon Team <team@phalcon.io>
+     * @since  2013-03-09
      */
-    public function testFilterValidationValidatorStringLengthValidateMultipleFieldSingleMinMax(): void
+    public function testFilterValidationValidatorStringLengthValidateMinimum(): void
     {
         $validation = new Validation();
 
-        $validationMinimumMessages = [
-            'name' => 'Name length must be minimum 0.',
-            'type' => 'Type length must be minimum 0.',
-        ];
-
-        $validationMaximumMessages = [
-            'name' => 'Name length must be maximum 9.',
-            'type' => 'Type length must be maximum 9.',
-        ];
-
         $validation->add(
-            [
-                'name',
-                'type',
-            ],
+            'name',
             new StringLength(
                 [
-                    'min'            => 0,
-                    'max'            => 9,
-                    'messageMinimum' => $validationMinimumMessages,
-                    'messageMaximum' => $validationMaximumMessages,
+                    'min' => 3,
                 ]
             )
         );
@@ -319,8 +150,7 @@ final class ValidateTest extends UnitTestCase
 
         $messages = $validation->validate(
             [
-                'name' => 'SomeValue',
-                'type' => 'SomeValue',
+                'name' => 'Something',
             ]
         );
 
@@ -330,45 +160,78 @@ final class ValidateTest extends UnitTestCase
         );
 
 
+        $expected = new Messages(
+            [
+                new Message(
+                    'Field name must be at least 3 characters long',
+                    'name',
+                    Min::class,
+                    0
+                ),
+            ]
+        );
+
         $messages = $validation->validate(
             [
-                'name' => 'SomeValue123',
-                'type' => 'SomeValue',
+                'name' => 'So',
+            ]
+        );
+
+        $this->assertEquals($expected, $messages);
+    }
+
+    /**
+     * Tests Phalcon\Filter\Validation\Validator\StringLength :: validate() - minimum
+     * custom message
+     *
+     * @author Phalcon Team <team@phalcon.io>
+     * @since  2013-03-09
+     */
+    public function testFilterValidationValidatorStringLengthValidateMinimumWithCustomMessage(): void
+    {
+        $validation = new Validation();
+
+        $validation->add(
+            'message',
+            new StringLength(
+                [
+                    'min'            => 3,
+                    'messageMinimum' => 'The message is too short',
+                ]
+            )
+        );
+
+
+        $messages = $validation->validate(
+            [
+                'message' => 'Something',
             ]
         );
 
         $this->assertSame(
-            1,
+            0,
             $messages->count()
         );
 
-        $this->assertSame(
-            $validationMaximumMessages['name'],
-            $messages->offsetGet(0)->getMessage()
-        );
 
-
-        $messages = $validation->validate(
+        $expected = new Messages(
             [
-                'name' => 'SomeValue123',
-                'type' => 'SomeValue123',
+                new Message(
+                    'The message is too short',
+                    'message',
+                    Min::class,
+                    0
+                ),
             ]
         );
 
-        $this->assertSame(
-            2,
-            $messages->count()
+        $messages = $validation->validate(
+            [
+                'message' => 'So',
+            ]
         );
 
-        $this->assertSame(
-            $validationMaximumMessages['name'],
-            $messages->offsetGet(0)->getMessage()
-        );
-
-        $this->assertSame(
-            $validationMaximumMessages['type'],
-            $messages->offsetGet(1)->getMessage()
-        );
+        $this->assertEquals($expected, $messages);
     }
 
     /**
@@ -483,6 +346,143 @@ final class ValidateTest extends UnitTestCase
         $this->assertSame(
             $validationMaximumMessages['type'],
             $messages->offsetGet(1)->getMessage()
+        );
+    }
+
+    /**
+     * Tests Phalcon\Filter\Validation\Validator\StringLength :: validate()
+     * multiple field and single min, max
+     *
+     * @author Wojciech Ślawski <jurigag@gmail.com>
+     * @since  2016-06-05
+     */
+    public function testFilterValidationValidatorStringLengthValidateMultipleFieldSingleMinMax(): void
+    {
+        $validation = new Validation();
+
+        $validationMinimumMessages = [
+            'name' => 'Name length must be minimum 0.',
+            'type' => 'Type length must be minimum 0.',
+        ];
+
+        $validationMaximumMessages = [
+            'name' => 'Name length must be maximum 9.',
+            'type' => 'Type length must be maximum 9.',
+        ];
+
+        $validation->add(
+            [
+                'name',
+                'type',
+            ],
+            new StringLength(
+                [
+                    'min'            => 0,
+                    'max'            => 9,
+                    'messageMinimum' => $validationMinimumMessages,
+                    'messageMaximum' => $validationMaximumMessages,
+                ]
+            )
+        );
+
+
+        $messages = $validation->validate(
+            [
+                'name' => 'SomeValue',
+                'type' => 'SomeValue',
+            ]
+        );
+
+        $this->assertSame(
+            0,
+            $messages->count()
+        );
+
+
+        $messages = $validation->validate(
+            [
+                'name' => 'SomeValue123',
+                'type' => 'SomeValue',
+            ]
+        );
+
+        $this->assertSame(
+            1,
+            $messages->count()
+        );
+
+        $this->assertSame(
+            $validationMaximumMessages['name'],
+            $messages->offsetGet(0)->getMessage()
+        );
+
+
+        $messages = $validation->validate(
+            [
+                'name' => 'SomeValue123',
+                'type' => 'SomeValue123',
+            ]
+        );
+
+        $this->assertSame(
+            2,
+            $messages->count()
+        );
+
+        $this->assertSame(
+            $validationMaximumMessages['name'],
+            $messages->offsetGet(0)->getMessage()
+        );
+
+        $this->assertSame(
+            $validationMaximumMessages['type'],
+            $messages->offsetGet(1)->getMessage()
+        );
+    }
+
+    /**
+     * Tests Phalcon\Filter\Validation\Validator\StringLength :: validate() - single
+     * field
+     *
+     * @author Wojciech Ślawski <jurigag@gmail.com>
+     * @since  2016-06-05
+     */
+    public function testFilterValidationValidatorStringLengthValidateSingleField(): void
+    {
+        $validation = new Validation();
+
+        $validation->add(
+            'name',
+            new StringLength(
+                [
+                    'min' => 3,
+                    'max' => 9,
+                ]
+            )
+        );
+
+
+        $messages = $validation->validate(
+            [
+                'name' => 'SomeValue',
+            ]
+        );
+
+        $this->assertSame(
+            0,
+            $messages->count()
+        );
+
+
+        $messages = $validation->validate(
+            [
+                'name' => 'SomeValue123',
+            ]
+        );
+
+        $this->assertSame(
+            1,
+            $messages->count()
         );
     }
 }

@@ -43,6 +43,36 @@ use Phalcon\Tests\UnitTestCase;
 final class NewInstanceTest extends UnitTestCase
 {
     /**
+     * Returns the example data
+     */
+    public static function getData(): array
+    {
+        return [
+            [Filter::FILTER_ABSINT, AbsInt::class],
+            [Filter::FILTER_ALNUM, Alnum::class],
+            [Filter::FILTER_ALPHA, Alpha::class],
+            [Filter::FILTER_BOOL, BoolVal::class],
+            [Filter::FILTER_EMAIL, Email::class],
+            [Filter::FILTER_FLOAT, FloatVal::class],
+            [Filter::FILTER_INT, IntVal::class],
+            [Filter::FILTER_LOWER, Lower::class],
+            [Filter::FILTER_LOWERFIRST, LowerFirst::class],
+            [Filter::FILTER_REGEX, Regex::class],
+            [Filter::FILTER_REMOVE, Remove::class],
+            [Filter::FILTER_REPLACE, Replace::class],
+            [Filter::FILTER_SPECIAL, Special::class],
+            [Filter::FILTER_SPECIALFULL, SpecialFull::class],
+            [Filter::FILTER_STRING, StringVal::class],
+            [Filter::FILTER_STRIPTAGS, Striptags::class],
+            [Filter::FILTER_TRIM, Trim::class],
+            [Filter::FILTER_UPPER, Upper::class],
+            [Filter::FILTER_UPPERFIRST, UpperFirst::class],
+            [Filter::FILTER_UPPERWORDS, UpperWords::class],
+            [Filter::FILTER_URL, Url::class],
+        ];
+    }
+
+    /**
      * Tests Phalcon\Filter\FilterFactory :: newInstance()
      *
      * @return void
@@ -80,35 +110,5 @@ final class NewInstanceTest extends UnitTestCase
 
         $actual = $instance->get($name);
         $this->assertInstanceOf($class, $actual);
-    }
-
-    /**
-     * Returns the example data
-     */
-    public static function getData(): array
-    {
-        return [
-            [Filter::FILTER_ABSINT, AbsInt::class],
-            [Filter::FILTER_ALNUM, Alnum::class],
-            [Filter::FILTER_ALPHA, Alpha::class],
-            [Filter::FILTER_BOOL, BoolVal::class],
-            [Filter::FILTER_EMAIL, Email::class],
-            [Filter::FILTER_FLOAT, FloatVal::class],
-            [Filter::FILTER_INT, IntVal::class],
-            [Filter::FILTER_LOWER, Lower::class],
-            [Filter::FILTER_LOWERFIRST, LowerFirst::class],
-            [Filter::FILTER_REGEX, Regex::class],
-            [Filter::FILTER_REMOVE, Remove::class],
-            [Filter::FILTER_REPLACE, Replace::class],
-            [Filter::FILTER_SPECIAL, Special::class],
-            [Filter::FILTER_SPECIALFULL, SpecialFull::class],
-            [Filter::FILTER_STRING, StringVal::class],
-            [Filter::FILTER_STRIPTAGS, Striptags::class],
-            [Filter::FILTER_TRIM, Trim::class],
-            [Filter::FILTER_UPPER, Upper::class],
-            [Filter::FILTER_UPPERFIRST, UpperFirst::class],
-            [Filter::FILTER_UPPERWORDS, UpperWords::class],
-            [Filter::FILTER_URL, Url::class],
-        ];
     }
 }

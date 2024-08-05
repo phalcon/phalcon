@@ -11,10 +11,10 @@
 
 namespace Phalcon\Tests\Unit\Cli\Console;
 
-use Phalcon\Tests\UnitTestCase;
 use Phalcon\Cli\Console as CliConsole;
 use Phalcon\Di\FactoryDefault\Cli as DiFactoryDefault;
 use Phalcon\Events\Manager as EventsManager;
+use Phalcon\Tests\UnitTestCase;
 
 final class GetSetEventsManagerTest extends UnitTestCase
 {

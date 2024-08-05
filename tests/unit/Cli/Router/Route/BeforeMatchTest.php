@@ -13,10 +13,10 @@ declare(strict_types=1);
 
 namespace Phalcon\Tests\Unit\Cli\Router\Route;
 
-use Phalcon\Tests\UnitTestCase;
 use Phalcon\Cli\Router;
 use Phalcon\Cli\Router\Route;
 use Phalcon\Tests\Fixtures\Traits\DiTrait;
+use Phalcon\Tests\UnitTestCase;
 
 final class BeforeMatchTest extends UnitTestCase
 {
