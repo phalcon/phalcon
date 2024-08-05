@@ -13,12 +13,29 @@ declare(strict_types=1);
 
 namespace Phalcon\Tests\Unit\Mvc\View\Engine\Volt\Compiler;
 
-use Codeception\Example;
 use Phalcon\Mvc\View\Engine\Volt\Compiler;
 use Phalcon\Tests\UnitTestCase;
 
 class SetOptionTest extends UnitTestCase
 {
+    /**
+     * @return string[][]
+     */
+    public static function getVoltSetOptionAutoescape(): array
+    {
+        return [
+            [
+                '{{ "hello" }}{% autoescape true %}{{ "hello" }}' .
+                '{% autoescape false %}{{ "hello" }}{% endautoescape %}' .
+                '{{ "hello" }}{% endautoescape %}{{ "hello" }}',
+                "<?= \$this->escaper->html('hello') ?>" .
+                "<?= \$this->escaper->html('hello') ?>" .
+                "<?= 'hello' ?><?= \$this->escaper->html('hello') ?>" .
+                "<?= \$this->escaper->html('hello') ?>",
+            ],
+        ];
+    }
+
     /**
      * Tests Phalcon\Mvc\View\Engine\Volt\Compiler :: setOption() - autoescape
      *
@@ -37,23 +54,5 @@ class SetOptionTest extends UnitTestCase
 
         $actual = $volt->compileString($param);
         $this->assertSame($expected, $actual);
-    }
-
-    /**
-     * @return string[][]
-     */
-    public static function getVoltSetOptionAutoescape(): array
-    {
-        return [
-            [
-                '{{ "hello" }}{% autoescape true %}{{ "hello" }}' .
-                '{% autoescape false %}{{ "hello" }}{% endautoescape %}' .
-                '{{ "hello" }}{% endautoescape %}{{ "hello" }}',
-                "<?= \$this->escaper->html('hello') ?>" .
-                "<?= \$this->escaper->html('hello') ?>" .
-                "<?= 'hello' ?><?= \$this->escaper->html('hello') ?>" .
-                "<?= \$this->escaper->html('hello') ?>",
-            ],
-        ];
     }
 }

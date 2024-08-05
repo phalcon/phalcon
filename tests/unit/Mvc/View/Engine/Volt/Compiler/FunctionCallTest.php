@@ -13,7 +13,6 @@ declare(strict_types=1);
 
 namespace Phalcon\Tests\Unit\Mvc\View\Engine\Volt\Compiler;
 
-use Codeception\Example;
 use Phalcon\Mvc\View\Engine\Volt\Compiler;
 use Phalcon\Tests\Fixtures\Traits\DiTrait;
 use Phalcon\Tests\UnitTestCase;
@@ -21,27 +20,6 @@ use Phalcon\Tests\UnitTestCase;
 class FunctionCallTest extends UnitTestCase
 {
     use DiTrait;
-
-    /**
-     * Tests Phalcon\Mvc\View\Engine\Volt\Compiler :: functionCall()
-     *
-     * @dataProvider getExamples
-     * @author       Phalcon Team <team@phalcon.io>
-     * @since        2020-01-11
-     */
-    public function testMvcViewEngineVoltCompilerFunctionCall(
-        string $source,
-        string $expected
-    ): void {
-        $this->setNewFactoryDefault();
-
-        $volt = new Compiler();
-        $volt->setDI($this->container);
-
-        $actual   = $volt->compileString($source);
-
-        $this->assertSame($expected, $actual);
-    }
 
     /**
      * @return array
@@ -460,5 +438,26 @@ class FunctionCallTest extends UnitTestCase
                 '<?= $this->tag->ul("test", [\'class\' => "label label-info"]) ?>',
             ],
         ];
+    }
+
+    /**
+     * Tests Phalcon\Mvc\View\Engine\Volt\Compiler :: functionCall()
+     *
+     * @dataProvider getExamples
+     * @author       Phalcon Team <team@phalcon.io>
+     * @since        2020-01-11
+     */
+    public function testMvcViewEngineVoltCompilerFunctionCall(
+        string $source,
+        string $expected
+    ): void {
+        $this->setNewFactoryDefault();
+
+        $volt = new Compiler();
+        $volt->setDI($this->container);
+
+        $actual = $volt->compileString($source);
+
+        $this->assertSame($expected, $actual);
     }
 }

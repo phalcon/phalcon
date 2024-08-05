@@ -13,7 +13,6 @@ declare(strict_types=1);
 
 namespace Phalcon\Tests\Unit\Mvc\View\Engine\Volt\Compiler;
 
-use Codeception\Example;
 use Phalcon\Mvc\View\Engine\Volt\Compiler;
 use Phalcon\Mvc\View\Exception;
 use Phalcon\Tests\UnitTestCase;
@@ -22,67 +21,6 @@ use function is_array;
 
 class ParseTest extends UnitTestCase
 {
-    /**
-     * Tests Phalcon\Mvc\View\Engine\Volt\Compiler :: parse()
-     *
-     * @author       Phalcon Team <team@phalcon.io>
-     * @since        2017-01-15
-     *
-     * @dataProvider getVoltParse
-     */
-    public function testMvcViewEngineVoltCompilerParse(
-        string $param,
-        int $count
-    ): void {
-        $volt   = new Compiler();
-        $actual = $volt->parse($param);
-
-        $this->assertTrue(is_array($actual));
-        $this->assertCount($count, $actual);
-    }
-
-    /**
-     * Tests Phalcon\Mvc\View\Engine\Volt\Compiler :: parse() - extends with
-     * error
-     *
-     * @author       Phalcon Team <team@phalcon.io>
-     * @since        2017-01-15
-     *
-     * @dataProvider getVoltExtendsError
-     */
-    public function testMvcViewEngineVoltCompilerParseExtendsWithError(
-        string $code,
-        string $message
-    ): void {
-        $volt = new Compiler();
-
-        $this->expectException(Exception::class);
-        $this->expectExceptionMessage($message);
-
-        $volt->parse($code);
-    }
-
-    /**
-     * /**
-     * Tests Phalcon\Mvc\View\Engine\Volt\Compiler :: parse() - syntax error
-     *
-     * @author       Phalcon Team <team@phalcon.io>
-     * @since        2017-01-15
-     *
-     * @dataProvider getVoltSyntaxErrors
-     */
-    public function testMvcViewEngineVoltCompilerParseSyntaxError(
-        string $code,
-        string $message
-    ): void {
-        $volt = new Compiler();
-
-        $this->expectException(Exception::class);
-        $this->expectExceptionMessage($message);
-
-        $volt->parse($code);
-    }
-
     public static function getVoltExtendsError(): array
     {
         return [
@@ -323,5 +261,66 @@ class ParseTest extends UnitTestCase
                 "Scanning error before 'album.uri, \"<img...' in eval code on line 1",
             ],
         ];
+    }
+
+    /**
+     * Tests Phalcon\Mvc\View\Engine\Volt\Compiler :: parse()
+     *
+     * @author       Phalcon Team <team@phalcon.io>
+     * @since        2017-01-15
+     *
+     * @dataProvider getVoltParse
+     */
+    public function testMvcViewEngineVoltCompilerParse(
+        string $param,
+        int $count
+    ): void {
+        $volt   = new Compiler();
+        $actual = $volt->parse($param);
+
+        $this->assertTrue(is_array($actual));
+        $this->assertCount($count, $actual);
+    }
+
+    /**
+     * Tests Phalcon\Mvc\View\Engine\Volt\Compiler :: parse() - extends with
+     * error
+     *
+     * @author       Phalcon Team <team@phalcon.io>
+     * @since        2017-01-15
+     *
+     * @dataProvider getVoltExtendsError
+     */
+    public function testMvcViewEngineVoltCompilerParseExtendsWithError(
+        string $code,
+        string $message
+    ): void {
+        $volt = new Compiler();
+
+        $this->expectException(Exception::class);
+        $this->expectExceptionMessage($message);
+
+        $volt->parse($code);
+    }
+
+    /**
+     * /**
+     * Tests Phalcon\Mvc\View\Engine\Volt\Compiler :: parse() - syntax error
+     *
+     * @author       Phalcon Team <team@phalcon.io>
+     * @since        2017-01-15
+     *
+     * @dataProvider getVoltSyntaxErrors
+     */
+    public function testMvcViewEngineVoltCompilerParseSyntaxError(
+        string $code,
+        string $message
+    ): void {
+        $volt = new Compiler();
+
+        $this->expectException(Exception::class);
+        $this->expectExceptionMessage($message);
+
+        $volt->parse($code);
     }
 }

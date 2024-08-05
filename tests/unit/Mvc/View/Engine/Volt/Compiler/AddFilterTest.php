@@ -13,12 +13,35 @@ declare(strict_types=1);
 
 namespace Phalcon\Tests\Unit\Mvc\View\Engine\Volt\Compiler;
 
-use Codeception\Example;
 use Phalcon\Mvc\View\Engine\Volt\Compiler;
 use Phalcon\Tests\UnitTestCase;
 
 class AddFilterTest extends UnitTestCase
 {
+    public static function getVoltAddFilter(): array
+    {
+        return [
+            [
+                'reverse',
+                'strrev',
+                '{{ "hello"|reverse }}',
+                '<?= strrev(\'hello\') ?>',
+            ],
+        ];
+    }
+
+    public static function getVoltAddFilterClosure(): array
+    {
+        return [
+            [
+                'separate',
+                'explode',
+                '{{ "1,2,3,4"|separate }}',
+                '<?= explode(",", \'1,2,3,4\') ?>',
+            ],
+        ];
+    }
+
     /**
      * Tests Phalcon\Mvc\View\Engine\Volt\Compiler :: addFilter()
      *
@@ -69,29 +92,5 @@ class AddFilterTest extends UnitTestCase
             $expected,
             $volt->compileString($voltName)
         );
-    }
-
-    public static function getVoltAddFilter(): array
-    {
-        return [
-            [
-                'reverse',
-                'strrev',
-                '{{ "hello"|reverse }}',
-                '<?= strrev(\'hello\') ?>',
-            ],
-        ];
-    }
-
-    public static function getVoltAddFilterClosure(): array
-    {
-        return [
-            [
-                'separate',
-                'explode',
-                '{{ "1,2,3,4"|separate }}',
-                '<?= explode(",", \'1,2,3,4\') ?>',
-            ],
-        ];
     }
 }

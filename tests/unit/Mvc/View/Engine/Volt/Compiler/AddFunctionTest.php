@@ -13,12 +13,42 @@ declare(strict_types=1);
 
 namespace Phalcon\Tests\Unit\Mvc\View\Engine\Volt\Compiler;
 
-use Codeception\Example;
 use Phalcon\Mvc\View\Engine\Volt\Compiler;
 use Phalcon\Tests\UnitTestCase;
 
 class AddFunctionTest extends UnitTestCase
 {
+    public static function getVoltAddFunction(): array
+    {
+        return [
+            [
+                'random',
+                'mt_rand',
+                '{{ random() }}',
+                '<?= mt_rand() ?>',
+            ],
+
+            [
+                'strtotime',
+                'strtotime',
+                '{{ strtotime("now") }}',
+                '<?= strtotime(\'now\') ?>',
+            ],
+        ];
+    }
+
+    public static function getVoltAddFunctionClosure(): array
+    {
+        return [
+            [
+                'shuffle',
+                'str_shuffle',
+                '{{ shuffle("hello") }}',
+                '<?= str_shuffle(\'hello\') ?>',
+            ],
+        ];
+    }
+
     /**
      * Tests Phalcon\Mvc\View\Engine\Volt\Compiler :: addFunction()
      *
@@ -70,36 +100,5 @@ class AddFunctionTest extends UnitTestCase
             $expected,
             $volt->compileString($voltName)
         );
-    }
-
-    public static function getVoltAddFunction(): array
-    {
-        return [
-            [
-                'random',
-                'mt_rand',
-                '{{ random() }}',
-                '<?= mt_rand() ?>',
-            ],
-
-            [
-                'strtotime',
-                'strtotime',
-                '{{ strtotime("now") }}',
-                '<?= strtotime(\'now\') ?>',
-            ],
-        ];
-    }
-
-    public static function getVoltAddFunctionClosure(): array
-    {
-        return [
-            [
-                'shuffle',
-                'str_shuffle',
-                '{{ shuffle("hello") }}',
-                '<?= str_shuffle(\'hello\') ?>',
-            ],
-        ];
     }
 }

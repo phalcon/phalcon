@@ -13,12 +13,26 @@ declare(strict_types=1);
 
 namespace Phalcon\Tests\Unit\Mvc\View\Engine\Volt\Compiler;
 
-use Codeception\Example;
 use Phalcon\Mvc\View\Engine\Volt\Compiler;
 use Phalcon\Tests\UnitTestCase;
 
 class CompileFileTest extends UnitTestCase
 {
+    public static function defaultFilterProvider(): array
+    {
+        return [
+            [
+                'default',
+                "<?= (empty(\$robot->price) ? (10.0) : (\$robot->price)) ?>\n",
+            ],
+
+            [
+                'default_json_encode',
+                "<?= json_encode((empty(\$preparedParams) ? ([]) : (\$preparedParams))) ?>\n",
+            ],
+        ];
+    }
+
     /**
      * Tests Phalcon\Mvc\View\Engine\Volt\Compiler :: compileFile()
      *
@@ -71,20 +85,5 @@ Clearly, the song is: <?= $this->getContent() ?>.
         $this->assertFileContentsEqual($compiledFile, $expected);
 
         $this->safeDeleteFile($compiledFile);
-    }
-
-    public static function defaultFilterProvider(): array
-    {
-        return [
-            [
-                'default',
-                "<?= (empty(\$robot->price) ? (10.0) : (\$robot->price)) ?>\n",
-            ],
-
-            [
-                'default_json_encode',
-                "<?= json_encode((empty(\$preparedParams) ? ([]) : (\$preparedParams))) ?>\n",
-            ],
-        ];
     }
 }
