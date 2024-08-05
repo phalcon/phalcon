@@ -34,41 +34,41 @@ trait FormsTrait
     /**
      * @return string[][]
      */
-    private function getExamples(): array
+    public static function getExamples(): array
     {
         return [
-            ["Check", Check::class],
-            ["Date", Date::class],
-            ["Email", Email::class],
-            ["File", File::class],
-            ["Hidden", Hidden::class],
-            ["Numeric", Numeric::class],
-            ["Password", Password::class],
-            ["Radio", Radio::class],
-            ["Select", Select::class],
-            ["Submit", Submit::class],
-            ["Text", Text::class],
-            ["TextArea", TextArea::class],
+            [Check::class],
+            [Date::class],
+            [Email::class],
+            [File::class],
+            [Hidden::class],
+            [Numeric::class],
+            [Password::class],
+            [Radio::class],
+            [Select::class],
+            [Submit::class],
+            [Text::class],
+            [TextArea::class],
         ];
     }
 
     /**
      * @return string[][]
      */
-    private function getExamplesWithoutSelect(): array
+    public static function getExamplesWithoutSelect(): array
     {
         return [
-            ["Check", Check::class],
-            ["Date", Date::class],
-            ["Email", Email::class],
-            ["File", File::class],
-            ["Hidden", Hidden::class],
-            ["Numeric", Numeric::class],
-            ["Password", Password::class],
-            ["Radio", Radio::class],
-            ["Submit", Submit::class],
-            ["Text", Text::class],
-            ["TextArea", TextArea::class],
+            [Check::class],
+            [Date::class],
+            [Email::class],
+            [File::class],
+            [Hidden::class],
+            [Numeric::class],
+            [Password::class],
+            [Radio::class],
+            [Submit::class],
+            [Text::class],
+            [TextArea::class],
         ];
     }
 }
