@@ -13,9 +13,6 @@ declare(strict_types=1);
 
 namespace Phalcon\Tests\Fixtures\Migrations;
 
-/**
- * Class InvoicesMigration
- */
 class RollbackTestMigration extends AbstractMigration
 {
     protected $table = 'co_rb_test_model';
@@ -23,8 +20,12 @@ class RollbackTestMigration extends AbstractMigration
     protected function getSqlMysql(): array
     {
         return [
-            'DROP TABLE IF EXISTS co_rb_test_model;',
-            'CREATE TABLE co_rb_test_model (id SMALLINT, name VARCHAR(10) NOT NULL);',
+            'drop table if exists co_rb_test_model;',
+            "
+create table co_rb_test_model (
+    id   smallint,
+    name varchar(10) not null
+);",
         ];
     }
 
@@ -37,7 +38,11 @@ class RollbackTestMigration extends AbstractMigration
     {
         return [
             'DROP TABLE IF EXISTS co_rb_test_model;',
-            'CREATE TABLE co_rb_test_model (id SMALLINT, name VARCHAR(10) NOT NULL);',
+            "
+create table co_rb_test_model (
+    id   smallint,
+    name varchar(10) not null
+);",
         ];
     }
 

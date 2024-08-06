@@ -194,7 +194,7 @@ CREATE TABLE `co_orders` (
 
 
 
-drop table if exists private.`co_orders_x_products`;
+drop table if exists `co_orders_x_products`;
 
 CREATE TABLE private.`co_orders_x_products` (
   `oxp_ord_id` int(10) unsigned NOT NULL,
@@ -239,8 +239,12 @@ CREATE TABLE `co_products` (
   ) ENGINE=InnoDB DEFAULT CHARSET=utf8;
 
 
-DROP TABLE IF EXISTS co_rb_test_model;CREATE TABLE co_rb_test_model (id SMALLINT, name VARCHAR(10) NOT NULL);
+drop table if exists co_rb_test_model;
 
+create table co_rb_test_model (
+    id   smallint,
+    name varchar(10) not null
+);
 
 drop table if exists `co_setters`;
 
