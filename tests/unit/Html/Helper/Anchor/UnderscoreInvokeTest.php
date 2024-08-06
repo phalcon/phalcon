@@ -11,7 +11,6 @@ declare(strict_types=1);
 
 namespace Phalcon\Tests\Unit\Html\Helper\Anchor;
 
-use Codeception\Example;
 use Phalcon\Html\Escaper;
 use Phalcon\Html\Exception;
 use Phalcon\Html\Helper\Anchor;
@@ -92,7 +91,6 @@ final class UnderscoreInvokeTest extends UnitTestCase
      *
      * @dataProvider getExamples
      *
-     * @param Example $example
      *
      * @return void
      * @throws Exception

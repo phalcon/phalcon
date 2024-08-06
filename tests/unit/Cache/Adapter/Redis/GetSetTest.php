@@ -13,7 +13,6 @@ declare(strict_types=1);
 
 namespace Phalcon\Tests\Unit\Cache\Adapter\Redis;
 
-use Codeception\Example;
 use Phalcon\Cache\Adapter\Redis;
 use Phalcon\Storage\Exception as StorageException;
 use Phalcon\Storage\SerializerFactory;
@@ -56,7 +55,6 @@ final class GetSetTest extends UnitTestCase
      *
      * @dataProvider getExamples
      *
-     * @param Example $example
      *
      * @return void
      * @throws HelperException

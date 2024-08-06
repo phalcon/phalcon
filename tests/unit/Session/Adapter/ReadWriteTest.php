@@ -13,12 +13,13 @@ declare(strict_types=1);
 
 namespace Phalcon\Tests\Unit\Session\Adapter;
 
-use Codeception\Stub;
 use Phalcon\Session\Adapter\Redis;
+use Phalcon\Tests\Fixtures\Session\Adapter\StreamFileGetContentsFixture;
 use Phalcon\Tests\Fixtures\Traits\DiTrait;
 use Phalcon\Tests\ServicesTestCase;
 
 use function cacheDir;
+use function getOptionsSessionStream;
 use function uniqid;
 
 final class ReadWriteTest extends ServicesTestCase
@@ -126,18 +127,11 @@ final class ReadWriteTest extends ServicesTestCase
      */
     public function testSessionAdapterStreamReadNoData(): void
     {
-        $adapter = $this->newService('sessionStream');
-
+        $adapter = new StreamFileGetContentsFixture(getOptionsSessionStream());
         $value = uniqid();
         $adapter->write('test1', $value);
 
-        $mock   = Stub::make(
-            $adapter,
-            [
-                'phpFileGetContents' => false,
-            ]
-        );
-        $actual = $mock->read('test1');
+        $actual = $adapter->read('test1');
         $this->assertEmpty($actual);
 
         $this->safeDeleteFile(cacheDir('sessions/test1'));

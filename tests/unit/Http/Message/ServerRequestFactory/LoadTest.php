@@ -13,7 +13,6 @@ declare(strict_types=1);
 
 namespace Phalcon\Tests\Unit\Http\Message\ServerRequestFactory;
 
-use Codeception\Example;
 use Phalcon\Http\Message\Exception\InvalidArgumentException;
 use Phalcon\Http\Message\Factories\ServerRequestFactory;
 use Phalcon\Http\Message\Interfaces\ServerRequestInterface;
@@ -171,7 +170,6 @@ final class LoadTest extends HttpBase
      *
      * @dataProvider getConstructorExamples
      *
-     * @param Example $example
      *
      * @return void
      * @author       Phalcon Team <team@phalcon.io>

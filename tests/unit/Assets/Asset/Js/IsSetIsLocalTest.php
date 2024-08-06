@@ -13,7 +13,6 @@ declare(strict_types=1);
 
 namespace Phalcon\Tests\Unit\Assets\Asset\Js;
 
-use Codeception\Example;
 use Phalcon\Assets\Asset\Js;
 use Phalcon\Tests\Fixtures\Traits\AssetsTrait;
 use Phalcon\Tests\UnitTestCase;
@@ -26,8 +25,6 @@ final class IsSetIsLocalTest extends UnitTestCase
      * Tests Phalcon\Assets\Asset\Js :: isLocal()/setIsLocal()
      *
      * @dataProvider providerJsIsLocal
-     *
-     * @param Example $example
      *
      * @return void
      * @author       Phalcon Team <team@phalcon.io>

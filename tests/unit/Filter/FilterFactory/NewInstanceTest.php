@@ -13,7 +13,6 @@ declare(strict_types=1);
 
 namespace Phalcon\Tests\Unit\Filter\FilterFactory;
 
-use Codeception\Example;
 use Phalcon\Filter\Filter;
 use Phalcon\Filter\FilterFactory;
 use Phalcon\Filter\FilterInterface;
@@ -90,7 +89,6 @@ final class NewInstanceTest extends UnitTestCase
     /**
      * Tests Phalcon\Filter\FilterFactory :: newInstance() - services
      *
-     * @param Example $example
      *
      * @dataProvider getData
      *

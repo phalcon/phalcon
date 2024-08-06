@@ -13,7 +13,6 @@ declare(strict_types=1);
 
 namespace Phalcon\Tests\Unit\Forms\Element;
 
-use Codeception\Example;
 use Phalcon\Forms\Form;
 use Phalcon\Tests\Fixtures\Traits\FormsTrait;
 use Phalcon\Tests\UnitTestCase;
@@ -29,7 +28,6 @@ final class GetSetFormTest extends UnitTestCase
      *
      * @dataProvider getExamples
      *
-     * @param Example $example
      *
      * @return void
      * @author       Phalcon Team <team@phalcon.io>

@@ -13,7 +13,6 @@ declare(strict_types=1);
 
 namespace Phalcon\Tests\Unit\Filter;
 
-use Codeception\Example;
 use Phalcon\Filter\FilterFactory;
 use Phalcon\Tests\UnitTestCase;
 
@@ -784,7 +783,6 @@ final class SanitizeTest extends UnitTestCase
      *
      * @dataProvider getExamples
      *
-     * @param Example $example
      *
      * @author       Phalcon Team <team@phalcon.io>
      * @since        2021-11-07

@@ -13,8 +13,6 @@ declare(strict_types=1);
 
 namespace Phalcon\Tests\Unit\Filter\Validation\Validator\File\Size;
 
-use Codeception\Example;
-use Codeception\Stub;
 use Phalcon\Filter\Validation;
 use Phalcon\Filter\Validation\Validator\File\Size\Equal;
 use Phalcon\Filter\Validation\Validator\File\Size\Max;
@@ -33,21 +31,21 @@ final class ValidateTest extends UnitTestCase
     {
         return [
             [
-                Min::class,
+                MinFixture::class,
                 [
                     'size' => '1K',
                     ':field is smaller than file size (:size)',
                 ],
             ],
             [
-                Max::class,
+                MaxFixture::class,
                 [
                     'size' => '20K',
                     ':field is larger than file size (:size)',
                 ],
             ],
             [
-                Equal::class,
+                EqualFixture::class,
                 [
                     'size' => '11768',
                     ':field is not equal to file size (:size)',
@@ -110,9 +108,6 @@ final class ValidateTest extends UnitTestCase
     /**
      * Tests Phalcon\Filter\Validation\Validator\File\Size :: validate
      *
-     * @param Example $example
-     *
-     * @return void
      * @return void
      * @throws Validation\Exception
      * @author       Phalcon Team <team@phalcon.io>
@@ -142,17 +137,7 @@ final class ValidateTest extends UnitTestCase
             ],
         ];
 
-        $validator = Stub::construct(
-            $class,
-            [
-                $options,
-            ],
-            [
-                'checkIsUploadedFile' => function () {
-                    return true;
-                },
-            ]
-        );
+        $validator = new $class($options);
 
         $validation = new Validation();
         $validation->add('thumbnail', $validator);
@@ -168,7 +153,6 @@ final class ValidateTest extends UnitTestCase
     /**
      * Tests Phalcon\Filter\Validation\Validator\File\Size :: errors
      *
-     * @param Example $example
      *
      * @return void
      * @throws Validation\Exception
@@ -200,17 +184,7 @@ final class ValidateTest extends UnitTestCase
             ],
         ];
 
-        $validator = Stub::construct(
-            $class,
-            [
-                $options,
-            ],
-            [
-                'checkIsUploadedFile' => function () {
-                    return true;
-                },
-            ]
-        );
+        $validator = new $class($options);
 
         $validation = new Validation();
         $validation->add('thumbnail', $validator);
