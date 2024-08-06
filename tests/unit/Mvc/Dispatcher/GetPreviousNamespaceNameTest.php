@@ -15,7 +15,6 @@ namespace Phalcon\Tests\Unit\Mvc\Dispatcher;
 
 use Phalcon\Tests\UnitTestCase;
 
-
 class GetPreviousNamespaceNameTest extends UnitTestCase
 {
     /**

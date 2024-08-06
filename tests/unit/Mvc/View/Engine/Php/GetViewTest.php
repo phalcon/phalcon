@@ -27,7 +27,7 @@ class GetViewTest extends UnitTestCase
      */
     public function testMvcViewEnginePhpGetView(): void
     {
-        $view = new View();
+        $view   = new View();
         $engine = new Php($view);
 
         $this->assertSame(

@@ -30,7 +30,7 @@ class GetRenderTest extends UnitTestCase
     public function testMvcViewGetRender(): void
     {
         $container = new Di();
-        $view = new View();
+        $view      = new View();
 
         $view->setViewsDir(
             $this->getDirSeparator(dataDir('fixtures/views'))

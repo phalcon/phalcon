@@ -20,8 +20,6 @@ use Phalcon\Mvc\Dispatcher;
 use Phalcon\Mvc\View;
 use Phalcon\Tests\UnitTestCase;
 
-use function ob_end_clean;
-
 /**
  * @todo    : refactor
  */
