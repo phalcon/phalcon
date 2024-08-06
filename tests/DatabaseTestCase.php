@@ -64,7 +64,7 @@ class DatabaseTestCase extends UnitTestCase
      * @return PDO|null
      * @throws ModuleException
      */
-    public static function getConnection(): PDO|null
+    public static function getConnection(): PDO | null
     {
         return self::$connection;
     }
@@ -179,17 +179,32 @@ class DatabaseTestCase extends UnitTestCase
         return self::$driver;
     }
 
+    public function hasInDatabase(string $table, array $criteria = []): bool
+    {
+        $sql   = 'SELECT COUNT(*) FROM ' . $table . ' WHERE ';
+        $where = [];
+        foreach ($criteria as $key => $value) {
+            $val = $value;
+            if (is_string($value)) {
+                $val = '"' . $value . '"';
+            }
+
+            $where[] = $key . ' = ' . $val;
+        }
+        $sql .= implode(' AND ', $where);
+
+        $connection = self::$connection;
+        $result     = $connection->query($sql);
+        $records    = $result->fetchAll(PDO::FETCH_ASSOC);
+
+        return !empty($records);
+    }
+
     /**
      * @return void
      */
     public static function setUpBeforeClass(): void
     {
-        error_log(
-            date('YmdH:i:s') . ' setUpBeforeClass ' . static::class . PHP_EOL,
-            3,
-            rootDir('a.log')
-        );
-
         self::$driver = env('driver');
         /**
          * username and password are populated here
@@ -273,26 +288,5 @@ class DatabaseTestCase extends UnitTestCase
         if ($query !== '') {
             self::$connection->exec($query);
         }
-    }
-
-    public function hasInDatabase(string $table, array $criteria = []): bool
-    {
-        $sql = 'SELECT COUNT(*) FROM ' . $table . ' WHERE ';
-        $where = [];
-        foreach ($criteria as $key => $value) {
-            $val = $value;
-            if (is_string($value)) {
-                $val = '"' . $value . '"';
-            }
-
-            $where[] = $key . ' = ' . $val;
-        }
-        $sql .= implode(' AND ', $where);
-
-        $connection = self::$connection;
-        $result  = $connection->query($sql);
-        $records = $result->fetchAll(PDO::FETCH_ASSOC);
-
-        return !empty($records);
     }
 }
