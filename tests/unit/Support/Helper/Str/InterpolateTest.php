@@ -13,7 +13,6 @@ declare(strict_types=1);
 
 namespace Phalcon\Tests\Unit\Support\Helper\Str;
 
-use Codeception\Example;
 use Phalcon\Support\Helper\Str\Interpolate;
 use Phalcon\Tests\UnitTestCase;
 
@@ -70,7 +69,6 @@ final class InterpolateTest extends UnitTestCase
      *
      * @dataProvider getExamples
      *
-     * @param Example $example
      *
      * @return void
      * @author       Phalcon Team <team@phalcon.io>

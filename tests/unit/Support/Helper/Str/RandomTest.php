@@ -13,7 +13,6 @@ declare(strict_types=1);
 
 namespace Phalcon\Tests\Unit\Support\Helper\Str;
 
-use Codeception\Example;
 use Phalcon\Support\Helper\Str\Random;
 use Phalcon\Tests\UnitTestCase;
 
@@ -132,7 +131,6 @@ final class RandomTest extends UnitTestCase
      *
      * @dataProvider randomDistinctProvider
      *
-     * @param Example $example
      *
      * @return void
      * @author       Phalcon Team <team@phalcon.io>

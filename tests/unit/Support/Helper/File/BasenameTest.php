@@ -13,7 +13,6 @@ declare(strict_types=1);
 
 namespace Phalcon\Tests\Unit\Support\Helper\File;
 
-use Codeception\Example;
 use Phalcon\Support\Helper\File\Basename;
 use Phalcon\Tests\UnitTestCase;
 
@@ -93,7 +92,6 @@ final class BasenameTest extends UnitTestCase
      *
      * @dataProvider getNonAsciiExamples
      *
-     * @param Example $example
      *
      * @return void
      * @author       Ian Hu <hu2008yinxiang@163.com>
@@ -118,7 +116,6 @@ final class BasenameTest extends UnitTestCase
      *
      * @dataProvider getAsciiExamples
      *
-     * @param Example $example
      *
      * @return void
      * @author       Ian Hu <hu2008yinxiang@163.com>
