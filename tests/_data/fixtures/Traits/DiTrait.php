@@ -126,14 +126,12 @@ trait DiTrait
     }
 
     /**
-     * @param DatabaseTester $I
-     *
      * @return AdapterInterface
      */
-    protected function newDbService(DatabaseTester $I): AdapterInterface
+    protected function newDbService(): AdapterInterface
     {
         /** @var PDO $connection */
-        $connection = $I->getConnection();
+        $connection = $this->getConnection();
         $driver     = $connection->getAttribute(PDO::ATTR_DRIVER_NAME);
 
         return $this->newDbConnection($driver);
@@ -254,12 +252,9 @@ trait DiTrait
         Di::reset();
     }
 
-    /**
-     * @param DatabaseTester $I
-     */
-    protected function setDatabase(DatabaseTester $I)
+    protected function setDatabase(): void
     {
-        $db = $this->newDbService($I);
+        $db = $this->newDbService();
 
         $this->container->setShared('db', $db);
     }
