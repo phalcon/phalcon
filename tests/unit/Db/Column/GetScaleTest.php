@@ -60,13 +60,13 @@ final class GetScaleTest extends DatabaseTestCase
      */
     public function dbColumnGetScaleDateTimeTimeTimeStamp(): void
     {
-        $driver = $this->getDriver();
+        $driver = self::getDriver();
 
         if ('mysql' === $driver) {
             /**
              * @todo this is for MySql
              */
-            $connection = $this->getConnection();
+            $connection = self::getConnection();
             $migration  = new FractalDatesMigration($connection);
             $migration->clear();
             $migration->insert(

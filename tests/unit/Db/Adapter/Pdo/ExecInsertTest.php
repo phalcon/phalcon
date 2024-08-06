@@ -55,7 +55,7 @@ final class ExecInsertTest extends DatabaseTestCase
      */
     public function dbAdapterPdoInsert(): void
     {
-        $connection = $this->getConnection();
+        $connection = self::getConnection();
         $migration  = new DialectMigration($connection);
         $sql        = <<<SQL
 insert into co_dialect (

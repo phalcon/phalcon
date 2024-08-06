@@ -49,7 +49,7 @@ final class DescribeColumnsTest extends DatabaseTestCase
     {
         $db        = $this->container->get('db');
         $now       = date('Y-m-d H:i:s');
-        $migration = new ComplexDefaultMigration($this->getConnection());
+        $migration = new ComplexDefaultMigration(self::getConnection());
         $migration->insert(1, $now, $now);
 
         $columns = $db->describeColumns($migration->getTable());
@@ -72,7 +72,7 @@ final class DescribeColumnsTest extends DatabaseTestCase
     {
         $db        = $this->container->get('db');
         $now       = date('Y-m-d H:i:s');
-        $migration = new ComplexDefaultMigration($this->getConnection());
+        $migration = new ComplexDefaultMigration(self::getConnection());
         $migration->insert(1, $now, $now);
 
         $columns = $db->describeColumns($migration->getTable());
@@ -95,7 +95,7 @@ final class DescribeColumnsTest extends DatabaseTestCase
     {
         /** @var Mysql $db */
         $db        = $this->container->get('db');
-        $migration = new DialectMigration($this->getConnection());
+        $migration = new DialectMigration(self::getConnection());
         $columns   = $db->describeColumns($migration->getTable());
 
         $expected = 40;
