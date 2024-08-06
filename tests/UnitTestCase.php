@@ -13,11 +13,8 @@ declare(strict_types=1);
 
 namespace Phalcon\Tests;
 
-use Exception;
-use Memcached;
 use PHPUnit\Framework\SkippedTestSuiteError;
 use PHPUnit\Framework\TestCase;
-use Predis\Client as RedisDriver;
 use ReflectionClass;
 use ReflectionException;
 
@@ -28,8 +25,6 @@ use function extension_loaded;
 use function file_exists;
 use function func_get_args;
 use function gc_collect_cycles;
-use function getOptionsLibmemcached;
-use function getOptionsRedis;
 use function glob;
 use function is_dir;
 use function is_file;
@@ -118,33 +113,6 @@ class UnitTestCase extends TestCase
         }
     }
 
-    public function clearMemcached(): void
-    {
-        $adapter = $this->getMemcached();
-
-        $adapter->flush();
-    }
-
-    /**
-     * Checks whether a key exists
-     *
-     * @param string $key The key name
-     */
-    public function doesNotHaveMemcachedKey(string $key): bool
-    {
-        return false === $this->hasMemcachedKey($key);
-    }
-
-    /**
-     * Checks whether a key exists
-     *
-     * @param string $key The key name
-     */
-    public function doesNotHaveRedisKey(string $key): bool
-    {
-        return false === $this->hasRedisKey($key);
-    }
-
     /**
      * Returns a directory string with the trailing directory separator
      *
@@ -155,21 +123,6 @@ class UnitTestCase extends TestCase
     public function getDirSeparator(string $directory): string
     {
         return rtrim($directory, DIRECTORY_SEPARATOR) . DIRECTORY_SEPARATOR;
-    }
-
-    /**
-     * Returns the value of a given key
-     *
-     * @param string     $key
-     * @param mixed|null $value
-     *
-     * @return void
-     */
-    public function getMemcachedKey(string $key): mixed
-    {
-        $adapter = $this->getMemcached();
-
-        return $adapter->get($key);
     }
 
     /**
@@ -210,44 +163,6 @@ class UnitTestCase extends TestCase
     }
 
     /**
-     * Returns the value of a given key
-     *
-     * @param string $key The key name
-     *
-     * @throws Exception if the key does not exist
-     */
-    public function getRedisKey(string $key): array | string | null
-    {
-        $adapter = $this->getRedis();
-
-        return $adapter->get($key);
-    }
-
-    /**
-     * Checks whether a key exists
-     *
-     * @param string $key The key name
-     */
-    public function hasMemcachedKey(string $key): bool
-    {
-        $adapter = $this->getMemcached();
-
-        return null !== $adapter->get($key);
-    }
-
-    /**
-     * Checks whether a key exists
-     *
-     * @param string $key The key name
-     */
-    public function hasRedisKey(string $key): bool
-    {
-        $adapter = $this->getRedis();
-
-        return (bool)$adapter->exists($key);
-    }
-
-    /**
      * Deletes a directory recursively
      *
      * @param string $directory
@@ -282,42 +197,6 @@ class UnitTestCase extends TestCase
     }
 
     /**
-     * Sends a command directly to the Redis driver. See documentation at
-     * https://github.com/nrk/predis
-     * Every argument that follows the $command name will be passed to it.
-     *
-     * @param string $command The command name
-     *
-     * @return mixed
-     */
-    public function sendRedisCommand(string $command): mixed
-    {
-        return call_user_func_array(
-            [$this->getRedis(), $command],
-            array_slice(func_get_args(), 1)
-        );
-    }
-
-    /**
-     * Creates or modifies keys
-     *
-     * @param string $key
-     * @param mixed  $value
-     * @param int    $expiration
-     *
-     * @return void
-     */
-    public function setMemcachedKey(
-        string $key,
-        mixed $value,
-        int $expiration = 0
-    ): void {
-        $adapter = $this->getMemcached();
-
-        $this->assertTrue($adapter->set($key, $value, $expiration));
-    }
-
-    /**
      * Sets a protected property
      *
      * @param object|string $obj
@@ -338,55 +217,5 @@ class UnitTestCase extends TestCase
 
         $property->setAccessible(true);
         $property->setValue($obj, $value);
-    }
-
-    /**
-     * Creates or modifies keys
-     *
-     * @param string $key   The key name
-     * @param mixed  $value The value
-     *
-     * @throws Exception
-     */
-    public function setRedisKey(
-        string $key,
-        mixed $value
-    ): void {
-        $adapter = $this->getRedis();
-
-        $result = $adapter->set($key, $value);
-
-        if (false === $result) {
-            throw new Exception('Cannot set key in Redis');
-        }
-    }
-
-    /**
-     * @return Memcached
-     */
-    private function getMemcached(): Memcached
-    {
-        $options = getOptionsLibmemcached();
-        $server  = $options['servers'][0];
-        $adapter = new Memcached();
-        $adapter->addServer($server['host'], (int) $server['port']);
-
-        return $adapter;
-    }
-
-    /**
-     * @return RedisDriver
-     */
-    private function getRedis(): RedisDriver
-    {
-        try {
-            $adapter = new RedisDriver(getOptionsRedis());
-
-            return $adapter;
-        } catch (Exception $exception) {
-            $this->markTestSkipped(
-                __CLASS__ . ' - ' . $exception->getMessage()
-            );
-        }
     }
 }
