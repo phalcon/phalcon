@@ -13,7 +13,6 @@ declare(strict_types=1);
 
 namespace Phalcon\Tests\Unit\Support\Version;
 
-use Codeception\Example;
 use Phalcon\Tests\Fixtures\Support\Version\VersionAlphaFixture;
 use Phalcon\Tests\Fixtures\Support\Version\VersionBetaFixture;
 use Phalcon\Tests\Fixtures\Support\Version\VersionRcFixture;
@@ -54,7 +53,6 @@ final class GetTest extends UnitTestCase
      *
      * @dataProvider getExamples
      *
-     * @param Example $example
      *
      * @return void
      * @author       Phalcon Team <team@phalcon.io>
