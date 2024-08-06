@@ -70,7 +70,7 @@ jobs:
           PHALCON_PATH: ext
 
       - name: "Install development dependencies with Composer"
-        uses: "ramsey/composer-install@v2"
+        uses: "ramsey/composer-install@v3"
         with:
           composer-options: "--prefer-dist"
 
@@ -253,7 +253,7 @@ jobs:
           DATA_REDIS_PORT: ${{ job.services.redis.ports['6379'] }}
           DATA_MEMCACHED_PORT: ${{ job.services.memcached.ports['11211'] }}
         run: |
-          test-db-mysql-coverage
+          composer test-db-mysql-coverage
 
       - name: "Upload coverage file artifact"
         uses: "actions/upload-artifact@v4"
