@@ -24,6 +24,27 @@ final class GetColumnMapTest extends DatabaseTestCase
     use DiTrait;
 
     /**
+     * @return array[]
+     */
+    public static function getExamples(): array
+    {
+        return [
+            [
+                'metadataMemory',
+            ],
+            [
+                'metadataApcu',
+            ],
+            [
+                'metadataRedis',
+            ],
+            [
+                'metadataLibmemcached',
+            ],
+        ];
+    }
+
+    /**
      * Executed before each test
      *
      * @return void
@@ -42,7 +63,7 @@ final class GetColumnMapTest extends DatabaseTestCase
      * @author       Phalcon Team <team@phalcon.io>
      * @since        2020-02-01
      *
-     * @group common
+     * @group        common
      */
     public function testMvcModelMetadataGetColumnMap(
         string $service
@@ -87,26 +108,5 @@ final class GetColumnMapTest extends DatabaseTestCase
         $this->assertTrue($adapter->isEmpty());
 
         $this->assertEquals($expected, $adapter->getColumnMap($model));
-    }
-
-    /**
-     * @return array[]
-     */
-    public static function getExamples(): array
-    {
-        return [
-            [
-                'metadataMemory',
-            ],
-            [
-                'metadataApcu',
-            ],
-            [
-                'metadataRedis',
-            ],
-            [
-                'metadataLibmemcached',
-            ],
-        ];
     }
 }

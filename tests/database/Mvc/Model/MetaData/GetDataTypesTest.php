@@ -22,6 +22,27 @@ final class GetDataTypesTest extends DatabaseTestCase
 {
     use DiTrait;
 
+    /**
+     * @return array[]
+     */
+    public static function getExamples(): array
+    {
+        return [
+            [
+                'metadataMemory',
+            ],
+            [
+                'metadataApcu',
+            ],
+            [
+                'metadataRedis',
+            ],
+            [
+                'metadataLibmemcached',
+            ],
+        ];
+    }
+
     public function setUp(): void
     {
         $this->setNewFactoryDefault();
@@ -36,7 +57,7 @@ final class GetDataTypesTest extends DatabaseTestCase
      * @author       Phalcon Team <team@phalcon.io>
      * @since        2020-02-01
      *
-     * @group common
+     * @group        common
      */
     public function testMvcModelMetadataGetDataTypes(
         string $service
@@ -73,27 +94,6 @@ final class GetDataTypesTest extends DatabaseTestCase
 
         $actual = $adapter->getDataTypes($model);
         $this->assertEquals($expected, $actual);
-    }
-
-    /**
-     * @return array[]
-     */
-    public static function getExamples(): array
-    {
-        return [
-            [
-                'metadataMemory',
-            ],
-            [
-                'metadataApcu',
-            ],
-            [
-                'metadataRedis',
-            ],
-            [
-                'metadataLibmemcached',
-            ],
-        ];
     }
 
     private function getTypes(): array

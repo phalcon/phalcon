@@ -148,22 +148,14 @@ final class PaginateTest extends DatabaseTestCase
     /**
      * @group common
      */
-    public function testPaginatorAdapterModelPaginateParametersString(): void
+    public function testPaginatorAdapterModelPaginateEmpty(): void
     {
-        /** @var PDO $connection */
-        $connection = self::getConnection();
-        $migration  = new InvoicesMigration($connection);
-        $invId      = ('sqlite' === self::getDriver()) ? 'null' : 'default';
-
-        $this->insertDataInvoices($migration, 17, $invId, 2, 'ccc');
-        $this->insertDataInvoices($migration, 11, $invId, 3, 'aaa');
-        $this->insertDataInvoices($migration, 31, $invId, 1, 'aaa');
-        $this->insertDataInvoices($migration, 15, $invId, 2, 'bbb');
-
         $paginator = new Model(
             [
                 'model'      => Invoices::class,
-                'parameters' => 'inv_cst_id >= 2',
+                'parameters' => [
+                    'inv_cst_id < -1',
+                ],
                 'limit'      => 5,
                 'page'       => 1,
             ]
@@ -174,10 +166,11 @@ final class PaginateTest extends DatabaseTestCase
 
         $this->assertInstanceOf(Repository::class, $page);
 
-        $this->assertCount(5, $page->getItems());
+        $this->assertCount(0, $page->getItems());
+        $this->assertIsArray($page->getItems());
         $this->assertEquals(1, $page->getPrevious());
-        $this->assertEquals(2, $page->getNext());
-        $this->assertEquals(9, $page->getLast());
+        $this->assertEquals(0, $page->getNext());
+        $this->assertEquals(0, $page->getLast());
         $this->assertEquals(5, $page->getLimit());
         $this->assertEquals(1, $page->getCurrent());
     }
@@ -224,14 +217,22 @@ final class PaginateTest extends DatabaseTestCase
     /**
      * @group common
      */
-    public function testPaginatorAdapterModelPaginateEmpty(): void
+    public function testPaginatorAdapterModelPaginateParametersString(): void
     {
+        /** @var PDO $connection */
+        $connection = self::getConnection();
+        $migration  = new InvoicesMigration($connection);
+        $invId      = ('sqlite' === self::getDriver()) ? 'null' : 'default';
+
+        $this->insertDataInvoices($migration, 17, $invId, 2, 'ccc');
+        $this->insertDataInvoices($migration, 11, $invId, 3, 'aaa');
+        $this->insertDataInvoices($migration, 31, $invId, 1, 'aaa');
+        $this->insertDataInvoices($migration, 15, $invId, 2, 'bbb');
+
         $paginator = new Model(
             [
                 'model'      => Invoices::class,
-                'parameters' => [
-                    'inv_cst_id < -1',
-                ],
+                'parameters' => 'inv_cst_id >= 2',
                 'limit'      => 5,
                 'page'       => 1,
             ]
@@ -242,11 +243,10 @@ final class PaginateTest extends DatabaseTestCase
 
         $this->assertInstanceOf(Repository::class, $page);
 
-        $this->assertCount(0, $page->getItems());
-        $this->assertIsArray($page->getItems());
+        $this->assertCount(5, $page->getItems());
         $this->assertEquals(1, $page->getPrevious());
-        $this->assertEquals(0, $page->getNext());
-        $this->assertEquals(0, $page->getLast());
+        $this->assertEquals(2, $page->getNext());
+        $this->assertEquals(9, $page->getLast());
         $this->assertEquals(5, $page->getLimit());
         $this->assertEquals(1, $page->getCurrent());
     }
@@ -307,8 +307,8 @@ final class PaginateTest extends DatabaseTestCase
      * @since  2023-12-26
      * @issue  https://github.com/phalcon/cphalcon/issues/16471
      *
-     * @group mysql
-     * @group pgsql
+     * @group  mysql
+     * @group  pgsql
      */
     public function testPaginatorAdapterModelPaginateWithOrder(): void
     {
@@ -327,7 +327,7 @@ final class PaginateTest extends DatabaseTestCase
                 'model'      => Invoices::class,
                 'parameters' => [
                     'inv_cst_id >= 2',
-                    'order' => 'inv_cst_id'
+                    'order' => 'inv_cst_id',
                 ],
                 'limit'      => 5,
                 'page'       => 1,

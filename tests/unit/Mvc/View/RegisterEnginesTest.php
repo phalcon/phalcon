@@ -53,10 +53,8 @@ class RegisterEnginesTest extends UnitTestCase
     private function getViewRegisterEngines(): array
     {
         return [
-//            '.mhtml' => MustacheEngine::class,
-        '.phtml' => Php::class,
-//            '.twig'  => TwigEngine::class,
-        '.volt'  => Volt::class,
+            '.phtml' => Php::class,
+            '.volt'  => Volt::class,
         ];
     }
 }

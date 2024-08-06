@@ -20,7 +20,6 @@ use Phalcon\DataMapper\Pdo\Connection;
 use function array_filter;
 use function date;
 use function env;
-use function error_log;
 use function explode;
 use function file_exists;
 use function file_get_contents;
@@ -29,13 +28,11 @@ use function getOptionsPostgresql;
 use function getOptionsSqlite;
 use function preg_match;
 use function preg_split;
-use function rootDir;
 use function sprintf;
 use function strlen;
 use function substr;
 use function trim;
 
-use const PHP_EOL;
 use const PREG_SPLIT_NO_EMPTY;
 
 class DatabaseTestCase extends UnitTestCase

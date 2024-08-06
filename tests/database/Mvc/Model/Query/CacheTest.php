@@ -27,6 +27,27 @@ final class CacheTest extends DatabaseTestCase
 {
     use DiTrait;
 
+    /**
+     * @return string[][]
+     */
+    public static function getValidSerializers(): array
+    {
+        return [
+            /**
+             * @todo igbinary is throwing a seg fault in the docker environment
+             */
+            //            [
+            //                'Igbinary',
+            //            ],
+            [
+                'Msgpack',
+            ],
+            [
+                'Php',
+            ],
+        ];
+    }
+
     public function setUp(): void
     {
         $this->setNewFactoryDefault();
@@ -42,7 +63,7 @@ final class CacheTest extends DatabaseTestCase
      * @since        2021-05-06
      * @issue
      *
-     * @group common
+     * @group        common
      */
     public function testMvcModelQueryCache(
         string $serializer
@@ -149,26 +170,5 @@ final class CacheTest extends DatabaseTestCase
          * Delete the cache key
          */
         $cache->delete($cacheKey);
-    }
-
-    /**
-     * @return string[][]
-     */
-    public static function getValidSerializers(): array
-    {
-        return [
-            /**
-             * @todo igbinary is throwing a seg fault in the docker environment
-             */
-            //            [
-            //                'Igbinary',
-            //            ],
-            [
-                'Msgpack',
-            ],
-            [
-                'Php',
-            ],
-        ];
     }
 }

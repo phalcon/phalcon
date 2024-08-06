@@ -59,7 +59,7 @@ final class GetSetWriteTest extends DatabaseTestCase
      *
      * @since  2020-01-25
      *
-     * @group common
+     * @group  common
      */
     public function testDmPdoConnectionLocatorGetWriteEmpty(): void
     {
@@ -76,7 +76,7 @@ final class GetSetWriteTest extends DatabaseTestCase
      *
      * @since  2020-01-25
      *
-     * @group common
+     * @group  common
      */
     public function testDmPdoConnectionLocatorGetWriteException(): void
     {
@@ -104,7 +104,7 @@ final class GetSetWriteTest extends DatabaseTestCase
      *
      * @since  2020-01-25
      *
-     * @group common
+     * @group  common
      */
     public function testDmPdoConnectionLocatorGetWriteRandom(): void
     {

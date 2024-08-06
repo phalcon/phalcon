@@ -26,7 +26,7 @@ final class SetLimitTest extends DatabaseTestCase
      */
     public function testPaginatorAdapterNativearraySetLimit(): void
     {
-         $paginator = new NativeArray(
+        $paginator = new NativeArray(
             [
                 'data'  => array_fill(0, 30, 'banana'),
                 'limit' => 25,

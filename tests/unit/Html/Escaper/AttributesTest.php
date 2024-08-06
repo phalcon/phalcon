@@ -26,28 +26,6 @@ use const ENT_XML1;
 final class AttributesTest extends UnitTestCase
 {
     /**
-     * Tests Phalcon\Escaper :: attributes()
-     *
-     * @dataProvider escaperEscapeHtmlAttrProvider
-     *
-     * @return void
-     *
-     * @author       Phalcon Team <team@phalcon.io>
-     * @since        2020-09-09
-     */
-    public function testEscaperAttributes(
-        int $flags,
-        string $expected,
-        mixed $text
-    ): void {
-        $escaper = new Escaper();
-        $escaper->setFlags($flags);
-
-        $actual = $escaper->attributes($text);
-        $this->assertSame($expected, $actual);
-    }
-
-    /**
      * @return array[]
      */
     public static function escaperEscapeHtmlAttrProvider(): array
@@ -126,5 +104,27 @@ final class AttributesTest extends UnitTestCase
                 ],
             ],
         ];
+    }
+
+    /**
+     * Tests Phalcon\Escaper :: attributes()
+     *
+     * @dataProvider escaperEscapeHtmlAttrProvider
+     *
+     * @return void
+     *
+     * @author       Phalcon Team <team@phalcon.io>
+     * @since        2020-09-09
+     */
+    public function testEscaperAttributes(
+        int $flags,
+        string $expected,
+        mixed $text
+    ): void {
+        $escaper = new Escaper();
+        $escaper->setFlags($flags);
+
+        $actual = $escaper->attributes($text);
+        $this->assertSame($expected, $actual);
     }
 }

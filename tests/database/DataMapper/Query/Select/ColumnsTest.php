@@ -51,7 +51,7 @@ final class ColumnsTest extends DatabaseTestCase
                 [
                     'id'         => 'inv_id',
                     'customerId' => 'inv_cst_id',
-                    'total'      => 'COUNT(inv_total)'
+                    'total'      => 'COUNT(inv_total)',
                 ]
             )
             ->from('co_invoices')

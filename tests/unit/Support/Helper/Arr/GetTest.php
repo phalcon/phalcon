@@ -13,100 +13,12 @@ declare(strict_types=1);
 
 namespace Phalcon\Tests\Unit\Support\Helper\Arr;
 
-use Codeception\Example;
 use Phalcon\Support\Helper\Arr\Get;
-use stdClass;
 use Phalcon\Tests\UnitTestCase;
+use stdClass;
 
 final class GetTest extends UnitTestCase
 {
-    /**
-     * Tests Phalcon\Support\Helper\Arr :: get() - numeric
-     *
-     * @return void
-     *
-     * @author Phalcon Team <team@phalcon.io>
-     * @since  2020-09-09
-     */
-    public function testSupportHelperArrGetNumeric(): void
-    {
-        $object     = new Get();
-        $collection = [
-            1        => 'Phalcon',
-            'suffix' => 'Framework',
-        ];
-
-        $expected = 'Phalcon';
-        $actual   = $object($collection, 1, 'Error');
-        $this->assertSame($expected, $actual);
-    }
-
-    /**
-     * Tests Phalcon\Support\Helper\Arr :: get() - string
-     *
-     * @return void
-     *
-     * @author Phalcon Team <team@phalcon.io>
-     * @since  2020-09-09
-     */
-    public function testSupportHelperArrGetString(): void
-    {
-        $object     = new Get();
-        $collection = [
-            1        => 'Phalcon',
-            'suffix' => 'Framework',
-        ];
-
-        $expected = 'Framework';
-        $actual   = $object($collection, 'suffix', 'Error');
-        $this->assertSame($expected, $actual);
-    }
-
-    /**
-     * Tests Phalcon\Support\Helper\Arr :: get() - default
-     *
-     * @return void
-     *
-     * @author Phalcon Team <team@phalcon.io>
-     * @since  2020-09-09
-     */
-    public function testSupportHelperArrGetDefault(): void
-    {
-        $object     = new Get();
-        $collection = [
-            1        => 'Phalcon',
-            'suffix' => 'Framework',
-        ];
-
-        $expected = 'Error';
-        $actual   = $object($collection, uniqid(), 'Error');
-        $this->assertSame($expected, $actual);
-    }
-
-    /**
-     * Tests Phalcon\Support\Helper\Arr :: get() - cast
-     *
-     * @dataProvider getExamples
-     *
-     * @return void
-     *
-     * @author       Phalcon Team <team@phalcon.io>
-     * @since        2020-09-09
-     */
-    public function testSupportHelperArrGetCast(
-        string $cast,
-        mixed $value,
-        mixed $expected
-    ): void {
-        $object     = new Get();
-        $collection = [
-            'value' => $value,
-        ];
-
-        $actual = $object($collection, 'value', null, $cast);
-        $this->assertEquals($expected, $actual);
-    }
-
     /**
      * @return array[]
      */
@@ -167,5 +79,92 @@ final class GetTest extends UnitTestCase
                 null,
             ],
         ];
+    }
+
+    /**
+     * Tests Phalcon\Support\Helper\Arr :: get() - cast
+     *
+     * @dataProvider getExamples
+     *
+     * @return void
+     *
+     * @author       Phalcon Team <team@phalcon.io>
+     * @since        2020-09-09
+     */
+    public function testSupportHelperArrGetCast(
+        string $cast,
+        mixed $value,
+        mixed $expected
+    ): void {
+        $object     = new Get();
+        $collection = [
+            'value' => $value,
+        ];
+
+        $actual = $object($collection, 'value', null, $cast);
+        $this->assertEquals($expected, $actual);
+    }
+
+    /**
+     * Tests Phalcon\Support\Helper\Arr :: get() - default
+     *
+     * @return void
+     *
+     * @author Phalcon Team <team@phalcon.io>
+     * @since  2020-09-09
+     */
+    public function testSupportHelperArrGetDefault(): void
+    {
+        $object     = new Get();
+        $collection = [
+            1        => 'Phalcon',
+            'suffix' => 'Framework',
+        ];
+
+        $expected = 'Error';
+        $actual   = $object($collection, uniqid(), 'Error');
+        $this->assertSame($expected, $actual);
+    }
+
+    /**
+     * Tests Phalcon\Support\Helper\Arr :: get() - numeric
+     *
+     * @return void
+     *
+     * @author Phalcon Team <team@phalcon.io>
+     * @since  2020-09-09
+     */
+    public function testSupportHelperArrGetNumeric(): void
+    {
+        $object     = new Get();
+        $collection = [
+            1        => 'Phalcon',
+            'suffix' => 'Framework',
+        ];
+
+        $expected = 'Phalcon';
+        $actual   = $object($collection, 1, 'Error');
+        $this->assertSame($expected, $actual);
+    }
+
+    /**
+     * Tests Phalcon\Support\Helper\Arr :: get() - string
+     *
+     * @return void
+     *
+     * @author Phalcon Team <team@phalcon.io>
+     * @since  2020-09-09
+     */
+    public function testSupportHelperArrGetString(): void
+    {
+        $object     = new Get();
+        $collection = [
+            1        => 'Phalcon',
+            'suffix' => 'Framework',
+        ];
+
+        $expected = 'Framework';
+        $actual   = $object($collection, 'suffix', 'Error');
+        $this->assertSame($expected, $actual);
     }
 }

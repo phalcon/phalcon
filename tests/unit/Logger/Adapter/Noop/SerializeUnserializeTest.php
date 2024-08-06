@@ -30,13 +30,13 @@ final class SerializeUnserializeTest extends UnitTestCase
      * @since  2021-09-03
      * @issue  15638
      */
-    public function testLoggerAdapterNoopSerializeUnserializeException(): void
+    public function testLoggerAdapterNoopSerializeUnserialize(): void
     {
         $this->expectException(Exception::class);
-        $this->expectExceptionMessage("This object cannot be serialized");
+        $this->expectExceptionMessage("This object cannot be unserialized");
 
-        $adapter = new Noop();
-        $object  = serialize($adapter);
+        $serialized = file_get_contents(dataDir('assets/logger/logger.serialized'));
+        $object     = unserialize($serialized);
     }
 
     /**
@@ -46,12 +46,12 @@ final class SerializeUnserializeTest extends UnitTestCase
      * @since  2021-09-03
      * @issue  15638
      */
-    public function testLoggerAdapterNoopSerializeUnserialize(): void
+    public function testLoggerAdapterNoopSerializeUnserializeException(): void
     {
         $this->expectException(Exception::class);
-        $this->expectExceptionMessage("This object cannot be unserialized");
+        $this->expectExceptionMessage("This object cannot be serialized");
 
-        $serialized = file_get_contents(dataDir('assets/logger/logger.serialized'));
-        $object     = unserialize($serialized);
+        $adapter = new Noop();
+        $object  = serialize($adapter);
     }
 }

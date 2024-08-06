@@ -60,7 +60,7 @@ final class FetchObjectTest extends DatabaseTestCase
      */
     public function testDmPdoConnectionFetchObject(): void
     {
-         /** @var Connection $connection */
+        /** @var Connection $connection */
         $connection = $this->getDataMapperConnection();
         $migration  = new InvoicesMigration($connection);
         $migration->clear();

@@ -32,7 +32,7 @@ final class ProfilerTest extends DatabaseTestCase
      * @author Phalcon Team <team@phalcon.io>
      * @since  2022-11-30
      *
-     * @group mysql
+     * @group  mysql
      */
     public function testDbProfilerFull(): void
     {

@@ -21,15 +21,15 @@ final class HasChangedTest extends DatabaseTestCase
 {
     use DiTrait;
 
-    public function tearDown(): void
-    {
-        $this->container['db']->close();
-    }
-
     public function setUp(): void
     {
         $this->setNewFactoryDefault();
         $this->setDatabase();
+    }
+
+    public function tearDown(): void
+    {
+        $this->container['db']->close();
     }
 
     /**
