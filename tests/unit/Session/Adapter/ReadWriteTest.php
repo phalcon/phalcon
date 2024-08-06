@@ -16,12 +16,13 @@ namespace Phalcon\Tests\Unit\Session\Adapter;
 use Codeception\Stub;
 use Phalcon\Session\Adapter\Redis;
 use Phalcon\Tests\Fixtures\Traits\DiTrait;
+use Phalcon\Tests\ServicesTestCase;
 use Phalcon\Tests\UnitTestCase;
 
 use function cacheDir;
 use function uniqid;
 
-final class ReadWriteTest extends UnitTestCase
+final class ReadWriteTest extends ServicesTestCase
 {
     use DiTrait;
 
