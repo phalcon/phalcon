@@ -6,8 +6,8 @@
          colors="true"
 >
     <testsuites>
-        <testsuite name="unit tests">
-            <directory>./tests</directory>
+        <testsuite name="unit and mysql tests">
+            <directory>./tests/unit/</directory>
         </testsuite>
     </testsuites>
     <source>

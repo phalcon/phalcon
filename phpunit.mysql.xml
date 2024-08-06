@@ -6,8 +6,8 @@
          colors="true"
 >
     <testsuites>
-        <testsuite name="unit tests">
-            <directory>./tests</directory>
+        <testsuite name="unit and mysql tests">
+            <directory>./tests/database</directory>
         </testsuite>
     </testsuites>
     <source>
@@ -17,8 +17,8 @@
     </source>
     <groups>
         <include>
-            <group>mysql</group>
             <group>common</group>
+            <group>mysql</group>
         </include>
     </groups>
     <php>
