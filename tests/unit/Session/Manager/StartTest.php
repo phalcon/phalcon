@@ -13,8 +13,7 @@ declare(strict_types=1);
 
 namespace Phalcon\Tests\Unit\Session\Manager;
 
-use Codeception\Stub;
-use Phalcon\Session\Manager;
+use Phalcon\Tests\Fixtures\Session\ManagerHeadersSentFixture;
 use Phalcon\Tests\Fixtures\Traits\DiTrait;
 use Phalcon\Tests\UnitTestCase;
 
@@ -32,18 +31,11 @@ final class StartTest extends UnitTestCase
      */
     public function testSessionManagerStartHeadersSent(): void
     {
-        $manager = new Manager();
+        $manager = new ManagerHeadersSentFixture();
         $files   = $this->newService('sessionStream');
         $manager->setAdapter($files);
 
-        $mock = Stub::make(
-            $manager,
-            [
-                'phpHeadersSent' => true,
-            ]
-        );
-
-        $actual = $mock->start();
+        $actual = $manager->start();
         $this->assertFalse($actual);
 
         $manager->destroy();

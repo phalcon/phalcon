@@ -13,7 +13,6 @@ declare(strict_types=1);
 
 namespace Phalcon\Tests\Unit\Image\Adapter\Gd;
 
-use Codeception\Example;
 use Phalcon\Image\Adapter\Gd;
 use Phalcon\Tests\Fixtures\Traits\GdTrait;
 use Phalcon\Tests\UnitTestCase;
@@ -105,7 +104,6 @@ final class TextTest extends UnitTestCase
      *
      * @dataProvider getExamples
      *
-     * @param Example $example
      *
      * @return void
      * @author       Phalcon Team <team@phalcon.io>

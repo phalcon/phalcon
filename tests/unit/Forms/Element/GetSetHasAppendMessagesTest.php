@@ -13,7 +13,6 @@ declare(strict_types=1);
 
 namespace Phalcon\Tests\Unit\Forms\Element;
 
-use Codeception\Example;
 use Phalcon\Messages\Message;
 use Phalcon\Messages\Messages;
 use Phalcon\Tests\Fixtures\Traits\FormsTrait;
@@ -30,7 +29,6 @@ final class GetSetHasAppendMessagesTest extends UnitTestCase
      *
      * @dataProvider getExamples
      *
-     * @param Example $example
      *
      * @return void
      * @author       Phalcon Team <team@phalcon.io>

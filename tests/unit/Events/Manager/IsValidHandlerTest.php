@@ -13,7 +13,6 @@ declare(strict_types=1);
 
 namespace Phalcon\Tests\Unit\Events\Manager;
 
-use Codeception\Example;
 use Phalcon\Events\Manager;
 use Phalcon\Tests\UnitTestCase;
 
@@ -58,7 +57,6 @@ final class IsValidHandlerTest extends UnitTestCase
      *
      * @dataProvider getExamples
      *
-     * @param Example $example
      *
      * @return void
      * @author       Phalcon Team <team@phalcon.io>

@@ -13,7 +13,6 @@ declare(strict_types=1);
 
 namespace Phalcon\Tests\Unit\Html\TagFactory;
 
-use Codeception\Example;
 use Phalcon\Html\Escaper;
 use Phalcon\Html\Exception;
 use Phalcon\Html\Helper\Anchor;
@@ -156,7 +155,6 @@ final class NewInstanceTest extends UnitTestCase
      *
      * @dataProvider getData
      *
-     * @param Example $example
      *
      * @return void
      * @author       Phalcon Team <team@phalcon.io>

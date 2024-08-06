@@ -13,7 +13,6 @@ declare(strict_types=1);
 
 namespace Phalcon\Tests\Unit\Assets\Asset;
 
-use Codeception\Example;
 use Phalcon\Assets\Asset;
 use Phalcon\Assets\Exception;
 use Phalcon\Tests\Fixtures\Assets\AssetFileExistsFixture;
@@ -35,7 +34,6 @@ final class GetContentTest extends UnitTestCase
      *
      * @dataProvider providerCssJs
      *
-     * @param Example $example
      *
      * @return void
      * @author       Phalcon Team <team@phalcon.io>

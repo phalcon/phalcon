@@ -13,7 +13,6 @@ declare(strict_types=1);
 
 namespace Phalcon\Tests\Unit\Flash\Direct;
 
-use Codeception\Example;
 use Phalcon\Flash\Direct;
 use Phalcon\Flash\Exception;
 use Phalcon\Html\Escaper;
@@ -49,7 +48,6 @@ final class OutputMessageTest extends UnitTestCase
      *
      * @dataProvider getExamples
      *
-     * @param Example $example
      *
      * @return void
      * @author       Phalcon Team <team@phalcon.io>

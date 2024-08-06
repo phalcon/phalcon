@@ -13,7 +13,6 @@ declare(strict_types=1);
 
 namespace Phalcon\Tests\Unit\Http\Request;
 
-use Codeception\Example;
 use Phalcon\Tests\Unit\Http\Helper\HttpBase;
 
 final class GetPreferredIsoLocaleVariantTest extends HttpBase
@@ -58,7 +57,6 @@ final class GetPreferredIsoLocaleVariantTest extends HttpBase
     /**
      * Tests Phalcon\Http\Request :: getPreferredIsoLocaleVariant()
      *
-     * @param Example $example
      *
      * @dataProvider getExamples
      * @return void

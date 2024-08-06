@@ -13,7 +13,6 @@ declare(strict_types=1);
 
 namespace Phalcon\Tests\Unit\Session\Manager;
 
-use Codeception\Example;
 use Phalcon\Session\Manager;
 use Phalcon\Storage\Exception;
 use Phalcon\Tests\Fixtures\Traits\DiTrait;
@@ -30,7 +29,6 @@ final class ExistsDestroyTest extends UnitTestCase
      *
      * @dataProvider getClassNames
      *
-     * @param Example $example
      *
      * @return void
      * @throws Exception
@@ -75,7 +73,6 @@ final class ExistsDestroyTest extends UnitTestCase
      *
      * @dataProvider getClassNames
      *
-     * @param Example $example
      *
      * @return void
      * @throws Exception
