@@ -9,12 +9,13 @@
 
 declare(strict_types=1);
 
-namespace Phalcon\Tests\Database\DataMapper\Pdo\Connection;
+namespace Phalcon\Tests\Unit\DataMapper\Pdo\Connection;
 
 use DatabaseTester;
 use Phalcon\DataMapper\Pdo\Connection;
+use Phalcon\Tests\DatabaseTestCase;
 
-class ConnectDisconnectIsConnectedCest
+final class ConnectDisconnectIsConnectedTest extends DatabaseTestCase
 {
     /**
      * Database Tests Phalcon\DataMapper\Pdo\Connection ::
@@ -26,18 +27,16 @@ class ConnectDisconnectIsConnectedCest
      * @group  mysql
      * @group  sqlite
      */
-    public function dMPdoConnectionConnectDisconnectIsConnected(DatabaseTester $I)
+    public function testDmPdoConnectionConnectDisconnectIsConnected(): void
     {
-        $I->wantToTest('DataMapper\Pdo\Connection - connect()/disconnect()/isConnected()');
-
         /** @var Connection $connection */
-        $connection = $I->getDataMapperConnection();
+        $connection = $this->getDataMapperConnection();
 
-        $I->assertFalse($connection->isConnected());
+        $this->assertFalse($connection->isConnected());
         $connection->connect();
-        $I->assertTrue($connection->isConnected());
+        $this->assertTrue($connection->isConnected());
         $connection->disconnect();
-        $I->assertFalse($connection->isConnected());
+        $this->assertFalse($connection->isConnected());
     }
 
     /**
@@ -49,34 +48,32 @@ class ConnectDisconnectIsConnectedCest
      * @group  mysql
      * @group  sqlite
      */
-    public function dMPdoConnectionConnectQueries(DatabaseTester $I)
+    public function testDmPdoConnectionConnectQueries(): void
     {
-        $I->wantToTest('DataMapper\Pdo\Connection - connect() - queries');
-
-        if ('mysql' === $I->getDriver()) {
+        if ('mysql' === $this->getDriver()) {
             /** @var Connection $connection */
             $connection = new Connection(
-                $I->getDatabaseDsn(),
-                $I->getDatabaseUsername(),
-                $I->getDatabasePassword(),
+                $this->getDatabaseDsn(),
+                $this->getDatabaseUsername(),
+                $this->getDatabasePassword(),
                 [],
                 [
                     'set names big5',
                 ]
             );
 
-            $I->assertFalse($connection->isConnected());
+            $this->assertFalse($connection->isConnected());
             $result = $connection->fetchOne(
                 'show variables like "character_set_client"'
             );
 
-            $I->assertTrue($connection->isConnected());
+            $this->assertTrue($connection->isConnected());
             $expected = [
                 'Variable_name' => 'character_set_client',
                 'Value'         => 'big5',
             ];
 
-            $I->assertEquals($expected, $result);
+            $this->assertEquals($expected, $result);
         }
     }
 }
