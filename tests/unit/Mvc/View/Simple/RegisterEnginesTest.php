@@ -15,7 +15,6 @@ namespace Phalcon\Tests\Unit\Mvc\View\Simple;
 
 use Phalcon\Tests\UnitTestCase;
 
-
 class RegisterEnginesTest extends UnitTestCase
 {
     /**

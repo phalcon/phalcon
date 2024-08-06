@@ -27,7 +27,7 @@ class GetContentTest extends UnitTestCase
      */
     public function testMvcViewEnginePhpGetContent(): void
     {
-        $view = new View();
+        $view   = new View();
         $engine = new Php($view);
 
         $view->setContent('hello world');

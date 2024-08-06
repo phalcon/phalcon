@@ -54,9 +54,9 @@ class RegisterEnginesTest extends UnitTestCase
     {
         return [
 //            '.mhtml' => MustacheEngine::class,
-            '.phtml' => Php::class,
+        '.phtml' => Php::class,
 //            '.twig'  => TwigEngine::class,
-            '.volt'  => Volt::class,
+        '.volt'  => Volt::class,
         ];
     }
 }
