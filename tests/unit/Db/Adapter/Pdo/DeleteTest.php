@@ -40,7 +40,7 @@ final class DeleteTest extends DatabaseTestCase
      */
     public function dbAdapterPdoQuery(): void
     {
-        $connection = $this->getConnection();
+        $connection = self::getConnection();
         $db         = $this->container->get('db');
 
         $migration = new InvoicesMigration($connection);

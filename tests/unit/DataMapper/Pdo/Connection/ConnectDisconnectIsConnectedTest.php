@@ -45,7 +45,7 @@ final class ConnectDisconnectIsConnectedTest extends DatabaseTestCase
      */
     public function testDmPdoConnectionConnectQueries(): void
     {
-        if ('mysql' === $this->getDriver()) {
+        if ('mysql' === self::getDriver()) {
             /** @var Connection $connection */
             $connection = new Connection(
                 $this->getDatabaseDsn(),

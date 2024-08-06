@@ -60,7 +60,7 @@ final class ProfilerTest extends DatabaseTestCase
 
         $connection->setEventsManager($eventsManager);
 
-        $migration = new InvoicesMigration($this->getConnection());
+        $migration = new InvoicesMigration(self::getConnection());
         $title     = uniqid('tit-');
         $migration->insert(10, 20, 1, $title, 100);
 
