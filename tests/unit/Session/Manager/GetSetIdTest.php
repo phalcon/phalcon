@@ -60,19 +60,25 @@ final class GetSetIdTest extends UnitTestCase
      */
     public function testSessionManagerSetIdException(): void
     {
-        $this->expectException(Exception::class);
-        $this->expectExceptionMessage(
-            'The session has already been started. ' .
-            'To change the id, use regenerateId()'
-        );
-
         $manager = new Manager();
         $files   = $this->newService('sessionStream');
         $manager->setAdapter($files);
 
-        $manager->start();
+        try {
+            $manager->start();
 
-        $id = uniqid();
-        $manager->setId($id);
+            $id = uniqid();
+            $manager->setId($id);
+            $valid   = false;
+        } catch (Exception $ex) {
+            $manager->destroy();
+            $valid    = true;
+            $expected = 'The session has already been started. ' .
+                'To change the id, use regenerateId()';
+            $actual   = $ex->getMessage();
+            $this->assertEquals($expected, $actual);
+        }
+
+        $this->assertTrue($valid);
     }
 }

@@ -47,6 +47,7 @@ final class ManagerTest extends UnitTestCase
 
         $actual = $session->start();
         $this->assertTrue($actual);
+        $session->destroy();
     }
 
     /**
@@ -81,5 +82,6 @@ final class ManagerTest extends UnitTestCase
         // Check if session value has been sanitized
         $actual = isset($_COOKIE[$name]);
         $this->assertSame($expected, $actual);
+        $session->destroy();
     }
 }
