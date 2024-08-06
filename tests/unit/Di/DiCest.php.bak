@@ -25,7 +25,6 @@ use Phalcon\Tests\Fixtures\Di\SimpleComponent;
 use Phalcon\Tests\Fixtures\Di\SomeComponent;
 use Phalcon\Tests\Fixtures\Di\SomeServiceProvider;
 use stdClass;
-use UnitTester;
 
 use function dataDir;
 use function is_string;

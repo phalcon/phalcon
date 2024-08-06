@@ -2,10 +2,11 @@
 
 use Phalcon\Config\Config;
 use Phalcon\Tests\Fixtures\Di\ServiceComponent;
+use Phalcon\Tests\UnitTestCase;
 
 return [
     'unit-test' => [
-        'className' => UnitTester::class,
+        'className' => UnitTestCase::class,
     ],
     'config'    => [
         'className' => Config::class,

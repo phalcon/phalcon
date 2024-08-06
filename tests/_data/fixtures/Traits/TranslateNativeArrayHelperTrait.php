@@ -17,7 +17,6 @@ use Codeception\Example;
 use Phalcon\Translate\Adapter\NativeArray;
 use Phalcon\Translate\Exception;
 use Phalcon\Translate\InterpolatorFactory;
-use Phalcon\Tests\_support\UnitTester;
 
 trait TranslateNativeArrayHelperTrait
 {
@@ -206,9 +205,6 @@ trait TranslateNativeArrayHelperTrait
      * variable substitution in string (two variables)
      *
      * @dataProvider getQueryTwoVariables
-     *
-     * @param UnitTester $I
-     * @param Example    $data
      *
      * @throws Exception
      *

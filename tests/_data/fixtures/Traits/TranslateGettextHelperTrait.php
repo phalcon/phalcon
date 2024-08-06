@@ -17,15 +17,12 @@ use Codeception\Example;
 use Phalcon\Translate\Adapter\Gettext;
 use Phalcon\Translate\Exception;
 use Phalcon\Translate\InterpolatorFactory;
-use Phalcon\Tests\_support\UnitTester;
 
 trait TranslateGettextHelperTrait
 {
     /**
      * Tests Phalcon\Translate\Adapter\Gettext :: query() - array access and
      * UTF8 strings
-     *
-     * @param UnitTester $I
      *
      * @throws Exception
      *
@@ -77,9 +74,6 @@ trait TranslateGettextHelperTrait
      *
      * @dataProvider getQueryProvider
      *
-     * @param UnitTester $I
-     * @param Example    $data
-     *
      * @throws Exception
      *
      * @author       Phalcon Team <team@phalcon.io>
@@ -107,9 +101,6 @@ trait TranslateGettextHelperTrait
      * variable substitution in string (one variable)
      *
      * @dataProvider getQueryOneVariable
-     *
-     * @param UnitTester $I
-     * @param Example    $data
      *
      * @throws Exception
      *
