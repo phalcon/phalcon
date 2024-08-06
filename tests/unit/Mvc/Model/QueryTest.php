@@ -63,8 +63,8 @@ final class QueryTest extends DatabaseTestCase
 
         $this->setDatabase();
 
-        $this->customerMigration = new CustomersMigration($this->getConnection());
-        $this->invoiceMigration  = new InvoicesMigration($this->getConnection());
+        $this->customerMigration = new CustomersMigration(self::getConnection());
+        $this->invoiceMigration  = new InvoicesMigration(self::getConnection());
     }
 
     /**

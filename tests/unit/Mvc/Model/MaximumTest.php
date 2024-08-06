@@ -23,7 +23,7 @@ final class MaximumTest extends DatabaseTestCase
         $this->setDatabase();
 
         /** @var PDO $connection */
-        $connection = $this->getConnection();
+        $connection = self::getConnection();
         (new InvoicesMigration($connection));
     }
 
@@ -39,9 +39,9 @@ final class MaximumTest extends DatabaseTestCase
     public function testMvcModelMaximum(): void
     {
         /** @var PDO $connection */
-        $connection = $this->getConnection();
+        $connection = self::getConnection();
         $migration  = new InvoicesMigration($connection);
-        $invId      = ('sqlite' === $this->getDriver()) ? 'null' : 'default';
+        $invId      = ('sqlite' === self::getDriver()) ? 'null' : 'default';
 
         $this->insertDataInvoices($migration, 7, $invId, 2, 'ccc');
         $this->insertDataInvoices($migration, 1, $invId, 3, 'aaa');

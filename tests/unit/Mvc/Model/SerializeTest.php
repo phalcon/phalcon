@@ -34,7 +34,7 @@ final class SerializeTest extends DatabaseTestCase
         $this->setDatabase();
 
         /** @var PDO $connection */
-        $connection = $this->getConnection();
+        $connection = self::getConnection();
         (new InvoicesMigration($connection));
     }
 

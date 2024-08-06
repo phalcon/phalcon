@@ -47,7 +47,7 @@ final class CountTest extends DatabaseTestCase
 
         $this->setDatabase();
 
-        $this->invoiceMigration = new InvoicesMigration($this->getConnection());
+        $this->invoiceMigration = new InvoicesMigration(self::getConnection());
     }
 
     /**
@@ -64,7 +64,7 @@ final class CountTest extends DatabaseTestCase
          * TODO: The following tests need to skip sqlite because we will get
          *       a General Error 5 database is locked error
          */
-        $invId = ('sqlite' === $this->getDriver()) ? 'null' : 'default';
+        $invId = ('sqlite' === self::getDriver()) ? 'null' : 'default';
         $this->seed($invId);
 
         $total = Invoices::count();
@@ -90,7 +90,7 @@ final class CountTest extends DatabaseTestCase
         );
         $this->assertInstanceOf(Simple::class, $results);
 
-        if ('pgsql' !== $this->getDriver()) {
+        if ('pgsql' !== self::getDriver()) {
             $matrix = [
                 0 => [1, 20],
                 1 => [2, 12],
@@ -171,7 +171,7 @@ final class CountTest extends DatabaseTestCase
          * @todo The following tests need to skip sqlite because we will get
          *       a General Error 5 database is locked error
          */
-        $invId = ('sqlite' === $this->getDriver()) ? 'null' : 'default';
+        $invId = ('sqlite' === self::getDriver()) ? 'null' : 'default';
         $this->seed($invId);
 
         $total = InvoicesMap::count();
@@ -201,7 +201,7 @@ final class CountTest extends DatabaseTestCase
          * This is here because each engine sorts their groupped results
          * differently
          */
-        if ('mysql' !== $this->getDriver()) {
+        if ('mysql' !== self::getDriver()) {
             $matrix = [
                 0 => [3, 1],
                 1 => [2, 12],

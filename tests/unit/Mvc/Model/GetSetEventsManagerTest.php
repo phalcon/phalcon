@@ -46,7 +46,7 @@ final class GetSetEventsManagerTest extends DatabaseTestCase
 
         $this->setDatabase();
 
-        $this->invoiceMigration = new InvoicesMigration($this->getConnection());
+        $this->invoiceMigration = new InvoicesMigration(self::getConnection());
     }
 
     /**

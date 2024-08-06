@@ -44,7 +44,7 @@ final class GetRelatedTest extends DatabaseTestCase
     public function testMvcModelGetRelated(): void
     {
         /** @var PDO $connection */
-        $connection = $this->getConnection();
+        $connection = self::getConnection();
 
         $custId = 2;
 
@@ -126,7 +126,7 @@ final class GetRelatedTest extends DatabaseTestCase
     public function testMvcModelGetRelatedChangeForeignKey(): void
     {
         /** @var PDO $connection */
-        $connection = $this->getConnection();
+        $connection = self::getConnection();
 
 
         $custIdOne    = 10;

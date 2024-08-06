@@ -44,7 +44,7 @@ final class GetDataTypesTest extends DatabaseTestCase
     ): void {
         $adapter = $this->newService($service);
         $adapter->setDi($this->container);
-        $connection = $this->getConnection();
+        $connection = self::getConnection();
 
         $adapter->reset();
         $this->assertTrue($adapter->isEmpty());
@@ -99,7 +99,7 @@ final class GetDataTypesTest extends DatabaseTestCase
 
     private function getTypes(): array
     {
-        $driver = $this->getDriver();
+        $driver = self::getDriver();
         switch ($driver) {
             case 'mysql':
                 return [

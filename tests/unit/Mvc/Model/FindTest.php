@@ -57,7 +57,7 @@ final class FindTest extends DatabaseTestCase
     public function testMvcModelFind(): void
     {
         /** @var PDO $connection */
-        $connection = $this->getConnection();
+        $connection = self::getConnection();
         $migration  = new ObjectsMigration($connection);
         $migration->insert(1, 'random data', 1);
 
@@ -81,7 +81,7 @@ final class FindTest extends DatabaseTestCase
     public function testMvcModelFindDeprecationWarning(): void
     {
         /** @var PDO $connection */
-        $connection = $this->getConnection();
+        $connection = self::getConnection();
         $migration  = new ObjectsMigration($connection);
         $migration->insert(1, 'random data', 1);
         $migration->insert(2, 'random data 2', 1);
@@ -128,7 +128,7 @@ final class FindTest extends DatabaseTestCase
     public function testMvcModelFindPrivatePropertyWithRedisCache(): void
     {
         /** @var PDO $connection */
-        $connection = $this->getConnection();
+        $connection = self::getConnection();
         $migration  = new InvoicesMigration($connection);
         $migration->insert(1, 1, 1, 'Test', 101);
 
@@ -248,7 +248,7 @@ final class FindTest extends DatabaseTestCase
     public function testMvcModelFindResultsetSecondIteration(): void
     {
         /** @var PDO $connection */
-        $connection = $this->getConnection();
+        $connection = self::getConnection();
 
         $customersMigration = new CustomersMigration($connection);
         $customersMigration->clear();
@@ -304,7 +304,7 @@ final class FindTest extends DatabaseTestCase
         $this->safeDeleteFile($file);
 
         /** @var PDO $connection */
-        $connection = $this->getConnection();
+        $connection = self::getConnection();
         $migration  = new ObjectsMigration($connection);
         $migration->insert(1, 'random data', 1);
 
@@ -414,7 +414,7 @@ final class FindTest extends DatabaseTestCase
     public function testMvcModelFindWithSpecificColumn(): void
     {
         /** @var PDO $connection */
-        $connection = $this->getConnection();
+        $connection = self::getConnection();
         $migration  = new ObjectsMigration($connection);
         $migration->insert(1, 'random data', 1);
         $migration->insert(2, 'random data 2', 1);

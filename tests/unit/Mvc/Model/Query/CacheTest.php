@@ -48,7 +48,7 @@ final class CacheTest extends DatabaseTestCase
     public function testMvcModelQueryCache(
         string $serializer
     ): void {
-        (new InvoicesMigration($this->getConnection()));
+        (new InvoicesMigration(self::getConnection()));
 
         $this->container->set(
             'modelsCache',

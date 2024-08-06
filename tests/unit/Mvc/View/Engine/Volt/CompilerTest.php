@@ -129,7 +129,7 @@ class CompilerTest extends UnitTestCase
         $actual   = $view->getContent();
         $this->assertSame($expected, $actual);
 
-        $this->clearFiles($I);
+        $this->clearFiles();
     }
 
     /**

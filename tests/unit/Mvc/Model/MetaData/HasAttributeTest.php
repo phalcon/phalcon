@@ -44,7 +44,7 @@ final class HasAttributeTest extends DatabaseTestCase
     ): void {
         $adapter = $this->newService($service);
         $adapter->setDi($this->container);
-        $connection = $this->getConnection();
+        $connection = self::getConnection();
 
         $adapter->reset();
 
