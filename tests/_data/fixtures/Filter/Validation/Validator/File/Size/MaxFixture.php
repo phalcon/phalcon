@@ -27,6 +27,6 @@ class MaxFixture extends Max
      */
     protected function checkIsUploadedFile(string $name): bool
     {
-        return false;
+        return true;
     }
 }
