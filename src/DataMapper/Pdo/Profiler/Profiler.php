@@ -23,12 +23,17 @@ use Phalcon\DataMapper\Pdo\Exception\Exception;
 use Phalcon\Logger\Enum;
 use Phalcon\Logger\Exception as LoggerException;
 use Phalcon\Logger\LoggerInterface;
+use Phalcon\Traits\Php\JsonTrait;
+
+use function json_encode;
 
 /**
  * Sends query profiles to a logger.
  */
 class Profiler implements ProfilerInterface
 {
+    use JsonTrait;
+
     /**
      * @var array
      */
@@ -209,9 +214,13 @@ class Profiler implements ProfilerInterface
         int $options = 0,
         int $depth = 512
     ): string {
-        $encoded = json_encode($data, $options, $depth);
+        /**
+         * Clear any errors
+         */
+        json_encode(null);
+        $encoded = $this->phpJsonEncode($data, $options, $depth);
 
-        if (JSON_ERROR_NONE !== json_last_error()) {
+        if (false === $encoded) {
             throw new InvalidArgumentException(
                 "json_encode error: " . json_last_error_msg()
             );

@@ -19,6 +19,7 @@ declare(strict_types=1);
 namespace Phalcon\DataMapper\Query;
 
 use BadMethodCallException;
+use Generator as Gen;
 use PDO;
 
 use function array_key_last;
@@ -46,6 +47,12 @@ use function trim;
  * @method array  fetchPairs(string $statement, array $values = [])
  * @method array  fetchUnique(string $statement, array $values = [])
  * @method mixed  fetchValue(string $statement, array $values = [])
+ * @method Gen    yieldAll(string $statement, array $values = [])
+ * @method Gen    yieldAssoc(string $statement, array $values = [])
+ * @method Gen    yieldColumn(string $statement, array $values = [])
+ * @method Gen    yieldObjects(string $statement, array $values = [], string $class = 'stdClass', array $arguments = [])
+ * @method Gen    yieldPairs(string $statement, array $values = [])
+ * @method Gen    yieldUnique(string $statement, array $values = [])
  */
 class Select extends AbstractConditions
 {
@@ -86,6 +93,13 @@ class Select extends AbstractConditions
             'fetchPairs'    => true,
             'fetchUnique'   => true,
             'fetchValue'    => true,
+            'yieldAffected' => true,
+            'yieldAll'      => true,
+            'yieldAssoc'    => true,
+            'yieldColumn'   => true,
+            'yieldObjects'  => true,
+            'yieldPairs'    => true,
+            'yieldUnique'   => true,
         ];
 
         if (isset($proxied[$method])) {

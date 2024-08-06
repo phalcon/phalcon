@@ -350,7 +350,7 @@ interface PdoInterface
      *
      * @return Generator
      */
-    public function yieldColumns(
+    public function yieldColumn(
         string $statement,
         array $values = []
     ): Generator;
