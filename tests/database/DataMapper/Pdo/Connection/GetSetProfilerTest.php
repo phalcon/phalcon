@@ -27,7 +27,7 @@ final class GetSetProfilerTest extends DatabaseTestCase
     public function testDmPdoConnectionGetProfiler(): void
     {
         /** @var Connection $connection */
-        $connection = $this->getDataMapperConnection();
+        $connection = self::getDataMapperConnection();
 
         $this->assertInstanceOf(
             Profiler::class,

@@ -28,7 +28,7 @@ final class ConstructTest extends DatabaseTestCase
      */
     public function testDmQuerySelectConstruct(): void
     {
-        $connection = $this->getDataMapperConnection();
+        $connection = self::getDataMapperConnection();
         $bind       = new Bind();
         $select     = new Select($connection, $bind);
 

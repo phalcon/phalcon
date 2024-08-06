@@ -28,7 +28,7 @@ final class HavingTest extends DatabaseTestCase
      */
     public function testDmQuerySelectHaving(): void
     {
-        $connection = $this->getDataMapperConnection();
+        $connection = self::getDataMapperConnection();
         $factory    = new QueryFactory();
         $select     = $factory->newSelect($connection);
 
@@ -59,7 +59,7 @@ final class HavingTest extends DatabaseTestCase
      */
     public function testDmQuerySelectHavingComplex(): void
     {
-        $connection = $this->getDataMapperConnection();
+        $connection = self::getDataMapperConnection();
         $factory    = new QueryFactory();
         $select     = $factory->newSelect($connection);
 

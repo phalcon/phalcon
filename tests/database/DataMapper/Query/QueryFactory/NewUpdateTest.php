@@ -28,7 +28,7 @@ final class NewUpdateTest extends DatabaseTestCase
      */
     public function testDmQueryQueryFactoryNewUpdate(): void
     {
-        $connection = $this->getDataMapperConnection();
+        $connection = self::getDataMapperConnection();
         $factory    = new QueryFactory();
         $update     = $factory->newUpdate($connection);
         $this->assertInstanceOf(Update::class, $update);

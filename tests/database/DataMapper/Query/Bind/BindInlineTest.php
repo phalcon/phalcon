@@ -29,7 +29,7 @@ final class BindInlineTest extends DatabaseTestCase
      */
     public function testDmQueryBindBindInline(): void
     {
-        $connection = $this->getDataMapperConnection();
+        $connection = self::getDataMapperConnection();
         $bind       = new Bind();
         $factory    = new QueryFactory();
         $select     = $factory->newSelect($connection);

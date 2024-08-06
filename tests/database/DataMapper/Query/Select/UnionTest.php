@@ -27,7 +27,7 @@ final class UnionTest extends DatabaseTestCase
      */
     public function testDmQuerySelectUnion(): void
     {
-        $connection = $this->getDataMapperConnection();
+        $connection = self::getDataMapperConnection();
         $factory    = new QueryFactory();
         $select     = $factory->newSelect($connection);
 

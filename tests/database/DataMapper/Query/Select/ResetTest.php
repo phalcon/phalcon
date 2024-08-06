@@ -27,7 +27,7 @@ final class ResetTest extends DatabaseTestCase
      */
     public function testDmQueryReset(): void
     {
-        $connection = $this->getDataMapperConnection();
+        $connection = self::getDataMapperConnection();
         $factory    = new QueryFactory();
         $select     = $factory->newSelect($connection);
 

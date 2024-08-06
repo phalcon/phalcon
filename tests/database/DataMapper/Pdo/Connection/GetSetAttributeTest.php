@@ -28,7 +28,7 @@ final class GetSetAttributeTest extends DatabaseTestCase
     public function testDmPdoConnectionGetSetAttribute(): void
     {
         /** @var Connection $connection */
-        $connection = $this->getDataMapperConnection();
+        $connection = self::getDataMapperConnection();
 
         $this->assertEquals(
             PDO::ERRMODE_EXCEPTION,

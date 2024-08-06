@@ -27,7 +27,7 @@ final class FetchValueTest extends DatabaseTestCase
     public function testDmPdoConnectionFetchValue(): void
     {
         /** @var Connection $connection */
-        $connection = $this->getDataMapperConnection();
+        $connection = self::getDataMapperConnection();
         $migration  = new InvoicesMigration($connection);
         $migration->clear();
 

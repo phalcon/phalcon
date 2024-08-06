@@ -26,7 +26,7 @@ final class GetQuoteNamesTest extends DatabaseTestCase
     public function testDmPdoConnectionGetQuoteNames(): void
     {
         /** @var Connection $connection */
-        $connection = $this->getDataMapperConnection();
+        $connection = self::getDataMapperConnection();
 
         $mysql   = [
             "prefix"  => '`',

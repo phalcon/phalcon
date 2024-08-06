@@ -28,7 +28,7 @@ final class NewDeleteTest extends DatabaseTestCase
      */
     public function testDmQueryQueryFactoryNewDelete(): void
     {
-        $connection = $this->getDataMapperConnection();
+        $connection = self::getDataMapperConnection();
         $factory    = new QueryFactory();
         $delete     = $factory->newDelete($connection);
         $this->assertInstanceOf(Delete::class, $delete);

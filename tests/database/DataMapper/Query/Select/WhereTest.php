@@ -27,7 +27,7 @@ final class WhereTest extends DatabaseTestCase
      */
     public function testDmQuerySelectOrWhereBind(): void
     {
-        $connection = $this->getDataMapperConnection();
+        $connection = self::getDataMapperConnection();
         $factory    = new QueryFactory();
         $select     = $factory->newSelect($connection);
 
@@ -61,7 +61,7 @@ final class WhereTest extends DatabaseTestCase
      */
     public function testDmQuerySelectWhere(): void
     {
-        $connection = $this->getDataMapperConnection();
+        $connection = self::getDataMapperConnection();
         $factory    = new QueryFactory();
         $select     = $factory->newSelect($connection);
 
@@ -90,7 +90,7 @@ final class WhereTest extends DatabaseTestCase
      */
     public function testDmQuerySelectWhereBind(): void
     {
-        $connection = $this->getDataMapperConnection();
+        $connection = self::getDataMapperConnection();
         $factory    = new QueryFactory();
         $select     = $factory->newSelect($connection);
 

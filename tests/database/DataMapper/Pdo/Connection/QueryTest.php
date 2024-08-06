@@ -27,7 +27,7 @@ final class QueryTest extends DatabaseTestCase
     public function testDmPdoConnectionQuery(): void
     {
         /** @var Connection $connection */
-        $connection = $this->getDataMapperConnection();
+        $connection = self::getDataMapperConnection();
         $migration  = new InvoicesMigration($connection);
         $migration->clear();
 

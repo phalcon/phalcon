@@ -27,7 +27,7 @@ final class HasColumnsTest extends DatabaseTestCase
      */
     public function testDmQueryUpdateHasColumns(): void
     {
-        $connection = $this->getDataMapperConnection();
+        $connection = self::getDataMapperConnection();
         $factory    = new QueryFactory();
         $update     = $factory->newUpdate($connection);
 

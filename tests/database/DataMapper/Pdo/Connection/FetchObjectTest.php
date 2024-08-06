@@ -27,7 +27,7 @@ final class FetchObjectTest extends DatabaseTestCase
     public function connectionFetchObjectCtor(): void
     {
         /** @var Connection $connection */
-        $connection = $this->getDataMapperConnection();
+        $connection = self::getDataMapperConnection();
         $migration  = new InvoicesMigration($connection);
         $migration->clear();
 
@@ -61,7 +61,7 @@ final class FetchObjectTest extends DatabaseTestCase
     public function testDmPdoConnectionFetchObject(): void
     {
         /** @var Connection $connection */
-        $connection = $this->getDataMapperConnection();
+        $connection = self::getDataMapperConnection();
         $migration  = new InvoicesMigration($connection);
         $migration->clear();
 

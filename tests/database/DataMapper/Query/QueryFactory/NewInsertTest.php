@@ -28,7 +28,7 @@ final class NewInsertTest extends DatabaseTestCase
      */
     public function testDmQueryQueryFactoryNewInsert(): void
     {
-        $connection = $this->getDataMapperConnection();
+        $connection = self::getDataMapperConnection();
         $factory    = new QueryFactory();
         $insert     = $factory->newInsert($connection);
         $this->assertInstanceOf(Insert::class, $insert);

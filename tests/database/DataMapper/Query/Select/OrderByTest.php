@@ -27,7 +27,7 @@ final class OrderByTest extends DatabaseTestCase
      */
     public function testDmQuerySelectOrderBy(): void
     {
-        $connection = $this->getDataMapperConnection();
+        $connection = self::getDataMapperConnection();
         $factory    = new QueryFactory();
         $select     = $factory->newSelect($connection);
 

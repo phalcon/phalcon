@@ -27,7 +27,7 @@ final class SetFlagTest extends DatabaseTestCase
      */
     public function testDmQuerySelectSetFlag(): void
     {
-        $connection = $this->getDataMapperConnection();
+        $connection = self::getDataMapperConnection();
         $factory    = new QueryFactory();
         $select     = $factory->newSelect($connection);
 

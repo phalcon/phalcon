@@ -27,7 +27,7 @@ final class FetchAllTest extends DatabaseTestCase
     public function testDmPdoConnectionFetchAll(): void
     {
         /** @var Connection $connection */
-        $connection = $this->getDataMapperConnection();
+        $connection = self::getDataMapperConnection();
         $migration  = new InvoicesMigration($connection);
         $migration->clear();
 

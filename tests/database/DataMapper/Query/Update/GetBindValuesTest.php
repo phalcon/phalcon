@@ -28,7 +28,7 @@ final class GetBindValuesTest extends DatabaseTestCase
      */
     public function testDmQueryUpdateGetBindValues(): void
     {
-        $connection = $this->getDataMapperConnection();
+        $connection = self::getDataMapperConnection();
         $factory    = new QueryFactory();
         $update     = $factory->newUpdate($connection);
 

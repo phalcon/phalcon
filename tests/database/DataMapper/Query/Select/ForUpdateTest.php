@@ -27,7 +27,7 @@ final class ForUpdateTest extends DatabaseTestCase
      */
     public function testDmQuerySelectForUpdate(): void
     {
-        $connection = $this->getDataMapperConnection();
+        $connection = self::getDataMapperConnection();
         $factory    = new QueryFactory();
         $select     = $factory->newSelect($connection);
 
@@ -50,7 +50,7 @@ final class ForUpdateTest extends DatabaseTestCase
      */
     public function testDmQuerySelectForUpdateUnset(): void
     {
-        $connection = $this->getDataMapperConnection();
+        $connection = self::getDataMapperConnection();
         $factory    = new QueryFactory();
         $select     = $factory->newSelect($connection);
 
