@@ -27,6 +27,6 @@ class MinFixture extends Min
      */
     protected function checkIsUploadedFile(string $name): bool
     {
-        return false;
+        return true;
     }
 }

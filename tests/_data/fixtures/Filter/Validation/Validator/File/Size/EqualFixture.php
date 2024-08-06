@@ -27,6 +27,6 @@ class EqualFixture extends Equal
      */
     protected function checkIsUploadedFile(string $name): bool
     {
-        return false;
+        return true;
     }
 }

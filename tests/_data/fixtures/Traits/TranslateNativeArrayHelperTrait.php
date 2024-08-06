@@ -13,7 +13,6 @@ declare(strict_types=1);
 
 namespace Phalcon\Tests\Fixtures\Traits;
 
-use Codeception\Example;
 use Phalcon\Translate\Adapter\NativeArray;
 use Phalcon\Translate\Exception;
 use Phalcon\Translate\InterpolatorFactory;
