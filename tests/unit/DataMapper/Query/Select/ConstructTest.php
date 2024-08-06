@@ -24,9 +24,7 @@ final class ConstructTest extends DatabaseTestCase
      *
      * @since  2020-01-20
      *
-     * @group  pgsql
-     * @group  mysql
-     * @group  sqlite
+     * @group  common
      */
     public function testDmQuerySelectConstruct(): void
     {

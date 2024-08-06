@@ -21,9 +21,7 @@ final class ErrorCodeTest extends DatabaseTestCase
      *
      * @since  2020-01-25
      *
-     * @group  pgsql
-     * @group  mysql
-     * @group  sqlite
+     * @group  common
      */
     public function testDmPdoConnectionErrorCode(): void
     {

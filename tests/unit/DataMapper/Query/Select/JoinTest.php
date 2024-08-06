@@ -24,9 +24,7 @@ final class JoinTest extends DatabaseTestCase
      *
      * @since  2020-01-20
      *
-     * @group  pgsql
-     * @group  mysql
-     * @group  sqlite
+     * @group  common
      */
     public function testDmQuerySelectJoinInner(): void
     {
@@ -51,9 +49,7 @@ final class JoinTest extends DatabaseTestCase
      *
      * @since  2020-01-20
      *
-     * @group  pgsql
-     * @group  mysql
-     * @group  sqlite
+     * @group  common
      */
     public function testDmQuerySelectJoinLeft(): void
     {
@@ -77,9 +73,7 @@ final class JoinTest extends DatabaseTestCase
      *
      * @since  2020-01-20
      *
-     * @group  pgsql
-     * @group  mysql
-     * @group  sqlite
+     * @group  common
      */
     public function testDmQuerySelectJoinNatural(): void
     {
@@ -103,9 +97,7 @@ final class JoinTest extends DatabaseTestCase
      *
      * @since  2020-01-20
      *
-     * @group  pgsql
-     * @group  mysql
-     * @group  sqlite
+     * @group  common
      */
     public function testDmQuerySelectJoinRight(): void
     {
@@ -129,9 +121,7 @@ final class JoinTest extends DatabaseTestCase
      *
      * @since  2020-01-20
      *
-     * @group  pgsql
-     * @group  mysql
-     * @group  sqlite
+     * @group  common
      */
     public function testDmQuerySelectJoinWithBind(): void
     {
