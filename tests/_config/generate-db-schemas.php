@@ -34,6 +34,14 @@ foreach ($drivers as $driver) {
     $schema = $root . '/tests/_data/assets/schemas/' . $driver . '.sql';
     cleanFile($schema);
     echo "Driver: " . $driver . " - ";
+
+    if ('mysql' === $driver) {
+        error_log('set foreign_key_checks = 0;', 3, $schema);
+        error_log(
+            PHP_EOL, 3, $schema);
+    }
+
+
     foreach ($migrations as $migration) {
         $className  = sprintf($migrationClass, $migration);
         /** @var AbstractMigration $class */
