@@ -31,7 +31,7 @@ final class RefreshTest extends DatabaseTestCase
         $this->setDatabase();
 
         /** @var PDO $connection */
-        $connection = $this->getConnection();
+        $connection = self::getConnection();
         (new InvoicesMigration($connection));
     }
 
@@ -44,7 +44,7 @@ final class RefreshTest extends DatabaseTestCase
     {
         $title = uniqid('inv-');
         /** @var PDO $connection */
-        $connection = $this->getConnection();
+        $connection = self::getConnection();
         $migration  = new InvoicesMigration($connection);
         $migration->insert(4, null, 0, $title);
 

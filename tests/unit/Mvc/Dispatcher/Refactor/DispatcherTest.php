@@ -470,7 +470,7 @@ class DispatcherTest extends BaseDispatcher
 
         $dispatcher->getEventsManager()->attach(
             'dispatch:beforeException',
-            function ($event, $dispatcher) use (&$beforeExceptionHandled, $I) {
+            function ($event, $dispatcher) use (&$beforeExceptionHandled) {
                 $beforeExceptionHandled = true;
 
                 $this->assertEquals(
@@ -602,7 +602,7 @@ class DispatcherTest extends BaseDispatcher
 
         $dispatcher->getEventsManager()->attach(
             'dispatch:beforeException',
-            function ($event, $dispatcher) use (&$beforeExceptionHandled, $I) {
+            function ($event, $dispatcher) use (&$beforeExceptionHandled) {
                 $beforeExceptionHandled = true;
 
                 $this->assertEquals(

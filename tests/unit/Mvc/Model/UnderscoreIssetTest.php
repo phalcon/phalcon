@@ -43,7 +43,7 @@ final class UnderscoreIssetTest extends DatabaseTestCase
     public function testMvcModelUnderscoreIsset(): void
     {
         /** @var PDO $connection */
-        $connection = $this->getConnection();
+        $connection = self::getConnection();
 
         $customersMigration = new CustomersMigration($connection);
         $customersMigration->insert(1, 1, 'test_firstName_1', 'test_lastName_1');

@@ -41,7 +41,7 @@ final class RollbackOnExceptionTest extends DatabaseTestCase
         $this->setNewFactoryDefault();
         $this->setDatabase();
 
-        $this->migration = new RollbackTestMigration($this->getConnection(), false);
+        $this->migration = new RollbackTestMigration(self::getConnection(), false);
     }
 
     /**

@@ -31,7 +31,7 @@ final class ExecuteTest extends DatabaseTestCase
         $this->setNewFactoryDefault();
         $this->setDatabase();
 
-        $connection = $this->getConnection();
+        $connection = self::getConnection();
         (new InvoicesMigration($connection));
     }
 
@@ -46,7 +46,7 @@ final class ExecuteTest extends DatabaseTestCase
     public function testMvcModelCriteriaExecute(): void
     {
         $title      = uniqid('inv-');
-        $connection = $this->getConnection();
+        $connection = self::getConnection();
         $migration  = new InvoicesMigration($connection);
         $migration->insert(4, 1, 2, $title);
 

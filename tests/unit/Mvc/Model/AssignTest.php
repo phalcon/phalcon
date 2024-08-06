@@ -30,7 +30,7 @@ final class AssignTest extends DatabaseTestCase
         $this->setNewFactoryDefault();
         $this->setDatabase();
 
-        $connection = $this->getConnection();
+        $connection = self::getConnection();
         (new InvoicesMigration($connection));
     }
 

@@ -35,7 +35,7 @@ final class UpdateTest extends DatabaseTestCase
         $this->setNewFactoryDefault();
         $this->setDatabase();
 
-        $connection = $this->getConnection();
+        $connection = self::getConnection();
         (new InvoicesMigration($connection));
     }
 
@@ -52,7 +52,7 @@ final class UpdateTest extends DatabaseTestCase
     public function testMvcModelSaveAfterWithoutDefaultValues(): void
     {
         /** @var PDO $connection */
-        $connection = $this->getConnection();
+        $connection = self::getConnection();
 
         $customersMigration = new CustomersDefaultsMigration($connection);
         $customersMigration->clear();
@@ -119,7 +119,7 @@ final class UpdateTest extends DatabaseTestCase
     public function testMvcModelSaveViaSettersAndLocalMethod(): void
     {
         /** @var PDO $connection */
-        $connection = $this->getConnection();
+        $connection = self::getConnection();
 
         $settersMigration = new SettersMigration($connection);
         $settersMigration->clear();

@@ -60,7 +60,7 @@ final class FromInputTest extends DatabaseTestCase
 
         $builder = $criteria->createBuilder();
 
-        if ($this->getDriver() === 'sqlite') {
+        if (self::getDriver() === 'sqlite') {
             $expected = 'SELECT [Phalcon\Tests\Models\Invoices].* '
                 . 'FROM [Phalcon\Tests\Models\Invoices] '
                 . 'WHERE [inv_id] = :inv_id: '
@@ -82,7 +82,7 @@ final class FromInputTest extends DatabaseTestCase
 
         $this->assertEquals($expected, $builder->getPhql());
 
-        if ($this->getDriver() === 'sqlite') {
+        if (self::getDriver() === 'sqlite') {
             $expected = [
                 'inv_id'          => 1,
                 'inv_cst_id'      => 2,

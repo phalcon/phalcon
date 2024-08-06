@@ -43,7 +43,7 @@ final class GetAttributesTest extends DatabaseTestCase
         string $service
     ): void {
         $adapter    = $this->newService($service);
-        $connection = $this->getConnection();
+        $connection = self::getConnection();
         $adapter->setDi($this->container);
 
         $adapter->reset();

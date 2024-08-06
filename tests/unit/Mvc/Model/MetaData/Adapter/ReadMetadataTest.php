@@ -54,7 +54,7 @@ final class ReadMetadataTest extends DatabaseTestCase
         string $service,
         array $keys
     ): void {
-        $connection = $this->getConnection();
+        $connection = self::getConnection();
         $adapter    = $this->newService($service);
 
         /**

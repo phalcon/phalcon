@@ -62,7 +62,7 @@ final class SaveTest extends DatabaseTestCase
     public function infiniteSaveLoop(): void
     {
         /** @var PDO $connection */
-        $connection        = $this->getConnection();
+        $connection        = self::getConnection();
         $invoicesMigration = new InvoicesMigration($connection);
         $invoicesMigration->insert(77, 1, 0, uniqid('inv-', true));
 
@@ -89,7 +89,7 @@ final class SaveTest extends DatabaseTestCase
     public function testMvcModelSave(): void
     {
          /** @var PDO $connection */
-        $connection = $this->getConnection();
+        $connection = self::getConnection();
 
         $customersMigration = new CustomersMigration($connection);
 
@@ -161,7 +161,7 @@ final class SaveTest extends DatabaseTestCase
     public function testMvcModelSaveAfterFetchingRelated(): void
     {
         /** @var PDO $connection */
-        $connection = $this->getConnection();
+        $connection = self::getConnection();
 
         $invoicesMigration = new InvoicesMigration($connection);
         $invoicesMigration->insert(77, 1, 0, uniqid('inv-'));
@@ -206,7 +206,7 @@ final class SaveTest extends DatabaseTestCase
     public function testMvcModelSaveAfterSettingEmptyRelated(): void
     {
         /** @var PDO $connection */
-        $connection = $this->getConnection();
+        $connection = self::getConnection();
 
         $customersMigration = new CustomersMigration($connection);
         $customersMigration->insert(1, 1, 'test_firstName_1', 'test_lastName_1');
@@ -241,7 +241,7 @@ final class SaveTest extends DatabaseTestCase
     public function testMvcModelSaveAfterUsingRelatedGetters(): void
     {
         /** @var PDO $connection */
-        $connection = $this->getConnection();
+        $connection = self::getConnection();
 
         $invoicesMigration = new InvoicesMigration($connection);
         $invoicesMigration->insert(77, 1, 0, uniqid('inv-'));
@@ -286,7 +286,7 @@ final class SaveTest extends DatabaseTestCase
     public function testMvcModelSaveAfterWithoutDefaultValues(): void
     {
         /** @var PDO $connection */
-        $connection = $this->getConnection();
+        $connection = self::getConnection();
 
         $customersMigration = new CustomersDefaultsMigration($connection);
         $customer           = new CustomersDefaults();
@@ -329,7 +329,7 @@ final class SaveTest extends DatabaseTestCase
     public function testMvcModelSaveCircularRelation(): void
     {
         /** @var PDO $connection */
-        $connection = $this->getConnection();
+        $connection = self::getConnection();
 
         $invoicesMigration  = new InvoicesMigration($connection);
         $customersMigration = new CustomersMigration($connection);
@@ -378,7 +378,7 @@ final class SaveTest extends DatabaseTestCase
     public function testMvcModelSaveWithPropertySource(): void
     {
         /** @var PDO $connection */
-        $connection = $this->getConnection();
+        $connection = self::getConnection();
 
         $sourcesMigration = new SourcesMigration($connection);
         $sourcesMigration->insert(1, 'llama', 'test_source');
@@ -435,7 +435,7 @@ final class SaveTest extends DatabaseTestCase
     public function testMvcModelSaveWithRelatedManyAndBelongsRecordsProperty(): void
     {
         /** @var PDO $connection */
-        $connection = $this->getConnection();
+        $connection = self::getConnection();
 
         $invoicesMigration = new InvoicesMigration($connection);
         $invoicesMigration->insert(77, 1, 0, uniqid('inv-', true));
@@ -530,7 +530,7 @@ final class SaveTest extends DatabaseTestCase
     public function testMvcModelSaveWithRelatedRecordsProperty(): void
     {
         /** @var PDO $connection */
-        $connection = $this->getConnection();
+        $connection = self::getConnection();
 
         $invoicesMigration = new InvoicesMigration($connection);
         $invoicesMigration->insert(77, 1, 0, uniqid('inv-', true));

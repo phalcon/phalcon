@@ -46,7 +46,7 @@ final class AverageTest extends DatabaseTestCase
 
         $this->setDatabase();
 
-        $this->invoiceMigration = new InvoicesMigration($this->getConnection());
+        $this->invoiceMigration = new InvoicesMigration(self::getConnection());
     }
 
     /**
@@ -63,7 +63,7 @@ final class AverageTest extends DatabaseTestCase
          * @todo The following tests are skipped for sqlite because we will get
          *       a General Error 5 database is locked error.
          */
-        $invId = ('sqlite' === $this->getDriver()) ? 'null' : 'default';
+        $invId = ('sqlite' === self::getDriver()) ? 'null' : 'default';
 
         $this->insertDataInvoices($this->invoiceMigration, 7, $invId, 2, 'ccc');
         $this->insertDataInvoices($this->invoiceMigration, 1, $invId, 3, 'aaa');

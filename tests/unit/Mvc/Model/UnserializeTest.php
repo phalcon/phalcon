@@ -30,7 +30,7 @@ final class UnserializeTest extends DatabaseTestCase
         $this->setNewFactoryDefault();
         $this->setDatabase();
 
-        (new InvoicesMigration($this->getConnection()));
+        (new InvoicesMigration(self::getConnection()));
     }
 
     /**
