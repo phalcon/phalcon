@@ -274,4 +274,25 @@ class DatabaseTestCase extends UnitTestCase
             self::$connection->exec($query);
         }
     }
+
+    public function hasInDatabase(string $table, array $criteria = []): bool
+    {
+        $sql = 'SELECT COUNT(*) FROM ' . $table . ' WHERE ';
+        $where = [];
+        foreach ($criteria as $key => $value) {
+            $val = $value;
+            if (is_string($value)) {
+                $val = '"' . $value . '"';
+            }
+
+            $where[] = $key . ' = ' . $val;
+        }
+        $sql .= implode(' AND ', $where);
+
+        $connection = self::$connection;
+        $result  = $connection->query($sql);
+        $records = $result->fetchAll(PDO::FETCH_ASSOC);
+
+        return !empty($records);
+    }
 }
