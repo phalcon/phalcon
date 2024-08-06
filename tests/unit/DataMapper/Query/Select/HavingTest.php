@@ -24,9 +24,7 @@ final class HavingTest extends DatabaseTestCase
      *
      * @since  2020-01-20
      *
-     * @group  pgsql
-     * @group  mysql
-     * @group  sqlite
+     * @group  common
      */
     public function testDmQuerySelectHaving(): void
     {
@@ -57,9 +55,7 @@ final class HavingTest extends DatabaseTestCase
      *
      * @since  2020-01-20
      *
-     * @group  pgsql
-     * @group  mysql
-     * @group  sqlite
+     * @group  common
      */
     public function testDmQuerySelectHavingComplex(): void
     {

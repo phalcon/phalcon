@@ -24,9 +24,7 @@ final class LimitOffsetTest extends DatabaseTestCase
      *
      * @since  2020-01-20
      *
-     * @group  pgsql
-     * @group  mysql
-     * @group  sqlite
+     * @group  common
      */
     public function testDmQuerySelectLimitOffset(): void
     {
@@ -56,9 +54,7 @@ final class LimitOffsetTest extends DatabaseTestCase
      *
      * @since  2020-01-20
      *
-     * @group  pgsql
-     * @group  mysql
-     * @group  sqlite
+     * @group  common
      */
     public function testDmQuerySelectLimitOffsetMssql(): void
     {

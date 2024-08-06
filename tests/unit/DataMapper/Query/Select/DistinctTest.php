@@ -23,9 +23,7 @@ final class DistinctTest extends DatabaseTestCase
      *
      * @since  2020-01-20
      *
-     * @group  pgsql
-     * @group  mysql
-     * @group  sqlite
+     * @group  common
      */
     public function testDmQuerySelectDistinct(): void
     {
@@ -49,9 +47,7 @@ final class DistinctTest extends DatabaseTestCase
      *
      * @since  2020-01-20
      *
-     * @group  pgsql
-     * @group  mysql
-     * @group  sqlite
+     * @group  common
      */
     public function testDmQuerySelectDistinctTwice(): void
     {
@@ -76,9 +72,7 @@ final class DistinctTest extends DatabaseTestCase
      *
      * @since  2020-01-20
      *
-     * @group  pgsql
-     * @group  mysql
-     * @group  sqlite
+     * @group  common
      */
     public function testDmQuerySelectDistinctUnset(): void
     {

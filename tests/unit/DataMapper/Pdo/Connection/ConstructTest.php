@@ -22,9 +22,7 @@ final class ConstructTest extends DatabaseTestCase
      *
      * @since  2020-01-25
      *
-     * @group  pgsql
-     * @group  mysql
-     * @group  sqlite
+     * @group  common
      */
     public function testDmPdoConnectionConstruct(): void
     {
@@ -40,9 +38,7 @@ final class ConstructTest extends DatabaseTestCase
      *
      * @since  2020-01-20
      *
-     * @group  pgsql
-     * @group  mysql
-     * @group  sqlite
+     * @group  common
      */
     public function testDmPdoConnectionConstructException(): void
     {

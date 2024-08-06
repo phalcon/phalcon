@@ -22,9 +22,7 @@ final class ConnectDisconnectIsConnectedTest extends DatabaseTestCase
      *
      * @since  2020-01-25
      *
-     * @group  pgsql
-     * @group  mysql
-     * @group  sqlite
+     * @group  common
      */
     public function testDmPdoConnectionConnectDisconnectIsConnected(): void
     {
@@ -43,9 +41,7 @@ final class ConnectDisconnectIsConnectedTest extends DatabaseTestCase
      *
      * @since  2020-01-25
      *
-     * @group  pgsql
-     * @group  mysql
-     * @group  sqlite
+     * @group  common
      */
     public function testDmPdoConnectionConnectQueries(): void
     {

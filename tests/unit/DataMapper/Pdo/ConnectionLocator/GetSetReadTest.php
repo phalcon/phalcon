@@ -26,9 +26,7 @@ final class GetSetReadTest extends DatabaseTestCase
      *
      * @since  2020-01-25
      *
-     * @group  pgsql
-     * @group  mysql
-     * @group  sqlite
+     * @group  common
      */
     public function testDmPdoConnectionLocatorGetReadEmpty(): void
     {
@@ -45,9 +43,7 @@ final class GetSetReadTest extends DatabaseTestCase
      *
      * @since  2020-01-25
      *
-     * @group  pgsql
-     * @group  mysql
-     * @group  sqlite
+     * @group  common
      */
     public function testDmPdoConnectionLocatorGetReadException(): void
     {
@@ -76,9 +72,7 @@ final class GetSetReadTest extends DatabaseTestCase
      *
      * @since  2020-01-25
      *
-     * @group  pgsql
-     * @group  mysql
-     * @group  sqlite
+     * @group  common
      */
     public function testDmPdoConnectionLocatorGetReadRandom(): void
     {
@@ -112,9 +106,7 @@ final class GetSetReadTest extends DatabaseTestCase
      *
      * @since  2020-01-25
      *
-     * @group  pgsql
-     * @group  mysql
-     * @group  sqlite
+     * @group  common
      */
     public function testDmPdoConnectionLocatorGetSetRead(): void
     {
