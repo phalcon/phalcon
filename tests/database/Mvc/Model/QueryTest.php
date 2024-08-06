@@ -43,11 +43,6 @@ final class QueryTest extends DatabaseTestCase
      */
     private InvoicesMigration $invoiceMigration;
 
-    public function tearDown(): void
-    {
-        $this->container['db']->close();
-    }
-
     /**
      * Executed before each test
      *
@@ -65,6 +60,11 @@ final class QueryTest extends DatabaseTestCase
 
         $this->customerMigration = new CustomersMigration(self::getConnection());
         $this->invoiceMigration  = new InvoicesMigration(self::getConnection());
+    }
+
+    public function tearDown(): void
+    {
+        $this->container['db']->close();
     }
 
     /**

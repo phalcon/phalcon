@@ -22,6 +22,27 @@ final class HasAttributeTest extends DatabaseTestCase
 {
     use DiTrait;
 
+    /**
+     * @return array[]
+     */
+    public static function getExamples(): array
+    {
+        return [
+            [
+                'metadataMemory',
+            ],
+            [
+                'metadataApcu',
+            ],
+            [
+                'metadataRedis',
+            ],
+            [
+                'metadataLibmemcached',
+            ],
+        ];
+    }
+
     public function setUp(): void
     {
         $this->setNewFactoryDefault();
@@ -36,7 +57,7 @@ final class HasAttributeTest extends DatabaseTestCase
      * @author       Phalcon Team <team@phalcon.io>
      * @since        2018-11-13
      *
-     * @group common
+     * @group        common
      */
     public function testMvcModelMetadataHasAttribute(
         string $service
@@ -81,26 +102,5 @@ final class HasAttributeTest extends DatabaseTestCase
         $this->assertTrue($adapter->hasAttribute($model, 'inv_created_at'));
 
         $this->assertFalse($adapter->hasAttribute($model, 'unknown'));
-    }
-
-    /**
-     * @return array[]
-     */
-    public static function getExamples(): array
-    {
-        return [
-            [
-                'metadataMemory',
-            ],
-            [
-                'metadataApcu',
-            ],
-            [
-                'metadataRedis',
-            ],
-            [
-                'metadataLibmemcached',
-            ],
-        ];
     }
 }

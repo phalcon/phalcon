@@ -19,26 +19,6 @@ use Phalcon\Tests\UnitTestCase;
 final class DetectEncodingTest extends UnitTestCase
 {
     /**
-     * Tests Phalcon\Escaper :: detectEncoding()
-     *
-     * @dataProvider escaperDetectEncodingProvider
-     *
-     * @return void
-     *
-     * @author       Phalcon Team <team@phalcon.io>
-     * @since        2020-09-09
-     */
-    public function testEscaperDetectEncoding(
-        string $source,
-        string $expected
-    ): void {
-        $escaper = new Escaper();
-
-        $actual = $escaper->detectEncoding($source);
-        $this->assertSame($expected, $actual);
-    }
-
-    /**
      * @return string[][]
      */
     public static function escaperDetectEncodingProvider(): array
@@ -59,5 +39,25 @@ final class DetectEncodingTest extends UnitTestCase
                 'UTF-8',
             ],
         ];
+    }
+
+    /**
+     * Tests Phalcon\Escaper :: detectEncoding()
+     *
+     * @dataProvider escaperDetectEncodingProvider
+     *
+     * @return void
+     *
+     * @author       Phalcon Team <team@phalcon.io>
+     * @since        2020-09-09
+     */
+    public function testEscaperDetectEncoding(
+        string $source,
+        string $expected
+    ): void {
+        $escaper = new Escaper();
+
+        $actual = $escaper->detectEncoding($source);
+        $this->assertSame($expected, $actual);
     }
 }

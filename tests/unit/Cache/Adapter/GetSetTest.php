@@ -13,9 +13,6 @@ declare(strict_types=1);
 
 namespace Phalcon\Tests\Unit\Cache\Adapter;
 
-use Codeception\Example;
-use Phalcon\Tests\UnitTestCase;
-use Memcached as NativeMemcached;
 use Phalcon\Cache\Adapter\Apcu;
 use Phalcon\Cache\Adapter\Libmemcached;
 use Phalcon\Cache\Adapter\Memory;
@@ -23,17 +20,52 @@ use Phalcon\Cache\Adapter\Redis;
 use Phalcon\Cache\Adapter\Stream;
 use Phalcon\Cache\Adapter\Weak;
 use Phalcon\Storage\SerializerFactory;
-use Redis as NativeRedis;
+use Phalcon\Tests\UnitTestCase;
 use stdClass;
 
 use function getOptionsLibmemcached;
 use function getOptionsRedis;
 use function outputDir;
-use function sprintf;
 use function uniqid;
 
 final class GetSetTest extends UnitTestCase
 {
+    /**
+     * @return array[]
+     */
+    public static function getExamples(): array
+    {
+        return [
+            [
+                Apcu::class,
+                [],
+                'apcu',
+            ],
+            [
+                Libmemcached::class,
+                getOptionsLibmemcached(),
+                'memcached',
+            ],
+            [
+                Memory::class,
+                [],
+                '',
+            ],
+            [
+                Redis::class,
+                getOptionsRedis(),
+                'redis',
+            ],
+            [
+                Stream::class,
+                [
+                    'storageDir' => outputDir(),
+                ],
+                '',
+            ],
+        ];
+    }
+
     /**
      * Tests Phalcon\Cache\Adapter\* :: get()/set()
      *
@@ -100,41 +132,5 @@ final class GetSetTest extends UnitTestCase
 
         $result = $adapter->has($key);
         $this->assertTrue($result);
-    }
-
-    /**
-     * @return array[]
-     */
-    public static function getExamples(): array
-    {
-        return [
-            [
-                Apcu::class,
-                [],
-                'apcu',
-            ],
-            [
-                Libmemcached::class,
-                getOptionsLibmemcached(),
-                'memcached',
-            ],
-            [
-                Memory::class,
-                [],
-                '',
-            ],
-            [
-                Redis::class,
-                getOptionsRedis(),
-                'redis',
-            ],
-            [
-                Stream::class,
-                [
-                    'storageDir' => outputDir(),
-                ],
-                '',
-            ],
-        ];
     }
 }

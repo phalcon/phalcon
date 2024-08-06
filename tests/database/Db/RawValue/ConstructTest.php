@@ -26,7 +26,7 @@ final class ConstructTest extends DatabaseTestCase
      *
      * @dataProvider valueProvider
      *
-     * @group common
+     * @group        common
      */
     public function testDbRawvalueConstruct(
         mixed $value,

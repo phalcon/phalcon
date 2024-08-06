@@ -23,6 +23,27 @@ final class GetSetDITest extends DatabaseTestCase
     use DiTrait;
 
     /**
+     * @return array[]
+     */
+    public static function getExamples(): array
+    {
+        return [
+            [
+                'metadataMemory',
+            ],
+            [
+                'metadataApcu',
+            ],
+            [
+                'metadataRedis',
+            ],
+            [
+                'metadataLibmemcached',
+            ],
+        ];
+    }
+
+    /**
      * Tests Phalcon\Mvc\Model\MetaData :: getDI() - exception
      *
      * @author Phalcon Team <team@phalcon.io>
@@ -59,26 +80,5 @@ final class GetSetDITest extends DatabaseTestCase
         $metadata->setDi($this->container);
 
         $this->assertEquals($this->container, $metadata->getDI());
-    }
-
-    /**
-     * @return array[]
-     */
-    public static function getExamples(): array
-    {
-        return [
-            [
-                'metadataMemory',
-            ],
-            [
-                'metadataApcu',
-            ],
-            [
-                'metadataRedis',
-            ],
-            [
-                'metadataLibmemcached',
-            ],
-        ];
     }
 }

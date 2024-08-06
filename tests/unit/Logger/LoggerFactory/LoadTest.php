@@ -32,6 +32,32 @@ final class LoadTest extends UnitTestCase
     }
 
     /**
+     * Tests Phalcon\Translate\Factory :: load() - exceptions
+     *
+     * @return void
+     *
+     * @throws LoggerException
+     *
+     * @author Phalcon Team <team@phalcon.io>
+     * @since  2020-09-09
+     */
+    public function testLoggerFactoryLoadExceptions(): void
+    {
+        $options = $this->arrayConfig['logger'];
+        $factory = new LoggerFactory(new AdapterFactory());
+
+        $this->expectException(LoggerException::class);
+        $this->expectExceptionMessage(
+            "You must provide 'name' option in factory config parameter."
+        );
+
+        $newOptions = $options;
+        unset($newOptions['name']);
+
+        $factory->load($newOptions);
+    }
+
+    /**
      * Tests Phalcon\Logger\LoggerFactory :: load()
      *
      * @return void
@@ -115,31 +141,5 @@ final class LoadTest extends UnitTestCase
         $class  = Stream::class;
         $actual = $logger->getAdapter('admin');
         $this->assertInstanceOf($class, $actual);
-    }
-
-    /**
-     * Tests Phalcon\Translate\Factory :: load() - exceptions
-     *
-     * @return void
-     *
-     * @throws LoggerException
-     *
-     * @author Phalcon Team <team@phalcon.io>
-     * @since  2020-09-09
-     */
-    public function testLoggerFactoryLoadExceptions(): void
-    {
-        $options = $this->arrayConfig['logger'];
-        $factory = new LoggerFactory(new AdapterFactory());
-
-        $this->expectException(LoggerException::class);
-        $this->expectExceptionMessage(
-            "You must provide 'name' option in factory config parameter."
-        );
-
-        $newOptions = $options;
-        unset($newOptions['name']);
-
-        $factory->load($newOptions);
     }
 }

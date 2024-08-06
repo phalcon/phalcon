@@ -34,6 +34,44 @@ final class FindFirstTest extends DatabaseTestCase
 {
     use DiTrait;
 
+    /**
+     * @return array
+     */
+    public static function findFirstProvider(): array
+    {
+        return [
+            [
+                [
+                    'uuid = ?0',
+                    'bind' => ['5741bfd7-6870-40b7-adf6-cbacb515b9a9'],
+                ],
+                true,
+            ],
+            [
+                [
+                    'uuid = ?0',
+                    'bind' => ['1c53079c-249e-0c63-af8d-52413bfa2a2b'],
+                ],
+                true,
+            ],
+            [
+                [
+                    'uuid = ?0',
+                    'bind' => ['1c53079c-249e-0c63-af8d-52413bfa2a2c'],
+                ],
+                false,
+            ],
+            [
+                '134',
+                false,
+            ],
+            [
+                "uuid = '134'",
+                false,
+            ],
+        ];
+    }
+
     public function setUp(): void
     {
         $this->setNewFactoryDefault();
@@ -374,10 +412,10 @@ final class FindFirstTest extends DatabaseTestCase
      * @author       Phalcon Team <team@phalcon.io>
      * @since        2020-01-27
      *
-     * @group common
+     * @group        common
      */
     public function testMvcModelFindFirstStringPrimaryKey(
-        array|string $params,
+        array | string $params,
         bool $found
     ): void {
         $connection = self::getConnection();
@@ -394,43 +432,5 @@ final class FindFirstTest extends DatabaseTestCase
         $model = ModelWithStringPrimary::findFirst($params);
 
         $this->assertSame($found, $model instanceof Model);
-    }
-
-    /**
-     * @return array
-     */
-    public static function findFirstProvider(): array
-    {
-        return [
-            [
-                [
-                    'uuid = ?0',
-                    'bind' => ['5741bfd7-6870-40b7-adf6-cbacb515b9a9'],
-                ],
-                true,
-            ],
-            [
-                [
-                    'uuid = ?0',
-                    'bind' => ['1c53079c-249e-0c63-af8d-52413bfa2a2b'],
-                ],
-                true,
-            ],
-            [
-                [
-                    'uuid = ?0',
-                    'bind' => ['1c53079c-249e-0c63-af8d-52413bfa2a2c'],
-                ],
-                false,
-            ],
-            [
-                '134',
-                false,
-            ],
-            [
-                "uuid = '134'",
-                false,
-            ],
-        ];
     }
 }

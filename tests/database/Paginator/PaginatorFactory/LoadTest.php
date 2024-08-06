@@ -15,9 +15,9 @@ namespace Phalcon\Tests\Database\Paginator\PaginatorFactory;
 
 use Phalcon\Paginator\Adapter\QueryBuilder;
 use Phalcon\Paginator\PaginatorFactory;
+use Phalcon\Tests\DatabaseTestCase;
 use Phalcon\Tests\Fixtures\Traits\DiTrait;
 use Phalcon\Tests\Fixtures\Traits\FactoryTrait;
-use Phalcon\Tests\DatabaseTestCase;
 
 final class LoadTest extends DatabaseTestCase
 {

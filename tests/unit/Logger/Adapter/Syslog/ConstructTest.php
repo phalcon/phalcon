@@ -13,35 +13,11 @@ declare(strict_types=1);
 
 namespace Phalcon\Tests\Unit\Logger\Adapter\Syslog;
 
-use Codeception\Example;
 use Phalcon\Logger\Adapter\Syslog;
 use Phalcon\Tests\UnitTestCase;
 
 final class ConstructTest extends UnitTestCase
 {
-    /**
-     * Tests Phalcon\Logger\Adapter\Syslog :: __construct()
-     *
-     * @dataProvider getExamples
-     *
-     * @return void
-     *
-     * @author       Phalcon Team <team@phalcon.io>
-     * @since        2020-09-09
-     */
-    public function testLoggerAdapterSyslogConstructOptionsCast(
-        array $options,
-        string $property,
-        int $expected
-    ): void {
-        $streamName = $this->getNewFileName('log', 'log');
-
-        $adapter  = new Syslog($streamName, $options);
-        $property = $this->getProtectedProperty($adapter, $property);
-
-        $this->assertSame($expected, $property);
-    }
-
     /**
      * @return array[]
      */
@@ -69,5 +45,28 @@ final class ConstructTest extends UnitTestCase
                 LOG_DAEMON,
             ],
         ];
+    }
+
+    /**
+     * Tests Phalcon\Logger\Adapter\Syslog :: __construct()
+     *
+     * @dataProvider getExamples
+     *
+     * @return void
+     *
+     * @author       Phalcon Team <team@phalcon.io>
+     * @since        2020-09-09
+     */
+    public function testLoggerAdapterSyslogConstructOptionsCast(
+        array $options,
+        string $property,
+        int $expected
+    ): void {
+        $streamName = $this->getNewFileName('log', 'log');
+
+        $adapter  = new Syslog($streamName, $options);
+        $property = $this->getProtectedProperty($adapter, $property);
+
+        $this->assertSame($expected, $property);
     }
 }

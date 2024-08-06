@@ -33,7 +33,7 @@ final class GetSQLVariablesTest extends DatabaseTestCase
      * @author Phalcon Team <team@phalcon.io>
      * @since  2021-10-31
      *
-     * @group common
+     * @group  common
      */
     public function testDbAdapterGetSqlVariablesInit(): void
     {

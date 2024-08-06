@@ -19,6 +19,55 @@ use Phalcon\Tests\Fixtures\Migrations\InvoicesMigration;
 final class FetchOneTest extends DatabaseTestCase
 {
     /**
+     * @return array
+     */
+    public static function getBindTypes(): array
+    {
+        return [
+            [
+                'inv_id = ?',
+                [0 => 1],
+            ],
+            [
+                'inv_id = :id',
+                ['id' => 1],
+            ],
+            [
+                'inv_status_flag = :status',
+                [
+                    'status' => true,
+                ],
+            ],
+            [
+                'inv_status_flag = :status',
+                [
+                    'status' => [true, PDO::PARAM_BOOL],
+                ],
+            ],
+            [
+                'inv_id = :id AND inv_status_flag IS NOT :status',
+                [
+                    'id'     => 1,
+                    'status' => null,
+                ],
+            ],
+            [
+                'inv_id = :id AND inv_status_flag IS NOT :status',
+                [
+                    'id'     => [1, PDO::PARAM_INT],
+                    'status' => [null, PDO::PARAM_NULL],
+                ],
+            ],
+            [
+                'inv_title = :title',
+                [
+                    'title' => 'test-1',
+                ],
+            ],
+        ];
+    }
+
+    /**
      * Database Tests Phalcon\DataMapper\Pdo\Connection :: fetchOne()
      *
      * @since  2020-01-25
@@ -66,7 +115,7 @@ final class FetchOneTest extends DatabaseTestCase
         string $where,
         array $params
     ): void {
-         /** @var Connection $connection */
+        /** @var Connection $connection */
         $connection = $this->getDataMapperConnection();
         $migration  = new InvoicesMigration($connection);
         $migration->clear();
@@ -92,7 +141,7 @@ final class FetchOneTest extends DatabaseTestCase
      */
     public function testDmPdoConnectionFetchOneNoResult(): void
     {
-          /** @var Connection $connection */
+        /** @var Connection $connection */
         $connection = $this->getDataMapperConnection();
         $migration  = new InvoicesMigration($connection);
         $migration->clear();
@@ -109,54 +158,5 @@ final class FetchOneTest extends DatabaseTestCase
 
         $this->assertIsArray($all);
         $this->assertEmpty($all);
-    }
-
-    /**
-     * @return array
-     */
-    public static function getBindTypes(): array
-    {
-        return [
-            [
-                'inv_id = ?',
-                [0 => 1],
-            ],
-            [
-                'inv_id = :id',
-                ['id' => 1],
-            ],
-            [
-                'inv_status_flag = :status',
-                [
-                    'status' => true,
-                ],
-            ],
-            [
-                'inv_status_flag = :status',
-                [
-                    'status' => [true, PDO::PARAM_BOOL],
-                ],
-            ],
-            [
-                'inv_id = :id AND inv_status_flag IS NOT :status',
-                [
-                    'id'     => 1,
-                    'status' => null,
-                ],
-            ],
-            [
-                'inv_id = :id AND inv_status_flag IS NOT :status',
-                [
-                    'id'     => [1, PDO::PARAM_INT],
-                    'status' => [null, PDO::PARAM_NULL],
-                ],
-            ],
-            [
-                'inv_title = :title',
-                [
-                    'title' => 'test-1',
-                ],
-            ],
-        ];
     }
 }

@@ -32,18 +32,6 @@ final class SumTest extends DatabaseTestCase
      */
     private InvoicesMigration $invoiceMigration;
 
-    public function tearDown(): void
-    {
-        /**
-         * @var Manager $transactionManager
-         */
-        $transactionManager = $this->getDi()->getShared('transactionManager');
-
-        if ($transactionManager->has()) {
-            $transactionManager->rollback();
-        }
-    }
-
     /**
      * Executed before each test
      *
@@ -60,6 +48,18 @@ final class SumTest extends DatabaseTestCase
         $this->setDatabase();
 
         $this->invoiceMigration = new InvoicesMigration(self::getConnection());
+    }
+
+    public function tearDown(): void
+    {
+        /**
+         * @var Manager $transactionManager
+         */
+        $transactionManager = $this->getDi()->getShared('transactionManager');
+
+        if ($transactionManager->has()) {
+            $transactionManager->rollback();
+        }
     }
 
     /**

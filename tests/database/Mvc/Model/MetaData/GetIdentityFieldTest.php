@@ -22,6 +22,27 @@ final class GetIdentityFieldTest extends DatabaseTestCase
 {
     use DiTrait;
 
+    /**
+     * @return array[]
+     */
+    public static function getExamples(): array
+    {
+        return [
+            [
+                'metadataMemory',
+            ],
+            [
+                'metadataApcu',
+            ],
+            [
+                'metadataRedis',
+            ],
+            [
+                'metadataLibmemcached',
+            ],
+        ];
+    }
+
     public function setUp(): void
     {
         $this->setNewFactoryDefault();
@@ -36,7 +57,7 @@ final class GetIdentityFieldTest extends DatabaseTestCase
      * @author       Phalcon Team <team@phalcon.io>
      * @since        2020-02-01
      *
-     * @group common
+     * @group        common
      */
     public function testMvcModelMetadataGetIdentityField(
         string $service
@@ -75,26 +96,5 @@ final class GetIdentityFieldTest extends DatabaseTestCase
         $expected = 'inv_id';
         $actual   = $adapter->getIdentityField($model);
         $this->assertEquals($expected, $actual);
-    }
-
-    /**
-     * @return array[]
-     */
-    public static function getExamples(): array
-    {
-        return [
-            [
-                'metadataMemory',
-            ],
-            [
-                'metadataApcu',
-            ],
-            [
-                'metadataRedis',
-            ],
-            [
-                'metadataLibmemcached',
-            ],
-        ];
     }
 }

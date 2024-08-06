@@ -13,6 +13,7 @@ declare(strict_types=1);
 
 namespace Phalcon\Tests\Database\Paginator\Adapter\QueryBuilder;
 
+use PDO;
 use Phalcon\Paginator\Adapter\AdapterInterface;
 use Phalcon\Paginator\Adapter\QueryBuilder;
 use Phalcon\Paginator\Exception;
@@ -20,7 +21,6 @@ use Phalcon\Tests\DatabaseTestCase;
 use Phalcon\Tests\Fixtures\Migrations\InvoicesMigration;
 use Phalcon\Tests\Fixtures\Traits\DiTrait;
 use Phalcon\Tests\Models\Invoices;
-use PDO;
 use stdClass;
 
 final class ConstructTest extends DatabaseTestCase
@@ -43,7 +43,7 @@ final class ConstructTest extends DatabaseTestCase
      * @author Phalcon Team <team@phalcon.io>
      * @since  2020-02-01
      *
-     * @group common
+     * @group  common
      */
     public function testPaginatorAdapterQuerybuilderConstruct(): void
     {
@@ -72,7 +72,7 @@ final class ConstructTest extends DatabaseTestCase
      * @author Phalcon Team <team@phalcon.io>
      * @since  2020-02-01
      *
-     * @group common
+     * @group  common
      */
     public function testPaginatorAdapterQuerybuilderConstructException(): void
     {

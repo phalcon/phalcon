@@ -30,6 +30,23 @@ final class ReadMetadataTest extends DatabaseTestCase
 {
     use DiTrait;
 
+    /**
+     * @return array[]
+     */
+    public static function getExamples(): array
+    {
+        return [
+            [
+                'metadataRedis',
+                self::getKeyData(),
+            ],
+            [
+                'metadataLibmemcached',
+                self::getKeyData(),
+            ],
+        ];
+    }
+
     public function setUp(): void
     {
         $this->setNewFactoryDefault();
@@ -134,23 +151,6 @@ final class ReadMetadataTest extends DatabaseTestCase
             $actual = $service->get($key);
             $this->assertSame($expected, $actual);
         }
-    }
-
-    /**
-     * @return array[]
-     */
-    public static function getExamples(): array
-    {
-        return [
-            [
-                'metadataRedis',
-                self::getKeyData(),
-            ],
-            [
-                'metadataLibmemcached',
-                self::getKeyData(),
-            ],
-        ];
     }
 
     /**

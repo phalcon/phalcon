@@ -24,28 +24,6 @@ class GetSetNameTest extends ServicesTestCase
     use DiTrait;
 
     /**
-     * Tests Phalcon\Session\Manager :: getName()/setName()
-     *
-     * @author Phalcon Team <team@phalcon.io>
-     * @since  2020-09-09
-     */
-    public function testSessionManagerGetSetName(): void
-    {
-        $manager = new Manager();
-        $files   = $this->newService('sessionStream');
-        $manager->setAdapter($files);
-
-        if (false !== $manager->exists()) {
-            $manager->destroy();
-        }
-
-        $manager->setName('myname');
-        $expected = 'myname';
-        $actual   = $manager->getName();
-        $this->assertEquals($expected, $actual);
-    }
-
-    /**
      * Tests Phalcon\Session\Manager :: getName()/setName() - not valid name
      *
      * @author Phalcon Team <team@phalcon.io>
@@ -90,5 +68,27 @@ class GetSetNameTest extends ServicesTestCase
         }
 
         $this->assertTrue($valid);
+    }
+
+    /**
+     * Tests Phalcon\Session\Manager :: getName()/setName()
+     *
+     * @author Phalcon Team <team@phalcon.io>
+     * @since  2020-09-09
+     */
+    public function testSessionManagerGetSetName(): void
+    {
+        $manager = new Manager();
+        $files   = $this->newService('sessionStream');
+        $manager->setAdapter($files);
+
+        if (false !== $manager->exists()) {
+            $manager->destroy();
+        }
+
+        $manager->setName('myname');
+        $expected = 'myname';
+        $actual   = $manager->getName();
+        $this->assertEquals($expected, $actual);
     }
 }

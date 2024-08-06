@@ -17,28 +17,6 @@ use Phalcon\Tests\DatabaseTestCase;
 final class LevelsTest extends DatabaseTestCase
 {
     /**
-     * Database Tests Phalcon\DataMapper\Pdo\Profiler\MemoryLogger ::
-     *
-     * @dataProvider getExamples
-     * @since        2020-01-25
-     *
-     * @group        pgsql
-     * @group        mysql
-     * @group        sqlite
-     */
-    public function testDmPdoProfilerMemoryLoggerLevels(
-        string $level
-    ): void {
-        $logger = new MemoryLogger();
-
-        $logger->$level($level . ' message');
-        $expected = [$level . ' message'];
-        $message  = $logger->getMessages();
-
-        $this->assertEquals($expected, $message);
-    }
-
-    /**
      * @return array
      */
     public static function getExamples(): array
@@ -69,5 +47,27 @@ final class LevelsTest extends DatabaseTestCase
                 'warning',
             ],
         ];
+    }
+
+    /**
+     * Database Tests Phalcon\DataMapper\Pdo\Profiler\MemoryLogger ::
+     *
+     * @dataProvider getExamples
+     * @since        2020-01-25
+     *
+     * @group        pgsql
+     * @group        mysql
+     * @group        sqlite
+     */
+    public function testDmPdoProfilerMemoryLoggerLevels(
+        string $level
+    ): void {
+        $logger = new MemoryLogger();
+
+        $logger->$level($level . ' message');
+        $expected = [$level . ' message'];
+        $message  = $logger->getMessages();
+
+        $this->assertEquals($expected, $message);
     }
 }

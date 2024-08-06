@@ -24,6 +24,31 @@ final class CloneResultMapTest extends DatabaseTestCase
 {
     use DiTrait;
 
+    /**
+     * @return array
+     */
+    public static function modelDataProvider(): array
+    {
+        return [
+            [
+                '1',
+                '42',
+                '1',
+                'Test title',
+                '3.14',
+                '2020-10-05 20:43',
+            ],
+            [
+                1,
+                42,
+                1,
+                'Test title',
+                3.14,
+                '2020-10-05 20:43',
+            ],
+        ];
+    }
+
     public function setUp(): void
     {
         $this->setNewFactoryDefault();
@@ -42,14 +67,14 @@ final class CloneResultMapTest extends DatabaseTestCase
      * @author       Phalcon Team <team@phalcon.io>
      * @since        2020-10-05
      *
-     * @group common
+     * @group        common
      */
     public function testMvcModelCloneResultMap(
-        int|string $invId,
-        int|string $invCstId,
-        int|string $invStatusFlag,
+        int | string $invId,
+        int | string $invCstId,
+        int | string $invStatusFlag,
         string $invTitle,
-        float|string $invTotal,
+        float | string $invTotal,
         string $invCreatedAt
     ): void {
         $base = new InvoicesMap();
@@ -102,11 +127,11 @@ final class CloneResultMapTest extends DatabaseTestCase
      * @group        pgsql
      */
     public function testMvcModelCloneResultMapWithCasting(
-        int|string $invId,
-        int|string $invCstId,
-        int|string $invStatusFlag,
+        int | string $invId,
+        int | string $invCstId,
+        int | string $invStatusFlag,
         string $invTitle,
-        float|string $invTotal,
+        float | string $invTotal,
         string $invCreatedAt
     ): void {
         $base = new InvoicesMap();
@@ -167,30 +192,5 @@ final class CloneResultMapTest extends DatabaseTestCase
         $this->assertIsFloat($invoice->total);
         $this->assertIsString($invoice->created_at);
         $this->assertEquals($invCreatedAt, $invoice->created_at);
-    }
-
-    /**
-     * @return array
-     */
-    public static function modelDataProvider(): array
-    {
-        return [
-            [
-                '1',
-                '42',
-                '1',
-                'Test title',
-                '3.14',
-                '2020-10-05 20:43',
-            ],
-            [
-                1,
-                42,
-                1,
-                'Test title',
-                3.14,
-                '2020-10-05 20:43',
-            ],
-        ];
     }
 }

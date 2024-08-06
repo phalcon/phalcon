@@ -37,17 +37,6 @@ final class SaveTest extends DatabaseTestCase
 {
     use DiTrait;
 
-    public function tearDown(): void
-    {
-        $this->container['db']->close();
-    }
-
-    public function setUp(): void
-    {
-        $this->setNewFactoryDefault();
-        $this->setDatabase();
-    }
-
     /**
      * Tests Phalcon\Mvc\Model\ :: save() Infinite Loop
      *
@@ -75,6 +64,17 @@ final class SaveTest extends DatabaseTestCase
         $customer->save();
     }
 
+    public function setUp(): void
+    {
+        $this->setNewFactoryDefault();
+        $this->setDatabase();
+    }
+
+    public function tearDown(): void
+    {
+        $this->container['db']->close();
+    }
+
     /**
      * Tests Phalcon\Mvc\Model :: save()
      *
@@ -87,7 +87,7 @@ final class SaveTest extends DatabaseTestCase
      */
     public function testMvcModelSave(): void
     {
-         /** @var PDO $connection */
+        /** @var PDO $connection */
         $connection = self::getConnection();
 
         $customersMigration = new CustomersMigration($connection);
@@ -608,7 +608,7 @@ final class SaveTest extends DatabaseTestCase
      * @since        2019-08-02
      * @dataProvider tinyintProvider
      *
-     * @group common
+     * @group        common
      */
     public function testMvcModelSaveWithTinyInt(
         string $value

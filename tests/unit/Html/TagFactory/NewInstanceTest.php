@@ -67,6 +67,53 @@ use function uniqid;
 final class NewInstanceTest extends UnitTestCase
 {
     /**
+     * Returns the example data
+     */
+    public static function getData(): array
+    {
+        return [
+            ["a", Anchor::class],
+            ["base", Base::class],
+            ["body", Body::class],
+            ["button", Button::class],
+            ["close", Close::class],
+            ["element", Element::class],
+            ["form", Form::class],
+            ["img", Img::class],
+            ["inputColor", Color::class],
+            ["inputDate", Date::class],
+            ["inputDateTime", DateTime::class],
+            ["inputDateTimeLocal", DateTimeLocal::class],
+            ["inputEmail", Email::class],
+            ["inputFile", File::class],
+            ["inputHidden", Hidden::class],
+            ["inputImage", Image::class],
+            ["inputInput", Input::class],
+            ["inputMonth", Month::class],
+            ["inputNumeric", Numeric::class],
+            ["inputPassword", Password::class],
+            ["inputRange", Range::class],
+            ["inputSelect", Select::class],
+            ["inputSearch", Search::class],
+            ["inputSubmit", Submit::class],
+            ["inputTel", Tel::class],
+            ["inputText", Text::class],
+            ["inputTextarea", Textarea::class],
+            ["inputTime", Time::class],
+            ["inputUrl", Url::class],
+            ["inputWeek", Week::class],
+            ["label", Label::class],
+            ["link", Link::class],
+            ["meta", Meta::class],
+            ["ol", Ol::class],
+            ["script", Script::class],
+            ["style", Style::class],
+            ["title", Title::class],
+            ["ul", Ul::class],
+        ];
+    }
+
+    /**
      * Tests Phalcon\Storage\SerializerFactory :: newInstance() - exception
      *
      * @return void
@@ -125,52 +172,5 @@ final class NewInstanceTest extends UnitTestCase
         $service = $factory->newInstance($name);
 
         $this->assertInstanceOf($class, $service);
-    }
-
-    /**
-     * Returns the example data
-     */
-    public static function getData(): array
-    {
-        return [
-            ["a", Anchor::class],
-            ["base", Base::class],
-            ["body", Body::class],
-            ["button", Button::class],
-            ["close", Close::class],
-            ["element", Element::class],
-            ["form", Form::class],
-            ["img", Img::class],
-            ["inputColor", Color::class],
-            ["inputDate", Date::class],
-            ["inputDateTime", DateTime::class],
-            ["inputDateTimeLocal", DateTimeLocal::class],
-            ["inputEmail", Email::class],
-            ["inputFile", File::class],
-            ["inputHidden", Hidden::class],
-            ["inputImage", Image::class],
-            ["inputInput", Input::class],
-            ["inputMonth", Month::class],
-            ["inputNumeric", Numeric::class],
-            ["inputPassword", Password::class],
-            ["inputRange", Range::class],
-            ["inputSelect", Select::class],
-            ["inputSearch", Search::class],
-            ["inputSubmit", Submit::class],
-            ["inputTel", Tel::class],
-            ["inputText", Text::class],
-            ["inputTextarea", Textarea::class],
-            ["inputTime", Time::class],
-            ["inputUrl", Url::class],
-            ["inputWeek", Week::class],
-            ["label", Label::class],
-            ["link", Link::class],
-            ["meta", Meta::class],
-            ["ol", Ol::class],
-            ["script", Script::class],
-            ["style", Style::class],
-            ["title", Title::class],
-            ["ul", Ul::class],
-        ];
     }
 }

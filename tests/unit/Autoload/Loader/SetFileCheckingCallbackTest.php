@@ -41,11 +41,11 @@ final class SetFileCheckingCallbackTest extends UnitTestCase
     /**
      * Tests Phalcon\Autoload\Loader :: setFileCheckingCallback() - exception
      *
+     * @return void
+     * @throws Exception
      * @author Phalcon Team <team@phalcon.io>
      * @since  2020-09-09
      *
-     * @return void
-     * @throws Exception
      */
     public function testAutoloaderLoaderSetFileCheckingCallbackException(): void
     {
@@ -61,14 +61,14 @@ final class SetFileCheckingCallbackTest extends UnitTestCase
     /**
      * Tests Phalcon\Autoload\Loader :: setFileCheckingCallback()
      *
-     * @author Phalcon Team <team@phalcon.io>
+     * @return void
+     * @throws EventsException
+     * @throws Exception
      * @since  2020-09-09
      * @issue  https://github.com/phalcon/cphalcon/issues/13360
      * @issue  https://github.com/phalcon/cphalcon/issues/10472
      *
-     * @return void
-     * @throws EventsException
-     * @throws Exception
+     * @author Phalcon Team <team@phalcon.io>
      */
     public function testAutoloaderLoaderSetFileCheckingCallbackFalse(): void
     {
@@ -108,16 +108,16 @@ final class SetFileCheckingCallbackTest extends UnitTestCase
      *
      * @dataProvider getExamples
      *
-     * @author       Phalcon Team <team@phalcon.io>
-     * @since        2020-09-09
-     * @issue  https://github.com/phalcon/cphalcon/issues/13360
-     * @issue  https://github.com/phalcon/cphalcon/issues/10472
-     *
      * @param string|null $callback
      *
      * @return void
      * @throws Exception
      * @throws EventsException
+     * @author       Phalcon Team <team@phalcon.io>
+     * @since        2020-09-09
+     * @issue  https://github.com/phalcon/cphalcon/issues/13360
+     * @issue  https://github.com/phalcon/cphalcon/issues/10472
+     *
      */
     public function testAutoloaderLoaderSetFileCheckingCallbackValid(
         ?string $callback

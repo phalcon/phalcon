@@ -22,6 +22,27 @@ final class GetNotNullAttributesTest extends DatabaseTestCase
 {
     use DiTrait;
 
+    /**
+     * @return array[]
+     */
+    public static function getExamples(): array
+    {
+        return [
+            [
+                'metadataMemory',
+            ],
+            [
+                'metadataApcu',
+            ],
+            [
+                'metadataRedis',
+            ],
+            [
+                'metadataLibmemcached',
+            ],
+        ];
+    }
+
     public function setUp(): void
     {
         $this->setNewFactoryDefault();
@@ -36,7 +57,7 @@ final class GetNotNullAttributesTest extends DatabaseTestCase
      * @author       Phalcon Team <team@phalcon.io>
      * @since        2020-02-01
      *
-     * @group common
+     * @group        common
      */
     public function testMvcModelMetadataGetNotNullAttributes(
         string $service
@@ -71,26 +92,5 @@ final class GetNotNullAttributesTest extends DatabaseTestCase
         $this->assertTrue($adapter->isEmpty());
         $actual = $adapter->getNotNullAttributes($model);
         $this->assertEquals($expected, $actual);
-    }
-
-    /**
-     * @return array[]
-     */
-    public static function getExamples(): array
-    {
-        return [
-            [
-                'metadataMemory',
-            ],
-            [
-                'metadataApcu',
-            ],
-            [
-                'metadataRedis',
-            ],
-            [
-                'metadataLibmemcached',
-            ],
-        ];
     }
 }
