@@ -11,13 +11,13 @@
 
 declare(strict_types=1);
 
-namespace Phalcon\Tests\Unit\Db\Adapter\Pdo;
+namespace Phalcon\Tests\Database\Db\Adapter\Pdo;
 
-use Phalcon\Tests\DatabaseTestCase;
 use Phalcon\Db\Adapter\Pdo\AbstractPdo;
 use Phalcon\Db\Adapter\Pdo\Mysql;
 use Phalcon\Db\Column;
 use Phalcon\Storage\Exception;
+use Phalcon\Tests\DatabaseTestCase;
 use Phalcon\Tests\Fixtures\Migrations\DialectMigration;
 use Phalcon\Tests\Fixtures\Traits\DiTrait;
 
@@ -51,7 +51,7 @@ final class ExecInsertTest extends DatabaseTestCase
      *
      * @group  mysql
      */
-    public function dbAdapterPdoInsert(): void
+    public function testDbAdapterPdoInsert(): void
     {
         $connection = self::getConnection();
         $migration  = new DialectMigration($connection);

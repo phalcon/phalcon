@@ -11,13 +11,13 @@
 
 declare(strict_types=1);
 
-namespace Phalcon\Tests\Unit\Mvc\Model;
+namespace Phalcon\Tests\Database\Mvc\Model;
 
-use Phalcon\Tests\DatabaseTestCase;
 use Phalcon\Events\Event;
 use Phalcon\Events\Manager;
 use Phalcon\Support\Collection;
 use Phalcon\Support\Settings;
+use Phalcon\Tests\DatabaseTestCase;
 use Phalcon\Tests\Fixtures\Migrations\CustomersMigration;
 use Phalcon\Tests\Fixtures\Traits\DiTrait;
 use Phalcon\Tests\Models\Customers;

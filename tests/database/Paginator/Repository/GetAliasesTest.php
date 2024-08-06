@@ -13,9 +13,9 @@ declare(strict_types=1);
 
 namespace Phalcon\Tests\Database\Paginator\Repository;
 
-use Phalcon\Tests\UnitTestCase;
+use Phalcon\Tests\DatabaseTestCase;
 
-final class GetAliasesTest extends UnitTestCase
+final class GetAliasesTest extends DatabaseTestCase
 {
     /**
      * Tests Phalcon\Paginator\Repository :: getAliases()

@@ -11,10 +11,10 @@
 
 declare(strict_types=1);
 
-namespace Phalcon\Tests\Unit\Mvc\Model\Manager;
+namespace Phalcon\Tests\Database\Mvc\Model\Manager;
 
-use Phalcon\Tests\DatabaseTestCase;
 use Phalcon\Mvc\Model\ManagerInterface;
+use Phalcon\Tests\DatabaseTestCase;
 use Phalcon\Tests\Fixtures\Traits\DiTrait;
 
 use function spl_object_hash;

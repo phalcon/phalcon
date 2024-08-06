@@ -11,10 +11,10 @@
 
 declare(strict_types=1);
 
-namespace Phalcon\Tests\Unit\Db\Profiler\Item;
+namespace Phalcon\Tests\Database\Db\Profiler\Item;
 
-use Phalcon\Tests\DatabaseTestCase;
 use Phalcon\Db\Profiler\Item;
+use Phalcon\Tests\DatabaseTestCase;
 
 final class GetSetFinalTimeTest extends DatabaseTestCase
 {
@@ -26,7 +26,7 @@ final class GetSetFinalTimeTest extends DatabaseTestCase
      *
      * @group  common
      */
-    public function dbProfilerItemGetSetFinalTime(): void
+    public function testDbProfilerItemGetSetFinalTime(): void
     {
         $item = new Item();
         $item->setFinalTime(123.45);

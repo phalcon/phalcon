@@ -11,10 +11,10 @@
 
 declare(strict_types=1);
 
-namespace Phalcon\Tests\Unit\Mvc\Model;
+namespace Phalcon\Tests\Database\Mvc\Model;
 
-use Phalcon\Tests\DatabaseTestCase;
 use Phalcon\Mvc\Model\Transaction\Manager;
+use Phalcon\Tests\DatabaseTestCase;
 use Phalcon\Tests\Fixtures\Migrations\InvoicesMigration;
 use Phalcon\Tests\Fixtures\Traits\DiTrait;
 use Phalcon\Tests\Models\Invoices;

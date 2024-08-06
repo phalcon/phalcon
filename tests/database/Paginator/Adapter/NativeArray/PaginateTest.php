@@ -15,9 +15,9 @@ namespace Phalcon\Tests\Database\Paginator\Adapter\NativeArray;
 
 use Phalcon\Paginator\Adapter\NativeArray;
 use Phalcon\Paginator\Repository;
-use Phalcon\Tests\UnitTestCase;
+use Phalcon\Tests\DatabaseTestCase;
 
-final class PaginateTest extends UnitTestCase
+final class PaginateTest extends DatabaseTestCase
 {
     /**
      * Tests Phalcon\Paginator\Adapter\NativeArray :: paginate()

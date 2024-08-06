@@ -11,11 +11,11 @@
 
 declare(strict_types=1);
 
-namespace Phalcon\Tests\Unit\Mvc\Model\Criteria;
+namespace Phalcon\Tests\Database\Mvc\Model\Criteria;
 
-use Phalcon\Tests\DatabaseTestCase;
 use Phalcon\Mvc\Model\Criteria;
 use Phalcon\Mvc\Model\Resultset\Simple;
+use Phalcon\Tests\DatabaseTestCase;
 use Phalcon\Tests\Fixtures\Migrations\InvoicesMigration;
 use Phalcon\Tests\Fixtures\Traits\DiTrait;
 use Phalcon\Tests\Models\Invoices;

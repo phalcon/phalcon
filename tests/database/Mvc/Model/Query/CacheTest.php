@@ -11,13 +11,12 @@
 
 declare(strict_types=1);
 
-namespace Phalcon\Tests\Unit\Mvc\Model\Query;
+namespace Phalcon\Tests\Database\Mvc\Model\Query;
 
-use Codeception\Example;
-use Phalcon\Tests\DatabaseTestCase;
 use Phalcon\Cache\AdapterFactory;
 use Phalcon\Cache\Cache;
 use Phalcon\Storage\SerializerFactory;
+use Phalcon\Tests\DatabaseTestCase;
 use Phalcon\Tests\Fixtures\Migrations\InvoicesMigration;
 use Phalcon\Tests\Fixtures\Traits\DiTrait;
 use Phalcon\Tests\Models\Invoices;

@@ -11,10 +11,10 @@
 
 declare(strict_types=1);
 
-namespace Phalcon\Tests\Unit\Db\RawValue;
+namespace Phalcon\Tests\Database\Db\RawValue;
 
-use Phalcon\Tests\DatabaseTestCase;
 use Phalcon\Db\RawValue;
+use Phalcon\Tests\DatabaseTestCase;
 
 final class ToStringTest extends DatabaseTestCase
 {
@@ -26,7 +26,7 @@ final class ToStringTest extends DatabaseTestCase
      *
      * @group  common
      */
-    public function dbRawvalueToString(): void
+    public function testDbRawvalueToString(): void
     {
         $rawValue = new RawValue('example string');
 

@@ -11,12 +11,12 @@
 
 declare(strict_types=1);
 
-namespace Phalcon\Tests\Unit\Mvc\Model\Behavior;
+namespace Phalcon\Tests\Database\Mvc\Model\Behavior;
 
-use Phalcon\Tests\DatabaseTestCase;
 use DateTime;
 use Phalcon\Events\Event;
 use Phalcon\Events\Manager as EventManager;
+use Phalcon\Tests\DatabaseTestCase;
 use Phalcon\Tests\Fixtures\Migrations\InvoicesMigration;
 use Phalcon\Tests\Fixtures\Traits\DiTrait;
 use Phalcon\Tests\Models\Invoices;

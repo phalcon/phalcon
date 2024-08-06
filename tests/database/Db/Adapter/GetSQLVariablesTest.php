@@ -11,7 +11,7 @@
 
 declare(strict_types=1);
 
-namespace Phalcon\Tests\Unit\Db\Adapter;
+namespace Phalcon\Tests\Database\Db\Adapter;
 
 use Phalcon\Tests\DatabaseTestCase;
 use Phalcon\Tests\Fixtures\Traits\DiTrait;
@@ -35,7 +35,7 @@ final class GetSQLVariablesTest extends DatabaseTestCase
      *
      * @group common
      */
-    public function dbAdapterGetSqlVariablesInit(): void
+    public function testDbAdapterGetSqlVariablesInit(): void
     {
         $db = $this->container->get('db');
 

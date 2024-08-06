@@ -11,7 +11,7 @@
 
 declare(strict_types=1);
 
-namespace Phalcon\Tests\Unit\Mvc\Model;
+namespace Phalcon\Tests\Database\Mvc\Model;
 
 use Phalcon\Tests\DatabaseTestCase;
 use Phalcon\Tests\Fixtures\Traits\DiTrait;

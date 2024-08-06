@@ -11,11 +11,11 @@
 
 declare(strict_types=1);
 
-namespace Phalcon\Tests\Unit\Mvc\Model\Resultset\Simple;
+namespace Phalcon\Tests\Database\Mvc\Model\Resultset\Simple;
 
-use Phalcon\Tests\DatabaseTestCase;
 use Phalcon\Mvc\Model\Resultset\Simple;
 use Phalcon\Storage\Exception;
+use Phalcon\Tests\DatabaseTestCase;
 use Phalcon\Tests\Fixtures\Traits\DiTrait;
 use Phalcon\Tests\Fixtures\Traits\RecordsTrait;
 

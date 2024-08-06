@@ -13,9 +13,9 @@ declare(strict_types=1);
 
 namespace Phalcon\Tests\Database\Paginator\Repository;
 
-use Phalcon\Tests\UnitTestCase;
+use Phalcon\Tests\DatabaseTestCase;
 
-final class GetNextTest extends UnitTestCase
+final class GetNextTest extends DatabaseTestCase
 {
     /**
      * Tests Phalcon\Paginator\Repository :: getNext()

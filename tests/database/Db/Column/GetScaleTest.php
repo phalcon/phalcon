@@ -11,7 +11,7 @@
 
 declare(strict_types=1);
 
-namespace Phalcon\Tests\Unit\Db\Column;
+namespace Phalcon\Tests\Database\Db\Column;
 
 use Phalcon\Tests\DatabaseTestCase;
 use Phalcon\Tests\Fixtures\Migrations\FractalDatesMigration;
@@ -39,7 +39,7 @@ final class GetScaleTest extends DatabaseTestCase
      *
      * @group  common
      */
-    public function dbColumnGetScale(): void
+    public function testDbColumnGetScale(): void
     {
         $columns         = $this->getColumnsArray();
         $expectedColumns = $this->getColumnsObjects();
@@ -58,7 +58,7 @@ final class GetScaleTest extends DatabaseTestCase
      * @author Phalcon Team <team@phalcon.io>
      * @since  2019-12-23
      */
-    public function dbColumnGetScaleDateTimeTimeTimeStamp(): void
+    public function testDbColumnGetScaleDateTimeTimeTimeStamp(): void
     {
         $driver = self::getDriver();
 

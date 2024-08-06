@@ -11,7 +11,7 @@
 
 declare(strict_types=1);
 
-namespace Phalcon\Tests\Unit\Db\Column;
+namespace Phalcon\Tests\Database\Db\Column;
 
 use Phalcon\Tests\DatabaseTestCase;
 use Phalcon\Tests\Fixtures\Traits\DbTrait;
@@ -30,7 +30,7 @@ final class GetAfterPositionTest extends DatabaseTestCase
      *
      * @group  common
      */
-    public function dbColumnGetAfterPosition(): void
+    public function testDbColumnGetAfterPosition(): void
     {
         $columns         = $this->getColumnsArray();
         $expectedColumns = $this->getColumnsObjects();

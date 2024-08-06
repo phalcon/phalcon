@@ -11,11 +11,11 @@
 
 declare(strict_types=1);
 
-namespace Phalcon\Tests\Unit\Db\Adapter\Pdo;
+namespace Phalcon\Tests\Database\Db\Adapter\Pdo;
 
-use Phalcon\Tests\DatabaseTestCase;
 use PDO;
 use Phalcon\Db\Adapter\PdoFactory;
+use Phalcon\Tests\DatabaseTestCase;
 use Phalcon\Tests\Fixtures\Traits\DiTrait;
 
 use function getOptionsMysql;
@@ -44,7 +44,7 @@ final class ConnectTest extends DatabaseTestCase
      *
      * @group  mysql
      */
-    public function dbAdapterPdoConnectPersistent(): void
+    public function testDbAdapterPdoConnectPersistent(): void
     {
         $options               = getOptionsMysql();
         $options['persistent'] = true;

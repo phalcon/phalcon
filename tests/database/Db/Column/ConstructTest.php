@@ -11,11 +11,11 @@
 
 declare(strict_types=1);
 
-namespace Phalcon\Tests\Unit\Db\Column;
+namespace Phalcon\Tests\Database\Db\Column;
 
-use Phalcon\Tests\DatabaseTestCase;
 use Phalcon\Db\Column;
 use Phalcon\Db\ColumnInterface;
+use Phalcon\Tests\DatabaseTestCase;
 
 final class ConstructTest extends DatabaseTestCase
 {
@@ -27,7 +27,7 @@ final class ConstructTest extends DatabaseTestCase
      *
      * @group  common
      */
-    public function dbColumnConstruct(): void
+    public function testDbColumnConstruct(): void
     {
         $options = [
             'type'          => Column::TYPE_INTEGER,
