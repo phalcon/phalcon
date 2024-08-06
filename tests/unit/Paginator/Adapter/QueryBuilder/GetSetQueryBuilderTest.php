@@ -11,27 +11,27 @@
 
 declare(strict_types=1);
 
-namespace Phalcon\Tests\Database\Paginator\Adapter\QueryBuilder;
+namespace Phalcon\Tests\Unit\Paginator\Adapter\QueryBuilder;
 
-use DatabaseTester;
 use Phalcon\Paginator\Adapter\QueryBuilder;
+use Phalcon\Tests\DatabaseTestCase;
 use Phalcon\Tests\Fixtures\Migrations\InvoicesMigration;
 use Phalcon\Tests\Fixtures\Traits\DiTrait;
 use Phalcon\Tests\Fixtures\Traits\RecordsTrait;
 use Phalcon\Tests\Models\Invoices;
 
-class GetSetQueryBuilderCest
+final class GetSetQueryBuilderTest extends DatabaseTestCase
 {
     use DiTrait;
     use RecordsTrait;
 
-    public function _before(DatabaseTester $I)
+    public function setUp(): void
     {
         $this->setNewFactoryDefault();
-        $this->setDatabase($I);
+        $this->setDatabase();
 
         /** @var PDO $connection */
-        $connection = $I->getConnection();
+        $connection = self::getConnection();
         (new InvoicesMigration($connection));
     }
 
@@ -39,18 +39,14 @@ class GetSetQueryBuilderCest
      * Tests Phalcon\Paginator\Adapter\QueryBuilder :: getQueryBuilder() /
      * setQueryBuilder()
      *
-     * @group mysql
-     * @group sqlite
-     * @group pgsql
+     * @group common
      */
-    public function paginatorAdapterQuerybuilderGetSetQueryBuilder(DatabaseTester $I)
+    public function testPaginatorAdapterQuerybuilderGetSetQueryBuilder(): void
     {
-        $I->wantToTest('Paginator\Adapter\QueryBuilder - getQueryBuilder() / setQueryBuilder()');
-
         /** @var PDO $connection */
-        $connection = $I->getConnection();
+        $connection = self::getConnection();
         $migration  = new InvoicesMigration($connection);
-        $invId      = ('sqlite' === $I->getDriver()) ? 'null' : 'default';
+        $invId      = ('sqlite' === self::getDriver()) ? 'null' : 'default';
 
         $this->insertDataInvoices($migration, 17, $invId, 2, 'ccc');
         $this->insertDataInvoices($migration, 15, $invId, 2, 'bbb');
@@ -69,7 +65,7 @@ class GetSetQueryBuilderCest
             ]
         );
 
-        $I->assertEquals($builder1, $paginator->getQueryBuilder());
+        $this->assertEquals($builder1, $paginator->getQueryBuilder());
 
         $builder2 = $manager
             ->createBuilder()
@@ -79,7 +75,7 @@ class GetSetQueryBuilderCest
 
         $result = $paginator->setQueryBuilder($builder2);
 
-        $I->assertEquals($builder2, $paginator->getQueryBuilder());
-        $I->assertEquals($paginator, $result);
+        $this->assertEquals($builder2, $paginator->getQueryBuilder());
+        $this->assertEquals($paginator, $result);
     }
 }

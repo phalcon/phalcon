@@ -11,46 +11,42 @@
 
 declare(strict_types=1);
 
-namespace Phalcon\Tests\Database\Paginator\Adapter\QueryBuilder;
+namespace Phalcon\Tests\Unit\Paginator\Adapter\QueryBuilder;
 
-use DatabaseTester;
 use Phalcon\Paginator\Adapter\QueryBuilder;
 use Phalcon\Paginator\Exception;
+use Phalcon\Tests\DatabaseTestCase;
 use Phalcon\Tests\Fixtures\Migrations\InvoicesMigration;
 use Phalcon\Tests\Fixtures\Traits\DiTrait;
 use Phalcon\Tests\Fixtures\Traits\RecordsTrait;
 use Phalcon\Tests\Models\Invoices;
 
-class GetSetLimitCest
+final class GetSetLimitTest extends DatabaseTestCase
 {
     use DiTrait;
     use RecordsTrait;
 
-    public function _before(DatabaseTester $I)
+    public function setUp(): void
     {
         $this->setNewFactoryDefault();
-        $this->setDatabase($I);
+        $this->setDatabase();
 
         /** @var PDO $connection */
-        $connection = $I->getConnection();
+        $connection = self::getConnection();
         (new InvoicesMigration($connection));
     }
 
     /**
      * Tests Phalcon\Paginator\Adapter\QueryBuilder :: getLimit() / setLimit()
      *
-     * @group mysql
-     * @group pgsql
-     * @group sqlite
+     * @group common
      */
-    public function paginatorAdapterQuerybuilderGetSetLimit(DatabaseTester $I)
+    public function testPaginatorAdapterQuerybuilderGetSetLimit(): void
     {
-        $I->wantToTest('Paginator\Adapter\QueryBuilder - getLimit() / setLimit()');
-
         /** @var PDO $connection */
-        $connection = $I->getConnection();
+        $connection = self::getConnection();
         $migration  = new InvoicesMigration($connection);
-        $invId      = ('sqlite' === $I->getDriver()) ? 'null' : 'default';
+        $invId      = ('sqlite' === self::getDriver()) ? 'null' : 'default';
 
         $this->insertDataInvoices($migration, 17, $invId, 2, 'ccc');
 
@@ -68,25 +64,21 @@ class GetSetLimitCest
             ]
         );
 
-        $I->assertEquals(5, $paginator->getLimit());
+        $this->assertEquals(5, $paginator->getLimit());
         $paginator->setLimit(12);
-        $I->assertEquals(12, $paginator->getLimit());
+        $this->assertEquals(12, $paginator->getLimit());
 
-        $I->expectThrowable(
-            new Exception(
-                'Limit must be greater than zero'
-            ),
-            function () use ($builder) {
-                $paginator = new QueryBuilder(
-                    [
-                        'builder' => $builder,
-                        'limit'   => 0,
-                        'page'    => 1,
-                    ]
-                );
+        $this->expectException(Exception::class);
+        $this->expectExceptionMessage('Limit must be greater than zero');
 
-                $paginator->paginate();
-            }
+        $paginator = new QueryBuilder(
+            [
+                'builder' => $builder,
+                'limit'   => 0,
+                'page'    => 1,
+            ]
         );
+
+        $paginator->paginate();
     }
 }

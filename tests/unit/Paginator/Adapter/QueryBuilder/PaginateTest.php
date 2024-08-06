@@ -11,13 +11,13 @@
 
 declare(strict_types=1);
 
-namespace Phalcon\Tests\Database\Paginator\Adapter\QueryBuilder;
+namespace Phalcon\Tests\Unit\Paginator\Adapter\QueryBuilder;
 
-use DatabaseTester;
 use Phalcon\Mvc\Model\Criteria;
 use Phalcon\Paginator\Adapter\QueryBuilder;
 use Phalcon\Paginator\Repository;
 use Phalcon\Storage\Exception;
+use Phalcon\Tests\DatabaseTestCase;
 use Phalcon\Tests\Fixtures\Migrations\InvoicesMigration;
 use Phalcon\Tests\Fixtures\Traits\DiTrait;
 use Phalcon\Tests\Fixtures\Traits\RecordsTrait;
@@ -25,18 +25,18 @@ use Phalcon\Tests\Models\Invoices;
 
 use function is_int;
 
-class PaginateCest
+final class PaginateTest extends DatabaseTestCase
 {
     use DiTrait;
     use RecordsTrait;
 
-    public function _before(DatabaseTester $I)
+    public function setUp(): void
     {
         $this->setNewFactoryDefault();
-        $this->setDatabase($I);
+        $this->setDatabase();
 
         /** @var PDO $connection */
-        $connection = $I->getConnection();
+        $connection = self::getConnection();
         (new InvoicesMigration($connection));
     }
 
@@ -46,21 +46,17 @@ class PaginateCest
      * @author Phalcon Team <team@phalcon.io>
      * @since  2020-02-01
      *
-     * @group  mysql
-     * @group  sqlite
-     * @group  pgsql
+     * @group common
      */
-    public function paginatorAdapterQuerybuilderPaginate(DatabaseTester $I)
+    public function testPaginatorAdapterQuerybuilderPaginate(): void
     {
-        $I->wantToTest('Paginator\Adapter\QueryBuilder - paginate()');
-
         /**
          * Sqlite does not like `where` that much and locks the database
          */
         /** @var PDO $connection */
-        $connection = $I->getConnection();
+        $connection = self::getConnection();
         $migration  = new InvoicesMigration($connection);
-        $invId      = ('sqlite' === $I->getDriver()) ? 'null' : 'default';
+        $invId      = ('sqlite' === self::getDriver()) ? 'null' : 'default';
 
         $this->insertDataInvoices($migration, 17, $invId, 2, 'ccc');
 
@@ -80,16 +76,16 @@ class PaginateCest
 
         $page = $paginator->paginate();
 
-        $I->assertInstanceOf(Repository::class, $page);
-        $I->assertCount(5, $page->getItems());
-        $I->assertEquals(1, $page->getPrevious());
-        $I->assertEquals(2, $page->getNext());
-        $I->assertEquals(4, $page->getLast());
-        $I->assertEquals(5, $page->getLimit());
-        $I->assertEquals(1, $page->getCurrent());
-        $I->assertEquals(5, $page->limit);
-        $I->assertEquals(17, $page->getTotalItems());
-        $I->assertTrue(is_int($page->getTotalItems()));
+        $this->assertInstanceOf(Repository::class, $page);
+        $this->assertCount(5, $page->getItems());
+        $this->assertEquals(1, $page->getPrevious());
+        $this->assertEquals(2, $page->getNext());
+        $this->assertEquals(4, $page->getLast());
+        $this->assertEquals(5, $page->getLimit());
+        $this->assertEquals(1, $page->getCurrent());
+        $this->assertEquals(5, $page->limit);
+        $this->assertEquals(17, $page->getTotalItems());
+        $this->assertTrue(is_int($page->getTotalItems()));
     }
 
     /**
@@ -101,18 +97,16 @@ class PaginateCest
      * @group  mysql
      * @group  pgsql
      */
-    public function paginatorAdapterQuerybuilderPaginateGroupBy(DatabaseTester $I)
+    public function testPaginatorAdapterQuerybuilderPaginateGroupBy(): void
     {
-        $I->wantToTest('Paginator\Adapter\QueryBuilder - paginate() - groupBy');
-
         /**
          * Sqlite does not like `where` that much and locks the database
          */
 
         /** @var PDO $connection */
-        $connection = $I->getConnection();
+        $connection = self::getConnection();
         $migration  = new InvoicesMigration($connection);
-        $invId      = ('sqlite' === $I->getDriver()) ? 'null' : 'default';
+        $invId      = ('sqlite' === self::getDriver()) ? 'null' : 'default';
 
         $this->insertDataInvoices($migration, 17, $invId, 2, 'ccc');
         $this->insertDataInvoices($migration, 11, $invId, 3, 'aaa');
@@ -133,16 +127,16 @@ class PaginateCest
 
         $page = $paginator->paginate();
 
-        $I->assertInstanceOf(Repository::class, $page);
-        $I->assertCount(5, $page->getItems());
-        $I->assertEquals(1, $page->getPrevious());
-        $I->assertEquals(2, $page->getNext());
-        $I->assertEquals(6, $page->getLast());
-        $I->assertEquals(5, $page->getLimit());
-        $I->assertEquals(1, $page->getCurrent());
-        $I->assertEquals(5, $page->limit);
-        $I->assertEquals(28, $page->getTotalItems());
-        $I->assertTrue(is_int($page->getTotalItems()));
+        $this->assertInstanceOf(Repository::class, $page);
+        $this->assertCount(5, $page->getItems());
+        $this->assertEquals(1, $page->getPrevious());
+        $this->assertEquals(2, $page->getNext());
+        $this->assertEquals(6, $page->getLast());
+        $this->assertEquals(5, $page->getLimit());
+        $this->assertEquals(1, $page->getCurrent());
+        $this->assertEquals(5, $page->limit);
+        $this->assertEquals(28, $page->getTotalItems());
+        $this->assertTrue(is_int($page->getTotalItems()));
 
         $builder = $manager
             ->createBuilder()
@@ -154,22 +148,20 @@ class PaginateCest
 
         $page = $paginator->paginate();
 
-        $I->assertInstanceOf(Repository::class, $page);
-        $I->assertCount(5, $page->getItems());
-        $I->assertEquals(1, $page->getPrevious());
-        $I->assertEquals(2, $page->getNext());
-        $I->assertEquals(4, $page->getLast());
-        $I->assertEquals(5, $page->getLimit());
-        $I->assertEquals(1, $page->getCurrent());
-        $I->assertEquals(5, $page->limit);
-        $I->assertEquals(17, $page->getTotalItems());
-        $I->assertTrue(is_int($page->getTotalItems()));
+        $this->assertInstanceOf(Repository::class, $page);
+        $this->assertCount(5, $page->getItems());
+        $this->assertEquals(1, $page->getPrevious());
+        $this->assertEquals(2, $page->getNext());
+        $this->assertEquals(4, $page->getLast());
+        $this->assertEquals(5, $page->getLimit());
+        $this->assertEquals(1, $page->getCurrent());
+        $this->assertEquals(5, $page->limit);
+        $this->assertEquals(17, $page->getTotalItems());
+        $this->assertTrue(is_int($page->getTotalItems()));
     }
 
     /**
      * Tests Phalcon\Paginator\Adapter\QueryBuilder :: paginate()
-     *
-     * @param DatabaseTester $I
      *
      * @issue  14639
      *
@@ -180,16 +172,14 @@ class PaginateCest
      * @since  2020-03-15
      *
      */
-    public function paginatorAdapterQuerybuilderPaginateView(DatabaseTester $I): void
+    public function testPaginatorAdapterQuerybuilderPaginateView(): void
     {
-        $I->wantToTest('Paginator\Adapter\QueryBuilder - paginate() - set in view');
-
         $this->setDiService('view');
 
         /** @var PDO $connection */
-        $connection = $I->getConnection();
+        $connection = self::getConnection();
         $migration  = new InvoicesMigration($connection);
-        $invId      = ('sqlite' === $I->getDriver()) ? 'null' : 'default';
+        $invId      = ('sqlite' === self::getDriver()) ? 'null' : 'default';
 
         $this->insertDataInvoices($migration, 17, $invId, 2, 'ccc');
         $this->insertDataInvoices($migration, 11, $invId, 3, 'aaa');
@@ -212,19 +202,19 @@ class PaginateCest
         );
 
         $page = $paginator->paginate();
-        $I->assertCount(5, $page->getItems());
+        $this->assertCount(5, $page->getItems());
 
         $view = $this->getService('view');
         $view->setVar('page', $page);
 
         $actual = $view->getVar('page');
-        $I->assertInstanceOf(Repository::class, $actual);
+        $this->assertInstanceOf(Repository::class, $actual);
 
 
         $view = $this->getService('view');
         $view->setVar('paginate', $paginator->paginate());
 
         $actual = $view->getVar('paginate');
-        $I->assertInstanceOf(Repository::class, $actual);
+        $this->assertInstanceOf(Repository::class, $actual);
     }
 }

@@ -11,48 +11,42 @@
 
 declare(strict_types=1);
 
-namespace Phalcon\Tests\Database\Paginator\Adapter\Model;
+namespace Phalcon\Tests\Unit\Paginator\Adapter\Model;
 
-use DatabaseTester;
 use PDO;
 use Phalcon\Paginator\Adapter\Model;
 use Phalcon\Paginator\Repository;
 use Phalcon\Storage\Exception;
+use Phalcon\Tests\DatabaseTestCase;
 use Phalcon\Tests\Fixtures\Migrations\InvoicesMigration;
 use Phalcon\Tests\Fixtures\Traits\DiTrait;
 use Phalcon\Tests\Fixtures\Traits\RecordsTrait;
 use Phalcon\Tests\Models\Invoices;
 
-class PaginateCest
+final class PaginateTest extends DatabaseTestCase
 {
     use DiTrait;
     use RecordsTrait;
 
-    public function _before(DatabaseTester $I)
+    public function setUp(): void
     {
         $this->setNewFactoryDefault();
-        $this->setDatabase($I);
+        $this->setDatabase();
 
         /** @var PDO $connection */
-        $connection = $I->getConnection();
+        $connection = self::getConnection();
         (new InvoicesMigration($connection));
     }
 
     /**
-     * @param DatabaseTester $I
-     *
-     * @group mysql
-     * @group sqlite
-     * @group pgsql
+     * @group common
      */
-    public function paginatorAdapterModelPaginate(DatabaseTester $I)
+    public function testPaginatorAdapterModelPaginate(): void
     {
-        $I->wantToTest('Paginator\Adapter\Model - paginate()');
-
         /** @var PDO $connection */
-        $connection = $I->getConnection();
+        $connection = self::getConnection();
         $migration  = new InvoicesMigration($connection);
-        $invId      = ('sqlite' === $I->getDriver()) ? 'null' : 'default';
+        $invId      = ('sqlite' === self::getDriver()) ? 'null' : 'default';
 
         $this->insertDataInvoices($migration, 17, $invId, 2, 'ccc');
         $this->insertDataInvoices($migration, 11, $invId, 3, 'aaa');
@@ -70,53 +64,49 @@ class PaginateCest
         // First Page
         $page = $paginator->paginate();
 
-        $I->assertInstanceOf(Repository::class, $page);
+        $this->assertInstanceOf(Repository::class, $page);
 
-        $I->assertCount(5, $page->getItems());
-        $I->assertEquals(1, $page->getPrevious());
-        $I->assertEquals(2, $page->getNext());
-        $I->assertEquals(15, $page->getLast());
-        $I->assertEquals(5, $page->getLimit());
-        $I->assertEquals(1, $page->getCurrent());
+        $this->assertCount(5, $page->getItems());
+        $this->assertEquals(1, $page->getPrevious());
+        $this->assertEquals(2, $page->getNext());
+        $this->assertEquals(15, $page->getLast());
+        $this->assertEquals(5, $page->getLimit());
+        $this->assertEquals(1, $page->getCurrent());
 
         // Middle Page
         $paginator->setCurrentPage(3);
         $page = $paginator->paginate();
 
-        $I->assertInstanceOf(Repository::class, $page);
-        $I->assertCount(5, $page->getItems());
-        $I->assertEquals(2, $page->getPrevious());
-        $I->assertEquals(4, $page->getNext());
-        $I->assertEquals(15, $page->getLast());
-        $I->assertEquals(3, $page->getCurrent());
+        $this->assertInstanceOf(Repository::class, $page);
+        $this->assertCount(5, $page->getItems());
+        $this->assertEquals(2, $page->getPrevious());
+        $this->assertEquals(4, $page->getNext());
+        $this->assertEquals(15, $page->getLast());
+        $this->assertEquals(3, $page->getCurrent());
 
         // Last Page
         $paginator->setCurrentPage(5);
         $page = $paginator->paginate();
 
-        $I->assertInstanceOf(Repository::class, $page);
-        $I->assertCount(5, $page->getItems());
-        $I->assertEquals(4, $page->getPrevious());
-        $I->assertEquals(6, $page->getNext());
-        $I->assertEquals(15, $page->getLast());
-        $I->assertEquals(5, $page->getCurrent());
+        $this->assertInstanceOf(Repository::class, $page);
+        $this->assertCount(5, $page->getItems());
+        $this->assertEquals(4, $page->getPrevious());
+        $this->assertEquals(6, $page->getNext());
+        $this->assertEquals(15, $page->getLast());
+        $this->assertEquals(5, $page->getCurrent());
     }
 
     /**
-     * @param DatabaseTester $I
-     *
      * @group mysql
      * @group sqlite
      */
-    public function paginatorAdapterModelPaginateBind(DatabaseTester $I)
+    public function testPaginatorAdapterModelPaginateBind(): void
     {
-        $I->wantToTest('Paginator\Adapter\Model - paginate() - bind');
-
         /** @var PDO $connection */
-        $connection = $I->getConnection();
+        $connection = self::getConnection();
         $migration  = new InvoicesMigration($connection);
 
-        $invId = ('sqlite' === $I->getDriver()) ? 'null' : 'default';
+        $invId = ('sqlite' === self::getDriver()) ? 'null' : 'default';
 
         $this->insertDataInvoices($migration, 17, $invId, 2, 'ccc');
         $this->insertDataInvoices($migration, 11, $invId, 3, 'aaa');
@@ -145,31 +135,25 @@ class PaginateCest
         // First Page
         $page = $paginator->paginate();
 
-        $I->assertInstanceOf(Repository::class, $page);
+        $this->assertInstanceOf(Repository::class, $page);
 
-        $I->assertCount(5, $page->getItems());
-        $I->assertEquals(1, $page->getPrevious());
-        $I->assertEquals(2, $page->getNext());
-        $I->assertEquals(9, $page->getLast());
-        $I->assertEquals(5, $page->getLimit());
-        $I->assertEquals(1, $page->getCurrent());
+        $this->assertCount(5, $page->getItems());
+        $this->assertEquals(1, $page->getPrevious());
+        $this->assertEquals(2, $page->getNext());
+        $this->assertEquals(9, $page->getLast());
+        $this->assertEquals(5, $page->getLimit());
+        $this->assertEquals(1, $page->getCurrent());
     }
 
     /**
-     * @param DatabaseTester $I
-     *
-     * @group mysql
-     * @group sqlite
-     * @group pgsql
+     * @group common
      */
-    public function paginatorAdapterModelPaginateParametersString(DatabaseTester $I): void
+    public function testPaginatorAdapterModelPaginateParametersString(): void
     {
-        $I->wantToTest('Paginator\Adapter\Model - paginate() - parameters string');
-
         /** @var PDO $connection */
-        $connection = $I->getConnection();
+        $connection = self::getConnection();
         $migration  = new InvoicesMigration($connection);
-        $invId      = ('sqlite' === $I->getDriver()) ? 'null' : 'default';
+        $invId      = ('sqlite' === self::getDriver()) ? 'null' : 'default';
 
         $this->insertDataInvoices($migration, 17, $invId, 2, 'ccc');
         $this->insertDataInvoices($migration, 11, $invId, 3, 'aaa');
@@ -188,31 +172,25 @@ class PaginateCest
         // First Page
         $page = $paginator->paginate();
 
-        $I->assertInstanceOf(Repository::class, $page);
+        $this->assertInstanceOf(Repository::class, $page);
 
-        $I->assertCount(5, $page->getItems());
-        $I->assertEquals(1, $page->getPrevious());
-        $I->assertEquals(2, $page->getNext());
-        $I->assertEquals(9, $page->getLast());
-        $I->assertEquals(5, $page->getLimit());
-        $I->assertEquals(1, $page->getCurrent());
+        $this->assertCount(5, $page->getItems());
+        $this->assertEquals(1, $page->getPrevious());
+        $this->assertEquals(2, $page->getNext());
+        $this->assertEquals(9, $page->getLast());
+        $this->assertEquals(5, $page->getLimit());
+        $this->assertEquals(1, $page->getCurrent());
     }
 
     /**
-     * @param DatabaseTester $I
-     *
-     * @group mysql
-     * @group sqlite
-     * @group pgsql
+     * @group common
      */
-    public function paginatorAdapterModelPaginateParametersArrayString(DatabaseTester $I): void
+    public function testPaginatorAdapterModelPaginateParametersArrayString(): void
     {
-        $I->wantToTest('Paginator\Adapter\Model - paginate() - parameters array string');
-
         /** @var PDO $connection */
-        $connection = $I->getConnection();
+        $connection = self::getConnection();
         $migration  = new InvoicesMigration($connection);
-        $invId      = ('sqlite' === $I->getDriver()) ? 'null' : 'default';
+        $invId      = ('sqlite' === self::getDriver()) ? 'null' : 'default';
 
         $this->insertDataInvoices($migration, 17, $invId, 2, 'ccc');
         $this->insertDataInvoices($migration, 11, $invId, 3, 'aaa');
@@ -233,27 +211,21 @@ class PaginateCest
         // First Page
         $page = $paginator->paginate();
 
-        $I->assertInstanceOf(Repository::class, $page);
+        $this->assertInstanceOf(Repository::class, $page);
 
-        $I->assertCount(5, $page->getItems());
-        $I->assertEquals(1, $page->getPrevious());
-        $I->assertEquals(2, $page->getNext());
-        $I->assertEquals(9, $page->getLast());
-        $I->assertEquals(5, $page->getLimit());
-        $I->assertEquals(1, $page->getCurrent());
+        $this->assertCount(5, $page->getItems());
+        $this->assertEquals(1, $page->getPrevious());
+        $this->assertEquals(2, $page->getNext());
+        $this->assertEquals(9, $page->getLast());
+        $this->assertEquals(5, $page->getLimit());
+        $this->assertEquals(1, $page->getCurrent());
     }
 
     /**
-     * @param DatabaseTester $I
-     *
-     * @group mysql
-     * @group sqlite
-     * @group pgsql
+     * @group common
      */
-    public function paginatorAdapterModelPaginateEmpty(DatabaseTester $I)
+    public function testPaginatorAdapterModelPaginateEmpty(): void
     {
-        $I->wantToTest('Paginator\Adapter\Model - paginate() - empty');
-
         $paginator = new Model(
             [
                 'model'      => Invoices::class,
@@ -268,21 +240,19 @@ class PaginateCest
         // First Page
         $page = $paginator->paginate();
 
-        $I->assertInstanceOf(Repository::class, $page);
+        $this->assertInstanceOf(Repository::class, $page);
 
-        $I->assertCount(0, $page->getItems());
-        $I->assertIsArray($page->getItems());
-        $I->assertEquals(1, $page->getPrevious());
-        $I->assertEquals(0, $page->getNext());
-        $I->assertEquals(0, $page->getLast());
-        $I->assertEquals(5, $page->getLimit());
-        $I->assertEquals(1, $page->getCurrent());
+        $this->assertCount(0, $page->getItems());
+        $this->assertIsArray($page->getItems());
+        $this->assertEquals(1, $page->getPrevious());
+        $this->assertEquals(0, $page->getNext());
+        $this->assertEquals(0, $page->getLast());
+        $this->assertEquals(5, $page->getLimit());
+        $this->assertEquals(1, $page->getCurrent());
     }
 
     /**
      * Tests Phalcon\Paginator\Adapter\QueryBuilder :: paginate()
-     *
-     * @param DatabaseTester $I
      *
      * @issue  14639
      *
@@ -293,16 +263,14 @@ class PaginateCest
      * @since  2020-03-15
      *
      */
-    public function paginatorAdapterModelPaginateView(DatabaseTester $I): void
+    public function testPaginatorAdapterModelPaginateView(): void
     {
-        $I->wantToTest('Paginator\Adapter\Model - paginate() - set in view');
-
         $this->setDiService('view');
 
         /** @var PDO $connection */
-        $connection = $I->getConnection();
+        $connection = self::getConnection();
         $migration  = new InvoicesMigration($connection);
-        $invId      = ('sqlite' === $I->getDriver()) ? 'null' : 'default';
+        $invId      = ('sqlite' === self::getDriver()) ? 'null' : 'default';
 
         $this->insertDataInvoices($migration, 17, $invId, 2, 'ccc');
         $this->insertDataInvoices($migration, 11, $invId, 3, 'aaa');
@@ -318,25 +286,23 @@ class PaginateCest
         );
 
         $page = $paginator->paginate();
-        $I->assertCount(5, $page->getItems());
+        $this->assertCount(5, $page->getItems());
 
         $view = $this->getService('view');
         $view->setVar('page', $page);
 
         $actual = $view->getVar('page');
-        $I->assertInstanceOf(Repository::class, $actual);
+        $this->assertInstanceOf(Repository::class, $actual);
 
 
         $view = $this->getService('view');
         $view->setVar('paginate', $paginator->paginate());
 
         $actual = $view->getVar('paginate');
-        $I->assertInstanceOf(Repository::class, $actual);
+        $this->assertInstanceOf(Repository::class, $actual);
     }
 
     /**
-     * @param DatabaseTester $I
-     *
      * @author Phalcon Team <team@phalcon.io>
      * @since  2023-12-26
      * @issue  https://github.com/phalcon/cphalcon/issues/16471
@@ -344,12 +310,10 @@ class PaginateCest
      * @group mysql
      * @group pgsql
      */
-    public function paginatorAdapterModelPaginateWithOrder(DatabaseTester $I)
+    public function testPaginatorAdapterModelPaginateWithOrder(): void
     {
-        $I->wantToTest('Paginator\Adapter\Model - paginate() - with order');
-
         /** @var PDO $connection */
-        $connection = $I->getConnection();
+        $connection = self::getConnection();
         $migration  = new InvoicesMigration($connection);
         $invId      = 'default';
 
@@ -373,13 +337,13 @@ class PaginateCest
         // First Page
         $page = $paginator->paginate();
 
-        $I->assertInstanceOf(Repository::class, $page);
+        $this->assertInstanceOf(Repository::class, $page);
 
-        $I->assertCount(5, $page->getItems());
-        $I->assertEquals(1, $page->getPrevious());
-        $I->assertEquals(2, $page->getNext());
-        $I->assertEquals(9, $page->getLast());
-        $I->assertEquals(5, $page->getLimit());
-        $I->assertEquals(1, $page->getCurrent());
+        $this->assertCount(5, $page->getItems());
+        $this->assertEquals(1, $page->getPrevious());
+        $this->assertEquals(2, $page->getNext());
+        $this->assertEquals(9, $page->getLast());
+        $this->assertEquals(5, $page->getLimit());
+        $this->assertEquals(1, $page->getCurrent());
     }
 }
