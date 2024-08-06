@@ -11,7 +11,6 @@ declare(strict_types=1);
 
 namespace Phalcon\Tests\Unit\DataMapper\Pdo\Connection;
 
-use DatabaseTester;
 use Phalcon\DataMapper\Pdo\Connection;
 use Phalcon\Tests\DatabaseTestCase;
 
