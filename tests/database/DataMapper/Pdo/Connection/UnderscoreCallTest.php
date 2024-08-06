@@ -53,7 +53,7 @@ final class UnderscoreCallTest extends DatabaseTestCase
         );
 
         /** @var Connection $connection */
-        $connection = $this->getDataMapperConnection();
+        $connection = self::getDataMapperConnection();
 
         $connection->unknown();
     }

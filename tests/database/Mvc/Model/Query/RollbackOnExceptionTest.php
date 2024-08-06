@@ -11,15 +11,19 @@ declare(strict_types=1);
 
 namespace Phalcon\Tests\Database\Mvc\Model\Query;
 
-use Codeception\Util\Debug;
 use PDOException;
 use Phalcon\Mvc\Model\Manager;
+use Phalcon\Support\Debug;
 use Phalcon\Tests\DatabaseTestCase;
 use Phalcon\Tests\Fixtures\Migrations\RollbackTestMigration;
 use Phalcon\Tests\Fixtures\Traits\DiTrait;
 use Phalcon\Tests\Fixtures\Traits\RecordsTrait;
 use RuntimeException;
 use Throwable;
+
+use function ob_end_clean;
+use function ob_get_contents;
+use function ob_start;
 
 final class RollbackOnExceptionTest extends DatabaseTestCase
 {
@@ -58,9 +62,9 @@ final class RollbackOnExceptionTest extends DatabaseTestCase
         $this->migration->create();
         $this->migration->clear();
 
-        $this->hasInDatabase($this->migration->getTable(), ['name' => 'abc']);
-        $this->hasInDatabase($this->migration->getTable(), ['name' => 'test 4 OK']);
-        $this->hasInDatabase($this->migration->getTable(), ['name' => 'test 5 OK']);
+        $this->assertNotInDatabase($this->migration->getTable(), ['name' => 'abc']);
+        $this->assertNotInDatabase($this->migration->getTable(), ['name' => 'test 4 OK']);
+        $this->assertNotInDatabase($this->migration->getTable(), ['name' => 'test 5 OK']);
 
         /** @var Manager|null $modelsManager */
         $modelsManager = $this->container->get('modelsManager');
@@ -95,8 +99,6 @@ final class RollbackOnExceptionTest extends DatabaseTestCase
         $messages[] = $this->update(4, 'test 4 OK', $modelsManager);
         $messages[] = $this->update(5, 'test 5 OK', $modelsManager);
 
-        Debug::debug($messages);
-
         $this->assertEquals('Update test 1 OK', $messages[0]);
         $this->assertEquals('Update test 2 OK', $messages[1]);
         $this->assertNotEquals('Update test 3 OK', $messages[2]);
@@ -104,17 +106,25 @@ final class RollbackOnExceptionTest extends DatabaseTestCase
         $this->assertEquals('Update test 4 OK', $messages[3]);
         $this->assertEquals('Update test 5 OK', $messages[4]);
 
-        $this->hasInDatabase($this->migration->getTable(), ['name' => 'test 1 OK']);
-        $this->hasInDatabase($this->migration->getTable(), ['name' => 'test 2 OK']);
-        $this->hasInDatabase($this->migration->getTable(), ['id' => 3, 'name' => 'abc']);
-        $this->hasInDatabase($this->migration->getTable(), ['name' => 'test 4 OK']);
-        $this->hasInDatabase($this->migration->getTable(), ['name' => 'test 5 OK']);
+        $this->assertInDatabase($this->migration->getTable(), ['name' => 'test 1 OK']);
+        $this->assertInDatabase($this->migration->getTable(), ['name' => 'test 2 OK']);
+        $this->assertInDatabase($this->migration->getTable(), ['id' => 1, 'name' => 'abc']);
+        $this->assertInDatabase($this->migration->getTable(), ['name' => 'test 4 OK']);
+        $this->assertInDatabase($this->migration->getTable(), ['name' => 'test 5 OK']);
     }
 
+    /**
+     * @param int     $id
+     * @param string  $name
+     * @param Manager $modelsManager
+     *
+     * @return string
+     */
     private function update(int $id, string $name, Manager $modelsManager): string
     {
         try {
-            $query = 'UPDATE \\Phalcon\\Tests\\Models\\RbTestModel SET name = :name: WHERE id = :id:';
+            $query = 'UPDATE \\Phalcon\\Tests\\Models\\RbTestModel '
+                . 'SET name = :name: WHERE id = :id:';
             $modelsManager->executeQuery($query, ['id' => $id, 'name' => $name]);
             return "Update $name";
         } catch (PDOException $exc) {

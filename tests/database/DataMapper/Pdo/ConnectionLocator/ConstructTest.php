@@ -26,7 +26,7 @@ final class ConstructTest extends DatabaseTestCase
      */
     public function testDmPdoConnectionLocatorConstruct(): void
     {
-        $connection = $this->getDataMapperConnection();
+        $connection = self::getDataMapperConnection();
         $locator    = new ConnectionLocator($connection);
 
         $this->assertInstanceOf(ConnectionLocatorInterface::class, $locator);

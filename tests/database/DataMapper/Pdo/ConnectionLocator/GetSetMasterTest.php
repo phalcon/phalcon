@@ -28,8 +28,8 @@ final class GetSetMasterTest extends DatabaseTestCase
      */
     public function testDmPdoConnectionLocatorGetSetMaster(): void
     {
-        $connection1 = $this->getDataMapperConnection();
-        $connection2 = $this->getDataMapperConnection();
+        $connection1 = self::getDataMapperConnection();
+        $connection2 = self::getDataMapperConnection();
         $locator     = new ConnectionLocator($connection1);
 
         $actual = $locator->getMaster();

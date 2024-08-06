@@ -27,7 +27,7 @@ final class FetchUniqueTest extends DatabaseTestCase
     public function testDmPdoConnectionFetchUnique(): void
     {
         /** @var Connection $connection */
-        $connection = $this->getDataMapperConnection();
+        $connection = self::getDataMapperConnection();
         $migration  = new InvoicesMigration($connection);
         $migration->clear();
 

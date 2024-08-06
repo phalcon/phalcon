@@ -30,7 +30,7 @@ final class GetStatementTest extends DatabaseTestCase
      */
     public function testDmQueryInsertGetStatement(): void
     {
-        $connection = $this->getDataMapperConnection();
+        $connection = self::getDataMapperConnection();
         $factory    = new QueryFactory();
         $insert     = $factory->newInsert($connection);
         $quotes     = $connection->getQuoteNames();

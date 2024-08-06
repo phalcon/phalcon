@@ -27,7 +27,7 @@ final class ConstructTest extends DatabaseTestCase
     public function testDmPdoConnectionConstruct(): void
     {
         /** @var Connection $connection */
-        $connection = $this->getDataMapperConnection();
+        $connection = self::getDataMapperConnection();
 
         $this->assertInstanceOf(Connection::class, $connection);
     }

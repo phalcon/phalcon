@@ -77,7 +77,7 @@ final class FetchOneTest extends DatabaseTestCase
     public function testDmPdoConnectionFetchOne(): void
     {
         /** @var Connection $connection */
-        $connection = $this->getDataMapperConnection();
+        $connection = self::getDataMapperConnection();
         $migration  = new InvoicesMigration($connection);
         $migration->clear();
 
@@ -116,7 +116,7 @@ final class FetchOneTest extends DatabaseTestCase
         array $params
     ): void {
         /** @var Connection $connection */
-        $connection = $this->getDataMapperConnection();
+        $connection = self::getDataMapperConnection();
         $migration  = new InvoicesMigration($connection);
         $migration->clear();
 
@@ -142,7 +142,7 @@ final class FetchOneTest extends DatabaseTestCase
     public function testDmPdoConnectionFetchOneNoResult(): void
     {
         /** @var Connection $connection */
-        $connection = $this->getDataMapperConnection();
+        $connection = self::getDataMapperConnection();
         $migration  = new InvoicesMigration($connection);
         $migration->clear();
 

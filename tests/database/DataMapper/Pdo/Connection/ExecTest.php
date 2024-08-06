@@ -27,7 +27,7 @@ final class ExecTest extends DatabaseTestCase
     public function testDmPdoConnectionExec(): void
     {
         /** @var Connection $connection */
-        $connection = $this->getDataMapperConnection();
+        $connection = self::getDataMapperConnection();
         $migration  = new InvoicesMigration($connection);
         $migration->clear();
 

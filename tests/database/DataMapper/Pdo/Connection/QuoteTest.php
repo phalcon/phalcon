@@ -26,7 +26,7 @@ final class QuoteTest extends DatabaseTestCase
     public function testDmPdoConnectionQuote(): void
     {
         /** @var Connection $connection */
-        $connection = $this->getDataMapperConnection();
+        $connection = self::getDataMapperConnection();
         $quotes     = $connection->getQuoteNames();
 
         $source   = 'test';

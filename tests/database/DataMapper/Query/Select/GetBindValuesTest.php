@@ -28,7 +28,7 @@ final class GetBindValuesTest extends DatabaseTestCase
      */
     public function testDmQuerySelectGetBindValues(): void
     {
-        $connection = $this->getDataMapperConnection();
+        $connection = self::getDataMapperConnection();
         $factory    = new QueryFactory();
         $select     = $factory->newSelect($connection);
 

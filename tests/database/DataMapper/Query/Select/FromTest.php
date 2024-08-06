@@ -27,7 +27,7 @@ final class FromTest extends DatabaseTestCase
      */
     public function testDmQuerySelectFrom(): void
     {
-        $connection = $this->getDataMapperConnection();
+        $connection = self::getDataMapperConnection();
         $factory    = new QueryFactory();
         $select     = $factory->newSelect($connection);
 
@@ -50,7 +50,7 @@ final class FromTest extends DatabaseTestCase
      */
     public function testDmQuerySelectFromEmpty(): void
     {
-        $connection = $this->getDataMapperConnection();
+        $connection = self::getDataMapperConnection();
         $factory    = new QueryFactory();
         $select     = $factory->newSelect($connection);
 

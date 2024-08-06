@@ -28,7 +28,7 @@ final class NewSelectTest extends DatabaseTestCase
      */
     public function testDmQueryQueryFactoryNewSelect(): void
     {
-        $connection = $this->getDataMapperConnection();
+        $connection = self::getDataMapperConnection();
         $factory    = new QueryFactory();
         $select     = $factory->newSelect($connection);
         $this->assertInstanceOf(Select::class, $select);

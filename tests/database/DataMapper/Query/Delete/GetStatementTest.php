@@ -27,7 +27,7 @@ final class GetStatementTest extends DatabaseTestCase
      */
     public function testDmQueryDeleteGetStatement(): void
     {
-        $connection = $this->getDataMapperConnection();
+        $connection = self::getDataMapperConnection();
         $factory    = new QueryFactory();
         $delete     = $factory->newDelete($connection);
 

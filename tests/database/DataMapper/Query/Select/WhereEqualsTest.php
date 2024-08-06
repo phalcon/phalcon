@@ -27,7 +27,7 @@ final class WhereEqualsTest extends DatabaseTestCase
      */
     public function testDmQuerySelectWhereEquals(): void
     {
-        $connection = $this->getDataMapperConnection();
+        $connection = self::getDataMapperConnection();
         $factory    = new QueryFactory();
         $select     = $factory->newSelect($connection);
 

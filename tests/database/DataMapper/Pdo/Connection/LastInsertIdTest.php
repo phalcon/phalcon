@@ -31,7 +31,7 @@ final class LastInsertIdTest extends DatabaseTestCase
     public function testDmPdoConnectionLastInsertId(): void
     {
         /** @var Connection $connection */
-        $connection = $this->getDataMapperConnection();
+        $connection = self::getDataMapperConnection();
         $migration  = new InvoicesMigration($connection);
         $migration->clear();
 

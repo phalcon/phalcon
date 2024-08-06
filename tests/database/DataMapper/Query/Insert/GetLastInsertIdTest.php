@@ -13,7 +13,7 @@ declare(strict_types=1);
 
 namespace Phalcon\Tests\Database\DataMapper\Query\Insert;
 
-use Codeception\Stub;
+use Phalcon\DataMapper\Pdo\Connection;
 use Phalcon\DataMapper\Query\QueryFactory;
 use Phalcon\Tests\DatabaseTestCase;
 use Phalcon\Tests\Fixtures\Migrations\Invoices;
@@ -32,15 +32,20 @@ final class GetLastInsertIdTest extends DatabaseTestCase
      */
     public function testDmQueryInsertGetLastInsertId(): void
     {
-        $connection     = $this->getDataMapperConnection();
-        $mockConnection = Stub::make(
-            $connection,
-            [
-                'lastInsertId' => "12345",
-            ]
-        );
+        $mock = $this
+            ->getMockBuilder(Connection::class)
+            ->setConstructorArgs(
+                [
+                    self::getDatabaseDsn(),
+                    self::getDatabaseUsername(),
+                    self::getDatabasePassword()
+                ]
+            )
+            ->getMock();
+
+        $mock->method('lastInsertId')->willReturn("12345");
         $factory        = new QueryFactory();
-        $insert         = $factory->newInsert($mockConnection);
+        $insert         = $factory->newInsert($mock);
 
         $name = uniqid('inv-');
         $insert
@@ -55,7 +60,7 @@ final class GetLastInsertIdTest extends DatabaseTestCase
             )
             ->set(
                 'inv_created_at',
-                $this->getDatabaseNow($connection->getDriverName())
+                $this->getDatabaseNow($mock->getDriverName())
             )
         ;
 
@@ -73,7 +78,7 @@ final class GetLastInsertIdTest extends DatabaseTestCase
      */
     public function testDmQueryInsertGetLastInsertIdReal(): void
     {
-        $connection = $this->getDataMapperConnection();
+        $connection = self::getDataMapperConnection();
         $factory    = new QueryFactory();
         $insert     = $factory->newInsert($connection);
         (new InvoicesMigration($connection));

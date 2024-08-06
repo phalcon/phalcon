@@ -26,7 +26,7 @@ final class ErrorInfoTest extends DatabaseTestCase
     public function testDmPdoConnectionErrorInfo(): void
     {
         /** @var Connection $connection */
-        $connection = $this->getDataMapperConnection();
+        $connection = self::getDataMapperConnection();
 
         $actual = $connection->errorInfo();
         $expect = ['', null, null];

@@ -27,7 +27,7 @@ final class GetAvailableDriversTest extends DatabaseTestCase
     public function testDmPdoConnectionGetAvailableDrivers(): void
     {
         /** @var Connection $connection */
-        $connection = $this->getDataMapperConnection();
+        $connection = self::getDataMapperConnection();
 
         $expected = PDO::getAvailableDrivers();
         $actual   = $connection::getAvailableDrivers();

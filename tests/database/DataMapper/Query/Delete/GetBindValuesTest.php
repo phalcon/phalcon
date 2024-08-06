@@ -28,7 +28,7 @@ final class GetBindValuesTest extends DatabaseTestCase
      */
     public function testDmQueryDeleteGetBindValues(): void
     {
-        $connection = $this->getDataMapperConnection();
+        $connection = self::getDataMapperConnection();
         $factory    = new QueryFactory();
         $delete     = $factory->newDelete($connection);
 

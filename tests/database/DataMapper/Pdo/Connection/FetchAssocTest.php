@@ -27,7 +27,7 @@ final class FetchAssocTest extends DatabaseTestCase
     public function testDmPdoConnectionFetchAssoc(): void
     {
         /** @var Connection $connection */
-        $connection = $this->getDataMapperConnection();
+        $connection = self::getDataMapperConnection();
         $migration  = new InvoicesMigration($connection);
         $migration->clear();
 

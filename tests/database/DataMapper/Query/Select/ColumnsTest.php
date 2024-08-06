@@ -27,7 +27,7 @@ final class ColumnsTest extends DatabaseTestCase
      */
     public function testDmQuerySelectColumns(): void
     {
-        $connection = $this->getDataMapperConnection();
+        $connection = self::getDataMapperConnection();
         $factory    = new QueryFactory();
         $select     = $factory->newSelect($connection);
 

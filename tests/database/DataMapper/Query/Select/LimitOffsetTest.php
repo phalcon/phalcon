@@ -13,7 +13,7 @@ declare(strict_types=1);
 
 namespace Phalcon\Tests\Database\DataMapper\Query\Select;
 
-use Codeception\Stub;
+use Phalcon\DataMapper\Pdo\Connection;
 use Phalcon\DataMapper\Query\QueryFactory;
 use Phalcon\Tests\DatabaseTestCase;
 
@@ -28,7 +28,7 @@ final class LimitOffsetTest extends DatabaseTestCase
      */
     public function testDmQuerySelectLimitOffset(): void
     {
-        $connection = $this->getDataMapperConnection();
+        $connection = self::getDataMapperConnection();
         $factory    = new QueryFactory();
         $select     = $factory->newSelect($connection);
 
@@ -58,15 +58,20 @@ final class LimitOffsetTest extends DatabaseTestCase
      */
     public function testDmQuerySelectLimitOffsetMssql(): void
     {
-        $connection = $this->getDataMapperConnection();
-        $mockConnection = Stub::make(
-            $connection,
-            [
-                'getDriverName' => 'sqlsrv',
-            ]
-        );
-        $factory = new QueryFactory();
-        $select = $factory->newSelect($mockConnection);
+        $mock = $this
+            ->getMockBuilder(Connection::class)
+            ->setConstructorArgs(
+                [
+                    self::getDatabaseDsn(),
+                    self::getDatabaseUsername(),
+                    self::getDatabasePassword()
+                ]
+            )
+            ->getMock();
+
+        $mock->method('getDriverName')->willReturn('sqlsrv');
+        $factory        = new QueryFactory();
+        $select = $factory->newSelect($mock);
 
         $select
             ->from('co_invoices')

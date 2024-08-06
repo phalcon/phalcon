@@ -27,7 +27,7 @@ final class FetchGroupTest extends DatabaseTestCase
     public function testDmPdoConnectionFetchGroup(): void
     {
         /** @var Connection $connection */
-        $connection = $this->getDataMapperConnection();
+        $connection = self::getDataMapperConnection();
         $migration  = new InvoicesMigration($connection);
         $migration->clear();
 

@@ -30,9 +30,9 @@ final class GetSetWriteTest extends DatabaseTestCase
      */
     public function testDmPdoConnectionLocatorGetSetWrite(): void
     {
-        $master  = $this->getDataMapperConnection();
-        $write1  = $this->getDataMapperConnection();
-        $write2  = $this->getDataMapperConnection();
+        $master  = self::getDataMapperConnection();
+        $write1  = self::getDataMapperConnection();
+        $write2  = self::getDataMapperConnection();
         $locator = new ConnectionLocator(
             $master,
             [],
@@ -63,7 +63,7 @@ final class GetSetWriteTest extends DatabaseTestCase
      */
     public function testDmPdoConnectionLocatorGetWriteEmpty(): void
     {
-        $master  = $this->getDataMapperConnection();
+        $master  = self::getDataMapperConnection();
         $locator = new ConnectionLocator($master);
 
         $actual = $locator->getWrite("write1");
@@ -83,8 +83,8 @@ final class GetSetWriteTest extends DatabaseTestCase
         $this->expectException(ConnectionNotFound::class);
         $this->expectExceptionMessage("Connection not found: write:unknown");
 
-        $master  = $this->getDataMapperConnection();
-        $write1  = $this->getDataMapperConnection();
+        $master  = self::getDataMapperConnection();
+        $write1  = self::getDataMapperConnection();
         $locator = new ConnectionLocator(
             $master,
             [],
@@ -108,9 +108,9 @@ final class GetSetWriteTest extends DatabaseTestCase
      */
     public function testDmPdoConnectionLocatorGetWriteRandom(): void
     {
-        $master  = $this->getDataMapperConnection();
-        $write1  = $this->getDataMapperConnection();
-        $write2  = $this->getDataMapperConnection();
+        $master  = self::getDataMapperConnection();
+        $write1  = self::getDataMapperConnection();
+        $write2  = self::getDataMapperConnection();
         $locator = new ConnectionLocator(
             $master,
             [],

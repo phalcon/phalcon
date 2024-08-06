@@ -27,7 +27,7 @@ final class AsAliasTest extends DatabaseTestCase
      */
     public function testDmQuerySelectAsAlias(): void
     {
-        $connection = $this->getDataMapperConnection();
+        $connection = self::getDataMapperConnection();
         $factory    = new QueryFactory();
         $select     = $factory->newSelect($connection);
 

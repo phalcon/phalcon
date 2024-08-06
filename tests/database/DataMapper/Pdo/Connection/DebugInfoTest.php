@@ -27,7 +27,7 @@ final class DebugInfoTest extends DatabaseTestCase
     public function testDmPdoConnectionDebugInfo(): void
     {
         /** @var Connection $connection */
-        $connection = $this->getDataMapperConnection();
+        $connection = self::getDataMapperConnection();
 
         $expected = [
             'arguments' => [

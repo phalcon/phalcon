@@ -30,7 +30,7 @@ final class GetSetReadTest extends DatabaseTestCase
      */
     public function testDmPdoConnectionLocatorGetReadEmpty(): void
     {
-        $master  = $this->getDataMapperConnection();
+        $master  = self::getDataMapperConnection();
         $locator = new ConnectionLocator($master);
 
         $actual = $locator->getRead();
@@ -76,9 +76,9 @@ final class GetSetReadTest extends DatabaseTestCase
      */
     public function testDmPdoConnectionLocatorGetReadRandom(): void
     {
-        $master  = $this->getDataMapperConnection();
-        $read1   = $this->getDataMapperConnection();
-        $read2   = $this->getDataMapperConnection();
+        $master  = self::getDataMapperConnection();
+        $read1   = self::getDataMapperConnection();
+        $read2   = self::getDataMapperConnection();
         $locator = new ConnectionLocator(
             $master,
             [
@@ -110,9 +110,9 @@ final class GetSetReadTest extends DatabaseTestCase
      */
     public function testDmPdoConnectionLocatorGetSetRead(): void
     {
-        $master  = $this->getDataMapperConnection();
-        $read1   = $this->getDataMapperConnection();
-        $read2   = $this->getDataMapperConnection();
+        $master  = self::getDataMapperConnection();
+        $read1   = self::getDataMapperConnection();
+        $read2   = self::getDataMapperConnection();
         $locator = new ConnectionLocator(
             $master,
             [

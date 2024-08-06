@@ -27,7 +27,7 @@ final class ConnectDisconnectIsConnectedTest extends DatabaseTestCase
     public function testDmPdoConnectionConnectDisconnectIsConnected(): void
     {
         /** @var Connection $connection */
-        $connection = $this->getDataMapperConnection();
+        $connection = self::getDataMapperConnection();
 
         $this->assertFalse($connection->isConnected());
         $connection->connect();

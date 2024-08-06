@@ -30,7 +30,7 @@ final class UnderscoreCallTest extends DatabaseTestCase
      */
     public function testDmQuerySelectUnderscoreCall(): void
     {
-        $connection = $this->getDataMapperConnection();
+        $connection = self::getDataMapperConnection();
         $factory    = new QueryFactory();
         $select     = $factory->newSelect($connection);
         (new InvoicesMigration($connection));
@@ -54,7 +54,7 @@ final class UnderscoreCallTest extends DatabaseTestCase
         $this->expectException(BadMethodCallException::class);
         $this->expectExceptionMessage('Unknown method: [unknown]');
 
-        $connection = $this->getDataMapperConnection();
+        $connection = self::getDataMapperConnection();
         $factory    = new QueryFactory();
         $select     = $factory->newSelect($connection);
 

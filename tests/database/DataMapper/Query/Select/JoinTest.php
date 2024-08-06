@@ -28,7 +28,7 @@ final class JoinTest extends DatabaseTestCase
      */
     public function testDmQuerySelectJoinInner(): void
     {
-        $connection = $this->getDataMapperConnection();
+        $connection = self::getDataMapperConnection();
         $factory    = new QueryFactory();
         $select     = $factory->newSelect($connection);
 
@@ -53,7 +53,7 @@ final class JoinTest extends DatabaseTestCase
      */
     public function testDmQuerySelectJoinLeft(): void
     {
-        $connection = $this->getDataMapperConnection();
+        $connection = self::getDataMapperConnection();
         $factory    = new QueryFactory();
         $select     = $factory->newSelect($connection);
 
@@ -77,7 +77,7 @@ final class JoinTest extends DatabaseTestCase
      */
     public function testDmQuerySelectJoinNatural(): void
     {
-        $connection = $this->getDataMapperConnection();
+        $connection = self::getDataMapperConnection();
         $factory    = new QueryFactory();
         $select     = $factory->newSelect($connection);
 
@@ -101,7 +101,7 @@ final class JoinTest extends DatabaseTestCase
      */
     public function testDmQuerySelectJoinRight(): void
     {
-        $connection = $this->getDataMapperConnection();
+        $connection = self::getDataMapperConnection();
         $factory    = new QueryFactory();
         $select     = $factory->newSelect($connection);
 
@@ -125,7 +125,7 @@ final class JoinTest extends DatabaseTestCase
      */
     public function testDmQuerySelectJoinWithBind(): void
     {
-        $connection = $this->getDataMapperConnection();
+        $connection = self::getDataMapperConnection();
         $factory    = new QueryFactory();
         $select     = $factory->newSelect($connection);
 

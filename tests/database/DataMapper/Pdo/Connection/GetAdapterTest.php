@@ -26,7 +26,7 @@ final class GetAdapterTest extends DatabaseTestCase
     public function testDmPdoConnectionGetAdapter(): void
     {
         /** @var Connection $connection */
-        $connection = $this->getDataMapperConnection();
+        $connection = self::getDataMapperConnection();
 
         $this->assertFalse($connection->isConnected());
 

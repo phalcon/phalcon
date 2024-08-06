@@ -31,7 +31,7 @@ final class CommitInTransactionRollBackTest extends DatabaseTestCase
     public function testDmPdoConnectionCommitInTransaction(): void
     {
         /** @var Connection $connection */
-        $connection = $this->getDataMapperConnection();
+        $connection = self::getDataMapperConnection();
         (new InvoicesMigration($connection));
         $connection->beginTransaction();
 
@@ -75,7 +75,7 @@ final class CommitInTransactionRollBackTest extends DatabaseTestCase
     public function testDmPdoConnectionRollBack(): void
     {
         /** @var Connection $connection */
-        $connection = $this->getDataMapperConnection();
+        $connection = self::getDataMapperConnection();
         (new InvoicesMigration($connection));
         $connection->beginTransaction();
 

@@ -27,7 +27,7 @@ final class DistinctTest extends DatabaseTestCase
      */
     public function testDmQuerySelectDistinct(): void
     {
-        $connection = $this->getDataMapperConnection();
+        $connection = self::getDataMapperConnection();
         $factory    = new QueryFactory();
         $select     = $factory->newSelect($connection);
 
@@ -51,7 +51,7 @@ final class DistinctTest extends DatabaseTestCase
      */
     public function testDmQuerySelectDistinctTwice(): void
     {
-        $connection = $this->getDataMapperConnection();
+        $connection = self::getDataMapperConnection();
         $factory    = new QueryFactory();
         $select     = $factory->newSelect($connection);
 
@@ -76,7 +76,7 @@ final class DistinctTest extends DatabaseTestCase
      */
     public function testDmQuerySelectDistinctUnset(): void
     {
-        $connection = $this->getDataMapperConnection();
+        $connection = self::getDataMapperConnection();
         $factory    = new QueryFactory();
         $select     = $factory->newSelect($connection);
 

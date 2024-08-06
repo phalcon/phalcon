@@ -26,7 +26,7 @@ final class ErrorCodeTest extends DatabaseTestCase
     public function testDmPdoConnectionErrorCode(): void
     {
         /** @var Connection $connection */
-        $connection = $this->getDataMapperConnection();
+        $connection = self::getDataMapperConnection();
 
         $actual = $connection->errorCode();
         $this->assertEquals('', $actual);

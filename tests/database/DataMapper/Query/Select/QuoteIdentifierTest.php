@@ -27,7 +27,7 @@ final class QuoteIdentifierTest extends DatabaseTestCase
      */
     public function testDmQuerySelectQuoteIdentifier(): void
     {
-        $connection = $this->getDataMapperConnection();
+        $connection = self::getDataMapperConnection();
         $factory    = new QueryFactory();
         $select     = $factory->newSelect($connection);
 

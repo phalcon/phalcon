@@ -27,7 +27,7 @@ final class SubSelectTest extends DatabaseTestCase
      */
     public function testDmQuerySelectSubSelect(): void
     {
-        $connection = $this->getDataMapperConnection();
+        $connection = self::getDataMapperConnection();
         $factory    = new QueryFactory();
         $select     = $factory->newSelect($connection);
 

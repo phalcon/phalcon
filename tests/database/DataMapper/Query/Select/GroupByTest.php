@@ -27,7 +27,7 @@ final class GroupByTest extends DatabaseTestCase
      */
     public function testDmQuerySelectGroupBy(): void
     {
-        $connection = $this->getDataMapperConnection();
+        $connection = self::getDataMapperConnection();
         $factory    = new QueryFactory();
         $select     = $factory->newSelect($connection);
 
