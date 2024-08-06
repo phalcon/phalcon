@@ -11,12 +11,11 @@
 
 declare(strict_types=1);
 
-namespace Phalcon\Tests\Unit\Mvc\Model\MetaData;
+namespace Phalcon\Tests\Database\Mvc\Model\MetaData;
 
-use Codeception\Example;
-use Phalcon\Tests\DatabaseTestCase;
 use Phalcon\Mvc\Model\Exception as ExpectedException;
 use Phalcon\Mvc\Model\MetaData\Memory;
+use Phalcon\Tests\DatabaseTestCase;
 use Phalcon\Tests\Fixtures\Traits\DiTrait;
 
 final class GetSetDITest extends DatabaseTestCase

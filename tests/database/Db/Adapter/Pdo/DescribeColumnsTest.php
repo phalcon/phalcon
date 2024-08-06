@@ -11,11 +11,11 @@
 
 declare(strict_types=1);
 
-namespace Phalcon\Tests\Unit\Db\Adapter\Pdo;
+namespace Phalcon\Tests\Database\Db\Adapter\Pdo;
 
-use Phalcon\Tests\DatabaseTestCase;
 use Phalcon\Db\Adapter\Pdo\Mysql;
 use Phalcon\Db\Column;
+use Phalcon\Tests\DatabaseTestCase;
 use Phalcon\Tests\Fixtures\Migrations\ComplexDefaultMigration;
 use Phalcon\Tests\Fixtures\Migrations\DialectMigration;
 use Phalcon\Tests\Fixtures\Traits\DiTrait;
@@ -45,7 +45,7 @@ final class DescribeColumnsTest extends DatabaseTestCase
      *
      * @group  pgsql
      */
-    public function dbAdapterPdoDescribeColumnsDefaultPostgres(): void
+    public function testDbAdapterPdoDescribeColumnsDefaultPostgres(): void
     {
         $db        = $this->container->get('db');
         $now       = date('Y-m-d H:i:s');
@@ -68,7 +68,7 @@ final class DescribeColumnsTest extends DatabaseTestCase
      *
      * @group  mysql
      */
-    public function dbAdapterPdoDescribeColumnsOnUpdate(): void
+    public function testDbAdapterPdoDescribeColumnsOnUpdate(): void
     {
         $db        = $this->container->get('db');
         $now       = date('Y-m-d H:i:s');
@@ -91,7 +91,7 @@ final class DescribeColumnsTest extends DatabaseTestCase
      *
      * @group  mysql
      */
-    public function dbAdapterPdoDescribeColumnsSupported(): void
+    public function testDbAdapterPdoDescribeColumnsSupported(): void
     {
         /** @var Mysql $db */
         $db        = $this->container->get('db');

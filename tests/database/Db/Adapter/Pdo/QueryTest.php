@@ -11,11 +11,11 @@
 
 declare(strict_types=1);
 
-namespace Phalcon\Tests\Unit\Db\Adapter\Pdo;
+namespace Phalcon\Tests\Database\Db\Adapter\Pdo;
 
-use Phalcon\Tests\DatabaseTestCase;
 use Phalcon\Db\Enum;
 use Phalcon\Db\Result\PdoResult;
+use Phalcon\Tests\DatabaseTestCase;
 use Phalcon\Tests\Fixtures\Migrations\InvoicesMigration;
 use Phalcon\Tests\Fixtures\Traits\DiTrait;
 
@@ -40,7 +40,7 @@ final class QueryTest extends DatabaseTestCase
      *
      * @group common
      */
-    public function dbAdapterPdoQuery(): void
+    public function testDbAdapterPdoQuery(): void
     {
         $connection = self::getConnection();
         $db         = $this->container->get('db');

@@ -11,12 +11,11 @@
 
 declare(strict_types=1);
 
-namespace Phalcon\Tests\Unit\Mvc\Model\MetaData\Adapter;
+namespace Phalcon\Tests\Database\Mvc\Model\MetaData\Adapter;
 
-use Codeception\Example;
-use Phalcon\Tests\DatabaseTestCase;
 use Phalcon\Mvc\Model\MetaData;
 use Phalcon\Storage\Exception;
+use Phalcon\Tests\DatabaseTestCase;
 use Phalcon\Tests\Fixtures\Migrations\AlbumMigration;
 use Phalcon\Tests\Fixtures\Migrations\AlbumPhotoMigration;
 use Phalcon\Tests\Fixtures\Migrations\PhotoMigration;

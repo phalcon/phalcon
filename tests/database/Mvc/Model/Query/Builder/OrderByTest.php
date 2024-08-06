@@ -11,11 +11,11 @@
 
 declare(strict_types=1);
 
-namespace Phalcon\Tests\Unit\Mvc\Model\Query\Builder;
+namespace Phalcon\Tests\Database\Mvc\Model\Query\Builder;
 
-use Phalcon\Tests\DatabaseTestCase;
 use Phalcon\Mvc\Model\Query\Builder;
 use Phalcon\Storage\Exception;
+use Phalcon\Tests\DatabaseTestCase;
 use Phalcon\Tests\Fixtures\Traits\DiTrait;
 use Phalcon\Tests\Fixtures\Traits\RecordsTrait;
 use Phalcon\Tests\Models\Invoices;

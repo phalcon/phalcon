@@ -11,10 +11,10 @@
 
 declare(strict_types=1);
 
-namespace Phalcon\Tests\Unit\Db\Profiler\Item;
+namespace Phalcon\Tests\Database\Db\Profiler\Item;
 
-use Phalcon\Tests\DatabaseTestCase;
 use Phalcon\Db\Profiler\Item;
+use Phalcon\Tests\DatabaseTestCase;
 
 final class GetTotalElapsedNanoMicroSecondsTest extends DatabaseTestCase
 {
@@ -27,7 +27,7 @@ final class GetTotalElapsedNanoMicroSecondsTest extends DatabaseTestCase
      *
      * @group  common
      */
-    public function dbProfilerItemGetTotalElapsedNanoMicroSeconds(): void
+    public function testDbProfilerItemGetTotalElapsedNanoMicroSeconds(): void
     {
         $item  = new Item();
         $start = 444445555566666;

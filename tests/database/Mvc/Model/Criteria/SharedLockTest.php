@@ -11,10 +11,10 @@
 
 declare(strict_types=1);
 
-namespace Phalcon\Tests\Unit\Mvc\Model\Criteria;
+namespace Phalcon\Tests\Database\Mvc\Model\Criteria;
 
-use Phalcon\Tests\DatabaseTestCase;
 use Phalcon\Mvc\Model\Criteria;
+use Phalcon\Tests\DatabaseTestCase;
 
 final class SharedLockTest extends DatabaseTestCase
 {

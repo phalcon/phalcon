@@ -20,7 +20,7 @@ use Phalcon\Tests\DatabaseTestCase;
 use Phalcon\Tests\Fixtures\Migrations\InvoicesMigration;
 use Phalcon\Tests\Fixtures\Traits\DiTrait;
 use Phalcon\Tests\Models\Invoices;
-use Phalcon\Tests\Unit\Paginator\Adapter\QueryBuilder\PDO;
+use PDO;
 use stdClass;
 
 final class ConstructTest extends DatabaseTestCase

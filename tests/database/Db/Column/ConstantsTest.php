@@ -11,10 +11,10 @@
 
 declare(strict_types=1);
 
-namespace Phalcon\Tests\Unit\Db\Column;
+namespace Phalcon\Tests\Database\Db\Column;
 
-use Phalcon\Tests\DatabaseTestCase;
 use Phalcon\Db\Column;
+use Phalcon\Tests\DatabaseTestCase;
 
 final class ConstantsTest extends DatabaseTestCase
 {
@@ -26,7 +26,7 @@ final class ConstantsTest extends DatabaseTestCase
      *
      * @group  common
      */
-    public function checkClassConstants(): void
+    public function testDbColumnConstants(): void
     {
         $bind = [
             [Column::BIND_PARAM_BLOB, 3],

@@ -11,11 +11,10 @@
 
 declare(strict_types=1);
 
-namespace Phalcon\Tests\Unit\Db\RawValue;
+namespace Phalcon\Tests\Database\Db\RawValue;
 
-use Codeception\Example;
-use Phalcon\Tests\DatabaseTestCase;
 use Phalcon\Db\RawValue;
+use Phalcon\Tests\DatabaseTestCase;
 
 final class ConstructTest extends DatabaseTestCase
 {
@@ -29,7 +28,7 @@ final class ConstructTest extends DatabaseTestCase
      *
      * @group common
      */
-    public function dbRawvalueConstruct(
+    public function testDbRawvalueConstruct(
         mixed $value,
         string $expected
     ): void {

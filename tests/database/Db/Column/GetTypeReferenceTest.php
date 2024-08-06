@@ -11,7 +11,7 @@
 
 declare(strict_types=1);
 
-namespace Phalcon\Tests\Unit\Db\Column;
+namespace Phalcon\Tests\Database\Db\Column;
 
 use Phalcon\Tests\DatabaseTestCase;
 use Phalcon\Tests\Fixtures\Traits\DbTrait;
@@ -28,7 +28,7 @@ final class GetTypeReferenceTest extends DatabaseTestCase
      *
      * @group  common
      */
-    public function dbColumnGetTypeReference(): void
+    public function testDbColumnGetTypeReference(): void
     {
         $columns         = $this->getColumnsArray();
         $expectedColumns = $this->getColumnsObjects();

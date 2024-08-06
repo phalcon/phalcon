@@ -11,12 +11,12 @@
 
 declare(strict_types=1);
 
-namespace Phalcon\Tests\Unit\Mvc\Model\Resultset;
+namespace Phalcon\Tests\Database\Mvc\Model\Resultset;
 
-use Phalcon\Tests\DatabaseTestCase;
 use Phalcon\Mvc\Model\ManagerInterface;
 use Phalcon\Mvc\Model\Row;
 use Phalcon\Storage\Exception;
+use Phalcon\Tests\DatabaseTestCase;
 use Phalcon\Tests\Fixtures\Migrations\InvoicesMigration;
 use Phalcon\Tests\Fixtures\Traits\DiTrait;
 use Phalcon\Tests\Fixtures\Traits\RecordsTrait;

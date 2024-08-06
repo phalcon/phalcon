@@ -9,12 +9,12 @@
 
 declare(strict_types=1);
 
-namespace Phalcon\Tests\Unit\Mvc\Model\Query;
+namespace Phalcon\Tests\Database\Mvc\Model\Query;
 
 use Codeception\Util\Debug;
-use Phalcon\Tests\DatabaseTestCase;
 use PDOException;
 use Phalcon\Mvc\Model\Manager;
+use Phalcon\Tests\DatabaseTestCase;
 use Phalcon\Tests\Fixtures\Migrations\RollbackTestMigration;
 use Phalcon\Tests\Fixtures\Traits\DiTrait;
 use Phalcon\Tests\Fixtures\Traits\RecordsTrait;

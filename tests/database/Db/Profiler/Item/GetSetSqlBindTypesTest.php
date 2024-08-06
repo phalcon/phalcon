@@ -11,10 +11,10 @@
 
 declare(strict_types=1);
 
-namespace Phalcon\Tests\Unit\Db\Profiler\Item;
+namespace Phalcon\Tests\Database\Db\Profiler\Item;
 
-use Phalcon\Tests\DatabaseTestCase;
 use Phalcon\Db\Profiler\Item;
+use Phalcon\Tests\DatabaseTestCase;
 
 final class GetSetSqlBindTypesTest extends DatabaseTestCase
 {
@@ -26,7 +26,7 @@ final class GetSetSqlBindTypesTest extends DatabaseTestCase
      *
      * @group  common
      */
-    public function dbProfilerItemGetSetSqlBindTypes(): void
+    public function testDbProfilerItemGetSetSqlBindTypes(): void
     {
         $item = new Item();
         $item->setSqlBindTypes(['one' => 1, 'two' => 2]);

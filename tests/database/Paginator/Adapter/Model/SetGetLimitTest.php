@@ -19,7 +19,7 @@ use Phalcon\Tests\Fixtures\Migrations\InvoicesMigration;
 use Phalcon\Tests\Fixtures\Traits\DiTrait;
 use Phalcon\Tests\Fixtures\Traits\RecordsTrait;
 use Phalcon\Tests\Models\Invoices;
-use Phalcon\Tests\Unit\Paginator\Adapter\Model\PDO;
+use PDO;
 
 final class SetGetLimitTest extends DatabaseTestCase
 {

@@ -16,11 +16,11 @@ namespace Phalcon\Tests\Database\Paginator\Adapter\NativeArray;
 use Phalcon\Paginator\Adapter\NativeArray;
 use Phalcon\Paginator\Repository;
 use Phalcon\Tests\Fixtures\Paginator\Store;
-use Phalcon\Tests\UnitTestCase;
+use Phalcon\Tests\DatabaseTestCase;
 
 use function array_fill;
 
-final class GetSetRepositoryTest extends UnitTestCase
+final class GetSetRepositoryTest extends DatabaseTestCase
 {
     /**
      * Tests Phalcon\Paginator\Adapter\NativeArray :: setRepository()

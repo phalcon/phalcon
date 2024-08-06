@@ -11,11 +11,11 @@
 
 declare(strict_types=1);
 
-namespace Phalcon\Tests\Unit\Mvc\Model\Row;
+namespace Phalcon\Tests\Database\Mvc\Model\Row;
 
-use Phalcon\Tests\DatabaseTestCase;
 use Phalcon\Mvc\Model\Exception;
 use Phalcon\Mvc\Model\Row;
+use Phalcon\Tests\DatabaseTestCase;
 
 final class OffsetUnsetTest extends DatabaseTestCase
 {

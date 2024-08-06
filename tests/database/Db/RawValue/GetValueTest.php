@@ -11,10 +11,10 @@
 
 declare(strict_types=1);
 
-namespace Phalcon\Tests\Unit\Db\RawValue;
+namespace Phalcon\Tests\Database\Db\RawValue;
 
-use Phalcon\Tests\DatabaseTestCase;
 use Phalcon\Db\RawValue;
+use Phalcon\Tests\DatabaseTestCase;
 
 final class GetValueTest extends DatabaseTestCase
 {
@@ -26,7 +26,7 @@ final class GetValueTest extends DatabaseTestCase
      *
      * @group  common
      */
-    public function dbRawvalueGetValue(): void
+    public function testDbRawvalueGetValue(): void
     {
         $rawValue = new RawValue('example string');
 

@@ -11,10 +11,10 @@
 
 declare(strict_types=1);
 
-namespace Phalcon\Tests\Unit\Db\Profiler;
+namespace Phalcon\Tests\Database\Db\Profiler;
 
-use Phalcon\Tests\DatabaseTestCase;
 use Phalcon\Db\Profiler\Item;
+use Phalcon\Tests\DatabaseTestCase;
 use Phalcon\Tests\Fixtures\Migrations\InvoicesMigration;
 use Phalcon\Tests\Fixtures\Traits\DiTrait;
 use Phalcon\Tests\Models\Invoices;
@@ -34,7 +34,7 @@ final class ProfilerTest extends DatabaseTestCase
      *
      * @group mysql
      */
-    public function dbProfilerFull(): void
+    public function testDbProfilerFull(): void
     {
         $this->setNewFactoryDefault();
         $this->setDatabase($this);
