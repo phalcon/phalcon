@@ -163,7 +163,9 @@ class RenderTest extends UnitTestCase
             dataDir('fixtures/views/mustache') . '/index.mhtml.php'
         );
 
-        $this->safeDeleteFile('index.mhtml.php');
+        $this->safeDeleteFile(
+            dataDir('fixtures/views/mustache') . '/index.mhtml.php'
+        );
     }
 
     /**
