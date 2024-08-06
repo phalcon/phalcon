@@ -13,7 +13,6 @@ declare(strict_types=1);
 
 namespace Phalcon\Tests;
 
-use Codeception\Exception\ModuleException;
 use PDO;
 use Phalcon\DataMapper\Pdo\Connection;
 
@@ -26,6 +25,8 @@ use function file_get_contents;
 use function getOptionsMysql;
 use function getOptionsPostgresql;
 use function getOptionsSqlite;
+use function implode;
+use function is_string;
 use function preg_match;
 use function preg_split;
 use function sprintf;
@@ -59,7 +60,6 @@ class DatabaseTestCase extends UnitTestCase
 
     /**
      * @return PDO|null
-     * @throws ModuleException
      */
     public static function getConnection(): PDO | null
     {
@@ -176,25 +176,30 @@ class DatabaseTestCase extends UnitTestCase
         return self::$driver;
     }
 
-    public function hasInDatabase(string $table, array $criteria = []): bool
+    /**
+     * @param string $table
+     * @param array  $criteria
+     *
+     * @return void
+     */
+    public function assertInDatabase(string $table, array $criteria = []): void
     {
-        $sql   = 'SELECT COUNT(*) FROM ' . $table . ' WHERE ';
-        $where = [];
-        foreach ($criteria as $key => $value) {
-            $val = $value;
-            if (is_string($value)) {
-                $val = '"' . $value . '"';
-            }
+        $records = $this->getFromDatabase($table, $criteria);
 
-            $where[] = $key . ' = ' . $val;
-        }
-        $sql .= implode(' AND ', $where);
+        $this->assertNotEmpty($records);
+    }
 
-        $connection = self::$connection;
-        $result     = $connection->query($sql);
-        $records    = $result->fetchAll(PDO::FETCH_ASSOC);
+    /**
+     * @param string $table
+     * @param array  $criteria
+     *
+     * @return void
+     */
+    public function assertNotInDatabase(string $table, array $criteria = []): void
+    {
+        $records = $this->getFromDatabase($table, $criteria);
 
-        return !empty($records);
+        $this->assertEmpty($records);
     }
 
     /**
@@ -285,5 +290,34 @@ class DatabaseTestCase extends UnitTestCase
         if ($query !== '') {
             self::$connection->exec($query);
         }
+    }
+
+    /**
+     * Return records from the database
+     *
+     * @param string $table
+     * @param array  $criteria
+     *
+     * @return array
+     */
+    protected function getFromDatabase(string $table, array $criteria = []): array
+    {
+        $sql   = 'SELECT * FROM ' . $table . ' WHERE ';
+        $where = [];
+        foreach ($criteria as $key => $value) {
+            $val = $value;
+            if (is_string($value)) {
+                $val = '"' . $value . '"';
+            }
+
+            $where[] = $key . ' = ' . $val;
+        }
+        $sql .= implode(' AND ', $where);
+
+        $connection = self::$connection;
+        $result     = $connection->query($sql);
+        $records    = $result->fetchAll(PDO::FETCH_ASSOC);
+
+        return $records;
     }
 }

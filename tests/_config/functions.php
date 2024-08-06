@@ -11,40 +11,9 @@
 
 declare(strict_types=1);
 
-use Codeception\Util\Autoload;
-
 /*******************************************************************************
  * Load settings and setup
  *******************************************************************************/
-/**
- * Initialize ini values and xdebug if it is loaded
- */
-if (!function_exists('loadAutoloader')) {
-    function loadAutoloader(string $root)
-    {
-        Autoload::addNamespace(
-            'Phalcon\Tests\Controllers',
-            $root . 'fixtures/controllers'
-        );
-        Autoload::addNamespace(
-            'Phalcon\Tests\Models',
-            $root . 'fixtures/models'
-        );
-        Autoload::addNamespace(
-            'Phalcon\Tests\Resultsets',
-            $root . 'fixtures/resultsets'
-        );
-        Autoload::addNamespace(
-            'Phalcon\Tests\Modules\Frontend\Controllers',
-            $root . 'fixtures/modules/frontend/controllers/'
-        );
-        Autoload::addNamespace(
-            'Phalcon\Tests\Modules\Backend\Controllers',
-            $root . 'fixtures/modules/backend/controllers/'
-        );
-    }
-}
-
 /**
  * Converts ENV variables to defined for tests to work
  */
