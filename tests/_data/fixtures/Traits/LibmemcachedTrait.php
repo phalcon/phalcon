@@ -21,9 +21,9 @@ trait LibmemcachedTrait
 {
     protected array $options = [];
 
-    public function _before(IntegrationTester $I)
+    public function setUp(): void
     {
-        $I->checkExtensionIsLoaded('memcached');
+        $this->checkExtensionIsLoaded('memcached');
 
         $this->options = getOptionsLibmemcached();
     }

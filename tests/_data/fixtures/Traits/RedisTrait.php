@@ -21,12 +21,9 @@ trait RedisTrait
 {
     protected array $options = [];
 
-    /**
-     * @param IntegrationTester $I
-     */
-    public function _before(IntegrationTester $I)
+    public function setUp(): void
     {
-        $I->checkExtensionIsLoaded('redis');
+        $this->checkExtensionIsLoaded('redis');
 
         $this->options = getOptionsRedis();
     }
