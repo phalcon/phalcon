@@ -17,8 +17,8 @@ use IntegrationTester;
 
 trait ApcuTrait
 {
-    public function _before(IntegrationTester $I)
+    public function setUp(): void
     {
-        $I->checkExtensionIsLoaded('apcu');
+        $this->checkExtensionIsLoaded('apcu');
     }
 }
