@@ -422,11 +422,11 @@ jobs:
 
     name: "Upload coverage"
     runs-on: "ubuntu-22.04"
-#    needs:
-#      - "unit-tests"
+    needs:
+      - "unit-tests"
 #      - "db-mysql-tests"
-##      - "db-postgres-tests"
-##      - "db-sqlite-tests"
+#      - "db-postgres-tests"
+#      - "db-sqlite-tests"
 
     steps:
       - name: "Checkout"
