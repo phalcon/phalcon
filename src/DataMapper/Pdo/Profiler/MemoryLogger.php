@@ -21,72 +21,21 @@ namespace Phalcon\DataMapper\Pdo\Profiler;
 use Phalcon\Logger\Adapter\AdapterInterface;
 use Phalcon\Logger\Adapter\Noop;
 use Phalcon\Logger\Enum;
-use Phalcon\Logger\LoggerInterface;
+use Psr\Log\LoggerInterface;
+use Psr\Log\LoggerTrait;
+use Stringable;
 
 /**
  * A naive memory-based logger.
  */
 class MemoryLogger implements LoggerInterface
 {
+    use LoggerTrait;
+
     /**
      * @var array
      */
     protected array $messages = [];
-
-    /**
-     * @param string $message
-     * @param array  $context
-     *
-     * @return void
-     */
-    public function alert(string $message, array $context = []): void
-    {
-        $this->log(Enum::ALERT, $message, $context);
-    }
-
-    /**
-     * @param string $message
-     * @param array  $context
-     *
-     * @return void
-     */
-    public function critical(string $message, array $context = []): void
-    {
-        $this->log(Enum::CRITICAL, $message, $context);
-    }
-
-    /**
-     * @param string $message
-     * @param array  $context
-     *
-     * @return void
-     */
-    public function debug(string $message, array $context = []): void
-    {
-        $this->log(Enum::DEBUG, $message, $context);
-    }
-
-    /**
-     * @param string $message
-     * @param array  $context
-     *
-     * @return void
-     */
-    public function emergency(string $message, array $context = []): void
-    {
-        $this->log(Enum::EMERGENCY, $message, $context);
-    }
-
-    /**
-     * @param string $message
-     * @param array  $context
-     *
-     * @return void
-     */
-    public function error(string $message, array $context = []): void
-    {
-        $this->log(Enum::ERROR, $message, $context);
-    }
 
     /**
      * Returns an adapter from the stack
@@ -139,24 +88,13 @@ class MemoryLogger implements LoggerInterface
     }
 
     /**
-     * @param string $message
-     * @param array  $context
-     *
-     * @return void
-     */
-    public function info(string $message, array $context = []): void
-    {
-        $this->log(Enum::INFO, $message, $context);
-    }
-
-    /**
      * Logs a message.
      *
      * @param mixed  $level
      * @param string $message
      * @param array  $context
      */
-    public function log(mixed $level, string $message, array $context = []): void
+    public function log(mixed $level, string | Stringable $message, array $context = []): void
     {
         $replace = [];
         foreach ($context as $key => $item) {
@@ -164,27 +102,5 @@ class MemoryLogger implements LoggerInterface
         }
 
         $this->messages[] = strtr($message, $replace);
-    }
-
-    /**
-     * @param string $message
-     * @param array  $context
-     *
-     * @return void
-     */
-    public function notice(string $message, array $context = []): void
-    {
-        $this->log(Enum::NOTICE, $message, $context);
-    }
-
-    /**
-     * @param string $message
-     * @param array  $context
-     *
-     * @return void
-     */
-    public function warning(string $message, array $context = []): void
-    {
-        $this->log(Enum::WARNING, $message, $context);
     }
 }

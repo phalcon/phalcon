@@ -18,7 +18,7 @@ declare(strict_types=1);
 
 namespace Phalcon\DataMapper\Pdo\Profiler;
 
-use Phalcon\Logger\LoggerInterface;
+use Psr\Log\LoggerInterface;
 
 /**
  * Interface to send query profiles to a logger.

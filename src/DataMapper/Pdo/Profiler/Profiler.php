@@ -21,9 +21,8 @@ namespace Phalcon\DataMapper\Pdo\Profiler;
 use InvalidArgumentException;
 use Phalcon\DataMapper\Pdo\Exception\Exception;
 use Phalcon\Logger\Enum;
-use Phalcon\Logger\Exception as LoggerException;
-use Phalcon\Logger\LoggerInterface;
 use Phalcon\Traits\Php\JsonTrait;
+use Psr\Log\LoggerInterface;
 
 use function json_encode;
 
@@ -77,7 +76,6 @@ class Profiler implements ProfilerInterface
      * @param array       $values
      *
      * @return void
-     * @throws LoggerException
      */
     public function finish(?string $statement = null, array $values = []): void
     {
