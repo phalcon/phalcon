@@ -359,21 +359,19 @@ class ClassDefinition extends AbstractDefinition
         foreach ($this->parameters as $position => $parameter) {
             $this->collatePositionalArgument($position)
             || $this->collateTypedArgument($position, $parameter, $container)
-            || $this->collateInheritedArgument($position, $parameter, $inherited)
+            || $this->collateInheritedArgument($position, $inherited)
             || $this->collateOptionalArgument($position, $parameter);
         }
     }
 
     /**
      * @param int                 $position
-     * @param ReflectionParameter $parameter
      * @param array               $inherited
      *
      * @return bool
      */
     protected function collateInheritedArgument(
         int $position,
-        ReflectionParameter $parameter,
         array $inherited
     ): bool {
         if (array_key_exists($position, $inherited)) {
