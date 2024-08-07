@@ -3,8 +3,7 @@ Phalcon Framework
 
 [![PDS Skeleton](https://img.shields.io/badge/pds-skeleton-blue.svg?style=flat-square)](https://github.com/php-pds/skeleton)
 [![Phalcon CI](https://github.com/phalcon/phalcon/actions/workflows/continuous-integration.yml/badge.svg?branch=v6.0.x)](https://github.com/phalcon/phalcon/actions/workflows/continuous-integration.yml)
-[![Codacy Badge](https://app.codacy.com/project/badge/Grade/dfa016713ae049ea854ad1f8e54754b3)](https://app.codacy.com/gh/phalcon/phalcon/dashboard?utm_source=gh&utm_medium=referral&utm_content=&utm_campaign=Badge_grade)
-[![Codacy Badge](https://app.codacy.com/project/badge/Coverage/dfa016713ae049ea854ad1f8e54754b3)](https://app.codacy.com/gh/phalcon/phalcon/dashboard?utm_source=gh&utm_medium=referral&utm_content=&utm_campaign=Badge_coverage)
+[![Quality Gate Status](https://sonarcloud.io/api/project_badges/measure?project=phalcon_phalcon&metric=alert_status)](https://sonarcloud.io/summary/new_code?id=phalcon_phalcon)
 
 ## Implemented
 
