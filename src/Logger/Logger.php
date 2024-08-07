@@ -13,12 +13,11 @@ declare(strict_types=1);
 
 namespace Phalcon\Logger;
 
-use Exception;
-use Phalcon\Logger\Exception as LoggerException;
+use Psr\Log\LoggerInterface;
+use Psr\Log\LoggerTrait;
+use Stringable;
 
 /**
- * Phalcon Logger.
- *
  * A logger, with various adapters and formatters. A formatter
  * interface is available as well as an adapter one. Adapters can be created
  * easily using the built-in AdapterFactory. A LoggerFactory is also available
@@ -27,152 +26,25 @@ use Phalcon\Logger\Exception as LoggerException;
  */
 class Logger extends AbstractLogger implements LoggerInterface
 {
-    /**
-     * Action must be taken immediately.
-     *
-     * Example: Entire website down, database unavailable, etc. This should
-     * trigger the SMS alerts and wake you up.
-     *
-     * @param string $message
-     * @param array  $context
-     *
-     * @return void
-     * @throws Exception
-     * @throws LoggerException
-     */
-    public function alert(string $message, array $context = []): void
-    {
-        $this->addMessage(Enum::ALERT, $message, $context);
-    }
-
-    /**
-     * Critical conditions.
-     *
-     * Example: Application component unavailable, unexpected exception.
-     *
-     * @param string $message
-     * @param array  $context
-     *
-     * @return void
-     * @throws Exception
-     * @throws LoggerException
-     */
-    public function critical(string $message, array $context = []): void
-    {
-        $this->addMessage(Enum::CRITICAL, $message, $context);
-    }
-
-    /**
-     * Detailed debug information.
-     *
-     * @param string $message
-     * @param array  $context
-     *
-     * @return void
-     * @throws Exception
-     * @throws LoggerException
-     */
-    public function debug(string $message, array $context = []): void
-    {
-        $this->addMessage(Enum::DEBUG, $message, $context);
-    }
-
-    /**
-     * System is unusable.
-     *
-     * @param string $message
-     * @param array  $context
-     *
-     * @return void
-     * @throws Exception
-     * @throws LoggerException
-     */
-    public function emergency(string $message, array $context = []): void
-    {
-        $this->addMessage(Enum::EMERGENCY, $message, $context);
-    }
-
-    /**
-     * Runtime errors that do not require immediate action but should typically
-     * be logged and monitored.
-     *
-     * @param string $message
-     * @param array  $context
-     *
-     * @return void
-     * @throws Exception
-     * @throws LoggerException
-     */
-    public function error(string $message, array $context = []): void
-    {
-        $this->addMessage(Enum::ERROR, $message, $context);
-    }
-
-    /**
-     * Interesting events.
-     *
-     * Example: User logs in, SQL logs.
-     *
-     * @param string $message
-     * @param array  $context
-     *
-     * @return void
-     * @throws Exception
-     * @throws LoggerException
-     */
-    public function info(string $message, array $context = []): void
-    {
-        $this->addMessage(Enum::INFO, $message, $context);
-    }
+    use LoggerTrait;
 
     /**
      * Logs with an arbitrary level.
      *
-     * @param mixed  $level
-     * @param string $message
-     * @param array  $context
+     * @param mixed             $level
+     * @param string|Stringable $message
+     * @param array             $context
      *
      * @return void
      * @throws Exception
-     * @throws LoggerException
      */
-    public function log(mixed $level, string $message, array $context = []): void
-    {
-        $intLevel = $this->getLevelNumber($level);
+    public function log(
+        mixed $level,
+        string | Stringable $message,
+        array $context = []
+    ): void {
+        $levelName = $this->getLevelNumber($level);
 
-        $this->addMessage($intLevel, $message, $context);
-    }
-
-    /**
-     * Normal but significant events.
-     *
-     * @param string $message
-     * @param array  $context
-     *
-     * @return void
-     * @throws Exception
-     * @throws LoggerException
-     */
-    public function notice(string $message, array $context = []): void
-    {
-        $this->addMessage(Enum::NOTICE, $message, $context);
-    }
-
-    /**
-     * Exceptional occurrences that are not errors.
-     *
-     * Example: Use of deprecated APIs, poor use of an API, undesirable things
-     * that are not necessarily wrong.
-     *
-     * @param string $message
-     * @param array  $context
-     *
-     * @return void
-     * @throws Exception
-     * @throws LoggerException
-     */
-    public function warning(string $message, array $context = []): void
-    {
-        $this->addMessage(Enum::WARNING, $message, $context);
+        $this->addMessage($levelName, $message, $context);
     }
 }
