@@ -79,7 +79,7 @@ final class ReadWriteTest extends UnitTestCase
     {
         require_once dataDir('fixtures/Annotations/AnnotationsTestClass.php');
 
-        $this->expectException(RuntimeException::class);
+        $this->expectException(Exception::class);
         $this->expectExceptionMessage('Cannot read annotation data');
 
         $parameters = [
