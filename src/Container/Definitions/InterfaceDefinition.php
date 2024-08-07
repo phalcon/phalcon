@@ -58,7 +58,7 @@ class InterfaceDefinition extends AbstractDefinition
     /**
      * @param Container $container
      *
-     * @return object|mixed
+     * @return object
      * @throws NotDefined
      */
     protected function instantiate(Container $container): object

@@ -135,9 +135,9 @@ class View extends Injectable implements ViewInterface, EventsAwareInterface
     protected array $disabledLevels = [];
 
     /**
-     * @var array|bool
+     * @var array|false
      */
-    protected array | bool $engines = false; // TODO: Make always array
+    protected array | false $engines = false; // TODO: Make always array
 
     /**
      * @var string|null
@@ -158,14 +158,17 @@ class View extends Injectable implements ViewInterface, EventsAwareInterface
      * @var array
      */
     protected array $params = [];
+
     /**
      * @var string
      */
     protected string $partialsDir = ""; // TODO: Make always array
+
     /**
      * @var array|null
      */
     protected ?array $pickView = null;
+
     /**
      * @var array
      */
@@ -185,12 +188,14 @@ class View extends Injectable implements ViewInterface, EventsAwareInterface
      * @var array
      */
     protected array $templatesBefore = [];
+
     /**
      * @var array
      */
     protected array $viewParams = [];
+
     /**
-     * @var array
+     * @var array|string
      */
     protected array | string $viewsDirs = [];
 

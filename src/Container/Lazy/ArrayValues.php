@@ -37,9 +37,9 @@ class ArrayValues extends AbstractLazy implements ArrayAccess, Countable, Iterat
     /**
      * @param Container $container
      *
-     * @return mixed
+     * @return array
      */
-    public function __invoke(Container $container): mixed
+    public function __invoke(Container $container): array
     {
         return $this->resolveValues($container, $this->values);
     }

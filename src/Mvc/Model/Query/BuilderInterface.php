@@ -234,7 +234,7 @@ interface BuilderInterface
     /**
      * Return the set ORDER BY clause
      *
-     * @return array|string
+     * @return array|string|null
      */
     public function getOrderBy(): array | string | null;
 

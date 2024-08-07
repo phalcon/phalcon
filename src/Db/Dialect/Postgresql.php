@@ -342,9 +342,9 @@ class Postgresql extends Dialect
     /**
      * Generates SQL to create a view
      *
-     * @param string $viewName
-     * @param array  $definition
-     * @param string $schemaName
+     * @param string      $viewName
+     * @param array       $definition
+     * @param string|null $schemaName
      *
      * @return string
      * @throws Exception
@@ -375,8 +375,8 @@ class Postgresql extends Dialect
      * );
      * ```
      *
-     * @param string $tableName
-     * @param string $schemaName
+     * @param string      $tableName
+     * @param string|null $schemaName
      *
      * @return string
      */
@@ -455,8 +455,8 @@ class Postgresql extends Dialect
     /**
      * Generates SQL to query foreign keys on a table
      *
-     * @param string $tableName
-     * @param string $schemaName
+     * @param string      $tableName
+     * @param string|null $schemaName
      *
      * @return string
      */
@@ -572,9 +572,9 @@ class Postgresql extends Dialect
     /**
      * Generates SQL to drop a table
      *
-     * @param string $tableName
-     * @param string $schemaName
-     * @param bool   $ifExists
+     * @param string      $tableName
+     * @param string|null $schemaName
+     * @param bool        $ifExists
      *
      * @return string
      */
@@ -774,7 +774,7 @@ class Postgresql extends Dialect
      * );
      * ```
      *
-     * @param string $schemaName
+     * @param string|null $schemaName
      *
      * @return string
      */
@@ -793,7 +793,7 @@ class Postgresql extends Dialect
     /**
      * Generates the SQL to list all views of a schema or user
      *
-     * @param string $schemaName
+     * @param string|null $schemaName
      *
      * @return string
      */
@@ -939,8 +939,8 @@ class Postgresql extends Dialect
      * echo $dialect->tableExists("posts");
      * ```
      *
-     * @param string $tableName
-     * @param string $schemaName
+     * @param string      $tableName
+     * @param string|null $schemaName
      *
      * @return string
      */
@@ -962,8 +962,8 @@ class Postgresql extends Dialect
     /**
      * Generates the SQL to describe the table creation options
      *
-     * @param string $tableName
-     * @param string $schemaName
+     * @param string      $tableName
+     * @param string|null $schemaName
      *
      * @return string
      */
@@ -992,8 +992,8 @@ class Postgresql extends Dialect
     /**
      * Generates SQL checking for the existence of a schema.view
      *
-     * @param string $viewName
-     * @param string $schemaName
+     * @param string      $viewName
+     * @param string|null $schemaName
      *
      * @return string
      */

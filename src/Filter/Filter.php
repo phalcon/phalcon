@@ -257,7 +257,7 @@ class Filter implements FilterInterface
      */
     private function processArraySanitizers(
         array $sanitizers,
-        $value,
+        mixed $value,
         bool $noRecursive
     ) {
         /**
@@ -406,8 +406,7 @@ class Filter implements FilterInterface
         if (true !== $this->has($sanitizerName)) {
             if (true !== empty($sanitizerName)) {
                 trigger_error(
-                    "Sanitizer '" . $sanitizerName . "' is not registered",
-                    E_USER_NOTICE
+                    "Sanitizer '" . $sanitizerName . "' is not registered"
                 );
             }
 

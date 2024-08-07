@@ -84,13 +84,13 @@ class Grouped extends Config
      */
     public function __construct(array $arrayConfig, string $defaultAdapter = 'php')
     {
-        parent::__construct([]);
+        parent::__construct();
 
         foreach ($arrayConfig as $configName) {
             $configInstance = $configName;
 
             // Set to default adapter if passed as string
-            if (is_object($configName) && $configName instanceof ConfigInterface) {
+            if ($configName instanceof ConfigInterface) {
                 $this->merge($configInstance);
 
                 continue;

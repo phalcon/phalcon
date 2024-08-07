@@ -36,10 +36,10 @@ class CsEnv extends Env
     /**
      * @param Container $container
      *
-     * @return mixed
+     * @return array
      * @throws NotDefined
      */
-    public function __invoke(Container $container): mixed
+    public function __invoke(Container $container): array
     {
         $values = str_getcsv($this->getEnv());
 

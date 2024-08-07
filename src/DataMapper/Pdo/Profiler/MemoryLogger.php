@@ -90,12 +90,17 @@ class MemoryLogger implements LoggerInterface
     /**
      * Logs a message.
      *
-     * @param mixed  $level
-     * @param string $message
-     * @param array  $context
+     * @param mixed             $level
+     * @param string|Stringable $message
+     * @param array             $context
+     *
+     * @return void
      */
-    public function log(mixed $level, string | Stringable $message, array $context = []): void
-    {
+    public function log(
+        mixed $level,
+        string | Stringable $message,
+        array $context = []
+    ): void {
         $replace = [];
         foreach ($context as $key => $item) {
             $replace["{" . $key . "}"] = $item;

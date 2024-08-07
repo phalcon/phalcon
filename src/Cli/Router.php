@@ -113,6 +113,8 @@ class Router extends AbstractInjectionAware implements RouterInterface
      * Phalcon\Cli\Router constructor
      *
      * @param bool $defaultRoutes
+     *
+     * @throws Exception
      */
     public function __construct(bool $defaultRoutes = true)
     {

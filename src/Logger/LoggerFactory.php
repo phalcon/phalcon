@@ -14,6 +14,7 @@ declare(strict_types=1);
 namespace Phalcon\Logger;
 
 use DateTimeZone;
+use Exception as BaseException;
 use Phalcon\Config\ConfigInterface;
 use Phalcon\Support\Exception as SupportException;
 use Phalcon\Support\Traits\ConfigTrait;
@@ -41,23 +42,23 @@ class LoggerFactory
     /**
      * Factory to create an instance from a Config object
      *
-     * @param array|ConfigInterface $config = [
-     *                                      'name'     => 'messages',
-     *                                      'adapters' => [
-     *                                      'adapter-name' => [
-     *                                      'adapter' => 'stream',
-     *                                      'name'    => 'file.log',
-     *                                      'options' => [
-     *                                      'mode'     => 'ab',
-     *                                      'option'   => null,
-     *                                      'facility' => null
-     *                                      ],
-     *                                      ],
-     *                                      ]
-     *                                      ]
+     * @param array|ConfigInterface $config = {
+     *      @option string "'name"
+     *      @option array  "adapters"' = {
+     *          @option string "adapter-name" = {
+     *              @option string "adapter"
+     *              @option string "name"
+     *              @option string "options" = {
+     *                  @option string "mode" = "ab"
+     *                  @option string "option"
+     *                  @option string "facility"
+     *              }
+     *          }
+     *      }
+     * }
      *
      * @return Logger
-     * @throws SupportException
+     * @throws BaseException
      */
     public function load(array | ConfigInterface $config): Logger
     {
@@ -92,6 +93,7 @@ class LoggerFactory
      * @param DateTimeZone|null $timezone
      *
      * @return Logger
+     * @throws BaseException
      */
     public function newInstance(
         string $name,

@@ -47,6 +47,10 @@ class Collection implements Iterator, Countable
 
     /**
      * Constructor
+     *
+     * @param array $reflectionData
+     *
+     * @throws Exception
      */
     public function __construct(array $reflectionData = [])
     {

@@ -288,6 +288,7 @@ abstract class AbstractAdapter implements AdapterInterface
      * @param int         $quality
      *
      * @return string
+     * @throws Exception
      */
     public function render(string $extension = null, int $quality = 100): string
     {

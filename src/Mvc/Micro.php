@@ -879,9 +879,9 @@ class Micro extends Injectable implements ArrayAccess, EventsAwareInterface
      *
      * @param mixed $offset
      *
-     * @return mixed
+     * @return object
      */
-    public function offsetGet(mixed $offset): mixed
+    public function offsetGet(mixed $offset): object
     {
         return $this->getService($offset);
     }

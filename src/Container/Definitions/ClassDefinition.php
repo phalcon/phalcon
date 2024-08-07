@@ -290,7 +290,7 @@ class ClassDefinition extends AbstractDefinition
      * @param Container $container
      * @param object    $object
      *
-     * @return object|mixed
+     * @return object
      */
     protected function applyExtenders(Container $container, object $object): object
     {
@@ -518,7 +518,7 @@ class ClassDefinition extends AbstractDefinition
     /**
      * @param Container $container
      *
-     * @return object|mixed
+     * @return object
      * @throws NotAllowed
      * @throws NotDefined
      */
