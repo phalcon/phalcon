@@ -445,12 +445,17 @@ jobs:
 
       - name: "Display structure of downloaded files"
         run: |
-#          mv coverage/db-mysql-8.1.coverage/coverage.xml coverage/db-mysql-8.1-coverage.xml
           mv coverage/unit-8.1.coverage/coverage.xml     coverage/unit-8.1-coverage.xml
-#          mv coverage/unit-8.2.coverage/coverage.xml     coverage/unit-8.2-coverage.xml
-#          mv coverage/unit-8.3.coverage/coverage.xml     coverage/unit-8.3-coverage.xml
           ls -la coverage/
           cat coverage/unit-8.1-coverage.xml
+
+#        run: |
+#          mv coverage/db-mysql-8.1.coverage/coverage.xml coverage/db-mysql-8.1-coverage.xml
+#          mv coverage/unit-8.1.coverage/coverage.xml     coverage/unit-8.1-coverage.xml
+#          mv coverage/unit-8.2.coverage/coverage.xml     coverage/unit-8.2-coverage.xml
+#          mv coverage/unit-8.3.coverage/coverage.xml     coverage/unit-8.3-coverage.xml
+#          ls -la coverage/
+#          cat coverage/unit-8.1-coverage.xml
 
       - name: SonarCloud Scan
         uses: SonarSource/sonarcloud-github-action@master
