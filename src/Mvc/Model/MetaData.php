@@ -23,7 +23,6 @@ use Phalcon\Parsers\Parser;
 use Phalcon\Support\Settings;
 use Phalcon\Traits\Php\IniTrait;
 
-use function call_user_func;
 use function is_array;
 use function mb_strtolower;
 use function method_exists;
@@ -122,7 +121,7 @@ abstract class MetaData extends Injectable implements MetaDataInterface
      */
     public function getAttributes(ModelInterface $model): array
     {
-        $data = $this->readMetaDataIndex($model, MetaData::MODELS_ATTRIBUTES);
+        $data = $this->readMetaDataIndex($model, self::MODELS_ATTRIBUTES);
         if (true === is_array($data)) {
             return $data;
         }
@@ -146,7 +145,7 @@ abstract class MetaData extends Injectable implements MetaDataInterface
      */
     public function getAutomaticCreateAttributes(ModelInterface $model): array
     {
-        $data = $this->readMetaDataIndex($model, MetaData::MODELS_AUTOMATIC_DEFAULT_INSERT);
+        $data = $this->readMetaDataIndex($model, self::MODELS_AUTOMATIC_DEFAULT_INSERT);
         if (true === is_array($data)) {
             return $data;
         }
@@ -172,7 +171,7 @@ abstract class MetaData extends Injectable implements MetaDataInterface
      */
     public function getAutomaticUpdateAttributes(ModelInterface $model): array
     {
-        $data = $this->readMetaDataIndex($model, MetaData::MODELS_AUTOMATIC_DEFAULT_UPDATE);
+        $data = $this->readMetaDataIndex($model, self::MODELS_AUTOMATIC_DEFAULT_UPDATE);
         if (true === is_array($data)) {
             return $data;
         }
@@ -198,7 +197,7 @@ abstract class MetaData extends Injectable implements MetaDataInterface
      */
     public function getBindTypes(ModelInterface $model): array
     {
-        $data = $this->readMetaDataIndex($model, MetaData::MODELS_DATA_TYPES_BIND);
+        $data = $this->readMetaDataIndex($model, self::MODELS_DATA_TYPES_BIND);
         if (true === is_array($data)) {
             return $data;
         }
@@ -239,6 +238,7 @@ abstract class MetaData extends Injectable implements MetaDataInterface
      * @param ModelInterface $model
      *
      * @return string|null
+     * @throws Exception
      */
     final public function getColumnMapUniqueKey(ModelInterface $model): string | null
     {
@@ -387,6 +387,7 @@ abstract class MetaData extends Injectable implements MetaDataInterface
      * @param ModelInterface $model
      *
      * @return bool|string|null
+     * @throws Exception
      */
     public function getIdentityField(ModelInterface $model): bool | string | null
     {
@@ -420,10 +421,11 @@ abstract class MetaData extends Injectable implements MetaDataInterface
      * @param array          $row
      *
      * @return string|null
+     * @throws Exception
      */
     public function getModelUUID(ModelInterface $model, array $row): string | null
     {
-        $pks = $this->readMetaDataIndex($model, MetaData::MODELS_PRIMARY_KEY);
+        $pks = $this->readMetaDataIndex($model, self::MODELS_PRIMARY_KEY);
         if (null === $pks) {
             return null;
         }
@@ -507,7 +509,7 @@ abstract class MetaData extends Injectable implements MetaDataInterface
      */
     public function getPrimaryKeyAttributes(ModelInterface $model): array
     {
-        $data = $this->readMetaDataIndex($model, MetaData::MODELS_PRIMARY_KEY);
+        $data = $this->readMetaDataIndex($model, self::MODELS_PRIMARY_KEY);
         if (true === is_array($data)) {
             return $data;
         }
@@ -533,7 +535,7 @@ abstract class MetaData extends Injectable implements MetaDataInterface
      */
     public function getReverseColumnMap(ModelInterface $model): array | null
     {
-        $data = $this->readColumnMapIndex($model, MetaData::MODELS_REVERSE_COLUMN_MAP);
+        $data = $this->readColumnMapIndex($model, self::MODELS_REVERSE_COLUMN_MAP);
         if (true === is_array($data) || null === $data) {
             return $data;
         }
@@ -580,7 +582,7 @@ abstract class MetaData extends Injectable implements MetaDataInterface
             return isset($columnMap[$attribute]);
         }
 
-        return isset($this->readMetaData($model)[MetaData::MODELS_DATA_TYPES][$attribute]);
+        return isset($this->readMetaData($model)[self::MODELS_DATA_TYPES][$attribute]);
     }
 
     /**
@@ -630,6 +632,7 @@ abstract class MetaData extends Injectable implements MetaDataInterface
      * @param ModelInterface $model
      *
      * @return array|null
+     * @throws Exception
      */
     final public function readColumnMap(ModelInterface $model): array | null
     {
@@ -661,6 +664,7 @@ abstract class MetaData extends Injectable implements MetaDataInterface
      * @param int            $index
      *
      * @return array|null
+     * @throws Exception
      */
     final public function readColumnMapIndex(ModelInterface $model, int $index): array | null
     {
@@ -763,10 +767,11 @@ abstract class MetaData extends Injectable implements MetaDataInterface
      * @param array          $attributes
      *
      * @return void
+     * @throws Exception
      */
     public function setAutomaticCreateAttributes(ModelInterface $model, array $attributes): void
     {
-        $this->writeMetaDataIndex($model, MetaData::MODELS_AUTOMATIC_DEFAULT_INSERT, $attributes);
+        $this->writeMetaDataIndex($model, self::MODELS_AUTOMATIC_DEFAULT_INSERT, $attributes);
     }
 
     /**
@@ -785,10 +790,11 @@ abstract class MetaData extends Injectable implements MetaDataInterface
      * @param array          $attributes
      *
      * @return void
+     * @throws Exception
      */
     public function setAutomaticUpdateAttributes(ModelInterface $model, array $attributes): void
     {
-        $this->writeMetaDataIndex($model, MetaData::MODELS_AUTOMATIC_DEFAULT_UPDATE, $attributes);
+        $this->writeMetaDataIndex($model, self::MODELS_AUTOMATIC_DEFAULT_UPDATE, $attributes);
     }
 
     /**
@@ -811,12 +817,13 @@ abstract class MetaData extends Injectable implements MetaDataInterface
      * @param array          $attributes
      *
      * @return void
+     * @throws Exception
      */
     public function setEmptyStringAttributes(ModelInterface $model, array $attributes): void
     {
         $this->writeMetaDataIndex(
             $model,
-            MetaData::MODELS_EMPTY_STRING_VALUES,
+            self::MODELS_EMPTY_STRING_VALUES,
             $attributes
         );
     }
@@ -898,7 +905,7 @@ abstract class MetaData extends Injectable implements MetaDataInterface
      * @return void
      * @throws Exception
      */
-    final protected function initialize(ModelInterface $model, string $key, $table, $schema)
+    final protected function initialize(ModelInterface $model, string $key, $table, $schema): void
     {
         $this->initializeMetaData($model, $key);
         $this->initializeColumnMap($model, $key);
@@ -968,7 +975,7 @@ abstract class MetaData extends Injectable implements MetaDataInterface
      * Initialize the metadata for certain table
      *
      * @param ModelInterface $model
-     * @param string         $key
+     * @param string|null    $key
      *
      * @return bool
      * @throws Exception

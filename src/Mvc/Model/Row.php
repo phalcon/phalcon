@@ -50,14 +50,14 @@ class Row extends stdClass implements EntityInterface, ResultInterface, ArrayAcc
     /**
      * Gets a record in a specific position of the row
      *
-     * @param mixed $index
+     * @param mixed $offset
      *
      * @return mixed
      * @throws Exception
      */
     public function offsetGet(mixed $offset): mixed
     {
-        if (!$this->offsetExists($index)) {
+        if (!$this->offsetExists($offset)) {
             throw new Exception("The index does not exist in the row");
         }
 
