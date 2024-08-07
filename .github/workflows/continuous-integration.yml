@@ -176,7 +176,7 @@ jobs:
 
   db-mysql-tests:
     name: Database MySQL tests / PHP-${{ matrix.php }}
-    needs: phpcs
+#    needs: phpcs
 
     permissions:
       contents: read # to fetch code (actions/checkout)
