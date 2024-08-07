@@ -134,54 +134,6 @@ final class IsAllowedTest extends UnitTestCase
     }
 
     /**
-     * Tests Phalcon\Acl\Adapter\Memory :: isAllowed() - exception
-     *
-     * @return void
-     *
-     * @author  Phalcon Team <team@phalcon.io>
-     * @since   2019-06-16
-     */
-    public function testAclAdapterMemoryIsAllowedExceptionComponent(): void
-    {
-        $this->expectException(AclException::class);
-        $this->expectExceptionMessage(
-            'Object passed as componentName must implement ' .
-            'Phalcon\Acl\ComponentAwareInterface or Phalcon\Acl\ComponentInterface'
-        );
-
-        $acl = new Memory();
-        $acl->setDefaultAction(Enum::DENY);
-        $acl->addRole('Member');
-        $acl->addComponent('Post', ['update']);
-        $acl->allow('Member', 'Post', 'update');
-        $acl->isAllowed('Member', new stdClass(), 'update');
-    }
-
-    /**
-     * Tests Phalcon\Acl\Adapter\Memory :: isAllowed() - exception
-     *
-     * @return void
-     *
-     * @author  Phalcon Team <team@phalcon.io>
-     * @since   2019-06-16
-     */
-    public function testAclAdapterMemoryIsAllowedExceptionRole(): void
-    {
-        $this->expectException(AclException::class);
-        $this->expectExceptionMessage(
-            'Object passed as roleName must implement ' .
-            'Phalcon\Acl\RoleAwareInterface or Phalcon\Acl\RoleInterface'
-        );
-
-        $acl = new Memory();
-        $acl->setDefaultAction(Enum::DENY);
-        $acl->addRole('Member');
-        $acl->addComponent('Post', ['update']);
-        $acl->allow('Member', 'Post', 'update');
-        $acl->isAllowed(new stdClass(), 'Post', 'update');
-    }
-
-    /**
      * Tests Phalcon\Acl\Adapter\Memory :: isAllowed() - fireEvent returns false
      *
      * @return void

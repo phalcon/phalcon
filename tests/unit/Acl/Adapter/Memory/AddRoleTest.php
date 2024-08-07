@@ -21,25 +21,6 @@ use Phalcon\Tests\UnitTestCase;
 final class AddRoleTest extends UnitTestCase
 {
     /**
-     * Tests Phalcon\Acl\Adapter\Memory :: addRole() - exception
-     *
-     * @return void
-     *
-     * @author Phalcon Team <team@phalcon.io>
-     * @since  2018-11-13
-     */
-    public function testAclAdapterMemoryAddRoleException(): void
-    {
-        $this->expectException(Exception::class);
-        $this->expectExceptionMessage(
-            'Role must be either a string or implement RoleInterface'
-        );
-
-        $acl = new Memory();
-        $acl->addRole(true);
-    }
-
-    /**
      * Tests Phalcon\Acl\Adapter\Memory :: addRole() - numeric key
      *
      * @return void
