@@ -19,11 +19,14 @@ use Exception;
 use Phalcon\Logger\Adapter\AdapterInterface;
 use Phalcon\Logger\Exception as LoggerException;
 
+use Psr\Log\LogLevel;
+
 use function array_diff_key;
 use function array_flip;
 use function date_default_timezone_get;
 use function is_numeric;
 use function is_string;
+use function strtolower;
 use function strtoupper;
 
 /**
@@ -64,7 +67,7 @@ abstract class AbstractLogger
      *
      * @var int
      */
-    protected int $logLevel = 8;
+    protected int $logLevel = Enum::CUSTOM;
 
     /**
      * @var DateTimeZone
@@ -298,24 +301,17 @@ abstract class AbstractLogger
      *
      * @return int
      */
-    protected function getLevelNumber($level): int
+    protected function getLevelNumber(mixed $level): int
     {
-        /**
-         * If someone uses "critical" as the level (string)
-         */
-        if (true === is_string($level)) {
-            $levelName = strtoupper($level);
-            $levels    = array_flip($this->getLevels());
+        if (is_string($level)) {
+            $levelName = strtolower($level);
+            $levels = array_flip($this->getLevels());
 
-            if (isset($levels[$levelName])) {
-                return $levels[$levelName];
-            }
-        } elseif (true === is_numeric($level)) {
-            $levels = $this->getLevels();
+            return $levels[$levelName] ?? Enum::CUSTOM;
+        }
 
-            if (isset($levels[$level])) {
-                return (int)$level;
-            }
+        if (is_numeric($level) && isset($this->getLevels()[$level])) {
+            return (int)$level;
         }
 
         return Enum::CUSTOM;
@@ -329,15 +325,15 @@ abstract class AbstractLogger
     protected function getLevels(): array
     {
         return [
-            Enum::ALERT     => "ALERT",
-            Enum::CRITICAL  => "CRITICAL",
-            Enum::DEBUG     => "DEBUG",
-            Enum::EMERGENCY => "EMERGENCY",
-            Enum::ERROR     => "ERROR",
-            Enum::INFO      => "INFO",
-            Enum::NOTICE    => "NOTICE",
-            Enum::WARNING   => "WARNING",
-            Enum::CUSTOM    => "CUSTOM",
+            Enum::ALERT     => LogLevel::ALERT,
+            Enum::CRITICAL  => LogLevel::CRITICAL,
+            Enum::DEBUG     => LogLevel::DEBUG,
+            Enum::EMERGENCY => LogLevel::EMERGENCY,
+            Enum::ERROR     => LogLevel::ERROR,
+            Enum::INFO      => LogLevel::INFO,
+            Enum::NOTICE    => LogLevel::NOTICE,
+            Enum::WARNING   => LogLevel::WARNING,
+            Enum::CUSTOM    => 'custom',
         ];
     }
 }
