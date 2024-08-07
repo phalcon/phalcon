@@ -4,8 +4,5 @@ parameters:
     level: 1
     ignoreErrors:
         -
-            message: '#Constructor of class Phalcon\\Mvc\\Model\\MetaData\\Memory has an unused parameter \$options.#'
-            path: src/Mvc/Model/MetaData/Memory.php
-        -
             message: '#Static access to instance property Phalcon\\Support\\Debug::\$isActive.#'
             path: src/Support/Debug.php
