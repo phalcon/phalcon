@@ -450,6 +450,7 @@ jobs:
           mv unit-8.2.coverage/coverage.xml     unit-8.2.-coverage.xml
           mv unit-8.3.coverage/coverage.xml     unit-8.3.-coverage.xml
           ls -R
+          pwd
         working-directory: reports
 
       - name: SonarCloud Scan
