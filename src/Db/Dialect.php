@@ -709,10 +709,9 @@ abstract class Dialect implements DialectInterface
      *
      * @param ColumnInterface $column
      *
-     * @return string
-     * @todo check the return types here
+     * @return int
      */
-    protected function checkColumnType(ColumnInterface $column): string
+    protected function checkColumnType(ColumnInterface $column): int
     {
         if (is_string($column->getType())) {
             return $column->getTypeReference();

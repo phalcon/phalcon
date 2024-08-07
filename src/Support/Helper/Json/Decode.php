@@ -56,7 +56,7 @@ class Decode
         /**
          * Need to clear the json_last_error() before the code below
          */
-        $decoded = json_encode(null);
+        json_encode(null);
         $decoded = json_decode($data, $associative, $depth, $options);
         $error   = json_last_error();
         $message = json_last_error_msg();

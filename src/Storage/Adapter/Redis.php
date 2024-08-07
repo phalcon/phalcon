@@ -253,7 +253,7 @@ class Redis extends AbstractAdapter
 
         try {
             $error = (true !== empty($auth) && true !== $connection->auth($auth));
-        } catch (BaseException $ex) {
+        } catch (BaseException) {
             $error = true;
         }
 

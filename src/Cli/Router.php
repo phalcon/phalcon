@@ -284,6 +284,7 @@ class Router extends AbstractInjectionAware implements RouterInterface
     {
         $routeFound         = false;
         $parts              = [];
+        $params             = [];
         $matches            = [];
         $this->wasMatched   = false;
         $this->matchedRoute = null;

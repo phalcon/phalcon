@@ -17,6 +17,7 @@ use Closure;
 use Phalcon\Cache\Adapter\AdapterInterface;
 use Phalcon\Mvc\Controller\BindModelInterface;
 use Phalcon\Mvc\Model\Binder\BindableInterface;
+use ReflectionClass;
 use ReflectionException;
 use ReflectionFunction;
 use ReflectionMethod;
@@ -228,13 +229,14 @@ class Binder implements BinderInterface
         $paramsKeys   = array_keys($params);
 
         foreach ($methodParams as $paramKey => $methodParam) {
-            $reflectionClass = $methodParam->getClass();
-
-            if (!$reflectionClass) {
+            $reflectionType = $methodParam->getType();
+            if (null === $reflectionType) {
                 continue;
             }
 
-            $className = $reflectionClass->getName();
+            $typeClassName   = $reflectionType->getName();
+            $reflectionClass = new ReflectionClass($typeClassName);
+            $className       = $reflectionClass->getName();
 
             if (true !== isset($params[$paramKey])) {
                 $paramKey = $paramsKeys[$paramKey];
