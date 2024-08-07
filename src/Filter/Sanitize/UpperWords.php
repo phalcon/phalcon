@@ -18,8 +18,6 @@ use function mb_convert_case;
 use const MB_CASE_TITLE;
 
 /**
- * Phalcon\Filter\Sanitize\UpperWords
- *
  * Sanitizes a value to uppercase the first character of each word
  */
 class UpperWords

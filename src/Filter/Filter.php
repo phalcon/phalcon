@@ -115,7 +115,7 @@ class Filter implements FilterInterface
      * @return mixed
      * @throws Exception
      */
-    public function get(string $name)
+    public function get(string $name): mixed
     {
         if (true !== isset($this->mapper[$name])) {
             throw new Exception(
