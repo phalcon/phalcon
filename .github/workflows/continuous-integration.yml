@@ -434,18 +434,22 @@ jobs:
         with:
           fetch-depth: 0
 
+      - name: "Display structure of downloaded files"
+        run: |
+          mkdir -p coverage
+
       - name: "Download coverage files"
         uses: "actions/download-artifact@v4"
         with:
-          path: "tests/_output"
+          path: "coverage"
 
       - name: "Display structure of downloaded files"
         run: |
-          mv tests/_output/db-mysql-8.1.coverage/coverage.xml tests/_output/db-mysql-8.1-coverage.xml
-          mv tests/_output/unit-8.1.coverage/coverage.xml     tests/_output/unit-8.1.-coverage.xml
-          mv tests/_output/unit-8.2.coverage/coverage.xml     tests/_output/unit-8.2.-coverage.xml
-          mv tests/_output/unit-8.3.coverage/coverage.xml     tests/_output/unit-8.3.-coverage.xml
-          ls -R tests/_output
+          mv coverage/db-mysql-8.1.coverage/coverage.xml coverage/db-mysql-8.1-coverage.xml
+          mv coverage/unit-8.1.coverage/coverage.xml     coverage/unit-8.1.-coverage.xml
+          mv coverage/unit-8.2.coverage/coverage.xml     coverage/unit-8.2.-coverage.xml
+          mv coverage/unit-8.3.coverage/coverage.xml     coverage/unit-8.3.-coverage.xml
+          ls -la coverage/
 
       - name: SonarCloud Scan
         uses: SonarSource/sonarcloud-github-action@master
