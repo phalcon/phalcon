@@ -18,7 +18,6 @@ use Phalcon\Logger\Enum;
 use Phalcon\Logger\Formatter\Line;
 use Phalcon\Logger\Logger;
 use Phalcon\Tests\UnitTestCase;
-
 use Psr\Log\LogLevel;
 
 use function file_get_contents;
