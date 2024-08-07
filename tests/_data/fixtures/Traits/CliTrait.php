@@ -22,7 +22,7 @@ use Phalcon\Filter\Filter;
 use Phalcon\Html\Escaper;
 use Phalcon\Html\TagFactory;
 use Phalcon\Mvc\Model\Manager;
-use Phalcon\Mvc\Model\MetaData\Memory as MetadataMemory;
+use Phalcon\Mvc\Model\MetaData\Adapter\Memory as MetadataMemory;
 use Phalcon\Mvc\Model\Transaction\Manager as TransactionManager;
 use Phalcon\Support\HelperFactory;
 
