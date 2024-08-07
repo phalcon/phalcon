@@ -13,7 +13,9 @@ declare(strict_types=1);
 
 namespace Phalcon\Acl\Adapter;
 
+use Phalcon\Acl\ComponentAwareInterface;
 use Phalcon\Acl\ComponentInterface;
+use Phalcon\Acl\RoleAwareInterface;
 use Phalcon\Acl\RoleInterface;
 
 /**
@@ -28,42 +30,54 @@ interface AdapterInterface
      * `delete` etc. or a list of them.
      *
      * @param ComponentInterface|string $componentObject
-     * @param mixed                     $accessList
+     * @param array|string              $accessList
      *
      * @return bool
      */
-    public function addComponent($componentObject, $accessList): bool;
+    public function addComponent(
+        ComponentInterface|string $componentObject,
+        array|string $accessList
+    ): bool;
 
     /**
      * Adds access to components
      *
-     * @param string $componentName
-     * @param mixed  $accessList
+     * @param string       $componentName
+     * @param array|string $accessList
      *
      * @return bool
      */
-    public function addComponentAccess(string $componentName, $accessList): bool;
+    public function addComponentAccess(
+        string $componentName,
+        array|string $accessList
+    ): bool;
 
     /**
      * Add a role which inherits from an existing role
      *
-     * @param string $roleName
-     * @param mixed  $roleToInherit
+     * @param string                     $roleName
+     * @param RoleInterface|array|string $roleToInherit
      *
      * @return bool
      */
-    public function addInherit(string $roleName, $roleToInherit): bool;
+    public function addInherit(
+        string $roleName,
+        RoleInterface|array|string $roleToInherit
+    ): bool;
 
     /**
      * Adds a role to the ACL list. The second parameter lets to inherit access
      * from an existing role
      *
-     * @param RoleInterface|string $roleObject
-     * @param mixed|null           $accessInherits
+     * @param RoleInterface|string            $roleObject
+     * @param RoleInterface|array|string|null $accessInherits
      *
      * @return bool
      */
-    public function addRole($roleObject, $accessInherits = null): bool;
+    public function addRole(
+        RoleInterface|string $roleObject,
+        RoleInterface|array|string|null $accessInherits = null
+    ): bool;
 
     /**
      * Allow access to a role on a component. You can use `*` as wildcard
@@ -76,32 +90,37 @@ interface AdapterInterface
     public function allow(
         string $roleName,
         string $componentName,
-        $access,
-        $function = null
+        array|string $access,
+        ?callable $function = null
     ): void;
 
     /**
      * Deny access to a role on a component. You can use `*` as wildcard
      *
-     * @param string     $roleName
-     * @param string     $componentName
-     * @param mixed      $access
-     * @param mixed|null $function
+     * @param string        $roleName
+     * @param string        $componentName
+     * @param int           $access
+     * @param callable|null $function
+     *
+     * @return void
      */
     public function deny(
         string $roleName,
         string $componentName,
-        $access,
-        $function = null
+        int $access,
+        ?callable $function = null
     ): void;
 
     /**
      * Removes access from a component
      *
-     * @param string $componentName
-     * @param mixed  $accessList
+     * @param string       $componentName
+     * @param array|string $accessList
      */
-    public function dropComponentAccess(string $componentName, $accessList): void;
+    public function dropComponentAccess(
+        string $componentName,
+        array|string $accessList
+    ): void;
 
     /**
      * Returns the access which the list is checking if a role can access it
@@ -169,16 +188,16 @@ interface AdapterInterface
     /**
      * Check whether a role is allowed to access an action from a component
      *
-     * @param mixed                    $roleName
-     * @param mixed                    $componentName
+     * @param RoleAwareInterface|RoleInterface $roleName
+     * @param ComponentAwareInterface|ComponentInterface $componentName
      * @param string                   $access
      * @param array<int|string, mixed> $parameters
      *
      * @return bool
      */
     public function isAllowed(
-        $roleName,
-        $componentName,
+        RoleAwareInterface|RoleInterface $roleName,
+        ComponentAwareInterface|ComponentInterface $componentName,
         string $access,
         array $parameters = []
     ): bool;

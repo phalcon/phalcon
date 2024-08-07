@@ -174,13 +174,15 @@ class Memory extends AbstractAdapter
      * ```
      *
      * @param ComponentInterface|string $componentObject
-     * @param mixed                     $accessList
+     * @param array|string              $accessList
      *
      * @return bool
      * @throws Exception
      */
-    public function addComponent($componentObject, $accessList): bool
-    {
+    public function addComponent(
+        ComponentInterface | string $componentObject,
+        array | string $accessList
+    ): bool {
         if ($componentObject instanceof ComponentInterface) {
             $component = $componentObject;
         } else {
@@ -200,19 +202,17 @@ class Memory extends AbstractAdapter
     /**
      * Adds access to components
      *
-     * @param string $componentName
-     * @param mixed  $accessList
+     * @param string       $componentName
+     * @param array|string $accessList
      *
      * @return bool
      * @throws Exception
      */
-    public function addComponentAccess(string $componentName, $accessList): bool
-    {
+    public function addComponentAccess(
+        string $componentName,
+        array | string $accessList
+    ): bool {
         $this->checkExists($this->componentsNames, $componentName, 'Component');
-
-        if (true !== is_array($accessList) && true !== is_string($accessList)) {
-            throw new Exception('Invalid value for the accessList');
-        }
 
         if (true === is_string($accessList)) {
             $accessList = [$accessList];
@@ -236,14 +236,16 @@ class Memory extends AbstractAdapter
      * $acl->addRole("administrator", ["consultant", "consultant2"]);
      * ```
      *
-     * @param string $roleName
-     * @param mixed  $roleToInherit
+     * @param string                     $roleName
+     * @param RoleInterface|array|string $roleToInherit
      *
      * @return bool
      * @throws Exception
      */
-    public function addInherit(string $roleName, $roleToInherit): bool
-    {
+    public function addInherit(
+        string $roleName,
+        RoleInterface | array | string $roleToInherit
+    ): bool {
         $this->checkExists($this->roles, $roleName, 'Role', 'role list');
 
         if (true !== isset($this->roleInherits[$roleName])) {
@@ -357,8 +359,10 @@ class Memory extends AbstractAdapter
      * @return bool
      * @throws Exception
      */
-    public function addRole($roleObject, $accessInherits = null): bool
-    {
+    public function addRole(
+        RoleInterface | string $roleObject,
+        RoleInterface | array | string | null $accessInherits = null
+    ): bool {
         if ($roleObject instanceof RoleInterface) {
             $role = $roleObject;
         } elseif (true === is_string($roleObject)) {
@@ -399,18 +403,18 @@ class Memory extends AbstractAdapter
      * // Allow access to any role to browse on any component
      * $acl->allow("*", "*", "browse");
      *
-     * @param string     $roleName
-     * @param string     $componentName
-     * @param mixed      $access
-     * @param mixed|null $function
+     * @param string       $roleName
+     * @param string       $componentName
+     * @param array|string $access
+     * @param mixed|null   $function
      *
      * @throws Exception
      */
     public function allow(
         string $roleName,
         string $componentName,
-        $access,
-        $function = null
+        array | string $access,
+        mixed $function = null
     ): void {
         $rolesArray = [$roleName];
         if ('*' === $roleName) {
@@ -477,24 +481,22 @@ class Memory extends AbstractAdapter
     /**
      * Removes access from a component
      *
-     * @param string $componentName
-     * @param mixed  $accessList
+     * @param string       $componentName
+     * @param array|string $accessList
      */
     public function dropComponentAccess(
         string $componentName,
-        $accessList
+        array | string $accessList
     ): void {
         $localAccess = $accessList;
         if (true === is_string($accessList)) {
             $localAccess = [$accessList];
         }
 
-        if (is_array($accessList)) {
-            foreach ($localAccess as $accessName) {
-                $accessKey = $componentName . '!' . $accessName;
-                if (true === isset($this->accessList[$accessKey])) {
-                    unset($this->accessList[$accessKey]);
-                }
+        foreach ($localAccess as $accessName) {
+            $accessKey = $componentName . '!' . $accessName;
+            if (true === isset($this->accessList[$accessKey])) {
+                unset($this->accessList[$accessKey]);
             }
         }
     }
@@ -583,10 +585,10 @@ class Memory extends AbstractAdapter
      * $acl->isAllowed("guests", "*", "edit");
      * ```
      *
-     * @param mixed                    $roleName
-     * @param mixed                    $componentName
-     * @param string                   $access
-     * @param array<int|string, mixed> $parameters
+     * @param RoleAwareInterface|RoleInterface|string           $roleName
+     * @param ComponentAwareInterface|ComponentInterface|string $componentName
+     * @param string                                            $access
+     * @param array<int|string, mixed>                          $parameters
      *
      * @return bool
      * @throws Exception
@@ -594,8 +596,8 @@ class Memory extends AbstractAdapter
      * @throws EventsException
      */
     public function isAllowed(
-        $roleName,
-        $componentName,
+        RoleAwareInterface | RoleInterface | string $roleName,
+        ComponentAwareInterface | ComponentInterface | string $componentName,
         string $access,
         array $parameters = []
     ): bool {
@@ -610,13 +612,8 @@ class Memory extends AbstractAdapter
             if ($roleName instanceof RoleAwareInterface) {
                 $roleObject = $roleName;
                 $roleName   = $roleObject->getRoleName();
-            } elseif ($roleName instanceof RoleInterface) {
-                $roleName = $roleName->getName();
             } else {
-                throw new Exception(
-                    'Object passed as roleName must implement ' .
-                    'Phalcon\Acl\RoleAwareInterface or Phalcon\Acl\RoleInterface'
-                );
+                $roleName = $roleName->getName();
             }
         }
 
@@ -624,13 +621,8 @@ class Memory extends AbstractAdapter
             if ($componentName instanceof ComponentAwareInterface) {
                 $componentObject = $componentName;
                 $componentName   = $componentObject->getComponentName();
-            } elseif ($componentName instanceof ComponentInterface) {
-                $componentName = $componentName->getName();
             } else {
-                throw new Exception(
-                    'Object passed as componentName must implement ' .
-                    'Phalcon\Acl\ComponentAwareInterface or Phalcon\Acl\ComponentInterface'
-                );
+                $componentName = $componentName->getName();
             }
         }
 
@@ -695,8 +687,8 @@ class Memory extends AbstractAdapter
              */
             if (0 === $parameterNumber) {
                 return $haveAccess == Enum::ALLOW && call_user_func(
-                    $funcAccess
-                );
+                        $funcAccess
+                    );
             }
 
             $parametersForFunction      = [];
@@ -860,20 +852,20 @@ class Memory extends AbstractAdapter
     /**
      * Checks if a role has access to a component
      *
-     * @param string     $roleName
-     * @param string     $componentName
-     * @param mixed      $access
-     * @param mixed      $action
-     * @param mixed|null $function
+     * @param string        $roleName
+     * @param string        $componentName
+     * @param array|string  $access
+     * @param int           $action
+     * @param callable|null $function
      *
      * @throws Exception
      */
     private function allowOrDeny(
         string $roleName,
         string $componentName,
-        $access,
-        $action,
-        $function = null
+        array | string $access,
+        int $action,
+        ?callable $function = null
     ): void {
         $this->checkExists($this->roles, $roleName, 'Role');
         $this->checkExists($this->componentsNames, $componentName, 'Component');
