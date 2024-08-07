@@ -68,7 +68,6 @@ abstract class MetaData extends Injectable implements MetaDataInterface
     public const MODELS_PRIMARY_KEY              = 1;
     public const MODELS_REVERSE_COLUMN_MAP       = 1;
 
-
     private const MESSAGE_INVALID_METADATA = "The meta-data is invalid or is corrupt";
 
     /**
