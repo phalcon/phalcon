@@ -13,13 +13,28 @@ declare(strict_types=1);
 
 namespace Phalcon\Filter;
 
-/**
- * Interface FilterInterface
- *
- * @package Phalcon\Filter
- */
 interface FilterInterface
 {
+    /**
+     * Get a service. If it is not in the mapper array, create a new object,
+     * set it and then return it.
+     *
+     * @param string $name
+     *
+     * @return mixed
+     * @throws Exception
+     */
+    public function get(string $name): mixed;
+
+    /**
+     * Checks if a service exists in the map array
+     *
+     * @param string $name
+     *
+     * @return bool
+     */
+    public function has(string $name): bool;
+
     /**
      * Sanitizes a value with a specified single or set of sanitizers
      *
@@ -34,4 +49,12 @@ interface FilterInterface
         array | string $sanitizers,
         bool $noRecursive = false
     ): mixed;
+
+    /**
+     * Set a new service to the mapper array
+     *
+     * @param string $name
+     * @param mixed  $service
+     */
+    public function set(string $name, $service): void;
 }

@@ -409,8 +409,7 @@ class ClassDefinition extends AbstractDefinition
     }
 
     /**
-     * @param int                 $position
-     * @param ReflectionParameter $parameter
+     * @param int $position
      *
      * @return bool
      */

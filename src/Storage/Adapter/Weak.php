@@ -180,7 +180,7 @@ class Weak extends AbstractAdapter
     /**
      * Checks if an element exists in the cache
      *
-     * @param string key
+     * @param string $key
      *
      * @return bool
      */
