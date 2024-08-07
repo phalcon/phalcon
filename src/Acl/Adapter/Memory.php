@@ -642,7 +642,7 @@ class Memory extends AbstractAdapter
          * Check if the role exists
          */
         if (true !== isset($this->roles[$roleName])) {
-            return ($this->defaultAccess == Enum::ALLOW);
+            return $this->defaultAccess == Enum::ALLOW;
         }
 
         /**
@@ -926,51 +926,46 @@ class Memory extends AbstractAdapter
         /**
          * Check if there is a direct combination for role-component-access
          */
-        $keys   = $this->getKeys($roleName, $componentName, $access);
+        $keys = $this->getKeys($roleName, $componentName, $access);
         $result = array_intersect_key($keys, $this->access);
-        if (true !== empty($result)) {
+        if (!empty($result)) {
             return key($result);
         }
+
+        if (!isset($this->roleInherits[$roleName])) {
+            return null;
+        }
+
+        $checkRoleToInherits = $this->roleInherits[$roleName];
+        $usedRoleToInherits = [];
 
         /**
          * Deep check if the role to inherit is valid
          */
-        if (true === isset($this->roleInherits[$roleName])) {
-            $checkRoleToInherits = [];
+        while (true !== empty($checkRoleToInherits)) {
+            $checkRoleToInherit = array_shift($checkRoleToInherits);
 
-            foreach ($this->roleInherits[$roleName] as $usedRoleToInherit) {
-                $checkRoleToInherits[] = $usedRoleToInherit;
+            if (isset($usedRoleToInherits[$checkRoleToInherit])) {
+                continue;
             }
 
-            $usedRoleToInherits = [];
+            $usedRoleToInherits[$checkRoleToInherit] = true;
 
-            while (true !== empty($checkRoleToInherits)) {
-                $checkRoleToInherit = array_shift($checkRoleToInherits);
+            /**
+             * Check if there is a direct combination in one of the
+             * inherited roles
+             */
+            $keys = $this->getKeys($checkRoleToInherit, $componentName, $access);
+            $result = array_intersect_key($keys, $this->access);
+            if (!empty($result)) {
+                return key($result);
+            }
 
-                if (true === isset($usedRoleToInherits[$checkRoleToInherit])) {
-                    continue;
-                }
-
-                $usedRoleToInherits[$checkRoleToInherit] = true;
-
-                /**
-                 * Check if there is a direct combination in one of the
-                 * inherited roles
-                 */
-                $keys   = $this->getKeys($checkRoleToInherit, $componentName, $access);
-                $result = array_intersect_key($keys, $this->access);
-                if (true !== empty($result)) {
-                    return key($result);
-                }
-
-                /**
-                 * Push inherited roles
-                 */
-                if (true === isset($this->roleInherits[$checkRoleToInherit])) {
-                    foreach ($this->roleInherits[$checkRoleToInherit] as $usedRoleToInherit) {
-                        $checkRoleToInherits[] = $usedRoleToInherit;
-                    }
-                }
+            /**
+             * Push inherited roles
+             */
+            if (isset($this->roleInherits[$checkRoleToInherit])) {
+                $checkRoleToInherits = array_merge($checkRoleToInherits, $this->roleInherits[$checkRoleToInherit]);
             }
         }
 
@@ -1011,11 +1006,10 @@ class Memory extends AbstractAdapter
         string $componentName,
         string $access
     ): array {
-        $keys = [
+        return [
             $roleName . '!' . $componentName . '!' . $access => true,
             $roleName . '!' . $componentName . '!*'          => true,
             $roleName . '!*!*'                               => true,
         ];
-        return $keys;
     }
 }
