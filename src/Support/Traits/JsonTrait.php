@@ -16,11 +16,6 @@ namespace Phalcon\Support\Traits;
 use function is_object;
 use function method_exists;
 
-/**
- * Trait JsonTrait
- *
- * @package Phalcon\Support\Traits
- */
 trait JsonTrait
 {
     /**

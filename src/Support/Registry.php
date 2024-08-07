@@ -15,6 +15,12 @@ namespace Phalcon\Support;
 
 use Generator;
 
+use const JSON_HEX_AMP;
+use const JSON_HEX_APOS;
+use const JSON_HEX_QUOT;
+use const JSON_HEX_TAG;
+use const JSON_UNESCAPED_UNICODE;
+
 /**
  * Phalcon\Registry
  *
@@ -252,9 +258,14 @@ final class Registry extends Collection
      * JSON_HEX_TAG, JSON_HEX_APOS, JSON_HEX_AMP, JSON_HEX_QUOT, JSON_UNESCAPED_SLASHES
      *
      * @see https://www.ietf.org/rfc/rfc4627.txt
+     *
+     * @param int $options
+     *
+     * @return string
      */
-    final public function toJson(int $options = 79): string
-    {
+    public function toJson(
+        int $options = JSON_HEX_TAG | JSON_HEX_APOS | JSON_HEX_QUOT | JSON_HEX_AMP | JSON_UNESCAPED_UNICODE
+    ): string {
         return parent::toJson($options);
     }
 

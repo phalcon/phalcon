@@ -246,13 +246,14 @@ class Crypt implements CryptInterface
             $decrypted
         );
 
-        if (true === $this->useSigning) {
-            /**
-             * Checks on the decrypted message digest using the HMAC method.
-             */
-            if ($digest !== hash_hmac($hashAlgorithm, $padded, $decryptKey, true)) {
-                throw new Mismatch("Hash does not match.");
-            }
+        /**
+         * Checks on the decrypted message digest using the HMAC method.
+         */
+        if (
+            true === $this->useSigning &&
+            $digest !== hash_hmac($hashAlgorithm, $padded, $decryptKey, true)
+        ) {
+            throw new Mismatch("Hash does not match.");
         }
 
         return $decrypted;

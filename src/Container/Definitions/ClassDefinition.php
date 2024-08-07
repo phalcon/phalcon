@@ -357,7 +357,7 @@ class ClassDefinition extends AbstractDefinition
             : $this->inherit->getCollatedArguments($container);
 
         foreach ($this->parameters as $position => $parameter) {
-            $this->collatePositionalArgument($position, $parameter)
+            $this->collatePositionalArgument($position)
             || $this->collateTypedArgument($position, $parameter, $container)
             || $this->collateInheritedArgument($position, $parameter, $inherited)
             || $this->collateOptionalArgument($position, $parameter);
@@ -415,8 +415,7 @@ class ClassDefinition extends AbstractDefinition
      * @return bool
      */
     protected function collatePositionalArgument(
-        int $position,
-        ReflectionParameter $parameter
+        int $position
     ): bool {
         if (!array_key_exists($position, $this->arguments)) {
             return false;
@@ -441,22 +440,22 @@ class ClassDefinition extends AbstractDefinition
     ): bool {
         $type = $parameter->getType();
 
-        if (!$type instanceof ReflectionNamedType) {
-            return false;
-        }
+        if ($type instanceof ReflectionNamedType) {
+            $type = $type->getName();
 
-        $type = $type->getName();
+            // explicit
+            if (array_key_exists($type, $this->arguments)) {
+                $this->collatedArguments[$position] = $this->arguments[$type];
 
-        // explicit
-        if (array_key_exists($type, $this->arguments)) {
-            $this->collatedArguments[$position] = $this->arguments[$type];
-            return true;
-        }
+                return true;
+            }
 
-        // implicit
-        if ($container->has($type)) {
-            $this->collatedArguments[$position] = new Get($type);
-            return true;
+            // implicit
+            if ($container->has($type)) {
+                $this->collatedArguments[$position] = new Get($type);
+
+                return true;
+            }
         }
 
         return false;

@@ -11,27 +11,16 @@
 
 declare(strict_types=1);
 
-namespace Phalcon\Mvc\Model\MetaData;
+namespace Phalcon\Mvc\Model\MetaData\Adapter;
 
 use Phalcon\Mvc\Model\MetaData;
 
 /**
- * Phalcon\Mvc\Model\MetaData\Memory
- *
- * Stores model meta-data in memory. Data will be erased when the request finishes
- *
+ * Stores model meta-data in memory. Data will be erased when the request
+ * finishes
  */
 class Memory extends MetaData
 {
-    /**
-     * Phalcon\Mvc\Model\MetaData\Memory constructor
-     *
-     * @param array<string, mixed> $options
-     */
-    public function __construct(array $options = [])
-    {
-    }
-
     /**
      * Reads the meta-data from temporal memory
      */

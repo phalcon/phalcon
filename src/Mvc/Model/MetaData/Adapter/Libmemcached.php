@@ -11,15 +11,13 @@
 
 declare(strict_types=1);
 
-namespace Phalcon\Mvc\Model\MetaData;
+namespace Phalcon\Mvc\Model\MetaData\Adapter;
 
 use Exception;
 use Phalcon\Cache\AdapterFactory;
 use Phalcon\Mvc\Model\MetaData;
 
 /**
- * Phalcon\Mvc\Model\MetaData\Libmemcached
- *
  * Stores model meta-data in the Memcache.
  *
  * By default meta-data is stored for 48 hours (172800 seconds)

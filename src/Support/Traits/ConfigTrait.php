@@ -17,11 +17,6 @@ use Phalcon\Config\ConfigInterface;
 
 use function is_array;
 
-/**
- * Trait ConfigTrait
- *
- * @package Phalcon\Support\Traits
- */
 trait ConfigTrait
 {
     /**
