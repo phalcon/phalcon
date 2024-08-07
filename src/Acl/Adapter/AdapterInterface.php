@@ -82,12 +82,10 @@ interface AdapterInterface
     /**
      * Allow access to a role on a component. You can use `*` as wildcard
      *
-     * @param string        $roleName
-     * @param string        $componentName
-     * @param array|string  $access
-     * @param callable|null $function
-     *
-     * @return void
+     * @param string     $roleName
+     * @param string     $componentName
+     * @param mixed      $access
+     * @param mixed|null $function
      */
     public function allow(
         string $roleName,
@@ -101,7 +99,7 @@ interface AdapterInterface
      *
      * @param string        $roleName
      * @param string        $componentName
-     * @param array|string  $access
+     * @param int           $access
      * @param callable|null $function
      *
      * @return void
@@ -109,7 +107,7 @@ interface AdapterInterface
     public function deny(
         string $roleName,
         string $componentName,
-        array|string $access,
+        int $access,
         ?callable $function = null
     ): void;
 
