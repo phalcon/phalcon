@@ -353,8 +353,8 @@ class Memory extends AbstractAdapter
      * $acl->addRole("administrator", ["consultant", "consultant2"]);
      * ```
      *
-     * @param RoleInterface|string            $roleObject
-     * @param RoleInterface|array|string|null $accessInherits
+     * @param RoleInterface|string $roleObject
+     * @param mixed|null           $accessInherits
      *
      * @return bool
      * @throws Exception
@@ -403,19 +403,18 @@ class Memory extends AbstractAdapter
      * // Allow access to any role to browse on any component
      * $acl->allow("*", "*", "browse");
      *
-     * @param string        $roleName
-     * @param string        $componentName
-     * @param array|string  $access
-     * @param callable|null $function
+     * @param string       $roleName
+     * @param string       $componentName
+     * @param array|string $access
+     * @param mixed|null   $function
      *
-     * @return void
      * @throws Exception
      */
     public function allow(
         string $roleName,
         string $componentName,
-        array|string $access,
-        ?callable $function = null
+        array | string $access,
+        mixed $function = null
     ): void {
         $rolesArray = [$roleName];
         if ('*' === $roleName) {
@@ -450,19 +449,18 @@ class Memory extends AbstractAdapter
      * $acl->deny("*", "*", "browse");
      * ```
      *
-     * @param string        $roleName
-     * @param string        $componentName
-     * @param array|string  $access
-     * @param callable|null $function
+     * @param string     $roleName
+     * @param string     $componentName
+     * @param mixed      $access
+     * @param mixed|null $function
      *
-     * @return void
      * @throws Exception
      */
     public function deny(
         string $roleName,
         string $componentName,
-        array|string $access,
-        ?callable $function = null
+        $access,
+        $function = null
     ): void {
         $rolesArray = [$roleName];
         if ('*' === $roleName) {
