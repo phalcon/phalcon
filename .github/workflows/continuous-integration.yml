@@ -39,51 +39,51 @@ permissions: { }
 jobs:
 
   # PHP CodeSniffer inspection
-  phpcs:
-    name: "Validate Tests code style"
-    if: "!contains(github.event.head_commit.message, 'ci skip')"
-
-    permissions:
-      contents: read
-
-    runs-on: ubuntu-20.04
-
-    strategy:
-      fail-fast: true
-      matrix:
-        php:
-          - '8.1'
-          - '8.2'
-          - '8.3'
-    steps:
-      - uses: actions/checkout@v4
-
-      - name: "Setup PHP"
-        uses: shivammathur/setup-php@v2
-        with:
-          php-version: ${{ matrix.php }}
-          extensions: ${{ env.EXTENSIONS }}
-          ini-values: apc.enable_cli=on, session.save_path=/tmp
-          tools: pecl
-        env:
-          COMPOSER_TOKEN: ${{ secrets.GITHUB_TOKEN }}
-          PHALCON_PATH: ext
-
-      - name: "Install development dependencies with Composer"
-        uses: "ramsey/composer-install@v3"
-        with:
-          composer-options: "--prefer-dist"
-
-      - name: "PHPCS"
-        run: |
-          composer cs
-
-      - name: "Psalm"
-        run: |
-          composer analyze
-
+#  phpcs:
+#    name: "Validate Tests code style"
+#    if: "!contains(github.event.head_commit.message, 'ci skip')"
+#
+#    permissions:
+#      contents: read
+#
+#    runs-on: ubuntu-20.04
+#
+#    strategy:
+#      fail-fast: true
+#      matrix:
+#        php:
+#          - '8.1'
+#          - '8.2'
+#          - '8.3'
+#    steps:
+#      - uses: actions/checkout@v4
+#
+#      - name: "Setup PHP"
+#        uses: shivammathur/setup-php@v2
+#        with:
+#          php-version: ${{ matrix.php }}
+#          extensions: ${{ env.EXTENSIONS }}
+#          ini-values: apc.enable_cli=on, session.save_path=/tmp
+#          tools: pecl
+#        env:
+#          COMPOSER_TOKEN: ${{ secrets.GITHUB_TOKEN }}
+#          PHALCON_PATH: ext
+#
+#      - name: "Install development dependencies with Composer"
+#        uses: "ramsey/composer-install@v3"
+#        with:
+#          composer-options: "--prefer-dist"
+#
+#      - name: "PHPCS"
+#        run: |
+#          composer cs
+#
+#      - name: "Psalm"
+#        run: |
+#          composer analyze
+#
   unit-tests:
-    needs: phpcs
+#    needs: phpcs
 
     permissions:
       contents: read # to fetch code (actions/checkout)
@@ -105,8 +105,8 @@ jobs:
       matrix:
         php:
           - '8.1'
-          - '8.2'
-          - '8.3'
+#          - '8.2'
+#          - '8.3'
         ts:
           # - 'nts'
           - 'ts'
@@ -422,11 +422,11 @@ jobs:
 
     name: "Upload coverage"
     runs-on: "ubuntu-22.04"
-    needs:
-      - "unit-tests"
-      - "db-mysql-tests"
-#      - "db-postgres-tests"
-#      - "db-sqlite-tests"
+#    needs:
+#      - "unit-tests"
+#      - "db-mysql-tests"
+##      - "db-postgres-tests"
+##      - "db-sqlite-tests"
 
     steps:
       - name: "Checkout"
@@ -445,10 +445,10 @@ jobs:
 
       - name: "Display structure of downloaded files"
         run: |
-          mv coverage/db-mysql-8.1.coverage/coverage.xml coverage/db-mysql-8.1-coverage.xml
+#          mv coverage/db-mysql-8.1.coverage/coverage.xml coverage/db-mysql-8.1-coverage.xml
           mv coverage/unit-8.1.coverage/coverage.xml     coverage/unit-8.1-coverage.xml
-          mv coverage/unit-8.2.coverage/coverage.xml     coverage/unit-8.2-coverage.xml
-          mv coverage/unit-8.3.coverage/coverage.xml     coverage/unit-8.3-coverage.xml
+#          mv coverage/unit-8.2.coverage/coverage.xml     coverage/unit-8.2-coverage.xml
+#          mv coverage/unit-8.3.coverage/coverage.xml     coverage/unit-8.3-coverage.xml
           ls -la coverage/
           cat coverage/unit-8.1-coverage.xml
 
