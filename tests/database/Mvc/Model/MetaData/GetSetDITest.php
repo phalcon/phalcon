@@ -14,7 +14,7 @@ declare(strict_types=1);
 namespace Phalcon\Tests\Database\Mvc\Model\MetaData;
 
 use Phalcon\Mvc\Model\Exception as ExpectedException;
-use Phalcon\Mvc\Model\MetaData\Memory;
+use Phalcon\Mvc\Model\MetaData\Adapter\Memory;
 use Phalcon\Tests\DatabaseTestCase;
 use Phalcon\Tests\Fixtures\Traits\DiTrait;
 

@@ -13,7 +13,6 @@ declare(strict_types=1);
 
 namespace Phalcon\Tests\Fixtures\Traits;
 
-use DatabaseTester;
 use PDO;
 use Phalcon\Annotations\Adapter\Memory as AnnotationsMemory;
 use Phalcon\Cache\Adapter\Libmemcached as StorageLibmemcached;
@@ -35,11 +34,11 @@ use Phalcon\Html\TagFactory;
 use Phalcon\Http\Request;
 use Phalcon\Http\Response;
 use Phalcon\Mvc\Model\Manager as ModelsManager;
-use Phalcon\Mvc\Model\MetaData\Apcu as MetaDataApcu;
-use Phalcon\Mvc\Model\MetaData\Memory as MetaDataMemory;
-use Phalcon\Mvc\Model\MetaData\Libmemcached as MetaDataMemcached;
-use Phalcon\Mvc\Model\MetaData\Redis as MetaDataRedis;
-use Phalcon\Mvc\Model\MetaData\Stream as MetaDataStream;
+use Phalcon\Mvc\Model\MetaData\Adapter\Apcu as MetaDataApcu;
+use Phalcon\Mvc\Model\MetaData\Adapter\Memory as MetaDataMemory;
+use Phalcon\Mvc\Model\MetaData\Adapter\Libmemcached as MetaDataMemcached;
+use Phalcon\Mvc\Model\MetaData\Adapter\Redis as MetaDataRedis;
+use Phalcon\Mvc\Model\MetaData\Adapter\Stream as MetaDataStream;
 use Phalcon\Mvc\View;
 use Phalcon\Mvc\View\Simple;
 use Phalcon\Session\Adapter\Libmemcached as SessionLibmemcached;
