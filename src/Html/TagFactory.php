@@ -122,6 +122,7 @@ class TagFactory
      * @var array
      */
     protected array $services = [];
+
     /**
      * @var EscaperInterface
      */

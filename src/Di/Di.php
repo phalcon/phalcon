@@ -475,7 +475,7 @@ class Di extends stdClass implements DiInterface
             // The service is registered in the DI.
             try {
                 $instance = $service->resolve($parameters, $this);
-            } catch (ServiceResolutionException $ex) {
+            } catch (ServiceResolutionException) {
                 $this->throwCannotResolveService($name);
             }
 

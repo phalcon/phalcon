@@ -69,7 +69,7 @@ final class UploadedFile implements UploadedFileInterface
      *
      * @var string|null
      */
-    private ?string $clientFilename = null;
+    private ?string $clientFilename;
 
     /**
      * Retrieve the media type sent by the client.
@@ -83,7 +83,7 @@ final class UploadedFile implements UploadedFileInterface
      *
      * @var string | null
      */
-    private ?string $clientMediaType = null;
+    private ?string $clientMediaType;
 
     /**
      * Retrieve the error associated with the uploaded file.
@@ -118,7 +118,7 @@ final class UploadedFile implements UploadedFileInterface
      *
      * @var int|null
      */
-    private ?int $size = null;
+    private ?int $size;
 
     /**
      * Holds the stream/string for the uploaded file

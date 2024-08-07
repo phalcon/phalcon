@@ -105,7 +105,7 @@ class Stream implements StreamInterface
 
                 $result = $this->getContents();
             }
-        } catch (Exception $ex) {
+        } catch (Exception) {
             $result = "";
         }
 
