@@ -18,6 +18,8 @@ use Phalcon\Logger\Adapter\Stream;
 use Phalcon\Logger\Logger;
 use Phalcon\Tests\UnitTestCase;
 
+use Psr\Log\LogLevel;
+
 use function date;
 use function end;
 use function file_get_contents;
@@ -33,14 +35,14 @@ final class LevelsTest extends UnitTestCase
     public static function getExamples(): array
     {
         return [
-            ['alert'],
-            ['critical'],
-            ['debug'],
-            ['emergency'],
-            ['error'],
-            ['info'],
-            ['notice'],
-            ['warning'],
+            [LogLevel::ALERT],
+            [LogLevel::CRITICAL],
+            [LogLevel::DEBUG],
+            [LogLevel::EMERGENCY],
+            [LogLevel::ERROR],
+            [LogLevel::INFO],
+            [LogLevel::NOTICE],
+            [LogLevel::WARNING],
         ];
     }
 
@@ -77,7 +79,10 @@ final class LevelsTest extends UnitTestCase
         $this->assertStringContainsString($logString, $content);
 
         // Check if the level is in the log file
-        $this->assertStringContainsString('[' . strtoupper($level) . ']', $content);
+        $this->assertStringContainsString(
+            '[' . $level . ']',
+            $content
+        );
 
         // Check time content
         $content = file_get_contents($fileName);
@@ -85,7 +90,7 @@ final class LevelsTest extends UnitTestCase
         // Get time part
         $matches = [];
         preg_match(
-            '/\[(.*)\]\[' . strtoupper($level) . '\]/',
+            '/\[(.*)]\[' . $level . ']/',
             $content,
             $matches
         );

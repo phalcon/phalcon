@@ -33,9 +33,10 @@ final class AddAdapterTest extends UnitTestCase
     {
         $fileName1  = $this->getNewFileName('log', 'log');
         $fileName2  = $this->getNewFileName('log', 'log');
-        $outputPath = logsDir();
-        $adapter1   = new Stream($outputPath . $fileName1);
-        $adapter2   = new Stream($outputPath . $fileName2);
+        $outputPath1 = logsDir($fileName1);
+        $outputPath2 = logsDir($fileName2);
+        $adapter1   = new Stream($outputPath1);
+        $adapter2   = new Stream($outputPath2);
 
         $logger = new Logger(
             'my-logger',
@@ -58,12 +59,12 @@ final class AddAdapterTest extends UnitTestCase
         $adapter1->close();
         $adapter2->close();
 
-        $contents = file_get_contents($outputPath . $fileName1);
+        $contents = file_get_contents($outputPath1);
         $this->assertStringContainsString('Hello', $contents);
-        $this->safeDeleteFile($fileName1);
+        $this->safeDeleteFile($outputPath1);
 
-        $contents = file_get_contents($outputPath . $fileName2);
+        $contents = file_get_contents($outputPath2);
         $this->assertStringContainsString('Hello', $contents);
-        $this->safeDeleteFile($fileName2);
+        $this->safeDeleteFile($outputPath2);
     }
 }

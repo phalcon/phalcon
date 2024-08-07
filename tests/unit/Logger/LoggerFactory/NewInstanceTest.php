@@ -17,8 +17,8 @@ use Phalcon\Logger\Adapter\Stream;
 use Phalcon\Logger\AdapterFactory;
 use Phalcon\Logger\Logger;
 use Phalcon\Logger\LoggerFactory;
-use Phalcon\Logger\LoggerInterface;
 use Phalcon\Tests\UnitTestCase;
+use Psr\Log\LoggerInterface;
 
 use function logsDir;
 

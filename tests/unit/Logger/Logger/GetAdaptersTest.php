@@ -31,9 +31,10 @@ final class GetAdaptersTest extends UnitTestCase
     {
         $fileName1  = $this->getNewFileName('log', 'log');
         $fileName2  = $this->getNewFileName('log', 'log');
-        $outputPath = logsDir();
-        $adapter1   = new Stream($outputPath . $fileName1);
-        $adapter2   = new Stream($outputPath . $fileName2);
+        $outputPath1 = logsDir($fileName1);
+        $outputPath2 = logsDir($fileName1);
+        $adapter1   = new Stream($outputPath1);
+        $adapter2   = new Stream($outputPath2);
 
         $logger = new Logger(
             'my-logger',
@@ -51,7 +52,7 @@ final class GetAdaptersTest extends UnitTestCase
         $this->assertInstanceOf($class, $adapters['one']);
         $this->assertInstanceOf($class, $adapters['two']);
 
-        $this->safeDeleteFile($outputPath . $fileName1);
-        $this->safeDeleteFile($outputPath . $fileName2);
+        $this->safeDeleteFile($outputPath1);
+        $this->safeDeleteFile($outputPath2);
     }
 }
