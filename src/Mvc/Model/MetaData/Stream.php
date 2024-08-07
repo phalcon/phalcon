@@ -71,7 +71,7 @@ class Stream extends MetaData
         if (false === file_exists($path)) {
             return null;
         }
-        return require $path;
+        return require_once $path;
     }
 
     /**

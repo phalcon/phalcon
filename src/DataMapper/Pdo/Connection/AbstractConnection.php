@@ -440,16 +440,6 @@ abstract class AbstractConnection extends PDO implements ConnectionInterface
     }
 
     /**
-     * Return an array of available PDO drivers (empty array if none available)
-     *
-     * @return array
-     */
-    public static function getAvailableDrivers(): array
-    {
-        return PDO::getAvailableDrivers();
-    }
-
-    /**
      * Return the driver name
      *
      * @return string

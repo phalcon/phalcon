@@ -99,9 +99,7 @@ class Stream extends AbstractAdapter
         restore_error_handler();
 
         if (true === $warning) {
-            throw new RuntimeException(
-                "Cannot read annotation data"
-            );
+            throw new Exception('Cannot read annotation data');
         }
 
         return $contents;
