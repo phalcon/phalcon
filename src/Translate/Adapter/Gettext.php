@@ -148,7 +148,7 @@ class Gettext extends AbstractAdapter implements ArrayAccess
     {
         $result = $this->query($index);
 
-        return ($result !== $index);
+        return $result !== $index;
     }
 
     /**

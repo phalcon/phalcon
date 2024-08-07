@@ -23,13 +23,13 @@ use Phalcon\Parsers\Parser;
 use Phalcon\Support\Settings;
 use Phalcon\Traits\Php\IniTrait;
 
+use function get_class;
 use function is_array;
-use function mb_strtolower;
 use function method_exists;
+use function spl_object_id;
+use function trigger_error;
 
 /**
- * Phalcon\Mvc\Model\MetaData
- *
  * Because Phalcon\Mvc\Model requires meta-data like field names, data types,
  * primary keys, etc. This component collect them and store for further
  * querying by Phalcon\Mvc\Model. Phalcon\Mvc\Model\MetaData can also use
@@ -67,6 +67,9 @@ abstract class MetaData extends Injectable implements MetaDataInterface
     public const MODELS_NOT_NULL                 = 3;
     public const MODELS_PRIMARY_KEY              = 1;
     public const MODELS_REVERSE_COLUMN_MAP       = 1;
+
+
+    private const MESSAGE_INVALID_METADATA = "The meta-data is invalid or is corrupt";
 
     /**
      * @var CacheAdapterInterface|null
@@ -126,7 +129,7 @@ abstract class MetaData extends Injectable implements MetaDataInterface
             return $data;
         }
 
-        throw new Exception("The meta-data is invalid or is corrupt");
+        throw new Exception(self::MESSAGE_INVALID_METADATA);
     }
 
     /**
@@ -150,7 +153,7 @@ abstract class MetaData extends Injectable implements MetaDataInterface
             return $data;
         }
 
-        throw new Exception("The meta-data is invalid or is corrupt");
+        throw new Exception(self::MESSAGE_INVALID_METADATA);
     }
 
     /**
@@ -176,7 +179,7 @@ abstract class MetaData extends Injectable implements MetaDataInterface
             return $data;
         }
 
-        throw new Exception("The meta-data is invalid or is corrupt");
+        throw new Exception(self::MESSAGE_INVALID_METADATA);
     }
 
     /**
@@ -202,7 +205,7 @@ abstract class MetaData extends Injectable implements MetaDataInterface
             return $data;
         }
 
-        throw new Exception("The meta-data is invalid or is corrupt");
+        throw new Exception(self::MESSAGE_INVALID_METADATA);
     }
 
     /**
@@ -229,7 +232,7 @@ abstract class MetaData extends Injectable implements MetaDataInterface
             return $data;
         }
 
-        throw new Exception("The meta-data is invalid or is corrupt");
+        throw new Exception(self::MESSAGE_INVALID_METADATA);
     }
 
     /**
@@ -243,10 +246,11 @@ abstract class MetaData extends Injectable implements MetaDataInterface
     final public function getColumnMapUniqueKey(ModelInterface $model): string | null
     {
         $key = mb_strtolower(get_class($model));
-        if (false === isset($this->columnMap[$key])) {
-            if (false === $this->initializeColumnMap($model, $key)) {
-                return null;
-            }
+        if (
+            false === isset($this->columnMap[$key]) &&
+            false === $this->initializeColumnMap($model, $key)
+        ) {
+            return null;
         }
 
         return $key;
@@ -292,7 +296,7 @@ abstract class MetaData extends Injectable implements MetaDataInterface
             return $data;
         }
 
-        throw new Exception("The meta-data is invalid or is corrupt");
+        throw new Exception(self::MESSAGE_INVALID_METADATA);
     }
 
     /**
@@ -318,7 +322,7 @@ abstract class MetaData extends Injectable implements MetaDataInterface
             return $data;
         }
 
-        throw new Exception("The meta-data is invalid or is corrupt");
+        throw new Exception(self::MESSAGE_INVALID_METADATA);
     }
 
     /**
@@ -344,7 +348,7 @@ abstract class MetaData extends Injectable implements MetaDataInterface
             return $data;
         }
 
-        throw new Exception("The meta-data is invalid or is corrupt");
+        throw new Exception(self::MESSAGE_INVALID_METADATA);
     }
 
     /**
@@ -370,7 +374,7 @@ abstract class MetaData extends Injectable implements MetaDataInterface
             return $data;
         }
 
-        throw new Exception("The meta-data is invalid or is corrupt");
+        throw new Exception(self::MESSAGE_INVALID_METADATA);
     }
 
     /**
@@ -405,10 +409,11 @@ abstract class MetaData extends Injectable implements MetaDataInterface
     final public function getMetaDataUniqueKey(ModelInterface $model): string | null
     {
         $key = mb_strtolower(get_class($model));
-        if (false === isset($this->metaData[$key])) {
-            if (false === $this->initializeMetaData($model, $key)) {
-                return null;
-            }
+        if (
+            false === isset($this->metaData[$key]) &&
+            false === $this->initializeMetaData($model, $key)
+        ) {
+            return null;
         }
 
         return $key;
@@ -462,7 +467,7 @@ abstract class MetaData extends Injectable implements MetaDataInterface
             return $data;
         }
 
-        throw new Exception("The meta-data is invalid or is corrupt");
+        throw new Exception(self::MESSAGE_INVALID_METADATA);
     }
 
     /**
@@ -488,7 +493,7 @@ abstract class MetaData extends Injectable implements MetaDataInterface
             return $data;
         }
 
-        throw new Exception("The meta-data is invalid or is corrupt");
+        throw new Exception(self::MESSAGE_INVALID_METADATA);
     }
 
     /**
@@ -514,7 +519,7 @@ abstract class MetaData extends Injectable implements MetaDataInterface
             return $data;
         }
 
-        throw new Exception("The meta-data is invalid or is corrupt");
+        throw new Exception(self::MESSAGE_INVALID_METADATA);
     }
 
     /**
@@ -540,7 +545,7 @@ abstract class MetaData extends Injectable implements MetaDataInterface
             return $data;
         }
 
-        throw new Exception("The meta-data is invalid or is corrupt");
+        throw new Exception(self::MESSAGE_INVALID_METADATA);
     }
 
     /**
@@ -799,8 +804,6 @@ abstract class MetaData extends Injectable implements MetaDataInterface
 
     /**
      * Initialize old behaviour for compatability
-     *
-     * TODO: check compatability
      *
      * Set the attributes that allow empty string values
      *

@@ -67,10 +67,8 @@ abstract class Select
         /**
          * Automatically assign the id if the name is not an array
          */
-        if (!str_contains($id, "[")) {
-            if (true !== isset($params["id"])) {
-                $params["id"] = $id;
-            }
+        if (!str_contains($id, "[") && true !== isset($params["id"])) {
+            $params["id"] = $id;
         }
 
         if (true !== isset($params["name"])) {
@@ -179,7 +177,6 @@ abstract class Select
 
         foreach ($data as $optionValue => $optionText) {
             $escaped = $escaper->html((string)$optionValue);
-//            $escaped = htmlspecialchars($optionValue);
 
             if (is_array($optionText)) {
                 $code .= "\t<optgroup label=\""

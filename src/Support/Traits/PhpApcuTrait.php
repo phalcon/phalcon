@@ -22,11 +22,6 @@ use function apcu_fetch;
 use function apcu_inc;
 use function apcu_store;
 
-/**
- * Trait PhpApcuTrait
- *
- * @package Phalcon\Storage\Adapter\Traits
- */
 trait PhpApcuTrait
 {
     /**

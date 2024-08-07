@@ -15,11 +15,6 @@ namespace Phalcon\Support\Traits;
 
 use function yaml_parse_file;
 
-/**
- * Trait PhpYamlTrait
- *
- * @package Phalcon\Storage\Adapter\Traits
- */
 trait PhpYamlTrait
 {
     /**

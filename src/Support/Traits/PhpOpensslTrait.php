@@ -16,11 +16,6 @@ namespace Phalcon\Support\Traits;
 use function openssl_cipher_iv_length;
 use function openssl_random_pseudo_bytes;
 
-/**
- * Trait PhpOpensslTrait
- *
- * @package Phalcon\Support\Traits
- */
 trait PhpOpensslTrait
 {
     /**

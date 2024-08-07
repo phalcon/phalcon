@@ -11,7 +11,7 @@
 
 declare(strict_types=1);
 
-namespace Phalcon\Mvc\Model\MetaData;
+namespace Phalcon\Mvc\Model\MetaData\Adapter;
 
 use Phalcon\Mvc\Model\Exception;
 use Phalcon\Mvc\Model\MetaData;
