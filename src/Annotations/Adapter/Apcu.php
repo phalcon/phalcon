@@ -45,10 +45,10 @@ class Apcu extends AbstractAdapter
     /**
      * Constructor
      *
-     * @param array<string, string|int> $options = {
-     *      @option string $prefix
-     *      @option int    $lifetime
-     * }
+     * @param array $options = [
+     *                       'prefix' => 'phalcon'
+     *                       'lifetime' => 3600
+     *                       ]
      */
     public function __construct(array $options = [])
     {
