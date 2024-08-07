@@ -48,7 +48,7 @@ class Input extends Stream
      */
     public function __construct()
     {
-        parent::__construct("php://input", "rb");
+        parent::__construct("php://input");
     }
 
     /**

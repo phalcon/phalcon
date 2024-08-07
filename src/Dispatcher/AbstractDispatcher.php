@@ -870,6 +870,7 @@ abstract class AbstractDispatcher extends Injectable implements DispatcherInterf
      * @param mixed|null   $defaultValue
      *
      * @return mixed
+     * @throws CliDispatcherException
      * @todo deprecate this in the future
      */
     public function getParam(

@@ -990,7 +990,7 @@ abstract class AbstractAdapter implements AdapterInterface, EventsAwareInterface
          * string "null", everything else is passed as "?"
          */
         foreach ($values as $position => $value) {
-            if (is_object($value) && $value instanceof RawValue) {
+            if ($value instanceof RawValue) {
                 $placeholders[] = (string)$value;
             } else {
                 if (is_object($value)) {
@@ -1427,7 +1427,7 @@ abstract class AbstractAdapter implements AdapterInterface, EventsAwareInterface
             $field        = $fields[$position];
             $escapedField = $this->escapeIdentifier($field);
 
-            if (is_object($value) && $value instanceof RawValue) {
+            if ($value instanceof RawValue) {
                 $placeholders[] = $escapedField . " = " . $value;
             } else {
                 if (is_object($value)) {

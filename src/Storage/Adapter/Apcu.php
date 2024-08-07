@@ -43,7 +43,7 @@ class Apcu extends AbstractAdapter
      * @param SerializerFactory $factory
      * @param array             $options
      *
-     * @throws SupportException
+     * @throws Exception
      */
     public function __construct(
         SerializerFactory $factory,

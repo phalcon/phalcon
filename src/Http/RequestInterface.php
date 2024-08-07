@@ -259,7 +259,7 @@ interface RequestInterface
      *
      * @param string|null $name
      * @param mixed|null  $filters
-     * @param mixed|null  $default
+     * @param mixed|null  $defaultValue
      * @param bool        $notAllowEmpty
      * @param bool        $noRecursive
      *
@@ -269,7 +269,7 @@ interface RequestInterface
     public function getPost(
         string $name = null,
         mixed $filters = null,
-        mixed $default = null,
+        mixed $defaultValue = null,
         bool $notAllowEmpty = false,
         bool $noRecursive = false
     ): mixed;
@@ -287,7 +287,7 @@ interface RequestInterface
      *
      * @param string|null $name
      * @param mixed|null  $filters
-     * @param mixed|null  $default
+     * @param mixed|null  $defaultValue
      * @param bool        $notAllowEmpty
      * @param bool        $noRecursive
      *
@@ -297,7 +297,7 @@ interface RequestInterface
     public function getPut(
         string $name = null,
         mixed $filters = null,
-        mixed $default = null,
+        mixed $defaultValue = null,
         bool $notAllowEmpty = false,
         bool $noRecursive = false
     );
@@ -319,7 +319,7 @@ interface RequestInterface
      *
      * @param string|null $name
      * @param mixed|null  $filters
-     * @param mixed|null  $default
+     * @param mixed|null  $defaultValue
      * @param bool        $notAllowEmpty
      * @param bool        $noRecursive
      *
@@ -329,7 +329,7 @@ interface RequestInterface
     public function getQuery(
         string $name = null,
         mixed $filters = null,
-        mixed $default = null,
+        mixed $defaultValue = null,
         bool $notAllowEmpty = false,
         bool $noRecursive = false
     );

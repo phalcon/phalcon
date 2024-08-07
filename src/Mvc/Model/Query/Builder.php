@@ -129,7 +129,7 @@ class Builder implements BuilderInterface, InjectionAwareInterface
     protected array | string | int | null $limit = null;
 
     /**
-     * @var array|string
+     * @var array|string|null
      */
     protected array | string | null $models = null;
 
@@ -139,7 +139,7 @@ class Builder implements BuilderInterface, InjectionAwareInterface
     protected int $offset = 0;
 
     /**
-     * @var array|string
+     * @var array|string|mixed|null
      */
     protected array | string | null $order = null;
 
@@ -1639,7 +1639,7 @@ class Builder implements BuilderInterface, InjectionAwareInterface
      * $builder->orderBy(["Robots.name DESC"]);
      *```
      *
-     * @param array|string $orderBy
+     * @param array|string|null $orderBy
      *
      * @return BuilderInterface
      */

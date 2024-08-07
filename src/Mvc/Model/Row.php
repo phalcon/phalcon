@@ -38,13 +38,13 @@ class Row extends stdClass implements EntityInterface, ResultInterface, ArrayAcc
     /**
      * Checks whether offset exists in the row
      *
-     * @param mixed $index
+     * @param mixed $offset
      *
      * @return bool
      */
-    public function offsetExists(mixed $index): bool
+    public function offsetExists(mixed $offset): bool
     {
-        return isset($this->$index);
+        return isset($this->$offset);
     }
 
     /**
@@ -55,13 +55,13 @@ class Row extends stdClass implements EntityInterface, ResultInterface, ArrayAcc
      * @return mixed
      * @throws Exception
      */
-    public function offsetGet(mixed $index): mixed
+    public function offsetGet(mixed $offset): mixed
     {
         if (!$this->offsetExists($index)) {
             throw new Exception("The index does not exist in the row");
         }
 
-        return $this->$index;
+        return $this->$offset;
     }
 
     /**

@@ -83,7 +83,7 @@ class Attributes extends Collection implements RenderInterface
                 }
 
                 $result .= $key . "=\""
-                    . htmlspecialchars($value, ENT_QUOTES, "utf-8", true)
+                    . htmlspecialchars($value, ENT_QUOTES, "utf-8")
                     . "\" ";
             }
         }

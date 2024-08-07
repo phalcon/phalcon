@@ -55,6 +55,7 @@ class AdapterFactory
     /**
      * Create a new instance of the adapter
      *
+     * @param string $name
      * @param array $options = [
      *             'servers' => [
      *             [
@@ -75,9 +76,6 @@ class AdapterFactory
      *             'socket' => '',
      *             'storageDir' => '',
      *             ]
-     *
-     * @param string $name
-     * @param array  $options
      *
      * @return AdapterInterface
      * @throws BaseException

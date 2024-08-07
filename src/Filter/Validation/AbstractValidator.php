@@ -33,12 +33,14 @@ abstract class AbstractValidator implements ValidatorInterface
      * @var array
      */
     protected array $options = [];
+
     /**
      * Message template
      *
      * @var string|null
      */
     protected ?string $template = null;
+
     /**
      * Message templates
      *
@@ -50,11 +52,10 @@ abstract class AbstractValidator implements ValidatorInterface
      * Phalcon\Filter\Validation\Validator constructor
      *
      * @param mixed[] $options {
-     *
-     * @type string  'message'
-     * @type string  'template'
-     * @type boolean 'allowEmpty'
-     *                         }
+     *     $option string "message"
+     *     $option string "template"
+     *     $option bool   "allowEmpty"
+     * }
      */
     public function __construct(array $options = [])
     {

@@ -42,8 +42,6 @@ class Redis extends AbstractAdapter
      *
      * @param SerializerFactory $factory
      * @param array             $options
-     *
-     * @throws SupportException
      */
     public function __construct(
         SerializerFactory $factory,

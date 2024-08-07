@@ -1440,10 +1440,10 @@ abstract class Dialect implements DialectInterface
     /**
      * Prepares table for this RDBMS
      *
-     * @param string $tableName
-     * @param string $schemaName
-     * @param string $alias
-     * @param string $escapeChar
+     * @param string      $tableName
+     * @param string|null $schemaName
+     * @param string      $alias
+     * @param string      $escapeChar
      *
      * @return string
      */

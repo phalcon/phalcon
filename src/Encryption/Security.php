@@ -13,6 +13,7 @@ declare(strict_types=1);
 
 namespace Phalcon\Encryption;
 
+use Exception as BaseException;
 use Phalcon\Di\InjectionAwareInterface;
 use Phalcon\Di\Traits\InjectionAwareTrait;
 use Phalcon\Encryption\Security\Exception;
@@ -319,7 +320,7 @@ class Security implements InjectionAwareInterface
      * @param int $numberBytes
      *
      * @return string
-     * @throws Exception
+     * @throws BaseException
      */
     public function getSaltBytes(int $numberBytes = 0): string
     {

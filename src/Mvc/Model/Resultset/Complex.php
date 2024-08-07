@@ -47,9 +47,11 @@ class Complex extends Resultset implements ResultsetInterface
     /**
      * Phalcon\Mvc\Model\Resultset\Complex constructor
      *
-     * @param array                $columnTypes
+     * @param array|null           $columnTypes
      * @param ResultInterface|null $result
      * @param mixed|null           $cache
+     *
+     * @throws Exception
      */
     public function __construct(
         protected ?array $columnTypes,

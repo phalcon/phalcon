@@ -22,14 +22,14 @@ abstract class AbstractAdapter implements AdapterInterface
     /**
      * Number of rows to show in the paginator. By default is null
      *
-     * @var int
+     * @var int|null
      */
     protected ?int $limitRows = null;
 
     /**
      * Current page in paginate
      *
-     * @var int
+     * @var int|null
      */
     protected ?int $page = null;
 

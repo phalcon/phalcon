@@ -14,6 +14,7 @@ declare(strict_types=1);
 namespace Phalcon\Storage\Adapter;
 
 use DateInterval;
+use Exception as BaseException;
 use Phalcon\Storage\SerializerFactory;
 use Phalcon\Support\Exception as SupportException;
 
@@ -40,7 +41,7 @@ class Memory extends AbstractAdapter
      * @param SerializerFactory $factory
      * @param array             $options
      *
-     * @throws SupportException
+     * @throws BaseException
      */
     public function __construct(
         SerializerFactory $factory,

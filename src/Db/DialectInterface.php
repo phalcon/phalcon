@@ -105,9 +105,9 @@ interface DialectInterface
     /**
      * Generates SQL to create a view
      *
-     * @param string $viewName
-     * @param array  $definition
-     * @param string $schemaName
+     * @param string      $viewName
+     * @param array       $definition
+     * @param string|null $schemaName
      *
      * @return string
      */
@@ -120,8 +120,8 @@ interface DialectInterface
     /**
      * Generates SQL to describe a table
      *
-     * @param string $tableName
-     * @param string $schemaName
+     * @param string      $tableName
+     * @param string|null $schemaName
      *
      * @return string
      */
@@ -133,8 +133,8 @@ interface DialectInterface
     /**
      * Generates SQL to query indexes on a table
      *
-     * @param string $tableName
-     * @param string $schemaName
+     * @param string      $tableName
+     * @param string|null $schemaName
      *
      * @return string
      */
@@ -146,8 +146,8 @@ interface DialectInterface
     /**
      * Generates SQL to query foreign keys on a table
      *
-     * @param string $tableName
-     * @param string $schemaName
+     * @param string      $tableName
+     * @param string|null $schemaName
      *
      * @return string
      */
@@ -214,24 +214,24 @@ interface DialectInterface
     /**
      * Generates SQL to drop a table
      *
-     * @param string $tableName
-     * @param string $schemaName
-     * @param bool   $ifExists
+     * @param string      $tableName
+     * @param string|null $schemaName
+     * @param bool        $ifExists
      *
      * @return string
      */
     public function dropTable(
         string $tableName,
-        string $schemaName,
+        ?string $schemaName = null,
         bool $ifExists = true
     ): string;
 
     /**
      * Generates SQL to drop a view
      *
-     * @param string $viewName
-     * @param string $schemaName
-     * @param bool   $ifExists
+     * @param string      $viewName
+     * @param string|null $schemaName
+     * @param bool        $ifExists
      *
      * @return string
      */
@@ -304,7 +304,7 @@ interface DialectInterface
     /**
      * List all tables in database
      *
-     * @param string $schemaName
+     * @param string|null $schemaName
      *
      * @return string
      */
@@ -329,6 +329,11 @@ interface DialectInterface
 
     /**
      * Registers custom SQL functions
+     *
+     * @param string   $name
+     * @param callable $customFunction
+     *
+     * @return Dialect
      */
     public function registerCustomFunction(
         string $name,
@@ -388,8 +393,8 @@ interface DialectInterface
     /**
      * Generates SQL checking for the existence of a schema.table
      *
-     * @param string $tableName
-     * @param string $schemaName
+     * @param string      $tableName
+     * @param string|null $schemaName
      *
      * @return string
      */
@@ -401,18 +406,21 @@ interface DialectInterface
     /**
      * Generates the SQL to describe the table creation options
      *
-     * @param string $tableName
-     * @param string $schemaName
+     * @param string      $tableName
+     * @param string|null $schemaName
      *
      * @return string
      */
-    public function tableOptions(string $tableName, ?string $schemaName = null): string;
+    public function tableOptions(
+        string $tableName,
+        ?string $schemaName = null
+    ): string;
 
     /**
      * Generates SQL checking for the existence of a schema.view
      *
-     * @param string $viewName
-     * @param string $schemaName
+     * @param string      $viewName
+     * @param string|null $schemaName
      *
      * @return string
      */

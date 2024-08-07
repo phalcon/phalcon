@@ -594,7 +594,6 @@ abstract class AbstractConnection extends PDO implements ConnectionInterface
      * @param array  $options
      *
      * @return PDOStatement
-     * @throws Exception
      */
     public function prepare(
         string $statement,

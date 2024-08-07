@@ -124,6 +124,7 @@ class Group implements GroupInterface
      * @param mixed|null        $httpMethods
      *
      * @return RouteInterface
+     * @throws Exception
      */
     public function add(
         string $pattern,
@@ -145,6 +146,7 @@ class Group implements GroupInterface
      *                                 ]
      *
      * @return RouteInterface
+     * @throws Exception
      */
     public function addConnect(string $pattern, mixed $paths = null): RouteInterface
     {
@@ -163,6 +165,7 @@ class Group implements GroupInterface
      *                                 ]
      *
      * @return RouteInterface
+     * @throws Exception
      */
     public function addDelete(string $pattern, mixed $paths = null): RouteInterface
     {
@@ -181,6 +184,7 @@ class Group implements GroupInterface
      *                                 ]
      *
      * @return RouteInterface
+     * @throws Exception
      */
     public function addGet(string $pattern, mixed $paths = null): RouteInterface
     {
@@ -199,6 +203,7 @@ class Group implements GroupInterface
      *                                 ]
      *
      * @return RouteInterface
+     * @throws Exception
      */
     public function addHead(string $pattern, mixed $paths = null): RouteInterface
     {
@@ -217,6 +222,7 @@ class Group implements GroupInterface
      *                                 ]
      *
      * @return RouteInterface
+     * @throws Exception
      */
     public function addOptions(string $pattern, mixed $paths = null): RouteInterface
     {
@@ -235,6 +241,7 @@ class Group implements GroupInterface
      *                                 ]
      *
      * @return RouteInterface
+     * @throws Exception
      */
     public function addPatch(string $pattern, mixed $paths = null): RouteInterface
     {
@@ -253,6 +260,7 @@ class Group implements GroupInterface
      *                                 ]
      *
      * @return RouteInterface
+     * @throws Exception
      */
     public function addPost(string $pattern, mixed $paths = null): RouteInterface
     {
@@ -271,6 +279,7 @@ class Group implements GroupInterface
      *                                 ]
      *
      * @return RouteInterface
+     * @throws Exception
      */
     public function addPurge(string $pattern, mixed $paths = null): RouteInterface
     {
@@ -289,6 +298,7 @@ class Group implements GroupInterface
      *                                 ]
      *
      * @return RouteInterface
+     * @throws Exception
      */
     public function addPut(string $pattern, mixed $paths = null): RouteInterface
     {
@@ -307,6 +317,7 @@ class Group implements GroupInterface
      *                                 ]
      *
      * @return RouteInterface
+     * @throws Exception
      */
     public function addTrace(string $pattern, mixed $paths = null): RouteInterface
     {

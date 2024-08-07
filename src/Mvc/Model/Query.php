@@ -250,7 +250,7 @@ class Query implements QueryInterface, InjectionAwareInterface
     protected bool $enableImplicitJoins;
 
     /**
-     * @var array
+     * @var array|null
      */
     protected ?array $intermediate = null;
 

@@ -316,7 +316,7 @@ class Random
         $values = array_values(
             unpack(
                 'N1a/n1b/n1c/n1d/n1e/N1f',
-                $this->bytes(16)
+                $this->bytes()
             )
         );
 
@@ -338,7 +338,7 @@ class Random
      * @param int    $number
      *
      * @return string
-     * @throws Exception If secure random number generator is not available or unexpected partial read
+     * @throws BaseException If secure random number generator is not available or unexpected partial read
      */
     protected function base(string $alphabet, int $base, int $number = 16): string
     {
