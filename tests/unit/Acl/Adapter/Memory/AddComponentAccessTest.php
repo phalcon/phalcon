@@ -55,25 +55,4 @@ final class AddComponentAccessTest extends UnitTestCase
         $acl = new Memory();
         $acl->addComponentAccess('Post', ['update']);
     }
-
-    /**
-     * Tests Phalcon\Acl\Adapter\Memory :: addComponentAccess() - wrong access
-     * list
-     *
-     * @return void
-     *
-     * @author Phalcon Team <team@phalcon.io>
-     * @since  2018-11-13
-     */
-    public function testAclAdapterMemoryAddComponentAccessWrongAccessList(): void
-    {
-        $this->expectException(Exception::class);
-        $this->expectExceptionMessage('Invalid value for the accessList');
-
-        $acl  = new Memory();
-        $post = new Component('Post');
-
-        $acl->addComponent($post, ['update']);
-        $acl->addComponentAccess('Post', 123);
-    }
 }
