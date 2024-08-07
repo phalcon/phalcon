@@ -338,13 +338,13 @@ final class UploadedFile implements UploadedFileInterface
     {
         if (0 === $error) {
             switch (true) {
-                case (true === is_string($stream)):
+                case is_string($stream):
                     $this->fileName = $stream;
                     break;
-                case (true === is_resource($stream)):
+                case is_resource($stream):
                     $this->stream = new Stream($stream);
                     break;
-                case ($stream instanceof StreamInterface):
+                case $stream instanceof StreamInterface:
                     $this->stream = $stream;
                     break;
                 default:

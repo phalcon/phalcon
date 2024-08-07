@@ -932,40 +932,38 @@ class Memory extends AbstractAdapter
             return key($result);
         }
 
-        if (!isset($this->roleInherits[$roleName])) {
-            return null;
-        }
-
-        $checkRoleToInherits = $this->roleInherits[$roleName];
-        $usedRoleToInherits = [];
-
-        /**
-         * Deep check if the role to inherit is valid
-         */
-        while (true !== empty($checkRoleToInherits)) {
-            $checkRoleToInherit = array_shift($checkRoleToInherits);
-
-            if (isset($usedRoleToInherits[$checkRoleToInherit])) {
-                continue;
-            }
-
-            $usedRoleToInherits[$checkRoleToInherit] = true;
+        if (true === isset($this->roleInherits[$roleName])) {
+            $checkRoleToInherits = $this->roleInherits[$roleName];
+            $usedRoleToInherits = [];
 
             /**
-             * Check if there is a direct combination in one of the
-             * inherited roles
+             * Deep check if the role to inherit is valid
              */
-            $keys = $this->getKeys($checkRoleToInherit, $componentName, $access);
-            $result = array_intersect_key($keys, $this->access);
-            if (!empty($result)) {
-                return key($result);
-            }
+            while (true !== empty($checkRoleToInherits)) {
+                $checkRoleToInherit = array_shift($checkRoleToInherits);
 
-            /**
-             * Push inherited roles
-             */
-            if (isset($this->roleInherits[$checkRoleToInherit])) {
-                $checkRoleToInherits = array_merge($checkRoleToInherits, $this->roleInherits[$checkRoleToInherit]);
+                if (isset($usedRoleToInherits[$checkRoleToInherit])) {
+                    continue;
+                }
+
+                $usedRoleToInherits[$checkRoleToInherit] = true;
+
+                /**
+                 * Check if there is a direct combination in one of the
+                 * inherited roles
+                 */
+                $keys = $this->getKeys($checkRoleToInherit, $componentName, $access);
+                $result = array_intersect_key($keys, $this->access);
+                if (!empty($result)) {
+                    return key($result);
+                }
+
+                /**
+                 * Push inherited roles
+                 */
+                if (isset($this->roleInherits[$checkRoleToInherit])) {
+                    $checkRoleToInherits = array_merge($checkRoleToInherits, $this->roleInherits[$checkRoleToInherit]);
+                }
             }
         }
 
