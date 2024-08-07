@@ -45,12 +45,11 @@
     "psr-4": {
       "Phalcon\\Tests\\Benchmarks\\": "tests/benchmarks/",
       "Phalcon\\Tests\\Database\\": "tests/database/",
-      "Phalcon\\Tests\\Integration\\": "tests/integration/",
       "Phalcon\\Tests\\": "tests/",
       "Phalcon\\Tests\\Unit\\": "tests/unit/",
       "Phalcon\\Tests\\Controllers\\": "tests/_data/fixtures/controllers/",
       "Phalcon\\Tests\\Fixtures\\": "tests/_data/fixtures/",
-      "Phalcon\\Tests\\Listener\\": "tests/_data/listener/",
+      "Phalcon\\Tests\\Fixtures\\Listener\\": "tests/_data/fixtures/Listener/",
       "Phalcon\\Tests\\Models\\": "tests/_data/fixtures/models/",
       "Phalcon\\Tests\\Modules\\Backend\\": "tests/_data/fixtures/modules/backend/",
       "Phalcon\\Tests\\Modules\\Backend\\Controllers\\": "tests/_data/fixtures/modules/backend/controllers/",
