@@ -445,12 +445,11 @@ jobs:
 
       - name: "Display structure of downloaded files"
         run: |
-          ls -R
-          
           mv db-mysql-8.1.coverage/coverage.xml db-mysql-8.1-coverage.xml
           mv unit-8.1.coverage/coverage.xml     unit-8.1.-coverage.xml
           mv unit-8.2.coverage/coverage.xml     unit-8.2.-coverage.xml
           mv unit-8.3.coverage/coverage.xml     unit-8.3.-coverage.xml
+          ls -R
         working-directory: reports
 
       - name: SonarCloud Scan
