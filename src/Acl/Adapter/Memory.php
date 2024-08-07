@@ -55,9 +55,9 @@ class Memory extends AbstractAdapter
     /**
      * Access
      *
-     * @var mixed
+     * @var array
      */
-    protected $access;
+    protected array $access = [];
 
     /**
      * Access List
@@ -71,7 +71,7 @@ class Memory extends AbstractAdapter
      *
      * @var mixed
      */
-    protected $activeFunction;
+    protected mixed $activeFunction;
 
     /**
      * Returns number of additional arguments(excluding role and resource) for
@@ -504,7 +504,7 @@ class Memory extends AbstractAdapter
     /**
      * @return mixed
      */
-    public function getActiveFunction()
+    public function getActiveFunction(): mixed
     {
         return $this->activeFunction;
     }
@@ -926,11 +926,7 @@ class Memory extends AbstractAdapter
         /**
          * Check if there is a direct combination for role-component-access
          */
-        $keys   = [
-            $roleName . '!' . $componentName . '!' . $access => true,
-            $roleName . '!' . $componentName . '!*'          => true,
-            $roleName . '!*!*'                               => true,
-        ];
+        $keys   = $this->getKeys($roleName, $componentName, $access);
         $result = array_intersect_key($keys, $this->access);
         if (true !== empty($result)) {
             return key($result);
@@ -961,11 +957,7 @@ class Memory extends AbstractAdapter
                  * Check if there is a direct combination in one of the
                  * inherited roles
                  */
-                $keys   = [
-                    $checkRoleToInherit . '!' . $componentName . '!' . $access => true,
-                    $checkRoleToInherit . '!' . $componentName . '!*'          => true,
-                    $checkRoleToInherit . '!*!*'                               => true,
-                ];
+                $keys   = $this->getKeys($checkRoleToInherit, $componentName, $access);
                 $result = array_intersect_key($keys, $this->access);
                 if (true !== empty($result)) {
                     return key($result);
@@ -1005,5 +997,25 @@ class Memory extends AbstractAdapter
                 "' does not exist in the " . $suffix
             );
         }
+    }
+
+    /**
+     * @param string $roleName
+     * @param string $componentName
+     * @param string $access
+     *
+     * @return true[]
+     */
+    private function getKeys(
+        string $roleName,
+        string $componentName,
+        string $access
+    ): array {
+        $keys = [
+            $roleName . '!' . $componentName . '!' . $access => true,
+            $roleName . '!' . $componentName . '!*'          => true,
+            $roleName . '!*!*'                               => true,
+        ];
+        return $keys;
     }
 }
