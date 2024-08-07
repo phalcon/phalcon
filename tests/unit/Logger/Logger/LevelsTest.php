@@ -17,7 +17,6 @@ use DateTime;
 use Phalcon\Logger\Adapter\Stream;
 use Phalcon\Logger\Logger;
 use Phalcon\Tests\UnitTestCase;
-
 use Psr\Log\LogLevel;
 
 use function date;

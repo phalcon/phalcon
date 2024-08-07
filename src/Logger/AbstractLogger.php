@@ -18,7 +18,6 @@ use DateTimeZone;
 use Exception;
 use Phalcon\Logger\Adapter\AdapterInterface;
 use Phalcon\Logger\Exception as LoggerException;
-
 use Psr\Log\LogLevel;
 
 use function array_diff_key;
