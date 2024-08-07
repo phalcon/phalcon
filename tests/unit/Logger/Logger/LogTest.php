@@ -19,6 +19,8 @@ use Phalcon\Logger\Formatter\Line;
 use Phalcon\Logger\Logger;
 use Phalcon\Tests\UnitTestCase;
 
+use Psr\Log\LogLevel;
+
 use function file_get_contents;
 use function logsDir;
 use function sprintf;
@@ -37,9 +39,9 @@ final class LogTest extends UnitTestCase
      */
     public function testLoggerLog(): void
     {
-        $logPath  = logsDir();
-        $fileName = $this->getNewFileName('log', 'log');
-        $adapter  = new Stream($logPath . $fileName);
+        $fileName   = $this->getNewFileName('log', 'log');
+        $outputPath = logsDir($fileName);
+        $adapter    = new Stream($outputPath);
 
         $logger = new Logger(
             'my-logger',
@@ -49,23 +51,23 @@ final class LogTest extends UnitTestCase
         );
 
         $levels = [
-            Enum::ALERT     => 'alert',
-            Enum::CRITICAL  => 'critical',
-            Enum::DEBUG     => 'debug',
-            Enum::EMERGENCY => 'emergency',
-            Enum::ERROR     => 'error',
-            Enum::INFO      => 'info',
-            Enum::NOTICE    => 'notice',
-            Enum::WARNING   => 'warning',
+            Enum::ALERT     => LogLevel::ALERT,
+            Enum::CRITICAL  => LogLevel::CRITICAL,
+            Enum::DEBUG     => LogLevel::DEBUG,
+            Enum::EMERGENCY => LogLevel::EMERGENCY,
+            Enum::ERROR     => LogLevel::ERROR,
+            Enum::INFO      => LogLevel::INFO,
+            Enum::NOTICE    => LogLevel::NOTICE,
+            Enum::WARNING   => LogLevel::WARNING,
             Enum::CUSTOM    => 'custom',
-            'alert'         => 'alert',
-            'critical'      => 'critical',
-            'debug'         => 'debug',
-            'emergency'     => 'emergency',
-            'error'         => 'error',
-            'info'          => 'info',
-            'notice'        => 'notice',
-            'warning'       => 'warning',
+            'alert'         => LogLevel::ALERT,
+            'critical'      => LogLevel::CRITICAL,
+            'debug'         => LogLevel::DEBUG,
+            'emergency'     => LogLevel::EMERGENCY,
+            'error'         => LogLevel::ERROR,
+            'info'          => LogLevel::INFO,
+            'notice'        => LogLevel::NOTICE,
+            'warning'       => LogLevel::WARNING,
             'custom'        => 'custom',
             99              => 'custom',
         ];
@@ -74,11 +76,11 @@ final class LogTest extends UnitTestCase
             $logger->log($level, 'Message ' . $levelName);
         }
 
-        $contents = file_get_contents($logPath . $fileName);
+        $contents = file_get_contents($outputPath);
         foreach ($levels as $levelName) {
             $expected = sprintf(
                 '[%s] Message %s',
-                strtoupper($levelName),
+                $levelName,
                 $levelName
             );
 
@@ -86,7 +88,7 @@ final class LogTest extends UnitTestCase
         }
 
         $adapter->close();
-        $this->safeDeleteFile($fileName);
+        $this->safeDeleteFile($outputPath);
     }
 
     /**
@@ -99,9 +101,9 @@ final class LogTest extends UnitTestCase
      */
     public function testLoggerLogLogInterpolator(): void
     {
-        $logPath   = logsDir();
-        $fileName  = $this->getNewFileName('log', 'log');
-        $formatter = new Line(
+        $fileName   = $this->getNewFileName('log', 'log');
+        $outputPath = logsDir($fileName);
+        $formatter  = new Line(
             '%message%-[%level%]-%server%:%user%',
             'U.u'
         );
@@ -109,7 +111,7 @@ final class LogTest extends UnitTestCase
             'server' => uniqid('srv-'),
             'user'   => uniqid('usr-'),
         ];
-        $adapter   = new Stream($logPath . $fileName);
+        $adapter   = new Stream($outputPath);
         $adapter->setFormatter($formatter);
 
         $logger = new Logger(
@@ -121,16 +123,16 @@ final class LogTest extends UnitTestCase
 
         $logger->log(Enum::DEBUG, 'log message', $context);
 
-        $contents = file_get_contents($logPath . $fileName);
+        $contents = file_get_contents($outputPath);
         $expected = sprintf(
-            'log message-[DEBUG]-%s:%s',
+            'log message-[debug]-%s:%s',
             $context['server'],
             $context['user']
         );
         $this->assertStringContainsString($expected, $contents);
 
         $adapter->close();
-        $this->safeDeleteFile($fileName);
+        $this->safeDeleteFile($outputPath);
     }
 
     /**
@@ -143,9 +145,9 @@ final class LogTest extends UnitTestCase
      */
     public function testLoggerLogLogLevel(): void
     {
-        $logPath  = logsDir();
-        $fileName = $this->getNewFileName('log', 'log');
-        $adapter  = new Stream($logPath . $fileName);
+        $fileName   = $this->getNewFileName('log', 'log');
+        $outputPath = logsDir($fileName);
+        $adapter  = new Stream($outputPath);
 
         $logger = new Logger(
             'my-logger',
@@ -157,26 +159,26 @@ final class LogTest extends UnitTestCase
         $logger->setLogLevel(Enum::ALERT);
 
         $levelsYes = [
-            Enum::ALERT     => 'alert',
-            Enum::CRITICAL  => 'critical',
-            Enum::EMERGENCY => 'emergency',
-            'alert'         => 'alert',
-            'critical'      => 'critical',
-            'emergency'     => 'emergency',
+            Enum::ALERT     => LogLevel::ALERT,
+            Enum::CRITICAL  => LogLevel::CRITICAL,
+            Enum::EMERGENCY => LogLevel::EMERGENCY,
+            'alert'         => LogLevel::ALERT,
+            'critical'      => LogLevel::CRITICAL,
+            'emergency'     => LogLevel::EMERGENCY,
         ];
 
         $levelsNo = [
-            Enum::DEBUG   => 'debug',
-            Enum::ERROR   => 'error',
-            Enum::INFO    => 'info',
-            Enum::NOTICE  => 'notice',
-            Enum::WARNING => 'warning',
+            Enum::DEBUG   => LogLevel::DEBUG,
+            Enum::ERROR   => LogLevel::ERROR,
+            Enum::INFO    => LogLevel::INFO,
+            Enum::NOTICE  => LogLevel::NOTICE,
+            Enum::WARNING => LogLevel::WARNING,
             Enum::CUSTOM  => 'custom',
-            'debug'       => 'debug',
-            'error'       => 'error',
-            'info'        => 'info',
-            'notice'      => 'notice',
-            'warning'     => 'warning',
+            'debug'       => LogLevel::DEBUG,
+            'error'       => LogLevel::ERROR,
+            'info'        => LogLevel::INFO,
+            'notice'      => LogLevel::NOTICE,
+            'warning'     => LogLevel::WARNING,
             'custom'      => 'custom',
         ];
 
@@ -188,11 +190,11 @@ final class LogTest extends UnitTestCase
             $logger->log($level, 'Message ' . $levelName);
         }
 
-        $contents = file_get_contents($logPath . $fileName);
+        $contents = file_get_contents($outputPath);
         foreach ($levelsYes as $levelName) {
             $expected = sprintf(
                 '[%s] Message %s',
-                strtoupper($levelName),
+                $levelName,
                 $levelName
             );
             $this->assertStringContainsString($expected, $contents);
@@ -201,13 +203,13 @@ final class LogTest extends UnitTestCase
         foreach ($levelsNo as $levelName) {
             $expected = sprintf(
                 '[%s] Message %s',
-                strtoupper($levelName),
+                $levelName,
                 $levelName
             );
             $this->assertStringNotContainsString($expected, $contents);
         }
 
         $adapter->close();
-        $this->safeDeleteFile($fileName);
+        $this->safeDeleteFile($outputPath);
     }
 }

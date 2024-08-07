@@ -18,8 +18,8 @@ use Phalcon\Logger\Enum;
 use Phalcon\Logger\Exception;
 use Phalcon\Logger\Formatter\Json;
 use Phalcon\Logger\Logger;
-use Phalcon\Logger\LoggerInterface;
 use Phalcon\Tests\UnitTestCase;
+use Psr\Log\LoggerInterface;
 
 final class ConstructTest extends UnitTestCase
 {
@@ -112,8 +112,8 @@ final class ConstructTest extends UnitTestCase
     public function testLoggerConstructStreamWithJsonConstants(): void
     {
         $fileName   = $this->getNewFileName('log', 'log');
-        $outputPath = logsDir();
-        $adapter    = new Stream($outputPath . $fileName);
+        $outputPath = logsDir($fileName);
+        $adapter    = new Stream($outputPath);
 
         $adapter->setFormatter(new Json());
 
@@ -131,18 +131,18 @@ final class ConstructTest extends UnitTestCase
         $logger->error('This is another error');
 
         $expected = sprintf(
-            '{"level":"DEBUG","message":"This is a message","timestamp":"%s"}' . PHP_EOL .
-            '{"level":"ERROR","message":"This is an error","timestamp":"%s"}' . PHP_EOL .
-            '{"level":"ERROR","message":"This is another error","timestamp":"%s"}',
+            '{"level":"debug","message":"This is a message","timestamp":"%s"}' . PHP_EOL .
+            '{"level":"error","message":"This is an error","timestamp":"%s"}' . PHP_EOL .
+            '{"level":"error","message":"This is another error","timestamp":"%s"}',
             date('c', $time),
             date('c', $time),
             date('c', $time)
         );
 
-        $contents = file_get_contents($outputPath . $fileName);
+        $contents = file_get_contents($outputPath);
         $this->assertStringContainsString($expected, $contents);
 
         $adapter->close();
-        $this->safeDeleteFile($outputPath . $fileName);
+        $this->safeDeleteFile($outputPath);
     }
 }
