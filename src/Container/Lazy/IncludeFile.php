@@ -39,6 +39,6 @@ class IncludeFile extends AbstractLazy
     {
         $file = $this->resolveArgument($container, $this->file);
 
-        return include $file;
+        return include_once $file;
     }
 }

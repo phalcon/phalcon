@@ -61,6 +61,10 @@ class Stream extends MetaData
 
     /**
      * Reads meta-data from files
+     *
+     * @param string|null $key
+     *
+     * @return array|null
      */
     public function read(?string $key): array | null
     {
@@ -89,10 +93,12 @@ class Stream extends MetaData
         try {
             $path = $this->metaDataDir . $this->prepareVirtualPath($key) . ".php";
 
-            if (false === file_put_contents($path, "<?php return " . var_export($data, true) . "; ")) {
+            if (
+                false === file_put_contents($path, "<?php return " . var_export($data, true) . "; ")
+            ) {
                 $this->throwWriteException($option);
             }
-        } catch (\Exception $e) {
+        } catch (\Exception) {
             $this->throwWriteException($option);
         }
     }

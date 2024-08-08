@@ -13,7 +13,7 @@ declare(strict_types=1);
 
 namespace Phalcon\Db;
 
-use Phalcon\Support\Traits\IniTrait;
+use Phalcon\Support\Settings;
 
 use function explode;
 use function implode;
@@ -31,8 +31,6 @@ use function trim;
  */
 abstract class Dialect implements DialectInterface
 {
-    use IniTrait;
-
     /**
      * @var array
      */
@@ -66,7 +64,7 @@ abstract class Dialect implements DialectInterface
         string $input,
         string $escapeChar = ""
     ): string {
-        $identifiers = $this->iniGetBool("db.escape_identifiers", true);
+        $identifiers = Settings::get("db.escape_identifiers");
         if (true !== $identifiers) {
             return $input;
         }
@@ -109,7 +107,7 @@ abstract class Dialect implements DialectInterface
         string $input,
         string $escapeChar = ""
     ): string {
-        $identifiers = $this->iniGetBool("db.escape_identifiers", true);
+        $identifiers = Settings::get("db.escape_identifiers");
         if (true !== $identifiers) {
             return $input;
         }

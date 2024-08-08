@@ -265,17 +265,18 @@ class Compiler implements InjectionAwareInterface
             $leftCode = $this->expression($left);
             $leftType = $left["type"];
 
-            /**
-             * @todo What?
-             */
-            if (
-                $leftType != Enum::PHVOLT_T_DOT &&
-                $leftType != Enum::PHVOLT_T_FCALL
-            ) {
-                $exprCode .= $leftCode;
-            } else {
-                $exprCode .= $leftCode;
-            }
+//            /**
+//             * @todo What?
+//             */
+//            if (
+//                $leftType != Enum::PHVOLT_T_DOT &&
+//                $leftType != Enum::PHVOLT_T_FCALL
+//            ) {
+//                $exprCode .= $leftCode;
+//            } else {
+//                $exprCode .= $leftCode;
+//            }
+            $exprCode .= $leftCode;
         }
 
         $exprCode .= "->";
