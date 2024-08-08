@@ -172,10 +172,11 @@ class Mysql extends Dialect
         $temp = $temporary ? 'TEMPORARY ' : '';
         $sql = 'CREATE ' . $temp . 'TABLE ' . $tableName . " (\n\t";
 
-        $createLines = $this->getTableColumns($definition)
-            + $this->getTableIndexes($definition)
-            + $this->getTableReferences($definition)
-        ;
+        $createLines = array_merge(
+            $this->getTableColumns($definition),
+            $this->getTableIndexes($definition),
+            $this->getTableReferences($definition)
+        );
 
         /**
          * Create related references
@@ -424,260 +425,57 @@ class Mysql extends Dialect
         $columnSql  = $this->checkColumnTypeSql($column);
         $columnType = $this->checkColumnType($column);
 
-        switch ($columnType) {
-            case Column::TYPE_BIGINTEGER:
-                if (true === empty($columnSql)) {
-                    $columnSql .= "BIGINT";
-                }
-
-                $columnSql .= $this->getColumnSize($column)
-                    . $this->checkColumnUnsigned($column);
-
-                break;
-
-            case Column::TYPE_BIT:
-                if (true === empty($columnSql)) {
-                    $columnSql .= "BIT";
-                }
-
-                $columnSql .= $this->getColumnSize($column);
-
-                break;
-
-            case Column::TYPE_BLOB:
-                if (true === empty($columnSql)) {
-                    $columnSql .= "BLOB";
-                }
-
-                break;
-
-            case Column::TYPE_BOOLEAN:
-                if (true === empty($columnSql)) {
-                    $columnSql .= "TINYINT(1)";
-                }
-
-                break;
-
-            case Column::TYPE_CHAR:
-                if (true === empty($columnSql)) {
-                    $columnSql .= "CHAR";
-                }
-
-                $columnSql .= $this->getColumnSize($column);
-
-                break;
-
-            case Column::TYPE_DATE:
-                if (true === empty($columnSql)) {
-                    $columnSql .= "DATE";
-                }
-
-                break;
-
-            case Column::TYPE_DATETIME:
-                if (true === empty($columnSql)) {
-                    $columnSql .= "DATETIME";
-                }
-
-                if ($column->getSize() > 0) {
-                    $columnSql .= $this->getColumnSize($column);
-                }
-
-                break;
-
-            case Column::TYPE_DECIMAL:
-                if (true === empty($columnSql)) {
-                    $columnSql .= "DECIMAL";
-                }
-
-                $columnSql .= $this->getColumnSizeAndScale($column)
-                    . $this->checkColumnUnsigned($column);
-
-                break;
-
-            case Column::TYPE_DOUBLE:
-                if (true === empty($columnSql)) {
-                    $columnSql .= "DOUBLE";
-                }
-
-                $columnSql .= $this->checkColumnSizeAndScale($column)
-                    . $this->checkColumnUnsigned($column);
-
-                break;
-
-            case Column::TYPE_ENUM:
-                if (true === empty($columnSql)) {
-                    $columnSql .= "ENUM";
-                }
-
-                $columnSql .= $this->getColumnSize($column);
-
-                break;
-
-            case Column::TYPE_FLOAT:
-                if (true === empty($columnSql)) {
-                    $columnSql .= "FLOAT";
-                }
-
-                $columnSql .= $this->checkColumnSizeAndScale($column)
-                    . $this->checkColumnUnsigned($column);
-
-                break;
-
-            case Column::TYPE_INTEGER:
-                if (true === empty($columnSql)) {
-                    $columnSql .= "INT";
-                }
-
-                $columnSql .= $this->getColumnSize($column)
-                    . $this->checkColumnUnsigned($column);
-
-                break;
-
-            case Column::TYPE_JSON:
-                if (true === empty($columnSql)) {
-                    $columnSql .= "JSON";
-                }
-
-                break;
-
-            case Column::TYPE_LONGBLOB:
-                if (true === empty($columnSql)) {
-                    $columnSql .= "LONGBLOB";
-                }
-
-                break;
-
-            case Column::TYPE_LONGTEXT:
-                if (true === empty($columnSql)) {
-                    $columnSql .= "LONGTEXT";
-                }
-
-                break;
-
-            case Column::TYPE_MEDIUMBLOB:
-                if (true === empty($columnSql)) {
-                    $columnSql .= "MEDIUMBLOB";
-                }
-
-                break;
-
-            case Column::TYPE_MEDIUMINTEGER:
-                if (true === empty($columnSql)) {
-                    $columnSql .= "MEDIUMINT";
-                }
-
-                $columnSql .= $this->getColumnSize($column)
-                    . $this->checkColumnUnsigned($column);
-
-                break;
-
-            case Column::TYPE_MEDIUMTEXT:
-                if (true === empty($columnSql)) {
-                    $columnSql .= "MEDIUMTEXT";
-                }
-
-                break;
-
-            case Column::TYPE_SMALLINTEGER:
-                if (true === empty($columnSql)) {
-                    $columnSql .= "SMALLINT";
-                }
-
-                $columnSql .= $this->getColumnSize($column)
-                    . $this->checkColumnUnsigned($column);
-
-                break;
-
-            case Column::TYPE_TEXT:
-                if (true === empty($columnSql)) {
-                    $columnSql .= "TEXT";
-                }
-
-                break;
-
-            case Column::TYPE_TIME:
-                if (true === empty($columnSql)) {
-                    $columnSql .= "TIME";
-                }
-
-                if ($column->getSize() > 0) {
-                    $columnSql .= $this->getColumnSize($column);
-                }
-
-                break;
-
-            case Column::TYPE_TIMESTAMP:
-                if (true === empty($columnSql)) {
-                    $columnSql .= "TIMESTAMP";
-                }
-
-                if ($column->getSize() > 0) {
-                    $columnSql .= $this->getColumnSize($column);
-                }
-
-                break;
-
-            case Column::TYPE_TINYBLOB:
-                if (true === empty($columnSql)) {
-                    $columnSql .= "TINYBLOB";
-                }
-
-                break;
-
-            case Column::TYPE_TINYINTEGER:
-                if (true === empty($columnSql)) {
-                    $columnSql .= "TINYINT";
-                }
-
-                $columnSql .= $this->getColumnSize($column)
-                    . $this->checkColumnUnsigned($column);
-
-                break;
-
-            case Column::TYPE_TINYTEXT:
-                if (true === empty($columnSql)) {
-                    $columnSql .= "TINYTEXT";
-                }
-
-                break;
-
-            case Column::TYPE_VARCHAR:
-                if (true === empty($columnSql)) {
-                    $columnSql .= "VARCHAR";
-                }
-
-                $columnSql .= $this->getColumnSize($column);
-
-                break;
-
-            default:
-                if (true === empty($columnSql)) {
-                    throw new Exception(
-                        "Unrecognized MySQL data type at column " . $column->getName()
-                    );
-                }
-
-                $typeValues = $column->getTypeValues();
-                if (true !== empty($typeValues)) {
-                    if (is_array($typeValues)) {
-                        $valueSql = "";
-                        foreach ($typeValues as $value) {
-                            $valueSql .= "\""
-                                . addcslashes($value, "\"")
-                                . "\", ";
-                        }
-
-                        $columnSql .= "("
-                            . substr($valueSql, 0, -2)
-                            . ")";
-                    } else {
-                        $columnSql .= "(\""
-                            . addcslashes($typeValues, "\"")
-                            . "\")";
-                    }
-                }
-        }
+        $columnSql .= match ($columnType) {
+            Column::TYPE_BIGINTEGER    => "BIGINT",
+            Column::TYPE_BIT           => "BIT",
+            Column::TYPE_BLOB          => "BLOB",
+            Column::TYPE_BOOLEAN       => "TINYINT(1)",
+            Column::TYPE_CHAR          => "CHAR",
+            Column::TYPE_DATE          => "DATE",
+            Column::TYPE_DATETIME      => "DATETIME",
+            Column::TYPE_DECIMAL       => "DECIMAL",
+            Column::TYPE_DOUBLE        => "DOUBLE",
+            Column::TYPE_ENUM          => "ENUM",
+            Column::TYPE_FLOAT         => "FLOAT",
+            Column::TYPE_INTEGER       => "INT",
+            Column::TYPE_JSON          => "JSON",
+            Column::TYPE_LONGBLOB      => "LONGBLOB",
+            Column::TYPE_LONGTEXT      => "LONGTEXT",
+            Column::TYPE_MEDIUMBLOB    => "MEDIUMBLOB",
+            Column::TYPE_MEDIUMINTEGER => "MEDIUMINT",
+            Column::TYPE_MEDIUMTEXT    => "MEDIUMTEXT",
+            Column::TYPE_SMALLINTEGER  => "SMALLINT",
+            Column::TYPE_TEXT          => "TEXT",
+            Column::TYPE_TIME          => "TIME",
+            Column::TYPE_TIMESTAMP     => "TIMESTAMP",
+            Column::TYPE_TINYBLOB      => "TINYBLOB",
+            Column::TYPE_TINYINTEGER   => "TINYINT",
+            Column::TYPE_TINYTEXT      => "TINYTEXT",
+            Column::TYPE_VARCHAR       => "VARCHAR",
+            default                    => throw new Exception(
+                "Unrecognized MySQL data type at column " . $column->getName()
+            ),
+        };
+
+        $columnSql .= match ($columnType) {
+            Column::TYPE_BIGINTEGER,
+            Column::TYPE_BIT,
+            Column::TYPE_CHAR,
+            Column::TYPE_DATETIME,
+            Column::TYPE_ENUM,
+            Column::TYPE_INTEGER,
+            Column::TYPE_MEDIUMINTEGER,
+            Column::TYPE_SMALLINTEGER,
+            Column::TYPE_TINYINTEGER,
+            Column::TYPE_TIME,
+            Column::TYPE_TIMESTAMP,
+            Column::TYPE_VARCHAR,
+            Column::TYPE_DECIMAL,
+            Column::TYPE_DOUBLE,
+            Column::TYPE_FLOAT          => $this->checkColumnSizeAndScale($column)
+                . $this->checkColumnUnsigned($column),
+            default                     => '',
+        };
 
         return $columnSql;
     }

@@ -352,7 +352,7 @@ class Column implements ColumnInterface
         $this->isPrimary     = (bool)($definition["primary"] ?? false);
         $this->isUnsigned    = (bool)($definition["unsigned"] ?? false);
         $this->size          = $definition["size"] ?? 0;
-        $this->type          = $definition["type"];
+        $this->type          = $this->processColumnType($definition["type"]);
         $this->typeReference = $definition["typeReference"] ?? -1;
         $this->typeValues    = $definition["typeValues"] ?? [];
 
@@ -567,5 +567,45 @@ class Column implements ColumnInterface
     public function isUnsigned(): bool
     {
         return $this->isUnsigned;
+    }
+
+    private function processColumnType(mixed $type): int
+    {
+        $type = (int) $type;
+
+        return match ($type) {
+            self::TYPE_BIGINTEGER,
+            self::TYPE_BINARY,
+            self::TYPE_BIT,
+            self::TYPE_BLOB,
+            self::TYPE_BOOLEAN,
+            self::TYPE_CHAR,
+            self::TYPE_DATE,
+            self::TYPE_DATETIME,
+            self::TYPE_DECIMAL,
+            self::TYPE_DOUBLE,
+            self::TYPE_ENUM,
+            self::TYPE_FLOAT,
+            self::TYPE_INTEGER,
+            self::TYPE_JSON,
+            self::TYPE_JSONB,
+            self::TYPE_LONGBLOB,
+            self::TYPE_LONGTEXT,
+            self::TYPE_MEDIUMBLOB,
+            self::TYPE_MEDIUMINTEGER,
+            self::TYPE_MEDIUMTEXT,
+            self::TYPE_SMALLINTEGER,
+            self::TYPE_TEXT,
+            self::TYPE_TIME,
+            self::TYPE_TIMESTAMP,
+            self::TYPE_TINYBLOB,
+            self::TYPE_TINYINTEGER,
+            self::TYPE_TINYTEXT,
+            self::TYPE_VARBINARY,
+            self::TYPE_VARCHAR => $type,
+            default            => throw new Exception(
+                "Column type is not valid"
+            ),
+        };
     }
 }
