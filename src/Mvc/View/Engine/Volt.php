@@ -250,7 +250,7 @@ class Volt extends AbstractEngine
             }
         }
 
-        require $compiledTemplatePath;
+        require_once $compiledTemplatePath;
 
         if ($mustClean) {
             $this->view->setContent(ob_get_contents());

@@ -39,6 +39,6 @@ class RequireFile extends AbstractLazy
     {
         $arguments = $this->resolveArguments($container, [$this->file]);
 
-        return require $arguments[0];
+        return require_once $arguments[0];
     }
 }

@@ -71,11 +71,15 @@ class Mysql extends Dialect
 
         if (true === $column->hasDefault()) {
             $defaultValue      = $column->getDefault();
-            $upperDefaultValue = strtoupper($defaultValue);
 
             if (
-                str_contains($upperDefaultValue, "CURRENT_TIMESTAMP") ||
-                str_contains($upperDefaultValue, "NULL") ||
+                (
+                    is_string($defaultValue) &&
+                    (
+                        str_contains(strtoupper($defaultValue), "CURRENT_TIMESTAMP") ||
+                        str_contains(strtoupper($defaultValue), "NULL")
+                    )
+                ) ||
                 is_int($defaultValue) ||
                 is_float($defaultValue)
             ) {

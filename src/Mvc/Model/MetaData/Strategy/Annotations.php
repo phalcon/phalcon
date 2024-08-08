@@ -31,7 +31,9 @@ class Annotations implements StrategyInterface
     final public function getColumnMaps(ModelInterface $model, DiInterface $container): array
     {
         if (false === is_object($container)) {
-            throw new Exception("The dependency injector is invalid in MetaData Stratagy Annotations");
+            throw new Exception(
+                "The dependency injector is invalid in MetaData Strategy Annotations"
+            );
         }
 
         $annotations = $container->get("annotations");
@@ -101,10 +103,19 @@ class Annotations implements StrategyInterface
     }
 
     /**
-     * The meta-data is obtained by reading the column descriptions from the database information schema
+     * The meta-data is obtained by reading the column descriptions from the
+     * database information schema
+     *
+     * @param ModelInterface $model
+     * @param DiInterface    $container
+     *
+     * @return array
+     * @throws Exception
      */
-    final public function getMetaData(ModelInterface $model, DiInterface $container): array
-    {
+    final public function getMetaData(
+        ModelInterface $model,
+        DiInterface $container
+    ): array {
         if (false === is_object($container)) {
             throw new Exception("The dependency injector is invalid");
         }
