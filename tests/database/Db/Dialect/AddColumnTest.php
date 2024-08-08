@@ -27,7 +27,9 @@ final class AddColumnTest extends DatabaseTestCase
         return [
             [
                 Mysql::class,
-                'ALTER TABLE `schema`.`table` ADD `field_primary` INT(11) NOT NULL AUTO_INCREMENT FIRST',
+                'ALTER TABLE `schema`.`table` '
+                . 'ADD `field_primary` INT(11) NOT NULL '
+                . 'AUTO_INCREMENT FIRST',
 
             ],
             //            [Postgresql::class],
@@ -43,7 +45,9 @@ final class AddColumnTest extends DatabaseTestCase
         return [
             [
                 Mysql::class,
-                'ALTER TABLE `schema`.`table` ADD `field_primary` DOUBLE(10,2) NOT NULL DEFAULT 13.34 FIRST',
+                'ALTER TABLE `schema`.`table` '
+                . 'ADD `field_primary` DOUBLE(10,2) NOT NULL '
+                . 'DEFAULT 13.34 FIRST',
 
             ],
             //            [Postgresql::class],
@@ -59,7 +63,9 @@ final class AddColumnTest extends DatabaseTestCase
         return [
             [
                 Mysql::class,
-                'ALTER TABLE `schema`.`table` ADD `field_primary` INT(10) NOT NULL DEFAULT 13 FIRST',
+                'ALTER TABLE `schema`.`table` '
+                . 'ADD `field_primary` INT(10) NOT NULL '
+                . 'DEFAULT 13 FIRST',
 
             ],
             //            [Postgresql::class],
@@ -75,7 +81,9 @@ final class AddColumnTest extends DatabaseTestCase
         return [
             [
                 Mysql::class,
-                'ALTER TABLE `schema`.`table` ADD `field_primary` VARCHAR(10) NOT NULL DEFAULT NULL FIRST',
+                'ALTER TABLE `schema`.`table` '
+                . 'ADD `field_primary` VARCHAR(10) NOT NULL '
+                . 'DEFAULT NULL FIRST',
 
             ],
             //            [Postgresql::class],
@@ -91,7 +99,9 @@ final class AddColumnTest extends DatabaseTestCase
         return [
             [
                 Mysql::class,
-                'ALTER TABLE `schema`.`table` ADD `field_primary` VARCHAR(10) NOT NULL DEFAULT "test" AFTER `field_first`',
+                'ALTER TABLE `schema`.`table` '
+                . 'ADD `field_primary` VARCHAR(10) NOT NULL '
+                . 'DEFAULT "test" AFTER `field_first`',
 
             ],
             //            [Postgresql::class],
@@ -107,7 +117,9 @@ final class AddColumnTest extends DatabaseTestCase
         return [
             [
                 Mysql::class,
-                'ALTER TABLE `schema`.`table` ADD `field_primary` VARCHAR(10) NOT NULL DEFAULT CURRENT_TIMESTAMP FIRST',
+                'ALTER TABLE `schema`.`table` '
+                . 'ADD `field_primary` VARCHAR(10) NOT NULL '
+                . 'DEFAULT CURRENT_TIMESTAMP FIRST',
 
             ],
             //            [Postgresql::class],
