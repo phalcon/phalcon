@@ -186,154 +186,66 @@ class Annotations implements StrategyInterface
              */
             $feature = $columnAnnotation->getNamedParameter("type");
 
-            switch ($feature) {
-                case "biginteger":
-                    $fieldTypes[$columnName]     = Column::TYPE_BIGINTEGER;
-                    $fieldBindTypes[$columnName] = Column::BIND_PARAM_STR;
-                    $numericTyped[$columnName]   = true;
-                    break;
+            $fieldTypes[$columnName] = match ($feature) {
+                "biginteger" => Column::TYPE_BIGINTEGER,
+                "bit"        => Column::TYPE_BIT,
+                "blob"       => Column::TYPE_BLOB,
+                "boolean"    => Column::TYPE_BOOLEAN,
+                "char"       => Column::TYPE_CHAR,
+                "date"       => Column::TYPE_DATE,
+                "datetime"   => Column::TYPE_DATETIME,
+                "decimal"    => Column::TYPE_DECIMAL,
+                "double"     => Column::TYPE_DOUBLE,
+                "enum"       => Column::TYPE_ENUM,
+                "float"      => Column::TYPE_FLOAT,
+                "integer"    => Column::TYPE_INTEGER,
+                "json"       => Column::TYPE_JSON,
+                "jsonb"      => Column::TYPE_JSONB,
+                "longblob"   => Column::TYPE_LONGBLOB,
+                "longtext"   => Column::TYPE_LONGTEXT,
+                "mediumblob" => Column::TYPE_MEDIUMBLOB,
+                "mediumint"  => Column::TYPE_MEDIUMINTEGER,
+                "mediumtext" => Column::TYPE_MEDIUMTEXT,
+                "smallint"   => Column::TYPE_SMALLINTEGER,
+                "text"       => Column::TYPE_TEXT,
+                "time"       => Column::TYPE_TIME,
+                "timestamp"  => Column::TYPE_TIMESTAMP,
+                "tinyblob"   => Column::TYPE_TINYBLOB,
+                "tinyint"    => Column::TYPE_TINYINTEGER,
+                "tinytext"   => Column::TYPE_TINYTEXT,
+                default      => Column::TYPE_VARCHAR,
+            };
 
-                case "bit":
-                    $fieldTypes[$columnName]     = Column::TYPE_BIT;
-                    $fieldBindTypes[$columnName] = Column::BIND_PARAM_INT;
-                    $numericTyped[$columnName]   = true;
-                    break;
+            $fieldBindTypes[$columnName] = match ($feature) {
+                "decimal",
+                "double",
+                "float"      => Column::BIND_PARAM_DECIMAL,
+                "blob",
+                "mediumblob",
+                "longblob",
+                "tinyblob"   => Column::BIND_PARAM_BLOB,
+                "boolean"    => Column::BIND_PARAM_BOOL,
+                "mediumint",
+                "smallint",
+                "tinyint",
+                "bit",
+                "integer"    => Column::BIND_PARAM_INT,
+                default      => Column::BIND_PARAM_STR,
+            };
 
-                case "blob":
-                    $fieldTypes[$columnName]     = Column::TYPE_BLOB;
-                    $fieldBindTypes[$columnName] = Column::BIND_PARAM_BLOB;
-                    break;
-
-                case "boolean":
-                    $fieldTypes[$columnName]     = Column::TYPE_BOOLEAN;
-                    $fieldBindTypes[$columnName] = Column::BIND_PARAM_BOOL;
-                    break;
-
-                case "char":
-                    $fieldTypes[$columnName]     = Column::TYPE_CHAR;
-                    $fieldBindTypes[$columnName] = Column::BIND_PARAM_STR;
-                    break;
-
-                case "date":
-                    $fieldTypes[$columnName]     = Column::TYPE_DATE;
-                    $fieldBindTypes[$columnName] = Column::BIND_PARAM_STR;
-                    break;
-
-                case "datetime":
-                    $fieldTypes[$columnName]     = Column::TYPE_DATETIME;
-                    $fieldBindTypes[$columnName] = Column::BIND_PARAM_STR;
-                    break;
-
-                case "decimal":
-                    $fieldTypes[$columnName]     = Column::TYPE_DECIMAL;
-                    $fieldBindTypes[$columnName] = Column::BIND_PARAM_DECIMAL;
-                    $numericTyped[$columnName]   = true;
-                    break;
-
-                case "double":
-                    $fieldTypes[$columnName]     = Column::TYPE_DOUBLE;
-                    $fieldBindTypes[$columnName] = Column::BIND_PARAM_DECIMAL;
-                    $numericTyped[$columnName]   = true;
-                    break;
-
-                case "enum":
-                    $fieldTypes[$columnName]     = Column::TYPE_ENUM;
-                    $fieldBindTypes[$columnName] = Column::BIND_PARAM_STR;
-                    $numericTyped[$columnName]   = true;
-                    break;
-
-                case "float":
-                    $fieldTypes[$columnName]     = Column::TYPE_FLOAT;
-                    $fieldBindTypes[$columnName] = Column::BIND_PARAM_DECIMAL;
-                    $numericTyped[$columnName]   = true;
-                    break;
-
-                case "integer":
-                    $fieldTypes[$columnName]     = Column::TYPE_INTEGER;
-                    $fieldBindTypes[$columnName] = Column::BIND_PARAM_INT;
-                    $numericTyped[$columnName]   = true;
-                    break;
-
-                case "json":
-                    $fieldTypes[$columnName]     = Column::TYPE_JSON;
-                    $fieldBindTypes[$columnName] = Column::BIND_PARAM_STR;
-                    break;
-
-                case "jsonb":
-                    $fieldTypes[$columnName]     = Column::TYPE_JSONB;
-                    $fieldBindTypes[$columnName] = Column::BIND_PARAM_STR;
-                    break;
-
-                case "longblob":
-                    $fieldTypes[$columnName]     = Column::TYPE_LONGBLOB;
-                    $fieldBindTypes[$columnName] = Column::BIND_PARAM_BLOB;
-                    break;
-
-                case "longtext":
-                    $fieldTypes[$columnName]     = Column::TYPE_LONGTEXT;
-                    $fieldBindTypes[$columnName] = Column::BIND_PARAM_STR;
-                    break;
-
-                case "mediumblob":
-                    $fieldTypes[$columnName]     = Column::TYPE_MEDIUMBLOB;
-                    $fieldBindTypes[$columnName] = Column::BIND_PARAM_BLOB;
-                    break;
-
-                case "mediumint":
-                    $fieldTypes[$columnName]     = Column::TYPE_MEDIUMINTEGER;
-                    $fieldBindTypes[$columnName] = Column::BIND_PARAM_INT;
-                    $numericTyped[$columnName]   = true;
-                    break;
-
-                case "mediumtext":
-                    $fieldTypes[$columnName]     = Column::TYPE_MEDIUMTEXT;
-                    $fieldBindTypes[$columnName] = Column::BIND_PARAM_STR;
-                    break;
-
-                case "smallint":
-                    $fieldTypes[$columnName]     = Column::TYPE_SMALLINTEGER;
-                    $fieldBindTypes[$columnName] = Column::BIND_PARAM_INT;
-                    $numericTyped[$columnName]   = true;
-                    break;
-
-                case "text":
-                    $fieldTypes[$columnName]     = Column::TYPE_TEXT;
-                    $fieldBindTypes[$columnName] = Column::BIND_PARAM_STR;
-                    break;
-
-                case "time":
-                    $fieldTypes[$columnName]     = Column::TYPE_TIME;
-                    $fieldBindTypes[$columnName] = Column::BIND_PARAM_STR;
-                    break;
-
-                case "timestamp":
-                    $fieldTypes[$columnName]     = Column::TYPE_TIMESTAMP;
-                    $fieldBindTypes[$columnName] = Column::BIND_PARAM_STR;
-                    break;
-
-                case "tinyblob":
-                    $fieldTypes[$columnName]     = Column::TYPE_TINYBLOB;
-                    $fieldBindTypes[$columnName] = Column::BIND_PARAM_BLOB;
-                    break;
-
-                case "tinyint":
-                    $fieldTypes[$columnName]     = Column::TYPE_TINYINTEGER;
-                    $fieldBindTypes[$columnName] = Column::BIND_PARAM_INT;
-                    $numericTyped[$columnName]   = true;
-                    break;
-
-                case "tinytext":
-                    $fieldTypes[$columnName]     = Column::TYPE_TINYTEXT;
-                    $fieldBindTypes[$columnName] = Column::BIND_PARAM_STR;
-                    break;
-
-                default:
-                    /**
-                     * By default all columns are varchar/string
-                     */
-                    $fieldTypes[$columnName]     = Column::TYPE_VARCHAR;
-                    $fieldBindTypes[$columnName] = Column::BIND_PARAM_STR;
-            }
+            $numericTyped[$columnName] = match ($feature) {
+                "biginteger",
+                "bit",
+                "decimal",
+                "double",
+                "enum",
+                "float",
+                "integer",
+                "mediumint",
+                "smallint",
+                "tinyint" => true,
+                default   => false,
+            };
 
             /**
              * All columns marked with the "Primary" annotation are considered
