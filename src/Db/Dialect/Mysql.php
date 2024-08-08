@@ -968,12 +968,7 @@ class Mysql extends Dialect
         string $tableName,
         ?string $schemaName = null
     ): string {
-        $schema = empty($schemaName) ? "DATABASE()" : "'" . $schemaName . "'";
-
-        return "SELECT IF(COUNT(*) > 0, 1, 0) "
-            . "FROM `INFORMATION_SCHEMA`.`TABLES` "
-            . "WHERE `TABLE_NAME` = '" . $tableName . "' "
-            . "AND `TABLE_SCHEMA` = " . $schema;
+        return $this->getExistsSql('TABLES', $tableName, $schemaName);
     }
 
     /**
@@ -1026,12 +1021,7 @@ class Mysql extends Dialect
         string $viewName,
         ?string $schemaName = null
     ): string {
-        $schema = empty($schemaName) ? "DATABASE()" : "'" . $schemaName . "'";
-
-        return "SELECT IF(COUNT(*) > 0, 1, 0) "
-            . "FROM `INFORMATION_SCHEMA`.`VIEWS` "
-            . "WHERE `TABLE_NAME`='" . $viewName . "' "
-            . "AND `TABLE_SCHEMA` = " . $schema;
+        return $this->getExistsSql('VIEWS', $viewName, $schemaName);
     }
 
     /**
@@ -1139,7 +1129,6 @@ class Mysql extends Dialect
 
     /**
      * @param Column $column
-     * @param        $sql
      *
      * @return string
      */
@@ -1169,5 +1158,25 @@ class Mysql extends Dialect
         }
 
         return $sql;
+    }
+
+    /**
+     * @param string      $table
+     * @param string      $viewName
+     * @param string|null $schemaName
+     *
+     * @return string
+     */
+    private function getExistsSql(
+        string $table,
+        string $viewName,
+        ?string $schemaName
+    ): string {
+        $schema = empty($schemaName) ? "DATABASE()" : "'" . $schemaName . "'";
+
+        return "SELECT IF(COUNT(*) > 0, 1, 0) "
+            . "FROM `INFORMATION_SCHEMA`.`" . $table . "` "
+            . "WHERE `TABLE_NAME` = '" . $viewName . "' "
+            . "AND `TABLE_SCHEMA` = " . $schema;
     }
 }
