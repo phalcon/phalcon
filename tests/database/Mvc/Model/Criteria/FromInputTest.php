@@ -13,28 +13,32 @@ declare(strict_types=1);
 
 namespace Phalcon\Tests\Database\Mvc\Model\Criteria;
 
+use DatabaseTester;
 use Phalcon\Mvc\Model\Criteria;
-use Phalcon\Tests\DatabaseTestCase;
 use Phalcon\Tests\Fixtures\Traits\DiTrait;
 use Phalcon\Tests\Models\Invoices;
 
-final class FromInputTest extends DatabaseTestCase
+class FromInputCest
 {
     use DiTrait;
 
     /**
      * Executed before each test
      *
+     * @param DatabaseTester $I
+     *
      * @return void
      */
-    public function setUp(): void
+    public function _before(DatabaseTester $I): void
     {
         $this->setNewFactoryDefault();
-        $this->setDatabase();
+        $this->setDatabase($I);
     }
 
     /**
      * Tests Phalcon\Mvc\Model\Criteria :: fromInput()
+     *
+     * @param DatabaseTester $I
      *
      * @author Phalcon Team <team@phalcon.io>
      * @since  2020-03-05
@@ -42,8 +46,10 @@ final class FromInputTest extends DatabaseTestCase
      * @group  mysql
      * @group  sqlite
      */
-    public function testMvcModelCriteriaFromInputMysql(): void
+    public function mvcModelCriteriaFromInputMysql(DatabaseTester $I): void
     {
+        $I->wantToTest('Mvc\Model\Criteria - fromInput()');
+
         $criteria = Criteria::fromInput(
             $this->container,
             Invoices::class,
@@ -59,15 +65,15 @@ final class FromInputTest extends DatabaseTestCase
 
         $builder = $criteria->createBuilder();
 
-        if (self::getDriver() === 'sqlite') {
+        if ($I->getDriver() === 'sqlite') {
             $expected = 'SELECT [Phalcon\Tests\Models\Invoices].* '
                 . 'FROM [Phalcon\Tests\Models\Invoices] '
                 . 'WHERE [inv_id] = :inv_id: '
                 . 'AND [inv_cst_id] = :inv_cst_id: '
                 . 'AND [inv_status_flag] = :inv_status_flag: '
                 . 'AND [inv_title] LIKE :inv_title: '
-                . 'AND [inv_total] = :inv_total: '
-                . 'AND [inv_created_at] = :inv_created_at:';
+                . 'AND [inv_total] LIKE :inv_total: '
+                . 'AND [inv_created_at] LIKE :inv_created_at:';
         } else {
             $expected = 'SELECT [Phalcon\Tests\Models\Invoices].* '
                 . 'FROM [Phalcon\Tests\Models\Invoices] '
@@ -79,16 +85,16 @@ final class FromInputTest extends DatabaseTestCase
                 . 'AND [inv_created_at] = :inv_created_at:';
         }
 
-        $this->assertEquals($expected, $builder->getPhql());
+        $I->assertEquals($expected, $builder->getPhql());
 
-        if (self::getDriver() === 'sqlite') {
+        if ($I->getDriver() === 'sqlite') {
             $expected = [
                 'inv_id'          => 1,
                 'inv_cst_id'      => 2,
                 'inv_status_flag' => 3,
                 'inv_title'       => '%title%',
-                'inv_total'       => '100.1',
-                'inv_created_at'  => '2020-12-25 01:02:03',
+                'inv_total'       => '%100.1%',
+                'inv_created_at'  => '%2020-12-25 01:02:03%',
             ];
         } else {
             $expected = [
@@ -101,6 +107,6 @@ final class FromInputTest extends DatabaseTestCase
             ];
         }
 
-        $this->assertEquals($expected, $builder->getBindParams());
+        $I->assertEquals($expected, $builder->getBindParams());
     }
 }

@@ -103,7 +103,6 @@ abstract class AbstractAdapter implements AdapterInterface
      *
      * @throws Exception
      * @return AdapterInterface
-     * @throws Exception
      */
     public function setLimit(int $limit): AdapterInterface
     {

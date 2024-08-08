@@ -1,4 +1,4 @@
-set foreign_key_checks = 0;
+
 
 drop table if exists `album`;
 
@@ -239,12 +239,8 @@ CREATE TABLE `co_products` (
   ) ENGINE=InnoDB DEFAULT CHARSET=utf8;
 
 
-drop table if exists co_rb_test_model;
+DROP TABLE IF EXISTS co_rb_test_model;CREATE TABLE co_rb_test_model (id SMALLINT, name VARCHAR(10) NOT NULL);
 
-create table co_rb_test_model (
-    id   smallint,
-    name varchar(10) not null
-);
 
 drop table if exists `co_setters`;
 

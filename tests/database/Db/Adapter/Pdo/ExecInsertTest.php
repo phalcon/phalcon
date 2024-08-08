@@ -13,49 +13,61 @@ declare(strict_types=1);
 
 namespace Phalcon\Tests\Database\Db\Adapter\Pdo;
 
+use Codeception\Attribute\Group;
+use DatabaseTester;
 use Phalcon\Db\Adapter\Pdo\AbstractPdo;
 use Phalcon\Db\Adapter\Pdo\Mysql;
 use Phalcon\Db\Column;
 use Phalcon\Storage\Exception;
-use Phalcon\Tests\DatabaseTestCase;
 use Phalcon\Tests\Fixtures\Migrations\DialectMigration;
 use Phalcon\Tests\Fixtures\Traits\DiTrait;
 
-final class ExecInsertTest extends DatabaseTestCase
+class ExecInsertCest
 {
     use DiTrait;
 
     /**
      * Executed before each test
      *
+     * @param DatabaseTester $I
+     *
      * @return void
      */
-    public function setUp(): void
+    public function _before(DatabaseTester $I): void
     {
         try {
             $this->setNewFactoryDefault();
         } catch (Exception $e) {
-            $this->fail($e->getMessage());
+            $I->fail($e->getMessage());
         }
 
-        $this->setDatabase();
+        $this->setDatabase($I);
     }
 
     /**
      * Tests Phalcon\Db\Adapter\Pdo :: describeColumns()
      *
-     * @return void
+     * @param DatabaseTester $I
      *
      * @author Phalcon Team <team@phalcon.io>
      * @since  2021-04-20
      *
      * @group  mysql
      */
-    public function testDbAdapterPdoInsert(): void
+    #[Group('mysql')]
+    public function dbAdapterPdoInsert(DatabaseTester $I)
     {
-        $connection = self::getConnection();
-        $migration  = new DialectMigration($connection);
-        $sql        = <<<SQL
+        $I->wantToTest('Db\Adapter\Pdo - execute() (insert)');
+
+        // This test is buggy and ignores @group, skip manually.
+        if ($I->getDriver() !== 'mysql') {
+            $I->skipTest('Driver ' . $I->getDriver() . ' not supported');
+            return;
+        }
+
+        $connection = $I->getConnection();
+        new DialectMigration($connection);
+        $sql = <<<SQL
 insert into co_dialect (
     field_primary,
     field_blob,
@@ -110,7 +122,7 @@ insert into co_dialect (
     ?
 )
 SQL;
-        $values     = [
+        $values = [
             10,                          // field_primary,
             'abcdefgh',                  // field_blob,
             'bin',                       // field_binary,
@@ -137,7 +149,7 @@ SQL;
             'vbin',                      // field_varbinary,
             'abcdef',                    // field_varchar
         ];
-        $types      = [
+        $types = [
             Column::BIND_PARAM_INT,      // field_primary,
             Column::BIND_PARAM_BLOB,     // field_blob,
             Column::BIND_PARAM_BLOB,     // field_binary,
@@ -165,14 +177,14 @@ SQL;
             Column::BIND_PARAM_STR,      // field_varchar
         ];
 
-        $connection = new Mysql($this->getDatabaseOptions());
-        $this->assertInstanceOf(AbstractPdo::class, $connection);
+        $connection = new Mysql($I->getDatabaseOptions());
+        $I->assertInstanceOf(AbstractPdo::class, $connection);
 
-        $this->assertCount(25, $values);
-        $this->assertCount(25, $types);
+        $I->assertCount(25, $values);
+        $I->assertCount(25, $types);
 
         $result = $connection->execute($sql, $values);
 
-        $this->assertNotFalse($result);
+        $I->assertNotFalse($result);
     }
 }

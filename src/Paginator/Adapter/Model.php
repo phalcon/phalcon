@@ -15,10 +15,6 @@ namespace Phalcon\Paginator\Adapter;
 
 use Phalcon\Paginator\RepositoryInterface;
 
-use function call_user_func;
-use function is_array;
-use function is_object;
-
 /**
  * This adapter allows to paginate data using a Phalcon\Mvc\Model resultset as a
  * base.
@@ -62,6 +58,7 @@ use function is_object;
  *     ]
  * );
  *
+ *
  * $paginator = new Model(
  *     [
  *         "model" => Robots::class,
@@ -93,14 +90,16 @@ class Model extends AbstractAdapter
      */
     public function paginate(): RepositoryInterface
     {
-        $pageItems  = [];
-        $limit      = $this->limitRows;
-        $pageNumber = $this->page;
-        $modelClass = $this->config["model"];
+        $pageItems = [];
 
-        $parameters = $this->config["parameters"] ?? [];
+        $limit      = (int)$this->limitRows;
+        $config     = $this->config;
+        $pageNumber = (int)$this->page;
+        $modelClass = $config["model"];
 
-        if (!is_array($parameters)) {
+        $parameters = $config['parameters'] ?? [];
+
+        if (is_array($parameters) === false) {
             $parameters = (array)$parameters;
         }
 
@@ -118,7 +117,7 @@ class Model extends AbstractAdapter
             $rowcount = (int)$rowCountResult;
         }
 
-        if ($rowcount % $limit !== 0) {
+        if ($rowcount % $limit != 0) {
             $totalPages = (int)($rowcount / $limit + 1);
         } else {
             $totalPages = (int)($rowcount / $limit);

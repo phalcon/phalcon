@@ -16,9 +16,6 @@ namespace Phalcon\Paginator\Adapter;
 use Phalcon\Paginator\Exception;
 use Phalcon\Paginator\RepositoryInterface;
 
-use function array_slice;
-use function is_array;
-
 /**
  * Pagination using a PHP array as source of data
  *
@@ -45,22 +42,23 @@ class NativeArray extends AbstractAdapter
     /**
      * Returns a slice of the resultset to show in the pagination
      *
-     * @return RepositoryInterface
      * @throws Exception
+     * @return RepositoryInterface
      */
     public function paginate(): RepositoryInterface
     {
         /**
          * TODO: Rewrite the whole method!
          */
-        $items = $this->config["data"];
+        $config = $this->config;
+        $items  = $config["data"];
 
         if (!is_array($items)) {
             throw new Exception("Invalid data for paginator");
         }
 
-        $show       = (int) $this->limitRows;
-        $pageNumber = (int) $this->page;
+        $show       = (int)$this->limitRows;
+        $pageNumber = (int)$this->page;
 
         if ($pageNumber <= 0) {
             $pageNumber = 1;
@@ -68,7 +66,7 @@ class NativeArray extends AbstractAdapter
 
         $number       = count($items);
         $roundedTotal = $number / floatval($show);
-        $totalPages   = (int) $roundedTotal;
+        $totalPages   = (int)$roundedTotal;
 
         /**
          * Increase total pages if wasn't integer
@@ -83,7 +81,7 @@ class NativeArray extends AbstractAdapter
             $show
         );
 
-        //Fix next
+        // Fix next
         $next = $totalPages;
         if ($pageNumber < $totalPages) {
             $next = $pageNumber + 1;

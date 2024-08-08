@@ -82,6 +82,7 @@ class PaginatorFactory
      * @param string $name
      * @param array  $options
      *
+     * @throws Exception
      * @return AdapterInterface
      */
     public function newInstance(string $name, array $options = []): AdapterInterface

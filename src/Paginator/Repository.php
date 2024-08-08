@@ -16,10 +16,6 @@ namespace Phalcon\Paginator;
 use JsonSerializable;
 use Phalcon\Traits\Helper\Str\CamelizeTrait;
 
-use function get_class;
-use function method_exists;
-use function trigger_error;
-
 /**
  * Repository of current state Phalcon\Paginator\AdapterInterface::paginate()
  */
@@ -44,9 +40,7 @@ class Repository implements RepositoryInterface, JsonSerializable
      */
     public function __get(string $property): mixed
     {
-        $method = "get" . $this->toCamelize(
-            $this->getRealNameProperty($property)
-        );
+        $method = "get" . $this->toCamelize($this->getRealNameProperty($property));
 
         if (method_exists($this, $method)) {
             return $this->$method();
@@ -64,7 +58,7 @@ class Repository implements RepositoryInterface, JsonSerializable
     }
 
     /**
-     * @return array
+     * {@inheritdoc}
      */
     public function getAliases(): array
     {
@@ -72,7 +66,7 @@ class Repository implements RepositoryInterface, JsonSerializable
     }
 
     /**
-     * @return int
+     * {@inheritdoc}
      */
     public function getCurrent(): int
     {
@@ -80,7 +74,7 @@ class Repository implements RepositoryInterface, JsonSerializable
     }
 
     /**
-     * @return int
+     * {@inheritdoc}
      */
     public function getFirst(): int
     {
@@ -88,15 +82,15 @@ class Repository implements RepositoryInterface, JsonSerializable
     }
 
     /**
-     * @return mixed
+     * {@inheritdoc}
      */
     public function getItems(): mixed
     {
-        return $this->getProperty(self::PROPERTY_ITEMS, null);
+        return $this->getProperty(self::PROPERTY_ITEMS);
     }
 
     /**
-     * @return int
+     * {@inheritdoc}
      */
     public function getLast(): int
     {
@@ -104,7 +98,7 @@ class Repository implements RepositoryInterface, JsonSerializable
     }
 
     /**
-     * @return int
+     * {@inheritdoc}
      */
     public function getLimit(): int
     {
@@ -112,7 +106,7 @@ class Repository implements RepositoryInterface, JsonSerializable
     }
 
     /**
-     * @return int
+     * {@inheritdoc}
      */
     public function getNext(): int
     {
@@ -120,7 +114,7 @@ class Repository implements RepositoryInterface, JsonSerializable
     }
 
     /**
-     * @return int
+     * {@inheritdoc}
      */
     public function getPrevious(): int
     {
@@ -128,7 +122,7 @@ class Repository implements RepositoryInterface, JsonSerializable
     }
 
     /**
-     * @return int
+     * {@inheritdoc}
      */
     public function getTotalItems(): int
     {
@@ -144,9 +138,7 @@ class Repository implements RepositoryInterface, JsonSerializable
     }
 
     /**
-     * @param array $aliases
-     *
-     * @return RepositoryInterface
+     * {@inheritdoc}
      */
     public function setAliases(array $aliases): RepositoryInterface
     {
@@ -156,9 +148,7 @@ class Repository implements RepositoryInterface, JsonSerializable
     }
 
     /**
-     * @param array $properties
-     *
-     * @return RepositoryInterface
+     * {@inheritdoc}
      */
     public function setProperties(array $properties): RepositoryInterface
     {
