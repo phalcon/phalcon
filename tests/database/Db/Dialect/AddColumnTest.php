@@ -117,7 +117,7 @@ final class AddColumnTest extends DatabaseTestCase
             'size'          => 10,
             'scale'         => 0,
             'default'       => 13,
-            'unsigned'      => true,
+            'unsigned'      => false,
             'notNull'       => true,
             'autoIncrement' => false,
             'primary'       => false,
@@ -283,7 +283,7 @@ final class AddColumnTest extends DatabaseTestCase
         return [
             [
                 Mysql::class,
-                'ALTER TABLE `schema`.`table` ADD `field_primary` INT(10) UNSIGNED NOT NULL DEFAULT 13 FIRST'
+                'ALTER TABLE `schema`.`table` ADD `field_primary` INT(10) NOT NULL DEFAULT 13 FIRST'
 
             ],
 //            [Postgresql::class],
