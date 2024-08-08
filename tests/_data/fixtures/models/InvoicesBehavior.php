@@ -17,8 +17,6 @@ use Phalcon\Mvc\Model\Behavior\SoftDelete;
 use Phalcon\Mvc\Model\Behavior\Timestampable;
 
 /**
- * Class InvoicesSoftDelete
- *
  * @property int    $inv_id
  * @property int    $inv_cst_id
  * @property int    $inv_status_flag
