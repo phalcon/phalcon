@@ -20,52 +20,6 @@ use Phalcon\Tests\DatabaseTestCase;
 final class CreateViewTest extends DatabaseTestCase
 {
     /**
-     * Tests Phalcon\Db\Dialect :: createView
-     *
-     * @dataProvider getDialects
-     *
-     * @author Phalcon Team <team@phalcon.io>
-     * @since  2020-01-20
-     *
-     * @group  common
-     */
-    public function testDbDialectCreateView(
-        string $dialectClass,
-        string $expected
-    ): void {
-        /** @var Mysql $dialect */
-        $dialect = new $dialectClass();
-
-        $definition['sql'] = 'DEFINITION-VIEW';
-        $actual  = $dialect->createView('view', $definition, 'schema');
-        $this->assertSame($expected, $actual);
-    }
-
-    /**
-     * Tests Phalcon\Db\Dialect :: createView
-     *
-     * @dataProvider getDialectsException
-     *
-     * @author Phalcon Team <team@phalcon.io>
-     * @since  2020-01-20
-     *
-     * @group  common
-     */
-    public function testDbDialectCreateViewException(
-        string $dialectClass
-    ): void {
-        /** @var Mysql $dialect */
-        $dialect = new $dialectClass();
-
-        $this->expectException(Exception::class);
-        $this->expectExceptionMessage(
-            "The index 'sql' is required in the definition array"
-        );
-        $definition = [];
-        $dialect->createView('view', $definition, 'schema');
-    }
-
-    /**
      * @return array[]
      */
     public static function getDialects(): array
@@ -92,5 +46,51 @@ final class CreateViewTest extends DatabaseTestCase
             //            [Postgresql::class],
             //            [Sqlite::class],
         ];
+    }
+
+    /**
+     * Tests Phalcon\Db\Dialect :: createView
+     *
+     * @dataProvider getDialects
+     *
+     * @author       Phalcon Team <team@phalcon.io>
+     * @since        2020-01-20
+     *
+     * @group        common
+     */
+    public function testDbDialectCreateView(
+        string $dialectClass,
+        string $expected
+    ): void {
+        /** @var Mysql $dialect */
+        $dialect = new $dialectClass();
+
+        $definition['sql'] = 'DEFINITION-VIEW';
+        $actual            = $dialect->createView('view', $definition, 'schema');
+        $this->assertSame($expected, $actual);
+    }
+
+    /**
+     * Tests Phalcon\Db\Dialect :: createView
+     *
+     * @dataProvider getDialectsException
+     *
+     * @author       Phalcon Team <team@phalcon.io>
+     * @since        2020-01-20
+     *
+     * @group        common
+     */
+    public function testDbDialectCreateViewException(
+        string $dialectClass
+    ): void {
+        /** @var Mysql $dialect */
+        $dialect = new $dialectClass();
+
+        $this->expectException(Exception::class);
+        $this->expectExceptionMessage(
+            "The index 'sql' is required in the definition array"
+        );
+        $definition = [];
+        $dialect->createView('view', $definition, 'schema');
     }
 }

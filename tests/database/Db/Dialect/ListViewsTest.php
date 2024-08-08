@@ -19,48 +19,6 @@ use Phalcon\Tests\DatabaseTestCase;
 final class ListViewsTest extends DatabaseTestCase
 {
     /**
-     * Tests Phalcon\Db\Dialect :: listViews
-     *
-     * @dataProvider getDialects
-     *
-     * @author Phalcon Team <team@phalcon.io>
-     * @since  2020-01-20
-     *
-     * @group  common
-     */
-    public function testDbDialectListViews(
-        string $dialectClass,
-        string $expected
-    ): void {
-        /** @var Mysql $dialect */
-        $dialect = new $dialectClass();
-
-        $actual  = $dialect->listViews('schema');
-        $this->assertSame($expected, $actual);
-    }
-
-    /**
-     * Tests Phalcon\Db\Dialect :: listViews
-     *
-     * @dataProvider getDialectsNoSchema
-     *
-     * @author Phalcon Team <team@phalcon.io>
-     * @since  2020-01-20
-     *
-     * @group  common
-     */
-    public function testDbDialectListViewsNoSchema(
-        string $dialectClass,
-        string $expected
-    ): void {
-        /** @var Mysql $dialect */
-        $dialect = new $dialectClass();
-
-        $actual  = $dialect->listViews();
-        $this->assertSame($expected, $actual);
-    }
-
-    /**
      * @return array[]
      */
     public static function getDialects(): array
@@ -71,7 +29,7 @@ final class ListViewsTest extends DatabaseTestCase
                 "SELECT `TABLE_NAME` AS view_name "
                 . "FROM `INFORMATION_SCHEMA`.`VIEWS` "
                 . "WHERE `TABLE_SCHEMA` = 'schema' "
-                . "ORDER BY view_name"
+                . "ORDER BY view_name",
             ],
             //            [Postgresql::class],
             //            [Sqlite::class],
@@ -89,10 +47,52 @@ final class ListViewsTest extends DatabaseTestCase
                 "SELECT `TABLE_NAME` AS view_name "
                 . "FROM `INFORMATION_SCHEMA`.`VIEWS` "
                 . "WHERE `TABLE_SCHEMA` = DATABASE() "
-                . "ORDER BY view_name"
+                . "ORDER BY view_name",
             ],
             //            [Postgresql::class],
             //            [Sqlite::class],
         ];
+    }
+
+    /**
+     * Tests Phalcon\Db\Dialect :: listViews
+     *
+     * @dataProvider getDialects
+     *
+     * @author       Phalcon Team <team@phalcon.io>
+     * @since        2020-01-20
+     *
+     * @group        common
+     */
+    public function testDbDialectListViews(
+        string $dialectClass,
+        string $expected
+    ): void {
+        /** @var Mysql $dialect */
+        $dialect = new $dialectClass();
+
+        $actual = $dialect->listViews('schema');
+        $this->assertSame($expected, $actual);
+    }
+
+    /**
+     * Tests Phalcon\Db\Dialect :: listViews
+     *
+     * @dataProvider getDialectsNoSchema
+     *
+     * @author       Phalcon Team <team@phalcon.io>
+     * @since        2020-01-20
+     *
+     * @group        common
+     */
+    public function testDbDialectListViewsNoSchema(
+        string $dialectClass,
+        string $expected
+    ): void {
+        /** @var Mysql $dialect */
+        $dialect = new $dialectClass();
+
+        $actual = $dialect->listViews();
+        $this->assertSame($expected, $actual);
     }
 }

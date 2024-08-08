@@ -20,50 +20,6 @@ use Phalcon\Tests\DatabaseTestCase;
 final class AddIndexTest extends DatabaseTestCase
 {
     /**
-     * Tests Phalcon\Db\Dialect :: addIndex
-     *
-     * @dataProvider getDialects
-     *
-     * @author Phalcon Team <team@phalcon.io>
-     * @since  2020-01-20
-     *
-     * @group  common
-     */
-    public function testDbDialectAddIndex(
-        string $dialectClass,
-        string $expected
-    ): void {
-        /** @var Mysql $dialect */
-        $dialect = new $dialectClass();
-
-        $index = new Index('index1', ['field1', 'field2']);
-        $actual  = $dialect->addIndex('table', 'schema', $index);
-        $this->assertSame($expected, $actual);
-    }
-
-    /**
-     * Tests Phalcon\Db\Dialect :: addIndex
-     *
-     * @dataProvider getDialectsType
-     *
-     * @author Phalcon Team <team@phalcon.io>
-     * @since  2020-01-20
-     *
-     * @group  common
-     */
-    public function testDbDialectAddIndexType(
-        string $dialectClass,
-        string $expected
-    ): void {
-        /** @var Mysql $dialect */
-        $dialect = new $dialectClass();
-
-        $index = new Index('index1', ['field1', 'field2'], 'UNIQUE');
-        $actual  = $dialect->addIndex('table', 'schema', $index);
-        $this->assertSame($expected, $actual);
-    }
-
-    /**
      * @return array[]
      */
     public static function getDialects(): array
@@ -72,7 +28,7 @@ final class AddIndexTest extends DatabaseTestCase
             [
                 Mysql::class,
                 'ALTER TABLE `schema`.`table` '
-                . 'ADD INDEX `index1` (`field1`, `field2`)'
+                . 'ADD INDEX `index1` (`field1`, `field2`)',
 
             ],
             //            [Postgresql::class],
@@ -89,11 +45,55 @@ final class AddIndexTest extends DatabaseTestCase
             [
                 Mysql::class,
                 'ALTER TABLE `schema`.`table` '
-                . 'ADD UNIQUE INDEX `index1` (`field1`, `field2`)'
+                . 'ADD UNIQUE INDEX `index1` (`field1`, `field2`)',
 
             ],
             //            [Postgresql::class],
             //            [Sqlite::class],
         ];
+    }
+
+    /**
+     * Tests Phalcon\Db\Dialect :: addIndex
+     *
+     * @dataProvider getDialects
+     *
+     * @author       Phalcon Team <team@phalcon.io>
+     * @since        2020-01-20
+     *
+     * @group        common
+     */
+    public function testDbDialectAddIndex(
+        string $dialectClass,
+        string $expected
+    ): void {
+        /** @var Mysql $dialect */
+        $dialect = new $dialectClass();
+
+        $index  = new Index('index1', ['field1', 'field2']);
+        $actual = $dialect->addIndex('table', 'schema', $index);
+        $this->assertSame($expected, $actual);
+    }
+
+    /**
+     * Tests Phalcon\Db\Dialect :: addIndex
+     *
+     * @dataProvider getDialectsType
+     *
+     * @author       Phalcon Team <team@phalcon.io>
+     * @since        2020-01-20
+     *
+     * @group        common
+     */
+    public function testDbDialectAddIndexType(
+        string $dialectClass,
+        string $expected
+    ): void {
+        /** @var Mysql $dialect */
+        $dialect = new $dialectClass();
+
+        $index  = new Index('index1', ['field1', 'field2'], 'UNIQUE');
+        $actual = $dialect->addIndex('table', 'schema', $index);
+        $this->assertSame($expected, $actual);
     }
 }

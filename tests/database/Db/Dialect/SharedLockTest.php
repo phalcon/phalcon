@@ -19,27 +19,6 @@ use Phalcon\Tests\DatabaseTestCase;
 final class SharedLockTest extends DatabaseTestCase
 {
     /**
-     * Tests Phalcon\Db\Dialect :: sharedLock
-     *
-     * @dataProvider getDialects
-     *
-     * @author Phalcon Team <team@phalcon.io>
-     * @since  2020-01-20
-     *
-     * @group  common
-     */
-    public function testDbDialectListViews(
-        string $dialectClass
-    ): void {
-        /** @var Mysql $dialect */
-        $dialect = new $dialectClass();
-
-        $expected = 'SQL-QUERY LOCK IN SHARE MODE';
-        $actual  = $dialect->sharedLock('SQL-QUERY');
-        $this->assertSame($expected, $actual);
-    }
-
-    /**
      * @return array[]
      */
     public static function getDialects(): array
@@ -51,5 +30,26 @@ final class SharedLockTest extends DatabaseTestCase
             //            [Postgresql::class],
             //            [Sqlite::class],
         ];
+    }
+
+    /**
+     * Tests Phalcon\Db\Dialect :: sharedLock
+     *
+     * @dataProvider getDialects
+     *
+     * @author       Phalcon Team <team@phalcon.io>
+     * @since        2020-01-20
+     *
+     * @group        common
+     */
+    public function testDbDialectListViews(
+        string $dialectClass
+    ): void {
+        /** @var Mysql $dialect */
+        $dialect = new $dialectClass();
+
+        $expected = 'SQL-QUERY LOCK IN SHARE MODE';
+        $actual   = $dialect->sharedLock('SQL-QUERY');
+        $this->assertSame($expected, $actual);
     }
 }

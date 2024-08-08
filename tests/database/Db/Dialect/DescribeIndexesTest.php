@@ -19,14 +19,30 @@ use Phalcon\Tests\DatabaseTestCase;
 final class DescribeIndexesTest extends DatabaseTestCase
 {
     /**
+     * @return array[]
+     */
+    public static function getDialects(): array
+    {
+        return [
+            [
+                Mysql::class,
+                'SHOW INDEXES FROM `schema`.`table`',
+
+            ],
+            //            [Postgresql::class],
+            //            [Sqlite::class],
+        ];
+    }
+
+    /**
      * Tests Phalcon\Db\Dialect :: describeIndexes
      *
      * @dataProvider getDialects
      *
-     * @author Phalcon Team <team@phalcon.io>
-     * @since  2020-01-20
+     * @author       Phalcon Team <team@phalcon.io>
+     * @since        2020-01-20
      *
-     * @group  common
+     * @group        common
      */
     public function testDbDialectDescribeIndexes(
         string $dialectClass,
@@ -35,23 +51,7 @@ final class DescribeIndexesTest extends DatabaseTestCase
         /** @var Mysql $dialect */
         $dialect = new $dialectClass();
 
-        $actual  = $dialect->describeIndexes('table', 'schema');
+        $actual = $dialect->describeIndexes('table', 'schema');
         $this->assertSame($expected, $actual);
-    }
-
-    /**
-     * @return array[]
-     */
-    public static function getDialects(): array
-    {
-        return [
-            [
-                Mysql::class,
-                'SHOW INDEXES FROM `schema`.`table`'
-
-            ],
-            //            [Postgresql::class],
-            //            [Sqlite::class],
-        ];
     }
 }

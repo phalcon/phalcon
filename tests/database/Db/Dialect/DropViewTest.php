@@ -19,48 +19,6 @@ use Phalcon\Tests\DatabaseTestCase;
 final class DropViewTest extends DatabaseTestCase
 {
     /**
-     * Tests Phalcon\Db\Dialect :: dropView
-     *
-     * @dataProvider getDialects
-     *
-     * @author Phalcon Team <team@phalcon.io>
-     * @since  2020-01-20
-     *
-     * @group  common
-     */
-    public function testDbDialectDropView(
-        string $dialectClass,
-        string $expected
-    ): void {
-        /** @var Mysql $dialect */
-        $dialect = new $dialectClass();
-
-        $actual  = $dialect->dropView('table', 'schema');
-        $this->assertSame($expected, $actual);
-    }
-
-    /**
-     * Tests Phalcon\Db\Dialect :: dropView
-     *
-     * @dataProvider getDialectsNotExists
-     *
-     * @author Phalcon Team <team@phalcon.io>
-     * @since  2020-01-20
-     *
-     * @group  common
-     */
-    public function testDbDialectDropViewNotExists(
-        string $dialectClass,
-        string $expected
-    ): void {
-        /** @var Mysql $dialect */
-        $dialect = new $dialectClass();
-
-        $actual  = $dialect->dropView('table', 'schema', false);
-        $this->assertSame($expected, $actual);
-    }
-
-    /**
      * @return array[]
      */
     public static function getDialects(): array
@@ -68,7 +26,7 @@ final class DropViewTest extends DatabaseTestCase
         return [
             [
                 Mysql::class,
-                'DROP VIEW IF EXISTS `schema`.`table`'
+                'DROP VIEW IF EXISTS `schema`.`table`',
 
             ],
             //            [Postgresql::class],
@@ -84,11 +42,53 @@ final class DropViewTest extends DatabaseTestCase
         return [
             [
                 Mysql::class,
-                'DROP VIEW `schema`.`table`'
+                'DROP VIEW `schema`.`table`',
 
             ],
             //            [Postgresql::class],
             //            [Sqlite::class],
         ];
+    }
+
+    /**
+     * Tests Phalcon\Db\Dialect :: dropView
+     *
+     * @dataProvider getDialects
+     *
+     * @author       Phalcon Team <team@phalcon.io>
+     * @since        2020-01-20
+     *
+     * @group        common
+     */
+    public function testDbDialectDropView(
+        string $dialectClass,
+        string $expected
+    ): void {
+        /** @var Mysql $dialect */
+        $dialect = new $dialectClass();
+
+        $actual = $dialect->dropView('table', 'schema');
+        $this->assertSame($expected, $actual);
+    }
+
+    /**
+     * Tests Phalcon\Db\Dialect :: dropView
+     *
+     * @dataProvider getDialectsNotExists
+     *
+     * @author       Phalcon Team <team@phalcon.io>
+     * @since        2020-01-20
+     *
+     * @group        common
+     */
+    public function testDbDialectDropViewNotExists(
+        string $dialectClass,
+        string $expected
+    ): void {
+        /** @var Mysql $dialect */
+        $dialect = new $dialectClass();
+
+        $actual = $dialect->dropView('table', 'schema', false);
+        $this->assertSame($expected, $actual);
     }
 }

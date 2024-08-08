@@ -19,27 +19,6 @@ use Phalcon\Tests\DatabaseTestCase;
 final class DropPrimaryKeyTest extends DatabaseTestCase
 {
     /**
-     * Tests Phalcon\Db\Dialect :: dropPrimaryKey
-     *
-     * @dataProvider getDialects
-     *
-     * @author Phalcon Team <team@phalcon.io>
-     * @since  2020-01-20
-     *
-     * @group  common
-     */
-    public function testDbDialectDropPrimaryKey(
-        string $dialectClass,
-        string $expected
-    ): void {
-        /** @var Mysql $dialect */
-        $dialect = new $dialectClass();
-
-        $actual  = $dialect->dropPrimaryKey('table', 'schema');
-        $this->assertSame($expected, $actual);
-    }
-
-    /**
      * @return array[]
      */
     public static function getDialects(): array
@@ -48,11 +27,32 @@ final class DropPrimaryKeyTest extends DatabaseTestCase
             [
                 Mysql::class,
                 'ALTER TABLE `schema`.`table` '
-                . 'DROP PRIMARY KEY'
+                . 'DROP PRIMARY KEY',
 
             ],
             //            [Postgresql::class],
             //            [Sqlite::class],
         ];
+    }
+
+    /**
+     * Tests Phalcon\Db\Dialect :: dropPrimaryKey
+     *
+     * @dataProvider getDialects
+     *
+     * @author       Phalcon Team <team@phalcon.io>
+     * @since        2020-01-20
+     *
+     * @group        common
+     */
+    public function testDbDialectDropPrimaryKey(
+        string $dialectClass,
+        string $expected
+    ): void {
+        /** @var Mysql $dialect */
+        $dialect = new $dialectClass();
+
+        $actual = $dialect->dropPrimaryKey('table', 'schema');
+        $this->assertSame($expected, $actual);
     }
 }

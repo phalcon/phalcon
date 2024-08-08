@@ -19,48 +19,6 @@ use Phalcon\Tests\DatabaseTestCase;
 final class TruncateTableTest extends DatabaseTestCase
 {
     /**
-     * Tests Phalcon\Db\Dialect :: truncateTable
-     *
-     * @dataProvider getDialects
-     *
-     * @author Phalcon Team <team@phalcon.io>
-     * @since  2020-01-20
-     *
-     * @group  common
-     */
-    public function testDbDialectTruncateTable(
-        string $dialectClass,
-        string $expected
-    ): void {
-        /** @var Mysql $dialect */
-        $dialect = new $dialectClass();
-
-        $actual  = $dialect->truncateTable('table', 'schema');
-        $this->assertSame($expected, $actual);
-    }
-
-    /**
-     * Tests Phalcon\Db\Dialect :: truncateTable
-     *
-     * @dataProvider getDialectsNoSchema
-     *
-     * @author Phalcon Team <team@phalcon.io>
-     * @since  2020-01-20
-     *
-     * @group  common
-     */
-    public function testDbDialectTruncateTableNoSchema(
-        string $dialectClass,
-        string $expected
-    ): void {
-        /** @var Mysql $dialect */
-        $dialect = new $dialectClass();
-
-        $actual  = $dialect->truncateTable('table');
-        $this->assertSame($expected, $actual);
-    }
-
-    /**
      * @return array[]
      */
     public static function getDialects(): array
@@ -68,7 +26,7 @@ final class TruncateTableTest extends DatabaseTestCase
         return [
             [
                 Mysql::class,
-                "TRUNCATE TABLE `schema`.`table`"
+                "TRUNCATE TABLE `schema`.`table`",
             ],
             //            [Postgresql::class],
             //            [Sqlite::class],
@@ -83,10 +41,52 @@ final class TruncateTableTest extends DatabaseTestCase
         return [
             [
                 Mysql::class,
-                "TRUNCATE TABLE `table`"
+                "TRUNCATE TABLE `table`",
             ],
             //            [Postgresql::class],
             //            [Sqlite::class],
         ];
+    }
+
+    /**
+     * Tests Phalcon\Db\Dialect :: truncateTable
+     *
+     * @dataProvider getDialects
+     *
+     * @author       Phalcon Team <team@phalcon.io>
+     * @since        2020-01-20
+     *
+     * @group        common
+     */
+    public function testDbDialectTruncateTable(
+        string $dialectClass,
+        string $expected
+    ): void {
+        /** @var Mysql $dialect */
+        $dialect = new $dialectClass();
+
+        $actual = $dialect->truncateTable('table', 'schema');
+        $this->assertSame($expected, $actual);
+    }
+
+    /**
+     * Tests Phalcon\Db\Dialect :: truncateTable
+     *
+     * @dataProvider getDialectsNoSchema
+     *
+     * @author       Phalcon Team <team@phalcon.io>
+     * @since        2020-01-20
+     *
+     * @group        common
+     */
+    public function testDbDialectTruncateTableNoSchema(
+        string $dialectClass,
+        string $expected
+    ): void {
+        /** @var Mysql $dialect */
+        $dialect = new $dialectClass();
+
+        $actual = $dialect->truncateTable('table');
+        $this->assertSame($expected, $actual);
     }
 }

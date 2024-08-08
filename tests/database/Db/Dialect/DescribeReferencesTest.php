@@ -19,48 +19,6 @@ use Phalcon\Tests\DatabaseTestCase;
 final class DescribeReferencesTest extends DatabaseTestCase
 {
     /**
-     * Tests Phalcon\Db\Dialect :: describeReferences
-     *
-     * @dataProvider getDialects
-     *
-     * @author Phalcon Team <team@phalcon.io>
-     * @since  2020-01-20
-     *
-     * @group  common
-     */
-    public function testDbDialectDescribeReferences(
-        string $dialectClass,
-        string $expected
-    ): void {
-        /** @var Mysql $dialect */
-        $dialect = new $dialectClass();
-
-        $actual  = $dialect->describeReferences('table', 'schema');
-        $this->assertSame($expected, $actual);
-    }
-
-    /**
-     * Tests Phalcon\Db\Dialect :: describeReferences
-     *
-     * @dataProvider getDialectsNoSchema
-     *
-     * @author Phalcon Team <team@phalcon.io>
-     * @since  2020-01-20
-     *
-     * @group  common
-     */
-    public function testDbDialectDescribeReferencesNoSchema(
-        string $dialectClass,
-        string $expected
-    ): void {
-        /** @var Mysql $dialect */
-        $dialect = new $dialectClass();
-
-        $actual  = $dialect->describeReferences('table');
-        $this->assertSame($expected, $actual);
-    }
-
-    /**
      * @return array[]
      */
     public static function getDialects(): array
@@ -79,7 +37,7 @@ final class DescribeReferencesTest extends DatabaseTestCase
                 . "AND RC.CONSTRAINT_SCHEMA = KCU.CONSTRAINT_SCHEMA "
                 . "WHERE KCU.REFERENCED_TABLE_NAME IS NOT NULL "
                 . "AND KCU.CONSTRAINT_SCHEMA = 'schema' "
-                . "AND KCU.TABLE_NAME = 'table'"
+                . "AND KCU.TABLE_NAME = 'table'",
 
             ],
             //            [Postgresql::class],
@@ -105,10 +63,52 @@ final class DescribeReferencesTest extends DatabaseTestCase
                 . "AND RC.CONSTRAINT_SCHEMA = KCU.CONSTRAINT_SCHEMA "
                 . "WHERE KCU.REFERENCED_TABLE_NAME IS NOT NULL "
                 . "AND KCU.CONSTRAINT_SCHEMA = DATABASE() "
-                . "AND KCU.TABLE_NAME = 'table'"
+                . "AND KCU.TABLE_NAME = 'table'",
             ],
             //            [Postgresql::class],
             //            [Sqlite::class],
         ];
+    }
+
+    /**
+     * Tests Phalcon\Db\Dialect :: describeReferences
+     *
+     * @dataProvider getDialects
+     *
+     * @author       Phalcon Team <team@phalcon.io>
+     * @since        2020-01-20
+     *
+     * @group        common
+     */
+    public function testDbDialectDescribeReferences(
+        string $dialectClass,
+        string $expected
+    ): void {
+        /** @var Mysql $dialect */
+        $dialect = new $dialectClass();
+
+        $actual = $dialect->describeReferences('table', 'schema');
+        $this->assertSame($expected, $actual);
+    }
+
+    /**
+     * Tests Phalcon\Db\Dialect :: describeReferences
+     *
+     * @dataProvider getDialectsNoSchema
+     *
+     * @author       Phalcon Team <team@phalcon.io>
+     * @since        2020-01-20
+     *
+     * @group        common
+     */
+    public function testDbDialectDescribeReferencesNoSchema(
+        string $dialectClass,
+        string $expected
+    ): void {
+        /** @var Mysql $dialect */
+        $dialect = new $dialectClass();
+
+        $actual = $dialect->describeReferences('table');
+        $this->assertSame($expected, $actual);
     }
 }

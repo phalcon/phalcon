@@ -19,27 +19,6 @@ use Phalcon\Tests\DatabaseTestCase;
 final class DropIndexTest extends DatabaseTestCase
 {
     /**
-     * Tests Phalcon\Db\Dialect :: dropIndex
-     *
-     * @dataProvider getDialects
-     *
-     * @author Phalcon Team <team@phalcon.io>
-     * @since  2020-01-20
-     *
-     * @group  common
-     */
-    public function testDbDialectDropIndex(
-        string $dialectClass,
-        string $expected
-    ): void {
-        /** @var Mysql $dialect */
-        $dialect = new $dialectClass();
-
-        $actual  = $dialect->dropIndex('table', 'schema', 'index');
-        $this->assertSame($expected, $actual);
-    }
-
-    /**
      * @return array[]
      */
     public static function getDialects(): array
@@ -48,11 +27,32 @@ final class DropIndexTest extends DatabaseTestCase
             [
                 Mysql::class,
                 'ALTER TABLE `schema`.`table` '
-                . 'DROP INDEX `index`'
+                . 'DROP INDEX `index`',
 
             ],
             //            [Postgresql::class],
             //            [Sqlite::class],
         ];
+    }
+
+    /**
+     * Tests Phalcon\Db\Dialect :: dropIndex
+     *
+     * @dataProvider getDialects
+     *
+     * @author       Phalcon Team <team@phalcon.io>
+     * @since        2020-01-20
+     *
+     * @group        common
+     */
+    public function testDbDialectDropIndex(
+        string $dialectClass,
+        string $expected
+    ): void {
+        /** @var Mysql $dialect */
+        $dialect = new $dialectClass();
+
+        $actual = $dialect->dropIndex('table', 'schema', 'index');
+        $this->assertSame($expected, $actual);
     }
 }
