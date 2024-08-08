@@ -22,6 +22,7 @@ use Phalcon\Db\ReferenceInterface;
 
 use function addcslashes;
 use function is_array;
+use function is_string;
 use function join;
 use function strtoupper;
 use function substr;
@@ -62,10 +63,16 @@ class Sqlite extends Dialect
         if (true === $column->hasDefault()) {
             $defaultValue = $column->getDefault();
 
-            if (str_contains(strtoupper($defaultValue), "CURRENT_TIMESTAMP")) {
-                $sql .= " DEFAULT CURRENT_TIMESTAMP";
+            if (is_string($defaultValue)) {
+                if (str_contains(strtoupper($defaultValue), "CURRENT_TIMESTAMP")) {
+                    $sql .= " DEFAULT CURRENT_TIMESTAMP";
+                } else {
+                    $sql .= " DEFAULT \""
+                        . addcslashes($defaultValue, "\"")
+                        . "\"";
+                }
             } else {
-                $sql .= " DEFAULT \"" . addcslashes($defaultValue, "\"") . "\"";
+                $sql .= " DEFAULT " . $defaultValue;
             }
         }
 
@@ -224,11 +231,16 @@ class Sqlite extends Dialect
             if (true === $column->hasDefault()) {
                 $defaultValue = $column->getDefault();
 
-                if (str_contains(strtoupper($defaultValue), "CURRENT_TIMESTAMP")) {
-                    $columnLine .= " DEFAULT CURRENT_TIMESTAMP";
+                if (is_string($defaultValue)) {
+                    if (str_contains(strtoupper($defaultValue), "CURRENT_TIMESTAMP")) {
+                        $columnLine .= " DEFAULT CURRENT_TIMESTAMP";
+                    } else {
+                        $columnLine .= " DEFAULT \""
+                            . addcslashes($defaultValue, "\"")
+                            . "\"";
+                    }
                 } else {
-                    $columnLine .= " DEFAULT \""
-                        . addcslashes($defaultValue, "\"") . "\"";
+                    $columnLine .= " DEFAULT " . $defaultValue;
                 }
             }
 
