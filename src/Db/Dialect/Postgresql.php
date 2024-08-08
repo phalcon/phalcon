@@ -1028,7 +1028,10 @@ class Postgresql extends Dialect
             return $defaultValue;
         }
 
-        if (str_contains(strtoupper($defaultValue), "CURRENT_TIMESTAMP")) {
+        if (
+                is_string($defaultValue) &&
+                str_contains(strtoupper($defaultValue), "CURRENT_TIMESTAMP")
+        ) {
             return "CURRENT_TIMESTAMP";
         }
 
