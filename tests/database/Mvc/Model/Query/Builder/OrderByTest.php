@@ -14,30 +14,19 @@ declare(strict_types=1);
 namespace Phalcon\Tests\Database\Mvc\Model\Query\Builder;
 
 use Phalcon\Mvc\Model\Query\Builder;
-use Phalcon\Storage\Exception;
 use Phalcon\Tests\DatabaseTestCase;
 use Phalcon\Tests\Fixtures\Traits\DiTrait;
 use Phalcon\Tests\Fixtures\Traits\RecordsTrait;
 use Phalcon\Tests\Models\Invoices;
 
-final class OrderByTest extends DatabaseTestCase
+class OrderByTest extends DatabaseTestCase
 {
     use DiTrait;
     use RecordsTrait;
 
-    /**
-     * Executed before each test
-     *
-     * @return void
-     */
     public function setUp(): void
     {
-        try {
-            $this->setNewFactoryDefault();
-        } catch (Exception $e) {
-            $this->fail($e->getMessage());
-        }
-
+        $this->setNewFactoryDefault();
         $this->setDatabase();
     }
 
@@ -48,17 +37,18 @@ final class OrderByTest extends DatabaseTestCase
      * @since  2021-04-20
      * @issue  15411
      *
-     * @group  common
+     * @group  mysql
+     * @group  pgsql
+     * @group  sqlite
      */
-    public function testMvcModelQueryBuilderOrderBy(): void
+    public function testMvcModelQueryBuilderOrderBy()
     {
-        $builder = new Builder();
+        $builder = new Builder(null, $this->container);
         $phql    = $builder
             ->columns('inv_id, inv_title')
             ->addFrom(Invoices::class)
             ->orderBy('inv_title')
-            ->getPhql()
-        ;
+            ->getPhql();
 
         $expected = 'SELECT inv_id, inv_title '
             . 'FROM [Phalcon\Tests\Models\Invoices] '
@@ -68,8 +58,7 @@ final class OrderByTest extends DatabaseTestCase
 
         $phql = $builder
             ->orderBy('inv_title DESC')
-            ->getPhql()
-        ;
+            ->getPhql();
 
         $expected = 'SELECT inv_id, inv_title '
             . 'FROM [Phalcon\Tests\Models\Invoices] '

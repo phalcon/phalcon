@@ -30,6 +30,8 @@ class CustomersKeepSnapshots extends Model
     public $cst_name_last;
     public $cst_name_first;
 
+    public $customer;
+
     public function initialize()
     {
         $this->keepSnapshots(true);

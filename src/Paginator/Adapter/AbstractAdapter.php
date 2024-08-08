@@ -20,6 +20,13 @@ use Phalcon\Paginator\RepositoryInterface;
 abstract class AbstractAdapter implements AdapterInterface
 {
     /**
+     * Configuration of paginator
+     *
+     * @var array
+     */
+    protected array $config;
+
+    /**
      * Number of rows to show in the paginator. By default is null
      *
      * @var int|null
@@ -44,11 +51,13 @@ abstract class AbstractAdapter implements AdapterInterface
      * Phalcon\Paginator\Adapter\AbstractAdapter constructor
      *
      * @param array $config
+     *
+     * @throws Exception
      */
-    public function __construct(
-        protected array $config
-    ) {
+    public function __construct(array $config)
+    {
         $this->repository = new Repository();
+        $this->config     = $config;
 
         if (isset($config["limit"])) {
             $this->setLimit($config["limit"]);
@@ -66,9 +75,9 @@ abstract class AbstractAdapter implements AdapterInterface
     /**
      * Get current rows limit
      *
-     * @return int
+     * @return int|null
      */
-    public function getLimit(): int
+    public function getLimit(): int | null
     {
         return $this->limitRows;
     }
@@ -92,8 +101,8 @@ abstract class AbstractAdapter implements AdapterInterface
      *
      * @param int $limit
      *
-     * @return AdapterInterface
      * @throws Exception
+     * @return AdapterInterface
      */
     public function setLimit(int $limit): AdapterInterface
     {

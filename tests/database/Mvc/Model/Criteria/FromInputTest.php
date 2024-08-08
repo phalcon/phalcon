@@ -18,15 +18,10 @@ use Phalcon\Tests\DatabaseTestCase;
 use Phalcon\Tests\Fixtures\Traits\DiTrait;
 use Phalcon\Tests\Models\Invoices;
 
-final class FromInputTest extends DatabaseTestCase
+class FromInputTest extends DatabaseTestCase
 {
     use DiTrait;
 
-    /**
-     * Executed before each test
-     *
-     * @return void
-     */
     public function setUp(): void
     {
         $this->setNewFactoryDefault();
@@ -59,7 +54,7 @@ final class FromInputTest extends DatabaseTestCase
 
         $builder = $criteria->createBuilder();
 
-        if (self::getDriver() === 'sqlite') {
+        if ($this->getDriver() === 'sqlite') {
             $expected = 'SELECT [Phalcon\Tests\Models\Invoices].* '
                 . 'FROM [Phalcon\Tests\Models\Invoices] '
                 . 'WHERE [inv_id] = :inv_id: '
@@ -81,7 +76,7 @@ final class FromInputTest extends DatabaseTestCase
 
         $this->assertEquals($expected, $builder->getPhql());
 
-        if (self::getDriver() === 'sqlite') {
+        if ($this->getDriver() === 'sqlite') {
             $expected = [
                 'inv_id'          => 1,
                 'inv_cst_id'      => 2,

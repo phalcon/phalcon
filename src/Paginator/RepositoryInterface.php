@@ -94,7 +94,7 @@ interface RepositoryInterface
     /**
      * Sets the aliases for properties repository
      *
-     * @param array $aliases
+     * @param string[] $aliases
      *
      * @return RepositoryInterface
      */
@@ -103,7 +103,7 @@ interface RepositoryInterface
     /**
      * Sets values for properties of the repository
      *
-     * @param array $properties
+     * @param string[] $properties
      *
      * @return RepositoryInterface
      */

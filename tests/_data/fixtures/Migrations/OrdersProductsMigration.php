@@ -35,7 +35,7 @@ class OrdersProductsMigration extends AbstractMigration
         $oxp_prd_id   = $oxp_prd_id ?: 'null';
         $oxp_quantity = $oxp_quantity ?: 'null';
         $sql    = <<<SQL
-insert into co_order_products (
+insert into co_order_x_products (
     oxp_ord_id, oxp_prd_id, oxp_quantity
 ) values (
     {$oxp_ord_id}, {$oxp_prd_id}, {$oxp_quantity}
@@ -49,10 +49,10 @@ SQL;
     {
         return [
             "
-drop table if exists private.`co_orders_x_products`;
+drop table if exists `co_orders_x_products`;
             ",
             "
-CREATE TABLE private.`co_orders_x_products` (
+CREATE TABLE `co_orders_x_products` (
   `oxp_ord_id` int(10) unsigned NOT NULL,
   `oxp_prd_id` int(10) unsigned NOT NULL,
   `oxp_quantity` int(10) unsigned NOT NULL,

@@ -16,9 +16,6 @@ namespace Phalcon\Tests\Database\Mvc\Model\MetaData\Adapter;
 use Phalcon\Mvc\Model\MetaData;
 use Phalcon\Storage\Exception;
 use Phalcon\Tests\DatabaseTestCase;
-use Phalcon\Tests\Fixtures\Migrations\AlbumMigration;
-use Phalcon\Tests\Fixtures\Migrations\AlbumPhotoMigration;
-use Phalcon\Tests\Fixtures\Migrations\PhotoMigration;
 use Phalcon\Tests\Fixtures\Traits\DiTrait;
 use Phalcon\Tests\Models\Album;
 use Phalcon\Tests\Models\AlbumPhoto;
@@ -26,26 +23,9 @@ use Phalcon\Tests\Models\Photo;
 
 use function array_keys;
 
-final class ReadMetadataTest extends DatabaseTestCase
+class ReadMetadataTest extends DatabaseTestCase
 {
     use DiTrait;
-
-    /**
-     * @return array[]
-     */
-    public static function getExamples(): array
-    {
-        return [
-            [
-                'metadataRedis',
-                self::getKeyData(),
-            ],
-            [
-                'metadataLibmemcached',
-                self::getKeyData(),
-            ],
-        ];
-    }
 
     public function setUp(): void
     {
@@ -58,19 +38,20 @@ final class ReadMetadataTest extends DatabaseTestCase
      *
      * @dataProvider getExamples
      *
-     * @return void
+     * @param string $service
+     * @param array $keys
+     *
      * @throws Exception
+     * @throws \Phalcon\Mvc\Model\Exception
+     * @return void
      * @author       Phalcon Team <team@phalcon.io>
      * @since        2023-07-01
      *
      * @group        mysql
-     *
      */
-    public function testMvcModelMetadataGetAttributesRedis(
-        string $service,
-        array $keys
-    ): void {
-        $connection = self::getConnection();
+    public function testMvcModelMetadataGetAttributesRedis(string $service, array $keys)
+    {
+        $connection = $this->getConnection();
         $adapter    = $this->newService($service);
 
         /**
@@ -79,10 +60,6 @@ final class ReadMetadataTest extends DatabaseTestCase
         $adapter->reset();
 
         $this->container->setShared('modelsMetadata', $adapter);
-
-        (new PhotoMigration($connection));
-        (new AlbumMigration($connection));
-        (new AlbumPhotoMigration($connection));
 
         /** @var MetaData $metadata */
         $metadata = $this->container->get('modelsMetadata');
@@ -154,9 +131,26 @@ final class ReadMetadataTest extends DatabaseTestCase
     }
 
     /**
+     * @return array[]
+     */
+    public static function getExamples(): array
+    {
+        return [
+            [
+                'service' => 'metadataRedis',
+                'keys'    => self::getKeyData(),
+            ],
+            [
+                'service' => 'metadataLibmemcached',
+                'keys'    => self::getKeyData(),
+            ],
+        ];
+    }
+
+    /**
      * @return array
      */
-    private static function getKeyData(): array
+    public static function getKeyData(): array
     {
         return [
             'meta-phalcon\tests\models\albumphoto' => [

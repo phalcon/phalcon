@@ -84,9 +84,9 @@ class Builder implements BuilderInterface, InjectionAwareInterface
     protected array | string | null $columns = null;
 
     /**
-     * @var array|int|string|null
+     * @var string|null
      */
-    protected array | int | string | null $conditions = null;
+    protected string | null $conditions = null;
 
     /**
      * @var DiInterface|null
@@ -94,9 +94,9 @@ class Builder implements BuilderInterface, InjectionAwareInterface
     protected ?DiInterface $container;
 
     /**
-     * @var mixed
+     * @var bool|string|null
      */
-    protected mixed $distinct = null;
+    protected bool | string | null $distinct = null;
 
     /**
      * @var bool
@@ -139,7 +139,7 @@ class Builder implements BuilderInterface, InjectionAwareInterface
     protected int $offset = 0;
 
     /**
-     * @var array|string|mixed|null
+     * @var array|string|null
      */
     protected array | string | null $order = null;
 
@@ -162,56 +162,27 @@ class Builder implements BuilderInterface, InjectionAwareInterface
             /**
              * Process conditions
              */
-            $conditions = '';
             if (isset($params[0])) {
-                $conditions       = $params[0];
-                $this->conditions = $conditions;
+                $this->conditions = is_array($params[0]) ?
+                    $this->mergeConditions($params[0]) :
+                    (string)$params[0];
             } else {
+                $this->conditions = '';
                 if (isset($params["conditions"])) {
-                    $conditions       = $params["conditions"];
-                    $this->conditions = $conditions;
+                    $this->conditions = is_array($params["conditions"]) ?
+                        $this->mergeConditions($params["conditions"]) :
+                        (string)$params["conditions"];
                 }
-            }
-
-            if (is_array($conditions)) {
-                $mergedConditions = [];
-                $mergedParams     = [];
-                $mergedTypes      = [];
-
-                foreach ($conditions as $singleConditionArray) {
-                    if (is_array($singleConditionArray)) {
-                        $singleCondition = $singleConditionArray[0] ?? null;
-                        $singleParams    = $singleConditionArray[1] ?? null;
-                        $singleTypes     = $singleConditionArray[2] ?? null;
-
-                        if (is_string($singleCondition)) {
-                            $mergedConditions[] = $singleCondition;
-                        }
-
-                        if (is_array($singleParams)) {
-                            $mergedParams = $mergedParams + $singleParams;
-                        }
-
-                        if (is_array($singleTypes)) {
-                            $mergedTypes = $mergedTypes + $singleTypes;
-                        }
-                    }
-                }
-
-                $this->conditions = implode(" AND ", $mergedConditions);
-
-                $this->bindParams = $mergedParams;
-                $this->bindTypes  = $mergedTypes;
             }
 
             /**
              * Assign bind types
              */
-            if (isset($params["bind"])) {
+            if (isset($params["bind"]) && is_array($params['bind'])) {
                 $this->bindParams = $params["bind"];
             }
 
-            if (isset($params["bindTypes"])) {
+            if (isset($params["bindTypes"]) && is_array($params['bindTypes'])) {
                 $this->bindTypes = $params["bindTypes"];
             }
 
@@ -219,34 +190,43 @@ class Builder implements BuilderInterface, InjectionAwareInterface
              * Assign SELECT DISTINCT / SELECT ALL clause
              */
             if (isset($params["distinct"])) {
-                $this->distinct = $params["distinct"];
+                $this->distinct = is_string($params['distinct']) ? $params['distinct'] : (bool)$params['distinct'];
             }
 
             /**
              * Assign FROM clause
              */
-            if (isset($params["models"])) {
+            if (
+                isset($params["models"]) &&
+                (is_string($params['models']) || is_array($params['models']))
+            ) {
                 $this->models = $params["models"];
             }
 
             /**
              * Assign COLUMNS clause
              */
-            if (isset($params["columns"])) {
+            if (
+                isset($params["columns"]) &&
+                (is_string($params['columns']) || is_array($params['columns']))
+            ) {
                 $this->columns = $params["columns"];
             }
 
             /**
              * Assign JOIN clause
              */
-            if (isset($params["joins"])) {
+            if (isset($params["joins"]) && is_array($params['joins'])) {
                 $this->joins = $params["joins"];
             }
 
             /**
              * Assign GROUP clause
              */
-            if (isset($params["group"])) {
+            if (
+                isset($params["group"]) &&
+                (is_string($params['group']) || is_array($params['group']))
+            ) {
                 $this->groupBy($params["group"]);
             }
 
@@ -254,13 +234,16 @@ class Builder implements BuilderInterface, InjectionAwareInterface
              * Assign HAVING clause
              */
             if (isset($params["having"])) {
-                $this->having = $params["having"];
+                $this->having = (string)$params["having"];
             }
 
             /**
              * Assign ORDER clause
              */
-            if (isset($params["order"])) {
+            if (
+                isset($params["order"]) &&
+                (is_string($params['order']) || is_array($params['order']))
+            ) {
                 $this->order = $params["order"];
             }
 
@@ -272,12 +255,12 @@ class Builder implements BuilderInterface, InjectionAwareInterface
                 if (is_array($limitClause)) {
                     if (isset($limitClause[0])) {
                         if (is_int($limitClause[0])) {
-                            $this->limit = (string)$limitClause[0];
+                            $this->limit = $limitClause[0];
                         }
 
                         if (isset($limitClause[1])) {
                             if (is_int($limitClause[1])) {
-                                $this->offset = $limitClause[1];
+                                $this->offset = (int)abs($limitClause[1]);
                             }
                         }
                     } else {
@@ -292,24 +275,24 @@ class Builder implements BuilderInterface, InjectionAwareInterface
              * Assign OFFSET clause
              */
             if (isset($params["offset"])) {
-                $this->offset = $params["offset"];
+                $this->offset = (int)$params["offset"];
             }
 
             /**
              * Assign FOR UPDATE clause
              */
             if (isset($params["for_update"])) {
-                $this->forUpdate = $params["for_update"];
+                $this->forUpdate = (bool)$params["for_update"];
             }
 
             /**
              * Assign SHARED LOCK clause
              */
             if (isset($params["shared_lock"])) {
-                $this->sharedLock = $params["shared_lock"];
+                $this->sharedLock = (bool)$params["shared_lock"];
             }
         } else {
-            if (is_string($params) && $params !== "") {
+            if (is_string($params) && trim($params) !== "") {
                 $this->conditions = $params;
             }
         }
@@ -351,7 +334,7 @@ class Builder implements BuilderInterface, InjectionAwareInterface
             }
         }
 
-        if (is_string($alias) && $alias !== null) {
+        if (is_string($alias) && trim($alias) !== '') {
             $this->models[$alias] = $model;
         } else {
             $this->models[] = $model;
@@ -458,17 +441,18 @@ class Builder implements BuilderInterface, InjectionAwareInterface
      * $builder->betweenHaving("SUM(Robots.price)", 100.25, 200.50);
      *```
      *
-     * @param string $expr
-     * @param mixed  $minimum
-     * @param mixed  $maximum
-     * @param string $operator
+     * @param string           $expr
+     * @param string|float|int $minimum
+     * @param string|float|int $maximum
+     * @param string           $operator
      *
+     * @throws Exception
      * @return BuilderInterface
      */
     public function betweenHaving(
         string $expr,
-        mixed $minimum,
-        mixed $maximum,
+        string | float | int $minimum,
+        string | float | int $maximum,
         string $operator = BuilderInterface::OPERATOR_AND
     ): BuilderInterface {
         return $this->conditionBetween("Having", $operator, $expr, $minimum, $maximum);
@@ -481,17 +465,18 @@ class Builder implements BuilderInterface, InjectionAwareInterface
      * $builder->betweenWhere("price", 100.25, 200.50);
      *```
      *
-     * @param string $expr
-     * @param mixed  $minimum
-     * @param mixed  $maximum
-     * @param string $operator
+     * @param string           $expr
+     * @param string|float|int $minimum
+     * @param string|float|int $maximum
+     * @param string           $operator
      *
+     * @throws Exception
      * @return BuilderInterface
      */
     public function betweenWhere(
         string $expr,
-        mixed $minimum,
-        mixed $maximum,
+        string | float | int $minimum,
+        string | float | int $maximum,
         string $operator = BuilderInterface::OPERATOR_AND
     ): BuilderInterface {
         return $this->conditionBetween("Where", $operator, $expr, $minimum, $maximum);
@@ -558,14 +543,15 @@ class Builder implements BuilderInterface, InjectionAwareInterface
      *
      *```php
      * $builder->distinct("status");
-     * $builder->distinct(null);
+     * $builder->distinct(true);
+     * $builder->distinct(false);
      *```
      *
-     * @param mixed $distinct
+     * @param bool|string $distinct
      *
      * @return BuilderInterface
      */
-    public function distinct(mixed $distinct): BuilderInterface
+    public function distinct(bool | string $distinct): BuilderInterface
     {
         $this->distinct = $distinct;
 
@@ -613,11 +599,11 @@ class Builder implements BuilderInterface, InjectionAwareInterface
      * );
      *```
      *
-     * @param mixed $models
+     * @param array|string|null $models
      *
      * @return BuilderInterface
      */
-    public function from(mixed $models): BuilderInterface
+    public function from(array | string | null $models): BuilderInterface
     {
         $this->models = $models;
 
@@ -647,9 +633,9 @@ class Builder implements BuilderInterface, InjectionAwareInterface
     /**
      * Return the columns to be queried
      *
-     * @return array|string
+     * @return array|string|null
      */
-    public function getColumns(): array | string
+    public function getColumns(): array | string | null
     {
         return $this->columns;
     }
@@ -667,9 +653,9 @@ class Builder implements BuilderInterface, InjectionAwareInterface
     /**
      * Returns SELECT DISTINCT / SELECT ALL flag
      *
-     * @return bool
+     * @return bool|string|null
      */
-    public function getDistinct(): bool
+    public function getDistinct(): bool | string | null
     {
         return $this->distinct;
     }
@@ -699,7 +685,7 @@ class Builder implements BuilderInterface, InjectionAwareInterface
      *
      * @return string|null
      */
-    public function getHaving(): string|null
+    public function getHaving(): string | null
     {
         return $this->having;
     }
@@ -751,7 +737,7 @@ class Builder implements BuilderInterface, InjectionAwareInterface
     /**
      * Returns the set ORDER BY clause
      *
-     * @return array|string
+     * @return array|string|null
      */
     public function getOrderBy(): array | string | null
     {
@@ -761,8 +747,8 @@ class Builder implements BuilderInterface, InjectionAwareInterface
     /**
      * Returns a PHQL statement built based on the builder parameters
      *
-     * @return string
      * @throws Exception
+     * @return string
      */
     final public function getPhql(): string
     {
@@ -839,15 +825,12 @@ class Builder implements BuilderInterface, InjectionAwareInterface
                         $attributeField = $firstPrimaryKey;
                     }
 
-                    // check the type of the condition, if it's a string put single quotes around the value
-                    if (is_string($conditions)) {
-                        /*
-                         * Example : if the developer writes findFirstBy('135'), Phalcon will generate where uuid = 135.
-                         * But the column's type is text so Postgres needs to have single quotes such as ;
-                         * where uuid = '135'.
-                         */
-                        $conditions = "'" . $conditions . "'";
-                    }
+                    /*
+                     * Example : if the developer writes findFirstBy('135'), Phalcon will generate where uuid = 135.
+                     * But the column's type is text so Postgres needs to have single quotes such as ;
+                     * where uuid = '135'.
+                     */
+                    $conditions = "'" . $conditions . "'";
 
                     $conditions = $this->autoescape($model)
                         . "."
@@ -868,28 +851,20 @@ class Builder implements BuilderInterface, InjectionAwareInterface
             }
         }
 
-        $distinct = $this->distinct;
-
-        if (is_bool($distinct)) {
-            if ($distinct) {
-                $phql = "SELECT DISTINCT ";
-            } else {
-                $phql = "SELECT ALL ";
-            }
+        if (is_bool($this->distinct)) {
+            $phql = "SELECT " . ($this->distinct ? "DISTINCT " : "ALL ");
         } else {
             $phql = "SELECT ";
         }
 
-        $columns = $this->columns;
-
-        if ($columns !== null) {
+        if ($this->columns !== null) {
             /**
              * Generate PHQL for columns
              */
-            if (is_array($columns)) {
+            if (is_array($this->columns)) {
                 $selectedColumns = [];
 
-                foreach ($columns as $columnAlias => $column) {
+                foreach ($this->columns as $columnAlias => $column) {
                     if (is_int($columnAlias)) {
                         $selectedColumns[] = $column;
                     } else {
@@ -901,7 +876,7 @@ class Builder implements BuilderInterface, InjectionAwareInterface
 
                 $phql .= implode(", ", $selectedColumns);
             } else {
-                $phql .= $columns;
+                $phql .= $this->columns;
             }
         } else {
             /**
@@ -952,52 +927,48 @@ class Builder implements BuilderInterface, InjectionAwareInterface
         /**
          * Check if joins were passed to the builders
          */
-        $joins = $this->joins;
+        foreach ($this->joins as $join) {
+            /**
+             * The joined table is in the first place of the array
+             */
+            $joinModel = $join[0];
 
-        if (is_array($joins)) {
-            foreach ($joins as $join) {
-                /**
-                 * The joined table is in the first place of the array
-                 */
-                $joinModel = $join[0];
+            /**
+             * The join conditions are in the second place of the array
+             */
+            $joinConditions = $join[1];
 
-                /**
-                 * The join conditions are in the second place of the array
-                 */
-                $joinConditions = $join[1];
+            /**
+             * The join alias is in the second place of the array
+             */
+            $joinAlias = $join[2];
 
-                /**
-                 * The join alias is in the second place of the array
-                 */
-                $joinAlias = $join[2];
+            /**
+             * Join type
+             */
+            $joinType = $join[3];
 
-                /**
-                 * Join type
-                 */
-                $joinType = $join[3];
+            /**
+             * Create the join according to the type
+             */
+            if ($joinType) {
+                $phql .= " " . $joinType . " JOIN " . $this->autoescape($joinModel);
+            } else {
+                $phql .= " JOIN " . $this->autoescape($joinModel);
+            }
 
-                /**
-                 * Create the join according to the type
-                 */
-                if ($joinType) {
-                    $phql .= " " . $joinType . " JOIN " . $this->autoescape($joinModel);
-                } else {
-                    $phql .= " JOIN " . $this->autoescape($joinModel);
-                }
+            /**
+             * Alias comes first
+             */
+            if ($joinAlias) {
+                $phql .= " AS " . $this->autoescape($joinAlias);
+            }
 
-                /**
-                 * Alias comes first
-                 */
-                if ($joinAlias) {
-                    $phql .= " AS " . $this->autoescape($joinAlias);
-                }
-
-                /**
-                 * Conditions then
-                 */
-                if ($joinConditions) {
-                    $phql .= " ON " . $joinConditions;
-                }
+            /**
+             * Conditions then
+             */
+            if ($joinConditions) {
+                $phql .= " ON " . $joinConditions;
             }
         }
 
@@ -1011,11 +982,10 @@ class Builder implements BuilderInterface, InjectionAwareInterface
         /**
          * Process group parameters
          */
-        $group = $this->group;
-        if (!empty($group)) {
+        if (!empty($this->group)) {
             $groupItems = [];
 
-            foreach ($group as $groupItem) {
+            foreach ($this->group as $groupItem) {
                 $groupItems[] = $this->autoescape($groupItem);
             }
 
@@ -1025,23 +995,18 @@ class Builder implements BuilderInterface, InjectionAwareInterface
         /**
          * Process having clause
          */
-        $having = $this->having;
-        if ($having !== null) {
-            if (!empty($having)) {
-                $phql .= " HAVING " . $having;
-            }
+        if (!empty($this->having)) {
+            $phql .= " HAVING " . $this->having;
         }
 
         /**
          * Process order clause
          */
-        $order = $this->order;
-
-        if ($order !== null) {
-            if (is_array($order)) {
+        if ($this->order !== null) {
+            if (is_array($this->order)) {
                 $orderItems = [];
 
-                foreach ($order as $orderItem) {
+                foreach ($this->order as $orderItem) {
                     /**
                      * For case 'ORDER BY 1'
                      */
@@ -1063,7 +1028,7 @@ class Builder implements BuilderInterface, InjectionAwareInterface
 
                 $phql .= " ORDER BY " . implode(", ", $orderItems);
             } else {
-                $phql .= " ORDER BY " . $order;
+                $phql .= " ORDER BY " . $this->order;
             }
         }
 
@@ -1088,30 +1053,23 @@ class Builder implements BuilderInterface, InjectionAwareInterface
                 if (is_numeric($limit)) {
                     $number = $limit;
                     $offset = $this->offset;
-                    if ($offset !== null) {
-                        if (!is_numeric($offset)) {
-                            $offset = 0;
-                        }
-                    }
                 }
             }
 
             if (is_numeric($number)) {
                 $phql                     .= " LIMIT :APL0:";
-                $this->bindParams["APL0"] = intval($number, 10);
+                $this->bindParams["APL0"] = (int)$number;
                 $this->bindTypes["APL0"]  = Column::BIND_PARAM_INT;
 
                 if (is_numeric($offset) && $offset !== 0) {
                     $phql                     .= " OFFSET :APL1:";
-                    $this->bindParams["APL1"] = intval($offset, 10);
+                    $this->bindParams["APL1"] = (int)$offset;
                     $this->bindTypes["APL1"]  = Column::BIND_PARAM_INT;
                 }
             }
         }
 
-        $forUpdate = $this->forUpdate;
-
-        if (is_bool($forUpdate) && $forUpdate) {
+        if ($this->forUpdate) {
             $phql .= " FOR UPDATE";
         }
 
@@ -1121,6 +1079,7 @@ class Builder implements BuilderInterface, InjectionAwareInterface
     /**
      * Returns the query built
      *
+     * @throws Exception
      * @return QueryInterface
      */
     public function getQuery(): QueryInterface
@@ -1143,18 +1102,12 @@ class Builder implements BuilderInterface, InjectionAwareInterface
         );
 
         // Set default bind params
-        $bindParams = $this->bindParams;
-        if (is_array($bindParams)) {
-            $query->setBindParams($bindParams);
-        }
+        $query->setBindParams($this->bindParams);
 
         // Set default bind types
-        $bindTypes = $this->bindTypes;
-        if (is_array($bindTypes)) {
-            $query->setBindTypes($bindTypes);
-        }
+        $query->setBindTypes($this->bindTypes);
 
-        if (is_bool($this->sharedLock)) {
+        if ($this->sharedLock) {
             $query->setSharedLock($this->sharedLock);
         }
 
@@ -1186,7 +1139,7 @@ class Builder implements BuilderInterface, InjectionAwareInterface
      *
      * @return BuilderInterface
      */
-    public function groupBy(mixed $group): BuilderInterface
+    public function groupBy(array | string $group): BuilderInterface
     {
         if (is_string($group)) {
             if (str_contains($group, ",")) {
@@ -1232,22 +1185,14 @@ class Builder implements BuilderInterface, InjectionAwareInterface
         /**
          * Merge the bind params to the current ones
          */
-        if (is_array($currentBindParams)) {
-            $this->bindParams = $currentBindParams + $bindParams;
-        } else {
-            $this->bindParams = $bindParams;
-        }
+        $this->bindParams = $currentBindParams + $bindParams;
 
         $currentBindTypes = $this->bindTypes;
 
         /**
          * Merge the bind types to the current ones
          */
-        if (is_array($currentBindTypes)) {
-            $this->bindTypes = $currentBindTypes + $bindTypes;
-        } else {
-            $this->bindTypes = $bindTypes;
-        }
+        $this->bindTypes = $currentBindTypes + $bindTypes;
 
         return $this;
     }
@@ -1263,6 +1208,7 @@ class Builder implements BuilderInterface, InjectionAwareInterface
      * @param array  $values
      * @param string $operator
      *
+     * @throws Exception
      * @return BuilderInterface
      */
     public function inHaving(
@@ -1287,6 +1233,7 @@ class Builder implements BuilderInterface, InjectionAwareInterface
      * @param array  $values
      * @param string $operator
      *
+     * @throws Exception
      * @return BuilderInterface
      */
     public function inWhere(
@@ -1421,12 +1368,12 @@ class Builder implements BuilderInterface, InjectionAwareInterface
      * $builder->limit("100", "20");
      * ```
      *
-     * @param int        $limit
-     * @param mixed|null $offset
+     * @param int      $limit
+     * @param int|null $offset
      *
      * @return BuilderInterface
      */
-    public function limit(int $limit, mixed $offset = null): BuilderInterface
+    public function limit(int $limit, ?int $offset = null): BuilderInterface
     {
         $limit = abs($limit);
 
@@ -1450,17 +1397,18 @@ class Builder implements BuilderInterface, InjectionAwareInterface
      * $builder->notBetweenHaving("SUM(Robots.price)", 100.25, 200.50);
      *```
      *
-     * @param string $expr
-     * @param mixed  $minimum
-     * @param mixed  $maximum
-     * @param string $operator
+     * @param string           $expr
+     * @param string|float|int $minimum
+     * @param string|float|int $maximum
+     * @param string           $operator
      *
+     * @throws Exception
      * @return BuilderInterface
      */
     public function notBetweenHaving(
         string $expr,
-        mixed $minimum,
-        mixed $maximum,
+        string | float | int $minimum,
+        string | float | int $maximum,
         string $operator = BuilderInterface::OPERATOR_AND
     ): BuilderInterface {
         return $this->conditionNotBetween(
@@ -1479,17 +1427,18 @@ class Builder implements BuilderInterface, InjectionAwareInterface
      * $builder->notBetweenWhere("price", 100.25, 200.50);
      *```
      *
-     * @param string $expr
-     * @param mixed  $minimum
-     * @param mixed  $maximum
-     * @param string $operator
+     * @param string           $expr
+     * @param string|float|int $minimum
+     * @param string|float|int $maximum
+     * @param string           $operator
      *
+     * @throws Exception
      * @return BuilderInterface
      */
     public function notBetweenWhere(
         string $expr,
-        mixed $minimum,
-        mixed $maximum,
+        string | float | int $minimum,
+        string | float | int $maximum,
         string $operator = BuilderInterface::OPERATOR_AND
     ): BuilderInterface {
         return $this->conditionNotBetween(
@@ -1512,6 +1461,7 @@ class Builder implements BuilderInterface, InjectionAwareInterface
      * @param array  $values
      * @param string $operator
      *
+     * @throws Exception
      * @return BuilderInterface
      */
     public function notInHaving(
@@ -1533,6 +1483,7 @@ class Builder implements BuilderInterface, InjectionAwareInterface
      * @param array  $values
      * @param string $operator
      *
+     * @throws Exception
      * @return BuilderInterface
      */
     public function notInWhere(
@@ -1688,12 +1639,7 @@ class Builder implements BuilderInterface, InjectionAwareInterface
     public function setBindParams(array $bindParams, bool $merge = false): BuilderInterface
     {
         if ($merge) {
-            $currentBindParams = $this->bindParams;
-            if (is_array($currentBindParams)) {
-                $this->bindParams = $currentBindParams + $bindParams;
-            } else {
-                $this->bindParams = $bindParams;
-            }
+            $this->bindParams = $this->bindParams + $bindParams;
         } else {
             $this->bindParams = $bindParams;
         }
@@ -1712,13 +1658,7 @@ class Builder implements BuilderInterface, InjectionAwareInterface
     public function setBindTypes(array $bindTypes, bool $merge = false): BuilderInterface
     {
         if ($merge) {
-            $currentBindTypes = $this->bindTypes;
-
-            if (is_array($currentBindTypes)) {
-                $this->bindTypes = $currentBindTypes + $bindTypes;
-            } else {
-                $this->bindTypes = $bindTypes;
-            }
+            $this->bindTypes = $this->bindTypes + $bindTypes;
         } else {
             $this->bindTypes = $bindTypes;
         }
@@ -1754,6 +1694,12 @@ class Builder implements BuilderInterface, InjectionAwareInterface
      *     ]
      * );
      *```
+     *
+     * @param string $conditions
+     * @param array  $bindParams
+     * @param array  $bindTypes
+     *
+     * @return BuilderInterface
      */
     public function where(
         string $conditions,
@@ -1766,26 +1712,14 @@ class Builder implements BuilderInterface, InjectionAwareInterface
          * Merge the bind params to the current ones
          */
         if (count($bindParams) > 0) {
-            $currentBindParams = $this->bindParams;
-
-            if (is_array($currentBindParams)) {
-                $this->bindParams = $currentBindParams + $bindParams;
-            } else {
-                $this->bindParams = $bindParams;
-            }
+            $this->bindParams = $this->bindParams + $bindParams;
         }
 
         /**
          * Merge the bind types to the current ones
          */
         if (count($bindTypes) > 0) {
-            $currentBindTypes = $this->bindTypes;
-
-            if (is_array($currentBindTypes)) {
-                $this->bindTypes = $currentBindTypes + $bindTypes;
-            } else {
-                $this->bindTypes = $bindTypes;
-            }
+            $this->bindTypes = $this->bindTypes + $bindTypes;
         }
 
         return $this;
@@ -1794,22 +1728,23 @@ class Builder implements BuilderInterface, InjectionAwareInterface
     /**
      * Appends a BETWEEN condition
      *
-     * @param string $clause
-     * @param string $operator
-     * @param string $expr
-     * @param mixed  $minimum
-     * @param mixed  $maximum
+     * @param string           $clause
+     * @param string           $operator
+     * @param string           $expr
+     * @param string|float|int $minimum
+     * @param string|float|int $maximum
      *
+     * @throws Exception
      * @return BuilderInterface
      */
     protected function conditionBetween(
         string $clause,
         string $operator,
         string $expr,
-        mixed $minimum,
-        mixed $maximum
+        string | float | int $minimum,
+        string | float | int $maximum
     ): BuilderInterface {
-        if ($operator !== Builder::OPERATOR_AND && $operator !== Builder::OPERATOR_OR) {
+        if ($operator !== self::OPERATOR_AND && $operator !== self::OPERATOR_OR) {
             throw new Exception(
                 sprintf(
                     "Operator %s is not available.",
@@ -1857,6 +1792,7 @@ class Builder implements BuilderInterface, InjectionAwareInterface
      * @param string $expr
      * @param array  $values
      *
+     * @throws Exception
      * @return BuilderInterface
      */
     protected function conditionIn(
@@ -1865,7 +1801,7 @@ class Builder implements BuilderInterface, InjectionAwareInterface
         string $expr,
         array $values
     ): BuilderInterface {
-        if ($operator !== Builder::OPERATOR_AND && $operator !== Builder::OPERATOR_OR) {
+        if ($operator !== self::OPERATOR_AND && $operator !== self::OPERATOR_OR) {
             throw new Exception(
                 sprintf(
                     "Operator %s is not available.",
@@ -1882,7 +1818,7 @@ class Builder implements BuilderInterface, InjectionAwareInterface
             return $this;
         }
 
-        $hiddenParam = (int)$this->hiddenParamNumber;
+        $hiddenParam = $this->hiddenParamNumber;
 
         $bindParams = [];
         $bindKeys   = [];
@@ -1914,15 +1850,24 @@ class Builder implements BuilderInterface, InjectionAwareInterface
 
     /**
      * Appends a NOT BETWEEN condition
+     *
+     * @param string           $clause
+     * @param string           $operator
+     * @param string           $expr
+     * @param string|float|int $minimum
+     * @param string|float|int $maximum
+     *
+     * @throws Exception
+     * @return BuilderInterface
      */
     protected function conditionNotBetween(
         string $clause,
         string $operator,
         string $expr,
-        mixed $minimum,
-        mixed $maximum
+        string | float | int $minimum,
+        string | float | int $maximum
     ): BuilderInterface {
-        if ($operator !== Builder::OPERATOR_AND && $operator !== Builder::OPERATOR_OR) {
+        if ($operator !== self::OPERATOR_AND && $operator !== self::OPERATOR_OR) {
             throw new Exception(
                 sprintf(
                     "Operator %s is not available.",
@@ -1963,6 +1908,14 @@ class Builder implements BuilderInterface, InjectionAwareInterface
 
     /**
      * Appends a NOT IN condition
+     *
+     * @param string $clause
+     * @param string $operator
+     * @param string $expr
+     * @param array  $values
+     *
+     * @throws Exception
+     * @return BuilderInterface
      */
     protected function conditionNotIn(
         string $clause,
@@ -1970,7 +1923,7 @@ class Builder implements BuilderInterface, InjectionAwareInterface
         string $expr,
         array $values
     ): BuilderInterface {
-        if ($operator !== Builder::OPERATOR_AND && $operator !== Builder::OPERATOR_OR) {
+        if ($operator !== self::OPERATOR_AND && $operator !== self::OPERATOR_OR) {
             throw new Exception(
                 sprintf(
                     "Operator %s is not available.",
@@ -1987,7 +1940,7 @@ class Builder implements BuilderInterface, InjectionAwareInterface
             return $this;
         }
 
-        $hiddenParam = (int)$this->hiddenParamNumber;
+        $hiddenParam = $this->hiddenParamNumber;
 
         $bindParams = [];
         $bindKeys   = [];
@@ -2015,5 +1968,42 @@ class Builder implements BuilderInterface, InjectionAwareInterface
         $this->hiddenParamNumber = $hiddenParam;
 
         return $this;
+    }
+
+    /**
+     * @param array $conditions
+     *
+     * @return string
+     */
+    private function mergeConditions(array $conditions): string
+    {
+        $mergedConditions = [];
+        $mergedParams     = [];
+        $mergedTypes      = [];
+
+        foreach ($conditions as $singleConditionArray) {
+            if (is_array($singleConditionArray)) {
+                $singleCondition = $singleConditionArray[0] ?? null;
+                $singleParams    = $singleConditionArray[1] ?? null;
+                $singleTypes     = $singleConditionArray[2] ?? null;
+
+                if (is_string($singleCondition)) {
+                    $mergedConditions[] = $singleCondition;
+                }
+
+                if (is_array($singleParams)) {
+                    $mergedParams = $mergedParams + $singleParams;
+                }
+
+                if (is_array($singleTypes)) {
+                    $mergedTypes = $mergedTypes + $singleTypes;
+                }
+            }
+        }
+
+        $this->bindParams = (array)$mergedParams;
+        $this->bindTypes  = (array)$mergedTypes;
+
+        return implode(" AND ", $mergedConditions);
     }
 }

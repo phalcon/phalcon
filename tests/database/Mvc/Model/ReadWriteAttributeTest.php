@@ -84,7 +84,7 @@ final class ReadWriteAttributeTest extends DatabaseTestCase
         ];
 
         $invoice = new Invoices();
-        $invoice->writeAttribute('whatEverUndefinedProperty', $array);
+        @$invoice->writeAttribute('whatEverUndefinedProperty', $array);
 
         $this->assertEquals(
             [

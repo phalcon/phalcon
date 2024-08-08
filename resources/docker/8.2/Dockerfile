@@ -20,7 +20,7 @@ RUN set -eux && \
 
 # Update
 RUN apt update -y && \
-    apt install -y \
+    apt install -y --no-install-recommends \
         apt-utils \
         gettext \
         git \
@@ -104,5 +104,7 @@ RUN cd /tmp && \
 COPY --from=composer /usr/bin/composer /usr/local/bin/composer
 # Bash script with helper aliases
 COPY ./.bashrc /root/.bashrc
+
+USER $MY_USER
 
 CMD ["php-fpm"]

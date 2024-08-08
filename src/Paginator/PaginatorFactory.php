@@ -15,7 +15,6 @@ namespace Phalcon\Paginator;
 
 use Phalcon\Config\Config;
 use Phalcon\Paginator\Adapter\AdapterInterface;
-use Phalcon\Paginator\Adapter\NativeArray;
 use Phalcon\Support\Traits\ConfigTrait;
 use Phalcon\Traits\Factory\FactoryTrait;
 
@@ -26,6 +25,8 @@ class PaginatorFactory
 
     /**
      * AdapterFactory constructor.
+     *
+     * @param array $services
      */
     public function __construct(array $services = [])
     {
@@ -56,11 +57,14 @@ class PaginatorFactory
      *```
      *
      * @param array|Config $config = [
-     *                             'adapter' => 'queryBuilder',
-     *                             'limit' => 20,
-     *                             'page' => 1,
-     *                             'builder' => null
-     *                             ]
+     *     'adapter' => 'queryBuilder',
+     *     'limit' => 20,
+     *     'page' => 1,
+     *     'builder' => null
+     * ]
+     *
+     * @throws Exception
+     * @return AdapterInterface
      */
     public function load(array | Config $config): AdapterInterface
     {
@@ -74,12 +78,24 @@ class PaginatorFactory
 
     /**
      * Create a new instance of the adapter
+     *
+     * @param string $name
+     * @param array  $options
+     *
+     * @throws Exception
+     * @return AdapterInterface
      */
     public function newInstance(string $name, array $options = []): AdapterInterface
     {
         $definition = $this->getService($name);
 
-        return new $definition($options);
+        $instance = new $definition($options);
+        if ($instance instanceof AdapterInterface) {
+            return $instance;
+        }
+
+        $exception = $this->getExceptionClass();
+        throw new $exception("$name is not an instance of \\Phalcon\\Paginator\\Adapter\\AdapterInterface");
     }
 
     /**
@@ -98,9 +114,9 @@ class PaginatorFactory
     protected function getServices(): array
     {
         return [
-            "model"        => "Phalcon\\Paginator\\Adapter\\Model",
-            "nativeArray"  => NativeArray::class,
-            "queryBuilder" => "Phalcon\\Paginator\\Adapter\\QueryBuilder",
+            "model"        => Adapter\Model::class,
+            "nativeArray"  => Adapter\NativeArray::class,
+            "queryBuilder" => Adapter\QueryBuilder::class,
         ];
     }
 }

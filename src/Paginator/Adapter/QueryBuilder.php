@@ -64,10 +64,12 @@ class QueryBuilder extends AbstractAdapter
      * Phalcon\Paginator\Adapter\QueryBuilder
      *
      * @param array $config = [
-     *                      'limit' => 10,
-     *                      'builder' => null,
-     *                      'columns' => ''
-     *                      ]
+     *     'limit' => 10,
+     *     'builder' => null,
+     *     'columns' => ''
+     * ]
+     *
+     * @throws Exception
      */
     public function __construct(array $config)
     {
@@ -78,17 +80,18 @@ class QueryBuilder extends AbstractAdapter
         if (!isset($config["builder"])) {
             throw new Exception("Parameter 'builder' is required");
         }
-
-        $builder = $config["builder"];
-
-        if (!($builder instanceof Builder)) {
+        if ($config['builder'] instanceof Builder === false) {
             throw new Exception(
                 "Parameter 'builder' must be an instance " .
                 "of Phalcon\\Mvc\\Model\\Query\\Builder"
             );
         }
+        $builder = $config['builder'];
 
-        if (isset($config["columns"])) {
+        if (
+            isset($config["columns"]) &&
+            (is_array($config['columns']) || is_string($config['columns']))
+        ) {
             $this->columns = $config["columns"];
         }
 
@@ -104,7 +107,7 @@ class QueryBuilder extends AbstractAdapter
      */
     public function getCurrentPage(): int
     {
-        return $this->page;
+        return (int)$this->page;
     }
 
     /**
@@ -120,8 +123,8 @@ class QueryBuilder extends AbstractAdapter
     /**
      * Returns a slice of the resultset to show in the pagination
      *
-     * @return RepositoryInterface
      * @throws Exception
+     * @return RepositoryInterface
      */
     public function paginate(): RepositoryInterface
     {
@@ -139,7 +142,11 @@ class QueryBuilder extends AbstractAdapter
         $totalBuilder = clone $builder;
 
         $limit      = $this->limitRows;
-        $numberPage = $this->page;
+        $numberPage = (int)$this->page;
+
+        if (!$numberPage) {
+            $numberPage = 1;
+        }
 
         $number = $limit * ($numberPage - 1);
 
@@ -147,9 +154,9 @@ class QueryBuilder extends AbstractAdapter
          * Set the limit clause avoiding negative offsets
          */
         if ($number < $limit) {
-            $builder->limit($limit);
+            $builder->limit((int)$limit);
         } else {
-            $builder->limit($limit, $number);
+            $builder->limit((int)$limit, $number);
         }
 
         $query = $builder->getQuery();
@@ -188,14 +195,10 @@ class QueryBuilder extends AbstractAdapter
          * Change 'COUNT()' parameters, when the query contains 'GROUP BY'
          */
         if ($hasGroup) {
-            if (is_array($groups)) {
-                $groupColumn = implode(", ", $groups);
-            } else {
-                $groupColumn = $groups;
-            }
+            $groupColumn = implode(", ", $groups);
 
             if (!$hasHaving) {
-                $totalBuilder->groupBy(null)->columns(
+                $totalBuilder->groupBy('')->columns(
                     [
                         "COUNT(DISTINCT " . $groupColumn . ") AS [rowcount]",
                     ]
@@ -245,16 +248,15 @@ class QueryBuilder extends AbstractAdapter
                 $sql["bind"]
             );
 
-            $rowcount   = $row ? intval($row["rowcount"]) : 0;
-            $totalPages = intval(ceil($rowcount / $limit));
+            $rowcount = $row ? intval($row["rowcount"]) : 0;
         } else {
-            $result     = $totalQuery->execute();
-            $row        = $result->getFirst();
-            $rowcount   = $row ? intval($row->rowcount) : 0;
-            $totalPages = intval(ceil($rowcount / $limit));
+            $result   = $totalQuery->execute();
+            $row      = $result->getFirst();
+            $rowcount = $row ? intval($row->rowcount) : 0;
         }
 
-        $next = $totalPages;
+        $totalPages = intval(ceil($rowcount / $limit));
+        $next       = $totalPages;
         if ($numberPage < $totalPages) {
             $next = $numberPage + 1;
         }
@@ -275,6 +277,10 @@ class QueryBuilder extends AbstractAdapter
 
     /**
      * Set query builder object
+     *
+     * @param Builder $builder
+     *
+     * @return QueryBuilder
      */
     public function setQueryBuilder(Builder $builder): QueryBuilder
     {

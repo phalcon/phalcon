@@ -13,49 +13,44 @@ declare(strict_types=1);
 
 namespace Phalcon\Tests\Database\Db\Adapter\Pdo;
 
+use Codeception\Attribute\Group;
 use Phalcon\Db\Adapter\Pdo\AbstractPdo;
 use Phalcon\Db\Adapter\Pdo\Mysql;
 use Phalcon\Db\Column;
-use Phalcon\Storage\Exception;
 use Phalcon\Tests\DatabaseTestCase;
 use Phalcon\Tests\Fixtures\Migrations\DialectMigration;
 use Phalcon\Tests\Fixtures\Traits\DiTrait;
 
-final class ExecInsertTest extends DatabaseTestCase
+class ExecInsertTest extends DatabaseTestCase
 {
     use DiTrait;
 
-    /**
-     * Executed before each test
-     *
-     * @return void
-     */
     public function setUp(): void
     {
-        try {
-            $this->setNewFactoryDefault();
-        } catch (Exception $e) {
-            $this->fail($e->getMessage());
-        }
-
+        $this->setNewFactoryDefault();
         $this->setDatabase();
     }
 
     /**
      * Tests Phalcon\Db\Adapter\Pdo :: describeColumns()
      *
-     * @return void
-     *
      * @author Phalcon Team <team@phalcon.io>
      * @since  2021-04-20
      *
      * @group  mysql
      */
-    public function testDbAdapterPdoInsert(): void
+    #[Group('mysql')]
+    public function testDbAdapterPdoInsert()
     {
-        $connection = self::getConnection();
-        $migration  = new DialectMigration($connection);
-        $sql        = <<<SQL
+        // This test is buggy and ignores @group, skip manually.
+        if ($this->getDriver() !== 'mysql') {
+            $this->skipTest('Driver ' . $this->getDriver() . ' not supported');
+            return;
+        }
+
+        $connection = $this->getConnection();
+        new DialectMigration($connection);
+        $sql = <<<SQL
 insert into co_dialect (
     field_primary,
     field_blob,
@@ -110,7 +105,7 @@ insert into co_dialect (
     ?
 )
 SQL;
-        $values     = [
+        $values = [
             10,                          // field_primary,
             'abcdefgh',                  // field_blob,
             'bin',                       // field_binary,
@@ -137,7 +132,7 @@ SQL;
             'vbin',                      // field_varbinary,
             'abcdef',                    // field_varchar
         ];
-        $types      = [
+        $types = [
             Column::BIND_PARAM_INT,      // field_primary,
             Column::BIND_PARAM_BLOB,     // field_blob,
             Column::BIND_PARAM_BLOB,     // field_binary,
