@@ -15,13 +15,10 @@ namespace Phalcon\Tests\Database\Mvc\Model\Criteria;
 
 use Codeception\Attribute\Group;
 use Codeception\Attribute\Skip;
-use DatabaseTester;
 use Phalcon\Mvc\Model\Criteria;
 use Phalcon\Mvc\Model\Query\Builder;
 use Phalcon\Mvc\Model\Resultset\Simple;
-use Phalcon\Storage\Exception;
-use Phalcon\Tests\Fixtures\Migrations\CustomersMigration;
-use Phalcon\Tests\Fixtures\Migrations\InvoicesMigration;
+use Phalcon\Tests\DatabaseTestCase;
 use Phalcon\Tests\Fixtures\Migrations\OrdersMigration;
 use Phalcon\Tests\Fixtures\Migrations\OrdersProductsMigration;
 use Phalcon\Tests\Fixtures\Migrations\ProductsMigration;
@@ -34,18 +31,14 @@ use Phalcon\Tests\Models\Products;
 /**
  * Class JoinCest
  */
-class JoinCest
+class JoinTest extends DatabaseTestCase
 {
     use DiTrait;
 
-    /**
-     * @param DatabaseTester $I
-     *
-     * @throws Exception
-     */
-    public function _before(DatabaseTester $I)
+    public function setUp(): void
     {
         $this->setNewFactoryDefault();
+        $this->setDatabase();
     }
 
     /**
@@ -56,12 +49,10 @@ class JoinCest
      *
      * @group  common
      */
-    public function mvcModelCriteriaJoin(DatabaseTester $I)
+    public function testMvcModelCriteriaJoin()
     {
-        $I->wantToTest('Mvc\Model\Criteria - join()');
-
-        new InvoicesMigration($I->getConnection());
-        new CustomersMigration($I->getConnection());
+//        new InvoicesMigration($this->getConnection());
+//        new CustomersMigration($this->getConnection());
 
         $criteria = new Criteria();
         $criteria->setDI($this->container);
@@ -72,13 +63,13 @@ class JoinCest
 
         $builder = $criteria->createBuilder();
 
-        $I->assertInstanceOf(Builder::class, $builder);
+        $this->assertInstanceOf(Builder::class, $builder);
 
         $expected = 'SELECT [Phalcon\Tests\Models\Invoices].* '
             . 'FROM [Phalcon\Tests\Models\Invoices] '
             . 'JOIN [Phalcon\Tests\Models\Customers] AS [customer] ON inv_cst_id = cst_id';
         $actual = $builder->getPhql();
-        $I->assertEquals($expected, $actual);
+        $this->assertEquals($expected, $actual);
     }
 
     /**
@@ -93,15 +84,11 @@ class JoinCest
      */
     #[Group('pgsql')]
     #[Skip('This currently does not work')]
-    public function mvcModelCriteriaJoinManyToManyMultipleSchema(DatabaseTester $I)
+    public function testMvcModelCriteriaJoinManyToManyMultipleSchema()
     {
-        $I->wantToTest('Mvc\Model\Criteria - join() and use ManyToMany with Multiple schemas');
-
-        $this->setDatabase($I);
-
-        new OrdersMigration($I->getConnection());
-        new ProductsMigration($I->getConnection());
-        new OrdersProductsMigration($I->getConnection());
+        new OrdersMigration($this->getConnection());
+        new ProductsMigration($this->getConnection());
+        new OrdersProductsMigration($this->getConnection());
 
         /**
          * The following test needs to skip sqlite because I think
@@ -118,8 +105,8 @@ class JoinCest
         $request = $query->getSql();
 
         $expected = 'private';
-        $I->assertStringContainsString($expected, $request['sql']);
+        $this->assertStringContainsString($expected, $request['sql']);
 
-        $I->assertInstanceOf(Simple::class, $query->execute());
+        $this->assertInstanceOf(Simple::class, $query->execute());
     }
 }

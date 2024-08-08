@@ -13,40 +13,25 @@ declare(strict_types=1);
 
 namespace Phalcon\Tests\Database\Mvc\Model\Query\Builder;
 
-use DatabaseTester;
 use Phalcon\Mvc\Model\Query\Builder;
-use Phalcon\Storage\Exception;
+use Phalcon\Tests\DatabaseTestCase;
 use Phalcon\Tests\Fixtures\Traits\DiTrait;
 use Phalcon\Tests\Fixtures\Traits\RecordsTrait;
 use Phalcon\Tests\Models\Invoices;
 
-class OrderByCest
+class OrderByTest extends DatabaseTestCase
 {
     use DiTrait;
     use RecordsTrait;
 
-    /**
-     * Executed before each test
-     *
-     * @param DatabaseTester $I
-     *
-     * @return void
-     */
-    public function _before(DatabaseTester $I): void
+    public function setUp(): void
     {
-        try {
-            $this->setNewFactoryDefault();
-        } catch (Exception $e) {
-            $I->fail($e->getMessage());
-        }
-
-        $this->setDatabase($I);
+        $this->setNewFactoryDefault();
+        $this->setDatabase();
     }
 
     /**
      * Tests Phalcon\Mvc\Model\Query :: getSql() - Issue 14657
-     *
-     * @param DatabaseTester $I
      *
      * @author Phalcon Team <team@phalcon.io>
      * @since  2021-04-20
@@ -56,33 +41,29 @@ class OrderByCest
      * @group  pgsql
      * @group  sqlite
      */
-    public function mvcModelQueryBuilderOrderBy(DatabaseTester $I)
+    public function testMvcModelQueryBuilderOrderBy()
     {
-        $I->wantToTest('Mvc\Model\Query\Builder :: orderBy()');
-
         $builder = new Builder(null, $this->container);
         $phql    = $builder
             ->columns('inv_id, inv_title')
             ->addFrom(Invoices::class)
             ->orderBy('inv_title')
-            ->getPhql()
-        ;
+            ->getPhql();
 
         $expected = 'SELECT inv_id, inv_title '
             . 'FROM [Phalcon\Tests\Models\Invoices] '
             . 'ORDER BY inv_title';
         $actual   = $phql;
-        $I->assertEquals($expected, $actual);
+        $this->assertEquals($expected, $actual);
 
         $phql = $builder
             ->orderBy('inv_title DESC')
-            ->getPhql()
-        ;
+            ->getPhql();
 
         $expected = 'SELECT inv_id, inv_title '
             . 'FROM [Phalcon\Tests\Models\Invoices] '
             . 'ORDER BY inv_title DESC';
         $actual   = $phql;
-        $I->assertEquals($expected, $actual);
+        $this->assertEquals($expected, $actual);
     }
 }

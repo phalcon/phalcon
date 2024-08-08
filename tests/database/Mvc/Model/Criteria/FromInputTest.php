@@ -13,32 +13,23 @@ declare(strict_types=1);
 
 namespace Phalcon\Tests\Database\Mvc\Model\Criteria;
 
-use DatabaseTester;
 use Phalcon\Mvc\Model\Criteria;
+use Phalcon\Tests\DatabaseTestCase;
 use Phalcon\Tests\Fixtures\Traits\DiTrait;
 use Phalcon\Tests\Models\Invoices;
 
-class FromInputCest
+class FromInputTest extends DatabaseTestCase
 {
     use DiTrait;
 
-    /**
-     * Executed before each test
-     *
-     * @param DatabaseTester $I
-     *
-     * @return void
-     */
-    public function _before(DatabaseTester $I): void
+    public function setUp(): void
     {
         $this->setNewFactoryDefault();
-        $this->setDatabase($I);
+        $this->setDatabase();
     }
 
     /**
      * Tests Phalcon\Mvc\Model\Criteria :: fromInput()
-     *
-     * @param DatabaseTester $I
      *
      * @author Phalcon Team <team@phalcon.io>
      * @since  2020-03-05
@@ -46,10 +37,8 @@ class FromInputCest
      * @group  mysql
      * @group  sqlite
      */
-    public function mvcModelCriteriaFromInputMysql(DatabaseTester $I): void
+    public function testMvcModelCriteriaFromInputMysql(): void
     {
-        $I->wantToTest('Mvc\Model\Criteria - fromInput()');
-
         $criteria = Criteria::fromInput(
             $this->container,
             Invoices::class,
@@ -65,7 +54,7 @@ class FromInputCest
 
         $builder = $criteria->createBuilder();
 
-        if ($I->getDriver() === 'sqlite') {
+        if ($this->getDriver() === 'sqlite') {
             $expected = 'SELECT [Phalcon\Tests\Models\Invoices].* '
                 . 'FROM [Phalcon\Tests\Models\Invoices] '
                 . 'WHERE [inv_id] = :inv_id: '
@@ -85,9 +74,9 @@ class FromInputCest
                 . 'AND [inv_created_at] = :inv_created_at:';
         }
 
-        $I->assertEquals($expected, $builder->getPhql());
+        $this->assertEquals($expected, $builder->getPhql());
 
-        if ($I->getDriver() === 'sqlite') {
+        if ($this->getDriver() === 'sqlite') {
             $expected = [
                 'inv_id'          => 1,
                 'inv_cst_id'      => 2,
@@ -107,6 +96,6 @@ class FromInputCest
             ];
         }
 
-        $I->assertEquals($expected, $builder->getBindParams());
+        $this->assertEquals($expected, $builder->getBindParams());
     }
 }

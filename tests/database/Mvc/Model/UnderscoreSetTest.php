@@ -153,7 +153,7 @@ final class UnderscoreSetTest extends DatabaseTestCase
         ];
 
         $customer                            = new Models\Customers();
-        $customer->whatEverUndefinedProperty = $associativeArray;
+        @$customer->whatEverUndefinedProperty = $associativeArray;
 
         $this->assertEquals(
             [

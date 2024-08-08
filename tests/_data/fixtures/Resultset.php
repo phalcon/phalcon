@@ -11,7 +11,9 @@ declare(strict_types=1);
 
 namespace Phalcon\Tests\Fixtures;
 
-class Resultset
+use stdClass;
+
+class Resultset extends stdClass
 {
     public $calculated = '';
 

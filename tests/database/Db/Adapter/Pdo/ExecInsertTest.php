@@ -14,40 +14,25 @@ declare(strict_types=1);
 namespace Phalcon\Tests\Database\Db\Adapter\Pdo;
 
 use Codeception\Attribute\Group;
-use DatabaseTester;
 use Phalcon\Db\Adapter\Pdo\AbstractPdo;
 use Phalcon\Db\Adapter\Pdo\Mysql;
 use Phalcon\Db\Column;
-use Phalcon\Storage\Exception;
+use Phalcon\Tests\DatabaseTestCase;
 use Phalcon\Tests\Fixtures\Migrations\DialectMigration;
 use Phalcon\Tests\Fixtures\Traits\DiTrait;
 
-class ExecInsertCest
+class ExecInsertTest extends DatabaseTestCase
 {
     use DiTrait;
 
-    /**
-     * Executed before each test
-     *
-     * @param DatabaseTester $I
-     *
-     * @return void
-     */
-    public function _before(DatabaseTester $I): void
+    public function setUp(): void
     {
-        try {
-            $this->setNewFactoryDefault();
-        } catch (Exception $e) {
-            $I->fail($e->getMessage());
-        }
-
-        $this->setDatabase($I);
+        $this->setNewFactoryDefault();
+        $this->setDatabase();
     }
 
     /**
      * Tests Phalcon\Db\Adapter\Pdo :: describeColumns()
-     *
-     * @param DatabaseTester $I
      *
      * @author Phalcon Team <team@phalcon.io>
      * @since  2021-04-20
@@ -55,17 +40,15 @@ class ExecInsertCest
      * @group  mysql
      */
     #[Group('mysql')]
-    public function dbAdapterPdoInsert(DatabaseTester $I)
+    public function testDbAdapterPdoInsert()
     {
-        $I->wantToTest('Db\Adapter\Pdo - execute() (insert)');
-
         // This test is buggy and ignores @group, skip manually.
-        if ($I->getDriver() !== 'mysql') {
-            $I->skipTest('Driver ' . $I->getDriver() . ' not supported');
+        if ($this->getDriver() !== 'mysql') {
+            $this->skipTest('Driver ' . $this->getDriver() . ' not supported');
             return;
         }
 
-        $connection = $I->getConnection();
+        $connection = $this->getConnection();
         new DialectMigration($connection);
         $sql = <<<SQL
 insert into co_dialect (
@@ -177,14 +160,14 @@ SQL;
             Column::BIND_PARAM_STR,      // field_varchar
         ];
 
-        $connection = new Mysql($I->getDatabaseOptions());
-        $I->assertInstanceOf(AbstractPdo::class, $connection);
+        $connection = new Mysql($this->getDatabaseOptions());
+        $this->assertInstanceOf(AbstractPdo::class, $connection);
 
-        $I->assertCount(25, $values);
-        $I->assertCount(25, $types);
+        $this->assertCount(25, $values);
+        $this->assertCount(25, $types);
 
         $result = $connection->execute($sql, $values);
 
-        $I->assertNotFalse($result);
+        $this->assertNotFalse($result);
     }
 }

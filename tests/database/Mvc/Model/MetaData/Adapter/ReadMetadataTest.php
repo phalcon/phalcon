@@ -13,14 +13,9 @@ declare(strict_types=1);
 
 namespace Phalcon\Tests\Database\Mvc\Model\MetaData\Adapter;
 
-use Codeception\Attribute\Skip;
-use Codeception\Example;
-use DatabaseTester;
 use Phalcon\Mvc\Model\MetaData;
 use Phalcon\Storage\Exception;
-use Phalcon\Tests\Fixtures\Migrations\AlbumMigration;
-use Phalcon\Tests\Fixtures\Migrations\AlbumPhotoMigration;
-use Phalcon\Tests\Fixtures\Migrations\PhotoMigration;
+use Phalcon\Tests\DatabaseTestCase;
 use Phalcon\Tests\Fixtures\Traits\DiTrait;
 use Phalcon\Tests\Models\Album;
 use Phalcon\Tests\Models\AlbumPhoto;
@@ -28,14 +23,14 @@ use Phalcon\Tests\Models\Photo;
 
 use function array_keys;
 
-class ReadMetadataCest
+class ReadMetadataTest extends DatabaseTestCase
 {
     use DiTrait;
 
-    public function _before(DatabaseTester $I)
+    public function setUp(): void
     {
         $this->setNewFactoryDefault();
-        $this->setDatabase($I);
+        $this->setDatabase();
     }
 
     /**
@@ -43,28 +38,20 @@ class ReadMetadataCest
      *
      * @dataProvider getExamples
      *
-     * @param DatabaseTester $I
-     * @param Example        $example
+     * @param string $service
+     * @param array $keys
      *
-     * @return void
      * @throws Exception
+     * @throws \Phalcon\Mvc\Model\Exception
+     * @return void
      * @author       Phalcon Team <team@phalcon.io>
      * @since        2023-07-01
      *
      * @group        mysql
-     *
      */
-    #[Skip('This currently doesn\'t work because of constraint errors.')]
-    public function mvcModelMetadataGetAttributesRedis(
-        DatabaseTester $I,
-        Example $example
-    ) {
-        $keys    = $example['keys'];
-        $service = $example['service'];
-
-        $I->wantToTest('Mvc\Model\MetaData - readMetadata() - ' . $service);
-
-        $connection = $I->getConnection();
+    public function testMvcModelMetadataGetAttributesRedis(string $service, array $keys)
+    {
+        $connection = $this->getConnection();
         $adapter    = $this->newService($service);
 
         /**
@@ -73,10 +60,6 @@ class ReadMetadataCest
         $adapter->reset();
 
         $this->container->setShared('modelsMetadata', $adapter);
-
-        (new PhotoMigration($connection));
-        (new AlbumMigration($connection));
-        (new AlbumPhotoMigration($connection));
 
         /** @var MetaData $metadata */
         $metadata = $this->container->get('modelsMetadata');
@@ -90,7 +73,7 @@ class ReadMetadataCest
         ];
         $actual    = $metadata->getAttributes($model);
         $columnMap = $metadata->getColumnMap($model);
-        $I->assertEquals($expected, $actual);
+        $this->assertEquals($expected, $actual);
 
         $model     = new AlbumPhoto();
         $expected  = [
@@ -101,7 +84,7 @@ class ReadMetadataCest
         ];
         $actual    = $metadata->getAttributes($model);
         $columnMap = $metadata->getColumnMap($model);
-        $I->assertEquals($expected, $actual);
+        $this->assertEquals($expected, $actual);
 
         $model     = new Photo();
         $expected  = [
@@ -125,7 +108,7 @@ class ReadMetadataCest
         ];
         $actual    = $metadata->getAttributes($model);
         $columnMap = $metadata->getColumnMap($model);
-        $I->assertEquals($expected, $actual);
+        $this->assertEquals($expected, $actual);
 
         $service = $adapter->getAdapter();
 
@@ -135,7 +118,7 @@ class ReadMetadataCest
         $keyKeys = array_keys($keys);
         foreach ($keyKeys as $key) {
             $actual = $service->has($key);
-            $I->assertTrue($actual);
+            $this->assertTrue($actual);
         }
 
         /**
@@ -143,23 +126,23 @@ class ReadMetadataCest
          */
         foreach ($keys as $key => $expected) {
             $actual = $service->get($key);
-            $I->assertSame($expected, $actual);
+            $this->assertSame($expected, $actual);
         }
     }
 
     /**
      * @return array[]
      */
-    private function getExamples(): array
+    public static function getExamples(): array
     {
         return [
             [
                 'service' => 'metadataRedis',
-                'keys'    => $this->getKeyData(),
+                'keys'    => self::getKeyData(),
             ],
             [
                 'service' => 'metadataLibmemcached',
-                'keys'    => $this->getKeyData(),
+                'keys'    => self::getKeyData(),
             ],
         ];
     }
@@ -167,7 +150,7 @@ class ReadMetadataCest
     /**
      * @return array
      */
-    private function getKeyData(): array
+    public static function getKeyData(): array
     {
         return [
             'meta-phalcon\tests\models\albumphoto' => [
