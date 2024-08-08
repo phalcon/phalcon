@@ -25,6 +25,7 @@ use function explode;
 use function is_array;
 use function is_float;
 use function is_int;
+use function is_string;
 use function join;
 use function strtoupper;
 use function substr;
@@ -68,28 +69,7 @@ class Mysql extends Dialect
         // Query won't be executed if NULL wasn't specified
         // Even if DEFAULT NULL was specified
         $sql .= " NULL";
-
-        if (true === $column->hasDefault()) {
-            $defaultValue      = $column->getDefault();
-
-            if (
-                (
-                    is_string($defaultValue) &&
-                    (
-                        str_contains(strtoupper($defaultValue), "CURRENT_TIMESTAMP") ||
-                        str_contains(strtoupper($defaultValue), "NULL")
-                    )
-                ) ||
-                is_int($defaultValue) ||
-                is_float($defaultValue)
-            ) {
-                $sql .= " DEFAULT " . $defaultValue;
-            } else {
-                $sql .= " DEFAULT \""
-                    . addcslashes($defaultValue, "\"")
-                    . "\"";
-            }
-        }
+        $sql .= $this->checkHasDefault($column);
 
         if (true === $column->isAutoIncrement()) {
             $sql .= " AUTO_INCREMENT";
@@ -255,23 +235,7 @@ class Mysql extends Dialect
             /**
              * Add a Default clause
              */
-            if ($column->hasDefault()) {
-                $defaultValue      = $column->getDefault();
-                $upperDefaultValue = strtoupper($defaultValue);
-
-                if (
-                    str_contains($upperDefaultValue, "CURRENT_TIMESTAMP") ||
-                    str_contains($upperDefaultValue, "NULL") ||
-                    is_int($defaultValue) ||
-                    is_float($defaultValue)
-                ) {
-                    $columnLine .= " DEFAULT " . $defaultValue;
-                } else {
-                    $columnLine .= " DEFAULT \""
-                        . addcslashes($defaultValue, "\"")
-                        . "\"";
-                }
-            }
+            $columnLine .= $this->checkHasDefault($column);
 
             /**
              * Add an AUTO_INCREMENT clause
@@ -387,7 +351,7 @@ class Mysql extends Dialect
         array $definition,
         string $schemaName = null
     ): string {
-        if (isset($definition["sql"])) {
+        if (!isset($definition["sql"])) {
             throw new Exception(
                 "The index 'sql' is required in the definition array"
             );
@@ -563,11 +527,9 @@ class Mysql extends Dialect
     ): string {
         $tableName = $this->prepareTable($tableName, $schemaName);
 
-        if (true === $ifExists) {
-            return "DROP TABLE IF EXISTS " . $tableName;
-        }
+        $exists = $ifExists ? 'IF EXISTS ' : '';
 
-        return "DROP TABLE " . $tableName;
+        return "DROP TABLE " . $exists . $tableName;
     }
 
     /**
@@ -586,11 +548,9 @@ class Mysql extends Dialect
     ): string {
         $view = $this->prepareTable($viewName, $schemaName);
 
-        if (true === $ifExists) {
-            return "DROP VIEW IF EXISTS " . $view;
-        }
+        $exists = $ifExists ? 'IF EXISTS ' : '';
 
-        return "DROP VIEW " . $view;
+        return "DROP VIEW " . $exists . $view;
     }
 
     /**
@@ -889,11 +849,9 @@ class Mysql extends Dialect
      */
     public function listTables(?string $schemaName = null): string
     {
-        if (true === empty($schemaName)) {
-            return "SHOW TABLES FROM `" . $schemaName . "`";
-        }
+        $schema = empty($schemaName) ? "" : " FROM `" . $schemaName . "`";
 
-        return "SHOW TABLES";
+        return "SHOW TABLES" . $schema;
     }
 
     /**
@@ -905,16 +863,11 @@ class Mysql extends Dialect
      */
     public function listViews(?string $schemaName = null): string
     {
-        if (true === empty($schemaName)) {
-            return "SELECT `TABLE_NAME` AS view_name "
-                . "FROM `INFORMATION_SCHEMA`.`VIEWS` "
-                . "WHERE `TABLE_SCHEMA` = '" . $schemaName . "' "
-                . "ORDER BY view_name";
-        }
+        $schema = empty($schemaName) ? "DATABASE()" : "'" . $schemaName . "'";
 
         return "SELECT `TABLE_NAME` AS view_name "
             . "FROM `INFORMATION_SCHEMA`.`VIEWS` "
-            . "WHERE `TABLE_SCHEMA` = DATABASE() "
+            . "WHERE `TABLE_SCHEMA` = " . $schema . " "
             . "ORDER BY view_name";
     }
 
@@ -963,24 +916,7 @@ class Mysql extends Dialect
         // Query won't be executed if NULL wasn't specified
         // Even if DEFAULT NULL was specified
         $sql .= " NULL";
-
-        if ($column->hasDefault()) {
-            $defaultValue      = $column->getDefault();
-            $upperDefaultValue = strtoupper($defaultValue);
-
-            if (
-                str_contains($upperDefaultValue, "CURRENT_TIMESTAMP") ||
-                str_contains($upperDefaultValue, "NULL") ||
-                is_int($defaultValue) ||
-                is_float($defaultValue)
-            ) {
-                $sql .= " DEFAULT " . $defaultValue;
-            } else {
-                $sql .= " DEFAULT \""
-                    . addcslashes($defaultValue, "\"")
-                    . "\"";
-            }
-        }
+        $sql .= $this->checkHasDefault($column);
 
         if ($column->isAutoIncrement()) {
             $sql .= " AUTO_INCREMENT";
@@ -1032,17 +968,12 @@ class Mysql extends Dialect
         string $tableName,
         ?string $schemaName = null
     ): string {
-        if (true !== empty($schemaName)) {
-            return "SELECT IF(COUNT(*) > 0, 1, 0) "
-                . "FROM `INFORMATION_SCHEMA`.`TABLES` "
-                . "WHERE `TABLE_NAME`= '" . $tableName . "' "
-                . "AND `TABLE_SCHEMA` = '" . $schemaName . "'";
-        }
+        $schema = empty($schemaName) ? "DATABASE()" : "'" . $schemaName . "'";
 
         return "SELECT IF(COUNT(*) > 0, 1, 0) "
             . "FROM `INFORMATION_SCHEMA`.`TABLES` "
             . "WHERE `TABLE_NAME` = '" . $tableName . "' "
-            . "AND `TABLE_SCHEMA` = DATABASE()";
+            . "AND `TABLE_SCHEMA` = " . $schema;
     }
 
     /**
@@ -1055,21 +986,14 @@ class Mysql extends Dialect
      */
     public function tableOptions(string $tableName, ?string $schemaName = null): string
     {
-        $sql = "SELECT TABLES.TABLE_TYPE AS table_type,"
+        $schema = empty($schemaName) ? "DATABASE()" : "'" . $schemaName . "'";
+
+        return "SELECT TABLES.TABLE_TYPE AS table_type,"
             . "TABLES.AUTO_INCREMENT AS auto_increment,"
             . "TABLES.ENGINE AS engine,"
             . "TABLES.TABLE_COLLATION AS table_collation "
-            . "FROM INFORMATION_SCHEMA.TABLES WHERE ";
-
-        if (true !== empty($schemaName)) {
-            return $sql
-                . "TABLES.TABLE_SCHEMA = '"
-                . $schemaName
-                . "' AND TABLES.TABLE_NAME = '"
-                . $tableName . "'";
-        }
-
-        return $sql . "TABLES.TABLE_SCHEMA = DATABASE() "
+            . "FROM INFORMATION_SCHEMA.TABLES WHERE "
+            . "TABLES.TABLE_SCHEMA = " . $schema . " "
             . "AND TABLES.TABLE_NAME = '" . $tableName . "'";
     }
 
@@ -1081,15 +1005,13 @@ class Mysql extends Dialect
      *
      * @return string
      */
-    public function truncateTable(string $tableName, string $schemaName): string
-    {
-        if (true !== empty($schemaName)) {
-            $tableName = "`" . $schemaName . "`.";
-        }
+    public function truncateTable(
+        string $tableName,
+        string $schemaName = ''
+    ): string {
+        $schema = empty($schemaName) ? '' : "`" . $schemaName . "`.";
 
-        $tableName .= "`" . $tableName . "`";
-
-        return "TRUNCATE TABLE " . $tableName;
+        return "TRUNCATE TABLE " . $schema . '`' . $tableName . '`';
     }
 
     /**
@@ -1104,17 +1026,12 @@ class Mysql extends Dialect
         string $viewName,
         ?string $schemaName = null
     ): string {
-        if (true !== empty($schemaName)) {
-            return "SELECT IF(COUNT(*) > 0, 1, 0) "
-                . "FROM `INFORMATION_SCHEMA`.`VIEWS` "
-                . "WHERE `TABLE_NAME`= '" . $viewName . "' "
-                . "AND `TABLE_SCHEMA`='" . $schemaName . "'";
-        }
+        $schema = empty($schemaName) ? "DATABASE()" : "'" . $schemaName . "'";
 
         return "SELECT IF(COUNT(*) > 0, 1, 0) "
             . "FROM `INFORMATION_SCHEMA`.`VIEWS` "
             . "WHERE `TABLE_NAME`='" . $viewName . "' "
-            . "AND `TABLE_SCHEMA` = DATABASE()";
+            . "AND `TABLE_SCHEMA` = " . $schema;
     }
 
     /**
@@ -1194,11 +1111,7 @@ class Mysql extends Dialect
      */
     private function checkColumnUnsigned(ColumnInterface $column): string
     {
-        if ($column->isUnsigned()) {
-            return " UNSIGNED";
-        }
-
-        return "";
+        return $column->isUnsigned() ? ' UNSIGNED' : '';
     }
 
     /**
@@ -1218,6 +1131,40 @@ class Mysql extends Dialect
 
             if (true !== empty($afterPosition)) {
                 $sql .= " AFTER `" . $afterPosition . "`";
+            }
+        }
+
+        return $sql;
+    }
+
+    /**
+     * @param Column $column
+     * @param        $sql
+     *
+     * @return string
+     */
+    private function checkHasDefault(Column $column): string
+    {
+        $sql = '';
+        if (true === $column->hasDefault()) {
+            $defaultValue      = $column->getDefault();
+
+            if (
+                (
+                    is_string($defaultValue) &&
+                    (
+                        str_contains(strtoupper($defaultValue), "CURRENT_TIMESTAMP") ||
+                        str_contains(strtoupper($defaultValue), "NULL")
+                    )
+                ) ||
+                is_int($defaultValue) ||
+                is_float($defaultValue)
+            ) {
+                $sql = " DEFAULT " . $defaultValue;
+            } else {
+                $sql = " DEFAULT \""
+                    . addcslashes($defaultValue, "\"")
+                    . "\"";
             }
         }
 
