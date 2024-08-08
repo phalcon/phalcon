@@ -26,6 +26,8 @@ use Phalcon\Db\ReferenceInterface;
 
 use function preg_match;
 use function preg_replace;
+use function str_ends_with;
+use function str_starts_with;
 use function strcasecmp;
 use function strtolower;
 use function trigger_error;
@@ -338,11 +340,12 @@ class Sqlite extends PdoAdapter
                 true !== empty($field[4]) &&
                 0 !== strcasecmp($field[4], "null")
             ) {
-                $definition["default"] = preg_replace(
-                    "/^('|')$/",
-                    "",
-                    $field[4]
-                );
+                if (str_starts_with($field[4], "'")) {
+                    $definition["default"] = substr($definition["default"], 1);
+                }
+                if (str_ends_with($field[4], "'")) {
+                    $definition["default"] = substr($definition["default"], 0, -1);
+                }
             }
 
             /**
