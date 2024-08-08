@@ -47,7 +47,7 @@ final class DescribeColumnsTest extends DatabaseTestCase
         return [
             [
                 Mysql::class,
-                'SHOW FULL COLUMNS FROM `schema`.`table` '
+                'SHOW FULL COLUMNS FROM `schema`.`table`'
 
             ],
             //            [Postgresql::class],
