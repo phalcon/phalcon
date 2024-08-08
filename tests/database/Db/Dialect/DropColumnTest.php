@@ -19,14 +19,30 @@ use Phalcon\Tests\DatabaseTestCase;
 final class DropColumnTest extends DatabaseTestCase
 {
     /**
+     * @return array[]
+     */
+    public static function getDialects(): array
+    {
+        return [
+            [
+                Mysql::class,
+                'ALTER TABLE `schema`.`table` DROP COLUMN `column`',
+
+            ],
+            //            [Postgresql::class],
+            //            [Sqlite::class],
+        ];
+    }
+
+    /**
      * Tests Phalcon\Db\Dialect :: dropColumn
      *
      * @dataProvider getDialects
      *
-     * @author Phalcon Team <team@phalcon.io>
-     * @since  2020-01-20
+     * @author       Phalcon Team <team@phalcon.io>
+     * @since        2020-01-20
      *
-     * @group  common
+     * @group        common
      */
     public function testDbDialectDropColumn(
         string $dialectClass,
@@ -35,23 +51,7 @@ final class DropColumnTest extends DatabaseTestCase
         /** @var Mysql $dialect */
         $dialect = new $dialectClass();
 
-        $actual  = $dialect->dropColumn('table', 'schema', 'column');
+        $actual = $dialect->dropColumn('table', 'schema', 'column');
         $this->assertSame($expected, $actual);
-    }
-
-    /**
-     * @return array[]
-     */
-    public static function getDialects(): array
-    {
-        return [
-            [
-                Mysql::class,
-                'ALTER TABLE `schema`.`table` DROP COLUMN `column`'
-
-            ],
-            //            [Postgresql::class],
-            //            [Sqlite::class],
-        ];
     }
 }

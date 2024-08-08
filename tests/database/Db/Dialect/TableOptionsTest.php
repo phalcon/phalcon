@@ -19,48 +19,6 @@ use Phalcon\Tests\DatabaseTestCase;
 final class TableOptionsTest extends DatabaseTestCase
 {
     /**
-     * Tests Phalcon\Db\Dialect :: tableExists
-     *
-     * @dataProvider getDialects
-     *
-     * @author Phalcon Team <team@phalcon.io>
-     * @since  2020-01-20
-     *
-     * @group  common
-     */
-    public function testDbDialectTableExists(
-        string $dialectClass,
-        string $expected
-    ): void {
-        /** @var Mysql $dialect */
-        $dialect = new $dialectClass();
-
-        $actual  = $dialect->tableOptions('table', 'schema');
-        $this->assertSame($expected, $actual);
-    }
-
-    /**
-     * Tests Phalcon\Db\Dialect :: tableExists
-     *
-     * @dataProvider getDialectsNoSchema
-     *
-     * @author Phalcon Team <team@phalcon.io>
-     * @since  2020-01-20
-     *
-     * @group  common
-     */
-    public function testDbDialectTableExistsNoSchema(
-        string $dialectClass,
-        string $expected
-    ): void {
-        /** @var Mysql $dialect */
-        $dialect = new $dialectClass();
-
-        $actual  = $dialect->tableOptions('table');
-        $this->assertSame($expected, $actual);
-    }
-
-    /**
      * @return array[]
      */
     public static function getDialects(): array
@@ -74,7 +32,7 @@ final class TableOptionsTest extends DatabaseTestCase
                 . "TABLES.TABLE_COLLATION AS table_collation "
                 . "FROM INFORMATION_SCHEMA.TABLES WHERE "
                 . "TABLES.TABLE_SCHEMA = 'schema' "
-                . "AND TABLES.TABLE_NAME = 'table'"
+                . "AND TABLES.TABLE_NAME = 'table'",
             ],
             //            [Postgresql::class],
             //            [Sqlite::class],
@@ -95,10 +53,52 @@ final class TableOptionsTest extends DatabaseTestCase
                 . "TABLES.TABLE_COLLATION AS table_collation "
                 . "FROM INFORMATION_SCHEMA.TABLES WHERE "
                 . "TABLES.TABLE_SCHEMA = DATABASE() "
-                . "AND TABLES.TABLE_NAME = 'table'"
+                . "AND TABLES.TABLE_NAME = 'table'",
             ],
             //            [Postgresql::class],
             //            [Sqlite::class],
         ];
+    }
+
+    /**
+     * Tests Phalcon\Db\Dialect :: tableExists
+     *
+     * @dataProvider getDialects
+     *
+     * @author       Phalcon Team <team@phalcon.io>
+     * @since        2020-01-20
+     *
+     * @group        common
+     */
+    public function testDbDialectTableExists(
+        string $dialectClass,
+        string $expected
+    ): void {
+        /** @var Mysql $dialect */
+        $dialect = new $dialectClass();
+
+        $actual = $dialect->tableOptions('table', 'schema');
+        $this->assertSame($expected, $actual);
+    }
+
+    /**
+     * Tests Phalcon\Db\Dialect :: tableExists
+     *
+     * @dataProvider getDialectsNoSchema
+     *
+     * @author       Phalcon Team <team@phalcon.io>
+     * @since        2020-01-20
+     *
+     * @group        common
+     */
+    public function testDbDialectTableExistsNoSchema(
+        string $dialectClass,
+        string $expected
+    ): void {
+        /** @var Mysql $dialect */
+        $dialect = new $dialectClass();
+
+        $actual = $dialect->tableOptions('table');
+        $this->assertSame($expected, $actual);
     }
 }

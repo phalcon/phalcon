@@ -18,15 +18,10 @@ use Phalcon\Db\ColumnInterface;
 use Phalcon\Db\Dialect;
 use Phalcon\Db\Dialect\Traits\TextTrait;
 use Phalcon\Db\Exception;
-use Phalcon\Db\Index;
 use Phalcon\Db\IndexInterface;
 use Phalcon\Db\ReferenceInterface;
 
-use function addcslashes;
 use function implode;
-use function is_array;
-use function substr;
-use function trim;
 
 /**
  * Generates database specific SQL for the MySQL RDBMS
@@ -36,7 +31,7 @@ class Mysql extends Dialect
     use TextTrait;
 
     private const DEFAULT_SCHEMA = "DATABASE()";
-    private const STR_NULL = " NULL";
+    private const STR_NULL       = " NULL";
 
     /**
      * @var string
@@ -67,8 +62,7 @@ class Mysql extends Dialect
             . self::STR_NULL
             . $this->checkColumnHasDefault($column)
             . $this->checkColumnIsAutoIncrement($column)
-            . $this->checkColumnFirstAfterPositions($column)
-        ;
+            . $this->checkColumnFirstAfterPositions($column);
     }
 
     /**
@@ -116,7 +110,7 @@ class Mysql extends Dialect
         $indexType = $index->getType() ? $index->getType() . ' ' : '';
 
         return $this->alter($tableName, $schemaName)
-            .' ADD ' . $indexType . 'INDEX '
+            . ' ADD ' . $indexType . 'INDEX '
             . $this->delimit($index->getName()) . ' '
             . $this->wrap($this->getColumnList($index->getColumns()));
     }
@@ -170,7 +164,7 @@ class Mysql extends Dialect
          * Create a temporary or normal table
          */
         $temp = $temporary ? 'TEMPORARY ' : '';
-        $sql = 'CREATE ' . $temp . 'TABLE ' . $tableName . " (\n\t";
+        $sql  = 'CREATE ' . $temp . 'TABLE ' . $tableName . " (\n\t";
 
         $createLines = array_merge(
             $this->getTableColumns($definition),
@@ -425,6 +419,9 @@ class Mysql extends Dialect
         $columnSql  = $this->checkColumnTypeSql($column);
         $columnType = $this->checkColumnType($column);
 
+        /**
+         * The Column checks for the correct type
+         */
         $columnSql .= match ($columnType) {
             Column::TYPE_BIGINTEGER    => "BIGINT",
             Column::TYPE_BIT           => "BIT",
@@ -451,10 +448,7 @@ class Mysql extends Dialect
             Column::TYPE_TINYBLOB      => "TINYBLOB",
             Column::TYPE_TINYINTEGER   => "TINYINT",
             Column::TYPE_TINYTEXT      => "TINYTEXT",
-            Column::TYPE_VARCHAR       => "VARCHAR",
-            default                    => throw new Exception(
-                "Unrecognized MySQL data type at column " . $column->getName()
-            ),
+            default                    => "VARCHAR",
         };
 
         $columnSql .= match ($columnType) {
@@ -472,9 +466,9 @@ class Mysql extends Dialect
             Column::TYPE_VARCHAR,
             Column::TYPE_DECIMAL,
             Column::TYPE_DOUBLE,
-            Column::TYPE_FLOAT          => $this->checkColumnSizeAndScale($column)
+            Column::TYPE_FLOAT => $this->checkColumnSizeAndScale($column)
                 . $this->checkColumnUnsigned($column),
-            default                     => '',
+            default            => '',
         };
 
         return $columnSql;
@@ -567,8 +561,7 @@ class Mysql extends Dialect
             . $this->checkColumnHasDefault($column)
             . $this->checkColumnIsAutoIncrement($column)
             . $this->checkColumnComment($column)
-            . $this->checkColumnFirstAfterPositions($column)
-        ;
+            . $this->checkColumnFirstAfterPositions($column);
     }
 
     /**

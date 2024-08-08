@@ -15,9 +15,6 @@ namespace Phalcon\Tests\Database\Db\Dialect;
 
 use Phalcon\Db\Column;
 use Phalcon\Db\Dialect\Mysql;
-use Phalcon\Db\Exception;
-use Phalcon\Db\Index;
-use Phalcon\Db\Reference;
 use Phalcon\Tests\DatabaseTestCase;
 
 final class ModifyColumnTest extends DatabaseTestCase
@@ -155,7 +152,7 @@ final class ModifyColumnTest extends DatabaseTestCase
                 'bindType'      => Column::BIND_PARAM_INT,
             ]
         );
-        $actual = $dialect->modifyColumn(
+        $actual    = $dialect->modifyColumn(
             'table',
             'schema',
             $columnOld

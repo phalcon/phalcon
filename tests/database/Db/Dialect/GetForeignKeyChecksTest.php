@@ -19,14 +19,29 @@ use Phalcon\Tests\DatabaseTestCase;
 final class GetForeignKeyChecksTest extends DatabaseTestCase
 {
     /**
+     * @return array[]
+     */
+    public static function getDialects(): array
+    {
+        return [
+            [
+                Mysql::class,
+
+            ],
+            //            [Postgresql::class],
+            //            [Sqlite::class],
+        ];
+    }
+
+    /**
      * Tests Phalcon\Db\Dialect :: getForeignKeyChecks
      *
      * @dataProvider getDialects
      *
-     * @author Phalcon Team <team@phalcon.io>
-     * @since  2020-01-20
+     * @author       Phalcon Team <team@phalcon.io>
+     * @since        2020-01-20
      *
-     * @group  common
+     * @group        common
      */
     public function testDbDialectGetForeignKeyChecks(
         string $dialectClass
@@ -35,22 +50,7 @@ final class GetForeignKeyChecksTest extends DatabaseTestCase
         $dialect = new $dialectClass();
 
         $expected = 'SELECT @@foreign_key_checks';
-        $actual  = $dialect->getForeignKeyChecks();
+        $actual   = $dialect->getForeignKeyChecks();
         $this->assertSame($expected, $actual);
-    }
-
-    /**
-     * @return array[]
-     */
-    public static function getDialects(): array
-    {
-        return [
-            [
-                Mysql::class
-
-            ],
-            //            [Postgresql::class],
-            //            [Sqlite::class],
-        ];
     }
 }

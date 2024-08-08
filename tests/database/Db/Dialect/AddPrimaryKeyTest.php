@@ -20,28 +20,6 @@ use Phalcon\Tests\DatabaseTestCase;
 final class AddPrimaryKeyTest extends DatabaseTestCase
 {
     /**
-     * Tests Phalcon\Db\Dialect :: addPrimaryKey
-     *
-     * @dataProvider getDialects
-     *
-     * @author Phalcon Team <team@phalcon.io>
-     * @since  2020-01-20
-     *
-     * @group  common
-     */
-    public function testDbDialectAddPrimaryKey(
-        string $dialectClass,
-        string $expected
-    ): void {
-        /** @var Mysql $dialect */
-        $dialect = new $dialectClass();
-
-        $index = new Index('index1', ['field1', 'field2']);
-        $actual  = $dialect->addPrimaryKey('table', 'schema', $index);
-        $this->assertSame($expected, $actual);
-    }
-
-    /**
      * @return array[]
      */
     public static function getDialects(): array
@@ -50,11 +28,33 @@ final class AddPrimaryKeyTest extends DatabaseTestCase
             [
                 Mysql::class,
                 'ALTER TABLE `schema`.`table` '
-                . 'ADD PRIMARY KEY (`field1`, `field2`)'
+                . 'ADD PRIMARY KEY (`field1`, `field2`)',
 
             ],
             //            [Postgresql::class],
             //            [Sqlite::class],
         ];
+    }
+
+    /**
+     * Tests Phalcon\Db\Dialect :: addPrimaryKey
+     *
+     * @dataProvider getDialects
+     *
+     * @author       Phalcon Team <team@phalcon.io>
+     * @since        2020-01-20
+     *
+     * @group        common
+     */
+    public function testDbDialectAddPrimaryKey(
+        string $dialectClass,
+        string $expected
+    ): void {
+        /** @var Mysql $dialect */
+        $dialect = new $dialectClass();
+
+        $index  = new Index('index1', ['field1', 'field2']);
+        $actual = $dialect->addPrimaryKey('table', 'schema', $index);
+        $this->assertSame($expected, $actual);
     }
 }
