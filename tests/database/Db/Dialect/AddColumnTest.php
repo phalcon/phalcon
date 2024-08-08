@@ -195,8 +195,8 @@ final class AddColumnTest extends DatabaseTestCase
             'notNull'       => true,
             'autoIncrement' => false,
             'primary'       => false,
-            'first'         => true,
-            'after'         => null,
+            'first'         => false,
+            'after'         => 'field_first',
             'bindType'      => Column::BIND_PARAM_STR,
         ];
 
@@ -315,7 +315,7 @@ final class AddColumnTest extends DatabaseTestCase
         return [
             [
                 Mysql::class,
-                'ALTER TABLE `schema`.`table` ADD `field_primary` VARCHAR(10) NOT NULL DEFAULT "test" FIRST'
+                'ALTER TABLE `schema`.`table` ADD `field_primary` VARCHAR(10) NOT NULL DEFAULT "test" AFTER `field_first`'
 
             ],
 //            [Postgresql::class],

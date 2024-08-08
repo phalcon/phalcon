@@ -1158,7 +1158,7 @@ class Mysql extends Dialect
             $tableNameOptions[] = "COLLATE=" . $tableNameCollation;
         }
 
-        return join(" ", $tableNameOptions);
+        return implode(" ", $tableNameOptions);
     }
 
     /**
