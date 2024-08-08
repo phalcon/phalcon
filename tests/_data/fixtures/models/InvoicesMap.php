@@ -16,8 +16,6 @@ namespace Phalcon\Tests\Models;
 use Phalcon\Mvc\Model;
 
 /**
- * Class InvoicesMap
- *
  * @property int    $id
  * @property int    $cst_id
  * @property int    $status_flag

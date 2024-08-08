@@ -16,8 +16,7 @@ namespace Phalcon\Tests\Models;
 use Phalcon\Mvc\Model;
 
 /**
- * Class CustomersKeepSnapshots
- *
+
  * @property int    $cst_id;
  * @property int    $cst_status_flag;
  * @property string $cst_name_last;

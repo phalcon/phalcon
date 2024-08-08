@@ -14,8 +14,6 @@ declare(strict_types=1);
 namespace Phalcon\Tests\Models;
 
 /**
- * Class InvoicesMap
- *
  * @property int    $inv_id
  * @property int    $inv_cst_id
  * @property int    $inv_status_flag

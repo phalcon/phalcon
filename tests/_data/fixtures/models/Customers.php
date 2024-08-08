@@ -16,8 +16,6 @@ namespace Phalcon\Tests\Models;
 use Phalcon\Mvc\Model;
 
 /**
- * Class Customers
- *
  * @property int    $cst_id
  * @property int    $cst_status_flag
  * @property string $cst_name_last

@@ -13,9 +13,6 @@ declare(strict_types=1);
 
 namespace Phalcon\Tests\Models;
 
-/**
- * Class EntityWithPublic
- */
 class EntityWithPublic
 {
     public $name;
