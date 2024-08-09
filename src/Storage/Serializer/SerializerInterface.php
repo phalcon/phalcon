@@ -13,8 +13,6 @@ declare(strict_types=1);
 
 namespace Phalcon\Storage\Serializer;
 
-use Serializable;
-
 interface SerializerInterface //extends Serializable
 {
     /**

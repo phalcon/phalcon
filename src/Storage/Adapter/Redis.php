@@ -17,7 +17,6 @@ use DateInterval;
 use Exception as BaseException;
 use Phalcon\Storage\Exception as StorageException;
 use Phalcon\Storage\SerializerFactory;
-use Phalcon\Support\Exception as SupportException;
 use Redis as RedisService;
 use RedisException;
 

@@ -18,6 +18,8 @@ use Exception as BaseException;
 use Phalcon\Storage\SerializerFactory;
 use WeakReference;
 
+use function is_bool;
+use function is_int;
 use function is_object;
 
 /**
@@ -164,8 +166,8 @@ class Weak extends AbstractAdapter
             return $defaultValue;
         }
 
-        $wr             = $this->weakList[$key];
-        $value          = $wr->get();
+        $reference      = $this->weakList[$key];
+        $value          = $reference->get();
         $this->fetching = null;
         /**
          * value could be null, object could be destroyed while fetching
@@ -180,7 +182,7 @@ class Weak extends AbstractAdapter
     /**
      * Checks if an element exists in the cache
      *
-     * @param string key
+     * @param string $key
      *
      * @return bool
      */
@@ -218,6 +220,10 @@ class Weak extends AbstractAdapter
      */
     protected function doSet(string $key, mixed $value, mixed $ttl = null): bool
     {
+        if (true === is_int($ttl) && $ttl < 1) {
+            return $this->delete($key);
+        }
+
         if (!is_object($value)) {
             return false;
         }

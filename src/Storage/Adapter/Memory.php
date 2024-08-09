@@ -16,7 +16,6 @@ namespace Phalcon\Storage\Adapter;
 use DateInterval;
 use Exception as BaseException;
 use Phalcon\Storage\SerializerFactory;
-use Phalcon\Support\Exception as SupportException;
 
 use function array_key_exists;
 use function array_keys;
