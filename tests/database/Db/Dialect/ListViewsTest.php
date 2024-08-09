@@ -14,6 +14,8 @@ declare(strict_types=1);
 namespace Phalcon\Tests\Database\Db\Dialect;
 
 use Phalcon\Db\Dialect\Mysql;
+use Phalcon\Db\Dialect\Postgresql;
+use Phalcon\Db\Dialect\Sqlite;
 use Phalcon\Tests\DatabaseTestCase;
 
 final class ListViewsTest extends DatabaseTestCase
@@ -31,8 +33,20 @@ final class ListViewsTest extends DatabaseTestCase
                 . "WHERE `TABLE_SCHEMA` = 'schema' "
                 . "ORDER BY view_name",
             ],
-            //            [Postgresql::class],
-            //            [Sqlite::class],
+            [
+                Postgresql::class,
+                "SELECT viewname AS view_name "
+                . "FROM pg_views "
+                . "WHERE schemaname = 'schema' "
+                . "ORDER BY view_name",
+            ],
+            [
+                Sqlite::class,
+                "SELECT tbl_name "
+                . "FROM sqlite_master "
+                . "WHERE type = 'view' "
+                . "ORDER BY tbl_name",
+            ],
         ];
     }
 
@@ -49,8 +63,16 @@ final class ListViewsTest extends DatabaseTestCase
                 . "WHERE `TABLE_SCHEMA` = DATABASE() "
                 . "ORDER BY view_name",
             ],
-            //            [Postgresql::class],
-            //            [Sqlite::class],
+            [
+                Postgresql::class,
+                "SELECT viewname AS view_name FROM pg_views "
+                . "WHERE schemaname = 'public' ORDER BY view_name",
+            ],
+            [
+                Sqlite::class,
+                "SELECT tbl_name FROM sqlite_master "
+                . "WHERE type = 'view' ORDER BY tbl_name",
+            ],
         ];
     }
 

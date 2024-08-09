@@ -14,6 +14,9 @@ declare(strict_types=1);
 namespace Phalcon\Tests\Database\Db\Dialect;
 
 use Phalcon\Db\Dialect\Mysql;
+use Phalcon\Db\Dialect\Postgresql;
+use Phalcon\Db\Dialect\Sqlite;
+use Phalcon\Db\Exception;
 use Phalcon\Tests\DatabaseTestCase;
 
 final class DropForeignKeyTest extends DatabaseTestCase
@@ -30,9 +33,31 @@ final class DropForeignKeyTest extends DatabaseTestCase
                 . 'DROP FOREIGN KEY `fk_1`',
 
             ],
-            //            [Postgresql::class],
-            //            [Sqlite::class],
+            [
+                Postgresql::class,
+                'ALTER TABLE "schema"."table" DROP CONSTRAINT "fk_1"',
+            ],
         ];
+    }
+
+    /**
+     * Tests Phalcon\Db\Dialect :: dropColumn
+     *
+     * @author       Phalcon Team <team@phalcon.io>
+     * @since        2020-01-20
+     *
+     * @group        sqlite
+     */
+    public function testDbDialectDropForeignKeySqlite(): void
+    {
+        $this->expectException(Exception::class);
+        $this->expectExceptionMessage(
+            'Dropping a foreign key constraint is not supported by SQLite'
+        );
+
+        $dialect = new Sqlite();
+
+        $dialect->dropForeignKey('table', 'schema', 'fk_1');
     }
 
     /**

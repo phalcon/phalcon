@@ -14,6 +14,9 @@ declare(strict_types=1);
 namespace Phalcon\Tests\Database\Db\Dialect;
 
 use Phalcon\Db\Dialect\Mysql;
+use Phalcon\Db\Dialect\Postgresql;
+use Phalcon\Db\Dialect\Sqlite;
+use Phalcon\Db\Exception;
 use Phalcon\Tests\DatabaseTestCase;
 
 final class DropPrimaryKeyTest extends DatabaseTestCase
@@ -30,9 +33,32 @@ final class DropPrimaryKeyTest extends DatabaseTestCase
                 . 'DROP PRIMARY KEY',
 
             ],
-            //            [Postgresql::class],
-            //            [Sqlite::class],
+            [
+                Postgresql::class,
+                'ALTER TABLE "schema"."table" DROP CONSTRAINT "table_PRIMARY"',
+            ],
         ];
+    }
+
+    /**
+     * Tests Phalcon\Db\Dialect :: dropColumn
+     *
+     * @author       Phalcon Team <team@phalcon.io>
+     * @since        2020-01-20
+     *
+     * @group        sqlite
+     */
+    public function testDbDialectDropPrimaryKeySqlite(): void
+    {
+        $this->expectException(Exception::class);
+        $this->expectExceptionMessage(
+            'Removing a primary key after table has been created '
+            . 'is not supported by SQLite'
+        );
+
+        $dialect = new Sqlite();
+
+        $dialect->dropPrimaryKey('table', 'schema');
     }
 
     /**

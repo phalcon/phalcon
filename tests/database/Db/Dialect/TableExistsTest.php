@@ -14,6 +14,8 @@ declare(strict_types=1);
 namespace Phalcon\Tests\Database\Db\Dialect;
 
 use Phalcon\Db\Dialect\Mysql;
+use Phalcon\Db\Dialect\Postgresql;
+use Phalcon\Db\Dialect\Sqlite;
 use Phalcon\Tests\DatabaseTestCase;
 
 final class TableExistsTest extends DatabaseTestCase
@@ -31,8 +33,20 @@ final class TableExistsTest extends DatabaseTestCase
                 . "WHERE `TABLE_NAME` = 'table' "
                 . "AND `TABLE_SCHEMA` = 'schema'",
             ],
-            //            [Postgresql::class],
-            //            [Sqlite::class],
+            [
+                Postgresql::class,
+                "SELECT CASE WHEN COUNT(*) > 0 THEN 1 ELSE 0 END "
+                . "FROM information_schema.tables "
+                . "WHERE table_schema = 'public' "
+                . "AND table_name='table'",
+            ],
+            [
+                Sqlite::class,
+                "SELECT CASE WHEN COUNT(*) > 0 THEN 1 ELSE 0 END "
+                . "FROM sqlite_master "
+                . "WHERE type='table' "
+                . "AND tbl_name='table'",
+            ],
         ];
     }
 
@@ -49,8 +63,20 @@ final class TableExistsTest extends DatabaseTestCase
                 . "WHERE `TABLE_NAME` = 'table' "
                 . "AND `TABLE_SCHEMA` = DATABASE()",
             ],
-            //            [Postgresql::class],
-            //            [Sqlite::class],
+            [
+                Postgresql::class,
+                "SELECT CASE WHEN COUNT(*) > 0 THEN 1 ELSE 0 END "
+                . "FROM information_schema.tables "
+                . "WHERE table_schema = '' "
+                . "AND table_name='table'",
+            ],
+            [
+                Sqlite::class,
+                "SELECT CASE WHEN COUNT(*) > 0 THEN 1 ELSE 0 END "
+                . "FROM sqlite_master "
+                . "WHERE type='table' "
+                . "AND tbl_name='table'",
+            ],
         ];
     }
 

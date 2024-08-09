@@ -14,6 +14,8 @@ declare(strict_types=1);
 namespace Phalcon\Tests\Database\Db\Dialect;
 
 use Phalcon\Db\Dialect\Mysql;
+use Phalcon\Db\Dialect\Postgresql;
+use Phalcon\Db\Dialect\Sqlite;
 use Phalcon\Tests\DatabaseTestCase;
 
 final class DropIndexTest extends DatabaseTestCase
@@ -30,8 +32,14 @@ final class DropIndexTest extends DatabaseTestCase
                 . 'DROP INDEX `index`',
 
             ],
-            //            [Postgresql::class],
-            //            [Sqlite::class],
+            [
+                Postgresql::class,
+                'DROP INDEX "index"',
+            ],
+            [
+                Sqlite::class,
+                'DROP INDEX "schema"."index"',
+            ],
         ];
     }
 

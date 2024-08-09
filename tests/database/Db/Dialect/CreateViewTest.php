@@ -14,6 +14,8 @@ declare(strict_types=1);
 namespace Phalcon\Tests\Database\Db\Dialect;
 
 use Phalcon\Db\Dialect\Mysql;
+use Phalcon\Db\Dialect\Postgresql;
+use Phalcon\Db\Dialect\Sqlite;
 use Phalcon\Db\Exception;
 use Phalcon\Tests\DatabaseTestCase;
 
@@ -29,8 +31,14 @@ final class CreateViewTest extends DatabaseTestCase
                 Mysql::class,
                 'CREATE VIEW `schema`.`view` AS DEFINITION-VIEW',
             ],
-            //            [Postgresql::class],
-            //            [Sqlite::class],
+            [
+                Postgresql::class,
+                'CREATE VIEW "schema"."view" AS DEFINITION-VIEW',
+            ],
+            [
+                Sqlite::class,
+                'CREATE VIEW "schema"."view" AS DEFINITION-VIEW',
+            ],
         ];
     }
 
@@ -43,8 +51,14 @@ final class CreateViewTest extends DatabaseTestCase
             [
                 Mysql::class,
             ],
-            //            [Postgresql::class],
-            //            [Sqlite::class],
+            [
+                Postgresql::class,
+                '3',
+            ],
+            [
+                Sqlite::class,
+                '4',
+            ],
         ];
     }
 

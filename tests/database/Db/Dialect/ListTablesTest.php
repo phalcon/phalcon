@@ -14,6 +14,8 @@ declare(strict_types=1);
 namespace Phalcon\Tests\Database\Db\Dialect;
 
 use Phalcon\Db\Dialect\Mysql;
+use Phalcon\Db\Dialect\Postgresql;
+use Phalcon\Db\Dialect\Sqlite;
 use Phalcon\Tests\DatabaseTestCase;
 
 final class ListTablesTest extends DatabaseTestCase
@@ -29,8 +31,20 @@ final class ListTablesTest extends DatabaseTestCase
                 'SHOW TABLES FROM `schema`',
 
             ],
-            //            [Postgresql::class],
-            //            [Sqlite::class],
+            [
+                Postgresql::class,
+                "SELECT table_name "
+                . "FROM information_schema.tables "
+                . "WHERE table_schema = 'schema' "
+                . "ORDER BY table_name",
+            ],
+            [
+                Sqlite::class,
+                "SELECT tbl_name "
+                . "FROM sqlite_master "
+                . "WHERE type = 'table' "
+                . "ORDER BY tbl_name",
+            ],
         ];
     }
 
@@ -45,8 +59,20 @@ final class ListTablesTest extends DatabaseTestCase
                 'SHOW TABLES',
 
             ],
-            //            [Postgresql::class],
-            //            [Sqlite::class],
+            [
+                Postgresql::class,
+                "SELECT table_name "
+                . "FROM information_schema.tables "
+                . "WHERE table_schema = 'public' "
+                . "ORDER BY table_name",
+            ],
+            [
+                Sqlite::class,
+                "SELECT tbl_name "
+                . "FROM sqlite_master "
+                . "WHERE type = 'table' "
+                . "ORDER BY tbl_name",
+            ],
         ];
     }
 

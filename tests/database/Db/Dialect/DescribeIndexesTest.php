@@ -14,6 +14,8 @@ declare(strict_types=1);
 namespace Phalcon\Tests\Database\Db\Dialect;
 
 use Phalcon\Db\Dialect\Mysql;
+use Phalcon\Db\Dialect\Postgresql;
+use Phalcon\Db\Dialect\Sqlite;
 use Phalcon\Tests\DatabaseTestCase;
 
 final class DescribeIndexesTest extends DatabaseTestCase
@@ -29,8 +31,25 @@ final class DescribeIndexesTest extends DatabaseTestCase
                 'SHOW INDEXES FROM `schema`.`table`',
 
             ],
-            //            [Postgresql::class],
-            //            [Sqlite::class],
+            [
+                Postgresql::class,
+                "SELECT 0 as c0, t.relname as table_name, "
+                . "i.relname as key_name, 3 as c3, "
+                . "a.attname as column_name "
+                . "FROM pg_class t, pg_class i, pg_index ix, pg_attribute a "
+                . "WHERE t.oid = ix.indrelid "
+                . "AND i.oid = ix.indexrelid "
+                . "AND a.attrelid = t.oid "
+                . "AND a.attnum = "
+                . "ANY(ix.indkey) "
+                . "AND t.relkind = 'r' "
+                . "AND t.relname = 'table' "
+                . "ORDER BY t.relname, i.relname;",
+            ],
+            [
+                Sqlite::class,
+                "PRAGMA index_list('table')",
+            ],
         ];
     }
 

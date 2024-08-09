@@ -15,6 +15,8 @@ namespace Phalcon\Tests\Database\Db\Dialect;
 
 use Phalcon\Db\Column;
 use Phalcon\Db\Dialect\Mysql;
+use Phalcon\Db\Dialect\Postgresql;
+use Phalcon\Db\Dialect\Sqlite;
 use Phalcon\Db\Exception;
 use Phalcon\Db\Index;
 use Phalcon\Db\Reference;
@@ -46,8 +48,26 @@ final class CreateTableTest extends DatabaseTestCase
 	CONSTRAINT `fk_field_primary` FOREIGN KEY (`field_primary`) REFERENCES `other_table` (`id`) ON UPDATE ONUPDATESQL
 )',
             ],
-            //            [Postgresql::class],
-            //            [Sqlite::class],
+            //            [
+            //                Postgresql::class,
+            //                '1'
+            //            ],
+            [
+                Sqlite::class,
+                'CREATE  TABLE "schema"."table" (
+	`field_primary` INTEGER PRIMARY KEY AUTOINCREMENT NOT NULL,
+	`field_timestamp` VARCHAR(10) DEFAULT CURRENT_TIMESTAMP NOT NULL,
+	`field_int` INTEGER DEFAULT 13 NOT NULL,
+	`field_double` DOUBLE DEFAULT 13.34 NOT NULL,
+	`field_string` VARCHAR(10) DEFAULT "test" NOT NULL,
+	`field_null` VARCHAR(10) DEFAULT "NULL" NOT NULL,
+	`field_comment` VARCHAR(10) DEFAULT "test" NOT NULL,
+	UNIQUE ("field_field2"),
+	CONSTRAINT `fk_field_primary` FOREIGN KEY ("field_primary") REFERENCES `other_table`("id"),
+	CONSTRAINT `fk_field_primary` FOREIGN KEY ("field_primary") REFERENCES `other_table`("id") ON DELETE ONDELETESQL,
+	CONSTRAINT `fk_field_primary` FOREIGN KEY ("field_primary") REFERENCES `other_table`("id") ON UPDATE ONUPDATESQL
+)',
+            ],
         ];
     }
 
@@ -61,8 +81,14 @@ final class CreateTableTest extends DatabaseTestCase
                 Mysql::class,
 
             ],
-            //            [Postgresql::class],
-            //            [Sqlite::class],
+            [
+                Postgresql::class,
+                '3',
+            ],
+            [
+                Sqlite::class,
+                '4',
+            ],
         ];
     }
 
