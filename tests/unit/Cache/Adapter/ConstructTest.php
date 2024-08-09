@@ -22,7 +22,7 @@ use Phalcon\Cache\Adapter\Redis;
 use Phalcon\Cache\Adapter\RedisCluster;
 use Phalcon\Cache\Adapter\Stream;
 use Phalcon\Cache\Adapter\Weak;
-use Phalcon\Cache\Exception\Exception as StorageException;
+use Phalcon\Storage\Exception as StorageException;
 use Phalcon\Storage\SerializerFactory;
 use Phalcon\Support\Exception as SupportException;
 use Phalcon\Tests\Fixtures\Cache\Adapter\Libmemcached as LibmemcachedFixture;

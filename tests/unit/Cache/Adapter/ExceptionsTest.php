@@ -15,7 +15,7 @@ namespace Phalcon\Tests\Unit\Cache\Adapter;
 
 use Phalcon\Cache\Adapter\Redis;
 use Phalcon\Cache\Adapter\Stream;
-use Phalcon\Cache\Exception\Exception as StorageException;
+use Phalcon\Storage\Exception as StorageException;
 use Phalcon\Storage\SerializerFactory;
 use Phalcon\Support\Exception as HelperException;
 use Phalcon\Tests\UnitTestCase;
