@@ -14,6 +14,7 @@ declare(strict_types=1);
 namespace Phalcon\Db\Dialect\Traits;
 
 use Phalcon\Db\Column;
+use Phalcon\Db\Exception;
 use Phalcon\Db\Index;
 use Phalcon\Db\Reference;
 
@@ -27,16 +28,30 @@ use function strtoupper;
 
 trait TextTrait
 {
+    /**
+     * @return string
+     */
+    protected function getNullString(): string
+    {
+        return ' NULL';
+    }
+
+    /**
+     * @param array $definition
+     *
+     * @return array
+     * @throws Exception
+     */
     protected function getTableColumns(array $definition): array
     {
         $result  = [];
-        $columns = $definition["columns"];
+        $columns = $definition['columns'];
         foreach ($columns as $column) {
             $result[] = $this->delimit($column->getName())
                 . ' '
                 . $this->getColumnDefinition($column)
                 . $this->checkColumnIsNull($column)
-                . self::STR_NULL
+                . $this->getNullString()
                 . $this->checkColumnHasDefault($column)
                 . $this->checkColumnIsAutoIncrement($column)
                 . $this->checkColumnIsPrimary($column)
@@ -46,19 +61,25 @@ trait TextTrait
         return $result;
     }
 
+    /**
+     * @param array $definition
+     *
+     * @return array
+     * @throws Exception
+     */
     protected function getTableReferences(array $definition): array
     {
         $result  = [];
-        if (isset($definition["references"])) {
-            $references = $definition["references"];
+        if (isset($definition['references'])) {
+            $references = $definition['references'];
             foreach ($references as $reference) {
-                $result[] = "CONSTRAINT "
+                $result[] = 'CONSTRAINT '
                     . $this->delimit($reference->getName())
-                    . " FOREIGN KEY "
+                    . ' FOREIGN KEY '
                     . $this->wrap($this->getColumnList($reference->getColumns()))
-                    . " REFERENCES "
+                    . ' REFERENCES '
                     . $this->prepareTable($reference->getReferencedTable(), $reference->getReferencedSchema())
-                    . " "
+                    . ' '
                     . $this->wrap($this->getColumnList($reference->getReferencedColumns()))
                     . $this->checkReferenceOnDelete($reference)
                     . $this->checkReferenceOnUpdate($reference);
@@ -74,8 +95,8 @@ trait TextTrait
         /**
          * Create related indexes
          */
-        if (isset($definition["indexes"])) {
-            $indexes = $definition["indexes"];
+        if (isset($definition['indexes'])) {
+            $indexes = $definition['indexes'];
             /** @var Index $index */
             foreach ($indexes as $index) {
                 $indexName = $index->getName();
@@ -154,12 +175,12 @@ trait TextTrait
     ): string {
         $sql = '';
         if (true === $column->isFirst()) {
-            $sql = " FIRST";
+            $sql = ' FIRST';
         } else {
             $afterPosition = $column->getAfterPosition();
 
             if (true !== empty($afterPosition)) {
-                $sql = " AFTER `" . $afterPosition . "`";
+                $sql = ' AFTER ' . $this->delimit($afterPosition);
             }
         }
 
@@ -181,18 +202,18 @@ trait TextTrait
                 (
                     is_string($defaultValue) &&
                     (
-                        str_contains(strtoupper($defaultValue), "CURRENT_TIMESTAMP") ||
-                        str_contains(strtoupper($defaultValue), "NULL")
+                        str_contains(strtoupper($defaultValue), 'CURRENT_TIMESTAMP') ||
+                        str_contains(strtoupper($defaultValue), 'NULL')
                     )
                 ) ||
                 is_int($defaultValue) ||
                 is_float($defaultValue)
             ) {
-                $sql = " DEFAULT " . $defaultValue;
+                $sql = ' DEFAULT ' . $defaultValue;
             } else {
-                $sql = " DEFAULT \""
-                    . addcslashes($defaultValue, "\"")
-                    . "\"";
+                $sql = ' DEFAULT "'
+                    . addcslashes($defaultValue, '"')
+                    . '"';
             }
         }
 
@@ -239,15 +260,15 @@ trait TextTrait
      */
     protected function checkColumnSizeAndScale(Column $column): string
     {
-        $columnSql = "";
+        $columnSql = '';
         if ($column->getSize()) {
-            $columnSql .= "(" . $column->getSize();
+            $columnSql .= '(' . $column->getSize();
 
             if ($column->getScale()) {
-                $columnSql .= "," . $column->getScale();
+                $columnSql .= ',' . $column->getScale();
             }
 
-            $columnSql .= ")";
+            $columnSql .= ')';
         }
 
         return $columnSql;
@@ -274,7 +295,7 @@ trait TextTrait
     {
         $sql = '';
         if ($reference->getName()) {
-            $sql .= " CONSTRAINT " . $this->delimit($reference->getName());
+            $sql .= ' CONSTRAINT ' . $this->delimit($reference->getName());
         }
 
         return $sql;
@@ -291,7 +312,7 @@ trait TextTrait
 
         return empty($onDelete)
             ? ''
-            : " ON DELETE " . $onDelete;
+            : ' ON DELETE ' . $onDelete;
     }
 
     /**
@@ -305,7 +326,7 @@ trait TextTrait
 
         return empty($onUpdate)
             ? ''
-            : " ON UPDATE " . $onUpdate;
+            : ' ON UPDATE ' . $onUpdate;
     }
 
     /**
@@ -351,12 +372,23 @@ trait TextTrait
         string $viewName,
         ?string $schemaName
     ): string {
-        $schema = empty($schemaName) ? 'DATABASE()' : "'" . $schemaName . "'";
 
-        return "SELECT IF(COUNT(*) > 0, 1, 0) "
-            . "FROM `INFORMATION_SCHEMA`.`" . $table . "` "
-            . "WHERE `TABLE_NAME` = '" . $viewName . "' "
-            . "AND `TABLE_SCHEMA` = " . $schema;
+        return 'SELECT IF(COUNT(*) > 0, 1, 0) '
+            . 'FROM `INFORMATION_SCHEMA`.' . $this->delimit($table) . ' '
+            . 'WHERE `TABLE_NAME` = ' . $this->delimit($viewName, "'") . ' '
+            . 'AND `TABLE_SCHEMA` = ' . $this->getMysqlSchemaString($schemaName);
+    }
+
+    /**
+     * @param string|null $schemaName
+     *
+     * @return string
+     */
+    protected function getMysqlSchemaString(?string $schemaName): string
+    {
+        return empty($schemaName)
+            ? 'DATABASE()' :
+            $this->delimit($schemaName, "'");
     }
 
     /**
@@ -369,34 +401,34 @@ trait TextTrait
     protected function getTableOptions(array $definition): string
     {
         $tableNameOptions = [];
-        $options          = $definition["options"];
+        $options          = $definition['options'];
         /**
          * Check if there is an ENGINE option
          */
-        $engine = $options["ENGINE"] ?? "";
+        $engine = $options['ENGINE'] ?? '';
         if (true !== empty($engine)) {
-            $tableNameOptions[] = "ENGINE=" . $engine;
+            $tableNameOptions[] = 'ENGINE=' . $engine;
         }
 
         /**
          * Check if there is an AUTO_INCREMENT option
          */
-        $autoIncrement = $options["AUTO_INCREMENT"] ?? "";
+        $autoIncrement = $options['AUTO_INCREMENT'] ?? '';
         if (true !== empty($autoIncrement)) {
-            $tableNameOptions[] = "AUTO_INCREMENT=" . $autoIncrement;
+            $tableNameOptions[] = 'AUTO_INCREMENT=' . $autoIncrement;
         }
 
         /**
          * Check if there is a TABLE_COLLATION option
          */
-        $tableNameCollation = $options["TABLE_COLLATION"] ?? "";
+        $tableNameCollation = $options['TABLE_COLLATION'] ?? '';
         if (true !== empty($tableNameCollation)) {
-            $collationParts     = explode("_", $tableNameCollation);
-            $tableNameOptions[] = "DEFAULT CHARSET=" . $collationParts[0];
-            $tableNameOptions[] = "COLLATE=" . $tableNameCollation;
+            $collationParts     = explode('_', $tableNameCollation);
+            $tableNameOptions[] = 'DEFAULT CHARSET=' . $collationParts[0];
+            $tableNameOptions[] = 'COLLATE=' . $tableNameCollation;
         }
 
-        return implode(" ", $tableNameOptions);
+        return implode(' ', $tableNameOptions);
     }
 
     /**

@@ -977,14 +977,14 @@ class Postgresql extends Dialect
     /**
      * Generates SQL to truncate a table
      *
-     * @param string $tableName
-     * @param string $schemaName
+     * @param string      $tableName
+     * @param string|null $schemaName
      *
      * @return string
      */
     public function truncateTable(
         string $tableName,
-        string $schemaName
+        ?string $schemaName = ''
     ): string {
         return "TRUNCATE TABLE " . $this->prepareTable($tableName, $schemaName);
     }

@@ -16,6 +16,7 @@ namespace Phalcon\Db\Dialect;
 use Phalcon\Db\Column;
 use Phalcon\Db\ColumnInterface;
 use Phalcon\Db\Dialect;
+use Phalcon\Db\Dialect\Traits\TextTrait;
 use Phalcon\Db\Exception;
 use Phalcon\Db\IndexInterface;
 use Phalcon\Db\ReferenceInterface;
@@ -32,6 +33,8 @@ use function substr;
  */
 class Sqlite extends Dialect
 {
+    use TextTrait;
+
     /**
      * @var string
      */
@@ -52,12 +55,10 @@ class Sqlite extends Dialect
         string $schemaName,
         ColumnInterface $column
     ): string {
-        $sql = "ALTER TABLE "
-            . $this->prepareTable($tableName, $schemaName)
+        $sql = $this->alter($tableName, $schemaName)
             . " ADD COLUMN "
-            . "\""
-            . $column->getName()
-            . "\" "
+            . $this->delimit($column->getName(), '"')
+            . ' '
             . $this->getColumnDefinition($column);
 
         if (true === $column->hasDefault()) {
@@ -67,19 +68,18 @@ class Sqlite extends Dialect
                 if (str_contains(strtoupper($defaultValue), "CURRENT_TIMESTAMP")) {
                     $sql .= " DEFAULT CURRENT_TIMESTAMP";
                 } else {
-                    $sql .= " DEFAULT \""
-                        . addcslashes($defaultValue, "\"")
-                        . "\"";
+                    $sql .= ' DEFAULT "'
+                        . addcslashes($defaultValue, '"')
+                        . '"';
                 }
             } else {
                 $sql .= " DEFAULT " . $defaultValue;
             }
         }
 
-        if (true === $column->isNotNull()) {
-            $sql .= " NOT";
-        }
-        $sql .= " NULL";
+        $sql .= $this->checkColumnIsNull($column)
+            . $this->getNullString();
+
 
         if (true === $column->isAutoincrement()) {
             $sql .= " PRIMARY KEY AUTOINCREMENT";
@@ -205,9 +205,8 @@ class Sqlite extends Dialect
         $columns     = $definition["columns"];
 
         foreach ($columns as $column) {
-            $columnLine = "`"
-                . $column->getName()
-                . "` "
+            $columnLine = $this->delimit($column->getName())
+                . ' '
                 . $this->getColumnDefinition($column);
 
             /**
@@ -846,13 +845,15 @@ class Sqlite extends Dialect
     /**
      * Generates SQL to truncate a table
      *
-     * @param string $tableName
-     * @param string $schemaName
+     * @param string      $tableName
+     * @param string|null $schemaName
      *
      * @return string
      */
-    public function truncateTable(string $tableName, string $schemaName): string
-    {
+    public function truncateTable(
+        string $tableName,
+        ?string $schemaName = ''
+    ): string {
         $schema = "";
         if (true !== empty($schemaName)) {
             $schema = "\"" . $schemaName . "\".";
