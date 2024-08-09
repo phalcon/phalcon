@@ -330,7 +330,7 @@ if (!function_exists('getOptionsSqlite')) {
     function getOptionsSqlite(): array
     {
         return [
-            'dbname' => codecept_root_dir(env('DATA_SQLITE_NAME')),
+            'dbname' => rootDir(env('DATA_SQLITE_NAME')),
         ];
     }
 }
