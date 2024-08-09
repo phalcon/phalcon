@@ -14,7 +14,6 @@ declare(strict_types=1);
 namespace Phalcon\Mvc\Model;
 
 use PDOException;
-use Phalcon\Cache\Exception\InvalidArgumentException;
 use Phalcon\Db\Adapter\AdapterInterface;
 use Phalcon\Db\Column;
 use Phalcon\Db\RawValue;
@@ -30,6 +29,8 @@ use Phalcon\Mvc\Model\Resultset\Simple;
 use Phalcon\Mvc\ModelInterface;
 use Phalcon\Parsers\Parser;
 use Phalcon\Support\Settings;
+use Psr\SimpleCache\InvalidArgumentException;
+use Psr\SimpleCache\CacheInterface;
 
 use function array_merge;
 use function class_exists;
@@ -235,9 +236,9 @@ class Query implements QueryInterface, InjectionAwareInterface
     protected array $bindTypes = [];
 
     /**
-     * @var mixed|null
+     * @var CacheInterface|null
      */
-    protected mixed $cache = null;
+    protected ?CacheInterface $cache = null;
 
     /**
      * @var array
@@ -426,10 +427,10 @@ class Query implements QueryInterface, InjectionAwareInterface
 
             $cache = $this->container->getShared($cacheService);
 
-            if (true !== is_a($cache, "Phalcon\\Cache\\CacheInterface")) {
+            if (!$cache instanceof CacheInterface) {
                 throw new Exception(
                     "Cache service must be an object implementing " .
-                    "Phalcon\Cache\CacheInterface"
+                    "Psr\SimpleCache\CacheInterface"
                 );
             }
 

@@ -18,11 +18,11 @@ use Closure;
 use Countable;
 use Iterator;
 use JsonSerializable;
-use Phalcon\Cache\CacheInterface;
 use Phalcon\Db\Enum;
 use Phalcon\Messages\MessageInterface;
 use Phalcon\Mvc\ModelInterface;
 use Phalcon\Support\Settings;
+use Psr\SimpleCache\CacheInterface;
 use SeekableIterator;
 use Serializable;
 
@@ -95,7 +95,7 @@ abstract class Resultset implements
     /**
      * @var CacheInterface|null
      */
-    protected mixed $cache = null;
+    protected ?CacheInterface $cache = null;
 
     /**
      * @var int
@@ -163,13 +163,10 @@ abstract class Resultset implements
          * Update the related cache if any
          */
         if ($cache !== null) {
-            if (
-                true !== is_a($cache, "Phalcon\\Cache\\CacheInterface") &&
-                true !== is_a($cache, "Psr\\SimpleCache\\CacheInterface")
-            ) {
+            if (!$cache instanceof CacheInterface) {
                 throw new Exception(
                     "Cache service must be an object implementing " .
-                    "Phalcon\Cache\CacheInterface or Psr\SimpleCache\CacheInterface"
+                    "Psr\SimpleCache\CacheInterface"
                 );
             }
 
