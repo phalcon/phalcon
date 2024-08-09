@@ -78,6 +78,97 @@ final class EventsTest extends UnitTestCase
     }
 
     /**
+     * @return array[]
+     */
+    public static function getAdapters(): array
+    {
+        return [
+            [
+                Apcu::class,
+                [],
+                'apcu',
+            ],
+            [
+                Libmemcached::class,
+                getOptionsLibmemcached(),
+                'memcached'
+            ],
+            [
+                Memory::class,
+                [],
+                '',
+            ],
+            [
+                Redis::class,
+                getOptionsRedis(),
+                'redis',
+            ],
+            [
+                RedisCluster::class,
+                getOptionsRedisCluster(),
+                'redis',
+            ],
+            [
+                Stream::class,
+                [
+                    'storageDir' => outputDir(),
+                ],
+                '',
+            ],
+        ];
+    }
+
+    /**
+     * Tests Cache\Adapter\Libmemcached :: getEventsManager()
+     *
+     * @dataProvider getAdapters
+     *
+     * @author n[oO]ne <lominum@protonmail.com>
+     * @since  2024-06-07
+     */
+    public function testCacheAdapterMemoryGetEventsManagerNotSet(
+        string $adapterClass,
+        array $options,
+        string $extension
+    ): void
+    {
+        if (!empty($extension)) {
+            $this->checkExtensionIsLoaded($extension);
+        }
+
+        $serializer = new SerializerFactory();
+        $adapter    = new $adapterClass($serializer, $options);
+
+        $this->assertNull($adapter->getEventsManager());
+    }
+
+    /**
+     * Tests Cache\Adapter\Libmemcached :: getEventsManager()
+     *
+     * @dataProvider getAdapters
+     * *
+     * @author n[oO]ne <lominum@protonmail.com>
+     * @since  2024-06-07
+     */
+    public function testCacheAdapterMemoryGetEventsManagerSet(
+        string $adapterClass,
+        array $options,
+        string $extension
+    ): void
+    {
+        if (!empty($extension)) {
+            $this->checkExtensionIsLoaded($extension);
+        }
+
+        $serializer = new SerializerFactory();
+        $adapter    = new $adapterClass($serializer, $options);
+
+        $adapter->setEventsManager(new Manager());
+
+        $this->assertInstanceOf(Manager::class, $adapter->getEventsManager());
+    }
+
+    /**
      * Tests Phalcon\Storage\Adapter\* :: events - afterDecrement
      *
      * @dataProvider getExamples

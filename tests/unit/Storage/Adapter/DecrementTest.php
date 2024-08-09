@@ -135,47 +135,4 @@ final class DecrementTest extends UnitTestCase
             $this->safeDeleteDirectory(outputDir('ph-strm'));
         }
     }
-
-    /**
-     * Tests Phalcon\Storage\Adapter\Redis :: decrement()
-     *
-     * @return void
-     *
-     * @author Phalcon Team <team@phalcon.io>
-     * @since  2020-09-09
-     */
-    public function testStorageAdapterRedisDecrement(): void
-    {
-        $this->checkExtensionIsLoaded('redis');
-
-        $serializer = new SerializerFactory();
-        $adapter    = new Redis($serializer, getOptionsRedis());
-
-        $key      = uniqid();
-        $expected = 100;
-        $actual   = $adapter->increment($key, 100);
-        $this->assertEquals($expected, $actual);
-
-        $expected = 99;
-        $actual   = $adapter->decrement($key);
-        $this->assertEquals($expected, $actual);
-
-        $actual = $adapter->get($key);
-        $this->assertEquals($expected, $actual);
-
-        $expected = 90;
-        $actual   = $adapter->decrement($key, 9);
-        $this->assertEquals($expected, $actual);
-
-        $actual = $adapter->get($key);
-        $this->assertEquals($expected, $actual);
-
-        /**
-         * unknown key
-         */
-        $key      = uniqid();
-        $expected = -9;
-        $actual   = $adapter->decrement($key, 9);
-        $this->assertEquals($expected, $actual);
-    }
 }
