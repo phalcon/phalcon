@@ -15,9 +15,9 @@ namespace Phalcon\Tests\Unit\Cache\Cache;
 
 use Phalcon\Cache\AdapterFactory;
 use Phalcon\Cache\Cache;
-use Phalcon\Cache\CacheInterface;
 use Phalcon\Storage\SerializerFactory;
 use Phalcon\Tests\UnitTestCase;
+use Psr\SimpleCache\CacheInterface;
 
 final class ConstructTest extends UnitTestCase
 {

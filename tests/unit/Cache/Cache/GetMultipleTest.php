@@ -15,7 +15,6 @@ namespace Phalcon\Tests\Unit\Cache\Cache;
 
 use Phalcon\Cache\AdapterFactory;
 use Phalcon\Cache\Cache;
-use Phalcon\Cache\Exception\InvalidArgumentException;
 use Phalcon\Storage\SerializerFactory;
 use Phalcon\Tests\UnitTestCase;
 
@@ -60,26 +59,5 @@ final class GetMultipleTest extends UnitTestCase
         ];
         $actual   = $adapter->getMultiple([$key1, $key2, 'unknown'], 'default-unknown');
         $this->assertEquals($expected, $actual);
-    }
-
-    /**
-     * Tests Phalcon\Cache :: getMultiple() - exception
-     *
-     * @author Phalcon Team <team@phalcon.io>
-     * @since  2020-09-09
-     */
-    public function testCacheCacheGetMultipleException(): void
-    {
-        $this->expectException(InvalidArgumentException::class);
-        $this->expectExceptionMessage(
-            'The keys need to be an array or instance of Traversable'
-        );
-
-        $serializer = new SerializerFactory();
-        $factory    = new AdapterFactory($serializer);
-        $instance   = $factory->newInstance('apcu');
-
-        $adapter = new Cache($instance);
-        $actual  = $adapter->getMultiple(1234);
     }
 }

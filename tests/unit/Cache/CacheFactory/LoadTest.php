@@ -16,11 +16,11 @@ namespace Phalcon\Tests\Unit\Cache\CacheFactory;
 use Phalcon\Cache\AdapterFactory;
 use Phalcon\Cache\Cache;
 use Phalcon\Cache\CacheFactory;
-use Phalcon\Cache\CacheInterface;
 use Phalcon\Config\Config;
 use Phalcon\Storage\SerializerFactory;
 use Phalcon\Tests\Fixtures\Traits\FactoryTrait;
 use Phalcon\Tests\UnitTestCase;
+use Psr\SimpleCache\CacheInterface;
 
 final class LoadTest extends UnitTestCase
 {
