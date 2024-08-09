@@ -17,9 +17,12 @@ use Phalcon\Cache\Adapter\Apcu;
 use Phalcon\Cache\Adapter\Libmemcached;
 use Phalcon\Cache\Adapter\Memory;
 use Phalcon\Cache\Adapter\Redis;
+use Phalcon\Cache\Adapter\RedisCluster;
 use Phalcon\Cache\Adapter\Stream;
 use Phalcon\Cache\Adapter\Weak;
+use Phalcon\Cache\Exception as StorageException;
 use Phalcon\Storage\SerializerFactory;
+use Phalcon\Support\Exception as HelperException;
 use Phalcon\Tests\Fixtures\Cache\Adapter\StreamFileGetContentsFixture;
 use Phalcon\Tests\Fixtures\Cache\Adapter\StreamFopenFixture;
 use Phalcon\Tests\UnitTestCase;
@@ -27,6 +30,7 @@ use stdClass;
 
 use function getOptionsLibmemcached;
 use function getOptionsRedis;
+use function getOptionsRedisCluster;
 use function outputDir;
 use function uniqid;
 
@@ -59,6 +63,11 @@ final class HasTest extends UnitTestCase
                 'redis',
             ],
             [
+                RedisCluster::class,
+                getOptionsRedisCluster(),
+                'redis',
+            ],
+            [
                 Stream::class,
                 [
                     'storageDir' => outputDir(),
@@ -79,7 +88,7 @@ final class HasTest extends UnitTestCase
     public function testCacheAdapterHas(
         string $class,
         array $options,
-        string $extension
+        ?string $extension
     ): void {
         if (!empty($extension)) {
             $this->checkExtensionIsLoaded($extension);
@@ -102,6 +111,9 @@ final class HasTest extends UnitTestCase
      * Tests Phalcon\Cache\Adapter\Stream :: has() - cannot open file
      *
      * @return void
+     *
+     * @throws HelperException
+     * @throws StorageException
      *
      * @author Phalcon Team <team@phalcon.io>
      * @since  2020-09-09
@@ -128,6 +140,9 @@ final class HasTest extends UnitTestCase
      * Tests Phalcon\Cache\Adapter\Stream :: has() - empty payload
      *
      * @return void
+     *
+     * @throws HelperException
+     * @throws StorageException
      *
      * @author Phalcon Team <team@phalcon.io>
      * @since  2020-09-09

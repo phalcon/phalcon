@@ -17,9 +17,13 @@ use Phalcon\Cache\Adapter\Apcu;
 use Phalcon\Cache\Adapter\Libmemcached;
 use Phalcon\Cache\Adapter\Memory;
 use Phalcon\Cache\Adapter\Redis;
+use Phalcon\Cache\Adapter\RedisCluster;
 use Phalcon\Cache\Adapter\Stream;
 use Phalcon\Cache\Adapter\Weak;
+use Phalcon\Cache\Exception as StorageException;
 use Phalcon\Storage\SerializerFactory;
+use Phalcon\Support\Exception;
+use Phalcon\Support\Exception as HelperException;
 use Phalcon\Tests\Fixtures\Cache\Adapter\ApcuApcuDeleteFixture;
 use Phalcon\Tests\Fixtures\Cache\Adapter\StreamUnlinkFixture;
 use Phalcon\Tests\UnitTestCase;
@@ -59,6 +63,11 @@ final class ClearTest extends UnitTestCase
                 'redis',
             ],
             [
+                RedisCluster::class,
+                getOptionsRedisCluster(),
+                'redis',
+            ],
+            [
                 Stream::class,
                 [
                     'storageDir' => outputDir(),
@@ -72,6 +81,8 @@ final class ClearTest extends UnitTestCase
      * Tests Phalcon\Cache\Adapter\Apcu :: clear() - delete error
      *
      * @return void
+     *
+     * @throws Exception
      *
      * @author Phalcon Team <team@phalcon.io>
      * @since  2020-09-09
@@ -101,6 +112,8 @@ final class ClearTest extends UnitTestCase
      * Tests Phalcon\Cache\Adapter\Apcu :: clear() - iterator error
      *
      * @return void
+     *
+     * @throws Exception
      *
      * @author Phalcon Team <team@phalcon.io>
      * @since  2020-09-09
@@ -177,6 +190,9 @@ final class ClearTest extends UnitTestCase
      *
      * @return void
      *
+     * @throws HelperException
+     * @throws StorageException
+     *
      * @author Phalcon Team <team@phalcon.io>
      * @since  2020-09-09
      */
@@ -187,7 +203,7 @@ final class ClearTest extends UnitTestCase
             $serializer,
             [
                 'storageDir' => outputDir(),
-            ]
+            ],
         );
 
         $key1 = uniqid();
@@ -210,6 +226,8 @@ final class ClearTest extends UnitTestCase
      * Tests Phalcon\Cache\Adapter\Weak :: clear()
      *
      * @return void
+     *
+     * @throws HelperException
      *
      * @author       Phalcon Team <team@phalcon.io>
      * @since        2023-07-17

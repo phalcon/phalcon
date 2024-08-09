@@ -16,11 +16,15 @@ namespace Phalcon\Tests\Unit\Cache\Adapter;
 use Phalcon\Cache\Adapter\Apcu;
 use Phalcon\Cache\Adapter\Libmemcached;
 use Phalcon\Cache\Adapter\Memory;
+use Phalcon\Cache\Adapter\Redis;
+use Phalcon\Cache\Adapter\RedisCluster;
 use Phalcon\Cache\Adapter\Stream;
 use Phalcon\Storage\SerializerFactory;
 use Phalcon\Tests\UnitTestCase;
 
 use function getOptionsLibmemcached;
+use function getOptionsRedis;
+use function getOptionsRedisCluster;
 use function outputDir;
 use function uniqid;
 
@@ -53,13 +57,20 @@ final class DecrementTest extends UnitTestCase
                 '',
                 false,
             ],
-            //            [
-            //                'Redis',
-            //                Redis::class,
-            //                getOptionsRedis(),
-            //                'redis',
-            //                1,
-            //            ],
+            [
+                'Redis',
+                Redis::class,
+                getOptionsRedis(),
+                'redis',
+                -1
+            ],
+            [
+                'RedisCluster',
+                RedisCluster::class,
+                getOptionsRedisCluster(),
+                'redis',
+                -1
+            ],
             [
                 'Stream',
                 Stream::class,
@@ -80,7 +91,7 @@ final class DecrementTest extends UnitTestCase
      * @author       Phalcon Team <team@phalcon.io>
      * @since        2020-09-09
      */
-    public function testCacheAdapterClear(
+    public function testCacheAdapterDecrement(
         string $className,
         string $class,
         array $options,

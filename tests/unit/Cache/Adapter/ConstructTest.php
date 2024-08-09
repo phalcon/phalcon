@@ -19,9 +19,10 @@ use Phalcon\Cache\Adapter\Apcu;
 use Phalcon\Cache\Adapter\Libmemcached;
 use Phalcon\Cache\Adapter\Memory;
 use Phalcon\Cache\Adapter\Redis;
+use Phalcon\Cache\Adapter\RedisCluster;
 use Phalcon\Cache\Adapter\Stream;
 use Phalcon\Cache\Adapter\Weak;
-use Phalcon\Storage\Exception as CacheException;
+use Phalcon\Cache\Exception as StorageException;
 use Phalcon\Storage\SerializerFactory;
 use Phalcon\Support\Exception as SupportException;
 use Phalcon\Tests\Fixtures\Cache\Adapter\Libmemcached as LibmemcachedFixture;
@@ -29,6 +30,7 @@ use Phalcon\Tests\UnitTestCase;
 
 use function getOptionsLibmemcached;
 use function getOptionsRedis;
+use function getOptionsRedisCluster;
 use function outputDir;
 
 final class ConstructTest extends UnitTestCase
@@ -57,6 +59,11 @@ final class ConstructTest extends UnitTestCase
             [
                 Redis::class,
                 getOptionsRedis(),
+                'redis',
+            ],
+            [
+                RedisCluster::class,
+                getOptionsRedisCluster(),
                 'redis',
             ],
             [
@@ -125,7 +132,7 @@ final class ConstructTest extends UnitTestCase
             ],
         ];
         $actual   = $adapter->getOptions();
-        $this->assertEquals($expected, $actual);
+        $this->assertSame($expected, $actual);
     }
 
     /**
@@ -150,16 +157,16 @@ final class ConstructTest extends UnitTestCase
 
         $expected = 3600;
         $actual   = $adapter->getTtl(null);
-        $this->assertEquals($expected, $actual);
+        $this->assertSame($expected, $actual);
 
         $expected = 20;
         $actual   = $adapter->getTtl(20);
-        $this->assertEquals($expected, $actual);
+        $this->assertSame($expected, $actual);
 
         $time     = new DateInterval('PT5S');
         $expected = 5;
         $actual   = $adapter->getTtl($time);
-        $this->assertEquals($expected, $actual);
+        $this->assertSame($expected, $actual);
     }
 
     /**
@@ -172,7 +179,7 @@ final class ConstructTest extends UnitTestCase
      */
     public function testCacheAdapterStreamConstructException(): void
     {
-        $this->expectException(CacheException::class);
+        $this->expectException(StorageException::class);
         $this->expectExceptionMessage(
             "The 'storageDir' must be specified in the options"
         );
