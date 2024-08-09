@@ -133,6 +133,25 @@ jobs:
           $SessionSavePath = if ("${{ runner.os }}" -eq "Windows") { 'C:\temp' } else { '/tmp' }
           Write-Output "SESSION_SAVE_PATH=$SessionSavePath" | Out-File -FilePath $env:GITHUB_ENV -Encoding utf8 -Append
 
+      - name: Redis Cluster
+        uses: vishnudxb/redis-cluster@1.0.9
+        with:
+          redis-node-0-port: 5000
+          redis-node-1-port: 5001
+          redis-node-2-port: 5002
+          redis-node-3-port: 5003
+          redis-node-4-port: 5004
+          redis-node-5-port: 5005
+          sleep-duration: 5 # Define the sleep duration for docker to start and ready for accepting connections (Here we set default to 5seconds)
+
+      # Running Test
+      - name: Test Redis Cluster
+        run: |
+          sudo apt-get install -y redis-tools
+          docker ps -a
+          redis-cli -h 127.0.0.1 -p 5000 ping
+          redis-cli -h 127.0.0.1 -p 5000 cluster nodes
+
       - name: "Setup PHP"
         uses: shivammathur/setup-php@v2
         with:
@@ -201,6 +220,19 @@ jobs:
           MYSQL_USER: phalcon
           MYSQL_DATABASE: phalcon
           MYSQL_PASSWORD: secret
+      postgres:
+        image: postgres:12-alpine
+        ports:
+          - "5432:5432"
+        env:
+          POSTGRES_USER: phalcon
+          POSTGRES_PASSWORD: secret
+          POSTGRES_DB: phalcon
+        options: >-
+          --health-cmd pg_isready
+          --health-interval 10s
+          --health-timeout 5s
+          --health-retries 5
       redis:
         image: redis:5-alpine
         ports:
@@ -224,7 +256,7 @@ jobs:
           extensions: ${{ env.EXTENSIONS }}
           ini-values: apc.enable_cli=on, session.save_path=${{ env.SESSION_SAVE_PATH }}
           tools: pecl, phpize, php-config, composer:v2
-          coverage: pcov
+          coverage: xdebug
         env:
           COMPOSER_TOKEN: ${{ secrets.GITHUB_TOKEN }}
           PHALCON_PATH: ext
@@ -313,7 +345,7 @@ jobs:
   #          extensions: ${{ env.EXTENSIONS }}
   #          ini-values: apc.enable_cli=on, session.save_path=${{ env.SESSION_SAVE_PATH }}
   #          tools: pecl, phpize, php-config, composer:v2
-  #          coverage: pcov
+  #          coverage: xdebug
   #        env:
   #          COMPOSER_TOKEN: ${{ secrets.GITHUB_TOKEN }}
   #          PHALCON_PATH: ext
@@ -383,7 +415,7 @@ jobs:
           extensions: ${{ env.EXTENSIONS }}
           ini-values: apc.enable_cli=on, session.save_path=${{ env.SESSION_SAVE_PATH }}
           tools: pecl, phpize, php-config, composer:v2
-          coverage: pcov
+          coverage: xdebug
         env:
           COMPOSER_TOKEN: ${{ secrets.GITHUB_TOKEN }}
           PHALCON_PATH: ext
