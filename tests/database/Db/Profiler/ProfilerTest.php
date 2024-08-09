@@ -37,7 +37,7 @@ final class ProfilerTest extends DatabaseTestCase
     public function testDbProfilerFull(): void
     {
         $this->setNewFactoryDefault();
-        $this->setDatabase($this);
+        $this->setDatabase();
 
         $eventsManager = $this->newService('eventsManager');
         $profiler      = $this->newService('profiler');
@@ -73,6 +73,9 @@ final class ProfilerTest extends DatabaseTestCase
         $profiles = $profiler->getProfiles();
         $this->assertCount(3, $profiles);
 
+        /**
+         * First
+         */
         /** @var Item $first */
         $first = $profiles[0];
 
@@ -92,6 +95,13 @@ final class ProfilerTest extends DatabaseTestCase
         $this->assertSame($expected, $actual);
 
         /**
+         * Active
+         */
+        $active = $profiler->getLastProfile();
+        $last = $profiles[2];
+        $this->assertSame($last, $active);
+
+        /**
          * Profile
          */
         $elapsed = $profiles[0]->getTotalElapsedSeconds()
@@ -107,5 +117,13 @@ final class ProfilerTest extends DatabaseTestCase
         $expected = 3;
         $actual   = $profiler->getNumberTotalStatements();
         $this->assertSame($expected, $actual);
+
+        /**
+         * Reset
+         */
+        $profiler->reset();
+
+        $profiles = $profiler->getProfiles();
+        $this->assertCount(0, $profiles);
     }
 }
