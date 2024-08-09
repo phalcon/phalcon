@@ -30,9 +30,6 @@ class Mysql extends Dialect
 {
     use TextTrait;
 
-    private const DEFAULT_SCHEMA = "DATABASE()";
-    private const STR_NULL       = " NULL";
-
     /**
      * @var string
      */
@@ -59,7 +56,7 @@ class Mysql extends Dialect
             . " "
             . $this->getColumnDefinition($column)
             . $this->checkColumnIsNull($column)
-            . self::STR_NULL
+            . $this->getNullString()
             . $this->checkColumnHasDefault($column)
             . $this->checkColumnIsAutoIncrement($column)
             . $this->checkColumnFirstAfterPositions($column);
@@ -513,11 +510,9 @@ class Mysql extends Dialect
      */
     public function listViews(?string $schemaName = null): string
     {
-        $schema = empty($schemaName) ? self::DEFAULT_SCHEMA : $this->delimit($schemaName, "'");
-
         return "SELECT `TABLE_NAME` AS view_name "
             . "FROM `INFORMATION_SCHEMA`.`VIEWS` "
-            . "WHERE `TABLE_SCHEMA` = " . $schema . " "
+            . "WHERE `TABLE_SCHEMA` = " . $this->getMysqlSchemaString($schemaName) . " "
             . "ORDER BY view_name";
     }
 
@@ -557,7 +552,7 @@ class Mysql extends Dialect
             . ' '
             . $columnDefinition
             . $this->checkColumnIsNull($column)
-            . self::STR_NULL
+            . $this->getNullString()
             . $this->checkColumnHasDefault($column)
             . $this->checkColumnIsAutoIncrement($column)
             . $this->checkColumnComment($column)
@@ -613,14 +608,12 @@ class Mysql extends Dialect
      */
     public function tableOptions(string $tableName, ?string $schemaName = null): string
     {
-        $schema = empty($schemaName) ? self::DEFAULT_SCHEMA : "'" . $schemaName . "'";
-
         return "SELECT TABLES.TABLE_TYPE AS table_type,"
             . "TABLES.AUTO_INCREMENT AS auto_increment,"
             . "TABLES.ENGINE AS engine,"
             . "TABLES.TABLE_COLLATION AS table_collation "
             . "FROM INFORMATION_SCHEMA.TABLES WHERE "
-            . "TABLES.TABLE_SCHEMA = " . $schema . " "
+            . "TABLES.TABLE_SCHEMA = " . $this->getMysqlSchemaString($schemaName) . " "
             . "AND TABLES.TABLE_NAME = '" . $tableName . "'";
     }
 
