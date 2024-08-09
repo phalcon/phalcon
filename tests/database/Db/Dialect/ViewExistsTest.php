@@ -14,6 +14,8 @@ declare(strict_types=1);
 namespace Phalcon\Tests\Database\Db\Dialect;
 
 use Phalcon\Db\Dialect\Mysql;
+use Phalcon\Db\Dialect\Postgresql;
+use Phalcon\Db\Dialect\Sqlite;
 use Phalcon\Tests\DatabaseTestCase;
 
 final class ViewExistsTest extends DatabaseTestCase
@@ -31,8 +33,20 @@ final class ViewExistsTest extends DatabaseTestCase
                 . "WHERE `TABLE_NAME` = 'view' "
                 . "AND `TABLE_SCHEMA` = 'schema'",
             ],
-            //            [Postgresql::class],
-            //            [Sqlite::class],
+            [
+                Postgresql::class,
+                "SELECT CASE WHEN COUNT(*) > 0 THEN 1 ELSE 0 END "
+                . "FROM pg_views "
+                . "WHERE viewname='view' "
+                . "AND schemaname='public'",
+            ],
+            [
+                Sqlite::class,
+                "SELECT CASE WHEN COUNT(*) > 0 THEN 1 ELSE 0 END "
+                . "FROM sqlite_master "
+                . "WHERE type='view' "
+                . "AND tbl_name='view'",
+            ],
         ];
     }
 
@@ -49,8 +63,20 @@ final class ViewExistsTest extends DatabaseTestCase
                 . "WHERE `TABLE_NAME` = 'view' "
                 . "AND `TABLE_SCHEMA` = DATABASE()",
             ],
-            //            [Postgresql::class],
-            //            [Sqlite::class],
+            [
+                Postgresql::class,
+                "SELECT CASE WHEN COUNT(*) > 0 THEN 1 ELSE 0 END "
+                . "FROM pg_views "
+                . "WHERE viewname='view' "
+                . "AND schemaname=''",
+            ],
+            [
+                Sqlite::class,
+                "SELECT CASE WHEN COUNT(*) > 0 THEN 1 ELSE 0 END "
+                . "FROM sqlite_master "
+                . "WHERE type='view' "
+                . "AND tbl_name='view'",
+            ],
         ];
     }
 

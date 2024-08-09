@@ -14,6 +14,8 @@ declare(strict_types=1);
 namespace Phalcon\Tests\Database\Db\Dialect;
 
 use Phalcon\Db\Dialect\Mysql;
+use Phalcon\Db\Dialect\Postgresql;
+use Phalcon\Db\Dialect\Sqlite;
 use Phalcon\Tests\DatabaseTestCase;
 
 final class SharedLockTest extends DatabaseTestCase
@@ -26,9 +28,16 @@ final class SharedLockTest extends DatabaseTestCase
         return [
             [
                 Mysql::class,
+                'SQL-QUERY LOCK IN SHARE MODE',
             ],
-            //            [Postgresql::class],
-            //            [Sqlite::class],
+            [
+                Postgresql::class,
+                'SQL-QUERY',
+            ],
+            [
+                Sqlite::class,
+                'SQL-QUERY',
+            ],
         ];
     }
 
@@ -42,13 +51,13 @@ final class SharedLockTest extends DatabaseTestCase
      *
      * @group        common
      */
-    public function testDbDialectListViews(
-        string $dialectClass
+    public function testDbDialectSharedLock(
+        string $dialectClass,
+        string $expected
     ): void {
         /** @var Mysql $dialect */
         $dialect = new $dialectClass();
 
-        $expected = 'SQL-QUERY LOCK IN SHARE MODE';
         $actual   = $dialect->sharedLock('SQL-QUERY');
         $this->assertSame($expected, $actual);
     }

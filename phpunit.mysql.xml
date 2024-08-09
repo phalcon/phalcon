@@ -6,7 +6,7 @@
          colors="true"
 >
     <testsuites>
-        <testsuite name="unit and mysql tests">
+        <testsuite name="common and mysql tests">
             <directory>./tests/database</directory>
         </testsuite>
     </testsuites>

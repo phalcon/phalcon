@@ -191,7 +191,7 @@ trait DiTrait
                 );
             case 'metadataStream':
                 return new MetaDataStream(
-                    ['storageDir' => outputDir()],
+                    ['metaDataDir' => outputDir()],
                 );
             case 'modelsCacheLibmemcached':
                 return new StorageLibmemcached(

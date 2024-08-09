@@ -15,6 +15,8 @@ namespace Phalcon\Tests\Database\Db\Dialect;
 
 use Phalcon\Db\Column;
 use Phalcon\Db\Dialect\Mysql;
+use Phalcon\Db\Dialect\Postgresql;
+use Phalcon\Db\Dialect\Sqlite;
 use Phalcon\Tests\DatabaseTestCase;
 
 final class ModifyColumnTest extends DatabaseTestCase
@@ -32,8 +34,14 @@ final class ModifyColumnTest extends DatabaseTestCase
                 . 'AUTO_INCREMENT COMMENT \'This is a comment\' '
                 . 'AFTER `field_primary`',
             ],
-            //            [Postgresql::class],
-            //            [Sqlite::class],
+//            [
+//                Postgresql::class,
+//                '',
+//            ],
+//            [
+//                Sqlite::class,
+//                '',
+//            ],
         ];
     }
 
@@ -49,8 +57,14 @@ final class ModifyColumnTest extends DatabaseTestCase
                 . 'MODIFY `field_old` INT(20) NULL '
                 . 'DEFAULT 13 AFTER `field_primary`',
             ],
-            //            [Postgresql::class],
-            //            [Sqlite::class],
+//            [
+//                Postgresql::class,
+//                '',
+//            ],
+//            [
+//                Sqlite::class,
+//                '4',
+//            ],
         ];
     }
 

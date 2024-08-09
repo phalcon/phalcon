@@ -14,6 +14,8 @@ declare(strict_types=1);
 namespace Phalcon\Tests\Database\Db\Dialect;
 
 use Phalcon\Db\Dialect\Mysql;
+use Phalcon\Db\Dialect\Postgresql;
+use Phalcon\Db\Dialect\Sqlite;
 use Phalcon\Tests\DatabaseTestCase;
 
 final class TruncateTableTest extends DatabaseTestCase
@@ -28,8 +30,14 @@ final class TruncateTableTest extends DatabaseTestCase
                 Mysql::class,
                 "TRUNCATE TABLE `schema`.`table`",
             ],
-            //            [Postgresql::class],
-            //            [Sqlite::class],
+            [
+                Postgresql::class,
+                'TRUNCATE TABLE "schema"."table"',
+            ],
+            [
+                Sqlite::class,
+                'DELETE FROM "schema"."table"',
+            ],
         ];
     }
 
@@ -43,8 +51,14 @@ final class TruncateTableTest extends DatabaseTestCase
                 Mysql::class,
                 "TRUNCATE TABLE `table`",
             ],
-            //            [Postgresql::class],
-            //            [Sqlite::class],
+            [
+                Postgresql::class,
+                'TRUNCATE TABLE "table"',
+            ],
+            [
+                Sqlite::class,
+                'DELETE FROM "table"',
+            ],
         ];
     }
 

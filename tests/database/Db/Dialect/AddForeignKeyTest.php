@@ -14,6 +14,9 @@ declare(strict_types=1);
 namespace Phalcon\Tests\Database\Db\Dialect;
 
 use Phalcon\Db\Dialect\Mysql;
+use Phalcon\Db\Dialect\Postgresql;
+use Phalcon\Db\Dialect\Sqlite;
+use Phalcon\Db\Exception;
 use Phalcon\Db\Reference;
 use Phalcon\Tests\DatabaseTestCase;
 
@@ -32,8 +35,13 @@ final class AddForeignKeyTest extends DatabaseTestCase
                 . 'REFERENCES `ref_schema`.`ref_table`(`field_referenced`)',
 
             ],
-            //            [Postgresql::class],
-            //            [Sqlite::class],
+            [
+                Postgresql::class,
+                'ALTER TABLE "schema"."table" '
+                . 'ADD CONSTRAINT "fk1" '
+                . 'FOREIGN KEY ("field_primary") '
+                . 'REFERENCES "ref_table" ("field_referenced")',
+            ],
         ];
     }
 
@@ -51,8 +59,14 @@ final class AddForeignKeyTest extends DatabaseTestCase
                 . 'ON DELETE delete command',
 
             ],
-            //            [Postgresql::class],
-            //            [Sqlite::class],
+            [
+                Postgresql::class,
+                'ALTER TABLE "schema"."table" '
+                . 'ADD CONSTRAINT "fk1" '
+                . 'FOREIGN KEY ("field_primary") '
+                . 'REFERENCES "ref_table" ("field_referenced") '
+                . 'ON DELETE delete command',
+            ],
         ];
     }
 
@@ -70,9 +84,42 @@ final class AddForeignKeyTest extends DatabaseTestCase
                 . 'ON UPDATE update command',
 
             ],
-            //            [Postgresql::class],
-            //            [Sqlite::class],
+            [
+                Postgresql::class,
+                'ALTER TABLE "schema"."table" '
+                . 'ADD CONSTRAINT "fk1" '
+                . 'FOREIGN KEY ("field_primary") '
+                . 'REFERENCES "ref_table" ("field_referenced") '
+                . 'ON UPDATE update command',
+            ],
         ];
+    }
+
+    /**
+     * Tests Phalcon\Db\Dialect :: addForeignKey
+     *
+     * @author       Phalcon Team <team@phalcon.io>
+     * @since        2020-01-20
+     *
+     * @group        sqlite
+     */
+    public function testDbDialectAddForeignKeySqlite(): void
+    {
+        $this->expectException(Exception::class);
+        $this->expectExceptionMessage(
+            'Adding a foreign key constraint to an existing table '
+            . 'is not supported by SQLite'
+        );
+
+        $dialect = new Sqlite();
+
+        $reference = new Reference('fk1', [
+            'referencedSchema'  => 'ref_schema',
+            'referencedTable'   => 'ref_table',
+            'columns'           => ['field_primary'],
+            'referencedColumns' => ['field_referenced'],
+        ]);
+        $dialect->addForeignKey('table', 'schema', $reference);
     }
 
     /**

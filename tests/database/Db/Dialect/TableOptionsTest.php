@@ -14,6 +14,8 @@ declare(strict_types=1);
 namespace Phalcon\Tests\Database\Db\Dialect;
 
 use Phalcon\Db\Dialect\Mysql;
+use Phalcon\Db\Dialect\Postgresql;
+use Phalcon\Db\Dialect\Sqlite;
 use Phalcon\Tests\DatabaseTestCase;
 
 final class TableOptionsTest extends DatabaseTestCase
@@ -34,8 +36,14 @@ final class TableOptionsTest extends DatabaseTestCase
                 . "TABLES.TABLE_SCHEMA = 'schema' "
                 . "AND TABLES.TABLE_NAME = 'table'",
             ],
-            //            [Postgresql::class],
-            //            [Sqlite::class],
+            [
+                Postgresql::class,
+                '',
+            ],
+            [
+                Sqlite::class,
+                '',
+            ],
         ];
     }
 
@@ -55,8 +63,14 @@ final class TableOptionsTest extends DatabaseTestCase
                 . "TABLES.TABLE_SCHEMA = DATABASE() "
                 . "AND TABLES.TABLE_NAME = 'table'",
             ],
-            //            [Postgresql::class],
-            //            [Sqlite::class],
+            [
+                Postgresql::class,
+                '',
+            ],
+            [
+                Sqlite::class,
+                '',
+            ],
         ];
     }
 
@@ -70,7 +84,7 @@ final class TableOptionsTest extends DatabaseTestCase
      *
      * @group        common
      */
-    public function testDbDialectTableExists(
+    public function testDbDialectTableOptions(
         string $dialectClass,
         string $expected
     ): void {
@@ -91,7 +105,7 @@ final class TableOptionsTest extends DatabaseTestCase
      *
      * @group        common
      */
-    public function testDbDialectTableExistsNoSchema(
+    public function testDbDialectTableOptionsNoSchema(
         string $dialectClass,
         string $expected
     ): void {

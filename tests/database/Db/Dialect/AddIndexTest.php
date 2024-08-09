@@ -14,6 +14,8 @@ declare(strict_types=1);
 namespace Phalcon\Tests\Database\Db\Dialect;
 
 use Phalcon\Db\Dialect\Mysql;
+use Phalcon\Db\Dialect\Postgresql;
+use Phalcon\Db\Dialect\Sqlite;
 use Phalcon\Db\Index;
 use Phalcon\Tests\DatabaseTestCase;
 
@@ -31,8 +33,16 @@ final class AddIndexTest extends DatabaseTestCase
                 . 'ADD INDEX `index1` (`field1`, `field2`)',
 
             ],
-            //            [Postgresql::class],
-            //            [Sqlite::class],
+            [
+                Postgresql::class,
+                'CREATE INDEX "index1" '
+                . 'ON "schema"."table" ("field1", "field2")',
+            ],
+            [
+                Sqlite::class,
+                'CREATE INDEX "schema"."index1" '
+                . 'ON "table" ("field1", "field2")',
+            ],
         ];
     }
 
@@ -48,8 +58,16 @@ final class AddIndexTest extends DatabaseTestCase
                 . 'ADD UNIQUE INDEX `index1` (`field1`, `field2`)',
 
             ],
-            //            [Postgresql::class],
-            //            [Sqlite::class],
+            [
+                Postgresql::class,
+                'CREATE UNIQUE INDEX "index1" '
+                . 'ON "schema"."table" ("field1", "field2")',
+            ],
+            [
+                Sqlite::class,
+                'CREATE UNIQUE INDEX "schema"."index1" '
+                . 'ON "table" ("field1", "field2")',
+            ],
         ];
     }
 

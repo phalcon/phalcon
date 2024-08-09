@@ -32,18 +32,17 @@ final class AddColumnTest extends DatabaseTestCase
                 'ALTER TABLE `schema`.`table` '
                 . 'ADD `field_primary` INT(11) NOT NULL '
                 . 'AUTO_INCREMENT FIRST',
-
             ],
             [
                 Postgresql::class,
                 'ALTER TABLE "schema"."table" '
-                . 'ADD COLUMN "field_primary" SERIAL NOT NULL'
+                . 'ADD COLUMN "field_primary" SERIAL NOT NULL',
             ],
             [
                 Sqlite::class,
                 'ALTER TABLE "schema"."table" '
                 . 'ADD COLUMN "field_primary" INTEGER NOT NULL '
-                . 'PRIMARY KEY AUTOINCREMENT'
+                . 'PRIMARY KEY AUTOINCREMENT',
             ],
         ];
     }
@@ -61,15 +60,15 @@ final class AddColumnTest extends DatabaseTestCase
                 . 'DEFAULT 13.34 FIRST',
 
             ],
-//            [
-//                Postgresql::class,
-//                '3'
-//            ],
+            //            [
+            //                Postgresql::class,
+            //                '3'
+            //            ],
             [
                 Sqlite::class,
                 'ALTER TABLE "schema"."table" '
                 . 'ADD COLUMN "field_primary" DOUBLE '
-                . 'DEFAULT 13.34 NOT NULL'
+                . 'DEFAULT 13.34 NOT NULL',
             ],
         ];
     }
@@ -91,13 +90,13 @@ final class AddColumnTest extends DatabaseTestCase
                 Postgresql::class,
                 'ALTER TABLE "schema"."table" '
                 . 'ADD COLUMN "field_primary" INT '
-                . 'DEFAULT 13 NOT NULL'
+                . 'DEFAULT 13 NOT NULL',
             ],
             [
                 Sqlite::class,
                 'ALTER TABLE "schema"."table" '
                 . 'ADD COLUMN "field_primary" INTEGER '
-                . 'DEFAULT 13 NOT NULL'
+                . 'DEFAULT 13 NOT NULL',
             ],
         ];
     }
@@ -119,13 +118,13 @@ final class AddColumnTest extends DatabaseTestCase
                 Postgresql::class,
                 'ALTER TABLE "schema"."table" '
                 . 'ADD COLUMN "field_primary" CHARACTER VARYING(10) '
-                . 'DEFAULT \'NULL\' NOT NULL'
+                . 'DEFAULT \'NULL\' NOT NULL',
             ],
             [
                 Sqlite::class,
                 'ALTER TABLE "schema"."table" '
                 . 'ADD COLUMN "field_primary" VARCHAR(10) '
-                . 'DEFAULT "NULL" NOT NULL'
+                . 'DEFAULT "NULL" NOT NULL',
             ],
         ];
     }
@@ -147,13 +146,13 @@ final class AddColumnTest extends DatabaseTestCase
                 Postgresql::class,
                 'ALTER TABLE "schema"."table" '
                 . 'ADD COLUMN "field_primary" CHARACTER VARYING(10) '
-                . 'DEFAULT \'test\' NOT NULL'
+                . 'DEFAULT \'test\' NOT NULL',
             ],
             [
                 Sqlite::class,
                 'ALTER TABLE "schema"."table" '
                 . 'ADD COLUMN "field_primary" VARCHAR(10) DEFAULT '
-                . '"test" NOT NULL'
+                . '"test" NOT NULL',
             ],
         ];
     }
@@ -175,13 +174,13 @@ final class AddColumnTest extends DatabaseTestCase
                 Postgresql::class,
                 'ALTER TABLE "schema"."table" '
                 . 'ADD COLUMN "field_primary" CHARACTER VARYING(10) '
-                . 'DEFAULT CURRENT_TIMESTAMP NOT NULL'
+                . 'DEFAULT CURRENT_TIMESTAMP NOT NULL',
             ],
             [
                 Sqlite::class,
                 'ALTER TABLE "schema"."table" '
                 . 'ADD COLUMN "field_primary" VARCHAR(10) '
-                . 'DEFAULT CURRENT_TIMESTAMP NOT NULL'
+                . 'DEFAULT CURRENT_TIMESTAMP NOT NULL',
             ],
         ];
     }

@@ -14,6 +14,8 @@ declare(strict_types=1);
 namespace Phalcon\Tests\Database\Db\Dialect;
 
 use Phalcon\Db\Dialect\Mysql;
+use Phalcon\Db\Dialect\Postgresql;
+use Phalcon\Db\Dialect\Sqlite;
 use Phalcon\Tests\DatabaseTestCase;
 
 final class DropViewTest extends DatabaseTestCase
@@ -29,8 +31,14 @@ final class DropViewTest extends DatabaseTestCase
                 'DROP VIEW IF EXISTS `schema`.`table`',
 
             ],
-            //            [Postgresql::class],
-            //            [Sqlite::class],
+            [
+                Postgresql::class,
+                'DROP VIEW IF EXISTS "schema"."table"',
+            ],
+            [
+                Sqlite::class,
+                'DROP VIEW IF EXISTS "schema"."table"',
+            ],
         ];
     }
 
@@ -45,8 +53,14 @@ final class DropViewTest extends DatabaseTestCase
                 'DROP VIEW `schema`.`table`',
 
             ],
-            //            [Postgresql::class],
-            //            [Sqlite::class],
+            [
+                Postgresql::class,
+                'DROP VIEW "schema"."table"',
+            ],
+            [
+                Sqlite::class,
+                'DROP VIEW "schema"."table"',
+            ],
         ];
     }
 

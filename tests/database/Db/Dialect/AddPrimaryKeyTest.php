@@ -14,7 +14,11 @@ declare(strict_types=1);
 namespace Phalcon\Tests\Database\Db\Dialect;
 
 use Phalcon\Db\Dialect\Mysql;
+use Phalcon\Db\Dialect\Postgresql;
+use Phalcon\Db\Dialect\Sqlite;
+use Phalcon\Db\Exception;
 use Phalcon\Db\Index;
+use Phalcon\Db\Reference;
 use Phalcon\Tests\DatabaseTestCase;
 
 final class AddPrimaryKeyTest extends DatabaseTestCase
@@ -31,9 +35,35 @@ final class AddPrimaryKeyTest extends DatabaseTestCase
                 . 'ADD PRIMARY KEY (`field1`, `field2`)',
 
             ],
-            //            [Postgresql::class],
-            //            [Sqlite::class],
+            [
+                Postgresql::class,
+                'ALTER TABLE "schema"."table" '
+                . 'ADD CONSTRAINT "table_PRIMARY" '
+                . 'PRIMARY KEY ("field1", "field2")',
+            ],
         ];
+    }
+
+    /**
+     * Tests Phalcon\Db\Dialect :: addPrimaryKey
+     *
+     * @author       Phalcon Team <team@phalcon.io>
+     * @since        2020-01-20
+     *
+     * @group        sqlite
+     */
+    public function testDbDialectAddPrimaryKeySqlite(): void
+    {
+        $this->expectException(Exception::class);
+        $this->expectExceptionMessage(
+            'Adding a primary key after table has been created '
+            . 'is not supported by SQLite'
+        );
+
+        $dialect = new Sqlite();
+
+        $index = new Index('index1', ['field1', 'field2']);
+        $dialect->addPrimaryKey('table', 'schema', $index);
     }
 
     /**
