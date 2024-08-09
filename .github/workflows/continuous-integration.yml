@@ -449,7 +449,7 @@ jobs:
           mv cv/unit-8.1.coverage/coverage.xml      cv/03.xml
           mv cv/unit-8.2.coverage/coverage.xml      cv/04.xml
           mv cv/unit-8.3.coverage/coverage.xml      cv/05.xml
-          ls -la coverage/
+          ls -la cv/
 
       - name: SonarCloud Scan
         uses: SonarSource/sonarcloud-github-action@master
