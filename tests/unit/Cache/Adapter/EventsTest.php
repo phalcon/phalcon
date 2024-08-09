@@ -130,8 +130,7 @@ final class EventsTest extends UnitTestCase
         string $adapterClass,
         array $options,
         string $extension
-    ): void
-    {
+    ): void {
         if (!empty($extension)) {
             $this->checkExtensionIsLoaded($extension);
         }
@@ -154,8 +153,7 @@ final class EventsTest extends UnitTestCase
         string $adapterClass,
         array $options,
         string $extension
-    ): void
-    {
+    ): void {
         if (!empty($extension)) {
             $this->checkExtensionIsLoaded($extension);
         }

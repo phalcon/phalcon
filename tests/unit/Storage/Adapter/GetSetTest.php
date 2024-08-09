@@ -36,7 +36,6 @@ use function uniqid;
 
 final class GetSetTest extends UnitTestCase
 {
-
     /**
      * @return array[]
      */

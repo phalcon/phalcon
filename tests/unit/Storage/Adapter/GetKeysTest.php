@@ -102,8 +102,7 @@ final class GetKeysTest extends UnitTestCase
         string $adapterClass,
         array $options,
         string $prefix
-    ): void
-    {
+    ): void {
         if (!empty($extension)) {
             $this->checkExtensionIsLoaded($extension);
         }
