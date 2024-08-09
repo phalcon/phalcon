@@ -378,7 +378,7 @@ final class FindTest extends DatabaseTestCase
         $this->expectException(Exception::class);
         $this->expectExceptionMessage(
             "Cache service must be an object implementing " .
-            "Phalcon\Cache\CacheInterface"
+            "Psr\SimpleCache\CacheInterface"
         );
 
         $options = [
