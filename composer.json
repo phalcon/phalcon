@@ -84,6 +84,9 @@
     "test-unit-coverage-html": "vendor/bin/phpunit  -c phpunit.xml.dist --coverage-html tests/_output/coverage/",
     "test-db-mysql": "vendor/bin/phpunit -c phpunit.mysql.xml",
     "test-db-mysql-coverage": "vendor/bin/phpunit -c phpunit.mysql.xml  --coverage-clover tests/_output/coverage.xml",
-    "test-db-mysql-coverage-html": "vendor/bin/phpunit -c phpunit.mysql.xml --coverage-html tests/_output/coverage/"
+    "test-db-mysql-coverage-html": "vendor/bin/phpunit -c phpunit.mysql.xml --coverage-html tests/_output/coverage/",
+    "test-db-sqlite": "vendor/bin/phpunit -c phpunit.sqlite.xml",
+    "test-db-sqlite-coverage": "vendor/bin/phpunit -c phpunit.sqlite.xml  --coverage-clover tests/_output/coverage.xml",
+    "test-db-sqlite-coverage-html": "vendor/bin/phpunit -c phpunit.sqlite.xml --coverage-html tests/_output/coverage/"
   }
 }
