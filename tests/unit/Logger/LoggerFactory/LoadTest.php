@@ -48,7 +48,7 @@ final class LoadTest extends UnitTestCase
 
         $this->expectException(LoggerException::class);
         $this->expectExceptionMessage(
-            "You must provide 'name' option in factory config parameter."
+            "You must provide the 'name' option in the factory config parameter."
         );
 
         $newOptions = $options;

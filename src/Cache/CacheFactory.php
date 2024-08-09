@@ -71,6 +71,8 @@ class CacheFactory
     public function load(array | ConfigInterface $config): CacheInterface
     {
         $config  = $this->checkConfig($config);
+        $this->checkConfigElement($config, 'adapter');
+
         $name    = $config['adapter'];
         $options = $config['options'] ?? [];
 

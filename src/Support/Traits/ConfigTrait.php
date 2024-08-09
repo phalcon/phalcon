@@ -29,13 +29,6 @@ trait ConfigTrait
         if ($config instanceof ConfigInterface) {
             return $config->toArray();
         }
-
-        if (true !== is_array($config)) {
-            $exception = $this->getExceptionClass();
-            throw new $exception(
-                'Config must be array or Phalcon\Config\Config object'
-            );
-        }
 //
 //        if (true !== isset($config['adapter'])) {
 //            $exception = $this->getExceptionClass();
@@ -60,7 +53,7 @@ trait ConfigTrait
         if (true !== isset($config[$element])) {
             $exception = $this->getExceptionClass();
             throw new $exception(
-                "You must provide '" . $element . "' option in factory config parameter."
+                "You must provide the '" . $element . "' option in the factory config parameter."
             );
         }
 

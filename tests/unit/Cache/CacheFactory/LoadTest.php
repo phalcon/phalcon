@@ -16,11 +16,14 @@ namespace Phalcon\Tests\Unit\Cache\CacheFactory;
 use Phalcon\Cache\AdapterFactory;
 use Phalcon\Cache\Cache;
 use Phalcon\Cache\CacheFactory;
+use Phalcon\Cache\Exception\Exception;
 use Phalcon\Config\Config;
 use Phalcon\Storage\SerializerFactory;
 use Phalcon\Tests\Fixtures\Traits\FactoryTrait;
 use Phalcon\Tests\UnitTestCase;
 use Psr\SimpleCache\CacheInterface;
+
+use function uniqid;
 
 final class LoadTest extends UnitTestCase
 {
@@ -55,6 +58,28 @@ final class LoadTest extends UnitTestCase
         $this->runTests($options);
     }
 
+
+    /**
+     * Tests Phalcon\Cache\CacheFactory :: load() - exception
+     *
+     * @author Phalcon Team <team@phalcon.io>
+     * @since  2022-03-05
+     */
+    public function testCacheCacheFactoryLoadException(): void
+    {
+        $this->expectException(Exception::class);
+        $this->expectExceptionMessage(
+            'You must provide the \'adapter\' option in the factory config parameter.'
+        );
+
+        $cacheFactory = new CacheFactory(
+            new AdapterFactory(
+                new SerializerFactory()
+            )
+        );
+
+        $cacheFactory->load([]);
+    }
     private function runTests(Config | array $options)
     {
         $cacheFactory = new CacheFactory(

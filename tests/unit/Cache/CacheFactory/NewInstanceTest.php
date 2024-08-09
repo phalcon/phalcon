@@ -16,7 +16,6 @@ namespace Phalcon\Tests\Unit\Cache\CacheFactory;
 use Phalcon\Cache\AdapterFactory;
 use Phalcon\Cache\Cache;
 use Phalcon\Cache\CacheFactory;
-use Phalcon\Cache\Exception\Exception;
 use Phalcon\Storage\SerializerFactory;
 use Phalcon\Tests\UnitTestCase;
 use Psr\SimpleCache\CacheInterface;
@@ -40,28 +39,5 @@ final class NewInstanceTest extends UnitTestCase
 
         $this->assertInstanceOf(Cache::class, $adapter);
         $this->assertInstanceOf(CacheInterface::class, $adapter);
-    }
-
-    /**
-     * Tests Phalcon\Cache\CacheFactory :: newInstance() - exception
-     *
-     * @author Phalcon Team <team@phalcon.io>
-     * @since  2022-03-05
-     */
-    public function testCacheCacheFactoryNewInstanceException(): void
-    {
-        $name = uniqid();
-        $this->expectException(Exception::class);
-        $this->expectExceptionMessage(
-            'Service ' . $name . ' is not registered'
-        );
-
-        $cacheFactory = new CacheFactory(
-            new AdapterFactory(
-                new SerializerFactory()
-            )
-        );
-
-        $cacheFactory->newInstance($name);
     }
 }
