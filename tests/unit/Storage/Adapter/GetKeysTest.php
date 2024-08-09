@@ -13,6 +13,7 @@ declare(strict_types=1);
 
 namespace Phalcon\Tests\Unit\Storage\Adapter;
 
+use Phalcon\Cache\Adapter\RedisCluster;
 use Phalcon\Storage\Adapter\AdapterInterface;
 use Phalcon\Storage\Adapter\Apcu;
 use Phalcon\Storage\Adapter\Libmemcached;
@@ -37,25 +38,86 @@ use function version_compare;
 final class GetKeysTest extends UnitTestCase
 {
     /**
-     * Tests Phalcon\Storage\Adapter\Apcu :: getKeys()
+     *
+     */
+    public static function getAdapters(): array
+    {
+        return [
+            [
+                'apcu',
+                Apcu::class,
+                [],
+                'ph-apcu-'
+            ],
+            [
+                '',
+                Memory::class,
+                [],
+                'ph-memo-'
+            ],
+            [
+                'redis',
+                Redis::class,
+                getOptionsRedis(),
+                'ph-reds-'
+            ],
+            [
+                'redis',
+                RedisCluster::class,
+                getOptionsRedisCluster(),
+                'ph-redc-'
+            ],
+            [
+                '',
+                Stream::class,
+                [
+                    'storageDir' => outputDir(),
+                ],
+                'ph-strm'
+            ],
+//            [
+//                '',
+//                Weak::class,
+//                [],
+//                'ph-wea-'
+//            ],
+        ];
+    }
+
+    /**
+     * Tests Phalcon\Storage\Adapter\Redis :: getKeys()
+     *
+     * @dataProvider getAdapters
      *
      * @return void
      *
-     * @throws Exception
+     * @throws HelperException
+     * @throws StorageException
      *
      * @author Phalcon Team <team@phalcon.io>
      * @since  2020-09-09
      */
-    public function testStorageAdapterApcuGetKeys(): void
+    public function testStorageAdapterGetKeys(
+        string $extension,
+        string $adapterClass,
+        array $options,
+        string $prefix
+    ): void
     {
-        $this->checkExtensionIsLoaded('apcu');
+        if (!empty($extension)) {
+            $this->checkExtensionIsLoaded($extension);
+        }
 
         $serializer = new SerializerFactory();
-        $adapter    = new Apcu($serializer);
+        $adapter    = new $adapterClass($serializer, $options);
 
         $this->assertTrue($adapter->clear());
 
-        $this->runTests($adapter, 'ph-apcu-');
+        $this->runTests($adapter, $prefix);
+
+        if ('ph-strm' === $prefix) {
+            $this->safeDeleteDirectory(outputDir('ph-strm'));
+        }
     }
 
     /**
@@ -107,77 +169,6 @@ final class GetKeysTest extends UnitTestCase
         $this->assertTrue($adapter->clear());
 
         $this->runTests($adapter, 'ph-memc-');
-    }
-
-    /**
-     * Tests Phalcon\Storage\Adapter\Memory :: getKeys()
-     *
-     * @return void
-     *
-     * @throws HelperException
-     *
-     * @author Phalcon Team <team@phalcon.io>
-     * @since  2020-09-09
-     */
-    public function testStorageAdapterMemoryGetKeys(): void
-    {
-        $serializer = new SerializerFactory();
-        $adapter    = new Memory($serializer);
-
-        $this->assertTrue($adapter->clear());
-
-        $this->runTests($adapter, 'ph-memo-');
-    }
-
-    /**
-     * Tests Phalcon\Storage\Adapter\Redis :: getKeys()
-     *
-     * @return void
-     *
-     * @throws HelperException
-     * @throws StorageException
-     *
-     * @author Phalcon Team <team@phalcon.io>
-     * @since  2020-09-09
-     */
-    public function testStorageAdapterRedisGetKeys(): void
-    {
-        $this->checkExtensionIsLoaded('redis');
-
-        $serializer = new SerializerFactory();
-        $adapter    = new Redis($serializer, getOptionsRedis());
-
-        $this->assertTrue($adapter->clear());
-
-        $this->runTests($adapter, 'ph-reds-');
-    }
-
-    /**
-     * Tests Phalcon\Storage\Adapter\Stream :: getKeys()
-     *
-     * @return void
-     *
-     * @throws HelperException
-     * @throws StorageException
-     *
-     * @author Phalcon Team <team@phalcon.io>
-     * @since  2020-09-09
-     */
-    public function testStorageAdapterStreamGetKeys(): void
-    {
-        $serializer = new SerializerFactory();
-        $adapter    = new Stream(
-            $serializer,
-            [
-                'storageDir' => outputDir(),
-            ]
-        );
-
-        $this->assertTrue($adapter->clear());
-
-        $this->runTests($adapter, 'ph-strm');
-
-        $this->safeDeleteDirectory(outputDir('ph-strm'));
     }
 
     /**

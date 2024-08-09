@@ -17,6 +17,7 @@ use Phalcon\Storage\Adapter\Apcu;
 use Phalcon\Storage\Adapter\Libmemcached;
 use Phalcon\Storage\Adapter\Memory;
 use Phalcon\Storage\Adapter\Redis;
+use Phalcon\Storage\Adapter\RedisCluster;
 use Phalcon\Storage\Adapter\Stream;
 use Phalcon\Storage\Adapter\Weak;
 use Phalcon\Storage\SerializerFactory;
@@ -24,6 +25,7 @@ use Phalcon\Tests\UnitTestCase;
 
 use function array_merge;
 use function getOptionsRedis;
+use function getOptionsRedisCluster;
 use function outputDir;
 
 final class GetPrefixTest extends UnitTestCase
@@ -134,6 +136,38 @@ final class GetPrefixTest extends UnitTestCase
                 Redis::class,
                 array_merge(
                     getOptionsRedis(),
+                    [
+                        'prefix' => 'my-prefix',
+                    ]
+                ),
+                'my-prefix',
+                'redis',
+            ],
+            [
+                RedisCluster::class,
+                array_merge(
+                    getOptionsRedisCluster(),
+                    [
+                    ]
+                ),
+                'ph-redc-',
+                'redis',
+            ],
+            [
+                RedisCluster::class,
+                array_merge(
+                    getOptionsRedisCluster(),
+                    [
+                        'prefix' => '',
+                    ]
+                ),
+                '',
+                'redis',
+            ],
+            [
+                RedisCluster::class,
+                array_merge(
+                    getOptionsRedisCluster(),
                     [
                         'prefix' => 'my-prefix',
                     ]
