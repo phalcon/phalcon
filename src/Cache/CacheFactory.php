@@ -18,6 +18,7 @@ use Phalcon\Cache\Exception\Exception;
 use Phalcon\Config\ConfigInterface;
 use Phalcon\Support\Exception as SupportException;
 use Phalcon\Support\Traits\ConfigTrait;
+use Psr\SimpleCache\CacheInterface;
 
 /**
  * Creates a new Cache class
