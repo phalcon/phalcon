@@ -352,70 +352,69 @@ jobs:
   #          name: "db-postgres-${{ matrix.php }}-${{ matrix.ts }}-${{ matrix.name }}.coverage"
   #          path: "tests/_output/coverage.xml"
 
-#  db-sqlite-tests:
-#    name: Database Sqlite tests / PHP-${{ matrix.php }}
-#    needs: phpcs
-#
-#    permissions:
-#      contents: read # to fetch code (actions/checkout)
-#
-#    runs-on: ubuntu-20.04
-#
-#    strategy:
-#      fail-fast: true
-#      matrix:
-#        php:
-#          - '8.1'
-##          - '8.2'
-##          - '8.3'
-#
-#    steps:
-#      - uses: actions/checkout@v4
-#      - name: "Setup platform specific environment"
-#        shell: pwsh
-#        run: |
-#          git config --global core.autocrlf false
-#
-#      - name: "Setup PHP"
-#        uses: shivammathur/setup-php@v2
-#        with:
-#          php-version: ${{ matrix.php }}
-#          extensions: ${{ env.EXTENSIONS }}
-#          ini-values: apc.enable_cli=on, session.save_path=${{ env.SESSION_SAVE_PATH }}
-#          tools: pecl, phpize, php-config, composer:v2
-#          coverage: pcov
-#        env:
-#          COMPOSER_TOKEN: ${{ secrets.GITHUB_TOKEN }}
-#          PHALCON_PATH: ext
-#
-#      - name: "Validate composer"
-#        run: composer validate --no-check-all --no-check-publish
-#
-#      - name: "Install development dependencies with Composer"
-#        uses: "ramsey/composer-install@v2"
-#        with:
-#          composer-options: "--prefer-dist"
-#
-#      - name: "Setup Tests"
-#        shell: bash
-#        run: |
-#          if [ "${{ runner.os }}" = "Linux" ]; then
-#            ./config/ci/linux-setup-locales.sh
-#          fi
-#
-#          cp tests/_config/.env.default .env
-#          vendor/bin/codecept build
-#
-#      - name: "Run Database Tests (Sqlite)"
-#        run: |
-#          vendor/bin/codecept run --coverage-xml=coverage.xml --ext DotReporter database --env sqlite -g sqlite
-#
-#      - name: "Upload coverage file artifact"
-#        uses: "actions/upload-artifact@v4"
-#        with:
-#          name: "db-sqlite-${{ matrix.php }}.coverage"
-#          path: "tests/_output/coverage.xml"
-#
+  db-sqlite-tests:
+    name: Database Sqlite tests / PHP-${{ matrix.php }}
+    needs: phpcs
+
+    permissions:
+      contents: read # to fetch code (actions/checkout)
+
+    runs-on: ubuntu-20.04
+
+    strategy:
+      fail-fast: true
+      matrix:
+        php:
+          - '8.1'
+#          - '8.2'
+#          - '8.3'
+
+    steps:
+      - uses: actions/checkout@v4
+      - name: "Setup platform specific environment"
+        shell: pwsh
+        run: |
+          git config --global core.autocrlf false
+
+      - name: "Setup PHP"
+        uses: shivammathur/setup-php@v2
+        with:
+          php-version: ${{ matrix.php }}
+          extensions: ${{ env.EXTENSIONS }}
+          ini-values: apc.enable_cli=on, session.save_path=${{ env.SESSION_SAVE_PATH }}
+          tools: pecl, phpize, php-config, composer:v2
+          coverage: pcov
+        env:
+          COMPOSER_TOKEN: ${{ secrets.GITHUB_TOKEN }}
+          PHALCON_PATH: ext
+
+      - name: "Validate composer"
+        run: composer validate --no-check-all --no-check-publish
+
+      - name: "Install development dependencies with Composer"
+        uses: "ramsey/composer-install@v3"
+        with:
+          composer-options: "--prefer-dist"
+
+      - name: "Setup Tests"
+        shell: bash
+        run: |
+          if [ "${{ runner.os }}" = "Linux" ]; then
+            ./config/ci/linux-setup-locales.sh
+          fi
+
+          cp tests/_config/.env.default .env
+
+      - name: "Run Database Tests (Sqlite)"
+        run: |
+          composer test-db-sqlite-coverage
+
+      - name: "Upload coverage file artifact"
+        uses: "actions/upload-artifact@v4"
+        with:
+          name: "db-sqlite-${{ matrix.php }}.coverage"
+          path: "tests/_output/coverage.xml"
+
   upload-coverage:
     permissions:
       contents: read
@@ -436,19 +435,20 @@ jobs:
 
       - name: "Display structure of downloaded files"
         run: |
-          mkdir -p coverage
+          mkdir -p cv
 
       - name: "Download coverage files"
         uses: "actions/download-artifact@v4"
         with:
-          path: "coverage"
+          path: "cv"
 
       - name: "Display structure of downloaded files"
         run: |
-          mv coverage/db-mysql-8.1.coverage/coverage.xml coverage/db-mysql-8.1-coverage.xml
-          mv coverage/unit-8.1.coverage/coverage.xml     coverage/unit-8.1-coverage.xml
-          mv coverage/unit-8.2.coverage/coverage.xml     coverage/unit-8.2-coverage.xml
-          mv coverage/unit-8.3.coverage/coverage.xml     coverage/unit-8.3-coverage.xml
+          mv cv/db-mysql-8.1.coverage/coverage.xml  cv/01.xml
+          mv cv/db-sqlite-8.1.coverage/coverage.xml cv/02.xml
+          mv cv/unit-8.1.coverage/coverage.xml      cv/03.xml
+          mv cv/unit-8.2.coverage/coverage.xml      cv/04.xml
+          mv cv/unit-8.3.coverage/coverage.xml      cv/05.xml
           ls -la coverage/
 
       - name: SonarCloud Scan
