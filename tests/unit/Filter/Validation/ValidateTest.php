@@ -14,10 +14,12 @@ declare(strict_types=1);
 namespace Phalcon\Tests\Unit\Filter\Validation;
 
 use Phalcon\Filter\Validation;
+use Phalcon\Filter\Validation\Validator\Alpha;
 use Phalcon\Filter\Validation\Validator\PresenceOf;
 use Phalcon\Messages\Message;
 use Phalcon\Messages\Messages;
 use Phalcon\Tests\UnitTestCase;
+use PHPUnit\Framework\Attributes\Test;
 use stdClass;
 
 use function date;
@@ -31,6 +33,27 @@ final class ValidateTest extends UnitTestCase
      * @since  2016-06-27
      * @issue  10405
      */
+    #[Test]
+    public function testFilterValidationValidateException(): void
+    {
+        $data       = ['name' => 'Leonidas'];
+        $validation = new Validation();
+        $validator  = new Alpha();
+        $entity     = new stdClass();
+        $validation->add('name', $validator);
+        $messages = $validation->validate($data, $entity);
+
+        $this->assertCount(0, $messages);
+    }
+
+    /**
+     * Tests Phalcon\Filter\Validation :: validate() - message to non object
+     *
+     * @author Phalcon Team <team@phalcon.io>
+     * @since  2016-06-27
+     * @issue  10405
+     */
+    #[Test]
     public function testFilterValidationValidateMessageToNonObject(): void
     {
         $myValidator = new PresenceOf();
@@ -47,7 +70,7 @@ final class ValidateTest extends UnitTestCase
 
         $myValidator->validate($validation, 'foo');
 
-        $expectedMessages = new Messages(
+        $expected = new Messages(
             [
                 new Message(
                     'Field foo is required',
@@ -58,6 +81,7 @@ final class ValidateTest extends UnitTestCase
             ]
         );
 
-        $this->assertEquals($expectedMessages, $validation->getMessages());
+        $actual = $validation->getMessages();
+        $this->assertEquals($expected, $actual);
     }
 }

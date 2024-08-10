@@ -16,6 +16,7 @@ namespace Phalcon\Tests\Unit\Filter\Validation;
 use Phalcon\Filter\Validation;
 use Phalcon\Tests\Models\EntityWithPublic;
 use Phalcon\Tests\UnitTestCase;
+use PHPUnit\Framework\Attributes\Test;
 
 final class GetValueByDataTest extends UnitTestCase
 {
@@ -27,6 +28,7 @@ final class GetValueByDataTest extends UnitTestCase
      * @author Phalcon Team <team@phalcon.io>
      * @since  2021-11-07
      */
+    #[Test]
     public function testFilterValidationGetValueByDataArray(): void
     {
         $data = [
@@ -36,9 +38,12 @@ final class GetValueByDataTest extends UnitTestCase
         $validation = new Validation();
         $value      = $validation->getValueByData($data, 'name');
 
-        $this->assertSame($data['name'], $value);
+        $expected = $data['name'];
+        $actual   = $value;
+        $this->assertSame($expected, $actual);
     }
 
+    #[Test]
     public function testFilterValidationGetValueByDataObject(): void
     {
         $data = new EntityWithPublic(self::NAME);
@@ -46,6 +51,8 @@ final class GetValueByDataTest extends UnitTestCase
         $validation = new Validation();
         $value      = $validation->getValueByData($data, 'name');
 
-        $this->assertSame($data->name, $value);
+        $expected = $data->name;
+        $actual   = $value;
+        $this->assertSame($expected, $actual);
     }
 }

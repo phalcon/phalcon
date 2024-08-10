@@ -16,6 +16,7 @@ namespace Phalcon\Tests\Unit\Filter\Validation;
 use Phalcon\Filter\Validation;
 use Phalcon\Filter\Validation\Validator\Alpha;
 use Phalcon\Tests\UnitTestCase;
+use PHPUnit\Framework\Attributes\Test;
 
 final class AllowEmptyTest extends UnitTestCase
 {
@@ -25,6 +26,7 @@ final class AllowEmptyTest extends UnitTestCase
      * @author Phalcon Team <team@phalcon.io>
      * @since  2021-11-07
      */
+    #[Test]
     public function testFilterValidationAllowEmptyFalse(): void
     {
         $data       = ['name' => ''];
@@ -36,6 +38,7 @@ final class AllowEmptyTest extends UnitTestCase
         $this->assertCount(0, $messages);
     }
 
+    #[Test]
     public function testFilterValidationAllowEmptyTrue(): void
     {
         $data       = ['name' => ''];

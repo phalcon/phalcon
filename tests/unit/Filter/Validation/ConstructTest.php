@@ -17,6 +17,7 @@ use Phalcon\Filter\Validation;
 use Phalcon\Filter\Validation\Validator\Date;
 use Phalcon\Filter\Validation\Validator\Email;
 use Phalcon\Tests\UnitTestCase;
+use PHPUnit\Framework\Attributes\Test;
 
 final class ConstructTest extends UnitTestCase
 {
@@ -26,6 +27,7 @@ final class ConstructTest extends UnitTestCase
      * @author Sid Roberts <https://github.com/SidRoberts>
      * @since  2019-05-25
      */
+    #[Test]
     public function testFilterValidationConstruct(): void
     {
         $validators = [

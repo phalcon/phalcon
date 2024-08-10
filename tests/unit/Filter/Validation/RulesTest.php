@@ -18,6 +18,7 @@ use Phalcon\Filter\Validation\Validator\Alpha;
 use Phalcon\Filter\Validation\Validator\Email;
 use Phalcon\Filter\Validation\Validator\PresenceOf;
 use Phalcon\Tests\UnitTestCase;
+use PHPUnit\Framework\Attributes\Test;
 
 final class RulesTest extends UnitTestCase
 {
@@ -27,6 +28,7 @@ final class RulesTest extends UnitTestCase
      * @author Sid Roberts <https://github.com/SidRoberts>
      * @since  2019-05-27
      */
+    #[Test]
     public function testFilterValidationRules(): void
     {
         $alpha      = new Alpha();
@@ -35,32 +37,32 @@ final class RulesTest extends UnitTestCase
 
         $validation = new Validation();
 
-        $validation->rules(
-            'name',
-            [
-                $alpha,
-                $presenceOf,
-            ]
-        );
-
-        $validation->rules(
-            'email',
-            [
-                $email,
-            ]
-        );
-
-        $this->assertEquals(
-            [
-                'name'  => [
+        $validation
+            ->rules(
+                'name',
+                [
                     $alpha,
                     $presenceOf,
-                ],
-                'email' => [
+                ]
+            )
+            ->rules(
+                'email',
+                [
                     $email,
-                ],
+                ]
+            )
+        ;
+
+        $expected = [
+            'name'  => [
+                $alpha,
+                $presenceOf,
             ],
-            $validation->getValidators()
-        );
+            'email' => [
+                $email,
+            ],
+        ];
+        $actual = $validation->getValidators();
+        $this->assertSame($expected, $actual);
     }
 }
