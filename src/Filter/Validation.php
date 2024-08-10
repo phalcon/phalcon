@@ -228,7 +228,7 @@ class Validation extends Injectable implements ValidationInterface
     public function getLabel(array | string $field): string
     {
         if (is_array($field)) {
-            return join(", ", $field);
+            return implode(", ", $field);
         }
 
         return $this->labels[$field] ?? $field;

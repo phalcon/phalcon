@@ -15,9 +15,9 @@ namespace Phalcon\Tests\Unit\Http\Response\Cookies;
 
 use Phalcon\Http\Response\Cookies;
 use Phalcon\Tests\Fixtures\Traits\CookieTrait;
-use Phalcon\Tests\Unit\Http\Helper\HttpBase;
+use Phalcon\Tests\Unit\Http\Helper\AbstractHttpBase;
 
-final class UseEncryptionIsUsingEncryptionTest extends HttpBase
+final class UseEncryptionIsUsingEncryptionTest extends AbstractHttpBase
 {
     use CookieTrait;
 

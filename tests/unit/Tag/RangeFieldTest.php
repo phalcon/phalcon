@@ -13,9 +13,9 @@ declare(strict_types=1);
 
 namespace Phalcon\Tests\Unit\Tag;
 
-use Phalcon\Tests\Fixtures\Helpers\TagHelper;
+use Phalcon\Tests\Fixtures\Helpers\AbstractTagHelper;
 
-class RangeFieldTest extends TagHelper
+class RangeFieldTest extends AbstractTagHelper
 {
     protected string $function  = 'rangeField';
     protected string $inputType = 'range';

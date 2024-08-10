@@ -65,8 +65,8 @@ final class GetExpressionTest extends UnitTestCase
             'arguments' => $expr,
         ]);
 
-        $this->assertSame($annotation->getExpression($oneExpr), $value);
-        $this->assertSame($annotation->getExpression($twoExpr), $value1);
+        $this->assertSame($value, $annotation->getExpression($oneExpr));
+        $this->assertSame($value1, $annotation->getExpression($twoExpr));
         $this->assertInstanceOf(
             Annotation::class,
             $annotation->getExpression($threeExpr)

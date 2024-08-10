@@ -192,50 +192,44 @@ class Complex extends Resultset implements ResultsetInterface
                 /**
                  * Generate the column value according to the hydration type
                  */
-                switch ($hydrateMode) {
-                    case Resultset::HYDRATE_RECORDS:
-                        // Check if the resultset must keep snapshots
-                        $keepSnapshots = $column["keepSnapshots"] ?? false;
+                if ($hydrateMode == Resultset::HYDRATE_RECORDS) {
+                    // Check if the resultset must keep snapshots
+                    $keepSnapshots = $column["keepSnapshots"] ?? false;
 
-                        if (Settings::get("orm.late_state_binding")) {
-                            if ($column["instance"] instanceof Model) {
-                                $modelName = get_class($column["instance"]);
-                            } else {
-                                $modelName = "Phalcon\\Mvc\\Model";
-                            }
-
-                            $value = $modelName::cloneResultMap(
-                                $column["instance"],
-                                $rowModel,
-                                $columnMap,
-                                $dirtyState,
-                                $keepSnapshots
-                            );
+                    if (Settings::get("orm.late_state_binding")) {
+                        if ($column["instance"] instanceof Model) {
+                            $modelName = get_class($column["instance"]);
                         } else {
-                            /**
-                             * Get the base instance. Assign the values to the
-                             * attributes using a column map
-                             */
-                            $value = Model::cloneResultMap(
-                                $column["instance"],
-                                $rowModel,
-                                $columnMap,
-                                $dirtyState,
-                                $keepSnapshots
-                            );
+                            $modelName = "Phalcon\\Mvc\\Model";
                         }
 
-                        break;
-
-                    default:
-                        // Other kinds of hydration
-                        $value = Model::cloneResultMapHydrate(
+                        $value = $modelName::cloneResultMap(
+                            $column["instance"],
                             $rowModel,
                             $columnMap,
-                            $hydrateMode
+                            $dirtyState,
+                            $keepSnapshots
                         );
-
-                        break;
+                    } else {
+                        /**
+                         * Get the base instance. Assign the values to the
+                         * attributes using a column map
+                         */
+                        $value = Model::cloneResultMap(
+                            $column["instance"],
+                            $rowModel,
+                            $columnMap,
+                            $dirtyState,
+                            $keepSnapshots
+                        );
+                    }
+                } else {
+                    // Other kinds of hydration
+                    $value = Model::cloneResultMapHydrate(
+                        $rowModel,
+                        $columnMap,
+                        $hydrateMode
+                    );
                 }
 
                 /**
@@ -266,14 +260,10 @@ class Complex extends Resultset implements ResultsetInterface
                 /**
                  * Assign the instance according to the hydration type
                  */
-                switch ($hydrateMode) {
-                    case Resultset::HYDRATE_ARRAYS:
-                        $activeRow[$attribute] = $value;
-                        break;
-
-                    default:
-                        $activeRow->$attribute = $value;
-                        break;
+                if ($hydrateMode == Resultset::HYDRATE_ARRAYS) {
+                    $activeRow[$attribute] = $value;
+                } else {
+                    $activeRow->$attribute = $value;
                 }
             }
         }

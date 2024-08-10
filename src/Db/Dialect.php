@@ -164,7 +164,7 @@ abstract class Dialect implements DialectInterface
             $columns[] = $this->getSqlColumn($column, $escapeChar, $bindCounts);
         }
 
-        return join(", ", $columns);
+        return implode(", ", $columns);
     }
 
     /**
@@ -324,7 +324,7 @@ abstract class Dialect implements DialectInterface
                         $placeholders[] = $value . ($counter - 1);
                     }
 
-                    return join(", ", $placeholders);
+                    return implode(", ", $placeholders);
                 }
 
                 return $expression["value"];
@@ -923,7 +923,7 @@ abstract class Dialect implements DialectInterface
                 $tableNames[] = $this->getSqlTable($tableName, $escapeChar);
             }
 
-            $tableNames = join(", ", $tableNames);
+            $tableNames = implode(", ", $tableNames);
         }
 
         return "FROM " . $tableNames;
@@ -1007,7 +1007,7 @@ abstract class Dialect implements DialectInterface
                 );
             }
 
-            $fields = join(", ", $fields);
+            $fields = implode(", ", $fields);
         }
 
         return "GROUP BY " . $fields;
@@ -1077,7 +1077,7 @@ abstract class Dialect implements DialectInterface
                         );
                     }
 
-                    $joinCondition = join(" AND ", $joinCondition);
+                    $joinCondition = implode(" AND ", $joinCondition);
                 }
             }
 
@@ -1182,10 +1182,10 @@ abstract class Dialect implements DialectInterface
                 isset($expression["parentheses"]) &&
                 false === $expression["parentheses"]
             ) {
-                return join($separator, $items);
+                return implode($separator, $items);
             }
 
-            return "(" . join($separator, $items) . ")";
+            return "(" . implode($separator, $items) . ")";
         }
 
         throw new Exception("Invalid SQL-list expression");
@@ -1267,7 +1267,7 @@ abstract class Dialect implements DialectInterface
                 $fields[] = $fieldSql;
             }
 
-            $fields = join(", ", $fields);
+            $fields = implode(", ", $fields);
         }
 
         return "ORDER BY " . $fields;

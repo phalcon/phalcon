@@ -14,12 +14,12 @@ namespace Phalcon\Tests\Unit\Http\Cookie;
 use Exception;
 use Phalcon\Http\Cookie;
 use Phalcon\Tests\Fixtures\Traits\CookieTrait;
-use Phalcon\Tests\Unit\Http\Helper\HttpBase;
+use Phalcon\Tests\Unit\Http\Helper\AbstractHttpBase;
 
 use function explode;
 use function uniqid;
 
-final class CookieTest extends HttpBase
+final class CookieTest extends AbstractHttpBase
 {
     use CookieTrait;
 

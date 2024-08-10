@@ -13,11 +13,11 @@ declare(strict_types=1);
 
 namespace Phalcon\Tests\Unit\Http\Request;
 
-use Phalcon\Tests\Unit\Http\Helper\HttpBase;
+use Phalcon\Tests\Unit\Http\Helper\AbstractHttpBase;
 
 use function uniqid;
 
-final class GetHTTPRefererTest extends HttpBase
+final class GetAbstractHTTPRefererTest extends AbstractHttpBase
 {
     /**
      * Tests Phalcon\Http\Request :: getHTTPReferer()

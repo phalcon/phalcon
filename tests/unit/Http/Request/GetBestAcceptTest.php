@@ -15,9 +15,9 @@ namespace Phalcon\Tests\Unit\Http\Request;
 
 use Phalcon\Http\Request;
 use Phalcon\Tests\Fixtures\Page\Http;
-use Phalcon\Tests\Unit\Http\Helper\HttpBase;
+use Phalcon\Tests\Unit\Http\Helper\AbstractHttpBase;
 
-final class GetBestAcceptTest extends HttpBase
+final class GetBestAcceptTest extends AbstractHttpBase
 {
     /**
      * Tests Phalcon\Http\Request :: getBestAccept()

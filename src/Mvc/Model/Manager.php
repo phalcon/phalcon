@@ -292,12 +292,10 @@ class Manager implements ManagerInterface, InjectionAwareInterface, EventsAwareI
         /**
          * Check if the number of fields are the same
          */
-        if (is_array($referencedFields)) {
-            if (count($fields) != count($referencedFields)) {
-                throw new Exception(
-                    "Number of referenced fields are not the same"
-                );
-            }
+        if (is_array($referencedFields) && count($fields) != count($referencedFields)) {
+            throw new Exception(
+                "Number of referenced fields are not the same"
+            );
         }
 
         /**
@@ -379,12 +377,10 @@ class Manager implements ManagerInterface, InjectionAwareInterface, EventsAwareI
         /**
          * Check if the number of fields are the same
          */
-        if (is_array($referencedFields)) {
-            if (count($fields) != count($referencedFields)) {
-                throw new Exception(
-                    "Number of referenced fields are not the same"
-                );
-            }
+        if (is_array($referencedFields) && count($fields) != count($referencedFields)) {
+            throw new Exception(
+                "Number of referenced fields are not the same"
+            );
         }
 
         /**
@@ -476,24 +472,20 @@ class Manager implements ManagerInterface, InjectionAwareInterface, EventsAwareI
          * Check if the number of fields are the same from the model to the
          * intermediate model
          */
-        if (is_array($intermediateFields)) {
-            if (count($fields) != count($intermediateFields)) {
-                throw new Exception(
-                    "Number of referenced fields are not the same"
-                );
-            }
+        if (is_array($intermediateFields) && count($fields) != count($intermediateFields)) {
+            throw new Exception(
+                "Number of referenced fields are not the same"
+            );
         }
 
         /**
          * Check if the number of fields are the same from the intermediate
          * model to the referenced model
          */
-        if (is_array($intermediateReferencedFields)) {
-            if (count($fields) != count($intermediateFields)) {
-                throw new Exception(
-                    "Number of referenced fields are not the same"
-                );
-            }
+        if (is_array($intermediateReferencedFields) && count($fields) != count($intermediateFields)) {
+            throw new Exception(
+                "Number of referenced fields are not the same"
+            );
         }
 
         /**
@@ -590,12 +582,10 @@ class Manager implements ManagerInterface, InjectionAwareInterface, EventsAwareI
         /**
          * Check if the number of fields are the same
          */
-        if (is_array($referencedFields)) {
-            if (count($fields) != count($referencedFields)) {
-                throw new Exception(
-                    "Number of referenced fields are not the same"
-                );
-            }
+        if (is_array($referencedFields) && count($fields) != count($referencedFields)) {
+            throw new Exception(
+                "Number of referenced fields are not the same"
+            );
         }
 
         /**
@@ -687,24 +677,20 @@ class Manager implements ManagerInterface, InjectionAwareInterface, EventsAwareI
          * Check if the number of fields are the same from the model to the
          * intermediate model
          */
-        if (is_array($intermediateFields)) {
-            if (count($fields) != count($intermediateFields)) {
-                throw new Exception(
-                    "Number of referenced fields are not the same"
-                );
-            }
+        if (is_array($intermediateFields) && count($fields) != count($intermediateFields)) {
+            throw new Exception(
+                "Number of referenced fields are not the same"
+            );
         }
 
         /**
          * Check if the number of fields are the same from the intermediate
          * model to the referenced model
          */
-        if (is_array($intermediateReferencedFields)) {
-            if (count($fields) != count($intermediateFields)) {
-                throw new Exception(
-                    "Number of referenced fields are not the same"
-                );
-            }
+        if (is_array($intermediateReferencedFields) && count($fields) != count($intermediateFields)) {
+            throw new Exception(
+                "Number of referenced fields are not the same"
+            );
         }
 
         /**

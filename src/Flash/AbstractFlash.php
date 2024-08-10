@@ -325,7 +325,7 @@ abstract class AbstractFlash implements FlashInterface, InjectionAwareInterface
                 $content = [$content];
             }
 
-            $content = join(' ', $content);
+            $content = implode(' ', $content);
         }
 
         return $content;

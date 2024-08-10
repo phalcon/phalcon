@@ -14,11 +14,11 @@ declare(strict_types=1);
 namespace Phalcon\Tests\Unit\Tag;
 
 use Phalcon\Tag;
-use Phalcon\Tests\Fixtures\Helpers\TagSetup;
+use Phalcon\Tests\Fixtures\Helpers\AbstractTagSetup;
 
 use function uniqid;
 
-class GetHasValueTest extends TagSetup
+class GetHasValueTest extends AbstractTagSetup
 {
     /**
      * Tests Phalcon\Tag :: getValue()/hasValue()

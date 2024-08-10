@@ -32,6 +32,6 @@ final class GetNameTest extends UnitTestCase
             'name' => 'NovAnnotation',
         ]);
 
-        $this->assertSame($annotation->getName(), $name);
+        $this->assertSame($name, $annotation->getName());
     }
 }

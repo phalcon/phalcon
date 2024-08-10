@@ -14,9 +14,9 @@ declare(strict_types=1);
 namespace Phalcon\Tests\Unit\Http\Response;
 
 use Phalcon\Tests\Fixtures\Page\Http;
-use Phalcon\Tests\Unit\Http\Helper\HttpBase;
+use Phalcon\Tests\Unit\Http\Helper\AbstractHttpBase;
 
-final class SetRawHeaderTest extends HttpBase
+final class SetRawHeaderTest extends AbstractHttpBase
 {
     /**
      * Tests the setRawHeader

@@ -15,9 +15,9 @@ namespace Phalcon\Tests\Unit\Http\Request;
 
 use Phalcon\Http\Request;
 use Phalcon\Tests\Fixtures\Page\Http;
-use Phalcon\Tests\Unit\Http\Helper\HttpBase;
+use Phalcon\Tests\Unit\Http\Helper\AbstractHttpBase;
 
-final class GetContentTypeTest extends HttpBase
+final class GetContentTypeTest extends AbstractHttpBase
 {
     /**
      * Tests Phalcon\Http\Request :: getContentType()

@@ -26,9 +26,6 @@ use function is_object;
 use function join;
 use function range;
 
-//use Phalcon\Mvc\CollectionInterface;
-//use Phalcon\Mvc\Collection;
-
 /**
  * Check that a field is unique in the related table
  *
@@ -374,7 +371,7 @@ class Uniqueness extends AbstractCombinedFieldsValidator
 
                             $exceptConditions[] = $attribute
                                 . " NOT IN ("
-                                . join(",", $notInValues)
+                                . implode(",", $notInValues)
                                 . ")";
                         } else {
                             $exceptConditions[] = $attribute . " <> ?" . $index;
@@ -397,7 +394,7 @@ class Uniqueness extends AbstractCombinedFieldsValidator
 
                         $exceptConditions[] = $attribute
                             . " NOT IN ("
-                            . join(",", $notInValues)
+                            . implode(",", $notInValues)
                             . ")";
                     } else {
                         $params["conditions"][] = $attribute . " <> ?" . $index;
@@ -420,7 +417,7 @@ class Uniqueness extends AbstractCombinedFieldsValidator
 
                             $exceptConditions[] = $attribute
                                 . " NOT IN ("
-                                . join(",", $notInValues)
+                                . implode(",", $notInValues)
                                 . ")";
                         } else {
                             $params["conditions"][] = $attribute . " <> ?" . $index;
@@ -459,11 +456,11 @@ class Uniqueness extends AbstractCombinedFieldsValidator
 
         if (true !== empty($exceptConditions)) {
             $params["conditions"][] = "("
-                . join(" OR ", $exceptConditions)
+                . implode(" OR ", $exceptConditions)
                 . ")";
         }
 
-        $params["conditions"] = join(
+        $params["conditions"] = implode(
             " AND ",
             $params["conditions"]
         );

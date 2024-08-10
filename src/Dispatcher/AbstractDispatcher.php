@@ -1230,7 +1230,7 @@ abstract class AbstractDispatcher extends Injectable implements DispatcherInterf
     protected function toCamelCase(string $input): string
     {
         if (true !== isset($this->camelCaseMap[$input])) {
-            $this->camelCaseMap[$input] = join(
+            $this->camelCaseMap[$input] = implode(
                 "",
                 array_map(
                     "ucfirst",

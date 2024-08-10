@@ -329,7 +329,7 @@ class Postgresql extends Dialect
             $createLines[] = $referenceSql;
         }
 
-        $sql .= join(",\n\t", $createLines) . "\n)";
+        $sql .= implode(",\n\t", $createLines) . "\n)";
         if (isset($definition["options"])) {
             $sql .= " " . $this->getTableOptions($definition);
         }

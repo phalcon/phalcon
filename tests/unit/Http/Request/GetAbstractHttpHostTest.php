@@ -14,10 +14,10 @@ declare(strict_types=1);
 namespace Phalcon\Tests\Unit\Http\Request;
 
 use Phalcon\Http\Request;
-use Phalcon\Tests\Unit\Http\Helper\HttpBase;
+use Phalcon\Tests\Unit\Http\Helper\AbstractHttpBase;
 use UnexpectedValueException;
 
-final class GetHttpHostTest extends HttpBase
+final class GetAbstractHttpHostTest extends AbstractHttpBase
 {
     /**
      * @return array[]

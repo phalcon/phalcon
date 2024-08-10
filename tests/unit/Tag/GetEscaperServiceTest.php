@@ -16,9 +16,9 @@ namespace Phalcon\Tests\Unit\Tag;
 use Phalcon\Html\Escaper;
 use Phalcon\Html\Escaper\EscaperInterface;
 use Phalcon\Tag;
-use Phalcon\Tests\Fixtures\Helpers\TagSetup;
+use Phalcon\Tests\Fixtures\Helpers\AbstractTagSetup;
 
-class GetEscaperServiceTest extends TagSetup
+class GetEscaperServiceTest extends AbstractTagSetup
 {
     /**
      * Tests Phalcon\Tag :: getEscaperService()

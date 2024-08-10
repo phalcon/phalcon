@@ -27,7 +27,7 @@ use function stream_wrapper_restore;
 use function stream_wrapper_unregister;
 use function time;
 
-class HttpBase extends UnitTestCase
+abstract class AbstractHttpBase extends UnitTestCase
 {
     use DiTrait;
 
@@ -36,7 +36,7 @@ class HttpBase extends UnitTestCase
     /**
      * executed after each test
      */
-    public function _after(): void
+    public function tearDown(): void
     {
         $_SERVER  = $this->store['SERVER'];
         $_REQUEST = $this->store['REQUEST'];

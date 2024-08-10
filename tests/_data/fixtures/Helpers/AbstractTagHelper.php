@@ -13,7 +13,7 @@ declare(strict_types=1);
 
 namespace Phalcon\Tests\Fixtures\Helpers;
 
-class TagHelper extends TagSetup
+class AbstractTagHelper extends AbstractTagSetup
 {
     /**
      * @var string

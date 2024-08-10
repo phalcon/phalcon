@@ -16,9 +16,9 @@ namespace Phalcon\Tests\Unit\Http\Response;
 use DateTime;
 use DateTimeZone;
 use Phalcon\Tests\Fixtures\Page\Http;
-use Phalcon\Tests\Unit\Http\Helper\HttpBase;
+use Phalcon\Tests\Unit\Http\Helper\AbstractHttpBase;
 
-final class SetCacheTest extends HttpBase
+final class SetCacheTest extends AbstractHttpBase
 {
     /**
      * Tests setCache

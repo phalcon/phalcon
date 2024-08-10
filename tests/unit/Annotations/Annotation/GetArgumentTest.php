@@ -49,7 +49,7 @@ final class GetArgumentTest extends UnitTestCase
             ],
         ]);
 
-        $this->assertSame($annotation->getArgument(0), $value);
-        $this->assertSame($annotation->getArgument(1), $value1);
+        $this->assertSame($value, $annotation->getArgument(0));
+        $this->assertSame($value1, $annotation->getArgument(1));
     }
 }

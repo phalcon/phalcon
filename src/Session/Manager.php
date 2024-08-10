@@ -135,7 +135,7 @@ class Manager implements ManagerInterface
      */
     public function exists(): bool
     {
-        return (session_status() === self::SESSION_ACTIVE);
+        return session_status() === self::SESSION_ACTIVE;
     }
 
     /**

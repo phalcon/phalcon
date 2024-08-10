@@ -15,11 +15,11 @@ namespace Phalcon\Tests\Unit\Http\Response;
 
 use Phalcon\Http\Response;
 use Phalcon\Http\Response\Cookies;
-use Phalcon\Tests\Unit\Http\Helper\HttpBase;
+use Phalcon\Tests\Unit\Http\Helper\AbstractHttpBase;
 
 use function uniqid;
 
-final class GetSetCookiesTest extends HttpBase
+final class GetSetCookiesTest extends AbstractHttpBase
 {
     /**
      * Tests Phalcon\Http\Response :: getCookies() / setCookies()

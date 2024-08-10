@@ -15,11 +15,11 @@ use Phalcon\Events\Event;
 use Phalcon\Http\Response\Headers;
 use Phalcon\Http\Response\HeadersInterface;
 use Phalcon\Tests\Fixtures\Page\Http;
-use Phalcon\Tests\Unit\Http\Helper\HttpBase;
+use Phalcon\Tests\Unit\Http\Helper\AbstractHttpBase;
 
 use function uniqid;
 
-final class HeadersTest extends HttpBase
+final class HeadersTest extends AbstractHttpBase
 {
     /**
      * @return array[]

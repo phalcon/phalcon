@@ -13,9 +13,9 @@ declare(strict_types=1);
 
 namespace Phalcon\Tests\Unit\Tag;
 
-use Phalcon\Tests\Fixtures\Helpers\TagHelper;
+use Phalcon\Tests\Fixtures\Helpers\AbstractTagHelper;
 
-class WeekFieldTest extends TagHelper
+class WeekFieldTest extends AbstractTagHelper
 {
     protected string $function  = 'weekField';
     protected string $inputType = 'week';

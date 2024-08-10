@@ -17,7 +17,7 @@ use Phalcon\Tag;
 use Phalcon\Tests\Fixtures\Traits\DiTrait;
 use Phalcon\Tests\UnitTestCase;
 
-class TagSetup extends UnitTestCase
+abstract class AbstractTagSetup extends UnitTestCase
 {
     use DiTrait;
 

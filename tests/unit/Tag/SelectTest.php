@@ -13,9 +13,9 @@ declare(strict_types=1);
 
 namespace Phalcon\Tests\Unit\Tag;
 
-use Phalcon\Tests\Fixtures\Helpers\TagSetup;
+use Phalcon\Tests\Fixtures\Helpers\AbstractTagSetup;
 
-class SelectTest extends TagSetup
+class SelectTest extends AbstractTagSetup
 {
     /**
      * Tests Phalcon\Tag :: select()

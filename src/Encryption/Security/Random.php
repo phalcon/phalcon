@@ -83,7 +83,6 @@ use Phalcon\Traits\Php\UrlTrait;
  */
 class Random
 {
-    //use Base64Trait;
     use UrlTrait;
 
     /**

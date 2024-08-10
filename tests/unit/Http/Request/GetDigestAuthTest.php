@@ -14,9 +14,9 @@ declare(strict_types=1);
 namespace Phalcon\Tests\Unit\Http\Request;
 
 use Phalcon\Http\Request;
-use Phalcon\Tests\Unit\Http\Helper\HttpBase;
+use Phalcon\Tests\Unit\Http\Helper\AbstractHttpBase;
 
-final class GetDigestAuthTest extends HttpBase
+final class GetDigestAuthTest extends AbstractHttpBase
 {
     /**
      * Tests Phalcon\Http\Request :: getDigestAuth()

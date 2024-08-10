@@ -14,9 +14,9 @@ declare(strict_types=1);
 namespace Phalcon\Tests\Unit\Tag;
 
 use Phalcon\Tag;
-use Phalcon\Tests\Fixtures\Helpers\TagSetup;
+use Phalcon\Tests\Fixtures\Helpers\AbstractTagSetup;
 
-class GetDocTypeTest extends TagSetup
+class GetDocTypeTest extends AbstractTagSetup
 {
     /**
      * Tests Phalcon\Tag :: getDocType() - 1.0 Frameset

@@ -1025,7 +1025,7 @@ abstract class AbstractAdapter implements AdapterInterface, EventsAwareInterface
         /**
          * Build the final SQL INSERT statement
          */
-        $joinedValues = join(", ", $placeholders);
+        $joinedValues = implode(", ", $placeholders);
 
         $insertSql = "INSERT INTO " . $escapedTable . " VALUES (" . $joinedValues . ")";
 
@@ -1037,7 +1037,7 @@ abstract class AbstractAdapter implements AdapterInterface, EventsAwareInterface
 
             $insertSql = "INSERT INTO "
                 . $escapedTable
-                . " (" . join(", ", $escapedFields)
+                . " (" . implode(", ", $escapedFields)
                 . ") VALUES (" . $joinedValues . ")";
         }
 
@@ -1462,7 +1462,7 @@ abstract class AbstractAdapter implements AdapterInterface, EventsAwareInterface
         }
 
         $escapedTable = $this->escapeIdentifier($tableName);
-        $setClause    = join(", ", $placeholders);
+        $setClause    = implode(", ", $placeholders);
 
         $updateSql = "UPDATE " . $escapedTable . " SET " . $setClause;
         if (true !== empty($whereCondition)) {

@@ -305,7 +305,7 @@ class Sqlite extends Dialect
             $createLines[] = $referenceSql;
         }
 
-        $sql .= join(",\n\t", $createLines) . "\n)";
+        $sql .= implode(",\n\t", $createLines) . "\n)";
 
         return $sql;
     }

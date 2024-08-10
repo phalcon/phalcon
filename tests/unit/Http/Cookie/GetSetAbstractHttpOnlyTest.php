@@ -13,9 +13,9 @@ declare(strict_types=1);
 
 namespace Phalcon\Tests\Unit\Http\Cookie;
 
-use Phalcon\Tests\Unit\Http\Helper\HttpBase;
+use Phalcon\Tests\Unit\Http\Helper\AbstractHttpBase;
 
-final class GetSetHttpOnlyTest extends HttpBase
+final class GetSetAbstractHttpOnlyTest extends AbstractHttpBase
 {
     /**
      * Tests Phalcon\Http\Cookie :: getHttpOnly()/setHttpOnly()

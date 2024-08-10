@@ -258,12 +258,13 @@ abstract class Resultset implements
             /**
              * Perform additional validations
              */
-            if (is_object($conditionCallback)) {
-                if (call_user_func_array($conditionCallback, [$record]) === false) {
-                    $this->next();
+            if (
+                is_object($conditionCallback) &&
+                call_user_func_array($conditionCallback, [$record]) === false
+            ) {
+                $this->next();
 
-                    continue;
-                }
+                continue;
             }
 
             /**
@@ -712,12 +713,13 @@ abstract class Resultset implements
             /**
              * Perform additional validations
              */
-            if (is_object($conditionCallback)) {
-                if (call_user_func_array($conditionCallback, [$record]) === false) {
-                    $this->next();
+            if (
+                is_object($conditionCallback) &&
+                call_user_func_array($conditionCallback, [$record]) === false
+            ) {
+                $this->next();
 
-                    continue;
-                }
+                continue;
             }
 
             $record->assign($data);

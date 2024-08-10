@@ -13,9 +13,9 @@ declare(strict_types=1);
 
 namespace Phalcon\Tests\Unit\Tag;
 
-use Phalcon\Tests\Fixtures\Helpers\TagHelper;
+use Phalcon\Tests\Fixtures\Helpers\AbstractTagHelper;
 
-class TimeFieldTest extends TagHelper
+class TimeFieldTest extends AbstractTagHelper
 {
     protected string $function  = 'timeField';
     protected string $inputType = 'time';

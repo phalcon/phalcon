@@ -759,13 +759,14 @@ class Router extends AbstractInjectionAware implements RouterInterface, EventsAw
              * Look for HTTP method constraints
              */
             $methods = $route->getHttpMethods();
-            if (null !== $methods) {
+            if (
+                null !== $methods &&
+                false === $request->isMethod($methods, true)
+            ) {
                 /**
                  * Check if the current method is allowed by the route
                  */
-                if (false === $request->isMethod($methods, true)) {
-                    continue;
-                }
+                continue;
             }
 
             /**
@@ -890,16 +891,14 @@ class Router extends AbstractInjectionAware implements RouterInterface, EventsAw
                             /**
                              * Check if the part has a converter
                              */
-                            if (is_array($converters)) {
-                                if (isset($converters[$part])) {
-                                    $converter    = $converters[$part];
-                                    $parts[$part] = call_user_func_array(
-                                        $converter,
-                                        [$matchPosition]
-                                    );
+                            if (is_array($converters) && isset($converters[$part])) {
+                                $converter    = $converters[$part];
+                                $parts[$part] = call_user_func_array(
+                                    $converter,
+                                    [$matchPosition]
+                                );
 
-                                    continue;
-                                }
+                                continue;
                             }
 
                             /**

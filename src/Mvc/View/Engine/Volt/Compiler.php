@@ -263,8 +263,8 @@ class Compiler implements InjectionAwareInterface
             }
         } else {
             $leftCode = $this->expression($left);
-            $leftType = $left["type"];
-
+//            $leftType = $left["type"];
+//
 //            /**
 //             * @todo What?
 //             */
@@ -624,14 +624,15 @@ class Compiler implements InjectionAwareInterface
             }
 
             $name = $expr["name"];
-            if ($name["type"] == Enum::PHVOLT_T_IDENTIFIER) {
-                /**
-                 * super() is a function however the return of this function
-                 * must be output as it is
-                 */
-                if ($name["value"] == "super") {
-                    return $exprCode;
-                }
+            /**
+             * super() is a function however the return of this function
+             * must be output as it is
+             */
+            if (
+                $name["type"] == Enum::PHVOLT_T_IDENTIFIER &&
+                $name["value"] == "super"
+            ) {
+                return $exprCode;
             }
         }
 
@@ -996,39 +997,39 @@ class Compiler implements InjectionAwareInterface
         /**
          * Check if the expression is a string
          * If the path is an string try to make an static compilation
+         *
+         * Static compilation cannot be performed if the user passed extra
+         * parameters
          */
-        if ($pathExpr["type"] == 260) {
+        if (
+            $pathExpr["type"] == 260 &&
+            !isset($statement["params"])
+        ) {
             /**
-             * Static compilation cannot be performed if the user passed extra
-             * parameters
+             * Get the static path
              */
-            if (!isset($statement["params"])) {
+            $path      = $pathExpr["value"];
+            $finalPath = $this->getFinalPath($path);
+
+            /**
+             * Clone the original compiler
+             * Perform a sub-compilation of the included file
+             * If the compilation doesn't return anything we include the compiled path
+             */
+            $subCompiler = clone $this;
+            $compilation = $subCompiler->compile($finalPath);
+
+            if ($compilation === null) {
                 /**
-                 * Get the static path
+                 * Use file-get-contents to respect the openbase_dir
+                 * directive
                  */
-                $path      = $pathExpr["value"];
-                $finalPath = $this->getFinalPath($path);
-
-                /**
-                 * Clone the original compiler
-                 * Perform a sub-compilation of the included file
-                 * If the compilation doesn't return anything we include the compiled path
-                 */
-                $subCompiler = clone $this;
-                $compilation = $subCompiler->compile($finalPath);
-
-                if ($compilation === null) {
-                    /**
-                     * Use file-get-contents to respect the openbase_dir
-                     * directive
-                     */
-                    $compilation = file_get_contents(
-                        $subCompiler->getCompiledTemplatePath()
-                    );
-                }
-
-                return $compilation;
+                $compilation = file_get_contents(
+                    $subCompiler->getCompiledTemplatePath()
+                );
             }
+
+            return $compilation;
         }
 
         /**
@@ -1839,37 +1840,35 @@ class Compiler implements InjectionAwareInterface
             /**
              * Check if it's a user defined function
              */
-            if (!empty($this->functions)) {
-                if (isset($this->functions[$name])) {
-                    $definition = $this->functions[$name];
+            if (!empty($this->functions) && isset($this->functions[$name])) {
+                $definition = $this->functions[$name];
 
-                    /**
-                     * Use the string as function
-                     */
-                    if (is_string($definition)) {
-                        return $definition . "(" . $arguments . ")";
-                    }
+                /**
+                 * Use the string as function
+                 */
+                if (is_string($definition)) {
+                    return $definition . "(" . $arguments . ")";
+                }
 
-                    /**
-                     * Execute the function closure returning the compiled
-                     * definition
-                     */
-                    if ($definition instanceof Closure) {
-                        return call_user_func_array(
-                            $definition,
-                            [$arguments, $funcArguments]
-                        );
-                    }
-
-                    throw new Exception(
-                        "Invalid definition for user function '"
-                        . $name
-                        . "' in "
-                        . $expr["file"]
-                        . " on line "
-                        . $expr["line"]
+                /**
+                 * Execute the function closure returning the compiled
+                 * definition
+                 */
+                if ($definition instanceof Closure) {
+                    return call_user_func_array(
+                        $definition,
+                        [$arguments, $funcArguments]
                     );
                 }
+
+                throw new Exception(
+                    "Invalid definition for user function '"
+                    . $name
+                    . "' in "
+                    . $expr["file"]
+                    . " on line "
+                    . $expr["line"]
+                );
             }
 
             /**
@@ -2138,15 +2137,13 @@ class Compiler implements InjectionAwareInterface
         /**
          * The user could use a closure generator
          */
-        if (is_object($this->prefix)) {
-            if ($this->prefix instanceof Closure) {
-                $this->prefix = call_user_func_array(
-                    $this->prefix,
-                    [
-                        $this,
-                    ]
-                );
-            }
+        if (is_object($this->prefix) && $this->prefix instanceof Closure) {
+            $this->prefix = call_user_func_array(
+                $this->prefix,
+                [
+                    $this,
+                ]
+            );
         }
 
         if (!is_string($this->prefix)) {
@@ -2308,18 +2305,16 @@ class Compiler implements InjectionAwareInterface
         /**
          * Check for compilation options
          */
-        if (!empty($this->options)) {
+        if (!empty($this->options) && isset($this->options["autoescape"])) {
             /**
              * Enable autoescape globally
              */
-            if (isset($this->options["autoescape"])) {
-                $autoescape = $this->options["autoescape"];
-                if (!is_bool($autoescape)) {
-                    throw new Exception("'autoescape' must be bool");
-                }
-
-                $this->autoescape = $autoescape;
+            $autoescape = $this->options["autoescape"];
+            if (!is_bool($autoescape)) {
+                throw new Exception("'autoescape' must be bool");
             }
+
+            $this->autoescape = $autoescape;
         }
 
         $intermediate = Parser::voltParse($viewCode, $this->currentPath);

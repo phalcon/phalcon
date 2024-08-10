@@ -545,7 +545,7 @@ abstract class Model extends AbstractInjectionAware implements
 
                         unset($this->related[$lowerProperty]);
 
-                        if (count($related) > 0) {
+                        if (!empty($related)) {
                             $this->dirtyRelated[$lowerProperty] = $related;
                             $this->dirtyState                   = self::DIRTY_STATE_TRANSIENT;
                         } else {
@@ -842,7 +842,7 @@ abstract class Model extends AbstractInjectionAware implements
             $dataMapped = $data;
         }
 
-        if (count($dataMapped) === 0) {
+        if (empty($dataMapped)) {
             return $this;
         }
 

@@ -119,7 +119,7 @@ class MimeType extends AbstractFile
 
         if (true !== in_array($mime, $types)) {
             $replacePairs = [
-                ":types" => join(", ", $types),
+                ":types" => implode(", ", $types),
             ];
 
             $validation->appendMessage(

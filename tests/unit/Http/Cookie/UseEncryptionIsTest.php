@@ -13,9 +13,9 @@ declare(strict_types=1);
 
 namespace Phalcon\Tests\Unit\Http\Cookie;
 
-use Phalcon\Tests\Unit\Http\Helper\HttpBase;
+use Phalcon\Tests\Unit\Http\Helper\AbstractHttpBase;
 
-final class UseEncryptionIsTest extends HttpBase
+final class UseEncryptionIsTest extends AbstractHttpBase
 {
     /**
      * Tests Phalcon\Http\Cookie :: useEncryption()
