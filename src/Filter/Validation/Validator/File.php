@@ -209,8 +209,8 @@ class File extends AbstractValidatorComposite
         string $iniSize,
         string $valid
     ): File {
-        if (true === isset($options["minSize"])) {
-            $validator = new MinResolution(
+        if (true === isset($options["equalResolution"])) {
+            $validator = new EqualResolution(
                 [
                     "size"    => $options["equalResolution"],
                     "message" => $options["messageEqualResolution"] ?? null,
@@ -277,7 +277,7 @@ class File extends AbstractValidatorComposite
         string $valid
     ): File {
         if (true === isset($options["minResolution"])) {
-            $validator = new EqualResolution(
+            $validator = new MinResolution(
                 [
                     "size"     => $options["minResolution"],
                     "message"  => $options["messageMinResolution"] ?? null,

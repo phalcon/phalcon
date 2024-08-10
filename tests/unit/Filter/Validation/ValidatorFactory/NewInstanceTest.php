@@ -54,5 +54,5 @@ final class NewInstanceTest extends UnitTestCase
         $this->expectExceptionMessage('Service unknown is not registered');
 
         $factory->newInstance($name);
-   }
+    }
 }
