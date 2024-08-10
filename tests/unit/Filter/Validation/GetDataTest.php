@@ -15,6 +15,7 @@ namespace Phalcon\Tests\Unit\Filter\Validation;
 
 use Phalcon\Filter\Validation;
 use Phalcon\Tests\UnitTestCase;
+use PHPUnit\Framework\Attributes\Test;
 use stdClass;
 
 final class GetDataTest extends UnitTestCase
@@ -25,6 +26,7 @@ final class GetDataTest extends UnitTestCase
      * @author Sid Roberts <https://github.com/SidRoberts>
      * @since  2019-04-17
      */
+    #[Test]
     public function testFilterValidationGetData(): void
     {
         $user = new stdClass();
@@ -38,9 +40,8 @@ final class GetDataTest extends UnitTestCase
 
         $validation->bind($user, $data);
 
-        $this->assertEquals(
-            $data,
-            $validation->getData()
-        );
+        $expected = $data;
+        $actual   = $validation->getData();
+        $this->assertSame($expected, $actual);
     }
 }

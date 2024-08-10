@@ -18,6 +18,7 @@ use Phalcon\Filter\Validation\Validator\PresenceOf;
 use Phalcon\Messages\Message;
 use Phalcon\Messages\Messages;
 use Phalcon\Tests\UnitTestCase;
+use PHPUnit\Framework\Attributes\Test;
 use stdClass;
 
 final class GetMessagesTest extends UnitTestCase
@@ -28,6 +29,7 @@ final class GetMessagesTest extends UnitTestCase
      * @author Phalcon Team <team@phalcon.io>
      * @since  2019-04-16
      */
+    #[Test]
     public function testFilterValidationGetMessages(): void
     {
         $validator  = new PresenceOf();

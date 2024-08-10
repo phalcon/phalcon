@@ -15,6 +15,7 @@ namespace Phalcon\Tests\Unit\Filter\Validation;
 
 use Phalcon\Filter\Validation;
 use Phalcon\Tests\UnitTestCase;
+use PHPUnit\Framework\Attributes\Test;
 use stdClass;
 
 final class SetEntityTest extends UnitTestCase
@@ -25,6 +26,7 @@ final class SetEntityTest extends UnitTestCase
      * @author Sid Roberts <https://github.com/SidRoberts>
      * @since  2019-04-17
      */
+    #[Test]
     public function testFilterValidationSetEntity(): void
     {
         $user       = new stdClass();
@@ -32,9 +34,8 @@ final class SetEntityTest extends UnitTestCase
 
         $validation->setEntity($user);
 
-        $this->assertSame(
-            $user,
-            $validation->getEntity()
-        );
+        $expected = $user;
+        $actual   = $validation->getEntity();
+        $this->assertSame($expected, $actual);
     }
 }

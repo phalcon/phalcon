@@ -21,7 +21,10 @@ use Phalcon\Tests\Fixtures\Filter\Validation\Validator\File\Size\EqualFixture;
 use Phalcon\Tests\Fixtures\Filter\Validation\Validator\File\Size\MaxFixture;
 use Phalcon\Tests\Fixtures\Filter\Validation\Validator\File\Size\MinFixture;
 use Phalcon\Tests\UnitTestCase;
+use PHPUnit\Framework\Attributes\BackupGlobals;
+use PHPUnit\Framework\Attributes\DataProvider;
 
+#[BackupGlobals(true)]
 final class ValidateTest extends UnitTestCase
 {
     /**
@@ -113,15 +116,12 @@ final class ValidateTest extends UnitTestCase
      * @author       Phalcon Team <team@phalcon.io>
      * @since        2023-09-28
      *
-     * @dataProvider getExamples
-     *
      */
+    #[DataProvider("getExamples")]
     public function testFilterValidationValidatorFileSize(
         string $class,
         array $options
     ): void {
-        $files   = $_FILES ?? [];
-        $server  = $_SERVER ?? [];
         $_SERVER = [
             'REQUEST_METHOD' => 'POST',
         ];
@@ -145,9 +145,6 @@ final class ValidateTest extends UnitTestCase
         $messages = $validation->validate($_FILES);
 
         $this->assertCount(0, $messages);
-
-        $_FILES  = $files;
-        $_SERVER = $server;
     }
 
     /**
@@ -159,17 +156,13 @@ final class ValidateTest extends UnitTestCase
      *
      * @author       Phalcon Team <team@phalcon.io>
      * @since        2023-09-28
-     *
-     * @dataProvider getExamplesErrors
-     *
      */
+    #[DataProvider("getExamplesErrors")]
     public function testFilterValidationValidatorFileSizeErrors(
         string $class,
         string $message,
         array $options
     ): void {
-        $files   = $_FILES ?? [];
-        $server  = $_SERVER ?? [];
         $_SERVER = [
             'REQUEST_METHOD' => 'POST',
         ];
@@ -196,8 +189,5 @@ final class ValidateTest extends UnitTestCase
         $expected = $message;
         $actual   = $messages[0]->getMessage();
         $this->assertSame($expected, $actual);
-
-        $_FILES  = $files;
-        $_SERVER = $server;
     }
 }

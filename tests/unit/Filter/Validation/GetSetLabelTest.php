@@ -16,6 +16,7 @@ namespace Phalcon\Tests\Unit\Filter\Validation;
 use Phalcon\Filter\Validation;
 use Phalcon\Filter\Validation\Validator\PresenceOf;
 use Phalcon\Tests\UnitTestCase;
+use PHPUnit\Framework\Attributes\Test;
 use stdClass;
 
 use function date;
@@ -30,6 +31,7 @@ final class GetSetLabelTest extends UnitTestCase
      * @author Phalcon Team <team@phalcon.io>
      * @since  2019-04-16
      */
+    #[Test]
     public function testFilterValidationGetLabel(): void
     {
         $validator  = new PresenceOf();
@@ -44,16 +46,26 @@ final class GetSetLabelTest extends UnitTestCase
             ]
         );
 
-        $label = uniqid('lbl-');
+        $label1 = uniqid('lbl-');
+        $label2 = uniqid('lbl-');
         $validation->setLabels(
             [
-                'foo' => $label,
+                'name' => $label1,
+                'city' => $label2,
             ]
         );
-        $validator->validate($validation, 'foo');
+        $validator->validate($validation, 'name');
 
-        $expected = $label;
-        $actual   = $validation->getLabel('foo');
+        $expected = $label1;
+        $actual   = $validation->getLabel('name');
+        $this->assertSame($expected, $actual);
+
+        $expected = 'unknown';
+        $actual   = $validation->getLabel('unknown');
+        $this->assertSame($expected, $actual);
+
+        $expected = 'name, email';
+        $actual   = $validation->getLabel(['name', 'email']);
         $this->assertSame($expected, $actual);
     }
 }

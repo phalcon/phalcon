@@ -15,6 +15,7 @@ namespace Phalcon\Tests\Unit\Filter\Validation;
 
 use Phalcon\Filter\Validation;
 use Phalcon\Tests\UnitTestCase;
+use PHPUnit\Framework\Attributes\Test;
 use stdClass;
 
 final class BindTest extends UnitTestCase
@@ -25,27 +26,26 @@ final class BindTest extends UnitTestCase
      * @author Sid Roberts <https://github.com/SidRoberts>
      * @since  2019-04-17
      */
+    #[Test]
     public function testFilterValidationBind(): void
     {
         $user = new stdClass();
 
         $data = [
-            'name' => 'Sid',
-            'city' => 'Busan',
+            'name' => 'Leonidas',
+            'city' => 'Sparta',
         ];
 
         $validation = new Validation();
 
         $validation->bind($user, $data);
 
-        $this->assertSame(
-            $user,
-            $validation->getEntity()
-        );
+        $expected = $user;
+        $actual   = $validation->getEntity();
+        $this->assertSame($expected, $actual);
 
-        $this->assertSame(
-            $data,
-            $validation->getData()
-        );
+        $expected = $data;
+        $actual   = $validation->getData();
+        $this->assertSame($expected, $actual);
     }
 }
