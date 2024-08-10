@@ -336,12 +336,14 @@ class Route implements RouteInterface
             if ($bracketCount > 0) {
                 $intermediate++;
             } else {
-                if ($parenthesesCount === 0 && $prevCh !== '\\' && ($ch === '.' ||
+                if (
+                    $parenthesesCount === 0 && $prevCh !== '\\' && ($ch === '.' ||
                         $ch === '+' ||
                         $ch === '|' ||
-                        $ch === '#')) {
+                        $ch === '#')
+                ) {
                             $route .= '\\';
-                        }
+                }
 
                 $route  .= $ch;
                 $prevCh = $ch;
