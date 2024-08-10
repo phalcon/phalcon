@@ -14,11 +14,11 @@ declare(strict_types=1);
 namespace Phalcon\Tests\Unit\Http\Request;
 
 use Phalcon\Tests\Fixtures\Page\Http;
-use Phalcon\Tests\Unit\Http\Helper\HttpBase;
+use Phalcon\Tests\Unit\Http\Helper\AbstractHttpBase;
 
 use function uniqid;
 
-final class GetMethodTest extends HttpBase
+final class GetMethodTest extends AbstractHttpBase
 {
     /**
      * Tests Phalcon\Http\Request :: getMethod() - default

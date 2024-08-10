@@ -15,9 +15,9 @@ namespace Phalcon\Tests\Unit\Http\Request;
 
 use Phalcon\Http\Request;
 use Phalcon\Tests\Fixtures\Page\Http;
-use Phalcon\Tests\Unit\Http\Helper\HttpBase;
+use Phalcon\Tests\Unit\Http\Helper\AbstractHttpBase;
 
-final class GetClientAddressTest extends HttpBase
+final class GetClientAddressTest extends AbstractHttpBase
 {
     /**
      * Tests Phalcon\Http\Request :: getClientAddress()

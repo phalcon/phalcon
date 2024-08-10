@@ -19,7 +19,7 @@ use Phalcon\Http\Message\Interfaces\ServerRequestInterface;
 use Phalcon\Http\Message\UploadedFile;
 use Phalcon\Tests\Fixtures\Http\Message\ServerRequestFactoryFixture;
 use Phalcon\Tests\Fixtures\Page\Http;
-use Phalcon\Tests\Unit\Http\Helper\HttpBase;
+use Phalcon\Tests\Unit\Http\Helper\AbstractHttpBase;
 
 /**
  * Class LoadTest extends UnitTestCase
@@ -32,7 +32,7 @@ use Phalcon\Tests\Unit\Http\Helper\HttpBase;
  * @property array $storePost
  * @property array $storeServer
  */
-final class LoadTest extends HttpBase
+final class LoadTest extends AbstractHttpBase
 {
     /**
      * @return array

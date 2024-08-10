@@ -15,9 +15,9 @@ namespace Phalcon\Tests\Unit\Http\Request;
 
 use Phalcon\Tests\Fixtures\Listener\CustomAuthorizationListener;
 use Phalcon\Tests\Fixtures\Listener\NegotiateAuthorizationListener;
-use Phalcon\Tests\Unit\Http\Helper\HttpBase;
+use Phalcon\Tests\Unit\Http\Helper\AbstractHttpBase;
 
-final class AuthHeaderTest extends HttpBase
+final class AuthHeaderTest extends AbstractHttpBase
 {
     /**
      * @return array[]

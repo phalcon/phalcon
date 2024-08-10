@@ -14,9 +14,9 @@ declare(strict_types=1);
 namespace Phalcon\Tests\Unit\Http\Request;
 
 use Phalcon\Tests\Fixtures\Page\Http;
-use Phalcon\Tests\Unit\Http\Helper\HttpBase;
+use Phalcon\Tests\Unit\Http\Helper\AbstractHttpBase;
 
-final class IsMethodTest extends HttpBase
+final class IsMethodTest extends AbstractHttpBase
 {
     /**
      * Tests Phalcon\Http\Request :: isMethod()

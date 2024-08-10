@@ -13,12 +13,12 @@ declare(strict_types=1);
 
 namespace Phalcon\Tests\Unit\Http\Request;
 
-use Phalcon\Tests\Unit\Http\Helper\HttpBase;
+use Phalcon\Tests\Unit\Http\Helper\AbstractHttpBase;
 
 use function strtolower;
 use function uniqid;
 
-final class GetQueryTest extends HttpBase
+final class GetQueryTest extends AbstractHttpBase
 {
     /**
      * Tests Phalcon\Http\Request :: getQuery()

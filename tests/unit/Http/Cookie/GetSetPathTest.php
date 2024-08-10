@@ -13,9 +13,9 @@ declare(strict_types=1);
 
 namespace Phalcon\Tests\Unit\Http\Cookie;
 
-use Phalcon\Tests\Unit\Http\Helper\HttpBase;
+use Phalcon\Tests\Unit\Http\Helper\AbstractHttpBase;
 
-final class GetSetPathTest extends HttpBase
+final class GetSetPathTest extends AbstractHttpBase
 {
     /**
      * Tests Phalcon\Http\Cookie :: getPath()/setPath()

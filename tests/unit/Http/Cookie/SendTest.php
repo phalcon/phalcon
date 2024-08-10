@@ -14,9 +14,9 @@ declare(strict_types=1);
 namespace Phalcon\Tests\Unit\Http\Cookie;
 
 use Phalcon\Http\Cookie\CookieInterface;
-use Phalcon\Tests\Unit\Http\Helper\HttpBase;
+use Phalcon\Tests\Unit\Http\Helper\AbstractHttpBase;
 
-final class SendTest extends HttpBase
+final class SendTest extends AbstractHttpBase
 {
     /**
      * Tests Phalcon\Http\Cookie :: send()

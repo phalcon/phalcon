@@ -44,23 +44,4 @@ final class GetSetAudienceTest extends UnitTestCase
 
         $this->assertSame(['audience'], $builder->getAudience());
     }
-
-    /**
-     * Unit Tests Phalcon\Encryption\Security\JWT\Builder :: setAudience() -
-     * exception
-     *
-     * @return void
-     *
-     * @author Phalcon Team <team@phalcon.io>
-     * @since  2020-09-09
-     */
-    public function testEncryptionSecurityJWTBuilderSetAudienceException(): void
-    {
-        $this->expectException(ValidatorException::class);
-        $this->expectExceptionMessage("Invalid Audience");
-
-        $signer  = new Hmac();
-        $builder = new Builder($signer);
-        $builder->setAudience(1234);
-    }
 }

@@ -14,12 +14,12 @@ declare(strict_types=1);
 namespace Phalcon\Tests\Unit\Http\Request;
 
 use Phalcon\Tests\Fixtures\Page\Http;
-use Phalcon\Tests\Unit\Http\Helper\HttpBase;
+use Phalcon\Tests\Unit\Http\Helper\AbstractHttpBase;
 
 use function file_put_contents;
 use function json_encode;
 
-final class GetJsonRawBodyTest extends HttpBase
+final class GetJsonRawBodyTest extends AbstractHttpBase
 {
     /**
      * Tests Phalcon\Http\Request :: getJsonRawBody()

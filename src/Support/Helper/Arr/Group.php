@@ -49,10 +49,8 @@ class Group
      */
     private function isCallable($method): bool
     {
-        return (
-            is_callable($method) ||
-            (is_string($method) && function_exists($method))
-        );
+        return is_callable($method) ||
+            (is_string($method) && function_exists($method));
     }
 
     /**

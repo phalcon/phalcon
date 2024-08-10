@@ -14,9 +14,9 @@ declare(strict_types=1);
 namespace Phalcon\Tests\Unit\Tag;
 
 use Phalcon\Tag;
-use Phalcon\Tests\Fixtures\Helpers\TagSetup;
+use Phalcon\Tests\Fixtures\Helpers\AbstractTagSetup;
 
-class EndFormTest extends TagSetup
+class EndFormTest extends AbstractTagSetup
 {
     /**
      * Tests Phalcon\Tag :: endForm()

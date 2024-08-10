@@ -312,7 +312,7 @@ abstract class AbstractPdo extends AbstractAdapter
         }
 
         // Create the dsn attributes string.
-        $dsnAttributes = join(";", $dsnParts);
+        $dsnAttributes = implode(";", $dsnParts);
 
         // Create the connection using PDO
         $this->pdo = new PDO(

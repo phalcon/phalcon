@@ -13,9 +13,9 @@ declare(strict_types=1);
 
 namespace Phalcon\Tests\Unit\Tag;
 
-use Phalcon\Tests\Fixtures\Helpers\TagSetup;
+use Phalcon\Tests\Fixtures\Helpers\AbstractTagSetup;
 
-class ImageInputTest extends TagSetup
+class ImageInputTest extends AbstractTagSetup
 {
     /**
      * Tests Phalcon\Tag :: imageInput() - array as a parameter

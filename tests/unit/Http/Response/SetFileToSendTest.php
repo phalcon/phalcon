@@ -13,9 +13,9 @@ declare(strict_types=1);
 
 namespace Phalcon\Tests\Unit\Http\Response;
 
-use Phalcon\Tests\Unit\Http\Helper\HttpBase;
+use Phalcon\Tests\Unit\Http\Helper\AbstractHttpBase;
 
-final class SetFileToSendTest extends HttpBase
+final class SetFileToSendTest extends AbstractHttpBase
 {
     /**
      * Tests setFileToSend

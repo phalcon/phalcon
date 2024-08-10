@@ -29,13 +29,6 @@ trait ConfigTrait
         if ($config instanceof ConfigInterface) {
             return $config->toArray();
         }
-//
-//        if (true !== isset($config['adapter'])) {
-//            $exception = $this->getExceptionClass();
-//            throw new $exception(
-//                'You must provide "adapter" option in factory config parameter.'
-//            );
-//        }
 
         return $config;
     }

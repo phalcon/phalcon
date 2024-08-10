@@ -131,49 +131,43 @@ class Simple extends Resultset
         /**
          * Hydrate based on the current hydration
          */
-        switch ($hydrateMode) {
-            case Resultset::HYDRATE_RECORDS:
-                /**
-                 * Set records as dirty state PERSISTENT by default
-                 * Performs the standard hydration based on objects
-                 */
-                if (Settings::get("orm.late_state_binding")) {
-                    if ($this->model instanceof Model) {
-                        $modelName = get_class($this->model);
-                    } else {
-                        $modelName = "Phalcon\\Mvc\\Model";
-                    }
-
-                    $activeRow = $modelName::cloneResultMap(
-                        $this->model,
-                        $row,
-                        $columnMap,
-                        Model::DIRTY_STATE_PERSISTENT,
-                        $this->keepSnapshots
-                    );
+        if ($hydrateMode == Resultset::HYDRATE_RECORDS) {
+            /**
+             * Set records as dirty state PERSISTENT by default
+             * Performs the standard hydration based on objects
+             */
+            if (Settings::get("orm.late_state_binding")) {
+                if ($this->model instanceof Model) {
+                    $modelName = get_class($this->model);
                 } else {
-                    $activeRow = Model::cloneResultMap(
-                        $this->model,
-                        $row,
-                        $columnMap,
-                        Model::DIRTY_STATE_PERSISTENT,
-                        $this->keepSnapshots
-                    );
+                    $modelName = "Phalcon\\Mvc\\Model";
                 }
 
-                break;
-
-            default:
-                /**
-                 * Other kinds of hydrations
-                 */
-                $activeRow = Model::cloneResultMapHydrate(
+                $activeRow = $modelName::cloneResultMap(
+                    $this->model,
                     $row,
                     $columnMap,
-                    $hydrateMode
+                    Model::DIRTY_STATE_PERSISTENT,
+                    $this->keepSnapshots
                 );
-
-                break;
+            } else {
+                $activeRow = Model::cloneResultMap(
+                    $this->model,
+                    $row,
+                    $columnMap,
+                    Model::DIRTY_STATE_PERSISTENT,
+                    $this->keepSnapshots
+                );
+            }
+        } else {
+            /**
+             * Other kinds of hydrations
+             */
+            $activeRow = Model::cloneResultMapHydrate(
+                $row,
+                $columnMap,
+                $hydrateMode
+            );
         }
 
         $this->activeRow = $activeRow;

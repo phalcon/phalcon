@@ -727,10 +727,8 @@ class Tag
             ;
         }
 
-        $code = self::renderAttributes("<script", $params)
+        return self::renderAttributes("<script", $params)
             . "></script>" . PHP_EOL;
-
-        return $code;
     }
 
     /**
@@ -794,10 +792,8 @@ class Tag
         $url            = self::getUrlService();
         $params["href"] = $url->get($action, $query, $local);
 
-        $code = self::renderAttributes("<a", $params)
+        return self::renderAttributes("<a", $params)
             . ">" . $text . "</a>";
-
-        return $code;
     }
 
     /**
@@ -1149,12 +1145,10 @@ class Tag
      */
     public static function setDefault(string $id, mixed $value = null): void
     {
-        if (null !== $value) {
-            if (true !== is_scalar($value)) {
-                throw new Exception(
-                    "Only scalar values can be assigned to UI components"
-                );
-            }
+        if (null !== $value && true !== is_scalar($value)) {
+            throw new Exception(
+                "Only scalar values can be assigned to UI components"
+            );
         }
 
         self::$displayValues[$id] = $value;
@@ -1547,10 +1541,8 @@ class Tag
             /**
              * Automatically assign the id if the name is not an array
              */
-            if (true === is_string($id)) {
-                if (!str_contains($id, "[") && true !== isset($params["id"])) {
-                    $params["id"] = $id;
-                }
+            if (true === is_string($id) && !str_contains($id, "[") && true !== isset($params["id"])) {
+                $params["id"] = $id;
             }
 
             $params["value"] = self::getValue($id, $params);
@@ -1558,10 +1550,8 @@ class Tag
             /**
              * Use the "id" as value if the user hadn't set it
              */
-            if (true !== isset($params["value"])) {
-                if (true === isset($params[0])) {
-                    $params["value"] = $params[0];
-                }
+            if (true !== isset($params["value"]) && true === isset($params[0])) {
+                $params["value"] = $params[0];
             }
         }
 
@@ -1613,10 +1603,8 @@ class Tag
         /**
          * Automatically assign the id if the name is not an array
          */
-        if (!str_contains($id, "[")) {
-            if (true !== isset($params["id"])) {
-                $params["id"] = $id;
-            }
+        if (!str_contains($id, "[") && true !== isset($params["id"])) {
+            $params["id"] = $id;
         }
 
         /**

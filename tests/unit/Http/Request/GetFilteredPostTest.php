@@ -13,11 +13,11 @@ declare(strict_types=1);
 
 namespace Phalcon\Tests\Unit\Http\Request;
 
-use Phalcon\Tests\Unit\Http\Helper\HttpBase;
+use Phalcon\Tests\Unit\Http\Helper\AbstractHttpBase;
 
 use function ucfirst;
 
-final class GetFilteredPostTest extends HttpBase
+final class GetFilteredPostTest extends AbstractHttpBase
 {
     /**
      * @return array[]

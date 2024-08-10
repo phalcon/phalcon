@@ -16,14 +16,14 @@ namespace Phalcon\Tests\Unit\Http\Response;
 use Phalcon\Mvc\Micro;
 use Phalcon\Tests\_data\fixtures\Micro\HttpResponseContentMiddleware;
 use Phalcon\Tests\Fixtures\Page\Http;
-use Phalcon\Tests\Unit\Http\Helper\HttpBase;
+use Phalcon\Tests\Unit\Http\Helper\AbstractHttpBase;
 
 use function ob_get_clean;
 use function ob_start;
 use function uniqid;
 use function xdebug_get_headers;
 
-final class GetSetStatusCodeTest extends HttpBase
+final class GetSetStatusCodeTest extends AbstractHttpBase
 {
     /**
      * Tests Phalcon\Http\Response :: getStatusCode() / setStatusCode()

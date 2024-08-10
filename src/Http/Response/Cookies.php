@@ -184,7 +184,7 @@ class Cookies extends AbstractInjectionAware implements CookiesInterface
      */
     public function has(string $name): bool
     {
-        return (isset($this->cookies[$name]) || isset($_COOKIE[$name]));
+        return isset($this->cookies[$name]) || isset($_COOKIE[$name]);
     }
 
     /**

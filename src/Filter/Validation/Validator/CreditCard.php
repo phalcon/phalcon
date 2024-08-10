@@ -128,6 +128,6 @@ class CreditCard extends AbstractValidator
             return false;
         }
 
-        return (0 === $result % 10);
+        return 0 === $result % 10;
     }
 }

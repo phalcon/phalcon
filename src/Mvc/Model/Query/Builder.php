@@ -275,10 +275,8 @@ class Builder implements BuilderInterface, InjectionAwareInterface
                             $this->limit = (string)$limitClause[0];
                         }
 
-                        if (isset($limitClause[1])) {
-                            if (is_int($limitClause[1])) {
-                                $this->offset = $limitClause[1];
-                            }
+                        if (isset($limitClause[1]) && is_int($limitClause[1])) {
+                            $this->offset = $limitClause[1];
                         }
                     } else {
                         $this->limit = $limitClause;
@@ -813,49 +811,47 @@ class Builder implements BuilderInterface, InjectionAwareInterface
             $noPrimary     = true;
             $primaryKeys   = $metaData->getPrimaryKeyAttributes($modelInstance);
 
-            if (count($primaryKeys)) {
-                if (isset($primaryKeys[0])) {
-                    $firstPrimaryKey = $primaryKeys[0];
-                    /**
-                     * The PHQL contains the renamed columns if available
-                     */
-                    if (Settings::get("orm.column_renaming")) {
-                        $columnMap = $metaData->getColumnMap($modelInstance);
-                    } else {
-                        $columnMap = null;
-                    }
-
-                    if (is_array($columnMap)) {
-                        if (!isset($columnMap[$firstPrimaryKey])) {
-                            throw new Exception(
-                                "Column '"
-                                . $firstPrimaryKey
-                                . "' isn't part of the column map"
-                            );
-                        } else {
-                            $attributeField = $columnMap[$firstPrimaryKey];
-                        }
-                    } else {
-                        $attributeField = $firstPrimaryKey;
-                    }
-
-                    // check the type of the condition, if it's a string put single quotes around the value
-                    if (is_string($conditions)) {
-                        /*
-                         * Example : if the developer writes findFirstBy('135'), Phalcon will generate where uuid = 135.
-                         * But the column's type is text so Postgres needs to have single quotes such as ;
-                         * where uuid = '135'.
-                         */
-                        $conditions = "'" . $conditions . "'";
-                    }
-
-                    $conditions = $this->autoescape($model)
-                        . "."
-                        . $this->autoescape($attributeField)
-                        . " = "
-                        . $conditions;
-                    $noPrimary  = false;
+            if (count($primaryKeys) && isset($primaryKeys[0])) {
+                $firstPrimaryKey = $primaryKeys[0];
+                /**
+                 * The PHQL contains the renamed columns if available
+                 */
+                if (Settings::get("orm.column_renaming")) {
+                    $columnMap = $metaData->getColumnMap($modelInstance);
+                } else {
+                    $columnMap = null;
                 }
+
+                if (is_array($columnMap)) {
+                    if (!isset($columnMap[$firstPrimaryKey])) {
+                        throw new Exception(
+                            "Column '"
+                            . $firstPrimaryKey
+                            . "' isn't part of the column map"
+                        );
+                    } else {
+                        $attributeField = $columnMap[$firstPrimaryKey];
+                    }
+                } else {
+                    $attributeField = $firstPrimaryKey;
+                }
+
+                // check the type of the condition, if it's a string put single quotes around the value
+                if (is_string($conditions)) {
+                    /*
+                     * Example : if the developer writes findFirstBy('135'), Phalcon will generate where uuid = 135.
+                     * But the column's type is text so Postgres needs to have single quotes such as ;
+                     * where uuid = '135'.
+                     */
+                    $conditions = "'" . $conditions . "'";
+                }
+
+                $conditions = $this->autoescape($model)
+                    . "."
+                    . $this->autoescape($attributeField)
+                    . " = "
+                    . $conditions;
+                $noPrimary  = false;
             }
 
             /**
@@ -1002,10 +998,8 @@ class Builder implements BuilderInterface, InjectionAwareInterface
         }
 
         // Only append where conditions if it's string
-        if (is_string($conditions)) {
-            if (!empty($conditions)) {
-                $phql .= " WHERE " . $conditions;
-            }
+        if (is_string($conditions) && !empty($conditions)) {
+            $phql .= " WHERE " . $conditions;
         }
 
         /**
@@ -1026,10 +1020,8 @@ class Builder implements BuilderInterface, InjectionAwareInterface
          * Process having clause
          */
         $having = $this->having;
-        if ($having !== null) {
-            if (!empty($having)) {
-                $phql .= " HAVING " . $having;
-            }
+        if ($having !== null && !empty($having)) {
+            $phql .= " HAVING " . $having;
         }
 
         /**
@@ -1088,10 +1080,8 @@ class Builder implements BuilderInterface, InjectionAwareInterface
                 if (is_numeric($limit)) {
                     $number = $limit;
                     $offset = $this->offset;
-                    if ($offset !== null) {
-                        if (!is_numeric($offset)) {
-                            $offset = 0;
-                        }
+                    if ($offset !== null && !is_numeric($offset)) {
+                        $offset = 0;
                     }
                 }
             }
@@ -1765,7 +1755,7 @@ class Builder implements BuilderInterface, InjectionAwareInterface
         /**
          * Merge the bind params to the current ones
          */
-        if (count($bindParams) > 0) {
+        if (true !== empty($bindParams)) {
             $currentBindParams = $this->bindParams;
 
             if (is_array($currentBindParams)) {
@@ -1778,7 +1768,7 @@ class Builder implements BuilderInterface, InjectionAwareInterface
         /**
          * Merge the bind types to the current ones
          */
-        if (count($bindTypes) > 0) {
+        if (true !== empty($bindTypes)) {
             $currentBindTypes = $this->bindTypes;
 
             if (is_array($currentBindTypes)) {

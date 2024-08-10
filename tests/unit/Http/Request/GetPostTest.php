@@ -14,12 +14,12 @@ declare(strict_types=1);
 namespace Phalcon\Tests\Unit\Http\Request;
 
 use Phalcon\Storage\Exception;
-use Phalcon\Tests\Unit\Http\Helper\HttpBase;
+use Phalcon\Tests\Unit\Http\Helper\AbstractHttpBase;
 
 use function strtolower;
 use function uniqid;
 
-final class GetPostTest extends HttpBase
+final class GetPostTest extends AbstractHttpBase
 {
     /**
      * Tests Phalcon\Http\Request :: getPost()

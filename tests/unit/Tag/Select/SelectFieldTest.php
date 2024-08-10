@@ -14,9 +14,9 @@ declare(strict_types=1);
 namespace Phalcon\Tests\Unit\Tag\Select;
 
 use Phalcon\Tag\Select;
-use Phalcon\Tests\Fixtures\Helpers\TagSetup;
+use Phalcon\Tests\Fixtures\Helpers\AbstractTagSetup;
 
-class SelectFieldTest extends TagSetup
+class SelectFieldTest extends AbstractTagSetup
 {
     /**
      * Tests Phalcon\Tag\Select :: selectField()

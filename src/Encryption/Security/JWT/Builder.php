@@ -253,17 +253,13 @@ class Builder
      * @return Builder
      * @throws ValidatorException
      */
-    public function setAudience($audience): Builder
+    public function setAudience(array|string $audience): Builder
     {
-        if (true !== is_string($audience) && true !== is_array($audience)) {
-            throw new ValidatorException('Invalid Audience');
-        }
-
         if (true === is_string($audience)) {
             $audience = [$audience];
         }
 
-        return $this->setClaim(Enum::AUDIENCE, $audience);
+        return $this->addClaim(Enum::AUDIENCE, $audience);
     }
 
     /**
@@ -300,7 +296,7 @@ class Builder
             throw new ValidatorException('Invalid Expiration Time');
         }
 
-        return $this->setClaim(Enum::EXPIRATION_TIME, $timestamp);
+        return $this->addClaim(Enum::EXPIRATION_TIME, $timestamp);
     }
 
     /**
@@ -319,7 +315,7 @@ class Builder
      */
     public function setId(string $jwtId): Builder
     {
-        return $this->setClaim(Enum::ID, $jwtId);
+        return $this->addClaim(Enum::ID, $jwtId);
     }
 
     /**
@@ -334,7 +330,7 @@ class Builder
      */
     public function setIssuedAt(int $timestamp): Builder
     {
-        return $this->setClaim(Enum::ISSUED_AT, $timestamp);
+        return $this->addClaim(Enum::ISSUED_AT, $timestamp);
     }
 
     /**
@@ -349,7 +345,7 @@ class Builder
      */
     public function setIssuer(string $issuer): Builder
     {
-        return $this->setClaim(Enum::ISSUER, $issuer);
+        return $this->addClaim(Enum::ISSUER, $issuer);
     }
 
     /**
@@ -372,7 +368,7 @@ class Builder
             throw new ValidatorException('Invalid Not Before');
         }
 
-        return $this->setClaim(Enum::NOT_BEFORE, $timestamp);
+        return $this->addClaim(Enum::NOT_BEFORE, $timestamp);
     }
 
     /**
@@ -412,21 +408,6 @@ class Builder
      */
     public function setSubject(string $subject): Builder
     {
-        return $this->setClaim(Enum::SUBJECT, $subject);
-    }
-
-    /**
-     * Sets a registered claim
-     *
-     * @param string $name
-     * @param mixed  $value
-     *
-     * @return Builder
-     */
-    private function setClaim(string $name, $value): Builder
-    {
-        $this->claims->set($name, $value);
-
-        return $this;
+        return $this->addClaim(Enum::SUBJECT, $subject);
     }
 }

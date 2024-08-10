@@ -80,7 +80,7 @@ class Numericality extends AbstractValidator
 
         // Dump spaces in the string if we have any
 //        $value   = str_replace(" ", "", $value);
-        $pattern = "/((^[-]?[0-9,]+(\\.[0-9]+)?$)|(^[-]?[0-9.]+(,[0-9]+)?$))/";
+        $pattern = "/((^[-]?[0-9,]+(\\.\d+)?$)|(^[-]?[0-9.]+(,\d+)?$))/";
 
         if (!preg_match($pattern, $value)) {
             $validation->appendMessage(

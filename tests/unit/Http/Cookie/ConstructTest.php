@@ -15,11 +15,11 @@ namespace Phalcon\Tests\Unit\Http\Cookie;
 
 use Phalcon\Http\Cookie;
 use Phalcon\Http\Cookie\CookieInterface;
-use Phalcon\Tests\Unit\Http\Helper\HttpBase;
+use Phalcon\Tests\Unit\Http\Helper\AbstractHttpBase;
 
 use function uniqid;
 
-final class ConstructTest extends HttpBase
+final class ConstructTest extends AbstractHttpBase
 {
     /**
      * Tests Phalcon\Http\Cookie :: __construct()

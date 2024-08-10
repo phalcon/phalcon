@@ -234,95 +234,93 @@ class Route implements RouteInterface
                 } elseif ('}' === $character) {
                     $bracketCount--;
 
-                    if ($intermediate > 0) {
-                        if (0 === $bracketCount) {
-                            $numberMatches++;
-                            $variable = null;
-                            $regexp   = null;
-                            $item     = substr(
-                                $pattern,
-                                $marker,
-                                $cursor - $marker
-                            );
+                    if ($intermediate > 0 && 0 === $bracketCount) {
+                        $numberMatches++;
+                        $variable = null;
+                        $regexp   = null;
+                        $item     = substr(
+                            $pattern,
+                            $marker,
+                            $cursor - $marker
+                        );
 
-                            $itemArray = str_split($item);
-                            foreach ($itemArray as $cursorVar => $itemChar) {
-                                if ('\0' === $itemChar) {
-                                    break;
-                                }
+                        $itemArray = str_split($item);
+                        foreach ($itemArray as $cursorVar => $itemChar) {
+                            if ('\0' === $itemChar) {
+                                break;
+                            }
 
-                                if (
-                                    0 === $cursorVar &&
-                                    !(
-                                        ($itemChar >= 'a' && $itemChar <= 'z') ||
-                                        ($itemChar >= 'A' && $itemChar <= 'Z')
-                                    )
-                                ) {
-                                    $notValid = true;
-
-                                    break;
-                                }
-
-                                if (
+                            if (
+                                0 === $cursorVar &&
+                                !(
                                     ($itemChar >= 'a' && $itemChar <= 'z') ||
-                                    ($itemChar >= 'A' && $itemChar <= 'Z') ||
-                                    ($itemChar >= '0' && $itemChar <= '9') ||
-                                    $itemChar == '-' ||
-                                    $itemChar == '_' ||
-                                    $itemChar == ':'
-                                ) {
-                                    if (':' === $itemChar) {
-                                        $variable = substr($item, 0, $cursorVar);
-                                        $regexp   = substr($item, $cursorVar + 1);
+                                    ($itemChar >= 'A' && $itemChar <= 'Z')
+                                )
+                            ) {
+                                $notValid = true;
+
+                                break;
+                            }
+
+                            if (
+                                ($itemChar >= 'a' && $itemChar <= 'z') ||
+                                ($itemChar >= 'A' && $itemChar <= 'Z') ||
+                                ($itemChar >= '0' && $itemChar <= '9') ||
+                                $itemChar == '-' ||
+                                $itemChar == '_' ||
+                                $itemChar == ':'
+                            ) {
+                                if (':' === $itemChar) {
+                                    $variable = substr($item, 0, $cursorVar);
+                                    $regexp   = substr($item, $cursorVar + 1);
+
+                                    break;
+                                }
+                            } else {
+                                $notValid = true;
+
+                                break;
+                            }
+                        }
+
+                        if (!$notValid) {
+                            $tmp = $numberMatches;
+
+                            if ($variable && $regexp) {
+                                $foundPattern = 0;
+                                $regexpArray  = str_split($regexp);
+                                foreach ($regexpArray as $regexChar) {
+                                    if ('\0' === $regexChar) {
+                                        break;
+                                    }
+
+                                    if (!$foundPattern) {
+                                        if ('(' === $regexChar) {
+                                            $foundPattern = 1;
+                                        }
+                                    } elseif (')' === $regexChar) {
+                                        $foundPattern = 2;
 
                                         break;
                                     }
-                                } else {
-                                    $notValid = true;
-
-                                    break;
                                 }
-                            }
 
-                            if (!$notValid) {
-                                $tmp = $numberMatches;
-
-                                if ($variable && $regexp) {
-                                    $foundPattern = 0;
-                                    $regexpArray  = str_split($regexp);
-                                    foreach ($regexpArray as $regexChar) {
-                                        if ('\0' === $regexChar) {
-                                            break;
-                                        }
-
-                                        if (!$foundPattern) {
-                                            if ('(' === $regexChar) {
-                                                $foundPattern = 1;
-                                            }
-                                        } elseif (')' === $regexChar) {
-                                            $foundPattern = 2;
-
-                                            break;
-                                        }
-                                    }
-
-                                    if ($foundPattern !== 2) {
-                                        $route .= "(" . $regexp . ")";
-                                    } else {
-                                        $route .= $regexp;
-                                    }
-
-                                    $matches[$variable] = $tmp;
+                                if ($foundPattern !== 2) {
+                                    $route .= "(" . $regexp . ")";
                                 } else {
-                                    $route          .= "([^" . $this->delimiter . "]*)";
-                                    $matches[$item] = $tmp;
+                                    $route .= $regexp;
                                 }
+
+                                $matches[$variable] = $tmp;
                             } else {
-                                $route .= "{" . $item . "}";
+                                $route          .= "([^" . $this->delimiter . "]*)";
+                                $matches[$item] = $tmp;
                             }
-
-                            continue;
+                        } else {
+                            $route .= "{" . $item . "}";
                         }
+
+                        continue;
                     }
                 }
             }

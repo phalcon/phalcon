@@ -13,9 +13,9 @@ declare(strict_types=1);
 
 namespace Phalcon\Tests\Unit\Http\Request;
 
-use Phalcon\Tests\Unit\Http\Helper\HttpBase;
+use Phalcon\Tests\Unit\Http\Helper\AbstractHttpBase;
 
-final class GetLanguagesTest extends HttpBase
+final class GetLanguagesTest extends AbstractHttpBase
 {
     /**
      * Tests Phalcon\Http\Request :: getLanguages()

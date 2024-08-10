@@ -426,7 +426,7 @@ class Criteria implements CriteriaInterface, InjectionAwareInterface
      */
     public function getConditions(): string | null
     {
-        return $this->params["conditions"] ?? null;
+        return $this->getWhere();
     }
 
     /**

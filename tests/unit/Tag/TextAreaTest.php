@@ -14,9 +14,9 @@ declare(strict_types=1);
 namespace Phalcon\Tests\Unit\Tag;
 
 use Phalcon\Tag;
-use Phalcon\Tests\Fixtures\Helpers\TagSetup;
+use Phalcon\Tests\Fixtures\Helpers\AbstractTagSetup;
 
-class TextAreaTest extends TagSetup
+class TextAreaTest extends AbstractTagSetup
 {
     /**
      * Tests Phalcon\Tag :: textArea() - array as a parameter

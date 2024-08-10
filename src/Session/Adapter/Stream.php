@@ -197,9 +197,7 @@ class Stream extends Noop
     {
         $name = $this->path . $this->getPrefixedName($id);
 
-        return (
-            false !== $this->phpFilePutContents($name, $data, LOCK_EX)
-        );
+        return false !== $this->phpFilePutContents($name, $data, LOCK_EX);
     }
 
     /**
