@@ -90,7 +90,7 @@ abstract class AbstractCache implements CacheInterface, EventsAwareInterface
      * @return bool True if the item was successfully removed. False if there
      *              was an error.
      *
-     * @throws InvalidArgumentException MUST be thrown if the $key string is
+     * @throws Exception MUST be thrown if the $key string is
      *                                  not a legal value.
      * @throws EventsException
      */
@@ -115,7 +115,7 @@ abstract class AbstractCache implements CacheInterface, EventsAwareInterface
      * @return bool True if the items were successfully removed. False if there
      *              was an error.
      *
-     * @throws InvalidArgumentException MUST be thrown if $keys is neither an
+     * @throws Exception MUST be thrown if $keys is neither an
      *                                  array nor a Traversable, or if any of
      *                                  the $keys are not a legal value.
      * @throws EventsException
@@ -145,7 +145,7 @@ abstract class AbstractCache implements CacheInterface, EventsAwareInterface
      * @return mixed The value of the item from the cache, or $default in case
      * of cache miss.
      *
-     * @throws InvalidArgumentException MUST be thrown if the $key string is
+     * @throws Exception MUST be thrown if the $key string is
      * not a legal value.
      * @throws EventsException
      */
@@ -173,7 +173,7 @@ abstract class AbstractCache implements CacheInterface, EventsAwareInterface
      * @return iterable<array-key, mixed> A list of key => value pairs. Cache
      * keys that do not exist or are stale will have $default as value.
      *
-     * @throws InvalidArgumentException MUST be thrown if $keys is neither an
+     * @throws Exception MUST be thrown if $keys is neither an
      * array nor a Traversable, or if any of the $keys are not a legal value.
      * @throws EventsException
      */
@@ -200,7 +200,7 @@ abstract class AbstractCache implements CacheInterface, EventsAwareInterface
      *
      * @return bool
      *
-     * @throws InvalidArgumentException MUST be thrown if the $key string is
+     * @throws Exception MUST be thrown if the $key string is
      * not a legal value.
      * @throws EventsException
      */
@@ -232,7 +232,7 @@ abstract class AbstractCache implements CacheInterface, EventsAwareInterface
      *
      * @return bool True on success and false on failure.
      *
-     * @throws InvalidArgumentException MUST be thrown if the $key string is not
+     * @throws Exception MUST be thrown if the $key string is not
      * a legal value.
      * @throws EventsException
      */
@@ -266,7 +266,7 @@ abstract class AbstractCache implements CacheInterface, EventsAwareInterface
      *
      * @return bool True on success and false on failure.
      *
-     * @throws InvalidArgumentException MUST be thrown if $values is neither an
+     * @throws Exception MUST be thrown if $values is neither an
      * array nor a Traversable, or if any of the $values are not a legal value.
      * @throws EventsException
      */
