@@ -15,7 +15,7 @@ namespace Phalcon\Tests\Database\Mvc\Model;
 
 use PDO;
 use Phalcon\Mvc\Model\Transaction\Manager;
-use Phalcon\Tests\DatabaseTestCase;
+use Phalcon\Tests\AbstractDatabaseTestCase;
 use Phalcon\Tests\Fixtures\Migrations\CustomersMigration;
 use Phalcon\Tests\Fixtures\Migrations\InvoicesMigration;
 use Phalcon\Tests\Fixtures\Traits\DiTrait;
@@ -25,7 +25,7 @@ use Phalcon\Tests\Models\Invoices;
 use function date;
 use function uniqid;
 
-final class DeleteTest extends DatabaseTestCase
+final class DeleteTest extends AbstractDatabaseTestCase
 {
     use DiTrait;
 

@@ -16,11 +16,11 @@ namespace Phalcon\Tests\Unit\Session\Bag;
 use Phalcon\Session\Bag;
 use Phalcon\Session\Manager;
 use Phalcon\Tests\Fixtures\Traits\DiTrait;
-use Phalcon\Tests\UnitTestCase;
+use Phalcon\Tests\AbstractUnitTestCase;
 
 use function uniqid;
 
-final class InitTest extends UnitTestCase
+final class InitTest extends AbstractUnitTestCase
 {
     use DiTrait;
 

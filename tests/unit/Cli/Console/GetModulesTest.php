@@ -18,9 +18,9 @@ use Phalcon\Di\FactoryDefault\Cli as DiFactoryDefault;
 use Phalcon\Tests\Fixtures\Traits\DiTrait;
 use Phalcon\Tests\Modules\Backend\Module as BackendModule;
 use Phalcon\Tests\Modules\Frontend\Module as FrontendModule;
-use Phalcon\Tests\UnitTestCase;
+use Phalcon\Tests\AbstractUnitTestCase;
 
-final class GetModulesTest extends UnitTestCase
+final class GetModulesTest extends AbstractUnitTestCase
 {
     use DiTrait;
 

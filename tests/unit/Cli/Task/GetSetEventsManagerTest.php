@@ -15,9 +15,9 @@ namespace Phalcon\Tests\Unit\Cli\Task;
 
 use Phalcon\Cli\Task;
 use Phalcon\Events\Manager;
-use Phalcon\Tests\UnitTestCase;
+use Phalcon\Tests\AbstractUnitTestCase;
 
-final class GetSetEventsManagerTest extends UnitTestCase
+final class GetSetEventsManagerTest extends AbstractUnitTestCase
 {
     /**
      * Tests Phalcon\Cli\Task :: getEventsManager()/setEventsManager()

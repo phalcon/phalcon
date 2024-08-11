@@ -17,10 +17,10 @@ use Phalcon\Session\Adapter\Noop;
 use Phalcon\Session\Manager;
 use Phalcon\Session\ManagerInterface;
 use Phalcon\Tests\Fixtures\Session\ExtendedManager;
-use Phalcon\Tests\UnitTestCase;
+use Phalcon\Tests\AbstractUnitTestCase;
 use SessionHandlerInterface;
 
-final class ConstructTest extends UnitTestCase
+final class ConstructTest extends AbstractUnitTestCase
 {
     /**
      * Tests Phalcon\Session\Manager :: __construct()

@@ -15,9 +15,9 @@ namespace Phalcon\Tests\Unit\Html\TagFactory;
 
 use Phalcon\Html\Escaper;
 use Phalcon\Html\TagFactory;
-use Phalcon\Tests\UnitTestCase;
+use Phalcon\Tests\AbstractUnitTestCase;
 
-final class HasTest extends UnitTestCase
+final class HasTest extends AbstractUnitTestCase
 {
     /**
      * Tests Phalcon\Helper\TagFactory :: has()

@@ -14,9 +14,10 @@ declare(strict_types=1);
 namespace Phalcon\Tests\Unit\Assets\Collection;
 
 use Phalcon\Assets\Collection;
-use Phalcon\Tests\UnitTestCase;
+use Phalcon\Tests\AbstractUnitTestCase;
+use PHPUnit\Framework\Attributes\Test;
 
-final class IsSetIsLocalTest extends UnitTestCase
+final class IsSetIsLocalTest extends AbstractUnitTestCase
 {
     /**
      * Tests Phalcon\Assets\Collection :: isLocal() / setIsLocal()
@@ -24,6 +25,7 @@ final class IsSetIsLocalTest extends UnitTestCase
      * @author Jeremy PASTOURET <https://github.com/jenovateurs>
      * @since  2020-02-15
      */
+    #[Test]
     public function testAssetsCollectionIsSetLocal(): void
     {
         $collection = new Collection();

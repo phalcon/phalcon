@@ -18,9 +18,9 @@ use Phalcon\Annotations\Adapter\Memory;
 use Phalcon\Annotations\Adapter\Stream;
 use Phalcon\Annotations\AnnotationsFactory;
 use Phalcon\Annotations\Exception;
-use Phalcon\Tests\UnitTestCase;
+use Phalcon\Tests\AbstractUnitTestCase;
 
-final class NewInstanceTest extends UnitTestCase
+final class NewInstanceTest extends AbstractUnitTestCase
 {
     public static function getExamples(): array
     {

@@ -15,13 +15,13 @@ namespace Phalcon\Tests\Database\DataMapper\Query\Insert;
 
 use Phalcon\DataMapper\Pdo\Connection;
 use Phalcon\DataMapper\Query\QueryFactory;
-use Phalcon\Tests\DatabaseTestCase;
+use Phalcon\Tests\AbstractDatabaseTestCase;
 use Phalcon\Tests\Fixtures\Migrations\Invoices;
 use Phalcon\Tests\Fixtures\Migrations\InvoicesMigration;
 
 use function uniqid;
 
-final class GetLastInsertIdTest extends DatabaseTestCase
+final class GetLastInsertIdTest extends AbstractDatabaseTestCase
 {
     /**
      * Database Tests Phalcon\DataMapper\Query\Insert :: getLastInsertId()

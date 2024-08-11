@@ -15,9 +15,9 @@ namespace Phalcon\Tests\Unit\Tag;
 
 use Phalcon\Di\Di;
 use Phalcon\Tag;
-use Phalcon\Tests\UnitTestCase;
+use Phalcon\Tests\AbstractUnitTestCase;
 
-class GetSetDITest extends UnitTestCase
+class GetSetDITest extends AbstractUnitTestCase
 {
     /**
      * Tests Phalcon\Tag :: getDI() / setDI()

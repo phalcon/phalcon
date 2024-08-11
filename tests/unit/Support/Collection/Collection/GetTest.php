@@ -14,10 +14,10 @@ declare(strict_types=1);
 namespace Phalcon\Tests\Unit\Support\Collection\Collection;
 
 use Phalcon\Support\Collection;
-use Phalcon\Tests\UnitTestCase;
+use Phalcon\Tests\AbstractUnitTestCase;
 use stdClass;
 
-final class GetTest extends UnitTestCase
+final class GetTest extends AbstractUnitTestCase
 {
     /**
      * @return array[]

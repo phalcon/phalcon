@@ -18,13 +18,13 @@ use Phalcon\Http\Message\Interfaces\StreamInterface;
 use Phalcon\Http\Message\Stream;
 use Phalcon\Http\Message\UploadedFile;
 use Phalcon\Tests\Fixtures\Page\Http;
-use Phalcon\Tests\UnitTestCase;
+use Phalcon\Tests\AbstractUnitTestCase;
 
 use function outputDir;
 
 use const UPLOAD_ERR_CANT_WRITE;
 
-final class GetStreamTest extends UnitTestCase
+final class GetStreamTest extends AbstractUnitTestCase
 {
     /**
      * Tests Phalcon\Http\Message\UploadedFile :: getStream()

@@ -14,9 +14,9 @@ namespace Phalcon\Tests\Unit\Encryption\Security\JWT\Builder;
 use Phalcon\Encryption\Security\JWT\Builder;
 use Phalcon\Encryption\Security\JWT\Exceptions\ValidatorException;
 use Phalcon\Encryption\Security\JWT\Signer\Hmac;
-use Phalcon\Tests\UnitTestCase;
+use Phalcon\Tests\AbstractUnitTestCase;
 
-final class GetSetAudienceTest extends UnitTestCase
+final class GetSetAudienceTest extends AbstractUnitTestCase
 {
     /**
      * Unit Tests Phalcon\Encryption\Security\JWT\Builder ::

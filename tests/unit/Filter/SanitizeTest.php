@@ -14,12 +14,12 @@ declare(strict_types=1);
 namespace Phalcon\Tests\Unit\Filter;
 
 use Phalcon\Filter\FilterFactory;
-use Phalcon\Tests\UnitTestCase;
+use Phalcon\Tests\AbstractUnitTestCase;
 
 use function call_user_func_array;
 use function is_array;
 
-final class SanitizeTest extends UnitTestCase
+final class SanitizeTest extends AbstractUnitTestCase
 {
     /**
      * @return array[]

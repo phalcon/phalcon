@@ -13,10 +13,10 @@ declare(strict_types=1);
 
 namespace Phalcon\Tests\Database\Db\Adapter;
 
-use Phalcon\Tests\DatabaseTestCase;
+use Phalcon\Tests\AbstractDatabaseTestCase;
 use Phalcon\Tests\Fixtures\Traits\DiTrait;
 
-final class GetSQLVariablesTest extends DatabaseTestCase
+final class GetSQLVariablesTest extends AbstractDatabaseTestCase
 {
     use DiTrait;
 

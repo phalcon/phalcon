@@ -15,9 +15,11 @@ namespace Phalcon\Tests\Unit\Assets\Asset;
 
 use Phalcon\Assets\Asset;
 use Phalcon\Tests\Fixtures\Traits\AssetsTrait;
-use Phalcon\Tests\UnitTestCase;
+use Phalcon\Tests\AbstractUnitTestCase;
+use PHPUnit\Framework\Attributes\DataProvider;
+use PHPUnit\Framework\Attributes\Test;
 
-final class ConstructTest extends UnitTestCase
+final class ConstructTest extends AbstractUnitTestCase
 {
     use AssetsTrait;
 
@@ -31,6 +33,8 @@ final class ConstructTest extends UnitTestCase
      * @author       Phalcon Team <team@phalcon.io>
      * @since        2020-09-09
      */
+    #[Test]
+    #[DataProvider('providerAssets')]
     public function testAssetsAssetConstructAttributes(
         string $type,
         string $path
@@ -52,6 +56,8 @@ final class ConstructTest extends UnitTestCase
      * @author       Phalcon Team <team@phalcon.io>
      * @since        2020-09-09
      */
+    #[Test]
+    #[DataProvider('providerAssets')]
     public function testAssetsAssetConstructAttributesSet(
         string $type,
         string $path
@@ -82,6 +88,8 @@ final class ConstructTest extends UnitTestCase
      * @author       Phalcon Team <team@phalcon.io>
      * @since        2020-09-09
      */
+    #[Test]
+    #[DataProvider('providerAssets')]
     public function testAssetsAssetConstructFilter(
         string $type,
         string $path
@@ -102,6 +110,8 @@ final class ConstructTest extends UnitTestCase
      * @author       Phalcon Team <team@phalcon.io>
      * @since        2020-09-09
      */
+    #[Test]
+    #[DataProvider('providerAssets')]
     public function testAssetsAssetConstructFilterSet(
         string $type,
         string $path
@@ -127,6 +137,8 @@ final class ConstructTest extends UnitTestCase
      * @author       Phalcon Team <team@phalcon.io>
      * @since        2020-09-09
      */
+    #[Test]
+    #[DataProvider('providerAssets')]
     public function testAssetsAssetConstructLocal(
         string $type,
         string $path
@@ -146,6 +158,8 @@ final class ConstructTest extends UnitTestCase
      * @author       Phalcon Team <team@phalcon.io>
      * @since        2020-09-09
      */
+    #[Test]
+    #[DataProvider('providerAssets')]
     public function testAssetsAssetConstructRemote(
         string $type,
         string $path

@@ -16,11 +16,14 @@ namespace Phalcon\Tests\Unit\Assets\Asset;
 use Phalcon\Assets\Asset;
 use Phalcon\Tests\Fixtures\Assets\AssetFileExistsPositiveFixture;
 use Phalcon\Tests\Fixtures\Traits\AssetsTrait;
-use Phalcon\Tests\UnitTestCase;
+use Phalcon\Tests\AbstractUnitTestCase;
+
+use PHPUnit\Framework\Attributes\DataProvider;
+use PHPUnit\Framework\Attributes\Test;
 
 use function dataDir;
 
-final class GetRealTargetPathTest extends UnitTestCase
+final class GetRealTargetPathTest extends AbstractUnitTestCase
 {
     use AssetsTrait;
 
@@ -34,6 +37,8 @@ final class GetRealTargetPathTest extends UnitTestCase
      * @author       Phalcon Team <team@phalcon.io>
      * @since        2020-09-09
      */
+    #[Test]
+    #[DataProvider('providerCssJsLocal')]
     public function testAssetsAssetGetRealTargetPath(
         string $type,
         string $path,
@@ -54,6 +59,7 @@ final class GetRealTargetPathTest extends UnitTestCase
      * @author       Phalcon Team <team@phalcon.io>
      * @since        2020-09-09
      */
+    #[Test]
     public function testAssetsAssetGetRealTargetPath404(): void
     {
         if (PHP_OS_FAMILY === 'Windows') {

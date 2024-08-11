@@ -13,9 +13,10 @@ declare(strict_types=1);
 
 namespace Phalcon\Tests\Unit\Assets\Manager;
 
-use Phalcon\Tests\UnitTestCase;
+use Phalcon\Tests\AbstractUnitTestCase;
+use PHPUnit\Framework\Attributes\Test;
 
-final class OutputInlineTest extends UnitTestCase
+final class OutputInlineTest extends AbstractUnitTestCase
 {
     /**
      * Tests Phalcon\Assets\Manager :: outputInline()
@@ -23,6 +24,7 @@ final class OutputInlineTest extends UnitTestCase
      * @author Phalcon Team <team@phalcon.io>
      * @since  2018-11-13
      */
+    #[Test]
     public function testAssetsManagerOutputInline(): void
     {
         $this->markTestSkipped('Need implementation');

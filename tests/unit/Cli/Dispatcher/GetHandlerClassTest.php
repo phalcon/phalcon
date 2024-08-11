@@ -14,12 +14,12 @@ declare(strict_types=1);
 namespace Phalcon\Tests\Unit\Cli\Dispatcher;
 
 use Phalcon\Cli\Dispatcher;
-use Phalcon\Tests\UnitTestCase;
+use Phalcon\Tests\AbstractUnitTestCase;
 
 /**
- * Class GetHandlerClassTest extends UnitTestCase
+ * Class GetHandlerClassTest extends AbstractUnitTestCase
  */
-final class GetHandlerClassTest extends UnitTestCase
+final class GetHandlerClassTest extends AbstractUnitTestCase
 {
     /**
      * @return array[]

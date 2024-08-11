@@ -18,11 +18,11 @@ use Phalcon\Di\Exception;
 use Phalcon\Di\Service;
 use Phalcon\Di\ServiceInterface;
 use Phalcon\Html\Escaper;
-use Phalcon\Tests\UnitTestCase;
+use Phalcon\Tests\AbstractUnitTestCase;
 
 use function spl_object_hash;
 
-class GetTest extends UnitTestCase
+class GetTest extends AbstractUnitTestCase
 {
     /**
      * Unit Tests Phalcon\Di\Di :: get()

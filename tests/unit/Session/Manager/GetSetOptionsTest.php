@@ -15,9 +15,9 @@ namespace Phalcon\Tests\Unit\Session\Manager;
 
 use Phalcon\Session\Manager;
 use Phalcon\Tests\Fixtures\Traits\DiTrait;
-use Phalcon\Tests\UnitTestCase;
+use Phalcon\Tests\AbstractUnitTestCase;
 
-final class GetSetOptionsTest extends UnitTestCase
+final class GetSetOptionsTest extends AbstractUnitTestCase
 {
     use DiTrait;
 

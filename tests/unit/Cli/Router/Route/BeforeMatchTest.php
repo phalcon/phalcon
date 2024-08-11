@@ -16,9 +16,9 @@ namespace Phalcon\Tests\Unit\Cli\Router\Route;
 use Phalcon\Cli\Router;
 use Phalcon\Cli\Router\Route;
 use Phalcon\Tests\Fixtures\Traits\DiTrait;
-use Phalcon\Tests\UnitTestCase;
+use Phalcon\Tests\AbstractUnitTestCase;
 
-final class BeforeMatchTest extends UnitTestCase
+final class BeforeMatchTest extends AbstractUnitTestCase
 {
     use DiTrait;
 

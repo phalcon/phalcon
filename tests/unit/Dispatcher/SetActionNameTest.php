@@ -13,9 +13,9 @@ declare(strict_types=1);
 
 namespace Phalcon\Tests\Unit\Dispatcher;
 
-use Phalcon\Tests\UnitTestCase;
+use Phalcon\Tests\AbstractUnitTestCase;
 
-final class SetActionNameTest extends UnitTestCase
+final class SetActionNameTest extends AbstractUnitTestCase
 {
     /**
      * Tests Phalcon\Dispatcher :: setActionName()

@@ -14,11 +14,11 @@ declare(strict_types=1);
 namespace Phalcon\Tests\Unit\Http\Cookie;
 
 use Phalcon\Http\Cookie;
-use Phalcon\Tests\UnitTestCase;
+use Phalcon\Tests\AbstractUnitTestCase;
 
 use function uniqid;
 
-final class DeleteTest extends UnitTestCase
+final class DeleteTest extends AbstractUnitTestCase
 {
     /**
      * Tests Phalcon\Http\Cookie :: delete()

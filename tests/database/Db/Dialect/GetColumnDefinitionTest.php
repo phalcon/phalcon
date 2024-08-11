@@ -15,9 +15,9 @@ namespace Phalcon\Tests\Database\Db\Dialect;
 
 use Phalcon\Db\Column;
 use Phalcon\Db\Dialect\Mysql;
-use Phalcon\Tests\DatabaseTestCase;
+use Phalcon\Tests\AbstractDatabaseTestCase;
 
-final class GetColumnDefinitionTest extends DatabaseTestCase
+final class GetColumnDefinitionTest extends AbstractDatabaseTestCase
 {
     /**
      * @return array[]

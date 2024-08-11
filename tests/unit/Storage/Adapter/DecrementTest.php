@@ -20,7 +20,7 @@ use Phalcon\Storage\Adapter\Redis;
 use Phalcon\Storage\Adapter\RedisCluster;
 use Phalcon\Storage\Adapter\Stream;
 use Phalcon\Storage\SerializerFactory;
-use Phalcon\Tests\UnitTestCase;
+use Phalcon\Tests\AbstractUnitTestCase;
 
 use function getOptionsLibmemcached;
 use function getOptionsRedis;
@@ -28,7 +28,7 @@ use function getOptionsRedisCluster;
 use function outputDir;
 use function uniqid;
 
-final class DecrementTest extends UnitTestCase
+final class DecrementTest extends AbstractUnitTestCase
 {
     /**
      * @return array[]

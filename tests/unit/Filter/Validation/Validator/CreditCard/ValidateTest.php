@@ -18,10 +18,10 @@ use Phalcon\Filter\Validation\Exception;
 use Phalcon\Filter\Validation\Validator\CreditCard;
 use Phalcon\Messages\Message;
 use Phalcon\Messages\Messages;
-use Phalcon\Tests\UnitTestCase;
+use Phalcon\Tests\AbstractUnitTestCase;
 use stdClass;
 
-final class ValidateTest extends UnitTestCase
+final class ValidateTest extends AbstractUnitTestCase
 {
     /**
      * Tests Phalcon\Filter\Validation\Validator\CreditCard :: validate() - empty

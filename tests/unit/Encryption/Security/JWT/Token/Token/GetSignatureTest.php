@@ -14,9 +14,9 @@ namespace Phalcon\Tests\Unit\Encryption\Security\JWT\Token\Token;
 use Phalcon\Encryption\Security\JWT\Token\Item;
 use Phalcon\Encryption\Security\JWT\Token\Signature;
 use Phalcon\Encryption\Security\JWT\Token\Token;
-use Phalcon\Tests\UnitTestCase;
+use Phalcon\Tests\AbstractUnitTestCase;
 
-final class GetSignatureTest extends UnitTestCase
+final class GetSignatureTest extends AbstractUnitTestCase
 {
     /**
      * Unit Tests Phalcon\Encryption\Security\JWT\Token\Token :: getSignature()

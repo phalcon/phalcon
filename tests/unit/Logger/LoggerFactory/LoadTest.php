@@ -19,10 +19,10 @@ use Phalcon\Logger\Exception as LoggerException;
 use Phalcon\Logger\Logger;
 use Phalcon\Logger\LoggerFactory;
 use Phalcon\Tests\Fixtures\Traits\FactoryTrait;
-use Phalcon\Tests\UnitTestCase;
+use Phalcon\Tests\AbstractUnitTestCase;
 use Psr\Log\LoggerInterface;
 
-final class LoadTest extends UnitTestCase
+final class LoadTest extends AbstractUnitTestCase
 {
     use FactoryTrait;
 

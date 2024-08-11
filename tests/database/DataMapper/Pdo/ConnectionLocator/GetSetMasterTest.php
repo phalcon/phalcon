@@ -12,11 +12,11 @@ declare(strict_types=1);
 namespace Phalcon\Tests\Database\DataMapper\Pdo\ConnectionLocator;
 
 use Phalcon\DataMapper\Pdo\ConnectionLocator;
-use Phalcon\Tests\DatabaseTestCase;
+use Phalcon\Tests\AbstractDatabaseTestCase;
 
 use function spl_object_hash;
 
-final class GetSetMasterTest extends DatabaseTestCase
+final class GetSetMasterTest extends AbstractDatabaseTestCase
 {
     /**
      * Database Tests Phalcon\DataMapper\Pdo\ConnectionLocator ::

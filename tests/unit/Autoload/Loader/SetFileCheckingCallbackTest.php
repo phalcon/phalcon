@@ -17,12 +17,12 @@ use Phalcon\Autoload\Exception;
 use Phalcon\Autoload\Loader;
 use Phalcon\Events\Exception as EventsException;
 use Phalcon\Tests\Fixtures\Traits\LoaderTrait;
-use Phalcon\Tests\UnitTestCase;
+use Phalcon\Tests\AbstractUnitTestCase;
 
 use function class_exists;
 use function function_exists;
 
-final class SetFileCheckingCallbackTest extends UnitTestCase
+final class SetFileCheckingCallbackTest extends AbstractUnitTestCase
 {
     use LoaderTrait;
 

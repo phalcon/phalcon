@@ -17,9 +17,9 @@ use Phalcon\Cli\Router;
 use Phalcon\Cli\Router\Route;
 use Phalcon\Tests\Fixtures\Traits\CliTrait;
 use Phalcon\Tests\Fixtures\Traits\DiTrait;
-use Phalcon\Tests\UnitTestCase;
+use Phalcon\Tests\AbstractUnitTestCase;
 
-final class GetPathsTest extends UnitTestCase
+final class GetPathsTest extends AbstractUnitTestCase
 {
     use CliTrait;
     use DiTrait;

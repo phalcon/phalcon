@@ -15,9 +15,9 @@ namespace Phalcon\Tests\Database\DataMapper\Query\QueryFactory;
 
 use Phalcon\DataMapper\Query\QueryFactory;
 use Phalcon\DataMapper\Query\Update;
-use Phalcon\Tests\DatabaseTestCase;
+use Phalcon\Tests\AbstractDatabaseTestCase;
 
-final class NewUpdateTest extends DatabaseTestCase
+final class NewUpdateTest extends AbstractDatabaseTestCase
 {
     /**
      * Database Tests Phalcon\DataMapper\Query\QueryFactory :: newUpdate()

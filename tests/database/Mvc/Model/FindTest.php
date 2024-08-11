@@ -19,7 +19,7 @@ use Phalcon\Cache\Cache;
 use Phalcon\Mvc\Model\Exception;
 use Phalcon\Mvc\Router;
 use Phalcon\Storage\SerializerFactory;
-use Phalcon\Tests\DatabaseTestCase;
+use Phalcon\Tests\AbstractDatabaseTestCase;
 use Phalcon\Tests\Fixtures\Migrations\CustomersMigration;
 use Phalcon\Tests\Fixtures\Migrations\InvoicesMigration;
 use Phalcon\Tests\Fixtures\Migrations\ObjectsMigration;
@@ -36,7 +36,7 @@ use function outputDir;
 use function uniqid;
 use function var_dump;
 
-final class FindTest extends DatabaseTestCase
+final class FindTest extends AbstractDatabaseTestCase
 {
     use DiTrait;
 

@@ -15,9 +15,9 @@ namespace Phalcon\Tests\Unit\Support\Collection\Collection;
 
 use Phalcon\Support\Collection;
 use Phalcon\Tests\Fixtures\Support\Collection\JsonFixture;
-use Phalcon\Tests\UnitTestCase;
+use Phalcon\Tests\AbstractUnitTestCase;
 
-final class JsonSerializeTest extends UnitTestCase
+final class JsonSerializeTest extends AbstractUnitTestCase
 {
     /**
      * Tests Phalcon\Support\Collection :: jsonSerialize()

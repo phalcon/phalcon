@@ -15,11 +15,11 @@ namespace Phalcon\Tests\Unit\Di\Service;
 
 use Phalcon\Di\Service;
 use Phalcon\Html\Escaper;
-use Phalcon\Tests\UnitTestCase;
+use Phalcon\Tests\AbstractUnitTestCase;
 
 use function spl_object_hash;
 
-class SetSharedInstanceTest extends UnitTestCase
+class SetSharedInstanceTest extends AbstractUnitTestCase
 {
     /**
      * Unit Tests Phalcon\Di\Service :: setSharedInstance()

@@ -15,9 +15,9 @@ namespace Phalcon\Tests\Unit\Session\Adapter;
 
 use Phalcon\Tests\Fixtures\Traits\DiTrait;
 use Phalcon\Tests\Fixtures\Traits\SessionTrait;
-use Phalcon\Tests\UnitTestCase;
+use Phalcon\Tests\AbstractUnitTestCase;
 
-final class OpenCloseTest extends UnitTestCase
+final class OpenCloseTest extends AbstractUnitTestCase
 {
     use DiTrait;
     use SessionTrait;

@@ -13,9 +13,9 @@ declare(strict_types=1);
 
 namespace Phalcon\Tests\Unit\Support\Debug;
 
-use Phalcon\Tests\UnitTestCase;
+use Phalcon\Tests\AbstractUnitTestCase;
 
-final class OnUncaughtExceptionTest extends UnitTestCase
+final class OnUncaughtExceptionTest extends AbstractUnitTestCase
 {
     /**
      * Tests Phalcon\Debug :: onUncaughtException()

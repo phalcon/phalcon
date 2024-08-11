@@ -18,9 +18,9 @@ use Phalcon\Mvc\Application;
 use Phalcon\Mvc\Dispatcher;
 use Phalcon\Mvc\View;
 use Phalcon\Tests\Fixtures\Traits\DiTrait;
-use Phalcon\Tests\UnitTestCase;
+use Phalcon\Tests\AbstractUnitTestCase;
 
-class HandleTest extends UnitTestCase
+class HandleTest extends AbstractUnitTestCase
 {
     use DiTrait;
 

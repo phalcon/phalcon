@@ -15,7 +15,7 @@ namespace Phalcon\Tests\Database\Mvc\Model\MetaData\Adapter;
 
 use Phalcon\Mvc\Model\MetaData;
 use Phalcon\Storage\Exception;
-use Phalcon\Tests\DatabaseTestCase;
+use Phalcon\Tests\AbstractDatabaseTestCase;
 use Phalcon\Tests\Fixtures\Migrations\AlbumMigration;
 use Phalcon\Tests\Fixtures\Migrations\AlbumPhotoMigration;
 use Phalcon\Tests\Fixtures\Migrations\PhotoMigration;
@@ -26,7 +26,7 @@ use Phalcon\Tests\Models\Photo;
 
 use function array_keys;
 
-final class ReadMetadataTest extends DatabaseTestCase
+final class ReadMetadataTest extends AbstractDatabaseTestCase
 {
     use DiTrait;
 

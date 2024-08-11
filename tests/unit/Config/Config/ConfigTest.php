@@ -13,9 +13,9 @@ namespace Phalcon\Tests\Unit\Config\Config;
 
 use Phalcon\Config\Config;
 use Phalcon\Tests\Fixtures\Traits\ConfigTrait;
-use Phalcon\Tests\UnitTestCase;
+use Phalcon\Tests\AbstractUnitTestCase;
 
-final class ConfigTest extends UnitTestCase
+final class ConfigTest extends AbstractUnitTestCase
 {
     use ConfigTrait;
 

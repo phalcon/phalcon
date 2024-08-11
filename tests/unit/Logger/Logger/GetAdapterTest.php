@@ -16,12 +16,12 @@ namespace Phalcon\Tests\Unit\Logger\Logger;
 use Phalcon\Logger\Adapter\Stream;
 use Phalcon\Logger\Exception;
 use Phalcon\Logger\Logger;
-use Phalcon\Tests\UnitTestCase;
+use Phalcon\Tests\AbstractUnitTestCase;
 
 use function file_get_contents;
 use function logsDir;
 
-final class GetAdapterTest extends UnitTestCase
+final class GetAdapterTest extends AbstractUnitTestCase
 {
     /**
      * Tests Phalcon\Logger :: getAdapter()

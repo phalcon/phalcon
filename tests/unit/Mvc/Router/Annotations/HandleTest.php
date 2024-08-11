@@ -18,11 +18,11 @@ use Phalcon\Mvc\Router\Annotations;
 use Phalcon\Mvc\Router\Exception as RouterException;
 use Phalcon\Mvc\Router\Route;
 use Phalcon\Tests\Fixtures\Traits\DiTrait;
-use Phalcon\Tests\UnitTestCase;
+use Phalcon\Tests\AbstractUnitTestCase;
 
 use function dataDir;
 
-final class HandleTest extends UnitTestCase
+final class HandleTest extends AbstractUnitTestCase
 {
     use DiTrait;
 

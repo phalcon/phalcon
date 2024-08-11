@@ -13,9 +13,9 @@ declare(strict_types=1);
 
 namespace Phalcon\Tests\Unit\Forms\Form;
 
-use Phalcon\Tests\UnitTestCase;
+use Phalcon\Tests\AbstractUnitTestCase;
 
-final class UnderscoreGetTest extends UnitTestCase
+final class UnderscoreGetTest extends AbstractUnitTestCase
 {
     /**
      * Tests Phalcon\Forms\Form :: __get()

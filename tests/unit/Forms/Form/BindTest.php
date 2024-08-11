@@ -15,13 +15,13 @@ namespace Phalcon\Tests\Unit\Forms\Form;
 
 use Phalcon\Forms\Element\Text;
 use Phalcon\Forms\Form;
-use Phalcon\Tests\UnitTestCase;
+use Phalcon\Tests\AbstractUnitTestCase;
 use stdClass;
 
 /**
- * Class BindTest extends UnitTestCase
+ * Class BindTest extends AbstractUnitTestCase
  */
-final class BindTest extends UnitTestCase
+final class BindTest extends AbstractUnitTestCase
 {
     public function testBindWhitelist(): void
     {

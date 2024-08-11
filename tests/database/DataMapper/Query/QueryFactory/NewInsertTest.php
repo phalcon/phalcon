@@ -15,9 +15,9 @@ namespace Phalcon\Tests\Database\DataMapper\Query\QueryFactory;
 
 use Phalcon\DataMapper\Query\Insert;
 use Phalcon\DataMapper\Query\QueryFactory;
-use Phalcon\Tests\DatabaseTestCase;
+use Phalcon\Tests\AbstractDatabaseTestCase;
 
-final class NewInsertTest extends DatabaseTestCase
+final class NewInsertTest extends AbstractDatabaseTestCase
 {
     /**
      * Database Tests Phalcon\DataMapper\Query\QueryFactory :: newInsert()

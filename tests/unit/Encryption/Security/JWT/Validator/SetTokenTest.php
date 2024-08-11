@@ -14,9 +14,9 @@ namespace Phalcon\Tests\Unit\Encryption\Security\JWT\Validator;
 use Phalcon\Encryption\Security\JWT\Signer\Hmac;
 use Phalcon\Encryption\Security\JWT\Validator;
 use Phalcon\Tests\Fixtures\Traits\JWTTrait;
-use Phalcon\Tests\UnitTestCase;
+use Phalcon\Tests\AbstractUnitTestCase;
 
-final class SetTokenTest extends UnitTestCase
+final class SetTokenTest extends AbstractUnitTestCase
 {
     use JWTTrait;
 

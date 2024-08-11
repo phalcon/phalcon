@@ -15,11 +15,11 @@ namespace Phalcon\Tests\Unit\Flash\Session;
 
 use Phalcon\Flash\Session;
 use Phalcon\Tests\Fixtures\Traits\DiTrait;
-use Phalcon\Tests\UnitTestCase;
+use Phalcon\Tests\AbstractUnitTestCase;
 
 use function uniqid;
 
-final class ClearHasTest extends UnitTestCase
+final class ClearHasTest extends AbstractUnitTestCase
 {
     use DiTrait;
 

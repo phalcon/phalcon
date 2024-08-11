@@ -13,9 +13,9 @@ declare(strict_types=1);
 
 namespace Phalcon\Tests\Unit\Filter\Validation;
 
-use Phalcon\Tests\UnitTestCase;
+use Phalcon\Tests\AbstractUnitTestCase;
 
-final class UnderscoreGetTest extends UnitTestCase
+final class UnderscoreGetTest extends AbstractUnitTestCase
 {
     /**
      * Tests Phalcon\Filter\Validation :: __get()

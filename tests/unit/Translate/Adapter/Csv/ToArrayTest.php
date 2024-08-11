@@ -14,11 +14,11 @@ declare(strict_types=1);
 namespace Phalcon\Tests\Unit\Translate\Adapter\Csv;
 
 use Phalcon\Tests\Fixtures\Traits\TranslateCsvTrait;
-use Phalcon\Tests\UnitTestCase;
+use Phalcon\Tests\AbstractUnitTestCase;
 use Phalcon\Translate\Adapter\Csv;
 use Phalcon\Translate\InterpolatorFactory;
 
-final class ToArrayTest extends UnitTestCase
+final class ToArrayTest extends AbstractUnitTestCase
 {
     use TranslateCsvTrait;
 

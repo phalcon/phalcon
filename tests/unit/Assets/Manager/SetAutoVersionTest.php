@@ -17,12 +17,13 @@ use Phalcon\Assets\Manager;
 use Phalcon\Html\Escaper;
 use Phalcon\Html\TagFactory;
 use Phalcon\Tests\Fixtures\Traits\DiTrait;
-use Phalcon\Tests\UnitTestCase;
+use Phalcon\Tests\AbstractUnitTestCase;
+use PHPUnit\Framework\Attributes\Test;
 
 use function dataDir;
 use function filemtime;
 
-final class SetAutoVersionTest extends UnitTestCase
+final class SetAutoVersionTest extends AbstractUnitTestCase
 {
     use DiTrait;
 
@@ -42,6 +43,7 @@ final class SetAutoVersionTest extends UnitTestCase
      * @author Wojciech Ślawski <jurigag@gmail.com>
      * @since  2017-02-01
      */
+    #[Test]
     public function testAssetsManagerAddJsAutomaticVersioning(): void
     {
         if (PHP_OS_FAMILY === 'Windows') {

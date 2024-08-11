@@ -16,13 +16,13 @@ namespace Phalcon\Tests\Unit\Mvc\View;
 use Phalcon\Events\Manager;
 use Phalcon\Mvc\View;
 use Phalcon\Tests\Fixtures\Mvc\View\AfterRenderListener;
-use Phalcon\Tests\UnitTestCase;
+use Phalcon\Tests\AbstractUnitTestCase;
 
 use function dataDir;
 
 use const DIRECTORY_SEPARATOR;
 
-class GetActiveRenderPathTest extends UnitTestCase
+class GetActiveRenderPathTest extends AbstractUnitTestCase
 {
     /**
      * Tests Phalcon\Mvc\View :: getActiveRenderPath()

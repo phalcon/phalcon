@@ -14,20 +14,20 @@ declare(strict_types=1);
 namespace Phalcon\Tests\Fixtures\Listener;
 
 use Phalcon\Events\Event;
-use Phalcon\Tests\UnitTestCase;
+use Phalcon\Tests\AbstractUnitTestCase;
 
 /**
  * Class ViewCompileListener
  */
 class ViewCompileListener
 {
-    /** @var UnitTestCase */
+    /** @var AbstractUnitTestCase */
     protected $testCase;
 
     protected $before = '';
     protected $after  = '';
 
-    public function setTestCase(UnitTestCase $testCase)
+    public function setTestCase(AbstractUnitTestCase $testCase)
     {
         $this->testCase = $testCase;
     }

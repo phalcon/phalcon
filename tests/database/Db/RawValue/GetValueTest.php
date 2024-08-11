@@ -14,9 +14,9 @@ declare(strict_types=1);
 namespace Phalcon\Tests\Database\Db\RawValue;
 
 use Phalcon\Db\RawValue;
-use Phalcon\Tests\DatabaseTestCase;
+use Phalcon\Tests\AbstractDatabaseTestCase;
 
-final class GetValueTest extends DatabaseTestCase
+final class GetValueTest extends AbstractDatabaseTestCase
 {
     /**
      * Tests Phalcon\Db\RawValue :: getValue()

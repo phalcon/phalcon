@@ -13,9 +13,9 @@ declare(strict_types=1);
 
 namespace Phalcon\Tests\Unit\Mvc\View\Engine\Volt;
 
-use Phalcon\Tests\UnitTestCase;
+use Phalcon\Tests\AbstractUnitTestCase;
 
-class IsIncludedTest extends UnitTestCase
+class IsIncludedTest extends AbstractUnitTestCase
 {
     /**
      * Tests Phalcon\Mvc\View\Engine\Volt :: isIncluded()

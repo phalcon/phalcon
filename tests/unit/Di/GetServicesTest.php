@@ -14,10 +14,10 @@ declare(strict_types=1);
 namespace Phalcon\Tests\Unit\Di;
 
 use Phalcon\Di\Di;
-use Phalcon\Tests\UnitTestCase;
+use Phalcon\Tests\AbstractUnitTestCase;
 use stdClass;
 
-class GetServicesTest extends UnitTestCase
+class GetServicesTest extends AbstractUnitTestCase
 {
     /**
      * Unit Tests Phalcon\Di :: getServices()

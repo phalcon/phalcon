@@ -13,9 +13,9 @@ namespace Phalcon\Tests\Unit\Encryption\Security\JWT\Signer\Hmac;
 
 use Phalcon\Encryption\Security\JWT\Exceptions\UnsupportedAlgorithmException;
 use Phalcon\Encryption\Security\JWT\Signer\Hmac;
-use Phalcon\Tests\UnitTestCase;
+use Phalcon\Tests\AbstractUnitTestCase;
 
-final class ConstructTest extends UnitTestCase
+final class ConstructTest extends AbstractUnitTestCase
 {
     /**
      * Unit Tests Phalcon\Encryption\Security\JWT\Signer\Hmac :: __construct()

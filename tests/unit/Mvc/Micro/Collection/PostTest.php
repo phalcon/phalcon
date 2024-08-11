@@ -16,9 +16,9 @@ namespace Phalcon\Tests\Unit\Mvc\Micro\Collection;
 use Phalcon\Mvc\Micro;
 use Phalcon\Mvc\Micro\Collection;
 use Phalcon\Tests\Fixtures\Micro\HttpMethodHandler;
-use Phalcon\Tests\UnitTestCase;
+use Phalcon\Tests\AbstractUnitTestCase;
 
-class PostTest extends UnitTestCase
+class PostTest extends AbstractUnitTestCase
 {
     /**
      * Tests Phalcon\Mvc\Micro\Collection :: post()

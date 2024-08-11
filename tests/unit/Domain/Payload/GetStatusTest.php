@@ -15,9 +15,9 @@ namespace Phalcon\Tests\Unit\Domain\Payload;
 
 use PayloadInterop\DomainStatus;
 use Phalcon\Domain\Payload;
-use Phalcon\Tests\UnitTestCase;
+use Phalcon\Tests\AbstractUnitTestCase;
 
-final class GetStatusTest extends UnitTestCase
+final class GetStatusTest extends AbstractUnitTestCase
 {
     /**
      * Unit Tests Phalcon\Domain\Payload :: getStatus()

@@ -14,9 +14,9 @@ declare(strict_types=1);
 namespace Phalcon\Tests\Unit\Html\Escaper;
 
 use Phalcon\Html\Escaper;
-use Phalcon\Tests\UnitTestCase;
+use Phalcon\Tests\AbstractUnitTestCase;
 
-final class UrlTest extends UnitTestCase
+final class UrlTest extends AbstractUnitTestCase
 {
     /**
      * Tests Phalcon\Escaper :: escapeUrl()

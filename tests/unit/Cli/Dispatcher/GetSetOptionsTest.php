@@ -14,9 +14,9 @@ declare(strict_types=1);
 namespace Phalcon\Tests\Unit\Cli\Dispatcher;
 
 use Phalcon\Cli\Dispatcher;
-use Phalcon\Tests\UnitTestCase;
+use Phalcon\Tests\AbstractUnitTestCase;
 
-final class GetSetOptionsTest extends UnitTestCase
+final class GetSetOptionsTest extends AbstractUnitTestCase
 {
     /**
      * Tests Phalcon\Cli\Dispatcher - getOptions() / setOptions()

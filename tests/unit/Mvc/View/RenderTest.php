@@ -15,9 +15,9 @@ namespace Phalcon\Tests\Unit\Mvc\View;
 
 use Phalcon\Tests\Fixtures\Traits\DiTrait;
 use Phalcon\Tests\Fixtures\Traits\ViewTrait;
-use Phalcon\Tests\UnitTestCase;
+use Phalcon\Tests\AbstractUnitTestCase;
 
-class RenderTest extends UnitTestCase
+class RenderTest extends AbstractUnitTestCase
 {
     use DiTrait;
     use ViewTrait;

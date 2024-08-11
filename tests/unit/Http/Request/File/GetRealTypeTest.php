@@ -15,12 +15,12 @@ namespace Phalcon\Tests\Unit\Http\Request\File;
 
 use Phalcon\Http\Request\File;
 use Phalcon\Tests\Fixtures\Page\Http;
-use Phalcon\Tests\UnitTestCase;
+use Phalcon\Tests\AbstractUnitTestCase;
 
 use function dataDir;
 use function function_exists;
 
-final class GetRealTypeTest extends UnitTestCase
+final class GetRealTypeTest extends AbstractUnitTestCase
 {
     /**
      * Tests Phalcon\Http\Request\File :: getRealType()

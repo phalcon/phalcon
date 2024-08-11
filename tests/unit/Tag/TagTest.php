@@ -15,9 +15,9 @@ namespace Phalcon\Tests\Unit\Tag;
 
 use Phalcon\Tag;
 use Phalcon\Tests\Fixtures\Traits\DiTrait;
-use Phalcon\Tests\UnitTestCase;
+use Phalcon\Tests\AbstractUnitTestCase;
 
-class TagTest extends UnitTestCase
+class TagTest extends AbstractUnitTestCase
 {
     use DiTrait;
 

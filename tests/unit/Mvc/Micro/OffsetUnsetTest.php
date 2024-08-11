@@ -16,9 +16,9 @@ namespace Phalcon\Tests\Unit\Mvc\Micro;
 use Phalcon\Di\Di;
 use Phalcon\Html\Escaper;
 use Phalcon\Mvc\Micro;
-use Phalcon\Tests\UnitTestCase;
+use Phalcon\Tests\AbstractUnitTestCase;
 
-class OffsetUnsetTest extends UnitTestCase
+class OffsetUnsetTest extends AbstractUnitTestCase
 {
     /**
      * Tests Phalcon\Mvc\Micro :: offsetUnset()

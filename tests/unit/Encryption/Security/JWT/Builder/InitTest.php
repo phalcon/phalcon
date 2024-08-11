@@ -13,9 +13,9 @@ namespace Phalcon\Tests\Unit\Encryption\Security\JWT\Builder;
 
 use Phalcon\Encryption\Security\JWT\Builder;
 use Phalcon\Encryption\Security\JWT\Signer\Hmac;
-use Phalcon\Tests\UnitTestCase;
+use Phalcon\Tests\AbstractUnitTestCase;
 
-final class InitTest extends UnitTestCase
+final class InitTest extends AbstractUnitTestCase
 {
     /**
      * Unit Tests Phalcon\Encryption\Security\JWT\Builder :: init()

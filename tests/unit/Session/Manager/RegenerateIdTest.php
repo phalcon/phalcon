@@ -15,9 +15,9 @@ namespace Phalcon\Tests\Unit\Session\Manager;
 
 use Phalcon\Session\Manager;
 use Phalcon\Tests\Fixtures\Traits\DiTrait;
-use Phalcon\Tests\UnitTestCase;
+use Phalcon\Tests\AbstractUnitTestCase;
 
-final class RegenerateIdTest extends UnitTestCase
+final class RegenerateIdTest extends AbstractUnitTestCase
 {
     use DiTrait;
 

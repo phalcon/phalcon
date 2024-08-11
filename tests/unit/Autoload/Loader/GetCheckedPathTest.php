@@ -16,11 +16,11 @@ namespace Phalcon\Tests\Unit\Autoload\Loader;
 use Phalcon\Autoload\Exception;
 use Phalcon\Autoload\Loader;
 use Phalcon\Tests\Fixtures\Traits\LoaderTrait;
-use Phalcon\Tests\UnitTestCase;
+use Phalcon\Tests\AbstractUnitTestCase;
 
 use function dataDir;
 
-final class GetCheckedPathTest extends UnitTestCase
+final class GetCheckedPathTest extends AbstractUnitTestCase
 {
     use LoaderTrait;
 

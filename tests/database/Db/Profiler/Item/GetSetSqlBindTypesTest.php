@@ -14,9 +14,9 @@ declare(strict_types=1);
 namespace Phalcon\Tests\Database\Db\Profiler\Item;
 
 use Phalcon\Db\Profiler\Item;
-use Phalcon\Tests\DatabaseTestCase;
+use Phalcon\Tests\AbstractDatabaseTestCase;
 
-final class GetSetSqlBindTypesTest extends DatabaseTestCase
+final class GetSetSqlBindTypesTest extends AbstractDatabaseTestCase
 {
     /**
      * Tests Phalcon\Db\Profiler\Item :: getSqlBindTypes()/setSqlBindTypes()

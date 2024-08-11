@@ -16,9 +16,9 @@ namespace Phalcon\Tests\Unit\Di;
 use Phalcon\Di\Di;
 use Phalcon\Di\Exception;
 use Phalcon\Html\Escaper;
-use Phalcon\Tests\UnitTestCase;
+use Phalcon\Tests\AbstractUnitTestCase;
 
-class OffsetGetTest extends UnitTestCase
+class OffsetGetTest extends AbstractUnitTestCase
 {
     /**
      * Unit Tests Phalcon\Di\Di :: offsetGet()

@@ -15,14 +15,14 @@ namespace Phalcon\Tests\Database\Mvc\Model;
 
 use Phalcon\Mvc\Model\Resultset\Simple;
 use Phalcon\Storage\Exception;
-use Phalcon\Tests\DatabaseTestCase;
+use Phalcon\Tests\AbstractDatabaseTestCase;
 use Phalcon\Tests\Fixtures\Migrations\InvoicesMigration;
 use Phalcon\Tests\Fixtures\Traits\DiTrait;
 use Phalcon\Tests\Fixtures\Traits\RecordsTrait;
 use Phalcon\Tests\Models\Invoices;
 use Phalcon\Tests\Models\InvoicesMap;
 
-final class CountTest extends DatabaseTestCase
+final class CountTest extends AbstractDatabaseTestCase
 {
     use DiTrait;
     use RecordsTrait;

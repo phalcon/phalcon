@@ -13,9 +13,9 @@ declare(strict_types=1);
 
 namespace Phalcon\Tests\Unit\Mvc\Application;
 
-use Phalcon\Tests\UnitTestCase;
+use Phalcon\Tests\AbstractUnitTestCase;
 
-class GetSetDITest extends UnitTestCase
+class GetSetDITest extends AbstractUnitTestCase
 {
     /**
      * Tests Phalcon\Mvc\Application :: getDI() / setDI()

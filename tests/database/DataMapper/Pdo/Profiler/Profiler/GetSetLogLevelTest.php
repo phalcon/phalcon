@@ -14,9 +14,9 @@ namespace Phalcon\Tests\Database\DataMapper\Pdo\Profiler\Profiler;
 use Phalcon\DataMapper\Pdo\Profiler\Profiler;
 use Phalcon\Logger\Enum;
 use Phalcon\Logger\LogLevel;
-use Phalcon\Tests\DatabaseTestCase;
+use Phalcon\Tests\AbstractDatabaseTestCase;
 
-final class GetSetLogLevelTest extends DatabaseTestCase
+final class GetSetLogLevelTest extends AbstractDatabaseTestCase
 {
     /**
      * Database Tests Phalcon\DataMapper\Pdo\Profiler\Profiler ::

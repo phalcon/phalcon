@@ -12,11 +12,11 @@ declare(strict_types=1);
 namespace Phalcon\Tests\Unit\Encryption\Security\JWT\Signer\Hmac;
 
 use Phalcon\Encryption\Security\JWT\Signer\Hmac;
-use Phalcon\Tests\UnitTestCase;
+use Phalcon\Tests\AbstractUnitTestCase;
 
 use function hash_hmac;
 
-final class SignTest extends UnitTestCase
+final class SignTest extends AbstractUnitTestCase
 {
     /**
      * Unit Tests Phalcon\Encryption\Security\JWT\Signer\Hmac :: sign()

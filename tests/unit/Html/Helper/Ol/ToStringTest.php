@@ -13,11 +13,11 @@ namespace Phalcon\Tests\Unit\Html\Helper\Ol;
 
 use Phalcon\Html\Escaper;
 use Phalcon\Html\Helper\Ol;
-use Phalcon\Tests\UnitTestCase;
+use Phalcon\Tests\AbstractUnitTestCase;
 
 use const PHP_EOL;
 
-final class ToStringTest extends UnitTestCase
+final class ToStringTest extends AbstractUnitTestCase
 {
     /**
      * Tests Phalcon\Html\Helper\Ol :: __toString()

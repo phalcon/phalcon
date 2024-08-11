@@ -14,13 +14,13 @@ declare(strict_types=1);
 namespace Phalcon\Tests\Unit\Encryption\Crypt;
 
 use Phalcon\Encryption\Crypt;
-use Phalcon\Tests\UnitTestCase;
+use Phalcon\Tests\AbstractUnitTestCase;
 
 use function md5;
 use function substr;
 use function uniqid;
 
-final class EncryptBase64Test extends UnitTestCase
+final class EncryptBase64Test extends AbstractUnitTestCase
 {
     /**
      * Tests Phalcon\Encryption\Crypt :: encryptBase64()

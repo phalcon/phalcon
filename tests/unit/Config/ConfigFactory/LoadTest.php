@@ -18,12 +18,12 @@ use Phalcon\Config\Adapter\Yaml;
 use Phalcon\Config\ConfigFactory;
 use Phalcon\Config\Exception;
 use Phalcon\Tests\Fixtures\Traits\FactoryTrait;
-use Phalcon\Tests\UnitTestCase;
+use Phalcon\Tests\AbstractUnitTestCase;
 
 use function hash;
 use function supportDir;
 
-final class LoadTest extends UnitTestCase
+final class LoadTest extends AbstractUnitTestCase
 {
     use FactoryTrait;
 

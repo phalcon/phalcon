@@ -15,9 +15,9 @@ namespace Phalcon\Tests\Unit\Cli\Router\Route;
 
 use Phalcon\Cli\Router\Route;
 use Phalcon\Cli\Router\RouteInterface;
-use Phalcon\Tests\UnitTestCase;
+use Phalcon\Tests\AbstractUnitTestCase;
 
-final class ConstructTest extends UnitTestCase
+final class ConstructTest extends AbstractUnitTestCase
 {
     /**
      * Tests Phalcon\Cli\Router\Route :: __construct()

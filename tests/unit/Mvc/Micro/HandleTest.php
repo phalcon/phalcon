@@ -14,9 +14,9 @@ declare(strict_types=1);
 namespace Phalcon\Tests\Unit\Mvc\Micro;
 
 use Phalcon\Mvc\Micro;
-use Phalcon\Tests\UnitTestCase;
+use Phalcon\Tests\AbstractUnitTestCase;
 
-class HandleTest extends UnitTestCase
+class HandleTest extends AbstractUnitTestCase
 {
     /**
      * Tests Phalcon\Mvc\Micro :: handle()

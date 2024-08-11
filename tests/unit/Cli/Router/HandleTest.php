@@ -16,9 +16,9 @@ namespace Phalcon\Tests\Unit\Cli\Router;
 use Phalcon\Cli\Router;
 use Phalcon\Cli\Router\Exception;
 use Phalcon\Cli\Router\Route;
-use Phalcon\Tests\UnitTestCase;
+use Phalcon\Tests\AbstractUnitTestCase;
 
-final class HandleTest extends UnitTestCase
+final class HandleTest extends AbstractUnitTestCase
 {
     /**
      * @dataProvider getExamplesDelimiter

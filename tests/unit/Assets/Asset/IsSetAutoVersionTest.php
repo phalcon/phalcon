@@ -14,9 +14,11 @@ declare(strict_types=1);
 namespace Phalcon\Tests\Unit\Assets\Asset;
 
 use Phalcon\Assets\Asset;
-use Phalcon\Tests\UnitTestCase;
+use Phalcon\Tests\AbstractUnitTestCase;
+use PHPUnit\Framework\Attributes\DataProvider;
+use PHPUnit\Framework\Attributes\Test;
 
-final class IsSetAutoVersionTest extends UnitTestCase
+final class IsSetAutoVersionTest extends AbstractUnitTestCase
 {
     /**
      * Unit Tests Phalcon\Assets\Asset :: isAutoVersion() / setAutoVersion()
@@ -26,6 +28,7 @@ final class IsSetAutoVersionTest extends UnitTestCase
      * @author Phalcon Team <team@phalcon.io>
      * @since  2020-09-09
      */
+    #[Test]
     public function testAssetsAssetIsSetAutoVersion(): void
     {
         $asset = new Asset('css', 'css/docs.css');

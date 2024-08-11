@@ -16,9 +16,9 @@ namespace Phalcon\Tests\Unit\Di\Service;
 use Phalcon\Di\Service;
 use Phalcon\Html\Escaper;
 use Phalcon\Support\Collection;
-use Phalcon\Tests\UnitTestCase;
+use Phalcon\Tests\AbstractUnitTestCase;
 
-class GetSetDefinitionTest extends UnitTestCase
+class GetSetDefinitionTest extends AbstractUnitTestCase
 {
     /**
      * Tests Phalcon\Di\Service :: setDefinition()

@@ -14,9 +14,10 @@ declare(strict_types=1);
 namespace Phalcon\Tests\Unit\Assets\Collection;
 
 use Phalcon\Assets\Collection;
-use Phalcon\Tests\UnitTestCase;
+use Phalcon\Tests\AbstractUnitTestCase;
+use PHPUnit\Framework\Attributes\Test;
 
-final class GetSetTargetPathTest extends UnitTestCase
+final class GetSetTargetPathTest extends AbstractUnitTestCase
 {
     /**
      * Tests Phalcon\Assets\Collection :: getTargetPath() / setTargetPath()
@@ -26,6 +27,7 @@ final class GetSetTargetPathTest extends UnitTestCase
      * @author Phalcon Team <team@phalcon.io>
      * @since  2020-09-09
      */
+    #[Test]
     public function testAssetsCollectionGetSetTargetPath(): void
     {
         $collection = new Collection();

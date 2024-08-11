@@ -16,9 +16,9 @@ namespace Phalcon\Tests\Unit\Http\Message\Stream;
 use Phalcon\Http\Message\Stream;
 use Phalcon\Tests\Fixtures\Http\Message\StreamFixture;
 use Phalcon\Tests\Fixtures\Page\Http;
-use Phalcon\Tests\UnitTestCase;
+use Phalcon\Tests\AbstractUnitTestCase;
 
-final class GetMetadataTest extends UnitTestCase
+final class GetMetadataTest extends AbstractUnitTestCase
 {
     public static function getExamples(): array
     {

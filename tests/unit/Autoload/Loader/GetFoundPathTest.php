@@ -16,12 +16,12 @@ namespace Phalcon\Tests\Unit\Autoload\Loader;
 use Phalcon\Autoload\Exception;
 use Phalcon\Autoload\Loader;
 use Phalcon\Tests\Fixtures\Traits\LoaderTrait;
-use Phalcon\Tests\UnitTestCase;
+use Phalcon\Tests\AbstractUnitTestCase;
 
 use function dataDir;
 use function function_exists;
 
-final class GetFoundPathTest extends UnitTestCase
+final class GetFoundPathTest extends AbstractUnitTestCase
 {
     use LoaderTrait;
 

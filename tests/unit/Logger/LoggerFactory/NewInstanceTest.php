@@ -17,17 +17,17 @@ use Phalcon\Logger\Adapter\Stream;
 use Phalcon\Logger\AdapterFactory;
 use Phalcon\Logger\Logger;
 use Phalcon\Logger\LoggerFactory;
-use Phalcon\Tests\UnitTestCase;
+use Phalcon\Tests\AbstractUnitTestCase;
 use Psr\Log\LoggerInterface;
 
 use function logsDir;
 
 /**
- * Class NewInstanceTest extends UnitTestCase
+ * Class NewInstanceTest extends AbstractUnitTestCase
  *
  * @package Phalcon\Tests\Unit\Logger\LoggerFactory
  */
-final class NewInstanceTest extends UnitTestCase
+final class NewInstanceTest extends AbstractUnitTestCase
 {
     /**
      * Tests Phalcon\Logger\LoggerFactory :: newInstance()

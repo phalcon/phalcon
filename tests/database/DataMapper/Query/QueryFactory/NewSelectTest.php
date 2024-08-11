@@ -15,9 +15,9 @@ namespace Phalcon\Tests\Database\DataMapper\Query\QueryFactory;
 
 use Phalcon\DataMapper\Query\QueryFactory;
 use Phalcon\DataMapper\Query\Select;
-use Phalcon\Tests\DatabaseTestCase;
+use Phalcon\Tests\AbstractDatabaseTestCase;
 
-final class NewSelectTest extends DatabaseTestCase
+final class NewSelectTest extends AbstractDatabaseTestCase
 {
     /**
      * Database Tests Phalcon\DataMapper\Query\QueryFactory :: newSelect()

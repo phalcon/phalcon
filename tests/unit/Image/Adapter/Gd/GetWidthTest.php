@@ -15,11 +15,11 @@ namespace Phalcon\Tests\Unit\Image\Adapter\Gd;
 
 use Phalcon\Image\Adapter\Gd;
 use Phalcon\Tests\Fixtures\Traits\GdTrait;
-use Phalcon\Tests\UnitTestCase;
+use Phalcon\Tests\AbstractUnitTestCase;
 
 use function dataDir;
 
-final class GetWidthTest extends UnitTestCase
+final class GetWidthTest extends AbstractUnitTestCase
 {
     use GdTrait;
 

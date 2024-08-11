@@ -13,10 +13,10 @@ declare(strict_types=1);
 
 namespace Phalcon\Tests\Unit\Translate\Interpolator\IndexedArray;
 
-use Phalcon\Tests\UnitTestCase;
+use Phalcon\Tests\AbstractUnitTestCase;
 use Phalcon\Translate\Interpolator\IndexedArray;
 
-final class ReplacePlaceholdersTest extends UnitTestCase
+final class ReplacePlaceholdersTest extends AbstractUnitTestCase
 {
     /**
      * Tests Phalcon\Translate\Interpolator\IndexedArray ::

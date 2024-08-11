@@ -15,10 +15,10 @@ namespace Phalcon\Tests\Unit\Filter\Validation;
 
 use Phalcon\Filter\Validation;
 use Phalcon\Tests\Models\EntityWithPublic;
-use Phalcon\Tests\UnitTestCase;
+use Phalcon\Tests\AbstractUnitTestCase;
 use PHPUnit\Framework\Attributes\Test;
 
-final class GetValueByDataTest extends UnitTestCase
+final class GetValueByDataTest extends AbstractUnitTestCase
 {
     public const NAME = 'John Doe';
 

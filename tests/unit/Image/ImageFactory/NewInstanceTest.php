@@ -16,12 +16,12 @@ namespace Phalcon\Tests\Unit\Image\ImageFactory;
 use Phalcon\Image\Adapter\Imagick;
 use Phalcon\Image\Exception;
 use Phalcon\Image\ImageFactory;
-use Phalcon\Tests\UnitTestCase;
+use Phalcon\Tests\AbstractUnitTestCase;
 
 use function dataDir;
 use function uniqid;
 
-final class NewInstanceTest extends UnitTestCase
+final class NewInstanceTest extends AbstractUnitTestCase
 {
     /**
      * Tests Phalcon\Image\ImageFactory :: newInstance()

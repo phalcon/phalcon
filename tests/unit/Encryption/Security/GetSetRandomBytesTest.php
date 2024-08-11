@@ -14,9 +14,9 @@ declare(strict_types=1);
 namespace Phalcon\Tests\Unit\Encryption\Security;
 
 use Phalcon\Encryption\Security;
-use Phalcon\Tests\UnitTestCase;
+use Phalcon\Tests\AbstractUnitTestCase;
 
-final class GetSetRandomBytesTest extends UnitTestCase
+final class GetSetRandomBytesTest extends AbstractUnitTestCase
 {
     /**
      * Tests Phalcon\Security :: getRandomBytes()

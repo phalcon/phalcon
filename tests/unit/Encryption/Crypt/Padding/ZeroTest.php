@@ -14,12 +14,12 @@ declare(strict_types=1);
 namespace Phalcon\Tests\Unit\Encryption\Crypt\Padding;
 
 use Phalcon\Encryption\Crypt\Padding\Zero;
-use Phalcon\Tests\UnitTestCase;
+use Phalcon\Tests\AbstractUnitTestCase;
 
 use function chr;
 use function str_repeat;
 
-final class ZeroTest extends UnitTestCase
+final class ZeroTest extends AbstractUnitTestCase
 {
     /**
      * Tests Phalcon\Encryption\Crypt\Padding\Zero :: __construct()

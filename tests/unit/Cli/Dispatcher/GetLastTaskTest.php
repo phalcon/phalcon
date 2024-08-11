@@ -17,9 +17,9 @@ use Phalcon\Cli\Dispatcher;
 use Phalcon\Di\FactoryDefault\Cli as DiFactoryDefault;
 use Phalcon\Tests\Fixtures\Tasks\EchoTask;
 use Phalcon\Tests\Fixtures\Tasks\MainTask;
-use Phalcon\Tests\UnitTestCase;
+use Phalcon\Tests\AbstractUnitTestCase;
 
-final class GetLastTaskTest extends UnitTestCase
+final class GetLastTaskTest extends AbstractUnitTestCase
 {
     /**
      * Tests Phalcon\Cli\Dispatcher :: getLastTask()

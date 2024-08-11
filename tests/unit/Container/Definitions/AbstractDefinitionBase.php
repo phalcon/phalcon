@@ -17,9 +17,9 @@ use Phalcon\Container\Container;
 use Phalcon\Container\Definitions\AbstractDefinition;
 use Phalcon\Container\Definitions\Definitions;
 use Phalcon\Container\Exception\NotInstantiated;
-use Phalcon\Tests\UnitTestCase;
+use Phalcon\Tests\AbstractUnitTestCase;
 
-abstract class AbstractDefinitionBase extends UnitTestCase
+abstract class AbstractDefinitionBase extends AbstractUnitTestCase
 {
     protected Container $container;
 

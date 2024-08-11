@@ -15,11 +15,11 @@ namespace Phalcon\Tests\Database\Mvc\Model;
 
 use Phalcon\Mvc\Model;
 use Phalcon\Mvc\ModelInterface;
-use Phalcon\Tests\DatabaseTestCase;
+use Phalcon\Tests\AbstractDatabaseTestCase;
 use Phalcon\Tests\Fixtures\Traits\DiTrait;
 use Phalcon\Tests\Models\Invoices;
 
-final class ConstructTest extends DatabaseTestCase
+final class ConstructTest extends AbstractDatabaseTestCase
 {
     use DiTrait;
 

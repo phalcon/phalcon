@@ -19,7 +19,7 @@ use Phalcon\Http\Response;
 use Phalcon\Tests\Fixtures\Http\PhpStream;
 use Phalcon\Tests\Fixtures\Page\Http;
 use Phalcon\Tests\Fixtures\Traits\DiTrait;
-use Phalcon\Tests\UnitTestCase;
+use Phalcon\Tests\AbstractUnitTestCase;
 
 use function header_remove;
 use function stream_wrapper_register;
@@ -27,7 +27,7 @@ use function stream_wrapper_restore;
 use function stream_wrapper_unregister;
 use function time;
 
-abstract class AbstractHttpBase extends UnitTestCase
+abstract class AbstractHttpBase extends AbstractUnitTestCase
 {
     use DiTrait;
 

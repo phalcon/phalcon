@@ -14,9 +14,9 @@ namespace Phalcon\Tests\Database\DataMapper\Pdo\Profiler\MemoryLogger;
 use Phalcon\DataMapper\Pdo\Profiler\MemoryLogger;
 use Phalcon\Logger\Adapter\Noop;
 use Phalcon\Logger\Enum;
-use Phalcon\Tests\DatabaseTestCase;
+use Phalcon\Tests\AbstractDatabaseTestCase;
 
-final class LogTest extends DatabaseTestCase
+final class LogTest extends AbstractDatabaseTestCase
 {
     /**
      * Database Tests Phalcon\DataMapper\Pdo\Profiler\MemoryLogger :: log()

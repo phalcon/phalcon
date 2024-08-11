@@ -15,7 +15,7 @@ namespace Phalcon\Tests\Database\Mvc\Model\Behavior;
 
 use Phalcon\Events\Event;
 use Phalcon\Events\Manager as EventManager;
-use Phalcon\Tests\DatabaseTestCase;
+use Phalcon\Tests\AbstractDatabaseTestCase;
 use Phalcon\Tests\Fixtures\Migrations\InvoicesMigration;
 use Phalcon\Tests\Fixtures\Traits\DiTrait;
 use Phalcon\Tests\Models\Invoices;
@@ -23,7 +23,7 @@ use Phalcon\Tests\Models\InvoicesBehavior;
 
 use function uniqid;
 
-final class SoftDeleteTest extends DatabaseTestCase
+final class SoftDeleteTest extends AbstractDatabaseTestCase
 {
     use DiTrait;
 

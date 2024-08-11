@@ -16,9 +16,9 @@ namespace Phalcon\Tests\Unit\Container\Lazy;
 use Phalcon\Container\Container;
 use Phalcon\Container\Definitions\Definitions;
 use Phalcon\Container\Lazy\AbstractLazy;
-use Phalcon\Tests\UnitTestCase;
+use Phalcon\Tests\AbstractUnitTestCase;
 
-abstract class AbstractLazyBase extends UnitTestCase
+abstract class AbstractLazyBase extends AbstractUnitTestCase
 {
     protected Container $container;
 

@@ -12,9 +12,9 @@ declare(strict_types=1);
 namespace Phalcon\Tests\Unit\Encryption\Security\JWT\Signer\None;
 
 use Phalcon\Encryption\Security\JWT\Signer\None;
-use Phalcon\Tests\UnitTestCase;
+use Phalcon\Tests\AbstractUnitTestCase;
 
-final class GetAlgHeaderTest extends UnitTestCase
+final class GetAlgHeaderTest extends AbstractUnitTestCase
 {
     /**
      * Unit Tests Phalcon\Encryption\Security\JWT\Signer\None :: getAlgHeader()

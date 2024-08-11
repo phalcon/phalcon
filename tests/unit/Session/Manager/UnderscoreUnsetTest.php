@@ -15,9 +15,9 @@ namespace Phalcon\Tests\Unit\Session\Manager;
 
 use Phalcon\Session\Manager;
 use Phalcon\Tests\Fixtures\Traits\DiTrait;
-use Phalcon\Tests\UnitTestCase;
+use Phalcon\Tests\AbstractUnitTestCase;
 
-final class UnderscoreUnsetTest extends UnitTestCase
+final class UnderscoreUnsetTest extends AbstractUnitTestCase
 {
     use DiTrait;
 

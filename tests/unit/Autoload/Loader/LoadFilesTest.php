@@ -15,12 +15,12 @@ namespace Phalcon\Tests\Unit\Autoload\Loader;
 
 use Phalcon\Autoload\Loader;
 use Phalcon\Tests\Fixtures\Traits\LoaderTrait;
-use Phalcon\Tests\UnitTestCase;
+use Phalcon\Tests\AbstractUnitTestCase;
 
 use function dataDir;
 use function function_exists;
 
-final class LoadFilesTest extends UnitTestCase
+final class LoadFilesTest extends AbstractUnitTestCase
 {
     use LoaderTrait;
 

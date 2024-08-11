@@ -15,12 +15,12 @@ namespace Phalcon\Tests\Database\Mvc\Model\Criteria;
 
 use Phalcon\Mvc\Model\Criteria;
 use Phalcon\Mvc\Model\Query\Builder;
-use Phalcon\Tests\DatabaseTestCase;
+use Phalcon\Tests\AbstractDatabaseTestCase;
 use Phalcon\Tests\Fixtures\Traits\DiTrait;
 use Phalcon\Tests\Models\Customers;
 use Phalcon\Tests\Models\Invoices;
 
-final class InnerJoinTest extends DatabaseTestCase
+final class InnerJoinTest extends AbstractDatabaseTestCase
 {
     use DiTrait;
 

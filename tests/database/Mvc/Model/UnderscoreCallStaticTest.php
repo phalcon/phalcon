@@ -14,13 +14,13 @@ namespace Phalcon\Tests\Database\Mvc\Model;
 use PDO;
 use Phalcon\Mvc\Model\Exception;
 use Phalcon\Mvc\Model\Resultset;
-use Phalcon\Tests\DatabaseTestCase;
+use Phalcon\Tests\AbstractDatabaseTestCase;
 use Phalcon\Tests\Fixtures\Migrations\CustomersMigration;
 use Phalcon\Tests\Fixtures\Migrations\InvoicesMigration;
 use Phalcon\Tests\Fixtures\Traits\DiTrait;
 use Phalcon\Tests\Models\Invoices;
 
-final class UnderscoreCallStaticTest extends DatabaseTestCase
+final class UnderscoreCallStaticTest extends AbstractDatabaseTestCase
 {
     use DiTrait;
 

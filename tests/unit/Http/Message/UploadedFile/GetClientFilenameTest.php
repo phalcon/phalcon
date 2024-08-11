@@ -15,9 +15,9 @@ namespace Phalcon\Tests\Unit\Http\Message\UploadedFile;
 
 use Phalcon\Http\Message\UploadedFile;
 use Phalcon\Tests\Fixtures\Page\Http;
-use Phalcon\Tests\UnitTestCase;
+use Phalcon\Tests\AbstractUnitTestCase;
 
-final class GetClientFilenameTest extends UnitTestCase
+final class GetClientFilenameTest extends AbstractUnitTestCase
 {
     /**
      * Tests Phalcon\Http\Message\UploadedFile :: getClientFilename()

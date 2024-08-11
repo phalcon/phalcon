@@ -15,9 +15,9 @@ namespace Phalcon\Tests\Unit\Cli\Dispatcher;
 
 use Phalcon\Cli\Dispatcher;
 use Phalcon\Di\FactoryDefault\Cli as DiFactoryDefault;
-use Phalcon\Tests\UnitTestCase;
+use Phalcon\Tests\AbstractUnitTestCase;
 
-final class WasForwardedTest extends UnitTestCase
+final class WasForwardedTest extends AbstractUnitTestCase
 {
     /**
      * Tests Phalcon\Cli\Dispatcher :: wasForwarded()

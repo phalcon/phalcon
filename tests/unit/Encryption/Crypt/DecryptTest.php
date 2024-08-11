@@ -17,11 +17,11 @@ use Phalcon\Encryption\Crypt;
 use Phalcon\Encryption\Crypt\Exception\Exception;
 use Phalcon\Encryption\Crypt\Exception\Mismatch;
 use Phalcon\Tests\Fixtures\Encryption\Crypt\CryptFixture;
-use Phalcon\Tests\UnitTestCase;
+use Phalcon\Tests\AbstractUnitTestCase;
 
 use function str_repeat;
 
-final class DecryptTest extends UnitTestCase
+final class DecryptTest extends AbstractUnitTestCase
 {
     /**
      * Tests Phalcon\Encryption\Crypt :: encrypt() - Zero padding returns input

@@ -15,11 +15,11 @@ namespace Phalcon\Tests\Unit\Flash\Session;
 
 use Phalcon\Flash\Session;
 use Phalcon\Tests\Fixtures\Traits\DiTrait;
-use Phalcon\Tests\UnitTestCase;
+use Phalcon\Tests\AbstractUnitTestCase;
 
 use function ksort;
 
-final class GetSetCssClassesTest extends UnitTestCase
+final class GetSetCssClassesTest extends AbstractUnitTestCase
 {
     use DiTrait;
 

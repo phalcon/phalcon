@@ -15,9 +15,9 @@ namespace Phalcon\Tests\Database\Db\Column;
 
 use Phalcon\Db\Column;
 use Phalcon\Db\ColumnInterface;
-use Phalcon\Tests\DatabaseTestCase;
+use Phalcon\Tests\AbstractDatabaseTestCase;
 
-final class ConstructTest extends DatabaseTestCase
+final class ConstructTest extends AbstractDatabaseTestCase
 {
     /**
      * Tests Phalcon\Db\Column :: __construct()

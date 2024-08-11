@@ -14,9 +14,9 @@ declare(strict_types=1);
 namespace Phalcon\Tests\Database\DataMapper\Query\Bind;
 
 use Phalcon\DataMapper\Query\Bind;
-use Phalcon\Tests\DatabaseTestCase;
+use Phalcon\Tests\AbstractDatabaseTestCase;
 
-final class SetValuesTest extends DatabaseTestCase
+final class SetValuesTest extends AbstractDatabaseTestCase
 {
     /**
      * Database Tests Phalcon\DataMapper\Query\Bind :: setValues()

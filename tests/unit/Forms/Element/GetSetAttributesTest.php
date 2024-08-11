@@ -24,12 +24,12 @@ use Phalcon\Forms\Element\Radio;
 use Phalcon\Forms\Element\Submit;
 use Phalcon\Forms\Element\Text;
 use Phalcon\Forms\Element\TextArea;
-use Phalcon\Tests\UnitTestCase;
+use Phalcon\Tests\AbstractUnitTestCase;
 
 use function array_flip;
 use function uniqid;
 
-final class GetSetAttributesTest extends UnitTestCase
+final class GetSetAttributesTest extends AbstractUnitTestCase
 {
     /**
      * @return string[][]

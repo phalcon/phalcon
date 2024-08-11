@@ -16,12 +16,12 @@ namespace Phalcon\Tests\Database\Mvc\Model\MetaData\Strategy;
 use Phalcon\Mvc\Model\Exception as ModelException;
 use Phalcon\Mvc\Model\MetaData\Strategy\Introspection;
 use Phalcon\Storage\Exception;
-use Phalcon\Tests\DatabaseTestCase;
+use Phalcon\Tests\AbstractDatabaseTestCase;
 use Phalcon\Tests\Fixtures\Traits\DiTrait;
 use Phalcon\Tests\Models\Invoices;
 use Phalcon\Tests\Models\InvoicesMap;
 
-final class IntrospectionTest extends DatabaseTestCase
+final class IntrospectionTest extends AbstractDatabaseTestCase
 {
     use DiTrait;
 

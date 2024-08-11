@@ -13,9 +13,9 @@ declare(strict_types=1);
 
 namespace Phalcon\Tests\Unit\Mvc\Router\Annotations;
 
-use Phalcon\Tests\UnitTestCase;
+use Phalcon\Tests\AbstractUnitTestCase;
 
-final class SetDefaultActionTest extends UnitTestCase
+final class SetDefaultActionTest extends AbstractUnitTestCase
 {
     /**
      * Tests Phalcon\Mvc\Router\Annotations :: setDefaultAction()

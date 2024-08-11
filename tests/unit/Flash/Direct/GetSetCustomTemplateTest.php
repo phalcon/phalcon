@@ -14,9 +14,9 @@ declare(strict_types=1);
 namespace Phalcon\Tests\Unit\Flash\Direct;
 
 use Phalcon\Flash\Direct;
-use Phalcon\Tests\UnitTestCase;
+use Phalcon\Tests\AbstractUnitTestCase;
 
-final class GetSetCustomTemplateTest extends UnitTestCase
+final class GetSetCustomTemplateTest extends AbstractUnitTestCase
 {
     /**
      * Tests Phalcon\Flash\Direct :: getCustomTemplate()/setCustomTemplate()

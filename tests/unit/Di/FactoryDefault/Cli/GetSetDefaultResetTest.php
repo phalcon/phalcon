@@ -14,11 +14,11 @@ declare(strict_types=1);
 namespace Phalcon\Tests\Unit\Di\FactoryDefault\Cli;
 
 use Phalcon\Di\FactoryDefault\Cli as Di;
-use Phalcon\Tests\UnitTestCase;
+use Phalcon\Tests\AbstractUnitTestCase;
 
 use function spl_object_hash;
 
-final class GetSetDefaultResetTest extends UnitTestCase
+final class GetSetDefaultResetTest extends AbstractUnitTestCase
 {
     /**
      * Tests Phalcon\Di\FactoryDefault\Cli :: getDefault()/setDefault()/reset()

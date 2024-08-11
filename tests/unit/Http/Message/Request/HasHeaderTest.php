@@ -15,9 +15,9 @@ namespace Phalcon\Tests\Unit\Http\Message\Request;
 
 use Phalcon\Http\Message\Request;
 use Phalcon\Tests\Fixtures\Page\Http;
-use Phalcon\Tests\UnitTestCase;
+use Phalcon\Tests\AbstractUnitTestCase;
 
-final class HasHeaderTest extends UnitTestCase
+final class HasHeaderTest extends AbstractUnitTestCase
 {
     /**
      * Tests Phalcon\Http\Message\Request :: hasHeader()

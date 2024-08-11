@@ -14,9 +14,9 @@ declare(strict_types=1);
 namespace Phalcon\Tests\Unit\Acl\Component;
 
 use Phalcon\Acl\Component;
-use Phalcon\Tests\UnitTestCase;
+use Phalcon\Tests\AbstractUnitTestCase;
 
-final class GetDescriptionTest extends UnitTestCase
+final class GetDescriptionTest extends AbstractUnitTestCase
 {
     /**
      * Tests Phalcon\Acl\Component :: getDescription()

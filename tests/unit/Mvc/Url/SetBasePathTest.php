@@ -13,9 +13,9 @@ declare(strict_types=1);
 
 namespace Phalcon\Tests\Unit\Mvc\Url;
 
-use Phalcon\Tests\UnitTestCase;
+use Phalcon\Tests\AbstractUnitTestCase;
 
-final class SetBasePathTest extends UnitTestCase
+final class SetBasePathTest extends AbstractUnitTestCase
 {
     /**
      * Tests Phalcon\Mvc\Url :: setBasePath()

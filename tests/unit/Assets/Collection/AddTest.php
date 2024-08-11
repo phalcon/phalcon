@@ -15,14 +15,10 @@ namespace Phalcon\Tests\Unit\Assets\Collection;
 
 use Phalcon\Assets\Asset;
 use Phalcon\Assets\Collection;
-use Phalcon\Tests\UnitTestCase;
+use Phalcon\Tests\AbstractUnitTestCase;
+use PHPUnit\Framework\Attributes\Test;
 
-/**
- * Class AddTest extends UnitTestCase
- *
- * @package Phalcon\Tests\Unit\Assets\Collection
- */
-final class AddTest extends UnitTestCase
+final class AddTest extends AbstractUnitTestCase
 {
     /**
      * Tests Phalcon\Assets\Collection :: add()
@@ -32,6 +28,7 @@ final class AddTest extends UnitTestCase
      * @author Phalcon Team <team@phalcon.io>
      * @since  2020-09-09
      */
+    #[Test]
     public function testAssetsCollectionAdd(): void
     {
         $collection = new Collection();
@@ -57,6 +54,7 @@ final class AddTest extends UnitTestCase
      * @author Phalcon Team <team@phalcon.io>
      * @since  2020-09-09
      */
+    #[Test]
     public function testAssetsCollectionAddDuplicate(): void
     {
         $collection = new Collection();

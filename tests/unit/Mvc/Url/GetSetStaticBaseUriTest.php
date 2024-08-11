@@ -14,9 +14,9 @@ declare(strict_types=1);
 namespace Phalcon\Tests\Unit\Mvc\Url;
 
 use Phalcon\Mvc\Url;
-use Phalcon\Tests\UnitTestCase;
+use Phalcon\Tests\AbstractUnitTestCase;
 
-final class GetSetStaticBaseUriTest extends UnitTestCase
+final class GetSetStaticBaseUriTest extends AbstractUnitTestCase
 {
     /**
      * Tests Phalcon\Mvc\Url :: getStaticBaseUri()/setStaticBaseUri()

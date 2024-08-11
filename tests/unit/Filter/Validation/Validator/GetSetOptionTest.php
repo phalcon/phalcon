@@ -14,11 +14,11 @@ declare(strict_types=1);
 namespace Phalcon\Tests\Unit\Filter\Validation\Validator;
 
 use Phalcon\Tests\Fixtures\Traits\ValidationTrait;
-use Phalcon\Tests\UnitTestCase;
+use Phalcon\Tests\AbstractUnitTestCase;
 
 use function uniqid;
 
-final class GetSetOptionTest extends UnitTestCase
+final class GetSetOptionTest extends AbstractUnitTestCase
 {
     use ValidationTrait;
 

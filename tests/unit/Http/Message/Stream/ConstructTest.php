@@ -19,11 +19,11 @@ use Phalcon\Http\Message\Stream\Input;
 use Phalcon\Http\Message\Stream\Memory;
 use Phalcon\Http\Message\Stream\Temp;
 use Phalcon\Tests\Fixtures\Page\Http;
-use Phalcon\Tests\UnitTestCase;
+use Phalcon\Tests\AbstractUnitTestCase;
 use RuntimeException;
 use stdClass;
 
-final class ConstructTest extends UnitTestCase
+final class ConstructTest extends AbstractUnitTestCase
 {
     /**
      * @return array[]

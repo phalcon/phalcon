@@ -16,9 +16,9 @@ namespace Phalcon\Tests\Unit\Forms\Manager;
 use Phalcon\Forms\Exception;
 use Phalcon\Forms\Form;
 use Phalcon\Forms\Manager;
-use Phalcon\Tests\UnitTestCase;
+use Phalcon\Tests\AbstractUnitTestCase;
 
-final class GetSetTest extends UnitTestCase
+final class GetSetTest extends AbstractUnitTestCase
 {
     /**
      * Tests Phalcon\Forms\Manager :: get() non-existent form

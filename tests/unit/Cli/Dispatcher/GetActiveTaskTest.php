@@ -16,12 +16,12 @@ namespace Phalcon\Tests\Unit\Cli\Dispatcher;
 use Phalcon\Cli\Dispatcher;
 use Phalcon\Di\FactoryDefault\Cli as DiFactoryDefault;
 use Phalcon\Tests\Fixtures\Tasks\MainTask;
-use Phalcon\Tests\UnitTestCase;
+use Phalcon\Tests\AbstractUnitTestCase;
 
 /**
- * Class GetActiveTaskTest extends UnitTestCase
+ * Class GetActiveTaskTest extends AbstractUnitTestCase
  */
-final class GetActiveTaskTest extends UnitTestCase
+final class GetActiveTaskTest extends AbstractUnitTestCase
 {
     /**
      * Tests Phalcon\Cli\Dispatcher :: getActiveTask()

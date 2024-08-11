@@ -13,9 +13,9 @@ declare(strict_types=1);
 
 namespace Phalcon\Tests\Unit\Mvc\View;
 
-use Phalcon\Tests\UnitTestCase;
+use Phalcon\Tests\AbstractUnitTestCase;
 
-class GetPartialTest extends UnitTestCase
+class GetPartialTest extends AbstractUnitTestCase
 {
     /**
      * Tests Phalcon\Mvc\View :: getPartial()

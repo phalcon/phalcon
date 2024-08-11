@@ -14,9 +14,10 @@ declare(strict_types=1);
 namespace Phalcon\Tests\Unit\Assets\Filters\JsMin;
 
 use Phalcon\Assets\Filters\JsMin;
-use Phalcon\Tests\UnitTestCase;
+use Phalcon\Tests\AbstractUnitTestCase;
+use PHPUnit\Framework\Attributes\Test;
 
-final class FilterTest extends UnitTestCase
+final class FilterTest extends AbstractUnitTestCase
 {
     /**
      * Tests Phalcon\Assets\Filters\JsMin :: filter()
@@ -26,6 +27,7 @@ final class FilterTest extends UnitTestCase
      * @author Phalcon Team <team@phalcon.io>
      * @since  2020-09-09
      */
+    #[Test]
     public function testAssetsFiltersJsMinFilter(): void
     {
         $jsmin  = new JsMin();

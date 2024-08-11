@@ -17,9 +17,9 @@ use AnnotationsTestClass;
 use Phalcon\Annotations\Collection;
 use Phalcon\Annotations\Reflection;
 use Phalcon\Tests\Fixtures\Traits\AnnotationsTrait;
-use Phalcon\Tests\UnitTestCase;
+use Phalcon\Tests\AbstractUnitTestCase;
 
-final class GetTest extends UnitTestCase
+final class GetTest extends AbstractUnitTestCase
 {
     use AnnotationsTrait;
 

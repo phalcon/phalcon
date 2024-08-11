@@ -16,11 +16,11 @@ namespace Phalcon\Tests\Unit\Forms\Element;
 use Phalcon\Messages\Message;
 use Phalcon\Messages\Messages;
 use Phalcon\Tests\Fixtures\Traits\FormsTrait;
-use Phalcon\Tests\UnitTestCase;
+use Phalcon\Tests\AbstractUnitTestCase;
 
 use function uniqid;
 
-final class GetSetHasAppendMessagesTest extends UnitTestCase
+final class GetSetHasAppendMessagesTest extends AbstractUnitTestCase
 {
     use FormsTrait;
 

@@ -18,11 +18,11 @@ use Phalcon\Http\Message\Exception\RuntimeException;
 use Phalcon\Http\Message\Stream;
 use Phalcon\Http\Message\UploadedFile;
 use Phalcon\Tests\Fixtures\Page\Http;
-use Phalcon\Tests\UnitTestCase;
+use Phalcon\Tests\AbstractUnitTestCase;
 
 use function outputDir;
 
-final class MoveToTest extends UnitTestCase
+final class MoveToTest extends AbstractUnitTestCase
 {
     /**
      * Tests Phalcon\Http\Message\UploadedFile :: moveTo()

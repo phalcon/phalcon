@@ -19,9 +19,9 @@ use Phalcon\Di\Service\Builder;
 use Phalcon\Html\Escaper;
 use Phalcon\Tests\Fixtures\Di\PropertiesComponent;
 use Phalcon\Tests\Fixtures\Di\ServiceComponent;
-use Phalcon\Tests\UnitTestCase;
+use Phalcon\Tests\AbstractUnitTestCase;
 
-class BuildTest extends UnitTestCase
+class BuildTest extends AbstractUnitTestCase
 {
     /**
      * Unit Tests Phalcon\Di\Service\Builder :: build() - exception argument

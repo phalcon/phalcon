@@ -15,12 +15,12 @@ namespace Phalcon\Tests\Unit\Cli\Dispatcher;
 
 use Phalcon\Cli\Dispatcher;
 use Phalcon\Di\FactoryDefault\Cli as DiFactoryDefault;
-use Phalcon\Tests\UnitTestCase;
+use Phalcon\Tests\AbstractUnitTestCase;
 
 /**
- * Class IsFinishedTest extends UnitTestCase
+ * Class IsFinishedTest extends AbstractUnitTestCase
  */
-final class IsFinishedTest extends UnitTestCase
+final class IsFinishedTest extends AbstractUnitTestCase
 {
     /**
      * Tests Phalcon\Cli\Dispatcher :: isFinished()

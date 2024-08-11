@@ -15,9 +15,9 @@ namespace Phalcon\Tests\Unit\Config\Adapter;
 
 use Phalcon\Config\Exception;
 use Phalcon\Tests\Fixtures\Traits\ConfigTrait;
-use Phalcon\Tests\UnitTestCase;
+use Phalcon\Tests\AbstractUnitTestCase;
 
-final class MergeTest extends UnitTestCase
+final class MergeTest extends AbstractUnitTestCase
 {
     use ConfigTrait;
 

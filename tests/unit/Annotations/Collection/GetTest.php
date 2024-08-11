@@ -16,9 +16,9 @@ namespace Phalcon\Tests\Unit\Annotations\Collection;
 use Phalcon\Annotations\Annotation;
 use Phalcon\Annotations\Collection;
 use Phalcon\Annotations\Exception;
-use Phalcon\Tests\UnitTestCase;
+use Phalcon\Tests\AbstractUnitTestCase;
 
-final class GetTest extends UnitTestCase
+final class GetTest extends AbstractUnitTestCase
 {
     /**
      * Tests Phalcon\Annotations\Collection :: get()

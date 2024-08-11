@@ -14,9 +14,9 @@ declare(strict_types=1);
 namespace Phalcon\Tests\Unit\Encryption\Crypt;
 
 use Phalcon\Tests\Fixtures\Encryption\Crypt\CryptOpensslCipherIvLengthFixture;
-use Phalcon\Tests\UnitTestCase;
+use Phalcon\Tests\AbstractUnitTestCase;
 
-final class IsValidDecryptLengthTest extends UnitTestCase
+final class IsValidDecryptLengthTest extends AbstractUnitTestCase
 {
 //    /**
 //     * Tests Phalcon\Encryption\Crypt :: isValidDecryptLength()

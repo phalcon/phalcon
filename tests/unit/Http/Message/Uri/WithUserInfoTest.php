@@ -14,11 +14,11 @@ declare(strict_types=1);
 namespace Phalcon\Tests\Unit\Http\Message\Uri;
 
 use Phalcon\Http\Message\Uri;
-use Phalcon\Tests\UnitTestCase;
+use Phalcon\Tests\AbstractUnitTestCase;
 
 use function sprintf;
 
-final class WithUserInfoTest extends UnitTestCase
+final class WithUserInfoTest extends AbstractUnitTestCase
 {
     /**
      * @return string[][]

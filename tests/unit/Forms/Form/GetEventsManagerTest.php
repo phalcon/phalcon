@@ -13,12 +13,12 @@ declare(strict_types=1);
 
 namespace Phalcon\Tests\Unit\Forms\Form;
 
-use Phalcon\Tests\UnitTestCase;
+use Phalcon\Tests\AbstractUnitTestCase;
 
 /**
- * Class GetEventsManagerTest extends UnitTestCase
+ * Class GetEventsManagerTest extends AbstractUnitTestCase
  */
-final class GetEventsManagerTest extends UnitTestCase
+final class GetEventsManagerTest extends AbstractUnitTestCase
 {
     /**
      * Tests Phalcon\Forms\Form :: getEventsManager()

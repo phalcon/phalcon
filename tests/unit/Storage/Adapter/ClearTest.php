@@ -26,7 +26,7 @@ use Phalcon\Support\Exception;
 use Phalcon\Support\Exception as HelperException;
 use Phalcon\Tests\Fixtures\Storage\Adapter\ApcuApcuDeleteFixture;
 use Phalcon\Tests\Fixtures\Storage\Adapter\StreamUnlinkFixture;
-use Phalcon\Tests\UnitTestCase;
+use Phalcon\Tests\AbstractUnitTestCase;
 use stdClass;
 
 use function getOptionsLibmemcached;
@@ -34,7 +34,7 @@ use function getOptionsRedis;
 use function outputDir;
 use function uniqid;
 
-final class ClearTest extends UnitTestCase
+final class ClearTest extends AbstractUnitTestCase
 {
     /**
      * @return array[]

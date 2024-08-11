@@ -15,12 +15,12 @@ namespace Phalcon\Tests\Unit\Cli\Dispatcher;
 
 use Phalcon\Cli\Dispatcher;
 use Phalcon\Di\FactoryDefault\Cli as DiFactoryDefault;
-use Phalcon\Tests\UnitTestCase;
+use Phalcon\Tests\AbstractUnitTestCase;
 
 /**
- * Class GetOptionTest extends UnitTestCase
+ * Class GetOptionTest extends AbstractUnitTestCase
  */
-final class GetOptionTest extends UnitTestCase
+final class GetOptionTest extends AbstractUnitTestCase
 {
     /**
      * Tests Phalcon\Cli\Dispatcher :: getOption()

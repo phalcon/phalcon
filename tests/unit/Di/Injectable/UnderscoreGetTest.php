@@ -16,12 +16,12 @@ namespace Phalcon\Tests\Unit\Di\Injectable;
 use Exception;
 use Phalcon\Di\Di;
 use Phalcon\Tests\Fixtures\Di\InjectableComponent;
-use Phalcon\Tests\UnitTestCase;
+use Phalcon\Tests\AbstractUnitTestCase;
 use stdClass;
 
 use function spl_object_hash;
 
-class UnderscoreGetTest extends UnitTestCase
+class UnderscoreGetTest extends AbstractUnitTestCase
 {
     /**
      * Unit Tests Phalcon\Di\Injectable :: __get() - exception

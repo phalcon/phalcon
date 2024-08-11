@@ -15,9 +15,9 @@ namespace Phalcon\Tests\Unit\Mvc\View\Simple;
 
 use Phalcon\Mvc\View\Simple;
 use Phalcon\Mvc\View\ViewBaseInterface;
-use Phalcon\Tests\UnitTestCase;
+use Phalcon\Tests\AbstractUnitTestCase;
 
-class ConstructTest extends UnitTestCase
+class ConstructTest extends AbstractUnitTestCase
 {
     /**
      * Tests Phalcon\Mvc\View\Simple :: __construct()

@@ -15,9 +15,9 @@ namespace Phalcon\Tests\Unit\Di\Service;
 
 use Phalcon\Di\Service;
 use Phalcon\Html\Escaper;
-use Phalcon\Tests\UnitTestCase;
+use Phalcon\Tests\AbstractUnitTestCase;
 
-class IsSharedTest extends UnitTestCase
+class IsSharedTest extends AbstractUnitTestCase
 {
     /**
      * @return array[]

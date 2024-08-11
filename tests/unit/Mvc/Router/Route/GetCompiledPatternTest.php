@@ -13,12 +13,12 @@ declare(strict_types=1);
 
 namespace Phalcon\Tests\Unit\Mvc\Router\Route;
 
-use Phalcon\Tests\UnitTestCase;
+use Phalcon\Tests\AbstractUnitTestCase;
 
 /**
- * Class GetCompiledPatternTest extends UnitTestCase
+ * Class GetCompiledPatternTest extends AbstractUnitTestCase
  */
-final class GetCompiledPatternTest extends UnitTestCase
+final class GetCompiledPatternTest extends AbstractUnitTestCase
 {
     /**
      * Tests Phalcon\Mvc\Router\Route :: getCompiledPattern()

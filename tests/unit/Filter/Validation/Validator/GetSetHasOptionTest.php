@@ -35,11 +35,11 @@ use Phalcon\Filter\Validation\Validator\Uniqueness;
 use Phalcon\Filter\Validation\Validator\Url;
 use Phalcon\Filter\Validation\ValidatorInterface;
 use Phalcon\Tests\Fixtures\Traits\ValidationTrait;
-use Phalcon\Tests\UnitTestCase;
+use Phalcon\Tests\AbstractUnitTestCase;
 
 use function uniqid;
 
-final class GetSetHasOptionTest extends UnitTestCase
+final class GetSetHasOptionTest extends AbstractUnitTestCase
 {
     use ValidationTrait;
 

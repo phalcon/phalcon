@@ -14,9 +14,9 @@ declare(strict_types=1);
 namespace Phalcon\Tests\Database\DataMapper\Query\QueryFactory;
 
 use Phalcon\DataMapper\Query\QueryFactory;
-use Phalcon\Tests\DatabaseTestCase;
+use Phalcon\Tests\AbstractDatabaseTestCase;
 
-final class ConstructTest extends DatabaseTestCase
+final class ConstructTest extends AbstractDatabaseTestCase
 {
     /**
      * Database Tests Phalcon\DataMapper\Query\QueryFactory :: __construct()

@@ -14,9 +14,9 @@ declare(strict_types=1);
 namespace Phalcon\Tests\Unit\Html\Link\EvolvableLink;
 
 use Phalcon\Html\Link\EvolvableLink;
-use Phalcon\Tests\UnitTestCase;
+use Phalcon\Tests\AbstractUnitTestCase;
 
-final class GetAttributesTest extends UnitTestCase
+final class GetAttributesTest extends AbstractUnitTestCase
 {
     /**
      * Tests Phalcon\Html\Link\Link :: getAttributes()

@@ -14,10 +14,10 @@ declare(strict_types=1);
 namespace Phalcon\Tests\Unit\Support\Helper\Str;
 
 use Phalcon\Support\Helper\Str\Dynamic;
-use Phalcon\Tests\UnitTestCase;
+use Phalcon\Tests\AbstractUnitTestCase;
 use RuntimeException;
 
-final class DynamicTest extends UnitTestCase
+final class DynamicTest extends AbstractUnitTestCase
 {
     /**
      * Tests Phalcon\Text :: dynamic()

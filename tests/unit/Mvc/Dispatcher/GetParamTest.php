@@ -13,9 +13,9 @@ declare(strict_types=1);
 
 namespace Phalcon\Tests\Unit\Mvc\Dispatcher;
 
-use Phalcon\Tests\UnitTestCase;
+use Phalcon\Tests\AbstractUnitTestCase;
 
-class GetParamTest extends UnitTestCase
+class GetParamTest extends AbstractUnitTestCase
 {
     /**
      * Tests Phalcon\Mvc\Dispatcher :: getParam()

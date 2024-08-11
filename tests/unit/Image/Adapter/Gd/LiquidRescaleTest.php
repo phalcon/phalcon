@@ -14,9 +14,9 @@ declare(strict_types=1);
 namespace Phalcon\Tests\Unit\Image\Adapter\Gd;
 
 use Phalcon\Tests\Fixtures\Traits\GdTrait;
-use Phalcon\Tests\UnitTestCase;
+use Phalcon\Tests\AbstractUnitTestCase;
 
-final class LiquidRescaleTest extends UnitTestCase
+final class LiquidRescaleTest extends AbstractUnitTestCase
 {
     use GdTrait;
 

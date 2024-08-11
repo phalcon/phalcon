@@ -32,7 +32,7 @@ use function is_string;
 /**
  * Tests the \Phalcon\Di component
  */
-class DiTest extends UnitTestCase
+class DiTest extends AbstractUnitTestCase
 {
     /**
      * @var DiInterface

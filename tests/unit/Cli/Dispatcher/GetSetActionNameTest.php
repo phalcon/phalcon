@@ -14,12 +14,12 @@ declare(strict_types=1);
 namespace Phalcon\Tests\Unit\Cli\Dispatcher;
 
 use Phalcon\Cli\Dispatcher;
-use Phalcon\Tests\UnitTestCase;
+use Phalcon\Tests\AbstractUnitTestCase;
 
 /**
- * Class GetActionNameTest extends UnitTestCase
+ * Class GetActionNameTest extends AbstractUnitTestCase
  */
-final class GetSetActionNameTest extends UnitTestCase
+final class GetSetActionNameTest extends AbstractUnitTestCase
 {
     /**
      * Tests Phalcon\Cli\Dispatcher :: getActionName()

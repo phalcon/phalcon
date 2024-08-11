@@ -13,11 +13,11 @@ namespace Phalcon\Tests\Unit\Encryption\Security\JWT\Builder;
 
 use Phalcon\Encryption\Security\JWT\Builder;
 use Phalcon\Encryption\Security\JWT\Signer\Hmac;
-use Phalcon\Tests\UnitTestCase;
+use Phalcon\Tests\AbstractUnitTestCase;
 
 use function ksort;
 
-final class GetHeadersTest extends UnitTestCase
+final class GetHeadersTest extends AbstractUnitTestCase
 {
     /**
      * Unit Tests Phalcon\Encryption\Security\JWT\Builder :: getHeaders()

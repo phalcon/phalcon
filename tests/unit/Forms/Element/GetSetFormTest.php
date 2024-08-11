@@ -15,11 +15,11 @@ namespace Phalcon\Tests\Unit\Forms\Element;
 
 use Phalcon\Forms\Form;
 use Phalcon\Tests\Fixtures\Traits\FormsTrait;
-use Phalcon\Tests\UnitTestCase;
+use Phalcon\Tests\AbstractUnitTestCase;
 
 use function uniqid;
 
-final class GetSetFormTest extends UnitTestCase
+final class GetSetFormTest extends AbstractUnitTestCase
 {
     use FormsTrait;
 

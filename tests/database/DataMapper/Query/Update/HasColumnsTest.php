@@ -14,9 +14,9 @@ declare(strict_types=1);
 namespace Phalcon\Tests\Database\DataMapper\Query\Update;
 
 use Phalcon\DataMapper\Query\QueryFactory;
-use Phalcon\Tests\DatabaseTestCase;
+use Phalcon\Tests\AbstractDatabaseTestCase;
 
-final class HasColumnsTest extends DatabaseTestCase
+final class HasColumnsTest extends AbstractDatabaseTestCase
 {
     /**
      * Database Tests Phalcon\DataMapper\Query\Update :: hasColumns()

@@ -14,9 +14,10 @@ declare(strict_types=1);
 namespace Phalcon\Tests\Unit\Assets\Inline\Css;
 
 use Phalcon\Assets\Inline\Css;
-use Phalcon\Tests\UnitTestCase;
+use Phalcon\Tests\AbstractUnitTestCase;
+use PHPUnit\Framework\Attributes\Test;
 
-final class GetSetTypeTest extends UnitTestCase
+final class GetSetTypeTest extends AbstractUnitTestCase
 {
     /**
      * Tests Phalcon\Assets\Inline\Css :: getType()/setType()
@@ -26,6 +27,7 @@ final class GetSetTypeTest extends UnitTestCase
      * @author Phalcon Team <team@phalcon.io>
      * @since  2020-09-09
      */
+    #[Test]
     public function testAssetsInlineCssGetSetType(): void
     {
         $asset   = new Css('p {color: #000099}');

@@ -17,7 +17,7 @@ use PDO;
 use Phalcon\Mvc\Model;
 use Phalcon\Mvc\Model\Exception;
 use Phalcon\Mvc\Model\Row;
-use Phalcon\Tests\DatabaseTestCase;
+use Phalcon\Tests\AbstractDatabaseTestCase;
 use Phalcon\Tests\Fixtures\Migrations\CustomersMigration;
 use Phalcon\Tests\Fixtures\Migrations\InvoicesMigration;
 use Phalcon\Tests\Fixtures\Migrations\StringPrimaryMigration;
@@ -30,7 +30,7 @@ use Phalcon\Tests\Models\ModelWithStringPrimary;
 
 use function uniqid;
 
-final class FindFirstTest extends DatabaseTestCase
+final class FindFirstTest extends AbstractDatabaseTestCase
 {
     use DiTrait;
 

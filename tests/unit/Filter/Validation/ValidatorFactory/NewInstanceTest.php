@@ -16,10 +16,10 @@ namespace Phalcon\Tests\Unit\Filter\Validation\ValidatorFactory;
 use Phalcon\Filter\Validation\Exception;
 use Phalcon\Filter\Validation\Validator\Alnum;
 use Phalcon\Filter\Validation\ValidatorFactory;
-use Phalcon\Tests\UnitTestCase;
+use Phalcon\Tests\AbstractUnitTestCase;
 use PHPUnit\Framework\Attributes\Test;
 
-final class NewInstanceTest extends UnitTestCase
+final class NewInstanceTest extends AbstractUnitTestCase
 {
     /**
      * Tests Phalcon\Filter\Validation\ValidatorFactory :: newInstance()

@@ -17,9 +17,9 @@ use Phalcon\Db\Dialect\Mysql;
 use Phalcon\Db\Dialect\Postgresql;
 use Phalcon\Db\Dialect\Sqlite;
 use Phalcon\Db\Index;
-use Phalcon\Tests\DatabaseTestCase;
+use Phalcon\Tests\AbstractDatabaseTestCase;
 
-final class AddIndexTest extends DatabaseTestCase
+final class AddIndexTest extends AbstractDatabaseTestCase
 {
     /**
      * @return array[]

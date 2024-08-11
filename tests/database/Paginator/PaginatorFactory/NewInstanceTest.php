@@ -16,9 +16,9 @@ namespace Phalcon\Tests\Database\Paginator\PaginatorFactory;
 use Phalcon\Paginator\Adapter\AdapterInterface;
 use Phalcon\Paginator\Adapter\NativeArray;
 use Phalcon\Paginator\PaginatorFactory;
-use Phalcon\Tests\DatabaseTestCase;
+use Phalcon\Tests\AbstractDatabaseTestCase;
 
-final class NewInstanceTest extends DatabaseTestCase
+final class NewInstanceTest extends AbstractDatabaseTestCase
 {
     /**
      * Tests Phalcon\Paginator\AdapterFactory :: newInstance()

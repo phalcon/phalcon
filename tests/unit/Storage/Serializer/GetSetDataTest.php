@@ -19,9 +19,9 @@ use Phalcon\Storage\Serializer\Json;
 use Phalcon\Storage\Serializer\Msgpack;
 use Phalcon\Storage\Serializer\None;
 use Phalcon\Storage\Serializer\Php;
-use Phalcon\Tests\UnitTestCase;
+use Phalcon\Tests\AbstractUnitTestCase;
 
-final class GetSetDataTest extends UnitTestCase
+final class GetSetDataTest extends AbstractUnitTestCase
 {
     /**
      * @return array

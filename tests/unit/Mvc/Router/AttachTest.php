@@ -16,9 +16,9 @@ namespace Phalcon\Tests\Unit\Mvc\Router;
 use Phalcon\Mvc\Router;
 use Phalcon\Mvc\Router\Route;
 use Phalcon\Tests\Fixtures\Traits\RouterTrait;
-use Phalcon\Tests\UnitTestCase;
+use Phalcon\Tests\AbstractUnitTestCase;
 
-final class AttachTest extends UnitTestCase
+final class AttachTest extends AbstractUnitTestCase
 {
     use RouterTrait;
 

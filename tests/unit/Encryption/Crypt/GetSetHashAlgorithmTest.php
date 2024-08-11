@@ -15,9 +15,9 @@ namespace Phalcon\Tests\Unit\Encryption\Crypt;
 
 use Phalcon\Encryption\Crypt;
 use Phalcon\Encryption\Crypt\Exception\Exception;
-use Phalcon\Tests\UnitTestCase;
+use Phalcon\Tests\AbstractUnitTestCase;
 
-final class GetSetHashAlgorithmTest extends UnitTestCase
+final class GetSetHashAlgorithmTest extends AbstractUnitTestCase
 {
     /**
      * Tests Phalcon\Encryption\Crypt :: getHashAlgorithm() / setHashAlgorithm()

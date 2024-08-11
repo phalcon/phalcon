@@ -16,9 +16,9 @@ namespace Phalcon\Tests\Unit\Image\ImageFactory;
 use Phalcon\Image\Adapter\Imagick;
 use Phalcon\Image\ImageFactory;
 use Phalcon\Tests\Fixtures\Traits\FactoryTrait;
-use Phalcon\Tests\UnitTestCase;
+use Phalcon\Tests\AbstractUnitTestCase;
 
-final class LoadTest extends UnitTestCase
+final class LoadTest extends AbstractUnitTestCase
 {
     use FactoryTrait;
 

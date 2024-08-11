@@ -13,9 +13,9 @@ declare(strict_types=1);
 
 namespace Phalcon\Tests\Unit\Mvc\Micro;
 
-use Phalcon\Tests\UnitTestCase;
+use Phalcon\Tests\AbstractUnitTestCase;
 
-class GetRouterTest extends UnitTestCase
+class GetRouterTest extends AbstractUnitTestCase
 {
     /**
      * Tests Phalcon\Mvc\Micro :: getRouter()

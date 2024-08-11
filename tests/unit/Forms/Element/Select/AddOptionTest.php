@@ -16,11 +16,11 @@ namespace Phalcon\Tests\Unit\Forms\Element\Select;
 use Phalcon\Forms\Element\Select;
 use Phalcon\Html\Escaper;
 use Phalcon\Html\TagFactory;
-use Phalcon\Tests\UnitTestCase;
+use Phalcon\Tests\AbstractUnitTestCase;
 
 use function preg_replace;
 
-final class AddOptionTest extends UnitTestCase
+final class AddOptionTest extends AbstractUnitTestCase
 {
     /**
      * Tests Phalcon\Forms\Element\Select :: addOption() - array

@@ -16,10 +16,10 @@ namespace Phalcon\Tests\Unit\Filter\Validation\Validator\StringLength\Min;
 use Phalcon\Filter\Validation;
 use Phalcon\Filter\Validation\Exception;
 use Phalcon\Filter\Validation\Validator\StringLength\Min;
-use Phalcon\Tests\UnitTestCase;
+use Phalcon\Tests\AbstractUnitTestCase;
 use stdClass;
 
-final class ValidateTest extends UnitTestCase
+final class ValidateTest extends AbstractUnitTestCase
 {
     /**
      * Tests Phalcon\Filter\Validation\Validator\StringLength :: validate() - single

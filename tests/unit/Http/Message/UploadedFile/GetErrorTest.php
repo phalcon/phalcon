@@ -15,9 +15,9 @@ namespace Phalcon\Tests\Unit\Http\Message\UploadedFile;
 
 use Phalcon\Http\Message\UploadedFile;
 use Phalcon\Tests\Fixtures\Page\Http;
-use Phalcon\Tests\UnitTestCase;
+use Phalcon\Tests\AbstractUnitTestCase;
 
-final class GetErrorTest extends UnitTestCase
+final class GetErrorTest extends AbstractUnitTestCase
 {
     /**
      * Tests Phalcon\Http\Message\UploadedFile :: getError()

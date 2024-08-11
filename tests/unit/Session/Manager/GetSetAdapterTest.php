@@ -15,10 +15,10 @@ namespace Phalcon\Tests\Unit\Session\Manager;
 
 use Phalcon\Session\Manager;
 use Phalcon\Tests\Fixtures\Traits\DiTrait;
-use Phalcon\Tests\UnitTestCase;
+use Phalcon\Tests\AbstractUnitTestCase;
 use SessionHandlerInterface;
 
-final class GetSetAdapterTest extends UnitTestCase
+final class GetSetAdapterTest extends AbstractUnitTestCase
 {
     use DiTrait;
 

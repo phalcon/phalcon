@@ -15,9 +15,9 @@ namespace Phalcon\Tests\Unit\Events\Event;
 
 use Phalcon\Events\Event;
 use Phalcon\Events\EventInterface;
-use Phalcon\Tests\UnitTestCase;
+use Phalcon\Tests\AbstractUnitTestCase;
 
-final class ConstructTest extends UnitTestCase
+final class ConstructTest extends AbstractUnitTestCase
 {
     /**
      * Tests Phalcon\Events\Event :: __construct()

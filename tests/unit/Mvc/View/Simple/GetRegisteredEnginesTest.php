@@ -18,9 +18,9 @@ use Phalcon\Mvc\View\Engine\Volt;
 use Phalcon\Tests\Fixtures\Mvc\View\Engine\Mustache;
 use Phalcon\Tests\Fixtures\Mvc\View\Engine\Twig;
 use Phalcon\Tests\Fixtures\Traits\DiTrait;
-use Phalcon\Tests\UnitTestCase;
+use Phalcon\Tests\AbstractUnitTestCase;
 
-class GetRegisteredEnginesTest extends UnitTestCase
+class GetRegisteredEnginesTest extends AbstractUnitTestCase
 {
     use DiTrait;
 

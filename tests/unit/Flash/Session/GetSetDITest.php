@@ -15,9 +15,9 @@ namespace Phalcon\Tests\Unit\Flash\Session;
 
 use Phalcon\Di\Di;
 use Phalcon\Flash\Session;
-use Phalcon\Tests\UnitTestCase;
+use Phalcon\Tests\AbstractUnitTestCase;
 
-final class GetSetDITest extends UnitTestCase
+final class GetSetDITest extends AbstractUnitTestCase
 {
     /**
      * Tests Phalcon\Flash\Session :: getDI()/setDI()

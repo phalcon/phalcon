@@ -17,9 +17,9 @@ use Phalcon\Encryption\Security\JWT\Token\Item;
 use Phalcon\Encryption\Security\JWT\Token\Parser;
 use Phalcon\Encryption\Security\JWT\Token\Signature;
 use Phalcon\Tests\Fixtures\Traits\JWTTrait;
-use Phalcon\Tests\UnitTestCase;
+use Phalcon\Tests\AbstractUnitTestCase;
 
-final class ParseTest extends UnitTestCase
+final class ParseTest extends AbstractUnitTestCase
 {
     use JWTTrait;
 

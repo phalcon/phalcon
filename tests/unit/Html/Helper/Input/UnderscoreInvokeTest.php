@@ -34,9 +34,9 @@ use Phalcon\Html\Helper\Input\Time;
 use Phalcon\Html\Helper\Input\Url;
 use Phalcon\Html\Helper\Input\Week;
 use Phalcon\Html\TagFactory;
-use Phalcon\Tests\UnitTestCase;
+use Phalcon\Tests\AbstractUnitTestCase;
 
-final class UnderscoreInvokeTest extends UnitTestCase
+final class UnderscoreInvokeTest extends AbstractUnitTestCase
 {
     /**
      * @return array

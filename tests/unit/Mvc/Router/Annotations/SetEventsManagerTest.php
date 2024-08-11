@@ -13,9 +13,9 @@ declare(strict_types=1);
 
 namespace Phalcon\Tests\Unit\Mvc\Router\Annotations;
 
-use Phalcon\Tests\UnitTestCase;
+use Phalcon\Tests\AbstractUnitTestCase;
 
-final class SetEventsManagerTest extends UnitTestCase
+final class SetEventsManagerTest extends AbstractUnitTestCase
 {
     /**
      * Tests Phalcon\Mvc\Router\Annotations :: setEventsManager()

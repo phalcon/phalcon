@@ -14,13 +14,13 @@ declare(strict_types=1);
 namespace Phalcon\Tests\Unit\Html\Escaper;
 
 use Phalcon\Html\Escaper;
-use Phalcon\Tests\UnitTestCase;
+use Phalcon\Tests\AbstractUnitTestCase;
 
 use const ENT_HTML401;
 use const ENT_QUOTES;
 use const ENT_SUBSTITUTE;
 
-final class GetSetFlagsTest extends UnitTestCase
+final class GetSetFlagsTest extends AbstractUnitTestCase
 {
     /**
      * Tests Phalcon\Escaper :: getFlags() / setFlags()

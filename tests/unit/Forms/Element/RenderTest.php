@@ -27,11 +27,11 @@ use Phalcon\Forms\Element\Text;
 use Phalcon\Forms\Element\TextArea;
 use Phalcon\Html\Escaper;
 use Phalcon\Html\TagFactory;
-use Phalcon\Tests\UnitTestCase;
+use Phalcon\Tests\AbstractUnitTestCase;
 
 use function uniqid;
 
-final class RenderTest extends UnitTestCase
+final class RenderTest extends AbstractUnitTestCase
 {
     /**
      * @return string[][]

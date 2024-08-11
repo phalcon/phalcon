@@ -13,13 +13,13 @@ declare(strict_types=1);
 
 namespace Phalcon\Tests\Database\Db\Column;
 
-use Phalcon\Tests\DatabaseTestCase;
+use Phalcon\Tests\AbstractDatabaseTestCase;
 use Phalcon\Tests\Fixtures\Migrations\FractalDatesMigration;
 use Phalcon\Tests\Fixtures\Traits\DbTrait;
 use Phalcon\Tests\Fixtures\Traits\DiTrait;
 use Phalcon\Tests\Models\FractalDates;
 
-final class GetScaleTest extends DatabaseTestCase
+final class GetScaleTest extends AbstractDatabaseTestCase
 {
     use DbTrait;
     use DiTrait;

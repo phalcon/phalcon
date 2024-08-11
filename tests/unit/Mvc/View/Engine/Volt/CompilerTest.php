@@ -27,18 +27,18 @@ use Phalcon\Mvc\Url;
 use Phalcon\Mvc\View;
 use Phalcon\Mvc\View\Engine\Volt;
 use Phalcon\Mvc\View\Engine\Volt\Compiler;
-use Phalcon\Tests\UnitTestCase;
+use Phalcon\Tests\AbstractUnitTestCase;
 use stdClass;
 
 use function dataDir;
 use function file_put_contents;
 
 /**
- * Phalcon\Tests\Unit\Mvc\View\Engine\Volt\CompilerTest extends UnitTestCase
+ * Phalcon\Tests\Unit\Mvc\View\Engine\Volt\CompilerTest extends AbstractUnitTestCase
  *
  * Test Compiler template engine
  */
-class CompilerTest extends UnitTestCase
+class CompilerTest extends AbstractUnitTestCase
 {
     /**
      * Test to correct create content

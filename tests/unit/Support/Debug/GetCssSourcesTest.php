@@ -14,16 +14,16 @@ declare(strict_types=1);
 namespace Phalcon\Tests\Unit\Support\Debug;
 
 use Phalcon\Support\Debug;
-use Phalcon\Tests\UnitTestCase;
+use Phalcon\Tests\AbstractUnitTestCase;
 
 use function sprintf;
 
 /**
- * Class GetCssSourcesTest extends UnitTestCase
+ * Class GetCssSourcesTest extends AbstractUnitTestCase
  *
  * @package Phalcon\Tests\Unit\Support\Debug
  */
-final class GetCssSourcesTest extends UnitTestCase
+final class GetCssSourcesTest extends AbstractUnitTestCase
 {
     /**
      * Tests Phalcon\Debug :: getCssSources()

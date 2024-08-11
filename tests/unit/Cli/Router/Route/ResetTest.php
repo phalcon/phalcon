@@ -14,9 +14,9 @@ declare(strict_types=1);
 namespace Phalcon\Tests\Unit\Cli\Router\Route;
 
 use Phalcon\Cli\Router\Route;
-use Phalcon\Tests\UnitTestCase;
+use Phalcon\Tests\AbstractUnitTestCase;
 
-final class ResetTest extends UnitTestCase
+final class ResetTest extends AbstractUnitTestCase
 {
     /**
      * Tests Phalcon\Cli\Router\Route :: reset()

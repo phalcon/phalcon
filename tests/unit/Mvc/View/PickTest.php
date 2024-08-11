@@ -16,11 +16,11 @@ namespace Phalcon\Tests\Unit\Mvc\View;
 use Phalcon\Di\Di;
 use Phalcon\Mvc\View;
 use Phalcon\Tests\Fixtures\Traits\DiTrait;
-use Phalcon\Tests\UnitTestCase;
+use Phalcon\Tests\AbstractUnitTestCase;
 
 use function dataDir;
 
-class PickTest extends UnitTestCase
+class PickTest extends AbstractUnitTestCase
 {
     use DiTrait;
 

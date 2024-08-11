@@ -20,13 +20,13 @@ use Phalcon\Logger\Adapter\Stream;
 use Phalcon\Logger\Enum;
 use Phalcon\Logger\Item;
 use Phalcon\Tests\Fixtures\Logger\Adapter\StreamFopenFixture;
-use Phalcon\Tests\UnitTestCase;
+use Phalcon\Tests\AbstractUnitTestCase;
 
 use function date_default_timezone_get;
 use function file_get_contents;
 use function logsDir;
 
-final class ProcessTest extends UnitTestCase
+final class ProcessTest extends AbstractUnitTestCase
 {
     /**
      * Tests Phalcon\Logger\Adapter\Stream :: process()

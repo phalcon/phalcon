@@ -14,11 +14,11 @@ declare(strict_types=1);
 namespace Phalcon\Tests\Unit\Encryption\Security\Random;
 
 use Phalcon\Encryption\Security\Random;
-use Phalcon\Tests\UnitTestCase;
+use Phalcon\Tests\AbstractUnitTestCase;
 
 use function strlen;
 
-final class BytesTest extends UnitTestCase
+final class BytesTest extends AbstractUnitTestCase
 {
     /**
      * Tests Phalcon\Encryption\Security\Random :: bytes()

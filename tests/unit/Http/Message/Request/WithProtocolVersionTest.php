@@ -15,9 +15,9 @@ namespace Phalcon\Tests\Unit\Http\Message\Request;
 
 use Phalcon\Http\Message\Exception\InvalidArgumentException;
 use Phalcon\Http\Message\Request;
-use Phalcon\Tests\UnitTestCase;
+use Phalcon\Tests\AbstractUnitTestCase;
 
-final class WithProtocolVersionTest extends UnitTestCase
+final class WithProtocolVersionTest extends AbstractUnitTestCase
 {
     /**
      * Tests Phalcon\Http\Message\Request :: withProtocolVersion()

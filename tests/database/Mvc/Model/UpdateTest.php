@@ -15,7 +15,7 @@ namespace Phalcon\Tests\Database\Mvc\Model;
 
 use PDO;
 use Phalcon\Mvc\ModelInterface;
-use Phalcon\Tests\DatabaseTestCase;
+use Phalcon\Tests\AbstractDatabaseTestCase;
 use Phalcon\Tests\Fixtures\Migrations\CustomersDefaultsMigration;
 use Phalcon\Tests\Fixtures\Migrations\InvoicesMigration;
 use Phalcon\Tests\Fixtures\Migrations\SettersMigration;
@@ -26,7 +26,7 @@ use Phalcon\Tests\Models\Setters;
 
 use function uniqid;
 
-final class UpdateTest extends DatabaseTestCase
+final class UpdateTest extends AbstractDatabaseTestCase
 {
     use DiTrait;
 

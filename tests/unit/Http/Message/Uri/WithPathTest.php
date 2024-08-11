@@ -15,11 +15,11 @@ namespace Phalcon\Tests\Unit\Http\Message\Uri;
 
 use InvalidArgumentException;
 use Phalcon\Http\Message\Uri;
-use Phalcon\Tests\UnitTestCase;
+use Phalcon\Tests\AbstractUnitTestCase;
 
 use const PHP_OS_FAMILY;
 
-final class WithPathTest extends UnitTestCase
+final class WithPathTest extends AbstractUnitTestCase
 {
     /**
      * @return string[][]

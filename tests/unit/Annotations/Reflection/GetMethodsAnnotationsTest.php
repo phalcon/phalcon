@@ -16,9 +16,9 @@ namespace Phalcon\Tests\Unit\Annotations\Reflection;
 use Phalcon\Annotations\Collection;
 use Phalcon\Annotations\Reader;
 use Phalcon\Annotations\Reflection;
-use Phalcon\Tests\UnitTestCase;
+use Phalcon\Tests\AbstractUnitTestCase;
 
-final class GetMethodsAnnotationsTest extends UnitTestCase
+final class GetMethodsAnnotationsTest extends AbstractUnitTestCase
 {
     /**
      * Tests Phalcon\Annotations\Reflection :: getMethodsAnnotations()

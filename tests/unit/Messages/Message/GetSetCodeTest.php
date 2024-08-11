@@ -14,9 +14,9 @@ declare(strict_types=1);
 namespace Phalcon\Tests\Unit\Messages\Message;
 
 use Phalcon\Messages\Message;
-use Phalcon\Tests\UnitTestCase;
+use Phalcon\Tests\AbstractUnitTestCase;
 
-final class GetSetCodeTest extends UnitTestCase
+final class GetSetCodeTest extends AbstractUnitTestCase
 {
     /**
      * Tests Phalcon\Messages\Message :: getCode()/setCode()

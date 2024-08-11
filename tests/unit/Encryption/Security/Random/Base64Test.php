@@ -14,11 +14,11 @@ declare(strict_types=1);
 namespace Phalcon\Tests\Unit\Encryption\Security\Random;
 
 use Phalcon\Encryption\Security\Random;
-use Phalcon\Tests\UnitTestCase;
+use Phalcon\Tests\AbstractUnitTestCase;
 
 use function is_string;
 
-final class Base64Test extends UnitTestCase
+final class Base64Test extends AbstractUnitTestCase
 {
     /**
      * @return int[][]

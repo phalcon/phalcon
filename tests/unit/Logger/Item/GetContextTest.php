@@ -17,11 +17,11 @@ use DateTimeImmutable;
 use DateTimeZone;
 use Phalcon\Logger\Enum;
 use Phalcon\Logger\Item;
-use Phalcon\Tests\UnitTestCase;
+use Phalcon\Tests\AbstractUnitTestCase;
 
 use function date_default_timezone_get;
 
-final class GetContextTest extends UnitTestCase
+final class GetContextTest extends AbstractUnitTestCase
 {
     /**
      * Tests Phalcon\Logger\Item :: getContext()

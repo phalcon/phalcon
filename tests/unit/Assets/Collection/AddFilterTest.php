@@ -15,9 +15,10 @@ namespace Phalcon\Tests\Unit\Assets\Collection;
 
 use Phalcon\Assets\Collection;
 use Phalcon\Assets\Filters\None;
-use Phalcon\Tests\UnitTestCase;
+use Phalcon\Tests\AbstractUnitTestCase;
+use PHPUnit\Framework\Attributes\Test;
 
-final class AddFilterTest extends UnitTestCase
+final class AddFilterTest extends AbstractUnitTestCase
 {
     /**
      * Tests Phalcon\Assets\Collection :: addFilter()
@@ -27,6 +28,7 @@ final class AddFilterTest extends UnitTestCase
      * @author Phalcon Team <team@phalcon.io>
      * @since  2020-09-09
      */
+    #[Test]
     public function testAssetsCollectionAddFilter(): void
     {
         $collection = new Collection();

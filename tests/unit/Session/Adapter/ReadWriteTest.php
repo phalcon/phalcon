@@ -16,13 +16,13 @@ namespace Phalcon\Tests\Unit\Session\Adapter;
 use Phalcon\Session\Adapter\Redis;
 use Phalcon\Tests\Fixtures\Session\Adapter\StreamFileGetContentsFixture;
 use Phalcon\Tests\Fixtures\Traits\DiTrait;
-use Phalcon\Tests\ServicesTestCase;
+use Phalcon\Tests\AbstractServicesTestCase;
 
 use function cacheDir;
 use function getOptionsSessionStream;
 use function uniqid;
 
-final class ReadWriteTest extends ServicesTestCase
+final class ReadWriteTest extends AbstractServicesTestCase
 {
     use DiTrait;
 

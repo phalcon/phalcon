@@ -14,9 +14,9 @@ declare(strict_types=1);
 namespace Phalcon\Tests\Unit\Html\Breadcrumbs;
 
 use Phalcon\Html\Breadcrumbs;
-use Phalcon\Tests\UnitTestCase;
+use Phalcon\Tests\AbstractUnitTestCase;
 
-final class ClearTest extends UnitTestCase
+final class ClearTest extends AbstractUnitTestCase
 {
     /**
      * Tests Phalcon\Html\Breadcrumbs :: clear()

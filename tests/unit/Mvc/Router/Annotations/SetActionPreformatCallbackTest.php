@@ -15,9 +15,9 @@ namespace Phalcon\Tests\Unit\Mvc\Router\Annotations;
 
 use Phalcon\Mvc\Router\Annotations;
 use Phalcon\Support\Helper\Str\Uncamelize;
-use Phalcon\Tests\UnitTestCase;
+use Phalcon\Tests\AbstractUnitTestCase;
 
-final class SetActionPreformatCallbackTest extends UnitTestCase
+final class SetActionPreformatCallbackTest extends AbstractUnitTestCase
 {
     /**
      * Tests Phalcon\Mvc\Router\Annotations :: setActionPreformatCallback()

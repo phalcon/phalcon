@@ -18,9 +18,9 @@ use Phalcon\Filter\Validation\Validator\StringLength;
 use Phalcon\Filter\Validation\ValidatorCompositeInterface;
 use Phalcon\Filter\Validation\ValidatorInterface;
 use Phalcon\Tests\Fixtures\Traits\ValidationTrait;
-use Phalcon\Tests\UnitTestCase;
+use Phalcon\Tests\AbstractUnitTestCase;
 
-final class ConstructTest extends UnitTestCase
+final class ConstructTest extends AbstractUnitTestCase
 {
     use ValidationTrait;
 

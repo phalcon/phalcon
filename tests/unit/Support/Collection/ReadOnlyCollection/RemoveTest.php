@@ -15,9 +15,9 @@ namespace Phalcon\Tests\Unit\Support\Collection\ReadOnlyCollection;
 
 use Phalcon\Support\Collection\Exception;
 use Phalcon\Support\Collection\ReadOnlyCollection;
-use Phalcon\Tests\UnitTestCase;
+use Phalcon\Tests\AbstractUnitTestCase;
 
-final class RemoveTest extends UnitTestCase
+final class RemoveTest extends AbstractUnitTestCase
 {
     /**
      * Tests Phalcon\Support\Collection\ReadOnlyCollection :: remove()

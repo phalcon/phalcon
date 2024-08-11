@@ -14,9 +14,9 @@ declare(strict_types=1);
 namespace Phalcon\Tests\Unit\Support\Registry;
 
 use Phalcon\Support\Registry;
-use Phalcon\Tests\UnitTestCase;
+use Phalcon\Tests\AbstractUnitTestCase;
 
-final class UnderscoreUnsetTest extends UnitTestCase
+final class UnderscoreUnsetTest extends AbstractUnitTestCase
 {
     /**
      * Unit Tests Phalcon\Support\Registry :: __unset()

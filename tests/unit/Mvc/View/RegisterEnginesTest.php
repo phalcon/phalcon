@@ -17,9 +17,9 @@ use Phalcon\Mvc\View;
 use Phalcon\Mvc\View\Engine\Php;
 use Phalcon\Mvc\View\Engine\Volt;
 use Phalcon\Tests\Fixtures\Traits\DiTrait;
-use Phalcon\Tests\UnitTestCase;
+use Phalcon\Tests\AbstractUnitTestCase;
 
-class RegisterEnginesTest extends UnitTestCase
+class RegisterEnginesTest extends AbstractUnitTestCase
 {
     use DiTrait;
 

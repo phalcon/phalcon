@@ -13,12 +13,12 @@ declare(strict_types=1);
 
 namespace Phalcon\Tests\Unit\Mvc\View\Engine\Volt\Compiler;
 
-use Phalcon\Tests\UnitTestCase;
+use Phalcon\Tests\AbstractUnitTestCase;
 
 /**
- * Class AddExtensionTest extends UnitTestCase
+ * Class AddExtensionTest extends AbstractUnitTestCase
  */
-class AddExtensionTest extends UnitTestCase
+class AddExtensionTest extends AbstractUnitTestCase
 {
     /**
      * Tests Phalcon\Mvc\View\Engine\Volt\Compiler :: addExtension()

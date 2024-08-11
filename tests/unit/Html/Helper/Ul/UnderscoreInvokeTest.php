@@ -15,11 +15,11 @@ use Phalcon\Html\Escaper;
 use Phalcon\Html\Exception;
 use Phalcon\Html\Helper\Ul;
 use Phalcon\Html\TagFactory;
-use Phalcon\Tests\UnitTestCase;
+use Phalcon\Tests\AbstractUnitTestCase;
 
 use const PHP_EOL;
 
-final class UnderscoreInvokeTest extends UnitTestCase
+final class UnderscoreInvokeTest extends AbstractUnitTestCase
 {
     /**
      * @return array

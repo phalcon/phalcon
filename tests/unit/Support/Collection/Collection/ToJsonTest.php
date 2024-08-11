@@ -15,9 +15,9 @@ namespace Phalcon\Tests\Unit\Support\Collection\Collection;
 
 use Phalcon\Support\Collection;
 use Phalcon\Tests\Fixtures\Support\Collection\CollectionJsonEncodeFixture;
-use Phalcon\Tests\UnitTestCase;
+use Phalcon\Tests\AbstractUnitTestCase;
 
-final class ToJsonTest extends UnitTestCase
+final class ToJsonTest extends AbstractUnitTestCase
 {
     /**
      * Tests Phalcon\Support\Collection :: toJson()

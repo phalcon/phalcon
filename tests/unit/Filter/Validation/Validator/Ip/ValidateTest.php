@@ -15,9 +15,9 @@ namespace Phalcon\Tests\Unit\Filter\Validation\Validator\Ip;
 
 use Phalcon\Filter\Validation;
 use Phalcon\Filter\Validation\Validator\Ip;
-use Phalcon\Tests\UnitTestCase;
+use Phalcon\Tests\AbstractUnitTestCase;
 
-final class ValidateTest extends UnitTestCase
+final class ValidateTest extends AbstractUnitTestCase
 {
     /**
      * Tests Phalcon\Filter\Validation\Validator\Ip :: validate() - multiple field

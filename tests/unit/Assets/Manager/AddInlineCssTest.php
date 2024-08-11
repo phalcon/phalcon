@@ -17,7 +17,8 @@ use Phalcon\Assets\Manager;
 use Phalcon\Html\Escaper;
 use Phalcon\Html\TagFactory;
 use Phalcon\Tests\Fixtures\Traits\DiTrait;
-use Phalcon\Tests\UnitTestCase;
+use Phalcon\Tests\AbstractUnitTestCase;
+use PHPUnit\Framework\Attributes\Test;
 
 use function ob_end_clean;
 use function ob_get_contents;
@@ -25,7 +26,7 @@ use function ob_start;
 
 use const PHP_EOL;
 
-final class AddInlineCssTest extends UnitTestCase
+final class AddInlineCssTest extends AbstractUnitTestCase
 {
     use DiTrait;
 
@@ -53,6 +54,7 @@ final class AddInlineCssTest extends UnitTestCase
      * @author Phalcon Team <team@phalcon.io>
      * @since  2020-03-19
      */
+    #[Test]
     public function testAssetsManagerAddInlineCss(): void
     {
         $manager = new Manager(new TagFactory(new Escaper()));

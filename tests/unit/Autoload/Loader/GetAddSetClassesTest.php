@@ -15,9 +15,9 @@ namespace Phalcon\Tests\Unit\Autoload\Loader;
 
 use Phalcon\Autoload\Loader;
 use Phalcon\Tests\Fixtures\Traits\LoaderTrait;
-use Phalcon\Tests\UnitTestCase;
+use Phalcon\Tests\AbstractUnitTestCase;
 
-final class GetAddSetClassesTest extends UnitTestCase
+final class GetAddSetClassesTest extends AbstractUnitTestCase
 {
     use LoaderTrait;
 

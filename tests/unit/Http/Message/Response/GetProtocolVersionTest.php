@@ -14,9 +14,9 @@ declare(strict_types=1);
 namespace Phalcon\Tests\Unit\Http\Message\Response;
 
 use Phalcon\Http\Message\Response;
-use Phalcon\Tests\UnitTestCase;
+use Phalcon\Tests\AbstractUnitTestCase;
 
-final class GetProtocolVersionTest extends UnitTestCase
+final class GetProtocolVersionTest extends AbstractUnitTestCase
 {
     /**
      * Tests Phalcon\Http\Message\Response :: getProtocolVersion()

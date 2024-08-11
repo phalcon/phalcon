@@ -15,11 +15,11 @@ namespace Phalcon\Tests\Unit\Mvc\View\Engine\Volt\Compiler;
 
 use Phalcon\Mvc\View\Engine\Volt\Compiler;
 use Phalcon\Mvc\View\Exception;
-use Phalcon\Tests\UnitTestCase;
+use Phalcon\Tests\AbstractUnitTestCase;
 
 use function is_array;
 
-class ParseTest extends UnitTestCase
+class ParseTest extends AbstractUnitTestCase
 {
     public static function getVoltExtendsError(): array
     {

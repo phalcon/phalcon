@@ -17,10 +17,10 @@ use Phalcon\Filter\Validation;
 use Phalcon\Filter\Validation\Validator\Alpha;
 use Phalcon\Filter\Validation\Validator\Email;
 use Phalcon\Filter\Validation\Validator\PresenceOf;
-use Phalcon\Tests\UnitTestCase;
+use Phalcon\Tests\AbstractUnitTestCase;
 use PHPUnit\Framework\Attributes\Test;
 
-final class RulesTest extends UnitTestCase
+final class RulesTest extends AbstractUnitTestCase
 {
     /**
      * Tests Phalcon\Filter\Validation :: rules()

@@ -15,9 +15,9 @@ namespace Phalcon\Tests\Unit\Http\Message\UriFactory;
 
 use Phalcon\Http\Message\Factories\UriFactory;
 use Phalcon\Http\Message\Interfaces\UriFactoryInterface;
-use Phalcon\Tests\UnitTestCase;
+use Phalcon\Tests\AbstractUnitTestCase;
 
-final class ConstructTest extends UnitTestCase
+final class ConstructTest extends AbstractUnitTestCase
 {
     /**
      * Tests Phalcon\Http\Message\UriFactory :: __construct()

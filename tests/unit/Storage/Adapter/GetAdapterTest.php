@@ -22,7 +22,7 @@ use Phalcon\Storage\Adapter\RedisCluster;
 use Phalcon\Storage\Adapter\Stream;
 use Phalcon\Storage\Adapter\Weak;
 use Phalcon\Storage\SerializerFactory;
-use Phalcon\Tests\UnitTestCase;
+use Phalcon\Tests\AbstractUnitTestCase;
 use Redis as NativeRedis;
 use RedisCluster as NativeRedisCluster;
 
@@ -31,7 +31,7 @@ use function getOptionsRedis;
 use function getOptionsRedisCluster;
 use function outputDir;
 
-final class GetAdapterTest extends UnitTestCase
+final class GetAdapterTest extends AbstractUnitTestCase
 {
     /**
      * @return array[]

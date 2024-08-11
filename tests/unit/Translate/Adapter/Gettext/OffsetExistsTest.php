@@ -14,11 +14,11 @@ declare(strict_types=1);
 namespace Phalcon\Tests\Unit\Translate\Adapter\Gettext;
 
 use Phalcon\Tests\Fixtures\Traits\TranslateGettextTrait;
-use Phalcon\Tests\UnitTestCase;
+use Phalcon\Tests\AbstractUnitTestCase;
 use Phalcon\Translate\Adapter\Gettext;
 use Phalcon\Translate\InterpolatorFactory;
 
-final class OffsetExistsTest extends UnitTestCase
+final class OffsetExistsTest extends AbstractUnitTestCase
 {
     use TranslateGettextTrait;
 

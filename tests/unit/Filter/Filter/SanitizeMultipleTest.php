@@ -14,14 +14,14 @@ declare(strict_types=1);
 namespace Phalcon\Tests\Unit\Filter\Filter;
 
 use Phalcon\Filter\FilterFactory;
-use Phalcon\Tests\UnitTestCase;
+use Phalcon\Tests\AbstractUnitTestCase;
 
 use function restore_error_handler;
 use function set_error_handler;
 
 use const E_USER_NOTICE;
 
-final class SanitizeMultipleTest extends UnitTestCase
+final class SanitizeMultipleTest extends AbstractUnitTestCase
 {
     /**
      * @return array<array-key, array<string, mixed>>

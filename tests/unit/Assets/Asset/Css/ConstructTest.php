@@ -15,9 +15,11 @@ namespace Phalcon\Tests\Unit\Assets\Asset\Css;
 
 use Phalcon\Assets\Asset\Css;
 use Phalcon\Tests\Fixtures\Traits\AssetsTrait;
-use Phalcon\Tests\UnitTestCase;
+use Phalcon\Tests\AbstractUnitTestCase;
+use PHPUnit\Framework\Attributes\DataProvider;
+use PHPUnit\Framework\Attributes\Test;
 
-final class ConstructTest extends UnitTestCase
+final class ConstructTest extends AbstractUnitTestCase
 {
     use AssetsTrait;
 
@@ -29,6 +31,7 @@ final class ConstructTest extends UnitTestCase
      * @author Phalcon Team <team@phalcon.io>
      * @since  2020-09-09
      */
+    #[Test]
     public function testAssetsAssetCssConstructAttributes(): void
     {
         $asset = new Css('css/docs.css');
@@ -46,6 +49,7 @@ final class ConstructTest extends UnitTestCase
      * @author Phalcon Team <team@phalcon.io>
      * @since  2020-09-09
      */
+    #[Test]
     public function testAssetsAssetCssConstructAttributesSet(): void
     {
         $attributes = [
@@ -71,6 +75,7 @@ final class ConstructTest extends UnitTestCase
      * @author Phalcon Team <team@phalcon.io>
      * @since  2020-09-09
      */
+    #[Test]
     public function testAssetsAssetCssConstructFilter(): void
     {
         $asset  = new Css('css/docs.css');
@@ -86,6 +91,7 @@ final class ConstructTest extends UnitTestCase
      * @author Phalcon Team <team@phalcon.io>
      * @since  2020-09-09
      */
+    #[Test]
     public function testAssetsAssetCssConstructFilterSet(): void
     {
         $asset  = new Css('css/docs.css', true, false);
@@ -96,13 +102,13 @@ final class ConstructTest extends UnitTestCase
     /**
      * Tests Phalcon\Assets\Asset\Css :: __construct() - local
      *
-     * @dataProvider providerCss
-     *
      * @return void
      *
      * @author       Phalcon Team <team@phalcon.io>
      * @since        2020-09-09
      */
+    #[Test]
+    #[DataProvider('providerCss')]
     public function testAssetsAssetCssConstructLocal(
         string $path,
         bool $local

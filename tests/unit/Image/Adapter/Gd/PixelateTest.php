@@ -15,9 +15,9 @@ namespace Phalcon\Tests\Unit\Image\Adapter\Gd;
 
 use Phalcon\Image\Adapter\Gd;
 use Phalcon\Tests\Fixtures\Traits\GdTrait;
-use Phalcon\Tests\UnitTestCase;
+use Phalcon\Tests\AbstractUnitTestCase;
 
-final class PixelateTest extends UnitTestCase
+final class PixelateTest extends AbstractUnitTestCase
 {
     use GdTrait;
 

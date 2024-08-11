@@ -16,9 +16,9 @@ namespace Phalcon\Tests\Database\DataMapper\Query\Bind;
 use PDO;
 use Phalcon\DataMapper\Query\Bind;
 use Phalcon\DataMapper\Query\QueryFactory;
-use Phalcon\Tests\DatabaseTestCase;
+use Phalcon\Tests\AbstractDatabaseTestCase;
 
-final class BindInlineTest extends DatabaseTestCase
+final class BindInlineTest extends AbstractDatabaseTestCase
 {
     /**
      * Database Tests Phalcon\DataMapper\Query\Bind :: bindInline()

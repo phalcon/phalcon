@@ -21,12 +21,12 @@ use Phalcon\Acl\Exception as AclException;
 use Phalcon\Acl\Role;
 use Phalcon\Tests\Fixtures\Acl\TestComponentAware;
 use Phalcon\Tests\Fixtures\Acl\TestRoleAware;
-use Phalcon\Tests\UnitTestCase;
+use Phalcon\Tests\AbstractUnitTestCase;
 
 use function restore_error_handler;
 use function set_error_handler;
 
-final class AllowTest extends UnitTestCase
+final class AllowTest extends AbstractUnitTestCase
 {
     /**
      * Tests Phalcon\Acl\Adapter\Memory :: allow()

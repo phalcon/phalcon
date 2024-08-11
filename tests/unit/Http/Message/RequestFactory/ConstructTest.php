@@ -15,9 +15,9 @@ namespace Phalcon\Tests\Unit\Http\Message\RequestFactory;
 
 use Phalcon\Http\Message\Interfaces\RequestInterface;
 use Phalcon\Http\Message\Request;
-use Phalcon\Tests\UnitTestCase;
+use Phalcon\Tests\AbstractUnitTestCase;
 
-final class ConstructTest extends UnitTestCase
+final class ConstructTest extends AbstractUnitTestCase
 {
     /**
      * Tests Phalcon\Http\Message\Request :: __construct()

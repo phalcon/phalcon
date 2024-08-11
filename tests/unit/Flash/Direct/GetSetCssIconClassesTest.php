@@ -14,9 +14,9 @@ declare(strict_types=1);
 namespace Phalcon\Tests\Unit\Flash\Direct;
 
 use Phalcon\Flash\Direct;
-use Phalcon\Tests\UnitTestCase;
+use Phalcon\Tests\AbstractUnitTestCase;
 
-final class GetSetCssIconClassesTest extends UnitTestCase
+final class GetSetCssIconClassesTest extends AbstractUnitTestCase
 {
     /**
      * Tests Phalcon\Flash\Direct :: getCssIconClasses()/setCssIconClasses()

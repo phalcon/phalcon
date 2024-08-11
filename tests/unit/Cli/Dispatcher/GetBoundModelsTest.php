@@ -16,12 +16,12 @@ namespace Phalcon\Tests\Unit\Cli\Dispatcher;
 use Phalcon\Cli\Dispatcher;
 use Phalcon\Di\FactoryDefault\Cli as DiFactoryDefault;
 use Phalcon\Mvc\Model\Binder;
-use Phalcon\Tests\UnitTestCase;
+use Phalcon\Tests\AbstractUnitTestCase;
 
 /**
- * Class GetBoundModelsTest extends UnitTestCase
+ * Class GetBoundModelsTest extends AbstractUnitTestCase
  */
-final class GetBoundModelsTest extends UnitTestCase
+final class GetBoundModelsTest extends AbstractUnitTestCase
 {
     /**
      * Tests Phalcon\Cli\Dispatcher :: getBoundModels()

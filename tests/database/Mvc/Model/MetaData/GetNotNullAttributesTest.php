@@ -14,11 +14,11 @@ declare(strict_types=1);
 namespace Phalcon\Tests\Database\Mvc\Model\MetaData;
 
 use Phalcon\Mvc\Model\MetaData;
-use Phalcon\Tests\DatabaseTestCase;
+use Phalcon\Tests\AbstractDatabaseTestCase;
 use Phalcon\Tests\Fixtures\Traits\DiTrait;
 use Phalcon\Tests\Models\Invoices;
 
-final class GetNotNullAttributesTest extends DatabaseTestCase
+final class GetNotNullAttributesTest extends AbstractDatabaseTestCase
 {
     use DiTrait;
 

@@ -21,7 +21,7 @@ use Phalcon\Storage\Adapter\RedisCluster;
 use Phalcon\Storage\Adapter\Stream;
 use Phalcon\Storage\Adapter\Weak;
 use Phalcon\Storage\SerializerFactory;
-use Phalcon\Tests\UnitTestCase;
+use Phalcon\Tests\AbstractUnitTestCase;
 use RuntimeException;
 
 use function getOptionsLibmemcached;
@@ -29,7 +29,7 @@ use function getOptionsRedis;
 use function getOptionsRedisCluster;
 use function outputDir;
 
-final class EventsTest extends UnitTestCase
+final class EventsTest extends AbstractUnitTestCase
 {
     /**
      * @return array[]

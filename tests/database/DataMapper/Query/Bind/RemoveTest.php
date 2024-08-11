@@ -15,9 +15,9 @@ namespace Phalcon\Tests\Database\DataMapper\Query\Bind;
 
 use PDO;
 use Phalcon\DataMapper\Query\Bind;
-use Phalcon\Tests\DatabaseTestCase;
+use Phalcon\Tests\AbstractDatabaseTestCase;
 
-final class RemoveTest extends DatabaseTestCase
+final class RemoveTest extends AbstractDatabaseTestCase
 {
     /**
      * Database Tests Phalcon\DataMapper\Query\Bind :: remove()

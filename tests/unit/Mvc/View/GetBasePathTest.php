@@ -15,11 +15,11 @@ namespace Phalcon\Tests\Unit\Mvc\View;
 
 use Phalcon\Di\Di;
 use Phalcon\Mvc\View;
-use Phalcon\Tests\UnitTestCase;
+use Phalcon\Tests\AbstractUnitTestCase;
 
 use function dataDir;
 
-class GetBasePathTest extends UnitTestCase
+class GetBasePathTest extends AbstractUnitTestCase
 {
     /**
      * Tests Phalcon\Mvc\View :: getBasePath()

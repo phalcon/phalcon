@@ -20,7 +20,8 @@ use Phalcon\Assets\Manager;
 use Phalcon\Html\Escaper;
 use Phalcon\Html\TagFactory;
 use Phalcon\Tests\Fixtures\Traits\DiTrait;
-use Phalcon\Tests\UnitTestCase;
+use Phalcon\Tests\AbstractUnitTestCase;
+use PHPUnit\Framework\Attributes\Test;
 
 use function dataDir;
 use function ob_get_clean;
@@ -31,7 +32,7 @@ use function uniqid;
 
 use const PHP_EOL;
 
-final class OutputJsTest extends UnitTestCase
+final class OutputJsTest extends AbstractUnitTestCase
 {
     use DiTrait;
 
@@ -53,6 +54,7 @@ final class OutputJsTest extends UnitTestCase
      * @author Phalcon Team <team@phalcon.io>
      * @since  2014-10-13
      */
+    #[Test]
     public function testAssetsManagerOutputJsBasic(): void
     {
         $manager = new Manager(new TagFactory(new Escaper()));
@@ -80,6 +82,7 @@ final class OutputJsTest extends UnitTestCase
      * @author Phalcon Team <team@phalcon.io>
      * @since  2014-10-13
      */
+    #[Test]
     public function testAssetsManagerOutputJsDisabledJoin(): void
     {
         $manager = new Manager(new TagFactory(new Escaper()));
@@ -107,6 +110,7 @@ final class OutputJsTest extends UnitTestCase
      * @author Phalcon Team <team@phalcon.io>
      * @since  2014-10-13
      */
+    #[Test]
     public function testAssetsManagerOutputJsEnabledJoin(): void
     {
         $manager = new Manager(new TagFactory(new Escaper()));
@@ -135,6 +139,7 @@ final class OutputJsTest extends UnitTestCase
      * @author Phalcon Team <team@phalcon.io>
      * @since  2014-10-13
      */
+    #[Test]
     public function testAssetsManagerOutputJsImplicit(): void
     {
         $manager = new Manager(new TagFactory(new Escaper()));
@@ -158,6 +163,7 @@ final class OutputJsTest extends UnitTestCase
      * @author Phalcon Team <team@phalcon.io>
      * @since  2014-10-13
      */
+    #[Test]
     public function testAssetsManagerOutputJsJoinAndFilter(): void
     {
         if (PHP_OS_FAMILY === 'Windows') {
@@ -192,6 +198,7 @@ final class OutputJsTest extends UnitTestCase
      * @author Paul Scarrone <paul@savvysoftworks.com>
      * @since  2017-06-20
      */
+    #[Test]
     public function testAssetsManagerOutputJsMixedResources(): void
     {
         $manager = new Manager(new TagFactory(new Escaper()));
@@ -234,6 +241,7 @@ final class OutputJsTest extends UnitTestCase
      * @author Phalcon Team <team@phalcon.io>
      * @since  2014-10-13
      */
+    #[Test]
     public function testAssetsManagerOutputJsNotImplicit(): void
     {
         $manager = new Manager(new TagFactory(new Escaper()));
@@ -267,6 +275,7 @@ final class OutputJsTest extends UnitTestCase
      * @author Dreamszhu <dreamsxin@qq.com>
      * @since  2013-10-25
      */
+    #[Test]
     public function testAssetsManagerOutputJsTargetLocal(): void
     {
         $file   = uniqid() . '.js';
@@ -291,7 +300,7 @@ final class OutputJsTest extends UnitTestCase
             $manager->outputJs('js')
         );
 
-        $this->assertFileExists(outputDir("tests/assets/{$file}"));
-        $this->safeDeleteFile(outputDir("tests/assets/{$file}"));
+        $this->assertFileExists(outputDir("tests/assets/$file"));
+        $this->safeDeleteFile(outputDir("tests/assets/$file"));
     }
 }

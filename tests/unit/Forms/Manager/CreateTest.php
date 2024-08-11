@@ -15,10 +15,10 @@ namespace Phalcon\Tests\Unit\Forms\Manager;
 
 use Phalcon\Forms\Form;
 use Phalcon\Forms\Manager;
-use Phalcon\Tests\UnitTestCase;
+use Phalcon\Tests\AbstractUnitTestCase;
 use stdClass;
 
-final class CreateTest extends UnitTestCase
+final class CreateTest extends AbstractUnitTestCase
 {
     /**
      * Tests Phalcon\Forms\Manager :: create()

@@ -39,7 +39,7 @@ use function unlink;
 use const DIRECTORY_SEPARATOR;
 use const GLOB_MARK;
 
-class UnitTestCase extends TestCase
+abstract class AbstractUnitTestCase extends TestCase
 {
     /**
      * @param string $fileName

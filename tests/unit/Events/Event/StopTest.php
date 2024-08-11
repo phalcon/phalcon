@@ -15,9 +15,9 @@ namespace Phalcon\Tests\Unit\Events\Event;
 
 use Phalcon\Events\Event;
 use Phalcon\Events\Manager;
-use Phalcon\Tests\UnitTestCase;
+use Phalcon\Tests\AbstractUnitTestCase;
 
-final class StopTest extends UnitTestCase
+final class StopTest extends AbstractUnitTestCase
 {
     /**
      * Tests using events propagation

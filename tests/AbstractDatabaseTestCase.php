@@ -36,7 +36,7 @@ use function trim;
 
 use const PREG_SPLIT_NO_EMPTY;
 
-class DatabaseTestCase extends UnitTestCase
+abstract class AbstractDatabaseTestCase extends AbstractUnitTestCase
 {
     /**
      * @var PDO|null

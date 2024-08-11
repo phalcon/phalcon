@@ -14,9 +14,9 @@ declare(strict_types=1);
 namespace Phalcon\Tests\Unit\Config\Adapter;
 
 use Phalcon\Tests\Fixtures\Traits\ConfigTrait;
-use Phalcon\Tests\UnitTestCase;
+use Phalcon\Tests\AbstractUnitTestCase;
 
-final class OffsetGetTest extends UnitTestCase
+final class OffsetGetTest extends AbstractUnitTestCase
 {
     use ConfigTrait;
 

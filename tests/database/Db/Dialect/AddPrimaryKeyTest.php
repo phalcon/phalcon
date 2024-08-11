@@ -19,9 +19,9 @@ use Phalcon\Db\Dialect\Sqlite;
 use Phalcon\Db\Exception;
 use Phalcon\Db\Index;
 use Phalcon\Db\Reference;
-use Phalcon\Tests\DatabaseTestCase;
+use Phalcon\Tests\AbstractDatabaseTestCase;
 
-final class AddPrimaryKeyTest extends DatabaseTestCase
+final class AddPrimaryKeyTest extends AbstractDatabaseTestCase
 {
     /**
      * @return array[]

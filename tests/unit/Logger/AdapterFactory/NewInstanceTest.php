@@ -16,11 +16,11 @@ namespace Phalcon\Tests\Unit\Logger\AdapterFactory;
 use Phalcon\Logger\Adapter\AdapterInterface;
 use Phalcon\Logger\AdapterFactory;
 use Phalcon\Logger\Exception;
-use Phalcon\Tests\UnitTestCase;
+use Phalcon\Tests\AbstractUnitTestCase;
 
 use function outputDir;
 
-final class NewInstanceTest extends UnitTestCase
+final class NewInstanceTest extends AbstractUnitTestCase
 {
     /**
      * Tests Phalcon\Logger\AdapterFactory :: newInstance()

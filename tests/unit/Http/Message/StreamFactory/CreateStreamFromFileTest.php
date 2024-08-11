@@ -15,9 +15,9 @@ namespace Phalcon\Tests\Unit\Http\Message\StreamFactory;
 
 use Phalcon\Http\Message\Factories\StreamFactory;
 use Phalcon\Http\Message\Stream;
-use Phalcon\Tests\UnitTestCase;
+use Phalcon\Tests\AbstractUnitTestCase;
 
-final class CreateStreamFromFileTest extends UnitTestCase
+final class CreateStreamFromFileTest extends AbstractUnitTestCase
 {
     /**
      * Tests Phalcon\Http\Message\StreamFactory :: createStreamFromFile()

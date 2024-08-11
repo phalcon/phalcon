@@ -18,7 +18,7 @@ use Phalcon\Mvc\Model\Criteria;
 use Phalcon\Paginator\Adapter\QueryBuilder;
 use Phalcon\Paginator\Repository;
 use Phalcon\Storage\Exception;
-use Phalcon\Tests\DatabaseTestCase;
+use Phalcon\Tests\AbstractDatabaseTestCase;
 use Phalcon\Tests\Fixtures\Migrations\InvoicesMigration;
 use Phalcon\Tests\Fixtures\Traits\DiTrait;
 use Phalcon\Tests\Fixtures\Traits\RecordsTrait;
@@ -26,7 +26,7 @@ use Phalcon\Tests\Models\Invoices;
 
 use function is_int;
 
-final class PaginateTest extends DatabaseTestCase
+final class PaginateTest extends AbstractDatabaseTestCase
 {
     use DiTrait;
     use RecordsTrait;

@@ -23,12 +23,12 @@ use Phalcon\Support\Collection;
 use Phalcon\Tests\Fixtures\Storage\Serializer\Base64DecodeFixture;
 use Phalcon\Tests\Fixtures\Storage\Serializer\IgbinarySerializeFixture;
 use Phalcon\Tests\Fixtures\Storage\Serializer\IgbinaryUnserializeFixture;
-use Phalcon\Tests\UnitTestCase;
+use Phalcon\Tests\AbstractUnitTestCase;
 use stdClass;
 
 use function json_encode;
 
-final class ExceptionsTest extends UnitTestCase
+final class ExceptionsTest extends AbstractUnitTestCase
 {
     /**
      * Tests Phalcon\Storage\Serializer\Base64 :: serialize() - exception

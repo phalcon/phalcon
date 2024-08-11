@@ -14,9 +14,9 @@ declare(strict_types=1);
 namespace Phalcon\Tests\Unit\Forms\Form;
 
 use Phalcon\Forms\Form;
-use Phalcon\Tests\UnitTestCase;
+use Phalcon\Tests\AbstractUnitTestCase;
 
-final class SetAttributesTest extends UnitTestCase
+final class SetAttributesTest extends AbstractUnitTestCase
 {
     /**
      * Tests Phalcon\Forms\Form :: setAttributes()

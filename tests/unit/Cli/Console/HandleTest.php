@@ -23,7 +23,7 @@ use Phalcon\Events\Event;
 use Phalcon\Tests\Fixtures\Tasks\Issue787Task;
 use Phalcon\Tests\Modules\Backend\Module as BackendModule;
 use Phalcon\Tests\Modules\Frontend\Module as FrontendModule;
-use Phalcon\Tests\UnitTestCase;
+use Phalcon\Tests\AbstractUnitTestCase;
 
 use function dataDir;
 use function ob_end_clean;
@@ -33,7 +33,7 @@ use function shell_exec;
 
 use const PHP_OS_FAMILY;
 
-final class HandleTest extends UnitTestCase
+final class HandleTest extends AbstractUnitTestCase
 {
     /**
      * @return array

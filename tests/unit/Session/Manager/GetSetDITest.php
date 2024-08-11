@@ -15,9 +15,9 @@ namespace Phalcon\Tests\Unit\Session\Manager;
 
 use Phalcon\Di\FactoryDefault;
 use Phalcon\Session\Manager;
-use Phalcon\Tests\UnitTestCase;
+use Phalcon\Tests\AbstractUnitTestCase;
 
-final class GetSetDITest extends UnitTestCase
+final class GetSetDITest extends AbstractUnitTestCase
 {
     /**
      * Tests Phalcon\Session\Manager :: getDI()/setDI()

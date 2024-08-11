@@ -17,11 +17,11 @@ use Phalcon\Flash\Exception;
 use Phalcon\Flash\Session;
 use Phalcon\Html\Escaper;
 use Phalcon\Tests\Fixtures\Traits\DiTrait;
-use Phalcon\Tests\UnitTestCase;
+use Phalcon\Tests\AbstractUnitTestCase;
 
 use function spl_object_hash;
 
-final class GetSetEscaperServiceTest extends UnitTestCase
+final class GetSetEscaperServiceTest extends AbstractUnitTestCase
 {
     use DiTrait;
 

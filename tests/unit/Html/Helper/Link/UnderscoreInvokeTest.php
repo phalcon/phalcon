@@ -14,11 +14,11 @@ namespace Phalcon\Tests\Unit\Html\Helper\Link;
 use Phalcon\Html\Escaper;
 use Phalcon\Html\Helper\Link;
 use Phalcon\Html\TagFactory;
-use Phalcon\Tests\UnitTestCase;
+use Phalcon\Tests\AbstractUnitTestCase;
 
 use const PHP_EOL;
 
-final class UnderscoreInvokeTest extends UnitTestCase
+final class UnderscoreInvokeTest extends AbstractUnitTestCase
 {
     /**
      * @return array

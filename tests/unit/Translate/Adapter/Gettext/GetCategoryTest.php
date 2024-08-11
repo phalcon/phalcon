@@ -14,13 +14,13 @@ declare(strict_types=1);
 namespace Phalcon\Tests\Unit\Translate\Adapter\Gettext;
 
 use Phalcon\Tests\Fixtures\Traits\TranslateGettextTrait;
-use Phalcon\Tests\UnitTestCase;
+use Phalcon\Tests\AbstractUnitTestCase;
 use Phalcon\Translate\Adapter\Gettext;
 use Phalcon\Translate\InterpolatorFactory;
 
 use const LC_MESSAGES;
 
-final class GetCategoryTest extends UnitTestCase
+final class GetCategoryTest extends AbstractUnitTestCase
 {
     use TranslateGettextTrait;
 

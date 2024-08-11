@@ -15,13 +15,13 @@ namespace Phalcon\Tests\Database\Paginator\Adapter\Model;
 
 use PDO;
 use Phalcon\Paginator\Adapter\Model;
-use Phalcon\Tests\DatabaseTestCase;
+use Phalcon\Tests\AbstractDatabaseTestCase;
 use Phalcon\Tests\Fixtures\Migrations\InvoicesMigration;
 use Phalcon\Tests\Fixtures\Traits\DiTrait;
 use Phalcon\Tests\Fixtures\Traits\RecordsTrait;
 use Phalcon\Tests\Models\Invoices;
 
-final class SetGetLimitTest extends DatabaseTestCase
+final class SetGetLimitTest extends AbstractDatabaseTestCase
 {
     use DiTrait;
     use RecordsTrait;

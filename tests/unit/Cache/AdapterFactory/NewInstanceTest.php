@@ -22,14 +22,14 @@ use Phalcon\Cache\Adapter\Weak;
 use Phalcon\Cache\AdapterFactory;
 use Phalcon\Cache\Exception\Exception;
 use Phalcon\Storage\SerializerFactory;
-use Phalcon\Tests\UnitTestCase;
+use Phalcon\Tests\AbstractUnitTestCase;
 
 use function getOptionsLibmemcached;
 use function getOptionsRedis;
 use function outputDir;
 use function uniqid;
 
-final class NewInstanceTest extends UnitTestCase
+final class NewInstanceTest extends AbstractUnitTestCase
 {
     public static function getExamples(): array
     {

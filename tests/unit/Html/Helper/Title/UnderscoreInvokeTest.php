@@ -15,13 +15,13 @@ use Phalcon\Html\Escaper;
 use Phalcon\Html\Exception;
 use Phalcon\Html\Helper\Title;
 use Phalcon\Html\TagFactory;
-use Phalcon\Tests\UnitTestCase;
+use Phalcon\Tests\AbstractUnitTestCase;
 
 use function uniqid;
 
 use const PHP_EOL;
 
-final class UnderscoreInvokeTest extends UnitTestCase
+final class UnderscoreInvokeTest extends AbstractUnitTestCase
 {
     /**
      * @return array

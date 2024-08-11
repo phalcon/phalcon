@@ -13,9 +13,9 @@ namespace Phalcon\Tests\Unit\Encryption\Security\JWT\Validator;
 
 use Phalcon\Encryption\Security\JWT\Validator;
 use Phalcon\Tests\Fixtures\Traits\JWTTrait;
-use Phalcon\Tests\UnitTestCase;
+use Phalcon\Tests\AbstractUnitTestCase;
 
-final class ValidateIssuedAtTest extends UnitTestCase
+final class ValidateIssuedAtTest extends AbstractUnitTestCase
 {
     use JWTTrait;
 

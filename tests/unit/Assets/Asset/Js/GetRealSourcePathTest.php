@@ -14,11 +14,14 @@ declare(strict_types=1);
 namespace Phalcon\Tests\Unit\Assets\Asset\Js;
 
 use Phalcon\Assets\Asset\Js;
-use Phalcon\Tests\UnitTestCase;
+use Phalcon\Tests\AbstractUnitTestCase;
+
+use PHPUnit\Framework\Attributes\DataProvider;
+use PHPUnit\Framework\Attributes\Test;
 
 use function dataDir;
 
-final class GetRealSourcePathTest extends UnitTestCase
+final class GetRealSourcePathTest extends AbstractUnitTestCase
 {
     /**
      * Tests Phalcon\Assets\Asset\Js :: getRealSourcePath() - js local
@@ -28,6 +31,7 @@ final class GetRealSourcePathTest extends UnitTestCase
      * @author Phalcon Team <team@phalcon.io>
      * @since  2020-09-09
      */
+    #[Test]
     public function testAssetsAssetJsGetRealSourcePathLocal(): void
     {
         if (PHP_OS_FAMILY === 'Windows') {
@@ -51,6 +55,7 @@ final class GetRealSourcePathTest extends UnitTestCase
      * @author Phalcon Team <team@phalcon.io>
      * @since  2020-09-09
      */
+    #[Test]
     public function testAssetsAssetJsGetRealSourcePathLocalDoesNotExist(): void
     {
         $asset  = new Js('js/jquery.js');
@@ -66,6 +71,7 @@ final class GetRealSourcePathTest extends UnitTestCase
      * @author Phalcon Team <team@phalcon.io>
      * @since  2020-09-09
      */
+    #[Test]
     public function testAssetsAssetJsGetRealSourcePathRemote(): void
     {
         $path  = 'https://phalcon.ld/js/jquery.js';

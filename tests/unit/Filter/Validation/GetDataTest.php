@@ -14,11 +14,11 @@ declare(strict_types=1);
 namespace Phalcon\Tests\Unit\Filter\Validation;
 
 use Phalcon\Filter\Validation;
-use Phalcon\Tests\UnitTestCase;
+use Phalcon\Tests\AbstractUnitTestCase;
 use PHPUnit\Framework\Attributes\Test;
 use stdClass;
 
-final class GetDataTest extends UnitTestCase
+final class GetDataTest extends AbstractUnitTestCase
 {
     /**
      * Tests Phalcon\Filter\Validation :: getData()

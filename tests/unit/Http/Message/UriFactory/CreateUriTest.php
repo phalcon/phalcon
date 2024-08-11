@@ -15,9 +15,9 @@ namespace Phalcon\Tests\Unit\Http\Message\UriFactory;
 
 use Phalcon\Http\Message\Factories\UriFactory;
 use Phalcon\Http\Message\Interfaces\UriInterface;
-use Phalcon\Tests\UnitTestCase;
+use Phalcon\Tests\AbstractUnitTestCase;
 
-final class CreateUriTest extends UnitTestCase
+final class CreateUriTest extends AbstractUnitTestCase
 {
     /**
      * Tests Phalcon\Http\Message\UriFactory :: createUri()

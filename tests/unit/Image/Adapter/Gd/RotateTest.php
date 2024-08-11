@@ -16,9 +16,9 @@ namespace Phalcon\Tests\Unit\Image\Adapter\Gd;
 use Phalcon\Image\Adapter\Gd;
 use Phalcon\Image\Exception;
 use Phalcon\Tests\Fixtures\Traits\GdTrait;
-use Phalcon\Tests\UnitTestCase;
+use Phalcon\Tests\AbstractUnitTestCase;
 
-final class RotateTest extends UnitTestCase
+final class RotateTest extends AbstractUnitTestCase
 {
     use GdTrait;
 

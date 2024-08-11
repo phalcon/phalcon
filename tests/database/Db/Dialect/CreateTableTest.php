@@ -20,9 +20,9 @@ use Phalcon\Db\Dialect\Sqlite;
 use Phalcon\Db\Exception;
 use Phalcon\Db\Index;
 use Phalcon\Db\Reference;
-use Phalcon\Tests\DatabaseTestCase;
+use Phalcon\Tests\AbstractDatabaseTestCase;
 
-final class CreateTableTest extends DatabaseTestCase
+final class CreateTableTest extends AbstractDatabaseTestCase
 {
     /**
      * @return array[]

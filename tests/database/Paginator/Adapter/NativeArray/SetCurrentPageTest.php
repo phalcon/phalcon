@@ -15,9 +15,9 @@ namespace Phalcon\Tests\Database\Paginator\Adapter\NativeArray;
 
 use Phalcon\Paginator\Adapter\NativeArray;
 use Phalcon\Paginator\Repository;
-use Phalcon\Tests\DatabaseTestCase;
+use Phalcon\Tests\AbstractDatabaseTestCase;
 
-final class SetCurrentPageTest extends DatabaseTestCase
+final class SetCurrentPageTest extends AbstractDatabaseTestCase
 {
     /**
      * Tests Phalcon\Paginator\Adapter\NativeArray :: setCurrentPage()

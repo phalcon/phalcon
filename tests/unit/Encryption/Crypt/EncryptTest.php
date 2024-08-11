@@ -17,12 +17,12 @@ use Phalcon\Encryption\Crypt;
 use Phalcon\Encryption\Crypt\Exception\Exception;
 use Phalcon\Tests\Fixtures\Encryption\Crypt\CryptFixture;
 use Phalcon\Tests\Fixtures\Encryption\Crypt\CryptOpensslRandomPseudoBytesFixture;
-use Phalcon\Tests\UnitTestCase;
+use Phalcon\Tests\AbstractUnitTestCase;
 
 use function str_repeat;
 use function substr;
 
-final class EncryptTest extends UnitTestCase
+final class EncryptTest extends AbstractUnitTestCase
 {
     public static function getExceptionCiphers(): array
     {

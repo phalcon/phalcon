@@ -15,12 +15,12 @@ namespace Phalcon\Tests\Unit\Image\Adapter\Imagick;
 
 use Phalcon\Image\Adapter\Imagick;
 use Phalcon\Tests\Fixtures\Traits\ImagickTrait;
-use Phalcon\Tests\UnitTestCase;
+use Phalcon\Tests\AbstractUnitTestCase;
 
 use function dataDir;
 use function outputDir;
 
-final class RotateTest extends UnitTestCase
+final class RotateTest extends AbstractUnitTestCase
 {
     use ImagickTrait;
 

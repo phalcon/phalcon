@@ -14,9 +14,9 @@ declare(strict_types=1);
 namespace Phalcon\Tests\Unit\Mvc\Router;
 
 use Phalcon\Mvc\Router;
-use Phalcon\Tests\UnitTestCase;
+use Phalcon\Tests\AbstractUnitTestCase;
 
-final class SetDefaultControllerTest extends UnitTestCase
+final class SetDefaultControllerTest extends AbstractUnitTestCase
 {
     /**
      * Tests Phalcon\Mvc\Router :: setDefaultController()

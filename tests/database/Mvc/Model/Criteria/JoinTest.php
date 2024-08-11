@@ -17,14 +17,14 @@ use Phalcon\Mvc\Model\Criteria;
 use Phalcon\Mvc\Model\Query\Builder;
 use Phalcon\Mvc\Model\Resultset\Simple;
 use Phalcon\Storage\Exception;
-use Phalcon\Tests\DatabaseTestCase;
+use Phalcon\Tests\AbstractDatabaseTestCase;
 use Phalcon\Tests\Fixtures\Traits\DiTrait;
 use Phalcon\Tests\Models\Customers;
 use Phalcon\Tests\Models\Invoices;
 use Phalcon\Tests\Models\Orders;
 use Phalcon\Tests\Models\Products;
 
-final class JoinTest extends DatabaseTestCase
+final class JoinTest extends AbstractDatabaseTestCase
 {
     use DiTrait;
 

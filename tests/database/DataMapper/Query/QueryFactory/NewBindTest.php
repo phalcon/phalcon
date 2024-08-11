@@ -15,9 +15,9 @@ namespace Phalcon\Tests\Database\DataMapper\Query\QueryFactory;
 
 use Phalcon\DataMapper\Query\Bind;
 use Phalcon\DataMapper\Query\QueryFactory;
-use Phalcon\Tests\DatabaseTestCase;
+use Phalcon\Tests\AbstractDatabaseTestCase;
 
-final class NewBindTest extends DatabaseTestCase
+final class NewBindTest extends AbstractDatabaseTestCase
 {
     /**
      * Database Tests Phalcon\DataMapper\Query\QueryFactory :: newBind()

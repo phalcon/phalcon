@@ -14,21 +14,22 @@ declare(strict_types=1);
 namespace Phalcon\Tests\Unit\Assets\Manager;
 
 use Phalcon\Assets\Asset\Css;
+use Phalcon\Assets\Collection;
 use Phalcon\Assets\Manager;
 use Phalcon\Html\Escaper;
 use Phalcon\Html\TagFactory;
 use Phalcon\Tests\Fixtures\Assets\TrimFilter;
 use Phalcon\Tests\Fixtures\Assets\UppercaseFilter;
 use Phalcon\Tests\Fixtures\Traits\DiTrait;
-use Phalcon\Tests\UnitTestCase;
+use Phalcon\Tests\AbstractUnitTestCase;
+use PHPUnit\Framework\Attributes\Test;
 
 use function file_get_contents;
-use function getNewFileName;
 use function outputDir;
 
 use const PHP_EOL;
 
-final class OutputCssTest extends UnitTestCase
+final class OutputCssTest extends AbstractUnitTestCase
 {
     use DiTrait;
 
@@ -53,6 +54,7 @@ final class OutputCssTest extends UnitTestCase
      * @author Phalcon Team <team@phalcon.io>
      * @since  2013-09-15
      */
+    #[Test]
     public function testAssetsManagerOutputCssFilterChainCustomFilterWithCssmin(): void
     {
         $fileName = $this->getNewFileName('assets_', 'css');
@@ -90,6 +92,7 @@ final class OutputCssTest extends UnitTestCase
      * @author Phalcon Team <team@phalcon.io>
      * @since  2014-10-13
      */
+    #[Test]
     public function testAssetsManagerOutputCssImplicit(): void
     {
         $manager = new Manager(new TagFactory(new Escaper()));
@@ -115,6 +118,7 @@ final class OutputCssTest extends UnitTestCase
      * @author Phalcon Team <team@phalcon.io>
      * @since  2014-10-13
      */
+    #[Test]
     public function testAssetsManagerOutputCssNotImplicit(): void
     {
         $manager = new Manager(new TagFactory(new Escaper()));

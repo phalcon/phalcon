@@ -12,11 +12,11 @@ declare(strict_types=1);
 namespace Phalcon\Tests\Unit\Html\Helper\Doctype;
 
 use Phalcon\Html\Helper\Doctype;
-use Phalcon\Tests\UnitTestCase;
+use Phalcon\Tests\AbstractUnitTestCase;
 
 use const PHP_EOL;
 
-final class ToStringTest extends UnitTestCase
+final class ToStringTest extends AbstractUnitTestCase
 {
     /**
      * Tests Phalcon\Html\Helper\Doctype :: __toString() - empty

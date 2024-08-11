@@ -15,9 +15,9 @@ namespace Phalcon\Tests\Unit\Messages\Messages;
 
 use Phalcon\Messages\Message;
 use Phalcon\Messages\Messages;
-use Phalcon\Tests\UnitTestCase;
+use Phalcon\Tests\AbstractUnitTestCase;
 
-final class OffsetExistsTest extends UnitTestCase
+final class OffsetExistsTest extends AbstractUnitTestCase
 {
     /**
      * Tests Phalcon\Messages\Messages :: offsetExists()

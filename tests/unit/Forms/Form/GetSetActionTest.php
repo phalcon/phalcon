@@ -15,9 +15,9 @@ namespace Phalcon\Tests\Unit\Forms\Form;
 
 use Phalcon\Forms\Form;
 use Phalcon\Tests\Fixtures\Forms\SetActionForm;
-use Phalcon\Tests\UnitTestCase;
+use Phalcon\Tests\AbstractUnitTestCase;
 
-final class GetSetActionTest extends UnitTestCase
+final class GetSetActionTest extends AbstractUnitTestCase
 {
     /**
      * Tests Phalcon\Forms\Form :: getAction() / setAction()

@@ -15,12 +15,12 @@ namespace Phalcon\Tests\Unit\Forms\Form;
 
 use Phalcon\Forms\Element\Text;
 use Phalcon\Forms\Form;
-use Phalcon\Tests\UnitTestCase;
+use Phalcon\Tests\AbstractUnitTestCase;
 
 /**
- * Class CountTest extends UnitTestCase
+ * Class CountTest extends AbstractUnitTestCase
  */
-final class CountTest extends UnitTestCase
+final class CountTest extends AbstractUnitTestCase
 {
     /**
      * Tests Phalcon\Forms\Form :: count()

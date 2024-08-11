@@ -15,12 +15,12 @@ namespace Phalcon\Tests\Unit\Encryption\Crypt;
 
 use Phalcon\Encryption\Crypt;
 use Phalcon\Tests\Fixtures\Encryption\Crypt\CryptFunctionExistsTwiceFixture;
-use Phalcon\Tests\UnitTestCase;
+use Phalcon\Tests\AbstractUnitTestCase;
 
 use function function_exists;
 use function hash_hmac_algos;
 
-final class GetAvailableHashAlgorithmsTest extends UnitTestCase
+final class GetAvailableHashAlgorithmsTest extends AbstractUnitTestCase
 {
     /**
      * Tests Phalcon\Encryption\Crypt :: getAvailableHashAlgorithms()

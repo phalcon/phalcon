@@ -16,11 +16,11 @@ namespace Phalcon\Tests\Unit\Forms\Element;
 use Phalcon\Html\Escaper;
 use Phalcon\Html\TagFactory;
 use Phalcon\Tests\Fixtures\Traits\FormsTrait;
-use Phalcon\Tests\UnitTestCase;
+use Phalcon\Tests\AbstractUnitTestCase;
 
 use function uniqid;
 
-final class GetSetLabelTest extends UnitTestCase
+final class GetSetLabelTest extends AbstractUnitTestCase
 {
     use FormsTrait;
 

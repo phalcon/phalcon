@@ -13,12 +13,12 @@ declare(strict_types=1);
 
 namespace Phalcon\Tests\Unit\Forms\Element\Select;
 
-use Phalcon\Tests\UnitTestCase;
+use Phalcon\Tests\AbstractUnitTestCase;
 
 /**
- * Class ClearTest extends UnitTestCase
+ * Class ClearTest extends AbstractUnitTestCase
  */
-final class ClearTest extends UnitTestCase
+final class ClearTest extends AbstractUnitTestCase
 {
     /**
      * Tests Phalcon\Forms\Element\Select :: clear()

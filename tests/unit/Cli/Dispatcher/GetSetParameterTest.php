@@ -15,9 +15,9 @@ namespace Phalcon\Tests\Unit\Cli\Dispatcher;
 
 use Phalcon\Cli\Dispatcher;
 use Phalcon\Tests\Fixtures\Traits\DiTrait;
-use Phalcon\Tests\UnitTestCase;
+use Phalcon\Tests\AbstractUnitTestCase;
 
-final class GetSetParameterTest extends UnitTestCase
+final class GetSetParameterTest extends AbstractUnitTestCase
 {
     use DiTrait;
 

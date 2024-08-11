@@ -18,9 +18,9 @@ use Phalcon\Html\Escaper;
 use Phalcon\Mvc\Dispatcher;
 use Phalcon\Mvc\Micro;
 use Phalcon\Mvc\Router;
-use Phalcon\Tests\UnitTestCase;
+use Phalcon\Tests\AbstractUnitTestCase;
 
-class OffsetGetTest extends UnitTestCase
+class OffsetGetTest extends AbstractUnitTestCase
 {
     /**
      * Tests Phalcon\Mvc\Micro :: offsetGet()

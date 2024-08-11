@@ -15,9 +15,9 @@ namespace Phalcon\Tests\Database\DataMapper\Query\Select;
 
 use Phalcon\DataMapper\Pdo\Connection;
 use Phalcon\DataMapper\Query\QueryFactory;
-use Phalcon\Tests\DatabaseTestCase;
+use Phalcon\Tests\AbstractDatabaseTestCase;
 
-final class LimitOffsetTest extends DatabaseTestCase
+final class LimitOffsetTest extends AbstractDatabaseTestCase
 {
     /**
      * Database Tests Phalcon\DataMapper\Query\Select :: limit()/offset()

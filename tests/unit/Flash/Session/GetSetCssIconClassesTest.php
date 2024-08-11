@@ -15,9 +15,9 @@ namespace Phalcon\Tests\Unit\Flash\Session;
 
 use Phalcon\Flash\Session;
 use Phalcon\Tests\Fixtures\Traits\DiTrait;
-use Phalcon\Tests\UnitTestCase;
+use Phalcon\Tests\AbstractUnitTestCase;
 
-final class GetSetCssIconClassesTest extends UnitTestCase
+final class GetSetCssIconClassesTest extends AbstractUnitTestCase
 {
     use DiTrait;
 

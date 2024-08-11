@@ -14,9 +14,10 @@ declare(strict_types=1);
 namespace Phalcon\Tests\Unit\Assets\Inline\Css;
 
 use Phalcon\Assets\Inline\Css;
-use Phalcon\Tests\UnitTestCase;
+use Phalcon\Tests\AbstractUnitTestCase;
+use PHPUnit\Framework\Attributes\Test;
 
-final class GetSetFilterTest extends UnitTestCase
+final class GetSetFilterTest extends AbstractUnitTestCase
 {
     /**
      * Tests Phalcon\Assets\Inline\Css :: getFilter()/setFilter()
@@ -26,6 +27,7 @@ final class GetSetFilterTest extends UnitTestCase
      * @author Phalcon Team <team@phalcon.io>
      * @since  2020-09-09
      */
+    #[Test]
     public function testAssetsInlineCssGetSetFilter(): void
     {
         $asset  = new Css('p {color: #000099}');

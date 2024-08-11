@@ -14,12 +14,12 @@ declare(strict_types=1);
 namespace Phalcon\Tests\Unit\Cli\Dispatcher;
 
 use Phalcon\Cli\Dispatcher;
-use Phalcon\Tests\UnitTestCase;
+use Phalcon\Tests\AbstractUnitTestCase;
 
 /**
- * Class HasOptionTest extends UnitTestCase
+ * Class HasOptionTest extends AbstractUnitTestCase
  */
-final class HasOptionTest extends UnitTestCase
+final class HasOptionTest extends AbstractUnitTestCase
 {
     /**
      * Tests Phalcon\Cli\Dispatcher :: hasOption()

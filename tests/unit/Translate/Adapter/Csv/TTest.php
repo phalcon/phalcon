@@ -15,9 +15,9 @@ namespace Phalcon\Tests\Unit\Translate\Adapter\Csv;
 
 use Phalcon\Tests\Fixtures\Traits\TranslateCsvHelperTrait;
 use Phalcon\Tests\Fixtures\Traits\TranslateCsvTrait;
-use Phalcon\Tests\UnitTestCase;
+use Phalcon\Tests\AbstractUnitTestCase;
 
-final class TTest extends UnitTestCase
+final class TTest extends AbstractUnitTestCase
 {
     use TranslateCsvTrait;
     use TranslateCsvHelperTrait;

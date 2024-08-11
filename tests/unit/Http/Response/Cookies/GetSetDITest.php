@@ -15,9 +15,9 @@ namespace Phalcon\Tests\Unit\Http\Response\Cookies;
 
 use Phalcon\Di\Di;
 use Phalcon\Http\Response\Cookies;
-use Phalcon\Tests\UnitTestCase;
+use Phalcon\Tests\AbstractUnitTestCase;
 
-final class GetSetDITest extends UnitTestCase
+final class GetSetDITest extends AbstractUnitTestCase
 {
     /**
      * Tests Phalcon\Http\Response\Cookies :: getDI() / setDI()

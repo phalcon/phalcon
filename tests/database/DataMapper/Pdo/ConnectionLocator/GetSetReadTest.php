@@ -13,12 +13,12 @@ namespace Phalcon\Tests\Database\DataMapper\Pdo\ConnectionLocator;
 
 use Phalcon\DataMapper\Pdo\ConnectionLocator;
 use Phalcon\DataMapper\Pdo\Exception\ConnectionNotFound;
-use Phalcon\Tests\DatabaseTestCase;
+use Phalcon\Tests\AbstractDatabaseTestCase;
 
 use function in_array;
 use function spl_object_hash;
 
-final class GetSetReadTest extends DatabaseTestCase
+final class GetSetReadTest extends AbstractDatabaseTestCase
 {
     /**
      * Database Tests Phalcon\DataMapper\Pdo\ConnectionLocator :: getRead() -

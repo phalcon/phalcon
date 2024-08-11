@@ -14,9 +14,10 @@ declare(strict_types=1);
 namespace Phalcon\Tests\Unit\Assets\Inline\Js;
 
 use Phalcon\Assets\Inline\Js;
-use Phalcon\Tests\UnitTestCase;
+use Phalcon\Tests\AbstractUnitTestCase;
+use PHPUnit\Framework\Attributes\Test;
 
-final class ConstructTest extends UnitTestCase
+final class ConstructTest extends AbstractUnitTestCase
 {
     /**
      * Tests Phalcon\Assets\Inline\Js :: __construct()
@@ -26,6 +27,7 @@ final class ConstructTest extends UnitTestCase
      * @author Phalcon Team <team@phalcon.io>
      * @since  2020-09-09
      */
+    #[Test]
     public function testAssetsInlineJsConstruct(): void
     {
         $asset = new Js('<script>alert("Hello");</script>');
@@ -43,6 +45,7 @@ final class ConstructTest extends UnitTestCase
      * @author Phalcon Team <team@phalcon.io>
      * @since  2020-09-09
      */
+    #[Test]
     public function testAssetsInlineJsConstructAttributes(): void
     {
         $asset = new Js('<script>alert("Hello");</script>');
@@ -62,6 +65,7 @@ final class ConstructTest extends UnitTestCase
      * @author Phalcon Team <team@phalcon.io>
      * @since  2020-09-09
      */
+    #[Test]
     public function testAssetsInlineJsConstructAttributesSet(): void
     {
         $attributes = [
@@ -85,6 +89,7 @@ final class ConstructTest extends UnitTestCase
      * @author Phalcon Team <team@phalcon.io>
      * @since  2020-09-09
      */
+    #[Test]
     public function testAssetsInlineJsConstructFilter(): void
     {
         $asset  = new Js('<script>alert("Hello");</script>');
@@ -100,6 +105,7 @@ final class ConstructTest extends UnitTestCase
      * @author Phalcon Team <team@phalcon.io>
      * @since  2020-09-09
      */
+    #[Test]
     public function testAssetsInlineJsConstructFilterSet(): void
     {
         $asset  = new Js('<script>alert("Hello");</script>', false);

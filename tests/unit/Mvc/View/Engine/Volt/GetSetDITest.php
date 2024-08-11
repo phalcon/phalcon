@@ -16,9 +16,9 @@ namespace Phalcon\Tests\Unit\Mvc\View\Engine\Volt;
 use Phalcon\Di\Di;
 use Phalcon\Mvc\View;
 use Phalcon\Mvc\View\Engine\Volt;
-use Phalcon\Tests\UnitTestCase;
+use Phalcon\Tests\AbstractUnitTestCase;
 
-class GetSetDITest extends UnitTestCase
+class GetSetDITest extends AbstractUnitTestCase
 {
     /**
      * Tests Phalcon\Mvc\View\Engine\Volt :: getDI() / setDI()

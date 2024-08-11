@@ -13,7 +13,7 @@ declare(strict_types=1);
 
 namespace Phalcon\Tests\Database\Mvc\Model;
 
-use Phalcon\Tests\DatabaseTestCase;
+use Phalcon\Tests\AbstractDatabaseTestCase;
 use Phalcon\Tests\Fixtures\Migrations\InvoicesMigration;
 use Phalcon\Tests\Fixtures\Traits\DiTrait;
 use Phalcon\Tests\Models\Invoices;
@@ -21,7 +21,7 @@ use Phalcon\Tests\Models\Invoices;
 use function date;
 use function uniqid;
 
-final class UnserializeTest extends DatabaseTestCase
+final class UnserializeTest extends AbstractDatabaseTestCase
 {
     use DiTrait;
 

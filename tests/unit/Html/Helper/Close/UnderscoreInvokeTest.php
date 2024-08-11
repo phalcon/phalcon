@@ -14,9 +14,9 @@ namespace Phalcon\Tests\Unit\Html\Helper\Close;
 use Phalcon\Html\Escaper;
 use Phalcon\Html\Helper\Close;
 use Phalcon\Html\TagFactory;
-use Phalcon\Tests\UnitTestCase;
+use Phalcon\Tests\AbstractUnitTestCase;
 
-final class UnderscoreInvokeTest extends UnitTestCase
+final class UnderscoreInvokeTest extends AbstractUnitTestCase
 {
     /**
      * Tests Phalcon\Html\Helper\Close :: __invoke()

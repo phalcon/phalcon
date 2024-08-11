@@ -19,9 +19,10 @@ use Phalcon\Assets\Collection;
 use Phalcon\Assets\Manager;
 use Phalcon\Html\Escaper;
 use Phalcon\Html\TagFactory;
-use Phalcon\Tests\UnitTestCase;
+use Phalcon\Tests\AbstractUnitTestCase;
+use PHPUnit\Framework\Attributes\Test;
 
-final class GetCollectionsTest extends UnitTestCase
+final class GetCollectionsTest extends AbstractUnitTestCase
 {
     /**
      * Tests Phalcon\Assets\Manager :: getCollections()
@@ -29,6 +30,7 @@ final class GetCollectionsTest extends UnitTestCase
      * @author Phalcon Team <team@phalcon.io>
      * @since  2020-03-19
      */
+    #[Test]
     public function testAssetsManagerGetCollections(): void
     {
         $manager = new Manager(new TagFactory(new Escaper()));

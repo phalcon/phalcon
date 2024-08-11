@@ -14,7 +14,7 @@ declare(strict_types=1);
 namespace Phalcon\Tests\Database\Mvc\Model;
 
 use PDO;
-use Phalcon\Tests\DatabaseTestCase;
+use Phalcon\Tests\AbstractDatabaseTestCase;
 use Phalcon\Tests\Fixtures\Migrations\InvoicesMigration;
 use Phalcon\Tests\Fixtures\Traits\DiTrait;
 use Phalcon\Tests\Models\Invoices;
@@ -24,7 +24,7 @@ use function serialize;
 use function uniqid;
 use function unserialize;
 
-final class SerializeTest extends DatabaseTestCase
+final class SerializeTest extends AbstractDatabaseTestCase
 {
     use DiTrait;
 
