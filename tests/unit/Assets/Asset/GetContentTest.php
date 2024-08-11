@@ -19,7 +19,6 @@ use Phalcon\Tests\Fixtures\Assets\AssetFileExistsFixture;
 use Phalcon\Tests\Fixtures\Assets\AssetFileGetContentsFixture;
 use Phalcon\Tests\Fixtures\Traits\AssetsTrait;
 use Phalcon\Tests\AbstractUnitTestCase;
-
 use PHPUnit\Framework\Attributes\DataProvider;
 use PHPUnit\Framework\Attributes\Test;
 
