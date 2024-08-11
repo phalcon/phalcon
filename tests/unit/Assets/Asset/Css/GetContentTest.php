@@ -15,7 +15,6 @@ namespace Phalcon\Tests\Unit\Assets\Asset\Css;
 
 use Phalcon\Assets\Asset\Css;
 use Phalcon\Tests\AbstractUnitTestCase;
-
 use PHPUnit\Framework\Attributes\Test;
 
 use function dataDir;
