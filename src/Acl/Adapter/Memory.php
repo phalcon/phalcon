@@ -46,7 +46,6 @@ use const E_USER_WARNING;
 
 /**
  * Manages ACL lists in memory
- *
  */
 class Memory extends AbstractAdapter
 {
@@ -367,10 +366,6 @@ class Memory extends AbstractAdapter
             $role = $roleObject;
         } elseif (true === is_string($roleObject)) {
             $role = new Role($roleObject);
-        } else {
-            throw new Exception(
-                'Role must be either a string or implement RoleInterface'
-            );
         }
 
         $roleName = $role->getName();
@@ -611,7 +606,7 @@ class Memory extends AbstractAdapter
         if (true === is_object($roleName)) {
             if ($roleName instanceof RoleAwareInterface) {
                 $roleObject = $roleName;
-                $roleName   = $roleObject->getRoleName();
+                $roleName   = $roleName->getRoleName();
             } else {
                 $roleName = $roleName->getName();
             }
@@ -620,7 +615,7 @@ class Memory extends AbstractAdapter
         if (true === is_object($componentName)) {
             if ($componentName instanceof ComponentAwareInterface) {
                 $componentObject = $componentName;
-                $componentName   = $componentObject->getComponentName();
+                $componentName   = $componentName->getComponentName();
             } else {
                 $componentName = $componentName->getName();
             }
@@ -872,14 +867,7 @@ class Memory extends AbstractAdapter
 
         if (is_array($access)) {
             foreach ($access as $accessName) {
-                $accessKey = $componentName . '!' . $accessName;
-                if (true !== isset($this->accessList[$accessKey])) {
-                    throw new Exception(
-                        "Access '" . $accessName .
-                        "' does not exist in component '" .
-                        $componentName . "'"
-                    );
-                }
+                $this->checkExistsInAccessList($componentName, $accessName);
             }
 
             foreach ($access as $accessName) {
@@ -891,14 +879,7 @@ class Memory extends AbstractAdapter
             }
         } else {
             if ('*' !== $access) {
-                $accessKey = $componentName . '!' . $access;
-                if (true !== isset($this->accessList[$accessKey])) {
-                    throw new Exception(
-                        "Access '" . $access .
-                        "' does not exist in component '" .
-                        $componentName . "'"
-                    );
-                }
+                $this->checkExistsInAccessList($componentName, $access);
             }
 
             $accessKey                = $roleName . '!' . $componentName . '!' . $access;
@@ -988,6 +969,27 @@ class Memory extends AbstractAdapter
             throw new Exception(
                 $elementName . " '" . $element .
                 "' does not exist in the " . $suffix
+            );
+        }
+    }
+
+    /**
+     * @param string $componentName
+     * @param mixed  $accessName
+     *
+     * @return void
+     * @throws Exception
+     */
+    private function checkExistsInAccessList(
+        string $componentName,
+        mixed $accessName
+    ): void {
+        $accessKey = $componentName . '!' . $accessName;
+        if (true !== isset($this->accessList[$accessKey])) {
+            throw new Exception(
+                "Access '" . $accessName .
+                "' does not exist in component '" .
+                $componentName . "'"
             );
         }
     }
