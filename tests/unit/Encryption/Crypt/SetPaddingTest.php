@@ -16,9 +16,9 @@ namespace Phalcon\Tests\Unit\Encryption\Crypt;
 use Phalcon\Encryption\Crypt;
 use Phalcon\Encryption\Crypt\Exception\Exception;
 use Phalcon\Encryption\Crypt\Exception\Mismatch;
-use Phalcon\Tests\UnitTestCase;
+use Phalcon\Tests\AbstractUnitTestCase;
 
-final class SetPaddingTest extends UnitTestCase
+final class SetPaddingTest extends AbstractUnitTestCase
 {
     /**
      * @return array[]

@@ -14,9 +14,9 @@ declare(strict_types=1);
 namespace Phalcon\Tests\Unit\Encryption\Security\Random;
 
 use Phalcon\Encryption\Security\Random;
-use Phalcon\Tests\UnitTestCase;
+use Phalcon\Tests\AbstractUnitTestCase;
 
-final class Base64SafeTest extends UnitTestCase
+final class Base64SafeTest extends AbstractUnitTestCase
 {
     /**
      * @return array[]

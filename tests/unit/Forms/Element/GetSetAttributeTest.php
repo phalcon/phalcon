@@ -14,11 +14,11 @@ declare(strict_types=1);
 namespace Phalcon\Tests\Unit\Forms\Element;
 
 use Phalcon\Tests\Fixtures\Traits\FormsTrait;
-use Phalcon\Tests\UnitTestCase;
+use Phalcon\Tests\AbstractUnitTestCase;
 
 use function uniqid;
 
-final class GetSetAttributeTest extends UnitTestCase
+final class GetSetAttributeTest extends AbstractUnitTestCase
 {
     use FormsTrait;
 

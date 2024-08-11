@@ -12,9 +12,9 @@ declare(strict_types=1);
 namespace Phalcon\Tests\Database\DataMapper\Pdo\Profiler\MemoryLogger;
 
 use Phalcon\DataMapper\Pdo\Profiler\MemoryLogger;
-use Phalcon\Tests\DatabaseTestCase;
+use Phalcon\Tests\AbstractDatabaseTestCase;
 
-final class LevelsTest extends DatabaseTestCase
+final class LevelsTest extends AbstractDatabaseTestCase
 {
     /**
      * @return array

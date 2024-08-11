@@ -13,9 +13,9 @@ declare(strict_types=1);
 
 namespace Phalcon\Tests\Unit\Support\Debug;
 
-use Phalcon\Tests\UnitTestCase;
+use Phalcon\Tests\AbstractUnitTestCase;
 
-final class ListenLowSeverityTest extends UnitTestCase
+final class ListenLowSeverityTest extends AbstractUnitTestCase
 {
     /**
      * Tests Phalcon\Debug :: listenLowSeverity()

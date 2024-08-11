@@ -17,9 +17,10 @@ use Phalcon\Assets\Manager;
 use Phalcon\Di\InjectionAwareInterface;
 use Phalcon\Html\Escaper;
 use Phalcon\Html\TagFactory;
-use Phalcon\Tests\UnitTestCase;
+use Phalcon\Tests\AbstractUnitTestCase;
+use PHPUnit\Framework\Attributes\Test;
 
-final class ConstructTest extends UnitTestCase
+final class ConstructTest extends AbstractUnitTestCase
 {
     /**
      * Tests Phalcon\Assets\Manager :: __construct()
@@ -27,6 +28,7 @@ final class ConstructTest extends UnitTestCase
      * @author Phalcon Team <team@phalcon.io>
      * @since  2020-03-19
      */
+    #[Test]
     public function testAssetsManagerConstruct(): void
     {
         $manager = new Manager(new TagFactory(new Escaper()));

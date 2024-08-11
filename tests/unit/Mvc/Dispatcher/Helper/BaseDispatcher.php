@@ -7,7 +7,7 @@ use Phalcon\Dispatcher\DispatcherInterface;
 use Phalcon\Events\Manager as EventsManager;
 use Phalcon\Http\Response;
 use Phalcon\Mvc\Dispatcher;
-use Phalcon\Tests\UnitTestCase;
+use Phalcon\Tests\AbstractUnitTestCase;
 
 /**
  * \Phalcon\Tests\Unit\Mvc\Dispatcher\Helper\BaseDispatcher
@@ -26,7 +26,7 @@ use Phalcon\Tests\UnitTestCase;
  * through the world-wide-web, please send an email to license@phalcon.io
  * so that we can send you a copy immediately.
  */
-abstract class BaseDispatcher extends UnitTestCase
+abstract class BaseDispatcher extends AbstractUnitTestCase
 {
     /**
      * @var Di

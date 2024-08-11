@@ -13,10 +13,10 @@ declare(strict_types=1);
 
 namespace Phalcon\Tests\Unit\Translate\Interpolator\AssociativeArray;
 
-use Phalcon\Tests\UnitTestCase;
+use Phalcon\Tests\AbstractUnitTestCase;
 use Phalcon\Translate\Interpolator\AssociativeArray;
 
-final class ReplacePlaceholdersTest extends UnitTestCase
+final class ReplacePlaceholdersTest extends AbstractUnitTestCase
 {
     /**
      * Tests Phalcon\Translate\Interpolator\AssociativeArray ::

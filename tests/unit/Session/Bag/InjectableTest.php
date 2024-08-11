@@ -16,9 +16,9 @@ namespace Phalcon\Tests\Unit\Session\Bag;
 use Phalcon\Session\Bag;
 use Phalcon\Tests\Fixtures\Session\InjectableBag;
 use Phalcon\Tests\Fixtures\Traits\DiTrait;
-use Phalcon\Tests\UnitTestCase;
+use Phalcon\Tests\AbstractUnitTestCase;
 
-final class InjectableTest extends UnitTestCase
+final class InjectableTest extends AbstractUnitTestCase
 {
     use DiTrait;
 

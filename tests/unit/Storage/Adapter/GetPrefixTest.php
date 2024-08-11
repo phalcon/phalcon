@@ -21,14 +21,14 @@ use Phalcon\Storage\Adapter\RedisCluster;
 use Phalcon\Storage\Adapter\Stream;
 use Phalcon\Storage\Adapter\Weak;
 use Phalcon\Storage\SerializerFactory;
-use Phalcon\Tests\UnitTestCase;
+use Phalcon\Tests\AbstractUnitTestCase;
 
 use function array_merge;
 use function getOptionsRedis;
 use function getOptionsRedisCluster;
 use function outputDir;
 
-final class GetPrefixTest extends UnitTestCase
+final class GetPrefixTest extends AbstractUnitTestCase
 {
     public static function getExamples(): array
     {

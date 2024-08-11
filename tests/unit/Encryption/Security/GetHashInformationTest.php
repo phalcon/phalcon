@@ -14,13 +14,13 @@ declare(strict_types=1);
 namespace Phalcon\Tests\Unit\Encryption\Security;
 
 use Phalcon\Encryption\Security;
-use Phalcon\Tests\UnitTestCase;
+use Phalcon\Tests\AbstractUnitTestCase;
 
 use const PASSWORD_ARGON2_DEFAULT_MEMORY_COST;
 use const PASSWORD_ARGON2_DEFAULT_THREADS;
 use const PASSWORD_ARGON2_DEFAULT_TIME_COST;
 
-final class GetHashInformationTest extends UnitTestCase
+final class GetHashInformationTest extends AbstractUnitTestCase
 {
     /**
      * @return array[]

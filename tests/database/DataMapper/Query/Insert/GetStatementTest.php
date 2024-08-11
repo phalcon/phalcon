@@ -15,11 +15,11 @@ namespace Phalcon\Tests\Database\DataMapper\Query\Insert;
 
 use PDO;
 use Phalcon\DataMapper\Query\QueryFactory;
-use Phalcon\Tests\DatabaseTestCase;
+use Phalcon\Tests\AbstractDatabaseTestCase;
 
 use function sprintf;
 
-final class GetStatementTest extends DatabaseTestCase
+final class GetStatementTest extends AbstractDatabaseTestCase
 {
     /**
      * Database Tests Phalcon\DataMapper\Query\Insert :: getStatement()

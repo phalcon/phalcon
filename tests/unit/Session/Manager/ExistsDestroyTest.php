@@ -17,9 +17,9 @@ use Phalcon\Session\Manager;
 use Phalcon\Storage\Exception;
 use Phalcon\Tests\Fixtures\Traits\DiTrait;
 use Phalcon\Tests\Fixtures\Traits\SessionTrait;
-use Phalcon\Tests\UnitTestCase;
+use Phalcon\Tests\AbstractUnitTestCase;
 
-final class ExistsDestroyTest extends UnitTestCase
+final class ExistsDestroyTest extends AbstractUnitTestCase
 {
     use DiTrait;
     use SessionTrait;

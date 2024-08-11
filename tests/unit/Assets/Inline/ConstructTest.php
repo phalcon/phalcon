@@ -14,9 +14,10 @@ declare(strict_types=1);
 namespace Phalcon\Tests\Unit\Assets\Inline;
 
 use Phalcon\Assets\Inline;
-use Phalcon\Tests\UnitTestCase;
+use Phalcon\Tests\AbstractUnitTestCase;
+use PHPUnit\Framework\Attributes\Test;
 
-final class ConstructTest extends UnitTestCase
+final class ConstructTest extends AbstractUnitTestCase
 {
     /**
      * Tests Phalcon\Assets\Asset :: __construct() - css
@@ -26,6 +27,7 @@ final class ConstructTest extends UnitTestCase
      * @author Phalcon Team <team@phalcon.io>
      * @since  2020-09-09
      */
+    #[Test]
     public function testAssetsInlineConstructCss(): void
     {
         $content = 'p {color: #000099}';
@@ -44,6 +46,7 @@ final class ConstructTest extends UnitTestCase
      * @author Phalcon Team <team@phalcon.io>
      * @since  2020-09-09
      */
+    #[Test]
     public function testAssetsInlineConstructCssAttributes(): void
     {
         $content = 'p {color: #000099}';
@@ -62,6 +65,7 @@ final class ConstructTest extends UnitTestCase
      * @author Phalcon Team <team@phalcon.io>
      * @since  2020-09-09
      */
+    #[Test]
     public function testAssetsInlineConstructCssAttributesSet(): void
     {
         $content    = 'p {color: #000099}';
@@ -88,6 +92,7 @@ final class ConstructTest extends UnitTestCase
      * @author Phalcon Team <team@phalcon.io>
      * @since  2020-09-09
      */
+    #[Test]
     public function testAssetsInlineConstructCssFilter(): void
     {
         $content = 'p {color: #000099}';
@@ -104,6 +109,7 @@ final class ConstructTest extends UnitTestCase
      * @author Phalcon Team <team@phalcon.io>
      * @since  2020-09-09
      */
+    #[Test]
     public function testAssetsInlineConstructCssFilterSet(): void
     {
         $content = 'p {color: #000099}';
@@ -120,6 +126,7 @@ final class ConstructTest extends UnitTestCase
      * @author Phalcon Team <team@phalcon.io>
      * @since  2020-09-09
      */
+    #[Test]
     public function testAssetsInlineConstructJs(): void
     {
         $content = '<script>alert("Hello");</script>';
@@ -138,6 +145,7 @@ final class ConstructTest extends UnitTestCase
      * @author Phalcon Team <team@phalcon.io>
      * @since  2020-09-09
      */
+    #[Test]
     public function testAssetsInlineConstructJsAttributes(): void
     {
         $content = '<script>alert("Hello");</script>';
@@ -156,6 +164,7 @@ final class ConstructTest extends UnitTestCase
      * @author Phalcon Team <team@phalcon.io>
      * @since  2020-09-09
      */
+    #[Test]
     public function testAssetsInlineConstructJsAttributesSet(): void
     {
         $content    = '<script>alert("Hello");</script>';
@@ -176,6 +185,7 @@ final class ConstructTest extends UnitTestCase
      * @author Phalcon Team <team@phalcon.io>
      * @since  2020-09-09
      */
+    #[Test]
     public function testAssetsInlineConstructJsFilter(): void
     {
         $content = '<script>alert("Hello");</script>';
@@ -192,6 +202,7 @@ final class ConstructTest extends UnitTestCase
      * @author Phalcon Team <team@phalcon.io>
      * @since  2020-09-09
      */
+    #[Test]
     public function testAssetsInlineConstructJsFilterSet(): void
     {
         $content = '<script>alert("Hello");</script>';

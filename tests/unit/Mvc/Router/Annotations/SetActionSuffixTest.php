@@ -13,12 +13,12 @@ declare(strict_types=1);
 
 namespace Phalcon\Tests\Unit\Mvc\Router\Annotations;
 
-use Phalcon\Tests\UnitTestCase;
+use Phalcon\Tests\AbstractUnitTestCase;
 
 /**
- * Class SetActionSuffixTest extends UnitTestCase
+ * Class SetActionSuffixTest extends AbstractUnitTestCase
  */
-final class SetActionSuffixTest extends UnitTestCase
+final class SetActionSuffixTest extends AbstractUnitTestCase
 {
     /**
      * Tests Phalcon\Mvc\Router\Annotations :: setActionSuffix()

@@ -14,9 +14,10 @@ declare(strict_types=1);
 namespace Phalcon\Tests\Unit\Assets\Inline\Js;
 
 use Phalcon\Assets\Inline\Js;
-use Phalcon\Tests\UnitTestCase;
+use Phalcon\Tests\AbstractUnitTestCase;
+use PHPUnit\Framework\Attributes\Test;
 
-final class GetSetTypeTest extends UnitTestCase
+final class GetSetTypeTest extends AbstractUnitTestCase
 {
     /**
      * Tests Phalcon\Assets\Inline\Js :: getType()/setType()
@@ -26,6 +27,7 @@ final class GetSetTypeTest extends UnitTestCase
      * @author Phalcon Team <team@phalcon.io>
      * @since  2020-09-09
      */
+    #[Test]
     public function testAssetsInlineJsGetSetType(): void
     {
         $asset   = new Js('<script>alert("Hello");</script>');

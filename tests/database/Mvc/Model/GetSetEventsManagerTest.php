@@ -15,14 +15,14 @@ namespace Phalcon\Tests\Database\Mvc\Model;
 
 use Exception;
 use Phalcon\Events\Manager;
-use Phalcon\Tests\DatabaseTestCase;
+use Phalcon\Tests\AbstractDatabaseTestCase;
 use Phalcon\Tests\Fixtures\Migrations\InvoicesMigration;
 use Phalcon\Tests\Fixtures\Traits\DiTrait;
 use Phalcon\Tests\Models\Invoices;
 
 use function uniqid;
 
-final class GetSetEventsManagerTest extends DatabaseTestCase
+final class GetSetEventsManagerTest extends AbstractDatabaseTestCase
 {
     use DiTrait;
 

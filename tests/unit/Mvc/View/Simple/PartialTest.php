@@ -14,12 +14,12 @@ declare(strict_types=1);
 namespace Phalcon\Tests\Unit\Mvc\View\Simple;
 
 use Phalcon\Tests\Fixtures\Traits\DiTrait;
-use Phalcon\Tests\UnitTestCase;
+use Phalcon\Tests\AbstractUnitTestCase;
 
 use function ob_end_clean;
 use function ob_start;
 
-class PartialTest extends UnitTestCase
+class PartialTest extends AbstractUnitTestCase
 {
     use DiTrait;
 

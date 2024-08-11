@@ -15,9 +15,11 @@ namespace Phalcon\Tests\Unit\Assets\Asset\Js;
 
 use Phalcon\Assets\Asset\Js;
 use Phalcon\Tests\Fixtures\Traits\AssetsTrait;
-use Phalcon\Tests\UnitTestCase;
+use Phalcon\Tests\AbstractUnitTestCase;
+use PHPUnit\Framework\Attributes\DataProvider;
+use PHPUnit\Framework\Attributes\Test;
 
-final class GetRealTargetUriTest extends UnitTestCase
+final class GetRealTargetUriTest extends AbstractUnitTestCase
 {
     use AssetsTrait;
 
@@ -31,6 +33,8 @@ final class GetRealTargetUriTest extends UnitTestCase
      * @author       Phalcon Team <team@phalcon.io>
      * @since        2020-09-09
      */
+    #[Test]
+    #[DataProvider('providerJs')]
     public function testAssetsAssetJsGetAssetKey(
         string $path,
         bool $local

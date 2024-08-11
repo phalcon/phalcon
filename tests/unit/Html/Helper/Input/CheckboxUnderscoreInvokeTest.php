@@ -14,9 +14,9 @@ namespace Phalcon\Tests\Unit\Html\Helper\Input;
 use Phalcon\Html\Escaper;
 use Phalcon\Html\Helper\Input\Checkbox;
 use Phalcon\Html\Helper\Input\Radio;
-use Phalcon\Tests\UnitTestCase;
+use Phalcon\Tests\AbstractUnitTestCase;
 
-final class CheckboxUnderscoreInvokeTest extends UnitTestCase
+final class CheckboxUnderscoreInvokeTest extends AbstractUnitTestCase
 {
     /**
      * @param string $type

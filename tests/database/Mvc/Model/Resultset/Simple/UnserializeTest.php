@@ -15,11 +15,11 @@ namespace Phalcon\Tests\Database\Mvc\Model\Resultset\Simple;
 
 use Phalcon\Mvc\Model\Resultset\Simple;
 use Phalcon\Storage\Exception;
-use Phalcon\Tests\DatabaseTestCase;
+use Phalcon\Tests\AbstractDatabaseTestCase;
 use Phalcon\Tests\Fixtures\Traits\DiTrait;
 use Phalcon\Tests\Fixtures\Traits\RecordsTrait;
 
-final class UnserializeTest extends DatabaseTestCase
+final class UnserializeTest extends AbstractDatabaseTestCase
 {
     use DiTrait;
     use RecordsTrait;

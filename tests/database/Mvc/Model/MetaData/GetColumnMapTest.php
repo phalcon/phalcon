@@ -14,12 +14,12 @@ declare(strict_types=1);
 namespace Phalcon\Tests\Database\Mvc\Model\MetaData;
 
 use Phalcon\Mvc\Model\MetaData;
-use Phalcon\Tests\DatabaseTestCase;
+use Phalcon\Tests\AbstractDatabaseTestCase;
 use Phalcon\Tests\Fixtures\Traits\DiTrait;
 use Phalcon\Tests\Models\Invoices;
 use Phalcon\Tests\Models\InvoicesMap;
 
-final class GetColumnMapTest extends DatabaseTestCase
+final class GetColumnMapTest extends AbstractDatabaseTestCase
 {
     use DiTrait;
 

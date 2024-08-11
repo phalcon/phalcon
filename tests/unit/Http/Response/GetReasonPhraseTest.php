@@ -15,9 +15,9 @@ namespace Phalcon\Tests\Unit\Http\Response;
 
 use Phalcon\Http\Response;
 use Phalcon\Tests\Fixtures\Page\Http;
-use Phalcon\Tests\UnitTestCase;
+use Phalcon\Tests\AbstractUnitTestCase;
 
-final class GetReasonPhraseTest extends UnitTestCase
+final class GetReasonPhraseTest extends AbstractUnitTestCase
 {
     /**
      * Tests Phalcon\Http\Response :: getReasonPhrase()

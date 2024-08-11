@@ -23,13 +23,13 @@ use Phalcon\Tests\Fixtures\Acl\Adapter\MemoryFixture;
 use Phalcon\Tests\Fixtures\Acl\TestComponentAware;
 use Phalcon\Tests\Fixtures\Acl\TestRoleAware;
 use Phalcon\Tests\Fixtures\Acl\TestRoleComponentAware;
-use Phalcon\Tests\UnitTestCase;
+use Phalcon\Tests\AbstractUnitTestCase;
 use stdClass;
 
 use function restore_error_handler;
 use function set_error_handler;
 
-final class IsAllowedTest extends UnitTestCase
+final class IsAllowedTest extends AbstractUnitTestCase
 {
     /**
      * Tests Phalcon\Acl\Adapter\Memory :: isAllowed() - default

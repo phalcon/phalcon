@@ -15,9 +15,10 @@ namespace Phalcon\Tests\Unit\Assets\Collection;
 
 use Phalcon\Assets\Collection;
 use Phalcon\Assets\Inline;
-use Phalcon\Tests\UnitTestCase;
+use Phalcon\Tests\AbstractUnitTestCase;
+use PHPUnit\Framework\Attributes\Test;
 
-final class AddInlineTest extends UnitTestCase
+final class AddInlineTest extends AbstractUnitTestCase
 {
     /**
      * Tests Phalcon\Assets\Collection :: addInline()
@@ -27,6 +28,7 @@ final class AddInlineTest extends UnitTestCase
      * @author Phalcon Team <team@phalcon.io>
      * @since  2020-09-09
      */
+    #[Test]
     public function testAssetsCollectionAddInline(): void
     {
         $collection = new Collection();

@@ -17,9 +17,9 @@ use Phalcon\Cache\Adapter\AdapterInterface;
 use Phalcon\Cache\AdapterFactory;
 use Phalcon\Cache\Cache;
 use Phalcon\Storage\SerializerFactory;
-use Phalcon\Tests\UnitTestCase;
+use Phalcon\Tests\AbstractUnitTestCase;
 
-final class GetAdapterTest extends UnitTestCase
+final class GetAdapterTest extends AbstractUnitTestCase
 {
     /**
      * Tests Phalcon\Cache :: getAdapter()

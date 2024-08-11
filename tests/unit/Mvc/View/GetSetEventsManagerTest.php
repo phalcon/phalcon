@@ -15,9 +15,9 @@ namespace Phalcon\Tests\Unit\Mvc\View;
 
 use Phalcon\Mvc\View;
 use Phalcon\Tests\Fixtures\Traits\DiTrait;
-use Phalcon\Tests\UnitTestCase;
+use Phalcon\Tests\AbstractUnitTestCase;
 
-class GetSetEventsManagerTest extends UnitTestCase
+class GetSetEventsManagerTest extends AbstractUnitTestCase
 {
     use DiTrait;
 

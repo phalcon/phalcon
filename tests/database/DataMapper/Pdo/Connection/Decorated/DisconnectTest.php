@@ -14,9 +14,9 @@ namespace Phalcon\Tests\Database\DataMapper\Pdo\Connection\Decorated;
 use PDO;
 use Phalcon\DataMapper\Pdo\Connection\Decorated;
 use Phalcon\DataMapper\Pdo\Exception\CannotDisconnect;
-use Phalcon\Tests\DatabaseTestCase;
+use Phalcon\Tests\AbstractDatabaseTestCase;
 
-final class DisconnectTest extends DatabaseTestCase
+final class DisconnectTest extends AbstractDatabaseTestCase
 {
     /**
      * Database Tests Phalcon\DataMapper\Pdo\Connection\Decorated ::

@@ -16,9 +16,9 @@ namespace Phalcon\Tests\Unit\Di;
 use Exception;
 use Phalcon\Di\Di;
 use Phalcon\Html\Escaper;
-use Phalcon\Tests\UnitTestCase;
+use Phalcon\Tests\AbstractUnitTestCase;
 
-class GetRawTest extends UnitTestCase
+class GetRawTest extends AbstractUnitTestCase
 {
     /**
      * Tests Phalcon\Di\Di :: getRaw()

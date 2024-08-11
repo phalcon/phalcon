@@ -12,9 +12,9 @@ declare(strict_types=1);
 namespace Phalcon\Tests\Unit\Encryption\Security\JWT\Token\Signature;
 
 use Phalcon\Encryption\Security\JWT\Token\Signature;
-use Phalcon\Tests\UnitTestCase;
+use Phalcon\Tests\AbstractUnitTestCase;
 
-final class UnderscoreCallTest extends UnitTestCase
+final class UnderscoreCallTest extends AbstractUnitTestCase
 {
     /**
      * Unit Tests Phalcon\Encryption\Security\JWT\Token\Signature :: __call()

@@ -17,9 +17,9 @@ use Example\Namespaces\Adapter\Another;
 use Example\Namespaces\Adapter\Mongo;
 use Phalcon\Autoload\Loader;
 use Phalcon\Tests\Fixtures\Traits\LoaderTrait;
-use Phalcon\Tests\UnitTestCase;
+use Phalcon\Tests\AbstractUnitTestCase;
 
-final class AutoloadTest extends UnitTestCase
+final class AutoloadTest extends AbstractUnitTestCase
 {
     use LoaderTrait;
 

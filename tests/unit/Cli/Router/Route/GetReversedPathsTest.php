@@ -17,11 +17,11 @@ use Phalcon\Cli\Router;
 use Phalcon\Cli\Router\Route;
 use Phalcon\Tests\Fixtures\Traits\CliTrait;
 use Phalcon\Tests\Fixtures\Traits\DiTrait;
-use Phalcon\Tests\UnitTestCase;
+use Phalcon\Tests\AbstractUnitTestCase;
 
 use function array_flip;
 
-final class GetReversedPathsTest extends UnitTestCase
+final class GetReversedPathsTest extends AbstractUnitTestCase
 {
     use CliTrait;
     use DiTrait;

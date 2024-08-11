@@ -15,9 +15,9 @@ namespace Phalcon\Tests\Unit\Mvc\Router\Annotations;
 
 use Phalcon\Mvc\Router\Annotations;
 use Phalcon\Tests\Fixtures\Traits\DiTrait;
-use Phalcon\Tests\UnitTestCase;
+use Phalcon\Tests\AbstractUnitTestCase;
 
-final class IsExactControllerNameTest extends UnitTestCase
+final class IsExactControllerNameTest extends AbstractUnitTestCase
 {
     use DiTrait;
 

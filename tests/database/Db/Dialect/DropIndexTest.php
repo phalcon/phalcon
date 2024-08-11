@@ -16,9 +16,9 @@ namespace Phalcon\Tests\Database\Db\Dialect;
 use Phalcon\Db\Dialect\Mysql;
 use Phalcon\Db\Dialect\Postgresql;
 use Phalcon\Db\Dialect\Sqlite;
-use Phalcon\Tests\DatabaseTestCase;
+use Phalcon\Tests\AbstractDatabaseTestCase;
 
-final class DropIndexTest extends DatabaseTestCase
+final class DropIndexTest extends AbstractDatabaseTestCase
 {
     /**
      * @return array[]

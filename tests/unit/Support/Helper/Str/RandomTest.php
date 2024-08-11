@@ -14,11 +14,11 @@ declare(strict_types=1);
 namespace Phalcon\Tests\Unit\Support\Helper\Str;
 
 use Phalcon\Support\Helper\Str\Random;
-use Phalcon\Tests\UnitTestCase;
+use Phalcon\Tests\AbstractUnitTestCase;
 
 use function strlen;
 
-final class RandomTest extends UnitTestCase
+final class RandomTest extends AbstractUnitTestCase
 {
     /**
      * @return int[][]

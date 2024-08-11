@@ -17,9 +17,10 @@ use Phalcon\Assets\Manager;
 use Phalcon\Di\Di;
 use Phalcon\Html\Escaper;
 use Phalcon\Html\TagFactory;
-use Phalcon\Tests\UnitTestCase;
+use Phalcon\Tests\AbstractUnitTestCase;
+use PHPUnit\Framework\Attributes\Test;
 
-final class GetSetDITest extends UnitTestCase
+final class GetSetDITest extends AbstractUnitTestCase
 {
     /**
      * Unit Tests Phalcon\Assets\Manager :: getDI() / setDI()
@@ -27,6 +28,7 @@ final class GetSetDITest extends UnitTestCase
      * @author Sid Roberts <https://github.com/SidRoberts>
      * @since  2019-05-28
      */
+    #[Test]
     public function testAssetsManagerGetSetDI(): void
     {
         $container = new Di();

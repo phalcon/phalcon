@@ -18,7 +18,7 @@ use Phalcon\Cache\Adapter\Stream;
 use Phalcon\Storage\Exception as StorageException;
 use Phalcon\Storage\SerializerFactory;
 use Phalcon\Support\Exception as HelperException;
-use Phalcon\Tests\UnitTestCase;
+use Phalcon\Tests\AbstractUnitTestCase;
 
 use function array_merge;
 use function file_put_contents;
@@ -29,7 +29,7 @@ use function outputDir;
 use function sleep;
 use function uniqid;
 
-final class ExceptionsTest extends UnitTestCase
+final class ExceptionsTest extends AbstractUnitTestCase
 {
     /**
      * Tests Phalcon\Cache\Adapter\Redis :: get() - failed auth

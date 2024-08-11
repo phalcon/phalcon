@@ -22,7 +22,7 @@ use Phalcon\Tests\Fixtures\Page\Http;
 use Phalcon\Tests\Unit\Http\Helper\AbstractHttpBase;
 
 /**
- * Class LoadTest extends UnitTestCase
+ * Class LoadTest extends AbstractUnitTestCase
  *
  * @package Phalcon\Tests\Unit\Http\Message\ServerRequestFactory
  *

@@ -14,7 +14,7 @@ declare(strict_types=1);
 namespace Phalcon\Tests\Database\Db\Profiler;
 
 use Phalcon\Db\Profiler\Item;
-use Phalcon\Tests\DatabaseTestCase;
+use Phalcon\Tests\AbstractDatabaseTestCase;
 use Phalcon\Tests\Fixtures\Migrations\InvoicesMigration;
 use Phalcon\Tests\Fixtures\Traits\DiTrait;
 use Phalcon\Tests\Models\Invoices;
@@ -22,7 +22,7 @@ use Phalcon\Tests\Models\Invoices;
 use function substr;
 use function uniqid;
 
-final class ProfilerTest extends DatabaseTestCase
+final class ProfilerTest extends AbstractDatabaseTestCase
 {
     use DiTrait;
 

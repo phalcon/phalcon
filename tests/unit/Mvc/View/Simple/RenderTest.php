@@ -19,7 +19,7 @@ use Phalcon\Tests\Fixtures\Objects\ChildObject;
 use Phalcon\Tests\Fixtures\Objects\ParentObject;
 use Phalcon\Tests\Fixtures\Traits\DiTrait;
 use Phalcon\Tests\Fixtures\Traits\ViewTrait;
-use Phalcon\Tests\UnitTestCase;
+use Phalcon\Tests\AbstractUnitTestCase;
 
 use function dataDir;
 use function ob_end_clean;
@@ -27,7 +27,7 @@ use function ob_get_level;
 use function ob_start;
 use function sprintf;
 
-class RenderTest extends UnitTestCase
+class RenderTest extends AbstractUnitTestCase
 {
     use DiTrait;
     use ViewTrait;

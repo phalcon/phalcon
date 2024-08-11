@@ -16,7 +16,7 @@ namespace Phalcon\Tests\Unit\Logger\Logger;
 use DateTime;
 use Phalcon\Logger\Adapter\Stream;
 use Phalcon\Logger\Logger;
-use Phalcon\Tests\UnitTestCase;
+use Phalcon\Tests\AbstractUnitTestCase;
 use Psr\Log\LogLevel;
 
 use function date;
@@ -26,7 +26,7 @@ use function logsDir;
 use function preg_match;
 use function strtoupper;
 
-final class LevelsTest extends UnitTestCase
+final class LevelsTest extends AbstractUnitTestCase
 {
     /**
      * @return string[][]

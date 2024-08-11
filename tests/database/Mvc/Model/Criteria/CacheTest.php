@@ -14,10 +14,10 @@ declare(strict_types=1);
 namespace Phalcon\Tests\Database\Mvc\Model\Criteria;
 
 use Phalcon\Mvc\Model\Criteria;
-use Phalcon\Tests\DatabaseTestCase;
+use Phalcon\Tests\AbstractDatabaseTestCase;
 use Phalcon\Tests\Fixtures\Traits\DiTrait;
 
-final class CacheTest extends DatabaseTestCase
+final class CacheTest extends AbstractDatabaseTestCase
 {
     use DiTrait;
 

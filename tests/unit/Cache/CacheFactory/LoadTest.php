@@ -20,12 +20,12 @@ use Phalcon\Cache\Exception\Exception;
 use Phalcon\Config\Config;
 use Phalcon\Storage\SerializerFactory;
 use Phalcon\Tests\Fixtures\Traits\FactoryTrait;
-use Phalcon\Tests\UnitTestCase;
+use Phalcon\Tests\AbstractUnitTestCase;
 use Psr\SimpleCache\CacheInterface;
 
 use function uniqid;
 
-final class LoadTest extends UnitTestCase
+final class LoadTest extends AbstractUnitTestCase
 {
     use FactoryTrait;
 

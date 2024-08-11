@@ -14,12 +14,14 @@ declare(strict_types=1);
 namespace Phalcon\Tests\Unit\Assets\Asset\Css;
 
 use Phalcon\Assets\Asset\Css;
-use Phalcon\Tests\UnitTestCase;
+use Phalcon\Tests\AbstractUnitTestCase;
+
+use PHPUnit\Framework\Attributes\Test;
 
 use function dataDir;
 use function file_get_contents;
 
-final class GetContentTest extends UnitTestCase
+final class GetContentTest extends AbstractUnitTestCase
 {
     /**
      * Tests Phalcon\Assets\Asset\Css :: getContent()
@@ -29,6 +31,7 @@ final class GetContentTest extends UnitTestCase
      * @author Phalcon Team <team@phalcon.io>
      * @since  2020-09-09
      */
+    #[Test]
     public function testAssetsAssetCssGetContent(): void
     {
         if (PHP_OS_FAMILY === 'Windows') {

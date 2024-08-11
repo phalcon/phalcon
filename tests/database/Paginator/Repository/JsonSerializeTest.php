@@ -15,9 +15,9 @@ namespace Phalcon\Tests\Database\Paginator\Repository;
 
 use Phalcon\Paginator\Adapter\NativeArray;
 use Phalcon\Paginator\Repository;
-use Phalcon\Tests\DatabaseTestCase;
+use Phalcon\Tests\AbstractDatabaseTestCase;
 
-final class JsonSerializeTest extends DatabaseTestCase
+final class JsonSerializeTest extends AbstractDatabaseTestCase
 {
     /**
      * Tests Phalcon\Paginator\Repository :: jsonSerialize()

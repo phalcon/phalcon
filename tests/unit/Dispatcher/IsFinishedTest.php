@@ -13,9 +13,9 @@ declare(strict_types=1);
 
 namespace Phalcon\Tests\Unit\Dispatcher;
 
-use Phalcon\Tests\UnitTestCase;
+use Phalcon\Tests\AbstractUnitTestCase;
 
-final class IsFinishedTest extends UnitTestCase
+final class IsFinishedTest extends AbstractUnitTestCase
 {
     /**
      * Tests Phalcon\Dispatcher :: isFinished()

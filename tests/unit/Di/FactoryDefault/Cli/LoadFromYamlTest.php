@@ -15,9 +15,9 @@ namespace Phalcon\Tests\Unit\Di\FactoryDefault\Cli;
 
 use Phalcon\Config\Config;
 use Phalcon\Di\FactoryDefault\Cli as Di;
-use Phalcon\Tests\UnitTestCase;
+use Phalcon\Tests\AbstractUnitTestCase;
 
-final class LoadFromYamlTest extends UnitTestCase
+final class LoadFromYamlTest extends AbstractUnitTestCase
 {
     /**
      * Tests Phalcon\Di\FactoryDefault\Cli :: loadFromYaml()

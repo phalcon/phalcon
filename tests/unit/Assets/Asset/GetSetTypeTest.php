@@ -14,14 +14,16 @@ declare(strict_types=1);
 namespace Phalcon\Tests\Unit\Assets\Asset;
 
 use Phalcon\Assets\Asset;
-use Phalcon\Tests\UnitTestCase;
+use Phalcon\Tests\AbstractUnitTestCase;
+use PHPUnit\Framework\Attributes\DataProvider;
+use PHPUnit\Framework\Attributes\Test;
 
-final class GetSetTypeTest extends UnitTestCase
+final class GetSetTypeTest extends AbstractUnitTestCase
 {
     /**
      * @return string[][]
      */
-    public static function provider(): array
+    public static function providerAssets(): array
     {
         return [
             [
@@ -40,13 +42,13 @@ final class GetSetTypeTest extends UnitTestCase
     /**
      * Tests Phalcon\Assets\Asset :: getType()/setType()
      *
-     * @dataProvider provider
-     *
      * @return void
      *
      * @author       Phalcon Team <team@phalcon.io>
      * @since        2020-09-09
      */
+    #[Test]
+    #[DataProvider('providerAssets')]
     public function testAssetsAssetSetType(
         string $type,
         string $path,

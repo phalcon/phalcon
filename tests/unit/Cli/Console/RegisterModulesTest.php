@@ -18,9 +18,9 @@ use Phalcon\Cli\Console\Exception;
 use Phalcon\Di\FactoryDefault\Cli as DiFactoryDefault;
 use Phalcon\Tests\Modules\Backend\Module;
 use Phalcon\Tests\Modules\Frontend\Module as FrontendModule;
-use Phalcon\Tests\UnitTestCase;
+use Phalcon\Tests\AbstractUnitTestCase;
 
-final class RegisterModulesTest extends UnitTestCase
+final class RegisterModulesTest extends AbstractUnitTestCase
 {
     /**
      * Tests Phalcon\Cli\Console :: registerModules() - bad path throws

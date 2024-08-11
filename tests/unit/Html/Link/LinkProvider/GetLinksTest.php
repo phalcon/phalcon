@@ -15,11 +15,11 @@ namespace Phalcon\Tests\Unit\Html\Link\LinkProvider;
 
 use Phalcon\Html\Link\Link;
 use Phalcon\Html\Link\LinkProvider;
-use Phalcon\Tests\UnitTestCase;
+use Phalcon\Tests\AbstractUnitTestCase;
 
 use function spl_object_hash;
 
-final class GetLinksTest extends UnitTestCase
+final class GetLinksTest extends AbstractUnitTestCase
 {
     /**
      * Tests Phalcon\Html\Link\LinkProvider :: getLinks()

@@ -14,9 +14,9 @@ declare(strict_types=1);
 namespace Phalcon\Tests\Unit\Filter\Validation\Validator\File;
 
 use Phalcon\Filter\Validation\Validator\File;
-use Phalcon\Tests\UnitTestCase;
+use Phalcon\Tests\AbstractUnitTestCase;
 
-final class CustomMessagesTest extends UnitTestCase
+final class CustomMessagesTest extends AbstractUnitTestCase
 {
     /**
      * Tests Phalcon\Filter\Validation\Validator\File :: customMessages[]

@@ -16,9 +16,11 @@ namespace Phalcon\Tests\Unit\Assets\Manager;
 use Phalcon\Assets\Manager;
 use Phalcon\Html\Escaper;
 use Phalcon\Html\TagFactory;
-use Phalcon\Tests\UnitTestCase;
+use Phalcon\Tests\AbstractUnitTestCase;
+use PHPUnit\Framework\Attributes\DataProvider;
+use PHPUnit\Framework\Attributes\Test;
 
-final class GetSetOptionsTest extends UnitTestCase
+final class GetSetOptionsTest extends AbstractUnitTestCase
 {
     /**
      * @return array
@@ -63,10 +65,9 @@ final class GetSetOptionsTest extends UnitTestCase
      *
      * @author       Phalcon Team <team@phalcon.io>
      * @since        2020-03-19
-     *
-     *
-     * @dataProvider getExamples
      */
+    #[Test]
+    #[DataProvider('getExamples')]
     public function testAssetsManagerGetSetOptions(
         array $options,
         array $expected,

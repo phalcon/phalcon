@@ -19,14 +19,14 @@ namespace Phalcon\Tests\Unit\Mvc\View\Engine\Volt;
 
 use Phalcon\Mvc\View;
 use Phalcon\Mvc\View\Engine\Volt\Compiler;
-use Phalcon\Tests\UnitTestCase;
+use Phalcon\Tests\AbstractUnitTestCase;
 
 use function dataDir;
 use function sprintf;
 
 use const PHP_EOL;
 
-class CompilerFilesTest extends UnitTestCase
+class CompilerFilesTest extends AbstractUnitTestCase
 {
     public function setUp(): void
     {

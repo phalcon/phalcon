@@ -16,9 +16,9 @@ namespace Phalcon\Tests\Unit\Forms\Form;
 use Phalcon\Forms\Form;
 use Phalcon\Html\Escaper;
 use Phalcon\Html\TagFactory;
-use Phalcon\Tests\UnitTestCase;
+use Phalcon\Tests\AbstractUnitTestCase;
 
-final class GetSetTagFactoryTest extends UnitTestCase
+final class GetSetTagFactoryTest extends AbstractUnitTestCase
 {
     /**
      * Tests Phalcon\Forms\Form :: getTagFactory()/setTagFactory()

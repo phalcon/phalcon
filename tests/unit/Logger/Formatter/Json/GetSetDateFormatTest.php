@@ -14,9 +14,9 @@ declare(strict_types=1);
 namespace Phalcon\Tests\Unit\Logger\Formatter\Json;
 
 use Phalcon\Logger\Formatter\Json;
-use Phalcon\Tests\UnitTestCase;
+use Phalcon\Tests\AbstractUnitTestCase;
 
-final class GetSetDateFormatTest extends UnitTestCase
+final class GetSetDateFormatTest extends AbstractUnitTestCase
 {
     /**
      * Tests Phalcon\Logger\Formatter\Json :: setDateFormat()

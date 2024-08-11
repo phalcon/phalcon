@@ -14,9 +14,9 @@ declare(strict_types=1);
 namespace Phalcon\Tests\Unit\Dispatcher;
 
 use Phalcon\Mvc\Dispatcher;
-use Phalcon\Tests\UnitTestCase;
+use Phalcon\Tests\AbstractUnitTestCase;
 
-final class GetSetActionSuffixTest extends UnitTestCase
+final class GetSetActionSuffixTest extends AbstractUnitTestCase
 {
     /**
      * Tests Phalcon\Dispatcher :: getActionSuffix()/setActionSuffix()

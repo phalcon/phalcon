@@ -18,12 +18,12 @@ use Phalcon\Forms\Form;
 use Phalcon\Html\Escaper;
 use Phalcon\Html\TagFactory;
 use Phalcon\Tests\Fixtures\Traits\DiTrait;
-use Phalcon\Tests\UnitTestCase;
+use Phalcon\Tests\AbstractUnitTestCase;
 
 use function sprintf;
 use function uniqid;
 
-final class GetSetTagFactoryTest extends UnitTestCase
+final class GetSetTagFactoryTest extends AbstractUnitTestCase
 {
     use DiTrait;
 

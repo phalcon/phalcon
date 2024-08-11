@@ -15,12 +15,12 @@ namespace Phalcon\Tests\Unit\Annotations\Reader;
 
 use Phalcon\Annotations\Exception;
 use Phalcon\Annotations\Reader;
-use Phalcon\Tests\UnitTestCase;
+use Phalcon\Tests\AbstractUnitTestCase;
 use ReflectionException;
 
 use function supportDir;
 
-final class ParseTest extends UnitTestCase
+final class ParseTest extends AbstractUnitTestCase
 {
     /**
      * Test throws Phalcon\Annotations\Exception when got final class with invalid

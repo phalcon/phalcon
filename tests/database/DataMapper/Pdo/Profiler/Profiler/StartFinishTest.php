@@ -13,13 +13,13 @@ namespace Phalcon\Tests\Database\DataMapper\Pdo\Profiler\Profiler;
 
 use InvalidArgumentException;
 use Phalcon\DataMapper\Pdo\Profiler\Profiler;
-use Phalcon\Tests\DatabaseTestCase;
+use Phalcon\Tests\AbstractDatabaseTestCase;
 use Phalcon\Tests\Fixtures\DataMapper\Pdo\ProfilerJsonEncodeFixture;
 
 use function sleep;
 use function strpos;
 
-final class StartFinishTest extends DatabaseTestCase
+final class StartFinishTest extends AbstractDatabaseTestCase
 {
     /**
      * Database Tests Phalcon\DataMapper\Pdo\Profiler\Profiler ::

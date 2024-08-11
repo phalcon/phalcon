@@ -13,10 +13,10 @@ declare(strict_types=1);
 
 namespace Phalcon\Tests\Database\Db\Column;
 
-use Phalcon\Tests\DatabaseTestCase;
+use Phalcon\Tests\AbstractDatabaseTestCase;
 use Phalcon\Tests\Fixtures\Traits\DbTrait;
 
-final class GetAfterPositionTest extends DatabaseTestCase
+final class GetAfterPositionTest extends AbstractDatabaseTestCase
 {
     use DbTrait;
 

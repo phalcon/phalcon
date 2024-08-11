@@ -15,12 +15,12 @@ namespace Phalcon\Tests\Database\Mvc\Model;
 
 use PDO;
 use Phalcon\Mvc\Model;
-use Phalcon\Tests\DatabaseTestCase;
+use Phalcon\Tests\AbstractDatabaseTestCase;
 use Phalcon\Tests\Fixtures\Migrations\InvoicesMigration;
 use Phalcon\Tests\Fixtures\Traits\DiTrait;
 use Phalcon\Tests\Models\InvoicesMap;
 
-final class CloneResultMapTest extends DatabaseTestCase
+final class CloneResultMapTest extends AbstractDatabaseTestCase
 {
     use DiTrait;
 

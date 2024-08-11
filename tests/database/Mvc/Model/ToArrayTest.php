@@ -16,7 +16,7 @@ namespace Phalcon\Tests\Database\Mvc\Model;
 use PDO;
 use Phalcon\Db\Adapter\PdoFactory;
 use Phalcon\Mvc\Model\Manager;
-use Phalcon\Tests\DatabaseTestCase;
+use Phalcon\Tests\AbstractDatabaseTestCase;
 use Phalcon\Tests\Fixtures\Migrations\InvoicesMigration;
 use Phalcon\Tests\Fixtures\Traits\DiTrait;
 use Phalcon\Tests\Models\Invoices;
@@ -27,7 +27,7 @@ use function date;
 use function getOptionsMysql;
 use function uniqid;
 
-final class ToArrayTest extends DatabaseTestCase
+final class ToArrayTest extends AbstractDatabaseTestCase
 {
     use DiTrait;
 

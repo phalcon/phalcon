@@ -16,11 +16,11 @@ namespace Phalcon\Tests\Unit\Flash\Direct;
 use Phalcon\Flash\Direct;
 use Phalcon\Flash\Exception;
 use Phalcon\Html\Escaper;
-use Phalcon\Tests\UnitTestCase;
+use Phalcon\Tests\AbstractUnitTestCase;
 
 use const PHP_EOL;
 
-final class OutputMessageTest extends UnitTestCase
+final class OutputMessageTest extends AbstractUnitTestCase
 {
     /**
      * @return array

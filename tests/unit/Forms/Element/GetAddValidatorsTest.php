@@ -17,11 +17,11 @@ use Phalcon\Filter\Validation\Validator\Alnum;
 use Phalcon\Filter\Validation\Validator\Digit;
 use Phalcon\Filter\Validation\Validator\StringLength;
 use Phalcon\Tests\Fixtures\Traits\FormsTrait;
-use Phalcon\Tests\UnitTestCase;
+use Phalcon\Tests\AbstractUnitTestCase;
 
 use function uniqid;
 
-final class GetAddValidatorsTest extends UnitTestCase
+final class GetAddValidatorsTest extends AbstractUnitTestCase
 {
     use FormsTrait;
 

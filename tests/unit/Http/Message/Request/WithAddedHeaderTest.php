@@ -16,9 +16,9 @@ namespace Phalcon\Tests\Unit\Http\Message\Request;
 use Phalcon\Http\Message\Exception\InvalidArgumentException;
 use Phalcon\Http\Message\Request;
 use Phalcon\Tests\Fixtures\Page\Http;
-use Phalcon\Tests\UnitTestCase;
+use Phalcon\Tests\AbstractUnitTestCase;
 
-final class WithAddedHeaderTest extends UnitTestCase
+final class WithAddedHeaderTest extends AbstractUnitTestCase
 {
     /**
      * Tests Phalcon\Http\Message\Request :: withAddedHeader()

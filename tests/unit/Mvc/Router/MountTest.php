@@ -13,12 +13,12 @@ declare(strict_types=1);
 
 namespace Phalcon\Tests\Unit\Mvc\Router;
 
-use Phalcon\Tests\UnitTestCase;
+use Phalcon\Tests\AbstractUnitTestCase;
 
 /**
- * Class MountTest extends UnitTestCase
+ * Class MountTest extends AbstractUnitTestCase
  */
-final class MountTest extends UnitTestCase
+final class MountTest extends AbstractUnitTestCase
 {
     /**
      * Tests Phalcon\Mvc\Router :: mount()

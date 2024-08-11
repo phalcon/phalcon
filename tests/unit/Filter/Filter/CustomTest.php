@@ -15,9 +15,9 @@ namespace Phalcon\Tests\Unit\Filter\Filter;
 
 use Phalcon\Filter\Filter;
 use Phalcon\Tests\Fixtures\Filter\Sanitize\IPv4;
-use Phalcon\Tests\UnitTestCase;
+use Phalcon\Tests\AbstractUnitTestCase;
 
-final class CustomTest extends UnitTestCase
+final class CustomTest extends AbstractUnitTestCase
 {
     /**
      * Tests Phalcon\Filter :: custom has()

@@ -15,7 +15,7 @@ namespace Phalcon\Tests\Unit\Filter\Validation;
 
 use Phalcon\Filter\Validation;
 use Phalcon\Filter\Validation\Validator\PresenceOf;
-use Phalcon\Tests\UnitTestCase;
+use Phalcon\Tests\AbstractUnitTestCase;
 use PHPUnit\Framework\Attributes\Test;
 use stdClass;
 
@@ -23,7 +23,7 @@ use function date;
 use function intval;
 use function uniqid;
 
-final class GetSetLabelTest extends UnitTestCase
+final class GetSetLabelTest extends AbstractUnitTestCase
 {
     /**
      * Tests Phalcon\Filter\Validation :: getLabel()/setLabels()

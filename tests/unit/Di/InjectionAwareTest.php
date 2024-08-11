@@ -15,11 +15,11 @@ namespace Phalcon\Tests\Unit\Di;
 
 use Phalcon\Di\Di;
 use Phalcon\Tests\Fixtures\Di\InjectionAwareComponent;
-use Phalcon\Tests\UnitTestCase;
+use Phalcon\Tests\AbstractUnitTestCase;
 
 use function spl_object_hash;
 
-class InjectionAwareTest extends UnitTestCase
+class InjectionAwareTest extends AbstractUnitTestCase
 {
     /**
      * Tests Phalcon\Di\Di :: injection aware trait

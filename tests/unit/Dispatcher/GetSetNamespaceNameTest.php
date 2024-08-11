@@ -14,9 +14,9 @@ declare(strict_types=1);
 namespace Phalcon\Tests\Unit\Dispatcher;
 
 use Phalcon\Mvc\Dispatcher;
-use Phalcon\Tests\UnitTestCase;
+use Phalcon\Tests\AbstractUnitTestCase;
 
-final class GetSetNamespaceNameTest extends UnitTestCase
+final class GetSetNamespaceNameTest extends AbstractUnitTestCase
 {
     /**
      * Tests Phalcon\Dispatcher :: getNamespaceName()/setNamespaceName()

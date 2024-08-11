@@ -17,9 +17,9 @@ use Phalcon\Di\Di;
 use Phalcon\Di\Exception;
 use Phalcon\Di\Service;
 use Phalcon\Html\Escaper;
-use Phalcon\Tests\UnitTestCase;
+use Phalcon\Tests\AbstractUnitTestCase;
 
-class GetServiceTest extends UnitTestCase
+class GetServiceTest extends AbstractUnitTestCase
 {
     /**
      * Unit Tests Phalcon\Di\Di :: getService()

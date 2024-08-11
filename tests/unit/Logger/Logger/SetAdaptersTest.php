@@ -15,9 +15,9 @@ namespace Phalcon\Tests\Unit\Logger\Logger;
 
 use Phalcon\Logger\Adapter\Stream;
 use Phalcon\Logger\Logger;
-use Phalcon\Tests\UnitTestCase;
+use Phalcon\Tests\AbstractUnitTestCase;
 
-final class SetAdaptersTest extends UnitTestCase
+final class SetAdaptersTest extends AbstractUnitTestCase
 {
     /**
      * Tests Phalcon\Logger :: setAdapters()

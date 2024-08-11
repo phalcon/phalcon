@@ -13,9 +13,9 @@ declare(strict_types=1);
 
 namespace Phalcon\Tests\Unit\Mvc\Micro;
 
-use Phalcon\Tests\UnitTestCase;
+use Phalcon\Tests\AbstractUnitTestCase;
 
-class MountTest extends UnitTestCase
+class MountTest extends AbstractUnitTestCase
 {
     /**
      * Tests Phalcon\Mvc\Micro :: mount()

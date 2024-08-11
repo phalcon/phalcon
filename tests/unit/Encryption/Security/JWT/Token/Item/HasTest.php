@@ -12,9 +12,9 @@ declare(strict_types=1);
 namespace Phalcon\Tests\Unit\Encryption\Security\JWT\Token\Item;
 
 use Phalcon\Encryption\Security\JWT\Token\Item;
-use Phalcon\Tests\UnitTestCase;
+use Phalcon\Tests\AbstractUnitTestCase;
 
-final class HasTest extends UnitTestCase
+final class HasTest extends AbstractUnitTestCase
 {
     /**
      * Unit Tests Phalcon\Encryption\Security\JWT\Token\Item :: has()

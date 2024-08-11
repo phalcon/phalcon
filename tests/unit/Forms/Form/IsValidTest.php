@@ -21,9 +21,9 @@ use Phalcon\Forms\Form;
 use Phalcon\Messages\Message;
 use Phalcon\Messages\Messages;
 use Phalcon\Tests\Fixtures\Forms\ValidationForm;
-use Phalcon\Tests\UnitTestCase;
+use Phalcon\Tests\AbstractUnitTestCase;
 
-final class IsValidTest extends UnitTestCase
+final class IsValidTest extends AbstractUnitTestCase
 {
     /**
      * Tests Form::isValid()

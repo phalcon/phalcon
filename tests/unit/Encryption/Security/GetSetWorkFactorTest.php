@@ -14,9 +14,9 @@ declare(strict_types=1);
 namespace Phalcon\Tests\Unit\Encryption\Security;
 
 use Phalcon\Encryption\Security;
-use Phalcon\Tests\UnitTestCase;
+use Phalcon\Tests\AbstractUnitTestCase;
 
-final class GetSetWorkFactorTest extends UnitTestCase
+final class GetSetWorkFactorTest extends AbstractUnitTestCase
 {
     /**
      * Tests Phalcon\Security :: setWorkFactor()/getWorkFactor()

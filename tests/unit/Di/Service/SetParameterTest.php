@@ -17,9 +17,9 @@ use Phalcon\Di\Exception;
 use Phalcon\Di\Service;
 use Phalcon\Di\ServiceInterface;
 use Phalcon\Html\Escaper;
-use Phalcon\Tests\UnitTestCase;
+use Phalcon\Tests\AbstractUnitTestCase;
 
-class SetParameterTest extends UnitTestCase
+class SetParameterTest extends AbstractUnitTestCase
 {
     /**
      * Unit Tests Phalcon\Di\Service :: setParameter()

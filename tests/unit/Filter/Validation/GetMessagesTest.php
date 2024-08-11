@@ -17,11 +17,11 @@ use Phalcon\Filter\Validation;
 use Phalcon\Filter\Validation\Validator\PresenceOf;
 use Phalcon\Messages\Message;
 use Phalcon\Messages\Messages;
-use Phalcon\Tests\UnitTestCase;
+use Phalcon\Tests\AbstractUnitTestCase;
 use PHPUnit\Framework\Attributes\Test;
 use stdClass;
 
-final class GetMessagesTest extends UnitTestCase
+final class GetMessagesTest extends AbstractUnitTestCase
 {
     /**
      * Tests Phalcon\Filter\Validation :: getMessages()

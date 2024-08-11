@@ -15,9 +15,11 @@ namespace Phalcon\Tests\Unit\Assets\Asset\Js;
 
 use Phalcon\Assets\Asset\Js;
 use Phalcon\Tests\Fixtures\Traits\AssetsTrait;
-use Phalcon\Tests\UnitTestCase;
+use Phalcon\Tests\AbstractUnitTestCase;
+use PHPUnit\Framework\Attributes\DataProvider;
+use PHPUnit\Framework\Attributes\Test;
 
-final class GetSetTypeTest extends UnitTestCase
+final class GetSetTypeTest extends AbstractUnitTestCase
 {
     use AssetsTrait;
 
@@ -30,6 +32,9 @@ final class GetSetTypeTest extends UnitTestCase
      * @author       Phalcon Team <team@phalcon.io>
      * @since        2020-09-09
      */
+    #[Test]
+    #[DataProvider('providerJs')]
+
     public function testAssetsAssetJsGetSetType(
         string $path,
         bool $local

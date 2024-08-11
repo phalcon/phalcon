@@ -11,9 +11,9 @@
 
 namespace Phalcon\Tests\Unit\Filter\Validation\Validator\File;
 
-use Phalcon\Tests\UnitTestCase;
+use Phalcon\Tests\AbstractUnitTestCase;
 
-final class IsAllowEmptyTest extends UnitTestCase
+final class IsAllowEmptyTest extends AbstractUnitTestCase
 {
     /**
      * Tests Phalcon\Filter\Validation\Validator\File :: isAllowEmpty()

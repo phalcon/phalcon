@@ -16,11 +16,11 @@ namespace Phalcon\Tests\Unit\Image\Adapter\Gd;
 use Phalcon\Image\Adapter\Gd;
 use Phalcon\Image\Enum;
 use Phalcon\Tests\Fixtures\Traits\GdTrait;
-use Phalcon\Tests\UnitTestCase;
+use Phalcon\Tests\AbstractUnitTestCase;
 
 use function outputDir;
 
-final class WatermarkTest extends UnitTestCase
+final class WatermarkTest extends AbstractUnitTestCase
 {
     use GdTrait;
 

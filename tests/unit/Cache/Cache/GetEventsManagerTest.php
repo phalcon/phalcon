@@ -15,9 +15,9 @@ use Phalcon\Cache\AdapterFactory;
 use Phalcon\Cache\Cache;
 use Phalcon\Events\Manager;
 use Phalcon\Storage\SerializerFactory;
-use Phalcon\Tests\UnitTestCase;
+use Phalcon\Tests\AbstractUnitTestCase;
 
-final class GetEventsManagerTest extends UnitTestCase
+final class GetEventsManagerTest extends AbstractUnitTestCase
 {
     /**
      * @return array[]

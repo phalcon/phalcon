@@ -15,7 +15,7 @@ namespace Phalcon\Tests\Unit\Image\Adapter\Gd;
 
 use Phalcon\Image\Adapter\Gd;
 use Phalcon\Tests\Fixtures\Traits\GdTrait;
-use Phalcon\Tests\UnitTestCase;
+use Phalcon\Tests\AbstractUnitTestCase;
 
 use const IMAGETYPE_GIF;
 use const IMAGETYPE_JPEG;
@@ -24,7 +24,7 @@ use const IMAGETYPE_WBMP;
 use const IMAGETYPE_WEBP;
 use const IMAGETYPE_XBM;
 
-final class GetTypeTest extends UnitTestCase
+final class GetTypeTest extends AbstractUnitTestCase
 {
     use GdTrait;
 

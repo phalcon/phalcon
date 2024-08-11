@@ -16,9 +16,9 @@ namespace Phalcon\Tests\Unit\Http\Response;
 use Phalcon\Http\Response;
 use Phalcon\Http\Response\Headers;
 use Phalcon\Tests\Fixtures\Page\Http;
-use Phalcon\Tests\UnitTestCase;
+use Phalcon\Tests\AbstractUnitTestCase;
 
-final class GetSetHeadersTest extends UnitTestCase
+final class GetSetHeadersTest extends AbstractUnitTestCase
 {
     /**
      * Tests Phalcon\Http\Response :: getHeaders() / setHeaders()

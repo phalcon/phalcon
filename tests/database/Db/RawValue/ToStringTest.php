@@ -14,9 +14,9 @@ declare(strict_types=1);
 namespace Phalcon\Tests\Database\Db\RawValue;
 
 use Phalcon\Db\RawValue;
-use Phalcon\Tests\DatabaseTestCase;
+use Phalcon\Tests\AbstractDatabaseTestCase;
 
-final class ToStringTest extends DatabaseTestCase
+final class ToStringTest extends AbstractDatabaseTestCase
 {
     /**
      * Tests Phalcon\Db\RawValue :: __toString()

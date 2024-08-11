@@ -15,9 +15,9 @@ namespace Phalcon\Tests\Unit\Di;
 
 use Phalcon\Di\Di;
 use Phalcon\Html\Escaper;
-use Phalcon\Tests\UnitTestCase;
+use Phalcon\Tests\AbstractUnitTestCase;
 
-class HasTest extends UnitTestCase
+class HasTest extends AbstractUnitTestCase
 {
     /**
      * Tests Phalcon\Di\Di :: has()

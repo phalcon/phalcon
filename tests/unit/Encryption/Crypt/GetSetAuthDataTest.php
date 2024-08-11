@@ -14,11 +14,11 @@ declare(strict_types=1);
 namespace Phalcon\Tests\Unit\Encryption\Crypt;
 
 use Phalcon\Encryption\Crypt;
-use Phalcon\Tests\UnitTestCase;
+use Phalcon\Tests\AbstractUnitTestCase;
 
 use function uniqid;
 
-final class GetSetAuthDataTest extends UnitTestCase
+final class GetSetAuthDataTest extends AbstractUnitTestCase
 {
     /**
      * Unit Tests Phalcon\Encryption\Crypt :: getAuthData()/setAuthData()

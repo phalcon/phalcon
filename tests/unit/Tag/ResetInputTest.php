@@ -14,9 +14,9 @@ declare(strict_types=1);
 namespace Phalcon\Tests\Unit\Tag;
 
 use Phalcon\Tag;
-use Phalcon\Tests\UnitTestCase;
+use Phalcon\Tests\AbstractUnitTestCase;
 
-class ResetInputTest extends UnitTestCase
+class ResetInputTest extends AbstractUnitTestCase
 {
     /**
      * Tests Phalcon\Tag :: resetInput() - displayTo

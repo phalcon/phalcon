@@ -14,9 +14,9 @@ declare(strict_types=1);
 namespace Phalcon\Tests\Unit\Support\Helper\Str;
 
 use Phalcon\Support\Helper\Str\Friendly;
-use Phalcon\Tests\UnitTestCase;
+use Phalcon\Tests\AbstractUnitTestCase;
 
-final class FriendlyTest extends UnitTestCase
+final class FriendlyTest extends AbstractUnitTestCase
 {
     /**
      * @return array

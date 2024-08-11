@@ -16,9 +16,9 @@ namespace Phalcon\Tests\Unit\Mvc\Micro\Collection;
 use Phalcon\Mvc\Micro;
 use Phalcon\Mvc\Micro\Collection;
 use Phalcon\Tests\Controllers\Micro\Collections\PersonasLazyController;
-use Phalcon\Tests\UnitTestCase;
+use Phalcon\Tests\AbstractUnitTestCase;
 
-class SetHandlerTest extends UnitTestCase
+class SetHandlerTest extends AbstractUnitTestCase
 {
     public function testMicroCollectionsLazy(): void
     {

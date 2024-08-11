@@ -13,12 +13,12 @@ declare(strict_types=1);
 
 namespace Phalcon\Tests\Unit\Forms\Form;
 
-use Phalcon\Tests\UnitTestCase;
+use Phalcon\Tests\AbstractUnitTestCase;
 
 /**
- * Class GetMessagesForTest extends UnitTestCase
+ * Class GetMessagesForTest extends AbstractUnitTestCase
  */
-final class GetMessagesForTest extends UnitTestCase
+final class GetMessagesForTest extends AbstractUnitTestCase
 {
     /**
      * Tests Phalcon\Forms\Form :: getMessagesFor()

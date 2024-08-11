@@ -16,9 +16,9 @@ namespace Phalcon\Tests\Unit\Di\FactoryDefault\Cli;
 use Phalcon\Di\FactoryDefault;
 use Phalcon\Di\Service;
 use Phalcon\Html\Escaper;
-use Phalcon\Tests\UnitTestCase;
+use Phalcon\Tests\AbstractUnitTestCase;
 
-final class SetServiceTest extends UnitTestCase
+final class SetServiceTest extends AbstractUnitTestCase
 {
     /**
      * Unit Tests Phalcon\Di\FactoryDefault\Cli :: setService()

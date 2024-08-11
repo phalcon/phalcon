@@ -16,14 +16,14 @@ namespace Phalcon\Tests\Database\Mvc\Model\Query;
 use Phalcon\Cache\AdapterFactory;
 use Phalcon\Cache\Cache;
 use Phalcon\Storage\SerializerFactory;
-use Phalcon\Tests\DatabaseTestCase;
+use Phalcon\Tests\AbstractDatabaseTestCase;
 use Phalcon\Tests\Fixtures\Migrations\InvoicesMigration;
 use Phalcon\Tests\Fixtures\Traits\DiTrait;
 use Phalcon\Tests\Models\Invoices;
 
 use function cacheDir;
 
-final class CacheTest extends DatabaseTestCase
+final class CacheTest extends AbstractDatabaseTestCase
 {
     use DiTrait;
 

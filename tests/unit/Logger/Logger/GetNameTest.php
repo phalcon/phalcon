@@ -14,9 +14,9 @@ declare(strict_types=1);
 namespace Phalcon\Tests\Unit\Logger\Logger;
 
 use Phalcon\Logger\Logger;
-use Phalcon\Tests\UnitTestCase;
+use Phalcon\Tests\AbstractUnitTestCase;
 
-final class GetNameTest extends UnitTestCase
+final class GetNameTest extends AbstractUnitTestCase
 {
     /**
      * Tests Phalcon\Logger :: getName()

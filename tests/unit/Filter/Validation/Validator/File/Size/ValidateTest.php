@@ -20,12 +20,12 @@ use Phalcon\Filter\Validation\Validator\File\Size\Min;
 use Phalcon\Tests\Fixtures\Filter\Validation\Validator\File\Size\EqualFixture;
 use Phalcon\Tests\Fixtures\Filter\Validation\Validator\File\Size\MaxFixture;
 use Phalcon\Tests\Fixtures\Filter\Validation\Validator\File\Size\MinFixture;
-use Phalcon\Tests\UnitTestCase;
+use Phalcon\Tests\AbstractUnitTestCase;
 use PHPUnit\Framework\Attributes\BackupGlobals;
 use PHPUnit\Framework\Attributes\DataProvider;
 
 #[BackupGlobals(true)]
-final class ValidateTest extends UnitTestCase
+final class ValidateTest extends AbstractUnitTestCase
 {
     /**
      * @return array[]

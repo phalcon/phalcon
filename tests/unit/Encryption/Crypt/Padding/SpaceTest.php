@@ -14,11 +14,11 @@ declare(strict_types=1);
 namespace Phalcon\Tests\Unit\Encryption\Crypt\Padding;
 
 use Phalcon\Encryption\Crypt\Padding\Space;
-use Phalcon\Tests\UnitTestCase;
+use Phalcon\Tests\AbstractUnitTestCase;
 
 use function str_repeat;
 
-final class SpaceTest extends UnitTestCase
+final class SpaceTest extends AbstractUnitTestCase
 {
     /**
      * Tests Phalcon\Encryption\Crypt\Padding\Space :: __construct()

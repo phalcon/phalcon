@@ -15,13 +15,13 @@ namespace Phalcon\Tests\Unit\Translate\Adapter\NativeArray;
 
 use ArrayAccess;
 use Phalcon\Tests\Fixtures\Traits\TranslateNativeArrayTrait;
-use Phalcon\Tests\UnitTestCase;
+use Phalcon\Tests\AbstractUnitTestCase;
 use Phalcon\Translate\Adapter\AdapterInterface;
 use Phalcon\Translate\Adapter\NativeArray;
 use Phalcon\Translate\Exception;
 use Phalcon\Translate\InterpolatorFactory;
 
-final class ConstructTest extends UnitTestCase
+final class ConstructTest extends AbstractUnitTestCase
 {
     use TranslateNativeArrayTrait;
 

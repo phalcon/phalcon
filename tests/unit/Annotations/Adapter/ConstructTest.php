@@ -19,11 +19,11 @@ use Phalcon\Annotations\Collection;
 use Phalcon\Annotations\Reflection;
 use Phalcon\Tests\Fixtures\Annotations\AnnotationsTestClassNs;
 use Phalcon\Tests\Fixtures\Traits\AnnotationsTrait;
-use Phalcon\Tests\UnitTestCase;
+use Phalcon\Tests\AbstractUnitTestCase;
 
 use function is_object;
 
-final class ConstructTest extends UnitTestCase
+final class ConstructTest extends AbstractUnitTestCase
 {
     use AnnotationsTrait;
 

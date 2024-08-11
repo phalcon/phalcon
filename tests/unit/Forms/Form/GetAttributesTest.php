@@ -15,11 +15,11 @@ namespace Phalcon\Tests\Unit\Forms\Form;
 
 use Phalcon\Forms\Form;
 use Phalcon\Html\Attributes\AttributesInterface;
-use Phalcon\Tests\UnitTestCase;
+use Phalcon\Tests\AbstractUnitTestCase;
 
 use function method_exists;
 
-final class GetAttributesTest extends UnitTestCase
+final class GetAttributesTest extends AbstractUnitTestCase
 {
     /**
      * Tests Phalcon\Forms\Form :: getAttributes()

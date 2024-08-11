@@ -14,9 +14,10 @@ declare(strict_types=1);
 namespace Phalcon\Tests\Unit\Assets\Collection;
 
 use Phalcon\Assets\Collection;
-use Phalcon\Tests\UnitTestCase;
+use Phalcon\Tests\AbstractUnitTestCase;
+use PHPUnit\Framework\Attributes\Test;
 
-final class GetSetJoinTest extends UnitTestCase
+final class GetSetJoinTest extends AbstractUnitTestCase
 {
     /**
      * Tests Phalcon\Assets\Collection :: getJoin() / join()
@@ -26,6 +27,7 @@ final class GetSetJoinTest extends UnitTestCase
      * @author Phalcon Team <team@phalcon.io>
      * @since  2020-09-09
      */
+    #[Test]
     public function testAssetsCollectionGetSetJoin(): void
     {
         $collection = new Collection();

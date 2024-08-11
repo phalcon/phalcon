@@ -15,9 +15,9 @@ namespace Phalcon\Tests\Unit\Cli\Router;
 
 use Phalcon\Cli\Router;
 use Phalcon\Di\Di;
-use Phalcon\Tests\UnitTestCase;
+use Phalcon\Tests\AbstractUnitTestCase;
 
-final class GetSetDITest extends UnitTestCase
+final class GetSetDITest extends AbstractUnitTestCase
 {
     /**
      * Tests Phalcon\Cli\Router :: getDI()/setDI()

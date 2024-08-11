@@ -14,9 +14,9 @@ declare(strict_types=1);
 namespace Phalcon\Tests\Unit\Http\Request;
 
 use Phalcon\Http\Request;
-use Phalcon\Tests\UnitTestCase;
+use Phalcon\Tests\AbstractUnitTestCase;
 
-final class GetSetHttpMethodParameterOverrideTest extends UnitTestCase
+final class GetSetHttpMethodParameterOverrideTest extends AbstractUnitTestCase
 {
     /**
      * Tests Phalcon\Http\Request ::

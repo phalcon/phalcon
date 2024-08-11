@@ -13,9 +13,9 @@ declare(strict_types=1);
 
 namespace Phalcon\Tests\Unit\Mvc\Router\Group;
 
-use Phalcon\Tests\UnitTestCase;
+use Phalcon\Tests\AbstractUnitTestCase;
 
-final class BeforeMatchTest extends UnitTestCase
+final class BeforeMatchTest extends AbstractUnitTestCase
 {
     /**
      * Tests Phalcon\Mvc\Router\Group :: beforeMatch()

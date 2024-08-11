@@ -14,9 +14,9 @@ namespace Phalcon\Tests\Database\DataMapper\Pdo\Connection\Decorated;
 use PDO;
 use Phalcon\DataMapper\Pdo\Connection\Decorated;
 use Phalcon\DataMapper\Pdo\Profiler\Profiler;
-use Phalcon\Tests\DatabaseTestCase;
+use Phalcon\Tests\AbstractDatabaseTestCase;
 
-final class ConstructTest extends DatabaseTestCase
+final class ConstructTest extends AbstractDatabaseTestCase
 {
     /**
      * Database Tests Phalcon\DataMapper\Pdo\Connection\Decorated ::

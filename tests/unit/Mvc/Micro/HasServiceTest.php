@@ -18,9 +18,9 @@ use Phalcon\Html\Escaper;
 use Phalcon\Mvc\Dispatcher;
 use Phalcon\Mvc\Micro;
 use Phalcon\Mvc\Router;
-use Phalcon\Tests\UnitTestCase;
+use Phalcon\Tests\AbstractUnitTestCase;
 
-class HasServiceTest extends UnitTestCase
+class HasServiceTest extends AbstractUnitTestCase
 {
     /**
      * Tests Phalcon\Mvc\Micro :: hasService()

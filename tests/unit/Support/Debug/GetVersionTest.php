@@ -15,9 +15,9 @@ namespace Phalcon\Tests\Unit\Support\Debug;
 
 use Phalcon\Support\Debug;
 use Phalcon\Support\Version;
-use Phalcon\Tests\UnitTestCase;
+use Phalcon\Tests\AbstractUnitTestCase;
 
-final class GetVersionTest extends UnitTestCase
+final class GetVersionTest extends AbstractUnitTestCase
 {
 //    use DiTrait;
 

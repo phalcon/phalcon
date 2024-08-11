@@ -22,14 +22,14 @@ use Phalcon\Tests\Fixtures\Annotations\Adapter\StreamFileGetContentsFixture;
 use Phalcon\Tests\Fixtures\Annotations\Adapter\StreamFilePutContentsFixture;
 use Phalcon\Tests\Fixtures\Annotations\Adapter\StreamUnserializeFixture;
 use Phalcon\Tests\Fixtures\Traits\AnnotationsTrait;
-use Phalcon\Tests\UnitTestCase;
+use Phalcon\Tests\AbstractUnitTestCase;
 use RuntimeException;
 
 use function outputDir;
 use function safeDeleteFile;
 use function supportDir;
 
-final class ReadWriteTest extends UnitTestCase
+final class ReadWriteTest extends AbstractUnitTestCase
 {
     use AnnotationsTrait;
 

@@ -13,9 +13,9 @@ declare(strict_types=1);
 
 namespace Phalcon\Tests\Unit\Mvc\Micro;
 
-use Phalcon\Tests\UnitTestCase;
+use Phalcon\Tests\AbstractUnitTestCase;
 
-class MapTest extends UnitTestCase
+class MapTest extends AbstractUnitTestCase
 {
     /**
      * Tests Phalcon\Mvc\Micro :: map()

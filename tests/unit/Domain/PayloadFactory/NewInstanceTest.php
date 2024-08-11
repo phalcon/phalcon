@@ -16,9 +16,9 @@ namespace Phalcon\Tests\Unit\Domain\PayloadFactory;
 use PayloadInterop\DomainPayload;
 use PayloadInterop\DomainStatus;
 use Phalcon\Domain\PayloadFactory;
-use Phalcon\Tests\UnitTestCase;
+use Phalcon\Tests\AbstractUnitTestCase;
 
-final class NewInstanceTest extends UnitTestCase
+final class NewInstanceTest extends AbstractUnitTestCase
 {
     /**
      * Unit Tests Phalcon\Domain\PayloadFactory :: newInstance()

@@ -15,11 +15,13 @@ namespace Phalcon\Tests\Unit\Assets\Inline;
 
 use Phalcon\Assets\Inline;
 use Phalcon\Tests\Fixtures\Traits\AssetsTrait;
-use Phalcon\Tests\UnitTestCase;
+use Phalcon\Tests\AbstractUnitTestCase;
+use PHPUnit\Framework\Attributes\DataProvider;
+use PHPUnit\Framework\Attributes\Test;
 
 use function hash;
 
-final class GetAssetKeyTest extends UnitTestCase
+final class GetAssetKeyTest extends AbstractUnitTestCase
 {
     use AssetsTrait;
 
@@ -28,9 +30,9 @@ final class GetAssetKeyTest extends UnitTestCase
      *
      * @author       Phalcon Team <team@phalcon.io>
      * @since        2018-11-13
-     *
-     * @dataProvider providerInlineCssJs
      */
+    #[Test]
+    #[DataProvider('providerInlineCssJs')]
     public function testAssetsInlineGetAssetKey(
         string $type,
         string $content

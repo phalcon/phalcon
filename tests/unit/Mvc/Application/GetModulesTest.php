@@ -15,9 +15,9 @@ namespace Phalcon\Tests\Unit\Mvc\Application;
 
 use Phalcon\Mvc\Application;
 use Phalcon\Tests\Modules\Frontend\Module;
-use Phalcon\Tests\UnitTestCase;
+use Phalcon\Tests\AbstractUnitTestCase;
 
-class GetModulesTest extends UnitTestCase
+class GetModulesTest extends AbstractUnitTestCase
 {
     /**
      * Tests Phalcon\Mvc\Application :: getModules()

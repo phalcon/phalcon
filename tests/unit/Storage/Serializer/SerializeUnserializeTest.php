@@ -27,14 +27,14 @@ use Phalcon\Storage\Serializer\RedisJson;
 use Phalcon\Storage\Serializer\RedisMsgpack;
 use Phalcon\Storage\Serializer\RedisNone;
 use Phalcon\Storage\Serializer\RedisPhp;
-use Phalcon\Tests\UnitTestCase;
+use Phalcon\Tests\AbstractUnitTestCase;
 use stdClass;
 
 use function igbinary_serialize;
 use function json_encode;
 use function serialize;
 
-final class SerializeUnserializeTest extends UnitTestCase
+final class SerializeUnserializeTest extends AbstractUnitTestCase
 {
     private const TEXT = 'Phalcon Framework';
 

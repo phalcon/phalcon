@@ -14,11 +14,11 @@ declare(strict_types=1);
 namespace Phalcon\Tests\Unit\Http\Message\Stream;
 
 use Phalcon\Http\Message\Stream;
-use Phalcon\Tests\UnitTestCase;
+use Phalcon\Tests\AbstractUnitTestCase;
 
 use function dataDir;
 
-final class SetStreamTest extends UnitTestCase
+final class SetStreamTest extends AbstractUnitTestCase
 {
     /**
      * Unit Tests Phalcon\Http\Message\Stream :: setStream()

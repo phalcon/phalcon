@@ -15,9 +15,9 @@ namespace Phalcon\Tests\Database\DataMapper\Query\Delete;
 
 use PDO;
 use Phalcon\DataMapper\Query\QueryFactory;
-use Phalcon\Tests\DatabaseTestCase;
+use Phalcon\Tests\AbstractDatabaseTestCase;
 
-final class GetBindValuesTest extends DatabaseTestCase
+final class GetBindValuesTest extends AbstractDatabaseTestCase
 {
     /**
      * Database Tests Phalcon\DataMapper\Query\Delete :: getBindValues()

@@ -16,9 +16,9 @@ namespace Phalcon\Tests\Unit\Di;
 use Phalcon\Di\Di;
 use Phalcon\Di\Exception;
 use Phalcon\Html\Escaper;
-use Phalcon\Tests\UnitTestCase;
+use Phalcon\Tests\AbstractUnitTestCase;
 
-class UnderscoreCallTest extends UnitTestCase
+class UnderscoreCallTest extends AbstractUnitTestCase
 {
     /**
      * Tests Phalcon\Di\Di :: __call()

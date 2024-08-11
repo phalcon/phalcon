@@ -17,9 +17,9 @@ use Phalcon\Events\Manager;
 use Phalcon\Tests\Fixtures\Events\ComponentOne;
 use Phalcon\Tests\Fixtures\Listener\OneListener;
 use Phalcon\Tests\Fixtures\Listener\TwoListener;
-use Phalcon\Tests\UnitTestCase;
+use Phalcon\Tests\AbstractUnitTestCase;
 
-final class GetListenersTest extends UnitTestCase
+final class GetListenersTest extends AbstractUnitTestCase
 {
     /**
      * Tests Phalcon\Events\Manager :: getListeners()

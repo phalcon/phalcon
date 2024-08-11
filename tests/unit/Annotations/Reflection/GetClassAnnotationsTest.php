@@ -17,9 +17,9 @@ use Phalcon\Annotations\Annotation;
 use Phalcon\Annotations\Collection;
 use Phalcon\Annotations\Reader;
 use Phalcon\Annotations\Reflection;
-use Phalcon\Tests\UnitTestCase;
+use Phalcon\Tests\AbstractUnitTestCase;
 
-final class GetClassAnnotationsTest extends UnitTestCase
+final class GetClassAnnotationsTest extends AbstractUnitTestCase
 {
     /**
      * Tests creating empty Reflection object

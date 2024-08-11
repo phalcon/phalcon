@@ -14,9 +14,9 @@ declare(strict_types=1);
 namespace Phalcon\Tests\Unit\Support\HelperFactory;
 
 use Phalcon\Support\HelperFactory;
-use Phalcon\Tests\UnitTestCase;
+use Phalcon\Tests\AbstractUnitTestCase;
 
-final class CallTest extends UnitTestCase
+final class CallTest extends AbstractUnitTestCase
 {
     /**
      * Tests Phalcon\Support :: __call()

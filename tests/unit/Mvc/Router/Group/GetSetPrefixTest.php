@@ -14,9 +14,9 @@ declare(strict_types=1);
 namespace Phalcon\Tests\Unit\Mvc\Router\Group;
 
 use Phalcon\Mvc\Router\Group;
-use Phalcon\Tests\UnitTestCase;
+use Phalcon\Tests\AbstractUnitTestCase;
 
-final class GetSetPrefixTest extends UnitTestCase
+final class GetSetPrefixTest extends AbstractUnitTestCase
 {
     /**
      * Tests Phalcon\Mvc\Router\Group :: getPrefix() when nothing is set

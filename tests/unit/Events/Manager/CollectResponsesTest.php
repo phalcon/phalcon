@@ -13,9 +13,9 @@ declare(strict_types=1);
 
 namespace Phalcon\Tests\Unit\Events\Manager;
 
-use Phalcon\Tests\UnitTestCase;
+use Phalcon\Tests\AbstractUnitTestCase;
 
-final class CollectResponsesTest extends UnitTestCase
+final class CollectResponsesTest extends AbstractUnitTestCase
 {
     /**
      * Tests Phalcon\Events\Manager :: collectResponses()

@@ -15,9 +15,9 @@ namespace Phalcon\Tests\Unit\Annotations\Adapter;
 
 use Phalcon\Annotations\Reader;
 use Phalcon\Tests\Fixtures\Traits\AnnotationsTrait;
-use Phalcon\Tests\UnitTestCase;
+use Phalcon\Tests\AbstractUnitTestCase;
 
-final class GetSetReaderTest extends UnitTestCase
+final class GetSetReaderTest extends AbstractUnitTestCase
 {
     use AnnotationsTrait;
 

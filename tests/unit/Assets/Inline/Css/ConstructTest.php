@@ -14,9 +14,10 @@ declare(strict_types=1);
 namespace Phalcon\Tests\Unit\Assets\Inline\Css;
 
 use Phalcon\Assets\Inline\Css;
-use Phalcon\Tests\UnitTestCase;
+use Phalcon\Tests\AbstractUnitTestCase;
+use PHPUnit\Framework\Attributes\Test;
 
-final class ConstructTest extends UnitTestCase
+final class ConstructTest extends AbstractUnitTestCase
 {
     /**
      * Tests Phalcon\Assets\Inline\Css :: __construct()
@@ -26,6 +27,7 @@ final class ConstructTest extends UnitTestCase
      * @author Phalcon Team <team@phalcon.io>
      * @since  2020-09-09
      */
+    #[Test]
     public function testAssetsInlineCssConstruct(): void
     {
         $asset = new Css('p {color: #000099}');
@@ -43,6 +45,7 @@ final class ConstructTest extends UnitTestCase
      * @author Phalcon Team <team@phalcon.io>
      * @since  2020-09-09
      */
+    #[Test]
     public function testAssetsInlineCssConstructAttributes(): void
     {
         $asset = new Css('p {color: #000099}');
@@ -62,6 +65,7 @@ final class ConstructTest extends UnitTestCase
      * @author Phalcon Team <team@phalcon.io>
      * @since  2020-09-09
      */
+    #[Test]
     public function testAssetsInlineCssConstructAttributesSet(): void
     {
         $attributes = [
@@ -85,6 +89,7 @@ final class ConstructTest extends UnitTestCase
      * @author Phalcon Team <team@phalcon.io>
      * @since  2020-09-09
      */
+    #[Test]
     public function testAssetsInlineCssConstructFilter(): void
     {
         $asset  = new Css('p {color: #000099}');
@@ -100,6 +105,7 @@ final class ConstructTest extends UnitTestCase
      * @author Phalcon Team <team@phalcon.io>
      * @since  2020-09-09
      */
+    #[Test]
     public function testAssetsInlineCssConstructFilterSet(): void
     {
         $asset  = new Css('p {color: #000099}', false);

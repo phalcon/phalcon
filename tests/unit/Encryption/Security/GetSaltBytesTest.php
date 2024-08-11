@@ -14,9 +14,9 @@ declare(strict_types=1);
 namespace Phalcon\Tests\Unit\Encryption\Security;
 
 use Phalcon\Encryption\Security;
-use Phalcon\Tests\UnitTestCase;
+use Phalcon\Tests\AbstractUnitTestCase;
 
-final class GetSaltBytesTest extends UnitTestCase
+final class GetSaltBytesTest extends AbstractUnitTestCase
 {
     /**
      * Tests Phalcon\Security :: getSaltBytes()

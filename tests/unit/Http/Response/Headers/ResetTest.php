@@ -15,9 +15,9 @@ namespace Phalcon\Tests\Unit\Http\Response\Headers;
 
 use Phalcon\Http\Response\Headers;
 use Phalcon\Tests\Fixtures\Page\Http;
-use Phalcon\Tests\UnitTestCase;
+use Phalcon\Tests\AbstractUnitTestCase;
 
-final class ResetTest extends UnitTestCase
+final class ResetTest extends AbstractUnitTestCase
 {
     /**
      * Tests Phalcon\Http\Response\Headers :: reset()

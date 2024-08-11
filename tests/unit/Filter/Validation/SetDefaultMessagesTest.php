@@ -13,9 +13,9 @@ declare(strict_types=1);
 
 namespace Phalcon\Tests\Unit\Filter\Validation;
 
-use Phalcon\Tests\UnitTestCase;
+use Phalcon\Tests\AbstractUnitTestCase;
 
-final class SetDefaultMessagesTest extends UnitTestCase
+final class SetDefaultMessagesTest extends AbstractUnitTestCase
 {
     /**
      * Tests Phalcon\Filter\Validation :: setDefaultMessages()

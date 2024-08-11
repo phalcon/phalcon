@@ -17,10 +17,10 @@ use Phalcon\Filter\Validation;
 use Phalcon\Tests\Models\EntityWithGetter;
 use Phalcon\Tests\Models\EntityWithHook;
 use Phalcon\Tests\Models\EntityWithPublic;
-use Phalcon\Tests\UnitTestCase;
+use Phalcon\Tests\AbstractUnitTestCase;
 use PHPUnit\Framework\Attributes\Test;
 
-final class GetValueByEntityTest extends UnitTestCase
+final class GetValueByEntityTest extends AbstractUnitTestCase
 {
     public const NAME = 'John Doe';
 

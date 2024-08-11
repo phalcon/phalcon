@@ -15,9 +15,9 @@ namespace Phalcon\Tests\Unit\Application;
 
 use Phalcon\Application\Exception;
 use Phalcon\Tests\Fixtures\Application\ApplicationFixture;
-use Phalcon\Tests\UnitTestCase;
+use Phalcon\Tests\AbstractUnitTestCase;
 
-final class GetRegisterModulesTest extends UnitTestCase
+final class GetRegisterModulesTest extends AbstractUnitTestCase
 {
     /**
      * Tests Phalcon\Acl\Role :: getModule()

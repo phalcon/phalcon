@@ -15,22 +15,24 @@ namespace Phalcon\Tests\Unit\Assets\Asset;
 
 use Phalcon\Assets\Asset;
 use Phalcon\Tests\Fixtures\Traits\AssetsTrait;
-use Phalcon\Tests\UnitTestCase;
+use Phalcon\Tests\AbstractUnitTestCase;
+use PHPUnit\Framework\Attributes\DataProvider;
+use PHPUnit\Framework\Attributes\Test;
 
-final class GetSetPathTest extends UnitTestCase
+final class GetSetPathTest extends AbstractUnitTestCase
 {
     use AssetsTrait;
 
     /**
      * Tests Phalcon\Assets\Asset :: getPath()/setPath()
      *
-     * @dataProvider providerCssJs
-     *
      * @return void
      *
      * @author       Phalcon Team <team@phalcon.io>
      * @since        2020-09-09
      */
+    #[Test]
+    #[DataProvider('providerCssJs')]
     public function testAssetsAssetGetSetPath(
         string $type,
         string $path

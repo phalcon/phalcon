@@ -16,9 +16,9 @@ use Phalcon\Encryption\Security\JWT\Exceptions\ValidatorException;
 use Phalcon\Encryption\Security\JWT\Signer\Hmac;
 use Phalcon\Encryption\Security\JWT\Token\Token;
 use Phalcon\Tests\Fixtures\Traits\JWTTrait;
-use Phalcon\Tests\UnitTestCase;
+use Phalcon\Tests\AbstractUnitTestCase;
 
-final class GetTokenTest extends UnitTestCase
+final class GetTokenTest extends AbstractUnitTestCase
 {
     use JWTTrait;
 

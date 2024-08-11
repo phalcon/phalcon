@@ -15,9 +15,9 @@ namespace Phalcon\Tests\Unit\Mvc\Router\Route;
 
 use Phalcon\Mvc\Router\Exception;
 use Phalcon\Mvc\Router\Route;
-use Phalcon\Tests\UnitTestCase;
+use Phalcon\Tests\AbstractUnitTestCase;
 
-final class CompilePatternTest extends UnitTestCase
+final class CompilePatternTest extends AbstractUnitTestCase
 {
     /**
      * Tests Phalcon\Mvc\Router\Route :: compilePattern()

@@ -13,11 +13,11 @@ namespace Phalcon\Tests\Unit\Events;
 
 use Phalcon\Events\Manager;
 use Phalcon\Tests\Fixtures\Events\ComponentWithEvents;
-use Phalcon\Tests\UnitTestCase;
+use Phalcon\Tests\AbstractUnitTestCase;
 
 use function method_exists;
 
-final class ComponentManagerTest extends UnitTestCase
+final class ComponentManagerTest extends AbstractUnitTestCase
 {
     /**
      * Tests Phalcon\Events\EventsAwareTrait

@@ -15,12 +15,12 @@ namespace Phalcon\Tests\Unit\Di;
 
 use Phalcon\Di\Di;
 use Phalcon\Tests\Fixtures\Di\InjectableComponent;
-use Phalcon\Tests\UnitTestCase;
+use Phalcon\Tests\AbstractUnitTestCase;
 use ReflectionClass;
 use ReflectionException;
 use stdClass;
 
-final class GetDITest extends UnitTestCase
+final class GetDITest extends AbstractUnitTestCase
 {
     /**
      * Unit Tests Phalcon\Di\Injectable :: getDI()

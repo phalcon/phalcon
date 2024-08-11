@@ -14,9 +14,9 @@ declare(strict_types=1);
 namespace Phalcon\Tests\Unit\Cli\Router;
 
 use Phalcon\Cli\Router;
-use Phalcon\Tests\UnitTestCase;
+use Phalcon\Tests\AbstractUnitTestCase;
 
-final class GetParametersTest extends UnitTestCase
+final class GetParametersTest extends AbstractUnitTestCase
 {
     /**
      * Tests Phalcon\Cli\Router :: getParams()

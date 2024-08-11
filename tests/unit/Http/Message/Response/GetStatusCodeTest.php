@@ -16,9 +16,9 @@ namespace Phalcon\Tests\Unit\Http\Message\Response;
 use InvalidArgumentException;
 use Phalcon\Http\Message\Response;
 use Phalcon\Tests\Fixtures\Page\Http;
-use Phalcon\Tests\UnitTestCase;
+use Phalcon\Tests\AbstractUnitTestCase;
 
-final class GetStatusCodeTest extends UnitTestCase
+final class GetStatusCodeTest extends AbstractUnitTestCase
 {
     /**
      * Tests Phalcon\Http\Message\Response :: getStatusCode()

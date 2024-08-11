@@ -14,11 +14,11 @@ declare(strict_types=1);
 namespace Phalcon\Tests\Unit\Mvc\Router\Route;
 
 use Phalcon\Mvc\Router\Route;
-use Phalcon\Tests\UnitTestCase;
+use Phalcon\Tests\AbstractUnitTestCase;
 
 use function uniqid;
 
-final class GetPatternTest extends UnitTestCase
+final class GetPatternTest extends AbstractUnitTestCase
 {
     /**
      * Tests Phalcon\Mvc\Router\Route :: getPattern()

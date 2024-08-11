@@ -16,9 +16,9 @@ namespace Phalcon\Tests\Unit\Support\Debug;
 use Phalcon\Support\Debug;
 use Phalcon\Support\Exception;
 use Phalcon\Support\Version;
-use Phalcon\Tests\UnitTestCase;
+use Phalcon\Tests\AbstractUnitTestCase;
 
-final class RenderHtmlTest extends UnitTestCase
+final class RenderHtmlTest extends AbstractUnitTestCase
 {
     /**
      * Tests Phalcon\Debug :: renderHtml() - with backtrace

@@ -14,9 +14,9 @@ declare(strict_types=1);
 namespace Phalcon\Tests\Unit\Encryption\Crypt\Padding;
 
 use Phalcon\Encryption\Crypt\Padding\Iso10126;
-use Phalcon\Tests\UnitTestCase;
+use Phalcon\Tests\AbstractUnitTestCase;
 
-final class Iso10126Test extends UnitTestCase
+final class Iso10126Test extends AbstractUnitTestCase
 {
     /**
      * Tests Phalcon\Encryption\Crypt\Padding\Iso10126 :: __construct()

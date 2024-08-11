@@ -14,9 +14,9 @@ declare(strict_types=1);
 namespace Phalcon\Tests\Unit\Events\Event;
 
 use Phalcon\Events\Event;
-use Phalcon\Tests\UnitTestCase;
+use Phalcon\Tests\AbstractUnitTestCase;
 
-final class IsCancelableTest extends UnitTestCase
+final class IsCancelableTest extends AbstractUnitTestCase
 {
     /**
      * Tests Phalcon\Events\Event :: isCancelable()

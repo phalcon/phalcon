@@ -17,9 +17,9 @@ use Phalcon\Filter\Validation;
 use Phalcon\Filter\Validation\Validator\StringLength\Max;
 use Phalcon\Messages\Message;
 use Phalcon\Messages\Messages;
-use Phalcon\Tests\UnitTestCase;
+use Phalcon\Tests\AbstractUnitTestCase;
 
-final class MessageFactoryTest extends UnitTestCase
+final class MessageFactoryTest extends AbstractUnitTestCase
 {
     /**
      * Tests Phalcon\Filter\Validation\Validator\StringLength\Max :: messageFactory()

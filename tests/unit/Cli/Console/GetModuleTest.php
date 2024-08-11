@@ -18,9 +18,9 @@ use Phalcon\Cli\Console as CliConsole;
 use Phalcon\Di\FactoryDefault\Cli as DiFactoryDefault;
 use Phalcon\Tests\Modules\Backend\Module as BackendModule;
 use Phalcon\Tests\Modules\Frontend\Module as FrontendModule;
-use Phalcon\Tests\UnitTestCase;
+use Phalcon\Tests\AbstractUnitTestCase;
 
-final class GetModuleTest extends UnitTestCase
+final class GetModuleTest extends AbstractUnitTestCase
 {
     /**
      * Tests Phalcon\Cli\Console :: getModule()

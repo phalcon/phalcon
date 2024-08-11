@@ -13,12 +13,12 @@ declare(strict_types=1);
 
 namespace Phalcon\Tests\Unit\Forms\Element\Select;
 
-use Phalcon\Tests\UnitTestCase;
+use Phalcon\Tests\AbstractUnitTestCase;
 
 /**
- * Class PrepareAttributesTest extends UnitTestCase
+ * Class PrepareAttributesTest extends AbstractUnitTestCase
  */
-final class PrepareAttributesTest extends UnitTestCase
+final class PrepareAttributesTest extends AbstractUnitTestCase
 {
     /**
      * Tests Phalcon\Forms\Element\Select :: prepareAttributes()

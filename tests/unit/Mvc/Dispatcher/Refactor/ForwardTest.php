@@ -18,12 +18,12 @@ use Phalcon\Events\Manager;
 use Phalcon\Mvc\Application;
 use Phalcon\Mvc\Dispatcher;
 use Phalcon\Mvc\View;
-use Phalcon\Tests\UnitTestCase;
+use Phalcon\Tests\AbstractUnitTestCase;
 
 /**
  * @todo    : refactor
  */
-class ForwardTest extends UnitTestCase
+class ForwardTest extends AbstractUnitTestCase
 {
     /**
      * @issue https://github.com/phalcon/cphalcon/issues/11819

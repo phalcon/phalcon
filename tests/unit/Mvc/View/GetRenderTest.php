@@ -15,11 +15,11 @@ namespace Phalcon\Tests\Unit\Mvc\View;
 
 use Phalcon\Di\Di;
 use Phalcon\Mvc\View;
-use Phalcon\Tests\UnitTestCase;
+use Phalcon\Tests\AbstractUnitTestCase;
 
 use function dataDir;
 
-class GetRenderTest extends UnitTestCase
+class GetRenderTest extends AbstractUnitTestCase
 {
     /**
      * Tests Phalcon\Mvc\View :: getRender()

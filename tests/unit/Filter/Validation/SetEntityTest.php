@@ -14,11 +14,11 @@ declare(strict_types=1);
 namespace Phalcon\Tests\Unit\Filter\Validation;
 
 use Phalcon\Filter\Validation;
-use Phalcon\Tests\UnitTestCase;
+use Phalcon\Tests\AbstractUnitTestCase;
 use PHPUnit\Framework\Attributes\Test;
 use stdClass;
 
-final class SetEntityTest extends UnitTestCase
+final class SetEntityTest extends AbstractUnitTestCase
 {
     /**
      * Tests Phalcon\Filter\Validation :: setEntity()

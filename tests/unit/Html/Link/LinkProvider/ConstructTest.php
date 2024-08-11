@@ -16,9 +16,9 @@ namespace Phalcon\Tests\Unit\Html\Link\LinkProvider;
 use Phalcon\Html\Link\Interfaces\LinkProviderInterface;
 use Phalcon\Html\Link\Link;
 use Phalcon\Html\Link\LinkProvider;
-use Phalcon\Tests\UnitTestCase;
+use Phalcon\Tests\AbstractUnitTestCase;
 
-final class ConstructTest extends UnitTestCase
+final class ConstructTest extends AbstractUnitTestCase
 {
     /**
      * Tests Phalcon\Html\Link\LinkProvider :: __construct()

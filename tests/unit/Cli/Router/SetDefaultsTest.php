@@ -14,9 +14,9 @@ declare(strict_types=1);
 namespace Phalcon\Tests\Unit\Cli\Router;
 
 use Phalcon\Cli\Router;
-use Phalcon\Tests\UnitTestCase;
+use Phalcon\Tests\AbstractUnitTestCase;
 
-final class SetDefaultsTest extends UnitTestCase
+final class SetDefaultsTest extends AbstractUnitTestCase
 {
     /**
      * Tests Phalcon\Cli\Router :: setDefaults()

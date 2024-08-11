@@ -17,9 +17,9 @@ use Phalcon\Db\Dialect\Mysql;
 use Phalcon\Db\Dialect\Postgresql;
 use Phalcon\Db\Dialect\Sqlite;
 use Phalcon\Db\Exception;
-use Phalcon\Tests\DatabaseTestCase;
+use Phalcon\Tests\AbstractDatabaseTestCase;
 
-final class CreateViewTest extends DatabaseTestCase
+final class CreateViewTest extends AbstractDatabaseTestCase
 {
     /**
      * @return array[]

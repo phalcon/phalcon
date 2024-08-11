@@ -14,9 +14,9 @@ declare(strict_types=1);
 namespace Phalcon\Tests\Unit\Encryption\Crypt;
 
 use Phalcon\Encryption\Crypt;
-use Phalcon\Tests\UnitTestCase;
+use Phalcon\Tests\AbstractUnitTestCase;
 
-final class GetSetAuthTagLengthTest extends UnitTestCase
+final class GetSetAuthTagLengthTest extends AbstractUnitTestCase
 {
     /**
      * Unit Tests Phalcon\Encryption\Crypt ::

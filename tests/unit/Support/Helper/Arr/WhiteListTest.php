@@ -14,10 +14,10 @@ declare(strict_types=1);
 namespace Phalcon\Tests\Unit\Support\Helper\Arr;
 
 use Phalcon\Support\Helper\Arr\Whitelist;
-use Phalcon\Tests\UnitTestCase;
+use Phalcon\Tests\AbstractUnitTestCase;
 use stdClass;
 
-final class WhiteListTest extends UnitTestCase
+final class WhiteListTest extends AbstractUnitTestCase
 {
     /**
      * Unit Tests Phalcon\Support\Helper\Arr :: whiteList()

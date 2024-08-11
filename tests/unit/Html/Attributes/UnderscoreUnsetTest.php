@@ -14,9 +14,9 @@ declare(strict_types=1);
 namespace Phalcon\Tests\Unit\Html\Attributes;
 
 use Phalcon\Html\Attributes;
-use Phalcon\Tests\UnitTestCase;
+use Phalcon\Tests\AbstractUnitTestCase;
 
-final class UnderscoreUnsetTest extends UnitTestCase
+final class UnderscoreUnsetTest extends AbstractUnitTestCase
 {
     /**
      * Tests Phalcon\Html\Attributes :: __unset()

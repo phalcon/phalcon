@@ -17,9 +17,9 @@ use Phalcon\Db\Column;
 use Phalcon\Db\Dialect\Mysql;
 use Phalcon\Db\Dialect\Postgresql;
 use Phalcon\Db\Dialect\Sqlite;
-use Phalcon\Tests\DatabaseTestCase;
+use Phalcon\Tests\AbstractDatabaseTestCase;
 
-final class ModifyColumnTest extends DatabaseTestCase
+final class ModifyColumnTest extends AbstractDatabaseTestCase
 {
     /**
      * @return array[]

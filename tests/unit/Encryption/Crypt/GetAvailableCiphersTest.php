@@ -14,13 +14,13 @@ declare(strict_types=1);
 namespace Phalcon\Tests\Unit\Encryption\Crypt;
 
 use Phalcon\Encryption\Crypt;
-use Phalcon\Tests\UnitTestCase;
+use Phalcon\Tests\AbstractUnitTestCase;
 
 use function array_values;
 use function openssl_get_cipher_methods;
 use function sort;
 
-final class GetAvailableCiphersTest extends UnitTestCase
+final class GetAvailableCiphersTest extends AbstractUnitTestCase
 {
     /**
      * Tests Phalcon\Encryption\Crypt :: getAvailableCiphers()

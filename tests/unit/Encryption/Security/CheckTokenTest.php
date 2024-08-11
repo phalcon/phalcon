@@ -16,9 +16,9 @@ namespace Phalcon\Tests\Unit\Encryption\Security;
 use Phalcon\Encryption\Security;
 use Phalcon\Session\Manager;
 use Phalcon\Tests\Fixtures\Traits\DiTrait;
-use Phalcon\Tests\UnitTestCase;
+use Phalcon\Tests\AbstractUnitTestCase;
 
-final class CheckTokenTest extends UnitTestCase
+final class CheckTokenTest extends AbstractUnitTestCase
 {
     use DiTrait;
 

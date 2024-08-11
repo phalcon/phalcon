@@ -16,9 +16,9 @@ namespace Phalcon\Tests\Unit\Di\FactoryDefault\Cli;
 use Phalcon\Di\FactoryDefault\Cli as Di;
 use Phalcon\Events\Manager;
 use Phalcon\Events\ManagerInterface;
-use Phalcon\Tests\UnitTestCase;
+use Phalcon\Tests\AbstractUnitTestCase;
 
-final class SetInternalEventsManagerTest extends UnitTestCase
+final class SetInternalEventsManagerTest extends AbstractUnitTestCase
 {
     /**
      * Tests Phalcon\Di\FactoryDefault\Cli :: setInternalEventsManager()

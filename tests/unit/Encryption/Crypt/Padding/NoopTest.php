@@ -14,9 +14,9 @@ declare(strict_types=1);
 namespace Phalcon\Tests\Unit\Encryption\Crypt\Padding;
 
 use Phalcon\Encryption\Crypt\Padding\Noop;
-use Phalcon\Tests\UnitTestCase;
+use Phalcon\Tests\AbstractUnitTestCase;
 
-final class NoopTest extends UnitTestCase
+final class NoopTest extends AbstractUnitTestCase
 {
     /**
      * Tests Phalcon\Encryption\Crypt\Padding\Noop :: __construct()

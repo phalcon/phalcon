@@ -17,12 +17,12 @@ use Phalcon\Http\Message\Stream;
 use Phalcon\Http\Message\Stream\Input;
 use Phalcon\Http\Message\Stream\Memory;
 use Phalcon\Http\Message\Stream\Temp;
-use Phalcon\Tests\UnitTestCase;
+use Phalcon\Tests\AbstractUnitTestCase;
 
 use function dataDir;
 use function logsDir;
 
-final class IsSeekableTest extends UnitTestCase
+final class IsSeekableTest extends AbstractUnitTestCase
 {
     /**
      * @return array[]

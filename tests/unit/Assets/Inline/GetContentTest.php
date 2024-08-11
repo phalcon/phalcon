@@ -15,22 +15,24 @@ namespace Phalcon\Tests\Unit\Assets\Inline;
 
 use Phalcon\Assets\Inline;
 use Phalcon\Tests\Fixtures\Traits\AssetsTrait;
-use Phalcon\Tests\UnitTestCase;
+use Phalcon\Tests\AbstractUnitTestCase;
+use PHPUnit\Framework\Attributes\DataProvider;
+use PHPUnit\Framework\Attributes\Test;
 
-final class GetContentTest extends UnitTestCase
+final class GetContentTest extends AbstractUnitTestCase
 {
     use AssetsTrait;
 
     /**
      * Tests Phalcon\Assets\Inline :: getContent()
      *
-     * @dataProvider providerInlineCssJs
-     *
      * @return void
      *
      * @author       Phalcon Team <team@phalcon.io>
      * @since        2020-09-09
      */
+    #[Test]
+    #[DataProvider('providerInlineCssJs')]
     public function testAssetsInlineGetContent(
         string $type,
         string $content

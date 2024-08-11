@@ -17,9 +17,9 @@ use Phalcon\Config\Config;
 use Phalcon\Config\ConfigInterface;
 use Phalcon\Di\Di;
 use Phalcon\Di\Exception;
-use Phalcon\Tests\UnitTestCase;
+use Phalcon\Tests\AbstractUnitTestCase;
 
-class LoadFromYamlTest extends UnitTestCase
+class LoadFromYamlTest extends AbstractUnitTestCase
 {
     /**
      * Unit Tests Phalcon\Di :: loadFromYaml()

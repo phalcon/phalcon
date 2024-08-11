@@ -15,12 +15,12 @@ namespace Phalcon\Tests\Unit\Mvc\Micro;
 
 use Phalcon\Mvc\Micro;
 use Phalcon\Tests\Fixtures\Micro\RestHandler;
-use Phalcon\Tests\UnitTestCase;
+use Phalcon\Tests\AbstractUnitTestCase;
 
 /**
- * Class NotFoundTest extends UnitTestCase
+ * Class NotFoundTest extends AbstractUnitTestCase
  */
-class NotFoundTest extends UnitTestCase
+class NotFoundTest extends AbstractUnitTestCase
 {
     /**
      * Tests the notFound

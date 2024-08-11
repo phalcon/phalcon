@@ -16,10 +16,10 @@ namespace Phalcon\Tests\Unit\Filter\Validation;
 use Phalcon\Filter\Validation;
 use Phalcon\Filter\Validation\Validator\Date;
 use Phalcon\Filter\Validation\Validator\Email;
-use Phalcon\Tests\UnitTestCase;
+use Phalcon\Tests\AbstractUnitTestCase;
 use PHPUnit\Framework\Attributes\Test;
 
-final class GetSetValidatorsTest extends UnitTestCase
+final class GetSetValidatorsTest extends AbstractUnitTestCase
 {
     /**
      * Tests Phalcon\Filter\Validation :: getValidators()/setValidators()

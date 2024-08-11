@@ -15,9 +15,9 @@ namespace Phalcon\Tests\Database\DataMapper\Query\Select;
 
 use Phalcon\DataMapper\Query\Bind;
 use Phalcon\DataMapper\Query\Select;
-use Phalcon\Tests\DatabaseTestCase;
+use Phalcon\Tests\AbstractDatabaseTestCase;
 
-final class ConstructTest extends DatabaseTestCase
+final class ConstructTest extends AbstractDatabaseTestCase
 {
     /**
      * Database Tests Phalcon\DataMapper\Query\Select :: __construct()

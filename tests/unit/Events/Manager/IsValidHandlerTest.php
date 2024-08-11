@@ -14,9 +14,9 @@ declare(strict_types=1);
 namespace Phalcon\Tests\Unit\Events\Manager;
 
 use Phalcon\Events\Manager;
-use Phalcon\Tests\UnitTestCase;
+use Phalcon\Tests\AbstractUnitTestCase;
 
-final class IsValidHandlerTest extends UnitTestCase
+final class IsValidHandlerTest extends AbstractUnitTestCase
 {
     /**
      * @return array[]

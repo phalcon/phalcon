@@ -14,12 +14,12 @@ declare(strict_types=1);
 namespace Phalcon\Tests\Unit\Forms\Element\Select;
 
 use Phalcon\Forms\Element\Select;
-use Phalcon\Tests\UnitTestCase;
+use Phalcon\Tests\AbstractUnitTestCase;
 
 use function array_flip;
 use function uniqid;
 
-final class GetSetAttributesTest extends UnitTestCase
+final class GetSetAttributesTest extends AbstractUnitTestCase
 {
     /**
      * Tests Phalcon\Forms\Element\Select :: getAttributes()/setAttributes()

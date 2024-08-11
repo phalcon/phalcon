@@ -18,9 +18,9 @@ use Phalcon\Forms\Element\Text;
 use Phalcon\Forms\Form;
 use Phalcon\Messages\Message;
 use Phalcon\Messages\Messages;
-use Phalcon\Tests\UnitTestCase;
+use Phalcon\Tests\AbstractUnitTestCase;
 
-final class HasMessagesForTest extends UnitTestCase
+final class HasMessagesForTest extends AbstractUnitTestCase
 {
     /**
      * Tests Form::hasMessagesFor

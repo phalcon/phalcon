@@ -15,9 +15,9 @@ namespace Phalcon\Tests\Unit\Forms\Form;
 
 use Phalcon\Forms\Element\Text;
 use Phalcon\Forms\Form;
-use Phalcon\Tests\UnitTestCase;
+use Phalcon\Tests\AbstractUnitTestCase;
 
-final class GetElementsTest extends UnitTestCase
+final class GetElementsTest extends AbstractUnitTestCase
 {
     /**
      * Tests Phalcon\Forms\Form :: getElements()

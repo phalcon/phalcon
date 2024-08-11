@@ -24,9 +24,9 @@ use Phalcon\Encryption\Crypt\Padding\Pkcs7;
 use Phalcon\Encryption\Crypt\Padding\Space;
 use Phalcon\Encryption\Crypt\Padding\Zero;
 use Phalcon\Encryption\Crypt\PadFactory;
-use Phalcon\Tests\UnitTestCase;
+use Phalcon\Tests\AbstractUnitTestCase;
 
-final class NewInstanceTest extends UnitTestCase
+final class NewInstanceTest extends AbstractUnitTestCase
 {
     /**
      * @return array<array-key, array<array-key, string>>

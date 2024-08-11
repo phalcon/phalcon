@@ -17,9 +17,9 @@ use IntegrationTester;
 use Phalcon\Session\Exception;
 use Phalcon\Session\Manager;
 use Phalcon\Tests\Fixtures\Traits\DiTrait;
-use Phalcon\Tests\ServicesTestCase;
+use Phalcon\Tests\AbstractServicesTestCase;
 
-class GetSetNameTest extends ServicesTestCase
+class GetSetNameTest extends AbstractServicesTestCase
 {
     use DiTrait;
 

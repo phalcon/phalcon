@@ -15,9 +15,9 @@ namespace Phalcon\Tests\Unit\Di;
 
 use Phalcon\Di\Di;
 use Phalcon\Tests\Fixtures\Di\InitializationAwareComponent;
-use Phalcon\Tests\UnitTestCase;
+use Phalcon\Tests\AbstractUnitTestCase;
 
-class InitializationAwareTest extends UnitTestCase
+class InitializationAwareTest extends AbstractUnitTestCase
 {
     /**
      * Tests Phalcon\Di\Di :: initialization aware interface

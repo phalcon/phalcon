@@ -17,7 +17,7 @@ use Phalcon\Logger\Adapter\Stream;
 use Phalcon\Logger\Enum;
 use Phalcon\Logger\Formatter\Line;
 use Phalcon\Logger\Logger;
-use Phalcon\Tests\UnitTestCase;
+use Phalcon\Tests\AbstractUnitTestCase;
 use Psr\Log\LogLevel;
 
 use function file_get_contents;
@@ -26,7 +26,7 @@ use function sprintf;
 use function strtoupper;
 use function uniqid;
 
-final class LogTest extends UnitTestCase
+final class LogTest extends AbstractUnitTestCase
 {
     /**
      * Tests Phalcon\Logger :: log()

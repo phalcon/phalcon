@@ -15,11 +15,11 @@ namespace Phalcon\Tests\Unit\Image\Adapter\Imagick;
 
 use Phalcon\Image\Adapter\Imagick;
 use Phalcon\Image\Exception;
-use Phalcon\Tests\UnitTestCase;
+use Phalcon\Tests\AbstractUnitTestCase;
 
 use function dataDir;
 
-final class SetResourceLimitTest extends UnitTestCase
+final class SetResourceLimitTest extends AbstractUnitTestCase
 {
     /**
      * Unit Tests Phalcon\Image\Adapter\Imagick :: setResourceLimit() -

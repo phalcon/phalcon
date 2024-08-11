@@ -25,7 +25,7 @@ use Phalcon\Storage\SerializerFactory;
 use Phalcon\Support\Exception as HelperException;
 use Phalcon\Tests\Fixtures\Storage\Adapter\StreamFileGetContentsFixture;
 use Phalcon\Tests\Fixtures\Storage\Adapter\StreamFopenFixture;
-use Phalcon\Tests\UnitTestCase;
+use Phalcon\Tests\AbstractUnitTestCase;
 use stdClass;
 
 use function getOptionsLibmemcached;
@@ -34,7 +34,7 @@ use function getOptionsRedisCluster;
 use function outputDir;
 use function uniqid;
 
-final class HasTest extends UnitTestCase
+final class HasTest extends AbstractUnitTestCase
 {
     /**
      * @return array[]

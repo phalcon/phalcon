@@ -15,12 +15,12 @@ namespace Phalcon\Tests\Unit\Cli\Dispatcher;
 
 use Phalcon\Cli\Dispatcher;
 use Phalcon\Mvc\Model\Binder;
-use Phalcon\Tests\UnitTestCase;
+use Phalcon\Tests\AbstractUnitTestCase;
 
 /**
- * Class GetSetModelBinderTest extends UnitTestCase
+ * Class GetSetModelBinderTest extends AbstractUnitTestCase
  */
-final class GetSetModelBinderTest extends UnitTestCase
+final class GetSetModelBinderTest extends AbstractUnitTestCase
 {
     /**
      * Tests Phalcon\Cli\Dispatcher - getModelBinder() / setModelBinder()

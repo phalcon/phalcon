@@ -17,7 +17,7 @@ use Phalcon\Mvc\Model\Resultset\Complex;
 use Phalcon\Mvc\Model\Resultset\Simple;
 use Phalcon\Mvc\Model\Row;
 use Phalcon\Storage\Exception;
-use Phalcon\Tests\DatabaseTestCase;
+use Phalcon\Tests\AbstractDatabaseTestCase;
 use Phalcon\Tests\Fixtures\Migrations\CustomersMigration;
 use Phalcon\Tests\Fixtures\Migrations\InvoicesMigration;
 use Phalcon\Tests\Fixtures\Traits\DiTrait;
@@ -28,7 +28,7 @@ use Phalcon\Tests\Models\InvoicesKeepSnapshots;
 
 use function uniqid;
 
-final class QueryTest extends DatabaseTestCase
+final class QueryTest extends AbstractDatabaseTestCase
 {
     use DiTrait;
     use RecordsTrait;

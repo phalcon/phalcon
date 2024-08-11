@@ -32,11 +32,11 @@ use Phalcon\Container\Lazy\RequireFile;
 use Phalcon\Container\Lazy\StaticCall;
 use Phalcon\Tests\Fixtures\Container\TestInterface;
 use Phalcon\Tests\Fixtures\Container\TestWithInterface;
-use Phalcon\Tests\UnitTestCase;
+use Phalcon\Tests\AbstractUnitTestCase;
 
 use function uniqid;
 
-final class DefinitionsTest extends UnitTestCase
+final class DefinitionsTest extends AbstractUnitTestCase
 {
     protected Definitions $definitions;
 

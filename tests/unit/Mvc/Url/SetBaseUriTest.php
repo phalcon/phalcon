@@ -16,9 +16,9 @@ namespace Phalcon\Tests\Unit\Mvc\Url;
 use Phalcon\Mvc\Router;
 use Phalcon\Tests\Fixtures\Traits\DiTrait;
 use Phalcon\Tests\Fixtures\Traits\RouterTrait;
-use Phalcon\Tests\UnitTestCase;
+use Phalcon\Tests\AbstractUnitTestCase;
 
-final class SetBaseUriTest extends UnitTestCase
+final class SetBaseUriTest extends AbstractUnitTestCase
 {
     use DiTrait;
     use RouterTrait;

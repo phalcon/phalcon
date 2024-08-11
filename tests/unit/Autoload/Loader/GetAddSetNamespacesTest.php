@@ -16,11 +16,11 @@ namespace Phalcon\Tests\Unit\Autoload\Loader;
 use Phalcon\Autoload\Exception;
 use Phalcon\Autoload\Loader;
 use Phalcon\Tests\Fixtures\Traits\LoaderTrait;
-use Phalcon\Tests\UnitTestCase;
+use Phalcon\Tests\AbstractUnitTestCase;
 
 use function hash;
 
-final class GetAddSetNamespacesTest extends UnitTestCase
+final class GetAddSetNamespacesTest extends AbstractUnitTestCase
 {
     use LoaderTrait;
 

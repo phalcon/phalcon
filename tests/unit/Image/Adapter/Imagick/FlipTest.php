@@ -16,12 +16,12 @@ namespace Phalcon\Tests\Unit\Image\Adapter\Imagick;
 use Phalcon\Image\Adapter\Imagick;
 use Phalcon\Image\Enum;
 use Phalcon\Tests\Fixtures\Traits\ImagickTrait;
-use Phalcon\Tests\UnitTestCase;
+use Phalcon\Tests\AbstractUnitTestCase;
 
 use function dataDir;
 use function outputDir;
 
-final class FlipTest extends UnitTestCase
+final class FlipTest extends AbstractUnitTestCase
 {
     use ImagickTrait;
 

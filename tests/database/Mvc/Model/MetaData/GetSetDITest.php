@@ -15,10 +15,10 @@ namespace Phalcon\Tests\Database\Mvc\Model\MetaData;
 
 use Phalcon\Mvc\Model\Exception as ExpectedException;
 use Phalcon\Mvc\Model\MetaData\Adapter\Memory;
-use Phalcon\Tests\DatabaseTestCase;
+use Phalcon\Tests\AbstractDatabaseTestCase;
 use Phalcon\Tests\Fixtures\Traits\DiTrait;
 
-final class GetSetDITest extends DatabaseTestCase
+final class GetSetDITest extends AbstractDatabaseTestCase
 {
     use DiTrait;
 

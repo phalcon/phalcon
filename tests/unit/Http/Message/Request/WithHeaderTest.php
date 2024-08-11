@@ -16,9 +16,9 @@ namespace Phalcon\Tests\Unit\Http\Message\Request;
 use Phalcon\Http\Message\Exception\InvalidArgumentException;
 use Phalcon\Http\Message\Request;
 use Phalcon\Tests\Fixtures\Page\Http;
-use Phalcon\Tests\UnitTestCase;
+use Phalcon\Tests\AbstractUnitTestCase;
 
-final class WithHeaderTest extends UnitTestCase
+final class WithHeaderTest extends AbstractUnitTestCase
 {
     public static function getExamples(): array
     {

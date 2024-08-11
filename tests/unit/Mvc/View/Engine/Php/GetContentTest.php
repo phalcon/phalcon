@@ -15,9 +15,9 @@ namespace Phalcon\Tests\Unit\Mvc\View\Engine\Php;
 
 use Phalcon\Mvc\View;
 use Phalcon\Mvc\View\Engine\Php;
-use Phalcon\Tests\UnitTestCase;
+use Phalcon\Tests\AbstractUnitTestCase;
 
-class GetContentTest extends UnitTestCase
+class GetContentTest extends AbstractUnitTestCase
 {
     /**
      * Tests Phalcon\Mvc\View\Engine\Php :: getContent()

@@ -18,10 +18,10 @@ use Phalcon\Container\Definitions\Definitions;
 use Phalcon\Tests\Fixtures\Container\TestProvider;
 use Phalcon\Tests\Fixtures\Container\TestWithDefaultConstructorParameters;
 use Phalcon\Tests\Fixtures\Container\TestWithInterface;
-use Phalcon\Tests\UnitTestCase;
+use Phalcon\Tests\AbstractUnitTestCase;
 use stdClass;
 
-final class ContainerTest extends UnitTestCase
+final class ContainerTest extends AbstractUnitTestCase
 {
     protected $container;
 

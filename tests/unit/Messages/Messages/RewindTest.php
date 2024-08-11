@@ -15,9 +15,9 @@ namespace Phalcon\Tests\Unit\Messages\Messages;
 
 use Phalcon\Messages\Message;
 use Phalcon\Messages\Messages;
-use Phalcon\Tests\UnitTestCase;
+use Phalcon\Tests\AbstractUnitTestCase;
 
-final class RewindTest extends UnitTestCase
+final class RewindTest extends AbstractUnitTestCase
 {
     /**
      * Tests Phalcon\Messages\Messages :: rewind()

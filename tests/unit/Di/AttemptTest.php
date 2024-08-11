@@ -16,9 +16,9 @@ namespace Phalcon\Tests\Unit\Di;
 use Phalcon\Di\Di;
 use Phalcon\Di\Service;
 use Phalcon\Html\Escaper;
-use Phalcon\Tests\UnitTestCase;
+use Phalcon\Tests\AbstractUnitTestCase;
 
-class AttemptTest extends UnitTestCase
+class AttemptTest extends AbstractUnitTestCase
 {
     /**
      * Tests Phalcon\Di\Di :: attempt()

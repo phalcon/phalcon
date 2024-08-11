@@ -14,9 +14,9 @@ declare(strict_types=1);
 namespace Phalcon\Tests\Database\Db\Dialect;
 
 use Phalcon\Db\Dialect\Mysql;
-use Phalcon\Tests\DatabaseTestCase;
+use Phalcon\Tests\AbstractDatabaseTestCase;
 
-final class DescribeColumnsTest extends DatabaseTestCase
+final class DescribeColumnsTest extends AbstractDatabaseTestCase
 {
     /**
      * @return array[]

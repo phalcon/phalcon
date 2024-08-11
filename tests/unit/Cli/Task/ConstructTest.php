@@ -19,9 +19,9 @@ use Phalcon\Support\Registry;
 use Phalcon\Tests\Fixtures\Tasks\EchoTask;
 use Phalcon\Tests\Fixtures\Tasks\MainTask;
 use Phalcon\Tests\Fixtures\Tasks\OnConstructTask;
-use Phalcon\Tests\UnitTestCase;
+use Phalcon\Tests\AbstractUnitTestCase;
 
-final class ConstructTest extends UnitTestCase
+final class ConstructTest extends AbstractUnitTestCase
 {
     public function echoTask(): void
     {

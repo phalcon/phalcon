@@ -13,9 +13,9 @@ declare(strict_types=1);
 
 namespace Phalcon\Tests\Unit\Mvc\Router\Route;
 
-use Phalcon\Tests\UnitTestCase;
+use Phalcon\Tests\AbstractUnitTestCase;
 
-final class GetHttpMethodsTest extends UnitTestCase
+final class GetHttpMethodsTest extends AbstractUnitTestCase
 {
     /**
      * Tests Phalcon\Mvc\Router\Route :: getHttpMethods()

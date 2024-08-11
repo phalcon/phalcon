@@ -17,9 +17,9 @@ use Phalcon\Filter\Validation;
 use Phalcon\Filter\Validation\Validator\InclusionIn;
 use Phalcon\Messages\Message;
 use Phalcon\Messages\Messages;
-use Phalcon\Tests\UnitTestCase;
+use Phalcon\Tests\AbstractUnitTestCase;
 
-final class ValidateTest extends UnitTestCase
+final class ValidateTest extends AbstractUnitTestCase
 {
     public function testFilterValidationValidatorInclusioninCustomMessage(): void
     {

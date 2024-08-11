@@ -20,9 +20,9 @@ use Phalcon\Forms\Element\Text;
 use Phalcon\Forms\Form;
 use Phalcon\Messages\Message;
 use Phalcon\Messages\Messages;
-use Phalcon\Tests\UnitTestCase;
+use Phalcon\Tests\AbstractUnitTestCase;
 
-final class GetMessagesTest extends UnitTestCase
+final class GetMessagesTest extends AbstractUnitTestCase
 {
     /**
      * Tests Form::getMessages()

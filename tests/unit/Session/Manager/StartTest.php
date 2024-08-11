@@ -15,9 +15,9 @@ namespace Phalcon\Tests\Unit\Session\Manager;
 
 use Phalcon\Tests\Fixtures\Session\ManagerHeadersSentFixture;
 use Phalcon\Tests\Fixtures\Traits\DiTrait;
-use Phalcon\Tests\UnitTestCase;
+use Phalcon\Tests\AbstractUnitTestCase;
 
-final class StartTest extends UnitTestCase
+final class StartTest extends AbstractUnitTestCase
 {
     use DiTrait;
 

@@ -12,12 +12,12 @@ declare(strict_types=1);
 namespace Phalcon\Tests\Database\DataMapper\Pdo\Connection;
 
 use Phalcon\DataMapper\Pdo\Connection;
-use Phalcon\Tests\DatabaseTestCase;
+use Phalcon\Tests\AbstractDatabaseTestCase;
 use Phalcon\Tests\Fixtures\Migrations\InvoicesMigration;
 use Phalcon\Tests\Fixtures\Resultset;
 use stdClass;
 
-final class FetchObjectTest extends DatabaseTestCase
+final class FetchObjectTest extends AbstractDatabaseTestCase
 {
     /**
      * Tests Phalcon\DataMapper\Pdo\Connection :: fetchObject() - ctor

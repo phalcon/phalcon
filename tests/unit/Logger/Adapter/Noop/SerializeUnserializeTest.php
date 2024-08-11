@@ -15,13 +15,13 @@ namespace Phalcon\Tests\Unit\Logger\Adapter\Noop;
 
 use Phalcon\Logger\Adapter\Noop;
 use Phalcon\Logger\Exception;
-use Phalcon\Tests\UnitTestCase;
+use Phalcon\Tests\AbstractUnitTestCase;
 
 use function dataDir;
 use function file_get_contents;
 use function serialize;
 
-final class SerializeUnserializeTest extends UnitTestCase
+final class SerializeUnserializeTest extends AbstractUnitTestCase
 {
     /**
      * Tests Phalcon\Logger\Adapter\Noop :: serialize()/unserialize

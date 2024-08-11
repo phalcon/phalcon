@@ -14,11 +14,11 @@ declare(strict_types=1);
 namespace Phalcon\Tests\Unit\Annotations\Reader;
 
 use Phalcon\Annotations\Reader;
-use Phalcon\Tests\UnitTestCase;
+use Phalcon\Tests\AbstractUnitTestCase;
 
 use function ksort;
 
-final class ParseDocBlockTest extends UnitTestCase
+final class ParseDocBlockTest extends AbstractUnitTestCase
 {
     /**
      * Tests Phalcon\Annotations\Reader :: parseDocBlock()

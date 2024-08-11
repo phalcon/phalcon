@@ -16,13 +16,13 @@ namespace Phalcon\Tests\Unit\Annotations\Adapter;
 use AnnotationsTestClass;
 use Phalcon\Annotations\Collection;
 use Phalcon\Tests\Fixtures\Traits\AnnotationsTrait;
-use Phalcon\Tests\UnitTestCase;
+use Phalcon\Tests\AbstractUnitTestCase;
 
 use function array_keys;
 use function outputDir;
 use function safeDeleteFile;
 
-final class GetMethodsTest extends UnitTestCase
+final class GetMethodsTest extends AbstractUnitTestCase
 {
     use AnnotationsTrait;
 

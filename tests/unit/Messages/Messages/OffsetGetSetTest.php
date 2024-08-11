@@ -16,9 +16,9 @@ namespace Phalcon\Tests\Unit\Messages\Messages;
 use Phalcon\Messages\Exception;
 use Phalcon\Messages\Message;
 use Phalcon\Messages\Messages;
-use Phalcon\Tests\UnitTestCase;
+use Phalcon\Tests\AbstractUnitTestCase;
 
-final class OffsetGetSetTest extends UnitTestCase
+final class OffsetGetSetTest extends AbstractUnitTestCase
 {
     /**
      * Tests Phalcon\Messages\Messages :: offsetGet()/offsetSet()

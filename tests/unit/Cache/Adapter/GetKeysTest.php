@@ -25,7 +25,7 @@ use Phalcon\Cache\Exception\Exception as StorageException;
 use Phalcon\Storage\SerializerFactory;
 use Phalcon\Support\Exception;
 use Phalcon\Support\Exception as HelperException;
-use Phalcon\Tests\UnitTestCase;
+use Phalcon\Tests\AbstractUnitTestCase;
 use stdClass;
 
 use function getOptionsLibmemcached;
@@ -35,7 +35,7 @@ use function phpversion;
 use function uniqid;
 use function version_compare;
 
-final class GetKeysTest extends UnitTestCase
+final class GetKeysTest extends AbstractUnitTestCase
 {
     /**
      *

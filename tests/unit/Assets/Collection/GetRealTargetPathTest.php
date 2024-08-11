@@ -15,11 +15,13 @@ namespace Phalcon\Tests\Unit\Assets\Collection;
 
 use Phalcon\Assets\Collection;
 use Phalcon\Tests\Fixtures\Assets\CollectionFileExistsFixture;
-use Phalcon\Tests\UnitTestCase;
+use Phalcon\Tests\AbstractUnitTestCase;
+
+use PHPUnit\Framework\Attributes\Test;
 
 use function dataDir;
 
-final class GetRealTargetPathTest extends UnitTestCase
+final class GetRealTargetPathTest extends AbstractUnitTestCase
 {
     /**
      * Tests Phalcon\Assets\Collection :: getRealTargetPath()
@@ -29,6 +31,7 @@ final class GetRealTargetPathTest extends UnitTestCase
      * @author Phalcon Team <team@phalcon.io>
      * @since  2020-09-09
      */
+    #[Test]
     public function testAssetsCollectionGetRealTargetPath(): void
     {
         $collection        = new Collection();
@@ -51,6 +54,7 @@ final class GetRealTargetPathTest extends UnitTestCase
      * @author Phalcon Team <team@phalcon.io>
      * @since  2020-09-09
      */
+    #[Test]
     public function testAssetsCollectionGetRealTargetPathFileDoesNotExist(): void
     {
         if (PHP_OS_FAMILY === 'Windows') {

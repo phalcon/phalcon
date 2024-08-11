@@ -17,11 +17,12 @@ use Phalcon\Assets\Manager;
 use Phalcon\Html\Escaper;
 use Phalcon\Html\TagFactory;
 use Phalcon\Tests\Fixtures\Traits\DiTrait;
-use Phalcon\Tests\UnitTestCase;
+use Phalcon\Tests\AbstractUnitTestCase;
+use PHPUnit\Framework\Attributes\Test;
 
 use function dataDir;
 
-final class AddJsTest extends UnitTestCase
+final class AddJsTest extends AbstractUnitTestCase
 {
     use DiTrait;
 
@@ -42,6 +43,7 @@ final class AddJsTest extends UnitTestCase
      * @author Phalcon Team <team@phalcon.io>
      * @since  2014-10-13
      */
+    #[Test]
     public function testAssetsManagerAddJs(): void
     {
         $manager = new Manager(new TagFactory(new Escaper()));
@@ -64,6 +66,7 @@ final class AddJsTest extends UnitTestCase
      * @author Wojciech Ślawski <jurigag@gmail.com>
      * @since  2017-02-01
      */
+    #[Test]
     public function testAssetsManagerAddJsVersioning(): void
     {
         if (PHP_OS_FAMILY === 'Windows') {

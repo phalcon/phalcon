@@ -15,14 +15,14 @@ namespace Phalcon\Tests\Unit\Session\Bag;
 
 use Phalcon\Session\Bag;
 use Phalcon\Tests\Fixtures\Traits\DiTrait;
-use Phalcon\Tests\UnitTestCase;
+use Phalcon\Tests\AbstractUnitTestCase;
 
 /**
- * Class ToJsonTest extends UnitTestCase
+ * Class ToJsonTest extends AbstractUnitTestCase
  *
  * @package Phalcon\Tests\Unit\Session\Bag
  */
-final class ToJsonTest extends UnitTestCase
+final class ToJsonTest extends AbstractUnitTestCase
 {
     use DiTrait;
 

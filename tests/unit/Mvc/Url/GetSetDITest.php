@@ -15,9 +15,9 @@ namespace Phalcon\Tests\Unit\Mvc\Url;
 
 use Phalcon\Di\Di;
 use Phalcon\Mvc\Url;
-use Phalcon\Tests\UnitTestCase;
+use Phalcon\Tests\AbstractUnitTestCase;
 
-final class GetSetDITest extends UnitTestCase
+final class GetSetDITest extends AbstractUnitTestCase
 {
     /**
      * Tests Phalcon\Mvc\Url :: getDI()/setDI()

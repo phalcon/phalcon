@@ -23,11 +23,11 @@ use Phalcon\Tests\Fixtures\Filter\Validation\ValueAttributeFixture;
 use Phalcon\Tests\Fixtures\Filter\Validation\ValueMethodFixture;
 use Phalcon\Tests\Fixtures\Filter\Validation\ValuePropertyFixture;
 use Phalcon\Tests\Fixtures\Traits\DiTrait;
-use Phalcon\Tests\UnitTestCase;
+use Phalcon\Tests\AbstractUnitTestCase;
 use PHPUnit\Framework\Attributes\Test;
 use stdClass;
 
-final class GetValueTest extends UnitTestCase
+final class GetValueTest extends AbstractUnitTestCase
 {
     use DiTrait;
 

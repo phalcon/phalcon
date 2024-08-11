@@ -34,9 +34,9 @@ use Phalcon\Mvc\Model\Transaction\Manager as TransactionManager;
 use Phalcon\Mvc\Router;
 use Phalcon\Mvc\Url;
 use Phalcon\Support\HelperFactory;
-use Phalcon\Tests\UnitTestCase;
+use Phalcon\Tests\AbstractUnitTestCase;
 
-class ConstructTest extends UnitTestCase
+class ConstructTest extends AbstractUnitTestCase
 {
     /**
      * @return string[][]

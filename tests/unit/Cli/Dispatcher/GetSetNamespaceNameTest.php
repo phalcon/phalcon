@@ -14,12 +14,12 @@ declare(strict_types=1);
 namespace Phalcon\Tests\Unit\Cli\Dispatcher;
 
 use Phalcon\Cli\Dispatcher;
-use Phalcon\Tests\UnitTestCase;
+use Phalcon\Tests\AbstractUnitTestCase;
 
 /**
- * Class GetSetNamespaceNameTest extends UnitTestCase
+ * Class GetSetNamespaceNameTest extends AbstractUnitTestCase
  */
-final class GetSetNamespaceNameTest extends UnitTestCase
+final class GetSetNamespaceNameTest extends AbstractUnitTestCase
 {
     /**
      * Tests Phalcon\Cli\Dispatcher - getNamespaceName() / setNamespaceName()

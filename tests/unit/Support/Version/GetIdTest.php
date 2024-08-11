@@ -18,11 +18,11 @@ use Phalcon\Tests\Fixtures\Support\Version\VersionBetaFixture;
 use Phalcon\Tests\Fixtures\Support\Version\VersionRcFixture;
 use Phalcon\Tests\Fixtures\Support\Version\VersionStableFixture;
 use Phalcon\Tests\Fixtures\Traits\VersionTrait;
-use Phalcon\Tests\UnitTestCase;
+use Phalcon\Tests\AbstractUnitTestCase;
 
 use function is_string;
 
-final class GetIdTest extends UnitTestCase
+final class GetIdTest extends AbstractUnitTestCase
 {
     use VersionTrait;
 

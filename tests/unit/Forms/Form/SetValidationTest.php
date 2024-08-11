@@ -19,9 +19,9 @@ use Phalcon\Forms\Element\Text;
 use Phalcon\Forms\Form;
 use Phalcon\Messages\Message;
 use Phalcon\Messages\Messages;
-use Phalcon\Tests\UnitTestCase;
+use Phalcon\Tests\AbstractUnitTestCase;
 
-final class SetValidationTest extends UnitTestCase
+final class SetValidationTest extends AbstractUnitTestCase
 {
     /**
      * Tests Form::setValidation()

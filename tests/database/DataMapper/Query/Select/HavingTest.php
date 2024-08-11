@@ -15,9 +15,9 @@ namespace Phalcon\Tests\Database\DataMapper\Query\Select;
 
 use PDO;
 use Phalcon\DataMapper\Query\QueryFactory;
-use Phalcon\Tests\DatabaseTestCase;
+use Phalcon\Tests\AbstractDatabaseTestCase;
 
-final class HavingTest extends DatabaseTestCase
+final class HavingTest extends AbstractDatabaseTestCase
 {
     /**
      * Database Tests Phalcon\DataMapper\Query\Select :: having()

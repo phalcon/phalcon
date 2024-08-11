@@ -15,9 +15,9 @@ namespace Phalcon\Tests\Unit\Mvc\View\Engine\Volt\Compiler;
 
 use Phalcon\Mvc\View\Engine\Volt\Compiler;
 use Phalcon\Tests\Fixtures\Traits\DiTrait;
-use Phalcon\Tests\UnitTestCase;
+use Phalcon\Tests\AbstractUnitTestCase;
 
-class FunctionCallTest extends UnitTestCase
+class FunctionCallTest extends AbstractUnitTestCase
 {
     use DiTrait;
 

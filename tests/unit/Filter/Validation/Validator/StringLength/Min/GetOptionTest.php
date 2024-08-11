@@ -14,9 +14,9 @@ declare(strict_types=1);
 namespace Phalcon\Tests\Unit\Filter\Validation\Validator\StringLength\Min;
 
 use Phalcon\Filter\Validation\Validator\StringLength\Min;
-use Phalcon\Tests\UnitTestCase;
+use Phalcon\Tests\AbstractUnitTestCase;
 
-final class GetOptionTest extends UnitTestCase
+final class GetOptionTest extends AbstractUnitTestCase
 {
     /**
      * Tests Phalcon\Filter\Validation\Validator\StringLength\Min :: getOption()

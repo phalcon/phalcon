@@ -17,9 +17,9 @@ use DateTime;
 use DateTimeZone;
 use Phalcon\Http\Response;
 use Phalcon\Tests\Fixtures\Page\Http;
-use Phalcon\Tests\UnitTestCase;
+use Phalcon\Tests\AbstractUnitTestCase;
 
-final class SetExpiresTest extends UnitTestCase
+final class SetExpiresTest extends AbstractUnitTestCase
 {
     /**
      * Tests Phalcon\Http\Response :: setExpires()

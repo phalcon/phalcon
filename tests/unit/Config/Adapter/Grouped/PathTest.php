@@ -14,9 +14,9 @@ declare(strict_types=1);
 namespace Phalcon\Tests\Unit\Config\Adapter\Grouped;
 
 use Phalcon\Tests\Fixtures\Traits\ConfigTrait;
-use Phalcon\Tests\UnitTestCase;
+use Phalcon\Tests\AbstractUnitTestCase;
 
-final class PathTest extends UnitTestCase
+final class PathTest extends AbstractUnitTestCase
 {
     use ConfigTrait;
 

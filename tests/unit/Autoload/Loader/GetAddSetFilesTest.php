@@ -15,11 +15,11 @@ namespace Phalcon\Tests\Unit\Autoload\Loader;
 
 use Phalcon\Autoload\Loader;
 use Phalcon\Tests\Fixtures\Traits\LoaderTrait;
-use Phalcon\Tests\UnitTestCase;
+use Phalcon\Tests\AbstractUnitTestCase;
 
 use function hash;
 
-final class GetAddSetFilesTest extends UnitTestCase
+final class GetAddSetFilesTest extends AbstractUnitTestCase
 {
     use LoaderTrait;
 

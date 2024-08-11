@@ -15,7 +15,7 @@ namespace Phalcon\Tests\Unit\Session;
 
 use Phalcon\Session\Adapter\Noop;
 use Phalcon\Session\Manager;
-use Phalcon\Tests\UnitTestCase;
+use Phalcon\Tests\AbstractUnitTestCase;
 use PHPUnit\Framework\Attributes\TestWith;
 
 use function session_abort;
@@ -25,7 +25,7 @@ use function session_status;
 
 use const PHP_SESSION_ACTIVE;
 
-final class ManagerTest extends UnitTestCase
+final class ManagerTest extends AbstractUnitTestCase
 {
     /**
      * Tests Phalcon\Session\Manager :: start()

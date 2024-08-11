@@ -15,9 +15,9 @@ namespace Phalcon\Tests\Database\DataMapper\Query\Select;
 
 use PDO;
 use Phalcon\DataMapper\Query\QueryFactory;
-use Phalcon\Tests\DatabaseTestCase;
+use Phalcon\Tests\AbstractDatabaseTestCase;
 
-final class JoinTest extends DatabaseTestCase
+final class JoinTest extends AbstractDatabaseTestCase
 {
     /**
      * Database Tests Phalcon\DataMapper\Query\Select :: join() - inner

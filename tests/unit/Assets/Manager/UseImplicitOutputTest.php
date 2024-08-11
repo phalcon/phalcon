@@ -16,13 +16,14 @@ namespace Phalcon\Tests\Unit\Assets\Manager;
 use Phalcon\Assets\Manager;
 use Phalcon\Html\Escaper;
 use Phalcon\Html\TagFactory;
-use Phalcon\Tests\UnitTestCase;
+use Phalcon\Tests\AbstractUnitTestCase;
+use PHPUnit\Framework\Attributes\Test;
 
 use function sprintf;
 
 use const PHP_EOL;
 
-final class UseImplicitOutputTest extends UnitTestCase
+final class UseImplicitOutputTest extends AbstractUnitTestCase
 {
     /**
      * Tests Phalcon\Assets\Manager :: useImplicitOutput()
@@ -30,6 +31,7 @@ final class UseImplicitOutputTest extends UnitTestCase
      * @author Phalcon Team <team@phalcon.io>
      * @since  2018-11-13
      */
+    #[Test]
     public function testAssetsManagerUseImplicitOutput(): void
     {
         $manager = new Manager(new TagFactory(new Escaper()));
@@ -58,6 +60,7 @@ final class UseImplicitOutputTest extends UnitTestCase
      * @author Phalcon Team <team@phalcon.io>
      * @since  2018-11-13
      */
+    #[Test]
     public function testAssetsManagerUseImplicitOutputRemote(): void
     {
         $manager = new Manager(new TagFactory(new Escaper()));

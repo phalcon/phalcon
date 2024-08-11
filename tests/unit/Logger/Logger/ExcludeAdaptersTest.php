@@ -15,11 +15,11 @@ namespace Phalcon\Tests\Unit\Logger\Logger;
 
 use Phalcon\Logger\Adapter\Stream;
 use Phalcon\Logger\Logger;
-use Phalcon\Tests\UnitTestCase;
+use Phalcon\Tests\AbstractUnitTestCase;
 
 use function file_get_contents;
 
-final class ExcludeAdaptersTest extends UnitTestCase
+final class ExcludeAdaptersTest extends AbstractUnitTestCase
 {
     /**
      * Tests Phalcon\Logger :: excludeAdapters()

@@ -15,9 +15,9 @@ namespace Phalcon\Tests\Unit\Encryption\Security\Random;
 
 use Phalcon\Encryption\Security\Exception;
 use Phalcon\Encryption\Security\Random;
-use Phalcon\Tests\UnitTestCase;
+use Phalcon\Tests\AbstractUnitTestCase;
 
-final class NumberTest extends UnitTestCase
+final class NumberTest extends AbstractUnitTestCase
 {
     /**
      * Tests Phalcon\Encryption\Security\Random :: number()

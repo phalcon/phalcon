@@ -15,9 +15,9 @@ namespace Phalcon\Tests\Unit\Encryption\Crypt;
 
 use Phalcon\Encryption\Crypt;
 use Phalcon\Encryption\Crypt\Exception\Mismatch;
-use Phalcon\Tests\UnitTestCase;
+use Phalcon\Tests\AbstractUnitTestCase;
 
-final class DecryptBase64Test extends UnitTestCase
+final class DecryptBase64Test extends AbstractUnitTestCase
 {
     /**
      * Tests decrypt using HMAC

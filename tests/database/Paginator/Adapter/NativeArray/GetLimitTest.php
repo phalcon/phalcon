@@ -14,9 +14,9 @@ declare(strict_types=1);
 namespace Phalcon\Tests\Database\Paginator\Adapter\NativeArray;
 
 use Phalcon\Paginator\Adapter\NativeArray;
-use Phalcon\Tests\DatabaseTestCase;
+use Phalcon\Tests\AbstractDatabaseTestCase;
 
-final class GetLimitTest extends DatabaseTestCase
+final class GetLimitTest extends AbstractDatabaseTestCase
 {
     /**
      * Tests Phalcon\Paginator\Adapter\NativeArray :: getLimit()

@@ -14,9 +14,9 @@ namespace Phalcon\Tests\Unit\Forms\Form;
 use Phalcon\Forms\Element\Text;
 use Phalcon\Forms\Form;
 use Phalcon\Tests\Fixtures\Traits\DiTrait;
-use Phalcon\Tests\UnitTestCase;
+use Phalcon\Tests\AbstractUnitTestCase;
 
-final class IteratorTest extends UnitTestCase
+final class IteratorTest extends AbstractUnitTestCase
 {
     use DiTrait;
 

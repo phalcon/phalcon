@@ -14,11 +14,12 @@ declare(strict_types=1);
 namespace Phalcon\Tests\Unit\Assets\Inline\Js;
 
 use Phalcon\Assets\Inline\Js;
-use Phalcon\Tests\UnitTestCase;
+use Phalcon\Tests\AbstractUnitTestCase;
+use PHPUnit\Framework\Attributes\Test;
 
 use function hash;
 
-final class GetAssetKeyTest extends UnitTestCase
+final class GetAssetKeyTest extends AbstractUnitTestCase
 {
     /**
      * Tests Phalcon\Assets\Inline\Js :: getAssetKey()
@@ -28,6 +29,7 @@ final class GetAssetKeyTest extends UnitTestCase
      * @author Phalcon Team <team@phalcon.io>
      * @since  2020-09-09
      */
+    #[Test]
     public function testAssetsInlineJsGetAssetKey(): void
     {
         $content = '<script>alert("Hello");</script>';

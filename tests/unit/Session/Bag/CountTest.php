@@ -15,9 +15,9 @@ namespace Phalcon\Tests\Unit\Session\Bag;
 
 use Phalcon\Session\Bag;
 use Phalcon\Tests\Fixtures\Traits\DiTrait;
-use Phalcon\Tests\UnitTestCase;
+use Phalcon\Tests\AbstractUnitTestCase;
 
-final class CountTest extends UnitTestCase
+final class CountTest extends AbstractUnitTestCase
 {
     use DiTrait;
 

@@ -14,11 +14,11 @@ declare(strict_types=1);
 namespace Phalcon\Tests\Unit\Support\Debug;
 
 use Phalcon\Support\Debug;
-use Phalcon\Tests\UnitTestCase;
+use Phalcon\Tests\AbstractUnitTestCase;
 
 use function sprintf;
 
-final class GetJsSourcesTest extends UnitTestCase
+final class GetJsSourcesTest extends AbstractUnitTestCase
 {
     /**
      * Tests Phalcon\Debug :: getJsSources()

@@ -14,9 +14,9 @@ declare(strict_types=1);
 namespace Phalcon\Tests\Unit\Support\Collection\ReadOnlyCollection;
 
 use Phalcon\Support\Collection\ReadOnlyCollection;
-use Phalcon\Tests\UnitTestCase;
+use Phalcon\Tests\AbstractUnitTestCase;
 
-final class ToJsonTest extends UnitTestCase
+final class ToJsonTest extends AbstractUnitTestCase
 {
     /**
      * Tests Phalcon\Support\Collection\ReadOnlyCollection :: toJson()

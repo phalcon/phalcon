@@ -12,12 +12,12 @@
 namespace Phalcon\Tests\Database\Mvc\Model;
 
 use PDO;
-use Phalcon\Tests\DatabaseTestCase;
+use Phalcon\Tests\AbstractDatabaseTestCase;
 use Phalcon\Tests\Fixtures\Migrations\CustomersMigration;
 use Phalcon\Tests\Fixtures\Traits\DiTrait;
 use Phalcon\Tests\Models;
 
-final class UnderscoreIssetTest extends DatabaseTestCase
+final class UnderscoreIssetTest extends AbstractDatabaseTestCase
 {
     use DiTrait;
 

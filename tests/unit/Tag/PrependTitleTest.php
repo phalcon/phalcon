@@ -14,9 +14,9 @@ declare(strict_types=1);
 namespace Phalcon\Tests\Unit\Tag;
 
 use Phalcon\Tag;
-use Phalcon\Tests\UnitTestCase;
+use Phalcon\Tests\AbstractUnitTestCase;
 
-class PrependTitleTest extends UnitTestCase
+class PrependTitleTest extends AbstractUnitTestCase
 {
     /**
      * Tests Phalcon\Tag :: prependTitle()

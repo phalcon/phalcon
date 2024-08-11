@@ -16,9 +16,9 @@ namespace Phalcon\Tests\Unit\Cli\Task;
 use Phalcon\Cli\Task;
 use Phalcon\Di\FactoryDefault\Cli as CliDi;
 use Phalcon\Events\Manager;
-use Phalcon\Tests\UnitTestCase;
+use Phalcon\Tests\AbstractUnitTestCase;
 
-final class UnderscoreGetTest extends UnitTestCase
+final class UnderscoreGetTest extends AbstractUnitTestCase
 {
     /**
      * Tests Phalcon\Cli\Task :: __get()

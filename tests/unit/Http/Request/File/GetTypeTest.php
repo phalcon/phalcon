@@ -15,11 +15,11 @@ namespace Phalcon\Tests\Unit\Http\Request\File;
 
 use Phalcon\Http\Request\File;
 use Phalcon\Tests\Fixtures\Page\Http;
-use Phalcon\Tests\UnitTestCase;
+use Phalcon\Tests\AbstractUnitTestCase;
 
 use function dataDir;
 
-final class GetTypeTest extends UnitTestCase
+final class GetTypeTest extends AbstractUnitTestCase
 {
     /**
      * Tests Phalcon\Http\Request\File :: getType()

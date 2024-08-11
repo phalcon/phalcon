@@ -18,9 +18,9 @@ use Phalcon\Db\Dialect\Postgresql;
 use Phalcon\Db\Dialect\Sqlite;
 use Phalcon\Db\Exception;
 use Phalcon\Db\Reference;
-use Phalcon\Tests\DatabaseTestCase;
+use Phalcon\Tests\AbstractDatabaseTestCase;
 
-final class DropColumnTest extends DatabaseTestCase
+final class DropColumnTest extends AbstractDatabaseTestCase
 {
     /**
      * @return array[]

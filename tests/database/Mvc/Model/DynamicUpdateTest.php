@@ -17,13 +17,13 @@ use Phalcon\Events\Event;
 use Phalcon\Events\Manager;
 use Phalcon\Support\Collection;
 use Phalcon\Support\Settings;
-use Phalcon\Tests\DatabaseTestCase;
+use Phalcon\Tests\AbstractDatabaseTestCase;
 use Phalcon\Tests\Fixtures\Migrations\CustomersMigration;
 use Phalcon\Tests\Fixtures\Traits\DiTrait;
 use Phalcon\Tests\Models\Customers;
 use Phalcon\Tests\Models\CustomersDymanicUpdate;
 
-final class DynamicUpdateTest extends DatabaseTestCase
+final class DynamicUpdateTest extends AbstractDatabaseTestCase
 {
     use DiTrait;
 

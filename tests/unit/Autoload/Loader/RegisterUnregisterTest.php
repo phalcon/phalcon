@@ -17,12 +17,12 @@ use LoaderEvent;
 use Phalcon\Autoload\Loader;
 use Phalcon\Events\Manager;
 use Phalcon\Tests\Fixtures\Traits\LoaderTrait;
-use Phalcon\Tests\UnitTestCase;
+use Phalcon\Tests\AbstractUnitTestCase;
 
 use function array_pop;
 use function spl_autoload_functions;
 
-final class RegisterUnregisterTest extends UnitTestCase
+final class RegisterUnregisterTest extends AbstractUnitTestCase
 {
     use LoaderTrait;
 

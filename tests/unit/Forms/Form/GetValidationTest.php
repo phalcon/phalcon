@@ -13,12 +13,12 @@ declare(strict_types=1);
 
 namespace Phalcon\Tests\Unit\Forms\Form;
 
-use Phalcon\Tests\UnitTestCase;
+use Phalcon\Tests\AbstractUnitTestCase;
 
 /**
- * Class GetValidationTest extends UnitTestCase
+ * Class GetValidationTest extends AbstractUnitTestCase
  */
-final class GetValidationTest extends UnitTestCase
+final class GetValidationTest extends AbstractUnitTestCase
 {
     /**
      * Tests Phalcon\Forms\Form :: getValidation()

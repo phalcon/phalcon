@@ -54,16 +54,16 @@ use Phalcon\Html\Helper\Style;
 use Phalcon\Html\Helper\Title;
 use Phalcon\Html\Helper\Ul;
 use Phalcon\Html\TagFactory;
-use Phalcon\Tests\UnitTestCase;
+use Phalcon\Tests\AbstractUnitTestCase;
 
 use function uniqid;
 
 /**
- * Class NewInstanceTest extends UnitTestCase
+ * Class NewInstanceTest extends AbstractUnitTestCase
  *
  * @package Phalcon\Tests\Unit\Html\TagFactory
  */
-final class NewInstanceTest extends UnitTestCase
+final class NewInstanceTest extends AbstractUnitTestCase
 {
     /**
      * Returns the example data

@@ -16,10 +16,10 @@ namespace Phalcon\Tests\Database\DataMapper\Query\Select;
 use BadMethodCallException;
 use PDOStatement;
 use Phalcon\DataMapper\Query\QueryFactory;
-use Phalcon\Tests\DatabaseTestCase;
+use Phalcon\Tests\AbstractDatabaseTestCase;
 use Phalcon\Tests\Fixtures\Migrations\InvoicesMigration;
 
-final class UnderscoreCallTest extends DatabaseTestCase
+final class UnderscoreCallTest extends AbstractDatabaseTestCase
 {
     /**
      * Database Tests Phalcon\DataMapper\Query\Select :: __call()

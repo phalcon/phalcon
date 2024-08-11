@@ -16,9 +16,9 @@ namespace Phalcon\Tests\Unit\Session\Bag;
 use Phalcon\Di\FactoryDefault;
 use Phalcon\Session\Bag;
 use Phalcon\Tests\Fixtures\Traits\DiTrait;
-use Phalcon\Tests\UnitTestCase;
+use Phalcon\Tests\AbstractUnitTestCase;
 
-final class GetSetDITest extends UnitTestCase
+final class GetSetDITest extends AbstractUnitTestCase
 {
     use DiTrait;
 

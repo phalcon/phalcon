@@ -13,10 +13,10 @@ namespace Phalcon\Tests\Database\DataMapper\Pdo\Connection;
 
 use PDO;
 use Phalcon\DataMapper\Pdo\Connection;
-use Phalcon\Tests\DatabaseTestCase;
+use Phalcon\Tests\AbstractDatabaseTestCase;
 use Phalcon\Tests\Fixtures\Migrations\InvoicesMigration;
 
-final class FetchOneTest extends DatabaseTestCase
+final class FetchOneTest extends AbstractDatabaseTestCase
 {
     /**
      * @return array

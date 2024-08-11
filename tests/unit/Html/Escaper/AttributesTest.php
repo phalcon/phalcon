@@ -14,7 +14,7 @@ declare(strict_types=1);
 namespace Phalcon\Tests\Unit\Html\Escaper;
 
 use Phalcon\Html\Escaper;
-use Phalcon\Tests\UnitTestCase;
+use Phalcon\Tests\AbstractUnitTestCase;
 
 use const ENT_HTML401;
 use const ENT_HTML5;
@@ -23,7 +23,7 @@ use const ENT_SUBSTITUTE;
 use const ENT_XHTML;
 use const ENT_XML1;
 
-final class AttributesTest extends UnitTestCase
+final class AttributesTest extends AbstractUnitTestCase
 {
     /**
      * @return array[]

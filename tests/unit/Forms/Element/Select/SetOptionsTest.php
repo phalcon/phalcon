@@ -13,12 +13,12 @@ declare(strict_types=1);
 
 namespace Phalcon\Tests\Unit\Forms\Element\Select;
 
-use Phalcon\Tests\UnitTestCase;
+use Phalcon\Tests\AbstractUnitTestCase;
 
 /**
- * Class SetOptionsTest extends UnitTestCase
+ * Class SetOptionsTest extends AbstractUnitTestCase
  */
-final class SetOptionsTest extends UnitTestCase
+final class SetOptionsTest extends AbstractUnitTestCase
 {
     /**
      * Tests Phalcon\Forms\Element\Select :: setOptions()

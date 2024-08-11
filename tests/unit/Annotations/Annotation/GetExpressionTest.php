@@ -15,9 +15,9 @@ namespace Phalcon\Tests\Unit\Annotations\Annotation;
 
 use Phalcon\Annotations\Annotation;
 use Phalcon\Annotations\Exception;
-use Phalcon\Tests\UnitTestCase;
+use Phalcon\Tests\AbstractUnitTestCase;
 
-final class GetExpressionTest extends UnitTestCase
+final class GetExpressionTest extends AbstractUnitTestCase
 {
     private int $PHANNOT_T_ANNOTATION = 300;
     private int $PHANNOT_T_STRING     = 303;

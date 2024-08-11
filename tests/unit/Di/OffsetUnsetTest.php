@@ -15,9 +15,9 @@ namespace Phalcon\Tests\Unit\Di;
 
 use Phalcon\Di\Di;
 use Phalcon\Html\Escaper;
-use Phalcon\Tests\UnitTestCase;
+use Phalcon\Tests\AbstractUnitTestCase;
 
-class OffsetUnsetTest extends UnitTestCase
+class OffsetUnsetTest extends AbstractUnitTestCase
 {
     /**
      * Tests Phalcon\Di\Di :: offsetUnset()

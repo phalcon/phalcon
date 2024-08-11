@@ -15,13 +15,13 @@ namespace Phalcon\Tests\Database\Paginator\Adapter\QueryBuilder;
 
 use PDO;
 use Phalcon\Paginator\Adapter\QueryBuilder;
-use Phalcon\Tests\DatabaseTestCase;
+use Phalcon\Tests\AbstractDatabaseTestCase;
 use Phalcon\Tests\Fixtures\Migrations\InvoicesMigration;
 use Phalcon\Tests\Fixtures\Traits\DiTrait;
 use Phalcon\Tests\Fixtures\Traits\RecordsTrait;
 use Phalcon\Tests\Models\Invoices;
 
-final class GetSetQueryBuilderTest extends DatabaseTestCase
+final class GetSetQueryBuilderTest extends AbstractDatabaseTestCase
 {
     use DiTrait;
     use RecordsTrait;

@@ -15,9 +15,9 @@ namespace Phalcon\Tests\Unit\Messages\Messages;
 
 use Phalcon\Messages\Message;
 use Phalcon\Messages\Messages;
-use Phalcon\Tests\UnitTestCase;
+use Phalcon\Tests\AbstractUnitTestCase;
 
-final class NextTest extends UnitTestCase
+final class NextTest extends AbstractUnitTestCase
 {
     /**
      * Tests Phalcon\Messages\Messages :: next()

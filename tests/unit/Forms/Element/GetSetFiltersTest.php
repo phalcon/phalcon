@@ -14,12 +14,12 @@ declare(strict_types=1);
 namespace Phalcon\Tests\Unit\Forms\Element;
 
 use Phalcon\Tests\Fixtures\Traits\FormsTrait;
-use Phalcon\Tests\UnitTestCase;
+use Phalcon\Tests\AbstractUnitTestCase;
 
 use function array_flip;
 use function uniqid;
 
-final class GetSetFiltersTest extends UnitTestCase
+final class GetSetFiltersTest extends AbstractUnitTestCase
 {
     use FormsTrait;
 

@@ -20,9 +20,10 @@ use Phalcon\Assets\Exception;
 use Phalcon\Assets\Manager;
 use Phalcon\Html\Escaper;
 use Phalcon\Html\TagFactory;
-use Phalcon\Tests\UnitTestCase;
+use Phalcon\Tests\AbstractUnitTestCase;
+use PHPUnit\Framework\Attributes\Test;
 
-final class GetSetTest extends UnitTestCase
+final class GetSetTest extends AbstractUnitTestCase
 {
     /**
      * Tests Phalcon\Assets\Manager :: get()/set()
@@ -30,6 +31,7 @@ final class GetSetTest extends UnitTestCase
      * @author Phalcon Team <team@phalcon.io>
      * @since  2020-03-19
      */
+    #[Test]
     public function testAssetsManagerGetSet(): void
     {
         $manager    = new Manager(new TagFactory(new Escaper()));
@@ -48,6 +50,7 @@ final class GetSetTest extends UnitTestCase
      * @author Phalcon Team <team@phalcon.io>
      * @since  2017-06-04
      */
+    #[Test]
     public function testAssetsManagerGetUnknown(): void
     {
         $this->expectException(Exception::class);

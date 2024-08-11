@@ -15,11 +15,11 @@ use Phalcon\Html\Escaper;
 use Phalcon\Html\Exception;
 use Phalcon\Html\Helper\Input\Select;
 use Phalcon\Html\TagFactory;
-use Phalcon\Tests\UnitTestCase;
+use Phalcon\Tests\AbstractUnitTestCase;
 
 use const PHP_EOL;
 
-final class SelectUnderscoreInvokeTest extends UnitTestCase
+final class SelectUnderscoreInvokeTest extends AbstractUnitTestCase
 {
     /**
      * @return array

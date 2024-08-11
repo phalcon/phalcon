@@ -23,7 +23,7 @@ use function func_get_args;
 use function getOptionsLibmemcached;
 use function getOptionsRedis;
 
-class ServicesTestCase extends UnitTestCase
+abstract class AbstractServicesTestCase extends AbstractUnitTestCase
 {
     public function clearMemcached(): void
     {

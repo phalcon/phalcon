@@ -15,9 +15,9 @@ namespace Phalcon\Tests\Unit\Http\Message\Request;
 
 use Phalcon\Http\Message\Request;
 use Phalcon\Http\Message\Uri;
-use Phalcon\Tests\UnitTestCase;
+use Phalcon\Tests\AbstractUnitTestCase;
 
-final class GetUriTest extends UnitTestCase
+final class GetUriTest extends AbstractUnitTestCase
 {
     /**
      * Tests Phalcon\Http\Message\Request :: getUri()

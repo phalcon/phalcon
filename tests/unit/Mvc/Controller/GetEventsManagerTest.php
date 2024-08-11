@@ -16,9 +16,9 @@ namespace Phalcon\Tests\Unit\Mvc\Controller;
 use Phalcon\Events\Manager as EventsManager;
 use Phalcon\Tests\Controllers\ViewRequestController;
 use Phalcon\Tests\Fixtures\Traits\DiTrait;
-use Phalcon\Tests\UnitTestCase;
+use Phalcon\Tests\AbstractUnitTestCase;
 
-class GetEventsManagerTest extends UnitTestCase
+class GetEventsManagerTest extends AbstractUnitTestCase
 {
     use DiTrait;
 

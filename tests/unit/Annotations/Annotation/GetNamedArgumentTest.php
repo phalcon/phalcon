@@ -14,9 +14,9 @@ declare(strict_types=1);
 namespace Phalcon\Tests\Unit\Annotations\Annotation;
 
 use Phalcon\Annotations\Annotation;
-use Phalcon\Tests\UnitTestCase;
+use Phalcon\Tests\AbstractUnitTestCase;
 
-final class GetNamedArgumentTest extends UnitTestCase
+final class GetNamedArgumentTest extends AbstractUnitTestCase
 {
     private $PHANNOT_T_ARRAY  = 308;
     private $PHANNOT_T_STRING = 303;

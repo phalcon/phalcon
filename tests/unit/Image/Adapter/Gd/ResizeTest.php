@@ -17,11 +17,11 @@ use Phalcon\Image\Adapter\Gd;
 use Phalcon\Image\Enum;
 use Phalcon\Image\Exception;
 use Phalcon\Tests\Fixtures\Traits\GdTrait;
-use Phalcon\Tests\UnitTestCase;
+use Phalcon\Tests\AbstractUnitTestCase;
 
 use function dataDir;
 
-final class ResizeTest extends UnitTestCase
+final class ResizeTest extends AbstractUnitTestCase
 {
     use GdTrait;
 

@@ -16,9 +16,9 @@ namespace Phalcon\Tests\Unit\Logger\Logger;
 use Phalcon\Logger\Adapter\Stream;
 use Phalcon\Logger\Exception;
 use Phalcon\Logger\Logger;
-use Phalcon\Tests\UnitTestCase;
+use Phalcon\Tests\AbstractUnitTestCase;
 
-final class RemoveAdapterTest extends UnitTestCase
+final class RemoveAdapterTest extends AbstractUnitTestCase
 {
     /**
      * Tests Phalcon\Logger :: removeAdapter()

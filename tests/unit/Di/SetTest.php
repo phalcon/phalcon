@@ -17,9 +17,9 @@ use Phalcon\Di\Di;
 use Phalcon\Di\Exception;
 use Phalcon\Html\Escaper;
 use Phalcon\Support\Collection;
-use Phalcon\Tests\UnitTestCase;
+use Phalcon\Tests\AbstractUnitTestCase;
 
-class SetTest extends UnitTestCase
+class SetTest extends AbstractUnitTestCase
 {
     /**
      * @return array

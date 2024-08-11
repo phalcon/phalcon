@@ -15,9 +15,9 @@ namespace Phalcon\Tests\Unit\Translate\Adapter\Gettext;
 
 use Phalcon\Tests\Fixtures\Traits\TranslateGettextHelperTrait;
 use Phalcon\Tests\Fixtures\Traits\TranslateGettextTrait;
-use Phalcon\Tests\UnitTestCase;
+use Phalcon\Tests\AbstractUnitTestCase;
 
-final class UnderscoreTest extends UnitTestCase
+final class UnderscoreTest extends AbstractUnitTestCase
 {
     use TranslateGettextTrait;
     use TranslateGettextHelperTrait;

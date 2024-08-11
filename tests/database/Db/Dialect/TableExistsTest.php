@@ -16,9 +16,9 @@ namespace Phalcon\Tests\Database\Db\Dialect;
 use Phalcon\Db\Dialect\Mysql;
 use Phalcon\Db\Dialect\Postgresql;
 use Phalcon\Db\Dialect\Sqlite;
-use Phalcon\Tests\DatabaseTestCase;
+use Phalcon\Tests\AbstractDatabaseTestCase;
 
-final class TableExistsTest extends DatabaseTestCase
+final class TableExistsTest extends AbstractDatabaseTestCase
 {
     /**
      * @return array[]

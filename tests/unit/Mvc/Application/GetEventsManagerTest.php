@@ -13,9 +13,9 @@ declare(strict_types=1);
 
 namespace Phalcon\Tests\Unit\Mvc\Application;
 
-use Phalcon\Tests\UnitTestCase;
+use Phalcon\Tests\AbstractUnitTestCase;
 
-class GetEventsManagerTest extends UnitTestCase
+class GetEventsManagerTest extends AbstractUnitTestCase
 {
     /**
      * Tests Phalcon\Mvc\Application :: getEventsManager()

@@ -16,9 +16,9 @@ namespace Phalcon\Tests\Unit\Di;
 use Phalcon\Di\Di;
 use Phalcon\Tests\Fixtures\Di\SomeComponent;
 use Phalcon\Tests\Fixtures\Di\SomeServiceProvider;
-use Phalcon\Tests\UnitTestCase;
+use Phalcon\Tests\AbstractUnitTestCase;
 
-class RegisterTest extends UnitTestCase
+class RegisterTest extends AbstractUnitTestCase
 {
     /**
      * Unit Tests Phalcon\Di :: register()

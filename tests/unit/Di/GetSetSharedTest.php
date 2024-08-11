@@ -16,11 +16,11 @@ namespace Phalcon\Tests\Unit\Di;
 use Phalcon\Di\Di;
 use Phalcon\Html\Escaper;
 use Phalcon\Html\Escaper\EscaperInterface;
-use Phalcon\Tests\UnitTestCase;
+use Phalcon\Tests\AbstractUnitTestCase;
 
 use function spl_object_hash;
 
-class GetSetSharedTest extends UnitTestCase
+class GetSetSharedTest extends AbstractUnitTestCase
 {
     /**
      * Tests Phalcon\Di\Di :: getShared()/setShared() - class name

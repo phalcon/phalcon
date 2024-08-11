@@ -15,10 +15,10 @@ namespace Phalcon\Tests\Unit\Filter\Validation;
 
 use Phalcon\Filter\Validation;
 use Phalcon\Filter\Validation\Validator\Alpha;
-use Phalcon\Tests\UnitTestCase;
+use Phalcon\Tests\AbstractUnitTestCase;
 use PHPUnit\Framework\Attributes\Test;
 
-final class AllowEmptyTest extends UnitTestCase
+final class AllowEmptyTest extends AbstractUnitTestCase
 {
     /**
      * Tests Phalcon\Filter\Validation :: allowEmpty()

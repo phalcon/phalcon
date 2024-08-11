@@ -17,13 +17,13 @@ use Phalcon\Events\Manager;
 use Phalcon\Mvc\View;
 use Phalcon\Tests\Fixtures\Mvc\View\AfterRenderListener;
 use Phalcon\Tests\Fixtures\Traits\DiTrait;
-use Phalcon\Tests\UnitTestCase;
+use Phalcon\Tests\AbstractUnitTestCase;
 
 use function dataDir;
 
 use const DIRECTORY_SEPARATOR;
 
-class GetSetRenderLevelTest extends UnitTestCase
+class GetSetRenderLevelTest extends AbstractUnitTestCase
 {
     use DiTrait;
 

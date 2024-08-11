@@ -18,9 +18,9 @@ use Phalcon\Db\Dialect\Postgresql;
 use Phalcon\Db\Dialect\Sqlite;
 use Phalcon\Db\Exception;
 use Phalcon\Db\Reference;
-use Phalcon\Tests\DatabaseTestCase;
+use Phalcon\Tests\AbstractDatabaseTestCase;
 
-final class AddForeignKeyTest extends DatabaseTestCase
+final class AddForeignKeyTest extends AbstractDatabaseTestCase
 {
     /**
      * @return array[]

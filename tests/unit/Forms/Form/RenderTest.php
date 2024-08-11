@@ -17,10 +17,10 @@ use Phalcon\Forms\Element\Text;
 use Phalcon\Forms\Form;
 use Phalcon\Html\Escaper;
 use Phalcon\Html\TagFactory;
-use Phalcon\Tests\UnitTestCase;
+use Phalcon\Tests\AbstractUnitTestCase;
 use stdClass;
 
-final class RenderTest extends UnitTestCase
+final class RenderTest extends AbstractUnitTestCase
 {
     /**
      * Tests Form::render

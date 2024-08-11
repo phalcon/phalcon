@@ -15,12 +15,12 @@ namespace Phalcon\Tests\Database\Mvc\Model\Query\Builder;
 
 use Phalcon\Mvc\Model\Query\Builder;
 use Phalcon\Storage\Exception;
-use Phalcon\Tests\DatabaseTestCase;
+use Phalcon\Tests\AbstractDatabaseTestCase;
 use Phalcon\Tests\Fixtures\Traits\DiTrait;
 use Phalcon\Tests\Fixtures\Traits\RecordsTrait;
 use Phalcon\Tests\Models\Invoices;
 
-final class OrderByTest extends DatabaseTestCase
+final class OrderByTest extends AbstractDatabaseTestCase
 {
     use DiTrait;
     use RecordsTrait;
