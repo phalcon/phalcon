@@ -91,12 +91,7 @@ class Min extends AbstractValidator
             return true;
         }
 
-        // Check if mbstring is available to calculate the correct length
-        $length = strlen((string)$value);
-        if (true === $this->phpFunctionExists("mb_strlen")) {
-            $length = mb_strlen((string)$value);
-        }
-
+        $length      = mb_strlen((string)$value);
         $optionField = $this->getOptionField();
         $optionValue = $this->checkArray($this->getOption($optionField), $field);
         $included    = (bool)$this->checkArray(

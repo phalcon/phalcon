@@ -119,13 +119,6 @@ class Confirmation extends AbstractValidator
     final protected function compare(string $source, string $target): bool
     {
         if (true === $this->getOption("ignoreCase", false)) {
-            /**
-             * mbstring is required here
-             */
-            if (true !== $this->phpFunctionExists("mb_strtolower")) {
-                throw new Exception("Extension 'mbstring' is required");
-            }
-
             $source = mb_strtolower($source, "utf-8");
             $target = mb_strtolower($target, "utf-8");
         }

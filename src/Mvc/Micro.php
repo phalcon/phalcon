@@ -647,7 +647,7 @@ class Micro extends Injectable implements ArrayAccess, EventsAwareInterface
             }
         } catch (Throwable $ex) {
             /**
-             * Calling beforeNotFound event
+             * Calling beforeException event
              */
             $this->fireManagerEvent("micro:beforeException", $ex);
 

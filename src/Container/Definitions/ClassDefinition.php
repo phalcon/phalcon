@@ -28,6 +28,7 @@ use ReflectionClass;
 use ReflectionException;
 use ReflectionNamedType;
 use ReflectionParameter;
+use ReflectionType;
 use ReflectionUnionType;
 
 use function array_key_exists;
@@ -312,6 +313,7 @@ class ClassDefinition extends AbstractDefinition
         ReflectionParameter $parameter
     ): NotDefined {
         $name = $parameter->getName();
+        /** @var ReflectionType $type */
         $type = $parameter->getType();
 
         if ($type instanceof ReflectionUnionType) {
@@ -407,8 +409,7 @@ class ClassDefinition extends AbstractDefinition
     }
 
     /**
-     * @param int                 $position
-     * @param ReflectionParameter $parameter
+     * @param int $position
      *
      * @return bool
      */

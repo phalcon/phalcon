@@ -17,6 +17,7 @@ use Phalcon\Filter\Validation;
 use Phalcon\Filter\Validation\Exception;
 use Phalcon\Traits\Php\InfoTrait;
 
+use function array_flip;
 use function finfo_close;
 use function finfo_file;
 use function finfo_open;
@@ -104,17 +105,16 @@ class MimeType extends AbstractFile
 
         if (true !== is_array($types)) {
             throw new Exception(
-                "Option 'allowedTypes' must be an array"
+                "Option 'types' must be an array"
             );
         }
-
         if (true === $this->phpFunctionExists("finfo_open")) {
             $mimeType = finfo_open(FILEINFO_MIME_TYPE);
             $mime     = finfo_file($mimeType, $value["tmp_name"]);
 
             finfo_close($mimeType);
         } else {
-            $mime = $value["type"];
+            $mime = $value['type'];
         }
 
         if (true !== in_array($mime, $types)) {
@@ -129,6 +129,7 @@ class MimeType extends AbstractFile
             return false;
         }
 
+        var_dump(5);
         return true;
     }
 }

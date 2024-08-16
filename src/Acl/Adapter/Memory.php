@@ -28,6 +28,8 @@ use ReflectionClass;
 use ReflectionException;
 use ReflectionFunction;
 
+use ReflectionType;
+
 use function array_intersect_key;
 use function array_keys;
 use function array_shift;
@@ -352,8 +354,8 @@ class Memory extends AbstractAdapter
      * $acl->addRole("administrator", ["consultant", "consultant2"]);
      * ```
      *
-     * @param RoleInterface|string $roleObject
-     * @param mixed|null           $accessInherits
+     * @param RoleInterface|string            $roleObject
+     * @param RoleInterface|array|string|null $accessInherits
      *
      * @return bool
      * @throws Exception
@@ -690,6 +692,7 @@ class Memory extends AbstractAdapter
             $numberOfRequiredParameters = $reflectionFunction->getNumberOfRequiredParameters();
             $userParametersSizeShouldBe = $parameterNumber;
             foreach ($reflectionParameters as $reflectionParameter) {
+                /** @var ReflectionType $reflectionType */
                 $reflectionType   = $reflectionParameter->getType();
                 $parameterToCheck = $reflectionParameter->getName();
 

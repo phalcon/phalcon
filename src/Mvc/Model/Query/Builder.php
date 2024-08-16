@@ -31,8 +31,6 @@ use function is_string;
 use function str_contains;
 
 /**
- * Phalcon\Mvc\Model\Query\Builder
- *
  * Helps to create PHQL queries using an OO interface
  *
  *```php
@@ -139,7 +137,7 @@ class Builder implements BuilderInterface, InjectionAwareInterface
     protected int $offset = 0;
 
     /**
-     * @var array|string|mixed|null
+     * @var array|string|null
      */
     protected array | string | null $order = null;
 
