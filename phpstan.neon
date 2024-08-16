@@ -1,7 +1,7 @@
 parameters:
     paths:
         - src
-    level: 1
+    level: 2
     ignoreErrors:
         -
             message: '#Static access to instance property Phalcon\\Support\\Debug::\$isActive.#'
