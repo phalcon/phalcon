@@ -22,8 +22,6 @@ use function call_user_func;
 use function call_user_func_array;
 
 /**
- * Phalcon\Di\Service\Builder
- *
  * This class builds instances based on complex definitions
  */
 class Builder

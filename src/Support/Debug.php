@@ -684,6 +684,7 @@ class Debug
         /**
          * Normally the backtrace contains only classes
          */
+        /** @var string $functionName */
         $functionName = $trace['function'];
 
         if (true === isset($trace['class'])) {
@@ -701,6 +702,7 @@ class Debug
                     /**
                      * Prepare function's name according to the conventions in the docs
                      */
+                    /** @var string $preparedFunctionName */
                     $preparedFunctionName = str_replace(
                         '_',
                         '-',

@@ -13,6 +13,7 @@ declare(strict_types=1);
 
 namespace Phalcon\Mvc\View\Engine;
 
+use Phalcon\Events\Exception as EventsException;
 use Phalcon\Html\Link\Link;
 use Phalcon\Html\Link\Serializer\Header;
 use Phalcon\Mvc\View\Engine\Volt\Compiler;
@@ -210,13 +211,15 @@ class Volt extends AbstractEngine
     /**
      * Renders a view using the template engine
      *
-     * @param string path
-     * @param mixed params
-     * @params bool mustClean
-     *
-     * @return void
+     * @param string $path
+     * @param mixed  $params
+     * @param bool   $mustClean
      *
      * TODO: Make params array
+     *
+     * @return void|null
+     * @throws Volt\Exception
+     * @throws EventsException
      */
     public function render(string $path, mixed $params, bool $mustClean = false)
     {

@@ -325,9 +325,8 @@ abstract class AbstractAdapter implements AdapterInterface, EventsAwareInterface
         }
 
         $content = $this->doGetData($key);
-        $result  = $this->getUnserializedData($content, $defaultValue);
 
-        return $result;
+        return $this->getUnserializedData($content, $defaultValue);
     }
 
     /**

@@ -28,9 +28,7 @@ use function is_array;
 use function is_string;
 
 /**
- * Builder
- *
- * The builder offers
+ * JWT Builder
  *
  * @property CollectionInterface $claims
  * @property CollectionInterface $jose
@@ -248,10 +246,9 @@ class Builder
      * interpretation of audience values is generally application specific.
      * Use of this claim is OPTIONAL.
      *
-     * @param mixed $audience
+     * @param array|string $audience
      *
      * @return Builder
-     * @throws ValidatorException
      */
     public function setAudience(array|string $audience): Builder
     {

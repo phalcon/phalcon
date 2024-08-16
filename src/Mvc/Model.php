@@ -1912,7 +1912,7 @@ abstract class Model extends AbstractInjectionAware implements
             $params = $parameters;
         }
 
-        $query = static::getPreparedQuery($params);
+        $query = self::getPreparedQuery($params);
 
         /**
          * Execute the query passing the bind-params and casting-types
@@ -2032,7 +2032,7 @@ abstract class Model extends AbstractInjectionAware implements
             );
         }
 
-        $query = static::getPreparedQuery($params, 1);
+        $query = self::getPreparedQuery($params, 1);
 
         /**
          * Return only the first row
