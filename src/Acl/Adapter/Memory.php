@@ -27,7 +27,6 @@ use Phalcon\Events\Traits\EventsAwareTrait;
 use ReflectionClass;
 use ReflectionException;
 use ReflectionFunction;
-
 use ReflectionType;
 
 use function array_intersect_key;
