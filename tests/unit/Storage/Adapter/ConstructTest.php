@@ -141,8 +141,6 @@ final class ConstructTest extends AbstractUnitTestCase
      *
      * @return void
      *
-     * @throws SupportException
-     *
      * @author Phalcon Team <team@phalcon.io>
      * @since  2020-09-09
      */

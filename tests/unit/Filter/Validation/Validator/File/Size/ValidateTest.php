@@ -23,6 +23,7 @@ use Phalcon\Tests\Fixtures\Filter\Validation\Validator\File\Size\MinFixture;
 use Phalcon\Tests\AbstractUnitTestCase;
 use PHPUnit\Framework\Attributes\BackupGlobals;
 use PHPUnit\Framework\Attributes\DataProvider;
+use PHPUnit\Framework\Attributes\Test;
 
 #[BackupGlobals(true)]
 final class ValidateTest extends AbstractUnitTestCase
@@ -115,8 +116,8 @@ final class ValidateTest extends AbstractUnitTestCase
      * @throws Validation\Exception
      * @author       Phalcon Team <team@phalcon.io>
      * @since        2023-09-28
-     *
      */
+    #[Test]
     #[DataProvider("getExamples")]
     public function testFilterValidationValidatorFileSize(
         string $class,
@@ -157,6 +158,7 @@ final class ValidateTest extends AbstractUnitTestCase
      * @author       Phalcon Team <team@phalcon.io>
      * @since        2023-09-28
      */
+    #[Test]
     #[DataProvider("getExamplesErrors")]
     public function testFilterValidationValidatorFileSizeErrors(
         string $class,
