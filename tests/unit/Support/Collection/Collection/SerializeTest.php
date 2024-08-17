@@ -40,4 +40,28 @@ final class SerializeTest extends AbstractUnitTestCase
         $actual   = $collection->serialize();
         $this->assertSame($expected, $actual);
     }
+
+    /**
+     * Tests Phalcon\Support\Collection :: serialize()
+     *
+     * @return void
+     *
+     * @author Phalcon Team <team@phalcon.io>
+     * @since  2020-09-09
+     */
+    public function testSupportCollectionSerializeUnderscore(): void
+    {
+        $data = [
+            'one'   => 'two',
+            'three' => 'four',
+            'five'  => 'six',
+        ];
+
+        $collection = new Collection($data);
+
+        $expected = 'O:26:"Phalcon\Support\Collection":'
+            . '3:{s:3:"one";s:3:"two";s:5:"three";s:4:"four";s:4:"five";s:3:"six";}';
+        $actual   = serialize($collection);
+        $this->assertSame($expected, $actual);
+    }
 }

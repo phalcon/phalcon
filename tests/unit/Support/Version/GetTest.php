@@ -18,6 +18,8 @@ use Phalcon\Tests\Fixtures\Support\Version\VersionBetaFixture;
 use Phalcon\Tests\Fixtures\Support\Version\VersionRcFixture;
 use Phalcon\Tests\Fixtures\Support\Version\VersionStableFixture;
 use Phalcon\Tests\AbstractUnitTestCase;
+use PHPUnit\Framework\Attributes\DataProvider;
+use PHPUnit\Framework\Attributes\Test;
 
 use function is_string;
 
@@ -51,13 +53,12 @@ final class GetTest extends AbstractUnitTestCase
     /**
      * Tests get()
      *
-     * @dataProvider getExamples
-     *
-     *
      * @return void
      * @author       Phalcon Team <team@phalcon.io>
      * @since        2020-09-09
      */
+    #[Test]
+    #[DataProvider('getExamples')]
     public function testSupportVersionGet(
         string $class,
         string $expected

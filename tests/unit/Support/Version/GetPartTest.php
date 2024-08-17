@@ -16,6 +16,7 @@ namespace Phalcon\Tests\Unit\Support\Version;
 use Phalcon\Support\Version;
 use Phalcon\Tests\Fixtures\Traits\VersionTrait;
 use Phalcon\Tests\AbstractUnitTestCase;
+use PHPUnit\Framework\Attributes\Test;
 
 final class GetPartTest extends AbstractUnitTestCase
 {
@@ -27,6 +28,7 @@ final class GetPartTest extends AbstractUnitTestCase
      * @author Phalcon Team <team@phalcon.io>
      * @since  2020-09-09
      */
+    #[Test]
     public function testSupportVersionGetPart(): void
     {
         /*

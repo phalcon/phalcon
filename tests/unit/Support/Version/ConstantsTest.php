@@ -15,6 +15,7 @@ namespace Phalcon\Tests\Unit\Support\Version;
 
 use Phalcon\Support\Version;
 use Phalcon\Tests\AbstractUnitTestCase;
+use PHPUnit\Framework\Attributes\Test;
 
 final class ConstantsTest extends AbstractUnitTestCase
 {
@@ -24,6 +25,7 @@ final class ConstantsTest extends AbstractUnitTestCase
      * @author Phalcon Team <team@phalcon.io>
      * @since  2020-09-09
      */
+    #[Test]
     public function testSupportVersionConstants(): void
     {
         $this->assertSame(0, Version::VERSION_MAJOR);
