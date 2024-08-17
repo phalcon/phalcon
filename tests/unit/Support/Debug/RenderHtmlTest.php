@@ -28,7 +28,7 @@ final class RenderHtmlTest extends AbstractUnitTestCase
      * @author Phalcon Team <team@phalcon.io>
      * @since  2020-09-09
      */
-    public function debugRenderHtmlWithBacktrace(): void
+    public function testSupportDebugRenderHtmlWithBacktrace(): void
     {
         $exception = new Exception('exception message', 1234);
         $debug     = new Debug();
@@ -59,6 +59,107 @@ final class RenderHtmlTest extends AbstractUnitTestCase
             '<li><a href="#error-tabs-5">Memory</a></li>',
             $actual
         );
+
+        $this->assertStringContainsString('DATA_MYSQL_HOST', $actual);
+    }
+
+    /**
+     * Tests Phalcon\Debug :: renderHtml() - with backtrace
+     *
+     * @return void
+     *
+     * @author Phalcon Team <team@phalcon.io>
+     * @since  2020-09-09
+     */
+    public function testSupportDebugRenderHtmlWithBacktraceAndBlacklist(): void
+    {
+        $exception = new Exception('exception message', 1234);
+        $debug     = new Debug();
+        $debug->setShowBackTrace(true);
+        $debug->setBlacklist(
+            [
+                'server' => ['DATA_MYSQL_HOST']
+            ]
+        );
+
+        $actual = $debug->renderHtml($exception);
+
+        $this->assertStringContainsString(
+            '<div class="error-info">',
+            $actual
+        );
+        $this->assertStringContainsString(
+            '<li><a href="#error-tabs-1">Backtrace</a></li>',
+            $actual
+        );
+        $this->assertStringContainsString(
+            '<li><a href="#error-tabs-2">Request</a></li>',
+            $actual
+        );
+        $this->assertStringContainsString(
+            '<li><a href="#error-tabs-3">Server</a></li>',
+            $actual
+        );
+        $this->assertStringContainsString(
+            '<li><a href="#error-tabs-4">Included Files</a></li>',
+            $actual
+        );
+        $this->assertStringContainsString(
+            '<li><a href="#error-tabs-5">Memory</a></li>',
+            $actual
+        );
+
+        $this->assertStringNotContainsString('DATA_MYSQL_HOST', $actual);
+    }
+
+    /**
+     * Tests Phalcon\Debug :: renderHtml() - with file fragment
+     *
+     * @return void
+     *
+     * @author Phalcon Team <team@phalcon.io>
+     * @since  2020-09-09
+     */
+    public function testSupportDebugRenderHtmlFileFragment(): void
+    {
+        $exception = new Exception('exception message', 1234);
+        $debug     = new Debug();
+        $debug->setShowBackTrace(true);
+        $debug->setShowFileFragment(true);
+
+        $actual = $debug->renderHtml($exception);
+
+        $this->assertStringNotContainsString(
+            'linenums error-scroll',
+            $actual
+        );
+
+        $this->assertStringContainsString('linenums:', $actual);
+    }
+
+    /**
+     * Tests Phalcon\Debug :: renderHtml() - with file fragment
+     *
+     * @return void
+     *
+     * @author Phalcon Team <team@phalcon.io>
+     * @since  2020-09-09
+     */
+    public function testSupportDebugRenderHtmlNoFiles(): void
+    {
+        $exception = new Exception('exception message', 1234);
+        $debug     = new Debug();
+        $debug->setShowBackTrace(true);
+        $debug->setShowFiles(false);
+
+        $actual = $debug->renderHtml($exception);
+
+        $this->assertStringNotContainsString(
+            'linenums error-scroll',
+            $actual
+        );
+
+        $this->assertStringNotContainsString('linenums:', $actual);
     }
 
     /**
@@ -102,7 +203,7 @@ final class RenderHtmlTest extends AbstractUnitTestCase
             . '<h1>Phalcon\Support\Exception: exception message</h1>'
             . '<span class="error-file">'
             . __FILE__
-            . ' (74)</span>'
+            . ' (175)</span>'
             . '</div>'
             . '<script type="application/javascript" '
             . 'src="https://assets.phalcon.io/debug/6.0.x/assets/'

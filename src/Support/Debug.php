@@ -28,6 +28,7 @@ use function is_string;
 use function mb_strtolower;
 use function memory_get_usage;
 use function sprintf;
+use function var_dump;
 
 /**
  * Class Debug

@@ -19,6 +19,8 @@ use Phalcon\Tests\Fixtures\Support\Version\VersionRcFixture;
 use Phalcon\Tests\Fixtures\Support\Version\VersionStableFixture;
 use Phalcon\Tests\Fixtures\Traits\VersionTrait;
 use Phalcon\Tests\AbstractUnitTestCase;
+use PHPUnit\Framework\Attributes\DataProvider;
+use PHPUnit\Framework\Attributes\Test;
 
 use function is_string;
 
@@ -54,13 +56,13 @@ final class GetIdTest extends AbstractUnitTestCase
     /**
      * Tests get()
      *
-     * @dataProvider getExamples
-     *
      * @return void
      *
      * @author       Phalcon Team <team@phalcon.io>
      * @since        2020-09-09
      */
+    #[Test]
+    #[DataProvider('getExamples')]
     public function testSupportVersionGetId(
         string $class,
         string $expected
