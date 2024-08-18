@@ -31,10 +31,6 @@ use function sprintf;
 use function var_dump;
 
 /**
- * Class Debug
- *
- * @package Phalcon\Debug
- *
  * @property array  $blacklist
  * @property mixed  $data
  * @property bool   $hideDocumentRoot
@@ -120,8 +116,10 @@ class Debug
      */
     public function getCssSources(): string
     {
-        $template = '<link rel="stylesheet" type="text/css" href="'
-            . $this->uri . '%s" />';
+        $template = "
+    <link href='" . $this->uri . "%s'
+          rel='stylesheet' 
+          type='text/css' />";
 
         return sprintf($template, 'assets/jquery-ui/themes/ui-lightness/jquery-ui.min.css')
             . sprintf($template, 'assets/jquery-ui/themes/ui-lightness/theme.css')
@@ -135,9 +133,9 @@ class Debug
      */
     public function getJsSources(): string
     {
-        $template = '<script type="application/javascript" src="'
-            . $this->uri
-            . '%s"></script>';
+        $template = "
+    <script type='application/javascript' 
+            src='" . $this->uri . "%s'></script>";
 
         return sprintf($template, 'assets/jquery/dist/jquery.min.js')
             . sprintf($template, 'assets/jquery-ui/jquery-ui.min.js')
@@ -158,9 +156,9 @@ class Debug
             . $version->getPart(Version::VERSION_MEDIUM)
             . "/en/";
 
-        return '<div class="version">Phalcon Framework '
-            . '<a href="' . $link . '" target="_new">'
-            . $version->get() . "</a></div>";
+        return "<div class='version'>
+    Phalcon Framework <a href='$link' target='_new'>" . $version->get() . "</a>
+</div>";
     }
 
     /**
@@ -311,12 +309,14 @@ class Debug
          * CSS static sources to style the error presentation
          * Use the exception info as document's title
          */
-        $html = '<html><head>'
-            . '<title>'
-            . $className . ': '
-            . $escapedMessage . '</title>'
-            . $this->getCssSources()
-            . '</head><body>';
+
+        $html = "<!DOCTYPE html>
+<html lang='en'>
+<head>
+    <title>$className:$escapedMessage</title>" . $this->getCssSources() . "
+</head>
+<body>
+";
 
         /**
          * Get the version link
@@ -326,15 +326,12 @@ class Debug
         /**
          * Main exception info
          */
-        $html .= '<div align="center">'
-            . '<div class="error-main">'
-            . '<h1>'
-            . $className . ': '
-            . $escapedMessage . '</h1>'
-            . '<span class="error-file">'
-            . $exception->getFile() . ' ('
-            . $exception->getLine() . ')</span>'
-            . '</div>';
+        $html .= "
+<div align='center'>
+    <div class='error-main'>
+        <h1>$className: $escapedMessage</h1>
+        <span class='error-file'>" . $exception->getFile() . " (" . $exception->getLine() . ")</span>
+    </div>";
 
         /**
          * Check if the developer wants to show the backtrace or not
@@ -343,18 +340,24 @@ class Debug
             /**
              * Create the tabs in the page
              */
-            $html .= '<div class="error-info"><div id="tabs"><ul>'
-                . '<li><a href="#error-tabs-1">Backtrace</a></li>'
-                . '<li><a href="#error-tabs-2">Request</a></li>'
-                . '<li><a href="#error-tabs-3">Server</a></li>'
-                . '<li><a href="#error-tabs-4">Included Files</a></li>'
-                . '<li><a href="#error-tabs-5">Memory</a></li>';
+            $html .= "
+            
+    <div class='error-info'>
+        <div id='tabs'>
+            <ul>
+                <li><a href='#backtrace'>Backtrace</a></li>
+                <li><a href='#request'>Request</a></li>
+                <li><a href='#server'>Server</a></li>
+                <li><a href='#files'>Included Files</a></li>
+                <li><a href='#memory'>Memory</a></li>";
 
             if (is_array($this->data)) {
-                $html .= '<li><a href="#error-tabs-6">Variables</a></li>';
+                $html .= "
+                <li><a href='#variables'>Variables</a></li>";
             }
 
-            $html .= '</ul>';
+            $html .= "
+            </ul>";
 
             /**
              * Print backtrace
@@ -364,11 +367,11 @@ class Debug
             /**
              * Print _REQUEST superglobal
              */
-            $html .= $this->printSuperglobal($_REQUEST);
+            $html .= $this->printSuperglobal($_REQUEST, 'request');
             /**
              * Print _SERVER superglobal
              */
-            $html .= $this->printSuperglobal($_SERVER);
+            $html .= $this->printSuperglobal($_SERVER, 'server');
 
             /**
              * Show included files
@@ -385,13 +388,17 @@ class Debug
              */
             $html .= $this->printExtraVariables();
 
-            $html .= '</div>';
+            $html .= "
+            </div>";
         }
 
         /**
          * Get JavaScript sources
          */
-        return $html . $this->getJsSources() . '</div></body></html>';
+        return $html . $this->getJsSources() . "
+        </div>
+    </body>
+</html>";
     }
 
     /**
@@ -629,7 +636,13 @@ class Debug
         /**
          * Every trace in the backtrace have a unique number
          */
-        $html = '<tr><td style="text-align: right; vertical-align: top" class="error-number">#' . $number . '</td><td>';
+        $html = "
+                    <tr>
+                        <td style='text-align: right; vertical-align: top'
+                            class='error-number'>
+                            #
+                        </td>
+                        <td>";
 
         if (true === isset($trace['class'])) {
             $className = $trace['class'];
@@ -647,9 +660,9 @@ class Debug
                 /**
                  * Generate a link to the official docs
                  */
-                $classNameWithLink = '<a target="_new" href="https://docs.phalcon.io/6.0/en/api/'
-                    . $prepareUriClass . '">'
-                    . $className . '</a>';
+                $classNameWithLink = "<a target='_new' "
+                    . "href='https://docs.phalcon.io/6.0/en/api/$prepareUriClass'>"
+                    . "$className</a>";
             } else {
                 $classReflection = new ReflectionClass($className);
 
@@ -666,15 +679,18 @@ class Debug
                     /**
                      * Generate a link to the official docs
                      */
-                    $classNameWithLink = '<a target="_new" href="https://secure.php.net/manual/en/class.'
-                        . $prepareInternalClass . '.php">'
-                        . $className . '</a>';
+                    $classNameWithLink = "<a target='_new' "
+                        . "href='https://secure.php.net/manual/en/class.$prepareInternalClass.php'>"
+                        . "$className</a>";
                 } else {
                     $classNameWithLink = $className;
                 }
             }
 
-            $html .= '<span class="error-class">' . $classNameWithLink . '</span>';
+            $html .= "
+                        <span class='error-class'>
+                            $classNameWithLink
+                        </span>";
 
             /**
              * Object access operator: static/instance
@@ -710,9 +726,9 @@ class Debug
                         $functionName
                     );
 
-                    $functionNameWithLink = '<a target="_new" href="https://secure.php.net/manual/en/function.'
-                        . $preparedFunctionName . '.php">'
-                        . $functionName . '</a>';
+                    $functionNameWithLink = "<a target='_new' "
+                        . "href='https://secure.php.net/manual/en/function.$preparedFunctionName.php'>"
+                        . "$functionName</a>";
                 } else {
                     $functionNameWithLink = $functionName;
                 }
@@ -721,9 +737,10 @@ class Debug
             }
         }
 
-        $html .= '<span class="error-function">'
-            . $functionNameWithLink
-            . '</span>';
+        $html .= "
+                        <span class='error-function'>
+                            $functionNameWithLink
+                        </span>";
 
         /**
          * Check for arguments in the function
@@ -735,9 +752,10 @@ class Debug
                  * Every argument is generated using getVarDump
                  * Append the HTML generated to the argument's list
                  */
-                $arguments[] = '<span class="error-parameter">'
-                    . $this->getVarDump($argument)
-                    . '</span>';
+                $arguments[] = "
+                        <span class='error-parameter'>
+                            " . $this->getVarDump($argument) . "
+                        </span>";
             }
 
             /**
@@ -757,8 +775,11 @@ class Debug
             /**
              * Realpath to the file and its line using a special header
              */
-            $html .= '<br/><div class="error-file">'
-                . "$file ($line)</div>";
+            $html .= "
+                        <br/>
+                        <div class='error-file'>
+                            $file ($line)
+                        </div>";
 
             /**
              * The developer can change if the files must be opened or not
@@ -797,16 +818,13 @@ class Debug
                     $lastLine = ($afterLine > $numberLines) ? $numberLines : $afterLine;
 
 
-                    $html .= '<pre class="prettyprint highlight:'
-                        . $firstLine . ':'
-                        . $line . ' linenums:'
-                        . $firstLine . '">';
+                    $html .= " 
+                        <pre class='prettyprint highlight:$firstLine:$line linenums:$firstLine . '>";
                 } else {
                     $firstLine = 1;
                     $lastLine  = $numberLines;
-                    $html      .= '<pre class="prettyprint highlight:'
-                        . $firstLine . ':'
-                        . $line . ' linenums error-scroll">';
+                    $html      .= "
+                        <pre class='prettyprint highlight:$firstLine:$line linenums error-scroll'>";
                 }
 
                 $counter = $firstLine;
@@ -858,11 +876,14 @@ class Debug
                     $counter++;
                 }
 
-                $html .= '</pre>';
+                $html      .= "
+                            </pre>";
             }
         }
 
-        return $html . '</td></tr>';
+        return $html . "
+                    </td>
+                </tr>";
     }
 
     /**
@@ -873,9 +894,11 @@ class Debug
      */
     private function printBacktrace(Throwable $exception): string
     {
-        $html = '<div id="error-tabs-1">'
-            . '<table style="border-collapse: collapse; border-spacing: 0; '
-            . 'text-align=center; width:100%">';
+        $html = "
+        
+        <div id='backtrace'>
+            <table style='border-collapse: collapse; border-spacing: 0; text-align=center; width:100%'>
+                <tbody>";
 
         $trace = $exception->getTrace();
         foreach ($trace as $number => $item) {
@@ -885,7 +908,7 @@ class Debug
             $html .= $this->showTraceItem($number, $item);
         }
 
-        return $html . '</table></div>';
+        return $html . $this->closeTable();
     }
 
     /**
@@ -895,7 +918,7 @@ class Debug
     {
         $html = '';
         if (is_array($this->data)) {
-            $html .= $this->printTableHeader('error-tabs-6', 'Key', 'Value');
+            $html .= $this->printTableHeader('variables', 'Key', 'Value');
 
             foreach ($this->data as $key => $value) {
                 $html .= '<tr><td class="key">'
@@ -904,7 +927,7 @@ class Debug
                     . '</td></tr>';
             }
 
-            $html .= '</table></div>';
+            $html .= $this->closeTable();
         }
 
         return $html;
@@ -915,14 +938,18 @@ class Debug
      */
     private function printIncludedFiles(): string
     {
-        $html = $this->printTableHeader('error-tabs-4', '#', 'Path');
+        $html = $this->printTableHeader('files', '#', 'Path');
 
         $files = get_included_files();
         foreach ($files as $key => $value) {
-            $html .= sprintf('<tr><td>%s</th><td>%s</td></tr>', $key, $value);
+            $html .= "
+                        <tr>
+                            <td>$key</td>
+                            <td>$value</td>
+                        </tr>";
         }
 
-        return $html . '</table></div>';
+        return $html . $this->closeTable();
     }
 
     /**
@@ -930,10 +957,19 @@ class Debug
      */
     private function printMemoryUsage(): string
     {
-        return $this->printTableHeader('error-tabs-5', 'Memory', 'Usage', "2")
+        return $this->printTableHeader('memory', 'Memory', '')
+            . "
+                    <tr>
+                        <td>
+                            Usage
+                        </td>
+                        <td>"
             . memory_get_usage(true)
-            . '</td></tr>'
-            . '</table></div>';
+            . "</td>
+                    </tr>
+                </tbody>
+                </table>
+            </div>";
     }
 
     /**
@@ -941,25 +977,28 @@ class Debug
      *
      * @return string
      */
-    private function printSuperglobal(array $source): string
+    private function printSuperglobal(array $source, string $div): string
     {
         /**
          * Print $_REQUEST or $_SERVER superglobal
          */
-        $html   = $this->printTableHeader('error-tabs-3', 'Key', 'Value');
+        $html   = $this->printTableHeader($div, 'Key', 'Value');
         $filter = $this->blacklist['server'] ?? [];
 
         foreach ($source as $key => $value) {
             if (true !== isset($filter[mb_strtolower($key)])) {
-                $html .= sprintf(
-                    '<tr><td class="key">%s</td><td>%s</td></tr>',
-                    $key,
-                    $this->getVarDump($value)
-                );
+                $html .= "
+                    <tr>
+                        <td class='key'>$key</td>
+                        <td>" . $this->getVarDump($value) . "</td>
+                    </tr>";
             }
         }
 
-        return $html . '</table></div>';
+        return $html . "
+                    </tbody>
+                </table>
+            </div>";
     }
 
     /**
@@ -978,14 +1017,32 @@ class Debug
     ): string {
         $span = (true === empty($colspan)) ? "" : ' colspan="' . $colspan . '"';
 
-        return '<div id="' . $divId . '">'
-            . '<table style="border-collapse: collapse; border-spacing: 0; '
-            . 'text-align: center" class="superglobal-detail">'
-            . '<tr><th'
-            . $span . '>'
-            . $headerOne
-            . '</th></tr><tr><td>'
-            . $headerTwo
-            . '</td><td>';
+        return "
+        <div id='$divId'>
+            <table style='border-collapse: collapse; border-spacing: 0; text-align: center' 
+                   class='superglobal-detail'>
+                <thead>
+                <tr>
+                    <th$span>$headerOne</th>
+                </tr>
+                <tr>
+                    <th>$headerTwo</th>
+                </tr>
+                </thead>
+                <tbody>";
+    }
+
+
+
+
+    /**
+     * @return string
+     */
+    private function closeTable(): string
+    {
+        return "
+                </tbody>
+            </table>
+        </div>";
     }
 }
