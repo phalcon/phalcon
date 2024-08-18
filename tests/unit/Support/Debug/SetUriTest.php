@@ -31,15 +31,16 @@ final class SetUriTest extends AbstractUnitTestCase
         $debug = new Debug();
         $uri   = 'https://something.com/test/';
 
-        $expected = sprintf(
-            '<link rel="stylesheet" type="text/css" ' .
-            'href="%1$sassets/jquery-ui/themes/ui-lightness/jquery-ui.min.css" />' .
-            '<link rel="stylesheet" type="text/css" ' .
-            'href="%1$sassets/jquery-ui/themes/ui-lightness/theme.css" />' .
-            '<link rel="stylesheet" type="text/css" ' .
-            'href="%1$sthemes/default/style.css" />',
-            $uri
-        );
+        $expected = "
+    <link href='" . $uri . "assets/jquery-ui/themes/ui-lightness/jquery-ui.min.css'
+          rel='stylesheet' 
+          type='text/css' />
+    <link href='" . $uri . "assets/jquery-ui/themes/ui-lightness/theme.css'
+          rel='stylesheet' 
+          type='text/css' />
+    <link href='" . $uri . "themes/default/style.css'
+          rel='stylesheet' 
+          type='text/css' />";
 
         $debug->setUri($uri);
 
