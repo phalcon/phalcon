@@ -22,6 +22,8 @@ use Phalcon\Translate\Adapter\Csv;
 use Phalcon\Translate\Exception;
 use Phalcon\Translate\InterpolatorFactory;
 
+use PHPUnit\Framework\Attributes\Test;
+
 use function dataDir;
 
 final class ConstructTest extends AbstractUnitTestCase
@@ -36,6 +38,7 @@ final class ConstructTest extends AbstractUnitTestCase
      * @author Phalcon Team <team@phalcon.io>
      * @since  2020-09-09
      */
+    #[Test]
     public function testTranslateAdapterCsvConstruct(): void
     {
         $language   = $this->getCsvConfig()['en'];
@@ -53,6 +56,7 @@ final class ConstructTest extends AbstractUnitTestCase
      * @author Phalcon Team <team@phalcon.io>
      * @since  2020-09-09
      */
+    #[Test]
     public function testTranslateAdapterCsvContentParamExist(): void
     {
         $this->expectException(Exception::class);
@@ -70,6 +74,7 @@ final class ConstructTest extends AbstractUnitTestCase
      * @author Phalcon Team <team@phalcon.io>
      * @since  2020-09-09
      */
+    #[Test]
     public function testTranslateAdapterCsvErrorLoadingFile(): void
     {
         $message = "Error opening translation file '"

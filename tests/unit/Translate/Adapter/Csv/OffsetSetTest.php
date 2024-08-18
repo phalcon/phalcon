@@ -18,6 +18,7 @@ use Phalcon\Tests\AbstractUnitTestCase;
 use Phalcon\Translate\Adapter\Csv;
 use Phalcon\Translate\Exception;
 use Phalcon\Translate\InterpolatorFactory;
+use PHPUnit\Framework\Attributes\Test;
 
 final class OffsetSetTest extends AbstractUnitTestCase
 {
@@ -31,6 +32,7 @@ final class OffsetSetTest extends AbstractUnitTestCase
      * @author Phalcon Team <team@phalcon.io>
      * @since  2020-09-09
      */
+    #[Test]
     public function testTranslateAdapterCsvOffsetSet(): void
     {
         $this->expectException(Exception::class);

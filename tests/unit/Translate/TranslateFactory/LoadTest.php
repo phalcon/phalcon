@@ -19,6 +19,8 @@ use Phalcon\Translate\Adapter\Gettext;
 use Phalcon\Translate\InterpolatorFactory;
 use Phalcon\Translate\TranslateFactory;
 
+use PHPUnit\Framework\Attributes\Test;
+
 use function strtolower;
 
 use const PHP_OS;
@@ -42,6 +44,7 @@ final class LoadTest extends AbstractUnitTestCase
      * @author Wojciech Ślawski <jurigag@gmail.com>
      * @since  2017-03-02
      */
+    #[Test]
     public function testTranslateFactoryLoadArray(): void
     {
         /**
@@ -69,6 +72,7 @@ final class LoadTest extends AbstractUnitTestCase
      * @author Wojciech Ślawski <jurigag@gmail.com>
      * @since  2017-03-02
      */
+    #[Test]
     public function testTranslateFactoryLoadConfig(): void
     {
         /**

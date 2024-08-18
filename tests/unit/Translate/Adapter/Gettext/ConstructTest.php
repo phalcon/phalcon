@@ -21,7 +21,10 @@ use Phalcon\Translate\Adapter\AdapterInterface;
 use Phalcon\Translate\Adapter\Gettext;
 use Phalcon\Translate\Exception;
 use Phalcon\Translate\InterpolatorFactory;
+use PHPUnit\Framework\Attributes\RequiresPhpExtension;
+use PHPUnit\Framework\Attributes\Test;
 
+#[RequiresPhpExtension('gettext')]
 final class ConstructTest extends AbstractUnitTestCase
 {
     use TranslateGettextTrait;
@@ -34,6 +37,7 @@ final class ConstructTest extends AbstractUnitTestCase
      * @author Phalcon Team <team@phalcon.io>
      * @since  2020-09-09
      */
+    #[Test]
     public function testTranslateAdapterGettextConstruct(): void
     {
         $params     = $this->getGettextConfig();
@@ -52,6 +56,7 @@ final class ConstructTest extends AbstractUnitTestCase
      * @author Phalcon Team <team@phalcon.io>
      * @since  2020-09-09
      */
+    #[Test]
     public function testTranslateAdapterGettextConstructNoGettextException(): void
     {
         $this->expectException(\Exception::class);
@@ -74,6 +79,7 @@ final class ConstructTest extends AbstractUnitTestCase
      * @author Phalcon Team <team@phalcon.io>
      * @since  2020-09-09
      */
+    #[Test]
     public function testTranslateAdapterGettextContentParamDirectoryExist(): void
     {
         $this->expectException(Exception::class);
@@ -96,6 +102,7 @@ final class ConstructTest extends AbstractUnitTestCase
      * @author Phalcon Team <team@phalcon.io>
      * @since  2020-09-09
      */
+    #[Test]
     public function testTranslateAdapterGettextContentParamLocaleExist(): void
     {
         $this->expectException(Exception::class);

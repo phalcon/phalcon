@@ -18,9 +18,14 @@ use Phalcon\Tests\AbstractUnitTestCase;
 use Phalcon\Translate\Adapter\Gettext;
 use Phalcon\Translate\InterpolatorFactory;
 
+use PHPUnit\Framework\Attributes\RequiresPhpExtension;
+
+use PHPUnit\Framework\Attributes\Test;
+
 use function dataDir;
 use function supportDir;
 
+#[RequiresPhpExtension('gettext')]
 final class GetSetDirectoryTest extends AbstractUnitTestCase
 {
     use TranslateGettextTrait;
@@ -33,6 +38,7 @@ final class GetSetDirectoryTest extends AbstractUnitTestCase
      * @author Phalcon Team <team@phalcon.io>
      * @since  2020-09-09
      */
+    #[Test]
     public function testTranslateAdapterGettextGetSetDirectory(): void
     {
         $params = $this->getGettextConfig();

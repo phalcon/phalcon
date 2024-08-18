@@ -15,6 +15,7 @@ namespace Phalcon\Tests\Unit\Translate\Interpolator\AssociativeArray;
 
 use Phalcon\Tests\AbstractUnitTestCase;
 use Phalcon\Translate\Interpolator\AssociativeArray;
+use PHPUnit\Framework\Attributes\Test;
 
 final class ReplacePlaceholdersTest extends AbstractUnitTestCase
 {
@@ -27,6 +28,7 @@ final class ReplacePlaceholdersTest extends AbstractUnitTestCase
      * @author Phalcon Team <team@phalcon.io>
      * @since  2020-09-09
      */
+    #[Test]
     public function testTranslateInterpolatorAssociativearrayReplacePlaceholders(): void
     {
         $interpolator = new AssociativeArray();

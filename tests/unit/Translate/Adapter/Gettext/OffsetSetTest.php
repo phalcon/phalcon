@@ -18,7 +18,10 @@ use Phalcon\Tests\AbstractUnitTestCase;
 use Phalcon\Translate\Adapter\Gettext;
 use Phalcon\Translate\Exception;
 use Phalcon\Translate\InterpolatorFactory;
+use PHPUnit\Framework\Attributes\RequiresPhpExtension;
+use PHPUnit\Framework\Attributes\Test;
 
+#[RequiresPhpExtension('gettext')]
 final class OffsetSetTest extends AbstractUnitTestCase
 {
     use TranslateGettextTrait;
@@ -31,6 +34,7 @@ final class OffsetSetTest extends AbstractUnitTestCase
      * @author Phalcon Team <team@phalcon.io>
      * @since  2020-09-09
      */
+    #[Test]
     public function testTranslateAdapterGettextOffsetSet(): void
     {
         $this->expectException(Exception::class);

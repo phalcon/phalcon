@@ -19,6 +19,7 @@ use Phalcon\Tests\AbstractUnitTestCase;
 use Phalcon\Translate\Adapter\NativeArray;
 use Phalcon\Translate\Exception;
 use Phalcon\Translate\InterpolatorFactory;
+use PHPUnit\Framework\Attributes\Test;
 
 final class NotFoundTest extends AbstractUnitTestCase
 {
@@ -32,6 +33,7 @@ final class NotFoundTest extends AbstractUnitTestCase
      * @author Phalcon Team <team@phalcon.io>
      * @since  2020-09-09
      */
+    #[Test]
     public function testTranslateAdapterNativearrayNotFound(): void
     {
         $language = $this->getArrayConfig()['en'];
@@ -56,6 +58,7 @@ final class NotFoundTest extends AbstractUnitTestCase
      * @author Phalcon Team <team@phalcon.io>
      * @since  2020-09-09
      */
+    #[Test]
     public function testTranslateAdapterNativearrayNotFoundCustom(): void
     {
         $language = $this->getArrayConfig()['en'];
@@ -80,6 +83,7 @@ final class NotFoundTest extends AbstractUnitTestCase
      * @author Phalcon Team <team@phalcon.io>
      * @since  2020-09-09
      */
+    #[Test]
     public function testTranslateAdapterNativearrayNotFoundTriggerError(): void
     {
         $this->expectException(Exception::class);
@@ -107,6 +111,7 @@ final class NotFoundTest extends AbstractUnitTestCase
      * @author Phalcon Team <team@phalcon.io>
      * @since  2020-09-09
      */
+    #[Test]
     public function testTranslateAdapterNativearrayNotFoundTriggerErrorRandomVaue(): void
     {
         $this->expectException(Exception::class);

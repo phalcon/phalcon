@@ -17,7 +17,9 @@ use Phalcon\Tests\Fixtures\Traits\TranslateGettextTrait;
 use Phalcon\Tests\AbstractUnitTestCase;
 use Phalcon\Translate\Adapter\Gettext;
 use Phalcon\Translate\InterpolatorFactory;
+use PHPUnit\Framework\Attributes\RequiresPhpExtension;
 
+#[RequiresPhpExtension('gettext')]
 final class NqueryTest extends AbstractUnitTestCase
 {
     use TranslateGettextTrait;
