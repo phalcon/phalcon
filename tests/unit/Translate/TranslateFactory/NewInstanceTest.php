@@ -20,7 +20,6 @@ use Phalcon\Translate\Adapter\Csv;
 use Phalcon\Translate\Exception;
 use Phalcon\Translate\InterpolatorFactory;
 use Phalcon\Translate\TranslateFactory;
-
 use PHPUnit\Framework\Attributes\Test;
 
 use function uniqid;

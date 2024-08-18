@@ -21,7 +21,6 @@ use Phalcon\Translate\Adapter\AdapterInterface;
 use Phalcon\Translate\Adapter\Csv;
 use Phalcon\Translate\Exception;
 use Phalcon\Translate\InterpolatorFactory;
-
 use PHPUnit\Framework\Attributes\Test;
 
 use function dataDir;

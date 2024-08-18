@@ -18,7 +18,6 @@ use Phalcon\Tests\AbstractUnitTestCase;
 use Phalcon\Translate\Adapter\Gettext;
 use Phalcon\Translate\InterpolatorFactory;
 use Phalcon\Translate\TranslateFactory;
-
 use PHPUnit\Framework\Attributes\Test;
 
 use function strtolower;

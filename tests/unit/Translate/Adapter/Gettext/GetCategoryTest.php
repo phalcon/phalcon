@@ -17,9 +17,7 @@ use Phalcon\Tests\Fixtures\Traits\TranslateGettextTrait;
 use Phalcon\Tests\AbstractUnitTestCase;
 use Phalcon\Translate\Adapter\Gettext;
 use Phalcon\Translate\InterpolatorFactory;
-
 use PHPUnit\Framework\Attributes\RequiresPhpExtension;
-
 use PHPUnit\Framework\Attributes\Test;
 
 use const LC_MESSAGES;
