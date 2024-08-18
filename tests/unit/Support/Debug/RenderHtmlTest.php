@@ -35,6 +35,7 @@ final class RenderHtmlTest extends AbstractUnitTestCase
         $debug->setShowBackTrace(true);
 
         $actual = $debug->renderHtml($exception);
+
         $this->assertStringContainsString(
             '<div class="error-info">',
             $actual
