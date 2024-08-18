@@ -16,6 +16,8 @@ namespace Phalcon\Tests\Fixtures\Traits;
 use Phalcon\Translate\Adapter\Csv;
 use Phalcon\Translate\Exception;
 use Phalcon\Translate\InterpolatorFactory;
+use PHPUnit\Framework\Attributes\DataProvider;
+use PHPUnit\Framework\Attributes\Test;
 
 /**
  * Trait TranslateCsvHelperTrait
@@ -119,13 +121,13 @@ trait TranslateCsvHelperTrait
     /**
      * Tests Phalcon\Translate\Adapter\Csv :: query()
      *
-     * @dataProvider getQueryProvider
-     *
      * @throws Exception
      *
      * @author       Phalcon Team <team@phalcon.io>
      * @since        2020-09-09
      */
+    #[Test]
+    #[DataProvider('getQueryProvider')]
     public function testTranslateAdapterCsvQuery(
         string $code,
         array $tests
@@ -144,13 +146,13 @@ trait TranslateCsvHelperTrait
      * Tests Phalcon\Translate\Adapter\Csv :: query() -
      * variable substitution in string with no variables
      *
-     * @dataProvider getQueryProvider
-     *
      * @throws Exception
      *
      * @author       Phalcon Team <team@phalcon.io>
      * @since        2020-09-09
      */
+    #[Test]
+    #[DataProvider('getQueryProvider')]
     public function testTranslateAdapterCsvVariableSubstitutionNoVariables(
         string $code,
         array $tests
@@ -174,13 +176,13 @@ trait TranslateCsvHelperTrait
      * Tests Phalcon\Translate\Adapter\Csv :: query() -
      * variable substitution in string (one variable)
      *
-     * @dataProvider getQueryOneVariable
-     *
      * @throws Exception
      *
      * @author       Phalcon Team <team@phalcon.io>
      * @since        2020-09-09
      */
+    #[Test]
+    #[DataProvider('getQueryOneVariable')]
     public function testTranslateAdapterCsvVariableSubstitutionOneVariable(
         string $code,
         array $tests
@@ -198,13 +200,13 @@ trait TranslateCsvHelperTrait
      * Tests Phalcon\Translate\Adapter\Csv :: query() -
      * variable substitution in string (two variables)
      *
-     * @dataProvider getQueryTwoVariables
-     *
      * @throws Exception
      *
      * @author       Phalcon Team <team@phalcon.io>
      * @since        2020-09-09
      */
+    #[Test]
+    #[DataProvider('getQueryTwoVariables')]
     public function testTranslateAdapterCsvVariableSubstitutionTwoVariable(
         string $code,
         array $tests
@@ -232,6 +234,7 @@ trait TranslateCsvHelperTrait
      * @author Phalcon Team <team@phalcon.io>
      * @since  2020-09-09
      */
+    #[Test]
     public function testTranslateAdapterCsvWithArrayAccessAndUTF8Strings()
     {
         $language   = $this->getCsvConfig()['ru'];

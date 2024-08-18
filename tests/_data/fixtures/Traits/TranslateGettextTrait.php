@@ -13,8 +13,6 @@ declare(strict_types=1);
 
 namespace Phalcon\Tests\Fixtures\Traits;
 
-use function extension_loaded;
-
 trait TranslateGettextTrait
 {
     /**
@@ -22,10 +20,6 @@ trait TranslateGettextTrait
      */
     public function _setUp()
     {
-        if (!extension_loaded('gettext')) {
-            $this->markTestSkipped('Warning: gettext extension is not loaded');
-        }
-
         if (!setlocale(LC_ALL, 'en_US.utf8')) {
             $this->markTestSkipped('Locale en_US.utf8 not enabled');
         }

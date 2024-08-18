@@ -13,6 +13,8 @@ declare(strict_types=1);
 
 namespace Phalcon\Tests\Fixtures\Helpers;
 
+use PHPUnit\Framework\Attributes\Test;
+
 abstract class AbstractTagHelper extends AbstractTagSetup
 {
     /**
@@ -31,6 +33,7 @@ abstract class AbstractTagHelper extends AbstractTagSetup
      * @author Phalcon Team <team@phalcon.io>
      * @since  2014-09-05
      */
+    #[Test]
     public function testTagFieldStringParameter()
     {
         $options  = 'x_name';
@@ -46,6 +49,7 @@ abstract class AbstractTagHelper extends AbstractTagSetup
      * @author Phalcon Team <team@phalcon.io>
      * @since  2014-09-05
      */
+    #[Test]
     public function testTagFieldArrayParameter()
     {
         $options = [
@@ -65,6 +69,7 @@ abstract class AbstractTagHelper extends AbstractTagSetup
      * @author Phalcon Team <team@phalcon.io>
      * @since  2014-09-05
      */
+    #[Test]
     public function testTagFieldArrayParameterWithId()
     {
         $options = [
@@ -87,6 +92,7 @@ abstract class AbstractTagHelper extends AbstractTagSetup
      * @author Phalcon Team <team@phalcon.io>
      * @since  2014-09-05
      */
+    #[Test]
     public function testTagFieldArrayParameterWithNameNoId()
     {
         $options = [
@@ -108,6 +114,7 @@ abstract class AbstractTagHelper extends AbstractTagSetup
      * @author Phalcon Team <team@phalcon.io>
      * @since  2014-09-05
      */
+    #[Test]
     public function testTagFieldWithSetDefault()
     {
         $options = [
@@ -130,6 +137,7 @@ abstract class AbstractTagHelper extends AbstractTagSetup
      * @author Phalcon Team <team@phalcon.io>
      * @since  2014-09-05
      */
+    #[Test]
     public function testTagFieldWithDisplayTo()
     {
         $options = [
@@ -152,6 +160,7 @@ abstract class AbstractTagHelper extends AbstractTagSetup
      * @author Phalcon Team <team@phalcon.io>
      * @since  2014-09-05
      */
+    #[Test]
     public function testTagFieldWithSetDefaultElementNotPresent()
     {
         $options = [
@@ -174,6 +183,7 @@ abstract class AbstractTagHelper extends AbstractTagSetup
      * @author Phalcon Team <team@phalcon.io>
      * @since  2014-09-05
      */
+    #[Test]
     public function testTagFieldWithDisplayToElementNotPresent()
     {
         $options = [

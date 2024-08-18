@@ -440,13 +440,6 @@ class Tag
         if (null === self::$escaperService) {
             $container = self::getDI();
 
-            if (null === $container) {
-                throw new Exception(
-                    "A dependency injection container is required "
-                    . "to access the 'escaper' service"
-                );
-            }
-
             self::$escaperService = $container->getShared("escaper");
         }
 
@@ -528,13 +521,6 @@ class Tag
     {
         if (null === self::$urlService) {
             $container = self::getDI();
-
-            if (null === $container) {
-                throw new Exception(
-                    "A dependency injection container is required "
-                    . "to access the 'url' service"
-                );
-            }
 
             self::$urlService = $container->getShared("url");
         }

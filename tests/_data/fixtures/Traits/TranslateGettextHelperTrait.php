@@ -16,6 +16,8 @@ namespace Phalcon\Tests\Fixtures\Traits;
 use Phalcon\Translate\Adapter\Gettext;
 use Phalcon\Translate\Exception;
 use Phalcon\Translate\InterpolatorFactory;
+use PHPUnit\Framework\Attributes\DataProvider;
+use PHPUnit\Framework\Attributes\Test;
 
 trait TranslateGettextHelperTrait
 {
@@ -28,6 +30,7 @@ trait TranslateGettextHelperTrait
      * @author Phalcon Team <team@phalcon.io>
      * @since  2020-09-09
      */
+    #[Test]
     public function testTranslateAdapterGettextWithArrayAccessAndUTF8Strings()
     {
         $language = $this->getGettextConfig();
@@ -48,13 +51,13 @@ trait TranslateGettextHelperTrait
     /**
      * Tests Phalcon\Translate\Adapter\Gettext :: query()
      *
-     * @dataProvider getQueryProvider
-     *
      * @throws Exception
      *
      * @author       Phalcon Team <team@phalcon.io>
      * @since        2020-09-09
      */
+    #[Test]
+    #[DataProvider('getQueryProvider')]
     public function translateAdapterGettextQuery(
         array $tests
     ): void {
@@ -71,13 +74,13 @@ trait TranslateGettextHelperTrait
      * Tests Phalcon\Translate\Adapter\Gettext :: query() -
      * variable substitution in string with no variables
      *
-     * @dataProvider getQueryProvider
-     *
      * @throws Exception
      *
      * @author       Phalcon Team <team@phalcon.io>
      * @since        2020-09-09
      */
+    #[Test]
+    #[DataProvider('getQueryProvider')]
     public function translateAdapterGettextVariableSubstitutionNoVariables(
         array $tests
     ): void {
@@ -99,13 +102,13 @@ trait TranslateGettextHelperTrait
      * Tests Phalcon\Translate\Adapter\Gettext :: query() -
      * variable substitution in string (one variable)
      *
-     * @dataProvider getQueryOneVariable
-     *
      * @throws Exception
      *
      * @author       Phalcon Team <team@phalcon.io>
      * @since        2020-09-09
      */
+    #[Test]
+    #[DataProvider('getQueryOneVariable')]
     public function translateAdapterGettextVariableSubstitutionOneVariable(
         array $tests
     ): void {
@@ -122,13 +125,13 @@ trait TranslateGettextHelperTrait
      * Tests Phalcon\Translate\Adapter\Gettext :: query() -
      * variable substitution in string (two variables)
      *
-     * @dataProvider getQueryTwoVariables
-     *
      * @throws Exception
      *
      * @author       Phalcon Team <team@phalcon.io>
      * @since        2020-09-09
      */
+    #[Test]
+    #[DataProvider('getQueryTwoVariables')]
     public function translateAdapterGettextVariableSubstitutionTwoVariable(
         array $tests
     ): void {
