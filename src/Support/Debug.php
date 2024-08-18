@@ -154,7 +154,8 @@ class Debug
             . $version->getPart(Version::VERSION_MAJOR)
             . "."
             . $version->getPart(Version::VERSION_MEDIUM)
-            . "/en/";
+            . "/"
+        ;
 
         return "<div class='version'>
     Phalcon Framework <a href='$link' target='_new'>" . $version->get() . "</a>

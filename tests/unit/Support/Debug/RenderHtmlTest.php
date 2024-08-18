@@ -20,7 +20,9 @@ use Phalcon\Tests\AbstractUnitTestCase;
 
 final class RenderHtmlTest extends AbstractUnitTestCase
 {
-    /**
+    private const ERROR_DIV = "<div class='error-info'>";
+
+        /**
      * Tests Phalcon\Debug :: renderHtml() - with backtrace
      *
      * @return void
@@ -36,28 +38,25 @@ final class RenderHtmlTest extends AbstractUnitTestCase
 
         $actual = $debug->renderHtml($exception);
 
+        $this->assertStringContainsString(self::ERROR_DIV, $actual);
         $this->assertStringContainsString(
-            '<div class="error-info">',
+            "<li><a href='#backtrace'>Backtrace</a></li>",
             $actual
         );
         $this->assertStringContainsString(
-            '<li><a href="#error-tabs-1">Backtrace</a></li>',
+            "<li><a href='#request'>Request</a></li>",
             $actual
         );
         $this->assertStringContainsString(
-            '<li><a href="#error-tabs-2">Request</a></li>',
+            "<li><a href='#server'>Server</a></li>",
             $actual
         );
         $this->assertStringContainsString(
-            '<li><a href="#error-tabs-3">Server</a></li>',
+            "<li><a href='#files'>Included Files</a></li>",
             $actual
         );
         $this->assertStringContainsString(
-            '<li><a href="#error-tabs-4">Included Files</a></li>',
-            $actual
-        );
-        $this->assertStringContainsString(
-            '<li><a href="#error-tabs-5">Memory</a></li>',
+            "<li><a href='#memory'>Memory</a></li>",
             $actual
         );
 
@@ -85,28 +84,25 @@ final class RenderHtmlTest extends AbstractUnitTestCase
 
         $actual = $debug->renderHtml($exception);
 
+        $this->assertStringContainsString(self::ERROR_DIV, $actual);
         $this->assertStringContainsString(
-            '<div class="error-info">',
+            "<li><a href='#backtrace'>Backtrace</a></li>",
             $actual
         );
         $this->assertStringContainsString(
-            '<li><a href="#error-tabs-1">Backtrace</a></li>',
+            "<li><a href='#request'>Request</a></li>",
             $actual
         );
         $this->assertStringContainsString(
-            '<li><a href="#error-tabs-2">Request</a></li>',
+            "<li><a href='#server'>Server</a></li>",
             $actual
         );
         $this->assertStringContainsString(
-            '<li><a href="#error-tabs-3">Server</a></li>',
+            "<li><a href='#files'>Included Files</a></li>",
             $actual
         );
         $this->assertStringContainsString(
-            '<li><a href="#error-tabs-4">Included Files</a></li>',
-            $actual
-        );
-        $this->assertStringContainsString(
-            '<li><a href="#error-tabs-5">Memory</a></li>',
+            "<li><a href='#memory'>Memory</a></li>",
             $actual
         );
 
@@ -184,43 +180,42 @@ final class RenderHtmlTest extends AbstractUnitTestCase
             . $version->getPart(Version::VERSION_MEDIUM);
 
 
-        $expected = '<html><head>'
-            . '<title>Phalcon\Support\Exception: exception message</title>'
-            . '<link rel="stylesheet" type="text/css" '
-            . 'href="https://assets.phalcon.io/debug/6.0.x/assets/'
-            . 'jquery-ui/themes/ui-lightness/jquery-ui.min.css" />'
-            . '<link rel="stylesheet" type="text/css" '
-            . 'href="https://assets.phalcon.io/debug/6.0.x/assets/'
-            . 'jquery-ui/themes/ui-lightness/theme.css" />'
-            . '<link rel="stylesheet" type="text/css" '
-            . 'href="https://assets.phalcon.io/debug/6.0.x/themes/default/style.css" />'
-            . '</head><body>'
-            . '<div class="version">Phalcon Framework '
-            . '<a href="https://docs.phalcon.io/' . $link . '/en/" '
-            . 'target="_new">' . $versionString . '</a>'
-            . '</div>'
-            . '<div align="center">'
-            . '<div class="error-main">'
-            . '<h1>Phalcon\Support\Exception: exception message</h1>'
-            . '<span class="error-file">'
-            . __FILE__
-            . ' (175)</span>'
-            . '</div>'
-            . '<script type="application/javascript" '
-            . 'src="https://assets.phalcon.io/debug/6.0.x/assets/'
-            . 'jquery/dist/jquery.min.js"></script>'
-            . '<script type="application/javascript" '
-            . 'src="https://assets.phalcon.io/debug/6.0.x/assets/'
-            . 'jquery-ui/jquery-ui.min.js"></script>'
-            . '<script type="application/javascript" '
-            . 'src="https://assets.phalcon.io/debug/6.0.x/assets/'
-            . 'jquery.scrollTo/jquery.scrollTo.min.js"></script>'
-            . '<script type="application/javascript" '
-            . 'src="https://assets.phalcon.io/debug/6.0.x/prettify/prettify.js"></script>'
-            . '<script type="application/javascript" '
-            . 'src="https://assets.phalcon.io/debug/6.0.x/pretty.js"></script>'
-            . '</div>'
-            . '</body></html>';
+        $expected = "<!DOCTYPE html>
+<html lang='en'>
+<head>
+    <title>Phalcon\Support\Exception:exception message</title>
+    <link href='https://assets.phalcon.io/debug/6.0.x/assets/jquery-ui/themes/ui-lightness/jquery-ui.min.css'
+          rel='stylesheet' 
+          type='text/css' />
+    <link href='https://assets.phalcon.io/debug/6.0.x/assets/jquery-ui/themes/ui-lightness/theme.css'
+          rel='stylesheet' 
+          type='text/css' />
+    <link href='https://assets.phalcon.io/debug/6.0.x/themes/default/style.css'
+          rel='stylesheet' 
+          type='text/css' />
+</head>
+<body>
+<div class='version'>
+    Phalcon Framework <a href='https://docs.phalcon.io/$link/' target='_new'>$versionString</a>
+</div>
+<div align='center'>
+    <div class='error-main'>
+        <h1>Phalcon\Support\Exception: exception message</h1>
+        <span class='error-file'>" . __FILE__ . " (172)</span>
+    </div>
+    <script type='application/javascript' 
+            src='https://assets.phalcon.io/debug/6.0.x/assets/jquery/dist/jquery.min.js'></script>
+    <script type='application/javascript' 
+            src='https://assets.phalcon.io/debug/6.0.x/assets/jquery-ui/jquery-ui.min.js'></script>
+    <script type='application/javascript' 
+            src='https://assets.phalcon.io/debug/6.0.x/assets/jquery.scrollTo/jquery.scrollTo.min.js'></script>
+    <script type='application/javascript' 
+            src='https://assets.phalcon.io/debug/6.0.x/prettify/prettify.js'></script>
+    <script type='application/javascript' 
+            src='https://assets.phalcon.io/debug/6.0.x/pretty.js'></script>
+        </div>
+    </body>
+</html>";
 
         $actual = $debug->renderHtml($exception);
         $this->assertSame($expected, $actual);

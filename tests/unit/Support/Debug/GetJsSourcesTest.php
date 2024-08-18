@@ -33,17 +33,17 @@ final class GetJsSourcesTest extends AbstractUnitTestCase
         $debug = new Debug();
         $uri   = 'https://assets.phalcon.io/debug/6.0.x/';
 
-        $expected = sprintf(
-            '<script type="application/javascript" ' .
-            'src="%1$sassets/jquery/dist/jquery.min.js"></script>' .
-            '<script type="application/javascript" ' .
-            'src="%1$sassets/jquery-ui/jquery-ui.min.js"></script>' .
-            '<script type="application/javascript" ' .
-            'src="%1$sassets/jquery.scrollTo/jquery.scrollTo.min.js"></script>' .
-            '<script type="application/javascript" src="%1$sprettify/prettify.js"></script>' .
-            '<script type="application/javascript" src="%1$spretty.js"></script>',
-            $uri
-        );
+        $expected = "
+    <script type='application/javascript' 
+            src='{$uri}assets/jquery/dist/jquery.min.js'></script>
+    <script type='application/javascript' 
+            src='{$uri}assets/jquery-ui/jquery-ui.min.js'></script>
+    <script type='application/javascript' 
+            src='{$uri}assets/jquery.scrollTo/jquery.scrollTo.min.js'></script>
+    <script type='application/javascript' 
+            src='{$uri}prettify/prettify.js'></script>
+    <script type='application/javascript' 
+            src='{$uri}pretty.js'></script>";
 
         $actual = $debug->getJsSources();
         $this->assertSame($expected, $actual);
