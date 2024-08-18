@@ -16,6 +16,8 @@ namespace Phalcon\Tests\Fixtures\Traits;
 use Phalcon\Translate\Adapter\NativeArray;
 use Phalcon\Translate\Exception;
 use Phalcon\Translate\InterpolatorFactory;
+use PHPUnit\Framework\Attributes\DataProvider;
+use PHPUnit\Framework\Attributes\Test;
 
 trait TranslateNativeArrayHelperTrait
 {
@@ -112,13 +114,13 @@ trait TranslateNativeArrayHelperTrait
     /**
      * Tests Phalcon\Translate\Adapter\NativeArray :: query()
      *
-     * @dataProvider getQueryProvider
-     *
      * @throws Exception
      *
      * @author       Phalcon Team <team@phalcon.io>
      * @since        2020-09-09
      */
+    #[Test]
+    #[DataProvider('getQueryProvider')]
     public function testTranslateAdapterNativearrayQuery(
         string $code,
         array $tests
@@ -149,6 +151,8 @@ trait TranslateNativeArrayHelperTrait
      * @author       Phalcon Team <team@phalcon.io>
      * @since        2020-09-09
      */
+    #[Test]
+    #[DataProvider('getQueryProvider')]
     public function testTranslateAdapterNativearrayVariableSubstitutionNoVariables(
         string $code,
         array $tests
@@ -181,6 +185,8 @@ trait TranslateNativeArrayHelperTrait
      *
      * @throws Exception
      */
+    #[Test]
+    #[DataProvider('getQueryOneVariable')]
     public function testTranslateAdapterNativearrayVariableSubstitutionOneVariable(
         string $code,
         array $tests
@@ -210,6 +216,8 @@ trait TranslateNativeArrayHelperTrait
      * @author       Phalcon Team <team@phalcon.io>
      * @since        2020-09-09
      */
+    #[Test]
+    #[DataProvider('getQueryTwoVariables')]
     public function testTranslateAdapterNativearrayVariableSubstitutionTwoVariable(
         string $code,
         array $tests
@@ -243,6 +251,7 @@ trait TranslateNativeArrayHelperTrait
      * @author Phalcon Team <team@phalcon.io>
      * @since  2020-09-09
      */
+    #[Test]
     public function testWithArrayAccessAndUTF8Strings(): void
     {
         $language = $this->getArrayConfig()['ru'];
