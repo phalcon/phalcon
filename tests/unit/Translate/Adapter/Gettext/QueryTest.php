@@ -16,7 +16,9 @@ namespace Phalcon\Tests\Unit\Translate\Adapter\Gettext;
 use Phalcon\Tests\Fixtures\Traits\TranslateGettextHelperTrait;
 use Phalcon\Tests\Fixtures\Traits\TranslateGettextTrait;
 use Phalcon\Tests\AbstractUnitTestCase;
+use PHPUnit\Framework\Attributes\RequiresPhpExtension;
 
+#[RequiresPhpExtension('gettext')]
 final class QueryTest extends AbstractUnitTestCase
 {
     use TranslateGettextTrait;

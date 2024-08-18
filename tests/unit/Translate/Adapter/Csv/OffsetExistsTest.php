@@ -17,6 +17,7 @@ use Phalcon\Tests\Fixtures\Traits\TranslateCsvTrait;
 use Phalcon\Tests\AbstractUnitTestCase;
 use Phalcon\Translate\Adapter\Csv;
 use Phalcon\Translate\InterpolatorFactory;
+use PHPUnit\Framework\Attributes\Test;
 
 final class OffsetExistsTest extends AbstractUnitTestCase
 {
@@ -30,6 +31,7 @@ final class OffsetExistsTest extends AbstractUnitTestCase
      * @author Phalcon Team <team@phalcon.io>
      * @since  2020-09-09
      */
+    #[Test]
     public function testTranslateAdapterCsvOffsetExists(): void
     {
         $language   = $this->getCsvConfig()['en'];

@@ -15,6 +15,7 @@ namespace Phalcon\Tests\Unit\Translate\Interpolator\IndexedArray;
 
 use Phalcon\Tests\AbstractUnitTestCase;
 use Phalcon\Translate\Interpolator\IndexedArray;
+use PHPUnit\Framework\Attributes\Test;
 
 final class ReplacePlaceholdersTest extends AbstractUnitTestCase
 {
@@ -27,6 +28,7 @@ final class ReplacePlaceholdersTest extends AbstractUnitTestCase
      * @author Phalcon Team <team@phalcon.io>
      * @since  2020-09-09
      */
+    #[Test]
     public function testTranslateInterpolatorIndexedarrayReplacePlaceholders(): void
     {
         $interpolator = new IndexedArray();

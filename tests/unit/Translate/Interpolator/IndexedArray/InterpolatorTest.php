@@ -16,6 +16,7 @@ namespace Phalcon\Tests\Unit\Translate\Interpolator\IndexedArray;
 use Phalcon\Tests\AbstractUnitTestCase;
 use Phalcon\Translate\Adapter\NativeArray;
 use Phalcon\Translate\InterpolatorFactory;
+use PHPUnit\Framework\Attributes\Test;
 
 final class InterpolatorTest extends AbstractUnitTestCase
 {
@@ -27,6 +28,7 @@ final class InterpolatorTest extends AbstractUnitTestCase
      * @author Phalcon Team <team@phalcon.io>
      * @since  2020-09-09
      */
+    #[Test]
     public function testTranslateInterpolatorIndexedArrayInterpolator(): void
     {
         $language = [

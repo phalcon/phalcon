@@ -20,6 +20,7 @@ use Phalcon\Translate\Adapter\AdapterInterface;
 use Phalcon\Translate\Adapter\NativeArray;
 use Phalcon\Translate\Exception;
 use Phalcon\Translate\InterpolatorFactory;
+use PHPUnit\Framework\Attributes\Test;
 
 final class ConstructTest extends AbstractUnitTestCase
 {
@@ -33,6 +34,7 @@ final class ConstructTest extends AbstractUnitTestCase
      * @author Phalcon Team <team@phalcon.io>
      * @since  2020-09-09
      */
+    #[Test]
     public function testTranslateAdapterNativeArrayConstruct(): void
     {
         $language = $this->getArrayConfig()['en'];
@@ -64,6 +66,7 @@ final class ConstructTest extends AbstractUnitTestCase
      * @author Phalcon Team <team@phalcon.io>
      * @since  2020-09-09
      */
+    #[Test]
     public function testTranslateAdapterNativeArrayContentNotArray(): void
     {
         $this->expectException(Exception::class);
@@ -85,6 +88,7 @@ final class ConstructTest extends AbstractUnitTestCase
      * @author Phalcon Team <team@phalcon.io>
      * @since  2020-09-09
      */
+    #[Test]
     public function testTranslateAdapterNativeArrayContentParamExist(): void
     {
         $this->expectException(Exception::class);

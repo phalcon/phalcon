@@ -18,6 +18,8 @@ use Phalcon\Translate\Exception;
 use Phalcon\Translate\Interpolator\AssociativeArray;
 use Phalcon\Translate\Interpolator\IndexedArray;
 use Phalcon\Translate\InterpolatorFactory;
+use PHPUnit\Framework\Attributes\DataProvider;
+use PHPUnit\Framework\Attributes\Test;
 
 final class NewInstanceTest extends AbstractUnitTestCase
 {
@@ -42,6 +44,8 @@ final class NewInstanceTest extends AbstractUnitTestCase
      * @author       Phalcon Team <team@phalcon.io>
      * @since        2020-09-09
      */
+    #[Test]
+    #[DataProvider('getExamples')]
     public function testTranslateInterpolatorFactoryNewInstance(
         string $name,
         string $class
@@ -59,6 +63,7 @@ final class NewInstanceTest extends AbstractUnitTestCase
      * @author       Phalcon Team <team@phalcon.io>
      * @since        2020-09-09
      */
+    #[Test]
     public function testTranslateInterpolatorFactoryNewInstanceException(): void
     {
         $this->expectException(Exception::class);

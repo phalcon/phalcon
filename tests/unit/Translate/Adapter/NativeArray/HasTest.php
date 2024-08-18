@@ -17,6 +17,7 @@ use Phalcon\Tests\Fixtures\Traits\TranslateNativeArrayTrait;
 use Phalcon\Tests\AbstractUnitTestCase;
 use Phalcon\Translate\Adapter\NativeArray;
 use Phalcon\Translate\InterpolatorFactory;
+use PHPUnit\Framework\Attributes\Test;
 
 final class HasTest extends AbstractUnitTestCase
 {
@@ -30,6 +31,7 @@ final class HasTest extends AbstractUnitTestCase
      * @author Phalcon Team <team@phalcon.io>
      * @since  2020-09-09
      */
+    #[Test]
     public function testTranslateAdapterNativeArrayHas(): void
     {
         $language = $this->getArrayConfig()['en'];

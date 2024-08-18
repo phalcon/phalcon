@@ -16,7 +16,7 @@ namespace Phalcon\Tests\Unit\Tag;
 use Phalcon\Tag;
 use Phalcon\Tests\Fixtures\Helpers\AbstractTagSetup;
 
-class AbstractTagHtmlCloseTest extends AbstractTagSetup
+class TagHtmlCloseTest extends AbstractTagSetup
 {
     /**
      * Tests Phalcon\Tag :: tagHtmlClose()
