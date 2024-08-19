@@ -11,13 +11,14 @@
 
 declare(strict_types=1);
 
-namespace Phalcon\Tests\Unit\Support\Collection\Collection;
+namespace Phalcon\Tests\Unit\Support\Collection;
 
 use Phalcon\Support\Collection;
 use Phalcon\Tests\Fixtures\Support\Collection\CollectionJsonEncodeFixture;
-use Phalcon\Tests\AbstractUnitTestCase;
+use PHPUnit\Framework\Attributes\DataProvider;
+use PHPUnit\Framework\Attributes\Test;
 
-final class ToJsonTest extends AbstractUnitTestCase
+final class ToJsonTest extends AbstractCollectionTestCase
 {
     /**
      * Tests Phalcon\Support\Collection :: toJson()
@@ -27,15 +28,13 @@ final class ToJsonTest extends AbstractUnitTestCase
      * @author Phalcon Team <team@phalcon.io>
      * @since  2020-09-09
      */
-    public function testSupportCollectionToJson(): void
-    {
-        $data = [
-            'one'   => 'two',
-            'three' => 'four',
-            'five'  => 'six',
-        ];
-
-        $collection = new Collection($data);
+    #[Test]
+    #[DataProvider('getClasses')]
+    public function testSupportCollectionToJson(
+        string $class
+    ): void {
+        $data = $this->getData();
+        $collection = new $class($data);
 
         $expected = json_encode($data);
         $actual   = $collection->toJson();
@@ -54,14 +53,10 @@ final class ToJsonTest extends AbstractUnitTestCase
      * @author Phalcon Team <team@phalcon.io>
      * @since  2020-09-09
      */
+    #[Test]
     public function testSupportCollectionToJsonEncodeFail(): void
     {
-        $data = [
-            'one'   => 'two',
-            'three' => 'four',
-            'five'  => 'six',
-        ];
-
+        $data = $this->getData();
         $collection = new CollectionJsonEncodeFixture($data);
 
         $actual = $collection->toJson();

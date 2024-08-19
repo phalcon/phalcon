@@ -11,12 +11,13 @@
 
 declare(strict_types=1);
 
-namespace Phalcon\Tests\Unit\Support\Collection\Collection;
+namespace Phalcon\Tests\Unit\Support\Collection;
 
 use Phalcon\Support\Collection;
-use Phalcon\Tests\AbstractUnitTestCase;
+use PHPUnit\Framework\Attributes\DataProvider;
+use PHPUnit\Framework\Attributes\Test;
 
-final class GetIteratorTest extends AbstractUnitTestCase
+final class GetIteratorTest extends AbstractCollectionTestCase
 {
     /**
      * Tests Phalcon\Support\Collection :: getIterator()
@@ -26,15 +27,13 @@ final class GetIteratorTest extends AbstractUnitTestCase
      * @author Phalcon Team <team@phalcon.io>
      * @since  2020-09-09
      */
-    public function testSupportCollectionGetIterator(): void
-    {
-        $data = [
-            'one'   => 'two',
-            'three' => 'four',
-            'five'  => 'six',
-        ];
-
-        $collection = new Collection($data);
+    #[Test]
+    #[DataProvider('getClasses')]
+    public function testSupportCollectionGetIterator(
+        string $class
+    ): void {
+        $data = $this->getData();
+        $collection = new $class($data);
 
         foreach ($collection as $key => $value) {
             $expected = $data[$key];

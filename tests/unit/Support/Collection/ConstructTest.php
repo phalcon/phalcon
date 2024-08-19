@@ -11,12 +11,13 @@
 
 declare(strict_types=1);
 
-namespace Phalcon\Tests\Unit\Support\Collection\Collection;
+namespace Phalcon\Tests\Unit\Support\Collection;
 
 use Phalcon\Support\Collection;
-use Phalcon\Tests\AbstractUnitTestCase;
+use PHPUnit\Framework\Attributes\DataProvider;
+use PHPUnit\Framework\Attributes\Test;
 
-final class ConstructTest extends AbstractUnitTestCase
+final class ConstructTest extends AbstractCollectionTestCase
 {
     /**
      * Tests Phalcon\Support\Collection :: __construct()
@@ -26,11 +27,14 @@ final class ConstructTest extends AbstractUnitTestCase
      * @author Phalcon Team <team@phalcon.io>
      * @since  2020-09-09
      */
-    public function testSupportCollectionConstruct(): void
-    {
-        $collection = new Collection();
+    #[Test]
+    #[DataProvider('getClasses')]
+    public function testSupportCollectionConstruct(
+        string $class
+    ): void {
+        $collection = new $class();
 
-        $class = Collection::class;
-        $this->assertInstanceOf($class, $collection);
+        $className = Collection::class;
+        $this->assertInstanceOf($className, $collection);
     }
 }

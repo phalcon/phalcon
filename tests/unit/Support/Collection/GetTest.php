@@ -11,76 +11,17 @@
 
 declare(strict_types=1);
 
-namespace Phalcon\Tests\Unit\Support\Collection\Collection;
+namespace Phalcon\Tests\Unit\Support\Collection;
 
 use Phalcon\Support\Collection;
-use Phalcon\Tests\AbstractUnitTestCase;
-use stdClass;
+use Phalcon\Support\Collection\ReadOnlyCollection;
+use PHPUnit\Framework\Attributes\DataProvider;
+use PHPUnit\Framework\Attributes\Test;
 
-final class GetTest extends AbstractUnitTestCase
+use function uniqid;
+
+final class GetTest extends AbstractCollectionTestCase
 {
-    /**
-     * @return array[]
-     */
-    public static function getExamples(): array
-    {
-        $sample      = new stdClass();
-        $sample->one = 'two';
-
-        return [
-            [
-                'boolean',
-                1,
-                true,
-            ],
-            [
-                'bool',
-                1,
-                true,
-            ],
-            [
-                'integer',
-                "123",
-                123,
-            ],
-            [
-                'int',
-                "123",
-                123,
-            ],
-            [
-                'float',
-                "123.45",
-                123.45,
-            ],
-            [
-                'double',
-                "123.45",
-                123.45,
-            ],
-            [
-                'string',
-                123,
-                "123",
-            ],
-            [
-                'array',
-                $sample,
-                ['one' => 'two'],
-            ],
-            [
-                'object',
-                ['one' => 'two'],
-                $sample,
-            ],
-            [
-                'null',
-                1234,
-                null,
-            ],
-        ];
-    }
-
     /**
      * Tests Phalcon\Support\Collection :: get()
      *
@@ -90,17 +31,13 @@ final class GetTest extends AbstractUnitTestCase
      * @since  2021-12-01
      * @issue  https://github.com/phalcon/cphalcon/issues/15370
      */
-    public function testSupportCollectionGet(): void
-    {
-        $data = [
-            'one'   => 'two',
-            'three' => 'four',
-            'five'  => 'six',
-            'seven' => '',
-            'eight' => null,
-        ];
-
-        $collection = new Collection($data);
+    #[Test]
+    #[DataProvider('getClasses')]
+    public function testSupportCollectionGet(
+        string $class
+    ): void {
+        $data = $this->getDataForGet();
+        $collection = new $class($data);
         $expected   = 'four';
 
         $actual = $collection->get('three');
@@ -137,17 +74,18 @@ final class GetTest extends AbstractUnitTestCase
     /**
      * Tests Phalcon\Support\Collection :: get() - cast
      *
-     * @dataProvider getExamples
-     *
      * @author       Phalcon Team <team@phalcon.io>
      * @since        2020-09-09
      */
+    #[Test]
+    #[DataProvider('getExamples')]
     public function testSupportCollectionGetCast(
+        string $class,
         string $cast,
         mixed $value,
         mixed $expected
     ): void {
-        $collection = new Collection(
+        $collection = new $class(
             [
                 'value' => $value,
             ]
