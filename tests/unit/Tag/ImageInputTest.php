@@ -13,8 +13,6 @@ declare(strict_types=1);
 
 namespace Phalcon\Tests\Unit\Tag;
 
-use Phalcon\Tests\Fixtures\Helpers\AbstractTagSetup;
-
 class ImageInputTest extends AbstractTagSetup
 {
     /**
