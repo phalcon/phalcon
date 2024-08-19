@@ -14,6 +14,7 @@ declare(strict_types=1);
 namespace Phalcon\Tests\Unit\Tag;
 
 use Phalcon\Tag;
+use PHPUnit\Framework\Attributes\Test;
 
 class EndFormTest extends AbstractTagSetup
 {
@@ -23,6 +24,7 @@ class EndFormTest extends AbstractTagSetup
      * @author Phalcon Team <team@phalcon.io>
      * @since  2018-11-13
      */
+    #[Test]
     public function testTagEndForm(): void
     {
         $expected = '</form>';

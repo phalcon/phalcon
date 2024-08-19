@@ -193,20 +193,6 @@ abstract class AbstractTagSetup extends AbstractUnitTestCase
     }
 
     /**
-     * Runs a doctype test, one for each doctype
-     */
-    protected function runDoctypeTest(int $doctype)
-    {
-        Tag::resetInput();
-
-        Tag::setDocType($doctype);
-
-        $expected = $this->docTypeToString($doctype);
-        $actual   = Tag::getDocType();
-        $this->assertSame($expected, $actual);
-    }
-
-    /**
      * Runs the test for a Tag::$function with $options
      */
     protected function testFieldParameter(

@@ -15,6 +15,7 @@ namespace Phalcon\Tests\Unit\Tag\Select;
 
 use Phalcon\Tag\Select;
 use Phalcon\Tests\Unit\Tag\AbstractTagSetup;
+use PHPUnit\Framework\Attributes\Test;
 
 class SelectFieldTest extends AbstractTagSetup
 {
@@ -24,6 +25,7 @@ class SelectFieldTest extends AbstractTagSetup
      * @author Phalcon Team <team@phalcon.io>
      * @since  2018-11-13
      */
+    #[Test]
     public function testTagSelectSelectField(): void
     {
         $sSelect = Select::selectField('city', ['Lyon', 'Miramas']);

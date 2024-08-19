@@ -14,6 +14,7 @@ declare(strict_types=1);
 namespace Phalcon\Tests\Unit\Tag;
 
 use Phalcon\Tag;
+use PHPUnit\Framework\Attributes\Test;
 
 class ImageTest extends AbstractTagSetup
 {
@@ -23,6 +24,7 @@ class ImageTest extends AbstractTagSetup
      * @author Phalcon Team <team@phalcon.io>
      * @since  2014-09-05
      */
+    #[Test]
     public function testTagImageArrayParameter(): void
     {
         $options  = [
@@ -41,6 +43,7 @@ class ImageTest extends AbstractTagSetup
      * @author Phalcon Team <team@phalcon.io>
      * @since  2014-09-05
      */
+    #[Test]
     public function testTagImageArrayParameterLocalLink(): void
     {
         $options  = [
@@ -72,6 +75,7 @@ class ImageTest extends AbstractTagSetup
      * @author Phalcon Team <team@phalcon.io>
      * @since  2014-09-05
      */
+    #[Test]
     public function testTagImageArrayParameterRemoteLink(): void
     {
         $options = [
@@ -109,6 +113,7 @@ class ImageTest extends AbstractTagSetup
      * @author Phalcon Team <team@phalcon.io>
      * @since  2014-09-05
      */
+    #[Test]
     public function testTagImageArrayParameterWithNameNoSrc(): void
     {
         $options  = [
@@ -127,6 +132,7 @@ class ImageTest extends AbstractTagSetup
      * @author Phalcon Team <team@phalcon.io>
      * @since  2014-09-05
      */
+    #[Test]
     public function testTagImageArrayParameterWithSrc(): void
     {
         $options  = [
@@ -146,6 +152,7 @@ class ImageTest extends AbstractTagSetup
      * @author Phalcon Team <team@phalcon.io>
      * @since  2014-09-05
      */
+    #[Test]
     public function testTagImageStringParameter(): void
     {
         $options  = 'img/hello.gif';
@@ -161,6 +168,7 @@ class ImageTest extends AbstractTagSetup
      * @author Phalcon Team <team@phalcon.io>
      * @since  2014-09-05
      */
+    #[Test]
     public function testTagImageStringParameterLocalLink(): void
     {
         $options  = 'img/hello.gif';
@@ -186,6 +194,7 @@ class ImageTest extends AbstractTagSetup
      * @author Phalcon Team <team@phalcon.io>
      * @since  2014-09-05
      */
+    #[Test]
     public function testTagImageStringParameterRemoteLink(): void
     {
         $options  = 'https://phalcon.io/img/hello.gif';
@@ -211,6 +220,7 @@ class ImageTest extends AbstractTagSetup
      * @author Phalcon Team <team@phalcon.io>
      * @since  2014-09-05
      */
+    #[Test]
     public function testTagImageWithDisplayTo(): void
     {
         $options  = [
@@ -229,6 +239,7 @@ class ImageTest extends AbstractTagSetup
      * @author Phalcon Team <team@phalcon.io>
      * @since  2014-09-05
      */
+    #[Test]
     public function testTagImageWithDisplayToElementNotPresent(): void
     {
         $options  = [
@@ -247,6 +258,7 @@ class ImageTest extends AbstractTagSetup
      * @author Phalcon Team <team@phalcon.io>
      * @since  2014-09-05
      */
+    #[Test]
     public function testTagImageWithSetDefault(): void
     {
         $options  = [
@@ -265,6 +277,7 @@ class ImageTest extends AbstractTagSetup
      * @author Phalcon Team <team@phalcon.io>
      * @since  2014-09-05
      */
+    #[Test]
     public function testTagImageWithSetDefaultElementNotPresent(): void
     {
         $options  = [

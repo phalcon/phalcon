@@ -14,6 +14,7 @@ declare(strict_types=1);
 namespace Phalcon\Tests\Unit\Tag;
 
 use Phalcon\Tag;
+use PHPUnit\Framework\Attributes\Test;
 use Phalcon\Tests\Fixtures\Traits\DiTrait;
 use Phalcon\Tests\AbstractUnitTestCase;
 
@@ -28,6 +29,7 @@ class TagTest extends AbstractUnitTestCase
      * @since  2022-06-11
      * @issue  15992
      */
+    #[Test]
     public function testTagTextAreaNullValue(): void
     {
         $this->setNewFactoryDefault();

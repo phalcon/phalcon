@@ -14,6 +14,7 @@ declare(strict_types=1);
 namespace Phalcon\Tests\Unit\Tag;
 
 use Phalcon\Tag;
+use PHPUnit\Framework\Attributes\Test;
 
 class SetDefaultTest extends AbstractTagSetup
 {
@@ -24,6 +25,7 @@ class SetDefaultTest extends AbstractTagSetup
      * @author Dmitry Patsura <talk@dmtry.me>
      * @since  2014-05-10
      */
+    #[Test]
     public function testTagSetDefault(): void
     {
         Tag::setDefault('property1', 'testVal1');

@@ -14,6 +14,7 @@ declare(strict_types=1);
 namespace Phalcon\Tests\Unit\Tag;
 
 use Phalcon\Tag;
+use PHPUnit\Framework\Attributes\Test;
 use Phalcon\Tests\AbstractUnitTestCase;
 
 class GetSetTitleSeparatorTest extends AbstractUnitTestCase
@@ -25,6 +26,7 @@ class GetSetTitleSeparatorTest extends AbstractUnitTestCase
      * @since  2012-09-05
      * @since  2018-11-13
      */
+    #[Test]
     public function testTagGetSetTitleSeparator(): void
     {
         Tag::resetInput();

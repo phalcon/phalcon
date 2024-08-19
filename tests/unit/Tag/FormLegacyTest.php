@@ -14,6 +14,7 @@ declare(strict_types=1);
 namespace Phalcon\Tests\Unit\Tag;
 
 use Phalcon\Tag;
+use PHPUnit\Framework\Attributes\Test;
 
 class FormLegacyTest extends AbstractTagSetup
 {
@@ -23,6 +24,7 @@ class FormLegacyTest extends AbstractTagSetup
      * @author Phalcon Team <team@phalcon.io>
      * @since  2020-02-22
      */
+    #[Test]
     public function testTagForm(): void
     {
         $options = [

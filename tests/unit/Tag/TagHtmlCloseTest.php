@@ -14,6 +14,7 @@ declare(strict_types=1);
 namespace Phalcon\Tests\Unit\Tag;
 
 use Phalcon\Tag;
+use PHPUnit\Framework\Attributes\Test;
 
 class TagHtmlCloseTest extends AbstractTagSetup
 {
@@ -23,6 +24,7 @@ class TagHtmlCloseTest extends AbstractTagSetup
      * @author Phalcon Team <team@phalcon.io>
      * @since  2014-09-05
      */
+    #[Test]
     public function testTagTagHtmlClose(): void
     {
         Tag::resetInput();
@@ -58,6 +60,7 @@ class TagHtmlCloseTest extends AbstractTagSetup
      * @author Phalcon Team <team@phalcon.io>
      * @since  2014-09-05
      */
+    #[Test]
     public function testTagTagHtmlCloseEol(): void
     {
         Tag::resetInput();

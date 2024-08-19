@@ -14,6 +14,7 @@ declare(strict_types=1);
 namespace Phalcon\Tests\Unit\Tag;
 
 use Phalcon\Tag;
+use PHPUnit\Framework\Attributes\Test;
 use Phalcon\Tests\AbstractUnitTestCase;
 
 class SetTitleTest extends AbstractUnitTestCase
@@ -24,6 +25,7 @@ class SetTitleTest extends AbstractUnitTestCase
      * @author Phalcon Team <team@phalcon.io>
      * @since  2018-11-13
      */
+    #[Test]
     public function testTagSetTitle(): void
     {
         Tag::resetInput();
