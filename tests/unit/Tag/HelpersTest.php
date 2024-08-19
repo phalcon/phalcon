@@ -76,10 +76,6 @@ final class HelpersTest extends AbstractUnitTestCase
                 'telField',
             ],
             [
-                'week',
-                'weekField',
-            ],
-            [
                 'text',
                 'textField',
             ],

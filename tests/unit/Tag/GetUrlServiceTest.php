@@ -16,7 +16,6 @@ namespace Phalcon\Tests\Unit\Tag;
 use Phalcon\Mvc\Url;
 use Phalcon\Mvc\Url\UrlInterface;
 use Phalcon\Tag;
-use Phalcon\Tests\Fixtures\Helpers\AbstractTagSetup;
 
 class GetUrlServiceTest extends AbstractTagSetup
 {

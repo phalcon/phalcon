@@ -13,12 +13,90 @@ declare(strict_types=1);
 
 namespace Phalcon\Tests\Unit\Tag;
 
-use Phalcon\Tests\Fixtures\Helpers\AbstractTagHelper;
+use PHPUnit\Framework\Attributes\Test;
 
-class CheckFieldTest extends AbstractTagHelper
+class CheckFieldTest extends AbstractTagSetup
 {
-    protected string $function  = 'checkField';
-    protected string $inputType = 'checkbox';
+    /**
+     * Tests Phalcon\Tag :: weekField() - string as a parameter
+     *
+     * @author Phalcon Team <team@phalcon.io>
+     * @since  2014-09-05
+     */
+    #[Test]
+    public function testTagFieldStringParameter()
+    {
+        $options  = 'x_name';
+        $expected = '<input type="checkbox" id="x_name" name="x_name"';
+
+        $this->testFieldParameter('checkField', $options, $expected);
+        $this->testFieldParameter('checkField', $options, $expected, true);
+    }
+
+    /**
+     * Tests Phalcon\Tag :: weekField() - array as a parameter
+     *
+     * @author Phalcon Team <team@phalcon.io>
+     * @since  2014-09-05
+     */
+    #[Test]
+    public function testTagFieldArrayParameter()
+    {
+        $options = [
+            'x_name',
+            'class' => 'x_class',
+        ];
+
+        $expected = '<input type="checkbox" id="x_name" name="x_name" class="x_class"';
+
+        $this->testFieldParameter('checkField', $options, $expected);
+        $this->testFieldParameter('checkField', $options, $expected, true);
+    }
+
+    /**
+     * Tests Phalcon\Tag :: weekField() - array as a parameters and id in it
+     *
+     * @author Phalcon Team <team@phalcon.io>
+     * @since  2014-09-05
+     */
+    #[Test]
+    public function testTagFieldArrayParameterWithId()
+    {
+        $options = [
+            'x_name',
+            'id'    => 'x_id',
+            'class' => 'x_class',
+            'size'  => '10',
+        ];
+
+        $expected = '<input type="checkbox" id="x_id" name="x_name" '
+            . 'class="x_class" size="10"';
+
+        $this->testFieldParameter('checkField', $options, $expected);
+        $this->testFieldParameter('checkField', $options, $expected, true);
+    }
+
+    /**
+     * Tests Phalcon\Tag :: weekField() - name and no id in parameter
+     *
+     * @author Phalcon Team <team@phalcon.io>
+     * @since  2014-09-05
+     */
+    #[Test]
+    public function testTagFieldArrayParameterWithNameNoId()
+    {
+        $options = [
+            'x_name',
+            'name'  => 'x_other',
+            'class' => 'x_class',
+            'size'  => '10',
+        ];
+
+        $expected = '<input type="checkbox" id="x_name" name="x_other" class="x_class" size="10"';
+
+        $this->testFieldParameter('checkField', $options, $expected);
+        $this->testFieldParameter('checkField', $options, $expected, true);
+    }
 
     /**
      * Tests Phalcon\Tag :: weekField() - displayTo
@@ -26,6 +104,7 @@ class CheckFieldTest extends AbstractTagHelper
      * @author Phalcon Team <team@phalcon.io>
      * @since  2014-09-05
      */
+    #[Test]
     public function testTagFieldWithDisplayTo(): void
     {
         $options = [
@@ -35,11 +114,11 @@ class CheckFieldTest extends AbstractTagHelper
             'size'  => '10',
         ];
 
-        $expected = '<input type="' . $this->inputType . '" id="x_name" '
+        $expected = '<input type="checkbox" id="x_name" '
             . 'name="x_other" value="x_value" class="x_class" size="10" checked="checked"';
 
-        $this->testFieldParameter($this->function, $options, $expected, false, 'displayTo');
-        $this->testFieldParameter($this->function, $options, $expected, true, 'displayTo');
+        $this->testFieldParameter('checkField', $options, $expected, false, 'displayTo');
+        $this->testFieldParameter('checkField', $options, $expected, true, 'displayTo');
     }
 
     /**
@@ -48,6 +127,7 @@ class CheckFieldTest extends AbstractTagHelper
      * @author Phalcon Team <team@phalcon.io>
      * @since  2014-09-05
      */
+    #[Test]
     public function testTagFieldWithDisplayToElementNotPresent(): void
     {
         $options = [
@@ -57,11 +137,11 @@ class CheckFieldTest extends AbstractTagHelper
             'size'  => '10',
         ];
 
-        $expected = '<input type="' . $this->inputType . '" id="x_name" '
+        $expected = '<input type="checkbox" id="x_name" '
             . 'name="x_other" value="x_value" class="x_class" size="10" checked="checked"';
 
-        $this->testFieldParameter($this->function, $options, $expected, false, 'displayTo');
-        $this->testFieldParameter($this->function, $options, $expected, true, 'displayTo');
+        $this->testFieldParameter('checkField', $options, $expected, false, 'displayTo');
+        $this->testFieldParameter('checkField', $options, $expected, true, 'displayTo');
     }
 
     /**
@@ -70,6 +150,7 @@ class CheckFieldTest extends AbstractTagHelper
      * @author Phalcon Team <team@phalcon.io>
      * @since  2014-09-05
      */
+    #[Test]
     public function testTagFieldWithSetDefault(): void
     {
         $options = [
@@ -79,11 +160,11 @@ class CheckFieldTest extends AbstractTagHelper
             'size'  => '10',
         ];
 
-        $expected = '<input type="' . $this->inputType . '" id="x_name" '
+        $expected = '<input type="checkbox" id="x_name" '
             . 'name="x_other" value="x_value" class="x_class" size="10" checked="checked"';
 
-        $this->testFieldParameter($this->function, $options, $expected, false, 'setDefault');
-        $this->testFieldParameter($this->function, $options, $expected, true, 'setDefault');
+        $this->testFieldParameter('checkField', $options, $expected, false, 'setDefault');
+        $this->testFieldParameter('checkField', $options, $expected, true, 'setDefault');
     }
 
     /**
@@ -92,6 +173,7 @@ class CheckFieldTest extends AbstractTagHelper
      * @author Phalcon Team <team@phalcon.io>
      * @since  2014-09-05
      */
+    #[Test]
     public function testTagFieldWithSetDefaultElementNotPresent(): void
     {
         $options = [
@@ -101,10 +183,10 @@ class CheckFieldTest extends AbstractTagHelper
             'size'  => '10',
         ];
 
-        $expected = '<input type="' . $this->inputType . '" id="x_name" '
+        $expected = '<input type="checkbox" id="x_name" '
             . 'name="x_other" value="x_value" class="x_class" size="10" checked="checked"';
 
-        $this->testFieldParameter($this->function, $options, $expected, false, 'setDefault');
-        $this->testFieldParameter($this->function, $options, $expected, true, 'setDefault');
+        $this->testFieldParameter('checkField', $options, $expected, false, 'setDefault');
+        $this->testFieldParameter('checkField', $options, $expected, true, 'setDefault');
     }
 }
