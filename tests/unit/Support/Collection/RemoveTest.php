@@ -11,14 +11,78 @@
 
 declare(strict_types=1);
 
-namespace Phalcon\Tests\Unit\Support\Collection\ReadOnlyCollection;
+namespace Phalcon\Tests\Unit\Support\Collection;
 
+use Phalcon\Support\Collection;
 use Phalcon\Support\Collection\Exception;
 use Phalcon\Support\Collection\ReadOnlyCollection;
-use Phalcon\Tests\AbstractUnitTestCase;
+use PHPUnit\Framework\Attributes\DataProvider;
+use PHPUnit\Framework\Attributes\Test;
 
-final class RemoveTest extends AbstractUnitTestCase
+final class RemoveTest extends AbstractCollectionTestCase
 {
+    /**
+     * Tests Phalcon\Support\Collection :: remove()
+     *
+     * @return void
+     *
+     * @author Phalcon Team <team@phalcon.io>
+     * @since  2020-09-09
+     */
+    #[Test]
+    public function testSupportCollectionRemove(): void
+    {
+        $data = $this->getData();
+        $collection = new Collection($data);
+
+        $expected = $data;
+        $actual   = $collection->toArray();
+        $this->assertSame($expected, $actual);
+
+        $collection->remove('five');
+        $expected = [
+            'one'   => 'two',
+            'three' => 'four',
+        ];
+        $actual   = $collection->toArray();
+        $this->assertSame($expected, $actual);
+
+        $collection->remove('FIVE');
+        $expected = [
+            'one'   => 'two',
+            'three' => 'four',
+        ];
+        $actual   = $collection->toArray();
+        $this->assertSame($expected, $actual);
+
+        $collection->init($data);
+        unset($collection['five']);
+        $expected = [
+            'one'   => 'two',
+            'three' => 'four',
+        ];
+        $actual   = $collection->toArray();
+        $this->assertSame($expected, $actual);
+
+        $collection->init($data);
+        $collection->__unset('five');
+        $expected = [
+            'one'   => 'two',
+            'three' => 'four',
+        ];
+        $actual   = $collection->toArray();
+        $this->assertSame($expected, $actual);
+
+        $collection->init($data);
+        $collection->offsetUnset('five');
+        $expected = [
+            'one'   => 'two',
+            'three' => 'four',
+        ];
+        $actual   = $collection->toArray();
+        $this->assertSame($expected, $actual);
+    }
+
     /**
      * Tests Phalcon\Support\Collection\ReadOnlyCollection :: remove()
      *
@@ -27,13 +91,10 @@ final class RemoveTest extends AbstractUnitTestCase
      * @author Phalcon Team <team@phalcon.io>
      * @since  2020-09-09
      */
-    public function testSupportCollectionRemove(): void
+    #[Test]
+    public function testSupportCollectionRemoveException(): void
     {
-        $data       = [
-            'one'   => 'two',
-            'three' => 'four',
-            'five'  => 'six',
-        ];
+        $data = $this->getData();
         $collection = new ReadOnlyCollection($data);
 
         $this->expectException(Exception::class);
@@ -49,13 +110,10 @@ final class RemoveTest extends AbstractUnitTestCase
      * @author Phalcon Team <team@phalcon.io>
      * @since  2020-09-09
      */
-    public function testSupportCollectionRemoveInsensitive(): void
+    #[Test]
+    public function testSupportCollectionRemoveInsensitiveException(): void
     {
-        $data       = [
-            'one'   => 'two',
-            'three' => 'four',
-            'five'  => 'six',
-        ];
+        $data = $this->getData();
         $collection = new ReadOnlyCollection($data);
 
         $this->expectException(Exception::class);
@@ -71,13 +129,10 @@ final class RemoveTest extends AbstractUnitTestCase
      * @author Phalcon Team <team@phalcon.io>
      * @since  2020-09-09
      */
-    public function testSupportCollectionRemoveOffsetUnset(): void
+    #[Test]
+    public function testSupportCollectionRemoveOffsetUnsetException(): void
     {
-        $data       = [
-            'one'   => 'two',
-            'three' => 'four',
-            'five'  => 'six',
-        ];
+        $data = $this->getData();
         $collection = new ReadOnlyCollection($data);
 
         $this->expectException(Exception::class);
@@ -93,13 +148,10 @@ final class RemoveTest extends AbstractUnitTestCase
      * @author Phalcon Team <team@phalcon.io>
      * @since  2020-09-09
      */
-    public function testSupportCollectionRemoveUnderscoreUnset(): void
+    #[Test]
+    public function testSupportCollectionRemoveUnderscoreUnsetException(): void
     {
-        $data       = [
-            'one'   => 'two',
-            'three' => 'four',
-            'five'  => 'six',
-        ];
+        $data = $this->getData();
         $collection = new ReadOnlyCollection($data);
 
         $this->expectException(Exception::class);
@@ -115,13 +167,10 @@ final class RemoveTest extends AbstractUnitTestCase
      * @author Phalcon Team <team@phalcon.io>
      * @since  2020-09-09
      */
-    public function testSupportCollectionRemoveUnset(): void
+    #[Test]
+    public function testSupportCollectionRemoveUnsetException(): void
     {
-        $data       = [
-            'one'   => 'two',
-            'three' => 'four',
-            'five'  => 'six',
-        ];
+        $data = $this->getData();
         $collection = new ReadOnlyCollection($data);
 
         $this->expectException(Exception::class);

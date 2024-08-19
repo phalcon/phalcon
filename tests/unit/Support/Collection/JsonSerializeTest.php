@@ -11,13 +11,14 @@
 
 declare(strict_types=1);
 
-namespace Phalcon\Tests\Unit\Support\Collection\Collection;
+namespace Phalcon\Tests\Unit\Support\Collection;
 
 use Phalcon\Support\Collection;
 use Phalcon\Tests\Fixtures\Support\Collection\JsonFixture;
-use Phalcon\Tests\AbstractUnitTestCase;
+use PHPUnit\Framework\Attributes\DataProvider;
+use PHPUnit\Framework\Attributes\Test;
 
-final class JsonSerializeTest extends AbstractUnitTestCase
+final class JsonSerializeTest extends AbstractCollectionTestCase
 {
     /**
      * Tests Phalcon\Support\Collection :: jsonSerialize()
@@ -27,14 +28,11 @@ final class JsonSerializeTest extends AbstractUnitTestCase
      * @author Phalcon Team <team@phalcon.io>
      * @since  2020-09-09
      */
+    #[Test]
+    #[DataProvider('getClasses')]
     public function testSupportCollectionJsonSerialize(): void
     {
-        $data = [
-            'one'   => 'two',
-            'three' => 'four',
-            'five'  => 'six',
-        ];
-
+        $data = $this->getData();
         $collection = new Collection($data);
 
         $expected = $data;

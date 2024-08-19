@@ -11,12 +11,13 @@
 
 declare(strict_types=1);
 
-namespace Phalcon\Tests\Unit\Support\Collection\Collection;
+namespace Phalcon\Tests\Unit\Support\Collection;
 
 use Phalcon\Support\Collection;
-use Phalcon\Tests\AbstractUnitTestCase;
+use PHPUnit\Framework\Attributes\DataProvider;
+use PHPUnit\Framework\Attributes\Test;
 
-final class SerializeTest extends AbstractUnitTestCase
+final class SerializeTest extends AbstractCollectionTestCase
 {
     /**
      * Tests Phalcon\Support\Collection :: serialize()
@@ -26,15 +27,13 @@ final class SerializeTest extends AbstractUnitTestCase
      * @author Phalcon Team <team@phalcon.io>
      * @since  2020-09-09
      */
-    public function testSupportCollectionSerialize(): void
-    {
-        $data = [
-            'one'   => 'two',
-            'three' => 'four',
-            'five'  => 'six',
-        ];
-
-        $collection = new Collection($data);
+    #[Test]
+    #[DataProvider('getClasses')]
+    public function testSupportCollectionSerialize(
+        string $class
+    ): void {
+        $data = $this->getData();
+        $collection = new $class($data);
 
         $expected = serialize($data);
         $actual   = $collection->serialize();
@@ -49,14 +48,10 @@ final class SerializeTest extends AbstractUnitTestCase
      * @author Phalcon Team <team@phalcon.io>
      * @since  2020-09-09
      */
+    #[Test]
     public function testSupportCollectionSerializeUnderscore(): void
     {
-        $data = [
-            'one'   => 'two',
-            'three' => 'four',
-            'five'  => 'six',
-        ];
-
+        $data = $this->getData();
         $collection = new Collection($data);
 
         $expected = 'O:26:"Phalcon\Support\Collection":'

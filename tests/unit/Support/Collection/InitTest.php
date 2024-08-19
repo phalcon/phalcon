@@ -11,12 +11,13 @@
 
 declare(strict_types=1);
 
-namespace Phalcon\Tests\Unit\Support\Collection\Collection;
+namespace Phalcon\Tests\Unit\Support\Collection;
 
 use Phalcon\Support\Collection;
-use Phalcon\Tests\AbstractUnitTestCase;
+use PHPUnit\Framework\Attributes\DataProvider;
+use PHPUnit\Framework\Attributes\Test;
 
-final class InitTest extends AbstractUnitTestCase
+final class InitTest extends AbstractCollectionTestCase
 {
     /**
      * Tests Phalcon\Support\Collection :: init()
@@ -26,15 +27,13 @@ final class InitTest extends AbstractUnitTestCase
      * @author Phalcon Team <team@phalcon.io>
      * @since  2020-09-09
      */
-    public function testSupportCollectionInit(): void
-    {
-        $data = [
-            'one'   => 'two',
-            'three' => 'four',
-            'five'  => 'six',
-        ];
-
-        $collection = new Collection();
+    #[Test]
+    #[DataProvider('getClasses')]
+    public function testSupportCollectionInit(
+        string $class
+    ): void {
+        $data = $this->getData();
+        $collection = new $class();
 
         $expected = 0;
         $actual   = $collection->count();

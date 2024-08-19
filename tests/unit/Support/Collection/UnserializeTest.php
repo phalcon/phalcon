@@ -11,12 +11,13 @@
 
 declare(strict_types=1);
 
-namespace Phalcon\Tests\Unit\Support\Collection\Collection;
+namespace Phalcon\Tests\Unit\Support\Collection;
 
 use Phalcon\Support\Collection;
-use Phalcon\Tests\AbstractUnitTestCase;
+use PHPUnit\Framework\Attributes\DataProvider;
+use PHPUnit\Framework\Attributes\Test;
 
-final class UnserializeTest extends AbstractUnitTestCase
+final class UnserializeTest extends AbstractCollectionTestCase
 {
     /**
      * Tests Phalcon\Support\Collection :: unserialize()
@@ -26,16 +27,14 @@ final class UnserializeTest extends AbstractUnitTestCase
      * @author Phalcon Team <team@phalcon.io>
      * @since  2020-09-09
      */
-    public function testSupportCollectionUnserialize(): void
-    {
-        $data = [
-            'one'   => 'two',
-            'three' => 'four',
-            'five'  => 'six',
-        ];
-
+    #[Test]
+    #[DataProvider('getClasses')]
+    public function testSupportCollectionUnserialize(
+        string $class
+    ): void {
+        $data = $this->getData();
         $serialized = serialize($data);
-        $collection = new Collection();
+        $collection = new $class();
 
         $collection->unserialize($serialized);
 

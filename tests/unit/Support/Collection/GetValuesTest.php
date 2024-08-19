@@ -11,12 +11,13 @@
 
 declare(strict_types=1);
 
-namespace Phalcon\Tests\Unit\Support\Collection\Collection;
+namespace Phalcon\Tests\Unit\Support\Collection;
 
 use Phalcon\Support\Collection;
-use Phalcon\Tests\AbstractUnitTestCase;
+use PHPUnit\Framework\Attributes\DataProvider;
+use PHPUnit\Framework\Attributes\Test;
 
-final class GetValuesTest extends AbstractUnitTestCase
+final class GetValuesTest extends AbstractCollectionTestCase
 {
     /**
      * Tests Phalcon\Support\Collection :: get()
@@ -26,22 +27,15 @@ final class GetValuesTest extends AbstractUnitTestCase
      * @author Phalcon Team <team@phalcon.io>
      * @since  2020-09-09
      */
-    public function testSupportCollectionGetValues(): void
-    {
-        $data = [
-            'one'   => 'two',
-            'Three' => 'four',
-            'five'  => 'six',
-        ];
+    #[Test]
+    #[DataProvider('getClasses')]
+    public function testSupportCollectionGetValues(
+        string $class
+    ): void {
+        $data = $this->getData();
+        $collection = new $class($data);
 
-        $collection = new Collection($data);
-
-        $expected = [
-            'two',
-            'four',
-            'six',
-        ];
-
+        $expected = $this->getDataValues();
         $actual = $collection->getValues();
         $this->assertSame($expected, $actual);
     }

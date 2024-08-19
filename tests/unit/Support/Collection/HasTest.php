@@ -11,30 +11,29 @@
 
 declare(strict_types=1);
 
-namespace Phalcon\Tests\Unit\Support\Collection\ReadOnlyCollection;
+namespace Phalcon\Tests\Unit\Support\Collection;
 
-use Phalcon\Support\Collection\ReadOnlyCollection;
-use Phalcon\Tests\AbstractUnitTestCase;
+use Phalcon\Support\Collection;
+use PHPUnit\Framework\Attributes\DataProvider;
+use PHPUnit\Framework\Attributes\Test;
 
-final class HasTest extends AbstractUnitTestCase
+final class HasTest extends AbstractCollectionTestCase
 {
     /**
-     * Tests Phalcon\Support\Collection\ReadOnlyCollection :: has()
+     * Tests Phalcon\Support\Collection :: has()
      *
      * @return void
      *
      * @author Phalcon Team <team@phalcon.io>
      * @since  2020-09-09
      */
-    public function testSupportCollectionHas(): void
-    {
-        $data = [
-            'one'   => 'two',
-            'three' => 'four',
-            'five'  => 'six',
-        ];
-
-        $collection = new ReadOnlyCollection($data);
+    #[Test]
+    #[DataProvider('getClasses')]
+    public function testSupportCollectionHas(
+        string $class
+    ): void {
+        $data = $this->getData();
+        $collection = new $class($data);
 
         $actual = $collection->has('three');
         $this->assertTrue($actual);
@@ -62,20 +61,16 @@ final class HasTest extends AbstractUnitTestCase
     }
 
     /**
-     * Tests Phalcon\Support\Collection\ReadOnlyCollection :: has() - sensitive
+     * Tests Phalcon\Support\Collection :: has() - sensitive
      *
      * @author Phalcon Team <team@phalcon.io>
      * @since  2020-09-09
      */
+    #[Test]
     public function testSupportCollectionHasSensitive(): void
     {
-        $data = [
-            'one'   => 'two',
-            'three' => 'four',
-            'five'  => 'six',
-        ];
-
-        $collection = new ReadOnlyCollection($data, false);
+        $data = $this->getData();
+        $collection = new Collection($data, false);
 
         $actual = $collection->has('three');
         $this->assertTrue($actual);
