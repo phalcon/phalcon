@@ -18,7 +18,7 @@ trait TranslateGettextTrait
     /**
      * Executed before each test
      */
-    public function _setUp()
+    public function setUp(): void
     {
         if (!setlocale(LC_ALL, 'en_US.utf8')) {
             $this->markTestSkipped('Locale en_US.utf8 not enabled');
