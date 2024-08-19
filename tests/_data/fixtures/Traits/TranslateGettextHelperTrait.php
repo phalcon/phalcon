@@ -164,7 +164,7 @@ trait TranslateGettextHelperTrait
      *
      * @return array[]
      */
-    private function getQueryOneVariable(): array
+    public static function getQueryOneVariable(): array
     {
         return [
             [
@@ -180,7 +180,7 @@ trait TranslateGettextHelperTrait
      *
      * @return array[]
      */
-    private function getQueryProvider(): array
+    public static function getQueryProvider(): array
     {
         return [
             [
@@ -197,7 +197,7 @@ trait TranslateGettextHelperTrait
      *
      * @return array[]
      */
-    private function getQueryTwoVariables(): array
+    public static function getQueryTwoVariables(): array
     {
         return [
             [
