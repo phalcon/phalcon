@@ -14,8 +14,9 @@ declare(strict_types=1);
 namespace Phalcon\Tests\Unit\Tag;
 
 use Phalcon\Tag;
+use PHPUnit\Framework\Attributes\Test;
 
-class GetDocTypeTest extends AbstractTagSetup
+class GetSetDocTypeTest extends AbstractTagSetup
 {
     /**
      * Tests Phalcon\Tag :: getDocType() - 1.0 Frameset
@@ -23,6 +24,7 @@ class GetDocTypeTest extends AbstractTagSetup
      * @author Phalcon Team <team@phalcon.io>
      * @since  2014-09-04
      */
+    #[Test]
     public function testDoctypeSet10Frameset(): void
     {
         $this->runDoctypeTest(Tag::XHTML10_FRAMESET);
@@ -34,6 +36,7 @@ class GetDocTypeTest extends AbstractTagSetup
      * @author Phalcon Team <team@phalcon.io>
      * @since  2014-09-04
      */
+    #[Test]
     public function testDoctypeSet10Strict(): void
     {
         $this->runDoctypeTest(Tag::XHTML10_STRICT);
@@ -45,6 +48,7 @@ class GetDocTypeTest extends AbstractTagSetup
      * @author Phalcon Team <team@phalcon.io>
      * @since  2014-09-04
      */
+    #[Test]
     public function testDoctypeSet10Transitional(): void
     {
         $this->runDoctypeTest(Tag::XHTML10_TRANSITIONAL);
@@ -56,6 +60,7 @@ class GetDocTypeTest extends AbstractTagSetup
      * @author Phalcon Team <team@phalcon.io>
      * @since  2014-09-04
      */
+    #[Test]
     public function testDoctypeSet11(): void
     {
         $this->runDoctypeTest(Tag::XHTML11);
@@ -67,6 +72,7 @@ class GetDocTypeTest extends AbstractTagSetup
      * @author Phalcon Team <team@phalcon.io>
      * @since  2014-09-04
      */
+    #[Test]
     public function testDoctypeSet20(): void
     {
         $this->runDoctypeTest(Tag::XHTML20);
@@ -78,6 +84,7 @@ class GetDocTypeTest extends AbstractTagSetup
      * @author Phalcon Team <team@phalcon.io>
      * @since  2014-09-05
      */
+    #[Test]
     public function testDoctypeSet32Final(): void
     {
         $this->runDoctypeTest(Tag::HTML32);
@@ -89,6 +96,7 @@ class GetDocTypeTest extends AbstractTagSetup
      * @author Phalcon Team <team@phalcon.io>
      * @since  2014-09-04
      */
+    #[Test]
     public function testDoctypeSet401(): void
     {
         $this->runDoctypeTest(Tag::HTML401_STRICT);
@@ -100,6 +108,7 @@ class GetDocTypeTest extends AbstractTagSetup
      * @author Phalcon Team <team@phalcon.io>
      * @since  2014-09-04
      */
+    #[Test]
     public function testDoctypeSet401Frameset(): void
     {
         $this->runDoctypeTest(Tag::HTML401_FRAMESET);
@@ -111,6 +120,7 @@ class GetDocTypeTest extends AbstractTagSetup
      * @author Phalcon Team <team@phalcon.io>
      * @since  2014-09-04
      */
+    #[Test]
     public function testDoctypeSet401Transitional(): void
     {
         $this->runDoctypeTest(Tag::HTML401_TRANSITIONAL);
@@ -122,6 +132,7 @@ class GetDocTypeTest extends AbstractTagSetup
      * @author Phalcon Team <team@phalcon.io>
      * @since  2014-09-04
      */
+    #[Test]
     public function testDoctypeSet5(): void
     {
         $this->runDoctypeTest(Tag::HTML5);
@@ -133,8 +144,23 @@ class GetDocTypeTest extends AbstractTagSetup
      * @author Phalcon Team <team@phalcon.io>
      * @since  2014-09-04
      */
+    #[Test]
     public function testDoctypeSetWrongParameter(): void
     {
         $this->runDoctypeTest(99);
+    }
+
+    /**
+     * Runs a doctype test, one for each doctype
+     */
+    private function runDoctypeTest(int $doctype)
+    {
+        Tag::resetInput();
+
+        Tag::setDocType($doctype);
+
+        $expected = $this->docTypeToString($doctype);
+        $actual   = Tag::getDocType();
+        $this->assertSame($expected, $actual);
     }
 }

@@ -14,6 +14,8 @@ declare(strict_types=1);
 namespace Phalcon\Tests\Unit\Tag;
 
 use Phalcon\Tag;
+use PHPUnit\Framework\Attributes\DataProvider;
+use PHPUnit\Framework\Attributes\Test;
 
 class AbstractTagHtmlTest extends AbstractTagSetup
 {
@@ -43,6 +45,7 @@ class AbstractTagHtmlTest extends AbstractTagSetup
      * @author Phalcon Team <team@phalcon.io>
      * @since  2014-09-05
      */
+    #[Test]
     public function testTagNameSelfClose(): void
     {
         Tag::resetInput();
@@ -73,9 +76,9 @@ class AbstractTagHtmlTest extends AbstractTagSetup
      *
      * @author       Phalcon Team <team@phalcon.io>
      * @since        2014-09-05
-     *
-     * @dataProvider nameProvider
      */
+    #[Test]
+    #[DataProvider('nameProvider')]
     public function testTagTagHtmlName(
         string $name,
         int $doctype,
@@ -95,6 +98,7 @@ class AbstractTagHtmlTest extends AbstractTagSetup
      * @author Phalcon Team <team@phalcon.io>
      * @since  2014-09-05
      */
+    #[Test]
     public function testTagTagHtmlNameEol(): void
     {
         Tag::resetInput();
@@ -126,6 +130,7 @@ class AbstractTagHtmlTest extends AbstractTagSetup
      * @author Phalcon Team <team@phalcon.io>
      * @since  2014-09-05
      */
+    #[Test]
     public function testTagTagHtmlNameOnlyStart(): void
     {
         Tag::resetInput();
@@ -157,6 +162,7 @@ class AbstractTagHtmlTest extends AbstractTagSetup
      * @author Phalcon Team <team@phalcon.io>
      * @since  2014-09-05
      */
+    #[Test]
     public function testTagTagHtmlWithArray(): void
     {
         Tag::resetInput();

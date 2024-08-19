@@ -15,6 +15,7 @@ namespace Phalcon\Tests\Unit\Tag;
 
 use Phalcon\Di\Di;
 use Phalcon\Tag;
+use PHPUnit\Framework\Attributes\Test;
 use Phalcon\Tests\AbstractUnitTestCase;
 
 class GetSetDITest extends AbstractUnitTestCase
@@ -25,6 +26,7 @@ class GetSetDITest extends AbstractUnitTestCase
      * @author Jeremy PASTOURET <https://github.com/jenovateurs>
      * @since  2019-12-07
      */
+    #[Test]
     public function testTagGetSetDI(): void
     {
         $container = new Di();

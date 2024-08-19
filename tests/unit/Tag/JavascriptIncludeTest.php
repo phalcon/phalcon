@@ -14,6 +14,7 @@ declare(strict_types=1);
 namespace Phalcon\Tests\Unit\Tag;
 
 use Phalcon\Tag;
+use PHPUnit\Framework\Attributes\Test;
 
 class JavascriptIncludeTest extends AbstractTagSetup
 {
@@ -25,6 +26,7 @@ class JavascriptIncludeTest extends AbstractTagSetup
      * @author Phalcon Team <team@phalcon.io>
      * @since  2018-12-22
      */
+    #[Test]
     public function testTagJavascriptIncludeHtml5(): void
     {
         $url = 'js/phalcon.js';
@@ -45,6 +47,7 @@ class JavascriptIncludeTest extends AbstractTagSetup
      * @author Phalcon Team <team@phalcon.io>
      * @since  2014-09-29
      */
+    #[Test]
     public function testTagJavascriptIncludeLocal(): void
     {
         $options = 'js/phalcon.js';
@@ -65,6 +68,7 @@ class JavascriptIncludeTest extends AbstractTagSetup
      * @author Phalcon Team <team@phalcon.io>
      * @since  2014-09-29
      */
+    #[Test]
     public function testTagJavascriptIncludeRemote(): void
     {
         $options = 'https://my.local.com/js/phalcon.js';
@@ -85,6 +89,7 @@ class JavascriptIncludeTest extends AbstractTagSetup
      * @author Phalcon Team <team@phalcon.io>
      * @since  2014-09-29
      */
+    #[Test]
     public function testTagJavascriptIncludeWithArrayLocal(): void
     {
         $options = ['js/phalcon.js'];
@@ -106,6 +111,7 @@ class JavascriptIncludeTest extends AbstractTagSetup
      * @author Phalcon Team <team@phalcon.io>
      * @since  2014-09-29
      */
+    #[Test]
     public function testTagJavascriptIncludeWithArrayRemote(): void
     {
         $options = ['https://my.local.com/js/phalcon.js'];

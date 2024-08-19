@@ -14,6 +14,7 @@ declare(strict_types=1);
 namespace Phalcon\Tests\Unit\Tag;
 
 use Phalcon\Tag;
+use PHPUnit\Framework\Attributes\Test;
 
 class StylesheetLinkTest extends AbstractTagSetup
 {
@@ -25,6 +26,7 @@ class StylesheetLinkTest extends AbstractTagSetup
      * @author Dreamszhu <dreamsxin@qq.com>
      * @since  2014-09-12
      */
+    #[Test]
     public function testTagStylesheetLinkArrayParameterLocal(): void
     {
         Tag::resetInput();
@@ -64,6 +66,7 @@ class StylesheetLinkTest extends AbstractTagSetup
      * @author Phalcon Team <team@phalcon.io>
      * @since  2014-09-12
      */
+    #[Test]
     public function testTagStylesheetLinkArrayParameterRemote(): void
     {
         Tag::resetInput();
@@ -101,6 +104,7 @@ class StylesheetLinkTest extends AbstractTagSetup
      * @author Dreamszhu <dreamsxin@qq.com>
      * @since  2014-09-12
      */
+    #[Test]
     public function testTagStylesheetLinkOverrideRelLink(): void
     {
         Tag::resetInput();
@@ -146,6 +150,7 @@ class StylesheetLinkTest extends AbstractTagSetup
      * @author Dreamszhu <dreamsxin@qq.com>
      * @since  2014-09-12
      */
+    #[Test]
     public function testTagStylesheetLinkStringParameterLocal(): void
     {
         Tag::resetInput();
@@ -182,6 +187,7 @@ class StylesheetLinkTest extends AbstractTagSetup
      * @author Phalcon Team <team@phalcon.io>
      * @since  2014-09-12
      */
+    #[Test]
     public function testTagStylesheetLinkStringParameterRemote(): void
     {
         Tag::resetInput();

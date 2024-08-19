@@ -14,6 +14,7 @@ declare(strict_types=1);
 namespace Phalcon\Tests\Unit\Tag;
 
 use Phalcon\Tag;
+use PHPUnit\Framework\Attributes\Test;
 use Phalcon\Tests\AbstractUnitTestCase;
 
 class PrependTitleTest extends AbstractUnitTestCase
@@ -24,6 +25,7 @@ class PrependTitleTest extends AbstractUnitTestCase
      * @author Phalcon Team <team@phalcon.io>
      * @since  2012-09-05
      */
+    #[Test]
     public function testTagPrependTitle(): void
     {
         Tag::resetInput();
@@ -54,6 +56,7 @@ class PrependTitleTest extends AbstractUnitTestCase
      * @author Phalcon Team <team@phalcon.io>
      * @since  2012-09-05
      */
+    #[Test]
     public function testTagPrependTitleArray(): void
     {
         Tag::resetInput();
@@ -87,6 +90,7 @@ class PrependTitleTest extends AbstractUnitTestCase
      * @author Phalcon Team <team@phalcon.io>
      * @since  2012-09-05
      */
+    #[Test]
     public function testTagPrependTitleDoubleCall(): void
     {
         Tag::resetInput();
@@ -119,6 +123,7 @@ class PrependTitleTest extends AbstractUnitTestCase
      * @author Phalcon Team <team@phalcon.io>
      * @since  2012-09-05
      */
+    #[Test]
     public function testTagPrependTitleEmptyArray(): void
     {
         Tag::resetInput();
@@ -154,6 +159,7 @@ class PrependTitleTest extends AbstractUnitTestCase
      * @author Phalcon Team <team@phalcon.io>
      * @since  2012-09-05
      */
+    #[Test]
     public function testTagPrependTitleSeparator(): void
     {
         Tag::resetInput();

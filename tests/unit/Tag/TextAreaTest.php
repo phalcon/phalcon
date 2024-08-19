@@ -14,6 +14,7 @@ declare(strict_types=1);
 namespace Phalcon\Tests\Unit\Tag;
 
 use Phalcon\Tag;
+use PHPUnit\Framework\Attributes\Test;
 
 class TextAreaTest extends AbstractTagSetup
 {
@@ -23,6 +24,7 @@ class TextAreaTest extends AbstractTagSetup
      * @author Phalcon Team <team@phalcon.io>
      * @since  2014-09-05
      */
+    #[Test]
     public function testTagTextAreaArrayParameter(): void
     {
         $options = [
@@ -41,6 +43,7 @@ class TextAreaTest extends AbstractTagSetup
      * @author Phalcon Team <team@phalcon.io>
      * @since  2014-09-05
      */
+    #[Test]
     public function testTagTextAreaArrayParameterWithId(): void
     {
         $options = [
@@ -61,6 +64,7 @@ class TextAreaTest extends AbstractTagSetup
      * @author Phalcon Team <team@phalcon.io>
      * @since  2014-09-05
      */
+    #[Test]
     public function testTagTextAreaArrayParameterWithNameNoId(): void
     {
         $options = [
@@ -81,6 +85,7 @@ class TextAreaTest extends AbstractTagSetup
      * @author Phalcon Team <team@phalcon.io>
      * @since  2014-09-05
      */
+    #[Test]
     public function testTagTextAreaStringParameter(): void
     {
         $options  = 'x_name';
@@ -95,6 +100,7 @@ class TextAreaTest extends AbstractTagSetup
      * @author Phalcon Team <team@phalcon.io>
      * @since  2014-09-05
      */
+    #[Test]
     public function testTagTextAreaWithDisplayTo(): void
     {
         $options = [
@@ -115,6 +121,7 @@ class TextAreaTest extends AbstractTagSetup
      * @author Phalcon Team <team@phalcon.io>
      * @since  2014-10-03
      */
+    #[Test]
     public function testTagTextAreaWithDisplayToAndNewlineInValue(): void
     {
         $options  = 'x_name';
@@ -136,6 +143,7 @@ class TextAreaTest extends AbstractTagSetup
      * @author Phalcon Team <team@phalcon.io>
      * @since  2014-09-05
      */
+    #[Test]
     public function testTagTextAreaWithDisplayToElementNotPresent(): void
     {
         $options = [
@@ -156,6 +164,7 @@ class TextAreaTest extends AbstractTagSetup
      * @author Phalcon Team <team@phalcon.io>
      * @since  2014-09-05
      */
+    #[Test]
     public function testTagTextAreaWithSetDefault(): void
     {
         $options = [
@@ -176,6 +185,7 @@ class TextAreaTest extends AbstractTagSetup
      * @author Phalcon Team <team@phalcon.io>
      * @since  2014-09-05
      */
+    #[Test]
     public function testTagTextAreaWithSetDefaultElementNotPresent(): void
     {
         $options = [

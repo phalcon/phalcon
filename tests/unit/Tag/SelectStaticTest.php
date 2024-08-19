@@ -14,6 +14,7 @@ declare(strict_types=1);
 namespace Phalcon\Tests\Unit\Tag;
 
 use Phalcon\Tag;
+use PHPUnit\Framework\Attributes\Test;
 
 class SelectStaticTest extends AbstractTagSetup
 {
@@ -23,6 +24,7 @@ class SelectStaticTest extends AbstractTagSetup
      * @author Phalcon Team <team@phalcon.io>
      * @since  2014-09-05
      */
+    #[Test]
     public function testTagSelectStaticArrayParameter(): void
     {
         Tag::resetInput();
@@ -56,6 +58,7 @@ class SelectStaticTest extends AbstractTagSetup
      * @author Phalcon Team <team@phalcon.io>
      * @since  2014-09-05
      */
+    #[Test]
     public function testTagSelectStaticArrayParameterWithId(): void
     {
         Tag::resetInput();
@@ -90,6 +93,7 @@ class SelectStaticTest extends AbstractTagSetup
      * @author Phalcon Team <team@phalcon.io>
      * @since  2014-09-05
      */
+    #[Test]
     public function testTagSelectStaticArrayParameterWithNameNoId(): void
     {
         Tag::resetInput();
@@ -123,6 +127,7 @@ class SelectStaticTest extends AbstractTagSetup
      * @author Phalcon Team <team@phalcon.io>
      * @since  2014-09-05
      */
+    #[Test]
     public function testTagSelectStaticArrayParameterWithValue(): void
     {
         Tag::resetInput();
@@ -156,6 +161,7 @@ class SelectStaticTest extends AbstractTagSetup
      * @author Phalcon Team <team@phalcon.io>
      * @since  2014-09-05
      */
+    #[Test]
     public function testTagSelectStaticOptGroupArrayParameter(): void
     {
         Tag::resetInput();
@@ -193,6 +199,7 @@ class SelectStaticTest extends AbstractTagSetup
      * @author Phalcon Team <team@phalcon.io>
      * @since  2014-09-05
      */
+    #[Test]
     public function testTagSelectStaticOptGroupArrayParameterWithId(): void
     {
         Tag::resetInput();
@@ -234,6 +241,7 @@ class SelectStaticTest extends AbstractTagSetup
      * @author Phalcon Team <team@phalcon.io>
      * @since  2014-09-05
      */
+    #[Test]
     public function testTagSelectStaticOptGroupArrayParameterWithNameNoId(): void
     {
         Tag::resetInput();
@@ -273,6 +281,7 @@ class SelectStaticTest extends AbstractTagSetup
      * @author Phalcon Team <team@phalcon.io>
      * @since  2014-09-05
      */
+    #[Test]
     public function testTagSelectStaticOptGroupArrayParameterWithValue(): void
     {
         Tag::resetInput();
@@ -312,6 +321,7 @@ class SelectStaticTest extends AbstractTagSetup
      * @author Phalcon Team <team@phalcon.io>
      * @since  2014-09-05
      */
+    #[Test]
     public function testTagSelectStaticOptGroupWithDisplayTo(): void
     {
         Tag::resetInput();
@@ -353,6 +363,7 @@ class SelectStaticTest extends AbstractTagSetup
      * @author Phalcon Team <team@phalcon.io>
      * @since  2014-09-05
      */
+    #[Test]
     public function testTagSelectStaticOptGroupWithDisplayToElementNotPresent(): void
     {
         Tag::resetInput();
@@ -395,6 +406,7 @@ class SelectStaticTest extends AbstractTagSetup
      * @author Phalcon Team <team@phalcon.io>
      * @since  2014-09-05
      */
+    #[Test]
     public function testTagSelectStaticOptGroupWithSetDefault(): void
     {
         Tag::resetInput();
@@ -436,6 +448,7 @@ class SelectStaticTest extends AbstractTagSetup
      * @author Phalcon Team <team@phalcon.io>
      * @since  2014-09-05
      */
+    #[Test]
     public function testTagSelectStaticOptGroupWithSetDefaultElementNotPresent(): void
     {
         Tag::resetInput();
@@ -478,6 +491,7 @@ class SelectStaticTest extends AbstractTagSetup
      * @author Phalcon Team <team@phalcon.io>
      * @since  2014-09-05
      */
+    #[Test]
     public function testTagSelectStaticStringParameter(): void
     {
         Tag::resetInput();
@@ -506,6 +520,7 @@ class SelectStaticTest extends AbstractTagSetup
      * @author Phalcon Team <team@phalcon.io>
      * @since  2014-09-05
      */
+    #[Test]
     public function testTagSelectStaticWithDisplayTo(): void
     {
         Tag::resetInput();
@@ -541,6 +556,7 @@ class SelectStaticTest extends AbstractTagSetup
      * @author Phalcon Team <team@phalcon.io>
      * @since  2014-09-05
      */
+    #[Test]
     public function testTagSelectStaticWithDisplayToElementNotPresent(): void
     {
         Tag::resetInput();
@@ -577,6 +593,7 @@ class SelectStaticTest extends AbstractTagSetup
      * @author Phalcon Team <team@phalcon.io>
      * @since  2014-09-05
      */
+    #[Test]
     public function testTagSelectStaticWithSetDefault(): void
     {
         Tag::resetInput();
@@ -612,6 +629,7 @@ class SelectStaticTest extends AbstractTagSetup
      * @author Phalcon Team <team@phalcon.io>
      * @since  2014-09-05
      */
+    #[Test]
     public function testTagSelectStaticWithSetDefaultElementNotPresent(): void
     {
         Tag::resetInput();

@@ -14,6 +14,7 @@ declare(strict_types=1);
 namespace Phalcon\Tests\Unit\Tag;
 
 use Phalcon\Tag;
+use PHPUnit\Framework\Attributes\Test;
 
 class AppendTitleTest extends AbstractTagSetup
 {
@@ -23,6 +24,7 @@ class AppendTitleTest extends AbstractTagSetup
      * @author Phalcon Team <team@phalcon.io>
      * @since  2012-09-05
      */
+    #[Test]
     public function testTagAppendTitle(): void
     {
         Tag::resetInput();
@@ -53,6 +55,7 @@ class AppendTitleTest extends AbstractTagSetup
      * @author Phalcon Team <team@phalcon.io>
      * @since  2012-09-05
      */
+    #[Test]
     public function testTagAppendTitleArray(): void
     {
         Tag::resetInput();
@@ -84,6 +87,7 @@ class AppendTitleTest extends AbstractTagSetup
      * @author Phalcon Team <team@phalcon.io>
      * @since  2012-09-05
      */
+    #[Test]
     public function testTagAppendTitleDoubleCall(): void
     {
         Tag::resetInput();
@@ -116,6 +120,7 @@ class AppendTitleTest extends AbstractTagSetup
      * @author Phalcon Team <team@phalcon.io>
      * @since  2012-09-05
      */
+    #[Test]
     public function testTagAppendTitleEmptyArray(): void
     {
         Tag::resetInput();
@@ -148,6 +153,7 @@ class AppendTitleTest extends AbstractTagSetup
      * @author Phalcon Team <team@phalcon.io>
      * @since  2012-09-05
      */
+    #[Test]
     public function testTagAppendTitleSeparator(): void
     {
         Tag::resetInput();

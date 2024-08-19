@@ -16,6 +16,7 @@ namespace Phalcon\Tests\Unit\Tag;
 use Phalcon\Mvc\Url;
 use Phalcon\Mvc\Url\UrlInterface;
 use Phalcon\Tag;
+use PHPUnit\Framework\Attributes\Test;
 
 class GetUrlServiceTest extends AbstractTagSetup
 {
@@ -25,6 +26,7 @@ class GetUrlServiceTest extends AbstractTagSetup
      * @author Phalcon Team <team@phalcon.io>
      * @since  2018-11-13
      */
+    #[Test]
     public function testTagGetUrlService(): void
     {
         $url = Tag::getUrlService();

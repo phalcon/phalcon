@@ -16,6 +16,7 @@ namespace Phalcon\Tests\Unit\Tag;
 use Phalcon\Html\Escaper;
 use Phalcon\Html\Escaper\EscaperInterface;
 use Phalcon\Tag;
+use PHPUnit\Framework\Attributes\Test;
 
 class GetEscaperServiceTest extends AbstractTagSetup
 {
@@ -26,6 +27,7 @@ class GetEscaperServiceTest extends AbstractTagSetup
      *
      * @author Phalcon Team <team@phalcon.io>
      */
+    #[Test]
     public function testTagGetEscaperService(): void
     {
         $escaper = Tag::getEscaperService();

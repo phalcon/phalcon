@@ -14,6 +14,7 @@ declare(strict_types=1);
 namespace Phalcon\Tests\Unit\Tag;
 
 use Phalcon\Tag;
+use PHPUnit\Framework\Attributes\Test;
 use Phalcon\Tests\AbstractUnitTestCase;
 
 class GetTitleTest extends AbstractUnitTestCase
@@ -25,6 +26,7 @@ class GetTitleTest extends AbstractUnitTestCase
      * @author Phalcon Team <team@phalcon.io>
      * @since  2016-01-13
      */
+    #[Test]
     public function testTagGetTitleWithMaliciousContent(): void
     {
         Tag::resetInput();
