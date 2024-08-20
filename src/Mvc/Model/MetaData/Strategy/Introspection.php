@@ -71,10 +71,9 @@ class Introspection implements StrategyInterface
         $readConnection = $model->getReadConnection();
 
         if (!$readConnection->tableExists($table, $schema)) {
+            $completeTable = $table;
             if (null !== $schema) {
                 $completeTable = $schema . "'.'" . $table;
-            } else {
-                $completeTable = $table;
             }
 
             /**
@@ -93,10 +92,9 @@ class Introspection implements StrategyInterface
         $columns = $readConnection->describeColumns($table, $schema);
 
         if (0 === count($columns)) {
+            $completeTable = $table;
             if (null !== $schema) {
                 $completeTable = $schema . "'.'" . $table;
-            } else {
-                $completeTable = $table;
             }
 
             /**

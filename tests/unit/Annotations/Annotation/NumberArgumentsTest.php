@@ -49,6 +49,6 @@ final class NumberArgumentsTest extends AbstractUnitTestCase
             ],
         ]);
 
-        $this->assertSame($annotation->numberArguments(), 2);
+        $this->assertSame(2, $annotation->numberArguments());
     }
 }

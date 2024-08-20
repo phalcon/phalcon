@@ -48,6 +48,24 @@ use const IMAGETYPE_GIF;
  */
 class Imagick extends AbstractAdapter
 {
+    private const ALPHACHANNEL_SET = 8;
+    private const CHANNEL_ALPHA = 8;
+    private const COMPOSITE_DISSOLVE = 28;
+    private const COMPOSITE_DSTIN = 23;
+    private const COMPOSITE_DSTOUT = 24;
+    private const COMPOSITE_OVER = 40;
+    private const COMPOSITE_SRC = 48;
+    private const COMPRESSION_JPEG = 8;
+    private const EVALUATE_MULTIPLY = 7;
+    private const IMAGICK_EXTNUM = 30700;
+    private const GRAVITY_SOUTHEAST = 9;
+    private const GRAVITY_NORTHEAST = 3;
+    private const GRAVITY_NORTH = 2;
+    private const GRAVITY_SOUTH = 8;
+    private const GRAVITY_EAST = 6;
+    private const GRAVITY_WEST = 4;
+    private const GRAVITY_CENTER = 5;
+
     /**
      * @var int
      */
@@ -83,9 +101,7 @@ class Imagick extends AbstractAdapter
             }
 
             if (!$this->image->getImageAlphaChannel()) {
-                $this->image->setImageAlphaChannel(
-                    constant("Imagick::ALPHACHANNEL_SET")
-                );
+                $this->image->setImageAlphaChannel(self::ALPHACHANNEL_SET);
             }
             $this->type = $this->image->getImageType();
 
@@ -241,7 +257,7 @@ class Imagick extends AbstractAdapter
             try {
                 if (true !== $background->getImageAlphaChannel()) {
                     $background->setImageAlphaChannel(
-                        constant("Imagick::ALPHACHANNEL_SET")
+                        self::ALPHACHANNEL_SET
                     );
                 }
             } catch (ImagickException) {
@@ -251,9 +267,9 @@ class Imagick extends AbstractAdapter
             $background->setImageBackgroundColor($pixel2);
 
             $background->evaluateImage(
-                constant("Imagick::EVALUATE_MULTIPLY"),
+                self::EVALUATE_MULTIPLY,
                 $opacity,
-                constant("Imagick::CHANNEL_ALPHA")
+                self::CHANNEL_ALPHA
             );
 
             $background->setColorspace(
@@ -262,7 +278,7 @@ class Imagick extends AbstractAdapter
 
             $result = $background->compositeImage(
                 $this->image,
-                constant("Imagick::COMPOSITE_DISSOLVE"),
+                self::COMPOSITE_DISSOLVE,
                 0,
                 0
             );
@@ -392,7 +408,7 @@ class Imagick extends AbstractAdapter
 
             $return = $this->image->compositeImage(
                 $mask,
-                constant("Imagick::COMPOSITE_DSTIN"),
+                self::COMPOSITE_DSTIN,
                 0,
                 0
             );
@@ -496,7 +512,7 @@ class Imagick extends AbstractAdapter
         while (true) {
             $return = $reflection->compositeImage(
                 $fade,
-                constant("Imagick::COMPOSITE_DSTOUT"),
+                self::COMPOSITE_DSTOUT,
                 0,
                 0
             );
@@ -506,9 +522,9 @@ class Imagick extends AbstractAdapter
             }
 
             $reflection->evaluateImage(
-                constant("Imagick::EVALUATE_MULTIPLY"),
+                self::EVALUATE_MULTIPLY,
                 $opacity,
-                constant("Imagick::CHANNEL_ALPHA")
+                self::CHANNEL_ALPHA
             );
 
             if (true !== $this->image->nextImage()) {
@@ -526,16 +542,13 @@ class Imagick extends AbstractAdapter
 
         while (true) {
             $image->newImage($this->width, $height, $pixel);
-
-            $image->setImageAlphaChannel(
-                constant("Imagick::ALPHACHANNEL_SET")
-            );
+            $image->setImageAlphaChannel(self::ALPHACHANNEL_SET);
 
             $image->setColorspace($this->image->getColorspace());
             $image->setImageDelay($this->image->getImageDelay());
             $return = $image->compositeImage(
                 $this->image,
-                constant("Imagick::COMPOSITE_SRC"),
+                self::COMPOSITE_SRC,
                 0,
                 0
             );
@@ -555,7 +568,7 @@ class Imagick extends AbstractAdapter
         while (true) {
             $return = $image->compositeImage(
                 $reflection,
-                constant("Imagick::COMPOSITE_OVER"),
+                self::COMPOSITE_OVER,
                 0,
                 $this->height
             );
@@ -606,10 +619,7 @@ class Imagick extends AbstractAdapter
                 break;
             case "jpg":
             case "jpeg":
-                $image->setImageCompression(
-                    constant("Imagick::COMPRESSION_JPEG")
-                );
-
+                $image->setImageCompression(self::COMPRESSION_JPEG);
                 $image->setImageCompressionQuality($quality);
         }
 
@@ -708,9 +718,7 @@ class Imagick extends AbstractAdapter
                 return;
             case "jpg":
             case "jpeg":
-                $this->image->setImageCompression(
-                    constant("Imagick::COMPRESSION_JPEG")
-                );
+                $this->image->setImageCompression(self::COMPRESSION_JPEG);
         }
 
         if ($quality >= 0) {
@@ -797,14 +805,14 @@ class Imagick extends AbstractAdapter
             if (true === is_bool($offsetY)) {
                 $offsetX = 0;
                 $offsetY = 0;
-                $gravity = constant("Imagick::GRAVITY_CENTER");
+                $gravity = self::GRAVITY_CENTER;
             } elseif (true === is_int($offsetY)) {
                 $y = $offsetY;
 
-                $gravity = (true === $offsetX && $y < 0) ? constant("Imagick::GRAVITY_SOUTHEAST") : $gravity;
-                $gravity = (true === $offsetX && $y >= 0) ? constant("Imagick::GRAVITY_NORTHEAST") : $gravity;
-                $gravity = (true !== $offsetX && $y < 0) ? constant("Imagick::GRAVITY_SOUTH") : $gravity;
-                $gravity = (true !== $offsetX && $y >= 0) ? constant("Imagick::GRAVITY_NORTH") : $gravity;
+                $gravity = (true === $offsetX && $y < 0) ? self::GRAVITY_SOUTHEAST : $gravity;
+                $gravity = (true === $offsetX && $y >= 0) ? self::GRAVITY_NORTHEAST : $gravity;
+                $gravity = (true !== $offsetX && $y < 0) ? self::GRAVITY_SOUTH : $gravity;
+                $gravity = (true !== $offsetX && $y >= 0) ? self::GRAVITY_NORTH : $gravity;
 
                 $offsetX = 0;
                 $offsetY = ($y < 0) ? $y * -1 : $offsetY;
@@ -814,10 +822,10 @@ class Imagick extends AbstractAdapter
 
             if ($offsetX) {
                 if (true === is_bool($offsetY)) {
-                    $gravity = (true === $offsetY && $x < 0) ? constant("Imagick::GRAVITY_SOUTHEAST") : $gravity;
-                    $gravity = (true === $offsetY && $x >= 0) ? constant("Imagick::GRAVITY_SOUTH") : $gravity;
-                    $gravity = (true !== $offsetY && $x < 0) ? constant("Imagick::GRAVITY_EAST") : $gravity;
-                    $gravity = (true !== $offsetY && $x >= 0) ? constant("Imagick::GRAVITY_WEST") : $gravity;
+                    $gravity = (true === $offsetY && $x < 0) ? self::GRAVITY_SOUTHEAST : $gravity;
+                    $gravity = (true === $offsetY && $x >= 0) ? self::GRAVITY_SOUTH : $gravity;
+                    $gravity = (true !== $offsetY && $x < 0) ? self::GRAVITY_EAST : $gravity;
+                    $gravity = (true !== $offsetY && $x >= 0) ? self::GRAVITY_WEST : $gravity;
 
                     $offsetY = 0;
                     $offsetX = ($x < 0) ? $x * -1 : $offsetX;
@@ -827,8 +835,8 @@ class Imagick extends AbstractAdapter
                     $offsetX = ($x < 0) ? $x * -1 : 0;
                     $offsetY = ($y < 0) ? $y * -1 : $offsetY;
 
-                    $gravity = ($y < 0) ? constant("Imagick::GRAVITY_SOUTHEAST") : $gravity;
-                    $gravity = ($y >= 0) ? constant("Imagick::GRAVITY_NORTHEAST") : $gravity;
+                    $gravity = ($y < 0) ? self::GRAVITY_SOUTHEAST : $gravity;
+                    $gravity = ($y >= 0) ? self::GRAVITY_NORTHEAST : $gravity;
                 }
             }
         }
@@ -873,9 +881,9 @@ class Imagick extends AbstractAdapter
 
         $watermark->readImageBlob($image->render());
         $watermark->evaluateImage(
-            constant("Imagick::EVALUATE_MULTIPLY"),
+            self::EVALUATE_MULTIPLY,
             $opacity,
-            constant("Imagick::CHANNEL_ALPHA")
+            self::CHANNEL_ALPHA
         );
 
         $this->image->setIteratorIndex(0);
@@ -883,7 +891,7 @@ class Imagick extends AbstractAdapter
         while (true) {
             $return = $this->image->compositeImage(
                 $watermark,
-                constant("Imagick::COMPOSITE_OVER"),
+                self::COMPOSITE_OVER,
                 $offsetX,
                 $offsetY
             );
@@ -916,7 +924,7 @@ class Imagick extends AbstractAdapter
         }
 
         if (defined("Imagick::IMAGICK_EXTNUM")) {
-            $this->version = constant("Imagick::IMAGICK_EXTNUM");
+            $this->version = self::IMAGICK_EXTNUM;
         }
     }
 }
