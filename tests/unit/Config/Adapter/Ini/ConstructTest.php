@@ -19,7 +19,11 @@ use Phalcon\Tests\Fixtures\Config\Adapter\IniParseFileFixture;
 use Phalcon\Tests\Fixtures\Traits\ConfigTrait;
 use Phalcon\Tests\AbstractUnitTestCase;
 
-use function supportDir;
+use function basename;
+use function dataDir;
+use function define;
+
+use const INI_SCANNER_NORMAL;
 
 final class ConstructTest extends AbstractUnitTestCase
 {
