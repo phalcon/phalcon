@@ -28,7 +28,6 @@ use function is_string;
 use function mb_strtolower;
 use function memory_get_usage;
 use function sprintf;
-use function var_dump;
 
 /**
  * @property array  $blacklist
@@ -46,14 +45,17 @@ class Debug
      * @var array
      */
     protected array $blacklist = ["request" => [], "server" => []];
+
     /**
      * @var mixed
      */
     protected mixed $data = null;
+
     /**
      * @var bool
      */
     protected bool $hideDocumentRoot = false;
+
     /**
      * @var bool
      */
@@ -154,8 +156,7 @@ class Debug
             . $version->getPart(Version::VERSION_MAJOR)
             . "."
             . $version->getPart(Version::VERSION_MEDIUM)
-            . "/"
-        ;
+            . "/";
 
         return "<div class='version'>
     Phalcon Framework <a href='$link' target='_new'>" . $version->get() . "</a>
@@ -877,7 +878,7 @@ class Debug
                     $counter++;
                 }
 
-                $html      .= "
+                $html .= "
                             </pre>";
             }
         }
@@ -885,6 +886,17 @@ class Debug
         return $html . "
                     </td>
                 </tr>";
+    }
+
+    /**
+     * @return string
+     */
+    private function closeTable(): string
+    {
+        return "
+                </tbody>
+            </table>
+        </div>";
     }
 
     /**
@@ -1031,19 +1043,5 @@ class Debug
                 </tr>
                 </thead>
                 <tbody>";
-    }
-
-
-
-
-    /**
-     * @return string
-     */
-    private function closeTable(): string
-    {
-        return "
-                </tbody>
-            </table>
-        </div>";
     }
 }
