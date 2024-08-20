@@ -737,11 +737,10 @@ class Router extends AbstractInjectionAware implements RouterInterface, EventsAw
         /**
          * Retrieve the request service from the container
          */
-        if (null === $this->container) {
-            throw new Exception(
-                "A dependency injection container is required to access the 'request' service"
-            );
-        }
+        $this->checkContainer(
+            Exception::class,
+            "the 'request' service"
+        );
 
         /** @var RequestInterface $request */
         $request = $this->container->get("request");

@@ -102,11 +102,7 @@ class Application extends AbstractApplication
      */
     public function handle(string $uri): ResponseInterface | bool
     {
-        if (null === $this->container) {
-            throw new Exception(
-                "A dependency injection container is required to access internal services"
-            );
-        }
+        $this->checkContainer(Exception::class, 'internal services');
 
         /**
          * Call boot event, this allows the developer to perform initialization

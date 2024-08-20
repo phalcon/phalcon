@@ -103,8 +103,8 @@ abstract class AbstractFlash implements FlashInterface, InjectionAwareInterface
             return $this->escaperService;
         }
 
-        throw new Exception(
-            'A dependency injection container is required to access ' .
+        $this->checkContainer(
+            Exception::class,
             "the 'escaper' service"
         );
     }
