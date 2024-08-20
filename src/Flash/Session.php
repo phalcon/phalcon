@@ -61,6 +61,10 @@ class Session extends AbstractFlash
      */
     public function getSessionService(): ManagerInterface
     {
+        if (null !== $this->sessionService) {
+            return $this->sessionService;
+        }
+
         $this->checkContainer(
             Exception::class,
             "the 'session' service"
