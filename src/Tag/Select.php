@@ -325,5 +325,4 @@ abstract class Select
 
         return "\t<option {$extra}value=\"" . $value . "\">";
     }
-
 }
