@@ -21,7 +21,7 @@ use Phalcon\Config\Exception;
 use Phalcon\Tests\Fixtures\Traits\ConfigTrait;
 use Phalcon\Tests\AbstractUnitTestCase;
 
-use function supportDir;
+use function dataDir;
 
 final class ConstructTest extends AbstractUnitTestCase
 {

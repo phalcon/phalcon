@@ -20,7 +20,11 @@ use Phalcon\Tests\Fixtures\Config\Adapter\YamlParseFileFixture;
 use Phalcon\Tests\Fixtures\Traits\ConfigTrait;
 use Phalcon\Tests\AbstractUnitTestCase;
 
-use function supportDir;
+use function basename;
+use function dataDir;
+use function hash;
+
+use const PATH_DATA;
 
 final class ConstructTest extends AbstractUnitTestCase
 {
