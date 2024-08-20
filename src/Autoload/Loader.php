@@ -433,7 +433,7 @@ class Loader
     public function setExtensions(array $extensions, bool $merge = false): Loader
     {
         if (true !== $merge) {
-            $this->extensions = [$this->getHash( 'php') => 'php'];
+            $this->extensions = [$this->getHash('php') => 'php'];
         }
 
         foreach ($extensions as $extension) {
