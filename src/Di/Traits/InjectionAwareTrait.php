@@ -48,4 +48,23 @@ trait InjectionAwareTrait
     {
         $this->container = $container;
     }
+
+    /**
+     * @param string $exceptionClass
+     *
+     * @return void
+     */
+    protected function checkContainer(
+        string $exceptionClass,
+        string $message,
+        int $code = 0
+    ): void {
+        if (null === $this->container) {
+            throw new $exceptionClass(
+                'A dependency injection container is required to access '
+                . $message,
+                $code
+            );
+        }
+    }
 }

@@ -263,11 +263,10 @@ abstract class MetaData extends Injectable implements MetaDataInterface
      */
     public function getDI(): DiInterface
     {
-        if (null === $this->container) {
-            throw new Exception(
-                "A dependency injection container is required to access internal services"
-            );
-        }
+        $this->checkContainer(
+            Exception::class,
+            'internal services'
+        );
 
         return $this->container;
     }

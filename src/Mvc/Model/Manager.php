@@ -778,11 +778,10 @@ class Manager implements ManagerInterface, InjectionAwareInterface, EventsAwareI
      */
     public function createBuilder(array | string | null $params = null): BuilderInterface
     {
-        if (null === $this->container) {
-            throw new Exception(
-                "A dependency injection container is required to access the services related to the ORM"
-            );
-        }
+        $this->checkContainer(
+            Exception::class,
+            'the services related to the ORM'
+        );
 
         /**
          * Gets Builder instance from DI container
@@ -808,11 +807,10 @@ class Manager implements ManagerInterface, InjectionAwareInterface, EventsAwareI
      */
     public function createQuery(string $phql): QueryInterface
     {
-        if (null === $this->container) {
-            throw new Exception(
-                "A dependency injection container is required to access the services related to the ORM"
-            );
-        }
+        $this->checkContainer(
+            Exception::class,
+            'the services related to the ORM'
+        );
 
         /**
          * Create a query
@@ -2092,11 +2090,10 @@ class Manager implements ManagerInterface, InjectionAwareInterface, EventsAwareI
     ): AdapterInterface {
         $service = $this->getConnectionService($model, $connectionServices);
 
-        if (null === $this->container) {
-            throw new Exception(
-                "A dependency injection container is required to access the services related to the ORM"
-            );
-        }
+        $this->checkContainer(
+            Exception::class,
+            'the services related to the ORM'
+        );
 
         /**
          * Request the connection service from the DI

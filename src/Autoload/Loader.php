@@ -55,6 +55,11 @@ class Loader
     use EventsAwareTrait;
     use StartsWithTrait;
 
+    private const EVENT_BEFORE_CHECK_PATH = "loader:beforeCheckPath";
+    private const EVENT_BEFORE_CHECK_CLASS = "loader:beforeCheckClass";
+    private const EVENT_AFTER_CHECK_CLASS = "loader:afterCheckClass";
+    private const EVENT_PATH_FOUND = "loader:pathFound";
+
     /**
      * @var string|null
      */
@@ -115,7 +120,7 @@ class Loader
      */
     public function __construct(bool $isDebug = false)
     {
-        $this->extensions = [hash("sha256", 'php') => 'php'];
+        $this->extensions = [$this->getHash('php') => 'php'];
         $this->isDebug    = $isDebug;
     }
 
@@ -143,7 +148,7 @@ class Loader
      */
     public function addDirectory(string $directory): Loader
     {
-        $this->directories[hash("sha256", $directory)] = $directory;
+        $this->directories[$this->getHash($directory)] = $directory;
 
         return $this;
     }
@@ -157,7 +162,7 @@ class Loader
      */
     public function addExtension(string $extension): Loader
     {
-        $this->extensions[hash("sha256", $extension)] = $extension;
+        $this->extensions[$this->getHash($extension)] = $extension;
 
         return $this;
     }
@@ -171,7 +176,7 @@ class Loader
      */
     public function addFile(string $file): Loader
     {
-        $this->files[hash("sha256", $file)] = $file;
+        $this->files[$this->getHash($file)] = $file;
 
         return $this;
     }
@@ -220,7 +225,7 @@ class Loader
     {
         $this->debug = [];
         $this->addDebug("Loading: " . $className);
-        $this->fireManagerEvent("loader:beforeCheckClass", $className);
+        $this->fireManagerEvent(self::EVENT_BEFORE_CHECK_CLASS, $className);
 
         if (true === $this->autoloadCheckClasses($className)) {
             return true;
@@ -246,7 +251,7 @@ class Loader
 
         $this->addDebug("Directories: 404: " . $className);
 
-        $this->fireManagerEvent("loader:afterCheckClass", $className);
+        $this->fireManagerEvent(self::EVENT_AFTER_CHECK_CLASS, $className);
 
         /**
          * Cannot find the class, return false
@@ -343,11 +348,11 @@ class Loader
     public function loadFiles(): void
     {
         foreach ($this->files as $file) {
-            $this->fireManagerEvent("loader:beforeCheckPath", $file);
+            $this->fireManagerEvent(self::EVENT_BEFORE_CHECK_PATH, $file);
 
             if (true === $this->requireFile($file)) {
                 $this->foundPath = $file;
-                $this->fireManagerEvent("loader:pathFound", $file);
+                $this->fireManagerEvent(self::EVENT_PATH_FOUND, $file);
             }
         }
     }
@@ -428,7 +433,7 @@ class Loader
     public function setExtensions(array $extensions, bool $merge = false): Loader
     {
         if (true !== $merge) {
-            $this->extensions = [hash("sha256", 'php') => 'php'];
+            $this->extensions = [$this->getHash( 'php') => 'php'];
         }
 
         foreach ($extensions as $extension) {
@@ -556,7 +561,7 @@ class Loader
             /**
              * Call 'pathFound' event
              */
-            $this->fireManagerEvent("loader:pathFound", $file);
+            $this->fireManagerEvent(self::EVENT_PATH_FOUND, $file);
             $this->addDebug("Require: " . $file);
 
             /**
@@ -625,7 +630,7 @@ class Loader
     {
         if (true === isset($this->classes[$className])) {
             $filePath = $this->classes[$className];
-            $this->fireManagerEvent("loader:pathFound", $filePath);
+            $this->fireManagerEvent(self::EVENT_PATH_FOUND, $filePath);
 
             $this->requireFile($filePath);
             $this->addDebug("Class: load: " . $filePath);
@@ -668,7 +673,7 @@ class Loader
                  */
                 $filePath          = $fixedDirectory . $className . "." . $extension;
                 $this->checkedPath = $filePath;
-                $this->fireManagerEvent("loader:beforeCheckPath", $filePath);
+                $this->fireManagerEvent(self::EVENT_BEFORE_CHECK_PATH, $filePath);
 
                 if (true === $this->requireFile($filePath)) {
                     if (true === $isDirectory) {
@@ -737,9 +742,19 @@ class Loader
         foreach ($directories as $directory) {
             $directory = rtrim($directory, $dirSeparator) . $dirSeparator;
 
-            $results[hash("sha256", $directory)] = $directory;
+            $results[$this->getHash($directory)] = $directory;
         }
 
         return $results;
+    }
+
+    /**
+     * @param string $content
+     *
+     * @return string
+     */
+    private function getHash(string $content): string
+    {
+        return hash('sha256', $content);
     }
 }

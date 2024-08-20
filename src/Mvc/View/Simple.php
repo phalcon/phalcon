@@ -521,11 +521,10 @@ class Simple extends Injectable implements ViewBaseInterface, EventsAwareInterfa
                  */
                 $engines[".phtml"] = new PhpEngine($this, $this->container);
             } else {
-                if (null === $this->container) {
-                    throw new Exception(
-                        "A dependency injection container is required to access the application services"
-                    );
-                }
+                $this->checkContainer(
+                    Exception::class,
+                    'the application services'
+                );
 
                 foreach ($this->registeredEngines as $extension => $engineService) {
                     if (is_object($engineService)) {

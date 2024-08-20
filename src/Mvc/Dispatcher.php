@@ -269,12 +269,11 @@ class Dispatcher extends BaseDispatcher implements DispatcherInterface
      */
     protected function throwDispatchException(string $message, int $exceptionCode = 0): bool
     {
-        if (null === $this->container) {
-            throw new Exception(
-                "A dependency injection container is required to access the 'response' service",
-                Exception::EXCEPTION_NO_DI
-            );
-        }
+        $this->checkContainer(
+            Exception::class,
+            "the 'response' service",
+            Exception::EXCEPTION_NO_DI
+        );
 
         $response = $this->container->getShared("response");
 

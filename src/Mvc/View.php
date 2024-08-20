@@ -1508,11 +1508,10 @@ class View extends Injectable implements ViewInterface, EventsAwareInterface
                  */
                 $engines[".phtml"] = new PhpEngine($this, $this->container);
             } else {
-                if (null === $this->container) {
-                    throw new Exception(
-                        "A dependency injection container is required to access application services"
-                    );
-                }
+                $this->checkContainer(
+                    Exception::class,
+                    'the application services'
+                );
 
                 foreach ($registeredEngines as $extension => $engineService) {
                     if (is_object($engineService)) {
