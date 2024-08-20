@@ -203,9 +203,7 @@ abstract class AbstractLink
      */
     protected function hrefIsTemplated(string $href): bool
     {
-        return (
-            false !== mb_strpos($href, "{") &&
-            false !== mb_strpos($href, "}")
-        );
+        return false !== mb_strpos($href, "{") &&
+            false !== mb_strpos($href, "}");
     }
 }

@@ -464,8 +464,10 @@ class Stream extends AbstractAdapter
             mkdir($directory, 0777, true);
         }
 
-        return (
-            false !== $this->phpFilePutContents($directory . $key, $payload, LOCK_EX)
+        return false !== $this->phpFilePutContents(
+            $directory . $key,
+            $payload,
+            LOCK_EX
         );
     }
 }

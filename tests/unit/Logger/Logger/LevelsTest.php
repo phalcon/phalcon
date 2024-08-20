@@ -93,7 +93,7 @@ final class LevelsTest extends AbstractUnitTestCase
             $content,
             $matches
         );
-        $this->assertSame(count($matches), 2);
+        $this->assertSame(2, count($matches));
 
         // Get Extract time
         $date             = end($matches);

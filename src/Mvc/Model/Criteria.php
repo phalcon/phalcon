@@ -361,31 +361,32 @@ class Criteria implements CriteriaInterface, InjectionAwareInterface
              * We look for attributes in the array passed as data
              */
             foreach ($data as $field => $value) {
+                $attribute = $field;
                 if (is_array($columnMap) && count($columnMap)) {
                     $attribute = $columnMap[$field];
-                } else {
-                    $attribute = $field;
                 }
 
-                if (isset($dataTypes[$attribute])) {
+                if (
+                    isset($dataTypes[$attribute]) &&
+                    $value !== null &&
+                    $value !== ""
+                ) {
                     $type = $dataTypes[$attribute];
-                    if ($value !== null && $value !== "") {
-                        if ($type == Column::TYPE_VARCHAR) {
-                            /**
-                             * For varchar types we use LIKE operator
-                             */
-                            $conditions[] = "[" . $field . "] LIKE :" . $field . ":";
-                            $bind[$field] = "%" . $value . "%";
-
-                            continue;
-                        }
-
+                    if ($type == Column::TYPE_VARCHAR) {
                         /**
-                         * For the rest of data types we use a plain = operator
+                         * For varchar types we use LIKE operator
                          */
-                        $conditions[] = "[" . $field . "] = :" . $field . ":";
-                        $bind[$field] = $value;
+                        $conditions[] = "[" . $field . "] LIKE :" . $field . ":";
+                        $bind[$field] = "%" . $value . "%";
+
+                        continue;
                     }
+
+                    /**
+                     * For the rest of data types we use a plain = operator
+                     */
+                    $conditions[] = "[" . $field . "] = :" . $field . ":";
+                    $bind[$field] = $value;
                 }
             }
         }

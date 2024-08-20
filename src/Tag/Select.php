@@ -20,6 +20,7 @@ use function is_array;
 use function is_object;
 use function is_string;
 use function method_exists;
+use function self;
 use function str_contains;
 
 /**
@@ -30,6 +31,9 @@ use function str_contains;
  */
 abstract class Select
 {
+    protected const SELECT_CLOSE = '</select>';
+    protected const OPTION_CLOSE = '</option>';
+
     /**
      * Generates a SELECT tag
      *
@@ -126,7 +130,9 @@ abstract class Select
             /**
              * Create an empty value
              */
-            $code .= "\t<option value=\"" . $emptyValue . "\">" . $emptyText . "</option>" . PHP_EOL;
+            $code .= self::echoOption($emptyValue)
+                . $emptyText
+                . self::OPTION_CLOSE . PHP_EOL;
         }
 
         if (true === is_object($options)) {
@@ -137,7 +143,7 @@ abstract class Select
                 $options,
                 $using,
                 $value,
-                "</option>" . PHP_EOL
+                self::OPTION_CLOSE . PHP_EOL
             );
         } else {
             if (is_array($options)) {
@@ -147,12 +153,12 @@ abstract class Select
                 $code .= self::optionsFromArray(
                     $options,
                     $value,
-                    "</option>" . PHP_EOL
+                    self::OPTION_CLOSE . PHP_EOL
                 );
             }
         }
 
-        $code .= "</select>";
+        $code .= self::SELECT_CLOSE;
 
         return $code;
     }
@@ -189,10 +195,10 @@ abstract class Select
 
             if (is_array($value)) {
                 if (true === in_array($optionValue, $value)) {
-                    $code .= "\t<option selected=\"selected\" value=\""
-                        . $escaped . "\">" . $optionText . $closeOption;
+                    $code .= self::echoOption($escaped, true)
+                        . $optionText . $closeOption;
                 } else {
-                    $code .= "\t<option value=\"" . $escaped . "\">"
+                    $code .= self::echoOption($escaped)
                         . $optionText . $closeOption;
                 }
             } else {
@@ -200,10 +206,10 @@ abstract class Select
                 $strValue       = (string)$value;
 
                 if ($strOptionValue === $strValue) {
-                    $code .= "\t<option selected=\"selected\" value=\""
-                        . $escaped . "\">" . $optionText . $closeOption;
+                    $code .= self::echoOption($escaped, true)
+                        . $optionText . $closeOption;
                 } else {
-                    $code .= "\t<option value=\"" . $escaped . "\">"
+                    $code .= self::echoOption($escaped)
                         . $optionText . $closeOption;
                 }
             }
@@ -274,13 +280,11 @@ abstract class Select
                  */
                 if (is_array($value)) {
                     if (true === in_array($optionValue, $value)) {
-                        $code .= "\t<option selected=\"selected\" value=\""
-                            . $optionValue . "\">"
+                        $code .= self::echoOption($optionValue, true)
                             . $optionText
                             . $closeOption;
                     } else {
-                        $code .= "\t<option value=\""
-                            . $optionValue . "\">"
+                        $code .= self::echoOption($optionValue)
                             . $optionText
                             . $closeOption;
                     }
@@ -289,13 +293,12 @@ abstract class Select
                     $strValue       = (string)$value;
 
                     if ($strOptionValue === $strValue) {
-                        $code .= "\t<option selected=\"selected\" value=\""
-                            . $strOptionValue . "\">"
+                        $code .= self::echoOption($strOptionValue, true)
                             . $optionText
                             . $closeOption;
                     } else {
-                        $code .= "\t<option value=\"" . $strOptionValue
-                            . "\">" . $optionText . $closeOption;
+                        $code .= self::echoOption($strOptionValue)
+                            . $optionText . $closeOption;
                     }
                 }
             } else {
@@ -315,4 +318,12 @@ abstract class Select
 
         return $code;
     }
+
+    protected static function echoOption(string $value, bool $selected = false): string
+    {
+        $extra = $selected ? 'selected="selected" ' : '';
+
+        return "\t<option {$extra}value=\"" . $value . "\">";
+    }
+
 }
