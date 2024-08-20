@@ -15,6 +15,8 @@ namespace Phalcon\Tests\Unit\Support\Helper\Str;
 
 use Phalcon\Support\Helper\Str\Friendly;
 use Phalcon\Tests\AbstractUnitTestCase;
+use PHPUnit\Framework\Attributes\DataProvider;
+use PHPUnit\Framework\Attributes\Test;
 
 final class FriendlyTest extends AbstractUnitTestCase
 {
@@ -87,13 +89,13 @@ final class FriendlyTest extends AbstractUnitTestCase
     /**
      * Tests Phalcon\Support\Helper\Str :: friendly()
      *
-     * @dataProvider getExamples
-     *
      * @return void
      *
      * @author       Phalcon Team <team@phalcon.io>
      * @since        2020-09-09
      */
+    #[Test]
+    #[DataProvider('getExamples')]
     public function testSupportHelperStrFriendly(
         string $text,
         string $separator,

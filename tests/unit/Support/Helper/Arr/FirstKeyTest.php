@@ -15,6 +15,7 @@ namespace Phalcon\Tests\Unit\Support\Helper\Arr;
 
 use Phalcon\Support\Helper\Arr\FirstKey;
 use Phalcon\Tests\AbstractUnitTestCase;
+use PHPUnit\Framework\Attributes\Test;
 
 final class FirstKeyTest extends AbstractUnitTestCase
 {
@@ -26,6 +27,7 @@ final class FirstKeyTest extends AbstractUnitTestCase
      * @author Phalcon Team <team@phalcon.io>
      * @since  2020-09-09
      */
+    #[Test]
     public function testSupportHelperArrFirstKey(): void
     {
         $object     = new FirstKey();
@@ -47,6 +49,7 @@ final class FirstKeyTest extends AbstractUnitTestCase
      * @author Phalcon Team <team@phalcon.io>
      * @since  2020-09-09
      */
+    #[Test]
     public function testSupportHelperArrFirstKeyFunction(): void
     {
         $object     = new FirstKey();

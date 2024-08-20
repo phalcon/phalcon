@@ -15,6 +15,7 @@ namespace Phalcon\Tests\Unit\Support\Debug;
 
 use Phalcon\Support\Debug;
 use Phalcon\Tests\AbstractUnitTestCase;
+use PHPUnit\Framework\Attributes\Test;
 
 use function sprintf;
 
@@ -33,6 +34,7 @@ final class GetCssSourcesTest extends AbstractUnitTestCase
      * @author Phalcon Team <team@phalcon.io>
      * @since  2020-09-09
      */
+    #[Test]
     public function testSupportDebugGetCssSources(): void
     {
         $debug = new Debug();

@@ -15,6 +15,8 @@ namespace Phalcon\Tests\Unit\Support\Helper\Str;
 
 use Phalcon\Support\Helper\Str\Underscore;
 use Phalcon\Tests\AbstractUnitTestCase;
+use PHPUnit\Framework\Attributes\DataProvider;
+use PHPUnit\Framework\Attributes\Test;
 
 final class UnderscoreTest extends AbstractUnitTestCase
 {
@@ -46,13 +48,13 @@ final class UnderscoreTest extends AbstractUnitTestCase
     /**
      * Tests Phalcon\Support\Helper\Str :: underscore()
      *
-     * @dataProvider getExamples
-     *
      * @return void
      *
      * @author       Phalcon Team <team@phalcon.io>
      * @since        2020-09-09
      */
+    #[Test]
+    #[DataProvider('getExamples')]
     public function testSupportHelperStrUnderscore(
         string $text,
         string $expected

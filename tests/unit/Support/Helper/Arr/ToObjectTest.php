@@ -15,6 +15,7 @@ namespace Phalcon\Tests\Unit\Support\Helper\Arr;
 
 use Phalcon\Support\Helper\Arr\ToObject;
 use Phalcon\Tests\AbstractUnitTestCase;
+use PHPUnit\Framework\Attributes\Test;
 use stdClass;
 
 final class ToObjectTest extends AbstractUnitTestCase
@@ -27,6 +28,7 @@ final class ToObjectTest extends AbstractUnitTestCase
      * @author Phalcon Team <team@phalcon.io>
      * @since  2020-09-09
      */
+    #[Test]
     public function testSupportHelperArrArrayToObject(): void
     {
         $object = new ToObject();

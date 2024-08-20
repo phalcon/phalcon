@@ -75,6 +75,8 @@ use Phalcon\Support\Helper\Str\Underscore;
 use Phalcon\Support\Helper\Str\Upper;
 use Phalcon\Support\HelperFactory;
 use Phalcon\Tests\AbstractUnitTestCase;
+use PHPUnit\Framework\Attributes\DataProvider;
+use PHPUnit\Framework\Attributes\Test;
 
 final class NewInstanceTest extends AbstractUnitTestCase
 {
@@ -149,13 +151,13 @@ final class NewInstanceTest extends AbstractUnitTestCase
     /**
      * Tests Phalcon\Support :: newInstance()
      *
-     * @dataProvider getExamples
-     *
      * @return void
      *
      * @author       Phalcon Team <team@phalcon.io>
      * @since        2020-09-09
      */
+    #[Test]
+    #[DataProvider('getExamples')]
     public function testSupportHelperFactoryNewInstance(
         string $method,
         string $className
@@ -175,6 +177,7 @@ final class NewInstanceTest extends AbstractUnitTestCase
      * @author       Phalcon Team <team@phalcon.io>
      * @since        2020-09-09
      */
+    #[Test]
     public function testSupportHelperFactoryNewInstanceException(): void
     {
         $name = uniqid('service-');

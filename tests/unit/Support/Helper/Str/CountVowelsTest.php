@@ -15,6 +15,7 @@ namespace Phalcon\Tests\Unit\Support\Helper\Str;
 
 use Phalcon\Support\Helper\Str\CountVowels;
 use Phalcon\Tests\AbstractUnitTestCase;
+use PHPUnit\Framework\Attributes\Test;
 
 final class CountVowelsTest extends AbstractUnitTestCase
 {
@@ -26,6 +27,7 @@ final class CountVowelsTest extends AbstractUnitTestCase
      * @author Phalcon Team <team@phalcon.io>
      * @since  2020-09-09
      */
+    #[Test]
     public function testSupportHelperStrCountVowels(): void
     {
         $object = new CountVowels();

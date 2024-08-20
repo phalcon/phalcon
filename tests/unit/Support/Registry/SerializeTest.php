@@ -14,9 +14,9 @@ declare(strict_types=1);
 namespace Phalcon\Tests\Unit\Support\Registry;
 
 use Phalcon\Support\Registry;
-use Phalcon\Tests\AbstractUnitTestCase;
+use PHPUnit\Framework\Attributes\Test;
 
-final class SerializeTest extends AbstractUnitTestCase
+final class SerializeTest extends AbstractRegistryTestCase
 {
     /**
      * Tests Phalcon\Support\Registry :: serialize()
@@ -24,6 +24,7 @@ final class SerializeTest extends AbstractUnitTestCase
      * @author Phalcon Team <team@phalcon.io>
      * @since  2018-11-13
      */
+    #[Test]
     public function testSupportRegistrySerialize(): void
     {
         $data = [

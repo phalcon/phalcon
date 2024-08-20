@@ -15,6 +15,7 @@ namespace Phalcon\Tests\Unit\Support\Debug;
 
 use Phalcon\Support\Debug;
 use Phalcon\Tests\AbstractUnitTestCase;
+use PHPUnit\Framework\Attributes\Test;
 
 final class SetUriTest extends AbstractUnitTestCase
 {
@@ -26,6 +27,7 @@ final class SetUriTest extends AbstractUnitTestCase
      * @author Phalcon Team <team@phalcon.io>
      * @since  2020-09-09
      */
+    #[Test]
     public function testSupportDebugSetUri(): void
     {
         $debug = new Debug();

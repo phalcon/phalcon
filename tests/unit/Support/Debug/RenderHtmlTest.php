@@ -17,6 +17,7 @@ use Phalcon\Support\Debug;
 use Phalcon\Support\Exception;
 use Phalcon\Support\Version;
 use Phalcon\Tests\AbstractUnitTestCase;
+use PHPUnit\Framework\Attributes\Test;
 
 final class RenderHtmlTest extends AbstractUnitTestCase
 {
@@ -30,6 +31,7 @@ final class RenderHtmlTest extends AbstractUnitTestCase
      * @author Phalcon Team <team@phalcon.io>
      * @since  2020-09-09
      */
+    #[Test]
     public function testSupportDebugRenderHtmlWithBacktrace(): void
     {
         $exception = new Exception('exception message', 1234);
@@ -71,6 +73,7 @@ final class RenderHtmlTest extends AbstractUnitTestCase
      * @author Phalcon Team <team@phalcon.io>
      * @since  2020-09-09
      */
+    #[Test]
     public function testSupportDebugRenderHtmlWithBacktraceAndBlacklist(): void
     {
         $exception = new Exception('exception message', 1234);
@@ -117,6 +120,7 @@ final class RenderHtmlTest extends AbstractUnitTestCase
      * @author Phalcon Team <team@phalcon.io>
      * @since  2020-09-09
      */
+    #[Test]
     public function testSupportDebugRenderHtmlFileFragment(): void
     {
         $exception = new Exception('exception message', 1234);
@@ -142,6 +146,7 @@ final class RenderHtmlTest extends AbstractUnitTestCase
      * @author Phalcon Team <team@phalcon.io>
      * @since  2020-09-09
      */
+    #[Test]
     public function testSupportDebugRenderHtmlNoFiles(): void
     {
         $exception = new Exception('exception message', 1234);
@@ -167,6 +172,7 @@ final class RenderHtmlTest extends AbstractUnitTestCase
      * @author Phalcon Team <team@phalcon.io>
      * @since  2020-09-09
      */
+    #[Test]
     public function testSupportDebugRenderHtml(): void
     {
         $exception = new Exception('exception message', 1234);
@@ -201,7 +207,7 @@ final class RenderHtmlTest extends AbstractUnitTestCase
 <div align='center'>
     <div class='error-main'>
         <h1>Phalcon\Support\Exception: exception message</h1>
-        <span class='error-file'>" . __FILE__ . " (172)</span>
+        <span class='error-file'>" . __FILE__ . " (178)</span>
     </div>
     <script type='application/javascript' 
             src='https://assets.phalcon.io/debug/6.0.x/assets/jquery/dist/jquery.min.js'></script>

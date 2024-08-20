@@ -15,6 +15,7 @@ namespace Phalcon\Tests\Unit\Support\Debug\Dump;
 
 use Phalcon\Support\Debug\Dump;
 use Phalcon\Tests\AbstractUnitTestCase;
+use PHPUnit\Framework\Attributes\Test;
 
 final class VariableTest extends AbstractUnitTestCase
 {
@@ -26,6 +27,7 @@ final class VariableTest extends AbstractUnitTestCase
      * @author Phalcon Team <team@phalcon.io>
      * @since  2020-09-09
      */
+    #[Test]
     public function debugDumpVariableName(): void
     {
         $test = 'value';
@@ -49,6 +51,7 @@ final class VariableTest extends AbstractUnitTestCase
      * @author Phalcon Team <team@phalcon.io>
      * @since  2020-09-09
      */
+    #[Test]
     public function testSupportDebugDumpVariable(): void
     {
         $test = 'value';

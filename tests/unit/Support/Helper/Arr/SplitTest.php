@@ -15,6 +15,7 @@ namespace Phalcon\Tests\Unit\Support\Helper\Arr;
 
 use Phalcon\Support\Helper\Arr\Split;
 use Phalcon\Tests\AbstractUnitTestCase;
+use PHPUnit\Framework\Attributes\Test;
 
 final class SplitTest extends AbstractUnitTestCase
 {
@@ -26,6 +27,7 @@ final class SplitTest extends AbstractUnitTestCase
      * @author Phalcon Team <team@phalcon.io>
      * @since  2020-09-09
      */
+    #[Test]
     public function testSupportHelperArrSplit(): void
     {
         $object     = new Split();

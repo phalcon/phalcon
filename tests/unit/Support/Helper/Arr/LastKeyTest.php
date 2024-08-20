@@ -15,6 +15,7 @@ namespace Phalcon\Tests\Unit\Support\Helper\Arr;
 
 use Phalcon\Support\Helper\Arr\LastKey;
 use Phalcon\Tests\AbstractUnitTestCase;
+use PHPUnit\Framework\Attributes\Test;
 
 use function strlen;
 
@@ -28,6 +29,7 @@ final class LastKeyTest extends AbstractUnitTestCase
      * @author Phalcon Team <team@phalcon.io>
      * @since  2020-09-09
      */
+    #[Test]
     public function testSupportHelperArrLastKey(): void
     {
         $object     = new LastKey();
@@ -49,6 +51,7 @@ final class LastKeyTest extends AbstractUnitTestCase
      * @author Phalcon Team <team@phalcon.io>
      * @since  2020-09-09
      */
+    #[Test]
     public function testSupportHelperArrLastKeyFunction(): void
     {
         $object     = new LastKey();

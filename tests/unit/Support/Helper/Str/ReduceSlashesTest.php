@@ -16,6 +16,7 @@ namespace Phalcon\Tests\Unit\Support\Helper\Str;
 use Phalcon\Support\Helper\Str\ReduceSlashes;
 use Phalcon\Tests\Fixtures\Page\Http;
 use Phalcon\Tests\AbstractUnitTestCase;
+use PHPUnit\Framework\Attributes\Test;
 
 final class ReduceSlashesTest extends AbstractUnitTestCase
 {
@@ -27,6 +28,7 @@ final class ReduceSlashesTest extends AbstractUnitTestCase
      * @author Phalcon Team <team@phalcon.io>
      * @since  2020-09-09
      */
+    #[Test]
     public function testSupportHelperStrReduceSlashes(): void
     {
         $object = new ReduceSlashes();

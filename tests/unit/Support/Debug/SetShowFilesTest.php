@@ -14,6 +14,7 @@ declare(strict_types=1);
 namespace Phalcon\Tests\Unit\Support\Debug;
 
 use Phalcon\Tests\AbstractUnitTestCase;
+use PHPUnit\Framework\Attributes\Test;
 
 final class SetShowFilesTest extends AbstractUnitTestCase
 {
@@ -23,6 +24,7 @@ final class SetShowFilesTest extends AbstractUnitTestCase
      * @author Phalcon Team <team@phalcon.io>
      * @since  2020-09-09
      */
+    #[Test]
     public function testSupportDebugSetShowFiles(): void
     {
         $this->markTestSkipped('Need implementation');

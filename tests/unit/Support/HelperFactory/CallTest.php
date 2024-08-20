@@ -15,6 +15,7 @@ namespace Phalcon\Tests\Unit\Support\HelperFactory;
 
 use Phalcon\Support\HelperFactory;
 use Phalcon\Tests\AbstractUnitTestCase;
+use PHPUnit\Framework\Attributes\Test;
 
 final class CallTest extends AbstractUnitTestCase
 {
@@ -26,6 +27,7 @@ final class CallTest extends AbstractUnitTestCase
      * @author Phalcon Team <team@phalcon.io>
      * @since  2020-09-09
      */
+    #[Test]
     public function testSupportHelperFactoryCall(): void
     {
         $factory = new HelperFactory();

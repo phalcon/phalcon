@@ -15,6 +15,8 @@ namespace Phalcon\Tests\Unit\Support\Helper\Arr;
 
 use Phalcon\Support\Helper\Arr\Get;
 use Phalcon\Tests\AbstractUnitTestCase;
+use PHPUnit\Framework\Attributes\DataProvider;
+use PHPUnit\Framework\Attributes\Test;
 use stdClass;
 
 final class GetTest extends AbstractUnitTestCase
@@ -84,13 +86,13 @@ final class GetTest extends AbstractUnitTestCase
     /**
      * Tests Phalcon\Support\Helper\Arr :: get() - cast
      *
-     * @dataProvider getExamples
-     *
      * @return void
      *
      * @author       Phalcon Team <team@phalcon.io>
      * @since        2020-09-09
      */
+    #[Test]
+    #[DataProvider('getExamples')]
     public function testSupportHelperArrGetCast(
         string $cast,
         mixed $value,
@@ -113,6 +115,7 @@ final class GetTest extends AbstractUnitTestCase
      * @author Phalcon Team <team@phalcon.io>
      * @since  2020-09-09
      */
+    #[Test]
     public function testSupportHelperArrGetDefault(): void
     {
         $object     = new Get();
@@ -134,6 +137,7 @@ final class GetTest extends AbstractUnitTestCase
      * @author Phalcon Team <team@phalcon.io>
      * @since  2020-09-09
      */
+    #[Test]
     public function testSupportHelperArrGetNumeric(): void
     {
         $object     = new Get();
@@ -155,6 +159,7 @@ final class GetTest extends AbstractUnitTestCase
      * @author Phalcon Team <team@phalcon.io>
      * @since  2020-09-09
      */
+    #[Test]
     public function testSupportHelperArrGetString(): void
     {
         $object     = new Get();

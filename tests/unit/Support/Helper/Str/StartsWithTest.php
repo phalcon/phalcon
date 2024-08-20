@@ -15,6 +15,7 @@ namespace Phalcon\Tests\Unit\Support\Helper\Str;
 
 use Phalcon\Support\Helper\Str\StartsWith;
 use Phalcon\Tests\AbstractUnitTestCase;
+use PHPUnit\Framework\Attributes\Test;
 
 final class StartsWithTest extends AbstractUnitTestCase
 {
@@ -26,6 +27,7 @@ final class StartsWithTest extends AbstractUnitTestCase
      * @author Phalcon Team <team@phalcon.io>
      * @since  2020-09-09
      */
+    #[Test]
     public function testSupportHelperStrStartsWith(): void
     {
         $object = new StartsWith();
@@ -48,6 +50,7 @@ final class StartsWithTest extends AbstractUnitTestCase
      * @author Phalcon Team <team@phalcon.io>
      * @since  2020-09-09
      */
+    #[Test]
     public function testSupportHelperStrStartsWithCaseInsensitive(): void
     {
         $object = new StartsWith();
@@ -70,6 +73,7 @@ final class StartsWithTest extends AbstractUnitTestCase
      * @author Phalcon Team <team@phalcon.io>
      * @since  2020-09-09
      */
+    #[Test]
     public function testSupportHelperStrStartsWithCaseSensitive(): void
     {
         $object = new StartsWith();
@@ -92,6 +96,7 @@ final class StartsWithTest extends AbstractUnitTestCase
      * @author Phalcon Team <team@phalcon.io>
      * @since  2020-09-09
      */
+    #[Test]
     public function testSupportHelperStrStartsWithEmpty(): void
     {
         $object = new StartsWith();
@@ -109,6 +114,7 @@ final class StartsWithTest extends AbstractUnitTestCase
      * @author Phalcon Team <team@phalcon.io>
      * @since  2020-09-09
      */
+    #[Test]
     public function testSupportHelperStrStartsWithEmptySearchString(): void
     {
         $object = new StartsWith();

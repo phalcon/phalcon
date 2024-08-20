@@ -14,9 +14,9 @@ declare(strict_types=1);
 namespace Phalcon\Tests\Unit\Support\Registry;
 
 use Phalcon\Support\Registry;
-use Phalcon\Tests\AbstractUnitTestCase;
+use PHPUnit\Framework\Attributes\Test;
 
-final class ToJsonTest extends AbstractUnitTestCase
+final class ToJsonTest extends AbstractRegistryTestCase
 {
     /**
      * Tests Phalcon\Support\Registry :: toJson()
@@ -24,6 +24,7 @@ final class ToJsonTest extends AbstractUnitTestCase
      * @author Phalcon Team <team@phalcon.io>
      * @since  2018-11-13
      */
+    #[Test]
     public function testSupportRegistryToJson(): void
     {
         $data = [

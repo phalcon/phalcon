@@ -15,6 +15,8 @@ namespace Phalcon\Tests\Unit\Support\Helper\Str;
 
 use Phalcon\Support\Helper\Str\Ucwords;
 use Phalcon\Tests\AbstractUnitTestCase;
+use PHPUnit\Framework\Attributes\DataProvider;
+use PHPUnit\Framework\Attributes\Test;
 
 final class UcwordsTest extends AbstractUnitTestCase
 {
@@ -73,13 +75,13 @@ final class UcwordsTest extends AbstractUnitTestCase
     /**
      * Tests Phalcon\Support\Helper\Str :: ucwords()
      *
-     * @dataProvider getData
-     *
      * @return void
      *
      * @author       Phalcon Team <team@phalcon.io>
      * @since        2020-09-09
      */
+    #[Test]
+    #[DataProvider('getData')]
     public function testSupportHelperStrUcwords(
         string $text,
         string $expected

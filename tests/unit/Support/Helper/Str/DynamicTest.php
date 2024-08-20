@@ -15,6 +15,7 @@ namespace Phalcon\Tests\Unit\Support\Helper\Str;
 
 use Phalcon\Support\Helper\Str\Dynamic;
 use Phalcon\Tests\AbstractUnitTestCase;
+use PHPUnit\Framework\Attributes\Test;
 use RuntimeException;
 
 final class DynamicTest extends AbstractUnitTestCase
@@ -27,6 +28,7 @@ final class DynamicTest extends AbstractUnitTestCase
      * @author Phalcon Team <team@phalcon.io>
      * @since  2020-09-09
      */
+    #[Test]
     public function testSupportHelperStrDynamic(): void
     {
         $object = new Dynamic();
@@ -49,6 +51,7 @@ final class DynamicTest extends AbstractUnitTestCase
      * @author Phalcon Team <team@phalcon.io>
      * @since  2020-09-09
      */
+    #[Test]
     public function testSupportHelperStrDynamicCustomDelimiter(): void
     {
         $object = new Dynamic();
@@ -71,6 +74,7 @@ final class DynamicTest extends AbstractUnitTestCase
      * @author Phalcon Team <team@phalcon.io>
      * @since  2020-09-09
      */
+    #[Test]
     public function testSupportHelperStrDynamicCustomSeparator(): void
     {
         $object = new Dynamic();
@@ -116,6 +120,7 @@ final class DynamicTest extends AbstractUnitTestCase
      * @author Phalcon Team <team@phalcon.io>
      * @since  2020-09-09
      */
+    #[Test]
     public function testSupportHelperStrDynamicException(): void
     {
         $this->expectException(RuntimeException::class);

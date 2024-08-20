@@ -15,7 +15,7 @@ namespace Phalcon\Tests\Unit\Support\Collection;
 
 use Phalcon\Support\Collection;
 use Phalcon\Tests\AbstractUnitTestCase;
-
+use PHPUnit\Framework\Attributes\Test;
 use stdClass;
 
 use function array_keys;

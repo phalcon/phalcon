@@ -15,6 +15,8 @@ namespace Phalcon\Tests\Unit\Support\Helper\Str;
 
 use Phalcon\Support\Helper\Str\Random;
 use Phalcon\Tests\AbstractUnitTestCase;
+use PHPUnit\Framework\Attributes\DataProvider;
+use PHPUnit\Framework\Attributes\Test;
 
 use function strlen;
 
@@ -61,13 +63,13 @@ final class RandomTest extends AbstractUnitTestCase
     /**
      * Tests Phalcon\Support\Helper\Str :: random() - alnum
      *
-     * @dataProvider oneToTenProvider
-     *
      * @return void
      *
      * @author       Phalcon Team <team@phalcon.io>
      * @since        2020-09-09
      */
+    #[Test]
+    #[DataProvider('oneToTenProvider')]
     public function testSupportHelperStrRandomAlnum(
         int $i
     ): void {
@@ -86,13 +88,13 @@ final class RandomTest extends AbstractUnitTestCase
     /**
      * Tests Phalcon\Support\Helper\Str :: random() - alpha
      *
-     * @dataProvider oneToTenProvider
-     *
      * @return void
      *
      * @author       Phalcon Team <team@phalcon.io>
      * @since        2020-09-09
      */
+    #[Test]
+    #[DataProvider('oneToTenProvider')]
     public function testSupportHelperStrRandomAlpha(
         int $i
     ): void {
@@ -116,6 +118,7 @@ final class RandomTest extends AbstractUnitTestCase
      * @author Phalcon Team <team@phalcon.io>
      * @since  2020-09-09
      */
+    #[Test]
     public function testSupportHelperStrRandomConstants(): void
     {
         $this->assertSame(0, Random::RANDOM_ALNUM);
@@ -129,13 +132,12 @@ final class RandomTest extends AbstractUnitTestCase
     /**
      * Tests Phalcon\Support\Helper\Str :: random() - distinct type
      *
-     * @dataProvider randomDistinctProvider
-     *
-     *
      * @return void
      * @author       Phalcon Team <team@phalcon.io>
      * @since        2020-09-09
      */
+    #[Test]
+    #[DataProvider('randomDistinctProvider')]
     public function testSupportHelperStrRandomDistinct(
         int $i
     ): void {
@@ -153,13 +155,13 @@ final class RandomTest extends AbstractUnitTestCase
     /**
      * Tests Phalcon\Support\Helper\Str :: random() - hexdec
      *
-     * @dataProvider oneToTenProvider
-     *
      * @return void
      *
      * @author       Phalcon Team <team@phalcon.io>
      * @since        2020-09-09
      */
+    #[Test]
+    #[DataProvider('oneToTenProvider')]
     public function testSupportHelperStrRandomHexDec(
         int $i
     ): void {
@@ -178,13 +180,13 @@ final class RandomTest extends AbstractUnitTestCase
     /**
      * Tests Phalcon\Support\Helper\Str :: random() - non zero
      *
-     * @dataProvider oneToTenProvider
-     *
      * @return void
      *
      * @author       Phalcon Team <team@phalcon.io>
      * @since        2020-09-09
      */
+    #[Test]
+    #[DataProvider('oneToTenProvider')]
     public function testSupportHelperStrRandomNonZero(
         int $i
     ): void {
@@ -203,13 +205,13 @@ final class RandomTest extends AbstractUnitTestCase
     /**
      * Tests Phalcon\Support\Helper\Str :: random() - numeric
      *
-     * @dataProvider oneToTenProvider
-     *
      * @return void
      *
      * @author       Phalcon Team <team@phalcon.io>
      * @since        2020-09-09
      */
+    #[Test]
+    #[DataProvider('oneToTenProvider')]
     public function testSupportHelperStrRandomNumeric(
         int $i
     ): void {

@@ -15,6 +15,8 @@ namespace Phalcon\Tests\Unit\Support\Helper\Str;
 
 use Phalcon\Support\Helper\Str\Interpolate;
 use Phalcon\Tests\AbstractUnitTestCase;
+use PHPUnit\Framework\Attributes\DataProvider;
+use PHPUnit\Framework\Attributes\Test;
 
 final class InterpolateTest extends AbstractUnitTestCase
 {
@@ -67,13 +69,12 @@ final class InterpolateTest extends AbstractUnitTestCase
     /**
      * Tests Phalcon\Support\Helper\Str\Interpolate :: __invoke
      *
-     * @dataProvider getExamples
-     *
-     *
      * @return void
      * @author       Phalcon Team <team@phalcon.io>
      * @since        2021-04-28
      */
+    #[Test]
+    #[DataProvider('getExamples')]
     public function testSupportHelperHelperStrInterpolateInvoke(
         string $expected,
         string $format,
