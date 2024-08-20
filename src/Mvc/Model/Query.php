@@ -720,10 +720,10 @@ class Query implements QueryInterface, InjectionAwareInterface
                 $this->type = $type;
 
                 $irPhql = match ($type) {
-                    self::PHQL_T_SELECT => $this->_prepareSelect(),
-                    self::PHQL_T_INSERT => $this->_prepareInsert(),
-                    self::PHQL_T_UPDATE => $this->_prepareUpdate(),
-                    self::PHQL_T_DELETE => $this->_prepareDelete(),
+                    self::PHQL_T_SELECT => $this->prepareSelect(),
+                    self::PHQL_T_INSERT => $this->prepareInsert(),
+                    self::PHQL_T_UPDATE => $this->prepareUpdate(),
+                    self::PHQL_T_DELETE => $this->prepareDelete(),
                     default             => throw new Exception(
                         "Unknown statement " . $type . ", when preparing: " . $phql
                     ),
@@ -896,7 +896,7 @@ class Query implements QueryInterface, InjectionAwareInterface
      * @return array
      * @throws Exception
      */
-    final protected function _prepareDelete(): array
+    final protected function prepareDelete(): array
     {
         $ast = $this->ast;
 
@@ -997,7 +997,7 @@ class Query implements QueryInterface, InjectionAwareInterface
      * @return array
      * @throws Exception
      */
-    final protected function _prepareInsert(): array
+    final protected function prepareInsert(): array
     {
         $ast = $this->ast;
 
@@ -1084,7 +1084,7 @@ class Query implements QueryInterface, InjectionAwareInterface
      * @return array
      * @throws Exception
      */
-    final protected function _prepareSelect(
+    final protected function prepareSelect(
         mixed $ast = null,
         bool $merge = false
     ): array {
@@ -1468,7 +1468,7 @@ class Query implements QueryInterface, InjectionAwareInterface
      * @return array
      * @throws Exception
      */
-    final protected function _prepareUpdate(): array
+    final protected function prepareUpdate(): array
     {
         $ast = $this->ast;
 
@@ -3040,7 +3040,7 @@ class Query implements QueryInterface, InjectionAwareInterface
                 case self::PHQL_T_SELECT:
                     $exprReturn = [
                         "type"  => "select",
-                        "value" => $this->_prepareSelect($expr, true),
+                        "value" => $this->prepareSelect($expr, true),
                     ];
 
                     break;
