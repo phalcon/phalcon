@@ -15,6 +15,7 @@ namespace Phalcon\Tests\Unit\Support\Helper\Str;
 
 use Phalcon\Support\Helper\Str\EndsWith;
 use Phalcon\Tests\AbstractUnitTestCase;
+use PHPUnit\Framework\Attributes\Test;
 
 final class EndsWithTest extends AbstractUnitTestCase
 {
@@ -26,6 +27,7 @@ final class EndsWithTest extends AbstractUnitTestCase
      * @author Phalcon Team <team@phalcon.io>
      * @since  2020-09-09
      */
+    #[Test]
     public function testSupportHelperStrEndsWith(): void
     {
         $object = new EndsWith();
@@ -47,6 +49,7 @@ final class EndsWithTest extends AbstractUnitTestCase
      * @author Phalcon Team <team@phalcon.io>
      * @since  2020-09-09
      */
+    #[Test]
     public function testSupportHelperStrEndsWithCaseInsensitive(): void
     {
         $object = new EndsWith();
@@ -68,6 +71,7 @@ final class EndsWithTest extends AbstractUnitTestCase
      * @author Phalcon Team <team@phalcon.io>
      * @since  2020-09-09
      */
+    #[Test]
     public function testSupportHelperStrEndsWithCaseSensitive(): void
     {
         $object = new EndsWith();
@@ -89,6 +93,7 @@ final class EndsWithTest extends AbstractUnitTestCase
      * @author Phalcon Team <team@phalcon.io>
      * @since  2020-09-09
      */
+    #[Test]
     public function testSupportHelperStrEndsWithEmpty(): void
     {
         $object = new EndsWith();
@@ -104,6 +109,7 @@ final class EndsWithTest extends AbstractUnitTestCase
      * @author Phalcon Team <team@phalcon.io>
      * @since  2020-09-09
      */
+    #[Test]
     public function testSupportHelperStrEndsWithEmptySearchString(): void
     {
         $object = new EndsWith();

@@ -16,6 +16,7 @@ namespace Phalcon\Tests\Unit\Support\Helper\Json;
 use InvalidArgumentException;
 use Phalcon\Support\Helper\Json\Decode;
 use Phalcon\Tests\AbstractUnitTestCase;
+use PHPUnit\Framework\Attributes\Test;
 
 final class DecodeTest extends AbstractUnitTestCase
 {
@@ -27,6 +28,7 @@ final class DecodeTest extends AbstractUnitTestCase
      * @author Phalcon Team <team@phalcon.io>
      * @since  2020-09-09
      */
+    #[Test]
     public function testSupportHelperJsonDecode(): void
     {
         $object   = new Decode();
@@ -47,6 +49,7 @@ final class DecodeTest extends AbstractUnitTestCase
      * @author Phalcon Team <team@phalcon.io>
      * @since  2020-09-09
      */
+    #[Test]
     public function testSupportHelperJsonDecodeException(): void
     {
         $this->expectException(InvalidArgumentException::class);

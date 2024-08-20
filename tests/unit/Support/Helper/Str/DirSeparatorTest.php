@@ -15,6 +15,7 @@ namespace Phalcon\Tests\Unit\Support\Helper\Str;
 
 use Phalcon\Support\Helper\Str\DirSeparator;
 use Phalcon\Tests\AbstractUnitTestCase;
+use PHPUnit\Framework\Attributes\Test;
 
 use const PHP_OS_FAMILY;
 
@@ -28,6 +29,7 @@ final class DirSeparatorTest extends AbstractUnitTestCase
      * @author Phalcon Team <team@phalcon.io>
      * @since  2020-09-09
      */
+    #[Test]
     public function testSupportHelperStrFolderSeparator(): void
     {
         if (PHP_OS_FAMILY === 'Windows') {
@@ -53,6 +55,7 @@ final class DirSeparatorTest extends AbstractUnitTestCase
      * @author Phalcon Team <team@phalcon.io>
      * @since  2020-09-09
      */
+    #[Test]
     public function testSupportHelperStrFolderSeparatorEmptyString(): void
     {
         if (PHP_OS_FAMILY === 'Windows') {

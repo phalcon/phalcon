@@ -15,6 +15,7 @@ namespace Phalcon\Tests\Unit\Support\Debug\Dump;
 
 use Phalcon\Support\Debug\Dump;
 use Phalcon\Tests\AbstractUnitTestCase;
+use PHPUnit\Framework\Attributes\Test;
 use ReflectionException;
 
 final class SetStylesTest extends AbstractUnitTestCase
@@ -29,6 +30,7 @@ final class SetStylesTest extends AbstractUnitTestCase
      * @author Phalcon Team <team@phalcon.io>
      * @since  2020-09-09
      */
+    #[Test]
     public function testSupportDebugDumpGetStyle(): void
     {
         $dump = new Dump(
@@ -55,6 +57,7 @@ final class SetStylesTest extends AbstractUnitTestCase
      * @author Phalcon Team <team@phalcon.io>
      * @since  2020-09-09
      */
+    #[Test]
     public function testSupportDebugDumpSetStyles(): void
     {
         $dump = new Dump(

@@ -14,9 +14,9 @@ declare(strict_types=1);
 namespace Phalcon\Tests\Unit\Support\Registry;
 
 use Phalcon\Support\Registry;
-use Phalcon\Tests\AbstractUnitTestCase;
+use PHPUnit\Framework\Attributes\Test;
 
-final class GetIteratorTest extends AbstractUnitTestCase
+final class GetIteratorTest extends AbstractRegistryTestCase
 {
     /**
      * Tests Phalcon\Support\Registry :: getIterator()
@@ -24,21 +24,14 @@ final class GetIteratorTest extends AbstractUnitTestCase
      * @author Phalcon Team <team@phalcon.io>
      * @since  2018-11-13
      */
+    #[Test]
     public function testSupportRegistryGetIterator(): void
     {
-        $data = [
-            'one'   => 'two',
-            'three' => 'four',
-            'five'  => 'six',
-        ];
-
+        $data = $this->getData();
         $registry = new Registry($data);
 
         foreach ($registry as $key => $value) {
-            $this->assertSame(
-                $data[$key],
-                $registry[$key]
-            );
+            $this->assertSame($data[$key], $registry[$key]);
         }
     }
 }

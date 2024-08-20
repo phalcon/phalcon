@@ -16,6 +16,7 @@ namespace Phalcon\Tests\Unit\Support\Debug\Dump;
 use Phalcon\Support\Debug\Dump;
 use Phalcon\Tests\Fixtures\Support\Dump\ClassProperties;
 use Phalcon\Tests\AbstractUnitTestCase;
+use PHPUnit\Framework\Attributes\Test;
 
 use const PHP_OS_FAMILY;
 
@@ -31,6 +32,7 @@ final class ConstructTest extends AbstractUnitTestCase
      * @author Phalcon Team <team@phalcon.io>
      * @since  2020-09-09
      */
+    #[Test]
     public function testSupportDebugDumpConstructDump(): void
     {
         if (PHP_OS_FAMILY === 'Windows') {

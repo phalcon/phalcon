@@ -16,6 +16,7 @@ namespace Phalcon\Tests\Unit\Support\Debug;
 use Phalcon\Support\Debug;
 use Phalcon\Support\Debug\Exception;
 use Phalcon\Tests\AbstractUnitTestCase;
+use PHPUnit\Framework\Attributes\Test;
 
 final class HaltTest extends AbstractUnitTestCase
 {
@@ -27,6 +28,7 @@ final class HaltTest extends AbstractUnitTestCase
      * @author Phalcon Team <team@phalcon.io>
      * @since  2020-09-09
      */
+    #[Test]
     public function testSupportDebugHalt(): void
     {
         $this->expectException(Exception::class);

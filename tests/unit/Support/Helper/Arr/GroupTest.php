@@ -15,6 +15,7 @@ namespace Phalcon\Tests\Unit\Support\Helper\Arr;
 
 use Phalcon\Support\Helper\Arr\Group;
 use Phalcon\Tests\AbstractUnitTestCase;
+use PHPUnit\Framework\Attributes\Test;
 use stdClass;
 
 final class GroupTest extends AbstractUnitTestCase
@@ -27,6 +28,7 @@ final class GroupTest extends AbstractUnitTestCase
      * @author Phalcon Team <team@phalcon.io>
      * @since  2020-09-09
      */
+    #[Test]
     public function testSupportHelperArrGroup(): void
     {
         $object     = new Group();
@@ -78,6 +80,7 @@ final class GroupTest extends AbstractUnitTestCase
      * @author Phalcon Team <team@phalcon.io>
      * @since  2020-09-09
      */
+    #[Test]
     public function testSupportHelperArrGroupFunction(): void
     {
         $object     = new Group();
@@ -99,6 +102,7 @@ final class GroupTest extends AbstractUnitTestCase
      * @author Phalcon Team <team@phalcon.io>
      * @since  2020-09-09
      */
+    #[Test]
     public function testSupportHelperArrGroupObject(): void
     {
         $object      = new Group();

@@ -16,6 +16,7 @@ namespace Phalcon\Tests\Unit\Support\Helper\Json;
 use InvalidArgumentException;
 use Phalcon\Support\Helper\Json\Encode;
 use Phalcon\Tests\AbstractUnitTestCase;
+use PHPUnit\Framework\Attributes\Test;
 
 use const JSON_HEX_TAG;
 
@@ -29,6 +30,7 @@ final class EncodeTest extends AbstractUnitTestCase
      * @author Phalcon Team <team@phalcon.io>
      * @since  2020-09-09
      */
+    #[Test]
     public function testSupportHelperJsonEncode(): void
     {
         $object   = new Encode();
@@ -49,6 +51,7 @@ final class EncodeTest extends AbstractUnitTestCase
      * @author Phalcon Team <team@phalcon.io>
      * @since  2020-09-09
      */
+    #[Test]
     public function testSupportHelperJsonEncodeExceptionDefaultOptions(): void
     {
         $this->expectException(InvalidArgumentException::class);
@@ -67,6 +70,7 @@ final class EncodeTest extends AbstractUnitTestCase
      * @author Phalcon Team <team@phalcon.io>
      * @since  2020-09-09
      */
+    #[Test]
     public function testSupportHelperJsonEncodeExceptionNoOptions(): void
     {
         $this->expectException(InvalidArgumentException::class);

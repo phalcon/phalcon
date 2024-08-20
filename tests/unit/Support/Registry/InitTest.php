@@ -14,9 +14,9 @@ declare(strict_types=1);
 namespace Phalcon\Tests\Unit\Support\Registry;
 
 use Phalcon\Support\Registry;
-use Phalcon\Tests\AbstractUnitTestCase;
+use PHPUnit\Framework\Attributes\Test;
 
-final class InitTest extends AbstractUnitTestCase
+final class InitTest extends AbstractRegistryTestCase
 {
     /**
      * Tests Phalcon\Support\Registry :: init()
@@ -24,26 +24,20 @@ final class InitTest extends AbstractUnitTestCase
      * @author Phalcon Team <team@phalcon.io>
      * @since  2018-11-13
      */
+    #[Test]
     public function testSupportRegistryInit(): void
     {
-        $data = [
-            'one'   => 'two',
-            'three' => 'four',
-            'five'  => 'six',
-        ];
-
+        $data = $this->getData();
         $registry = new Registry();
 
-        $this->assertSame(
-            0,
-            $registry->count()
-        );
+        $expected = 0;
+        $actual   = $registry->count();
+        $this->assertSame($expected, $actual);
 
         $registry->init($data);
 
-        $this->assertSame(
-            $data,
-            $registry->toArray()
-        );
+        $expected = $data;
+        $actual   = $registry->toArray();
+        $this->assertSame($expected, $actual);
     }
 }

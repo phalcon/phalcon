@@ -15,31 +15,16 @@ namespace Phalcon\Tests\Unit\Support\Registry;
 
 use Phalcon\Support\Registry;
 use Phalcon\Tests\AbstractUnitTestCase;
+use PHPUnit\Framework\Attributes\Test;
 
-final class UnderscoreIsSetTest extends AbstractUnitTestCase
+abstract class AbstractRegistryTestCase extends AbstractUnitTestCase
 {
-    /**
-     * Unit Tests Phalcon\Support\Registry :: __isset()
-     *
-     * @author Sid Roberts <https://github.com/SidRoberts>
-     * @since  2019-05-25
-     */
-    public function testSupportRegistryUnderscoreIsSet(): void
+    protected function getData(): array
     {
-        $data = [
+        return [
             'one'   => 'two',
             'three' => 'four',
             'five'  => 'six',
         ];
-
-        $registry = new Registry($data);
-
-        $this->assertTrue(
-            isset($registry->three)
-        );
-
-        $this->assertFalse(
-            isset($registry->unknown)
-        );
     }
 }

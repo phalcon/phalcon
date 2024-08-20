@@ -15,6 +15,7 @@ namespace Phalcon\Tests\Unit\Support\Helper\Arr;
 
 use Phalcon\Support\Helper\Arr\Set;
 use Phalcon\Tests\AbstractUnitTestCase;
+use PHPUnit\Framework\Attributes\Test;
 
 final class SetTest extends AbstractUnitTestCase
 {
@@ -26,6 +27,7 @@ final class SetTest extends AbstractUnitTestCase
      * @author Phalcon Team <team@phalcon.io>
      * @since  2020-09-09
      */
+    #[Test]
     public function testSupportHelperArrSetNoIndex(): void
     {
         $object     = new Set();
@@ -46,6 +48,7 @@ final class SetTest extends AbstractUnitTestCase
      * @author Phalcon Team <team@phalcon.io>
      * @since  2020-09-09
      */
+    #[Test]
     public function testSupportHelperArrSetNumeric(): void
     {
         $object     = new Set();
@@ -66,6 +69,7 @@ final class SetTest extends AbstractUnitTestCase
      * @author Phalcon Team <team@phalcon.io>
      * @since  2020-09-09
      */
+    #[Test]
     public function testSupportHelperArrSetOverwride(): void
     {
         $object     = new Set();
@@ -88,6 +92,7 @@ final class SetTest extends AbstractUnitTestCase
      * @author Phalcon Team <team@phalcon.io>
      * @since  2020-09-09
      */
+    #[Test]
     public function testSupportHelperArrSetString(): void
     {
         $object     = new Set();

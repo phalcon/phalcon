@@ -14,9 +14,9 @@ declare(strict_types=1);
 namespace Phalcon\Tests\Unit\Support\Registry;
 
 use Phalcon\Support\Registry;
-use Phalcon\Tests\AbstractUnitTestCase;
+use PHPUnit\Framework\Attributes\Test;
 
-final class JsonSerializeTest extends AbstractUnitTestCase
+final class JsonSerializeTest extends AbstractRegistryTestCase
 {
     /**
      * Tests Phalcon\Support\Registry :: jsonSerialize()
@@ -24,19 +24,14 @@ final class JsonSerializeTest extends AbstractUnitTestCase
      * @author Phalcon Team <team@phalcon.io>
      * @since  2018-11-13
      */
+    #[Test]
     public function testSupportRegistryJsonSerialize(): void
     {
-        $data = [
-            'one'   => 'two',
-            'three' => 'four',
-            'five'  => 'six',
-        ];
-
+        $data = $this->getData();
         $registry = new Registry($data);
 
-        $this->assertSame(
-            $data,
-            $registry->jsonSerialize()
-        );
+        $expected = $data;
+        $actual   = $registry->jsonSerialize();
+        $this->assertSame($expected, $actual);
     }
 }

@@ -14,9 +14,9 @@ declare(strict_types=1);
 namespace Phalcon\Tests\Unit\Support\Registry;
 
 use Phalcon\Support\Registry;
-use Phalcon\Tests\AbstractUnitTestCase;
+use PHPUnit\Framework\Attributes\Test;
 
-final class ClearTest extends AbstractUnitTestCase
+final class ClearTest extends AbstractRegistryTestCase
 {
     /**
      * Tests Phalcon\Support\Registry :: clear()
@@ -24,26 +24,20 @@ final class ClearTest extends AbstractUnitTestCase
      * @author Phalcon Team <team@phalcon.io>
      * @since  2018-11-13
      */
+    #[Test]
     public function testSupportRegistryClear(): void
     {
-        $data = [
-            'one'   => 'two',
-            'three' => 'four',
-            'five'  => 'six',
-        ];
-
+        $data = $this->getData();
         $registry = new Registry($data);
 
-        $this->assertSame(
-            $data,
-            $registry->toArray()
-        );
+        $expected = $data;
+        $actual   = $registry->toArray();
+        $this->assertSame($expected, $actual);
 
         $registry->clear();
 
-        $this->assertSame(
-            0,
-            $registry->count()
-        );
+        $expected = 0;
+        $actual   = $registry->count();
+        $this->assertSame($expected, $actual);
     }
 }
