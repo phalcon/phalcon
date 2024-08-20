@@ -20,7 +20,6 @@ use function is_array;
 use function is_object;
 use function is_string;
 use function method_exists;
-use function self;
 use function str_contains;
 
 /**
