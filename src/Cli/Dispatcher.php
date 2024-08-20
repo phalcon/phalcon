@@ -138,7 +138,7 @@ class Dispatcher extends CliDispatcher implements DispatcherInterface
         $this->checkContainer(
             Exception::class,
             "the 'filter' service",
-                DispatcherException::EXCEPTION_NO_DI
+            DispatcherException::EXCEPTION_NO_DI
         );
 
         /** @var Filter $filter */
