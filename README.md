@@ -32,3 +32,5 @@ Phalcon Framework
 - Url
 - Pull requests to `cphalcon`
 - Convert tests to phpunit.
+
+![Alt](https://repobeats.axiom.co/api/embed/2d73e3d230f4a39aa8e144feb6083f1d2c38faec.svg "Repobeats analytics image")
