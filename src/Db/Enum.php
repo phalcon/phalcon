@@ -35,7 +35,12 @@ class Enum
     public const FETCH_NAMED      = PDO::FETCH_NAMED;
     public const FETCH_NUM        = PDO::FETCH_NUM;
     public const FETCH_OBJ        = PDO::FETCH_OBJ;
+    public const FETCH_ORI_ABS    = PDO::FETCH_ORI_ABS;
+    public const FETCH_ORI_FIRST  = PDO::FETCH_ORI_FIRST;
+    public const FETCH_ORI_LAST   = PDO::FETCH_ORI_LAST;
     public const FETCH_ORI_NEXT   = PDO::FETCH_ORI_NEXT;
+    public const FETCH_ORI_PRIOR  = PDO::FETCH_ORI_PRIOR;
+    public const FETCH_ORI_REL    = PDO::FETCH_ORI_REL;
     public const FETCH_PROPS_LATE = PDO::FETCH_PROPS_LATE;
     public const FETCH_SERIALIZE  = PDO::FETCH_SERIALIZE;
     public const FETCH_UNIQUE     = PDO::FETCH_UNIQUE;
