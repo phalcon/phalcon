@@ -533,7 +533,7 @@ class Cookie extends AbstractInjectionAware implements
      * @throws CookieException
      * @see \Phalcon\Encryption\Security\Random
      */
-    public function setSignKey(string $signKey = null): CookieInterface
+    public function setSignKey(?string $signKey = null): CookieInterface
     {
         if (null !== $signKey) {
             $this->assertSignKeyIsLongEnough($signKey);
