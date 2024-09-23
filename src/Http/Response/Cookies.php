@@ -265,9 +265,9 @@ class Cookies extends AbstractInjectionAware implements CookiesInterface
         mixed $value = null,
         int $expire = 0,
         string $path = '/',
-        bool $secure = null,
-        string $domain = null,
-        bool $httpOnly = null,
+        bool $secure = false,
+        string $domain = '',
+        bool $httpOnly = false,
         array $options = []
     ): CookiesInterface {
         /**
@@ -355,7 +355,7 @@ class Cookies extends AbstractInjectionAware implements CookiesInterface
      * @return CookiesInterface
      * @see \Phalcon\Encryption\Security\Random
      */
-    public function setSignKey(string $signKey = null): CookiesInterface
+    public function setSignKey(?string $signKey = null): CookiesInterface
     {
         $this->signKey = $signKey;
 
