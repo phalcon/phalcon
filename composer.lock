@@ -4,7 +4,7 @@
         "Read more about it at https://getcomposer.org/doc/01-basic-usage.md#installing-dependencies",
         "This file is @generated automatically"
     ],
-    "content-hash": "dbe51f18788fa2b3d70993d3a0538b21",
+    "content-hash": "aca2aafb12c0ecdf3fc5df4422f683a2",
     "packages": [
         {
             "name": "matthiasmullie/minify",
@@ -1253,6 +1253,83 @@
                 "source": "https://github.com/php-pds/skeleton/tree/1.x"
             },
             "time": "2017-01-25T23:30:41+00:00"
+        },
+        {
+            "name": "phalcon/volt",
+            "version": "dev-master",
+            "source": {
+                "type": "git",
+                "url": "https://github.com/phalcon/volt.git",
+                "reference": "ef48e50b0178903c917a20b942a5d74dc8d2534f"
+            },
+            "dist": {
+                "type": "zip",
+                "url": "https://api.github.com/repos/phalcon/volt/zipball/ef48e50b0178903c917a20b942a5d74dc8d2534f",
+                "reference": "ef48e50b0178903c917a20b942a5d74dc8d2534f",
+                "shasum": ""
+            },
+            "require": {
+                "ext-mbstring": "*",
+                "php": ">=8.0"
+            },
+            "require-dev": {
+                "phalcon/ide-stubs": "^5.8",
+                "phpstan/phpstan": "^1.11",
+                "phpunit/phpunit": "^9.6",
+                "squizlabs/php_codesniffer": "^3.10"
+            },
+            "default-branch": true,
+            "type": "library",
+            "autoload": {
+                "files": [
+                    "files/parser.php.php"
+                ],
+                "psr-4": {
+                    "Phalcon\\Volt\\": "src/"
+                }
+            },
+            "notification-url": "https://packagist.org/downloads/",
+            "license": [
+                "MIT"
+            ],
+            "authors": [
+                {
+                    "name": "Phalcon Team",
+                    "email": "team@phalcon.io",
+                    "homepage": "https://phalcon.io/en/team"
+                },
+                {
+                    "name": "Contributors",
+                    "homepage": "https://github.com/phalcon/cphalcon/graphs/contributors"
+                }
+            ],
+            "description": "Phalcon Volt is a HTML template engine for sender-side rendering.",
+            "keywords": [
+                "engine",
+                "html",
+                "phalcon",
+                "template",
+                "volt"
+            ],
+            "support": {
+                "docs": "https://phalcon.io/docs/",
+                "email": "support@phalcon.io",
+                "forum": "https://phalcon.io/forum/",
+                "issues": "https://github.com/phalcon/cphalcon/issues",
+                "rss": "https://blog.phalcon.io/rss",
+                "source": "https://github.com/phalcon/cphalcon"
+            },
+            "funding": [
+                {
+                    "url": "https://github.com/phalcon",
+                    "type": "github"
+                },
+                {
+                    "url": "https://opencollective.com/phalcon",
+                    "type": "open_collective"
+                }
+            ],
+            "time": "2024-10-13T18:12:28+00:00"
         },
         {
             "name": "phar-io/manifest",
@@ -5344,7 +5421,9 @@
     ],
     "aliases": [],
     "minimum-stability": "stable",
-    "stability-flags": [],
+    "stability-flags": {
+        "phalcon/volt": 20
+    },
     "prefer-stable": false,
     "prefer-lowest": false,
     "platform": {
@@ -5359,5 +5438,5 @@
         "ext-gettext": "*",
         "ext-yaml": "*"
     },
-    "plugin-api-version": "2.6.0"
+    "plugin-api-version": "2.3.0"
 }
