@@ -41,13 +41,20 @@ RUN apt update -y && \
         zip && \
     rm -rf /var/lib/apt/lists/* /var/cache/apt/archives/*
 
+# Remove this RUN when imagick will be available via pecl
+RUN cd /opt && \
+    git clone https://github.com/Imagick/imagick.git && \
+    cd imagick && \
+    phpize && ./configure && \
+    make && make install
+
 # PECL Packages
 RUN pecl install -o -f redis && \
     pecl install igbinary \
       msgpack \
       apcu \
       yaml \
-      imagick \
+#      imagick \
       memcached \
       xdebug
 
