@@ -68,6 +68,7 @@
     "ext-yaml": "*",
     "friendsofphp/php-cs-fixer": "^3.13",
     "pds/skeleton": "^1.0",
+    "phalcon/volt": "dev-master",
     "phpbench/phpbench": "^1.2",
     "phpstan/phpstan": "^1.10",
     "phpunit/phpunit": "^10.5",
