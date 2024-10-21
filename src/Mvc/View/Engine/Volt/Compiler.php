@@ -17,10 +17,10 @@ use Closure;
 use Phalcon\Di\InjectionAwareInterface;
 use Phalcon\Di\Traits\InjectionAwareTrait;
 use Phalcon\Mvc\View\ViewBaseInterface;
-use Phalcon\Parsers\Parser;
 use Phalcon\Parsers\Volt\Enum;
 use Phalcon\Support\Traits\FilePathTrait;
 use Phalcon\Traits\Helper\Str\CamelizeTrait;
+use Phalcon\Volt\Parser\Parser;
 
 use function addslashes;
 use function array_key_exists;
@@ -1443,7 +1443,7 @@ class Compiler implements InjectionAwareInterface
             /**
              * We don't resolve the right expression for filters
              */
-            if ($type == 124) {
+            if ($type == Enum::PHVOLT_T_PIPE) {
                 $exprCode = $this->resolveFilter(
                     $expr["right"],
                     $leftCode
@@ -2169,9 +2169,7 @@ class Compiler implements InjectionAwareInterface
      */
     public function parse(string $viewCode): array
     {
-        $currentPath = "eval code";
-
-        return Parser::voltParse($viewCode, $currentPath);
+        return (new Parser($viewCode))->parseView("eval code");
     }
 
     /**
@@ -2317,15 +2315,7 @@ class Compiler implements InjectionAwareInterface
             $this->autoescape = $autoescape;
         }
 
-        $intermediate = Parser::voltParse($viewCode, $this->currentPath);
-
-        /**
-         * The parsing must return a valid array
-         */
-        if (!is_array($intermediate)) {
-            throw new Exception("Invalid intermediate representation");
-        }
-
+        $intermediate = (new Parser($viewCode))->parseView($this->currentPath);
         $compilation = $this->statementList($intermediate, $extendsMode);
 
         /**
