@@ -1443,7 +1443,7 @@ class Compiler implements InjectionAwareInterface
             /**
              * We don't resolve the right expression for filters
              */
-            if ($type == 124) {
+            if ($type == Enum::PHVOLT_T_PIPE) {
                 $exprCode = $this->resolveFilter(
                     $expr["right"],
                     $leftCode
