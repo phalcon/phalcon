@@ -84,7 +84,6 @@ class Enum
     public const PHVOLT_T_FALSE            = 262;
     /** Special Tokens */
     public const PHVOLT_T_FCALL        = 350;
-    public const PHVOLT_T_FILTER       = 124;
     public const PHVOLT_T_FOR          = 304;
     public const PHVOLT_T_GREATER      = 62; //'>';
     public const PHVOLT_T_GREATEREQUAL = 271;
