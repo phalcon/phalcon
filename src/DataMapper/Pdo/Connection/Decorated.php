@@ -41,9 +41,8 @@ class Decorated extends AbstractConnection
         PDO $pdo,
         ?ProfilerInterface $profiler = null
     ) {
-        $this->pdo = $pdo;
-
-        $this->setProfiler($profiler ?? new Profiler());
+        $this->pdo      = $pdo;
+        $this->profiler = $profiler;
     }
 
     /**

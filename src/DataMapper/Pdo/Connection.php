@@ -49,7 +49,7 @@ class Connection extends AbstractConnection
         string $password = null,
         array $options = [],
         array $queries = [],
-        ProfilerInterface $profiler = null
+        ?ProfilerInterface $profiler = null
     ) {
         $parts     = explode(":", $dsn);
         $available = [
@@ -80,12 +80,7 @@ class Connection extends AbstractConnection
             $queries,
         ];
 
-        // Create a new profiler if none has been passed
-        if (null === $profiler) {
-            $profiler = new Profiler();
-        }
-
-        $this->setProfiler($profiler);
+        $this->profiler = $profiler;
     }
 
     /**

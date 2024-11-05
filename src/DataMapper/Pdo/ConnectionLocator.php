@@ -18,18 +18,17 @@ declare(strict_types=1);
 
 namespace Phalcon\DataMapper\Pdo;
 
-use Phalcon\DataMapper\Pdo\Connection\ConnectionInterface;
 use Phalcon\DataMapper\Pdo\Exception\ConnectionNotFound;
 
 /**
  * Manages Connection instances for default, read, and write connections.
  */
-class ConnectionLocator implements ConnectionLocatorInterface
+class ConnectionLocator
 {
     /**
-     * @var ConnectionInterface
+     * @var Connection
      */
-    protected ConnectionInterface $master;
+    protected Connection $master;
 
     /**
      * @var array
@@ -51,12 +50,12 @@ class ConnectionLocator implements ConnectionLocatorInterface
     /**
      * Constructor.
      *
-     * @param ConnectionInterface $master
+     * @param Connection $master
      * @param array               $read
      * @param array               $write
      */
     public function __construct(
-        ConnectionInterface $master,
+        Connection $master,
         array $read = [],
         array $write = []
     ) {
@@ -74,9 +73,9 @@ class ConnectionLocator implements ConnectionLocatorInterface
     /**
      * Returns the default connection object.
      *
-     * @return ConnectionInterface
+     * @return Connection
      */
-    public function getMaster(): ConnectionInterface
+    public function getMaster(): Connection
     {
         return $this->master;
     }
@@ -88,10 +87,10 @@ class ConnectionLocator implements ConnectionLocatorInterface
      *
      * @param string $name
      *
-     * @return ConnectionInterface
+     * @return Connection
      * @throws ConnectionNotFound
      */
-    public function getRead(string $name = ""): ConnectionInterface
+    public function getRead(string $name = ""): Connection
     {
         return $this->getConnection("read", $name);
     }
@@ -103,10 +102,10 @@ class ConnectionLocator implements ConnectionLocatorInterface
      *
      * @param string $name
      *
-     * @return ConnectionInterface
+     * @return Connection
      * @throws ConnectionNotFound
      */
-    public function getWrite(string $name = ""): ConnectionInterface
+    public function getWrite(string $name = ""): Connection
     {
         return $this->getConnection("write", $name);
     }
@@ -114,13 +113,13 @@ class ConnectionLocator implements ConnectionLocatorInterface
     /**
      * Sets the default connection factory.
      *
-     * @param ConnectionInterface $callableObject
+     * @param Connection $callableObject
      *
-     * @return ConnectionLocatorInterface
+     * @return ConnectionLocator
      */
     public function setMaster(
-        ConnectionInterface $callableObject
-    ): ConnectionLocatorInterface {
+        Connection $callableObject
+    ): ConnectionLocator {
         $this->master = $callableObject;
 
         return $this;
@@ -132,12 +131,12 @@ class ConnectionLocator implements ConnectionLocatorInterface
      * @param string   $name
      * @param callable $callableObject
      *
-     * @return ConnectionLocatorInterface
+     * @return ConnectionLocator
      */
     public function setRead(
         string $name,
         callable $callableObject
-    ): ConnectionLocatorInterface {
+    ): ConnectionLocator {
         $this->read[$name] = $callableObject;
 
         return $this;
@@ -149,12 +148,12 @@ class ConnectionLocator implements ConnectionLocatorInterface
      * @param string   $name
      * @param callable $callableObject
      *
-     * @return ConnectionLocatorInterface
+     * @return ConnectionLocator
      */
     public function setWrite(
         string $name,
         callable $callableObject
-    ): ConnectionLocatorInterface {
+    ): ConnectionLocator {
         $this->write[$name] = $callableObject;
 
         return $this;
@@ -166,13 +165,13 @@ class ConnectionLocator implements ConnectionLocatorInterface
      * @param string $type
      * @param string $name
      *
-     * @return ConnectionInterface
+     * @return Connection
      * @throws ConnectionNotFound
      */
     protected function getConnection(
         string $type,
         string $name = ""
-    ): ConnectionInterface {
+    ): Connection {
         $collection = $this->{$type};
         $requested  = $name;
 

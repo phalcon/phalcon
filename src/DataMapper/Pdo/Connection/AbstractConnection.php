@@ -39,8 +39,11 @@ use function method_exists;
 /**
  * Provides array quoting, profiling, a new `perform()` method, new `fetch*()`
  * methods
+ *
+ * @method string|null errorCode()
+ * @method array       errorInfo()
  */
-abstract class AbstractConnection extends PDO implements ConnectionInterface
+abstract class AbstractConnection
 {
     /**
      * @var PDO|null
@@ -48,9 +51,9 @@ abstract class AbstractConnection extends PDO implements ConnectionInterface
     protected ?PDO $pdo = null;
 
     /**
-     * @var ProfilerInterface
+     * @var ProfilerInterface|null
      */
-    protected ProfilerInterface $profiler;
+    protected ?ProfilerInterface $profiler;
 
     /**
      * Proxies to PDO methods created for specific drivers; in particular,
@@ -122,30 +125,6 @@ abstract class AbstractConnection extends PDO implements ConnectionInterface
      * Disconnects from the database.
      */
     abstract public function disconnect(): void;
-
-    /**
-     * Gets the most recent error code.
-     *
-     * @return string|null
-     */
-    public function errorCode(): string | null
-    {
-        $this->connect();
-
-        return $this->pdo->errorCode();
-    }
-
-    /**
-     * Gets the most recent error info.
-     *
-     * @return array
-     */
-    public function errorInfo(): array
-    {
-        $this->connect();
-
-        return $this->pdo->errorInfo();
-    }
 
     /**
      * Executes an SQL statement and returns the number of affected rows. If

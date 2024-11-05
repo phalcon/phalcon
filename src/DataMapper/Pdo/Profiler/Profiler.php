@@ -54,18 +54,13 @@ class Profiler implements ProfilerInterface
     protected int $logLevel = Enum::DEBUG;
 
     /**
-     * @var LoggerInterface
-     */
-    protected LoggerInterface $logger;
-
-    /**
      * Constructor.
      *
      * @param LoggerInterface|null $logger
      */
-    public function __construct(?LoggerInterface $logger = null)
-    {
-        $this->logger = $logger ?? new MemoryLogger();
+    public function __construct(
+        protected ?LoggerInterface $logger = null
+    ) {
     }
 
     /**
@@ -91,7 +86,7 @@ class Profiler implements ProfilerInterface
                 ? ""
                 : $this->encode($values);
 
-            $this->logger->log(
+            $this->logger?->log(
                 $this->logLevel,
                 $this->logFormat,
                 $this->context
