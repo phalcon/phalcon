@@ -42,12 +42,21 @@ RUN apt update -y && \
     rm -rf /var/lib/apt/lists/* /var/cache/apt/archives/*
 
 # PECL Packages
+#RUN pecl install -o -f redis && \
+#    pecl install igbinary \
+#      msgpack \
+#      apcu \
+#      yaml \
+#      imagick \
+#      memcached \
+#      xdebug
+
 RUN pecl install -o -f redis && \
     pecl install igbinary \
       msgpack \
       apcu \
       yaml \
-      imagick \
+#      imagick \
       memcached \
       xdebug
 
@@ -82,13 +91,21 @@ RUN docker-php-ext-install \
         zip
 
 # Install PHP extensions
+#RUN docker-php-ext-enable \
+#        gettext \
+#        redis \
+#        igbinary \
+#        msgpack \
+#        apcu \
+#        imagick \
+#        yaml \
+#        memcached \
+#        xdebug
 RUN docker-php-ext-enable \
         gettext \
         redis \
-        igbinary \
         msgpack \
         apcu \
-        imagick \
         yaml \
         memcached \
         xdebug
