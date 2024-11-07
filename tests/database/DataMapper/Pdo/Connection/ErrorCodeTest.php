@@ -29,6 +29,6 @@ final class ErrorCodeTest extends AbstractDatabaseTestCase
         $connection = self::getDataMapperConnection();
 
         $actual = $connection->errorCode();
-        $this->assertEquals('', $actual);
+        $this->assertNull($actual);
     }
 }

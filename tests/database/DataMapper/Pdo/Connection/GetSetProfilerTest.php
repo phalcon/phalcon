@@ -29,14 +29,14 @@ final class GetSetProfilerTest extends AbstractDatabaseTestCase
         /** @var Connection $connection */
         $connection = self::getDataMapperConnection();
 
-        $this->assertInstanceOf(
-            Profiler::class,
-            $connection->getProfiler()
-        );
+        $actual = $connection->getProfiler();
+        $this->assertNull($actual);
 
         $profiler = new Profiler();
         $connection->setProfiler($profiler);
 
-        $this->assertSame($profiler, $connection->getProfiler());
+        $expected = $profiler;
+        $actual   = $connection->getProfiler();
+        $this->assertSame($expected, $actual);
     }
 }

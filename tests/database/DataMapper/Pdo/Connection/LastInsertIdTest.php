@@ -56,7 +56,7 @@ final class LastInsertIdTest extends AbstractDatabaseTestCase
         );
 
         $result = $connection->exec($sql);
-        $this->assertEquals(1, $result);
-        $this->assertEquals(2, $connection->lastInsertId());
+        $this->assertSame(1, $result);
+        $this->assertSame(2, (int)$connection->lastInsertId());
     }
 }

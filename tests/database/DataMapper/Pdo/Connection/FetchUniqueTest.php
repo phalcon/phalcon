@@ -32,23 +32,23 @@ final class FetchUniqueTest extends AbstractDatabaseTestCase
         $migration->clear();
 
         $result = $migration->insert(1, 1);
-        $this->assertEquals(1, $result);
+        $this->assertSame(1, $result);
         $result = $migration->insert(2, 2);
-        $this->assertEquals(1, $result);
+        $this->assertSame(1, $result);
         $result = $migration->insert(3, 3);
-        $this->assertEquals(1, $result);
+        $this->assertSame(1, $result);
         $result = $migration->insert(4, 4);
-        $this->assertEquals(1, $result);
+        $this->assertSame(1, $result);
 
         $all = $connection->fetchUnique(
             'SELECT * from co_invoices ORDER BY inv_id'
         );
         $this->assertCount(4, $all);
 
-        $this->assertEquals(1, $all[1]['inv_cst_id']);
-        $this->assertEquals(2, $all[2]['inv_cst_id']);
-        $this->assertEquals(3, $all[3]['inv_cst_id']);
-        $this->assertEquals(4, $all[4]['inv_cst_id']);
+        $this->assertSame(1, $all[1]['inv_cst_id']);
+        $this->assertSame(2, $all[2]['inv_cst_id']);
+        $this->assertSame(3, $all[3]['inv_cst_id']);
+        $this->assertSame(4, $all[4]['inv_cst_id']);
 
         $all = $connection->yieldUnique(
             'SELECT * from co_invoices ORDER BY inv_id'
@@ -61,9 +61,9 @@ final class FetchUniqueTest extends AbstractDatabaseTestCase
 
         $this->assertCount(4, $results);
 
-        $this->assertEquals(1, $results[1]['inv_cst_id']);
-        $this->assertEquals(2, $results[2]['inv_cst_id']);
-        $this->assertEquals(3, $results[3]['inv_cst_id']);
-        $this->assertEquals(4, $results[4]['inv_cst_id']);
+        $this->assertSame(1, $results[1]['inv_cst_id']);
+        $this->assertSame(2, $results[2]['inv_cst_id']);
+        $this->assertSame(3, $results[3]['inv_cst_id']);
+        $this->assertSame(4, $results[4]['inv_cst_id']);
     }
 }

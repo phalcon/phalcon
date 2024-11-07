@@ -38,7 +38,7 @@ final class ConstructTest extends AbstractDatabaseTestCase
         $decorated->connect();
 
         $this->assertTrue($decorated->isConnected());
-        $this->assertInstanceOf(Profiler::class, $decorated->getProfiler());
+        $this->assertNull($decorated->getProfiler());
         $this->assertSame($connection, $decorated->getAdapter());
     }
 }

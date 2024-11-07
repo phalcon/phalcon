@@ -32,13 +32,13 @@ final class FetchPairsTest extends AbstractDatabaseTestCase
         $migration->clear();
 
         $result = $migration->insert(1, 1, 1, null, 101);
-        $this->assertEquals(1, $result);
+        $this->assertSame(1, $result);
         $result = $migration->insert(2, 1, 1, null, 102);
-        $this->assertEquals(1, $result);
+        $this->assertSame(1, $result);
         $result = $migration->insert(3, 1, 1, null, 103);
-        $this->assertEquals(1, $result);
+        $this->assertSame(1, $result);
         $result = $migration->insert(4, 1, 1, null, 104);
-        $this->assertEquals(1, $result);
+        $this->assertSame(1, $result);
 
         $all = $connection->fetchPairs(
             'SELECT inv_id, inv_total from co_invoices'
@@ -52,7 +52,7 @@ final class FetchPairsTest extends AbstractDatabaseTestCase
             4 => 104.00,
         ];
 
-        $this->assertEquals($expected, $all);
+        $this->assertSame($expected, $all);
 
         $all = $connection->yieldPairs(
             'SELECT inv_id, inv_total from co_invoices'
@@ -72,6 +72,6 @@ final class FetchPairsTest extends AbstractDatabaseTestCase
             4 => 104.00,
         ];
 
-        $this->assertEquals($expected, $results);
+        $this->assertSame($expected, $results);
     }
 }

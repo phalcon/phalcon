@@ -45,7 +45,7 @@ final class CommitInTransactionRollBackTest extends AbstractDatabaseTestCase
             . "{$invId}, 1, 1, '{$title}', 102, '{$date}')";
 
         $result = $connection->exec($sql);
-        $this->assertEquals(1, $result);
+        $this->assertSame(1, $result);
 
         $connection->commit();
 
@@ -62,7 +62,7 @@ final class CommitInTransactionRollBackTest extends AbstractDatabaseTestCase
         ;
 
         $this->assertIsArray($all);
-        $this->assertEquals($invId, $all['inv_id']);
+        $this->assertSame($invId, $all['inv_id']);
     }
 
     /**
@@ -89,7 +89,7 @@ final class CommitInTransactionRollBackTest extends AbstractDatabaseTestCase
             . "{$invId}, 1, 1, '{$title}', 102, '{$date}')";
 
         $result = $connection->exec($sql);
-        $this->assertEquals(1, $result);
+        $this->assertSame(1, $result);
 
         /**
          * Committed record

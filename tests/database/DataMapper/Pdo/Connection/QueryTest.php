@@ -32,7 +32,7 @@ final class QueryTest extends AbstractDatabaseTestCase
         $migration->clear();
 
         $result = $migration->insert(1);
-        $this->assertEquals(1, $result);
+        $this->assertSame(1, $result);
 
         $all = $connection
             ->query('select * from co_invoices WHERE inv_id = 1')
@@ -40,7 +40,7 @@ final class QueryTest extends AbstractDatabaseTestCase
         ;
 
         $this->assertIsArray($all);
-        $this->assertEquals(1, $all['inv_id']);
+        $this->assertSame(1, $all['inv_id']);
         $this->assertArrayHasKey('inv_id', $all);
         $this->assertArrayHasKey('inv_cst_id', $all);
         $this->assertArrayHasKey('inv_status_flag', $all);

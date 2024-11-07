@@ -68,7 +68,7 @@ final class ConnectDisconnectIsConnectedTest extends AbstractDatabaseTestCase
                 'Value'         => 'big5',
             ];
 
-            $this->assertEquals($expected, $result);
+            $this->assertSame($expected, $result);
         }
     }
 }

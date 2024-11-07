@@ -40,6 +40,6 @@ final class DebugInfoTest extends AbstractDatabaseTestCase
                 [],
             ],
         ];
-        $this->assertEquals($expected, $connection->__debugInfo());
+        $this->assertSame($expected, $connection->__debugInfo());
     }
 }

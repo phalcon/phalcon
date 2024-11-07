@@ -30,7 +30,7 @@ final class GetSetAttributeTest extends AbstractDatabaseTestCase
         /** @var Connection $connection */
         $connection = self::getDataMapperConnection();
 
-        $this->assertEquals(
+        $this->assertSame(
             PDO::ERRMODE_EXCEPTION,
             $connection->getAttribute(PDO::ATTR_ERRMODE)
         );
@@ -40,7 +40,7 @@ final class GetSetAttributeTest extends AbstractDatabaseTestCase
             PDO::ERRMODE_WARNING
         );
 
-        $this->assertEquals(
+        $this->assertSame(
             PDO::ERRMODE_WARNING,
             $connection->getAttribute(PDO::ATTR_ERRMODE)
         );

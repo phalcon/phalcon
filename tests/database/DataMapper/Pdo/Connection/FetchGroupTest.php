@@ -32,21 +32,21 @@ final class FetchGroupTest extends AbstractDatabaseTestCase
         $migration->clear();
 
         $result = $migration->insert(1, 1, 1, null, 101);
-        $this->assertEquals(1, $result);
+        $this->assertSame(1, $result);
         $result = $migration->insert(2, 1, 0, null, 102);
-        $this->assertEquals(1, $result);
+        $this->assertSame(1, $result);
         $result = $migration->insert(3, 1, 1, null, 103);
-        $this->assertEquals(1, $result);
+        $this->assertSame(1, $result);
         $result = $migration->insert(4, 1, 0, null, 104);
-        $this->assertEquals(1, $result);
+        $this->assertSame(1, $result);
 
         $all = $connection->fetchGroup(
             'SELECT inv_status_flag, inv_id, inv_total from co_invoices'
         );
 
-        $this->assertEquals(2, $all[0][0]['inv_id']);
-        $this->assertEquals(4, $all[0][1]['inv_id']);
-        $this->assertEquals(1, $all[1][0]['inv_id']);
-        $this->assertEquals(3, $all[1][1]['inv_id']);
+        $this->assertSame(2, $all[0][0]['inv_id']);
+        $this->assertSame(4, $all[0][1]['inv_id']);
+        $this->assertSame(1, $all[1][0]['inv_id']);
+        $this->assertSame(3, $all[1][1]['inv_id']);
     }
 }

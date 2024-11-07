@@ -31,6 +31,6 @@ final class ErrorInfoTest extends AbstractDatabaseTestCase
         $actual = $connection->errorInfo();
         $expect = ['', null, null];
 
-        $this->assertEquals($expect, $actual);
+        $this->assertSame($expect, $actual);
     }
 }

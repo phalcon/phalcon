@@ -32,7 +32,7 @@ final class FetchValueTest extends AbstractDatabaseTestCase
         $migration->clear();
 
         $result = $migration->insert(1, 1, 1, null, 101);
-        $this->assertEquals(1, $result);
+        $this->assertSame(1, $result);
 
         $all = $connection->fetchValue(
             'select inv_total from co_invoices WHERE inv_cst_id = ?',
@@ -40,6 +40,6 @@ final class FetchValueTest extends AbstractDatabaseTestCase
                 0 => 1,
             ]
         );
-        $this->assertEquals(101, $all);
+        $this->assertSame(101.0, $all);
     }
 }

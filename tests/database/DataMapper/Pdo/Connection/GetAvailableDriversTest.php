@@ -15,6 +15,8 @@ use PDO;
 use Phalcon\DataMapper\Pdo\Connection;
 use Phalcon\Tests\AbstractDatabaseTestCase;
 
+use function explode;
+
 final class GetAvailableDriversTest extends AbstractDatabaseTestCase
 {
     /**
@@ -32,6 +34,26 @@ final class GetAvailableDriversTest extends AbstractDatabaseTestCase
         $expected = PDO::getAvailableDrivers();
         $actual   = $connection::getAvailableDrivers();
 
-        $this->assertEquals($expected, $actual);
+        $this->assertSame($expected, $actual);
+    }
+
+    /**
+     * Database Tests Phalcon\DataMapper\Pdo\Connection :: getDriverName()
+     *
+     * @since  2020-01-25
+     *
+     * @group  common
+     */
+    public function testDmPdoConnectionGetDriverName(): void
+    {
+        /** @var Connection $connection */
+        $connection = self::getDataMapperConnection();
+
+        $dsn = self::getDatabaseDsn();
+        $dsn = explode(':', $dsn);
+
+        $expected = $dsn[0];
+        $actual = $connection->getDriverName();
+        $this->assertSame($expected, $actual);
     }
 }

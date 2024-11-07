@@ -34,13 +34,13 @@ final class FetchObjectsTest extends AbstractDatabaseTestCase
         $migration->clear();
 
         $result = $migration->insert(1);
-        $this->assertEquals(1, $result);
+        $this->assertSame(1, $result);
         $result = $migration->insert(2);
-        $this->assertEquals(1, $result);
+        $this->assertSame(1, $result);
         $result = $migration->insert(3);
-        $this->assertEquals(1, $result);
+        $this->assertSame(1, $result);
         $result = $migration->insert(4);
-        $this->assertEquals(1, $result);
+        $this->assertSame(1, $result);
 
         $all = $connection->fetchObjects(
             'SELECT * from co_invoices'
@@ -52,10 +52,10 @@ final class FetchObjectsTest extends AbstractDatabaseTestCase
         $this->assertInstanceOf(stdClass::class, $all[2]);
         $this->assertInstanceOf(stdClass::class, $all[3]);
 
-        $this->assertEquals(1, $all[0]->inv_id);
-        $this->assertEquals(2, $all[1]->inv_id);
-        $this->assertEquals(3, $all[2]->inv_id);
-        $this->assertEquals(4, $all[3]->inv_id);
+        $this->assertSame(1, $all[0]->inv_id);
+        $this->assertSame(2, $all[1]->inv_id);
+        $this->assertSame(3, $all[2]->inv_id);
+        $this->assertSame(4, $all[3]->inv_id);
 
         $all = $connection->yieldObjects(
             'SELECT * from co_invoices'
@@ -73,10 +73,10 @@ final class FetchObjectsTest extends AbstractDatabaseTestCase
         $this->assertInstanceOf(stdClass::class, $results[2]);
         $this->assertInstanceOf(stdClass::class, $results[3]);
 
-        $this->assertEquals(1, $results[0]->inv_id);
-        $this->assertEquals(2, $results[1]->inv_id);
-        $this->assertEquals(3, $results[2]->inv_id);
-        $this->assertEquals(4, $results[3]->inv_id);
+        $this->assertSame(1, $results[0]->inv_id);
+        $this->assertSame(2, $results[1]->inv_id);
+        $this->assertSame(3, $results[2]->inv_id);
+        $this->assertSame(4, $results[3]->inv_id);
     }
 
     /**
@@ -94,13 +94,13 @@ final class FetchObjectsTest extends AbstractDatabaseTestCase
         $migration->clear();
 
         $result = $migration->insert(1);
-        $this->assertEquals(1, $result);
+        $this->assertSame(1, $result);
         $result = $migration->insert(2);
-        $this->assertEquals(1, $result);
+        $this->assertSame(1, $result);
         $result = $migration->insert(3);
-        $this->assertEquals(1, $result);
+        $this->assertSame(1, $result);
         $result = $migration->insert(4);
-        $this->assertEquals(1, $result);
+        $this->assertSame(1, $result);
 
         $all = $connection->fetchObjects(
             'SELECT * from co_invoices',
@@ -117,15 +117,15 @@ final class FetchObjectsTest extends AbstractDatabaseTestCase
         $this->assertInstanceOf(Resultset::class, $all[2]);
         $this->assertInstanceOf(Resultset::class, $all[3]);
 
-        $this->assertEquals(1, $all[0]->inv_id);
-        $this->assertEquals(2, $all[1]->inv_id);
-        $this->assertEquals(3, $all[2]->inv_id);
-        $this->assertEquals(4, $all[3]->inv_id);
+        $this->assertSame(1, $all[0]->inv_id);
+        $this->assertSame(2, $all[1]->inv_id);
+        $this->assertSame(3, $all[2]->inv_id);
+        $this->assertSame(4, $all[3]->inv_id);
 
-        $this->assertEquals('darth', $all[0]->calculated);
-        $this->assertEquals('darth', $all[1]->calculated);
-        $this->assertEquals('darth', $all[2]->calculated);
-        $this->assertEquals('darth', $all[3]->calculated);
+        $this->assertSame('darth', $all[0]->calculated);
+        $this->assertSame('darth', $all[1]->calculated);
+        $this->assertSame('darth', $all[2]->calculated);
+        $this->assertSame('darth', $all[3]->calculated);
 
         $all = $connection->yieldObjects(
             'SELECT * from co_invoices',
@@ -148,14 +148,14 @@ final class FetchObjectsTest extends AbstractDatabaseTestCase
         $this->assertInstanceOf(Resultset::class, $results[2]);
         $this->assertInstanceOf(Resultset::class, $results[3]);
 
-        $this->assertEquals(1, $results[0]->inv_id);
-        $this->assertEquals(2, $results[1]->inv_id);
-        $this->assertEquals(3, $results[2]->inv_id);
-        $this->assertEquals(4, $results[3]->inv_id);
+        $this->assertSame(1, $results[0]->inv_id);
+        $this->assertSame(2, $results[1]->inv_id);
+        $this->assertSame(3, $results[2]->inv_id);
+        $this->assertSame(4, $results[3]->inv_id);
 
-        $this->assertEquals('darth', $results[0]->calculated);
-        $this->assertEquals('darth', $results[1]->calculated);
-        $this->assertEquals('darth', $results[2]->calculated);
-        $this->assertEquals('darth', $results[3]->calculated);
+        $this->assertSame('darth', $results[0]->calculated);
+        $this->assertSame('darth', $results[1]->calculated);
+        $this->assertSame('darth', $results[2]->calculated);
+        $this->assertSame('darth', $results[3]->calculated);
     }
 }

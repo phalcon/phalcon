@@ -48,12 +48,12 @@ final class GetQuoteNamesTest extends AbstractDatabaseTestCase
         ];
 
         $actual = $connection->getQuoteNames('unknown');
-        $this->assertEquals($default, $actual);
+        $this->assertSame($default, $actual);
 
         $actual = $connection->getQuoteNames('mysql');
-        $this->assertEquals($mysql, $actual);
+        $this->assertSame($mysql, $actual);
 
         $actual = $connection->getQuoteNames('sqlsrv');
-        $this->assertEquals($sqlsrv, $actual);
+        $this->assertSame($sqlsrv, $actual);
     }
 }

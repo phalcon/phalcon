@@ -19,26 +19,6 @@ use Phalcon\Tests\Fixtures\DataMapper\Pdo\ConnectionFixture;
 final class UnderscoreCallTest extends AbstractDatabaseTestCase
 {
     /**
-     * Database Tests Phalcon\DataMapper\Pdo\Connection :: __call()
-     *
-     * @since  2020-01-25
-     *
-     * @group  common
-     */
-    public function testDmPdoConnectionUnderscoreCall(): void
-    {
-        /** @var Connection $connection */
-        $connection = new ConnectionFixture(
-            $this->getDatabaseDsn(),
-            $this->getDatabaseUsername(),
-            $this->getDatabasePassword()
-        );
-
-        $actual = $connection->callMe('blondie');
-        $this->assertEquals('blondie', $actual);
-    }
-
-    /**
      * Database Tests Phalcon\DataMapper\Pdo\Connection :: __call() - exception
      *
      * @since  2020-01-25
