@@ -28,16 +28,22 @@ final class GetSetLogFormatTest extends AbstractDatabaseTestCase
     {
         $profiler = new Profiler();
 
-        $this->assertEquals(
-            "{method} ({duration}s): {statement} {backtrace}",
-            $profiler->getLogFormat()
-        );
+        $expected = "M: {method} ({duration}s)"
+            . PHP_EOL
+            . "S: {statement}"
+            . PHP_EOL
+            . "V: {values}"
+            . PHP_EOL
+            . "B: {backtrace}"
+        ;
+        $actual   = $profiler->getLogFormat();
+        $this->assertSame($expected, $actual);
 
         $format = "{method} ({duration}s): {statement}";
         $profiler->setLogFormat($format);
-        $this->assertEquals(
-            $format,
-            $profiler->getLogFormat()
-        );
+
+        $expected = $format;
+        $actual   = $profiler->getLogFormat();
+        $this->assertSame($expected, $actual);
     }
 }

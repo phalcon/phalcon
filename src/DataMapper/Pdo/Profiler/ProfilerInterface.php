@@ -28,8 +28,8 @@ interface ProfilerInterface
     /**
      * Finishes and logs a profile entry.
      *
-     * @param string|null $statement
-     * @param array       $values
+     * @param string|null          $statement
+     * @param array<string, mixed> $values
      *
      * @return void
      */
@@ -52,9 +52,9 @@ interface ProfilerInterface
     /**
      * Returns the underlying logger instance.
      *
-     * @return LoggerInterface
+     * @return LoggerInterface|null
      */
-    public function getLogger(): LoggerInterface;
+    public function getLogger(): ?LoggerInterface;
 
     /**
      * Returns true if logging is active.

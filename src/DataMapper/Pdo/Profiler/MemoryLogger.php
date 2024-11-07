@@ -33,7 +33,7 @@ class MemoryLogger implements LoggerInterface
     use LoggerTrait;
 
     /**
-     * @var array
+     * @var array<array-key, string>
      */
     protected array $messages = [];
 
@@ -72,7 +72,7 @@ class MemoryLogger implements LoggerInterface
     /**
      * Returns the logged messages.
      *
-     * @return array
+     * @return array<array-key, string>
      */
     public function getMessages(): array
     {
@@ -90,9 +90,9 @@ class MemoryLogger implements LoggerInterface
     /**
      * Logs a message.
      *
-     * @param mixed             $level
-     * @param string|Stringable $message
-     * @param array             $context
+     * @param mixed                    $level
+     * @param string|Stringable        $message
+     * @param array<array-key, string> $context
      *
      * @return void
      */
@@ -106,6 +106,6 @@ class MemoryLogger implements LoggerInterface
             $replace["{" . $key . "}"] = $item;
         }
 
-        $this->messages[] = strtr($message, $replace);
+        $this->messages[] = strtr((string)$message, $replace);
     }
 }

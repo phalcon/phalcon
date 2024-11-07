@@ -30,13 +30,13 @@ final class GetSetLogLevelTest extends AbstractDatabaseTestCase
     {
         $profiler = new Profiler();
 
-        $this->assertEquals(
+        $this->assertSame(
             Enum::DEBUG,
             $profiler->getLogLevel()
         );
 
         $profiler->setLogLevel(Enum::INFO);
-        $this->assertEquals(
+        $this->assertSame(
             Enum::INFO,
             $profiler->getLogLevel()
         );

@@ -12,6 +12,7 @@ declare(strict_types=1);
 namespace Phalcon\Tests\Database\DataMapper\Pdo\Profiler\Profiler;
 
 use InvalidArgumentException;
+use Phalcon\DataMapper\Pdo\Profiler\MemoryLogger;
 use Phalcon\DataMapper\Pdo\Profiler\Profiler;
 use Phalcon\Tests\AbstractDatabaseTestCase;
 use Phalcon\Tests\Fixtures\DataMapper\Pdo\ProfilerJsonEncodeFixture;
@@ -31,7 +32,7 @@ final class StartFinishTest extends AbstractDatabaseTestCase
      */
     public function testDmPdoProfilerProfilerStartFinish(): void
     {
-        $profiler = new Profiler();
+        $profiler = new Profiler(new MemoryLogger());
 
         $profiler
             ->setActive(true)
@@ -41,11 +42,17 @@ final class StartFinishTest extends AbstractDatabaseTestCase
         sleep(1);
         $profiler->finish('select from something', [1 => 2]);
 
-        $logger  = $profiler->getLogger();
-        $message = $logger->getMessages()[0];
+        $logger = $profiler->getLogger();
+        $actual = $logger->getMessages()[0];
 
-        $this->assertNotFalse(strpos($message, 'my-method ('));
-        $this->assertNotFalse(strpos($message, 'select from something #0'));
+        $expected = 'M: my-method (';
+        $this->assertStringContainsString($expected, $actual);
+
+        $expected = 'S: select from something';
+        $this->assertStringContainsString($expected, $actual);
+
+        $expected = 'V: {"1":2}';
+        $this->assertStringContainsString($expected, $actual);
     }
 
     /**
@@ -58,7 +65,7 @@ final class StartFinishTest extends AbstractDatabaseTestCase
      */
     public function testDmPdoProfilerProfilerStartFinishEmptyValues(): void
     {
-        $profiler = new Profiler();
+        $profiler = new Profiler(new MemoryLogger());
 
         $profiler
             ->setActive(true)
@@ -68,11 +75,14 @@ final class StartFinishTest extends AbstractDatabaseTestCase
         sleep(1);
         $profiler->finish('select from something');
 
-        $logger  = $profiler->getLogger();
-        $message = $logger->getMessages()[0];
+        $logger = $profiler->getLogger();
+        $actual = $logger->getMessages()[0];
 
-        $this->assertNotFalse(strpos($message, 'my-method ('));
-        $this->assertNotFalse(strpos($message, 'select from something #0'));
+        $expected = 'M: my-method (';
+        $this->assertStringContainsString($expected, $actual);
+
+        $expected = 'S: select from something';
+        $this->assertStringContainsString($expected, $actual);
     }
 
     /**

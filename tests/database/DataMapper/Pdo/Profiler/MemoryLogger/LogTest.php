@@ -43,7 +43,7 @@ final class LogTest extends AbstractDatabaseTestCase
         $expected = ["f1 (123 seconds): select backtrace"];
         $message  = $logger->getMessages();
 
-        $this->assertEquals($expected, $message);
+        $this->assertSame($expected, $message);
         $this->assertSame(Enum::CUSTOM, $logger->getLogLevel());
         $this->assertSame('memory logger', $logger->getName());
         $this->assertEmpty($logger->getAdapters());

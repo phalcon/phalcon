@@ -25,6 +25,10 @@ use Phalcon\Traits\Php\JsonTrait;
 use Psr\Log\LoggerInterface;
 
 use function json_encode;
+use function microtime;
+use function number_format;
+
+use const PHP_EOL;
 
 /**
  * Sends query profiles to a logger.
@@ -34,7 +38,7 @@ class Profiler implements ProfilerInterface
     use JsonTrait;
 
     /**
-     * @var array
+     * @var array<array-key, mixed>
      */
     protected array $context = [];
 
@@ -46,7 +50,13 @@ class Profiler implements ProfilerInterface
     /**
      * @var string
      */
-    protected string $logFormat = "{method} ({duration}s): {statement} {backtrace}";
+    protected string $logFormat = "M: {method} ({duration}s)"
+        . PHP_EOL
+        . "S: {statement}"
+        . PHP_EOL
+        . "V: {values}"
+        . PHP_EOL
+        . "B: {backtrace}";
 
     /**
      * @var int
@@ -67,8 +77,8 @@ class Profiler implements ProfilerInterface
      *
      * Finishes and logs a profile entry.
      *
-     * @param string|null $statement
-     * @param array       $values
+     * @param string|null           $statement
+     * @param array<string, string> $values
      *
      * @return void
      */
@@ -78,8 +88,8 @@ class Profiler implements ProfilerInterface
             $ex     = new Exception();
             $finish = hrtime(true);
 
-            $this->context["backtrace"] = $ex->getTraceAsString();
-            $this->context["duration"]  = $finish - $this->context["start"];
+            $this->context["backtrace"] = '';//$ex->getTraceAsString();
+            $this->context["duration"]  = ($finish - $this->context["start"]) / 1e+9;
             $this->context["finish"]    = $finish;
             $this->context["statement"] = $statement;
             $this->context["values"]    = empty($values)
@@ -119,9 +129,9 @@ class Profiler implements ProfilerInterface
     /**
      * Returns the underlying logger instance.
      *
-     * @return LoggerInterface
+     * @return LoggerInterface|null
      */
-    public function getLogger(): LoggerInterface
+    public function getLogger(): ?LoggerInterface
     {
         return $this->logger;
     }

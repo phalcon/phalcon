@@ -29,13 +29,13 @@ final class GetLoggerTest extends AbstractDatabaseTestCase
         $profile = new Profiler();
         $logger  = $profile->getLogger();
 
-        $this->assertInstanceOf(MemoryLogger::class, $logger);
+        $this->assertNull($logger);
 
         $newLogger = new MemoryLogger();
         $profile   = new Profiler($newLogger);
 
         $logger = $profile->getLogger();
         $this->assertInstanceOf(MemoryLogger::class, $logger);
-        $this->assertEquals($newLogger, $logger);
+        $this->assertSame($newLogger, $logger);
     }
 }

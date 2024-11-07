@@ -68,6 +68,6 @@ final class LevelsTest extends AbstractDatabaseTestCase
         $expected = [$level . ' message'];
         $message  = $logger->getMessages();
 
-        $this->assertEquals($expected, $message);
+        $this->assertSame($expected, $message);
     }
 }
