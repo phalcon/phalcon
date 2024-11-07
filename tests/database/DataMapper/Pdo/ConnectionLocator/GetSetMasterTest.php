@@ -33,10 +33,10 @@ final class GetSetMasterTest extends AbstractDatabaseTestCase
         $locator     = new ConnectionLocator($connection1);
 
         $actual = $locator->getMaster();
-        $this->assertEquals(spl_object_hash($connection1), spl_object_hash($actual));
+        $this->assertSame(spl_object_hash($connection1), spl_object_hash($actual));
 
         $locator->setMaster($connection2);
         $actual = $locator->getMaster();
-        $this->assertEquals(spl_object_hash($connection2), spl_object_hash($actual));
+        $this->assertSame(spl_object_hash($connection2), spl_object_hash($actual));
     }
 }

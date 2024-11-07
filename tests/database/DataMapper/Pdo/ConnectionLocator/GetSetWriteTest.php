@@ -47,10 +47,10 @@ final class GetSetWriteTest extends AbstractDatabaseTestCase
         );
 
         $actual = $locator->getWrite("write1");
-        $this->assertEquals(spl_object_hash($write1), spl_object_hash($actual));
+        $this->assertSame(spl_object_hash($write1), spl_object_hash($actual));
 
         $actual = $locator->getWrite("write2");
-        $this->assertEquals(spl_object_hash($write2), spl_object_hash($actual));
+        $this->assertSame(spl_object_hash($write2), spl_object_hash($actual));
     }
 
     /**
@@ -67,7 +67,7 @@ final class GetSetWriteTest extends AbstractDatabaseTestCase
         $locator = new ConnectionLocator($master);
 
         $actual = $locator->getWrite("write1");
-        $this->assertEquals(spl_object_hash($master), spl_object_hash($actual));
+        $this->assertSame(spl_object_hash($master), spl_object_hash($actual));
     }
 
     /**

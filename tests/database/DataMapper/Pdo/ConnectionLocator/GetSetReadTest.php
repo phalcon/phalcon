@@ -34,7 +34,7 @@ final class GetSetReadTest extends AbstractDatabaseTestCase
         $locator = new ConnectionLocator($master);
 
         $actual = $locator->getRead();
-        $this->assertEquals(spl_object_hash($master), spl_object_hash($actual));
+        $this->assertSame(spl_object_hash($master), spl_object_hash($actual));
     }
 
     /**
@@ -126,9 +126,9 @@ final class GetSetReadTest extends AbstractDatabaseTestCase
         );
 
         $actual = $locator->getRead("read1");
-        $this->assertEquals(spl_object_hash($read1), spl_object_hash($actual));
+        $this->assertSame(spl_object_hash($read1), spl_object_hash($actual));
 
         $actual = $locator->getRead("read2");
-        $this->assertEquals(spl_object_hash($read2), spl_object_hash($actual));
+        $this->assertSame(spl_object_hash($read2), spl_object_hash($actual));
     }
 }

@@ -20,6 +20,9 @@ namespace Phalcon\DataMapper\Pdo;
 
 use Phalcon\DataMapper\Pdo\Exception\ConnectionNotFound;
 
+use function array_rand;
+use function is_callable;
+
 /**
  * Manages Connection instances for default, read, and write connections.
  */
@@ -31,28 +34,28 @@ class ConnectionLocator
     protected Connection $master;
 
     /**
-     * @var array
+     * @var array<string, callable>
      */
     protected array $read = [];
 
     /**
-     * @var array
+     * @var array<string, callable>
      */
     protected array $write = [];
 
     /**
      * A collection of resolved instances
      *
-     * @var array
+     * @var array<string, Connection>
      */
     private array $instances = [];
 
     /**
      * Constructor.
      *
-     * @param Connection $master
-     * @param array               $read
-     * @param array               $write
+     * @param Connection              $master
+     * @param array<string, callable> $read
+     * @param array<string, callable> $write
      */
     public function __construct(
         Connection $master,
@@ -62,10 +65,20 @@ class ConnectionLocator
         $this->setMaster($master);
 
         foreach ($read as $name => $callableObject) {
+            if (!is_callable($callableObject)) {
+                throw new ConnectionNotFound(
+                    "Read connection [$name] must be a callable"
+                );
+            }
             $this->setRead($name, $callableObject);
         }
 
         foreach ($write as $name => $callableObject) {
+            if (!is_callable($callableObject)) {
+                throw new ConnectionNotFound(
+                    "Write connection [$name] must be a callable"
+                );
+            }
             $this->setWrite($name, $callableObject);
         }
     }
@@ -173,26 +186,23 @@ class ConnectionLocator
         string $name = ""
     ): Connection {
         $collection = $this->{$type};
-        $requested  = $name;
 
         /**
          * No collection returns the master
          */
         if (true === empty($collection)) {
-            return $this->getMaster();
+            return $this->master;
         }
 
         /**
          * If the requested name is empty, get a random connection
          */
-        if (true === empty($name)) {
-            $requested = array_rand($collection);
-        }
+        $requested = $name ?: array_rand($collection);
 
         /**
          * If the connection name does not exist, send an exception back
          */
-        if (true !== isset($collection[$requested])) {
+        if (!isset($collection[$requested])) {
             throw new ConnectionNotFound(
                 "Connection not found: " . $type . ":" . $requested
             );
@@ -205,10 +215,8 @@ class ConnectionLocator
          */
         $instanceName = $type . "-" . $requested;
 
-        if (true !== isset($this->instances[$instanceName])) {
-            $this->instances[$instanceName] = call_user_func(
-                $collection[$requested]
-            );
+        if (!isset($this->instances[$instanceName])) {
+            $this->instances[$instanceName] = $collection[$requested]();
         }
 
         return $this->instances[$instanceName];
