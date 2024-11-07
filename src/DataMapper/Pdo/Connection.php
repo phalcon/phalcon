@@ -16,19 +16,54 @@ namespace Phalcon\DataMapper\Pdo;
 use InvalidArgumentException;
 use PDO;
 use Phalcon\DataMapper\Pdo\Connection\AbstractConnection;
-use Phalcon\DataMapper\Pdo\Profiler\Profiler;
 use Phalcon\DataMapper\Pdo\Profiler\ProfilerInterface;
 
 /**
  * Provides array quoting, profiling, a new `perform()` method, new `fetch*()`
  * methods
+ *
+ * @method int|false exec(string $statement = '')
  */
 class Connection extends AbstractConnection
 {
     /**
+     * @var PDO|null
+     */
+    protected ?PDO $pdo = null;
+
+    /**
      * @var array
      */
     protected array $arguments = [];
+
+    /**
+     * @param mixed ...$arguments
+     *
+     * @return Connection
+     */
+    public static function new(mixed ...$arguments): Connection
+    {
+        $dsn = $arguments[0] ?? '';
+        if (is_string($dsn) && empty($dsn)) {
+            throw new InvalidArgumentException(
+                "DSN cannot be empty"
+            );
+        }
+
+        return new static(...$arguments);
+    }
+
+    /**
+     * @param mixed ...$arguments
+     *
+     * @return callable
+     */
+    public static function factory(mixed ...$arguments): callable
+    {
+        return function () use ($arguments) {
+            return static::new(...$arguments);
+        };
+    }
 
     /**
      * Constructor.
@@ -36,12 +71,12 @@ class Connection extends AbstractConnection
      * This overrides the parent so that it can take connection attributes as a
      * constructor parameter, and set them after connection.
      *
-     * @param string                 $dsn
-     * @param string|null            $username
-     * @param string|null            $password
-     * @param array                  $options
-     * @param array                  $queries
-     * @param ProfilerInterface|null $profiler
+     * @param string                   $dsn
+     * @param string|null              $username
+     * @param string|null              $password
+     * @param array<int, int>          $options
+     * @param array<array-key, string> $queries
+     * @param ProfilerInterface|null   $profiler
      */
     public function __construct(
         string $dsn,
@@ -49,7 +84,7 @@ class Connection extends AbstractConnection
         string $password = null,
         array $options = [],
         array $queries = [],
-        ?ProfilerInterface $profiler = null
+        protected ?ProfilerInterface $profiler = null
     ) {
         $parts     = explode(":", $dsn);
         $available = [
@@ -79,8 +114,6 @@ class Connection extends AbstractConnection
             $options,
             $queries,
         ];
-
-        $this->profiler = $profiler;
     }
 
     /**
@@ -110,7 +143,7 @@ class Connection extends AbstractConnection
     {
         if (!$this->pdo) {
             // connect
-            $this->profiler->start(__FUNCTION__);
+            $this->profileStart(__METHOD__);
 
             $dsn      = $this->arguments[0];
             $username = $this->arguments[1];
@@ -120,7 +153,7 @@ class Connection extends AbstractConnection
 
             $this->pdo = new PDO($dsn, $username, $password, $options);
 
-            $this->profiler->finish();
+            $this->profileFinish();
 
             // connection-time queries
             foreach ($queries as $query) {
@@ -136,10 +169,6 @@ class Connection extends AbstractConnection
      */
     public function disconnect(): void
     {
-        $this->profiler->start(__FUNCTION__);
-
         $this->pdo = null;
-
-        $this->profiler->finish();
     }
 }
