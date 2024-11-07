@@ -66,8 +66,8 @@ abstract class AbstractConnection
      */
     public function __call(string $method, array $arguments)
     {
-        $this->connect();
-
+//        $this->connect();
+//
         if (true !== method_exists($this->pdo, $method)) {
             $className = get_class($this);
             $message   = "Class '" . $className
@@ -113,8 +113,8 @@ abstract class AbstractConnection
      */
     public function getAdapter(): PDO
     {
-        $this->connect();
-
+//        $this->connect();
+//
         return $this->pdo;
     }
 
@@ -133,8 +133,8 @@ abstract class AbstractConnection
      */
     public function getDriverName(): string
     {
-        $this->connect();
-
+//        $this->connect();
+//
         return $this->pdo->getAttribute(PDO::ATTR_DRIVER_NAME);
     }
 
@@ -209,8 +209,8 @@ abstract class AbstractConnection
         string $statement,
         array $values = []
     ): PDOStatement {
-        $this->connect();
-
+//        $this->connect();
+//
         $this->profileStart(__METHOD__);
 
         $sth = $this->prepare($statement);
@@ -237,8 +237,8 @@ abstract class AbstractConnection
         string $statement,
         array $options = []
     ): PDOStatement {
-        $this->connect();
-
+//        $this->connect();
+//
         $this->profileStart(__METHOD__);
 
         $sth = $this->pdo->prepare($statement, $options);
@@ -263,7 +263,7 @@ abstract class AbstractConnection
         ?int $mode = null,
         mixed ...$arguments
     ): PDOStatement | false {
-        $this->connect();
+//        $this->connect();
         $this->profileStart(__METHOD__);
 
         $sth = $this->pdo->query($statement, $mode, ...$arguments);

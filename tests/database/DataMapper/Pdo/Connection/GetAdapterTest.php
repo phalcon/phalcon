@@ -28,19 +28,7 @@ final class GetAdapterTest extends AbstractDatabaseTestCase
         /** @var Connection $connection */
         $connection = self::getDataMapperConnection();
 
-        $this->assertFalse($connection->isConnected());
-
-        $connection->connect();
-
         $this->assertTrue($connection->isConnected());
         $this->assertNotEmpty($connection->getAdapter());
-
-        $connection->disconnect();
-
-        $this->assertNotEmpty(
-            $connection->getAdapter(),
-            'getPdo() will re-connect if disconnected'
-        );
-        $this->assertTrue($connection->isConnected());
     }
 }

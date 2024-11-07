@@ -60,9 +60,7 @@ class Connection extends AbstractConnection
      */
     public static function factory(mixed ...$arguments): callable
     {
-        return function () use ($arguments) {
-            return static::new(...$arguments);
-        };
+        return fn() => static::new(...$arguments);
     }
 
     /**
@@ -114,6 +112,8 @@ class Connection extends AbstractConnection
             $options,
             $queries,
         ];
+
+        $this->connect();
     }
 
     /**
@@ -145,12 +145,7 @@ class Connection extends AbstractConnection
             // connect
             $this->profileStart(__METHOD__);
 
-            $dsn      = $this->arguments[0];
-            $username = $this->arguments[1];
-            $password = $this->arguments[2];
-            $options  = $this->arguments[3];
-            $queries  = $this->arguments[4];
-
+            [$dsn, $username, $password, $options, $queries] = $this->arguments;
             $this->pdo = new PDO($dsn, $username, $password, $options);
 
             $this->profileFinish();
