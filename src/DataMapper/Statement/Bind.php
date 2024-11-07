@@ -1,14 +1,14 @@
 <?php
 
 /**
- * $this file is part of the Phalcon Framework.
+ * This file is part of the Phalcon Framework.
  *
  * (c) Phalcon Team <team@phalcon.io>
  *
  * For the full copyright and license information, please view the LICENSE.txt
- * file that was distributed with $this source code.
+ * file that was distributed with this source code.
  *
- * Implementation of $this file has been influenced by AtlasPHP
+ * Implementation of this file has been influenced by AtlasPHP
  *
  * @link    https://github.com/atlasphp/Atlas.Pdo
  * @license https://github.com/atlasphp/Atlas.Pdo/blob/1.x/LICENSE.md
@@ -18,33 +18,33 @@ declare(strict_types=1);
 
 namespace Phalcon\DataMapper\Statement;
 
-use Atlas\Statement\Statement;
 use PDO;
 
+use function array_map;
 use function implode;
 use function is_array;
 use function is_bool;
 use function is_int;
 
+/**
+ * Class Bind
+ */
 class Bind
 {
     /**
      * @var int
      */
     protected int $inlineCount = 0;
-
     /**
      * @var int
      */
     protected int $inlinePrefix = 0;
-
     /**
      * @var int
      */
     protected static int $instanceCount = 0;
-
     /**
-     * @var array
+     * @var array<string, array<array-key, mixed>>
      */
     protected array $store = [];
 
@@ -53,43 +53,40 @@ class Bind
         $this->incrementInstanceCount();
     }
 
+    /**
+     * Increment the internal count when cloning
+     *
+     * @return void
+     */
     public function __clone()
     {
         $this->incrementInstanceCount();
     }
 
     /**
-     * @return array
-     */
-    public function getValues(): array
-    {
-        return $this->store;
-    }
-
-    /**
-     * @param mixed    $value
-     * @param int|null $type
+     * @param mixed $value
+     * @param int   $type
      *
      * @return string
      */
-    public function inline(mixed $value, ?int $type = null): string
+    public function bindInline(mixed $value, int $type = -1): string
     {
-        if ($value instanceof Statement) {
-            $this->store += $value->getBindValueObjects();
+        if ($value instanceof Select) {
+            $this->store += $value->getBindValues();
 
-            return '(' . $value->getQueryString() . ')';
+            return '(' . $value->getStatement() . ')';
         }
 
         if (is_array($value)) {
             return $this->inlineArray($value, $type);
         }
 
-        $key = $this->inlineValue($value, $type);
-
-        return ':' . $key;
+        return ':' . $this->inlineValue($value, $type);
     }
 
     /**
+     * Merge values with the internal collection
+     *
      * @param array $values
      *
      * @return void
@@ -100,9 +97,9 @@ class Bind
     }
 
     /**
-     * @param string $key
+     * Removes a value from the store
      *
-     * @return void
+     * @param string $key
      */
     public function remove(string $key): void
     {
@@ -110,6 +107,8 @@ class Bind
     }
 
     /**
+     * Reset the internal stores
+     *
      * @return void
      */
     public function reset(): void
@@ -119,59 +118,40 @@ class Bind
     }
 
     /**
-     * @param string   $key
-     * @param mixed    $value
-     * @param int|null $type
+     * Sets a value
      *
-     * @return void
+     * @param string $key
+     * @param mixed  $value
+     * @param int    $type
      */
-    public function value(string $key, mixed $value, ?int $type = null): void
+    public function setValue(string $key, mixed $value, int $type = -1): void
     {
-        $localType = $type;
-        if ($localType === -1) {
-            $localType = $this->getType($value);
-        }
+        $localType = $type === -1 ? $this->getType($value) : $type;
 
         $this->store[$key] = [$value, $localType];
-
-
     }
 
     /**
-     * @param array    $values
-     * @param int|null $type
+     * Sets values from an array
      *
-     * @return void
+     * @param array $values
+     * @param int   $type
      */
-    public function values(array $values, ?int $type = null): void
+    public function setValues(array $values, int $type = -1): void
     {
         foreach ($values as $key => $value) {
-            $this->value($key, $value, $type);
+            $this->setValue($key, $value, $type);
         }
-    }
-
-    protected function incrementInstanceCount(): void
-    {
-        static::$instanceCount++;
-        $this->inlinePrefix = static::$instanceCount;
     }
 
     /**
-     * @param array    $array
-     * @param int|null $type
+     * Returns the internal collection
      *
-     * @return string
+     * @return array
      */
-    protected function inlineArray(array $array, ?int $type): string
+    public function toArray(): array
     {
-        $keys = [];
-
-        foreach ($array as $value) {
-            $key    = $this->inlineValue($value, $type);
-            $keys[] = ':' . $key;
-        }
-
-        return '(' . implode(', ', $keys) . ')';
+        return $this->store;
     }
 
     /**
@@ -192,16 +172,47 @@ class Bind
     }
 
     /**
-     * @param mixed    $value
-     * @param int|null $type
+     * Increment the internal instance count
+     *
+     * @return void
+     */
+    protected function incrementInstanceCount(): void
+    {
+        static::$instanceCount++;
+        $this->inlinePrefix = static::$instanceCount;
+    }
+
+    /**
+     * Processes an array - if passed as an `inline` parameter
+     *
+     * @param array<string, mixed> $data
+     * @param int                  $type
      *
      * @return string
      */
-    protected function inlineValue(mixed $value, ?int $type): string
+    protected function inlineArray(array $data, int $type): string
+    {
+        $keys = array_map(
+            fn($value) => ':' . $this->inlineValue($value, $type),
+            $data
+        );
+
+        return '(' . implode(', ', $keys) . ')';
+    }
+
+    /**
+     * Calculate the key and add the value in the internal collection
+     *
+     * @param mixed $value
+     * @param int   $type
+     *
+     * @return string
+     */
+    protected function inlineValue(mixed $value, int $type): string
     {
         $this->inlineCount++;
-        $key = "_{$this->inlinePrefix}_{$this->inlineCount}_";
-        $this->value($key, $value, $type);
+        $key = '_' . $this->inlinePrefix . '_' . $this->inlineCount . '_';
+        $this->setValue($key, $value, $type);
 
         return $key;
     }
