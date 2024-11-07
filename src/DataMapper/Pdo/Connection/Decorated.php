@@ -20,7 +20,6 @@ namespace Phalcon\DataMapper\Pdo\Connection;
 
 use PDO;
 use Phalcon\DataMapper\Pdo\Exception\CannotDisconnect;
-use Phalcon\DataMapper\Pdo\Profiler\Profiler;
 use Phalcon\DataMapper\Pdo\Profiler\ProfilerInterface;
 
 /**
@@ -38,11 +37,9 @@ class Decorated extends AbstractConnection
      * @param ProfilerInterface|null $profiler
      */
     public function __construct(
-        PDO $pdo,
-        ?ProfilerInterface $profiler = null
+        protected PDO $pdo,
+        protected ?ProfilerInterface $profiler = null
     ) {
-        $this->pdo      = $pdo;
-        $this->profiler = $profiler;
     }
 
     /**

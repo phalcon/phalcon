@@ -32,7 +32,7 @@ final class QuoteTest extends AbstractDatabaseTestCase
         $source   = 'test';
         $expected = $quotes["prefix"] . $source . $quotes["suffix"];
         $actual   = $connection->quote($source);
-        $this->assertEquals($expected, $actual);
+        $this->assertSame($expected, $actual);
 
         $source   = ['test', 1, true, null];
         $expected = $quotes["prefix"] . 'test' . $quotes["suffix"] . ', '
@@ -40,6 +40,6 @@ final class QuoteTest extends AbstractDatabaseTestCase
             . $quotes["prefix"] . '1' . $quotes["suffix"] . ', '
             . $quotes["prefix"] . '' . $quotes["suffix"];
         $actual   = $connection->quote($source);
-        $this->assertEquals($expected, $actual);
+        $this->assertSame($expected, $actual);
     }
 }
