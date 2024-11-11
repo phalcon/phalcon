@@ -112,8 +112,6 @@ class Connection extends AbstractConnection
             $options,
             $queries,
         ];
-
-        $this->connect();
     }
 
     /**

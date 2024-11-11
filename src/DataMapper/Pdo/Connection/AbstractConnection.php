@@ -66,8 +66,8 @@ abstract class AbstractConnection
      */
     public function __call(string $method, array $arguments)
     {
-//        $this->connect();
-//
+        $this->connect();
+
         if (true !== method_exists($this->pdo, $method)) {
             $className = get_class($this);
             $message   = "Class '" . $className
@@ -95,8 +95,17 @@ abstract class AbstractConnection
      */
     abstract public function disconnect(): void;
 
+    /**
+     * Executes a statement on the PDO adapter. This is not a pass-through
+     * because we want to log the statement if the profiler is enabled
+     *
+     * @param string $statement
+     *
+     * @return int|false
+     */
     public function exec(string $statement = ''): int|false
     {
+        $this->connect();
         $this->profileStart(__METHOD__);
 
         $result = $this->pdo->exec($statement);
@@ -113,8 +122,8 @@ abstract class AbstractConnection
      */
     public function getAdapter(): PDO
     {
-//        $this->connect();
-//
+        $this->connect();
+
         return $this->pdo;
     }
 
@@ -133,8 +142,8 @@ abstract class AbstractConnection
      */
     public function getDriverName(): string
     {
-//        $this->connect();
-//
+        $this->connect();
+
         return $this->pdo->getAttribute(PDO::ATTR_DRIVER_NAME);
     }
 
@@ -148,41 +157,6 @@ abstract class AbstractConnection
         return $this->profiler;
     }
 
-//    /**
-//     * Gets the quote parameters based on the driver
-//     *
-//     * @param string $driver
-//     *
-//     * @return array
-//     */
-//    public function getQuoteNames(string $driver = ""): array
-//    {
-//        if (true === empty($driver)) {
-//            $driver = $this->getDriverName();
-//        }
-//
-//        return match ($driver) {
-//            "mysql"  => [
-//                "prefix"  => "`",
-//                "suffix"  => "`",
-//                "find"    => "`",
-//                "replace" => "``",
-//            ],
-//            "sqlsrv" => [
-//                "prefix"  => "[",
-//                "suffix"  => "]",
-//                "find"    => "]",
-//                "replace" => "][",
-//            ],
-//            default  => [
-//                "prefix"  => "\"",
-//                "suffix"  => "\"",
-//                "find"    => "\"",
-//                "replace" => "\"\"",
-//            ],
-//        };
-//    }
-//
     /**
      * Is the PDO connection active?
      *
@@ -209,8 +183,8 @@ abstract class AbstractConnection
         string $statement,
         array $values = []
     ): PDOStatement {
-//        $this->connect();
-//
+        $this->connect();
+
         $this->profileStart(__METHOD__);
 
         $sth = $this->prepare($statement);
@@ -237,8 +211,8 @@ abstract class AbstractConnection
         string $statement,
         array $options = []
     ): PDOStatement {
-//        $this->connect();
-//
+        $this->connect();
+
         $this->profileStart(__METHOD__);
 
         $sth = $this->pdo->prepare($statement, $options);
@@ -263,7 +237,7 @@ abstract class AbstractConnection
         ?int $mode = null,
         mixed ...$arguments
     ): PDOStatement | false {
-//        $this->connect();
+        $this->connect();
         $this->profileStart(__METHOD__);
 
         $sth = $this->pdo->query($statement, $mode, ...$arguments);

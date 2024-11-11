@@ -28,7 +28,7 @@ final class GetAdapterTest extends AbstractDatabaseTestCase
         /** @var Connection $connection */
         $connection = self::getDataMapperConnection();
 
-        $this->assertTrue($connection->isConnected());
-        $this->assertNotEmpty($connection->getAdapter());
+        $this->assertFalse($connection->isConnected());
+        $this->assertNull($connection->getAdapter());
     }
 }

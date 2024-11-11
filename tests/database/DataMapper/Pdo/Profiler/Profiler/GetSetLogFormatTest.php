@@ -34,8 +34,7 @@ final class GetSetLogFormatTest extends AbstractDatabaseTestCase
             . PHP_EOL
             . "V: {values}"
             . PHP_EOL
-            . "B: {backtrace}"
-        ;
+            . "B: {backtrace}";
         $actual   = $profiler->getLogFormat();
         $this->assertSame($expected, $actual);
 

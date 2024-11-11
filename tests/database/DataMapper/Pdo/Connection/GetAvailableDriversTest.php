@@ -53,7 +53,7 @@ final class GetAvailableDriversTest extends AbstractDatabaseTestCase
         $dsn = explode(':', $dsn);
 
         $expected = $dsn[0];
-        $actual = $connection->getDriverName();
+        $actual   = $connection->getDriverName();
         $this->assertSame($expected, $actual);
     }
 }

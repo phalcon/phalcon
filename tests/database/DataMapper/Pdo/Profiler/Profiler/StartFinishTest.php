@@ -18,7 +18,6 @@ use Phalcon\Tests\AbstractDatabaseTestCase;
 use Phalcon\Tests\Fixtures\DataMapper\Pdo\ProfilerJsonEncodeFixture;
 
 use function sleep;
-use function strpos;
 
 final class StartFinishTest extends AbstractDatabaseTestCase
 {

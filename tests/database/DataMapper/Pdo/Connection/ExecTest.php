@@ -58,8 +58,8 @@ final class ExecTest extends AbstractDatabaseTestCase
      */
     public function testDmPdoConnectionExecWithProfiler(): void
     {
-        $logger     = new MemoryLogger();
-        $profiler   = new Profiler($logger);
+        $logger   = new MemoryLogger();
+        $profiler = new Profiler($logger);
         $profiler->setActive(true);
         $connection = new Connection(
             self::getDatabaseDsn(),
@@ -70,7 +70,7 @@ final class ExecTest extends AbstractDatabaseTestCase
             $profiler
         );
 
-        $migration  = new InvoicesMigration($connection);
+        $migration = new InvoicesMigration($connection);
         $migration->clear();
 
         $result = $migration->insert(1);

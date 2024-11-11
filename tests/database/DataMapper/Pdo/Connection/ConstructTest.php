@@ -50,19 +50,24 @@ final class ConstructTest extends AbstractDatabaseTestCase
     }
 
     /**
-     * Database Tests Phalcon\DataMapper\Pdo\Connection :: __construct() -
-     * exception
+     * Database Tests Phalcon\DataMapper\Pdo\Connection :: factory
      *
      * @since  2020-01-20
      *
      * @group  common
      */
-    public function testDmPdoConnectionNewException(): void
+    public function testDmPdoConnectionFactory(): void
     {
-        $this->expectException(InvalidArgumentException::class);
-        $this->expectExceptionMessage('DSN cannot be empty');
+        $factory = Connection::factory(
+            self::getDatabaseDsn(),
+            self::getDatabaseUsername(),
+            self::getDatabasePassword()
+        );
 
-        Connection::new('');
+        $this->assertInstanceOf(Closure::class, $factory);
+
+        $connection = $factory();
+        $this->assertInstanceOf(Connection::class, $connection);
     }
 
     /**
@@ -84,23 +89,18 @@ final class ConstructTest extends AbstractDatabaseTestCase
     }
 
     /**
-     * Database Tests Phalcon\DataMapper\Pdo\Connection :: factory
+     * Database Tests Phalcon\DataMapper\Pdo\Connection :: __construct() -
+     * exception
      *
      * @since  2020-01-20
      *
      * @group  common
      */
-    public function testDmPdoConnectionFactory(): void
+    public function testDmPdoConnectionNewException(): void
     {
-        $factory = Connection::factory(
-            self::getDatabaseDsn(),
-            self::getDatabaseUsername(),
-            self::getDatabasePassword()
-        );
+        $this->expectException(InvalidArgumentException::class);
+        $this->expectExceptionMessage('DSN cannot be empty');
 
-        $this->assertInstanceOf(Closure::class, $factory);
-
-        $connection = $factory();
-        $this->assertInstanceOf(Connection::class, $connection);
+        Connection::new('');
     }
 }
