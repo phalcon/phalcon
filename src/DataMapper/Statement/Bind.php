@@ -20,31 +20,25 @@ namespace Phalcon\DataMapper\Statement;
 
 use PDO;
 
-use function array_map;
-use function implode;
-use function is_array;
-use function is_bool;
-use function is_int;
-
-/**
- * Class Bind
- */
 class Bind
 {
     /**
      * @var int
      */
     protected int $inlineCount = 0;
+
     /**
      * @var int
      */
     protected int $inlinePrefix = 0;
+
     /**
      * @var int
      */
     protected static int $instanceCount = 0;
+
     /**
-     * @var array<string, array<array-key, mixed>>
+     * @var array
      */
     protected array $store = [];
 
@@ -54,7 +48,7 @@ class Bind
     }
 
     /**
-     * Increment the internal count when cloning
+     * Object clone - increment the instance count
      *
      * @return void
      */
@@ -69,11 +63,9 @@ class Bind
      *
      * @return string
      */
-    public function bindInline(mixed $value, int $type = -1): string
+    public function inline(mixed $value, int $type = -1): string
     {
         if ($value instanceof Select) {
-            $this->store += $value->getBindValues();
-
             return '(' . $value->getStatement() . ')';
         }
 
@@ -85,7 +77,7 @@ class Bind
     }
 
     /**
-     * Merge values with the internal collection
+     * Merges values into the store
      *
      * @param array $values
      *
@@ -107,7 +99,7 @@ class Bind
     }
 
     /**
-     * Reset the internal stores
+     * Resets the inline count and values
      *
      * @return void
      */
@@ -126,7 +118,7 @@ class Bind
      */
     public function setValue(string $key, mixed $value, int $type = -1): void
     {
-        $localType = $type === -1 ? $this->getType($value) : $type;
+        $localType = -1 === $type ? $this->getType($value) : $type;
 
         $this->store[$key] = [$value, $localType];
     }
@@ -172,7 +164,7 @@ class Bind
     }
 
     /**
-     * Increment the internal instance count
+     * Increment the instance count
      *
      * @return void
      */
@@ -192,26 +184,26 @@ class Bind
      */
     protected function inlineArray(array $data, int $type): string
     {
-        $keys = array_map(
-            fn($value) => ':' . $this->inlineValue($value, $type),
-            $data
-        );
+        $keys = [];
+
+        foreach ($data as $value) {
+            $keys[] = ':' . $this->inlineValue($value, $type);
+        }
 
         return '(' . implode(', ', $keys) . ')';
     }
 
     /**
-     * Calculate the key and add the value in the internal collection
-     *
      * @param mixed $value
      * @param int   $type
      *
      * @return string
      */
-    protected function inlineValue(mixed $value, int $type): string
+    private function inlineValue(mixed $value, int $type): string
     {
         $this->inlineCount++;
         $key = '_' . $this->inlinePrefix . '_' . $this->inlineCount . '_';
+
         $this->setValue($key, $value, $type);
 
         return $key;
