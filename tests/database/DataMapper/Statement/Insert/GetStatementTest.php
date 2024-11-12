@@ -15,16 +15,12 @@ namespace Phalcon\Tests\Database\DataMapper\Statement\Insert;
 
 use PDO;
 use Phalcon\DataMapper\Statement\Insert;
-use Phalcon\DataMapper\Statement\Traits\QuoteTrait;
 use Phalcon\Tests\AbstractDatabaseTestCase;
 
 use function env;
-use function sprintf;
 
 final class GetStatementTest extends AbstractDatabaseTestCase
 {
-    use QuoteTrait;
-
     /**
      * Database Tests Phalcon\DataMapper\Statement\Insert :: getStatement()
      *
@@ -32,7 +28,7 @@ final class GetStatementTest extends AbstractDatabaseTestCase
      *
      * @group  common
      */
-    public function testDmQueryInsertGetStatement(): void
+    public function testDmStatementInsertGetStatement(): void
     {
         $driver = env('driver');
         $insert = Insert::new($driver);
@@ -49,11 +45,11 @@ final class GetStatementTest extends AbstractDatabaseTestCase
         ;
 
         $expected = 'INSERT INTO co_invoices ('
-            . $this->quote($driver, 'inv_cst_id') . ', '
-            . $this->quote($driver, 'inv_total') . ', '
-            . $this->quote($driver, 'inv_id') . ', '
-            . $this->quote($driver, 'inv_status_flag') . ', '
-            . $this->quote($driver, 'inv_created_date')
+            . $insert->quote($driver, 'inv_cst_id') . ', '
+            . $insert->quote($driver, 'inv_total') . ', '
+            . $insert->quote($driver, 'inv_id') . ', '
+            . $insert->quote($driver, 'inv_status_flag') . ', '
+            . $insert->quote($driver, 'inv_created_date')
             . ') VALUES ('
             . ':inv_cst_id, '
             . ':inv_total, '
@@ -75,11 +71,11 @@ final class GetStatementTest extends AbstractDatabaseTestCase
         $insert->resetReturning();
 
         $expected = 'INSERT INTO co_invoices ('
-            . $this->quote($driver, 'inv_cst_id') . ', '
-            . $this->quote($driver, 'inv_total') . ', '
-            . $this->quote($driver, 'inv_id') . ', '
-            . $this->quote($driver, 'inv_status_flag') . ', '
-            . $this->quote($driver, 'inv_created_date')
+            . $insert->quote($driver, 'inv_cst_id') . ', '
+            . $insert->quote($driver, 'inv_total') . ', '
+            . $insert->quote($driver, 'inv_id') . ', '
+            . $insert->quote($driver, 'inv_status_flag') . ', '
+            . $insert->quote($driver, 'inv_created_date')
             . ') VALUES ('
             . ':inv_cst_id, '
             . ':inv_total, '

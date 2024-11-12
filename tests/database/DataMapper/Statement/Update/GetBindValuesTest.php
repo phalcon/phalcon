@@ -28,7 +28,7 @@ final class GetBindValuesTest extends AbstractDatabaseTestCase
      *
      * @group  common
      */
-    public function testDmQueryUpdateGetBindValues(): void
+    public function testDmStatementUpdateGetBindValues(): void
     {
         $driver = env('driver');
         $update = Update::new($driver);

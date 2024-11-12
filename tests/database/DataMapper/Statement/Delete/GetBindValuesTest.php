@@ -29,7 +29,7 @@ final class GetBindValuesTest extends AbstractDatabaseTestCase
      *
      * @group  common
      */
-    public function testDmQueryDeleteGetBindValues(): void
+    public function testDmStatementDeleteGetBindValues(): void
     {
         $driver = env('driver');
         $delete = Delete::new($driver);

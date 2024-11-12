@@ -14,17 +14,13 @@ declare(strict_types=1);
 namespace Phalcon\Tests\Database\DataMapper\Statement\Update;
 
 use PDO;
-use Phalcon\DataMapper\Statement\Traits\QuoteTrait;
 use Phalcon\DataMapper\Statement\Update;
 use Phalcon\Tests\AbstractDatabaseTestCase;
 
 use function env;
-use function sprintf;
 
 final class GetStatementTest extends AbstractDatabaseTestCase
 {
-    use QuoteTrait;
-
     /**
      * Database Tests Phalcon\DataMapper\Query\Update :: getStatement()
      *
@@ -32,7 +28,7 @@ final class GetStatementTest extends AbstractDatabaseTestCase
      *
      * @group  common
      */
-    public function testDmQueryUpdateGetStatement(): void
+    public function testDmStatementUpdateGetStatement(): void
     {
         $driver = env('driver');
         $update = Update::new($driver);
@@ -56,15 +52,14 @@ final class GetStatementTest extends AbstractDatabaseTestCase
 
         $expected = 'UPDATE co_invoices '
             . 'SET '
-            . $this->quote($driver, 'inv_id') . ' = :inv_id, '
-            . $this->quote($driver, 'inv_cst_id') . ' = :inv_cst_id, '
-            . $this->quote($driver, 'inv_total') . ' = :inv_total, '
-            . $this->quote($driver, 'inv_status_flag') . ' = NULL, '
-            . $this->quote($driver, 'inv_created_date') . ' = NOW() '
+            . $update->quote($driver, 'inv_id') . ' = :inv_id, '
+            . $update->quote($driver, 'inv_cst_id') . ' = :inv_cst_id, '
+            . $update->quote($driver, 'inv_total') . ' = :inv_total, '
+            . $update->quote($driver, 'inv_status_flag') . ' = NULL, '
+            . $update->quote($driver, 'inv_created_date') . ' = NOW() '
             . 'WHERE inv_total > :totalMax '
             . 'AND inv_cst_id = :cstId '
-            . 'OR inv_status_flag = :flag'
-        ;
+            . 'OR inv_status_flag = :flag';
 
         $actual = $update->getStatement();
         $this->assertSame($expected, $actual);
@@ -85,16 +80,15 @@ final class GetStatementTest extends AbstractDatabaseTestCase
 
         $expected = 'UPDATE co_invoices '
             . 'SET '
-            . $this->quote($driver, 'inv_id') . ' = :inv_id, '
-            . $this->quote($driver, 'inv_cst_id') . ' = :inv_cst_id, '
-            . $this->quote($driver, 'inv_total') . ' = :inv_total, '
-            . $this->quote($driver, 'inv_status_flag') . ' = NULL, '
-            . $this->quote($driver, 'inv_created_date') . ' = NOW() '
+            . $update->quote($driver, 'inv_id') . ' = :inv_id, '
+            . $update->quote($driver, 'inv_cst_id') . ' = :inv_cst_id, '
+            . $update->quote($driver, 'inv_total') . ' = :inv_total, '
+            . $update->quote($driver, 'inv_status_flag') . ' = NULL, '
+            . $update->quote($driver, 'inv_created_date') . ' = NOW() '
             . 'WHERE inv_total > :totalMax '
             . 'AND inv_cst_id = :cstId '
             . 'OR inv_status_flag = :flag '
-            . 'RETURNING inv_id, inv_cst_id, inv_total'
-        ;
+            . 'RETURNING inv_id, inv_cst_id, inv_total';
         $actual   = $update->getStatement();
         $this->assertSame($expected, $actual);
     }

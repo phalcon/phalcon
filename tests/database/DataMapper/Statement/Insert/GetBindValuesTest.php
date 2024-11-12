@@ -29,7 +29,7 @@ final class GetBindValuesTest extends AbstractDatabaseTestCase
      *
      * @group  common
      */
-    public function testDmQueryInsertGetBindValues(): void
+    public function testDmStatementInsertGetBindValues(): void
     {
         $driver = env('driver');
         $insert = Insert::new($driver);

@@ -28,7 +28,7 @@ final class GetStatementTest extends AbstractDatabaseTestCase
      *
      * @group  common
      */
-    public function testDmQueryDeleteGetStatement(): void
+    public function testDmStatementDeleteGetStatement(): void
     {
         $driver = env('driver');
         $delete = Delete::new($driver);

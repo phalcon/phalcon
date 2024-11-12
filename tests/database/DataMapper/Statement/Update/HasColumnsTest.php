@@ -27,7 +27,7 @@ final class HasColumnsTest extends AbstractDatabaseTestCase
      *
      * @group  common
      */
-    public function testDmQueryUpdateHasColumns(): void
+    public function testDmStatementUpdateHasColumns(): void
     {
         $driver = env('driver');
         $update = Update::new($driver);

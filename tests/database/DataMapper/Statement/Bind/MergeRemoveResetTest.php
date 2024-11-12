@@ -16,28 +16,11 @@ namespace Phalcon\Tests\Database\DataMapper\Statement\Bind;
 use PDO;
 use Phalcon\DataMapper\Statement\Bind;
 use Phalcon\Tests\AbstractDatabaseTestCase;
+use Phalcon\Tests\Database\DataMapper\Statement\AbstractStatementTestCase;
 use ReflectionClass;
 
-final class MergeRemoveResetTest extends AbstractDatabaseTestCase
+final class MergeRemoveResetTest extends AbstractStatementTestCase
 {
-    /**
-     * @return void
-     */
-    protected function setUp() : void
-    {
-        /**
-         * This is here to ensure that the tests run fine either individually
-         * or as a suite, since the static instance count will increase
-         * differently depending on how the test is run (suite/on its own)
-         */
-        parent::setUp();
-
-        $bind = new ReflectionClass(Bind::class);
-        $property = $bind->getProperty('instanceCount');
-        $property->setAccessible(true);
-        $property->setValue(0);
-    }
-
     /**
      * Database Tests Phalcon\DataMapper\Statement\Bind :: merge()/remove()/reset()
      *
@@ -45,7 +28,7 @@ final class MergeRemoveResetTest extends AbstractDatabaseTestCase
      *
      * @group  common
      */
-    public function testDmQueryBindMergeRemoveReset(): void
+    public function testDmStatementBindMergeRemoveReset(): void
     {
         $bind = new Bind();
 
@@ -53,37 +36,37 @@ final class MergeRemoveResetTest extends AbstractDatabaseTestCase
         $actual   = $bind->toArray();
         $this->assertSame($expected, $actual);
 
-        $bind->inline("one");
+        $bind->inline('one');
         $bind->inline(true, PDO::PARAM_BOOL);
 
         $expected = [
-            "_1_1_" => ["one", 2],
-            "_1_2_" => [true, 5],
+            '_1_1_' => ['one', 2],
+            '_1_2_' => [true, 5],
         ];
         $actual   = $bind->toArray();
         $this->assertSame($expected, $actual);
 
         $values = [
-            "three" => "four",
-            "five"  => ["six", "seven", 8, 9],
+            'three' => 'four',
+            'five'  => ['six', 'seven', 8, 9],
         ];
         $bind->merge($values);
 
         $expected = [
-            "_1_1_" => ["one", 2],
-            "_1_2_" => [true, 5],
-            "three" => "four",
-            "five"  => ["six", "seven", 8, 9],
+            '_1_1_' => ['one', 2],
+            '_1_2_' => [true, 5],
+            'three' => 'four',
+            'five'  => ['six', 'seven', 8, 9],
         ];
         $actual   = $bind->toArray();
         $this->assertSame($expected, $actual);
 
-        $bind->remove("_1_1_");
+        $bind->remove('_1_1_');
 
         $expected = [
-            "_1_2_" => [true, 5],
-            "three" => "four",
-            "five"  => ["six", "seven", 8, 9],
+            '_1_2_' => [true, 5],
+            'three' => 'four',
+            'five'  => ['six', 'seven', 8, 9],
         ];
         $actual   = $bind->toArray();
         $this->assertSame($expected, $actual);

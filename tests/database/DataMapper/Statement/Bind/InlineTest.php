@@ -18,30 +18,13 @@ use Phalcon\DataMapper\Statement\Bind;
 use Phalcon\DataMapper\Statement\Select;
 use Phalcon\Tests\AbstractDatabaseTestCase;
 
+use Phalcon\Tests\Database\DataMapper\Statement\AbstractStatementTestCase;
 use ReflectionClass;
 
 use function env;
 
-final class InlineTest extends AbstractDatabaseTestCase
+final class InlineTest extends AbstractStatementTestCase
 {
-    /**
-     * @return void
-     */
-    protected function setUp() : void
-    {
-        /**
-         * This is here to ensure that the tests run fine either individually
-         * or as a suite, since the static instance count will increase
-         * differently depending on how the test is run (suite/on its own)
-         */
-        parent::setUp();
-
-        $bind = new ReflectionClass(Bind::class);
-        $property = $bind->getProperty('instanceCount');
-        $property->setAccessible(true);
-        $property->setValue(0);
-    }
-
     /**
      * Database Tests Phalcon\DataMapper\Statement\Bind :: bindInline()
      *
@@ -49,7 +32,7 @@ final class InlineTest extends AbstractDatabaseTestCase
      *
      * @group  common
      */
-    public function testDmQueryBindBindInline(): void
+    public function testDmStatementBindBindInline(): void
     {
         $bind   = new Bind();
 
@@ -57,10 +40,10 @@ final class InlineTest extends AbstractDatabaseTestCase
         $actual   = $bind->toArray();
         $this->assertSame($expected, $actual);
 
-        $bind->inline("one");
+        $bind->inline('one');
 
         $expected = [
-            "_1_1_" => ["one", 2],
+            '_1_1_' => ['one', 2],
         ];
         $actual   = $bind->toArray();
         $this->assertSame($expected, $actual);
@@ -68,21 +51,21 @@ final class InlineTest extends AbstractDatabaseTestCase
         $bind->inline(true, PDO::PARAM_BOOL);
 
         $expected = [
-            "_1_1_" => ["one", 2],
-            "_1_2_" => [true, 5],
+            '_1_1_' => ['one', 2],
+            '_1_2_' => [true, 5],
         ];
         $actual   = $bind->toArray();
         $this->assertSame($expected, $actual);
 
-        $bind->inline(["six", "seven", 8, 9]);
+        $bind->inline(['six', 'seven', 8, 9]);
 
         $expected = [
-            "_1_1_" => ["one", 2],
-            "_1_2_" => [true, 5],
-            "_1_3_" => ["six", 2],
-            "_1_4_" => ["seven", 2],
-            "_1_5_" => [8, 1],
-            "_1_6_" => [9, 1],
+            '_1_1_' => ['one', 2],
+            '_1_2_' => [true, 5],
+            '_1_3_' => ['six', 2],
+            '_1_4_' => ['seven', 2],
+            '_1_5_' => [8, 1],
+            '_1_6_' => [9, 1],
         ];
         $actual   = $bind->toArray();
         $this->assertSame($expected, $actual);

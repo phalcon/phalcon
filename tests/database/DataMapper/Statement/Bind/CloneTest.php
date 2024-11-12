@@ -16,28 +16,11 @@ namespace Phalcon\Tests\Database\DataMapper\Statement\Bind;
 use PDO;
 use Phalcon\DataMapper\Statement\Bind;
 use Phalcon\Tests\AbstractDatabaseTestCase;
+use Phalcon\Tests\Database\DataMapper\Statement\AbstractStatementTestCase;
 use ReflectionClass;
 
-final class CloneTest extends AbstractDatabaseTestCase
+final class CloneTest extends AbstractStatementTestCase
 {
-    /**
-     * @return void
-     */
-    protected function setUp() : void
-    {
-        /**
-         * This is here to ensure that the tests run fine either individually
-         * or as a suite, since the static instance count will increase
-         * differently depending on how the test is run (suite/on its own)
-         */
-        parent::setUp();
-
-        $bind = new ReflectionClass(Bind::class);
-        $property = $bind->getProperty('instanceCount');
-        $property->setAccessible(true);
-        $property->setValue(0);
-    }
-
     /**
      * Database Tests Phalcon\DataMapper\Statement\Bind :: clone()
      *
@@ -45,7 +28,7 @@ final class CloneTest extends AbstractDatabaseTestCase
      *
      * @group  common
      */
-    public function testDmQueryBindClone(): void
+    public function testDmStatementBindClone(): void
     {
         $bind = new Bind();
 
@@ -53,24 +36,24 @@ final class CloneTest extends AbstractDatabaseTestCase
         $actual   = $bind->toArray();
         $this->assertSame($expected, $actual);
 
-        $bind->inline("one");
+        $bind->inline('one');
         $bind->inline(true, PDO::PARAM_BOOL);
 
         $expected = [
-            "_1_1_" => ["one", 2],
-            "_1_2_" => [true, 5],
+            '_1_1_' => ['one', 2],
+            '_1_2_' => [true, 5],
         ];
         $actual   = $bind->toArray();
         $this->assertSame($expected, $actual);
 
         $clone = clone $bind;
 
-        $clone->inline("two");
+        $clone->inline('two');
 
         $expected = [
-            "_1_1_" => ["one", 2],
-            "_1_2_" => [true, 5],
-            "_2_3_" => ["two", 2],
+            '_1_1_' => ['one', 2],
+            '_1_2_' => [true, 5],
+            '_2_3_' => ['two', 2],
         ];
         $actual   = $clone->toArray();
         $this->assertSame($expected, $actual);
