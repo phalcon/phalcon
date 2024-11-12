@@ -46,7 +46,7 @@ abstract class AbstractStatementTestCase extends AbstractUnitTestCase
     /**
      * @return void
      */
-    protected function setUp() : void
+    protected function setUp(): void
     {
         /**
          * This is here to ensure that the tests run fine either individually
