@@ -17,11 +17,6 @@ use Phalcon\Session\Bag;
 use Phalcon\Tests\Fixtures\Traits\DiTrait;
 use Phalcon\Tests\AbstractUnitTestCase;
 
-/**
- * Class RemoveTest extends AbstractUnitTestCase
- *
- * @package Phalcon\Tests\Unit\Session\Bag
- */
 final class RemoveTest extends AbstractUnitTestCase
 {
     use DiTrait;
