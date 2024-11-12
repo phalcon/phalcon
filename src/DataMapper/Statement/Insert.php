@@ -186,7 +186,9 @@ class Insert extends AbstractStatement
          * Using `array_map` instead of a foreach. It might not be easy to
          * understand at first glance but it is the fastest implementation.
          *
-         * We are traversing the array and quoting every column.
+         * We are traversing the array and quoting every column.        $driver = env('driver');
+        $insert = Insert::new($driver);
+
          */
         $columns = array_map(
             fn($column) => $this->quoteIdentifier($column),
