@@ -22,12 +22,25 @@ use function env;
 final class JoinTest extends AbstractStatementTestCase
 {
     /**
+     * @return array[]
+     */
+    public static function getJoinNames(): array
+    {
+        return [
+            ['INNER'],
+            ['LEFT'],
+            ['NATURAL'],
+            ['RIGHT'],
+        ];
+    }
+
+    /**
      * Database Tests Phalcon\DataMapper\Statement\Select :: join() - inner
      *
-     * @since  2020-01-20
+     * @since        2020-01-20
      *
      * @dataProvider getJoinNames
-     * @group  common
+     * @group        common
      */
     public function testDmStatementSelectJoin(string $join): void
     {
@@ -47,16 +60,47 @@ final class JoinTest extends AbstractStatementTestCase
     }
 
     /**
-     * @return array[]
+     * Database Tests Phalcon\DataMapper\Statement\Select :: join() - subselect
+     *
+     * @since  2020-01-20
+     *
+     * @group  common
      */
-    public static function getJoinNames(): array
+    public function testDmStatementSelectJoinSubSelect(): void
     {
-        return [
-            ['INNER'],
-            ['LEFT'],
-            ['NATURAL'],
-            ['RIGHT'],
+        $driver = env('driver');
+        $select = Select::new($driver);
+
+        $sub = $select
+            ->subSelect()
+            ->from('co_customers')
+            ->where('cst_status_flag = ', 1)
+            ->asAlias('cst')
+        ;
+
+        $select
+            ->from('co_invoices')
+            ->join(
+                $select::JOIN_LEFT,
+                $sub,
+                'inv_cst_id = cst_id'
+            )
+            ->appendJoin(' AND cst_name LIKE ', '%john%')
+        ;
+
+        $expected = 'SELECT * FROM co_invoices '
+            . 'LEFT JOIN (SELECT * FROM co_customers '
+            . 'WHERE cst_status_flag = :_2_1_) AS cst '
+            . 'ON inv_cst_id = cst_id AND cst_name LIKE :_1_1_';
+        $actual   = $select->getStatement();
+        $this->assertSame($expected, $actual);
+
+        $expected = [
+            '_2_1_' => [1, PDO::PARAM_INT],
+            '_1_1_' => ['%john%', PDO::PARAM_STR],
         ];
+        $actual   = $select->getBindValues();
+        $this->assertSame($expected, $actual);
     }
 
     /**
@@ -120,50 +164,6 @@ final class JoinTest extends AbstractStatementTestCase
         $expected = 'SELECT * FROM co_invoices '
             . 'LEFT JOIN co_customers USING (inv_id)';
         $actual   = $select->getStatement();
-        $this->assertSame($expected, $actual);
-    }
-
-    /**
-     * Database Tests Phalcon\DataMapper\Statement\Select :: join() - subselect
-     *
-     * @since  2020-01-20
-     *
-     * @group  common
-     */
-    public function testDmStatementSelectJoinSubSelect(): void
-    {
-        $driver = env('driver');
-        $select = Select::new($driver);
-
-        $sub = $select
-            ->subSelect()
-            ->from('co_customers')
-            ->where('cst_status_flag = ', 1)
-            ->asAlias('cst')
-        ;
-
-        $select
-            ->from('co_invoices')
-            ->join(
-                $select::JOIN_LEFT,
-                $sub,
-                'inv_cst_id = cst_id'
-            )
-            ->appendJoin(' AND cst_name LIKE ', '%john%')
-        ;
-
-        $expected = 'SELECT * FROM co_invoices '
-            . 'LEFT JOIN (SELECT * FROM co_customers '
-            . 'WHERE cst_status_flag = :_2_1_) AS cst '
-            . 'ON inv_cst_id = cst_id AND cst_name LIKE :_1_1_';
-        $actual   = $select->getStatement();
-        $this->assertSame($expected, $actual);
-
-        $expected = [
-            '_2_1_' => [1, PDO::PARAM_INT],
-            '_1_1_' => ['%john%', PDO::PARAM_STR],
-        ];
-        $actual   = $select->getBindValues();
         $this->assertSame($expected, $actual);
     }
 }

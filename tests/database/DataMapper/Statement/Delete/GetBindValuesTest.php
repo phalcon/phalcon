@@ -15,7 +15,6 @@ namespace Phalcon\Tests\Database\DataMapper\Statement\Delete;
 
 use PDO;
 use Phalcon\DataMapper\Statement\Delete;
-use Phalcon\DataMapper\Statement\Update;
 use Phalcon\Tests\AbstractDatabaseTestCase;
 
 use function env;

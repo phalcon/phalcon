@@ -31,7 +31,7 @@ final class InlineTest extends AbstractStatementTestCase
      */
     public function testDmStatementBindBindInline(): void
     {
-        $bind   = new Bind();
+        $bind = new Bind();
 
         $expected = [];
         $actual   = $bind->toArray();

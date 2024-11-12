@@ -15,7 +15,6 @@ namespace Phalcon\Tests\Database\DataMapper\Query;
 
 use BadMethodCallException;
 use PDOStatement;
-use Phalcon\DataMapper\Query\Delete;
 use Phalcon\DataMapper\Query\Select;
 use Phalcon\Tests\AbstractDatabaseTestCase;
 use Phalcon\Tests\Fixtures\Migrations\InvoicesMigration;

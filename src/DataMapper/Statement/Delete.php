@@ -29,21 +29,6 @@ class Delete extends AbstractConditions
         $this->store['RETURNING'] = [];
     }
 
-
-    /**
-     * Add table(s) in the query
-     *
-     * @param string $table
-     *
-     * @return static
-     */
-    public function table(string $table): static
-    {
-        $this->store['FROM'] = $table;
-
-        return $this;
-    }
-
     /**
      * Returns the generated statement
      *
@@ -98,6 +83,20 @@ class Delete extends AbstractConditions
             $this->store['RETURNING'],
             $columns
         );
+
+        return $this;
+    }
+
+    /**
+     * Add table(s) in the query
+     *
+     * @param string $table
+     *
+     * @return static
+     */
+    public function table(string $table): static
+    {
+        $this->store['FROM'] = $table;
 
         return $this;
     }

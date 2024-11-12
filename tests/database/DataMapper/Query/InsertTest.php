@@ -14,11 +14,9 @@ declare(strict_types=1);
 namespace Phalcon\Tests\Database\DataMapper\Query;
 
 use PDOStatement;
-use Phalcon\DataMapper\Query\Delete;
 use Phalcon\DataMapper\Query\Insert;
 use Phalcon\DataMapper\Query\Select;
 use Phalcon\Tests\AbstractDatabaseTestCase;
-use Phalcon\Tests\Fixtures\Migrations\InvoicesMigration;
 
 use function uniqid;
 
@@ -75,7 +73,7 @@ final class InsertTest extends AbstractDatabaseTestCase
         $this->assertInstanceOf(PDOStatement::class, $statement);
 
         $expected = 1;
-        $actual   = (int) $insert->getLastInsertId();
+        $actual   = (int)$insert->getLastInsertId();
         $this->assertSame($expected, $actual);
 
         /**

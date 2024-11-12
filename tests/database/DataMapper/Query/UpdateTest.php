@@ -14,7 +14,6 @@ declare(strict_types=1);
 namespace Phalcon\Tests\Database\DataMapper\Query;
 
 use PDOStatement;
-use Phalcon\DataMapper\Query\Delete;
 use Phalcon\DataMapper\Query\Select;
 use Phalcon\DataMapper\Query\Update;
 use Phalcon\Tests\AbstractDatabaseTestCase;

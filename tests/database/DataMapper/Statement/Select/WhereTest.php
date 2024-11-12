@@ -82,41 +82,6 @@ final class WhereTest extends AbstractStatementTestCase
     }
 
     /**
-     * Database Tests Phalcon\DataMapper\Statement\Select :: where() subselect
-     *
-     * @since  2020-01-20
-     *
-     * @group  common
-     */
-    public function testDmStatementSelectWhereSubSelect(): void
-    {
-        $driver = env('driver');
-        $select = Select::new($driver);
-
-        $select
-            ->from('co_invoices')
-            ->where(
-                'inv_cst_id IN ',
-                $select
-                    ->subSelect()
-                ->columns(['cst_id'])
-                ->from('co_customers')
-                ->where('cst_status_flag = ', 1)
-            )
-        ;
-
-        $expected = 'SELECT * '
-            . 'FROM co_invoices '
-            . 'WHERE inv_cst_id IN ('
-            . 'SELECT cst_id '
-            . 'FROM co_customers '
-            . 'WHERE cst_status_flag = :_2_1_'
-            . ')';
-        $actual   = $select->getStatement();
-        $this->assertSame($expected, $actual);
-    }
-
-    /**
      * Database Tests Phalcon\DataMapper\Statement\Select :: where() - bind values
      *
      * @since  2020-01-20
@@ -152,6 +117,41 @@ final class WhereTest extends AbstractStatementTestCase
             'total' => [100, 1],
         ];
         $actual   = $select->getBindValues();
+        $this->assertSame($expected, $actual);
+    }
+
+    /**
+     * Database Tests Phalcon\DataMapper\Statement\Select :: where() subselect
+     *
+     * @since  2020-01-20
+     *
+     * @group  common
+     */
+    public function testDmStatementSelectWhereSubSelect(): void
+    {
+        $driver = env('driver');
+        $select = Select::new($driver);
+
+        $select
+            ->from('co_invoices')
+            ->where(
+                'inv_cst_id IN ',
+                $select
+                    ->subSelect()
+                    ->columns(['cst_id'])
+                    ->from('co_customers')
+                    ->where('cst_status_flag = ', 1)
+            )
+        ;
+
+        $expected = 'SELECT * '
+            . 'FROM co_invoices '
+            . 'WHERE inv_cst_id IN ('
+            . 'SELECT cst_id '
+            . 'FROM co_customers '
+            . 'WHERE cst_status_flag = :_2_1_'
+            . ')';
+        $actual   = $select->getStatement();
         $this->assertSame($expected, $actual);
     }
 }

@@ -37,24 +37,6 @@ final class QuoteIdentifierTest extends AbstractStatementTestCase
 
     /**
      * Database Tests Phalcon\DataMapper\Statement\Select :: quoteIdentifier()
-     * MSSQL
-     *
-     * @since  2020-01-20
-     *
-     * @group  common
-     */
-    public function testDmStatementSelectQuoteIdentifierSqlsrv(): void
-    {
-        $select = Select::new('sqlsrv');
-
-        $source   = 'some field';
-        $expected = $select->quote('sqlsrv', $source);
-        $actual   = $select->quoteIdentifier($source);
-        $this->assertSame($expected, $actual);
-    }
-
-    /**
-     * Database Tests Phalcon\DataMapper\Statement\Select :: quoteIdentifier()
      * Sqlite
      *
      * @since  2020-01-20
@@ -67,6 +49,24 @@ final class QuoteIdentifierTest extends AbstractStatementTestCase
 
         $source   = 'some field';
         $expected = $select->quote('sqlite', $source);
+        $actual   = $select->quoteIdentifier($source);
+        $this->assertSame($expected, $actual);
+    }
+
+    /**
+     * Database Tests Phalcon\DataMapper\Statement\Select :: quoteIdentifier()
+     * MSSQL
+     *
+     * @since  2020-01-20
+     *
+     * @group  common
+     */
+    public function testDmStatementSelectQuoteIdentifierSqlsrv(): void
+    {
+        $select = Select::new('sqlsrv');
+
+        $source   = 'some field';
+        $expected = $select->quote('sqlsrv', $source);
         $actual   = $select->quoteIdentifier($source);
         $this->assertSame($expected, $actual);
     }

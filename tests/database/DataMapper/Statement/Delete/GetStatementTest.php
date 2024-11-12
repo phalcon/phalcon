@@ -14,7 +14,6 @@ declare(strict_types=1);
 namespace Phalcon\Tests\Database\DataMapper\Statement\Delete;
 
 use Phalcon\DataMapper\Statement\Delete;
-use Phalcon\DataMapper\Statement\Update;
 use Phalcon\Tests\AbstractDatabaseTestCase;
 
 use function env;

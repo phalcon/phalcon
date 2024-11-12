@@ -32,33 +32,6 @@ class Connection extends AbstractConnection
     protected array $arguments = [];
 
     /**
-     * @param mixed ...$arguments
-     *
-     * @return Connection
-     */
-    public static function new(mixed ...$arguments): Connection
-    {
-        $dsn = $arguments[0] ?? '';
-        if (is_string($dsn) && empty($dsn)) {
-            throw new InvalidArgumentException(
-                "DSN cannot be empty"
-            );
-        }
-
-        return new static(...$arguments);
-    }
-
-    /**
-     * @param mixed ...$arguments
-     *
-     * @return callable
-     */
-    public static function factory(mixed ...$arguments): callable
-    {
-        return fn() => static::new(...$arguments);
-    }
-
-    /**
      * Constructor.
      *
      * This overrides the parent so that it can take connection attributes as a
@@ -160,5 +133,32 @@ class Connection extends AbstractConnection
     public function disconnect(): void
     {
         $this->pdo = null;
+    }
+
+    /**
+     * @param mixed ...$arguments
+     *
+     * @return callable
+     */
+    public static function factory(mixed ...$arguments): callable
+    {
+        return fn() => static::new(...$arguments);
+    }
+
+    /**
+     * @param mixed ...$arguments
+     *
+     * @return Connection
+     */
+    public static function new(mixed ...$arguments): Connection
+    {
+        $dsn = $arguments[0] ?? '';
+        if (is_string($dsn) && empty($dsn)) {
+            throw new InvalidArgumentException(
+                "DSN cannot be empty"
+            );
+        }
+
+        return new static(...$arguments);
     }
 }

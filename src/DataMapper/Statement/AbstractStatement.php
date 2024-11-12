@@ -41,6 +41,18 @@ abstract class AbstractStatement
     protected array $store = [];
 
     /**
+     * Instantiate a new object
+     *
+     * @param string $driver
+     *
+     * @return static
+     */
+    public static function new(string $driver): static
+    {
+        return new static($driver);
+    }
+
+    /**
      * Constructor
      *
      * @param string $driver
@@ -54,6 +66,7 @@ abstract class AbstractStatement
         $this->reset();
     }
 
+
     public function __clone()
     {
         $vars = get_object_vars($this);
@@ -64,7 +77,6 @@ abstract class AbstractStatement
             }
         }
     }
-
 
     /**
      * Binds a value inline
@@ -166,30 +178,6 @@ abstract class AbstractStatement
     abstract public function getStatement(): string;
 
     /**
-     * Instantiate a new object
-     *
-     * @param string $driver
-     *
-     * @return static
-     */
-    public static function new(string $driver): static
-    {
-        return new static($driver);
-    }
-
-    /**
-     * Quotes an identifier/field
-     *
-     * @param string $name
-     *
-     * @return string
-     */
-    public function quoteIdentifier(string $name): string
-    {
-        return $this->quote($this->driver, $name);
-    }
-
-    /**
      * @param string $driver
      * @param string $name
      *
@@ -204,6 +192,18 @@ abstract class AbstractStatement
         };
 
         return $map[0] . $name . $map[1];
+    }
+
+    /**
+     * Quotes an identifier/field
+     *
+     * @param string $name
+     *
+     * @return string
+     */
+    public function quoteIdentifier(string $name): string
+    {
+        return $this->quote($this->driver, $name);
     }
 
     /**

@@ -21,13 +21,10 @@ namespace Phalcon\DataMapper\Query;
 use BadMethodCallException;
 use Generator as Gen;
 use PDO;
-use PDOStatement;
-use Phalcon\DataMapper\Pdo\Connection;
-use Phalcon\DataMapper\Pdo\Exception\Exception;
+use Phalcon\DataMapper\Query\Traits\QueryTrait;
 use Phalcon\DataMapper\Statement\Select as SelectStatement;
 
 use function array_merge;
-use function call_user_func_array;
 
 /**
  * Select Query
@@ -52,32 +49,7 @@ use function call_user_func_array;
  */
 class Select extends SelectStatement
 {
-    /**
-     * Create a new instance of this object
-     *
-     * @param mixed ...$arguments
-     *
-     * @return static
-     */
-    public static function new(mixed ...$arguments): static
-    {
-        $connection = Connection::new(...$arguments);
-
-        return new static($connection->getDriverName(), $connection);
-    }
-
-    /**
-     * Constructor.
-     *
-     * @param string     $driver
-     * @param Connection $connection
-     */
-    public function __construct(
-        string $driver,
-        protected Connection $connection
-    ) {
-        parent::__construct($driver);
-    }
+    use QueryTrait;
 
     /**
      * Proxied methods to the connection
@@ -111,37 +83,19 @@ class Select extends SelectStatement
         ];
 
         if (isset($proxied[$method])) {
-            return call_user_func_array(
+            $params = array_merge(
                 [
-                    $this->connection,
-                    $method,
+                    $this->getStatement(),
+                    $this->getBindValues(),
                 ],
-                array_merge(
-                    [
-                        $this->getStatement(),
-                        $this->getBindValues(),
-                    ],
-                    $params
-                )
+                $params
             );
+
+            return $this->connection->$method(...$params);
         }
 
         throw new BadMethodCallException(
             "Unknown method: [" . $method . "]"
-        );
-    }
-
-    /**
-     * Performs a statement in the connection
-     *
-     * @return PDOStatement
-     * @throws Exception
-     */
-    public function perform()
-    {
-        return $this->connection->perform(
-            $this->getStatement(),
-            $this->getBindValues()
         );
     }
 }

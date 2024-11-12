@@ -56,8 +56,7 @@ final class GetStatementTest extends AbstractDatabaseTestCase
             . 'NULL, '
             . '1, '
             . 'NOW()) '
-            . 'RETURNING inv_id, inv_cst_id, inv_total'
-        ;
+            . 'RETURNING inv_id, inv_cst_id, inv_total';
         $actual   = $insert->getStatement();
         $this->assertSame($expected, $actual);
 
@@ -81,8 +80,7 @@ final class GetStatementTest extends AbstractDatabaseTestCase
             . ':inv_total, '
             . 'NULL, '
             . '1, '
-            . 'NOW())'
-        ;
+            . 'NOW())';
         $actual   = $insert->getStatement();
         $this->assertSame($expected, $actual);
 

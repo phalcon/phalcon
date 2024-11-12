@@ -49,6 +49,35 @@ final class LimitOffsetTest extends AbstractStatementTestCase
     }
 
     /**
+     * Database Tests Phalcon\DataMapper\Statement\Select :: limit()/offset() -
+     * MSSSQL
+     *
+     * @since  2020-01-20
+     *
+     * @group  common
+     */
+    public function testDmStatementSelectLimitOffsetMssql(): void
+    {
+        $select = Select::new('sqlsrv');
+
+        $select
+            ->from('co_invoices')
+            ->limit(10)
+        ;
+
+        $expected = 'SELECT TOP 10 * FROM co_invoices';
+        $actual   = $select->getStatement();
+        $this->assertSame($expected, $actual);
+
+        $select->offset(50);
+
+        $expected = 'SELECT * FROM co_invoices '
+            . 'OFFSET 50 ROWS FETCH NEXT 10 ROWS ONLY';
+        $actual   = $select->getStatement();
+        $this->assertSame($expected, $actual);
+    }
+
+    /**
      * Database Tests Phalcon\DataMapper\Statement\Select :: page()/perPage()
      *
      * @since  2020-01-20
@@ -143,35 +172,6 @@ final class LimitOffsetTest extends AbstractStatementTestCase
         $select->offset(10);
 
         $expected = 'SELECT * FROM co_invoices OFFSET 10';
-        $actual   = $select->getStatement();
-        $this->assertSame($expected, $actual);
-    }
-
-    /**
-     * Database Tests Phalcon\DataMapper\Statement\Select :: limit()/offset() -
-     * MSSSQL
-     *
-     * @since  2020-01-20
-     *
-     * @group  common
-     */
-    public function testDmStatementSelectLimitOffsetMssql(): void
-    {
-        $select = Select::new('sqlsrv');
-
-        $select
-            ->from('co_invoices')
-            ->limit(10)
-        ;
-
-        $expected = 'SELECT TOP 10 * FROM co_invoices';
-        $actual   = $select->getStatement();
-        $this->assertSame($expected, $actual);
-
-        $select->offset(50);
-
-        $expected = 'SELECT * FROM co_invoices '
-            . 'OFFSET 50 ROWS FETCH NEXT 10 ROWS ONLY';
         $actual   = $select->getStatement();
         $this->assertSame($expected, $actual);
     }

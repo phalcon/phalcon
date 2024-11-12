@@ -25,8 +25,6 @@ use Phalcon\Traits\Php\JsonTrait;
 use Psr\Log\LoggerInterface;
 
 use function json_encode;
-use function microtime;
-use function number_format;
 
 use const PHP_EOL;
 
@@ -51,12 +49,12 @@ class Profiler implements ProfilerInterface
      * @var string
      */
     protected string $logFormat = "M: {method} ({duration}s)"
-        . PHP_EOL
-        . "S: {statement}"
-        . PHP_EOL
-        . "V: {values}"
-        . PHP_EOL
-        . "B: {backtrace}";
+    . PHP_EOL
+    . "S: {statement}"
+    . PHP_EOL
+    . "V: {values}"
+    . PHP_EOL
+    . "B: {backtrace}";
 
     /**
      * @var int

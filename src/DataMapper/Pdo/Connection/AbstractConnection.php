@@ -110,7 +110,7 @@ abstract class AbstractConnection
      *
      * @return int|false
      */
-    public function exec(string $statement = ''): int|false
+    public function exec(string $statement = ''): int | false
     {
         $this->connect();
         $this->profileStart(__METHOD__);
