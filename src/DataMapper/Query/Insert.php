@@ -10,8 +10,8 @@
  *
  * Implementation of $this file has been influenced by AtlasPHP
  *
- * @link    https://github.com/atlasphp/Atlas.Pdo
- * @license https://github.com/atlasphp/Atlas.Pdo/blob/1.x/LICENSE.md
+ * @link    https://github.com/atlasphp/Atlas.Query
+ * @license https://github.com/atlasphp/Atlas.Query/blob/2.x/LICENSE.md
  */
 
 declare(strict_types=1);
