@@ -37,9 +37,11 @@ class Decorated extends AbstractConnection
      * @param ProfilerInterface|null $profiler
      */
     public function __construct(
-        protected PDO $pdo,
-        protected ?ProfilerInterface $profiler = null
+        PDO $pdo,
+        ?ProfilerInterface $profiler = null
     ) {
+        $this->pdo      = $pdo;
+        $this->profiler = $profiler;
     }
 
     /**

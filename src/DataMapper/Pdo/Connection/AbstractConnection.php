@@ -55,6 +55,13 @@ abstract class AbstractConnection
     use YieldTrait;
 
     /**
+     * @var PDO|null
+     */
+    protected ?PDO $pdo = null;
+
+    protected ?ProfilerInterface $profiler = null;
+
+    /**
      * Proxies to PDO methods created for specific drivers; in particular,
      * `sqlite` and `pgsql`.
      *

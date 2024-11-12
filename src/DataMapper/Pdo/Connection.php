@@ -27,11 +27,6 @@ use Phalcon\DataMapper\Pdo\Profiler\ProfilerInterface;
 class Connection extends AbstractConnection
 {
     /**
-     * @var PDO|null
-     */
-    protected ?PDO $pdo = null;
-
-    /**
      * @var array
      */
     protected array $arguments = [];
@@ -82,7 +77,7 @@ class Connection extends AbstractConnection
         string $password = null,
         array $options = [],
         array $queries = [],
-        protected ?ProfilerInterface $profiler = null
+        ?ProfilerInterface $profiler = null
     ) {
         $parts     = explode(":", $dsn);
         $available = [
@@ -112,6 +107,8 @@ class Connection extends AbstractConnection
             $options,
             $queries,
         ];
+
+        $this->profiler = $profiler;
     }
 
     /**
