@@ -18,80 +18,54 @@ declare(strict_types=1);
 
 namespace Phalcon\DataMapper\Query;
 
+use PDOStatement;
 use Phalcon\DataMapper\Pdo\Connection;
-
-use function array_merge;
+use Phalcon\DataMapper\Pdo\Exception\Exception;
+use Phalcon\DataMapper\Statement\Delete as DeleteStatement;
 
 /**
  * Delete Query
  */
-class Delete extends AbstractConditions
+class Delete extends DeleteStatement
 {
     /**
-     * Delete constructor.
+     * Create a new instance of this object
      *
+     * @param mixed ...$arguments
+     *
+     * @return static
+     */
+    public static function new(mixed ...$arguments): static
+    {
+        $connection = Connection::new(...$arguments);
+
+        return new static($connection->getDriverName(), $connection);
+    }
+
+    /**
+     * Constructor.
+     *
+     * @param string     $driver
      * @param Connection $connection
-     * @param Bind       $bind
      */
-    public function __construct(Connection $connection, Bind $bind)
-    {
-        parent::__construct($connection, $bind);
-
-        $this->store["FROM"]      = "";
-        $this->store["RETURNING"] = [];
+    public function __construct(
+        string $driver,
+        protected Connection $connection
+    ) {
+        parent::__construct($driver);
     }
 
     /**
-     * Adds table(s) in the query
+     * Performs a statement in the connection
      *
-     * @param string $table
-     *
-     * @return Delete
+     * @return PDOStatement
+     * @throws Exception
      */
-    public function from(string $table): self
+    public function perform()
     {
-        $this->store["FROM"] = $table;
-
-        return $this;
-    }
-
-    /**
-     * @return string
-     */
-    public function getStatement(): string
-    {
-        return "DELETE"
-            . $this->buildFlags()
-            . " FROM " . $this->store["FROM"]
-            . $this->buildCondition("WHERE")
-            . $this->buildReturning();
-    }
-
-    /**
-     * Resets the internal store
-     */
-    public function reset(): void
-    {
-        parent::reset();
-
-        $this->store["FROM"]      = "";
-        $this->store["RETURNING"] = [];
-    }
-
-    /**
-     * Adds the `RETURNING` clause
-     *
-     * @param array $columns
-     *
-     * @return Delete
-     */
-    public function returning(array $columns): self
-    {
-        $this->store["RETURNING"] = array_merge(
-            $this->store["RETURNING"],
-            $columns
+        return $this->connection->perform(
+            $this->getStatement(),
+            $this->getBindValues()
         );
-
-        return $this;
     }
 }

@@ -18,172 +18,54 @@ declare(strict_types=1);
 
 namespace Phalcon\DataMapper\Query;
 
+use PDOStatement;
 use Phalcon\DataMapper\Pdo\Connection;
-
-use function array_merge;
-use function is_int;
+use Phalcon\DataMapper\Pdo\Exception\Exception;
+use Phalcon\DataMapper\Statement\Update as UpdateStatement;
 
 /**
  * Update Query
  */
-class Update extends AbstractConditions
+class Update extends UpdateStatement
 {
     /**
-     * Update constructor.
+     * Create a new instance of this object
      *
+     * @param mixed ...$arguments
+     *
+     * @return static
+     */
+    public static function new(mixed ...$arguments): static
+    {
+        $connection = Connection::new(...$arguments);
+
+        return new static($connection->getDriverName(), $connection);
+    }
+
+    /**
+     * Constructor.
+     *
+     * @param string     $driver
      * @param Connection $connection
-     * @param Bind       $bind
      */
-    public function __construct(Connection $connection, Bind $bind)
-    {
-        parent::__construct($connection, $bind);
-
-        $this->store["FROM"]      = "";
-        $this->store["RETURNING"] = [];
+    public function __construct(
+        string $driver,
+        protected Connection $connection
+    ) {
+        parent::__construct($driver);
     }
 
     /**
-     * Sets a column for the `UPDATE` query
+     * Performs a statement in the connection
      *
-     * @param string     $column
-     * @param mixed|null $value
-     * @param int        $type
-     *
-     * @return $this
+     * @return PDOStatement
+     * @throws Exception
      */
-    public function column(
-        string $column,
-        mixed $value = null,
-        int $type = -1
-    ): self {
-        $this->store["COLUMNS"][$column] = ":" . $column;
-
-        if (null !== $value) {
-            $this->bind->setValue($column, $value, $type);
-        }
-
-        return $this;
-    }
-
-    /**
-     * Mass sets columns and values for the `UPDATE`
-     *
-     * @param array $columns
-     *
-     * @return Update
-     */
-    public function columns(array $columns): self
+    public function perform()
     {
-        foreach ($columns as $column => $value) {
-            if (is_int($column)) {
-                $this->column($value);
-            } else {
-                $this->column($column, $value);
-            }
-        }
-
-        return $this;
-    }
-
-    /**
-     * Adds table(s) in the query
-     *
-     * @param string $table
-     *
-     * @return Update
-     */
-    public function from(string $table): self
-    {
-        $this->store["FROM"] = $table;
-
-        return $this;
-    }
-
-    /**
-     * @return string
-     */
-    public function getStatement(): string
-    {
-        return "UPDATE"
-            . $this->buildFlags()
-            . " " . $this->store["FROM"]
-            . $this->buildColumns()
-            . $this->buildCondition("WHERE")
-            . $this->buildReturning();
-    }
-
-    /**
-     * Whether the query has columns or not
-     *
-     * @return bool
-     */
-    public function hasColumns(): bool
-    {
-        return count($this->store["COLUMNS"]) > 0;
-    }
-
-    /**
-     * Resets the internal store
-     */
-    public function reset(): void
-    {
-        parent::reset();
-
-        $this->store["FROM"]      = "";
-        $this->store["RETURNING"] = [];
-    }
-
-    /**
-     * Adds the `RETURNING` clause
-     *
-     * @param array $columns
-     *
-     * @return Update
-     */
-    public function returning(array $columns): self
-    {
-        $this->store["RETURNING"] = array_merge(
-            $this->store["RETURNING"],
-            $columns
+        return $this->connection->perform(
+            $this->getStatement(),
+            $this->getBindValues()
         );
-
-        return $this;
-    }
-
-    /**
-     * Sets a column = value condition
-     *
-     * @param string     $column
-     * @param mixed|null $value
-     *
-     * @return Update
-     */
-    public function set(string $column, mixed $value = null): self
-    {
-        if (null === $value) {
-            $value = "NULL";
-        }
-
-        $this->store["COLUMNS"][$column] = $value;
-
-        $this->bind->remove($column);
-
-        return $this;
-    }
-
-    /**
-     * Builds the column list
-     *
-     * @return string
-     */
-    private function buildColumns(): string
-    {
-        $assignments = [];
-
-        foreach ($this->store["COLUMNS"] as $column => $value) {
-            $assignments[] = $this->quoteIdentifier($column) . " = " . $value;
-        }
-
-        return " SET" . $this->indent($assignments, ",");
     }
 }

@@ -11,32 +11,34 @@
 
 declare(strict_types=1);
 
-namespace Phalcon\Tests\Database\DataMapper\Query\Update;
+namespace Phalcon\Tests\Database\DataMapper\Query\Delete;
 
 use PDO;
-use Phalcon\DataMapper\Query\QueryFactory;
+use Phalcon\DataMapper\Query\Delete;
 use Phalcon\Tests\AbstractDatabaseTestCase;
 
 final class GetBindValuesTest extends AbstractDatabaseTestCase
 {
     /**
-     * Database Tests Phalcon\DataMapper\Query\Update :: getBindValues()
+     * Database Tests Phalcon\DataMapper\Query\Delete :: getBindValues()
      *
      * @since  2020-01-20
      *
      * @group  common
      */
-    public function testDmQueryUpdateGetBindValues(): void
+    public function testDmQueryDeleteGetBindValues(): void
     {
-        $connection = self::getDataMapperConnection();
-        $factory    = new QueryFactory();
-        $update     = $factory->newUpdate($connection);
+        $delete     = Delete::new(
+            self::getDatabaseDsn(),
+            self::getDatabaseUsername(),
+            self::getDatabasePassword()
+        );
 
         $expected = [];
-        $actual   = $update->getBindValues();
+        $actual   = $delete->getBindValues();
         $this->assertEquals($expected, $actual);
 
-        $update
+        $delete
             ->bindValues(
                 [
                     'one'   => 100,
@@ -53,10 +55,10 @@ final class GetBindValuesTest extends AbstractDatabaseTestCase
             'three' => [true, PDO::PARAM_BOOL],
             'four'  => [[1, 2, 3], PDO::PARAM_STR],
         ];
-        $actual   = $update->getBindValues();
+        $actual   = $delete->getBindValues();
         $this->assertEquals($expected, $actual);
 
-        $update
+        $delete
             ->bindValues(
                 [
                     'five' => 'active',
@@ -71,7 +73,7 @@ final class GetBindValuesTest extends AbstractDatabaseTestCase
             'four'  => [[1, 2, 3], PDO::PARAM_STR],
             'five'  => ['active', PDO::PARAM_STR],
         ];
-        $actual   = $update->getBindValues();
+        $actual   = $delete->getBindValues();
         $this->assertEquals($expected, $actual);
     }
 }

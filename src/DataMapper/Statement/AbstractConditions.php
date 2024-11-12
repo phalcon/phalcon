@@ -71,7 +71,7 @@ abstract class AbstractConditions extends AbstractStatement
     {
         $this->store['LIMIT'] = $limit;
 
-        if ($this->store['PAGE']) {
+        if ($this->store['PAGE'] > 0) {
             $this->store['PAGE']   = 0;
             $this->store['OFFSET'] = 0;
         }
@@ -90,7 +90,7 @@ abstract class AbstractConditions extends AbstractStatement
     {
         $this->store['OFFSET'] = $offset;
 
-        if ($this->store['PAGE']) {
+        if ($this->store['PAGE'] > 0) {
             $this->store['PAGE']  = 0;
             $this->store['LIMIT'] = 0;
         }
@@ -174,7 +174,7 @@ abstract class AbstractConditions extends AbstractStatement
         $this->store['LIMIT']    = 0;
         $this->store['OFFSET']   = 0;
         $this->store['PAGE']     = 0;
-        $this->store['PER_PAGE'] = 0;
+        $this->store['PER_PAGE'] = 10;
 
         return $this;
     }
@@ -359,7 +359,7 @@ abstract class AbstractConditions extends AbstractStatement
         $this->store['LIMIT']  = 0;
         $this->store['OFFSET'] = 0;
 
-        if ($this->store['PAGE']) {
+        if ($this->store['PAGE'] > 0) {
             $this->store['LIMIT']  = $this->store['PER_PAGE'];
             $this->store['OFFSET'] = $this->store['PER_PAGE'] * ($this->store['PAGE'] - 1);
         }
