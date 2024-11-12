@@ -16,21 +16,22 @@ namespace Phalcon\Tests\Database\DataMapper\Query;
 use PDOStatement;
 use Phalcon\DataMapper\Query\Delete;
 use Phalcon\DataMapper\Query\Select;
+use Phalcon\DataMapper\Query\Update;
 use Phalcon\Tests\AbstractDatabaseTestCase;
 use Phalcon\Tests\Fixtures\Migrations\InvoicesMigration;
 
 use function uniqid;
 
-final class DeleteTest extends AbstractDatabaseTestCase
+final class UpdateTest extends AbstractDatabaseTestCase
 {
     /**
-     * Database Tests Phalcon\DataMapper\Query\Delete :: delete()
+     * Database Tests Phalcon\DataMapper\Query\Update :: update
      *
      * @since  2020-01-20
      *
      * @group  common
      */
-    public function testDmQueryDelete(): void
+    public function testDmQueryUpdate(): void
     {
         $connection = self::getDataMapperConnection();
         $invoices   = new InvoicesMigration($connection);
@@ -66,16 +67,20 @@ final class DeleteTest extends AbstractDatabaseTestCase
         $this->assertSame($expected, $actual);
 
         /**
-         * Delete it
+         * Update it
          */
-        $delete = Delete::new(
+        $update = Update::new(
             self::getDatabaseDsn(),
             self::getDatabaseUsername(),
             self::getDatabasePassword()
         );
 
-        $statement = $delete
+        $statement = $update
             ->table('co_invoices')
+            ->column('inv_cst_id', 2)
+            ->column('inv_total', 200.0)
+            ->column('inv_status_flag', 2)
+            ->column('inv_created_at', '2024-12-11 20:21:22')
             ->where('inv_title = ', $title)
             ->perform()
         ;
@@ -83,9 +88,26 @@ final class DeleteTest extends AbstractDatabaseTestCase
         $this->assertInstanceOf(PDOStatement::class, $statement);
 
         /**
-         * Find it again - should not exist
+         * Find it again - it should be updated
          */
-        $expected = [];
+        $select = Select::new(
+            self::getDatabaseDsn(),
+            self::getDatabaseUsername(),
+            self::getDatabasePassword()
+        );
+        $select
+            ->from('co_invoices')
+            ->where('inv_title = ', $title)
+        ;
+
+        $expected = [
+            'inv_id'          => 1,
+            'inv_cst_id'      => 2,
+            'inv_status_flag' => 2,
+            'inv_title'       => $title,
+            'inv_total'       => 200.0,
+            'inv_created_at'  => '2024-12-11 20:21:22',
+        ];
         $actual   = $select->fetchOne();
         $this->assertSame($expected, $actual);
     }

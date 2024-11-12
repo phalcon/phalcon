@@ -16,9 +16,7 @@ namespace Phalcon\Tests\Database\DataMapper\Statement\Bind;
 use PDO;
 use Phalcon\DataMapper\Statement\Bind;
 use Phalcon\DataMapper\Statement\Select;
-use Phalcon\Tests\AbstractDatabaseTestCase;
-use Phalcon\Tests\Database\DataMapper\Statement\AbstractStatementTestCase;
-use ReflectionClass;
+use Phalcon\Tests\AbstractStatementTestCase;
 
 use function env;
 

@@ -11,37 +11,12 @@
 
 declare(strict_types=1);
 
-namespace Phalcon\Tests\Database\DataMapper\Statement;
+namespace Phalcon\Tests;
 
-use PDO;
-use Phalcon\DataMapper\Pdo\Connection;
 use Phalcon\DataMapper\Statement\Bind;
-use Phalcon\Tests\AbstractUnitTestCase;
 use ReflectionClass;
-use ReflectionException;
 
-use function array_filter;
-use function date;
-use function env;
-use function explode;
-use function file_exists;
-use function file_get_contents;
-use function get_class;
-use function getOptionsMysql;
-use function getOptionsPostgresql;
-use function getOptionsSqlite;
-use function implode;
-use function is_string;
-use function preg_match;
-use function preg_split;
-use function sprintf;
-use function strlen;
-use function substr;
-use function trim;
-
-use const PREG_SPLIT_NO_EMPTY;
-
-abstract class AbstractStatementTestCase extends AbstractUnitTestCase
+abstract class AbstractStatementTestCase extends AbstractDatabaseTestCase
 {
     /**
      * @return void

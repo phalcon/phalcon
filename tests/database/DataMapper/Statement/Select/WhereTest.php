@@ -14,7 +14,7 @@ declare(strict_types=1);
 namespace Phalcon\Tests\Database\DataMapper\Statement\Select;
 
 use Phalcon\DataMapper\Statement\Select;
-use Phalcon\Tests\Database\DataMapper\Statement\AbstractStatementTestCase;
+use Phalcon\Tests\AbstractStatementTestCase;
 
 use function env;
 
@@ -43,14 +43,14 @@ final class WhereTest extends AbstractStatementTestCase
             . 'WHERE inv_total > :_1_1_ '
             . 'OR inv_status_flag = :status';
         $actual   = $select->getStatement();
-        $this->assertEquals($expected, $actual);
+        $this->assertSame($expected, $actual);
 
         $expected = [
             '_1_1_'  => [100, 1],
             'status' => [1, 1],
         ];
         $actual   = $select->getBindValues();
-        $this->assertEquals($expected, $actual);
+        $this->assertSame($expected, $actual);
     }
 
     /**
@@ -72,13 +72,13 @@ final class WhereTest extends AbstractStatementTestCase
 
         $expected = 'SELECT * FROM co_invoices WHERE inv_id > :_1_1_';
         $actual   = $select->getStatement();
-        $this->assertEquals($expected, $actual);
+        $this->assertSame($expected, $actual);
 
         $expected = [
             '_1_1_' => [1, 1],
         ];
         $actual   = $select->getBindValues();
-        $this->assertEquals($expected, $actual);
+        $this->assertSame($expected, $actual);
     }
 
     /**
@@ -113,7 +113,7 @@ final class WhereTest extends AbstractStatementTestCase
             . 'WHERE cst_status_flag = :_2_1_'
             . ')';
         $actual   = $select->getStatement();
-        $this->assertEquals($expected, $actual);
+        $this->assertSame($expected, $actual);
     }
 
     /**
@@ -142,7 +142,7 @@ final class WhereTest extends AbstractStatementTestCase
             . 'AND inv_cst_id IN (:_1_1_, :_1_2_, :_1_3_) '
             . 'AND inv_status_flag = :_1_4_';
         $actual   = $select->getStatement();
-        $this->assertEquals($expected, $actual);
+        $this->assertSame($expected, $actual);
 
         $expected = [
             '_1_1_' => [1, 1],
@@ -152,6 +152,6 @@ final class WhereTest extends AbstractStatementTestCase
             'total' => [100, 1],
         ];
         $actual   = $select->getBindValues();
-        $this->assertEquals($expected, $actual);
+        $this->assertSame($expected, $actual);
     }
 }

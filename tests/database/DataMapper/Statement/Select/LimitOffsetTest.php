@@ -14,7 +14,7 @@ declare(strict_types=1);
 namespace Phalcon\Tests\Database\DataMapper\Statement\Select;
 
 use Phalcon\DataMapper\Statement\Select;
-use Phalcon\Tests\Database\DataMapper\Statement\AbstractStatementTestCase;
+use Phalcon\Tests\AbstractStatementTestCase;
 
 use function env;
 
@@ -39,13 +39,13 @@ final class LimitOffsetTest extends AbstractStatementTestCase
 
         $expected = 'SELECT * FROM co_invoices LIMIT 10';
         $actual   = $select->getStatement();
-        $this->assertEquals($expected, $actual);
+        $this->assertSame($expected, $actual);
 
         $select->offset(50);
 
         $expected = 'SELECT * FROM co_invoices LIMIT 10 OFFSET 50';
         $actual   = $select->getStatement();
-        $this->assertEquals($expected, $actual);
+        $this->assertSame($expected, $actual);
     }
 
     /**
@@ -67,13 +67,13 @@ final class LimitOffsetTest extends AbstractStatementTestCase
 
         $expected = 'SELECT * FROM co_invoices LIMIT 10 OFFSET 60';
         $actual   = $select->getStatement();
-        $this->assertEquals($expected, $actual);
+        $this->assertSame($expected, $actual);
 
         $select->perPage(50);
 
         $expected = 'SELECT * FROM co_invoices LIMIT 50 OFFSET 300';
         $actual   = $select->getStatement();
-        $this->assertEquals($expected, $actual);
+        $this->assertSame($expected, $actual);
 
         $select->resetLimit();
 
@@ -85,7 +85,7 @@ final class LimitOffsetTest extends AbstractStatementTestCase
         $expected = 'SELECT * FROM co_invoices LIMIT 5';
         $actual   = $select->getStatement();
 
-        $this->assertEquals($expected, $actual);
+        $this->assertSame($expected, $actual);
         $select->resetLimit();
 
         $select
@@ -95,7 +95,7 @@ final class LimitOffsetTest extends AbstractStatementTestCase
 
         $expected = 'SELECT * FROM co_invoices OFFSET 10';
         $actual   = $select->getStatement();
-        $this->assertEquals($expected, $actual);
+        $this->assertSame($expected, $actual);
     }
 
     /**
@@ -117,19 +117,19 @@ final class LimitOffsetTest extends AbstractStatementTestCase
 
         $expected = 'SELECT * FROM co_invoices';
         $actual   = $select->getStatement();
-        $this->assertEquals($expected, $actual);
+        $this->assertSame($expected, $actual);
 
         $select->page(3);
 
         $expected = 'SELECT * FROM co_invoices LIMIT 10 OFFSET 20';
         $actual   = $select->getStatement();
-        $this->assertEquals($expected, $actual);
+        $this->assertSame($expected, $actual);
 
         $select->limit(10);
 
-        $expected = 'SELECT * FROM co_invoices LIMIT 10 OFFSET 20';
+        $expected = 'SELECT * FROM co_invoices LIMIT 10';
         $actual   = $select->getStatement();
-        $this->assertEquals($expected, $actual);
+        $this->assertSame($expected, $actual);
 
         $select
             ->page(3)
@@ -138,13 +138,13 @@ final class LimitOffsetTest extends AbstractStatementTestCase
 
         $expected = 'SELECT * FROM co_invoices LIMIT 50 OFFSET 100';
         $actual   = $select->getStatement();
-        $this->assertEquals($expected, $actual);
+        $this->assertSame($expected, $actual);
 
         $select->offset(10);
 
         $expected = 'SELECT * FROM co_invoices OFFSET 10';
         $actual   = $select->getStatement();
-        $this->assertEquals($expected, $actual);
+        $this->assertSame($expected, $actual);
     }
 
     /**
@@ -166,13 +166,13 @@ final class LimitOffsetTest extends AbstractStatementTestCase
 
         $expected = 'SELECT TOP 10 * FROM co_invoices';
         $actual   = $select->getStatement();
-        $this->assertEquals($expected, $actual);
+        $this->assertSame($expected, $actual);
 
         $select->offset(50);
 
         $expected = 'SELECT * FROM co_invoices '
             . 'OFFSET 50 ROWS FETCH NEXT 10 ROWS ONLY';
         $actual   = $select->getStatement();
-        $this->assertEquals($expected, $actual);
+        $this->assertSame($expected, $actual);
     }
 }

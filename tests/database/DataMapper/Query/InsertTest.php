@@ -15,31 +15,68 @@ namespace Phalcon\Tests\Database\DataMapper\Query;
 
 use PDOStatement;
 use Phalcon\DataMapper\Query\Delete;
+use Phalcon\DataMapper\Query\Insert;
 use Phalcon\DataMapper\Query\Select;
 use Phalcon\Tests\AbstractDatabaseTestCase;
 use Phalcon\Tests\Fixtures\Migrations\InvoicesMigration;
 
 use function uniqid;
 
-final class DeleteTest extends AbstractDatabaseTestCase
+final class InsertTest extends AbstractDatabaseTestCase
 {
     /**
-     * Database Tests Phalcon\DataMapper\Query\Delete :: delete()
+     * Database Tests Phalcon\DataMapper\Query\Insert :: insert()
      *
      * @since  2020-01-20
      *
      * @group  common
      */
-    public function testDmQueryDelete(): void
+    public function testDmQueryInsert(): void
     {
-        $connection = self::getDataMapperConnection();
-        $invoices   = new InvoicesMigration($connection);
+        $title = uniqid('tit-');
 
         /**
-         * Create an invoice
+         * Find it
          */
-        $title = uniqid('tit-');
-        $invoices->insert(1, 1, 1, $title, 100.0, '2024-02-01 10:11:12');
+        $select = Select::new(
+            self::getDatabaseDsn(),
+            self::getDatabaseUsername(),
+            self::getDatabasePassword()
+        );
+        $select
+            ->from('co_invoices')
+            ->where('inv_title = ', $title)
+        ;
+
+        /**
+         * Find it - should not exist
+         */
+        $expected = [];
+        $actual   = $select->fetchOne();
+        $this->assertSame($expected, $actual);
+
+        $insert = Insert::new(
+            self::getDatabaseDsn(),
+            self::getDatabaseUsername(),
+            self::getDatabasePassword()
+        );
+
+        $statement = $insert
+            ->into('co_invoices')
+            ->column('inv_id', 1)
+            ->column('inv_cst_id', 1)
+            ->column('inv_status_flag', 1)
+            ->column('inv_title', $title)
+            ->column('inv_total', 100.0)
+            ->column('inv_created_at', '2024-02-01 10:11:12')
+            ->perform()
+        ;
+
+        $this->assertInstanceOf(PDOStatement::class, $statement);
+
+        $expected = 1;
+        $actual   = (int) $insert->getLastInsertId();
+        $this->assertSame($expected, $actual);
 
         /**
          * Find it
@@ -62,30 +99,6 @@ final class DeleteTest extends AbstractDatabaseTestCase
             'inv_total'       => 100.0,
             'inv_created_at'  => '2024-02-01 10:11:12',
         ];
-        $actual   = $select->fetchOne();
-        $this->assertSame($expected, $actual);
-
-        /**
-         * Delete it
-         */
-        $delete = Delete::new(
-            self::getDatabaseDsn(),
-            self::getDatabaseUsername(),
-            self::getDatabasePassword()
-        );
-
-        $statement = $delete
-            ->table('co_invoices')
-            ->where('inv_title = ', $title)
-            ->perform()
-        ;
-
-        $this->assertInstanceOf(PDOStatement::class, $statement);
-
-        /**
-         * Find it again - should not exist
-         */
-        $expected = [];
         $actual   = $select->fetchOne();
         $this->assertSame($expected, $actual);
     }

@@ -14,7 +14,7 @@ declare(strict_types=1);
 namespace Phalcon\Tests\Database\DataMapper\Statement\Select;
 
 use Phalcon\DataMapper\Statement\Select;
-use Phalcon\Tests\Database\DataMapper\Statement\AbstractStatementTestCase;
+use Phalcon\Tests\AbstractStatementTestCase;
 
 use function env;
 

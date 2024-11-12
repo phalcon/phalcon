@@ -14,7 +14,7 @@ declare(strict_types=1);
 namespace Phalcon\Tests\Database\DataMapper\Statement\Select;
 
 use Phalcon\DataMapper\Statement\Select;
-use Phalcon\Tests\Database\DataMapper\Statement\AbstractStatementTestCase;
+use Phalcon\Tests\AbstractStatementTestCase;
 
 use function env;
 
@@ -39,12 +39,12 @@ final class AsAliasTest extends AbstractStatementTestCase
 
         $expected = '(SELECT * FROM co_invoices) AS inv';
         $actual   = $select->getStatement();
-        $this->assertEquals($expected, $actual);
+        $this->assertSame($expected, $actual);
 
         $select->resetAs();
 
         $expected = 'SELECT * FROM co_invoices';
         $actual   = $select->getStatement();
-        $this->assertEquals($expected, $actual);
+        $this->assertSame($expected, $actual);
     }
 }

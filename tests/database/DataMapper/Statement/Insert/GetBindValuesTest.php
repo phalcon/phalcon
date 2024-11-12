@@ -36,7 +36,7 @@ final class GetBindValuesTest extends AbstractDatabaseTestCase
 
         $expected = [];
         $actual   = $insert->getBindValues();
-        $this->assertEquals($expected, $actual);
+        $this->assertSame($expected, $actual);
 
         $insert
             ->bindValues(
@@ -56,7 +56,7 @@ final class GetBindValuesTest extends AbstractDatabaseTestCase
             'four'  => [[1, 2, 3], PDO::PARAM_STR],
         ];
         $actual   = $insert->getBindValues();
-        $this->assertEquals($expected, $actual);
+        $this->assertSame($expected, $actual);
 
         $insert
             ->bindValues(
@@ -74,6 +74,6 @@ final class GetBindValuesTest extends AbstractDatabaseTestCase
             'five'  => ['active', PDO::PARAM_STR],
         ];
         $actual   = $insert->getBindValues();
-        $this->assertEquals($expected, $actual);
+        $this->assertSame($expected, $actual);
     }
 }

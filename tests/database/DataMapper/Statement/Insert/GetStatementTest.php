@@ -59,14 +59,14 @@ final class GetStatementTest extends AbstractDatabaseTestCase
             . 'RETURNING inv_id, inv_cst_id, inv_total'
         ;
         $actual   = $insert->getStatement();
-        $this->assertEquals($expected, $actual);
+        $this->assertSame($expected, $actual);
 
         $expected = [
             'inv_total'  => ['total', PDO::PARAM_STR],
             'inv_cst_id' => [1, PDO::PARAM_INT],
         ];
         $actual   = $insert->getBindValues();
-        $this->assertEquals($expected, $actual);
+        $this->assertSame($expected, $actual);
 
         $insert->resetReturning();
 
@@ -84,10 +84,10 @@ final class GetStatementTest extends AbstractDatabaseTestCase
             . 'NOW())'
         ;
         $actual   = $insert->getStatement();
-        $this->assertEquals($expected, $actual);
+        $this->assertSame($expected, $actual);
 
         $expected = 'co_invoices';
         $actual   = $insert->getTable();
-        $this->assertEquals($expected, $actual);
+        $this->assertSame($expected, $actual);
     }
 }

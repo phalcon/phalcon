@@ -14,7 +14,7 @@ declare(strict_types=1);
 namespace Phalcon\Tests\Database\DataMapper\Statement\Select;
 
 use Phalcon\DataMapper\Statement\Select;
-use Phalcon\Tests\Database\DataMapper\Statement\AbstractStatementTestCase;
+use Phalcon\Tests\AbstractStatementTestCase;
 
 use function env;
 
@@ -45,7 +45,7 @@ final class SubSelectTest extends AbstractStatementTestCase
 
         $expected = 'SELECT * FROM (SELECT inv_id FROM co_invoices) AS inv';
         $actual   = $select->getStatement();
-        $this->assertEquals($expected, $actual);
+        $this->assertSame($expected, $actual);
     }
 
     /**
@@ -75,6 +75,6 @@ final class SubSelectTest extends AbstractStatementTestCase
             . 'FROM (SELECT inv_id FROM co_invoices) AS inv '
             . 'WHERE inv_total > :_1_1_';
         $actual   = $select->getStatement();
-        $this->assertEquals($expected, $actual);
+        $this->assertSame($expected, $actual);
     }
 }

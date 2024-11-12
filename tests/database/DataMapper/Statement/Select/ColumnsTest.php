@@ -14,7 +14,7 @@ declare(strict_types=1);
 namespace Phalcon\Tests\Database\DataMapper\Statement\Select;
 
 use Phalcon\DataMapper\Statement\Select;
-use Phalcon\Tests\Database\DataMapper\Statement\AbstractStatementTestCase;
+use Phalcon\Tests\AbstractStatementTestCase;
 
 use function env;
 
@@ -43,7 +43,7 @@ final class ColumnsTest extends AbstractStatementTestCase
         $expected = 'SELECT inv_id, inv_cst_id, COUNT(inv_total) '
             . 'FROM co_invoices';
         $actual   = $select->getStatement();
-        $this->assertEquals($expected, $actual);
+        $this->assertSame($expected, $actual);
 
         $select->reset();
 
@@ -64,6 +64,6 @@ final class ColumnsTest extends AbstractStatementTestCase
             . 'COUNT(inv_total) AS total '
             . 'FROM co_invoices';
         $actual   = $select->getStatement();
-        $this->assertEquals($expected, $actual);
+        $this->assertSame($expected, $actual);
     }
 }

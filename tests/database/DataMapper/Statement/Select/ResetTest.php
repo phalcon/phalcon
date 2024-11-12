@@ -14,7 +14,7 @@ declare(strict_types=1);
 namespace Phalcon\Tests\Database\DataMapper\Statement\Select;
 
 use Phalcon\DataMapper\Statement\Select;
-use Phalcon\Tests\Database\DataMapper\Statement\AbstractStatementTestCase;
+use Phalcon\Tests\AbstractStatementTestCase;
 
 use function env;
 
@@ -61,7 +61,7 @@ final class ResetTest extends AbstractStatementTestCase
             . 'LIMIT 10 '
             . 'OFFSET 50';
         $actual   = $select->getStatement();
-        $this->assertEquals($expected, $actual);
+        $this->assertSame($expected, $actual);
 
         /**
          * resetWith
@@ -79,7 +79,7 @@ final class ResetTest extends AbstractStatementTestCase
             . 'LIMIT 10 '
             . 'OFFSET 50';
         $actual   = $select->getStatement();
-        $this->assertEquals($expected, $actual);
+        $this->assertSame($expected, $actual);
 
 
         /**
@@ -104,7 +104,7 @@ final class ResetTest extends AbstractStatementTestCase
             . 'LIMIT 10 '
             . 'OFFSET 50';
         $actual   = $select->getStatement();
-        $this->assertEquals($expected, $actual);
+        $this->assertSame($expected, $actual);
 
         /**
          * resetFlags()
@@ -121,7 +121,7 @@ final class ResetTest extends AbstractStatementTestCase
             . 'LIMIT 10 '
             . 'OFFSET 50';
         $actual   = $select->getStatement();
-        $this->assertEquals($expected, $actual);
+        $this->assertSame($expected, $actual);
 
         /**
          * resetFrom()
@@ -137,7 +137,7 @@ final class ResetTest extends AbstractStatementTestCase
             . 'LIMIT 10 '
             . 'OFFSET 50';
         $actual   = $select->getStatement();
-        $this->assertEquals($expected, $actual);
+        $this->assertSame($expected, $actual);
 
         /**
          * resetGroupBy()
@@ -152,7 +152,7 @@ final class ResetTest extends AbstractStatementTestCase
             . 'LIMIT 10 '
             . 'OFFSET 50';
         $actual   = $select->getStatement();
-        $this->assertEquals($expected, $actual);
+        $this->assertSame($expected, $actual);
 
         /**
          * resetHaving()
@@ -166,7 +166,7 @@ final class ResetTest extends AbstractStatementTestCase
             . 'LIMIT 10 '
             . 'OFFSET 50';
         $actual   = $select->getStatement();
-        $this->assertEquals($expected, $actual);
+        $this->assertSame($expected, $actual);
 
         /**
          * resetLimit()
@@ -178,7 +178,7 @@ final class ResetTest extends AbstractStatementTestCase
             . 'WHERE inv_total > :_1_1_ '
             . 'ORDER BY inv_cst_id';
         $actual   = $select->getStatement();
-        $this->assertEquals($expected, $actual);
+        $this->assertSame($expected, $actual);
 
         /**
          * resetOrderBy()
@@ -189,7 +189,7 @@ final class ResetTest extends AbstractStatementTestCase
             . '* '
             . 'WHERE inv_total > :_1_1_';
         $actual   = $select->getStatement();
-        $this->assertEquals($expected, $actual);
+        $this->assertSame($expected, $actual);
 
         /**
          * resetWhere()
@@ -199,7 +199,7 @@ final class ResetTest extends AbstractStatementTestCase
         $expected = 'SELECT '
             . '*';
         $actual   = $select->getStatement();
-        $this->assertEquals($expected, $actual);
+        $this->assertSame($expected, $actual);
 
         /**
          * reset()
@@ -221,6 +221,6 @@ final class ResetTest extends AbstractStatementTestCase
 
         $expected = 'SELECT *';
         $actual   = $select->getStatement();
-        $this->assertEquals($expected, $actual);
+        $this->assertSame($expected, $actual);
     }
 }

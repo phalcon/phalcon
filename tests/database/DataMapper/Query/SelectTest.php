@@ -13,6 +13,7 @@ declare(strict_types=1);
 
 namespace Phalcon\Tests\Database\DataMapper\Query;
 
+use BadMethodCallException;
 use PDOStatement;
 use Phalcon\DataMapper\Query\Delete;
 use Phalcon\DataMapper\Query\Select;
@@ -21,16 +22,16 @@ use Phalcon\Tests\Fixtures\Migrations\InvoicesMigration;
 
 use function uniqid;
 
-final class DeleteTest extends AbstractDatabaseTestCase
+final class SelectTest extends AbstractDatabaseTestCase
 {
     /**
-     * Database Tests Phalcon\DataMapper\Query\Delete :: delete()
+     * Database Tests Phalcon\DataMapper\Query\Select :: select()
      *
      * @since  2020-01-20
      *
      * @group  common
      */
-    public function testDmQueryDelete(): void
+    public function testDmQuerySelect(): void
     {
         $connection = self::getDataMapperConnection();
         $invoices   = new InvoicesMigration($connection);
@@ -54,6 +55,9 @@ final class DeleteTest extends AbstractDatabaseTestCase
             ->where('inv_title = ', $title)
         ;
 
+        $statement = $select->perform();
+        $this->assertInstanceOf(PDOStatement::class, $statement);
+
         $expected = [
             'inv_id'          => 1,
             'inv_cst_id'      => 1,
@@ -64,29 +68,27 @@ final class DeleteTest extends AbstractDatabaseTestCase
         ];
         $actual   = $select->fetchOne();
         $this->assertSame($expected, $actual);
+    }
 
-        /**
-         * Delete it
-         */
-        $delete = Delete::new(
+    /**
+     * Database Tests Phalcon\DataMapper\Query\Select :: __call exception
+     *
+     * @since  2020-01-20
+     *
+     * @group  common
+     */
+    public function testDmQuerySelectCallException(): void
+    {
+        $this->expectException(BadMethodCallException::class);
+        $this->expectExceptionMessage('Unknown method: [unknown]');
+        $select = Select::new(
             self::getDatabaseDsn(),
             self::getDatabaseUsername(),
             self::getDatabasePassword()
         );
-
-        $statement = $delete
-            ->table('co_invoices')
-            ->where('inv_title = ', $title)
-            ->perform()
+        $select
+            ->from('co_invoices')
+            ->unknown()
         ;
-
-        $this->assertInstanceOf(PDOStatement::class, $statement);
-
-        /**
-         * Find it again - should not exist
-         */
-        $expected = [];
-        $actual   = $select->fetchOne();
-        $this->assertSame($expected, $actual);
     }
 }

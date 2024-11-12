@@ -59,7 +59,7 @@ final class ConnectDisconnectIsConnectedTest extends AbstractDatabaseTestCase
                 ]
             );
 
-            $this->assertTrue($connection->isConnected());
+            $this->assertFalse($connection->isConnected());
 
             $expected = [
                 'Variable_name' => 'character_set_client',

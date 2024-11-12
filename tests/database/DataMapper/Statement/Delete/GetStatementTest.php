@@ -54,7 +54,7 @@ final class GetStatementTest extends AbstractDatabaseTestCase
             . 'OR inv_status_flag = :flag '
             . 'RETURNING inv_total, inv_cst_id, inv_status_flag';
         $actual   = $delete->getStatement();
-        $this->assertEquals($expected, $actual);
+        $this->assertSame($expected, $actual);
 
         $delete->resetReturning();
 
@@ -63,6 +63,6 @@ final class GetStatementTest extends AbstractDatabaseTestCase
             . 'AND inv_cst_id = :cstId '
             . 'OR inv_status_flag = :flag';
         $actual   = $delete->getStatement();
-        $this->assertEquals($expected, $actual);
+        $this->assertSame($expected, $actual);
     }
 }

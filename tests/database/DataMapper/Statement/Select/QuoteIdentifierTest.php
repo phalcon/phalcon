@@ -14,9 +14,7 @@ declare(strict_types=1);
 namespace Phalcon\Tests\Database\DataMapper\Statement\Select;
 
 use Phalcon\DataMapper\Statement\Select;
-use Phalcon\Tests\Database\DataMapper\Statement\AbstractStatementTestCase;
-
-use function env;
+use Phalcon\Tests\AbstractStatementTestCase;
 
 final class QuoteIdentifierTest extends AbstractStatementTestCase
 {
@@ -34,7 +32,7 @@ final class QuoteIdentifierTest extends AbstractStatementTestCase
         $source   = 'some field';
         $expected = $select->quote('mysql', $source);
         $actual   = $select->quoteIdentifier($source);
-        $this->assertEquals($expected, $actual);
+        $this->assertSame($expected, $actual);
     }
 
     /**
@@ -52,7 +50,7 @@ final class QuoteIdentifierTest extends AbstractStatementTestCase
         $source   = 'some field';
         $expected = $select->quote('sqlsrv', $source);
         $actual   = $select->quoteIdentifier($source);
-        $this->assertEquals($expected, $actual);
+        $this->assertSame($expected, $actual);
     }
 
     /**
@@ -70,6 +68,6 @@ final class QuoteIdentifierTest extends AbstractStatementTestCase
         $source   = 'some field';
         $expected = $select->quote('sqlite', $source);
         $actual   = $select->quoteIdentifier($source);
-        $this->assertEquals($expected, $actual);
+        $this->assertSame($expected, $actual);
     }
 }

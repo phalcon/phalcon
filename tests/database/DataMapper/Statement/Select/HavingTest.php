@@ -15,7 +15,7 @@ namespace Phalcon\Tests\Database\DataMapper\Statement\Select;
 
 use PDO;
 use Phalcon\DataMapper\Statement\Select;
-use Phalcon\Tests\Database\DataMapper\Statement\AbstractStatementTestCase;
+use Phalcon\Tests\AbstractStatementTestCase;
 
 use function env;
 
@@ -42,13 +42,13 @@ final class HavingTest extends AbstractStatementTestCase
 
         $expected = 'SELECT * FROM co_invoices HAVING inv_total = :total';
         $actual   = $select->getStatement();
-        $this->assertEquals($expected, $actual);
+        $this->assertSame($expected, $actual);
 
         $expected = [
             'total' => [100, PDO::PARAM_INT],
         ];
         $actual   = $select->getBindValues();
-        $this->assertEquals($expected, $actual);
+        $this->assertSame($expected, $actual);
     }
 
     /**
@@ -78,12 +78,12 @@ final class HavingTest extends AbstractStatementTestCase
             . 'inv_cst_id = 1 OR '
             . '(inv_status_flag = 0 OR inv_status_flag = 1)';
         $actual   = $select->getStatement();
-        $this->assertEquals($expected, $actual);
+        $this->assertSame($expected, $actual);
 
         $expected = [
             'total' => [100, PDO::PARAM_INT],
         ];
         $actual   = $select->getBindValues();
-        $this->assertEquals($expected, $actual);
+        $this->assertSame($expected, $actual);
     }
 }

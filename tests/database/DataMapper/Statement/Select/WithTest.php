@@ -14,7 +14,7 @@ declare(strict_types=1);
 namespace Phalcon\Tests\Database\DataMapper\Statement\Select;
 
 use Phalcon\DataMapper\Statement\Select;
-use Phalcon\Tests\Database\DataMapper\Statement\AbstractStatementTestCase;
+use Phalcon\Tests\AbstractStatementTestCase;
 
 use function env;
 
@@ -52,7 +52,7 @@ final class WithTest extends AbstractStatementTestCase
             . 'UNION '
             . 'SELECT * FROM cte2';
         $actual   = $select->getStatement();
-        $this->assertEquals($expected, $actual);
+        $this->assertSame($expected, $actual);
     }
 
     /**
@@ -101,14 +101,14 @@ final class WithTest extends AbstractStatementTestCase
             . 'UNION SELECT * '
             . 'FROM cte2';
         $actual   = $select->getStatement();
-        $this->assertEquals($expected, $actual);
+        $this->assertSame($expected, $actual);
 
         $expected = [
             '_2_1_' => [1, 1],
             '_3_1_' => [-1, 1],
         ];
         $actual   = $select->getBindValues();
-        $this->assertEquals($expected, $actual);
+        $this->assertSame($expected, $actual);
     }
 
     /**
@@ -144,6 +144,6 @@ final class WithTest extends AbstractStatementTestCase
             . 'UNION '
             . 'SELECT * FROM cte2';
         $actual   = $select->getStatement();
-        $this->assertEquals($expected, $actual);
+        $this->assertSame($expected, $actual);
     }
 }

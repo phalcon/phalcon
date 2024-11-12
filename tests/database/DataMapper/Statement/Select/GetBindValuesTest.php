@@ -15,7 +15,7 @@ namespace Phalcon\Tests\Database\DataMapper\Statement\Select;
 
 use PDO;
 use Phalcon\DataMapper\Statement\Select;
-use Phalcon\Tests\Database\DataMapper\Statement\AbstractStatementTestCase;
+use Phalcon\Tests\AbstractStatementTestCase;
 
 use function env;
 
@@ -38,7 +38,7 @@ final class GetBindValuesTest extends AbstractStatementTestCase
          */
         $expected = [];
         $actual   = $select->getBindValues();
-        $this->assertEquals($expected, $actual);
+        $this->assertSame($expected, $actual);
 
         /**
          * BindValues
@@ -54,7 +54,7 @@ final class GetBindValuesTest extends AbstractStatementTestCase
             'three' => ['four', PDO::PARAM_STR],
         ];
         $actual   = $select->getBindValues();
-        $this->assertEquals($expected, $actual);
+        $this->assertSame($expected, $actual);
 
         /**
          * BindValues - append
@@ -70,7 +70,7 @@ final class GetBindValuesTest extends AbstractStatementTestCase
             'five'  => ['six', PDO::PARAM_STR],
         ];
         $actual   = $select->getBindValues();
-        $this->assertEquals($expected, $actual);
+        $this->assertSame($expected, $actual);
 
         /**
          * BindValue
@@ -83,7 +83,7 @@ final class GetBindValuesTest extends AbstractStatementTestCase
             'seven' => [8, PDO::PARAM_INT],
         ];
         $actual   = $select->getBindValues();
-        $this->assertEquals($expected, $actual);
+        $this->assertSame($expected, $actual);
 
         /**
          * BindInline
@@ -97,6 +97,6 @@ final class GetBindValuesTest extends AbstractStatementTestCase
             '_1_1_' => [false, PDO::PARAM_BOOL],
         ];
         $actual   = $select->getBindValues();
-        $this->assertEquals($expected, $actual);
+        $this->assertSame($expected, $actual);
     }
 }

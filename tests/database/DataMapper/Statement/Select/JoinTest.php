@@ -15,7 +15,7 @@ namespace Phalcon\Tests\Database\DataMapper\Statement\Select;
 
 use PDO;
 use Phalcon\DataMapper\Statement\Select;
-use Phalcon\Tests\Database\DataMapper\Statement\AbstractStatementTestCase;
+use Phalcon\Tests\AbstractStatementTestCase;
 
 use function env;
 
@@ -43,7 +43,7 @@ final class JoinTest extends AbstractStatementTestCase
         $expected = 'SELECT * FROM co_invoices '
             . $join . ' JOIN co_customers ON inv_cst_id = cst_id';
         $actual   = $select->getStatement();
-        $this->assertEquals($expected, $actual);
+        $this->assertSame($expected, $actual);
     }
 
     /**
@@ -86,14 +86,14 @@ final class JoinTest extends AbstractStatementTestCase
             . 'LEFT JOIN co_customers ON inv_cst_id = cst_id '
             . 'AND cst_status_flag = :_1_1_ AND cst_name LIKE :_1_2_';
         $actual   = $select->getStatement();
-        $this->assertEquals($expected, $actual);
+        $this->assertSame($expected, $actual);
 
         $expected = [
             '_1_1_' => [1, PDO::PARAM_INT],
             '_1_2_' => ['%john%', PDO::PARAM_STR],
         ];
         $actual   = $select->getBindValues();
-        $this->assertEquals($expected, $actual);
+        $this->assertSame($expected, $actual);
     }
 
     /**
@@ -120,7 +120,7 @@ final class JoinTest extends AbstractStatementTestCase
         $expected = 'SELECT * FROM co_invoices '
             . 'LEFT JOIN co_customers USING (inv_id)';
         $actual   = $select->getStatement();
-        $this->assertEquals($expected, $actual);
+        $this->assertSame($expected, $actual);
     }
 
     /**
@@ -157,13 +157,13 @@ final class JoinTest extends AbstractStatementTestCase
             . 'WHERE cst_status_flag = :_2_1_) AS cst '
             . 'ON inv_cst_id = cst_id AND cst_name LIKE :_1_1_';
         $actual   = $select->getStatement();
-        $this->assertEquals($expected, $actual);
+        $this->assertSame($expected, $actual);
 
         $expected = [
-            '_1_1_' => ['%john%', PDO::PARAM_STR],
             '_2_1_' => [1, PDO::PARAM_INT],
+            '_1_1_' => ['%john%', PDO::PARAM_STR],
         ];
         $actual   = $select->getBindValues();
-        $this->assertEquals($expected, $actual);
+        $this->assertSame($expected, $actual);
     }
 }
