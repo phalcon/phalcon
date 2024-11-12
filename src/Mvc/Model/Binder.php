@@ -21,7 +21,6 @@ use ReflectionClass;
 use ReflectionException;
 use ReflectionFunction;
 use ReflectionMethod;
-
 use ReflectionNamedType;
 
 use function array_keys;
