@@ -72,8 +72,8 @@ abstract class AbstractConditions extends AbstractStatement
         $this->store['LIMIT'] = $limit;
 
         if ($this->store['PAGE']) {
-            $this->store['PAGE'] = 0;
-            $this->offset        = 0;
+            $this->store['PAGE']   = 0;
+            $this->store['OFFSET'] = 0;
         }
 
         return $this;

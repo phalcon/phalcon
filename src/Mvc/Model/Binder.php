@@ -22,6 +22,8 @@ use ReflectionException;
 use ReflectionFunction;
 use ReflectionMethod;
 
+use ReflectionNamedType;
+
 use function array_keys;
 use function get_class;
 use function is_array;
@@ -233,7 +235,7 @@ class Binder implements BinderInterface
             if (null === $reflectionType) {
                 continue;
             }
-
+            /** @var ReflectionNamedType $typeClassName */
             $typeClassName   = $reflectionType->getName();
             $reflectionClass = new ReflectionClass($typeClassName);
             $className       = $reflectionClass->getName();

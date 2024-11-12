@@ -313,7 +313,7 @@ class ClassDefinition extends AbstractDefinition
         ReflectionParameter $parameter
     ): NotDefined {
         $name = $parameter->getName();
-        /** @var ReflectionType $type */
+        /** @var ReflectionNamedType $type */
         $type = $parameter->getType();
 
         if ($type instanceof ReflectionUnionType) {

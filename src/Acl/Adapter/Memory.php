@@ -27,6 +27,7 @@ use Phalcon\Events\Traits\EventsAwareTrait;
 use ReflectionClass;
 use ReflectionException;
 use ReflectionFunction;
+use ReflectionNamedType;
 use ReflectionType;
 
 use function array_intersect_key;
@@ -691,7 +692,7 @@ class Memory extends AbstractAdapter
             $numberOfRequiredParameters = $reflectionFunction->getNumberOfRequiredParameters();
             $userParametersSizeShouldBe = $parameterNumber;
             foreach ($reflectionParameters as $reflectionParameter) {
-                /** @var ReflectionType $reflectionType */
+                /** @var ReflectionNamedType $reflectionType */
                 $reflectionType   = $reflectionParameter->getType();
                 $parameterToCheck = $reflectionParameter->getName();
 

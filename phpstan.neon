@@ -2,7 +2,9 @@ parameters:
     paths:
         - src
     level: 1
+    memoryLimitFile: 1024M
     ignoreErrors:
         -
             message: '#Static access to instance property Phalcon\\Support\\Debug::\$isActive.#'
             path: src/Support/Debug.php
+        - "#Unsafe usage of new static#"
