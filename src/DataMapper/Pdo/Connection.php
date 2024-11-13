@@ -37,12 +37,39 @@ class Connection extends AbstractConnection
     protected array $arguments = [];
 
     /**
+     * @param mixed ...$arguments
+     *
+     * @return Connection
+     */
+    public static function new(mixed ...$arguments): Connection
+    {
+        $dsn = $arguments[0] ?? '';
+        if (is_string($dsn) && empty($dsn)) {
+            throw new InvalidArgumentException(
+                "DSN cannot be empty"
+            );
+        }
+
+        return new static(...$arguments);
+    }
+
+    /**
+     * @param mixed ...$arguments
+     *
+     * @return callable
+     */
+    public static function factory(mixed ...$arguments): callable
+    {
+        return fn() => static::new(...$arguments);
+    }
+
+    /**
      * Constructor.
      *
      * This overrides the parent so that it can take connection attributes as a
      * constructor parameter, and set them after connection.
      *
-     * @param string                   $dsn
+     * @param PDO|string               $dsnPdo
      * @param string|null              $username
      * @param string|null              $password
      * @param array<int, int>          $options
@@ -50,41 +77,45 @@ class Connection extends AbstractConnection
      * @param ProfilerInterface|null   $profiler
      */
     public function __construct(
-        string $dsn,
+        PDO|string $dsnPdo,
         string $username = null,
         string $password = null,
         array $options = [],
         array $queries = [],
         ?ProfilerInterface $profiler = null
     ) {
-        $parts     = explode(":", $dsn);
-        $available = [
-            "mysql"  => true,
-            "pgsql"  => true,
-            "sqlite" => true,
-            "mssql"  => true,
-        ];
+        if ($dsnPdo instanceof PDO) {
+            $this->pdo = $dsnPdo;
+        } else {
+            $parts     = explode(":", $dsnPdo);
+            $available = [
+                "mysql"  => true,
+                "pgsql"  => true,
+                "sqlite" => true,
+                "mssql"  => true,
+            ];
 
-        if (true !== isset($available[$parts[0]])) {
-            throw new InvalidArgumentException(
-                "Driver not supported [" . $parts[0] . "]"
-            );
+            if (true !== isset($available[$parts[0]])) {
+                throw new InvalidArgumentException(
+                    "Driver not supported [" . $parts[0] . "]"
+                );
+            }
+
+
+            // if no error mode is specified, use exceptions
+            if (true !== isset($options[PDO::ATTR_ERRMODE])) {
+                $options[PDO::ATTR_ERRMODE] = PDO::ERRMODE_EXCEPTION;
+            }
+
+            // Arguments store
+            $this->arguments = [
+                $dsnPdo,
+                $username,
+                $password,
+                $options,
+                $queries,
+            ];
         }
-
-
-        // if no error mode is specified, use exceptions
-        if (true !== isset($options[PDO::ATTR_ERRMODE])) {
-            $options[PDO::ATTR_ERRMODE] = PDO::ERRMODE_EXCEPTION;
-        }
-
-        // Arguments store
-        $this->arguments = [
-            $dsn,
-            $username,
-            $password,
-            $options,
-            $queries,
-        ];
 
         $this->profiler = $profiler;
     }
@@ -138,32 +169,5 @@ class Connection extends AbstractConnection
     public function disconnect(): void
     {
         $this->pdo = null;
-    }
-
-    /**
-     * @param mixed ...$arguments
-     *
-     * @return callable
-     */
-    public static function factory(mixed ...$arguments): callable
-    {
-        return fn() => static::new(...$arguments);
-    }
-
-    /**
-     * @param mixed ...$arguments
-     *
-     * @return Connection
-     */
-    public static function new(mixed ...$arguments): Connection
-    {
-        $dsn = $arguments[0] ?? '';
-        if (is_string($dsn) && empty($dsn)) {
-            throw new InvalidArgumentException(
-                "DSN cannot be empty"
-            );
-        }
-
-        return new static(...$arguments);
     }
 }

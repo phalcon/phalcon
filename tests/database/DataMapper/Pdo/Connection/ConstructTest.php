@@ -13,6 +13,7 @@ namespace Phalcon\Tests\Database\DataMapper\Pdo\Connection;
 
 use Closure;
 use InvalidArgumentException;
+use PDO;
 use Phalcon\DataMapper\Pdo\Connection;
 use Phalcon\Tests\AbstractDatabaseTestCase;
 
@@ -102,5 +103,28 @@ final class ConstructTest extends AbstractDatabaseTestCase
         $this->expectExceptionMessage('DSN cannot be empty');
 
         Connection::new('');
+    }
+
+    /**
+     * Database Tests Phalcon\DataMapper\Pdo\Connection :: __construct() with
+     * PDO
+     *
+     * @since  2020-01-25
+     *
+     * @group  common
+     */
+    public function testDmPdoConnectionWithPdo(): void
+    {
+        $connection = new PDO(
+            $this->getDatabaseDsn(),
+            $this->getDatabaseUsername(),
+            $this->getDatabasePassword()
+        );
+
+        $newConnection = Connection::new($connection);
+
+        $this->assertTrue($newConnection->isConnected());
+        $this->assertNull($newConnection->getProfiler());
+        $this->assertSame($connection, $newConnection->getAdapter());
     }
 }
