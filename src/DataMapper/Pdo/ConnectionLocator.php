@@ -45,7 +45,7 @@ class ConnectionLocator
      * @return static
      * @throws ConnectionNotFound
      */
-    public static function new(mixed $argument, mixed ...$arguments) : static
+    public static function new(mixed $argument, mixed ...$arguments): static
     {
         if ($argument instanceof Connection) {
             $defaultFactory = function () use ($argument) {
