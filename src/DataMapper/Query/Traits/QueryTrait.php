@@ -35,9 +35,13 @@ trait QueryTrait
      *
      * @return static
      */
-    public static function new(mixed ...$arguments): static
+    public static function new(mixed $argument, mixed ...$arguments): static
     {
-        $connection = Connection::new(...$arguments);
+        if ($argument instanceof Connection) {
+            $connection = $argument;
+        } else {
+            $connection = Connection::new($argument, ...$arguments);
+        }
 
         return new static($connection->getDriverName(), $connection);
     }

@@ -347,18 +347,26 @@ class Select extends AbstractConditions
 
     /**
      * Resets the columns
+     *
+     * @return $this
      */
-    public function resetColumns(): void
+    public function resetColumns(): static
     {
         $this->store['COLUMNS'] = [];
+
+        return $this;
     }
 
     /**
      * Resets the flags
+     *
+     * @return $this
      */
-    public function resetFlags(): void
+    public function resetFlags(): static
     {
         $this->store['FLAGS'] = [];
+
+        return $this;
     }
 
     /**
@@ -375,10 +383,14 @@ class Select extends AbstractConditions
 
     /**
      * Resets the group by
+     *
+     * @return $this
      */
-    public function resetGroupBy(): void
+    public function resetGroupBy(): static
     {
         $this->store['GROUP'] = [];
+
+        return $this;
     }
 
     /**
@@ -386,9 +398,11 @@ class Select extends AbstractConditions
      *
      * @return void
      */
-    public function resetHaving(): void
+    public function resetHaving(): static
     {
         $this->store['HAVING'] = [];
+
+        return $this;
     }
 
     /**
