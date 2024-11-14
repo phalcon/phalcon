@@ -28,15 +28,22 @@ final class GetSetMasterTest extends AbstractDatabaseTestCase
      */
     public function testDmPdoConnectionLocatorGetSetMaster(): void
     {
-        $connection1 = self::getDataMapperConnection();
-        $connection2 = self::getDataMapperConnection();
+        $connection1 = function () {
+            return self::getDataMapperConnection();
+        };
+        $connection2 = function () {
+            return self::getDataMapperConnection();
+        };
         $locator     = new ConnectionLocator($connection1);
 
-        $actual = $locator->getMaster();
-        $this->assertSame(spl_object_hash($connection1), spl_object_hash($actual));
+        $expected = spl_object_hash($connection1());
+        $actual   = spl_object_hash($locator->getMaster());
+        $this->assertSame($expected, $actual);
 
         $locator->setMaster($connection2);
-        $actual = $locator->getMaster();
-        $this->assertSame(spl_object_hash($connection2), spl_object_hash($actual));
+
+        $expected = spl_object_hash($connection2());
+        $actual   = spl_object_hash($locator->getMaster());
+        $this->assertSame($expected, $actual);
     }
 }

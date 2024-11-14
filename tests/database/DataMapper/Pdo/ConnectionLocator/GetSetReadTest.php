@@ -31,10 +31,15 @@ final class GetSetReadTest extends AbstractDatabaseTestCase
     public function testDmPdoConnectionLocatorGetReadEmpty(): void
     {
         $master  = self::getDataMapperConnection();
-        $locator = new ConnectionLocator($master);
+        $locator = new ConnectionLocator(
+            function () use ($master) {
+                return $master;
+            }
+        );
 
-        $actual = $locator->getRead();
-        $this->assertSame(spl_object_hash($master), spl_object_hash($actual));
+        $expected = spl_object_hash($master);
+        $actual   = spl_object_hash($locator->getRead());
+        $this->assertSame($expected, $actual);
     }
 
     /**
@@ -52,10 +57,11 @@ final class GetSetReadTest extends AbstractDatabaseTestCase
             "Connection not found: read:unknown"
         );
 
-        $master  = self::getDataMapperConnection();
         $read1   = self::getDataMapperConnection();
         $locator = new ConnectionLocator(
-            $master,
+            function () {
+                return self::getDataMapperConnection();
+            },
             [
                 "read1" => function () use ($read1) {
                     return $read1;
@@ -76,11 +82,12 @@ final class GetSetReadTest extends AbstractDatabaseTestCase
      */
     public function testDmPdoConnectionLocatorGetReadRandom(): void
     {
-        $master  = self::getDataMapperConnection();
         $read1   = self::getDataMapperConnection();
         $read2   = self::getDataMapperConnection();
         $locator = new ConnectionLocator(
-            $master,
+            function () {
+                return self::getDataMapperConnection();
+            },
             [
                 "read1" => function () use ($read1) {
                     return $read1;
@@ -114,7 +121,9 @@ final class GetSetReadTest extends AbstractDatabaseTestCase
         $read1   = self::getDataMapperConnection();
         $read2   = self::getDataMapperConnection();
         $locator = new ConnectionLocator(
-            $master,
+            function () use ($master) {
+                return $master;
+            },
             [
                 "read1" => function () use ($read1) {
                     return $read1;
@@ -125,10 +134,12 @@ final class GetSetReadTest extends AbstractDatabaseTestCase
             ]
         );
 
-        $actual = $locator->getRead("read1");
-        $this->assertSame(spl_object_hash($read1), spl_object_hash($actual));
+        $expected = spl_object_hash($read1);
+        $actual   = spl_object_hash($locator->getRead("read1"));
+        $this->assertSame($expected, $actual);
 
-        $actual = $locator->getRead("read2");
-        $this->assertSame(spl_object_hash($read2), spl_object_hash($actual));
+        $expected = spl_object_hash($read1);
+        $actual   = spl_object_hash($locator->getRead("read1"));
+        $this->assertSame($expected, $actual);
     }
 }

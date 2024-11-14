@@ -29,38 +29,46 @@ use function is_callable;
 class ConnectionLocator
 {
     /**
-     * @var Connection
+     * @var callable
      */
-    protected Connection $master;
-
-    /**
-     * @var array<string, callable>
-     */
-    protected array $read = [];
-
-    /**
-     * @var array<string, callable>
-     */
-    protected array $write = [];
+    protected mixed $master;
 
     /**
      * A collection of resolved instances
-     *
-     * @var array<string, Connection>
      */
     private array $instances = [];
 
     /**
+     * @param mixed $argument
+     * @param mixed ...$arguments
+     *
+     * @return static
+     * @throws ConnectionNotFound
+     */
+    public static function new(mixed $argument, mixed ...$arguments) : static
+    {
+        if ($argument instanceof Connection) {
+            $defaultFactory = function () use ($argument) {
+                return $argument;
+            };
+
+            return new static($defaultFactory);
+        }
+
+        return new static(Connection::factory($arguments, ...$arguments));
+    }
+
+    /**
      * Constructor.
      *
-     * @param Connection              $master
+     * @param callable                $master
      * @param array<string, callable> $read
      * @param array<string, callable> $write
      */
     public function __construct(
-        Connection $master,
-        array $read = [],
-        array $write = []
+        callable $master,
+        protected array $read = [],
+        protected array $write = []
     ) {
         $this->setMaster($master);
 
@@ -90,7 +98,12 @@ class ConnectionLocator
      */
     public function getMaster(): Connection
     {
-        return $this->master;
+        if (!isset($this->instances["master"])) {
+            $master = $this->master;
+            $this->instances["master"] = $master();
+        }
+
+        return $this->instances["master"];
     }
 
     /**
@@ -126,14 +139,14 @@ class ConnectionLocator
     /**
      * Sets the default connection factory.
      *
-     * @param Connection $callableObject
+     * @param callable $callableObject
      *
      * @return ConnectionLocator
      */
-    public function setMaster(
-        Connection $callableObject
-    ): ConnectionLocator {
+    public function setMaster(callable $callableObject): ConnectionLocator
+    {
         $this->master = $callableObject;
+        unset($this->instances["master"]);
 
         return $this;
     }
@@ -191,7 +204,7 @@ class ConnectionLocator
          * No collection returns the master
          */
         if (true === empty($collection)) {
-            return $this->master;
+            return $this->getMaster();
         }
 
         /**

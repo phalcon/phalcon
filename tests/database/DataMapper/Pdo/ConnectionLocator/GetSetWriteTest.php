@@ -30,11 +30,12 @@ final class GetSetWriteTest extends AbstractDatabaseTestCase
      */
     public function testDmPdoConnectionLocatorGetSetWrite(): void
     {
-        $master  = self::getDataMapperConnection();
         $write1  = self::getDataMapperConnection();
         $write2  = self::getDataMapperConnection();
         $locator = new ConnectionLocator(
-            $master,
+            function () {
+                return self::getDataMapperConnection();
+            },
             [],
             [
                 "write1" => function () use ($write1) {
@@ -46,11 +47,13 @@ final class GetSetWriteTest extends AbstractDatabaseTestCase
             ]
         );
 
-        $actual = $locator->getWrite("write1");
-        $this->assertSame(spl_object_hash($write1), spl_object_hash($actual));
+        $expected = spl_object_hash($write1);
+        $actual   = spl_object_hash($locator->getWrite("write1"));
+        $this->assertSame($expected, $actual);
 
-        $actual = $locator->getWrite("write2");
-        $this->assertSame(spl_object_hash($write2), spl_object_hash($actual));
+        $expected = spl_object_hash($write2);
+        $actual   = spl_object_hash($locator->getWrite("write2"));
+        $this->assertSame($expected, $actual);
     }
 
     /**
@@ -64,10 +67,15 @@ final class GetSetWriteTest extends AbstractDatabaseTestCase
     public function testDmPdoConnectionLocatorGetWriteEmpty(): void
     {
         $master  = self::getDataMapperConnection();
-        $locator = new ConnectionLocator($master);
+        $locator = new ConnectionLocator(
+            function () use ($master) {
+                return $master;
+            }
+        );
 
-        $actual = $locator->getWrite("write1");
-        $this->assertSame(spl_object_hash($master), spl_object_hash($actual));
+        $expected = spl_object_hash($master);
+        $actual   = spl_object_hash($locator->getWrite("write1"));
+        $this->assertSame($expected, $actual);
     }
 
     /**
@@ -86,7 +94,9 @@ final class GetSetWriteTest extends AbstractDatabaseTestCase
         $master  = self::getDataMapperConnection();
         $write1  = self::getDataMapperConnection();
         $locator = new ConnectionLocator(
-            $master,
+            function () use ($master) {
+                return $master;
+            },
             [],
             [
                 "write1" => function () use ($write1) {
@@ -112,7 +122,9 @@ final class GetSetWriteTest extends AbstractDatabaseTestCase
         $write1  = self::getDataMapperConnection();
         $write2  = self::getDataMapperConnection();
         $locator = new ConnectionLocator(
-            $master,
+            function () use ($master) {
+                return $master;
+            },
             [],
             [
                 "write1" => function () use ($write1) {
