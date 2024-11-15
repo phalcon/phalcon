@@ -77,7 +77,7 @@
     "vlucas/phpdotenv": "^5.5"
   },
   "scripts": {
-    "analyze": "vendor/bin/phpstan analyse -c phpstan.neon",
+    "analyze": "vendor/bin/phpstan analyse -c phpstan.neon --memory-limit 1024M",
     "cs": "vendor/bin/phpcs --standard=phpcs.xml",
     "cs-fix": "vendor/bin/phpcbf --standard=phpcs.xml",
     "test-unit": "vendor/bin/phpunit -c phpunit.xml.dist",
