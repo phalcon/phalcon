@@ -254,36 +254,6 @@ abstract class AbstractConnection
         return $sth;
     }
 
-//    /**
-//     * Quotes a value for use in an SQL statement. This differs from
-//     * `PDO::quote()` in that it will convert an array into a string of
-//     * comma-separated quoted values. The default type is `PDO::PARAM_STR`
-//     *
-//     * @param mixed $value
-//     * @param int   $type
-//     *
-//     * @return string The quoted value.
-//     */
-//    public function quote(mixed $value, int $type = PDO::PARAM_STR): string
-//    {
-//        $this->connect();
-//
-//        if (true !== is_array($value)) {
-//            return $this->pdo->quote((string)$value, $type);
-//        }
-//
-//        // quote array values, not keys, then combine with commas
-//        $quotes = $this->getQuoteNames();
-//        $elements = array_map(
-//            fn($element) => $quotes["prefix"]
-//                . (string)$element
-//                . $quotes["suffix"],
-//            $value
-//        );
-//
-//        return implode(", ", $elements);
-//    }
-//
     /**
      * Sets the Profiler instance.
      *
