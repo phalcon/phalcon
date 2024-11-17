@@ -85,26 +85,18 @@ abstract class AbstractAdapter implements AdapterInterface, EventsAwareInterface
     protected ?SerializerInterface $serializer;
 
     /**
-     * Serializer Factory
-     *
-     * @var SerializerFactory
-     */
-    protected SerializerFactory $serializerFactory;
-
-    /**
      * AbstractAdapter constructor.
      *
      * @param SerializerFactory $factory
      * @param array             $options
      */
     protected function __construct(
-        protected SerializerFactory $factory,
+        protected SerializerFactory $serializerFactory,
         array $options = []
     ) {
         /**
          * Lets set some defaults and options here
          */
-        $this->serializerFactory = $factory;
         $this->defaultSerializer = mb_strtolower(($options['defaultSerializer']) ?? 'php');
         $this->lifetime          = $options['lifetime'] ?? 3600;
         $this->serializer        = $options['serializer'] ?? null;
