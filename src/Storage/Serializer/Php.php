@@ -21,6 +21,7 @@ use function serialize;
 use function set_error_handler;
 
 use const E_NOTICE;
+use const E_WARNING;
 
 class Php extends AbstractSerializer
 {
@@ -59,7 +60,7 @@ class Php extends AbstractSerializer
                 function () use (&$warning) {
                     $warning = true;
                 },
-                E_NOTICE
+                E_NOTICE | E_WARNING
             );
 
             $result = $this->phpUnserialize($data);
