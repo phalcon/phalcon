@@ -251,19 +251,23 @@ trait FetchTrait
     }
 
     /**
-     * Fetches the very first value (i.e., first column of the first row).
+     * Fetches the first value of the passed column, of the first row
      *
      * @param string $statement
      * @param array  $values
+     * @param int    $column
      *
      * @return mixed
      * @throws Exception
      */
-    public function fetchValue(string $statement, array $values = []): mixed
-    {
+    public function fetchValue(
+        string $statement,
+        array $values = [],
+        int $column = 0
+    ): mixed {
         $sth = $this->perform($statement, $values);
 
-        return $sth->fetchColumn();
+        return $sth->fetchColumn($column);
     }
 
     /**
