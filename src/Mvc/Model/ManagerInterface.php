@@ -38,6 +38,19 @@ interface ManagerInterface
     ): void;
 
     /**
+     * Removes a behavior from a model
+     *
+     * @param ModelInterface $model
+     * @param string         $behaviorClass
+     *
+     * @return void
+     */
+    public function removeBehavior(
+        ModelInterface $model,
+        string $behaviorClass
+    ): void;
+
+    /**
      * Setup a relation reverse 1-1  between two models
      *
      * @param ModelInterface $model

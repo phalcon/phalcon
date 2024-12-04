@@ -265,6 +265,30 @@ class Manager implements ManagerInterface, InjectionAwareInterface, EventsAwareI
     }
 
     /**
+     * Removes a behavior from a model
+     *
+     * @param ModelInterface $model
+     * @param string         $behaviorClass
+     */
+    public function removeBehavior(
+        ModelInterface $model,
+        string $behaviorClass
+    ): void {
+        $entityName = mb_strtolower(get_class($model));
+
+        if (isset($this->behaviors[$entityName])) {
+            foreach ($this->behaviors[$entityName] as $key => $behavior) {
+                if (get_class($behavior) === $behaviorClass) {
+                    unset($this->behaviors[$entityName][$key]);
+                }
+            }
+
+            // Reindex the array to remove gaps
+            $this->behaviors[$entityName] = array_values($this->behaviors[$entityName]);
+        }
+    }
+
+    /**
      * Setup a relation reverse many to one between two models
      *
      * @param ModelInterface $model
