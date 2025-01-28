@@ -15,9 +15,7 @@ namespace Phalcon\Tests;
 
 use PDO;
 use Phalcon\DataMapper\Pdo\Connection;
-
 use ReflectionClass;
-
 use ReflectionException;
 
 use function array_filter;
@@ -213,6 +211,7 @@ abstract class AbstractDatabaseTestCase extends AbstractUnitTestCase
     public static function setUpBeforeClass(): void
     {
         self::$driver = env('driver');
+
         /**
          * username and password are populated here
          */
