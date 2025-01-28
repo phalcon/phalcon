@@ -103,7 +103,7 @@ trait FetchTrait
      * @param array  $values
      * @param int    $column
      *
-     * @return array
+     * @return array<array-key, string>
      * @throws Exception
      */
     public function fetchColumn(
@@ -111,10 +111,9 @@ trait FetchTrait
         array $values = [],
         int $column = 0
     ): array {
-        $sth    = $this->perform($statement, $values);
-        $result = $sth->fetchAll(PDO::FETCH_COLUMN, $column);
+        $sth = $this->perform($statement, $values);
 
-        return is_array($result) ? $result : [];
+        return $sth->fetchAll(PDO::FETCH_COLUMN, $column);
     }
 
     /**
@@ -135,9 +134,8 @@ trait FetchTrait
         int $flags = PDO::FETCH_ASSOC
     ): array {
         $sth    = $this->perform($statement, $values);
-        $result = $sth->fetchAll(PDO::FETCH_GROUP | $flags);
 
-        return is_array($result) ? $result : [];
+        return $sth->fetchAll(PDO::FETCH_GROUP | $flags);
     }
 
     /**
@@ -226,10 +224,9 @@ trait FetchTrait
      */
     public function fetchPairs(string $statement, array $values = []): array
     {
-        $sth    = $this->perform($statement, $values);
-        $result = $sth->fetchAll(PDO::FETCH_KEY_PAIR);
+        $sth = $this->perform($statement, $values);
 
-        return is_array($result) ? $result : [];
+        return $sth->fetchAll(PDO::FETCH_KEY_PAIR);
     }
 
     /**
@@ -244,10 +241,9 @@ trait FetchTrait
      */
     public function fetchUnique(string $statement, array $values = []): array
     {
-        $sth    = $this->perform($statement, $values);
-        $result = $sth->fetchAll(PDO::FETCH_UNIQUE);
+        $sth = $this->perform($statement, $values);
 
-        return is_array($result) ? $result : [];
+        return $sth->fetchAll(PDO::FETCH_UNIQUE);
     }
 
     /**
