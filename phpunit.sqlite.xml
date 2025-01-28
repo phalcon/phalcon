@@ -17,6 +17,7 @@
     </source>
     <groups>
         <include>
+            <group>common</group>
             <group>sqlite</group>
         </include>
     </groups>
