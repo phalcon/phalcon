@@ -20,7 +20,8 @@ namespace Phalcon\DataMapper\Info\Adapter;
 
 use Phalcon\DataMapper\Pdo\Exception\Exception;
 
-use function explode;
+use function array_column;
+use function array_map;
 use function preg_match;
 use function preg_match_all;
 use function str_replace;
@@ -31,31 +32,8 @@ use function trim;
 use const PREG_SET_ORDER;
 
 /**
- * @phpstan-type ColumnDefinitionSql = array{
- *     name: string,
- *     type: string,
- *     size?: int,
- *     scale?: int,
- *     isNullable: bool,
- *     defaultValue: mixed,
- *     isAutoIncrement: bool,
- *     isPrimary: bool,
- *     options: mixed,
- *     extended: string
- * }
- *
- * @phpstan-type ColumnDefinition = array{
- *      name: string,
- *      type: string,
- *      size: int|null,
- *      scale: int|null,
- *      isNullable: bool,
- *      defaultValue: mixed,
- *      isAutoIncrement: bool,
- *      isPrimary: bool,
- *      isUnsigned: ?bool,
- *      options: mixed
- * }
+ * @phpstan-import-type ColumnDefinitionSql from AdapterInterface
+ * @phpstan-import-type ColumnDefinition from AdapterInterface
  */
 class Sqlite extends AbstractAdapter
 {
@@ -86,8 +64,21 @@ class Sqlite extends AbstractAdapter
 
         $columns = $this->connection->fetchAll($statement);
 
-        $processed = $this->processColumns($columns);
+        /**
+         * Format the columns
+         */
+        $processed = array_column(
+            array_map(
+                [$this, 'processColumn'],
+                $columns
+            ),
+            null,
+            'name'
+        );
 
+        /**
+         * Add autoinc and defaults and return
+         */
         return $this->processColumnInformation($schema, $table, $processed);
     }
 
@@ -196,7 +187,7 @@ class Sqlite extends AbstractAdapter
          * autoincrement
          */
         $createSql = $this->getTableSql($schema, $table);
-        $pattern = '/^\s*(\w+)\s+.*?(DEFAULT\s+([^\s,]+)|AUTOINCREMENT)/im';
+        $pattern   = '/^\s*(\w+)\s+.*?(DEFAULT\s+([^\s,]+)|AUTOINCREMENT)/im';
 
         /**
          * Find auto increment column as well as the default values
@@ -209,7 +200,7 @@ class Sqlite extends AbstractAdapter
         foreach ($matches as $match) {
             $fieldName = $match[1];
             if (false !== stripos($match[0], 'AUTOINCREMENT')) {
-                $columns[$fieldName]['isAutoIncrement'] = true;
+                $columns[$fieldName]['is_auto_increment'] = true;
             }
             if (isset($match[3])) {
                 $columns[$fieldName]['defaultValue'] = $this->processDefault(
@@ -220,21 +211,6 @@ class Sqlite extends AbstractAdapter
         }
 
         return $columns;
-    }
-
-    /**
-     * @param ColumnDefinitionSql[] $columns
-     *
-     * @return array<string, ColumnDefinition>
-     */
-    protected function processColumns(array $columns): array
-    {
-        $result = [];
-        foreach ($columns as $column) {
-            $result[$column['name']] = $this->processColumn($column);
-        }
-
-        return $result;
     }
 
     /**

@@ -20,8 +20,6 @@ namespace Phalcon\DataMapper\Info\Adapter;
 
 use Phalcon\DataMapper\Pdo\Exception\Exception;
 
-use function array_map;
-use function explode;
 use function str_contains;
 use function str_getcsv;
 use function stripos;
@@ -29,136 +27,12 @@ use function substr;
 use function trim;
 
 /**
- * @phpstan-type ColumnDefinitionSql = array{
- *     name: string,
- *     type: string,
- *     size?: int,
- *     scale?: int,
- *     isNullable: bool,
- *     defaultValue: mixed,
- *     isAutoIncrement: bool,
- *     isPrimary: bool,
- *     options: mixed,
- *     extended: string
- * }
- *
- * @phpstan-type ColumnDefinition = array{
- *      name: string,
- *      type: string,
- *      size: int|null,
- *      scale: int|null,
- *      isNullable: bool,
- *      defaultValue: mixed,
- *      isAutoIncrement: bool,
- *      isPrimary: bool,
- *      isUnsigned: ?bool,
- *      options: mixed
- * }
+ * @phpstan-import-type ColumnDefinitionSql from AdapterInterface
+ * @phpstan-import-type ColumnDefinition from AdapterInterface
  */
 class Mysql extends AbstractAdapter
 {
-    /**
-     * Return the current schema name
-     *
-     * @return string
-     * @throws Exception
-     */
-    public function getCurrentSchema(): string
-    {
-        /** @var string $currentSchema */
-        $currentSchema = $this->connection->fetchValue('SELECT DATABASE()');
-
-        return $currentSchema;
-    }
-
-    /**
-     * Return the columns in an array with their respective properties
-     *
-     * @param string $schema
-     * @param string $table
-     *
-     * @return ColumnDefinition[]
-     * @throws Exception
-     */
-    public function listColumns(string $schema, string $table): array
-    {
-        $statement = "
-            SELECT
-                c.column_name AS name,
-                c.data_type AS type,
-                COALESCE(
-                    c.character_maximum_length,
-                    c.numeric_precision
-                ) AS size,
-                c.numeric_scale AS scale,
-                CASE
-                    WHEN c.is_nullable = 'YES' THEN 1
-                    ELSE 0
-                END AS isNullable,
-                c.column_default AS defaultValue,
-                CASE
-                    WHEN LOCATE('auto_increment', c.EXTRA) > 0 THEN 1
-                    ELSE 0
-                END AS isAutoIncrement,
-                CASE
-                    WHEN tc.constraint_type = 'PRIMARY KEY' THEN 1
-                    ELSE 0
-                END AS isPrimary,
-                c.column_type as extended
-            FROM information_schema.columns c
-                LEFT JOIN information_schema.key_column_usage kcu
-                    ON  c.table_schema = kcu.table_schema
-                    AND c.table_name = kcu.table_name
-                    AND c.column_name = kcu.column_name
-                LEFT JOIN information_schema.table_constraints tc
-                    ON  kcu.table_schema = tc.table_schema
-                    AND kcu.table_name = tc.table_name
-                    AND kcu.constraint_name = tc.constraint_name
-            WHERE c.table_schema = :schema
-            AND   c.table_name = :table
-            ORDER BY c.ordinal_position
-        ";
-
-        /** @var ColumnDefinitionSql[] $columns */
-        $columns = $this->connection->fetchAll(
-            $statement,
-            [
-                'schema' => $schema,
-                'table'  => $table,
-            ]
-        );
-
-        return array_column(
-            array_map(
-                [$this, 'processColumn'],
-                $columns
-            ),
-            null,
-            'name'
-        );
-    }
-
-    /**
-     * Return an array with the schema and table name
-     *
-     * @param string $input
-     *
-     * @return string[]
-     * @throws Exception
-     */
-    public function listSchemaTable(string $input): array
-    {
-        $parts = explode('.', $input, 2);
-
-        if (count($parts) === 1) {
-            return [
-                $this->getCurrentSchema(),
-                $input,
-            ];
-        }
-
-        return $parts;
-    }
+    protected string $currentSchemaSql = 'SELECT DATABASE()';
 
     /**
      * Returns an array with the available tables for the schema
@@ -188,42 +62,26 @@ class Mysql extends AbstractAdapter
     }
 
     /**
-     * @param ColumnDefinitionSql $column
+     * Returns the SQL for the auto increment column
      *
-     * @return ColumnDefinition
+     * @return string
      */
-    protected function processColumn(array $column): array
+    protected function getAutoIncSql(): string
     {
-        $result = [
-            'name'            => $column['name'],
-            'type'            => $column['type'],
-            'size'            => isset($column['size']) ? (int)$column['size'] : null,
-            'scale'           => isset($column['scale']) ? (int)$column['scale'] : null,
-            'isNullable'      => (bool)$column['isNullable'],
-            'defaultValue'    => $this->processDefault(
-                $column['defaultValue'],
-                $column['type']
-            ),
-            'isAutoIncrement' => (bool)$column['isAutoIncrement'],
-            'isPrimary'       => (bool)$column['isPrimary'],
-            'isUnsigned'      => $this->processSigned(
-                $column['extended'],
-                $column['type']
-            ),
-            'options'         => null,
-        ];
+        return "CASE
+            WHEN LOCATE('auto_increment', c.EXTRA) > 0 THEN 1
+            ELSE 0
+        END ";
+    }
 
-        $extended = trim($column['extended']);
-
-        /**
-         * Enum
-         */
-        if (stripos($extended, 'enum') === 0) {
-            $input             = trim(substr($extended, 4), '()');
-            $result['options'] = str_getcsv($input);
-        }
-
-        return $result;
+    /**
+     * Returns the SQL for the extended field (MySQL)
+     *
+     * @return string
+     */
+    protected function getExtendedSql(): string
+    {
+        return 'c.column_type';
     }
 
     /**
