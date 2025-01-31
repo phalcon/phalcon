@@ -1,174 +1,256 @@
+DROP TABLE IF EXISTS album_photo CASCADE;
+DROP TABLE IF EXISTS album CASCADE;
+DROP TABLE IF EXISTS photo CASCADE;
 
+CREATE TABLE photo
+(
+    id                SERIAL PRIMARY KEY,
+    date_uploaded     TIMESTAMP    NOT NULL DEFAULT CURRENT_TIMESTAMP,
+    original_filename TEXT         NOT NULL,
+    path              TEXT         NOT NULL,
+    width             SMALLINT     NOT NULL,
+    height            SMALLINT     NOT NULL,
+    thumb_path        TEXT         NOT NULL,
+    thumb_width       SMALLINT     NOT NULL,
+    thumb_height      SMALLINT     NOT NULL,
+    display_path      TEXT         NOT NULL,
+    display_width     SMALLINT     NOT NULL,
+    display_height    SMALLINT     NOT NULL,
+    mime_type         VARCHAR(255) NOT NULL,
+    filesize          INTEGER NULL DEFAULT NULL,
+    phash             BIGINT       NOT NULL,
+    battles           INTEGER      NOT NULL DEFAULT 0,
+    wins              INTEGER      NOT NULL DEFAULT 0
+);
 
+CREATE TABLE album
+(
+    id       SERIAL PRIMARY KEY,
+    name     VARCHAR(100) NOT NULL,
+    album_id INTEGER NULL DEFAULT NULL,
+    photo_id INTEGER NULL DEFAULT NULL,
+    CONSTRAINT album_ibfk_1
+        FOREIGN KEY (album_id)
+            REFERENCES album (id) ON UPDATE CASCADE ON DELETE CASCADE,
+    CONSTRAINT album_ibfk_2
+        FOREIGN KEY (photo_id)
+            REFERENCES photo (id) ON UPDATE CASCADE ON DELETE SET NULL
+);
 
+CREATE INDEX index_foreignkey_album_album ON album (album_id);
+CREATE INDEX album_ibfk_2 ON album (photo_id);
 
+CREATE TABLE album_photo
+(
+    id       SERIAL PRIMARY KEY,
+    photo_id INTEGER NULL DEFAULT NULL,
+    album_id INTEGER NULL DEFAULT NULL,
+    position INTEGER NOT NULL DEFAULT 999999999,
+    CONSTRAINT c_fk_album_photo_album_id
+        FOREIGN KEY (album_id)
+            REFERENCES album (id) ON UPDATE CASCADE ON DELETE CASCADE,
+    CONSTRAINT c_fk_album_photo_photo_id
+        FOREIGN KEY (photo_id)
+            REFERENCES photo (id) ON UPDATE CASCADE ON DELETE CASCADE
+);
 
+CREATE UNIQUE INDEX UQ_cadf1c545153612614511f15197cae7b6dacac97 ON album_photo (album_id, photo_id);
+CREATE INDEX index_foreignkey_album_photo_photo ON album_photo (photo_id);
+CREATE INDEX index_foreignkey_album_photo_album ON album_photo (album_id);
 
-drop table if exists complex_default;
-            
-create table complex_default
+DROP TABLE IF EXISTS complex_default;
+
+CREATE TABLE complex_default
 (
     id           SERIAL PRIMARY KEY,
     created      TIMESTAMP DEFAULT CURRENT_TIMESTAMP,
     updated      TIMESTAMP DEFAULT CURRENT_TIMESTAMP,
     updated_null TIMESTAMP NULL DEFAULT NULL
 );
-            
-CREATE OR REPLACE FUNCTION update_timestamp()
-RETURNS TRIGGER AS $$
-BEGIN
-   NEW.updated = NOW(); 
-   NEW.updated_null = NOW();
-   RETURN NEW;
-END;
-$$ language 'plpgsql';
-            
-CREATE TRIGGER update_timestamp BEFORE UPDATE
-ON complex_default FOR EACH ROW EXECUTE PROCEDURE 
-update_timestamp();
-            
 
+DROP TABLE IF EXISTS co_customers_defaults;
 
-drop table if exists co_customers_defaults;
-            
-create table co_customers_defaults
+CREATE TABLE co_customers_defaults
 (
-    cst_id          serial not null constraint co_customers_defaults_pk primary key,
-    cst_status_flag smallint   not null DEFAULT 1,
-    cst_name_last   varchar(100) not null DEFAULT 'cst_default_lastName',
-    cst_name_first  varchar(50)  not null DEFAULT 'cst_default_firstName'
+    cst_id          SERIAL PRIMARY KEY,
+    cst_status_flag SMALLINT     NOT NULL DEFAULT 1,
+    cst_name_last   VARCHAR(100) NOT NULL DEFAULT 'cst_default_lastName',
+    cst_name_first  VARCHAR(50)  NOT NULL DEFAULT 'cst_default_firstName'
 );
-            
-create index co_customers_defaults_cst_status_flag_index
-    on co_customers_defaults (cst_status_flag);
-            
-create index co_customers_defaults_cst_name_last_index
-    on co_customers_defaults (cst_name_last);
-            
-create index co_customers_defaults_cst_name_first_index
-    on co_customers_defaults (cst_name_first);
-            
 
+CREATE INDEX co_customers_defaults_cst_status_flag_index ON co_customers_defaults (cst_status_flag);
+CREATE INDEX co_customers_defaults_cst_name_last_index ON co_customers_defaults (cst_name_last);
+CREATE INDEX co_customers_defaults_cst_name_first_index ON co_customers_defaults (cst_name_first);
 
-drop table if exists co_customers;
-            
-create table co_customers
+DROP TABLE IF EXISTS co_customers;
+
+CREATE TABLE co_customers
 (
-    cst_id          serial not null constraint co_customers_pk primary key,
-    cst_status_flag smallint   null,
-    cst_name_last   varchar(100) null,
-    cst_name_first  varchar(50)  null
+    cst_id          SERIAL PRIMARY KEY,
+    cst_status_flag SMALLINT NULL,
+    cst_name_last   VARCHAR(100) NULL,
+    cst_name_first  VARCHAR(50) NULL
 );
-            
-create index co_customers_cst_status_flag_index
-    on co_customers (cst_status_flag);
-            
-create index co_customers_cst_name_last_index
-    on co_customers (cst_name_last);
-            
-create index co_customers_cst_name_first_index
-    on co_customers (cst_name_first);
-            
 
+CREATE INDEX co_customers_cst_status_flag_index ON co_customers (cst_status_flag);
+CREATE INDEX co_customers_cst_name_last_index ON co_customers (cst_name_last);
+CREATE INDEX co_customers_cst_name_first_index ON co_customers (cst_name_first);
 
+DROP TABLE IF EXISTS co_dialect;
 
-
-
-
-drop table if exists co_invoices;
-            
-create table co_invoices
+CREATE TABLE co_dialect
 (
-    inv_id          serial constraint co_invoices_pk primary key,
-    inv_cst_id      integer,
-    inv_status_flag smallint,
-    inv_title       varchar(100),
-    inv_total       numeric(10, 2),
-    inv_created_at  timestamp
+    field_primary           SERIAL PRIMARY KEY,
+    field_blob              BYTEA,
+    field_binary            BYTEA,
+    field_bit               BIT(10),
+    field_bit_default       BIT(10)        DEFAULT B'1',
+    field_bigint            BIGINT,
+    field_bigint_default    BIGINT         DEFAULT 1,
+    field_boolean           BOOLEAN,
+    field_boolean_default   BOOLEAN        DEFAULT TRUE,
+    field_char              CHAR(10),
+    field_char_default      CHAR(10)       DEFAULT 'ABC',
+    field_decimal           DECIMAL(10, 4),
+    field_decimal_default   DECIMAL(10, 4) DEFAULT 14.5678,
+    field_enum              TEXT CHECK (field_enum IN ('xs', 's', 'm', 'l', 'xl', 'internal')),
+    field_integer           INTEGER,
+    field_integer_default   INTEGER        DEFAULT 1,
+    field_json              JSON,
+    field_float             FLOAT(10),
+    field_float_default     FLOAT(10)      DEFAULT 14.5678,
+    field_date              DATE,
+    field_date_default      DATE           DEFAULT '2018-10-01',
+    field_datetime          TIMESTAMP,
+    field_datetime_default  TIMESTAMP      DEFAULT '2018-10-01 12:34:56',
+    field_time              TIME,
+    field_time_default      TIME           DEFAULT '12:34:56',
+    field_timestamp         TIMESTAMP,
+    field_timestamp_default TIMESTAMP      DEFAULT '2018-10-01 12:34:56',
+    field_timestamp_current TIMESTAMP      DEFAULT CURRENT_TIMESTAMP,
+    field_mediumint         INTEGER,
+    field_mediumint_default INTEGER        DEFAULT 1,
+    field_smallint          SMALLINT,
+    field_smallint_default  SMALLINT       DEFAULT 1,
+    field_tinyint           SMALLINT,
+    field_tinyint_default   SMALLINT       DEFAULT 1,
+    field_longtext          TEXT,
+    field_mediumtext        TEXT,
+    field_tinytext          TEXT,
+    field_text              TEXT,
+    field_varbinary         BYTEA,
+    field_varchar           VARCHAR(10),
+    field_varchar_default   VARCHAR(10)    DEFAULT 'D',
+    UNIQUE (field_integer)
 );
-            
-create index co_invoices_inv_created_at_index
-    on co_invoices (inv_created_at);
-            
-create index co_invoices_inv_cst_id_index
-    on co_invoices (inv_cst_id);
-            
-create index co_invoices_inv_status_flag_index
-    on co_invoices (inv_status_flag);
-            
 
+CREATE INDEX dialect_table_index ON co_dialect (field_bigint);
+CREATE INDEX dialect_table_two_fields ON co_dialect (field_char, field_char_default);
 
-drop table if exists objects;
-            
-create table objects
+DROP TABLE IF EXISTS fractal_dates;
+
+CREATE TABLE fractal_dates
 (
-    obj_id serial not null constraint objects_pk primary key,
-    obj_name varchar(100) not null,
-    obj_type smallint not null
+    id         SERIAL PRIMARY KEY,
+    ftime      TIME(2),
+    fdatetime  TIMESTAMP(2),
+    ftimestamp TIMESTAMP(2)
 );
-            
 
+DROP TABLE IF EXISTS co_invoices;
 
-drop table if exists co_orders;
-            
-create table co_orders
+CREATE TABLE co_invoices
 (
-    ord_id serial not null
-    constraint ord_pk
-      primary key,
-      ord_name varchar(70)
+    inv_id          SERIAL PRIMARY KEY,
+    inv_cst_id      INTEGER,
+    inv_status_flag SMALLINT,
+    inv_title       VARCHAR(100),
+    inv_total       NUMERIC(10, 2),
+    inv_created_at  TIMESTAMP
 );
-            
 
+CREATE INDEX co_invoices_inv_cst_id_index ON co_invoices (inv_cst_id);
+CREATE INDEX co_invoices_inv_status_flag_index ON co_invoices (inv_status_flag);
+CREATE INDEX co_invoices_inv_created_at_index ON co_invoices (inv_created_at);
 
-drop table if exists private.co_orders_x_products;
-            
-create table private.co_orders_x_products
+DROP TABLE IF EXISTS objects;
+
+CREATE TABLE objects
 (
-    oxp_ord_id int not null,
-    oxp_prd_id int not null,
-    oxp_quantity int not null
+    obj_id   SERIAL PRIMARY KEY,
+    obj_name VARCHAR(100) NOT NULL,
+    obj_type SMALLINT     NOT NULL
 );
-            
 
+DROP TABLE IF EXISTS co_orders;
 
-
-
-drop table if exists co_products;
-            
-create table co_products
+CREATE TABLE co_orders
 (
-    prd_id serial not null
-    constraint prd_pk
-      primary key,
-      prd_name varchar(70)
+    ord_id   SERIAL PRIMARY KEY,
+    ord_name VARCHAR(70) NULL
 );
-            
 
-DROP TABLE IF EXISTS co_rb_test_model;CREATE TABLE co_rb_test_model (id SMALLINT, name VARCHAR(10) NOT NULL);
+DROP TABLE IF EXISTS co_orders_x_products;
+
+CREATE TABLE co_orders_x_products
+(
+    oxp_ord_id   INTEGER NOT NULL,
+    oxp_prd_id   INTEGER NOT NULL,
+    oxp_quantity INTEGER NOT NULL,
+    PRIMARY KEY (oxp_ord_id, oxp_prd_id)
+);
 
 
-drop table if exists co_setters;
-            
-create table co_setters
+DROP TABLE IF EXISTS co_products;
+
+CREATE TABLE co_products
+(
+    prd_id   SERIAL PRIMARY KEY,
+    prd_name VARCHAR(70) NULL
+);
+
+DROP TABLE IF EXISTS co_rb_test_model;
+
+CREATE TABLE co_rb_test_model
+(
+    id   SMALLINT,
+    name VARCHAR(10) NOT NULL
+);
+
+DROP TABLE IF EXISTS co_setters;
+
+CREATE TABLE co_setters
 (
     id      SERIAL PRIMARY KEY,
-    column1 varchar(100) not null,
-    column2 varchar(100) not null,
-    column3 varchar(100) not null
+    column1 VARCHAR(100) NULL,
+    column2 VARCHAR(100) NULL,
+    column3 VARCHAR(100) NULL
 );
-            
 
+DROP TABLE IF EXISTS co_sources;
 
-
-
-drop table if exists table_with_uuid_primary;
-            
-create table table_with_uuid_primary
+CREATE TABLE co_sources
 (
-    uuid char(36) not null primary key,
-    int_field int null
+    id       SERIAL PRIMARY KEY,
+    username VARCHAR(100) NULL,
+    source   VARCHAR(100) NULL
 );
-            
 
+CREATE INDEX co_sources_username_index ON co_sources (username);
 
+DROP TABLE IF EXISTS table_with_uuid_primary;
+
+CREATE TABLE table_with_uuid_primary
+(
+    uuid      UUID PRIMARY KEY,
+    int_field INTEGER NULL
+);
+
+DROP TABLE IF EXISTS stuff;
+
+CREATE TABLE stuff
+(
+    stf_id   SERIAL PRIMARY KEY,
+    stf_name VARCHAR(100) NOT NULL,
+    stf_type SMALLINT     NOT NULL
+);
