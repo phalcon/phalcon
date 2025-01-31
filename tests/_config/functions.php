@@ -269,6 +269,23 @@ if (!function_exists('getOptionsMysql')) {
     }
 }
 
+if (!function_exists('getOptionsMariadb')) {
+    /**
+     * Get mariadb db options
+     */
+    function getOptionsMariadb(): array
+    {
+        return [
+            'host'     => env('DATA_MARIADB_HOST'),
+            'username' => env('DATA_MARIADB_USER'),
+            'password' => env('DATA_MARIADB_PASS'),
+            'dbname'   => env('DATA_MARIADB_NAME'),
+            'port'     => env('DATA_MARIADB_PORT'),
+            'charset'  => env('DATA_MARIADB_CHARSET'),
+        ];
+    }
+}
+
 if (!function_exists('getOptionsPostgresql')) {
     /**
      * Get postgresql db options
