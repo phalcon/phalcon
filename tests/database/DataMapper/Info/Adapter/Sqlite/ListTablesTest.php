@@ -21,7 +21,7 @@ final class ListTablesTest extends AbstractDatabaseTestCase
      *
      * @group  sqlite
      */
-    public function testDmInfoAdapterSqlistListTables(): void
+    public function testDmInfoAdapterSqliteListTables(): void
     {
         $connection = self::getDataMapperConnection();
 
