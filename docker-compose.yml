@@ -39,6 +39,17 @@ services:
 #    extra_hosts:
 #      - "host.docker.internal:host-gateway"
 
+  mariadb:
+    container_name: phalcon-mariadb
+    image: mariadb:10.6
+    environment:
+      - MYSQL_ROOT_PASSWORD=secret
+      - MYSQL_USER=phalcon
+      - MYSQL_DATABASE=phalcon
+      - MYSQL_PASSWORD=secret
+    extra_hosts:
+      - "host.docker.internal:host-gateway"
+
   mysql:
     container_name: phalcon-mysql
     image: mysql:5.7
