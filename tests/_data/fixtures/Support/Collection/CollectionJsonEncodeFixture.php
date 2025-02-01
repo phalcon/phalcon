@@ -26,8 +26,11 @@ class CollectionJsonEncodeFixture extends Collection
      *
      * @link https://php.net/manual/en/function.json-encode.php
      */
-    protected function phpJsonEncode($value, int $flags = 0, int $depth = 512): false|string
-    {
+    protected function phpJsonEncode(
+        mixed $value,
+        int $flags = 0,
+        int $depth = 512
+    ): false | string {
         return false;
     }
 }
