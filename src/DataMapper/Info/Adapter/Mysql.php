@@ -21,9 +21,6 @@ namespace Phalcon\DataMapper\Info\Adapter;
 use Phalcon\DataMapper\Pdo\Exception\Exception;
 
 use function str_contains;
-use function str_getcsv;
-use function stripos;
-use function substr;
 use function trim;
 
 /**
