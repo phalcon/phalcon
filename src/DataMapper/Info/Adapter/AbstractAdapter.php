@@ -255,6 +255,7 @@ abstract class AbstractAdapter implements AdapterInterface
     {
         $type         = strtolower($type);
         $defaultValue = $this->getDefault($defaultValue, $type);
+        $charTypes    = ['char', 'text', 'varchar'];
         $floatTypes   = ['decimal', 'double', 'float', 'numeric', 'real'];
         $keywordTypes = ['CURRENT_DATE', 'CURRENT_TIME', 'CURRENT_TIMESTAMP'];
 
@@ -263,6 +264,12 @@ abstract class AbstractAdapter implements AdapterInterface
             true === in_array(strtoupper((string)$defaultValue), $keywordTypes)
         ) {
             return null;
+        }
+        if (
+            true === in_array($type, $charTypes) &&
+            "''" === $defaultValue
+        ) {
+            return '';
         }
 
         return match (true) {
