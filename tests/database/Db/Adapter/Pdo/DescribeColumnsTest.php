@@ -728,7 +728,7 @@ final class DescribeColumnsTest extends AbstractDatabaseTestCase
                 'getBindType'      => Column::BIND_PARAM_INT,
                 'getComment'       => "",
                 'getDefault'       => "1",
-                'getName'          => 'field_mediumint_default',
+                'getName'          => 'field_mediumint_currentgit ',
                 'getScale'         => 0,
                 'getSize'          => 10,
                 'getType'          => Column::TYPE_MEDIUMINTEGER,
