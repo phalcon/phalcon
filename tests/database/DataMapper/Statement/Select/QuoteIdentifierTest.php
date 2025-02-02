@@ -23,7 +23,7 @@ final class QuoteIdentifierTest extends AbstractStatementTestCase
      *
      * @since  2020-01-20
      *
-     * @group  common
+     * @group mysql
      */
     public function testDmStatementSelectQuoteIdentifier(): void
     {
@@ -41,7 +41,7 @@ final class QuoteIdentifierTest extends AbstractStatementTestCase
      *
      * @since  2020-01-20
      *
-     * @group  common
+     * @group mysql
      */
     public function testDmStatementSelectQuoteIdentifierSqlite(): void
     {
@@ -59,7 +59,7 @@ final class QuoteIdentifierTest extends AbstractStatementTestCase
      *
      * @since  2020-01-20
      *
-     * @group  common
+     * @group mysql
      */
     public function testDmStatementSelectQuoteIdentifierSqlsrv(): void
     {

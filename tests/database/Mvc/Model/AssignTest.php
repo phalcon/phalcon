@@ -40,7 +40,7 @@ final class AssignTest extends AbstractDatabaseTestCase
      * @author Sid Roberts <https://github.com/SidRoberts>
      * @since  2019-04-18
      *
-     * @group  common
+     * @group mysql
      */
     public function testMvcModelAssign(): void
     {
@@ -102,7 +102,7 @@ final class AssignTest extends AbstractDatabaseTestCase
      * @author Phalcon Team <team@phalcon.io>
      * @since  2020-02-13
      *
-     * @group  common
+     * @group mysql
      */
     public function testMvcModelAssignAutoPrimary(): void
     {
@@ -127,7 +127,7 @@ final class AssignTest extends AbstractDatabaseTestCase
      * @author Phalcon Team <team@phalcon.io>
      * @since  2020-01-29
      *
-     * @group  common
+     * @group mysql
      */
     public function testMvcModelAssignIncomplete(): void
     {
@@ -160,8 +160,8 @@ final class AssignTest extends AbstractDatabaseTestCase
      * @since  2020-01-29
      * @issue  https://github.com/phalcon/cphalcon/issues/15739
      *
-     * @group  mysql
-     * @group  sqlite
+     * @group mysql
+     * @group sqlite
      */
     public function testMvcModelAssignWithTransaction(): void
     {

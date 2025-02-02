@@ -45,7 +45,7 @@ final class UnserializeTest extends AbstractDatabaseTestCase
      * @author Phalcon Team <team@phalcon.io>
      * @since  2020-05-06
      *
-     * @group  common
+     * @group mysql
      */
     public function testMvcModelResultsetComplexUnserialize(): void
     {

@@ -20,7 +20,7 @@ final class GetAutoIncSequenceTest extends AbstractDatabaseTestCase
     /**
      * @since  2025-01-14
      *
-     * @group  pgsql
+     * @group pgsql
      *
      * @return void
      * @throws Exception

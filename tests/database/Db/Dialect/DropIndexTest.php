@@ -51,7 +51,7 @@ final class DropIndexTest extends AbstractDatabaseTestCase
      * @author       Phalcon Team <team@phalcon.io>
      * @since        2020-01-20
      *
-     * @group        common
+     * @group mysql
      */
     public function testDbDialectDropIndex(
         string $dialectClass,

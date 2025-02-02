@@ -43,7 +43,7 @@ final class TimestampableTest extends AbstractDatabaseTestCase
      * @author Jeremy PASTOURET <https://github.com/jenovateurs>
      * @since  2020-10-03
      *
-     * @group  common
+     * @group mysql
      */
     public function testMvcModelBehaviorTimestampable(): void
     {
@@ -75,7 +75,7 @@ final class TimestampableTest extends AbstractDatabaseTestCase
      * @author Jeremy PASTOURET <https://github.com/jenovateurs>
      * @since  2020-10-03
      *
-     * @group  common
+     * @group mysql
      */
     public function testMvcModelBehaviorTimestampableWithBeforeCreateEvent(): void
     {

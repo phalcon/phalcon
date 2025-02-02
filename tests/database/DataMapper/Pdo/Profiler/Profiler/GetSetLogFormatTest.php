@@ -22,7 +22,7 @@ final class GetSetLogFormatTest extends AbstractDatabaseTestCase
      *
      * @since  2020-01-25
      *
-     * @group  common
+     * @group mysql
      */
     public function testDmPdoProfilerProfilerGetSetLogFormat(): void
     {

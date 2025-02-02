@@ -44,7 +44,7 @@ final class SerializeTest extends AbstractDatabaseTestCase
      * @author Phalcon Team <team@phalcon.io>
      * @since  2020-02-01
      *
-     * @group  common
+     * @group mysql
      */
     public function testMvcModelSerialize(): void
     {
@@ -80,7 +80,7 @@ final class SerializeTest extends AbstractDatabaseTestCase
      * @author Phalcon Team <team@phalcon.io>
      * @since  2021-11-09
      *
-     * @group  common
+     * @group mysql
      */
     public function testMvcModelSerializeWithDirtyState(): void
     {

@@ -23,7 +23,7 @@ final class SetValuesTest extends AbstractStatementTestCase
      *
      * @since  2020-01-20
      *
-     * @group  common
+     * @group mysql
      */
     public function testDmStatementBindSetValues(): void
     {

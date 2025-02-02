@@ -26,7 +26,7 @@ final class GetBindValuesTest extends AbstractStatementTestCase
      *
      * @since  2020-01-20
      *
-     * @group  common
+     * @group mysql
      */
     public function testDmStatementSelectGetBindValues(): void
     {

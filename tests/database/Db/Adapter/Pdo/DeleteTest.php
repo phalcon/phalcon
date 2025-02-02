@@ -34,7 +34,7 @@ final class DeleteTest extends AbstractDatabaseTestCase
      * @author Phalcon Team <team@phalcon.io>
      * @since  2021-05-10
      *
-     * @group  common
+     * @group mysql
      */
     public function testDbAdapterPdoQuery(): void
     {

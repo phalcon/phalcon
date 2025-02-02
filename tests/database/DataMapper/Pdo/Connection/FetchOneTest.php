@@ -72,7 +72,7 @@ final class FetchOneTest extends AbstractDatabaseTestCase
      *
      * @since  2020-01-25
      *
-     * @group  common
+     * @group mysql
      */
     public function testDmPdoConnectionFetchOne(): void
     {
@@ -107,9 +107,9 @@ final class FetchOneTest extends AbstractDatabaseTestCase
      * @dataProvider getBindTypes
      * @since        2020-01-25
      *
-     * @group        pgsql
-     * @group        mysql
-     * @group        sqlite
+     * @group pgsql
+     * @group mysql
+     * @group sqlite
      */
     public function testDmPdoConnectionFetchOneBindTypes(
         string $where,
@@ -137,7 +137,7 @@ final class FetchOneTest extends AbstractDatabaseTestCase
      *
      * @since  2020-01-25
      *
-     * @group  common
+     * @group mysql
      */
     public function testDmPdoConnectionFetchOneNoResult(): void
     {

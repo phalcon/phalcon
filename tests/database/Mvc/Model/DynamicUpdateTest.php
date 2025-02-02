@@ -44,7 +44,7 @@ final class DynamicUpdateTest extends AbstractDatabaseTestCase
      * @author Phalcon Team <team@phalcon.io>
      * @since  2023-08-11
      *
-     * @group  common
+     * @group mysql
      */
     public function testMvcModelDisableDynamicUpdate(): void
     {
@@ -103,7 +103,7 @@ final class DynamicUpdateTest extends AbstractDatabaseTestCase
      * @author Phalcon Team <team@phalcon.io>
      * @since  2023-08-11
      *
-     * @group  common
+     * @group mysql
      */
     public function testMvcModelDisabledCherryPickDynamicUpdate(): void
     {
@@ -161,7 +161,7 @@ final class DynamicUpdateTest extends AbstractDatabaseTestCase
      *
      * @issue https://github.com/phalcon/cphalcon/issues/16343
      *
-     * @group  common
+     * @group mysql
      */
     public function testMvcModelEnableDynamicUpdate(): void
     {

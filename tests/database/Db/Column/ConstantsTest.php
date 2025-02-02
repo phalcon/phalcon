@@ -24,7 +24,7 @@ final class ConstantsTest extends AbstractDatabaseTestCase
      * @author Phalcon Team <team@phalcon.io>
      * @since  2018-10-26
      *
-     * @group  common
+     * @group mysql
      */
     public function testDbColumnConstants(): void
     {

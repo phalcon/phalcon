@@ -49,7 +49,7 @@ final class ExecInsertTest extends AbstractDatabaseTestCase
      * @author Phalcon Team <team@phalcon.io>
      * @since  2021-04-20
      *
-     * @group  mysql
+     * @group mysql
      */
     public function testDbAdapterPdoInsert(): void
     {

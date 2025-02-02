@@ -26,7 +26,7 @@ final class HavingTest extends AbstractStatementTestCase
      *
      * @since  2020-01-20
      *
-     * @group  common
+     * @group mysql
      */
     public function testDmStatementSelectHaving(): void
     {
@@ -56,7 +56,7 @@ final class HavingTest extends AbstractStatementTestCase
      *
      * @since  2020-01-20
      *
-     * @group  common
+     * @group mysql
      */
     public function testDmStatementSelectHavingComplex(): void
     {

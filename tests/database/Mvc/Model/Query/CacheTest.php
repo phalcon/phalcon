@@ -63,7 +63,7 @@ final class CacheTest extends AbstractDatabaseTestCase
      * @since        2021-05-06
      * @issue
      *
-     * @group        common
+     * @group mysql
      */
     public function testMvcModelQueryCache(
         string $serializer

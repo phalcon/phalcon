@@ -57,7 +57,7 @@ final class HasAttributeTest extends AbstractDatabaseTestCase
      * @author       Phalcon Team <team@phalcon.io>
      * @since        2018-11-13
      *
-     * @group        common
+     * @group mysql
      */
     public function testMvcModelMetadataHasAttribute(
         string $service

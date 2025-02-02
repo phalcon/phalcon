@@ -42,7 +42,7 @@ final class JoinTest extends AbstractDatabaseTestCase
      * @author Phalcon Team <team@phalcon.io>
      * @since  2020-02-01
      *
-     * @group  common
+     * @group mysql
      */
     public function testMvcModelCriteriaJoin(): void
     {
@@ -73,8 +73,8 @@ final class JoinTest extends AbstractDatabaseTestCase
      * @author Jeremy PASTOURET <https://github.com/jenovateurs>
      * @since  2020-02-06
      *
-     * @group  mysql
-     * @group  pgsql
+     * @group mysql
+     * @group pgsql
      */
     public function testMvcModelCriteriaJoinManyToManyMultipleSchema(): void
     {

@@ -40,7 +40,7 @@ final class GetMessagesTest extends AbstractDatabaseTestCase
      * @author Phalcon Team <team@phalcon.io>
      * @since  2020-02-01
      *
-     * @group  common
+     * @group mysql
      */
     public function testMvcModelGetMessages(): void
     {
@@ -69,7 +69,7 @@ final class GetMessagesTest extends AbstractDatabaseTestCase
      * @author Phalcon Team <team@phalcon.io>
      * @since  2023-09-30
      *
-     * @group  common
+     * @group mysql
      */
     public function testMvcModelGetMessagesFiltered(): void
     {

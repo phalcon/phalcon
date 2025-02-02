@@ -37,7 +37,7 @@ final class GetScaleTest extends AbstractDatabaseTestCase
      * @author Phalcon Team <team@phalcon.io>
      * @since  2020-02-01
      *
-     * @group  common
+     * @group mysql
      */
     public function testDbColumnGetScale(): void
     {
@@ -57,6 +57,8 @@ final class GetScaleTest extends AbstractDatabaseTestCase
      *
      * @author Phalcon Team <team@phalcon.io>
      * @since  2019-12-23
+     *
+     * @group mysql
      */
     public function testDbColumnGetScaleDateTimeTimeTimeStamp(): void
     {

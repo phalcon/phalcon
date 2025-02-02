@@ -41,7 +41,7 @@ final class UnderscoreCallStaticTest extends AbstractDatabaseTestCase
      * @author Balázs Németh <https://github.com/zsilbi>
      * @since  2019-10-14
      *
-     * @group  common
+     * @group mysql
      */
     public function testMvcModelUnderscoreCallStatic(): void
     {

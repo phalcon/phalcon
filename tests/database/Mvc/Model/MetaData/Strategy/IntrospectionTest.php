@@ -33,7 +33,7 @@ final class IntrospectionTest extends AbstractDatabaseTestCase
      * @author       Phalcon Team <team@phalcon.io>
      * @since        2023-07-01
      *
-     * @group        mysql
+     * @group mysql
      */
     public function testMvcModelMetadataIntrospection(): void
     {
@@ -118,7 +118,7 @@ final class IntrospectionTest extends AbstractDatabaseTestCase
      * @author       Phalcon Team <team@phalcon.io>
      * @since        2023-07-01
      *
-     * @group        mysql
+     * @group mysql
      */
     public function testMvcModelMetadataIntrospectionException(): void
     {

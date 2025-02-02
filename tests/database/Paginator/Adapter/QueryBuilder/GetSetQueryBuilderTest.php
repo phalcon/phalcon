@@ -40,7 +40,7 @@ final class GetSetQueryBuilderTest extends AbstractDatabaseTestCase
      * Tests Phalcon\Paginator\Adapter\QueryBuilder :: getQueryBuilder() /
      * setQueryBuilder()
      *
-     * @group common
+     * @group mysql
      */
     public function testPaginatorAdapterQuerybuilderGetSetQueryBuilder(): void
     {

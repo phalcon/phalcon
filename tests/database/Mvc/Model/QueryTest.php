@@ -73,7 +73,7 @@ final class QueryTest extends AbstractDatabaseTestCase
      * @author Phalcon Team <team@phalcon.io>
      * @since  2018-11-13
      *
-     * @group  common
+     * @group mysql
      */
     public function testMvcModelQuery(): void
     {
@@ -96,7 +96,7 @@ final class QueryTest extends AbstractDatabaseTestCase
      * @since  2020-05-01
      * @issue  14535
      *
-     * @group  common
+     * @group mysql
      */
     public function testMvcModelQueryIssue14535(): void
     {
@@ -123,7 +123,7 @@ final class QueryTest extends AbstractDatabaseTestCase
      * @since  2018-11-13
      * @issue  14783
      *
-     * @group  common
+     * @group mysql
      */
     public function testMvcModelQueryIssue14783(): void
     {

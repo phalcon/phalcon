@@ -39,7 +39,7 @@ final class GetRelatedTest extends AbstractDatabaseTestCase
      * @author Balázs Németh <https://github.com/zsilbi>
      * @since  2020-08-02
      *
-     * @group  common
+     * @group mysql
      */
     public function testMvcModelGetRelated(): void
     {
@@ -121,7 +121,7 @@ final class GetRelatedTest extends AbstractDatabaseTestCase
      * @author Phalcon Team <team@phalcon.io>
      * @since  2021-10-01
      *
-     * @group  common
+     * @group mysql
      */
     public function testMvcModelGetRelatedChangeForeignKey(): void
     {

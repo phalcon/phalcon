@@ -38,7 +38,7 @@ final class RefreshTest extends AbstractDatabaseTestCase
     /**
      * Tests Phalcon\Mvc\Model :: refresh()
      *
-     * @group common
+     * @group mysql
      */
     public function testMvcModelRefresh(): void
     {

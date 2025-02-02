@@ -38,7 +38,7 @@ final class HasChangedTest extends AbstractDatabaseTestCase
      * @author Balázs Németh <https://github.com/zsilbi>
      * @since  2019-05-17
      *
-     * @group  common
+     * @group mysql
      */
     public function testMvcModelHasChanged(): void
     {

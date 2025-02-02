@@ -41,7 +41,7 @@ final class DeleteTest extends AbstractDatabaseTestCase
      * @author Phalcon Team <team@phalcon.io>
      * @since  2020-02-01
      *
-     * @group  common
+     * @group mysql
      */
     public function testMvcModelDelete(): void
     {
@@ -71,7 +71,7 @@ final class DeleteTest extends AbstractDatabaseTestCase
      * @author Balázs Németh <https://github.com/zsilbi>
      * @since  2020-08-02
      *
-     * @group  common
+     * @group mysql
      */
     public function testMvcModelDeleteCascadeRelated(): void
     {
@@ -142,7 +142,7 @@ final class DeleteTest extends AbstractDatabaseTestCase
      * @author Phalcon Team <team@phalcon.io>
      * @since  2022-11-18
      *
-     * @group  common
+     * @group mysql
      */
     public function testMvcModelDeleteGetRelated(): void
     {
@@ -267,7 +267,7 @@ final class DeleteTest extends AbstractDatabaseTestCase
      * @author Balázs Németh <https://github.com/zsilbi>
      * @since  2020-10-17
      *
-     * @group  common
+     * @group mysql
      */
     public function testMvcModelDeleteRestrictRelated(): void
     {
@@ -322,7 +322,7 @@ final class DeleteTest extends AbstractDatabaseTestCase
      * @author Balázs Németh <https://github.com/zsilbi>
      * @since  2020-10-17
      *
-     * @group  common
+     * @group mysql
      */
     public function testMvcModelDeleteRestrictRelatedInTransaction(): void
     {

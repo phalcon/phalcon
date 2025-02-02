@@ -56,7 +56,7 @@ final class CountTest extends AbstractDatabaseTestCase
      * @author Phalcon Team <team@phalcon.io>
      * @since  2020-01-29
      *
-     * @group  common
+     * @group mysql
      */
     public function testMvcModelCount(): void
     {
@@ -162,8 +162,8 @@ final class CountTest extends AbstractDatabaseTestCase
      * @since  2023-12-26
      * @issue  https://github.com/phalcon/cphalcon/issues/16471
      *
-     * @group  mysql
-     * @group  pgsql
+     * @group mysql
+     * @group pgsql
      */
     public function testMvcModelCountColumnMap(): void
     {

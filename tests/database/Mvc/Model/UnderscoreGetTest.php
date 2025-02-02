@@ -44,7 +44,7 @@ final class UnderscoreGetTest extends AbstractDatabaseTestCase
      * @author Balázs Németh <https://github.com/zsilbi>
      * @since  2019-05-07
      *
-     * @group  common
+     * @group mysql
      */
     public function testMvcModelUnderscoreGet(): void
     {
@@ -70,7 +70,7 @@ final class UnderscoreGetTest extends AbstractDatabaseTestCase
      * @author Balázs Németh <https://github.com/zsilbi>
      * @since  2019-05-07
      *
-     * @group  common
+     * @group mysql
      */
     public function testMvcModelUnderscoreGetDirtyRelated(): void
     {
@@ -131,7 +131,7 @@ final class UnderscoreGetTest extends AbstractDatabaseTestCase
      * @author Balázs Németh <https://github.com/zsilbi>
      * @since  2019-05-07
      *
-     * @group  common
+     * @group mysql
      */
     public function testMvcModelUnderscoreGetIsUsingGetters(): void
     {
@@ -170,7 +170,7 @@ final class UnderscoreGetTest extends AbstractDatabaseTestCase
      * @author Balázs Németh <https://github.com/zsilbi>
      * @since  2019-05-07
      *
-     * @group  common
+     * @group mysql
      */
     public function testMvcModelUnderscoreGetRelated(): void
     {
@@ -238,7 +238,7 @@ final class UnderscoreGetTest extends AbstractDatabaseTestCase
      * @author Phalcon Team <team@phalcon.io>
      * @since  2019-12-24
      *
-     * @group  common
+     * @group mysql
      */
     public function testMvcModelUnderscorePrivateProperty(): void
     {
@@ -273,7 +273,7 @@ final class UnderscoreGetTest extends AbstractDatabaseTestCase
      * @author Phalcon Team <team@phalcon.io>
      * @since  2019-12-24
      *
-     * @group  common
+     * @group mysql
      */
     public function testMvcModelUnderscorePrivatePropertyException(): void
     {

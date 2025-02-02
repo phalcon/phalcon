@@ -55,9 +55,9 @@ final class LevelsTest extends AbstractDatabaseTestCase
      * @dataProvider getExamples
      * @since        2020-01-25
      *
-     * @group        pgsql
-     * @group        mysql
-     * @group        sqlite
+     * @group pgsql
+     * @group mysql
+     * @group sqlite
      */
     public function testDmPdoProfilerMemoryLoggerLevels(
         string $level

@@ -22,7 +22,7 @@ final class ConstructTest extends AbstractDatabaseTestCase
      *
      * @since  2020-01-25
      *
-     * @group  common
+     * @group mysql
      */
     public function testDmPdoConnectionLocatorConstruct(): void
     {
@@ -40,7 +40,7 @@ final class ConstructTest extends AbstractDatabaseTestCase
      *
      * @since  2020-01-25
      *
-     * @group  common
+     * @group mysql
      */
     public function testDmPdoConnectionLocatorConstructWithObject(): void
     {
@@ -60,7 +60,7 @@ final class ConstructTest extends AbstractDatabaseTestCase
      *
      * @since  2020-01-20
      *
-     * @group  common
+     * @group mysql
      */
     public function testDmPdoConnectionLocatorConstructReadException(): void
     {
@@ -79,7 +79,7 @@ final class ConstructTest extends AbstractDatabaseTestCase
      *
      * @since  2020-01-20
      *
-     * @group  common
+     * @group mysql
      */
     public function testDmPdoConnectionLocatorConstructWriteException(): void
     {

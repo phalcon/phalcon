@@ -34,7 +34,7 @@ final class GetSetWriteConnectionServiceTest extends AbstractDatabaseTestCase
      * @author Phalcon Team <team@phalcon.io>
      * @since  2020-01-31
      *
-     * @group  common
+     * @group mysql
      */
     public function testMvcModelGetSetWriteConnectionService(): void
     {

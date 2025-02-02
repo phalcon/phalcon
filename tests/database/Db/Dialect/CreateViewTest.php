@@ -70,7 +70,7 @@ final class CreateViewTest extends AbstractDatabaseTestCase
      * @author       Phalcon Team <team@phalcon.io>
      * @since        2020-01-20
      *
-     * @group        common
+     * @group mysql
      */
     public function testDbDialectCreateView(
         string $dialectClass,
@@ -92,7 +92,7 @@ final class CreateViewTest extends AbstractDatabaseTestCase
      * @author       Phalcon Team <team@phalcon.io>
      * @since        2020-01-20
      *
-     * @group        common
+     * @group mysql
      */
     public function testDbDialectCreateViewException(
         string $dialectClass

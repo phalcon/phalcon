@@ -32,7 +32,7 @@ final class DescribeColumnsTest extends AbstractDatabaseTestCase
     public function setUp(): void
     {
         $this->setNewFactoryDefault();
-        $this->setDatabase($this);
+        $this->setDatabase();
     }
 
     /**
@@ -43,7 +43,7 @@ final class DescribeColumnsTest extends AbstractDatabaseTestCase
      * @author Jeremy PASTOURET <https://github.com/jenovateurs>
      * @since  2020-03-09
      *
-     * @group  pgsql
+     * @group pgsql
      */
     public function testDbAdapterPdoDescribeColumnsDefaultPostgres(): void
     {
@@ -66,7 +66,7 @@ final class DescribeColumnsTest extends AbstractDatabaseTestCase
      * @author Phalcon Team <team@phalcon.io>
      * @since  2020-03-02
      *
-     * @group  mysql
+     * @group mysql
      */
     public function testDbAdapterPdoDescribeColumnsOnUpdate(): void
     {
@@ -89,7 +89,7 @@ final class DescribeColumnsTest extends AbstractDatabaseTestCase
      * @author Phalcon Team <team@phalcon.io>
      * @since  2021-04-20
      *
-     * @group  mysql
+     * @group mysql
      */
     public function testDbAdapterPdoDescribeColumnsSupported(): void
     {
@@ -98,7 +98,7 @@ final class DescribeColumnsTest extends AbstractDatabaseTestCase
         $migration = new DialectMigration(self::getConnection());
         $columns   = $db->describeColumns($migration->getTable());
 
-        $expected = 40;
+        $expected = 41;
         $this->assertCount($expected, $columns);
 
         $expected = Column::class;

@@ -42,7 +42,7 @@ final class SoftDeleteTest extends AbstractDatabaseTestCase
      * @author Jeremy PASTOURET <https://github.com/jenovateurs>
      * @since  2020-10-03
      *
-     * @group  common
+     * @group mysql
      */
     public function testMvcModelBehaviorSoftDelete(): void
     {
@@ -72,7 +72,7 @@ final class SoftDeleteTest extends AbstractDatabaseTestCase
      * @author Jeremy PASTOURET <https://github.com/jenovateurs>
      * @since  2020-10-03
      *
-     * @group  common
+     * @group mysql
      */
     public function testMvcModelBehaviorSoftDeleteWithBeforeDeleteEvent(): void
     {
@@ -109,7 +109,7 @@ final class SoftDeleteTest extends AbstractDatabaseTestCase
     /**
      * Tests Phalcon\Mvc\Model\Behavior :: removeBehavior()
      *
-     * @group  common
+     * @group mysql
      */
     public function testMvcModelBehaviorRemoveBehavior(): void
     {

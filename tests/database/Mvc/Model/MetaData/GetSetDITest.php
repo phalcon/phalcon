@@ -49,7 +49,7 @@ final class GetSetDITest extends AbstractDatabaseTestCase
      * @author Phalcon Team <team@phalcon.io>
      * @since  2020-05-05
      *
-     * @group  common
+     * @group mysql
      */
     public function testMvcModelMetadataGetDIThrowsException(): void
     {
@@ -69,7 +69,7 @@ final class GetSetDITest extends AbstractDatabaseTestCase
      * @author       Phalcon Team <team@phalcon.io>
      * @since        2020-02-01
      *
-     * @group        common
+     * @group mysql
      */
     public function testMvcModelMetadataGetSetDI(
         string $service

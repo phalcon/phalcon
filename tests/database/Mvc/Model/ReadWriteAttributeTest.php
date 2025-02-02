@@ -41,7 +41,7 @@ final class ReadWriteAttributeTest extends AbstractDatabaseTestCase
      * @author Sid Roberts <https://github.com/SidRoberts>
      * @since  2019-04-18
      *
-     * @group  common
+     * @group mysql
      */
     public function testMvcModelWriteAttribute(): void
     {
@@ -74,7 +74,7 @@ final class ReadWriteAttributeTest extends AbstractDatabaseTestCase
      * @author Balázs Németh <https://github.com/zsilbi>
      * @since  2019-04-30
      *
-     * @group  common
+     * @group mysql
      */
     public function testMvcModelWriteAttributeUndefinedPropertyWithAssociativeArray(): void
     {
@@ -105,7 +105,7 @@ final class ReadWriteAttributeTest extends AbstractDatabaseTestCase
      * @author Balázs Németh <https://github.com/zsilbi>
      * @since  2019-04-30
      *
-     * @group  common
+     * @group mysql
      */
     public function testMvcModelWriteAttributeWithAssociativeArray(): void
     {

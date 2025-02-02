@@ -72,7 +72,7 @@ final class DropViewTest extends AbstractDatabaseTestCase
      * @author       Phalcon Team <team@phalcon.io>
      * @since        2020-01-20
      *
-     * @group        common
+     * @group mysql
      */
     public function testDbDialectDropView(
         string $dialectClass,
@@ -93,7 +93,7 @@ final class DropViewTest extends AbstractDatabaseTestCase
      * @author       Phalcon Team <team@phalcon.io>
      * @since        2020-01-20
      *
-     * @group        common
+     * @group mysql
      */
     public function testDbDialectDropViewNotExists(
         string $dialectClass,

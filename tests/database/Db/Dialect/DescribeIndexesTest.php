@@ -61,7 +61,7 @@ final class DescribeIndexesTest extends AbstractDatabaseTestCase
      * @author       Phalcon Team <team@phalcon.io>
      * @since        2020-01-20
      *
-     * @group        common
+     * @group mysql
      */
     public function testDbDialectDescribeIndexes(
         string $dialectClass,

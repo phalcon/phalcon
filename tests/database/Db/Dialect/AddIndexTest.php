@@ -79,7 +79,7 @@ final class AddIndexTest extends AbstractDatabaseTestCase
      * @author       Phalcon Team <team@phalcon.io>
      * @since        2020-01-20
      *
-     * @group        common
+     * @group mysql
      */
     public function testDbDialectAddIndex(
         string $dialectClass,
@@ -101,7 +101,7 @@ final class AddIndexTest extends AbstractDatabaseTestCase
      * @author       Phalcon Team <team@phalcon.io>
      * @since        2020-01-20
      *
-     * @group        common
+     * @group mysql
      */
     public function testDbDialectAddIndexType(
         string $dialectClass,

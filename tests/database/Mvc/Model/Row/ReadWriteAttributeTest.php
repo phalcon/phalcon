@@ -24,7 +24,7 @@ final class ReadWriteAttributeTest extends AbstractDatabaseTestCase
      * @author Sid Roberts <https://github.com/SidRoberts>
      * @since  2019-06-01
      *
-     * @group  common
+     * @group mysql
      */
     public function testMvcModelRowReadWriteAttribute(): void
     {

@@ -84,7 +84,7 @@ final class ListViewsTest extends AbstractDatabaseTestCase
      * @author       Phalcon Team <team@phalcon.io>
      * @since        2020-01-20
      *
-     * @group        common
+     * @group mysql
      */
     public function testDbDialectListViews(
         string $dialectClass,
@@ -105,7 +105,7 @@ final class ListViewsTest extends AbstractDatabaseTestCase
      * @author       Phalcon Team <team@phalcon.io>
      * @since        2020-01-20
      *
-     * @group        common
+     * @group mysql
      */
     public function testDbDialectListViewsNoSchema(
         string $dialectClass,

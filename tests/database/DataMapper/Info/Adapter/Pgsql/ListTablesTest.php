@@ -19,7 +19,7 @@ final class ListTablesTest extends AbstractDatabaseTestCase
     /**
      * @since  2025-01-14
      *
-     * @group  pgsql
+     * @group pgsql
      */
     public function testDmInfoAdapterPgsqlListTables(): void
     {

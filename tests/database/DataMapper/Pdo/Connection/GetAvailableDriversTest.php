@@ -24,7 +24,7 @@ final class GetAvailableDriversTest extends AbstractDatabaseTestCase
      *
      * @since  2020-01-25
      *
-     * @group  common
+     * @group mysql
      */
     public function testDmPdoConnectionGetAvailableDrivers(): void
     {
@@ -42,7 +42,7 @@ final class GetAvailableDriversTest extends AbstractDatabaseTestCase
      *
      * @since  2020-01-25
      *
-     * @group  common
+     * @group mysql
      */
     public function testDmPdoConnectionGetDriverName(): void
     {

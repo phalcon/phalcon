@@ -25,7 +25,7 @@ final class UnionTest extends AbstractStatementTestCase
      *
      * @since  2020-01-20
      *
-     * @group  common
+     * @group mysql
      */
     public function testDmStatementSelectUnion(): void
     {

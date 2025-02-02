@@ -25,7 +25,7 @@ final class WithTest extends AbstractStatementTestCase
      *
      * @since  2020-01-20
      *
-     * @group  common
+     * @group mysql
      */
     public function testDmStatementSelectOrWhereBind(): void
     {
@@ -60,7 +60,7 @@ final class WithTest extends AbstractStatementTestCase
      *
      * @since  2020-01-20
      *
-     * @group  common
+     * @group mysql
      */
     public function testDmStatementSelectWithObject(): void
     {
@@ -116,7 +116,7 @@ final class WithTest extends AbstractStatementTestCase
      *
      * @since  2020-01-20
      *
-     * @group  common
+     * @group mysql
      */
     public function testDmStatementSelectWithRecursive(): void
     {

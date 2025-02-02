@@ -26,7 +26,7 @@ final class CommitInTransactionRollBackTest extends AbstractDatabaseTestCase
      *
      * @since  2020-01-25
      *
-     * @group  common
+     * @group mysql
      */
     public function testDmPdoConnectionCommitInTransaction(): void
     {
@@ -70,7 +70,7 @@ final class CommitInTransactionRollBackTest extends AbstractDatabaseTestCase
      *
      * @since  2020-01-25
      *
-     * @group  common
+     * @group mysql
      */
     public function testDmPdoConnectionRollBack(): void
     {

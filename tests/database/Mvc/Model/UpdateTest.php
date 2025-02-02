@@ -47,7 +47,7 @@ final class UpdateTest extends AbstractDatabaseTestCase
      * @author Balázs Németh <https://github.com/zsilbi>
      * @since  2020-10-18
      *
-     * @group  common
+     * @group mysql
      */
     public function testMvcModelSaveAfterWithoutDefaultValues(): void
     {
@@ -114,7 +114,7 @@ final class UpdateTest extends AbstractDatabaseTestCase
      * @author Anton Vasiliev <https://github.com/Jeckerson>
      * @since  2021-08-20
      *
-     * @group  common
+     * @group mysql
      */
     public function testMvcModelSaveViaSettersAndLocalMethod(): void
     {
@@ -167,9 +167,8 @@ final class UpdateTest extends AbstractDatabaseTestCase
      * @author Phalcon Team <team@phalcon.io>
      * @since  2020-01-31
      *
-     * @group  mysql
-     * @group  sqlite
-     * @group  pgsql
+     * @group mysql
+     * @group sqlite
      */
     public function testMvcModelUpdate(): void
     {

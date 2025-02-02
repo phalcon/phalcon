@@ -25,7 +25,7 @@ final class LimitOffsetTest extends AbstractStatementTestCase
      *
      * @since  2020-01-20
      *
-     * @group  common
+     * @group mysql
      */
     public function testDmStatementSelectLimitOffset(): void
     {
@@ -54,7 +54,7 @@ final class LimitOffsetTest extends AbstractStatementTestCase
      *
      * @since  2020-01-20
      *
-     * @group  common
+     * @group mysql
      */
     public function testDmStatementSelectLimitOffsetMssql(): void
     {
@@ -82,7 +82,7 @@ final class LimitOffsetTest extends AbstractStatementTestCase
      *
      * @since  2020-01-20
      *
-     * @group  common
+     * @group mysql
      */
     public function testDmStatementSelectPage(): void
     {
@@ -133,7 +133,7 @@ final class LimitOffsetTest extends AbstractStatementTestCase
      *
      * @since  2020-01-20
      *
-     * @group  common
+     * @group mysql
      */
     public function testDmStatementSelectPageCalculations(): void
     {

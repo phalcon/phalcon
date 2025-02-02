@@ -56,7 +56,7 @@ final class GetSqlTest extends AbstractDatabaseTestCase
      * @since  2020-05-06
      * @issue  14657
      *
-     * @group  common
+     * @group mysql
      */
     public function testMvcModelQueryGetSql(): void
     {

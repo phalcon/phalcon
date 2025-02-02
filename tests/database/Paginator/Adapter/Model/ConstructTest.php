@@ -42,7 +42,7 @@ final class ConstructTest extends AbstractDatabaseTestCase
      * @author Phalcon Team <team@phalcon.io>
      * @since  2019-11-01
      *
-     * @group  common
+     * @group mysql
      */
     public function testPaginatorAdapterModelConstruct(): void
     {

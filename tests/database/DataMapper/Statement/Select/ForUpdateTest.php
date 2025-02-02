@@ -25,7 +25,7 @@ final class ForUpdateTest extends AbstractStatementTestCase
      *
      * @since  2020-01-20
      *
-     * @group  common
+     * @group mysql
      */
     public function testDmStatementSelectForUpdate(): void
     {
@@ -47,7 +47,7 @@ final class ForUpdateTest extends AbstractStatementTestCase
      *
      * @since  2020-01-20
      *
-     * @group  common
+     * @group mysql
      */
     public function testDmStatementSelectForUpdateUnset(): void
     {

@@ -29,8 +29,8 @@ final class CreateBuilderTest extends AbstractDatabaseTestCase
      * @author Phalcon Team <team@phalcon.io>
      * @since  2022-07-04
      *
-     * @group  mysql
-     * @group  pgsql
+     * @group mysql
+     * @group pgsql
      */
     public function testMvcModelManagerCreateBuilder(): void
     {

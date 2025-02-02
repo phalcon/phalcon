@@ -28,7 +28,7 @@ final class DeleteTest extends AbstractDatabaseTestCase
      *
      * @since  2020-01-20
      *
-     * @group  common
+     * @group mysql
      */
     public function testDmQueryDelete(): void
     {

@@ -33,7 +33,7 @@ final class RollbackOnExceptionTest extends AbstractDatabaseTestCase
     /**
      * @var RollbackTestMigration
      */
-    private $migration;
+    private RollbackTestMigration $migration;
 
     /**
      * Executed before each test
@@ -54,8 +54,8 @@ final class RollbackOnExceptionTest extends AbstractDatabaseTestCase
      * @author noone-silent <lominum@protonmail.com>
      * @since  2024-06-10
      * @issue  16604
-     * @group  mysql
-     * @group  pgsql
+     * @group mysql
+     * @group pgsql
      */
     public function testMvcModelQueryRollbackOnException(): void
     {

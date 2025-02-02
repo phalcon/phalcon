@@ -129,7 +129,7 @@ final class CreateTableTest extends AbstractDatabaseTestCase
      * @author       Phalcon Team <team@phalcon.io>
      * @since        2020-01-20
      *
-     * @group        common
+     * @group mysql
      */
     public function testDbDialectCreateTable(
         string $dialectClass,
@@ -156,7 +156,7 @@ final class CreateTableTest extends AbstractDatabaseTestCase
      * @author       Phalcon Team <team@phalcon.io>
      * @since        2020-01-20
      *
-     * @group        common
+     * @group mysql
      */
     public function testDbDialectCreateTableException(
         string $dialectClass
@@ -180,7 +180,7 @@ final class CreateTableTest extends AbstractDatabaseTestCase
      * @author       Phalcon Team <team@phalcon.io>
      * @since        2020-01-20
      *
-     * @group        common
+     * @group mysql
      */
     public function testDbDialectCreateTableTemporary(
         string $dialectClass,

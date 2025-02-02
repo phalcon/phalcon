@@ -82,7 +82,7 @@ final class TableOptionsTest extends AbstractDatabaseTestCase
      * @author       Phalcon Team <team@phalcon.io>
      * @since        2020-01-20
      *
-     * @group        common
+     * @group mysql
      */
     public function testDbDialectTableOptions(
         string $dialectClass,
@@ -103,7 +103,7 @@ final class TableOptionsTest extends AbstractDatabaseTestCase
      * @author       Phalcon Team <team@phalcon.io>
      * @since        2020-01-20
      *
-     * @group        common
+     * @group mysql
      */
     public function testDbDialectTableOptionsNoSchema(
         string $dialectClass,

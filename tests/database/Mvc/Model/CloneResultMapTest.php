@@ -67,7 +67,7 @@ final class CloneResultMapTest extends AbstractDatabaseTestCase
      * @author       Phalcon Team <team@phalcon.io>
      * @since        2020-10-05
      *
-     * @group        common
+     * @group mysql
      */
     public function testMvcModelCloneResultMap(
         int | string $invId,
@@ -123,8 +123,8 @@ final class CloneResultMapTest extends AbstractDatabaseTestCase
      * @author       Phalcon Team <team@phalcon.io>
      * @since        2020-10-05
      *
-     * @group        mysql
-     * @group        pgsql
+     * @group mysql
+     * @group pgsql
      */
     public function testMvcModelCloneResultMapWithCasting(
         int | string $invId,

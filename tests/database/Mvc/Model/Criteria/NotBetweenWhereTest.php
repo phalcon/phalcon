@@ -34,7 +34,7 @@ final class NotBetweenWhereTest extends AbstractDatabaseTestCase
      * @author Phalcon Team <team@phalcon.io>
      * @since  2020-02-01
      *
-     * @group  common
+     * @group mysql
      */
     public function testMvcModelCriteriaNotBetweenWhere(): void
     {

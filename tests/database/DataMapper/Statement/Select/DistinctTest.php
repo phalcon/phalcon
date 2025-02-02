@@ -25,7 +25,7 @@ final class DistinctTest extends AbstractStatementTestCase
      *
      * @since  2020-01-20
      *
-     * @group  common
+     * @group mysql
      */
     public function testDmStatementSelectDistinct(): void
     {
@@ -48,7 +48,7 @@ final class DistinctTest extends AbstractStatementTestCase
      *
      * @since  2020-01-20
      *
-     * @group  common
+     * @group mysql
      */
     public function testDmStatementSelectDistinctTwice(): void
     {
@@ -72,7 +72,7 @@ final class DistinctTest extends AbstractStatementTestCase
      *
      * @since  2020-01-20
      *
-     * @group  common
+     * @group mysql
      */
     public function testDmStatementSelectDistinctUnset(): void
     {

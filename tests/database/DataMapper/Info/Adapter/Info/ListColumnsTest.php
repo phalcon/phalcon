@@ -21,7 +21,7 @@ final class ListColumnsTest extends AbstractDatabaseTestCase
     /**
      * @since  2025-01-14
      *
-     * @group  mysql
+     * @group mysql
      */
     public function testDmInfoAdapterInfoListTables(): void
     {

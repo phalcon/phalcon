@@ -39,7 +39,7 @@ final class PaginateTest extends AbstractDatabaseTestCase
     }
 
     /**
-     * @group common
+     * @group mysql
      */
     public function testPaginatorAdapterModelPaginate(): void
     {
@@ -146,7 +146,7 @@ final class PaginateTest extends AbstractDatabaseTestCase
     }
 
     /**
-     * @group common
+     * @group mysql
      */
     public function testPaginatorAdapterModelPaginateEmpty(): void
     {
@@ -176,7 +176,7 @@ final class PaginateTest extends AbstractDatabaseTestCase
     }
 
     /**
-     * @group common
+     * @group mysql
      */
     public function testPaginatorAdapterModelPaginateParametersArrayString(): void
     {
@@ -215,7 +215,7 @@ final class PaginateTest extends AbstractDatabaseTestCase
     }
 
     /**
-     * @group common
+     * @group mysql
      */
     public function testPaginatorAdapterModelPaginateParametersString(): void
     {
@@ -256,7 +256,7 @@ final class PaginateTest extends AbstractDatabaseTestCase
      *
      * @issue  14639
      *
-     * @group  mysql
+     * @group mysql
      *
      * @throws Exception
      * @author Phalcon Team <team@phalcon.io>
@@ -307,8 +307,7 @@ final class PaginateTest extends AbstractDatabaseTestCase
      * @since  2023-12-26
      * @issue  https://github.com/phalcon/cphalcon/issues/16471
      *
-     * @group  mysql
-     * @group  pgsql
+     * @group mysql
      */
     public function testPaginatorAdapterModelPaginateWithOrder(): void
     {

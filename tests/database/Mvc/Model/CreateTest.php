@@ -42,9 +42,9 @@ final class CreateTest extends AbstractDatabaseTestCase
      * @author Phalcon Team <team@phalcon.io>
      * @since  2020-02-01
      *
-     * @group  mysql
-     * @group  sqlite
-     * @group  pgsql
+     * @group mysql
+     * @group sqlite
+     * @group pgsql
      */
     public function testMvcModelCreate(): void
     {

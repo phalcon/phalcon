@@ -47,7 +47,7 @@ final class PaginateTest extends AbstractDatabaseTestCase
      * @author Phalcon Team <team@phalcon.io>
      * @since  2020-02-01
      *
-     * @group  common
+     * @group mysql
      */
     public function testPaginatorAdapterQuerybuilderPaginate(): void
     {
@@ -95,8 +95,8 @@ final class PaginateTest extends AbstractDatabaseTestCase
      * @author Phalcon Team <team@phalcon.io>
      * @since  2020-01-29
      *
-     * @group  mysql
-     * @group  pgsql
+     * @group mysql
+     * @group pgsql
      */
     public function testPaginatorAdapterQuerybuilderPaginateGroupBy(): void
     {
@@ -166,7 +166,7 @@ final class PaginateTest extends AbstractDatabaseTestCase
      *
      * @issue  14639
      *
-     * @group  mysql
+     * @group mysql
      *
      * @throws Exception
      * @author Phalcon Team <team@phalcon.io>
