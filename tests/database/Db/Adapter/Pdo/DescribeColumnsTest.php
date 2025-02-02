@@ -682,12 +682,12 @@ final class DescribeColumnsTest extends AbstractDatabaseTestCase
                 'isPrimary'        => false,
                 'isUnsigned'       => false,
             ],
-            // field_timestamp_default  timestamp     default '2018-10-01 12:34:56' null,
+            // field_timestamp_default timestamp      default '2018-10-01 12:34:56' null,
             26 => [
                 'getAfterPosition' => "field_timestamp",
                 'getBindType'      => Column::BIND_PARAM_STR,
                 'getComment'       => "",
-                'getDefault'       => "2018-10-01 12:34:56",
+                'getDefault'       => '2018-10-01 12:34:56',
                 'getName'          => 'field_timestamp_default',
                 'getScale'         => 0,
                 'getSize'          => 0,
@@ -702,13 +702,13 @@ final class DescribeColumnsTest extends AbstractDatabaseTestCase
                 'isPrimary'        => false,
                 'isUnsigned'       => false,
             ],
-            // field_mediumint          mediumint(10) unsigned                      null,
+            // field_timestamp_default  timestamp unsigned                      null,
             27 => [
                 'getAfterPosition' => "field_timestamp_default",
                 'getBindType'      => Column::BIND_PARAM_STR,
                 'getComment'       => "",
                 'getDefault'       => 'CURRENT_TIMESTAMP',
-                'getName'          => 'field_timestamp_default',
+                'getName'          => 'field_timestamp_current',
                 'getScale'         => 0,
                 'getSize'          => 0,
                 'getType'          => Column::TYPE_TIMESTAMP,
@@ -722,13 +722,33 @@ final class DescribeColumnsTest extends AbstractDatabaseTestCase
                 'isPrimary'        => false,
                 'isUnsigned'       => false,
             ],
-            // field_mediumint_default  mediumint(10) default 1                     null,
+            // field_mediumint_default  mediumint(10)                            null,
             28 => [
+                'getAfterPosition' => "field_timestamp_current",
+                'getBindType'      => Column::BIND_PARAM_INT,
+                'getComment'       => "",
+                'getDefault'       => null,
+                'getName'          => 'field_mediumint',
+                'getScale'         => 0,
+                'getSize'          => 10,
+                'getType'          => Column::TYPE_MEDIUMINTEGER,
+                'getTypeReference' => -1,
+                'getTypeValues'    => [],
+                'hasDefault'       => false,
+                'isAutoIncrement'  => false,
+                'isFirst'          => false,
+                'isNotNull'        => false,
+                'isNumeric'        => true,
+                'isPrimary'        => false,
+                'isUnsigned'       => true,
+            ],
+            // field_mediumint_default  mediumint(10) default 1                     null,
+            29 => [
                 'getAfterPosition' => "field_mediumint",
                 'getBindType'      => Column::BIND_PARAM_INT,
                 'getComment'       => "",
                 'getDefault'       => "1",
-                'getName'          => 'field_mediumint_currentgit ',
+                'getName'          => 'field_mediumint_default',
                 'getScale'         => 0,
                 'getSize'          => 10,
                 'getType'          => Column::TYPE_MEDIUMINTEGER,
@@ -743,7 +763,7 @@ final class DescribeColumnsTest extends AbstractDatabaseTestCase
                 'isUnsigned'       => false,
             ],
             // field_smallint           smallint(10)  unsigned                      null,
-            29 => [
+            30 => [
                 'getAfterPosition' => "field_mediumint_default",
                 'getBindType'      => Column::BIND_PARAM_INT,
                 'getComment'       => "",
@@ -763,7 +783,7 @@ final class DescribeColumnsTest extends AbstractDatabaseTestCase
                 'isUnsigned'       => true,
             ],
             // field_smallint_default   smallint(10)  default 1                     null,
-            30 => [
+            31 => [
                 'getAfterPosition' => "field_smallint",
                 'getBindType'      => Column::BIND_PARAM_INT,
                 'getComment'       => "",
@@ -783,7 +803,7 @@ final class DescribeColumnsTest extends AbstractDatabaseTestCase
                 'isUnsigned'       => false,
             ],
             // field_tinyint            tinyint(10)   unsigned                      null,
-            31 => [
+            32 => [
                 'getAfterPosition' => "field_smallint_default",
                 'getBindType'      => Column::BIND_PARAM_INT,
                 'getComment'       => "",
@@ -803,7 +823,7 @@ final class DescribeColumnsTest extends AbstractDatabaseTestCase
                 'isUnsigned'       => true,
             ],
             // field_tinyint_default    tinyint(10)   default 1                     null,
-            32 => [
+            33 => [
                 'getAfterPosition' => "field_tinyint",
                 'getBindType'      => Column::BIND_PARAM_INT,
                 'getComment'       => "",
@@ -823,7 +843,7 @@ final class DescribeColumnsTest extends AbstractDatabaseTestCase
                 'isUnsigned'       => false,
             ],
             // field_longtext           longtext                                    null,
-            33 => [
+            34 => [
                 'getAfterPosition' => "field_tinyint_default",
                 'getBindType'      => Column::BIND_PARAM_STR,
                 'getComment'       => "",
@@ -843,7 +863,7 @@ final class DescribeColumnsTest extends AbstractDatabaseTestCase
                 'isUnsigned'       => false,
             ],
             // field_mediumtext         mediumtext                                  null,
-            34 => [
+            35 => [
                 'getAfterPosition' => "field_longtext",
                 'getBindType'      => Column::BIND_PARAM_STR,
                 'getComment'       => "",
@@ -863,7 +883,7 @@ final class DescribeColumnsTest extends AbstractDatabaseTestCase
                 'isUnsigned'       => false,
             ],
             // field_tinytext           tinytext                                    null,
-            35 => [
+            36 => [
                 'getAfterPosition' => "field_mediumtext",
                 'getBindType'      => Column::BIND_PARAM_STR,
                 'getComment'       => "",
@@ -883,7 +903,7 @@ final class DescribeColumnsTest extends AbstractDatabaseTestCase
                 'isUnsigned'       => false,
             ],
             // field_text               text                                        null,
-            36 => [
+            37 => [
                 'getAfterPosition' => "field_tinytext",
                 'getBindType'      => Column::BIND_PARAM_STR,
                 'getComment'       => "",
@@ -903,7 +923,7 @@ final class DescribeColumnsTest extends AbstractDatabaseTestCase
                 'isUnsigned'       => false,
             ],
             // field_varbinary          varbinary(10)                               null,
-            37 => [
+            38 => [
                 'getAfterPosition' => "field_text",
                 'getBindType'      => Column::BIND_PARAM_STR,
                 'getComment'       => "",
@@ -923,7 +943,7 @@ final class DescribeColumnsTest extends AbstractDatabaseTestCase
                 'isUnsigned'       => false,
             ],
             // field_varchar            varchar(10)                                 null,
-            38 => [
+            39 => [
                 'getAfterPosition' => "field_varbinary",
                 'getBindType'      => Column::BIND_PARAM_STR,
                 'getComment'       => "",
@@ -943,7 +963,7 @@ final class DescribeColumnsTest extends AbstractDatabaseTestCase
                 'isUnsigned'       => false,
             ],
             // field_varchar_default    varchar(10) 'D'                             null,
-            39 => [
+            40 => [
                 'getAfterPosition' => "field_varchar",
                 'getBindType'      => Column::BIND_PARAM_STR,
                 'getComment'       => "",

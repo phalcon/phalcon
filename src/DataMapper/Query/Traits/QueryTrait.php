@@ -23,8 +23,8 @@ use Phalcon\DataMapper\Pdo\Connection;
 use Phalcon\DataMapper\Pdo\Exception\Exception;
 
 /**
- * @method string getStatement()
- * @method array  getBindValues()
+ * @method string               getStatement()
+ * @method array<string, mixed> getBindValues()
  */
 trait QueryTrait
 {
