@@ -88,6 +88,7 @@ class Postgresql extends PdoAdapter
     {
         $descriptor = !empty($descriptor) ? $descriptor : $this->descriptor;
         $schemaName = $descriptor["schema"] ?? null;
+        unset($descriptor['schema']);
         if (isset($descriptor["password"])) {
             $password               = $descriptor["password"];
             $descriptor["password"] = (!empty($password)) ? $password : null;

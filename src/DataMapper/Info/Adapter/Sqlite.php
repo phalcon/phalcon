@@ -200,7 +200,7 @@ class Sqlite extends AbstractAdapter
         foreach ($matches as $match) {
             $fieldName = $match[1];
             if (false !== stripos($match[0], 'AUTOINCREMENT')) {
-                $columns[$fieldName]['is_auto_increment'] = true;
+                $columns[$fieldName]['isAutoIncrement'] = true;
             }
             if (isset($match[3])) {
                 $columns[$fieldName]['defaultValue'] = $this->processDefault(

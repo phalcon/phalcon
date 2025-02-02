@@ -17,7 +17,6 @@
     </source>
     <groups>
         <include>
-            <group>common</group>
             <group>mysql</group>
         </include>
     </groups>
