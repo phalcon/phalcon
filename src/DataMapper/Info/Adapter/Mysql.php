@@ -65,10 +65,7 @@ class Mysql extends AbstractAdapter
      */
     protected function getAutoIncSql(): string
     {
-        return "CASE
-            WHEN LOCATE('auto_increment', c.EXTRA) > 0 THEN 1
-            ELSE 0
-        END ";
+        return "IF(LOCATE('auto_increment', c.EXTRA) > 0, 1, 0) ";
     }
 
     /**

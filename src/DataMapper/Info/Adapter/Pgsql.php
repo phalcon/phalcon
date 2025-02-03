@@ -21,10 +21,6 @@ namespace Phalcon\DataMapper\Info\Adapter;
 use Phalcon\DataMapper\Pdo\Exception\Exception;
 
 use function explode;
-use function str_getcsv;
-use function stripos;
-use function strrpos;
-use function substr;
 use function trim;
 
 /**
@@ -124,7 +120,7 @@ class Pgsql extends AbstractAdapter
     /**
      * Returns the actual default value of a column
      *
-     * @param mixed  $defaultValue
+     * @param mixed $defaultValue
      * @param string $type
      *
      * @return mixed

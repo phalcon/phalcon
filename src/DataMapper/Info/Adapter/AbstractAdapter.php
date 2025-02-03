@@ -91,36 +91,60 @@ abstract class AbstractAdapter implements AdapterInterface
 
         $statement = "
             SELECT
-                c.column_name AS name,
-                c.data_type AS type,
+                c.COLUMN_NAME AS name,
+                c.DATA_TYPE AS type,
+                IF(
+                    c.COLUMN_DEFAULT = \"''\" AND
+                    (
+                        LOCATE('char', c.DATA_TYPE) > 0 OR
+                        LOCATE('text', c.DATA_TYPE) > 0
+                        ),
+                    \"\",
+                    IF (
+                        LOCATE('CURRENT_TIMESTAMP', c.COLUMN_DEFAULT) > 0,
+                        NULL,
+                        IF (c.COLUMN_DEFAULT = 'NULL', NULL, c.COLUMN_DEFAULT)
+                    )
+                ) AS default_value,
+                CASE c.DATA_TYPE
+                    WHEN 'bigint' THEN 1
+                    WHEN 'decimal' THEN 1
+                    WHEN 'float' THEN 1
+                    WHEN 'int' THEN 1
+                    WHEN 'mediumint' THEN 1
+                    WHEN 'smallint' THEN 1
+                    WHEN 'tinyint' THEN 1
+                    ELSE 0
+                END AS is_numeric,
                 COALESCE(
-                    c.character_maximum_length,
-                    c.numeric_precision
+                    c.CHARACTER_MAXIMUM_LENGTH,
+                    c.NUMERIC_PRECISION
                 ) AS size,
-                c.numeric_scale AS numeric_scale,
-                CASE
-                    WHEN c.is_nullable = 'YES' THEN 1
-                    ELSE 0
-                END AS is_nullable,
-                c.column_default AS default_value,
+                c.NUMERIC_SCALE AS numeric_scale,
+                IF(c.is_nullable = 'YES', 0, 1) AS is_not_null,
+                c.COLUMN_COMMENT AS comment,
+                IF(c.ordinal_position = 1, 1, 0) AS is_first,
+                IF(tc.constraint_type = 'PRIMARY KEY', 1, 0) AS is_primary,
+                IF(
+                    LOCATE('int', c.COLUMN_TYPE) > 0,
+                   IF(LOCATE('unsigned', c.COLUMN_TYPE) > 0, 1, 0),
+                   NULL
+                ) AS is_unsigned,
                 $autoInc AS is_auto_increment,
-                CASE
-                    WHEN tc.constraint_type = 'PRIMARY KEY' THEN 1
-                    ELSE 0
-                END AS is_primary,
                 $extended AS extended
+            
             FROM information_schema.columns c
-                LEFT JOIN information_schema.key_column_usage kcu
-                    ON  c.table_schema = kcu.table_schema
-                    AND c.table_name = kcu.table_name
-                    AND c.column_name = kcu.column_name
-                LEFT JOIN information_schema.table_constraints tc
-                    ON  kcu.table_schema = tc.table_schema
-                    AND kcu.table_name = tc.table_name
-                    AND kcu.constraint_name = tc.constraint_name
-            WHERE c.table_schema = :schema
-            AND   c.table_name = :table
-            ORDER BY c.ordinal_position
+            LEFT JOIN information_schema.key_column_usage kcu
+                ON  c.TABLE_SCHEMA = kcu.TABLE_SCHEMA
+                    AND c.TABLE_NAME = kcu.TABLE_NAME
+                    AND c.COLUMN_NAME = kcu.COLUMN_NAME
+            LEFT JOIN information_schema.table_constraints tc
+                ON  kcu.TABLE_SCHEMA = tc.TABLE_SCHEMA
+                    AND kcu.TABLE_NAME = tc.TABLE_NAME
+                    AND kcu.CONSTRAINT_NAME = tc.CONSTRAINT_NAME
+            WHERE c.TABLE_SCHEMA = :schema
+              AND c.TABLE_NAME = :table
+            ORDER BY c.ORDINAL_POSITION
         ";
 
         /** @var ColumnDefinitionSql[] $columns */
@@ -132,14 +156,17 @@ abstract class AbstractAdapter implements AdapterInterface
             ]
         );
 
-        return array_column(
-            array_map(
-                [$this, 'processColumn'],
-                $columns
-            ),
-            null,
-            'name'
-        );
+        $results = [];
+        $previous = null;
+        foreach ($columns as $column) {
+            $name = $column['name'];
+
+            $results[$name] = $this->processColumn($column);
+            $results[$name]['afterField'] = $previous;
+            $previous = $name;
+        }
+
+        return $results;
     }
 
     /**
@@ -207,26 +234,30 @@ abstract class AbstractAdapter implements AdapterInterface
     protected function processColumn(array $column): array
     {
         $result = [
-            'name'            => $column['name'],
-            'type'            => $column['type'],
-            'size'            => isset($column['size'])
-                ? (int)$column['size']
-                : null,
-            'scale'           => isset($column['numeric_scale'])
-                ? (int)$column['numeric_scale']
-                : null,
-            'isNullable'      => (bool)$column['is_nullable'],
-            'defaultValue'    => $this->processDefault(
+            'afterField'      => null,
+            'comment'         => $column['comment'],
+            'default'         => $this->processDefault(
                 $column['default_value'],
                 $column['type']
             ),
+            'hasDefault'      => null !== $column['default_value'],
             'isAutoIncrement' => (bool)$column['is_auto_increment'],
+            'isFirst'         => (bool)$column['is_first'],
+            'isNotNull'       => (bool)$column['is_not_null'],
+            'isNumeric'       => (bool)$column['is_numeric'],
             'isPrimary'       => (bool)$column['is_primary'],
-            'isUnsigned'      => $this->processSigned(
-                $column['extended'],
-                $column['type']
-            ),
+            'isUnsigned'      => null !== $column['is_unsigned']
+                ? (bool)$column['is_unsigned']
+                : null,
+            'name'            => $column['name'],
             'options'         => null,
+            'scale'           => isset($column['numeric_scale'])
+                ? (int)$column['numeric_scale']
+                : null,
+            'size'            => isset($column['size'])
+                ? (int)$column['size']
+                : null,
+            'type'            => $column['type'],
         ];
 
         $extended = trim($column['extended']);
