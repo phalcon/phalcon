@@ -24,6 +24,7 @@ use function array_column;
 use function array_map;
 use function preg_match;
 use function preg_match_all;
+use function str_contains;
 use function str_replace;
 use function stripos;
 use function strtolower;
@@ -67,14 +68,7 @@ class Sqlite extends AbstractAdapter
         /**
          * Format the columns
          */
-        $processed = array_column(
-            array_map(
-                [$this, 'processColumn'],
-                $columns
-            ),
-            null,
-            'name'
-        );
+        $processed = $this->transformColumns($columns);
 
         /**
          * Add autoinc and defaults and return
@@ -147,25 +141,43 @@ class Sqlite extends AbstractAdapter
          * Regular expression to match the field type, size, and scale
          */
         $pattern = '/^([^(]+)(?:\((\d+)(?:\s*,\s*(\d+))?\))?$/';
-        preg_match($pattern, trim($column['type']), $matches);
+        $type    = strtolower(trim($column['type']));
+        preg_match($pattern, $type, $matches);
+
+        /**
+         * Check if the column is numeric
+         */
+        $isNumeric = match (true) {
+            str_contains($type, 'int'),
+            str_contains($type, 'double'),
+            str_contains($type, 'float'),
+            str_contains($type, 'numeric'),
+            str_contains($type, 'real') => true,
+            default => false
+        };
 
         /**
          * Extract the type, size, and scale from the matches
          */
         return [
-            'name'            => $column['name'],
-            'type'            => strtolower($matches[1]),
-            'size'            => isset($matches[2]) ? (int)$matches[2] : null,
-            'scale'           => isset($matches[3]) ? (int)$matches[3] : null,
-            'isNullable'      => (bool)($column['notnull']),
-            'defaultValue'    => $this->processDefault(
+            'afterField'      => null,
+            'comment'         => '',
+            'default'         => $this->processDefault(
                 $column['dflt_value'],
                 $column['type']
             ),
+            'hasDefault'      => null !== $column['dflt_value'],
             'isAutoIncrement' => null,
+            'isFirst'         => null,
+            'isNotNull'       => !((bool)($column['notnull'])),
+            'isNumeric'       => $isNumeric,
             'isPrimary'       => (bool)($column['pk']),
             'isUnsigned'      => null,
+            'name'            => $column['name'],
             'options'         => null,
+            'scale'           => isset($matches[3]) ? (int)$matches[3] : null,
+            'size'            => isset($matches[2]) ? (int)$matches[2] : null,
+            'type'            => strtolower($matches[1]),
         ];
     }
 

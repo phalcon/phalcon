@@ -21,8 +21,6 @@ namespace Phalcon\DataMapper\Info\Adapter;
 use Phalcon\DataMapper\Pdo\Connection;
 use Phalcon\DataMapper\Pdo\Exception\Exception;
 
-use function array_column;
-use function array_map;
 use function explode;
 use function in_array;
 use function str_getcsv;
@@ -127,8 +125,8 @@ abstract class AbstractAdapter implements AdapterInterface
                 IF(tc.constraint_type = 'PRIMARY KEY', 1, 0) AS is_primary,
                 IF(
                     LOCATE('int', c.COLUMN_TYPE) > 0,
-                   IF(LOCATE('unsigned', c.COLUMN_TYPE) > 0, 1, 0),
-                   NULL
+                    IF(LOCATE('unsigned', c.COLUMN_TYPE) > 0, 1, 0),
+                    NULL
                 ) AS is_unsigned,
                 $autoInc AS is_auto_increment,
                 $extended AS extended
@@ -156,17 +154,7 @@ abstract class AbstractAdapter implements AdapterInterface
             ]
         );
 
-        $results = [];
-        $previous = null;
-        foreach ($columns as $column) {
-            $name = $column['name'];
-
-            $results[$name] = $this->processColumn($column);
-            $results[$name]['afterField'] = $previous;
-            $previous = $name;
-        }
-
-        return $results;
+        return $this->transformColumns($columns);
     }
 
     /**
@@ -316,8 +304,28 @@ abstract class AbstractAdapter implements AdapterInterface
      *
      * @return bool|null
      */
-    protected function processSigned(string $value, string $type): bool | null
+    /**
+     * @param ColumnDefinition $columns
+     *
+     * @return ColumnDefinition
+     */
+    protected function transformColumns(array $columns): array
     {
-        return null;
+        $results  = [];
+        $previous = null;
+        $first    = reset($columns);
+        $firstName = $first['name'];
+        foreach ($columns as $column) {
+            $name = $column['name'];
+            if ($name === $firstName) {
+                $column['isFirst'] = true;
+            }
+
+            $results[$name] = $this->processColumn($column);
+            $results[$name]['afterField'] = $previous;
+            $previous = $name;
+        }
+
+        return $results;
     }
 }

@@ -77,24 +77,4 @@ class Mysql extends AbstractAdapter
     {
         return 'c.column_type';
     }
-
-    /**
-     * @param string $value
-     * @param string $type
-     *
-     * @return bool|null
-     */
-    protected function processSigned(string $value, string $type): bool | null
-    {
-        $extended = trim($value);
-
-        /**
-         * Unsigned
-         */
-        if (str_contains($extended, 'unsigned') && str_contains($type, 'int')) {
-            return true;
-        }
-
-        return str_contains($type, 'int') ? false : null;
-    }
 }
