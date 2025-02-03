@@ -19,7 +19,7 @@ final class ListTablesTest extends AbstractDatabaseTestCase
     /**
      * @since  2025-01-14
      *
-     * @group sqlite
+     * @group  sqlite
      */
     public function testDmInfoAdapterSqliteListTables(): void
     {

@@ -27,14 +27,14 @@ final class ListSchemaTableTest extends AbstractDatabaseTestCase
         /** @var Connection $connection */
         $connection = self::getDataMapperConnection();
 
-        $mysql  = new Mysql($connection);
+        $mysql = new Mysql($connection);
 
         $expected = ['phalcon', 'co_dialect'];
-        $actual = $mysql->listSchemaTable('co_dialect');
+        $actual   = $mysql->listSchemaTable('co_dialect');
         $this->assertSame($expected, $actual);
 
         $expected = ['phalcon', 'co_dialect'];
-        $actual = $mysql->listSchemaTable('phalcon.co_dialect');
+        $actual   = $mysql->listSchemaTable('phalcon.co_dialect');
         $this->assertSame($expected, $actual);
     }
 }

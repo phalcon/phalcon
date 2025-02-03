@@ -12,7 +12,6 @@ declare(strict_types=1);
 namespace Phalcon\Tests\Database\DataMapper\Info\Adapter\Mysql;
 
 use Phalcon\DataMapper\Info\Adapter\Mysql;
-use Phalcon\DataMapper\Pdo\Connection;
 use Phalcon\Tests\AbstractDatabaseTestCase;
 
 final class ListColumnsTest extends AbstractDatabaseTestCase
@@ -24,7 +23,6 @@ final class ListColumnsTest extends AbstractDatabaseTestCase
      */
     public function testDmInfoAdapterMysqlListTables(): void
     {
-        /** @var Connection $connection */
         $connection = self::getDataMapperConnection();
 
         $mysql  = new Mysql($connection);

@@ -11,9 +11,7 @@ declare(strict_types=1);
 
 namespace Phalcon\Tests\Database\DataMapper\Info\Adapter\Info;
 
-use Phalcon\DataMapper\Info\Adapter\Mysql;
 use Phalcon\DataMapper\Info\Info;
-use Phalcon\DataMapper\Pdo\Connection;
 use Phalcon\Tests\AbstractDatabaseTestCase;
 
 final class ListTablesTest extends AbstractDatabaseTestCase

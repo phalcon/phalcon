@@ -18,12 +18,12 @@ use Phalcon\Tests\AbstractDatabaseTestCase;
 final class ListColumnsTest extends AbstractDatabaseTestCase
 {
     /**
-     * @since  2025-01-14
-     *
-     * @group pgsql
-     *
      * @return void
      * @throws Exception
+     * @since  2025-01-14
+     *
+     * @group  pgsql
+     *
      */
     public function testDmInfoAdapterPgsqlListTables(): void
     {

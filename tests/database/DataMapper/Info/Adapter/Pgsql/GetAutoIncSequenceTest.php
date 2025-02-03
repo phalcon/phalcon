@@ -18,12 +18,12 @@ use Phalcon\Tests\AbstractDatabaseTestCase;
 final class GetAutoIncSequenceTest extends AbstractDatabaseTestCase
 {
     /**
-     * @since  2025-01-14
-     *
-     * @group pgsql
-     *
      * @return void
      * @throws Exception
+     * @since  2025-01-14
+     *
+     * @group  pgsql
+     *
      */
     public function testDmInfoAdapterPgsqlGetAutoIncSequence(): void
     {
@@ -33,7 +33,7 @@ final class GetAutoIncSequenceTest extends AbstractDatabaseTestCase
         $schema = $pgsql->getCurrentSchema();
 
         $expected = 'field_primary';
-        $actual = $pgsql->getAutoincSequence($schema, 'co_dialect');
+        $actual   = $pgsql->getAutoincSequence($schema, 'co_dialect');
         $this->assertSame($expected, $actual);
 
         $actual = $pgsql->getAutoincSequence($schema, 'co_rb_test_model');
