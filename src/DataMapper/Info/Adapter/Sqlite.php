@@ -159,17 +159,19 @@ class Sqlite extends AbstractAdapter
         /**
          * Extract the type, size, and scale from the matches
          */
+        [$defaultValue, $hasDefault] = $this->processDefault(
+            $column['dflt_value'],
+            $column['type']
+        );
+
         return [
             'afterField'      => null,
             'comment'         => '',
-            'default'         => $this->processDefault(
-                $column['dflt_value'],
-                $column['type']
-            ),
-            'hasDefault'      => null !== $column['dflt_value'],
-            'isAutoIncrement' => null,
-            'isFirst'         => null,
-            'isNotNull'       => !((bool)($column['notnull'])),
+            'default'         => $defaultValue,
+            'hasDefault'      => $hasDefault,
+            'isAutoIncrement' => false,
+            'isFirst'         => false,
+            'isNotNull'       => ((bool)$column['notnull']) !== false,
             'isNumeric'       => $isNumeric,
             'isPrimary'       => (bool)($column['pk']),
             'isUnsigned'      => null,
@@ -199,7 +201,8 @@ class Sqlite extends AbstractAdapter
          * autoincrement
          */
         $createSql = $this->getTableSql($schema, $table);
-        $pattern   = '/^\s*(\w+)\s+.*?(DEFAULT\s+([^\s,]+)|AUTOINCREMENT)/im';
+        $pattern = '/^\s*(\w+)\s+.*?(DEFAULT\s+((\'[^\']*\'|"[^"]*"|[^\s,]+))|AUTOINCREMENT)/im';
+        preg_match_all($pattern, $createSql, $matches, PREG_SET_ORDER);
 
         /**
          * Find auto increment column as well as the default values
@@ -214,12 +217,12 @@ class Sqlite extends AbstractAdapter
             if (false !== stripos($match[0], 'AUTOINCREMENT')) {
                 $columns[$fieldName]['isAutoIncrement'] = true;
             }
-            if (isset($match[3])) {
-                $columns[$fieldName]['defaultValue'] = $this->processDefault(
-                    trim($match[3], "'"),
-                    $columns[$fieldName]['type']
-                );
-            }
+//            if (isset($match[3])) {
+//                $columns[$fieldName]['default'] = $this->processDefault(
+//                    trim($match[3], "'"),
+//                    $columns[$fieldName]['type']
+//                );
+//            }
         }
 
         return $columns;

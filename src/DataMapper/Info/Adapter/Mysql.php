@@ -65,7 +65,7 @@ class Mysql extends AbstractAdapter
      */
     protected function getAutoIncSql(): string
     {
-        return "IF(LOCATE('auto_increment', c.EXTRA) > 0, 1, 0) ";
+        return "IF(LOCATE('auto_increment', EXTRA) > 0, 1, 0) ";
     }
 
     /**
@@ -75,6 +75,6 @@ class Mysql extends AbstractAdapter
      */
     protected function getExtendedSql(): string
     {
-        return 'c.column_type';
+        return 'COLUMN_TYPE';
     }
 }

@@ -89,22 +89,22 @@ abstract class AbstractAdapter implements AdapterInterface
 
         $statement = "
             SELECT
-                c.COLUMN_NAME AS name,
-                c.DATA_TYPE AS type,
+                COLUMN_NAME AS name,
+                DATA_TYPE AS type,
                 IF(
-                    c.COLUMN_DEFAULT = \"''\" AND
+                    COLUMN_DEFAULT = \"''\" AND
                     (
-                        LOCATE('char', c.DATA_TYPE) > 0 OR
-                        LOCATE('text', c.DATA_TYPE) > 0
+                        LOCATE('char', DATA_TYPE) > 0 OR
+                        LOCATE('text', DATA_TYPE) > 0
                         ),
                     \"\",
                     IF (
-                        LOCATE('CURRENT_TIMESTAMP', c.COLUMN_DEFAULT) > 0,
+                        LOCATE('CURRENT_TIMESTAMP', COLUMN_DEFAULT) > 0,
                         NULL,
-                        IF (c.COLUMN_DEFAULT = 'NULL', NULL, c.COLUMN_DEFAULT)
+                        IF (COLUMN_DEFAULT = 'NULL', NULL, COLUMN_DEFAULT)
                     )
                 ) AS default_value,
-                CASE c.DATA_TYPE
+                CASE DATA_TYPE
                     WHEN 'bigint' THEN 1
                     WHEN 'decimal' THEN 1
                     WHEN 'float' THEN 1
@@ -115,34 +115,25 @@ abstract class AbstractAdapter implements AdapterInterface
                     ELSE 0
                 END AS is_numeric,
                 COALESCE(
-                    c.CHARACTER_MAXIMUM_LENGTH,
-                    c.NUMERIC_PRECISION
+                    CHARACTER_MAXIMUM_LENGTH,
+                    NUMERIC_PRECISION
                 ) AS size,
-                c.NUMERIC_SCALE AS numeric_scale,
-                IF(c.is_nullable = 'YES', 0, 1) AS is_not_null,
-                c.COLUMN_COMMENT AS comment,
-                IF(c.ordinal_position = 1, 1, 0) AS is_first,
-                IF(tc.constraint_type = 'PRIMARY KEY', 1, 0) AS is_primary,
+                NUMERIC_SCALE AS numeric_scale,
+                IF(IS_NULLABLE = 'YES', 0, 1) AS is_not_null,
+                COLUMN_COMMENT AS comment,
+                IF(ORDINAL_POSITION = 1, 1, 0) AS is_first,
+                IF(COLUMN_KEY = 'PRI', 1, 0) AS is_primary,
                 IF(
-                    LOCATE('int', c.COLUMN_TYPE) > 0,
-                    IF(LOCATE('unsigned', c.COLUMN_TYPE) > 0, 1, 0),
+                    LOCATE('int', COLUMN_TYPE) > 0,
+                    IF(LOCATE('unsigned', COLUMN_TYPE) > 0, 1, 0),
                     NULL
                 ) AS is_unsigned,
                 $autoInc AS is_auto_increment,
                 $extended AS extended
-            
-            FROM information_schema.columns c
-            LEFT JOIN information_schema.key_column_usage kcu
-                ON  c.TABLE_SCHEMA = kcu.TABLE_SCHEMA
-                    AND c.TABLE_NAME = kcu.TABLE_NAME
-                    AND c.COLUMN_NAME = kcu.COLUMN_NAME
-            LEFT JOIN information_schema.table_constraints tc
-                ON  kcu.TABLE_SCHEMA = tc.TABLE_SCHEMA
-                    AND kcu.TABLE_NAME = tc.TABLE_NAME
-                    AND kcu.CONSTRAINT_NAME = tc.CONSTRAINT_NAME
-            WHERE c.TABLE_SCHEMA = :schema
-              AND c.TABLE_NAME = :table
-            ORDER BY c.ORDINAL_POSITION
+            FROM information_schema.columns
+            WHERE TABLE_SCHEMA = :schema
+              AND TABLE_NAME = :table
+            ORDER BY ORDINAL_POSITION
         ";
 
         /** @var ColumnDefinitionSql[] $columns */
@@ -221,14 +212,16 @@ abstract class AbstractAdapter implements AdapterInterface
      */
     protected function processColumn(array $column): array
     {
+        [$defaultValue, $hasDefault] = $this->processDefault(
+            $column['default_value'],
+            $column['type']
+        );
+
         $result = [
             'afterField'      => null,
             'comment'         => $column['comment'],
-            'default'         => $this->processDefault(
-                $column['default_value'],
-                $column['type']
-            ),
-            'hasDefault'      => null !== $column['default_value'],
+            'default'         => $defaultValue,
+            'hasDefault'      => $hasDefault,
             'isAutoIncrement' => (bool)$column['is_auto_increment'],
             'isFirst'         => (bool)$column['is_first'],
             'isNotNull'       => (bool)$column['is_not_null'],
@@ -270,10 +263,9 @@ abstract class AbstractAdapter implements AdapterInterface
      *
      * @return mixed
      */
-    protected function processDefault(mixed $defaultValue, string $type): mixed
+    protected function processDefault(mixed $defaultValue, string $type): array
     {
         $type         = strtolower($type);
-        $defaultValue = $this->getDefault($defaultValue, $type);
         $charTypes    = ['char', 'text', 'varchar'];
         $floatTypes   = ['decimal', 'double', 'float', 'numeric', 'real'];
         $keywordTypes = ['CURRENT_DATE', 'CURRENT_TIME', 'CURRENT_TIMESTAMP'];
@@ -282,19 +274,20 @@ abstract class AbstractAdapter implements AdapterInterface
             null === $defaultValue ||
             true === in_array(strtoupper((string)$defaultValue), $keywordTypes)
         ) {
-            return null;
+            return [null, false];
         }
+
         if (
             true === in_array($type, $charTypes) &&
             "''" === $defaultValue
         ) {
-            return '';
+            return ['', true];
         }
 
         return match (true) {
-            str_contains($type, 'int')   => (int)$defaultValue,
-            in_array($type, $floatTypes) => (float)$defaultValue,
-            default                      => $defaultValue,
+            str_contains($type, 'int')   => [(int)$defaultValue, true],
+            in_array($type, $floatTypes) => [(float)$defaultValue, true],
+            default                      => [$defaultValue, true]
         };
     }
 
