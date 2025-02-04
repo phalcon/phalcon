@@ -181,21 +181,6 @@ abstract class AbstractAdapter implements AdapterInterface
     }
 
     /**
-     * Returns the actual default value of a column
-     *
-     * @param mixed  $defaultValue
-     * @param string $type
-     *
-     * @return mixed
-     */
-    protected function getDefault(
-        mixed $defaultValue,
-        string $type
-    ): mixed {
-        return $defaultValue;
-    }
-
-    /**
      * Returns the SQL for the extended field (MySQL)
      *
      * @return string
@@ -309,12 +294,12 @@ abstract class AbstractAdapter implements AdapterInterface
         $first    = reset($columns);
         $firstName = $first['name'];
         foreach ($columns as $column) {
-            $name = $column['name'];
+            $name           = $column['name'];
+            $results[$name] = $this->processColumn($column);
             if ($name === $firstName) {
-                $column['isFirst'] = true;
+                $results[$name]['isFirst'] = true;
             }
 
-            $results[$name] = $this->processColumn($column);
             $results[$name]['afterField'] = $previous;
             $previous = $name;
         }

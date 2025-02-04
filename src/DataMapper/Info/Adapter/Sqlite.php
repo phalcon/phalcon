@@ -20,14 +20,15 @@ namespace Phalcon\DataMapper\Info\Adapter;
 
 use Phalcon\DataMapper\Pdo\Exception\Exception;
 
-use function array_column;
-use function array_map;
 use function preg_match;
 use function preg_match_all;
+use function preg_replace;
 use function str_contains;
 use function str_replace;
-use function stripos;
+use function strcasecmp;
+use function strpos;
 use function strtolower;
+use function substr;
 use function trim;
 
 use const PREG_SET_ORDER;
@@ -140,10 +141,31 @@ class Sqlite extends AbstractAdapter
         /**
          * Regular expression to match the field type, size, and scale
          */
-        $pattern = '/^([^(]+)(?:\((\d+)(?:\s*,\s*(\d+))?\))?$/';
-        $type    = strtolower(trim($column['type']));
-        preg_match($pattern, $type, $matches);
+        $sizePattern = "#\\((\d+)(?:,\\s*(\d+))*\\)#";
+        $type        = strtolower(trim($column['type'])); // char(10)
 
+        /**
+         * If the column type has a parentheses we try to get the column
+         * size from it
+         */
+        $matches = [];
+        $size    = null;
+        $scale   = null;
+        if (
+            str_contains($type, "(") &&
+            preg_match($sizePattern, $type, $matches)
+        ) {
+            $size  = isset($matches[1]) ? (int)$matches[1] : null;
+            $scale = isset($matches[2]) ? (int)$matches[2] : null;
+        }
+
+        /**
+         * Get the type by removing any parentheses
+         */
+        $position    = strpos($type, '(');
+        if (false !== $position) {
+            $type = substr($type, 0, $position);
+        }
         /**
          * Check if the column is numeric
          */
@@ -157,11 +179,23 @@ class Sqlite extends AbstractAdapter
         };
 
         /**
-         * Extract the type, size, and scale from the matches
+         * Check if the column is default values
+         * When field is empty default value is null
          */
+        $defaultValue = $column['dflt_value'];
+        if (
+            true !== empty($defaultValue) &&
+            0 !== strcasecmp($defaultValue, "null")
+        ) {
+            $defaultValue = preg_replace(
+                "/^'|'$/",
+                "",
+                $defaultValue
+            );
+        }
         [$defaultValue, $hasDefault] = $this->processDefault(
-            $column['dflt_value'],
-            $column['type']
+            $defaultValue,
+            $type
         );
 
         return [
@@ -171,15 +205,15 @@ class Sqlite extends AbstractAdapter
             'hasDefault'      => $hasDefault,
             'isAutoIncrement' => false,
             'isFirst'         => false,
-            'isNotNull'       => ((bool)$column['notnull']) !== false,
+            'isNotNull'       => 0 !== $column['notnull'],
             'isNumeric'       => $isNumeric,
             'isPrimary'       => (bool)($column['pk']),
-            'isUnsigned'      => null,
+            'isUnsigned'      => false, // Sqlite does not have unsigned
             'name'            => $column['name'],
             'options'         => null,
-            'scale'           => isset($matches[3]) ? (int)$matches[3] : null,
-            'size'            => isset($matches[2]) ? (int)$matches[2] : null,
-            'type'            => strtolower($matches[1]),
+            'scale'           => $scale,
+            'size'            => $size,
+            'type'            => $type,
         ];
     }
 
@@ -197,32 +231,17 @@ class Sqlite extends AbstractAdapter
         array $columns
     ): array {
         /**
-         * Get the CREATE SQL from SQLite to figure out the defaults and
-         * autoincrement
+         * Get the CREATE SQL from SQLite to figure out the autoincrement
          */
         $createSql = $this->getTableSql($schema, $table);
-        $pattern = '/^\s*(\w+)\s+.*?(DEFAULT\s+((\'[^\']*\'|"[^"]*"|[^\s,]+))|AUTOINCREMENT)/im';
-        preg_match_all($pattern, $createSql, $matches, PREG_SET_ORDER);
-
-        /**
-         * Find auto increment column as well as the default values
-         */
+        $pattern   = '/^\s*(\w+)\s+.*?AUTOINCREMENT/im';
         preg_match_all($pattern, $createSql, $matches, PREG_SET_ORDER);
 
         /**
          * Loop through the matches and update the $columns array
          */
         foreach ($matches as $match) {
-            $fieldName = $match[1];
-            if (false !== stripos($match[0], 'AUTOINCREMENT')) {
-                $columns[$fieldName]['isAutoIncrement'] = true;
-            }
-//            if (isset($match[3])) {
-//                $columns[$fieldName]['default'] = $this->processDefault(
-//                    trim($match[3], "'"),
-//                    $columns[$fieldName]['type']
-//                );
-//            }
+            $columns[$match[1]]['isAutoIncrement'] = true;
         }
 
         return $columns;
