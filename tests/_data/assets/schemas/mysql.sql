@@ -107,7 +107,7 @@ create table co_dialect
     field_decimal           decimal(10, 4)                               null comment "field_decimal field",
     field_decimal_default   decimal(10, 4) default 14.5678               null comment "field_decimal_default field",
     field_enum              enum ('xs', 's', 'm', 'l', 'xl', 'internal') null comment "field_enum field",
-    field_integer           int(10)                                      null comment "field_integer field",
+    field_integer           int(10)        unsigned                      null comment "field_integer field",
     field_integer_default   int(10)        default 1                     null comment "field_integer_default field",
     field_json              json                                         null comment "field_json field",
     field_float             float(10, 4)                                 null comment "field_float field",
