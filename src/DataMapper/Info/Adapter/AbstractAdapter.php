@@ -22,6 +22,7 @@ use Phalcon\DataMapper\Pdo\Connection;
 use Phalcon\DataMapper\Pdo\Exception\Exception;
 
 use function explode;
+use function get_class;
 use function in_array;
 use function str_getcsv;
 use function stripos;
@@ -84,68 +85,28 @@ abstract class AbstractAdapter implements AdapterInterface
      */
     public function listColumns(string $schema, string $table): array
     {
-        $autoInc  = $this->getAutoIncSql();
-        $extended = $this->getExtendedSql();
+        $statement = $this->getListColumnSql($schema, $table);
 
-        $statement = "
-            SELECT
-                COLUMN_NAME AS name,
-                DATA_TYPE AS type,
-                IF(
-                    COLUMN_DEFAULT = \"''\" AND
-                    (
-                        LOCATE('char', DATA_TYPE) > 0 OR
-                        LOCATE('text', DATA_TYPE) > 0
-                        ),
-                    \"\",
-                    IF (
-                        LOCATE('CURRENT_TIMESTAMP', COLUMN_DEFAULT) > 0,
-                        NULL,
-                        IF (COLUMN_DEFAULT = 'NULL', NULL, COLUMN_DEFAULT)
-                    )
-                ) AS default_value,
-                CASE DATA_TYPE
-                    WHEN 'bigint' THEN 1
-                    WHEN 'decimal' THEN 1
-                    WHEN 'float' THEN 1
-                    WHEN 'int' THEN 1
-                    WHEN 'mediumint' THEN 1
-                    WHEN 'smallint' THEN 1
-                    WHEN 'tinyint' THEN 1
-                    ELSE 0
-                END AS is_numeric,
-                COALESCE(
-                    CHARACTER_MAXIMUM_LENGTH,
-                    NUMERIC_PRECISION
-                ) AS size,
-                NUMERIC_SCALE AS numeric_scale,
-                IF(IS_NULLABLE = 'YES', 0, 1) AS is_not_null,
-                COLUMN_COMMENT AS comment,
-                IF(ORDINAL_POSITION = 1, 1, 0) AS is_first,
-                IF(COLUMN_KEY = 'PRI', 1, 0) AS is_primary,
-                IF(
-                    LOCATE('int', COLUMN_TYPE) > 0,
-                    IF(LOCATE('unsigned', COLUMN_TYPE) > 0, 1, 0),
-                    NULL
-                ) AS is_unsigned,
-                $autoInc AS is_auto_increment,
-                $extended AS extended
-            FROM information_schema.columns
-            WHERE TABLE_SCHEMA = :schema
-              AND TABLE_NAME = :table
-            ORDER BY ORDINAL_POSITION
-        ";
+        if (get_class($this) === Sqlite::class) {
+            /** @var ColumnDefinitionSql[] $columns */
+            $columns = $this->connection->fetchAll($statement);
+        } else {
+            /** @var ColumnDefinitionSql[] $columns */
+            $columns = $this->connection->fetchAll(
+                $statement,
+                [
+                    'schema' => $schema,
+                    'table'  => $table,
+                ]
+            );
+        }
 
-        /** @var ColumnDefinitionSql[] $columns */
-        $columns = $this->connection->fetchAll(
-            $statement,
-            [
-                'schema' => $schema,
-                'table'  => $table,
-            ]
-        );
+        $processed = $this->transformColumns($columns);
 
-        return $this->transformColumns($columns);
+        /**
+         * Additional processing (default none)
+         */
+        return $this->processColumnInformation($schema, $table, $processed);
     }
 
     /**
@@ -181,6 +142,16 @@ abstract class AbstractAdapter implements AdapterInterface
     }
 
     /**
+     * Returns the SQL for the comment column
+     *
+     * @return string
+     */
+    protected function getCommentSql(): string
+    {
+        return "''";
+    }
+
+    /**
      * Returns the SQL for the extended field (MySQL)
      *
      * @return string
@@ -188,6 +159,16 @@ abstract class AbstractAdapter implements AdapterInterface
     protected function getExtendedSql(): string
     {
         return "''";
+    }
+
+    /**
+     * Returns the SQL for the unsigned field (MySQL)
+     *
+     * @return string
+     */
+    protected function getUnsignedSql(): string
+    {
+        return 'NULL';
     }
 
     /**
@@ -277,11 +258,21 @@ abstract class AbstractAdapter implements AdapterInterface
     }
 
     /**
-     * @param string $value
-     * @param string $type
+     * @param string                          $schema
+     * @param string                          $table
+     * @param array<string, ColumnDefinition> $columns
      *
-     * @return bool|null
+     * @return array<string, ColumnDefinition>
+     * @throws Exception
      */
+    protected function processColumnInformation(
+        string $schema,
+        string $table,
+        array $columns
+    ): array {
+        return $columns;
+    }
+
     /**
      * @param ColumnDefinition $columns
      *
@@ -305,5 +296,90 @@ abstract class AbstractAdapter implements AdapterInterface
         }
 
         return $results;
+    }
+
+    /**
+     * @param string $schema
+     * @param string $table
+     *
+     * @return string
+     */
+    protected function getListColumnSql(string $schema, string $table): string
+    {
+        $autoInc  = $this->getAutoIncSql();
+        $comment  = $this->getCommentSql();
+        $extended = $this->getExtendedSql();
+        $unsigned = $this->getUnsignedSql();
+
+        return "
+            SELECT
+                c.column_name as name,
+                c.data_type as type,
+                COALESCE(
+                    c.character_maximum_length,
+                    c.numeric_precision
+                ) AS size,
+                c.numeric_scale AS numeric_scale,
+                CASE
+                    WHEN (
+                            c.column_default IS NULL OR
+                            c.column_default = 'NULL' OR
+                            POSITION('CURRENT_TIMESTAMP' IN c.column_default) > 0 OR
+                            (
+                                c.column_default = '\"\"' AND
+                                (
+                                    POSITION('char' IN c.data_type) > 0 OR
+                                    POSITION('text' IN c.data_type) > 0
+                                )
+                            )
+                        )
+                        THEN NULL
+                    ELSE c.column_default
+                END AS default_value,
+                CASE c.data_type
+                    WHEN 'bigint' THEN 1
+                    WHEN 'decimal' THEN 1
+                    WHEN 'float' THEN 1
+                    WHEN 'int' THEN 1
+                    WHEN 'integer' THEN 1
+                    WHEN 'mediumint' THEN 1
+                    WHEN 'numeric' THEN 1
+                    WHEN 'real' THEN 1
+                    WHEN 'smallint' THEN 1
+                    WHEN 'tinyint' THEN 1
+                    ELSE 0
+                END AS is_numeric,
+                CASE c.is_nullable
+                    WHEN 'YES'
+                    THEN 0
+                    ELSE 1
+                END AS is_not_null,
+                $comment AS comment,
+                CASE c.ordinal_position
+                    WHEN 1
+                    THEN 1
+                    ELSE 0
+                END AS is_first,
+                CASE tc.constraint_type
+                    WHEN 'PRIMARY KEY'
+                    THEN 1
+                    ELSE 0
+                END AS is_primary,
+                $unsigned AS is_unsigned,
+                $autoInc AS is_auto_increment,
+                $extended AS extended
+            FROM information_schema.columns c
+                LEFT JOIN information_schema.key_column_usage kcu
+                    ON  c.table_schema = kcu.table_schema
+                    AND c.table_name   = kcu.table_name
+                    AND c.column_name  = kcu.column_name
+                LEFT JOIN information_schema.table_constraints tc
+                    ON  kcu.table_schema    = tc.table_schema
+                    AND kcu.table_name      = tc.table_name
+                    AND kcu.constraint_name = tc.constraint_name
+            WHERE c.table_schema = :schema
+            AND   c.table_name   = :table
+            ORDER BY c.ordinal_position
+        ";
     }
 }

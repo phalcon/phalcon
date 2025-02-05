@@ -21,6 +21,7 @@ namespace Phalcon\DataMapper\Info\Adapter;
 use Phalcon\DataMapper\Pdo\Exception\Exception;
 
 use function explode;
+use function is_string;
 use function trim;
 
 /**
@@ -111,46 +112,78 @@ class Pgsql extends AbstractAdapter
      */
     protected function getAutoIncSql(): string
     {
-        return "CASE
-            WHEN SUBSTRING(c.COLUMN_DEFAULT FROM 1 FOR 7) = 'nextval' THEN 1
-            ELSE 0
-        END";
+        return "CASE SUBSTRING(c.column_default FROM 1 FOR 7) "
+            . "WHEN 'nextval' "
+            . "THEN 1 "
+            . "ELSE 0 "
+            . "END";
     }
 
     /**
-     * Returns the actual default value of a column
+     * Process the default value based on the type and return the correct type
+     * back
      *
-     * @param mixed $defaultValue
+     * @param mixed  $defaultValue
      * @param string $type
      *
      * @return mixed
      */
-    protected function getDefault(
-        mixed $defaultValue,
-        string $type
-    ): mixed {
-        /**
-         * Check if the value is null
-         */
-        if (null === $defaultValue || 'NULL' === strtoupper($defaultValue)) {
-            return null;
-        }
-
-        /**
-         * Check if this is a numeric value
-         */
-        if (is_numeric($defaultValue)) {
-            return $defaultValue;
-        }
-
+    protected function processDefault(mixed $defaultValue, string $type): array
+    {
         /**
          * If this is a string literal
          */
-        $parts = explode('::', $defaultValue);
-        if (2 === count($parts)) {
-            return trim($parts[0], "'");
+        if (is_string($defaultValue)) {
+            $parts = explode('::', $defaultValue);
+            if (2 === count($parts)) {
+                $defaultValue = trim($parts[0], "'");
+            }
         }
 
-        return null;
+        return parent::processDefault($defaultValue, $type);
+    }
+    /**
+     * @param string                          $schema
+     * @param string                          $table
+     * @param array<string, ColumnDefinition> $columns
+     *
+     * @return array<string, ColumnDefinition>
+     * @throws Exception
+     */
+    protected function processColumnInformation(
+        string $schema,
+        string $table,
+        array $columns
+    ): array {
+        $statement = "
+            SELECT 
+                i.column_name AS name, 
+                d.description AS comment
+            FROM pg_catalog.pg_statio_all_tables AS s
+            JOIN pg_catalog.pg_description d 
+                ON d.objoid = s.relid
+            JOIN information_schema.columns i 
+                ON d.objsubid = i.ordinal_position 
+                AND i.table_schema = s.schemaname 
+                AND i.table_name = s.relname
+            WHERE i.table_schema = :schema
+            AND i.table_name = :table
+        ";
+        /** @var array<string, string> $comments */
+        $comments = $this->connection->fetchPairs(
+            $statement,
+            [
+                'schema' => $schema,
+                'table'  => $table,
+            ]
+        );
+
+        foreach ($comments as $name => $comment) {
+            if (isset($columns[$name])) {
+                $columns[$name]['comment'] = $comment;
+            }
+        }
+
+        return $columns;
     }
 }

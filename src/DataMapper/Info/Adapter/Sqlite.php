@@ -50,34 +50,6 @@ class Sqlite extends AbstractAdapter
     }
 
     /**
-     * Return the columns in an array with their respective properties
-     *
-     * @param string $schema
-     * @param string $table
-     *
-     * @return ColumnDefinition[]
-     * @throws Exception
-     */
-    public function listColumns(string $schema, string $table): array
-    {
-        $currentSchema = $this->quote($schema);
-        $currentTable  = $this->quote($table);
-        $statement     = "PRAGMA $currentSchema.table_info($currentTable)";
-
-        $columns = $this->connection->fetchAll($statement);
-
-        /**
-         * Format the columns
-         */
-        $processed = $this->transformColumns($columns);
-
-        /**
-         * Add autoinc and defaults and return
-         */
-        return $this->processColumnInformation($schema, $table, $processed);
-    }
-
-    /**
      * Returns an array with the available tables for the schema
      *
      * @param string $schema
@@ -255,5 +227,19 @@ class Sqlite extends AbstractAdapter
     protected function quote(string $name): string
     {
         return '"' . str_replace('"', '""', $name) . '"';
+    }
+
+    /**
+     * @param string $schema
+     * @param string $table
+     *
+     * @return string
+     */
+    protected function getListColumnSql(string $schema, string $table): string
+    {
+        $currentSchema = $this->quote($schema);
+        $currentTable  = $this->quote($table);
+
+        return "PRAGMA $currentSchema.table_info($currentTable)";
     }
 }

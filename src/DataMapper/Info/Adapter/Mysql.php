@@ -65,7 +65,17 @@ class Mysql extends AbstractAdapter
      */
     protected function getAutoIncSql(): string
     {
-        return "IF(LOCATE('auto_increment', EXTRA) > 0, 1, 0) ";
+        return "IF(LOCATE('auto_increment', c.extra) > 0, 1, 0)";
+    }
+
+    /**
+     * Returns the SQL for the comment column
+     *
+     * @return string
+     */
+    protected function getCommentSql(): string
+    {
+        return "c.column_comment";
     }
 
     /**
@@ -75,6 +85,22 @@ class Mysql extends AbstractAdapter
      */
     protected function getExtendedSql(): string
     {
-        return 'COLUMN_TYPE';
+        return 'c.column_type';
+    }
+
+    /**
+     * Returns the SQL for the unsigned field (MySQL)
+     *
+     * @return string
+     */
+    protected function getUnsignedSql(): string
+    {
+        return "CASE
+            WHEN POSITION('int' IN c.data_type) > 0
+                AND POSITION('unsigned' IN c.column_type) > 0 THEN 1
+            WHEN POSITION('int' IN c.data_type) > 0
+                AND POSITION('unsigned' IN c.column_type) = 0 THEN 0
+            ELSE NULL
+        END";
     }
 }
