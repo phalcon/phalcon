@@ -258,7 +258,7 @@ final class ListColumnsTest extends AbstractDatabaseTestCase
                 'isNotNull'       => false,
                 'isNumeric'       => false,
                 'isPrimary'       => false,
-                'isUnsigned'      => false,
+                'isUnsigned'      => null,
                 'name'            => 'field_enum',
                 'options'         => [
                     "'xs'",
@@ -282,7 +282,7 @@ final class ListColumnsTest extends AbstractDatabaseTestCase
                 'isNotNull'       => false,
                 'isNumeric'       => true,
                 'isPrimary'       => false,
-                'isUnsigned'      => false,
+                'isUnsigned'      => true,
                 'name'            => 'field_integer',
                 'options'         => null,
                 'scale'           => 0,
