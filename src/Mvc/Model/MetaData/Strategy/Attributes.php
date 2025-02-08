@@ -40,19 +40,19 @@ class Attributes implements StrategyInterface
 
         foreach ($propertiesAttributes as $property => $propAttributes) {
             /**
-             * All columns marked with the "Column" annotation are considered columns
+             * All columns marked with the "Column" attribute are considered columns
              */
             if (false === $propAttributes->has("Column")) {
                 continue;
             }
 
             /**
-             * Fetch the "column" annotation
+             * Fetch the "column" attribute
              */
             $columnAttributes = $propAttributes->get("Column");
 
             /**
-             * Check if annotation has the "column" named parameter
+             * Check if attribute has the "column" named parameter
              */
             $columnName = $columnAttributes->getNamedParameter("column");
             if (empty($columnName)) {
@@ -107,7 +107,7 @@ class Attributes implements StrategyInterface
 
         foreach ($propertiesAttributes as $property => $propAttributes) {
             /**
-             * All columns marked with the "Column" annotation are considered
+             * All columns marked with the "Column" attribute are considered
              * columns
              */
             if (false === $propAttributes->has("Column")) {
@@ -115,12 +115,12 @@ class Attributes implements StrategyInterface
             }
 
             /**
-             * Fetch the "column" annotation
+             * Fetch the "column" attribute
              */
             $columnAttributes = $propAttributes->get("Column");
 
             /**
-             * Check if annotation has the "column" named parameter
+             * Check if attribute has the "column" named parameter
              */
             $columnName = $columnAttributes->getNamedParameter("column");
 
@@ -129,7 +129,7 @@ class Attributes implements StrategyInterface
             }
 
             /**
-             * Check if annotation has the "type" named parameter
+             * Check if attribute has the "type" named parameter
              */
             $feature = $columnAttributes->getNamedParameter("type");
 
@@ -195,7 +195,7 @@ class Attributes implements StrategyInterface
             };
 
             /**
-             * All columns marked with the "Primary" annotation are considered
+             * All columns marked with the "Primary" attribute are considered
              * primary keys
              */
             if (true === $propAttributes->has("Primary")) {
@@ -205,7 +205,7 @@ class Attributes implements StrategyInterface
             }
 
             /**
-             * All columns marked with the "Identity" annotation are considered
+             * All columns marked with the "Identity" attribute are considered
              * the column identity
              */
             if (true === $propAttributes->has("Identity")) {
@@ -292,7 +292,7 @@ class Attributes implements StrategyInterface
 
         if (!is_object($reflection)) {
             throw new Exception(
-                "No annotations were found in class " . $className
+                "No attributes were found in class " . $className
             );
         }
 
@@ -303,7 +303,7 @@ class Attributes implements StrategyInterface
 
         if (0 === count($propertiesAttributes)) {
             throw new Exception(
-                "No properties with annotations were found in class " . $className
+                "No properties with attributes were found in class " . $className
             );
         }
 
