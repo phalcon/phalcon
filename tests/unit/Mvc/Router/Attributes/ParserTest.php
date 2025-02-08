@@ -77,7 +77,6 @@ final class ParserTest extends AbstractUnitTestCase
     {
         $factory = new AdapterFactory(new SerializerFactory());
         $adapter = $factory->newInstance('stream', ['storageDir' => outputDir()]);
-        $adapter->clear();
 
         $di = new Di();
         $di->setShared(
