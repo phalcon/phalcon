@@ -76,7 +76,7 @@ final class ParserTest extends AbstractUnitTestCase
     public function testMvcRouterGeneralStream(): void
     {
         $factory = new AdapterFactory(new SerializerFactory());
-        $adapter = $factory->newInstance('stream', ['storageDir' => '/srv/.local/attributes/']);
+        $adapter = $factory->newInstance('stream', ['storageDir' => outputDir()]);
         $adapter->clear();
 
         $di = new Di();

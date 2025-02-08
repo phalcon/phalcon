@@ -46,7 +46,7 @@ class ParserTest extends AbstractUnitTestCase
         );
 
         $parser = new Attributes();
-        $result = $parser->getMetaData(new AttributesModel(), $di);
+        $result = $parser->getMetaData(new AttributesModel(null, $di), $di);
 
         $this->assertEquals(
             [
@@ -174,7 +174,7 @@ class ParserTest extends AbstractUnitTestCase
         );
 
         $parser = new Attributes();
-        $result = $parser->getColumnMaps(new AttributesModel(), $di);
+        $result = $parser->getColumnMaps(new AttributesModel(null, $di), $di);
 
         $this->assertEquals(
             [
@@ -225,7 +225,7 @@ class ParserTest extends AbstractUnitTestCase
         );
 
         $parser = new Attributes();
-        $result = $parser->getColumnMaps(new AttributesNoChangeModel(), $di);
+        $result = $parser->getColumnMaps(new AttributesNoChangeModel(null, $di), $di);
 
         $this->assertEquals(
             [
