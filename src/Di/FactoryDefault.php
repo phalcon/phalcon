@@ -15,6 +15,7 @@ namespace Phalcon\Di;
 
 use Phalcon\Annotations\Adapter\Memory as AnnotationsMemory;
 use Phalcon\Assets\Manager as AssetsManager;
+use Phalcon\Components\Attributes\Adapter\Memory as AttributesMemory;
 use Phalcon\Encryption\Crypt;
 use Phalcon\Encryption\Security;
 use Phalcon\Events\Manager as EventsManager;
@@ -42,6 +43,7 @@ use Phalcon\Support\HelperFactory;
  * full stack framework
  *
  * @property AnnotationsMemory  $annotations
+ * @property AttributesMemory   $attributes
  * @property AssetsManager      $assets
  * @property Crypt              $crypt
  * @property Cookies            $cookies
@@ -75,6 +77,7 @@ class FactoryDefault extends Di
 
         $this->services = [
             'annotations'        => new Service(AnnotationsMemory::class, true),
+            'attributes'         => new Service(AttributesMemory::class, true),
             'assets'             => new Service(
                 [
                     'className' => AssetsManager::class,

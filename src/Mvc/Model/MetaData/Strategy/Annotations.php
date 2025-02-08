@@ -269,21 +269,21 @@ class Annotations implements StrategyInterface
              * Column will be skipped on INSERT operation
              */
             if ($columnAnnotation->getNamedParameter("skip_on_insert")) {
-                $skipOnInsert[] = $columnName;
+                $skipOnInsert[$columnName] = true;
             }
 
             /**
              * Column will be skipped on UPDATE operation
              */
             if ($columnAnnotation->getNamedParameter("skip_on_update")) {
-                $skipOnUpdate[] = $columnName;
+                $skipOnUpdate[$columnName] = true;
             }
 
             /**
              * Allow empty strings for column
              */
             if ($columnAnnotation->getNamedParameter("allow_empty_string")) {
-                $emptyStringValues[$columnName] = $columnName;
+                $emptyStringValues[$columnName] = true;
             }
 
             /**
