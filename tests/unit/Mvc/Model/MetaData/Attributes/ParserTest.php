@@ -18,10 +18,10 @@ use Phalcon\Di\Di;
 use Phalcon\Mvc\Model\Manager;
 use Phalcon\Mvc\Model\MetaData;
 use Phalcon\Mvc\Model\MetaData\Strategy\Attributes;
+use Phalcon\Tests\AbstractUnitTestCase;
 use Phalcon\Tests\Fixtures\models\AttributesModel;
-use Phalcon\Tests\UnitTestCase;
 
-class ParserTest extends UnitTestCase
+class ParserTest extends AbstractUnitTestCase
 {
     /**
      * Tests Phalcon\Model\MetaData\Attributes :: getMetaData

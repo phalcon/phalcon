@@ -19,9 +19,9 @@ use Phalcon\Http\Request;
 use Phalcon\Mvc\Router\Attributes;
 use Phalcon\Storage\SerializerFactory;
 use Phalcon\Tests\Fixtures\Traits\RouterTrait;
-use Phalcon\Tests\UnitTestCase;
+use Phalcon\Tests\AbstractUnitTestCase;
 
-final class ParserTest extends UnitTestCase
+final class ParserTest extends AbstractUnitTestCase
 {
     use RouterTrait;
 
