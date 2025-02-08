@@ -18,9 +18,7 @@ use Attribute;
 #[Attribute(Attribute::TARGET_CLASS)]
 class RoutePrefix
 {
-    public string $prefix;
-    public function __construct(string $prefix)
+    public function __construct(public string $prefix)
     {
-        $this->prefix = $prefix;
     }
 }
