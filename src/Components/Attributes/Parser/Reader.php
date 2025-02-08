@@ -52,7 +52,7 @@ class Reader implements ReaderInterface
         /**
          * Get class constants
          */
-        $constants           = $reflection->getConstants();
+        $constants           = $reflection->getReflectionConstants();
         $attributesConstants = [];
         foreach ($constants as $constant) {
             $constantAttributes = $constant->getAttributes();
