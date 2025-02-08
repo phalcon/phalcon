@@ -14,28 +14,12 @@ declare(strict_types=1);
 namespace Phalcon\Components\Attributes\Parser;
 
 /**
- * Parses docblocks returning an array with the found annotations
+ * Parses attributes returning an array with the found attributes
  */
 interface ReaderInterface
 {
     /**
-     * Reads annotations from the class docblocks, its constants, properties
-     * and methods
+     * Reads attributes from the class, properties and methods
      */
     public function parse(string $className): array;
-
-    /**
-     * Parses a raw docblock returning the annotations found
-     *
-     * @param string     $docBlock
-     * @param mixed|null $file
-     * @param mixed|null $line
-     *
-     * @return array
-     */
-    public static function parseDocBlock(
-        string $docBlock,
-        mixed $file = null,
-        mixed $line = null
-    ): array;
 }

@@ -91,7 +91,7 @@ class Collection implements Iterator, Countable
     public function get(string $name): Attribute
     {
         foreach ($this->attributes as $attribute) {
-            if ($name == $attribute->getName()) {
+            if ($name === $attribute->getName()) {
                 return $attribute;
             }
         }
@@ -112,7 +112,7 @@ class Collection implements Iterator, Countable
     {
         $found = [];
         foreach ($this->attributes as $attribute) {
-            if ($name == $attribute->getName()) {
+            if ($name === $attribute->getName()) {
                 $found[] = $attribute;
             }
         }
@@ -140,7 +140,7 @@ class Collection implements Iterator, Countable
     public function has(string $name): bool
     {
         foreach ($this->attributes as $attribute) {
-            if ($name == $attribute->getName()) {
+            if ($name === $attribute->getName()) {
                 return true;
             }
         }

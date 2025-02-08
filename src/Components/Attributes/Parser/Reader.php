@@ -83,18 +83,4 @@ class Reader implements ReaderInterface
 
         return $attributes;
     }
-
-    /**
-     * Parses a raw doc block returning the annotations found
-     *
-     * @param string     $docBlock
-     * @param mixed|null $file
-     * @param mixed|null $line
-     *
-     * @return array
-     */
-    public static function parseDocBlock(string $docBlock, mixed $file = null, mixed $line = null): array
-    {
-        return [];
-    }
 }
