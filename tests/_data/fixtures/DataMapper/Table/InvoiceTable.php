@@ -11,7 +11,7 @@ declare(strict_types=1);
 
 namespace Phalcon\Tests\Fixtures\DataMapper\Table;
 
-use Phalcon\DataMapper\Table\AbstractRow;
+use Phalcon\DataMapper\Table\AbstractTable;
 
 /**
  *
@@ -21,7 +21,7 @@ use Phalcon\DataMapper\Table\AbstractRow;
  * @method InvoiceRow         newRow(array $cols = [])
  * @method InvoiceRow         newSelectedRow(array $cols)
  */
-class InvoiceTable extends AbstractRow
+class InvoiceTable extends AbstractTable
 {
     public const AUTOINC_COLUMN = 'inv_id';
 
