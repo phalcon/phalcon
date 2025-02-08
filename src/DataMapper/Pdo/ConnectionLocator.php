@@ -55,7 +55,7 @@ class ConnectionLocator
             return new static($defaultFactory);
         }
 
-        return new static(Connection::factory($arguments, ...$arguments));
+        return new static(Connection::factory($argument, ...$arguments));
     }
 
     /**
@@ -64,6 +64,8 @@ class ConnectionLocator
      * @param callable                $master
      * @param array<string, callable> $read
      * @param array<string, callable> $write
+     *
+     * @throws ConnectionNotFound
      */
     public function __construct(
         callable $master,

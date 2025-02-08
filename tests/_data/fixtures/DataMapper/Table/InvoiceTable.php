@@ -145,7 +145,7 @@ class InvoiceTable extends AbstractTable
 
     public const DRIVER = 'mysql';
 
-    public const NAME = 'invoice';
+    public const NAME = 'co_invoices';
 
     public const PRIMARY_KEY = [
         'inv_id',
