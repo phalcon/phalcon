@@ -66,7 +66,7 @@ class Annotations implements StrategyInterface
             /**
              * All columns marked with the "Column" annotation are considered columns
              */
-            if ($propAnnotations->has("Column")) {
+            if (false === $propAnnotations->has("Column")) {
                 continue;
             }
 

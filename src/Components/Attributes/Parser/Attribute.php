@@ -45,7 +45,7 @@ class Attribute
      */
     public function __construct(ReflectionAttribute $reflectionData)
     {
-        $this->name      = $reflectionData->getName() ?? "";
+        $this->name      = ltrim(strrchr($reflectionData->getName() ?: "", '\\'), '\\');
         $this->arguments = $reflectionData->getArguments() ?? [];
     }
 
@@ -62,6 +62,18 @@ class Attribute
     }
 
     /**
+     * Returns a named argument
+     *
+     * @param string $name
+     *
+     * @return mixed
+     */
+    public function getNamedArgument(string $name): mixed
+    {
+        return $this->arguments[$name] ?? null;
+    }
+
+    /**
      * Returns the expression arguments
      *
      * @return array
@@ -69,6 +81,18 @@ class Attribute
     public function getArguments(): array
     {
         return $this->arguments;
+    }
+
+    /**
+     * Returns a named parameter
+     *
+     * @param string $name
+     *
+     * @return mixed
+     */
+    public function getNamedParameter(string $name): mixed
+    {
+        return $this->getNamedArgument($name);
     }
 
     /**

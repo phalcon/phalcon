@@ -16,7 +16,6 @@ namespace Phalcon\Mvc\Router;
 use Phalcon\Components\Attributes\Adapter\Memory;
 use Phalcon\Components\Attributes\Parser\Attribute;
 use Phalcon\Components\Attributes\Parser\Exception;
-use Phalcon\Components\Attributes\Router\RoutePrefix;
 use Phalcon\Events\Exception as EventsException;
 use Phalcon\Mvc\Router;
 use Phalcon\Traits\Helper\Str\UncamelizeTrait;
@@ -312,7 +311,7 @@ class Attributes extends Router
         string $action,
         Attribute $attribute
     ): void {
-        $name    = $attribute->getCleanName();
+        $name    = $attribute->getName();
         $isRoute = match ($name) {
             "Route",
             "Get",
@@ -462,7 +461,7 @@ class Attributes extends Router
         /**
          * @RoutePrefix add a prefix for all the routes defined in the model
          */
-        if ($attribute->getName() === RoutePrefix::class) {
+        if ($attribute->getName() === 'RoutePrefix') {
             $this->routePrefix = $attribute->hasArgument(0) ?
                 $attribute->getArgument(0) :
                 $attribute->getArgument('prefix') ?? '';

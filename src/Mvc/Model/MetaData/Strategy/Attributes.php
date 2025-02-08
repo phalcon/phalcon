@@ -13,15 +13,12 @@ declare(strict_types=1);
 
 namespace Phalcon\Mvc\Model\MetaData\Strategy;
 
-use Phalcon\Components\Attributes\Models\MetaData\Column as MetaDataColumn;
-use Phalcon\Components\Attributes\Models\MetaData\Identity;
-use Phalcon\Components\Attributes\Models\MetaData\Primary;
+use Phalcon\Components\Attributes\Parser\Collection;
 use Phalcon\Db\Column;
 use Phalcon\Di\DiInterface;
 use Phalcon\Mvc\Model\Exception;
 use Phalcon\Mvc\Model\MetaData;
 use Phalcon\Mvc\ModelInterface;
-use ReflectionClass;
 
 class Attributes implements StrategyInterface
 {
@@ -30,45 +27,43 @@ class Attributes implements StrategyInterface
      * @param DiInterface    $container
      *
      * @throws Exception
+     * @throws \Phalcon\Components\Attributes\Parser\Exception
      * @return array
      */
     public function getColumnMaps(ModelInterface $model, DiInterface $container): array
     {
-        $properties = $this->getProperties($model, $container);
+        $propertiesAttributes = $this->getProperties($model, $container);
 
         $orderedColumnMap  = [];
         $reversedColumnMap = [];
         $hasReversedColumn = false;
 
-        foreach ($properties as $property) {
-            foreach ($property->getAttributes() as $attribute) {
-                /**
-                 * All columns marked with the "Column" annotation are considered columns
-                 */
-                if ($attribute->getName() !== MetaDataColumn::class) {
-                    continue;
-                }
+        foreach ($propertiesAttributes as $property => $propAttributes) {
+            /**
+             * All columns marked with the "Column" annotation are considered columns
+             */
+            if (false === $propAttributes->has("Column")) {
+                continue;
+            }
 
-                /**
-                 * Fetch the "column" annotation
-                 */
-                $arguments = $attribute->getArguments();
+            /**
+             * Fetch the "column" annotation
+             */
+            $columnAttributes = $propAttributes->get("Column");
 
-                /**
-                 * Check if annotation has the "column" named parameter
-                 */
-                $columnName = $arguments['column'] ?? null;
+            /**
+             * Check if annotation has the "column" named parameter
+             */
+            $columnName = $columnAttributes->getNamedParameter("column");
+            if (empty($columnName)) {
+                $columnName = $property;
+            }
 
-                if (true === empty($columnName)) {
-                    $columnName = $property->getName();
-                }
+            $orderedColumnMap[$columnName] = $property;
+            $reversedColumnMap[$property]  = $columnName;
 
-                $orderedColumnMap[$columnName]           = $property->getName();
-                $reversedColumnMap[$property->getName()] = $columnName;
-
-                if (false === $hasReversedColumn && $columnName !== $property->getName()) {
-                    $hasReversedColumn = true;
-                }
+            if (false === $hasReversedColumn && $columnName !== $property) {
+                $hasReversedColumn = true;
             }
         }
 
@@ -87,11 +82,12 @@ class Attributes implements StrategyInterface
      * @param DiInterface    $container
      *
      * @throws Exception
+     * @throws \Phalcon\Components\Attributes\Parser\Exception
      * @return array
      */
     public function getMetaData(ModelInterface $model, DiInterface $container): array
     {
-        $properties = $this->getProperties($model, $container);
+        $propertiesAttributes = $this->getProperties($model, $container);
 
         /**
          * Initialize meta-data
@@ -109,244 +105,151 @@ class Attributes implements StrategyInterface
         $defaultValues     = [];
         $emptyStringValues = [];
 
-        foreach ($properties as $property) {
-            foreach ($property->getAttributes() as $attribute) {
-                if ($attribute->getName() !== MetaDataColumn::class) {
-                    continue;
-                }
-                $arguments = $attribute->getArguments();
-                /**
-                 * Check if annotation has the "column" named parameter
-                 */
-                $columnName = $arguments['column'] ?? null;
-
-                if (true === empty($columnName)) {
-                    $columnName = $property->getName();
-                }
-
-                $attributes[] = $columnName;
-
-                /**
-                 * Check if annotation has the "type" named parameter
-                 */
-                switch ($arguments['type']) {
-                    case "biginteger":
-                        $fieldTypes[$columnName]     = Column::TYPE_BIGINTEGER;
-                        $fieldBindTypes[$columnName] = Column::BIND_PARAM_STR;
-                        $numericTyped[$columnName]   = true;
-                        break;
-
-                    case "bit":
-                        $fieldTypes[$columnName]     = Column::TYPE_BIT;
-                        $fieldBindTypes[$columnName] = Column::BIND_PARAM_INT;
-                        $numericTyped[$columnName]   = true;
-                        break;
-
-                    case "blob":
-                        $fieldTypes[$columnName]     = Column::TYPE_BLOB;
-                        $fieldBindTypes[$columnName] = Column::BIND_PARAM_BLOB;
-                        break;
-
-                    case "boolean":
-                        $fieldTypes[$columnName]     = Column::TYPE_BOOLEAN;
-                        $fieldBindTypes[$columnName] = Column::BIND_PARAM_BOOL;
-                        break;
-
-                    case "char":
-                        $fieldTypes[$columnName]     = Column::TYPE_CHAR;
-                        $fieldBindTypes[$columnName] = Column::BIND_PARAM_STR;
-                        break;
-
-                    case "date":
-                        $fieldTypes[$columnName]     = Column::TYPE_DATE;
-                        $fieldBindTypes[$columnName] = Column::BIND_PARAM_STR;
-                        break;
-
-                    case "datetime":
-                        $fieldTypes[$columnName]     = Column::TYPE_DATETIME;
-                        $fieldBindTypes[$columnName] = Column::BIND_PARAM_STR;
-                        break;
-
-                    case "decimal":
-                        $fieldTypes[$columnName]     = Column::TYPE_DECIMAL;
-                        $fieldBindTypes[$columnName] = Column::BIND_PARAM_DECIMAL;
-                        $numericTyped[$columnName]   = true;
-                        break;
-
-                    case "double":
-                        $fieldTypes[$columnName]     = Column::TYPE_DOUBLE;
-                        $fieldBindTypes[$columnName] = Column::BIND_PARAM_DECIMAL;
-                        $numericTyped[$columnName]   = true;
-                        break;
-
-                    case "enum":
-                        $fieldTypes[$columnName]     = Column::TYPE_ENUM;
-                        $fieldBindTypes[$columnName] = Column::BIND_PARAM_STR;
-                        $numericTyped[$columnName]   = true;
-                        break;
-
-                    case "float":
-                        $fieldTypes[$columnName]     = Column::TYPE_FLOAT;
-                        $fieldBindTypes[$columnName] = Column::BIND_PARAM_DECIMAL;
-                        $numericTyped[$columnName]   = true;
-                        break;
-
-                    case "integer":
-                        $fieldTypes[$columnName]     = Column::TYPE_INTEGER;
-                        $fieldBindTypes[$columnName] = Column::BIND_PARAM_INT;
-                        $numericTyped[$columnName]   = true;
-                        break;
-
-                    case "json":
-                        $fieldTypes[$columnName]     = Column::TYPE_JSON;
-                        $fieldBindTypes[$columnName] = Column::BIND_PARAM_STR;
-                        break;
-
-                    case "jsonb":
-                        $fieldTypes[$columnName]     = Column::TYPE_JSONB;
-                        $fieldBindTypes[$columnName] = Column::BIND_PARAM_STR;
-                        break;
-
-                    case "longblob":
-                        $fieldTypes[$columnName]     = Column::TYPE_LONGBLOB;
-                        $fieldBindTypes[$columnName] = Column::BIND_PARAM_BLOB;
-                        break;
-
-                    case "longtext":
-                        $fieldTypes[$columnName]     = Column::TYPE_LONGTEXT;
-                        $fieldBindTypes[$columnName] = Column::BIND_PARAM_STR;
-                        break;
-
-                    case "mediumblob":
-                        $fieldTypes[$columnName]     = Column::TYPE_MEDIUMBLOB;
-                        $fieldBindTypes[$columnName] = Column::BIND_PARAM_BLOB;
-                        break;
-
-                    case "mediumint":
-                        $fieldTypes[$columnName]     = Column::TYPE_MEDIUMINTEGER;
-                        $fieldBindTypes[$columnName] = Column::BIND_PARAM_INT;
-                        $numericTyped[$columnName]   = true;
-                        break;
-
-                    case "mediumtext":
-                        $fieldTypes[$columnName]     = Column::TYPE_MEDIUMTEXT;
-                        $fieldBindTypes[$columnName] = Column::BIND_PARAM_STR;
-                        break;
-
-                    case "smallint":
-                        $fieldTypes[$columnName]     = Column::TYPE_SMALLINTEGER;
-                        $fieldBindTypes[$columnName] = Column::BIND_PARAM_INT;
-                        $numericTyped[$columnName]   = true;
-                        break;
-
-                    case "text":
-                        $fieldTypes[$columnName]     = Column::TYPE_TEXT;
-                        $fieldBindTypes[$columnName] = Column::BIND_PARAM_STR;
-                        break;
-
-                    case "time":
-                        $fieldTypes[$columnName]     = Column::TYPE_TIME;
-                        $fieldBindTypes[$columnName] = Column::BIND_PARAM_STR;
-                        break;
-
-                    case "timestamp":
-                        $fieldTypes[$columnName]     = Column::TYPE_TIMESTAMP;
-                        $fieldBindTypes[$columnName] = Column::BIND_PARAM_STR;
-                        break;
-
-                    case "tinyblob":
-                        $fieldTypes[$columnName]     = Column::TYPE_TINYBLOB;
-                        $fieldBindTypes[$columnName] = Column::BIND_PARAM_BLOB;
-                        break;
-
-                    case "tinyint":
-                        $fieldTypes[$columnName]     = Column::TYPE_TINYINTEGER;
-                        $fieldBindTypes[$columnName] = Column::BIND_PARAM_INT;
-                        $numericTyped[$columnName]   = true;
-                        break;
-
-                    case "tinytext":
-                        $fieldTypes[$columnName]     = Column::TYPE_TINYTEXT;
-                        $fieldBindTypes[$columnName] = Column::BIND_PARAM_STR;
-                        break;
-
-                    default:
-                        /**
-                         * By default all columns are varchar/string
-                         */
-                        $fieldTypes[$columnName]     = Column::TYPE_VARCHAR;
-                        $fieldBindTypes[$columnName] = Column::BIND_PARAM_STR;
-                }
-
-                /**
-                 * Column will be skipped on INSERT operation
-                 */
-                if (($arguments['skipOnInsert'] ?? false) !== false) {
-                    $skipOnInsert[$columnName] = true;
-                }
-
-                /**
-                 * Column will be skipped on UPDATE operation
-                 */
-                if (($arguments['skipOnUpdate'] ?? false) !== false) {
-                    $skipOnUpdate[$columnName] = true;
-                }
-
-                /**
-                 * Allow empty strings for column
-                 */
-                if (($arguments['allowEmptyString'] ?? false) !== false) {
-                    $emptyStringValues[$columnName] = true;
-                }
-
-                /**
-                 * Check if the column is nullable
-                 */
-                if (($arguments['nullable'] ?? false) === false) {
-                    $notNull[] = $columnName;
-                }
-
-                /**
-                 * If column has default value or column is nullable and default
-                 * value is null
-                 */
-                $defaultValue = $arguments['default'] ?? null;
-                if ($defaultValue !== null || ($arguments['nullable'] ?? false)) {
-                    $defaultValues[$columnName] = $defaultValue;
-                }
-
-                /**
-                 * All columns marked with the "Primary" annotation are considered
-                 * primary keys
-                 */
-                if (
-                    count(
-                        array_filter(
-                            $property->getAttributes(),
-                            static fn ($attribute) => $attribute->getName() === Primary::class
-                        )
-                    ) !== 0
-                ) {
-                    $primaryKeys[] = $columnName;
-                } else {
-                    $nonPrimaryKeys[] = $columnName;
-                }
-
-                /**
-                 * All columns marked with the "Identity" annotation are considered
-                 * the column identity
-                 */
-                if (
-                    count(
-                        array_filter(
-                            $property->getAttributes(),
-                            static fn ($attribute) => $attribute->getName() === Identity::class
-                        )
-                    ) !== 0
-                ) {
-                    $identityField = $columnName;
-                }
+        foreach ($propertiesAttributes as $property => $propAttributes) {
+            /**
+             * All columns marked with the "Column" annotation are considered
+             * columns
+             */
+            if (false === $propAttributes->has("Column")) {
+                continue;
             }
+
+            /**
+             * Fetch the "column" annotation
+             */
+            $columnAttributes = $propAttributes->get("Column");
+
+            /**
+             * Check if annotation has the "column" named parameter
+             */
+            $columnName = $columnAttributes->getNamedParameter("column");
+
+            if (empty($columnName)) {
+                $columnName = $property;
+            }
+
+            /**
+             * Check if annotation has the "type" named parameter
+             */
+            $feature = $columnAttributes->getNamedParameter("type");
+
+            $fieldTypes[$columnName] = match ($feature) {
+                "biginteger" => Column::TYPE_BIGINTEGER,
+                "bit" => Column::TYPE_BIT,
+                "blob" => Column::TYPE_BLOB,
+                "boolean" => Column::TYPE_BOOLEAN,
+                "char" => Column::TYPE_CHAR,
+                "date" => Column::TYPE_DATE,
+                "datetime" => Column::TYPE_DATETIME,
+                "decimal" => Column::TYPE_DECIMAL,
+                "double" => Column::TYPE_DOUBLE,
+                "enum" => Column::TYPE_ENUM,
+                "float" => Column::TYPE_FLOAT,
+                "integer" => Column::TYPE_INTEGER,
+                "json" => Column::TYPE_JSON,
+                "jsonb" => Column::TYPE_JSONB,
+                "longblob" => Column::TYPE_LONGBLOB,
+                "longtext" => Column::TYPE_LONGTEXT,
+                "mediumblob" => Column::TYPE_MEDIUMBLOB,
+                "mediumint" => Column::TYPE_MEDIUMINTEGER,
+                "mediumtext" => Column::TYPE_MEDIUMTEXT,
+                "smallint" => Column::TYPE_SMALLINTEGER,
+                "text" => Column::TYPE_TEXT,
+                "time" => Column::TYPE_TIME,
+                "timestamp" => Column::TYPE_TIMESTAMP,
+                "tinyblob" => Column::TYPE_TINYBLOB,
+                "tinyint" => Column::TYPE_TINYINTEGER,
+                "tinytext" => Column::TYPE_TINYTEXT,
+                default => Column::TYPE_VARCHAR,
+            };
+
+            $fieldBindTypes[$columnName] = match ($feature) {
+                "decimal",
+                "double",
+                "float" => Column::BIND_PARAM_DECIMAL,
+                "blob",
+                "mediumblob",
+                "longblob",
+                "tinyblob" => Column::BIND_PARAM_BLOB,
+                "boolean" => Column::BIND_PARAM_BOOL,
+                "mediumint",
+                "smallint",
+                "tinyint",
+                "bit",
+                "integer" => Column::BIND_PARAM_INT,
+                default => Column::BIND_PARAM_STR,
+            };
+
+            $numericTyped[$columnName] = match ($feature) {
+                "biginteger",
+                "bit",
+                "decimal",
+                "double",
+                "enum",
+                "float",
+                "integer",
+                "mediumint",
+                "smallint",
+                "tinyint" => true,
+                default => false,
+            };
+
+            /**
+             * All columns marked with the "Primary" annotation are considered
+             * primary keys
+             */
+            if (true === $propAttributes->has("Primary")) {
+                $primaryKeys[] = $columnName;
+            } else {
+                $nonPrimaryKeys[] = $columnName;
+            }
+
+            /**
+             * All columns marked with the "Identity" annotation are considered
+             * the column identity
+             */
+            if (true === $propAttributes->has("Identity")) {
+                $identityField = $columnName;
+            }
+
+            /**
+             * Column will be skipped on INSERT operation
+             */
+            if ($columnAttributes->getNamedParameter("skipOnInsert")) {
+                $skipOnInsert[$columnName] = true;
+            }
+
+            /**
+             * Column will be skipped on UPDATE operation
+             */
+            if ($columnAttributes->getNamedParameter("skipOnUpdate")) {
+                $skipOnUpdate[$columnName] = true;
+            }
+
+            /**
+             * Allow empty strings for column
+             */
+            if ($columnAttributes->getNamedParameter("allowEmptyString")) {
+                $emptyStringValues[$columnName] = true;
+            }
+
+            /**
+             * Check if the column is nullable
+             */
+            if (!$columnAttributes->getNamedParameter("nullable")) {
+                $notNull[] = $columnName;
+            }
+
+            /**
+             * If column has default value or column is nullable and default
+             * value is null
+             */
+            $defaultValue = $columnAttributes->getNamedParameter("default");
+            if ($defaultValue !== null || $columnAttributes->getNamedParameter("nullable")) {
+                $defaultValues[$columnName] = $defaultValue;
+            }
+
+            $attributes[] = $columnName;
         }
 
         /**
@@ -373,7 +276,7 @@ class Attributes implements StrategyInterface
      * @param DiInterface    $container
      *
      * @throws Exception
-     * @return array
+     * @return Collection[]
      */
     private function getProperties(ModelInterface $model, DiInterface $container): array
     {
@@ -381,26 +284,29 @@ class Attributes implements StrategyInterface
             throw new Exception("The dependency injector is invalid in MetaData Strategy Attributes");
         }
 
-        $className  = get_class($model);
-        $reflection = new ReflectionClass($model);
+        /** @var \Phalcon\Components\Attributes\Attributes $attributes */
+        $attributes = $container->get("attributes");
 
-        if (false === is_object($reflection)) {
+        $className  = get_class($model);
+        $reflection = $attributes->get($className);
+
+        if (!is_object($reflection)) {
             throw new Exception(
-                "No attributes were found in class " . $className
+                "No annotations were found in class " . $className
             );
         }
 
         /**
          * Get the properties defined in
          */
-        $properties = $reflection->getProperties();
+        $propertiesAttributes = $reflection->getPropertiesAttributes();
 
-        if (0 === count($properties)) {
+        if (0 === count($propertiesAttributes)) {
             throw new Exception(
-                "No properties with attributes were found in class " . $className
+                "No properties with annotations were found in class " . $className
             );
         }
 
-        return $properties;
+        return $propertiesAttributes;
     }
 }

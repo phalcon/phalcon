@@ -13,13 +13,16 @@ declare(strict_types=1);
 
 namespace Phalcon\Tests\Unit\Mvc\Model\MetaData\Attributes;
 
+use Phalcon\Components\Attributes\Adapter\Memory;
 use Phalcon\Db\Column;
 use Phalcon\Di\Di;
 use Phalcon\Mvc\Model\Manager;
 use Phalcon\Mvc\Model\MetaData;
 use Phalcon\Mvc\Model\MetaData\Strategy\Attributes;
+use Phalcon\Storage\SerializerFactory;
 use Phalcon\Tests\AbstractUnitTestCase;
 use Phalcon\Tests\Fixtures\models\AttributesModel;
+use Phalcon\Tests\Fixtures\models\AttributesNoChangeModel;
 
 class ParserTest extends AbstractUnitTestCase
 {
@@ -33,6 +36,14 @@ class ParserTest extends AbstractUnitTestCase
     {
         $di = new Di();
         $di->setShared('modelsManager', new Manager());
+        $di->setShared(
+            'attributes',
+            new \Phalcon\Components\Attributes\Attributes(
+                new Memory(
+                    new SerializerFactory()
+                )
+            )
+        );
 
         $parser = new Attributes();
         $result = $parser->getMetaData(new AttributesModel(), $di);
@@ -94,8 +105,11 @@ class ParserTest extends AbstractUnitTestCase
                     'inv_id'          => true,
                     'inv_cst_id'      => true,
                     'inv_status_flag' => true,
+                    'inv_title'       => false,
                     'inv_total'       => true,
+                    'inv_created_at'  => false,
                     'inv_created_by'  => true,
+                    'inv_updated_at'  => false,
                     'inv_updated_by'  => true,
                 ],
 
@@ -150,6 +164,14 @@ class ParserTest extends AbstractUnitTestCase
     {
         $di = new Di();
         $di->setShared('modelsManager', new Manager());
+        $di->setShared(
+            'attributes',
+            new \Phalcon\Components\Attributes\Attributes(
+                new Memory(
+                    new SerializerFactory()
+                )
+            )
+        );
 
         $parser = new Attributes();
         $result = $parser->getColumnMaps(new AttributesModel(), $di);
@@ -178,6 +200,37 @@ class ParserTest extends AbstractUnitTestCase
                     "inv_updated_at"  => "inv_updated_at",
                     "inv_updated_by"  => "inv_updated_by",
                 ],
+            ],
+            $result,
+        );
+    }
+
+    /**
+     * Tests Phalcon\Model\MetaData\Attributes :: getColumnMap
+     *
+     * @author Phalcon Team <team@phalcon.io>
+     * @since  2025-02-07
+     */
+    public function testAttributesGetColumnMapNoChange(): void
+    {
+        $di = new Di();
+        $di->setShared('modelsManager', new Manager());
+        $di->setShared(
+            'attributes',
+            new \Phalcon\Components\Attributes\Attributes(
+                new Memory(
+                    new SerializerFactory()
+                )
+            )
+        );
+
+        $parser = new Attributes();
+        $result = $parser->getColumnMaps(new AttributesNoChangeModel(), $di);
+
+        $this->assertEquals(
+            [
+                null,
+                null,
             ],
             $result,
         );
