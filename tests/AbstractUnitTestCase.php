@@ -13,8 +13,11 @@ declare(strict_types=1);
 
 namespace Phalcon\Tests;
 
+use FilesystemIterator;
 use PHPUnit\Framework\SkippedTestSuiteError;
 use PHPUnit\Framework\TestCase;
+use RecursiveDirectoryIterator;
+use RecursiveIteratorIterator;
 use ReflectionClass;
 use ReflectionException;
 
@@ -25,19 +28,16 @@ use function extension_loaded;
 use function file_exists;
 use function func_get_args;
 use function gc_collect_cycles;
-use function glob;
 use function is_dir;
 use function is_file;
 use function is_object;
 use function rmdir;
 use function rtrim;
 use function sprintf;
-use function substr;
 use function uniqid;
 use function unlink;
 
 use const DIRECTORY_SEPARATOR;
-use const GLOB_MARK;
 
 abstract class AbstractUnitTestCase extends TestCase
 {
@@ -71,8 +71,8 @@ abstract class AbstractUnitTestCase extends TestCase
      * @param string|object $obj
      * @param string        $method
      *
-     * @return mixed
      * @throws ReflectionException
+     * @return mixed
      */
     public function callProtectedMethod(
         string | object $obj,
@@ -147,8 +147,8 @@ abstract class AbstractUnitTestCase extends TestCase
      * @param object|string $obj
      * @param string        $property
      *
-     * @return mixed
      * @throws ReflectionException
+     * @return mixed
      */
     public function getProtectedProperty(
         object | string $obj,
@@ -167,14 +167,22 @@ abstract class AbstractUnitTestCase extends TestCase
      *
      * @param string $directory
      */
-    public function safeDeleteDirectory(string $directory)
+    public function safeDeleteDirectory(string $directory): void
     {
-        $files = glob($directory . '*', GLOB_MARK);
-        foreach ($files as $file) {
-            if (substr($file, -1) == '/') {
-                $this->safeDeleteDirectory($file);
-            } else {
-                unlink($file);
+        $dirIterator = new RecursiveDirectoryIterator($directory, FilesystemIterator::SKIP_DOTS);
+        $iterator    = new RecursiveIteratorIterator($dirIterator, RecursiveIteratorIterator::CHILD_FIRST);
+
+        foreach ($iterator as $fileInfo) {
+            if ($fileInfo->isDir() === true) {
+                $this->safeDeleteDirectory($fileInfo->getRealPath());
+                continue;
+            }
+
+            if (
+                empty($fileInfo->getRealPath()) === false &&
+                file_exists($fileInfo->getRealPath())
+            ) {
+                unlink($fileInfo->getRealPath());
             }
         }
 
@@ -203,8 +211,8 @@ abstract class AbstractUnitTestCase extends TestCase
      * @param string        $property
      * @param mixed         $value
      *
-     * @return void
      * @throws ReflectionException
+     * @return void
      */
     public function setProtectedProperty(
         object | string $obj,

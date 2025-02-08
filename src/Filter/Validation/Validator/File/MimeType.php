@@ -129,7 +129,6 @@ class MimeType extends AbstractFile
             return false;
         }
 
-        var_dump(5);
         return true;
     }
 }
