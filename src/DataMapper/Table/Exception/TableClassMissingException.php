@@ -29,7 +29,8 @@ class TableClassMissingException extends Exception
     public function __construct(string $tableClass)
     {
         parent::__construct(
-            "Table class $tableClass does not exist or does not extend AbstractTable"
+            'Table class [' . $tableClass
+            . '] does not exist or does not extend AbstractTable.'
         );
     }
 }
