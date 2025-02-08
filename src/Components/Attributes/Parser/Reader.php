@@ -50,35 +50,51 @@ class Reader implements ReaderInterface
         }
 
         /**
-         * Get the class properties
+         * Get class constants
          */
-        $properties            = $reflection->getProperties();
-        $annotationsProperties = [];
-        foreach ($properties as $property) {
-            $propertyAttributes = $property->getAttributes();
-            if (count($propertyAttributes) > 0) {
-                $annotationsProperties[$property->getName()] = new Collection($propertyAttributes);
+        $constants           = $reflection->getConstants();
+        $attributesConstants = [];
+        foreach ($constants as $constant) {
+            $constantAttributes = $constant->getAttributes();
+            if (count($constantAttributes) > 0) {
+                $attributesConstants[$constant->getName()] = new Collection($constantAttributes);
             }
         }
 
-        if (count($annotationsProperties) !== 0) {
-            $attributes["properties"] = $annotationsProperties;
+        if (!empty($attributesConstants)) {
+            $attributes["constants"] = $attributesConstants;
+        }
+
+        /**
+         * Get the class properties
+         */
+        $properties           = $reflection->getProperties();
+        $attributesProperties = [];
+        foreach ($properties as $property) {
+            $propertyAttributes = $property->getAttributes();
+            if (count($propertyAttributes) > 0) {
+                $attributesProperties[$property->getName()] = new Collection($propertyAttributes);
+            }
+        }
+
+        if (count($attributesProperties) !== 0) {
+            $attributes["properties"] = $attributesProperties;
         }
 
         /**
          * Get the class methods
          */
-        $methods            = $reflection->getMethods();
-        $annotationsMethods = [];
+        $methods           = $reflection->getMethods();
+        $attributesMethods = [];
         foreach ($methods as $method) {
             $methodAttributes = $method->getAttributes();
             if (count($methodAttributes) > 0) {
-                $annotationsMethods[$method->getName()] = new Collection($methodAttributes);
+                $attributesMethods[$method->getName()] = new Collection($methodAttributes);
             }
         }
 
-        if (count($annotationsMethods) !== 0) {
-            $attributes["methods"] = $annotationsMethods;
+        if (count($attributesMethods) !== 0) {
+            $attributes["methods"] = $attributesMethods;
         }
 
         return $attributes;
