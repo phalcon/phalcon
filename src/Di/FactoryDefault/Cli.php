@@ -16,7 +16,6 @@ namespace Phalcon\Di\FactoryDefault;
 use Phalcon\Annotations\Adapter\Memory;
 use Phalcon\Cli\Dispatcher;
 use Phalcon\Cli\Router;
-use Phalcon\Components\Attributes\Adapter\Memory as AttributesMemory;
 use Phalcon\Di\FactoryDefault;
 use Phalcon\Di\Service;
 use Phalcon\Encryption\Security;
@@ -50,7 +49,6 @@ class Cli extends FactoryDefault
 
         $this->services = [
             "annotations"        => new Service(Memory::class, true),
-            'attributes'         => new Service(AttributesMemory::class, true),
             "dispatcher"         => new Service(Dispatcher::class, true),
             "escaper"            => new Service(Escaper::class, true),
             "eventsManager"      => new Service(EventsManager::class, true),

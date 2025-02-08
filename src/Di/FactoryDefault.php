@@ -77,7 +77,6 @@ class FactoryDefault extends Di
 
         $this->services = [
             'annotations'        => new Service(AnnotationsMemory::class, true),
-            'attributes'         => new Service(AttributesMemory::class, true),
             'assets'             => new Service(
                 [
                     'className' => AssetsManager::class,
