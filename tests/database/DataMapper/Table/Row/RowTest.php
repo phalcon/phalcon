@@ -18,7 +18,7 @@ use Phalcon\DataMapper\Table\Exception\ImmutableAfterDeletedException;
 use Phalcon\DataMapper\Table\Exception\InvalidOptionException;
 use Phalcon\DataMapper\Table\Exception\PropertyDoesNotExistException;
 use Phalcon\Tests\AbstractDatabaseTestCase;
-use Phalcon\Tests\Fixtures\DataMapper\Table\InvoiceRow;
+use Phalcon\Tests\Fixtures\DataMapper\Table\Invoices\InvoicesRow;
 
 use function uniqid;
 
@@ -31,8 +31,8 @@ final class RowTest extends AbstractDatabaseTestCase
      */
     public function testConstructor(): void
     {
-        $row = new InvoiceRow();
-        $this->assertInstanceOf(InvoiceRow::class, $row);
+        $row = new InvoicesRow();
+        $this->assertInstanceOf(InvoicesRow::class, $row);
         $this->assertInstanceOf(AbstractRow::class, $row);
     }
 
@@ -53,7 +53,7 @@ final class RowTest extends AbstractDatabaseTestCase
             'inv_created_at'  => '2024-02-01 10:11:12',
         ];
 
-        $row = new InvoiceRow($data);
+        $row = new InvoicesRow($data);
 
         $expected = $data;
         $actual   = $row->getCopy();
@@ -80,10 +80,10 @@ final class RowTest extends AbstractDatabaseTestCase
 
         $this->expectException(PropertyDoesNotExistException::class);
         $this->expectExceptionMessage(
-            '[' . InvoiceRow::class . '::other_column] does not exist'
+            '[' . InvoicesRow::class . '::other_column] does not exist'
         );
 
-        $row = new InvoiceRow($data);
+        $row = new InvoicesRow($data);
     }
 
     /**
@@ -103,7 +103,7 @@ final class RowTest extends AbstractDatabaseTestCase
             'inv_created_at'  => '2024-02-01 10:11:12',
         ];
 
-        $row = new InvoiceRow($data);
+        $row = new InvoicesRow($data);
 
         $expected = $data;
         $actual   = $row->getCopy();
@@ -127,7 +127,7 @@ final class RowTest extends AbstractDatabaseTestCase
             'inv_created_at'  => '2024-02-01 10:11:12',
         ];
 
-        $row = new InvoiceRow($data);
+        $row = new InvoicesRow($data);
 
         $row
             ->set('inv_id', 2)
@@ -171,7 +171,7 @@ final class RowTest extends AbstractDatabaseTestCase
             'inv_created_at'  => '2024-02-01 10:11:12',
         ];
 
-        $row = new InvoiceRow($data);
+        $row = new InvoicesRow($data);
 
         $expected = $data;
         $actual   = $row->getInit();
@@ -195,7 +195,7 @@ final class RowTest extends AbstractDatabaseTestCase
             'inv_created_at'  => '2024-02-01 10:11:12',
         ];
 
-        $row = new InvoiceRow($data);
+        $row = new InvoicesRow($data);
 
         foreach ($row as $name => $value) {
             $this->assertSame($data[$name], $value);
@@ -209,7 +209,7 @@ final class RowTest extends AbstractDatabaseTestCase
      */
     public function testHas(): void
     {
-        $row = new InvoiceRow();
+        $row = new InvoicesRow();
 
         $actual = $row->has('inv_id');
         $this->assertTrue($actual);
@@ -235,7 +235,7 @@ final class RowTest extends AbstractDatabaseTestCase
             'inv_created_at'  => '2024-02-01 10:11:12',
         ];
 
-        $row = new InvoiceRow($data);
+        $row = new InvoicesRow($data);
 
         $expected = $data;
         $actual   = $row->jsonSerialize();
@@ -249,7 +249,7 @@ final class RowTest extends AbstractDatabaseTestCase
      */
     public function testRemove(): void
     {
-        $row = new InvoiceRow();
+        $row = new InvoicesRow();
 
         $actual = $row->get('inv_id');
         $this->assertNull($actual);
@@ -275,10 +275,10 @@ final class RowTest extends AbstractDatabaseTestCase
     {
         $this->expectException(ImmutableAfterDeletedException::class);
         $this->expectExceptionMessage(
-            '[' . InvoiceRow::class . '::inv_id] is immutable after the row is deleted'
+            '[' . InvoicesRow::class . '::inv_id] is immutable after the row is deleted'
         );
 
-        $row = new InvoiceRow();
+        $row = new InvoicesRow();
 
         $row->set('inv_id', 1);
         $row->setLastAction($row::DELETE);
@@ -295,7 +295,7 @@ final class RowTest extends AbstractDatabaseTestCase
     {
         $title = uniqid('tit-');
 
-        $row = new InvoiceRow();
+        $row = new InvoicesRow();
         $row
             ->set('inv_id', 1)
             ->set('inv_cst_id', 1)
@@ -326,10 +326,10 @@ final class RowTest extends AbstractDatabaseTestCase
     {
         $this->expectException(ImmutableAfterDeletedException::class);
         $this->expectExceptionMessage(
-            '[' . InvoiceRow::class . '::inv_id] is immutable after the row is deleted.'
+            '[' . InvoicesRow::class . '::inv_id] is immutable after the row is deleted.'
         );
 
-        $row = new InvoiceRow();
+        $row = new InvoicesRow();
         $row
             ->setLastAction($row::DELETE)
             ->set('inv_id', 1)
@@ -345,10 +345,10 @@ final class RowTest extends AbstractDatabaseTestCase
     {
         $this->expectException(PropertyDoesNotExistException::class);
         $this->expectExceptionMessage(
-            '[' . InvoiceRow::class . '::other_column] does not exist'
+            '[' . InvoicesRow::class . '::other_column] does not exist'
         );
 
-        $row = new InvoiceRow();
+        $row = new InvoicesRow();
         $row
             ->set('other_column', 'random stuff')
         ;
@@ -361,7 +361,7 @@ final class RowTest extends AbstractDatabaseTestCase
      */
     public function testLastAction(): void
     {
-        $row = new InvoiceRow();
+        $row = new InvoicesRow();
 
         $actual = $row->getLastAction();
         $this->assertNull($actual);
@@ -444,7 +444,7 @@ final class RowTest extends AbstractDatabaseTestCase
             'Invalid option supplied [other_option]'
         );
 
-        $row = new InvoiceRow();
+        $row = new InvoicesRow();
         $row->setLastAction('other_option');
     }
 
@@ -465,7 +465,7 @@ final class RowTest extends AbstractDatabaseTestCase
             'inv_total'       => 100.0,
             'inv_created_at'  => '2024-02-01 10:11:12',
         ];
-        $row = new InvoiceRow($data);
+        $row = new InvoicesRow($data);
 
         $row->set('inv_status_flag', true);
 
@@ -499,7 +499,7 @@ final class RowTest extends AbstractDatabaseTestCase
             'inv_total'       => 100.0,
             'inv_created_at'  => '2024-02-01 10:11:12',
         ];
-        $row = new InvoiceRow($data);
+        $row = new InvoicesRow($data);
 
         $row->set('inv_status_flag', 1);
 
