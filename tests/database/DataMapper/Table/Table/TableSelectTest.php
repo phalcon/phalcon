@@ -16,15 +16,22 @@ namespace Phalcon\Tests\Database\DataMapper\Table\Table;
 use Phalcon\DataMapper\Table\AbstractTableSelect;
 use Phalcon\DataMapper\Table\TableLocator;
 use Phalcon\Tests\AbstractDatabaseTestCase;
-use Phalcon\Tests\Fixtures\DataMapper\Table\InvoiceRow;
-use Phalcon\Tests\Fixtures\DataMapper\Table\InvoiceTable;
+use Phalcon\Tests\Fixtures\DataMapper\Table\Invoices\InvoicesRow;
+use Phalcon\Tests\Fixtures\DataMapper\Table\Invoices\InvoicesTable;
 use Phalcon\Tests\Fixtures\Migrations\InvoicesMigration;
 
 use function uniqid;
 
 final class TableSelectTest extends AbstractDatabaseTestCase
 {
-    private array               $data = [];
+    /**
+     * @var array
+     */
+    private array $data = [];
+
+    /**
+     * @var AbstractTableSelect
+     */
     private AbstractTableSelect $select;
 
     public function setUp(): void
@@ -73,74 +80,8 @@ final class TableSelectTest extends AbstractDatabaseTestCase
         }
 
         $this->data   = $data;
-        $table        = TableLocator::new($connection)->get(InvoiceTable::class);
+        $table        = TableLocator::new($connection)->get(InvoicesTable::class);
         $this->select = $table->select();
-    }
-
-    /**
-     * @return void
-     *
-     * @group mysql
-     */
-    public function testFetchRow(): void
-    {
-        $expected = $this->data[0];
-        $actual   = $this
-            ->select
-            ->where('inv_id = ', 1)
-            ->fetchRow()
-        ;
-        $this->assertInstanceOf(InvoiceRow::class, $actual);
-        $this->assertSame($expected, $actual->getCopy());
-
-        $actual = $this
-            ->select
-            ->where('inv_id = ', -1)
-            ->fetchRow()
-        ;
-        $this->assertNull($actual);
-    }
-
-    /**
-     * @return void
-     *
-     * @group mysql
-     */
-    public function testFetchRows(): void
-    {
-        $rows = $this
-            ->select
-            ->where('inv_id IN ', [1, 2, 3])
-            ->fetchRows()
-        ;
-
-        $actual   = $rows;
-        $this->assertIsArray($actual);
-        $this->assertCount(3, $actual);
-
-        $this->assertInstanceOf(InvoiceRow::class, $rows[0]);
-        $this->assertInstanceOf(InvoiceRow::class, $rows[1]);
-        $this->assertInstanceOf(InvoiceRow::class, $rows[2]);
-
-        $expected = $this->data[0];
-        $actual   = $rows[0]->getCopy();
-        $this->assertSame($expected, $actual);
-
-        $expected = $this->data[1];
-        $actual   = $rows[1]->getCopy();
-        $this->assertSame($expected, $actual);
-
-        $expected = $this->data[2];
-        $actual   = $rows[2]->getCopy();
-        $this->assertSame($expected, $actual);
-
-        $actual = $this
-            ->select
-            ->where('inv_id = ', -1)
-            ->fetchRows()
-        ;
-        $this->assertIsArray($actual);
-        $this->assertEmpty($actual);
     }
 
     /**
@@ -164,5 +105,71 @@ final class TableSelectTest extends AbstractDatabaseTestCase
             ->fetchCount()
         ;
         $this->assertSame(2, $actual);
+    }
+
+    /**
+     * @return void
+     *
+     * @group mysql
+     */
+    public function testFetchRow(): void
+    {
+        $expected = $this->data[0];
+        $actual   = $this
+            ->select
+            ->where('inv_id = ', 1)
+            ->fetchRow()
+        ;
+        $this->assertInstanceOf(InvoicesRow::class, $actual);
+        $this->assertSame($expected, $actual->getCopy());
+
+        $actual = $this
+            ->select
+            ->where('inv_id = ', -1)
+            ->fetchRow()
+        ;
+        $this->assertNull($actual);
+    }
+
+    /**
+     * @return void
+     *
+     * @group mysql
+     */
+    public function testFetchRows(): void
+    {
+        $rows = $this
+            ->select
+            ->where('inv_id IN ', [1, 2, 3])
+            ->fetchRows()
+        ;
+
+        $actual = $rows;
+        $this->assertIsArray($actual);
+        $this->assertCount(3, $actual);
+
+        $this->assertInstanceOf(InvoicesRow::class, $rows[0]);
+        $this->assertInstanceOf(InvoicesRow::class, $rows[1]);
+        $this->assertInstanceOf(InvoicesRow::class, $rows[2]);
+
+        $expected = $this->data[0];
+        $actual   = $rows[0]->getCopy();
+        $this->assertSame($expected, $actual);
+
+        $expected = $this->data[1];
+        $actual   = $rows[1]->getCopy();
+        $this->assertSame($expected, $actual);
+
+        $expected = $this->data[2];
+        $actual   = $rows[2]->getCopy();
+        $this->assertSame($expected, $actual);
+
+        $actual = $this
+            ->select
+            ->where('inv_id = ', -1)
+            ->fetchRows()
+        ;
+        $this->assertIsArray($actual);
+        $this->assertEmpty($actual);
     }
 }

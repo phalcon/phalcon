@@ -39,7 +39,7 @@ abstract class AbstractTableSelect extends Select
     public static function new(mixed $argument, mixed ...$arguments): static
     {
         /** @var array $whereEquals */
-        $whereEquals = array_pop($arguments);
+        $whereEquals = array_pop($arguments) ?? [];
 
         /** @var AbstractTable $table */
         $table  = array_pop($arguments);
@@ -80,12 +80,11 @@ abstract class AbstractTableSelect extends Select
      */
     public function fetchRow(): ?AbstractRow
     {
-        $columns = $this->fetchOne();
-        if (true === empty($columns)) {
-            return null;
-        }
+        $columns = $this->fetchOne() ?? [];
 
-        return $this->table->newSelectedRow($columns);
+        return true === empty($columns)
+            ? null
+            : $this->table->newSelectedRow($columns);
     }
 
     /**
