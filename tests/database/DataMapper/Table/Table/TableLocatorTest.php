@@ -17,7 +17,7 @@ use Phalcon\DataMapper\Pdo\ConnectionLocator;
 use Phalcon\DataMapper\Table\Exception\TableClassMissingException;
 use Phalcon\DataMapper\Table\TableLocator;
 use Phalcon\Tests\AbstractDatabaseTestCase;
-use Phalcon\Tests\Fixtures\DataMapper\Table\InvoiceTable;
+use Phalcon\Tests\Fixtures\DataMapper\Table\Invoices\InvoicesTable;
 
 final class TableLocatorTest extends AbstractDatabaseTestCase
 {
@@ -38,11 +38,11 @@ final class TableLocatorTest extends AbstractDatabaseTestCase
      */
     public function testGet(): void
     {
-        $actual = $this->locator->get(InvoiceTable::class);
-        $this->assertInstanceOf(InvoiceTable::class, $actual);
+        $actual = $this->locator->get(InvoicesTable::class);
+        $this->assertInstanceOf(InvoicesTable::class, $actual);
 
-        $twice = $this->locator->get(InvoiceTable::class);
-        $this->assertInstanceOf(InvoiceTable::class, $twice);
+        $twice = $this->locator->get(InvoicesTable::class);
+        $this->assertInstanceOf(InvoicesTable::class, $twice);
     }
 
     /**
@@ -80,7 +80,7 @@ final class TableLocatorTest extends AbstractDatabaseTestCase
      */
     public function testHas(): void
     {
-        $actual = $this->locator->has(InvoiceTable::class);
+        $actual = $this->locator->has(InvoicesTable::class);
         $this->assertTrue($actual);
 
         $actual = $this->locator->has('other_class');
