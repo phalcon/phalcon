@@ -211,6 +211,13 @@ CREATE TABLE `co_orders_x_products`
 ) ENGINE = InnoDB
   DEFAULT CHARSET = utf8;
 
+drop table if exists `no_primary_key`;
+
+create table no_primary_key
+(
+    `nokey_id`        int(10) unsigned,
+    `nokey_name`      varchar(100) not null
+);
 
 
 drop table if exists `photo`;

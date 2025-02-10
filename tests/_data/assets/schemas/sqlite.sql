@@ -171,6 +171,14 @@ CREATE TABLE co_orders_x_products
     PRIMARY KEY (oxp_ord_id, oxp_prd_id)
 );
 
+DROP TABLE IF EXISTS no_primary_key;
+
+CREATE TABLE no_primary_key
+(
+    nokey_id   INTEGER,
+    nokey_name TEXT NOT NULL
+);
+
 DROP TABLE IF EXISTS photo;
 
 CREATE TABLE photo

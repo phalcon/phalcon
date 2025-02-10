@@ -216,6 +216,14 @@ CREATE INDEX co_invoices_inv_cst_id_index ON co_invoices (inv_cst_id);
 CREATE INDEX co_invoices_inv_status_flag_index ON co_invoices (inv_status_flag);
 CREATE INDEX co_invoices_inv_created_at_index ON co_invoices (inv_created_at);
 
+DROP TABLE IF EXISTS no_primary_key;
+
+CREATE TABLE no_primary_key
+(
+    nokey_id   INTEGER,
+    nokey_name VARCHAR(100) NOT NULL
+);
+
 DROP TABLE IF EXISTS objects;
 
 CREATE TABLE objects
