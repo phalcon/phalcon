@@ -31,7 +31,7 @@ class NoPrimaryKeyException extends Exception
     public function __construct(string $operation, string $table)
     {
         parent::__construct(
-            "Cannot {$operation} on table '$table' without primary key."
+            "Cannot $operation on table [$table] without a primary key."
         );
     }
 }
