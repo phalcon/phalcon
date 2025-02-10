@@ -45,6 +45,7 @@ final class ListTablesTest extends AbstractDatabaseTestCase
             'co_sources',
             'complex_default',
             'fractal_dates',
+            'no_primary_key',
             'objects',
             'photo',
             'stuff',
