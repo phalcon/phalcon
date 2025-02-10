@@ -9,7 +9,7 @@
 
 declare(strict_types=1);
 
-namespace Phalcon\Tests\Fixtures\DataMapper\Table;
+namespace Phalcon\Tests\Fixtures\DataMapper\Table\Invoices;
 
 use Phalcon\DataMapper\Table\AbstractRow;
 
@@ -21,7 +21,7 @@ use Phalcon\DataMapper\Table\AbstractRow;
  * @property $inv_total       float(10, 2) null
  * @property $inv_created_at  datetime     null
  */
-class InvoiceRow extends AbstractRow
+class InvoicesRow extends AbstractRow
 {
     protected array $store = [
         'inv_id'          => null,

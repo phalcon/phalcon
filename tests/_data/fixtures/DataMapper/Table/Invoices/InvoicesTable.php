@@ -9,19 +9,19 @@
 
 declare(strict_types=1);
 
-namespace Phalcon\Tests\Fixtures\DataMapper\Table;
+namespace Phalcon\Tests\Fixtures\DataMapper\Table\Invoices;
 
 use Phalcon\DataMapper\Table\AbstractTable;
 
 /**
  *
- * @method InvoiceRow|null    fetchRow(mixed $primaryVal)
- * @method InvoiceRow[]       fetchRows(array $primaryVals)
- * @method InvoiceTableSelect select(array $whereEquals = [])
- * @method InvoiceRow         newRow(array $cols = [])
- * @method InvoiceRow         newSelectedRow(array $cols)
+ * @method InvoicesRow|null    fetchRow(mixed $primaryVal)
+ * @method InvoicesRow[]       fetchRows(array $primaryVals)
+ * @method InvoicesTableSelect select(array $whereEquals = [])
+ * @method InvoicesRow         newRow(array $cols = [])
+ * @method InvoicesRow         newSelectedRow(array $cols)
  */
-class InvoiceTable extends AbstractTable
+class InvoicesTable extends AbstractTable
 {
     public const AUTOINC_COLUMN = 'inv_id';
 
@@ -151,5 +151,5 @@ class InvoiceTable extends AbstractTable
         'inv_id',
     ];
 
-    public const ROW_CLASS = InvoiceRow::class;
+    public const ROW_CLASS = InvoicesRow::class;
 }

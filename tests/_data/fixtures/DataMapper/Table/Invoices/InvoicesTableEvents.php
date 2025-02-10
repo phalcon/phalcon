@@ -9,10 +9,10 @@
 
 declare(strict_types=1);
 
-namespace Phalcon\Tests\Fixtures\DataMapper\Table;
+namespace Phalcon\Tests\Fixtures\DataMapper\Table\Invoices;
 
 use Phalcon\DataMapper\Table\AbstractTableEvents;
 
-class InvoiceTableEvents extends AbstractTableEvents
+class InvoicesTableEvents extends AbstractTableEvents
 {
 }

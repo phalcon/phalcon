@@ -9,14 +9,14 @@
 
 declare(strict_types=1);
 
-namespace Phalcon\Tests\Fixtures\DataMapper\Table;
+namespace Phalcon\Tests\Fixtures\DataMapper\Table\Invoices;
 
 use Phalcon\DataMapper\Table\AbstractTableSelect;
 
 /**
- * @method InvoiceRow|null fetchRow()
- * @method InvoiceRow[]    fetchRows()
+ * @method InvoicesRow|null fetchRow()
+ * @method InvoicesRow[]    fetchRows()
  */
-class InvoiceTableSelect extends AbstractTableSelect
+class InvoicesTableSelect extends AbstractTableSelect
 {
 }
