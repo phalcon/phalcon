@@ -48,6 +48,16 @@ use Phalcon\DataMapper\Pdo\Exception\Exception;
 interface AdapterInterface
 {
     /**
+     * Returns the autoincrement or sequence
+     *
+     * @param string $schema
+     * @param string $table
+     *
+     * @return string|null
+     */
+    public function getAutoincSequence(string $schema, string $table): string|null;
+
+    /**
      * Return the current schema name
      *
      * @return string

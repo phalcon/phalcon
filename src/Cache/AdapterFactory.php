@@ -77,7 +77,7 @@ class AdapterFactory
      */
     public function newInstance(string $name, array $options = []): AdapterInterface
     {
-        /** @var AdapterInterface $definition */
+        /** @var class-string $definition */
         $definition = $this->getService($name);
 
         return new $definition(

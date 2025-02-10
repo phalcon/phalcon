@@ -64,7 +64,7 @@ class Info
      *
      * @return string|null
      */
-    public function getAutoincSequence(string $schemaTable): ?string
+    public function getAutoincSequence(string $schemaTable): string|null
     {
         [$schema, $table] = $this->adapter->listSchemaTable($schemaTable);
 

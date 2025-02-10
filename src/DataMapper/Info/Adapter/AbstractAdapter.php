@@ -227,7 +227,7 @@ abstract class AbstractAdapter implements AdapterInterface
      * @param mixed  $defaultValue
      * @param string $type
      *
-     * @return mixed
+     * @return array<array-key, bool|mixed>
      */
     protected function processDefault(mixed $defaultValue, string $type): array
     {

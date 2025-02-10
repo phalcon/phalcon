@@ -40,7 +40,7 @@ class Pgsql extends AbstractAdapter
      *
      * @return string|null
      */
-    public function getAutoincSequence(string $schema, string $table): ?string
+    public function getAutoincSequence(string $schema, string $table): string|null
     {
         $statement = "
             SELECT
@@ -126,7 +126,7 @@ class Pgsql extends AbstractAdapter
      * @param mixed  $defaultValue
      * @param string $type
      *
-     * @return mixed
+     * @return array<array-key, bool|mixed>
      */
     protected function processDefault(mixed $defaultValue, string $type): array
     {
