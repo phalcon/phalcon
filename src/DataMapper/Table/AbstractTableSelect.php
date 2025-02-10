@@ -19,7 +19,6 @@ declare(strict_types=1);
 namespace Phalcon\DataMapper\Table;
 
 use Phalcon\DataMapper\Query\Select;
-
 use Phalcon\DataMapper\Table\Exception\TableAlreadySetException;
 
 use function array_pop;
