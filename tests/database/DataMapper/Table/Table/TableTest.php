@@ -230,6 +230,62 @@ final class TableTest extends AbstractDatabaseTestCase
      *
      * @group mysql
      */
+    public function testFetchRow(): void
+    {
+        $title = uniqid('tit-');
+        $data  = [
+            0 => [
+                'inv_id'          => 1,
+                'inv_cst_id'      => 1,
+                'inv_status_flag' => 1,
+                'inv_title'       => $title . '-1',
+                'inv_total'       => 100.12,
+                'inv_created_at'  => '2018-01-01 01:02:13',
+            ],
+            1 => [
+                'inv_id'          => 2,
+                'inv_cst_id'      => 2,
+                'inv_status_flag' => 2,
+                'inv_title'       => $title . '-2',
+                'inv_total'       => 200.23,
+                'inv_created_at'  => '2018-01-01 01:02:23',
+            ],
+            2 => [
+                'inv_id'          => 3,
+                'inv_cst_id'      => 3,
+                'inv_status_flag' => 2,
+                'inv_title'       => $title . '-3',
+                'inv_total'       => 300.34,
+                'inv_created_at'  => '2018-01-01 01:02:33',
+            ],
+        ];
+
+        $migration = new InvoicesMigration($this->connection);
+        foreach ($data as $row) {
+            $migration->insert(
+                $row['inv_id'],
+                $row['inv_cst_id'],
+                $row['inv_status_flag'],
+                $row['inv_title'],
+                $row['inv_total'],
+                $row['inv_created_at']
+            );
+        }
+
+        $row = $this->table->fetchRow(4);
+        $this->assertNull($row);
+
+        $row = $this->table->fetchRow(1);
+        $expected = $data[0];
+        $actual   = $row->getCopy();
+        $this->assertSame($expected, $actual);
+    }
+
+    /**
+     * @return void
+     *
+     * @group mysql
+     */
     public function testFetchRows(): void
     {
         $title = uniqid('tit-');
@@ -273,20 +329,6 @@ final class TableTest extends AbstractDatabaseTestCase
         }
 
         $select = $this->table->select();
-
-        $title   = uniqid('tit-');
-        $rowData = [
-            'inv_id'          => 10,
-            'inv_cst_id'      => 10,
-            'inv_status_flag' => 1,
-            'inv_title'       => $title,
-            'inv_total'       => 100.12,
-            'inv_created_at'  => '2018-01-01 01:02:03',
-        ];
-
-        $newRow = $this->table->newRow($rowData);
-        $actual = $this->table->insertRow($newRow);
-        $this->assertInstanceOf(PDOStatement::class, $actual);
 
         $rows = $this->table->fetchRows([1, 2, 3]);
 
