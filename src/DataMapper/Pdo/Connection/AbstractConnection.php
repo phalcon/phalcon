@@ -194,7 +194,7 @@ abstract class AbstractConnection
 
         $this->profileStart(__METHOD__);
 
-        $sth = $this->prepare($statement);
+        $sth = $this->pdo->prepare($statement);
         foreach ($values as $name => $value) {
             $this->performBind($sth, $name, $value);
         }
