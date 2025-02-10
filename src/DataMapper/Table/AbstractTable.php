@@ -41,7 +41,6 @@ abstract class AbstractTable
     public const AUTOINC_SEQUENCE = null;
 
     public const COLUMNS = [];
-    public const COLUMN_DEFAULTS = [];
     public const COLUMN_NAMES = [];
     public const COMPOSITE_KEY = false;
     public const NAME = '';
@@ -263,10 +262,11 @@ abstract class AbstractTable
             throw new UnexpectedRowCountAffectedException($rowCount);
         }
 
+        /** @var null|string $autoinc */
         $autoinc = static::AUTOINC_COLUMN;
         if ($autoinc !== null) {
             $row->set(
-                'autoinc',
+                $autoinc,
                 $insert->getLastInsertId(static::AUTOINC_SEQUENCE)
             );
         }
@@ -294,6 +294,7 @@ abstract class AbstractTable
         }
 
         $insert  = $this->insert();
+        /** @var null|string $autoinc */
         $autoinc = static::AUTOINC_COLUMN;
         if (null !== $autoinc && true !== isset($copy[$autoinc])) {
             unset($copy[$autoinc]);
