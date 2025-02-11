@@ -11,17 +11,15 @@
 
 declare(strict_types=1);
 
-namespace Phalcon\Tests\Controllers;
+namespace Phalcon\Annotations\Models\MetaData;
 
-use Phalcon\Annotations\Router\Get;
+use Attribute;
 
-/**
- * Class MainController
- */
-class MainController
+#[Attribute(Attribute::TARGET_CLASS)]
+class Source
 {
-    #[Get("/")]
-    public function indexAction()
-    {
+    public function __construct(
+        public string $table
+    ) {
     }
 }

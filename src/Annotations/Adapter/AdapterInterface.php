@@ -13,99 +13,11 @@ declare(strict_types=1);
 
 namespace Phalcon\Annotations\Adapter;
 
-use Phalcon\Annotations\Collection;
-use Phalcon\Annotations\ReaderInterface;
-use Phalcon\Annotations\Reflection;
+use Phalcon\Storage\Adapter\AdapterInterface as StorageAdapterInterface;
 
 /**
- * This interface must be implemented by adapters in Phalcon\Annotations
+ * This interface must be implemented by adapters in Phalcon\Components\Attributes
  */
-interface AdapterInterface
+interface AdapterInterface extends StorageAdapterInterface
 {
-    /**
-     * Parses or retrieves all the annotations found in a class
-     *
-     * @param string $className
-     *
-     * @return Reflection
-     */
-    public function get(string $className): Reflection;
-
-    /**
-     * Returns the annotations found in a specific constant
-     *
-     * @param string $className
-     * @param string $constantName
-     *
-     * @return Collection
-     */
-    public function getConstant(
-        string $className,
-        string $constantName
-    ): Collection;
-
-    /**
-     * Returns the annotations found in all the class' constants
-     */
-    public function getConstants(string $className): array;
-
-    /**
-     * Returns the annotations found in a specific method
-     *
-     * @param string $className
-     * @param string $methodName
-     *
-     * @return Collection
-     */
-    public function getMethod(
-        string $className,
-        string $methodName
-    ): Collection;
-
-    /**
-     * Returns the annotations found in all the class' methods
-     *
-     * @param string $className
-     *
-     * @return array
-     */
-    public function getMethods(string $className): array;
-
-    /**
-     * Returns the annotations found in all the class' methods
-     *
-     * @param string $className
-     *
-     * @return array
-     */
-    public function getProperties(string $className): array;
-
-    /**
-     * Returns the annotations found in a specific property
-     *
-     * @param string $className
-     * @param string $propertyName
-     *
-     * @return Collection
-     */
-    public function getProperty(
-        string $className,
-        string $propertyName
-    ): Collection;
-
-    /**
-     * Returns the annotation reader
-     *
-     * @return ReaderInterface
-     */
-    public function getReader(): ReaderInterface;
-
-    /**
-     * Sets the annotations parser
-     *
-     * @param ReaderInterface $reader
-     *
-     * @return mixed
-     */
-    public function setReader(ReaderInterface $reader);
 }

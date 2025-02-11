@@ -13,40 +13,12 @@ declare(strict_types=1);
 
 namespace Phalcon\Annotations\Adapter;
 
-use Phalcon\Annotations\Reflection;
-
-use function strtolower;
+use Phalcon\Storage\Adapter\Memory as StorageMemory;
 
 /**
  * Stores the parsed annotations in memory. This adapter is the suitable
  * development/testing
  */
-class Memory extends AbstractAdapter
+class Memory extends StorageMemory implements AdapterInterface
 {
-    /**
-     * @var array
-     */
-    protected array $data = [];
-
-    /**
-     * Reads parsed annotations from memory
-     *
-     * @param string $key
-     *
-     * @return Reflection|bool
-     */
-    public function read(string $key): Reflection | bool
-    {
-        return $this->data[strtolower($key)] ?? false;
-    }
-
-    /**
-     * Writes parsed annotations to memory
-     */
-    public function write(string $key, Reflection $data): bool
-    {
-        $this->data[strtolower($key)] = $data;
-
-        return true;
-    }
 }

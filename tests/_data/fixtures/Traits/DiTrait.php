@@ -19,26 +19,27 @@ use Phalcon\Cache\Adapter\Libmemcached as StorageLibmemcached;
 use Phalcon\Cache\Adapter\Stream as StorageStream;
 use Phalcon\Cache\AdapterFactory;
 use Phalcon\Cli\Console;
-use Phalcon\Db\Profiler;
-use Phalcon\Encryption\Crypt;
 use Phalcon\Db\Adapter\AdapterInterface;
 use Phalcon\Db\Adapter\PdoFactory;
+use Phalcon\Db\Profiler;
 use Phalcon\Di\Di;
 use Phalcon\Di\DiInterface;
 use Phalcon\Di\FactoryDefault;
 use Phalcon\Di\FactoryDefault\Cli as CliFactoryDefault;
-use Phalcon\Html\Escaper;
+use Phalcon\Encryption\Crypt;
 use Phalcon\Events\Manager as EventsManager;
 use Phalcon\Filter;
+use Phalcon\Html\Escaper;
 use Phalcon\Html\TagFactory;
 use Phalcon\Http\Request;
 use Phalcon\Http\Response;
 use Phalcon\Mvc\Model\Manager as ModelsManager;
 use Phalcon\Mvc\Model\MetaData\Adapter\Apcu as MetaDataApcu;
-use Phalcon\Mvc\Model\MetaData\Adapter\Memory as MetaDataMemory;
 use Phalcon\Mvc\Model\MetaData\Adapter\Libmemcached as MetaDataMemcached;
+use Phalcon\Mvc\Model\MetaData\Adapter\Memory as MetaDataMemory;
 use Phalcon\Mvc\Model\MetaData\Adapter\Redis as MetaDataRedis;
 use Phalcon\Mvc\Model\MetaData\Adapter\Stream as MetaDataStream;
+use Phalcon\Mvc\Url;
 use Phalcon\Mvc\View;
 use Phalcon\Mvc\View\Simple;
 use Phalcon\Session\Adapter\Libmemcached as SessionLibmemcached;
@@ -49,7 +50,6 @@ use Phalcon\Session\Manager;
 use Phalcon\Storage\AdapterFactory as StorageAdapterFactory;
 use Phalcon\Storage\Exception;
 use Phalcon\Storage\SerializerFactory;
-use Phalcon\Mvc\Url;
 
 use function getOptionsLibmemcached;
 use function getOptionsModelCacheStream;
@@ -105,7 +105,7 @@ trait DiTrait
                 break;
             case 'pgsql':
                 $options = getOptionsPostgresql();
-                $driver = 'postgresql';
+                $driver  = 'postgresql';
                 break;
             case 'sqlite':
                 $options = getOptionsSqlite();
@@ -147,17 +147,17 @@ trait DiTrait
     }
 
     /**
-     * @param string     $service
+     * @param string $service
      * @param mixed|null $options
      *
-     * @return mixed|null
      * @throws Exception
+     * @return mixed|null
      */
     protected function newService(string $service, $options = null)
     {
         switch ($service) {
             case 'annotations':
-                return new AnnotationsMemory();
+                return new AnnotationsMemory(new SerializerFactory());
             case 'cliFactoryDefault':
                 return new CliFactoryDefault();
             case 'console':

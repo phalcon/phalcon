@@ -11,17 +11,14 @@
 
 declare(strict_types=1);
 
-namespace Phalcon\Tests\Controllers;
+namespace Phalcon\Annotations\Adapter;
 
-use Phalcon\Annotations\Router\Get;
+use Phalcon\Storage\Adapter\Weak as StorageWeak;
 
 /**
- * Class MainController
+ * Stores the parsed annotations in memory. This adapter is the suitable
+ * development/testing
  */
-class MainController
+class Weak extends StorageWeak implements AdapterInterface
 {
-    #[Get("/")]
-    public function indexAction()
-    {
-    }
 }

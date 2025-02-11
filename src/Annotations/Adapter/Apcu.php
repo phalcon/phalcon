@@ -13,77 +13,11 @@ declare(strict_types=1);
 
 namespace Phalcon\Annotations\Adapter;
 
-use Phalcon\Annotations\Reflection;
-use Phalcon\Support\Traits\PhpApcuTrait;
-
-use function strtolower;
+use Phalcon\Storage\Adapter\Apcu as StorageApcu;
 
 /**
- * Stores the parsed annotations in APCu. This adapter is suitable for
- * production
- *
- *```php
- * use Phalcon\Annotations\Adapter\Apcu;
- *
- * $annotations = new Apcu();
- *```
+ * Stores the parsed annotations in apcu.
  */
-class Apcu extends AbstractAdapter
+class Apcu extends StorageApcu implements AdapterInterface
 {
-    use PhpApcuTrait;
-
-    /**
-     * @var string
-     */
-    protected string $prefix = "";
-
-    /**
-     * @var int
-     */
-    protected int $ttl = 172800;
-
-    /**
-     * Constructor
-     *
-     * @param array $options = [
-     *                       'prefix' => 'phalcon'
-     *                       'lifetime' => 3600
-     *                       ]
-     */
-    public function __construct(array $options = [])
-    {
-        $this->prefix = $options["prefix"] ?? $this->prefix;
-        $this->ttl    = $options["lifetime"] ?? $this->ttl;
-    }
-
-    /**
-     * Reads parsed annotations from APCu
-     *
-     * @param string $key
-     *
-     * @return Reflection|bool
-     */
-    public function read(string $key): Reflection | bool
-    {
-        return $this->phpApcuFetch(
-            strtolower("_PHAN" . $this->prefix . $key)
-        );
-    }
-
-    /**
-     * Writes parsed annotations to APCu
-     *
-     * @param string     $key
-     * @param Reflection $data
-     *
-     * @return bool
-     */
-    public function write(string $key, Reflection $data): bool
-    {
-        return $this->phpApcuStore(
-            strtolower("_PHAN" . $this->prefix . $key),
-            $data,
-            $this->ttl
-        );
-    }
 }

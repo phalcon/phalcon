@@ -13,7 +13,7 @@ declare(strict_types=1);
 
 namespace Phalcon\Di\FactoryDefault;
 
-use Phalcon\Annotations\Adapter\Memory;
+use Phalcon\Annotations\Adapter\Memory as AnnotationsMemory;
 use Phalcon\Cli\Dispatcher;
 use Phalcon\Cli\Router;
 use Phalcon\Di\FactoryDefault;
@@ -26,6 +26,7 @@ use Phalcon\Html\TagFactory;
 use Phalcon\Mvc\Model\Manager as ModelsManager;
 use Phalcon\Mvc\Model\MetaData\Adapter\Memory as MetadataMemory;
 use Phalcon\Mvc\Model\Transaction\Manager as TransactionManager;
+use Phalcon\Storage\SerializerFactory;
 use Phalcon\Support\HelperFactory;
 
 /**
@@ -48,7 +49,12 @@ class Cli extends FactoryDefault
         $filter = new FilterFactory();
 
         $this->services = [
-            "annotations"        => new Service(Memory::class, true),
+            "annotations"        => new Service(
+                new AnnotationsMemory(
+                    new SerializerFactory()
+                ),
+                true
+            ),
             "dispatcher"         => new Service(Dispatcher::class, true),
             "escaper"            => new Service(Escaper::class, true),
             "eventsManager"      => new Service(EventsManager::class, true),

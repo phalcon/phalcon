@@ -28,6 +28,7 @@ class AnnotationsTestClass
 {
     /**
      * @Simple
+     *
      */
     public const TEST_CONST1 = 'test-const-with-annotation';
 

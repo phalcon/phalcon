@@ -11,17 +11,14 @@
 
 declare(strict_types=1);
 
-namespace Phalcon\Tests\Controllers;
+namespace Phalcon\Annotations\Router;
 
-use Phalcon\Annotations\Router\Get;
+use Attribute;
 
-/**
- * Class MainController
- */
-class MainController
+#[Attribute(Attribute::TARGET_CLASS)]
+class RoutePrefix
 {
-    #[Get("/")]
-    public function indexAction()
+    public function __construct(public string $prefix)
     {
     }
 }

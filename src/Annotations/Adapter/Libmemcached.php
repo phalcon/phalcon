@@ -11,17 +11,14 @@
 
 declare(strict_types=1);
 
-namespace Phalcon\Tests\Controllers;
+namespace Phalcon\Annotations\Adapter;
 
-use Phalcon\Annotations\Router\Get;
+use Phalcon\Storage\Adapter\Libmemcached as StorageLibmemcached;
 
 /**
- * Class MainController
+ * Stores the parsed annotations in memory. This adapter is the suitable
+ * development/testing
  */
-class MainController
+class Libmemcached extends StorageLibmemcached implements AdapterInterface
 {
-    #[Get("/")]
-    public function indexAction()
-    {
-    }
 }

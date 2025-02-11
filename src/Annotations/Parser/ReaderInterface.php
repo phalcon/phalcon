@@ -11,17 +11,15 @@
 
 declare(strict_types=1);
 
-namespace Phalcon\Tests\Controllers;
-
-use Phalcon\Annotations\Router\Get;
+namespace Phalcon\Annotations\Parser;
 
 /**
- * Class MainController
+ * Parses attributes returning an array with the found attributes
  */
-class MainController
+interface ReaderInterface
 {
-    #[Get("/")]
-    public function indexAction()
-    {
-    }
+    /**
+     * Reads attributes from the class, properties and methods
+     */
+    public function parse(string $className): array;
 }

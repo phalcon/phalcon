@@ -11,17 +11,16 @@
 
 declare(strict_types=1);
 
-namespace Phalcon\Tests\Controllers;
+namespace Phalcon\Annotations\Router;
 
-use Phalcon\Annotations\Router\Get;
+use Attribute;
 
-/**
- * Class MainController
- */
-class MainController
+#[Attribute(Attribute::TARGET_METHOD)]
+class Patch extends Route
 {
-    #[Get("/")]
-    public function indexAction()
+    public function __construct(...$params)
     {
+        $params['methods'] = 'PATCH';
+        parent::__construct(...$params);
     }
 }

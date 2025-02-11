@@ -11,17 +11,13 @@
 
 declare(strict_types=1);
 
-namespace Phalcon\Tests\Controllers;
+namespace Phalcon\Annotations\Adapter;
 
-use Phalcon\Annotations\Router\Get;
+use Phalcon\Storage\Adapter\Redis as StorageRedis;
 
 /**
- * Class MainController
+ * Stores the parsed annotations in redis.
  */
-class MainController
+class Redis extends StorageRedis implements AdapterInterface
 {
-    #[Get("/")]
-    public function indexAction()
-    {
-    }
 }

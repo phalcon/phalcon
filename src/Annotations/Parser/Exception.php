@@ -11,17 +11,11 @@
 
 declare(strict_types=1);
 
-namespace Phalcon\Tests\Controllers;
-
-use Phalcon\Annotations\Router\Get;
+namespace Phalcon\Annotations\Parser;
 
 /**
- * Class MainController
+ * Class for exceptions thrown by Phalcon\Annotations
  */
-class MainController
+class Exception extends \Exception
 {
-    #[Get("/")]
-    public function indexAction()
-    {
-    }
 }

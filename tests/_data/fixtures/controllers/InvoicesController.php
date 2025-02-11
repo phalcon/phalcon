@@ -13,29 +13,24 @@ declare(strict_types=1);
 
 namespace Phalcon\Tests\Controllers;
 
-/**
- * @RoutePrefix("/invoices")
- */
+use Phalcon\Annotations\Router\Get;
+use Phalcon\Annotations\Router\Route;
+use Phalcon\Annotations\Router\RoutePrefix;
+
+#[RoutePrefix("/invoices")]
 class InvoicesController
 {
-    /**
-     * @Get("/")
-     */
+    #[Get("/")]
     public function indexAction()
     {
     }
 
-    /**
-     * @Get("/edit/{id:[0-9]+}", name="edit-invoice")
-     * @param int $id
-     */
+    #[Get("/edit/{id:[0-9]+}", name: "edit-invoice")]
     public function editAction($id)
     {
     }
 
-    /**
-     * @Route("/save", methods={"POST", "PUT"}, name="save-invoice")
-     */
+    #[Route("/save", methods: ["POST", "PUT"], name: "save-invoice")]
     public function saveAction()
     {
     }

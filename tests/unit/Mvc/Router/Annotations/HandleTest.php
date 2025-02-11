@@ -13,10 +13,12 @@ declare(strict_types=1);
 
 namespace Phalcon\Tests\Unit\Mvc\Router\Annotations;
 
+use Phalcon\Annotations\AdapterFactory;
 use Phalcon\Events\Exception as EventsException;
 use Phalcon\Mvc\Router\Annotations;
 use Phalcon\Mvc\Router\Exception as RouterException;
 use Phalcon\Mvc\Router\Route;
+use Phalcon\Storage\SerializerFactory;
 use Phalcon\Tests\Fixtures\Traits\DiTrait;
 use Phalcon\Tests\AbstractUnitTestCase;
 
@@ -113,7 +115,15 @@ final class HandleTest extends AbstractUnitTestCase
     {
         $this->newDi();
         $this->setDiService('request');
-        $this->setDiService('annotations');
+//        $this->setDiService('annotations');
+
+        $factory = new AdapterFactory(new SerializerFactory());
+        $adapter = $factory->newInstance('memory');
+
+        $this->container->setShared(
+            'annotations',
+            new \Phalcon\Annotations\Annotations($adapter)
+        );
     }
 
     /**
