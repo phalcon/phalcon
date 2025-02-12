@@ -22,27 +22,40 @@ use Phalcon\DataMapper\Pdo\Exception\Exception;
 
 /**
  * @phpstan-type ColumnDefinitionSql = array{
- *     _name: string,
- *     _type: string,
- *     _size?: int,
- *     _scale?: int,
- *     _notnull: bool,
- *     _default: mixed,
- *     _autoinc: bool,
- *     _primary: bool,
- *     _options: mixed
+ *      extended: string,
+ *      comment: string,
+ *      default_value?: mixed,
+ *      dflt_value?: mixed,
+ *      name: string,
+ *      is_auto_increment: bool,
+ *      is_first: bool,
+ *      is_not_null?: bool,
+ *      is_numeric: bool,
+ *      is_primary: bool,
+ *      is_unsigned: bool,
+ *      notnull?: int,
+ *      numeric_scale: int,
+ *      pk?: int,
+ *      size: int,
+ *      type: string,
  * }
  *
  * @phpstan-type ColumnDefinition = array{
- *     name: string,
- *     type: string,
- *     size: int|null,
- *     scale: int|null,
- *     notnull: bool,
- *     default: mixed,
- *     autoinc: bool,
- *     primary: bool,
- *     options: mixed
+ *      afterField: string|null,
+ *      comment: string,
+ *      default: mixed,
+ *      hasDefault: bool,
+ *      isAutoIncrement: bool,
+ *      isFirst: bool,
+ *      isNotNull: bool,
+ *      isNumeric: bool,
+ *      isPrimary: bool,
+ *      isUnsigned: bool|null,
+ *      name: string,
+ *      options: list<string>|null,
+ *      scale: int|null,
+ *      size: int|null,
+ *      type: string
  * }
  */
 interface AdapterInterface

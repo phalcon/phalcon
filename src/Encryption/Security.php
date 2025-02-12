@@ -200,7 +200,6 @@ class Security implements InjectionAwareInterface
         /**
          * The value is the same?
          */
-        /** @var string $tokenKey */
         $userToken  = $this->processUserToken($tokenKey, $tokenValue);
         $knownToken = $this->getRequestToken();
         if (null === $knownToken || null === $userToken) {
@@ -599,7 +598,7 @@ class Security implements InjectionAwareInterface
      *
      * @param TOptions $options
      *
-     * @return array
+     * @return array<string, int>
      */
     private function processArgonOptions(array $options): array
     {

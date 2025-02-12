@@ -232,7 +232,7 @@ class Uniqueness extends AbstractCombinedFieldsValidator
 //            );
         }
 
-        /** @var Model $className */
+        /** @var class-string $className */
         $className = get_class($record);
 
         return $className::count($params) === 0;
@@ -321,7 +321,7 @@ class Uniqueness extends AbstractCombinedFieldsValidator
      * @param array $field
      * @param array $values
      *
-     * @return array|array[]
+     * @return array<string, list<string>|string>
      */
     protected function isUniquenessModel(
         mixed $record,

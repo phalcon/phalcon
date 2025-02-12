@@ -26,7 +26,7 @@ class Igbinary extends AbstractSerializer
      *
      * @return string
      */
-    public function serialize()
+    public function serialize(): mixed
     {
         if (true !== $this->isSerializable($this->data)) {
             return $this->data;
@@ -49,7 +49,7 @@ class Igbinary extends AbstractSerializer
      *
      * @return void
      */
-    public function unserialize($data)
+    public function unserialize(mixed $data): void
     {
         if (true !== $this->isSerializable($data)) {
             $this->data = $data;

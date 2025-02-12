@@ -18,10 +18,24 @@ interface SerializerInterface //extends Serializable
     /**
      * @return mixed
      */
-    public function getData();
+    public function getData(): mixed;
 
     /**
      * @param mixed $data
      */
     public function setData($data): void;
+
+    /**
+     * Serializes data
+     *
+     * @return mixed
+     */
+    public function serialize(): mixed;
+
+    /**
+     * Unserializes data
+     *
+     * @param mixed $data
+     */
+    public function unserialize(mixed $data): void;
 }

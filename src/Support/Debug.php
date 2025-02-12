@@ -274,7 +274,6 @@ class Debug
      * @param string $message
      * @param string $file
      * @param int    $line
-     * @param array  $context
      *
      * @throws ErrorException
      */

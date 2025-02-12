@@ -22,7 +22,7 @@ class Msgpack extends Igbinary
      *
      * @return string|null
      */
-    public function serialize()
+    public function serialize(): mixed
     {
         if (true !== $this->isSerializable($this->data)) {
             return $this->data;

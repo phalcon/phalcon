@@ -66,7 +66,7 @@ class PascalCase
          */
         $delimiters = str_replace(['\-', '-'], ['-', '\-'], $delimiters);
 
-        /** @var string[] $result */
+        /** @var list<string>|false $result */
         $result = preg_split(
             '/[' . $delimiters . ']+/',
             $text,
