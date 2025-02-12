@@ -21,6 +21,8 @@ use Phalcon\Storage\Adapter\AdapterInterface;
 
 class Annotations
 {
+    private const CACHE_PREFIX = '_PHATN';
+
     protected array $attributes = [];
 
     protected AdapterInterface $adapter;
@@ -53,7 +55,7 @@ class Annotations
         /**
          * Try to read the attributes from the adapter
          */
-        $classAttributes = $this->read($realClassName);
+        $classAttributes = $this->read(self::CACHE_PREFIX . $realClassName);
 
         if (false === $classAttributes) {
             /**
@@ -64,7 +66,7 @@ class Annotations
 
             $classAttributes                  = new Reflection($parsedAttributes);
             $this->attributes[$realClassName] = $classAttributes;
-            $this->write($realClassName, $classAttributes);
+            $this->write(self::CACHE_PREFIX . $realClassName, $classAttributes);
         }
 
         return $classAttributes;
