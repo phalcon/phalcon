@@ -274,9 +274,9 @@ abstract class AbstractAdapter implements AdapterInterface
     }
 
     /**
-     * @param ColumnDefinition $columns
+     * @param ColumnDefinition[] $columns
      *
-     * @return ColumnDefinition
+     * @return ColumnDefinition[]
      */
     protected function transformColumns(array $columns): array
     {

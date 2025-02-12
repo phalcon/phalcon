@@ -2470,7 +2470,7 @@ class Query implements QueryInterface, InjectionAwareInterface
      * @param array $expr
      * @param bool  $quoting
      *
-     * @return array|string[]
+     * @return array<array-key, list<array<string>>|string>
      * @throws Exception
      */
     final protected function getExpression(array $expr, bool $quoting = true): array
@@ -3133,7 +3133,7 @@ class Query implements QueryInterface, InjectionAwareInterface
      *
      * @param array $group
      *
-     * @return array|\string[][]
+     * @return list<array<list<array<string>>|string>>
      * @throws Exception
      */
     final protected function getGroupClause(array $group): array
@@ -3162,7 +3162,12 @@ class Query implements QueryInterface, InjectionAwareInterface
      * @param ManagerInterface $manager
      * @param array            $join
      *
-     * @return string[]
+     * @return array{
+     *     schema: null|string,
+     *     source: string,
+     *     modelName: string,
+     *     model: ModelInterface
+     * }
      * @throws Exception
      */
     final protected function getJoin(ManagerInterface $manager, array $join): array

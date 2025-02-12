@@ -13,15 +13,12 @@ declare(strict_types=1);
 
 namespace Phalcon\Session;
 
-use Phalcon\Di\InjectionAwareInterface;
 use Phalcon\Di\Traits\InjectionAwareTrait;
 use Phalcon\Support\Collection;
 
 use function is_array;
 
 /**
- * Phalcon\Session\Bag
- *
  * This component helps to separate session data into "namespaces". Working by
  * this way you can easily create groups of session variables into the
  * application
@@ -36,7 +33,7 @@ use function is_array;
  * @property string           $name
  * @property ManagerInterface $session;
  */
-class Bag extends Collection implements BagInterface, InjectionAwareInterface
+class Bag extends Collection implements BagInterface
 {
     use InjectionAwareTrait;
 

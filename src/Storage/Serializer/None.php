@@ -20,7 +20,7 @@ class None extends AbstractSerializer
      *
      * @return string
      */
-    public function serialize()
+    public function serialize(): mixed
     {
         return $this->data;
     }
@@ -32,7 +32,7 @@ class None extends AbstractSerializer
      *
      * @retrun void
      */
-    public function unserialize($data)
+    public function unserialize(mixed $data): void
     {
         $this->data = $data;
     }

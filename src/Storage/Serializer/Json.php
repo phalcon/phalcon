@@ -27,7 +27,7 @@ class Json extends AbstractSerializer
      *
      * @return JsonSerializable|mixed|string
      */
-    public function serialize()
+    public function serialize(): mixed
     {
         if (is_object($this->data) && !($this->data instanceof JsonSerializable)) {
             throw new InvalidArgumentException(
@@ -50,7 +50,7 @@ class Json extends AbstractSerializer
      *
      * @return void
      */
-    public function unserialize($data)
+    public function unserialize(mixed $data): void
     {
         if (true !== $this->isSerializable($data)) {
             $this->data = $data;

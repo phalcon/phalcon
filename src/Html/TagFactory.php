@@ -106,12 +106,12 @@ use const PHP_EOL;
  * @method string inputUrl(string $name, string $value = null, array $attributes = [])
  * @method string inputWeek(string $name, string $value = null, array $attributes = [])
  * @method string label(string $label, array $attributes = [], bool $raw = false)
- * @method string link(string $indent = '    ', string $delimiter = PHP_EOL)
- * @method string meta(string $indent = '    ', string $delimiter = PHP_EOL)
+ * @method string link(string $indent = '    ', string $delimiter = "\n")
+ * @method string meta(string $indent = '    ', string $delimiter = "\n")
  * @method string ol(string $text, array $attributes = [], bool $raw = false)
- * @method string script(string $indent = '    ', string $delimiter = PHP_EOL)
- * @method string style(string $indent = '    ', string $delimiter = PHP_EOL)
- * @method string title(string $indent = '    ', string $delimiter = PHP_EOL)
+ * @method string script(string $indent = '    ', string $delimiter = "\n")
+ * @method string style(string $indent = '    ', string $delimiter = "\n")
+ * @method string title(string $indent = '    ', string $delimiter = "\n")
  * @method string ul(string $text, array $attributes = [], bool $raw = false)
  */
 class TagFactory
