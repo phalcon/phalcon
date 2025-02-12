@@ -311,6 +311,15 @@ interface DialectInterface
     public function listTables(?string $schemaName = null): string;
 
     /**
+     * Generates the SQL to list all views of a schema or user
+     *
+     * @param string|null $schemaName
+     *
+     * @return string
+     */
+    public function listViews(?string $schemaName = null): string;
+
+    /**
      * Generates SQL to modify a column in a table
      *
      * @param string               $tableName
