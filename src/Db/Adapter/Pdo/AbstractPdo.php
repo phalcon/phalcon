@@ -340,7 +340,7 @@ abstract class AbstractPdo extends AbstractAdapter
      * @param string $sql
      * @param array  $parameters
      *
-     * @return string[]
+     * @return array<string, list|string|null>
      * @throws Exception
      */
     public function convertBoundParams(

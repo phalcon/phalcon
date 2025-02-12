@@ -813,7 +813,6 @@ class Crypt implements CryptInterface
                 $this->authTagLength
             );
 
-            /** @var string $authTag */
             $this->authTag = $authTag;
         } else {
             $encrypted = openssl_encrypt(
