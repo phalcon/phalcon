@@ -96,7 +96,7 @@ class Annotations
      */
     public function getConstants(string $className): array
     {
-        return $this->get($className)->getConstantsAttributes();
+        return $this->get($className)->getConstantsAnnotations();
     }
 
     /**
@@ -109,7 +109,7 @@ class Annotations
      */
     public function getMethod(string $className, string $methodName): Collection
     {
-        $methods = $this->get($className)->getMethodsAttributes();
+        $methods = $this->get($className)->getMethodsAnnotations();
 
         foreach ($methods as $methodKey => $method) {
             if (!strcasecmp($methodKey, $methodName)) {
@@ -132,7 +132,7 @@ class Annotations
      */
     public function getMethods(string $className): array
     {
-        return $this->get($className)->getMethodsAttributes();
+        return $this->get($className)->getMethodsAnnotations();
     }
 
     /**
@@ -144,7 +144,7 @@ class Annotations
      */
     public function getProperties(string $className): array
     {
-        return $this->get($className)->getPropertiesAttributes();
+        return $this->get($className)->getPropertiesAnnotations();
     }
 
     /**
@@ -157,7 +157,7 @@ class Annotations
      */
     public function getProperty(string $className, string $propertyName): Collection
     {
-        $properties = $this->get($className)->getPropertiesAttributes();
+        $properties = $this->get($className)->getPropertiesAnnotations();
 
         return $properties[$propertyName] ?? new Collection();
     }
