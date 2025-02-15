@@ -32,16 +32,43 @@ use function ftell;
 use function get_resource_type;
 use function is_resource;
 use function is_string;
-use function restore_error_handler;
-use function set_error_handler;
 use function stream_get_contents;
 use function stream_get_meta_data;
 use function strpbrk;
 
-use const E_WARNING;
-
 /**
  * Stream/file OO class
+ *
+ * @psalm-type TStat array{
+ *      dev: int<0,max>,
+ *      ino: int<0,max>,
+ *      mode: int<0,max>,
+ *      nlink: int<0,max>,
+ *      uid: int<0,max>,
+ *      gid: int<0,max>,
+ *      rdev: int<0,max>,
+ *      size: int<0,max>,
+ *      atime: int<0,max>,
+ *      mtime: int<0,max>,
+ *      ctime: int<0,max>,
+ *      blksize: int<0,max>,
+ *      blocks: int<0,max>,
+ * }
+ *
+ * @psalm-type TMetadata array{
+ *      timed_out: bool,
+ *      blocked: bool,
+ *      eof: bool,
+ *      unread_bytes: int,
+ *      stream_type: string,
+ *      wrapper_type: string,
+ *      wrapper_data: mixed,
+ *      mode: string,
+ *      seekable: bool,
+ *      uri?: string,
+ *      mediatype?: string,
+ *      base64?: bool
+ * }
  *
  * @property resource|null   $handle
  * @property resource|string $stream
@@ -181,7 +208,7 @@ class Stream implements StreamInterface
      *
      * @param string|null $key
      *
-     * @return array|bool|int|mixed|string|null
+     * @return TMetadata|bool|int|mixed|string|null
      */
     public function getMetadata(?string $key = null)
     {
@@ -206,10 +233,11 @@ class Stream implements StreamInterface
     public function getSize(): ?int
     {
         if (null !== $this->handle) {
+            /** @var TStat|false $stats */
             $stats = fstat($this->handle);
 
             if (false !== $stats) {
-                return $stats["size"] ?? null;
+                return $stats["size"];
             }
         }
 
@@ -315,22 +343,17 @@ class Stream implements StreamInterface
     public function setStream($stream, string $mode = "rb"): void
     {
         $handle  = $stream;
-        $warning = false;
+
         if (is_string($stream)) {
-            set_error_handler(
-                function () use (&$warning) {
-                    $warning = true;
-                },
-                E_WARNING
-            );
+            $errorLevel = error_reporting(0);
+            error_clear_last();
 
             $handle = $this->phpFopen($stream, $mode);
 
-            restore_error_handler();
+            error_reporting($errorLevel);
         }
 
         if (
-            true === $warning ||
             !is_resource($handle) ||
             "stream" !== get_resource_type($handle)
         ) {

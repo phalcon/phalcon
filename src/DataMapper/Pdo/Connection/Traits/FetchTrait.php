@@ -28,7 +28,6 @@ use function is_array;
 /**
  * Provides array quoting, profiling, a new `perform()` method, new `fetch*()`
  * methods
- *
  */
 trait FetchTrait
 {
@@ -60,10 +59,9 @@ trait FetchTrait
      */
     public function fetchAll(string $statement, array $values = []): array
     {
-        $sth    = $this->perform($statement, $values);
-        $result = $sth->fetchAll(PDO::FETCH_ASSOC);
+        $sth = $this->perform($statement, $values);
 
-        return is_array($result) ? $result : [];
+        return $sth->fetchAll(PDO::FETCH_ASSOC);
     }
 
     /**

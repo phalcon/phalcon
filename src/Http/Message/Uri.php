@@ -41,6 +41,17 @@ use function substr;
 /**
  * Uri
  *
+ * @psalm-type TParseUrl array{
+ *      scheme: string,
+ *      host: string,
+ *      port: int,
+ *      user?: string,
+ *      pass?: string,
+ *      query: string,
+ *      path: string,
+ *      fragment: string
+ * }
+ *
  * @property string   $fragment
  * @property string   $host
  * @property string   $pass
@@ -149,22 +160,20 @@ final class Uri extends AbstractCommon implements UriInterface
      */
     public function __construct(string $uri = "")
     {
-        if (null !== $uri) {
+        if (true !== empty($uri)) {
             $urlParts = $this->phpParseUrl($uri);
 
             if (false === $urlParts) {
                 throw new InvalidArgumentException("The URI cannot be parsed");
             }
 
-            $this->fragment = $this->filterFragment(
-                $urlParts["fragment"] ?? ""
-            );
-            $this->host     = strtolower($urlParts["host"] ?? "");
-            $this->path     = $this->filterPath($urlParts["path"] ?? "");
-            $this->port     = $this->filterPort($urlParts["port"] ?? null);
-            $this->query    = $this->filterQuery($urlParts["query"] ?? "");
-            $this->scheme   = $this->filterScheme($urlParts["scheme"] ?? "");
-            $this->userInfo = $this->filterUserInfo($urlParts["user"] ?? "");
+            $this->fragment = $this->filterFragment($urlParts["fragment"]);
+            $this->host     = strtolower($urlParts["host"]);
+            $this->path     = $this->filterPath($urlParts["path"]);
+            $this->port     = $this->filterPort($urlParts["port"]);
+            $this->query    = $this->filterQuery($urlParts["query"]);
+            $this->scheme   = $this->filterScheme($urlParts["scheme"]);
+            $this->userInfo = $this->filterUserInfo($urlParts["user"]);
 
             if (isset($urlParts["pass"])) {
                 $this->userInfo .= ":" . $this->filterUserInfo(
@@ -545,9 +554,9 @@ final class Uri extends AbstractCommon implements UriInterface
      *
      * @param string $url
      *
-     * @return array|false|int|string|null
+     * @return TParseUrl|false
      */
-    protected function phpParseUrl(string $url)
+    protected function phpParseUrl(string $url): array|false
     {
         return parse_url($url);
     }

@@ -58,74 +58,11 @@ final class UploadedFile implements UploadedFileInterface
     private bool $alreadyMoved = false;
 
     /**
-     * Retrieve the filename sent by the client.
-     *
-     * Do not trust the value returned by this method. A client could send
-     * a malicious filename with the intention to corrupt or hack your
-     * application.
-     *
-     * Implementations SHOULD return the value stored in the 'name' key of
-     * the file in the $_FILES array.
-     *
-     * @var string|null
-     */
-    private ?string $clientFilename;
-
-    /**
-     * Retrieve the media type sent by the client.
-     *
-     * Do not trust the value returned by this method. A client could send
-     * a malicious media type with the intention to corrupt or hack your
-     * application.
-     *
-     * Implementations SHOULD return the value stored in the 'type' key of
-     * the file in the $_FILES array.
-     *
-     * @var string | null
-     */
-    private ?string $clientMediaType;
-
-    /**
-     * Retrieve the error associated with the uploaded file.
-     *
-     * The return value MUST be one of PHP's UPLOAD_ERR_XXX constants.
-     *
-     * If the file was uploaded successfully, this method MUST return
-     * UPLOAD_ERR_OK.
-     *
-     * Implementations SHOULD return the value stored in the 'error' key of
-     * the file in the $_FILES array.
-     *
-     * @see https://php.net/manual/en/features.file-upload.errors.php
-     *
-     * @var int
-     */
-    private int $error = 0;
-
-    /**
      * If the stream is a string (file name) we store it here
      *
      * @var string
      */
     private string $fileName = "";
-
-    /**
-     * Retrieve the file size.
-     *
-     * Implementations SHOULD return the value stored in the 'size' key of
-     * the file in the $_FILES array if available, as PHP calculates this based
-     * on the actual size transmitted.
-     *
-     * @var int|null
-     */
-    private ?int $size;
-
-    /**
-     * Holds the stream/string for the uploaded file
-     *
-     * @var StreamInterface|string|null
-     */
-    private $stream;
 
     /**
      * UploadedFile constructor.
@@ -137,11 +74,11 @@ final class UploadedFile implements UploadedFileInterface
      * @param string|null                 $clientMediaType
      */
     public function __construct(
-        $stream,
-        int $size = null,
-        int $error = 0,
-        string $clientFilename = null,
-        string $clientMediaType = null
+        private StreamInterface|string|null $stream,
+        private int|null $size = null,
+        private int $error = 0,
+        private string|null $clientFilename = null,
+        private string|null $clientMediaType = null
     ) {
         /**
          * Check the stream passed. It can be a string representing a file or
@@ -153,10 +90,6 @@ final class UploadedFile implements UploadedFileInterface
          * Check the error
          */
         $this->checkError($error);
-
-        $this->size            = $size;
-        $this->clientFilename  = $clientFilename;
-        $this->clientMediaType = $clientMediaType;
     }
 
     /**
@@ -278,10 +211,11 @@ final class UploadedFile implements UploadedFileInterface
          * All together for early failure
          */
         if (
-            !(is_string($targetPath) &&
+            !(
                 !empty($targetPath) &&
                 is_dir(dirname($targetPath)) &&
-                is_writable(dirname($targetPath)))
+                is_writable(dirname($targetPath))
+            )
         ) {
             throw new InvalidArgumentException(
                 "Target folder is empty string, not a folder or not writable"

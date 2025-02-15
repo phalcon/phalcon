@@ -79,7 +79,7 @@ abstract class AbstractTableSelect extends Select
      */
     public function fetchRow(): ?AbstractRow
     {
-        $columns = $this->fetchOne() ?? [];
+        $columns = $this->fetchOne();
 
         return true === empty($columns)
             ? null

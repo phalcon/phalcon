@@ -262,7 +262,7 @@ abstract class AbstractRequest extends AbstractMessage implements
      * @return UriInterface
      * @throws InvalidArgumentException
      */
-    final protected function processUri($uri): UriInterface
+    final protected function processUri(mixed $uri): UriInterface
     {
         if ($uri instanceof UriInterface) {
             return $uri;

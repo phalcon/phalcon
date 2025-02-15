@@ -29,6 +29,11 @@ use Traversable;
 use function array_key_exists;
 use function is_bool;
 
+/**
+ * @template TKey of string
+ * @template TValue
+ * @implements IteratorAggregate<TKey, TValue>
+ */
 abstract class AbstractRow implements IteratorAggregate, JsonSerializable
 {
     public const DELETE = 'DELETE';
