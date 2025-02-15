@@ -25,6 +25,7 @@ use function get_object_vars;
 use function implode;
 use function is_object;
 use function is_string;
+use function rtrim;
 
 abstract class AbstractStatement
 {
@@ -157,7 +158,7 @@ abstract class AbstractStatement
 
         $output = $recursive . $this->indent($ctes, ',');
 
-        return $output ? $output . ' ' : '';
+        return rtrim($output, ' ') . ' ';
     }
 
     /**

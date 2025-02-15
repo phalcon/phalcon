@@ -31,7 +31,8 @@ trait QueryTrait
     /**
      * Create a new instance of this object
      *
-     * @param mixed ...$arguments
+     * @param Connection|string $argument
+     * @param mixed             ...$arguments
      *
      * @return static
      */

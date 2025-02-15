@@ -326,7 +326,7 @@ abstract class AbstractMessage extends AbstractCommon implements
             "3.0" => 1,
         ];
 
-        if (empty($protocol) || !is_string($protocol)) {
+        if (empty($protocol)) {
             throw new InvalidArgumentException("Invalid protocol value");
         }
 

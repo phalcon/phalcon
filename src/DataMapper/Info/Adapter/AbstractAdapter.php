@@ -263,7 +263,6 @@ abstract class AbstractAdapter implements AdapterInterface
      * @param array<string, ColumnDefinition> $columns
      *
      * @return array<string, ColumnDefinition>
-     * @throws Exception
      */
     protected function processColumnInformation(
         string $schema,
@@ -274,7 +273,7 @@ abstract class AbstractAdapter implements AdapterInterface
     }
 
     /**
-     * @param ColumnDefinition[] $columns
+     * @param ColumnDefinitionSql[] $columns
      *
      * @return ColumnDefinition[]
      */

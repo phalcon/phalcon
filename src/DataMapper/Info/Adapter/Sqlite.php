@@ -127,8 +127,8 @@ class Sqlite extends AbstractAdapter
             str_contains($type, "(") &&
             preg_match($sizePattern, $type, $matches)
         ) {
-            $size  = isset($matches[1]) ? (int)$matches[1] : null;
-            $scale = isset($matches[2]) ? (int)$matches[2] : null;
+            $size  = (int)$matches[1];
+            $scale = (int)$matches[2];
         }
 
         /**

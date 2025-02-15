@@ -32,11 +32,11 @@ use Phalcon\DataMapper\Pdo\Exception\Exception;
  *      is_not_null?: bool,
  *      is_numeric: bool,
  *      is_primary: bool,
- *      is_unsigned: bool,
+ *      is_unsigned: bool|null,
  *      notnull?: int,
- *      numeric_scale: int,
+ *      numeric_scale: int|null,
  *      pk?: int,
- *      size: int,
+ *      size: int|null,
  *      type: string,
  * }
  *

@@ -61,9 +61,9 @@ class ConnectionLocator
     /**
      * Constructor.
      *
-     * @param callable                $master
-     * @param array<string, callable> $read
-     * @param array<string, callable> $write
+     * @param callable                      $master
+     * @param array<string, callable|mixed> $read
+     * @param array<string, callable|mixed> $write
      *
      * @throws ConnectionNotFound
      */
