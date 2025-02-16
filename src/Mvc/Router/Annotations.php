@@ -327,8 +327,6 @@ class Annotations extends Router
             default => false,
         };
 
-        var_dump($isRoute);
-
         $methods = match ($name) {
             "Connect",
             "Delete",

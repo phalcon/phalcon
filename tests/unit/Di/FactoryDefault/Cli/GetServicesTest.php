@@ -29,7 +29,7 @@ final class GetServicesTest extends AbstractUnitTestCase
     {
         $di = new Di();
 
-        $numberOfFactoryServices = 12;
+        $numberOfFactoryServices = 13;
 
         $this->assertCount($numberOfFactoryServices, $di->getServices());
 

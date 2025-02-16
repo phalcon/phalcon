@@ -76,9 +76,15 @@ class FactoryDefault extends Di
 
         $this->services = [
             'annotations'        => new Service(
-                new AnnotationsMemory(
-                    new SerializerFactory()
-                ),
+                [
+                    'className' => AnnotationsMemory::class,
+                    'arguments' => [
+                        [
+                            'type' => 'service',
+                            'name' => 'storageSerializer',
+                        ],
+                    ],
+                ],
                 true
             ),
             'assets'             => new Service(
@@ -121,6 +127,7 @@ class FactoryDefault extends Di
                 true
             ),
             'transactionManager' => new Service(TransactionManager::class, true),
+            'storageSerializer'  => new Service(SerializerFactory::class, true),
             'url'                => new Service(Url::class, true),
         ];
     }

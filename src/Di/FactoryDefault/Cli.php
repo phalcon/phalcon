@@ -50,9 +50,15 @@ class Cli extends FactoryDefault
 
         $this->services = [
             "annotations"        => new Service(
-                new AnnotationsMemory(
-                    new SerializerFactory()
-                ),
+                [
+                    'className' => AnnotationsMemory::class,
+                    'arguments' => [
+                        [
+                            'type' => 'service',
+                            'name' => 'storageSerializer',
+                        ],
+                    ],
+                ],
                 true
             ),
             "dispatcher"         => new Service(Dispatcher::class, true),
@@ -77,6 +83,7 @@ class Cli extends FactoryDefault
                 true
             ),
             "transactionManager" => new Service(TransactionManager::class, true),
+            "storageSerializer"  => new Service(SerializerFactory::class, true),
         ];
     }
 }

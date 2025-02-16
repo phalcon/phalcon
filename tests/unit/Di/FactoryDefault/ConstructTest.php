@@ -139,7 +139,7 @@ class ConstructTest extends AbstractUnitTestCase
     {
         $container = new FactoryDefault();
 
-        $expected = 20;
+        $expected = 21;
         $actual   = count($container->getServices());
         $this->assertSame($expected, $actual);
     }

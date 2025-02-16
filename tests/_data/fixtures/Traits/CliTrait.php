@@ -24,6 +24,7 @@ use Phalcon\Html\TagFactory;
 use Phalcon\Mvc\Model\Manager;
 use Phalcon\Mvc\Model\MetaData\Adapter\Memory as MetadataMemory;
 use Phalcon\Mvc\Model\Transaction\Manager as TransactionManager;
+use Phalcon\Storage\SerializerFactory;
 use Phalcon\Support\HelperFactory;
 
 trait CliTrait
@@ -132,6 +133,10 @@ trait CliTrait
             [
                 'transactionManager',
                 TransactionManager::class,
+            ],
+            [
+                'storageSerializer',
+                SerializerFactory::class,
             ],
         ];
     }
