@@ -314,22 +314,32 @@ class Annotations extends Router
         $name    = $annotation->getName();
         $isRoute = match ($name) {
             "Route",
-            "Get",
-            "Post",
-            "Put",
-            "Patch",
+            "Connect",
             "Delete",
-            "Options" => true,
+            "Get",
+            "Head",
+            "Patch",
+            "Post",
+            "Purge",
+            "Put",
+            "Options",
+            "Trace" => true,
             default => false,
         };
 
+        var_dump($isRoute);
+
         $methods = match ($name) {
-            "Get",
-            "Post",
-            "Put",
-            "Patch",
+            "Connect",
             "Delete",
-            "Options" => strtoupper($name),
+            "Get",
+            "Head",
+            "Patch",
+            "Post",
+            "Purge",
+            "Put",
+            "Options",
+            "Trace" => strtoupper($name),
             default => null,
         };
 

@@ -14,13 +14,14 @@ declare(strict_types=1);
 namespace Phalcon\Annotations\Router;
 
 use Attribute;
+use Phalcon\Http\Message\Interfaces\RequestMethodInterface;
 
 #[Attribute(Attribute::TARGET_METHOD)]
 class Delete extends Route
 {
     public function __construct(...$params)
     {
-        $params['methods'] = 'DELETE';
+        $params['methods'] = RequestMethodInterface::METHOD_DELETE;
         parent::__construct(...$params);
     }
 }

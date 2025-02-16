@@ -13,6 +13,7 @@ declare(strict_types=1);
 
 namespace Phalcon\Annotations\Adapter;
 
+use Phalcon\Annotations\Parser\Reflection;
 use Phalcon\Storage\Adapter\Libmemcached as StorageLibmemcached;
 
 /**
@@ -21,4 +22,14 @@ use Phalcon\Storage\Adapter\Libmemcached as StorageLibmemcached;
  */
 class Libmemcached extends StorageLibmemcached implements AdapterInterface
 {
+    /**
+     * @param string     $key
+     * @param mixed|null $defaultValue
+     *
+     * @return Reflection|mixed
+     */
+    public function get(string $key, mixed $defaultValue = null): mixed
+    {
+        return parent::get($key, $defaultValue);
+    }
 }

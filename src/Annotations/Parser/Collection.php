@@ -13,8 +13,10 @@ declare(strict_types=1);
 
 namespace Phalcon\Annotations\Parser;
 
-use Countable;
-use Iterator;
+use ArrayIterator;
+use Exception;
+use IteratorAggregate;
+use Traversable;
 
 /**
  * Represents a collection of annotations. This class allows to traverse a group
@@ -31,18 +33,15 @@ use Iterator;
  *
  * // Get an specific annotation in the collection
  * $annotation = $classAnnotations->get("Cacheable");
+ *
+ * @template TKey of int
+ * @template TValue of Annotation
  *```
  */
-class Collection implements Iterator, Countable
+class Collection implements IteratorAggregate
 {
-    /**
-     * @var array
-     */
     protected array $annotations;
 
-    /**
-     * @var int
-     */
     protected int $position = 0;
 
     /**
@@ -52,32 +51,20 @@ class Collection implements Iterator, Countable
      */
     public function __construct(array $reflectionData = [])
     {
-        $annotations = [];
+        $this->annotations = [];
         foreach ($reflectionData as $annotationData) {
-            $annotations[] = new Annotation($annotationData);
+            $this->annotations[] = new Annotation($annotationData);
         }
-
-        $this->annotations = $annotations;
     }
 
-    /**
-     * Returns the number of annotations in the collection
-     *
-     * @return int
-     */
-    public function count(): int
+    public function getIterator(): Traversable
     {
-        return count($this->annotations);
+        return new ArrayIterator($this->annotations);
     }
 
-    /**
-     * Returns the current annotation in the iterator
-     *
-     * @return mixed
-     */
-    public function current(): mixed
+    public function getAnnotations(): Traversable
     {
-        return $this->annotations[$this->position] ?? false;
+        return new ArrayIterator($this->annotations);
     }
 
     /**
@@ -106,7 +93,7 @@ class Collection implements Iterator, Countable
      *
      * @param string $name
      *
-     * @return Annotation[]
+     * @return TValue[]
      */
     public function getAll(string $name): array
     {
@@ -118,16 +105,6 @@ class Collection implements Iterator, Countable
         }
 
         return $found;
-    }
-
-    /**
-     * Returns the internal annotations as an array
-     *
-     * @return Annotation[]
-     */
-    public function getAnnotations(): array
-    {
-        return $this->annotations;
     }
 
     /**
@@ -146,45 +123,5 @@ class Collection implements Iterator, Countable
         }
 
         return false;
-    }
-
-    /**
-     * Returns the current position/key in the iterator
-     *
-     * @return int
-     */
-    public function key(): int
-    {
-        return $this->position;
-    }
-
-    /**
-     * Moves the internal iteration pointer to the next position
-     *
-     * @return void
-     */
-    public function next(): void
-    {
-        $this->position++;
-    }
-
-    /**
-     * Rewinds the internal iterator
-     *
-     * @return void
-     */
-    public function rewind(): void
-    {
-        $this->position = 0;
-    }
-
-    /**
-     * Check if the current annotation in the iterator is valid
-     *
-     * @return bool
-     */
-    public function valid(): bool
-    {
-        return isset($this->annotations[$this->position]);
     }
 }

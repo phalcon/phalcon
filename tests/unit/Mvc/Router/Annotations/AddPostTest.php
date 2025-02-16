@@ -30,7 +30,6 @@ final class AddPostTest extends AbstractUnitTestCase
      */
     public function testMvcRouterAnnotationsAddPost(): void
     {
-
         $factory = new AdapterFactory(new SerializerFactory());
         $adapter = $factory->newInstance('memory');
 

@@ -13,18 +13,43 @@ declare(strict_types=1);
 
 namespace Phalcon\Tests\Unit\Mvc\Router\Annotations;
 
+use Phalcon\Annotations\AdapterFactory;
+use Phalcon\Di\Di;
+use Phalcon\Http\Request;
+use Phalcon\Mvc\Router\Annotations;
+use Phalcon\Storage\SerializerFactory;
 use Phalcon\Tests\AbstractUnitTestCase;
 
 final class AddConnectTest extends AbstractUnitTestCase
 {
     /**
-     * Tests Phalcon\Mvc\Router\Annotations :: addConnect()
+     * Tests Phalcon\Mvc\Router\Annotations :: addPurge()
      *
      * @author Phalcon Team <team@phalcon.io>
      * @since  2018-11-13
      */
-    public function testMvcRouterAnnotationsAddConnect(): void
+    public function testMvcRouterAnnotationsAddPurge(): void
     {
-        $this->markTestSkipped('Need implementation');
+        $factory = new AdapterFactory(new SerializerFactory());
+        $adapter = $factory->newInstance('memory');
+
+        $di = new Di();
+        $di->setShared(
+            'annotations',
+            new \Phalcon\Annotations\Annotations($adapter)
+        );
+        $di->set('request', new Request());
+
+        $router = new Annotations(false);
+        $router->setDI($di);
+        $router->addResource('\\Phalcon\\Tests\\Controllers\\Annotations', '/annotations');
+
+        $_SERVER['REQUEST_METHOD'] = 'CONNECT';
+
+        $router->handle('/annotations');
+
+        $this->assertSame('annotations', $router->getControllerName());
+
+        $this->assertSame('connect', $router->getActionName());
     }
 }

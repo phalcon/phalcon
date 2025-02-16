@@ -17,11 +17,11 @@ use Attribute;
 use Phalcon\Http\Message\Interfaces\RequestMethodInterface;
 
 #[Attribute(Attribute::TARGET_METHOD)]
-class Get extends Route
+class Head extends Route
 {
     public function __construct(...$params)
     {
-        $params['methods'] = RequestMethodInterface::METHOD_GET;
+        $params['methods'] = RequestMethodInterface::METHOD_HEAD;
         parent::__construct(...$params);
     }
 }

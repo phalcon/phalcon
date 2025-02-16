@@ -13,6 +13,11 @@ declare(strict_types=1);
 
 namespace Phalcon\Tests\Unit\Mvc\Router\Annotations;
 
+use Phalcon\Annotations\AdapterFactory;
+use Phalcon\Di\Di;
+use Phalcon\Http\Request;
+use Phalcon\Mvc\Router\Annotations;
+use Phalcon\Storage\SerializerFactory;
 use Phalcon\Tests\AbstractUnitTestCase;
 
 final class GetActionNameTest extends AbstractUnitTestCase
@@ -25,6 +30,24 @@ final class GetActionNameTest extends AbstractUnitTestCase
      */
     public function testMvcRouterAnnotationsGetActionName(): void
     {
-        $this->markTestSkipped('Need implementation');
+        $factory = new AdapterFactory(new SerializerFactory());
+        $adapter = $factory->newInstance('memory');
+
+        $di = new Di();
+        $di->setShared(
+            'annotations',
+            new \Phalcon\Annotations\Annotations($adapter)
+        );
+        $di->set('request', new Request());
+
+        $router = new Annotations(false);
+        $router->setDI($di);
+        $router->addResource('\\Phalcon\\Tests\\Controllers\\Annotations', '/annotations');
+
+        $_SERVER['REQUEST_METHOD'] = 'POST';
+
+        $router->handle('/annotations/3');
+
+        $this->assertSame('post', $router->getActionName());
     }
 }

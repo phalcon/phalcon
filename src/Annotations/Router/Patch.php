@@ -14,13 +14,14 @@ declare(strict_types=1);
 namespace Phalcon\Annotations\Router;
 
 use Attribute;
+use Phalcon\Http\Message\Interfaces\RequestMethodInterface;
 
 #[Attribute(Attribute::TARGET_METHOD)]
 class Patch extends Route
 {
     public function __construct(...$params)
     {
-        $params['methods'] = 'PATCH';
+        $params['methods'] = RequestMethodInterface::METHOD_PATCH;
         parent::__construct(...$params);
     }
 }

@@ -13,6 +13,7 @@ declare(strict_types=1);
 
 namespace Phalcon\Annotations\Adapter;
 
+use Phalcon\Annotations\Parser\Reflection;
 use Phalcon\Storage\Adapter\Redis as StorageRedis;
 
 /**
@@ -20,4 +21,14 @@ use Phalcon\Storage\Adapter\Redis as StorageRedis;
  */
 class Redis extends StorageRedis implements AdapterInterface
 {
+    /**
+     * @param string     $key
+     * @param mixed|null $defaultValue
+     *
+     * @return Reflection|mixed
+     */
+    public function get(string $key, mixed $defaultValue = null): mixed
+    {
+        return parent::get($key, $defaultValue);
+    }
 }

@@ -14,13 +14,14 @@ declare(strict_types=1);
 namespace Phalcon\Annotations\Router;
 
 use Attribute;
+use Phalcon\Http\Message\Interfaces\RequestMethodInterface;
 
 #[Attribute(Attribute::TARGET_METHOD)]
 class Put extends Route
 {
     public function __construct(...$params)
     {
-        $params['methods'] = 'PUT';
+        $params['methods'] = RequestMethodInterface::METHOD_PUT;
         parent::__construct(...$params);
     }
 }

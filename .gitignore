@@ -1,9 +1,10 @@
-.env
-.php_cs.cache
-.php-cs-fixer.cache
 .idea/
 .local/
 tests/_output/
 tests/_support/_generated/
 vendor/
 *.sqlite*
+.env
+.php_cs.cache
+.php-cs-fixer.cache
+docker-compose.override.yml

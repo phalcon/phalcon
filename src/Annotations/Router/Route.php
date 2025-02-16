@@ -14,13 +14,25 @@ declare(strict_types=1);
 namespace Phalcon\Annotations\Router;
 
 use Attribute;
+use Phalcon\Http\Message\Interfaces\RequestMethodInterface;
 
 #[Attribute(Attribute::TARGET_METHOD)]
 class Route
 {
     public function __construct(
         public string $route,
-        public string | array $methods = ['GET', 'POST', 'PUT', 'PATCH', 'DELETE', 'OPTIONS'],
+        public string | array $methods = [
+            RequestMethodInterface::METHOD_CONNECT,
+            RequestMethodInterface::METHOD_GET,
+            RequestMethodInterface::METHOD_DELETE,
+            RequestMethodInterface::METHOD_HEAD,
+            RequestMethodInterface::METHOD_OPTIONS,
+            RequestMethodInterface::METHOD_PATCH,
+            RequestMethodInterface::METHOD_POST,
+            RequestMethodInterface::METHOD_PURGE,
+            RequestMethodInterface::METHOD_PUT,
+            RequestMethodInterface::METHOD_TRACE,
+        ],
         public ?string $name = null,
         public array $paths = [],
         public array $converters = []

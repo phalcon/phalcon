@@ -13,12 +13,17 @@ declare(strict_types=1);
 
 namespace Phalcon\Tests\Controllers;
 
+use Phalcon\Annotations\Router\Connect;
 use Phalcon\Annotations\Router\Delete;
+use Phalcon\Annotations\Router\Get;
+use Phalcon\Annotations\Router\Head;
 use Phalcon\Annotations\Router\Patch;
 use Phalcon\Annotations\Router\Post;
+use Phalcon\Annotations\Router\Purge;
 use Phalcon\Annotations\Router\Put;
 use Phalcon\Annotations\Router\Route;
 use Phalcon\Annotations\Router\RoutePrefix;
+use Phalcon\Annotations\Router\Trace;
 
 #[RoutePrefix('/annotations')]
 class AnnotationsController
@@ -50,6 +55,31 @@ class AnnotationsController
 
     #[Patch('/{id:[0-9+]}')]
     public function patchAction(int $id): void
+    {
+    }
+
+    #[Get('/subroute', name: 'extra-route')]
+    public function diffAction(): void
+    {
+    }
+
+    #[Purge('/')]
+    public function purgeAction(): void
+    {
+    }
+
+    #[Connect('/')]
+    public function connectAction(): void
+    {
+    }
+
+    #[Head('/')]
+    public function headAction(): void
+    {
+    }
+
+    #[Trace('/')]
+    public function traceAction(): void
     {
     }
 
