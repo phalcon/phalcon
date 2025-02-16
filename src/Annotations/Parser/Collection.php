@@ -14,7 +14,6 @@ declare(strict_types=1);
 namespace Phalcon\Annotations\Parser;
 
 use ArrayIterator;
-use Exception;
 use IteratorAggregate;
 use Traversable;
 
