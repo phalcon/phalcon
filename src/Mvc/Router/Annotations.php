@@ -14,6 +14,7 @@ declare(strict_types=1);
 namespace Phalcon\Mvc\Router;
 
 use Phalcon\Annotations\Adapter\Memory;
+use Phalcon\Annotations\Annotations as AnnotationsAnnotations;
 use Phalcon\Annotations\Parser\Annotation;
 use Phalcon\Annotations\Parser\Exception;
 use Phalcon\Events\Exception as EventsException;

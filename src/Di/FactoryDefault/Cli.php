@@ -14,6 +14,7 @@ declare(strict_types=1);
 namespace Phalcon\Di\FactoryDefault;
 
 use Phalcon\Annotations\Adapter\Memory as AnnotationsMemory;
+use Phalcon\Annotations\Annotations;
 use Phalcon\Cli\Dispatcher;
 use Phalcon\Cli\Router;
 use Phalcon\Di\FactoryDefault;
@@ -49,7 +50,19 @@ class Cli extends FactoryDefault
         $filter = new FilterFactory();
 
         $this->services = [
-            "annotations"        => new Service(
+            'annotations'        => new Service(
+                [
+                    'className' => Annotations::class,
+                    'arguments' => [
+                        [
+                            'type' => 'service',
+                            'name' => 'annotationsMemory',
+                        ],
+                    ],
+                ],
+                true
+            ),
+            'annotationsMemory'  => new Service(
                 [
                     'className' => AnnotationsMemory::class,
                     'arguments' => [
@@ -61,15 +74,16 @@ class Cli extends FactoryDefault
                 ],
                 true
             ),
-            "dispatcher"         => new Service(Dispatcher::class, true),
-            "escaper"            => new Service(Escaper::class, true),
-            "eventsManager"      => new Service(EventsManager::class, true),
-            "filter"             => new Service($filter->newInstance(), true),
-            "helper"             => new Service(HelperFactory::class, true),
-            "modelsManager"      => new Service(ModelsManager::class, true),
-            "modelsMetadata"     => new Service(MetadataMemory::class, true),
-            "router"             => new Service(Router::class, true),
-            "security"           => new Service(Security::class, true),
+            'dispatcher'         => new Service(Dispatcher::class, true),
+            'escaper'            => new Service(Escaper::class, true),
+            'eventsManager'      => new Service(EventsManager::class, true),
+            'filter'             => new Service($filter->newInstance(), true),
+            'helper'             => new Service(HelperFactory::class, true),
+            'modelsManager'      => new Service(ModelsManager::class, true),
+            'modelsMetadata'     => new Service(MetadataMemory::class, true),
+            'router'             => new Service(Router::class, true),
+            'security'           => new Service(Security::class, true),
+            'storageSerializer'  => new Service(SerializerFactory::class, true),
             'tag'                => new Service(
                 [
                     'className' => TagFactory::class,
@@ -82,8 +96,7 @@ class Cli extends FactoryDefault
                 ],
                 true
             ),
-            "transactionManager" => new Service(TransactionManager::class, true),
-            "storageSerializer"  => new Service(SerializerFactory::class, true),
+            'transactionManager' => new Service(TransactionManager::class, true),
         ];
     }
 }

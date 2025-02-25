@@ -14,6 +14,7 @@ declare(strict_types=1);
 namespace Phalcon\Tests\Fixtures\Traits;
 
 use Phalcon\Annotations\Adapter\Memory;
+use Phalcon\Annotations\Annotations;
 use Phalcon\Cli\Dispatcher;
 use Phalcon\Cli\Router;
 use Phalcon\Encryption\Security;
@@ -88,6 +89,10 @@ trait CliTrait
         return [
             [
                 'annotations',
+                Annotations::class,
+            ],
+            [
+                'annotationsMemory',
                 Memory::class,
             ],
             [

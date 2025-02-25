@@ -20,18 +20,18 @@ use Phalcon\Mvc\Router\Annotations;
 use Phalcon\Storage\SerializerFactory;
 use Phalcon\Tests\AbstractUnitTestCase;
 
-final class AddOptionsTest extends AbstractUnitTestCase
+final class AddGetStreamCacheTest extends AbstractUnitTestCase
 {
     /**
-     * Tests Phalcon\Mvc\Router\Annotations :: addOptions()
+     * Tests Phalcon\Mvc\Router\Annotations :: addGet()
      *
      * @author Phalcon Team <team@phalcon.io>
      * @since  2018-11-13
      */
-    public function testMvcRouterAnnotationsAddOptions(): void
+    public function testMvcRouterAnnotationsAddGet(): void
     {
         $factory = new AdapterFactory(new SerializerFactory());
-        $adapter = $factory->newInstance('memory');
+        $adapter = $factory->newInstance('stream', ['storageDir' => cacheDir('annotations')]);
 
         $di = new Di();
         $di->setShared(
@@ -44,7 +44,7 @@ final class AddOptionsTest extends AbstractUnitTestCase
         $router->setDI($di);
         $router->addResource('\\Phalcon\\Tests\\Controllers\\Annotations', '/annotations');
 
-        $_SERVER['REQUEST_METHOD'] = 'OPTIONS';
+        $_SERVER['REQUEST_METHOD'] = 'GET';
 
         $router->handle('/annotations');
 
@@ -54,12 +54,30 @@ final class AddOptionsTest extends AbstractUnitTestCase
         );
 
         $this->assertSame(
-            'options',
+            'index',
             $router->getActionName()
         );
 
         $this->assertSame(
             [],
+            $router->getParams()
+        );
+        $router->handle('/annotations/view/12');
+
+        $this->assertSame(
+            'annotations',
+            $router->getControllerName()
+        );
+
+        $this->assertSame(
+            'view',
+            $router->getActionName()
+        );
+
+        $this->assertSame(
+            [
+                'id' => '12',
+            ],
             $router->getParams()
         );
     }

@@ -17,6 +17,7 @@ use Phalcon\Annotations\Router\Connect;
 use Phalcon\Annotations\Router\Delete;
 use Phalcon\Annotations\Router\Get;
 use Phalcon\Annotations\Router\Head;
+use Phalcon\Annotations\Router\Options;
 use Phalcon\Annotations\Router\Patch;
 use Phalcon\Annotations\Router\Post;
 use Phalcon\Annotations\Router\Purge;
@@ -80,6 +81,11 @@ class AnnotationsController
 
     #[Trace('/')]
     public function traceAction(): void
+    {
+    }
+
+    #[Options('/')]
+    public function optionsAction(): void
     {
     }
 
