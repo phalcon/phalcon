@@ -14,6 +14,7 @@ declare(strict_types=1);
 namespace Phalcon\Tests\Unit\Di\FactoryDefault;
 
 use Phalcon\Annotations\Adapter\Memory as MemoryAnnotations;
+use Phalcon\Annotations\Annotations;
 use Phalcon\Assets\Manager as ManagerAssets;
 use Phalcon\Di\FactoryDefault;
 use Phalcon\Encryption\Crypt;
@@ -46,6 +47,10 @@ class ConstructTest extends AbstractUnitTestCase
         return [
             [
                 'annotations',
+                Annotations::class,
+            ],
+            [
+                'annotationsMemory',
                 MemoryAnnotations::class,
             ],
             [
@@ -139,7 +144,7 @@ class ConstructTest extends AbstractUnitTestCase
     {
         $container = new FactoryDefault();
 
-        $expected = 21;
+        $expected = 22;
         $actual   = count($container->getServices());
         $this->assertSame($expected, $actual);
     }
