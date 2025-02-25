@@ -338,10 +338,10 @@ class Micro extends Injectable implements ArrayAccess, EventsAwareInterface
      *
      * @param string $uri
      *
-     * @return mixed
      * @throws EventsException
      * @throws Exception
      * @throws Throwable
+     * @return mixed
      */
     public function handle(string $uri): mixed
     {
@@ -759,8 +759,8 @@ class Micro extends Injectable implements ArrayAccess, EventsAwareInterface
      *
      * @param CollectionInterface $collection
      *
-     * @return $this
      * @throws Exception
+     * @return $this
      */
     public function mount(CollectionInterface $collection): Micro
     {
@@ -812,9 +812,9 @@ class Micro extends Injectable implements ArrayAccess, EventsAwareInterface
             $prefixedPattern = $pattern;
 
             if (!empty($prefix)) {
-                $prefixedPattern = $prefix;
+                $prefixedPattern = $prefix . $pattern;
                 if ($pattern === "/") {
-                    $prefixedPattern .= $pattern;
+                    $prefixedPattern = $prefix;
                 }
             }
 
