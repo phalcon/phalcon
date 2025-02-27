@@ -14,9 +14,9 @@ declare(strict_types=1);
 namespace Phalcon\Tests\Unit\Mvc\Url;
 
 use Phalcon\Mvc\Router;
+use Phalcon\Tests\AbstractUnitTestCase;
 use Phalcon\Tests\Fixtures\Traits\DiTrait;
 use Phalcon\Tests\Fixtures\Traits\RouterTrait;
-use Phalcon\Tests\AbstractUnitTestCase;
 
 final class SetBaseUriTest extends AbstractUnitTestCase
 {
@@ -237,18 +237,15 @@ final class SetBaseUriTest extends AbstractUnitTestCase
      *
      * @dataProvider getUrlToSetServer
      */
-    public function shouldGetCorrectUrlWithServer(
+    public function testShouldGetCorrectUrlWithServer(
         string $phpSelf,
-        string $name,
+        string | null $name,
         string $expected
     ): void {
-        $store = $_SERVER;
-
         $_SERVER['PHP_SELF'] = $phpSelf;
         $url                 = $this->getService('url');
 
         $actual = $url->get($name);
-
         $this->assertEquals($expected, $actual);
     }
 

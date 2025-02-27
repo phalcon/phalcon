@@ -16,6 +16,7 @@ namespace Phalcon\Mvc;
 use Phalcon\Di\AbstractInjectionAware;
 use Phalcon\Mvc\Url\Exception;
 use Phalcon\Mvc\Url\UrlInterface;
+use Phalcon\Mvc\Url\Utils;
 
 use function http_build_query;
 use function is_array;
@@ -47,10 +48,12 @@ class Url extends AbstractInjectionAware implements UrlInterface
      * @var string|null
      */
     protected ?string $basePath = null;
+
     /**
      * @var string|null
      */
     protected ?string $baseUri = null;
+
     /**
      * @var RouterInterface|null
      */
@@ -106,8 +109,8 @@ class Url extends AbstractInjectionAware implements UrlInterface
      * @param bool|null         $local
      * @param mixed|null        $baseUri
      *
-     * @return string
      * @throws Exception
+     * @return string
      */
     public function get(
         array | string $uri = null,
@@ -178,14 +181,11 @@ class Url extends AbstractInjectionAware implements UrlInterface
             /**
              * Replace the patterns by its variables
              */
-            /**
-             * @todo Check the implementation for this
-             */
-//            $uri = phalcon_replace_paths(
-//                $route->getPattern(),
-//                $route->getReversedPaths(),
-//                $uri
-//            );
+            $uri = Utils::replacePaths(
+                $route->getPattern(),
+                $route->getReversedPaths(),
+                $uri
+            );
         }
 
         if (true === $local) {
@@ -231,11 +231,7 @@ class Url extends AbstractInjectionAware implements UrlInterface
     {
         if (null === $this->baseUri) {
             if (isset($_SERVER["PHP_SELF"])) {
-                /**
-                 * @todo Check the implementation for this
-                 */
-                // $uri = phalcon_get_uri($_SERVER["PHP_SELF"]);
-                $uri = $_SERVER["PHP_SELF"];
+                $uri = Utils::getUri($_SERVER["PHP_SELF"]);
             } else {
                 $uri = null;
             }
@@ -271,8 +267,8 @@ class Url extends AbstractInjectionAware implements UrlInterface
      *                               'for' => ''
      *                               ]
      *
-     * @return string
      * @throws Exception
+     * @return string
      */
     public function getStatic(array | string $uri = null): string
     {

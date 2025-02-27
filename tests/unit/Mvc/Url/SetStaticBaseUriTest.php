@@ -13,6 +13,7 @@ declare(strict_types=1);
 
 namespace Phalcon\Tests\Unit\Mvc\Url;
 
+use Phalcon\Mvc\Url;
 use Phalcon\Tests\AbstractUnitTestCase;
 
 final class SetStaticBaseUriTest extends AbstractUnitTestCase
@@ -25,6 +26,13 @@ final class SetStaticBaseUriTest extends AbstractUnitTestCase
      */
     public function testMvcUrlSetStaticBaseUri(): void
     {
-        $this->markTestSkipped('Need implementation');
+        $url = new Url();
+
+        $path = 'https://phalcon.io';
+        $url->setStaticBaseUri($path);
+
+        $expected = $path;
+        $actual   = $url->getStaticBaseUri();
+        $this->assertEquals($expected, $actual);
     }
 }
