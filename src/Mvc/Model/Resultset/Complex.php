@@ -20,7 +20,6 @@ use Phalcon\Mvc\Model\Exception;
 use Phalcon\Mvc\Model\Resultset;
 use Phalcon\Mvc\Model\ResultsetInterface;
 use Phalcon\Mvc\Model\Row;
-use Phalcon\Parsers\Parser;
 use Phalcon\Support\Settings;
 use stdClass;
 

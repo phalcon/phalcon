@@ -21,7 +21,6 @@ use Phalcon\Events\Traits\EventsAwareTrait;
 use Phalcon\Mvc\View\Engine\Php as PhpEngine;
 use Phalcon\Mvc\View\Exception;
 use Phalcon\Mvc\View\ViewInterface;
-use Phalcon\Parsers\Parser;
 use Phalcon\Traits\Helper\Str\DirSeparatorTrait;
 
 use function array_keys;
@@ -135,9 +134,9 @@ class View extends Injectable implements ViewInterface, EventsAwareInterface
     protected array $disabledLevels = [];
 
     /**
-     * @var array|false
+     * @var array
      */
-    protected array | false $engines = false; // TODO: Make always array
+    protected array $engines = [];
 
     /**
      * @var string|null
@@ -707,11 +706,6 @@ class View extends Injectable implements ViewInterface, EventsAwareInterface
              */
             $viewParams       = $this->viewParams;
             $this->viewParams = array_merge($viewParams, $params);
-
-            /**
-             * Create a virtual symbol table
-             */
-            Parser::viewCreateSymbolTable();
         }
 
         /**
@@ -866,12 +860,6 @@ class View extends Injectable implements ViewInterface, EventsAwareInterface
                 $layoutName = $pickView[1];
             }
         }
-
-        /**
-         * Create a virtual symbol table.
-         * Variables are shared across symbol tables in PHP5
-         */
-        Parser::viewCreateSymbolTable();
 
         /**
          * Call beforeRender if there is an events manager
@@ -1066,7 +1054,7 @@ class View extends Injectable implements ViewInterface, EventsAwareInterface
     public function reset(): View
     {
         $this->disabled        = false;
-        $this->engines         = false;
+        $this->engines         = [];
         $this->renderLevel     = self::LEVEL_MAIN_LAYOUT;
         $this->content         = "";
         $this->templatesBefore = [];
@@ -1498,10 +1486,8 @@ class View extends Injectable implements ViewInterface, EventsAwareInterface
         /**
          * If the engines aren't initialized 'engines' is false
          */
-        if (false === $this->engines) {
-            $engines           = [];
-            $registeredEngines = $this->registeredEngines;
-
+        if ($this->engines === []) {
+            $engines = [];
             if (empty($registeredEngines)) {
                 /**
                  * We use Phalcon\Mvc\View\Engine\Php as default

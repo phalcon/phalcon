@@ -13,8 +13,6 @@ declare(strict_types=1);
 
 namespace Phalcon\Mvc\Model\Query;
 
-use Phalcon\Parsers\Parser;
-
 /**
  * PHQL is implemented as a parser (written in C) that translates syntax in
  * that of the target RDBMS. It allows Phalcon to offer a unified SQL language to
@@ -41,6 +39,7 @@ abstract class Lang
      */
     public static function parsePHQL(string $phql): array
     {
-        return Parser::ormParse($phql);
+//        return Parser::ormParse($phql);
+        return $phql;
     }
 }

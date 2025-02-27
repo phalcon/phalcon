@@ -14,11 +14,10 @@ declare(strict_types=1);
 namespace Phalcon\Tests\Unit\Mvc\View\Simple;
 
 use Phalcon\Mvc\View\Engine\Php;
-use Phalcon\Mvc\View\Engine\Volt;
+use Phalcon\Tests\AbstractUnitTestCase;
 use Phalcon\Tests\Fixtures\Mvc\View\Engine\Mustache;
 use Phalcon\Tests\Fixtures\Mvc\View\Engine\Twig;
 use Phalcon\Tests\Fixtures\Traits\DiTrait;
-use Phalcon\Tests\AbstractUnitTestCase;
 
 class GetRegisteredEnginesTest extends AbstractUnitTestCase
 {
@@ -41,7 +40,6 @@ class GetRegisteredEnginesTest extends AbstractUnitTestCase
             '.mhtml' => Mustache::class,
             '.phtml' => Php::class,
             '.twig'  => Twig::class,
-            '.volt'  => Volt::class,
         ];
 
         $view->registerEngines($engines);

@@ -10,9 +10,6 @@ Phalcon Framework
 [![Bugs](https://sonarcloud.io/api/project_badges/measure?project=phalcon_phalcon&metric=bugs)](https://sonarcloud.io/summary/new_code?id=phalcon_phalcon)
 [![Code Smells](https://sonarcloud.io/api/project_badges/measure?project=phalcon_phalcon&metric=code_smells)](https://sonarcloud.io/summary/new_code?id=phalcon_phalcon)
 
-# Volt: Template Engine
-
-This repository consists of the Volt parser, for the Volt Template Engine used by the Phalcon Framework.## Implemented
 
 | Standard                                                                   | Description                   |
 |----------------------------------------------------------------------------|-------------------------------|
