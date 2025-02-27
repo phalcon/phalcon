@@ -15,11 +15,13 @@ namespace Phalcon\Cache;
 
 use DateInterval;
 use Phalcon\Cache\Adapter\AdapterInterface;
+use Phalcon\Cache\Adapter\Redis;
 use Phalcon\Cache\Exception\Exception;
 use Phalcon\Events\EventsAwareInterface;
 use Phalcon\Events\Exception as EventsException;
 use Phalcon\Events\Traits\EventsAwareTrait;
 use Psr\SimpleCache\CacheInterface;
+use Psr\SimpleCache\InvalidArgumentException;
 
 /**
  * This component offers caching capabilities for your application.
@@ -184,10 +186,27 @@ abstract class AbstractCache implements CacheInterface, EventsAwareInterface
     ): iterable {
         $this->fireManagerEvent('cache:beforeGetMultiple', $keys);
 
-        $results = [];
-        /** @var string $element */
-        foreach ($keys as $element) {
-            $results[$element] = $this->get($element, $default);
+        $adapterClass = get_class($this->adapter);
+        if ($adapterClass === Redis::class) {
+            $results    = $this->adapter->getAdapter()->mget($keys);
+            $serializer = $this->adapter->getSerializer();
+            $results    = array_map(
+                function ($element) use ($serializer, $default) {
+                    $serializer->unserialize($element);
+                    return false === $element
+                        ? $default
+                        : $serializer->getData()
+                    ;
+                },
+                $results
+            );
+            $results = array_combine($keys, $results);
+        } else {
+            $results = [];
+            /** @var string $element */
+            foreach ($keys as $element) {
+                $results[$element] = $this->get($element, $default);
+            }
         }
 
         $this->fireManagerEvent('cache:afterGetMultiple', $keys);
