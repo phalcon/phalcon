@@ -1488,7 +1488,7 @@ class View extends Injectable implements ViewInterface, EventsAwareInterface
          */
         if ($this->engines === []) {
             $engines = [];
-            if (empty($registeredEngines)) {
+            if (empty($this->registeredEngines)) {
                 /**
                  * We use Phalcon\Mvc\View\Engine\Php as default
                  */
@@ -1499,7 +1499,7 @@ class View extends Injectable implements ViewInterface, EventsAwareInterface
                     'the application services'
                 );
 
-                foreach ($registeredEngines as $extension => $engineService) {
+                foreach ($this->registeredEngines as $extension => $engineService) {
                     if (is_object($engineService)) {
                         /**
                          * Engine can be a closure
