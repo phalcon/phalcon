@@ -690,7 +690,8 @@ class Form extends Injectable implements Countable, Iterator, AttributesInterfac
         /**
          * Perform the validation
          */
-        $messages = $validation->validate($data, $entity);
+        $validation->validate($data, $entity);
+        $messages = $validation->getMessages();
         if ($messages->count() > 0) {
             // Add validation messages to relevant elements
             foreach ($messages as $elementMessage) {
