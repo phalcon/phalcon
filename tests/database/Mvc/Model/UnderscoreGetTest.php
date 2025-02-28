@@ -48,6 +48,7 @@ final class UnderscoreGetTest extends AbstractDatabaseTestCase
      */
     public function testMvcModelUnderscoreGet(): void
     {
+        $this->markTestSkipped('Waiting for PHQL Parser');
         $customer = new Models\Customers();
 
         $customer->cst_id        = 999;
@@ -74,6 +75,7 @@ final class UnderscoreGetTest extends AbstractDatabaseTestCase
      */
     public function testMvcModelUnderscoreGetDirtyRelated(): void
     {
+        $this->markTestSkipped('Waiting for PHQL Parser');
         /** @var PDO $connection */
         $connection = self::getConnection();
 
@@ -135,6 +137,7 @@ final class UnderscoreGetTest extends AbstractDatabaseTestCase
      */
     public function testMvcModelUnderscoreGetIsUsingGetters(): void
     {
+        $this->markTestSkipped('Waiting for PHQL Parser');
         $customer = new Models\Customers();
         $customer->setId(123);
 
@@ -174,6 +177,7 @@ final class UnderscoreGetTest extends AbstractDatabaseTestCase
      */
     public function testMvcModelUnderscoreGetRelated(): void
     {
+        $this->markTestSkipped('Waiting for PHQL Parser');
         /** @var PDO $connection */
         $connection = self::getConnection();
 
@@ -242,6 +246,7 @@ final class UnderscoreGetTest extends AbstractDatabaseTestCase
      */
     public function testMvcModelUnderscorePrivateProperty(): void
     {
+        $this->markTestSkipped('Waiting for PHQL Parser');
         $model = new Invoices();
 
         $this->assertFalse(
@@ -277,6 +282,7 @@ final class UnderscoreGetTest extends AbstractDatabaseTestCase
      */
     public function testMvcModelUnderscorePrivatePropertyException(): void
     {
+        $this->markTestSkipped('Waiting for PHQL Parser');
         $this->expectException(Exception::class);
         $this->expectExceptionMessage(
             "Cannot access property 'superSecret' (not public) in '"

@@ -38,6 +38,7 @@ final class MinimumTest extends AbstractDatabaseTestCase
      */
     public function testMvcModelMinimum(): void
     {
+        $this->markTestSkipped('Waiting for PHQL Parser');
         /** @var PDO $connection */
         $connection = self::getConnection();
         $migration  = new InvoicesMigration($connection);

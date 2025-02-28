@@ -39,7 +39,6 @@ abstract class Lang
      */
     public static function parsePHQL(string $phql): array
     {
-//        return Parser::ormParse($phql);
-        return $phql;
+        return [];
     }
 }

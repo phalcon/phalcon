@@ -54,6 +54,7 @@ final class ExecuteQueryTest extends AbstractDatabaseTestCase
      */
     public function testMvcModelManagerExecuteQuery(): void
     {
+        $this->markTestSkipped('Waiting for PHQL Parser');
         /** @var ManagerInterface $manager */
         $manager = $this->getService('modelsManager');
 

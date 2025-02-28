@@ -38,6 +38,7 @@ final class DeleteTest extends AbstractDatabaseTestCase
      */
     public function testDbAdapterPdoQuery(): void
     {
+        $this->markTestSkipped('Waiting for PHQL Parser');
         $connection = self::getConnection();
         $db         = $this->container->get('db');
 

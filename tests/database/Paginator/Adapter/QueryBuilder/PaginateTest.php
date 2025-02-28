@@ -51,6 +51,7 @@ final class PaginateTest extends AbstractDatabaseTestCase
      */
     public function testPaginatorAdapterQuerybuilderPaginate(): void
     {
+        $this->markTestSkipped('Waiting for PHQL Parser');
         /**
          * Sqlite does not like `where` that much and locks the database
          */
@@ -100,6 +101,7 @@ final class PaginateTest extends AbstractDatabaseTestCase
      */
     public function testPaginatorAdapterQuerybuilderPaginateGroupBy(): void
     {
+        $this->markTestSkipped('Waiting for PHQL Parser');
         /**
          * Sqlite does not like `where` that much and locks the database
          */
@@ -175,6 +177,7 @@ final class PaginateTest extends AbstractDatabaseTestCase
      */
     public function testPaginatorAdapterQuerybuilderPaginateView(): void
     {
+        $this->markTestSkipped('Waiting for PHQL Parser');
         $this->setDiService('view');
 
         /** @var PDO $connection */

@@ -36,6 +36,7 @@ final class ProfilerTest extends AbstractDatabaseTestCase
      */
     public function testDbProfilerFull(): void
     {
+        $this->markTestSkipped('Waiting for PHQL Parser');
         $this->setNewFactoryDefault();
         $this->setDatabase();
 

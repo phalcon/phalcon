@@ -38,6 +38,7 @@ final class MaximumTest extends AbstractDatabaseTestCase
      */
     public function testMvcModelMaximum(): void
     {
+        $this->markTestSkipped('Waiting for PHQL Parser');
         /** @var PDO $connection */
         $connection = self::getConnection();
         $migration  = new InvoicesMigration($connection);

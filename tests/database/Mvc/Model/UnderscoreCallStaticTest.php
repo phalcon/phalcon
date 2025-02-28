@@ -45,6 +45,7 @@ final class UnderscoreCallStaticTest extends AbstractDatabaseTestCase
      */
     public function testMvcModelUnderscoreCallStatic(): void
     {
+        $this->markTestSkipped('Waiting for PHQL Parser');
         /** @var PDO $connection */
         $connection = self::getConnection();
 

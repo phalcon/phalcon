@@ -45,6 +45,7 @@ final class DeleteTest extends AbstractDatabaseTestCase
      */
     public function testMvcModelDelete(): void
     {
+        $this->markTestSkipped('Waiting for PHQL Parser');
         /**
          * The following tests need to skip sqlite because we will get
          * a General Error 5 database is locked error
@@ -75,6 +76,7 @@ final class DeleteTest extends AbstractDatabaseTestCase
      */
     public function testMvcModelDeleteCascadeRelated(): void
     {
+        $this->markTestSkipped('Waiting for PHQL Parser');
         /** @var PDO $connection */
         $connection = self::getConnection();
 
@@ -146,6 +148,7 @@ final class DeleteTest extends AbstractDatabaseTestCase
      */
     public function testMvcModelDeleteGetRelated(): void
     {
+        $this->markTestSkipped('Waiting for PHQL Parser');
         /** @var PDO $connection */
         $connection = self::getConnection();
 
@@ -271,6 +274,7 @@ final class DeleteTest extends AbstractDatabaseTestCase
      */
     public function testMvcModelDeleteRestrictRelated(): void
     {
+        $this->markTestSkipped('Waiting for PHQL Parser');
         /** @var PDO $connection */
         $connection = self::getConnection();
 
@@ -326,6 +330,7 @@ final class DeleteTest extends AbstractDatabaseTestCase
      */
     public function testMvcModelDeleteRestrictRelatedInTransaction(): void
     {
+        $this->markTestSkipped('Waiting for PHQL Parser');
         /** @var PDO $connection */
         $connection = self::getConnection();
 

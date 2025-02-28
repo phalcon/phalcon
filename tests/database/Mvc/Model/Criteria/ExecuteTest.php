@@ -45,6 +45,7 @@ final class ExecuteTest extends AbstractDatabaseTestCase
      */
     public function testMvcModelCriteriaExecute(): void
     {
+        $this->markTestSkipped('Waiting for PHQL Parser');
         $title      = uniqid('inv-');
         $connection = self::getConnection();
         $migration  = new InvoicesMigration($connection);

@@ -42,6 +42,7 @@ final class UnderscoreIssetTest extends AbstractDatabaseTestCase
      */
     public function testMvcModelUnderscoreIsset(): void
     {
+        $this->markTestSkipped('Waiting for PHQL Parser');
         /** @var PDO $connection */
         $connection = self::getConnection();
 

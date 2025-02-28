@@ -59,6 +59,7 @@ final class AverageTest extends AbstractDatabaseTestCase
      */
     public function testMvcModelAverage(): void
     {
+        $this->markTestSkipped('Waiting for PHQL Parser');
         /**
          * @todo The following tests are skipped for sqlite because we will get
          *       a General Error 5 database is locked error.

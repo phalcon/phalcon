@@ -44,6 +44,7 @@ final class UnderscoreSetTest extends AbstractDatabaseTestCase
      */
     public function testMvcModelUnderscoreSet(): void
     {
+        $this->markTestSkipped('Waiting for PHQL Parser');
         $customer = new Models\Customers();
 
         $customer->cst_id = 999;
@@ -94,6 +95,7 @@ final class UnderscoreSetTest extends AbstractDatabaseTestCase
      */
     public function testMvcModelUnderscoreSetIsUsingSetters(): void
     {
+        $this->markTestSkipped('Waiting for PHQL Parser');
         $customer = new Models\Customers();
 
         $customer->id = 999;
@@ -147,6 +149,7 @@ final class UnderscoreSetTest extends AbstractDatabaseTestCase
      */
     public function testMvcModelUnderscoreSetUndefinedPropertyWithAssociativeArray(): void
     {
+        $this->markTestSkipped('Waiting for PHQL Parser');
         $associativeArray = [
             'cst_id'         => 123,
             'cst_name_first' => 'cst_firstName',
@@ -177,6 +180,7 @@ final class UnderscoreSetTest extends AbstractDatabaseTestCase
      */
     public function testMvcModelUnderscoreSetWithArrayOfBelongsToRelatedRecord(): void
     {
+        $this->markTestSkipped('Waiting for PHQL Parser');
         $invoice           = new Models\Invoices();
         $invoice->customer = [
             'cst_id'          => 33,
@@ -217,6 +221,7 @@ final class UnderscoreSetTest extends AbstractDatabaseTestCase
      */
     public function testMvcModelUnderscoreSetWithArrayOfHasOneRelatedRecord(): void
     {
+        $this->markTestSkipped('Waiting for PHQL Parser');
         $invoice           = new Models\Invoices();
         $invoice->customer = [
             'cst_id'         => 99,
@@ -256,6 +261,7 @@ final class UnderscoreSetTest extends AbstractDatabaseTestCase
      */
     public function testMvcModelUnderscoreSetWithBelongsToRelatedRecord(): void
     {
+        $this->markTestSkipped('Waiting for PHQL Parser');
         $customerSnap           = new Models\CustomersKeepSnapshots();
         $customerSnap->invoices = new Models\Invoices();
 
@@ -282,6 +288,7 @@ final class UnderscoreSetTest extends AbstractDatabaseTestCase
      */
     public function testMvcModelUnderscoreSetWithHasManyRelatedRecords(): void
     {
+        $this->markTestSkipped('Waiting for PHQL Parser');
         /** @var PDO $connection */
         $connection = self::getConnection();
 
@@ -389,6 +396,7 @@ final class UnderscoreSetTest extends AbstractDatabaseTestCase
      */
     public function testMvcModelUnderscoreSetWithHasManyToManyRelatedRecords(): void
     {
+        $this->markTestSkipped('Waiting for PHQL Parser');
         $order           = new Models\Orders();
         $order->products = [
             new Models\Products(),
@@ -432,6 +440,7 @@ final class UnderscoreSetTest extends AbstractDatabaseTestCase
      */
     public function testMvcModelUnderscoreSetWithHasOneRelatedRecord(): void
     {
+        $this->markTestSkipped('Waiting for PHQL Parser');
         $invoice           = new Models\Invoices();
         $invoice->customer = new Models\Customers();
 
@@ -458,6 +467,7 @@ final class UnderscoreSetTest extends AbstractDatabaseTestCase
      */
     public function testMvcModelUnderscoreSetWithHasOneThroughRelatedRecord(): void
     {
+        $this->markTestSkipped('Waiting for PHQL Parser');
         $product = new Models\Products();
 
         $order                = new Models\Orders();

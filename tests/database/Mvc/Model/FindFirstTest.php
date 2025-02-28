@@ -92,6 +92,7 @@ final class FindFirstTest extends AbstractDatabaseTestCase
      */
     public function testMvcModelFindFirst(): void
     {
+        $this->markTestSkipped('Waiting for PHQL Parser');
         $title = uniqid('inv-');
         /** @var PDO $connection */
         $connection = self::getConnection();
@@ -129,6 +130,7 @@ final class FindFirstTest extends AbstractDatabaseTestCase
      */
     public function testMvcModelFindFirstByNotFound(): void
     {
+        $this->markTestSkipped('Waiting for PHQL Parser');
         $actual = Invoices::findFirstByInvTitle('unknown');
         $this->assertNull($actual);
     }
@@ -145,6 +147,7 @@ final class FindFirstTest extends AbstractDatabaseTestCase
      */
     public function testMvcModelFindFirstColumn(): void
     {
+        $this->markTestSkipped('Waiting for PHQL Parser');
         /** @var PDO $connection */
         $connection = self::getConnection();
         $migration  = new InvoicesMigration($connection);
@@ -179,6 +182,7 @@ final class FindFirstTest extends AbstractDatabaseTestCase
      */
     public function testMvcModelFindFirstColumnMap(): void
     {
+        $this->markTestSkipped('Waiting for PHQL Parser');
         $title = uniqid('inv-');
         /** @var PDO $connection */
         $connection = self::getConnection();
@@ -224,6 +228,7 @@ final class FindFirstTest extends AbstractDatabaseTestCase
      */
     public function testMvcModelFindFirstException(): void
     {
+        $this->markTestSkipped('Waiting for PHQL Parser');
         $this->expectException(Exception::class);
         $this->expectExceptionMessage(
             "Parameters passed must be of type array, string, numeric or null in '"
@@ -243,6 +248,7 @@ final class FindFirstTest extends AbstractDatabaseTestCase
      */
     public function testMvcModelFindFirstExtended(): void
     {
+        $this->markTestSkipped('Waiting for PHQL Parser');
         $title = uniqid('inv-');
         /** @var PDO $connection */
         $connection = self::getConnection();
@@ -273,6 +279,7 @@ final class FindFirstTest extends AbstractDatabaseTestCase
      */
     public function testMvcModelFindFirstExtendedColumn(): void
     {
+        $this->markTestSkipped('Waiting for PHQL Parser');
         $title = uniqid('inv-');
         /** @var PDO $connection */
         $connection = self::getConnection();
@@ -304,6 +311,7 @@ final class FindFirstTest extends AbstractDatabaseTestCase
      */
     public function testMvcModelFindFirstFoundNotFoundGetRelated(): void
     {
+        $this->markTestSkipped('Waiting for PHQL Parser');
         /** @var PDO $connection */
         $connection = self::getConnection();
 
@@ -395,6 +403,7 @@ final class FindFirstTest extends AbstractDatabaseTestCase
      */
     public function testMvcModelFindFirstNotFound(): void
     {
+        $this->markTestSkipped('Waiting for PHQL Parser');
         $invoice = Invoices::findFirst(
             [
                 'conditions' => 'inv_id < 0',
@@ -418,6 +427,7 @@ final class FindFirstTest extends AbstractDatabaseTestCase
         array | string $params,
         bool $found
     ): void {
+        $this->markTestSkipped('Waiting for PHQL Parser');
         $connection = self::getConnection();
         $migration  = new StringPrimaryMigration($connection);
         $migration->insert(

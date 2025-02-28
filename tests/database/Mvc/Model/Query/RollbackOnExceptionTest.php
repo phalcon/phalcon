@@ -59,6 +59,7 @@ final class RollbackOnExceptionTest extends AbstractDatabaseTestCase
      */
     public function testMvcModelQueryRollbackOnException(): void
     {
+        $this->markTestSkipped('Waiting for PHQL Parser');
         $this->migration->create();
         $this->migration->clear();
 

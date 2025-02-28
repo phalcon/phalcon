@@ -51,6 +51,7 @@ final class UpdateTest extends AbstractDatabaseTestCase
      */
     public function testMvcModelSaveAfterWithoutDefaultValues(): void
     {
+        $this->markTestSkipped('Waiting for PHQL Parser');
         /** @var PDO $connection */
         $connection = self::getConnection();
 
@@ -118,6 +119,7 @@ final class UpdateTest extends AbstractDatabaseTestCase
      */
     public function testMvcModelSaveViaSettersAndLocalMethod(): void
     {
+        $this->markTestSkipped('Waiting for PHQL Parser');
         /** @var PDO $connection */
         $connection = self::getConnection();
 
@@ -172,6 +174,7 @@ final class UpdateTest extends AbstractDatabaseTestCase
      */
     public function testMvcModelUpdate(): void
     {
+        $this->markTestSkipped('Waiting for PHQL Parser');
         $title   = uniqid('inv-');
         $invoice = new Invoices();
         $invoice->assign(

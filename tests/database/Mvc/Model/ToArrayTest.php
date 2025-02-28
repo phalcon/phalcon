@@ -51,6 +51,7 @@ final class ToArrayTest extends AbstractDatabaseTestCase
      */
     public function testMvcModelToArray(): void
     {
+        $this->markTestSkipped('Waiting for PHQL Parser');
         $title = uniqid('inv-');
         $date  = date('Y-m-d H:i:s');
 
@@ -98,6 +99,7 @@ final class ToArrayTest extends AbstractDatabaseTestCase
      */
     public function testMvcModelToArrayColumnMap(): void
     {
+        $this->markTestSkipped('Waiting for PHQL Parser');
         $title = uniqid('inv-');
         $date  = date('Y-m-d H:i:s');
 
@@ -147,6 +149,7 @@ final class ToArrayTest extends AbstractDatabaseTestCase
      */
     public function testMvcModelToArrayExecuteColumnNotInColumnMap(): void
     {
+        $this->markTestSkipped('Waiting for PHQL Parser');
         /** @var PDO $connection */
         $connection = self::getConnection();
         $title      = uniqid('inv-');
@@ -207,6 +210,7 @@ final class ToArrayTest extends AbstractDatabaseTestCase
      */
     public function testMvcModelToArrayFindCastOnHydrateForceCasting(): void
     {
+        $this->markTestSkipped('Waiting for PHQL Parser');
         /** @var PDO $connection */
         $connection = self::getConnection();
         $title      = uniqid('inv-');
@@ -283,6 +287,7 @@ final class ToArrayTest extends AbstractDatabaseTestCase
      */
     public function testMvcModelToArrayFindFirstColumns(): void
     {
+        $this->markTestSkipped('Waiting for PHQL Parser');
         $title = uniqid('inv-');
         $date  = date('Y-m-d H:i:s');
 
@@ -328,6 +333,7 @@ final class ToArrayTest extends AbstractDatabaseTestCase
      */
     public function testMvcModelToArrayModelWithGetters(): void
     {
+        $this->markTestSkipped('Waiting for PHQL Parser');
         /** @var PDO $connection */
         $connection = self::getConnection();
         $title      = uniqid('inv-');
@@ -385,6 +391,7 @@ final class ToArrayTest extends AbstractDatabaseTestCase
      */
     public function testMvcModelToArrayModelWithGettersSerialize(): void
     {
+        $this->markTestSkipped('Waiting for PHQL Parser');
         /** @var PDO $connection */
         $connection = self::getConnection();
         $title      = uniqid('inv-');

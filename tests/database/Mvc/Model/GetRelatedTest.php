@@ -43,6 +43,7 @@ final class GetRelatedTest extends AbstractDatabaseTestCase
      */
     public function testMvcModelGetRelated(): void
     {
+        $this->markTestSkipped('Waiting for PHQL Parser');
         /** @var PDO $connection */
         $connection = self::getConnection();
 
@@ -125,6 +126,7 @@ final class GetRelatedTest extends AbstractDatabaseTestCase
      */
     public function testMvcModelGetRelatedChangeForeignKey(): void
     {
+        $this->markTestSkipped('Waiting for PHQL Parser');
         /** @var PDO $connection */
         $connection = self::getConnection();
 

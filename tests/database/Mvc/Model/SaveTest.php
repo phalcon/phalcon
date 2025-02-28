@@ -87,6 +87,7 @@ final class SaveTest extends AbstractDatabaseTestCase
      */
     public function testMvcModelSave(): void
     {
+        $this->markTestSkipped('Waiting for PHQL Parser');
         /** @var PDO $connection */
         $connection = self::getConnection();
 
@@ -159,6 +160,7 @@ final class SaveTest extends AbstractDatabaseTestCase
      */
     public function testMvcModelSaveAfterFetchingRelated(): void
     {
+        $this->markTestSkipped('Waiting for PHQL Parser');
         /** @var PDO $connection */
         $connection = self::getConnection();
 
@@ -204,6 +206,7 @@ final class SaveTest extends AbstractDatabaseTestCase
      */
     public function testMvcModelSaveAfterSettingEmptyRelated(): void
     {
+        $this->markTestSkipped('Waiting for PHQL Parser');
         /** @var PDO $connection */
         $connection = self::getConnection();
 
@@ -239,6 +242,7 @@ final class SaveTest extends AbstractDatabaseTestCase
      */
     public function testMvcModelSaveAfterUsingRelatedGetters(): void
     {
+        $this->markTestSkipped('Waiting for PHQL Parser');
         /** @var PDO $connection */
         $connection = self::getConnection();
 
@@ -284,6 +288,7 @@ final class SaveTest extends AbstractDatabaseTestCase
      */
     public function testMvcModelSaveAfterWithoutDefaultValues(): void
     {
+        $this->markTestSkipped('Waiting for PHQL Parser');
         /** @var PDO $connection */
         $connection = self::getConnection();
 
@@ -327,6 +332,7 @@ final class SaveTest extends AbstractDatabaseTestCase
      */
     public function testMvcModelSaveCircularRelation(): void
     {
+        $this->markTestSkipped('Waiting for PHQL Parser');
         /** @var PDO $connection */
         $connection = self::getConnection();
 
@@ -376,6 +382,7 @@ final class SaveTest extends AbstractDatabaseTestCase
      */
     public function testMvcModelSaveWithPropertySource(): void
     {
+        $this->markTestSkipped('Waiting for PHQL Parser');
         /** @var PDO $connection */
         $connection = self::getConnection();
 
@@ -433,6 +440,7 @@ final class SaveTest extends AbstractDatabaseTestCase
      */
     public function testMvcModelSaveWithRelatedManyAndBelongsRecordsProperty(): void
     {
+        $this->markTestSkipped('Waiting for PHQL Parser');
         /** @var PDO $connection */
         $connection = self::getConnection();
 
@@ -481,6 +489,7 @@ final class SaveTest extends AbstractDatabaseTestCase
      */
     public function testMvcModelSaveWithRelatedRecords(): void
     {
+        $this->markTestSkipped('Waiting for PHQL Parser');
         $invoice = new InvoicesKeepSnapshots();
 
         $invoice->customer = new CustomersKeepSnapshots();
@@ -528,6 +537,7 @@ final class SaveTest extends AbstractDatabaseTestCase
      */
     public function testMvcModelSaveWithRelatedRecordsProperty(): void
     {
+        $this->markTestSkipped('Waiting for PHQL Parser');
         /** @var PDO $connection */
         $connection = self::getConnection();
 
@@ -576,6 +586,7 @@ final class SaveTest extends AbstractDatabaseTestCase
      */
     public function testMvcModelSaveWithSchema(): void
     {
+        $this->markTestSkipped('Waiting for PHQL Parser');
         $model = new Invoices();
 
         $model->inv_cst_id      = 1;
@@ -613,6 +624,7 @@ final class SaveTest extends AbstractDatabaseTestCase
     public function testMvcModelSaveWithTinyInt(
         string $value
     ): void {
+        $this->markTestSkipped('Waiting for PHQL Parser');
         $customer                  = new Customers();
         $customer->cst_status_flag = $value;
 

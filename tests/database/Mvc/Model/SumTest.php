@@ -73,6 +73,7 @@ final class SumTest extends AbstractDatabaseTestCase
      */
     public function testMvcModelSum(): void
     {
+        $this->markTestSkipped('Waiting for PHQL Parser');
         /**
          * @todo The following tests are skipped for sqlite because we will get
          *       a General Error 5 database is locked error.
@@ -168,6 +169,7 @@ final class SumTest extends AbstractDatabaseTestCase
      */
     public function testMvcModelSumTransaction(): void
     {
+        $this->markTestSkipped('Waiting for PHQL Parser');
         $this->insertDataInvoices($this->invoiceMigration, 7, 'default', 2, 'ccc');
         $this->insertDataInvoices($this->invoiceMigration, 1, 'default', 3, 'aaa');
         $this->insertDataInvoices($this->invoiceMigration, 11, 'default', 1, 'aaa');

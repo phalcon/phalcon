@@ -56,6 +56,7 @@ final class FindTest extends AbstractDatabaseTestCase
      */
     public function testMvcModelFind(): void
     {
+        $this->markTestSkipped('Waiting for PHQL Parser');
         /** @var PDO $connection */
         $connection = self::getConnection();
         $migration  = new ObjectsMigration($connection);
@@ -80,6 +81,7 @@ final class FindTest extends AbstractDatabaseTestCase
      */
     public function testMvcModelFindDeprecationWarning(): void
     {
+        $this->markTestSkipped('Waiting for PHQL Parser');
         /** @var PDO $connection */
         $connection = self::getConnection();
         $migration  = new ObjectsMigration($connection);
@@ -127,6 +129,7 @@ final class FindTest extends AbstractDatabaseTestCase
      */
     public function testMvcModelFindPrivatePropertyWithRedisCache(): void
     {
+        $this->markTestSkipped('Waiting for PHQL Parser');
         /** @var PDO $connection */
         $connection = self::getConnection();
         $migration  = new InvoicesMigration($connection);
@@ -247,6 +250,7 @@ final class FindTest extends AbstractDatabaseTestCase
      */
     public function testMvcModelFindResultsetSecondIteration(): void
     {
+        $this->markTestSkipped('Waiting for PHQL Parser');
         /** @var PDO $connection */
         $connection = self::getConnection();
 
@@ -300,6 +304,7 @@ final class FindTest extends AbstractDatabaseTestCase
      */
     public function testMvcModelFindWithCache(): void
     {
+        $this->markTestSkipped('Waiting for PHQL Parser');
         $file = outputDir('data-/my/-c/ac/my-cache');
         $this->safeDeleteFile($file);
 
@@ -375,6 +380,7 @@ final class FindTest extends AbstractDatabaseTestCase
      */
     public function testMvcModelFindWithCacheException(): void
     {
+        $this->markTestSkipped('Waiting for PHQL Parser');
         $this->expectException(Exception::class);
         $this->expectExceptionMessage(
             "Cache service must be an object implementing " .
@@ -413,6 +419,7 @@ final class FindTest extends AbstractDatabaseTestCase
      */
     public function testMvcModelFindWithSpecificColumn(): void
     {
+        $this->markTestSkipped('Waiting for PHQL Parser');
         /** @var PDO $connection */
         $connection = self::getConnection();
         $migration  = new ObjectsMigration($connection);

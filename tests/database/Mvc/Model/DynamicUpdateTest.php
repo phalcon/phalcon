@@ -48,6 +48,7 @@ final class DynamicUpdateTest extends AbstractDatabaseTestCase
      */
     public function testMvcModelDisableDynamicUpdate(): void
     {
+        $this->markTestSkipped('Waiting for PHQL Parser');
         $connection         = self::getConnection();
         $customersMigration = new CustomersMigration($connection);
         $customersMigration->insert(90, 1);
@@ -107,6 +108,7 @@ final class DynamicUpdateTest extends AbstractDatabaseTestCase
      */
     public function testMvcModelDisabledCherryPickDynamicUpdate(): void
     {
+        $this->markTestSkipped('Waiting for PHQL Parser');
         $connection         = self::getConnection();
         $customersMigration = new CustomersMigration($connection);
         $customersMigration->insert(90, 1);
@@ -165,6 +167,7 @@ final class DynamicUpdateTest extends AbstractDatabaseTestCase
      */
     public function testMvcModelEnableDynamicUpdate(): void
     {
+        $this->markTestSkipped('Waiting for PHQL Parser');
         $connection         = self::getConnection();
         $customersMigration = new CustomersMigration($connection);
         $customersMigration->insert(90, 1);

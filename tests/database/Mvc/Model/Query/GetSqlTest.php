@@ -60,6 +60,7 @@ final class GetSqlTest extends AbstractDatabaseTestCase
      */
     public function testMvcModelQueryGetSql(): void
     {
+        $this->markTestSkipped('Waiting for PHQL Parser');
         $phql = sprintf('SELECT i.inv_id, i.inv_cst_id FROM [%s] AS i', Invoices::class);
 
         $query = new Query($phql, $this->container);

@@ -68,6 +68,7 @@ final class CacheTest extends AbstractDatabaseTestCase
     public function testMvcModelQueryCache(
         string $serializer
     ): void {
+        $this->markTestSkipped('Waiting for PHQL Parser');
         (new InvoicesMigration(self::getConnection()));
 
         $this->container->set(

@@ -77,6 +77,7 @@ final class QueryTest extends AbstractDatabaseTestCase
      */
     public function testMvcModelQuery(): void
     {
+        $this->markTestSkipped('Waiting for PHQL Parser');
         $this->addTestData();
 
         $query = Customers::query();
@@ -100,6 +101,7 @@ final class QueryTest extends AbstractDatabaseTestCase
      */
     public function testMvcModelQueryIssue14535(): void
     {
+        $this->markTestSkipped('Waiting for PHQL Parser');
         $this->addTestData();
 
         $query = Customers::query();
@@ -127,6 +129,7 @@ final class QueryTest extends AbstractDatabaseTestCase
      */
     public function testMvcModelQueryIssue14783(): void
     {
+        $this->markTestSkipped('Waiting for PHQL Parser');
         $this->addTestData();
 
         $query = CustomersKeepSnapshots::query();

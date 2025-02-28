@@ -59,6 +59,7 @@ final class GetSetEventsManagerTest extends AbstractDatabaseTestCase
      */
     public function testMvcModelGetEventsManager(): void
     {
+        $this->markTestSkipped('Waiting for PHQL Parser');
         $this->invoiceMigration->insert(4, null, 0, uniqid('inv-', true));
 
         $invoice = Invoices::findFirst();

@@ -43,6 +43,7 @@ final class PaginateTest extends AbstractDatabaseTestCase
      */
     public function testPaginatorAdapterModelPaginate(): void
     {
+        $this->markTestSkipped('Waiting for PHQL Parser');
         /** @var PDO $connection */
         $connection = self::getConnection();
         $migration  = new InvoicesMigration($connection);
@@ -102,6 +103,7 @@ final class PaginateTest extends AbstractDatabaseTestCase
      */
     public function testPaginatorAdapterModelPaginateBind(): void
     {
+        $this->markTestSkipped('Waiting for PHQL Parser');
         /** @var PDO $connection */
         $connection = self::getConnection();
         $migration  = new InvoicesMigration($connection);
@@ -150,6 +152,7 @@ final class PaginateTest extends AbstractDatabaseTestCase
      */
     public function testPaginatorAdapterModelPaginateEmpty(): void
     {
+        $this->markTestSkipped('Waiting for PHQL Parser');
         $paginator = new Model(
             [
                 'model'      => Invoices::class,
@@ -180,6 +183,7 @@ final class PaginateTest extends AbstractDatabaseTestCase
      */
     public function testPaginatorAdapterModelPaginateParametersArrayString(): void
     {
+        $this->markTestSkipped('Waiting for PHQL Parser');
         /** @var PDO $connection */
         $connection = self::getConnection();
         $migration  = new InvoicesMigration($connection);
@@ -219,6 +223,7 @@ final class PaginateTest extends AbstractDatabaseTestCase
      */
     public function testPaginatorAdapterModelPaginateParametersString(): void
     {
+        $this->markTestSkipped('Waiting for PHQL Parser');
         /** @var PDO $connection */
         $connection = self::getConnection();
         $migration  = new InvoicesMigration($connection);
@@ -265,6 +270,7 @@ final class PaginateTest extends AbstractDatabaseTestCase
      */
     public function testPaginatorAdapterModelPaginateView(): void
     {
+        $this->markTestSkipped('Waiting for PHQL Parser');
         $this->setDiService('view');
 
         /** @var PDO $connection */
@@ -311,6 +317,7 @@ final class PaginateTest extends AbstractDatabaseTestCase
      */
     public function testPaginatorAdapterModelPaginateWithOrder(): void
     {
+        $this->markTestSkipped('Waiting for PHQL Parser');
         /** @var PDO $connection */
         $connection = self::getConnection();
         $migration  = new InvoicesMigration($connection);

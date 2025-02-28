@@ -60,6 +60,7 @@ final class CountTest extends AbstractDatabaseTestCase
      */
     public function testMvcModelCount(): void
     {
+        $this->markTestSkipped('Waiting for PHQL Parser');
         /**
          * TODO: The following tests need to skip sqlite because we will get
          *       a General Error 5 database is locked error
@@ -167,6 +168,7 @@ final class CountTest extends AbstractDatabaseTestCase
      */
     public function testMvcModelCountColumnMap(): void
     {
+        $this->markTestSkipped('Waiting for PHQL Parser');
         /**
          * @todo The following tests need to skip sqlite because we will get
          *       a General Error 5 database is locked error

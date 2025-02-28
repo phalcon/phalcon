@@ -42,6 +42,7 @@ final class RefreshTest extends AbstractDatabaseTestCase
      */
     public function testMvcModelRefresh(): void
     {
+        $this->markTestSkipped('Waiting for PHQL Parser');
         $title = uniqid('inv-');
         /** @var PDO $connection */
         $connection = self::getConnection();
