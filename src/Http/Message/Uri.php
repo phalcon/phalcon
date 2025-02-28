@@ -41,17 +41,6 @@ use function substr;
 /**
  * Uri
  *
- * @psalm-type TParseUrl array{
- *      scheme: string,
- *      host: string,
- *      port: int,
- *      user?: string,
- *      pass?: string,
- *      query: string,
- *      path: string,
- *      fragment: string
- * }
- *
  * @property string   $fragment
  * @property string   $host
  * @property string   $pass
@@ -160,25 +149,27 @@ final class Uri extends AbstractCommon implements UriInterface
      */
     public function __construct(string $uri = "")
     {
-        if (true !== empty($uri)) {
+        if (null !== $uri) {
             $urlParts = $this->phpParseUrl($uri);
 
             if (false === $urlParts) {
                 throw new InvalidArgumentException("The URI cannot be parsed");
             }
 
-            $this->fragment = $this->filterFragment($urlParts["fragment"]);
-            $this->host     = strtolower($urlParts["host"]);
-            $this->path     = $this->filterPath($urlParts["path"]);
-            $this->port     = $this->filterPort($urlParts["port"]);
-            $this->query    = $this->filterQuery($urlParts["query"]);
-            $this->scheme   = $this->filterScheme($urlParts["scheme"]);
-            $this->userInfo = $this->filterUserInfo($urlParts["user"]);
+            $this->fragment = $this->filterFragment(
+                $urlParts["fragment"] ?? ""
+            );
+            $this->host     = strtolower($urlParts["host"] ?? "");
+            $this->path     = $this->filterPath($urlParts["path"] ?? "");
+            $this->port     = $this->filterPort($urlParts["port"] ?? null);
+            $this->query    = $this->filterQuery($urlParts["query"] ?? "");
+            $this->scheme   = $this->filterScheme($urlParts["scheme"] ?? "");
+            $this->userInfo = $this->filterUserInfo($urlParts["user"] ?? "");
 
             if (isset($urlParts["pass"])) {
                 $this->userInfo .= ":" . $this->filterUserInfo(
-                    $urlParts["pass"]
-                );
+                        $urlParts["pass"]
+                    );
             }
         }
     }
@@ -554,9 +545,9 @@ final class Uri extends AbstractCommon implements UriInterface
      *
      * @param string $url
      *
-     * @return TParseUrl|false
+     * @return array|false|int|string|null
      */
-    protected function phpParseUrl(string $url): array|false
+    protected function phpParseUrl(string $url)
     {
         return parse_url($url);
     }
