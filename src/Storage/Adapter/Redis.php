@@ -22,6 +22,7 @@ use RedisException;
 
 use function constant;
 use function defined;
+use function is_array;
 use function is_bool;
 use function is_int;
 use function mb_strtolower;
@@ -218,7 +219,12 @@ class Redis extends AbstractAdapter
         return is_bool($result) ? $result : false;
     }
 
-    protected function getDefaultOptions($options): array
+    /**
+     * @param array $options
+     *
+     * @return array
+     */
+    protected function getDefaultOptions(array $options): array
     {
         /**
          * Lets set some defaults and options here
@@ -229,11 +235,12 @@ class Redis extends AbstractAdapter
         $options["timeout"]        = $options["timeout"] ?? 0;
         $options["persistent"]     = (bool)($options["persistent"] ?? false);
         $options["persistentId"]   = (string)($options["persistentId"] ?? "");
-        $options["auth"]           = $options["auth"] ?? "";
+        $options["auth"]           = $options["auth"] ?? '';
         $options["socket"]         = $options["socket"] ?? "";
         $options["connectTimeout"] = $options["connectTimeout"] ?? 0;
         $options["retryInterval"]  = $options["retryInterval"] ?? 0;
         $options["readTimeout"]    = $options["readTimeout"] ?? 0;
+        $options["ssl"]            = $options["ssl"] ?? [];
 
         return $options;
     }
@@ -277,6 +284,16 @@ class Redis extends AbstractAdapter
         $timeout       = $options["timeout"];
         $retryInterval = $options["retryInterval"];
         $readTimeout   = $options["readTimeout"];
+        $auth          = $options["auth"];
+        $ssl           = $options["ssl"];
+
+        $connectionOptions = [];
+        if (true !== empty($auth)) {
+            $connectionOptions['auth'] = $auth;
+        }
+        if (true !== empty($ssl)) {
+            $connectionOptions['stream'] = $ssl;
+        }
 
         if (true === $options["persistent"]) {
             $method    = "connect";
@@ -293,7 +310,8 @@ class Redis extends AbstractAdapter
             $timeout,
             $parameter,
             $retryInterval,
-            $readTimeout
+            $readTimeout,
+            $connectionOptions
         );
 
         if (true !== $result) {
@@ -333,6 +351,9 @@ class Redis extends AbstractAdapter
      * the custom one is set.
      *
      * @param RedisService $connection
+     *
+     * @return void
+     * @throws BaseException
      */
     private function setSerializer(RedisService $connection): void
     {
