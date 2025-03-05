@@ -278,50 +278,54 @@ class Redis extends AbstractAdapter
      */
     private function checkConnect(RedisService $connection): Redis
     {
-        $options       = $this->options;
-        $host          = $options["host"];
-        $port          = $options["port"];
-        $timeout       = $options["timeout"];
-        $retryInterval = $options["retryInterval"];
-        $readTimeout   = $options["readTimeout"];
-        $auth          = $options["auth"];
-        $ssl           = $options["ssl"];
+        try {
+            $options       = $this->options;
+            $host          = $options["host"];
+            $port          = $options["port"];
+            $timeout       = $options["timeout"];
+            $retryInterval = $options["retryInterval"];
+            $readTimeout   = $options["readTimeout"];
+            $auth          = $options["auth"];
+            $ssl           = $options["ssl"];
 
-        $connectionOptions = [];
-        if (true !== empty($auth)) {
-            $connectionOptions['auth'] = $auth;
-        }
-        if (true !== empty($ssl)) {
-            $connectionOptions['stream'] = $ssl;
-        }
+            $connectionOptions = [];
+            if (true !== empty($auth)) {
+                $connectionOptions['auth'] = $auth;
+            }
+            if (true !== empty($ssl)) {
+                $connectionOptions['stream'] = $ssl;
+            }
 
-        if (true === $options["persistent"]) {
-            $method    = "connect";
-            $parameter = null;
-        } else {
-            $method       = "pconnect";
-            $persistentId = $options["persistentId"];
-            $parameter    = !empty($persistentId) ?: "persistentId" . $options["index"];
-        }
+            if (true === $options["persistent"]) {
+                $method    = "connect";
+                $parameter = null;
+            } else {
+                $method       = "pconnect";
+                $persistentId = $options["persistentId"];
+                $parameter    = !empty($persistentId) ?: "persistentId" . $options["index"];
+            }
 
-        $result = $connection->$method(
-            $host,
-            $port,
-            $timeout,
-            $parameter,
-            $retryInterval,
-            $readTimeout,
-            $connectionOptions
-        );
-
-        if (true !== $result) {
-            throw new StorageException(
-                sprintf(
-                    "Could not connect to the Redis server [%s:%s]",
-                    $host,
-                    $port
-                )
+            $result = $connection->$method(
+                $host,
+                $port,
+                $timeout,
+                $parameter,
+                $retryInterval,
+                $readTimeout,
+                $connectionOptions
             );
+
+            if (true !== $result) {
+                throw new StorageException(
+                    sprintf(
+                        "Could not connect to the Redis server [%s:%s]",
+                        $host,
+                        $port
+                    )
+                );
+            }
+        } catch (BaseException $ex) {
+            throw new StorageException($ex->getMessage());
         }
 
         return $this;
