@@ -30,9 +30,9 @@ RUN apt update -y && \
         libmemcached-dev \
         libpng-dev \
         libpq-dev \
-        libyaml-dev \
         libwebp-dev \
         libxpm-dev \
+        libyaml-dev \
         libzip-dev \
         locales \
         nano \
