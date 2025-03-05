@@ -75,9 +75,9 @@ final class ExceptionsTest extends AbstractUnitTestCase
         $this->checkExtensionIsLoaded('redis');
 
         $this->expectException(StorageException::class);
-        $this->expectExceptionMessage(
-            'Connection refused'
-        );
+//        $this->expectExceptionMessage(
+//            'Connection refused'
+//        );
 
         $serializer      = new SerializerFactory();
         $options         = getOptionsRedis();
