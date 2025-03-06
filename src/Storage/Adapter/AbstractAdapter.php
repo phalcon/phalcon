@@ -218,6 +218,16 @@ abstract class AbstractAdapter implements AdapterInterface, EventsAwareInterface
     }
 
     /**
+     * Returns the lifetime
+     *
+     * @return int
+     */
+    public function getLifetime(): int
+    {
+        return $this->lifetime;
+    }
+
+    /**
      * Get the serializer
      *
      * @return SerializerInterface
