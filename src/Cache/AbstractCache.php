@@ -32,20 +32,13 @@ abstract class AbstractCache implements CacheInterface, EventsAwareInterface
     use EventsAwareTrait;
 
     /**
-     * The adapter
-     *
-     * @var AdapterInterface
-     */
-    protected AdapterInterface $adapter;
-
-    /**
      * Constructor.
      *
      * @param AdapterInterface $adapter The cache adapter
      */
-    public function __construct(AdapterInterface $adapter)
-    {
-        $this->adapter = $adapter;
+    public function __construct(
+        protected AdapterInterface $adapter
+    ) {
     }
 
     /**

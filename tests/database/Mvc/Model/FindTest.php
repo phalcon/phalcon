@@ -33,6 +33,7 @@ use function ob_end_clean;
 use function ob_get_contents;
 use function ob_start;
 use function outputDir;
+use function sleep;
 use function uniqid;
 use function var_dump;
 
@@ -137,7 +138,7 @@ final class FindTest extends AbstractDatabaseTestCase
         /**
          * Find without models cache
          */
-        /** @var Invoices $original */
+        /** @var iterable $original */
         $original = Invoices::find(
             [
                 'conditions' => 'inv_id = :inv_id:',
@@ -164,7 +165,7 @@ final class FindTest extends AbstractDatabaseTestCase
         /**
          * Find it - so that we can use the models cache now
          */
-        /** @var Invoices $cached */
+        /** @var iterable $cached */
         $cached = Invoices::find(
             [
                 'conditions' => 'inv_id = :inv_id:',
@@ -193,7 +194,7 @@ final class FindTest extends AbstractDatabaseTestCase
         /**
          * Ensure we do not have anything in the db
          */
-        /** @var Invoices $original */
+        /** @var iterable $original */
         $original = Invoices::find(
             [
                 'conditions' => 'inv_id = :inv_id:',
@@ -208,7 +209,7 @@ final class FindTest extends AbstractDatabaseTestCase
         /**
          * Finally get it back from the cache
          */
-        /** @var Invoices $cached */
+        /** @var iterable $cached */
         $cached = Invoices::find(
             [
                 'conditions' => 'inv_id = :inv_id:',
@@ -252,9 +253,20 @@ final class FindTest extends AbstractDatabaseTestCase
 
         $customersMigration = new CustomersMigration($connection);
         $customersMigration->clear();
-        $customersMigration->insert(1, 1, uniqid('cust-', true), uniqid('cust-', true));
-        $customersMigration->insert(2, 0, uniqid('cust-', true), uniqid('cust-', true));
+        $customersMigration->insert(
+            1,
+            1,
+            uniqid('cust-', true),
+            uniqid('cust-', true)
+        );
+        $customersMigration->insert(
+            2,
+            0,
+            uniqid('cust-', true),
+            uniqid('cust-', true)
+        );
 
+        /** @var iterable $customers */
         $customers = Customers::find();
 
         $this->assertCount(2, $customers);
@@ -363,6 +375,75 @@ final class FindTest extends AbstractDatabaseTestCase
         $record = $data[0];
         $this->assertEquals(1, $record->obj_id);
         $this->assertEquals('random data', $record->obj_name);
+    }
+
+    /**
+     * Tests Phalcon\Mvc\Model :: find()
+     *
+     * @author Phalcon Team <team@phalcon.io>
+     * @since  2020-02-01
+     *
+     * @group mysql
+     * @issue 16696
+     */
+    public function testMvcModelFindWithCacheLifetimeFromCacheService(): void
+    {
+        /** @var PDO $connection */
+        $connection = self::getConnection();
+        $migration  = new ObjectsMigration($connection);
+        $migration->insert(1, 'random data', 1);
+
+        $options = [
+            'defaultSerializer' => 'Json',
+            'lifetime'          => 2,
+            'prefix'            => 'data-',
+        ];
+
+        /**
+         * Models Cache setup. Lifetime is 2 seconds
+         */
+        $serializerFactory = new SerializerFactory();
+        $adapterFactory    = new AdapterFactory($serializerFactory);
+        $adapter           = $adapterFactory->newInstance('apcu', $options);
+        $cache             = new Cache($adapter);
+
+        $this->container->setShared('modelsCache', $cache);
+
+        /**
+         * Get the records (should cache the resultset)
+         */
+        $data = Objects::find(
+            [
+                'cache' => [
+                    'key' => 'my-cache',
+                ],
+            ]
+        );
+
+        $this->assertEquals(1, count($data));
+
+        $record = $data[0];
+        $this->assertEquals(1, $record->obj_id);
+        $this->assertEquals('random data', $record->obj_name);
+
+        /**
+         * Get the models cache
+         */
+        $modelsCache = $this->container->get('modelsCache');
+
+        $exists = $modelsCache->has('my-cache');
+        $this->assertTrue($exists);
+
+        /**
+         * Wait for 3 seconds for the cache to expire
+         */
+        sleep(3);
+
+        /**
+         * Get the data now from the cache - expired
+         */
+        $data = $modelsCache->get('my-cache');
+        $this->assertNull($data);
     }
 
     /**

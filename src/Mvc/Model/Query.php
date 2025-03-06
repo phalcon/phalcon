@@ -14,6 +14,7 @@ declare(strict_types=1);
 namespace Phalcon\Mvc\Model;
 
 use PDOException;
+use Phalcon\Cache\Adapter\AdapterInterface as CacheAdapterInterface;
 use Phalcon\Db\Adapter\AdapterInterface;
 use Phalcon\Db\Column;
 use Phalcon\Db\RawValue;
@@ -422,9 +423,10 @@ class Query implements QueryInterface, InjectionAwareInterface
             /**
              * By default use use 3600 seconds (1 hour) as cache lifetime
              */
-            $lifetime     = $cacheOptions["lifetime"] ?? 3600;
+            $lifetime     = (int)($cacheOptions["lifetime"] ?? 3600);
             $cacheService = $cacheOptions["service"] ?? "modelsCache";
 
+            /** @var CacheInterface $cache */
             $cache = $this->container->getShared($cacheService);
 
             if (!$cache instanceof CacheInterface) {
@@ -432,6 +434,16 @@ class Query implements QueryInterface, InjectionAwareInterface
                     "Cache service must be an object implementing " .
                     "Psr\SimpleCache\CacheInterface"
                 );
+            }
+
+            /**
+             * If the lifetime is different than the cache lifetime, assign
+             * the cache lifetime to the current cache setting
+             */
+            $adapter       = $cache->getAdapter();
+            $cacheLifetime = $adapter->getLifetime();
+            if ($lifetime !== $cacheLifetime) {
+                $lifetime = $cacheLifetime;
             }
 
             $result = $cache->get($key);
