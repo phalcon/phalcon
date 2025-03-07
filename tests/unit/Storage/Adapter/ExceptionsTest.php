@@ -63,6 +63,36 @@ final class ExceptionsTest extends AbstractUnitTestCase
     }
 
     /**
+     * Tests Phalcon\Storage\Adapter\Redis :: get() - failed auth
+     *
+     * @return void
+     *
+     * @author Phalcon Team <team@phalcon.io>
+     * @since  2020-09-09
+     */
+    public function testStorageAdapterRedisGetSetFailedSslLocalhost(): void
+    {
+        $this->checkExtensionIsLoaded('redis');
+
+        $this->expectException(StorageException::class);
+//        $this->expectExceptionMessage(
+//            'Connection refused'
+//        );
+
+        $serializer      = new SerializerFactory();
+        $options         = getOptionsRedis();
+        $options['host'] = 'tls://127.0.0.1';
+        $options['ssl']  = [
+            'verify_peer_name' => '127.0.0.1',
+            'verify_peer'      => false,
+        ];
+
+        $adapter = new Redis($serializer, $options);
+
+        $adapter->get('test');
+    }
+
+    /**
      * Tests Phalcon\Storage\Adapter\Redis :: get() - wrong index
      *
      * @return void
