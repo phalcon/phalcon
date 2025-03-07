@@ -37,6 +37,26 @@ final class GetBasicAuthTest extends AbstractHttpBase
         ];
         $actual   = $request->getBasicAuth();
         $this->assertSame($expected, $actual);
+
+        /**
+         * @issue 16668
+         */
+        unset($_SERVER['PHP_AUTH_USER']);
+        unset($_SERVER['PHP_AUTH_PW']);
+
+        $_SERVER['PHP_AUTH_USER'] = 'darth';
+
+        $request = new Request();
+
+        $expected = [
+            'username' => 'darth',
+            'password' => null,
+        ];
+        $actual   = $request->getBasicAuth();
+        $this->assertSame($expected, $actual);
+
+        unset($_SERVER['PHP_AUTH_USER']);
+        unset($_SERVER['PHP_AUTH_PW']);
     }
 
     /**
