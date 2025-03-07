@@ -13,11 +13,15 @@ declare(strict_types=1);
 
 namespace Phalcon\Tests\Unit\Session\Adapter;
 
+use Phalcon\Session\Adapter\Stream as SessionStream;
+use Phalcon\Session\Exception;
+use Phalcon\Tests\Fixtures\Session\Adapter\StreamGlobFixture;
 use Phalcon\Tests\Fixtures\Traits\DiTrait;
 use Phalcon\Tests\AbstractServicesTestCase;
 
 use function cacheDir;
 use function file_put_contents;
+use function getOptionsSessionStream;
 use function sleep;
 use function uniqid;
 
@@ -115,5 +119,24 @@ final class GcTest extends AbstractServicesTestCase
 
         $this->assertFileDoesNotExist(cacheDir('sessions/gc_1'));
         $this->assertFileDoesNotExist(cacheDir('sessions/gc_2'));
+    }
+
+    /**
+     * Tests Phalcon\Session\Adapter\Stream :: gc() -
+     * glob() false returns exception
+     *
+     * @return void
+     *
+     * @author Phalcon Team <team@phalcon.io>
+     * @since  2020-09-09
+     */
+    public function testSessionAdapterStreamGcGlobThrowsException(): void
+    {
+        $this->expectException(Exception::class);
+        $this->expectExceptionMessage('Unexpected gc error');
+
+        $adapter = new StreamGlobFixture(getOptionsSessionStream());
+
+        $actual = $adapter->gc(1);
     }
 }
