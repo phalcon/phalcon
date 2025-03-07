@@ -18,6 +18,9 @@ use Phalcon\Traits\Php\FileTrait;
 use Phalcon\Traits\Php\InfoTrait;
 use Phalcon\Traits\Php\IniTrait;
 
+use function error_clear_last;
+use function error_get_last;
+use function error_reporting;
 use function file_exists;
 use function rtrim;
 
@@ -133,7 +136,12 @@ class Stream extends Noop
     {
         $pattern = $this->path . $this->prefix . "*";
         $time    = time() - $max_lifetime;
-        $glob    = glob($pattern);
+        $glob    = $this->getGlobFiles($pattern);
+
+        if (false === $glob) {
+            $last = error_get_last();
+            throw new Exception($last['message'] ?? 'Unexpected gc error');
+        }
 
         if (!empty($glob)) {
             foreach ($glob as $file) {
@@ -215,5 +223,22 @@ class Stream extends Noop
         $name = (string)$name;
 
         return $this->prefix . $name;
+    }
+
+    /**
+     * Gets the glob array or returns false on failure
+     *
+     * @param string $pattern
+     *
+     * @return array|false
+     */
+    protected function getGlobFiles(string $pattern): array | false
+    {
+        $errorLevel = error_reporting(0);
+        error_clear_last();
+        $glob = glob($pattern);
+        error_reporting($errorLevel);
+
+        return $glob;
     }
 }

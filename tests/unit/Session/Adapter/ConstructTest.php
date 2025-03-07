@@ -15,14 +15,18 @@ namespace Phalcon\Tests\Unit\Session\Adapter;
 
 use Phalcon\Session\Adapter\Libmemcached;
 use Phalcon\Session\Adapter\Redis;
+use Phalcon\Session\Adapter\Stream;
+use Phalcon\Session\Exception;
 use Phalcon\Storage\AdapterFactory;
 use Phalcon\Storage\SerializerFactory;
+use Phalcon\Tests\Fixtures\Session\Adapter\StreamIsWritableFixture;
 use Phalcon\Tests\Fixtures\Traits\DiTrait;
 use Phalcon\Tests\Fixtures\Traits\SessionTrait;
 use Phalcon\Tests\AbstractUnitTestCase;
 use SessionHandlerInterface;
 
 use function getOptionsRedis;
+use function getOptionsSessionStream;
 
 final class ConstructTest extends AbstractUnitTestCase
 {
@@ -80,6 +84,45 @@ final class ConstructTest extends AbstractUnitTestCase
         $expected = 'test-data';
         $actual   = $memcachedStorage->get('my-session-prefixed-key');
         $this->assertEquals($expected, $actual);
+    }
+
+    /**
+     * Tests Phalcon\Session\Adapter\Stream :: __construct() -
+     * empty savePath throws exception
+     *
+     * @author Phalcon Team <team@phalcon.io>
+     * @since  2020-10-23
+     */
+    public function testSessionAdapterStreamWithNoSavePathThrowsException(): void
+    {
+        $this->expectException(Exception::class);
+        $this->expectExceptionMessage('The session save path cannot be empty');
+
+        $options = [
+            'prefix'   => 'my-custom-prefix-',
+            'savePath' => '',
+        ];
+
+        $streamSession = new Stream($options);
+    }
+
+    /**
+     * Tests Phalcon\Session\Adapter\Stream :: __construct() -
+     * empty savePath throws exception
+     *
+     * @author Phalcon Team <team@phalcon.io>
+     * @since  2020-10-23
+     */
+    public function testSessionAdapterStreamWithNotWriteableSavePathThrowsException(): void
+    {
+        $options = getOptionsSessionStream();
+        $savePath = $options['savePath'];
+        $this->expectException(Exception::class);
+        $this->expectExceptionMessage(
+            'The session save path [' . $savePath . '] is not writable'
+        );
+
+        $streamSession = new StreamIsWritableFixture($options);
     }
 
     /**
