@@ -131,6 +131,7 @@ class Stream extends Noop
      * @param int $max_lifetime
      *
      * @return false|int
+     * @throws Exception
      */
     public function gc(int $max_lifetime): false | int
     {
@@ -212,20 +213,6 @@ class Stream extends Noop
     }
 
     /**
-     * Helper method to get the name prefixed
-     *
-     * @param mixed $name
-     *
-     * @return string
-     */
-    protected function getPrefixedName($name): string
-    {
-        $name = (string)$name;
-
-        return $this->prefix . $name;
-    }
-
-    /**
      * Gets the glob array or returns false on failure
      *
      * @param string $pattern
@@ -240,5 +227,19 @@ class Stream extends Noop
         error_reporting($errorLevel);
 
         return $glob;
+    }
+
+    /**
+     * Helper method to get the name prefixed
+     *
+     * @param mixed $name
+     *
+     * @return string
+     */
+    protected function getPrefixedName($name): string
+    {
+        $name = (string)$name;
+
+        return $this->prefix . $name;
     }
 }

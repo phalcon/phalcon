@@ -14,9 +14,9 @@ declare(strict_types=1);
 namespace Phalcon\Tests\Unit\Session\Adapter;
 
 use Phalcon\Session\Adapter\Redis;
+use Phalcon\Tests\AbstractServicesTestCase;
 use Phalcon\Tests\Fixtures\Session\Adapter\StreamFileGetContentsFixture;
 use Phalcon\Tests\Fixtures\Traits\DiTrait;
-use Phalcon\Tests\AbstractServicesTestCase;
 
 use function cacheDir;
 use function getOptionsSessionStream;
@@ -128,7 +128,7 @@ final class ReadWriteTest extends AbstractServicesTestCase
     public function testSessionAdapterStreamReadNoData(): void
     {
         $adapter = new StreamFileGetContentsFixture(getOptionsSessionStream());
-        $value = uniqid();
+        $value   = uniqid();
         $adapter->write('test1', $value);
 
         $actual = $adapter->read('test1');
