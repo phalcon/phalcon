@@ -173,10 +173,7 @@ class Request extends AbstractInjectionAware implements
      */
     public function getBasicAuth(): array | null
     {
-        if (
-            true !== $this->hasServer('PHP_AUTH_USER') ||
-            true !== $this->hasServer('PHP_AUTH_PW')
-        ) {
+        if (true !== $this->hasServer('PHP_AUTH_USER')) {
             return null;
         }
 
