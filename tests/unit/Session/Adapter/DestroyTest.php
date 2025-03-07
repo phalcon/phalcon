@@ -13,8 +13,8 @@ declare(strict_types=1);
 
 namespace Phalcon\Tests\Unit\Session\Adapter;
 
-use Phalcon\Tests\Fixtures\Traits\DiTrait;
 use Phalcon\Tests\AbstractServicesTestCase;
+use Phalcon\Tests\Fixtures\Traits\DiTrait;
 
 use function cacheDir;
 use function file_put_contents;
