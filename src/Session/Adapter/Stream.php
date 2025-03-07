@@ -136,7 +136,7 @@ class Stream extends Noop
         $glob    = glob($pattern);
 
         if (!empty($glob)) {
-            foreach (glob($pattern) as $file) {
+            foreach ($glob as $file) {
                 if (
                     file_exists($file) &&
                     is_file($file) &&
