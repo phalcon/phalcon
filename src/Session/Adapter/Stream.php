@@ -133,14 +133,17 @@ class Stream extends Noop
     {
         $pattern = $this->path . $this->prefix . "*";
         $time    = time() - $max_lifetime;
+        $glob    = glob($pattern);
 
-        foreach (glob($pattern) as $file) {
-            if (
-                file_exists($file) &&
-                is_file($file) &&
-                filemtime($file) < $time
-            ) {
-                unlink($file);
+        if (!empty($glob)) {
+            foreach (glob($pattern) as $file) {
+                if (
+                    file_exists($file) &&
+                    is_file($file) &&
+                    filemtime($file) < $time
+                ) {
+                    unlink($file);
+                }
             }
         }
 
