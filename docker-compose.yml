@@ -29,15 +29,15 @@ services:
     extra_hosts:
       - "host.docker.internal:host-gateway"
 
-#  phalcon-8.4:
-#    container_name: phalcon-8.4
-#    hostname: phalcon-84
-#    build: resources/docker/8.4
-#    working_dir: /srv
-#    volumes:
-#      - .:/srv
-#    extra_hosts:
-#      - "host.docker.internal:host-gateway"
+  phalcon-8.4:
+    container_name: phalcon-8.4
+    hostname: phalcon-84
+    build: resources/docker/8.4
+    working_dir: /srv
+    volumes:
+      - .:/srv
+    extra_hosts:
+      - "host.docker.internal:host-gateway"
 
   mariadb:
     container_name: phalcon-mariadb
