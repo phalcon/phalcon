@@ -31,9 +31,9 @@ class Style extends AbstractSeries
      * @param string $url
      * @param array  $attributes
      *
-     * @return $this
+     * @return static
      */
-    public function add(string $url, array $attributes = [])
+    public function add(string $url, array $attributes = []): static
     {
         $this->store[] = [
             "renderTag",

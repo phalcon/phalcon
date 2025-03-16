@@ -40,13 +40,13 @@ abstract class AbstractInput extends AbstractHelper
      * @param string|null $value
      * @param array       $attributes
      *
-     * @return AbstractInput
+     * @return static
      */
     public function __invoke(
         string $name,
         string $value = null,
         array $attributes = []
-    ): AbstractInput {
+    ): static {
         $this->attributes = [
             'type' => $this->type,
             'name' => $name,

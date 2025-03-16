@@ -28,7 +28,7 @@ class Img extends AbstractHelper
      *
      * @return string
      */
-    public function __invoke(string $src, array $attributes = [])
+    public function __invoke(string $src, array $attributes = []): string
     {
         $overrides = ['src' => $src];
 

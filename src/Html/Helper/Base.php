@@ -28,7 +28,7 @@ class Base extends AbstractHelper
      *
      * @return string
      */
-    public function __invoke(string $href, array $attributes = [])
+    public function __invoke(string $href, array $attributes = []): string
     {
         $overrides = [];
         if (!empty($href)) {
