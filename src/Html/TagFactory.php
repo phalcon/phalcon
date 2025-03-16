@@ -15,6 +15,7 @@ use Exception as BaseException;
 use Phalcon\Html\Escaper\EscaperInterface;
 use Phalcon\Html\Helper\Anchor;
 use Phalcon\Html\Helper\Base;
+use Phalcon\Html\Helper\Breadcrumbs;
 use Phalcon\Html\Helper\Body;
 use Phalcon\Html\Helper\Button;
 use Phalcon\Html\Helper\Close;
@@ -75,6 +76,7 @@ use const PHP_EOL;
  * @method string a(string $href, string $text, array $attributes = [], bool $raw = false)
  * @method string base(string $href, array $attributes = [])
  * @method string body(array $attributes = [])
+ * @method Breadcrumbs breadcrumbs(string $indent = '    ', string $delimiter = "\n")
  * @method string button(string $text, array $attributes = [], bool $raw = false)
  * @method string close(string $tag, bool $raw = false)
  * @method string doctype(int $flag, string $delimiter)
@@ -207,6 +209,7 @@ class TagFactory
         return [
             'a'                  => Anchor::class,
             'base'               => Base::class,
+            'breadcrumbs'        => Breadcrumbs::class,
             'body'               => Body::class,
             'button'             => Button::class,
             'close'              => Close::class,
