@@ -13,6 +13,7 @@ declare(strict_types=1);
 
 namespace Phalcon\Tests\Unit\Html\TagFactory;
 
+use Phalcon\Html\Breadcrumbs;
 use Phalcon\Html\Escaper;
 use Phalcon\Html\Exception;
 use Phalcon\Html\Helper\Anchor;
@@ -74,6 +75,7 @@ final class NewInstanceTest extends AbstractUnitTestCase
             ["a", Anchor::class],
             ["base", Base::class],
             ["body", Body::class],
+            ["breadcrumbs", Breadcrumbs::class],
             ["button", Button::class],
             ["close", Close::class],
             ["element", Element::class],
