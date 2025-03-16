@@ -1,0 +1,112 @@
+<?php
+
+/**
+ * This file is part of the Phalcon Framework.
+ *
+ * (c) Phalcon Team <team@phalcon.io>
+ *
+ * For the full copyright and license information, please view the LICENSE.txt
+ * file that was distributed with this source code.
+ */
+
+declare(strict_types=1);
+
+namespace Phalcon\Tests\Unit\Html\Helper\Breadcrumbs;
+
+use Phalcon\Html\Escaper;
+use Phalcon\Html\TagFactory;
+use Phalcon\Tests\AbstractUnitTestCase;
+
+use const PHP_EOL;
+
+final class RenderTest extends AbstractUnitTestCase
+{
+    /**
+     * Tests Phalcon\Html\Breadcrumbs :: render()
+     *
+     * @return void
+     *
+     * @author Phalcon Team <team@phalcon.io>
+     * @since  2020-09-09
+     */
+    public function testHtmlHelperBreadcrumbsRender(): void
+    {
+        $escaper     = new Escaper();
+        $helper      = new TagFactory($escaper);
+        $breadcrumbs = $helper->breadcrumbs();
+
+        $breadcrumbs
+            ->setAttributes(
+                [
+                    'class' => 'breadcrumb',
+                ]
+            )
+            ->add('Home', '/')
+            ->add(
+                'Invoices',
+                '/invoices',
+                '<i class="fa-solid fa-file-invoice"></i>'
+            )
+            ->add(
+                'Customers',
+                '/customers',
+                '<i class="fa-solid fa-user"></i>',
+                [
+                    'class'      => 'breadcrumb-item',
+                    'aria-label' => 'breadcrumb',
+                ]
+            )
+            ->add(
+                'List',
+                '/customers/list',
+                '',
+                [
+                    'aria-current' => 'page',
+                ]
+            )
+        ;
+
+        $expected = '    <nav class="breadcrumb">' . PHP_EOL
+            . '    <ol>' . PHP_EOL
+            . '    <li><a href="/">Home</a></li>' . PHP_EOL
+            . '    <li><a href="/invoices">'
+                    . '<i class="fa-solid fa-file-invoice"></i> Invoices</a>'
+                . '</li>' . PHP_EOL
+            . '    <li class="breadcrumb-item" aria-label="breadcrumb">'
+                    . '<a href="/customers">'
+                    . '<i class="fa-solid fa-user"></i> Customers</a>'
+                . '</li>' . PHP_EOL
+            . '    <li>'
+                    . '<span aria-current="page">List</span>'
+                . '</li>' . PHP_EOL
+            . '    </ol>' . PHP_EOL
+            . '    </nav>' . PHP_EOL;
+        $actual = $breadcrumbs->render();
+        $this->assertSame($expected, $actual);
+    }
+
+//    /**
+//     * Tests Phalcon\Html\Breadcrumbs :: render()
+//     *
+//     * @return void
+//     *
+//     * @author Phalcon Team <team@phalcon.io>
+//     * @since  2020-09-09
+//     */
+//    public function testHtmlHelperBreadcrumbsRenderHome(): void
+//    {
+//        $breadcrumbs = new Breadcrumbs();
+//        $breadcrumbs
+//            ->add('Home', '/')
+//        ;
+//
+//        $expected = '<dl>'
+//            . '<dt><a href="/">Home</a></dt>'
+//            . '</dl>';
+//
+//        $this->assertSame(
+//            $expected,
+//            $breadcrumbs->render()
+//        );
+//    }
+}
