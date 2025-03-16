@@ -26,9 +26,9 @@ class Link extends Style
      * @param string $href
      * @param array  $attributes
      *
-     * @return Link
+     * @return static
      */
-    public function add(string $href, array $attributes = []): Link
+    public function add(string $href, array $attributes = []): static
     {
         $this->store[] = [
             'renderTag',
@@ -46,10 +46,10 @@ class Link extends Style
     /**
      * Returns the necessary attributes
      *
-     * @param string $href
-     * @param array  $attributes
+     * @param string                $href
+     * @param array<string, string> $attributes
      *
-     * @return array
+     * @return array<string, string>
      */
     protected function getAttributes(string $href, array $attributes): array
     {
