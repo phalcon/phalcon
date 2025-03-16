@@ -85,28 +85,22 @@ final class RenderTest extends AbstractUnitTestCase
         $this->assertSame($expected, $actual);
     }
 
-//    /**
-//     * Tests Phalcon\Html\Breadcrumbs :: render()
-//     *
-//     * @return void
-//     *
-//     * @author Phalcon Team <team@phalcon.io>
-//     * @since  2020-09-09
-//     */
-//    public function testHtmlHelperBreadcrumbsRenderHome(): void
-//    {
-//        $breadcrumbs = new Breadcrumbs();
-//        $breadcrumbs
-//            ->add('Home', '/')
-//        ;
-//
-//        $expected = '<dl>'
-//            . '<dt><a href="/">Home</a></dt>'
-//            . '</dl>';
-//
-//        $this->assertSame(
-//            $expected,
-//            $breadcrumbs->render()
-//        );
-//    }
+    /**
+     * Tests Phalcon\Html\Breadcrumbs :: render() empty
+     *
+     * @return void
+     *
+     * @author Phalcon Team <team@phalcon.io>
+     * @since  2020-09-09
+     */
+    public function testHtmlHelperBreadcrumbsRenderEmpty(): void
+    {
+        $escaper     = new Escaper();
+        $helper      = new TagFactory($escaper);
+        $breadcrumbs = $helper->breadcrumbs();
+
+        $expected = '';
+        $actual   = $breadcrumbs->render();
+        $this->assertSame($expected, $actual);
+    }
 }

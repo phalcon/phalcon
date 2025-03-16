@@ -18,7 +18,6 @@ use Phalcon\Traits\Helper\Str\InterpolateTrait;
 use function array_keys;
 use function end;
 use function implode;
-
 use function rtrim;
 
 use const PHP_EOL;
@@ -27,33 +26,51 @@ use const PHP_EOL;
  * This component offers an easy way to create breadcrumbs for your application.
  * The resulting HTML when calling `render()` will have each breadcrumb enclosed
  * in `<li>` tags, while the whole string is enclosed in `<nav>` and `<ol>` tags.
+ *
+ * @phpstan-type TTemplate = array{
+ *      main: string,
+ *      line: string,
+ *      last: string,
+ * }
+ *
+ * @phpstan-type TElement = array{
+ *      text: string,
+ *      icon: string,
+ *      attributes: array<string, string>,
+ * }
  */
 class Breadcrumbs extends AbstractHelper
 {
     use InterpolateTrait;
 
     /**
-     * Keeps all the breadcrumbs
-     *
-     * @var array<string, array<string, string>>
+     * @var string
      */
-    private array $data = [];
-
+    protected string $delimiter = '';
+    /**
+     * @var string
+     */
+    protected string $indent = '    ';
     /**
      * @var array<string, string>
      */
     private array $attributes = [];
+    /**
+     * Keeps all the breadcrumbs
+     *
+     * @var array<string, TElement>
+     */
+    private array $data = [];
     /**
      * Crumb separator
      *
      * @var string
      */
     private string $separator = " / ";
-
     /**
      * The HTML template to use to render the breadcrumbs.
      *
-     * @var array
+     * @var TTemplate
      */
     private array $template = [
         'main' => '%indent%<nav%attributes%>%delimiter%'
@@ -64,17 +81,8 @@ class Breadcrumbs extends AbstractHelper
         'line' => '%indent%<li%attributes%>'
             . '<a href="%link%">%icon%%text%</a>'
             . '</li>%delimiter%',
-        'last' => '%indent%<li><span%attributes%>%text%</span></li>%delimiter%'
+        'last' => '%indent%<li><span%attributes%>%text%</span></li>%delimiter%',
     ];
-
-    /**
-     * @var string
-     */
-    protected string $delimiter = '';
-    /**
-     * @var string
-     */
-    protected string $indent = '    ';
 
     /**
      * Sets the separator and returns the object back
@@ -95,75 +103,6 @@ class Breadcrumbs extends AbstractHelper
     }
 
     /**
-     * Return the current template
-     *
-     * @return array<string, array<string, string>>
-     */
-    public function getTemplate(): array
-    {
-        return $this->template;
-    }
-
-    /**
-     * Set the attributes for the parent element
-     *
-     * @param array<string, string> $attributes
-     *
-     * @return $this
-     */
-    public function setAttributes(array $attributes): static
-    {
-        $this->attributes = $attributes;
-
-        return $this;
-    }
-
-    /**
-     * Clear the attributes of the parent element
-     *
-     * @return $this
-     */
-    public function clearAttributes(): static
-    {
-        $this->attributes = [];
-
-        return $this;
-    }
-
-    /**
-     * Get the attributes of the parent element
-     *
-     * @return array<string, string>
-     */
-    public function getAttributes(): array
-    {
-        return $this->attributes;
-    }
-
-    /**
-     * Set the HTML template
-     *
-     * @param string $main
-     * @param string $line
-     * @param string $last
-     *
-     * @return static
-     */
-    public function setTemplate(
-        string $main,
-        string $line,
-        string $last = ''
-    ): static {
-        $this->template = [
-            'main' => $main,
-            'line' => $line,
-            'last' => $last,
-        ];
-
-        return $this;
-    }
-
-    /**
      * Adds a new crumb.
      *
      * ```php
@@ -177,10 +116,10 @@ class Breadcrumbs extends AbstractHelper
      * $breadcrumbs->add("Users");
      * ```
      *
-     * @param string $text
-     * @param string $link
-     * @param string $icon
-     * @param array  $attributes
+     * @param string                $text
+     * @param string                $link
+     * @param string                $icon
+     * @param array<string, string> $attributes
      *
      * @return $this
      */
@@ -212,6 +151,28 @@ class Breadcrumbs extends AbstractHelper
     }
 
     /**
+     * Clear the attributes of the parent element
+     *
+     * @return $this
+     */
+    public function clearAttributes(): static
+    {
+        $this->attributes = [];
+
+        return $this;
+    }
+
+    /**
+     * Get the attributes of the parent element
+     *
+     * @return array<string, string>
+     */
+    public function getAttributes(): array
+    {
+        return $this->attributes;
+    }
+
+    /**
      * Returns the separator
      *
      * @return string
@@ -222,27 +183,13 @@ class Breadcrumbs extends AbstractHelper
     }
 
     /**
-     * Set the separator
+     * Return the current template
      *
-     * @param string $separator
-     *
-     * @return static
+     * @return TTemplate
      */
-    public function setSeparator(string $separator): static
+    public function getTemplate(): array
     {
-        $this->separator = $separator;
-
-        return $this;
-    }
-
-    /**
-     * Returns the internal breadcrumbs array
-     *
-     * @return array
-     */
-    public function toArray(): array
-    {
-        return $this->data;
+        return $this->template;
     }
 
     /**
@@ -273,8 +220,16 @@ class Breadcrumbs extends AbstractHelper
      */
     public function render(): string
     {
+        /**
+         * Early exit for empty data
+         */
+        if (true === empty($this->data)) {
+            return '';
+        }
+
         $output      = [];
         $urls        = array_keys($this->data);
+        /** @var string $lastUrl */
         $lastUrl     = end($urls);
         $lastElement = $this->data[$lastUrl];
 
@@ -312,9 +267,70 @@ class Breadcrumbs extends AbstractHelper
     }
 
     /**
-     * @param string                $template
-     * @param array<string, string> $element
-     * @param string                $url
+     * Set the attributes for the parent element
+     *
+     * @param array<string, string> $attributes
+     *
+     * @return $this
+     */
+    public function setAttributes(array $attributes): static
+    {
+        $this->attributes = $attributes;
+
+        return $this;
+    }
+
+    /**
+     * Set the separator
+     *
+     * @param string $separator
+     *
+     * @return static
+     */
+    public function setSeparator(string $separator): static
+    {
+        $this->separator = $separator;
+
+        return $this;
+    }
+
+    /**
+     * Set the HTML template
+     *
+     * @param string $main
+     * @param string $line
+     * @param string $last
+     *
+     * @return static
+     */
+    public function setTemplate(
+        string $main,
+        string $line,
+        string $last = ''
+    ): static {
+        $this->template = [
+            'main' => $main,
+            'line' => $line,
+            'last' => $last,
+        ];
+
+        return $this;
+    }
+
+    /**
+     * Returns the internal breadcrumbs array
+     *
+     * @return array<string, TElement>
+     */
+    public function toArray(): array
+    {
+        return $this->data;
+    }
+
+    /**
+     * @param string   $template
+     * @param TElement $element
+     * @param string   $url
      *
      * @return string
      */
@@ -323,8 +339,8 @@ class Breadcrumbs extends AbstractHelper
         array $element,
         string $url
     ): string {
-        $icon = trim($element['icon']);
-        $icon = !empty($icon) ? $icon . ' ' : '';
+        $icon       = trim($element['icon']);
+        $icon       = !empty($icon) ? $icon . ' ' : '';
         $attributes = $this->renderAttributes($element['attributes']);
         $attributes = rtrim(!empty($attributes) ? ' ' . $attributes : '');
 
