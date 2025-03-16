@@ -26,9 +26,9 @@ class Script extends AbstractSeries
      * @param string $href
      * @param array  $attributes
      *
-     * @return $this
+     * @return static
      */
-    public function add(string $href, array $attributes = [])
+    public function add(string $href, array $attributes = []): static
     {
         $this->store[] = [
             'renderFullElement',

@@ -25,7 +25,7 @@ class Body extends AbstractHelper
      *
      * @return string
      */
-    public function __invoke(array $attributes = [])
+    public function __invoke(array $attributes = []): string
     {
         return $this->renderElement('body', $attributes);
     }

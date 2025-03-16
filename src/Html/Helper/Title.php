@@ -47,12 +47,12 @@ class Title extends AbstractHelper
      * @param string $indent
      * @param string $delimiter
      *
-     * @return Title
+     * @return static
      */
     public function __invoke(
         string $indent = '    ',
         string $delimiter = PHP_EOL
-    ): Title {
+    ): static {
         $this->delimiter = $delimiter;
         $this->indent    = $indent;
 

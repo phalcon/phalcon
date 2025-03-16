@@ -31,12 +31,12 @@ abstract class AbstractSeries extends AbstractHelper
      * @param string $indent
      * @param string $delimiter
      *
-     * @return AbstractSeries
+     * @return static
      */
     public function __invoke(
         string $indent = '    ',
         string $delimiter = PHP_EOL
-    ): AbstractSeries {
+    ): static {
         $this->delimiter = $delimiter;
         $this->indent    = $indent;
         $this->store     = [];

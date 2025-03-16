@@ -25,10 +25,13 @@ class Ol extends AbstractList
      * @param array  $attributes
      * @param bool   $raw
      *
-     * @return $this
+     * @return static
      */
-    public function add(string $text, array $attributes = [], bool $raw = false)
-    {
+    public function add(
+        string $text,
+        array $attributes = [],
+        bool $raw = false
+    ): static {
         $this->store[] = [
             'renderFullElement',
             [

@@ -25,7 +25,7 @@ class Form extends AbstractHelper
      *
      * @return string
      */
-    public function __invoke(array $attributes = [])
+    public function __invoke(array $attributes = []): string
     {
         $overrides = [
             'method'  => 'post',
