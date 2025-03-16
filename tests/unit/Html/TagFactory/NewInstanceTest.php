@@ -13,11 +13,11 @@ declare(strict_types=1);
 
 namespace Phalcon\Tests\Unit\Html\TagFactory;
 
-use Phalcon\Html\Breadcrumbs;
 use Phalcon\Html\Escaper;
 use Phalcon\Html\Exception;
 use Phalcon\Html\Helper\Anchor;
 use Phalcon\Html\Helper\Base;
+use Phalcon\Html\Helper\Breadcrumbs;
 use Phalcon\Html\Helper\Body;
 use Phalcon\Html\Helper\Button;
 use Phalcon\Html\Helper\Close;
