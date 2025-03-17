@@ -55,7 +55,6 @@ jobs:
           - '8.1'
           - '8.2'
           - '8.3'
-          - '8.4'
     steps:
       - uses: actions/checkout@v4
 
@@ -108,23 +107,12 @@ jobs:
           - '8.1'
           - '8.2'
           - '8.3'
-          - '8.4'
         ts:
-          # - 'nts'
           - 'ts'
         name:
           - ubuntu-gcc
-        #          - macos-clang
-        # matrix names should be in next format:
-        #     {php}-{ts}-{os.name}-{compiler}-{arch}
         include:
-          # Linux
           - { name: ubuntu-gcc, os: ubuntu-22.04, compiler: gcc }
-#          # macOS
-#          - { name: macos-clang, os: macos-12, compiler: clang }
-#          # Windows
-#          - { php: '8.1', ts: 'ts',  arch: 'x64', name: 'windows2019-vs16', os: 'windows-2019', compiler: 'vs16' }
-#          - { php: '8.1', ts: 'nts', arch: 'x64', name: 'windows2019-vs16', os: 'windows-2019', compiler: 'vs16' }
 
     steps:
       - uses: actions/checkout@v4
@@ -481,7 +469,6 @@ jobs:
           mv cv/unit-8.1.coverage/coverage.xml      cv/03.xml
           mv cv/unit-8.2.coverage/coverage.xml      cv/04.xml
           mv cv/unit-8.3.coverage/coverage.xml      cv/05.xml
-          mv cv/unit-8.4.coverage/coverage.xml      cv/06.xml
           ls -la cv/
 
 
@@ -500,4 +487,4 @@ jobs:
             -Dsonar.sourceEncoding=UTF-8
             -Dsonar.language=php
             -Dsonar.tests=tests/
-            -Dsonar.php.coverage.reportPaths=cv/01.xml,cv/02.xml,cv/03.xml,cv/04.xml,cv/05.xml,cv/06.xml
+            -Dsonar.php.coverage.reportPaths=cv/01.xml,cv/02.xml,cv/03.xml,cv/04.xml,cv/05.xml
