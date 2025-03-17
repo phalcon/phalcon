@@ -71,9 +71,11 @@ final class RenderTest extends AbstractUnitTestCase
     <ol>
     <li><a href=\"/\">Home</a></li>
      / 
-    <li><a href=\"/invoices\"><i class=\"fa-solid fa-file-invoice\"></i> Invoices</a></li>
+    <li><a href=\"/invoices\">" .
+        "<i class=\"fa-solid fa-file-invoice\"></i> Invoices</a></li>
      / 
-    <li class=\"breadcrumb-item\" aria-label=\"breadcrumb\"><a href=\"/customers\"><i class=\"fa-solid fa-user\"></i> Customers</a></li>
+    <li class=\"breadcrumb-item\" aria-label=\"breadcrumb\">" .
+        "<a href=\"/customers\"><i class=\"fa-solid fa-user\"></i> Customers</a></li>
      / 
     <li><span aria-current=\"page\">List</span></li>
 
