@@ -33,15 +33,14 @@ final class GetSetTemplateTest extends AbstractUnitTestCase
         $breadcrumbs = new Breadcrumbs($escaper);
 
         $expected = [
-            'main' => '%indent%<nav%attributes%>%delimiter%'
-                . '%indent%<ol>%delimiter%'
-                . '%items%'
-                . '%indent%</ol>%delimiter%'
-                . '%indent%</nav>%delimiter%',
-            'line' => '%indent%<li%attributes%>'
-                . '<a href="%link%">%icon%%text%</a>'
-                . '</li>%delimiter%',
-            'last' => '%indent%<li><span%attributes%>%text%</span></li>%delimiter%'
+            'main' => "
+<nav%attributes%>
+    <ol>
+%items%
+    </ol>
+</nav>",
+            'line' => '<li%attributes%><a href="%link%">%icon%%text%</a></li>',
+            'last' => '<li><span%attributes%>%text%</span></li>',
         ];
         $actual   = $breadcrumbs->getTemplate();
         $this->assertSame($expected, $actual);
