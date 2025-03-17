@@ -66,21 +66,19 @@ final class RenderTest extends AbstractUnitTestCase
             )
         ;
 
-        $expected = '    <nav class="breadcrumb">' . PHP_EOL
-            . '    <ol>' . PHP_EOL
-            . '    <li><a href="/">Home</a></li>' . PHP_EOL
-            . '    <li><a href="/invoices">'
-                    . '<i class="fa-solid fa-file-invoice"></i> Invoices</a>'
-                . '</li>' . PHP_EOL
-            . '    <li class="breadcrumb-item" aria-label="breadcrumb">'
-                    . '<a href="/customers">'
-                    . '<i class="fa-solid fa-user"></i> Customers</a>'
-                . '</li>' . PHP_EOL
-            . '    <li>'
-                    . '<span aria-current="page">List</span>'
-                . '</li>' . PHP_EOL
-            . '    </ol>' . PHP_EOL
-            . '    </nav>' . PHP_EOL;
+        $expected = "
+<nav class=\"breadcrumb\">
+    <ol>
+    <li><a href=\"/\">Home</a></li>
+     / 
+    <li><a href=\"/invoices\"><i class=\"fa-solid fa-file-invoice\"></i> Invoices</a></li>
+     / 
+    <li class=\"breadcrumb-item\" aria-label=\"breadcrumb\"><a href=\"/customers\"><i class=\"fa-solid fa-user\"></i> Customers</a></li>
+     / 
+    <li><span aria-current=\"page\">List</span></li>
+
+    </ol>
+</nav>";
         $actual = $breadcrumbs->render();
         $this->assertSame($expected, $actual);
     }

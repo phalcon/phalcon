@@ -73,15 +73,14 @@ class Breadcrumbs extends AbstractHelper
      * @var TTemplate
      */
     private array $template = [
-        'main' => '%indent%<nav%attributes%>%delimiter%'
-            . '%indent%<ol>%delimiter%'
-            . '%items%'
-            . '%indent%</ol>%delimiter%'
-            . '%indent%</nav>%delimiter%',
-        'line' => '%indent%<li%attributes%>'
-            . '<a href="%link%">%icon%%text%</a>'
-            . '</li>%delimiter%',
-        'last' => '%indent%<li><span%attributes%>%text%</span></li>%delimiter%',
+        'main' => "
+<nav%attributes%>
+    <ol>
+%items%
+    </ol>
+</nav>",
+        'line' => '<li%attributes%><a href="%link%">%icon%%text%</a></li>',
+        'last' => '<li><span%attributes%>%text%</span></li>',
     ];
 
     /**
@@ -252,16 +251,16 @@ class Breadcrumbs extends AbstractHelper
             $lastUrl
         );
 
-        $attributes = $this->renderAttributes($this->attributes);
-        $attributes = rtrim(!empty($attributes) ? ' ' . $attributes : '');
-
         return $this->toInterpolate(
             $this->template['main'],
             [
-                'attributes' => $attributes,
+                'attributes' => $this->processAttributes($this->attributes),
                 'delimiter'  => $this->delimiter,
                 'indent'     => $this->indent,
-                'items'      => implode('', $output),
+                'items'      => implode(
+                    $this->indent . $this->separator . $this->delimiter,
+                    $output
+                ),
             ]
         );
     }
@@ -341,19 +340,30 @@ class Breadcrumbs extends AbstractHelper
     ): string {
         $icon       = trim($element['icon']);
         $icon       = !empty($icon) ? $icon . ' ' : '';
-        $attributes = $this->renderAttributes($element['attributes']);
-        $attributes = rtrim(!empty($attributes) ? ' ' . $attributes : '');
 
-        return $this->toInterpolate(
-            $template,
-            [
-                'attributes' => $attributes,
-                'delimiter'  => $this->delimiter,
-                'icon'       => $icon,
-                'indent'     => $this->indent,
-                'text'       => $this->escaper->html($element['text']),
-                'link'       => $url,
-            ]
-        );
+        return $this->indent
+            . $this->toInterpolate(
+                $template,
+                [
+                    'attributes' => $this->processAttributes($element['attributes']),
+                    'icon'       => $icon,
+                    'text'       => $this->escaper->html($element['text']),
+                    'link'       => $url,
+                ]
+            )
+            . $this->delimiter
+        ;
+    }
+
+    /**
+     * @param array<string, string> $attributes
+     *
+     * @return string
+     */
+    private function processAttributes(array $attributes): string
+    {
+        $attributes = $this->renderAttributes($attributes);
+
+        return rtrim(!empty($attributes) ? ' ' . $attributes : '');
     }
 }
