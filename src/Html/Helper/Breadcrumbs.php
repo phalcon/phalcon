@@ -19,6 +19,8 @@ use function array_key_last;
 use function implode;
 use function rtrim;
 
+use function sha1;
+
 use const PHP_EOL;
 
 /**
@@ -33,9 +35,10 @@ use const PHP_EOL;
  * }
  *
  * @phpstan-type TElement = array{
- *      text: string,
- *      icon: string,
  *      attributes: array<string, string>,
+ *      icon: string,
+ *      link: string,
+ *      text: string,
  * }
  */
 class Breadcrumbs extends AbstractHelper
@@ -119,7 +122,7 @@ class Breadcrumbs extends AbstractHelper
      * @param string                $icon
      * @param array<string, string> $attributes
      *
-     * @return $this
+     * @return static
      */
     public function add(
         string $text,
@@ -127,10 +130,12 @@ class Breadcrumbs extends AbstractHelper
         string $icon = '',
         array $attributes = []
     ): static {
-        $this->data[$link] = [
-            'text'       => $text,
-            'icon'       => $icon,
+        $key = sha1($text . $link);
+        $this->data[$key] = [
             'attributes' => $attributes,
+            'icon'       => $icon,
+            'link'       => $link,
+            'text'       => $text,
         ];
 
         return $this;
@@ -200,11 +205,16 @@ class Breadcrumbs extends AbstractHelper
      * $breadcrumbs->remove();
      * ```
      *
+     * @param string $text
      * @param string $link
+     *
+     * @return void
      */
-    public function remove(string $link): void
+    public function remove(string $text, string $link): void
     {
-        unset($this->data[$link]);
+        $key = sha1($text . $link);
+
+        unset($this->data[$key]);
     }
 
     /**
@@ -231,11 +241,10 @@ class Breadcrumbs extends AbstractHelper
 
         unset($this->data[$lastUrl]);
 
-        foreach ($this->data as $url => $element) {
+        foreach ($this->data as $element) {
             $output[] = $this->getLink(
                 $this->template['line'],
-                $element,
-                $url
+                $element
             );
         }
 
@@ -326,14 +335,12 @@ class Breadcrumbs extends AbstractHelper
     /**
      * @param string   $template
      * @param TElement $element
-     * @param string   $url
      *
      * @return string
      */
     private function getLink(
         string $template,
-        array $element,
-        string $url
+        array $element
     ): string {
         return $this->indent
             . $this->toInterpolate(
@@ -342,7 +349,7 @@ class Breadcrumbs extends AbstractHelper
                     'attributes' => $this->processAttributes($element['attributes']),
                     'icon'       => $element['icon'],
                     'text'       => $this->escaper->html($element['text']),
-                    'link'       => $url,
+                    'link'       => $element['link'],
                 ]
             )
             . $this->delimiter;
