@@ -83,7 +83,7 @@ class Breadcrumbs extends AbstractHelper
     ];
 
     /**
-     * Sets the separator and returns the object back
+     * Sets the indent and delimiter and returns the object back
      *
      * @param string $indent
      * @param string $delimiter
