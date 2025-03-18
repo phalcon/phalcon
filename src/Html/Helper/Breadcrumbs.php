@@ -15,10 +15,12 @@ namespace Phalcon\Html\Helper;
 
 use Phalcon\Traits\Helper\Str\InterpolateTrait;
 
-use function array_keys;
+use function array_key_last;
+use function array_pop;
 use function end;
 use function implode;
 use function rtrim;
+use function trim;
 
 use const PHP_EOL;
 
@@ -66,7 +68,7 @@ class Breadcrumbs extends AbstractHelper
      *
      * @var string
      */
-    private string $separator = " / ";
+    private string $separator = "<li>/</li>";
     /**
      * The HTML template to use to render the breadcrumbs.
      *
@@ -227,9 +229,7 @@ class Breadcrumbs extends AbstractHelper
         }
 
         $output      = [];
-        $urls        = array_keys($this->data);
-        /** @var string $lastUrl */
-        $lastUrl     = end($urls);
+        $lastUrl     = array_key_last($this->data);
         $lastElement = $this->data[$lastUrl];
 
         unset($this->data[$lastUrl]);
@@ -338,21 +338,18 @@ class Breadcrumbs extends AbstractHelper
         array $element,
         string $url
     ): string {
-        $icon       = trim($element['icon']);
-        $icon       = !empty($icon) ? $icon . ' ' : '';
-
         return $this->indent
             . $this->toInterpolate(
                 $template,
                 [
                     'attributes' => $this->processAttributes($element['attributes']),
-                    'icon'       => $icon,
+                    'icon'       => $element['icon'],
                     'text'       => $this->escaper->html($element['text']),
                     'link'       => $url,
                 ]
             )
             . $this->delimiter
-        ;
+            ;
     }
 
     /**

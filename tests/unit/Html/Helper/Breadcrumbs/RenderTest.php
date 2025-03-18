@@ -45,12 +45,12 @@ final class RenderTest extends AbstractUnitTestCase
             ->add(
                 'Invoices',
                 '/invoices',
-                '<i class="fa-solid fa-file-invoice"></i>'
+                '<i class="fa-solid fa-file-invoice"></i> '
             )
             ->add(
                 'Customers',
                 '/customers',
-                '<i class="fa-solid fa-user"></i>',
+                '<i class="fa-solid fa-user"></i> ',
                 [
                     'class'      => 'breadcrumb-item',
                     'aria-label' => 'breadcrumb',
@@ -70,13 +70,13 @@ final class RenderTest extends AbstractUnitTestCase
 <nav class=\"breadcrumb\">
     <ol>
     <li><a href=\"/\">Home</a></li>
-     / 
+    <li>/</li>
     <li><a href=\"/invoices\">" .
         "<i class=\"fa-solid fa-file-invoice\"></i> Invoices</a></li>
-     / 
+    <li>/</li>
     <li class=\"breadcrumb-item\" aria-label=\"breadcrumb\">" .
         "<a href=\"/customers\"><i class=\"fa-solid fa-user\"></i> Customers</a></li>
-     / 
+    <li>/</li>
     <li><span aria-current=\"page\">List</span></li>
 
     </ol>
