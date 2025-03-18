@@ -19,8 +19,6 @@ use function array_key_last;
 use function implode;
 use function rtrim;
 
-use function sha1;
-
 use const PHP_EOL;
 
 /**
@@ -130,8 +128,9 @@ class Breadcrumbs extends AbstractHelper
         string $icon = '',
         array $attributes = []
     ): static {
-        $key = sha1($text . $link);
-        $this->data[$key] = [
+        $count = count($this->data);
+        $count++;
+        $this->data[$count] = [
             'attributes' => $attributes,
             'icon'       => $icon,
             'link'       => $link,
@@ -199,22 +198,17 @@ class Breadcrumbs extends AbstractHelper
      * Removes crumb by url.
      *
      * ```php
-     * $breadcrumbs->remove("/admin/user/create");
-     *
-     * // remove a crumb without an url (last link)
-     * $breadcrumbs->remove();
+     * // Remove the second element
+     * $breadcrumbs->remove(2);
      * ```
      *
-     * @param string $text
-     * @param string $link
+     * @param int $index
      *
      * @return void
      */
-    public function remove(string $text, string $link): void
+    public function remove(int $index): void
     {
-        $key = sha1($text . $link);
-
-        unset($this->data[$key]);
+        unset($this->data[$index]);
     }
 
     /**
@@ -242,20 +236,13 @@ class Breadcrumbs extends AbstractHelper
         unset($this->data[$lastUrl]);
 
         foreach ($this->data as $element) {
-            $output[] = $this->getLink(
-                $this->template['line'],
-                $element
-            );
+            $output[] = $this->getLink($this->template['line'], $element);
         }
 
         /**
          * Last element
          */
-        $output[] = $this->getLink(
-            $this->template['last'],
-            $lastElement,
-            $lastUrl
-        );
+        $output[] = $this->getLink($this->template['last'], $lastElement);
 
         return $this->toInterpolate(
             $this->template['main'],
