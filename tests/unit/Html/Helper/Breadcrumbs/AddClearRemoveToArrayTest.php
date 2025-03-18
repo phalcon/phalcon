@@ -54,7 +54,7 @@ final class AddClearRemoveToArrayTest extends AbstractUnitTestCase
         );
 
         $expected = [
-            '/'     => [
+            '/'         => [
                 'text'       => 'Home',
                 'icon'       => '',
                 'attributes' => [],
@@ -79,12 +79,12 @@ final class AddClearRemoveToArrayTest extends AbstractUnitTestCase
         );
 
         $expected = [
-            '/'           => [
+            '/'          => [
                 'text'       => 'Home',
                 'icon'       => '',
                 'attributes' => [],
             ],
-            '/invoices'       => [
+            '/invoices'  => [
                 'text'       => 'Invoices',
                 'icon'       => '<i class="fa-solid fa-file-invoice"></i>',
                 'attributes' => [],
@@ -106,7 +106,7 @@ final class AddClearRemoveToArrayTest extends AbstractUnitTestCase
          */
         $breadcrumbs->remove('/invoices');
         $expected = [
-            '/'           => [
+            '/'          => [
                 'text'       => 'Home',
                 'icon'       => '',
                 'attributes' => [],
