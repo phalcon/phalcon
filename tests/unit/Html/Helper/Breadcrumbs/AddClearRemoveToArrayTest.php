@@ -38,7 +38,7 @@ final class AddClearRemoveToArrayTest extends AbstractUnitTestCase
         $breadcrumbs->add('Home', '/');
 
         $expected = [
-            '75192c92acf8997b8863087bb3428b3b250c4e9b' => [
+            1 => [
                 'attributes' => [],
                 'icon'       => '',
                 'link'       => '/',
@@ -55,13 +55,13 @@ final class AddClearRemoveToArrayTest extends AbstractUnitTestCase
         );
 
         $expected = [
-            '75192c92acf8997b8863087bb3428b3b250c4e9b' => [
+            1 => [
                 'attributes' => [],
                 'icon'       => '',
                 'link'       => '/',
                 'text'       => 'Home',
             ],
-            '69036aa2fcdac6c8fd29fea71aad03943af4a162' => [
+            2 => [
                 'attributes' => [],
                 'icon'       => '<i class="fa-solid fa-file-invoice"></i>',
                 'link'       => '/invoices',
@@ -82,19 +82,19 @@ final class AddClearRemoveToArrayTest extends AbstractUnitTestCase
         );
 
         $expected = [
-            '75192c92acf8997b8863087bb3428b3b250c4e9b' => [
+            1 => [
                 'attributes' => [],
                 'icon'       => '',
                 'link'       => '/',
                 'text'       => 'Home',
             ],
-            '69036aa2fcdac6c8fd29fea71aad03943af4a162' => [
+            2 => [
                 'attributes' => [],
                 'icon'       => '<i class="fa-solid fa-file-invoice"></i>',
                 'link'       => '/invoices',
                 'text'       => 'Invoices',
             ],
-            '2ffff299327c2b373331240e28352b65f47ef006' => [
+            3 => [
                 'attributes' => [
                     'class'      => 'breadcrumb-item',
                     'aria-label' => 'breadcrumb',
@@ -110,15 +110,15 @@ final class AddClearRemoveToArrayTest extends AbstractUnitTestCase
         /**
          * remove()
          */
-        $breadcrumbs->remove('Invoices', '/invoices');
+        $breadcrumbs->remove(2);
         $expected = [
-            '75192c92acf8997b8863087bb3428b3b250c4e9b' => [
+            1 => [
                 'attributes' => [],
                 'icon'       => '',
                 'link'       => '/',
                 'text'       => 'Home',
             ],
-            '2ffff299327c2b373331240e28352b65f47ef006' => [
+            3 => [
                 'attributes' => [
                     'class'      => 'breadcrumb-item',
                     'aria-label' => 'breadcrumb',
