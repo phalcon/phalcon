@@ -17,8 +17,6 @@ use Phalcon\Html\Escaper;
 use Phalcon\Html\TagFactory;
 use Phalcon\Tests\AbstractUnitTestCase;
 
-use const PHP_EOL;
-
 final class RenderTest extends AbstractUnitTestCase
 {
     /**
@@ -72,16 +70,16 @@ final class RenderTest extends AbstractUnitTestCase
     <li><a href=\"/\">Home</a></li>
     <li>/</li>
     <li><a href=\"/invoices\">" .
-        "<i class=\"fa-solid fa-file-invoice\"></i> Invoices</a></li>
+            "<i class=\"fa-solid fa-file-invoice\"></i> Invoices</a></li>
     <li>/</li>
     <li class=\"breadcrumb-item\" aria-label=\"breadcrumb\">" .
-        "<a href=\"/customers\"><i class=\"fa-solid fa-user\"></i> Customers</a></li>
+            "<a href=\"/customers\"><i class=\"fa-solid fa-user\"></i> Customers</a></li>
     <li>/</li>
     <li><span aria-current=\"page\">List</span></li>
 
     </ol>
 </nav>";
-        $actual = $breadcrumbs->render();
+        $actual   = $breadcrumbs->render();
         $this->assertSame($expected, $actual);
     }
 

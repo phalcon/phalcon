@@ -16,11 +16,8 @@ namespace Phalcon\Html\Helper;
 use Phalcon\Traits\Helper\Str\InterpolateTrait;
 
 use function array_key_last;
-use function array_pop;
-use function end;
 use function implode;
 use function rtrim;
-use function trim;
 
 use const PHP_EOL;
 
@@ -348,8 +345,7 @@ class Breadcrumbs extends AbstractHelper
                     'link'       => $url,
                 ]
             )
-            . $this->delimiter
-            ;
+            . $this->delimiter;
     }
 
     /**
