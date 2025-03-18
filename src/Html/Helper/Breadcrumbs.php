@@ -298,7 +298,7 @@ class Breadcrumbs extends AbstractHelper
     public function setTemplate(
         string $main,
         string $line,
-        string $last = ''
+        string $last
     ): static {
         $this->template = [
             'main' => $main,
