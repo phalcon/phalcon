@@ -58,7 +58,7 @@ class Breadcrumbs extends AbstractHelper
     /**
      * Keeps all the breadcrumbs
      *
-     * @var array<string, TElement>
+     * @var array<int, TElement>
      */
     private array $data = [];
     /**
@@ -312,7 +312,7 @@ class Breadcrumbs extends AbstractHelper
     /**
      * Returns the internal breadcrumbs array
      *
-     * @return array<string, TElement>
+     * @return array<int, TElement>
      */
     public function toArray(): array
     {
