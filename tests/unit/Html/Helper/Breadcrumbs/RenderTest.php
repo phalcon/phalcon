@@ -84,6 +84,49 @@ final class RenderTest extends AbstractUnitTestCase
     }
 
     /**
+     * Tests Phalcon\Html\Breadcrumbs :: render() with same href
+     *
+     * @return void
+     *
+     * @author Phalcon Team <team@phalcon.io>
+     * @since  2020-09-09
+     */
+    public function testHtmlHelperBreadcrumbsRenderWithSameHref(): void
+    {
+        $escaper     = new Escaper();
+        $helper      = new TagFactory($escaper);
+        $breadcrumbs = $helper->breadcrumbs();
+
+        $breadcrumbs
+            ->setAttributes(
+                [
+                    'class' => 'breadcrumb',
+                ]
+            )
+            ->add('Home', '#')
+            ->add('Invoices', '#')
+            ->add('Customers', '#')
+            ->add('List')
+        ;
+
+        $expected = "
+<nav class=\"breadcrumb\">
+    <ol>
+    <li><a href=\"#\">Home</a></li>
+    <li>/</li>
+    <li><a href=\"#\">Invoices</a></li>
+    <li>/</li>
+    <li><a href=\"#\">Customers</a></li>
+    <li>/</li>
+    <li><span>List</span></li>
+
+    </ol>
+</nav>";
+        $actual   = $breadcrumbs->render();
+        $this->assertSame($expected, $actual);
+    }
+
+    /**
      * Tests Phalcon\Html\Breadcrumbs :: render() empty
      *
      * @return void

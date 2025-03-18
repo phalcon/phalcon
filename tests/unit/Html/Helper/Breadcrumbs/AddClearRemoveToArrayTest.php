@@ -38,10 +38,11 @@ final class AddClearRemoveToArrayTest extends AbstractUnitTestCase
         $breadcrumbs->add('Home', '/');
 
         $expected = [
-            '/' => [
-                'text'       => 'Home',
-                'icon'       => '',
+            '75192c92acf8997b8863087bb3428b3b250c4e9b' => [
                 'attributes' => [],
+                'icon'       => '',
+                'link'       => '/',
+                'text'       => 'Home',
             ],
         ];
         $actual   = $breadcrumbs->toArray();
@@ -54,15 +55,17 @@ final class AddClearRemoveToArrayTest extends AbstractUnitTestCase
         );
 
         $expected = [
-            '/'         => [
-                'text'       => 'Home',
+            '75192c92acf8997b8863087bb3428b3b250c4e9b' => [
+                'attributes' => [],
                 'icon'       => '',
-                'attributes' => [],
+                'link'       => '/',
+                'text'       => 'Home',
             ],
-            '/invoices' => [
-                'text'       => 'Invoices',
-                'icon'       => '<i class="fa-solid fa-file-invoice"></i>',
+            '69036aa2fcdac6c8fd29fea71aad03943af4a162' => [
                 'attributes' => [],
+                'icon'       => '<i class="fa-solid fa-file-invoice"></i>',
+                'link'       => '/invoices',
+                'text'       => 'Invoices',
             ],
         ];
         $actual   = $breadcrumbs->toArray();
@@ -79,23 +82,26 @@ final class AddClearRemoveToArrayTest extends AbstractUnitTestCase
         );
 
         $expected = [
-            '/'          => [
-                'text'       => 'Home',
+            '75192c92acf8997b8863087bb3428b3b250c4e9b' => [
+                'attributes' => [],
                 'icon'       => '',
-                'attributes' => [],
+                'link'       => '/',
+                'text'       => 'Home',
             ],
-            '/invoices'  => [
-                'text'       => 'Invoices',
+            '69036aa2fcdac6c8fd29fea71aad03943af4a162' => [
+                'attributes' => [],
                 'icon'       => '<i class="fa-solid fa-file-invoice"></i>',
-                'attributes' => [],
+                'link'       => '/invoices',
+                'text'       => 'Invoices',
             ],
-            '/customers' => [
-                'text'       => 'Customers',
-                'icon'       => '<i class="fa-solid fa-user"></i>',
+            '2ffff299327c2b373331240e28352b65f47ef006' => [
                 'attributes' => [
                     'class'      => 'breadcrumb-item',
                     'aria-label' => 'breadcrumb',
                 ],
+                'icon'       => '<i class="fa-solid fa-user"></i>',
+                'link'       => '/customers',
+                'text'       => 'Customers',
             ],
         ];
         $actual   = $breadcrumbs->toArray();
@@ -104,20 +110,22 @@ final class AddClearRemoveToArrayTest extends AbstractUnitTestCase
         /**
          * remove()
          */
-        $breadcrumbs->remove('/invoices');
+        $breadcrumbs->remove('Invoices', '/invoices');
         $expected = [
-            '/'          => [
-                'text'       => 'Home',
-                'icon'       => '',
+            '75192c92acf8997b8863087bb3428b3b250c4e9b' => [
                 'attributes' => [],
+                'icon'       => '',
+                'link'       => '/',
+                'text'       => 'Home',
             ],
-            '/customers' => [
-                'text'       => 'Customers',
-                'icon'       => '<i class="fa-solid fa-user"></i>',
+            '2ffff299327c2b373331240e28352b65f47ef006' => [
                 'attributes' => [
                     'class'      => 'breadcrumb-item',
                     'aria-label' => 'breadcrumb',
                 ],
+                'icon'       => '<i class="fa-solid fa-user"></i>',
+                'link'       => '/customers',
+                'text'       => 'Customers',
             ],
         ];
         $actual   = $breadcrumbs->toArray();
