@@ -15,6 +15,8 @@ namespace Phalcon\Mvc\Micro;
 
 use Phalcon\Mvc\Model\BinderInterface;
 
+use function array_values;
+
 /**
  * Lazy-Load of handlers for Mvc\Micro using auto-loading
  */
@@ -77,7 +79,7 @@ class LazyLoader
          */
         return call_user_func_array(
             [$this->handler, $method],
-            $arguments
+            array_values($arguments)
         );
     }
 
