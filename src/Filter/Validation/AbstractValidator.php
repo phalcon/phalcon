@@ -39,7 +39,7 @@ abstract class AbstractValidator implements ValidatorInterface
      *
      * @var string|null
      */
-    protected ?string $template = null;
+    protected string | null $template = null;
 
     /**
      * Message templates
@@ -52,10 +52,10 @@ abstract class AbstractValidator implements ValidatorInterface
      * Phalcon\Filter\Validation\Validator constructor
      *
      * @param mixed[] $options {
-     *     $option string "message"
-     *     $option string "template"
-     *     $option bool   "allowEmpty"
-     * }
+     *                         $option string "message"
+     *                         $option string "template"
+     *                         $option bool   "allowEmpty"
+     *                         }
      */
     public function __construct(array $options = [])
     {
@@ -118,7 +118,7 @@ abstract class AbstractValidator implements ValidatorInterface
      *
      * @return string
      */
-    public function getTemplate(string $field = null): string
+    public function getTemplate(string | null $field = null): string
     {
         // there is a template in field
         if (null !== $field && isset($this->templates[$field])) {

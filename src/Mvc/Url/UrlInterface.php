@@ -28,9 +28,9 @@ interface UrlInterface
      * @return string
      */
     public function get(
-        array | string $uri = null,
-        array | object $arguments = null,
-        bool $local = null
+        array | string | null $uri = null,
+        array | object | null $arguments = null,
+        bool | null $local = null
     ): string;
 
     /**
@@ -54,7 +54,7 @@ interface UrlInterface
      *
      * @return string
      */
-    public function path(?string $path = null): string;
+    public function path(string | null $path = null): string;
 
     /**
      * Sets a base paths for all the generated paths

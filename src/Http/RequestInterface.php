@@ -53,7 +53,7 @@ interface RequestInterface
      * @todo check the filters here
      */
     public function get(
-        string $name = null,
+        string | null $name = null,
         mixed $filters = null,
         mixed $defaultValue = null,
         bool $notAllowEmpty = false,
@@ -74,7 +74,7 @@ interface RequestInterface
      *
      * @return array|null
      */
-    public function getBasicAuth(): ?array;
+    public function getBasicAuth(): array | null;
 
     /**
      * Return the best mime/type accepted by the browser/client from
@@ -124,7 +124,7 @@ interface RequestInterface
      *
      * @return string|null
      */
-    public function getContentType(): ?string;
+    public function getContentType(): string | null;
 
     /**
      * Return the auth info accepted by the browser/client from
@@ -267,7 +267,7 @@ interface RequestInterface
      * @todo check the filters
      */
     public function getPost(
-        string $name = null,
+        string | null $name = null,
         mixed $filters = null,
         mixed $defaultValue = null,
         bool $notAllowEmpty = false,
@@ -295,7 +295,7 @@ interface RequestInterface
      * @todo check the filters
      */
     public function getPut(
-        string $name = null,
+        string | null $name = null,
         mixed $filters = null,
         mixed $defaultValue = null,
         bool $notAllowEmpty = false,
@@ -327,7 +327,7 @@ interface RequestInterface
      * @todo check the filters
      */
     public function getQuery(
-        string $name = null,
+        string | null $name = null,
         mixed $filters = null,
         mixed $defaultValue = null,
         bool $notAllowEmpty = false,
@@ -355,7 +355,7 @@ interface RequestInterface
      *
      * @return string|null
      */
-    public function getServer(string $name): ?string;
+    public function getServer(string $name): string | null;
 
     /**
      * Return the active server address IP

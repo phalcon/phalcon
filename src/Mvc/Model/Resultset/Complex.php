@@ -54,8 +54,8 @@ class Complex extends Resultset implements ResultsetInterface
      * @throws Exception
      */
     public function __construct(
-        protected ?array $columnTypes,
-        ?ResultInterface $result = null,
+        protected array | null $columnTypes,
+        ResultInterface | null $result = null,
         mixed $cache = null
     ) {
         parent::__construct($result, $cache);

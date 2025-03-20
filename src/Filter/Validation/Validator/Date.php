@@ -63,7 +63,7 @@ class Date extends AbstractValidator
     /**
      * @var string|null
      */
-    protected ?string $template = "Field :field is not a valid date";
+    protected string | null $template = "Field :field is not a valid date";
 
     /**
      * Executes the validation

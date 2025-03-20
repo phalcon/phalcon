@@ -20,14 +20,14 @@ use function property_exists;
 
 trait EventsAwareTrait
 {
-    protected ?ManagerInterface $eventsManager = null;
+    protected ManagerInterface | null $eventsManager = null;
 
     /**
      * Returns the internal event manager
      *
      * @return ManagerInterface|null
      */
-    public function getEventsManager(): ?ManagerInterface
+    public function getEventsManager(): ManagerInterface | null
     {
         return $this->eventsManager;
     }

@@ -46,12 +46,12 @@ interface DiInterface extends ArrayAccess
      *
      * @return mixed
      */
-    public function get(string $name, array $parameters = null): mixed;
+    public function get(string $name, array | null $parameters = null): mixed;
 
     /**
      * Return the last DI created
      */
-    public static function getDefault(): ?DiInterface;
+    public static function getDefault(): DiInterface | null;
 
     /**
      * Returns a service definition without resolving
@@ -86,7 +86,7 @@ interface DiInterface extends ArrayAccess
      *
      * @return mixed
      */
-    public function getShared(string $name, array $parameters = null): mixed;
+    public function getShared(string $name, array | null $parameters = null): mixed;
 
     /**
      * Check whether the DI contains a service by a name

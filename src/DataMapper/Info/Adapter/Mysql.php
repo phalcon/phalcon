@@ -20,9 +20,6 @@ namespace Phalcon\DataMapper\Info\Adapter;
 
 use Phalcon\DataMapper\Pdo\Exception\Exception;
 
-use function str_contains;
-use function trim;
-
 /**
  * @phpstan-import-type ColumnDefinitionSql from AdapterInterface
  * @phpstan-import-type ColumnDefinition from AdapterInterface

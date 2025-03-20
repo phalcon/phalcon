@@ -33,7 +33,7 @@ interface ProfilerInterface
      *
      * @return void
      */
-    public function finish(string $statement = null, array $values = []): void;
+    public function finish(string | null $statement = null, array $values = []): void;
 
     /**
      * Returns the log message format string, with placeholders.
@@ -54,7 +54,7 @@ interface ProfilerInterface
      *
      * @return LoggerInterface|null
      */
-    public function getLogger(): ?LoggerInterface;
+    public function getLogger(): LoggerInterface | null;
 
     /**
      * Returns true if logging is active.

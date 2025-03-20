@@ -111,7 +111,7 @@ final class Uri extends AbstractCommon implements UriInterface
      *
      * @var int|null
      */
-    protected ?int $port = null;
+    protected int | null $port = null;
 
     /**
      * Returns the query of the URL
@@ -312,7 +312,7 @@ final class Uri extends AbstractCommon implements UriInterface
      *
      * @return int|null
      */
-    public function getPort(): ?int
+    public function getPort(): int | null
     {
         return $this->port;
     }
@@ -463,7 +463,7 @@ final class Uri extends AbstractCommon implements UriInterface
      * @return Uri
      * @throws InvalidArgumentException for invalid ports.
      */
-    public function withPort(?int $port): UriInterface
+    public function withPort(int | null $port): UriInterface
     {
         return $this->cloneInstance(
             $this->filterPort($port),
@@ -530,7 +530,7 @@ final class Uri extends AbstractCommon implements UriInterface
      */
     public function withUserInfo(
         string $user,
-        ?string $password = null
+        string | null $password = null
     ): UriInterface {
         $userInfo = $this->filterUserInfo($user);
         if (null !== $password) {
@@ -645,11 +645,11 @@ final class Uri extends AbstractCommon implements UriInterface
     /**
      * Filters the port
      *
-     * @param ?int $port
+     * @param int | null $port
      *
      * @return int|null
      */
-    private function filterPort(?int $port): ?int
+    private function filterPort(int | null $port): int | null
     {
         if (null === $port) {
             return null;

@@ -60,7 +60,7 @@ class Identical extends AbstractValidator
     /**
      * @var string|null
      */
-    protected ?string $template = "Field :field does not have the expected value";
+    protected string | null $template = "Field :field does not have the expected value";
 
     /**
      * Executes the validation

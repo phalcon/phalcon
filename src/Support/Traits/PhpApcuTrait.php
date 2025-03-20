@@ -13,8 +13,6 @@ declare(strict_types=1);
 
 namespace Phalcon\Support\Traits;
 
-use APCuIterator;
-
 use function apcu_dec;
 use function apcu_delete;
 use function apcu_exists;
@@ -39,7 +37,7 @@ trait PhpApcuTrait
         int $step = 1,
         ?bool &$success = null,
         int $ttl = 0
-    ): int|false {
+    ): int | false {
         return apcu_dec($key, $step, $success, $ttl);
     }
 
@@ -50,7 +48,7 @@ trait PhpApcuTrait
      *
      * @link https://php.net/manual/en/function.apcu-delete.php
      */
-    protected function phpApcuDelete(array|string $key): bool|array
+    protected function phpApcuDelete(array | string $key): bool | array
     {
         return apcu_delete($key);
     }
@@ -62,7 +60,7 @@ trait PhpApcuTrait
      *
      * @link https://php.net/manual/en/function.apcu-exists.php
      */
-    protected function phpApcuExists(array|string $key): bool|array
+    protected function phpApcuExists(array | string $key): bool | array
     {
         return apcu_exists($key);
     }
@@ -76,7 +74,7 @@ trait PhpApcuTrait
      * @link https://php.net/manual/en/function.apcu-fetch.php
      */
     protected function phpApcuFetch(
-        array|string $key,
+        array | string $key,
         ?bool &$success = null
     ): mixed {
         return apcu_fetch($key, $success);
@@ -97,7 +95,7 @@ trait PhpApcuTrait
         int $step = 1,
         ?bool &$success = null,
         int $ttl = 0
-    ): false|int {
+    ): false | int {
         return apcu_inc($key, $step, $success, $ttl);
     }
 
@@ -111,10 +109,10 @@ trait PhpApcuTrait
      * @link https://php.net/manual/en/function.apcu-store.php
      */
     protected function phpApcuStore(
-        array|string $key,
+        array | string $key,
         mixed $var,
         int $ttl = 0
-    ): array|bool {
+    ): array | bool {
         return apcu_store($key, $var, $ttl);
     }
 }

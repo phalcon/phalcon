@@ -97,7 +97,7 @@ class Micro extends Injectable implements ArrayAccess, EventsAwareInterface
     /**
      * @var BinderInterface|null
      */
-    protected ?BinderInterface $modelBinder = null;
+    protected BinderInterface | null $modelBinder = null;
 
     /**
      * @var callable|null
@@ -117,7 +117,7 @@ class Micro extends Injectable implements ArrayAccess, EventsAwareInterface
     /**
      * @var RouterInterface|null
      */
-    protected ?RouterInterface $router = null;
+    protected RouterInterface | null $router = null;
 
     /**
      * @var bool
@@ -127,7 +127,7 @@ class Micro extends Injectable implements ArrayAccess, EventsAwareInterface
     /**
      * Phalcon\Mvc\Micro constructor
      */
-    public function __construct(DiInterface $container = null)
+    public function __construct(DiInterface | null $container = null)
     {
         if (null !== $container) {
             $this->setDi($container);
@@ -338,10 +338,10 @@ class Micro extends Injectable implements ArrayAccess, EventsAwareInterface
      *
      * @param string $uri
      *
-     * @throws EventsException
+     * @return mixed
      * @throws Exception
      * @throws Throwable
-     * @return mixed
+     * @throws EventsException
      */
     public function handle(string $uri): mixed
     {
@@ -759,8 +759,8 @@ class Micro extends Injectable implements ArrayAccess, EventsAwareInterface
      *
      * @param CollectionInterface $collection
      *
-     * @throws Exception
      * @return $this
+     * @throws Exception
      */
     public function mount(CollectionInterface $collection): Micro
     {

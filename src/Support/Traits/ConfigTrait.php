@@ -15,8 +15,6 @@ namespace Phalcon\Support\Traits;
 
 use Phalcon\Config\ConfigInterface;
 
-use function is_array;
-
 trait ConfigTrait
 {
     /**

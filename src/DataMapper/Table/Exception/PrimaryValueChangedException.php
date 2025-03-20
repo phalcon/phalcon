@@ -33,8 +33,8 @@ class PrimaryValueChangedException extends Exception
      */
     public function __construct(string $column, mixed $old, mixed $new)
     {
-        $old     = var_export($old, true);
-        $new     = var_export($new, true);
+        $old = var_export($old, true);
+        $new = var_export($new, true);
 
         parent::__construct(
             "Primary key value for [$column] changed from [$old] to [$new]."

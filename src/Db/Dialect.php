@@ -19,7 +19,6 @@ use function explode;
 use function implode;
 use function is_array;
 use function is_string;
-use function join;
 use function range;
 use function str_replace;
 use function strlen;
@@ -1448,7 +1447,7 @@ abstract class Dialect implements DialectInterface
      */
     protected function prepareTable(
         string $tableName,
-        ?string $schemaName = null,
+        string | null $schemaName = null,
         string $alias = "",
         string $escapeChar = ""
     ): string {

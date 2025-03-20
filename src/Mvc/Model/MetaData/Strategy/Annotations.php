@@ -26,9 +26,9 @@ class Annotations implements StrategyInterface
      * @param ModelInterface $model
      * @param DiInterface    $container
      *
-     * @throws Exception
-     * @throws \Phalcon\Annotations\Parser\Exception
      * @return array
+     * @throws \Phalcon\Annotations\Parser\Exception
+     * @throws Exception
      */
     public function getColumnMaps(ModelInterface $model, DiInterface $container): array
     {
@@ -81,9 +81,9 @@ class Annotations implements StrategyInterface
      * @param ModelInterface $model
      * @param DiInterface    $container
      *
-     * @throws Exception
-     * @throws \Phalcon\Annotations\Parser\Exception
      * @return array
+     * @throws \Phalcon\Annotations\Parser\Exception
+     * @throws Exception
      */
     public function getMetaData(ModelInterface $model, DiInterface $container): array
     {
@@ -92,7 +92,7 @@ class Annotations implements StrategyInterface
         /**
          * Initialize meta-data
          */
-        $annotations        = [];
+        $annotations       = [];
         $primaryKeys       = [];
         $nonPrimaryKeys    = [];
         $numericTyped      = [];
@@ -135,49 +135,49 @@ class Annotations implements StrategyInterface
 
             $fieldTypes[$columnName] = match ($feature) {
                 "biginteger" => Column::TYPE_BIGINTEGER,
-                "bit" => Column::TYPE_BIT,
-                "blob" => Column::TYPE_BLOB,
-                "boolean" => Column::TYPE_BOOLEAN,
-                "char" => Column::TYPE_CHAR,
-                "date" => Column::TYPE_DATE,
-                "datetime" => Column::TYPE_DATETIME,
-                "decimal" => Column::TYPE_DECIMAL,
-                "double" => Column::TYPE_DOUBLE,
-                "enum" => Column::TYPE_ENUM,
-                "float" => Column::TYPE_FLOAT,
-                "integer" => Column::TYPE_INTEGER,
-                "json" => Column::TYPE_JSON,
-                "jsonb" => Column::TYPE_JSONB,
-                "longblob" => Column::TYPE_LONGBLOB,
-                "longtext" => Column::TYPE_LONGTEXT,
+                "bit"        => Column::TYPE_BIT,
+                "blob"       => Column::TYPE_BLOB,
+                "boolean"    => Column::TYPE_BOOLEAN,
+                "char"       => Column::TYPE_CHAR,
+                "date"       => Column::TYPE_DATE,
+                "datetime"   => Column::TYPE_DATETIME,
+                "decimal"    => Column::TYPE_DECIMAL,
+                "double"     => Column::TYPE_DOUBLE,
+                "enum"       => Column::TYPE_ENUM,
+                "float"      => Column::TYPE_FLOAT,
+                "integer"    => Column::TYPE_INTEGER,
+                "json"       => Column::TYPE_JSON,
+                "jsonb"      => Column::TYPE_JSONB,
+                "longblob"   => Column::TYPE_LONGBLOB,
+                "longtext"   => Column::TYPE_LONGTEXT,
                 "mediumblob" => Column::TYPE_MEDIUMBLOB,
-                "mediumint" => Column::TYPE_MEDIUMINTEGER,
+                "mediumint"  => Column::TYPE_MEDIUMINTEGER,
                 "mediumtext" => Column::TYPE_MEDIUMTEXT,
-                "smallint" => Column::TYPE_SMALLINTEGER,
-                "text" => Column::TYPE_TEXT,
-                "time" => Column::TYPE_TIME,
-                "timestamp" => Column::TYPE_TIMESTAMP,
-                "tinyblob" => Column::TYPE_TINYBLOB,
-                "tinyint" => Column::TYPE_TINYINTEGER,
-                "tinytext" => Column::TYPE_TINYTEXT,
-                default => Column::TYPE_VARCHAR,
+                "smallint"   => Column::TYPE_SMALLINTEGER,
+                "text"       => Column::TYPE_TEXT,
+                "time"       => Column::TYPE_TIME,
+                "timestamp"  => Column::TYPE_TIMESTAMP,
+                "tinyblob"   => Column::TYPE_TINYBLOB,
+                "tinyint"    => Column::TYPE_TINYINTEGER,
+                "tinytext"   => Column::TYPE_TINYTEXT,
+                default      => Column::TYPE_VARCHAR,
             };
 
             $fieldBindTypes[$columnName] = match ($feature) {
                 "decimal",
                 "double",
-                "float" => Column::BIND_PARAM_DECIMAL,
+                "float"    => Column::BIND_PARAM_DECIMAL,
                 "blob",
                 "mediumblob",
                 "longblob",
                 "tinyblob" => Column::BIND_PARAM_BLOB,
-                "boolean" => Column::BIND_PARAM_BOOL,
+                "boolean"  => Column::BIND_PARAM_BOOL,
                 "mediumint",
                 "smallint",
                 "tinyint",
                 "bit",
-                "integer" => Column::BIND_PARAM_INT,
-                default => Column::BIND_PARAM_STR,
+                "integer"  => Column::BIND_PARAM_INT,
+                default    => Column::BIND_PARAM_STR,
             };
 
             $numericTyped[$columnName] = match ($feature) {
@@ -191,7 +191,7 @@ class Annotations implements StrategyInterface
                 "mediumint",
                 "smallint",
                 "tinyint" => true,
-                default => false,
+                default   => false,
             };
 
             /**
@@ -275,8 +275,8 @@ class Annotations implements StrategyInterface
      * @param ModelInterface $model
      * @param DiInterface    $container
      *
-     * @throws Exception
      * @return Collection[]
+     * @throws Exception
      */
     private function getProperties(ModelInterface $model, DiInterface $container): array
     {

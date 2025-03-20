@@ -25,7 +25,7 @@ class LazyLoader
     /**
      * @var object|null
      */
-    protected ?object $handler = null;
+    protected object | null $handler = null;
 
     /**
      * Phalcon\Mvc\Micro\LazyLoader constructor
@@ -50,7 +50,7 @@ class LazyLoader
     public function callMethod(
         string $method,
         array $arguments,
-        BinderInterface $modelBinder = null
+        BinderInterface | null $modelBinder = null
     ): mixed {
         $definition = $this->definition;
 

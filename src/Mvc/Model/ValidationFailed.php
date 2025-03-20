@@ -13,7 +13,6 @@ declare(strict_types=1);
 
 namespace Phalcon\Mvc\Model;
 
-use Phalcon\Messages\Message;
 use Phalcon\Mvc\ModelInterface;
 
 /**

@@ -28,31 +28,6 @@ abstract class AbstractTableSelect extends Select
     protected AbstractTable $table;
 
     /**
-     * Returns a new TableSelect object.
-     *
-     * @param mixed $argument
-     * @param mixed ...$arguments
-     *
-     * @return static
-     */
-    public static function new(mixed $argument, mixed ...$arguments): static
-    {
-        /** @var array $whereEquals */
-        $whereEquals = array_pop($arguments) ?? [];
-
-        /** @var AbstractTable $table */
-        $table  = array_pop($arguments);
-        $select = parent::new($argument, ...$arguments);
-
-        $select->table = $table;
-
-        $select->from($select->quoteIdentifier($table::NAME));
-        $select->whereEquals($whereEquals);
-
-        return $select;
-    }
-
-    /**
      * Return the number of rows in the result set.
      *
      * @param string $column
@@ -77,7 +52,7 @@ abstract class AbstractTableSelect extends Select
     /**
      * @return AbstractRow|null
      */
-    public function fetchRow(): ?AbstractRow
+    public function fetchRow(): AbstractRow | null
     {
         $columns = $this->fetchOne();
 
@@ -99,5 +74,30 @@ abstract class AbstractTableSelect extends Select
         }
 
         return $rows;
+    }
+
+    /**
+     * Returns a new TableSelect object.
+     *
+     * @param mixed $argument
+     * @param mixed ...$arguments
+     *
+     * @return static
+     */
+    public static function new(mixed $argument, mixed ...$arguments): static
+    {
+        /** @var array $whereEquals */
+        $whereEquals = array_pop($arguments) ?? [];
+
+        /** @var AbstractTable $table */
+        $table  = array_pop($arguments);
+        $select = parent::new($argument, ...$arguments);
+
+        $select->table = $table;
+
+        $select->from($select->quoteIdentifier($table::NAME));
+        $select->whereEquals($whereEquals);
+
+        return $select;
     }
 }

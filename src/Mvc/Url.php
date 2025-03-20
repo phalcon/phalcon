@@ -47,24 +47,19 @@ class Url extends AbstractInjectionAware implements UrlInterface
     /**
      * @var string|null
      */
-    protected ?string $basePath = null;
+    protected string | null $basePath = null;
     /**
      * @var string|null
      */
-    protected ?string $baseUri = null;
-    /**
-     * @var RouterInterface|null
-     */
-    protected ?RouterInterface $router = null;
-
+    protected string | null $baseUri = null;
     /**
      * @var string|null
      */
-    protected ?string $staticBaseUri = null;
+    protected string | null $staticBaseUri = null;
 
-    public function __construct(RouterInterface $router = null)
-    {
-        $this->router = $router;
+    public function __construct(
+        protected RouterInterface | null $router = null
+    ) {
     }
 
     /**
@@ -111,9 +106,9 @@ class Url extends AbstractInjectionAware implements UrlInterface
      * @throws Exception
      */
     public function get(
-        array | string $uri = null,
+        array | string | null $uri = null,
         mixed $arguments = null,
-        bool $local = null,
+        ?bool $local = null,
         mixed $baseUri = null
     ): string {
         if (null === $local) {
@@ -280,7 +275,7 @@ class Url extends AbstractInjectionAware implements UrlInterface
      * @return string
      * @throws Exception
      */
-    public function getStatic(array | string $uri = null): string
+    public function getStatic(array | string | null $uri = null): string
     {
         return $this->get(
             $uri,
@@ -311,7 +306,7 @@ class Url extends AbstractInjectionAware implements UrlInterface
      *
      * @return string
      */
-    public function path(string $path = null): string
+    public function path(string | null $path = null): string
     {
         return $this->basePath . $path;
     }

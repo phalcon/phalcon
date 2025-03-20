@@ -37,15 +37,15 @@ use Phalcon\DataMapper\Table\Exception\UnexpectedRowCountAffectedException;
 
 abstract class AbstractTable
 {
-    public const AUTOINC_COLUMN = null;
+    public const AUTOINC_COLUMN   = null;
     public const AUTOINC_SEQUENCE = null;
 
-    public const COLUMNS = [];
-    public const COLUMN_NAMES = [];
+    public const COLUMNS       = [];
+    public const COLUMN_NAMES  = [];
     public const COMPOSITE_KEY = false;
-    public const NAME = '';
-    public const PRIMARY_KEY = [];
-    public const ROW_CLASS = '';
+    public const NAME          = '';
+    public const PRIMARY_KEY   = [];
+    public const ROW_CLASS     = '';
 
     public function __construct(
         protected ConnectionLocator $connectionLocator,
@@ -82,7 +82,7 @@ abstract class AbstractTable
      * @throws PropertyDoesNotExistException
      * @throws UnexpectedRowCountAffectedException
      */
-    public function deleteRow(AbstractRow $row): ?PDOStatement
+    public function deleteRow(AbstractRow $row): PDOStatement | null
     {
         $delete = $this->deleteRowPrepare($row);
 
@@ -104,7 +104,7 @@ abstract class AbstractTable
     public function deleteRowPerform(
         AbstractRow $row,
         Delete $delete
-    ): ?PDOStatement {
+    ): PDOStatement | null {
         if ($row->getLastAction() === $row::DELETE) {
             return null;
         }
@@ -159,7 +159,7 @@ abstract class AbstractTable
      * @throws PrimaryValueMissingException
      * @throws PrimaryValueNotScalarException
      */
-    public function fetchRow(mixed $primaryValue): ?AbstractRow
+    public function fetchRow(mixed $primaryValue): AbstractRow | null
     {
         return $this->selectRow($this->select(), $primaryValue);
     }
@@ -293,7 +293,7 @@ abstract class AbstractTable
             $copy = $row->getCopy();
         }
 
-        $insert  = $this->insert();
+        $insert = $this->insert();
         /** @var null|string $autoinc */
         $autoinc = static::AUTOINC_COLUMN;
         if (null !== $autoinc && true !== isset($copy[$autoinc])) {
@@ -363,7 +363,7 @@ abstract class AbstractTable
     public function selectRow(
         AbstractTableSelect $select,
         mixed $primaryValue
-    ): ?AbstractRow {
+    ): AbstractRow | null {
         if (static::COMPOSITE_KEY) {
             return $this->selectRowComposite($select, $primaryValue);
         }
@@ -421,7 +421,7 @@ abstract class AbstractTable
      * @throws PropertyDoesNotExistException
      * @throws UnexpectedRowCountAffectedException
      */
-    public function updateRow(AbstractRow $row): ?PDOStatement
+    public function updateRow(AbstractRow $row): PDOStatement | null
     {
         return $this->updateRowPerform(
             $row,
@@ -442,7 +442,7 @@ abstract class AbstractTable
     public function updateRowPerform(
         AbstractRow $row,
         Update $update
-    ): ?PDOStatement {
+    ): PDOStatement | null {
         if (!$update->hasColumns()) {
             return null;
         }
@@ -546,16 +546,15 @@ abstract class AbstractTable
     protected function selectRowComposite(
         AbstractTableSelect $select,
         mixed $primaryValue
-    ): ?AbstractRow {
+    ): AbstractRow | null {
         $primaryValue = (array)$primaryValue;
-        $condition  = [];
+        $condition    = [];
 
         foreach (static::PRIMARY_KEY as $column) {
             $this->assertCompositePart($primaryValue, $column);
             $condition[] = $select->quoteIdentifier($column)
                 . ' = '
-                . $select->bindInline($primaryValue[$column])
-            ;
+                . $select->bindInline($primaryValue[$column]);
         }
 
         $select->where(implode(' AND ', $condition));
@@ -584,8 +583,7 @@ abstract class AbstractTable
                 $this->assertCompositePart($primaryValue, $column);
                 $condition[] = $select->quoteIdentifier($column)
                     . ' = '
-                    . $select->bindInline($primaryValue[$column])
-                ;
+                    . $select->bindInline($primaryValue[$column]);
             }
 
             $select->orWhere(

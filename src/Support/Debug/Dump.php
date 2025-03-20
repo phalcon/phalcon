@@ -137,7 +137,7 @@ class Dump
      * @return string
      * @throws ReflectionException
      */
-    public function one($variable, string $name = null): string
+    public function one(mixed $variable, string | null $name = null): string
     {
         return $this->variable($variable, $name);
     }
@@ -201,7 +201,7 @@ class Dump
      * @return string
      * @throws JsonException
      */
-    public function toJson($variable): string
+    public function toJson(mixed $variable): string
     {
         return json_encode(
             $variable,
@@ -222,7 +222,7 @@ class Dump
      * @return string
      * @throws ReflectionException
      */
-    public function variable($variable, string $name = null): string
+    public function variable(mixed $variable, string | null $name = null): string
     {
         $message = '<pre style="%style%">%output%</pre>';
         $context = [
@@ -286,8 +286,11 @@ class Dump
      * @return string
      * @throws ReflectionException
      */
-    protected function output($variable, string $name = null, int $tab = 1): string
-    {
+    protected function output(
+        mixed $variable,
+        string | null $name = null,
+        int $tab = 1
+    ): string {
         $space       = '  ';
         $output      = '';
         $varTemplate = "(<span style=\"%style%\">%var%</span>)";

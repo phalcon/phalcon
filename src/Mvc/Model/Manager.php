@@ -103,7 +103,7 @@ class Manager implements ManagerInterface, InjectionAwareInterface, EventsAwareI
     /**
      * @var BuilderInterface|null
      */
-    protected ?BuilderInterface $builder = null;
+    protected BuilderInterface | null $builder = null;
 
     /**
      * @var array
@@ -190,14 +190,14 @@ class Manager implements ManagerInterface, InjectionAwareInterface, EventsAwareI
      *
      * @var ModelInterface|null
      */
-    protected ?ModelInterface $lastInitialized = null;
+    protected ModelInterface | null $lastInitialized = null;
 
     /**
      * Last query created/executed
      *
      * @var QueryInterface|null
      */
-    protected ?QueryInterface $lastQuery = null;
+    protected QueryInterface | null $lastQuery = null;
 
     /**
      * @var array
@@ -262,30 +262,6 @@ class Manager implements ManagerInterface, InjectionAwareInterface, EventsAwareI
          * Append the behavior to the list of behaviors
          */
         $this->behaviors[$entityName][] = $behavior;
-    }
-
-    /**
-     * Removes a behavior from a model
-     *
-     * @param ModelInterface $model
-     * @param string         $behaviorClass
-     */
-    public function removeBehavior(
-        ModelInterface $model,
-        string $behaviorClass
-    ): void {
-        $entityName = mb_strtolower(get_class($model));
-
-        if (isset($this->behaviors[$entityName])) {
-            foreach ($this->behaviors[$entityName] as $key => $behavior) {
-                if (get_class($behavior) === $behaviorClass) {
-                    unset($this->behaviors[$entityName][$key]);
-                }
-            }
-
-            // Reindex the array to remove gaps
-            $this->behaviors[$entityName] = array_values($this->behaviors[$entityName]);
-        }
     }
 
     /**
@@ -881,8 +857,8 @@ class Manager implements ManagerInterface, InjectionAwareInterface, EventsAwareI
      */
     public function executeQuery(
         string $phql,
-        ?array $placeholders = null,
-        ?array $types = null
+        array | null $placeholders = null,
+        array | null $types = null
     ): mixed {
         $query = $this->createQuery($phql);
 
@@ -935,7 +911,7 @@ class Manager implements ManagerInterface, InjectionAwareInterface, EventsAwareI
         string $modelRelation,
         ModelInterface $record,
         mixed $parameters = null,
-        string $method = null
+        string | null $method = null
     ): ResultsetInterface | bool {
         /**
          * Check if there is a relation between them
@@ -1029,7 +1005,7 @@ class Manager implements ManagerInterface, InjectionAwareInterface, EventsAwareI
         string $modelRelation,
         ModelInterface $record,
         mixed $parameters = null,
-        string $method = null
+        string | null $method = null
     ): ResultsetInterface | bool {
         /**
          * Check if there is a relation between them
@@ -1110,7 +1086,7 @@ class Manager implements ManagerInterface, InjectionAwareInterface, EventsAwareI
         string $modelRelation,
         ModelInterface $record,
         mixed $parameters = null,
-        string $method = null
+        string | null $method = null
     ): ModelInterface | bool {
         /**
          * Check if there is a relation between them
@@ -1274,7 +1250,7 @@ class Manager implements ManagerInterface, InjectionAwareInterface, EventsAwareI
         RelationInterface $relation,
         ModelInterface $record,
         array | string | null $parameters = null,
-        string $method = null
+        string | null $method = null
     ): Simple | ModelInterface | int | false {
         /**
          * Re-use bound parameters
@@ -1955,6 +1931,30 @@ class Manager implements ManagerInterface, InjectionAwareInterface, EventsAwareI
         }
 
         return $status;
+    }
+
+    /**
+     * Removes a behavior from a model
+     *
+     * @param ModelInterface $model
+     * @param string         $behaviorClass
+     */
+    public function removeBehavior(
+        ModelInterface $model,
+        string $behaviorClass
+    ): void {
+        $entityName = mb_strtolower(get_class($model));
+
+        if (isset($this->behaviors[$entityName])) {
+            foreach ($this->behaviors[$entityName] as $key => $behavior) {
+                if (get_class($behavior) === $behaviorClass) {
+                    unset($this->behaviors[$entityName][$key]);
+                }
+            }
+
+            // Reindex the array to remove gaps
+            $this->behaviors[$entityName] = array_values($this->behaviors[$entityName]);
+        }
     }
 
     /**

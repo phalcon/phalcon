@@ -23,7 +23,6 @@ use ImagickPixelException;
 use Phalcon\Image\Enum;
 use Phalcon\Image\Exception;
 
-use function constant;
 use function is_bool;
 use function is_float;
 use function is_int;
@@ -48,24 +47,23 @@ use const IMAGETYPE_GIF;
  */
 class Imagick extends AbstractAdapter
 {
-    private const ALPHACHANNEL_SET = 8;
-    private const CHANNEL_ALPHA = 8;
+    private const ALPHACHANNEL_SET   = 8;
+    private const CHANNEL_ALPHA      = 8;
     private const COMPOSITE_DISSOLVE = 28;
-    private const COMPOSITE_DSTIN = 23;
-    private const COMPOSITE_DSTOUT = 24;
-    private const COMPOSITE_OVER = 40;
-    private const COMPOSITE_SRC = 48;
-    private const COMPRESSION_JPEG = 8;
-    private const EVALUATE_MULTIPLY = 7;
-    private const IMAGICK_EXTNUM = 30700;
-    private const GRAVITY_SOUTHEAST = 9;
-    private const GRAVITY_NORTHEAST = 3;
-    private const GRAVITY_NORTH = 2;
-    private const GRAVITY_SOUTH = 8;
-    private const GRAVITY_EAST = 6;
-    private const GRAVITY_WEST = 4;
-    private const GRAVITY_CENTER = 5;
-
+    private const COMPOSITE_DSTIN    = 23;
+    private const COMPOSITE_DSTOUT   = 24;
+    private const COMPOSITE_OVER     = 40;
+    private const COMPOSITE_SRC      = 48;
+    private const COMPRESSION_JPEG   = 8;
+    private const EVALUATE_MULTIPLY  = 7;
+    private const GRAVITY_CENTER     = 5;
+    private const GRAVITY_EAST       = 6;
+    private const GRAVITY_NORTH      = 2;
+    private const GRAVITY_NORTHEAST  = 3;
+    private const GRAVITY_SOUTH      = 8;
+    private const GRAVITY_SOUTHEAST  = 9;
+    private const GRAVITY_WEST       = 4;
+    private const IMAGICK_EXTNUM     = 30700;
     /**
      * @var int
      */
@@ -83,8 +81,8 @@ class Imagick extends AbstractAdapter
      */
     public function __construct(
         string $file,
-        int $width = null,
-        int $height = null
+        int | null $width = null,
+        int | null $height = null
     ) {
         $this->check();
 
@@ -780,7 +778,7 @@ class Imagick extends AbstractAdapter
         int $green,
         int $blue,
         int $size,
-        string $fontFile = null
+        string | null $fontFile = null
     ): void {
         $opacity = $opacity / 100;
         $draw    = new ImagickDraw();

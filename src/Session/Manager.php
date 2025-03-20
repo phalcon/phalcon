@@ -42,7 +42,7 @@ class Manager implements ManagerInterface
     /**
      * @var SessionHandlerInterface|null
      */
-    private ?SessionHandlerInterface $adapter = null;
+    private SessionHandlerInterface | null $adapter = null;
 
     /**
      * @var string
@@ -171,7 +171,7 @@ class Manager implements ManagerInterface
      *
      * @return SessionHandlerInterface|null
      */
-    public function getAdapter(): ?SessionHandlerInterface
+    public function getAdapter(): SessionHandlerInterface | null
     {
         return $this->adapter;
     }

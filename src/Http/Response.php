@@ -78,7 +78,7 @@ class Response extends Injectable implements
     /**
      * @var string|null
      */
-    protected ?string $file = null;
+    protected string | null $file = null;
 
     /**
      * @var Headers
@@ -101,8 +101,8 @@ class Response extends Injectable implements
      */
     public function __construct(
         protected string $content = '',
-        int $code = null,
-        string $status = null
+        int | null $code = null,
+        string | null $status = null
     ) {
         // A Phalcon\Http\Response\Headers bag is temporary used to manage
         // the headers before sent them to the client
@@ -267,7 +267,7 @@ class Response extends Injectable implements
      * @throws Exception
      */
     public function redirect(
-        string $location = null,
+        string | null $location = null,
         bool $externalRedirect = false,
         int $statusCode = 302
     ): ResponseInterface {
@@ -494,7 +494,7 @@ class Response extends Injectable implements
      */
     public function setContentType(
         string $contentType,
-        ?string $charset = null
+        string | null $charset = null
     ): ResponseInterface {
         if (!empty($charset)) {
             $contentType .= '; charset=' . $charset;
@@ -580,7 +580,7 @@ class Response extends Injectable implements
      */
     public function setFileToSend(
         string $filePath,
-        ?string $attachmentName = null,
+        string | null $attachmentName = null,
         bool $attach = true
     ): ResponseInterface {
         $basePath = $attachmentName;
@@ -775,7 +775,7 @@ class Response extends Injectable implements
      */
     public function setStatusCode(
         int $code,
-        string $message = null
+        string | null $message = null
     ): ResponseInterface {
         $currentHeadersRaw = array_keys($this->headers->toArray());
 

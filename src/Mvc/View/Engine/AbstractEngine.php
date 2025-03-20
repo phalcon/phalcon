@@ -35,7 +35,7 @@ abstract class AbstractEngine extends Injectable implements EngineInterface, Eve
      */
     public function __construct(
         protected ViewBaseInterface $view,
-        DiInterface $container = null
+        DiInterface | null $container = null
     ) {
         $this->container = $container;
     }

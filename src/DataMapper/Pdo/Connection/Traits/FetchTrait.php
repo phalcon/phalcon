@@ -131,7 +131,7 @@ trait FetchTrait
         array $values = [],
         int $flags = PDO::FETCH_ASSOC
     ): array {
-        $sth    = $this->perform($statement, $values);
+        $sth = $this->perform($statement, $values);
 
         return $sth->fetchAll(PDO::FETCH_GROUP | $flags);
     }

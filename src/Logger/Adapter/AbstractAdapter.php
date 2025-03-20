@@ -40,7 +40,7 @@ abstract class AbstractAdapter implements AdapterInterface
      *
      * @var FormatterInterface|null
      */
-    protected ?FormatterInterface $formatter = null;
+    protected FormatterInterface | null $formatter = null;
 
     /**
      * Tells if there is an active transaction or not

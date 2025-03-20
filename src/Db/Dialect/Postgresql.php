@@ -22,7 +22,6 @@ use Phalcon\Db\ReferenceInterface;
 
 use function addcslashes;
 use function is_array;
-use function join;
 use function strtoupper;
 use function substr;
 
@@ -352,7 +351,7 @@ class Postgresql extends Dialect
     public function createView(
         string $viewName,
         array $definition,
-        ?string $schemaName = null
+        string | null $schemaName = null
     ): string {
         if (!isset($definition["sql"])) {
             throw new Exception(
@@ -382,7 +381,7 @@ class Postgresql extends Dialect
      */
     public function describeColumns(
         string $tableName,
-        ?string $schemaName = null
+        string | null $schemaName = null
     ): string {
         if (empty($schemaName)) {
             $schemaName = "public";
@@ -435,7 +434,7 @@ class Postgresql extends Dialect
      */
     public function describeIndexes(
         string $tableName,
-        ?string $schemaName = null
+        string | null $schemaName = null
     ): string {
         return "SELECT 0 as c0, "
             . "t.relname as table_name, "
@@ -462,7 +461,7 @@ class Postgresql extends Dialect
      */
     public function describeReferences(
         string $tableName,
-        ?string $schemaName = null
+        string | null $schemaName = null
     ): string {
         if (empty($schemaName)) {
             $schemaName = "public";
@@ -580,7 +579,7 @@ class Postgresql extends Dialect
      */
     public function dropTable(
         string $tableName,
-        ?string $schemaName = null,
+        string | null $schemaName = null,
         bool $ifExists = true
     ): string {
         $tableName = $this->prepareTable($tableName, $schemaName);
@@ -603,7 +602,7 @@ class Postgresql extends Dialect
      */
     public function dropView(
         string $viewName,
-        ?string $schemaName = null,
+        string | null $schemaName = null,
         bool $ifExists = true
     ): string {
         $view = $this->prepareTable($viewName, $schemaName);
@@ -778,7 +777,7 @@ class Postgresql extends Dialect
      *
      * @return string
      */
-    public function listTables(?string $schemaName = null): string
+    public function listTables(string | null $schemaName = null): string
     {
         if (empty($schemaName)) {
             $schemaName = "public";
@@ -797,7 +796,7 @@ class Postgresql extends Dialect
      *
      * @return string
      */
-    public function listViews(?string $schemaName = null): string
+    public function listViews(string | null $schemaName = null): string
     {
         if (empty($schemaName)) {
             $schemaName = "public";
@@ -824,7 +823,7 @@ class Postgresql extends Dialect
         string $tableName,
         string $schemaName,
         ColumnInterface $column,
-        ColumnInterface $currentColumn = null
+        ColumnInterface | null $currentColumn = null
     ): string {
         $sql = "";
 
@@ -946,7 +945,7 @@ class Postgresql extends Dialect
      */
     public function tableExists(
         string $tableName,
-        ?string $schemaName = null
+        string | null $schemaName = null
     ): string {
         if (!empty($schemaName)) {
             $schemaName = "public";
@@ -969,7 +968,7 @@ class Postgresql extends Dialect
      */
     public function tableOptions(
         string $tableName,
-        ?string $schemaName = null
+        string | null $schemaName = null
     ): string {
         return "";
     }
@@ -984,7 +983,7 @@ class Postgresql extends Dialect
      */
     public function truncateTable(
         string $tableName,
-        ?string $schemaName = ''
+        string | null $schemaName = ''
     ): string {
         return "TRUNCATE TABLE " . $this->prepareTable($tableName, $schemaName);
     }
@@ -999,7 +998,7 @@ class Postgresql extends Dialect
      */
     public function viewExists(
         string $viewName,
-        ?string $schemaName = null
+        string | null $schemaName = null
     ): string {
         if (!empty($schemaName)) {
             $schemaName = "public";
@@ -1029,8 +1028,8 @@ class Postgresql extends Dialect
         }
 
         if (
-                is_string($defaultValue) &&
-                str_contains(strtoupper($defaultValue), "CURRENT_TIMESTAMP")
+            is_string($defaultValue) &&
+            str_contains(strtoupper($defaultValue), "CURRENT_TIMESTAMP")
         ) {
             return "CURRENT_TIMESTAMP";
         }

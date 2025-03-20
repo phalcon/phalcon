@@ -30,7 +30,7 @@ class Role implements RoleInterface
      *
      * @throws Exception
      */
-    public function __construct(string $name, string $description = null)
+    public function __construct(string $name, string | null $description = null)
     {
         if ('*' === $name) {
             throw new Exception("Role name cannot be '*'");

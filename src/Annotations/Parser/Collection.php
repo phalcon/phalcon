@@ -56,23 +56,13 @@ class Collection implements IteratorAggregate
         }
     }
 
-    public function getIterator(): Traversable
-    {
-        return new ArrayIterator($this->annotations);
-    }
-
-    public function getAnnotations(): Traversable
-    {
-        return new ArrayIterator($this->annotations);
-    }
-
     /**
      * Returns the first annotation that match a name
      *
      * @param string $name
      *
-     * @throws Exception
      * @return Annotation
+     * @throws Exception
      */
     public function get(string $name): Annotation
     {
@@ -104,6 +94,16 @@ class Collection implements IteratorAggregate
         }
 
         return $found;
+    }
+
+    public function getAnnotations(): Traversable
+    {
+        return new ArrayIterator($this->annotations);
+    }
+
+    public function getIterator(): Traversable
+    {
+        return new ArrayIterator($this->annotations);
     }
 
     /**

@@ -41,12 +41,12 @@ abstract class AbstractElement implements ElementInterface
     /**
      * @var Form|null
      */
-    protected ?Form $form = null;
+    protected Form | null $form = null;
 
     /**
      * @var string|null
      */
-    protected ?string $label = null;
+    protected string | null $label = null;
     /**
      * @var Messages
      */
@@ -68,7 +68,7 @@ abstract class AbstractElement implements ElementInterface
     /**
      * @var TagFactory|null
      */
-    protected ?TagFactory $tagFactory = null;
+    protected TagFactory | null $tagFactory = null;
 
     /**
      * @var array

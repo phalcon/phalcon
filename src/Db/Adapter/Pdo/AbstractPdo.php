@@ -31,7 +31,6 @@ use function is_array;
 use function is_int;
 use function is_object;
 use function is_string;
-use function join;
 use function preg_match_all;
 use function preg_replace;
 
@@ -69,7 +68,7 @@ abstract class AbstractPdo extends AbstractAdapter
      *
      * @var PDO|null
      */
-    protected ?PDO $pdo = null;
+    protected PDO | null $pdo = null;
 
     /**
      * Constructor for Phalcon\Db\Adapter\Pdo
@@ -655,7 +654,7 @@ abstract class AbstractPdo extends AbstractAdapter
      *
      * @return string|bool
      */
-    public function lastInsertId(string $name = null): string | bool
+    public function lastInsertId(string | null $name = null): string | bool
     {
         return $this->pdo->lastInsertId($name);
     }

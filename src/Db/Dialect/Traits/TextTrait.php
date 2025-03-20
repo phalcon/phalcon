@@ -29,107 +29,12 @@ use function strtoupper;
 trait TextTrait
 {
     /**
-     * @return string
-     */
-    protected function getNullString(): string
-    {
-        return ' NULL';
-    }
-
-    /**
-     * @param array $definition
-     *
-     * @return array
-     * @throws Exception
-     */
-    protected function getTableColumns(array $definition): array
-    {
-        $result  = [];
-        $columns = $definition['columns'];
-        foreach ($columns as $column) {
-            $result[] = $this->delimit($column->getName())
-                . ' '
-                . $this->getColumnDefinition($column)
-                . $this->checkColumnIsNull($column)
-                . $this->getNullString()
-                . $this->checkColumnHasDefault($column)
-                . $this->checkColumnIsAutoIncrement($column)
-                . $this->checkColumnIsPrimary($column)
-                . $this->checkColumnComment($column);
-        }
-
-        return $result;
-    }
-
-    /**
-     * @param array $definition
-     *
-     * @return array
-     * @throws Exception
-     */
-    protected function getTableReferences(array $definition): array
-    {
-        $result  = [];
-        if (isset($definition['references'])) {
-            $references = $definition['references'];
-            foreach ($references as $reference) {
-                $result[] = 'CONSTRAINT '
-                    . $this->delimit($reference->getName())
-                    . ' FOREIGN KEY '
-                    . $this->wrap($this->getColumnList($reference->getColumns()))
-                    . ' REFERENCES '
-                    . $this->prepareTable($reference->getReferencedTable(), $reference->getReferencedSchema())
-                    . ' '
-                    . $this->wrap($this->getColumnList($reference->getReferencedColumns()))
-                    . $this->checkReferenceOnDelete($reference)
-                    . $this->checkReferenceOnUpdate($reference);
-            }
-        }
-
-        return $result;
-    }
-
-    protected function getTableIndexes(array $definition): array
-    {
-        $result = [];
-        /**
-         * Create related indexes
-         */
-        if (isset($definition['indexes'])) {
-            $indexes = $definition['indexes'];
-            /** @var Index $index */
-            foreach ($indexes as $index) {
-                $indexName = $index->getName();
-                $indexType = $index->getType() ? $index->getType() . ' ' : '';
-
-                /**
-                 * If the index name is primary we add a primary key
-                 */
-                $columnList = $this->wrap($this->getColumnList($index->getColumns()));
-                if ($indexName === 'PRIMARY') {
-                    $indexSql = 'PRIMARY KEY ' . $columnList;
-                } else {
-                    $indexSql = $indexType
-                        . 'KEY '
-                        . $this->delimit($indexName)
-                        . ' '
-                        . $columnList;
-                }
-
-                $result[] = $indexSql;
-            }
-        }
-
-        return $result;
-    }
-
-    /**
      * @param string      $tableName
      * @param string|null $schemaName
      *
      * @return string
      */
-    protected function alter(string $tableName, ?string $schemaName = null): string
+    protected function alter(string $tableName, string | null $schemaName = null): string
     {
         return 'ALTER TABLE ' . $this->prepareTable($tableName, $schemaName);
     }
@@ -370,9 +275,8 @@ trait TextTrait
     protected function getExistsSql(
         string $table,
         string $viewName,
-        ?string $schemaName
+        string | null $schemaName
     ): string {
-
         return 'SELECT IF(COUNT(*) > 0, 1, 0) '
             . 'FROM `INFORMATION_SCHEMA`.' . $this->delimit($table) . ' '
             . 'WHERE `TABLE_NAME` = ' . $this->delimit($viewName, "'") . ' '
@@ -384,11 +288,78 @@ trait TextTrait
      *
      * @return string
      */
-    protected function getMysqlSchemaString(?string $schemaName): string
+    protected function getMysqlSchemaString(string | null $schemaName): string
     {
         return empty($schemaName)
             ? 'DATABASE()' :
             $this->delimit($schemaName, "'");
+    }
+
+    /**
+     * @return string
+     */
+    protected function getNullString(): string
+    {
+        return ' NULL';
+    }
+
+    /**
+     * @param array $definition
+     *
+     * @return array
+     * @throws Exception
+     */
+    protected function getTableColumns(array $definition): array
+    {
+        $result  = [];
+        $columns = $definition['columns'];
+        foreach ($columns as $column) {
+            $result[] = $this->delimit($column->getName())
+                . ' '
+                . $this->getColumnDefinition($column)
+                . $this->checkColumnIsNull($column)
+                . $this->getNullString()
+                . $this->checkColumnHasDefault($column)
+                . $this->checkColumnIsAutoIncrement($column)
+                . $this->checkColumnIsPrimary($column)
+                . $this->checkColumnComment($column);
+        }
+
+        return $result;
+    }
+
+    protected function getTableIndexes(array $definition): array
+    {
+        $result = [];
+        /**
+         * Create related indexes
+         */
+        if (isset($definition['indexes'])) {
+            $indexes = $definition['indexes'];
+            /** @var Index $index */
+            foreach ($indexes as $index) {
+                $indexName = $index->getName();
+                $indexType = $index->getType() ? $index->getType() . ' ' : '';
+
+                /**
+                 * If the index name is primary we add a primary key
+                 */
+                $columnList = $this->wrap($this->getColumnList($index->getColumns()));
+                if ($indexName === 'PRIMARY') {
+                    $indexSql = 'PRIMARY KEY ' . $columnList;
+                } else {
+                    $indexSql = $indexType
+                        . 'KEY '
+                        . $this->delimit($indexName)
+                        . ' '
+                        . $columnList;
+                }
+
+                $result[] = $indexSql;
+            }
+        }
+
+        return $result;
     }
 
     /**
@@ -429,6 +400,34 @@ trait TextTrait
         }
 
         return implode(' ', $tableNameOptions);
+    }
+
+    /**
+     * @param array $definition
+     *
+     * @return array
+     * @throws Exception
+     */
+    protected function getTableReferences(array $definition): array
+    {
+        $result = [];
+        if (isset($definition['references'])) {
+            $references = $definition['references'];
+            foreach ($references as $reference) {
+                $result[] = 'CONSTRAINT '
+                    . $this->delimit($reference->getName())
+                    . ' FOREIGN KEY '
+                    . $this->wrap($this->getColumnList($reference->getColumns()))
+                    . ' REFERENCES '
+                    . $this->prepareTable($reference->getReferencedTable(), $reference->getReferencedSchema())
+                    . ' '
+                    . $this->wrap($this->getColumnList($reference->getReferencedColumns()))
+                    . $this->checkReferenceOnDelete($reference)
+                    . $this->checkReferenceOnUpdate($reference);
+            }
+        }
+
+        return $result;
     }
 
     /**

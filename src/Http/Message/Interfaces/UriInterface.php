@@ -162,7 +162,7 @@ interface UriInterface
      *
      * @return null|int The URI port.
      */
-    public function getPort(): ?int;
+    public function getPort(): int | null;
 
     /**
      * Retrieve the query string of the URI.
@@ -294,7 +294,7 @@ interface UriInterface
      * @return static A new instance with the specified port.
      * @throws InvalidArgumentException for invalid ports.
      */
-    public function withPort(?int $port): UriInterface;
+    public function withPort(int | null $port): UriInterface;
 
     /**
      * Return an instance with the specified query string.
@@ -349,6 +349,6 @@ interface UriInterface
      */
     public function withUserInfo(
         string $user,
-        ?string $password = null
+        string | null $password = null
     ): UriInterface;
 }

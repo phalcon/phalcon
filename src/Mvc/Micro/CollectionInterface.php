@@ -30,7 +30,7 @@ interface CollectionInterface
     public function delete(
         string $routePattern,
         callable $handler,
-        string $name = null
+        string | null $name = null
     ): CollectionInterface;
 
     /**
@@ -45,7 +45,7 @@ interface CollectionInterface
     public function get(
         string $routePattern,
         callable $handler,
-        string $name = null
+        string | null $name = null
     ): CollectionInterface;
 
     /**
@@ -81,7 +81,7 @@ interface CollectionInterface
     public function head(
         string $routePattern,
         callable $handler,
-        string $name = null
+        string | null $name = null
     ): CollectionInterface;
 
     /**
@@ -103,7 +103,7 @@ interface CollectionInterface
     public function map(
         string $routePattern,
         callable $handler,
-        string $name = null
+        string | null $name = null
     ): CollectionInterface;
 
     /**
@@ -119,7 +119,7 @@ interface CollectionInterface
     public function options(
         string $routePattern,
         callable $handler,
-        string $name = null
+        string | null $name = null
     ): CollectionInterface;
 
     /**
@@ -134,7 +134,7 @@ interface CollectionInterface
     public function patch(
         string $routePattern,
         callable $handler,
-        string $name = null
+        string | null $name = null
     ): CollectionInterface;
 
     /**
@@ -149,7 +149,7 @@ interface CollectionInterface
     public function post(
         string $routePattern,
         callable $handler,
-        string $name = null
+        string | null $name = null
     ): CollectionInterface;
 
     /**
@@ -164,7 +164,7 @@ interface CollectionInterface
     public function put(
         string $routePattern,
         callable $handler,
-        string $name = null
+        string | null $name = null
     ): CollectionInterface;
 
     /**

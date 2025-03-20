@@ -210,7 +210,7 @@ class Stream implements StreamInterface
      *
      * @return TMetadata|bool|int|mixed|string|null
      */
-    public function getMetadata(?string $key = null)
+    public function getMetadata(string | null $key = null)
     {
         if (null === $this->handle) {
             return null;
@@ -230,7 +230,7 @@ class Stream implements StreamInterface
      *
      * @return int|null
      */
-    public function getSize(): ?int
+    public function getSize(): int | null
     {
         if (null !== $this->handle) {
             /** @var TStat|false $stats */
@@ -342,7 +342,7 @@ class Stream implements StreamInterface
      */
     public function setStream($stream, string $mode = "rb"): void
     {
-        $handle  = $stream;
+        $handle = $stream;
 
         if (is_string($stream)) {
             $errorLevel = error_reporting(0);

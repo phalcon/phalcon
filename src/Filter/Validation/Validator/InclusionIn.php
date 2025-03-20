@@ -59,7 +59,7 @@ class InclusionIn extends ExclusionIn
     /**
      * @var string|null
      */
-    protected ?string $template = "Field :field must be a part of list: :domain";
+    protected string | null $template = "Field :field must be a part of list: :domain";
 
     /**
      * Execute the conditional

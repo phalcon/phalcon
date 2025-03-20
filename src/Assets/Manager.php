@@ -127,7 +127,7 @@ class Manager implements InjectionAwareInterface
         bool $local = true,
         bool $filter = true,
         array $attributes = [],
-        string $version = null,
+        string | null $version = null,
         bool $autoVersion = false
     ): static {
         $this->addAssetByType(
@@ -237,7 +237,7 @@ class Manager implements InjectionAwareInterface
         bool $local = true,
         bool $filter = true,
         array $attributes = [],
-        string $version = null,
+        string | null $version = null,
         bool $autoVersion = false
     ): static {
         $this->addAssetByType(
@@ -372,7 +372,7 @@ class Manager implements InjectionAwareInterface
      * @return string|null
      * @throws Exception
      */
-    public function output(Collection $collection, string $type): ?string
+    public function output(Collection $collection, string $type): string | null
     {
         $completeSourcePath    = '';
         $completeTargetPath    = '';
@@ -619,7 +619,7 @@ class Manager implements InjectionAwareInterface
      * @return string|null
      * @throws Exception
      */
-    public function outputCss(string $name = null): ?string
+    public function outputCss(string | null $name = null): string | null
     {
         $collection = $this->getCss();
         if (null !== $name) {
@@ -711,7 +711,7 @@ class Manager implements InjectionAwareInterface
      * @return string
      * @throws Exception
      */
-    public function outputInlineCss(string $name = null): string
+    public function outputInlineCss(string | null $name = null): string
     {
         $collection = $this->getCss();
         if (!empty($name)) {
@@ -729,7 +729,7 @@ class Manager implements InjectionAwareInterface
      * @return string
      * @throws Exception
      */
-    public function outputInlineJs(string $name = null): string
+    public function outputInlineJs(string | null $name = null): string
     {
         $collection = $this->getJs();
         if (!empty($name)) {
@@ -747,7 +747,7 @@ class Manager implements InjectionAwareInterface
      * @return string|null
      * @throws Exception
      */
-    public function outputJs(string $name = null): ?string
+    public function outputJs(string | null $name = null): string | null
     {
         $collection = $this->getJs();
         if (!empty($name)) {

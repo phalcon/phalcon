@@ -24,7 +24,6 @@ use Phalcon\Support\Collection\CollectionInterface;
 use Phalcon\Support\Helper\Json\Encode;
 use Phalcon\Support\Traits\Base64Trait;
 
-use function is_array;
 use function is_string;
 
 /**
@@ -102,7 +101,7 @@ class Builder
     /**
      * @return string[]|string
      */
-    public function getAudience(): array|string
+    public function getAudience(): array | string
     {
         return $this->claims->get(Enum::AUDIENCE, []);
     }
@@ -118,7 +117,7 @@ class Builder
     /**
      * @return string|null
      */
-    public function getContentType(): ?string
+    public function getContentType(): string | null
     {
         return $this->jose->get(Enum::CONTENT_TYPE, null, 'string');
     }
@@ -126,7 +125,7 @@ class Builder
     /**
      * @return int|null
      */
-    public function getExpirationTime(): ?int
+    public function getExpirationTime(): int | null
     {
         return $this->claims->get(Enum::EXPIRATION_TIME, null, 'int');
     }
@@ -142,7 +141,7 @@ class Builder
     /**
      * @return string|null
      */
-    public function getId(): ?string
+    public function getId(): string | null
     {
         return $this->claims->get(Enum::ID, null, 'string');
     }
@@ -150,7 +149,7 @@ class Builder
     /**
      * @return int|null
      */
-    public function getIssuedAt(): ?int
+    public function getIssuedAt(): int | null
     {
         return $this->claims->get(Enum::ISSUED_AT, null, 'int');
     }
@@ -158,7 +157,7 @@ class Builder
     /**
      * @return string|null
      */
-    public function getIssuer(): ?string
+    public function getIssuer(): string | null
     {
         return $this->claims->get(Enum::ISSUER, null, 'string');
     }
@@ -166,7 +165,7 @@ class Builder
     /**
      * @return int|null
      */
-    public function getNotBefore(): ?int
+    public function getNotBefore(): int | null
     {
         return $this->claims->get(Enum::NOT_BEFORE, null, 'int');
     }
@@ -182,7 +181,7 @@ class Builder
     /**
      * @return string|null
      */
-    public function getSubject(): ?string
+    public function getSubject(): string | null
     {
         return $this->claims->get(Enum::SUBJECT, null, 'string');
     }
@@ -245,7 +244,7 @@ class Builder
      *
      * @return Builder
      */
-    public function setAudience(array|string $audience): Builder
+    public function setAudience(array | string $audience): Builder
     {
         if (is_string($audience)) {
             $audience = [$audience];

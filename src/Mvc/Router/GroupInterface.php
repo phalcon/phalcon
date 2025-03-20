@@ -74,8 +74,8 @@ interface GroupInterface
      */
     public function add(
         string $pattern,
-        array | string $paths = null,
-        array | string $httpMethods = null
+        array | string | null $paths = null,
+        array | string | null $httpMethods = null
     ): RouteInterface;
 
     /**
@@ -88,7 +88,7 @@ interface GroupInterface
      */
     public function addConnect(
         string $pattern,
-        array | string $paths = null
+        array | string | null $paths = null
     ): RouteInterface;
 
     /**
@@ -101,7 +101,7 @@ interface GroupInterface
      */
     public function addDelete(
         string $pattern,
-        array | string $paths = null
+        array | string | null $paths = null
     ): RouteInterface;
 
     /**
@@ -114,7 +114,7 @@ interface GroupInterface
      */
     public function addGet(
         string $pattern,
-        array | string $paths = null
+        array | string | null $paths = null
     ): RouteInterface;
 
     /**
@@ -127,7 +127,7 @@ interface GroupInterface
      */
     public function addHead(
         string $pattern,
-        array | string $paths = null
+        array | string | null $paths = null
     ): RouteInterface;
 
     /**
@@ -140,7 +140,7 @@ interface GroupInterface
      */
     public function addOptions(
         string $pattern,
-        array | string $paths = null
+        array | string | null $paths = null
     ): RouteInterface;
 
     /**
@@ -153,7 +153,7 @@ interface GroupInterface
      */
     public function addPatch(
         string $pattern,
-        array | string $paths = null
+        array | string | null $paths = null
     ): RouteInterface;
 
     /**
@@ -166,7 +166,7 @@ interface GroupInterface
      */
     public function addPost(
         string $pattern,
-        array | string $paths = null
+        array | string | null $paths = null
     ): RouteInterface;
 
     /**
@@ -179,7 +179,7 @@ interface GroupInterface
      */
     public function addPurge(
         string $pattern,
-        array | string $paths = null
+        array | string | null $paths = null
     ): RouteInterface;
 
     /**
@@ -205,7 +205,7 @@ interface GroupInterface
      */
     public function addTrace(
         string $pattern,
-        array | string $paths = null
+        array | string | null $paths = null
     ): RouteInterface;
 
     /**

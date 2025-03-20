@@ -32,10 +32,10 @@ class Get
      */
     public function __invoke(
         array $collection,
-        $index,
-        $defaultValue = null,
-        string $cast = null
-    ) {
+        mixed $index,
+        mixed $defaultValue = null,
+        string | null $cast = null
+    ): mixed {
         $value = $collection[$index] ?? $defaultValue;
 
         if (null !== $cast) {

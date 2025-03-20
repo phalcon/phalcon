@@ -51,7 +51,7 @@ class Status implements StatusInterface
      */
     public function __construct(
         protected bool $success,
-        protected ?ModelInterface $model = null
+        protected ModelInterface | null $model = null
     ) {
     }
 

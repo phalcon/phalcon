@@ -163,7 +163,7 @@ class Crypt implements CryptInterface
     public function __construct(
         string $cipher = self::DEFAULT_CIPHER,
         bool $useSigning = true,
-        PadFactory $padFactory = null
+        PadFactory | null $padFactory = null
     ) {
         if (null === $padFactory) {
             $padFactory = new PadFactory();
@@ -195,7 +195,7 @@ class Crypt implements CryptInterface
      * @throws Exception
      * @throws Mismatch
      */
-    public function decrypt(string $input, string $key = null): string
+    public function decrypt(string $input, string | null $key = null): string
     {
         $decryptKey = (empty($key)) ? $this->key : $key;
 
@@ -261,7 +261,7 @@ class Crypt implements CryptInterface
      */
     public function decryptBase64(
         string $input,
-        $key = null,
+        mixed $key = null,
         bool $safe = false
     ): string {
         if (true === $safe) {
@@ -288,7 +288,7 @@ class Crypt implements CryptInterface
      * @return string
      * @throws Exception
      */
-    public function encrypt(string $input, string $key = null): string
+    public function encrypt(string $input, string | null $key = null): string
     {
         $encryptKey = (empty($key)) ? $this->key : $key;
 
@@ -340,7 +340,7 @@ class Crypt implements CryptInterface
      */
     public function encryptBase64(
         string $input,
-        $key = null,
+        mixed $key = null,
         bool $safe = false
     ): string {
         if (true === $safe) {
@@ -588,8 +588,8 @@ class Crypt implements CryptInterface
      */
     protected function checkCipherHashIsAvailable(string $cipher, string $type): void
     {
-        $method    = "getAvailable";
-        $method    .= ("hash" === $cipher) ? "HashAlgorithms" : "Ciphers";
+        $method = "getAvailable";
+        $method .= ("hash" === $cipher) ? "HashAlgorithms" : "Ciphers";
         /** @var array<array-key, string> $available */
         $available = $this->$method();
         $lower     = $this->toLower($cipher);

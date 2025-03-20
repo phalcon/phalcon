@@ -143,9 +143,9 @@ class Filter implements FilterInterface
     /**
      * Sanitizes a value with a specified single or set of sanitizers
      *
-     * @param mixed        $value
+     * @param mixed                                 $value
      * @param array<array-key, string|array>|string $sanitizers
-     * @param bool         $noRecursive
+     * @param bool                                  $noRecursive
      *
      * @return array|false|mixed|null
      * @throws Exception

@@ -63,7 +63,7 @@ class Equal extends AbstractFile
     /**
      * @var string|null
      */
-    protected ?string $template = "The resolution of the field :field has to be equal :resolution";
+    protected string | null $template = "The resolution of the field :field has to be equal :resolution";
 
     /**
      * Executes the validation

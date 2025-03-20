@@ -26,7 +26,7 @@ interface CryptInterface
      *
      * @return string
      */
-    public function decrypt(string $input, string $key = null): string;
+    public function decrypt(string $input, string | null $key = null): string;
 
     /**
      * Decrypt a text that is coded as a base64 string
@@ -36,7 +36,7 @@ interface CryptInterface
      *
      * @return string
      */
-    public function decryptBase64(string $input, $key = null): string;
+    public function decryptBase64(string $input, mixed $key = null): string;
 
     /**
      * Encrypts a text
@@ -46,7 +46,7 @@ interface CryptInterface
      *
      * @return string
      */
-    public function encrypt(string $input, string $key = null): string;
+    public function encrypt(string $input, string | null $key = null): string;
 
     /**
      * Encrypts a text returning the result as a base64 string
@@ -56,7 +56,7 @@ interface CryptInterface
      *
      * @return string
      */
-    public function encryptBase64(string $input, $key = null): string;
+    public function encryptBase64(string $input, mixed $key = null): string;
 
     /**
      * Returns authentication data

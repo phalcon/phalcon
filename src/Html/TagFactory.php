@@ -15,8 +15,8 @@ use Exception as BaseException;
 use Phalcon\Html\Escaper\EscaperInterface;
 use Phalcon\Html\Helper\Anchor;
 use Phalcon\Html\Helper\Base;
-use Phalcon\Html\Helper\Breadcrumbs;
 use Phalcon\Html\Helper\Body;
+use Phalcon\Html\Helper\Breadcrumbs;
 use Phalcon\Html\Helper\Button;
 use Phalcon\Html\Helper\Close;
 use Phalcon\Html\Helper\Doctype;
@@ -58,8 +58,6 @@ use Phalcon\Html\Helper\Ul;
 use Phalcon\Traits\Factory\FactoryTrait;
 
 use function call_user_func_array;
-
-use const PHP_EOL;
 
 /**
  * ServiceLocator implementation for Tag helpers.

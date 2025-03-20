@@ -49,7 +49,7 @@ class Select extends AbstractList
      */
     public function add(
         string $text,
-        string $value = null,
+        string | null $value = null,
         array $attributes = [],
         bool $raw = false
     ): Select {
@@ -81,7 +81,7 @@ class Select extends AbstractList
      */
     public function addPlaceholder(
         string $text,
-        string $value = null,
+        string | null $value = null,
         array $attributes = [],
         bool $raw = false
     ): Select {
@@ -112,7 +112,7 @@ class Select extends AbstractList
      * @return Select
      */
     public function optGroup(
-        string $label = null,
+        string | null $label = null,
         array $attributes = []
     ): Select {
         if (!$this->inOptGroup) {
@@ -186,8 +186,10 @@ class Select extends AbstractList
      *
      * @return array
      */
-    private function processValue(array $attributes, string $value = null): array
-    {
+    private function processValue(
+        array $attributes,
+        string | null $value = null
+    ): array {
         if (null !== $value) {
             $attributes['value'] = $value;
             if (!empty($this->selected) && $value === $this->selected) {

@@ -67,7 +67,7 @@ class Profiler implements ProfilerInterface
      * @param LoggerInterface|null $logger
      */
     public function __construct(
-        protected ?LoggerInterface $logger = null
+        protected LoggerInterface | null $logger = null
     ) {
     }
 
@@ -80,7 +80,7 @@ class Profiler implements ProfilerInterface
      *
      * @return void
      */
-    public function finish(?string $statement = null, array $values = []): void
+    public function finish(string | null $statement = null, array $values = []): void
     {
         if (true === $this->isActive) {
             $ex     = new Exception();
@@ -129,7 +129,7 @@ class Profiler implements ProfilerInterface
      *
      * @return LoggerInterface|null
      */
-    public function getLogger(): ?LoggerInterface
+    public function getLogger(): LoggerInterface | null
     {
         return $this->logger;
     }

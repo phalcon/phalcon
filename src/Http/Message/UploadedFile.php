@@ -37,14 +37,6 @@ use function move_uploaded_file;
 
 /**
  * UploadedFile class
- *
- * @property bool                        $alreadyMoved
- * @property string|null                 $clientFilename
- * @property string|null                 $clientMediaType
- * @property int                         $error
- * @property string                      $fileName
- * @property int|null                    $size
- * @property StreamInterface|string|null $stream
  */
 final class UploadedFile implements UploadedFileInterface
 {
@@ -69,7 +61,7 @@ final class UploadedFile implements UploadedFileInterface
      *
      * @var string|null
      */
-    private ?string $clientFilename;
+    private string | null $clientFilename;
 
     /**
      * Retrieve the media type sent by the client.
@@ -83,7 +75,7 @@ final class UploadedFile implements UploadedFileInterface
      *
      * @var string | null
      */
-    private ?string $clientMediaType;
+    private string | null $clientMediaType;
 
     /**
      * Retrieve the error associated with the uploaded file.
@@ -118,7 +110,7 @@ final class UploadedFile implements UploadedFileInterface
      *
      * @var int|null
      */
-    private ?int $size;
+    private int | null $size;
 
     /**
      * Holds the stream/string for the uploaded file
@@ -138,10 +130,10 @@ final class UploadedFile implements UploadedFileInterface
      */
     public function __construct(
         $stream,
-        int $size = null,
+        int | null $size = null,
         int $error = 0,
-        string $clientFilename = null,
-        string $clientMediaType = null
+        string | null $clientFilename = null,
+        string | null $clientMediaType = null
     ) {
         /**
          * Check the stream passed. It can be a string representing a file or
@@ -162,7 +154,7 @@ final class UploadedFile implements UploadedFileInterface
     /**
      * @return string|null
      */
-    public function getClientFilename(): ?string
+    public function getClientFilename(): string | null
     {
         return $this->clientFilename;
     }
@@ -170,7 +162,7 @@ final class UploadedFile implements UploadedFileInterface
     /**
      * @return string|null
      */
-    public function getClientMediaType(): ?string
+    public function getClientMediaType(): string | null
     {
         return $this->clientMediaType;
     }
@@ -186,7 +178,7 @@ final class UploadedFile implements UploadedFileInterface
     /**
      * @return int|null
      */
-    public function getSize(): ?int
+    public function getSize(): int | null
     {
         return $this->size;
     }

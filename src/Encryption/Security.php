@@ -99,17 +99,17 @@ class Security implements InjectionAwareInterface
     /**
      * @var string|null
      */
-    protected ?string $requestToken = null;
+    protected string | null $requestToken = null;
 
     /**
      * @var string|null
      */
-    protected ?string $token = null;
+    protected string | null $token = null;
 
     /**
      * @var string|null
      */
-    protected ?string $tokenKey = null;
+    protected string | null $tokenKey = null;
 
     /**
      * @var string
@@ -129,12 +129,12 @@ class Security implements InjectionAwareInterface
     /**
      * @var RequestInterface|null
      */
-    private ?RequestInterface $localRequest = null;
+    private RequestInterface | null $localRequest = null;
 
     /**
      * @var SessionInterface|null
      */
-    private ?SessionInterface $localSession = null;
+    private SessionInterface | null $localSession = null;
 
     /**
      * Security constructor.
@@ -143,8 +143,8 @@ class Security implements InjectionAwareInterface
      * @param RequestInterface|null $request
      */
     public function __construct(
-        SessionInterface $session = null,
-        RequestInterface $request = null
+        SessionInterface | null $session = null,
+        RequestInterface | null $request = null
     ) {
         $this->random       = new Random();
         $this->localRequest = $request;
@@ -184,8 +184,8 @@ class Security implements InjectionAwareInterface
      * @return bool
      */
     public function checkToken(
-        string $tokenKey = null,
-        $tokenValue = null,
+        string | null $tokenKey = null,
+        mixed $tokenValue = null,
         bool $destroyIfValid = true
     ): bool {
         $tokenKey = $this->processTokenKey($tokenKey);
@@ -314,7 +314,7 @@ class Security implements InjectionAwareInterface
      *
      * @return string|null
      */
-    public function getRequestToken(): ?string
+    public function getRequestToken(): string | null
     {
         if (empty($this->requestToken)) {
             return $this->getSessionToken();
@@ -349,7 +349,7 @@ class Security implements InjectionAwareInterface
      *
      * @return string|null
      */
-    public function getSessionToken(): ?string
+    public function getSessionToken(): string | null
     {
         /** @var SessionInterface|null $session */
         $session = $this->getLocalService('session', 'localSession');
@@ -393,7 +393,7 @@ class Security implements InjectionAwareInterface
      * @return string|null
      * @throws BaseException
      */
-    public function getTokenKey(): ?string
+    public function getTokenKey(): string | null
     {
         if (null === $this->tokenKey) {
             /** @var SessionInterface|null $session */
@@ -561,7 +561,7 @@ class Security implements InjectionAwareInterface
     protected function getLocalService(
         string $name,
         string $property
-    ): RequestInterface|SessionInterface|null {
+    ): RequestInterface | SessionInterface | null {
         if (
             null === $this->$property &&
             null !== $this->container &&
@@ -635,7 +635,7 @@ class Security implements InjectionAwareInterface
      *
      * @return string|null
      */
-    private function processTokenKey(string $tokenKey = null): ?string
+    private function processTokenKey(string | null $tokenKey = null): string | null
     {
         /** @var SessionInterface|null $session */
         $session = $this->getLocalService('session', 'localSession');
@@ -654,8 +654,8 @@ class Security implements InjectionAwareInterface
      */
     private function processUserToken(
         string $tokenKey,
-        string $tokenValue = null
-    ): ?string {
+        string | null $tokenValue = null
+    ): string | null {
         $userToken = $tokenValue;
         if (null === $tokenValue) {
             /** @var RequestInterface|null $request */

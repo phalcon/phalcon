@@ -73,8 +73,8 @@ interface TransactionInterface
      * @return bool
      */
     public function rollback(
-        string $rollbackMessage = null,
-        ModelInterface $rollbackRecord = null
+        string | null $rollbackMessage = null,
+        ModelInterface | null $rollbackRecord = null
     ): bool;
 
     /**

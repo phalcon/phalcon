@@ -28,7 +28,7 @@ class KebabCase extends PascalCase
      */
     public function __invoke(
         string $text,
-        string $delimiters = null
+        string | null $delimiters = null
     ): string {
         $output = $this->processArray($text, $delimiters);
 

@@ -62,7 +62,7 @@ class Regex extends AbstractValidator
     /**
      * @var string|null
      */
-    protected ?string $template = "Field :field does not match the required format";
+    protected string | null $template = "Field :field does not match the required format";
 
     /**
      * Executes the validation

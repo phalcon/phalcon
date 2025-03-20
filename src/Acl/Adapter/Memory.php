@@ -88,7 +88,7 @@ class Memory extends AbstractAdapter
      *
      * @var string|null
      */
-    protected ?string $activeKey = null;
+    protected string | null $activeKey = null;
 
     /**
      * Components
@@ -414,7 +414,7 @@ class Memory extends AbstractAdapter
         string $roleName,
         string $componentName,
         array | string $access,
-        ?callable $function = null
+        callable | null $function = null
     ): void {
         $rolesArray = [$roleName];
         if ('*' === $roleName) {
@@ -460,7 +460,7 @@ class Memory extends AbstractAdapter
         string $roleName,
         string $componentName,
         array | string $access,
-        ?callable $function = null
+        callable | null $function = null
     ): void {
         $rolesArray = [$roleName];
         if ('*' === $roleName) {
@@ -521,7 +521,7 @@ class Memory extends AbstractAdapter
     /**
      * @return string|null
      */
-    public function getActiveKey(): ?string
+    public function getActiveKey(): string | null
     {
         return $this->activeKey;
     }
@@ -868,7 +868,7 @@ class Memory extends AbstractAdapter
         string $componentName,
         array | string $access,
         int $action,
-        ?callable $function = null
+        callable | null $function = null
     ): void {
         $this->checkExists($this->roles, $roleName, 'Role');
         $this->checkExists($this->componentsNames, $componentName, 'Component');
@@ -911,7 +911,7 @@ class Memory extends AbstractAdapter
         string $roleName,
         string $componentName,
         string $access
-    ): ?string {
+    ): string | null {
         /**
          * Check if there is a direct combination for role-component-access
          */

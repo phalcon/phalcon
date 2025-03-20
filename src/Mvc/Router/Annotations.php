@@ -14,7 +14,6 @@ declare(strict_types=1);
 namespace Phalcon\Mvc\Router;
 
 use Phalcon\Annotations\Adapter\Memory;
-use Phalcon\Annotations\Annotations as AnnotationsAnnotations;
 use Phalcon\Annotations\Parser\Annotation;
 use Phalcon\Annotations\Parser\Exception;
 use Phalcon\Events\Exception as EventsException;
@@ -98,7 +97,7 @@ class Annotations extends Router
     public function addModuleResource(
         string $module,
         string $handler,
-        string $prefix = null
+        string | null $prefix = null
     ): Annotations {
         $this->handlers[] = [$prefix, $handler, $module];
 
@@ -116,7 +115,7 @@ class Annotations extends Router
      */
     public function addResource(
         string $handler,
-        string $prefix = null
+        string | null $prefix = null
     ): Annotations {
         $this->handlers[] = [$prefix, $handler];
 
@@ -146,9 +145,9 @@ class Annotations extends Router
      *
      * @param string $uri
      *
-     * @throws EventsException
-     * @throws Exception|\Phalcon\Mvc\Router\Exception
      * @return void
+     * @throws Exception|\Phalcon\Mvc\Router\Exception
+     * @throws EventsException
      */
     public function handle(string $uri): void
     {
@@ -302,8 +301,8 @@ class Annotations extends Router
      * @param string     $action
      * @param Annotation $annotation
      *
-     * @throws Exception|\Phalcon\Mvc\Router\Exception
      * @return void
+     * @throws Exception|\Phalcon\Mvc\Router\Exception
      */
     public function processActionAnnotation(
         string $module,
@@ -506,8 +505,8 @@ class Annotations extends Router
      *
      * @param callable|string|null $callback
      *
-     * @throws Exception
      * @return Annotations
+     * @throws Exception
      */
     public function setActionPreformatCallback(callable | string | null $callback = null): Annotations
     {

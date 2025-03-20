@@ -29,7 +29,7 @@ interface ResultsetInterface
      *
      * @return bool
      */
-    public function delete(Closure $conditionCallback = null): bool;
+    public function delete(Closure | null $conditionCallback = null): bool;
 
     /**
      * Filters a resultset returning only those the developer requires
@@ -133,6 +133,6 @@ interface ResultsetInterface
      */
     public function update(
         mixed $data,
-        Closure $conditionCallback = null
+        Closure | null $conditionCallback = null
     ): bool;
 }

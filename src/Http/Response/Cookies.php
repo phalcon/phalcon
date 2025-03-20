@@ -91,14 +91,14 @@ class Cookies extends AbstractInjectionAware implements CookiesInterface
      *
      * @var string|null
      */
-    protected ?string $signKey = null;
+    protected string | null $signKey = null;
 
     /**
      * Constructor
      */
     public function __construct(
         protected bool $useEncryption = true,
-        ?string $signKey = null
+        string | null $signKey = null
     ) {
         $this->setSignKey($signKey);
     }
@@ -355,7 +355,7 @@ class Cookies extends AbstractInjectionAware implements CookiesInterface
      * @return CookiesInterface
      * @see \Phalcon\Encryption\Security\Random
      */
-    public function setSignKey(?string $signKey = null): CookiesInterface
+    public function setSignKey(string | null $signKey = null): CookiesInterface
     {
         $this->signKey = $signKey;
 

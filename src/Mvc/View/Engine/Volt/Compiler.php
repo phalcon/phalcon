@@ -43,13 +43,9 @@ use function method_exists;
 use function preg_replace;
 use function realpath;
 use function serialize;
-use function stat;
 use function str_replace;
 use function strlen;
-use function trigger_error;
 use function unserialize;
-
-use const E_USER_WARNING;
 
 /**
  * This class reads and compiles Volt templates into PHP plain code
@@ -83,22 +79,22 @@ class Compiler implements InjectionAwareInterface
      *
      * TODO: Make array only?
      */
-    protected ?array $blocks = null;
+    protected array | null $blocks = null;
 
     /**
      * @var string|null
      */
-    protected ?string $compiledTemplatePath;
+    protected string | null $compiledTemplatePath;
 
     /**
      * @var string|null
      */
-    protected ?string $currentBlock = null;
+    protected string | null $currentBlock = null;
 
     /**
      * @var string|null
      */
-    protected ?string $currentPath = null;
+    protected string | null $currentPath = null;
 
     /**
      * @var int
@@ -167,7 +163,7 @@ class Compiler implements InjectionAwareInterface
      * @param ViewBaseInterface|null $view
      */
     public function __construct(
-        protected ?ViewBaseInterface $view = null
+        protected ViewBaseInterface | null $view = null
     ) {
     }
 
@@ -693,7 +689,7 @@ class Compiler implements InjectionAwareInterface
         string $path,
         string $compiledPath,
         bool $extendsMode = false
-    ): array|string {
+    ): array | string {
         if ($path == $compiledPath) {
             throw new Exception(
                 "Template path and compilation template path cannot be the same"
@@ -2315,7 +2311,7 @@ class Compiler implements InjectionAwareInterface
         }
 
         $intermediate = (new Parser($viewCode))->parseView($this->currentPath);
-        $compilation = $this->statementList($intermediate, $extendsMode);
+        $compilation  = $this->statementList($intermediate, $extendsMode);
 
         /**
          * Check if the template is extending another
@@ -2635,13 +2631,13 @@ class Compiler implements InjectionAwareInterface
      * @param array $statements
      * @param bool  $extendsMode
      *
-     * @return ?string
+     * @return string | null
      * @throws Exception
      */
     final protected function statementList(
         array $statements,
         bool $extendsMode = false
-    ): ?string {
+    ): string | null {
         /**
          * Nothing to compile
          */
@@ -2975,7 +2971,7 @@ class Compiler implements InjectionAwareInterface
      *
      * @return string
      */
-    private function getUniquePathKey(?string $path): string
+    private function getUniquePathKey(string | null $path): string
     {
         if ($path) {
             return "v" . hash('crc32b', $path);

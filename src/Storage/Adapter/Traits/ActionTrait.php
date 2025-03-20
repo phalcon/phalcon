@@ -38,21 +38,6 @@ use function is_object;
 trait ActionTrait
 {
     /**
-     * Deletes data from the adapter. This just checks the key and is called
-     * from the children
-     *
-     * @param string $key
-     *
-     * @return bool
-     */
-    protected function doDelete(string $key): bool
-    {
-        $this->assertKey($key);
-
-        return true;
-    }
-
-    /**
      * Delete multiple keys.
      *
      * @param iterable $keys
@@ -138,6 +123,21 @@ trait ActionTrait
     protected function doDecrement(string $key, int $value = 1): false | int
     {
         $this->assertKey($key);
+    }
+
+    /**
+     * Deletes data from the adapter. This just checks the key and is called
+     * from the children
+     *
+     * @param string $key
+     *
+     * @return bool
+     */
+    protected function doDelete(string $key): bool
+    {
+        $this->assertKey($key);
+
+        return true;
     }
 
     /**

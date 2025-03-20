@@ -55,7 +55,7 @@ class Form extends Injectable implements Countable, Iterator, AttributesInterfac
     /**
      * @var object|null
      */
-    protected ?object $entity = null;
+    protected object | null $entity = null;
     /**
      * @var array
      */
@@ -75,12 +75,12 @@ class Form extends Injectable implements Countable, Iterator, AttributesInterfac
     /**
      * @var TagFactory|null
      */
-    protected ?TagFactory $tagFactory = null;
+    protected TagFactory | null $tagFactory = null;
 
     /**
      * @var ValidationInterface|null
      */
-    protected ?ValidationInterface $validation = null;
+    protected ValidationInterface | null $validation = null;
 
     /**
      * @var array
@@ -118,8 +118,8 @@ class Form extends Injectable implements Countable, Iterator, AttributesInterfac
      */
     public function add(
         ElementInterface $element,
-        string $position = null,
-        bool $type = null
+        string | null $position = null,
+        bool | null $type = null
     ): Form {
         /**
          * Gets the element's name
@@ -262,7 +262,7 @@ class Form extends Injectable implements Countable, Iterator, AttributesInterfac
      *
      * @return $this
      */
-    public function clear(array | string $fields = null): Form
+    public function clear(array | string | null $fields = null): Form
     {
         $data = $this->data;
 

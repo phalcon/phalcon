@@ -33,7 +33,7 @@ interface BuilderInterface
      */
     public function addFrom(
         string $model,
-        ?string $alias = null
+        string | null $alias = null
     ): BuilderInterface;
 
     /**
@@ -201,7 +201,7 @@ interface BuilderInterface
      *
      * @return string|null
      */
-    public function getHaving(): string|null;
+    public function getHaving(): string | null;
 
     /**
      * Return join parts of the query
@@ -309,8 +309,8 @@ interface BuilderInterface
      */
     public function innerJoin(
         string $model,
-        ?string $conditions = null,
-        ?string $alias = null
+        string | null $conditions = null,
+        string | null $alias = null
     ): BuilderInterface;
 
     /**
@@ -324,8 +324,8 @@ interface BuilderInterface
      */
     public function join(
         string $model,
-        ?string $conditions = null,
-        ?string $alias = null
+        string | null $conditions = null,
+        string | null $alias = null
     ): BuilderInterface;
 
     /**
@@ -339,8 +339,8 @@ interface BuilderInterface
      */
     public function leftJoin(
         string $model,
-        ?string $conditions = null,
-        ?string $alias = null
+        string | null $conditions = null,
+        string | null $alias = null
     ): BuilderInterface;
 
     /**
@@ -427,8 +427,8 @@ interface BuilderInterface
      */
     public function rightJoin(
         string $model,
-        ?string $conditions = null,
-        ?string $alias = null
+        string | null $conditions = null,
+        string | null $alias = null
     ): BuilderInterface;
 
     /**

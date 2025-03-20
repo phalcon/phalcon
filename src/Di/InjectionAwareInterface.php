@@ -22,7 +22,7 @@ interface InjectionAwareInterface
     /**
      * Returns the internal dependency injector
      */
-    public function getDI(): ?DiInterface;
+    public function getDI(): DiInterface | null;
 
     /**
      * Sets the dependency injector

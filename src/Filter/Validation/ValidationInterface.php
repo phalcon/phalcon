@@ -73,7 +73,7 @@ interface ValidationInterface
      *
      * @return mixed
      */
-    public function getFilters(string $field = null): mixed;
+    public function getFilters(string | null $field = null): mixed;
 
     /**
      * Get label for field
@@ -165,7 +165,7 @@ interface ValidationInterface
      * @return Messages|false
      */
     public function validate(
-        array | object $data = null,
-        object $entity = null
+        array | object | null $data = null,
+        object | null $entity = null
     ): Messages | false;
 }

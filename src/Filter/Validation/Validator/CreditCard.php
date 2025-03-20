@@ -63,7 +63,7 @@ class CreditCard extends AbstractValidator
     /**
      * @var string|null
      */
-    protected ?string $template = "Field :field is not valid for a credit card number";
+    protected string | null $template = "Field :field is not valid for a credit card number";
 
     /**
      * Executes the validation

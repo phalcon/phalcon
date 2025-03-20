@@ -43,8 +43,10 @@ trait SerializableTrait
      * @link https://php.net/manual/en/serializable.unserialize.php
      *
      * @param string $serialized
+     *
+     * @return void
      */
-    public function unserialize($serialized)
+    public function unserialize($serialized): void
     {
         $serialized = (string)$serialized;
         $data       = unserialize($serialized);

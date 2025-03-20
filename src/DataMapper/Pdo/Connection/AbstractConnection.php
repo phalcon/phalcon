@@ -57,9 +57,9 @@ abstract class AbstractConnection
     /**
      * @var PDO|null
      */
-    protected ?PDO $pdo = null;
+    protected PDO | null $pdo = null;
 
-    protected ?ProfilerInterface $profiler = null;
+    protected ProfilerInterface | null $profiler = null;
 
     /**
      * Proxies to PDO methods created for specific drivers; in particular,
@@ -159,7 +159,7 @@ abstract class AbstractConnection
      *
      * @return ProfilerInterface|null
      */
-    public function getProfiler(): ?ProfilerInterface
+    public function getProfiler(): ProfilerInterface | null
     {
         return $this->profiler;
     }
@@ -241,7 +241,7 @@ abstract class AbstractConnection
      */
     public function query(
         string $statement,
-        ?int $mode = null,
+        int | null $mode = null,
         mixed ...$arguments
     ): PDOStatement | false {
         $this->connect();
@@ -302,7 +302,7 @@ abstract class AbstractConnection
      * @return void
      */
     protected function profileFinish(
-        string $statement = null,
+        string | null $statement = null,
         array $values = []
     ): void {
         if ($this->profiler) {

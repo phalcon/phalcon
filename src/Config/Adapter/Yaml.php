@@ -70,7 +70,7 @@ class Yaml extends Config
      *
      * @throws Exception
      */
-    public function __construct(string $filePath, ?array $callbacks = null)
+    public function __construct(string $filePath, array | null $callbacks = null)
     {
         $ndocs = 0;
 

@@ -76,7 +76,7 @@ class Di extends stdClass implements DiInterface
      *
      * @var DiInterface|null
      */
-    protected static ?DiInterface $defaultContainer = null;
+    protected static DiInterface | null $defaultContainer = null;
     /**
      * List of registered services
      *
@@ -150,8 +150,11 @@ class Di extends stdClass implements DiInterface
      *
      * @return bool|mixed|Service|ServiceInterface
      */
-    public function attempt(string $name, $definition, bool $shared = false)
-    {
+    public function attempt(
+        string $name,
+        mixed $definition,
+        bool $shared = false
+    ) {
         if (isset($this->services[$name])) {
             return false;
         }
@@ -170,7 +173,7 @@ class Di extends stdClass implements DiInterface
      * @return mixed
      * @throws Exception
      */
-    public function get(string $name, array $parameters = null): mixed
+    public function get(string $name, array | null $parameters = null): mixed
     {
         $instance = null;
         $service  = null;
@@ -245,7 +248,7 @@ class Di extends stdClass implements DiInterface
      *
      * @return DiInterface|null
      */
-    public static function getDefault(): ?DiInterface
+    public static function getDefault(): DiInterface | null
     {
         return self::$defaultContainer;
     }
@@ -255,7 +258,7 @@ class Di extends stdClass implements DiInterface
      *
      * @return ManagerInterface|null
      */
-    public function getInternalEventsManager(): ?ManagerInterface
+    public function getInternalEventsManager(): ManagerInterface | null
     {
         return $this->eventsManager;
     }
@@ -312,7 +315,7 @@ class Di extends stdClass implements DiInterface
      * @return mixed
      * @throws DiException
      */
-    public function getShared(string $name, array $parameters = null): mixed
+    public function getShared(string $name, array | null $parameters = null): mixed
     {
         if (!isset($this->sharedInstances[$name])) {
             // Store the instance in the shared instances cache.
@@ -425,7 +428,7 @@ class Di extends stdClass implements DiInterface
      *
      * @param ManagerInterface $eventsManager
      */
-    public function setInternalEventsManager(ManagerInterface $eventsManager)
+    public function setInternalEventsManager(ManagerInterface $eventsManager): void
     {
         $this->eventsManager = $eventsManager;
     }
@@ -467,8 +470,8 @@ class Di extends stdClass implements DiInterface
      */
     private function processObjectNotNullService(
         string $name,
-        array $parameters = null,
-        ServiceInterface $service = null,
+        array | null $parameters = null,
+        ServiceInterface | null $service = null,
         mixed $instance = null
     ) {
         if (null !== $service) {
@@ -499,8 +502,8 @@ class Di extends stdClass implements DiInterface
      */
     private function processObjectNullService(
         string $name,
-        array $parameters = null,
-        ServiceInterface $service = null,
+        array | null $parameters = null,
+        ServiceInterface | null $service = null,
         mixed $instance = null
     ): mixed {
         if (null === $service) {

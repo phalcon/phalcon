@@ -131,8 +131,8 @@ class Service implements ServiceInterface
      * @throws ServiceResolutionException
      */
     public function resolve(
-        array $parameters = null,
-        ?DiInterface $container = null
+        array | null $parameters = null,
+        DiInterface | null $container = null
     ): mixed {
         /**
          * Check if the service is shared

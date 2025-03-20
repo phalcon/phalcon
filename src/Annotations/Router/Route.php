@@ -33,7 +33,7 @@ class Route
             RequestMethodInterface::METHOD_PUT,
             RequestMethodInterface::METHOD_TRACE,
         ],
-        public ?string $name = null,
+        public string | null $name = null,
         public array $paths = [],
         public array $converters = []
     ) {

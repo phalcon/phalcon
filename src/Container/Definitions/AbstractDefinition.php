@@ -28,7 +28,7 @@ abstract class AbstractDefinition extends AbstractLazy
     /**
      * @var string|null
      */
-    protected ?string $class = null;
+    protected string | null $class = null;
     /**
      * @var mixed|null
      */

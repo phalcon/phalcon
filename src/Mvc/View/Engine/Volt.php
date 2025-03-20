@@ -37,7 +37,7 @@ class Volt extends AbstractEngine
     /**
      * @var Compiler|null
      */
-    protected ?Compiler $compiler = null;
+    protected Compiler | null $compiler = null;
 
     /**
      * @var array

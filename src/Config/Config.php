@@ -85,7 +85,7 @@ class Config extends Collection implements ConfigInterface
      * @return ConfigInterface
      * @throws Exception
      */
-    public function merge(array|ConfigInterface $toMerge): ConfigInterface
+    public function merge(array | ConfigInterface $toMerge): ConfigInterface
     {
         $source = $this->toArray();
 
@@ -122,7 +122,7 @@ class Config extends Collection implements ConfigInterface
     public function path(
         string $path,
         mixed $defaultValue = null,
-        ?string $delimiter = null
+        string | null $delimiter = null
     ) {
         if (false !== $this->has($path)) {
             return $this->get($path);

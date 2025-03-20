@@ -62,18 +62,6 @@ class Annotation
     }
 
     /**
-     * Returns a named argument
-     *
-     * @param string $name
-     *
-     * @return mixed
-     */
-    public function getNamedArgument(string $name): mixed
-    {
-        return $this->arguments[$name] ?? null;
-    }
-
-    /**
      * Returns the expression arguments
      *
      * @return array
@@ -84,15 +72,13 @@ class Annotation
     }
 
     /**
-     * Returns a named parameter
+     * Returns the attribute's base name
      *
-     * @param string $name
-     *
-     * @return mixed
+     * @return string
      */
-    public function getNamedParameter(string $name): mixed
+    public function getCleanName(): string
     {
-        return $this->getNamedArgument($name);
+        return ltrim(strrchr($this->name, '\\'), '\\');
     }
 
     /**
@@ -106,13 +92,27 @@ class Annotation
     }
 
     /**
-     * Returns the attribute's base name
+     * Returns a named argument
      *
-     * @return string
+     * @param string $name
+     *
+     * @return mixed
      */
-    public function getCleanName(): string
+    public function getNamedArgument(string $name): mixed
     {
-        return ltrim(strrchr($this->name, '\\'), '\\');
+        return $this->arguments[$name] ?? null;
+    }
+
+    /**
+     * Returns a named parameter
+     *
+     * @param string $name
+     *
+     * @return mixed
+     */
+    public function getNamedParameter(string $name): mixed
+    {
+        return $this->getNamedArgument($name);
     }
 
     /**

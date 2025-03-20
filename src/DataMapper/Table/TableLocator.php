@@ -33,17 +33,6 @@ class TableLocator
     protected array $instances = [];
 
     /**
-     * @param mixed ...$arguments
-     *
-     * @return static
-     * @throws ConnectionNotFound
-     */
-    public static function new(mixed ...$arguments): static
-    {
-        return new static(ConnectionLocator::new(...$arguments));
-    }
-
-    /**
      * @param ConnectionLocator $connectionLocator
      * @param callable|null     $factory
      */
@@ -98,6 +87,17 @@ class TableLocator
     {
         return class_exists($tableClass) &&
             is_subclass_of($tableClass, AbstractTable::class);
+    }
+
+    /**
+     * @param mixed ...$arguments
+     *
+     * @return static
+     * @throws ConnectionNotFound
+     */
+    public static function new(mixed ...$arguments): static
+    {
+        return new static(ConnectionLocator::new(...$arguments));
     }
 
     /**

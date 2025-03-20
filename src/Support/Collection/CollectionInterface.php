@@ -48,7 +48,7 @@ interface CollectionInterface extends ArrayAccess, IteratorAggregate
      * @param string $element Name of the element
      * @param mixed  $value   Value to store for the element
      */
-    public function __set(string $element, $value): void;
+    public function __set(string $element, mixed $value): void;
 
     /**
      * Delete the element from the collection
@@ -73,8 +73,8 @@ interface CollectionInterface extends ArrayAccess, IteratorAggregate
      */
     public function get(
         string $element,
-        $defaultValue = null,
-        string $cast = null
+        mixed $defaultValue = null,
+        string | null $cast = null
     );
 
     /**
@@ -122,7 +122,7 @@ interface CollectionInterface extends ArrayAccess, IteratorAggregate
      * @param string $element Name of the element
      * @param mixed  $value   Value to store for the element
      */
-    public function set(string $element, $value): void;
+    public function set(string $element, mixed $value): void;
 
     /**
      * Returns the object in an array format
@@ -145,5 +145,5 @@ interface CollectionInterface extends ArrayAccess, IteratorAggregate
      *
      * @return string
      */
-    public function toJson(int $options = 4194383): string;
+    public function toJson(int $options = 79): string;
 }

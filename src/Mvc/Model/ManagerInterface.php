@@ -38,19 +38,6 @@ interface ManagerInterface
     ): void;
 
     /**
-     * Removes a behavior from a model
-     *
-     * @param ModelInterface $model
-     * @param string         $behaviorClass
-     *
-     * @return void
-     */
-    public function removeBehavior(
-        ModelInterface $model,
-        string $behaviorClass
-    ): void;
-
-    /**
      * Setup a relation reverse 1-1  between two models
      *
      * @param ModelInterface $model
@@ -189,8 +176,8 @@ interface ManagerInterface
      */
     public function executeQuery(
         string $phql,
-        ?array $placeholders = null,
-        ?array $types = null
+        array | null $placeholders = null,
+        array | null $types = null
     ): mixed;
 
     /**
@@ -216,7 +203,7 @@ interface ManagerInterface
         string $modelRelation,
         ModelInterface $record,
         array | string | null $parameters = null,
-        ?string $method = null
+        string | null $method = null
     ): ResultsetInterface | bool;
 
     /**
@@ -249,7 +236,7 @@ interface ManagerInterface
         string $modelRelation,
         ModelInterface $record,
         array | string | null $parameters = null,
-        string $method = null
+        string | null $method = null
     ): ResultsetInterface | bool;
 
     /**
@@ -293,7 +280,7 @@ interface ManagerInterface
         string $modelRelation,
         ModelInterface $record,
         array | string | null $parameters = null,
-        string $method = null
+        string | null $method = null
     ): ModelInterface | bool;
 
     /**
@@ -382,7 +369,7 @@ interface ManagerInterface
         RelationInterface $relation,
         ModelInterface $record,
         array | string | null $parameters = null,
-        string $method = null
+        string | null $method = null
     ): ModelInterface | Simple | int | false;
 
     /**
@@ -587,6 +574,19 @@ interface ManagerInterface
      * @return mixed
      */
     public function notifyEvent(string $eventName, ModelInterface $model);
+
+    /**
+     * Removes a behavior from a model
+     *
+     * @param ModelInterface $model
+     * @param string         $behaviorClass
+     *
+     * @return void
+     */
+    public function removeBehavior(
+        ModelInterface $model,
+        string $behaviorClass
+    ): void;
 
     /**
      * Sets both write and read connection service for a model

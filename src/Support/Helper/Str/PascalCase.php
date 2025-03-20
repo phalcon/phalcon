@@ -36,7 +36,7 @@ class PascalCase
      */
     public function __invoke(
         string $text,
-        string $delimiters = null
+        string | null $delimiters = null
     ): string {
         $exploded = $this->processArray($text, $delimiters);
 
@@ -56,8 +56,10 @@ class PascalCase
      *
      * @return string[]
      */
-    protected function processArray(string $text, string $delimiters = null): array
-    {
+    protected function processArray(
+        string $text,
+        string | null $delimiters = null
+    ): array {
         $delimiters = $delimiters ?: '\-_';
         /**
          * Escape the `-` if it exists so that it does not get interpreted

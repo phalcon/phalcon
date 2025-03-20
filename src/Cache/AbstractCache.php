@@ -21,7 +21,6 @@ use Phalcon\Events\EventsAwareInterface;
 use Phalcon\Events\Exception as EventsException;
 use Phalcon\Events\Traits\EventsAwareTrait;
 use Psr\SimpleCache\CacheInterface;
-use Psr\SimpleCache\InvalidArgumentException;
 
 /**
  * This component offers caching capabilities for your application.
@@ -188,12 +187,11 @@ abstract class AbstractCache implements CacheInterface, EventsAwareInterface
                     $serializer->unserialize($element);
                     return false === $element
                         ? $default
-                        : $serializer->getData()
-                    ;
+                        : $serializer->getData();
                 },
                 $results
             );
-            $results = array_combine($keys, $results);
+            $results    = array_combine($keys, $results);
         } else {
             $results = [];
             /** @var string $element */
@@ -293,7 +291,7 @@ abstract class AbstractCache implements CacheInterface, EventsAwareInterface
         $result = true;
         /**
          * @var string $key
-         * @var mixed $value
+         * @var mixed  $value
          */
         foreach ($values as $key => $value) {
             if (true !== $this->set($key, $value, $ttl)) {

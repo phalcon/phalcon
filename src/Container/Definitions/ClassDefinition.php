@@ -28,7 +28,6 @@ use ReflectionClass;
 use ReflectionException;
 use ReflectionNamedType;
 use ReflectionParameter;
-use ReflectionType;
 use ReflectionUnionType;
 
 use function array_key_exists;
@@ -59,7 +58,7 @@ class ClassDefinition extends AbstractDefinition
     /**
      * @var ClassDefinition|null
      */
-    protected ?ClassDefinition $inherit = null;
+    protected ClassDefinition | null $inherit = null;
 
     /**
      * @var array
@@ -134,7 +133,7 @@ class ClassDefinition extends AbstractDefinition
      * @return $this
      * @throws NotFound
      */
-    public function class(?string $class): static
+    public function class(string | null $class): static
     {
         if ($class === $this->id) {
             $class = null;
@@ -185,7 +184,7 @@ class ClassDefinition extends AbstractDefinition
      *
      * @return $this
      */
-    public function inherit(?Definitions $definition): static
+    public function inherit(Definitions | null $definition): static
     {
         $parent = get_parent_class($this->id);
 
@@ -367,8 +366,8 @@ class ClassDefinition extends AbstractDefinition
     }
 
     /**
-     * @param int                 $position
-     * @param array               $inherited
+     * @param int   $position
+     * @param array $inherited
      *
      * @return bool
      */

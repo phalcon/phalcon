@@ -56,7 +56,10 @@ interface ServiceInterface
      *
      * @return mixed
      */
-    public function resolve(array $parameters = null, DiInterface $container = null): mixed;
+    public function resolve(
+        array | null $parameters = null,
+        DiInterface | null $container = null
+    ): mixed;
 
     /**
      * Set the service definition

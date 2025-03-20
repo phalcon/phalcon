@@ -65,7 +65,7 @@ class Tag
      *
      * @var DiInterface|null
      */
-    protected static ?DiInterface $container = null;
+    protected static DiInterface | null $container = null;
 
     /**
      * Pre-assigned values for components
@@ -89,12 +89,12 @@ class Tag
      *
      * @var string|null
      */
-    protected static ?string $documentTitle = "";
+    protected static string | null $documentTitle = "";
 
     /**
      * @var string|null
      */
-    protected static ?string $documentTitleSeparator = "";
+    protected static string | null $documentTitleSeparator = "";
 
     /**
      * @var int
@@ -104,12 +104,12 @@ class Tag
     /**
      * @var EscaperInterface|null
      */
-    protected static ?EscaperInterface $escaperService = null;
+    protected static EscaperInterface | null $escaperService = null;
 
     /**
      * @var UrlInterface|null
      */
-    protected static ?UrlInterface $urlService = null;
+    protected static UrlInterface | null $urlService = null;
 
     /**
      * Appends a text to current document title
@@ -739,7 +739,7 @@ class Tag
      */
     public static function linkTo(
         array | string $parameters,
-        string $text = null,
+        string | null $text = null,
         bool $local = true
     ): string {
         $params = $parameters;
@@ -1207,7 +1207,7 @@ class Tag
      * @throws Url\Exception
      */
     public static function stylesheetLink(
-        array | string $parameters = null,
+        array | string | null $parameters = null,
         bool $local = true
     ): string {
         if (!is_array($parameters)) {
@@ -1483,12 +1483,14 @@ class Tag
      *
      * @param string       $type
      * @param array|string $parameters = {
-     *      @option string "id"
-     *      @option string "name"
-     *      @option string "value"
-     *      @option string "class"
-     *      @option string "type"
+     *
+     * @option string "id"
+     * @option string "name"
+     * @option string "value"
+     * @option string "class"
+     * @option string "type"
      * }
+     *
      * @param bool         $asValue
      *
      * @return string

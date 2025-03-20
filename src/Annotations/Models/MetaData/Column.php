@@ -19,9 +19,9 @@ use Attribute;
 class Column
 {
     public function __construct(
-        public ?string $column = null,
+        public string | null $column = null,
         public string $type = 'string',
-        public ?int $length = null,
+        public int | null $length = null,
         public bool $nullable = false,
         public bool $skipOnInsert = false,
         public bool $skipOnUpdate = false,

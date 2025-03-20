@@ -24,7 +24,7 @@ class Memory extends MetaData
     /**
      * Reads the meta-data from temporal memory
      */
-    public function read(?string $key): array | null
+    public function read(string | null $key): array | null
     {
         return null;
     }
@@ -32,7 +32,7 @@ class Memory extends MetaData
     /**
      * Writes the meta-data to temporal memory
      */
-    public function write(?string $key, array $data): void
+    public function write(string | null $key, array $data): void
     {
     }
 }

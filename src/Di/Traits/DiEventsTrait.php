@@ -17,8 +17,6 @@ use Phalcon\Events\ManagerInterface;
 
 /**
  * Trait DiEventsTrait
- *
- * @package Phalcon\Di\Traits
  */
 trait DiEventsTrait
 {
@@ -31,10 +29,10 @@ trait DiEventsTrait
      * @return mixed
      */
     private function fireAfterServiceResolve(
-        $eventsManager,
+        ManagerInterface | null $eventsManager,
         string $name,
-        array $parameters = null,
-        $instance = null
+        array | null $parameters = null,
+        mixed $instance = null
     ) {
         /**
          * Allows for custom creation of instances through the
@@ -64,10 +62,10 @@ trait DiEventsTrait
      * @return mixed
      */
     private function fireBeforeServiceResolve(
-        $eventsManager,
+        ManagerInterface | null $eventsManager,
         string $name,
-        array $parameters = null,
-        $instance = null
+        array | null $parameters = null,
+        mixed $instance = null
     ) {
         /**
          * Allows for custom creation of instances through the

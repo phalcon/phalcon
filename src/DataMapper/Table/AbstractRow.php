@@ -40,17 +40,14 @@ abstract class AbstractRow implements IteratorAggregate, JsonSerializable
     public const INSERT = 'INSERT';
     public const SELECT = 'SELECT';
     public const UPDATE = 'UPDATE';
-
+    /**
+     * @var array<string, mixed>
+     */
+    protected array $store = [];
     /**
      * @var array<string, mixed>
      */
     private array $initStore;
-
-    /**
-     * @var string|null
-     */
-    private ?string $lastAction = null;
-
     /**
      * @var bool
      */
@@ -60,11 +57,10 @@ abstract class AbstractRow implements IteratorAggregate, JsonSerializable
      * @var bool
      */
     private bool $isDelete = false;
-
     /**
-     * @var array<string, mixed>
+     * @var string|null
      */
-    protected array $store = [];
+    private string | null $lastAction = null;
 
     /**
      * @param array $columns
@@ -149,7 +145,7 @@ abstract class AbstractRow implements IteratorAggregate, JsonSerializable
      *
      * @return string|null
      */
-    public function getLastAction(): ?string
+    public function getLastAction(): string | null
     {
         return $this->lastAction;
     }
@@ -159,7 +155,7 @@ abstract class AbstractRow implements IteratorAggregate, JsonSerializable
      *
      * @return string|null
      */
-    public function getNextAction(): ?string
+    public function getNextAction(): string | null
     {
         if (null === $this->lastAction) {
             return $this->isDelete ? null : static::INSERT;

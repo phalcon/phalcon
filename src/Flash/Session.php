@@ -48,7 +48,7 @@ class Session extends AbstractFlash
      * @return array
      * @throws Exception
      */
-    public function getMessages(?string $type = null, bool $remove = true): array
+    public function getMessages(string | null $type = null, bool $remove = true): array
     {
         return $this->getSessionMessages($remove, $type);
     }
@@ -93,7 +93,7 @@ class Session extends AbstractFlash
      * @return bool
      * @throws Exception
      */
-    public function has(string $type = null): bool
+    public function has(string | null $type = null): bool
     {
         $messages = $this->getSessionMessages(false);
 
@@ -113,7 +113,7 @@ class Session extends AbstractFlash
      * @return string|null
      * @throws Exception
      */
-    public function message(string $type, $message): ?string
+    public function message(string $type, $message): string | null
     {
         $messages = $this->getSessionMessages(false);
 
@@ -155,7 +155,7 @@ class Session extends AbstractFlash
      * @return array
      * @throws Exception
      */
-    protected function getSessionMessages(bool $remove, ?string $type = null): array
+    protected function getSessionMessages(bool $remove, string | null $type = null): array
     {
         $session  = $this->getSessionService();
         $messages = $session->get(self::SESSION_KEY);

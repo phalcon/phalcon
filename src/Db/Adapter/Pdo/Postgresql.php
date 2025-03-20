@@ -175,7 +175,7 @@ class Postgresql extends PdoAdapter
      */
     public function describeColumns(
         string $tableName,
-        ?string $schemaName = null
+        string | null $schemaName = null
     ): array {
         $oldColumn = null;
         $columns   = [];
@@ -562,7 +562,7 @@ class Postgresql extends PdoAdapter
      */
     public function describeReferences(
         string $tableName,
-        ?string $schemaName = null
+        string | null $schemaName = null
     ): array {
         $references = [];
         $records    = $this->fetchAll(
@@ -653,7 +653,7 @@ class Postgresql extends PdoAdapter
         string $tableName,
         string $schemaName,
         ColumnInterface $column,
-        ColumnInterface $currentColumn = null
+        ColumnInterface | null $currentColumn = null
     ): bool {
         $sql = $this->dialect->modifyColumn(
             $tableName,

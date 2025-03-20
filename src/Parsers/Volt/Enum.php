@@ -130,8 +130,8 @@ class Enum
     public const PHVOLT_T_OPEN_DELIMITER    = 330;
     public const PHVOLT_T_OPEN_EDELIMITER   = 332;
     public const PHVOLT_T_OR                = 267;
-    public const PHVOLT_T_PARENTHESES_CLOSE = 41; //')';
-    public const PHVOLT_T_PARENTHESES_OPEN  = 40; //'(';
+    public const PHVOLT_T_PARENTHESES_CLOSE = 41;  //')';
+    public const PHVOLT_T_PARENTHESES_OPEN  = 40;  //'(';
     public const PHVOLT_T_PIPE              = 124; //'|';
     public const PHVOLT_T_PLUS              = 369;
     public const PHVOLT_T_POW               = 278;

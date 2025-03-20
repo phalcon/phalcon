@@ -20,7 +20,6 @@ use Phalcon\Filter\Validation\Exception as ValidationException;
 use function in_array;
 use function is_array;
 use function is_bool;
-use function join;
 
 /**
  * Check if a value is not included into a list of values
@@ -69,7 +68,7 @@ use function join;
  */
 class ExclusionIn extends AbstractValidator
 {
-    protected ?string $template = "Field :field must not be a part of list: :domain";
+    protected string | null $template = "Field :field must not be a part of list: :domain";
 
     /**
      * Executes the validation

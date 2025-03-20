@@ -80,8 +80,8 @@ class ImageFactory
     public function newInstance(
         string $name,
         string $file,
-        int $width = null,
-        int $height = null
+        int | null $width = null,
+        int | null $height = null
     ): AdapterInterface {
         $definition = $this->getService($name);
 

@@ -59,7 +59,7 @@ class Url extends AbstractValidator
     /**
      * @var string|null
      */
-    protected ?string $template = "Field :field must be a url";
+    protected string | null $template = "Field :field must be a url";
 
     /**
      * Executes the validation

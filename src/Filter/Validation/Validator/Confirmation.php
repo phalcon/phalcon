@@ -67,7 +67,7 @@ class Confirmation extends AbstractValidator
     /**
      * @var string|null
      */
-    protected ?string $template = "Field :field must be the same as :with";
+    protected string | null $template = "Field :field must be the same as :with";
 
     /**
      * Executes the validation

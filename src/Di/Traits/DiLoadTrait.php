@@ -94,10 +94,12 @@ trait DiLoadTrait
      *    className: \Acme\User
      * ```
      *
-     * @link https://docs.phalcon.io/en/latest/di
+     * @link https://docs.phalcon.io/latest/di
      */
-    public function loadFromYaml(string $filePath, array $callbacks = null): void
-    {
+    public function loadFromYaml(
+        string $filePath,
+        array | null $callbacks = null
+    ): void {
         $services = new Yaml($filePath, $callbacks);
 
         $this->loadFromConfig($services);

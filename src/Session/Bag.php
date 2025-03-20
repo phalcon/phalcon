@@ -98,7 +98,7 @@ class Bag extends Collection implements BagInterface
     /**
      * Sets a value in the session bag
      */
-    public function set(string $element, $value): void
+    public function set(string $element, mixed $value): void
     {
         parent::set($element, $value);
 

@@ -31,7 +31,7 @@ class First
      *
      * @return mixed
      */
-    public function __invoke(array $collection, callable $method = null)
+    public function __invoke(array $collection, callable | null $method = null)
     {
         $filtered = $this->toFilter($collection, $method);
 

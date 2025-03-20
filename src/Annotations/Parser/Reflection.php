@@ -39,7 +39,7 @@ class Reflection
     /**
      * @var Collection|null
      */
-    protected ?Collection $classAnnotations = null;
+    protected Collection | null $classAnnotations = null;
 
     /**
      * @var array

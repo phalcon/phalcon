@@ -26,7 +26,6 @@ use function date_default_timezone_get;
 use function is_numeric;
 use function is_string;
 use function strtolower;
-use function strtoupper;
 
 /**
  * Abstract Logger Class
@@ -87,7 +86,7 @@ abstract class AbstractLogger
     public function __construct(
         protected string $name,
         array $adapters = [],
-        ?DateTimeZone $timezone = null
+        DateTimeZone | null $timezone = null
     ) {
         if (null == $timezone) {
             $timezone = new DateTimeZone(date_default_timezone_get());
@@ -304,7 +303,7 @@ abstract class AbstractLogger
     {
         if (is_string($level)) {
             $levelName = strtolower($level);
-            $levels = array_flip($this->getLevels());
+            $levels    = array_flip($this->getLevels());
 
             return $levels[$levelName] ?? Enum::CUSTOM;
         }

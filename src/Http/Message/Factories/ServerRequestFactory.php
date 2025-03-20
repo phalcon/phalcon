@@ -95,11 +95,11 @@ class ServerRequestFactory implements
      * @return ServerRequest
      */
     public function load(
-        array $server = null,
-        array $get = null,
-        array $post = null,
-        array $cookies = null,
-        array $files = null
+        array | null $server = null,
+        array | null $get = null,
+        array | null $post = null,
+        array | null $cookies = null,
+        array | null $files = null
     ): ServerRequest {
         /**
          * Ensure that superglobals are defined if not

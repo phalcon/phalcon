@@ -106,7 +106,7 @@ class Definitions extends stdClass
      *
      * @return CsEnv
      */
-    public function csEnv(string $name, string $type = null): CsEnv
+    public function csEnv(string $name, string | null $type = null): CsEnv
     {
         return new CsEnv($name, $type);
     }
@@ -117,7 +117,7 @@ class Definitions extends stdClass
      *
      * @return Env
      */
-    public function env(string $name, string $type = null): Env
+    public function env(string $name, string | null $type = null): Env
     {
         return new Env($name, $type);
     }
@@ -202,7 +202,7 @@ class Definitions extends stdClass
      * @return AbstractDefinition|null
      * @throws NotFound
      */
-    public function newDefinition(string $type): ?AbstractDefinition
+    public function newDefinition(string $type): AbstractDefinition | null
     {
         if (interface_exists($type)) {
             return new InterfaceDefinition($type);

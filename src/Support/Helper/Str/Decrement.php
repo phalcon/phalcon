@@ -14,7 +14,6 @@ declare(strict_types=1);
 namespace Phalcon\Support\Helper\Str;
 
 use function explode;
-use function is_array;
 
 /**
  * Removes a number from the end of a string or decrements that number if it
@@ -35,7 +34,7 @@ class Decrement
         $number = 0;
         $parts  = explode($separator, $text);
         /** @var array<int, string> $parts */
-        $parts  = false === $parts ? [] : $parts;
+        $parts = false === $parts ? [] : $parts;
 
         if (isset($parts[1])) {
             $number = (int)$parts[1];

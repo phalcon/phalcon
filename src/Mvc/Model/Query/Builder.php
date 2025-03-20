@@ -89,7 +89,7 @@ class Builder implements BuilderInterface, InjectionAwareInterface
     /**
      * @var DiInterface|null
      */
-    protected ?DiInterface $container;
+    protected DiInterface | null $container;
 
     /**
      * @var mixed
@@ -109,7 +109,7 @@ class Builder implements BuilderInterface, InjectionAwareInterface
     /**
      * @var string|null
      */
-    protected ?string $having = null;
+    protected string | null $having = null;
 
     /**
      * @var int
@@ -154,7 +154,7 @@ class Builder implements BuilderInterface, InjectionAwareInterface
      */
     public function __construct(
         array | string | null $params = null,
-        ?DiInterface $container = null
+        DiInterface | null $container = null
     ) {
         if (is_array($params)) {
             /**
@@ -337,7 +337,7 @@ class Builder implements BuilderInterface, InjectionAwareInterface
      *
      * @return BuilderInterface
      */
-    public function addFrom(string $model, ?string $alias = null): BuilderInterface
+    public function addFrom(string $model, string | null $alias = null): BuilderInterface
     {
         if (!is_array($this->models)) {
             if ($this->models !== null) {
@@ -695,7 +695,7 @@ class Builder implements BuilderInterface, InjectionAwareInterface
      *
      * @return string|null
      */
-    public function getHaving(): string|null
+    public function getHaving(): string | null
     {
         return $this->having;
     }
@@ -1316,8 +1316,8 @@ class Builder implements BuilderInterface, InjectionAwareInterface
      */
     public function innerJoin(
         string $model,
-        ?string $conditions = null,
-        ?string $alias = null
+        string | null $conditions = null,
+        string | null $alias = null
     ): BuilderInterface {
         $this->joins[] = [$model, $conditions, $alias, "INNER"];
 
@@ -1364,9 +1364,9 @@ class Builder implements BuilderInterface, InjectionAwareInterface
      */
     public function join(
         string $model,
-        ?string $conditions = null,
-        ?string $alias = null,
-        string $type = null
+        string | null $conditions = null,
+        string | null $alias = null,
+        string | null $type = null
     ): BuilderInterface {
         $this->joins[] = [$model, $conditions, $alias, $type];
 
@@ -1392,8 +1392,8 @@ class Builder implements BuilderInterface, InjectionAwareInterface
      */
     public function leftJoin(
         string $model,
-        ?string $conditions = null,
-        ?string $alias = null
+        string | null $conditions = null,
+        string | null $alias = null
     ): BuilderInterface {
         $this->joins[] = [$model, $conditions, $alias, "LEFT"];
 
@@ -1657,8 +1657,8 @@ class Builder implements BuilderInterface, InjectionAwareInterface
      */
     public function rightJoin(
         string $model,
-        ?string $conditions = null,
-        ?string $alias = null
+        string | null $conditions = null,
+        string | null $alias = null
     ): BuilderInterface {
         $this->joins[] = [$model, $conditions, $alias, "RIGHT"];
 

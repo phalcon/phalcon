@@ -298,7 +298,7 @@ interface ModelInterface
      * @return CriteriaInterface
      */
     public static function query(
-        DiInterface $container = null
+        DiInterface | null $container = null
     ): CriteriaInterface;
 
     /**

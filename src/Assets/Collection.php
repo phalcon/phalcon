@@ -123,10 +123,10 @@ class Collection implements Countable, IteratorAggregate
      */
     public function addCss(
         string $path,
-        bool $isLocal = null,
+        bool | null $isLocal = null,
         bool $filter = true,
         array $attributes = [],
-        string $version = null,
+        string | null $version = null,
         bool $autoVersion = false
     ): static {
         return $this->processAdd(
@@ -216,10 +216,10 @@ class Collection implements Countable, IteratorAggregate
      */
     public function addJs(
         string $path,
-        bool $isLocal = null,
+        bool | null $isLocal = null,
         bool $filter = true,
         array $attributes = [],
-        string $version = null,
+        string | null $version = null,
         bool $autoVersion = false
     ): static {
         return $this->processAdd(
@@ -636,10 +636,10 @@ class Collection implements Countable, IteratorAggregate
     private function processAdd(
         string $className,
         string $path,
-        bool $isLocal = null,
+        bool | null $isLocal = null,
         bool $filter = true,
         array $attributes = [],
-        string $version = null,
+        string | null $version = null,
         bool $autoVersion = false
     ): static {
         /** @var class-string $name */

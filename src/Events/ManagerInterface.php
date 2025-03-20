@@ -31,7 +31,7 @@ interface ManagerInterface
      */
     public function attach(
         string $eventType,
-        callable|object $handler,
+        callable | object $handler,
         int $priority = self::DEFAULT_PRIORITY
     ): void;
 
@@ -48,7 +48,7 @@ interface ManagerInterface
      *
      * @param string|null $type
      */
-    public function detachAll(?string $type = null): void;
+    public function detachAll(string | null $type = null): void;
 
     /**
      * Fires an event in the events manager causing the active listeners to be

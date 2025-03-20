@@ -35,7 +35,7 @@ class Exception extends BaseException
         string $message = "",
         array $statement = [],
         int $code = 0,
-        BaseException $previous = null
+        BaseException | null $previous = null
     ) {
         $this->statement = $statement;
 

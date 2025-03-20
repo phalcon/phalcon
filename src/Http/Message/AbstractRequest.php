@@ -50,7 +50,7 @@ abstract class AbstractRequest extends AbstractMessage implements
      *
      * @var null|string
      */
-    protected ?string $requestTarget = null;
+    protected string | null $requestTarget = null;
 
     /**
      * Retrieves the URI instance.
@@ -155,7 +155,7 @@ abstract class AbstractRequest extends AbstractMessage implements
      *
      * @return RequestInterface
      */
-    public function withRequestTarget(?string $requestTarget): RequestInterface
+    public function withRequestTarget(string | null $requestTarget): RequestInterface
     {
         if (null === $requestTarget) {
             return $this;

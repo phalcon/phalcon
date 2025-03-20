@@ -55,7 +55,7 @@ class PresenceOf extends AbstractValidator
     /**
      * @var string|null
      */
-    protected ?string $template = "Field :field is required";
+    protected string | null $template = "Field :field is required";
 
     /**
      * Executes the validation
