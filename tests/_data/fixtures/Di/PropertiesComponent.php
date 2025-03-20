@@ -26,8 +26,6 @@ use Phalcon\Tests\Fixtures\Di\ServiceComponent;
  */
 class PropertiesComponent extends ServiceComponent
 {
-    private ?EscaperInterface $escaper = null;
-
     /**
      * @var string
      */
@@ -39,11 +37,6 @@ class PropertiesComponent extends ServiceComponent
     public int $propertyType = 0;
 
     /**
-     * @var ServiceComponent
-     */
-    private ?ServiceComponent $service = null;
-
-    /**
      * PropertiesComponent constructor.
      *
      * @param string $name
@@ -52,12 +45,9 @@ class PropertiesComponent extends ServiceComponent
     public function __construct(
         string $name,
         int $type,
-        EscaperInterface $escaper = null,
-        ServiceComponent $service = null
+        public EscaperInterface | null $escaper = null,
+        public ServiceComponent | null $service = null
     ) {
-        $this->escaper = $escaper;
-        $this->service = $service;
-
         parent::__construct($name, $type);
     }
 

@@ -45,7 +45,7 @@ trait GetSetHasTrait
      * @param string $element
      * @param mixed  $value
      */
-    public function __set(string $element, $value): void
+    public function __set(string $element, mixed $value): void
     {
         $this->set($element, $value);
     }
@@ -71,8 +71,8 @@ trait GetSetHasTrait
      */
     abstract public function get(
         string $element,
-        $defaultValue = null,
-        string $cast = null
+        mixed $defaultValue = null,
+        string | null $cast = null
     ): mixed;
 
     /**

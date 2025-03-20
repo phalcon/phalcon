@@ -26,7 +26,7 @@ use function dataDir;
  */
 class Module implements ModuleDefinitionInterface
 {
-    public function registerAutoloaders(DiInterface $di = null)
+    public function registerAutoloaders(DiInterface | null $di = null)
     {
     }
 
