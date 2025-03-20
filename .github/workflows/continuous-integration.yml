@@ -55,6 +55,7 @@ jobs:
           - '8.1'
           - '8.2'
           - '8.3'
+          - '8.4'
     steps:
       - uses: actions/checkout@v4
 
@@ -107,6 +108,7 @@ jobs:
           - '8.1'
           - '8.2'
           - '8.3'
+          - '8.4'
         ts:
           - 'ts'
         name:
@@ -386,8 +388,6 @@ jobs:
       matrix:
         php:
           - '8.1'
-#          - '8.2'
-#          - '8.3'
 
     steps:
       - uses: actions/checkout@v4
@@ -469,6 +469,7 @@ jobs:
           mv cv/unit-8.1.coverage/coverage.xml      cv/03.xml
           mv cv/unit-8.2.coverage/coverage.xml      cv/04.xml
           mv cv/unit-8.3.coverage/coverage.xml      cv/05.xml
+          mv cv/unit-8.4.coverage/coverage.xml      cv/06.xml
           ls -la cv/
 
 
@@ -487,4 +488,4 @@ jobs:
             -Dsonar.sourceEncoding=UTF-8
             -Dsonar.language=php
             -Dsonar.tests=tests/
-            -Dsonar.php.coverage.reportPaths=cv/01.xml,cv/02.xml,cv/03.xml,cv/04.xml,cv/05.xml
+            -Dsonar.php.coverage.reportPaths=cv/01.xml,cv/02.xml,cv/03.xml,cv/04.xml,cv/05.xml,cv/06.xml
