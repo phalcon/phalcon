@@ -30,7 +30,7 @@ trait DiArrayAccessTrait
      * @return mixed|InjectionAwareInterface|null
      * @throws Exception
      */
-    abstract public function getShared(string $name, array $parameters = null);
+    abstract public function getShared(string $name, array | null $parameters = null);
 
     /**
      * Check whether the DI contains a service by a name
@@ -118,7 +118,7 @@ trait DiArrayAccessTrait
      */
     abstract public function set(
         string $name,
-        $definition,
+        mixed $definition,
         bool $shared = false
     ): ServiceInterface;
 
@@ -130,7 +130,7 @@ trait DiArrayAccessTrait
      *
      * @return ServiceInterface
      */
-    public function setShared(string $name, $definition): ServiceInterface
+    public function setShared(string $name, mixed $definition): ServiceInterface
     {
         return $this->set($name, $definition, true);
     }

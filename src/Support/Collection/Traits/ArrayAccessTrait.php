@@ -27,7 +27,7 @@ trait ArrayAccessTrait
     abstract public function get(
         string $element,
         mixed $defaultValue = null,
-        string $cast = null
+        string | null $cast = null
     ): mixed;
 
     /**
