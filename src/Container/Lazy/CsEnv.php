@@ -41,7 +41,7 @@ class CsEnv extends Env
      */
     public function __invoke(Container $container): array
     {
-        $values = str_getcsv($this->getEnv());
+        $values = str_getcsv($this->getEnv(), ",", '"', "\\");
 
         if ($this->vartype !== null) {
             $return = [];
