@@ -17,13 +17,11 @@ use Phalcon\Filter\Validation;
 use Phalcon\Filter\Validation\Exception;
 use Phalcon\Traits\Php\InfoTrait;
 
-use function array_flip;
 use function finfo_close;
 use function finfo_file;
 use function finfo_open;
 use function in_array;
 use function is_array;
-use function join;
 
 use const FILEINFO_MIME_TYPE;
 
@@ -82,7 +80,7 @@ class MimeType extends AbstractFile
     /**
      * @var string|null
      */
-    protected ?string $template = "File :field must be of type: :types";
+    protected string | null $template = "File :field must be of type: :types";
 
     /**
      * Executes the validation

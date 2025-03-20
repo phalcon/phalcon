@@ -22,12 +22,9 @@ use Phalcon\Storage\Adapter\AdapterInterface;
 class Annotations
 {
     private const CACHE_PREFIX = '_PHATN';
-
-    protected array $attributes = [];
-
     protected AdapterInterface $adapter;
-
-    protected ?Reader $reader = null;
+    protected array $attributes = [];
+    protected Reader | null $reader = null;
 
     public function __construct(AdapterInterface $adapter)
     {
@@ -173,18 +170,6 @@ class Annotations
     }
 
     /**
-     * Sets the attributes parser
-     *
-     * @param ReaderInterface $reader
-     *
-     * @return void
-     */
-    public function setReader(ReaderInterface $reader): void
-    {
-        $this->reader = $reader;
-    }
-
-    /**
      * Reads parsed annotations from memory
      *
      * @param string $key
@@ -194,6 +179,18 @@ class Annotations
     public function read(string $key): Reflection | bool
     {
         return $this->adapter->get(strtolower($key)) ?? false;
+    }
+
+    /**
+     * Sets the attributes parser
+     *
+     * @param ReaderInterface $reader
+     *
+     * @return void
+     */
+    public function setReader(ReaderInterface $reader): void
+    {
+        $this->reader = $reader;
     }
 
     /**

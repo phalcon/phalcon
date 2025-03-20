@@ -88,10 +88,10 @@ class Cache extends AbstractCache
     /**
      * Obtains multiple cache items by their unique keys.
      *
-     * @param iterable<string> $keys A list of keys that can be
-     *                               obtained in a single operation.
-     * @param mixed $default         Default value to return for keys
-     *                               that do not exist.
+     * @param iterable<string> $keys    A list of keys that can be
+     *                                  obtained in a single operation.
+     * @param mixed            $default Default value to return for keys
+     *                                  that do not exist.
      *
      * @return iterable<string, mixed> A list of key => value pairs. Cache
      *                                 keys that do not exist or are stale will

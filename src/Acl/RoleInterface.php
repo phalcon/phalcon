@@ -30,7 +30,7 @@ interface RoleInterface
      *
      * @return string|null
      */
-    public function getDescription(): ?string;
+    public function getDescription(): string | null;
 
     /**
      * Returns the role name

@@ -42,14 +42,14 @@ abstract class AbstractAdapter implements AdapterInterface, EventsAwareInterface
      *
      * @var string|null
      */
-    protected ?string $activeAccess = null;
+    protected string | null $activeAccess = null;
 
     /**
      * Component which the list is checking if some role can access it
      *
      * @var string|null
      */
-    protected ?string $activeComponent = null;
+    protected string | null $activeComponent = null;
 
     /**
      * Role which the list is checking if it's allowed to certain
@@ -57,7 +57,7 @@ abstract class AbstractAdapter implements AdapterInterface, EventsAwareInterface
      *
      * @var string|null
      */
-    protected ?string $activeRole = null;
+    protected string | null $activeRole = null;
 
     /**
      * Default access
@@ -71,7 +71,7 @@ abstract class AbstractAdapter implements AdapterInterface, EventsAwareInterface
      *
      * @return string|null
      */
-    public function getActiveAccess(): ?string
+    public function getActiveAccess(): string | null
     {
         return $this->activeAccess;
     }
@@ -82,7 +82,7 @@ abstract class AbstractAdapter implements AdapterInterface, EventsAwareInterface
      *
      * @return string|null
      */
-    public function getActiveComponent(): ?string
+    public function getActiveComponent(): string | null
     {
         return $this->activeComponent;
     }
@@ -93,7 +93,7 @@ abstract class AbstractAdapter implements AdapterInterface, EventsAwareInterface
      *
      * @return string|null
      */
-    public function getActiveRole(): ?string
+    public function getActiveRole(): string | null
     {
         return $this->activeRole;
     }

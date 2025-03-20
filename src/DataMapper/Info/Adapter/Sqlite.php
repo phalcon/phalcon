@@ -76,6 +76,20 @@ class Sqlite extends AbstractAdapter
     }
 
     /**
+     * @param string $schema
+     * @param string $table
+     *
+     * @return string
+     */
+    protected function getListColumnSql(string $schema, string $table): string
+    {
+        $currentSchema = $this->quote($schema);
+        $currentTable  = $this->quote($table);
+
+        return "PRAGMA $currentSchema.table_info($currentTable)";
+    }
+
+    /**
      * Returns the SQL statement that creates the table. Useful in parsing
      * the default values and autoincrement columns
      *
@@ -134,7 +148,7 @@ class Sqlite extends AbstractAdapter
         /**
          * Get the type by removing any parentheses
          */
-        $position    = strpos($type, '(');
+        $position = strpos($type, '(');
         if (false !== $position) {
             $type = substr($type, 0, $position);
         }
@@ -147,7 +161,7 @@ class Sqlite extends AbstractAdapter
             str_contains($type, 'float'),
             str_contains($type, 'numeric'),
             str_contains($type, 'real') => true,
-            default => false
+            default                     => false
         };
 
         /**
@@ -227,19 +241,5 @@ class Sqlite extends AbstractAdapter
     protected function quote(string $name): string
     {
         return '"' . str_replace('"', '""', $name) . '"';
-    }
-
-    /**
-     * @param string $schema
-     * @param string $table
-     *
-     * @return string
-     */
-    protected function getListColumnSql(string $schema, string $table): string
-    {
-        $currentSchema = $this->quote($schema);
-        $currentTable  = $this->quote($table);
-
-        return "PRAGMA $currentSchema.table_info($currentTable)";
     }
 }

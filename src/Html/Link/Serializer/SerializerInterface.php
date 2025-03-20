@@ -25,5 +25,5 @@ interface SerializerInterface
      *
      * @return string|null
      */
-    public function serialize(array $links): ?string;
+    public function serialize(array $links): string | null;
 }

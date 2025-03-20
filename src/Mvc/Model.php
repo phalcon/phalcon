@@ -144,12 +144,12 @@ abstract class Model extends AbstractInjectionAware implements
     /**
      * @var ManagerInterface|null
      */
-    protected ?ManagerInterface $modelsManager = null;
+    protected ManagerInterface | null $modelsManager = null;
 
     /**
      * @var MetaDataInterface|null
      */
-    protected ?MetaDataInterface $modelsMetaData = null;
+    protected MetaDataInterface | null $modelsMetaData = null;
     /**
      * @var array
      */
@@ -175,12 +175,12 @@ abstract class Model extends AbstractInjectionAware implements
     /**
      * @var TransactionInterface|null
      */
-    protected ?TransactionInterface $transaction = null;
+    protected TransactionInterface | null $transaction = null;
 
     /**
      * @var string|null
      */
-    protected ?string $uniqueKey = null;
+    protected string | null $uniqueKey = null;
 
     /**
      * @var array
@@ -202,9 +202,9 @@ abstract class Model extends AbstractInjectionAware implements
      * @throws Exception
      */
     final public function __construct(
-        ?array $data = null,
-        ?DiInterface $container = null,
-        ?ManagerInterface $modelsManager = null
+        array | null $data = null,
+        DiInterface | null $container = null,
+        ManagerInterface | null $modelsManager = null
     ) {
         /**
          * We use a default DI if the user doesn't define one
@@ -1037,7 +1037,7 @@ abstract class Model extends AbstractInjectionAware implements
         array $data,
         mixed $columnMap,
         int $dirtyState = 0,
-        bool $keepSnapshots = null
+        bool | null $keepSnapshots = null
     ): ModelInterface | ResultInterface {
         $instance = clone $base;
 
@@ -1880,21 +1880,22 @@ abstract class Model extends AbstractInjectionAware implements
      * ```
      *
      * @param array|string|int|null $parameters = {
-     *      @option string "conditions"
-     *      @option string "columns"
-     *      @option array  "bind"
-     *      @option array  "bindTypes"
-     *      @option string "order"
-     *      @option int    "limit"
-     *      @option int    "offset"
-     *      @option string "group"
-     *      @option bool   "for_updated"
-     *      @option bool   "shared_lock"
-     *      @option array  "cache" {
-     *          @option string "lifetime"
-     *          @option string "key"
+     *
+     * @option string "conditions"
+     * @option string "columns"
+     * @option array  "bind"
+     * @option array  "bindTypes"
+     * @option string "order"
+     * @option int    "limit"
+     * @option int    "offset"
+     * @option string "group"
+     * @option bool   "for_updated"
+     * @option bool   "shared_lock"
+     * @option array  "cache" {
+     * @option string "lifetime"
+     * @option string "key"
      *      },
-     *      @option ?bool  "hydration"
+     * @option ?bool  "hydration"
      * }
      *
      * @return ResultsetInterface
@@ -1996,21 +1997,22 @@ abstract class Model extends AbstractInjectionAware implements
      * ```
      *
      * @param array|string|int|null $parameters = {
-     *      @option string "conditions"
-     *      @option string "columns"
-     *      @option array  "bind"
-     *      @option array  "bindTypes"
-     *      @option string "order"
-     *      @option int    "limit"
-     *      @option int    "offset"
-     *      @option string "group"
-     *      @option bool   "for_updated"
-     *      @option bool   "shared_lock"
-     *      @option array  "cache" {
-     *          @option string "lifetime"
-     *          @option string "key"
+     *
+     * @option string "conditions"
+     * @option string "columns"
+     * @option array  "bind"
+     * @option array  "bindTypes"
+     * @option string "order"
+     * @option int    "limit"
+     * @option int    "offset"
+     * @option string "group"
+     * @option bool   "for_updated"
+     * @option bool   "shared_lock"
+     * @option array  "cache" {
+     * @option string "lifetime"
+     * @option string "key"
      *      },
-     *      @option ?bool  "hydration"
+     * @option ?bool  "hydration"
      * }
      *
      * @return ModelInterface|Row|null
@@ -2748,7 +2750,7 @@ abstract class Model extends AbstractInjectionAware implements
      *
      * @return CriteriaInterface
      */
-    public static function query(DiInterface $container = null): CriteriaInterface
+    public static function query(DiInterface | null $container = null): CriteriaInterface
     {
         /**
          * Use the global dependency injector if there is no one defined
@@ -3015,7 +3017,7 @@ abstract class Model extends AbstractInjectionAware implements
      * @return void
      * @throws Exception
      */
-    public function setOldSnapshotData(array $data, ?array $columnMap = null)
+    public function setOldSnapshotData(array $data, array | null $columnMap = null)
     {
         /**
          * Build the snapshot based on a column map
@@ -3332,8 +3334,10 @@ abstract class Model extends AbstractInjectionAware implements
      * @return array
      * @throws Exception
      */
-    public function toArray(array $columns = null, bool $useGetter = true): array
-    {
+    public function toArray(
+        array | null $columns = null,
+        bool $useGetter = true
+    ): array {
         $data      = [];
         $metaData  = $this->getModelsMetaData();
         $columnMap = $metaData->getColumnMap($this);
@@ -3663,29 +3667,30 @@ abstract class Model extends AbstractInjectionAware implements
      * @param string $referenceModel
      * @param string $referencedFields
      * @param array  $options {
-     *      @option bool   "reusable"
-     *      @option string "alias"
-     *      @option array  "foreignKey" {
-     *          @option string|null "message"
-     *          @option bool        "allowNulls"
-     *          @option string|null "action"
+     *
+     * @option bool   "reusable"
+     * @option string "alias"
+     * @option array  "foreignKey" {
+     * @option string|null "message"
+     * @option bool        "allowNulls"
+     * @option string|null "action"
      *      }
-     *      @option array params {
-     *          @option string "conditions"
-     *          @option string "columns"
-     *          @option array  "bind"
-     *          @option array  "bindTypes"
-     *          @option string "order"
-     *          @option int    "limit"
-     *          @option int    "offset"
-     *          @option string "group"
-     *          @option bool   "for_updated"
-     *          @option bool   "shared_lock"
-     *          @option array  "cache" {
-     *              @option int    "lifetime"
-     *              @option string "key"
+     * @option array params {
+     * @option string "conditions"
+     * @option string "columns"
+     * @option array  "bind"
+     * @option array  "bindTypes"
+     * @option string "order"
+     * @option int    "limit"
+     * @option int    "offset"
+     * @option string "group"
+     * @option bool   "for_updated"
+     * @option bool   "shared_lock"
+     * @option array  "cache" {
+     * @option int    "lifetime"
+     * @option string "key"
      *          }
-     *      @option string "hydration"
+     * @option string "hydration"
      * }
      *
      * @return Relation
@@ -5053,29 +5058,30 @@ abstract class Model extends AbstractInjectionAware implements
      * @param string $referenceModel
      * @param string $referencedFields
      * @param array  $options {
-     *      @option bool   "reusable"
-     *      @option string "alias"
-     *      @option array  "foreignKey" {
-     *          @option string|null "message"
-     *          @option bool        "allowNulls"
-     *          @option string|null "action"
+     *
+     * @option bool   "reusable"
+     * @option string "alias"
+     * @option array  "foreignKey" {
+     * @option string|null "message"
+     * @option bool        "allowNulls"
+     * @option string|null "action"
      *      }
-     *      @option array params {
-     *          @option string "conditions"
-     *          @option string "columns"
-     *          @option array  "bind"
-     *          @option array  "bindTypes"
-     *          @option string "order"
-     *          @option int    "limit"
-     *          @option int    "offset"
-     *          @option string "group"
-     *          @option bool   "for_updated"
-     *          @option bool   "shared_lock"
-     *          @option array  "cache" {
-     *              @option int    "lifetime"
-     *              @option string "key"
+     * @option array params {
+     * @option string "conditions"
+     * @option string "columns"
+     * @option array  "bind"
+     * @option array  "bindTypes"
+     * @option string "order"
+     * @option int    "limit"
+     * @option int    "offset"
+     * @option string "group"
+     * @option bool   "for_updated"
+     * @option bool   "shared_lock"
+     * @option array  "cache" {
+     * @option int    "lifetime"
+     * @option string "key"
      *          }
-     *      @option string "hydration"
+     * @option string "hydration"
      * }
      *
      * @return Relation
@@ -5124,29 +5130,30 @@ abstract class Model extends AbstractInjectionAware implements
      * @param string       $referenceModel
      * @param string       $referencedFields
      * @param array        $options {
-     *      @option bool   "reusable"
-     *      @option string "alias"
-     *      @option array  "foreignKey" {
-     *          @option string|null "message"
-     *          @option bool        "allowNulls"
-     *          @option string|null "action"
+     *
+     * @option bool   "reusable"
+     * @option string "alias"
+     * @option array  "foreignKey" {
+     * @option string|null "message"
+     * @option bool        "allowNulls"
+     * @option string|null "action"
      *      }
-     *      @option array params {
-     *          @option string "conditions"
-     *          @option string "columns"
-     *          @option array  "bind"
-     *          @option array  "bindTypes"
-     *          @option string "order"
-     *          @option int    "limit"
-     *          @option int    "offset"
-     *          @option string "group"
-     *          @option bool   "for_updated"
-     *          @option bool   "shared_lock"
-     *          @option array  "cache" {
-     *              @option int    "lifetime"
-     *              @option string "key"
+     * @option array params {
+     * @option string "conditions"
+     * @option string "columns"
+     * @option array  "bind"
+     * @option array  "bindTypes"
+     * @option string "order"
+     * @option int    "limit"
+     * @option int    "offset"
+     * @option string "group"
+     * @option bool   "for_updated"
+     * @option bool   "shared_lock"
+     * @option array  "cache" {
+     * @option int    "lifetime"
+     * @option string "key"
      *          }
-     *      @option string "hydration"
+     * @option string "hydration"
      * }
      *
      * @return Relation
@@ -5193,29 +5200,30 @@ abstract class Model extends AbstractInjectionAware implements
      * @param string $referenceModel
      * @param string $referencedFields
      * @param array  $options {
-     *      @option bool   "reusable"
-     *      @option string "alias"
-     *      @option array  "foreignKey" {
-     *          @option string|null "message"
-     *          @option bool        "allowNulls"
-     *          @option string|null "action"
+     *
+     * @option bool   "reusable"
+     * @option string "alias"
+     * @option array  "foreignKey" {
+     * @option string|null "message"
+     * @option bool        "allowNulls"
+     * @option string|null "action"
      *      }
-     *      @option array params {
-     *          @option string "conditions"
-     *          @option string "columns"
-     *          @option array  "bind"
-     *          @option array  "bindTypes"
-     *          @option string "order"
-     *          @option int    "limit"
-     *          @option int    "offset"
-     *          @option string "group"
-     *          @option bool   "for_updated"
-     *          @option bool   "shared_lock"
-     *          @option array  "cache" {
-     *              @option int    "lifetime"
-     *              @option string "key"
+     * @option array params {
+     * @option string "conditions"
+     * @option string "columns"
+     * @option array  "bind"
+     * @option array  "bindTypes"
+     * @option string "order"
+     * @option int    "limit"
+     * @option int    "offset"
+     * @option string "group"
+     * @option bool   "for_updated"
+     * @option bool   "shared_lock"
+     * @option array  "cache" {
+     * @option int    "lifetime"
+     * @option string "key"
      *          }
-     *      @option string "hydration"
+     * @option string "hydration"
      * }
      *
      * @return Relation
@@ -5264,29 +5272,30 @@ abstract class Model extends AbstractInjectionAware implements
      * @param string       $referenceModel
      * @param string       $referencedFields
      * @param array        $options {
-     *      @option bool   "reusable"
-     *      @option string "alias"
-     *      @option array  "foreignKey" {
-     *          @option string|null "message"
-     *          @option bool        "allowNulls"
-     *          @option string|null "action"
+     *
+     * @option bool   "reusable"
+     * @option string "alias"
+     * @option array  "foreignKey" {
+     * @option string|null "message"
+     * @option bool        "allowNulls"
+     * @option string|null "action"
      *      }
-     *      @option array params {
-     *          @option string "conditions"
-     *          @option string "columns"
-     *          @option array  "bind"
-     *          @option array  "bindTypes"
-     *          @option string "order"
-     *          @option int    "limit"
-     *          @option int    "offset"
-     *          @option string "group"
-     *          @option bool   "for_updated"
-     *          @option bool   "shared_lock"
-     *          @option array  "cache" {
-     *              @option int    "lifetime"
-     *              @option string "key"
+     * @option array params {
+     * @option string "conditions"
+     * @option string "columns"
+     * @option array  "bind"
+     * @option array  "bindTypes"
+     * @option string "order"
+     * @option int    "limit"
+     * @option int    "offset"
+     * @option string "group"
+     * @option bool   "for_updated"
+     * @option bool   "shared_lock"
+     * @option array  "cache" {
+     * @option int    "lifetime"
+     * @option string "key"
      *          }
-     *      @option string "hydration"
+     * @option string "hydration"
      * }
      *
      * @return Relation

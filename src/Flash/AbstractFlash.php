@@ -22,7 +22,6 @@ use Phalcon\Traits\Helper\Str\InterpolateTrait;
 
 use function is_array;
 use function is_string;
-use function join;
 
 use const PHP_EOL;
 
@@ -52,8 +51,8 @@ abstract class AbstractFlash implements FlashInterface, InjectionAwareInterface
      * @param SessionInterface|null $session
      */
     public function __construct(
-        EscaperInterface $escaper = null,
-        SessionInterface $session = null
+        EscaperInterface | null $escaper = null,
+        SessionInterface | null $session = null
     ) {
         $this->escaperService = $escaper;
         $this->sessionService = $session;
@@ -77,7 +76,7 @@ abstract class AbstractFlash implements FlashInterface, InjectionAwareInterface
      *
      * @return string|null
      */
-    public function error(string $message): ?string
+    public function error(string $message): string | null
     {
         return $this->message('error', $message);
     }
@@ -125,7 +124,7 @@ abstract class AbstractFlash implements FlashInterface, InjectionAwareInterface
      *
      * @return string|null
      */
-    public function notice(string $message): ?string
+    public function notice(string $message): string | null
     {
         return $this->message('notice', $message);
     }
@@ -143,7 +142,7 @@ abstract class AbstractFlash implements FlashInterface, InjectionAwareInterface
      * @return string|null
      * @throws Exception
      */
-    public function outputMessage(string $type, $message): ?string
+    public function outputMessage(string $type, $message): string | null
     {
         $content = '';
 
@@ -291,7 +290,7 @@ abstract class AbstractFlash implements FlashInterface, InjectionAwareInterface
      *
      * @return string|null
      */
-    public function success(string $message): ?string
+    public function success(string $message): string | null
     {
         return $this->message('success', $message);
     }
@@ -307,7 +306,7 @@ abstract class AbstractFlash implements FlashInterface, InjectionAwareInterface
      *
      * @return string|null
      */
-    public function warning(string $message): ?string
+    public function warning(string $message): string | null
     {
         return $this->message('warning', $message);
     }

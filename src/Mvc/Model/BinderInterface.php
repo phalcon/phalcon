@@ -36,7 +36,7 @@ interface BinderInterface
         object $handler,
         array $params,
         string $cacheKey,
-        ?string $methodName = null
+        string | null $methodName = null
     ): array;
 
     /**

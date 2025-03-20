@@ -62,7 +62,7 @@ abstract class AbstractBehavior implements BehaviorInterface
      *
      * @return array
      */
-    protected function getOptions(?string $eventName = null): array
+    protected function getOptions(string | null $eventName = null): array
     {
         if (null !== $eventName) {
             return $this->options[$eventName] ?? [];

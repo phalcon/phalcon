@@ -81,7 +81,7 @@ class Collection implements
     }
 
     /**
-     * @return mixed[]
+     * @return array
      */
     public function __serialize(): array
     {
@@ -128,8 +128,8 @@ class Collection implements
      */
     public function get(
         string $element,
-        $defaultValue = null,
-        string $cast = null
+        mixed $defaultValue = null,
+        string | null $cast = null
     ): mixed {
         $element = $this->processKey($element);
 
@@ -231,13 +231,12 @@ class Collection implements
      */
     public function jsonSerialize(): array
     {
-        $records = [];
-
-        foreach ($this->data as $key => $value) {
-            $records[$key] = $this->checkSerializable($value);
-        }
-
-        return $records;
+        return array_map(
+            function ($value) {
+                return $this->checkSerializable($value);
+            },
+            $this->data
+        );
     }
 
     /**
@@ -322,7 +321,7 @@ class Collection implements
      * @param string $element Name of the element
      * @param mixed  $value   Value to store for the element
      */
-    protected function setData(string $element, $value): void
+    protected function setData(string $element, mixed $value): void
     {
         $key                   = $this->processKey($element);
         $this->data[$element]  = $value;

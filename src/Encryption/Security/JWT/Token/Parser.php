@@ -40,7 +40,7 @@ class Parser
     /**
      * @param Decode|null $decode
      */
-    public function __construct(Decode $decode = null)
+    public function __construct(Decode | null $decode = null)
     {
         if (null === $decode) {
             $decode = new Decode();

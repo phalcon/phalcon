@@ -22,8 +22,6 @@ use const JSON_HEX_TAG;
 use const JSON_UNESCAPED_UNICODE;
 
 /**
- * Phalcon\Registry
- *
  * A registry is a container for storing objects and values in the application
  * space. By storing the value in a registry, the same object is always
  * available throughout your application.
@@ -75,6 +73,8 @@ final class Registry extends Collection
 {
     /**
      * Constructor
+     *
+     * @param array $data
      */
     final public function __construct(array $data = [])
     {
@@ -83,6 +83,10 @@ final class Registry extends Collection
 
     /**
      * Magic getter to get an element from the collection
+     *
+     * @param string $element
+     *
+     * @return mixed
      */
     final public function __get(string $element): mixed
     {
@@ -91,6 +95,10 @@ final class Registry extends Collection
 
     /**
      * Magic isset to check whether an element exists or not
+     *
+     * @param string $element
+     *
+     * @return bool
      */
     final public function __isset(string $element): bool
     {
@@ -99,14 +107,23 @@ final class Registry extends Collection
 
     /**
      * Magic setter to assign values to an element
+     *
+     * @param string $element
+     * @param mixed  $value
+     *
+     * @return void
      */
-    final public function __set(string $element, $value): void
+    final public function __set(string $element, mixed $value): void
     {
         parent::set($element, $value);
     }
 
     /**
      * Magic unset to remove an element from the collection
+     *
+     * @param string $element
+     *
+     * @return void
      */
     final public function __unset(string $element): void
     {
@@ -115,6 +132,8 @@ final class Registry extends Collection
 
     /**
      * Clears the internal collection
+     *
+     * @return void
      */
     final public function clear(): void
     {
@@ -125,6 +144,8 @@ final class Registry extends Collection
      * Count elements of an object
      *
      * @link https://php.net/manual/en/countable.count.php
+     *
+     * @return int
      */
     final public function count(): int
     {
@@ -133,17 +154,25 @@ final class Registry extends Collection
 
     /**
      * Get the element from the collection
+     *
+     * @param string      $element
+     * @param mixed|null  $defaultValue
+     * @param string|null $cast
+     *
+     * @return mixed
      */
     final public function get(
         string $element,
-        $defaultValue = null,
-        string $cast = null
+        mixed $defaultValue = null,
+        string | null $cast = null
     ): mixed {
         return parent::get($element, $defaultValue, $cast);
     }
 
     /**
      * Returns the iterator of the class
+     *
+     * @return Generator
      */
     final public function getIterator(): Generator
     {
@@ -152,6 +181,10 @@ final class Registry extends Collection
 
     /**
      * Determines whether an element is present in the collection.
+     *
+     * @param string $element
+     *
+     * @return bool
      */
     final public function has(string $element): bool
     {
@@ -160,6 +193,10 @@ final class Registry extends Collection
 
     /**
      * Initialize internal array
+     *
+     * @param array $data
+     *
+     * @return void
      */
     final public function init(array $data = []): void
     {
@@ -170,6 +207,8 @@ final class Registry extends Collection
      * Specify data which should be serialized to JSON
      *
      * @link https://php.net/manual/en/jsonserializable.jsonserialize.php
+     *
+     * @return array|mixed[]
      */
     final public function jsonSerialize(): array
     {
@@ -180,6 +219,10 @@ final class Registry extends Collection
      * Whether a offset exists
      *
      * @link https://php.net/manual/en/arrayaccess.offsetexists.php
+     *
+     * @param mixed $element
+     *
+     * @return bool
      */
     final public function offsetExists(mixed $element): bool
     {
@@ -190,6 +233,10 @@ final class Registry extends Collection
      * Offset to retrieve
      *
      * @link https://php.net/manual/en/arrayaccess.offsetget.php
+     *
+     * @param mixed $element
+     *
+     * @return mixed
      */
     final public function offsetGet(mixed $element): mixed
     {
@@ -200,6 +247,11 @@ final class Registry extends Collection
      * Offset to set
      *
      * @link https://php.net/manual/en/arrayaccess.offsetset.php
+     *
+     * @param mixed $element
+     * @param mixed $value
+     *
+     * @return void
      */
     final public function offsetSet(mixed $element, mixed $value): void
     {
@@ -210,6 +262,10 @@ final class Registry extends Collection
      * Offset to unset
      *
      * @link https://php.net/manual/en/arrayaccess.offsetunset.php
+     *
+     * @param mixed $element
+     *
+     * @return void
      */
     final public function offsetUnset(mixed $element): void
     {
@@ -218,6 +274,10 @@ final class Registry extends Collection
 
     /**
      * Delete the element from the collection
+     *
+     * @param string $element
+     *
+     * @return void
      */
     final public function remove(string $element): void
     {
@@ -228,6 +288,8 @@ final class Registry extends Collection
      * String representation of object
      *
      * @link https://php.net/manual/en/serializable.serialize.php
+     *
+     * @return string
      */
     final public function serialize(): string
     {
@@ -236,14 +298,21 @@ final class Registry extends Collection
 
     /**
      * Set an element in the collection
+     *
+     * @param string $element
+     * @param mixed  $value
+     *
+     * @return void
      */
-    final public function set(string $element, $value): void
+    final public function set(string $element, mixed $value): void
     {
         parent::set($element, $value);
     }
 
     /**
      * Returns the object in an array format
+     *
+     * @return array|mixed[]
      */
     final public function toArray(): array
     {
@@ -273,6 +342,10 @@ final class Registry extends Collection
      * Constructs the object
      *
      * @link https://php.net/manual/en/serializable.unserialize.php
+     *
+     * @param $serialized
+     *
+     * @return void
      */
     final public function unserialize($serialized): void
     {

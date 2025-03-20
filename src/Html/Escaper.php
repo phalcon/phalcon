@@ -130,7 +130,7 @@ class Escaper implements EscaperInterface
      *
      * @return string|null
      */
-    final public function detectEncoding(string $input): ?string
+    final public function detectEncoding(string $input): string | null
     {
         /**
          * Strict encoding detection with fallback to non-strict detection.
@@ -181,7 +181,7 @@ class Escaper implements EscaperInterface
      *
      * @return string
      */
-    public function html(string $input = null): string
+    public function html(string | null $input = null): string
     {
         if (null === $input) {
             return '';

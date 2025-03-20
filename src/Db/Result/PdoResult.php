@@ -55,7 +55,7 @@ class PdoResult implements ResultInterface
     /**
      * @var int|null
      */
-    protected ?int $rowCount = null;
+    protected int | null $rowCount = null;
 
     /**
      * Phalcon\Db\Result\Pdo constructor
@@ -158,7 +158,7 @@ class PdoResult implements ResultInterface
      * @return mixed
      */
     public function fetch(
-        int $fetchStyle = null,
+        int | null $fetchStyle = null,
         int $cursorOrientation = Enum::FETCH_ORI_NEXT,
         int $cursorOffset = 0
     ): mixed {
@@ -193,7 +193,7 @@ class PdoResult implements ResultInterface
     public function fetchAll(
         int $mode = Enum::FETCH_DEFAULT,
         mixed $fetchArgument = Enum::FETCH_ORI_NEXT,
-        ?array $constructorArgs = null
+        array | null $constructorArgs = null
     ): array {
         if ($mode === Enum::FETCH_CLASS) {
             return $this->pdoStatement->fetchAll($mode, $fetchArgument, $constructorArgs);

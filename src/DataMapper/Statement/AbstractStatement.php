@@ -42,18 +42,6 @@ abstract class AbstractStatement
     protected array $store = [];
 
     /**
-     * Instantiate a new object
-     *
-     * @param string $driver
-     *
-     * @return static
-     */
-    public static function new(string $driver): static
-    {
-        return new static($driver);
-    }
-
-    /**
      * Constructor
      *
      * @param string $driver
@@ -66,7 +54,6 @@ abstract class AbstractStatement
 
         $this->reset();
     }
-
 
     public function __clone()
     {
@@ -177,6 +164,18 @@ abstract class AbstractStatement
      * @return string
      */
     abstract public function getStatement(): string;
+
+    /**
+     * Instantiate a new object
+     *
+     * @param string $driver
+     *
+     * @return static
+     */
+    public static function new(string $driver): static
+    {
+        return new static($driver);
+    }
 
     /**
      * @param string $driver

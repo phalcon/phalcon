@@ -44,7 +44,7 @@ abstract class AbstractInput extends AbstractHelper
      */
     public function __invoke(
         string $name,
-        string $value = null,
+        string | null $value = null,
         array $attributes = []
     ): static {
         $this->attributes = [
@@ -88,7 +88,7 @@ abstract class AbstractInput extends AbstractHelper
      *
      * @return AbstractInput
      */
-    public function setValue(string $value = null): AbstractInput
+    public function setValue(string | null $value = null): AbstractInput
     {
         if (null !== $value) {
             $this->attributes['value'] = $value;

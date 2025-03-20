@@ -24,14 +24,14 @@ abstract class AbstractAdapter implements AdapterInterface
      *
      * @var int|null
      */
-    protected ?int $limitRows = null;
+    protected int | null $limitRows = null;
 
     /**
      * Current page in paginate
      *
      * @var int|null
      */
-    protected ?int $page = null;
+    protected int | null $page = null;
 
     /**
      * Repository for pagination
@@ -41,9 +41,11 @@ abstract class AbstractAdapter implements AdapterInterface
     protected RepositoryInterface $repository;
 
     /**
-     * Phalcon\Paginator\Adapter\AbstractAdapter constructor
+     * Constructor
      *
      * @param array $config
+     *
+     * @throws Exception
      */
     public function __construct(
         protected array $config
@@ -127,8 +129,9 @@ abstract class AbstractAdapter implements AdapterInterface
      *
      * @return RepositoryInterface
      */
-    protected function getRepository(array $properties = null): RepositoryInterface
-    {
+    protected function getRepository(
+        array | null $properties = null
+    ): RepositoryInterface {
         if (null !== $properties) {
             $this->repository->setProperties($properties);
         }

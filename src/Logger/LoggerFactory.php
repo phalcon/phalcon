@@ -16,7 +16,6 @@ namespace Phalcon\Logger;
 use DateTimeZone;
 use Exception as BaseException;
 use Phalcon\Config\ConfigInterface;
-use Phalcon\Support\Exception as SupportException;
 use Phalcon\Support\Traits\ConfigTrait;
 
 /**
@@ -43,15 +42,16 @@ class LoggerFactory
      * Factory to create an instance from a Config object
      *
      * @param array|ConfigInterface $config = {
-     *      @option string "'name"
-     *      @option array  "adapters"' = {
-     *          @option string "adapter-name" = {
-     *              @option string "adapter"
-     *              @option string "name"
-     *              @option string "options" = {
-     *                  @option string "mode" = "ab"
-     *                  @option string "option"
-     *                  @option string "facility"
+     *
+     * @option string "'name"
+     * @option array  "adapters"' = {
+     * @option string "adapter-name" = {
+     * @option string "adapter"
+     * @option string "name"
+     * @option string "options" = {
+     * @option string "mode" = "ab"
+     * @option string "option"
+     * @option string "facility"
      *              }
      *          }
      *      }
@@ -98,7 +98,7 @@ class LoggerFactory
     public function newInstance(
         string $name,
         array $adapters = [],
-        DateTimeZone $timezone = null
+        DateTimeZone | null $timezone = null
     ): Logger {
         return new Logger($name, $adapters, $timezone);
     }

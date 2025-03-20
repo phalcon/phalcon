@@ -142,7 +142,7 @@ class View extends Injectable implements ViewInterface, EventsAwareInterface
     /**
      * @var string|null
      */
-    protected ?string $layout = null;
+    protected string | null $layout = null;
 
     /**
      * @var string
@@ -167,7 +167,7 @@ class View extends Injectable implements ViewInterface, EventsAwareInterface
     /**
      * @var array|null
      */
-    protected ?array $pickView = null;
+    protected array | null $pickView = null;
 
     /**
      * @var array

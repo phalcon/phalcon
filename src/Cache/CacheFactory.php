@@ -70,7 +70,7 @@ class CacheFactory
      */
     public function load(array | ConfigInterface $config): CacheInterface
     {
-        $config  = $this->checkConfig($config);
+        $config = $this->checkConfig($config);
         $this->checkConfigElement($config, 'adapter');
 
         /** @var string $name */

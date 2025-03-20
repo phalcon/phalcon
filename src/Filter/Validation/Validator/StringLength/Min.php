@@ -18,8 +18,6 @@ use Phalcon\Filter\Validation\AbstractValidator;
 use Phalcon\Filter\Validation\Exception;
 use Phalcon\Traits\Php\InfoTrait;
 
-use function strlen;
-
 /**
  * Validates that a string has the specified minimum constraints
  * The test is passed if for a string's length L, min<=L, i.e. L must
@@ -73,7 +71,7 @@ class Min extends AbstractValidator
     /**
      * @var string|null
      */
-    protected ?string $template = "Field :field must be at least :min characters long";
+    protected string | null $template = "Field :field must be at least :min characters long";
 
     /**
      * Executes the validation

@@ -31,7 +31,7 @@ class Camelize
      */
     public function __invoke(
         string $text,
-        string $delimiters = null,
+        string | null $delimiters = null,
         bool $lowerFirst = false
     ): string {
         /**

@@ -32,7 +32,7 @@ interface EventInterface
      *
      * @return object|null
      */
-    public function getSource(): ?object;
+    public function getSource(): object | null;
 
     /**
      * Gets event type

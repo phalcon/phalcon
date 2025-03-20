@@ -24,18 +24,15 @@ use Phalcon\Mvc\ModelInterface;
 class Failed extends Exception
 {
     /**
-     * @var ModelInterface|null
-     */
-    protected ?ModelInterface $record = null;
-
-    /**
-     * Phalcon\Mvc\Model\Transaction\Failed constructor
+     * Constructor
      *
      * @param string              $message
      * @param ModelInterface|null $record
      */
-    public function __construct(string $message, ?ModelInterface $record = null)
-    {
+    public function __construct(
+        string $message,
+        protected ModelInterface | null $record = null
+    ) {
         $this->record = $record;
 
         parent::__construct($message);
@@ -46,7 +43,7 @@ class Failed extends Exception
      *
      * @return ModelInterface|null
      */
-    public function getRecord(): ?ModelInterface
+    public function getRecord(): ModelInterface | null
     {
         return $this->record;
     }

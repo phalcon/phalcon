@@ -64,7 +64,7 @@ class RedisCluster extends Redis
      *
      * @param SerializerFactory $factory
      * @param array             $options {
-     *                                   name: ?string,
+     *                                   name: string | null,
      *                                   hosts: array,
      *                                   timeout: float,
      *                                   readTimeout: float,

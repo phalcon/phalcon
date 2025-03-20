@@ -82,7 +82,7 @@ abstract class AbstractAdapter implements AdapterInterface, EventsAwareInterface
      *
      * @var SerializerInterface|null
      */
-    protected ?SerializerInterface $serializer;
+    protected SerializerInterface | null $serializer;
 
     /**
      * AbstractAdapter constructor.
@@ -208,16 +208,6 @@ abstract class AbstractAdapter implements AdapterInterface, EventsAwareInterface
     abstract public function getKeys(string $prefix = ''): array;
 
     /**
-     * Returns the prefix
-     *
-     * @return string
-     */
-    public function getPrefix(): string
-    {
-        return $this->prefix;
-    }
-
-    /**
      * Returns the lifetime
      *
      * @return int
@@ -225,6 +215,16 @@ abstract class AbstractAdapter implements AdapterInterface, EventsAwareInterface
     public function getLifetime(): int
     {
         return $this->lifetime;
+    }
+
+    /**
+     * Returns the prefix
+     *
+     * @return string
+     */
+    public function getPrefix(): string
+    {
+        return $this->prefix;
     }
 
     /**

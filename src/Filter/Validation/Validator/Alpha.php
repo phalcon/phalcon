@@ -57,7 +57,7 @@ class Alpha extends AbstractValidator
     /**
      * @var string|null
      */
-    protected ?string $template = "Field :field must contain only letters";
+    protected string | null $template = "Field :field must contain only letters";
 
     /**
      * Executes the validation

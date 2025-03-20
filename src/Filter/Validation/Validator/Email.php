@@ -73,7 +73,7 @@ class Email extends AbstractValidator
     /**
      * @var string|null
      */
-    protected ?string $template = "Field :field must be an email address";
+    protected string | null $template = "Field :field must be an email address";
 
     /**
      * Executes the validation

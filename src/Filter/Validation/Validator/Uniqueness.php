@@ -24,7 +24,6 @@ use function get_class;
 use function ini_get;
 use function is_array;
 use function is_object;
-use function join;
 use function range;
 
 /**
@@ -102,7 +101,7 @@ class Uniqueness extends AbstractCombinedFieldsValidator
     /**
      * @var string|null
      */
-    protected ?string $template = "Field :field must be unique";
+    protected string | null $template = "Field :field must be unique";
 
     /**
      * @var array

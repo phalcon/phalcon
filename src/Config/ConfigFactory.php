@@ -110,8 +110,8 @@ class ConfigFactory
     /**
      * Returns a new Config instance
      *
-     * @param string     $name
-     * @param string     $fileName
+     * @param string                                  $name
+     * @param string                                  $fileName
      * @param array<string, callable>|string|int|null $params
      *
      * @return ConfigInterface
@@ -120,7 +120,7 @@ class ConfigFactory
     public function newInstance(
         string $name,
         string $fileName,
-        array|string|int|null $params = null
+        array | string | int | null $params = null
     ): ConfigInterface {
         $definition = $this->getService($name);
 
@@ -179,7 +179,7 @@ class ConfigFactory
      * @return TConfigReturn
      * @throws Exception
      */
-    protected function parseConfig(array|ConfigInterface|string $config): array
+    protected function parseConfig(array | ConfigInterface | string $config): array
     {
         if (is_string($config)) {
             $oldConfig = $config;

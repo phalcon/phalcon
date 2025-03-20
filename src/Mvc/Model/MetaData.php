@@ -51,6 +51,7 @@ abstract class MetaData extends Injectable implements MetaDataInterface
 {
     use IniTrait;
 
+    private const MESSAGE_INVALID_METADATA = "The meta-data is invalid or is corrupt";
     public const MODELS_ATTRIBUTES               = 0;
     public const MODELS_AUTOMATIC_DEFAULT_INSERT = 10;
     public const MODELS_AUTOMATIC_DEFAULT_UPDATE = 11;
@@ -67,13 +68,10 @@ abstract class MetaData extends Injectable implements MetaDataInterface
     public const MODELS_NOT_NULL                 = 3;
     public const MODELS_PRIMARY_KEY              = 1;
     public const MODELS_REVERSE_COLUMN_MAP       = 1;
-
-    private const MESSAGE_INVALID_METADATA = "The meta-data is invalid or is corrupt";
-
     /**
      * @var CacheAdapterInterface|null
      */
-    protected ?CacheAdapterInterface $adapter = null;
+    protected CacheAdapterInterface | null $adapter = null;
 
     /**
      * @var array
@@ -83,7 +81,7 @@ abstract class MetaData extends Injectable implements MetaDataInterface
     /**
      * @var DiInterface|null
      */
-    protected ?DiInterface $container = null;
+    protected DiInterface | null $container = null;
 
     /**
      * @var array
@@ -93,7 +91,7 @@ abstract class MetaData extends Injectable implements MetaDataInterface
     /**
      * @var StrategyInterface|null
      */
-    protected ?StrategyInterface $strategy = null;
+    protected StrategyInterface | null $strategy = null;
 
     /**
      * Return the internal cache adapter
@@ -616,7 +614,7 @@ abstract class MetaData extends Injectable implements MetaDataInterface
      *
      * @return array|null
      */
-    public function read(?string $key): array | null
+    public function read(string | null $key): array | null
     {
         return $this->adapter->get($key);
     }
@@ -721,13 +719,13 @@ abstract class MetaData extends Injectable implements MetaDataInterface
      * );
      *```
      *
-     * @todo check the return type; 8 seems to be only string
-     *
      * @param ModelInterface $model
      * @param int            $index
      *
      * @return mixed
      * @throws Exception
+     * @todo check the return type; 8 seems to be only string
+     *
      */
     final public function readMetaDataIndex(ModelInterface $model, int $index): mixed
     {
@@ -981,7 +979,7 @@ abstract class MetaData extends Injectable implements MetaDataInterface
      * @return bool
      * @throws Exception
      */
-    final protected function initializeMetaData(ModelInterface $model, ?string $key): bool
+    final protected function initializeMetaData(ModelInterface $model, string | null $key): bool
     {
         if ($key !== null) {
             if (false === isset($this->metaData[$key])) {

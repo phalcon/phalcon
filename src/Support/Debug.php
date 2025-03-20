@@ -513,7 +513,7 @@ class Debug
      *
      * @return string|null
      */
-    protected function getArrayDump(array $arguments, int $number = 0): ?string
+    protected function getArrayDump(array $arguments, int $number = 0): string | null
     {
         if ($number >= 3 || empty($arguments)) {
             return null;

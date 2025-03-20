@@ -35,7 +35,7 @@ class Insert extends InsertStatement
      *
      * @return string
      */
-    public function getLastInsertId(string $name = null): string
+    public function getLastInsertId(string | null $name = null): string
     {
         return $this->connection->lastInsertId($name);
     }

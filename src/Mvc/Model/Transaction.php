@@ -81,7 +81,7 @@ class Transaction implements TransactionInterface
     /**
      * @var ManagerInterface|null
      */
-    protected ?ManagerInterface $manager = null;
+    protected ManagerInterface | null $manager = null;
 
     /**
      * @var array
@@ -94,7 +94,7 @@ class Transaction implements TransactionInterface
     /**
      * @var ModelInterface|null
      */
-    protected ?ModelInterface $rollbackRecord = null;
+    protected ModelInterface | null $rollbackRecord = null;
     /**
      * @var bool
      */
@@ -196,8 +196,8 @@ class Transaction implements TransactionInterface
      * Rollbacks the transaction
      */
     public function rollback(
-        string $rollbackMessage = null,
-        ModelInterface $rollbackRecord = null
+        string | null $rollbackMessage = null,
+        ModelInterface | null $rollbackRecord = null
     ): bool {
         if (null !== $this->manager) {
             $this->manager->notifyRollback($this);

@@ -31,7 +31,6 @@ use function class_exists;
 use function is_callable;
 use function is_object;
 use function is_string;
-use function join;
 use function lcfirst;
 use function method_exists;
 use function preg_split;
@@ -112,7 +111,7 @@ abstract class AbstractDispatcher extends Injectable implements DispatcherInterf
     /**
      * @var BinderInterface|null
      */
-    protected ?BinderInterface $modelBinder = null;
+    protected BinderInterface | null $modelBinder = null;
 
     /**
      * @var bool
@@ -1072,7 +1071,7 @@ abstract class AbstractDispatcher extends Injectable implements DispatcherInterf
      */
     public function setModelBinder(
         BinderInterface $modelBinder,
-        AdapterInterface | string $cache = null
+        AdapterInterface | string | null $cache = null
     ): DispatcherInterface {
         if (is_string($cache)) {
             $cache = $this->container->get($cache);

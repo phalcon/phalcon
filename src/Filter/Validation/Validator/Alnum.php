@@ -57,7 +57,7 @@ class Alnum extends AbstractValidator
     /**
      * @var string|null
      */
-    protected ?string $template = "Field :field must contain only letters and numbers";
+    protected string | null $template = "Field :field must contain only letters and numbers";
 
     /**
      * Executes the validation

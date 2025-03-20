@@ -16,7 +16,6 @@ namespace Phalcon\Assets;
 use Phalcon\Traits\Php\FileTrait;
 
 use function hash;
-use function var_dump;
 
 /**
  * Object representation of an asset
@@ -58,7 +57,7 @@ class Asset implements AssetInterface
         protected bool $isLocal = true,
         protected bool $filter = true,
         protected array $attributes = [],
-        protected ?string $version = null,
+        protected string | null $version = null,
         protected bool $isAutoVersion = false
     ) {
     }
@@ -92,15 +91,14 @@ class Asset implements AssetInterface
      * @return string
      * @throws Exception
      */
-    public function getContent(?string $basePath = null): string
+    public function getContent(string | null $basePath = null): string
     {
         /**
          * A base path for assets can be set in the assets manager
          */
         $completePath = empty($this->sourcePath)
             ? $this->path
-            : $this->sourcePath
-        ;
+            : $this->sourcePath;
         $completePath = $basePath . $completePath;
 
         /**
@@ -154,7 +152,7 @@ class Asset implements AssetInterface
      *
      * @return string
      */
-    public function getRealSourcePath(string $basePath = null): string
+    public function getRealSourcePath(string | null $basePath = null): string
     {
         $source = empty($this->sourcePath)
             ? $this->path
@@ -178,7 +176,7 @@ class Asset implements AssetInterface
      *
      * @return string
      */
-    public function getRealTargetPath(string $basePath = null): string
+    public function getRealTargetPath(string | null $basePath = null): string
     {
         $target = empty($this->targetPath)
             ? $this->path
@@ -277,7 +275,7 @@ class Asset implements AssetInterface
      *
      * @return string|null
      */
-    public function getVersion(): ?string
+    public function getVersion(): string | null
     {
         return $this->version;
     }

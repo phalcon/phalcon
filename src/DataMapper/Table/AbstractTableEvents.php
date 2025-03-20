@@ -104,7 +104,7 @@ abstract class AbstractTableEvents
     public function beforeInsertRow(
         AbstractTable $table,
         AbstractRow $row
-    ): ?array {
+    ): array | null {
         return null;
     }
 
@@ -119,7 +119,7 @@ abstract class AbstractTableEvents
     public function beforeUpdateRow(
         AbstractTable $table,
         AbstractRow $row
-    ): ?array {
+    ): array | null {
         return null;
     }
 

@@ -31,7 +31,7 @@ class Manager
      *
      * @return Form
      */
-    public function create(string $name, ?object $entity = null): Form
+    public function create(string $name, object | null $entity = null): Form
     {
         $form               = new Form($entity);
         $this->forms[$name] = $form;

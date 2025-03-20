@@ -14,7 +14,6 @@ declare(strict_types=1);
 namespace Phalcon\Mvc\Model;
 
 use PDOException;
-use Phalcon\Cache\Adapter\AdapterInterface as CacheAdapterInterface;
 use Phalcon\Db\Adapter\AdapterInterface;
 use Phalcon\Db\Column;
 use Phalcon\Db\RawValue;
@@ -30,14 +29,13 @@ use Phalcon\Mvc\Model\Resultset\Simple;
 use Phalcon\Mvc\ModelInterface;
 use Phalcon\Parsers\Parser;
 use Phalcon\Support\Settings;
-use Psr\SimpleCache\InvalidArgumentException;
 use Psr\SimpleCache\CacheInterface;
+use Psr\SimpleCache\InvalidArgumentException;
 
 use function array_merge;
 use function class_exists;
 use function explode;
 use function get_class;
-use function is_a;
 use function is_array;
 use function is_int;
 use function is_object;
@@ -239,7 +237,7 @@ class Query implements QueryInterface, InjectionAwareInterface
     /**
      * @var CacheInterface|null
      */
-    protected ?CacheInterface $cache = null;
+    protected CacheInterface | null $cache = null;
 
     /**
      * @var array
@@ -254,22 +252,22 @@ class Query implements QueryInterface, InjectionAwareInterface
     /**
      * @var array|null
      */
-    protected ?array $intermediate = null;
+    protected array | null $intermediate = null;
 
     /**
      * @var array|null
      */
-    protected static ?array $internalPhqlCache = null;
+    protected static array | null $internalPhqlCache = null;
 
     /**
      * @var ManagerInterface|null
      */
-    protected ?ManagerInterface $manager = null;
+    protected ManagerInterface | null $manager = null;
 
     /**
      * @var MetaDataInterface|null
      */
-    protected ?MetaDataInterface $metaData = null;
+    protected MetaDataInterface | null $metaData = null;
 
     /**
      * @var array
@@ -324,12 +322,12 @@ class Query implements QueryInterface, InjectionAwareInterface
      *
      * @var TransactionInterface|null
      */
-    protected ?TransactionInterface $transaction = null;
+    protected TransactionInterface | null $transaction = null;
 
     /**
      * @var int|null
      */
-    protected ?int $type = null;
+    protected int | null $type = null;
 
     /**
      * @var bool
@@ -346,8 +344,8 @@ class Query implements QueryInterface, InjectionAwareInterface
      * @throws Exception
      */
     public function __construct(
-        protected ?string $phql = null,
-        ?DiInterface $container = null,
+        protected string | null $phql = null,
+        DiInterface | null $container = null,
         array $options = []
     ) {
         if (null !== $container) {
@@ -899,710 +897,6 @@ class Query implements QueryInterface, InjectionAwareInterface
         $this->uniqueRow = $uniqueRow;
 
         return $this;
-    }
-
-    /**
-     * Analyzes a DELETE intermediate code and produces an array to be executed
-     * later
-     *
-     * @return array
-     * @throws Exception
-     */
-    final protected function prepareDelete(): array
-    {
-        $ast = $this->ast;
-
-        if (!isset($ast["delete"])) {
-            throw new Exception("Corrupted DELETE AST");
-        }
-
-        $delete = $ast["delete"];
-
-        if (!isset($delete["tables"])) {
-            throw new Exception("Corrupted DELETE AST");
-        }
-
-        $tables = $delete["tables"];
-
-        /**
-         * We use these arrays to store info related to models, alias and its
-         * sources. Thanks to them we can rename columns later
-         */
-        $models          = [];
-        $modelsInstances = [];
-
-        $sqlTables                 = [];
-        $sqlModels                 = [];
-        $sqlAliases                = [];
-        $sqlAliasesModelsInstances = [];
-
-        if (!isset($tables[0])) {
-            $deleteTables = [$tables];
-        } else {
-            $deleteTables = $tables;
-        }
-
-        $manager = $this->manager;
-
-        foreach ($deleteTables as $table) {
-            $qualifiedName = $table["qualifiedName"];
-            $modelName     = $qualifiedName["name"];
-
-            /**
-             * Load a model instance from the models manager
-             */
-            $model  = $manager->load($modelName);
-            $source = $model->getSource();
-            $schema = $model->getSchema();
-
-            if ($schema) {
-                $completeSource = [$source, $schema];
-            } else {
-                $completeSource = [$source, null];
-            }
-
-            if (isset($table["alias"])) {
-                $alias                             = $table["alias"];
-                $sqlAliases[$alias]                = $alias;
-                $completeSource[]                  = $alias;
-                $sqlTables[]                       = $completeSource;
-                $sqlAliasesModelsInstances[$alias] = $model;
-                $models[$alias]                    = $modelName;
-            } else {
-                $sqlAliases[$modelName]                = $source;
-                $sqlAliasesModelsInstances[$modelName] = $model;
-                $sqlTables[]                           = $source;
-                $models[$modelName]                    = $source;
-            }
-
-            $sqlModels[]                 = $modelName;
-            $modelsInstances[$modelName] = $model;
-        }
-
-        /**
-         * Update the models/alias/sources in the object
-         */
-        $this->models                    = $models;
-        $this->modelsInstances           = $modelsInstances;
-        $this->sqlAliases                = $sqlAliases;
-        $this->sqlAliasesModelsInstances = $sqlAliasesModelsInstances;
-
-        $sqlDelete           = [];
-        $sqlDelete["tables"] = $sqlTables;
-        $sqlDelete["models"] = $sqlModels;
-
-        if (isset($ast["where"])) {
-            $sqlDelete["where"] = $this->getExpression($ast["where"]);
-        }
-
-        if (isset($ast["limit"])) {
-            $sqlDelete["limit"] = $this->getLimitClause($ast["limit"]);
-        }
-
-        return $sqlDelete;
-    }
-
-    /**
-     * Analyzes an INSERT intermediate code and produces an array to be executed
-     * later
-     *
-     * @return array
-     * @throws Exception
-     */
-    final protected function prepareInsert(): array
-    {
-        $ast = $this->ast;
-
-        if (
-            !isset($ast["qualifiedName"]) ||
-            !isset($ast["values"])
-        ) {
-            throw new Exception("Corrupted INSERT AST");
-        }
-
-        $qualifiedName = $ast["qualifiedName"];
-
-        // Check if the related model exists
-        if (!isset($qualifiedName["name"])) {
-            throw new Exception("Corrupted INSERT AST");
-        }
-
-        $manager   = $this->manager;
-        $modelName = $qualifiedName["name"];
-
-        $model  = $manager->load($modelName);
-        $source = $model->getSource();
-        $schema = $model->getSchema();
-
-        if ($schema) {
-            $source = [$schema, $source];
-        }
-
-        $notQuoting = false;
-        $exprValues = [];
-
-        foreach ($ast["values"] as $exprValue) {
-            // Resolve every expression in the "values" clause
-            $exprValues[] = [
-                "type"  => $exprValue["type"],
-                "value" => $this->getExpression($exprValue, $notQuoting),
-            ];
-        }
-
-        $sqlInsert = [
-            "model" => $modelName,
-            "table" => $source,
-        ];
-
-        $metaData = $this->metaData;
-
-        if (isset($ast["fields"])) {
-            $fields    = $ast["fields"];
-            $sqlFields = [];
-
-            foreach ($fields as $field) {
-                $name = $field["name"];
-
-                // Check that inserted fields are part of the model
-                if (!$metaData->hasAttribute($model, $name)) {
-                    throw new Exception(
-                        "The model '"
-                        . $modelName
-                        . "' doesn't have the attribute '"
-                        . $name
-                        . "', when preparing: "
-                        . $this->phql
-                    );
-                }
-
-                // Add the file to the insert list
-                $sqlFields[] = $name;
-            }
-
-            $sqlInsert["fields"] = $sqlFields;
-        }
-
-        $sqlInsert["values"] = $exprValues;
-
-        return $sqlInsert;
-    }
-
-    /**
-     * Analyzes a SELECT intermediate code and produces an array to be executed later
-     *
-     * @param mixed|null $ast
-     * @param bool       $merge
-     *
-     * @return array
-     * @throws Exception
-     */
-    final protected function prepareSelect(
-        mixed $ast = null,
-        bool $merge = false
-    ): array {
-        if (empty($ast)) {
-            $ast = $this->ast;
-        }
-
-        $select = $ast["select"] ?? $ast;
-
-        if (
-            !isset($select["tables"]) ||
-            !isset($select["columns"])
-        ) {
-            throw new Exception("Corrupted SELECT AST");
-        }
-
-        $tables  = $select["tables"];
-        $columns = $select["columns"];
-
-        $this->nestingLevel++;
-
-        /**
-         * sqlModels is an array of the models to be used in the query
-         */
-        $sqlModels = [];
-
-        /**
-         * sqlTables is an array of the mapped models sources to be used in the
-         * query
-         */
-        $sqlTables = [];
-
-        /**
-         * sqlColumns is an array of every column expression
-         */
-        $sqlColumns = [];
-
-        /**
-         * sqlAliases is a map from aliases to mapped sources
-         */
-        $sqlAliases = [];
-
-        /**
-         * sqlAliasesModels is a map from aliases to model names
-         */
-        $sqlAliasesModels = [];
-
-        /**
-         * sqlAliasesModels is a map from model names to aliases
-         */
-        $sqlModelsAliases = [];
-
-        /**
-         * sqlAliasesModelsInstances is a map from aliases to model instances
-         */
-        $sqlAliasesModelsInstances = [];
-
-        /**
-         * Models information
-         */
-        $models          = [];
-        $modelsInstances = [];
-
-        // Convert selected models in an array
-        if (!isset($tables[0])) {
-            $selectedModels = [$tables];
-        } else {
-            $selectedModels = $tables;
-        }
-
-        // Convert selected columns in an array
-        if (!isset($columns[0])) {
-            $selectColumns = [$columns];
-        } else {
-            $selectColumns = $columns;
-        }
-
-        $manager  = $this->manager;
-        $metaData = $this->metaData;
-
-        if (!is_object($manager)) {
-            throw new Exception(
-                "A models-manager is required to execute the query"
-            );
-        }
-
-        if (!is_object($metaData)) {
-            throw new Exception(
-                "A meta-data is required to execute the query"
-            );
-        }
-
-        // Process selected models
-        $number         = 0;
-        $automaticJoins = [];
-
-        foreach ($selectedModels as $selectedModel) {
-            $qualifiedName = $selectedModel["qualifiedName"];
-            $modelName     = $qualifiedName["name"];
-
-            // Load a model instance from the models manager
-            $model = $manager->load($modelName);
-
-            // Define a complete schema/source
-            $schema = $model->getSchema();
-            $source = $model->getSource();
-
-            // Obtain the real source including the schema
-            if ($schema) {
-                $completeSource = [$source, $schema];
-            } else {
-                $completeSource = $source;
-            }
-
-            /**
-             * If an alias is defined for a model then the model cannot be
-             * referenced in the column list
-             */
-            if (isset($selectedModel["alias"])) {
-                $alias = $selectedModel["alias"];
-                // Check if the alias was used before
-                if (isset($sqlAliases[$alias])) {
-                    throw new Exception(
-                        "Alias '"
-                        . $alias . "' is used more than once, when preparing: "
-                        . $this->phql
-                    );
-                }
-
-                $sqlAliases[$alias]                = $alias;
-                $sqlAliasesModels[$alias]          = $modelName;
-                $sqlModelsAliases[$modelName]      = $alias;
-                $sqlAliasesModelsInstances[$alias] = $model;
-
-                /**
-                 * Append or convert complete source to an array
-                 */
-                if (is_array($completeSource)) {
-                    $completeSource[] = $alias;
-                } else {
-                    $completeSource = [$source, null, $alias];
-                }
-
-                $models[$modelName] = $alias;
-            } else {
-                $alias                                 = $source;
-                $sqlAliases[$modelName]                = $source;
-                $sqlAliasesModels[$modelName]          = $modelName;
-                $sqlModelsAliases[$modelName]          = $modelName;
-                $sqlAliasesModelsInstances[$modelName] = $model;
-                $models[$modelName]                    = $source;
-            }
-
-            // Eager load any specified relationship(s)
-            if (isset($selectedModel["with"])) {
-                $with = $selectedModel["with"];
-                if (!isset($with[0])) {
-                    $withs = [$with];
-                } else {
-                    $withs = $with;
-                }
-
-                // Simulate the definition of inner joins
-                foreach ($withs as $withItem) {
-                    $joinAlias     = "AA" . $number;
-                    $relationModel = $withItem["name"];
-
-                    $relation = $manager->getRelationByAlias(
-                        $modelName,
-                        $relationModel
-                    );
-
-                    if (is_object($relation)) {
-                        $bestAlias     = $relation->getOption("alias");
-                        $relationModel = $relation->getReferencedModel();
-                        $eagerType     = $relation->getType();
-                    } else {
-                        $relation = $manager->getRelationsBetween(
-                            $modelName,
-                            $relationModel
-                        );
-
-                        if (!is_object($relation)) {
-                            throw new Exception(
-                                "Can't find a relationship between '"
-                                . $modelName
-                                . "' and '"
-                                . $relationModel
-                                . "' when preparing: "
-                                . $this->phql
-                            );
-                        }
-
-                        $bestAlias     = $relation->getOption("alias");
-                        $relationModel = $relation->getReferencedModel();
-                        $eagerType     = $relation->getType();
-                    }
-
-                    $selectColumns[] = [
-                        "type"      => self::PHQL_T_DOMAINALL,
-                        "column"    => $joinAlias,
-                        "eager"     => $alias,
-                        "eagerType" => $eagerType,
-                        "balias"    => $bestAlias,
-                    ];
-
-                    $automaticJoins[] = [
-                        "type"      => self::PHQL_T_INNERJOIN,
-                        "qualified" => [
-                            "type" => self::PHQL_T_QUALIFIED,
-                            "name" => $relationModel,
-                        ],
-                        "alias"     => [
-                            "type" => self::PHQL_T_QUALIFIED,
-                            "name" => $joinAlias,
-                        ],
-                    ];
-
-                    $number++;
-                }
-            }
-
-            $sqlModels[]                 = $modelName;
-            $sqlTables[]                 = $completeSource;
-            $modelsInstances[$modelName] = $model;
-        }
-
-        // Assign Models/Tables information
-        if (!$merge) {
-            $this->models                    = $models;
-            $this->modelsInstances           = $modelsInstances;
-            $this->sqlAliases                = $sqlAliases;
-            $this->sqlAliasesModels          = $sqlAliasesModels;
-            $this->sqlModelsAliases          = $sqlModelsAliases;
-            $this->sqlAliasesModelsInstances = $sqlAliasesModelsInstances;
-        } else {
-            $tempModels                    = $this->models;
-            $tempModelsInstances           = $this->modelsInstances;
-            $tempSqlAliases                = $this->sqlAliases;
-            $tempSqlAliasesModels          = $this->sqlAliasesModels;
-            $tempSqlModelsAliases          = $this->sqlModelsAliases;
-            $tempSqlAliasesModelsInstances = $this->sqlAliasesModelsInstances;
-
-            $this->models                    = array_merge($this->models, $models);
-            $this->modelsInstances           = array_merge($this->modelsInstances, $modelsInstances);
-            $this->sqlAliases                = array_merge($this->sqlAliases, $sqlAliases);
-            $this->sqlAliasesModels          = array_merge($this->sqlAliasesModels, $sqlAliasesModels);
-            $this->sqlModelsAliases          = array_merge($this->sqlModelsAliases, $sqlModelsAliases);
-            $this->sqlAliasesModelsInstances = array_merge(
-                $this->sqlAliasesModelsInstances,
-                $sqlAliasesModelsInstances
-            );
-        }
-
-        $joins = $select["joins"] ?? [];
-
-        // Join existing JOINS with automatic Joins
-        if (count($joins)) {
-            if (count($automaticJoins)) {
-                if (isset($joins[0])) {
-                    $select["joins"] = array_merge($joins, $automaticJoins);
-                } else {
-                    $automaticJoins[] = $joins;
-                    $select["joins"]  = $automaticJoins;
-                }
-            }
-
-            $sqlJoins = $this->getJoins($select);
-        } else {
-            if (count($automaticJoins)) {
-                $select["joins"] = $automaticJoins;
-                $sqlJoins        = $this->getJoins($select);
-            } else {
-                $sqlJoins = [];
-            }
-        }
-
-        // Resolve selected columns
-        $position         = 0;
-        $sqlColumnAliases = [];
-
-        foreach ($selectColumns as $column) {
-            foreach ($this->getSelectColumn($column) as $sqlColumn) {
-                /**
-                 * If "alias" is set, the user defined an alias for the column
-                 */
-                if (isset($column["alias"])) {
-                    $alias = $column["alias"];
-                    /**
-                     * The best alias is the one provided by the user
-                     */
-                    $sqlColumn["balias"]      = $alias;
-                    $sqlColumn["sqlAlias"]    = $alias;
-                    $sqlColumns[$alias]       = $sqlColumn;
-                    $sqlColumnAliases[$alias] = true;
-                } else {
-                    /**
-                     * "balias" is the best alias chosen for the column
-                     */
-                    if (isset($sqlColumn["balias"])) {
-                        $alias              = $sqlColumn["balias"];
-                        $sqlColumns[$alias] = $sqlColumn;
-                    } else {
-                        if (is_scalar($sqlColumn["type"])) {
-                            $sqlColumns["_" . $position] = $sqlColumn;
-                        } else {
-                            $sqlColumns[] = $sqlColumn;
-                        }
-                    }
-                }
-
-                $position++;
-            }
-        }
-
-        $this->sqlColumnAliases[$this->nestingLevel] = $sqlColumnAliases;
-
-        // sqlSelect is the final prepared SELECT
-        $sqlSelect = [
-            "models"  => $sqlModels,
-            "tables"  => $sqlTables,
-            "columns" => $sqlColumns,
-        ];
-
-        if (isset($select["distinct"])) {
-            $sqlSelect["distinct"] = $select["distinct"];
-        }
-
-        if (count($sqlJoins)) {
-            $sqlSelect["joins"] = $sqlJoins;
-        }
-
-        // Process "WHERE" clause if set
-        if (isset($ast["where"])) {
-            $sqlSelect["where"] = $this->getExpression($ast["where"]);
-        }
-
-        // Process "GROUP BY" clause if set
-        if (isset($ast["groupBy"])) {
-            $sqlSelect["group"] = $this->getGroupClause($ast["groupBy"]);
-        }
-
-        // Process "HAVING" clause if set
-        if (isset($ast["having"])) {
-            $sqlSelect["having"] = $this->getExpression($ast["having"]);
-        }
-
-        // Process "ORDER BY" clause if set
-        if (isset($ast["orderBy"])) {
-            $sqlSelect["order"] = $this->getOrderClause($ast["orderBy"]);
-        }
-
-        // Process "LIMIT" clause if set
-        if (isset($ast["limit"])) {
-            $sqlSelect["limit"] = $this->getLimitClause($ast["limit"]);
-        }
-
-        // Process "FOR UPDATE" clause if set
-        if (isset($ast["forUpdate"])) {
-            $sqlSelect["forUpdate"] = true;
-        }
-
-        if ($merge) {
-            $this->models                    = $tempModels;
-            $this->modelsInstances           = $tempModelsInstances;
-            $this->sqlAliases                = $tempSqlAliases;
-            $this->sqlAliasesModels          = $tempSqlAliasesModels;
-            $this->sqlModelsAliases          = $tempSqlModelsAliases;
-            $this->sqlAliasesModelsInstances = $tempSqlAliasesModelsInstances;
-        }
-
-        $this->nestingLevel--;
-
-        return $sqlSelect;
-    }
-
-    /**
-     * Analyzes an UPDATE intermediate code and produces an array to be executed
-     * later
-     *
-     * @return array
-     * @throws Exception
-     */
-    final protected function prepareUpdate(): array
-    {
-        $ast = $this->ast;
-
-        if (!isset($ast["update"])) {
-            throw new Exception("Corrupted UPDATE AST");
-        }
-
-        $update = $ast["update"];
-        if (
-            !isset($update["tables"]) ||
-            !isset($update["values"])
-        ) {
-            throw new Exception("Corrupted UPDATE AST");
-        }
-
-        $tables = $update["tables"];
-        $values = $update["values"];
-
-        /**
-         * We use these arrays to store info related to models, alias and its
-         * sources. With them we can rename columns later
-         */
-        $models                    = [];
-        $modelsInstances           = [];
-        $sqlTables                 = [];
-        $sqlModels                 = [];
-        $sqlAliases                = [];
-        $sqlAliasesModelsInstances = [];
-
-        if (!isset($tables[0])) {
-            $updateTables = [$tables];
-        } else {
-            $updateTables = $tables;
-        }
-
-        $manager = $this->manager;
-
-        foreach ($updateTables as $table) {
-            $qualifiedName = $table["qualifiedName"];
-            $modelName     = $qualifiedName["name"];
-
-            /**
-             * Load a model instance from the models manager
-             */
-            $model  = $manager->load($modelName);
-            $source = $model->getSource();
-            $schema = $model->getSchema();
-
-            /**
-             * Create a full source representation including schema
-             */
-            if ($schema) {
-                $completeSource = [$source, $schema];
-            } else {
-                $completeSource = [$source, null];
-            }
-
-            /**
-             * Check if the table is aliased
-             */
-            if (isset($table["alias"])) {
-                $alias                             = $table["alias"];
-                $sqlAliases[$alias]                = $alias;
-                $completeSource[]                  = $alias;
-                $sqlTables[]                       = $completeSource;
-                $sqlAliasesModelsInstances[$alias] = $model;
-                $models[$alias]                    = $modelName;
-            } else {
-                $sqlAliases[$modelName]                = $source;
-                $sqlAliasesModelsInstances[$modelName] = $model;
-                $sqlTables[]                           = $source;
-                $models[$modelName]                    = $source;
-            }
-
-            $sqlModels[]                 = $modelName;
-            $modelsInstances[$modelName] = $model;
-        }
-
-        /**
-         * Update the models/alias/sources in the object
-         */
-        $this->models                    = $models;
-        $this->modelsInstances           = $modelsInstances;
-        $this->sqlAliases                = $sqlAliases;
-        $this->sqlAliasesModelsInstances = $sqlAliasesModelsInstances;
-
-        $sqlFields = [];
-        $sqlValues = [];
-
-        if (!isset($values[0])) {
-            $updateValues = [$values];
-        } else {
-            $updateValues = $values;
-        }
-
-        $notQuoting = false;
-
-        foreach ($updateValues as $updateValue) {
-            $sqlFields[] = $this->getExpression($updateValue["column"], $notQuoting);
-            $exprColumn  = $updateValue["expr"];
-            $sqlValues[] = [
-                "type"  => $exprColumn["type"],
-                "value" => $this->getExpression($exprColumn, $notQuoting),
-            ];
-        }
-
-        $sqlUpdate = [
-            "tables" => $sqlTables,
-            "models" => $sqlModels,
-            "fields" => $sqlFields,
-            "values" => $sqlValues,
-        ];
-
-        if (isset($ast["where"])) {
-            $sqlUpdate["where"] = $this->getExpression($ast["where"]);
-        }
-
-        if (isset($ast["limit"])) {
-            $sqlUpdate["limit"] = $this->getLimitClause($ast["limit"]);
-        }
-
-        return $sqlUpdate;
     }
 
     /**
@@ -4082,7 +3376,7 @@ class Query implements QueryInterface, InjectionAwareInterface
      */
     protected function getReadConnection(
         ModelInterface $model,
-        ?array $intermediate = null,
+        array | null $intermediate = null,
         array $bindParams = [],
         array $bindTypes = []
     ): AdapterInterface {
@@ -4481,7 +3775,7 @@ class Query implements QueryInterface, InjectionAwareInterface
      */
     protected function getWriteConnection(
         ModelInterface $model,
-        ?array $intermediate = null,
+        array | null $intermediate = null,
         array $bindParams = [],
         array $bindTypes = []
     ): AdapterInterface {
@@ -4509,6 +3803,710 @@ class Query implements QueryInterface, InjectionAwareInterface
         }
 
         return $model->getWriteConnection();
+    }
+
+    /**
+     * Analyzes a DELETE intermediate code and produces an array to be executed
+     * later
+     *
+     * @return array
+     * @throws Exception
+     */
+    final protected function prepareDelete(): array
+    {
+        $ast = $this->ast;
+
+        if (!isset($ast["delete"])) {
+            throw new Exception("Corrupted DELETE AST");
+        }
+
+        $delete = $ast["delete"];
+
+        if (!isset($delete["tables"])) {
+            throw new Exception("Corrupted DELETE AST");
+        }
+
+        $tables = $delete["tables"];
+
+        /**
+         * We use these arrays to store info related to models, alias and its
+         * sources. Thanks to them we can rename columns later
+         */
+        $models          = [];
+        $modelsInstances = [];
+
+        $sqlTables                 = [];
+        $sqlModels                 = [];
+        $sqlAliases                = [];
+        $sqlAliasesModelsInstances = [];
+
+        if (!isset($tables[0])) {
+            $deleteTables = [$tables];
+        } else {
+            $deleteTables = $tables;
+        }
+
+        $manager = $this->manager;
+
+        foreach ($deleteTables as $table) {
+            $qualifiedName = $table["qualifiedName"];
+            $modelName     = $qualifiedName["name"];
+
+            /**
+             * Load a model instance from the models manager
+             */
+            $model  = $manager->load($modelName);
+            $source = $model->getSource();
+            $schema = $model->getSchema();
+
+            if ($schema) {
+                $completeSource = [$source, $schema];
+            } else {
+                $completeSource = [$source, null];
+            }
+
+            if (isset($table["alias"])) {
+                $alias                             = $table["alias"];
+                $sqlAliases[$alias]                = $alias;
+                $completeSource[]                  = $alias;
+                $sqlTables[]                       = $completeSource;
+                $sqlAliasesModelsInstances[$alias] = $model;
+                $models[$alias]                    = $modelName;
+            } else {
+                $sqlAliases[$modelName]                = $source;
+                $sqlAliasesModelsInstances[$modelName] = $model;
+                $sqlTables[]                           = $source;
+                $models[$modelName]                    = $source;
+            }
+
+            $sqlModels[]                 = $modelName;
+            $modelsInstances[$modelName] = $model;
+        }
+
+        /**
+         * Update the models/alias/sources in the object
+         */
+        $this->models                    = $models;
+        $this->modelsInstances           = $modelsInstances;
+        $this->sqlAliases                = $sqlAliases;
+        $this->sqlAliasesModelsInstances = $sqlAliasesModelsInstances;
+
+        $sqlDelete           = [];
+        $sqlDelete["tables"] = $sqlTables;
+        $sqlDelete["models"] = $sqlModels;
+
+        if (isset($ast["where"])) {
+            $sqlDelete["where"] = $this->getExpression($ast["where"]);
+        }
+
+        if (isset($ast["limit"])) {
+            $sqlDelete["limit"] = $this->getLimitClause($ast["limit"]);
+        }
+
+        return $sqlDelete;
+    }
+
+    /**
+     * Analyzes an INSERT intermediate code and produces an array to be executed
+     * later
+     *
+     * @return array
+     * @throws Exception
+     */
+    final protected function prepareInsert(): array
+    {
+        $ast = $this->ast;
+
+        if (
+            !isset($ast["qualifiedName"]) ||
+            !isset($ast["values"])
+        ) {
+            throw new Exception("Corrupted INSERT AST");
+        }
+
+        $qualifiedName = $ast["qualifiedName"];
+
+        // Check if the related model exists
+        if (!isset($qualifiedName["name"])) {
+            throw new Exception("Corrupted INSERT AST");
+        }
+
+        $manager   = $this->manager;
+        $modelName = $qualifiedName["name"];
+
+        $model  = $manager->load($modelName);
+        $source = $model->getSource();
+        $schema = $model->getSchema();
+
+        if ($schema) {
+            $source = [$schema, $source];
+        }
+
+        $notQuoting = false;
+        $exprValues = [];
+
+        foreach ($ast["values"] as $exprValue) {
+            // Resolve every expression in the "values" clause
+            $exprValues[] = [
+                "type"  => $exprValue["type"],
+                "value" => $this->getExpression($exprValue, $notQuoting),
+            ];
+        }
+
+        $sqlInsert = [
+            "model" => $modelName,
+            "table" => $source,
+        ];
+
+        $metaData = $this->metaData;
+
+        if (isset($ast["fields"])) {
+            $fields    = $ast["fields"];
+            $sqlFields = [];
+
+            foreach ($fields as $field) {
+                $name = $field["name"];
+
+                // Check that inserted fields are part of the model
+                if (!$metaData->hasAttribute($model, $name)) {
+                    throw new Exception(
+                        "The model '"
+                        . $modelName
+                        . "' doesn't have the attribute '"
+                        . $name
+                        . "', when preparing: "
+                        . $this->phql
+                    );
+                }
+
+                // Add the file to the insert list
+                $sqlFields[] = $name;
+            }
+
+            $sqlInsert["fields"] = $sqlFields;
+        }
+
+        $sqlInsert["values"] = $exprValues;
+
+        return $sqlInsert;
+    }
+
+    /**
+     * Analyzes a SELECT intermediate code and produces an array to be executed later
+     *
+     * @param mixed|null $ast
+     * @param bool       $merge
+     *
+     * @return array
+     * @throws Exception
+     */
+    final protected function prepareSelect(
+        mixed $ast = null,
+        bool $merge = false
+    ): array {
+        if (empty($ast)) {
+            $ast = $this->ast;
+        }
+
+        $select = $ast["select"] ?? $ast;
+
+        if (
+            !isset($select["tables"]) ||
+            !isset($select["columns"])
+        ) {
+            throw new Exception("Corrupted SELECT AST");
+        }
+
+        $tables  = $select["tables"];
+        $columns = $select["columns"];
+
+        $this->nestingLevel++;
+
+        /**
+         * sqlModels is an array of the models to be used in the query
+         */
+        $sqlModels = [];
+
+        /**
+         * sqlTables is an array of the mapped models sources to be used in the
+         * query
+         */
+        $sqlTables = [];
+
+        /**
+         * sqlColumns is an array of every column expression
+         */
+        $sqlColumns = [];
+
+        /**
+         * sqlAliases is a map from aliases to mapped sources
+         */
+        $sqlAliases = [];
+
+        /**
+         * sqlAliasesModels is a map from aliases to model names
+         */
+        $sqlAliasesModels = [];
+
+        /**
+         * sqlAliasesModels is a map from model names to aliases
+         */
+        $sqlModelsAliases = [];
+
+        /**
+         * sqlAliasesModelsInstances is a map from aliases to model instances
+         */
+        $sqlAliasesModelsInstances = [];
+
+        /**
+         * Models information
+         */
+        $models          = [];
+        $modelsInstances = [];
+
+        // Convert selected models in an array
+        if (!isset($tables[0])) {
+            $selectedModels = [$tables];
+        } else {
+            $selectedModels = $tables;
+        }
+
+        // Convert selected columns in an array
+        if (!isset($columns[0])) {
+            $selectColumns = [$columns];
+        } else {
+            $selectColumns = $columns;
+        }
+
+        $manager  = $this->manager;
+        $metaData = $this->metaData;
+
+        if (!is_object($manager)) {
+            throw new Exception(
+                "A models-manager is required to execute the query"
+            );
+        }
+
+        if (!is_object($metaData)) {
+            throw new Exception(
+                "A meta-data is required to execute the query"
+            );
+        }
+
+        // Process selected models
+        $number         = 0;
+        $automaticJoins = [];
+
+        foreach ($selectedModels as $selectedModel) {
+            $qualifiedName = $selectedModel["qualifiedName"];
+            $modelName     = $qualifiedName["name"];
+
+            // Load a model instance from the models manager
+            $model = $manager->load($modelName);
+
+            // Define a complete schema/source
+            $schema = $model->getSchema();
+            $source = $model->getSource();
+
+            // Obtain the real source including the schema
+            if ($schema) {
+                $completeSource = [$source, $schema];
+            } else {
+                $completeSource = $source;
+            }
+
+            /**
+             * If an alias is defined for a model then the model cannot be
+             * referenced in the column list
+             */
+            if (isset($selectedModel["alias"])) {
+                $alias = $selectedModel["alias"];
+                // Check if the alias was used before
+                if (isset($sqlAliases[$alias])) {
+                    throw new Exception(
+                        "Alias '"
+                        . $alias . "' is used more than once, when preparing: "
+                        . $this->phql
+                    );
+                }
+
+                $sqlAliases[$alias]                = $alias;
+                $sqlAliasesModels[$alias]          = $modelName;
+                $sqlModelsAliases[$modelName]      = $alias;
+                $sqlAliasesModelsInstances[$alias] = $model;
+
+                /**
+                 * Append or convert complete source to an array
+                 */
+                if (is_array($completeSource)) {
+                    $completeSource[] = $alias;
+                } else {
+                    $completeSource = [$source, null, $alias];
+                }
+
+                $models[$modelName] = $alias;
+            } else {
+                $alias                                 = $source;
+                $sqlAliases[$modelName]                = $source;
+                $sqlAliasesModels[$modelName]          = $modelName;
+                $sqlModelsAliases[$modelName]          = $modelName;
+                $sqlAliasesModelsInstances[$modelName] = $model;
+                $models[$modelName]                    = $source;
+            }
+
+            // Eager load any specified relationship(s)
+            if (isset($selectedModel["with"])) {
+                $with = $selectedModel["with"];
+                if (!isset($with[0])) {
+                    $withs = [$with];
+                } else {
+                    $withs = $with;
+                }
+
+                // Simulate the definition of inner joins
+                foreach ($withs as $withItem) {
+                    $joinAlias     = "AA" . $number;
+                    $relationModel = $withItem["name"];
+
+                    $relation = $manager->getRelationByAlias(
+                        $modelName,
+                        $relationModel
+                    );
+
+                    if (is_object($relation)) {
+                        $bestAlias     = $relation->getOption("alias");
+                        $relationModel = $relation->getReferencedModel();
+                        $eagerType     = $relation->getType();
+                    } else {
+                        $relation = $manager->getRelationsBetween(
+                            $modelName,
+                            $relationModel
+                        );
+
+                        if (!is_object($relation)) {
+                            throw new Exception(
+                                "Can't find a relationship between '"
+                                . $modelName
+                                . "' and '"
+                                . $relationModel
+                                . "' when preparing: "
+                                . $this->phql
+                            );
+                        }
+
+                        $bestAlias     = $relation->getOption("alias");
+                        $relationModel = $relation->getReferencedModel();
+                        $eagerType     = $relation->getType();
+                    }
+
+                    $selectColumns[] = [
+                        "type"      => self::PHQL_T_DOMAINALL,
+                        "column"    => $joinAlias,
+                        "eager"     => $alias,
+                        "eagerType" => $eagerType,
+                        "balias"    => $bestAlias,
+                    ];
+
+                    $automaticJoins[] = [
+                        "type"      => self::PHQL_T_INNERJOIN,
+                        "qualified" => [
+                            "type" => self::PHQL_T_QUALIFIED,
+                            "name" => $relationModel,
+                        ],
+                        "alias"     => [
+                            "type" => self::PHQL_T_QUALIFIED,
+                            "name" => $joinAlias,
+                        ],
+                    ];
+
+                    $number++;
+                }
+            }
+
+            $sqlModels[]                 = $modelName;
+            $sqlTables[]                 = $completeSource;
+            $modelsInstances[$modelName] = $model;
+        }
+
+        // Assign Models/Tables information
+        if (!$merge) {
+            $this->models                    = $models;
+            $this->modelsInstances           = $modelsInstances;
+            $this->sqlAliases                = $sqlAliases;
+            $this->sqlAliasesModels          = $sqlAliasesModels;
+            $this->sqlModelsAliases          = $sqlModelsAliases;
+            $this->sqlAliasesModelsInstances = $sqlAliasesModelsInstances;
+        } else {
+            $tempModels                    = $this->models;
+            $tempModelsInstances           = $this->modelsInstances;
+            $tempSqlAliases                = $this->sqlAliases;
+            $tempSqlAliasesModels          = $this->sqlAliasesModels;
+            $tempSqlModelsAliases          = $this->sqlModelsAliases;
+            $tempSqlAliasesModelsInstances = $this->sqlAliasesModelsInstances;
+
+            $this->models                    = array_merge($this->models, $models);
+            $this->modelsInstances           = array_merge($this->modelsInstances, $modelsInstances);
+            $this->sqlAliases                = array_merge($this->sqlAliases, $sqlAliases);
+            $this->sqlAliasesModels          = array_merge($this->sqlAliasesModels, $sqlAliasesModels);
+            $this->sqlModelsAliases          = array_merge($this->sqlModelsAliases, $sqlModelsAliases);
+            $this->sqlAliasesModelsInstances = array_merge(
+                $this->sqlAliasesModelsInstances,
+                $sqlAliasesModelsInstances
+            );
+        }
+
+        $joins = $select["joins"] ?? [];
+
+        // Join existing JOINS with automatic Joins
+        if (count($joins)) {
+            if (count($automaticJoins)) {
+                if (isset($joins[0])) {
+                    $select["joins"] = array_merge($joins, $automaticJoins);
+                } else {
+                    $automaticJoins[] = $joins;
+                    $select["joins"]  = $automaticJoins;
+                }
+            }
+
+            $sqlJoins = $this->getJoins($select);
+        } else {
+            if (count($automaticJoins)) {
+                $select["joins"] = $automaticJoins;
+                $sqlJoins        = $this->getJoins($select);
+            } else {
+                $sqlJoins = [];
+            }
+        }
+
+        // Resolve selected columns
+        $position         = 0;
+        $sqlColumnAliases = [];
+
+        foreach ($selectColumns as $column) {
+            foreach ($this->getSelectColumn($column) as $sqlColumn) {
+                /**
+                 * If "alias" is set, the user defined an alias for the column
+                 */
+                if (isset($column["alias"])) {
+                    $alias = $column["alias"];
+                    /**
+                     * The best alias is the one provided by the user
+                     */
+                    $sqlColumn["balias"]      = $alias;
+                    $sqlColumn["sqlAlias"]    = $alias;
+                    $sqlColumns[$alias]       = $sqlColumn;
+                    $sqlColumnAliases[$alias] = true;
+                } else {
+                    /**
+                     * "balias" is the best alias chosen for the column
+                     */
+                    if (isset($sqlColumn["balias"])) {
+                        $alias              = $sqlColumn["balias"];
+                        $sqlColumns[$alias] = $sqlColumn;
+                    } else {
+                        if (is_scalar($sqlColumn["type"])) {
+                            $sqlColumns["_" . $position] = $sqlColumn;
+                        } else {
+                            $sqlColumns[] = $sqlColumn;
+                        }
+                    }
+                }
+
+                $position++;
+            }
+        }
+
+        $this->sqlColumnAliases[$this->nestingLevel] = $sqlColumnAliases;
+
+        // sqlSelect is the final prepared SELECT
+        $sqlSelect = [
+            "models"  => $sqlModels,
+            "tables"  => $sqlTables,
+            "columns" => $sqlColumns,
+        ];
+
+        if (isset($select["distinct"])) {
+            $sqlSelect["distinct"] = $select["distinct"];
+        }
+
+        if (count($sqlJoins)) {
+            $sqlSelect["joins"] = $sqlJoins;
+        }
+
+        // Process "WHERE" clause if set
+        if (isset($ast["where"])) {
+            $sqlSelect["where"] = $this->getExpression($ast["where"]);
+        }
+
+        // Process "GROUP BY" clause if set
+        if (isset($ast["groupBy"])) {
+            $sqlSelect["group"] = $this->getGroupClause($ast["groupBy"]);
+        }
+
+        // Process "HAVING" clause if set
+        if (isset($ast["having"])) {
+            $sqlSelect["having"] = $this->getExpression($ast["having"]);
+        }
+
+        // Process "ORDER BY" clause if set
+        if (isset($ast["orderBy"])) {
+            $sqlSelect["order"] = $this->getOrderClause($ast["orderBy"]);
+        }
+
+        // Process "LIMIT" clause if set
+        if (isset($ast["limit"])) {
+            $sqlSelect["limit"] = $this->getLimitClause($ast["limit"]);
+        }
+
+        // Process "FOR UPDATE" clause if set
+        if (isset($ast["forUpdate"])) {
+            $sqlSelect["forUpdate"] = true;
+        }
+
+        if ($merge) {
+            $this->models                    = $tempModels;
+            $this->modelsInstances           = $tempModelsInstances;
+            $this->sqlAliases                = $tempSqlAliases;
+            $this->sqlAliasesModels          = $tempSqlAliasesModels;
+            $this->sqlModelsAliases          = $tempSqlModelsAliases;
+            $this->sqlAliasesModelsInstances = $tempSqlAliasesModelsInstances;
+        }
+
+        $this->nestingLevel--;
+
+        return $sqlSelect;
+    }
+
+    /**
+     * Analyzes an UPDATE intermediate code and produces an array to be executed
+     * later
+     *
+     * @return array
+     * @throws Exception
+     */
+    final protected function prepareUpdate(): array
+    {
+        $ast = $this->ast;
+
+        if (!isset($ast["update"])) {
+            throw new Exception("Corrupted UPDATE AST");
+        }
+
+        $update = $ast["update"];
+        if (
+            !isset($update["tables"]) ||
+            !isset($update["values"])
+        ) {
+            throw new Exception("Corrupted UPDATE AST");
+        }
+
+        $tables = $update["tables"];
+        $values = $update["values"];
+
+        /**
+         * We use these arrays to store info related to models, alias and its
+         * sources. With them we can rename columns later
+         */
+        $models                    = [];
+        $modelsInstances           = [];
+        $sqlTables                 = [];
+        $sqlModels                 = [];
+        $sqlAliases                = [];
+        $sqlAliasesModelsInstances = [];
+
+        if (!isset($tables[0])) {
+            $updateTables = [$tables];
+        } else {
+            $updateTables = $tables;
+        }
+
+        $manager = $this->manager;
+
+        foreach ($updateTables as $table) {
+            $qualifiedName = $table["qualifiedName"];
+            $modelName     = $qualifiedName["name"];
+
+            /**
+             * Load a model instance from the models manager
+             */
+            $model  = $manager->load($modelName);
+            $source = $model->getSource();
+            $schema = $model->getSchema();
+
+            /**
+             * Create a full source representation including schema
+             */
+            if ($schema) {
+                $completeSource = [$source, $schema];
+            } else {
+                $completeSource = [$source, null];
+            }
+
+            /**
+             * Check if the table is aliased
+             */
+            if (isset($table["alias"])) {
+                $alias                             = $table["alias"];
+                $sqlAliases[$alias]                = $alias;
+                $completeSource[]                  = $alias;
+                $sqlTables[]                       = $completeSource;
+                $sqlAliasesModelsInstances[$alias] = $model;
+                $models[$alias]                    = $modelName;
+            } else {
+                $sqlAliases[$modelName]                = $source;
+                $sqlAliasesModelsInstances[$modelName] = $model;
+                $sqlTables[]                           = $source;
+                $models[$modelName]                    = $source;
+            }
+
+            $sqlModels[]                 = $modelName;
+            $modelsInstances[$modelName] = $model;
+        }
+
+        /**
+         * Update the models/alias/sources in the object
+         */
+        $this->models                    = $models;
+        $this->modelsInstances           = $modelsInstances;
+        $this->sqlAliases                = $sqlAliases;
+        $this->sqlAliasesModelsInstances = $sqlAliasesModelsInstances;
+
+        $sqlFields = [];
+        $sqlValues = [];
+
+        if (!isset($values[0])) {
+            $updateValues = [$values];
+        } else {
+            $updateValues = $values;
+        }
+
+        $notQuoting = false;
+
+        foreach ($updateValues as $updateValue) {
+            $sqlFields[] = $this->getExpression($updateValue["column"], $notQuoting);
+            $exprColumn  = $updateValue["expr"];
+            $sqlValues[] = [
+                "type"  => $exprColumn["type"],
+                "value" => $this->getExpression($exprColumn, $notQuoting),
+            ];
+        }
+
+        $sqlUpdate = [
+            "tables" => $sqlTables,
+            "models" => $sqlModels,
+            "fields" => $sqlFields,
+            "values" => $sqlValues,
+        ];
+
+        if (isset($ast["where"])) {
+            $sqlUpdate["where"] = $this->getExpression($ast["where"]);
+        }
+
+        if (isset($ast["limit"])) {
+            $sqlUpdate["limit"] = $this->getLimitClause($ast["limit"]);
+        }
+
+        return $sqlUpdate;
     }
 
     /**

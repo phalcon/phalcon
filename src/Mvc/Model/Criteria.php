@@ -63,7 +63,7 @@ class Criteria implements CriteriaInterface, InjectionAwareInterface
     /**
      * @var string|null
      */
-    protected ?string $model = null;
+    protected string | null $model = null;
 
     /**
      * @var array
@@ -81,8 +81,8 @@ class Criteria implements CriteriaInterface, InjectionAwareInterface
      */
     public function andWhere(
         string $conditions,
-        ?array $bindParams = null,
-        ?array $bindTypes = null
+        array | null $bindParams = null,
+        array | null $bindTypes = null
     ): CriteriaInterface {
         if (isset($this->params["conditions"])) {
             $conditions = "(" . $this->params["conditions"] . ") AND (" . $conditions . ")";
@@ -850,8 +850,8 @@ class Criteria implements CriteriaInterface, InjectionAwareInterface
      */
     public function orWhere(
         string $conditions,
-        ?array $bindParams = null,
-        ?array $bindTypes = null
+        array | null $bindParams = null,
+        array | null $bindTypes = null
     ): CriteriaInterface {
         if (isset($this->params["conditions"])) {
             $conditions = "(" . $this->params["conditions"] . ") OR (" . $conditions . ")";
@@ -949,8 +949,8 @@ class Criteria implements CriteriaInterface, InjectionAwareInterface
      */
     public function where(
         string $conditions,
-        ?array $bindParams = null,
-        ?array $bindTypes = null
+        array | null $bindParams = null,
+        array | null $bindTypes = null
     ): CriteriaInterface {
         $this->params["conditions"] = $conditions;
 

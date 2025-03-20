@@ -103,7 +103,7 @@ interface RouteInterface
      */
     public function reConfigure(
         string $pattern,
-        array | string $paths = null
+        array | string | null $paths = null
     ): void;
 
     /**

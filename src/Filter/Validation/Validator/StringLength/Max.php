@@ -64,7 +64,7 @@ class Max extends Min
     /**
      * @var string|null
      */
-    protected ?string $template = "Field :field must not exceed :max characters long";
+    protected string | null $template = "Field :field must not exceed :max characters long";
 
     /**
      * Executes the conditional

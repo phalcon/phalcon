@@ -68,7 +68,7 @@ interface AdapterInterface
      *
      * @return string|null
      */
-    public function getAutoincSequence(string $schema, string $table): string|null;
+    public function getAutoincSequence(string $schema, string $table): string | null;
 
     /**
      * Return the current schema name

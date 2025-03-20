@@ -27,7 +27,6 @@ use SeekableIterator;
 use Serializable;
 
 use function call_user_func_array;
-use function is_a;
 use function is_array;
 use function is_object;
 use function method_exists;
@@ -95,7 +94,7 @@ abstract class Resultset implements
     /**
      * @var CacheInterface|null
      */
-    protected ?CacheInterface $cache = null;
+    protected CacheInterface | null $cache = null;
 
     /**
      * @var int
@@ -130,7 +129,7 @@ abstract class Resultset implements
     /**
      * @var array|null
      */
-    protected ?array $rows = null;
+    protected array | null $rows = null;
 
     /**
      * Phalcon\Mvc\Model\Resultset constructor
@@ -230,7 +229,7 @@ abstract class Resultset implements
      * @return bool
      * @throws Exception
      */
-    public function delete(Closure $conditionCallback = null): bool
+    public function delete(Closure | null $conditionCallback = null): bool
     {
         $connection  = null;
         $result      = true;
@@ -686,8 +685,10 @@ abstract class Resultset implements
      * @return bool
      * @throws Exception
      */
-    public function update(mixed $data, ?Closure $conditionCallback = null): bool
-    {
+    public function update(
+        mixed $data,
+        Closure | null $conditionCallback = null
+    ): bool {
         $connection  = null;
         $transaction = false;
 

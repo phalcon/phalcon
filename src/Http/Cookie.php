@@ -40,7 +40,7 @@ class Cookie extends AbstractInjectionAware implements
     /**
      * @var FilterInterface|null
      */
-    protected ?FilterInterface $filter = null;
+    protected FilterInterface | null $filter = null;
 
     /**
      * @var bool
@@ -57,7 +57,7 @@ class Cookie extends AbstractInjectionAware implements
      *
      * @var string|null
      */
-    protected ?string $signKey = null;
+    protected string | null $signKey = null;
 
     /**
      * @var bool
@@ -77,9 +77,9 @@ class Cookie extends AbstractInjectionAware implements
         mixed $value = null,
         protected int $expire = 0,
         protected string $path = '/',
-        protected ?bool $secure = null,
-        protected ?string $domain = null,
-        protected ?bool $httpOnly = null,
+        protected bool | null $secure = null,
+        protected string | null $domain = null,
+        protected bool | null $httpOnly = null,
         protected array $options = []
     ) {
         if (null !== $value) {
@@ -533,7 +533,7 @@ class Cookie extends AbstractInjectionAware implements
      * @throws CookieException
      * @see \Phalcon\Encryption\Security\Random
      */
-    public function setSignKey(?string $signKey = null): CookieInterface
+    public function setSignKey(string | null $signKey = null): CookieInterface
     {
         if (null !== $signKey) {
             $this->assertSignKeyIsLongEnough($signKey);

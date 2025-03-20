@@ -32,7 +32,7 @@ trait PhpYamlTrait
     protected function phpYamlParseFile(
         string $filename,
         int $pos = 0,
-        ?int &$ndocs = null,
+        int | null &$ndocs = null,
         array $callbacks = []
     ) {
         return yaml_parse_file($filename, $pos, $ndocs, $callbacks);

@@ -30,8 +30,8 @@ use function str_contains;
  */
 abstract class Select
 {
-    protected const SELECT_CLOSE = '</select>';
     protected const OPTION_CLOSE = '</option>';
+    protected const SELECT_CLOSE = '</select>';
 
     /**
      * Generates a SELECT tag
@@ -160,6 +160,13 @@ abstract class Select
         $code .= self::SELECT_CLOSE;
 
         return $code;
+    }
+
+    protected static function echoOption(string $value, bool $selected = false): string
+    {
+        $extra = $selected ? 'selected="selected" ' : '';
+
+        return "\t<option {$extra}value=\"" . $value . "\">";
     }
 
     /**
@@ -316,12 +323,5 @@ abstract class Select
         }
 
         return $code;
-    }
-
-    protected static function echoOption(string $value, bool $selected = false): string
-    {
-        $extra = $selected ? 'selected="selected" ' : '';
-
-        return "\t<option {$extra}value=\"" . $value . "\">";
     }
 }

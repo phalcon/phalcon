@@ -29,6 +29,19 @@ use Phalcon\DataMapper\Pdo\Exception\Exception;
 trait QueryTrait
 {
     /**
+     * Constructor.
+     *
+     * @param string     $driver
+     * @param Connection $connection
+     */
+    public function __construct(
+        string $driver,
+        protected Connection $connection
+    ) {
+        parent::__construct($driver);
+    }
+
+    /**
      * Create a new instance of this object
      *
      * @param Connection|string $argument
@@ -45,19 +58,6 @@ trait QueryTrait
         }
 
         return new static($connection->getDriverName(), $connection);
-    }
-
-    /**
-     * Constructor.
-     *
-     * @param string     $driver
-     * @param Connection $connection
-     */
-    public function __construct(
-        string $driver,
-        protected Connection $connection
-    ) {
-        parent::__construct($driver);
     }
 
     /**

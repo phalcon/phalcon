@@ -42,13 +42,6 @@ class Binder implements BinderInterface
     protected array $boundModels = [];
 
     /**
-     * Cache object used for caching parameters for model binding
-     *
-     * @var AdapterInterface|null
-     */
-    protected ?AdapterInterface $cache;
-
-    /**
      * Internal cache for caching parameters for model binding during request
      *
      * @var array
@@ -65,9 +58,9 @@ class Binder implements BinderInterface
     /**
      * @param AdapterInterface|null $cache
      */
-    public function __construct(AdapterInterface $cache = null)
-    {
-        $this->cache = $cache;
+    public function __construct(
+        protected AdapterInterface | null $cache = null
+    ) {
     }
 
     /**
@@ -86,7 +79,7 @@ class Binder implements BinderInterface
         object $handler,
         array $params,
         string $cacheKey,
-        string $methodName = null
+        string | null $methodName = null
     ): array {
         $this->originalValues = [];
 

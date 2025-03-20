@@ -62,7 +62,7 @@ class Min extends Equal
     /**
      * @var string|null
      */
-    protected ?string $template = "File :field can not have the minimum size of :size";
+    protected string | null $template = "File :field can not have the minimum size of :size";
 
     /**
      * Executes the conditional

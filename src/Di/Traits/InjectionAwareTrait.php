@@ -31,12 +31,12 @@ trait InjectionAwareTrait
      *
      * @var DiInterface|null
      */
-    protected ?DiInterface $container = null;
+    protected DiInterface | null $container = null;
 
     /**
      * Returns the internal dependency injector
      */
-    public function getDI(): ?DiInterface
+    public function getDI(): DiInterface | null
     {
         return $this->container;
     }

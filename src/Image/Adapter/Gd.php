@@ -102,8 +102,8 @@ class Gd extends AbstractAdapter
      */
     public function __construct(
         string $file,
-        int $width = null,
-        int $height = null
+        int | null $width = null,
+        int | null $height = null
     ) {
         $this->check();
 
@@ -780,7 +780,7 @@ class Gd extends AbstractAdapter
         int $green,
         int $blue,
         int $size,
-        string $fontFile = null
+        string | null $fontFile = null
     ): void {
         $bottomLeftX = 0;
         $bottomLeftY = 0;

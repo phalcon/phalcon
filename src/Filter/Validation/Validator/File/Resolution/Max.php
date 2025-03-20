@@ -62,7 +62,7 @@ class Max extends Equal
     /**
      * @var string|null
      */
-    protected ?string $template = "File :field exceeds the maximum resolution of :resolution";
+    protected string | null $template = "File :field exceeds the maximum resolution of :resolution";
 
     /**
      * Executes the conditional

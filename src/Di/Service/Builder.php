@@ -42,7 +42,7 @@ class Builder
     public function build(
         DiInterface $container,
         array $definition,
-        array $parameters = null
+        array | null $parameters = null
     ) {
         $this->checkClassNameExists($definition);
 
@@ -227,7 +227,7 @@ class Builder
     private function checkPassedParameters(
         DiInterface $container,
         array $definition,
-        array $parameters = null
+        array | null $parameters = null
     ): array {
         if (null !== $parameters) {
             return $parameters;

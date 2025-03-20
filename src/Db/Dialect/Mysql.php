@@ -195,7 +195,7 @@ class Mysql extends Dialect
     public function createView(
         string $viewName,
         array $definition,
-        string $schemaName = null
+        string | null $schemaName = null
     ): string {
         if (!isset($definition["sql"])) {
             throw new Exception(
@@ -225,7 +225,7 @@ class Mysql extends Dialect
      */
     public function describeColumns(
         string $tableName,
-        ?string $schemaName = null
+        string | null $schemaName = null
     ): string {
         return "SHOW FULL COLUMNS FROM "
             . $this->prepareTable($tableName, $schemaName);
@@ -241,7 +241,7 @@ class Mysql extends Dialect
      */
     public function describeIndexes(
         string $tableName,
-        ?string $schemaName = null
+        string | null $schemaName = null
     ): string {
         return "SHOW INDEXES FROM "
             . $this->prepareTable($tableName, $schemaName);
@@ -257,7 +257,7 @@ class Mysql extends Dialect
      */
     public function describeReferences(
         string $tableName,
-        ?string $schemaName = null
+        string | null $schemaName = null
     ): string {
         $sql = "SELECT DISTINCT KCU.TABLE_NAME, KCU.COLUMN_NAME, "
             . "KCU.CONSTRAINT_NAME, KCU.REFERENCED_TABLE_SCHEMA, "
@@ -376,7 +376,7 @@ class Mysql extends Dialect
      */
     public function dropTable(
         string $tableName,
-        ?string $schemaName = null,
+        string | null $schemaName = null,
         bool $ifExists = true
     ): string {
         return $this->drop('TABLE')
@@ -395,7 +395,7 @@ class Mysql extends Dialect
      */
     public function dropView(
         string $viewName,
-        ?string $schemaName = null,
+        string | null $schemaName = null,
         bool $ifExists = true
     ): string {
         return $this->drop('VIEW')
@@ -494,7 +494,7 @@ class Mysql extends Dialect
      *
      * @return string
      */
-    public function listTables(?string $schemaName = null): string
+    public function listTables(string | null $schemaName = null): string
     {
         $schema = empty($schemaName) ? "" : " FROM " . $this->delimit($schemaName);
 
@@ -508,7 +508,7 @@ class Mysql extends Dialect
      *
      * @return string
      */
-    public function listViews(?string $schemaName = null): string
+    public function listViews(string | null $schemaName = null): string
     {
         return "SELECT `TABLE_NAME` AS view_name "
             . "FROM `INFORMATION_SCHEMA`.`VIEWS` "
@@ -531,7 +531,7 @@ class Mysql extends Dialect
         string $tableName,
         string $schemaName,
         ColumnInterface $column,
-        ColumnInterface $currentColumn = null
+        ColumnInterface | null $currentColumn = null
     ): string {
         $columnDefinition = $this->getColumnDefinition($column);
 
@@ -593,7 +593,7 @@ class Mysql extends Dialect
      */
     public function tableExists(
         string $tableName,
-        ?string $schemaName = null
+        string | null $schemaName = null
     ): string {
         return $this->getExistsSql('TABLES', $tableName, $schemaName);
     }
@@ -606,8 +606,10 @@ class Mysql extends Dialect
      *
      * @return string
      */
-    public function tableOptions(string $tableName, ?string $schemaName = null): string
-    {
+    public function tableOptions(
+        string $tableName,
+        string | null $schemaName = null
+    ): string {
         return "SELECT TABLES.TABLE_TYPE AS table_type,"
             . "TABLES.AUTO_INCREMENT AS auto_increment,"
             . "TABLES.ENGINE AS engine,"
@@ -644,7 +646,7 @@ class Mysql extends Dialect
      */
     public function viewExists(
         string $viewName,
-        ?string $schemaName = null
+        string | null $schemaName = null
     ): string {
         return $this->getExistsSql('VIEWS', $viewName, $schemaName);
     }

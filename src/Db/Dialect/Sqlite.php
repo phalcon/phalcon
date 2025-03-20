@@ -24,7 +24,6 @@ use Phalcon\Db\ReferenceInterface;
 use function addcslashes;
 use function is_array;
 use function is_string;
-use function join;
 use function strtoupper;
 use function substr;
 
@@ -323,7 +322,7 @@ class Sqlite extends Dialect
     public function createView(
         string $viewName,
         array $definition,
-        string $schemaName = null
+        string | null $schemaName = null
     ): string {
         if (!isset($definition["sql"])) {
             throw new Exception(
@@ -353,7 +352,7 @@ class Sqlite extends Dialect
      */
     public function describeColumns(
         string $tableName,
-        string $schemaName = null
+        string | null $schemaName = null
     ): string {
         return "PRAGMA table_info('" . $tableName . "')";
     }
@@ -380,7 +379,7 @@ class Sqlite extends Dialect
      */
     public function describeIndexes(
         string $tableName,
-        ?string $schemaName = null
+        string | null $schemaName = null
     ): string {
         return "PRAGMA index_list('" . $tableName . "')";
     }
@@ -395,7 +394,7 @@ class Sqlite extends Dialect
      */
     public function describeReferences(
         string $tableName,
-        ?string $schemaName = null
+        string | null $schemaName = null
     ): string {
         return "PRAGMA foreign_key_list('" . $tableName . "')";
     }
@@ -488,7 +487,7 @@ class Sqlite extends Dialect
      */
     public function dropTable(
         string $tableName,
-        string $schemaName = null,
+        string | null $schemaName = null,
         bool $ifExists = true
     ): string {
         $tableName = $this->prepareTable($tableName, $schemaName);
@@ -511,7 +510,7 @@ class Sqlite extends Dialect
      */
     public function dropView(
         string $viewName,
-        ?string $schemaName = null,
+        string | null $schemaName = null,
         bool $ifExists = true
     ): string {
         $view = $this->prepareTable($viewName, $schemaName);
@@ -728,8 +727,8 @@ class Sqlite extends Dialect
      */
     public function listIndexesSql(
         string $tableName,
-        ?string $schemaName = null,
-        string $keyName = null
+        string | null $schemaName = null,
+        string | null $keyName = null
     ): string {
         $sql = "SELECT sql "
             . "FROM sqlite_master "
@@ -756,7 +755,7 @@ class Sqlite extends Dialect
      *
      * @return string
      */
-    public function listTables(?string $schemaName = null): string
+    public function listTables(string | null $schemaName = null): string
     {
         return "SELECT tbl_name "
             . "FROM sqlite_master "
@@ -770,7 +769,7 @@ class Sqlite extends Dialect
      *
      * @return string
      */
-    public function listViews(?string $schemaName = null): string
+    public function listViews(string | null $schemaName = null): string
     {
         return "SELECT tbl_name "
             . "FROM sqlite_master "
@@ -822,7 +821,7 @@ class Sqlite extends Dialect
      */
     public function tableExists(
         string $tableName,
-        ?string $schemaName = null
+        string | null $schemaName = null
     ): string {
         return "SELECT CASE WHEN COUNT(*) > 0 THEN 1 ELSE 0 END "
             . "FROM sqlite_master "
@@ -837,7 +836,7 @@ class Sqlite extends Dialect
      *
      * @return string
      */
-    public function tableOptions(string $tableName, ?string $schemaName = null): string
+    public function tableOptions(string $tableName, string | null $schemaName = null): string
     {
         return "";
     }
@@ -852,7 +851,7 @@ class Sqlite extends Dialect
      */
     public function truncateTable(
         string $tableName,
-        ?string $schemaName = ''
+        string | null $schemaName = ''
     ): string {
         $schema = "";
         if (!empty($schemaName)) {
@@ -870,7 +869,7 @@ class Sqlite extends Dialect
      *
      * @return string
      */
-    public function viewExists(string $viewName, ?string $schemaName = null): string
+    public function viewExists(string $viewName, string | null $schemaName = null): string
     {
         return "SELECT CASE WHEN COUNT(*) > 0 THEN 1 ELSE 0 END FROM "
             . "sqlite_master WHERE type='view' AND tbl_name='" . $viewName . "'";

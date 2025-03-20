@@ -28,8 +28,8 @@ class Reader implements ReaderInterface
      *
      * @param string $className
      *
-     * @throws ReflectionException
      * @return array
+     * @throws ReflectionException
      */
     public function parse(string $className): array
     {
@@ -52,7 +52,7 @@ class Reader implements ReaderInterface
         /**
          * Get class constants
          */
-        $constants           = $reflection->getReflectionConstants();
+        $constants            = $reflection->getReflectionConstants();
         $annotationsConstants = [];
         foreach ($constants as $constant) {
             $constantAnnotations = $constant->getAttributes();
@@ -68,7 +68,7 @@ class Reader implements ReaderInterface
         /**
          * Get the class properties
          */
-        $properties           = $reflection->getProperties();
+        $properties            = $reflection->getProperties();
         $annotationsProperties = [];
         foreach ($properties as $property) {
             $propertyAnnotations = $property->getAttributes();
@@ -84,7 +84,7 @@ class Reader implements ReaderInterface
         /**
          * Get the class methods
          */
-        $methods           = $reflection->getMethods();
+        $methods            = $reflection->getMethods();
         $annotationsMethods = [];
         foreach ($methods as $method) {
             $methodAnnotations = $method->getAttributes();

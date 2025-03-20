@@ -27,7 +27,7 @@ interface ModuleDefinitionInterface
      *
      * @return void
      */
-    public function registerAutoloaders(DiInterface $container = null);
+    public function registerAutoloaders(DiInterface | null $container = null);
 
     /**
      * Registers services related to the module

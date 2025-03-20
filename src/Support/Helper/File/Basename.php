@@ -37,7 +37,7 @@ class Basename
      */
     public function __invoke(
         string $uri,
-        string $suffix = null
+        string | null $suffix = null
     ): string {
         $uri      = rtrim($uri, DIRECTORY_SEPARATOR);
         $filename = preg_match(

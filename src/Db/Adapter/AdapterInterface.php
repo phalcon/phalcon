@@ -165,7 +165,7 @@ interface AdapterInterface
     public function createView(
         string $viewName,
         array $definition,
-        string $schemaName = null
+        string | null $schemaName = null
     ): bool;
 
     /**
@@ -180,7 +180,7 @@ interface AdapterInterface
      */
     public function delete(
         array | string $tableName,
-        string $whereCondition = null,
+        string | null $whereCondition = null,
         array $placeholders = [],
         array $dataTypes = []
     ): bool;
@@ -193,7 +193,10 @@ interface AdapterInterface
      *
      * @return ColumnInterface[]
      */
-    public function describeColumns(string $tableName, ?string $schemaName = null): array;
+    public function describeColumns(
+        string $tableName,
+        string | null $schemaName = null
+    ): array;
 
     /**
      * Lists table indexes
@@ -205,7 +208,7 @@ interface AdapterInterface
      */
     public function describeIndexes(
         string $tableName,
-        ?string $schemaName = null
+        string | null $schemaName = null
     ): array;
 
     /**
@@ -218,7 +221,7 @@ interface AdapterInterface
      */
     public function describeReferences(
         string $tableName,
-        ?string $schemaName = null
+        string | null $schemaName = null
     ): array;
 
     /**
@@ -238,8 +241,18 @@ interface AdapterInterface
 
     /**
      * Drops a foreign key from a table
+     *
+     * @param string $tableName
+     * @param string $schemaName
+     * @param string $referenceName
+     *
+     * @return bool
      */
-    public function dropForeignKey(string $tableName, string $schemaName, string $referenceName): bool;
+    public function dropForeignKey(
+        string $tableName,
+        string $schemaName,
+        string $referenceName
+    ): bool;
 
     /**
      * Drop an index from a table
@@ -277,7 +290,7 @@ interface AdapterInterface
      */
     public function dropTable(
         string $tableName,
-        string $schemaName = null,
+        string | null $schemaName = null,
         bool $ifExists = true
     ): bool;
 
@@ -292,7 +305,7 @@ interface AdapterInterface
      */
     public function dropView(
         string $viewName,
-        ?string $schemaName = null,
+        string | null $schemaName = null,
         bool $ifExists = true
     ): bool;
 
@@ -457,7 +470,7 @@ interface AdapterInterface
      * @todo Return NULL if this is not supported by the adapter
      *
      */
-    public function getDefaultValue(): ?RawValue;
+    public function getDefaultValue(): RawValue | null;
 
     /**
      * Return descriptor used to connect to the active database
@@ -598,7 +611,7 @@ interface AdapterInterface
      *
      * @return string|bool
      */
-    public function lastInsertId(string $name = null): string | bool;
+    public function lastInsertId(string | null $name = null): string | bool;
 
     /**
      * Appends a LIMIT clause to sqlQuery argument
@@ -617,7 +630,7 @@ interface AdapterInterface
      *
      * @return array
      */
-    public function listTables(?string $schemaName = null): array;
+    public function listTables(string | null $schemaName = null): array;
 
     /**
      * List all views on a database
@@ -626,7 +639,7 @@ interface AdapterInterface
      *
      * @return array
      */
-    public function listViews(?string $schemaName = null): array;
+    public function listViews(string | null $schemaName = null): array;
 
     /**
      * Modifies a table column based on a definition
@@ -642,7 +655,7 @@ interface AdapterInterface
         string $tableName,
         string $schemaName,
         ColumnInterface $column,
-        ColumnInterface $currentColumn = null
+        ColumnInterface | null $currentColumn = null
     ): bool;
 
     /**
@@ -736,7 +749,7 @@ interface AdapterInterface
      */
     public function tableExists(
         string $tableName,
-        ?string $schemaName = null
+        string | null $schemaName = null
     ): bool;
 
     /**
@@ -749,7 +762,7 @@ interface AdapterInterface
      */
     public function tableOptions(
         string $tableName,
-        ?string $schemaName = null
+        string | null $schemaName = null
     ): array;
 
     /**
@@ -821,6 +834,6 @@ interface AdapterInterface
      */
     public function viewExists(
         string $viewName,
-        ?string $schemaName = null
+        string | null $schemaName = null
     ): bool;
 }

@@ -79,7 +79,7 @@ interface ResponseInterface
      * @return ResponseInterface
      */
     public function redirect(
-        string $location = null,
+        string | null $location = null,
         bool $externalRedirect = false,
         int $statusCode = 302
     ): ResponseInterface;
@@ -141,7 +141,7 @@ interface ResponseInterface
      */
     public function setContentType(
         string $contentType,
-        string $charset = null
+        string | null $charset = null
     ): ResponseInterface;
 
     /**
@@ -164,7 +164,7 @@ interface ResponseInterface
      */
     public function setFileToSend(
         string $filePath,
-        string $attachmentName = null
+        string | null $attachmentName = null
     ): ResponseInterface;
 
     /**
@@ -222,6 +222,6 @@ interface ResponseInterface
      */
     public function setStatusCode(
         int $code,
-        string $message = null
+        string | null $message = null
     ): ResponseInterface;
 }

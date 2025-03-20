@@ -18,7 +18,6 @@ use Phalcon\Config\ConfigFactory;
 use Phalcon\Config\ConfigInterface;
 use Phalcon\Config\Exception;
 
-use function is_object;
 use function is_string;
 
 /**

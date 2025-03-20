@@ -26,7 +26,7 @@ trait ItemTrait
      *
      * @var string|null
      */
-    private ?string $description = null;
+    private string | null $description = null;
     /**
      * Role name
      *
@@ -45,7 +45,7 @@ trait ItemTrait
     /**
      * @return string|null
      */
-    public function getDescription(): ?string
+    public function getDescription(): string | null
     {
         return $this->description;
     }

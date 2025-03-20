@@ -30,7 +30,7 @@ class Component implements ComponentInterface
      *
      * @throws Exception
      */
-    public function __construct(string $name, string $description = null)
+    public function __construct(string $name, string | null $description = null)
     {
         if ('*' === $name) {
             throw new Exception("Component name cannot be '*'");

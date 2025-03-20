@@ -30,7 +30,7 @@ class PrimaryValueNotScalarException extends Exception
     {
         parent::__construct(
             "The value for primary key [$column] is not scalar, "
-                . "got [" . gettype($value) . "]."
+            . "got [" . gettype($value) . "]."
         );
     }
 }

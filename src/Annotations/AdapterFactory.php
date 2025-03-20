@@ -37,7 +37,7 @@ class AdapterFactory
     /**
      * @var SerializerFactory|null
      */
-    private ?SerializerFactory $serializerFactory;
+    private SerializerFactory | null $serializerFactory;
 
     /**
      * AdapterFactory constructor.
@@ -79,8 +79,8 @@ class AdapterFactory
      *                                      'storageDir'        => ''
      *                                      ]
      *
-     * @throws BaseException
      * @return AdapterInterface
+     * @throws BaseException
      */
     public function newInstance(string $name, array $options = []): AdapterInterface
     {

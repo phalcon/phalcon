@@ -18,7 +18,6 @@ use Exception as BaseException;
 use Phalcon\Storage\SerializerFactory;
 use WeakReference;
 
-use function is_bool;
 use function is_int;
 use function is_object;
 
@@ -30,7 +29,7 @@ class Weak extends AbstractAdapter
     /**
      * @var string|null
      */
-    protected ?string $fetching = null;
+    protected string | null $fetching = null;
 
     /**
      * @var array

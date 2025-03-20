@@ -13,7 +13,6 @@ declare(strict_types=1);
 
 namespace Phalcon\Translate\Adapter;
 
-use ArrayAccess;
 use Phalcon\Traits\Php\InfoTrait;
 use Phalcon\Translate\Exception;
 use Phalcon\Translate\InterpolatorFactory;
@@ -166,7 +165,7 @@ class Gettext extends AbstractAdapter
         string $msgid2,
         int $count,
         array $placeholders = [],
-        string $domain = null
+        string | null $domain = null
     ): string {
         if (null === $domain) {
             $translation = ngettext($msgid1, $msgid2, $count);
@@ -259,7 +258,7 @@ class Gettext extends AbstractAdapter
      *
      * @return string
      */
-    public function setDomain(?string $domain = null): string
+    public function setDomain(string | null $domain = null): string
     {
         return textdomain($domain);
     }

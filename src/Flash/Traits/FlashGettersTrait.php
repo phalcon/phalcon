@@ -67,7 +67,7 @@ trait FlashGettersTrait
     /**
      * @var EscaperInterface|null
      */
-    protected ?EscaperInterface $escaperService = null;
+    protected EscaperInterface | null $escaperService = null;
 
     /**
      * @var bool
@@ -82,7 +82,7 @@ trait FlashGettersTrait
     /**
      * @var SessionInterface|null
      */
-    protected ?SessionInterface $sessionService = null;
+    protected SessionInterface | null $sessionService = null;
 
     /**
      * Clears accumulated messages when implicit flush is disabled

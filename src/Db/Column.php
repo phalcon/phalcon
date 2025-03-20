@@ -571,7 +571,7 @@ class Column implements ColumnInterface
 
     private function processColumnType(mixed $type): int
     {
-        $type = (int) $type;
+        $type = (int)$type;
 
         return match ($type) {
             self::TYPE_BIGINTEGER,

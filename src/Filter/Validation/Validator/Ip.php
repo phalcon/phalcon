@@ -83,7 +83,7 @@ class Ip extends AbstractValidator
     /**
      * @var string|null
      */
-    protected ?string $template = "Field :field must be a valid IP address";
+    protected string | null $template = "Field :field must be a valid IP address";
 
     /**
      * Executes the validation

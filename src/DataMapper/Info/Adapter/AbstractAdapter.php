@@ -55,7 +55,7 @@ abstract class AbstractAdapter implements AdapterInterface
      *
      * @return string|null
      */
-    public function getAutoincSequence(string $schema, string $table): ?string
+    public function getAutoincSequence(string $schema, string $table): string | null
     {
         return null;
     }
@@ -162,142 +162,6 @@ abstract class AbstractAdapter implements AdapterInterface
     }
 
     /**
-     * Returns the SQL for the unsigned field (MySQL)
-     *
-     * @return string
-     */
-    protected function getUnsignedSql(): string
-    {
-        return 'NULL';
-    }
-
-    /**
-     * @param ColumnDefinitionSql $column
-     *
-     * @return ColumnDefinition
-     */
-    protected function processColumn(array $column): array
-    {
-        [$defaultValue, $hasDefault] = $this->processDefault(
-            $column['default_value'],
-            $column['type']
-        );
-
-        $result = [
-            'afterField'      => null,
-            'comment'         => $column['comment'],
-            'default'         => $defaultValue,
-            'hasDefault'      => $hasDefault,
-            'isAutoIncrement' => (bool)$column['is_auto_increment'],
-            'isFirst'         => (bool)$column['is_first'],
-            'isNotNull'       => (bool)$column['is_not_null'],
-            'isNumeric'       => (bool)$column['is_numeric'],
-            'isPrimary'       => (bool)$column['is_primary'],
-            'isUnsigned'      => null !== $column['is_unsigned']
-                ? (bool)$column['is_unsigned']
-                : null,
-            'name'            => $column['name'],
-            'options'         => null,
-            'scale'           => isset($column['numeric_scale'])
-                ? (int)$column['numeric_scale']
-                : null,
-            'size'            => isset($column['size'])
-                ? (int)$column['size']
-                : null,
-            'type'            => $column['type'],
-        ];
-
-        $extended = trim($column['extended']);
-
-        /**
-         * Enum
-         */
-        if (stripos($extended, 'enum') === 0) {
-            $input             = trim(substr($extended, 4), '()');
-            $result['options'] = str_getcsv($input);
-        }
-
-        return $result;
-    }
-
-    /**
-     * Process the default value based on the type and return the correct type
-     * back
-     *
-     * @param mixed  $defaultValue
-     * @param string $type
-     *
-     * @return array<array-key, bool|mixed>
-     */
-    protected function processDefault(mixed $defaultValue, string $type): array
-    {
-        $type         = strtolower($type);
-        $charTypes    = ['char', 'text', 'varchar'];
-        $floatTypes   = ['decimal', 'double', 'float', 'numeric', 'real'];
-        $keywordTypes = ['CURRENT_DATE', 'CURRENT_TIME', 'CURRENT_TIMESTAMP'];
-
-        if (
-            null === $defaultValue ||
-            true === in_array(strtoupper((string)$defaultValue), $keywordTypes)
-        ) {
-            return [null, false];
-        }
-
-        if (
-            true === in_array($type, $charTypes) &&
-            "''" === $defaultValue
-        ) {
-            return ['', true];
-        }
-
-        return match (true) {
-            str_contains($type, 'int')   => [(int)$defaultValue, true],
-            in_array($type, $floatTypes) => [(float)$defaultValue, true],
-            default                      => [$defaultValue, true]
-        };
-    }
-
-    /**
-     * @param string                          $schema
-     * @param string                          $table
-     * @param array<string, ColumnDefinition> $columns
-     *
-     * @return array<string, ColumnDefinition>
-     */
-    protected function processColumnInformation(
-        string $schema,
-        string $table,
-        array $columns
-    ): array {
-        return $columns;
-    }
-
-    /**
-     * @param ColumnDefinitionSql[] $columns
-     *
-     * @return ColumnDefinition[]
-     */
-    protected function transformColumns(array $columns): array
-    {
-        $results  = [];
-        $previous = null;
-        $first    = reset($columns);
-        $firstName = $first['name'];
-        foreach ($columns as $column) {
-            $name           = $column['name'];
-            $results[$name] = $this->processColumn($column);
-            if ($name === $firstName) {
-                $results[$name]['isFirst'] = true;
-            }
-
-            $results[$name]['afterField'] = $previous;
-            $previous = $name;
-        }
-
-        return $results;
-    }
-
-    /**
      * @param string $schema
      * @param string $table
      *
@@ -380,5 +244,141 @@ abstract class AbstractAdapter implements AdapterInterface
             AND   c.table_name   = :table
             ORDER BY c.ordinal_position
         ";
+    }
+
+    /**
+     * Returns the SQL for the unsigned field (MySQL)
+     *
+     * @return string
+     */
+    protected function getUnsignedSql(): string
+    {
+        return 'NULL';
+    }
+
+    /**
+     * @param ColumnDefinitionSql $column
+     *
+     * @return ColumnDefinition
+     */
+    protected function processColumn(array $column): array
+    {
+        [$defaultValue, $hasDefault] = $this->processDefault(
+            $column['default_value'],
+            $column['type']
+        );
+
+        $result = [
+            'afterField'      => null,
+            'comment'         => $column['comment'],
+            'default'         => $defaultValue,
+            'hasDefault'      => $hasDefault,
+            'isAutoIncrement' => (bool)$column['is_auto_increment'],
+            'isFirst'         => (bool)$column['is_first'],
+            'isNotNull'       => (bool)$column['is_not_null'],
+            'isNumeric'       => (bool)$column['is_numeric'],
+            'isPrimary'       => (bool)$column['is_primary'],
+            'isUnsigned'      => null !== $column['is_unsigned']
+                ? (bool)$column['is_unsigned']
+                : null,
+            'name'            => $column['name'],
+            'options'         => null,
+            'scale'           => isset($column['numeric_scale'])
+                ? (int)$column['numeric_scale']
+                : null,
+            'size'            => isset($column['size'])
+                ? (int)$column['size']
+                : null,
+            'type'            => $column['type'],
+        ];
+
+        $extended = trim($column['extended']);
+
+        /**
+         * Enum
+         */
+        if (stripos($extended, 'enum') === 0) {
+            $input             = trim(substr($extended, 4), '()');
+            $result['options'] = str_getcsv($input);
+        }
+
+        return $result;
+    }
+
+    /**
+     * @param string                          $schema
+     * @param string                          $table
+     * @param array<string, ColumnDefinition> $columns
+     *
+     * @return array<string, ColumnDefinition>
+     */
+    protected function processColumnInformation(
+        string $schema,
+        string $table,
+        array $columns
+    ): array {
+        return $columns;
+    }
+
+    /**
+     * Process the default value based on the type and return the correct type
+     * back
+     *
+     * @param mixed  $defaultValue
+     * @param string $type
+     *
+     * @return array<array-key, bool|mixed>
+     */
+    protected function processDefault(mixed $defaultValue, string $type): array
+    {
+        $type         = strtolower($type);
+        $charTypes    = ['char', 'text', 'varchar'];
+        $floatTypes   = ['decimal', 'double', 'float', 'numeric', 'real'];
+        $keywordTypes = ['CURRENT_DATE', 'CURRENT_TIME', 'CURRENT_TIMESTAMP'];
+
+        if (
+            null === $defaultValue ||
+            true === in_array(strtoupper((string)$defaultValue), $keywordTypes)
+        ) {
+            return [null, false];
+        }
+
+        if (
+            true === in_array($type, $charTypes) &&
+            "''" === $defaultValue
+        ) {
+            return ['', true];
+        }
+
+        return match (true) {
+            str_contains($type, 'int')   => [(int)$defaultValue, true],
+            in_array($type, $floatTypes) => [(float)$defaultValue, true],
+            default                      => [$defaultValue, true]
+        };
+    }
+
+    /**
+     * @param ColumnDefinitionSql[] $columns
+     *
+     * @return ColumnDefinition[]
+     */
+    protected function transformColumns(array $columns): array
+    {
+        $results   = [];
+        $previous  = null;
+        $first     = reset($columns);
+        $firstName = $first['name'];
+        foreach ($columns as $column) {
+            $name           = $column['name'];
+            $results[$name] = $this->processColumn($column);
+            if ($name === $firstName) {
+                $results[$name]['isFirst'] = true;
+            }
+
+            $results[$name]['afterField'] = $previous;
+            $previous                     = $name;
+        }
+
+        return $results;
     }
 }

@@ -44,7 +44,7 @@ class Headers extends Collection
      */
     final public function checkHeaderHost(
         Headers $collection,
-        ?UriInterface $uri = null
+        UriInterface | null $uri = null
     ): Headers {
         if (
             true === $collection->has("host") &&
@@ -217,7 +217,7 @@ class Headers extends Collection
      */
     final public function processHeaders(
         mixed $headers,
-        ?UriInterface $uri = null
+        UriInterface | null $uri = null
     ): Headers {
         if (is_array($headers)) {
             $collection = $this->populateHeaders($headers);

@@ -57,7 +57,7 @@ class Numericality extends AbstractValidator
     /**
      * @var string|null
      */
-    protected ?string $template = "Field :field does not have a valid numeric format";
+    protected string | null $template = "Field :field does not have a valid numeric format";
 
     /**
      * Executes the validation

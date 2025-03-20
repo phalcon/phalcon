@@ -21,7 +21,6 @@ use Phalcon\Support\Traits\FilePathTrait;
 use function array_key_exists;
 use function file_exists;
 use function file_put_contents;
-use function is_null;
 use function var_export;
 
 /**
@@ -65,7 +64,7 @@ class Stream extends MetaData
      *
      * @return array|null
      */
-    public function read(?string $key): array | null
+    public function read(string | null $key): array | null
     {
         if (null === $key) {
             return null;
@@ -86,7 +85,7 @@ class Stream extends MetaData
      * @return void
      * @throws Exception
      */
-    public function write(?string $key, array $data): void
+    public function write(string | null $key, array $data): void
     {
         $option = Settings::get('orm.exception_on_failed_metadata_save');
         try {

@@ -88,7 +88,7 @@ class Request extends AbstractInjectionAware implements
     /**
      * @var FilterInterface|null
      */
-    private ?FilterInterface $filterService = null;
+    private FilterInterface | null $filterService = null;
 
     /**
      * @var bool
@@ -97,11 +97,11 @@ class Request extends AbstractInjectionAware implements
     /**
      * @var array|null
      */
-    private ?array $patchCache = null;
+    private array | null $patchCache = null;
     /**
      * @var array|null
      */
-    private ?array $putCache = null;
+    private array | null $putCache = null;
     /**
      * @var array
      */
@@ -138,7 +138,7 @@ class Request extends AbstractInjectionAware implements
      * @todo check the filters
      */
     public function get(
-        string $name = null,
+        string | null $name = null,
         mixed $filters = null,
         mixed $defaultValue = null,
         bool $notAllowEmpty = false,
@@ -328,7 +328,7 @@ class Request extends AbstractInjectionAware implements
     public function getFilteredData(
         string $methodKey,
         string $method,
-        string $name = null,
+        string | null $name = null,
         mixed $defaultValue = null,
         bool $notAllowEmpty = false,
         bool $noRecursive = false
@@ -355,7 +355,7 @@ class Request extends AbstractInjectionAware implements
      * @return mixed
      */
     public function getFilteredPatch(
-        string $name = null,
+        string | null $name = null,
         mixed $defaultValue = null,
         bool $notAllowEmpty = false,
         bool $noRecursive = false
@@ -381,7 +381,7 @@ class Request extends AbstractInjectionAware implements
      * @return mixed
      */
     public function getFilteredPost(
-        string $name = null,
+        string | null $name = null,
         mixed $defaultValue = null,
         bool $notAllowEmpty = false,
         bool $noRecursive = false
@@ -407,7 +407,7 @@ class Request extends AbstractInjectionAware implements
      * @return mixed
      */
     public function getFilteredPut(
-        string $name = null,
+        string | null $name = null,
         mixed $defaultValue = null,
         bool $notAllowEmpty = false,
         bool $noRecursive = false
@@ -433,7 +433,7 @@ class Request extends AbstractInjectionAware implements
      * @return mixed
      */
     public function getFilteredQuery(
-        string $name = null,
+        string | null $name = null,
         mixed $defaultValue = null,
         bool $notAllowEmpty = false,
         bool $noRecursive = false
@@ -728,7 +728,7 @@ class Request extends AbstractInjectionAware implements
      * @return mixed
      */
     public function getPatch(
-        string $name = null,
+        string | null $name = null,
         mixed $filters = null,
         mixed $defaultValue = null,
         bool $notAllowEmpty = false,
@@ -791,7 +791,7 @@ class Request extends AbstractInjectionAware implements
      * @return mixed
      */
     public function getPost(
-        string $name = null,
+        string | null $name = null,
         mixed $filters = null,
         mixed $defaultValue = null,
         bool $notAllowEmpty = false,
@@ -849,7 +849,7 @@ class Request extends AbstractInjectionAware implements
      * @return mixed
      */
     public function getPut(
-        string $name = null,
+        string | null $name = null,
         mixed $filters = null,
         mixed $defaultValue = null,
         bool $notAllowEmpty = false,
@@ -889,7 +889,7 @@ class Request extends AbstractInjectionAware implements
      * @return mixed
      */
     public function getQuery(
-        string $name = null,
+        string | null $name = null,
         mixed $filters = null,
         mixed $defaultValue = null,
         bool $notAllowEmpty = false,
@@ -1568,7 +1568,7 @@ class Request extends AbstractInjectionAware implements
      */
     final protected function getHelper(
         array $source,
-        string $name = null,
+        string | null $name = null,
         mixed $filters = null,
         mixed $defaultValue = null,
         bool $notAllowEmpty = false,
@@ -1899,7 +1899,7 @@ class Request extends AbstractInjectionAware implements
      */
     private function getPatchPut(
         string $collection,
-        string $name = null,
+        string | null $name = null,
         mixed $filters = null,
         mixed $defaultValue = null,
         bool $notAllowEmpty = false,

@@ -54,7 +54,7 @@ class Loader
     /**
      * @var string|null
      */
-    protected ?string $checkedPath = null;
+    protected string | null $checkedPath = null;
 
     /**
      * @var TStrings
@@ -89,7 +89,7 @@ class Loader
     /**
      * @var string|null
      */
-    protected ?string $foundPath = null;
+    protected string | null $foundPath = null;
 
     /**
      * @var bool
@@ -255,7 +255,7 @@ class Loader
      *
      * @return string|null
      */
-    public function getCheckedPath(): ?string
+    public function getCheckedPath(): string | null
     {
         return $this->checkedPath;
     }
@@ -315,7 +315,7 @@ class Loader
      *
      * @return string|null
      */
-    public function getFoundPath(): ?string
+    public function getFoundPath(): string | null
     {
         return $this->foundPath;
     }
@@ -449,7 +449,7 @@ class Loader
      * @return Loader
      * @throws Exception
      */
-    public function setFileCheckingCallback(string|callable|null $method = null): Loader
+    public function setFileCheckingCallback(string | callable | null $method = null): Loader
     {
         if (is_callable($method) || is_string($method)) {
             $this->fileCheckingCallback = $method;

@@ -25,30 +25,11 @@ use Phalcon\DataMapper\Info\Adapter\Sqlite;
 use Phalcon\DataMapper\Pdo\Connection;
 use Phalcon\DataMapper\Pdo\Exception\Exception;
 
-use function stripos;
-
 /**
  * @phpstan-import-type ColumnDefinition from AdapterInterface
  */
 class Info
 {
-    /**
-     * @param Connection $connection
-     *
-     * @return Info
-     */
-    public static function new(Connection $connection): Info
-    {
-        $adapters = self::getAdapters();
-        $type     = $connection->getDriverName();
-        $adapter  = $adapters[$type] ?? null;
-        if (null === $adapter) {
-            throw new Exception('Adapter [' . $type . '] not supported');
-        }
-
-        return new static(new $adapter($connection));
-    }
-
     /**
      * @param AdapterInterface $adapter
      */
@@ -64,7 +45,7 @@ class Info
      *
      * @return string|null
      */
-    public function getAutoincSequence(string $schemaTable): string|null
+    public function getAutoincSequence(string $schemaTable): string | null
     {
         [$schema, $table] = $this->adapter->listSchemaTable($schemaTable);
 
@@ -105,11 +86,28 @@ class Info
      * @return array<array-key, string>
      * @throws Exception
      */
-    public function listTables(string $schema = null): array
+    public function listTables(string | null $schema = null): array
     {
         return $this->adapter->listTables(
             $schema ?? $this->getCurrentSchema()
         );
+    }
+
+    /**
+     * @param Connection $connection
+     *
+     * @return Info
+     */
+    public static function new(Connection $connection): Info
+    {
+        $adapters = self::getAdapters();
+        $type     = $connection->getDriverName();
+        $adapter  = $adapters[$type] ?? null;
+        if (null === $adapter) {
+            throw new Exception('Adapter [' . $type . '] not supported');
+        }
+
+        return new static(new $adapter($connection));
     }
 
     /**

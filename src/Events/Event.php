@@ -31,39 +31,11 @@ namespace Phalcon\Events;
 class Event implements EventInterface
 {
     /**
-     * Is event cancelable?
-     *
-     * @var bool
-     */
-    protected bool $cancelable;
-
-    /**
-     * Event data
-     *
-     * @var mixed
-     */
-    protected $data;
-
-    /**
-     * Event source
-     *
-     * @var object|null
-     */
-    protected ?object $source;
-
-    /**
      * Is event propagation stopped?
      *
      * @var bool
      */
     protected bool $stopped = false;
-
-    /**
-     * Event type
-     *
-     * @var string
-     */
-    protected string $type;
 
     /**
      * Event constructor.
@@ -74,15 +46,11 @@ class Event implements EventInterface
      * @param bool        $cancelable
      */
     public function __construct(
-        string $type,
-        object $source = null,
-        $data = null,
-        bool $cancelable = true
+        protected string $type,
+        protected object | null $source = null,
+        protected mixed $data = null,
+        protected bool $cancelable = true
     ) {
-        $this->type       = $type;
-        $this->source     = $source;
-        $this->data       = $data;
-        $this->cancelable = $cancelable;
     }
 
     /**
@@ -96,7 +64,7 @@ class Event implements EventInterface
     /**
      * @return object|null
      */
-    public function getSource(): ?object
+    public function getSource(): object | null
     {
         return $this->source;
     }

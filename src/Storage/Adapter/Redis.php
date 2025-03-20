@@ -22,7 +22,6 @@ use RedisException;
 
 use function constant;
 use function defined;
-use function is_array;
 use function is_bool;
 use function is_int;
 use function mb_strtolower;

@@ -29,8 +29,10 @@ trait DiInstanceTrait
      *
      * @return mixed
      */
-    private function createClosureInstance($instance, array $parameters = null)
-    {
+    private function createClosureInstance(
+        mixed $instance,
+        array | null $parameters = null
+    ): mixed {
         if (!empty($parameters)) {
             return call_user_func_array($instance, $parameters);
         }
@@ -44,8 +46,10 @@ trait DiInstanceTrait
      *
      * @return mixed
      */
-    private function createInstance(string $name, array $parameters = null)
-    {
+    private function createInstance(
+        string $name,
+        array | null $parameters = null
+    ): mixed {
         if (!empty($parameters)) {
             return new $name(...$parameters);
         }

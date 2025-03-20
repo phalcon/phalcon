@@ -39,7 +39,7 @@ class Css extends AssetBase
         bool $local = true,
         bool $filter = true,
         array $attributes = [],
-        string $version = null,
+        string | null $version = null,
         bool $autoVersion = false
     ) {
         parent::__construct('css', $path, $local, $filter, $attributes, $version, $autoVersion);

@@ -27,7 +27,7 @@ interface FlashInterface
      *
      * @return string|null
      */
-    public function error(string $message): ?string;
+    public function error(string $message): string | null;
 
     /**
      * Outputs a message
@@ -37,7 +37,7 @@ interface FlashInterface
      *
      * @return string|null
      */
-    public function message(string $type, $message): ?string;
+    public function message(string $type, $message): string | null;
 
     /**
      * Shows a HTML notice/information message
@@ -46,7 +46,7 @@ interface FlashInterface
      *
      * @return string|null
      */
-    public function notice(string $message): ?string;
+    public function notice(string $message): string | null;
 
     /**
      * Shows a HTML success message
@@ -55,7 +55,7 @@ interface FlashInterface
      *
      * @return string|null
      */
-    public function success(string $message): ?string;
+    public function success(string $message): string | null;
 
     /**
      * Shows a HTML warning message
@@ -64,5 +64,5 @@ interface FlashInterface
      *
      * @return string|null
      */
-    public function warning(string $message): ?string;
+    public function warning(string $message): string | null;
 }

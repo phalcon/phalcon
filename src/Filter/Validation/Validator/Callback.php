@@ -70,7 +70,7 @@ class Callback extends AbstractValidator
     /**
      * @var string|null
      */
-    protected ?string $template = "Field :field must match the callback function";
+    protected string | null $template = "Field :field must match the callback function";
 
     /**
      * Executes the validation

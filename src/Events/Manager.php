@@ -68,7 +68,7 @@ class Manager implements ManagerInterface
      */
     public function attach(
         string $eventType,
-        callable|object $handler,
+        callable | object $handler,
         int $priority = self::DEFAULT_PRIORITY
     ): void {
         /** @var SplPriorityQueue|null $priorityQueue */
@@ -112,7 +112,7 @@ class Manager implements ManagerInterface
      * @return void
      * @throws Exception
      */
-    public function detach(string $eventType, object|callable $handler): void
+    public function detach(string $eventType, object | callable $handler): void
     {
         /** @var SplPriorityQueue|null $priorityQueue */
         $priorityQueue = $this->events[$eventType] ?? null;
@@ -145,7 +145,7 @@ class Manager implements ManagerInterface
      *
      * @param string|null $type
      */
-    public function detachAll(?string $type = null): void
+    public function detachAll(string | null $type = null): void
     {
         $this->processDetachAllNullType($type);
         $this->processDetachAllNotNullType($type);
@@ -414,7 +414,7 @@ class Manager implements ManagerInterface
     /**
      * @param string|null $type
      */
-    private function processDetachAllNotNullType(?string $type): void
+    private function processDetachAllNotNullType(string | null $type): void
     {
         if (null !== $type && isset($this->events[$type])) {
             unset($this->events[$type]);
@@ -424,7 +424,7 @@ class Manager implements ManagerInterface
     /**
      * @param string|null $type
      */
-    private function processDetachAllNullType(?string $type): void
+    private function processDetachAllNullType(string | null $type): void
     {
         if (null === $type) {
             $this->events = [];

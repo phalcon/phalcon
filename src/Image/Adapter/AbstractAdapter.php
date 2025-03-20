@@ -49,7 +49,7 @@ abstract class AbstractAdapter implements AdapterInterface
     /**
      * @var mixed|null
      */
-    protected $image = null;
+    protected mixed $image = null;
 
     /**
      * Image mime type
@@ -128,8 +128,8 @@ abstract class AbstractAdapter implements AdapterInterface
     public function crop(
         int $width,
         int $height,
-        int $offsetX = null,
-        int $offsetY = null
+        int | null $offsetX = null,
+        int | null $offsetY = null
     ): AdapterInterface {
         if (null === $offsetX) {
             $offsetX = (($this->width - $width) / 2);
@@ -290,7 +290,7 @@ abstract class AbstractAdapter implements AdapterInterface
      * @return string
      * @throws Exception
      */
-    public function render(string $extension = null, int $quality = 100): string
+    public function render(string | null $extension = null, int $quality = 100): string
     {
         if (null === $extension) {
             $extension = (string)pathinfo($this->file, PATHINFO_EXTENSION);
@@ -316,8 +316,8 @@ abstract class AbstractAdapter implements AdapterInterface
      * @throws Exception
      */
     public function resize(
-        int $width = null,
-        int $height = null,
+        int | null $width = null,
+        int | null $height = null,
         int $master = Enum::AUTO
     ): AdapterInterface {
         $this->checkResizeInput($width, $height, $master);
@@ -397,7 +397,7 @@ abstract class AbstractAdapter implements AdapterInterface
      *
      * @return AdapterInterface
      */
-    public function save(string $file = null, int $quality = -1): AdapterInterface
+    public function save(string | null $file = null, int $quality = -1): AdapterInterface
     {
         if (null === $file) {
             $file = $this->realpath;
@@ -445,7 +445,7 @@ abstract class AbstractAdapter implements AdapterInterface
         int $opacity = 100,
         string $color = "000000",
         int $size = 12,
-        string $fontFile = null
+        string | null $fontFile = null
     ): AdapterInterface {
         $opacity = $this->checkHighLow($opacity);
 
@@ -650,7 +650,7 @@ abstract class AbstractAdapter implements AdapterInterface
         int $green,
         int $blue,
         int $size,
-        string $fontFile = null
+        string | null $fontFile = null
     ): void;
 
     /**
@@ -679,8 +679,8 @@ abstract class AbstractAdapter implements AdapterInterface
      * @throws Exception
      */
     private function checkResizeInput(
-        int $width = null,
-        int $height = null,
+        int | null $width = null,
+        int | null $height = null,
         int $master = Enum::AUTO
     ): void {
         switch ($master) {
@@ -714,8 +714,8 @@ abstract class AbstractAdapter implements AdapterInterface
      * @return int
      */
     private function checkResizeMaster(
-        int $width = null,
-        int $height = null,
+        int | null $width = null,
+        int | null $height = null,
         int $master = Enum::AUTO
     ) {
         if ($master === Enum::AUTO) {

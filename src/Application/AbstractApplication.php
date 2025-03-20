@@ -47,7 +47,7 @@ abstract class AbstractApplication extends Injectable implements EventsAwareInte
      *
      * @param DiInterface|null $container
      */
-    public function __construct(DiInterface $container = null)
+    public function __construct(DiInterface | null $container = null)
     {
         $this->container = $container;
     }

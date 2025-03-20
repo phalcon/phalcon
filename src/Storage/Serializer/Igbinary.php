@@ -94,7 +94,7 @@ class Igbinary extends AbstractSerializer
      *
      * @return string|null
      */
-    protected function phpIgbinarySerialize($value): ?string
+    protected function phpIgbinarySerialize($value): string | null
     {
         return igbinary_serialize($value);
     }

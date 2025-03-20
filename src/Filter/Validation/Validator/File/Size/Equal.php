@@ -65,7 +65,7 @@ class Equal extends AbstractFile
     /**
      * @var string|null
      */
-    protected ?string $template = "File :field does not have the exact :size file size";
+    protected string | null $template = "File :field does not have the exact :size file size";
 
     /**
      * Executes the validation

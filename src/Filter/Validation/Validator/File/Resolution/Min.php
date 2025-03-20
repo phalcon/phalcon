@@ -62,7 +62,7 @@ class Min extends Equal
     /**
      * @var string|null
      */
-    protected ?string $template = "File :field can not have the minimum resolution of :resolution";
+    protected string | null $template = "File :field can not have the minimum resolution of :resolution";
 
     /**
      * Executes the conditional

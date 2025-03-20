@@ -55,9 +55,18 @@ interface AdapterInterface
     public function crop(
         int $width,
         int $height,
-        int $offsetX = null,
-        int $offsetY = null
+        int | null $offsetX = null,
+        int | null $offsetY = null
     ): AdapterInterface;
+
+    /**
+     * Flip an image
+     *
+     * @param int $direction
+     *
+     * @return AdapterInterface
+     */
+    public function flip(int $direction): AdapterInterface;
 
     /**
      * @return int
@@ -68,15 +77,6 @@ interface AdapterInterface
      * @return int
      */
     public function getWidth(): int;
-
-    /**
-     * Flip an image
-     *
-     * @param int $direction
-     *
-     * @return AdapterInterface
-     */
-    public function flip(int $direction): AdapterInterface;
 
     /**
      * Add a mask to an image
@@ -119,7 +119,10 @@ interface AdapterInterface
      *
      * @return string
      */
-    public function render(string $extension = null, int $quality = 100): string;
+    public function render(
+        string | null $extension = null,
+        int $quality = 100
+    ): string;
 
     /**
      * Resize an image
@@ -131,8 +134,8 @@ interface AdapterInterface
      * @return AdapterInterface
      */
     public function resize(
-        int $width = null,
-        int $height = null,
+        int | null $width = null,
+        int | null $height = null,
         int $master = Enum::AUTO
     ): AdapterInterface;
 
@@ -154,7 +157,7 @@ interface AdapterInterface
      * @return AdapterInterface
      */
     public function save(
-        string $file = null,
+        string | null $file = null,
         int $quality = 100
     ): AdapterInterface;
 
@@ -187,7 +190,7 @@ interface AdapterInterface
         int $opacity = 100,
         string $color = "000000",
         int $size = 12,
-        string $fontFile = null
+        string | null $fontFile = null
     ): AdapterInterface;
 
     /**

@@ -26,8 +26,6 @@ use function strlen;
 use function substr;
 
 /**
- * Phalcon\Mvc\Router\Route
- *
  * This class represents every route added to the router
  */
 class Route implements RouteInterface
@@ -96,8 +94,8 @@ class Route implements RouteInterface
      */
     public function __construct(
         string $pattern,
-        array | string $paths = null,
-        array | string $httpMethods = null
+        array | string | null $paths = null,
+        array | string | null $httpMethods = null
     ) {
         // Configure the route (extract parameters, paths, etc)
         $this->reConfigure($pattern, $paths);
@@ -342,7 +340,7 @@ class Route implements RouteInterface
                         $ch === '|' ||
                         $ch === '#')
                 ) {
-                            $route .= '\\';
+                    $route .= '\\';
                 }
 
                 $route  .= $ch;

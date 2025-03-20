@@ -18,8 +18,6 @@ declare(strict_types=1);
 
 namespace Phalcon\DataMapper\Table\Exception;
 
-use function var_export;
-
 /**
  * Exception when an operation is to be performed on a table without a primary
  * key

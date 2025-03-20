@@ -49,10 +49,10 @@ final class UploadedFileFactory implements UploadedFileFactoryInterface
      */
     public function createUploadedFile(
         StreamInterface $stream,
-        int $size = null,
+        int | null $size = null,
         int $error = 0,
-        string $clientFilename = null,
-        string $clientMediaType = null
+        string | null $clientFilename = null,
+        string | null $clientMediaType = null
     ): UploadedFileInterface {
         return new UploadedFile(
             $stream,

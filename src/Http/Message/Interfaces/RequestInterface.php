@@ -116,7 +116,7 @@ interface RequestInterface extends MessageInterface
      *
      * @return RequestInterface
      */
-    public function withRequestTarget(?string $requestTarget): RequestInterface;
+    public function withRequestTarget(string | null $requestTarget): RequestInterface;
 
     /**
      * Returns an instance with the provided URI.

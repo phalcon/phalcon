@@ -39,26 +39,6 @@ class ConnectionLocator
     private array $instances = [];
 
     /**
-     * @param mixed $argument
-     * @param mixed ...$arguments
-     *
-     * @return static
-     * @throws ConnectionNotFound
-     */
-    public static function new(mixed $argument, mixed ...$arguments): static
-    {
-        if ($argument instanceof Connection) {
-            $defaultFactory = function () use ($argument) {
-                return $argument;
-            };
-
-            return new static($defaultFactory);
-        }
-
-        return new static(Connection::factory($argument, ...$arguments));
-    }
-
-    /**
      * Constructor.
      *
      * @param callable                      $master
@@ -101,7 +81,7 @@ class ConnectionLocator
     public function getMaster(): Connection
     {
         if (!isset($this->instances["master"])) {
-            $master = $this->master;
+            $master                    = $this->master;
             $this->instances["master"] = $master();
         }
 
@@ -136,6 +116,26 @@ class ConnectionLocator
     public function getWrite(string $name = ""): Connection
     {
         return $this->getConnection("write", $name);
+    }
+
+    /**
+     * @param mixed $argument
+     * @param mixed ...$arguments
+     *
+     * @return static
+     * @throws ConnectionNotFound
+     */
+    public static function new(mixed $argument, mixed ...$arguments): static
+    {
+        if ($argument instanceof Connection) {
+            $defaultFactory = function () use ($argument) {
+                return $argument;
+            };
+
+            return new static($defaultFactory);
+        }
+
+        return new static(Connection::factory($argument, ...$arguments));
     }
 
     /**

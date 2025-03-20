@@ -40,7 +40,7 @@ class Pgsql extends AbstractAdapter
      *
      * @return string|null
      */
-    public function getAutoincSequence(string $schema, string $table): string|null
+    public function getAutoincSequence(string $schema, string $table): string | null
     {
         $statement = "
             SELECT
@@ -120,29 +120,6 @@ class Pgsql extends AbstractAdapter
     }
 
     /**
-     * Process the default value based on the type and return the correct type
-     * back
-     *
-     * @param mixed  $defaultValue
-     * @param string $type
-     *
-     * @return array<array-key, bool|mixed>
-     */
-    protected function processDefault(mixed $defaultValue, string $type): array
-    {
-        /**
-         * If this is a string literal
-         */
-        if (is_string($defaultValue)) {
-            $parts = explode('::', $defaultValue);
-            if (2 === count($parts)) {
-                $defaultValue = trim($parts[0], "'");
-            }
-        }
-
-        return parent::processDefault($defaultValue, $type);
-    }
-    /**
      * @param string                          $schema
      * @param string                          $table
      * @param array<string, ColumnDefinition> $columns
@@ -185,5 +162,29 @@ class Pgsql extends AbstractAdapter
         }
 
         return $columns;
+    }
+
+    /**
+     * Process the default value based on the type and return the correct type
+     * back
+     *
+     * @param mixed  $defaultValue
+     * @param string $type
+     *
+     * @return array<array-key, bool|mixed>
+     */
+    protected function processDefault(mixed $defaultValue, string $type): array
+    {
+        /**
+         * If this is a string literal
+         */
+        if (is_string($defaultValue)) {
+            $parts = explode('::', $defaultValue);
+            if (2 === count($parts)) {
+                $defaultValue = trim($parts[0], "'");
+            }
+        }
+
+        return parent::processDefault($defaultValue, $type);
     }
 }

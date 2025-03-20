@@ -62,7 +62,7 @@ interface ResultInterface
     public function fetchAll(
         int $mode = Enum::FETCH_DEFAULT,
         mixed $fetchArgument = Enum::FETCH_ORI_NEXT,
-        ?array $constructorArgs = null
+        array | null $constructorArgs = null
     ): array;
 
     /**

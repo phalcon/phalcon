@@ -37,33 +37,6 @@ class Connection extends AbstractConnection
     protected array $arguments = [];
 
     /**
-     * @param mixed ...$arguments
-     *
-     * @return Connection
-     */
-    public static function new(mixed ...$arguments): Connection
-    {
-        $dsn = $arguments[0] ?? '';
-        if (is_string($dsn) && empty($dsn)) {
-            throw new InvalidArgumentException(
-                "DSN cannot be empty"
-            );
-        }
-
-        return new static(...$arguments);
-    }
-
-    /**
-     * @param mixed ...$arguments
-     *
-     * @return callable
-     */
-    public static function factory(mixed ...$arguments): callable
-    {
-        return fn() => static::new(...$arguments);
-    }
-
-    /**
      * Constructor.
      *
      * This overrides the parent so that it can take connection attributes as a
@@ -77,12 +50,12 @@ class Connection extends AbstractConnection
      * @param ProfilerInterface|null   $profiler
      */
     public function __construct(
-        PDO|string $dsnPdo,
-        string $username = null,
-        string $password = null,
+        PDO | string $dsnPdo,
+        string | null $username = null,
+        string | null $password = null,
         array $options = [],
         array $queries = [],
-        ?ProfilerInterface $profiler = null
+        ProfilerInterface | null $profiler = null
     ) {
         if ($dsnPdo instanceof PDO) {
             $this->pdo = $dsnPdo;
@@ -169,5 +142,32 @@ class Connection extends AbstractConnection
     public function disconnect(): void
     {
         $this->pdo = null;
+    }
+
+    /**
+     * @param mixed ...$arguments
+     *
+     * @return callable
+     */
+    public static function factory(mixed ...$arguments): callable
+    {
+        return fn() => static::new(...$arguments);
+    }
+
+    /**
+     * @param mixed ...$arguments
+     *
+     * @return Connection
+     */
+    public static function new(mixed ...$arguments): Connection
+    {
+        $dsn = $arguments[0] ?? '';
+        if (is_string($dsn) && empty($dsn)) {
+            throw new InvalidArgumentException(
+                "DSN cannot be empty"
+            );
+        }
+
+        return new static(...$arguments);
     }
 }

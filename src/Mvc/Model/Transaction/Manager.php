@@ -70,11 +70,6 @@ use function is_object;
 class Manager implements ManagerInterface, InjectionAwareInterface
 {
     /**
-     * @var DiInterface|null
-     */
-    protected ?DiInterface $container;
-
-    /**
      * @var bool
      */
     protected bool $initialized = false;
@@ -106,8 +101,9 @@ class Manager implements ManagerInterface, InjectionAwareInterface
      *
      * @throws Exception
      */
-    public function __construct(?DiInterface $container = null)
-    {
+    public function __construct(
+        protected DiInterface | null $container = null
+    ) {
         if (null === $container) {
             $container = Di::getDefault();
         }
@@ -185,7 +181,7 @@ class Manager implements ManagerInterface, InjectionAwareInterface
      *
      * @return DiInterface|null
      */
-    public function getDI(): ?DiInterface
+    public function getDI(): DiInterface | null
     {
         return $this->container;
     }

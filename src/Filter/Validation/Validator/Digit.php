@@ -57,7 +57,7 @@ class Digit extends AbstractValidator
     /**
      * @var string|null
      */
-    protected ?string $template = "Field :field must be numeric";
+    protected string | null $template = "Field :field must be numeric";
 
     /**
      * Executes the validation

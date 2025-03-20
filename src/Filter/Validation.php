@@ -50,7 +50,7 @@ class Validation extends Injectable implements ValidationInterface
     /**
      * @var object|null
      */
-    protected ?object $entity = null;
+    protected object | null $entity = null;
 
     /**
      * @var array
@@ -168,7 +168,7 @@ class Validation extends Injectable implements ValidationInterface
      * @return ValidationInterface
      */
     public function bind(
-        ?object $entity,
+        object | null $entity,
         array | object $data
     ): ValidationInterface {
         $this->setEntity($entity);
@@ -191,7 +191,7 @@ class Validation extends Injectable implements ValidationInterface
      *
      * @return object|null
      */
-    public function getEntity(): ?object
+    public function getEntity(): object | null
     {
         return $this->entity;
     }
@@ -203,7 +203,7 @@ class Validation extends Injectable implements ValidationInterface
      *
      * @return mixed
      */
-    public function getFilters(string $field = null): mixed
+    public function getFilters(string | null $field = null): mixed
     {
         if (empty($field)) {
             return $this->filters;
@@ -411,7 +411,7 @@ class Validation extends Injectable implements ValidationInterface
      *
      * @return void
      */
-    public function setEntity(?object $entity): void
+    public function setEntity(object | null $entity): void
     {
         $this->entity = $entity;
     }
@@ -478,8 +478,8 @@ class Validation extends Injectable implements ValidationInterface
      * @throws ValidationException
      */
     public function validate(
-        array | object $data = null,
-        object $entity = null
+        array | object | null $data = null,
+        object | null $entity = null
     ): Messages | false {
         /**
          * Clear pre-calculated values

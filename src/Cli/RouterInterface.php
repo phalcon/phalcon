@@ -49,7 +49,7 @@ interface RouterInterface
      *
      * @return RouteInterface|null
      */
-    public function getMatchedRoute(): ?RouteInterface;
+    public function getMatchedRoute(): RouteInterface | null;
 
     /**
      * Return the sub expressions in the regular expression matched
