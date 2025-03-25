@@ -68,6 +68,7 @@ final class FireTest extends AbstractUnitTestCase
      */
     public function testEventsManagerFireException(): void
     {
+        $this->markTestSkipped('Events no longer have to contain : in them');
         $this->expectException(Exception::class);
         $this->expectExceptionMessage('Invalid event type unknown');
 

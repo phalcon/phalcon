@@ -177,54 +177,57 @@ class Manager implements ManagerInterface
      * $eventsManager->fire("db", $connection);
      *```
      *
-     * @param string     $eventType
-     * @param object     $source
+     * @param string $eventType
+     * @param object $source
      * @param mixed|null $data
-     * @param bool       $cancelable
-     *
+     * @param bool $cancelable
      * @return mixed
-     * @throws Exception
      */
     public function fire(
         string $eventType,
         object $source,
         mixed $data = null,
-        bool $cancelable = true
+        bool $cancelable = true,
     ): mixed {
         if (empty($this->events)) {
             return null;
         }
-
-        // All valid events must have a colon separator
-        if (!str_contains($eventType, ':')) {
-            throw new Exception('Invalid event type ' . $eventType);
-        }
-
-        $eventParts = explode(':', $eventType);
-        $type       = $eventParts[0];
-        $eventName  = $eventParts[1];
-        $status     = null;
 
         // Responses must be traced?
         if (true === $this->collect) {
             $this->responses = [];
         }
 
-        // Create the event context
-        $event = new Event($eventName, $source, $data, $cancelable);
+        $status   = null;
+        $psrEvent = false;
 
-        // Check if events are grouped by type
-        $fireEvents = $this->events[$type] ?? null;
-        if (is_object($fireEvents)) {
-            // Call the events queue
-            $status = $this->fireQueue($fireEvents, $event);
+        // phalcon style events look like this: <event_group>:<event_type>
+        // PSR style events use class name as an event name by default
+        if (str_contains($eventType, ':')) {
+            [$type, $eventName] = explode(':', $eventType);
+
+            if ($data instanceof Event) {
+                $event = $data;
+            } else {
+                $event = new Event($eventName, $source, $data, $cancelable);
+            }
+
+            // Check if events are grouped by type
+            $fireEvents = $this->events[$type] ?? null;
+            if (is_object($fireEvents)) {
+                // Call the events queue
+                $status = $this->fireQueue($fireEvents, $event);
+            }
+        } else {
+            $psrEvent = true;
+            $event = new Event($eventType, $source, $data, $cancelable);
         }
 
         // Check if there are listeners for the event type itself
         $fireEvents = $this->events[$eventType] ?? null;
         if (is_object($fireEvents)) {
             // Call the events queue
-            $status = $this->fireQueue($fireEvents, $event);
+            $status = $this->fireQueue($fireEvents, $event, $psrEvent);
         }
 
         return $status;
@@ -238,9 +241,10 @@ class Manager implements ManagerInterface
      *
      * @return mixed
      */
-    final public function fireQueue(
+    final protected function fireQueue(
         SplPriorityQueue $queue,
-        EventInterface $event
+        EventInterface $event,
+        bool $psrEvent = false,
     ): mixed {
         $status = null;
 
@@ -264,8 +268,8 @@ class Manager implements ManagerInterface
 
             // Only handler objects are valid
             if (true === $this->isValidHandler($handler)) {
-                $status = $this->checkFireHandlerClosure($status, $handler, $event);
-                $status = $this->checkFireHandlerMethod($status, $handler, $event);
+                $status = $this->checkFireHandlerClosure($status, $handler, $event, $psrEvent);
+                $status = $this->checkFireHandlerMethod($status, $handler, $event, $psrEvent);
 
                 // Trace the response
                 if (true === $collected) {
@@ -364,19 +368,16 @@ class Manager implements ManagerInterface
     private function checkFireHandlerClosure(
         mixed $status,
         mixed $handler,
-        EventInterface $event
+        object $event,
+        bool $psrEvent = false,
     ): mixed {
         // Check if the event is a closure
         if ($handler instanceof Closure || is_callable($handler)) {
-            // Call the function in the PHP userland
-            $status = call_user_func_array(
-                $handler,
-                [
-                    $event,
-                    $event->getSource(),
-                    $event->getData(),
-                ]
-            );
+            if ($psrEvent === false) {
+                $status = $handler($event, $event->getSource(), $event->getData());
+            } else {
+                $status = $handler($event->getData());
+            }
         }
 
         return $status;
@@ -392,7 +393,8 @@ class Manager implements ManagerInterface
     private function checkFireHandlerMethod(
         mixed $status,
         mixed $handler,
-        EventInterface $event
+        EventInterface $event,
+        bool $psrEvent = false,
     ): mixed {
         $eventName = $event->getType();
 
@@ -401,11 +403,15 @@ class Manager implements ManagerInterface
             true !== ($handler instanceof Closure || is_callable($handler)) &&
             true === method_exists($handler, $eventName)
         ) {
-            $status = $handler->{$eventName}(
-                $event,
-                $event->getSource(),
-                $event->getData()
-            );
+            if ($psrEvent === false) {
+                $status = $handler->{$eventName}(
+                    $event,
+                    $event->getSource(),
+                    $event->getData()
+                );
+            } else {
+                $status = $handler->{$eventName}($event->getData());
+            }
         }
 
         return $status;
