@@ -17,6 +17,17 @@ use JsonSerializable;
 use Phalcon\Db\Adapter\AdapterInterface;
 use Phalcon\Db\Column;
 use Phalcon\Db\Enum;
+use Phalcon\Db\Event\AfterCreateEvent;
+use Phalcon\Db\Event\AfterDeleteEvent;
+use Phalcon\Db\Event\AfterFetchEvent;
+use Phalcon\Db\Event\AfterSaveEvent;
+use Phalcon\Db\Event\AfterUpdateEvent;
+use Phalcon\Db\Event\Factory;
+use Phalcon\Db\Event\NotDeletedEvent;
+use Phalcon\Db\Event\NotSavedEvent;
+use Phalcon\Db\Event\OnValidationFailsEvent;
+use Phalcon\Db\Event\PrepareSaveEvent;
+use Phalcon\Db\Event\UnknownEventTypeException;
 use Phalcon\Db\RawValue;
 use Phalcon\Di\AbstractInjectionAware;
 use Phalcon\Di\Di;
@@ -2062,6 +2073,13 @@ abstract class Model extends AbstractInjectionAware implements
          */
         if (method_exists($this, $eventName)) {
             $this->$eventName();
+        }
+
+        if (
+            ($em = $this->getEventsManager()) &&
+            $eventObject = $this->getDI()?->get('modelsEventFactory', [$this->getDI()])->create($eventName, $this)
+        ){
+            $em->dispatch($eventObject, name: static::class . ':' . $eventName, source: $this);
         }
 
         /**

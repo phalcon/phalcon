@@ -14,9 +14,9 @@ declare(strict_types=1);
 namespace Phalcon\Events;
 
 use Closure;
+use Psr\EventDispatcher\EventDispatcherInterface;
 use SplPriorityQueue;
 
-use function call_user_func_array;
 use function is_callable;
 use function is_object;
 use function method_exists;
@@ -27,7 +27,7 @@ use function method_exists;
  * can create hooks or plugins that will offer monitoring of data, manipulation,
  * conditional execution and much more.
  */
-class Manager implements ManagerInterface
+class Manager implements ManagerInterface, EventDispatcherInterface
 {
     /**
      * @var bool
@@ -203,7 +203,7 @@ class Manager implements ManagerInterface
 
         // phalcon style events look like this: <event_group>:<event_type>
         // PSR style events use class name as an event name by default
-        if (str_contains($eventType, ':')) {
+        if (!($data instanceof PsrEventInterface) && str_contains($eventType, ':')) {
             [$type, $eventName] = explode(':', $eventType);
 
             if ($data instanceof Event) {
@@ -233,6 +233,19 @@ class Manager implements ManagerInterface
         return $status;
     }
 
+    public function dispatch(object $event, ?string $name = null, ?object $source = null)
+    {
+        if ($event instanceof Event) {
+            return $this->fire(
+                $name ?? $event->getType(),
+                $event->getSource() ?? $this,
+                $event,
+                $event->isCancelable()
+            );
+        }
+
+        return $this->fire($name ?? $event::class, $source ?? $this, $event);
+    }
     /**
      * Internal handler to call a queue of events
      *

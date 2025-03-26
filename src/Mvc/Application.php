@@ -19,6 +19,7 @@ use Phalcon\Application\Exception as ApplicationException;
 use Phalcon\Events\Exception as EventsException;
 use Phalcon\Http\ResponseInterface;
 use Phalcon\Mvc\Application\Exception;
+use Phalcon\Mvc\Event\ApplicationBootEvent;
 use Phalcon\Traits\Php\FileTrait;
 
 use function call_user_func_array;
@@ -108,7 +109,7 @@ class Application extends AbstractApplication
          * Call boot event, this allows the developer to perform initialization
          * actions
          */
-        if (false === $this->fireManagerEvent("application:boot")) {
+        if (false === $this->firePsrEvent(new ApplicationBootEvent($this), 'application:boot')) {
             return false;
         }
 
