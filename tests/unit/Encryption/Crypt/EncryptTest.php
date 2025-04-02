@@ -215,11 +215,11 @@ final class EncryptTest extends AbstractUnitTestCase
     {
         $this->expectException(Exception::class);
         $this->expectExceptionMessage(
-            "The cipher algorithm 'AES-128-ECB' is not supported on this system."
+            "The cipher algorithm 'AES-128' is not supported on this system."
         );
 
         $crypt = new Crypt();
-        $crypt->setCipher('AES-128-ECB');
+        $crypt->setCipher('AES-128');
     }
 
     /**

@@ -27,8 +27,7 @@ use function headers_sent;
  * A cookies bag is automatically registered as part of the 'response' service
  * in the DI. By default, cookies are automatically encrypted before being sent
  * to the client and are decrypted when retrieved from the user. To set sign
- * key
- * used to generate a message authentication code use
+ * key used to generate a message authentication code use
  * `Phalcon\Http\Response\Cookies::setSignKey()`.
  *
  * ```php
@@ -44,7 +43,7 @@ use function headers_sent;
  *         $crypt = new Crypt();
  *
  *         // The `$key' should have been previously generated in a
- *         cryptographically safe way.
+ *         // cryptographically safe way.
  *         $key =
  *         "T4\xb1\x8d\xa9\x98\x05\\\x8c\xbe\x1d\x07&[\x99\x18\xa4~Lc1\xbeW\xb3";
  *
@@ -60,8 +59,7 @@ use function headers_sent;
  *         $cookies = new Cookies();
  *
  *         // The `$key' MUST be at least 32 characters long and generated
- *         using a
- *         // cryptographically secure pseudo random generator.
+ *         // using a cryptographically secure pseudo random generator.
  *         $key =
  *         "#1dj8$=dp?.ak//j1V$~%*0XaK\xb1\x8d\xa9\x98\x054t7w!z%C*F-Jk\x98\x05\\\x5c";
  *
