@@ -109,7 +109,7 @@ interface RequestInterface
      *
      * @return string|bool
      */
-    public function getClientAddress(bool $trustForwardedHeader = false);
+    public function getClientAddress(bool $trustForwardedHeader = false): bool | string;
 
     /**
      * Return a charset array and their quality accepted by the browser/client

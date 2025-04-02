@@ -54,6 +54,8 @@ class FilterFactory
     }
 
     /**
+     * Returns the available adapters
+     *
      * @return string[]
      */
     protected function getServices(): array
