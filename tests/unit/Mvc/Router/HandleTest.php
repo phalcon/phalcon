@@ -18,11 +18,13 @@ use Phalcon\Http\Request;
 use Phalcon\Mvc\Router;
 use Phalcon\Mvc\Router\Group;
 use Phalcon\Mvc\Router\Route;
+use Phalcon\Tests\Fixtures\Traits\DiTrait;
 use Phalcon\Tests\Fixtures\Traits\RouterTrait;
 use Phalcon\Tests\AbstractUnitTestCase;
 
 final class HandleTest extends AbstractUnitTestCase
 {
+    use DiTrait;
     use RouterTrait;
 
     /**
@@ -395,5 +397,47 @@ final class HandleTest extends AbstractUnitTestCase
         ];
         $actual   = $router->getParams();
         $this->assertSame($expected, $actual);
+    }
+
+    /**
+     * Tests Phalcon\Mvc\Router :: handle() - with colons
+     *
+     * @dataProvider getUrlsWithColons
+     *
+     * @author Phalcon Team <team@phalcon.io>
+     * @since  2025-04-04
+     */
+    public function testMvcRouterHandleWithColons(string $url): void
+    {
+        $this->setNewFactoryDefault();
+        $router = new Router(false);
+        $router ->setDI($this->container);
+
+        // Simple catch-all route
+        $router->add(
+            '/{param:.+}',
+            [
+                'controller' => 'index',
+                'action'     => 'test',
+            ]
+        );
+
+        // Explicitly set request method (for CLI testing)
+        $_SERVER["REQUEST_METHOD"] = "GET";
+
+        $router->handle($url);
+
+        $route = $router->getMatchedRoute();
+        $this->assertInstanceOf(Route::class, $route);
+    }
+
+    public static function getUrlsWithColons(): array
+    {
+        return [
+            ['/1:1/test'],
+            ['/a:1/test'],
+            ['/1:a/test'],
+            ['/a:a/test'],
+        ];
     }
 }
