@@ -710,7 +710,12 @@ class Router extends AbstractInjectionAware implements RouterInterface, EventsAw
      */
     public function handle(string $uri): void
     {
-        $uri = parse_url($uri, PHP_URL_PATH);
+        if (empty($uri)) {
+            /**
+             * If 'uri' isn't passed as parameter it reads _GET["_url"]
+             */
+            $uri = $this->getRewriteUri();
+		}
 
         /**
          * Remove extra slashes in the route
@@ -1246,5 +1251,35 @@ class Router extends AbstractInjectionAware implements RouterInterface, EventsAw
     public function wasMatched(): bool
     {
         return $this->wasMatched;
+    }
+    /**
+     * Get rewrite info. This info is read from $_GET["_url"].
+     * This returns '/' if the rewrite information cannot be read
+     */
+    public function getRewriteUri(): string
+	{
+		/**
+         * By default we use $_GET["url"] to obtain the rewrite information
+         */
+		if (empty($this->uriSource)) {
+			$url = $_GET['_url'] ?? '';
+            if (true !== empty($url)) {
+                return $url;
+            }
+        } else {
+            /**
+             * Otherwise use the standard $_SERVER["REQUEST_URI"]
+             */
+            $url = $_SERVER['REQUEST_URI'] ?? '';
+            if (true !== empty($url)) {
+                $urlParts = explode("?", $url);
+                $realUri = $urlParts[0];
+				if (true !== empty($realUri)) {
+                    return $realUri;
+                }
+			}
+		}
+
+        return "/";
     }
 }
