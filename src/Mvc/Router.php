@@ -31,12 +31,9 @@ use function is_array;
 use function is_callable;
 use function is_int;
 use function is_string;
-use function parse_url;
 use function preg_match;
 use function rtrim;
 use function trim;
-
-use const PHP_URL_PATH;
 
 /**
  * Phalcon\Mvc\Router is the standard framework router. Routing is the
@@ -628,6 +625,37 @@ class Router extends AbstractInjectionAware implements RouterInterface, EventsAw
     }
 
     /**
+     * Get rewrite info. This info is read from $_GET["_url"].
+     * This returns '/' if the rewrite information cannot be read
+     */
+    public function getRewriteUri(): string
+    {
+        /**
+         * By default we use $_GET["url"] to obtain the rewrite information
+         */
+        if (empty($this->uriSource)) {
+            $url = $_GET['_url'] ?? '';
+            if (true !== empty($url)) {
+                return $url;
+            }
+        } else {
+            /**
+             * Otherwise use the standard $_SERVER["REQUEST_URI"]
+             */
+            $url = $_SERVER['REQUEST_URI'] ?? '';
+            if (true !== empty($url)) {
+                $urlParts = explode("?", $url);
+                $realUri  = $urlParts[0];
+                if (true !== empty($realUri)) {
+                    return $realUri;
+                }
+            }
+        }
+
+        return "/";
+    }
+
+    /**
      * Returns a route object by its id
      *
      * @param int|string $routeId
@@ -715,7 +743,7 @@ class Router extends AbstractInjectionAware implements RouterInterface, EventsAw
              * If 'uri' isn't passed as parameter it reads _GET["_url"]
              */
             $uri = $this->getRewriteUri();
-		}
+        }
 
         /**
          * Remove extra slashes in the route
@@ -1251,35 +1279,5 @@ class Router extends AbstractInjectionAware implements RouterInterface, EventsAw
     public function wasMatched(): bool
     {
         return $this->wasMatched;
-    }
-    /**
-     * Get rewrite info. This info is read from $_GET["_url"].
-     * This returns '/' if the rewrite information cannot be read
-     */
-    public function getRewriteUri(): string
-	{
-		/**
-         * By default we use $_GET["url"] to obtain the rewrite information
-         */
-		if (empty($this->uriSource)) {
-			$url = $_GET['_url'] ?? '';
-            if (true !== empty($url)) {
-                return $url;
-            }
-        } else {
-            /**
-             * Otherwise use the standard $_SERVER["REQUEST_URI"]
-             */
-            $url = $_SERVER['REQUEST_URI'] ?? '';
-            if (true !== empty($url)) {
-                $urlParts = explode("?", $url);
-                $realUri = $urlParts[0];
-				if (true !== empty($realUri)) {
-                    return $realUri;
-                }
-			}
-		}
-
-        return "/";
     }
 }
