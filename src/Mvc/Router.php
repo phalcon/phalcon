@@ -68,6 +68,9 @@ class Router extends AbstractInjectionAware implements RouterInterface, EventsAw
     public const POSITION_FIRST = 0;
     public const POSITION_LAST  = 1;
 
+    public const URI_SOURCE_GET_URL = 0;
+    public const URI_SOURCE_SERVER_REQUEST_URI = 1;
+
     /**
      * @var string
      */
@@ -102,14 +105,17 @@ class Router extends AbstractInjectionAware implements RouterInterface, EventsAw
      * @var array
      */
     protected array $defaultParams = [];
+
     /**
      * @var array
      */
     protected array $keyRouteIds = [];
+
     /**
      * @var array
      */
     protected array $keyRouteNames = [];
+
     /**
      * @var RouteInterface|null
      */
@@ -149,6 +155,11 @@ class Router extends AbstractInjectionAware implements RouterInterface, EventsAw
      * @var array
      */
     protected array $routes = [];
+
+    /**
+     * @var int
+     */
+    protected int $uriSource = self::URI_SOURCE_GET_URL;
 
     /**
      * @var bool
@@ -1195,6 +1206,22 @@ class Router extends AbstractInjectionAware implements RouterInterface, EventsAw
     public function setDefaultNamespace(string $namespaceName): RouterInterface
     {
         $this->defaultNamespace = $namespaceName;
+
+        return $this;
+    }
+
+    /**
+     * Sets the URI source. One of the URI_SOURCE_* constants
+     *
+     * ```php
+     * $router->setUriSource(
+     *     Router::URI_SOURCE_SERVER_REQUEST_URI
+     * );
+     * ```
+     */
+    public function setUriSource(int $uriSource): RouterInterface
+    {
+        $this->uriSource = $uriSource;
 
         return $this;
     }
