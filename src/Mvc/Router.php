@@ -68,7 +68,7 @@ class Router extends AbstractInjectionAware implements RouterInterface, EventsAw
     public const POSITION_FIRST = 0;
     public const POSITION_LAST  = 1;
 
-    public const URI_SOURCE_GET_URL = 0;
+    public const URI_SOURCE_GET_URL            = 0;
     public const URI_SOURCE_SERVER_REQUEST_URI = 1;
 
     /**
@@ -1211,22 +1211,6 @@ class Router extends AbstractInjectionAware implements RouterInterface, EventsAw
     }
 
     /**
-     * Sets the URI source. One of the URI_SOURCE_* constants
-     *
-     * ```php
-     * $router->setUriSource(
-     *     Router::URI_SOURCE_SERVER_REQUEST_URI
-     * );
-     * ```
-     */
-    public function setUriSource(int $uriSource): RouterInterface
-    {
-        $this->uriSource = $uriSource;
-
-        return $this;
-    }
-
-    /**
      * Sets an array of default paths. If a route is missing a path the router
      * will use the defined here. This method must not be used to set a 404
      * route
@@ -1294,6 +1278,22 @@ class Router extends AbstractInjectionAware implements RouterInterface, EventsAw
     public function setKeyRouteNames(array $routeNames): Router
     {
         $this->keyRouteNames = $routeNames;
+
+        return $this;
+    }
+
+    /**
+     * Sets the URI source. One of the URI_SOURCE_* constants
+     *
+     * ```php
+     * $router->setUriSource(
+     *     Router::URI_SOURCE_SERVER_REQUEST_URI
+     * );
+     * ```
+     */
+    public function setUriSource(int $uriSource): Router
+    {
+        $this->uriSource = $uriSource;
 
         return $this;
     }
