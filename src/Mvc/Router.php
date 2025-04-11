@@ -647,7 +647,7 @@ class Router extends AbstractInjectionAware implements RouterInterface, EventsAw
         if (empty($this->uriSource)) {
             $url = $_GET['_url'] ?? '';
             if (true !== empty($url)) {
-                return $url;
+                return $this->extractRealUri($url);
             }
         } else {
             /**
@@ -655,11 +655,7 @@ class Router extends AbstractInjectionAware implements RouterInterface, EventsAw
              */
             $url = $_SERVER['REQUEST_URI'] ?? '';
             if (true !== empty($url)) {
-                $urlParts = explode("?", $url);
-                $realUri  = $urlParts[0];
-                if (true !== empty($realUri)) {
-                    return $realUri;
-                }
+                return $this->extractRealUri($url);
             }
         }
 
@@ -754,6 +750,8 @@ class Router extends AbstractInjectionAware implements RouterInterface, EventsAw
              * If 'uri' isn't passed as parameter it reads _GET["_url"]
              */
             $uri = $this->getRewriteUri();
+        } else {
+            $uri = $this->extractRealUri($uri);
         }
 
         /**
@@ -1306,5 +1304,17 @@ class Router extends AbstractInjectionAware implements RouterInterface, EventsAw
     public function wasMatched(): bool
     {
         return $this->wasMatched;
+    }
+
+    /**
+     * @param string $uri
+     *
+     * @return string
+     */
+    protected function extractRealUri(string $uri): string
+    {
+        $urlParts = explode("?", $uri, 2);
+
+        return $urlParts[0];
     }
 }
