@@ -1,38 +1,52 @@
 services:
-  phalcon-8.1:
-    container_name: phalcon-8.1
-    hostname: phalcon-81
-    build: resources/docker/8.1
+  phalcon-dev-8.1:
+    container_name: phalcon-dev-8.1
+    hostname: phalcon-dev-81
+    build:
+      dockerfile: resources/docker/develop/Dockerfile
+      args:
+        PHP_VERSION: 8.1
+    working_dir: /srv
+    ports:
+      - "9501:9501"
+    volumes:
+      - .:/srv
+    extra_hosts:
+      - "host.docker.internal:host-gateway"
+
+  phalcon-dev-8.2:
+    container_name: phalcon-dev-8.2
+    hostname: phalcon-dev-82
+    build:
+      dockerfile: resources/docker/develop/Dockerfile
+      args:
+        PHP_VERSION: 8.2
     working_dir: /srv
     volumes:
       - .:/srv
     extra_hosts:
       - "host.docker.internal:host-gateway"
 
-  phalcon-8.2:
-    container_name: phalcon-8.2
-    hostname: phalcon-82
-    build: resources/docker/8.2
+  phalcon-dev-8.3:
+    container_name: phalcon-dev-8.3
+    hostname: phalcon-dev-83
+    build:
+      dockerfile: resources/docker/develop/Dockerfile
+      args:
+        PHP_VERSION: 8.3
     working_dir: /srv
     volumes:
       - .:/srv
     extra_hosts:
       - "host.docker.internal:host-gateway"
 
-  phalcon-8.3:
-    container_name: phalcon-8.3
-    hostname: phalcon-83
-    build: resources/docker/8.3
-    working_dir: /srv
-    volumes:
-      - .:/srv
-    extra_hosts:
-      - "host.docker.internal:host-gateway"
-
-  phalcon-8.4:
-    container_name: phalcon-8.4
-    hostname: phalcon-84
-    build: resources/docker/8.4
+  phalcon-dev-8.4:
+    container_name: phalcon-dev-8.4
+    hostname: phalcon-dev-84
+    build:
+      dockerfile: resources/docker/develop/Dockerfile
+      args:
+        PHP_VERSION: 8.4
     working_dir: /srv
     volumes:
       - .:/srv
