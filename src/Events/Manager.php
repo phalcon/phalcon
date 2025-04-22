@@ -14,6 +14,9 @@ declare(strict_types=1);
 namespace Phalcon\Events;
 
 use Closure;
+use Phalcon\Db\Event\AbstractModelEvent;
+use Phalcon\Db\Event\ModelEventNameEnum;
+use Phalcon\Db\Event\UnknownEventTypeException;
 use Psr\EventDispatcher\EventDispatcherInterface;
 use SplPriorityQueue;
 
@@ -62,15 +65,20 @@ class Manager implements ManagerInterface, EventDispatcherInterface
     /**
      * Attach a listener to the events manager
      *
-     * @param string          $eventType
+     * @param string|string[] $eventType
      * @param object|callable $handler
      * @param int             $priority
      */
     public function attach(
-        string $eventType,
+        string|array $eventType,
         callable | object $handler,
         int $priority = self::DEFAULT_PRIORITY
     ): void {
+
+        if (is_array($eventType)) {
+            $eventType = join(':', $eventType);
+        }
+
         /** @var SplPriorityQueue|null $priorityQueue */
         $priorityQueue = $this->events[$eventType] ?? null;
         if (null === $priorityQueue) {
@@ -235,15 +243,19 @@ class Manager implements ManagerInterface, EventDispatcherInterface
      * Dispatches an event to the appropriate event listeners.
      *
      * @param object $event The event object to be dispatched.
-     * @param string|null $name The optional event name to look for.
+     * @param string|string[]|null $name The optional event name to look for.
      * @param object|null $source The optional source object of the event.
      *
      * @return mixed The result of the event listeners' processing or null if no listeners are found.
      */
-    public function dispatch(object $event, ?string $name = null, ?object $source = null): mixed
+    public function dispatch(object $event, string|array|null $name = null, ?object $source = null): mixed
     {
         if (empty($this->events)) {
             return null;
+        }
+
+        if (is_array($name)) {
+            $name = join(':', $name);
         }
 
         if (!empty($this->events[$name])) {
@@ -425,13 +437,24 @@ class Manager implements ManagerInterface, EventDispatcherInterface
             true !== ($handler instanceof Closure || is_callable($handler))
         ) {
             if ($event instanceof EventInterface && method_exists($handler, $eventName = $event->getType())) {
-                $status = $handler->{$eventName}(
+                return $handler->{$eventName}(
                     $event,
                     $event->getSource(),
                     $event->getData()
                 );
-            } else {
-                $status = $handler->__invoke($event);
+            }
+            if ($event instanceof AbstractModelEvent) {
+                try {
+                    $eventName = ModelEventNameEnum::fromEventClass($event::class)->value;
+                    if (method_exists($handler, $eventName)) {
+                        return $handler->{$eventName}($event);
+                    }
+                } catch (UnknownEventTypeException $e) {
+                }
+            }
+
+            if (method_exists($handler, '__invoke')) {
+                return $handler->__invoke($event);
             }
         }
 

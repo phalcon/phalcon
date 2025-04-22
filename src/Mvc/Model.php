@@ -59,6 +59,8 @@ use Phalcon\Traits\Helper\Str\CamelizeTrait;
 use Phalcon\Traits\Helper\Str\UncamelizeTrait;
 use Serializable;
 
+use Throwable;
+
 use function array_intersect;
 use function array_key_exists;
 use function array_keys;
@@ -2079,7 +2081,17 @@ abstract class Model extends AbstractInjectionAware implements
             ($em = $this->getEventsManager()) &&
             $eventObject = $this->getDI()?->get('modelsEventFactory', [$this->getDI()])->create($eventName, $this)
         ){
-            $em->dispatch($eventObject, name: static::class . ':' . $eventName, source: $this);
+            foreach([static::class, ...class_parents($this)] as $className) {
+                // make sure that every event has a chance to be fired
+                try {
+                    $em->dispatch($eventObject, name: $className, source: $this);
+                } catch (Throwable) {
+                }
+                try {
+                    $em->dispatch($eventObject, name: [$className, $eventName], source: $this);
+                } catch (Throwable) {
+                }
+            }
         }
 
         /**

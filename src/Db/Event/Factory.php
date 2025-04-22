@@ -12,20 +12,13 @@ class Factory
     {
     }
 
-    public function create($eventName, Model $model): PsrEventInterface
+    public function create($eventName, Model $model): ?PsrEventInterface
     {
-        // @todo use Di ?
-        return match ($eventName) {
-            'afterCreate' => new AfterCreateEvent($model),
-            'afterDelete' => new AfterDeleteEvent($model),
-            'afterFetch' => new AfterFetchEvent($model),
-            'afterSave' => new AfterSaveEvent($model),
-            'afterUpdate' => new AfterUpdateEvent($model),
-            'notDeleted' => new NotDeletedEvent($model),
-            'notSaved' => new NotSavedEvent($model),
-            'onValidationFails' => new OnValidationFailsEvent($model),
-            'prepareSave' => new PrepareSaveEvent($model),
-            default => throw new UnknownEventTypeException($eventName),
-        };
+        try {
+            $className = ModelEventNameEnum::getEventClass($eventName);
+            return $this->di->get($className, [$model]);
+        } catch (UnknownEventTypeException $e) {
+            return null;
+        }
     }
 }
