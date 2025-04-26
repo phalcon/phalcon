@@ -46,6 +46,7 @@ use Phalcon\Support\Collection\CollectionInterface;
 use Phalcon\Support\Settings;
 use Phalcon\Traits\Helper\Str\CamelizeTrait;
 use Phalcon\Traits\Helper\Str\UncamelizeTrait;
+use Psr\Log\LoggerInterface;
 use Serializable;
 
 use Throwable;
@@ -2073,12 +2074,30 @@ abstract class Model extends AbstractInjectionAware implements
             foreach([static::class, ...class_parents($this)] as $className) {
                 // make sure that every event has a chance to be fired
                 try {
+                    // wildcard event
                     $em->dispatch($eventObject, name: $className, source: $this);
-                } catch (Throwable) {
+                } catch (Throwable $t) {
+                    ($this->container->getShared('logger') ?? $this->container->getShared(LoggerInterface::class))?->error(
+                        'Error processing model event',
+                        [
+                            'exception' => $t,
+                            'class' => $className,
+                            'event' => $eventName,
+                        ]
+                    );
                 }
                 try {
+                    // specific event
                     $em->dispatch($eventObject, name: [$className, $eventName], source: $this);
-                } catch (Throwable) {
+                } catch (Throwable $t) {
+                    ($this->container->getShared('logger') ?? $this->container->getShared(LoggerInterface::class))?->error(
+                        'Error processing model event',
+                        [
+                            'exception' => $t,
+                            'class' => $className,
+                            'event' => $eventName,
+                        ]
+                    );
                 }
             }
         }

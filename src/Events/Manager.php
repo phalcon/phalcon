@@ -16,7 +16,6 @@ namespace Phalcon\Events;
 use Closure;
 use Phalcon\Db\Event\AbstractModelEvent;
 use Phalcon\Db\Event\ModelEventNameEnum;
-use Phalcon\Db\Event\UnknownEventTypeException;
 use Psr\EventDispatcher\EventDispatcherInterface;
 use SplPriorityQueue;
 
@@ -436,21 +435,23 @@ class Manager implements ManagerInterface, EventDispatcherInterface
         if (
             true !== ($handler instanceof Closure || is_callable($handler))
         ) {
-            if ($event instanceof EventInterface && method_exists($handler, $eventName = $event->getType())) {
+            if (
+                ($event instanceof EventInterface) &&
+                ($eventName = $event->getType()) &&
+                method_exists($handler, $eventName)
+            ) {
                 return $handler->{$eventName}(
                     $event,
                     $event->getSource(),
                     $event->getData()
                 );
             }
-            if ($event instanceof AbstractModelEvent) {
-                try {
-                    $eventName = ModelEventNameEnum::fromEventClass($event::class)->value;
-                    if (method_exists($handler, $eventName)) {
-                        return $handler->{$eventName}($event);
-                    }
-                } catch (UnknownEventTypeException $e) {
-                }
+            if (
+                ($event instanceof AbstractModelEvent) &&
+                ($eventName = ModelEventNameEnum::tryFromEventClass($event::class)?->value) &&
+                method_exists($handler, $eventName)
+            ) {
+                return $handler->{$eventName}($event);
             }
 
             if (method_exists($handler, '__invoke')) {

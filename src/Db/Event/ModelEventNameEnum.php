@@ -60,4 +60,13 @@ enum ModelEventNameEnum: string
             default => throw new UnknownEventTypeException($shortClassName),
         };
     }
+
+    public static function tryFromEventClass(string $eventClassName): self|null
+    {
+        try {
+            return self::fromEventClass($eventClassName);
+        } catch (UnknownEventTypeException) {}
+
+        return null;
+    }
 }
