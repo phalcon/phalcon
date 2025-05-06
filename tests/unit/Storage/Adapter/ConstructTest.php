@@ -33,8 +33,54 @@ use function getOptionsRedis;
 use function getOptionsRedisCluster;
 use function outputDir;
 
-final class ConstructTest extends AbstractStorageAdapterTestCase
+final class ConstructTest extends AbstractUnitTestCase
 {
+    /**
+     * @return array[]
+     */
+    public static function getExamples(): array
+    {
+        return [
+            [
+                Apcu::class,
+                [],
+                'apcu',
+            ],
+            [
+                Libmemcached::class,
+                getOptionsLibmemcached(),
+                'memcached',
+            ],
+            [
+                Memory::class,
+                [],
+                '',
+            ],
+            [
+                Redis::class,
+                getOptionsRedis(),
+                'redis',
+            ],
+            [
+                RedisCluster::class,
+                getOptionsRedisCluster(),
+                'redis',
+            ],
+            [
+                Stream::class,
+                [
+                    'storageDir' => outputDir(),
+                ],
+                '',
+            ],
+            [
+                Weak::class,
+                [],
+                '',
+            ],
+        ];
+    }
+
     /**
      * Tests Phalcon\Storage\Adapter\* :: __construct()
      *
