@@ -24,8 +24,6 @@ use function is_int;
 
 /**
  * Apcu adapter
- *
- * @property array $options
  */
 class Apcu extends AbstractAdapter
 {
@@ -54,23 +52,6 @@ class Apcu extends AbstractAdapter
     }
 
     /**
-     * Flushes/clears the cache
-     */
-    public function clear(): bool
-    {
-        $result = true;
-        $apc    = $this->getKeys();
-
-        foreach ($apc as $item) {
-            if (true !== $this->phpApcuDelete($item)) {
-                $result = false;
-            }
-        }
-
-        return $result;
-    }
-
-    /**
      * Stores data in the adapter
      *
      * @param string $prefix
@@ -80,14 +61,9 @@ class Apcu extends AbstractAdapter
     public function getKeys(string $prefix = ''): array
     {
         $pattern = '/^' . $this->prefix . $prefix . '/';
-        $apc     = new APCuIterator($pattern);
-        $results = [];
+        $apc     = new APCUIterator($pattern);
 
-        foreach ($apc as $item) {
-            $results[] = $item['key'];
-        }
-
-        return $results;
+        return array_map(fn($item) => $item['key'], iterator_to_array($apc));
     }
 
     /**
@@ -98,6 +74,7 @@ class Apcu extends AbstractAdapter
      * @param mixed  $data
      *
      * @return bool
+     * @throws Exception
      */
     public function setForever(string $key, mixed $data): bool
     {
