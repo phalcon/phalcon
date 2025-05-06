@@ -30,8 +30,49 @@ use function getOptionsRedisCluster;
 use function outputDir;
 use function uniqid;
 
-final class DeleteTest extends AbstractStorageAdapterTestCase
+final class DeleteTest extends AbstractUnitTestCase
 {
+    /**
+     * @return array[]
+     */
+    public static function getExamples(): array
+    {
+        return [
+            [
+                Apcu::class,
+                [],
+                'apcu',
+            ],
+            [
+                Libmemcached::class,
+                getOptionsLibmemcached(),
+                'memcached',
+            ],
+            [
+                Memory::class,
+                [],
+                '',
+            ],
+            [
+                Redis::class,
+                getOptionsRedis(),
+                'redis',
+            ],
+            [
+                RedisCluster::class,
+                getOptionsRedisCluster(),
+                'redis',
+            ],
+            [
+                Stream::class,
+                [
+                    'storageDir' => outputDir(),
+                ],
+                '',
+            ],
+        ];
+    }
+
     /**
      * Tests Phalcon\Storage\Adapter\* :: delete()
      *
