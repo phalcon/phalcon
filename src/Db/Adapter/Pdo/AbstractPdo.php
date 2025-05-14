@@ -198,7 +198,13 @@ abstract class AbstractPdo extends AbstractAdapter
              */
             $this->transactionLevel--;
 
-            return $this->pdo->commit();
+            $result = $this->pdo->commit();
+            /**
+             * Notify the events manager about the committed transaction
+             */
+            $this->fireManagerEvent('db:transactionCommited');
+
+            return $result;
         }
 
         /**
@@ -229,8 +235,14 @@ abstract class AbstractPdo extends AbstractAdapter
          * Reduce the transaction nesting level
          */
         $this->transactionLevel--;
+        $result = $this->releaseSavepoint($savepointName);
 
-        return $this->releaseSavepoint($savepointName);
+        /**
+         * Notify the events manager about the committed savepoint
+         */
+        $this->fireManagerEvent('db:savepointReleased', $savepointName);
+
+        return $result;
     }
 
     /**
