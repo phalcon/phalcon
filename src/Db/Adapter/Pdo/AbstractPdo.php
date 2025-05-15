@@ -200,7 +200,7 @@ abstract class AbstractPdo extends AbstractAdapter
 
             $result = $this->pdo->commit();
             /**
-             * When error mode is set to silent or warning we need to check result and trigger event only when
+             * When error mode is set to silent or warning, we need to check result and trigger event only when
              * $result is not false.
              */
             if ($result === false) {
@@ -209,7 +209,7 @@ abstract class AbstractPdo extends AbstractAdapter
             /**
              * Notify the events manager about the committed transaction
              */
-            $this->fireManagerEvent('db:transactionCommited');
+            $this->fireManagerEvent('db:transactionCommitted');
 
             return true;
         }
@@ -245,7 +245,7 @@ abstract class AbstractPdo extends AbstractAdapter
         $result = $this->releaseSavepoint($savepointName);
 
         /**
-         * When error mode is set to silent or warning we need to check result and trigger event only when
+         * When error mode is set to silent or warning, we need to check result and trigger event only when
          * $result is not false.
          */
 
