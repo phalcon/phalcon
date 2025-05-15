@@ -189,16 +189,21 @@ abstract class AbstractPdo extends AbstractAdapter
 
         if (1 === $this->transactionLevel) {
             /**
-             * Notify the events manager about the committed transaction
-             */
-            $this->fireManagerEvent("db:commitTransaction");
-
-            /**
              * Reduce the transaction nesting level
              */
             $this->transactionLevel--;
 
-            return $this->pdo->commit();
+            /**
+             * Commit the transaction and store the result
+             */
+            $commitResult = $this->pdo->commit();
+
+            /**
+             * Notify the events manager about the committed transaction
+             */
+            $this->fireManagerEvent("db:commitTransaction");
+
+            return $commitResult;
         }
 
         /**
