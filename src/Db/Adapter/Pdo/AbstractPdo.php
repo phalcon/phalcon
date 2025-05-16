@@ -824,7 +824,11 @@ abstract class AbstractPdo extends AbstractAdapter
              */
             $this->transactionLevel--;
 
-            return $this->pdo->rollback();
+            $result = $this->pdo->rollback();
+
+            $this->fireManagerEvent('db:transactionRolledBack');
+
+            return $result;
         }
 
         /**
