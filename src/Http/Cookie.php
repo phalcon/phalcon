@@ -353,12 +353,12 @@ class Cookie extends AbstractInjectionAware implements
     public function send(): CookieInterface
     {
         $definition             = [];
-        $definition['expire']   = $this->expire ?? null;
-        $definition['path']     = $this->path ?? null;
+        $definition['expire']   = $this->expire;
+        $definition['path']     = $this->path;
         $definition['domain']   = $this->domain ?? null;
         $definition['secure']   = $this->secure ?? null;
         $definition['httpOnly'] = $this->httpOnly ?? null;
-        $definition['options']  = $this->options ?? null;
+        $definition['options']  = $this->options;
 
         /**
          * Remove all the empty elements
