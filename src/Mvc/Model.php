@@ -48,7 +48,6 @@ use Phalcon\Traits\Helper\Str\CamelizeTrait;
 use Phalcon\Traits\Helper\Str\UncamelizeTrait;
 use Psr\Log\LoggerInterface;
 use Serializable;
-
 use Throwable;
 
 use function array_intersect;
@@ -2070,8 +2069,8 @@ abstract class Model extends AbstractInjectionAware implements
         if (
             ($em = $this->getEventsManager()) &&
             $eventObject = $this->getDI()?->get('modelsEventFactory', [$this->getDI()])->create($eventName, $this)
-        ){
-            foreach([static::class, ...class_parents($this)] as $className) {
+        ) {
+            foreach ([static::class, ...class_parents($this)] as $className) {
                 // make sure that every event has a chance to be fired
                 try {
                     // wildcard event

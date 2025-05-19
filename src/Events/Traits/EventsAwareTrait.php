@@ -15,8 +15,8 @@ namespace Phalcon\Events\Traits;
 
 use Phalcon\Events\Exception as EventsException;
 use Phalcon\Events\ManagerInterface;
-
 use Phalcon\Events\PsrEventInterface;
+
 use function property_exists;
 
 trait EventsAwareTrait

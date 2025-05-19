@@ -65,7 +65,8 @@ enum ModelEventNameEnum: string
     {
         try {
             return self::fromEventClass($eventClassName);
-        } catch (UnknownEventTypeException) {}
+        } catch (UnknownEventTypeException) {
+        }
 
         return null;
     }

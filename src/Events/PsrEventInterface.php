@@ -4,5 +4,4 @@ namespace Phalcon\Events;
 
 interface PsrEventInterface
 {
-
 }
