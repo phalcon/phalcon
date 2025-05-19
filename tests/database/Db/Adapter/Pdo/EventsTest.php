@@ -1,4 +1,5 @@
 <?php
+
 declare(strict_types=1);
 
 namespace Phalcon\Tests\Database\Db\Adapter\Pdo;
@@ -100,7 +101,7 @@ final class EventsTest extends AbstractUnitTestCase
                 break;
         }
 
-        foreach($expectedEvents as $expectedEvent) {
+        foreach ($expectedEvents as $expectedEvent) {
             $this->assertContains($expectedEvent, $listener->events);
         }
     }
