@@ -15,8 +15,6 @@ namespace Phalcon\Filter;
 
 /**
  * Interface FilterInterface
- *
- * @package Phalcon\Filter
  */
 interface FilterInterface
 {

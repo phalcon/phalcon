@@ -44,7 +44,7 @@ trait EventsAwareTrait
             true === property_exists($this, 'container') &&
             null !== $this->container
         ) {
-            $this->container->set('eventsManager', $eventsManager);
+            $this->container->set('eventsManager', $eventsManager, true);
         }
 
         $this->eventsManager = $eventsManager;

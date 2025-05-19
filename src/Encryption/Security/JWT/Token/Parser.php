@@ -139,13 +139,14 @@ class Parser
     private function decodeSignature(Item $headers, string $signature): Signature
     {
         $algo    = $headers->get(Enum::ALGO, 'none');
-        $decoded = $this->doDecodeUrl($signature);
-        if ('none' === $algo) {
-            $decoded   = '';
-            $signature = '';
+        $decoded = '';
+        $sig     = '';
+        if ('none' !== $algo) {
+            $decoded = $this->doDecodeUrl($signature);
+            $sig     = $signature;
         }
 
-        return new Signature($decoded, $signature);
+        return new Signature($decoded, $sig);
     }
 
     /**

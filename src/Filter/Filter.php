@@ -211,7 +211,7 @@ class Filter implements FilterInterface
      * @param string $name
      * @param mixed  $service
      */
-    public function set(string $name, $service): void
+    public function set(string $name, mixed $service): void
     {
         $this->mapper[$name] = $service;
 
@@ -422,7 +422,7 @@ class Filter implements FilterInterface
      *
      * @return array
      */
-    private function splitSanitizerParameters($sanitizerKey, $sanitizer): array
+    private function splitSanitizerParameters(mixed $sanitizerKey, mixed $sanitizer): array
     {
         /**
          * If `sanitizer` is an array, that means that the sanitizerKey

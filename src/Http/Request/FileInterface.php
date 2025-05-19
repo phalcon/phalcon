@@ -25,9 +25,7 @@ namespace Phalcon\Http\File;
 namespace Phalcon\Http\Request;
 
 /**
- * Interface FileInterface
- *
- * @package Phalcon\Http\Request
+ * Interface for Phalcon\Http\Request\File
  */
 interface FileInterface
 {

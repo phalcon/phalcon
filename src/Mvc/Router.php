@@ -31,12 +31,9 @@ use function is_array;
 use function is_callable;
 use function is_int;
 use function is_string;
-use function parse_url;
 use function preg_match;
 use function rtrim;
 use function trim;
-
-use const PHP_URL_PATH;
 
 /**
  * Phalcon\Mvc\Router is the standard framework router. Routing is the
@@ -70,6 +67,9 @@ class Router extends AbstractInjectionAware implements RouterInterface, EventsAw
 
     public const POSITION_FIRST = 0;
     public const POSITION_LAST  = 1;
+
+    public const URI_SOURCE_GET_URL            = 0;
+    public const URI_SOURCE_SERVER_REQUEST_URI = 1;
 
     /**
      * @var string
@@ -105,14 +105,17 @@ class Router extends AbstractInjectionAware implements RouterInterface, EventsAw
      * @var array
      */
     protected array $defaultParams = [];
+
     /**
      * @var array
      */
     protected array $keyRouteIds = [];
+
     /**
      * @var array
      */
     protected array $keyRouteNames = [];
+
     /**
      * @var RouteInterface|null
      */
@@ -152,6 +155,11 @@ class Router extends AbstractInjectionAware implements RouterInterface, EventsAw
      * @var array
      */
     protected array $routes = [];
+
+    /**
+     * @var int
+     */
+    protected int $uriSource = self::URI_SOURCE_GET_URL;
 
     /**
      * @var bool
@@ -628,6 +636,33 @@ class Router extends AbstractInjectionAware implements RouterInterface, EventsAw
     }
 
     /**
+     * Get rewrite info. This info is read from $_GET["_url"].
+     * This returns '/' if the rewrite information cannot be read
+     */
+    public function getRewriteUri(): string
+    {
+        /**
+         * By default we use $_GET["url"] to obtain the rewrite information
+         */
+        if (empty($this->uriSource)) {
+            $url = $_GET['_url'] ?? '';
+            if (true !== empty($url)) {
+                return $this->extractRealUri($url);
+            }
+        } else {
+            /**
+             * Otherwise use the standard $_SERVER["REQUEST_URI"]
+             */
+            $url = $_SERVER['REQUEST_URI'] ?? '';
+            if (true !== empty($url)) {
+                return $this->extractRealUri($url);
+            }
+        }
+
+        return "/";
+    }
+
+    /**
      * Returns a route object by its id
      *
      * @param int|string $routeId
@@ -710,7 +745,14 @@ class Router extends AbstractInjectionAware implements RouterInterface, EventsAw
      */
     public function handle(string $uri): void
     {
-        $uri = parse_url($uri, PHP_URL_PATH);
+        if (empty($uri)) {
+            /**
+             * If 'uri' isn't passed as parameter it reads _GET["_url"]
+             */
+            $uri = $this->getRewriteUri();
+        } else {
+            $uri = $this->extractRealUri($uri);
+        }
 
         /**
          * Remove extra slashes in the route
@@ -1239,6 +1281,22 @@ class Router extends AbstractInjectionAware implements RouterInterface, EventsAw
     }
 
     /**
+     * Sets the URI source. One of the URI_SOURCE_* constants
+     *
+     * ```php
+     * $router->setUriSource(
+     *     Router::URI_SOURCE_SERVER_REQUEST_URI
+     * );
+     * ```
+     */
+    public function setUriSource(int $uriSource): Router
+    {
+        $this->uriSource = $uriSource;
+
+        return $this;
+    }
+
+    /**
      * Checks if the router matches any of the defined routes
      *
      * @return bool
@@ -1246,5 +1304,17 @@ class Router extends AbstractInjectionAware implements RouterInterface, EventsAw
     public function wasMatched(): bool
     {
         return $this->wasMatched;
+    }
+
+    /**
+     * @param string $uri
+     *
+     * @return string
+     */
+    protected function extractRealUri(string $uri): string
+    {
+        $urlParts = explode("?", $uri, 2);
+
+        return $urlParts[0];
     }
 }
