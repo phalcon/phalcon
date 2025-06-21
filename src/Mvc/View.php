@@ -21,7 +21,6 @@ use Phalcon\Events\Traits\EventsAwareTrait;
 use Phalcon\Mvc\View\Engine\Php as PhpEngine;
 use Phalcon\Mvc\View\Exception;
 use Phalcon\Mvc\View\ViewInterface;
-use Phalcon\Parsers\Parser;
 use Phalcon\Traits\Helper\Str\DirSeparatorTrait;
 
 use function array_keys;
@@ -707,11 +706,6 @@ class View extends Injectable implements ViewInterface, EventsAwareInterface
              */
             $viewParams       = $this->viewParams;
             $this->viewParams = array_merge($viewParams, $params);
-
-            /**
-             * Create a virtual symbol table
-             */
-            Parser::viewCreateSymbolTable();
         }
 
         /**
@@ -866,12 +860,6 @@ class View extends Injectable implements ViewInterface, EventsAwareInterface
                 $layoutName = $pickView[1];
             }
         }
-
-        /**
-         * Create a virtual symbol table.
-         * Variables are shared across symbol tables in PHP5
-         */
-        Parser::viewCreateSymbolTable();
 
         /**
          * Call beforeRender if there is an events manager

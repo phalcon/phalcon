@@ -16,7 +16,6 @@ namespace Phalcon\Mvc;
 use Phalcon\Di\AbstractInjectionAware;
 use Phalcon\Mvc\Url\Exception;
 use Phalcon\Mvc\Url\UrlInterface;
-use Phalcon\Parsers\Parser;
 
 use function http_build_query;
 use function is_array;

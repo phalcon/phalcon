@@ -19,7 +19,6 @@ use Phalcon\Di\Injectable;
 use Phalcon\Mvc\Model\MetaData\Strategy\Introspection;
 use Phalcon\Mvc\Model\MetaData\Strategy\StrategyInterface;
 use Phalcon\Mvc\ModelInterface;
-use Phalcon\Parsers\Parser;
 use Phalcon\Support\Settings;
 use Phalcon\Traits\Php\IniTrait;
 

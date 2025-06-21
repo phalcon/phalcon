@@ -13,7 +13,7 @@ declare(strict_types=1);
 
 namespace Phalcon\Mvc\Model\Query;
 
-use Phalcon\Parsers\Parser;
+use Phalcon\Phql\Parser\Parser;
 
 /**
  * PHQL is implemented as a parser (written in C) that translates syntax in
@@ -41,6 +41,7 @@ abstract class Lang
      */
     public static function parsePHQL(string $phql): array
     {
-        return Parser::ormParse($phql);
+        $parser = new Parser(true);
+        return $parser->parse($phql);
     }
 }

@@ -20,7 +20,6 @@ use Phalcon\Events\Exception as EventsException;
 use Phalcon\Events\Traits\EventsAwareTrait;
 use Phalcon\Mvc\View\Engine\EngineInterface;
 use Phalcon\Mvc\View\Engine\Php as PhpEngine;
-use Phalcon\Parsers\Parser;
 use Phalcon\Traits\Helper\Str\DirSeparatorTrait;
 
 use function array_merge;
@@ -234,11 +233,6 @@ class Simple extends Injectable implements ViewBaseInterface, EventsAwareInterfa
              * Merge or assign the new params as parameters
              */
             $mergedParams = array_merge($viewParams, $params);
-
-            /**
-             * Create a virtual symbol table
-             */
-            Parser::viewCreateSymbolTable();
         } else {
             $mergedParams = $params;
         }
@@ -300,11 +294,6 @@ class Simple extends Injectable implements ViewBaseInterface, EventsAwareInterfa
      */
     public function render(string $path, array $params = []): string
     {
-        /**
-         * Create a virtual symbol table
-         */
-        Parser::viewCreateSymbolTable();
-
         ob_start();
 
         /**
