@@ -21,27 +21,28 @@ use function is_string;
  * Lazy loads, stores and exposes sanitizer objects
  *
  *
- * @method int         absint(mixed $input)
- * @method string      alnum(mixed $input)
- * @method string      alpha(mixed $input)
- * @method bool        bool(mixed $input)
- * @method string      email(string $input)
- * @method float       float(mixed $input)
- * @method int         int(string $input)
- * @method string      lower(string $input)
- * @method string      lowerfirst(string $input)
- * @method mixed       regex(mixed $input, mixed $pattern, mixed $replace)
- * @method mixed       remove(mixed $input, mixed $replace)
- * @method mixed       replace(mixed $input, mixed $source, mixed $target)
- * @method string      special(string $input)
- * @method string      specialfull(string $input)
- * @method string      string(string $input)
- * @method string      striptags(string $input)
- * @method string      trim(string $input)
- * @method string      upper(string $input)
- * @method string      upperFirst(string $input)
- * @method string|null upperWords(string $input)
- * @method string|null url(string $input)
+ * @method int          absint(mixed $input)
+ * @method string       alnum(mixed $input)
+ * @method string       alpha(mixed $input)
+ * @method bool         bool(mixed $input)
+ * @method string       email(string $input)
+ * @method float        float(mixed $input)
+ * @method int          int(string $input)
+ * @method string|false ip(string $input, int $filter = FILTER_FLAG_NONE)
+ * @method string       lower(string $input)
+ * @method string       lowerfirst(string $input)
+ * @method mixed        regex(mixed $input, mixed $pattern, mixed $replace)
+ * @method mixed        remove(mixed $input, mixed $replace)
+ * @method mixed        replace(mixed $input, mixed $source, mixed $target)
+ * @method string       special(string $input)
+ * @method string       specialfull(string $input)
+ * @method string       string(string $input)
+ * @method string       striptags(string $input)
+ * @method string       trim(string $input)
+ * @method string       upper(string $input)
+ * @method string       upperFirst(string $input)
+ * @method string|null  upperWords(string $input)
+ * @method string|null  url(string $input)
  */
 class Filter implements FilterInterface
 {
@@ -52,6 +53,7 @@ class Filter implements FilterInterface
     public const FILTER_EMAIL       = 'email';
     public const FILTER_FLOAT       = 'float';
     public const FILTER_INT         = 'int';
+    public const FILTER_IP          = 'ip';
     public const FILTER_LOWER       = 'lower';
     public const FILTER_LOWERFIRST  = 'lowerfirst';
     public const FILTER_REGEX       = 'regex';

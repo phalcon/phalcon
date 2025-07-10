@@ -20,6 +20,7 @@ use Phalcon\Filter\Sanitize\BoolVal;
 use Phalcon\Filter\Sanitize\Email;
 use Phalcon\Filter\Sanitize\FloatVal;
 use Phalcon\Filter\Sanitize\IntVal;
+use Phalcon\Filter\Sanitize\Ip;
 use Phalcon\Filter\Sanitize\Lower;
 use Phalcon\Filter\Sanitize\LowerFirst;
 use Phalcon\Filter\Sanitize\Regex;
@@ -68,6 +69,7 @@ class FilterFactory
             Filter::FILTER_EMAIL       => Email::class,
             Filter::FILTER_FLOAT       => FloatVal::class,
             Filter::FILTER_INT         => IntVal::class,
+            Filter::FILTER_IP          => Ip::class,
             Filter::FILTER_LOWER       => Lower::class,
             Filter::FILTER_LOWERFIRST  => LowerFirst::class,
             Filter::FILTER_REGEX       => Regex::class,
