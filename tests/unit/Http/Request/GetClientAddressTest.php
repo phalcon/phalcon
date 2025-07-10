@@ -13,7 +13,9 @@ declare(strict_types=1);
 
 namespace Phalcon\Tests\Unit\Http\Request;
 
+use Phalcon\Di\FactoryDefault;
 use Phalcon\Http\Request;
+use Phalcon\Tests\Fixtures\Http\RequestFixture;
 use Phalcon\Tests\Fixtures\Page\Http;
 use Phalcon\Tests\Unit\Http\Helper\AbstractHttpBase;
 
@@ -70,37 +72,95 @@ final class GetClientAddressTest extends AbstractHttpBase
     }
 
     /**
-     * Tests Phalcon\Http\Request :: getClientAddress() - multiple
+     * Tests Phalcon\Http\Request :: getClientAddress() - trustForwardedHeader - without trusted proxy
      *
      * @author Phalcon Team <team@phalcon.io>
-     * @since  2020-03-17
+     * @since  2025-07-11
      */
-    public function testHttpRequestGetClientAddressMultiple(): void
+    public function testHttpRequestGetClientAddressTrustForwardedHeader(): void
     {
-        $_SERVER['REMOTE_ADDR'] = Http::TEST_IP_MULTI;
+        $container = new FactoryDefault();
+
+        // skip private IP and return the first non-private and non-reserved IP
+        $_SERVER['HTTP_X_FORWARDED_FOR'] = '10.4.6.1,25.25.25.25';
 
         $request = new Request();
+        $request->setDI($container);
 
-        $expected = '10.4.6.4';
-        $actual   = $request->getClientAddress();
+        $expected = '25.25.25.25';
+        $actual   = $request->getClientAddress(true);
         $this->assertSame($expected, $actual);
     }
 
     /**
-     * Tests Phalcon\Http\Request :: getClientAddress() - trustForwardedHeader
+     * Tests Phalcon\Http\Request :: setTrustedProxies()
      *
      * @author Phalcon Team <team@phalcon.io>
-     * @since  2020-03-17
+     * @since  2025-07-11
      */
-    public function testHttpRequestGetClientAddressTrustForwardedHeader(): void
+    public function testHttpRequestSetTrustedProxies(): void
     {
-        $_SERVER['HTTP_X_FORWARDED_FOR'] = Http::TEST_IP_ONE;
+        $container = new FactoryDefault();
+
+        $request = new RequestFixture();
+        $request->setDI($container);
+        $request->setTrustedProxies([
+            '25.25.25.0/24'
+        ]);
+
+        $expected = ['25.25.25.0/24'];
+        $actual   = $request->getTrustedProxies();
+        $this->assertSame($expected, $actual);
+    }
+
+    /**
+     * Tests Phalcon\Http\Request :: getClientAddress() - trustForwardedHeader - with valid trusted proxy
+     *
+     * @author Phalcon Team <team@phalcon.io>
+     * @since  2025-07-11
+     */
+    public function testHttpRequestGetClientAddressTrustForwardedHeaderWithValidTrustedProxy(): void
+    {
+        $container = new FactoryDefault();
+
+        $_SERVER['HTTP_X_FORWARDED_FOR'] = '8.8.8.8,25.25.25.1';
 
         $request = new Request();
+        $request->setDI($container);
+        $request->setTrustedProxies([
+            '25.25.25.0/24'
+        ]);
 
-        $expected = Http::TEST_IP_ONE;
+        $expected = '8.8.8.8';
         $actual   = $request->getClientAddress(true);
         $this->assertSame($expected, $actual);
+    }
+
+    /**
+     * Tests Phalcon\Http\Request :: getClientAddress() - trustForwardedHeader - with invalid trusted proxy
+     *
+     * @author Phalcon Team <team@phalcon.io>
+     * @since  2025-07-11
+     */
+    public function testHttpRequestGetClientAddressTrustForwardedHeaderWithInvalidTrustedProxy(): void
+    {
+        $container = new FactoryDefault();
+
+        $_SERVER['HTTP_X_FORWARDED_FOR'] = '8.8.8.8,1.1.1.1';
+
+        $request = new Request();
+        $request->setDI($container);
+        $request->setTrustedProxies([
+            '25.25.25.0/24'
+        ]);
+
+        $expectedExceptionMessage = 'The forwarded proxy IP addresses are not trusted.';
+        try {
+            $request->getClientAddress(true);
+            $this->fail('Expected exception was not thrown.');
+        } catch (\Exception $e) {
+            $this->assertEquals($expectedExceptionMessage, $e->getMessage());
+        }
     }
 
     /**
