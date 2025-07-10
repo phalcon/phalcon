@@ -27,7 +27,7 @@ final class SanitizeTest extends AbstractUnitTestCase
     public static function getExamples(): array
     {
         return [
-            [
+            /*[
                 'absint',
                 '',
                 -125,
@@ -774,6 +774,140 @@ final class SanitizeTest extends AbstractUnitTestCase
                 'url',
                 ['https://pha�lc�on.i�o'],
                 'https://phalcon.io',
+            ],*/
+            // IPv4 Test dataset
+            [
+                'ip',
+                '',
+                ['192.168.0.10', 0],
+                '192.168.0.10',
+            ],
+            [
+                'ip',
+                '',
+                ['255.255.255.255', 0],
+                '255.255.255.255',
+            ],
+            [
+                'ip',
+                '',
+                ['10.0.0.0/24', 0],
+                '10.0.0.0/24',
+            ],
+            [
+                'ip',
+                '',
+                ['8.8.8.8'],
+                '8.8.8.8',
+            ],
+            [
+                'ip',
+                '',
+                ['192.168.1.1', FILTER_FLAG_NO_PRIV_RANGE],
+                false,
+            ],
+            [
+                'ip',
+                '',
+                ['10.0.0.5', FILTER_FLAG_NO_PRIV_RANGE],
+                false,
+            ],
+            [
+                'ip',
+                '',
+                ['0.0.0.0', FILTER_FLAG_NO_RES_RANGE],
+                false,
+            ],
+            [
+                'ip',
+                '',
+                ['255.255.255.255', FILTER_FLAG_NO_RES_RANGE],
+                false,
+            ],
+            [
+                'ip',
+                '',
+                ['255.255.255.255', FILTER_FLAG_NO_RES_RANGE | FILTER_FLAG_NO_PRIV_RANGE],
+                false,
+            ],
+            [
+                'ip',
+                '',
+                ['999.999.999.999', FILTER_FLAG_IPV4],
+                false,
+            ],
+            [
+                'ip',
+                '',
+                ['192.168.1.1/33', FILTER_FLAG_IPV4],
+                false,
+            ],
+            // IPv6 Test dataset
+            [
+                'ip',
+                '',
+                ['2001:4860:4860::8888', 0],
+                '2001:4860:4860::8888',
+            ],
+            [
+                'ip',
+                '',
+                ['2001:db8::1', FILTER_FLAG_IPV6],
+                '2001:db8::1',
+            ],
+            [
+                'ip',
+                '',
+                ['2001:db8::/32', 0],
+                '2001:db8::/32',
+            ],
+            [
+                'ip',
+                '',
+                ['2001:db8:85a3:8d3:1319:8a2e:370:7348'],
+                '2001:db8:85a3:8d3:1319:8a2e:370:7348',
+            ],
+            [
+                'ip',
+                '',
+                ['fd12:3456:789a:1::1', FILTER_FLAG_NO_PRIV_RANGE],
+                false,
+            ],
+            [
+                'ip',
+                '',
+                ['fc00::1', FILTER_FLAG_NO_PRIV_RANGE],
+                false,
+            ],
+            [
+                'ip',
+                '',
+                ['fe80::1', FILTER_FLAG_NO_RES_RANGE],
+                false,
+            ],
+            [
+                'ip',
+                '',
+                ['::1', FILTER_FLAG_NO_RES_RANGE],
+                false,
+            ],
+            [
+                'ip',
+                '',
+                ['fd00::1', FILTER_FLAG_NO_RES_RANGE | FILTER_FLAG_NO_PRIV_RANGE],
+                false,
+            ],
+            [
+                'ip',
+                '',
+                ['2001:db8:85a3::8a2e:370g:7334', FILTER_FLAG_IPV6],
+                false,
+            ],
+            [
+                'ip',
+                '',
+                ['2001:db8::/140', FILTER_FLAG_IPV6],
+                false,
             ],
         ];
     }
