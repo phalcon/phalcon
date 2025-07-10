@@ -110,11 +110,14 @@ class Request extends AbstractInjectionAware implements
      * @var string
      */
     private string $rawBody = '';
-
     /**
      * @var bool
      */
     private bool $strictHostCheck = false;
+    /**
+     * @var array
+     */
+    protected array $trustedProxies = [];
 
     /**
      * Gets a variable from the $_REQUEST superglobal applying filters if
@@ -217,42 +220,82 @@ class Request extends AbstractInjectionAware implements
     }
 
     /**
-     * Gets most possible client IPv4 Address. This method searches in
+     * Gets most possible client IP Address. This method searches in
      * `$_SERVER["REMOTE_ADDR"]` and optionally in
-     * `$_SERVER["HTTP_X_FORWARDED_FOR"]`
+     * `$_SERVER["HTTP_X_FORWARDED_FOR"]` and returns the first non-private or non-reserved IP address
      *
      * @param bool $trustForwardedHeader
      *
-     * @return string|bool
+     * @return string|false
+     * @throws \Exception
      */
     public function getClientAddress(bool $trustForwardedHeader = false): string | bool
     {
         $address = null;
 
-        /**
-         * Proxies uses this IP
-         */
-        if (true === $trustForwardedHeader) {
+        if ($trustForwardedHeader) {
             $address = $_SERVER['HTTP_X_FORWARDED_FOR'] ?? null;
             if (null === $address) {
                 $address = $_SERVER['HTTP_CLIENT_IP'] ?? null;
             }
-        }
 
-        if (null === $address) {
-            $address = $_SERVER['REMOTE_ADDR'] ?? null;
+            if (null !== $address && strpos($address, ',') !== false) {
+                /**
+                 * The client address has multiples parts,
+                 * only return the first non-private/non-reserved IP
+                 */
+                $trustedProxies = $this->trustedProxies;
+                $forwardedIps = explode(',', $address);
+                if (!empty($trustedProxies)) {
+                    // verify if we trust the forwarded proxy
+                    $isTrusted = false;
+                    $reverseForwardedIps = array_reverse($forwardedIps);
+                    foreach ($reverseForwardedIps as $invertForwardedIp) {
+                        if ($isTrusted === true) {
+                            break;
+                        }
+                        foreach ($trustedProxies as $trustedForwardedIp) {
+                            if (strpos($trustedForwardedIp, "/") !== false) {
+                                $isIpAddressInCIDR = $this->isIpAddressInCIDR($invertForwardedIp, $trustedForwardedIp);
+                                if ($isIpAddressInCIDR === true) {
+                                    $isTrusted = true;
+                                    break;
+                                }
+                            } else {
+                                if ($invertForwardedIp === $trustedForwardedIp) {
+                                    $isTrusted = true;
+                                    break;
+                                }
+                            }
+                        }
+                    }
+
+                    if (!$isTrusted) {
+                        throw new \Exception("The forwarded proxy IP addresses are not trusted.");
+                    }
+                }
+
+                // retrieve the first valid IP that is not reserved or private
+                $filterService = $this->getFilterService();
+                foreach ($forwardedIps as $forwardedIp) {
+                    $filtered = $filterService->sanitize($forwardedIp, [
+                        "ip" => [
+                            "filter" => FILTER_FLAG_NO_PRIV_RANGE | FILTER_FLAG_NO_RES_RANGE
+                        ]
+                    ]);
+                    if ($filtered) {
+                        return $filtered;
+                    }
+                }
+
+                return false;
+            }
+        } else {
+            $address = $_SERVER["REMOTE_ADDR"];
         }
 
         if (!is_string($address)) {
             return false;
-        }
-
-        if (str_contains($address, ',')) {
-            /**
-             * The client address has multiples parts, only return the first
-             * part
-             */
-            return explode(',', $address)[0];
         }
 
         return $address;
@@ -1515,6 +1558,79 @@ class Request extends AbstractInjectionAware implements
         $this->strictHostCheck = $flag;
 
         return $this;
+    }
+
+    /**
+     * Set trusted proxy
+     *
+     * @param array $trustedProxies
+     * @return RequestInterface
+     * @throws Exception
+     */
+    public function setTrustedProxies(array $trustedProxies): RequestInterface
+    {
+        $filterService = $this->getFilterService();
+
+        // sanitize IPs
+        foreach ($trustedProxies as $trustedProxy) {
+            $filtered = $filterService->sanitize($trustedProxy, "ip");
+            if ($filtered !== false) {
+                $this->trustedProxies[] = $filtered;
+            }
+        }
+
+        return $this;
+    }
+
+    /**
+     * Check if an IP address exists in CIDR range
+     *
+     * @param string $ip The IP address to check.
+     * @param string $cidr The CIDR range to compare against.
+     * @return bool True if the IP is in range, false otherwise.
+     */
+    protected function isIpAddressInCIDR(string $ip, string $cidr): bool
+    {
+        $parts       = explode('/', $cidr);
+        $subnet      = $parts[0];
+        $maskLength  = $parts[1];
+
+        $ipBin     = inet_pton($ip);
+        $subnetBin = inet_pton($subnet);
+
+        if ($ipBin === false || $subnetBin === false) {
+            return false; // Invalid IP
+        }
+
+        $ipBits        = unpack("H*", $ipBin);
+        $subnetBits    = unpack("H*", $subnetBin);
+
+        $ipBits     = $ipBits[1];
+        $subnetBits = $subnetBits[1];
+
+        // Convert hex string to binary string
+        $ipBits     = hex2bin(str_pad($ipBits, strlen($ipBits), "0"));
+        $subnetBits = hex2bin(str_pad($subnetBits, strlen($subnetBits), "0"));
+
+        $maskBytes     = (int)floor($maskLength / 8);
+        $remainingBits = $maskLength % 8;
+
+        // Compare full bytes
+        if (strncmp($ipBits, $subnetBits, $maskBytes) !== 0) {
+            return false;
+        }
+
+        if ($remainingBits === 0) {
+            return true;
+        }
+
+        $ipByte     = ord($ipBits[$maskBytes]);
+        $subnetByte = ord($subnetBits[$maskBytes]);
+
+        $tempMask = (1 << (8 - $remainingBits)) - 1;
+        $mask = 0xFF ^ $tempMask;
+
+        return ($ipByte & $mask) === ($subnetByte & $mask);
     }
 
     /**
