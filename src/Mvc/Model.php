@@ -2070,7 +2070,7 @@ abstract class Model extends AbstractInjectionAware implements
             ($em = $this->getEventsManager()) &&
             $eventObject = $this->getDI()?->get('modelsEventFactory', [$this->getDI()])->create($eventName, $this)
         ) {
-            foreach ([static::class, ...class_parents($this)] as $className) {
+            foreach ([static::class, ...class_parents($this), ...class_implements($this)] as $className) {
                 // make sure that every event has a chance to be fired
                 try {
                     // wildcard event
