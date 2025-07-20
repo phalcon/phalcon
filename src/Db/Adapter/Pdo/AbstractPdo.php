@@ -198,7 +198,22 @@ abstract class AbstractPdo extends AbstractAdapter
              */
             $this->transactionLevel--;
 
-            return $this->pdo->commit();
+            $result = $this->pdo->commit();
+
+            /**
+             * When error mode is set to silent or warning, we need to check result and trigger event only when
+             * $result is not false.
+             */
+            if ($result === false) {
+                return false;
+            }
+
+            /**
+             * Notify the events manager about the committed transaction
+             */
+            $this->fireManagerEvent('db:transactionCommitted');
+
+            return true;
         }
 
         /**
@@ -229,8 +244,22 @@ abstract class AbstractPdo extends AbstractAdapter
          * Reduce the transaction nesting level
          */
         $this->transactionLevel--;
+        $result = $this->releaseSavepoint($savepointName);
 
-        return $this->releaseSavepoint($savepointName);
+        /**
+         * When error mode is set to silent or warning, we need to check result and trigger event only when
+         * $result is not false.
+         */
+        if ($result === false) {
+            return false;
+        }
+
+        /**
+         * Notify the events manager about the released savepoint
+         */
+        $this->fireManagerEvent('db:savepointReleased', $savepointName);
+
+        return true;
     }
 
     /**
@@ -795,7 +824,11 @@ abstract class AbstractPdo extends AbstractAdapter
              */
             $this->transactionLevel--;
 
-            return $this->pdo->rollback();
+            $result = $this->pdo->rollback();
+
+            $this->fireManagerEvent('db:transactionRolledBack');
+
+            return $result;
         }
 
         /**
