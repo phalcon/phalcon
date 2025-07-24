@@ -97,11 +97,7 @@ class Request extends AbstractInjectionAware implements
     /**
      * @var array|null
      */
-    private array | null $patchCache = null;
-    /**
-     * @var array|null
-     */
-    private array | null $putCache = null;
+    private array | null $postCache = null;
     /**
      * @var array
      */
@@ -777,8 +773,10 @@ class Request extends AbstractInjectionAware implements
         bool $notAllowEmpty = false,
         bool $noRecursive = false
     ): mixed {
-        return $this->getPatchPut(
-            'patchCache',
+        $this->postCache = $this->getPostData($_POST);
+
+        return $this->getHelper(
+            $this->postCache,
             $name,
             $filters,
             $defaultValue,
@@ -840,8 +838,10 @@ class Request extends AbstractInjectionAware implements
         bool $notAllowEmpty = false,
         bool $noRecursive = false
     ): mixed {
+        $this->postCache = $this->getPostData($_POST);
+
         return $this->getHelper(
-            $_POST,
+            $this->postCache,
             $name,
             $filters,
             $defaultValue,
@@ -898,8 +898,10 @@ class Request extends AbstractInjectionAware implements
         bool $notAllowEmpty = false,
         bool $noRecursive = false
     ): mixed {
-        return $this->getPatchPut(
-            'putCache',
+        $this->postCache = $this->getPostData($this->postCache);
+
+        return $this->getHelper(
+            $this->postCache,
             $name,
             $filters,
             $defaultValue,
@@ -1176,7 +1178,7 @@ class Request extends AbstractInjectionAware implements
      */
     public function hasPost(string $name): bool
     {
-        return array_key_exists($name, $_POST);
+        return array_key_exists($name, $this->getPost());
     }
 
     /**
@@ -1224,6 +1226,17 @@ class Request extends AbstractInjectionAware implements
     {
         return true === $this->hasServer("HTTP_X_REQUESTED_WITH") &&
             'XMLHttpRequest' === $this->getServer("HTTP_X_REQUESTED_WITH");
+    }
+
+    /**
+     * Checks whether request content type contains json data
+     *
+     * @return bool
+     */
+    public function isJson(): bool
+    {
+        return $this->hasServer("CONTENT_TYPE") &&
+            stripos($this->getServer("CONTENT_TYPE"), "json") !== false;
     }
 
     /**
@@ -1994,60 +2007,32 @@ class Request extends AbstractInjectionAware implements
     }
 
     /**
-     * Gets a variable from put request
+     * Return post data from rawBody or urlencoded form data
      *
-     *```php
-     * // Returns value from $_PATCH["user_email"] without sanitizing
-     * $userEmail = $request->getPatch("user_email");
-     *
-     * // Returns value from $_PATCH["user_email"] with sanitizing
-     * $userEmail = $request->getPatch("user_email", "email");
-     *```
-     *
-     * @param string      $collection
-     * @param string|null $name
-     * @param mixed|null  $filters
-     * @param mixed|null  $defaultValue
-     * @param bool        $notAllowEmpty
-     * @param bool        $noRecursive
-     *
-     * @return mixed
+     * @param array|null $data
+     * @return array
      */
-    private function getPatchPut(
-        string $collection,
-        string | null $name = null,
-        mixed $filters = null,
-        mixed $defaultValue = null,
-        bool $notAllowEmpty = false,
-        bool $noRecursive = false
-    ): mixed {
-        $cached = $this->{$collection};
-
-        if (null === $cached) {
-            $contentType = $this->getContentType();
-
-            if (
-                is_string($contentType) &&
-                false !== stripos($contentType, 'json')
-            ) {
-                $cached = $this->getJsonRawBody(true);
-                $cached = !is_array($cached) ? [] : $cached;
+    private function getPostData(array|null $data): array
+    {
+        if (empty($data)) {
+            if ($this->isJson()) {
+                $result = $this->getJsonRawBody(true);
             } else {
-                $cached = [];
-                parse_str($this->getRawBody(), $cached);
+                // this is more like a fallback to application/x-www-form-urlencoded parsing raw body
+                // the web server should technically take care of adding these to $_POST, but who knows...
+                $result = [];
+                parse_str($this->getRawBody(), $result);
             }
-
-            $this->{$collection} = $cached;
+        } else {
+            $result = $data;
         }
 
-        return $this->getHelper(
-            $cached,
-            $name,
-            $filters,
-            $defaultValue,
-            $notAllowEmpty,
-            $noRecursive
-        );
+        // sanity check, if after all parsing is not an array, set an empty one
+        if (!is_array($result)) {
+            $result = [];
+        }
+
+        return $result;
     }
 
     /**

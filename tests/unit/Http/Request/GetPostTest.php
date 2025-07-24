@@ -14,6 +14,7 @@ declare(strict_types=1);
 namespace Phalcon\Tests\Unit\Http\Request;
 
 use Phalcon\Storage\Exception;
+use Phalcon\Tests\Fixtures\Page\Http;
 use Phalcon\Tests\Unit\Http\Helper\AbstractHttpBase;
 
 use function strtolower;
@@ -46,6 +47,44 @@ final class GetPostTest extends AbstractHttpBase
         $expected = $value;
         $actual   = $request->getPost($key);
         $this->assertSame($expected, $actual);
+    }
+
+    /**
+     * Tests Phalcon\Http\Request :: getPost() - json
+     *
+     * @author Phalcon Team <team@phalcon.io>
+     * @since  2025-07-22
+     */
+    public function testHttpRequestGetPostJson(): void
+    {
+        $this->registerStream();
+
+        file_put_contents(
+            Http::STREAM,
+            '{"fruit": "orange", "quantity": "4"}'
+        );
+
+        $_SERVER['REQUEST_METHOD'] = Http::METHOD_POST;
+        $_SERVER['CONTENT_TYPE']   = Http::CONTENT_TYPE_JSON;
+
+        $request = $this->getRequestObject();
+
+        $expected = [
+            'fruit'    => 'orange',
+            'quantity' => '4',
+        ];
+
+        $actual = json_decode(
+            file_get_contents(Http::STREAM),
+            true
+        );
+
+        $this->assertSame($expected, $actual);
+
+        $actual = $request->getPost();
+        $this->assertSame($expected, $actual);
+
+        $this->unregisterStream();
     }
 
     /**

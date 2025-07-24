@@ -167,6 +167,13 @@ final class IsTest extends AbstractHttpBase
                 true,
                 'isSoap',
             ],
+            [
+                [
+                    'CONTENT_TYPE' => 'application/json',
+                ],
+                true,
+                'isJson',
+            ],
         ];
     }
 
