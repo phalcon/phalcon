@@ -8,7 +8,6 @@ define('PROJECT_PATH', $root);
 require_once $root . 'tests/_config/functions.php';
 
 loadIni();
-loadAutoloader($root);
 loadFolders();
 loadDefined();
 
