@@ -133,15 +133,15 @@ class Pgsql extends AbstractAdapter
         array $columns
     ): array {
         $statement = "
-            SELECT 
-                i.column_name AS name, 
+            SELECT
+                i.column_name AS name,
                 d.description AS comment
             FROM pg_catalog.pg_statio_all_tables AS s
-            JOIN pg_catalog.pg_description d 
+            JOIN pg_catalog.pg_description d
                 ON d.objoid = s.relid
-            JOIN information_schema.columns i 
-                ON d.objsubid = i.ordinal_position 
-                AND i.table_schema = s.schemaname 
+            JOIN information_schema.columns i
+                ON d.objsubid = i.ordinal_position
+                AND i.table_schema = s.schemaname
                 AND i.table_name = s.relname
             WHERE i.table_schema = :schema
             AND i.table_name = :table

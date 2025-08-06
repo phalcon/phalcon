@@ -120,7 +120,7 @@ class Debug
     {
         $template = "
     <link href='" . $this->uri . "%s'
-          rel='stylesheet' 
+          rel='stylesheet'
           type='text/css' />";
 
         return sprintf($template, 'assets/jquery-ui/themes/ui-lightness/jquery-ui.min.css')
@@ -136,7 +136,7 @@ class Debug
     public function getJsSources(): string
     {
         $template = "
-    <script type='application/javascript' 
+    <script type='application/javascript'
             src='" . $this->uri . "%s'></script>";
 
         return sprintf($template, 'assets/jquery/dist/jquery.min.js')
@@ -341,7 +341,7 @@ class Debug
              * Create the tabs in the page
              */
             $html .= "
-            
+
     <div class='error-info'>
         <div id='tabs'>
             <ul>
@@ -818,7 +818,7 @@ class Debug
                     $lastLine = ($afterLine > $numberLines) ? $numberLines : $afterLine;
 
 
-                    $html .= " 
+                    $html .= "
                         <pre class='prettyprint highlight:$firstLine:$line linenums:$firstLine . '>";
                 } else {
                     $firstLine = 1;
@@ -906,7 +906,7 @@ class Debug
     private function printBacktrace(Throwable $exception): string
     {
         $html = "
-        
+
         <div id='backtrace'>
             <table style='border-collapse: collapse; border-spacing: 0; text-align=center; width:100%'>
                 <tbody>";
@@ -1030,7 +1030,7 @@ class Debug
 
         return "
         <div id='$divId'>
-            <table style='border-collapse: collapse; border-spacing: 0; text-align: center' 
+            <table style='border-collapse: collapse; border-spacing: 0; text-align: center'
                    class='superglobal-detail'>
                 <thead>
                 <tr>
