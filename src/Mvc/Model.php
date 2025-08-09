@@ -2790,11 +2790,7 @@ abstract class Model extends AbstractInjectionAware implements
      */
     public function readAttribute(string $attribute): mixed
     {
-        if (!isset($this->$attribute)) {
-            return null;
-        }
-
-        return $this->$attribute;
+        return $this->$attribute ?? null;
     }
 
     /**
