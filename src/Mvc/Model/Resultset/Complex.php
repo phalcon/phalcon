@@ -71,15 +71,11 @@ class Complex extends Resultset implements ResultsetInterface
          */
         $records = $this->toArray();
 
-        $cache       = $this->cache;
-        $columnTypes = $this->columnTypes;
-        $hydrateMode = $this->hydrateMode;
-
         return [
-            "cache"       => $cache,
+            "cache"       => $this->cache,
             "rows"        => $records,
-            "columnTypes" => $columnTypes,
-            "hydrateMode" => $hydrateMode,
+            "columnTypes" => $this->columnTypes,
+            "hydrateMode" => $this->hydrateMode,
         ];
     }
 
