@@ -406,38 +406,40 @@ class ServerRequestFactory implements
         $serverArray = $server->toArray();
 
         foreach ($serverArray as $key => $value) {
-            if ("" !== $value) {
+            if ("" === $value) {
+                continue;
+            }
+
+            /**
+             * Apache prefixes environment variables with REDIRECT_
+             * if they are added by rewrite rules
+             */
+            if (str_starts_with($key, "REDIRECT_")) {
+                $key = substr($key, 9);
                 /**
-                 * Apache prefixes environment variables with REDIRECT_
-                 * if they are added by rewrite rules
+                 * We will not overwrite existing variables with the
+                 * prefixed versions, though
                  */
-                if (str_starts_with($key, "REDIRECT_")) {
-                    $key = substr($key, 9);
-                    /**
-                     * We will not overwrite existing variables with the
-                     * prefixed versions, though
-                     */
-                    if (true === $server->has($key)) {
-                        continue;
-                    }
-                }
-
-                if (str_starts_with($key, "HTTP_")) {
-                    $name = str_replace(
-                        "_",
-                        "-",
-                        strtolower(substr($key, 5))
-                    );
-
-                    $headers->set($name, $value);
+                if (true === $server->has($key)) {
                     continue;
                 }
+            }
 
-                if (str_starts_with($key, "CONTENT_")) {
-                    $name = "content-" . strtolower(substr($key, 8));
+            if (str_starts_with($key, "HTTP_")) {
+                $name = str_replace(
+                    "_",
+                    "-",
+                    strtolower(substr($key, 5))
+                );
 
-                    $headers->set($name, $value);
-                }
+                $headers->set($name, $value);
+                continue;
+            }
+
+            if (str_starts_with($key, "CONTENT_")) {
+                $name = "content-" . strtolower(substr($key, 8));
+
+                $headers->set($name, $value);
             }
         }
 
