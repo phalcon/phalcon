@@ -16,7 +16,7 @@ namespace Phalcon\Tests\Unit\Mvc\Micro;
 use Phalcon\Mvc\Micro;
 use Phalcon\Tests\AbstractUnitTestCase;
 
-class HandleTest extends AbstractUnitTestCase
+final class HandleTest extends AbstractUnitTestCase
 {
     /**
      * Tests Phalcon\Mvc\Micro :: handle()

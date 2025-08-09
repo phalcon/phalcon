@@ -15,7 +15,7 @@ namespace Phalcon\Tests\Unit\Mvc\Micro;
 
 use Phalcon\Tests\AbstractUnitTestCase;
 
-class SetActiveHandlerTest extends AbstractUnitTestCase
+final class SetActiveHandlerTest extends AbstractUnitTestCase
 {
     /**
      * Tests Phalcon\Mvc\Micro :: setActiveHandler()

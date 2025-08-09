@@ -26,7 +26,7 @@ use Phalcon\Tests\AbstractUnitTestCase;
 use function restore_error_handler;
 use function set_error_handler;
 
-class GetServiceTest extends AbstractUnitTestCase
+final class GetServiceTest extends AbstractUnitTestCase
 {
     /**
      * Tests Phalcon\Mvc\Micro :: getService()

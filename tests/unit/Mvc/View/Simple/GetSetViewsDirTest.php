@@ -20,7 +20,7 @@ use function dataDir;
 
 use const DIRECTORY_SEPARATOR;
 
-class GetSetViewsDirTest extends AbstractUnitTestCase
+final class GetSetViewsDirTest extends AbstractUnitTestCase
 {
     /**
      * Tests Phalcon\Mvc\View\Simple :: getViewsDir()/setViewsDir()

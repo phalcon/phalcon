@@ -18,7 +18,7 @@ use Phalcon\Mvc\Micro\Collection;
 use Phalcon\Tests\Fixtures\Micro\HttpMethodHandler;
 use Phalcon\Tests\AbstractUnitTestCase;
 
-class PostTest extends AbstractUnitTestCase
+final class PostTest extends AbstractUnitTestCase
 {
     /**
      * Tests Phalcon\Mvc\Micro\Collection :: post()

@@ -15,7 +15,7 @@ namespace Phalcon\Tests\Unit\Mvc\View\Engine\Volt\Compiler;
 
 use Phalcon\Tests\AbstractUnitTestCase;
 
-class GetOptionTest extends AbstractUnitTestCase
+final class GetOptionTest extends AbstractUnitTestCase
 {
     /**
      * Tests Phalcon\Mvc\View\Engine\Volt\Compiler :: getOption()

@@ -21,7 +21,7 @@ use Phalcon\Tests\Fixtures\Micro\MyMiddleware;
 use Phalcon\Tests\Fixtures\Micro\MyMiddlewareStop;
 use Phalcon\Tests\AbstractUnitTestCase;
 
-class AfterBindingTest extends AbstractUnitTestCase
+final class AfterBindingTest extends AbstractUnitTestCase
 {
     /**
      * Tests after binding event

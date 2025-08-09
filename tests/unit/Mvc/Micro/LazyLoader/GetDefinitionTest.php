@@ -15,7 +15,7 @@ namespace Phalcon\Tests\Unit\Mvc\Micro\LazyLoader;
 
 use Phalcon\Tests\AbstractUnitTestCase;
 
-class GetDefinitionTest extends AbstractUnitTestCase
+final class GetDefinitionTest extends AbstractUnitTestCase
 {
     /**
      * Tests Phalcon\Mvc\Micro\LazyLoader :: getDefinition()

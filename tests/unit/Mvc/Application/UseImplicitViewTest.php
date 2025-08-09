@@ -15,7 +15,7 @@ namespace Phalcon\Tests\Unit\Mvc\Application;
 
 use Phalcon\Tests\AbstractUnitTestCase;
 
-class UseImplicitViewTest extends AbstractUnitTestCase
+final class UseImplicitViewTest extends AbstractUnitTestCase
 {
     /**
      * Tests Phalcon\Mvc\Application :: useImplicitView()

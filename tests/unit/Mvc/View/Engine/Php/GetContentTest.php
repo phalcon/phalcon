@@ -17,7 +17,7 @@ use Phalcon\Mvc\View;
 use Phalcon\Mvc\View\Engine\Php;
 use Phalcon\Tests\AbstractUnitTestCase;
 
-class GetContentTest extends AbstractUnitTestCase
+final class GetContentTest extends AbstractUnitTestCase
 {
     /**
      * Tests Phalcon\Mvc\View\Engine\Php :: getContent()

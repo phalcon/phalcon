@@ -19,7 +19,7 @@ use Phalcon\Tests\Unit\Mvc\Dispatcher\Helper\BaseDispatcher;
 /**
  * @todo    : refactor
  */
-class DispatcherInitializeMethodTest extends BaseDispatcher
+final class DispatcherInitializeMethodTest extends BaseDispatcher
 {
     /**
      * Tests the forwarding in the initialize method

@@ -16,7 +16,7 @@ namespace Phalcon\Tests\Unit\Tag;
 use Phalcon\Tag;
 use PHPUnit\Framework\Attributes\Test;
 
-class TextAreaTest extends AbstractTagSetup
+final class TextAreaTest extends AbstractTagSetup
 {
     /**
      * Tests Phalcon\Tag :: textArea() - array as a parameter

@@ -18,7 +18,7 @@ use Phalcon\Di\ServiceInterface;
 use Phalcon\Html\Escaper;
 use Phalcon\Tests\AbstractUnitTestCase;
 
-class ConstructTest extends AbstractUnitTestCase
+final class ConstructTest extends AbstractUnitTestCase
 {
     /**
      * Unit Tests Phalcon\Di\Service :: __construct()

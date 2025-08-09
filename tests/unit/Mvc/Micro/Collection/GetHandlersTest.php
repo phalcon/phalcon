@@ -15,7 +15,7 @@ namespace Phalcon\Tests\Unit\Mvc\Micro\Collection;
 
 use Phalcon\Tests\AbstractUnitTestCase;
 
-class GetHandlersTest extends AbstractUnitTestCase
+final class GetHandlersTest extends AbstractUnitTestCase
 {
     /**
      * Tests Phalcon\Mvc\Micro\Collection :: getHandlers()

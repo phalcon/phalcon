@@ -16,7 +16,7 @@ namespace Phalcon\Tests\Unit\Mvc\View\Simple;
 use Phalcon\Mvc\View\Simple;
 use Phalcon\Tests\AbstractUnitTestCase;
 
-class UnderscoreGetSetTest extends AbstractUnitTestCase
+final class UnderscoreGetSetTest extends AbstractUnitTestCase
 {
     /**
      * Tests Phalcon\Mvc\View\Simple :: __get()/__set()

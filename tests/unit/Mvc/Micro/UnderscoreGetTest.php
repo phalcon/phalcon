@@ -15,7 +15,7 @@ namespace Phalcon\Tests\Unit\Mvc\Micro;
 
 use Phalcon\Tests\AbstractUnitTestCase;
 
-class UnderscoreGetTest extends AbstractUnitTestCase
+final class UnderscoreGetTest extends AbstractUnitTestCase
 {
     /**
      * Tests Phalcon\Mvc\Micro :: __get()

@@ -16,7 +16,7 @@ namespace Phalcon\Tests\Unit\Tag;
 use Phalcon\Tag;
 use PHPUnit\Framework\Attributes\Test;
 
-class RadioFieldTest extends AbstractTagSetup
+final class RadioFieldTest extends AbstractTagSetup
 {
     /**
      * Tests Phalcon\Tag :: radioField()

@@ -16,7 +16,7 @@ namespace Phalcon\Tests\Unit\Tag;
 use Phalcon\Tag;
 use PHPUnit\Framework\Attributes\Test;
 
-class RenderAttributesTest extends AbstractTagSetup
+final class RenderAttributesTest extends AbstractTagSetup
 {
     /**
      * Tests Phalcon\Tag :: renderAttributes()

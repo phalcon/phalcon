@@ -17,7 +17,7 @@ use Phalcon\Tag;
 use PHPUnit\Framework\Attributes\Test;
 use Phalcon\Tests\AbstractUnitTestCase;
 
-class SetTitleTest extends AbstractUnitTestCase
+final class SetTitleTest extends AbstractUnitTestCase
 {
     /**
      * Tests Phalcon\Tag :: setTitle()

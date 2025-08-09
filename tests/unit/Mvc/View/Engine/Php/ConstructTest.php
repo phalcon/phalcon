@@ -15,7 +15,7 @@ namespace Phalcon\Tests\Unit\Mvc\View\Engine\Php;
 
 use Phalcon\Tests\AbstractUnitTestCase;
 
-class ConstructTest extends AbstractUnitTestCase
+final class ConstructTest extends AbstractUnitTestCase
 {
     /**
      * Tests Phalcon\Mvc\View\Engine\Php :: __construct()

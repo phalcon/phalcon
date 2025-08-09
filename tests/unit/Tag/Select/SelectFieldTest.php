@@ -17,7 +17,7 @@ use Phalcon\Tag\Select;
 use Phalcon\Tests\Unit\Tag\AbstractTagSetup;
 use PHPUnit\Framework\Attributes\Test;
 
-class SelectFieldTest extends AbstractTagSetup
+final class SelectFieldTest extends AbstractTagSetup
 {
     /**
      * Tests Phalcon\Tag\Select :: selectField()

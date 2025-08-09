@@ -17,7 +17,7 @@ use Phalcon\Mvc\View;
 use Phalcon\Tests\Fixtures\Traits\ViewTrait;
 use Phalcon\Tests\AbstractUnitTestCase;
 
-class UnderscoreIssetTest extends AbstractUnitTestCase
+final class UnderscoreIssetTest extends AbstractUnitTestCase
 {
     use ViewTrait;
 

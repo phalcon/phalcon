@@ -37,7 +37,7 @@ use Phalcon\Mvc\Url;
 use Phalcon\Support\HelperFactory;
 use Phalcon\Tests\AbstractUnitTestCase;
 
-class ConstructTest extends AbstractUnitTestCase
+final class ConstructTest extends AbstractUnitTestCase
 {
     /**
      * @return string[][]

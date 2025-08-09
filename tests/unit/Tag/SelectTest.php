@@ -15,7 +15,7 @@ namespace Phalcon\Tests\Unit\Tag;
 
 use PHPUnit\Framework\Attributes\Test;
 
-class SelectTest extends AbstractTagSetup
+final class SelectTest extends AbstractTagSetup
 {
     /**
      * Tests Phalcon\Tag :: select()

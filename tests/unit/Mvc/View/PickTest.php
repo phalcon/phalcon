@@ -20,7 +20,7 @@ use Phalcon\Tests\AbstractUnitTestCase;
 
 use function dataDir;
 
-class PickTest extends AbstractUnitTestCase
+final class PickTest extends AbstractUnitTestCase
 {
     use DiTrait;
 

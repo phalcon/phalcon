@@ -18,7 +18,7 @@ use Phalcon\Tests\AbstractUnitTestCase;
 /**
  * Class AddExtensionTest extends AbstractUnitTestCase
  */
-class AddExtensionTest extends AbstractUnitTestCase
+final class AddExtensionTest extends AbstractUnitTestCase
 {
     /**
      * Tests Phalcon\Mvc\View\Engine\Volt\Compiler :: addExtension()

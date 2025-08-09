@@ -15,7 +15,7 @@ namespace Phalcon\Tests\Unit\Mvc\Micro\LazyLoader;
 
 use Phalcon\Tests\AbstractUnitTestCase;
 
-class ConstructTest extends AbstractUnitTestCase
+final class ConstructTest extends AbstractUnitTestCase
 {
     /**
      * Tests Phalcon\Mvc\Micro\LazyLoader :: __construct()

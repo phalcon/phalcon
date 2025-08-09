@@ -15,7 +15,7 @@ namespace Phalcon\Tests\Unit\Mvc\View\Engine\Volt\Compiler;
 
 use Phalcon\Tests\AbstractUnitTestCase;
 
-class CompileReturnTest extends AbstractUnitTestCase
+final class CompileReturnTest extends AbstractUnitTestCase
 {
     /**
      * Tests Phalcon\Mvc\View\Engine\Volt\Compiler :: compileReturn()

@@ -17,7 +17,7 @@ use Phalcon\Di\Service;
 use Phalcon\Html\Escaper;
 use Phalcon\Tests\AbstractUnitTestCase;
 
-class GetParameterTest extends AbstractUnitTestCase
+final class GetParameterTest extends AbstractUnitTestCase
 {
     /**
      * Unit Tests Phalcon\Di\Service :: getParameter() - empty

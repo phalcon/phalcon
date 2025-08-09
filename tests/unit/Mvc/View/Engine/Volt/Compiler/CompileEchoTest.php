@@ -15,7 +15,7 @@ namespace Phalcon\Tests\Unit\Mvc\View\Engine\Volt\Compiler;
 
 use Phalcon\Tests\AbstractUnitTestCase;
 
-class CompileEchoTest extends AbstractUnitTestCase
+final class CompileEchoTest extends AbstractUnitTestCase
 {
     /**
      * Tests Phalcon\Mvc\View\Engine\Volt\Compiler :: compileEcho()

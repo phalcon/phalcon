@@ -15,7 +15,7 @@ namespace Phalcon\Tests\Unit\Mvc\View\Engine\Volt;
 
 use Phalcon\Tests\AbstractUnitTestCase;
 
-class IsIncludedTest extends AbstractUnitTestCase
+final class IsIncludedTest extends AbstractUnitTestCase
 {
     /**
      * Tests Phalcon\Mvc\View\Engine\Volt :: isIncluded()

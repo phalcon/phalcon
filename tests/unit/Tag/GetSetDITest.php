@@ -18,7 +18,7 @@ use Phalcon\Tag;
 use PHPUnit\Framework\Attributes\Test;
 use Phalcon\Tests\AbstractUnitTestCase;
 
-class GetSetDITest extends AbstractUnitTestCase
+final class GetSetDITest extends AbstractUnitTestCase
 {
     /**
      * Tests Phalcon\Tag :: getDI() / setDI()

@@ -18,7 +18,7 @@ use Phalcon\Mvc\Micro\Collection;
 use Phalcon\Tests\Fixtures\Micro\HttpMethodHandler;
 use Phalcon\Tests\AbstractUnitTestCase;
 
-class OptionsTest extends AbstractUnitTestCase
+final class OptionsTest extends AbstractUnitTestCase
 {
     /**
      * Tests Phalcon\Mvc\Micro\Collection :: options()

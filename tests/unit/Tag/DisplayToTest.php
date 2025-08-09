@@ -16,7 +16,7 @@ namespace Phalcon\Tests\Unit\Tag;
 use Phalcon\Tag;
 use PHPUnit\Framework\Attributes\Test;
 
-class DisplayToTest extends AbstractTagSetup
+final class DisplayToTest extends AbstractTagSetup
 {
     /**
      * Tests Phalcon\Tag :: displayTo()

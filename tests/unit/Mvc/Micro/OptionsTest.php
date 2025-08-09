@@ -16,7 +16,7 @@ namespace Phalcon\Tests\Unit\Mvc\Micro;
 use Phalcon\Mvc\Micro;
 use Phalcon\Tests\AbstractUnitTestCase;
 
-class OptionsTest extends AbstractUnitTestCase
+final class OptionsTest extends AbstractUnitTestCase
 {
     /**
      * Tests Phalcon\Mvc\Micro :: options()

@@ -20,7 +20,7 @@ use Phalcon\Mvc\Micro;
 use Phalcon\Mvc\Router;
 use Phalcon\Tests\AbstractUnitTestCase;
 
-class HasServiceTest extends AbstractUnitTestCase
+final class HasServiceTest extends AbstractUnitTestCase
 {
     /**
      * Tests Phalcon\Mvc\Micro :: hasService()

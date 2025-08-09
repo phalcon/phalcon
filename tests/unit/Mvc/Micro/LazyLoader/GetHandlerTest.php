@@ -15,7 +15,7 @@ namespace Phalcon\Tests\Unit\Mvc\Micro\LazyLoader;
 
 use Phalcon\Tests\AbstractUnitTestCase;
 
-class GetHandlerTest extends AbstractUnitTestCase
+final class GetHandlerTest extends AbstractUnitTestCase
 {
     /**
      * Tests Phalcon\Mvc\Micro\LazyLoader :: getHandler()

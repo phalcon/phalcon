@@ -15,7 +15,7 @@ namespace Phalcon\Tests\Unit\Mvc\Dispatcher;
 
 use Phalcon\Tests\AbstractUnitTestCase;
 
-class SetReturnedValueTest extends AbstractUnitTestCase
+final class SetReturnedValueTest extends AbstractUnitTestCase
 {
     /**
      * Tests Phalcon\Mvc\Dispatcher :: setReturnedValue()

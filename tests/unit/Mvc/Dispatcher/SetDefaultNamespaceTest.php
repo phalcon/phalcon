@@ -15,7 +15,7 @@ namespace Phalcon\Tests\Unit\Mvc\Dispatcher;
 
 use Phalcon\Tests\AbstractUnitTestCase;
 
-class SetDefaultNamespaceTest extends AbstractUnitTestCase
+final class SetDefaultNamespaceTest extends AbstractUnitTestCase
 {
     /**
      * Tests Phalcon\Mvc\Dispatcher :: setDefaultNamespace()

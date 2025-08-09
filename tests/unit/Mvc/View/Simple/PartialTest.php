@@ -19,7 +19,7 @@ use Phalcon\Tests\AbstractUnitTestCase;
 use function ob_end_clean;
 use function ob_start;
 
-class PartialTest extends AbstractUnitTestCase
+final class PartialTest extends AbstractUnitTestCase
 {
     use DiTrait;
 

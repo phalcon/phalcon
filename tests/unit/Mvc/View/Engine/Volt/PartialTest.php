@@ -15,7 +15,7 @@ namespace Phalcon\Tests\Unit\Mvc\View\Engine\Volt;
 
 use Phalcon\Tests\AbstractUnitTestCase;
 
-class PartialTest extends AbstractUnitTestCase
+final class PartialTest extends AbstractUnitTestCase
 {
     /**
      * Tests Phalcon\Mvc\View\Engine\Volt :: partial()

@@ -23,7 +23,7 @@ use Phalcon\Tests\AbstractUnitTestCase;
 /**
  * @todo    : refactor
  */
-class ForwardTest extends AbstractUnitTestCase
+final class ForwardTest extends AbstractUnitTestCase
 {
     /**
      * @issue https://github.com/phalcon/cphalcon/issues/11819

@@ -19,7 +19,7 @@ use Phalcon\Tests\AbstractUnitTestCase;
 
 use function chr;
 
-class ConvertEncodingTest extends AbstractUnitTestCase
+final class ConvertEncodingTest extends AbstractUnitTestCase
 {
     /**
      * Tests Phalcon\Mvc\View\Engine\Volt :: convertEncoding()

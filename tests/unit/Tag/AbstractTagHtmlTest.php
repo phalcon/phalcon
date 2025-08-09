@@ -17,7 +17,7 @@ use Phalcon\Tag;
 use PHPUnit\Framework\Attributes\DataProvider;
 use PHPUnit\Framework\Attributes\Test;
 
-class AbstractTagHtmlTest extends AbstractTagSetup
+final class AbstractTagHtmlTest extends AbstractTagSetup
 {
     /**
      * @return array[]

@@ -15,7 +15,7 @@ namespace Phalcon\Tests\Unit\Mvc\Dispatcher;
 
 use Phalcon\Tests\AbstractUnitTestCase;
 
-class GetParamsTest extends AbstractUnitTestCase
+final class GetParamsTest extends AbstractUnitTestCase
 {
     /**
      * Tests Phalcon\Mvc\Dispatcher :: getParams()

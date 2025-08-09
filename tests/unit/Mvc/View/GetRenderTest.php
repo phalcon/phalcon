@@ -19,7 +19,7 @@ use Phalcon\Tests\AbstractUnitTestCase;
 
 use function dataDir;
 
-class GetRenderTest extends AbstractUnitTestCase
+final class GetRenderTest extends AbstractUnitTestCase
 {
     /**
      * Tests Phalcon\Mvc\View :: getRender()

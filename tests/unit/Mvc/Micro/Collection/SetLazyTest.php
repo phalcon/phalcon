@@ -16,7 +16,7 @@ namespace Phalcon\Tests\Unit\Mvc\Micro\Collection;
 use Phalcon\Mvc\Micro\Collection;
 use Phalcon\Tests\AbstractUnitTestCase;
 
-class SetLazyTest extends AbstractUnitTestCase
+final class SetLazyTest extends AbstractUnitTestCase
 {
     public static function booleanProvider(): array
     {

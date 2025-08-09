@@ -15,7 +15,7 @@ namespace Phalcon\Tests\Unit\Mvc\View\Engine\Volt;
 
 use Phalcon\Tests\AbstractUnitTestCase;
 
-class LengthTest extends AbstractUnitTestCase
+final class LengthTest extends AbstractUnitTestCase
 {
     /**
      * Tests Phalcon\Mvc\View\Engine\Volt :: length()

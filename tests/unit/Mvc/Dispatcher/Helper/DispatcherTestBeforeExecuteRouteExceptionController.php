@@ -21,7 +21,7 @@ use Phalcon\Mvc\Controller;
  * through the world-wide-web, please send an email to license@phalcon.io
  * so that we can send you a copy immediately.
  */
-class DispatcherTestBeforeExecuteRouteExceptionController extends Controller
+final class DispatcherTestBeforeExecuteRouteExceptionController extends Controller
 {
     public function beforeExecuteRoute()
     {

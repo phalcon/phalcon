@@ -19,7 +19,7 @@ use Phalcon\Tests\AbstractUnitTestCase;
 
 use function dataDir;
 
-class GetBasePathTest extends AbstractUnitTestCase
+final class GetBasePathTest extends AbstractUnitTestCase
 {
     /**
      * Tests Phalcon\Mvc\View :: getBasePath()

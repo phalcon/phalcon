@@ -18,7 +18,7 @@ use PHPUnit\Framework\Attributes\Test;
 
 use function uniqid;
 
-class GetHasValueTest extends AbstractTagSetup
+final class GetHasValueTest extends AbstractTagSetup
 {
     /**
      * Tests Phalcon\Tag :: getValue()/hasValue()

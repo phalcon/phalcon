@@ -16,7 +16,7 @@ namespace Phalcon\Tests\Unit\Mvc\Dispatcher;
 use Phalcon\Mvc\Dispatcher\Exception;
 use Phalcon\Tests\Unit\Mvc\Dispatcher\Helper\BaseDispatcher;
 
-class GetHandlerSuffixTest extends BaseDispatcher
+final class GetHandlerSuffixTest extends BaseDispatcher
 {
     /**
      * Tests Phalcon\Mvc\Dispatcher :: getHandlerSuffix()

@@ -15,7 +15,7 @@ namespace Phalcon\Tests\Unit\Mvc\View;
 
 use Phalcon\Tests\AbstractUnitTestCase;
 
-class GetPartialTest extends AbstractUnitTestCase
+final class GetPartialTest extends AbstractUnitTestCase
 {
     /**
      * Tests Phalcon\Mvc\View :: getPartial()

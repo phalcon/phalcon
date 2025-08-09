@@ -17,7 +17,7 @@ use Phalcon\Tag;
 use PHPUnit\Framework\Attributes\Test;
 use Phalcon\Tests\AbstractUnitTestCase;
 
-class PrependTitleTest extends AbstractUnitTestCase
+final class PrependTitleTest extends AbstractUnitTestCase
 {
     /**
      * Tests Phalcon\Tag :: prependTitle()

@@ -15,7 +15,7 @@ namespace Phalcon\Tests\Unit\Mvc\View\Simple;
 
 use Phalcon\Tests\AbstractUnitTestCase;
 
-class GetActiveRenderPathTest extends AbstractUnitTestCase
+final class GetActiveRenderPathTest extends AbstractUnitTestCase
 {
     /**
      * Tests Phalcon\Mvc\View\Simple :: getActiveRenderPath()

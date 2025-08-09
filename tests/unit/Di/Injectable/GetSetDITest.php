@@ -17,7 +17,7 @@ use Phalcon\Di\Di;
 use Phalcon\Tests\Fixtures\Di\InjectableComponent;
 use Phalcon\Tests\AbstractUnitTestCase;
 
-class GetSetDITest extends AbstractUnitTestCase
+final class GetSetDITest extends AbstractUnitTestCase
 {
     /**
      * Unit Tests Phalcon\Di\Injectable :: getDI()/setDI()

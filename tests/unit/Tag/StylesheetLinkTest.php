@@ -16,7 +16,7 @@ namespace Phalcon\Tests\Unit\Tag;
 use Phalcon\Tag;
 use PHPUnit\Framework\Attributes\Test;
 
-class StylesheetLinkTest extends AbstractTagSetup
+final class StylesheetLinkTest extends AbstractTagSetup
 {
     /**
      * Tests Phalcon\Tag :: stylesheetLink() - array parameter for a local link

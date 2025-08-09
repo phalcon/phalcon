@@ -16,7 +16,7 @@ namespace Phalcon\Tests\Unit\Mvc\Dispatcher;
 use Phalcon\Tests\Unit\Mvc\Dispatcher\Helper\BaseDispatcher;
 use Phalcon\Tests\Unit\Mvc\Dispatcher\Helper\DispatcherTestDefaultController;
 
-class CallActionMethodTest extends BaseDispatcher
+final class CallActionMethodTest extends BaseDispatcher
 {
     /**
      * Tests Phalcon\Mvc\Dispatcher :: callActionMethod()

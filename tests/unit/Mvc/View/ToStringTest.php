@@ -19,7 +19,7 @@ use Phalcon\Tests\AbstractUnitTestCase;
 
 use function dataDir;
 
-class ToStringTest extends AbstractUnitTestCase
+final class ToStringTest extends AbstractUnitTestCase
 {
     /**
      * Tests Phalcon\Mvc\View :: toString()

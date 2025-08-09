@@ -16,7 +16,7 @@ namespace Phalcon\Tests\Unit\Tag;
 use Phalcon\Tag;
 use PHPUnit\Framework\Attributes\Test;
 
-class SetDefaultsTest extends AbstractTagSetup
+final class SetDefaultsTest extends AbstractTagSetup
 {
     /**
      * Tests Phalcon\Tag :: setDefaults()

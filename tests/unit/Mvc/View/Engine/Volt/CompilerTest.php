@@ -38,7 +38,7 @@ use function file_put_contents;
  *
  * Test Compiler template engine
  */
-class CompilerTest extends AbstractUnitTestCase
+final class CompilerTest extends AbstractUnitTestCase
 {
     /**
      * Test to correct create content

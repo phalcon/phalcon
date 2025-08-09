@@ -15,7 +15,7 @@ namespace Phalcon\Tests\Unit\Mvc\Application;
 
 use Phalcon\Tests\AbstractUnitTestCase;
 
-class GetDefaultModuleTest extends AbstractUnitTestCase
+final class GetDefaultModuleTest extends AbstractUnitTestCase
 {
     /**
      * Tests Phalcon\Mvc\Application :: getDefaultModule()

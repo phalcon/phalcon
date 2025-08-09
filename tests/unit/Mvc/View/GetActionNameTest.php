@@ -16,7 +16,7 @@ namespace Phalcon\Tests\Unit\Mvc\View;
 use Phalcon\Tests\Fixtures\Traits\DiTrait;
 use Phalcon\Tests\AbstractUnitTestCase;
 
-class GetActionNameTest extends AbstractUnitTestCase
+final class GetActionNameTest extends AbstractUnitTestCase
 {
     use DiTrait;
 

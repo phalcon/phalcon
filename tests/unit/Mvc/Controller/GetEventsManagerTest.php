@@ -18,7 +18,7 @@ use Phalcon\Tests\Controllers\ViewRequestController;
 use Phalcon\Tests\Fixtures\Traits\DiTrait;
 use Phalcon\Tests\AbstractUnitTestCase;
 
-class GetEventsManagerTest extends AbstractUnitTestCase
+final class GetEventsManagerTest extends AbstractUnitTestCase
 {
     use DiTrait;
 

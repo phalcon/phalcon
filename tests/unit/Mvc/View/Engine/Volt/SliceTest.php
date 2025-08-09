@@ -15,7 +15,7 @@ namespace Phalcon\Tests\Unit\Mvc\View\Engine\Volt;
 
 use Phalcon\Tests\AbstractUnitTestCase;
 
-class SliceTest extends AbstractUnitTestCase
+final class SliceTest extends AbstractUnitTestCase
 {
     /**
      * Tests Phalcon\Mvc\View\Engine\Volt :: slice()

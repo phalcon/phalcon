@@ -15,7 +15,7 @@ namespace Phalcon\Tests\Unit\Tag;
 
 use PHPUnit\Framework\Attributes\Test;
 
-class CheckFieldTest extends AbstractTagSetup
+final class CheckFieldTest extends AbstractTagSetup
 {
     /**
      * Tests Phalcon\Tag :: weekField() - string as a parameter

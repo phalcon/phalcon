@@ -20,7 +20,7 @@ use Phalcon\Mvc\Controller;
  * through the world-wide-web, please send an email to license@phalcon.io
  * so that we can send you a copy immediately.
  */
-class DispatcherTestDefaultTwoController extends Controller
+final class DispatcherTestDefaultTwoController extends Controller
 {
     public function afterExecuteRoute()
     {

@@ -18,7 +18,7 @@ use Phalcon\Tests\Fixtures\Di\SomeComponent;
 use Phalcon\Tests\Fixtures\Di\SomeServiceProvider;
 use Phalcon\Tests\AbstractUnitTestCase;
 
-class RegisterTest extends AbstractUnitTestCase
+final class RegisterTest extends AbstractUnitTestCase
 {
     /**
      * Unit Tests Phalcon\Di :: register()

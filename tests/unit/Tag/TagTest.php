@@ -18,7 +18,7 @@ use PHPUnit\Framework\Attributes\Test;
 use Phalcon\Tests\Fixtures\Traits\DiTrait;
 use Phalcon\Tests\AbstractUnitTestCase;
 
-class TagTest extends AbstractUnitTestCase
+final class TagTest extends AbstractUnitTestCase
 {
     use DiTrait;
 

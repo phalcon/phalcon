@@ -15,7 +15,7 @@ namespace Phalcon\Tests\Unit\Mvc\Micro;
 
 use Phalcon\Tests\AbstractUnitTestCase;
 
-class MountTest extends AbstractUnitTestCase
+final class MountTest extends AbstractUnitTestCase
 {
     /**
      * Tests Phalcon\Mvc\Micro :: mount()

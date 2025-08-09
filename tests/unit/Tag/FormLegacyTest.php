@@ -16,7 +16,7 @@ namespace Phalcon\Tests\Unit\Tag;
 use Phalcon\Tag;
 use PHPUnit\Framework\Attributes\Test;
 
-class FormLegacyTest extends AbstractTagSetup
+final class FormLegacyTest extends AbstractTagSetup
 {
     /**
      * Tests Phalcon\Tag :: form()

@@ -16,7 +16,7 @@ namespace Phalcon\Tests\Unit\Tag;
 use Phalcon\Tag;
 use PHPUnit\Framework\Attributes\Test;
 
-class AppendTitleTest extends AbstractTagSetup
+final class AppendTitleTest extends AbstractTagSetup
 {
     /**
      * Tests Phalcon\Tag :: appendTitle()

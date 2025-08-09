@@ -16,7 +16,7 @@ namespace Phalcon\Tests\Unit\Tag;
 use Phalcon\Tag;
 use PHPUnit\Framework\Attributes\Test;
 
-class FriendlyTitleTest extends AbstractTagSetup
+final class FriendlyTitleTest extends AbstractTagSetup
 {
     /**
      * Tests Phalcon\Tag :: friendlyTitle() - string as a parameter lowercase

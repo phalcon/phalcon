@@ -23,7 +23,7 @@ use function dataDir;
 
 use const DIRECTORY_SEPARATOR;
 
-class GetSetRenderLevelTest extends AbstractUnitTestCase
+final class GetSetRenderLevelTest extends AbstractUnitTestCase
 {
     use DiTrait;
 

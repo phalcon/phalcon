@@ -18,7 +18,7 @@ use Phalcon\Http\Response;
 use Phalcon\Mvc\Micro;
 use Phalcon\Tests\AbstractUnitTestCase;
 
-class ErrorTest extends AbstractUnitTestCase
+final class ErrorTest extends AbstractUnitTestCase
 {
     /**
      * Tests Phalcon\Mvc\Micro :: error()

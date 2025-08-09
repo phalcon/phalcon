@@ -17,7 +17,7 @@ use Phalcon\Tests\Fixtures\Traits\DiTrait;
 use Phalcon\Tests\Fixtures\Traits\ViewTrait;
 use Phalcon\Tests\AbstractUnitTestCase;
 
-class RenderTest extends AbstractUnitTestCase
+final class RenderTest extends AbstractUnitTestCase
 {
     use DiTrait;
     use ViewTrait;

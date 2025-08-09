@@ -18,7 +18,7 @@ use Phalcon\Mvc\View;
 use Phalcon\Mvc\View\Engine\Php;
 use Phalcon\Tests\AbstractUnitTestCase;
 
-class GetSetDITest extends AbstractUnitTestCase
+final class GetSetDITest extends AbstractUnitTestCase
 {
     /**
      * Tests Phalcon\Mvc\View\Engine\Php :: getDI() / setDI()

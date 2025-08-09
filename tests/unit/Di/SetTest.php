@@ -19,7 +19,7 @@ use Phalcon\Html\Escaper;
 use Phalcon\Support\Collection;
 use Phalcon\Tests\AbstractUnitTestCase;
 
-class SetTest extends AbstractUnitTestCase
+final class SetTest extends AbstractUnitTestCase
 {
     /**
      * @return array

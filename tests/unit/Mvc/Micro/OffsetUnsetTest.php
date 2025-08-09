@@ -18,7 +18,7 @@ use Phalcon\Html\Escaper;
 use Phalcon\Mvc\Micro;
 use Phalcon\Tests\AbstractUnitTestCase;
 
-class OffsetUnsetTest extends AbstractUnitTestCase
+final class OffsetUnsetTest extends AbstractUnitTestCase
 {
     /**
      * Tests Phalcon\Mvc\Micro :: offsetUnset()

@@ -15,7 +15,7 @@ namespace Phalcon\Tests\Unit\Mvc\View;
 
 use Phalcon\Tests\AbstractUnitTestCase;
 
-class GetRenderLevelTest extends AbstractUnitTestCase
+final class GetRenderLevelTest extends AbstractUnitTestCase
 {
     /**
      * Tests Phalcon\Mvc\View :: getRenderLevel()

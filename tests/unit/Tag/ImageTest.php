@@ -16,7 +16,7 @@ namespace Phalcon\Tests\Unit\Tag;
 use Phalcon\Tag;
 use PHPUnit\Framework\Attributes\Test;
 
-class ImageTest extends AbstractTagSetup
+final class ImageTest extends AbstractTagSetup
 {
     /**
      * Tests Phalcon\Tag :: image() - array as a parameter

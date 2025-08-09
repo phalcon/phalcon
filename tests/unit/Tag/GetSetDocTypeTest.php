@@ -16,7 +16,7 @@ namespace Phalcon\Tests\Unit\Tag;
 use Phalcon\Tag;
 use PHPUnit\Framework\Attributes\Test;
 
-class GetSetDocTypeTest extends AbstractTagSetup
+final class GetSetDocTypeTest extends AbstractTagSetup
 {
     /**
      * Tests Phalcon\Tag :: getDocType() - 1.0 Frameset

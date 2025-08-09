@@ -15,7 +15,7 @@ namespace Phalcon\Tests\Unit\Tag;
 
 use PHPUnit\Framework\Attributes\Test;
 
-class SubmitButtonTest extends AbstractTagSetup
+final class SubmitButtonTest extends AbstractTagSetup
 {
     /**
      * Tests Phalcon\Tag :: submitButton() - array as a parameter

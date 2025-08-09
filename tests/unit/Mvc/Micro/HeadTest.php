@@ -16,7 +16,7 @@ namespace Phalcon\Tests\Unit\Mvc\Micro;
 use Phalcon\Mvc\Micro;
 use Phalcon\Tests\AbstractUnitTestCase;
 
-class HeadTest extends AbstractUnitTestCase
+final class HeadTest extends AbstractUnitTestCase
 {
     /**
      * Tests Phalcon\Mvc\Micro :: head()

@@ -16,7 +16,7 @@ namespace Phalcon\Tests\Unit\Tag;
 use Phalcon\Tag;
 use PHPUnit\Framework\Attributes\Test;
 
-class SelectStaticTest extends AbstractTagSetup
+final class SelectStaticTest extends AbstractTagSetup
 {
     /**
      * Tests Phalcon\Tag :: selectStatic() - array as a parameter

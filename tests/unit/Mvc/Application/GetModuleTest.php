@@ -18,7 +18,7 @@ use Phalcon\Mvc\Application;
 use Phalcon\Tests\Modules\Frontend\Module;
 use Phalcon\Tests\AbstractUnitTestCase;
 
-class GetModuleTest extends AbstractUnitTestCase
+final class GetModuleTest extends AbstractUnitTestCase
 {
     /**
      * Tests Phalcon\Mvc\Application :: getModule()

@@ -19,7 +19,7 @@ use Phalcon\Volt\Exception;
 
 use function is_array;
 
-class ParseTest extends AbstractUnitTestCase
+final class ParseTest extends AbstractUnitTestCase
 {
     public static function getVoltExtendsError(): array
     {

@@ -20,7 +20,7 @@ use Phalcon\Mvc\Controller;
  * through the world-wide-web, please send an email to license@phalcon.io
  * so that we can send you a copy immediately.
  */
-class DispatcherTestBeforeExecuteRouteForwardController extends Controller
+final class DispatcherTestBeforeExecuteRouteForwardController extends Controller
 {
     public function beforeExecuteRoute()
     {

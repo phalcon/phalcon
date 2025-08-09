@@ -19,7 +19,7 @@ use Phalcon\Tests\AbstractUnitTestCase;
 
 use function dataDir;
 
-class HasTest extends AbstractUnitTestCase
+final class HasTest extends AbstractUnitTestCase
 {
     /**
      * Tests Phalcon\Mvc\View :: exists()

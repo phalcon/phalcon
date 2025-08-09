@@ -18,7 +18,7 @@ use Phalcon\Events\Manager;
 use Phalcon\Events\ManagerInterface;
 use Phalcon\Tests\AbstractUnitTestCase;
 
-class GetSetInternalEventsManagerTest extends AbstractUnitTestCase
+final class GetSetInternalEventsManagerTest extends AbstractUnitTestCase
 {
     /**
      * Unit Tests Phalcon\Di\Di ::

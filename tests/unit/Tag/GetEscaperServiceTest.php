@@ -18,7 +18,7 @@ use Phalcon\Html\Escaper\EscaperInterface;
 use Phalcon\Tag;
 use PHPUnit\Framework\Attributes\Test;
 
-class GetEscaperServiceTest extends AbstractTagSetup
+final class GetEscaperServiceTest extends AbstractTagSetup
 {
     /**
      * Tests Phalcon\Tag :: getEscaperService()

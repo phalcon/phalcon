@@ -19,7 +19,7 @@ use Phalcon\Mvc\View\Engine\Volt;
 use Phalcon\Tests\Fixtures\Traits\DiTrait;
 use Phalcon\Tests\AbstractUnitTestCase;
 
-class RegisterEnginesTest extends AbstractUnitTestCase
+final class RegisterEnginesTest extends AbstractUnitTestCase
 {
     use DiTrait;
 

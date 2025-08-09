@@ -21,7 +21,7 @@ use Phalcon\Tests\AbstractUnitTestCase;
 
 use function is_array;
 
-class GetActiveHandlerTest extends AbstractUnitTestCase
+final class GetActiveHandlerTest extends AbstractUnitTestCase
 {
     /**
      * Tests Phalcon\Mvc\Micro :: getActiveHandler()

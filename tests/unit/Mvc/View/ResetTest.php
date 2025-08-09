@@ -15,7 +15,7 @@ namespace Phalcon\Tests\Unit\Mvc\View;
 
 use Phalcon\Tests\AbstractUnitTestCase;
 
-class ResetTest extends AbstractUnitTestCase
+final class ResetTest extends AbstractUnitTestCase
 {
     /**
      * Tests Phalcon\Mvc\View :: reset()

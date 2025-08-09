@@ -18,7 +18,7 @@ use Phalcon\Mvc\Micro\Collection;
 use Phalcon\Tests\Fixtures\Micro\HttpMethodHandler;
 use Phalcon\Tests\AbstractUnitTestCase;
 
-class HeadTest extends AbstractUnitTestCase
+final class HeadTest extends AbstractUnitTestCase
 {
     /**
      * Tests Phalcon\Mvc\Micro\Collection :: head()

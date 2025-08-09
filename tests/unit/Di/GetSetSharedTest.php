@@ -20,7 +20,7 @@ use Phalcon\Tests\AbstractUnitTestCase;
 
 use function spl_object_hash;
 
-class GetSetSharedTest extends AbstractUnitTestCase
+final class GetSetSharedTest extends AbstractUnitTestCase
 {
     /**
      * Tests Phalcon\Di\Di :: getShared()/setShared() - class name

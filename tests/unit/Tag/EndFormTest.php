@@ -16,7 +16,7 @@ namespace Phalcon\Tests\Unit\Tag;
 use Phalcon\Tag;
 use PHPUnit\Framework\Attributes\Test;
 
-class EndFormTest extends AbstractTagSetup
+final class EndFormTest extends AbstractTagSetup
 {
     /**
      * Tests Phalcon\Tag :: endForm()

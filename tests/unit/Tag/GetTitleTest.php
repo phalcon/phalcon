@@ -17,7 +17,7 @@ use Phalcon\Tag;
 use PHPUnit\Framework\Attributes\Test;
 use Phalcon\Tests\AbstractUnitTestCase;
 
-class GetTitleTest extends AbstractUnitTestCase
+final class GetTitleTest extends AbstractUnitTestCase
 {
     /**
      * Tests Phalcon\Tag :: getTitle() - with malicious code

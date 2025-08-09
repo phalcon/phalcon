@@ -27,7 +27,7 @@ use function ob_get_level;
 use function ob_start;
 use function sprintf;
 
-class RenderTest extends AbstractUnitTestCase
+final class RenderTest extends AbstractUnitTestCase
 {
     use DiTrait;
     use ViewTrait;

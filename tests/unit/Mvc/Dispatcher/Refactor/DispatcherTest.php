@@ -23,7 +23,7 @@ use Phalcon\Tests\Unit\Mvc\Dispatcher\Helper\DispatcherTestDefaultTwoController;
 /**
  * @todo    : refactor
  */
-class DispatcherTest extends BaseDispatcher
+final class DispatcherTest extends BaseDispatcher
 {
     /**
      * Tests the forwarding inside a controller's action.

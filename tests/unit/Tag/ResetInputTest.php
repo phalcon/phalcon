@@ -17,7 +17,7 @@ use Phalcon\Tag;
 use PHPUnit\Framework\Attributes\Test;
 use Phalcon\Tests\AbstractUnitTestCase;
 
-class ResetInputTest extends AbstractUnitTestCase
+final class ResetInputTest extends AbstractUnitTestCase
 {
     /**
      * Tests Phalcon\Tag :: resetInput() - displayTo

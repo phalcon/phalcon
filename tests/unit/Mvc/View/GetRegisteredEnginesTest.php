@@ -15,7 +15,7 @@ namespace Phalcon\Tests\Unit\Mvc\View;
 
 use Phalcon\Tests\AbstractUnitTestCase;
 
-class GetRegisteredEnginesTest extends AbstractUnitTestCase
+final class GetRegisteredEnginesTest extends AbstractUnitTestCase
 {
     /**
      * Tests Phalcon\Mvc\View :: getRegisteredEngines()

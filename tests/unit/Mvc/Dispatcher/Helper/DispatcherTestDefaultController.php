@@ -21,7 +21,7 @@ use Phalcon\Mvc\Controller;
  * through the world-wide-web, please send an email to license@phalcon.io
  * so that we can send you a copy immediately.
  */
-class DispatcherTestDefaultController extends Controller
+final class DispatcherTestDefaultController extends Controller
 {
     public const RETURN_VALUE_INT    = 5;
     public const RETURN_VALUE_STRING = 'string';

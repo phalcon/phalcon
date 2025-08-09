@@ -15,7 +15,7 @@ namespace Phalcon\Tests\Unit\Mvc\Micro\LazyLoader;
 
 use Phalcon\Tests\AbstractUnitTestCase;
 
-class CallMethodTest extends AbstractUnitTestCase
+final class CallMethodTest extends AbstractUnitTestCase
 {
     /**
      * Tests Phalcon\Mvc\Micro\LazyLoader :: callMethod()

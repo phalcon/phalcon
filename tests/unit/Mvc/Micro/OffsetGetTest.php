@@ -20,7 +20,7 @@ use Phalcon\Mvc\Micro;
 use Phalcon\Mvc\Router;
 use Phalcon\Tests\AbstractUnitTestCase;
 
-class OffsetGetTest extends AbstractUnitTestCase
+final class OffsetGetTest extends AbstractUnitTestCase
 {
     /**
      * Tests Phalcon\Mvc\Micro :: offsetGet()

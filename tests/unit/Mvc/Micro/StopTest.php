@@ -15,7 +15,7 @@ namespace Phalcon\Tests\Unit\Mvc\Micro;
 
 use Phalcon\Tests\AbstractUnitTestCase;
 
-class StopTest extends AbstractUnitTestCase
+final class StopTest extends AbstractUnitTestCase
 {
     /**
      * Tests Phalcon\Mvc\Micro :: stop()

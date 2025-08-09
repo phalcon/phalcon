@@ -15,7 +15,7 @@ namespace Phalcon\Tests\Unit\Mvc\Micro;
 
 use Phalcon\Tests\AbstractUnitTestCase;
 
-class GetBoundModelsTest extends AbstractUnitTestCase
+final class GetBoundModelsTest extends AbstractUnitTestCase
 {
     /**
      * Tests Phalcon\Mvc\Micro :: getBoundModels()

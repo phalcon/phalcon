@@ -24,7 +24,7 @@ use function ob_start;
 
 use const PHP_EOL;
 
-class CompileStringTest extends AbstractUnitTestCase
+final class CompileStringTest extends AbstractUnitTestCase
 {
     use DiTrait;
 

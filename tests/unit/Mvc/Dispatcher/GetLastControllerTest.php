@@ -17,7 +17,7 @@ use Phalcon\Tests\Unit\Mvc\Dispatcher\Helper\BaseDispatcher;
 use Phalcon\Tests\Unit\Mvc\Dispatcher\Helper\DispatcherTestDefaultController;
 use Phalcon\Tests\Unit\Mvc\Dispatcher\Helper\DispatcherTestDefaultTwoController;
 
-class GetLastControllerTest extends BaseDispatcher
+final class GetLastControllerTest extends BaseDispatcher
 {
     /**
      * Tests the last handler on a forward

@@ -17,7 +17,7 @@ use Phalcon\Mvc\View;
 use Phalcon\Tests\Fixtures\Traits\ViewTrait;
 use Phalcon\Tests\AbstractUnitTestCase;
 
-class GetSetVarTest extends AbstractUnitTestCase
+final class GetSetVarTest extends AbstractUnitTestCase
 {
     use ViewTrait;
 

@@ -16,7 +16,7 @@ namespace Phalcon\Tests\Unit\Mvc\View\Simple;
 use Phalcon\Mvc\View\Simple;
 use Phalcon\Tests\AbstractUnitTestCase;
 
-class GetSetContentTest extends AbstractUnitTestCase
+final class GetSetContentTest extends AbstractUnitTestCase
 {
     /**
      * Tests Phalcon\Mvc\View\Simple :: getContent()/setContent()

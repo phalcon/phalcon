@@ -17,7 +17,7 @@ use Phalcon\Di\Di;
 use Phalcon\Tests\AbstractUnitTestCase;
 use stdClass;
 
-class GetServicesTest extends AbstractUnitTestCase
+final class GetServicesTest extends AbstractUnitTestCase
 {
     /**
      * Unit Tests Phalcon\Di :: getServices()

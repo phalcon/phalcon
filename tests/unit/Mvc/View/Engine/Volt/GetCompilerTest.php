@@ -15,7 +15,7 @@ namespace Phalcon\Tests\Unit\Mvc\View\Engine\Volt;
 
 use Phalcon\Tests\AbstractUnitTestCase;
 
-class GetCompilerTest extends AbstractUnitTestCase
+final class GetCompilerTest extends AbstractUnitTestCase
 {
     /**
      * Tests Phalcon\Mvc\View\Engine\Volt :: getCompiler()

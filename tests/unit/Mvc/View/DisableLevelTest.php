@@ -15,7 +15,7 @@ namespace Phalcon\Tests\Unit\Mvc\View;
 
 use Phalcon\Tests\AbstractUnitTestCase;
 
-class DisableLevelTest extends AbstractUnitTestCase
+final class DisableLevelTest extends AbstractUnitTestCase
 {
     /**
      * Tests Phalcon\Mvc\View :: disableLevel()

@@ -18,7 +18,7 @@ use Phalcon\Mvc\Micro\Collection;
 use Phalcon\Tests\Controllers\MicroController;
 use Phalcon\Tests\AbstractUnitTestCase;
 
-class MapViaTest extends AbstractUnitTestCase
+final class MapViaTest extends AbstractUnitTestCase
 {
     /**
      * Tests Phalcon\Mvc\Micro\Collection :: mapVia()

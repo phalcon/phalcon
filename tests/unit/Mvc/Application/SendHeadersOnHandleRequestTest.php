@@ -15,7 +15,7 @@ namespace Phalcon\Tests\Unit\Mvc\Application;
 
 use Phalcon\Tests\AbstractUnitTestCase;
 
-class SendHeadersOnHandleRequestTest extends AbstractUnitTestCase
+final class SendHeadersOnHandleRequestTest extends AbstractUnitTestCase
 {
     /**
      * Tests Phalcon\Mvc\Application :: sendHeadersOnHandleRequest()

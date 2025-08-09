@@ -16,7 +16,7 @@ namespace Phalcon\Tests\Unit\Mvc\View\Engine\Volt\Compiler;
 use Phalcon\Mvc\View\Engine\Volt\Compiler;
 use Phalcon\Tests\AbstractUnitTestCase;
 
-class AddFilterTest extends AbstractUnitTestCase
+final class AddFilterTest extends AbstractUnitTestCase
 {
     public static function getVoltAddFilter(): array
     {

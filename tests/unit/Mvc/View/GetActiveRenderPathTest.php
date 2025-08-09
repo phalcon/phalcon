@@ -22,7 +22,7 @@ use function dataDir;
 
 use const DIRECTORY_SEPARATOR;
 
-class GetActiveRenderPathTest extends AbstractUnitTestCase
+final class GetActiveRenderPathTest extends AbstractUnitTestCase
 {
     /**
      * Tests Phalcon\Mvc\View :: getActiveRenderPath()

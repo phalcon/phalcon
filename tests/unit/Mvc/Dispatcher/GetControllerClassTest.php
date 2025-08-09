@@ -16,7 +16,7 @@ namespace Phalcon\Tests\Unit\Mvc\Dispatcher;
 use Foo\IndexController;
 use Phalcon\Tests\Unit\Mvc\Dispatcher\Helper\BaseDispatcher;
 
-class GetControllerClassTest extends BaseDispatcher
+final class GetControllerClassTest extends BaseDispatcher
 {
     /**
      * Tests Phalcon\Mvc\Dispatcher :: getControllerClass()

@@ -15,7 +15,7 @@ namespace Phalcon\Tests\Unit\Mvc\View;
 
 use Phalcon\Tests\AbstractUnitTestCase;
 
-class FinishTest extends AbstractUnitTestCase
+final class FinishTest extends AbstractUnitTestCase
 {
     /**
      * Tests Phalcon\Mvc\View :: finish()

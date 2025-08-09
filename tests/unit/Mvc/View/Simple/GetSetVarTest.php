@@ -16,7 +16,7 @@ namespace Phalcon\Tests\Unit\Mvc\View\Simple;
 use Phalcon\Mvc\View\Simple;
 use Phalcon\Tests\AbstractUnitTestCase;
 
-class GetSetVarTest extends AbstractUnitTestCase
+final class GetSetVarTest extends AbstractUnitTestCase
 {
     /**
      * Tests Phalcon\Mvc\View\Simple :: getVar()

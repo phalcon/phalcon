@@ -17,7 +17,7 @@ use Phalcon\Mvc\Micro\Collection;
 use Phalcon\Tests\Fixtures\Micro\HttpMethodHandler;
 use Phalcon\Tests\AbstractUnitTestCase;
 
-class IsLazyTest extends AbstractUnitTestCase
+final class IsLazyTest extends AbstractUnitTestCase
 {
     public static function booleanProvider(): array
     {

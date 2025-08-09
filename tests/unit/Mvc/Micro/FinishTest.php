@@ -16,7 +16,7 @@ namespace Phalcon\Tests\Unit\Mvc\Micro;
 use Phalcon\Mvc\Micro;
 use Phalcon\Tests\AbstractUnitTestCase;
 
-class FinishTest extends AbstractUnitTestCase
+final class FinishTest extends AbstractUnitTestCase
 {
     /**
      * Tests Phalcon\Mvc\Micro :: finish()

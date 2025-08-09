@@ -18,7 +18,7 @@ use Phalcon\Mvc\Micro\Collection;
 use Phalcon\Tests\Controllers\Micro\Collections\CustomersController;
 use Phalcon\Tests\AbstractUnitTestCase;
 
-class GetSetPrefixTest extends AbstractUnitTestCase
+final class GetSetPrefixTest extends AbstractUnitTestCase
 {
     /**
      * Tests Phalcon\Mvc\Micro\Collection :: getPrefix()/setPrefix()

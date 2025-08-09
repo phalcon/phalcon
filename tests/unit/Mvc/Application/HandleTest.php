@@ -20,7 +20,7 @@ use Phalcon\Mvc\View;
 use Phalcon\Tests\Fixtures\Traits\DiTrait;
 use Phalcon\Tests\AbstractUnitTestCase;
 
-class HandleTest extends AbstractUnitTestCase
+final class HandleTest extends AbstractUnitTestCase
 {
     use DiTrait;
 

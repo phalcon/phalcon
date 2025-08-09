@@ -16,7 +16,7 @@ namespace Phalcon\Tests\Unit\Mvc\Micro;
 use Phalcon\Mvc\Micro;
 use Phalcon\Tests\AbstractUnitTestCase;
 
-class PutTest extends AbstractUnitTestCase
+final class PutTest extends AbstractUnitTestCase
 {
     /**
      * Tests Phalcon\Mvc\Micro :: put()

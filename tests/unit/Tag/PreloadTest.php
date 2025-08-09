@@ -19,7 +19,7 @@ use PHPUnit\Framework\Attributes\Test;
 use Phalcon\Tests\AbstractUnitTestCase;
 use Phalcon\Tests\Fixtures\Traits\DiTrait;
 
-class PreloadTest extends AbstractUnitTestCase
+final class PreloadTest extends AbstractUnitTestCase
 {
     use DiTrait;
 

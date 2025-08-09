@@ -16,7 +16,7 @@ namespace Phalcon\Tests\Unit\Mvc\View\Engine\Volt\Compiler;
 use Phalcon\Mvc\View\Engine\Volt\Compiler;
 use Phalcon\Tests\AbstractUnitTestCase;
 
-class CompileFileTest extends AbstractUnitTestCase
+final class CompileFileTest extends AbstractUnitTestCase
 {
     public static function defaultFilterProvider(): array
     {

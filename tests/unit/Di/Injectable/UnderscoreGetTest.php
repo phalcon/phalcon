@@ -21,7 +21,7 @@ use stdClass;
 
 use function spl_object_hash;
 
-class UnderscoreGetTest extends AbstractUnitTestCase
+final class UnderscoreGetTest extends AbstractUnitTestCase
 {
     /**
      * Unit Tests Phalcon\Di\Injectable :: __get() - exception

@@ -16,7 +16,7 @@ namespace Phalcon\Tests\Unit\Tag;
 use Phalcon\Tag;
 use PHPUnit\Framework\Attributes\Test;
 
-class JavascriptIncludeTest extends AbstractTagSetup
+final class JavascriptIncludeTest extends AbstractTagSetup
 {
     /**
      * Tests Phalcon\Tag :: javascriptInclude() - HTML5

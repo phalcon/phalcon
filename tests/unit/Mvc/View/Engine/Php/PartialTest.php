@@ -15,7 +15,7 @@ namespace Phalcon\Tests\Unit\Mvc\View\Engine\Php;
 
 use Phalcon\Tests\AbstractUnitTestCase;
 
-class PartialTest extends AbstractUnitTestCase
+final class PartialTest extends AbstractUnitTestCase
 {
     /**
      * Tests Phalcon\Mvc\View\Engine\Php :: partial()

@@ -19,7 +19,7 @@ use Phalcon\Tests\AbstractUnitTestCase;
 
 use function spl_object_hash;
 
-class InjectionAwareTest extends AbstractUnitTestCase
+final class InjectionAwareTest extends AbstractUnitTestCase
 {
     /**
      * Tests Phalcon\Di\Di :: injection aware trait

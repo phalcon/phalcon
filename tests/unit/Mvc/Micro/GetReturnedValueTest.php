@@ -15,7 +15,7 @@ namespace Phalcon\Tests\Unit\Mvc\Micro;
 
 use Phalcon\Tests\AbstractUnitTestCase;
 
-class GetReturnedValueTest extends AbstractUnitTestCase
+final class GetReturnedValueTest extends AbstractUnitTestCase
 {
     /**
      * Tests Phalcon\Mvc\Micro :: getReturnedValue()

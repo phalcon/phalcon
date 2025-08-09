@@ -15,7 +15,7 @@ namespace Phalcon\Tests\Unit\Mvc\Micro;
 
 use Phalcon\Tests\AbstractUnitTestCase;
 
-class SetServiceTest extends AbstractUnitTestCase
+final class SetServiceTest extends AbstractUnitTestCase
 {
     /**
      * Tests Phalcon\Mvc\Micro :: setService()

@@ -16,7 +16,7 @@ use Phalcon\Mvc\Micro\Collection;
 use Phalcon\Tests\Controllers\Micro\Collections\PersonasController;
 use Phalcon\Tests\AbstractUnitTestCase;
 
-class MicroMvcCollectionsTest extends AbstractUnitTestCase
+final class MicroMvcCollectionsTest extends AbstractUnitTestCase
 {
     public function testMicroCollections(): void
     {

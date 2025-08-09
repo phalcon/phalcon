@@ -17,7 +17,7 @@ use Phalcon\Mvc\View;
 use Phalcon\Tests\Fixtures\Traits\ViewTrait;
 use Phalcon\Tests\AbstractUnitTestCase;
 
-class GetSetLayoutsDirTest extends AbstractUnitTestCase
+final class GetSetLayoutsDirTest extends AbstractUnitTestCase
 {
     use ViewTrait;
 

@@ -24,7 +24,7 @@ use Phalcon\Tests\AbstractUnitTestCase;
 use Phalcon\Tests\Fixtures\models\AnnotationsModel;
 use Phalcon\Tests\Fixtures\models\AnnotationsNoChangeModel;
 
-class ParserTest extends AbstractUnitTestCase
+final class ParserTest extends AbstractUnitTestCase
 {
     /**
      * Tests Phalcon\Model\MetaData\Annotations :: getMetaData

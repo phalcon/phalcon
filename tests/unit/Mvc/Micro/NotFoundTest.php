@@ -20,7 +20,7 @@ use Phalcon\Tests\AbstractUnitTestCase;
 /**
  * Class NotFoundTest extends AbstractUnitTestCase
  */
-class NotFoundTest extends AbstractUnitTestCase
+final class NotFoundTest extends AbstractUnitTestCase
 {
     /**
      * Tests the notFound

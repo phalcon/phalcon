@@ -17,7 +17,7 @@ use Phalcon\Dispatcher\Exception;
 use Phalcon\Tests\Unit\Mvc\Dispatcher\Helper\BaseDispatcher;
 use Phalcon\Tests\Unit\Mvc\Dispatcher\Helper\DispatcherTestDefaultController;
 
-class DispatchTest extends BaseDispatcher
+final class DispatchTest extends BaseDispatcher
 {
     /**
      * Tests Phalcon\Mvc\Dispatcher :: dispatch()

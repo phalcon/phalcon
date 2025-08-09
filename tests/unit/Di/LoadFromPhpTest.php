@@ -19,7 +19,7 @@ use Phalcon\Di\Di;
 use Phalcon\Di\Exception;
 use Phalcon\Tests\AbstractUnitTestCase;
 
-class LoadFromPhpTest extends AbstractUnitTestCase
+final class LoadFromPhpTest extends AbstractUnitTestCase
 {
     /**
      * Unit Tests Phalcon\Di :: loadFromPhp()

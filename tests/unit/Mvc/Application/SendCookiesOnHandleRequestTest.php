@@ -15,7 +15,7 @@ namespace Phalcon\Tests\Unit\Mvc\Application;
 
 use Phalcon\Tests\AbstractUnitTestCase;
 
-class SendCookiesOnHandleRequestTest extends AbstractUnitTestCase
+final class SendCookiesOnHandleRequestTest extends AbstractUnitTestCase
 {
     /**
      * Tests Phalcon\Mvc\Application :: sendCookiesOnHandleRequest()

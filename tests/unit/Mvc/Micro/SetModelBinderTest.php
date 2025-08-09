@@ -15,7 +15,7 @@ namespace Phalcon\Tests\Unit\Mvc\Micro;
 
 use Phalcon\Tests\AbstractUnitTestCase;
 
-class SetModelBinderTest extends AbstractUnitTestCase
+final class SetModelBinderTest extends AbstractUnitTestCase
 {
     /**
      * Tests Phalcon\Mvc\Micro :: setModelBinder()

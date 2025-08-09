@@ -18,7 +18,7 @@ use Phalcon\Mvc\Url\UrlInterface;
 use Phalcon\Tag;
 use PHPUnit\Framework\Attributes\Test;
 
-class GetUrlServiceTest extends AbstractTagSetup
+final class GetUrlServiceTest extends AbstractTagSetup
 {
     /**
      * Tests Phalcon\Tag :: getUrlService()

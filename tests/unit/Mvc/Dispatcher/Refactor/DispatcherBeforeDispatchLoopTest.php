@@ -19,7 +19,7 @@ use Phalcon\Tests\Unit\Mvc\Dispatcher\Helper\BaseDispatcher;
 /**
  * @todo    : refactor
  */
-class DispatcherBeforeDispatchLoopTest extends BaseDispatcher
+final class DispatcherBeforeDispatchLoopTest extends BaseDispatcher
 {
     /**
      * Tests returning <tt>false</tt> inside a beforeDispatchLoop event with

@@ -20,7 +20,7 @@ use Phalcon\Tests\Fixtures\Mvc\View\Engine\Twig;
 use Phalcon\Tests\Fixtures\Traits\DiTrait;
 use Phalcon\Tests\AbstractUnitTestCase;
 
-class GetRegisteredEnginesTest extends AbstractUnitTestCase
+final class GetRegisteredEnginesTest extends AbstractUnitTestCase
 {
     use DiTrait;
 

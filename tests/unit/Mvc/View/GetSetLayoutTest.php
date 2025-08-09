@@ -16,7 +16,7 @@ namespace Phalcon\Tests\Unit\Mvc\View;
 use Phalcon\Mvc\View;
 use Phalcon\Tests\AbstractUnitTestCase;
 
-class GetSetLayoutTest extends AbstractUnitTestCase
+final class GetSetLayoutTest extends AbstractUnitTestCase
 {
     /**
      * Tests Phalcon\Mvc\View :: getLayout()

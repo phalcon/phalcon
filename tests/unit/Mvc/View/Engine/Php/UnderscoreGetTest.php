@@ -15,7 +15,7 @@ namespace Phalcon\Tests\Unit\Mvc\View\Engine\Php;
 
 use Phalcon\Tests\AbstractUnitTestCase;
 
-class UnderscoreGetTest extends AbstractUnitTestCase
+final class UnderscoreGetTest extends AbstractUnitTestCase
 {
     /**
      * Tests Phalcon\Mvc\View\Engine\Php :: __get()

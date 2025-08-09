@@ -15,7 +15,7 @@ namespace Phalcon\Tests\Unit\Mvc\View;
 
 use Phalcon\Tests\AbstractUnitTestCase;
 
-class SetBasePathTest extends AbstractUnitTestCase
+final class SetBasePathTest extends AbstractUnitTestCase
 {
     /**
      * Tests Phalcon\Mvc\View :: setBasePath()

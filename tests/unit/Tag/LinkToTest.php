@@ -16,7 +16,7 @@ namespace Phalcon\Tests\Unit\Tag;
 use Phalcon\Tag;
 use PHPUnit\Framework\Attributes\Test;
 
-class LinkToTest extends AbstractTagSetup
+final class LinkToTest extends AbstractTagSetup
 {
     /**
      * Tests Phalcon\Tag :: linkTo() - array as a parameter

@@ -17,7 +17,7 @@ use Phalcon\Tag;
 use PHPUnit\Framework\Attributes\Test;
 use Phalcon\Tests\AbstractUnitTestCase;
 
-class RenderTitleTest extends AbstractUnitTestCase
+final class RenderTitleTest extends AbstractUnitTestCase
 {
     /**
      * Tests Phalcon\Tag :: renderTitle() - with malicious code

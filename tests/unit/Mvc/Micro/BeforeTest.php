@@ -16,7 +16,7 @@ namespace Phalcon\Tests\Unit\Mvc\Micro;
 use Phalcon\Mvc\Micro;
 use Phalcon\Tests\AbstractUnitTestCase;
 
-class BeforeTest extends AbstractUnitTestCase
+final class BeforeTest extends AbstractUnitTestCase
 {
     /**
      * Tests Phalcon\Mvc\Micro :: before()

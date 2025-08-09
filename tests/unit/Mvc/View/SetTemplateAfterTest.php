@@ -15,7 +15,7 @@ namespace Phalcon\Tests\Unit\Mvc\View;
 
 use Phalcon\Tests\AbstractUnitTestCase;
 
-class SetTemplateAfterTest extends AbstractUnitTestCase
+final class SetTemplateAfterTest extends AbstractUnitTestCase
 {
     /**
      * Tests Phalcon\Mvc\View :: setTemplateAfter()

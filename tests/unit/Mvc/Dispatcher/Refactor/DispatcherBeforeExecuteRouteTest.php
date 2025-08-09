@@ -19,7 +19,7 @@ use Phalcon\Tests\Unit\Mvc\Dispatcher\Helper\BaseDispatcher;
 /**
  * @todo    : refactor
  */
-class DispatcherBeforeExecuteRouteTest extends BaseDispatcher
+final class DispatcherBeforeExecuteRouteTest extends BaseDispatcher
 {
     /**
      * Tests the forwarding in the beforeExecuteRoute event

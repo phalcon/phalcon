@@ -17,7 +17,7 @@ use Phalcon\Mvc\View\Simple;
 use Phalcon\Mvc\View\ViewBaseInterface;
 use Phalcon\Tests\AbstractUnitTestCase;
 
-class ConstructTest extends AbstractUnitTestCase
+final class ConstructTest extends AbstractUnitTestCase
 {
     /**
      * Tests Phalcon\Mvc\View\Simple :: __construct()

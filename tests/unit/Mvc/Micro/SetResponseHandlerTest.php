@@ -16,7 +16,7 @@ namespace Phalcon\Tests\Unit\Mvc\Micro;
 use Phalcon\Mvc\Micro;
 use Phalcon\Tests\AbstractUnitTestCase;
 
-class SetResponseHandlerTest extends AbstractUnitTestCase
+final class SetResponseHandlerTest extends AbstractUnitTestCase
 {
     /**
      * Tests Phalcon\Mvc\Micro :: setResponseHandler()

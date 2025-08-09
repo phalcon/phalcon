@@ -16,7 +16,7 @@ namespace Phalcon\Tests\Unit\Mvc\View\Engine\Volt;
 use Phalcon\Tests\AbstractUnitTestCase;
 use Phalcon\Volt\Compiler;
 
-class CallMacroTest extends AbstractUnitTestCase
+final class CallMacroTest extends AbstractUnitTestCase
 {
     /**
      * Tests Phalcon\Mvc\View\Engine\Volt :: callMacro() - PHP function

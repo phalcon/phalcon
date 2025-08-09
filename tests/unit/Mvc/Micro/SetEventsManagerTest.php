@@ -15,7 +15,7 @@ namespace Phalcon\Tests\Unit\Mvc\Micro;
 
 use Phalcon\Tests\AbstractUnitTestCase;
 
-class SetEventsManagerTest extends AbstractUnitTestCase
+final class SetEventsManagerTest extends AbstractUnitTestCase
 {
     /**
      * Tests Phalcon\Mvc\Micro :: setEventsManager()

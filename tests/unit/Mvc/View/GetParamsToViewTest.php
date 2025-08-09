@@ -15,7 +15,7 @@ namespace Phalcon\Tests\Unit\Mvc\View;
 
 use Phalcon\Tests\AbstractUnitTestCase;
 
-class GetParamsToViewTest extends AbstractUnitTestCase
+final class GetParamsToViewTest extends AbstractUnitTestCase
 {
     /**
      * Tests Phalcon\Mvc\View :: getParamsToView()

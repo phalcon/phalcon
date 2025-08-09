@@ -18,7 +18,7 @@ use Phalcon\Html\Escaper;
 use Phalcon\Support\Collection;
 use Phalcon\Tests\AbstractUnitTestCase;
 
-class GetSetDefinitionTest extends AbstractUnitTestCase
+final class GetSetDefinitionTest extends AbstractUnitTestCase
 {
     /**
      * Tests Phalcon\Di\Service :: setDefinition()

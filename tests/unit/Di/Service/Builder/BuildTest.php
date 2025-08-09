@@ -21,7 +21,7 @@ use Phalcon\Tests\Fixtures\Di\PropertiesComponent;
 use Phalcon\Tests\Fixtures\Di\ServiceComponent;
 use Phalcon\Tests\AbstractUnitTestCase;
 
-class BuildTest extends AbstractUnitTestCase
+final class BuildTest extends AbstractUnitTestCase
 {
     /**
      * Unit Tests Phalcon\Di\Service\Builder :: build() - exception argument

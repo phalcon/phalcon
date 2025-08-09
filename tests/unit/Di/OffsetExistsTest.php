@@ -17,7 +17,7 @@ use Phalcon\Di\Di;
 use Phalcon\Html\Escaper;
 use Phalcon\Tests\AbstractUnitTestCase;
 
-class OffsetExistsTest extends AbstractUnitTestCase
+final class OffsetExistsTest extends AbstractUnitTestCase
 {
     /**
      * Tests Phalcon\Di\Di :: offsetExists()

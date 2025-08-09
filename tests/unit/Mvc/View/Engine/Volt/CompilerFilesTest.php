@@ -26,7 +26,7 @@ use function sprintf;
 
 use const PHP_EOL;
 
-class CompilerFilesTest extends AbstractUnitTestCase
+final class CompilerFilesTest extends AbstractUnitTestCase
 {
     public function setUp(): void
     {

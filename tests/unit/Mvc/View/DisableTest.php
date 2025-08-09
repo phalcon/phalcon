@@ -15,7 +15,7 @@ namespace Phalcon\Tests\Unit\Mvc\View;
 
 use Phalcon\Tests\AbstractUnitTestCase;
 
-class DisableTest extends AbstractUnitTestCase
+final class DisableTest extends AbstractUnitTestCase
 {
     /**
      * Tests Phalcon\Mvc\View :: disable()

@@ -18,7 +18,7 @@ use Phalcon\Mvc\Dispatcher;
 use Phalcon\Mvc\Micro;
 use Phalcon\Tests\AbstractUnitTestCase;
 
-class OffsetSetTest extends AbstractUnitTestCase
+final class OffsetSetTest extends AbstractUnitTestCase
 {
     /**
      * Tests Phalcon\Mvc\Micro :: offsetSet()

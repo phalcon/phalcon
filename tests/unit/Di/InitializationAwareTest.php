@@ -17,7 +17,7 @@ use Phalcon\Di\Di;
 use Phalcon\Tests\Fixtures\Di\InitializationAwareComponent;
 use Phalcon\Tests\AbstractUnitTestCase;
 
-class InitializationAwareTest extends AbstractUnitTestCase
+final class InitializationAwareTest extends AbstractUnitTestCase
 {
     /**
      * Tests Phalcon\Di\Di :: initialization aware interface

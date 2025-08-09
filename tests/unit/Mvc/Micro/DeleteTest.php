@@ -16,7 +16,7 @@ namespace Phalcon\Tests\Unit\Mvc\Micro;
 use Phalcon\Mvc\Micro;
 use Phalcon\Tests\AbstractUnitTestCase;
 
-class DeleteTest extends AbstractUnitTestCase
+final class DeleteTest extends AbstractUnitTestCase
 {
     /**
      * Tests Phalcon\Mvc\Micro :: delete()

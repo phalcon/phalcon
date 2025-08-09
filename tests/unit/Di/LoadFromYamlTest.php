@@ -19,7 +19,7 @@ use Phalcon\Di\Di;
 use Phalcon\Di\Exception;
 use Phalcon\Tests\AbstractUnitTestCase;
 
-class LoadFromYamlTest extends AbstractUnitTestCase
+final class LoadFromYamlTest extends AbstractUnitTestCase
 {
     /**
      * Unit Tests Phalcon\Di :: loadFromYaml()
