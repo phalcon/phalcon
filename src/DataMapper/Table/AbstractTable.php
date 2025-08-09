@@ -315,10 +315,9 @@ abstract class AbstractTable
     public function newRow(array $columns = []): AbstractRow
     {
         $rowClass = static::ROW_CLASS;
-        /** @var AbstractRow $row */
-        $row = new $rowClass($columns);
 
-        return $row;
+        /** @var AbstractRow */
+        return new $rowClass($columns);
     }
 
     /**
