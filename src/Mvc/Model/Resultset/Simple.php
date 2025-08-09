@@ -224,14 +224,12 @@ class Simple extends Resultset
         $records = $this->rows;
 
         if (!is_array($records)) {
-            $result = $this->result;
-
             if ($this->row !== null) {
                 // re-execute query if required and fetchAll rows
-                $result->execute();
+                $this->result->execute();
             }
 
-            $records = $result->fetchAll(Enum::FETCH_ASSOC);
+            $records = $this->result->fetchAll(Enum::FETCH_ASSOC);
 
             $this->row  = null;
             $this->rows = $records; // keep result-set in memory
@@ -252,30 +250,32 @@ class Simple extends Resultset
                 foreach ($records as $record) {
                     $renamed = [];
                     foreach ($record as $key => $value) {
-                        if (is_string($key)) {
-                            /**
-                             * Check if the key is part of the column map
-                             */
-                            if (!isset($this->columnMap[$key])) {
+                        if (!is_string($key)) {
+                            continue;
+                        }
+
+                        /**
+                         * Check if the key is part of the column map
+                         */
+                        if (!isset($this->columnMap[$key])) {
+                            throw new Exception(
+                                "Column '" . $key . "' is not part of the column map"
+                            );
+                        }
+
+                        $renamedKey = $this->columnMap[$key];
+
+                        if (is_array($renamedKey)) {
+                            if (!isset($renamedKey[0])) {
                                 throw new Exception(
                                     "Column '" . $key . "' is not part of the column map"
                                 );
                             }
 
-                            $renamedKey = $this->columnMap[$key];
-
-                            if (is_array($renamedKey)) {
-                                if (!isset($renamedKey[0])) {
-                                    throw new Exception(
-                                        "Column '" . $key . "' is not part of the column map"
-                                    );
-                                }
-
-                                $renamedKey = $renamedKey[0];
-                            }
-
-                            $renamed[$renamedKey] = $value;
+                            $renamedKey = $renamedKey[0];
                         }
+
+                        $renamed[$renamedKey] = $value;
                     }
 
                     /**
