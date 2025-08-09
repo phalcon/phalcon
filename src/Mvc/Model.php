@@ -3469,16 +3469,13 @@ abstract class Model extends AbstractInjectionAware implements
         /**
          * Fetch serialized props
          */
-        if (isset($attributes["attributes"])) {
-            $properties = $attributes["attributes"];
-            /**
-             * Update the objects properties
-             */
-            foreach ($properties as $key => $value) {
-                $this->$key = $value;
-            }
-        } else {
-            $properties = [];
+        $properties = $attributes["attributes"] ?? [];
+
+        /**
+         * Update the objects properties
+         */
+        foreach ($properties as $key => $value) {
+            $this->$key = $value;
         }
 
         /**
