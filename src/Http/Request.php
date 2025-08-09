@@ -2045,10 +2045,12 @@ class Request extends AbstractInjectionAware implements
         array $input,
         string $key
     ): array {
+        $file = new File($input, $key);
+
         if (true === $namedKeys) {
-            $files[$key] = new File($input, $key);
+            $files[$key] = $file;
         } else {
-            $files[] = new File($input, $key);
+            $files[] = $file;
         }
 
         return $files;
