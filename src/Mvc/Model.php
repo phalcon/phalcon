@@ -1903,17 +1903,13 @@ abstract class Model extends AbstractInjectionAware implements
     public static function find(
         mixed $parameters = null
     ): ResultsetInterface {
-        if (!is_array($parameters)) {
-            $params = [];
-
-            if ($parameters !== null) {
-                $params[] = $parameters;
-            }
-        } else {
-            $params = $parameters;
+        if (null === $parameters) {
+            $parameters = [];
+        } elseif (!is_array($parameters)) {
+            $parameters = [$parameters];
         }
 
-        $query = self::getPreparedQuery($params);
+        $query = self::getPreparedQuery($parameters);
 
         /**
          * Execute the query passing the bind-params and casting-types
@@ -1923,8 +1919,8 @@ abstract class Model extends AbstractInjectionAware implements
         /**
          * Define an hydration mode
          */
-        if (is_object($resultset) && isset($params["hydration"])) {
-            $resultset->setHydrateMode($params["hydration"]);
+        if (is_object($resultset) && isset($parameters["hydration"])) {
+            $resultset->setHydrateMode($parameters["hydration"]);
         }
 
         return $resultset;
