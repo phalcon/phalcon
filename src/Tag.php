@@ -1548,67 +1548,60 @@ class Tag
         string $type,
         array | string $parameters
     ): string {
-        $params = $parameters;
         if (!is_array($parameters)) {
-            $params = [$parameters];
+            $parameters = [$parameters];
         }
 
-        if (!isset($params[0])) {
-            $params[0] = $params["id"];
+        if (!isset($parameters[0])) {
+            $parameters[0] = $parameters["id"];
         }
 
-        $id = $params[0];
+        $id = $parameters[0];
 
-        if (!isset($params["name"])) {
-            $params["name"] = $id;
-        } else {
-            $name = $params["name"];
-
-            if (empty($name)) {
-                $params["name"] = $id;
-            }
+        if (!isset($parameters["name"]) || empty($parameters["name"])) {
+            $parameters["name"] = $id;
         }
 
         /**
          * Automatically assign the id if the name is not an array
          */
-        if (!str_contains($id, "[") && !isset($params["id"])) {
-            $params["id"] = $id;
+        if (!str_contains($id, "[") && !isset($parameters["id"])) {
+            $parameters["id"] = $id;
         }
 
         /**
          * Automatically check inputs
          */
-        if (isset($params["value"])) {
-            $currentValue = $params["value"];
+        if (isset($parameters["value"])) {
+            $currentValue = $parameters["value"];
 
-            unset($params["value"]);
+            unset($parameters["value"]);
 
-            $value = self::getValue($id, $params);
+            $value = self::getValue($id, $parameters);
 
             if (null !== $value && $currentValue === $value) {
-                $params["checked"] = "checked";
+                $parameters["checked"] = "checked";
             }
 
-            $params["value"] = $currentValue;
+            $parameters["value"] = $currentValue;
         } else {
-            $value = self::getValue($id, $params);
+            $value = self::getValue($id, $parameters);
 
             /**
              * Evaluate the value in POST
              */
             if (null !== $value) {
-                $params["checked"] = "checked";
+                $parameters["checked"] = "checked";
             }
 
             /**
              * Update the value anyway
              */
-            $params["value"] = $value;
+            $parameters["value"] = $value;
         }
 
-        $params["type"] = $type;
-        $code           = self::renderAttributes("<input", $params);
+        $parameters["type"] = $type;
+        $code               = self::renderAttributes("<input", $parameters);
 
         /**
          * Check if Doctype is XHTML
