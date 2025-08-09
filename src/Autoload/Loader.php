@@ -451,13 +451,13 @@ class Loader
      */
     public function setFileCheckingCallback(string | callable | null $method = null): Loader
     {
-        if (is_callable($method) || is_string($method)) {
-            $this->fileCheckingCallback = $method;
-        } else {
-            $this->fileCheckingCallback = function () {
+        if (!is_callable($method) && !is_string($method)) {
+            $method = function () {
                 return true;
             };
         }
+
+        $this->fileCheckingCallback = $method;
 
         return $this;
     }
