@@ -2973,11 +2973,11 @@ class Compiler implements InjectionAwareInterface
      */
     private function getUniquePathKey(string | null $path): string
     {
-        if ($path) {
-            return "v" . hash('crc32b', $path);
+        if (!$path) {
+            return "";
         }
 
-        return '';
+        return "v" . hash("crc32b", $path);
     }
 
     /**
