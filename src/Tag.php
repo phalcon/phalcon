@@ -293,17 +293,18 @@ class Tag
      */
     public static function formLegacy(array | string $parameters): string
     {
-        $params = !is_array($parameters) ? [$parameters] : $parameters;
+        if (!is_array($parameters)) {
+            $parameters = [$parameters];
+        }
 
-        $paramsAction = $params[0] ?? "";
-        $paramsAction = $params["action"] ?? $paramsAction;
+        $paramsAction = $parameters["action"] ?? $parameters[0] ?? "";
 
         /**
          * By default, the method is POST
          */
-        $params["method"] = $params["method"] ?? "post";
+        $parameters["method"] = $parameters["method"] ?? "post";
 
-        $action = null;
+        $action = "";
 
         if (!empty($paramsAction)) {
             $action = self::getUrlService()
@@ -314,15 +315,15 @@ class Tag
         /**
          * Check for extra parameters
          */
-        if (isset($params["parameters"])) {
-            $action .= "?" . $params["parameters"];
+        if (isset($parameters["parameters"])) {
+            $action .= "?" . $parameters["parameters"];
         }
 
         if (!empty($action)) {
-            $params["action"] = $action;
+            $parameters["action"] = $action;
         }
 
-        return self::renderAttributes("<form", $params) . ">";
+        return self::renderAttributes("<form", $parameters) . ">";
     }
 
     /**
