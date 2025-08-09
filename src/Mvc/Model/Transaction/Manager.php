@@ -125,8 +125,6 @@ class Manager implements ManagerInterface, InjectionAwareInterface
      */
     public function collectTransactions(): void
     {
-        $transactions = $this->transactions;
-
         foreach ($this->transactions as $transaction) {
             $this->number--;
         }
