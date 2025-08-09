@@ -2403,21 +2403,21 @@ class Compiler implements InjectionAwareInterface
      */
     protected function getFinalPath(string $path): string
     {
-        if (null !== $this->view) {
-            $viewsDirs = $this->view->getViewsDir();
-
-            if (is_array($viewsDirs)) {
-                foreach ($viewsDirs as $viewsDir) {
-                    if (file_exists($viewsDir . $path)) {
-                        return $viewsDir . $path;
-                    }
-                }
-            }
-
-            return $viewsDirs . $path;
+        if (null === $this->view) {
+            return $path;
         }
 
-        return $path;
+        $viewsDirs = $this->view->getViewsDir();
+
+        if (is_array($viewsDirs)) {
+            foreach ($viewsDirs as $viewsDir) {
+                if (file_exists($viewsDir . $path)) {
+                    return $viewsDir . $path;
+                }
+            }
+        }
+
+        return $viewsDirs . $path;
     }
 
     /**
