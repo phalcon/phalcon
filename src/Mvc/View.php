@@ -1235,10 +1235,10 @@ class View extends Injectable implements ViewInterface, EventsAwareInterface
     public function setTemplateAfter(array | string $templateAfter): View
     {
         if (!is_array($templateAfter)) {
-            $this->templatesAfter = [$templateAfter];
-        } else {
-            $this->templatesAfter = $templateAfter;
+            $templateAfter = [$templateAfter];
         }
+
+        $this->templatesAfter = $templateAfter;
 
         return $this;
     }
@@ -1253,10 +1253,10 @@ class View extends Injectable implements ViewInterface, EventsAwareInterface
     public function setTemplateBefore(array | string $templateBefore): View
     {
         if (!is_array($templateBefore)) {
-            $this->templatesBefore = [$templateBefore];
-        } else {
-            $this->templatesBefore = $templateBefore;
+            $templateBefore = [$templateBefore];
         }
+
+        $this->templatesBefore = $templateBefore;
 
         return $this;
     }
