@@ -640,7 +640,6 @@ class Manager implements InjectionAwareInterface
      */
     public function outputInline(Collection $collection, string $type): string
     {
-        $output        = "";
         $html          = "";
         $joinedContent = "";
         $attributes    = [];
@@ -648,59 +647,59 @@ class Manager implements InjectionAwareInterface
         $filters       = $collection->getFilters();
         $join          = $collection->getJoin();
 
-        if (!empty($codes)) {
-            /** @var Inline $code */
-            foreach ($codes as $code) {
-                $attributes = $code->getAttributes();
-                $content    = $code->getContent();
-                /** @var FilterInterface $filter */
-                foreach ($filters as $filter) {
-                    /**
-                     * Filters must be valid objects
-                     */
-                    if (!is_object($filter)) {
-                        throw new Exception('Filter is invalid');
-                    }
+        if (empty($codes)) {
+            return "";
+        }
 
-                    /**
-                     * Calls the method 'filter' which must return a filtered
-                     * version of the content
-                     */
-                    $content = $filter->filter($content);
+        /** @var Inline $code */
+        foreach ($codes as $code) {
+            $attributes = $code->getAttributes();
+            $content    = $code->getContent();
+            /** @var FilterInterface $filter */
+            foreach ($filters as $filter) {
+                /**
+                 * Filters must be valid objects
+                 */
+                if (!is_object($filter)) {
+                    throw new Exception('Filter is invalid');
                 }
 
-                if (true === $join) {
-                    $joinedContent .= $content;
-                } else {
-                    $html .= $this->tagFactory->element(
-                        $type,
-                        $content,
-                        $attributes,
-                        true
-                    ) . PHP_EOL;
-                }
+                /**
+                 * Calls the method 'filter' which must return a filtered
+                 * version of the content
+                 */
+                $content = $filter->filter($content);
             }
 
             if (true === $join) {
+                $joinedContent .= $content;
+            } else {
                 $html .= $this->tagFactory->element(
                     $type,
-                    $joinedContent,
+                    $content,
                     $attributes,
                     true
                 ) . PHP_EOL;
             }
-
-            /**
-             * Implicit output prints the content directly
-             */
-            if (true === $this->implicitOutput) {
-                echo $html;
-            } else {
-                $output .= $html;
-            }
         }
 
-        return $output;
+        if (true === $join) {
+            $html .= $this->tagFactory->element(
+                $type,
+                $joinedContent,
+                $attributes,
+                true
+            ) . PHP_EOL;
+        }
+
+        /**
+         * Implicit output prints the content directly
+         */
+        if (true === $this->implicitOutput) {
+            echo $html;
+        }
+
+        return $html;
     }
 
     /**
