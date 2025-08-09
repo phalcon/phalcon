@@ -3418,82 +3418,84 @@ abstract class Model extends AbstractInjectionAware implements
     {
         $attributes = unserialize($data);
 
-        if (is_array($attributes)) {
-            if (!isset($attributes["attributes"])) {
-                $attributes = [
-                    "attributes" => $attributes,
-                ];
+        if (!is_array($attributes)) {
+            return;
+        }
+
+        if (!isset($attributes["attributes"])) {
+            $attributes = [
+                "attributes" => $attributes,
+            ];
+        }
+
+        /**
+         * Obtain the default DI
+         */
+        $container = Di::getDefault();
+        if ($container === null) {
+            throw new Exception(
+                "A dependency injection container is required to access the services related to the ODM in '"
+                . get_class($this) . "'"
+            );
+        }
+
+        /**
+         * Update the dependency injector
+         */
+        $this->container = $container;
+
+        /**
+         * Gets the default modelsManager service
+         */
+        $manager = $container->getShared("modelsManager");
+
+        if (!is_object($manager)) {
+            throw new Exception(
+                "The injected service 'modelsManager' is not valid in '"
+                . get_class($this) . "'"
+            );
+        }
+
+        /**
+         * Update the models manager
+         */
+        $this->modelsManager = $manager;
+
+        /**
+         * Try to initialize the model
+         */
+        $manager->initialize($this);
+
+        /**
+         * Fetch serialized props
+         */
+        if (isset($attributes["attributes"])) {
+            $properties = $attributes["attributes"];
+            /**
+             * Update the objects properties
+             */
+            foreach ($properties as $key => $value) {
+                $this->$key = $value;
             }
+        } else {
+            $properties = [];
+        }
 
-            /**
-             * Obtain the default DI
-             */
-            $container = Di::getDefault();
-            if ($container === null) {
-                throw new Exception(
-                    "A dependency injection container is required to access the services related to the ODM in '"
-                    . get_class($this) . "'"
-                );
-            }
+        /**
+         * Fetch serialized dirtyState
+         */
+        if (isset($attributes["dirtyState"])) {
+            $this->dirtyState = $attributes["dirtyState"];
+        }
 
-            /**
-             * Update the dependency injector
-             */
-            $this->container = $container;
-
-            /**
-             * Gets the default modelsManager service
-             */
-            $manager = $container->getShared("modelsManager");
-
-            if (!is_object($manager)) {
-                throw new Exception(
-                    "The injected service 'modelsManager' is not valid in '"
-                    . get_class($this) . "'"
-                );
-            }
-
-            /**
-             * Update the models manager
-             */
-            $this->modelsManager = $manager;
-
-            /**
-             * Try to initialize the model
-             */
-            $manager->initialize($this);
-
-            /**
-             * Fetch serialized props
-             */
-            if (isset($attributes["attributes"])) {
-                $properties = $attributes["attributes"];
-                /**
-                 * Update the objects properties
-                 */
-                foreach ($properties as $key => $value) {
-                    $this->$key = $value;
-                }
+        /**
+         * Fetch serialized snapshot when option is active
+         */
+        if ($manager->isKeepingSnapshots($this)) {
+            if (isset($attributes["snapshot"])) {
+                $this->snapshot = $attributes["snapshot"];
             } else {
-                $properties = [];
-            }
-
-            /**
-             * Fetch serialized dirtyState
-             */
-            if (isset($attributes["dirtyState"])) {
-                $this->dirtyState = $attributes["dirtyState"];
-            }
-
-            /**
-             * Fetch serialized snapshot when option is active
-             */
-            if ($manager->isKeepingSnapshots($this)) {
-                if (isset($attributes["snapshot"])) {
-                    $this->snapshot = $attributes["snapshot"];
-                } else {
-                    $this->snapshot = $properties;
-                }
+                $this->snapshot = $properties;
             }
         }
     }
