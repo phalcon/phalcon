@@ -2022,19 +2022,19 @@ abstract class Model extends AbstractInjectionAware implements
         mixed $parameters = null
     ): ModelInterface | Row | null {
         if (null === $parameters) {
-            $params = [];
-        } elseif (is_array($parameters)) {
-            $params = $parameters;
+            $parameters = [];
         } elseif (is_string($parameters) || is_numeric($parameters)) {
-            $params = [$parameters];
-        } else {
+            $parameters = [$parameters];
+        }
+
+        if (!is_array($parameters)) {
             throw new Exception(
                 "Parameters passed must be of type array, string, numeric or null in '"
                 . get_called_class() . "'"
             );
         }
 
-        $query = self::getPreparedQuery($params, 1);
+        $query = self::getPreparedQuery($parameters, 1);
 
         /**
          * Return only the first row
