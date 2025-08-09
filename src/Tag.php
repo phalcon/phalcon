@@ -835,15 +835,14 @@ class Tag
      */
     public static function preload(array | string $parameters): string
     {
-        $params = $parameters;
-        if (is_string($params)) {
-            $params = [$params];
+        if (!is_array($parameters)) {
+            $parameters = [$parameters];
         }
 
         /**
          * Grab the element
          */
-        $href = $params[0];
+        $href = $parameters[0];
 
         $container = self::getDI();
 
@@ -851,7 +850,7 @@ class Tag
          * Check if we have the response object in the container
          */
         if (true === $container->has("response")) {
-            $attributes = $params[1] ?? ["as" => "style"];
+            $attributes = $parameters[1] ?? ["as" => "style"];
 
             /**
              * href comes wrapped with ''. Remove them
