@@ -1352,35 +1352,34 @@ class Tag
      */
     public static function textArea(array | string $parameters): string
     {
-        $params = $parameters;
         if (!is_array($parameters)) {
-            $params = [$parameters];
+            $parameters = [$parameters];
         }
 
-        if (!isset($params[0]) && true === $params["id"]) {
-            $params[0] = $params["id"];
+        if (!isset($parameters[0]) && true === $parameters["id"]) {
+            $parameters[0] = $parameters["id"];
         }
 
-        $id = $params[0];
-        if (!isset($params["name"])) {
-            $params["name"] = $id;
+        $id = $parameters[0];
+        if (!isset($parameters["name"])) {
+            $parameters["name"] = $id;
         } else {
-            $name = $params["name"] ?? "";
+            $name = $parameters["name"] ?? "";
             if (empty($name)) {
-                $params["name"] = $id;
+                $parameters["name"] = $id;
             }
         }
 
-        if (!isset($params["id"])) {
-            $params["id"] = $id;
+        if (!isset($parameters["id"])) {
+            $parameters["id"] = $id;
         }
 
-        if (isset($params["value"])) {
-            $content = $params["value"];
+        if (isset($parameters["value"])) {
+            $content = $parameters["value"];
 
-            unset($params["value"]);
+            unset($parameters["value"]);
         } else {
-            $content = self::getValue($id, $params);
+            $content = self::getValue($id, $parameters);
         }
 
         /**
@@ -1390,7 +1389,7 @@ class Tag
             $content = "";
         }
 
-        $code = self::renderAttributes("<textarea", $params);
+        $code = self::renderAttributes("<textarea", $parameters);
         $code .= ">" . htmlspecialchars($content) . "</textarea>";
 
         return $code;
