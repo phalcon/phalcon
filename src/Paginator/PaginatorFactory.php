@@ -86,10 +86,9 @@ class PaginatorFactory
     public function newInstance(string $name, array $options = []): AdapterInterface
     {
         $definition = $this->getService($name);
-        /** @var AdapterInterface $paginator */
-        $paginator = new $definition($options);
 
-        return $paginator;
+        /** @var AdapterInterface */
+        return new $definition($options);
     }
 
     /**
