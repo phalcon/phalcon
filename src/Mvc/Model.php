@@ -3736,15 +3736,10 @@ abstract class Model extends AbstractInjectionAware implements
     final protected function checkForeignKeysRestrict(): bool
     {
         /**
-         * Get the models manager
-         */
-        $manager = $this->modelsManager;
-
-        /**
          * We check if some of the belongsTo relations act as virtual foreign
          * key
          */
-        $belongsTo = $manager->getBelongsTo($this);
+        $belongsTo = $this->modelsManager->getBelongsTo($this);
 
         $error = false;
 
@@ -3778,7 +3773,7 @@ abstract class Model extends AbstractInjectionAware implements
             /**
              * Load the referenced model if needed
              */
-            $referencedModel = $manager->load($relation->getReferencedModel());
+            $referencedModel = $this->modelsManager->load($relation->getReferencedModel());
 
             /**
              * Since relations can have multiple columns or a single one, we
@@ -3791,32 +3786,25 @@ abstract class Model extends AbstractInjectionAware implements
             $fields           = $relation->getFields();
             $referencedFields = $relation->getReferencedFields();
 
-            if (is_array($fields)) {
-                /**
-                 * Create a compound condition
-                 */
-                foreach ($fields as $position => $field) {
-                    $value = $this->$field ?? null;
+            if (!is_array($fields)) {
+                $fields = [$fields];
+            }
 
-                    $conditions[] = "[" . $referencedFields[$position] . "] = ?" . $position;
-                    $bindParams[] = $value;
+            /**
+             * Create a compound condition
+             */
+            foreach ($fields as $position => $field) {
+                $value = $this->$field ?? null;
 
-                    if ($value === null) {
-                        $numberNull++;
-                    }
-                }
-
-                $validateWithNulls = $numberNull == count($fields);
-            } else {
-                $value = $this->$fields ?? null;
-
-                $conditions[] = "[" . $referencedFields . "] = ?0";
+                $conditions[] = "[" . $referencedFields[$position] . "] = ?" . $position;
                 $bindParams[] = $value;
 
                 if ($value === null) {
-                    $validateWithNulls = true;
+                    $numberNull++;
                 }
             }
+
+            $validateWithNulls = ($numberNull === count($fields));
 
             /**
              * Check if the virtual foreign key has extra conditions
@@ -3852,19 +3840,17 @@ abstract class Model extends AbstractInjectionAware implements
                 /**
                  * Get the user message or produce a new one
                  */
-                if (!isset($foreignKey["message"])) {
-                    if (is_array($fields)) {
-                        $message = "Value of fields \""
-                            . implode(", ", $fields)
-                            . "\" does not exist on referenced table";
-                    } else {
-                        $message = "Value of field \""
-                            . $fields
-                            . "\" does not exist on referenced table";
-                    }
+                if (isset($foreignKey["message"])) {
+                    $message = $foreignKey["message"];
+                } elseif (count($fields) !== 1) {
+                    $message = "Value of fields \""
+                        . implode(", ", $fields)
+                        . "\" does not exist on referenced table";
+                } else {
+                    $message = "Value of field \""
+                        . $fields
+                        . "\" does not exist on referenced table";
                 }
-
-                $message = $foreignKey["message"];
 
                 /**
                  * Create a message
