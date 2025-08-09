@@ -993,56 +993,56 @@ abstract class MetaData extends Injectable implements MetaDataInterface
      */
     final protected function initializeMetaData(ModelInterface $model, string | null $key): bool
     {
-        if ($key !== null) {
-            if (false === isset($this->metaData[$key])) {
-                /**
-                 * The meta-data is read from the adapter always if not available in metaData property
-                 */
-                $prefixKey = "meta-" . $key;
-                $data      = $this->read($prefixKey);
-
-                if ($data !== null) {
-                    $this->metaData[$key] = $data;
-                } else {
-                    /**
-                     * Check if there is a method "metaData" in the model to retrieve meta-data from it
-                     */
-                    if (method_exists($model, "metaData")) {
-                        $modelMetadata = $model->metaData();
-
-                        if (!is_array($modelMetadata)) {
-                            throw new Exception(
-                                "Invalid meta-data for model " . get_class($model)
-                            );
-                        }
-                    } else {
-                        /**
-                         * Get the meta-data extraction strategy
-                         */
-                        $container     = $this->getDI();
-                        $strategy      = $this->getStrategy();
-                        $modelMetadata = $strategy->getMetaData(
-                            $model,
-                            $container
-                        );
-                    }
-
-                    /**
-                     * Store the meta-data locally
-                     */
-                    $this->metaData[$key] = $modelMetadata;
-
-                    /**
-                     * Store the meta-data in the adapter
-                     */
-                    $this->write($prefixKey, $modelMetadata);
-                }
-            }
-
-            return true;
+        if ($key === null) {
+            return false;
         }
 
-        return false;
+        if (false === isset($this->metaData[$key])) {
+            /**
+             * The meta-data is read from the adapter always if not available in metaData property
+             */
+            $prefixKey = "meta-" . $key;
+            $data      = $this->read($prefixKey);
+
+            if ($data !== null) {
+                $this->metaData[$key] = $data;
+            } else {
+                /**
+                 * Check if there is a method "metaData" in the model to retrieve meta-data from it
+                 */
+                if (method_exists($model, "metaData")) {
+                    $modelMetadata = $model->metaData();
+
+                    if (!is_array($modelMetadata)) {
+                        throw new Exception(
+                            "Invalid meta-data for model " . get_class($model)
+                        );
+                    }
+                } else {
+                    /**
+                     * Get the meta-data extraction strategy
+                     */
+                    $container     = $this->getDI();
+                    $strategy      = $this->getStrategy();
+                    $modelMetadata = $strategy->getMetaData(
+                        $model,
+                        $container
+                    );
+                }
+
+                /**
+                 * Store the meta-data locally
+                 */
+                $this->metaData[$key] = $modelMetadata;
+
+                /**
+                 * Store the meta-data in the adapter
+                 */
+                $this->write($prefixKey, $modelMetadata);
+            }
+        }
+
+        return true;
     }
 
     /**
