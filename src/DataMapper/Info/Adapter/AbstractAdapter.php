@@ -68,10 +68,8 @@ abstract class AbstractAdapter implements AdapterInterface
      */
     public function getCurrentSchema(): string
     {
-        /** @var string $currentSchema */
-        $currentSchema = $this->connection->fetchValue($this->currentSchemaSql);
-
-        return $currentSchema;
+        /** @var string */
+        return $this->connection->fetchValue($this->currentSchemaSql);
     }
 
     /**
