@@ -583,11 +583,7 @@ class Validation extends Injectable implements ValidationInterface
      */
     public function fails(): bool
     {
-        if ($this->messages->count() > 0) {
-            return true;
-        }
-
-        return false;
+        return $this->messages->count() > 0;
     }
 
     /**
