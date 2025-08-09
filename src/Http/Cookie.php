@@ -218,79 +218,68 @@ class Cookie extends AbstractInjectionAware implements
     ): mixed {
         $this->checkRestored();
 
-        if (true !== $this->isRead) {
-            if (!isset($_COOKIE[$this->name])) {
-                return $defaultValue;
-            }
-
-            $value          = $_COOKIE[$this->name];
-            $decryptedValue = $value;
-            if (true === $this->useEncryption) {
-                if (null === $this->container) {
-                    throw new Exception(
-                        "A dependency injection container is required "
-                        . "to access the 'filter' and 'crypt' services"
-                    );
-                }
-
-                /** @var CryptInterface $crypt */
-                $crypt = $this->container->getShared('crypt');
-
-                if (!is_object($crypt)) {
-                    throw new Exception(
-                        'A dependency which implements CryptInterface '
-                        . 'is required to use encryption'
-                    );
-                }
-
-                /**
-                 * Verify the cookie's value if the sign key was set
-                 */
-                if (null !== $this->signKey) {
-                    /**
-                     * Decrypt the value also decoding it with base64
-                     */
-                    $decryptedValue = $crypt->decryptBase64(
-                        $value,
-                        $this->signKey
-                    );
-                } else {
-                    /**
-                     * Decrypt the value also decoding it with base64
-                     */
-                    $decryptedValue = $crypt->decryptBase64($value);
-                }
-            }
-
-            /**
-             * Update the decrypted value
-             */
-            $this->value = $decryptedValue;
-
-            if (null !== $filters) {
-                if (null === $this->filter) {
-                    if (null === $this->container) {
-                        throw new Exception(
-                            "A dependency injection container is "
-                            . "required to access the 'filter' service"
-                        );
-                    }
-
-                    /** @var FilterInterface $filter */
-                    $filter       = $this->container->getShared('filter');
-                    $this->filter = $filter;
-                }
-
-                return $this->filter->sanitize($decryptedValue, $filters);
-            }
-
-            /**
-             * Return the value without filtering
-             */
-            return $decryptedValue;
+        if (true === $this->isRead) {
+            return $this->value;
         }
 
-        return $this->value;
+        if (!isset($_COOKIE[$this->name])) {
+            return $defaultValue;
+        }
+
+        $value          = $_COOKIE[$this->name];
+        $decryptedValue = $value;
+        if (true === $this->useEncryption) {
+            if (null === $this->container) {
+                throw new Exception(
+                    "A dependency injection container is required "
+                    . "to access the 'filter' and 'crypt' services"
+                );
+            }
+
+            /** @var CryptInterface $crypt */
+            $crypt = $this->container->getShared('crypt');
+
+            if (!is_object($crypt)) {
+                throw new Exception(
+                    'A dependency which implements CryptInterface '
+                    . 'is required to use encryption'
+                );
+            }
+
+            /**
+             * Decrypt the value also decoding it with base64
+             */
+            $decryptedValue = $crypt->decryptBase64(
+                $value,
+                $this->signKey ?? null
+            );
+        }
+
+        /**
+         * Update the decrypted value
+         */
+        $this->value = $decryptedValue;
+
+        if (null !== $filters) {
+            if (null === $this->filter) {
+                if (null === $this->container) {
+                    throw new Exception(
+                        "A dependency injection container is "
+                        . "required to access the 'filter' service"
+                    );
+                }
+
+                /** @var FilterInterface */
+                $this->filter = $this->container->getShared('filter');
+            }
+
+            return $this->filter->sanitize($decryptedValue, $filters);
+        }
+
+        /**
+         * Return the value without filtering
+         */
+        return $decryptedValue;
     }
 
     /**
