@@ -1059,52 +1059,48 @@ class Request extends AbstractInjectionAware implements
         $files      = [];
         $superFiles = $_FILES;
 
-        if (!empty($superFiles)) {
-            foreach ($superFiles as $prefix => $input) {
-                if (is_array($input['name'])) {
-                    $smoothInput = $this->smoothFiles(
-                        $input["name"],
-                        $input["type"],
-                        $input["tmp_name"],
-                        $input["size"],
-                        $input["error"],
-                        $prefix
-                    );
+        foreach ($superFiles as $prefix => $input) {
+            if (is_array($input['name'])) {
+                $smoothInput = $this->smoothFiles(
+                    $input["name"],
+                    $input["type"],
+                    $input["tmp_name"],
+                    $input["size"],
+                    $input["error"],
+                    $prefix
+                );
 
-                    foreach ($smoothInput as $file) {
-                        if (
-                            false === $onlySuccessful ||
-                            UPLOAD_ERR_OK === $file['error']
-                        ) {
-                            $dataFile = [
-                                'name'     => $file["name"],
-                                'type'     => $file["type"],
-                                'tmp_name' => $file["tmp_name"],
-                                'size'     => $file["size"],
-                                'error'    => $file["error"],
-                            ];
-
-                            $files = $this->processFiles(
-                                $files,
-                                $namedKeys,
-                                $dataFile,
-                                $file['key']
-                            );
-                        }
-                    }
-                } else {
+                foreach ($smoothInput as $file) {
                     if (
                         false === $onlySuccessful ||
-                        UPLOAD_ERR_OK === $input['error']
+                        UPLOAD_ERR_OK === $file['error']
                     ) {
+                        $dataFile = [
+                            'name'     => $file["name"],
+                            'type'     => $file["type"],
+                            'tmp_name' => $file["tmp_name"],
+                            'size'     => $file["size"],
+                            'error'    => $file["error"],
+                        ];
+
                         $files = $this->processFiles(
                             $files,
                             $namedKeys,
-                            $input,
-                            $prefix
+                            $dataFile,
+                            $file['key']
                         );
                     }
                 }
+            } elseif (
+                false === $onlySuccessful ||
+                UPLOAD_ERR_OK === $input['error']
+            ) {
+                $files = $this->processFiles(
+                    $files,
+                    $namedKeys,
+                    $input,
+                    $prefix
+                );
             }
         }
 
