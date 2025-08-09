@@ -235,19 +235,22 @@ class Gettext extends AbstractAdapter
      */
     public function setDirectory($directory): void
     {
-        if (!empty($directory)) {
-            $this->directory = $directory;
+        if (empty($directory)) {
+            return;
+        }
 
-            if (is_array($directory)) {
-                foreach ($directory as $index => $item) {
-                    bindtextdomain($index, $item);
-                }
-            } else {
-                bindtextdomain(
-                    $this->getDefaultDomain(),
-                    $directory
-                );
-            }
+        $this->directory = $directory;
+
+        if (!is_array($directory)) {
+            $defaultDomain = $this->getDefaultDomain();
+
+            $directory = [
+                $defaultDomain => $directory,
+            ];
+        }
+
+        foreach ($directory as $index => $item) {
+            bindtextdomain($index, $item);
         }
     }
 
