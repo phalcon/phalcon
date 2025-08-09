@@ -61,16 +61,16 @@ class Timestampable extends AbstractBehavior
         $field     = $options['field'];
         $timestamp = $this->getTimestamp($options);
 
+        if (!is_array($field)) {
+            $field = [$field];
+        }
+
         /**
          * Assign the value to the field, use writeAttribute() if the property
          * is protected
          */
-        if (is_array($field)) {
-            foreach ($field as $singleField) {
-                $model->writeAttribute($singleField, $timestamp);
-            }
-        } else {
-            $model->writeAttribute($field, $timestamp);
+        foreach ($field as $singleField) {
+            $model->writeAttribute($singleField, $timestamp);
         }
     }
 
