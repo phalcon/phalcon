@@ -147,47 +147,46 @@ class Service implements ServiceInterface
             /**
              * String definitions can be class names without implicit parameters
              */
-            if (true === class_exists($instanceDefinition)) {
-                $instance = $this->createInstance($instanceDefinition, $parameters);
-            } else {
+
+            if (false === class_exists($instanceDefinition)) {
                 throw new ServiceResolutionException();
             }
-        } else {
+
+            $instance = $this->createInstance($instanceDefinition, $parameters);
+        } elseif (is_object($instanceDefinition)) {
             /**
              * Object definitions can be a Closure or an already resolved
              * instance
              */
-            if (is_object($instanceDefinition)) {
-                if ($instanceDefinition instanceof Closure) {
-                    /**
-                     * Bounds the closure to the current DI
-                     */
-                    if (is_object($container)) {
-                        $instanceDefinition = Closure::bind($instanceDefinition, $container);
-                    }
 
-                    $instance = $this->createClosureInstance(
-                        $instanceDefinition,
-                        $parameters
-                    );
-                } else {
-                    $instance = $instanceDefinition;
-                }
-            } else {
+            if ($instanceDefinition instanceof Closure) {
                 /**
-                 * Array definitions require a 'className' parameter
+                 * Bounds the closure to the current DI
                  */
-                if (is_array($instanceDefinition)) {
-                    $builder  = new Builder();
-                    $instance = $builder->build(
-                        $container,
-                        $instanceDefinition,
-                        $parameters
-                    );
-                } else {
-                    throw new ServiceResolutionException();
+                if (is_object($container)) {
+                    $instanceDefinition = Closure::bind($instanceDefinition, $container);
                 }
+
+                $instance = $this->createClosureInstance(
+                    $instanceDefinition,
+                    $parameters
+                );
+            } else {
+                $instance = $instanceDefinition;
             }
+        } elseif (is_array($instanceDefinition)) {
+            /**
+             * Array definitions require a 'className' parameter
+             */
+
+            $builder  = new Builder();
+            $instance = $builder->build(
+                $container,
+                $instanceDefinition,
+                $parameters
+            );
+        } else {
+            throw new ServiceResolutionException();
         }
 
         /**
