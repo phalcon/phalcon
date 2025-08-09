@@ -1490,50 +1490,42 @@ class Tag
         array | string $parameters,
         bool $asValue = false
     ): string {
-        $params = [];
-        $id     = '';
+        $id = '';
 
         if (!is_array($parameters)) {
-            $params[] = $parameters;
-        } else {
-            $params = $parameters;
+            $parameters = [$parameters];
         }
 
         if (false === $asValue) {
-            if (!isset($params[0])) {
-                $params[0] = $params["id"];
+            if (!isset($parameters[0])) {
+                $parameters[0] = $parameters["id"];
             } else {
-                $id = $params[0];
+                $id = $parameters[0];
             }
 
-            if (isset($params["name"])) {
-                $name = $params["name"];
-                if (empty($name)) {
-                    $params["name"] = $id;
-                }
-            } else {
-                $params["name"] = $id;
+            if (!isset($parameters["name"]) || empty($parameters["name"])) {
+                $parameters["name"] = $id;
             }
 
             /**
              * Automatically assign the id if the name is not an array
              */
-            if (is_string($id) && !str_contains($id, "[") && !isset($params["id"])) {
+            if (is_string($id) && !str_contains($id, "[") && !isset($parameters["id"])) {
                 $params["id"] = $id;
             }
 
-            $params["value"] = self::getValue($id, $params);
+            $parameters["value"] = self::getValue($id, $parameters);
         } else {
             /**
              * Use the "id" as value if the user hadn't set it
              */
-            if (!isset($params["value"]) && isset($params[0])) {
-                $params["value"] = $params[0];
+            if (!isset($parameters["value"]) && isset($parameters[0])) {
+                $parameters["value"] = $parameters[0];
             }
         }
 
-        $params["type"] = $type;
-        $code           = self::renderAttributes("<input", $params);
+        $parameters["type"] = $type;
+        $code               = self::renderAttributes("<input", $parameters);
 
         /**
          * Check if Doctype is XHTML
