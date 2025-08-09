@@ -462,18 +462,16 @@ class Tag
     ): string {
         $escaper                = self::getEscaperService();
         $items                  = [];
-        $output                 = "";
         $documentTitle          = $escaper->html(self::$documentTitle);
         $documentTitleSeparator = $escaper->html(self::$documentTitleSeparator);
 
         if (true === $prepend) {
             $documentPrependTitle = self::$documentPrependTitle;
 
-            if (!empty($documentPrependTitle)) {
-                $reverse = array_reverse($documentPrependTitle);
-                foreach ($reverse as $title) {
-                    $items[] = $escaper->html($title);
-                }
+            $reverse = array_reverse($documentPrependTitle);
+
+            foreach ($reverse as $title) {
+                $items[] = $escaper->html($title);
             }
         }
 
@@ -484,10 +482,8 @@ class Tag
         if (true === $append) {
             $documentAppendTitle = self::$documentAppendTitle;
 
-            if (!empty($documentAppendTitle)) {
-                foreach ($documentAppendTitle as $title) {
-                    $items[] = $escaper->html($title);
-                }
+            foreach ($documentAppendTitle as $title) {
+                $items[] = $escaper->html($title);
             }
         }
 
@@ -495,11 +491,7 @@ class Tag
             $documentTitleSeparator = "";
         }
 
-        if (!empty($items)) {
-            $output = implode($documentTitleSeparator, $items);
-        }
-
-        return $output;
+        return implode($documentTitleSeparator, $items);
     }
 
     /**
