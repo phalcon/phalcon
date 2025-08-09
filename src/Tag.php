@@ -732,43 +732,42 @@ class Tag
         string | null $text = null,
         bool $local = true
     ): string {
-        $params = $parameters;
         if (is_string($parameters)) {
-            $params = [$parameters, $text, $local];
+            $parameters = [$parameters, $text, $local];
         }
 
-        if (!isset($params[0])) {
-            $action = $params["action"] ?? "";
-            if (isset($params["action"])) {
-                unset($params["action"]);
+        if (!isset($parameters[0])) {
+            $action = $parameters["action"] ?? "";
+            if (isset($parameters["action"])) {
+                unset($parameters["action"]);
             }
         } else {
-            $action = $params[0];
+            $action = $parameters[0];
         }
 
-        if (!isset($params[1])) {
-            $text = $params["text"] ?? "";
-            unset($params["text"]);
+        if (!isset($parameters[1])) {
+            $text = $parameters["text"] ?? "";
+            unset($parameters["text"]);
         } else {
-            $text = $params[1];
+            $text = $parameters[1];
         }
 
-        if (!isset($params[2])) {
-            $local = $params["local"] ?? true;
-            unset($params["local"]);
+        if (!isset($parameters[2])) {
+            $local = $parameters["local"] ?? true;
+            unset($parameters["local"]);
         } else {
-            $local = $params[2];
+            $local = $parameters[2];
         }
 
-        $query = $params["query"] ?? null;
-        if (isset($params["query"])) {
-            unset($params["query"]);
+        $query = $parameters["query"] ?? null;
+        if (isset($parameters["query"])) {
+            unset($parameters["query"]);
         }
 
-        $url            = self::getUrlService();
-        $params["href"] = $url->get($action, $query, $local);
+        $url                = self::getUrlService();
+        $parameters["href"] = $url->get($action, $query, $local);
 
-        return self::renderAttributes("<a", $params)
+        return self::renderAttributes("<a", $parameters)
             . ">" . $text . "</a>";
     }
 
