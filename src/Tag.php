@@ -622,9 +622,6 @@ class Tag
         $params = $parameters;
         if (is_string($params)) {
             $params = [$params];
-            if (isset($params[1])) {
-                $local = (bool)$params[1];
-            }
         }
 
         if (!isset($params["src"])) {
@@ -672,7 +669,6 @@ class Tag
      * Builds a SCRIPT[type="javascript"] tag
      *
      * @param array|string $parameters = [
-     *                                 'local' => false,
      *                                 'src'   => '',
      *                                 'type'  => 'text/javascript'
      *                                 'rel'   => ''
@@ -690,16 +686,6 @@ class Tag
         $params = $parameters;
         if (is_string($params)) {
             $params = [$params];
-        }
-
-        if (isset($params[1])) {
-            $local = (bool)$params[1];
-        } else {
-            if (isset($params["local"])) {
-                $local = (bool)$params["local"];
-
-                unset($params["local"]);
-            }
         }
 
         if (
@@ -732,7 +718,6 @@ class Tag
      * @param array|string $parameters = [
      *                                 'action' => '',
      *                                 'text'   => '',
-     *                                 'local'  => false,
      *                                 'query'  => '',
      *                                 'class'  => '',
      *                                 'name'   => '',
@@ -753,7 +738,7 @@ class Tag
     ): string {
         $params = $parameters;
         if (is_string($parameters)) {
-            $params = [$parameters, $text, $local];
+            $params = [$parameters, $text];
         }
 
         if (!isset($params[0])) {
@@ -770,13 +755,6 @@ class Tag
             unset($params["text"]);
         } else {
             $text = $params[1];
-        }
-
-        if (!isset($params[2])) {
-            $local = $params["local"] ?? true;
-            unset($params["local"]);
-        } else {
-            $local = $params[2];
         }
 
         $query = $params["query"] ?? null;
@@ -1219,44 +1197,34 @@ class Tag
         array | string | null $parameters = null,
         bool $local = true
     ): string {
-        if (!is_array($parameters)) {
-            $params = [$parameters, $local];
-        } else {
-            $params = $parameters;
+        if ($parameters === null) {
+            $parameters = [];
+        } elseif (!is_array($parameters)) {
+            $parameters = [$parameters];
         }
 
-        $local = true;
-        if (isset($params[1])) {
-            $local = (bool)$params[1];
-        } else {
-            if (isset($params["local"])) {
-                $local = (bool)$params["local"];
-                unset($params["local"]);
-            }
+        if (!isset($parameters["type"])) {
+            $parameters["type"] = "text/css";
         }
 
-        if (!isset($params["type"])) {
-            $params["type"] = "text/css";
-        }
-
-        if (!isset($params["href"])) {
-            $params["href"] = $params[0] ?? "";
+        if (!isset($parameters["href"])) {
+            $parameters["href"] = $parameters[0] ?? "";
         }
 
         /**
          * URLs are generated through the "url" service
          */
         if (true === $local) {
-            $params["href"] = self::getUrlService()
+            $parameters["href"] = self::getUrlService()
                                   ->getStatic(
-                                      $params["href"]
+                                      $parameters["href"]
                                   )
             ;
         }
 
-        $params["rel"] = $params["rel"] ?? "stylesheet";
+        $parameters["rel"] = $parameters["rel"] ?? "stylesheet";
 
-        $code = self::renderAttributes("<link", $params);
+        $code = self::renderAttributes("<link", $parameters);
 
         /**
          * Check if Doctype is XHTML
