@@ -380,29 +380,7 @@ class Uniqueness extends AbstractCombinedFieldsValidator
                             $index++;
                         }
                     }
-                } elseif (count($field) === 1) {
-                    $attribute = $this->getColumnNameReal(
-                        $record,
-                        $this->getOption("attribute", $field[0])
-                    );
-
-                    if (is_array($except)) {
-                        foreach ($except as $singleExcept) {
-                            $notInValues[]    = "?" . $index;
-                            $params["bind"][] = $singleExcept;
-                            $index++;
-                        }
-
-                        $exceptConditions[] = $attribute
-                            . " NOT IN ("
-                            . implode(",", $notInValues)
-                            . ")";
-                    } else {
-                        $params["conditions"][] = $attribute . " <> ?" . $index;
-                        $params["bind"][]       = $except;
-                        $index++;
-                    }
-                } elseif (count($field) > 1) {
+                } else {
                     foreach ($field as $item) {
                         $attribute = $this->getColumnNameReal(
                             $record,
