@@ -1763,14 +1763,10 @@ class Compiler implements InjectionAwareInterface
              * Check if the extension implements the required event name
              */
             if (method_exists($extension, $name)) {
-                if (!empty($arguments)) {
-                    $status = call_user_func_array(
-                        [$extension, $name],
-                        $arguments
-                    );
-                } else {
-                    $status = call_user_func([$extension, $name]);
-                }
+                $status = call_user_func_array(
+                    [$extension, $name],
+                    $arguments
+                );
 
                 /**
                  * Only string statuses means the extension processes
