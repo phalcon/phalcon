@@ -341,13 +341,14 @@ class Cookie extends AbstractInjectionAware implements
      */
     public function send(): CookieInterface
     {
-        $definition             = [];
-        $definition['expire']   = $this->expire;
-        $definition['path']     = $this->path;
-        $definition['domain']   = $this->domain ?? null;
-        $definition['secure']   = $this->secure ?? null;
-        $definition['httpOnly'] = $this->httpOnly ?? null;
-        $definition['options']  = $this->options;
+        $definition = [
+            'expire'   => $this->expire,
+            'path'     => $this->path,
+            'domain'   => $this->domain ?? null,
+            'secure'   => $this->secure ?? null,
+            'httpOnly' => $this->httpOnly ?? null,
+            'options'  => $this->options,
+        ];
 
         /**
          * Remove all the empty elements
@@ -393,14 +394,10 @@ class Cookie extends AbstractInjectionAware implements
              * Encrypt the value also coding it with base64.
              * Sign the cookie's value if the sign key was set
              */
-            if (is_string($this->signKey)) {
-                $encryptValue = $crypt->encryptBase64(
-                    (string)$this->value,
-                    $this->signKey
-                );
-            } else {
-                $encryptValue = $crypt->encryptBase64((string)$this->value);
-            }
+            $encryptValue = $crypt->encryptBase64(
+                (string)$this->value,
+                $this->signKey ?? null
+            );
         }
 
         /**
