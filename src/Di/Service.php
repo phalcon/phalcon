@@ -229,20 +229,14 @@ class Service implements ServiceInterface
             );
         }
 
-        /**
-         * Update the parameter
-         */
-        if (isset($this->definition['arguments'])) {
-            $arguments            = $this->definition['arguments'];
-            $arguments[$position] = $parameter;
-        } else {
-            $arguments = [$position => $parameter];
+        if (!isset($this->definition['arguments'])) {
+            $this->definition['arguments'] = [];
         }
 
         /**
-         * Re-update the arguments
+         * Update the parameter
          */
-        $this->definition['arguments'] = $arguments;
+        $this->definition['arguments'][$position] = $parameter;
 
         return $this;
     }
