@@ -671,42 +671,39 @@ class Tag
         array | string $parameters = [],
         bool $local = true
     ): string {
-        $params = $parameters;
-        if (is_string($params)) {
-            $params = [$params];
+        if (!is_array($parameters)) {
+            $parameters = [$parameters];
         }
 
-        if (isset($params[1])) {
-            $local = (bool)$params[1];
-        } else {
-            if (isset($params["local"])) {
-                $local = (bool)$params["local"];
+        if (isset($parameters[1])) {
+            $local = (bool)$parameters[1];
+        } elseif (isset($parameters["local"])) {
+            $local = (bool)$parameters["local"];
 
-                unset($params["local"]);
-            }
+            unset($parameters["local"]);
         }
 
         if (
-            !isset($params["type"]) &&
+            !isset($parameters["type"]) &&
             self::$documentType < self::HTML5
         ) {
-            $params["type"] = "text/javascript";
+            $parameters["type"] = "text/javascript";
         }
 
-        if (!isset($params["src"])) {
-            $params["src"] = $params[0] ?? "";
+        if (!isset($parameters["src"])) {
+            $parameters["src"] = $parameters[0] ?? "";
         }
 
         /**
          * URLs are generated through the "url" service
          */
         if (true === $local) {
-            $params["src"] = self::getUrlService()
-                                 ->getStatic($params["src"])
+            $parameters["src"] = self::getUrlService()
+                                 ->getStatic($parameters["src"])
             ;
         }
 
-        return self::renderAttributes("<script", $params)
+        return self::renderAttributes("<script", $parameters)
             . "></script>" . PHP_EOL;
     }
 
