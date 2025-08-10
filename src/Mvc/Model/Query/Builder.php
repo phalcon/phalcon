@@ -164,11 +164,9 @@ class Builder implements BuilderInterface, InjectionAwareInterface
             if (isset($params[0])) {
                 $conditions       = $params[0];
                 $this->conditions = $conditions;
-            } else {
-                if (isset($params["conditions"])) {
-                    $conditions       = $params["conditions"];
-                    $this->conditions = $conditions;
-                }
+            } elseif (isset($params["conditions"])) {
+                $conditions       = $params["conditions"];
+                $this->conditions = $conditions;
             }
 
             if (is_array($conditions)) {
@@ -177,22 +175,24 @@ class Builder implements BuilderInterface, InjectionAwareInterface
                 $mergedTypes      = [];
 
                 foreach ($conditions as $singleConditionArray) {
-                    if (is_array($singleConditionArray)) {
-                        $singleCondition = $singleConditionArray[0] ?? null;
-                        $singleParams    = $singleConditionArray[1] ?? null;
-                        $singleTypes     = $singleConditionArray[2] ?? null;
+                    if (!is_array($singleConditionArray)) {
+                        continue;
+                    }
 
-                        if (is_string($singleCondition)) {
-                            $mergedConditions[] = $singleCondition;
-                        }
+                    $singleCondition = $singleConditionArray[0] ?? null;
+                    $singleParams    = $singleConditionArray[1] ?? null;
+                    $singleTypes     = $singleConditionArray[2] ?? null;
 
-                        if (is_array($singleParams)) {
-                            $mergedParams = $mergedParams + $singleParams;
-                        }
+                    if (is_string($singleCondition)) {
+                        $mergedConditions[] = $singleCondition;
+                    }
 
-                        if (is_array($singleTypes)) {
-                            $mergedTypes = $mergedTypes + $singleTypes;
-                        }
+                    if (is_array($singleParams)) {
+                        $mergedParams = $mergedParams + $singleParams;
+                    }
+
+                    if (is_array($singleTypes)) {
+                        $mergedTypes = $mergedTypes + $singleTypes;
                     }
                 }
 
@@ -267,17 +267,13 @@ class Builder implements BuilderInterface, InjectionAwareInterface
              */
             if (isset($params["limit"])) {
                 $limitClause = $params["limit"];
-                if (is_array($limitClause)) {
-                    if (isset($limitClause[0])) {
-                        if (is_int($limitClause[0])) {
-                            $this->limit = (string)$limitClause[0];
-                        }
+                if (is_array($limitClause) && isset($limitClause[0])) {
+                    if (is_int($limitClause[0])) {
+                        $this->limit = (string)$limitClause[0];
+                    }
 
-                        if (isset($limitClause[1]) && is_int($limitClause[1])) {
-                            $this->offset = $limitClause[1];
-                        }
-                    } else {
-                        $this->limit = $limitClause;
+                    if (isset($limitClause[1]) && is_int($limitClause[1])) {
+                        $this->offset = $limitClause[1];
                     }
                 } else {
                     $this->limit = $limitClause;
