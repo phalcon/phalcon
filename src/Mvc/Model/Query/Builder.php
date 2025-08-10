@@ -1214,25 +1214,22 @@ class Builder implements BuilderInterface, InjectionAwareInterface
         array $bindParams = [],
         array $bindTypes = []
     ): BuilderInterface {
-        $this->having      = $conditions;
-        $currentBindParams = $this->bindParams;
+        $this->having = $conditions;
 
         /**
          * Merge the bind params to the current ones
          */
-        if (is_array($currentBindParams)) {
-            $this->bindParams = $currentBindParams + $bindParams;
+        if (is_array($this->bindParams)) {
+            $this->bindParams = $this->bindParams + $bindParams;
         } else {
             $this->bindParams = $bindParams;
         }
 
-        $currentBindTypes = $this->bindTypes;
-
         /**
          * Merge the bind types to the current ones
          */
-        if (is_array($currentBindTypes)) {
-            $this->bindTypes = $currentBindTypes + $bindTypes;
+        if (is_array($this->bindTypes)) {
+            $this->bindTypes = $this->bindTypes + $bindTypes;
         } else {
             $this->bindTypes = $bindTypes;
         }
