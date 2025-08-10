@@ -667,20 +667,15 @@ class Criteria implements CriteriaInterface, InjectionAwareInterface
         mixed $alias = null,
         mixed $type = null
     ): CriteriaInterface {
-        $join = [$model, $conditions, $alias, $type];
+        $joins = [
+            [$model, $conditions, $alias, $type]
+        ];
 
-        if (isset($this->params["joins"])) {
-            $currentJoins = $this->params["joins"];
-            if (is_array($currentJoins)) {
-                $mergedJoins = array_merge($currentJoins, [$join]);
-            } else {
-                $mergedJoins = [$join];
-            }
+        if (isset($this->params["joins"]) && is_array($this->params["joins"])) {
+            $this->params["joins"] = array_merge($this->params["joins"], $joins);
         } else {
-            $mergedJoins = [$join];
+            $this->params["joins"] = $joins;
         }
-
-        $this->params["joins"] = $mergedJoins;
 
         return $this;
     }
