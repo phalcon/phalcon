@@ -36,10 +36,10 @@ final class DeleteMultipleTest extends AbstractUnitTestCase
 
         $adapter = new Cache($instance);
 
-        $key1 = uniqid();
-        $key2 = uniqid();
-        $key3 = uniqid();
-        $key4 = uniqid();
+        $key1 = uniqid('key-');
+        $key2 = uniqid('key-');
+        $key3 = uniqid('key-');
+        $key4 = uniqid('key-');
 
         $adapter->setMultiple(
             [
