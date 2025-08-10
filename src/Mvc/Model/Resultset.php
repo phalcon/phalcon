@@ -592,60 +592,57 @@ abstract class Resultset implements
      */
     final public function seek(mixed $position): void
     {
-        if ($this->pointer != $position || $this->row === null) {
-            if (is_array($this->rows)) {
-                /**
-                 * All rows are in memory
-                 */
-                if (isset($this->rows[$position])) {
-                    $this->row = $this->rows[$position];
-                }
+        if ($this->pointer == $position && $this->row !== null) {
+            return;
+        }
 
-                $this->pointer   = $position;
-                $this->activeRow = null;
-
-                return;
-            }
-
+        if (is_array($this->rows)) {
             /**
-             * Fetch from PDO one-by-one.
+             * All rows are in memory
              */
-            $result = $this->result;
-
-            if ($this->row === null && $this->pointer === 0) {
-                /**
-                 * Fresh result-set: Query was already executed in
-                 * `Model\Query::executeSelect()`
-                 * The first row is available with fetch
-                 */
-                $this->row = $result->fetch();
-            }
-
-            if ($this->pointer > $position) {
-                /**
-                 * Current pointer is ahead requested position: e.g. request a
-                 * previous row. It is not possible to rewind. Re-execute query
-                 * with dataSeek.
-                 */
-                $result->dataSeek($position);
-
-                $this->row     = $result->fetch();
-                $this->pointer = $position;
-            }
-
-            while ($this->pointer < $position) {
-                /**
-                 * Requested position is greater than current pointer, seek
-                 * forward until the requested position is reached. We do not
-                 * need to re-execute the query!
-                 */
-                $this->row = $result->fetch();
-                $this->pointer++;
+            if (isset($this->rows[$position])) {
+                $this->row = $this->rows[$position];
             }
 
             $this->pointer   = $position;
             $this->activeRow = null;
+
+            return;
         }
+
+        if ($this->row === null && $this->pointer === 0) {
+            /**
+             * Fresh result-set: Query was already executed in
+             * `Model\Query::executeSelect()`
+             * The first row is available with fetch
+             */
+            $this->row = $this->result->fetch();
+        }
+
+        if ($this->pointer > $position) {
+            /**
+             * Current pointer is ahead requested position: e.g. request a
+             * previous row. It is not possible to rewind. Re-execute query
+             * with dataSeek.
+             */
+            $this->result->dataSeek($position);
+
+            $this->row     = $this->result->fetch();
+            $this->pointer = $position;
+        }
+
+        while ($this->pointer < $position) {
+            /**
+             * Requested position is greater than current pointer, seek
+             * forward until the requested position is reached. We do not
+             * need to re-execute the query!
+             */
+            $this->row = $this->result->fetch();
+            $this->pointer++;
+        }
+
+        $this->pointer   = $position;
+        $this->activeRow = null;
     }
 
     /**
