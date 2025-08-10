@@ -55,10 +55,10 @@ class Failed extends Exception
      */
     public function getRecordMessages(): array | string
     {
-        if (null !== $this->record) {
-            return $this->record->getMessages();
+        if (null === $this->record) {
+            return $this->getMessage();
         }
 
-        return $this->getMessage();
+        return $this->record->getMessages();
     }
 }
