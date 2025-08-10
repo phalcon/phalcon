@@ -373,10 +373,8 @@ class Response extends Injectable implements
          */
         if (!empty($this->content)) {
             echo $this->content;
-        } else {
-            if (!empty($this->file)) {
-                readfile($this->file);
-            }
+        } elseif (!empty($this->file)) {
+            readfile($this->file);
         }
 
         $this->sent = true;
