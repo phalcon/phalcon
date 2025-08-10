@@ -89,17 +89,13 @@ class Config extends Collection implements ConfigInterface
     {
         $source = $this->toArray();
 
-        $this->clear();
-
-        if (is_array($toMerge)) {
-            $result = $this->internalMerge($source, $toMerge);
-
-            $this->init($result);
-
-            return $this;
+        if (!is_array($toMerge)) {
+            $toMerge = $toMerge->toArray();
         }
 
-        $result = $this->internalMerge($source, $toMerge->toArray());
+        $this->clear();
+
+        $result = $this->internalMerge($source, $toMerge);
 
         $this->init($result);
 
