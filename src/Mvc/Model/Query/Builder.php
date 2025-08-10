@@ -766,19 +766,10 @@ class Builder implements BuilderInterface, InjectionAwareInterface
             $this->container = Di::getDefault();
         }
 
-        $models = $this->models;
-        if (is_array($models)) {
-            if (!count($models)) {
-                throw new Exception(
-                    "At least one model is required to build the query"
-                );
-            }
-        } else {
-            if (!$models) {
-                throw new Exception(
-                    "At least one model is required to build the query"
-                );
-            }
+        if (empty($this->models)) {
+            throw new Exception(
+                "At least one model is required to build the query"
+            );
         }
 
         $conditions = $this->conditions;
@@ -788,16 +779,16 @@ class Builder implements BuilderInterface, InjectionAwareInterface
              * If the conditions is a single numeric field. We internally create
              * a condition using the related primary key
              */
-            if (is_array($models)) {
-                if (count($models) > 1) {
+            if (is_array($this->models)) {
+                if (count($this->models) > 1) {
                     throw new Exception(
                         "Cannot build the query. Invalid condition"
                     );
                 }
 
-                $model = $models[0];
+                $model = $this->models[0];
             } else {
-                $model = $models;
+                $model = $this->models;
             }
 
             /**
@@ -862,28 +853,20 @@ class Builder implements BuilderInterface, InjectionAwareInterface
             }
         }
 
-        $distinct = $this->distinct;
+        $phql = match ($this->distinct) {
+            true    => "SELECT DISTINCT ",
+            false   => "SELECT ALL ",
+            default => "SELECT ",
+        };
 
-        if (is_bool($distinct)) {
-            if ($distinct) {
-                $phql = "SELECT DISTINCT ";
-            } else {
-                $phql = "SELECT ALL ";
-            }
-        } else {
-            $phql = "SELECT ";
-        }
-
-        $columns = $this->columns;
-
-        if ($columns !== null) {
+        if ($this->columns !== null) {
             /**
              * Generate PHQL for columns
              */
-            if (is_array($columns)) {
+            if (is_array($this->columns)) {
                 $selectedColumns = [];
 
-                foreach ($columns as $columnAlias => $column) {
+                foreach ($this->columns as $columnAlias => $column) {
                     if (is_int($columnAlias)) {
                         $selectedColumns[] = $column;
                     } else {
@@ -895,16 +878,16 @@ class Builder implements BuilderInterface, InjectionAwareInterface
 
                 $phql .= implode(", ", $selectedColumns);
             } else {
-                $phql .= $columns;
+                $phql .= $this->columns;
             }
         } else {
             /**
              * Automatically generate an array of models
              */
-            if (is_array($models)) {
+            if (is_array($this->models)) {
                 $selectedColumns = [];
 
-                foreach ($models as $modelColumnAlias => $model) {
+                foreach ($this->models as $modelColumnAlias => $model) {
                     if (is_int($modelColumnAlias)) {
                         $selectedColumn = $this->autoescape($model) . ".*";
                     } else {
@@ -916,17 +899,17 @@ class Builder implements BuilderInterface, InjectionAwareInterface
 
                 $phql .= implode(", ", $selectedColumns);
             } else {
-                $phql .= $this->autoescape($models) . ".*";
+                $phql .= $this->autoescape($this->models) . ".*";
             }
         }
 
         /**
          * Join multiple models or use a single one if it is a string
          */
-        if (is_array($models)) {
+        if (is_array($this->models)) {
             $selectedModels = [];
 
-            foreach ($models as $modelAlias => $model) {
+            foreach ($this->models as $modelAlias => $model) {
                 if (is_string($modelAlias)) {
                     $selectedModel = $this->autoescape($model)
                         . " AS "
@@ -940,16 +923,14 @@ class Builder implements BuilderInterface, InjectionAwareInterface
 
             $phql .= " FROM " . implode(", ", $selectedModels);
         } else {
-            $phql .= " FROM " . $this->autoescape($models);
+            $phql .= " FROM " . $this->autoescape($this->models);
         }
 
         /**
          * Check if joins were passed to the builders
          */
-        $joins = $this->joins;
-
-        if (is_array($joins)) {
-            foreach ($joins as $join) {
+        if (is_array($this->joins)) {
+            foreach ($this->joins as $join) {
                 /**
                  * The joined table is in the first place of the array
                  */
@@ -1003,11 +984,10 @@ class Builder implements BuilderInterface, InjectionAwareInterface
         /**
          * Process group parameters
          */
-        $group = $this->group;
-        if (!empty($group)) {
+        if (!empty($this->group)) {
             $groupItems = [];
 
-            foreach ($group as $groupItem) {
+            foreach ($this->group as $groupItem) {
                 $groupItems[] = $this->autoescape($groupItem);
             }
 
@@ -1017,66 +997,60 @@ class Builder implements BuilderInterface, InjectionAwareInterface
         /**
          * Process having clause
          */
-        $having = $this->having;
-        if ($having !== null && !empty($having)) {
-            $phql .= " HAVING " . $having;
+        if ($this->having !== null && !empty($this->having)) {
+            $phql .= " HAVING " . $this->having;
         }
 
         /**
          * Process order clause
          */
-        $order = $this->order;
+        if (is_array($this->order)) {
+            $orderItems = [];
 
-        if ($order !== null) {
-            if (is_array($order)) {
-                $orderItems = [];
+            foreach ($this->order as $orderItem) {
+                /**
+                 * For case 'ORDER BY 1'
+                 */
+                if (is_int($orderItem)) {
+                    $orderItems[] = $orderItem;
 
-                foreach ($order as $orderItem) {
-                    /**
-                     * For case 'ORDER BY 1'
-                     */
-                    if (is_int($orderItem)) {
-                        $orderItems[] = $orderItem;
-
-                        continue;
-                    }
-
-                    if (!str_contains($orderItem, " ")) {
-                        $itemExplode  = explode(" ", $orderItem);
-                        $orderItems[] = $this->autoescape($itemExplode[0]) . " " . $itemExplode[1];
-
-                        continue;
-                    }
-
-                    $orderItems[] = $this->autoescape($orderItem);
+                    continue;
                 }
 
-                $phql .= " ORDER BY " . implode(", ", $orderItems);
-            } else {
-                $phql .= " ORDER BY " . $order;
+                if (!str_contains($orderItem, " ")) {
+                    $itemExplode  = explode(" ", $orderItem);
+                    $orderItems[] = $this->autoescape($itemExplode[0]) . " " . $itemExplode[1];
+
+                    continue;
+                }
+
+                $orderItems[] = $this->autoescape($orderItem);
             }
+
+            $phql .= " ORDER BY " . implode(", ", $orderItems);
+        } elseif ($this->order !== null) {
+            $phql .= " ORDER BY " . $this->order;
         }
 
         /**
          * Process limit parameters
          */
-        $limit = $this->limit;
-        if ($limit !== null) {
+        if ($this->limit !== null) {
             $number = null;
             $offset = null;
 
-            if (is_array($limit)) {
-                $number = $limit["number"];
+            if (is_array($this->limit)) {
+                $number = $this->limit["number"];
 
-                if (isset($limit["offset"])) {
-                    $offset = $limit["offset"];
+                if (isset($this->limit["offset"])) {
+                    $offset = $this->limit["offset"];
                     if (!is_numeric($offset)) {
                         $offset = 0;
                     }
                 }
             } else {
-                if (is_numeric($limit)) {
-                    $number = $limit;
+                if (is_numeric($this->limit)) {
+                    $number = $this->limit;
                     $offset = $this->offset;
                     if ($offset !== null && !is_numeric($offset)) {
                         $offset = 0;
@@ -1097,9 +1071,7 @@ class Builder implements BuilderInterface, InjectionAwareInterface
             }
         }
 
-        $forUpdate = $this->forUpdate;
-
-        if (is_bool($forUpdate) && $forUpdate) {
+        if (is_bool($this->forUpdate) && $this->forUpdate) {
             $phql .= " FOR UPDATE";
         }
 
