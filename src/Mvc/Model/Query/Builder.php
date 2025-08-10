@@ -1113,10 +1113,9 @@ class Builder implements BuilderInterface, InjectionAwareInterface
      */
     public function getQuery(): QueryInterface
     {
-        $phql      = $this->getPhql();
-        $container = $this->container;
+        $phql = $this->getPhql();
 
-        if (!is_object($container)) {
+        if (!is_object($this->container)) {
             throw new Exception(
                 "A dependency injection container is required to access the services related to the ORM"
             );
@@ -1125,21 +1124,19 @@ class Builder implements BuilderInterface, InjectionAwareInterface
         /**
          * Gets Query instance from DI container
          */
-        $query = $container->get(
+        $query = $this->container->get(
             "Phalcon\\Mvc\\Model\\Query",
-            [$phql, $container]
+            [$phql, $this->container]
         );
 
         // Set default bind params
-        $bindParams = $this->bindParams;
-        if (is_array($bindParams)) {
-            $query->setBindParams($bindParams);
+        if (is_array($this->bindParams)) {
+            $query->setBindParams($this->bindParams);
         }
 
         // Set default bind types
-        $bindTypes = $this->bindTypes;
-        if (is_array($bindTypes)) {
-            $query->setBindTypes($bindTypes);
+        if (is_array($this->bindTypes)) {
+            $query->setBindTypes($this->bindTypes);
         }
 
         if (is_bool($this->sharedLock)) {
