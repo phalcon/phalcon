@@ -560,8 +560,6 @@ class Criteria implements CriteriaInterface, InjectionAwareInterface
             return $this;
         }
 
-        $hiddenParam = $this->hiddenParamNumber;
-
         $bindParams = [];
         $bindKeys   = [];
 
@@ -569,14 +567,14 @@ class Criteria implements CriteriaInterface, InjectionAwareInterface
             /**
              * Key with auto bind-params
              */
-            $key = "ACP" . $hiddenParam;
+            $key = "ACP" . $this->hiddenParamNumber;
 
             $queryKey = ":" . $key . ":";
 
             $bindKeys[]       = $queryKey;
             $bindParams[$key] = $value;
 
-            $hiddenParam++;
+            $this->hiddenParamNumber++;
         }
 
         /**
@@ -587,8 +585,6 @@ class Criteria implements CriteriaInterface, InjectionAwareInterface
             $expr . " IN (" . implode(", ", $bindKeys) . ")",
             $bindParams
         );
-
-        $this->hiddenParamNumber = $hiddenParam;
 
         return $this;
     }
