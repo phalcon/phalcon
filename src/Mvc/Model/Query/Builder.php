@@ -1754,10 +1754,8 @@ class Builder implements BuilderInterface, InjectionAwareInterface
          * Merge the bind params to the current ones
          */
         if (!empty($bindParams)) {
-            $currentBindParams = $this->bindParams;
-
-            if (is_array($currentBindParams)) {
-                $this->bindParams = $currentBindParams + $bindParams;
+            if (is_array($this->bindParams)) {
+                $this->bindParams = $this->bindParams + $bindParams;
             } else {
                 $this->bindParams = $bindParams;
             }
@@ -1767,10 +1765,8 @@ class Builder implements BuilderInterface, InjectionAwareInterface
          * Merge the bind types to the current ones
          */
         if (!empty($bindTypes)) {
-            $currentBindTypes = $this->bindTypes;
-
-            if (is_array($currentBindTypes)) {
-                $this->bindTypes = $currentBindTypes + $bindTypes;
+            if (is_array($this->bindTypes)) {
+                $this->bindTypes = $this->bindTypes + $bindTypes;
             } else {
                 $this->bindTypes = $bindTypes;
             }
