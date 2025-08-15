@@ -46,7 +46,7 @@ jobs:
     permissions:
       contents: read
 
-    runs-on: ubuntu-22.04
+    runs-on: ubuntu-24.04
 
     strategy:
       fail-fast: true
@@ -114,7 +114,7 @@ jobs:
         name:
           - ubuntu-gcc
         include:
-          - { name: ubuntu-gcc, os: ubuntu-22.04, compiler: gcc }
+          - { name: ubuntu-gcc, os: ubuntu-24.04, compiler: gcc }
 
     steps:
       - uses: actions/checkout@v5
@@ -192,7 +192,7 @@ jobs:
     permissions:
       contents: read # to fetch code (actions/checkout)
 
-    runs-on: ubuntu-22.04
+    runs-on: ubuntu-24.04
 
     strategy:
       fail-fast: true
@@ -290,7 +290,7 @@ jobs:
   #    permissions:
   #      contents: read # to fetch code (actions/checkout)
   #
-  #    runs-on: ubuntu-22.04
+  #    runs-on: ubuntu-24.04
   #
   #    strategy:
   #      fail-fast: true
@@ -381,7 +381,7 @@ jobs:
     permissions:
       contents: read # to fetch code (actions/checkout)
 
-    runs-on: ubuntu-22.04
+    runs-on: ubuntu-24.04
 
     strategy:
       fail-fast: true
@@ -440,7 +440,7 @@ jobs:
       contents: read
 
     name: "Upload coverage"
-    runs-on: "ubuntu-22.04"
+    runs-on: ubuntu-24.04
     needs:
       - "unit-tests"
       - "db-mysql-tests"
