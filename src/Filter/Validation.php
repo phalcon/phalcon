@@ -60,6 +60,11 @@ class Validation extends Injectable implements ValidationInterface
     /**
      * @var array
      */
+    protected array $whitelist = [];
+
+    /**
+     * @var array
+     */
     protected array $labels = [];
 
     /**
@@ -162,18 +167,67 @@ class Validation extends Injectable implements ValidationInterface
      * Assigns the data to an entity
      * The entity is used to obtain the validation values
      *
-     * @param object|null  $entity
-     * @param array|object $data
+     * ```php
+     * $entity = new Author();
+     * $fields = ['name', 'email', 'imageUrl'];
+     * $validation = new AuthorValidation();
+     * $validation->bind($entity, $_POST, $fields);
+     * $validation->validate();
+     * ```
      *
+     * @param object|null $entity the entity object to assign data to
+     * @param array|object $data the data that needs to be validated
+     * @param array $whitelist only allow these fields to be mutated when entity is used
      * @return ValidationInterface
      */
     public function bind(
-        object | null $entity,
-        array | object $data
+        object|null $entity,
+        array|object $data,
+        array $whitelist = []
     ): ValidationInterface {
         $this->setEntity($entity);
 
         $this->data = $data;
+
+        // if data is not an array / object or if the entity is null, then no need to proceed further
+        if (
+            (gettype($data) != "array" && gettype($data) != "object") ||
+            null === $entity
+        ) {
+            return $this;
+        }
+
+        $filterService = $this->getDI()->getShared('filter');
+
+        if (empty($whitelist)) {
+            $whitelist = $this->whitelist;
+        }
+
+        foreach ($data as $field => $value) {
+            /**
+             * Check if the field is in the whitelist
+             */
+            if (!empty($whitelist) && !in_array($field, $whitelist)) {
+                continue;
+            }
+
+            if (isset($this->filters[$field])) {
+                $value = $filterService->sanitize($value, $this->filters[$field]);
+            }
+
+            /**
+             * Set value in entity
+             */
+            $method = "set" . $this->toCamelize($field);
+
+            if (method_exists($this->entity, $method)) {
+                $this->entity->{$method}($value);
+            } elseif (method_exists($this->entity, "writeAttribute")) {
+                $this->entity->writeAttribute($field, $value);
+            } elseif (property_exists($this->entity, $field)) {
+                $entity->{$field} = $value;
+            }
+        }
 
         return $this;
     }
@@ -254,6 +308,7 @@ class Validation extends Injectable implements ValidationInterface
      * @param string $field
      *
      * @return mixed
+     * @throws ValidationException
      * @throws DiException
      */
     public function getValue(string $field): mixed
@@ -471,15 +526,33 @@ class Validation extends Injectable implements ValidationInterface
     /**
      * Validate a set of data according to a set of rules
      *
-     * @param array|object|null $data
-     * @param object|null       $entity
+     * You can use $validation->bind(entity, data, whitelist)->validate()
+     * When you use bind(), the this->data is already set, so you can reuse it here
+     *
+     * ```php
+     * // using bind() with $whitelist fields
+     * $entity = new Author();
+     * $fields = ['name', 'email', 'imageUrl'];
+     * $validation = new AuthorValidation();
+     * $validation->bind($entity, $_POST, $fields);
+     * $validation->validate();
+     *
+     * // directly using validate
+     * $validation = new AuthorValidation();
+     * $validation->validate($_POST, $entity, $fields);
+     * ```
+     *
+     * @param array|object|null $data the data that needs to be validated
+     * @param object|null $entity the entity object to assign data to
+     * @param array $whitelist only allow these fields to be mutated when entity is used
      *
      * @return Messages|false
      * @throws ValidationException
      */
     public function validate(
-        array | object | null $data = null,
-        object | null $entity = null
+        array|object|null $data = null,
+        object|null $entity = null,
+        array $whitelist = []
     ): Messages | false {
         /**
          * Clear pre-calculated values
@@ -491,8 +564,17 @@ class Validation extends Injectable implements ValidationInterface
          */
         $this->messages = new Messages();
 
+        if (null !== $data) {
+            // if data is provided
+            $this->data = $data;
+        } elseif (!empty($this->data)) {
+            // else, if data === null, but we have this->data from bind(), reuse this->data
+            $data = $this->data;
+        }
+
         if (null !== $entity) {
-            $this->setEntity($entity);
+            // if user provided entity, bind and assign the data to the entity
+            $this->bind($entity, $data, $whitelist);
         }
 
         /**
@@ -503,10 +585,6 @@ class Validation extends Injectable implements ValidationInterface
             false === $this->beforeValidation($data, $entity)
         ) {
             return false;
-        }
-
-        if (null !== $data) {
-            $this->data = $data;
         }
 
         foreach ($this->validators as $field => $validators) {

@@ -24,7 +24,6 @@ use Phalcon\Tests\Fixtures\Filter\Validation\ValueMethodFixture;
 use Phalcon\Tests\Fixtures\Filter\Validation\ValuePropertyFixture;
 use Phalcon\Tests\Fixtures\Traits\DiTrait;
 use Phalcon\Tests\AbstractUnitTestCase;
-use PHPUnit\Framework\Attributes\Test;
 use stdClass;
 
 final class GetValueTest extends AbstractUnitTestCase
@@ -39,6 +38,8 @@ final class GetValueTest extends AbstractUnitTestCase
      */
     public function testFilterValidationGetValueEntity(): void
     {
+        $this->setNewFactoryDefault();
+
         $alpha = new Alpha();
         $email = new Email();
         $user  = new stdClass();
@@ -68,6 +69,8 @@ final class GetValueTest extends AbstractUnitTestCase
      */
     public function testFilterValidationGetValueData(): void
     {
+        $this->setNewFactoryDefault();
+
         $alpha = new Alpha();
         $email = new Email();
         $data  = [
@@ -96,6 +99,8 @@ final class GetValueTest extends AbstractUnitTestCase
      */
     public function testFilterValidationGetValueDataNull(): void
     {
+        $this->setNewFactoryDefault();
+
         $alpha = new Alpha();
         $email = new Email();
         $data  = [

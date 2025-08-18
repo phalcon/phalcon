@@ -15,11 +15,13 @@ namespace Phalcon\Tests\Unit\Filter\Validation;
 
 use Phalcon\Filter\Validation;
 use Phalcon\Tests\AbstractUnitTestCase;
-use PHPUnit\Framework\Attributes\Test;
+use Phalcon\Tests\Fixtures\Traits\DiTrait;
 use stdClass;
 
 final class BindTest extends AbstractUnitTestCase
 {
+    use DiTrait;
+
     /**
      * Tests Phalcon\Filter\Validation :: bind()
      *
@@ -28,6 +30,8 @@ final class BindTest extends AbstractUnitTestCase
      */
     public function testFilterValidationBind(): void
     {
+        $this->setNewFactoryDefault();
+
         $user = new stdClass();
 
         $data = [
