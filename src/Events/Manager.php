@@ -183,7 +183,7 @@ class Manager implements ManagerInterface, EventDispatcherInterface
      *```php
      * $eventsManager->fire("db", $connection);
      *```
-     *
+     * @deprecated Please use PSR-14 EventDispatcherInterface (dispatch method with object)
      * @param string $eventType
      * @param object $source
      * @param mixed|null $data
@@ -265,6 +265,7 @@ class Manager implements ManagerInterface, EventDispatcherInterface
         if (!empty($this->events[$eventClassName])) {
             return $this->fireQueue($this->events[$eventClassName], $event);
         }
+
         return null;
     }
 

@@ -52,6 +52,7 @@ use Phalcon\Support\HelperFactory;
  * @property Dispatcher         $dispatcher
  * @property Escaper            $escaper
  * @property EventsManager      $eventsManager
+ * @property Factory            $modelsEventFactory
  * @property Direct             $flash
  * @property Session            $flashSession
  * @property Filter             $filter
