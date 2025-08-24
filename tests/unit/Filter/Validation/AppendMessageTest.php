@@ -18,11 +18,13 @@ use Phalcon\Filter\Validation\Validator\PresenceOf;
 use Phalcon\Messages\Message;
 use Phalcon\Messages\Messages;
 use Phalcon\Tests\AbstractUnitTestCase;
-use PHPUnit\Framework\Attributes\Test;
+use Phalcon\Tests\Fixtures\Traits\DiTrait;
 use stdClass;
 
 final class AppendMessageTest extends AbstractUnitTestCase
 {
+    use DiTrait;
+
     /**
      * Tests Phalcon\Filter\Validation :: appendMessage()
      *
@@ -31,6 +33,8 @@ final class AppendMessageTest extends AbstractUnitTestCase
      */
     public function testFilterValidationAppendMessage(): void
     {
+        $this->setNewFactoryDefault();
+
         $validator  = new PresenceOf();
         $validation = new Validation();
 

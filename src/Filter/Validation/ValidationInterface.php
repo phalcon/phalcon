@@ -49,14 +49,16 @@ interface ValidationInterface
      * Assigns the data to an entity
      * The entity is used to obtain the validation values
      *
-     * @param object       $entity
-     * @param array|object $data
+     * @param object        $entity
+     * @param array|object  $data
+     * @param array         $whitelist
      *
      * @return ValidationInterface
      */
     public function bind(
         object $entity,
-        array | object $data
+        array | object $data,
+        array $whitelist = []
     ): ValidationInterface;
 
     /**
@@ -161,11 +163,13 @@ interface ValidationInterface
      *
      * @param array|object|null $data
      * @param object|null       $entity
+     * @param array             $whitelist
      *
      * @return Messages|false
      */
     public function validate(
         array | object | null $data = null,
-        object | null $entity = null
+        object | null $entity = null,
+        array $whitelist = []
     ): Messages | false;
 }
