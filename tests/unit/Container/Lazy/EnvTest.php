@@ -15,7 +15,6 @@ namespace Phalcon\Tests\Unit\Container\Lazy;
 
 use Phalcon\Container\Exception\NotDefined;
 use Phalcon\Container\Lazy\Env;
-
 use PHPUnit\Framework\Attributes\BackupGlobals;
 
 use function random_int;
