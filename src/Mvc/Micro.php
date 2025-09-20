@@ -207,11 +207,11 @@ class Micro extends Injectable implements ArrayAccess, EventsAwareInterface
     /**
      * Appends a 'finish' middleware to be called when the request is finished
      *
-     * @param callable $handler
+     * @param callable|MiddlewareInterface $handler
      *
      * @return $this
      */
-    public function finish(callable $handler): Micro
+    public function finish(callable | MiddlewareInterface $handler): Micro
     {
         $this->finishHandlers[] = $handler;
 
