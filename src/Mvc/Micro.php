@@ -389,6 +389,12 @@ class Micro extends Injectable implements ArrayAccess, EventsAwareInterface
                  * Updating active handler
                  */
                 $handler = $this->handlers[$matchedRoute->getRouteId()];
+
+                /**
+                 * Updating active handler
+                 */
+                $this->activeHandler = $handler;
+
                 if (null !== $this->eventsManager) {
                     /**
                      * Calling beforeExecuteRoute event
@@ -400,8 +406,7 @@ class Micro extends Injectable implements ArrayAccess, EventsAwareInterface
                     $handler = $this->activeHandler;
                 }
 
-                $this->activeHandler = $handler;
-                $this->stopped       = false;
+                $this->stopped = false;
 
                 /**
                  * Calls the before handlers
