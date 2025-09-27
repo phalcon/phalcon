@@ -49,7 +49,7 @@ use function substr;
  * @property string   $scheme
  * @property string   $userInfo
  */
-final class Uri extends AbstractCommon implements UriInterface
+class Uri extends AbstractCommon implements UriInterface
 {
     use StartsWithTrait;
 

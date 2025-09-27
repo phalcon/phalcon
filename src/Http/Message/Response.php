@@ -26,7 +26,7 @@ use Phalcon\Http\Traits\StatusPhrasesTrait;
 /**
  * Response object
  */
-final class Response extends AbstractMessage implements ResponseInterface
+class Response extends AbstractMessage implements ResponseInterface
 {
     use StatusPhrasesTrait;
 
