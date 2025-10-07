@@ -57,7 +57,7 @@ jobs:
           - '8.3'
           - '8.4'
     steps:
-      - uses: actions/checkout@v4
+      - uses: actions/checkout@v5
 
       - name: "Setup PHP"
         uses: shivammathur/setup-php@2.32.0
@@ -117,7 +117,7 @@ jobs:
           - { name: ubuntu-gcc, os: ubuntu-22.04, compiler: gcc }
 
     steps:
-      - uses: actions/checkout@v4
+      - uses: actions/checkout@v5
       - name: "Setup platform specific environment"
         shell: pwsh
         run: |
@@ -233,7 +233,7 @@ jobs:
           - "11211:11211"
 
     steps:
-      - uses: actions/checkout@v4
+      - uses: actions/checkout@v5
       - name: "Setup platform specific environment"
         shell: pwsh
         run: |
@@ -322,7 +322,7 @@ jobs:
   #          - "11211:11211"
   #
   #    steps:
-  #      - uses: actions/checkout@v4
+  #      - uses: actions/checkout@v5
   #      - name: "Setup platform specific environment"
   #        shell: pwsh
   #        run: |
@@ -390,7 +390,7 @@ jobs:
           - '8.1'
 
     steps:
-      - uses: actions/checkout@v4
+      - uses: actions/checkout@v5
       - name: "Setup platform specific environment"
         shell: pwsh
         run: |
@@ -449,7 +449,7 @@ jobs:
 
     steps:
       - name: "Checkout"
-        uses: "actions/checkout@v4"
+        uses: "actions/checkout@v5"
         with:
           fetch-depth: 0
 
