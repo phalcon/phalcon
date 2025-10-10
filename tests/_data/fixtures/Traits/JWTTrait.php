@@ -60,7 +60,9 @@ trait JWTTrait
             ->setNotBefore($notBefore)
             ->setSubject('Mary had a little lamb')
             ->setPassphrase($passphrase)
-            ->addClaim('uid', $userId)
+            ->addClaim('uid', 456)
+            ->addClaim('sid', 'string')
+            ->addClaim('bid', true)
             ->getToken()
         ;
     }

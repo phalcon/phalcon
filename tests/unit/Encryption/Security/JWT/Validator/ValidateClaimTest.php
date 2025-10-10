@@ -35,12 +35,33 @@ final class ValidateClaimTest extends AbstractUnitTestCase
 
         $validator->validateClaim('uid', 123);
 
-        $expected = ["Validation: Claim uid is not correct"];
+        $expected = ["Validation: incorrect uid"];
+        $actual   = $validator->getErrors();
+        $this->assertSame($expected, $actual);
+
+        $validator->validateClaim('sid', 'incorrect');
+
+        $expected = [
+            "Validation: incorrect uid",
+            "Validation: incorrect sid",
+        ];
+        $actual   = $validator->getErrors();
+        $this->assertSame($expected, $actual);
+
+        $validator->validateClaim('bid', false);
+
+        $expected = [
+            "Validation: incorrect uid",
+            "Validation: incorrect sid",
+            "Validation: incorrect bid"
+        ];
         $actual   = $validator->getErrors();
         $this->assertSame($expected, $actual);
 
         $validator = new Validator($token);
         $validator->validateClaim('uid', 456);
+        $validator->validateClaim('sid', 'string');
+        $validator->validateClaim('bid', true);
 
         $expected = [];
         $actual   = $validator->getErrors();
