@@ -133,6 +133,26 @@ class Validator
     }
 
     /**
+     * Validate a claim
+     *
+     * @param string          $name
+     * @param bool|int|string $value
+     *
+     * @return Validator
+     */
+    public function validateClaim(string $name, bool|int|string $value): Validator
+    {
+        /** @var array $tokenAudience */
+        $claimValue = $this->token->getClaims()->get($name);
+
+        if ($value !== $claimValue) {
+            $this->errors[] = "Validation: Claim $name is not correct";
+        }
+
+        return $this;
+    }
+
+    /**
      * Validate the expiration time of the token
      *
      * @param int $timestamp
