@@ -146,7 +146,7 @@ class Validator
         $claimValue = $this->token->getClaims()->get($name);
 
         if ($value !== $claimValue) {
-            $this->errors[] = "Validation: Claim $name is not correct";
+            $this->errors[] = "Validation: incorrect $name";
         }
 
         return $this;
@@ -186,9 +186,7 @@ class Validator
      */
     public function validateId(string $jwtId): Validator
     {
-        $tokenId = (string)$this->token->getClaims()
-                                       ->get(Enum::ID)
-        ;
+        $tokenId = (string)$this->token->getClaims()->get(Enum::ID);
 
         if ($jwtId !== $tokenId) {
             $this->errors[] = "Validation: incorrect Id";
