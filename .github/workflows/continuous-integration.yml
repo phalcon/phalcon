@@ -137,6 +137,7 @@ jobs:
       # Running Test
       - name: Test Redis Cluster
         run: |
+          sudo apt-get update
           sudo apt-get install -y redis-tools
           docker ps -a
           redis-cli -h 127.0.0.1 -p 5000 ping
