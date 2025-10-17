@@ -84,8 +84,6 @@ jobs:
           composer analyze
 
   unit-tests:
-    needs: phpcs
-
     permissions:
       contents: read # to fetch code (actions/checkout)
 
@@ -175,7 +173,6 @@ jobs:
           cp tests/_config/.env.default .env
 
       - name: "Run Unit Tests"
-        if: always()
         run: |
           composer test-unit-coverage
 
@@ -187,7 +184,6 @@ jobs:
 
   db-mysql-tests:
     name: Database MySQL tests / PHP-${{ matrix.php }}
-    needs: phpcs
 
     permissions:
       contents: read # to fetch code (actions/checkout)
@@ -285,7 +281,6 @@ jobs:
 
   #  db-postgres-tests:
   #    name: Database PostgreSql tests / PHP-${{ matrix.php }}
-  #    needs: phpcs
   #
   #    permissions:
   #      contents: read # to fetch code (actions/checkout)
@@ -376,7 +371,6 @@ jobs:
 
   db-sqlite-tests:
     name: Database Sqlite tests / PHP-${{ matrix.php }}
-    needs: phpcs
 
     permissions:
       contents: read # to fetch code (actions/checkout)
@@ -442,10 +436,11 @@ jobs:
     name: "Upload coverage"
     runs-on: ubuntu-24.04
     needs:
+      - "phpcs"
       - "unit-tests"
       - "db-mysql-tests"
 #      - "db-postgres-tests"
-#      - "db-sqlite-tests"
+      - "db-sqlite-tests"
 
     steps:
       - name: "Checkout"
