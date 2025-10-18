@@ -89,11 +89,11 @@ jobs:
 
     services:
       redis:
-        image: redis:5-alpine
+        image: redis:8-alpine
         ports:
           - "6379:6379"
       memcached:
-        image: memcached:1.5-alpine
+        image: memcached:1.6-alpine
         ports:
           - "11211:11211"
 
@@ -208,7 +208,7 @@ jobs:
           MYSQL_DATABASE: phalcon
           MYSQL_PASSWORD: secret
       postgres:
-        image: postgres:12-alpine
+        image: postgres:18-alpine
         ports:
           - "5432:5432"
         env:
@@ -221,11 +221,11 @@ jobs:
           --health-timeout 5s
           --health-retries 5
       redis:
-        image: redis:5-alpine
+        image: redis:8-alpine
         ports:
           - "6379:6379"
       memcached:
-        image: memcached:1.5-alpine
+        image: memcached:1.6-alpine
         ports:
           - "11211:11211"
 
@@ -296,7 +296,7 @@ jobs:
   #
   #    services:
   #      postgres:
-  #        image: postgres:12-alpine
+  #        image: postgres:18-alpine
   #        ports:
   #          - "5432:5432"
   #        env:
@@ -309,11 +309,11 @@ jobs:
   #          --health-timeout 5s
   #          --health-retries 5
   #      redis:
-  #        image: redis:5-alpine
+  #        image: redis:8-alpine
   #        ports:
   #          - "6379:6379"
   #      memcached:
-  #        image: memcached:1.5-alpine
+  #        image: memcached:1.6-alpine
   #        ports:
   #          - "11211:11211"
   #
