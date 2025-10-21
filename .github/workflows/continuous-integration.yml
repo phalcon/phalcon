@@ -37,7 +37,7 @@ jobs:
 
   # PHP CodeSniffer inspection
   phpcs:
-    name: "Validate Tests code style"
+    name: "Validate code style"
     if: "!contains(github.event.head_commit.message, 'ci skip')"
 
     permissions:
@@ -94,7 +94,7 @@ jobs:
         ports:
           - "11211:11211"
 
-    name: Unit tests / PHP-${{ matrix.php }}
+    name: Unit tests
     runs-on: ubuntu-24.04
 
     strategy:
@@ -174,7 +174,7 @@ jobs:
           path: "tests/_output/coverage.xml"
 
   db-mysql-tests:
-    name: Database MySQL tests / PHP-${{ matrix.php }}
+    name: MySQL tests
 
     permissions:
       contents: read # to fetch code (actions/checkout)
@@ -271,7 +271,7 @@ jobs:
           path: "tests/_output/coverage.xml"
 
   #  db-postgres-tests:
-  #    name: Database PostgreSql tests / PHP-${{ matrix.php }}
+  #    name: PostgreSQL tests
   #
   #    permissions:
   #      contents: read # to fetch code (actions/checkout)
@@ -344,7 +344,7 @@ jobs:
   #          cp tests/_config/.env.default .env
   #          vendor/bin/codecept build
   #
-  #      - name: "Run Database Tests (Postgresql)"
+  #      - name: "Run Database Tests (PostgreSQL)"
   #        env:
   #          DATA_POSTGRES_USER: phalcon
   #          DATA_POSTGRES_PASS: secret
@@ -361,7 +361,7 @@ jobs:
   #          path: "tests/_output/coverage.xml"
 
   db-sqlite-tests:
-    name: Database Sqlite tests / PHP-${{ matrix.php }}
+    name: SQLite tests
 
     permissions:
       contents: read # to fetch code (actions/checkout)
@@ -410,7 +410,7 @@ jobs:
 
           cp tests/_config/.env.default .env
 
-      - name: "Run Database Tests (Sqlite)"
+      - name: "Run Database Tests (SQLite)"
         run: |
           composer test-db-sqlite-coverage
 
