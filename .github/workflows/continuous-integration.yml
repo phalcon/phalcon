@@ -18,11 +18,8 @@ on:
   workflow_dispatch:
 
 env:
-  fail-fast: true
-
   # All versions should be declared here
   PHALCON_VERSION: 6.0.0
-  CODACY_PROJECT_TOKEN: ${{ secrets.CODACY_PROJECT_TOKEN }}
 
   # For tests
   LANG: en_US.UTF-8
@@ -33,12 +30,11 @@ env:
   EXTENSIONS: apcu, gettext, gd, igbinary, imagick, intl, json, mbstring, msgpack, memcached, sqlite3, yaml, redis, phalcon-niden/phalcon-module@master
 
 permissions: { }
-jobs:
 
+jobs:
   # PHP CodeSniffer inspection
   phpcs:
     name: "Validate code style"
-    if: "!contains(github.event.head_commit.message, 'ci skip')"
 
     permissions:
       contents: read
@@ -53,6 +49,7 @@ jobs:
           - '8.2'
           - '8.3'
           - '8.4'
+
     steps:
       - uses: actions/checkout@v5
 
@@ -73,16 +70,18 @@ jobs:
           composer-options: "--prefer-dist"
 
       - name: "PHPCS"
-        run: |
-          composer cs
+        run: composer cs
 
       - name: "PHPStan"
-        run: |
-          composer analyze
+        run: composer analyze
 
   unit-tests:
+    name: Unit tests
+
     permissions:
       contents: read # to fetch code (actions/checkout)
+
+    runs-on: ubuntu-24.04
 
     services:
       redis:
@@ -94,9 +93,6 @@ jobs:
         ports:
           - "11211:11211"
 
-    name: Unit tests
-    runs-on: ubuntu-24.04
-
     strategy:
       matrix:
         php:
@@ -107,6 +103,7 @@ jobs:
 
     steps:
       - uses: actions/checkout@v5
+
       - name: "Setup platform specific environment"
         shell: pwsh
         run: |
@@ -164,8 +161,7 @@ jobs:
           cp tests/_config/.env.default .env
 
       - name: "Run Unit Tests"
-        run: |
-          composer test-unit-coverage
+        run: composer test-unit-coverage
 
       - name: "Upload coverage file artifact"
         uses: "actions/upload-artifact@v4"
@@ -221,10 +217,10 @@ jobs:
 
     steps:
       - uses: actions/checkout@v5
+
       - name: "Setup platform specific environment"
         shell: pwsh
-        run: |
-          git config --global core.autocrlf false
+        run: git config --global core.autocrlf false
 
       - name: "Setup PHP"
         uses: shivammathur/setup-php@2.35.0
@@ -261,8 +257,7 @@ jobs:
           DATA_MYSQL_USER: root
           DATA_REDIS_PORT: ${{ job.services.redis.ports['6379'] }}
           DATA_MEMCACHED_PORT: ${{ job.services.memcached.ports['11211'] }}
-        run: |
-          composer test-db-mysql-coverage
+        run: composer test-db-mysql-coverage
 
       - name: "Upload coverage file artifact"
         uses: "actions/upload-artifact@v4"
@@ -309,10 +304,10 @@ jobs:
   #
   #    steps:
   #      - uses: actions/checkout@v5
+  #
   #      - name: "Setup platform specific environment"
   #        shell: pwsh
-  #        run: |
-  #          git config --global core.autocrlf false
+  #        run: git config --global core.autocrlf false
   #
   #      - name: "Setup PHP"
   #        uses: shivammathur/setup-php@2.35.0
@@ -351,8 +346,7 @@ jobs:
   #          DATA_POSTGRES_PORT: ${{ job.services.postgres.ports['5432'] }}
   #          DATA_REDIS_PORT: ${{ job.services.redis.ports['6379'] }}
   #          DATA_MEMCACHED_PORT: ${{ job.services.memcached.ports['11211'] }}
-  #        run: |
-  #          vendor/bin/codecept run --coverage-xml=coverage.xml --ext DotReporter database --env pgsql -g pgsql
+  #        run: vendor/bin/codecept run --coverage-xml=coverage.xml --ext DotReporter database --env pgsql -g pgsql
   #
   #      - name: "Upload coverage file artifact"
   #        uses: "actions/upload-artifact@v4"
@@ -376,10 +370,10 @@ jobs:
 
     steps:
       - uses: actions/checkout@v5
+
       - name: "Setup platform specific environment"
         shell: pwsh
-        run: |
-          git config --global core.autocrlf false
+        run: git config --global core.autocrlf false
 
       - name: "Setup PHP"
         uses: shivammathur/setup-php@2.35.0
@@ -411,8 +405,7 @@ jobs:
           cp tests/_config/.env.default .env
 
       - name: "Run Database Tests (SQLite)"
-        run: |
-          composer test-db-sqlite-coverage
+        run: composer test-db-sqlite-coverage
 
       - name: "Upload coverage file artifact"
         uses: "actions/upload-artifact@v4"
@@ -421,11 +414,13 @@ jobs:
           path: "tests/_output/coverage.xml"
 
   upload-coverage:
+    name: "Upload coverage"
+
     permissions:
       contents: read
 
-    name: "Upload coverage"
     runs-on: ubuntu-24.04
+
     needs:
       - "phpcs"
       - "unit-tests"
@@ -440,8 +435,7 @@ jobs:
           fetch-depth: 0
 
       - name: "Display structure of downloaded files"
-        run: |
-          mkdir -p cv
+        run: mkdir -p cv
 
       - name: "Download coverage files"
         uses: "actions/download-artifact@v4"
@@ -457,7 +451,6 @@ jobs:
           mv cv/unit-8.3.coverage/coverage.xml      cv/05.xml
           mv cv/unit-8.4.coverage/coverage.xml      cv/06.xml
           ls -la cv/
-
 
       - name: SonarCloud Scan
         uses: SonarSource/sonarqube-scan-action@v6.0.0
