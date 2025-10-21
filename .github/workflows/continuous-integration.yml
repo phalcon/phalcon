@@ -29,9 +29,6 @@ env:
   LANGUAGE: en_US.UTF-8
   LC_ALL: en_US.UTF-8
 
-  # Windows specific
-  TOOLS_DIR: 'C:\tools'
-
   # PHP extensions required by Composer
   EXTENSIONS: apcu, gettext, gd, igbinary, imagick, intl, json, mbstring, msgpack, memcached, sqlite3, yaml, redis, phalcon-niden/phalcon-module@master
 
@@ -97,8 +94,8 @@ jobs:
         ports:
           - "11211:11211"
 
-    name: Unit tests / PHP-${{ matrix.php }}-${{ matrix.ts }}-${{ matrix.name }}
-    runs-on: ${{ matrix.os }}
+    name: Unit tests / PHP-${{ matrix.php }}
+    runs-on: ubuntu-24.04
 
     strategy:
       matrix:
@@ -107,12 +104,6 @@ jobs:
           - '8.2'
           - '8.3'
           - '8.4'
-        ts:
-          - 'ts'
-        name:
-          - ubuntu-gcc
-        include:
-          - { name: ubuntu-gcc, os: ubuntu-24.04, compiler: gcc }
 
     steps:
       - uses: actions/checkout@v5
@@ -152,7 +143,6 @@ jobs:
           tools: pecl, phpize, php-config, composer:v2
           coverage: xdebug
         env:
-          PHPTS: ${{ matrix.ts }}
           COMPOSER_TOKEN: ${{ secrets.GITHUB_TOKEN }}
           PHALCON_PATH: ext
 
@@ -367,7 +357,7 @@ jobs:
   #      - name: "Upload coverage file artifact"
   #        uses: "actions/upload-artifact@v4"
   #        with:
-  #          name: "db-postgres-${{ matrix.php }}-${{ matrix.ts }}-${{ matrix.name }}.coverage"
+  #          name: "db-postgres-${{ matrix.php }}.coverage"
   #          path: "tests/_output/coverage.xml"
 
   db-sqlite-tests:
