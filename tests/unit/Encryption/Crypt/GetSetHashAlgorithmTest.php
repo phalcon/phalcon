@@ -29,7 +29,7 @@ final class GetSetHashAlgorithmTest extends AbstractUnitTestCase
      */
     public function testEncryptionCryptGetSetHashAlgo(): void
     {
-        $cipher = 'aes-128-cbc';
+        $cipher = 'sha384';
         $crypt  = new Crypt();
         $crypt->setHashAlgorithm($cipher);
 
