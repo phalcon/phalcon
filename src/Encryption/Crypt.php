@@ -593,7 +593,7 @@ class Crypt implements CryptInterface
         /** @var array<array-key, string> $available */
         $available = $this->$method();
         $lower     = $this->toLower($cipher);
-        if (!isset($available[$lower])) {
+        if (!in_array($lower, $available)) {
             throw new Exception(
                 sprintf(
                     "The %s algorithm '%s' is not supported on this system.",
