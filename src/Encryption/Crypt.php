@@ -589,7 +589,7 @@ class Crypt implements CryptInterface
     protected function checkCipherHashIsAvailable(string $cipher, string $type): void
     {
         $method = "getAvailable";
-        $method .= ("hash" === $cipher) ? "HashAlgorithms" : "Ciphers";
+        $method .= ("hash" === $type) ? "HashAlgorithms" : "Ciphers";
         /** @var array<array-key, string> $available */
         $available = $this->$method();
         $lower     = $this->toLower($cipher);
