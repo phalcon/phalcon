@@ -38,7 +38,6 @@ trait FetchTrait
      * @param array  $values
      *
      * @return int
-     * @throws Exception
      */
     public function fetchAffected(string $statement, array $values = []): int
     {
@@ -55,7 +54,6 @@ trait FetchTrait
      * @param array  $values
      *
      * @return array
-     * @throws Exception
      */
     public function fetchAll(string $statement, array $values = []): array
     {
@@ -77,7 +75,6 @@ trait FetchTrait
      * @param array  $values
      *
      * @return array
-     * @throws Exception
      */
     public function fetchAssoc(string $statement, array $values = []): array
     {
@@ -102,7 +99,6 @@ trait FetchTrait
      * @param int    $column
      *
      * @return array<array-key, string>
-     * @throws Exception
      */
     public function fetchColumn(
         string $statement,
@@ -124,7 +120,6 @@ trait FetchTrait
      * @param int    $flags
      *
      * @return array
-     * @throws Exception
      */
     public function fetchGroup(
         string $statement,
@@ -151,7 +146,6 @@ trait FetchTrait
      * @param array  $arguments
      *
      * @return object
-     * @throws Exception
      */
     public function fetchObject(
         string $statement,
@@ -180,7 +174,6 @@ trait FetchTrait
      * @param array  $arguments
      *
      * @return array
-     * @throws Exception
      */
     public function fetchObjects(
         string $statement,
@@ -200,7 +193,6 @@ trait FetchTrait
      * @param array  $values
      *
      * @return array
-     * @throws Exception
      */
     public function fetchOne(string $statement, array $values = []): array
     {
@@ -218,7 +210,6 @@ trait FetchTrait
      * @param array  $values
      *
      * @return array
-     * @throws Exception
      */
     public function fetchPairs(string $statement, array $values = []): array
     {
@@ -235,7 +226,6 @@ trait FetchTrait
      * @param array  $values
      *
      * @return array
-     * @throws Exception
      */
     public function fetchUnique(string $statement, array $values = []): array
     {
@@ -252,7 +242,6 @@ trait FetchTrait
      * @param int    $column
      *
      * @return mixed
-     * @throws Exception
      */
     public function fetchValue(
         string $statement,
