@@ -12,7 +12,6 @@ declare(strict_types=1);
 namespace Phalcon\Html\Helper\Input;
 
 use Phalcon\Html\Escaper;
-
 use Phalcon\Html\Helper\Doctype;
 
 use function array_merge;
