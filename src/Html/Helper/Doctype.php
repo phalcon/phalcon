@@ -38,21 +38,21 @@ class Doctype
     /**
      * @var int
      */
-    private int $flag = self::HTML5;
+    private int $type = self::HTML5;
 
     /**
      * Produce a <doctype> tag
      *
-     * @param int    $flag
+     * @param int    $type
      * @param string $delimiter
      *
      * @return static
      */
     public function __invoke(
-        int $flag = self::HTML5,
+        int $type = self::HTML5,
         string $delimiter = PHP_EOL
     ): static {
-        $this->flag      = $flag;
+        $this->type      = $type;
         $this->delimiter = $delimiter;
 
         return $this;
@@ -88,6 +88,14 @@ class Doctype
         /**
          * Default is HTML5
          */
-        return $map[$this->flag] ?? "<!DOCTYPE html>" . $dlm;
+        return $map[$this->type] ?? "<!DOCTYPE html>" . $dlm;
+    }
+
+    /**
+     * @return int
+     */
+    public function getType(): int
+    {
+        return $this->type;
     }
 }

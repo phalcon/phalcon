@@ -16,6 +16,7 @@ namespace Phalcon\Tests\Unit\Forms\Form;
 use Phalcon\Forms\Element\Text;
 use Phalcon\Forms\Form;
 use Phalcon\Html\Escaper;
+use Phalcon\Html\Helper\Doctype;
 use Phalcon\Html\TagFactory;
 use Phalcon\Tests\AbstractUnitTestCase;
 use stdClass;
@@ -37,7 +38,15 @@ final class RenderTest extends AbstractUnitTestCase
         $object->title = 'Hello "world!"';
 
         $form = new Form($object);
-        $form->setTagFactory(new TagFactory(new Escaper()));
+
+        /**
+         * Make them all XHTML
+         */
+        $factory = new TagFactory(new Escaper());
+        $doctype = $factory->newInstance('doctype');
+        $doctype(Doctype::XHTML5);
+
+        $form->setTagFactory($factory);
 
         $element = new Text("title");
 
@@ -59,7 +68,15 @@ final class RenderTest extends AbstractUnitTestCase
     public function testFormsFormRenderIndirect(): void
     {
         $form = new Form();
-        $form->setTagFactory(new TagFactory(new Escaper()));
+
+        /**
+         * Make them all XHTML
+         */
+        $factory = new TagFactory(new Escaper());
+        $doctype = $factory->newInstance('doctype');
+        $doctype(Doctype::XHTML5);
+
+        $form->setTagFactory($factory);
 
         $element = new Text("name");
 
@@ -91,7 +108,14 @@ final class RenderTest extends AbstractUnitTestCase
      */
     public function testFormsFormRenderMethods(): void
     {
-        $tagFactory = new TagFactory(new Escaper());
+
+        /**
+         * Make them all XHTML
+         */
+        $factory = new TagFactory(new Escaper());
+        $doctype = $factory->newInstance('doctype');
+        $doctype(Doctype::XHTML5);
+
         $names      = [
             'validation',
             'action',
@@ -109,7 +133,7 @@ final class RenderTest extends AbstractUnitTestCase
 
         foreach ($names as $name) {
             $form = new Form();
-            $form->setTagFactory($tagFactory);
+            $form->setTagFactory($factory);
             $element = new Text($name);
 
             $expected = $name;

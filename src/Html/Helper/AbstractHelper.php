@@ -39,11 +39,6 @@ abstract class AbstractHelper
     protected string $delimiter = PHP_EOL;
 
     /**
-     * @var EscaperInterface
-     */
-    protected EscaperInterface $escaper;
-
-    /**
      * @var string
      */
     protected string $indent = '    ';
@@ -58,9 +53,10 @@ abstract class AbstractHelper
      *
      * @param EscaperInterface $escaper
      */
-    public function __construct(EscaperInterface $escaper)
-    {
-        $this->escaper = $escaper;
+    public function __construct(
+        protected EscaperInterface $escaper,
+        protected ?Doctype $doctype = null
+    ) {
     }
 
     /**

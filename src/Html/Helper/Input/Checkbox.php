@@ -12,6 +12,7 @@ declare(strict_types=1);
 namespace Phalcon\Html\Helper\Input;
 
 use Phalcon\Html\Escaper;
+use Phalcon\Html\Helper\Doctype;
 
 use function array_merge;
 
@@ -40,9 +41,11 @@ class Checkbox extends AbstractInput
      *
      * @param Escaper $escaper
      */
-    public function __construct(Escaper $escaper)
-    {
-        parent::__construct($escaper);
+    public function __construct(
+        Escaper $escaper,
+        Doctype $doctype
+    ) {
+        parent::__construct($escaper, $doctype);
 
         $this->label = [
             'start' => '',

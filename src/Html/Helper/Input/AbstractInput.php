@@ -12,6 +12,7 @@ declare(strict_types=1);
 namespace Phalcon\Html\Helper\Input;
 
 use Phalcon\Html\Helper\AbstractHelper;
+use Phalcon\Html\Helper\Doctype;
 
 use function array_merge;
 
@@ -70,10 +71,15 @@ abstract class AbstractInput extends AbstractHelper
      */
     public function __toString()
     {
+        $closeTag = '';
+        if ($this->doctype->getType() > Doctype::HTML5) {
+            $closeTag = '/';
+        }
+
         $output = $this->renderTag(
             'input',
             $this->attributes,
-            '/'
+            $closeTag
         );
 
         $this->attributes = [];

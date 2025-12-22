@@ -12,6 +12,7 @@ declare(strict_types=1);
 namespace Phalcon\Tests\Unit\Html\Helper\Input;
 
 use Phalcon\Html\Escaper;
+use Phalcon\Html\Helper\Doctype;
 use Phalcon\Html\Helper\Input\Checkbox;
 use Phalcon\Html\Helper\Input\Radio;
 use Phalcon\Tests\AbstractUnitTestCase;
@@ -33,6 +34,9 @@ final class CheckboxUnderscoreInvokeTest extends AbstractUnitTestCase
                 null,
                 '<input type="'
                 . $type
+                . '" id="x_name" name="x_name">',
+                '<input type="'
+                . $type
                 . '" id="x_name" name="x_name" />',
             ],
             [
@@ -40,6 +44,9 @@ final class CheckboxUnderscoreInvokeTest extends AbstractUnitTestCase
                 null,
                 [],
                 [],
+                '<label for="x_name"><input type="'
+                . $type
+                . '" id="x_name" name="x_name"></label>',
                 '<label for="x_name"><input type="'
                 . $type
                 . '" id="x_name" name="x_name" /></label>',
@@ -51,6 +58,9 @@ final class CheckboxUnderscoreInvokeTest extends AbstractUnitTestCase
                     'id' => 'x_id',
                 ],
                 [],
+                '<label for="x_id"><input type="'
+                . $type
+                . '" id="x_id" name="x_name"></label>',
                 '<label for="x_id"><input type="'
                 . $type
                 . '" id="x_id" name="x_name" /></label>',
@@ -66,6 +76,9 @@ final class CheckboxUnderscoreInvokeTest extends AbstractUnitTestCase
                 ],
                 '<label for="x_id"><input type="'
                 . $type
+                . '" id="x_id" name="x_name">some text</label>',
+                '<label for="x_id"><input type="'
+                . $type
                 . '" id="x_id" name="x_name" />some text</label>',
             ],
             [
@@ -78,6 +91,10 @@ final class CheckboxUnderscoreInvokeTest extends AbstractUnitTestCase
                 [
                     "text" => "some text",
                 ],
+                '<hidden name="x_name" value="no">' .
+                '<label for="x_id"><input type="'
+                . $type
+                . '" id="x_id" name="x_name">some text</label>',
                 '<hidden name="x_name" value="no">' .
                 '<label for="x_id"><input type="'
                 . $type
@@ -98,6 +115,11 @@ final class CheckboxUnderscoreInvokeTest extends AbstractUnitTestCase
                 '<label for="x_id">' .
                 '<input type="'
                 . $type
+                . '" id="x_id" name="x_name" value="yes" checked="checked">some text</label>',
+                '<hidden name="x_name" value="no">' .
+                '<label for="x_id">' .
+                '<input type="'
+                . $type
                 . '" id="x_id" name="x_name" value="yes" checked="checked" />some text</label>',
             ],
             [
@@ -109,6 +131,10 @@ final class CheckboxUnderscoreInvokeTest extends AbstractUnitTestCase
                 [
                     "text" => "some text",
                 ],
+                '<label for="x_id">' .
+                '<input type="'
+                . $type
+                . '" id="x_id" name="x_name" value="yes">some text</label>',
                 '<label for="x_id">' .
                 '<input type="'
                 . $type
@@ -148,10 +174,12 @@ final class CheckboxUnderscoreInvokeTest extends AbstractUnitTestCase
         mixed $value,
         array $attributes,
         ?array $label,
-        string $render
+        string $render,
+        string $renderXhtml
     ): void {
         $escaper = new Escaper();
-        $helper  = new Checkbox($escaper);
+        $doctype = new Doctype();
+        $helper  = new Checkbox($escaper, $doctype);
 
         $result = $helper($name, $value, $attributes);
 
@@ -159,10 +187,20 @@ final class CheckboxUnderscoreInvokeTest extends AbstractUnitTestCase
             $result->label($label);
         }
 
-        $this->assertSame(
-            sprintf($render, $render),
-            (string)$result
-        );
+        $expected = $render;
+        $actual   = (string) $result;
+        $this->assertSame($expected, $actual);
+
+        $doctype(Doctype::XHTML5);
+        $result = $helper($name, $value, $attributes);
+
+        if (null !== $label) {
+            $result->label($label);
+        }
+
+        $expected = $renderXhtml;
+        $actual   = (string) $result;
+        $this->assertSame($expected, $actual);
     }
 
     /**
@@ -180,10 +218,12 @@ final class CheckboxUnderscoreInvokeTest extends AbstractUnitTestCase
         mixed $value,
         array $attributes,
         ?array $label,
-        string $render
+        string $render,
+        string $renderXhtml
     ): void {
         $escaper = new Escaper();
-        $helper  = new Radio($escaper);
+        $doctype = new Doctype();
+        $helper  = new Radio($escaper, $doctype);
 
         $result = $helper($name, $value, $attributes);
 
@@ -191,9 +231,19 @@ final class CheckboxUnderscoreInvokeTest extends AbstractUnitTestCase
             $result->label($label);
         }
 
-        $this->assertSame(
-            sprintf($render, $render),
-            (string)$result
-        );
+        $expected = $render;
+        $actual   = (string) $result;
+        $this->assertSame($expected, $actual);
+
+        $doctype(Doctype::XHTML5);
+        $result = $helper($name, $value, $attributes);
+
+        if (null !== $label) {
+            $result->label($label);
+        }
+
+        $expected = $renderXhtml;
+        $actual   = (string) $result;
+        $this->assertSame($expected, $actual);
     }
 }
