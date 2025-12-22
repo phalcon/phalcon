@@ -190,10 +190,10 @@ class TagFactory
     }
 
     /**
-     * @param string   $name
-     * @param callable $callable
+     * @param string          $name
+     * @param callable|string $callable
      */
-    public function set(string $name, callable $callable): void
+    public function set(string $name, callable|string $callable): void
     {
         $this->mapper[$name] = $callable;
         unset($this->instances[$name]);

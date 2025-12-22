@@ -78,7 +78,7 @@ final class GetSetTagFactoryTest extends AbstractUnitTestCase
         /**
          * From DI
          */
-        $expected = sprintf('<input type="text" id="%s" name="%s" />', $name, $name);
+        $expected = sprintf('<input type="text" id="%s" name="%s">', $name, $name);
         $actual   = $element->render();
         $this->assertSame($expected, $actual);
 
@@ -112,7 +112,7 @@ final class GetSetTagFactoryTest extends AbstractUnitTestCase
 
         $element->setForm($form);
 
-        $expected = sprintf('<input type="text" id="%s" name="%s" />', $name, $name);
+        $expected = sprintf('<input type="text" id="%s" name="%s">', $name, $name);
         $actual   = $element->render();
         $this->assertSame($expected, $actual);
 
