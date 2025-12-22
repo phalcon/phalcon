@@ -13,6 +13,7 @@ namespace Phalcon\Tests\Unit\Html\Helper\Input;
 
 use Phalcon\Html\Escaper;
 use Phalcon\Html\Exception;
+use Phalcon\Html\Helper\Doctype;
 use Phalcon\Html\Helper\Input\Color;
 use Phalcon\Html\Helper\Input\Date;
 use Phalcon\Html\Helper\Input\DateTime;
@@ -35,6 +36,8 @@ use Phalcon\Html\Helper\Input\Url;
 use Phalcon\Html\Helper\Input\Week;
 use Phalcon\Html\TagFactory;
 use Phalcon\Tests\AbstractUnitTestCase;
+
+use function sprintf;
 
 final class UnderscoreInvokeTest extends AbstractUnitTestCase
 {
@@ -77,6 +80,7 @@ final class UnderscoreInvokeTest extends AbstractUnitTestCase
                 null,
                 [],
                 null,
+                '<input type="%s" id="x_name" name="x_name">',
                 '<input type="%s" id="x_name" name="x_name" />',
             ],
             [
@@ -86,6 +90,7 @@ final class UnderscoreInvokeTest extends AbstractUnitTestCase
                     'id' => 'x_new_id',
                 ],
                 null,
+                '<input type="%s" id="x_new_id" name="x_name">',
                 '<input type="%s" id="x_new_id" name="x_name" />',
             ],
             [
@@ -95,6 +100,7 @@ final class UnderscoreInvokeTest extends AbstractUnitTestCase
                     'id' => 'x_new_id',
                 ],
                 null,
+                '<input type="%s" id="x_new_id" name="x_name" value="24">',
                 '<input type="%s" id="x_new_id" name="x_name" value="24" />',
             ],
             [
@@ -104,6 +110,7 @@ final class UnderscoreInvokeTest extends AbstractUnitTestCase
                     'id' => 'x_new_id',
                 ],
                 "48",
+                '<input type="%s" id="x_new_id" name="x_name" value="48">',
                 '<input type="%s" id="x_new_id" name="x_name" value="48" />',
             ],
         ];
@@ -126,13 +133,15 @@ final class UnderscoreInvokeTest extends AbstractUnitTestCase
         ?string $value,
         array $attributes,
         mixed $newValue,
-        string $render
+        string $render,
+        string $renderXhtml
     ): void {
         $classes = $this->getClasses();
 
         foreach ($classes as $className => $class) {
             $escaper = new Escaper();
-            $helper  = new $class[1]($escaper);
+            $doctype = new Doctype();
+            $helper  = new $class[1]($escaper, $doctype);
 
             $result = $helper($name, $value, $attributes);
 
@@ -144,7 +153,23 @@ final class UnderscoreInvokeTest extends AbstractUnitTestCase
             $actual   = (string)$result;
             $this->assertSame($expected, $actual);
 
+            $doctype(Doctype::XHTML5);
+
+            $result = $helper($name, $value, $attributes);
+
+            if (null !== $newValue) {
+                $result->setValue($newValue);
+            }
+
+            $expected = sprintf($renderXhtml, $className);
+            $actual   = (string)$result;
+            $this->assertSame($expected, $actual);
+
+            /**
+             * TagFactory
+             */
             $factory = new TagFactory($escaper);
+            $doctype = $factory->newInstance('doctype');
             $locator = $factory->newInstance($class[0]);
             $result  = $locator($name, $value, $attributes);
 
@@ -152,7 +177,20 @@ final class UnderscoreInvokeTest extends AbstractUnitTestCase
                 $result->setValue($newValue);
             }
 
-            $actual = (string)$result;
+            $expected = sprintf($render, $className);
+            $actual   = (string)$result;
+            $this->assertSame($expected, $actual);
+
+            $doctype(Doctype::XHTML5);
+
+            $result  = $locator($name, $value, $attributes);
+
+            if (null !== $newValue) {
+                $result->setValue($newValue);
+            }
+
+            $expected = sprintf($renderXhtml, $className);
+            $actual   = (string)$result;
             $this->assertSame($expected, $actual);
         }
     }
@@ -168,7 +206,8 @@ final class UnderscoreInvokeTest extends AbstractUnitTestCase
     public function testHtmlHelperInputUnderscoreInvokeTextarea(): void
     {
         $escaper = new Escaper();
-        $helper  = new Textarea($escaper);
+        $doctype = new Doctype();
+        $helper  = new Textarea($escaper, $doctype);
 
         $result = $helper(
             'x_name',
