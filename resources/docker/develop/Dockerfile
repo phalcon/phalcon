@@ -12,14 +12,14 @@ ARG USER=phalcon
 ARG GROUP=phalcon
 
 RUN set -eux \
-# Add user and group
+# Add user and group \
     && groupadd -g "${GID}" "${GROUP}" \
     && useradd -l -m -u "${UID}" -g "${GID}" "${USER}" \
     && usermod -s /bin/bash "${USER}" \
     && mkdir /app \
     && chown "${USER}":"${GROUP}" /app \
     && chmod 0770 /app \
-# Install needed packages
+# Install needed packages \
     && apt update -y \
     && apt install -yq --no-install-recommends \
         apt-utils \
@@ -48,7 +48,7 @@ RUN set -eux \
     && sed -i -e 's/# ru_RU.UTF-8 UTF-8/ru_RU.UTF-8 UTF-8/' /etc/locale.gen \
     && dpkg-reconfigure --frontend=noninteractive locales \
     && update-locale LANG=en_US.UTF-8 \
-# Install base extensions
+# Install base extensions \
     && pecl install \
         igbinary \
         msgpack \
@@ -58,13 +58,13 @@ RUN set -eux \
         memcached \
         xdebug \
         redis \
-# Configure GD
+# Configure GD \
     && docker-php-ext-configure gd --with-freetype  \
         --with-jpeg=/usr/include/  \
         --with-xpm \
         --with-webp \
         --enable-gd \
-## Install extensions
+## Install extensions \
     && docker-php-ext-install \
         gd \
         gettext \
@@ -73,7 +73,7 @@ RUN set -eux \
         pdo_mysql \
         pdo_pgsql \
         zip \
-# Install PHP extensions
+# Install PHP extensions \
     && docker-php-ext-enable \
         redis \
         igbinary \
@@ -85,11 +85,11 @@ RUN set -eux \
         xdebug \
 # Copy ini file \
     && mv /usr/local/etc/php/php.ini-production /usr/local/etc/php/php.ini \
-# Set correct pid file location and permissions
+# Set correct pid file location and permissions \
     && mkdir -p /run/php \
     && chown "${USER}":"${GROUP}" /run/php \
     && chmod 0770 /run/php \
-# Cleanup
+# Cleanup \
     && apt-get autoremove --purge -y \
     && apt-get autoclean -y \
     && apt-get clean -y \
@@ -97,7 +97,7 @@ RUN set -eux \
     && find /var/cache/apt/archives /var/lib/apt/lists -not -name lock -type f -delete \
     && find /var/cache -type f -delete \
     && find /var/log -type f -delete \
-# Setup the phalcon-module
+# Setup the phalcon-module \
     && cd /tmp \
     && git clone https://github.com/niden/phalcon-module \
     && cd phalcon-module/ext \
@@ -105,7 +105,7 @@ RUN set -eux \
     && echo "extension=phalcon" > /usr/local/etc/php/conf.d/phalcon.ini
 
 # hadolint ignore=DL3022
-COPY --from=composer/composer:2 --chown=${USER}:${GROUP} --chmod=0660 /usr/bin/composer /usr/bin/composer
+COPY --from=composer/composer:2 --chown=${USER}:${GROUP} --chmod=0770 /usr/bin/composer /usr/bin/composer
 COPY resources/docker/develop/.bashrc /home/${USER}/.bashrc
 COPY resources/docker/develop/extra.ini /usr/local/etc/php/conf.d/
 
@@ -118,4 +118,4 @@ SHELL [ "/bin/bash", "--rcfile", "/home/${USER}/.bashrc", "-o", "pipefail", "-c"
 
 WORKDIR /app
 
-USER ${USER}
+#USER ${USER}
