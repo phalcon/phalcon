@@ -121,9 +121,7 @@ class StringLength extends AbstractValidatorComposite
             $options["included"],
             $options["includedMinimum"],
             $options["max"],
-            $options["message"],
             $options["messageMaximum"],
-            $options["included"],
             $options["includedMaximum"]
         );
 
