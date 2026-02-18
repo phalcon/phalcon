@@ -1257,12 +1257,12 @@
             "source": {
                 "type": "git",
                 "url": "https://github.com/phalcon/volt.git",
-                "reference": "dca82714db0d63b3c66acaa094d6e7c6b303640b"
+                "reference": "8d15be25344ac3611ba696d70806573a57cc6f00"
             },
             "dist": {
                 "type": "zip",
-                "url": "https://api.github.com/repos/phalcon/volt/zipball/dca82714db0d63b3c66acaa094d6e7c6b303640b",
-                "reference": "dca82714db0d63b3c66acaa094d6e7c6b303640b",
+                "url": "https://api.github.com/repos/phalcon/volt/zipball/8d15be25344ac3611ba696d70806573a57cc6f00",
+                "reference": "8d15be25344ac3611ba696d70806573a57cc6f00",
                 "shasum": ""
             },
             "require": {
@@ -1328,7 +1328,7 @@
                     "type": "open_collective"
                 }
             ],
-            "time": "2025-10-06T08:14:34+00:00"
+            "time": "2026-02-16T10:51:39+00:00"
         },
         {
             "name": "phar-io/manifest",
@@ -2048,16 +2048,16 @@
         },
         {
             "name": "phpunit/phpunit",
-            "version": "10.5.62",
+            "version": "10.5.63",
             "source": {
                 "type": "git",
                 "url": "https://github.com/sebastianbergmann/phpunit.git",
-                "reference": "3f7dd5066ebde5809296a81f0b19e8b00e5aab49"
+                "reference": "33198268dad71e926626b618f3ec3966661e4d90"
             },
             "dist": {
                 "type": "zip",
-                "url": "https://api.github.com/repos/sebastianbergmann/phpunit/zipball/3f7dd5066ebde5809296a81f0b19e8b00e5aab49",
-                "reference": "3f7dd5066ebde5809296a81f0b19e8b00e5aab49",
+                "url": "https://api.github.com/repos/sebastianbergmann/phpunit/zipball/33198268dad71e926626b618f3ec3966661e4d90",
+                "reference": "33198268dad71e926626b618f3ec3966661e4d90",
                 "shasum": ""
             },
             "require": {
@@ -2129,7 +2129,7 @@
             "support": {
                 "issues": "https://github.com/sebastianbergmann/phpunit/issues",
                 "security": "https://github.com/sebastianbergmann/phpunit/security/policy",
-                "source": "https://github.com/sebastianbergmann/phpunit/tree/10.5.62"
+                "source": "https://github.com/sebastianbergmann/phpunit/tree/10.5.63"
             },
             "funding": [
                 {
@@ -2153,7 +2153,7 @@
                     "type": "tidelift"
                 }
             ],
-            "time": "2026-01-27T05:32:38+00:00"
+            "time": "2026-01-27T05:48:37+00:00"
         },
         {
             "name": "predis/predis",
@@ -5615,5 +5615,5 @@
         "ext-gettext": "*",
         "ext-yaml": "*"
     },
-    "plugin-api-version": "2.6.0"
+    "plugin-api-version": "2.9.0"
 }
