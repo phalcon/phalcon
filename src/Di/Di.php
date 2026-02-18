@@ -422,6 +422,7 @@ class Di extends stdClass implements DiInterface
          */
         $name = $this->resolveAlias($name);
 
+        unset($this->aliases[$name]);
         unset($this->services[$name]);
         unset($this->sharedInstances[$name]);
     }
@@ -471,6 +472,10 @@ class Di extends stdClass implements DiInterface
      */
     public function setAlias(string $name, array | string $aliases): self
     {
+        if (true !== $this->has($name)) {
+            throw new DiException("Service '" . $name . "' is not registered in the container");
+        }
+
         if (true !== is_array($aliases)) {
             $aliases = [$aliases];
         }
@@ -480,8 +485,8 @@ class Di extends stdClass implements DiInterface
                 throw new DiException("Alias name must be a string");
             }
 
-            if (true === $this->has($alias)) {
-                throw new DiException("Alias '" . $alias . "' is already in use by an existing service.");
+            if (true === isset($this->aliases[$alias]) || true === $this->has($alias)) {
+                throw new DiException("Alias '" . $alias . "' is already in use by an existing service");
             }
 
             $this->aliases[$alias] = $name;
@@ -605,9 +610,25 @@ class Di extends stdClass implements DiInterface
      * @param string $name
      *
      * @return string
+     * @throws Exception
      */
     private function resolveAlias(string $name): string
     {
-        return $this->aliases[$name] ?? $name;
+        $current = $name;
+        $seen    = [];
+
+        while (isset($this->aliases[$current])) {
+            if (isset($seen[$current])) {
+                throw new DiException(
+                    sprintf(
+                        "Circular alias reference detected while resolving '%s'",
+                        $name
+                    )
+                );
+            }
+            $seen[$current] = true;
+            $current        = $this->aliases[$current];
+        }
+        return $current;
     }
 }
