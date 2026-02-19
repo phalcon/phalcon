@@ -114,7 +114,10 @@ class Request extends AbstractInjectionAware implements
      * @var array
      */
     protected array $trustedProxies = [];
-
+    /**
+     * @var string
+     */
+    protected string $trustedProxyHeader = '';
     /**
      * Gets a variable from the $_REQUEST superglobal applying filters if
      * needed. If no parameters are given the $_REQUEST superglobal is returned
@@ -220,6 +223,22 @@ class Request extends AbstractInjectionAware implements
      * `$_SERVER["REMOTE_ADDR"]` and optionally in
      * `$_SERVER["HTTP_X_FORWARDED_FOR"]` and returns the first non-private or non-reserved IP address
      *
+     * The user provided trusted header takes priority before checking X-Forwarded-For header.
+     *
+     * Using trusted proxies list, user has to provide a trusted list of proxy IPs
+     * ```
+     * $request
+     *     ->setTrustedProxies($trustedProxies)
+     *     ->getClientAddress(true);
+     * ```
+     * Using user provided trusted header, header should only ever contain 1 IP address, eg. HTTP_CLIENT_IP
+     * ```
+     * $request
+     *     ->setTrustedProxyHeader('HTTP_CLIENT_IP')
+     *     ->setTrustedProxies($trustedProxies)
+     *     ->getClientAddress(true);
+     * ```
+     *
      * @param bool $trustForwardedHeader
      *
      * @return string|false
@@ -227,71 +246,45 @@ class Request extends AbstractInjectionAware implements
      */
     public function getClientAddress(bool $trustForwardedHeader = false): string | bool
     {
-        $address = null;
-
-        if ($trustForwardedHeader) {
-            $address = $_SERVER['HTTP_X_FORWARDED_FOR'] ?? null;
-            if (null === $address) {
-                $address = $_SERVER['HTTP_CLIENT_IP'] ?? null;
-            }
-
-            if (null !== $address && strpos($address, ',') !== false) {
-                /**
-                 * The client address has multiples parts,
-                 * only return the first non-private/non-reserved IP
-                 */
-                $trustedProxies = $this->trustedProxies;
-                $forwardedIps = explode(',', $address);
-                if (!empty($trustedProxies)) {
-                    // verify if we trust the forwarded proxy
-                    $isTrusted = false;
-                    $reverseForwardedIps = array_reverse($forwardedIps);
-                    foreach ($reverseForwardedIps as $invertForwardedIp) {
-                        if ($isTrusted === true) {
-                            break;
-                        }
-                        foreach ($trustedProxies as $trustedForwardedIp) {
-                            if (strpos($trustedForwardedIp, "/") !== false) {
-                                $isIpAddressInCIDR = $this->isIpAddressInCIDR($invertForwardedIp, $trustedForwardedIp);
-                                if ($isIpAddressInCIDR === true) {
-                                    $isTrusted = true;
-                                    break;
-                                }
-                            } else {
-                                if ($invertForwardedIp === $trustedForwardedIp) {
-                                    $isTrusted = true;
-                                    break;
-                                }
-                            }
-                        }
-                    }
-
-                    if (!$isTrusted) {
-                        throw new \Exception("The forwarded proxy IP addresses are not trusted.");
-                    }
-                }
-
-                // retrieve the first valid IP that is not reserved or private
-                $filterService = $this->getFilterService();
-                foreach ($forwardedIps as $forwardedIp) {
-                    $filtered = $filterService->sanitize($forwardedIp, [
-                        "ip" => [
-                            "filter" => FILTER_FLAG_NO_PRIV_RANGE | FILTER_FLAG_NO_RES_RANGE
-                        ]
-                    ]);
-                    if ($filtered) {
-                        return $filtered;
-                    }
-                }
-
-                return false;
-            }
-        } else {
-            $address = $_SERVER["REMOTE_ADDR"];
-        }
+        $address = $_SERVER["REMOTE_ADDR"] ?? null;
 
         if (!is_string($address)) {
             return false;
+        }
+
+        // if trustForwardedHeader == true, the $address is deemed a proxy IP, or we get it from a trusted header
+        if ($trustForwardedHeader) {
+            // If trustedProxyHeader is not empty, it takes priority before we check for X-Forwarded-For
+            if ($this->trustedProxyHeader !== "") {
+                $trustedProxyHeaderIp = $_SERVER[$this->trustedProxyHeader] ?? null;
+                if ($trustedProxyHeaderIp) {
+                    return $trustedProxyHeaderIp;
+                }
+            }
+            // if $this->trustedProxies is not empty, we verify if the REMOTE_ADDR is a trusted proxy,
+            // and if not, we do not parse the X-Forwarded-For proxy header, return REMOTE_ADDR directly
+            if (!empty($this->trustedProxies) && !$this->isProxyTrusted($address)) {
+                return $address;
+            }
+            // if either trustedProxies are empty or we trust the proxy, parse the header HTTP_X_FORWARDED_FOR
+            $forwarded = $_SERVER["HTTP_X_FORWARDED_FOR"] ?? null;
+            if (!empty($forwarded)) {
+                // X-Forwarded-For contains ips, we continue parsing the header
+                $forwardedIps        = array_map("trim", explode(",", $forwarded));
+                $reverseForwardedIps = array_reverse($forwardedIps);
+                foreach ($reverseForwardedIps as $forwardedIp) {
+                    // skip if the IP is one of our own trusted proxy
+                    if (!empty($this->trustedProxies) && $this->isProxyTrusted($forwardedIp)) {
+                        continue;
+                    }
+
+                    // return the first public, non-private and non-reserved IP
+                    $filteredIp = $this->isValidPublicIp($forwardedIp);
+                    if ($filteredIp) {
+                        return $filteredIp;
+                    }
+                }
+            }
         }
 
         return $address;
@@ -1574,7 +1567,7 @@ class Request extends AbstractInjectionAware implements
     }
 
     /**
-     * Set trusted proxy
+     * Set a trusted proxy list for X-Forwarded-For header
      *
      * @param array $trustedProxies
      * @return RequestInterface
@@ -1596,6 +1589,25 @@ class Request extends AbstractInjectionAware implements
     }
 
     /**
+     * This header takes priority when parsing HTTP headers
+     * The header return only 1 single IP address, prefixed with HTTP_ eg. HTTP_CLIENT_IP.
+     *
+     * @param  string $trustedProxyHeader
+     * @return RequestInterface
+     */
+    public function setTrustedProxyHeader(string $trustedProxyHeader): RequestInterface
+    {
+        $trustedHeader = strtoupper(str_replace("-", "_", $trustedProxyHeader));
+        if (!str_starts_with($trustedHeader, "HTTP_")) {
+            $trustedHeader = "HTTP_" . $trustedHeader;
+        }
+
+        $this->trustedProxyHeader = $trustedHeader;
+
+        return $this;
+    }
+
+    /**
      * Check if an IP address exists in CIDR range
      *
      * @param string $ip The IP address to check.
@@ -1611,7 +1623,7 @@ class Request extends AbstractInjectionAware implements
         $ipBin     = inet_pton($ip);
         $subnetBin = inet_pton($subnet);
 
-        if ($ipBin === false || $subnetBin === false) {
+        if ($ipBin === false || $subnetBin === false || strlen($ipBin) !== strlen($subnetBin)) {
             return false; // Invalid IP
         }
 
@@ -1644,6 +1656,45 @@ class Request extends AbstractInjectionAware implements
         $mask = 0xFF ^ $tempMask;
 
         return ($ipByte & $mask) === ($subnetByte & $mask);
+    }
+
+
+    /**
+     * Verify if given IP address is trusted
+     *
+     * @param string $ip
+     * @return bool
+     */
+    private function isProxyTrusted(string $ip): bool
+    {
+        foreach ($this->trustedProxies as $trusted) {
+            if (strpos($trusted, '/') !== false) {
+                return $this->isIpAddressInCIDR($ip, $trusted);
+            } else {
+                return $ip === $trusted;
+            }
+        }
+
+        return false;
+    }
+
+    /**
+     * Verify if given IP address is public, eg. not private or reserved IP
+     *
+     * @param string $forwardedIp
+     * @return string|false
+     * @throws \Phalcon\Filter\Exception
+     */
+    private function isValidPublicIp(string $forwardedIp): string | false
+    {
+        $filterService = $this->getFilterService();
+        $filtered = $filterService->sanitize($forwardedIp, [
+            "ip" => [
+                "filter" => FILTER_FLAG_NO_PRIV_RANGE | FILTER_FLAG_NO_RES_RANGE
+            ]
+        ]);
+
+        return $filtered;
     }
 
     /**
