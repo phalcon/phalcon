@@ -26,6 +26,7 @@ use Phalcon\Forms\Element\Submit;
 use Phalcon\Forms\Element\Text;
 use Phalcon\Forms\Element\TextArea;
 use Phalcon\Html\Escaper;
+use Phalcon\Html\Helper\Doctype;
 use Phalcon\Html\TagFactory;
 use Phalcon\Tests\AbstractUnitTestCase;
 
@@ -134,6 +135,12 @@ final class RenderTest extends AbstractUnitTestCase
     ): void {
         $name    = uniqid();
         $factory = new TagFactory(new Escaper());
+        /**
+         * Make them all XHTML
+         */
+        $doctype = $factory->newInstance('doctype');
+        $doctype(Doctype::XHTML5);
+
         $object  = new $class($name);
         $object->setTagFactory($factory);
 

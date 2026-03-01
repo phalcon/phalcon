@@ -207,11 +207,11 @@ class Micro extends Injectable implements ArrayAccess, EventsAwareInterface
     /**
      * Appends a 'finish' middleware to be called when the request is finished
      *
-     * @param callable $handler
+     * @param callable|MiddlewareInterface $handler
      *
      * @return $this
      */
-    public function finish(callable $handler): Micro
+    public function finish(callable | MiddlewareInterface $handler): Micro
     {
         $this->finishHandlers[] = $handler;
 
@@ -389,19 +389,24 @@ class Micro extends Injectable implements ArrayAccess, EventsAwareInterface
                  * Updating active handler
                  */
                 $handler = $this->handlers[$matchedRoute->getRouteId()];
+
+                /**
+                 * Updating active handler
+                 */
+                $this->activeHandler = $handler;
+
                 if (null !== $this->eventsManager) {
                     /**
                      * Calling beforeExecuteRoute event
                      */
-                    if (true !== $this->fireManagerEvent("micro:beforeExecuteRoute")) {
+                    if (false === $this->fireManagerEvent("micro:beforeExecuteRoute")) {
                         return false;
                     }
 
                     $handler = $this->activeHandler;
                 }
 
-                $this->activeHandler = $handler;
-                $this->stopped       = false;
+                $this->stopped = false;
 
                 /**
                  * Calls the before handlers

@@ -82,6 +82,7 @@ final class GetClientAddressTest extends AbstractHttpBase
         $container = new FactoryDefault();
 
         // skip private IP and return the first non-private and non-reserved IP
+        $_SERVER['REMOTE_ADDR']          = '25.25.25.25';
         $_SERVER['HTTP_X_FORWARDED_FOR'] = '10.4.6.1,25.25.25.25';
 
         $request = new Request();
@@ -123,6 +124,7 @@ final class GetClientAddressTest extends AbstractHttpBase
     {
         $container = new FactoryDefault();
 
+        $_SERVER['REMOTE_ADDR']          = '25.25.25.1';
         $_SERVER['HTTP_X_FORWARDED_FOR'] = '8.8.8.8,25.25.25.1';
 
         $request = new Request();
@@ -146,6 +148,7 @@ final class GetClientAddressTest extends AbstractHttpBase
     {
         $container = new FactoryDefault();
 
+        $_SERVER['REMOTE_ADDR']          = '1.1.1.1';
         $_SERVER['HTTP_X_FORWARDED_FOR'] = '8.8.8.8,1.1.1.1';
 
         $request = new Request();
@@ -154,13 +157,33 @@ final class GetClientAddressTest extends AbstractHttpBase
             '25.25.25.0/24'
         ]);
 
-        $expectedExceptionMessage = 'The forwarded proxy IP addresses are not trusted.';
-        try {
-            $request->getClientAddress(true);
-            $this->fail('Expected exception was not thrown.');
-        } catch (\Exception $e) {
-            $this->assertEquals($expectedExceptionMessage, $e->getMessage());
-        }
+        $expected = '1.1.1.1';
+        $actual   = $request->getClientAddress(true);
+        $this->assertSame($expected, $actual);
+    }
+
+    /**
+     * Tests Phalcon\Http\Request :: getClientAddress() - trustForwardedHeader - with non-public proxy IPs
+     *
+     * @author Phalcon Team <team@phalcon.io>
+     * @since  2025-07-11
+     */
+    public function testHttpRequestGetClientAddressTrustForwardedHeaderWithNonPublicProxyIps(): void
+    {
+        $container = new FactoryDefault();
+
+        $_SERVER['REMOTE_ADDR']          = '192.168.0.10';
+        $_SERVER['HTTP_X_FORWARDED_FOR'] = '10.4.5.3,192.168.0.10';
+
+        $request = new Request();
+        $request->setDI($container);
+        $request->setTrustedProxies([
+            '192.168.0.10'
+        ]);
+
+        $expected = '192.168.0.10';
+        $actual   = $request->getClientAddress(true);
+        $this->assertSame($expected, $actual);
     }
 
     /**
@@ -172,9 +195,13 @@ final class GetClientAddressTest extends AbstractHttpBase
      */
     public function testHttpRequestGetClientAddressTrustForwardedHeaderClientIp(): void
     {
+        $container = new FactoryDefault();
+        $_SERVER['REMOTE_ADDR'] = Http::TEST_IP_THREE;
         $_SERVER['HTTP_CLIENT_IP'] = Http::TEST_IP_TWO;
 
         $request = new Request();
+        $request->setDI($container);
+        $request->setTrustedProxyHeader('HTTP_CLIENT_IP');
 
         $expected = Http::TEST_IP_TWO;
         $actual   = $request->getClientAddress(true);

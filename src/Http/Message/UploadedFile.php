@@ -38,7 +38,7 @@ use function move_uploaded_file;
 /**
  * UploadedFile class
  */
-final class UploadedFile implements UploadedFileInterface
+class UploadedFile implements UploadedFileInterface
 {
     use FileTrait;
 

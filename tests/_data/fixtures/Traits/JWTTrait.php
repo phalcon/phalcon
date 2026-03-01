@@ -43,12 +43,13 @@ trait JWTTrait
         string $signerClass = Hmac::class,
         int $issDrift = 0
     ): Token {
-        $signer  = new $signerClass();
-        $builder = new $builderClass($signer);
+        $signer     = new $signerClass();
+        $builder    = new $builderClass($signer);
         $expiry     = strtotime('+1 day');
         $issued     = strtotime('now') + $issDrift;
         $notBefore  = strtotime('-1 day');
         $passphrase = '&vsJBETaizP3A3VX&TPMJUqi48fJEgN7';
+        $userId     = 4567;
 
         return $builder
             ->setAudience('my-audience')
@@ -59,6 +60,9 @@ trait JWTTrait
             ->setNotBefore($notBefore)
             ->setSubject('Mary had a little lamb')
             ->setPassphrase($passphrase)
+            ->addClaim('uid', 456)
+            ->addClaim('sid', 'string')
+            ->addClaim('bid', true)
             ->getToken()
         ;
     }

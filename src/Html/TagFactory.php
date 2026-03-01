@@ -58,6 +58,7 @@ use Phalcon\Html\Helper\Ul;
 use Phalcon\Traits\Factory\FactoryTrait;
 
 use function call_user_func_array;
+use function str_starts_with;
 
 /**
  * ServiceLocator implementation for Tag helpers.
@@ -176,14 +177,23 @@ class TagFactory
      */
     public function newInstance(string $name)
     {
+        /**
+         * For input elements we need the doctype also.
+         */
+        if (str_starts_with($name, 'input')) {
+            $doctype = $this->getCachedInstance('doctype', $this->escaper);
+
+            return $this->getCachedInstance($name, $this->escaper, $doctype);
+        }
+
         return $this->getCachedInstance($name, $this->escaper);
     }
 
     /**
-     * @param string   $name
-     * @param callable $callable
+     * @param string          $name
+     * @param callable|string $callable
      */
-    public function set(string $name, $callable): void
+    public function set(string $name, callable|string $callable): void
     {
         $this->mapper[$name] = $callable;
         unset($this->instances[$name]);

@@ -234,11 +234,6 @@ class Simple extends Injectable implements ViewBaseInterface, EventsAwareInterfa
              * Merge or assign the new params as parameters
              */
             $mergedParams = array_merge($viewParams, $params);
-
-            /**
-             * Create a virtual symbol table
-             */
-            Parser::viewCreateSymbolTable();
         } else {
             $mergedParams = $params;
         }
@@ -300,11 +295,6 @@ class Simple extends Injectable implements ViewBaseInterface, EventsAwareInterfa
      */
     public function render(string $path, array $params = []): string
     {
-        /**
-         * Create a virtual symbol table
-         */
-        Parser::viewCreateSymbolTable();
-
         ob_start();
 
         /**

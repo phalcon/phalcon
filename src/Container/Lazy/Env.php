@@ -60,14 +60,15 @@ class Env extends AbstractLazy
      */
     protected function getEnv(): string
     {
-        $env = getenv();
+        $envs = array_merge($_ENV, getenv());
 
-        if (!array_key_exists($this->varname, $env)) {
+
+        if (!array_key_exists($this->varname, $envs)) {
             throw new NotDefined(
-                "Evironment variable '{$this->varname}' is not defined."
+                "Environment variable '{$this->varname}' is not defined."
             );
         }
 
-        return $env[$this->varname];
+        return $envs[$this->varname];
     }
 }

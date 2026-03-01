@@ -184,7 +184,6 @@ abstract class AbstractConnection
      * @param array<string, mixed> $values
      *
      * @return PDOStatement
-     * @throws Exception
      */
     public function perform(
         string $statement,
@@ -305,9 +304,7 @@ abstract class AbstractConnection
         string | null $statement = null,
         array $values = []
     ): void {
-        if ($this->profiler) {
-            $this->profiler->finish($statement, $values);
-        }
+        $this->profiler?->finish($statement, $values);
     }
 
     /**
@@ -317,8 +314,6 @@ abstract class AbstractConnection
      */
     protected function profileStart(string $method): void
     {
-        if ($this->profiler) {
-            $this->profiler->start($method);
-        }
+        $this->profiler?->start($method);
     }
 }

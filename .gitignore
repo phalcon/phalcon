@@ -1,5 +1,7 @@
 .idea/
 .local/
+.bash_history
+.composer
 tests/_output/
 tests/_support/_generated/
 vendor/

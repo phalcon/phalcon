@@ -802,7 +802,10 @@ class Router extends AbstractInjectionAware implements RouterInterface, EventsAw
             $methods = $route->getHttpMethods();
             if (
                 null !== $methods &&
-                false === $request->isMethod($methods, true)
+                (
+                    $request instanceof RequestInterface &&
+                    false === $request->isMethod($methods, true)
+                )
             ) {
                 /**
                  * Check if the current method is allowed by the route

@@ -33,7 +33,7 @@ use function is_object;
 /**
  * ServerRequest
  */
-final class ServerRequest extends AbstractRequest implements
+class ServerRequest extends AbstractRequest implements
     ServerRequestInterface
 {
     /**

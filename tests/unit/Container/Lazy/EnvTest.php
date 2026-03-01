@@ -15,9 +15,11 @@ namespace Phalcon\Tests\Unit\Container\Lazy;
 
 use Phalcon\Container\Exception\NotDefined;
 use Phalcon\Container\Lazy\Env;
+use PHPUnit\Framework\Attributes\BackupGlobals;
 
 use function random_int;
 
+#[BackupGlobals(true)]
 final class EnvTest extends AbstractLazyBase
 {
     /**
@@ -42,7 +44,7 @@ final class EnvTest extends AbstractLazyBase
         $varname = 'TEST_VAR_' . random_int(1, 100);
         $this->expectException(NotDefined::class);
         $this->expectExceptionMessage(
-            "Evironment variable '{$varname}' is not defined."
+            "Environment variable '{$varname}' is not defined."
         );
 
         $lazy = new Env($varname);
@@ -54,12 +56,20 @@ final class EnvTest extends AbstractLazyBase
      */
     public function testContainerLazyEnvType(): void
     {
-        $varname  = 'TEST_VAR';
-        $lazy     = new Env($varname, 'int');
+        $varName  = 'TEST_VAR';
+        $lazy     = new Env($varName, 'int');
         $expected = random_int(1, 100);
         putenv("TEST_VAR={$expected}");
 
         $actual = $this->actual($lazy);
+        $this->assertSame($expected, $actual);
+
+        $_ENV['TEST_VAR_2'] = '123';
+        $varName  = 'TEST_VAR_2';
+        $lazy     = new Env($varName, 'int');
+
+        $expected = 123;
+        $actual   = $this->actual($lazy);
         $this->assertSame($expected, $actual);
     }
 }
