@@ -46,7 +46,9 @@ use Phalcon\Support\Collection\CollectionInterface;
 use Phalcon\Support\Settings;
 use Phalcon\Traits\Helper\Str\CamelizeTrait;
 use Phalcon\Traits\Helper\Str\UncamelizeTrait;
+use Psr\Log\LoggerInterface;
 use Serializable;
+use Throwable;
 
 use function array_intersect;
 use function array_key_exists;
@@ -2062,6 +2064,42 @@ abstract class Model extends AbstractInjectionAware implements
          */
         if (method_exists($this, $eventName)) {
             $this->$eventName();
+        }
+
+        if (
+            ($em = $this->getEventsManager()) &&
+            $eventObject = $this->getDI()?->get('modelsEventFactory', [$this->getDI()])->create($eventName, $this)
+        ) {
+            $logger = $this->container->getShared('logger') ?? $this->container->getShared(LoggerInterface::class);
+            foreach ([static::class, ...class_parents($this), ...class_implements($this)] as $className) {
+                // make sure that every event has a chance to be fired
+                try {
+                    // wildcard event
+                    $em->dispatch($eventObject, name: $className, source: $this);
+                } catch (Throwable $t) {
+                    $logger?->error(
+                        'Error processing model event',
+                        [
+                            'exception' => $t,
+                            'class' => $className,
+                            'event' => $eventName,
+                        ]
+                    );
+                }
+                try {
+                    // specific event
+                    $em->dispatch($eventObject, name: [$className, $eventName], source: $this);
+                } catch (Throwable $t) {
+                    $logger?->error(
+                        'Error processing model event',
+                        [
+                            'exception' => $t,
+                            'class' => $className,
+                            'event' => $eventName,
+                        ]
+                    );
+                }
+            }
         }
 
         /**

@@ -14,9 +14,11 @@ declare(strict_types=1);
 namespace Phalcon\Events;
 
 use Closure;
+use Phalcon\Db\Event\AbstractModelEvent;
+use Phalcon\Db\Event\ModelEventNameEnum;
+use Psr\EventDispatcher\EventDispatcherInterface;
 use SplPriorityQueue;
 
-use function call_user_func_array;
 use function is_callable;
 use function is_object;
 use function method_exists;
@@ -27,7 +29,7 @@ use function method_exists;
  * can create hooks or plugins that will offer monitoring of data, manipulation,
  * conditional execution and much more.
  */
-class Manager implements ManagerInterface
+class Manager implements ManagerInterface, EventDispatcherInterface
 {
     /**
      * @var bool
@@ -62,15 +64,20 @@ class Manager implements ManagerInterface
     /**
      * Attach a listener to the events manager
      *
-     * @param string          $eventType
+     * @param string|string[] $eventType
      * @param object|callable $handler
      * @param int             $priority
      */
     public function attach(
-        string $eventType,
+        string|array $eventType,
         callable | object $handler,
         int $priority = self::DEFAULT_PRIORITY
     ): void {
+
+        if (is_array($eventType)) {
+            $eventType = join(':', $eventType);
+        }
+
         /** @var SplPriorityQueue|null $priorityQueue */
         $priorityQueue = $this->events[$eventType] ?? null;
         if (null === $priorityQueue) {
@@ -176,20 +183,18 @@ class Manager implements ManagerInterface
      *```php
      * $eventsManager->fire("db", $connection);
      *```
-     *
-     * @param string     $eventType
-     * @param object     $source
+     * @deprecated Please use PSR-14 EventDispatcherInterface (dispatch method with object)
+     * @param string $eventType
+     * @param object $source
      * @param mixed|null $data
-     * @param bool       $cancelable
-     *
+     * @param bool $cancelable
      * @return mixed
-     * @throws Exception
      */
     public function fire(
         string $eventType,
         object $source,
         mixed $data = null,
-        bool $cancelable = true
+        bool $cancelable = true,
     ): mixed {
         if (empty($this->events)) {
             return null;
@@ -197,6 +202,9 @@ class Manager implements ManagerInterface
 
         // All valid events must have a colon separator
         if (!str_contains($eventType, ':')) {
+            if (is_object($data)) {
+                return $this->dispatch($data, $eventType, $source);
+            }
             throw new Exception('Invalid event type ' . $eventType);
         }
 
@@ -231,21 +239,55 @@ class Manager implements ManagerInterface
     }
 
     /**
+     * Dispatches an event to the appropriate event listeners.
+     *
+     * @param object $event The event object to be dispatched.
+     * @param string|string[]|null $name The optional event name to look for.
+     * @param object|null $source The optional source object of the event.
+     *
+     * @return mixed The result of the event listeners' processing or null if no listeners are found.
+     */
+    public function dispatch(object $event, string|array|null $name = null, ?object $source = null): mixed
+    {
+        if (empty($this->events)) {
+            return null;
+        }
+
+        if (is_array($name)) {
+            $name = join(':', $name);
+        }
+
+        if (!empty($this->events[$name])) {
+            return $this->fireQueue($this->events[$name], $event);
+        }
+
+        $eventClassName = $event::class;
+        if (!empty($this->events[$eventClassName])) {
+            return $this->fireQueue($this->events[$eventClassName], $event);
+        }
+
+        return null;
+    }
+
+    /**
      * Internal handler to call a queue of events
      *
      * @param SplPriorityQueue $queue
-     * @param EventInterface   $event
+     * @param object $event
      *
      * @return mixed
      */
-    final public function fireQueue(
+    final protected function fireQueue(
         SplPriorityQueue $queue,
-        EventInterface $event
+        object $event,
     ): mixed {
         $status = null;
 
-        // Tell if the event is cancelable
-        $cancelable = $event->isCancelable();
+        $cancelable = true;
+        if ($event instanceof EventInterface) {
+            // Tell if the event is cancelable
+            $cancelable = $event->isCancelable();
+        }
 
         // Responses need to be traced?
         $collected = $this->collect;
@@ -273,7 +315,7 @@ class Manager implements ManagerInterface
                 }
 
                 // Check if the event was stopped by the user
-                if (true === $cancelable && true === $event->isStopped()) {
+                if (true === $cancelable && $event instanceof EventInterface &&  true === $event->isStopped()) {
                     break;
                 }
             }
@@ -355,57 +397,70 @@ class Manager implements ManagerInterface
     }
 
     /**
-     * @param mixed          $status
-     * @param mixed          $handler
-     * @param EventInterface $event
+     * @param mixed $status
+     * @param mixed $handler
+     * @param object $event
      *
      * @return false|mixed
      */
     private function checkFireHandlerClosure(
         mixed $status,
         mixed $handler,
-        EventInterface $event
+        object $event,
     ): mixed {
         // Check if the event is a closure
         if ($handler instanceof Closure || is_callable($handler)) {
-            // Call the function in the PHP userland
-            $status = call_user_func_array(
-                $handler,
-                [
-                    $event,
-                    $event->getSource(),
-                    $event->getData(),
-                ]
-            );
+            if ($event instanceof EventInterface) {
+                $status = $handler($event, $event->getSource(), $event->getData());
+            } else {
+                $status = $handler($event);
+            }
         }
 
         return $status;
     }
 
     /**
-     * @param mixed          $status
-     * @param mixed          $handler
-     * @param EventInterface $event
+     * @param mixed $status
+     * @param mixed $handler
+     * @param object $event
      *
      * @return mixed
      */
     private function checkFireHandlerMethod(
         mixed $status,
         mixed $handler,
-        EventInterface $event
+        object $event,
     ): mixed {
-        $eventName = $event->getType();
-
         // Check if the listener has implemented an event with the same name
         if (
-            true !== ($handler instanceof Closure || is_callable($handler)) &&
-            true === method_exists($handler, $eventName)
+            true !== ($handler instanceof Closure || is_callable($handler))
         ) {
-            $status = $handler->{$eventName}(
-                $event,
-                $event->getSource(),
-                $event->getData()
-            );
+            if (
+                ($event instanceof EventInterface) &&
+                ($eventName = $event->getType()) &&
+                method_exists($handler, $eventName)
+            ) {
+                return $handler->{$eventName}(
+                    $event,
+                    $event->getSource(),
+                    $event->getData()
+                );
+            }
+            // Model-specific: resolve the event object back to a method name
+            // (e.g. BeforeCreateEvent -> "beforeCreate") so non-closure handlers
+            // can implement named methods for each model lifecycle event.
+            if (
+                ($event instanceof AbstractModelEvent) &&
+                ($eventName = ModelEventNameEnum::tryFromEventClass($event::class)?->value) &&
+                method_exists($handler, $eventName)
+            ) {
+                return $handler->{$eventName}($event);
+            }
+
+            if (method_exists($handler, '__invoke')) {
+                return $handler->__invoke($event);
+            }
         }
 
         return $status;
