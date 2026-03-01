@@ -9,7 +9,6 @@ use Phalcon\Tests\Fixtures\Event\EmptyEventObject;
 
 final class Psr14Layer extends AbstractUnitTestCase
 {
-
     public function testDispatchWithStringName(): void
     {
         $result = false;

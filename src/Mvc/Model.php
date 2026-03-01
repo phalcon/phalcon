@@ -2071,13 +2071,14 @@ abstract class Model extends AbstractInjectionAware implements
             ($em = $this->getEventsManager()) &&
             $eventObject = $this->getDI()?->get('modelsEventFactory', [$this->getDI()])->create($eventName, $this)
         ) {
+            $logger = $this->container->getShared('logger') ?? $this->container->getShared(LoggerInterface::class);
             foreach ([static::class, ...class_parents($this), ...class_implements($this)] as $className) {
                 // make sure that every event has a chance to be fired
                 try {
                     // wildcard event
                     $em->dispatch($eventObject, name: $className, source: $this);
                 } catch (Throwable $t) {
-                    ($this->container->getShared('logger') ?? $this->container->getShared(LoggerInterface::class))?->error(
+                    $logger?->error(
                         'Error processing model event',
                         [
                             'exception' => $t,
@@ -2090,7 +2091,7 @@ abstract class Model extends AbstractInjectionAware implements
                     // specific event
                     $em->dispatch($eventObject, name: [$className, $eventName], source: $this);
                 } catch (Throwable $t) {
-                    ($this->container->getShared('logger') ?? $this->container->getShared(LoggerInterface::class))?->error(
+                    $logger?->error(
                         'Error processing model event',
                         [
                             'exception' => $t,
