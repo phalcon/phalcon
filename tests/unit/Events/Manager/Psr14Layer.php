@@ -8,7 +8,6 @@ use Phalcon\Tests\Fixtures\Event\EmptyEventObject;
 
 final class Psr14Layer extends AbstractUnitTestCase
 {
-
     public function testDispatchWithStringName(): void
     {
         $manager = new Manager();
@@ -47,7 +46,7 @@ final class Psr14Layer extends AbstractUnitTestCase
         $manager = new Manager();
         $counter = 0;
 
-        $manager->attach('group:test', new class($counter){
+        $manager->attach('group:test', new class ($counter){
             public function __construct(private &$c)
             {
             }
