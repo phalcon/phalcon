@@ -447,6 +447,9 @@ class Manager implements ManagerInterface, EventDispatcherInterface
                     $event->getData()
                 );
             }
+            // Model-specific: resolve the event object back to a method name
+            // (e.g. BeforeCreateEvent -> "beforeCreate") so non-closure handlers
+            // can implement named methods for each model lifecycle event.
             if (
                 ($event instanceof AbstractModelEvent) &&
                 ($eventName = ModelEventNameEnum::tryFromEventClass($event::class)?->value) &&
