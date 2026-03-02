@@ -2067,11 +2067,12 @@ abstract class Model extends AbstractInjectionAware implements
             $this->$eventName();
         }
 
+        $container = $this->getDI();
         if (
             ($em = $this->getEventsManager()) &&
-            $eventObject = $this->getDI()?->get('modelsEventFactory', [$this->getDI()])->create($eventName, $this)
+            $eventObject = $container?->get('modelsEventFactory', [$container])->create($eventName, $this)
         ) {
-            $logger = $this->container->getShared('logger') ?? $this->container->getShared(LoggerInterface::class);
+            $logger = $container?->getShared('logger') ?? $container?->getShared(LoggerInterface::class);
             foreach ([static::class, ...class_parents($this), ...class_implements($this)] as $className) {
                 // make sure that every event has a chance to be fired
                 try {
