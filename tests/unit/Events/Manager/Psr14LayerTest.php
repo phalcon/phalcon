@@ -7,7 +7,7 @@ use Phalcon\Tests\AbstractUnitTestCase;
 use Phalcon\Tests\Fixtures\Event\CancellableEventObject;
 use Phalcon\Tests\Fixtures\Event\EmptyEventObject;
 
-final class Psr14Layer extends AbstractUnitTestCase
+final class Psr14LayerTest extends AbstractUnitTestCase
 {
     public function testDispatchWithStringName(): void
     {
