@@ -17,6 +17,7 @@ use Closure;
 use Phalcon\Db\Event\AbstractModelEvent;
 use Phalcon\Db\Event\ModelEventNameEnum;
 use Psr\EventDispatcher\EventDispatcherInterface;
+use Psr\EventDispatcher\StoppableEventInterface;
 use SplPriorityQueue;
 
 use function is_callable;
@@ -316,6 +317,10 @@ class Manager implements ManagerInterface, EventDispatcherInterface
 
                 // Check if the event was stopped by the user
                 if (true === $cancelable && $event instanceof EventInterface &&  true === $event->isStopped()) {
+                    break;
+                }
+
+                if ($event instanceof StoppableEventInterface && $event->isPropagationStopped()) {
                     break;
                 }
             }
