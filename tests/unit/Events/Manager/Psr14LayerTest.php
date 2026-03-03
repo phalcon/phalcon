@@ -13,7 +13,7 @@ final class Psr14LayerTest extends AbstractUnitTestCase
     {
         $result = false;
         $manager = new Manager();
-        $manager->attach('test', function () use (&$result){
+        $manager->attach('test', function () use (&$result) {
             $this->assertTrue(true, 'Event was not dispatched');
             $result = true;
         });
@@ -26,7 +26,7 @@ final class Psr14LayerTest extends AbstractUnitTestCase
     {
         $result = false;
         $manager = new Manager();
-        $manager->attach(EmptyEventObject::class, function ($model) use (&$result){
+        $manager->attach(EmptyEventObject::class, function ($model) use (&$result) {
             $this->assertTrue(true, 'Event was not dispatched');
             $result = true;
         });
@@ -39,7 +39,7 @@ final class Psr14LayerTest extends AbstractUnitTestCase
     {
         $result = false;
         $manager = new Manager();
-        $manager->attach('test', function ($model) use (&$result){
+        $manager->attach('test', function ($model) use (&$result) {
             $this->assertTrue(true, 'Event was not dispatched');
             $result = true;
         });
@@ -54,7 +54,7 @@ final class Psr14LayerTest extends AbstractUnitTestCase
         $manager = new Manager();
         $counter = 0;
 
-        $manager->attach('group:test', new class($counter) {
+        $manager->attach('group:test', new class ($counter) {
             public function __construct(private &$c)
             {
             }

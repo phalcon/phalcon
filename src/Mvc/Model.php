@@ -2173,7 +2173,11 @@ abstract class Model extends AbstractInjectionAware implements
             }
         }
 
-        if (isset($eventObject) && $eventObject instanceof StoppableEventInterface && $eventObject->isPropagationStopped()) {
+        if (
+            isset($eventObject) &&
+            $eventObject instanceof StoppableEventInterface &&
+            $eventObject->isPropagationStopped()
+        ) {
             return false;
         }
 
