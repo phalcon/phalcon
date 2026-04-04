@@ -1,5 +1,16 @@
 <?php
 
+/**
+ * This file is part of the Phalcon Framework.
+ *
+ * (c) Phalcon Team <team@phalcon.io>
+ *
+ * For the full copyright and license information, please view the LICENSE.txt
+ * file that was distributed with this source code.
+ */
+
+declare(strict_types=1);
+
 error_reporting(E_ALL);
 
 $autoloader = __DIR__ . '/vendor/autoload.php';
@@ -11,7 +22,7 @@ if (! file_exists($autoloader)) {
 }
 
 require_once $autoloader;
-require_once __DIR__ . '/tests/_config/functions.php';
+require_once __DIR__ . '/tests/support/_config/functions.php';
 
 if (file_exists('.env')) {
     $dotenv = Dotenv\Dotenv::createImmutable(__DIR__);
