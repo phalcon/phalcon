@@ -24,13 +24,14 @@ use Phalcon\Cache\Exception\Exception as StorageException;
 use Phalcon\Storage\SerializerFactory;
 use Phalcon\Support\Exception;
 use Phalcon\Support\Exception as HelperException;
-use Phalcon\Tests\Fixtures\Cache\Adapter\ApcuApcuDeleteFixture;
-use Phalcon\Tests\Fixtures\Cache\Adapter\StreamUnlinkFixture;
 use Phalcon\Tests\AbstractUnitTestCase;
+use Phalcon\Tests\Unit\Cache\Fake\Adapter\FakeApcuApcuDelete;
+use Phalcon\Tests\Unit\Cache\Fake\Adapter\FakeStreamUnlink;
 use stdClass;
 
 use function getOptionsLibmemcached;
 use function getOptionsRedis;
+use function getOptionsRedisCluster;
 use function outputDir;
 use function uniqid;
 
@@ -92,7 +93,7 @@ final class ClearTest extends AbstractUnitTestCase
         $this->checkExtensionIsLoaded('apcu');
 
         $serializer = new SerializerFactory();
-        $adapter    = new ApcuApcuDeleteFixture($serializer);
+        $adapter    = new FakeApcuApcuDelete($serializer);
 
         $key1 = uniqid();
         $key2 = uniqid();
@@ -123,7 +124,7 @@ final class ClearTest extends AbstractUnitTestCase
         $this->checkExtensionIsLoaded('apcu');
 
         $serializer = new SerializerFactory();
-        $adapter    = new ApcuApcuDeleteFixture($serializer);
+        $adapter    = new FakeApcuApcuDelete($serializer);
 
         $key1 = uniqid();
         $key2 = uniqid();
@@ -199,7 +200,7 @@ final class ClearTest extends AbstractUnitTestCase
     public function testCacheAdapterStreamClearCannotDeleteFile(): void
     {
         $serializer = new SerializerFactory();
-        $adapter    = new StreamUnlinkFixture(
+        $adapter    = new FakeStreamUnlink(
             $serializer,
             [
                 'storageDir' => outputDir(),

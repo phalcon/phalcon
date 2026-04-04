@@ -15,7 +15,7 @@ namespace Phalcon\Tests\Unit\Cache\Cache;
 
 use Phalcon\Cache\AdapterFactory;
 use Phalcon\Cache\Cache;
-use Phalcon\Cache\Exception\Exception;
+use Phalcon\Cache\Exception\InvalidArgumentException;
 use Phalcon\Storage\SerializerFactory;
 use Phalcon\Tests\AbstractUnitTestCase;
 
@@ -66,7 +66,7 @@ final class SetMultipleTest extends AbstractUnitTestCase
      */
     public function testCacheCacheSetMultipleExceptionInvalidCharacters(): void
     {
-        $this->expectException(Exception::class);
+        $this->expectException(InvalidArgumentException::class);
         $this->expectExceptionMessage('The key contains invalid characters');
 
         $serializer = new SerializerFactory();
@@ -81,6 +81,27 @@ final class SetMultipleTest extends AbstractUnitTestCase
                 'abd$^' => 'test2',
             ]
         );
+    }
+
+    /**
+     * Tests Phalcon\Cache :: setMultiple() - exception - not traversable
+     *
+     * @author Phalcon Team <team@phalcon.io>
+     * @since  2020-09-09
+     */
+    public function testCacheCacheSetMultipleExceptionNotTraversable(): void
+    {
+        // PHP enforces iterable type strictly, throwing TypeError instead of
+        // InvalidArgumentException (diverges from cphalcon/Zephir behavior)
+        $this->expectException(\TypeError::class);
+
+        $serializer = new SerializerFactory();
+        $factory    = new AdapterFactory($serializer);
+        $instance   = $factory->newInstance('apcu');
+
+        $adapter = new Cache($instance);
+
+        $actual = $adapter->setMultiple(1234);
     }
 
     /**

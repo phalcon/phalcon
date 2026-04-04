@@ -17,10 +17,10 @@ use DateInterval;
 use Phalcon\Cache\Adapter\AdapterInterface;
 use Phalcon\Cache\Adapter\Redis;
 use Phalcon\Cache\Exception\Exception;
+use Phalcon\Cache\Exception\InvalidArgumentException;
 use Phalcon\Events\EventsAwareInterface;
 use Phalcon\Events\Exception as EventsException;
 use Phalcon\Events\Traits\EventsAwareTrait;
-use Psr\SimpleCache\CacheInterface;
 
 /**
  * This component offers caching capabilities for your application.
@@ -60,7 +60,7 @@ abstract class AbstractCache implements CacheInterface, EventsAwareInterface
     protected function checkKey(string $key): void
     {
         if (preg_match("/[^A-Za-z0-9-_.]/", $key)) {
-            throw new Exception(
+            throw new InvalidArgumentException(
                 "The key contains invalid characters"
             );
         }
@@ -286,7 +286,7 @@ abstract class AbstractCache implements CacheInterface, EventsAwareInterface
         iterable $values,
         null | int | DateInterval $ttl = null
     ): bool {
-        $this->fireManagerEvent('cache:beforeSetMultiple', $values);
+        $this->fireManagerEvent('cache:beforeSetMultiple', array_keys((array)$values));
 
         $result = true;
         /**
@@ -299,7 +299,7 @@ abstract class AbstractCache implements CacheInterface, EventsAwareInterface
             }
         }
 
-        $this->fireManagerEvent('cache:afterSetMultiple', $values);
+        $this->fireManagerEvent('cache:afterSetMultiple', array_keys((array)$values));
 
         return $result;
     }

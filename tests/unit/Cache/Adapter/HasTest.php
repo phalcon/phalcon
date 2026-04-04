@@ -23,9 +23,9 @@ use Phalcon\Cache\Adapter\Weak;
 use Phalcon\Cache\Exception\Exception as StorageException;
 use Phalcon\Storage\SerializerFactory;
 use Phalcon\Support\Exception as HelperException;
-use Phalcon\Tests\Fixtures\Cache\Adapter\StreamFileGetContentsFixture;
-use Phalcon\Tests\Fixtures\Cache\Adapter\StreamFopenFixture;
 use Phalcon\Tests\AbstractUnitTestCase;
+use Phalcon\Tests\Unit\Cache\Fake\Adapter\FakeStreamFileGetContents;
+use Phalcon\Tests\Unit\Cache\Fake\Adapter\FakeStreamFopen;
 use stdClass;
 
 use function getOptionsLibmemcached;
@@ -121,7 +121,7 @@ final class HasTest extends AbstractUnitTestCase
     public function testCacheAdapterStreamHasCannotOpenFile(): void
     {
         $serializer = new SerializerFactory();
-        $adapter    = new StreamFopenFixture(
+        $adapter    = new FakeStreamFopen(
             $serializer,
             [
                 'storageDir' => outputDir(),
@@ -150,7 +150,7 @@ final class HasTest extends AbstractUnitTestCase
     public function testCacheAdapterStreamHasEmptyPayload(): void
     {
         $serializer = new SerializerFactory();
-        $adapter    = new StreamFileGetContentsFixture(
+        $adapter    = new FakeStreamFileGetContents(
             $serializer,
             [
                 'storageDir' => outputDir(),

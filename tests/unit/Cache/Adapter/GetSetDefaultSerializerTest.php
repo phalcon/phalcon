@@ -115,11 +115,12 @@ final class GetSetDefaultSerializerTest extends AbstractUnitTestCase
         $serializer = new SerializerFactory();
         $adapter    = new Weak($serializer);
 
-        $actual = $adapter->getDefaultSerializer();
-        $this->assertEquals('none', $actual);
+        $expected = 'none';
+        $actual   = $adapter->getDefaultSerializer();
+        $this->assertEquals($expected, $actual);
 
         $adapter->setDefaultSerializer('Base64');
         $actual = $adapter->getDefaultSerializer();
-        $this->assertEquals('none', $actual);
+        $this->assertEquals($expected, $actual);
     }
 }

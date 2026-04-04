@@ -16,14 +16,12 @@ namespace Phalcon\Tests\Unit\Cache\CacheFactory;
 use Phalcon\Cache\AdapterFactory;
 use Phalcon\Cache\Cache;
 use Phalcon\Cache\CacheFactory;
+use Phalcon\Cache\CacheInterface;
 use Phalcon\Cache\Exception\Exception;
 use Phalcon\Config\Config;
 use Phalcon\Storage\SerializerFactory;
-use Phalcon\Tests\Fixtures\Traits\FactoryTrait;
 use Phalcon\Tests\AbstractUnitTestCase;
-use Psr\SimpleCache\CacheInterface;
-
-use function uniqid;
+use Phalcon\Tests\Support\Traits\FactoryTrait;
 
 final class LoadTest extends AbstractUnitTestCase
 {
@@ -58,7 +56,6 @@ final class LoadTest extends AbstractUnitTestCase
         $this->runTests($options);
     }
 
-
     /**
      * Tests Phalcon\Cache\CacheFactory :: load() - exception
      *
@@ -80,7 +77,8 @@ final class LoadTest extends AbstractUnitTestCase
 
         $cacheFactory->load([]);
     }
-    private function runTests(Config | array $options)
+
+    private function runTests(Config | array $options): void
     {
         $cacheFactory = new CacheFactory(
             new AdapterFactory(

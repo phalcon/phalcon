@@ -15,7 +15,7 @@ namespace Phalcon\Tests\Unit\Cache\Cache;
 
 use Phalcon\Cache\AdapterFactory;
 use Phalcon\Cache\Cache;
-use Phalcon\Cache\Exception\Exception;
+use Phalcon\Cache\Exception\InvalidArgumentException;
 use Phalcon\Storage\SerializerFactory;
 use Phalcon\Tests\AbstractUnitTestCase;
 
@@ -36,7 +36,6 @@ final class DeleteTest extends AbstractUnitTestCase
         $instance   = $factory->newInstance('apcu');
 
         $adapter = new Cache($instance);
-
 
         $key1 = uniqid();
         $key2 = uniqid();
@@ -59,7 +58,7 @@ final class DeleteTest extends AbstractUnitTestCase
      */
     public function testCacheCacheDeleteException(): void
     {
-        $this->expectException(Exception::class);
+        $this->expectException(InvalidArgumentException::class);
         $this->expectExceptionMessage('The key contains invalid characters');
 
         $serializer = new SerializerFactory();

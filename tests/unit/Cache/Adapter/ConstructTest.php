@@ -25,8 +25,8 @@ use Phalcon\Cache\Adapter\Weak;
 use Phalcon\Storage\Exception as StorageException;
 use Phalcon\Storage\SerializerFactory;
 use Phalcon\Support\Exception as SupportException;
-use Phalcon\Tests\Fixtures\Cache\Adapter\Libmemcached as LibmemcachedFixture;
 use Phalcon\Tests\AbstractUnitTestCase;
+use Phalcon\Tests\Unit\Cache\Fake\Adapter\Libmemcached as LibmemcachedFixture;
 
 use function getOptionsLibmemcached;
 use function getOptionsRedis;
