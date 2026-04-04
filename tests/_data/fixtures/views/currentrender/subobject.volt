@@ -1,1 +1,0 @@
-{{ parentObject.child.getValue() }}
