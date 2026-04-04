@@ -13,6 +13,8 @@ declare(strict_types=1);
 
 namespace Phalcon\Support\Traits;
 
+use APCUIterator;
+
 use function apcu_dec;
 use function apcu_delete;
 use function apcu_exists;
@@ -78,6 +80,18 @@ trait PhpApcuTrait
         ?bool &$success = null
     ): mixed {
         return apcu_fetch($key, $success);
+    }
+
+    /**
+     * @param string $pattern
+     *
+     * @return APCUIterator|bool
+     *
+     * @link https://php.net/manual/en/class.apcuiterator.php
+     */
+    protected function phpApcuIterator(string $pattern): APCUIterator | bool
+    {
+        return new APCUIterator($pattern);
     }
 
     /**
