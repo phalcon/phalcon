@@ -15,13 +15,29 @@ namespace Phalcon\Storage\Serializer;
 
 use InvalidArgumentException;
 use JsonSerializable;
+use Phalcon\Support\Helper\Json\Decode;
+use Phalcon\Support\Helper\Json\Encode;
 
 use function is_object;
-use function json_decode;
-use function json_encode;
 
 class Json extends AbstractSerializer
 {
+    private Decode $decode;
+    private Encode $encode;
+
+    /**
+     * AbstractSerializer constructor.
+     *
+     * @param null $data
+     */
+    public function __construct($data = null)
+    {
+        $this->encode = new Encode();
+        $this->decode = new Decode();
+
+        parent::__construct($data);
+    }
+
     /**
      * Serializes data
      *
@@ -40,7 +56,7 @@ class Json extends AbstractSerializer
             return $this->data;
         }
 
-        return json_encode($this->data);
+        return $this->encode->__invoke($this->data);
     }
 
     /**
@@ -55,7 +71,7 @@ class Json extends AbstractSerializer
         if (true !== $this->isSerializable($data)) {
             $this->data = $data;
         } else {
-            $this->data = json_decode($data);
+            $this->data = $this->decode->__invoke($data);
         }
     }
 }

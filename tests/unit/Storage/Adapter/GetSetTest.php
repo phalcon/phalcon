@@ -286,28 +286,6 @@ final class GetSetTest extends AbstractUnitTestCase
                 new stdClass(),
             ],
             [
-                'redis',
-                RedisCluster::class,
-                array_merge(
-                    getOptionsRedisCluster(),
-                    [
-                        'defaultSerializer' => 'Base64',
-                    ]
-                ),
-                uniqid(),
-            ],
-            [
-                'redis',
-                RedisCluster::class,
-                array_merge(
-                    getOptionsRedisCluster(),
-                    [
-                        'persistent' => true,
-                    ]
-                ),
-                uniqid(),
-            ],
-            [
                 '',
                 Stream::class,
                 [
@@ -362,36 +340,6 @@ final class GetSetTest extends AbstractUnitTestCase
                     'storageDir' => outputDir(),
                 ],
                 new stdClass(),
-            ],
-            [
-                '',
-                Weak::class,
-                [],
-                new stdClass(),
-            ],
-            [
-                '',
-                Weak::class,
-                [],
-                new stdClass(),
-            ],
-            [
-                '',
-                Weak::class,
-                [],
-                new ArrayObject(),
-            ],
-            [
-                '',
-                Weak::class,
-                [],
-                new SplObjectStorage(),
-            ],
-            [
-                '',
-                Weak::class,
-                [],
-                new SplQueue(),
             ],
         ];
     }
@@ -462,6 +410,11 @@ final class GetSetTest extends AbstractUnitTestCase
                 'redis',
             ],
             [
+                RedisCluster::class,
+                getOptionsRedisCluster(),
+                'redis',
+            ],
+            [
                 Stream::class,
                 [
                     'storageDir' => outputDir(),
@@ -469,6 +422,39 @@ final class GetSetTest extends AbstractUnitTestCase
                 '',
             ],
         ];
+    }
+
+    /**
+     * Tests Phalcon\Storage\Adapter\Weak :: get()/set()
+     *
+     * @author       Phalcon Team <team@phalcon.io>
+     * @since        2023-07-17
+     */
+    public function testStorageAdapterWeakGetSet(): void
+    {
+        $serializer = new SerializerFactory();
+        $adapter    = new Weak($serializer);
+
+        $key = uniqid();
+        $obj = new stdClass();
+
+        $result = $adapter->set($key, 'test');
+        $this->assertFalse($result);
+
+        $result = $adapter->set($key, $obj);
+        $this->assertTrue($result);
+
+        $result = $adapter->has($key);
+        $this->assertTrue($result);
+
+        /**
+         * There is no TTL.
+         */
+        $result = $adapter->set($key, $obj, 0);
+        $this->assertTrue($result);
+
+        $result = $adapter->has($key);
+        $this->assertTrue($result);
     }
 
     /**

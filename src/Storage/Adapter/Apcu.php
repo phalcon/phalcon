@@ -80,8 +80,12 @@ class Apcu extends AbstractAdapter
     public function getKeys(string $prefix = ''): array
     {
         $pattern = '/^' . $this->prefix . $prefix . '/';
-        $apc     = new APCuIterator($pattern);
+        $apc     = $this->phpApcuIterator($pattern);
         $results = [];
+
+        if (!is_object($apc)) {
+            return $results;
+        }
 
         foreach ($apc as $item) {
             $results[] = $item['key'];

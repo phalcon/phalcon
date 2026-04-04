@@ -13,6 +13,7 @@ declare(strict_types=1);
 
 namespace Phalcon\Storage\Serializer;
 
+use function is_array;
 use function is_bool;
 use function is_numeric;
 
@@ -40,6 +41,30 @@ abstract class AbstractSerializer implements SerializerInterface
     public function __construct($data = null)
     {
         $this->setData($data);
+    }
+
+    /**
+     * Serialize data
+     *
+     * @return array
+     */
+    public function __serialize(): array
+    {
+        if (true === is_array($this->data)) {
+            return $this->data;
+        }
+
+        return [];
+    }
+
+    /**
+     * Unserialize data
+     *
+     * @param array $data
+     */
+    public function __unserialize(array $data): void
+    {
+        $this->data = $data;
     }
 
     /**

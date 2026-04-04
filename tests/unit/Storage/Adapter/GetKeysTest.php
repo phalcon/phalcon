@@ -13,12 +13,12 @@ declare(strict_types=1);
 
 namespace Phalcon\Tests\Unit\Storage\Adapter;
 
-use Phalcon\Cache\Adapter\RedisCluster;
 use Phalcon\Storage\Adapter\AdapterInterface;
 use Phalcon\Storage\Adapter\Apcu;
 use Phalcon\Storage\Adapter\Libmemcached;
 use Phalcon\Storage\Adapter\Memory;
 use Phalcon\Storage\Adapter\Redis;
+use Phalcon\Storage\Adapter\RedisCluster;
 use Phalcon\Storage\Adapter\Stream;
 use Phalcon\Storage\Adapter\Weak;
 use Phalcon\Storage\Exception as StorageException;
@@ -26,10 +26,12 @@ use Phalcon\Storage\SerializerFactory;
 use Phalcon\Support\Exception;
 use Phalcon\Support\Exception as HelperException;
 use Phalcon\Tests\AbstractUnitTestCase;
+use Phalcon\Tests\Unit\Storage\Fake\FakeApcuIterator;
 use stdClass;
 
 use function getOptionsLibmemcached;
 use function getOptionsRedis;
+use function getOptionsRedisCluster;
 use function outputDir;
 use function phpversion;
 use function uniqid;
@@ -117,6 +119,30 @@ final class GetKeysTest extends AbstractUnitTestCase
         if ('ph-strm' === $prefix) {
             $this->safeDeleteDirectory(outputDir('ph-strm'));
         }
+    }
+
+    /**
+     * Tests Phalcon\Storage\Adapter\Apcu :: getKeys() - iterator error
+     *
+     * @return void
+     *
+     * @throws Exception
+     *
+     * @author Phalcon Team <team@phalcon.io>
+     * @since  2020-09-09
+     */
+    public function testStorageAdapterApcuGetKeysIteratorError(): void
+    {
+        $this->checkExtensionIsLoaded('apcu');
+
+        $serializer = new SerializerFactory();
+        $adapter    = new FakeApcuIterator($serializer);
+
+        $this->setupTest($adapter);
+
+        $actual = $adapter->getKeys();
+        $this->assertIsArray($actual);
+        $this->assertEmpty($actual);
     }
 
     /**
