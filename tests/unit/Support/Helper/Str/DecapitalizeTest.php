@@ -15,7 +15,6 @@ namespace Phalcon\Tests\Unit\Support\Helper\Str;
 
 use Phalcon\Support\Helper\Str\Decapitalize;
 use Phalcon\Tests\AbstractUnitTestCase;
-use PHPUnit\Framework\Attributes\Test;
 
 final class DecapitalizeTest extends AbstractUnitTestCase
 {
@@ -29,15 +28,15 @@ final class DecapitalizeTest extends AbstractUnitTestCase
      */
     public function testSupportHelperStrDecapitalize(): void
     {
-        $object   = new Decapitalize();
-        $source   = 'BeetleJuice';
+        $object = new Decapitalize();
+        $source = 'BeetleJuice';
         $expected = 'beetleJuice';
-        $actual   = $object($source);
+        $actual = $object($source);
         $this->assertSame($expected, $actual);
 
-        $source   = 'BeetleJuice';
+        $source = 'BeetleJuice';
         $expected = 'bEETLEJUICE';
-        $actual   = $object($source, true);
+        $actual = $object($source, true);
         $this->assertSame($expected, $actual);
     }
 }

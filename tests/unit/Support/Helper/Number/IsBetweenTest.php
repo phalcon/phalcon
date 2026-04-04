@@ -15,7 +15,6 @@ namespace Phalcon\Tests\Unit\Support\Helper\Number;
 
 use Phalcon\Support\Helper\Number\IsBetween;
 use Phalcon\Tests\AbstractUnitTestCase;
-use PHPUnit\Framework\Attributes\Test;
 
 final class IsBetweenTest extends AbstractUnitTestCase
 {

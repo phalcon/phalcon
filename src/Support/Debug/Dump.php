@@ -13,8 +13,10 @@ declare(strict_types=1);
 
 namespace Phalcon\Support\Debug;
 
+use InvalidArgumentException;
 use JsonException;
 use Phalcon\Di\DiInterface;
+use Phalcon\Support\Helper\Json\Encode;
 use Phalcon\Traits\Helper\Str\InterpolateTrait;
 use Reflection;
 use ReflectionClass;
@@ -39,7 +41,6 @@ use function is_int;
 use function is_numeric;
 use function is_object;
 use function is_string;
-use function json_encode;
 use function mb_strlen;
 use function nl2br;
 use function str_repeat;
@@ -92,6 +93,11 @@ class Dump
     protected array $styles = [];
 
     /**
+     * @var Encode
+     */
+    private Encode $encode;
+
+    /**
      * Dump constructor.
      *
      * @param array $styles
@@ -99,6 +105,8 @@ class Dump
      */
     public function __construct(array $styles = [], bool $detailed = false)
     {
+        $this->encode = new Encode();
+
         $this->setStyles($styles);
 
         $this->detailed = $detailed;
@@ -199,11 +207,12 @@ class Dump
      * @param mixed $variable
      *
      * @return string
+     * @throws InvalidArgumentException if the JSON cannot be encoded.
      * @throws JsonException
      */
     public function toJson(mixed $variable): string
     {
-        return json_encode(
+        return $this->encode->__invoke(
             $variable,
             JSON_PRETTY_PRINT | JSON_UNESCAPED_SLASHES | JSON_UNESCAPED_UNICODE | JSON_THROW_ON_ERROR
         );
@@ -511,9 +520,9 @@ class Dump
             return $output . $this->toInterpolate($message, $context);
         }
 
-        $message = "<b style=\"%style%\">%var%</b>";
+        $message = "(<span style=\"%style%\">%var%</span>)";
         $context = [
-            'style' => $this->getStyle('null'),
+            'style' => $this->getStyle('other'),
             'var'   => $variable,
         ];
 

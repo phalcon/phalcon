@@ -15,7 +15,6 @@ namespace Phalcon\Tests\Unit\Support\Helper\Arr;
 
 use Phalcon\Support\Helper\Arr\Set;
 use Phalcon\Tests\AbstractUnitTestCase;
-use PHPUnit\Framework\Attributes\Test;
 
 final class SetTest extends AbstractUnitTestCase
 {
@@ -29,13 +28,13 @@ final class SetTest extends AbstractUnitTestCase
      */
     public function testSupportHelperArrSetNoIndex(): void
     {
-        $object     = new Set();
+        $object = new Set();
         $collection = [];
 
         $expected = [
             0 => 'Phalcon',
         ];
-        $actual   = $object($collection, 'Phalcon');
+        $actual = $object($collection, 'Phalcon');
         $this->assertSame($expected, $actual);
     }
 
@@ -49,13 +48,13 @@ final class SetTest extends AbstractUnitTestCase
      */
     public function testSupportHelperArrSetNumeric(): void
     {
-        $object     = new Set();
+        $object = new Set();
         $collection = [];
 
         $expected = [
             1 => 'Phalcon',
         ];
-        $actual   = $object($collection, 'Phalcon', 1);
+        $actual = $object($collection, 'Phalcon', 1);
         $this->assertSame($expected, $actual);
     }
 
@@ -69,7 +68,7 @@ final class SetTest extends AbstractUnitTestCase
      */
     public function testSupportHelperArrSetOverwride(): void
     {
-        $object     = new Set();
+        $object = new Set();
         $collection = [
             1 => 'Phalcon',
         ];
@@ -77,7 +76,7 @@ final class SetTest extends AbstractUnitTestCase
         $expected = [
             1 => 'Framework',
         ];
-        $actual   = $object($collection, 'Framework', 1);
+        $actual = $object($collection, 'Framework', 1);
         $this->assertSame($expected, $actual);
     }
 
@@ -91,13 +90,13 @@ final class SetTest extends AbstractUnitTestCase
      */
     public function testSupportHelperArrSetString(): void
     {
-        $object     = new Set();
+        $object = new Set();
         $collection = [];
 
         $expected = [
             'suffix' => 'Framework',
         ];
-        $actual   = $object($collection, 'Framework', 'suffix');
+        $actual = $object($collection, 'Framework', 'suffix');
         $this->assertSame($expected, $actual);
     }
 }

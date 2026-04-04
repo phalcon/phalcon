@@ -13,9 +13,7 @@ declare(strict_types=1);
 
 namespace Phalcon\Tests\Unit\Support\Collection;
 
-use Phalcon\Support\Collection;
 use PHPUnit\Framework\Attributes\DataProvider;
-use PHPUnit\Framework\Attributes\Test;
 
 final class GetValuesTest extends AbstractCollectionTestCase
 {
@@ -24,12 +22,14 @@ final class GetValuesTest extends AbstractCollectionTestCase
      *
      * @return void
      *
-     * @author Phalcon Team <team@phalcon.io>
-     * @since  2020-09-09
+     * @dataProvider getClasses
+     *
+     * @author       Phalcon Team <team@phalcon.io>
+     * @since        2020-09-09
      */
     #[DataProvider('getClasses')]
     public function testSupportCollectionGetValues(
-        string $class
+        string $class,
     ): void {
         $data = $this->getData();
         $collection = new $class($data);

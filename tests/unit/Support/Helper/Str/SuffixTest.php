@@ -15,7 +15,6 @@ namespace Phalcon\Tests\Unit\Support\Helper\Str;
 
 use Phalcon\Support\Helper\Str\Suffix;
 use Phalcon\Tests\AbstractUnitTestCase;
-use PHPUnit\Framework\Attributes\Test;
 
 final class SuffixTest extends AbstractUnitTestCase
 {
@@ -32,7 +31,7 @@ final class SuffixTest extends AbstractUnitTestCase
         $object = new Suffix();
 
         $expected = 'ClassConstants';
-        $actual   = $object('Class', 'Constants');
+        $actual = $object('Class', 'Constants');
         $this->assertSame($expected, $actual);
     }
 }

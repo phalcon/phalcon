@@ -14,7 +14,6 @@ declare(strict_types=1);
 namespace Phalcon\Tests\Unit\Support\Registry;
 
 use Phalcon\Support\Registry;
-use PHPUnit\Framework\Attributes\Test;
 
 final class ConstructTest extends AbstractRegistryTestCase
 {

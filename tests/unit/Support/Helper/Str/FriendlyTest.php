@@ -16,7 +16,6 @@ namespace Phalcon\Tests\Unit\Support\Helper\Str;
 use Phalcon\Support\Helper\Str\Friendly;
 use Phalcon\Tests\AbstractUnitTestCase;
 use PHPUnit\Framework\Attributes\DataProvider;
-use PHPUnit\Framework\Attributes\Test;
 
 final class FriendlyTest extends AbstractUnitTestCase
 {
@@ -91,6 +90,8 @@ final class FriendlyTest extends AbstractUnitTestCase
      *
      * @return void
      *
+     * @dataProvider getExamples
+     *
      * @author       Phalcon Team <team@phalcon.io>
      * @since        2020-09-09
      */
@@ -99,16 +100,16 @@ final class FriendlyTest extends AbstractUnitTestCase
         string $text,
         string $separator,
         bool $lowercase,
-        array | string $replace,
-        string $result
+        array|string $replace,
+        string $result,
     ): void {
-        $object   = new Friendly();
+        $object = new Friendly();
         $expected = $result;
-        $actual   = $object->__invoke(
+        $actual = $object->__invoke(
             $text,
             $separator,
             $lowercase,
-            $replace
+            $replace,
         );
 
         $this->assertSame($expected, $actual);

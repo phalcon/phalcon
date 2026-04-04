@@ -15,7 +15,6 @@ namespace Phalcon\Tests\Unit\Support\Helper\Arr;
 
 use Phalcon\Support\Helper\Arr\Chunk;
 use Phalcon\Tests\AbstractUnitTestCase;
-use PHPUnit\Framework\Attributes\Test;
 
 final class ChunkTest extends AbstractUnitTestCase
 {
@@ -38,13 +37,13 @@ final class ChunkTest extends AbstractUnitTestCase
             'k6' => 6,
         ];
 
-        $object   = new Chunk();
+        $object = new Chunk();
         $expected = [
             [1, 2],
             [3, 4],
             [5, 6],
         ];
-        $actual   = $object($source, 2);
+        $actual = $object($source, 2);
         $this->assertSame($expected, $actual);
     }
 
@@ -67,7 +66,7 @@ final class ChunkTest extends AbstractUnitTestCase
             'k6' => 6,
         ];
 
-        $object   = new Chunk();
+        $object = new Chunk();
         $expected = [
             [
                 'k1' => 1,
@@ -82,7 +81,7 @@ final class ChunkTest extends AbstractUnitTestCase
                 'k6' => 6,
             ],
         ];
-        $actual   = $object($source, 2, true);
+        $actual = $object($source, 2, true);
         $this->assertSame($expected, $actual);
     }
 }

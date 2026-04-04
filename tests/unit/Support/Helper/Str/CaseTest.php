@@ -18,7 +18,6 @@ use Phalcon\Support\Helper\Str\PascalCase;
 use Phalcon\Support\Helper\Str\SnakeCase;
 use Phalcon\Tests\AbstractUnitTestCase;
 use PHPUnit\Framework\Attributes\DataProvider;
-use PHPUnit\Framework\Attributes\Test;
 
 final class CaseTest extends AbstractUnitTestCase
 {
@@ -103,17 +102,18 @@ final class CaseTest extends AbstractUnitTestCase
     /**
      * Tests Phalcon\Support\Helper\Str :: *Case()
      *
+     * @dataProvider getSources
+     *
      * @return void
      *
      * @author       Phalcon Team <team@phalcon.io>
      * @since        2022-01-02
      */
-    #[DataProvider('getSources')]
     public function testSupportHelperStrCase(
         string $class,
         string $value,
         string $expected,
-        ?string $delimiter
+        ?string $delimiter,
     ): void {
         $object = new $class();
 

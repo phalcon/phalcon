@@ -15,7 +15,6 @@ namespace Phalcon\Tests\Unit\Support\Helper\Arr;
 
 use Phalcon\Support\Helper\Arr\Flatten;
 use Phalcon\Tests\AbstractUnitTestCase;
-use PHPUnit\Framework\Attributes\Test;
 
 final class FlattenTest extends AbstractUnitTestCase
 {
@@ -33,7 +32,7 @@ final class FlattenTest extends AbstractUnitTestCase
         $source = [1, [2], [[3], 4], 5];
 
         $expected = [1, 2, [3], 4, 5];
-        $actual   = $object($source);
+        $actual = $object($source);
         $this->assertSame($expected, $actual);
     }
 
@@ -51,7 +50,7 @@ final class FlattenTest extends AbstractUnitTestCase
         $source = [1, [2], [[3], 4], 5];
 
         $expected = [1, 2, 3, 4, 5];
-        $actual   = $object($source, true);
+        $actual = $object($source, true);
         $this->assertSame($expected, $actual);
     }
 }

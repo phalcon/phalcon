@@ -15,7 +15,6 @@ namespace Phalcon\Tests\Unit\Support\Version;
 
 use Phalcon\Support\Version;
 use Phalcon\Tests\AbstractUnitTestCase;
-use PHPUnit\Framework\Attributes\Test;
 
 final class ConstantsTest extends AbstractUnitTestCase
 {

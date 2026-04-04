@@ -15,7 +15,6 @@ namespace Phalcon\Tests\Unit\Support\Collection;
 
 use Phalcon\Support\Collection;
 use PHPUnit\Framework\Attributes\DataProvider;
-use PHPUnit\Framework\Attributes\Test;
 
 final class ConstructTest extends AbstractCollectionTestCase
 {
@@ -24,12 +23,14 @@ final class ConstructTest extends AbstractCollectionTestCase
      *
      * @return void
      *
-     * @author Phalcon Team <team@phalcon.io>
-     * @since  2020-09-09
+     * @dataProvider getClasses
+     *
+     * @author       Phalcon Team <team@phalcon.io>
+     * @since        2020-09-09
      */
     #[DataProvider('getClasses')]
     public function testSupportCollectionConstruct(
-        string $class
+        string $class,
     ): void {
         $collection = new $class();
 

@@ -14,7 +14,6 @@ declare(strict_types=1);
 namespace Phalcon\Tests\Unit\Support\Registry;
 
 use Phalcon\Support\Registry;
-use PHPUnit\Framework\Attributes\Test;
 
 final class ToJsonTest extends AbstractRegistryTestCase
 {
@@ -36,12 +35,12 @@ final class ToJsonTest extends AbstractRegistryTestCase
 
         $this->assertSame(
             json_encode($data),
-            $registry->toJson()
+            $registry->toJson(),
         );
 
         $this->assertSame(
             json_encode($data, JSON_PRETTY_PRINT),
-            $registry->toJson(JSON_PRETTY_PRINT)
+            $registry->toJson(JSON_PRETTY_PRINT),
         );
     }
 }

@@ -16,7 +16,6 @@ namespace Phalcon\Tests\Unit\Support\Helper\Str;
 use Phalcon\Support\Helper\Str\Upper;
 use Phalcon\Tests\AbstractUnitTestCase;
 use PHPUnit\Framework\Attributes\DataProvider;
-use PHPUnit\Framework\Attributes\Test;
 
 final class UpperTest extends AbstractUnitTestCase
 {
@@ -86,13 +85,15 @@ final class UpperTest extends AbstractUnitTestCase
      *
      * @return void
      *
+     * @dataProvider basicProvider
+     *
      * @author       Phalcon Team <team@phalcon.io>
      * @since        2020-09-09
      */
     #[DataProvider('basicProvider')]
     public function testSupportHelperStrUpper(
         string $text,
-        string $expected
+        string $expected,
     ): void {
         $object = new Upper();
         $actual = $object($text);
@@ -112,7 +113,7 @@ final class UpperTest extends AbstractUnitTestCase
     #[DataProvider('multiBytesEncodingProvider')]
     public function testSupportHelperStrUpperMultiBytesEncoding(
         string $text,
-        string $expected
+        string $expected,
     ): void {
         $object = new Upper();
         $actual = $object($text);

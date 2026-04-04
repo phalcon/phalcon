@@ -11,7 +11,7 @@
 
 declare(strict_types=1);
 
-namespace Phalcon\Tests\Unit\Mvc\Model\MetaData\Annotations;
+namespace Phalcon\Tests\Database\Mvc\Model\MetaData\Annotations;
 
 use Phalcon\Annotations\Adapter\Memory;
 use Phalcon\Db\Column;

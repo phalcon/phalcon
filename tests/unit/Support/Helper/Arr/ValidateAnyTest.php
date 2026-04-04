@@ -15,7 +15,6 @@ namespace Phalcon\Tests\Unit\Support\Helper\Arr;
 
 use Phalcon\Support\Helper\Arr\ValidateAny;
 use Phalcon\Tests\AbstractUnitTestCase;
-use PHPUnit\Framework\Attributes\Test;
 
 final class ValidateAnyTest extends AbstractUnitTestCase
 {
@@ -35,7 +34,7 @@ final class ValidateAnyTest extends AbstractUnitTestCase
             $collection,
             function ($element) {
                 return $element < 2;
-            }
+            },
         );
         $this->assertTrue($actual);
     }

@@ -14,7 +14,6 @@ declare(strict_types=1);
 namespace Phalcon\Tests\Unit\Support\Registry;
 
 use Phalcon\Support\Registry;
-use PHPUnit\Framework\Attributes\Test;
 
 final class RemoveTest extends AbstractRegistryTestCase
 {
@@ -36,7 +35,7 @@ final class RemoveTest extends AbstractRegistryTestCase
 
         $this->assertSame(
             $data,
-            $registry->toArray()
+            $registry->toArray(),
         );
 
 
@@ -47,7 +46,7 @@ final class RemoveTest extends AbstractRegistryTestCase
                 'one'   => 'two',
                 'three' => 'four',
             ],
-            $registry->toArray()
+            $registry->toArray(),
         );
 
 
@@ -58,7 +57,7 @@ final class RemoveTest extends AbstractRegistryTestCase
                 'one'   => 'two',
                 'three' => 'four',
             ],
-            $registry->toArray()
+            $registry->toArray(),
         );
 
 
@@ -71,7 +70,7 @@ final class RemoveTest extends AbstractRegistryTestCase
                 'one'   => 'two',
                 'three' => 'four',
             ],
-            $registry->toArray()
+            $registry->toArray(),
         );
 
 
@@ -84,7 +83,7 @@ final class RemoveTest extends AbstractRegistryTestCase
                 'one'   => 'two',
                 'three' => 'four',
             ],
-            $registry->toArray()
+            $registry->toArray(),
         );
     }
 }

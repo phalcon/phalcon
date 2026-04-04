@@ -15,7 +15,6 @@ namespace Phalcon\Tests\Unit\Support\Helper\Str;
 
 use Phalcon\Support\Helper\Str\DirSeparator;
 use Phalcon\Tests\AbstractUnitTestCase;
-use PHPUnit\Framework\Attributes\Test;
 
 use const PHP_OS_FAMILY;
 
@@ -38,11 +37,11 @@ final class DirSeparatorTest extends AbstractUnitTestCase
         $object = new DirSeparator();
 
         $expected = '/home/phalcon/';
-        $actual   = $object('/home/phalcon');
+        $actual = $object('/home/phalcon');
         $this->assertSame($expected, $actual);
 
         $expected = '/home/phalcon/';
-        $actual   = $object('/home/phalcon//');
+        $actual = $object('/home/phalcon//');
         $this->assertSame($expected, $actual);
     }
 
@@ -61,10 +60,10 @@ final class DirSeparatorTest extends AbstractUnitTestCase
         }
 
         $fileName = '';
-        $object   = new DirSeparator();
+        $object = new DirSeparator();
 
         $expected = "/";
-        $actual   = $object($fileName);
+        $actual = $object($fileName);
         $this->assertSame($expected, $actual);
     }
 }

@@ -47,9 +47,9 @@ class Debug
     protected array $blacklist = ["request" => [], "server" => []];
 
     /**
-     * @var mixed
+     * @var array
      */
-    protected mixed $data = null;
+    protected array $data = [];
 
     /**
      * @var bool
@@ -88,7 +88,7 @@ class Debug
      */
     public function clearVars(): Debug
     {
-        $this->data = null;
+        $this->data = [];
 
         return $this;
     }
@@ -120,7 +120,7 @@ class Debug
     {
         $template = "
     <link href='" . $this->uri . "%s'
-          rel='stylesheet' 
+          rel='stylesheet'
           type='text/css' />";
 
         return sprintf($template, 'assets/jquery-ui/themes/ui-lightness/jquery-ui.min.css')
@@ -136,7 +136,7 @@ class Debug
     public function getJsSources(): string
     {
         $template = "
-    <script type='application/javascript' 
+    <script type='application/javascript'
             src='" . $this->uri . "%s'></script>";
 
         return sprintf($template, 'assets/jquery/dist/jquery.min.js')
@@ -928,7 +928,7 @@ class Debug
     private function printExtraVariables(): string
     {
         $html = '';
-        if (is_array($this->data)) {
+        if (!empty($this->data)) {
             $html .= $this->printTableHeader('variables', 'Key', 'Value');
 
             foreach ($this->data as $key => $value) {

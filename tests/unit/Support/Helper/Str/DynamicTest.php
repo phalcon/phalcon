@@ -15,7 +15,6 @@ namespace Phalcon\Tests\Unit\Support\Helper\Str;
 
 use Phalcon\Support\Helper\Str\Dynamic;
 use Phalcon\Tests\AbstractUnitTestCase;
-use PHPUnit\Framework\Attributes\Test;
 use RuntimeException;
 
 final class DynamicTest extends AbstractUnitTestCase
@@ -38,7 +37,7 @@ final class DynamicTest extends AbstractUnitTestCase
 
         $this->assertMatchesRegularExpression(
             '/^(Hi|Hello), my name is Bob!$/',
-            $actual
+            $actual,
         );
     }
 
@@ -60,7 +59,7 @@ final class DynamicTest extends AbstractUnitTestCase
 
         $this->assertMatchesRegularExpression(
             '/^(Hi|Hello), my name is Bob!$/',
-            $actual
+            $actual,
         );
     }
 
@@ -83,7 +82,7 @@ final class DynamicTest extends AbstractUnitTestCase
 
         $this->assertMatchesRegularExpression(
             '/^(Hi|Hello), my name is Bob!$/',
-            $actual
+            $actual,
         );
 
         $actual = $object->__invoke("{Hi'Hello}, my name is {Rob'Zyxep'Andres}!", '{', '}', "'");
@@ -94,7 +93,7 @@ final class DynamicTest extends AbstractUnitTestCase
 
         $this->assertMatchesRegularExpression(
             '/^(Hi|Hello), my name is (Rob|Zyxep|Andres)!$/',
-            $actual
+            $actual,
         );
 
         $actual = $object->__invoke('{Hi/Hello}, my name is {Stanislav/Nikos}!', '{', '}', '/');
@@ -105,7 +104,7 @@ final class DynamicTest extends AbstractUnitTestCase
 
         $this->assertMatchesRegularExpression(
             '/^(Hi|Hello), my name is (Stanislav|Nikos)!$/',
-            $actual
+            $actual,
         );
     }
 
@@ -121,7 +120,7 @@ final class DynamicTest extends AbstractUnitTestCase
     {
         $this->expectException(RuntimeException::class);
         $this->expectExceptionMessage(
-            "Syntax error in string '{{Hi/Hello}'"
+            "Syntax error in string '{{Hi/Hello}'",
         );
         $object = new Dynamic();
         $object->__invoke('{{Hi/Hello}');

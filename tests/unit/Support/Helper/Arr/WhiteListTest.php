@@ -15,7 +15,6 @@ namespace Phalcon\Tests\Unit\Support\Helper\Arr;
 
 use Phalcon\Support\Helper\Arr\Whitelist;
 use Phalcon\Tests\AbstractUnitTestCase;
-use PHPUnit\Framework\Attributes\Test;
 use stdClass;
 
 final class WhiteListTest extends AbstractUnitTestCase
@@ -31,7 +30,7 @@ final class WhiteListTest extends AbstractUnitTestCase
     public function testSupportHelperArrWhiteList(): void
     {
         $object = new Whitelist();
-        $value  = [
+        $value = [
             'value-1',
             ' key '  => 'value-2',
             5        => 'value-3',
@@ -60,7 +59,7 @@ final class WhiteListTest extends AbstractUnitTestCase
             7        => 'value-5',
             'key-3 ' => 'value-7',
         ];
-        $actual   = $object($value, $whiteList);
+        $actual = $object($value, $whiteList);
 
         $this->assertSame($expected, $actual);
     }

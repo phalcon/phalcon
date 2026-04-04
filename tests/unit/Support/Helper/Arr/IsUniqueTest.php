@@ -15,7 +15,6 @@ namespace Phalcon\Tests\Unit\Support\Helper\Arr;
 
 use Phalcon\Support\Helper\Arr\IsUnique;
 use Phalcon\Tests\AbstractUnitTestCase;
-use PHPUnit\Framework\Attributes\Test;
 
 final class IsUniqueTest extends AbstractUnitTestCase
 {
@@ -29,7 +28,7 @@ final class IsUniqueTest extends AbstractUnitTestCase
      */
     public function testSupportHelperArrIsUnique(): void
     {
-        $object     = new IsUnique();
+        $object = new IsUnique();
         $collection = [
             'Phalcon',
             'Framework',

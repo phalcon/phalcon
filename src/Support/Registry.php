@@ -289,9 +289,9 @@ final class Registry extends Collection
      *
      * @link https://php.net/manual/en/serializable.serialize.php
      *
-     * @return string
+     * @return string|null
      */
-    final public function serialize(): string
+    final public function serialize(): string|null
     {
         return parent::serialize();
     }
@@ -332,8 +332,8 @@ final class Registry extends Collection
      *
      * @return string
      */
-    public function toJson(
-        int $options = JSON_HEX_TAG | JSON_HEX_APOS | JSON_HEX_QUOT | JSON_HEX_AMP | JSON_UNESCAPED_UNICODE
+    final public function toJson(
+        int $options = JSON_HEX_TAG | JSON_HEX_AMP | JSON_HEX_APOS | JSON_HEX_QUOT | JSON_UNESCAPED_SLASHES
     ): string {
         return parent::toJson($options);
     }

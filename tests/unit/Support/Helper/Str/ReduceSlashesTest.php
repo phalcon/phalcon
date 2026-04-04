@@ -14,9 +14,7 @@ declare(strict_types=1);
 namespace Phalcon\Tests\Unit\Support\Helper\Str;
 
 use Phalcon\Support\Helper\Str\ReduceSlashes;
-use Phalcon\Tests\Fixtures\Page\Http;
 use Phalcon\Tests\AbstractUnitTestCase;
-use PHPUnit\Framework\Attributes\Test;
 
 final class ReduceSlashesTest extends AbstractUnitTestCase
 {
@@ -33,19 +31,19 @@ final class ReduceSlashesTest extends AbstractUnitTestCase
         $object = new ReduceSlashes();
 
         $expected = 'app/controllers/IndexController';
-        $actual   = $object('app/controllers//IndexController');
+        $actual = $object('app/controllers//IndexController');
         $this->assertSame($expected, $actual);
 
-        $expected = 'https://foo/bar/baz/buz';
-        $actual   = $object('https://foo//bar/baz/buz');
+        $expected = 'http://foo/bar/baz/buz';
+        $actual = $object('http://foo//bar/baz/buz');
         $this->assertSame($expected, $actual);
 
-        $expected = Http::STREAM_MEMORY;
-        $actual   = $object(Http::STREAM_MEMORY);
+        $expected = 'php://memory';
+        $actual = $object('php://memory');
         $this->assertSame($expected, $actual);
 
         $expected = 'http/https';
-        $actual   = $object('http//https');
+        $actual = $object('http//https');
         $this->assertSame($expected, $actual);
     }
 }

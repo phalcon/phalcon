@@ -13,9 +13,7 @@ declare(strict_types=1);
 
 namespace Phalcon\Tests\Unit\Support\Collection;
 
-use Phalcon\Support\Collection;
 use PHPUnit\Framework\Attributes\DataProvider;
-use PHPUnit\Framework\Attributes\Test;
 
 final class GetKeysTest extends AbstractCollectionTestCase
 {
@@ -24,27 +22,29 @@ final class GetKeysTest extends AbstractCollectionTestCase
      *
      * @return void
      *
-     * @author Phalcon Team <team@phalcon.io>
-     * @since  2020-09-09
+     * @dataProvider getClasses
+     *
+     * @author       Phalcon Team <team@phalcon.io>
+     * @since        2020-09-09
      */
     #[DataProvider('getClasses')]
-    public function testSupportCollectionGetKeys(): void
+    public function testSupportCollectionGetKeys(string $class): void
     {
         $data = $this->getData();
-        $collection = new Collection($data);
+        $collection = new $class($data);
 
         $expected = $this->getDataKeys();
-        $actual   = $collection->getKeys();
+        $actual = $collection->getKeys();
         $this->assertSame($expected, $actual);
 
         $data = $this->getDataNoCase();
-        $collection = new Collection($data);
-        $expected   = $this->getDataKeys();
-        $actual     = $collection->getKeys();
+        $collection = new $class($data);
+        $expected = $this->getDataKeys();
+        $actual = $collection->getKeys();
         $this->assertSame($expected, $actual);
 
         $expected = array_keys($data);
-        $actual   = $collection->getKeys(false);
+        $actual = $collection->getKeys(false);
         $this->assertSame($expected, $actual);
     }
 }

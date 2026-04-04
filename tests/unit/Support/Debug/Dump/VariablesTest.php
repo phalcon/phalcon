@@ -15,7 +15,6 @@ namespace Phalcon\Tests\Unit\Support\Debug\Dump;
 
 use Phalcon\Support\Debug\Dump;
 use Phalcon\Tests\AbstractUnitTestCase;
-use PHPUnit\Framework\Attributes\Test;
 use stdClass;
 
 use function dataDir;
@@ -45,10 +44,10 @@ final class VariablesTest extends AbstractUnitTestCase
 
         $expected = trim(
             file_get_contents(
-                dataDir('fixtures/Support/Dump/variables_output.txt')
-            )
+                supportDir('assets/Support/Dump/variables_output.txt'),
+            ),
         );
-        $actual   = $dump->variables($test1, $test2, $test3);
+        $actual = $dump->variables($test1, $test2, $test3);
         $this->assertSame($expected, $actual);
     }
 }

@@ -15,7 +15,6 @@ namespace Phalcon\Tests\Unit\Support\Helper\Str;
 
 use Phalcon\Support\Helper\Str\Concat;
 use Phalcon\Tests\AbstractUnitTestCase;
-use PHPUnit\Framework\Attributes\Test;
 
 final class ConcatTest extends AbstractUnitTestCase
 {
@@ -32,23 +31,23 @@ final class ConcatTest extends AbstractUnitTestCase
         $object = new Concat();
 
         // Test 1
-        $actual   = $object(
+        $actual = $object(
             '/',
             '/tmp/',
             '/folder_1/',
             '/folder_2',
-            'folder_3/'
+            'folder_3/',
         );
         $expected = '/tmp/folder_1/folder_2/folder_3/';
         $this->assertSame($expected, $actual);
 
         // Test 2
-        $actual   = $object(
+        $actual = $object(
             '.',
             '@test.',
             '.test2.',
             '.test',
-            '.34'
+            '.34',
         );
         $expected = '@test.test2.test.34';
         $this->assertSame($expected, $actual);

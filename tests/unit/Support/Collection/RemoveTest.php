@@ -16,8 +16,6 @@ namespace Phalcon\Tests\Unit\Support\Collection;
 use Phalcon\Support\Collection;
 use Phalcon\Support\Collection\Exception;
 use Phalcon\Support\Collection\ReadOnlyCollection;
-use PHPUnit\Framework\Attributes\DataProvider;
-use PHPUnit\Framework\Attributes\Test;
 
 final class RemoveTest extends AbstractCollectionTestCase
 {
@@ -35,7 +33,7 @@ final class RemoveTest extends AbstractCollectionTestCase
         $collection = new Collection($data);
 
         $expected = $data;
-        $actual   = $collection->toArray();
+        $actual = $collection->toArray();
         $this->assertSame($expected, $actual);
 
         $collection->remove('five');
@@ -43,7 +41,7 @@ final class RemoveTest extends AbstractCollectionTestCase
             'one'   => 'two',
             'three' => 'four',
         ];
-        $actual   = $collection->toArray();
+        $actual = $collection->toArray();
         $this->assertSame($expected, $actual);
 
         $collection->remove('FIVE');
@@ -51,7 +49,7 @@ final class RemoveTest extends AbstractCollectionTestCase
             'one'   => 'two',
             'three' => 'four',
         ];
-        $actual   = $collection->toArray();
+        $actual = $collection->toArray();
         $this->assertSame($expected, $actual);
 
         $collection->init($data);
@@ -60,7 +58,7 @@ final class RemoveTest extends AbstractCollectionTestCase
             'one'   => 'two',
             'three' => 'four',
         ];
-        $actual   = $collection->toArray();
+        $actual = $collection->toArray();
         $this->assertSame($expected, $actual);
 
         $collection->init($data);
@@ -69,7 +67,7 @@ final class RemoveTest extends AbstractCollectionTestCase
             'one'   => 'two',
             'three' => 'four',
         ];
-        $actual   = $collection->toArray();
+        $actual = $collection->toArray();
         $this->assertSame($expected, $actual);
 
         $collection->init($data);
@@ -78,7 +76,7 @@ final class RemoveTest extends AbstractCollectionTestCase
             'one'   => 'two',
             'three' => 'four',
         ];
-        $actual   = $collection->toArray();
+        $actual = $collection->toArray();
         $this->assertSame($expected, $actual);
     }
 

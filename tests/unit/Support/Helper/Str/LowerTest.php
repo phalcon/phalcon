@@ -15,7 +15,6 @@ namespace Phalcon\Tests\Unit\Support\Helper\Str;
 
 use Phalcon\Support\Helper\Str\Lower;
 use Phalcon\Tests\AbstractUnitTestCase;
-use PHPUnit\Framework\Attributes\Test;
 
 final class LowerTest extends AbstractUnitTestCase
 {
@@ -32,15 +31,15 @@ final class LowerTest extends AbstractUnitTestCase
         $object = new Lower();
 
         $expected = 'hello';
-        $actual   = $object('hello');
+        $actual = $object('hello');
         $this->assertSame($expected, $actual);
 
         $expected = 'hello';
-        $actual   = $object('HELLO');
+        $actual = $object('HELLO');
         $this->assertSame($expected, $actual);
 
         $expected = '1234';
-        $actual   = $object('1234');
+        $actual = $object('1234');
         $this->assertSame($expected, $actual);
     }
 
@@ -57,28 +56,28 @@ final class LowerTest extends AbstractUnitTestCase
         $object = new Lower();
 
         $expected = 'привет мир!';
-        $actual   = $object('привет мир!');
+        $actual = $object('привет мир!');
         $this->assertSame($expected, $actual);
 
         $expected = 'привет мир!';
-        $actual   = $object('ПриВЕт Мир!');
+        $actual = $object('ПриВЕт Мир!');
         $this->assertSame($expected, $actual);
 
         $expected = 'привет мир!';
-        $actual   = $object('ПРИВЕТ МИР!');
+        $actual = $object('ПРИВЕТ МИР!');
         $this->assertSame($expected, $actual);
 
 
         $expected = 'männer';
-        $actual   = $object('männer');
+        $actual = $object('männer');
         $this->assertSame($expected, $actual);
 
         $expected = 'männer';
-        $actual   = $object('mÄnnER');
+        $actual = $object('mÄnnER');
         $this->assertSame($expected, $actual);
 
         $expected = 'männer';
-        $actual   = $object('MÄNNER');
+        $actual = $object('MÄNNER');
         $this->assertSame($expected, $actual);
     }
 }

@@ -16,7 +16,6 @@ namespace Phalcon\Tests\Unit\Support\Helper\Str;
 use Phalcon\Support\Helper\Str\Random;
 use Phalcon\Tests\AbstractUnitTestCase;
 use PHPUnit\Framework\Attributes\DataProvider;
-use PHPUnit\Framework\Attributes\Test;
 
 use function strlen;
 
@@ -65,19 +64,21 @@ final class RandomTest extends AbstractUnitTestCase
      *
      * @return void
      *
+     * @dataProvider oneToTenProvider
+     *
      * @author       Phalcon Team <team@phalcon.io>
      * @since        2020-09-09
      */
     #[DataProvider('oneToTenProvider')]
     public function testSupportHelperStrRandomAlnum(
-        int $i
+        int $i,
     ): void {
         $object = new Random();
         $source = $object(Random::RANDOM_ALNUM, $i);
 
         $this->assertSame(
             1,
-            preg_match('/[a-zA-Z0-9]+/', $source, $matches)
+            preg_match('/[a-zA-Z0-9]+/', $source, $matches),
         );
 
         $this->assertSame($source, $matches[0]);
@@ -89,19 +90,21 @@ final class RandomTest extends AbstractUnitTestCase
      *
      * @return void
      *
+     * @dataProvider oneToTenProvider
+     *
      * @author       Phalcon Team <team@phalcon.io>
      * @since        2020-09-09
      */
     #[DataProvider('oneToTenProvider')]
     public function testSupportHelperStrRandomAlpha(
-        int $i
+        int $i,
     ): void {
         $object = new Random();
         $source = $object(Random::RANDOM_ALPHA, $i);
 
         $this->assertSame(
             1,
-            preg_match('/[a-zA-Z]+/', $source, $matches)
+            preg_match('/[a-zA-Z]+/', $source, $matches),
         );
 
         $this->assertSame($source, $matches[0]);
@@ -130,19 +133,22 @@ final class RandomTest extends AbstractUnitTestCase
      * Tests Phalcon\Support\Helper\Str :: random() - distinct type
      *
      * @return void
+     *
+     * @dataProvider randomDistinctProvider
+     *
      * @author       Phalcon Team <team@phalcon.io>
      * @since        2020-09-09
      */
     #[DataProvider('randomDistinctProvider')]
     public function testSupportHelperStrRandomDistinct(
-        int $i
+        int $i,
     ): void {
         $object = new Random();
         $source = $object(Random::RANDOM_DISTINCT, $i);
 
         $this->assertMatchesRegularExpression(
             '#^[2345679ACDEFHJKLMNPRSTUVWXYZ]+$#',
-            $source
+            $source,
         );
 
         $this->assertSame($i, strlen($source));
@@ -153,19 +159,21 @@ final class RandomTest extends AbstractUnitTestCase
      *
      * @return void
      *
+     * @dataProvider oneToTenProvider
+     *
      * @author       Phalcon Team <team@phalcon.io>
      * @since        2020-09-09
      */
     #[DataProvider('oneToTenProvider')]
     public function testSupportHelperStrRandomHexDec(
-        int $i
+        int $i,
     ): void {
         $object = new Random();
         $source = $object(Random::RANDOM_HEXDEC, $i);
 
         $this->assertSame(
             1,
-            preg_match('/[a-f0-9]+/', $source, $matches)
+            preg_match('/[a-f0-9]+/', $source, $matches),
         );
 
         $this->assertSame($source, $matches[0]);
@@ -177,19 +185,21 @@ final class RandomTest extends AbstractUnitTestCase
      *
      * @return void
      *
+     * @dataProvider oneToTenProvider
+     *
      * @author       Phalcon Team <team@phalcon.io>
      * @since        2020-09-09
      */
     #[DataProvider('oneToTenProvider')]
     public function testSupportHelperStrRandomNonZero(
-        int $i
+        int $i,
     ): void {
         $object = new Random();
         $source = $object(Random::RANDOM_NOZERO, $i);
 
         $this->assertSame(
             1,
-            preg_match('/[1-9]+/', $source, $matches)
+            preg_match('/[1-9]+/', $source, $matches),
         );
 
         $this->assertSame($source, $matches[0]);
@@ -201,19 +211,21 @@ final class RandomTest extends AbstractUnitTestCase
      *
      * @return void
      *
+     * @dataProvider oneToTenProvider
+     *
      * @author       Phalcon Team <team@phalcon.io>
      * @since        2020-09-09
      */
     #[DataProvider('oneToTenProvider')]
     public function testSupportHelperStrRandomNumeric(
-        int $i
+        int $i,
     ): void {
         $object = new Random();
         $source = $object(Random::RANDOM_NUMERIC, $i);
 
         $this->assertSame(
             1,
-            preg_match('/[0-9]+/', $source, $matches)
+            preg_match('/[0-9]+/', $source, $matches),
         );
 
         $this->assertSame($source, $matches[0]);

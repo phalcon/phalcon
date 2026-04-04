@@ -15,7 +15,6 @@ namespace Phalcon\Tests\Unit\Support\Helper\Str;
 
 use Phalcon\Support\Helper\Str\CountVowels;
 use Phalcon\Tests\AbstractUnitTestCase;
-use PHPUnit\Framework\Attributes\Test;
 
 final class CountVowelsTest extends AbstractUnitTestCase
 {
@@ -31,14 +30,14 @@ final class CountVowelsTest extends AbstractUnitTestCase
     {
         $object = new CountVowels();
 
-        $source   = 'Luke, I am your father!';
+        $source = 'Luke, I am your father!';
         $expected = 9;
-        $actual   = $object($source);
+        $actual = $object($source);
         $this->assertSame($expected, $actual);
 
-        $source   = '';
+        $source = '';
         $expected = 0;
-        $actual   = $object($source);
+        $actual = $object($source);
         $this->assertSame($expected, $actual);
     }
 }

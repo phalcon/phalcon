@@ -15,7 +15,6 @@ namespace Phalcon\Tests\Unit\Support\Helper\Arr;
 
 use Phalcon\Support\Helper\Arr\SliceLeft;
 use Phalcon\Tests\AbstractUnitTestCase;
-use PHPUnit\Framework\Attributes\Test;
 
 final class SliceLeftTest extends AbstractUnitTestCase
 {
@@ -29,7 +28,7 @@ final class SliceLeftTest extends AbstractUnitTestCase
      */
     public function testSupportHelperArrSliceLeft(): void
     {
-        $object     = new SliceLeft();
+        $object = new SliceLeft();
         $collection = [
             'Phalcon',
             'Framework',
@@ -40,7 +39,7 @@ final class SliceLeftTest extends AbstractUnitTestCase
         $expected = [
             'Phalcon',
         ];
-        $actual   = $object($collection, 1);
+        $actual = $object($collection, 1);
         $this->assertSame($expected, $actual);
 
         $expected = [
@@ -48,7 +47,7 @@ final class SliceLeftTest extends AbstractUnitTestCase
             'Framework',
             'for',
         ];
-        $actual   = $object($collection, 3);
+        $actual = $object($collection, 3);
         $this->assertSame($expected, $actual);
     }
 }

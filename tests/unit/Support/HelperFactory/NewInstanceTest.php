@@ -76,7 +76,6 @@ use Phalcon\Support\Helper\Str\Upper;
 use Phalcon\Support\HelperFactory;
 use Phalcon\Tests\AbstractUnitTestCase;
 use PHPUnit\Framework\Attributes\DataProvider;
-use PHPUnit\Framework\Attributes\Test;
 
 final class NewInstanceTest extends AbstractUnitTestCase
 {
@@ -153,18 +152,20 @@ final class NewInstanceTest extends AbstractUnitTestCase
      *
      * @return void
      *
+     * @dataProvider getExamples
+     *
      * @author       Phalcon Team <team@phalcon.io>
      * @since        2020-09-09
      */
     #[DataProvider('getExamples')]
     public function testSupportHelperFactoryNewInstance(
         string $method,
-        string $className
+        string $className,
     ): void {
         $factory = new HelperFactory();
 
         $expected = $className;
-        $actual   = $factory->newInstance($method);
+        $actual = $factory->newInstance($method);
         $this->assertInstanceOf($expected, $actual);
     }
 

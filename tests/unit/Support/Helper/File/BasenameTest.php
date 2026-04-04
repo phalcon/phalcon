@@ -16,7 +16,6 @@ namespace Phalcon\Tests\Unit\Support\Helper\File;
 use Phalcon\Support\Helper\File\Basename;
 use Phalcon\Tests\AbstractUnitTestCase;
 use PHPUnit\Framework\Attributes\DataProvider;
-use PHPUnit\Framework\Attributes\Test;
 
 use function basename;
 
@@ -93,13 +92,16 @@ final class BasenameTest extends AbstractUnitTestCase
      * support
      *
      * @return void
+     *
+     * @dataProvider getNonAsciiExamples
+     *
      * @author       Ian Hu <hu2008yinxiang@163.com>
      * @since        2020-09-09
      */
     #[DataProvider('getNonAsciiExamples')]
     public function testSupportHelperFileBasenameNonASCII(
         string $path,
-        string $expected
+        string $expected,
     ): void {
         if (PHP_OS_FAMILY === 'Windows') {
             $this->markTestSkipped('Need to fix Windows new lines...');
@@ -115,13 +117,16 @@ final class BasenameTest extends AbstractUnitTestCase
      * it should be same as PHP's basename
      *
      * @return void
+     *
+     * @dataProvider getAsciiExamples
+     *
      * @author       Ian Hu <hu2008yinxiang@163.com>
      * @since        2020-09-09
      */
     #[DataProvider('getAsciiExamples')]
     public function testSupportHelperFileBasenamePureASCII(
         string $path,
-        string $suffix
+        string $suffix,
     ): void {
         if (PHP_OS_FAMILY === 'Windows') {
             $this->markTestSkipped('Need to fix Windows new lines...');
@@ -130,7 +135,7 @@ final class BasenameTest extends AbstractUnitTestCase
         $object = new Basename();
 
         $expected = basename($path, $suffix);
-        $actual   = $object($path, $suffix);
+        $actual = $object($path, $suffix);
         $this->assertSame($expected, $actual);
     }
 }

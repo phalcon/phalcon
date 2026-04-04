@@ -72,6 +72,13 @@ class Di extends stdClass implements DiInterface
     use EventsAwareTrait;
 
     /**
+     * List of service aliases
+     *
+     * @var array<string, string>
+     */
+    protected array $aliases = [];
+
+    /**
      * Latest DI build
      *
      * @var DiInterface|null
@@ -179,6 +186,11 @@ class Di extends stdClass implements DiInterface
         $service  = null;
 
         /**
+         * Resolve the alias, if any
+         */
+        $name = $this->resolveAlias($name);
+
+        /**
          * If the service is shared, and it already has a cached instance then
          * immediately return it without triggering events.
          */
@@ -244,6 +256,19 @@ class Di extends stdClass implements DiInterface
     }
 
     /**
+     * Return the alias based on a passed key. Returns an empty string if
+     * the alias does not exist
+     *
+     * @param string $name
+     *
+     * @return string
+     */
+    public function getAlias(string $name): string
+    {
+        return $this->aliases[$name] ?? '';
+    }
+
+    /**
      * Return the latest DI created
      *
      * @return DiInterface|null
@@ -288,6 +313,11 @@ class Di extends stdClass implements DiInterface
      */
     public function getService(string $name): ServiceInterface
     {
+        /**
+         * Resolve the alias, if any
+         */
+        $name = $this->resolveAlias($name);
+
         if (true !== $this->has($name)) {
             $this->throwServiceNotFound($name);
         }
@@ -317,6 +347,11 @@ class Di extends stdClass implements DiInterface
      */
     public function getShared(string $name, array | null $parameters = null): mixed
     {
+        /**
+         * Resolve the alias, if any
+         */
+        $name = $this->resolveAlias($name);
+
         if (!isset($this->sharedInstances[$name])) {
             // Store the instance in the shared instances cache.
             $this->sharedInstances[$name] = $this->get($name, $parameters);
@@ -334,6 +369,11 @@ class Di extends stdClass implements DiInterface
      */
     public function has(string $name): bool
     {
+        /**
+         * Resolve the alias, if any
+         */
+        $name = $this->resolveAlias($name);
+
         return isset($this->services[$name]);
     }
 
@@ -377,6 +417,12 @@ class Di extends stdClass implements DiInterface
      */
     public function remove(string $name): void
     {
+        /**
+         * Resolve the alias, if any
+         */
+        $name = $this->resolveAlias($name);
+
+        unset($this->aliases[$name]);
         unset($this->services[$name]);
         unset($this->sharedInstances[$name]);
     }
@@ -405,9 +451,48 @@ class Di extends stdClass implements DiInterface
         mixed $definition,
         bool $shared = false
     ): ServiceInterface {
+        /**
+         * Resolve the alias, if any
+         */
+        $name = $this->resolveAlias($name);
+
         $this->services[$name] = new Service($definition, $shared);
 
         return $this->services[$name];
+    }
+
+    /**
+     * Sets one or more aliases to the given name.
+     *
+     * @param string       $name
+     * @param string|array $aliases
+     *
+     * @return $this
+     * @throws DiException
+     */
+    public function setAlias(string $name, array | string $aliases): self
+    {
+        if (true !== $this->has($name)) {
+            throw new DiException("Service '" . $name . "' is not registered in the container");
+        }
+
+        if (true !== is_array($aliases)) {
+            $aliases = [$aliases];
+        }
+
+        foreach ($aliases as $alias) {
+            if (true !== is_string($alias)) {
+                throw new DiException("Alias name must be a string");
+            }
+
+            if (true === isset($this->aliases[$alias]) || true === $this->has($alias)) {
+                throw new DiException("Alias '" . $alias . "' is already in use by an existing service");
+            }
+
+            $this->aliases[$alias] = $name;
+        }
+
+        return $this;
     }
 
     /**
@@ -517,5 +602,33 @@ class Di extends stdClass implements DiInterface
         }
 
         return $instance;
+    }
+
+    /**
+     * Resolve an alias to its actual service name
+     *
+     * @param string $name
+     *
+     * @return string
+     * @throws Exception
+     */
+    private function resolveAlias(string $name): string
+    {
+        $current = $name;
+        $seen    = [];
+
+        while (isset($this->aliases[$current])) {
+            if (isset($seen[$current])) {
+                throw new DiException(
+                    sprintf(
+                        "Circular alias reference detected while resolving '%s'",
+                        $name
+                    )
+                );
+            }
+            $seen[$current] = true;
+            $current        = $this->aliases[$current];
+        }
+        return $current;
     }
 }

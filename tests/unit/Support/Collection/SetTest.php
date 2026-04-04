@@ -16,11 +16,25 @@ namespace Phalcon\Tests\Unit\Support\Collection;
 use Phalcon\Support\Collection;
 use Phalcon\Support\Collection\Exception;
 use Phalcon\Support\Collection\ReadOnlyCollection;
-use PHPUnit\Framework\Attributes\DataProvider;
-use PHPUnit\Framework\Attributes\Test;
 
 final class SetTest extends AbstractCollectionTestCase
 {
+    /**
+     * Tests Phalcon\Support\Collection\ReadOnlyCollection :: set()
+     *
+     * @return void
+     *
+     * @author Phalcon Team <team@phalcon.io>
+     * @since  2020-09-09
+     */
+    public function testSupportCollectionOffsetSetException(): void
+    {
+        $this->expectException(Exception::class);
+        $this->expectExceptionMessage('The object is read only');
+        $collection = new ReadOnlyCollection();
+        $collection->offsetSet('three', 123);
+    }
+
     /**
      * Tests Phalcon\Support\Collection :: set()
      *
@@ -36,19 +50,19 @@ final class SetTest extends AbstractCollectionTestCase
         $collection->set('three', 'two');
 
         $expected = 'two';
-        $actual   = $collection->get('three');
+        $actual = $collection->get('three');
         $this->assertSame($expected, $actual);
 
         $collection->three = 'Phalcon';
 
         $expected = 'Phalcon';
-        $actual   = $collection->get('three');
+        $actual = $collection->get('three');
         $this->assertSame($expected, $actual);
 
         $collection->offsetSet('three', 123);
 
         $expected = 123;
-        $actual   = $collection->get('three');
+        $actual = $collection->get('three');
         $this->assertSame($expected, $actual);
 
         $collection['three'] = true;
@@ -65,12 +79,12 @@ final class SetTest extends AbstractCollectionTestCase
      * @author Phalcon Team <team@phalcon.io>
      * @since  2020-09-09
      */
-    public function testSupportCollectionOffsetSetException(): void
+    public function testSupportCollectionSetArrayException(): void
     {
         $this->expectException(Exception::class);
         $this->expectExceptionMessage('The object is read only');
         $collection = new ReadOnlyCollection();
-        $collection->offsetSet('three', 123);
+        $collection['three'] = true;
     }
 
     /**
@@ -97,27 +111,11 @@ final class SetTest extends AbstractCollectionTestCase
      * @author Phalcon Team <team@phalcon.io>
      * @since  2020-09-09
      */
-    public function testSupportCollectionSetArrayException(): void
-    {
-        $this->expectException(Exception::class);
-        $this->expectExceptionMessage('The object is read only');
-        $collection          = new ReadOnlyCollection();
-        $collection['three'] = true;
-    }
-
-    /**
-     * Tests Phalcon\Support\Collection\ReadOnlyCollection :: set()
-     *
-     * @return void
-     *
-     * @author Phalcon Team <team@phalcon.io>
-     * @since  2020-09-09
-     */
     public function testSupportCollectionSetPropertyException(): void
     {
         $this->expectException(Exception::class);
         $this->expectExceptionMessage('The object is read only');
-        $collection        = new ReadOnlyCollection();
+        $collection = new ReadOnlyCollection();
         $collection->three = 'Phalcon';
     }
 }

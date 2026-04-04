@@ -15,7 +15,6 @@ namespace Phalcon\Tests\Unit\Support\Helper\Arr;
 
 use Phalcon\Support\Helper\Arr\Filter;
 use Phalcon\Tests\AbstractUnitTestCase;
-use PHPUnit\Framework\Attributes\Test;
 
 final class FilterTest extends AbstractUnitTestCase
 {
@@ -29,7 +28,7 @@ final class FilterTest extends AbstractUnitTestCase
      */
     public function testSupportHelperArrFilter(): void
     {
-        $object     = new Filter();
+        $object = new Filter();
         $collection = [
             1  => 1,
             2  => 2,
@@ -50,11 +49,11 @@ final class FilterTest extends AbstractUnitTestCase
             7 => 7,
             9 => 9,
         ];
-        $actual   = $object->__invoke(
+        $actual = $object->__invoke(
             $collection,
             function ($element) {
                 return $element & 1;
-            }
+            },
         );
         $this->assertSame($expected, $actual);
     }

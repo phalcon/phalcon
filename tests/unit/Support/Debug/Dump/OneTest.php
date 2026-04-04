@@ -15,7 +15,6 @@ namespace Phalcon\Tests\Unit\Support\Debug\Dump;
 
 use Phalcon\Support\Debug\Dump;
 use Phalcon\Tests\AbstractUnitTestCase;
-use PHPUnit\Framework\Attributes\Test;
 
 final class OneTest extends AbstractUnitTestCase
 {
@@ -33,11 +32,11 @@ final class OneTest extends AbstractUnitTestCase
         $dump = new Dump();
 
         $expected = '<pre style="background-color:#f3f3f3; font-size:11px; '
-            . 'padding:10px; border:1px solid #ccc; text-align:left; '
-            . 'color:#333"><b style="color:teal">String</b> '
-            . '(<span style="color:teal">5</span>) "'
-            . '<span style="color:teal">value</span>"</pre>';
-        $actual   = $dump->one($test);
+                    . 'padding:10px; border:1px solid #ccc; text-align:left; '
+                    . 'color:#333"><b style="color:teal">String</b> '
+                    . '(<span style="color:teal">5</span>) "'
+                    . '<span style="color:teal">value</span>"</pre>';
+        $actual = $dump->one($test);
         $this->assertSame($expected, $actual);
     }
 
@@ -55,11 +54,11 @@ final class OneTest extends AbstractUnitTestCase
         $dump = new Dump();
 
         $expected = '<pre style="background-color:#f3f3f3; font-size:11px; '
-            . 'padding:10px; border:1px solid #ccc; text-align:left; '
-            . 'color:#333">super <b style="color:teal">String</b> '
-            . '(<span style="color:teal">5</span>) "'
-            . '<span style="color:teal">value</span>"</pre>';
-        $actual   = $dump->one($test, 'super');
+                    . 'padding:10px; border:1px solid #ccc; text-align:left; '
+                    . 'color:#333">super <b style="color:teal">String</b> '
+                    . '(<span style="color:teal">5</span>) "'
+                    . '<span style="color:teal">value</span>"</pre>';
+        $actual = $dump->one($test, 'super');
         $this->assertSame($expected, $actual);
     }
 }

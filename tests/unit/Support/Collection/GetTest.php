@@ -13,10 +13,7 @@ declare(strict_types=1);
 
 namespace Phalcon\Tests\Unit\Support\Collection;
 
-use Phalcon\Support\Collection;
-use Phalcon\Support\Collection\ReadOnlyCollection;
 use PHPUnit\Framework\Attributes\DataProvider;
-use PHPUnit\Framework\Attributes\Test;
 
 use function uniqid;
 
@@ -27,17 +24,19 @@ final class GetTest extends AbstractCollectionTestCase
      *
      * @return void
      *
-     * @author Phalcon Team <team@phalcon.io>
-     * @since  2021-12-01
+     * @author       Phalcon Team <team@phalcon.io>
+     * @since        2021-12-01
+     * @dataProvider getClasses
+     *
      * @issue  https://github.com/phalcon/cphalcon/issues/15370
      */
     #[DataProvider('getClasses')]
     public function testSupportCollectionGet(
-        string $class
+        string $class,
     ): void {
         $data = $this->getDataForGet();
         $collection = new $class($data);
-        $expected   = 'four';
+        $expected = 'four';
 
         $actual = $collection->get('three');
         $this->assertSame($expected, $actual);
@@ -58,20 +57,22 @@ final class GetTest extends AbstractCollectionTestCase
         $this->assertSame($expected, $actual);
 
         $expected = 'two';
-        $actual   = $collection->get('one', 'fallback');
+        $actual = $collection->get('one', 'fallback');
         $this->assertSame($expected, $actual);
 
         $expected = '';
-        $actual   = $collection->get('seven', 'fallback');
+        $actual = $collection->get('seven', 'fallback');
         $this->assertSame($expected, $actual);
 
         $expected = 'fallback';
-        $actual   = $collection->get('eight', 'fallback');
+        $actual = $collection->get('eight', 'fallback');
         $this->assertSame($expected, $actual);
     }
 
     /**
      * Tests Phalcon\Support\Collection :: get() - cast
+     *
+     * @dataProvider getExamples
      *
      * @author       Phalcon Team <team@phalcon.io>
      * @since        2020-09-09
@@ -81,12 +82,12 @@ final class GetTest extends AbstractCollectionTestCase
         string $class,
         string $cast,
         mixed $value,
-        mixed $expected
+        mixed $expected,
     ): void {
         $collection = new $class(
             [
                 'value' => $value,
-            ]
+            ],
         );
 
         $actual = $collection->get('value', null, $cast);
