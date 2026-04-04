@@ -20,9 +20,9 @@ use Phalcon\Session\Exception;
 use Phalcon\Storage\AdapterFactory;
 use Phalcon\Storage\SerializerFactory;
 use Phalcon\Tests\AbstractUnitTestCase;
-use Phalcon\Tests\Fixtures\Session\Adapter\StreamIsWritableFixture;
-use Phalcon\Tests\Fixtures\Traits\DiTrait;
-use Phalcon\Tests\Fixtures\Traits\SessionTrait;
+use Phalcon\Tests\Support\Traits\DiTrait;
+use Phalcon\Tests\Support\Traits\SessionTrait;
+use Phalcon\Tests\Unit\Session\Fake\Adapter\FakeStreamIsWritable;
 use SessionHandlerInterface;
 
 use function getOptionsRedis;
@@ -156,6 +156,6 @@ final class ConstructTest extends AbstractUnitTestCase
             'The session save path [' . $savePath . '] is not writable'
         );
 
-        $streamSession = new StreamIsWritableFixture($options);
+        $streamSession = new FakeStreamIsWritable($options);
     }
 }

@@ -15,8 +15,8 @@ namespace Phalcon\Tests\Unit\Session\Adapter;
 
 use Phalcon\Session\Exception;
 use Phalcon\Tests\AbstractServicesTestCase;
-use Phalcon\Tests\Fixtures\Session\Adapter\StreamGlobFixture;
-use Phalcon\Tests\Fixtures\Traits\DiTrait;
+use Phalcon\Tests\Support\Traits\DiTrait;
+use Phalcon\Tests\Unit\Session\Fake\FakeStreamGlob;
 
 use function cacheDir;
 use function file_put_contents;
@@ -134,7 +134,7 @@ final class GcTest extends AbstractServicesTestCase
         $this->expectException(Exception::class);
         $this->expectExceptionMessage('Unexpected gc error');
 
-        $adapter = new StreamGlobFixture(getOptionsSessionStream());
+        $adapter = new FakeStreamGlob(getOptionsSessionStream());
 
         $actual = $adapter->gc(1);
     }

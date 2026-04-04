@@ -14,9 +14,9 @@ declare(strict_types=1);
 namespace Phalcon\Tests\Unit\Session\Bag;
 
 use Phalcon\Session\Bag;
-use Phalcon\Tests\Fixtures\Session\InjectableBag;
-use Phalcon\Tests\Fixtures\Traits\DiTrait;
 use Phalcon\Tests\AbstractUnitTestCase;
+use Phalcon\Tests\Support\Traits\DiTrait;
+use Phalcon\Tests\Unit\Session\Fake\FakeInjectableBag;
 
 final class InjectableTest extends AbstractUnitTestCase
 {
@@ -53,7 +53,7 @@ final class InjectableTest extends AbstractUnitTestCase
          * Create the injectable component - this can be a controller for
          * instance, and set the container
          */
-        $injectable = new InjectableBag();
+        $injectable = new FakeInjectableBag();
         $injectable->setDI($this->container);
 
         /**

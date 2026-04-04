@@ -387,6 +387,10 @@ class Manager implements ManagerInterface
             }
         }
 
+        if (!($this->adapter instanceof SessionHandlerInterface)) {
+            throw new Exception('The session adapter is not valid');
+        }
+
         /**
          * Register the adapter
          */
@@ -405,7 +409,11 @@ class Manager implements ManagerInterface
      */
     public function status(): int
     {
-        return session_status();
+        return match (session_status()) {
+            PHP_SESSION_DISABLED => self::SESSION_DISABLED,
+            PHP_SESSION_ACTIVE   => self::SESSION_ACTIVE,
+            default              => self::SESSION_NONE,
+        };
     }
 
     /**

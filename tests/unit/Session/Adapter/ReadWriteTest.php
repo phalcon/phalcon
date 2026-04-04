@@ -15,8 +15,8 @@ namespace Phalcon\Tests\Unit\Session\Adapter;
 
 use Phalcon\Session\Adapter\Redis;
 use Phalcon\Tests\AbstractServicesTestCase;
-use Phalcon\Tests\Fixtures\Session\Adapter\StreamFileGetContentsFixture;
-use Phalcon\Tests\Fixtures\Traits\DiTrait;
+use Phalcon\Tests\Support\Traits\DiTrait;
+use Phalcon\Tests\Unit\Session\Fake\Adapter\FakeStreamFileGetContents;
 
 use function cacheDir;
 use function getOptionsSessionStream;
@@ -49,6 +49,22 @@ final class ReadWriteTest extends AbstractServicesTestCase
 
         $actual = $adapter->read('test1');
         $this->assertNotNull($actual);
+    }
+
+    /**
+     * Tests Phalcon\Session\Adapter\Noop :: write() - returns true
+     *
+     * @return void
+     *
+     * @author Phalcon Team <team@phalcon.io>
+     * @since  2020-09-09
+     */
+    public function testSessionAdapterNoopWrite(): void
+    {
+        $adapter = $this->newService('sessionNoop');
+
+        $actual = $adapter->write('test1', uniqid());
+        $this->assertTrue($actual);
     }
 
     /**
@@ -127,7 +143,7 @@ final class ReadWriteTest extends AbstractServicesTestCase
      */
     public function testSessionAdapterStreamReadNoData(): void
     {
-        $adapter = new StreamFileGetContentsFixture(getOptionsSessionStream());
+        $adapter = new FakeStreamFileGetContents(getOptionsSessionStream());
         $value   = uniqid();
         $adapter->write('test1', $value);
 

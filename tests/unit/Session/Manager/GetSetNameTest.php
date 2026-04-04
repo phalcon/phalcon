@@ -13,13 +13,12 @@ declare(strict_types=1);
 
 namespace Phalcon\Tests\Unit\Session\Manager;
 
-use IntegrationTester;
 use Phalcon\Session\Exception;
 use Phalcon\Session\Manager;
-use Phalcon\Tests\Fixtures\Traits\DiTrait;
 use Phalcon\Tests\AbstractServicesTestCase;
+use Phalcon\Tests\Support\Traits\DiTrait;
 
-class GetSetNameTest extends AbstractServicesTestCase
+final class GetSetNameTest extends AbstractServicesTestCase
 {
     use DiTrait;
 
@@ -43,8 +42,6 @@ class GetSetNameTest extends AbstractServicesTestCase
 
     /**
      * Tests Phalcon\Session\Manager :: getName()/setName() - session started
-     *
-     * @param IntegrationTester $I
      *
      * @author Phalcon Team <team@phalcon.io>
      * @since  2020-09-09

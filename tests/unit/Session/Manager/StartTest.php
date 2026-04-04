@@ -13,9 +13,9 @@ declare(strict_types=1);
 
 namespace Phalcon\Tests\Unit\Session\Manager;
 
-use Phalcon\Tests\Fixtures\Session\ManagerHeadersSentFixture;
-use Phalcon\Tests\Fixtures\Traits\DiTrait;
 use Phalcon\Tests\AbstractUnitTestCase;
+use Phalcon\Tests\Support\Traits\DiTrait;
+use Phalcon\Tests\Unit\Session\Fake\FakeManagerHeadersSent;
 
 final class StartTest extends AbstractUnitTestCase
 {
@@ -31,7 +31,7 @@ final class StartTest extends AbstractUnitTestCase
      */
     public function testSessionManagerStartHeadersSent(): void
     {
-        $manager = new ManagerHeadersSentFixture();
+        $manager = new FakeManagerHeadersSent();
         $files   = $this->newService('sessionStream');
         $manager->setAdapter($files);
 
