@@ -13,11 +13,10 @@ declare(strict_types=1);
 
 namespace Phalcon\Tests\Unit\Translate\Adapter\Csv;
 
-use Phalcon\Tests\Fixtures\Traits\TranslateCsvTrait;
 use Phalcon\Tests\AbstractUnitTestCase;
+use Phalcon\Tests\Unit\Translate\Fake\TranslateCsvTrait;
 use Phalcon\Translate\Adapter\Csv;
 use Phalcon\Translate\InterpolatorFactory;
-use PHPUnit\Framework\Attributes\Test;
 
 final class ArrayAccessTest extends AbstractUnitTestCase
 {
@@ -33,6 +32,7 @@ final class ArrayAccessTest extends AbstractUnitTestCase
      */
     public function testTranslateAdapterCsvWithArrayAccess(): void
     {
+
         $language = $this->getCsvConfig()['ru'];
 
         $translator = new Csv(new InterpolatorFactory(), $language);

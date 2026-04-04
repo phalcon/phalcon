@@ -14,16 +14,15 @@ declare(strict_types=1);
 namespace Phalcon\Tests\Unit\Translate\Adapter\Csv;
 
 use ArrayAccess;
-use Phalcon\Tests\Fixtures\Traits\TranslateCsvTrait;
-use Phalcon\Tests\Fixtures\Translate\Adapter\CsvFopenFixture;
 use Phalcon\Tests\AbstractUnitTestCase;
+use Phalcon\Tests\Unit\Translate\Fake\FakeCsvFopen;
+use Phalcon\Tests\Unit\Translate\Fake\TranslateCsvTrait;
 use Phalcon\Translate\Adapter\AdapterInterface;
 use Phalcon\Translate\Adapter\Csv;
 use Phalcon\Translate\Exception;
 use Phalcon\Translate\InterpolatorFactory;
-use PHPUnit\Framework\Attributes\Test;
 
-use function dataDir;
+use function supportDir;
 
 final class ConstructTest extends AbstractUnitTestCase
 {
@@ -39,6 +38,7 @@ final class ConstructTest extends AbstractUnitTestCase
      */
     public function testTranslateAdapterCsvConstruct(): void
     {
+
         $language   = $this->getCsvConfig()['en'];
         $translator = new Csv(new InterpolatorFactory(), $language);
 
@@ -56,6 +56,7 @@ final class ConstructTest extends AbstractUnitTestCase
      */
     public function testTranslateAdapterCsvContentParamExist(): void
     {
+
         $this->expectException(Exception::class);
         $this->expectExceptionMessage("Parameter 'content' is required");
 
@@ -73,12 +74,12 @@ final class ConstructTest extends AbstractUnitTestCase
      */
     public function testTranslateAdapterCsvErrorLoadingFile(): void
     {
-        $message = "Error opening translation file '"
-            . dataDir('assets/translation/csv/en.csv') . "'";
+
+        $message = "Error opening translation file '" . supportDir('assets/translation/csv/en.csv') . "'";
         $this->expectException(Exception::class);
         $this->expectExceptionMessage($message);
 
         $language = $this->getCsvConfig()['en'];
-        (new CsvFopenFixture(new InterpolatorFactory(), $language));
+        (new FakeCsvFopen(new InterpolatorFactory(), $language));
     }
 }

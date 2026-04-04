@@ -13,15 +13,12 @@ declare(strict_types=1);
 
 namespace Phalcon\Tests\Unit\Translate\Adapter\Gettext;
 
-use Phalcon\Tests\Fixtures\Traits\TranslateGettextTrait;
 use Phalcon\Tests\AbstractUnitTestCase;
+use Phalcon\Tests\Unit\Translate\Fake\TranslateGettextTrait;
 use Phalcon\Translate\Adapter\Gettext;
 use Phalcon\Translate\Exception;
 use Phalcon\Translate\InterpolatorFactory;
-use PHPUnit\Framework\Attributes\RequiresPhpExtension;
-use PHPUnit\Framework\Attributes\Test;
 
-#[RequiresPhpExtension('gettext')]
 final class OffsetUnsetTest extends AbstractUnitTestCase
 {
     use TranslateGettextTrait;
@@ -36,10 +33,9 @@ final class OffsetUnsetTest extends AbstractUnitTestCase
      */
     public function testTranslateAdapterGettextOffsetUnset(): void
     {
+
         $this->expectException(Exception::class);
-        $this->expectExceptionMessage(
-            'Translate is an immutable ArrayAccess object'
-        );
+        $this->expectExceptionMessage('Translate is an immutable ArrayAccess object');
 
         $language = $this->getGettextConfig();
 

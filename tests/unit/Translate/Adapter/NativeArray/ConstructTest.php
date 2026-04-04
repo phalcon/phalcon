@@ -14,13 +14,12 @@ declare(strict_types=1);
 namespace Phalcon\Tests\Unit\Translate\Adapter\NativeArray;
 
 use ArrayAccess;
-use Phalcon\Tests\Fixtures\Traits\TranslateNativeArrayTrait;
 use Phalcon\Tests\AbstractUnitTestCase;
+use Phalcon\Tests\Unit\Translate\Fake\TranslateNativeArrayTrait;
 use Phalcon\Translate\Adapter\AdapterInterface;
 use Phalcon\Translate\Adapter\NativeArray;
 use Phalcon\Translate\Exception;
 use Phalcon\Translate\InterpolatorFactory;
-use PHPUnit\Framework\Attributes\Test;
 
 final class ConstructTest extends AbstractUnitTestCase
 {
@@ -36,24 +35,14 @@ final class ConstructTest extends AbstractUnitTestCase
      */
     public function testTranslateAdapterNativeArrayConstruct(): void
     {
+
         $language = $this->getArrayConfig()['en'];
 
-        $translator = new NativeArray(
-            new InterpolatorFactory(),
-            [
-                'content' => $language,
-            ]
-        );
+        $translator = new NativeArray(new InterpolatorFactory(), ['content' => $language,]);
 
-        $this->assertInstanceOf(
-            ArrayAccess::class,
-            $translator
-        );
+        $this->assertInstanceOf(ArrayAccess::class, $translator);
 
-        $this->assertInstanceOf(
-            AdapterInterface::class,
-            $translator
-        );
+        $this->assertInstanceOf(AdapterInterface::class, $translator);
     }
 
     /**
@@ -67,15 +56,11 @@ final class ConstructTest extends AbstractUnitTestCase
      */
     public function testTranslateAdapterNativeArrayContentNotArray(): void
     {
+
         $this->expectException(Exception::class);
         $this->expectExceptionMessage('Translation data must be an array');
 
-        (new NativeArray(
-            new InterpolatorFactory(),
-            [
-                'content' => 1234,
-            ]
-        ));
+        (new NativeArray(new InterpolatorFactory(), ['content' => 1234,]));
     }
 
     /**
@@ -88,6 +73,7 @@ final class ConstructTest extends AbstractUnitTestCase
      */
     public function testTranslateAdapterNativeArrayContentParamExist(): void
     {
+
         $this->expectException(Exception::class);
         $this->expectExceptionMessage('Translation content was not provided');
 

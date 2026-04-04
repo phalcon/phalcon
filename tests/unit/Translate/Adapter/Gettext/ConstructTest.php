@@ -14,17 +14,14 @@ declare(strict_types=1);
 namespace Phalcon\Tests\Unit\Translate\Adapter\Gettext;
 
 use ArrayAccess;
-use Phalcon\Tests\Fixtures\Traits\TranslateGettextTrait;
-use Phalcon\Tests\Fixtures\Translate\Adapter\GettextFileExistsFixture;
 use Phalcon\Tests\AbstractUnitTestCase;
+use Phalcon\Tests\Unit\Translate\Fake\FakeGettextFunctionExists;
+use Phalcon\Tests\Unit\Translate\Fake\TranslateGettextTrait;
 use Phalcon\Translate\Adapter\AdapterInterface;
 use Phalcon\Translate\Adapter\Gettext;
 use Phalcon\Translate\Exception;
 use Phalcon\Translate\InterpolatorFactory;
-use PHPUnit\Framework\Attributes\RequiresPhpExtension;
-use PHPUnit\Framework\Attributes\Test;
 
-#[RequiresPhpExtension('gettext')]
 final class ConstructTest extends AbstractUnitTestCase
 {
     use TranslateGettextTrait;
@@ -39,6 +36,7 @@ final class ConstructTest extends AbstractUnitTestCase
      */
     public function testTranslateAdapterGettextConstruct(): void
     {
+
         $params     = $this->getGettextConfig();
         $translator = new Gettext(new InterpolatorFactory(), $params);
 
@@ -57,14 +55,13 @@ final class ConstructTest extends AbstractUnitTestCase
      */
     public function testTranslateAdapterGettextConstructNoGettextException(): void
     {
-        $this->expectException(\Exception::class);
+
+        $this->expectException(Exception::class);
         $this->expectExceptionMessage('This class requires the gettext extension for PHP');
 
-        (new GettextFileExistsFixture(
+        (new FakeGettextFunctionExists(
             new InterpolatorFactory(),
-            [
-                'locale' => 'en_US.utf8',
-            ],
+            ['locale' => 'en_US.utf8',]
         ));
     }
 
@@ -79,15 +76,11 @@ final class ConstructTest extends AbstractUnitTestCase
      */
     public function testTranslateAdapterGettextContentParamDirectoryExist(): void
     {
+
         $this->expectException(Exception::class);
         $this->expectExceptionMessage("Parameter 'directory' is required");
 
-        (new Gettext(
-            new InterpolatorFactory(),
-            [
-                'locale' => 'en_US.utf8',
-            ]
-        ));
+        (new Gettext(new InterpolatorFactory(), ['locale' => 'en_US.utf8',]));
     }
 
     /**
@@ -101,6 +94,7 @@ final class ConstructTest extends AbstractUnitTestCase
      */
     public function testTranslateAdapterGettextContentParamLocaleExist(): void
     {
+
         $this->expectException(Exception::class);
         $this->expectExceptionMessage("Parameter 'locale' is required");
 

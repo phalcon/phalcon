@@ -13,9 +13,9 @@ declare(strict_types=1);
 
 namespace Phalcon\Tests\Unit\Translate\Adapter\NativeArray;
 
-use Phalcon\Tests\Fixtures\Traits\TranslateNativeArrayHelperTrait;
-use Phalcon\Tests\Fixtures\Traits\TranslateNativeArrayTrait;
 use Phalcon\Tests\AbstractUnitTestCase;
+use Phalcon\Tests\Unit\Translate\Fake\TranslateNativeArrayHelperTrait;
+use Phalcon\Tests\Unit\Translate\Fake\TranslateNativeArrayTrait;
 
 final class UnderscoreTest extends AbstractUnitTestCase
 {
@@ -27,6 +27,7 @@ final class UnderscoreTest extends AbstractUnitTestCase
      */
     protected function func(): string
     {
+
         return '_';
     }
 }

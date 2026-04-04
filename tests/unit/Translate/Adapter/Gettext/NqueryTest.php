@@ -13,13 +13,11 @@ declare(strict_types=1);
 
 namespace Phalcon\Tests\Unit\Translate\Adapter\Gettext;
 
-use Phalcon\Tests\Fixtures\Traits\TranslateGettextTrait;
 use Phalcon\Tests\AbstractUnitTestCase;
+use Phalcon\Tests\Unit\Translate\Fake\TranslateGettextTrait;
 use Phalcon\Translate\Adapter\Gettext;
 use Phalcon\Translate\InterpolatorFactory;
-use PHPUnit\Framework\Attributes\RequiresPhpExtension;
 
-#[RequiresPhpExtension('gettext')]
 final class NqueryTest extends AbstractUnitTestCase
 {
     use TranslateGettextTrait;
@@ -34,6 +32,7 @@ final class NqueryTest extends AbstractUnitTestCase
      */
     public function testTranslateAdapterGettextNquery(): void
     {
+
         $params     = $this->getGettextConfig();
         $translator = new Gettext(new InterpolatorFactory(), $params);
 
@@ -42,13 +41,7 @@ final class NqueryTest extends AbstractUnitTestCase
         $this->assertSame($expected, $actual);
 
         $expected = 'two files';
-        $actual   = $translator->nquery(
-            'file',
-            'files',
-            2,
-            [],
-            'messages'
-        );
+        $actual   = $translator->nquery('file', 'files', 2, [], 'messages');
         $this->assertSame($expected, $actual);
     }
 }

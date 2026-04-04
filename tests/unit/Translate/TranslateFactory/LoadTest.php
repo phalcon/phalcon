@@ -13,12 +13,11 @@ declare(strict_types=1);
 
 namespace Phalcon\Tests\Unit\Translate\TranslateFactory;
 
-use Phalcon\Tests\Fixtures\Traits\FactoryTrait;
 use Phalcon\Tests\AbstractUnitTestCase;
+use Phalcon\Tests\Support\Traits\FactoryTrait;
 use Phalcon\Translate\Adapter\Gettext;
 use Phalcon\Translate\InterpolatorFactory;
 use Phalcon\Translate\TranslateFactory;
-use PHPUnit\Framework\Attributes\Test;
 
 use function strtolower;
 
@@ -30,10 +29,7 @@ final class LoadTest extends AbstractUnitTestCase
 
     public function setUp(): void
     {
-        if (!extension_loaded('gettext')) {
-            $this->markTestSkipped('The gettext extension is not loaded');
-        }
-
+        $this->checkExtensionIsLoaded('gettext');
         $this->init();
     }
 
@@ -45,6 +41,7 @@ final class LoadTest extends AbstractUnitTestCase
      */
     public function testTranslateFactoryLoadArray(): void
     {
+
         /**
          * This test will run only on Linux - unless we figure out how to
          * properly set locales on windows/macos
@@ -72,6 +69,7 @@ final class LoadTest extends AbstractUnitTestCase
      */
     public function testTranslateFactoryLoadConfig(): void
     {
+
         /**
          * This test will run only on Linux - unless we figure out how to
          * properly set locales on windows/macos

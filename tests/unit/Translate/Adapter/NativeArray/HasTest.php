@@ -13,11 +13,10 @@ declare(strict_types=1);
 
 namespace Phalcon\Tests\Unit\Translate\Adapter\NativeArray;
 
-use Phalcon\Tests\Fixtures\Traits\TranslateNativeArrayTrait;
 use Phalcon\Tests\AbstractUnitTestCase;
+use Phalcon\Tests\Unit\Translate\Fake\TranslateNativeArrayTrait;
 use Phalcon\Translate\Adapter\NativeArray;
 use Phalcon\Translate\InterpolatorFactory;
-use PHPUnit\Framework\Attributes\Test;
 
 final class HasTest extends AbstractUnitTestCase
 {
@@ -33,14 +32,10 @@ final class HasTest extends AbstractUnitTestCase
      */
     public function testTranslateAdapterNativeArrayHas(): void
     {
+
         $language = $this->getArrayConfig()['en'];
 
-        $translator = new NativeArray(
-            new InterpolatorFactory(),
-            [
-                'content' => $language,
-            ]
-        );
+        $translator = new NativeArray(new InterpolatorFactory(), ['content' => $language,]);
 
         $expected = $translator->has('hi');
         $this->assertTrue($expected);

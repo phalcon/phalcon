@@ -24,7 +24,8 @@ use function is_resource;
  * @phpstan-type TOptions = array{
  *      content?: string,
  *      delimiter?: string,
- *      enclosure?: string
+ *      enclosure?: string,
+ *      escape?: string
  * }
  */
 class Csv extends AbstractAdapter
@@ -56,8 +57,9 @@ class Csv extends AbstractAdapter
 
         $delimiter = $options['delimiter'] ?? ';';
         $enclosure = $options['enclosure'] ?? "\"";
+        $escape    = $options['escape'] ?? "\\";
 
-        $this->load($options['content'], 0, $delimiter, $enclosure);
+        $this->load($options['content'], 0, $delimiter, $enclosure, $escape);
     }
 
     /**
@@ -105,6 +107,7 @@ class Csv extends AbstractAdapter
      * @param int    $length
      * @param string $separator
      * @param string $enclosure
+     * @param string $escape
      *
      * @throws Exception
      */
@@ -112,7 +115,8 @@ class Csv extends AbstractAdapter
         string $file,
         int $length,
         string $separator,
-        string $enclosure
+        string $enclosure,
+        string $escape
     ): void {
         $pointer = $this->phpFopen($file, 'rb');
 
@@ -124,7 +128,7 @@ class Csv extends AbstractAdapter
 
         while (true) {
             /** @var array<array-key, string>|false $data */
-            $data = $this->phpFgetCsv($pointer, $length, $separator, $enclosure);
+            $data = $this->phpFgetCsv($pointer, $length, $separator, $enclosure, $escape);
 
             if (false === $data) {
                 break;

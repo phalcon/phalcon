@@ -13,12 +13,10 @@ declare(strict_types=1);
 
 namespace Phalcon\Tests\Unit\Translate\Adapter\Gettext;
 
-use Phalcon\Tests\Fixtures\Traits\TranslateGettextHelperTrait;
-use Phalcon\Tests\Fixtures\Traits\TranslateGettextTrait;
 use Phalcon\Tests\AbstractUnitTestCase;
-use PHPUnit\Framework\Attributes\RequiresPhpExtension;
+use Phalcon\Tests\Unit\Translate\Fake\TranslateGettextHelperTrait;
+use Phalcon\Tests\Unit\Translate\Fake\TranslateGettextTrait;
 
-#[RequiresPhpExtension('gettext')]
 final class UnderscoreTest extends AbstractUnitTestCase
 {
     use TranslateGettextTrait;
@@ -29,6 +27,7 @@ final class UnderscoreTest extends AbstractUnitTestCase
      */
     protected function func(): string
     {
+
         return '_';
     }
 }
