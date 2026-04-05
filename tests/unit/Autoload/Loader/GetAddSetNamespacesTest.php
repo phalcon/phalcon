@@ -15,8 +15,8 @@ namespace Phalcon\Tests\Unit\Autoload\Loader;
 
 use Phalcon\Autoload\Exception;
 use Phalcon\Autoload\Loader;
-use Phalcon\Tests\Fixtures\Traits\LoaderTrait;
 use Phalcon\Tests\AbstractUnitTestCase;
+use Phalcon\Tests\Unit\Autoload\Fake\LoaderTrait;
 
 use function hash;
 
@@ -25,14 +25,13 @@ final class GetAddSetNamespacesTest extends AbstractUnitTestCase
     use LoaderTrait;
 
     /**
-     * Tests Phalcon\Autoload\Loader ::
-     * getNamespaces()/addNamespace()/setNamespace()
+     * Tests Phalcon\Autoload\Loader :: getNamespaces()/addNamespace()/setNamespace()
      *
      * @return void
      *
      * @throws Exception
-     * @since  2020-09-09
      * @author Phalcon Team <team@phalcon.io>
+     * @since  2020-09-09
      */
     public function testAutoloaderLoaderGetAddSetNamespaces(): void
     {

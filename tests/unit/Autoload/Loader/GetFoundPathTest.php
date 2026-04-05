@@ -15,10 +15,9 @@ namespace Phalcon\Tests\Unit\Autoload\Loader;
 
 use Phalcon\Autoload\Exception;
 use Phalcon\Autoload\Loader;
-use Phalcon\Tests\Fixtures\Traits\LoaderTrait;
 use Phalcon\Tests\AbstractUnitTestCase;
+use Phalcon\Tests\Unit\Autoload\Fake\LoaderTrait;
 
-use function dataDir;
 use function function_exists;
 
 final class GetFoundPathTest extends AbstractUnitTestCase
@@ -31,8 +30,8 @@ final class GetFoundPathTest extends AbstractUnitTestCase
      * @return void
      *
      * @throws Exception
-     * @since  2020-09-09
      * @author Phalcon Team <team@phalcon.io>
+     * @since  2020-09-09
      */
     public function testAutoloaderLoaderGetFoundPath(): void
     {
@@ -41,7 +40,7 @@ final class GetFoundPathTest extends AbstractUnitTestCase
         }
 
         $loader = new Loader();
-        $file   = dataDir('fixtures/Loader/Example/Functions/FunctionsNoClass.php');
+        $file   = supportDir('assets/Loader/Example/Functions/FunctionsNoClass.php');
         $loader->addFile($file);
 
         $loader->loadFiles();

@@ -14,8 +14,8 @@ declare(strict_types=1);
 namespace Phalcon\Tests\Unit\Autoload\Loader;
 
 use Phalcon\Autoload\Loader;
-use Phalcon\Tests\Fixtures\Traits\LoaderTrait;
 use Phalcon\Tests\AbstractUnitTestCase;
+use Phalcon\Tests\Unit\Autoload\Fake\LoaderTrait;
 
 use function hash;
 
@@ -24,8 +24,7 @@ final class GetAddSetExtensionsTest extends AbstractUnitTestCase
     use LoaderTrait;
 
     /**
-     * Tests Phalcon\Autoload\Loader ::
-     * getExtensions()/addExtension()/setExtension()
+     * Tests Phalcon\Autoload\Loader :: getExtensions()/addExtension()/setExtension()
      *
      * @return void
      *
@@ -62,7 +61,6 @@ final class GetAddSetExtensionsTest extends AbstractUnitTestCase
         $expected = [hash("sha256", 'php') => 'php'];
         $actual   = $loader->getExtensions();
         $this->assertSame($expected, $actual);
-
 
         $loader
             ->addExtension('inc')

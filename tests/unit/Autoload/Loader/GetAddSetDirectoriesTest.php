@@ -14,8 +14,8 @@ declare(strict_types=1);
 namespace Phalcon\Tests\Unit\Autoload\Loader;
 
 use Phalcon\Autoload\Loader;
-use Phalcon\Tests\Fixtures\Traits\LoaderTrait;
 use Phalcon\Tests\AbstractUnitTestCase;
+use Phalcon\Tests\Unit\Autoload\Fake\LoaderTrait;
 
 use function hash;
 
@@ -24,8 +24,7 @@ final class GetAddSetDirectoriesTest extends AbstractUnitTestCase
     use LoaderTrait;
 
     /**
-     * Tests Phalcon\Autoload\Loader ::
-     * getDirectories()/addDirectory()/setDirectories()
+     * Tests Phalcon\Autoload\Loader :: getDirectories()/addDirectory()/setDirectories()
      *
      * @return void
      *
