@@ -13,11 +13,10 @@ declare(strict_types=1);
 
 namespace Phalcon\Tests\Unit\Application;
 
+use Phalcon\Di\FactoryDefault;
 use Phalcon\Events\Manager;
-use Phalcon\Tests\Fixtures\Application\ApplicationFixture;
 use Phalcon\Tests\AbstractUnitTestCase;
-
-use function spl_object_hash;
+use Phalcon\Tests\Unit\Application\Fake\FakeApplication;
 
 final class GetSetEventsManagerTest extends AbstractUnitTestCase
 {
@@ -31,14 +30,17 @@ final class GetSetEventsManagerTest extends AbstractUnitTestCase
      */
     public function testApplicationGetSetEventsManager(): void
     {
+        $container   = new FactoryDefault();
         $manager     = new Manager();
-        $application = new ApplicationFixture();
+        $application = new FakeApplication($container);
 
         $actual = $application->getEventsManager();
         $this->assertNull($actual);
 
         $application->setEventsManager($manager);
-        $actual = $application->getEventsManager();
-        $this->assertSame(spl_object_hash($manager), spl_object_hash($actual));
+
+        $expected = $manager;
+        $actual   = $application->getEventsManager();
+        $this->assertSame($expected, $actual);
     }
 }

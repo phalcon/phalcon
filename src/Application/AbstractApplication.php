@@ -16,6 +16,7 @@ namespace Phalcon\Application;
 use Phalcon\Di\DiInterface;
 use Phalcon\Di\Injectable;
 use Phalcon\Events\EventsAwareInterface;
+use Phalcon\Events\ManagerInterface;
 use Phalcon\Events\Traits\EventsAwareTrait;
 
 /**
@@ -70,7 +71,7 @@ abstract class AbstractApplication extends Injectable implements EventsAwareInte
      * @return TModule
      * @throws Exception
      */
-    public function getModule(string $name): array
+    public function getModule(string $name): array | object
     {
         if (!isset($this->modules[$name])) {
             throw new Exception(
@@ -126,6 +127,17 @@ abstract class AbstractApplication extends Injectable implements EventsAwareInte
         }
 
         return $this;
+    }
+
+    /**
+     * Sets the events manager
+     *
+     * @param ManagerInterface $eventsManager
+     */
+    public function setEventsManager(ManagerInterface $eventsManager): void
+    {
+        $this->getDI()->set('eventsManager', $eventsManager);
+        $this->eventsManager = $eventsManager;
     }
 
     /**

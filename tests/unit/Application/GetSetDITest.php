@@ -14,31 +14,11 @@ declare(strict_types=1);
 namespace Phalcon\Tests\Unit\Application;
 
 use Phalcon\Di\FactoryDefault;
-use Phalcon\Tests\Fixtures\Application\ApplicationFixture;
 use Phalcon\Tests\AbstractUnitTestCase;
-
-use function spl_object_hash;
+use Phalcon\Tests\Unit\Application\Fake\FakeApplication;
 
 final class GetSetDITest extends AbstractUnitTestCase
 {
-    /**
-     * Tests Phalcon\Acl\Role :: getDI()/setDI()
-     *
-     * @return void
-     *
-     * @author Phalcon Team <team@phalcon.io>
-     * @since  2020-09-09
-     */
-    public function testApplicationGetSetDi(): void
-    {
-        $container   = new FactoryDefault();
-        $application = new ApplicationFixture();
-
-        $application->setDI($container);
-        $actual = $application->getDI();
-        $this->assertSame(spl_object_hash($container), spl_object_hash($actual));
-    }
-
     /**
      * Tests Phalcon\Application\* :: getDI()/setDI() - construct
      *
@@ -50,9 +30,30 @@ final class GetSetDITest extends AbstractUnitTestCase
     public function testApplicationGetSetDiConstruct(): void
     {
         $container   = new FactoryDefault();
-        $application = new ApplicationFixture($container);
+        $application = new FakeApplication($container);
 
-        $actual = $application->getDI();
-        $this->assertSame(spl_object_hash($container), spl_object_hash($actual));
+        $expected = $container;
+        $actual   = $application->getDI();
+        $this->assertSame($expected, $actual);
+    }
+
+    /**
+     * Tests Phalcon\Application\* :: getDI()/setDI()
+     *
+     * @return void
+     *
+     * @author Phalcon Team <team@phalcon.io>
+     * @since  2020-09-09
+     */
+    public function testApplicationGetSetDi(): void
+    {
+        $container   = new FactoryDefault();
+        $application = new FakeApplication();
+
+        $application->setDI($container);
+
+        $expected = $container;
+        $actual   = $application->getDI();
+        $this->assertSame($expected, $actual);
     }
 }
