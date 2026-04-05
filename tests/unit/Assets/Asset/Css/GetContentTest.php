@@ -17,7 +17,7 @@ use Phalcon\Assets\Asset\Css;
 use Phalcon\Tests\AbstractUnitTestCase;
 use PHPUnit\Framework\Attributes\Test;
 
-use function dataDir;
+use function supportDir;
 use function file_get_contents;
 
 final class GetContentTest extends AbstractUnitTestCase
@@ -38,8 +38,8 @@ final class GetContentTest extends AbstractUnitTestCase
 
         $asset = new Css('assets/assets/1198.css');
 
-        $expected = file_get_contents(dataDir('assets/assets/1198.css'));
-        $actual   = $asset->getContent(dataDir());
+        $expected = file_get_contents(supportDir('assets/assets/1198.css'));
+        $actual   = $asset->getContent(supportDir());
         $this->assertSame($expected, $actual);
     }
 }

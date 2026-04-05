@@ -14,10 +14,9 @@ declare(strict_types=1);
 namespace Phalcon\Tests\Unit\Assets\Asset;
 
 use Phalcon\Assets\Asset;
-use Phalcon\Tests\Fixtures\Traits\AssetsTrait;
 use Phalcon\Tests\AbstractUnitTestCase;
+use Phalcon\Tests\Unit\Assets\Fake\AssetsTrait;
 use PHPUnit\Framework\Attributes\DataProvider;
-use PHPUnit\Framework\Attributes\Test;
 
 final class GetRealTargetUriTest extends AbstractUnitTestCase
 {
@@ -27,6 +26,8 @@ final class GetRealTargetUriTest extends AbstractUnitTestCase
      * Tests Phalcon\Assets\Asset :: getRealTargetUri() - local
      *
      * @return void
+     *
+     * @dataProvider providerCssJsTargetUri
      *
      * @author       Phalcon Team <team@phalcon.io>
      * @since        2020-09-09

@@ -622,7 +622,7 @@ class Manager implements InjectionAwareInterface
     public function outputCss(string | null $name = null): string | null
     {
         $collection = $this->getCss();
-        if (null !== $name) {
+        if (!empty($name)) {
             $collection = $this->get($name);
         }
 

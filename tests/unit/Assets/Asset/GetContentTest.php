@@ -15,15 +15,14 @@ namespace Phalcon\Tests\Unit\Assets\Asset;
 
 use Phalcon\Assets\Asset;
 use Phalcon\Assets\Exception;
-use Phalcon\Tests\Fixtures\Assets\AssetFileExistsFixture;
-use Phalcon\Tests\Fixtures\Assets\AssetFileGetContentsFixture;
-use Phalcon\Tests\Fixtures\Traits\AssetsTrait;
 use Phalcon\Tests\AbstractUnitTestCase;
+use Phalcon\Tests\Unit\Assets\Fake\AssetsTrait;
+use Phalcon\Tests\Unit\Assets\Fake\FakeAssetFileExists;
+use Phalcon\Tests\Unit\Assets\Fake\FakeAssetFileGetContents;
 use PHPUnit\Framework\Attributes\DataProvider;
-use PHPUnit\Framework\Attributes\Test;
 
-use function dataDir;
 use function file_get_contents;
+use function supportDir;
 
 use const PHP_EOL;
 
@@ -34,22 +33,23 @@ final class GetContentTest extends AbstractUnitTestCase
     /**
      * Tests Phalcon\Assets\Asset :: getContent()
      *
-     * @dataProvider providerCssJs
-     *
-     *
      * @return void
+     *
+     * @dataProvider providerAssets
+     *
      * @author       Phalcon Team <team@phalcon.io>
      * @since        2020-09-09
      */
+    #[DataProvider('providerAssets')]
     public function testAssetsAssetGetContent(
         string $type,
         string $path
     ): void {
         $asset = new Asset($type, $path);
 
-        $expected = file_get_contents(dataDir($path));
+        $expected = file_get_contents(supportDir($path));
         $expected = str_replace("\r\n", PHP_EOL, $expected);
-        $actual   = $asset->getContent(dataDir());
+        $actual   = $asset->getContent(supportDir());
         $this->assertSame($expected, $actual);
     }
 
@@ -64,13 +64,13 @@ final class GetContentTest extends AbstractUnitTestCase
     public function testAssetsAssetGetContentException404(): void
     {
         $file    = 'assets/assets/1198.css';
-        $message = "Asset's content for '" . dataDir($file) . "' cannot be read";
+        $message = "Asset's content for '" . supportDir($file) . "' cannot be read";
 
         $this->expectException(Exception::class);
         $this->expectExceptionMessage($message);
 
-        $asset = new AssetFileExistsFixture('css', $file);
-        $asset->getContent(dataDir());
+        $asset = new FakeAssetFileExists('css', $file);
+        $asset->getContent(supportDir());
     }
 
     /**
@@ -84,11 +84,11 @@ final class GetContentTest extends AbstractUnitTestCase
     public function testAssetsAssetGetContentExceptionCannotReadFile(): void
     {
         $file    = 'assets/assets/1198.css';
-        $message = "Asset's content for '" . dataDir($file) . "' cannot be read";
+        $message = "Asset's content for '" . supportDir($file) . "' cannot be read";
         $this->expectException(Exception::class);
         $this->expectExceptionMessage($message);
 
-        $asset = new AssetFileGetContentsFixture('css', $file);
-        $asset->getContent(dataDir());
+        $asset = new FakeAssetFileGetContents('css', $file);
+        $asset->getContent(supportDir());
     }
 }

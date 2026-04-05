@@ -16,11 +16,10 @@ namespace Phalcon\Tests\Unit\Assets\Manager;
 use Phalcon\Assets\Manager;
 use Phalcon\Html\Escaper;
 use Phalcon\Html\TagFactory;
-use Phalcon\Tests\Fixtures\Traits\DiTrait;
 use Phalcon\Tests\AbstractUnitTestCase;
-use PHPUnit\Framework\Attributes\Test;
+use Phalcon\Tests\Support\Traits\DiTrait;
 
-use function dataDir;
+use function supportDir;
 
 final class AddInlineJsTest extends AbstractUnitTestCase
 {
@@ -53,7 +52,7 @@ final class AddInlineJsTest extends AbstractUnitTestCase
     {
         $manager = new Manager(new TagFactory(new Escaper()));
 
-        $jsFile = dataDir('assets/assets/signup.js');
+        $jsFile = supportDir('assets/assets/signup.js');
         $js     = file_get_contents($jsFile);
 
         $manager->addInlineJs($js);

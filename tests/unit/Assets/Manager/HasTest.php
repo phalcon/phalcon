@@ -17,7 +17,6 @@ use Phalcon\Assets\Manager;
 use Phalcon\Html\Escaper;
 use Phalcon\Html\TagFactory;
 use Phalcon\Tests\AbstractUnitTestCase;
-use PHPUnit\Framework\Attributes\Test;
 
 final class HasTest extends AbstractUnitTestCase
 {
@@ -34,7 +33,8 @@ final class HasTest extends AbstractUnitTestCase
         $manager->addCss('/css/style1.css');
         $manager->addCss('/css/style2.css');
 
-        $this->assertTrue($manager->has('css'));
+        $actual = $manager->has('css');
+        $this->assertTrue($actual);
     }
 
     /**
@@ -47,6 +47,7 @@ final class HasTest extends AbstractUnitTestCase
     {
         $manager = new Manager(new TagFactory(new Escaper()));
 
-        $this->assertFalse($manager->has('some-non-existent-collection'));
+        $actual = $manager->has('some-non-existent-collection');
+        $this->assertFalse($actual);
     }
 }

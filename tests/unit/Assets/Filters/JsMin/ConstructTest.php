@@ -16,22 +16,26 @@ namespace Phalcon\Tests\Unit\Assets\Filters\JsMin;
 use Phalcon\Assets\FilterInterface;
 use Phalcon\Assets\Filters\JsMin;
 use Phalcon\Tests\AbstractUnitTestCase;
-use PHPUnit\Framework\Attributes\Test;
 
 final class ConstructTest extends AbstractUnitTestCase
 {
     /**
-     * Tests Phalcon\Assets\Filters\JsMin :: __construct() - no string exception
+     * Tests Phalcon\Assets\Filters\JsMin :: __construct()
      *
      * @return void
      *
      * @author Phalcon Team <team@phalcon.io>
      * @since  2020-09-09
      */
-    public function testAssetsFiltersJsminConstruct(): void
+    public function testAssetsFiltersJsMinConstruct(): void
     {
-        $jsMin = new Jsmin();
-        $this->assertInstanceOf(Jsmin::class, $jsMin);
-        $this->assertInstanceOf(FilterInterface::class, $jsMin);
+        $jsMin = new JsMin();
+
+        $class  = JsMin::class;
+        $actual = $jsMin;
+        $this->assertInstanceOf($class, $actual);
+
+        $class = FilterInterface::class;
+        $this->assertInstanceOf($class, $actual);
     }
 }

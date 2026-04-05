@@ -16,7 +16,6 @@ namespace Phalcon\Tests\Unit\Assets\Collection;
 use Phalcon\Assets\Asset;
 use Phalcon\Assets\Collection;
 use Phalcon\Tests\AbstractUnitTestCase;
-use PHPUnit\Framework\Attributes\Test;
 
 final class AddTest extends AbstractUnitTestCase
 {
@@ -40,7 +39,9 @@ final class AddTest extends AbstractUnitTestCase
             $this->assertSame($expected, $actual);
         }
 
-        $this->assertCount(2, $collection);
+        $expected = 2;
+        $actual   = count($collection);
+        $this->assertSame($expected, $actual);
     }
 
     /**
@@ -62,6 +63,8 @@ final class AddTest extends AbstractUnitTestCase
             $collection->add(new Asset('js', 'js/jquery-ui.js'));
         }
 
-        $this->assertCount(2, $collection->getAssets());
+        $expected = 2;
+        $actual   = count($collection->getAssets());
+        $this->assertSame($expected, $actual);
     }
 }

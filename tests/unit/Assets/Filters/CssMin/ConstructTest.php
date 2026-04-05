@@ -16,23 +16,26 @@ namespace Phalcon\Tests\Unit\Assets\Filters\CssMin;
 use Phalcon\Assets\FilterInterface;
 use Phalcon\Assets\Filters\CssMin;
 use Phalcon\Tests\AbstractUnitTestCase;
-use PHPUnit\Framework\Attributes\Test;
 
 final class ConstructTest extends AbstractUnitTestCase
 {
     /**
-     * Tests Phalcon\Assets\Filters\CssMin :: __construct() - no string
-     * exception
+     * Tests Phalcon\Assets\Filters\CssMin :: __construct()
      *
      * @return void
      *
      * @author Phalcon Team <team@phalcon.io>
      * @since  2020-09-09
      */
-    public function testAssetsFiltersCssMinConstructNonString(): void
+    public function testAssetsFiltersCssMinConstruct(): void
     {
-        $cssMin = new Cssmin();
-        $this->assertInstanceOf(Cssmin::class, $cssMin);
-        $this->assertInstanceOf(FilterInterface::class, $cssMin);
+        $cssMin = new CssMin();
+
+        $class  = CssMin::class;
+        $actual = $cssMin;
+        $this->assertInstanceOf($class, $actual);
+
+        $class = FilterInterface::class;
+        $this->assertInstanceOf($class, $actual);
     }
 }

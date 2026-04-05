@@ -15,7 +15,6 @@ namespace Phalcon\Tests\Unit\Assets\Collection;
 
 use Phalcon\Assets\Collection;
 use Phalcon\Tests\AbstractUnitTestCase;
-use PHPUnit\Framework\Attributes\Test;
 
 final class AddInlineJsTest extends AbstractUnitTestCase
 {
@@ -32,8 +31,8 @@ final class AddInlineJsTest extends AbstractUnitTestCase
         $collection = new Collection();
         $collection->addInlineJs("alert('an amazing test');");
 
-        $codes = $collection->getCodes();
-
-        $this->assertCount(1, $codes);
+        $expected = 1;
+        $actual   = count($collection->getCodes());
+        $this->assertSame($expected, $actual);
     }
 }

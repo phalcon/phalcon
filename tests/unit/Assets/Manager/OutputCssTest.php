@@ -14,15 +14,13 @@ declare(strict_types=1);
 namespace Phalcon\Tests\Unit\Assets\Manager;
 
 use Phalcon\Assets\Asset\Css;
-use Phalcon\Assets\Collection;
 use Phalcon\Assets\Manager;
 use Phalcon\Html\Escaper;
 use Phalcon\Html\TagFactory;
-use Phalcon\Tests\Fixtures\Assets\TrimFilter;
-use Phalcon\Tests\Fixtures\Assets\UppercaseFilter;
-use Phalcon\Tests\Fixtures\Traits\DiTrait;
 use Phalcon\Tests\AbstractUnitTestCase;
-use PHPUnit\Framework\Attributes\Test;
+use Phalcon\Tests\Support\Traits\DiTrait;
+use Phalcon\Tests\Unit\Assets\Fake\TrimFilter;
+use Phalcon\Tests\Unit\Assets\Fake\UppercaseFilter;
 
 use function file_get_contents;
 use function outputDir;
@@ -58,7 +56,7 @@ final class OutputCssTest extends AbstractUnitTestCase
     {
         $fileName = $this->getNewFileName('assets_', 'css');
         $fileName = outputDir('tests/assets/' . $fileName);
-        $cssFile  = dataDir('assets/assets/1198.css');
+        $cssFile  = supportDir('assets/assets/1198.css');
         $manager  = new Manager(new TagFactory(new Escaper()));
 
         $manager->useImplicitOutput(false);

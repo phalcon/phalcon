@@ -16,12 +16,11 @@ namespace Phalcon\Tests\Unit\Assets\Manager;
 use Phalcon\Assets\Manager;
 use Phalcon\Html\Escaper;
 use Phalcon\Html\TagFactory;
-use Phalcon\Tests\Fixtures\Traits\DiTrait;
 use Phalcon\Tests\AbstractUnitTestCase;
-use PHPUnit\Framework\Attributes\Test;
+use Phalcon\Tests\Support\Traits\DiTrait;
 
-use function dataDir;
 use function filemtime;
+use function supportDir;
 
 final class SetAutoVersionTest extends AbstractUnitTestCase
 {
@@ -52,7 +51,7 @@ final class SetAutoVersionTest extends AbstractUnitTestCase
         $manager = new Manager(new TagFactory(new Escaper()));
         $manager->useImplicitOutput(false);
         $manager->addJs(
-            dataDir('assets/assets/assets-version-1.js'),
+            supportDir('assets/assets/assets-version-1.js'),
             true,
             false,
             [],
@@ -60,7 +59,7 @@ final class SetAutoVersionTest extends AbstractUnitTestCase
         );
 
         $manager->addJs(
-            dataDir('assets/assets/assets-version-2.js'),
+            supportDir('assets/assets/assets-version-2.js'),
             true,
             false,
             [],
@@ -69,7 +68,7 @@ final class SetAutoVersionTest extends AbstractUnitTestCase
         );
 
         $manager->addJs(
-            dataDir('assets/assets/assets-version-3.js'),
+            supportDir('assets/assets/assets-version-3.js'),
             true,
             false,
             [],
@@ -77,9 +76,9 @@ final class SetAutoVersionTest extends AbstractUnitTestCase
             false
         );
 
-        $pathData         = dataDir('assets/');
+        $pathData         = supportDir('assets/');
         $modificationTime = filemtime(
-            dataDir('assets/assets/assets-version-3.js')
+            supportDir('assets/assets/assets-version-3.js')
         );
 
         $expected = sprintf(

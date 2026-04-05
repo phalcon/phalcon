@@ -14,13 +14,12 @@ declare(strict_types=1);
 namespace Phalcon\Tests\Unit\Assets\Asset;
 
 use Phalcon\Assets\Asset;
-use Phalcon\Tests\Fixtures\Assets\AssetFileExistsPositiveFixture;
-use Phalcon\Tests\Fixtures\Traits\AssetsTrait;
 use Phalcon\Tests\AbstractUnitTestCase;
+use Phalcon\Tests\Unit\Assets\Fake\AssetsTrait;
+use Phalcon\Tests\Unit\Assets\Fake\FakeAssetFileExistsPositive;
 use PHPUnit\Framework\Attributes\DataProvider;
-use PHPUnit\Framework\Attributes\Test;
 
-use function dataDir;
+use function supportDir;
 
 final class GetRealTargetPathTest extends AbstractUnitTestCase
 {
@@ -64,10 +63,10 @@ final class GetRealTargetPathTest extends AbstractUnitTestCase
         }
 
         $file  = 'assets/assets/1198.css';
-        $asset = new AssetFileExistsPositiveFixture('css', $file);
+        $asset = new FakeAssetFileExistsPositive('css', $file);
 
-        $expected = dataDir($file);
-        $actual   = $asset->getRealTargetPath(dataDir());
+        $expected = supportDir($file);
+        $actual   = $asset->getRealTargetPath(supportDir());
         $this->assertSame($expected, $actual);
     }
 }

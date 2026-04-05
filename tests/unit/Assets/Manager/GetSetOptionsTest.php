@@ -63,6 +63,8 @@ final class GetSetOptionsTest extends AbstractUnitTestCase
      *
      * @return void
      *
+     * @dataProvider getExamples
+     *
      * @author       Phalcon Team <team@phalcon.io>
      * @since        2020-03-19
      */

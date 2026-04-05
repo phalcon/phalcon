@@ -17,9 +17,8 @@ use Phalcon\Assets\Inline;
 use Phalcon\Assets\Manager;
 use Phalcon\Html\Escaper;
 use Phalcon\Html\TagFactory;
-use Phalcon\Tests\Fixtures\Traits\DiTrait;
 use Phalcon\Tests\AbstractUnitTestCase;
-use PHPUnit\Framework\Attributes\Test;
+use Phalcon\Tests\Support\Traits\DiTrait;
 
 use function ob_end_clean;
 use function ob_get_contents;
