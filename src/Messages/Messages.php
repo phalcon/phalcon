@@ -75,8 +75,8 @@ class Messages implements ArrayAccess, Countable, Iterator, JsonSerializable
             throw new Exception('The messages must be iterable');
         }
 
+        $this->checkAppendMessagesIterator($messages);
         $this->checkAppendMessagesArray($messages);
-        $this->checkAppendMessages($messages);
     }
 
     /**
@@ -134,7 +134,7 @@ class Messages implements ArrayAccess, Countable, Iterator, JsonSerializable
     /**
      * @param mixed $messages
      */
-    private function checkAppendMessages($messages): void
+    private function checkAppendMessagesArray($messages): void
     {
         if (is_array($messages)) {
             /**
@@ -148,7 +148,7 @@ class Messages implements ArrayAccess, Countable, Iterator, JsonSerializable
     /**
      * @param mixed $messages
      */
-    private function checkAppendMessagesArray($messages): void
+    private function checkAppendMessagesIterator($messages): void
     {
         if (!is_array($messages)) {
             /**
