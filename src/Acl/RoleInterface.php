@@ -28,9 +28,9 @@ interface RoleInterface
     /**
      * Returns role description
      *
-     * @return string|null
+     * @return string
      */
-    public function getDescription(): string | null;
+    public function getDescription(): string;
 
     /**
      * Returns the role name

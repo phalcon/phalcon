@@ -21,9 +21,12 @@ use Phalcon\Acl\RoleInterface;
 /**
  * Interface for Phalcon\Acl adapters
  *
- * @phpstan-type TComponent = array{string: ComponentInterface}
- * @phpstan-type TRole = array{string: RoleInterface}
+ * @phpstan-type TComponent = array<string, ComponentInterface>
+ * @phpstan-type TRole = array<string, RoleInterface>
  * @phpstan-type TRoleToInherit = RoleInterface|TRole|string
+ * @phpstan-type TAccessList = array<int|string, string>|string
+ * @phpstan-type TRoleName = RoleAwareInterface|RoleInterface|string
+ * @phpstan-type TComponentName = ComponentAwareInterface|ComponentInterface|string
  */
 interface AdapterInterface
 {
@@ -34,7 +37,7 @@ interface AdapterInterface
      * `delete` etc. or a list of them.
      *
      * @param ComponentInterface|string $componentObject
-     * @param TComponent|string         $accessList
+     * @param TAccessList               $accessList
      *
      * @return bool
      */
@@ -46,14 +49,16 @@ interface AdapterInterface
     /**
      * Adds access to components
      *
-     * @param string            $componentName
-     * @param TComponent|string $accessList
+     * @param string  $componentName
+     * @param mixed   $accessList
+     *
+     * @phpstan-param TAccessList $accessList
      *
      * @return bool
      */
     public function addComponentAccess(
         string $componentName,
-        array | string $accessList
+        mixed $accessList
     ): bool;
 
     /**
@@ -73,23 +78,25 @@ interface AdapterInterface
      * Adds a role to the ACL list. The second parameter lets to inherit access
      * from an existing role
      *
-     * @param RoleInterface|string $roleObject
-     * @param TRoleToInherit|null  $accessInherits
+     * @param mixed               $roleObject
+     * @param TRoleToInherit|null $accessInherits
+     *
+     * @phpstan-param RoleInterface|string $roleObject
      *
      * @return bool
      */
     public function addRole(
-        RoleInterface | string $roleObject,
+        mixed $roleObject,
         RoleInterface | array | string | null $accessInherits = null
     ): bool;
 
     /**
      * Allow access to a role on a component. You can use `*` as wildcard
      *
-     * @param string               $roleName
-     * @param string               $componentName
-     * @param array<string>|string $access
-     * @param callable|null        $function
+     * @param string        $roleName
+     * @param string        $componentName
+     * @param TAccessList   $access
+     * @param callable|null $function
      *
      * @return void
      */
@@ -103,10 +110,10 @@ interface AdapterInterface
     /**
      * Deny access to a role on a component. You can use `*` as wildcard
      *
-     * @param string               $roleName
-     * @param string               $componentName
-     * @param array<string>|string $access
-     * @param callable|null        $function
+     * @param string        $roleName
+     * @param string        $componentName
+     * @param TAccessList   $access
+     * @param callable|null $function
      *
      * @return void
      */
@@ -120,8 +127,10 @@ interface AdapterInterface
     /**
      * Removes access from a component
      *
-     * @param string               $componentName
-     * @param array<string>|string $accessList
+     * @param string      $componentName
+     * @param TAccessList $accessList
+     *
+     * @return void
      */
     public function dropComponentAccess(
         string $componentName,
@@ -144,7 +153,7 @@ interface AdapterInterface
     public function getActiveComponent(): string | null;
 
     /**
-     * Returns the role which the list is checking if 's allowed to certain
+     * Returns the role which the list is checking if it's allowed to certain
      * component/access
      *
      * @return string|null
@@ -154,7 +163,7 @@ interface AdapterInterface
     /**
      * Return an array with every component registered in the list
      *
-     * @return array<string, ComponentInterface>
+     * @return TComponent
      */
     public function getComponents(): array;
 
@@ -174,7 +183,7 @@ interface AdapterInterface
      *
      * @return array<int|string, string|array<int, string>>
      */
-    public function getInheritedRoles(string $roleName = ""): array;
+    public function getInheritedRoles(string $roleName = ''): array;
 
     /**
      * Returns the default ACL access level for no arguments provided in
@@ -187,23 +196,26 @@ interface AdapterInterface
     /**
      * Return an array with every role registered in the list
      *
-     * @return array<string, RoleInterface>
+     * @return TRole
      */
     public function getRoles(): array;
 
     /**
      * Check whether a role is allowed to access an action from a component
      *
-     * @param RoleAwareInterface|RoleInterface           $roleName
-     * @param ComponentAwareInterface|ComponentInterface $componentName
-     * @param string                                     $access
-     * @param array<int|string, mixed>                   $parameters
+     * @param mixed                    $roleName
+     * @param mixed                    $componentName
+     * @param string                   $access
+     * @param array<int|string, mixed> $parameters
+     *
+     * @phpstan-param TRoleName      $roleName
+     * @phpstan-param TComponentName $componentName
      *
      * @return bool
      */
     public function isAllowed(
-        RoleAwareInterface | RoleInterface $roleName,
-        ComponentAwareInterface | ComponentInterface $componentName,
+        mixed $roleName,
+        mixed $componentName,
         string $access,
         array $parameters = []
     ): bool;
@@ -231,6 +243,8 @@ interface AdapterInterface
      * (Phalcon\Acl\Enum::ALLOW or Phalcon\Acl\Enum::DENY)
      *
      * @param int $defaultAccess
+     *
+     * @return void
      */
     public function setDefaultAction(int $defaultAccess): void;
 
@@ -240,6 +254,8 @@ interface AdapterInterface
      * there exists func for accessKey
      *
      * @param int $defaultAccess
+     *
+     * @return void
      */
     public function setNoArgumentsDefaultAction(int $defaultAccess): void;
 }

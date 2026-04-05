@@ -43,17 +43,33 @@ final class ConstructTest extends AbstractUnitTestCase
     }
 
     /**
-     * Tests Phalcon\Acl\Adapter\Memory :: __construct() - constants
+     * Tests Phalcon\Acl\Adapter\Memory :: __construct() - constants allow
      *
      * @return void
      *
      * @author Phalcon Team <team@phalcon.io>
      * @since  2018-11-13
      */
-    public function testAclAdapterMemoryConstructConstants(): void
+    public function testAclAdapterMemoryConstructConstantsAllow(): void
     {
-        $this->assertSame(1, Enum::ALLOW);
-        $this->assertSame(0, Enum::DENY);
+        $expected = 1;
+        $actual   = Enum::ALLOW;
+        $this->assertSame($expected, $actual);
+    }
+
+    /**
+     * Tests Phalcon\Acl\Adapter\Memory :: __construct() - constants deny
+     *
+     * @return void
+     *
+     * @author Phalcon Team <team@phalcon.io>
+     * @since  2018-11-13
+     */
+    public function testAclAdapterMemoryConstructConstantsDeny(): void
+    {
+        $expected = 0;
+        $actual   = Enum::DENY;
+        $this->assertSame($expected, $actual);
     }
 
     /**
@@ -66,7 +82,7 @@ final class ConstructTest extends AbstractUnitTestCase
      * @author  Phalcon Team <team@phalcon.io>
      * @since   2014-10-04
      */
-    public function testAclNegationOfInheritedRoles(): void
+    public function testAclAdapterMemoryNegationOfInheritedRoles(): void
     {
         $acl = new Memory();
         $acl->setDefaultAction(Enum::DENY);
@@ -98,7 +114,7 @@ final class ConstructTest extends AbstractUnitTestCase
      * @author  cq-z <64899484@qq.com>
      * @since   2018-10-10
      */
-    public function testAclNegationOfMultilayerInheritedRoles(): void
+    public function testAclAdapterMemoryNegationOfMultilayerInheritedRoles(): void
     {
         $acl = new Memory();
 
@@ -139,7 +155,7 @@ final class ConstructTest extends AbstractUnitTestCase
      * @author  cq-z <64899484@qq.com>
      * @since   2018-10-10
      */
-    public function testAclNegationOfMultipleInheritedRoles(): void
+    public function testAclAdapterMemoryNegationOfMultipleInheritedRoles(): void
     {
         $acl = new Memory();
 
@@ -185,7 +201,7 @@ final class ConstructTest extends AbstractUnitTestCase
      * @author Phalcon Team <team@phalcon.io>
      * @since  2014-10-04
      */
-    public function testAclSerialize(): void
+    public function testAclAdapterMemorySerialize(): void
     {
         /** @var string $filename */
         $filename = $this->getNewFileName('acl', 'log');
@@ -229,7 +245,7 @@ final class ConstructTest extends AbstractUnitTestCase
      * @author  Wojciech Slawski <jurigag@gmail.com>
      * @since   2016-07-22
      */
-    public function testIssue12004(): void
+    public function testAclAdapterMemoryAllowFunctionWithInheritedRoles(): void
     {
         $acl = new Memory();
         $acl->setDefaultAction(Enum::DENY);
@@ -273,7 +289,7 @@ final class ConstructTest extends AbstractUnitTestCase
      * @author  Wojciech Slawski <jurigag@gmail.com>
      * @since   2016-10-01
      */
-    public function testWildCardLastRole(): void
+    public function testAclAdapterMemoryWildcardLastRole(): void
     {
         $acl = new Memory();
 
@@ -311,7 +327,7 @@ final class ConstructTest extends AbstractUnitTestCase
      * @author  Wojciech Slawski <jurigag@gmail.com>
      * @since   2016-10-01
      */
-    public function testWildCardSecondTime(): void
+    public function testAclAdapterMemoryWildcardSecondTime(): void
     {
         $acl = new Memory();
 

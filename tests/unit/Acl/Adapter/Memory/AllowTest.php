@@ -19,9 +19,9 @@ use Phalcon\Acl\Component;
 use Phalcon\Acl\Enum;
 use Phalcon\Acl\Exception as AclException;
 use Phalcon\Acl\Role;
-use Phalcon\Tests\Fixtures\Acl\TestComponentAware;
-use Phalcon\Tests\Fixtures\Acl\TestRoleAware;
 use Phalcon\Tests\AbstractUnitTestCase;
+use Phalcon\Tests\Unit\Acl\Fake\TestComponentAware;
+use Phalcon\Tests\Unit\Acl\Fake\TestRoleAware;
 
 use function restore_error_handler;
 use function set_error_handler;
@@ -50,70 +50,12 @@ final class AllowTest extends AbstractUnitTestCase
         $actual = $acl->isAllowed('Guest', 'Post', 'update');
         $this->assertFalse($actual);
 
-        $actual = $acl->isAllowed('Guest', 'Post', 'update');
-        $this->assertFalse($actual);
-
         $actual = $acl->isAllowed('Member', 'Post', 'update');
         $this->assertTrue($actual);
     }
 
     /**
-     * Tests Phalcon\Acl\Adapter\Memory :: allow() - exception
-     *
-     * @return void
-     *
-     * @author Phalcon Team <team@phalcon.io>
-     * @since  2019-06-16
-     */
-    public function testAclAdapterMemoryAllowException(): void
-    {
-        $this->expectException(AclException::class);
-        $this->expectExceptionMessage(
-            "Role 'Unknown' does not exist in the ACL"
-        );
-
-        $acl = new Memory();
-        $acl->setDefaultAction(Enum::DENY);
-        $acl->addRole('Member');
-        $acl->addComponent('Post', ['update']);
-        $acl->allow('Unknown', 'Post', 'update');
-
-        $this->expectException(AclException::class);
-        $this->expectExceptionMessage(
-            "Component 'Unknown' does not exist in the ACL"
-        );
-
-        $acl = new Memory();
-        $acl->setDefaultAction(Enum::DENY);
-        $acl->addRole('Member');
-        $acl->addComponent('Post', ['update']);
-        $acl->allow('Member', 'Unknown', 'update');
-
-        $this->expectException(AclException::class);
-        $this->expectExceptionMessage(
-            "Access 'Unknown' does not exist in component 'Post'"
-        );
-
-        $acl = new Memory();
-        $acl->setDefaultAction(Enum::DENY);
-        $acl->addRole('Member');
-        $acl->addComponent('Post', ['update']);
-        $acl->allow('Member', 'Post', 'Unknown');
-
-        $this->expectException(AclException::class);
-        $this->expectExceptionMessage(
-            "Access 'Unknown' does not exist in component 'Post'"
-        );
-
-        $acl = new Memory();
-        $acl->setDefaultAction(Enum::DENY);
-        $acl->addRole('Member');
-        $acl->addComponent('Post', ['update']);
-        $acl->allow('Member', 'Post', ['Unknown']);
-    }
-
-    /**
-     * Tests Phalcon\Acl\Adapter\Memory :: allow() - exception
+     * Tests Phalcon\Acl\Adapter\Memory :: allow() - exception (access unknown)
      *
      * @return void
      *
@@ -135,7 +77,7 @@ final class AllowTest extends AbstractUnitTestCase
     }
 
     /**
-     * Tests Phalcon\Acl\Adapter\Memory :: allow() - exception
+     * Tests Phalcon\Acl\Adapter\Memory :: allow() - exception (access unknown array)
      *
      * @return void
      *
@@ -157,7 +99,7 @@ final class AllowTest extends AbstractUnitTestCase
     }
 
     /**
-     * Tests Phalcon\Acl\Adapter\Memory :: allow() - exception
+     * Tests Phalcon\Acl\Adapter\Memory :: allow() - exception (component unknown)
      *
      * @return void
      *
@@ -179,7 +121,7 @@ final class AllowTest extends AbstractUnitTestCase
     }
 
     /**
-     * Tests Phalcon\Acl\Adapter\Memory :: allow() - exception
+     * Tests Phalcon\Acl\Adapter\Memory :: allow() - exception (role unknown)
      *
      * @return void
      *
@@ -328,14 +270,14 @@ final class AllowTest extends AbstractUnitTestCase
     }
 
     /**
-     * Tests Phalcon\Acl\Adapter\Memory :: allow() - wildcard
+     * Tests Phalcon\Acl\Adapter\Memory :: allow() - wildcard action
      *
      * @return void
      *
      * @author Phalcon Team <team@phalcon.io>
      * @since  2019-06-16
      */
-    public function testAclAdapterMemoryAllowWildcard(): void
+    public function testAclAdapterMemoryAllowWildcardAction(): void
     {
         $acl = new Memory();
         $acl->setDefaultAction(Enum::DENY);
@@ -346,16 +288,39 @@ final class AllowTest extends AbstractUnitTestCase
 
         $actual = $acl->isAllowed('Member', 'Post', 'update');
         $this->assertTrue($actual);
+    }
 
+    /**
+     * Tests Phalcon\Acl\Adapter\Memory :: allow() - wildcard component
+     *
+     * @return void
+     *
+     * @author Phalcon Team <team@phalcon.io>
+     * @since  2019-06-16
+     */
+    public function testAclAdapterMemoryAllowWildcardComponent(): void
+    {
         $acl = new Memory();
         $acl->setDefaultAction(Enum::DENY);
         $acl->addRole('Member');
         $acl->addComponent('Post', ['update']);
 
         $acl->allow('Member', '*', '*');
+
         $actual = $acl->isAllowed('Member', 'Post', 'update');
         $this->assertTrue($actual);
+    }
 
+    /**
+     * Tests Phalcon\Acl\Adapter\Memory :: allow() - wildcard component inherited
+     *
+     * @return void
+     *
+     * @author Phalcon Team <team@phalcon.io>
+     * @since  2019-06-16
+     */
+    public function testAclAdapterMemoryAllowWildcardComponentInherited(): void
+    {
         $acl = new Memory();
         $acl->setDefaultAction(Enum::DENY);
         $acl->addRole('Member');
@@ -364,9 +329,21 @@ final class AllowTest extends AbstractUnitTestCase
         $acl->addComponent('Post', ['update']);
 
         $acl->allow('Member', '*', '*');
+
         $actual = $acl->isAllowed('Guest', 'Post', 'update');
         $this->assertTrue($actual);
+    }
 
+    /**
+     * Tests Phalcon\Acl\Adapter\Memory :: allow() - wildcard role
+     *
+     * @return void
+     *
+     * @author Phalcon Team <team@phalcon.io>
+     * @since  2019-06-16
+     */
+    public function testAclAdapterMemoryAllowWildcardRole(): void
+    {
         $acl = new Memory();
         $acl->setDefaultAction(Enum::DENY);
 
@@ -388,6 +365,7 @@ final class AllowTest extends AbstractUnitTestCase
         foreach ($aclComponents as $component => $actions) {
             $acl->addComponent(new Component($component), $actions);
         }
+
         $acl->allow('*', 'welcome', 'index');
 
         foreach ($aclRoles as $Role => $object) {
@@ -396,6 +374,7 @@ final class AllowTest extends AbstractUnitTestCase
         }
 
         $acl->deny('*', 'welcome', 'index');
+
         foreach ($aclRoles as $Role => $object) {
             $actual = $acl->isAllowed($Role, 'welcome', 'index');
             $this->assertFalse($actual);

@@ -28,7 +28,6 @@ use ReflectionException;
 use ReflectionFunction;
 use ReflectionNamedType;
 
-use function array_intersect_key;
 use function array_keys;
 use function array_shift;
 use function call_user_func;
@@ -39,7 +38,6 @@ use function is_array;
 use function is_callable;
 use function is_object;
 use function is_string;
-use function key;
 use function trigger_error;
 
 use const E_USER_WARNING;
@@ -48,7 +46,11 @@ use const E_USER_WARNING;
  * Manages ACL lists in memory
  *
  * @phpstan-import-type TComponent from AdapterInterface
+ * @phpstan-import-type TRole from AdapterInterface
  * @phpstan-import-type TRoleToInherit from AdapterInterface
+ * @phpstan-import-type TAccessList from AdapterInterface
+ * @phpstan-import-type TRoleName from AdapterInterface
+ * @phpstan-import-type TComponentName from AdapterInterface
  */
 class Memory extends AbstractAdapter
 {
@@ -204,17 +206,23 @@ class Memory extends AbstractAdapter
     /**
      * Adds access to components
      *
-     * @param string            $componentName
-     * @param TComponent|string $accessList
+     * @param string $componentName
+     * @param mixed  $accessList
+     *
+     * @phpstan-param TAccessList $accessList
      *
      * @return bool
      * @throws Exception
      */
     public function addComponentAccess(
         string $componentName,
-        array | string $accessList
+        mixed $accessList
     ): bool {
         $this->checkExists($this->componentsNames, $componentName, 'Component');
+
+        if (!is_array($accessList) && !is_string($accessList)) {
+            throw new Exception('Invalid value for the accessList');
+        }
 
         if (is_string($accessList)) {
             $accessList = [$accessList];
@@ -357,20 +365,26 @@ class Memory extends AbstractAdapter
      * $acl->addRole("administrator", ["consultant", "consultant2"]);
      * ```
      *
-     * @param RoleInterface|string $roleObject
-     * @param TRoleToInherit|null  $accessInherits
+     * @param mixed               $roleObject
+     * @param TRoleToInherit|null $accessInherits
+     *
+     * @phpstan-param RoleInterface|string $roleObject
      *
      * @return bool
      * @throws Exception
      */
     public function addRole(
-        RoleInterface | string $roleObject,
+        mixed $roleObject,
         RoleInterface | array | string | null $accessInherits = null
     ): bool {
         if ($roleObject instanceof RoleInterface) {
             $role = $roleObject;
-        } else {
+        } elseif (is_string($roleObject)) {
             $role = new Role($roleObject);
+        } else {
+            throw new Exception(
+                'Role must be either a string or implement RoleInterface'
+            );
         }
 
         $roleName = $role->getName();
@@ -586,10 +600,13 @@ class Memory extends AbstractAdapter
      * $acl->isAllowed("guests", "*", "edit");
      * ```
      *
-     * @param RoleAwareInterface|RoleInterface|string           $roleName
-     * @param ComponentAwareInterface|ComponentInterface|string $componentName
-     * @param string                                            $access
-     * @param array<int|string, mixed>                          $parameters
+     * @param mixed                    $roleName
+     * @param mixed                    $componentName
+     * @param string                   $access
+     * @param array<int|string, mixed> $parameters
+     *
+     * @phpstan-param TRoleName      $roleName
+     * @phpstan-param TComponentName $componentName
      *
      * @return bool
      * @throws Exception
@@ -597,8 +614,8 @@ class Memory extends AbstractAdapter
      * @throws EventsException
      */
     public function isAllowed(
-        RoleAwareInterface | RoleInterface | string $roleName,
-        ComponentAwareInterface | ComponentInterface | string $componentName,
+        mixed $roleName,
+        mixed $componentName,
         string $access,
         array $parameters = []
     ): bool {
@@ -613,8 +630,13 @@ class Memory extends AbstractAdapter
             if ($roleName instanceof RoleAwareInterface) {
                 $roleObject = $roleName;
                 $roleName   = $roleName->getRoleName();
-            } else {
+            } elseif ($roleName instanceof RoleInterface) {
                 $roleName = $roleName->getName();
+            } else {
+                throw new Exception(
+                    'Object passed as roleName must implement ' .
+                    'Phalcon\Acl\RoleAwareInterface or Phalcon\Acl\RoleInterface'
+                );
             }
         }
 
@@ -622,8 +644,13 @@ class Memory extends AbstractAdapter
             if ($componentName instanceof ComponentAwareInterface) {
                 $componentObject = $componentName;
                 $componentName   = $componentName->getComponentName();
-            } else {
+            } elseif ($componentName instanceof ComponentInterface) {
                 $componentName = $componentName->getName();
+            } else {
+                throw new Exception(
+                    'Object passed as componentName must implement ' .
+                    'Phalcon\Acl\ComponentAwareInterface or Phalcon\Acl\ComponentInterface'
+                );
             }
         }
 
@@ -650,7 +677,7 @@ class Memory extends AbstractAdapter
          * Check if there is a direct combination for role-component-access
          */
         $accessKey = $this->canAccess($roleName, $componentName, $access);
-        if (null !== $accessKey && isset($this->access[$accessKey])) {
+        if (false !== $accessKey && isset($this->access[$accessKey])) {
             $haveAccess = $this->access[$accessKey];
             $funcAccess = $this->functions[$accessKey] ?? null;
         }
@@ -661,7 +688,7 @@ class Memory extends AbstractAdapter
         $this->accessGranted = (null === $haveAccess) ? false : $haveAccess;
         $this->fireManagerEvent('acl:afterCheckAccess');
 
-        $this->activeKey      = $accessKey ?: null;
+        $this->activeKey      = (false !== $accessKey) ? $accessKey : null;
         $this->activeFunction = $funcAccess;
 
         if (null === $haveAccess) {
@@ -825,7 +852,7 @@ class Memory extends AbstractAdapter
      */
     public function isComponent(string $componentName): bool
     {
-        return isset($this->components[$componentName]);
+        return isset($this->componentsNames[$componentName]);
     }
 
     /**
@@ -905,29 +932,38 @@ class Memory extends AbstractAdapter
      * @param string $componentName
      * @param string $access
      *
-     * @return string|null
+     * @return string|bool
      */
     private function canAccess(
         string $roleName,
         string $componentName,
         string $access
-    ): string | null {
-        /**
-         * Check if there is a direct combination for role-component-access
-         */
-        $keys   = $this->getKeys($roleName, $componentName, $access);
-        $result = array_intersect_key($keys, $this->access);
-        if (!empty($result)) {
-            return key($result);
+    ): string | bool {
+        $accessList = $this->access;
+
+        $accessKey = $roleName . '!' . $componentName . '!' . $access;
+        if (isset($accessList[$accessKey])) {
+            return $accessKey;
+        }
+
+        $accessKey = $roleName . '!' . $componentName . '!*';
+        if (isset($accessList[$accessKey])) {
+            return $accessKey;
+        }
+
+        $accessKey = $roleName . '!*!*';
+        if (isset($accessList[$accessKey])) {
+            return $accessKey;
         }
 
         if (isset($this->roleInherits[$roleName])) {
-            $checkRoleToInherits = $this->roleInherits[$roleName];
-            $usedRoleToInherits  = [];
+            $checkRoleToInherits = [];
+            foreach ($this->roleInherits[$roleName] as $usedRoleToInherit) {
+                $checkRoleToInherits[] = $usedRoleToInherit;
+            }
 
-            /**
-             * Deep check if the role to inherit is valid
-             */
+            $usedRoleToInherits = [];
+
             while (!empty($checkRoleToInherits)) {
                 $checkRoleToInherit = array_shift($checkRoleToInherits);
 
@@ -937,26 +973,30 @@ class Memory extends AbstractAdapter
 
                 $usedRoleToInherits[$checkRoleToInherit] = true;
 
-                /**
-                 * Check if there is a direct combination in one of the
-                 * inherited roles
-                 */
-                $keys   = $this->getKeys($checkRoleToInherit, $componentName, $access);
-                $result = array_intersect_key($keys, $this->access);
-                if (!empty($result)) {
-                    return key($result);
+                $accessKey = $checkRoleToInherit . '!' . $componentName . '!' . $access;
+                if (isset($accessList[$accessKey])) {
+                    return $accessKey;
                 }
 
-                /**
-                 * Push inherited roles
-                 */
+                $accessKey = $checkRoleToInherit . '!' . $componentName . '!*';
+                if (isset($accessList[$accessKey])) {
+                    return $accessKey;
+                }
+
+                $accessKey = $checkRoleToInherit . '!*!*';
+                if (isset($accessList[$accessKey])) {
+                    return $accessKey;
+                }
+
                 if (isset($this->roleInherits[$checkRoleToInherit])) {
-                    $checkRoleToInherits = array_merge($checkRoleToInherits, $this->roleInherits[$checkRoleToInherit]);
+                    foreach ($this->roleInherits[$checkRoleToInherit] as $usedRoleToInherit) {
+                        $checkRoleToInherits[] = $usedRoleToInherit;
+                    }
                 }
             }
         }
 
-        return null;
+        return false;
     }
 
     /**
@@ -1000,24 +1040,5 @@ class Memory extends AbstractAdapter
                 $componentName . "'"
             );
         }
-    }
-
-    /**
-     * @param string $roleName
-     * @param string $componentName
-     * @param string $access
-     *
-     * @return true[]
-     */
-    private function getKeys(
-        string $roleName,
-        string $componentName,
-        string $access
-    ): array {
-        return [
-            $roleName . '!' . $componentName . '!' . $access => true,
-            $roleName . '!' . $componentName . '!*'          => true,
-            $roleName . '!*!*'                               => true,
-        ];
     }
 }

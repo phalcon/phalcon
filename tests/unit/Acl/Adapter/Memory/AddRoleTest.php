@@ -21,6 +21,25 @@ use Phalcon\Tests\AbstractUnitTestCase;
 final class AddRoleTest extends AbstractUnitTestCase
 {
     /**
+     * Tests Phalcon\Acl\Adapter\Memory :: addRole() - exception
+     *
+     * @return void
+     *
+     * @author Phalcon Team <team@phalcon.io>
+     * @since  2018-11-13
+     */
+    public function testAclAdapterMemoryAddRoleException(): void
+    {
+        $this->expectException(Exception::class);
+        $this->expectExceptionMessage(
+            'Role must be either a string or implement RoleInterface'
+        );
+
+        $acl = new Memory();
+        $acl->addRole(true);
+    }
+
+    /**
      * Tests Phalcon\Acl\Adapter\Memory :: addRole() - numeric key
      *
      * @return void
@@ -32,8 +51,11 @@ final class AddRoleTest extends AbstractUnitTestCase
     {
         $acl = new Memory();
 
-        $this->assertTrue($acl->addRole('11'));
-        $this->assertTrue($acl->isRole('11'));
+        $actual = $acl->addRole('11');
+        $this->assertTrue($actual);
+
+        $actual = $acl->isRole('11');
+        $this->assertTrue($actual);
     }
 
     /**
@@ -49,7 +71,8 @@ final class AddRoleTest extends AbstractUnitTestCase
         $acl  = new Memory();
         $role = new Role('Administrators', 'Super User access');
 
-        $this->assertTrue($acl->addRole($role));
+        $actual = $acl->addRole($role);
+        $this->assertTrue($actual);
     }
 
     /**
@@ -64,7 +87,8 @@ final class AddRoleTest extends AbstractUnitTestCase
     {
         $acl = new Memory();
 
-        $this->assertTrue($acl->addRole('Administrators'));
+        $actual = $acl->addRole('Administrators');
+        $this->assertTrue($actual);
     }
 
     /**
@@ -80,8 +104,11 @@ final class AddRoleTest extends AbstractUnitTestCase
         $acl  = new Memory();
         $role = new Role('Administrators', 'Super User access');
 
-        $this->assertTrue($acl->addRole($role));
-        $this->assertFalse($acl->addRole($role));
+        $actual = $acl->addRole($role);
+        $this->assertTrue($actual);
+
+        $actual = $acl->addRole($role);
+        $this->assertFalse($actual);
     }
 
     /**
@@ -96,7 +123,10 @@ final class AddRoleTest extends AbstractUnitTestCase
     {
         $acl = new Memory();
 
-        $this->assertTrue($acl->addRole('Administrators'));
-        $this->assertFalse($acl->addRole('Administrators'));
+        $actual = $acl->addRole('Administrators');
+        $this->assertTrue($actual);
+
+        $actual = $acl->addRole('Administrators');
+        $this->assertFalse($actual);
     }
 }

@@ -31,10 +31,12 @@ final class AddComponentTest extends AbstractUnitTestCase
     {
         $acl       = new Memory();
         $component = new Component('11', 'Customer component');
-        $actual    = $acl->addComponent($component, ['index']);
 
+        $actual = $acl->addComponent($component, ['index']);
         $this->assertTrue($actual);
-        $this->assertTrue($acl->isComponent('11'));
+
+        $actual = $acl->isComponent('11');
+        $this->assertTrue($actual);
     }
 
     /**
@@ -49,8 +51,8 @@ final class AddComponentTest extends AbstractUnitTestCase
     {
         $acl       = new Memory();
         $component = new Component('Customer', 'Customer component');
-        $actual    = $acl->addComponent($component, ['index']);
 
+        $actual = $acl->addComponent($component, ['index']);
         $this->assertTrue($actual);
     }
 
