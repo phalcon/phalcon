@@ -136,19 +136,15 @@ abstract class AbstractFlash implements FlashInterface, InjectionAwareInterface
      * $flash->outputMessage("error", $message);
      *```
      *
-     * @param string $type
-     * @param mixed  $message
+     * @param string       $type
+     * @param array|string $message
      *
      * @return string|null
      * @throws Exception
      */
-    public function outputMessage(string $type, $message): string | null
+    public function outputMessage(string $type, array|string $message): string | null
     {
         $content = '';
-
-        if (!is_array($message) && !is_string($message)) {
-            throw new Exception('The message must be an array or a string');
-        }
 
         /**
          * Make this an array. Same code processes string and array
@@ -170,14 +166,10 @@ abstract class AbstractFlash implements FlashInterface, InjectionAwareInterface
         }
 
         /**
-         * We return the message as a string if the implicitFlush is turned
-         * off
+         * If we are here then implicitFlush is off - otherwise it has been
+         * echoed back during the loop. Return the string back.
          */
-        if (true !== $this->implicitFlush) {
-            return $content;
-        }
-
-        return null;
+        return $content;
     }
 
     /**

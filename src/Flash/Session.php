@@ -167,14 +167,18 @@ class Session extends AbstractFlash
             $messages = [];
         }
 
-        if (is_string($type)) {
-            $return = $messages[$type] ?? [];
-            if (true === $remove) {
-                unset($messages[$type]);
-                $session->set(self::SESSION_KEY, $messages);
+        if (!empty($type)) {
+            if (isset($messages[$type])) {
+                $returnMessages = $messages[$type];
+                if (true === $remove) {
+                    unset($messages[$type]);
+                    $session->set(self::SESSION_KEY, $messages);
+                }
+
+                return $returnMessages;
             }
 
-            return $return;
+            return [];
         }
 
         if (true === $remove) {
