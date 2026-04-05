@@ -15,11 +15,11 @@ namespace Phalcon\Tests\Unit\Events\Manager;
 
 use Phalcon\Events\Exception;
 use Phalcon\Events\Manager;
-use Phalcon\Tests\Fixtures\Events\ComponentOne;
-use Phalcon\Tests\Fixtures\Listener\OneListener;
-use Phalcon\Tests\Fixtures\Listener\ThreeListener;
-use Phalcon\Tests\Fixtures\Listener\TwoListener;
 use Phalcon\Tests\AbstractUnitTestCase;
+use Phalcon\Tests\Support\Listener\OneListener;
+use Phalcon\Tests\Support\Listener\ThreeListener;
+use Phalcon\Tests\Support\Listener\TwoListener;
+use Phalcon\Tests\Unit\Events\Fake\ComponentOne;
 use stdClass;
 
 final class FireTest extends AbstractUnitTestCase
