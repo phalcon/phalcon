@@ -17,7 +17,7 @@ use Phalcon\Image\Adapter\Imagick;
 use Phalcon\Image\Exception;
 use Phalcon\Tests\AbstractUnitTestCase;
 
-use function dataDir;
+use function supportDir;
 
 final class SetResourceLimitTest extends AbstractUnitTestCase
 {
@@ -35,7 +35,7 @@ final class SetResourceLimitTest extends AbstractUnitTestCase
             'Cannot set the Resource Type for this image'
         );
 
-        $source = dataDir('assets/images/example-jpg.jpg');
+        $source = supportDir('assets/images/example-jpg.jpg');
         $image  = new Imagick($source);
 
         $image->setResourceLimit(100, 1);

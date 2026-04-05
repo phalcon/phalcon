@@ -14,8 +14,8 @@ declare(strict_types=1);
 namespace Phalcon\Tests\Unit\Image\Adapter\Gd;
 
 use Phalcon\Image\Adapter\Gd;
-use Phalcon\Tests\Fixtures\Traits\GdTrait;
 use Phalcon\Tests\AbstractUnitTestCase;
+use Phalcon\Tests\Unit\Image\Fake\GdTrait;
 
 final class CropTest extends AbstractUnitTestCase
 {
@@ -31,7 +31,7 @@ final class CropTest extends AbstractUnitTestCase
     {
         $this->checkJpegSupport();
 
-        $image = new Gd(dataDir('assets/images/example-jpg.jpg'));
+        $image = new Gd(supportDir('assets/images/example-jpg.jpg'));
 
         $outputDir = 'tests/image/gd/';
         $width     = 200;
@@ -69,7 +69,7 @@ final class CropTest extends AbstractUnitTestCase
     {
         $this->checkJpegSupport();
 
-        $image = new Gd(dataDir('assets/images/example-jpg.jpg'));
+        $image = new Gd(supportDir('assets/images/example-jpg.jpg'));
 
         $outputDir = 'tests/image/gd/';
         $width     = 200;

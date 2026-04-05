@@ -14,11 +14,11 @@ declare(strict_types=1);
 namespace Phalcon\Tests\Unit\Image\Adapter\Imagick;
 
 use Phalcon\Image\Adapter\Imagick;
-use Phalcon\Tests\Fixtures\Traits\ImagickTrait;
 use Phalcon\Tests\AbstractUnitTestCase;
+use Phalcon\Tests\Unit\Image\Fake\ImagickTrait;
 
-use function dataDir;
 use function outputDir;
+use function supportDir;
 
 final class LiquidRescaleTest extends AbstractUnitTestCase
 {
@@ -35,7 +35,7 @@ final class LiquidRescaleTest extends AbstractUnitTestCase
         $this->markTestSkipped('Check library support');
 
         $image = new Imagick(
-            dataDir('assets/images/example-jpg.jpg')
+            supportDir('assets/images/example-jpg.jpg')
         );
 
         $image->setResourceLimit(6, 1);
@@ -49,15 +49,13 @@ final class LiquidRescaleTest extends AbstractUnitTestCase
             outputDir('tests/image/imagick/liquidRescale.jpg')
         );
 
-        $this->assertSame(
-            200,
-            $image->getWidth()
-        );
+        $expected = 200;
+        $actual   = $image->getWidth();
+        $this->assertSame($expected, $actual);
 
-        $this->assertSame(
-            200,
-            $image->getHeight()
-        );
+        $expected = 200;
+        $actual   = $image->getHeight();
+        $this->assertSame($expected, $actual);
 
         $this->safeDeleteFile('liquidRescale.jpg');
     }

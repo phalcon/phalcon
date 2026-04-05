@@ -14,10 +14,10 @@ declare(strict_types=1);
 namespace Phalcon\Tests\Unit\Image\Adapter\Gd;
 
 use Phalcon\Image\Adapter\Gd;
-use Phalcon\Tests\Fixtures\Traits\GdTrait;
 use Phalcon\Tests\AbstractUnitTestCase;
+use Phalcon\Tests\Unit\Image\Fake\GdTrait;
 
-use function dataDir;
+use function supportDir;
 
 final class GetWidthTest extends AbstractUnitTestCase
 {
@@ -30,27 +30,27 @@ final class GetWidthTest extends AbstractUnitTestCase
     {
         return [
             [
-                dataDir('assets/images/example-gif.gif'),
+                supportDir('assets/images/example-gif.gif'),
                 960,
             ],
             [
-                dataDir('assets/images/example-jpg.jpg'),
+                supportDir('assets/images/example-jpg.jpg'),
                 1820,
             ],
             [
-                dataDir('assets/images/example-png.png'),
+                supportDir('assets/images/example-png.png'),
                 82,
             ],
             [
-                dataDir('assets/images/example-wbmp.wbmp'),
+                supportDir('assets/images/example-wbmp.wbmp'),
                 640,
             ],
             [
-                dataDir('assets/images/example-webp.webp'),
+                supportDir('assets/images/example-webp.webp'),
                 1536,
             ],
             [
-                dataDir('assets/images/example-xbm.xbm'),
+                supportDir('assets/images/example-xbm.xbm'),
                 206,
             ],
         ];

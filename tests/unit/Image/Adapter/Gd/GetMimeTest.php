@@ -14,10 +14,10 @@ declare(strict_types=1);
 namespace Phalcon\Tests\Unit\Image\Adapter\Gd;
 
 use Phalcon\Image\Adapter\Gd;
-use Phalcon\Tests\Fixtures\Traits\GdTrait;
 use Phalcon\Tests\AbstractUnitTestCase;
+use Phalcon\Tests\Unit\Image\Fake\GdTrait;
 
-use function dataDir;
+use function supportDir;
 
 final class GetMimeTest extends AbstractUnitTestCase
 {
@@ -30,27 +30,27 @@ final class GetMimeTest extends AbstractUnitTestCase
     {
         return [
             [
-                dataDir('assets/images/example-gif.gif'),
+                supportDir('assets/images/example-gif.gif'),
                 'image/gif',
             ],
             [
-                dataDir('assets/images/example-jpg.jpg'),
+                supportDir('assets/images/example-jpg.jpg'),
                 'image/jpeg',
             ],
             [
-                dataDir('assets/images/example-png.png'),
+                supportDir('assets/images/example-png.png'),
                 'image/png',
             ],
             [
-                dataDir('assets/images/example-wbmp.wbmp'),
+                supportDir('assets/images/example-wbmp.wbmp'),
                 'image/vnd.wap.wbmp',
             ],
             [
-                dataDir('assets/images/example-webp.webp'),
+                supportDir('assets/images/example-webp.webp'),
                 'image/webp',
             ],
             [
-                dataDir('assets/images/example-xbm.xbm'),
+                supportDir('assets/images/example-xbm.xbm'),
                 'image/xbm',
             ],
         ];

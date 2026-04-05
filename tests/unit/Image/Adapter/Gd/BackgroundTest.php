@@ -15,8 +15,8 @@ namespace Phalcon\Tests\Unit\Image\Adapter\Gd;
 
 use Phalcon\Image\Adapter\Gd;
 use Phalcon\Image\Enum;
-use Phalcon\Tests\Fixtures\Traits\GdTrait;
 use Phalcon\Tests\AbstractUnitTestCase;
+use Phalcon\Tests\Unit\Image\Fake\GdTrait;
 
 final class BackgroundTest extends AbstractUnitTestCase
 {
@@ -40,7 +40,7 @@ final class BackgroundTest extends AbstractUnitTestCase
         foreach ($params as [$width, $height, $master, $color, $opacity, $hash]) {
             $resultImage = $color . 'bg.png';
             $output      = outputDir($outputDir . '/' . $resultImage);
-            $image       = new Gd(dataDir('assets/images/example-png.png'));
+            $image       = new Gd(supportDir('assets/images/example-png.png'));
 
             $image->background($color, $opacity)
                   ->resize($width, $height, $master)

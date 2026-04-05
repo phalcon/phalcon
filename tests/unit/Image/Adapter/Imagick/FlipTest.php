@@ -15,11 +15,11 @@ namespace Phalcon\Tests\Unit\Image\Adapter\Imagick;
 
 use Phalcon\Image\Adapter\Imagick;
 use Phalcon\Image\Enum;
-use Phalcon\Tests\Fixtures\Traits\ImagickTrait;
 use Phalcon\Tests\AbstractUnitTestCase;
+use Phalcon\Tests\Unit\Image\Fake\ImagickTrait;
 
-use function dataDir;
 use function outputDir;
+use function supportDir;
 
 final class FlipTest extends AbstractUnitTestCase
 {
@@ -34,7 +34,7 @@ final class FlipTest extends AbstractUnitTestCase
     public function testImageAdapterImagickFlip(): void
     {
         $image = new Imagick(
-            dataDir('assets/images/example-jpg.jpg')
+            supportDir('assets/images/example-jpg.jpg')
         );
 
         $image->setResourceLimit(6, 1);

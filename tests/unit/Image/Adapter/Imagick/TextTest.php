@@ -14,11 +14,11 @@ declare(strict_types=1);
 namespace Phalcon\Tests\Unit\Image\Adapter\Imagick;
 
 use Phalcon\Image\Adapter\Imagick;
-use Phalcon\Tests\Fixtures\Traits\ImagickTrait;
 use Phalcon\Tests\AbstractUnitTestCase;
+use Phalcon\Tests\Unit\Image\Fake\ImagickTrait;
 
-use function dataDir;
 use function outputDir;
+use function supportDir;
 
 final class TextTest extends AbstractUnitTestCase
 {
@@ -33,7 +33,7 @@ final class TextTest extends AbstractUnitTestCase
     public function testImageAdapterImagickText(): void
     {
         $image = new Imagick(
-            dataDir('assets/images/example-jpg.jpg')
+            supportDir('assets/images/example-jpg.jpg')
         );
 
         $image->setResourceLimit(6, 1);
@@ -45,7 +45,7 @@ final class TextTest extends AbstractUnitTestCase
             100,
             '000099',
             12,
-            dataDir('assets/fonts/Roboto-Thin.ttf')
+            supportDir('assets/fonts/Roboto-Thin.ttf')
         )
               ->save(outputDir('tests/image/imagick/text.jpg'))
         ;
@@ -54,14 +54,13 @@ final class TextTest extends AbstractUnitTestCase
             outputDir('tests/image/imagick/text.jpg')
         );
 
-        $this->assertSame(
-            1820,
-            $image->getWidth()
-        );
-        $this->assertSame(
-            694,
-            $image->getHeight()
-        );
+        $expected = 1820;
+        $actual   = $image->getWidth();
+        $this->assertSame($expected, $actual);
+
+        $expected = 694;
+        $actual   = $image->getHeight();
+        $this->assertSame($expected, $actual);
 
         $this->safeDeleteFile('text.jpg');
     }

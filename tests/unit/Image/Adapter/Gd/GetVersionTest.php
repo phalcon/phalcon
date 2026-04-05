@@ -14,8 +14,8 @@ declare(strict_types=1);
 namespace Phalcon\Tests\Unit\Image\Adapter\Gd;
 
 use Phalcon\Image\Adapter\Gd;
-use Phalcon\Tests\Fixtures\Traits\GdTrait;
 use Phalcon\Tests\AbstractUnitTestCase;
+use Phalcon\Tests\Unit\Image\Fake\GdTrait;
 
 final class GetVersionTest extends AbstractUnitTestCase
 {
@@ -31,7 +31,7 @@ final class GetVersionTest extends AbstractUnitTestCase
     {
         $this->checkJpegSupport();
 
-        $gd = new Gd(dataDir('assets/images/example-jpg.jpg'));
+        $gd = new Gd(supportDir('assets/images/example-jpg.jpg'));
 
         $expected = '/^2.[0-9].[0-9]/';
         $actual   = $gd->getVersion();
