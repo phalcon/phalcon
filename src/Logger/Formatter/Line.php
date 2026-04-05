@@ -28,12 +28,18 @@ class Line extends AbstractFormatter
      *
      * @param string $format
      * @param string $dateFormat
+     * @param string $interpolatorLeft
+     * @param string $interpolatorRight
      */
     public function __construct(
         protected string $format = '[%date%][%level%] %message%',
-        string $dateFormat = 'c'
+        string $dateFormat = 'c',
+        string $interpolatorLeft = '%',
+        string $interpolatorRight = '%'
     ) {
-        $this->dateFormat = $dateFormat;
+        $this->dateFormat        = $dateFormat;
+        $this->interpolatorLeft  = $interpolatorLeft;
+        $this->interpolatorRight = $interpolatorRight;
     }
 
     /**
@@ -55,7 +61,7 @@ class Line extends AbstractFormatter
             ]
         );
 
-        return $this->toInterpolate($message, $item->getContext());
+        return $this->getInterpolatedMessage($item, $message);
     }
 
     /**

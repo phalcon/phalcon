@@ -89,7 +89,11 @@ abstract class AbstractLogger
         DateTimeZone | null $timezone = null
     ) {
         if (null == $timezone) {
-            $timezone = new DateTimeZone(date_default_timezone_get());
+            $defaultTimezone = date_default_timezone_get();
+            if (empty($defaultTimezone)) {
+                $defaultTimezone = 'UTC';
+            }
+            $timezone = new DateTimeZone($defaultTimezone);
         }
 
         $this->timezone = $timezone;

@@ -19,7 +19,7 @@ use LogicException;
 use Phalcon\Logger\Adapter\Syslog;
 use Phalcon\Logger\Enum;
 use Phalcon\Logger\Item;
-use Phalcon\Tests\Fixtures\Logger\Adapter\SyslogFopenFixture;
+use Phalcon\Tests\Unit\Logger\Fake\Adapter\FakeSyslogAdapter;
 use Phalcon\Tests\AbstractUnitTestCase;
 
 use function date_default_timezone_get;
@@ -69,7 +69,7 @@ final class ProcessTest extends AbstractUnitTestCase
             . "] and facility [8]"
         );
 
-        $adapter = new SyslogFopenFixture($fileName);
+        $adapter = new FakeSyslogAdapter($fileName);
 
         $timezone = date_default_timezone_get();
         $datetime = new DateTimeImmutable('now', new DateTimeZone($timezone));

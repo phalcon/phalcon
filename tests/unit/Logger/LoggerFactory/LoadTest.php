@@ -18,9 +18,9 @@ use Phalcon\Logger\AdapterFactory;
 use Phalcon\Logger\Exception as LoggerException;
 use Phalcon\Logger\Logger;
 use Phalcon\Logger\LoggerFactory;
-use Phalcon\Tests\Fixtures\Traits\FactoryTrait;
+use Phalcon\Logger\LoggerInterface;
 use Phalcon\Tests\AbstractUnitTestCase;
-use Psr\Log\LoggerInterface;
+use Phalcon\Tests\Support\Traits\FactoryTrait;
 
 final class LoadTest extends AbstractUnitTestCase
 {
@@ -32,7 +32,7 @@ final class LoadTest extends AbstractUnitTestCase
     }
 
     /**
-     * Tests Phalcon\Translate\Factory :: load() - exceptions
+     * Tests Phalcon\Logger\LoggerFactory :: load() - exception - invalid config
      *
      * @return void
      *
@@ -41,7 +41,29 @@ final class LoadTest extends AbstractUnitTestCase
      * @author Phalcon Team <team@phalcon.io>
      * @since  2020-09-09
      */
-    public function testLoggerFactoryLoadExceptions(): void
+    public function testLoggerFactoryLoadExceptionsInvalidConfig(): void
+    {
+        $factory = new LoggerFactory(new AdapterFactory());
+
+        $this->expectException(LoggerException::class);
+        $this->expectExceptionMessage(
+            'Config must be array or Phalcon\Config\Config object'
+        );
+
+        $factory->load(1234);
+    }
+
+    /**
+     * Tests Phalcon\Logger\LoggerFactory :: load() - exception - no name
+     *
+     * @return void
+     *
+     * @throws LoggerException
+     *
+     * @author Phalcon Team <team@phalcon.io>
+     * @since  2020-09-09
+     */
+    public function testLoggerFactoryLoadExceptionsNoName(): void
     {
         $options = $this->arrayConfig['logger'];
         $factory = new LoggerFactory(new AdapterFactory());

@@ -60,8 +60,14 @@ class LoggerFactory
      * @return Logger
      * @throws BaseException
      */
-    public function load(array | ConfigInterface $config): Logger
+    public function load(mixed $config): Logger
     {
+        if (!is_array($config) && !($config instanceof ConfigInterface)) {
+            throw new Exception(
+                'Config must be array or Phalcon\Config\Config object'
+            );
+        }
+
         $data     = [];
         $config   = $this->checkConfig($config);
         $config   = $this->checkConfigElement($config, "name");

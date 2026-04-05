@@ -19,7 +19,7 @@ use LogicException;
 use Phalcon\Logger\Adapter\Stream;
 use Phalcon\Logger\Enum;
 use Phalcon\Logger\Item;
-use Phalcon\Tests\Fixtures\Logger\Adapter\StreamFopenFixture;
+use Phalcon\Tests\Unit\Logger\Fake\Adapter\FakeStreamAdapter;
 use Phalcon\Tests\AbstractUnitTestCase;
 
 use function date_default_timezone_get;
@@ -80,7 +80,7 @@ final class ProcessTest extends AbstractUnitTestCase
             "' cannot be opened with mode 'ab'"
         );
 
-        $adapter = new StreamFopenFixture($outputPath . $fileName);
+        $adapter = new FakeStreamAdapter($outputPath . $fileName);
 
         $timezone = date_default_timezone_get();
         $datetime = new DateTimeImmutable('now', new DateTimeZone($timezone));
