@@ -45,6 +45,15 @@ interface AdapterInterface
     public function delete(string $key): bool;
 
     /**
+     * Deletes multiple data from the adapter
+     *
+     * @param array $keys
+     *
+     * @return bool
+     */
+    public function deleteMultiple(array $keys): bool;
+
+    /**
      * Reads data from the adapter
      *
      * @param string     $key

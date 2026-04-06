@@ -160,6 +160,24 @@ abstract class AbstractAdapter implements AdapterInterface, EventsAwareInterface
     }
 
     /**
+     * Deletes multiple data from the adapter
+     *
+     * @param array $keys
+     *
+     * @return bool
+     */
+    public function deleteMultiple(array $keys): bool
+    {
+        $this->fireManagerEvent($this->eventType . ":beforeDeleteMultiple", $keys);
+
+        $result = $this->doDeleteMultiple($keys);
+
+        $this->fireManagerEvent($this->eventType . ":afterDeleteMultiple", $keys);
+
+        return $result;
+    }
+
+    /**
      * Reads data from the adapter
      *
      * @param string     $key
@@ -324,6 +342,25 @@ abstract class AbstractAdapter implements AdapterInterface, EventsAwareInterface
      * @return bool
      */
     abstract protected function doDelete(string $key): bool;
+
+    /**
+     * Deletes multiple data from the adapter
+     *
+     * @param array $keys
+     *
+     * @return bool
+     */
+    protected function doDeleteMultiple(array $keys): bool
+    {
+        $result = true;
+        foreach ($keys as $key) {
+            if (true !== $this->doDelete($key)) {
+                $result = false;
+            }
+        }
+
+        return $result;
+    }
 
     /**
      * @param string $key

@@ -17,7 +17,7 @@ use DateInterval;
 use Phalcon\Cache\Adapter\AdapterInterface;
 use Psr\SimpleCache\InvalidArgumentException;
 
-/**
+/**1
  * This component offers caching capabilities for your application.
  * Phalcon\Cache implements PSR-16.
  *
@@ -72,7 +72,7 @@ class Cache extends AbstractCache
      * Fetches a value from the cache.
      *
      * @param string $key     The unique key of this item in the cache.
-     * @param mixed  $default Default value to return if the key does not exist.
+     * @param mixed  $defaultValue Default value to return if the key does not exist.
      *
      * @return mixed The value of the item from the cache, or $default in
      * case of cache miss.
@@ -80,9 +80,9 @@ class Cache extends AbstractCache
      * @throws InvalidArgumentException
      *   MUST be thrown if the $key string is not a legal value.
      */
-    public function get(string $key, mixed $default = null): mixed
+    public function get(string $key, mixed $defaultValue = null): mixed
     {
-        return $this->doGet($key, $default);
+        return $this->doGet($key, $defaultValue);
     }
 
     /**
@@ -90,7 +90,7 @@ class Cache extends AbstractCache
      *
      * @param iterable<string> $keys    A list of keys that can be
      *                                  obtained in a single operation.
-     * @param mixed            $default Default value to return for keys
+     * @param mixed            $defaultValue Default value to return for keys
      *                                  that do not exist.
      *
      * @return iterable<string, mixed> A list of key => value pairs. Cache
@@ -103,9 +103,9 @@ class Cache extends AbstractCache
      */
     public function getMultiple(
         iterable $keys,
-        mixed $default = null
+        mixed $defaultValue = null
     ): iterable {
-        return $this->doGetMultiple($keys, $default);
+        return $this->doGetMultiple($keys, $defaultValue);
     }
 
     /**

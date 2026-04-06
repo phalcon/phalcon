@@ -139,6 +139,22 @@ class Apcu extends AbstractAdapter
     }
 
     /**
+     * Deletes multiple keys from APCu in a single call
+     *
+     * @param array $keys
+     *
+     * @return bool
+     */
+    protected function doDeleteMultiple(array $keys): bool
+    {
+        $prefixedKeys = array_map(fn($key) => $this->getPrefixedKey($key), $keys);
+        $result       = $this->phpApcuDelete($prefixedKeys);
+
+        // apcu_delete with array returns array of keys that could NOT be deleted
+        return is_array($result) && count($result) === 0;
+    }
+
+    /**
      * @param string $key
      *
      * @return mixed

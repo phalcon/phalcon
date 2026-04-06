@@ -118,13 +118,14 @@ abstract class AbstractCache implements CacheInterface, EventsAwareInterface
     {
         $this->fireManagerEvent("cache:beforeDeleteMultiple", $keys);
 
-        $result = true;
+        $keysArray = [];
         /** @var string $key */
         foreach ($keys as $key) {
-            if (true !== $this->adapter->delete($key)) {
-                $result = false;
-            }
+            $this->checkKey($key);
+            $keysArray[] = $key;
         }
+
+        $result = $this->adapter->deleteMultiple($keysArray);
 
         $this->fireManagerEvent("cache:afterDeleteMultiple", $keys);
 
