@@ -50,14 +50,14 @@ interface ValidationInterface
      * The entity is used to obtain the validation values
      *
      * @param object        $entity
-     * @param array|object  $data
+     * @param array|object|null  $data
      * @param array         $whitelist
      *
      * @return ValidationInterface
      */
     public function bind(
         object $entity,
-        array | object $data,
+        array | object | null $data,
         array $whitelist = []
     ): ValidationInterface;
 

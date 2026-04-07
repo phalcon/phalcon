@@ -20,7 +20,6 @@ use Phalcon\Events\Exception as EventsException;
 use Phalcon\Events\Traits\EventsAwareTrait;
 use Phalcon\Mvc\View\Engine\EngineInterface;
 use Phalcon\Mvc\View\Engine\Php as PhpEngine;
-use Phalcon\Parsers\Parser;
 use Phalcon\Traits\Helper\Str\DirSeparatorTrait;
 
 use function array_merge;

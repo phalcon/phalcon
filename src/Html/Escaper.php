@@ -332,7 +332,7 @@ class Escaper implements EscaperInterface
      */
     private function doEscapeCss(string $input): string
     {
-        return $input;
+        return $this->escapeMulti($input, '\\', ' ', false);
     }
 
     /**
@@ -342,6 +342,102 @@ class Escaper implements EscaperInterface
      */
     private function doEscapeJs(string $input): string
     {
-        return $input;
+        return $this->escapeMulti($input, '\\x', '', true);
+    }
+
+    /**
+     * Perform escaping of non-alphanumeric characters to different formats.
+     * zephir_escape_multi()
+     *c
+     * @param string $input        UTF-32 encoded string
+     * @param string $escapeChar   Escape prefix (e.g. '\' for CSS, '\x' for JS)
+     * @param string $escapeExtra  Character appended after hex (e.g. ' ' for CSS)
+     * @param bool   $useWhitelist Whether to allow a JS-specific whitelist through
+     *
+     * @return string
+     */
+    private function escapeMulti(
+        string $input,
+        string $escapeChar,
+        string $escapeExtra,
+        bool $useWhitelist
+    ): string {
+        if (empty($input)) {
+            return '';
+        }
+
+        $len    = strlen($input);
+        $offset = 0;
+        $format = 'N'; // big-endian by default
+
+        // Detect BOM and endianness from the UTF-32 string
+        if ($len >= 4) {
+            $bom = substr($input, 0, 4);
+            if ("\x00\x00\xFE\xFF" === $bom) {
+                $offset = 4;
+            } elseif ("\xFF\xFE\x00\x00" === $bom) {
+                $offset = 4;
+                $format = 'V'; // little-endian
+            }
+        }
+
+        if (($len - $offset) % 4 !== 0) {
+            return '';
+        }
+
+        $result = '';
+
+        for ($i = $offset; $i < $len; $i += 4) {
+            $unpacked = unpack($format, substr($input, $i, 4));
+            $value    = $unpacked[1];
+
+            // CSS 2.1: null codepoint is undefined - stop processing
+            if (0 === $value) {
+                break;
+            }
+
+            // Alphanumeric ASCII (< 123) passes through unchanged
+            if ($value < 123 && ctype_alnum(chr($value))) {
+                $result .= chr($value);
+                continue;
+            }
+
+            // JS whitelist characters pass through unchanged
+            if ($useWhitelist) {
+                switch ($value) {
+                    case 0x20:
+                    case 0x2F:
+                    case 0x2A:
+                    case 0x2B:
+                    case 0x2D:
+                    case 0x09:
+                    case 0x0A:
+                    case 0x5E:
+                    case 0x24:
+                    case 0x21:
+                    case 0x3F:
+                    case 0x5C:
+                    case 0x23:
+                    case 0x7D:
+                    case 0x7B:
+                    case 0x29:
+                    case 0x28:
+                    case 0x5D:
+                    case 0x5B:
+                    case 0x2E:
+                    case 0x2C:
+                    case 0x3A:
+                    case 0x3B:
+                    case 0x5F:
+                    case 0x7C:
+                                                                                    $result .= chr($value);
+                        continue 2;
+                }
+            }
+
+            $result .= $escapeChar . dechex($value) . $escapeExtra;
+        }
+
+        return $result;
     }
 }

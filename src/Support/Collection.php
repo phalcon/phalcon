@@ -293,8 +293,7 @@ class Collection implements
      */
     public function toJson(
         int $options = JSON_HEX_TAG | JSON_HEX_AMP | JSON_HEX_APOS | JSON_HEX_QUOT | JSON_UNESCAPED_SLASHES | JSON_THROW_ON_ERROR
-    ): string
-    {
+    ): string {
         $return = $this->phpJsonEncode($this->jsonSerialize(), $options);
 
         if (false === $return) {

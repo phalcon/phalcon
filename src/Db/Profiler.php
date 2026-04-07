@@ -82,7 +82,7 @@ class Profiler
      *
      * @var Item[]
      */
-    protected array $allProfiles;
+    protected array $allProfiles = [];
 
     /**
      * Total time spent by all profiles to complete in nanoseconds

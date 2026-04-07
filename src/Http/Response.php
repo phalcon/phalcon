@@ -23,6 +23,7 @@ use Phalcon\Events\EventsAwareInterface;
 use Phalcon\Events\Exception as EventsException;
 use Phalcon\Events\Traits\EventsAwareTrait;
 use Phalcon\Http\Message\Interfaces\ResponseStatusCodeInterface;
+use Phalcon\Http\Message\ResponseStatusCodeInterface as RootResponseStatusCodeInterface;
 use Phalcon\Http\Response\CookiesInterface;
 use Phalcon\Http\Response\Exception;
 use Phalcon\Http\Response\Headers;
@@ -64,7 +65,8 @@ use const JSON_ERROR_NONE;
 class Response extends Injectable implements
     EventsAwareInterface,
     ResponseInterface,
-    ResponseStatusCodeInterface
+    ResponseStatusCodeInterface,
+    RootResponseStatusCodeInterface
 {
     use EventsAwareTrait;
     use StatusPhrasesTrait;
@@ -791,7 +793,7 @@ class Response extends Injectable implements
         }
 
         // if an empty message is given we try and grab the default for this
-        // status code. If a default doesn't exist, stop here.
+        // status code. If a default does not exist, stop here.
         if (null === $message) {
             // See: https://www.iana.org/assignments/http-status-codes/http-status-codes.xhtml
             $statusCodes = $this->getPhrases();

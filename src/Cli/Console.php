@@ -76,7 +76,7 @@ class Console extends AbstractApplication
         }
 
         /**
-         * If the router doesn't return a valid module we use the default module
+         * If the router does not return a valid module we use the default module
          */
         $moduleName = $router->getModuleName();
 
@@ -107,7 +107,7 @@ class Console extends AbstractApplication
                 $path = $module["path"];
                 if (true !== file_exists($path)) {
                     throw new Exception(
-                        "Module definition path '" . $path . "' doesn't exist"
+                        "Module definition path '" . $path . "' does not exist"
                     );
                 }
 

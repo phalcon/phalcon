@@ -844,7 +844,7 @@ class Micro extends Injectable implements ArrayAccess, EventsAwareInterface
     }
 
     /**
-     * Sets a handler that will be called when the router doesn't match any of
+     * Sets a handler that will be called when the router does not match any of
      * the defined routes
      *
      * @param callable $handler
@@ -883,9 +883,9 @@ class Micro extends Injectable implements ArrayAccess, EventsAwareInterface
      *
      * @param mixed $offset
      *
-     * @return object
+     * @return mixed
      */
-    public function offsetGet(mixed $offset): object
+    public function offsetGet(mixed $offset): mixed
     {
         return $this->getService($offset);
     }

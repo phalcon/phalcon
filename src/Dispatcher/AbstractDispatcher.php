@@ -25,7 +25,11 @@ use Phalcon\Filter\FilterInterface;
 use Phalcon\Mvc\ControllerInterface;
 use Phalcon\Mvc\Model\BinderInterface;
 
+use Phalcon\Events\ManagerInterface;
+use Phalcon\Support\Collection;
+
 use function array_map;
+use function array_values;
 use function call_user_func_array;
 use function class_exists;
 use function is_callable;
@@ -165,10 +169,42 @@ abstract class AbstractDispatcher extends Injectable implements DispatcherInterf
         string $actionMethod,
         array $parameters = []
     ): mixed {
-        return call_user_func_array(
-            [$handler, $actionMethod],
-            array_values($parameters)
+        $altHandler = $handler;
+        $altAction  = $actionMethod;
+        $altParams  = $parameters;
+
+        if (
+            null !== $this->eventsManager &&
+            $this->eventsManager instanceof ManagerInterface
+        ) {
+            $observer = new Collection([
+                "handler" => $handler,
+                "action"  => $actionMethod,
+                "params"  => $parameters,
+            ]);
+
+            $this->eventsManager->fire("dispatch:beforeCallAction", $this, $observer);
+
+            $altHandler = $observer->get("handler");
+            $altAction  = $observer->get("action");
+            $altParams  = $observer->get("params", [], "array");
+        }
+
+        $result = call_user_func_array(
+            [$altHandler, $altAction],
+            array_values($altParams)
         );
+
+        if (
+            null !== $this->eventsManager &&
+            $this->eventsManager instanceof ManagerInterface
+        ) {
+            $observer["result"] = $result;
+
+            $this->eventsManager->fire("dispatch:afterCallAction", $this, $observer);
+        }
+
+        return $result;
     }
 
     /**
@@ -294,7 +330,7 @@ abstract class AbstractDispatcher extends Injectable implements DispatcherInterf
             $hasService = $this->container->has($handlerClass);
             if (true !== $hasService) {
                 /**
-                 * DI doesn't have a service with that name, try to load it
+                 * DI does not have a service with that name, try to load it
                  * using an autoloader
                  */
                 $hasService = class_exists($handlerClass);
@@ -467,7 +503,7 @@ abstract class AbstractDispatcher extends Injectable implements DispatcherInterf
                         /**
                          * If this is a dispatch exception (e.g. From
                          * forwarding) ensure we don't handle this twice. In
-                         * order to ensure this doesn't happen all other
+                         * order to ensure this does not happen all other
                          * exceptions thrown outside this method in this class
                          * should not call "throwDispatchException" but instead
                          * throw a normal Exception.

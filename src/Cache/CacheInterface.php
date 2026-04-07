@@ -22,4 +22,3 @@ use Psr\SimpleCache\CacheInterface as PsrCacheInterface;
 interface CacheInterface extends PsrCacheInterface
 {
 }
-

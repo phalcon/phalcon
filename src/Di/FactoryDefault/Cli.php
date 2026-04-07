@@ -25,10 +25,11 @@ use Phalcon\Filter\FilterFactory;
 use Phalcon\Html\Escaper;
 use Phalcon\Html\TagFactory;
 use Phalcon\Mvc\Model\Manager as ModelsManager;
-use Phalcon\Mvc\Model\MetaData\Adapter\Memory as MetadataMemory;
+use Phalcon\Mvc\Model\MetaData\Memory as MetadataMemory;
 use Phalcon\Mvc\Model\Transaction\Manager as TransactionManager;
 use Phalcon\Storage\SerializerFactory;
 use Phalcon\Support\HelperFactory;
+use Phalcon\Support\Settings;
 
 /**
  * Phalcon\Di\FactoryDefault\Cli
@@ -83,6 +84,7 @@ class Cli extends FactoryDefault
             'modelsMetadata'     => new Service(MetadataMemory::class, true),
             'router'             => new Service(Router::class, true),
             'security'           => new Service(Security::class, true),
+            'settings'           => new Service(Settings::class, true),
             'storageSerializer'  => new Service(SerializerFactory::class, true),
             'tag'                => new Service(
                 [

@@ -16,7 +16,6 @@ namespace Phalcon\Mvc;
 use Phalcon\Di\AbstractInjectionAware;
 use Phalcon\Mvc\Url\Exception;
 use Phalcon\Mvc\Url\UrlInterface;
-use Phalcon\Parsers\Parser;
 
 use function http_build_query;
 use function is_array;
@@ -241,7 +240,7 @@ class Url extends AbstractInjectionAware implements UrlInterface
                 $uri = null;
             }
 
-            if (null !== $uri) {
+            if (null === $uri) {
                 $baseUri = "/";
             } else {
                 $baseUri = "/" . $uri . "/";

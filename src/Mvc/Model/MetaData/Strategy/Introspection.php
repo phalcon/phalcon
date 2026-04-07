@@ -81,7 +81,7 @@ class Introspection implements StrategyInterface
              */
             throw new Exception(
                 "Table '" . $completeTable
-                . "' doesn't exist in database when dumping meta-data for "
+                . "' does not exist in database when dumping meta-data for "
                 . get_class($model)
             );
         }

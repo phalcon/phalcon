@@ -11,7 +11,7 @@
 
 declare(strict_types=1);
 
-namespace Phalcon\Mvc\Model\MetaData\Adapter;
+namespace Phalcon\Mvc\Model\MetaData;
 
 use Phalcon\Mvc\Model\Exception;
 use Phalcon\Mvc\Model\MetaData;
@@ -43,7 +43,7 @@ class Stream extends MetaData
     /**
      * @var string
      */
-    protected $metaDataDir = "./";
+    protected string $metaDataDir = "./";
 
     /**
      * Phalcon\Mvc\Model\MetaData\Files constructor

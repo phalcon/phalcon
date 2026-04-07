@@ -87,6 +87,10 @@ class Yaml extends Config
             $callbacks ?? []
         );
 
+        if (null === $yamlConfig) {
+            $yamlConfig = [];
+        }
+
         if (false === $yamlConfig) {
             throw new Exception(
                 'Configuration file ' . basename($filePath) . ' can\'t be loaded'

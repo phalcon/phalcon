@@ -103,7 +103,7 @@ class MimeType extends AbstractFile
 
         if (!is_array($types)) {
             throw new Exception(
-                "Option 'types' must be an array"
+                "Option 'allowedTypes' must be an array"
             );
         }
         if (true === $this->phpFunctionExists("finfo_open")) {

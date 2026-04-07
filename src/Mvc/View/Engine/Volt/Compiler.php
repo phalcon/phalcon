@@ -20,7 +20,7 @@ use Phalcon\Mvc\View\ViewBaseInterface;
 use Phalcon\Parsers\Volt\Enum;
 use Phalcon\Support\Traits\FilePathTrait;
 use Phalcon\Traits\Helper\Str\CamelizeTrait;
-use Phalcon\Volt\Exception;
+use Phalcon\Mvc\View\Engine\Volt\Exception;
 use Phalcon\Volt\Parser\Parser;
 
 use function addslashes;
@@ -430,7 +430,7 @@ class Compiler implements InjectionAwareInterface
          */
         if (!file_exists($compiledTemplatePath) || $compileAlways) {
             /**
-             * The file needs to be compiled because it either doesn't exist or
+             * The file needs to be compiled because it either does not exist or
              * needs to compiled every time
              */
             $compilation = $this->compileFile(
@@ -1011,7 +1011,7 @@ class Compiler implements InjectionAwareInterface
             /**
              * Clone the original compiler
              * Perform a sub-compilation of the included file
-             * If the compilation doesn't return anything we include the compiled path
+             * If the compilation does not return anything we include the compiled path
              */
             $subCompiler = clone $this;
             $compilation = $subCompiler->compile($finalPath);
@@ -1349,7 +1349,7 @@ class Compiler implements InjectionAwareInterface
         $compilation .= "<?php endswitch ?>";
 
         return $compilation;
-    }
+    }Does
 
     /**
      * Resolves an expression node in an AST volt tree
@@ -2806,7 +2806,7 @@ class Compiler implements InjectionAwareInterface
                     );
 
                     /**
-                     * If the compilation doesn't return anything we include the
+                     * If the compilation does not return anything we include the
                      * compiled path
                      */
                     if ($tempCompilation === null) {

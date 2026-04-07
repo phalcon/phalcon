@@ -40,7 +40,6 @@ use Phalcon\Mvc\Model\ResultsetInterface;
 use Phalcon\Mvc\Model\Row;
 use Phalcon\Mvc\Model\TransactionInterface;
 use Phalcon\Mvc\Model\ValidationFailed;
-use Phalcon\Parsers\Parser;
 use Phalcon\Support\Collection;
 use Phalcon\Support\Collection\CollectionInterface;
 use Phalcon\Support\Settings;
@@ -207,7 +206,7 @@ abstract class Model extends AbstractInjectionAware implements
         ManagerInterface | null $modelsManager = null
     ) {
         /**
-         * We use a default DI if the user doesn't define one
+         * We use a default DI if the user does not define one
          */
         if ($container === null) {
             $container = Di::getDefault();
@@ -297,11 +296,11 @@ abstract class Model extends AbstractInjectionAware implements
         }
 
         /**
-         * The method doesn't exist throw an exception
+         * The method does not exist throw an exception
          */
         throw new Exception(
             "The method '"
-            . $method . "' doesn't exist on model '"
+            . $method . "' does not exist on model '"
             . $modelName . "'"
         );
     }
@@ -326,11 +325,11 @@ abstract class Model extends AbstractInjectionAware implements
         $modelName = get_called_class();
 
         /**
-         * The method doesn't exist throw an exception
+         * The method does not exist throw an exception
          */
         throw new Exception(
             "The method '"
-            . $method . "' doesn't exist on model '"
+            . $method . "' does not exist on model '"
             . $modelName . "'"
         );
     }
@@ -871,7 +870,7 @@ abstract class Model extends AbstractInjectionAware implements
                         throw new Exception(
                             "Column '"
                             . $attribute
-                            . "' doesn't make part of the column map in '"
+                            . "' does not make part of the column map in '"
                             . get_class($this) . "'"
                         );
                     }
@@ -1069,7 +1068,7 @@ abstract class Model extends AbstractInjectionAware implements
                             throw new Exception(
                                 "Column '"
                                 . $key
-                                . "' doesn't make part of the column map in '"
+                                . "' does not make part of the column map in '"
                                 . get_class($base) . "'"
                             );
                         }
@@ -1083,7 +1082,7 @@ abstract class Model extends AbstractInjectionAware implements
                         throw new Exception(
                             "Column '"
                             . $key
-                            . "' doesn't make part of the column map in '"
+                            . "' does not make part of the column map in '"
                             . get_class($base) . "'"
                         );
                     }
@@ -1205,7 +1204,7 @@ abstract class Model extends AbstractInjectionAware implements
                         throw new Exception(
                             "Column '"
                             . $key
-                            . "' doesn't make part of the column map"
+                            . "' does not make part of the column map"
                         );
                     }
 
@@ -3041,7 +3040,7 @@ abstract class Model extends AbstractInjectionAware implements
                         throw new Exception(
                             "Column '"
                             . $key
-                            . "' doesn't make part of the column map in '"
+                            . "' does not make part of the column map in '"
                             . get_class($this) . "'"
                         );
                     }
@@ -3055,7 +3054,7 @@ abstract class Model extends AbstractInjectionAware implements
                         if (!Settings::get("orm.ignore_unknown_columns")) {
                             throw new Exception(
                                 "Column '"
-                                . $key . "' doesn't make part of the column map in '"
+                                . $key . "' does not make part of the column map in '"
                                 . get_class($this) . "'"
                             );
                         }
@@ -3129,7 +3128,7 @@ abstract class Model extends AbstractInjectionAware implements
                     if (!Settings::get("orm.ignore_unknown_columns")) {
                         throw new Exception(
                             "Column '"
-                            . $key . "' doesn't make part of the column map in '"
+                            . $key . "' does not make part of the column map in '"
                             . get_class($this) . "'"
                         );
                     }
@@ -3144,7 +3143,7 @@ abstract class Model extends AbstractInjectionAware implements
                         if (!Settings::get("orm.ignore_unknown_columns")) {
                             throw new Exception(
                                 "Column '"
-                                . $key . "' doesn't make part of the column map in '"
+                                . $key . "' does not make part of the column map in '"
                                 . get_class($this) . "'"
                             );
                         }
@@ -3328,14 +3327,14 @@ abstract class Model extends AbstractInjectionAware implements
      * );
      *```
      *
-     * @param array|null $columns
-     * @param bool       $useGetter
+     * @param mixed $columns
+     * @param bool  $useGetter
      *
      * @return array
      * @throws Exception
      */
     public function toArray(
-        array | null $columns = null,
+        mixed $columns = null,
         bool $useGetter = true
     ): array {
         $data      = [];
@@ -3362,7 +3361,7 @@ abstract class Model extends AbstractInjectionAware implements
                     if (!Settings::get("orm.ignore_unknown_columns")) {
                         throw new Exception(
                             "Column '"
-                            . $attribute . "' doesn't make part of the column map in '"
+                            . $attribute . "' does not make part of the column map in '"
                             . get_class($this) . "'"
                         );
                     }
@@ -3499,7 +3498,7 @@ abstract class Model extends AbstractInjectionAware implements
     }
 
     /**
-     * Updates a model instance. If the instance doesn't exist in the
+     * Updates a model instance. If the instance does not exist in the
      * persistence it will throw an exception. Returning `true` on success or
      * `false` otherwise.
      *
@@ -5054,9 +5053,9 @@ abstract class Model extends AbstractInjectionAware implements
      * }
      *```
      *
-     * @param mixed  $fields
-     * @param string $referenceModel
-     * @param string $referencedFields
+     * @param mixed        $fields
+     * @param string       $referenceModel
+     * @param string|array $referencedFields
      * @param array  $options {
      *
      * @option bool   "reusable"
@@ -5089,7 +5088,7 @@ abstract class Model extends AbstractInjectionAware implements
     protected function hasMany(
         mixed $fields,
         string $referenceModel,
-        string $referencedFields,
+        string | array $referencedFields,
         array $options = []
     ): Relation {
         return $this->modelsManager->addHasMany(

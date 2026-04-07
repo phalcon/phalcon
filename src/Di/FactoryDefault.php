@@ -30,12 +30,13 @@ use Phalcon\Http\Response;
 use Phalcon\Http\Response\Cookies;
 use Phalcon\Mvc\Dispatcher;
 use Phalcon\Mvc\Model\Manager as ModelsManager;
-use Phalcon\Mvc\Model\MetaData\Adapter\Memory as MetadataManager;
+use Phalcon\Mvc\Model\MetaData\Memory as MetadataManager;
 use Phalcon\Mvc\Model\Transaction\Manager as TransactionManager;
 use Phalcon\Mvc\Router;
 use Phalcon\Mvc\Url;
 use Phalcon\Storage\SerializerFactory;
 use Phalcon\Support\HelperFactory;
+use Phalcon\Support\Settings;
 
 /**
  * This is a variant of the standard Phalcon\Di\Di. By default it automatically
@@ -61,6 +62,7 @@ use Phalcon\Support\HelperFactory;
  * @property Response           $response
  * @property Router             $router
  * @property Security           $security
+ * @property Settings           $settings
  * @property SerializerFactory  $storageSerializer
  * @property TagFactory         $tag
  * @property TransactionManager $transactionManager
@@ -123,6 +125,7 @@ class FactoryDefault extends Di
             'flashSession'       => new Service(Session::class, true),
             'filter'             => new Service($filterFactory->newInstance(), true),
             'helper'             => new Service(HelperFactory::class, true),
+            'settings'           => new Service(Settings::class, true),
             'modelsManager'      => new Service(ModelsManager::class, true),
             'modelsMetadata'     => new Service(MetadataManager::class, true),
             'request'            => new Service(Request::class, true),

@@ -24,7 +24,6 @@ use Phalcon\Mvc\Model\Query\BuilderInterface;
 use Phalcon\Mvc\Model\Query\StatusInterface;
 use Phalcon\Mvc\Model\Resultset\Simple;
 use Phalcon\Mvc\ModelInterface;
-use Phalcon\Parsers\Parser;
 use Phalcon\Support\Settings;
 use Phalcon\Traits\Helper\Str\UncamelizeTrait;
 use ReflectionClass;
@@ -237,8 +236,6 @@ class Manager implements ManagerInterface, InjectionAwareInterface, EventsAwareI
      */
     public function __destruct()
     {
-        Parser::ormDestroyCache();
-
         Query::clean();
     }
 
@@ -1251,7 +1248,7 @@ class Manager implements ManagerInterface, InjectionAwareInterface, EventsAwareI
         ModelInterface $record,
         array | string | null $parameters = null,
         string | null $method = null
-    ): Simple | ModelInterface | int | false {
+    ): Simple | ModelInterface | int | false | null {
         /**
          * Re-use bound parameters
          */
@@ -1441,7 +1438,7 @@ class Manager implements ManagerInterface, InjectionAwareInterface, EventsAwareI
             $this->setReusableRecords($referencedModel, $uniqueKey, $records);
         }
 
-        return null === $records ? false : $records;
+        return $records;
     }
 
     /**
@@ -1800,7 +1797,7 @@ class Manager implements ManagerInterface, InjectionAwareInterface, EventsAwareI
     }
 
     /**
-     * Loads a model throwing an exception if it doesn't exist
+     * Loads a model throwing an exception if it does not exist
      *
      * @param string $modelName
      *
@@ -1810,7 +1807,7 @@ class Manager implements ManagerInterface, InjectionAwareInterface, EventsAwareI
     public function load(string $modelName): ModelInterface
     {
         /**
-         * The model doesn't exist throw an exception
+         * The model does not exist throw an exception
          */
         if (!class_exists($modelName)) {
             throw new Exception(

@@ -316,7 +316,7 @@ interface AdapterInterface
      *
      * @return string
      */
-    public function escapeIdentifier(array | string $identifier): string;
+    public function escapeIdentifier(array | string | int | float $identifier): string;
 
     /**
      * Escapes a value to avoid SQL injections
@@ -329,7 +329,7 @@ interface AdapterInterface
 
     /**
      * Sends SQL statements to the database server returning the success state.
-     * Use this method only when the SQL statement sent to the server doesn't
+     * Use this method only when the SQL statement sent to the server does not
      * return any rows
      *
      * @param string $sqlStatement
@@ -387,7 +387,7 @@ interface AdapterInterface
         string $sqlQuery,
         array $placeholders = [],
         int | string $column = 0
-    ): string | bool;
+    ): mixed;
 
     /**
      * Returns the first row in a SQL query result
@@ -555,7 +555,7 @@ interface AdapterInterface
     public function insert(
         string $tableName,
         array $values,
-        array $fields = [],
+        array | null $fields = null,
         array $dataTypes = []
     ): bool;
 

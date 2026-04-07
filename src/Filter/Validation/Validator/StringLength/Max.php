@@ -81,10 +81,10 @@ class Max extends Min
         bool $included = false
     ): bool {
         if (true === $included) {
-            return $source >= $target;
+            return $source > $target;
         }
 
-        return $source > $target;
+        return $source >= $target;
     }
 
     /**

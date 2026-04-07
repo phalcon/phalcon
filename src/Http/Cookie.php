@@ -77,9 +77,9 @@ class Cookie extends AbstractInjectionAware implements
         mixed $value = null,
         protected int $expire = 0,
         protected string $path = '/',
-        protected bool | null $secure = null,
-        protected string | null $domain = null,
-        protected bool | null $httpOnly = null,
+        protected bool $secure = false,
+        protected string $domain = '',
+        protected bool $httpOnly = false,
         protected array $options = []
     ) {
         if (null !== $value) {
@@ -355,9 +355,9 @@ class Cookie extends AbstractInjectionAware implements
         $definition             = [];
         $definition['expire']   = $this->expire;
         $definition['path']     = $this->path;
-        $definition['domain']   = $this->domain ?? null;
-        $definition['secure']   = $this->secure ?? null;
-        $definition['httpOnly'] = $this->httpOnly ?? null;
+        $definition['domain']   = $this->domain;
+        $definition['secure']   = $this->secure;
+        $definition['httpOnly'] = $this->httpOnly;
         $definition['options']  = $this->options;
 
         /**

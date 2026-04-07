@@ -18,10 +18,10 @@ use Phalcon\Filter\Validation\AbstractCombinedFieldsValidator;
 use Phalcon\Filter\Validation\Exception;
 use Phalcon\Mvc\Model;
 use Phalcon\Mvc\ModelInterface;
+use Phalcon\Support\Settings;
 
 use function array_keys;
 use function get_class;
-use function ini_get;
 use function is_array;
 use function is_object;
 use function range;
@@ -117,7 +117,7 @@ class Uniqueness extends AbstractCombinedFieldsValidator
      * @return bool
      * @throws Exception
      */
-    public function validate(Validation $validation, string $field): bool
+    public function validate(Validation $validation, array | string $field): bool
     {
         if (true !== $this->isUniqueness($validation, $field)) {
             $validation->appendMessage(
@@ -141,12 +141,11 @@ class Uniqueness extends AbstractCombinedFieldsValidator
     protected function getColumnNameReal(mixed $record, string $field): string
     {
         // Caching columnMap
-        $columnRenaming = (bool)ini_get("orm.column_renaming");
-        if (true === $columnRenaming && empty($this->columnMap)) {
+        if (Settings::get("orm.column_renaming") && empty($this->columnMap)) {
             $this->columnMap = $record
                 ->getDI()
                 ->getShared("modelsMetadata")
-                ->getColumnMap($record)
+                ->getColumnMap($record) ?? []
             ;
         }
 

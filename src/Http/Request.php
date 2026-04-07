@@ -116,6 +116,11 @@ class Request extends AbstractInjectionAware implements
     protected array $trustedProxies = [];
 
     /**
+     * @var string
+     */
+    protected string $trustedProxyHeader = "";
+
+    /**
      * Gets a variable from the $_REQUEST superglobal applying filters if
      * needed. If no parameters are given the $_REQUEST superglobal is returned
      *
@@ -227,71 +232,46 @@ class Request extends AbstractInjectionAware implements
      */
     public function getClientAddress(bool $trustForwardedHeader = false): string | bool
     {
-        $address = null;
-
-        if ($trustForwardedHeader) {
-            $address = $_SERVER['HTTP_X_FORWARDED_FOR'] ?? null;
-            if (null === $address) {
-                $address = $_SERVER['HTTP_CLIENT_IP'] ?? null;
-            }
-
-            if (null !== $address && strpos($address, ',') !== false) {
-                /**
-                 * The client address has multiples parts,
-                 * only return the first non-private/non-reserved IP
-                 */
-                $trustedProxies = $this->trustedProxies;
-                $forwardedIps = explode(',', $address);
-                if (!empty($trustedProxies)) {
-                    // verify if we trust the forwarded proxy
-                    $isTrusted = false;
-                    $reverseForwardedIps = array_reverse($forwardedIps);
-                    foreach ($reverseForwardedIps as $invertForwardedIp) {
-                        if ($isTrusted === true) {
-                            break;
-                        }
-                        foreach ($trustedProxies as $trustedForwardedIp) {
-                            if (strpos($trustedForwardedIp, "/") !== false) {
-                                $isIpAddressInCIDR = $this->isIpAddressInCIDR($invertForwardedIp, $trustedForwardedIp);
-                                if ($isIpAddressInCIDR === true) {
-                                    $isTrusted = true;
-                                    break;
-                                }
-                            } else {
-                                if ($invertForwardedIp === $trustedForwardedIp) {
-                                    $isTrusted = true;
-                                    break;
-                                }
-                            }
-                        }
-                    }
-
-                    if (!$isTrusted) {
-                        throw new \Exception("The forwarded proxy IP addresses are not trusted.");
-                    }
-                }
-
-                // retrieve the first valid IP that is not reserved or private
-                $filterService = $this->getFilterService();
-                foreach ($forwardedIps as $forwardedIp) {
-                    $filtered = $filterService->sanitize($forwardedIp, [
-                        "ip" => [
-                            "filter" => FILTER_FLAG_NO_PRIV_RANGE | FILTER_FLAG_NO_RES_RANGE
-                        ]
-                    ]);
-                    if ($filtered) {
-                        return $filtered;
-                    }
-                }
-
-                return false;
-            }
-        } else {
-            $address = $_SERVER["REMOTE_ADDR"];
-        }
+        $address = $_SERVER["REMOTE_ADDR"] ?? null;
 
         if (!is_string($address)) {
             return false;
+        }
+
+        // if trustForwardedHeader == true, $address is deemed a proxy IP,
+        // or we get it from a trusted header
+        if ($trustForwardedHeader) {
+            // If trustedProxyHeader is not empty, it takes priority over X-Forwarded-For
+            if ($this->trustedProxyHeader !== "" && isset($_SERVER[$this->trustedProxyHeader])) {
+                return $_SERVER[$this->trustedProxyHeader];
+            }
+
+            // If trustedProxies is not empty, verify REMOTE_ADDR is a trusted proxy;
+            // if not trusted, return REMOTE_ADDR directly without parsing forwarded headers
+            if (!empty($this->trustedProxies) && !$this->isProxyTrusted($address)) {
+                return $address;
+            }
+
+            // Either trustedProxies is empty or REMOTE_ADDR is a trusted proxy:
+            // parse HTTP_X_FORWARDED_FOR
+            $forwarded = $_SERVER["HTTP_X_FORWARDED_FOR"] ?? null;
+            if (!empty($forwarded)) {
+                $forwardedIps        = array_map("trim", explode(",", $forwarded));
+                $reverseForwardedIps = array_reverse($forwardedIps);
+
+                foreach ($reverseForwardedIps as $forwardedIp) {
+                    // skip IPs belonging to our own trusted proxies
+                    if (!empty($this->trustedProxies) && $this->isProxyTrusted($forwardedIp)) {
+                        continue;
+                    }
+
+                    // return the first public, non-private, non-reserved IP
+                    $filteredIp = $this->isValidPublicIp($forwardedIp);
+                    if ($filteredIp) {
+                        return $filteredIp;
+                    }
+                }
+            }
         }
 
         return $address;
@@ -691,6 +671,10 @@ class Request extends AbstractInjectionAware implements
     public function getJsonRawBody(bool $associative = false): array | bool | stdClass
     {
         $rawBody = $this->getRawBody();
+
+        if ('' === $rawBody) {
+            $rawBody = '{}';
+        }
 
         return json_decode($rawBody, $associative);
     }
@@ -1596,6 +1580,26 @@ class Request extends AbstractInjectionAware implements
     }
 
     /**
+     * This header takes priority when parsing HTTP headers.
+     * The header returns only 1 single IP address, prefixed with HTTP_ e.g. HTTP_CLIENT_IP.
+     *
+     * @param string $trustedProxyHeader
+     * @return RequestInterface
+     */
+    public function setTrustedProxyHeader(string $trustedProxyHeader): RequestInterface
+    {
+        $trustedHeader = strtoupper(str_replace("-", "_", $trustedProxyHeader));
+
+        if (!str_starts_with($trustedHeader, "HTTP_")) {
+            $trustedHeader = "HTTP_" . $trustedHeader;
+        }
+
+        $this->trustedProxyHeader = $trustedHeader;
+
+        return $this;
+    }
+
+    /**
      * Check if an IP address exists in CIDR range
      *
      * @param string $ip The IP address to check.
@@ -1985,6 +1989,42 @@ class Request extends AbstractInjectionAware implements
     }
 
     /**
+     * Checks whether the given IP address belongs to one of the trusted proxies.
+     *
+     * @param string $ip
+     * @return bool
+     */
+    private function isProxyTrusted(string $ip): bool
+    {
+        foreach ($this->trustedProxies as $trusted) {
+            if (strpos($trusted, '/') !== false) {
+                return $this->isIpAddressInCIDR($ip, $trusted);
+            } else {
+                return $ip === $trusted;
+            }
+        }
+
+        return false;
+    }
+
+    /**
+     * Verifies that the given IP address is public (not private or reserved).
+     *
+     * @param string $forwardedIp
+     * @return string|false
+     */
+    private function isValidPublicIp(string $forwardedIp): string | false
+    {
+        $filterService = $this->getFilterService();
+
+        return $filterService->sanitize($forwardedIp, [
+            "ip" => [
+                "filter" => FILTER_FLAG_NO_PRIV_RANGE | FILTER_FLAG_NO_RES_RANGE,
+            ],
+        ]);
+    }
+
+    /**
      * Checks the filter service and assigns it to the class parameter
      *
      * @return FilterInterface
@@ -2017,9 +2057,13 @@ class Request extends AbstractInjectionAware implements
         if (empty($data)) {
             if ($this->isJson()) {
                 $result = $this->getJsonRawBody(true);
+            } elseif (
+                $this->getContentType() &&
+                stripos($this->getContentType(), 'multipart/form-data') !== false
+            ) {
+                $result = $this->getFormData();
             } else {
-                // this is more like a fallback to application/x-www-form-urlencoded parsing raw body
-                // the web server should technically take care of adding these to $_POST, but who knows...
+                // fallback to application/x-www-form-urlencoded parsing raw body
                 $result = [];
                 parse_str($this->getRawBody(), $result);
             }
@@ -2027,12 +2071,72 @@ class Request extends AbstractInjectionAware implements
             $result = $data;
         }
 
-        // sanity check, if after all parsing is not an array, set an empty one
         if (!is_array($result)) {
             $result = [];
         }
 
         return $result;
+    }
+
+    /**
+     * Parses multipart/form-data from the raw body.
+     *
+     * @return array
+     */
+    private function getFormData(): array
+    {
+        preg_match('/boundary=(.*)$/is', (string) $this->getContentType(), $matches);
+
+        $boundary = $matches[1];
+        $bodyParts = preg_split('/\R?-+' . preg_quote($boundary, '/') . '/s', $this->getRawBody());
+
+        array_pop($bodyParts);
+
+        $dataset = [];
+
+        foreach ($bodyParts as $bodyPart) {
+            if (empty($bodyPart)) {
+                continue;
+            }
+
+            $splited     = preg_split('/\R\R/', $bodyPart, 2);
+            $headers     = [];
+            $headerParts = preg_split('/\R/s', $splited[0], -1, PREG_SPLIT_NO_EMPTY);
+
+            foreach ($headerParts as $headerPart) {
+                if (strpos($headerPart, ':') === false) {
+                    continue;
+                }
+
+                $exploded    = explode(':', $headerPart, 2);
+                $headerName  = strtolower(trim($exploded[0]));
+                $headerValue = trim($exploded[1]);
+
+                if (strpos($headerValue, ';') !== false) {
+                    $explodedHeader = explode(';', $headerValue);
+
+                    foreach ($explodedHeader as $part) {
+                        $part = preg_replace('/"/', '', trim($part));
+
+                        if (strpos($part, '=') !== false) {
+                            $explodedPart = explode('=', $part, 2);
+                            $namePart     = strtolower(trim($explodedPart[0]));
+                            $valuePart    = trim(trim($explodedPart[1]), '"');
+
+                            $headers[$headerName][$namePart] = $valuePart;
+                        } else {
+                            $headers[$headerName][] = $part;
+                        }
+                    }
+                } else {
+                    $headers[$headerName] = $headerValue;
+                }
+            }
+
+            $dataset[$headers['content-disposition']['name']] = $splited[1];
+        }
+
+        return $dataset;
     }
 
     /**

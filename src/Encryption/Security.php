@@ -77,9 +77,11 @@ class Security implements InjectionAwareInterface
     public const CRYPT_BLOWFISH_X = 6;
     public const CRYPT_BLOWFISH_Y = 7;
     public const CRYPT_DEFAULT    = 0;
+    public const CRYPT_EXT_DES    = 2;
     public const CRYPT_MD5        = 3;
     public const CRYPT_SHA256     = 8;
     public const CRYPT_SHA512     = 9;
+    public const CRYPT_STD_DES    = 1;
 
     /**
      * @var int
@@ -236,8 +238,16 @@ class Security implements InjectionAwareInterface
     ): string {
         try {
             $hmac = hash_hmac($algo, $data, $key, $raw);
-        } catch (ValueError $ex) {
-            throw new Exception($ex->getMessage());
+        } catch (ValueError) {
+            throw new Exception(
+                sprintf("Unknown hashing algorithm: %s", $algo)
+            );
+        }
+
+        if (!$hmac) {
+            throw new Exception(
+                sprintf("Unknown hashing algorithm: %s", $algo)
+            );
         }
 
         return $hmac;

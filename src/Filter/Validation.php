@@ -176,13 +176,13 @@ class Validation extends Injectable implements ValidationInterface
      * ```
      *
      * @param object|null $entity the entity object to assign data to
-     * @param array|object $data the data that needs to be validated
+     * @param array|object|null $data the data that needs to be validated
      * @param array $whitelist only allow these fields to be mutated when entity is used
      * @return ValidationInterface
      */
     public function bind(
         object|null $entity,
-        array|object $data,
+        array|object|null $data,
         array $whitelist = []
     ): ValidationInterface {
         $this->setEntity($entity);

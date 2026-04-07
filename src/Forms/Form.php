@@ -24,6 +24,7 @@ use Phalcon\Html\Attributes;
 use Phalcon\Html\Attributes\AttributesInterface;
 use Phalcon\Html\TagFactory;
 use Phalcon\Messages\Messages;
+use Phalcon\Support\Settings;
 use Phalcon\Traits\Helper\Str\CamelizeTrait;
 
 use function is_string;
@@ -243,9 +244,17 @@ class Form extends Injectable implements Countable, Iterator, AttributesInterfac
                 }
 
                 /**
-                 * Use the public property if it doesn't have a setter
+                 * Use the public property if it does not have a setter
                  */
-                $entity->{$key} = $filteredValue;
+                if (!Settings::get("form.strict_entity_property_check")) {
+                    $entity->{$key} = $filteredValue;
+
+                    continue;
+                }
+
+                if (property_exists($entity, $key)) {
+                    $entity->{$key} = $filteredValue;
+                }
             }
         }
 
@@ -531,8 +540,15 @@ class Form extends Injectable implements Countable, Iterator, AttributesInterfac
         /**
          * Check if the data is in the data array
          */
-        if (isset($this->data[$name])) {
+        if (array_key_exists($name, $this->data)) {
             return $this->data[$name];
+        }
+
+        /**
+         * Check if the name is in the $_POST superglobal
+         */
+        if (isset($_POST[$name])) {
+            return $_POST[$name];
         }
 
         $forbidden = [

@@ -131,12 +131,12 @@ class File extends AbstractValidatorComposite
 
         $this
             ->processFileAllowedType($options, $fileEmpty, $iniSize, $valid)
-            ->processFileResolutionEqual($options, $fileEmpty, $iniSize, $valid)
-            ->processFileResolutionMax($options, $fileEmpty, $iniSize, $valid)
-            ->processFileResolutionMin($options, $fileEmpty, $iniSize, $valid)
             ->processFileSizeEquals($options, $fileEmpty, $iniSize, $valid)
             ->processFileSizeMax($options, $fileEmpty, $iniSize, $valid)
             ->processFileSizeMin($options, $fileEmpty, $iniSize, $valid)
+            ->processFileResolutionEqual($options, $fileEmpty, $iniSize, $valid)
+            ->processFileResolutionMax($options, $fileEmpty, $iniSize, $valid)
+            ->processFileResolutionMin($options, $fileEmpty, $iniSize, $valid)
         ;
 
         unset(
@@ -179,7 +179,7 @@ class File extends AbstractValidatorComposite
         if (isset($options["allowedTypes"])) {
             $validator = new MimeType(
                 [
-                    "size"    => $options["allowedTypes"],
+                    "types"   => $options["allowedTypes"],
                     "message" => $options["messageType"] ?? null,
                 ]
             );

@@ -94,7 +94,7 @@ class PdoResult implements ResultInterface
         $pdo = $this->connection->getInternalHandler();
 
         /**
-         * PDO doesn't support scrollable cursors, so we need to re-execute the
+         * PDO does not support scrollable cursors, so we need to re-execute the
          * statement
          */
         if (!empty($this->bindParams)) {
